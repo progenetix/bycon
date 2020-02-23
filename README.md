@@ -1,4 +1,4 @@
-## A Python Based [Beacon API](http://) Implementation Leveraging the [Progenetix](http://progenetix.org) Data Model
+## A Python Based [Beacon API](http://) Implementation for the [Progenetix](http://progenetix.org) Data Model
 
 ### Directory Structure
 
