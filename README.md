@@ -1,11 +1,19 @@
-## Bycon - A Python Based [Beacon API](http://) implementation leveraging the [Progenetix](http://progenetix.org)
-data model
+## A Python Based [Beacon API](http://) Implementation Leveraging the [Progenetix](http://progenetix.org) Data Model
 
 ### Directory Structure
 
 #### `apps`
 
 * applications for data access & processing
+
+#### `bycon`
+
+* Python modules
+
+#### `data/in`, `data/out`
+
+* input and output for example and test data
+* in `.gitignore`
 
 ### Usage Examples
 
