@@ -6,22 +6,9 @@ import re
 ########################################################################################################################
 
 
-def plotpars_from_args(opts, **kwargs):
-
-    plot_pars = { }
-    plot_pars["dotalpha"] = 0.2
-
-    for opt, arg in opts:
-        if opt in ("-a", "--dotalpha"):
-            plot_pars[ "dotalpha" ] = arg
-
-    return plot_pars
-
-########################################################################################################################
-
 def callsets_add_metadata(cs, **kwargs):
 
-    dataset_id = kwargs[ "data_pars" ][ "dataset_id" ]
+    dataset_id = kwargs[ "config" ][ "data_pars" ][ "dataset_id" ]
     bio_prefixes = kwargs[ "config" ][ "bio_prefixes" ]
 
     mongo_client = MongoClient( )

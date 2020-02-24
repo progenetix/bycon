@@ -6,9 +6,12 @@ import matplotlib.gridspec as gridspec
 
 def plot_callset_stats(**kwargs):
 
-    statsno_str = str(len(kwargs[ "callsets_stats" ]["cnv_fs"]))
+    dataset_id = kwargs[ "config" ][ "data_pars" ][ "dataset_id" ]
     dash = kwargs[ "config" ][ "const" ][ "dash_sep" ]
-    cnvstatsplot = pgxp.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([kwargs[ "data_pars" ][ "dataset_id" ], statsno_str, "cnvstats.png"]) )
+
+    statsno_str = str(len(kwargs[ "callsets_stats" ]["cnv_fs"]))
+
+    cnvstatsplot = pgxp.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, statsno_str, "cnvstats.png" ]) )
     plt.interactive( False )
     f = plt.figure( )
     gs = gridspec.GridSpec( 1, 2, width_ratios=[ 4, 1 ] )
@@ -17,8 +20,8 @@ def plot_callset_stats(**kwargs):
     plt.ylabel( 'DEL Genome Fraction' )
     plt.ylim( (0, 1) )
     plt.xlim( (0, 1) )
-    plt.text( 0.5, 0.85, str(len(kwargs[ "callsets_stats" ]["cnv_fs"]))+" "+kwargs[ "data_pars" ][ "dataset_id" ]+" callsets" )
-    plt.scatter(kwargs[ "callsets_stats" ]["dup_fs"], kwargs[ "callsets_stats" ]["del_fs"], marker="o", s=2, alpha=float(kwargs["plot_pars"][ "dotalpha" ]) )
+    plt.text( 0.5, 0.85, str(len(kwargs[ "callsets_stats" ]["cnv_fs"]))+" "+dataset_id+" callsets" )
+    plt.scatter(kwargs[ "callsets_stats" ]["dup_fs"], kwargs[ "callsets_stats" ]["del_fs"], marker="o", s=2, alpha=float(kwargs[ "config" ]["plot_pars"][ "dotalpha" ]) )
     plt.subplot(gs[1])
     plt.ylabel( 'CNV Genome Fraction' )
     plt.ylim( (0, 1) )

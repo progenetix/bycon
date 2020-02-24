@@ -8,7 +8,7 @@ from pymongo import MongoClient
 def return_callsets_stats(**kwargs):
 
     mongo_client = MongoClient( )
-    mongo_db = mongo_client[ kwargs[ "data_pars" ][ "dataset_id" ] ]
+    mongo_db = mongo_client[ kwargs[ "config" ][ "data_pars" ][ "dataset_id" ] ]
     mongo_coll = mongo_db[ 'callsets' ]
 
     cs_stats = { }

@@ -35,6 +35,8 @@ config[ "dataset_ids" ] = { "biosamples","callsets","individuals","variants","qu
 config[ "bio_prefixes" ] = { 'icdom', 'icdot', 'ncit' }
 config[ "paths" ]["status_matrix_file_label"] = 'matrix_status.tsv'
 config[ "paths" ]["values_matrix_file_label"] = 'matrix_values.tsv'
+config[ "plot_pars" ] = { "dotalpha": 0.2 }
+config[ "data_pars" ] = { "dataset_id": "arraymap" }
 
 ########################################################################################################################
 ########################################################################################################################
@@ -42,31 +44,26 @@ config[ "paths" ]["values_matrix_file_label"] = 'matrix_values.tsv'
 
 def main(argv):
 
-    try:
-        opts, args = getopt.getopt(argv, "hd:b:e:j:a:", [ "dataset_id=" "bioclass=", "extid=", "jsonqueries=", "dotalpha=" ] )
-    except getopt.GetoptError:
-        print( 'opt error' )
-        sys.exit( 2 )
-
     kwargs = { "config": config }
+    opts, args = get_cmd_args(argv)
     queries = pgx_queries_from_args(opts, **kwargs)
-    plot_pars = plotpars_from_args(opts, **kwargs)
-    data_pars = pgx_datapars_from_args(opts, **kwargs)
+    kwargs[ "config" ][ "plot_pars" ] = plotpars_from_args(opts, **kwargs)
+    kwargs[ "config" ][ "data_pars" ] = pgx_datapars_from_args(opts, **kwargs)
 
     if not queries:
         print('no query')
         sys.exit( )
 
-    kwargs = { "config": config, "data_pars": data_pars, "queries": queries }
+    kwargs = { "config": config, "queries": queries }
     query_results = execute_bycon_queries(**kwargs)
 
-    kwargs = { "config": config, "data_pars": data_pars, "callsets::_id": query_results["callsets::_id"] }
+    kwargs = { "config": config, "callsets::_id": query_results["callsets::_id"] }
     write_callsets_matrix_files(**kwargs)
 
-    kwargs = { "config": config, "data_pars": data_pars, "callsets::_id": query_results["callsets::_id"] }
+    kwargs = { "config": config, "callsets::_id": query_results["callsets::_id"] }
     callsets_stats = return_callsets_stats(**kwargs)
 
-    kwargs = { "config": config, "data_pars": data_pars, "callsets_stats": callsets_stats, "plot_pars": plot_pars }
+    kwargs = { "config": config, "callsets_stats": callsets_stats }
     plot_callset_stats(**kwargs)
 
 ########################################################################################################################

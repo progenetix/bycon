@@ -3,9 +3,11 @@ from pymongo import MongoClient
 def execute_bycon_queries(**kwargs):
 
     query_results = { }
-    exe_queries = {}
+    exe_queries = { }
+    dataset_id = kwargs[ "config" ][ "data_pars" ][ "dataset_id" ]
+
     mongo_client = MongoClient( )
-    mongo_db = mongo_client[ kwargs[ "data_pars" ][ "dataset_id" ] ]
+    mongo_db = mongo_client[ dataset_id ]
 
     for collname in kwargs[ "config" ][ "dataset_ids" ]:
         if collname in kwargs[ "queries" ]:

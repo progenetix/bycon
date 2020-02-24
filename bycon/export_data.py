@@ -10,9 +10,11 @@ def write_callsets_matrix_files(**kwargs):
     bio_prefixes = kwargs[ "config" ][ "bio_prefixes" ]
     smfl = kwargs["config"][ "paths" ][ "status_matrix_file_label" ]
     vmfl = kwargs["config"][ "paths" ][ "values_matrix_file_label" ]
+    
+    dataset_id = kwargs[ "config" ][ "data_pars" ][ "dataset_id" ]
 
     mongo_client = MongoClient( )
-    mongo_db = mongo_client[ kwargs[ "data_pars" ][ "dataset_id" ] ]
+    mongo_db = mongo_client[ dataset_id ]
     mongo_coll = mongo_db[ 'callsets' ]
 
     tab = kwargs[ "config" ][ "const" ][ "tab_sep" ]
@@ -45,8 +47,8 @@ def write_callsets_matrix_files(**kwargs):
     vmf.close()
     mongo_client.close()
 
-    status_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([kwargs[ "data_pars" ][ "dataset_id" ], str(sm_no), smfl]) )
-    values_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([kwargs[ "data_pars" ][ "dataset_id" ], str(vm_no), vmfl]) )
+    status_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, str(sm_no), smfl ]) )
+    values_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, str(vm_no), vmfl ]) )
 
     rename(tmp_status_matrix_file, status_matrix_file)
     rename(tmp_values_matrix_file, values_matrix_file)
