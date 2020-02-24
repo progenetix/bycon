@@ -1,6 +1,5 @@
 # __init__.py
-from .cmd_parse_args import get_cmd_args, plotpars_from_args, pgx_datapars_from_args 
-from .query_preparation import pgx_queries_from_args
+from .cmd_parse_args import get_cmd_args,plotpars_from_args,pgx_datapars_from_args,pgx_queries_from_args
 from .query_execution import execute_bycon_queries
 from .output_preparation import callsets_add_metadata
 from .export_data import write_callsets_matrix_files
