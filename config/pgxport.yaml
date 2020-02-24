@@ -1,0 +1,20 @@
+const:
+  tab_sep: "\t"
+  dash_sep: "-"
+dataset_ids:
+  - biosamples
+  - callsets
+  - individuals
+  - variants
+  - querybuffer
+bio_prefixes:
+  - icdom
+  - icdot
+  - ncit
+plot_pars:
+  dotalpha: 0.2
+data_pars:
+  dataset_id: arraymap
+paths:
+  status_matrix_file_label: matrix_status.tsv
+  values_matrix_file_label: matrix_values.tsv

@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 
 from pymongo import MongoClient
-import sys, getopt
+import sys, getopt, yaml
 from os import path as path
 
 # local
@@ -9,16 +9,9 @@ dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon import *
 
-# TODO: defaults to config file
-config = {}
-config[ "const" ] =  { "tab_sep": "\t", "dash_sep": "-" }
-config[ "paths" ] = { "out": path.join(path.abspath(dir_path), '..', "data", "out") }
-config[ "dataset_ids" ] = { "biosamples","callsets","individuals","variants","querybuffer" }
-config[ "bio_prefixes" ] = { 'icdom', 'icdot', 'ncit' }
-config[ "paths" ]["status_matrix_file_label"] = 'matrix_status.tsv'
-config[ "paths" ]["values_matrix_file_label"] = 'matrix_values.tsv'
-config[ "plot_pars" ] = { "dotalpha": 0.2 }
-config[ "data_pars" ] = { "dataset_id": "arraymap" }
+with open( path.join(path.abspath(dir_path), '..', "config", "pgxport.yaml") ) as cf:
+    config = yaml.full_load( cf )
+config[ "paths" ][ "out"] = path.join(path.abspath(dir_path), '..', "data", "out")
 
 ########################################################################################################################
 ########################################################################################################################
