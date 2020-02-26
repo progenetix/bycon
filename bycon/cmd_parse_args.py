@@ -6,7 +6,9 @@ from os import path as path
 dir_path = path.dirname(path.abspath(__file__))
 help_file = path.join(path.abspath(dir_path), '..', "doc", "pgxport.md")
 
-def get_cmd_args(argv):
+def get_cmd_args():
+
+    argv = sys.argv[ 1: ]
 
     try:
         opts, args = getopt.getopt(argv, "hd:b:e:j:a:", [ "help", "dataset_id=" "bioclass=", "extid=", "jsonqueries=", "dotalpha=" ] )
@@ -29,7 +31,7 @@ def get_cmd_args(argv):
           
     return(opts, args)
 
-########################################################################################################################
+################################################################################
 
 def pgx_datapars_from_args(opts, **kwargs):
 
@@ -40,7 +42,7 @@ def pgx_datapars_from_args(opts, **kwargs):
 
     return data_pars
 
-########################################################################################################################
+################################################################################
 
 def plotpars_from_args(opts, **kwargs):
 
@@ -51,7 +53,7 @@ def plotpars_from_args(opts, **kwargs):
 
     return plot_pars
 
-########################################################################################################################
+################################################################################
 
 def pgx_queries_from_args(opts, **kwargs):
 

@@ -2,7 +2,7 @@ from os import path as pgxp
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
-########################################################################################################################
+################################################################################
 
 def plot_callset_stats(**kwargs):
 

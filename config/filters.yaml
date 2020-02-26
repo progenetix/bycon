@@ -1,0 +1,94 @@
+# Bio-Metadata
+ncit:
+  name: "National Cancer Institute Thesaurus"
+  url: "https://ncit.nci.nih.gov/"
+  scopes:
+    biosamples:
+      db_key: 'biocharacteristics.type.id'
+      default: 1
+    individuals:
+      db_key: 'biocharacteristics.type.id'
+  pattern: '^ncit:C\d+?$'
+  examples:
+    - 'ncit:C27676'
+    - 'ncit:C9325'
+
+HP:
+  name: "Human Phenotype Ontology"
+  url: "https://hpo.jax.org/"
+  scopes:
+    biosamples:
+      db_key: 'biocharacteristics.type.id'
+    individuals:
+      db_key: 'biocharacteristics.type.id'
+      default: 1
+  pattern: '^HP:\d+?$'
+  examples:
+    - 'HP:0012209'
+
+PATO:
+  name: "Phenotypic Qualities Ontology"
+  url: "http://obofoundry.org/ontology/pato.html"
+  scopes:
+    biosamples:
+      db_key: 'biocharacteristics.type.id'
+    individuals:
+      db_key: 'biocharacteristics.type.id'
+      default: 1
+  pattern: '^PATO:\d+?$'
+  examples:
+    - 'PATO:0020000'
+
+EFO:
+  name: "Experimental Factor Ontology"
+  url: "https://www.ebi.ac.uk/efo/"
+  scopes:
+    biosamples:
+      db_key: 'biocharacteristics.type.id'
+      default: 1
+    individuals:
+      db_key: 'biocharacteristics.type.id'
+  pattern: '^EFO:\d+?$'
+  examples:
+    - 'EFO:0009656'
+
+# Procedural Metadata
+
+pubmed:
+  name: "PubMed"
+  url: "https://www.ncbi.nlm.nih.gov/pubmed/"
+  scopes:
+    biosamples:
+      db_key: 'external_references.type.id'
+      default: 1
+  pattern: '^(PMID)|(pubmed):\d+?$'
+  examples:
+    - 'pubmed:28966033'
+    - 'pubmed:9405679'
+geo:
+  name: "NCBI Gene Expression Omnibus"
+  url: "https://www.ncbi.nlm.nih.gov/geo/"
+  scopes:
+    callsets:
+      db_key: 'external_references.type.id'
+    biosamples:
+      db_key: 'external_references.type.id'
+      default: 1
+  pattern: '^geo:G\d+?$'
+  examples:
+    - 'geo:GSE10092'
+    - 'geo:GSM253289'
+
+cellosaurus:
+  name: "Cellosaurus - a knowledge resource on cell lines"
+  url: "https://web.expasy.org/cellosaurus/"
+  scopes:
+    callsets:
+      db_key: 'external_references.type.id'
+    biosamples:
+      db_key: 'external_references.type.id'
+      default: 1
+  pattern: '^cellosaurus:CVCL_\w+?$'
+  examples:
+    - 'cellosaurus:CVCL_1650'
+    - 'cellosaurus:CVCL_0006'

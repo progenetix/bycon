@@ -1,0 +1,55 @@
+parameters:
+
+  assemblyId:
+    dbkey: assembly_id
+    pattern: '^\w+?$'
+
+  referenceName:
+    dbkey: reference_name
+    pattern: '^([1-9]|1\d|2[0-4]|[XY]|MT)$'
+
+  mateName:
+    dbkey: mate_name
+    pattern: '^([1-9]|1\d|2[0-4]|[XY]|MT)$'
+
+  referenceBases:
+    dbkey: reference_bases
+    pattern: '^[ACGTN]+$'
+
+  alternateBases:
+    dbkey: alternate_bases
+    pattern: '^[ACGTN]+$'
+
+  variantType:
+    dbkey: variant_type
+    pattern: '^((:?DUP)|(:?DEL)|(:?BND)|(:?INS)|(:?INV)|(:?CNV)|(:?INDEL)|(:?SNP)|(:?SNV))$'
+
+  start:
+    dbkey: start
+    pattern: '^\d+?$'
+    type: integer
+
+  end:
+    dbkey: end
+    pattern: '^\d+?$'
+    type: integer
+
+  startMin:
+    dbkey: start_min
+    pattern: '^\d+?$'
+    type: integer
+
+  startMax:
+    dbkey: start_max
+    pattern: '^\d+?$'
+    type: integer
+
+  endMin:
+    dbkey: end_min
+    pattern: '^\d+?$'
+    type: integer
+
+  endMax:
+    dbkey: end_max
+    pattern: '^\d+?$'
+    type: integer

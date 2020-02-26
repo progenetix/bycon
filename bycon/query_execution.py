@@ -9,7 +9,7 @@ def execute_bycon_queries(**kwargs):
     mongo_client = MongoClient( )
     mongo_db = mongo_client[ dataset_id ]
 
-    for collname in kwargs[ "config" ][ "dataset_ids" ]:
+    for collname in kwargs[ "config" ][ "collections" ]:
         if collname in kwargs[ "queries" ]:
             exe_queries[ collname ] = kwargs[ "queries" ][ collname ]
 

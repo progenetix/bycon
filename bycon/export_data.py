@@ -3,7 +3,7 @@ from os import rename as rename
 from pymongo import MongoClient
 from bycon import callsets_add_metadata
 
-########################################################################################################################
+################################################################################
 
 def write_callsets_matrix_files(**kwargs):
 

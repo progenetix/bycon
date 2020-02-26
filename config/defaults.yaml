@@ -1,7 +1,7 @@
 const:
   tab_sep: "\t"
   dash_sep: "-"
-dataset_ids:
+collections:
   - biosamples
   - callsets
   - individuals
@@ -18,3 +18,5 @@ data_pars:
 paths:
   status_matrix_file_label: matrix_status.tsv
   values_matrix_file_label: matrix_values.tsv
+  web_server_root_abs: '/Library/WebServer/Documents'
+  web_temp_dir_abs: '/Library/WebServer/Documents/tmp'
