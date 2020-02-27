@@ -21,7 +21,7 @@
 
 ### Usage Examples
 
-* `apps/pgxport.py -d progenetix -a 0.5 -j '{ 
+* `bin/pgxport.py -d progenetix -a 0.5 -j '{ 
         "biosamples": { "biocharacteristics.type.id": {"$regex":"icdom-94403" } }}'`
     - uses the dataset `progenetix`
     - the provided _JSON_ query string for the _MongoDB_ backend will retrieve
