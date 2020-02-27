@@ -37,15 +37,14 @@ def get_variant_request_type(variant_defs, variant_pars, variant_request_types):
     vrt_matches = [ ]
 
     for vrt in variant_request_types.keys():
-        mc = 0
-        rc = 0
+        matched_pars = [ ]
         for required in variant_request_types[ vrt ][ "all_of" ]:
-            mc += 1
             if required in variant_pars.keys():
                 if re.compile( variant_defs[ required ][ "pattern" ] ).match( variant_pars[ required ] ):
-                    rc += 1
-            if rc >= mc:
+                    matched_pars.append( required )
+            if len( matched_pars ) >= len( variant_request_types[ vrt ][ "all_of" ] ):
                 vrt_matches.append( vrt )
+#                 print(vrt+" matched: "+str(matched_pars))
 
     if len(vrt_matches) == 1:
         variant_request_type = vrt_matches[0]

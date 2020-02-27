@@ -2,7 +2,6 @@
 
 import cgi, cgitb
 import json, yaml
-from bson.json_util import dumps
 from os import path as path
 import sys
 
@@ -48,9 +47,11 @@ def main():
     kwargs = { "config": config, "queries": queries }
     query_results = execute_bycon_queries(**kwargs)
     
-    print(dumps(filters))
-    print(dumps(queries))
-    print(dumps(query_results))
+    print(json.dumps(filters))
+    print(json.dumps(queries))
+    
+    for res_key in query_results:
+        print(res_key+": "+str(len(query_results[ res_key ])))
     
 ################################################################################
 ################################################################################
