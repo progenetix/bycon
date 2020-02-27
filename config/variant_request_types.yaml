@@ -1,0 +1,27 @@
+parameters:
+
+  beacon_cnv_request:
+    all_of:
+      - startMin
+      - startMax
+      - endMin
+      - endMax
+      - referenceName
+      - variantType
+    
+  beacon_range_request:
+    all_of:
+      - start
+      - end
+      - referenceName
+    one_of:
+      - variantType
+      - alternateBases
+    
+  beacon_allele_request:
+    all_of:
+      - start
+      - referenceName
+      - referenceBases
+      - alternateBases
+      

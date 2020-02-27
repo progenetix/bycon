@@ -2,13 +2,17 @@
 
 ### Directory Structure
 
-#### `apps`
+#### `bin`
 
 * applications for data access & processing
 
 #### `bycon`
 
 * Python modules
+
+#### `cgi`
+
+* web server apps - "beacon" _et al._
 
 #### `data/in`, `data/out`
 

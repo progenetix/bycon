@@ -25,12 +25,19 @@ def main():
     print()
 
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
-        config = yaml.full_load( cf )
+        config = yaml.load( cf , Loader=yaml.FullLoader)
     config[ "paths" ][ "out" ] = path.abspath( config[ "paths" ][ "web_temp_dir_abs" ] )
     
     form_data = cgi_parse_query()
-    filters = parse_filters(form_data)
+
     filter_defs = read_filter_definitions(dir_path)
+    filters = parse_filters(form_data)
+    
+    variant_defs, variant_request_types = read_variant_definitions(dir_path)
+    variant_pars = parse_variants(form_data, variant_defs)
+    variant_request_type = get_variant_request_type(variant_defs, variant_pars, variant_request_types)
+    
+    print(variant_request_type)
     
     kwargs = { "config": config, "filter_defs": filter_defs, "filters": filters }
     queries = create_queries_from_filters(**kwargs)

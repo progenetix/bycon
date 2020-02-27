@@ -4,6 +4,19 @@ from os import path as path
 
 ################################################################################
 
+def read_filter_definitions(dir_path):
+
+    filter_defs = {}
+    for ff in [ "filters", "custom_filters" ]:
+        with open( path.join(path.abspath(dir_path), "..", "config", ff+".yaml") ) as fd:
+            defs = yaml.load( fd , Loader=yaml.FullLoader)
+            for fpre in defs:
+                filter_defs[fpre] = defs[fpre]
+    
+    return filter_defs
+
+################################################################################
+
 def parse_filters(form_data):
 
     filters = form_data.getlist('filters')
@@ -12,19 +25,6 @@ def parse_filters(form_data):
     
     return(filters)
   
-################################################################################
-
-def read_filter_definitions(dir_path):
-
-    filter_defs = {}
-    for ff in [ "filters", "custom_filters" ]:
-        with open( path.join(path.abspath(dir_path), "..", "config", ff+".yaml") ) as fd:
-            defs = yaml.full_load( fd )
-            for fpre in defs:
-                filter_defs[fpre] = defs[fpre]
-    
-    return filter_defs
-
 ################################################################################
 
 def create_queries_from_filters(**kwargs):
