@@ -10,6 +10,12 @@ dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon import *
 
+"""
+https://progenetix.test/cgi-bin/bycon/cgi/byconplus.py?filters=icdom-85,icdot-C54&referenceName=9&startMin=18000000&startMax=24000000&endMin=22000000&endMax=2600000&variantType=DEL
+https://progenetix.test/cgi-bin/bycon/cgi/byconplus.py
+https://progenetix.test/cgi-bin/bycon/cgi/byconplus.py/service-info/
+"""
+
 ################################################################################
 ################################################################################
 ################################################################################
@@ -57,8 +63,7 @@ def main():
     for ds in dataset_ids:
         kwargs = { "config": config, "queries": queries, "dataset": ds }
         kwargs[ "query_results" ] = execute_bycon_queries(**kwargs)
-        dataset_responses.append( create_dataset_response(**kwargs) )
-   
+        dataset_responses.append( create_dataset_response(**kwargs) )   
     
     kwargs = { "config": config, "dir_path": dir_path, "dataset_responses": dataset_responses }
     create_beacon_response(**kwargs)
