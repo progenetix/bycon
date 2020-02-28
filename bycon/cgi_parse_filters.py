@@ -27,6 +27,16 @@ def parse_filters(form_data):
   
 ################################################################################
 
+def get_dataset_ids(form_data):
+
+    dataset_ids = form_data.getlist('datasetIds')
+    dataset_ids = ','.join(dataset_ids)
+    dataset_ids = dataset_ids.split(',')
+    
+    return(dataset_ids)
+  
+################################################################################
+
 def create_queries_from_filters(**kwargs):
         
     queries = { }

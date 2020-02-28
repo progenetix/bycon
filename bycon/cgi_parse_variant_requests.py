@@ -36,7 +36,7 @@ def get_variant_request_type(variant_defs, variant_pars, variant_request_types):
     variant_request_type = "no variant request"
     vrt_matches = [ ]
 
-    for vrt in variant_request_types.keys():
+    for vrt in variant_request_types:
         matched_pars = [ ]
         for required in variant_request_types[ vrt ][ "all_of" ]:
             if required in variant_pars.keys():
@@ -55,7 +55,21 @@ def get_variant_request_type(variant_defs, variant_pars, variant_request_types):
     
 ################################################################################
 
-#def create_variant_
+def create_beacon_cnv_request_query(variant_request_type, variant_pars):
+
+    if variant_request_type != "beacon_cnv_request":
+        return
+        
+    variant_query = { "$and": [
+        { "reference_name": variant_pars[ "referenceName" ] },
+        { "variant_type": variant_pars[ "variantType" ] },
+        { "start": { "$gte": int(variant_pars[ "startMin" ]) } },
+        { "start": { "$gte": int(variant_pars[ "startMax" ]) } },
+        { "end": { "$gte": int(variant_pars[ "endMin" ]) } },
+        { "end": { "$gte": int(variant_pars[ "endMax" ]) } }
+    ]}
+
+    return( variant_query )
 
 ################################################################################
 def create_query_from_variant_pars(**kwargs):

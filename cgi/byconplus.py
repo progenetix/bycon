@@ -22,12 +22,16 @@ def main():
 
     print('Content-Type: text')
     print()
-
+    
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
         config = yaml.load( cf , Loader=yaml.FullLoader)
     config[ "paths" ][ "out" ] = path.abspath( config[ "paths" ][ "web_temp_dir_abs" ] )
-    
+
     form_data = cgi_parse_query()
+    
+    dataset_ids = get_dataset_ids(form_data)
+    # TODO: proper dataset_ids parsing & processing
+    dataset_ids = [ "arraymap" ]
 
     filter_defs = read_filter_definitions(dir_path)
     filters = parse_filters(form_data)
@@ -35,23 +39,35 @@ def main():
     variant_defs, variant_request_types = read_variant_definitions(dir_path)
     variant_pars = parse_variants(form_data, variant_defs)
     variant_request_type = get_variant_request_type(variant_defs, variant_pars, variant_request_types)
-    
-    print(variant_request_type)
-    
+        
     kwargs = { "config": config, "filter_defs": filter_defs, "filters": filters }
     queries = create_queries_from_filters(**kwargs)
-
+    
+    if variant_request_type in variant_request_types:
+        variant_query_generator = "create_"+variant_request_type+"_query"
+        queries["variants"] = getattr(cgi_parse_variant_requests, variant_query_generator)(variant_request_type, variant_pars)
+    
+    # TODO: earlier catch for empty call => info
     if not queries:
-        cgi_exit_on_error('No query specified; please use "-h" for examples')
+        return_beacon_info(config, dir_path)
+        exit()
+    
+    dataset_responses = [ ]
 
-    kwargs = { "config": config, "queries": queries }
-    query_results = execute_bycon_queries(**kwargs)
+    for ds in dataset_ids:
+        kwargs = { "config": config, "queries": queries, "dataset": ds }
+        kwargs[ "query_results" ] = execute_bycon_queries(**kwargs)
+        dataset_responses.append( create_dataset_response(**kwargs) )
+   
     
-    print(json.dumps(filters))
-    print(json.dumps(queries))
+    kwargs = { "config": config, "dir_path": dir_path, "dataset_responses": dataset_responses }
+    create_beacon_response(**kwargs)
     
-    for res_key in query_results:
-        print(res_key+": "+str(len(query_results[ res_key ])))
+#     print(json.dumps(dataset_responses, indent=4, sort_keys=True, default=str))
+#     print(json.dumps(queries))
+    
+    for res_key in dataset_responses[0]:
+        print(res_key+": "+str(len(dataset_responses[0][ res_key ])))
     
 ################################################################################
 ################################################################################

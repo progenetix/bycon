@@ -1,0 +1,231 @@
+---
+service_info:
+  id: org.progenetix.beacon
+  name: 'Progenetix Cancer Genomics Beacon+'
+  type: 'urn:ga4gh:beacon'
+  description: |
+    Beacon+ provides a forward looking implementation of the Beacon API, with focus on structural variants and metadata based on the cancer and reference genome profiling data represented in the Progenetix oncogenomic data resource (https://progenetix.org).
+  documentationUrl: 'https://info.progenetix.org/tags/Beacon.html'
+  serviceUrl: "https://beacon.progenetix.org/"
+  serviceType: "GA4GHBeacon"
+  welcomeUrl: "https://beacon.progenetix.org/ui/"
+  alternativeUrl: "https://progenetix.org"
+  contactUrl: 'mailto:contact@progenetix.org'
+  version: '1.1.0'
+  open: true
+  organization:
+    id: 'org.baudisgroup'
+    name: 'baudisgroup at UZH and SIB'
+    description: |
+      The "Theoretical Cytogenetics and Oncogenomics" group at the University of Zurich (UZH) and the Swiss Institute of Bioinformatics (SIB) performs research in cancer genomics and provides bioinformatics tools and cancer genome data resources to the scientific community.
+    address: "Department of Molecular Life Sciences, University of Zurich, Winterthurerstrasse 190, CH-8057 Zurich, Switzerland"
+    welcomeUrl: 'https://info.baudisgroup.org'
+    logoUrl: 'https://progenetix.org/p/progenetix.png'
+    info:
+      provider:
+        - 'Michael Baudis'
+        - 'Theoretical Cytogenetics and Oncogenomics, Department of Molecular Life Sciences, University of Zurich'
+        - 'http://www.imls.uzh.ch/en/research/baudis.html'
+        - 'http://info.baudisgroup.org/'
+        - 'Swiss Institute of Bioinformatics - SIB'
+        - 'http://www.sib.swiss/baudis-michael'
+beacon_info:
+  id: 'org.progenetix.beacon'
+  name: 'Progenetix Cancer Genomics Beacon+'
+  apiVersion: '1.1.0'
+  version: 2020-01-10
+  description:  |
+    Beacon+ provides a forward looking implementation of the Beacon API, with focus on structural variants and metadata based on the cancer and reference genome profiling data represented in the Progenetix oncogenomic data resource (https://progenetix.org).
+  welcomeUrl: 'https://beacon.progenetix.org/ui/'
+  alternativeUrl: "https://progenetix.org"
+  createDateTime: 2015-11-13
+  updateDateTime: 2020-01-10
+  organization:
+    id: 'org.baudisgroup'
+    name: 'baudisgroup at UZH and SIB'
+    description: |
+      The "Theoretical Cytogenetics and Oncogenomics" group at the University of Zurich (UZH) and the Swiss Institute of Bioinformatics (SIB) performs research in cancer genomics and provides bioinformatics tools and cancer genome data resources to the scientific community.
+    address: "Department of Molecular Life Sciences, University of Zurich, Winterthurerstrasse 190, CH-8057 Zurich, Switzerland"
+    welcomeUrl: 'https://info.baudisgroup.org'
+    contactUrl: 'mailto:contact@progenetix.org'
+    logoUrl: 'https://progenetix.org/p/progenetix.png'
+  sampleAlleleRequests:
+    - datasetIds:
+        - arraymap
+      assemblyId: GRCh38
+      referenceName: '9'
+      startMin: 18000000
+      startMax: 21975098
+      endMin: 21967753
+      endMax: 26000000
+      variantType: "DEL"
+      filters:
+        - "icdom-94403"
+    - datasetIds:
+        - dipg
+      assemblyId: GRCh38
+      referenceName: '17'
+      start: 7577121
+      alternateBases: "A"
+      referenceBases: "G"
+      filters:
+        - "icdot-C71.7"
+  datasets:
+    - id: arraymap
+      name: arraymap
+      identifier: 'org.progenetix::arraymap'
+      description: "arraymap cancer CNV datasets"
+      variantCount: 1
+      assemblyId: 'GRCh38'
+      createDateTime: 2012-01-01
+      updateDateTime: 2019-10-01
+      info:
+        authorized: true
+        accessType: PUBLIC
+    - id: progenetix
+      name: progenetix
+      identifier: 'org.progenetix::progenetix'
+      description: "Progenetix cancer genome profiles"
+      variantCount: 1
+      assemblyId: 'GRCh38'
+      createDateTime: 2001-01-01
+      updateDateTime: 2019-10-01
+      info:
+        authorized: true
+        accessType: PUBLIC
+    - id: tcga
+      name: tcga
+      identifier: 'org.progenetix::tcga'
+      description: "TCGA CNVs"
+      variantCount: 1
+      assemblyId: 'GRCh38'
+      createDateTime: 2012-01-01
+      updateDateTime: 2019-10-01
+      info:
+        authorized: true
+        accessType: PUBLIC
+    - id: dipg
+      name: dipg
+      identifier: 'org.progenetix::dipg'
+      description: "DIPG data from publication Mackay et al., 2017"
+      variantCount: 1
+      assemblyId: 'GRCh38'
+      createDateTime: 2015-01-01
+      updateDateTime: 2017-10-01
+      info:
+        authorized: true
+        accessType: PUBLIC
+    - id: 'GRCh38:beacon_test2:2030-01-01'
+      name: 'BeaconSpecTest2'
+      identifier: 'org.progenetix::test2'
+      description: "Beacon schema test"
+      variantCount: 1
+      assemblyId: 'GRCh38'
+      createDateTime: 2019-01-01
+      updateDateTime: 2019-10-01
+      info:
+        authorized: true
+        accessType: PUBLIC
+    - id: 'GRCh38:beacon_test:2030-01-01'
+      name: 'BeaconSpecTest'
+      identifier: 'org.progenetix::test'
+      description: "Beacon schema test"
+      variantCount: 1
+      createDateTime: 2019-01-01
+      updateDateTime: 2019-10-01
+      assemblyId: 'GRCh38'
+      info:
+        authorized: true
+        accessType: PUBLIC
+technology_keys:
+  - ccgh
+  - acgh
+  - wes
+  - wgs
+  - ngs
+  - genomes
+geo_keys:
+  - city
+  - country
+  - continent
+  - latitude
+  - longitude
+technology_labels:
+  ccgh: 'Chromosomal CGH'
+  acgh: 'Genomic Array'
+  wes: 'Whole Exome Sequencing'
+  wgs: 'Whole Genome Sequencing'
+collection_names:
+  callset_collection: callsets
+  variant_collection: variants
+  biosample_collection: biosamples
+  individual_collection: individuals
+handover_types:
+  cnvhistogram:
+    id: 'pgx:handover:cnvhistogram'
+    label: "CNV Histogram"
+    description: "create a CNV histogram from matched callsets"
+    handover_method: 'callsets::_id'
+  biosamplesdata:
+    id: 'pgx:handover:biosamplesdata'
+    label: "Biosamples"
+    description: "retrieve data of the biosamples matched by the query"
+    handover_method: 'biosamples::_id'
+  individualsdata:
+    id: 'pgx:handover:individualsdata'
+    label: "Individuals"
+    description: "retrieve data of the individuals matched by the query"
+    handover_method: 'individuals::_id'
+  variantsdata:
+    id: 'pgx:handover:variantsdata'
+    label: "Variants"
+    description: "retrieve variants matched by the query"
+    handover_method: 'variants::_id'
+  callsetsvariants:
+    id: 'pgx:handover:callsetsvariants'
+    label: "Callsets Variants"
+    description: "export all variants of matched callsets - potentially huge dataset..."
+    handover_method: 'callsets::_id'
+  progenetixtools:
+    id: 'pgx:handover:progenetixtools'
+    label: "Progenetix Interface"
+    description: "hand the data over to the Progenetix interface for visualization and additional information"
+    handover_method: 'callsets::_id'
+    script_path_web: '/cgi-bin/pgx_process.cgi'
+  UCSClink:   
+    id: 'pgx:handover:bedfile2ucsc'
+    label: "Variants in UCSC"
+    description: "map variants matched by the query to the UCSC browser"
+    handover_method: 'variants::_id'
+  queryaggregation:   
+    id: 'pgx:handover:queryaggregation'
+    label: "Aggregate Query"
+    description: "Start new query limited to the current samples"
+    handover_method: 'callsets::_id'
+    script_path_web: 'http://beacon.progenetix.org/ui/'
+genome_assemblies:
+  - 'GRCh38'
+url: 'https://beacon.progenetix.org/ui/'
+url_base: 'https://progenetix.org'
+url_alt: 'https://beacon.arraymap.org/ui/'
+url_logo: 'https://progenetix.org/p/progenetix.png'
+document_base: '/Library/WebServer/Documents'
+actions:
+  - handover
+handover_db: progenetix
+handover_coll: querybuffer
+max_distinct_variants: 20
+output_params:
+  color_var_snv_hex: '#EE00DD'
+  color_var_snv_rgb: '238,0,221'
+  color_var_break_hex: '#EE00DD'
+  color_var_break_rgb: '238,0,221'
+  color_var_dup_hex: '#FFC633'
+  color_var_dup_rgb: '255,198,51'
+  color_var_del_hex: '#33A0FF'
+  color_var_del_rgb: '51,160,255'
+  color_var_amp_hex: '#FF6600'
+  color_var_amp_rgb: '255,102,0'
+  color_var_homoloss_hex: '#0033CC'
+  color_var_homoloss_rgb: '0,51,204'
+

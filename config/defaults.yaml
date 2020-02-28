@@ -1,6 +1,11 @@
 const:
   tab_sep: "\t"
   dash_sep: "-"
+info_db: progenetix
+dataset_ids:
+  - arraymap
+  - progenetix
+  - dipg
 collections:
   - biosamples
   - callsets
