@@ -1,6 +1,8 @@
-## `pgxport.py` Help
+## _bycon_ Help
 
-### Options
+### `pgxport.py`
+
+#### Options
 
 * `-h`, `--help` 
     - this document
@@ -11,7 +13,7 @@
     (e.g. `"$regex"`)
     - please avoid to specify empty queries for aany of the collections
 
-### Examples
+#### Examples
 
 * search for all biosamples with a _cellosaurus_ identifier and mapped CNVs
 
@@ -41,4 +43,20 @@ pgxport.py -a 0.1 -j '{
         "biosamples": { "biocharacteristics.type.id": {"$regex":"icdom-[98]" } },
 }'
 
+```
+
+### `pgxupdate.py`
+
+#### Options
+
+* `-h`, `--help` 
+    - this document
+* `-f`
+    - the input file containing the ICD-O and NCIt mappings
+    - OpenOffice table; please see example for format of header etc.
+    
+#### Examples
+
+```
+bin/pgxupdate.py -f rsrc/progenetix-icdo-to-ncit.ods
 ```

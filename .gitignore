@@ -1,8 +1,5 @@
 .DS_Store
 *.pyc
-data.out/*.tsv
-data.out/*.png
-data/out/progenetix-2975-matrix_values.tsv
-data/out/progenetix-3050-cnvstats.png
-data/out/progenetix-3256-matrix_status.tsv
+data/out/*.tsv
+data/out/*.png
 rsrc/specification-v2/

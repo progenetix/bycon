@@ -11,7 +11,7 @@ def get_cmd_args():
     argv = sys.argv[ 1: ]
 
     try:
-        opts, args = getopt.getopt(argv, "hd:b:e:j:a:", [ "help", "dataset_id=" "bioclass=", "extid=", "jsonqueries=", "dotalpha=" ] )
+        opts, args = getopt.getopt(argv, "hd:b:e:j:a:f:", [ "help", "dataset_id=" "bioclass=", "extid=", "jsonqueries=", "dotalpha=", "mappingfile=" ] )
     except getopt.GetoptError:
         with open(help_file) as help:
 	        help_doc = help.read()

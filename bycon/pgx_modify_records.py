@@ -9,7 +9,12 @@ def pgx_read_mappings(**kwargs):
 
     equivmaps = [ ]
 
-    table = get_sheet(file_name=path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "mod_root" ]), "rsrc",  "progenetix-icdo-to-ncit.ods" ))
+    try:
+        table = get_sheet(file_name=kwargs[ "config" ][ "paths" ][ "mapping_file" ])
+    except:
+        print("No matching mapping file could be found!")
+        exit()
+        
     header = table[0]
     col_inds = { }
     hi = 0
