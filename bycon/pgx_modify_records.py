@@ -145,10 +145,10 @@ def pgx_update_biocharacteristics(**kwargs):
             new_biocs = [ ]
             for bioc in item[ "biocharacteristics" ]:               
                 if re.compile( "ncit" ).match(bioc["type"]["id"]):
-                    if bioc["type"]["id"] != equivmap["ncit::id"]:
+                    if bioc["type"]["id"] != equivmap["ncit::id"] or bioc["type"]["label"] != equivmap["ncit::label"]:
 
                         report = [ item[ "id" ] ]
-                        report.extend( str(equivmap[x]) for x in equiv_keys )
+                        report.extend( str(equivmap[x]) for x in kwargs["equiv_keys"] )
                         report.extend( [ str(bioc["type"]["id"]), str(bioc["type"]["label"]) ] )
                         update_report.append(report)
             
