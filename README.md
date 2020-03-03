@@ -31,10 +31,10 @@
     - unspecified output methods will use the current defaults
     - plot dots will have an opacity of "0.5"
     
-* `bin/pgxupdate.py -f rsrc/progenetix-icdo-to-ncit.ods` -d `arraymap,progenetix`
+* `bin/pgx_update_mappings.py -f rsrc/progenetix-icdo-to-ncit.ods` -d `arraymap,progenetix`
     - updates NCIt mappings in the _arraymap_ and _progenetix_ databases
     from the specified mapping file
-* `bin/pgxupdate.py -f rsrc/progenetix-icdo-to-ncit.ods -d arraymap,progenetix -y ~/switchdrive/work/GitHub/progenetix/ICDOntologies/current`
+* `bin/pgx_update_mappings.py -f rsrc/progenetix-icdo-to-ncit.ods -d arraymap,progenetix -y ~/switchdrive/work/GitHub/progenetix/ICDOntologies/current`
     - this version of the ICD => NCIT mapping updater will read from the
     specified input table and - besides updating the NCIt codes wich have
     different/missing values for the same ICD-O M+T combinations - write 
