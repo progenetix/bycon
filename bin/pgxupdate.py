@@ -1,5 +1,7 @@
 #!/usr/local/bin/python3
 
+import time
+from datetime import date
 import sys, yaml
 from os import path as path
 
@@ -19,27 +21,18 @@ def main():
     config[ "paths" ][ "mod_root" ] = path.join( path.abspath( dir_path ), '..' )
     config[ "paths" ][ "out" ] = path.join( path.abspath( dir_path ), '..', "data", "out" )
     opts, args = get_cmd_args()
-
-    kwargs = { "config": config }
-    queries = pgx_queries_from_args(opts, **kwargs)
-    kwargs[ "config" ][ "plot_pars" ] = plotpars_from_args(opts, **kwargs)
-    kwargs[ "config" ][ "data_pars" ] = pgx_datapars_from_args(opts, **kwargs)
-
-    if not queries:
-        print('No query specified; please use "-h" for examples')
-        sys.exit( )
-
-    kwargs = { "config": config, "queries": queries }
-    query_results = execute_bycon_queries(**kwargs)
-
-    kwargs = { "config": config, "callsets::_id": query_results["callsets::_id"] }
-    write_callsets_matrix_files(**kwargs)
-
-    kwargs = { "config": config, "callsets::_id": query_results["callsets::_id"] }
-    callsets_stats = return_callsets_stats(**kwargs)
-
-    kwargs = { "config": config, "callsets_stats": callsets_stats }
-    plot_callset_stats(**kwargs)
+    
+    filter_defs = read_filter_definitions( **{ "config": config } )
+    
+    kwargs = { "config": config, "filter_defs": filter_defs }
+    equivmaps = pgx_read_mappings( **kwargs)
+    
+    for dataset_id in config[ "dataset_ids" ]:
+        kwargs = { "config": config, "filter_defs": filter_defs, "equivmaps": equivmaps, "dataset_id": dataset_id, "update_collection": "biosamples", "mapping_type": "icdo2ncit" }
+        update_report = pgx_update_biocharacteristics(**kwargs)
+    
+        kwargs = { "config": config, "output_file": path.join( config[ "paths" ][ "mod_root" ], "data", "out", date.today().isoformat()+"_pgxupdate_mappings_report_"+dataset_id+".tsv"), "output_data": update_report }
+        write_tsv_from_list(**kwargs)
 
 ################################################################################
 ################################################################################

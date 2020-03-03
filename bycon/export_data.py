@@ -1,7 +1,6 @@
 from os import path as path
 from os import rename as rename
 from pymongo import MongoClient
-from bycon import callsets_add_metadata
 
 ################################################################################
 
@@ -36,12 +35,12 @@ def write_callsets_matrix_files(**kwargs):
         if "dupmap" in cs["info"][ "statusmaps" ]:
             if cs[ "info" ][ "statusmaps" ][ "dupmap" ] is not None:
                 smf.write( tab.join( [ tab.join( cs_meta ), tab.join( cs[ "info" ][ "statusmaps" ][ "dupmap" ] ),
-                    tab.join( cs[ "info" ][ "statusmaps" ][ "delmap" ] ) ] ) + '\n' )
+                    tab.join( cs[ "info" ][ "statusmaps" ][ "delmap" ] ) ] ) + "\n" )
                 sm_no += 1
         if "dupmax" in cs["info"][ "statusmaps" ]:
             if cs[ "info" ][ "statusmaps" ][ "dupmax" ] is not None:
                 vmf.write( tab.join( [ tab.join( cs_meta ), tab.join( str(x) for x in cs[ "info" ][ "statusmaps" ][ "dupmax" ] ),
-                tab.join( str(x) for x in cs[ "info" ][ "statusmaps" ][ "delmin" ] ) ] ) + '\n' )
+                tab.join( str(x) for x in cs[ "info" ][ "statusmaps" ][ "delmin" ] ) ] ) + "\n" )
                 vm_no += 1
     smf.close()
     vmf.close()
@@ -55,3 +54,14 @@ def write_callsets_matrix_files(**kwargs):
 
     print(str(sm_no)+" callsets were written to "+status_matrix_file)
     print(str(vm_no)+" callsets were written to "+values_matrix_file)
+
+################################################################################
+
+def write_tsv_from_list(**kwargs):
+
+    tab = kwargs[ "config" ][ "const" ][ "tab_sep" ]
+    tsv = open( kwargs[ "output_file" ], 'w' )
+    for line in kwargs[ "output_data" ]:
+        tsv.write( tab.join( line ) + "\n" )
+    tsv.close
+    

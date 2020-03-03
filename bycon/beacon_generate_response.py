@@ -6,9 +6,9 @@ from os import environ
 
 ################################################################################
 
-def return_beacon_info(config, dir_path):
+def return_beacon_info(**kwargs):
 
-    with open( path.join(path.abspath(dir_path), "..", "config", "beacon_info.yaml") ) as bc:
+    with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "mod_root" ]), "config", "beacon_info.yaml") ) as bc:
         b_defs = yaml.load( bc , Loader=yaml.FullLoader)
             
     service_info = b_defs[ "service_info" ]
@@ -23,15 +23,16 @@ def return_beacon_info(config, dir_path):
     
     end_podmd"""
     
-    if "/service-info" in environ['REQUEST_URI']:
-        print(json.dumps(service_info, indent=4, sort_keys=True, default=str))
-        exit( )
+    if environ.get("REQUEST_URI"):
+        if "/service-info" in environ['REQUEST_URI']:
+            print(json.dumps(service_info, indent=4, sort_keys=True, default=str))
+            exit( )
     
     for par in b_defs[ "beacon_info" ]:
         service_info[ par ] = b_defs[ "beacon_info" ][ par ]
         
     mongo_client = MongoClient( )
-    mongo_db = mongo_client[ config[ "info_db" ] ]
+    mongo_db = mongo_client[ kwargs[ "config" ][ "info_db" ] ]
     mongo_coll = mongo_db[ 'dbstats' ]
     
     stats = mongo_coll.find_one( { }, sort=[( '_id', -1 )] )
@@ -50,7 +51,7 @@ def return_beacon_info(config, dir_path):
 
     ds_with_counts = [ ]
     for dataset in b_defs[ "beacon_info" ][ "datasets" ]:
-        if dataset["id"] in config[ "dataset_ids" ]:
+        if dataset["id"] in kwargs[ "config" ][ "dataset_ids" ]:
             dataset[ "callCount" ] = stats[ dataset["id"]+"__variants" ][ "count" ]
             dataset[ "variantCount" ] = stats[ dataset["id"]+"__variants" ][ "distincts_count_digest" ]
             dataset[ "sampleCount" ] = stats[ dataset["id"]+"__biosamples" ][ "count" ]
@@ -74,7 +75,7 @@ def create_dataset_response(**kwargs):
 
 def create_beacon_response(**kwargs):
 
-    with open( path.join(path.abspath(kwargs["dir_path"]), "..", "config", "beacon_info.yaml") ) as bc:
+    with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "mod_root" ]), "config", "beacon_info.yaml") ) as bc:
         b_defs = yaml.load( bc , Loader=yaml.FullLoader)
 
     b_response = {}

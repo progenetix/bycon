@@ -6,6 +6,7 @@ dataset_ids:
   - arraymap
   - progenetix
   - dipg
+  - tcga
 collections:
   - biosamples
   - callsets
