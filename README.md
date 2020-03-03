@@ -30,3 +30,7 @@
     NOS" diagnosis
     - unspecified output methods will use the current defaults
     - plot dots will have an opacity of "0.5"
+    
+* `bin/pgxupdate.py -f rsrc/progenetix-icdo-to-ncit.ods` -d `arraymap,progenetix`
+    - updates NCIt mappings in the _arraymap_ and _progenetix_ databases
+    from the specified mapping file

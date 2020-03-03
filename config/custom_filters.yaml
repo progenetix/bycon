@@ -5,7 +5,7 @@ icdom:
     biosamples:
       db_key: 'biocharacteristics.type.id'
       default: 1
-  pattern: '^icdom-\d{5}?$'
+  pattern: '^icdom\-\d{5}?$'
   examples:
     - 'icdom-85003'
     - 'icdom-94403'
@@ -17,7 +17,7 @@ icdot:
     biosamples:
       db_key: 'biocharacteristics.type.id'
       default: 1
-  pattern: '^icdot-C\d\d?(\.\d)?$'
+  pattern: '^icdot\-C\d\d?(\.\d)?$'
   examples:
     - 'icdot-C42.2'
     - 'icdot-54.1'

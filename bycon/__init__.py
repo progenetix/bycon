@@ -20,6 +20,7 @@ from .cmd_parse_args import pgx_queries_from_args
 from .output_preparation import callsets_add_metadata
 from .pgx_modify_records import pgx_read_mappings
 from .pgx_modify_records import pgx_update_biocharacteristics
+from .pgx_modify_records import pgx_write_mappings_to_yaml
 from .query_execution import execute_bycon_queries
 from .export_data import write_tsv_from_list
 from .export_data import write_callsets_matrix_files

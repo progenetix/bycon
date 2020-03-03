@@ -8,7 +8,7 @@ ncit:
       default: 1
     individuals:
       db_key: 'biocharacteristics.type.id'
-  pattern: '^ncit:C\d+?$'
+  pattern: '^ncit\:C\d+?$'
   examples:
     - 'ncit:C27676'
     - 'ncit:C9325'
@@ -22,7 +22,7 @@ HP:
     individuals:
       db_key: 'biocharacteristics.type.id'
       default: 1
-  pattern: '^HP:\d+?$'
+  pattern: '^HP\:\d+?$'
   examples:
     - 'HP:0012209'
 
@@ -35,7 +35,7 @@ PATO:
     individuals:
       db_key: 'biocharacteristics.type.id'
       default: 1
-  pattern: '^PATO:\d+?$'
+  pattern: '^PATO\:\d+?$'
   examples:
     - 'PATO:0020000'
 
@@ -48,7 +48,7 @@ EFO:
       default: 1
     individuals:
       db_key: 'biocharacteristics.type.id'
-  pattern: '^EFO:\d+?$'
+  pattern: '^EFO\:\d+?$'
   examples:
     - 'EFO:0009656'
 
@@ -61,7 +61,7 @@ pubmed:
     biosamples:
       db_key: 'external_references.type.id'
       default: 1
-  pattern: '^(PMID)|(pubmed):\d+?$'
+  pattern: '^(PMID)|(pubmed)\:\d+?$'
   examples:
     - 'pubmed:28966033'
     - 'pubmed:9405679'
@@ -74,7 +74,7 @@ geo:
     biosamples:
       db_key: 'external_references.type.id'
       default: 1
-  pattern: '^geo:G\d+?$'
+  pattern: '^geo\:G\d+?$'
   examples:
     - 'geo:GSE10092'
     - 'geo:GSM253289'
@@ -88,7 +88,7 @@ cellosaurus:
     biosamples:
       db_key: 'external_references.type.id'
       default: 1
-  pattern: '^cellosaurus:CVCL_\w+?$'
+  pattern: '^cellosaurus\:CVCL_\w+?$'
   examples:
     - 'cellosaurus:CVCL_1650'
     - 'cellosaurus:CVCL_0006'

@@ -2,4 +2,6 @@
 *.pyc
 data/out/*.tsv
 data/out/*.png
+data/out/*.yaml
+data/out/yaml/*
 rsrc/specification-v2/
