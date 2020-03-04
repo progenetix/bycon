@@ -14,10 +14,27 @@
 
 * web server apps - "beacon" _et al._
 
-#### `data/in`, `data/out`
+#### `config`
+
+* configuration files, separated for topic/scope
+* YAML ...
+
+#### `data/in`, `data/out`, `data/out/yaml`
 
 * input and output for example and test data
 * in `.gitignore`
+
+#### `doc`
+
+* documentation, in Markdown
+* also invoked by `-h` flag
+
+#### `rsrc`
+
+* various resources beyond configuration data
+    - mapping input table(s)
+    - external schema dumps
+    - ...
 
 ### Usage Examples
 
