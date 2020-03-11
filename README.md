@@ -48,7 +48,7 @@
     - unspecified output methods will use the current defaults
     - plot dots will have an opacity of "0.5"
     
-* `bin/pgx_update_mappings.py -f rsrc/progenetix-icdo-to-ncit.ods` -d `arraymap,progenetix`
+* `bin/pgx_update_mappings.py -f rsrc/progenetix-icdo-to-ncit.ods -d arraymap,progenetix`
     - updates NCIt mappings in the _arraymap_ and _progenetix_ databases
     from the specified mapping file
 * `bin/pgx_update_mappings.py -f rsrc/progenetix-icdo-to-ncit.ods -d arraymap,progenetix -y ~/switchdrive/work/GitHub/progenetix/ICDOntologies/current`

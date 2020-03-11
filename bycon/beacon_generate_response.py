@@ -8,7 +8,7 @@ from os import environ
 
 def return_beacon_info(**kwargs):
 
-    with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "mod_root" ]), "config", "beacon_info.yaml") ) as bc:
+    with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "module_root" ]), "config", "beacon_info.yaml") ) as bc:
         b_defs = yaml.load( bc , Loader=yaml.FullLoader)
             
     service_info = b_defs[ "service_info" ]
@@ -75,7 +75,7 @@ def create_dataset_response(**kwargs):
 
 def create_beacon_response(**kwargs):
 
-    with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "mod_root" ]), "config", "beacon_info.yaml") ) as bc:
+    with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "module_root" ]), "config", "beacon_info.yaml") ) as bc:
         b_defs = yaml.load( bc , Loader=yaml.FullLoader)
 
     b_response = {}

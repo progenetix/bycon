@@ -7,12 +7,12 @@ from os import path as path
 def read_variant_definitions(**kwargs):
 
     variant_defs = {}
-    with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "mod_root" ]), "config", "variant_parameters.yaml") ) as vd:
+    with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "module_root" ]), "config", "variant_parameters.yaml") ) as vd:
         v_defs = yaml.load( vd , Loader=yaml.FullLoader)
         variant_defs = v_defs["parameters"]     
     
     variant_request_types = {}
-    with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "mod_root" ]), "config", "variant_request_types.yaml") ) as vrt:
+    with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "module_root" ]), "config", "variant_request_types.yaml") ) as vrt:
         v_reqs = yaml.load( vrt , Loader=yaml.FullLoader)
         variant_request_types = v_reqs["parameters"]
     

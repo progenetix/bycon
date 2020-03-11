@@ -8,7 +8,7 @@ def read_filter_definitions(**kwargs):
 
     filter_defs = {}
     for ff in [ "filters", "custom_filters" ]:
-        with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "mod_root" ]), "config", ff+".yaml") ) as fd:
+        with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "module_root" ]), "config", ff+".yaml") ) as fd:
             defs = yaml.load( fd , Loader=yaml.FullLoader)
             for fpre in defs:
                 filter_defs[fpre] = defs[fpre]

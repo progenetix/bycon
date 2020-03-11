@@ -8,7 +8,7 @@ def read_beacon_v2_spec(**kwargs):
 
     # TODO: proper integration with path from config etc.
     beacon_defs = {}
-    with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "mod_root" ]), "rsrc", "specification-v2", "beacon.yaml") ) as bspec:
+    with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "module_root" ]), "rsrc", "specification-v2", "beacon.yaml") ) as bspec:
         beacon_defs = yaml.load( bspec , Loader=yaml.FullLoader)
 
     print("[")

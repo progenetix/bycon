@@ -16,7 +16,7 @@ def main():
 
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
         config = yaml.load( cf , Loader=yaml.FullLoader)
-    config[ "paths" ][ "mod_root" ] = path.join( path.abspath( dir_path ), '..' )
+    config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
     config[ "paths" ][ "out" ] = path.join( path.abspath( dir_path ), '..', "data", "out" )
     opts, args = get_cmd_args()
 

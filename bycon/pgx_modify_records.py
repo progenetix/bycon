@@ -10,7 +10,8 @@ def pgx_read_mappings(**kwargs):
 
     equivmaps = [ ]
     equiv_keys = ["icdom::id", "icdom::label", "icdot::id", "icdot::label", "ncit::id", "ncit::label"]
-    
+#     equiv_keys.extend( [ ( "query::"+ek ) for ek in equiv_keys ] )
+       
     try:
         table = get_sheet(file_name=kwargs[ "config" ][ "paths" ][ "mapping_file" ])
     except:
@@ -96,6 +97,11 @@ def pgx_write_mappings_to_yaml(**kwargs):
     
         if not _check_equivmap_data(equivmap, kwargs["equiv_keys"], kwargs["filter_defs"]):
             continue
+            
+        if equivmap["icdom::id"] == 'icdom-99999':
+            continue
+        elif equivmap["icdot::id"] == 'icdot-C99.9':
+            continue
 
         re_map = {
             'input':[
@@ -139,6 +145,10 @@ def pgx_update_biocharacteristics(**kwargs):
             continue
         
         query = { "$and": [ {db_key: equivmap["icdom::id"]}, {db_key: equivmap["icdot::id"]} ] }
+        if equivmap["icdom::id"] == 'icdom-99999':
+            query = { db_key: equivmap["icdot::id"] }
+        elif equivmap["icdom::id"] == 'icdot-C99.9':
+            query = { db_key: equivmap["icdom::id"] }
         
         for item in mongo_coll.find( query ):
             update_flag = 0

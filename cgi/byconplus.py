@@ -33,7 +33,7 @@ def main():
     
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
         config = yaml.load( cf , Loader=yaml.FullLoader)
-    config[ "paths" ][ "mod_root" ] = path.join( path.abspath( dir_path ), '..' )
+    config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
     config[ "paths" ][ "out" ] = path.abspath( config[ "paths" ][ "web_temp_dir_abs" ] )
 
     form_data = cgi_parse_query()

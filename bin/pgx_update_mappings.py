@@ -19,7 +19,7 @@ def main():
 
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
         config = yaml.load( cf , Loader=yaml.FullLoader)
-    config[ "paths" ][ "mod_root" ] = path.join( path.abspath( dir_path ), '..' )
+    config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
     config[ "paths" ][ "out" ] = path.join( path.abspath( dir_path ), '..', "data", "out" )
     config[ "paths" ][ "mapping_file" ] = path.abspath(".")
 
@@ -60,7 +60,7 @@ def main():
         kwargs = { "config": config, "filter_defs": filter_defs, "equiv_keys": equiv_keys, "equivmaps": equivmaps, "dataset_id": dataset_id, "update_collection": "biosamples", "mapping_type": "icdo2ncit" }
         update_report = pgx_update_biocharacteristics(**kwargs)
     
-        kwargs = { "config": config, "output_file": path.join( config[ "paths" ][ "mod_root" ], "data", "out", date.today().isoformat()+"_pgxupdate_mappings_report_"+dataset_id+".tsv"), "output_data": update_report }
+        kwargs = { "config": config, "output_file": path.join( config[ "paths" ][ "module_root" ], "data", "out", "logs", date.today().isoformat()+"_pgxupdate_mappings_report_"+dataset_id+".tsv"), "output_data": update_report }
         write_tsv_from_list(**kwargs)
 
 ################################################################################
