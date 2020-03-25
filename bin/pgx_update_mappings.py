@@ -27,7 +27,7 @@ def main():
     kwargs = { "config": config }
     kwargs[ "config" ][ "data_pars" ] = pgx_datapars_from_args(opts, **kwargs)
 
-    dataset_ids = [ ]
+    dataset_ids = config[ "dataset_ids" ]
     for opt, arg in opts:
         if opt in ("-f", "--mappingfile"):
             config[ "paths" ][ "mapping_file" ] = path.abspath(arg)        
@@ -35,6 +35,18 @@ def main():
             config[ "paths" ][ "icdomappath" ] = path.abspath(arg)        
         if opt in ("-d", "--dataset_ids"):
             dataset_ids = arg.split(',')
+
+
+    for dataset_id in dataset_ids:
+        print(dataset_id)
+        kwargs = { "config": config, "dataset_id": dataset_id, "update_collection": "biosamples" }
+        pgx_normalize_prefixed_ids( **kwargs )
+        
+    # exit()
+
+
+
+
 
     if not path.isfile(config[ "paths" ][ "mapping_file" ]):
         print("No existing file was provided with -f ...")

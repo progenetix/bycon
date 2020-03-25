@@ -50,7 +50,6 @@ def pgx_read_mappings(**kwargs):
 ################################################################################
 
 def pgx_write_mappings_to_yaml(**kwargs):
-
     
     example_max = 4
         
@@ -123,18 +122,52 @@ def pgx_write_mappings_to_yaml(**kwargs):
 
 ################################################################################
 
+def pgx_normalize_prefixed_ids(**kwargs):
+
+    mongo_client = MongoClient( )
+    mongo_db = mongo_client[ kwargs[ "dataset_id" ] ]
+    mongo_coll = mongo_db[ kwargs["update_collection"] ]
+
+    query = { }
+
+    fixes = { 
+                "biocharacteristics": { "ncit": "NCIT" },
+                "external_references": { "pubmed": "PMID" }
+            }
+
+    for item in mongo_coll.find( query ):
+        for para in fixes:
+            update_flag = 0
+            new_para_is = [ ]
+            for para_i in item[ para ]:
+                for fix in fixes[ para ]:
+                    if fix in para_i["type"]["id"]:
+                        para_i["type"]["id"] = para_i["type"]["id"].replace(fix, fixes[ para ][ fix ])
+                        update_flag = 1
+
+                new_para_is.append( para_i )
+
+            if update_flag == 1:
+                # print(item[ "_id" ])
+                # print(new_para_is)
+
+                mongo_coll.update_one( { "_id" : item[ "_id" ] }, { "$set": { para: new_para_is, "updated": datetime.now() } } )
+
+    mongo_client.close()
+
+################################################################################
+
 def pgx_update_biocharacteristics(**kwargs):
 
     update_report = [ [ "id" ] ]
     update_report[0].extend( kwargs["equiv_keys"] )
     update_report[0].extend( [ "replaced_ncit::id", "replaced_ncit::label" ] )
-    update_collection = kwargs["update_collection"]
         
     mongo_client = MongoClient( )
     mongo_db = mongo_client[ kwargs[ "dataset_id" ] ]
-    mongo_coll = mongo_db[ update_collection ]
+    mongo_coll = mongo_db[ kwargs["update_collection"] ]
     
-    db_key = kwargs["filter_defs"]["icdom"][ "scopes" ][ update_collection ][ "db_key" ]
+    db_key = kwargs["filter_defs"]["icdom"][ "scopes" ][ kwargs["update_collection"] ][ "db_key" ]
     
     sample_no = 0
     for equivmap in kwargs["equivmaps"]:

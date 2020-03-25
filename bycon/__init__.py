@@ -18,6 +18,7 @@ from .cmd_parse_args import plotpars_from_args
 from .cmd_parse_args import pgx_datapars_from_args
 from .cmd_parse_args import pgx_queries_from_args
 from .output_preparation import callsets_add_metadata
+from .pgx_modify_records import pgx_normalize_prefixed_ids
 from .pgx_modify_records import pgx_read_mappings
 from .pgx_modify_records import pgx_update_biocharacteristics
 from .pgx_modify_records import pgx_write_mappings_to_yaml

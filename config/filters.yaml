@@ -1,5 +1,5 @@
 # Bio-Metadata
-ncit:
+NCIT:
   name: "National Cancer Institute Thesaurus"
   url: "https://ncit.nci.nih.gov/"
   scopes:
@@ -10,8 +10,8 @@ ncit:
       db_key: 'biocharacteristics.type.id'
   pattern: '^((?:NCIT)|(?:ncit))\:C\d+?$'
   examples:
-    - 'ncit:C27676'
-    - 'ncit:C9325'
+    - 'NCIT:C27676'
+    - 'NCIT:C9325'
 
 HP:
   name: "Human Phenotype Ontology"
@@ -54,7 +54,7 @@ EFO:
 
 # Procedural Metadata
 
-pubmed:
+PMID:
   name: "PubMed"
   url: "https://www.ncbi.nlm.nih.gov/pubmed/"
   scopes:
@@ -63,8 +63,8 @@ pubmed:
       default: 1
   pattern: '^(PMID)|(pubmed)\:\d+?$'
   examples:
-    - 'pubmed:28966033'
-    - 'pubmed:9405679'
+    - 'PMID:28966033'
+    - 'PMID:9405679'
 geo:
   name: "NCBI Gene Expression Omnibus"
   url: "https://www.ncbi.nlm.nih.gov/geo/"

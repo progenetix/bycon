@@ -3,9 +3,10 @@
 import sys, yaml, re, json
 from pymongo import MongoClient
 from os import path as path
-from ontobio.ontol_factory import OntologyFactory
-from ontobio.assoc_factory import AssociationSetFactory
-from networkx import nx
+# from ontobio.ontol_factory import OntologyFactory
+# from ontobio.assoc_factory import AssociationSetFactory
+# from networkx import nx
+# from networkx.readwrite import json_graph
 
 
 # local
@@ -42,10 +43,10 @@ def main():
     config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
     config[ "paths" ][ "out" ] = path.join( config[ "paths" ][ "module_root" ], "data", "out" )
     config[ "paths" ][ "mapping_file" ] = path.join( config[ "paths" ][ "module_root" ], "rsrc", "ncit", "neoplasm-core.json" )
+    config[ "paths" ][ "hier_file" ] = path.join( config[ "paths" ][ "module_root" ], "rsrc", "ncit", "Neoplasm_Core_Hierarchy_Plus.txt" )
     
     filter_defs = read_filter_definitions( **{ "config": config } )    
-
-    
+  
     # processing ncit
     # TODO: module, reading in the different hierarchies (ICDO-M, NCIt ...)
     prefix = "ncit"
@@ -59,40 +60,110 @@ def main():
     onto_ids = list(filter(pre_filter.match, onto_ids))
     print(len(onto_ids))
         
+    print("reading "+str(config[ "paths" ][ "hier_file" ]))
+    hier_lines = open( config[ "paths" ][ "hier_file" ], 'r' ).readlines()  
+
     ONTO_IDs = list(map(str.upper, onto_ids))
     ONTO_IDs.append('NCIT:C3262')
     
     print("reading "+str(config[ "paths" ][ "mapping_file" ]))
-    ont = OntologyFactory().create( config[ "paths" ][ "mapping_file" ] )
+    # ont = OntologyFactory().create( config[ "paths" ][ "mapping_file" ] )
+    # ont_g = ont.get_graph()
+    with open( config[ "paths" ][ "mapping_file" ], "r") as fd:
+        ont = json.load( fd )
+
+    npl_core_graph = { }
+
+    for graph in ont["graphs"]:
+        if "neoplasm-core" in graph["id"]:
+            npl_core_graph = graph
+
+    print(npl_core_graph.keys())
+    print(npl_core_graph["id"])
+
+    npl_core_ncit_graph = { "nodes": [ ], "edges": [ ] }
+
+    hier_match = re.compile(r"^.+?NCIT[:_](C\d+?)\s*?$")
+
+    for node in npl_core_graph["nodes"]:
+        if hier_match.match(node[ "id" ]):
+            node[ "id" ] = "ncit:"+hier_match.match(node[ "id" ]).group(1)
+            print(node[ "id" ])
+            npl_core_ncit_graph[ "nodes" ].append(node)
+
+    for key in ["edges", "nodes"]:
+        print("=> no. of "+key+": "+str(len(npl_core_ncit_graph[ key ])))
+
+
+    # print(ont["graphs"][0].keys())
+    # print(len(ont["graphs"][0]))
+    exit()
+
     
-    [root] = ont.search('NCIT:C3262')
+# "NCIT:C3262": "Neoplasm"
+# "NCIT:C7062": "Neoplasm by Special Category"
+# "NCIT:C4741": "Neoplasm by Morphology"
+# "NCIT:C3263": "Neoplasm by Site"
+
+    onto_trees = [
+        { "label": "Neoplasm", "root": "NCIT:C3262", "classes": { } },
+        # { "label": "Neoplasm by Morphology", "root": "NCIT:C4741", "classes": { } },
+        # { "label": "Neoplasm by Site", "root": "NCIT:C3263", "classes": { } },    
+    ]
+
     all_ancestors = set( ONTO_IDs )
     
-    for onto_id in ONTO_IDs:
-        
-        if onto_id == 'NCIT:C3262':
-            continue
-            
-        [matched] = ont.search(onto_id)
-        oldies = ont.ancestors(matched)
-        oldies = set(filter(pre_filter.match, oldies))
-        for old in oldies:
-            all_ancestors.add(old)
-            
-        youngsters = ont.descendants(matched)
-        youngsters = set(filter(pre_filter.match, youngsters))
-        if len(oldies) < 1 and len(youngsters) < 1:
-            print(onto_id+" not in neoplasm_core")
-        else:
-            print(str(len(oldies))+"<--"+onto_id+"-->"+str(len(youngsters)))
-        if onto_id == "NCIT:C3262":
-            print(oldies)
-    
-    ont_g = ont.get_graph()
-    print(len(ont_g.nodes()))
-    ont_g = ont_g.subgraph(all_ancestors)
-    print(len(ont_g.nodes()))
+    for idx, tree in enumerate(onto_trees):
 
+        [root] = ont.search(tree["root"])
+        
+        print("=> processing root "+tree["root"])
+   
+        for onto_id in ONTO_IDs:
+        
+#             if onto_id == 'NCIT:C3262':
+#                 continue
+            
+            [matched] = ont.search(onto_id)
+            oldies = ont.ancestors(matched)
+            oldies = set(filter(pre_filter.match, oldies))
+            for old in oldies:
+                all_ancestors.add(old)
+            
+            youngsters = ont.descendants(matched)
+            youngsters = set(filter(pre_filter.match, youngsters))
+            if len(oldies) < 1 and len(youngsters) < 1:
+                print(onto_id+" not in neoplasm_core")
+                onto_trees[ idx ][ "classes" ][ onto_id ] = { "parents": [ 'NCIT:C3262' ], "children": [ onto_id ], "core": False }
+            else:
+                print(str(len(oldies))+"<--"+onto_id+"-->"+str(len(youngsters)))
+                onto_trees[ idx ][ "classes" ][ onto_id ] = { "parents": oldies, "children": youngsters, "core": True }
+
+    
+        # onto_trees[ idx ][ "graph" ] = ont_g.subgraph(all_ancestors)
+        # print(len(onto_trees[ idx ][ "graph" ].nodes()))
+    
+        # data = json_graph.node_link_data(onto_trees[ idx ][ "graph" ])
+        # print("=> nodes for root "+tree["root"]+": "+str(len(data["nodes"])))
+    
+        # onto_dump = path.join( config[ "paths" ][ "out" ], "ontograph_"+tree[ "root" ]+".json")
+        # with open(onto_dump, 'w') as fp:
+        #     json.dump(data, fp)
+
+        hier_classes = { }
+        hier_match = re.compile(r"^\s*?(\w.*?) \((C\d+?)\)\s*?$")
+        line_no = 0
+        for line in hier_lines:
+            if hier_match.match(line):
+                hier_item = hier_match.match(line).group(1,2)
+                hier_classes[ hier_item[1] ] = hier_item[0]
+                line_no += 1
+                print(str(line_no)+" - "+hier_classes[ hier_item[1] ])
+
+
+
+        print("Wrote graph JSON to "+onto_dump)
+    
 ################################################################################
 ################################################################################
 ################################################################################
