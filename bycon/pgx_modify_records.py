@@ -130,6 +130,10 @@ def pgx_normalize_prefixed_ids(**kwargs):
 
     query = { }
 
+    # TODO:
+    # * swap key <-> value; the correct prefix becomes key, the value a regex matching more variations
+    # * make those part of the prefix definitions in the config file
+    
     fixes = { 
                 "biocharacteristics": { "ncit": "NCIT" },
                 "external_references": { "pubmed": "PMID" }
@@ -148,9 +152,6 @@ def pgx_normalize_prefixed_ids(**kwargs):
                 new_para_is.append( para_i )
 
             if update_flag == 1:
-                # print(item[ "_id" ])
-                # print(new_para_is)
-
                 mongo_coll.update_one( { "_id" : item[ "_id" ] }, { "$set": { para: new_para_is, "updated": datetime.now() } } )
 
     mongo_client.close()
