@@ -1,11 +1,8 @@
 .DS_Store
 *.pyc
-data/out/
-data/out/2020-03-02_pgxupdate_mappings_report_arraymap.tsv
-data/out/2020-03-02_pgxupdate_mappings_report_dipg.tsv
-data/out/2020-03-02_pgxupdate_mappings_report_progenetix.tsv
-data/out/2020-03-02_pgxupdate_mappings_report_tcga.tsv
-data/out/pre-run/2020-03-02_pgxupdate_mappings_report_arraymap.tsv
-data/out/pre-run/2020-03-02_pgxupdate_mappings_report_dipg.tsv
-data/out/pre-run/2020-03-02_pgxupdate_mappings_report_progenetix.tsv
-rsrc/specification-v2/
+data/out/*.tsv
+data/out/*.json
+data/out/*.png
+data/out/logs/*.tsv
+data/out/yaml/*.yaml
+rsrc/specification-v2/*git
