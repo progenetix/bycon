@@ -21,7 +21,7 @@ def return_beacon_info(**kwargs):
     Some of the values are then added/adjusted for the legacy Beacon info
     response.
     
-    end_podmd"""
+    podmd"""
     
     if environ.get("REQUEST_URI"):
         if "/service-info" in environ['REQUEST_URI']:
@@ -47,7 +47,7 @@ def return_beacon_info(**kwargs):
     For the non-parametrized call of the application, just the basic
     information including variant counts is returned.
 
-    end_podmd"""
+    podmd"""
 
     ds_with_counts = [ ]
     for dataset in b_defs[ "beacon_info" ][ "datasets" ]:
@@ -58,10 +58,8 @@ def return_beacon_info(**kwargs):
             ds_with_counts.append(dataset)
         
     service_info[ "datasets" ] = ds_with_counts
-
-    print(json.dumps(service_info, indent=4, sort_keys=True, default=str))
   
-    return(  )
+    return( service_info )
 
 
 ################################################################################
@@ -78,9 +76,10 @@ def create_beacon_response(**kwargs):
     with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "module_root" ]), "config", "beacon_info.yaml") ) as bc:
         b_defs = yaml.load( bc , Loader=yaml.FullLoader)
 
+    # print(b_defs)
+
     b_response = {}
-    
-        
+     
 
     return(  )
 

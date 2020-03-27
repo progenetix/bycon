@@ -35,21 +35,15 @@ def main():
             config[ "paths" ][ "icdomappath" ] = path.abspath(arg)        
         if opt in ("-d", "--dataset_ids"):
             dataset_ids = arg.split(',')
-
-
+    
+    print("=> normalizing prefixes")
     for dataset_id in dataset_ids:
         print(dataset_id)
         kwargs = { "config": config, "dataset_id": dataset_id, "update_collection": "biosamples" }
         pgx_normalize_prefixed_ids( **kwargs )
-        
-    # exit()
-
-
-
-
 
     if not path.isfile(config[ "paths" ][ "mapping_file" ]):
-        print("No existing file was provided with -f ...")
+        print("No mapping file was provided with -f ...")
         exit()
         
     if not dataset_ids:

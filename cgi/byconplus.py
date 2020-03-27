@@ -20,7 +20,7 @@ https://progenetix.test/cgi-bin/bycon/cgi/byconplus.py/service-info/
 ################################################################################
 ################################################################################
 
-cgitb.enable()  # for debugging
+# cgitb.enable()  # for debugging
 
 ################################################################################
 
@@ -37,6 +37,8 @@ def main():
     config[ "paths" ][ "out" ] = path.abspath( config[ "paths" ][ "web_temp_dir_abs" ] )
 
     form_data = cgi_parse_query()
+
+    service_info = return_beacon_info( **{ "config": config } )
     
     dataset_ids = get_dataset_ids(form_data)
     # TODO: proper dataset_ids parsing & processing
@@ -47,18 +49,25 @@ def main():
     
     variant_defs, variant_request_types = read_variant_definitions( **{ "config": config } )
     variant_pars = parse_variants(form_data, variant_defs)
+
+    opts, args = get_cmd_args()
+    for opt, arg in opts:
+        if opt in ("-t"):
+            variant_pars = service_info[ "sampleAlleleRequests" ][0]
+            filters = service_info[ "sampleAlleleRequests" ][0][ "filters" ]
+    
     variant_request_type = get_variant_request_type(variant_defs, variant_pars, variant_request_types)
-        
+       
     kwargs = { "config": config, "filter_defs": filter_defs, "filters": filters }
     queries = create_queries_from_filters(**kwargs)
-    
+
     if variant_request_type in variant_request_types:
         variant_query_generator = "create_"+variant_request_type+"_query"
         queries["variants"] = getattr(cgi_parse_variant_requests, variant_query_generator)(variant_request_type, variant_pars)
-    
+
     # TODO: earlier catch for empty call => info
     if not queries:
-        return_beacon_info( **{ "config": config } )
+        print(json.dumps(service_info, indent=4, sort_keys=True, default=str))
         exit()
     
     dataset_responses = [ ]

@@ -9,12 +9,15 @@ import re, yaml
 def pgx_read_mappings(**kwargs):
 
     equivmaps = [ ]
-    equiv_keys = ["icdom::id", "icdom::label", "icdot::id", "icdot::label", "ncit::id", "ncit::label"]
+    equiv_keys = ["icdom::id", "icdom::label", "icdot::id", "icdot::label", "NCIT::id", "NCIT::label"]
 #     equiv_keys.extend( [ ( "query::"+ek ) for ek in equiv_keys ] )
-       
+
+    # relevant sheet is the first one...
+    print(kwargs[ "config" ][ "paths" ][ "mapping_file" ])       
     try:
         table = get_sheet(file_name=kwargs[ "config" ][ "paths" ][ "mapping_file" ])
-    except:
+    except Exception as e:
+        print(e)
         print("No matching mapping file could be found!")
         exit()
         
@@ -35,14 +38,12 @@ def pgx_read_mappings(**kwargs):
         for col_name in col_inds:
             try:
                 cell_val = table[ i, col_inds[ col_name ] ]
-                cell_val.replace("NCIT:", "ncit:")
                 equiv_line[ col_name ] = cell_val
             except:
                 continue
-        if equiv_line.get("ncit::id"):
+        if equiv_line.get("NCIT::id"):
             equivmaps.append(equiv_line)
             fi += 1
-#             print(str(fi)+": "+equiv_line[ "ncit::id" ])
     
     print("mappings: "+str(fi))
     return(equiv_keys, equivmaps)
@@ -108,7 +109,7 @@ def pgx_write_mappings_to_yaml(**kwargs):
                 { 'id': equivmap["icdot::id"], 'label' : equivmap["icdot::label"] }
             ],
             'equivalents':[
-                { 'id' : equivmap["ncit::id"], 'label' : equivmap["ncit::label"] }
+                { 'id' : equivmap["NCIT::id"], 'label' : equivmap["NCIT::label"] }
             ],
             'examples': equivmap.get("examples"),
             'updated': date.today().isoformat()
@@ -131,12 +132,11 @@ def pgx_normalize_prefixed_ids(**kwargs):
     query = { }
 
     # TODO:
-    # * swap key <-> value; the correct prefix becomes key, the value a regex matching more variations
     # * make those part of the prefix definitions in the config file
     
     fixes = { 
-                "biocharacteristics": { "ncit": "NCIT" },
-                "external_references": { "pubmed": "PMID" }
+                "biocharacteristics": { "NCIT": "ncit" },
+                "external_references": { "PMID": "pubmed" }
             }
 
     for item in mongo_coll.find( query ):
@@ -144,9 +144,9 @@ def pgx_normalize_prefixed_ids(**kwargs):
             update_flag = 0
             new_para_is = [ ]
             for para_i in item[ para ]:
-                for fix in fixes[ para ]:
-                    if fix in para_i["type"]["id"]:
-                        para_i["type"]["id"] = para_i["type"]["id"].replace(fix, fixes[ para ][ fix ])
+                for fix, old in fixes[ para ].items():
+                    if old in para_i["type"]["id"]:         
+                        para_i["type"]["id"] = re.sub(old, fix, para_i["type"]["id"])
                         update_flag = 1
 
                 new_para_is.append( para_i )
@@ -188,16 +188,16 @@ def pgx_update_biocharacteristics(**kwargs):
             update_flag = 0
             new_biocs = [ ]
             for bioc in item[ "biocharacteristics" ]:               
-                if re.compile( "ncit" ).match(bioc["type"]["id"]):
-                    if bioc["type"]["id"] != equivmap["ncit::id"] or bioc["type"]["label"] != equivmap["ncit::label"]:
+                if re.compile( "NCIT" ).match(bioc["type"]["id"]):
+                    if bioc["type"]["id"] != equivmap["NCIT::id"] or bioc["type"]["label"] != equivmap["NCIT::label"]:
 
                         report = [ item[ "id" ] ]
                         report.extend( str(equivmap[x]) for x in kwargs["equiv_keys"] )
                         report.extend( [ str(bioc["type"]["id"]), str(bioc["type"]["label"]) ] )
                         update_report.append(report)
             
-                        bioc["type"]["id"] = equivmap["ncit::id"]
-                        bioc["type"]["label"] = equivmap["ncit::label"]
+                        bioc["type"]["id"] = equivmap["NCIT::id"]
+                        bioc["type"]["label"] = equivmap["NCIT::label"]
                         update_flag = 1
 
                 new_biocs.append( bioc )

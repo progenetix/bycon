@@ -40,11 +40,10 @@ def get_variant_request_type(variant_defs, variant_pars, variant_request_types):
         matched_pars = [ ]
         for required in variant_request_types[ vrt ][ "all_of" ]:
             if required in variant_pars.keys():
-                if re.compile( variant_defs[ required ][ "pattern" ] ).match( variant_pars[ required ] ):
+                if re.compile( variant_defs[ required ][ "pattern" ] ).match( str(variant_pars[ required ]) ):
                     matched_pars.append( required )
             if len( matched_pars ) >= len( variant_request_types[ vrt ][ "all_of" ] ):
                 vrt_matches.append( vrt )
-#                 print(vrt+" matched: "+str(matched_pars))
 
     if len(vrt_matches) == 1:
         variant_request_type = vrt_matches[0]
@@ -72,6 +71,7 @@ def create_beacon_cnv_request_query(variant_request_type, variant_pars):
     return( variant_query )
 
 ################################################################################
+
 def create_query_from_variant_pars(**kwargs):
         
     queries = { }
