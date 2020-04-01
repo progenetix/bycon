@@ -46,20 +46,20 @@ def create_queries_from_filters(**kwargs):
  
     for filterv in kwargs[ "filters" ]:
         pref = re.split('-|:', filterv)[0]
-        
+       
         if pref in kwargs["filter_defs"]:
             if re.compile( kwargs["filter_defs"][pref]["pattern"] ).match(filterv):
                 for scope in kwargs["filter_defs"][pref]["scopes"]:
                     m_scope = kwargs["filter_defs"][pref]["scopes"][scope]
                     if m_scope["default"]:
                         query_lists[ scope ].append( { m_scope[ "db_key" ]: { "$regex": "^"+filterv } } )
+                        break
 
     for coll_name in kwargs[ "config" ][ "collections" ]:
         if len(query_lists[coll_name]) == 1:
             queries[ coll_name ] = query_lists[coll_name][0]
         elif len(query_lists[coll_name]) > 1:
             queries[ coll_name ] = { "$and": query_lists[coll_name] }
-        
     return queries
 
 ################################################################################

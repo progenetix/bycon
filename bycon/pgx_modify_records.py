@@ -8,6 +8,8 @@ import re, yaml
 from isodate import parse_duration
 
 ################################################################################
+################################################################################
+################################################################################
 
 def pgx_populate_callset_info( **kwargs ):
 
@@ -46,6 +48,9 @@ def pgx_populate_callset_info( **kwargs ):
         bios = bios_coll.find_one({"id": cs["biosample_id"] })
         inds = inds_coll.find_one({"id": bios["individual_id"] })
 
+        if not "biocharacteristics" in inds:
+            inds[ "biocharacteristics" ] = [ ]
+
         prefixed = [ *bios[ "biocharacteristics" ], *bios[ "external_references" ], *inds[ "biocharacteristics" ]  ]
 
         for mapped in prefixed:
@@ -56,18 +61,18 @@ def pgx_populate_callset_info( **kwargs ):
                         # print(cs[ "info" ][ pre ][ "id" ])
                         update_flag = 1
                         break
-                except:
+                except Exception:
                     pass
 
-        if "followup_months" in bios[ "info" ].keys():
-            if bios[ "info" ][ "followup_months" ]:
-                try:
+        if "followup_months" in bios[ "info" ]:
+            try:
+                if bios[ "info" ][ "followup_months" ]:
                     cs[ "info" ][ "followup_months" ] = float("%.1f" %  bios[ "info" ][ "followup_months" ])
                     update_flag = 1
-                except ValueError:
-                    return False            
+            except ValueError:
+                return False            
 
-        if "death" in bios[ "info" ].keys():
+        if "death" in bios[ "info" ]:
             if bios[ "info" ][ "death" ]:
                 if str(bios[ "info" ][ "death" ]) == "1":
                     cs[ "info" ][ "death" ] = "dead"
@@ -76,14 +81,17 @@ def pgx_populate_callset_info( **kwargs ):
                     cs[ "info" ][ "death" ] = "alive"
                     update_flag = 1
 
-        if "age_at_collection" in bios.keys():
-            if bios[ "age_at_collection" ][ "age" ]:    
-                if re.compile( r"P\d" ).match( bios[ "age_at_collection" ][ "age" ] ):
-                    cs[ "info" ][ "age_iso" ] = bios[ "age_at_collection" ][ "age" ]
-                    cs[ "info" ][ "age_years" ] = _isoage_to_decimal_years(bios[ "age_at_collection" ][ "age" ])
-                    # print(cs[ "info" ][ "age_iso" ])
-                    # print(cs[ "info" ][ "age_years" ])
-                    update_flag = 1
+        if "age_at_collection" in bios:
+            try:
+                if bios[ "age_at_collection" ][ "age" ]:    
+                    if re.compile( r"P\d" ).match( bios[ "age_at_collection" ][ "age" ] ):
+                        cs[ "info" ][ "age_iso" ] = bios[ "age_at_collection" ][ "age" ]
+                        cs[ "info" ][ "age_years" ] = _isoage_to_decimal_years(bios[ "age_at_collection" ][ "age" ])
+                        # print(cs[ "info" ][ "age_iso" ])
+                        # print(cs[ "info" ][ "age_years" ])
+                        update_flag = 1
+            except Exception:
+                pass
 
 
         if update_flag == 1:
@@ -94,6 +102,8 @@ def pgx_populate_callset_info( **kwargs ):
     bar.finish()
     mongo_client.close()
 
+################################################################################
+################################################################################
 ################################################################################
 
 def pgx_read_mappings(**kwargs):
@@ -138,6 +148,8 @@ def pgx_read_mappings(**kwargs):
     print("mappings: "+str(fi))
     return(equiv_keys, equivmaps)
 
+################################################################################
+################################################################################
 ################################################################################
 
 def pgx_write_mappings_to_yaml(**kwargs):
@@ -212,6 +224,8 @@ def pgx_write_mappings_to_yaml(**kwargs):
     
 
 ################################################################################
+################################################################################
+################################################################################
 
 def pgx_normalize_prefixed_ids(**kwargs):
 
@@ -246,6 +260,8 @@ def pgx_normalize_prefixed_ids(**kwargs):
 
     mongo_client.close()
 
+################################################################################
+################################################################################
 ################################################################################
 
 def pgx_update_biocharacteristics(**kwargs):
@@ -301,6 +317,8 @@ def pgx_update_biocharacteristics(**kwargs):
     return(update_report)
 
 ################################################################################
+################################################################################
+################################################################################
 
 def _check_equivmap_data(equivmap, equiv_keys, filter_defs):
 
@@ -317,6 +335,8 @@ def _check_equivmap_data(equivmap, equiv_keys, filter_defs):
 
     return status
 
+################################################################################
+################################################################################
 ################################################################################
 
 def _isoage_to_decimal_years(isoage):

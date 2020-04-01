@@ -8,7 +8,7 @@ NCIT:
       default: 1
     individuals:
       db_key: 'biocharacteristics.type.id'
-  pattern: '^((?:NCIT)|(?:ncit))\:C\d+?$'
+  pattern: '^NCIT\:C\d+?$'
   examples:
     - 'NCIT:C27676'
     - 'NCIT:C9325'

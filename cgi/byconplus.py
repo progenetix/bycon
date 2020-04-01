@@ -12,6 +12,7 @@ from bycon import *
 
 """
 https://progenetix.test/cgi-bin/bycon/cgi/byconplus.py?filters=icdom-85,icdot-C54&referenceName=9&startMin=18000000&startMax=24000000&endMin=22000000&endMax=2600000&variantType=DEL
+https://progenetix.test/cgi-bin/bycon/cgi/byconplus.py?filters=NCIT:C3326&referenceName=9&startMin=18000000&startMax=24000000&endMin=22000000&endMax=2600000&variantType=DEL
 https://progenetix.test/cgi-bin/bycon/cgi/byconplus.py
 https://progenetix.test/cgi-bin/bycon/cgi/byconplus.py/service-info/
 """
@@ -26,8 +27,10 @@ https://progenetix.test/cgi-bin/bycon/cgi/byconplus.py/service-info/
 
 def main():
 
-    print('Content-Type: text')
+    print('Content-Type: application/json')
     print()
+    print()
+    # exit()    
     
 #     read_beacon_v2_spec(dir_path)
     
@@ -77,14 +80,14 @@ def main():
         kwargs[ "query_results" ] = execute_bycon_queries(**kwargs)
         dataset_responses.append( create_dataset_response(**kwargs) )   
     
-    kwargs = { "config": config, "dataset_responses": dataset_responses }
-    create_beacon_response(**kwargs)
+    kwargs = { "config": config, "service_info": service_info, "dataset_responses": dataset_responses }
+    beacon_response = create_beacon_response(**kwargs)
     
-#     print(json.dumps(dataset_responses, indent=4, sort_keys=True, default=str))
+    print(json.dumps(beacon_response, indent=4, sort_keys=True, default=str))
 #     print(json.dumps(queries))
     
-    for res_key in dataset_responses[0]:
-        print(res_key+": "+str(len(dataset_responses[0][ res_key ])))
+    # for res_key in dataset_responses[0]:
+    #     print(res_key+": "+str(len(dataset_responses[0][ res_key ])))
     
 ################################################################################
 ################################################################################

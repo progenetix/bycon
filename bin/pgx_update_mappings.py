@@ -92,21 +92,12 @@ def main():
 ################################################################################
 
 def _confirm(prompt=None, resp=False):
+
     """prompts for yes or no response from the user. Returns True for yes and
     False for no.
 
     'resp' should be set to the default value assumed by the caller when
     user simply types ENTER.
-
-    >>> confirm(prompt='Create Directory?', resp=True)
-    Create Directory? [y]|n: 
-    True
-    >>> confirm(prompt='Create Directory?', resp=False)
-    Create Directory? [n]|y: 
-    False
-    >>> confirm(prompt='Create Directory?', resp=False)
-    Create Directory? [n]|y: y
-    True
 
     """
     

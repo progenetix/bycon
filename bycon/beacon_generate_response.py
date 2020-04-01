@@ -66,22 +66,51 @@ def return_beacon_info(**kwargs):
 
 def create_dataset_response(**kwargs):
 
+    # TODO: getting the correct response structure from the schema
 
-	return( kwargs[ "query_results" ] )
+    dataset_allele_resp = {
+        "exists": False,
+        "error": "",
+        "variantCount": 0,
+        "callCount": 0,
+        "sampleCount": 0,
+        "frequency": 0,
+        "note": "",
+        "externalUrl": "",
+        "info": { },
+        "datasetHandover": [ ] }
+
+    if len(kwargs[ "query_results" ][ "variants::_id" ]) > 0:
+        dataset_allele_resp[ "exists" ] = True
+        dataset_allele_resp[ "variantCount" ] = len(kwargs[ "query_results" ][ "variants::_id" ])
+    if len(kwargs[ "query_results" ][ "biosamples::_id" ]) > 0:
+        dataset_allele_resp[ "sampleCount" ] = len(kwargs[ "query_results" ][ "biosamples::_id" ])
+
+    return( dataset_allele_resp )
 
 ################################################################################
 
 def create_beacon_response(**kwargs):
 
-    with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "module_root" ]), "config", "beacon_info.yaml") ) as bc:
-        b_defs = yaml.load( bc , Loader=yaml.FullLoader)
-
+    # with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "module_root" ]), "config", "beacon_info.yaml") ) as bc:
+    #     b_defs = yaml.load( bc , Loader=yaml.FullLoader)
     # print(b_defs)
 
-    b_response = {}
+    # TODO: getting the correct response structure from the schema
+
+    b_attr = [ "id", "beaconId", "name", "serviceUrl", 'organization', 'apiVersion', "info", "updateDateTime" ]
+    b_response = { "exists": False }
+    # print( kwargs[ "service_info" ].keys() )
+    for b_a in b_attr:
+        try:
+            b_response[ b_a ] = kwargs[ "service_info" ][ b_a ]
+        except Exception:
+            pass
+ 
+    b_response[ "datasetAlleleResponses" ] = kwargs[ "dataset_responses" ]
      
 
-    return(  )
+    return( b_response )
 
 
 ################################################################################
