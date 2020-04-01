@@ -6,3 +6,4 @@ data/out/*.png
 data/out/logs/*.tsv
 data/out/yaml/*.yaml
 rsrc/specification-v2/*git
+rsrc/specification-v2/

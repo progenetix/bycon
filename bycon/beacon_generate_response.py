@@ -108,7 +108,10 @@ def create_beacon_response(**kwargs):
             pass
  
     b_response[ "datasetAlleleResponses" ] = kwargs[ "dataset_responses" ]
-     
+
+    for b_r in b_response[ "datasetAlleleResponses" ]:
+        if b_r[ "exists" ] == True:
+            b_response[ "exists" ] = True
 
     return( b_response )
 
