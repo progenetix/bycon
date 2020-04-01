@@ -11,6 +11,8 @@ dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon import *
 
+# TODO: Interactive selection of procedures
+
 ################################################################################
 ################################################################################
 ################################################################################
@@ -22,6 +24,8 @@ def main():
     config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
     config[ "paths" ][ "out" ] = path.join( path.abspath( dir_path ), '..', "data", "out" )
     config[ "paths" ][ "mapping_file" ] = path.abspath(".")
+
+    filter_defs = read_filter_definitions( **{ "config": config } )    
 
     opts, args = get_cmd_args()
     kwargs = { "config": config }
@@ -36,38 +40,96 @@ def main():
         if opt in ("-d", "--dataset_ids"):
             dataset_ids = arg.split(',')
     
-    print("=> normalizing prefixes")
-    for dataset_id in dataset_ids:
-        print(dataset_id)
-        kwargs = { "config": config, "dataset_id": dataset_id, "update_collection": "biosamples" }
-        pgx_normalize_prefixed_ids( **kwargs )
-
-    if not path.isfile(config[ "paths" ][ "mapping_file" ]):
-        print("No mapping file was provided with -f ...")
-        exit()
-        
     if not dataset_ids:
         print("No existing dataset_id was provided with -d ...")
         exit()
    
-    filter_defs = read_filter_definitions( **{ "config": config } )    
-    kwargs = { "config": config, "filter_defs": filter_defs }
-    equiv_keys, equivmaps = pgx_read_mappings( **kwargs)
-    
-    kwargs = { "config": config, "filter_defs": filter_defs, "equiv_keys": equiv_keys, "equivmaps": equivmaps }
-    
-    pgx_write_mappings_to_yaml( **kwargs)
-    
-    for dataset_id in dataset_ids:
-        if not dataset_id in config[ "dataset_ids" ]:
-            print(dataset_id+" does not exist")
-            continue
+    ############################################################################
+
+    if _confirm("Normalize Prefixes?", False):
+
+        print("=> normalizing prefixes")
+        for dataset_id in dataset_ids:
+            print(dataset_id)
+            kwargs = { "config": config, "dataset_id": dataset_id, "update_collection": "biosamples" }
+            pgx_normalize_prefixed_ids( **kwargs )
+
+    ############################################################################
+
+    if _confirm("Update Mappings?", False):
+ 
+        if not path.isfile(config[ "paths" ][ "mapping_file" ]):
+            print("No mapping file was provided with -f ...")
+        else:        
+            kwargs = { "config": config, "filter_defs": filter_defs }
+            equiv_keys, equivmaps = pgx_read_mappings( **kwargs)
             
-        kwargs = { "config": config, "filter_defs": filter_defs, "equiv_keys": equiv_keys, "equivmaps": equivmaps, "dataset_id": dataset_id, "update_collection": "biosamples", "mapping_type": "icdo2ncit" }
-        update_report = pgx_update_biocharacteristics(**kwargs)
+            kwargs = { "config": config, "filter_defs": filter_defs, "equiv_keys": equiv_keys, "equivmaps": equivmaps }
+            
+            pgx_write_mappings_to_yaml( **kwargs)
+            
+            for dataset_id in dataset_ids:
+                if not dataset_id in config[ "dataset_ids" ]:
+                    print(dataset_id+" does not exist")
+                    continue
+                    
+                kwargs = { "config": config, "filter_defs": filter_defs, "equiv_keys": equiv_keys, "equivmaps": equivmaps, "dataset_id": dataset_id, "update_collection": "biosamples", "mapping_type": "icdo2ncit" }
+                update_report = pgx_update_biocharacteristics(**kwargs)
+            
+                kwargs = { "config": config, "output_file": path.join( config[ "paths" ][ "module_root" ], "data", "out", "logs", date.today().isoformat()+"_pgxupdate_mappings_report_"+dataset_id+".tsv"), "output_data": update_report }
+                write_tsv_from_list(**kwargs)
+
+    ############################################################################
+
+    if _confirm("Denormalize Biosample Essentials Into Callsets?", False):
+
+        print("=> denormalizing into callsets")
+        for dataset_id in dataset_ids:
+            print(dataset_id)
+            kwargs = { "config": config, "filter_defs": filter_defs, "dataset_id": dataset_id }
+            pgx_populate_callset_info( **kwargs )
+
+################################################################################
+
+def _confirm(prompt=None, resp=False):
+    """prompts for yes or no response from the user. Returns True for yes and
+    False for no.
+
+    'resp' should be set to the default value assumed by the caller when
+    user simply types ENTER.
+
+    >>> confirm(prompt='Create Directory?', resp=True)
+    Create Directory? [y]|n: 
+    True
+    >>> confirm(prompt='Create Directory?', resp=False)
+    Create Directory? [n]|y: 
+    False
+    >>> confirm(prompt='Create Directory?', resp=False)
+    Create Directory? [n]|y: y
+    True
+
+    """
     
-        kwargs = { "config": config, "output_file": path.join( config[ "paths" ][ "module_root" ], "data", "out", "logs", date.today().isoformat()+"_pgxupdate_mappings_report_"+dataset_id+".tsv"), "output_data": update_report }
-        write_tsv_from_list(**kwargs)
+    if prompt is None:
+        prompt = 'Confirm'
+
+    if resp:
+        prompt = '%s [%s]|%s: ' % (prompt, 'y', 'n')
+    else:
+        prompt = '%s [%s]|%s: ' % (prompt, 'n', 'y')
+        
+    while True:
+        ans = input(prompt)
+        if not ans:
+            return resp
+        if ans not in ['y', 'Y', 'n', 'N']:
+            print("please enter y or n.")
+            continue
+        if ans == 'y' or ans == 'Y':
+            return True
+        if ans == 'n' or ans == 'N':
+            return False
+
 
 ################################################################################
 ################################################################################
