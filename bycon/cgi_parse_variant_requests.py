@@ -20,29 +20,34 @@ def read_variant_definitions(**kwargs):
 
 ################################################################################
 
-def parse_variants(form_data, variant_defs):
+def parse_variants( **kwargs ):
 
     variant_pars = { }
-    for v_par in variant_defs:    
-        if v_par in form_data.keys():
-            variant_pars[ v_par ] = form_data.getvalue(v_par)
+    for v_par in kwargs["variant_defs"]:    
+        if v_par in kwargs["form_data"].keys():
+            variant_pars[ v_par ] = kwargs["form_data"].getvalue(v_par)
+
+    # for debugging
+    for opt, arg in kwargs["opts"]:
+        if opt in ("-t"):
+            variant_pars = kwargs["service_info"][ "sampleAlleleRequests" ][0]
     
     return( variant_pars )
 
 ################################################################################
 
-def get_variant_request_type(variant_defs, variant_pars, variant_request_types):
+def get_variant_request_type( **kwargs ):
 
     variant_request_type = "no variant request"
     vrt_matches = [ ]
 
-    for vrt in variant_request_types:
+    for vrt in kwargs[ "variant_request_types" ]:
         matched_pars = [ ]
-        for required in variant_request_types[ vrt ][ "all_of" ]:
-            if required in variant_pars.keys():
-                if re.compile( variant_defs[ required ][ "pattern" ] ).match( str(variant_pars[ required ]) ):
+        for required in kwargs[ "variant_request_types" ][ vrt ][ "all_of" ]:
+            if required in kwargs["variant_pars"].keys():
+                if re.compile( kwargs["variant_defs"][ required ][ "pattern" ] ).match( str( kwargs["variant_pars"][ required ] ) ):
                     matched_pars.append( required )
-            if len( matched_pars ) >= len( variant_request_types[ vrt ][ "all_of" ] ):
+            if len( matched_pars ) >= len( kwargs[ "variant_request_types" ][ vrt ][ "all_of" ] ):
                 vrt_matches.append( vrt )
 
     if len(vrt_matches) == 1:
@@ -62,10 +67,10 @@ def create_beacon_cnv_request_query(variant_request_type, variant_pars):
     variant_query = { "$and": [
         { "reference_name": variant_pars[ "referenceName" ] },
         { "variant_type": variant_pars[ "variantType" ] },
-        { "start": { "$gte": int(variant_pars[ "startMin" ]) } },
-        { "start": { "$gte": int(variant_pars[ "startMax" ]) } },
-        { "end": { "$gte": int(variant_pars[ "endMin" ]) } },
-        { "end": { "$gte": int(variant_pars[ "endMax" ]) } }
+        { "start": { "$gt": int(variant_pars[ "startMin" ]) } },
+        { "start": { "$lte": int(variant_pars[ "startMax" ]) } },
+        { "end": { "$gt": int(variant_pars[ "endMin" ]) } },
+        { "end": { "$lte": int(variant_pars[ "endMax" ]) } }
     ]}
 
     return( variant_query )

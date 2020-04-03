@@ -69,22 +69,25 @@ def create_dataset_response(**kwargs):
     # TODO: getting the correct response structure from the schema
 
     dataset_allele_resp = {
+        "datasetId": kwargs[ "dataset_id" ],
         "exists": False,
         "error": "",
-        "variantCount": 0,
-        "callCount": 0,
-        "sampleCount": 0,
+        "variantCount": kwargs[ "query_results" ][ "counts" ][ "variants" ],
+        "callCount": kwargs[ "query_results" ][ "counts" ][ "variants" ],
+        "sampleCount": kwargs[ "query_results" ][ "counts" ][ "biosamples" ],
         "frequency": 0,
         "note": "",
         "externalUrl": "",
         "info": { },
         "datasetHandover": [ ] }
 
-    if len(kwargs[ "query_results" ][ "variants::_id" ]) > 0:
+    # TODO: The "true" may actually be fulfilled by non-variant query types in v2.
+
+    if dataset_allele_resp[ "variantCount" ] > 0:
         dataset_allele_resp[ "exists" ] = True
-        dataset_allele_resp[ "variantCount" ] = len(kwargs[ "query_results" ][ "variants::_id" ])
-    if len(kwargs[ "query_results" ][ "biosamples::_id" ]) > 0:
-        dataset_allele_resp[ "sampleCount" ] = len(kwargs[ "query_results" ][ "biosamples::_id" ])
+    if dataset_allele_resp[ "variantCount" ] > 0:
+        dataset_allele_resp[ "frequency" ] = float("%.5f" % (dataset_allele_resp[ "variantCount" ] / kwargs[ "query_results" ][ "counts" ][ "variants_all" ]) )
+
 
     return( dataset_allele_resp )
 

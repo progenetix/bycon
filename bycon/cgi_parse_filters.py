@@ -4,7 +4,7 @@ from os import path as path
 
 ################################################################################
 
-def read_filter_definitions(**kwargs):
+def read_filter_definitions( **kwargs ):
 
     filter_defs = {}
     for ff in [ "filters", "custom_filters" ]:
@@ -17,27 +17,37 @@ def read_filter_definitions(**kwargs):
 
 ################################################################################
 
-def parse_filters(form_data):
+def parse_filters( **kwargs ):
 
-    filters = form_data.getlist('filters')
+    filters = kwargs["form_data"].getlist('filters')
     filters = ','.join(filters)
     filters = filters.split(',')
-    
+
+    # for debugging
+    for opt, arg in kwargs["opts"]:
+        if opt in ("-t"):
+            filters = kwargs["service_info"][ "sampleAlleleRequests" ][0][ "filters" ]
+
     return(filters)
   
 ################################################################################
 
-def get_dataset_ids(form_data):
+def get_dataset_ids( **kwargs ):
 
-    dataset_ids = form_data.getlist('datasetIds')
+    dataset_ids = kwargs[ "form_data" ].getlist('datasetIds')
     dataset_ids = ','.join(dataset_ids)
     dataset_ids = dataset_ids.split(',')
+
+    # for debugging
+    for opt, arg in kwargs["opts"]:
+        if opt in ("-t"):
+            dataset_ids = kwargs["service_info"][ "sampleAlleleRequests" ][0][ "datasetIds" ]
     
     return(dataset_ids)
   
 ################################################################################
 
-def create_queries_from_filters(**kwargs):
+def create_queries_from_filters( **kwargs ):
         
     queries = { }
     query_lists = { }
