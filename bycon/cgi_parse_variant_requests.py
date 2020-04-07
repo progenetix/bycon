@@ -59,6 +59,33 @@ def get_variant_request_type( **kwargs ):
     
 ################################################################################
 
+def create_beacon_allele_request_query(variant_request_type, variant_pars):
+
+    """podmd
+    beacon_allele_request:
+        all_of:
+          - start
+          - referenceName
+          - referenceBases
+          - alternateBases
+    podmd"""
+
+    if variant_request_type != "beacon_allele_request":
+        return
+
+    # TODO: Regexes for ref or alt with wildcard characters
+        
+    variant_query = { "$and": [
+        { "reference_name": variant_pars[ "referenceName" ] },
+        { "start": int(variant_pars[ "start" ]) },
+        { "reference_bases": variant_pars[ "referenceBases" ] },
+        { "alternate_bases": variant_pars[ "alternateBases" ] }
+    ]}
+
+    return( variant_query )
+
+################################################################################
+
 def create_beacon_cnv_request_query(variant_request_type, variant_pars):
 
     if variant_request_type != "beacon_cnv_request":
