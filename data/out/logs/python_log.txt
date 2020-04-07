@@ -1,0 +1,245 @@
+INFO:root:Start: 2020-04-07 10:49:28.712819
+INFO:root:Init steps: 0:00:00.040369
+INFO:root:Parsing steps: 0:00:00.024244
+INFO:root:		 cs_from_vars: {'biosamples': {'biocharacteristics.type.id': {'$regex': '^icdom-94403'}}, 'variants': {'$and': [{'reference_name': '9'}, {'start_min': {'$lt': 21975098}}, {'end_max': {'$gte': 21967753}}, {'start_max': {'$gte': 18000000}}, {'end_min': {'$lt': 26000000}}, {'variant_type': 'DEL'}]}}
+INFO:root:	 biosamples: 0:00:00.296619
+INFO:root:	 callsets: 0:00:00.000006
+INFO:root:		 callsets count: 2108
+INFO:root:		 cs_from_vars: 0:00:00.791431
+INFO:root:		 variants_id: 0:00:00.000763
+INFO:root:		 variants count: 0
+INFO:root:		 variants_digest: 0:00:00.000724
+INFO:root:		 digest count: 0
+INFO:root:	 variants: 0:00:00.000003
+INFO:root:	 callsets::_id: 0:00:00.016894
+INFO:root:	 biosamples::id: 0:00:00.006736
+INFO:root:	 biosamples::_id: 0:00:00.007353
+INFO:root:	 counts for all callsets: 0:00:00.000663
+INFO:root:	 counts for all biosamples: 0:00:00.000451
+INFO:root:	 variant counts: 0:00:00.000431
+INFO:root:Query: {'biosamples': {'biocharacteristics.type.id': {'$regex': '^icdom-94403'}}, 'variants': {'$and': [{'reference_name': '9'}, {'start_min': {'$lt': 21975098}}, {'end_max': {'$gte': 21967753}}, {'start_max': {'$gte': 18000000}}, {'end_min': {'$lt': 26000000}}, {'variant_type': 'DEL'}]}}: 0:00:01.148432
+INFO:root:Query steps: 0:00:00.000338
+INFO:root:Start: 2020-04-07 10:59:28.724689
+INFO:root:Init steps: 0:00:00.044616
+INFO:root:Parsing steps: 0:00:00.027814
+INFO:root:	 biosamples: 0:00:00.296180
+INFO:root:	 callsets: 0:00:00.000004
+INFO:root:		 callsets count: 2108
+INFO:root:		 cs_from_vars: 0:00:00.815910
+INFO:root:		 variants_id: 0:00:00.000696
+INFO:root:Start: 2020-04-07 10:59:47.949752
+INFO:root:Init steps: 0:00:00.043558
+INFO:root:Parsing steps: 0:00:00.024702
+INFO:root:	 biosamples: 0:00:00.289839
+INFO:root:	 callsets: 0:00:00.000004
+INFO:root:		 callsets count: 2108
+INFO:root:		 cs_from_vars: 0:00:00.781227
+INFO:root:		 variants_id: 0:00:00.000844
+INFO:root:Start: 2020-04-07 11:01:16.022759
+INFO:root:Init steps: 0:00:00.046124
+INFO:root:Parsing steps: 0:00:00.025051
+INFO:root:	 biosamples: 0:00:00.275316
+INFO:root:	 callsets: 0:00:00.000005
+INFO:root:		 callsets count: 2108
+INFO:root:		 cs_from_vars: 0:00:00.805498
+INFO:root:		 variants_id: 0:00:00.000817
+INFO:root:Start: 2020-04-07 11:02:00.454905
+INFO:root:Init steps: 0:00:00.044618
+INFO:root:Parsing steps: 0:00:00.023869
+INFO:root:	 biosamples: 0:00:00.287508
+INFO:root:	 callsets: 0:00:00.000005
+INFO:root:		 callsets count: 2108
+INFO:root:		 cs_from_vars: 0:00:00.788864
+INFO:root:		 variants_id: 0:00:00.000815
+INFO:root:		 variants count: 0
+INFO:root:		 variants_digest: 0:00:00.000788
+INFO:root:		 digest count: 0
+INFO:root:	 variants: 0:00:00.000003
+INFO:root:	 callsets::_id: 0:00:00.010488
+INFO:root:	 biosamples::id: 0:00:00.007114
+INFO:root:	 biosamples::_id: 0:00:00.007565
+INFO:root:	 counts for all callsets: 0:00:00.000582
+INFO:root:	 counts for all biosamples: 0:00:00.000454
+INFO:root:	 variant counts: 0:00:00.000503
+INFO:root:Query: {'biosamples': {'biocharacteristics.type.id': {'$regex': '^icdom-94403'}}, 'variants': {'$and': [{'reference_name': '9'}, {'start_min': {'$lt': 21975098}}, {'end_max': {'$gte': 21967753}}, {'start_max': {'$gte': 18000000}}, {'end_min': {'$lt': 26000000}}, {'variant_type': 'DEL'}]}}: 0:00:01.130756
+INFO:root:Query steps: 0:00:00.000350
+INFO:root:Start: 2020-04-07 11:03:31.580819
+INFO:root:Init steps: 0:00:00.038989
+INFO:root:Parsing steps: 0:00:00.024207
+INFO:root:	 biosamples: 0:00:00.310723
+INFO:root:	 callsets: 0:00:00.000005
+INFO:root:		 callsets count: 2108
+INFO:root:		 cs_from_vars: 0:00:00.789373
+INFO:root:		 variants_id: 0:00:00.000794
+INFO:root:		 variants count: 0
+INFO:root:		 variants_digest: 0:00:00.000820
+INFO:root:		 digest count: 0
+INFO:root:	 variants: 0:00:00.000003
+INFO:root:	 callsets::_id: 0:00:00.008685
+INFO:root:	 biosamples::id: 0:00:00.006598
+INFO:root:	 biosamples::_id: 0:00:00.016122
+INFO:root:	 counts for all callsets: 0:00:00.000610
+INFO:root:	 counts for all biosamples: 0:00:00.000555
+INFO:root:	 variant counts: 0:00:00.000511
+INFO:root:Query: {'biosamples': {'biocharacteristics.type.id': {'$regex': '^icdom-94403'}}, 'variants': {'$and': [{'reference_name': '9'}, {'start_min': {'$lt': 21975098}}, {'end_max': {'$gte': 21967753}}, {'start_max': {'$gte': 18000000}}, {'end_min': {'$lt': 26000000}}, {'variant_type': 'DEL'}]}}: 0:00:01.161391
+INFO:root:Query steps: 0:00:00.000352
+INFO:root:Start: 2020-04-07 11:04:05.194159
+INFO:root:Init steps: 0:00:00.046952
+INFO:root:Parsing steps: 0:00:00.024794
+INFO:root:	 biosamples: 0:00:00.258641
+INFO:root:	 callsets: 0:00:00.000005
+INFO:root:		 callsets count: 2108
+INFO:root:		 cs_from_vars: 0:00:00.797227
+INFO:root:		 variants_id: 0:00:00.000564
+INFO:root:		 variants count: 0
+INFO:root:		 variants_digest: 0:00:00.000583
+INFO:root:		 digest count: 0
+INFO:root:	 variants: 0:00:00.000002
+INFO:root:	 callsets::_id: 0:00:00.013728
+INFO:root:	 biosamples::id: 0:00:00.006612
+INFO:root:	 biosamples::_id: 0:00:00.008626
+INFO:root:	 counts for all callsets: 0:00:00.000599
+INFO:root:	 counts for all biosamples: 0:00:00.000591
+INFO:root:	 variant counts: 0:00:00.000394
+INFO:root:Query: {'biosamples': {'biocharacteristics.type.id': {'$regex': '^icdom-94403'}}, 'variants': {'$and': [{'reference_name': '9'}, {'start_min': {'$lt': 21975098}}, {'end_max': {'$gte': 21967753}}, {'start_max': {'$gte': 18000000}}, {'end_min': {'$lt': 26000000}}, {'variant_type': 'DEL'}]}}: 0:00:01.114433
+INFO:root:Query steps: 0:00:00.000280
+INFO:root:Start: 2020-04-07 11:06:39.315100
+INFO:root:Init steps: 0:00:00.046870
+INFO:root:Parsing steps: 0:00:00.024524
+INFO:root:	 biosamples: 0:00:00.265534
+INFO:root:	 callsets: 0:00:00.000005
+INFO:root:		 callsets count: 2108
+INFO:root:		 cs_from_vars: 0:00:00.738641
+INFO:root:		 variants_id: 0:00:00.000656
+INFO:root:		 variants count: 0
+INFO:root:		 variants_digest: 0:00:00.000858
+INFO:root:		 digest count: 0
+INFO:root:	 variants: 0:00:00.000003
+INFO:root:	 callsets::_id: 0:00:00.007167
+INFO:root:	 biosamples::id: 0:00:00.006808
+INFO:root:	 biosamples::_id: 0:00:00.020465
+INFO:root:	 counts for all callsets: 0:00:00.000612
+INFO:root:	 counts for all biosamples: 0:00:00.000713
+INFO:root:	 variant counts: 0:00:00.000524
+INFO:root:Query: {'biosamples': {'biocharacteristics.type.id': {'$regex': '^icdom-94403'}}, 'variants': {'$and': [{'reference_name': '9'}, {'start_min': {'$lt': 21975098}}, {'end_max': {'$gte': 21967753}}, {'start_max': {'$gte': 18000000}}, {'end_min': {'$lt': 26000000}}, {'variant_type': 'DEL'}]}}: 0:00:01.068799
+INFO:root:Query steps: 0:00:00.000329
+INFO:root:Start: 2020-04-07 11:07:14.991040
+INFO:root:Init steps: 0:00:00.040708
+INFO:root:Parsing steps: 0:00:00.023861
+INFO:root:	 biosamples: 0:00:00.288440
+INFO:root:	 callsets: 0:00:00.000004
+INFO:root:		 callsets count: 2108
+INFO:root:		 cs_from_vars: 0:00:00.800551
+INFO:root:		 variants_id: 0:00:00.000846
+INFO:root:		 variants count: 0
+INFO:root:		 variants_digest: 0:00:00.000792
+INFO:root:		 digest count: 0
+INFO:root:	 variants: 0:00:00.000003
+INFO:root:	 callsets::_id: 0:00:00.008544
+INFO:root:	 biosamples::id: 0:00:00.012912
+INFO:root:	 biosamples::_id: 0:00:00.007399
+INFO:root:	 counts for all callsets: 0:00:00.000722
+INFO:root:	 counts for all biosamples: 0:00:00.000483
+INFO:root:	 variant counts: 0:00:00.000454
+INFO:root:Query: {'biosamples': {'biocharacteristics.type.id': {'$regex': '^icdom-94403'}}, 'variants': {'$and': [{'reference_name': '9'}, {'start_min': {'$lt': 21975098}}, {'end_max': {'$gte': 21967753}}, {'start_max': {'$gte': 18000000}}, {'end_min': {'$lt': 26000000}}, {'variant_type': 'DEL'}]}}: 0:00:01.147327
+INFO:root:Query steps: 0:00:00.000336
+INFO:root:Start: 2020-04-07 11:08:00.278709
+INFO:root:Init steps: 0:00:00.041881
+INFO:root:Parsing steps: 0:00:00.026617
+INFO:root:	 biosamples: 0:00:00.289115
+INFO:root:	 callsets: 0:00:00.000005
+INFO:root:		 callsets count: 2108
+INFO:root:		 cs_from_vars: 0:00:00.798490
+INFO:root:		 variants_id: 0:00:00.000585
+INFO:root:		 variants count: 0
+INFO:root:		 variants_digest: 0:00:00.000600
+INFO:root:		 digest count: 0
+INFO:root:	 variants: 0:00:00.000002
+INFO:root:	 callsets::_id: 0:00:00.014950
+INFO:root:	 biosamples::id: 0:00:00.006913
+INFO:root:	 biosamples::_id: 0:00:00.007738
+INFO:root:	 counts for all callsets: 0:00:00.000578
+INFO:root:	 counts for all biosamples: 0:00:00.000489
+INFO:root:	 variant counts: 0:00:00.000488
+INFO:root:Query: {'biosamples': {'biocharacteristics.type.id': {'$regex': '^icdom-94403'}}, 'variants': {'$and': [{'reference_name': '9'}, {'start_min': {'$lt': 21975098}}, {'end_max': {'$gte': 21967753}}, {'start_max': {'$gte': 18000000}}, {'end_min': {'$lt': 26000000}}, {'variant_type': 'DEL'}]}}: 0:00:01.148905
+INFO:root:Query steps: 0:00:00.000394
+INFO:root:Start: 2020-04-07 11:11:11.089101
+INFO:root:Init steps: 0:00:00.046160
+INFO:root:Parsing steps: 0:00:00.025692
+INFO:root:	 biosamples: 0:00:00.287923
+INFO:root:	 callsets: 0:00:00.000006
+INFO:root:		 callsets count: 2108
+INFO:root:		 cs_from_vars: 0:00:00.786818
+INFO:root:		 variants_id: 0:00:00.000860
+INFO:root:		 variants count: 0
+INFO:root:		 variants_digest: 0:00:00.000732
+INFO:root:		 digest count: 0
+INFO:root:	 variants: 0:00:00.000002
+INFO:root:	 callsets::_id: 0:00:00.014893
+INFO:root:	 biosamples::id: 0:00:00.007233
+INFO:root:	 biosamples::_id: 0:00:00.006680
+INFO:root:	 counts for all callsets: 0:00:00.000747
+INFO:root:	 counts for all biosamples: 0:00:00.000515
+INFO:root:	 variant counts: 0:00:00.000433
+INFO:root:Query: {'biosamples': {'biocharacteristics.type.id': {'$regex': '^icdom-94403'}}, 'variants': {'$and': [{'reference_name': '9'}, {'start_min': {'$lt': 21975098}}, {'end_max': {'$gte': 21967753}}, {'start_max': {'$gte': 18000000}}, {'end_min': {'$lt': 26000000}}, {'variant_type': 'DEL'}]}}: 0:00:01.134865
+INFO:root:Query steps: 0:00:00.000395
+INFO:root:Start: 2020-04-07 11:13:38.590531
+INFO:root:Init steps: 0:00:00.039847
+INFO:root:Parsing steps: 0:00:00.024175
+INFO:root:	 biosamples: 0:00:00.281576
+INFO:root:	 callsets: 0:00:00.000006
+INFO:root:		 callsets count: 2108
+INFO:root:		 cs_from_vars: 0:00:00.818726
+INFO:root:		 variants_id: 0:00:00.897233
+INFO:root:		 variants count: 621
+INFO:root:		 variants_digest: 0:00:00.007785
+INFO:root:		 digest count: 582
+INFO:root:	 variants: 0:00:00.000002
+INFO:root:	 callsets::_id: 0:00:00.007129
+INFO:root:	 biosamples::id: 0:00:00.004831
+INFO:root:	 biosamples::_id: 0:00:00.006879
+INFO:root:	 counts for all callsets: 0:00:00.000513
+INFO:root:	 counts for all biosamples: 0:00:00.000402
+INFO:root:	 variant counts: 0:00:00.000362
+INFO:root:Query: {'biosamples': {'biocharacteristics.type.id': {'$regex': '^icdom-94403'}}, 'variants': {'$and': [{'reference_name': '9'}, {'start_min': {'$lt': 21975098}}, {'end_max': {'$gte': 21967753}}, {'start_max': {'$gte': 18000000}}, {'end_min': {'$lt': 26000000}}, {'variant_type': 'DEL'}]}}: 0:00:02.051720
+INFO:root:Query steps: 0:00:00.000364
+INFO:root:Start: 2020-04-07 11:14:58.504351
+INFO:root:Init steps: 0:00:00.039359
+INFO:root:Parsing steps: 0:00:00.024955
+INFO:root:	 biosamples: 0:00:00.287852
+INFO:root:	 callsets: 0:00:00.000005
+INFO:root:		 callsets count: 2108
+INFO:root:		 cs_from_vars: 0:00:00.821602
+INFO:root:		 variants_id: 0:00:00.850844
+INFO:root:		 variants count: 621
+INFO:root:		 variants_digest: 0:00:00.008832
+INFO:root:		 digests count: 582
+INFO:root:	 variants: 0:00:00.000004
+INFO:root:	 callsets::_id: 0:00:00.012148
+INFO:root:	 biosamples::id: 0:00:00.009421
+INFO:root:	 biosamples::_id: 0:00:00.008447
+INFO:root:	 counts for all callsets: 0:00:00.000718
+INFO:root:	 counts for all biosamples: 0:00:00.000516
+INFO:root:	 variant counts: 0:00:00.000462
+INFO:root:Query: {'biosamples': {'biocharacteristics.type.id': {'$regex': '^icdom-94403'}}, 'variants': {'$and': [{'reference_name': '9'}, {'start_min': {'$lt': 21975098}}, {'end_max': {'$gte': 21967753}}, {'start_max': {'$gte': 18000000}}, {'end_min': {'$lt': 26000000}}, {'variant_type': 'DEL'}]}}: 0:00:02.030960
+INFO:root:Query steps: 0:00:00.000369
+INFO:root:Start: 2020-04-07 11:20:33.951529
+INFO:root:Init steps: 0:00:00.043396
+INFO:root:Parsing steps: 0:00:00.026034
+INFO:root:	 biosamples: 0:00:02.253434
+INFO:root:	 callsets: 0:00:00.000005
+INFO:root:		 callsets count: 2108
+INFO:root:		 cs_from_vars: 0:00:04.591017
+INFO:root:		 variants_id: 0:00:01.484003
+INFO:root:		 variants count: 621
+INFO:root:		 variants_digest: 0:00:00.065950
+INFO:root:		 digests count: 582
+INFO:root:	 variants: 0:00:00.000003
+INFO:root:	 callsets::_id: 0:00:00.030991
+INFO:root:	 biosamples::id: 0:00:00.032836
+INFO:root:	 biosamples::_id: 0:00:00.017563
+INFO:root:	 counts for all callsets: 0:00:00.000656
+INFO:root:	 counts for all biosamples: 0:00:00.000444
+INFO:root:	 variant counts: 0:00:00.000434
+INFO:root:Query: {'biosamples': {'biocharacteristics.type.id': {'$regex': '^icdom-94403'}}, 'variants': {'$and': [{'reference_name': '9'}, {'start_min': {'$lt': 21975098}}, {'end_max': {'$gte': 21967753}}, {'start_max': {'$gte': 18000000}}, {'end_min': {'$lt': 26000000}}, {'variant_type': 'DEL'}]}}: 0:00:08.505640
+INFO:root:Query steps: 0:00:00.000397

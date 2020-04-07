@@ -1,6 +1,11 @@
 from pymongo import MongoClient
+import logging
+import datetime
 
 def execute_bycon_queries(**kwargs):
+
+    # last_time = datetime.datetime.now()
+    # logging.info("\t start query: {}".format(last_time))
 
     """podmd
     
@@ -9,9 +14,15 @@ def execute_bycon_queries(**kwargs):
         
     podmd"""
 
-    query_results = { }
+    query_results = { "info": { } }
+    for collname in kwargs[ "config" ][ "collections" ]:
+        query_results[ collname+"::id" ] = [ ]
+        query_results[ collname+"::_id" ] = [ ]
+    query_results[ "variants::digest" ] = [ ]
+
     exe_queries = { }
     dataset_id = kwargs[ "dataset_id" ]
+    last_time = kwargs[ "last_time" ]
 
     mongo_client = MongoClient( )
 
@@ -37,21 +48,21 @@ def execute_bycon_queries(**kwargs):
         # run. E.g. when only retrieving biosample data, it makes no
         # sense to also run a callsets query.
 
-        cs_from_bs = mongo_db[ "callsets" ].distinct( "id", {"biosample_id": {"$in": query_results["biosamples::id"] } } )
+        cs_from_bs = mongo_db[ "callsets" ].distinct( "id", { "biosample_id": {"$in": query_results["biosamples::id"] } } )
+
+    logging.info("\t biosamples: {}".format(datetime.datetime.now()-last_time))
+    last_time = datetime.datetime.now()
 
     if "callsets" in exe_queries:
-
         query_results[ "callsets::id" ] = mongo_db[ "callsets" ].distinct( "id", exe_queries[ "callsets" ] )
-
         if "biosamples" in exe_queries:
-            query_results[ "callsets::id" ] = list(set(cs_from_bs) & set(query_results[ "callsets::id" ]))
-
+            query_results[ "callsets::id" ] = set(cs_from_bs & query_results[ "callsets::id" ])
     elif "biosamples" in exe_queries:
-
         query_results[ "callsets::id" ] = cs_from_bs
 
-    query_results[ "variants::_id" ] = [ ]
-    query_results[ "variants::digest" ] = [ ]
+    logging.info("\t callsets: {}".format(datetime.datetime.now()-last_time))
+    logging.info("\t\t callsets count: {}".format(len(query_results[ "callsets::id" ])))
+    last_time = datetime.datetime.now()
 
     if "variants" in exe_queries:
 
@@ -67,9 +78,15 @@ def execute_bycon_queries(**kwargs):
         contain them), they are now fetched using the original query or a combination of the
         original query and the matching callsets from the intersect.
         podmd"""
-
+           
         mongo_vars = mongo_db[ 'variants' ]
         cs_from_vars = mongo_vars.distinct( "callset_id", exe_queries[ "variants" ] )
+        # print(exe_queries[ "variants" ])
+
+        logging.info("\t\t cs_from_vars: {}".format(datetime.datetime.now()-last_time))
+        last_time = datetime.datetime.now()
+        # print(len(cs_from_vars))
+        # print(len(query_results[ "callsets::id" ]))
 
         if "callsets::id" in query_results:
             query_results[ "callsets::id" ] = list(set(cs_from_vars) & set(query_results[ "callsets::id" ]))
@@ -77,8 +94,24 @@ def execute_bycon_queries(**kwargs):
         else:
             query_results[ "callsets::id" ] = cs_from_vars
 
+        # print(len(query_results[ "callsets::id" ]))
+
+        # print("requery vars")
         query_results[ "variants::_id" ] = mongo_vars.distinct( "_id", exe_queries[ "variants" ] )
+        logging.info("\t\t variants_id: {}".format(datetime.datetime.now()-last_time))
+        logging.info("\t\t variants count: {}".format(len(query_results[ "variants::_id" ])))
+        last_time = datetime.datetime.now()
+
+        # print("requery vars for digests")
         query_results[ "variants::digest" ] = mongo_vars.distinct( "digest", { "_id": {"$in": query_results[ "variants::_id" ] } } )
+
+        logging.info("\t\t variants_digest: {}".format(datetime.datetime.now()-last_time))
+        logging.info("\t\t digests count: {}".format(len(query_results[ "variants::digest" ])))
+
+        last_time = datetime.datetime.now()
+
+    logging.info("\t variants: {}".format(datetime.datetime.now()-last_time))
+    last_time = datetime.datetime.now()
 
     """podmd
     ### Result Aggregation
@@ -92,17 +125,29 @@ def execute_bycon_queries(**kwargs):
 
     query_results[ "callsets::_id" ] = mongo_db[ 'callsets' ].distinct( "_id", {
             "id": { "$in": query_results[ "callsets::id" ] } } )        
+    logging.info("\t callsets::_id: {}".format(datetime.datetime.now()-last_time))
+    last_time = datetime.datetime.now()
+
     query_results[ "biosamples::id" ] = mongo_db[ 'callsets' ].distinct( "biosample_id", {
         "_id": { "$in": query_results[ "callsets::_id" ] } } )         
+    logging.info("\t biosamples::id: {}".format(datetime.datetime.now()-last_time))
+    last_time = datetime.datetime.now()
+
     query_results[ "biosamples::_id" ] = mongo_db[ 'biosamples' ].distinct( "_id", { "id": { "$in": query_results[ "biosamples::id" ] } } )
+    logging.info("\t biosamples::_id: {}".format(datetime.datetime.now()-last_time))
+    last_time = datetime.datetime.now()
 
     query_results[ "counts" ] = { }
     for scope in [ "callsets", "biosamples" ]:
         query_results[ "counts" ][ scope ] = len( query_results[ scope+"::_id" ] )
         query_results[ "counts" ][ scope+"_all" ] =  mongo_db[ scope ].estimated_document_count()
+        logging.info("\t counts for all "+scope+": {}".format(datetime.datetime.now()-last_time))
+        last_time = datetime.datetime.now()
+
     query_results[ "counts" ][ "variants" ] =  len(query_results[ "variants::digest" ])
     query_results[ "counts" ][ "variants_all" ] =  mongo_db[ "variants" ].estimated_document_count()
-
+    logging.info("\t variant counts: {}".format(datetime.datetime.now()-last_time))
+    last_time = datetime.datetime.now()
 
     mongo_client.close( )   
 

@@ -85,6 +85,7 @@ def create_dataset_response(**kwargs):
 
     if dataset_allele_resp[ "variantCount" ] > 0:
         dataset_allele_resp[ "exists" ] = True
+        dataset_allele_resp[ "info" ].update( { "variants": kwargs[ "query_results" ][ "variants::digest" ] })
     if dataset_allele_resp[ "variantCount" ] > 0:
         dataset_allele_resp[ "frequency" ] = float("%.5f" % (dataset_allele_resp[ "variantCount" ] / kwargs[ "query_results" ][ "counts" ][ "variants_all" ]) )
 

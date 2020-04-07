@@ -66,11 +66,11 @@ def create_beacon_cnv_request_query(variant_request_type, variant_pars):
         
     variant_query = { "$and": [
         { "reference_name": variant_pars[ "referenceName" ] },
-        { "variant_type": variant_pars[ "variantType" ] },
-        { "start": { "$gt": int(variant_pars[ "startMin" ]) } },
-        { "start": { "$lte": int(variant_pars[ "startMax" ]) } },
-        { "end": { "$gt": int(variant_pars[ "endMin" ]) } },
-        { "end": { "$lte": int(variant_pars[ "endMax" ]) } }
+        { "start_min": { "$lt": int(variant_pars[ "startMax" ]) } },
+        { "end_max": { "$gte": int(variant_pars[ "endMin" ]) } },
+        { "start_max": { "$gte": int(variant_pars[ "startMin" ]) } },
+        { "end_min": { "$lt": int(variant_pars[ "endMax" ]) } },
+        { "variant_type": variant_pars[ "variantType" ] }
     ]}
 
     return( variant_query )
