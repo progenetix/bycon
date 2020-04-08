@@ -2,10 +2,10 @@ from pymongo import MongoClient
 
 ################################################################################
 
-def callsets_return_stats(**kwargs):
+def callsets_return_stats(**byc):
 
     mongo_client = MongoClient( )
-    mongo_db = mongo_client[ kwargs[ "config" ][ "data_pars" ][ "dataset_id" ] ]
+    mongo_db = mongo_client[ byc[ "config" ][ "data_pars" ][ "dataset_id" ] ]
     mongo_coll = mongo_db[ 'callsets' ]
 
     cs_stats = { }
@@ -13,7 +13,7 @@ def callsets_return_stats(**kwargs):
     cs_stats["del_fs"] = []
     cs_stats["cnv_fs"] = []
 
-    for cs in mongo_coll.find({"_id": {"$in": kwargs["callsets::_id"] }}) :
+    for cs in mongo_coll.find({"_id": {"$in": byc["callsets::_id"] }}) :
         if "cnvstatistics" in cs["info"]:
             if "dupfraction" in cs["info"]["cnvstatistics"] and "delfraction" in cs["info"]["cnvstatistics"]:
                 cs_stats["dup_fs"].append(cs["info"]["cnvstatistics"]["dupfraction"])
@@ -26,9 +26,9 @@ def callsets_return_stats(**kwargs):
 
 ################################################################################
 
-def dbstats_return_latest(**kwargs):
+def dbstats_return_latest(**byc):
 
 # db.dbstats.find().sort({date:-1}).limit(1)
-    dbstats_coll = MongoClient( )[ kwargs[ "config" ][ "info_db" ] ][ kwargs[ "config" ][ "stats_collection" ] ]
+    dbstats_coll = MongoClient( )[ byc[ "config" ][ "info_db" ] ][ byc[ "config" ][ "stats_collection" ] ]
     stats = dbstats_coll.find( { }, { "_id": 0 } ).sort( [{ "date", -1 }] ).limit( 1 )
     return(stats[0])

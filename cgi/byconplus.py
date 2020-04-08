@@ -12,11 +12,11 @@ dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon import *
 
-log_file = path.join( path.abspath( dir_path ), '..', "data", "out", "logs", "python_log.txt" )
+# log_file = path.join( path.abspath( dir_path ), '..', "data", "out", "logs", "python_log.txt" )
 
-logging.basicConfig(
-    filename=log_file,
-    level=logging.INFO) # INFO ERROR
+# logging.basicConfig(
+#     filename=log_file,
+#     level=logging.INFO) # INFO ERROR
 
 """
 https://progenetix.org/cgi/bycon/cgi/byconplus.py?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=18000000&startMax=21975097&endMin=21967753&endMax=26000000&filters=icdom-94403
@@ -37,8 +37,8 @@ https://progenetix.org/cgi/bycon/cgi/byconplus.py?datasetIds=dipg&assemblyId=GRC
 
 def main():
 
-    last_time = datetime.datetime.now()
-    logging.info("Start: {}".format(last_time))
+    # last_time = datetime.datetime.now()
+    # logging.info("Start: {}".format(last_time))
 
     print('Content-Type: application/json')
     # print('Content-Type: text')
@@ -54,8 +54,8 @@ def main():
     form_data = cgi_parse_query()
     opts, args = get_cmd_args()
 
-    logging.info("Init steps: {}".format(datetime.datetime.now()-last_time))
-    last_time = datetime.datetime.now()
+    # logging.info("Init steps: {}".format(datetime.datetime.now()-last_time))
+    # last_time = datetime.datetime.now()
 
     # TODO: "byc" becoming a proper object?!
     byc = {
@@ -83,7 +83,7 @@ def main():
         print(json.dumps(service_info, indent=4, sort_keys=True, default=str))
         exit()
     
-    logging.info("Parsing steps: {}".format(datetime.datetime.now()-last_time))
+    # logging.info("Parsing steps: {}".format(datetime.datetime.now()-last_time))
 
     dataset_responses = [ ]
 
@@ -92,16 +92,16 @@ def main():
         byc.update( { "query_results": execute_bycon_queries( **byc ) } )
         dataset_responses.append( create_dataset_response( **byc ) )   
 
-        logging.info("Query: {}: {}".format(byc['queries'], datetime.datetime.now()-last_time))
-        last_time = datetime.datetime.now()
+        # logging.info("Query: {}: {}".format(byc['queries'], datetime.datetime.now()-last_time))
+        # last_time = datetime.datetime.now()
     
     byc.update( { "dataset_responses": dataset_responses } )
     beacon_response = create_beacon_response(**byc)
     
     print(json.dumps(beacon_response, indent=4, sort_keys=True, default=str))
 
-    logging.info("Query steps: {}".format(datetime.datetime.now()-last_time))
-    last_time = datetime.datetime.now()
+    # logging.info("Query steps: {}".format(datetime.datetime.now()-last_time))
+    # last_time = datetime.datetime.now()
     
 ################################################################################
 ################################################################################

@@ -6,9 +6,9 @@ from os import environ
 
 ################################################################################
 
-def return_beacon_info(**kwargs):
+def return_beacon_info(**byc):
 
-    with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "module_root" ]), "config", "beacon_info.yaml") ) as bc:
+    with open( path.join(path.abspath(byc[ "config" ][ "paths" ][ "module_root" ]), "config", "beacon_info.yaml") ) as bc:
         b_defs = yaml.load( bc , Loader=yaml.FullLoader)
             
     service_info = b_defs[ "service_info" ]
@@ -43,10 +43,10 @@ def return_beacon_info(**kwargs):
 
     ds_with_counts = [ ]
     for dataset in b_defs[ "beacon_info" ][ "datasets" ]:
-        if dataset["id"] in kwargs[ "config" ][ "dataset_ids" ]:
-            dataset[ "callCount" ] = kwargs[ "dbstats" ][ dataset["id"]+"__variants" ][ "count" ]
-            dataset[ "variantCount" ] = kwargs[ "dbstats" ][ dataset["id"]+"__variants" ][ "distincts_count_digest" ]
-            dataset[ "sampleCount" ] = kwargs[ "dbstats" ][ dataset["id"]+"__biosamples" ][ "count" ]
+        if dataset["id"] in byc[ "config" ][ "dataset_ids" ]:
+            dataset[ "callCount" ] = byc[ "dbstats" ][ dataset["id"]+"__variants" ][ "count" ]
+            dataset[ "variantCount" ] = byc[ "dbstats" ][ dataset["id"]+"__variants" ][ "distincts_count_digest" ]
+            dataset[ "sampleCount" ] = byc[ "dbstats" ][ dataset["id"]+"__biosamples" ][ "count" ]
             ds_with_counts.append(dataset)
         
     service_info[ "datasets" ] = ds_with_counts
@@ -55,17 +55,17 @@ def return_beacon_info(**kwargs):
 
 ################################################################################
 
-def create_dataset_response(**kwargs):
+def create_dataset_response(**byc):
 
     # TODO: getting the correct response structure from the schema
 
     dataset_allele_resp = {
-        "datasetId": kwargs[ "dataset_id" ],
+        "datasetId": byc[ "dataset_id" ],
         "exists": False,
         "error": "",
-        "variantCount": len( kwargs[ "query_results" ][ "variants::digest" ] ),
-        "callCount": len( kwargs[ "query_results" ][ "variants::_id" ] ),
-        "sampleCount": len( kwargs[ "query_results" ][ "biosamples::_id" ] ),
+        "variantCount": len( byc[ "query_results" ][ "variants::digest" ] ),
+        "callCount": len( byc[ "query_results" ][ "variants::_id" ] ),
+        "sampleCount": len( byc[ "query_results" ][ "biosamples::_id" ] ),
         "frequency": 0,
         "note": "",
         "externalUrl": "",
@@ -76,17 +76,17 @@ def create_dataset_response(**kwargs):
     if dataset_allele_resp[ "variantCount" ] > 0:
         dataset_allele_resp.update( {
             "exists": True,
-            "frequency": float("%.5f" % (dataset_allele_resp[ "callCount" ] / kwargs[ "dbstats" ][ kwargs[ "dataset_id" ]+"__variants" ][ "count" ] ) )
+            "frequency": float("%.5f" % (dataset_allele_resp[ "callCount" ] / byc[ "dbstats" ][ byc[ "dataset_id" ]+"__variants" ][ "count" ] ) )
         } )
-        dataset_allele_resp[ "info" ].update( { "variants": kwargs[ "query_results" ][ "variants::digest" ] })
+        dataset_allele_resp[ "info" ].update( { "variants": byc[ "query_results" ][ "variants::digest" ] })
 
     return( dataset_allele_resp )
 
 ################################################################################
 
-def create_beacon_response(**kwargs):
+def create_beacon_response(**byc):
 
-    # with open( path.join(path.abspath(kwargs[ "config" ][ "paths" ][ "module_root" ]), "config", "beacon_info.yaml") ) as bc:
+    # with open( path.join(path.abspath(byc[ "config" ][ "paths" ][ "module_root" ]), "config", "beacon_info.yaml") ) as bc:
     #     b_defs = yaml.load( bc , Loader=yaml.FullLoader)
     # print(b_defs)
 
@@ -94,14 +94,14 @@ def create_beacon_response(**kwargs):
 
     b_attr = [ "id", "beaconId", "name", "serviceUrl", 'organization', 'apiVersion', "info", "updateDateTime" ]
     b_response = { "exists": False }
-    # print( kwargs[ "service_info" ].keys() )
+    # print( byc[ "service_info" ].keys() )
     for b_a in b_attr:
         try:
-            b_response[ b_a ] = kwargs[ "service_info" ][ b_a ]
+            b_response[ b_a ] = byc[ "service_info" ][ b_a ]
         except Exception:
             pass
  
-    b_response[ "datasetAlleleResponses" ] = kwargs[ "dataset_responses" ]
+    b_response[ "datasetAlleleResponses" ] = byc[ "dataset_responses" ]
 
     for b_r in b_response[ "datasetAlleleResponses" ]:
         if b_r[ "exists" ] == True:

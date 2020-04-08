@@ -359,3 +359,11 @@ INFO:root:		 callsets count: 2108
 INFO:root:	 variants: 0:00:11.764863
 INFO:root:Query: {'biosamples': {'biocharacteristics.type.id': {'$regex': '^icdom-94403'}}, 'variants': {'$and': [{'reference_name': '9'}, {'start_min': {'$lt': 21975098}}, {'end_max': {'$gte': 21967753}}, {'start_max': {'$gte': 18000000}}, {'end_min': {'$lt': 26000000}}, {'variant_type': 'DEL'}]}}: 0:00:14.433466
 INFO:root:Query steps: 0:00:00.005821
+INFO:root:Start: 2020-04-08 16:45:37.132288
+INFO:root:Init steps: 0:00:00.004316
+INFO:root:Parsing steps: 0:00:00.232387
+INFO:root:	 callsets: 0:00:06.589823
+INFO:root:		 callsets count: 2108
+INFO:root:	 variants: 0:00:12.779423
+INFO:root:Query: {'biosamples': {'biocharacteristics.type.id': {'$regex': '^icdom-94403'}}, 'variants': {'$and': [{'reference_name': '9'}, {'start_min': {'$lt': 21975098}}, {'end_max': {'$gte': 21967753}}, {'start_max': {'$gte': 18000000}}, {'end_min': {'$lt': 26000000}}, {'variant_type': 'DEL'}]}}: 0:00:19.808890
+INFO:root:Query steps: 0:00:00.003263
