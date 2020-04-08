@@ -31,14 +31,6 @@ def return_beacon_info(**kwargs):
     for par in b_defs[ "beacon_info" ]:
         service_info[ par ] = b_defs[ "beacon_info" ][ par ]
         
-    mongo_client = MongoClient( )
-    mongo_db = mongo_client[ kwargs[ "config" ][ "info_db" ] ]
-    mongo_coll = mongo_db[ 'dbstats' ]
-    
-    stats = mongo_coll.find_one( { }, sort=[( '_id', -1 )] )
-
-    mongo_client.close( )   
-
     """podmd
     The counts for the collections (`variants`, `biosamples` etc.) of the
     different datasets are retrieved from the daily updated 
@@ -52,15 +44,14 @@ def return_beacon_info(**kwargs):
     ds_with_counts = [ ]
     for dataset in b_defs[ "beacon_info" ][ "datasets" ]:
         if dataset["id"] in kwargs[ "config" ][ "dataset_ids" ]:
-            dataset[ "callCount" ] = stats[ dataset["id"]+"__variants" ][ "count" ]
-            dataset[ "variantCount" ] = stats[ dataset["id"]+"__variants" ][ "distincts_count_digest" ]
-            dataset[ "sampleCount" ] = stats[ dataset["id"]+"__biosamples" ][ "count" ]
+            dataset[ "callCount" ] = kwargs[ "dbstats" ][ dataset["id"]+"__variants" ][ "count" ]
+            dataset[ "variantCount" ] = kwargs[ "dbstats" ][ dataset["id"]+"__variants" ][ "distincts_count_digest" ]
+            dataset[ "sampleCount" ] = kwargs[ "dbstats" ][ dataset["id"]+"__biosamples" ][ "count" ]
             ds_with_counts.append(dataset)
         
     service_info[ "datasets" ] = ds_with_counts
   
     return( service_info )
-
 
 ################################################################################
 
@@ -72,9 +63,9 @@ def create_dataset_response(**kwargs):
         "datasetId": kwargs[ "dataset_id" ],
         "exists": False,
         "error": "",
-        "variantCount": kwargs[ "query_results" ][ "counts" ][ "variants" ],
-        "callCount": kwargs[ "query_results" ][ "counts" ][ "variants" ],
-        "sampleCount": kwargs[ "query_results" ][ "counts" ][ "biosamples" ],
+        "variantCount": len( kwargs[ "query_results" ][ "variants::digest" ] ),
+        "callCount": len( kwargs[ "query_results" ][ "variants::_id" ] ),
+        "sampleCount": len( kwargs[ "query_results" ][ "biosamples::_id" ] ),
         "frequency": 0,
         "note": "",
         "externalUrl": "",
@@ -82,13 +73,12 @@ def create_dataset_response(**kwargs):
         "datasetHandover": [ ] }
 
     # TODO: The "true" may actually be fulfilled by non-variant query types in v2.
-
     if dataset_allele_resp[ "variantCount" ] > 0:
-        dataset_allele_resp[ "exists" ] = True
+        dataset_allele_resp.update( {
+            "exists": True,
+            "frequency": float("%.5f" % (dataset_allele_resp[ "callCount" ] / kwargs[ "dbstats" ][ kwargs[ "dataset_id" ]+"__variants" ][ "count" ] ) )
+        } )
         dataset_allele_resp[ "info" ].update( { "variants": kwargs[ "query_results" ][ "variants::digest" ] })
-    if dataset_allele_resp[ "variantCount" ] > 0:
-        dataset_allele_resp[ "frequency" ] = float("%.5f" % (dataset_allele_resp[ "variantCount" ] / kwargs[ "query_results" ][ "counts" ][ "variants_all" ]) )
-
 
     return( dataset_allele_resp )
 

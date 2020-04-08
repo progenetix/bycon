@@ -2,7 +2,7 @@ from pymongo import MongoClient
 
 ################################################################################
 
-def return_callsets_stats(**kwargs):
+def callsets_return_stats(**kwargs):
 
     mongo_client = MongoClient( )
     mongo_db = mongo_client[ kwargs[ "config" ][ "data_pars" ][ "dataset_id" ] ]
@@ -26,3 +26,9 @@ def return_callsets_stats(**kwargs):
 
 ################################################################################
 
+def dbstats_return_latest(**kwargs):
+
+# db.dbstats.find().sort({date:-1}).limit(1)
+    dbstats_coll = MongoClient( )[ kwargs[ "config" ][ "info_db" ] ][ kwargs[ "config" ][ "stats_collection" ] ]
+    stats = dbstats_coll.find( { }, { "_id": 0 } ).sort( [{ "date", -1 }] ).limit( 1 )
+    return(stats[0])

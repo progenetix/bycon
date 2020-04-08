@@ -17,4 +17,6 @@ from .cmd_parse_args import get_cmd_args
 from .cmd_parse_args import plotpars_from_args
 from .cmd_parse_args import pgx_datapars_from_args
 from .cmd_parse_args import pgx_queries_from_args
+from .data_analysis import callsets_return_stats
+from .data_analysis import dbstats_return_latest
 from .query_execution import execute_bycon_queries

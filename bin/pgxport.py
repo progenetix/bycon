@@ -36,7 +36,7 @@ def main():
     write_callsets_matrix_files(**kwargs)
 
     kwargs = { "config": config, "callsets::_id": query_results["callsets::_id"] }
-    callsets_stats = return_callsets_stats(**kwargs)
+    callsets_stats = callsets_return_stats(**kwargs)
 
     kwargs = { "config": config, "callsets_stats": callsets_stats }
     plot_callset_stats(**kwargs)

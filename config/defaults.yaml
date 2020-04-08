@@ -17,6 +17,7 @@ bio_prefixes:
   - icdom
   - icdot
   - NCIT
+stats_collection: dbstats
 plot_pars:
   dotalpha: 0.2
 data_pars:
