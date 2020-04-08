@@ -53,7 +53,9 @@ Below are some usage examples against the [Progenetix resources](http://progenet
 * Service info for this Beacon:
     - https://progenetix.org/cgi-bin/bycon/cgi/byconplus.py/service-info/
 * A "classic" _BeaconAlleleRequest_, for brain stem gliomas with a particular mutation in the _EIF4A1_ gene:
-    - https://progenetix.org/cgi-bin/bycon/cgi/byconplus.py?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7577120&referenceBases=G&alternateBases=A&filters=icdot-C71.7&
+    - https://progenetix.org/cgi-bin/bycon/cgi/byconplus.py?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7577120&referenceBases=G&alternateBases=A&filters=icdot-C71.7
+* This is a range query for any SNV resulting in an **A** alternative allele, in a genomic range spanning the  _EIF4A1_ gene:
+    - https://progenetix.org/cgi-bin/bycon/cgi/byconplus.py?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7572841&end=7578485&alternateBases=A&filters=icdot-C71.7
 
 #### Databases
 

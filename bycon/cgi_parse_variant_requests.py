@@ -1,5 +1,7 @@
 import cgi, cgitb
 import re, yaml
+import logging
+
 from os import path as path
   
 ################################################################################
@@ -37,18 +39,34 @@ def parse_variants( **kwargs ):
 ################################################################################
 
 def get_variant_request_type( **kwargs ):
+    """podmd
+    This method guesses the type of variant request, based on the complete
+    fulfillment of the required parameters (all of `all_of`, at least one of
+    `one_of`).
+    This may be changed to using a pre-defined request type and using this as
+    completeness check only.
+    podmd"""
 
-    variant_request_type = "no variant request"
+    variant_request_type = "no correct variant request"
     vrt_matches = [ ]
 
     for vrt in kwargs[ "variant_request_types" ]:
-        matched_pars = [ ]
-        for required in kwargs[ "variant_request_types" ][ vrt ][ "all_of" ]:
-            if required in kwargs["variant_pars"].keys():
+        matched_par_no = 0
+        needed_par_no = 0
+        if "one_of" in kwargs[ "variant_request_types" ][vrt]:
+            needed_par_no = 1
+            for one_of in kwargs[ "variant_request_types" ][vrt][ "all_of" ]:
+                if one_of in kwargs["variant_pars"]:
+                    if re.compile( kwargs["variant_defs"][ one_of ][ "pattern" ] ).match( str( kwargs["variant_pars"][ one_of ] ) ):
+                        needed_par_no = 0
+        needed_par_no += len( kwargs[ "variant_request_types" ][vrt][ "all_of" ] )
+        for required in kwargs[ "variant_request_types" ][vrt][ "all_of" ]:
+            if required in kwargs["variant_pars"]:
                 if re.compile( kwargs["variant_defs"][ required ][ "pattern" ] ).match( str( kwargs["variant_pars"][ required ] ) ):
-                    matched_pars.append( required )
-            if len( matched_pars ) >= len( kwargs[ "variant_request_types" ][ vrt ][ "all_of" ] ):
-                vrt_matches.append( vrt )
+                    matched_par_no += 1
+        if matched_par_no >= needed_par_no:
+            vrt_matches.append( vrt )
+
 
     if len(vrt_matches) == 1:
         variant_request_type = vrt_matches[0]
@@ -98,6 +116,30 @@ def create_beacon_cnv_request_query(variant_request_type, variant_pars):
         { "start_max": { "$gte": int(variant_pars[ "startMin" ]) } },
         { "end_min": { "$lt": int(variant_pars[ "endMax" ]) } },
         { "variant_type": variant_pars[ "variantType" ] }
+    ]}
+
+    return( variant_query )
+
+################################################################################
+
+def create_beacon_range_request_query(variant_request_type, variant_pars):
+
+
+    if variant_request_type != "beacon_range_request":
+        return
+
+    if "variantType" in variant_pars:
+        type_par_q = { "variant_type": variant_pars[ "variantType" ] }
+    elif "alternateBases" in variant_pars:
+        type_par_q = { "alternate_bases": variant_pars[ "alternateBases" ] }
+    else:
+        return
+
+    variant_query = { "$and": [
+        { "reference_name": variant_pars[ "referenceName" ] },
+        { "start": { "$lt": int(variant_pars[ "end" ]) } },
+        { "end": { "$gte": int(variant_pars[ "start" ]) } },
+        type_par_q
     ]}
 
     return( variant_query )

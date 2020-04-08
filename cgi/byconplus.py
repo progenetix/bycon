@@ -16,7 +16,7 @@ log_file = path.join( path.abspath( dir_path ), '..', "data", "out", "logs", "py
 
 logging.basicConfig(
     filename=log_file,
-    level=logging.ERROR) # INFO ERROR
+    level=logging.INFO) # INFO ERROR
 
 """
 https://progenetix.org/cgi-bin/bycon/cgi/byconplus.py?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=17999999&startMax=21975097&endMin=21967753&endMax=26000000&referenceBases=N&filters=icdom-94403
@@ -72,7 +72,7 @@ def main():
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } ) 
     byc.update( { "queries": create_queries_from_filters( **byc ) } )
 
-    if byc["variant_request_type"] in byc["variant_request_types"]:
+    if byc["variant_request_type"] in byc["variant_request_types"].keys():
         variant_query_generator = "create_"+byc["variant_request_type"]+"_query"
         byc["queries"].update( { "variants": getattr(cgi_parse_variant_requests, variant_query_generator)( byc["variant_request_type"], byc["variant_pars"] ) } )
 
