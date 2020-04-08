@@ -56,6 +56,8 @@ Below are some usage examples against the [Progenetix resources](http://progenet
     - https://progenetix.org/cgi-bin/bycon/cgi/byconplus.py?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7577120&referenceBases=G&alternateBases=A&filters=icdot-C71.7
 * This is a range query for any SNV resulting in an **A** alternative allele, in a genomic range spanning the  _EIF4A1_ gene:
     - https://progenetix.org/cgi-bin/bycon/cgi/byconplus.py?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7572841&end=7578485&alternateBases=A&filters=icdot-C71.7
+* Another range query, here looking if there are deletions affecting _TP53_ in pre-invasive breast cancer (DCIS, ICD-O 3 8500/2) in the [arraymap](http://arraymap.org) dataset:
+    - https://progenetix.org/cgi-bin/bycon/cgi/byconplus.py?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7669608&end=7676593&variantType=DEL&filters=icdom-85002
 
 #### Databases
 
