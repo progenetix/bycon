@@ -76,7 +76,7 @@ def create_dataset_response(**byc):
     if dataset_allele_resp[ "variantCount" ] > 0:
         dataset_allele_resp.update( {
             "exists": True,
-            "frequency": float("%.5f" % (dataset_allele_resp[ "callCount" ] / byc[ "dbstats" ][ byc[ "dataset_id" ]+"__variants" ][ "count" ] ) )
+            "frequency": float("%.6f" % (dataset_allele_resp[ "callCount" ] / byc[ "dbstats" ][ byc[ "dataset_id" ]+"__variants" ][ "count" ] ) )
         } )
         dataset_allele_resp[ "info" ].update( { "variants": byc[ "query_results" ][ "variants::digest" ] })
 
