@@ -4,6 +4,33 @@ from pymongo import MongoClient
 
 ################################################################################
 
+def create_data_table(**kwargs):
+    """podmd
+
+    Export parameters are provided in the form
+
+    parameter: `collection.attribute(.child_attribute)(.grandchild_attribute)(::prefix)`
+    label: xxxxx
+
+    * if a prefix is provided, the export parameters for this parameter become
+        - (^...).id    
+        - (^...).label    
+        ... where the `id` value matches the prefix
+
+
+
+
+    podmd"""
+
+    mongo_db = MongoClient( )[ dataset_id ][ collectio ]
+    cs_coll = mongo_db[ 'callsets' ]
+    bios_coll = mongo_db[ 'biosamples' ]
+   
+
+
+
+
+
 def write_callsets_matrix_files(**kwargs):
 
     bio_prefixes = kwargs[ "config" ][ "bio_prefixes" ]
