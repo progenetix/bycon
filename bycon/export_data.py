@@ -4,7 +4,7 @@ from pymongo import MongoClient
 
 ################################################################################
 
-def create_data_table(**kwargs):
+def create_callset_table(**kwargs):
     """podmd
 
     Export parameters are provided in the form
@@ -18,18 +18,19 @@ def create_data_table(**kwargs):
         ... where the `id` value matches the prefix
 
 
-
-
     podmd"""
 
     mongo_db = MongoClient( )[ dataset_id ][ collectio ]
     cs_coll = mongo_db[ 'callsets' ]
     bios_coll = mongo_db[ 'biosamples' ]
+
+
    
 
 
+    mongo_client.close()
 
-
+################################################################################
 
 def write_callsets_matrix_files(**kwargs):
 
@@ -56,8 +57,8 @@ def write_callsets_matrix_files(**kwargs):
         cs = callsets_add_metadata( cs, **kwargs )
         cs_meta = [ cs[ "id" ] ]
         for bio_pre in bio_prefixes:
-            cs_meta.append(cs[ bio_pre ])
-
+            cs_meta.append(cs[ bio_pre+"::id" ])
+            cs_meta.append(cs[ bio_pre+"::label" ])
 
         if "dupmap" in cs["info"][ "statusmaps" ]:
             if cs[ "info" ][ "statusmaps" ][ "dupmap" ] is not None:

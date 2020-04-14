@@ -25,9 +25,11 @@ def read_variant_definitions(**byc):
 def parse_variants( **byc ):
 
     variant_pars = { }
-    for v_par in byc["variant_defs"]:    
-        if v_par in byc["form_data"].keys():
+    for v_par in byc[ "variant_defs" ]:    
+        if v_par in byc[ "form_data" ].keys():
             variant_pars[ v_par ] = byc["form_data"].getvalue(v_par)
+        elif "default" in v_par:
+            variant_pars[ v_par ] = v_par[ "default" ]
 
     # for debugging
     for opt, arg in byc["opts"]:

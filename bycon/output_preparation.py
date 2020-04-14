@@ -23,7 +23,8 @@ def callsets_add_metadata(cs, **kwargs):
         for biocharacteristic in bios["biocharacteristics"]:
             for bio_pre in bio_prefixes:
                 if re.compile( '^'+bio_pre ).match(biocharacteristic["type"]["id"]):
-                    cs[ bio_pre ] = biocharacteristic["type"]["id"]
+                    cs[ bio_pre+"::id" ] = biocharacteristic["type"]["id"]
+                    cs[ bio_pre+"::label" ] = biocharacteristic["type"]["label"]
     return cs
 
 ################################################################################

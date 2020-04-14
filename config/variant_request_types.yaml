@@ -2,6 +2,7 @@ parameters:
 
   beacon_cnv_request:
     all_of:
+      - assemblyId
       - startMin
       - startMax
       - endMin
@@ -11,6 +12,7 @@ parameters:
     
   beacon_range_request:
     all_of:
+      - assemblyId
       - start
       - end
       - referenceName
@@ -20,6 +22,7 @@ parameters:
     
   beacon_allele_request:
     all_of:
+      - assemblyId
       - start
       - referenceName
       - referenceBases

@@ -3,6 +3,7 @@ parameters:
   assemblyId:
     dbkey: assembly_id
     pattern: '^\w+?$'
+    default: GRCh38
 
   referenceName:
     dbkey: reference_name
@@ -53,3 +54,11 @@ parameters:
     dbkey: end_max
     pattern: '^\d+?$'
     type: integer
+
+# custom parameters
+
+  cytoband:
+    dbkey: info.cytoband
+    pattern: ^(chr)?([12]?[\dXY])([pq]([1-4]([0-8](\.\d\d*?)?)?)?)?\-?([pq]([1-4]([0-8](\.\d\d*?)?)?)?)?$
+    type: string
+
