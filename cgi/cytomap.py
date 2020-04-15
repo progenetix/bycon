@@ -13,8 +13,8 @@ sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon import *
 
 """
-https://progenetix.test/cgi/bycon/cgi/cytomap.py?assemblyId=GRCh38&cytoband=8q24.1&referenceName=17
-https://progenetix.test/cgi/bycon/cgi/cytomap.py?assemblyId=GRCh38&referenceName=17&start=8000000&end=24326000
+https://progenetix.org/cgi/bycon/cgi/cytomap.py?assemblyId=GRCh38&cytoband=8q24.1q24.2
+https://progenetix.org/cgi/bycon/cgi/cytomap.py?assemblyId=GRCh38&referenceName=17&start=8000000&end=24326000
 """
 
 ################################################################################
@@ -40,16 +40,16 @@ def main():
     config[ "paths" ][ "out" ] = path.abspath( config[ "paths" ][ "web_temp_dir_abs" ] )
     config[ "paths" ][ "genomes" ] = path.join( config[ "paths" ][ "module_root" ], "rsrc", "genomes" )
 
-    # TODO: "byc" becoming a proper object?!
     byc = {
         "config": config,
         "opts": opts,
         "form_data": form_data
     }
 
+    # empty response prototype
     cyto_response = {
-        "assemblyId": "",
-        "cytoband": "",
+        "assemblyId": None,
+        "cytoband": None,
         "referenceName": None,
         "start": None,
         "end": None,
@@ -81,15 +81,14 @@ def main():
 
     if byc[ "variant_request_type" ] == "cytoband_mapping":
         chro, cb_start, cb_end = cb_re.match(cb_par).group(2, 3, 7)
-        cyto_response[ "cytoband" ] = cb_par
         cytobands = subset_cytobands(  cytobands, chro, cb_start, cb_end  )
         if len(cytobands) < 1:
             cyto_response[ "error" ] = "No matching cytobands!"
         else:
             cyto_response.update( {
                 "referenceName": chro,
-                "start": cytobands[0]["start"],
-                "end": cytobands[-1]["end"],
+                "start": int( cytobands[0]["start"] ),
+                "end": int( cytobands[-1]["end"] ),
                 "cytoband": cytobands[0]["chro"]+cytobands[0]["cytoband"]
             } )
             if len(cytobands) > 1:
