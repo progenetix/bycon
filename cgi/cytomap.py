@@ -12,6 +12,8 @@ dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon import *
 
+# cgitb.enable()  # for debugging
+
 """
 https://progenetix.org/cgi/bycon/cgi/cytomap.py?assemblyId=GRCh38&cytoband=8q24.1q24.2
 https://progenetix.org/cgi/bycon/cgi/cytomap.py?assemblyId=GRCh38&referenceName=17&start=8000000&end=24326000
@@ -19,10 +21,6 @@ https://progenetix.org/cgi/bycon/cgi/cytomap.py?assemblyId=GRCh38&referenceName=
 
 ################################################################################
 ################################################################################
-################################################################################
-
-# cgitb.enable()  # for debugging
-
 ################################################################################
 
 def main():
@@ -104,8 +102,8 @@ def main():
         else:
             cyto_response.update( {
                 "referenceName": chro,
-                "start": start,
-                "end": end,
+                "start": int( start ),
+                "end": int( end ),
                 "cytoband": cytobands[0]["chro"]+cytobands[0]["cytoband"]
             } )
             if len(cytobands) > 1:
