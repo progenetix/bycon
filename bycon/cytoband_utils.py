@@ -47,3 +47,16 @@ def subset_cytobands( cytobands, chro, cb_start, cb_end ):
     return( cytobands )
 
 ################################################################################
+
+def subset_cytobands_by_bases( cytobands, chro, start, end ):
+
+    cytobands = list(filter(lambda d: d[ "chro" ] == chro, cytobands))
+    if isinstance(start, int):
+        cytobands = list(filter(lambda d: int(d[ "end" ]) > start, cytobands))
+
+    if isinstance(end, int):
+        cytobands = list(filter(lambda d: int(d[ "start" ]) < end, cytobands))
+
+    return( cytobands )
+
+################################################################################

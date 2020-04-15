@@ -22,4 +22,5 @@ from .data_analysis import callsets_return_stats
 from .data_analysis import dbstats_return_latest
 from .cytoband_utils import parse_cytoband_file
 from .cytoband_utils import subset_cytobands
+from .cytoband_utils import subset_cytobands_by_bases
 from .query_execution import execute_bycon_queries

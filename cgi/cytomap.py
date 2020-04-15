@@ -14,6 +14,7 @@ from bycon import *
 
 """
 https://progenetix.test/cgi/bycon/cgi/cytomap.py?assemblyId=GRCh38&cytoband=8q24.1&referenceName=17
+https://progenetix.test/cgi/bycon/cgi/cytomap.py?assemblyId=GRCh38&referenceName=17&start=8000000&end=24326000
 """
 
 ################################################################################
@@ -58,45 +59,58 @@ def main():
     byc[ "variant_defs" ], byc[ "variant_request_types" ] = read_variant_definitions( **byc )
     byc.update( { "variant_pars": parse_variants( **byc ) } )
     byc["variant_pars"][ "variantType" ] =  "CNV"
-    byc.update( { "variant_request_type": get_variant_request_type( **byc ) } ) 
-
-    cb_par = str( byc["variant_pars"][ "cytoband" ] )
+    byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
+    
     cb_re = re.compile( byc["variant_defs"][ "cytoband" ][ "pattern" ] )
 
     cyto_response[ "assemblyId" ] = byc["variant_pars"][ "assemblyId" ]
 
     if not byc[ "variant_request_type" ] == "beacon_range_request":
-        if cb_re.match( cb_par ):
-            byc[ "variant_request_type" ] = "cytoband_mapping"
+        if "cytoband" in byc["variant_pars"]:
+            cb_par = str( byc["variant_pars"][ "cytoband" ] )
+            if cb_re.match( cb_par ):
+                byc[ "variant_request_type" ] = "cytoband_mapping"
         else:
             cyto_response[ "error" ] = "¡No mapping query!"
             cgi_print_json_response(cyto_response)
 
     genome = byc["variant_pars"][ "assemblyId" ].lower()
     cb_file = path.join( byc[ "config" ][ "paths" ][ "genomes" ], genome, "CytoBandIdeo.txt" )
+    
     cytobands = parse_cytoband_file( cb_file )
 
-    if str(byc[ "variant_request_type" ]) == "cytoband_mapping":
-
-        chro = cb_re.match(cb_par).group(2)
-        cb_start = cb_re.match(cb_par).group(3)
-        cb_end = cb_re.match(cb_par).group(7)
-
+    if byc[ "variant_request_type" ] == "cytoband_mapping":
+        chro, cb_start, cb_end = cb_re.match(cb_par).group(2, 3, 7)
         cyto_response[ "cytoband" ] = cb_par
         cytobands = subset_cytobands(  cytobands, chro, cb_start, cb_end  )
-
-        bases = [ ]
- 
         if len(cytobands) < 1:
             cyto_response[ "error" ] = "No matching cytobands!"
         else:
-            for cb in cytobands:
-                bases.append( int( cb[ "start" ] ) )
-                bases.append( int( cb[ "end" ] ) )
-            
-            bases.sort()
-            cyto_response[ "start" ], cyto_response[ "end" ] = bases[0], bases[-1]
-            cyto_response[ "referenceName" ] = chro
+            cyto_response.update( {
+                "referenceName": chro,
+                "start": cytobands[0]["start"],
+                "end": cytobands[-1]["end"],
+                "cytoband": cytobands[0]["chro"]+cytobands[0]["cytoband"]
+            } )
+            if len(cytobands) > 1:
+                cyto_response.update( { "cytoband":  cyto_response[ "cytoband" ]+cytobands[-1]["cytoband"] } )
+
+    elif byc[ "variant_request_type" ] == "beacon_range_request":
+        chro = byc["variant_pars"][ "referenceName" ]
+        start = int( byc["variant_pars"][ "start" ] )
+        end = int( byc["variant_pars"][ "end" ] )
+        cytobands = subset_cytobands_by_bases(  cytobands, chro, start, end  )
+        if len(cytobands) < 1:
+            cyto_response[ "error" ] = "No matching cytobands!"
+        else:
+            cyto_response.update( {
+                "referenceName": chro,
+                "start": start,
+                "end": end,
+                "cytoband": cytobands[0]["chro"]+cytobands[0]["cytoband"]
+            } )
+            if len(cytobands) > 1:
+                cyto_response.update( { "cytoband":  cyto_response[ "cytoband" ]+cytobands[-1]["cytoband"] } )
 
     cgi_print_json_response(cyto_response)
 
