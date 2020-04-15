@@ -12,7 +12,21 @@ def parse_cytoband_file( **kwargs ):
  
     podmd"""
 
+    # should be in a config but seems like overkill...
+    g_map = {
+        "grch38": "grch38",
+        "grch37": "hg19",
+        "ncbi36": "hg18",
+        "ncbi35": "hg17",
+        "grch34": "hg16"
+    }
+
     genome = kwargs["variant_pars"][ "assemblyId" ].lower()
+    genome = re.sub( r"(\w+?)([^\w]\w+?)", r"\1", genome)
+
+    if genome in g_map.keys():
+        genome = g_map[ genome ]
+
     cb_file = path.join( kwargs[ "config" ][ "paths" ][ "genomes" ], genome, "CytoBandIdeo.txt" )
     cb_re = re.compile( kwargs["variant_defs"][ "cytoband" ][ "pattern" ] )
 
@@ -43,7 +57,7 @@ def filter_cytobands( **byc ):
         chro = byc["variant_pars"][ "referenceName" ]
         start = int( byc["variant_pars"][ "start" ] )
         end = int( byc["variant_pars"][ "end" ] )
-        cytobands = _subset_cytobands_by_bases( cytobands, chro, start, end  )
+        cytobands = _subset_cytobands_by_bases( byc[ "cytobands" ], chro, start, end  )
     else:
         cytobands = [ ]
         chro = ""

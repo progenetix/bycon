@@ -70,6 +70,7 @@ def main():
         "referenceName": byc["variant_pars"][ "referenceName" ],
         "start": None,
         "end": None,
+        "size": None,
         "error": None
     }
 
@@ -91,6 +92,8 @@ def main():
             "start": int( byc["variant_pars"][ "start" ] ),
             "end": int( byc["variant_pars"][ "end" ] ),
         } )
+        
+    cyto_response.update( { "size":  int( cyto_response[ "end" ] - cyto_response[ "start" ] ) } )
 
     if "callback" in byc[ "form_data" ]:
         cgi_print_json_callback(byc["form_data"].getvalue("callback"), [cyto_response])

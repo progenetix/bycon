@@ -2,7 +2,7 @@ parameters:
 
   assemblyId:
     dbkey: assembly_id
-    pattern: '^\w+?$'
+    pattern: '^\w+?(\.\d+?)$'
     default: GRCh38
 
   referenceName:
