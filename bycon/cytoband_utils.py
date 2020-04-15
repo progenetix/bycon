@@ -6,11 +6,15 @@ import re, yaml
 ################################################################################
 ################################################################################
 
-def parse_cytoband_file( cb_file ):
+def parse_cytoband_file( **kwargs ):
 
     """podmd
  
     podmd"""
+
+    genome = kwargs["variant_pars"][ "assemblyId" ].lower()
+    cb_file = path.join( kwargs[ "config" ][ "paths" ][ "genomes" ], genome, "CytoBandIdeo.txt" )
+    cb_re = re.compile( kwargs["variant_defs"][ "cytoband" ][ "pattern" ] )
 
     cb_keys = [ "chro", "start", "end", "cytoband", "staining" ]
     cytobands = [ ]
@@ -29,7 +33,26 @@ def parse_cytoband_file( cb_file ):
 
 ################################################################################
 
-def subset_cytobands( cytobands, chro, cb_start, cb_end ):
+def filter_cytobands( **byc ):
+
+    if byc[ "variant_request_type" ] == "cytoband_mapping_request":
+        cb_re = re.compile( byc["variant_defs"][ "cytoband" ][ "pattern" ] )
+        chro, cb_start, cb_end = cb_re.match( byc["variant_pars"][ "cytoband" ] ).group(2, 3, 7)
+        cytobands = _subset_cytobands_by_bands(  byc[ "cytobands" ], chro, cb_start, cb_end  )
+    elif byc[ "variant_request_type" ] == "beacon_range_request":
+        chro = byc["variant_pars"][ "referenceName" ]
+        start = int( byc["variant_pars"][ "start" ] )
+        end = int( byc["variant_pars"][ "end" ] )
+        cytobands = _subset_cytobands_by_bases( cytobands, chro, start, end  )
+    else:
+        cytobands = [ ]
+        chro = ""
+
+    return(cytobands, chro)
+
+################################################################################
+
+def _subset_cytobands_by_bands( cytobands, chro, cb_start, cb_end ):
 
     if cb_start == None and cb_end == None:
         cytobands = list(filter(lambda d: d[ "chro" ] == chro, cytobands))
@@ -48,7 +71,7 @@ def subset_cytobands( cytobands, chro, cb_start, cb_end ):
 
 ################################################################################
 
-def subset_cytobands_by_bases( cytobands, chro, start, end ):
+def _subset_cytobands_by_bases( cytobands, chro, start, end ):
 
     cytobands = list(filter(lambda d: d[ "chro" ] == chro, cytobands))
     if isinstance(start, int):

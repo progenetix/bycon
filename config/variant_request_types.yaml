@@ -27,4 +27,11 @@ parameters:
       - referenceName
       - referenceBases
       - alternateBases
+
+# custom
+     
+  cytoband_mapping_request:
+    all_of:
+      - assemblyId
+      - cytoband
       

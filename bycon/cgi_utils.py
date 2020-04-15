@@ -20,9 +20,17 @@ def cgi_exit_on_error(shout):
 ################################################################################
 
 def cgi_print_json_response(data):
-    print('Content-Type: text')
+    print('Content-Type: application/json')
     print()
     print(json.dumps(data, indent=4, sort_keys=True, default=str))
+    exit()
+
+################################################################################
+
+def cgi_print_json_callback(callback, data):
+    print('Content-Type: application/json')
+    print()
+    print(callback+'({"data":'+json.dumps(data, default=str)+"});\n")
     exit()
 
 ################################################################################
