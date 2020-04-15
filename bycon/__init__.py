@@ -20,6 +20,6 @@ from .cmd_parse_args import pgx_datapars_from_args
 from .cmd_parse_args import pgx_queries_from_args
 from .data_analysis import callsets_return_stats
 from .data_analysis import dbstats_return_latest
-from .io_utils import parse_cytoband_file
-from .io_utils import subset_cytobands
+from .cytoband_utils import parse_cytoband_file
+from .cytoband_utils import subset_cytobands
 from .query_execution import execute_bycon_queries

@@ -1,9 +1,6 @@
 import csv
 from os import path as path
-from datetime import datetime, date
-import time
 import re, yaml
-from isodate import parse_duration
 
 ################################################################################
 ################################################################################
@@ -49,3 +46,4 @@ def subset_cytobands( cytobands, chro, cb_start, cb_end ):
 
     return( cytobands )
 
+################################################################################
