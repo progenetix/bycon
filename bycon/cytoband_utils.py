@@ -93,10 +93,9 @@ def _subset_cytobands_by_bands( cytobands, chro, cb_start, cb_end ):
 
         if cb_start == None or cb_start == "pter":
             cb_start = "p"
-        if cb_end == None or cb_end == "qter":
+        if cb_end == "qter":
             cb_end = "q"
         cb_s_re = re.compile( "^"+cb_start )
-        cb_e_re = re.compile( "^"+cb_end )
         i = 0
 
         # searching for the first matching band
@@ -108,7 +107,13 @@ def _subset_cytobands_by_bands( cytobands, chro, cb_start, cb_end ):
         k = 0
 
         # retrieving the last matching band
-        # => index at least as start to avoid "q21qter" => "all q"
+        # * index at least as start to avoid "q21qter" => "all q"
+        # * if there was no end, the start band is queried again until its last match
+        if cb_end == None:
+            cb_end = cb_start
+ 
+        cb_e_re = re.compile( "^"+cb_end )
+
         for cb in cytobands:
             if k >= i:
                 if cb_e_re.match( cb[ "cytoband" ] ):

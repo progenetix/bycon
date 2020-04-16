@@ -36,6 +36,7 @@ There is a fallback to *GRCh38* if no assembly is being provided.
 * fallback to info / documentation
 * front end with callback (backend is implemented, not tested ...)
 * better error capture & documentation (e.g. wrong assemblies ...)
+* warning about / correcting wrong cytoband syntax (e.g. *not* "17p11p12" *but* "17p12p11")
 
 podmd"""
 
