@@ -2,7 +2,7 @@ parameters:
 
   assemblyId:
     dbkey: assembly_id
-    pattern: '^\w+?(\.\d+?)$'
+    pattern: '^\w+?(\.\d+?)?$'
     default: GRCh38
 
   referenceName:
@@ -59,6 +59,12 @@ parameters:
 
   cytoband:
     dbkey: info.cytoband
-    pattern: ^(chr)?([12]?[\dXY])([pq]([1-4]([0-8](\.\d\d*?)?)?)?)?\-?([pq]([1-4]([0-8](\.\d\d*?)?)?)?)?$
+    pattern: ^(chr)?([12]?[\dXY])([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?\-?([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?$
     type: string
+
+  rangeTag:
+    dbkey: None
+    pattern: 'true'
+
+
 

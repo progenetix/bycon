@@ -25,9 +25,9 @@ overlapping cytobands, or
 #### Examples
 
 * retrieve coordinates for some bands on chromosome 8
-  - <https://progenetix.org/cgi/bycon/cgi/cytomap.py?assemblyId=GRCh38&cytoband=8q24.1q24.2>
+  - <https://progenetix.org/cgi/bycon/cgi/cytomap.py?assemblyId=NCBI36.1&cytoband=8q>
 * get the cytobands whith which a base range on chromosome 17 overlaps
-  - <https://progenetix.org/cgi/bycon/cgi/cytomap.py?assemblyId=GRCh38&referenceName=17&start=8000000&end=24326000>
+  - <https://progenetix.org/cgi/bycon/cgi/cytomap.py?assemblyId=GRCh38&referenceName=17&start=800000&end=24326000>
 
 podmd"""
 
@@ -59,12 +59,16 @@ def main():
 
     byc[ "variant_defs" ], byc[ "variant_request_types" ] = read_variant_definitions( **byc )
     byc.update( { "variant_pars": parse_variants( **byc ) } )
+
+    byc["variant_pars"][ "rangeTag" ] = "true"
+
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
     byc.update( { "cytobands": parse_cytoband_file( **byc ) } )
     byc["cytobands"], byc["variant_pars"][ "referenceName" ] = filter_cytobands( **byc )
 
     # response prototype
     cyto_response = {
+        "request": byc["variant_pars"],
         "assemblyId": byc["variant_pars"][ "assemblyId" ],
         "cytoband": None,
         "referenceName": byc["variant_pars"][ "referenceName" ],
@@ -73,7 +77,6 @@ def main():
         "size": None,
         "error": None
     }
-
 
     if len( byc["cytobands"] ) < 1:
         cyto_response[ "error" ] = "No matching cytobands!"
@@ -87,7 +90,7 @@ def main():
     if len( byc["cytobands"] ) > 1:
         cyto_response.update( { "cytoband":  cyto_response[ "cytoband" ]+byc["cytobands"][-1]["cytoband"] } )
 
-    if byc[ "variant_request_type" ] == "beacon_range_request":
+    if byc[ "variant_request_type" ] == "positions2cytobands_request":
         cyto_response.update( {
             "start": int( byc["variant_pars"][ "start" ] ),
             "end": int( byc["variant_pars"][ "end" ] ),

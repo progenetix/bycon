@@ -13,6 +13,7 @@ def parse_cytoband_file( **kwargs ):
     podmd"""
 
     # should be in a config but seems like overkill...
+    # TODO: catch error for missing genome edition
     g_map = {
         "grch38": "grch38",
         "grch37": "hg19",
@@ -49,11 +50,11 @@ def parse_cytoband_file( **kwargs ):
 
 def filter_cytobands( **byc ):
 
-    if byc[ "variant_request_type" ] == "cytoband_mapping_request":
+    if byc[ "variant_request_type" ] == "cytobands2positions_request":
         cb_re = re.compile( byc["variant_defs"][ "cytoband" ][ "pattern" ] )
-        chro, cb_start, cb_end = cb_re.match( byc["variant_pars"][ "cytoband" ] ).group(2, 3, 7)
+        chro, cb_start, cb_end = cb_re.match( byc["variant_pars"][ "cytoband" ] ).group(2, 3, 9)
         cytobands = _subset_cytobands_by_bands(  byc[ "cytobands" ], chro, cb_start, cb_end  )
-    elif byc[ "variant_request_type" ] == "beacon_range_request":
+    elif byc[ "variant_request_type" ] == "positions2cytobands_request":
         chro = byc["variant_pars"][ "referenceName" ]
         start = int( byc["variant_pars"][ "start" ] )
         end = int( byc["variant_pars"][ "end" ] )
@@ -68,18 +69,40 @@ def filter_cytobands( **byc ):
 
 def _subset_cytobands_by_bands( cytobands, chro, cb_start, cb_end ):
 
+    cytobands = list(filter(lambda d: d[ "chro" ] == chro, cytobands))
+
     if cb_start == None and cb_end == None:
-        cytobands = list(filter(lambda d: d[ "chro" ] == chro, cytobands))
+        return( cytobands )
     else:
-        cb_tmp = [ ]
+
+        cb_from = 0
+        cb_to = len(cytobands)
+
+        if cb_start == None or cb_start == "pter":
+            cb_start = "p"
+        if cb_end == None or cb_end == "qter":
+            cb_end = "q"
+        cb_s_re = re.compile( "^"+cb_start )
+        cb_e_re = re.compile( "^"+cb_end )
+        i = 0
+
+        # searching for the first matching band
         for cb in cytobands:
-            if cb[ "chro" ] == chro:
-                for cb_side in [ cb_start, cb_end ]:
-                    if not cb_side == None:
-                        cb_sre = re.compile( "^"+cb_side )
-                        if cb_sre.match( cb[ "cytoband" ] ):
-                           cb_tmp.append( cb )
-        cytobands = cb_tmp
+            if cb_s_re.match( cb[ "cytoband" ] ):
+                cb_from = i
+                break
+            i += 1
+        k = 0
+
+        # retrieving the last matching band
+        # => index at least as start to avoid "q21qter" => "all q"
+        for cb in cytobands:
+            if k >= i:
+                if cb_e_re.match( cb[ "cytoband" ] ):
+                    cb_to = k+1
+            k += 1
+
+        cytobands = cytobands[cb_from:cb_to]
 
     return( cytobands )
 

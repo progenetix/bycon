@@ -53,22 +53,24 @@ def get_variant_request_type( **byc ):
     vrt_matches = [ ]
 
     for vrt in byc[ "variant_request_types" ]:
+
         matched_par_no = 0
         needed_par_no = 0
         if "one_of" in byc[ "variant_request_types" ][vrt]:
             needed_par_no = 1
-            for one_of in byc[ "variant_request_types" ][vrt][ "all_of" ]:
+            for one_of in byc[ "variant_request_types" ][vrt][ "one_of" ]:
                 if one_of in byc["variant_pars"]:
                     if re.compile( byc["variant_defs"][ one_of ][ "pattern" ] ).match( str( byc["variant_pars"][ one_of ] ) ):
                         needed_par_no = 0
+                        continue
         needed_par_no += len( byc[ "variant_request_types" ][vrt][ "all_of" ] )
+
         for required in byc[ "variant_request_types" ][vrt][ "all_of" ]:
             if required in byc["variant_pars"]:
                 if re.compile( byc["variant_defs"][ required ][ "pattern" ] ).match( str( byc["variant_pars"][ required ] ) ):
                     matched_par_no += 1
         if matched_par_no >= needed_par_no:
             vrt_matches.append( vrt )
-
 
     if len(vrt_matches) == 1:
         variant_request_type = vrt_matches[0]
