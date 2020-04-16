@@ -54,16 +54,29 @@ def filter_cytobands( **byc ):
         cb_re = re.compile( byc["variant_defs"][ "cytoband" ][ "pattern" ] )
         chro, cb_start, cb_end = cb_re.match( byc["variant_pars"][ "cytoband" ] ).group(2, 3, 9)
         cytobands = _subset_cytobands_by_bands(  byc[ "cytobands" ], chro, cb_start, cb_end  )
+        cb_label = _cytobands_label( cytobands )
     elif byc[ "variant_request_type" ] == "positions2cytobands_request":
         chro = byc["variant_pars"][ "referenceName" ]
         start = int( byc["variant_pars"][ "start" ] )
         end = int( byc["variant_pars"][ "end" ] )
         cytobands = _subset_cytobands_by_bases( byc[ "cytobands" ], chro, start, end  )
+        cb_label = _cytobands_label( cytobands )
     else:
         cytobands = [ ]
         chro = ""
+        cb_label = ""
 
-    return(cytobands, chro)
+    return(cytobands, chro, cb_label)
+
+################################################################################
+
+def _cytobands_label( cytobands ):
+
+    cb_label = cytobands[0]["chro"]+cytobands[0]["cytoband"]
+    if len( cytobands ) > 1:
+        cb_label = cb_label+cytobands[-1]["cytoband"]
+
+    return(cb_label)
 
 ################################################################################
 

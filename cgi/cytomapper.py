@@ -20,14 +20,22 @@ This script parses either:
 * a "Beacon-style" positional request (`assemblyId`, `referenceName`, `start`, `end`), to retrieve
 overlapping cytobands, or
 * a properly formatted cytoband annotation (`assemblyId`, `cytoband`)
-    - "8", "9p11q21", "8q"
+    - "8", "9p11q21", "8q", "1p12qter"
+
+There is a fallback to *GRCh38* if no assembly is being provided.
 
 #### Examples
 
 * retrieve coordinates for some bands on chromosome 8
-  - <https://progenetix.org/cgi/bycon/cgi/cytomap.py?assemblyId=NCBI36.1&cytoband=8q>
+  - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=NCBI36.1&cytoband=8q>
 * get the cytobands whith which a base range on chromosome 17 overlaps
-  - <https://progenetix.org/cgi/bycon/cgi/cytomap.py?assemblyId=GRCh38&referenceName=17&start=800000&end=24326000>
+  - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=GRCh38&referenceName=17&start=800000&end=24326000>
+
+#### TODO
+
+* fallback to info / documentation
+* front end with callback (backend is implemented, not tested ...)
+* better error capture & documentation (e.g. wrong assemblies ...)
 
 podmd"""
 
@@ -64,13 +72,13 @@ def main():
 
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
     byc.update( { "cytobands": parse_cytoband_file( **byc ) } )
-    byc["cytobands"], byc["variant_pars"][ "referenceName" ] = filter_cytobands( **byc )
+    byc["cytobands"], byc["variant_pars"][ "referenceName" ], cb_label = filter_cytobands( **byc )
 
     # response prototype
     cyto_response = {
         "request": byc["variant_pars"],
         "assemblyId": byc["variant_pars"][ "assemblyId" ],
-        "cytoband": None,
+        "cytobands": cb_label,
         "referenceName": byc["variant_pars"][ "referenceName" ],
         "start": None,
         "end": None,
@@ -85,10 +93,7 @@ def main():
     cyto_response.update( {
         "start": int( byc["cytobands"][0]["start"] ),
         "end": int( byc["cytobands"][-1]["end"] ),
-        "cytoband": byc["cytobands"][0]["chro"]+byc["cytobands"][0]["cytoband"]
     } )
-    if len( byc["cytobands"] ) > 1:
-        cyto_response.update( { "cytoband":  cyto_response[ "cytoband" ]+byc["cytobands"][-1]["cytoband"] } )
 
     if byc[ "variant_request_type" ] == "positions2cytobands_request":
         cyto_response.update( {
