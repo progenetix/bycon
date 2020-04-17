@@ -59,7 +59,12 @@ parameters:
 
   cytoband:
     dbkey: info.cytoband
-    pattern: ^(chr)?([12]?[\dXY])([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?\-?([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?$
+    pattern: ^(chro?)?([12]?[\dXY])([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?\-?([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?$
+    type: string
+
+  chroBases:
+    dbkey: info.chrobases
+    pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
     type: string
 
   rangeTag:

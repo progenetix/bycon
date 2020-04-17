@@ -10,7 +10,10 @@ import csv
 # local
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
-from bycon import *
+from bycon.cgi_parse_variant_requests import *
+from bycon.cgi_utils import *
+from bycon.cmd_parse_args import *
+from bycon.cytoband_utils import *
 
 
 """podmd
@@ -68,9 +71,7 @@ def main():
 
     byc[ "variant_defs" ], byc[ "variant_request_types" ] = read_variant_definitions( **byc )
     byc.update( { "variant_pars": parse_variants( **byc ) } )
-
-    byc["variant_pars"][ "rangeTag" ] = "true"
-
+    byc.update( { "variant_pars": _parse_chrobases( **byc ) } )
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
     byc.update( { "cytobands": parse_cytoband_file( **byc ) } )
     byc["cytobands"], byc["variant_pars"][ "referenceName" ], cb_label = filter_cytobands( **byc )
@@ -109,6 +110,27 @@ def main():
     else:
         cgi_print_json_response(cyto_response)
 
+################################################################################
+################################################################################
+
+def _parse_chrobases( **byc ):
+
+    variant_pars = byc["variant_pars"]
+    variant_defs = byc["variant_defs"]
+    v_par = "chroBases"
+
+    if v_par in variant_pars:
+        cb_re = re.compile( variant_defs[ v_par ][ "pattern" ] )
+        chro, start, end = cb_re.match( byc["variant_pars"][ v_par ] ).group(2, 3, 5)
+        if not end:
+            end = int(start) + 1
+        variant_pars[ "referenceName" ], variant_pars[ "start" ], variant_pars[ "end" ] = chro, int(start), int(end)
+        variant_pars[ "rangeTag" ] = "true"
+
+    return(variant_pars)
+
+################################################################################
+################################################################################
 ################################################################################
 ################################################################################
 
