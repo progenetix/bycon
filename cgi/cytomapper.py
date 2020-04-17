@@ -23,21 +23,30 @@ This script parses either:
 * a "Beacon-style" positional request (`assemblyId`, `referenceName`, `start`, `end`), to retrieve
 overlapping cytobands, or
 * a properly formatted cytoband annotation (`assemblyId`, `cytoband`)
-    - "8", "9p11q21", "8q", "1p12qter"
+  - "8", "9p11q21", "8q", "1p12qter"
+* a concatenated `chroBases` parameter
+  - `7:23028447-45000000`
+  - `X:99202660`
 
 There is a fallback to *GRCh38* if no assembly is being provided.
+
+The `cytoband` and `chroBases` parameters can be used for running the script on the command line
+(see examples below).
+
 
 #### Examples
 
 * retrieve coordinates for some bands on chromosome 8
   - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=NCBI36.1&cytoband=8q>
-* get the cytobands whith which a base range on chromosome 17 overlaps
+* get the cytobands whith which a base range on chromosome 17 overlaps, in short and long form
   - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=GRCh38&referenceName=17&start=800000&end=24326000>
+  - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=NCBI36&chroBases=17:800000-24326000>  
+* command line version of the above
+  - `cgi/cytomapper.py --chroBases 17:800000-24326000 --g NCBI36`
 
 #### TODO
 
 * fallback to info / documentation
-* front end with callback (backend is implemented, not tested ...)
 * better error capture & documentation (e.g. wrong assemblies ...)
 * warning about / correcting wrong cytoband syntax (e.g. *not* "17p11p12" *but* "17p12p11")
 

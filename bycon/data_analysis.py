@@ -30,5 +30,5 @@ def dbstats_return_latest(**byc):
 
 # db.dbstats.find().sort({date:-1}).limit(1)
     dbstats_coll = MongoClient( )[ byc[ "config" ][ "info_db" ] ][ byc[ "config" ][ "stats_collection" ] ]
-    stats = dbstats_coll.find( { }, { "_id": 0 } ).sort( [{ "date", -1 }] ).limit( 1 )
+    stats = dbstats_coll.find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
     return(stats[0])

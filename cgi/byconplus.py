@@ -21,7 +21,6 @@ from bycon import *
 """
 https://progenetix.org/cgi/bycon/cgi/byconplus.py?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=18000000&startMax=21975097&endMin=21967753&endMax=26000000&filters=icdom-94403
 https://progenetix.org/cgi/bycon/cgi/byconplus.py?assemblyId=GRCh38&datasetIds=arraymap,progenetix&filters=NCIT:C3326
-https://progenetix.org/cgi/bycon/cgi/byconplus.py?assemblyId=GRCh38&datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=17999999&startMax=21975097&endMin=21967753&endMax=26000000&filters=icdom-94403&filters=geolat%3A49%2Cgeolong%3A8.69%2Cgeodist%3A2000000&
 https://progenetix.org/cgi/bycon/cgi/byconplus.py
 https://progenetix.org/cgi/bycon/cgi/byconplus.py/service-info/
 https://progenetix.org/cgi/bycon/cgi/byconplus.py?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7577120&referenceBases=G&alternateBases=A&filters=icdot-C71.7&
@@ -31,7 +30,7 @@ https://progenetix.org/cgi/bycon/cgi/byconplus.py?datasetIds=dipg&assemblyId=GRC
 ################################################################################
 ################################################################################
 
-# cgitb.enable()  # for debugging
+  # for debugging
 
 ################################################################################
 
@@ -40,9 +39,6 @@ def main():
     # last_time = datetime.datetime.now()
     # logging.info("Start: {}".format(last_time))
 
-    print('Content-Type: application/json')
-    # print('Content-Type: text')
-    print()
 #     read_beacon_v2_spec(dir_path)
     
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
@@ -54,6 +50,13 @@ def main():
     form_data = cgi_parse_query()
     opts, args = get_cmd_args()
 
+    if "debug" in form_data:
+        cgitb.enable()
+        print('Content-Type: text')
+        print()
+    else:
+        pass
+
     # logging.info("Init steps: {}".format(datetime.datetime.now()-last_time))
     # last_time = datetime.datetime.now()
 
@@ -63,9 +66,11 @@ def main():
         "opts": opts,
         "form_data": form_data
     }
- 
+
     byc.update( { "dbstats": dbstats_return_latest( **byc ) } )
     byc.update( { "service_info": return_beacon_info( **byc ) } )    
+    # print(json.dumps(byc["service_info"], indent=4, sort_keys=True, default=str))
+    # exit()
     byc.update( { "dataset_ids": get_dataset_ids( **byc ) } )
     byc.update( { "filter_defs": read_filter_definitions( **byc ) } )
     byc.update( { "filters":  parse_filters( **byc ) } )
@@ -77,12 +82,10 @@ def main():
     if byc["variant_request_type"] in byc["variant_request_types"].keys():
         variant_query_generator = "create_"+byc["variant_request_type"]+"_query"
         byc["queries"].update( { "variants": getattr(cgi_parse_variant_requests, variant_query_generator)( byc["variant_request_type"], byc["variant_pars"] ) } )
-
     # TODO: earlier catch for empty call => info
     if not byc[ "queries" ]:
-        print(json.dumps(service_info, indent=4, sort_keys=True, default=str))
-        exit()
-    
+        cgi_print_json_response(service_info)
+            
     # logging.info("Parsing steps: {}".format(datetime.datetime.now()-last_time))
 
     dataset_responses = [ ]
@@ -94,11 +97,11 @@ def main():
 
         # logging.info("Query: {}: {}".format(byc['queries'], datetime.datetime.now()-last_time))
         # last_time = datetime.datetime.now()
-    
+
     byc.update( { "dataset_responses": dataset_responses } )
     beacon_response = create_beacon_response(**byc)
     
-    print(json.dumps(beacon_response, indent=4, sort_keys=True, default=str))
+    cgi_print_json_response(beacon_response)
 
     # logging.info("Query steps: {}".format(datetime.datetime.now()-last_time))
     # last_time = datetime.datetime.now()

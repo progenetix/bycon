@@ -15,9 +15,6 @@ def execute_bycon_queries(**kwargs):
     podmd"""
 
     query_results = { "info": { } }
-    for collname in kwargs[ "config" ][ "collections" ]:
-        query_results[ collname+"::id" ] = [ ]
-        query_results[ collname+"::_id" ] = [ ]
     query_results[ "variants::digest" ] = [ ]
 
     exe_queries = { }
@@ -25,12 +22,12 @@ def execute_bycon_queries(**kwargs):
     last_time = kwargs[ "last_time" ]
 
     mongo_client = MongoClient( )
-
     query_types = kwargs[ "queries" ].keys()
     for collname in kwargs[ "queries" ]:
         if collname in kwargs[ "config" ][ "collections" ]:
             exe_queries[ collname ] = kwargs[ "queries" ][ collname ]
 
+    # print(kwargs["config"]["dataset_id"])
     q_coll_name = "querybuffer"
     if q_coll_name in exe_queries:
         mongo_db = mongo_client[ "progenetix" ]
@@ -38,6 +35,7 @@ def execute_bycon_queries(**kwargs):
         
         handover = mongo_coll.find_one( exe_queries[ q_coll_name ] )
 
+    # mongo_db = mongo_client[ kwargs["config"]["dataset_id"] ]
     mongo_db = mongo_client[ dataset_id ]
 
     if "biosamples" in exe_queries:
@@ -60,9 +58,9 @@ def execute_bycon_queries(**kwargs):
     elif "biosamples" in exe_queries:
         query_results[ "callsets::id" ] = cs_from_bs
 
-    logging.info("\t callsets: {}".format(datetime.datetime.now()-last_time))
-    logging.info("\t\t callsets count: {}".format(len(query_results[ "callsets::id" ])))
-    last_time = datetime.datetime.now()
+    # logging.info("\t callsets: {}".format(datetime.datetime.now()-last_time))
+    # logging.info("\t\t callsets count: {}".format(len(query_results[ "callsets::id" ])))
+    # last_time = datetime.datetime.now()
 
     if "variants" in exe_queries:
 
@@ -85,7 +83,6 @@ def execute_bycon_queries(**kwargs):
 
         # logging.info("\t\t cs_from_vars: {}".format(datetime.datetime.now()-last_time))
         # last_time = datetime.datetime.now()
-        # print(len(cs_from_vars))
         # print(len(query_results[ "callsets::id" ]))
 
         if "callsets::id" in query_results:
@@ -110,8 +107,8 @@ def execute_bycon_queries(**kwargs):
 
         # last_time = datetime.datetime.now()
 
-    logging.info("\t variants: {}".format(datetime.datetime.now()-last_time))
-    last_time = datetime.datetime.now()
+    # logging.info("\t variants: {}".format(datetime.datetime.now()-last_time))
+    # last_time = datetime.datetime.now()
 
     """podmd
     ### Result Aggregation

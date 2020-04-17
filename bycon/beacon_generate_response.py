@@ -63,8 +63,8 @@ def create_dataset_response(**byc):
         "datasetId": byc[ "dataset_id" ],
         "exists": False,
         "error": None,
-        "variantCount": len( byc[ "query_results" ][ "variants::digest" ] ),
-        "callCount": len( byc[ "query_results" ][ "variants::_id" ] ),
+        "variantCount": 0,
+        "callCount": 0,
         "sampleCount": len( byc[ "query_results" ][ "biosamples::_id" ] ),
         "frequency": 0,
         "note": "",
@@ -73,15 +73,21 @@ def create_dataset_response(**byc):
         "datasetHandover": [ ] }
 
     # TODO: The "true" may actually be fulfilled by non-variant query types in v2.
-    if dataset_allele_resp[ "variantCount" ] > 0:
+    if "variants::_id" in byc[ "query_results" ]:
         dataset_allele_resp.update( {
-            "frequency": float("%.6f" % (dataset_allele_resp[ "callCount" ] / byc[ "dbstats" ][ byc[ "dataset_id" ]+"__variants" ][ "count" ] ) )
+            "variantCount": len( byc[ "query_results" ][ "variants::digest" ] ),
+            "callCount": len( byc[ "query_results" ][ "variants::_id" ] )
         } )
-        dataset_allele_resp[ "info" ].update( { "variants": byc[ "query_results" ][ "variants::digest" ] })
+        if dataset_allele_resp[ "variantCount" ] > 0:
+            dataset_allele_resp.update( {
+                "frequency": float("%.6f" % (dataset_allele_resp[ "callCount" ] / byc[ "dbstats" ][ byc[ "dataset_id" ]+"__variants" ][ "count" ] ) )
+            } )
+            dataset_allele_resp[ "info" ].update( { "variants": byc[ "query_results" ][ "variants::digest" ] })
 
     for this_c in [ "variantCount", "callCount", "sampleCount" ]:
-        if dataset_allele_resp[ this_c ] > 0:
-             dataset_allele_resp.update( { "exists": True } )
+        if this_c in dataset_allele_resp:
+            if dataset_allele_resp[ this_c ] > 0:
+                 dataset_allele_resp.update( { "exists": True } )
 
     return( dataset_allele_resp )
 
