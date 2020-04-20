@@ -28,22 +28,27 @@ overlapping cytobands, or
   - `7:23028447-45000000`
   - `X:99202660`
 
+While the return object is JSON by default, specifying `text=1`, together with the `cytoBands` or
+`chroBases` parameter will return the text version of the opposite.
+
 There is a fallback to *GRCh38* if no assembly is being provided.
 
 The `cytoBands` and `chroBases` parameters can be used for running the script on the command line
 (see examples below).
 
-
 #### Examples
 
 * retrieve coordinates for some bands on chromosome 8
   - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=NCBI36.1&cytoBands=8q>
+* as above, just as text:
+  - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=NCBI36.1&cytoBands=8q&text=1>
 * get the cytobands whith which a base range on chromosome 17 overlaps, in short and long form
   - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=GRCh38&referenceName=17&start=800000&end=24326000>
   - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=NCBI36&chroBases=17:800000-24326000>  
 * command line version of the above
   - `cgi/cytomapper.py --chroBases 17:800000-24326000 -g NCBI36`
   - `cgi/cytomapper.py --cytoBands 9p11q21 -g GRCh38`
+  - `cgi/cytomapper.py --cytoBands Xpterq24`
 
 #### TODO
 
@@ -96,6 +101,7 @@ def main():
     if len( cytoBands ) < 1:
         cyto_response.update( { "error": "No matching cytobands!" } )
         _print_terminal_response(opts, args, cyto_response)
+        _print_text_response(form_data, cyto_response)
         cgi_print_json_response(cyto_response)
 
     start = int( cytobands[0]["start"] )
@@ -118,6 +124,7 @@ def main():
     } )
 
     _print_terminal_response(opts, args, cyto_response)
+    _print_text_response(form_data, cyto_response)
 
     if "callback" in byc[ "form_data" ]:
         cgi_print_json_callback(byc["form_data"].getvalue("callback"), [cyto_response])
@@ -159,6 +166,26 @@ def _print_terminal_response(opts, args, cyto_response):
             exit()
         elif opt in ("-o", "--chroBases"):
             print(str(cyto_response[ "cytoBands" ]))
+            exit()
+
+    return
+
+################################################################################
+################################################################################
+
+def _print_text_response(form_data, cyto_response):
+
+    if "text" in form_data:
+
+        if "cytoBands" in cyto_response[ "request" ]:
+            print('Content-Type: text')
+            print()
+            print(str(cyto_response[ "chroBases" ])+"\n")
+            exit()
+        elif "chroBases" in cyto_response[ "request" ]:
+            print('Content-Type: text')
+            print()
+            print(str(cyto_response[ "cytoBands" ])+"\n")
             exit()
 
     return
