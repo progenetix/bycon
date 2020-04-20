@@ -22,7 +22,7 @@ This script parses either:
 
 * a "Beacon-style" positional request (`assemblyId`, `referenceName`, `start`, `end`), to retrieve
 overlapping cytobands, or
-* a properly formatted cytoband annotation (`assemblyId`, `cytoband`)
+* a properly formatted cytoband annotation (`assemblyId`, `cytoBands`)
   - "8", "9p11q21", "8q", "1p12qter"
 * a concatenated `chroBases` parameter
   - `7:23028447-45000000`
@@ -30,19 +30,20 @@ overlapping cytobands, or
 
 There is a fallback to *GRCh38* if no assembly is being provided.
 
-The `cytoband` and `chroBases` parameters can be used for running the script on the command line
+The `cytoBands` and `chroBases` parameters can be used for running the script on the command line
 (see examples below).
 
 
 #### Examples
 
 * retrieve coordinates for some bands on chromosome 8
-  - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=NCBI36.1&cytoband=8q>
+  - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=NCBI36.1&cytoBands=8q>
 * get the cytobands whith which a base range on chromosome 17 overlaps, in short and long form
   - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=GRCh38&referenceName=17&start=800000&end=24326000>
   - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=NCBI36&chroBases=17:800000-24326000>  
 * command line version of the above
-  - `cgi/cytomapper.py --chroBases 17:800000-24326000 --g NCBI36`
+  - `cgi/cytomapper.py --chroBases 17:800000-24326000 -g NCBI36`
+  - `cgi/cytomapper.py --cytoBands 9p11q21 -g GRCh38`
 
 #### TODO
 
@@ -57,14 +58,17 @@ podmd"""
 ################################################################################
 
 def main():
-
-    # cgitb.enable()  # for debugging
-    # print('Content-Type: text')
-    # print()
     
     # input & definitions
     form_data = cgi_parse_query()
     opts, args = get_cmd_args()
+
+    if "debug" in form_data:
+        cgitb.enable()
+        print('Content-Type: text')
+        print()
+    else:
+        pass
 
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
         config = yaml.load( cf , Loader=yaml.FullLoader)
@@ -83,36 +87,37 @@ def main():
     byc.update( { "variant_pars": _parse_chrobases( **byc ) } )
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
     byc.update( { "cytobands": parse_cytoband_file( **byc ) } )
-    byc["cytobands"], byc["variant_pars"][ "referenceName" ], cb_label = filter_cytobands( **byc )
+
+    cytobands, chro, cytoBands = filter_cytobands( **byc )
 
     # response prototype
-    cyto_response = {
-        "request": byc["variant_pars"],
-        "assemblyId": byc["variant_pars"][ "assemblyId" ],
-        "cytobands": cb_label,
-        "referenceName": byc["variant_pars"][ "referenceName" ],
-        "start": None,
-        "end": None,
-        "size": None,
-        "error": None
-    }
+    cyto_response = { "request": byc["variant_pars"], "error": None }
 
-    if len( byc["cytobands"] ) < 1:
-        cyto_response[ "error" ] = "No matching cytobands!"
+    if len( cytoBands ) < 1:
+        cyto_response.update( { "error": "No matching cytobands!" } )
+        _print_terminal_response(opts, args, cyto_response)
         cgi_print_json_response(cyto_response)
 
+    start = int( cytobands[0]["start"] )
+    end = int( cytobands[-1]["end"] )
+    if byc[ "variant_request_type" ] == "positions2cytobands_request":
+        start = int( byc["variant_pars"][ "start" ] )
+        end = int( byc["variant_pars"][ "end" ] )
+
+    size = int(  end - start )
+    chroBases = chro+":"+str(start)+"-"+str(end)
+    
     cyto_response.update( {
-        "start": int( byc["cytobands"][0]["start"] ),
-        "end": int( byc["cytobands"][-1]["end"] ),
+        "assemblyId": byc["variant_pars"][ "assemblyId" ],
+        "cytoBands": cytoBands,
+        "chroBases": chroBases,
+        "referenceName": chro,
+        "start": start,
+        "end": end,
+        "size": size        
     } )
 
-    if byc[ "variant_request_type" ] == "positions2cytobands_request":
-        cyto_response.update( {
-            "start": int( byc["variant_pars"][ "start" ] ),
-            "end": int( byc["variant_pars"][ "end" ] ),
-        } )
-        
-    cyto_response.update( { "size":  int( cyto_response[ "end" ] - cyto_response[ "start" ] ) } )
+    _print_terminal_response(opts, args, cyto_response)
 
     if "callback" in byc[ "form_data" ]:
         cgi_print_json_callback(byc["form_data"].getvalue("callback"), [cyto_response])
@@ -137,6 +142,26 @@ def _parse_chrobases( **byc ):
         variant_pars[ "rangeTag" ] = "true"
 
     return(variant_pars)
+
+################################################################################
+################################################################################
+
+def _print_terminal_response(opts, args, cyto_response):
+
+    if not opts is None:
+        if not cyto_response[ "error" ] is None:
+            print( cyto_response[ "error" ] )
+            exit()
+
+    for opt, arg in opts:
+        if opt in ("-c", "--cytoBands"):
+            print(str(cyto_response[ "chroBases" ]))
+            exit()
+        elif opt in ("-o", "--chroBases"):
+            print(str(cyto_response[ "cytoBands" ]))
+            exit()
+
+    return
 
 ################################################################################
 ################################################################################

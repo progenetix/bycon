@@ -33,7 +33,7 @@ parameters:
   cytobands2positions_request:
     all_of:
       - assemblyId
-      - cytoband
+      - cytoBands
   
   positions2cytobands_request:
     all_of:

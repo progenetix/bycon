@@ -102,7 +102,10 @@ def create_beacon_response(**byc):
     # TODO: getting the correct response structure from the schema
 
     b_attr = [ "id", "beaconId", "name", "serviceUrl", 'organization', 'apiVersion', "info", "updateDateTime" ]
-    b_response = { "exists": False }
+    b_response = {
+        "exists": False,
+        "beaconAlleleRequest" : byc[ "variant_pars" ]
+    }
     # print( byc[ "service_info" ].keys() )
     for b_a in b_attr:
         try:

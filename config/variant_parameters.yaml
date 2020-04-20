@@ -57,13 +57,13 @@ parameters:
 
 # custom parameters
 
-  cytoband:
-    dbkey: info.cytoband
+  cytoBands:
+    dbkey: info.cyto_bands
     pattern: ^(chro?)?([12]?[\dXY])([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?\-?([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?$
     type: string
 
   chroBases:
-    dbkey: info.chrobases
+    dbkey: info.chro_bases
     pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
     type: string
 

@@ -29,7 +29,7 @@ def parse_cytoband_file( **kwargs ):
         genome = g_map[ genome ]
 
     cb_file = path.join( kwargs[ "config" ][ "paths" ][ "genomes" ], genome, "CytoBandIdeo.txt" )
-    cb_re = re.compile( kwargs["variant_defs"][ "cytoband" ][ "pattern" ] )
+    cb_re = re.compile( kwargs["variant_defs"][ "cytoBands" ][ "pattern" ] )
 
     cb_keys = [ "chro", "start", "end", "cytoband", "staining" ]
     cytobands = [ ]
@@ -51,8 +51,8 @@ def parse_cytoband_file( **kwargs ):
 def filter_cytobands( **byc ):
 
     if byc[ "variant_request_type" ] == "cytobands2positions_request":
-        cb_re = re.compile( byc["variant_defs"][ "cytoband" ][ "pattern" ] )
-        chro, cb_start, cb_end = cb_re.match( byc["variant_pars"][ "cytoband" ] ).group(2, 3, 9)
+        cb_re = re.compile( byc["variant_defs"][ "cytoBands" ][ "pattern" ] )
+        chro, cb_start, cb_end = cb_re.match( byc["variant_pars"][ "cytoBands" ] ).group(2, 3, 9)
         cytobands = _subset_cytobands_by_bands(  byc[ "cytobands" ], chro, cb_start, cb_end  )
         cb_label = _cytobands_label( cytobands )
     elif byc[ "variant_request_type" ] == "positions2cytobands_request":

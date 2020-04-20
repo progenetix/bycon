@@ -26,17 +26,24 @@ def parse_variants( **byc ):
 
     variant_pars = { }
     for v_par in byc[ "variant_defs" ]:
-        if v_par in byc[ "form_data" ]:
-            variant_pars[ v_par ] = byc["form_data"].getvalue(v_par)
-        elif "default" in byc[ "variant_defs" ][ v_par ]:
-            variant_pars[ v_par ] = byc[ "variant_defs" ][ v_par ][ "default" ]
+        v_default = None
+        if "default" in byc[ "variant_defs" ][ v_par ]:
+            v_default = byc[ "variant_defs" ][ v_par ][ "default" ]
+        variant_pars[ v_par ] = byc["form_data"].getvalue(v_par, v_default)
+        if not variant_pars[ v_par ]:
+            del( variant_pars[ v_par ] )
+        try:
+            if byc[ "variant_defs" ][ v_par ][ "type" ] == "integer":
+                variant_pars[ v_par ] = int( variant_pars[ v_par ] )
+        except Exception:
+            pass
 
     # for debugging
     for opt, arg in byc["opts"]:
         if opt in ("-t"):
             variant_pars = byc["service_info"][ "sampleAlleleRequests" ][0]
-        if opt in ("-c", "--cytoband"):
-            variant_pars[ "cytoband" ] = arg
+        if opt in ("-c", "--cytoBands"):
+            variant_pars[ "cytoBands" ] = arg
         if opt in ("-o", "--chroBases"):
              variant_pars[ "chroBases" ] = arg
         if opt in ("-g", "--genome"):
