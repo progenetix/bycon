@@ -49,6 +49,11 @@ def parse_variants( **byc ):
         if opt in ("-g", "--genome"):
              variant_pars[ "assemblyId" ] = arg
 
+    if "rest_pars" in byc:
+        for rp in byc[ "rest_pars" ].keys():
+            if rp in byc[ "variant_defs" ]:
+                variant_pars[ rp ] = byc[ "rest_pars" ][ rp ]
+
     return( variant_pars )
 
 ################################################################################

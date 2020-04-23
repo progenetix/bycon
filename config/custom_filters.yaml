@@ -1,6 +1,7 @@
 icdom:
   name: "ICD-O 3 Morphologies (Progenetix)"
   url: "https://progenetix.org/"
+  list_par: biocharacteristics
   scopes:
     biosamples:
       db_key: 'biocharacteristics.type.id'
@@ -13,6 +14,7 @@ icdom:
 icdot:
   name: "ICD-O 3 Topographies (Progenetix)"
   url: "https://progenetix.org/"
+  list_par: biocharacteristics
   scopes:
     biosamples:
       db_key: 'biocharacteristics.type.id'
@@ -28,6 +30,7 @@ icdot:
 tcga:
   name: "The Cancer Genome Atlas"
   url: "http://cancergenome.nih.gov"
+  list_par: external_references
   scopes:
     callsets:
       db_key: 'external_references.type.id'

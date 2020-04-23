@@ -39,16 +39,18 @@ The `cytoBands` and `chroBases` parameters can be used for running the script on
 #### Examples
 
 * retrieve coordinates for some bands on chromosome 8
-  - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=NCBI36.1&cytoBands=8q>
+  - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=NCBI36.1&cytoBands=8q>
 * as above, just as text:
-  - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=NCBI36.1&cytoBands=8q&text=1>
+  - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=NCBI36.1&cytoBands=8q&text=1>
 * get the cytobands whith which a base range on chromosome 17 overlaps, in short and long form
-  - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=GRCh38&referenceName=17&start=800000&end=24326000>
-  - <https://progenetix.org/cgi/bycon/cgi/cytomapper.py?assemblyId=NCBI36&chroBases=17:800000-24326000>  
+  - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=GRCh38&referenceName=17&start=800000&end=24326000>
+  - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=NCBI36&chroBases=17:800000-24326000>
+* using `curl` to get the text format mapping of a cytoband range, using the API `services` shortcut:
+  - `curl -k https://progenetix.test/services/cytomapper/cytoBands\=8q21q24.1/assemblyId\=hg18/text\=1/`
 * command line version of the above
-  - `cgi/cytomapper.py --chroBases 17:800000-24326000 -g NCBI36`
-  - `cgi/cytomapper.py --cytoBands 9p11q21 -g GRCh38`
-  - `cgi/cytomapper.py --cytoBands Xpterq24`
+  - `bin/cytomapper.py --chroBases 17:800000-24326000 -g NCBI36`
+  - `bin/cytomapper.py --cytoBands 9p11q21 -g GRCh38`
+  - `bin/cytomapper.py --cytoBands Xpterq24`
 
 #### TODO
 
@@ -63,10 +65,19 @@ podmd"""
 ################################################################################
 
 def main():
+
+    cytomapper()
+
+################################################################################
+################################################################################
+################################################################################
+
+def cytomapper():
     
     # input & definitions
     form_data = cgi_parse_query()
     opts, args = get_cmd_args()
+    rest_pars = cgi_parse_path_params( "cytomapper" )
 
     if "debug" in form_data:
         cgitb.enable()
@@ -84,7 +95,8 @@ def main():
     byc = {
         "config": config,
         "opts": opts,
-        "form_data": form_data
+        "form_data": form_data,
+        "rest_pars": rest_pars
     }
 
     byc[ "variant_defs" ], byc[ "variant_request_types" ] = read_variant_definitions( **byc )
@@ -101,7 +113,7 @@ def main():
     if len( cytoBands ) < 1:
         cyto_response.update( { "error": "No matching cytobands!" } )
         _print_terminal_response(opts, args, cyto_response)
-        _print_text_response(form_data, cyto_response)
+        _print_text_response(form_data, rest_pars, cyto_response)
         cgi_print_json_response(cyto_response)
 
     start = int( cytobands[0]["start"] )
@@ -124,7 +136,7 @@ def main():
     } )
 
     _print_terminal_response(opts, args, cyto_response)
-    _print_text_response(form_data, cyto_response)
+    _print_text_response(form_data, rest_pars, cyto_response)
 
     if "callback" in byc[ "form_data" ]:
         cgi_print_json_callback(byc["form_data"].getvalue("callback"), [cyto_response])
@@ -173,9 +185,9 @@ def _print_terminal_response(opts, args, cyto_response):
 ################################################################################
 ################################################################################
 
-def _print_text_response(form_data, cyto_response):
+def _print_text_response(form_data, rest_pars, cyto_response):
 
-    if "text" in form_data:
+    if "text" in form_data or "text" in rest_pars:
 
         if "cytoBands" in cyto_response[ "request" ]:
             print('Content-Type: text')

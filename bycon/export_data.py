@@ -1,10 +1,12 @@
 from os import path as path
 from os import rename as rename
 from pymongo import MongoClient
+from .output_preparation import get_id_label_for_prefix
+from .output_preparation import callsets_add_metadata
 
 ################################################################################
 
-def create_callset_table(**kwargs):
+def write_biosamples_table(**kwargs):
     """podmd
 
     Export parameters are provided in the form
@@ -17,18 +19,53 @@ def create_callset_table(**kwargs):
         - (^...).label    
         ... where the `id` value matches the prefix
 
-
     podmd"""
 
-    mongo_db = MongoClient( )[ dataset_id ][ collectio ]
-    cs_coll = mongo_db[ 'callsets' ]
-    bios_coll = mongo_db[ 'biosamples' ]
+    io_params = kwargs[ "config" ][ "io_params" ]
+    biosfl = kwargs["config"][ "paths" ][ "biosamples_file_label" ]
+    filter_defs = kwargs[ "filter_defs" ]
 
+    tab = kwargs[ "config" ][ "const" ][ "tab_sep" ]
+    dash = kwargs[ "config" ][ "const" ][ "dash_sep" ]
+    tmp_bios_file = "_tmp-"+biosfl
 
-   
+    dataset_id = kwargs[ "config" ][ "data_pars" ][ "dataset_id" ]
+    query = { "_id": { "$in": kwargs[ "biosamples::_id" ] } }
 
+    bios_coll = MongoClient( )[ dataset_id ][ "biosamples" ]
 
-    mongo_client.close()
+    bios_no = 0
+
+    biosf = open( tmp_bios_file, 'w' )
+
+    header = [ ]
+    for par in io_params:
+        header.append( par )
+    for pre in filter_defs.keys():
+        if "biosamples" in filter_defs[ pre ][ "scopes" ]:
+            header.append( pre+"::id" )
+            header.append( pre+"::label" )
+
+    biosf.write( tab.join( header ) + "\n" )
+    for bios in bios_coll.find(query):
+        print(bios["id"])
+        bios_line = [  ]
+        for par in io_params:
+            bios_line.append( bios[ par ] )
+        for pre in filter_defs.keys():
+            if "biosamples" in filter_defs[ pre ][ "scopes" ]:
+                pre_id, pre_lab = get_id_label_for_prefix(bios["biocharacteristics"]+bios["external_references"], pre, **kwargs)
+                bios_line.append( pre_id )
+                bios_line.append( pre_lab )
+
+        biosf.write( tab.join( bios_line ) + "\n" )
+        bios_no += 1
+
+    biosf.close()
+    biosamples_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, str(bios_no), biosfl ]) )
+    rename(tmp_bios_file, biosamples_file)
+
+    print(str(bios_no)+" biosamples were written to "+biosamples_file)
 
 ################################################################################
 
@@ -38,7 +75,7 @@ def write_callsets_matrix_files(**kwargs):
     smfl = kwargs["config"][ "paths" ][ "status_matrix_file_label" ]
     vmfl = kwargs["config"][ "paths" ][ "values_matrix_file_label" ]
     
-    dataset_id = kwargs[ "config" ][ "data_pars" ][ "dataset_id" ]
+    dataset_id = kwargs[ "dataset_id" ]
 
     mongo_client = MongoClient( )
     mongo_db = mongo_client[ dataset_id ]
@@ -56,9 +93,9 @@ def write_callsets_matrix_files(**kwargs):
     for cs in mongo_coll.find({"_id": {"$in": kwargs["callsets::_id"] }}) :
         cs = callsets_add_metadata( cs, **kwargs )
         cs_meta = [ cs[ "id" ] ]
-        for bio_pre in bio_prefixes:
-            cs_meta.append(cs[ bio_pre+"::id" ])
-            cs_meta.append(cs[ bio_pre+"::label" ])
+        for pre in bio_prefixes:
+            cs_meta.append(cs[ pre+"::id" ])
+            cs_meta.append(cs[ pre+"::label" ])
 
         if "dupmap" in cs["info"][ "statusmaps" ]:
             if cs[ "info" ][ "statusmaps" ][ "dupmap" ] is not None:

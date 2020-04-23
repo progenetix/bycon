@@ -11,7 +11,7 @@ def get_cmd_args():
     argv = sys.argv[ 1: ]
 
     try:
-        opts, args = getopt.getopt(argv, "htd:b:e:j:a:f:y:c:o:g:", [ "help", "dataset_id=" "bioclass=", "extid=", "jsonqueries=", "dotalpha=", "mappingfile=", "icdomappath=", "cytoBands=", "chroBases=", "genome=" ] )
+        opts, args = getopt.getopt(argv, "htd:b:e:j:a:f:p:y:c:o:g:", [ "help", "dataset_id=" "bioclass=", "extid=", "jsonqueries=", "dotalpha=", "mappingfile=", "outpath=", "icdomappath=", "cytoBands=", "chroBases=", "genome=" ] )
     except getopt.GetoptError:
         with open(help_file) as help:
 	        help_doc = help.read()
@@ -55,7 +55,7 @@ def plotpars_from_args(opts, **kwargs):
 
 ################################################################################
 
-def pgx_queries_from_args(opts, **kwargs):
+def pgx_queries_from_args(opts):
 
     queries = { }
 
@@ -73,3 +73,39 @@ def pgx_queries_from_args(opts, **kwargs):
             elif len(querylist) == 1:
                 queries["biosamples"] = querylist[0]
     return queries
+
+################################################################################
+
+def confirm_prompt(prompt=None, resp=False):
+
+    """podmd
+    ### `confirm_prompt`
+    
+    ... prompts for yes or no response from the user. Returns True for yes and
+    False for no.
+
+    'resp' should be set to the default value assumed by the caller when
+    user simply types ENTER.
+
+    """
+    
+    if prompt is None:
+        prompt = 'Confirm'
+
+    if resp:
+        prompt = '%s [%s]|%s: ' % (prompt, 'y', 'n')
+    else:
+        prompt = '%s [%s]|%s: ' % (prompt, 'n', 'y')
+        
+    while True:
+        ans = input(prompt)
+        if not ans:
+            return resp
+        if ans not in ['y', 'Y', 'n', 'N']:
+            print("please enter y or n.")
+            continue
+        if ans == 'y' or ans == 'Y':
+            return True
+        if ans == 'n' or ans == 'N':
+            return False
+

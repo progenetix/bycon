@@ -2,6 +2,7 @@
 NCIT:
   name: "National Cancer Institute Thesaurus"
   url: "https://ncit.nci.nih.gov/"
+  list_par: biocharacteristics
   scopes:
     biosamples:
       db_key: 'biocharacteristics.type.id'
@@ -16,6 +17,7 @@ NCIT:
 HP:
   name: "Human Phenotype Ontology"
   url: "https://hpo.jax.org/"
+  list_par: biocharacteristics
   scopes:
     biosamples:
       db_key: 'biocharacteristics.type.id'
@@ -29,6 +31,7 @@ HP:
 PATO:
   name: "Phenotypic Qualities Ontology"
   url: "http://obofoundry.org/ontology/pato.html"
+  list_par: biocharacteristics
   scopes:
     biosamples:
       db_key: 'biocharacteristics.type.id'
@@ -42,6 +45,7 @@ PATO:
 EFO:
   name: "Experimental Factor Ontology"
   url: "https://www.ebi.ac.uk/efo/"
+  list_par: biocharacteristics
   scopes:
     biosamples:
       db_key: 'biocharacteristics.type.id'
@@ -57,6 +61,7 @@ EFO:
 PMID:
   name: "PubMed"
   url: "https://www.ncbi.nlm.nih.gov/pubmed/"
+  list_par: external_references
   scopes:
     biosamples:
       db_key: 'external_references.type.id'
@@ -65,23 +70,53 @@ PMID:
   examples:
     - 'PMID:28966033'
     - 'PMID:9405679'
-geo:
-  name: "NCBI Gene Expression Omnibus"
+
+geogse:
+  name: "NCBI Gene Expression Omnibus Series"
   url: "https://www.ncbi.nlm.nih.gov/geo/"
+  list_par: external_references
   scopes:
     callsets:
       db_key: 'external_references.type.id'
     biosamples:
       db_key: 'external_references.type.id'
       default: 1
-  pattern: '^geo\:G\d+?$'
+  pattern: '^geogse\-GSE\d+?$'
   examples:
-    - 'geo:GSE10092'
-    - 'geo:GSM253289'
+    - 'geogse-GSM253289'
+
+geogsm:
+  name: "NCBI Gene Expression Omnibus Experiment" 
+  url: "https://www.ncbi.nlm.nih.gov/geo/"
+  list_par: external_references
+  scopes:
+    callsets:
+      db_key: 'external_references.type.id'
+    biosamples:
+      db_key: 'external_references.type.id'
+      default: 1
+  pattern: '^geogsm\-GSM\d+?$'
+  examples:
+    - 'geogsm-GSM253289'
+
+geogpl:
+  name: "NCBI Gene Expression Omnibus Platform"
+  url: "https://www.ncbi.nlm.nih.gov/geo/"
+  list_par: external_references
+  scopes:
+    callsets:
+      db_key: 'external_references.type.id'
+    biosamples:
+      db_key: 'external_references.type.id'
+      default: 1
+  pattern: '^geopl\-GPL\d+?$'
+  examples:
+    - 'geogpl-GPL6504'
 
 cellosaurus:
   name: "Cellosaurus - a knowledge resource on cell lines"
   url: "https://web.expasy.org/cellosaurus/"
+  list_par: external_references
   scopes:
     callsets:
       db_key: 'external_references.type.id'

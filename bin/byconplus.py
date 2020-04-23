@@ -36,6 +36,12 @@ https://progenetix.org/cgi/bycon/cgi/byconplus.py?datasetIds=dipg&assemblyId=GRC
 
 def main():
 
+    byconplus()
+    
+################################################################################
+
+def byconplus():
+
     # last_time = datetime.datetime.now()
     # logging.info("Start: {}".format(last_time))
 
@@ -49,6 +55,7 @@ def main():
     # input & definitions
     form_data = cgi_parse_query()
     opts, args = get_cmd_args()
+    rest_pars = cgi_parse_path_params( "byconplus" )
 
     if "debug" in form_data:
         cgitb.enable()
@@ -64,7 +71,8 @@ def main():
     byc = {
         "config": config,
         "opts": opts,
-        "form_data": form_data
+        "form_data": form_data,
+        "rest_pars": rest_pars
     }
 
     byc.update( { "dbstats": dbstats_return_latest( **byc ) } )

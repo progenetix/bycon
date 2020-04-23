@@ -17,6 +17,17 @@ bio_prefixes:
   - icdom
   - icdot
   - NCIT
+io_params:
+  - id
+  - description
+io_prefixes:
+  - icdom
+  - icdot
+  - NCIT
+  - PMID
+  - geogsm
+  - geogse
+  - cellosaurus
 stats_collection: dbstats
 plot_pars:
   dotalpha: 0.2
@@ -25,5 +36,6 @@ data_pars:
 paths:
   status_matrix_file_label: matrix_status.tsv
   values_matrix_file_label: matrix_values.tsv
+  biosamples_file_label: biosamples.tsv
   web_server_root_abs: '/Library/WebServer/Documents'
   web_temp_dir_abs: '/Library/WebServer/Documents/tmp'

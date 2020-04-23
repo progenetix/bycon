@@ -29,3 +29,13 @@ def callsets_add_metadata(cs, **kwargs):
 
 ################################################################################
 
+def get_id_label_for_prefix(data_list, prefix, **kwargs):
+
+    pre_id = ""
+    pre_lab = ""
+    for item in data_list:
+        if re.compile( r"^"+prefix+r"[\:\-]" ).match(item["type"]["id"]):
+            pre_id = item["type"]["id"]
+            pre_lab = item["type"]["label"]
+
+    return(pre_id, pre_lab)

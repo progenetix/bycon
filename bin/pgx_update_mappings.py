@@ -46,7 +46,17 @@ def main():
    
     ############################################################################
 
-    if _confirm("Normalize Prefixes?", False):
+    if confirm_prompt("Update Biosamples from File?", False):
+
+        print("=> updating biosamples")
+        for dataset_id in dataset_ids:
+            print(dataset_id)
+            kwargs = { "config": config, "dataset_id": dataset_id, "update_collection": "biosamples" }
+            pgx_update_samples_from_file( **kwargs )
+
+    ############################################################################
+
+    if confirm_prompt("Normalize Prefixes?", False):
 
         print("=> normalizing prefixes")
         for dataset_id in dataset_ids:
@@ -56,7 +66,7 @@ def main():
 
     ############################################################################
 
-    if _confirm("Update Mappings?", False):
+    if confirm_prompt("Update Mappings?", False):
  
         if not path.isfile(config[ "paths" ][ "mapping_file" ]):
             print("No mapping file was provided with -f ...")
@@ -81,46 +91,13 @@ def main():
 
     ############################################################################
 
-    if _confirm("Denormalize Biosample Essentials Into Callsets?", False):
+    if confirm_prompt("Denormalize Biosample Essentials Into Callsets?", False):
 
         print("=> denormalizing into callsets")
         for dataset_id in dataset_ids:
             print(dataset_id)
             kwargs = { "config": config, "filter_defs": filter_defs, "dataset_id": dataset_id }
             pgx_populate_callset_info( **kwargs )
-
-################################################################################
-
-def _confirm(prompt=None, resp=False):
-
-    """prompts for yes or no response from the user. Returns True for yes and
-    False for no.
-
-    'resp' should be set to the default value assumed by the caller when
-    user simply types ENTER.
-
-    """
-    
-    if prompt is None:
-        prompt = 'Confirm'
-
-    if resp:
-        prompt = '%s [%s]|%s: ' % (prompt, 'y', 'n')
-    else:
-        prompt = '%s [%s]|%s: ' % (prompt, 'n', 'y')
-        
-    while True:
-        ans = input(prompt)
-        if not ans:
-            return resp
-        if ans not in ['y', 'Y', 'n', 'N']:
-            print("please enter y or n.")
-            continue
-        if ans == 'y' or ans == 'Y':
-            return True
-        if ans == 'n' or ans == 'N':
-            return False
-
 
 ################################################################################
 ################################################################################

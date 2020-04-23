@@ -19,7 +19,7 @@ def execute_bycon_queries(**kwargs):
 
     exe_queries = { }
     dataset_id = kwargs[ "dataset_id" ]
-    last_time = kwargs[ "last_time" ]
+    # last_time = kwargs[ "last_time" ]
 
     mongo_client = MongoClient( )
     query_types = kwargs[ "queries" ].keys()
@@ -27,7 +27,6 @@ def execute_bycon_queries(**kwargs):
         if collname in kwargs[ "config" ][ "collections" ]:
             exe_queries[ collname ] = kwargs[ "queries" ][ collname ]
 
-    # print(kwargs["config"]["dataset_id"])
     q_coll_name = "querybuffer"
     if q_coll_name in exe_queries:
         mongo_db = mongo_client[ "progenetix" ]
@@ -35,7 +34,6 @@ def execute_bycon_queries(**kwargs):
         
         handover = mongo_coll.find_one( exe_queries[ q_coll_name ] )
 
-    # mongo_db = mongo_client[ kwargs["config"]["dataset_id"] ]
     mongo_db = mongo_client[ dataset_id ]
 
     if "biosamples" in exe_queries:
