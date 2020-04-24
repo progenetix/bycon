@@ -16,6 +16,7 @@ from bycon import *
 """podmd
 
 * `bin/pgx_update_from_files.py -f /Users/bgadmin/dbtools/bycon/data/in/biosamples_update.ods -d arraymap`
+* `bin/pgx_update_from_files.py -f /Users/mbaudis/switchdrive/baudisgroup/collaborations/Bellinzona/2020-04-22-PMID-24037725-for-Francesco/progenetix-277-biosamples.tsv -d progenetix`
 
 podmd"""
 

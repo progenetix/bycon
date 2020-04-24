@@ -10,9 +10,25 @@ from bycon import *
 
 """podmd
 
+This program allows you to select biosamples from any of the datsets, and to export
+the sample data in the format of
+* a biosamples table
+* callsets tables with the 1Mb status matrix data
+* some statistics plots
+
+Queries are handled through the standard `bycon` query aggregation. While some simple
+parameters for data selection exist / may be added, the best way to filter the data is
+through providing a JSON string with scoped queries, as if run directly against the
+MongoDB collections.
+
 ##### Examples
 
-* `bin/pgxport.py -j '{ "biosamples": {"external_references.type.id": "geo:GSE67385"} }'
+* just one series
+  - `bin/pgxport.py -j '{ "biosamples": {"external_references.type.id": "geogse-GSE67385"} }'
+* specific diagnosis from one publication, with export path
+  - `bin/pgxport.py -j '{ "biosamples": { "$and": [ { "biocharacteristics.type.id": "NCIT:C3209" }, {"external_references.type.id": "PMID:24037725"} ] } }' -p ~/groupbox/dbdata/out -d arraymap`
+* combining this: all Progenetix samples with a "malignant" provenance and a numeric value in th efollowup
+  - `bin/pgxport.py -j '{ "biosamples": { "$and": [ { "info.followup_months": { "$gte": 0 } }, { "provenance.material.type.id":"EFO:0009656" } ] } }' -p ~/groupbox/dbdata/out -d progenetix`
 
 podmd"""
 
