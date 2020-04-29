@@ -22,12 +22,11 @@ def pgx_update_samples_from_file( **kwargs ):
     io_prefixes = kwargs[ "config" ][ "io_prefixes" ]
 
     # relevant sheet is the first one...
-    print(kwargs[ "config" ][ "paths" ][ "mapping_file" ])       
     try:
-        table = get_sheet(file_name=kwargs[ "config" ][ "paths" ][ "mapping_file" ])
+        table = get_sheet(file_name=kwargs[ "config" ][ "paths" ][ "update_file" ])
     except Exception as e:
         print(e)
-        print("No matching mapping file could be found!")
+        print("No matching update file could be found!")
         exit()
 
     header = table[0]
@@ -60,7 +59,7 @@ def pgx_update_samples_from_file( **kwargs ):
         for par_scope in [ "biocharacteristics", "external_references" ]:
             update[ par_scope ] = [ ]
             for pre in io_prefixes:
-                if not par_scope == filter_defs[ pre ][ "list_par" ]:
+                if not par_scope in filter_defs[ pre ][ "db_key" ]:
                     continue
                 u_par = { "type": {} }
                 exists = False
@@ -97,9 +96,11 @@ def pgx_update_samples_from_file( **kwargs ):
                 if exists == True:
                     update[ par_scope ].append( u_par )
 
-            # print( json.dumps(update, indent=4, sort_keys=True, default=str) )
-
-            bios_coll.update_one( { "_id" : bios[ "_id" ] }, { "$set": update } )
+            # 
+            if kwargs[ "args"].test:
+                print( json.dumps(update, indent=4, sort_keys=True, default=str) )
+            else:
+                bios_coll.update_one( { "_id" : bios[ "_id" ] }, { "$set": update } )
 
 ################################################################################
 ################################################################################
@@ -152,7 +153,6 @@ def pgx_populate_callset_info( **kwargs ):
                 try:
                     if re.compile( filter_defs[ pre ][ "pattern" ] ).match( mapped[ "type" ][ "id" ] ):
                         cs[ "info" ][ pre ] = mapped[ "type" ]
-                        # print(cs[ "info" ][ pre ][ "id" ])
                         update_flag = 1
                         break
                 except Exception:
@@ -368,7 +368,7 @@ def pgx_update_biocharacteristics(**kwargs):
     mongo_db = mongo_client[ kwargs[ "dataset_id" ] ]
     mongo_coll = mongo_db[ kwargs["update_collection"] ]
     
-    db_key = kwargs["filter_defs"]["icdom"][ "scopes" ][ kwargs["update_collection"] ][ "db_key" ]
+    db_key = kwargs["filter_defs"]["icdom"][ "db_key" ]
     
     sample_no = 0
     for equivmap in kwargs["equivmaps"]:

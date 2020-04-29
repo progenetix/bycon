@@ -2,6 +2,7 @@
 
 import sys, yaml
 from os import path as path
+import argparse
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
@@ -24,16 +25,33 @@ MongoDB collections.
 ##### Examples
 
 * just one series
-  - `bin/pgxport.py -j '{ "biosamples": {"external_references.type.id": "geogse-GSE67385"} }'
+  - `bin/pgxport.py -q '{ "biosamples": {"external_references.type.id": "geogse-GSE67385"} }' -d arraymap`
 * specific diagnosis from one publication, with export path
-  - `bin/pgxport.py -j '{ "biosamples": { "$and": [ { "biocharacteristics.type.id": "NCIT:C3209" }, {"external_references.type.id": "PMID:24037725"} ] } }' -p ~/groupbox/dbdata/out -d arraymap`
+  - `bin/pgxport.py -q '{ "biosamples": { "$and": [ { "biocharacteristics.type.id": "NCIT:C3209" }, {"external_references.type.id": "PMID:24037725"} ] } }' -p ~/groupbox/dbdata/out -d arraymap`
 * combining this: all Progenetix samples with a "malignant" provenance and a numeric value in th efollowup
-  - `bin/pgxport.py -j '{ "biosamples": { "$and": [ { "info.followup_months": { "$gte": 0 } }, { "provenance.material.type.id":"EFO:0009656" } ] } }' -p ~/groupbox/dbdata/out -d progenetix`
+  - `bin/pgxport.py -q '{ "biosamples": { "$and": [ { "info.followup_months": { "$gte": 0 } }, { "provenance.material.type.id":"EFO:0009656" } ] } }' -p ~/groupbox/dbdata/out -d progenetix`
 
 podmd"""
 
 ################################################################################
 ################################################################################
+################################################################################
+
+def _get_args():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-o", "--outdir", help="path to the output directory")
+    parser.add_argument("-d", "--datasetid", help="dataset id")
+    parser.add_argument("-f", "--filters", help="prefixed filter values, comma concatenated")
+    parser.add_argument("-b", "--bioclass", help="prefixed filter values, comma concatenated")
+    parser.add_argument("-e", "--extid", help="prefixed filter values, comma concatenated")    
+    parser.add_argument("-q", "--queries", help="JSON query object")
+    parser.add_argument("-a", "--dotalpha", help="dot opacity for plotting")
+    parser.add_argument("-l", "--label", help="keyword label for output files")
+    args = parser.parse_args()
+
+    return(args)
+
 ################################################################################
 
 def main():
@@ -43,20 +61,17 @@ def main():
     config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
     config[ "paths" ][ "out" ] = path.join( path.abspath( dir_path ), '..', "data", "out" )
 
-    opts, args = get_cmd_args()
+    args = _get_args()
 
-    dataset_ids = config[ "dataset_ids" ]
-    for opt, arg in opts:
-        if opt in ("-f", "--mappingfile"):
-            config[ "paths" ][ "mapping_file" ] = path.abspath(arg)        
-        if opt in ("-d", "--dataset_ids"):
-            dataset_ids = arg.split(',')
-        if opt in ("-p", "--outpath"):
-            if path.isdir( arg ):
-                config[ "paths" ][ "out" ] = arg
-    
-    if not dataset_ids:
-        print("No existing dataset_id was provided with -d ...")
+    dataset_id = args.datasetid
+    try:
+        if path.isdir( args.outdir ):
+            config[ "paths" ][ "out" ] = args.outdir
+    except:
+        pass
+
+    if not dataset_id in config[ "dataset_ids" ]:
+        print("No existing dataset was provided with -d ...")
         exit()
     if not path.isdir( config[ "paths" ][ "out" ] ):
         print("The output directory:\n\t"+config[ "paths" ][ "out" ]+"\n...does not exist; please use `-p` to specify")
@@ -64,16 +79,22 @@ def main():
     else:
         print("=> files will be written to"+str(config[ "paths" ][ "out" ]))
 
-    print("=> looking up data in "+dataset_ids[0])
+    print("=> looking up data in "+dataset_id)
 
-    kwargs = { "config": config, "dataset_id": dataset_ids[0], "filter_defs": read_filter_definitions( **{ "config": config } ), "queries": pgx_queries_from_args(opts) }
+    kwargs = {
+        "config": config,
+        "args": args,
+        "dataset_id": dataset_id,
+        "filter_defs": read_filter_definitions( **{ "config": config } )
+    }
+    
+    kwargs.update( { "queries": pgx_queries_from_args(**kwargs) }
 
     if not kwargs["queries"]:
         print('No query specified; please use "-h" for examples')
         sys.exit( )
 
-    kwargs[ "config" ].update( { "plot_pars": plotpars_from_args(opts, **kwargs) } )
-    kwargs[ "config" ].update( { "data_pars": pgx_datapars_from_args(opts, **kwargs) } )
+    kwargs[ "config" ].update( { "plot_pars": plotpars_from_args(args, **kwargs) } )
 
     query_results = execute_bycon_queries(**kwargs)
 

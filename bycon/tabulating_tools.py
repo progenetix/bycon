@@ -55,7 +55,7 @@ def get_nested_value(parent, dotted_key):
         except:
             v = ""
     elif len(ps) > 5:
-        print("¡¡¡ Parameter key "+dotted_key+" neted too deeply (>5) !!!")
+        print("¡¡¡ Parameter key "+dotted_key+" nested too deeply (>5) !!!")
 
     return( v )
 
@@ -68,13 +68,13 @@ def assign_nested_value(parent, dotted_key, v):
     updated = parent
 
     if len(ps) > 5:
-        print("¡¡¡ Parameter key "+dotted_key+" neted too deeply (>5) !!!")
+        print("¡¡¡ Parameter key "+dotted_key+" nested too deeply (>5) !!!")
     elif len(ps) == 5:
         try:
             updated[ ps[0] ][ ps[1] ][ ps[2] ][ ps[3] ][ ps[4] ] = v
         except:
             pass
-    if len(ps) == 4:
+    elif len(ps) == 4:
         try:
             updated[ ps[0] ][ ps[1] ][ ps[2] ][ ps[3] ] = v
         except:
@@ -96,6 +96,7 @@ def assign_nested_value(parent, dotted_key, v):
             pass
 
     return( updated )
+
 
 ################################################################################
 

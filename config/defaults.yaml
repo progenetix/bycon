@@ -74,8 +74,6 @@ io_prefixes:
 stats_collection: dbstats
 plot_pars:
   dotalpha: 0.2
-data_pars:
-  dataset_id: arraymap
 paths:
   status_matrix_file_label: matrix_status.tsv
   values_matrix_file_label: matrix_values.tsv

@@ -16,9 +16,7 @@ from .cgi_utils import cgi_exit_on_error
 from .cgi_utils import cgi_parse_path_params
 from .cgi_utils import cgi_print_json_response
 from .cgi_utils import cgi_print_json_callback
-from .cmd_parse_args import get_cmd_args
 from .cmd_parse_args import plotpars_from_args
-from .cmd_parse_args import pgx_datapars_from_args
 from .cmd_parse_args import pgx_queries_from_args
 from .cmd_parse_args import confirm_prompt
 from .data_analysis import callsets_return_stats

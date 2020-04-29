@@ -17,10 +17,12 @@ def cgi_parse_path_params( script_name ):
     URL components after the script name are deparsed into parameters.
     """
 
-    path_pars =  {}
+    path_pars =  { }
+    path_items = [ ]
 
     url_comps = urlparse( os.environ.get('REQUEST_URI') )
-    path_items = re.split(r'\/|\&', url_comps.path)
+    if type(url_comps.path) == str:
+        path_items = re.split(r'\/|\&', url_comps.path)
     par_re = re.compile( r'^(\w.*?)\=(\w.*?)$')
 
     if not script_name in path_items:

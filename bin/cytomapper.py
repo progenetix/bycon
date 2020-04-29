@@ -6,6 +6,7 @@ from os import path as path
 import sys
 import datetime
 import csv
+import argparse
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
@@ -33,8 +34,8 @@ While the return object is JSON by default, specifying `text=1`, together with t
 
 There is a fallback to *GRCh38* if no assembly is being provided.
 
-The `cytoBands` and `chroBases` parameters can be used for running the script on the command line
-(see examples below).
+The `cytobands` and `chrobases` parameters can be used for running the script on the command line
+(see examples below). Please be aware of the "chrobases" (command line) versus "chroBases" (cgi) use.
 
 #### Examples
 
@@ -48,9 +49,10 @@ The `cytoBands` and `chroBases` parameters can be used for running the script on
 * using `curl` to get the text format mapping of a cytoband range, using the API `services` shortcut:
   - `curl -k https://progenetix.test/services/cytomapper/cytoBands\=8q21q24.1/assemblyId\=hg18/text\=1/`
 * command line version of the above
-  - `bin/cytomapper.py --chroBases 17:800000-24326000 -g NCBI36`
-  - `bin/cytomapper.py --cytoBands 9p11q21 -g GRCh38`
-  - `bin/cytomapper.py --cytoBands Xpterq24`
+  - `bin/cytomapper.py --chrobases 17:800000-24326000 -g NCBI36`
+  - `bin/cytomapper.py -b 17:800000-24326000`
+  - `bin/cytomapper.py --cytobands 9p11q21 -g GRCh38`
+  - `bin/cytomapper.py -c Xpterq24`
 
 #### TODO
 
@@ -62,6 +64,18 @@ podmd"""
 
 ################################################################################
 ################################################################################
+################################################################################
+
+def _get_args():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-c", "--cytobands", help="cytoband(s), e.g. `8q21q24.1`")
+    parser.add_argument("-b", "--chrobases", help="chromosome and base(s), e.g. `17:12003942-18903371`")
+    parser.add_argument("-g", "--genome", help="genome edition, e.g. `GRCh38`")
+    args = parser.parse_args()
+
+    return(args)
+
 ################################################################################
 
 def main():
@@ -76,7 +90,7 @@ def cytomapper():
     
     # input & definitions
     form_data = cgi_parse_query()
-    opts, args = get_cmd_args()
+    args = _get_args()
     rest_pars = cgi_parse_path_params( "cytomapper" )
 
     if "debug" in form_data:
@@ -94,7 +108,7 @@ def cytomapper():
 
     byc = {
         "config": config,
-        "opts": opts,
+        "args": args,
         "form_data": form_data,
         "rest_pars": rest_pars
     }
@@ -104,7 +118,6 @@ def cytomapper():
     byc.update( { "variant_pars": _parse_chrobases( **byc ) } )
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
     byc.update( { "cytobands": parse_cytoband_file( **byc ) } )
-
     cytobands, chro, cytoBands = filter_cytobands( **byc )
 
     # response prototype
@@ -112,10 +125,9 @@ def cytomapper():
 
     if len( cytoBands ) < 1:
         cyto_response.update( { "error": "No matching cytobands!" } )
-        _print_terminal_response(opts, args, cyto_response)
+        _print_terminal_response(args, cyto_response)
         _print_text_response(form_data, rest_pars, cyto_response)
         cgi_print_json_response(cyto_response)
-
     start = int( cytobands[0]["start"] )
     end = int( cytobands[-1]["end"] )
     if byc[ "variant_request_type" ] == "positions2cytobands_request":
@@ -135,7 +147,7 @@ def cytomapper():
         "size": size        
     } )
 
-    _print_terminal_response(opts, args, cyto_response)
+    _print_terminal_response(args, cyto_response)
     _print_text_response(form_data, rest_pars, cyto_response)
 
     if "callback" in byc[ "form_data" ]:
@@ -151,6 +163,7 @@ def _parse_chrobases( **byc ):
     variant_pars = byc["variant_pars"]
     variant_defs = byc["variant_defs"]
     v_par = "chroBases"
+    variant_pars[ "rangeTag" ] = "true"
 
     if v_par in variant_pars:
         cb_re = re.compile( variant_defs[ v_par ][ "pattern" ] )
@@ -158,27 +171,25 @@ def _parse_chrobases( **byc ):
         if not end:
             end = int(start) + 1
         variant_pars[ "referenceName" ], variant_pars[ "start" ], variant_pars[ "end" ] = chro, int(start), int(end)
-        variant_pars[ "rangeTag" ] = "true"
 
     return(variant_pars)
 
 ################################################################################
 ################################################################################
 
-def _print_terminal_response(opts, args, cyto_response):
+def _print_terminal_response(args, cyto_response):
 
-    if not opts is None:
+    if not args is None:
         if not cyto_response[ "error" ] is None:
             print( cyto_response[ "error" ] )
             exit()
 
-    for opt, arg in opts:
-        if opt in ("-c", "--cytoBands"):
-            print(str(cyto_response[ "chroBases" ]))
-            exit()
-        elif opt in ("-o", "--chroBases"):
-            print(str(cyto_response[ "cytoBands" ]))
-            exit()
+    if args.cytobands:
+        print(str(cyto_response[ "chroBases" ]))
+        exit()
+    elif args.chrobases:
+        print(str(cyto_response[ "cytoBands" ]))
+        exit()
 
     return
 

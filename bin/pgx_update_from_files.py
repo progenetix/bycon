@@ -4,7 +4,7 @@ import time
 from datetime import date
 import sys, yaml
 from os import path as path
-
+import argparse
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
@@ -15,13 +15,26 @@ from bycon import *
 
 """podmd
 
-* `bin/pgx_update_from_files.py -f /Users/bgadmin/dbtools/bycon/data/in/biosamples_update.ods -d arraymap`
-* `bin/pgx_update_from_files.py -f /Users/mbaudis/switchdrive/baudisgroup/collaborations/Bellinzona/2020-04-22-PMID-24037725-for-Francesco/progenetix-277-biosamples.tsv -d progenetix`
+* `bin/pgx_update_from_files.py -u ~/dbtools/bycon/data/in/biosamples_update.ods -d arraymap`
+* `bin/pgx_update_from_files.py -u ~/switchdrive/baudisgroup/collaborations/Bellinzona/2020-04-22-PMID-24037725-for-Francesco/progenetix-277-biosamples.tsv -d progenetix`
 
 podmd"""
 
 ################################################################################
 ################################################################################
+################################################################################
+
+def _get_args():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-o", "--outdir", help="path to the output directory")
+    parser.add_argument("-d", "--datasetid", help="dataset id")
+    parser.add_argument("-u", "--updatefile", help="update file with canonical headers")
+    parser.add_argument("-t", "--test", help="test setting")
+    args = parser.parse_args()
+
+    return(args)
+
 ################################################################################
 
 def main():
@@ -30,33 +43,40 @@ def main():
         config = yaml.load( cf , Loader=yaml.FullLoader)
     config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
     config[ "paths" ][ "out" ] = path.join( path.abspath( dir_path ), '..', "data", "out" )
-    config[ "paths" ][ "mapping_file" ] = path.abspath(".")
 
-    opts, args = get_cmd_args()
-    kwargs = { "config": config, "filter_defs": read_filter_definitions( **{ "config": config } )  }
-    kwargs[ "config" ][ "data_pars" ] = pgx_datapars_from_args(opts, **kwargs)
+    args = _get_args()
+    config[ "paths" ][ "update_file" ] = args.updatefile
+    dataset_id = args.datasetid
 
-    dataset_ids = config[ "dataset_ids" ]
-    for opt, arg in opts:
-        if opt in ("-f", "--mappingfile"):
-            kwargs[ "config" ][ "paths" ][ "mapping_file" ] = path.abspath(arg)        
-        if opt in ("-d", "--dataset_ids"):
-            dataset_ids = arg.split(',')
-    
-    if not dataset_ids:
-        print("No existing dataset_id was provided with -d ...")
+    try:
+        if path.isdir( args.outdir ):
+            config[ "paths" ][ "out" ] = args.outdir
+    except:
+        pass
+
+    if not dataset_id in config[ "dataset_ids" ]:
+        print("No existing dataset was provided with -d ...")
         exit()
+    if not  path.isfile( config[ "paths" ][ "update_file" ] ):
+        print("No existing update file was provided with -u ...")
+        sys.exit()
+    if not  path.isdir( config[ "paths" ][ "out" ] ):
+        print("No existing output directory was provided with -o ...")
+        sys.exit()
 
-    dataset_id = dataset_ids[0]
-    if len(dataset_ids) > 1:
-        print("¡¡¡ Only the first dataset "+dataset_id+" is being processed !!!")
-   
     ############################################################################
 
-    if confirm_prompt("Update Biosamples from File?", False):
+    kwargs = {
+        "config": config,
+        "args": args,
+        "dataset_id": dataset_id,
+        "update_collection": "biosamples",
+        "filter_defs": read_filter_definitions( **{ "config": config } ) 
+    }
+   
+    if confirm_prompt("""Update Biosamples in {} from file\n{}\n""".format(dataset_id, kwargs[ "config" ][ "paths" ][ "update_file" ]), False):
 
         print("=> updating biosamples in "+dataset_id)
-        kwargs.update( { "dataset_id": dataset_id, "update_collection": "biosamples" } )
         pgx_update_samples_from_file( **kwargs )
 
 ################################################################################

@@ -2,13 +2,12 @@
 NCIT:
   name: "National Cancer Institute Thesaurus"
   url: "https://ncit.nci.nih.gov/"
-  list_par: biocharacteristics
+  db_key: 'biocharacteristics.type.id'
   scopes:
     biosamples:
-      db_key: 'biocharacteristics.type.id'
       default: 1
     individuals:
-      db_key: 'biocharacteristics.type.id'
+      default: 0
   pattern: '^NCIT\:C\d+?$'
   examples:
     - 'NCIT:C27676'
@@ -17,12 +16,11 @@ NCIT:
 HP:
   name: "Human Phenotype Ontology"
   url: "https://hpo.jax.org/"
-  list_par: biocharacteristics
+  db_key: 'biocharacteristics.type.id'
   scopes:
     biosamples:
-      db_key: 'biocharacteristics.type.id'
+      default: 0
     individuals:
-      db_key: 'biocharacteristics.type.id'
       default: 1
   pattern: '^HP\:\d+?$'
   examples:
@@ -31,12 +29,11 @@ HP:
 PATO:
   name: "Phenotypic Qualities Ontology"
   url: "http://obofoundry.org/ontology/pato.html"
-  list_par: biocharacteristics
+  db_key: 'biocharacteristics.type.id'
   scopes:
     biosamples:
-      db_key: 'biocharacteristics.type.id'
+      default: 0
     individuals:
-      db_key: 'biocharacteristics.type.id'
       default: 1
   pattern: '^PATO\:\d+?$'
   examples:
@@ -45,13 +42,12 @@ PATO:
 EFO:
   name: "Experimental Factor Ontology"
   url: "https://www.ebi.ac.uk/efo/"
-  list_par: biocharacteristics
+  db_key: 'biocharacteristics.type.id'
   scopes:
     biosamples:
-      db_key: 'biocharacteristics.type.id'
       default: 1
     individuals:
-      db_key: 'biocharacteristics.type.id'
+      default: 0
   pattern: '^EFO\:\d+?$'
   examples:
     - 'EFO:0009656'
@@ -61,10 +57,9 @@ EFO:
 PMID:
   name: "PubMed"
   url: "https://www.ncbi.nlm.nih.gov/pubmed/"
-  list_par: external_references
+  db_key: 'external_references.type.id'
   scopes:
     biosamples:
-      db_key: 'external_references.type.id'
       default: 1
   pattern: '^(PMID)|(pubmed)\:\d+?$'
   examples:
@@ -74,12 +69,11 @@ PMID:
 geogse:
   name: "NCBI Gene Expression Omnibus Series"
   url: "https://www.ncbi.nlm.nih.gov/geo/"
-  list_par: external_references
+  db_key: 'external_references.type.id'
   scopes:
     callsets:
-      db_key: 'external_references.type.id'
+      default: 0
     biosamples:
-      db_key: 'external_references.type.id'
       default: 1
   pattern: '^geogse\-GSE\d+?$'
   examples:
@@ -88,12 +82,11 @@ geogse:
 geogsm:
   name: "NCBI Gene Expression Omnibus Experiment" 
   url: "https://www.ncbi.nlm.nih.gov/geo/"
-  list_par: external_references
+  db_key: 'external_references.type.id'
   scopes:
     callsets:
-      db_key: 'external_references.type.id'
+      default: 0
     biosamples:
-      db_key: 'external_references.type.id'
       default: 1
   pattern: '^geogsm\-GSM\d+?$'
   examples:
@@ -102,12 +95,12 @@ geogsm:
 geogpl:
   name: "NCBI Gene Expression Omnibus Platform"
   url: "https://www.ncbi.nlm.nih.gov/geo/"
-  list_par: external_references
+  db_key: 'external_references.type.id'
   scopes:
     callsets:
-      db_key: 'external_references.type.id'
+      default: 0
     biosamples:
-      db_key: 'external_references.type.id'
+      default: 0
       default: 1
   pattern: '^geopl\-GPL\d+?$'
   examples:
@@ -116,12 +109,11 @@ geogpl:
 cellosaurus:
   name: "Cellosaurus - a knowledge resource on cell lines"
   url: "https://web.expasy.org/cellosaurus/"
-  list_par: external_references
+  db_key: 'external_references.type.id'
   scopes:
     callsets:
-      db_key: 'external_references.type.id'
+      default: 0
     biosamples:
-      db_key: 'external_references.type.id'
       default: 1
   pattern: '^cellosaurus\:CVCL_\w+?$'
   examples:

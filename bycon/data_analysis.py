@@ -5,7 +5,7 @@ from pymongo import MongoClient
 def callsets_return_stats(**byc):
 
     mongo_client = MongoClient( )
-    mongo_db = mongo_client[ byc[ "config" ][ "data_pars" ][ "dataset_id" ] ]
+    mongo_db = mongo_client[ byc[ "dataset_id" ] ]
     mongo_coll = mongo_db[ 'callsets' ]
 
     cs_stats = { }

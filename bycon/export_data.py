@@ -31,7 +31,7 @@ def write_biosamples_table(**kwargs):
     dash = kwargs[ "config" ][ "const" ][ "dash_sep" ]
     tmp_bios_file = "_tmp-"+biosfl
 
-    dataset_id = kwargs[ "config" ][ "data_pars" ][ "dataset_id" ]
+    dataset_id = kwargs[ "dataset_id" ]
     query = { "_id": { "$in": kwargs[ "biosamples::_id" ] } }
 
     bios_coll = MongoClient( )[ dataset_id ][ "biosamples" ]
@@ -40,7 +40,7 @@ def write_biosamples_table(**kwargs):
 
     biosf = open( tmp_bios_file, 'w' )
 
-    header = biosample_table_header(**kwargs[ "config" ])
+    header = biosample_table_header( **kwargs[ "config" ] )
     
     biosf.write( tab.join( header ) + "\n" )
     for bios in bios_coll.find(query):

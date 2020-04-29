@@ -1,10 +1,9 @@
 icdom:
   name: "ICD-O 3 Morphologies (Progenetix)"
   url: "https://progenetix.org/"
-  list_par: biocharacteristics
+  db_key: 'biocharacteristics.type.id'
   scopes:
     biosamples:
-      db_key: 'biocharacteristics.type.id'
       default: 1
   pattern: '^icdom\-\d{5}?$'
   examples:
@@ -14,10 +13,9 @@ icdom:
 icdot:
   name: "ICD-O 3 Topographies (Progenetix)"
   url: "https://progenetix.org/"
-  list_par: biocharacteristics
+  db_key: 'biocharacteristics.type.id'
   scopes:
     biosamples:
-      db_key: 'biocharacteristics.type.id'
       default: 1
   pattern: '^icdot\-C\d\d?(\.\d)?$'
   examples:
@@ -30,12 +28,11 @@ icdot:
 tcga:
   name: "The Cancer Genome Atlas"
   url: "http://cancergenome.nih.gov"
-  list_par: external_references
+  db_key: 'external_references.type.id'
   scopes:
     callsets:
-      db_key: 'external_references.type.id'
+      default: 0
     biosamples:
-      db_key: 'external_references.type.id'
       default: 1
     individuals:
       db_key: 'external_references.type.id'

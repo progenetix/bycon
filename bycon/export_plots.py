@@ -6,7 +6,7 @@ import matplotlib.gridspec as gridspec
 
 def plot_callset_stats(**kwargs):
 
-    dataset_id = kwargs[ "config" ][ "data_pars" ][ "dataset_id" ]
+    dataset_id = kwargs[ "dataset_id" ]
     dash = kwargs[ "config" ][ "const" ][ "dash_sep" ]
 
     statsno_str = str(len(kwargs[ "callsets_stats" ]["cnv_fs"]))

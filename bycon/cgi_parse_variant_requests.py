@@ -39,15 +39,19 @@ def parse_variants( **byc ):
             pass
 
     # for debugging
-    for opt, arg in byc["opts"]:
-        if opt in ("-t"):
+    args = byc["args"]
+    if "test" in args:
+        if args.test:
             variant_pars = byc["service_info"][ "sampleAlleleRequests" ][0]
-        if opt in ("-c", "--cytoBands"):
-            variant_pars[ "cytoBands" ] = arg
-        if opt in ("-o", "--chroBases"):
-             variant_pars[ "chroBases" ] = arg
-        if opt in ("-g", "--genome"):
-             variant_pars[ "assemblyId" ] = arg
+    if "cytobands" in args:
+        if args.cytobands:
+            variant_pars[ "cytoBands" ] = args.cytobands
+    if "chrobases" in args:
+        if args.chrobases:
+            variant_pars[ "chroBases" ] = args.chrobases
+    if "genome" in args:
+        if args.genome:
+            variant_pars[ "assemblyId" ] = args.genome
 
     if "rest_pars" in byc:
         for rp in byc[ "rest_pars" ].keys():
@@ -179,11 +183,12 @@ def create_query_from_variant_pars(**byc):
         pref = re.split('-|:', filterv)[0]
         
         if pref in byc["filter_defs"]:
-            if re.compile( byc["filter_defs"][pref]["pattern"] ).match(filterv):
-                for scope in byc["filter_defs"][pref]["scopes"]:
-                    m_scope = byc["filter_defs"][pref]["scopes"][scope]
+            pref_defs = byc["filter_defs"][pref]
+            if re.compile( pref_defs["pattern"] ).match(filterv):
+                for scope in pref_defs["scopes"]:
+                    m_scope = pref_defs["scopes"][scope]
                     if m_scope["default"]:
-                        query_lists[ scope ].append( { m_scope[ "db_key" ]: { "$regex": "^"+filterv } } )
+                        query_lists[ scope ].append( { pref_defs[ "db_key" ]: { "$regex": "^"+filterv } } )
 
     for coll_name in byc[ "config" ][ "collections" ]:
         if len(query_lists[coll_name]) == 1:

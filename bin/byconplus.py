@@ -6,6 +6,7 @@ from os import path as path
 import sys
 import datetime
 import logging
+import argparse
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
@@ -19,18 +20,25 @@ from bycon import *
 #     level=logging.INFO) # INFO ERROR
 
 """
-https://progenetix.org/cgi/bycon/cgi/byconplus.py?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=18000000&startMax=21975097&endMin=21967753&endMax=26000000&filters=icdom-94403
-https://progenetix.org/cgi/bycon/cgi/byconplus.py?assemblyId=GRCh38&datasetIds=arraymap,progenetix&filters=NCIT:C3326
-https://progenetix.org/cgi/bycon/cgi/byconplus.py
-https://progenetix.org/cgi/bycon/cgi/byconplus.py/service-info/
-https://progenetix.org/cgi/bycon/cgi/byconplus.py?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7577120&referenceBases=G&alternateBases=A&filters=icdot-C71.7&
+https://progenetix.org/cgi/bycon/bin/byconplus.py?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=18000000&startMax=21975097&endMin=21967753&endMax=26000000&filters=icdom-94403
+https://progenetix.org/cgi/bycon/bin/byconplus.py?assemblyId=GRCh38&datasetIds=arraymap,progenetix&filters=NCIT:C3326
+https://progenetix.org/cgi/bycon/bin/byconplus.py
+https://progenetix.org/cgi/bycon/bin/byconplus.py/service-info/
+https://progenetix.org/cgi/bycon/bin/byconplus.py?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7577120&referenceBases=G&alternateBases=A&filters=icdot-C71.7&
 """
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-  # for debugging
+def _get_args():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-f", "--filters", help="prefixed filter values, comma concatenated")
+    parser.add_argument("-t", "--test", action='store_true', help="test from command line with default parameters")
+    args = parser.parse_args()
+
+    return(args)
 
 ################################################################################
 
@@ -54,7 +62,7 @@ def byconplus():
 
     # input & definitions
     form_data = cgi_parse_query()
-    opts, args = get_cmd_args()
+    args = _get_args()
     rest_pars = cgi_parse_path_params( "byconplus" )
 
     if "debug" in form_data:
@@ -70,7 +78,7 @@ def byconplus():
     # TODO: "byc" becoming a proper object?!
     byc = {
         "config": config,
-        "opts": opts,
+        "args": args,
         "form_data": form_data,
         "rest_pars": rest_pars
     }
@@ -92,7 +100,7 @@ def byconplus():
         byc["queries"].update( { "variants": getattr(cgi_parse_variant_requests, variant_query_generator)( byc["variant_request_type"], byc["variant_pars"] ) } )
     # TODO: earlier catch for empty call => info
     if not byc[ "queries" ]:
-        cgi_print_json_response(service_info)
+        cgi_print_json_response(byc["service_info"])
             
     # logging.info("Parsing steps: {}".format(datetime.datetime.now()-last_time))
 
