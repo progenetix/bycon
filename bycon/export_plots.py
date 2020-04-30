@@ -8,10 +8,13 @@ def plot_callset_stats(**kwargs):
 
     dataset_id = kwargs[ "dataset_id" ]
     dash = kwargs[ "config" ][ "const" ][ "dash_sep" ]
-
+    args = kwargs[ "args" ]
+    label = ""
+    if args.label:
+        label = args.label
     statsno_str = str(len(kwargs[ "callsets_stats" ]["cnv_fs"]))
 
-    cnvstatsplot = pgxp.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, statsno_str, "cnvstats.png" ]) )
+    cnvstatsplot = pgxp.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, label, statsno_str, "cnvstats.png" ]) )
     plt.interactive( False )
     f = plt.figure( )
     gs = gridspec.GridSpec( 1, 2, width_ratios=[ 4, 1 ] )

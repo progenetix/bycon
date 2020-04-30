@@ -1,4 +1,4 @@
-import sys
+import sys, json
 from rich.console import Console
 from rich.markdown import Markdown
 
@@ -7,8 +7,9 @@ from rich.markdown import Markdown
 
 ################################################################################
 
-def plotpars_from_args(args, **kwargs):
+def plotpars_from_args(**kwargs):
 
+    args = kwargs[ "args" ]
     plot_pars = kwargs[ "config" ][ "plot_pars" ]
     if args.dotalpha:
         plot_pars[ "dotalpha" ] = args.dotalpha

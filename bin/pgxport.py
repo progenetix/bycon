@@ -88,13 +88,13 @@ def main():
         "filter_defs": read_filter_definitions( **{ "config": config } )
     }
     
-    kwargs.update( { "queries": pgx_queries_from_args(**kwargs) }
+    kwargs.update( { "queries": pgx_queries_from_args(**kwargs) } )
 
-    if not kwargs["queries"]:
+    if not "queries" in kwargs:
         print('No query specified; please use "-h" for examples')
         sys.exit( )
 
-    kwargs[ "config" ].update( { "plot_pars": plotpars_from_args(args, **kwargs) } )
+    kwargs[ "config" ].update( { "plot_pars": plotpars_from_args(**kwargs) } )
 
     query_results = execute_bycon_queries(**kwargs)
 

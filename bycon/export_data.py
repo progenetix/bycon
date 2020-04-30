@@ -26,6 +26,10 @@ def write_biosamples_table(**kwargs):
     io_prefixes = kwargs[ "config" ][ "io_prefixes" ]
     biosfl = kwargs["config"][ "paths" ][ "biosamples_file_label" ]
     filter_defs = kwargs[ "filter_defs" ]
+    args = kwargs[ "args" ]
+    label = ""
+    if args.label:
+        label = args.label
 
     tab = kwargs[ "config" ][ "const" ][ "tab_sep" ]
     dash = kwargs[ "config" ][ "const" ][ "dash_sep" ]
@@ -61,7 +65,7 @@ def write_biosamples_table(**kwargs):
         bios_no += 1
 
     biosf.close()
-    biosamples_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, str(bios_no), biosfl ]) )
+    biosamples_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, label, str(bios_no), biosfl ]) )
     rename(tmp_bios_file, biosamples_file)
 
     print(str(bios_no)+" biosamples were written to "+biosamples_file)
@@ -84,7 +88,11 @@ def write_callsets_matrix_files(**kwargs):
     dash = kwargs[ "config" ][ "const" ][ "dash_sep" ]
     tmp_status_matrix_file = "_tmp-"+smfl
     tmp_values_matrix_file = "_tmp-"+vmfl
-
+    args = kwargs[ "args" ]
+    label = ""
+    if args.label:
+        label = args.label
+        
     smf = open( tmp_status_matrix_file, 'w' )
     vmf = open( tmp_values_matrix_file, 'w' )
     sm_no = 0
@@ -115,8 +123,8 @@ def write_callsets_matrix_files(**kwargs):
     vmf.close()
     mongo_client.close()
 
-    status_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, str(sm_no), smfl ]) )
-    values_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, str(vm_no), vmfl ]) )
+    status_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, label, str(sm_no), smfl ]) )
+    values_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, label, str(vm_no), vmfl ]) )
 
     rename(tmp_status_matrix_file, status_matrix_file)
     rename(tmp_values_matrix_file, values_matrix_file)

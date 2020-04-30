@@ -7,7 +7,7 @@ import re
 
 def callsets_add_metadata(cs, **kwargs):
 
-    dataset_id = kwargs[ "config" ][ "data_pars" ][ "dataset_id" ]
+    dataset_id = kwargs[ "dataset_id" ]
     io_prefixes = kwargs[ "config" ][ "io_prefixes" ]
 
     mongo_client = MongoClient( )
