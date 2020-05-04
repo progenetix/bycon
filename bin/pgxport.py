@@ -100,13 +100,13 @@ def main():
 
     kwargs.update( { "callsets::_id": query_results["callsets::_id"] } )
     kwargs.update( { "biosamples::_id": query_results["biosamples::_id"] } )
- 
-    write_biosamples_table(**kwargs)
-    write_callsets_matrix_files(**kwargs)
+    
+    plot_worldmap(**kwargs)
 
-    kwargs.update( { "callsets_stats": callsets_return_stats(**kwargs) } )
-
-    plot_callset_stats(**kwargs)
+    # write_biosamples_table(**kwargs)
+    # write_callsets_matrix_files(**kwargs)
+    # kwargs.update( { "callsets_stats": callsets_return_stats(**kwargs) } )
+    # plot_callset_stats(**kwargs)
 
 ################################################################################
 ################################################################################

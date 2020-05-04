@@ -28,9 +28,9 @@ def pgx_queries_from_args(**kwargs):
     else:
         querylist = []
         if args.bioclass:
-            querylist.append({"biocharacteristics.type.id": {"$regex": arg } })
+            querylist.append({"biocharacteristics.type.id": {"$regex": args.bioclass } })
         if args.extid:
-            querylist.append( { "external_references.type.id": { "$regex": arg } } )
+            querylist.append( { "external_references.type.id": { "$regex": args.extid } } )
         if len(querylist) > 1:
             queries["biosamples"] = {"$and": querylist }
         elif len(querylist) == 1:
