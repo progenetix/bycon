@@ -1,6 +1,7 @@
 import sys, json
 from rich.console import Console
 from rich.markdown import Markdown
+import re
 
 # dir_path = path.dirname(path.abspath(__file__))
 # help_file = path.join(path.abspath(dir_path), '..', "doc", "pgxport.md")
@@ -24,7 +25,15 @@ def pgx_queries_from_args(**kwargs):
     args = kwargs[ "args" ]
 
     if args.queries:
-        queries = json.loads(args.queries)
+
+
+        q_s = args.queries
+        q_s = re.sub( r"([\{\s])(\$\w+?)([\:\s])", r'\1"\2"\3', q_s)
+        q_s = re.sub( r"\"\$regex\"\:\s*?\/([^\/]+?)\/", r'"$regex":"\1"', q_s)
+        # print(q_s)
+
+        queries = json.loads(q_s)
+        # exit()
     else:
         querylist = []
         if args.bioclass:

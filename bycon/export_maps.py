@@ -1,5 +1,6 @@
 from os import path
 from pymongo import MongoClient
+import plotly
 import plotly.graph_objects as go
 import pandas as pd
 
@@ -37,8 +38,8 @@ def plot_worldmap(**kwargs):
     df.to_csv(mapdata, sep='\t', index=False)
 
     fig = go.Figure(data=go.Choropleth(
-        locations = df['country'],
-        locationmode = "country names",
+        locations = df['ISO-3166-alpha3'],
+        locationmode = "ISO-3",
         z = df['count'],
         text = df['country'],
         colorscale = 'Blues',
@@ -65,17 +66,24 @@ def _aggregate_country_counts(geo_s):
 
     countries = {  }
     for g in geo_s:
-        if "country" in g:
-            if g["country"] in countries:
-                countries[ g["country"] ] += 1
+        if "ISO-3166-alpha3" in g:
+            if g["ISO-3166-alpha3"] in countries:
+                countries[ g["ISO-3166-alpha3"] ][ "count" ] += 1
             else:
-                countries[ g["country"] ] = 1
+                countries[ g["ISO-3166-alpha3"] ] = {
+                    "count": 1,
+                    "country": g["country"],
+                    "ISO-3166-alpha3": g[ "ISO-3166-alpha3" ]
+                }
 
-    country_counts = { "country": [ ], "count": [ ] }
+    country_counts = { "country": [ ], "count": [ ], "ISO-3166-alpha3": [ ] }
 
-    for key, value in countries.items():
+    for c in countries.keys():
 
-        country_counts[ "country"].append(key)
-        country_counts[ "count"].append(value)
+        country_counts[ "country"].append( countries[ c ]["country"] )
+        country_counts[ "count"].append( countries[ c ][ "count" ] )
+        country_counts[ "ISO-3166-alpha3"].append( countries[ c ][ "ISO-3166-alpha3" ] )
+
+        print(("{} ({}): {} samples").format(countries[ c ]["country"], countries[ c ][ "ISO-3166-alpha3" ], countries[ c ]["count"]))
 
     return(country_counts)
