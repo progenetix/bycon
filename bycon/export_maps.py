@@ -1,10 +1,7 @@
 from os import path
 from pymongo import MongoClient
-import plotly
 import plotly.graph_objects as go
 import pandas as pd
-from urllib.request import urlopen
-import json
 
 ################################################################################
 
