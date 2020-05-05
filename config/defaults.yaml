@@ -48,6 +48,9 @@ io_params:
   geoprov_country:
     db_key: provenance.geo.country
     type: string
+  geoprov_iso_alpha3:
+    db_key: provenance.geo.ISO-3166-alpha3
+    type: string
   geoprov_lat:
     db_key: provenance.geo.latitude
     type: float

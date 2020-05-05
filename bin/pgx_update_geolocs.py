@@ -44,7 +44,7 @@ def main():
 
     config[ "dataset_ids" ] = [ "progenetix", "arraymap" ]
 
-    iso_reset = True
+    config[ "iso_reset" ] = True
 
     args = _get_args()
 
@@ -80,7 +80,7 @@ def main():
 ################################################################################
 ################################################################################
 
-def _update_geolocs_db(config, table, col_inds)
+def _update_geolocs_db(config, table, col_inds):
 
     mongo_client = MongoClient( )
     geo_coll = mongo_client[ "progenetix" ][ "geolocs" ]
@@ -118,7 +118,7 @@ def _update_biosamples_geolocs(config, table, col_inds):
 
         bar = IncrementalBar(dataset_id+' biosamples', max = bio_all)
 
-        if iso_reset:
+        if config[ "iso_reset" ]:
             bios_coll.update_many( { }, { "$set": { "provenance.geo.ISO-3166-alpha3": "XXX" } } )
 
         bios_coll.update_many( { "provenance.geo.country": "South Korea" }, { "$set": { "provenance.geo.country": "Republic of Korea" } } )
@@ -145,8 +145,9 @@ def _update_publication_geolocs(config, table, col_inds):
 
     mongo_client = MongoClient( )
     pub_coll = mongo_client[ "progenetix" ][ "publications" ]
+    g_i = 0
 
-    if iso_reset:
+    if config[ "iso_reset" ]:
         pub_coll.update_many( { }, { "$set": { "provenance.geo.ISO-3166-alpha3": "XXX" } } )
 
     pub_coll.update_many( { "provenance.geo.country": "South Korea" }, { "$set": { "provenance.geo.country": "Republic of Korea" } } )

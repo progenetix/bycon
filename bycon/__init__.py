@@ -25,8 +25,12 @@ from .cytoband_utils import parse_cytoband_file
 from .cytoband_utils import filter_cytobands
 from .export_data import write_biosamples_table
 from .export_data import write_callsets_matrix_files
+from .export_data import write_tsv_from_list
 from .export_plots import plot_callset_stats
 from .export_maps import plot_worldmap
 from .output_preparation import get_id_label_for_prefix
 from .query_execution import execute_bycon_queries
+from .pgx_modify_records import pgx_read_mappings
+from .pgx_modify_records import pgx_write_mappings_to_yaml
+from .pgx_modify_records import pgx_update_biocharacteristics
 from .pgx_modify_records import pgx_update_samples_from_file

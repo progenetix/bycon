@@ -11,6 +11,12 @@ dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon import *
 
+"""podmd
+
+* `bin/pgx_update_mappings.py -d arraymap -m rsrc/ICDOntologies.ods`
+
+podmd"""
+
 ################################################################################
 ################################################################################
 ################################################################################
@@ -69,7 +75,7 @@ def main():
     
     ############################################################################
 
-    if confirm_prompt("Update Biosamples from File?", False):
+    if confirm_prompt("Update Biosamples from Sample File?", False):
 
         print("=> updating biosamples")
         pgx_update_samples_from_file( **kwargs )

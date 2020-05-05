@@ -48,7 +48,7 @@ def write_biosamples_table(**kwargs):
     
     biosf.write( tab.join( header ) + "\n" )
     for bios in bios_coll.find(query):
-        print(bios["id"])
+        # print(bios["id"])
         bios_line = [  ]
         for par in io_params.keys():
             v = get_nested_value(bios, io_params[ par ][ "db_key" ])

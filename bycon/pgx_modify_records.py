@@ -373,18 +373,21 @@ def pgx_update_biocharacteristics(**kwargs):
     sample_no = 0
     for equivmap in kwargs["equivmaps"]:
 
+
         if not _check_equivmap_data(equivmap, kwargs["equiv_keys"], kwargs["filter_defs"]):
             print("\nWrong format for mapping code(s):")
             print(equivmap)
             continue
         
         query = { "$and": [ {db_key: equivmap["icdom::id"]}, {db_key: equivmap["icdot::id"]} ] }
+
         if equivmap["icdom::id"] == 'icdom-99999':
             query = { db_key: equivmap["icdot::id"] }
         elif equivmap["icdom::id"] == 'icdot-C99.9':
             query = { db_key: equivmap["icdom::id"] }
         
         for item in mongo_coll.find( query ):
+            print(item["id"])
             update_flag = 0
             new_biocs = [ ]
             for bioc in item[ "biocharacteristics" ]:               
@@ -400,10 +403,21 @@ def pgx_update_biocharacteristics(**kwargs):
                         bioc["type"]["label"] = equivmap["NCIT::label"]
                         update_flag = 1
 
+                # all biocs are collected, since whole list will be replaced
                 new_biocs.append( bioc )
+
+            ncit_exists = 0
+            for nbc in new_biocs:
+                if re.compile( "NCIT" ).match(nbc["type"]["id"]):
+                    ncit_exists = 1
+
+            if not ncit_exists == 1:
+                new_biocs.append( { "type": { "id": equivmap["NCIT::id"], "label": equivmap["NCIT::label"] } } )
+                update_flag = 1
 
             if update_flag == 1:
                 mongo_coll.update_one( { "_id" : item[ "_id" ] }, { "$set": { "biocharacteristics": new_biocs, "updated": datetime.now() } } )
+                print(("updated {}: {} ({})").format(item[ "_id" ], equivmap["NCIT::id"], equivmap["NCIT::label"]))
                 sample_no +=1
 
     mongo_client.close()
