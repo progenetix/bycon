@@ -8,7 +8,7 @@ NCIT:
       default: 1
     individuals:
       default: 0
-  pattern: '^NCIT\:C\d+?$'
+  pattern: '^NCIT\:C\d*?$'
   examples:
     - 'NCIT:C27676'
     - 'NCIT:C9325'

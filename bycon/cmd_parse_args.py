@@ -19,13 +19,16 @@ def plotpars_from_args(**kwargs):
 
 ################################################################################
 
-def pgx_queries_from_args(**kwargs):
+def pgx_queries_from_js(**kwargs):
 
     queries = { }
     args = kwargs[ "args" ]
 
     if args.queries:
 
+        if "queries" in kwargs:
+            print("Please provide either filter values (`-f`) or a JSON query object (`-q).")
+            sys.exit()
 
         q_s = args.queries
         q_s = re.sub( r"([\{\s])(\$\w+?)([\:\s])", r'\1"\2"\3', q_s)
@@ -33,17 +36,11 @@ def pgx_queries_from_args(**kwargs):
         # print(q_s)
 
         queries = json.loads(q_s)
-        # exit()
-    else:
-        querylist = []
-        if args.bioclass:
-            querylist.append({"biocharacteristics.type.id": {"$regex": args.bioclass } })
-        if args.extid:
-            querylist.append( { "external_references.type.id": { "$regex": args.extid } } )
-        if len(querylist) > 1:
-            queries["biosamples"] = {"$and": querylist }
-        elif len(querylist) == 1:
-            queries["biosamples"] = querylist[0]
+
+    elif "queries" in kwargs:
+
+        return kwargs[ "queries" ]
+
     return queries
 
 ################################################################################

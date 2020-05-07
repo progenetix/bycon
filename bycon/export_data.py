@@ -1,9 +1,9 @@
 from os import path as path
 from os import rename as rename
 from pymongo import MongoClient
-from .output_preparation import get_id_label_for_prefix
-from .output_preparation import callsets_add_metadata
-from .tabulating_tools import *
+from pgy.output_preparation import get_id_label_for_prefix
+from pgy.output_preparation import callsets_add_metadata
+from pgy.tabulating_tools import *
 
 ################################################################################
 

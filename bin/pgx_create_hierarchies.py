@@ -13,6 +13,7 @@ from os import path as path
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon import *
+from pgy import *
 
 ################################################################################
 ################################################################################
@@ -92,7 +93,7 @@ def main():
             npl_core_ncit_graph[ "nodes" ].append(node)
 
     for key in ["edges", "nodes"]:
-        print("=> no. of "+key+": "+str(len(npl_core_ncit_graph[ key ])))
+        print("=> no. of {}: ".format(key, len( npl_core_ncit_graph[ key ] ) ) )
 
 
     # print(ont["graphs"][0].keys())
@@ -136,7 +137,7 @@ def main():
                 print(onto_id+" not in neoplasm_core")
                 onto_trees[ idx ][ "classes" ][ onto_id ] = { "parents": [ 'NCIT:C3262' ], "children": [ onto_id ], "core": False }
             else:
-                print(str(len(oldies))+"<--"+onto_id+"-->"+str(len(youngsters)))
+                print("{} <-- {} --> {}".format( len(oldies), onto_id, len(youngsters) ) )
                 onto_trees[ idx ][ "classes" ][ onto_id ] = { "parents": oldies, "children": youngsters, "core": True }
 
     
@@ -158,7 +159,7 @@ def main():
                 hier_item = hier_match.match(line).group(1,2)
                 hier_classes[ hier_item[1] ] = hier_item[0]
                 line_no += 1
-                print(str(line_no)+" - "+hier_classes[ hier_item[1] ])
+                print(("{} - {}").format(line_no, hier_classes[ hier_item[1] ]))
 
 
 

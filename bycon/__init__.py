@@ -17,7 +17,7 @@ from .cgi_utils import cgi_parse_path_params
 from .cgi_utils import cgi_print_json_response
 from .cgi_utils import cgi_print_json_callback
 from .cmd_parse_args import plotpars_from_args
-from .cmd_parse_args import pgx_queries_from_args
+from .cmd_parse_args import pgx_queries_from_js
 from .cmd_parse_args import confirm_prompt
 from .data_analysis import callsets_return_stats
 from .data_analysis import dbstats_return_latest
@@ -28,9 +28,4 @@ from .export_data import write_callsets_matrix_files
 from .export_data import write_tsv_from_list
 from .export_plots import plot_callset_stats
 from .export_maps import plot_worldmap
-from .output_preparation import get_id_label_for_prefix
 from .query_execution import execute_bycon_queries
-from .pgx_modify_records import pgx_read_mappings
-from .pgx_modify_records import pgx_write_mappings_to_yaml
-from .pgx_modify_records import pgx_update_biocharacteristics
-from .pgx_modify_records import pgx_update_samples_from_file

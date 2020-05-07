@@ -11,13 +11,23 @@ from progress.bar import IncrementalBar
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon import *
+from pgy import *
 
 """podmd
+
 This script provides a number of update & normalization functions for geographic
 attributes, such as
 
 * ISO country codes
 * (TBD)
+
+It uses an input file with the ISO-3166-alpha2 and ISO-3166-alpha3 country
+codes, and has the options to:
+
+* map the `-3` codes into our `geolocs` database (where city point locations are
+stored with attached ISO-3166-alpha2 codes)
+* add/update the ISO-3166-alpha3 codes for `provenance.geo` objects in
+`biosamples` and `publications`, based on the _correctly spelled_ country names
 
 podmd"""
 
@@ -28,7 +38,7 @@ podmd"""
 def _get_args():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-g", "--geoisofile", help="file with iso 3166 geographic codes and country names")
+    parser.add_argument("-g", "--geoisofile", help="file with ISO-3166-alpha3 geographic codes and country names")
     args = parser.parse_args()
 
     return(args)
@@ -74,7 +84,7 @@ def main():
 
     if confirm_prompt("Update geo codes in publications?", False):
         print("=> updating publications DB")
-        _update_publication_geolocs(config, table, col_inds)
+        _update_publications_geolocs(config, table, col_inds)
 
 ################################################################################
 ################################################################################
@@ -141,7 +151,7 @@ def _update_biosamples_geolocs(config, table, col_inds):
 
 ################################################################################
 
-def _update_publication_geolocs(config, table, col_inds):
+def _update_publications_geolocs(config, table, col_inds):
 
     mongo_client = MongoClient( )
     pub_coll = mongo_client[ "progenetix" ][ "publications" ]
@@ -161,9 +171,7 @@ def _update_publication_geolocs(config, table, col_inds):
             pub_coll.update_one( { "_id" : pub[ "_id" ] }, { "$set": { "provenance.geo.ISO-3166-alpha3": table[ i, col_inds[ "ISO-3166-alpha3" ] ] } } )
             g_i += 1
 
-    print(("{} locations were updated in publications").format(g_i))
-       
-
+    print("{} locations were updated in publications".format(g_i))
 
 ################################################################################
 ################################################################################

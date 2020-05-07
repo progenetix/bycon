@@ -41,6 +41,8 @@ Please see the examples below.
   - `bin/pgxport.py -q '{ "biosamples": { $and: [ { "info.followup_months": { $gte: 0 } }, { "provenance.material.type.id":"EFO:0009656" } ] } }' -p ~/groupbox/dbdata/out -d progenetix`
 * cancer samples with fallback ISO country code:
   - `bin/pgxport.py -q '{ "biosamples": {$and: [ { "biocharacteristics.type.id":{ $regex: /icdom-[89]/ } }, {"provenance.geo.ISO-3166-alpha3": "XXX"} ] } }' -d arraymap -l cancers-missing-geo -o ../../dbdata`
+* using "filters" (`-f`)
+  - `bin/pgxport.py -f "NCIT:C" -d progenetix -l all-NCIT-mapped -o ../../dbdata`
 
 podmd"""
 
@@ -54,14 +56,37 @@ def _get_args():
     parser.add_argument("-o", "--outdir", help="path to the output directory")
     parser.add_argument("-d", "--datasetid", help="dataset id")
     parser.add_argument("-f", "--filters", help="prefixed filter values, comma concatenated")
-    parser.add_argument("-b", "--bioclass", help="prefixed filter values, comma concatenated")
-    parser.add_argument("-e", "--extid", help="prefixed filter values, comma concatenated")    
     parser.add_argument("-q", "--queries", help="JSON query object")
     parser.add_argument("-a", "--dotalpha", help="dot opacity for plotting")
     parser.add_argument("-l", "--label", help="keyword label for output files")
+    parser.add_argument("-t", "--test", help="test settings")
+
     args = parser.parse_args()
 
     return(args)
+
+################################################################################
+
+def _check_args(config, args):
+  
+    if not args.datasetid in config[ "dataset_ids" ]:
+        print("No existing dataset was provided with -d ...")
+        sys.exit()
+
+    if not (args.filters or args.queries):
+        print("No queries or filters were provided ...")
+        sys.exit()
+
+    if args.outdir:
+        config[ "paths" ][ "out" ] = args.outdir
+        
+    if not path.isdir( config[ "paths" ][ "out" ] ):
+        print("""
+The output directory:
+    {}
+...does not exist; please use `-p` to specify
+""".format(config[ "paths" ][ "out" ]))
+        sys.exit( )
 
 ################################################################################
 
@@ -73,39 +98,26 @@ def main():
     config[ "paths" ][ "out" ] = path.join( path.abspath( dir_path ), '..', "data", "out" )
 
     args = _get_args()
-
-    dataset_id = args.datasetid
-    try:
-        if path.isdir( args.outdir ):
-            config[ "paths" ][ "out" ] = args.outdir
-    except:
-        pass
-
-    if not dataset_id in config[ "dataset_ids" ]:
-        print("No existing dataset was provided with -d ...")
-        exit()
-    if not path.isdir( config[ "paths" ][ "out" ] ):
-        print("The output directory:\n\t"+config[ "paths" ][ "out" ]+"\n...does not exist; please use `-p` to specify")
-        sys.exit( )
-    else:
-        print("=> files will be written to"+str(config[ "paths" ][ "out" ]))
-
-    print("=> looking up data in "+dataset_id)
+    _check_args(config, args)
 
     kwargs = {
         "config": config,
         "args": args,
-        "dataset_id": dataset_id,
+        "dataset_id": args.datasetid,
         "filter_defs": read_filter_definitions( **{ "config": config } )
     }
-    
-    kwargs.update( { "queries": pgx_queries_from_args(**kwargs) } )
+
+    print("=> files will be written to {}".format(config[ "paths" ][ "out" ]))
+    print("=> looking up data in "+kwargs["dataset_id"])
+
+    kwargs[ "config" ].update( { "plot_pars": plotpars_from_args(**kwargs) } )
+    kwargs.update( { "filters": parse_filters( **kwargs ) } )
+    kwargs.update( { "queries": create_queries_from_filters( **kwargs ) } )
+    kwargs.update( { "queries": pgx_queries_from_js(**kwargs) } )
 
     if not "queries" in kwargs:
         print('No query specified; please use "-h" for examples')
         sys.exit( )
-
-    kwargs[ "config" ].update( { "plot_pars": plotpars_from_args(**kwargs) } )
 
     query_results = execute_bycon_queries(**kwargs)
 

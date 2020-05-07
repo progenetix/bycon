@@ -84,7 +84,7 @@ def byconplus():
     }
 
     byc.update( { "dbstats": dbstats_return_latest( **byc ) } )
-    byc.update( { "service_info": return_beacon_info( **byc ) } )    
+    byc.update( { "service_info": return_beacon_info( **byc ) } )
     # print(json.dumps(byc["service_info"], indent=4, sort_keys=True, default=str))
     # exit()
     byc.update( { "dataset_ids": get_dataset_ids( **byc ) } )

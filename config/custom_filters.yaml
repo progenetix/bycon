@@ -5,7 +5,7 @@ icdom:
   scopes:
     biosamples:
       default: 1
-  pattern: '^icdom\-\d{5}?$'
+  pattern: '^icdom\-\d{1,5}?$'
   examples:
     - 'icdom-85003'
     - 'icdom-94403'
@@ -20,8 +20,8 @@ icdot:
   pattern: '^icdot\-C\d\d?(\.\d)?$'
   examples:
     - 'icdot-C42.2'
-    - 'icdot-54.1'
-    - 'icdot-54'
+    - 'icdot-C54.1'
+    - 'icdot-C5'
 
 # Procedural Metadata
 
