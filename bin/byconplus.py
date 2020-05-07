@@ -83,7 +83,7 @@ def byconplus():
         "rest_pars": rest_pars
     }
 
-    byc.update( { "dbstats": dbstats_return_latest( **byc ) } )
+    byc.update( { "dbstats": _dbstats_return_latest( **byc ) } )
     byc.update( { "service_info": return_beacon_info( **byc ) } )
     # print(json.dumps(byc["service_info"], indent=4, sort_keys=True, default=str))
     # exit()

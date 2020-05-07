@@ -8,6 +8,7 @@ import argparse
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon import *
+from pgy import *
 
 """podmd
 
