@@ -138,10 +138,9 @@ def main():
         kwargs.update( { "callsets_stats": callsets_return_stats(**kwargs) } )
         plot_callset_stats(**kwargs)
 
-    if confirm_prompt("Create geographic map?", False):
+    if confirm_prompt("Create sample map?", True):
         print("=> plotting map")
-        plot_worldmap(**kwargs)
-
+        plot_sample_geomap(**kwargs)
 
 ################################################################################
 ################################################################################
