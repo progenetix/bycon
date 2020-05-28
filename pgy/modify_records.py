@@ -199,16 +199,58 @@ def pgx_populate_callset_info( **kwargs ):
 ################################################################################
 ################################################################################
 
+def pgx_read_icdom_ncit_defaults(**kwargs):
+
+    defmaps = [ ]
+    equiv_keys = ["icdom::id", "icdom::label", "icdom::level", "NCIT::id", "NCIT::label"]
+
+    print(kwargs[ "config" ][ "paths" ][ "mapping_file" ])       
+    try:
+        table = get_sheet(file_name=kwargs[ "config" ][ "paths" ][ "mapping_file" ], sheet_name="ICDOM-NCIT-defaults")
+    except Exception as e:
+        print(e)
+        print("No matching mapping file could be found!")
+        exit()
+        
+    header = table[0]
+    col_inds = { }
+    hi = 0
+    fi = 0
+    for col_name in header:
+        if col_name in equiv_keys:
+            print(col_name+": "+str(hi))
+            col_inds[ col_name ] = hi
+            
+        hi += 1
+        
+    for i in range(1, len(table)):
+        equiv_line = { }
+        col_match_count = 0
+        for col_name in col_inds:
+            try:
+                cell_val = table[ i, col_inds[ col_name ] ]
+                equiv_line[ col_name ] = cell_val
+            except:
+                continue
+        if equiv_line.get("NCIT::id"):
+            defmaps.append(equiv_line)
+            fi += 1
+    
+    print("mappings: "+str(fi))
+    return(equiv_keys, defmaps)
+
+################################################################################
+################################################################################
+################################################################################
+
 def pgx_read_mappings(**kwargs):
 
     equivmaps = [ ]
     equiv_keys = ["icdom::id", "icdom::label", "icdot::id", "icdot::label", "NCIT::id", "NCIT::label"]
-#     equiv_keys.extend( [ ( "query::"+ek ) for ek in equiv_keys ] )
 
-    # relevant sheet is the first one...
     print(kwargs[ "config" ][ "paths" ][ "mapping_file" ])       
     try:
-        table = get_sheet(file_name=kwargs[ "config" ][ "paths" ][ "mapping_file" ])
+        table = get_sheet(file_name=kwargs[ "config" ][ "paths" ][ "mapping_file" ], sheet_name="ICDOM-ICDOT-NCIT-matched")
     except Exception as e:
         print(e)
         print("No matching mapping file could be found!")
@@ -309,7 +351,6 @@ def get_current_mappings(**kwargs):
     return(od)
 
 ################################################################################
-
 
 def pgx_write_mappings_to_yaml(**kwargs):
     

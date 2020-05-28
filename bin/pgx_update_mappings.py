@@ -81,6 +81,7 @@ def main():
         if not path.isfile(config[ "paths" ][ "mapping_file" ]):
             print("No mapping file was provided with -m ...")
         else:        
+            kwargs["equiv_keys"], kwargs["defmaps"] = pgx_read_icdom_ncit_defaults( **kwargs)
             kwargs["equiv_keys"], kwargs["equivmaps"] = pgx_read_mappings( **kwargs)
                         
             pgx_write_mappings_to_yaml( **kwargs )
