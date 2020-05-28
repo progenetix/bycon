@@ -1,19 +1,17 @@
 #!/usr/local/bin/python3
 
 import cgi, cgitb
-import re, json, yaml
+import re, yaml
 from os import path as path
-import sys
-import datetime
+from sys import path as sys_path
 import csv
 import argparse
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), '..'))
+sys_path.append(path.join(path.abspath(dir_path), '..'))
 from bycon.cgi_parse_variant_requests import *
 from bycon.cgi_utils import *
-from bycon.cmd_parse_args import *
 from bycon.cytoband_utils import *
 
 
@@ -43,7 +41,7 @@ The `cytobands` and `chrobases` parameters can be used for running the script on
   - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=NCBI36.1&cytoBands=8q>
 * as above, just as text:
   - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=NCBI36.1&cytoBands=8q&text=1>
-  - <https://progenetix.org/services/cytomapper/assemblyId=NCBI36.1/cytoBands=8q/text=1>
+  - *cytomapper shortcut*: <https://progenetix.org/services/cytomapper/?assemblyId=NCBI36.1&cytoBands=8q&text=1>
 * get the cytobands whith which a base range on chromosome 17 overlaps, in short and long form
   - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=GRCh38&referenceName=17&start=800000&end=24326000>
   - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=NCBI36&chroBases=17:800000-24326000>
@@ -104,7 +102,7 @@ def cytomapper():
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
         config = yaml.load( cf , Loader=yaml.FullLoader)
     config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
-    config[ "paths" ][ "out" ] = path.abspath( config[ "paths" ][ "web_temp_dir_abs" ] )
+    config[ "paths" ][ "out" ] = path.abspath( path.join( *config[ "paths" ][ "web_temp_dir_abs" ] ) )
     config[ "paths" ][ "genomes" ] = path.join( config[ "paths" ][ "module_root" ], "rsrc", "genomes" )
 
     byc = {

@@ -1,6 +1,7 @@
 import cgi, cgitb
 import json
-import os, re
+from os import environ as environ
+import re
 from urllib.parse import urlparse
 
 ################################################################################
@@ -14,13 +15,23 @@ def cgi_parse_query():
 
 def cgi_parse_path_params( script_name ):
     """
+    #### `cgi_parse_path_params`
+
     URL components after the script name are deparsed into parameters.
+
+    This option is skipped if a query string exists to avoid parameter
+    collisions.
+
+    Splitting for list parameters (e.g. `filters`) is performed at a later
+    stage.
     """
 
     path_pars =  { }
     path_items = [ ]
 
-    url_comps = urlparse( os.environ.get('REQUEST_URI') )
+    url_comps = urlparse( environ.get('REQUEST_URI') )
+    if url_comps.query:
+        return(path_pars)
     if type(url_comps.path) == str:
         path_items = re.split(r'\/|\&', url_comps.path)
     par_re = re.compile( r'^(\w.*?)\=(\w.*?)$')
@@ -41,7 +52,6 @@ def cgi_parse_path_params( script_name ):
                     path_pars[ par ] = val
             except Exception:
                 pass
-
     return(path_pars)
 
 ################################################################################
@@ -56,6 +66,7 @@ def cgi_exit_on_error(shout):
 ################################################################################
 
 def cgi_print_json_response(data):
+
     print('Content-Type: application/json')
     print()
     print(json.dumps(data, indent=4, sort_keys=True, default=str))
@@ -64,6 +75,7 @@ def cgi_print_json_response(data):
 ################################################################################
 
 def cgi_print_json_callback(callback, data):
+
     print('Content-Type: application/json')
     print()
     print(callback+'({"data":'+json.dumps(data, default=str)+"});\n")

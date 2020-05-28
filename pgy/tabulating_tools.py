@@ -1,3 +1,4 @@
+from os import path as path
 from .output_preparation import get_id_label_for_prefix
 
 ################################################################################
@@ -20,6 +21,16 @@ def biosample_table_header(**config):
         header_labs.append( pre+"::label" )
 
     return( header_labs )
+
+################################################################################
+
+def write_biosamples_template_file(**config):
+
+    btf = path.join( config[ "paths" ][ "module_root" ], *config[ "paths" ][ "biosamples_template_file" ] )
+
+    with open( btf, 'w' ) as bt:
+        header = biosample_table_header( **config )   
+        bt.write( "\t".join( header ) + "\n" )
 
 ################################################################################
 

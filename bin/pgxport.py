@@ -85,9 +85,11 @@ def _check_args(config, args):
         print("""
 The output directory:
     {}
-...does not exist; please use `-p` to specify
+...does not exist; please use `-o` to specify
 """.format(config[ "paths" ][ "out" ]))
         sys.exit( )
+
+    return(config)
 
 ################################################################################
 
@@ -99,7 +101,7 @@ def main():
     config[ "paths" ][ "out" ] = path.join( path.abspath( dir_path ), '..', "data", "out" )
 
     args = _get_args()
-    _check_args(config, args)
+    config = _check_args(config, args)
 
     kwargs = {
         "config": config,

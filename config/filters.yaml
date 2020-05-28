@@ -55,7 +55,7 @@ EFO:
 # Procedural Metadata
 
 PMID:
-  name: "PubMed"
+  name: "NCBI PubMed"
   url: "https://www.ncbi.nlm.nih.gov/pubmed/"
   db_key: 'external_references.type.id'
   scopes:

@@ -1,15 +1,15 @@
 #!/usr/local/bin/python3
 
+from os import environ as environ
 from os import path as path
-import os
-import sys
+from sys import path as sys_path
 import re
 import cgitb
 from urllib.parse import urlparse
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), '..'))
+sys_path.append(path.join(path.abspath(dir_path), '..'))
 
 from bin.cytomapper import cytomapper
 from bin.byconplus import byconplus
@@ -41,9 +41,9 @@ podmd"""
 
 def main():
 
-    url_comps = urlparse( os.environ.get('REQUEST_URI') )
+    url_comps = urlparse( environ.get('REQUEST_URI') )
 
-    if "debug" in os.environ.get('REQUEST_URI'):
+    if "debug" in environ.get('REQUEST_URI'):
         cgitb.enable()
         print('Content-Type: text')
         print()

@@ -45,6 +45,8 @@ def main():
     config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
     config[ "paths" ][ "out" ] = path.join( path.abspath( dir_path ), '..', "data", "out" )
 
+    write_biosamples_template_file(**config)
+
     args = _get_args()
     config[ "paths" ][ "update_file" ] = args.updatefile
     dataset_id = args.datasetid
@@ -58,7 +60,10 @@ def main():
     if not dataset_id in config[ "dataset_ids" ]:
         print("No existing dataset was provided with -d ...")
         exit()
-    if not  path.isfile( config[ "paths" ][ "update_file" ] ):
+    try:
+        if path.isfile( args.updatefile ):
+            config[ "paths" ][ "update_file" ] = args.updatefile
+    except:
         print("No existing update file was provided with -u ...")
         sys.exit()
     if not  path.isdir( config[ "paths" ][ "out" ] ):
@@ -74,6 +79,7 @@ def main():
         "update_collection": "biosamples",
         "filter_defs": read_filter_definitions( **{ "config": config } ) 
     }
+
    
     if confirm_prompt("""Update Biosamples in {} from file\n{}\n""".format(dataset_id, kwargs[ "config" ][ "paths" ][ "update_file" ]), False):
 

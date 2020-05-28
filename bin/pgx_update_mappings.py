@@ -76,43 +76,37 @@ def main():
     
     ############################################################################
 
-    if confirm_prompt("Update Biosamples from Sample File?", False):
-
-        print("=> updating biosamples")
-        pgx_update_samples_from_file( **kwargs )
-
-    ############################################################################
-
-    if confirm_prompt("Normalize Prefixes?", False):
-
-        print("=> normalizing prefixes")
-        pgx_normalize_prefixed_ids( **kwargs )
-
-    ############################################################################
-
-    if confirm_prompt("Update Mappings?", False):
+    if confirm_prompt("Update Default Mappings?", False):
  
         if not path.isfile(config[ "paths" ][ "mapping_file" ]):
-            print("No mapping file was provided with -f ...")
+            print("No mapping file was provided with -m ...")
         else:        
             kwargs["equiv_keys"], kwargs["equivmaps"] = pgx_read_mappings( **kwargs)
                         
-            pgx_write_mappings_to_yaml( **kwargs)
-            
-            kwargs.update( { "mapping_type": "icdo2ncit" } )
-        
-            kwargs.update( {
-                "output_file": path.join( config[ "paths" ][ "module_root" ], "data", "out", "logs", date.today().isoformat()+"_pgxupdate_mappings_report_"+dataset_id+".tsv"),
-                "output_data": pgx_update_biocharacteristics(**kwargs)
-            } )
-            write_tsv_from_list(**kwargs)
+            pgx_write_mappings_to_yaml( **kwargs )
+            pgx_rewrite_icdmaps_db( **kwargs )
+                    
+            of = path.join( config[ "paths" ][ "module_root" ], "data", "out", "logs", date.today().isoformat()+"_pgxupdate_mappings_report_"+dataset_id+".tsv")
+            od = pgx_update_biocharacteristics(**kwargs)
+            write_tsv_from_list(of, od, **config)
 
     ############################################################################
 
-    if confirm_prompt("Denormalize Biosample Essentials Into Callsets?", False):
+    if confirm_prompt("Save Current Mappings?", False):
+ 
+        kwargs["equiv_keys"], kwargs["equivmaps"] = pgx_read_mappings( **kwargs)
+                    
+        od = get_current_mappings( **kwargs)
+        of = path.join( config[ "paths" ][ "module_root" ], "rsrc", "icdo", "ICDO_mappings_current.tsv")
+        write_tsv_from_list(of, od, **config)
+        print("=> wrote mappings to {}".format(of))
 
-        print("=> denormalizing into callsets")
-        pgx_populate_callset_info( **kwargs )
+    # ############################################################################
+
+    # if confirm_prompt("Denormalize Biosample Essentials Into Callsets?", False):
+
+    #     print("=> denormalizing into callsets")
+    #     pgx_populate_callset_info( **kwargs )
 
 ################################################################################
 ################################################################################

@@ -1,5 +1,6 @@
 # __init__.py
-from .beacon_generate_response import return_beacon_info
+from .beacon_generate_response import generate_beacon_info
+from .beacon_generate_response import read_beacon_info
 from .beacon_generate_response import create_dataset_response
 from .beacon_generate_response import create_beacon_response
 from .beacon_generate_response import dbstats_return_latest

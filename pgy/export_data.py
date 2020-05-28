@@ -134,11 +134,11 @@ def write_callsets_matrix_files(**kwargs):
 
 ################################################################################
 
-def write_tsv_from_list(**kwargs):
+def write_tsv_from_list(of, od, **config):
 
-    tab = kwargs[ "config" ][ "const" ][ "tab_sep" ]
-    tsv = open( kwargs[ "output_file" ], 'w' )
-    for line in kwargs[ "output_data" ]:
-        tsv.write( tab.join( line ) + "\n" )
+    tab = config[ "const" ][ "tab_sep" ]
+    tsv = open( of, 'w' )
+    for l in od:
+        tsv.write( tab.join( l ) + "\n" )
     tsv.close
     

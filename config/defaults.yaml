@@ -6,7 +6,7 @@ dataset_ids:
   - arraymap
   - progenetix
   - dipg
-  - tcga
+  # - tcga
 collections:
   - biosamples
   - callsets
@@ -81,5 +81,18 @@ paths:
   status_matrix_file_label: matrix_status.tsv
   values_matrix_file_label: matrix_values.tsv
   biosamples_file_label: biosamples.tsv
-  web_server_root_abs: '/Library/WebServer/Documents'
-  web_temp_dir_abs: '/Library/WebServer/Documents/tmp'
+  web_server_root_abs:
+    - Library
+    - WebServer
+    - Documents
+  web_temp_dir_abs:
+    - Library
+    - WebServer
+    - Documents
+    - tmp
+  beacon_info_file:
+    - config
+    - beacon_info_generated.yaml
+  biosamples_template_file:
+    - rsrc
+    - biosamples-table-template.tsv

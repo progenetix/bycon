@@ -3,10 +3,8 @@
 import cgi, cgitb
 import json, yaml
 from os import path as path
-import sys
-import datetime
-import logging
-import argparse
+from os import environ
+import sys, os, datetime, logging, argparse
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
@@ -19,13 +17,23 @@ from bycon import *
 #     filename=log_file,
 #     level=logging.INFO) # INFO ERROR
 
-"""
-https://progenetix.org/cgi/bycon/bin/byconplus.py?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=18000000&startMax=21975097&endMin=21967753&endMax=26000000&filters=icdom-94403
-https://progenetix.org/cgi/bycon/bin/byconplus.py?assemblyId=GRCh38&datasetIds=arraymap,progenetix&filters=NCIT:C3326
-https://progenetix.org/cgi/bycon/bin/byconplus.py
-https://progenetix.org/cgi/bycon/bin/byconplus.py/service-info/
-https://progenetix.org/cgi/bycon/bin/byconplus.py?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7577120&referenceBases=G&alternateBases=A&filters=icdot-C71.7&
-"""
+"""podmd
+
+##### Examples
+
+* standard test deletion CNV query
+  - <https://progenetix.org/cgi/bycon/bin/byconplus.py?datasetIds=arraymap,progenetix/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=9/variantType=DEL/startMin=18000000/startMax=21975097/endMin=21967753/endMax=26000000/filters=icdom-94403>
+  - <https://progenetix.org/services/byconplus/datasetIds=arraymap,progenetix/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=9/variantType=DEL/startMin=18000000/startMax=21975097/endMin=21967753/endMax=26000000/filters=icdom-94403>
+* retrieving biosamples w/ a given filter code
+  - <https://progenetix.org/cgi/bycon/bin/byconplus.py?assemblyId=GRCh38/datasetIds=arraymap,progenetix/filters=NCIT:C3326>
+* beacon info (i.e. missing parameters return the info)
+  - <https://progenetix.org/cgi/bycon/bin/byconplus.py>
+* beacon info (i.e. specific request)
+  - <https://progenetix.org/cgi/bycon/bin/byconplus.py/service-info/>
+* precise variant query together with filter
+  - <https://progenetix.org/cgi/bycon/bin/byconplus.py?datasetIds=dipg/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=17/start=7577120/referenceBases=G/alternateBases=A/filters=icdot-C71.7>
+
+podmd"""
 
 ################################################################################
 ################################################################################
@@ -36,6 +44,7 @@ def _get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--filters", help="prefixed filter values, comma concatenated")
     parser.add_argument("-t", "--test", action='store_true', help="test from command line with default parameters")
+    parser.add_argument("-i", "--info", action='store_true', help="test from command line for info")
     args = parser.parse_args()
 
     return(args)
@@ -58,17 +67,17 @@ def byconplus():
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
         config = yaml.load( cf , Loader=yaml.FullLoader)
     config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
-    config[ "paths" ][ "out" ] = path.abspath( config[ "paths" ][ "web_temp_dir_abs" ] )
+    config[ "paths" ][ "out" ] = path.abspath( path.join( *config[ "paths" ][ "web_temp_dir_abs" ] ) )
 
-    # input & definitions
+    # input / definitions
     form_data = cgi_parse_query()
     args = _get_args()
     rest_pars = cgi_parse_path_params( "byconplus" )
 
     if "debug" in form_data:
-        cgitb.enable()
         print('Content-Type: text')
         print()
+        cgitb.enable()
     else:
         pass
 
@@ -82,13 +91,17 @@ def byconplus():
         "form_data": form_data,
         "rest_pars": rest_pars
     }
-
-    byc.update( { "dbstats": _dbstats_return_latest( **byc ) } )
-    byc.update( { "service_info": return_beacon_info( **byc ) } )
-    # print(json.dumps(byc["service_info"], indent=4, sort_keys=True, default=str))
-    # exit()
-    byc.update( { "dataset_ids": get_dataset_ids( **byc ) } )
     byc.update( { "filter_defs": read_filter_definitions( **byc ) } )
+    byc.update( { "dbstats": dbstats_return_latest( **byc ) } )
+    byc.update( { "service_info": read_beacon_info( **byc ) } )
+
+    if environ.get('REQUEST_URI'):
+        if "service-info" in environ.get('REQUEST_URI'):
+            cgi_print_json_response( byc["service_info"] )
+    if args.info:
+        cgi_print_json_response( byc["service_info"] )
+
+    byc.update( { "dataset_ids": get_dataset_ids( **byc ) } )
     byc.update( { "filters":  parse_filters( **byc ) } )
     byc[ "variant_defs" ], byc[ "variant_request_types" ] = read_variant_definitions( **byc )
     byc.update( { "variant_pars": parse_variants( **byc ) } )
@@ -98,7 +111,7 @@ def byconplus():
     if byc["variant_request_type"] in byc["variant_request_types"].keys():
         variant_query_generator = "create_"+byc["variant_request_type"]+"_query"
         byc["queries"].update( { "variants": getattr(cgi_parse_variant_requests, variant_query_generator)( byc["variant_request_type"], byc["variant_pars"] ) } )
-    # TODO: earlier catch for empty call => info
+
     if not byc[ "queries" ]:
         cgi_print_json_response(byc["service_info"])
             

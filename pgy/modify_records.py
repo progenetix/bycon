@@ -245,6 +245,72 @@ def pgx_read_mappings(**kwargs):
 ################################################################################
 ################################################################################
 
+def get_current_mappings(**kwargs):
+
+    equiv_keys = ["icdom::id", "icdom::label", "icdot::id", "icdot::label", "NCIT::id", "NCIT::label"]
+
+    equiv_dic = { }
+    for e in kwargs["equivmaps"]:
+        if not _check_equivmap_data(e, kwargs["equiv_keys"], kwargs["filter_defs"]):
+            continue
+        e_k = e[ "icdom::id" ]+"::"+e[ "icdot::id" ]
+        equiv_dic.update( { e_k: e } )
+    
+    map_dic = { }
+
+    for dataset_id in kwargs["config"]["dataset_ids"]:
+
+        mongo_client = MongoClient( )
+        mongo_db = mongo_client[ dataset_id ]
+        bios_coll = mongo_db[ "biosamples" ]
+        
+        bar = IncrementalBar(dataset_id+' samples', max = bios_coll.estimated_document_count() )
+
+        split_v = re.compile(r'^(\w+?)[\:\-](\w[\w\.]+?)$')
+
+        for bios in bios_coll.find( { } ):
+
+            b = { k: "" for k in equiv_keys }
+            b[ "status" ] = "TODO"
+ 
+            for bioc in bios[ "biocharacteristics" ]:
+                if split_v.match( bioc[ "type" ][ "id" ] ):
+                    pre, code = split_v.match(bioc[ "type" ][ "id" ]).group(1, 2)
+                    b[ pre+"::id" ] = bioc[ "type" ][ "id" ]
+                    b[ pre+"::label" ] = bioc[ "type" ][ "label" ]
+                else:
+                    continue
+
+            b_k = b[ "icdom::id" ]+"::"+b[ "icdot::id" ]
+            if b_k in equiv_dic.keys():
+                b[ "status" ] = "ok"
+
+            map_dic.update( { b_k: b } )
+
+            bar.next()
+
+        bar.finish()
+
+        todo = 0
+
+    t_k = equiv_keys
+    t_k.append( "status" )
+    od = [ t_k ]
+
+    for m in sorted(map_dic.keys()):
+        # print("{}: {} - {}".format(dataset_id, m, map_dic[ m ]["status"]))
+        if map_dic[ m ]["status"] == "TODO":
+            todo += 1
+        l = [ str(map_dic[ m ][ k ]) for k in t_k ]
+        od.append( l )
+
+    print("=> {} ICD-O combinations ({} to be reviewed)".format(len(map_dic), todo) )
+
+    return(od)
+
+################################################################################
+
+
 def pgx_write_mappings_to_yaml(**kwargs):
     
     example_max = 4
@@ -262,97 +328,88 @@ def pgx_write_mappings_to_yaml(**kwargs):
 
     for dataset_id in kwargs["config"]["dataset_ids"]:
 
+        bar = IncrementalBar(dataset_id+ ' example lookup', max = len(equivmaps))
+
         mongo_client = MongoClient( )
         mongo_db = mongo_client[ dataset_id ]
         mongo_coll = mongo_db[ "biosamples" ]
 
-        for equivmap in equivmaps:
+        for e in equivmaps:
 
-            if not _check_equivmap_data(equivmap, kwargs["equiv_keys"], kwargs["filter_defs"]):
+            bar.next()
+
+            if not _check_equivmap_data(e, kwargs["equiv_keys"], kwargs["filter_defs"]):
                 print("\nWrong format for mapping code(s):")
-                print(equivmap)
+                print(e)
                 continue
 
-            if not equivmap.get( "examples" ):
-                equivmap["examples"] = [ ]
-            if len(equivmap["examples"]) < example_max:
+            if not e.get( "examples" ):
+                e[ "examples" ] = [ ]
+            if len(e["examples"]) < example_max:
 
-                query = { "$and": [ {"biocharacteristics.type.id": equivmap["icdom::id"]}, {"biocharacteristics.type.id": equivmap["icdot::id"]} ] }
+                query = { "$and": [ {"biocharacteristics.type.id": e[ "icdom::id" ]}, {"biocharacteristics.type.id": e[ "icdot::id" ]} ] }
  
                 for item in mongo_coll.find( query ):
 
-                    if item[ "description" ] not in equivmap["examples"]:
-                        if len(equivmap["examples"]) < example_max:
-                            equivmap["examples"].append( item[ "description" ] )
+                    if item[ "description" ] not in e["examples"]:
+                        if len(e[ "examples" ]) < example_max:
+                            e[ "examples" ].append( item[ "description" ] )
                         else:
                             continue            
         mongo_client.close()
+        bar.finish()
         
-    for equivmap in equivmaps:
+    for e in equivmaps:
     
-        if not _check_equivmap_data(equivmap, kwargs["equiv_keys"], kwargs["filter_defs"]):
-            continue
-            
-        if equivmap["icdom::id"] == 'icdom-99999':
-            continue
-        elif equivmap["icdot::id"] == 'icdot-C99.9':
+        if not _check_equivmap_data(e, kwargs["equiv_keys"], kwargs["filter_defs"]):
             continue
 
-        re_map = {
-            'input':[
-                { 'id': equivmap["icdom::id"], 'label' : equivmap["icdom::label"] },
-                { 'id': equivmap["icdot::id"], 'label' : equivmap["icdot::label"] }
-            ],
-            'equivalents':[
-                { 'id' : equivmap["NCIT::id"], 'label' : equivmap["NCIT::label"] }
-            ],
-            'examples': equivmap.get("examples"),
-            'updated': date.today().isoformat()
-        }
-                
-        yaml_name = equivmap["icdom::id"]+','+equivmap["icdot::id"]+'.yaml'
+        icdmap = _format_icdmap( e )
+            
+        yaml_name = e[ "icdom::id" ]+','+e[ "icdot::id" ]+'.yaml'
         
         with open(path.join( kwargs[ "config" ][ "paths" ][ "icdomappath" ], yaml_name ), 'w') as yf:
-            yaml.safe_dump(re_map, yf, default_flow_style=False)
-    
+            yaml.safe_dump(icdmap, yf, default_flow_style=False)
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-def pgx_normalize_prefixed_ids(**kwargs):
+def pgx_rewrite_icdmaps_db( **kwargs ):
 
     mongo_client = MongoClient( )
-    mongo_db = mongo_client[ kwargs[ "dataset_id" ] ]
-    mongo_coll = mongo_db[ kwargs["update_collection"] ]
+    mappings_coll = mongo_client[ "progenetix" ][ "icdmaps" ]
+    mappings_coll.delete_many( {} )
+ 
+    for e in kwargs["equivmaps"]:
 
-    query = { }
+        if not _check_equivmap_data(e, kwargs["equiv_keys"], kwargs["filter_defs"]):
+            continue
 
-    # TODO:
-    # * make those part of the prefix definitions in the config file
-    
-    fixes = { 
-                "biocharacteristics": { "NCIT": "ncit" },
-                "external_references": { "PMID": "pubmed" }
-            }
+        icdmap = _format_icdmap( e )
 
-    for item in mongo_coll.find( query ):
-        for para in fixes:
-            update_flag = 0
-            new_para_is = [ ]
-            for para_i in item[ para ]:
-                for fix, old in fixes[ para ].items():
-                    if old in para_i["type"]["id"]:         
-                        para_i["type"]["id"] = re.sub(old, fix, para_i["type"]["id"])
-                        update_flag = 1
+        mappings_coll.insert_one( icdmap )
 
-                new_para_is.append( para_i )
+################################################################################
+################################################################################
+################################################################################
 
-            if update_flag == 1:
-                mongo_coll.update_one( { "_id" : item[ "_id" ] }, { "$set": { para: new_para_is, "updated": datetime.now() } } )
+def _format_icdmap( e ):
 
-    mongo_client.close()
+    icdmap = {
+        'input':[
+            { 'id': e["icdom::id"], 'label' : e["icdom::label"] },
+            { 'id': e["icdot::id"], 'label' : e["icdot::label"] }
+        ],
+        'equivalents':[
+            { 'id' : e["NCIT::id"], 'label' : e["NCIT::label"] }
+        ],
+        'examples': e.get("examples"),
+        'updated': date.today().isoformat()
+    }
 
+    return(icdmap)
+   
 ################################################################################
 ################################################################################
 ################################################################################
@@ -368,10 +425,14 @@ def pgx_update_biocharacteristics(**kwargs):
     mongo_coll = mongo_db[ kwargs["update_collection"] ]
     
     db_key = kwargs["filter_defs"]["icdom"][ "db_key" ]
+
+    bar = IncrementalBar('mappings', max = len(kwargs["equivmaps"]))
     
     sample_no = 0
+
     for equivmap in kwargs["equivmaps"]:
 
+        bar.next()
 
         if not _check_equivmap_data(equivmap, kwargs["equiv_keys"], kwargs["filter_defs"]):
             print("\nWrong format for mapping code(s):")
@@ -386,7 +447,7 @@ def pgx_update_biocharacteristics(**kwargs):
             query = { db_key: equivmap["icdom::id"] }
         
         for item in mongo_coll.find( query ):
-            print(item["id"])
+
             update_flag = 0
             new_biocs = [ ]
             for bioc in item[ "biocharacteristics" ]:               
@@ -416,8 +477,10 @@ def pgx_update_biocharacteristics(**kwargs):
 
             if update_flag == 1:
                 mongo_coll.update_one( { "_id" : item[ "_id" ] }, { "$set": { "biocharacteristics": new_biocs, "updated": datetime.now() } } )
-                print(("updated {}: {} ({})").format(item[ "_id" ], equivmap["NCIT::id"], equivmap["NCIT::label"]))
+                # print(("updated {}: {} ({})").format(item[ "_id" ], equivmap["NCIT::id"], equivmap["NCIT::label"]))
                 sample_no +=1
+
+    bar.finish()   
 
     mongo_client.close()
     print(kwargs[ "dataset_id" ]+": "+str(sample_no))
@@ -427,18 +490,23 @@ def pgx_update_biocharacteristics(**kwargs):
 ################################################################################
 ################################################################################
 
-def _check_equivmap_data(equivmap, equiv_keys, filter_defs):
+def _check_equivmap_data(e, equiv_keys, filter_defs):
 
     status = True
 
     for f_key in equiv_keys:
-        if not equivmap.get( f_key ):
+        if not e.get( f_key ):
             status = False
         else:
             pre, kind = f_key.split("::")
             if kind == "id":
-                if not re.compile( filter_defs[ pre ]["pattern"] ).match(equivmap[ f_key ]):
+                if not re.compile( filter_defs[ pre ]["pattern"] ).match(e[ f_key ]):
                     status = False
+
+    if e[ "icdom::id" ] == 'icdom-99999':
+        status = False
+    elif e[ "icdot::id" ] == 'icdot-C99.9':
+        status = False
 
     return status
 

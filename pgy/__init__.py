@@ -7,12 +7,15 @@ from .export_data import write_callsets_matrix_files
 from .export_data import write_tsv_from_list
 from .export_plots import plot_callset_stats
 from .export_maps import plot_sample_geomap
+from .modify_records import get_current_mappings
 from .modify_records import pgx_read_mappings
 from .modify_records import pgx_write_mappings_to_yaml
 from .modify_records import pgx_update_biocharacteristics
 from .modify_records import pgx_update_samples_from_file
+from .modify_records import pgx_rewrite_icdmaps_db
 from .output_preparation import get_id_label_for_prefix
 from .tabulating_tools import biosample_table_header
 from .tabulating_tools import get_nested_value
 from .tabulating_tools import assign_nested_value
+from .tabulating_tools import write_biosamples_template_file
 from .tabulating_tools import assign_value_type

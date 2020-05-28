@@ -6,7 +6,18 @@ from os import environ
 
 ################################################################################
 
-def return_beacon_info(**byc):
+def read_beacon_info(**byc):
+
+    ofp = path.join( byc[ "config" ][ "paths" ][ "module_root" ], *byc[ "config" ][ "paths" ][ "beacon_info_file" ] )
+
+    with open(ofp) as of:
+        b_info = yaml.load( of , Loader=yaml.FullLoader)
+
+    return(b_info)
+
+################################################################################
+
+def generate_beacon_info(**byc):
 
     with open( path.join(path.abspath(byc[ "config" ][ "paths" ][ "module_root" ]), "config", "beacon_info.yaml") ) as bc:
         b_defs = yaml.load( bc , Loader=yaml.FullLoader)
@@ -22,12 +33,7 @@ def return_beacon_info(**byc):
     response.
     
     podmd"""
-    
-    if environ.get("REQUEST_URI"):
-        if "/service-info" in environ['REQUEST_URI']:
-            print(json.dumps(service_info, indent=4, sort_keys=True, default=str))
-            exit( )
-    
+        
     for par in b_defs[ "beacon_info" ]:
         service_info[ par ] = b_defs[ "beacon_info" ][ par ]
         
@@ -47,11 +53,53 @@ def return_beacon_info(**byc):
             dataset[ "callCount" ] = byc[ "dbstats" ][ dataset["id"]+"__variants" ][ "count" ]
             dataset[ "variantCount" ] = byc[ "dbstats" ][ dataset["id"]+"__variants" ][ "distincts_count_digest" ]
             dataset[ "sampleCount" ] = byc[ "dbstats" ][ dataset["id"]+"__biosamples" ][ "count" ]
+
+            if "get_filters" in byc:
+                print("retrieving filters for {}".format(dataset["id"]))
+                dataset[ "filtering_terms" ] = dataset_get_filters(dataset["id"], **byc)
+                print("=> {} filters in {}".format(len( dataset[ "filtering_terms" ] ), dataset["id"]))
+
             ds_with_counts.append(dataset)
         
     service_info[ "datasets" ] = ds_with_counts
   
     return( service_info )
+
+
+################################################################################
+
+def dataset_get_filters(dataset_id, **byc):
+
+    mongo_client = MongoClient( )
+    mongo_db = mongo_client[ dataset_id ]
+    bios_coll = mongo_db[ 'biosamples' ]
+
+    filter_v = [ ]
+    biocs = bios_coll.distinct( "biocharacteristics.type.id" )
+
+    split_v = re.compile(r'^(\w+?)[\:\-](\w[\w\.]+?)$')
+
+    for b in biocs:
+
+        if split_v.match(b):
+            pre, code = split_v.match(b).group(1, 2)
+        else:
+            continue
+
+        l = ""
+        labs = bios_coll.find_one( { "biocharacteristics.type.id": b } )
+        for bio_c in labs[ "biocharacteristics" ]:
+            if re.match( b, bio_c[ "type" ][ "id" ] ):
+                l = bio_c[ "type" ][ "label" ]
+                continue
+        f = {
+            "source": byc[ "filter_defs" ][ pre ][ "name" ],
+            "id": b,
+            "label": l
+        }
+        filter_v.append( f )
+
+    return(filter_v)
 
 ################################################################################
 
