@@ -96,3 +96,7 @@ paths:
   biosamples_template_file:
     - rsrc
     - biosamples-table-template.tsv
+  icd-ncit-mapping_file:
+    - rsrc
+    - icdo
+    - ICDOntologies.ods

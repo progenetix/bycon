@@ -28,7 +28,7 @@ def _get_args():
     parser.add_argument("-o", "--outdir", help="path to the output directory")
     parser.add_argument("-i", "--icdomappath", help="path to the ICD mapping directory")    
     parser.add_argument("-d", "--datasetid", help="dataset id")
-    parser.add_argument("-m", "--mappingfile", help="update file with canonical headers")
+    parser.add_argument("-m", "--mappingfile", help="update file with canonical headers to be used instead of the default mapping file")
     args = parser.parse_args()
 
     return(args)
@@ -40,8 +40,8 @@ def main():
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
         config = yaml.load( cf , Loader=yaml.FullLoader)
     config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
-    config[ "paths" ][ "out" ] = path.join( path.abspath( dir_path ), '..', "data", "out" )
-    config[ "paths" ][ "mapping_file" ] = path.abspath(".")
+    config[ "paths" ][ "out" ] = path.join( config[ "paths" ][ "module_root" ], "data", "out" )
+    config[ "paths" ][ "mapping_file" ] = path.join( config[ "paths" ][ "module_root" ], *config[ "paths" ][ "icd-ncit-mapping_file" ] )
 
     args = _get_args()
 
@@ -81,14 +81,14 @@ def main():
         if not path.isfile(config[ "paths" ][ "mapping_file" ]):
             print("No mapping file was provided with -m ...")
         else:        
-            kwargs["equiv_keys"], kwargs["defmaps"] = pgx_read_icdom_ncit_defaults( **kwargs)
+            kwargs["defmaps"] = pgx_read_icdom_ncit_defaults( **kwargs)
             kwargs["equiv_keys"], kwargs["equivmaps"] = pgx_read_mappings( **kwargs)
                         
             pgx_write_mappings_to_yaml( **kwargs )
             pgx_rewrite_icdmaps_db( **kwargs )
+            od = pgx_update_biocharacteristics(**kwargs)
                     
             of = path.join( config[ "paths" ][ "module_root" ], "data", "out", "logs", date.today().isoformat()+"_pgxupdate_mappings_report_"+dataset_id+".tsv")
-            od = pgx_update_biocharacteristics(**kwargs)
             write_tsv_from_list(of, od, **config)
 
     ############################################################################
@@ -101,13 +101,6 @@ def main():
         of = path.join( config[ "paths" ][ "module_root" ], "rsrc", "icdo", "ICDO_mappings_current.tsv")
         write_tsv_from_list(of, od, **config)
         print("=> wrote mappings to {}".format(of))
-
-    # ############################################################################
-
-    # if confirm_prompt("Denormalize Biosample Essentials Into Callsets?", False):
-
-    #     print("=> denormalizing into callsets")
-    #     pgx_populate_callset_info( **kwargs )
 
 ################################################################################
 ################################################################################

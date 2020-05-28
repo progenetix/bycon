@@ -1,199 +1,4 @@
-from pymongo import MongoClient
-from pyexcel import get_sheet
-from os import path as path
-from datetime import datetime, date
-from progress.bar import IncrementalBar
-import re, yaml, json
-from isodate import parse_duration
-from .tabulating_tools import *
 
-################################################################################
-################################################################################
-################################################################################
-
-def pgx_update_samples_from_file( **kwargs ):
-    
-    filter_defs = kwargs[ "filter_defs" ]
-    mongo_client = MongoClient( )
-    mongo_db = mongo_client[ kwargs[ "dataset_id" ] ]
-    bios_coll = mongo_db[ "biosamples" ]
-    io_params = kwargs[ "config" ][ "io_params" ]
-    io_prefixes = kwargs[ "config" ][ "io_prefixes" ]
-
-    # relevant sheet is the first one...
-    try:
-        table = get_sheet(file_name=kwargs[ "config" ][ "paths" ][ "update_file" ])
-    except Exception as e:
-        print(e)
-        print("No matching update file could be found!")
-        exit()
-
-    header = table[0]
-    col_inds = { }
-    hi = 0
-    for col_name in header:
-        if col_name in io_params.keys() or col_name in io_prefixes:
-            print(col_name+": "+str(hi))
-            col_inds[ col_name ] = hi
-        hi += 1
-        
-    for i in range(1, len(table)):
-        if not table[ i, col_inds[ "id" ] ]:
-            break
-        print(str(i)+": "+table[ i, col_inds[ "id" ] ])
-        query = { "id": table[ i, col_inds[ "id" ] ] }
-        bios = bios_coll.find_one( query )
-        update = bios.copy()
-        update.update( { "updated": datetime.now() } )
-        for s_par in io_params.keys():
-            if s_par == "id":
-                continue
-            try:
-                if re.compile( r'\w' ).match( table[ i, col_inds[ s_par ] ] ):
-                    update = assign_nested_value(update, io_params[ s_par ][ "db_key" ], table[ i, col_inds[ s_par ] ])
-                    # print(update)
-                    # update[ simple_par ] = table[ i, col_inds[ simple_par ] ]
-            except Exception as e:
-                pass
-        for par_scope in [ "biocharacteristics", "external_references" ]:
-            update[ par_scope ] = [ ]
-            for pre in io_prefixes:
-                if not par_scope in filter_defs[ pre ][ "db_key" ]:
-                    continue
-                u_par = { "type": {} }
-                exists = False
-
-                # first evaluation if existing parameter has to be modified
-                for par in bios[ par_scope ]:
-                    try:
-                        if re.compile( filter_defs[ pre ][ "pattern" ] ).match( par[ "type" ][ "id" ] ):
-                            try:
-                                row, col = i, int( col_inds[ pre+"::id" ] )
-                                if re.compile( filter_defs[ pre ][ "pattern" ] ).match( table[ row, col ] ):
-                                    u_par[ "type" ][ "id" ] = table[ row, col ]
-                                    u_par[ "type" ][ "label" ] = table[ i, col_inds[ pre+"::label" ] ]
-                                    print(u_par[ "type" ][ "id" ])
-                                    exists = True
-                                else:
-                                    u_par = par
-                                    exists = True
-                            except Exception:
-                                pass
-                    except Exception as e:
-                        pass                
-
-                # if not there => new
-                if exists == False:
-                    try:
-                        if re.compile( filter_defs[ pre ][ "pattern" ] ).match( table[ i, col_inds[ pre+"::id" ] ] ):
-                                u_par[ "type" ][ "id" ] = table[ i, col_inds[ pre+"::id" ] ]
-                                u_par[ "type" ][ "label" ] = table[ i, col_inds[ pre+"::label" ] ]
-                                exists = True
-                    except Exception as e:
-                        pass
-
-                if exists == True:
-                    update[ par_scope ].append( u_par )
-
-            # 
-            if kwargs[ "args"].test:
-                print( json.dumps(update, indent=4, sort_keys=True, default=str) )
-            else:
-                bios_coll.update_one( { "_id" : bios[ "_id" ] }, { "$set": update } )
-
-################################################################################
-################################################################################
-################################################################################
-
-def pgx_populate_callset_info( **kwargs ):
-
-    """podmd
- 
-    ### Denormalizing Progenetix data
-
-    While the Progenetix data schema is highly flexible, the majority of
-    database content can be expressed with a limited set of parameters.
-
-    The `pgx_populate_callset_info` method denormalizes the main information
-    from the `biosamples` collection into the corresponding `callsets`, using
-    the schema-free `info` object.
-
-    podmd"""
-
-    mongo_client = MongoClient( )
-    mongo_db = mongo_client[ kwargs[ "dataset_id" ] ]
-    bios_coll = mongo_db[ "biosamples" ]
-    inds_coll = mongo_db[ "individuals" ]
-    cs_coll = mongo_db[ "callsets" ]
-
-    filter_defs = kwargs[ "filter_defs" ]
-
-    cs_query = { }
-    cs_count = cs_coll.estimated_document_count()
-
-    bar = IncrementalBar('callsets', max = cs_count)
-
-    for cs in cs_coll.find( { } ):
-
-        update_flag = 0
-        if not "info" in cs.keys():
-            cs[ "info" ] = { }
-
-        bios = bios_coll.find_one({"id": cs["biosample_id"] })
-        inds = inds_coll.find_one({"id": bios["individual_id"] })
-
-        if not "biocharacteristics" in inds:
-            inds[ "biocharacteristics" ] = [ ]
-
-        prefixed = [ *bios[ "biocharacteristics" ], *bios[ "external_references" ], *inds[ "biocharacteristics" ]  ]
-
-        for mapped in prefixed:
-            for pre in kwargs[ "filter_defs" ]:
-                try:
-                    if re.compile( filter_defs[ pre ][ "pattern" ] ).match( mapped[ "type" ][ "id" ] ):
-                        cs[ "info" ][ pre ] = mapped[ "type" ]
-                        update_flag = 1
-                        break
-                except Exception:
-                    pass
-
-        if "followup_months" in bios[ "info" ]:
-            try:
-                if bios[ "info" ][ "followup_months" ]:
-                    cs[ "info" ][ "followup_months" ] = float("%.1f" %  bios[ "info" ][ "followup_months" ])
-                    update_flag = 1
-            except ValueError:
-                return False            
-
-        if "death" in bios[ "info" ]:
-            if bios[ "info" ][ "death" ]:
-                if str(bios[ "info" ][ "death" ]) == "1":
-                    cs[ "info" ][ "death" ] = "dead"
-                    update_flag = 1
-                elif str(bios[ "info" ][ "death" ]) == "0":
-                    cs[ "info" ][ "death" ] = "alive"
-                    update_flag = 1
-
-        if "age_at_collection" in bios:
-            try:
-                if bios[ "age_at_collection" ][ "age" ]:    
-                    if re.compile( r"P\d" ).match( bios[ "age_at_collection" ][ "age" ] ):
-                        cs[ "info" ][ "age_iso" ] = bios[ "age_at_collection" ][ "age" ]
-                        cs[ "info" ][ "age_years" ] = _isoage_to_decimal_years(bios[ "age_at_collection" ][ "age" ])
-                        # print(cs[ "info" ][ "age_iso" ])
-                        # print(cs[ "info" ][ "age_years" ])
-                        update_flag = 1
-            except Exception:
-                pass
-
-
-        if update_flag == 1:
-                cs_coll.update_one( { "_id" : cs[ "_id" ] }, { "$set": { "info": cs[ "info" ], "updated": datetime.now() } } )
-
-        bar.next()
-
-    bar.finish()
-    mongo_client.close()
 
 ################################################################################
 ################################################################################
@@ -236,8 +41,8 @@ def pgx_read_icdom_ncit_defaults(**kwargs):
             defmaps.append(equiv_line)
             fi += 1
     
-    print("mappings: "+str(fi))
-    return(equiv_keys, defmaps)
+    print("default mappings: "+str(fi))
+    return(defmaps)
 
 ################################################################################
 ################################################################################
@@ -467,65 +272,80 @@ def pgx_update_biocharacteristics(**kwargs):
     
     db_key = kwargs["filter_defs"]["icdom"][ "db_key" ]
 
-    bar = IncrementalBar('mappings', max = len(kwargs["equivmaps"]))
-    
+
+    # default NCIT per icdom, in several levels...
     sample_no = 0
+    for n in (1,2,3,4):
+        for e in kwargs["defmaps"]:
+            if e[ "icdom::level" ] == n:                
+                query = { db_key: {"$regex": e["icdom::id"] } }
+                m_no = mongo_coll.find( query ).count()
+                if m_no > 0:
+                    print("=> level {}, {}, {}".format(n, e["icdom::id"], m_no) )
+                    for s in mongo_coll.find( query ):
+                        sample_no, update_report = update_sample_ncit(sample_no, s, e, mongo_coll, update_report, False, **kwargs)
 
-    for equivmap in kwargs["equivmaps"]:
-
+    # manually mapped icdom + icdot => NCIT mappings
+    bar = IncrementalBar('mappings', max = len(kwargs["equivmaps"]))    
+    sample_no = 0
+    for e in kwargs["equivmaps"]:
         bar.next()
 
-        if not _check_equivmap_data(equivmap, kwargs["equiv_keys"], kwargs["filter_defs"]):
-            print("\nWrong format for mapping code(s):")
-            print(equivmap)
+        if not _check_equivmap_data(e, kwargs["equiv_keys"], kwargs["filter_defs"]):
+            print("\nWrong format for mapping code(s): {}".format(e))
             continue
         
-        query = { "$and": [ {db_key: equivmap["icdom::id"]}, {db_key: equivmap["icdot::id"]} ] }
+        query = { "$and": [ {db_key: e["icdom::id"]}, {db_key: e["icdot::id"]} ] }
 
-        if equivmap["icdom::id"] == 'icdom-99999':
-            query = { db_key: equivmap["icdot::id"] }
-        elif equivmap["icdom::id"] == 'icdot-C99.9':
-            query = { db_key: equivmap["icdom::id"] }
-        
-        for item in mongo_coll.find( query ):
-
-            update_flag = 0
-            new_biocs = [ ]
-            for bioc in item[ "biocharacteristics" ]:               
-                if re.compile( "NCIT" ).match(bioc["type"]["id"]):
-                    if bioc["type"]["id"] != equivmap["NCIT::id"] or bioc["type"]["label"] != equivmap["NCIT::label"]:
-
-                        report = [ item[ "id" ] ]
-                        report.extend( str(equivmap[x]) for x in kwargs["equiv_keys"] )
-                        report.extend( [ str(bioc["type"]["id"]), str(bioc["type"]["label"]) ] )
-                        update_report.append(report)
-            
-                        bioc["type"]["id"] = equivmap["NCIT::id"]
-                        bioc["type"]["label"] = equivmap["NCIT::label"]
-                        update_flag = 1
-
-                # all biocs are collected, since whole list will be replaced
-                new_biocs.append( bioc )
-
-            ncit_exists = 0
-            for nbc in new_biocs:
-                if re.compile( "NCIT" ).match(nbc["type"]["id"]):
-                    ncit_exists = 1
-
-            if not ncit_exists == 1:
-                new_biocs.append( { "type": { "id": equivmap["NCIT::id"], "label": equivmap["NCIT::label"] } } )
-                update_flag = 1
-
-            if update_flag == 1:
-                mongo_coll.update_one( { "_id" : item[ "_id" ] }, { "$set": { "biocharacteristics": new_biocs, "updated": datetime.now() } } )
-                # print(("updated {}: {} ({})").format(item[ "_id" ], equivmap["NCIT::id"], equivmap["NCIT::label"]))
-                sample_no +=1
-
+        for s in mongo_coll.find( query ):
+            sample_no, update_report = update_sample_ncit(sample_no, s, e, mongo_coll, update_report, True, **kwargs)
     bar.finish()   
 
     mongo_client.close()
     print(kwargs[ "dataset_id" ]+": "+str(sample_no))
     return(update_report)
+
+################################################################################
+################################################################################
+################################################################################
+
+def update_sample_ncit(sample_no, s, e, mongo_coll, update_report, report_flag, **kwargs):
+
+    update_flag = 0
+    new_biocs = [ ]
+    for bioc in s[ "biocharacteristics" ]:               
+        if re.compile( "NCIT" ).match(bioc["type"]["id"]):
+            if bioc["type"]["id"] != e["NCIT::id"] or bioc["type"]["label"] != e["NCIT::label"]:
+
+                if report_flag:
+
+                    report = [ s[ "id" ] ]
+                    report.extend( format( e[x] ) for x in kwargs["equiv_keys"] )
+                    report.extend( [ str(bioc["type"]["id"]), str(bioc["type"]["label"]) ] )
+                    update_report.append(report)
+    
+                bioc["type"]["id"] = e["NCIT::id"]
+                bioc["type"]["label"] = e["NCIT::label"]
+                update_flag = 1
+
+        # all biocs are collected, since whole list will be replaced
+        new_biocs.append( bioc )
+
+    ncit_exists = 0
+    for nbc in new_biocs:
+        if re.compile( "NCIT" ).match(nbc["type"]["id"]):
+            ncit_exists = 1
+
+    if not ncit_exists == 1:
+        new_biocs.append( { "type": { "id": e["NCIT::id"], "label": e["NCIT::label"] } } )
+        update_flag = 1
+
+    if update_flag == 1:
+        mongo_coll.update_one( { "_id" : s[ "_id" ] }, { "$set": { "biocharacteristics": new_biocs, "updated": datetime.now() } } )
+        # print(("updated {}: {} ({})").format(s[ "_id" ], e["NCIT::id"], e["NCIT::label"]))
+        sample_no +=1
+
+    return(sample_no, update_report)
 
 ################################################################################
 ################################################################################
@@ -551,22 +371,4 @@ def _check_equivmap_data(e, equiv_keys, filter_defs):
 
     return status
 
-################################################################################
-################################################################################
-################################################################################
-
-def _isoage_to_decimal_years(isoage):
-
-    years, months = [ 0, 0 ]
-    age_match = re.compile(r"^P(?:(\d+?)Y)?(?:(\d+?))?")
-    if age_match.match(isoage):
-        y, m = age_match.match(isoage).group(1,2)
-        if y:
-            years = y * 1
-        if m:
-            months = m * 1
-        dec_age = float(years) + float(months) / 12
-        return float("%.1f" % dec_age)
-
-    return
 
