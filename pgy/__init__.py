@@ -10,6 +10,7 @@ from .export_maps import plot_sample_geomap
 from .modify_records import get_current_mappings
 from .modify_records import pgx_read_mappings
 from .modify_records import pgx_write_mappings_to_yaml
+from .modify_records import pgx_read_icdom_ncit_defaults
 from .modify_records import pgx_update_biocharacteristics
 from .modify_records import pgx_update_samples_from_file
 from .modify_records import pgx_rewrite_icdmaps_db
