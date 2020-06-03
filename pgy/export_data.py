@@ -31,8 +31,6 @@ def write_biosamples_table(**kwargs):
     if args.label:
         label = args.label
 
-    tab = kwargs[ "config" ][ "const" ][ "tab_sep" ]
-    dash = kwargs[ "config" ][ "const" ][ "dash_sep" ]
     tmp_bios_file = "_tmp-"+biosfl
 
     dataset_id = kwargs[ "dataset_id" ]
@@ -46,7 +44,7 @@ def write_biosamples_table(**kwargs):
 
     header = biosample_table_header( **kwargs[ "config" ] )
     
-    biosf.write( tab.join( header ) + "\n" )
+    biosf.write( "\t".join( header ) + "\n" )
     for bios in bios_coll.find(query):
         # print(bios["id"])
         bios_line = [  ]
@@ -61,11 +59,11 @@ def write_biosamples_table(**kwargs):
                 pre_lab = str("")
             bios_line.append( pre_lab )
 
-        biosf.write( tab.join( bios_line ) + "\n" )
+        biosf.write( "\t".join( bios_line ) + "\n" )
         bios_no += 1
 
     biosf.close()
-    biosamples_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, label, str(bios_no), biosfl ]) )
+    biosamples_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ dataset_id, label, str(bios_no), biosfl ]) )
     rename(tmp_bios_file, biosamples_file)
 
     print(str(bios_no)+" biosamples were written to "+biosamples_file)
@@ -84,8 +82,6 @@ def write_callsets_matrix_files(**kwargs):
     mongo_db = mongo_client[ dataset_id ]
     mongo_coll = mongo_db[ 'callsets' ]
 
-    tab = kwargs[ "config" ][ "const" ][ "tab_sep" ]
-    dash = kwargs[ "config" ][ "const" ][ "dash_sep" ]
     tmp_status_matrix_file = "_tmp-"+smfl
     tmp_values_matrix_file = "_tmp-"+vmfl
     args = kwargs[ "args" ]
@@ -111,20 +107,20 @@ def write_callsets_matrix_files(**kwargs):
 
         if "dupmap" in cs["info"][ "statusmaps" ]:
             if cs[ "info" ][ "statusmaps" ][ "dupmap" ] is not None:
-                smf.write( tab.join( [ tab.join( cs_meta ), tab.join( cs[ "info" ][ "statusmaps" ][ "dupmap" ] ),
-                    tab.join( cs[ "info" ][ "statusmaps" ][ "delmap" ] ) ] ) + "\n" )
+                smf.write( "\t".join( [ "\t".join( cs_meta ), "\t".join( cs[ "info" ][ "statusmaps" ][ "dupmap" ] ),
+                    "\t".join( cs[ "info" ][ "statusmaps" ][ "delmap" ] ) ] ) + "\n" )
                 sm_no += 1
         if "dupmax" in cs["info"][ "statusmaps" ]:
             if cs[ "info" ][ "statusmaps" ][ "dupmax" ] is not None:
-                vmf.write( tab.join( [ tab.join( cs_meta ), tab.join( str(x) for x in cs[ "info" ][ "statusmaps" ][ "dupmax" ] ),
-                tab.join( str(x) for x in cs[ "info" ][ "statusmaps" ][ "delmin" ] ) ] ) + "\n" )
+                vmf.write( "\t".join( [ "\t".join( cs_meta ), "\t".join( str(x) for x in cs[ "info" ][ "statusmaps" ][ "dupmax" ] ),
+                "\t".join( str(x) for x in cs[ "info" ][ "statusmaps" ][ "delmin" ] ) ] ) + "\n" )
                 vm_no += 1
     smf.close()
     vmf.close()
     mongo_client.close()
 
-    status_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, label, str(sm_no), smfl ]) )
-    values_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash.join([ dataset_id, label, str(vm_no), vmfl ]) )
+    status_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ dataset_id, label, str(sm_no), smfl ]) )
+    values_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ dataset_id, label, str(vm_no), vmfl ]) )
 
     rename(tmp_status_matrix_file, status_matrix_file)
     rename(tmp_values_matrix_file, values_matrix_file)
@@ -136,9 +132,8 @@ def write_callsets_matrix_files(**kwargs):
 
 def write_tsv_from_list(of, od, **config):
 
-    tab = config[ "const" ][ "tab_sep" ]
     tsv = open( of, 'w' )
     for l in od:
-        tsv.write( tab.join( l ) + "\n" )
+        tsv.write( "\t".join( l ) + "\n" )
     tsv.close
     

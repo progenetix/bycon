@@ -22,16 +22,16 @@ from bycon import *
 ##### Examples
 
 * standard test deletion CNV query
-  - <https://progenetix.org/cgi/bycon/bin/byconplus.py?datasetIds=arraymap,progenetix/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=9/variantType=DEL/startMin=18000000/startMax=21975097/endMin=21967753/endMax=26000000/filters=icdom-94403>
+  - <https://bycon.progenetix.org?datasetIds=arraymap,progenetix/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=9/variantType=DEL/startMin=18000000/startMax=21975097/endMin=21967753/endMax=26000000/filters=icdom-94403>
   - <https://progenetix.org/services/byconplus/datasetIds=arraymap,progenetix/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=9/variantType=DEL/startMin=18000000/startMax=21975097/endMin=21967753/endMax=26000000/filters=icdom-94403>
 * retrieving biosamples w/ a given filter code
-  - <https://progenetix.org/cgi/bycon/bin/byconplus.py?assemblyId=GRCh38/datasetIds=arraymap,progenetix/filters=NCIT:C3326>
+  - <https://bycon.progenetix.org?assemblyId=GRCh38/datasetIds=arraymap,progenetix/filters=NCIT:C3326>
 * beacon info (i.e. missing parameters return the info)
-  - <https://progenetix.org/cgi/bycon/bin/byconplus.py>
+  - <https://bycon.progenetix.org>
 * beacon info (i.e. specific request)
-  - <https://progenetix.org/cgi/bycon/bin/byconplus.py/service-info/>
+  - <https://bycon.progenetix.org/service-info/>
 * precise variant query together with filter
-  - <https://progenetix.org/cgi/bycon/bin/byconplus.py?datasetIds=dipg/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=17/start=7577120/referenceBases=G/alternateBases=A/filters=icdot-C71.7>
+  - <https://bycon.progenetix.org?datasetIds=dipg/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=17/start=7577120/referenceBases=G/alternateBases=A/filters=icdot-C71.7>
 
 podmd"""
 
@@ -89,15 +89,29 @@ def byconplus():
         "config": config,
         "args": args,
         "form_data": form_data,
-        "rest_pars": rest_pars
+        "rest_pars": rest_pars,
+        "get_filters": False
     }
     byc.update( { "filter_defs": read_filter_definitions( **byc ) } )
     byc.update( { "dbstats": dbstats_return_latest( **byc ) } )
-    byc.update( { "service_info": read_beacon_info( **byc ) } )
+    byc.update( { "beacon_info": read_beacon_info( **byc ) } )    
+    byc.update( { "service_info": read_service_info( **byc ) } )
+    byc.update( { "datasets_info": read_datasets_info( **byc ) } )
+    byc["beacon_info"].update( { "datasets": update_datasets_from_db(**byc) } )
+
+
+    for par in byc[ "beacon_info" ]:
+        byc[ "service_info" ][ par ] = byc[ "beacon_info" ][ par ]
+
 
     if environ.get('REQUEST_URI'):
         if "service-info" in environ.get('REQUEST_URI'):
             cgi_print_json_response( byc["service_info"] )
+        elif "get-datasetids" in environ.get('REQUEST_URI'):
+            dataset_ids = [ ]
+            for ds in byc["service_info"]["datasets"]:
+                dataset_ids.append( { "id": ds["id"], "name": ds["name"] } )
+            cgi_print_json_response( { "datasets": dataset_ids } )
     if args.info:
         cgi_print_json_response( byc["service_info"] )
 

@@ -1,22 +1,24 @@
-const:
-  tab_sep: "\t"
-  dash_sep: "-"
-info_db: progenetix
 dataset_ids:
   - arraymap
   - progenetix
   - dipg
+  - cellosaurus
   # - tcga
 collections:
   - biosamples
   - callsets
   - individuals
   - variants
-  - querybuffer
-bio_prefixes:
-  - icdom
-  - icdot
-  - NCIT
+collations:
+  - biosubsets
+  - datacollections
+info_db: progenetix
+beacon_info_coll: "beaconinfo"
+beacon_info_count_labels:
+  biosamples: "sampleCount"
+  individuals: "individualCount"
+  variants: "callCount"
+  variants_distinct: "variantCount"
 io_params:
   id:
     db_key: id
@@ -92,7 +94,13 @@ paths:
     - tmp
   beacon_info_file:
     - config
-    - beacon_info_generated.yaml
+    - beacon_info.yaml
+  beacon_datasets_file:
+    - config
+    - beacon_datasets.yaml
+  service_info_file:
+    - config
+    - service_info.yaml
   biosamples_template_file:
     - rsrc
     - biosamples-table-template.tsv

@@ -1,15 +1,18 @@
 ---
-beacon_info:
-  id: 'org.progenetix.beacon'
+service_info:
+  id: org.progenetix.beacon
   name: 'Progenetix Cancer Genomics Beacon+'
-  apiVersion: '2.0.pre.2020-04-07'
-  version: 2020-04-07
-  description:  |
+  type: 'urn:ga4gh:beacon'
+  description: |
     Beacon+ provides a forward looking implementation of the Beacon API, with focus on structural variants and metadata based on the cancer and reference genome profiling data represented in the Progenetix oncogenomic data resource (https://progenetix.org).
-  welcomeUrl: 'https://beacon.progenetix.org/ui/'
+  documentationUrl: 'https://info.progenetix.org/tags/Beacon.html'
+  serviceUrl: "https://beacon.progenetix.org/"
+  serviceType: "GA4GHBeacon"
+  welcomeUrl: "https://beacon.progenetix.org/ui/"
   alternativeUrl: "https://progenetix.org"
-  createDateTime: 2015-11-13
-  updateDateTime: 2020-04-07
+  contactUrl: 'mailto:contact@progenetix.org'
+  version: '2.0.pre.2020-04-07'
+  open: true
   organization:
     id: 'org.baudisgroup'
     name: 'baudisgroup at UZH and SIB'
@@ -17,26 +20,12 @@ beacon_info:
       The "Theoretical Cytogenetics and Oncogenomics" group at the University of Zurich (UZH) and the Swiss Institute of Bioinformatics (SIB) performs research in cancer genomics and provides bioinformatics tools and cancer genome data resources to the scientific community.
     address: "Department of Molecular Life Sciences, University of Zurich, Winterthurerstrasse 190, CH-8057 Zurich, Switzerland"
     welcomeUrl: 'https://info.baudisgroup.org'
-    contactUrl: 'mailto:contact@progenetix.org'
     logoUrl: 'https://progenetix.org/p/progenetix.png'
-  sampleAlleleRequests:
-    - datasetIds:
-        - arraymap
-      assemblyId: GRCh38
-      referenceName: '9'
-      startMin: 18000000
-      startMax: 21975098
-      endMin: 21967753
-      endMax: 26000000
-      variantType: "DEL"
-      filters:
-        - "icdom-94403"
-    - datasetIds:
-        - dipg
-      assemblyId: GRCh38
-      referenceName: '17'
-      start: 7577121
-      alternateBases: "A"
-      referenceBases: "G"
-      filters:
-        - "icdot-C71.7"
+    info:
+      provider:
+        - 'Michael Baudis'
+        - 'Theoretical Cytogenetics and Oncogenomics, Department of Molecular Life Sciences, University of Zurich'
+        - 'http://www.imls.uzh.ch/en/research/baudis.html'
+        - 'http://info.baudisgroup.org/'
+        - 'Swiss Institute of Bioinformatics - SIB'
+        - 'http://www.sib.swiss/baudis-michael'

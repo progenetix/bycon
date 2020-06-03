@@ -1,0 +1,75 @@
+---
+collection_names:
+  callset_collection: callsets
+  variant_collection: variants
+  biosample_collection: biosamples
+  individual_collection: individuals
+handover_types:
+  cnvhistogram:
+    id: 'pgx:handover:cnvhistogram'
+    label: "CNV Histogram"
+    description: "create a CNV histogram from matched callsets"
+    handover_method: 'callsets::_id'
+  biosamplesdata:
+    id: 'pgx:handover:biosamplesdata'
+    label: "Biosamples"
+    description: "retrieve data of the biosamples matched by the query"
+    handover_method: 'biosamples::_id'
+  individualsdata:
+    id: 'pgx:handover:individualsdata'
+    label: "Individuals"
+    description: "retrieve data of the individuals matched by the query"
+    handover_method: 'individuals::_id'
+  variantsdata:
+    id: 'pgx:handover:variantsdata'
+    label: "Variants"
+    description: "retrieve variants matched by the query"
+    handover_method: 'variants::_id'
+  callsetsvariants:
+    id: 'pgx:handover:callsetsvariants'
+    label: "Callsets Variants"
+    description: "export all variants of matched callsets - potentially huge dataset..."
+    handover_method: 'callsets::_id'
+  progenetixtools:
+    id: 'pgx:handover:progenetixtools'
+    label: "Progenetix Interface"
+    description: "hand the data over to the Progenetix interface for visualization and additional information"
+    handover_method: 'callsets::_id'
+    script_path_web: '/cgi-bin/pgx_process.cgi'
+  UCSClink:   
+    id: 'pgx:handover:bedfile2ucsc'
+    label: "Variants in UCSC"
+    description: "map variants matched by the query to the UCSC browser"
+    handover_method: 'variants::_id'
+  queryaggregation:   
+    id: 'pgx:handover:queryaggregation'
+    label: "Aggregate Query"
+    description: "Start new query limited to the current samples"
+    handover_method: 'callsets::_id'
+    script_path_web: 'http://beacon.progenetix.org/ui/'
+genome_assemblies:
+  - 'GRCh38'
+url: 'https://beacon.progenetix.org/ui/'
+url_base: 'https://progenetix.org'
+url_alt: 'https://beacon.arraymap.org/ui/'
+url_logo: 'https://progenetix.org/p/progenetix.png'
+document_base: '/Library/WebServer/Documents'
+actions:
+  - handover
+handover_db: progenetix
+handover_coll: querybuffer
+max_distinct_variants: 20
+output_params:
+  color_var_snv_hex: '#EE00DD'
+  color_var_snv_rgb: '238,0,221'
+  color_var_break_hex: '#EE00DD'
+  color_var_break_rgb: '238,0,221'
+  color_var_dup_hex: '#FFC633'
+  color_var_dup_rgb: '255,198,51'
+  color_var_del_hex: '#33A0FF'
+  color_var_del_rgb: '51,160,255'
+  color_var_amp_hex: '#FF6600'
+  color_var_amp_rgb: '255,102,0'
+  color_var_homoloss_hex: '#0033CC'
+  color_var_homoloss_rgb: '0,51,204'
+

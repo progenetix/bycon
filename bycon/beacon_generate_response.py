@@ -6,100 +6,49 @@ from os import environ
 
 ################################################################################
 
+def read_service_info(**byc):
+
+    ofp = path.join( byc[ "config" ][ "paths" ][ "module_root" ], *byc[ "config" ][ "paths" ][ "service_info_file" ] )
+    with open(ofp) as of:
+        s_info = yaml.load( of , Loader=yaml.FullLoader)
+        return(s_info["service_info"])
+
+################################################################################
+
 def read_beacon_info(**byc):
 
     ofp = path.join( byc[ "config" ][ "paths" ][ "module_root" ], *byc[ "config" ][ "paths" ][ "beacon_info_file" ] )
-
     with open(ofp) as of:
         b_info = yaml.load( of , Loader=yaml.FullLoader)
-
-    return(b_info)
+        return(b_info["beacon_info"])
 
 ################################################################################
 
-def generate_beacon_info(**byc):
+def read_datasets_info(**byc):
 
-    with open( path.join(path.abspath(byc[ "config" ][ "paths" ][ "module_root" ]), "config", "beacon_info.yaml") ) as bc:
-        b_defs = yaml.load( bc , Loader=yaml.FullLoader)
-            
-    service_info = b_defs[ "service_info" ]
+    ofp = path.join( byc[ "config" ][ "paths" ][ "module_root" ], *byc[ "config" ][ "paths" ][ "beacon_datasets_file" ] )
+    with open(ofp) as of:
+        ds = yaml.load( of , Loader=yaml.FullLoader)
+        return(ds["datasets"])
 
-    """podmd
-    
-    For compatibility with the GA4GH "Service Info" standard, a separate
-    endpoint is activated when calling with the path parameter.
-    
-    Some of the values are then added/adjusted for the legacy Beacon info
-    response.
-    
-    podmd"""
-        
-    for par in b_defs[ "beacon_info" ]:
-        service_info[ par ] = b_defs[ "beacon_info" ][ par ]
-        
-    """podmd
-    The counts for the collections (`variants`, `biosamples` etc.) of the
-    different datasets are retrieved from the daily updated 
-    `progenetix.dbstats` collection.
+################################################################################
 
-    For the non-parametrized call of the application, just the basic
-    information including variant counts is returned.
-
-    podmd"""
+def update_datasets_from_db(**byc):
 
     ds_with_counts = [ ]
-    for dataset in b_defs[ "beacon_info" ][ "datasets" ]:
-        if dataset["id"] in byc[ "config" ][ "dataset_ids" ]:
-            dataset[ "callCount" ] = byc[ "dbstats" ][ dataset["id"]+"__variants" ][ "count" ]
-            dataset[ "variantCount" ] = byc[ "dbstats" ][ dataset["id"]+"__variants" ][ "distincts_count_digest" ]
-            dataset[ "sampleCount" ] = byc[ "dbstats" ][ dataset["id"]+"__biosamples" ][ "count" ]
+    for ds in byc["datasets_info"]:
+        ds_id = ds["id"]
+        if ds_id in byc["dbstats"]:
+            for k, l in byc["config"]["beacon_info_count_labels"].items():
+                if "counts" in byc["dbstats"][ ds_id ]:
+                    if k in byc["dbstats"][ ds_id ]["counts"]:
+                        ds[ l ] = byc["dbstats"][ ds_id ]["counts"][ k ]
+            if "filtering_terms" in byc["dbstats"][ ds_id ]:
+                ds[ "filtering_terms" ] = byc["dbstats"][ ds_id ][ "filtering_terms" ]
+        ds_with_counts.append(ds)
 
-            if "get_filters" in byc:
-                print("retrieving filters for {}".format(dataset["id"]))
-                dataset[ "filtering_terms" ] = dataset_get_filters(dataset["id"], **byc)
-                print("=> {} filters in {}".format(len( dataset[ "filtering_terms" ] ), dataset["id"]))
+    return(ds_with_counts)
 
-            ds_with_counts.append(dataset)
-        
-    service_info[ "datasets" ] = ds_with_counts
-  
-    return( service_info )
-
-
-################################################################################
-
-def dataset_get_filters(dataset_id, **byc):
-
-    mongo_client = MongoClient( )
-    mongo_db = mongo_client[ dataset_id ]
-    bios_coll = mongo_db[ 'biosamples' ]
-
-    filter_v = [ ]
-    biocs = bios_coll.distinct( "biocharacteristics.type.id" )
-
-    split_v = re.compile(r'^(\w+?)[\:\-](\w[\w\.]+?)$')
-
-    for b in biocs:
-
-        if split_v.match(b):
-            pre, code = split_v.match(b).group(1, 2)
-        else:
-            continue
-
-        l = ""
-        labs = bios_coll.find_one( { "biocharacteristics.type.id": b } )
-        for bio_c in labs[ "biocharacteristics" ]:
-            if re.match( b, bio_c[ "type" ][ "id" ] ):
-                l = bio_c[ "type" ][ "label" ]
-                continue
-        f = {
-            "source": byc[ "filter_defs" ][ pre ][ "name" ],
-            "id": b,
-            "label": l
-        }
-        filter_v.append( f )
-
-    return(filter_v)
 
 ################################################################################
 
@@ -128,7 +77,7 @@ def create_dataset_response(**byc):
         } )
         if dataset_allele_resp[ "variantCount" ] > 0:
             dataset_allele_resp.update( {
-                "frequency": float("%.6f" % (dataset_allele_resp[ "callCount" ] / byc[ "dbstats" ][ byc[ "dataset_id" ]+"__variants" ][ "count" ] ) )
+                "frequency": float("%.6f" % (dataset_allele_resp[ "callCount" ] / byc[ "dbstats" ][ byc[ "dataset_id" ] ][ "counts" ][ "variants_distinct" ] ) )
             } )
             dataset_allele_resp[ "info" ].update( { "variants": byc[ "query_results" ][ "variants::digest" ] })
 
@@ -174,7 +123,7 @@ def create_beacon_response(**byc):
 def dbstats_return_latest(**byc):
 
 # db.dbstats.find().sort({date:-1}).limit(1)
-    dbstats_coll = MongoClient( )[ byc[ "config" ][ "info_db" ] ][ byc[ "config" ][ "stats_collection" ] ]
+    dbstats_coll = MongoClient( )[ byc[ "config" ][ "info_db" ] ][ byc[ "config" ][ "beacon_info_coll" ] ]
     stats = dbstats_coll.find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
     return(stats[0])
 

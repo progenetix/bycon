@@ -1,10 +1,12 @@
 # __init__.py
-from .beacon_generate_response import generate_beacon_info
-from .beacon_generate_response import read_beacon_info
 from .beacon_generate_response import create_dataset_response
+from .beacon_generate_response import read_beacon_info
+from .beacon_generate_response import read_datasets_info
+from .beacon_generate_response import read_service_info
 from .beacon_generate_response import create_beacon_response
 from .beacon_generate_response import dbstats_return_latest
 from .beacon_generate_response import callsets_return_stats
+from .beacon_generate_response import update_datasets_from_db
 from .beacon_parse_spec import read_beacon_v2_spec
 from .cgi_parse_filters import parse_filters
 from .cgi_parse_filters import get_dataset_ids

@@ -1,3 +1,105 @@
+from pymongo import MongoClient
+from pyexcel import get_sheet
+from os import path as path
+from datetime import datetime, date
+from progress.bar import IncrementalBar
+import re, yaml, json
+from isodate import parse_duration
+from .tabulating_tools import *
+
+################################################################################
+################################################################################
+################################################################################
+
+def pgx_update_samples_from_file( **kwargs ):
+    
+    filter_defs = kwargs[ "filter_defs" ]
+    mongo_client = MongoClient( )
+    mongo_db = mongo_client[ kwargs[ "dataset_id" ] ]
+    bios_coll = mongo_db[ "biosamples" ]
+    io_params = kwargs[ "config" ][ "io_params" ]
+    io_prefixes = kwargs[ "config" ][ "io_prefixes" ]
+
+    # relevant sheet is the first one...
+    try:
+        table = get_sheet(file_name=kwargs[ "config" ][ "paths" ][ "update_file" ])
+    except Exception as e:
+        print(e)
+        print("No matching update file could be found!")
+        exit()
+
+    header = table[0]
+    col_inds = { }
+    hi = 0
+    for col_name in header:
+        if col_name in io_params.keys() or col_name in io_prefixes:
+            print(col_name+": "+str(hi))
+            col_inds[ col_name ] = hi
+        hi += 1
+        
+    for i in range(1, len(table)):
+        if not table[ i, col_inds[ "id" ] ]:
+            break
+        print(str(i)+": "+table[ i, col_inds[ "id" ] ])
+        query = { "id": table[ i, col_inds[ "id" ] ] }
+        bios = bios_coll.find_one( query )
+        update = bios.copy()
+        update.update( { "updated": datetime.now() } )
+        for s_par in io_params.keys():
+            if s_par == "id":
+                continue
+            try:
+                if re.compile( r'\w' ).match( table[ i, col_inds[ s_par ] ] ):
+                    update = assign_nested_value(update, io_params[ s_par ][ "db_key" ], table[ i, col_inds[ s_par ] ])
+                    # print(update)
+                    # update[ simple_par ] = table[ i, col_inds[ simple_par ] ]
+            except Exception as e:
+                pass
+        for par_scope in [ "biocharacteristics", "external_references" ]:
+            update[ par_scope ] = [ ]
+            for pre in io_prefixes:
+                if not par_scope in filter_defs[ pre ][ "db_key" ]:
+                    continue
+                u_par = { "type": {} }
+                exists = False
+
+                # first evaluation if existing parameter has to be modified
+                for par in bios[ par_scope ]:
+                    try:
+                        if re.compile( filter_defs[ pre ][ "pattern" ] ).match( par[ "type" ][ "id" ] ):
+                            try:
+                                row, col = i, int( col_inds[ pre+"::id" ] )
+                                if re.compile( filter_defs[ pre ][ "pattern" ] ).match( table[ row, col ] ):
+                                    u_par[ "type" ][ "id" ] = table[ row, col ]
+                                    u_par[ "type" ][ "label" ] = table[ i, col_inds[ pre+"::label" ] ]
+                                    print(u_par[ "type" ][ "id" ])
+                                    exists = True
+                                else:
+                                    u_par = par
+                                    exists = True
+                            except Exception:
+                                pass
+                    except Exception as e:
+                        pass                
+
+                # if not there => new
+                if exists == False:
+                    try:
+                        if re.compile( filter_defs[ pre ][ "pattern" ] ).match( table[ i, col_inds[ pre+"::id" ] ] ):
+                                u_par[ "type" ][ "id" ] = table[ i, col_inds[ pre+"::id" ] ]
+                                u_par[ "type" ][ "label" ] = table[ i, col_inds[ pre+"::label" ] ]
+                                exists = True
+                    except Exception as e:
+                        pass
+
+                if exists == True:
+                    update[ par_scope ].append( u_par )
+
+            # 
+            if kwargs[ "args"].test:
+                print( json.dumps(update, indent=4, sort_keys=True, default=str) )
+            else:
+                bios_coll.update_one( { "_id" : bios[ "_id" ] }, { "$set": update } )
 
 
 ################################################################################
@@ -262,9 +364,7 @@ def _format_icdmap( e ):
 
 def pgx_update_biocharacteristics(**kwargs):
 
-    update_report = [ [ "id" ] ]
-    update_report[0].extend( kwargs["equiv_keys"] )
-    update_report[0].extend( [ "replaced_ncit::id", "replaced_ncit::label" ] )
+    update_report = [ "id",  *kwargs["equiv_keys"], "replaced_ncit::id", "replaced_ncit::label" ]
         
     mongo_client = MongoClient( )
     mongo_db = mongo_client[ kwargs[ "dataset_id" ] ]
