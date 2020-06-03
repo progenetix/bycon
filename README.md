@@ -47,17 +47,17 @@ While the current implementation runs nicely against the >100'000 samples / mill
 Below are some usage examples against the [Progenetix resources](http://progenetix.org).
 
 * The standard Beacon+ CNV test call, retrieving samples with a focal deletion in the _CDKNA/B,MTAP_ locus in Glioblastomas
-    - https://progenetix.org/cgi-bin/bycon/cgi/byconplus.py?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=18000000&startMax=21975097&endMin=21967753&endMax=26000000&referenceBases=N&filters=icdom-94403
+    - https://bycon.progenetix.org?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=18000000&startMax=21975097&endMin=21967753&endMax=26000000&referenceBases=N&filters=icdom-94403
 * A pure filter call, getting the sample numbers for _NCIT:C3326_ (Adrenal Gland Pheochromocytoma):
-    - https://progenetix.org/cgi-bin/bycon/cgi/byconplus.py?assemblyId=GRCh38&datasetIds=arraymap,progenetix&filters=NCIT:C3326
+    - https://bycon.progenetix.org?assemblyId=GRCh38&datasetIds=arraymap,progenetix&filters=NCIT:C3326
 * Service info for this Beacon:
-    - https://progenetix.org/cgi-bin/bycon/cgi/byconplus.py/service-info/
+    - https://bycon.progenetix.org/service-info/
 * A "classic" _BeaconAlleleRequest_, for brain stem gliomas with a particular mutation in the _EIF4A1_ gene:
-    - https://progenetix.org/cgi-bin/bycon/cgi/byconplus.py?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7577120&referenceBases=G&alternateBases=A&filters=icdot-C71.7
+    - https://bycon.progenetix.org?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7577120&referenceBases=G&alternateBases=A&filters=icdot-C71.7
 * This is a range query for any SNV resulting in an **A** alternative allele, in a genomic range spanning the  _EIF4A1_ gene:
-    - https://progenetix.org/cgi-bin/bycon/cgi/byconplus.py?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7572841&end=7578485&alternateBases=A&filters=icdot-C71.7
+    - https://bycon.progenetix.org?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7572841&end=7578485&alternateBases=A&filters=icdot-C71.7
 * Another range query, here looking if there are deletions affecting _TP53_ in pre-invasive breast cancer (DCIS, ICD-O 3 8500/2) in the [arraymap](http://arraymap.org) dataset:
-    - https://progenetix.org/cgi-bin/bycon/cgi/byconplus.py?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7669608&end=7676593&variantType=DEL&filters=icdom-85002
+    - https://bycon.progenetix.org?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7669608&end=7676593&variantType=DEL&filters=icdom-85002
 
 #### Databases
 

@@ -52,39 +52,22 @@ def main():
 
     print("=> updating entry in {}.{}".format(byc[ "config" ][ "info_db" ], byc[ "config" ][ "beacon_info_coll"]) )
 
-    b_info = {
-        "date": date_isoformat(datetime.datetime.now()),
-    }
+    b_info = { "date": date_isoformat(datetime.datetime.now()) }
     for ds in byc["datasets_info"]:
-        ds_id = ds["id"]
-        b_info, ds = _dataset_update_counts(b_info, ds, **byc)      
-        ds_with_counts.append(ds)
+        b_info = _dataset_update_counts(b_info, ds, **byc)      
 
-    byc["beacon_info"].update( { "datasets": ds_with_counts } )
-    byc["service_info"].update( { "datasets": ds_with_counts } )
-
-    mongo_client = MongoClient( )
-    print("=> updated entry in {}.{}".format(byc[ "config" ][ "info_db" ], byc[ "config" ][ "beacon_info_coll"]) )
     info_db = mongo_client[ byc[ "config" ][ "info_db" ] ]
     info_coll = info_db[ byc[ "config" ][ "beacon_info_coll"] ]
     info_coll.update_one( { "date" : b_info[ "date" ] }, { "$set": b_info }, upsert=True )
-
-    with open(bsif, 'w') as s:
-        yaml.dump(byc["service_info"], s)
-
-    print("=> output written to {}".format(bsif))
     
+    mongo_client = MongoClient( )
+    print("=> updated entry in {}.{}".format(byc[ "config" ][ "info_db" ], byc[ "config" ][ "beacon_info_coll"]) )
+
 ################################################################################
 ################################################################################
 ################################################################################
 
 def _dataset_update_counts(b_info, ds, **byc):
-
-    count_labels = {
-        "biosamples": "sampleCount",
-        "individuals": "individualCount",
-        "variants": "callCount"
-    }
 
     mongo_client = MongoClient( )
 
@@ -92,33 +75,29 @@ def _dataset_update_counts(b_info, ds, **byc):
     ds_db = mongo_client[ ds_id ]
     b_info.update( { ds_id: { "counts": { } } } )
     c_n = ds_db.list_collection_names()
-    for c in count_labels.keys():
+    for c in byc["config"]["collections"]:
         if c in c_n:
             b_info[ ds_id ]["counts"].update( { c: ds_db[ c ].estimated_document_count() } )
-            ds[ count_labels[ c ] ] = b_info[ ds_id ]["counts"][ c ]
             if c == "variants":
                 v_d = { }
-
                 bar = IncrementalBar(ds_id+' variants', max = ds_db[ c ].estimated_document_count() )
                 for v in ds_db[ c ].find({}):
                     v_d[ v["digest"] ] = 1
                     bar.next()
                 bar.finish()
-                ds[ "variantCount" ] = len(v_d.keys())
-                ds[ "filtering_terms" ] = _dataset_get_filters(ds_id, **byc)
                 b_info[ ds_id ]["counts"].update( { "variants_distinct": len(v_d.keys()) } )
-                b_info[ ds_id ].update( { "filtering_terms": ds[ "filtering_terms" ] } )
+                b_info[ ds_id ].update( { "filtering_terms": _dataset_get_filters(ds_id, **byc) } )
 
-    return(b_info, ds)
+    return(b_info)
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-def _dataset_get_filters(dataset_id, **byc):
+def _dataset_get_filters(ds_id, **byc):
 
     mongo_client = MongoClient( )
-    mongo_db = mongo_client[ dataset_id ]
+    mongo_db = mongo_client[ ds_id ]
     bios_coll = mongo_db[ 'biosamples' ]
 
     filter_v = [ ]
@@ -126,13 +105,13 @@ def _dataset_get_filters(dataset_id, **byc):
 
     split_v = re.compile(r'^(\w+?)[\:\-](\w[\w\.]+?)$')
 
+    bar = IncrementalBar(ds_id+': count filter matches', max = len(biocs) )
     for b in biocs:
-
+        bar.next()
         if split_v.match(b):
             pre, code = split_v.match(b).group(1, 2)
         else:
             continue
-
         l = ""
         labs = bios_coll.find_one( { "biocharacteristics.type.id": b } )
         for bio_c in labs[ "biocharacteristics" ]:
@@ -146,7 +125,7 @@ def _dataset_get_filters(dataset_id, **byc):
             "count": bios_coll.count_documents( { "biocharacteristics.type.id": b } )
         }
         filter_v.append( f )
-
+    bar.finish()
     return(filter_v)
 
 

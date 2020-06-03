@@ -121,7 +121,7 @@ def create_beacon_allele_request_query(variant_request_type, variant_pars):
         
     variant_query = { "$and": [
         { "reference_name": variant_pars[ "referenceName" ] },
-        { "start": int(variant_pars[ "start" ]) },
+        { "start_min": int(variant_pars[ "start" ]) },
         { "reference_bases": variant_pars[ "referenceBases" ] },
         { "alternate_bases": variant_pars[ "alternateBases" ] }
     ]}
@@ -163,8 +163,8 @@ def create_beacon_range_request_query(variant_request_type, variant_pars):
 
     variant_query = { "$and": [
         { "reference_name": variant_pars[ "referenceName" ] },
-        { "start": { "$lt": int(variant_pars[ "end" ]) } },
-        { "end": { "$gte": int(variant_pars[ "start" ]) } },
+        { "start_min": { "$lt": int(variant_pars[ "end" ]) } },
+        { "end_max": { "$gt": int(variant_pars[ "start" ]) } },
         type_par_q
     ]}
 
