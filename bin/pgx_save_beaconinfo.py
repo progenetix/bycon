@@ -3,11 +3,10 @@
 import re, json, yaml
 from os import path as path
 from os import environ
-import sys, os, datetime, logging, argparse
+import sys, os, datetime
 from isodate import date_isoformat
 from pymongo import MongoClient
-from progress.bar import IncrementalBar
-# from progress.bar import Bar
+from progress.bar import Bar
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
@@ -16,9 +15,10 @@ from bycon import *
 
 """
 
-This script reads the Becon definitions from the configuration file, populates
-the filter definition and dataset statistics and saves the enriched beacon info
-as YAML file, to be read in by the `byconplus` web service.
+This script reads the Beacon definitions from the configuration files, populates
+the filter definition and dataset statistics and saves the information ino the
+`progenetix.beaconinfo` database, from where it can be used e.g. by the Beacon
+API (`byconplus`).
 
 """
 
@@ -41,21 +41,15 @@ def main():
     }
 
     byc.update( { "filter_defs": read_filter_definitions( **byc ) } )
-    byc.update( { "dbstats": dbstats_return_latest( **byc ) } )
-    byc.update( { "beacon_info": read_beacon_info( **byc ) } )    
-    byc.update( { "service_info": read_service_info( **byc ) } )
     byc.update( { "datasets_info": read_datasets_info( **byc ) } )
-
-    for par in byc[ "beacon_info" ]:
-        byc[ "service_info" ][ par ] = byc[ "beacon_info" ][ par ]
 
     ds_with_counts = [ ]
 
     print("=> updating entry in {}.{}".format(byc[ "config" ][ "info_db" ], byc[ "config" ][ "beacon_info_coll"]) )
 
-    b_info = { "date": date_isoformat(datetime.datetime.now()) }
+    b_info = { "date": date_isoformat(datetime.datetime.now()), "datasets": { } }
     for ds in byc["datasets_info"]:
-        b_info = _dataset_update_counts(b_info, ds, **byc)      
+        b_info["datasets"].update( { ds["id"]: _dataset_update_counts(b_info, ds, **byc) } )      
 
     mongo_client = MongoClient( )
     info_db = mongo_client[ byc[ "config" ][ "info_db" ] ]
@@ -78,10 +72,11 @@ def _dataset_update_counts(b_info, ds, **byc):
     c_n = ds_db.list_collection_names()
     for c in byc["config"]["collections"]:
         if c in c_n:
-            b_info[ ds_id ]["counts"].update( { c: ds_db[ c ].estimated_document_count() } )
+            no = ds_db[ c ].estimated_document_count()
+            b_info[ ds_id ]["counts"].update( { c: no } )
             if c == "variants":
                 v_d = { }
-                bar = IncrementalBar(ds_id+' variants', max = ds_db[ c ].estimated_document_count() )
+                bar = Bar(ds_id+' variants', max = no, suffix='%(percent)d%%'+" of "+str(no) )
                 for v in ds_db[ c ].find({}):
                     v_d[ v["digest"] ] = 1
                     bar.next()
@@ -120,8 +115,8 @@ def _dataset_get_filters(ds_id, **byc):
                         pfs.append( k )
             except:
                 continue
-
-        bar = IncrementalBar(ds_id+': '+s, max = len(pfs) )
+        no = len(pfs)
+        bar = Bar(ds_id+': '+s, max = no, suffix='%(percent)d%%'+" of "+str(no) )
         for b in pfs:
             bar.next()
             pre, code = split_v.match(b).group(1, 2)          
@@ -146,7 +141,7 @@ def _dataset_get_filters(ds_id, **byc):
 
         bar.finish()
 
-        print("=> {} valid filtering terms out of {} for {}".format(len(pfs), len(afs), ds_id) )
+        print("=> {} valid filtering terms out of {} for {}".format(no, len(afs), ds_id) )
 
     print("=> {} filtering terms for {}".format(len(filter_v), ds_id) )
  

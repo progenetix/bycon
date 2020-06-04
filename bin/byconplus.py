@@ -45,6 +45,7 @@ def _get_args():
     parser.add_argument("-f", "--filters", help="prefixed filter values, comma concatenated")
     parser.add_argument("-t", "--test", action='store_true', help="test from command line with default parameters")
     parser.add_argument("-i", "--info", action='store_true', help="test from command line for info")
+    parser.add_argument("-n", "--filtering_terms", action='store_true', help="test filtering term response")
     args = parser.parse_args()
 
     return(args)
@@ -99,7 +100,6 @@ def byconplus():
     byc.update( { "datasets_info": read_datasets_info( **byc ) } )
     byc["beacon_info"].update( { "datasets": update_datasets_from_db(**byc) } )
 
-
     for par in byc[ "beacon_info" ]:
         byc[ "service_info" ][ par ] = byc[ "beacon_info" ][ par ]
 
@@ -107,18 +107,34 @@ def byconplus():
     if environ.get('REQUEST_URI'):
         if "service-info" in environ.get('REQUEST_URI'):
             cgi_print_json_response( byc["service_info"] )
+
         elif "get-datasetids" in environ.get('REQUEST_URI'):
             dataset_ids = [ ]
             for ds in byc["service_info"]["datasets"]:
                 dataset_ids.append( { "id": ds["id"], "name": ds["name"] } )
             cgi_print_json_response( { "datasets": dataset_ids } )
+
         elif "filtering_terms" in environ.get('REQUEST_URI'):
             ks = ( "id", "name", "apiVersion" )
             resp = { }
+            fts = {  }
+            # for the general filter response, filters from *all* datasets are
+            # being provided
+            for ds_id in byc["dbstats"]["datasets"].keys():
+                ds = byc["dbstats"]["datasets"][ ds_id ]
+                if "filtering_terms" in ds:
+                    for f in ds["filtering_terms"]:
+                        fts[f[ "id" ]] = {  }
+                        for l in ( "id", "label", "source" ):
+                            fts[f[ "id" ]][ l ] = f[ l ]
+            ftl = [ ]
+            for key in sorted(fts):
+                ftl.append( fts[key] )
+
             for k in ks:
                 if k in byc["service_info"]:
                     resp.update( { k: byc["service_info"][ k ] } )
-            resp.update( { "filteringTerms": byc["dbstats"]["progenetix"]["filtering_terms"] } )
+            resp.update( { "filteringTerms": ftl } )
             cgi_print_json_response(resp)
 
     if args.info:
