@@ -92,6 +92,7 @@ def plot_sample_geomap(**kwargs):
 
     try:
         fig.write_image(mapplot)
+        print('\nGEO map was written in', mapplot, end = '.\n')
     except Exception as e:
         print(e)
 

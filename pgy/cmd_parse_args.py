@@ -23,10 +23,10 @@ def pgx_queries_from_js(**kwargs):
 
     queries = { }
     args = kwargs[ "args" ]
-
+    
     if args.queries:
 
-        if "queries" in kwargs:
+        if "queries" not in kwargs:
             print("Please provide either filter values (`-f`) or a JSON query object (`-q).")
             sys.exit()
 

@@ -3,6 +3,7 @@
 data/out/*.tsv
 data/out/*.json
 data/out/*.png
+data/out/*.svg
 data/out/logs/*.tsv
 data/out/yaml/*.yaml
 rsrc/specification-v2/*git
