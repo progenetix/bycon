@@ -79,18 +79,18 @@ geogse:
   examples:
     - 'geogse-GSM253289'
 
-geogsm:
-  name: "NCBI Gene Expression Omnibus Experiment" 
-  url: "https://www.ncbi.nlm.nih.gov/geo/"
-  db_key: 'external_references.type.id'
-  scopes:
-    callsets:
-      default: 0
-    biosamples:
-      default: 1
-  pattern: '^geogsm\-GSM\d+?$'
-  examples:
-    - 'geogsm-GSM253289'
+# geogsm:
+#   name: "NCBI Gene Expression Omnibus Experiment" 
+#   url: "https://www.ncbi.nlm.nih.gov/geo/"
+#   db_key: 'external_references.type.id'
+#   scopes:
+#     callsets:
+#       default: 0
+#     biosamples:
+#       default: 1
+#   pattern: '^geogsm\-GSM\d+?$'
+#   examples:
+#     - 'geogsm-GSM253289'
 
 geogpl:
   name: "NCBI Gene Expression Omnibus Platform"

@@ -103,7 +103,7 @@ def byconplus():
     for par in byc[ "beacon_info" ]:
         byc[ "service_info" ][ par ] = byc[ "beacon_info" ][ par ]
 
-
+    # prototyping some info endpoints => to be factored out ...
     if environ.get('REQUEST_URI'):
         if "service-info" in environ.get('REQUEST_URI'):
             cgi_print_json_response( byc["service_info"] )
@@ -112,6 +112,15 @@ def byconplus():
             for ds in byc["service_info"]["datasets"]:
                 dataset_ids.append( { "id": ds["id"], "name": ds["name"] } )
             cgi_print_json_response( { "datasets": dataset_ids } )
+        elif "filtering_terms" in environ.get('REQUEST_URI'):
+            ks = ( "id", "name", "apiVersion" )
+            resp = { }
+            for k in ks:
+                if k in byc["service_info"]:
+                    resp.update( { k: byc["service_info"][ k ] } )
+            resp.update( { "filteringTerms": byc["dbstats"]["progenetix"]["filtering_terms"] } )
+            cgi_print_json_response(resp)
+
     if args.info:
         cgi_print_json_response( byc["service_info"] )
 

@@ -7,6 +7,7 @@ import sys, os, datetime, logging, argparse
 from isodate import date_isoformat
 from pymongo import MongoClient
 from progress.bar import IncrementalBar
+# from progress.bar import Bar
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
@@ -101,33 +102,49 @@ def _dataset_get_filters(ds_id, **byc):
     bios_coll = mongo_db[ 'biosamples' ]
 
     filter_v = [ ]
-    biocs = bios_coll.distinct( "biocharacteristics.type.id" )
+
+    scopes = ( "external_references", "biocharacteristics")
 
     split_v = re.compile(r'^(\w+?)[\:\-](\w[\w\.]+?)$')
 
-    bar = IncrementalBar(ds_id+': count filter matches', max = len(biocs) )
-    for b in biocs:
-        bar.next()
-        if split_v.match(b):
-            pre, code = split_v.match(b).group(1, 2)
-        else:
-            continue
-        l = ""
-        labs = bios_coll.find_one( { "biocharacteristics.type.id": b } )
-        for bio_c in labs[ "biocharacteristics" ]:
-            if re.match( b, bio_c[ "type" ][ "id" ] ):
-                l = bio_c[ "type" ][ "label" ]
-                continue
-        f = {
-            "source": byc[ "filter_defs" ][ pre ][ "name" ],
-            "id": b,
-            "label": l,
-            "count": bios_coll.count_documents( { "biocharacteristics.type.id": b } )
-        }
-        filter_v.append( f )
-    bar.finish()
-    return(filter_v)
+    for s in scopes:
 
+        s_key = s+".type.id"
+        pfs = [ ]
+        for k in bios_coll.distinct( s_key ):
+            if split_v.match(k):
+                pre, code = split_v.match(k).group(1, 2)
+                if pre in byc["filter_defs"]:
+                    pfs.append( k )
+
+        bar = IncrementalBar(ds_id+': '+s, max = len(pfs) )
+        for b in pfs:
+            bar.next()
+            pre, code = split_v.match(b).group(1, 2)          
+            l = ""
+            labs = bios_coll.find_one( { s_key: b } )
+            # the scope list will contain many items, not only for the
+            # current code
+            for bio_c in labs[ s ]:
+                if bio_c[ "type" ][ "id" ] == b:
+                    try:
+                        l = bio_c[ "type" ][ "label" ]
+                        break
+                    except:
+                        break
+            f = {
+                "source": byc[ "filter_defs" ][ pre ][ "name" ],
+                "id": b,
+                "label": l,
+                "count": bios_coll.count_documents( { s_key: b } )
+            }
+            filter_v.append( f )
+
+        bar.finish()
+
+        print("=> {} valid filtering terms out of {} for {}".format(len(filter_v), len(pfs), ds_id) )
+
+    return(filter_v)
 
 if __name__ == '__main__':
     main()

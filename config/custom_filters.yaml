@@ -25,18 +25,18 @@ icdot:
 
 # Procedural Metadata
 
-tcga:
-  name: "The Cancer Genome Atlas"
-  url: "http://cancergenome.nih.gov"
-  db_key: 'external_references.type.id'
-  scopes:
-    callsets:
-      default: 0
-    biosamples:
-      default: 1
-    individuals:
-      db_key: 'external_references.type.id'
-  pattern: '^tcga:[\-\w]+?$'
-  examples:
-    - 'tcga:000002fc-53a0-420e-b2aa-a40a358bba37'
+# tcga:
+#   name: "The Cancer Genome Atlas"
+#   url: "http://cancergenome.nih.gov"
+#   db_key: 'external_references.type.id'
+#   scopes:
+#     callsets:
+#       default: 0
+#     biosamples:
+#       default: 1
+#     individuals:
+#       db_key: 'external_references.type.id'
+#   pattern: '^tcga:[\-\w]+?$'
+#   examples:
+#     - 'tcga:000002fc-53a0-420e-b2aa-a40a358bba37'
 
