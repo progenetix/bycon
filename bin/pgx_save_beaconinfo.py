@@ -57,11 +57,11 @@ def main():
     for ds in byc["datasets_info"]:
         b_info = _dataset_update_counts(b_info, ds, **byc)      
 
+    mongo_client = MongoClient( )
     info_db = mongo_client[ byc[ "config" ][ "info_db" ] ]
     info_coll = info_db[ byc[ "config" ][ "beacon_info_coll"] ]
     info_coll.update_one( { "date" : b_info[ "date" ] }, { "$set": b_info }, upsert=True )
     
-    mongo_client = MongoClient( )
     print("=> updated entry in {}.{}".format(byc[ "config" ][ "info_db" ], byc[ "config" ][ "beacon_info_coll"]) )
 
 ################################################################################
@@ -110,12 +110,16 @@ def _dataset_get_filters(ds_id, **byc):
     for s in scopes:
 
         s_key = s+".type.id"
+        afs = bios_coll.distinct( s_key )
         pfs = [ ]
-        for k in bios_coll.distinct( s_key ):
-            if split_v.match(k):
-                pre, code = split_v.match(k).group(1, 2)
-                if pre in byc["filter_defs"]:
-                    pfs.append( k )
+        for k in afs:
+            try:
+                if split_v.match(k):
+                    pre, code = split_v.match(k).group(1, 2)
+                    if pre in byc["filter_defs"]:
+                        pfs.append( k )
+            except:
+                continue
 
         bar = IncrementalBar(ds_id+': '+s, max = len(pfs) )
         for b in pfs:
@@ -142,8 +146,10 @@ def _dataset_get_filters(ds_id, **byc):
 
         bar.finish()
 
-        print("=> {} valid filtering terms out of {} for {}".format(len(filter_v), len(pfs), ds_id) )
+        print("=> {} valid filtering terms out of {} for {}".format(len(pfs), len(afs), ds_id) )
 
+    print("=> {} filtering terms for {}".format(len(filter_v), ds_id) )
+ 
     return(filter_v)
 
 if __name__ == '__main__':
