@@ -16,7 +16,6 @@ def plot_sample_geomap(**kwargs):
 
     plotly.io.orca.config.executable = "/usr/local/bin/orca"
     dataset_id = kwargs[ "dataset_id" ]
-    dash_sep = kwargs[ "config" ][ "const" ][ "dash_sep" ]
     args = kwargs[ "args" ]
     label = ""
     if args.label:
@@ -26,9 +25,9 @@ def plot_sample_geomap(**kwargs):
     query = { "_id": { "$in": kwargs[ "biosamples::_id" ] } }
     bios_coll = MongoClient( )[ dataset_id ][ "biosamples" ]
 
-    mapplot = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash_sep.join([ dataset_id, label, "map.svg" ]) )
-    country_data = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash_sep.join([ dataset_id, label, "mapdata.tsv" ]) )    
-    city_data = path.join( kwargs[ "config" ][ "paths" ][ "out" ], dash_sep.join([ dataset_id, label, "mapdata_city.tsv" ]) )    
+    mapplot = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ dataset_id, label, "map.svg" ]) )
+    country_data = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ dataset_id, label, "mapdata.tsv" ]) )    
+    city_data = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ dataset_id, label, "mapdata_city.tsv" ]) )    
 
     geo_s = [ ]
     for bios in bios_coll.find(query):

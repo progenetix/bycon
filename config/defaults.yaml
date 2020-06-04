@@ -4,8 +4,6 @@ dataset_ids:
   - dipg
   - cellosaurus
   # - tcga
-const:
-  dash_sep: '-'
 collections:
   - biosamples
   - callsets
