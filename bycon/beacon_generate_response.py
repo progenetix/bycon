@@ -33,6 +33,15 @@ def read_datasets_info(**byc):
 
 ################################################################################
 
+def dbstats_return_latest(**byc):
+
+# db.dbstats.find().sort({date:-1}).limit(1)
+    dbstats_coll = MongoClient( )[ byc[ "config" ][ "info_db" ] ][ byc[ "config" ][ "beacon_info_coll" ] ]
+    stats = dbstats_coll.find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
+    return(stats[0])
+
+################################################################################
+
 def update_datasets_from_db(**byc):
 
     ds_with_counts = [ ]
@@ -117,15 +126,6 @@ def create_beacon_response(**byc):
             b_response[ "exists" ] = True
 
     return( b_response )
-
-################################################################################
-
-def dbstats_return_latest(**byc):
-
-# db.dbstats.find().sort({date:-1}).limit(1)
-    dbstats_coll = MongoClient( )[ byc[ "config" ][ "info_db" ] ][ byc[ "config" ][ "beacon_info_coll" ] ]
-    stats = dbstats_coll.find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
-    return(stats[0])
 
 ################################################################################
 
