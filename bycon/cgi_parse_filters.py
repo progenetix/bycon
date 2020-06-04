@@ -25,26 +25,26 @@ def parse_filters( **byc ):
         filters = filters.split(',')
         filters = _check_filter_values(filters, byc["filter_defs"])
         return(filters)
-
+    
     if "rest_pars" in byc:
         if "filters" in byc["rest_pars"]:
             filters = byc["rest_pars"][ "filters" ].split(',')
             filters = _check_filter_values(filters, byc["filter_defs"])
             return(filters)
-
+    
      # for debugging
     if "args" in byc:
         if byc["args"].filters:
             filters = byc["args"].filters.split(',')
             filters = _check_filter_values(filters, byc["filter_defs"])
             return(filters)
-
+    
     # for debugging
         if byc["args"].test:
             filters = byc["service_info"][ "sampleAlleleRequests" ][0][ "filters" ]
             filters = _check_filter_values(filters, byc["filter_defs"])
             return(filters)
-
+    
     return([])
 
 ################################################################################
@@ -138,6 +138,7 @@ def create_queries_from_filters( **byc ):
                 queries[ coll_name ] = '{ $and: [ '+','.join(query_lists[coll_name])+' ] }'
             else:
                 queries[ coll_name ] = { "$and": query_lists[coll_name] }
+
     return queries
 
 ################################################################################
