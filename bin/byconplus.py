@@ -32,6 +32,9 @@ from bycon import *
   - <https://bycon.progenetix.org/service-info/>
 * precise variant query together with filter
   - <https://bycon.progenetix.org?datasetIds=dipg/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=17/start=7577120/referenceBases=G/alternateBases=A/filters=icdot-C71.7>
+* retrieving filters
+  - <https://bycon.progenetix.org/filtering_terms/>
+  - <https://bycon.progenetix.org/filtering_terms/prefixes=NCIT,icdom/>
 
 podmd"""
 
@@ -103,6 +106,8 @@ def byconplus():
     for par in byc[ "beacon_info" ]:
         byc[ "service_info" ][ par ] = byc[ "beacon_info" ][ par ]
 
+    web_return_filtering_terms(**byc)
+
     # prototyping some info endpoints => to be factored out ...
     if environ.get('REQUEST_URI'):
         if "service-info" in environ.get('REQUEST_URI'):
@@ -113,29 +118,6 @@ def byconplus():
             for ds in byc["service_info"]["datasets"]:
                 dataset_ids.append( { "id": ds["id"], "name": ds["name"] } )
             cgi_print_json_response( { "datasets": dataset_ids } )
-
-        elif "filtering_terms" in environ.get('REQUEST_URI'):
-            ks = ( "id", "name", "apiVersion" )
-            resp = { }
-            fts = {  }
-            # for the general filter response, filters from *all* datasets are
-            # being provided
-            for ds_id in byc["dbstats"]["datasets"].keys():
-                ds = byc["dbstats"]["datasets"][ ds_id ]
-                if "filtering_terms" in ds:
-                    for f in ds["filtering_terms"]:
-                        fts[f[ "id" ]] = {  }
-                        for l in ( "id", "label", "source" ):
-                            fts[f[ "id" ]][ l ] = f[ l ]
-            ftl = [ ]
-            for key in sorted(fts):
-                ftl.append( fts[key] )
-
-            for k in ks:
-                if k in byc["service_info"]:
-                    resp.update( { k: byc["service_info"][ k ] } )
-            resp.update( { "filteringTerms": ftl } )
-            cgi_print_json_response(resp)
 
     if args.info:
         cgi_print_json_response( byc["service_info"] )

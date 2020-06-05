@@ -7,6 +7,7 @@ from .beacon_generate_response import create_beacon_response
 from .beacon_generate_response import dbstats_return_latest
 from .beacon_generate_response import callsets_return_stats
 from .beacon_generate_response import update_datasets_from_db
+from .beacon_generate_response import web_return_filtering_terms
 from .beacon_parse_spec import read_beacon_v2_spec
 from .cgi_parse_filters import parse_filters
 from .cgi_parse_filters import get_dataset_ids

@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from os import path as path
 from os import environ
 
+from .cgi_utils import *
 ################################################################################
 
 def read_service_info(**byc):
@@ -57,6 +58,53 @@ def update_datasets_from_db(**byc):
         ds_with_counts.append(ds)
 
     return(ds_with_counts)
+
+################################################################################
+
+def web_return_filtering_terms(**byc):
+
+    # prototyping some info endpoints => to be factored out ...
+    if not environ.get('REQUEST_URI'):
+        return()
+
+    if not "filtering_terms" in environ.get('REQUEST_URI'):
+        return()
+    
+    rest_pars = cgi_parse_path_params( "filtering_terms" )
+    
+    pres =  [  ]
+    if "prefixes" in rest_pars:
+        pres = rest_pars["prefixes"].split(",")
+
+    ks = ( "id", "name", "apiVersion" )
+    resp = { }
+    fts = { }
+    # for the general filter response, filters from *all* datasets are
+    # being provided
+    for ds_id in byc["dbstats"]["datasets"].keys():
+        ds = byc["dbstats"]["datasets"][ ds_id ]
+        if "filtering_terms" in ds:
+            for f in ds["filtering_terms"]:
+                fts[f[ "id" ]] = {  }
+                for l in ( "id", "label", "source" ):
+                    fts[f[ "id" ]][ l ] = f[ l ]
+    ftl = [ ]
+    split_v = re.compile(r'^(\w+?)[\:\-](\w[\w\.]+?)$')
+    for key in sorted(fts):
+        if len(pres) > 0:
+            if split_v.match(key):
+                pre, code = split_v.match(key).group(1, 2)
+                if pre in pres:
+                    ftl.append( fts[key] )
+        else: 
+            ftl.append( fts[key] )
+
+    for k in ks:
+        if k in byc["service_info"]:
+            resp.update( { k: byc["service_info"][ k ] } )
+
+    resp.update( { "filteringTerms": ftl } )
+    cgi_print_json_response(resp)
 
 
 ################################################################################
