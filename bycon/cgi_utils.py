@@ -40,6 +40,7 @@ def cgi_parse_path_params( script_name ):
     if not script_name in path_items:
         return(path_pars)
 
+
     i = 0
     p_i = 255
     for p in path_items:

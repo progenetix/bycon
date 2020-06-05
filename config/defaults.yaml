@@ -76,7 +76,6 @@ io_prefixes:
   - geogsm
   - geogse
   - cellosaurus
-stats_collection: dbstats
 plot_pars:
   dotalpha: 0.2
 paths:

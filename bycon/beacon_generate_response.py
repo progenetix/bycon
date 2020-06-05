@@ -48,20 +48,21 @@ def update_datasets_from_db(**byc):
     ds_with_counts = [ ]
     for ds in byc["datasets_info"]:
         ds_id = ds["id"]
-        if ds_id in byc["dbstats"]:
+        if ds_id in byc["dbstats"]["datasets"]:
+            ds_db = byc["dbstats"]["datasets"][ ds_id ]
             for k, l in byc["config"]["beacon_info_count_labels"].items():
-                if "counts" in byc["dbstats"][ ds_id ]:
-                    if k in byc["dbstats"][ ds_id ]["counts"]:
-                        ds[ l ] = byc["dbstats"][ ds_id ]["counts"][ k ]
-            if "filtering_terms" in byc["dbstats"][ ds_id ]:
-                ds[ "filtering_terms" ] = byc["dbstats"][ ds_id ][ "filtering_terms" ]
+                if "counts" in ds_db:
+                    if k in ds_db["counts"]:
+                        ds[ l ] = ds_db["counts"][ k ]
+            if "filtering_terms" in ds_db:
+                ds[ "filtering_terms" ] = ds_db[ "filtering_terms" ]
         ds_with_counts.append(ds)
 
     return(ds_with_counts)
 
 ################################################################################
 
-def web_return_filtering_terms(**byc):
+def respond_filtering_terms_request(**byc):
 
     # prototyping some info endpoints => to be factored out ...
     if not environ.get('REQUEST_URI'):
@@ -76,18 +77,32 @@ def web_return_filtering_terms(**byc):
     if "prefixes" in rest_pars:
         pres = rest_pars["prefixes"].split(",")
 
-    ks = ( "id", "name", "apiVersion" )
+    ks = [ "id", "name", "apiVersion" ]
+    fks = [ "id", "label", "source" ]
+
     resp = { }
+    for k in ks:
+        if k in byc["service_info"]:
+            resp.update( { k: byc["service_info"][ k ] } )
+
     fts = { }
     # for the general filter response, filters from *all* datasets are
     # being provided
-    for ds_id in byc["dbstats"]["datasets"].keys():
+    # if only one => with counts
+    dss = byc["dbstats"]["datasets"].keys()
+    if "datasetId" in rest_pars:
+        if rest_pars["datasetId"] in byc["dbstats"]["datasets"]:
+            dss = [ rest_pars["datasetId"] ]
+            fks.append("count")
+
+    for ds_id in dss:
         ds = byc["dbstats"]["datasets"][ ds_id ]
         if "filtering_terms" in ds:
             for f in ds["filtering_terms"]:
                 fts[f[ "id" ]] = {  }
-                for l in ( "id", "label", "source" ):
+                for l in fks:
                     fts[f[ "id" ]][ l ] = f[ l ]
+ 
     ftl = [ ]
     split_v = re.compile(r'^(\w+?)[\:\-](\w[\w\.]+?)$')
     for key in sorted(fts):
@@ -99,13 +114,8 @@ def web_return_filtering_terms(**byc):
         else: 
             ftl.append( fts[key] )
 
-    for k in ks:
-        if k in byc["service_info"]:
-            resp.update( { k: byc["service_info"][ k ] } )
-
     resp.update( { "filteringTerms": ftl } )
     cgi_print_json_response(resp)
-
 
 ################################################################################
 
@@ -134,7 +144,7 @@ def create_dataset_response(**byc):
         } )
         if dataset_allele_resp[ "variantCount" ] > 0:
             dataset_allele_resp.update( {
-                "frequency": float("%.6f" % (dataset_allele_resp[ "callCount" ] / byc[ "dbstats" ][ byc[ "dataset_id" ] ][ "counts" ][ "variants_distinct" ] ) )
+                "frequency": float("%.6f" % (dataset_allele_resp[ "callCount" ] / byc[ "dbstats" ]["datasets"][ byc[ "dataset_id" ] ][ "counts" ][ "variants_distinct" ] ) )
             } )
             dataset_allele_resp[ "info" ].update( { "variants": byc[ "query_results" ][ "variants::digest" ] })
 

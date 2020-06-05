@@ -106,7 +106,10 @@ def byconplus():
     for par in byc[ "beacon_info" ]:
         byc[ "service_info" ][ par ] = byc[ "beacon_info" ][ par ]
 
-    web_return_filtering_terms(**byc)
+    # checking & responding if `filtering_terms` endpoint
+    # 
+    # TODO: make a homogeneous strategy for the different responses
+    respond_filtering_terms_request(**byc)
 
     # prototyping some info endpoints => to be factored out ...
     if environ.get('REQUEST_URI'):
