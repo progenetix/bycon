@@ -64,7 +64,7 @@ def update_datasets_from_db(**byc):
 
 def respond_filtering_terms_request(**byc):
 
-    # prototyping some info endpoints => to be factored out ...
+    # TODO: in its own module
     if not environ.get('REQUEST_URI'):
         return()
 
@@ -94,6 +94,7 @@ def respond_filtering_terms_request(**byc):
         if rest_pars["datasetId"] in byc["dbstats"]["datasets"]:
             dss = [ rest_pars["datasetId"] ]
             fks.append("count")
+            resp.update( { "datasetId": rest_pars["datasetId"] } )
 
     for ds_id in dss:
         ds = byc["dbstats"]["datasets"][ ds_id ]

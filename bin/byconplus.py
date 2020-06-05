@@ -34,7 +34,9 @@ from bycon import *
   - <https://bycon.progenetix.org?datasetIds=dipg/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=17/start=7577120/referenceBases=G/alternateBases=A/filters=icdot-C71.7>
 * retrieving filters
   - <https://bycon.progenetix.org/filtering_terms/>
+  - <https://bycon.progenetix.org/filtering_terms/prefixes=PMID/>
   - <https://bycon.progenetix.org/filtering_terms/prefixes=NCIT,icdom/>
+  - <https://bycon.progenetix.org/filtering_terms/prefixes=NCIT,icdom,icdot/datasetId=dipg/>
 
 podmd"""
 
