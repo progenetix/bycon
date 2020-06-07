@@ -80,13 +80,6 @@ def byconplus():
     args = _get_args()
     rest_pars = cgi_parse_path_params( "byconplus" )
 
-    if "debug" in form_data:
-        print('Content-Type: text')
-        print()
-        cgitb.enable()
-    else:
-        pass
-
     # logging.info("Init steps: {}".format(datetime.datetime.now()-last_time))
     # last_time = datetime.datetime.now()
 
