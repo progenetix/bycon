@@ -4,11 +4,11 @@ from os import path as path
 
 ################################################################################
 
-def read_filter_definitions( **byc ):
+def read_filter_definitions( **paths ):
 
     filter_defs = {}
     for ff in [ "filters", "custom_filters" ]:
-        with open( path.join(path.abspath(byc[ "config" ][ "paths" ][ "module_root" ]), "config", ff+".yaml") ) as fd:
+        with open( path.join(path.abspath(paths[ "module_root" ]), "config", ff+".yaml") ) as fd:
             defs = yaml.load( fd , Loader=yaml.FullLoader)
             for fpre in defs:
                 filter_defs[fpre] = defs[fpre]

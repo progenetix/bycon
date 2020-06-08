@@ -74,7 +74,7 @@ def main():
         "config": config,
         "args": args,
         "mongostring": True,
-        "filter_defs": read_filter_definitions( **{ "config": config } ) 
+        "filter_defs": read_filter_definitions( **config[ "paths" ] ) 
     }
 
     if args.brutalmatch:

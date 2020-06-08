@@ -94,6 +94,9 @@ paths:
   beacon_info_file:
     - config
     - beacon_info.yaml
+  beacon_paths_file:
+    - config
+    - beacon_paths.yaml
   beacon_datasets_file:
     - config
     - beacon_datasets.yaml

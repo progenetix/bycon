@@ -34,46 +34,50 @@ def main():
     bsif = path.join( config[ "paths" ][ "module_root" ], *config[ "paths" ][ "service_info_file" ] )
 
     # input & definitions
-
     byc = {
         "config": config,
         "get_filters": True,
+        "filter_defs": read_filter_definitions( **config[ "paths" ] ),
+        "datasets_info": read_datasets_info( **config[ "paths" ] )
     }
 
-    byc.update( { "filter_defs": read_filter_definitions( **byc ) } )
-    byc.update( { "datasets_info": read_datasets_info( **byc ) } )
-
-    ds_with_counts = [ ]
-
-    print("=> updating entry in {}.{}".format(byc[ "config" ][ "info_db" ], byc[ "config" ][ "beacon_info_coll"]) )
-
     b_info = { "date": date_isoformat(datetime.datetime.now()), "datasets": { } }
-    for ds in byc["datasets_info"]:
-        b_info["datasets"].update( { ds["id"]: _dataset_update_counts(b_info, ds, **byc) } )      
+
+    print("=> updating entry {} in {}.{}".format(b_info[ "date" ], byc[ "config" ][ "info_db" ], byc[ "config" ][ "beacon_info_coll"]) )
 
     mongo_client = MongoClient( )
+    dbs = MongoClient().list_database_names()
+
+    for ds in byc["datasets_info"]:
+        ds_id = ds["id"]
+        if not ds_id in dbs:
+            print("¡¡¡ Dataset "+ds_id+" doesn't exist !!!")
+        else:
+            b_info["datasets"].update( { ds["id"]: _dataset_update_counts(ds, **byc) } )      
+
     info_db = mongo_client[ byc[ "config" ][ "info_db" ] ]
     info_coll = info_db[ byc[ "config" ][ "beacon_info_coll"] ]
-    info_coll.update_one( { "date" : b_info[ "date" ] }, { "$set": b_info }, upsert=True )
+    info_coll.delete_many( { "date": b_info["date"] } ) #, upsert=True 
+    info_coll.insert_one( b_info ) #, upsert=True 
     
-    print("=> updated entry in {}.{}".format(byc[ "config" ][ "info_db" ], byc[ "config" ][ "beacon_info_coll"]) )
+    print("=> updated entry {} in {}.{}".format(b_info["date"], byc[ "config" ][ "info_db" ], byc[ "config" ][ "beacon_info_coll"]) )
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-def _dataset_update_counts(b_info, ds, **byc):
+def _dataset_update_counts(ds, **byc):
 
     mongo_client = MongoClient( )
 
     ds_id = ds["id"]
     ds_db = mongo_client[ ds_id ]
-    b_info.update( { ds_id: { "counts": { } } } )
+    b_i_ds = { "counts": { } }
     c_n = ds_db.list_collection_names()
     for c in byc["config"]["collections"]:
         if c in c_n:
             no = ds_db[ c ].estimated_document_count()
-            b_info[ ds_id ]["counts"].update( { c: no } )
+            b_i_ds["counts"].update( { c: no } )
             if c == "variants":
                 v_d = { }
                 bar = Bar(ds_id+' variants', max = no, suffix='%(percent)d%%'+" of "+str(no) )
@@ -81,10 +85,10 @@ def _dataset_update_counts(b_info, ds, **byc):
                     v_d[ v["digest"] ] = 1
                     bar.next()
                 bar.finish()
-                b_info[ ds_id ]["counts"].update( { "variants_distinct": len(v_d.keys()) } )
-                b_info[ ds_id ].update( { "filtering_terms": _dataset_get_filters(ds_id, **byc) } )
+                b_i_ds["counts"].update( { "variants_distinct": len(v_d.keys()) } )
+                b_i_ds.update( { "filtering_terms": _dataset_get_filters(ds_id, **byc) } )
 
-    return(b_info)
+    return(b_i_ds)
 
 ################################################################################
 ################################################################################

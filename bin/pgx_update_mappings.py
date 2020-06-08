@@ -71,7 +71,7 @@ def main():
         "args": args,
         "dataset_id": dataset_id,
         "update_collection": "biosamples",
-        "filter_defs": read_filter_definitions( **{ "config": config } ) 
+        "filter_defs": read_filter_definitions( **config[ "paths" ] ) 
     }
     
     ############################################################################
