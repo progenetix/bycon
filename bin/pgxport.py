@@ -61,6 +61,7 @@ def _get_args():
     parser.add_argument("-a", "--dotalpha", help="dot opacity for plotting")
     parser.add_argument("-l", "--label", help="keyword label for output files")
     parser.add_argument("-t", "--test", help="test settings")
+    parser.add_argument("-i", "--interactive", help="default prompt for customized outputs; 0 output biosamples table")
 
     args = parser.parse_args()
 
@@ -81,6 +82,12 @@ def _check_args(config, args):
     if args.outdir:
         config[ "paths" ][ "out" ] = args.outdir
         
+    if args.interactive == '0':
+        config['prompt'] = False
+    else:
+        print('Default chosen interactive mode.')
+        config['prompt'] = True
+
     if not path.isdir( config[ "paths" ][ "out" ] ):
         print("""
 The output directory:
@@ -127,22 +134,25 @@ def main():
     kwargs.update( { "callsets::_id": query_results["callsets::_id"] } )
     kwargs.update( { "biosamples::_id": query_results["biosamples::_id"] } )
     
-    if confirm_prompt("Export Biosamples table?", True):
-        print("=> exporting biosamples")
+    if config['prompt']:
+        if confirm_prompt("Export Biosamples table?", True):
+            print("=> exporting biosamples")
+            write_biosamples_table(**kwargs)
+
+        if confirm_prompt("Export Callsets matrix files?", False):
+            print("=> exporting matrix files")
+            write_callsets_matrix_files(**kwargs)
+
+        if confirm_prompt("Plot CNV statistics?", False):
+            print("=> plotting CNV statistics")
+            kwargs.update( { "callsets_stats": callsets_return_stats(**kwargs) } )
+            plot_callset_stats(**kwargs)
+
+        if confirm_prompt("Create sample map?", True):
+            print("=> plotting map")
+            plot_sample_geomap(**kwargs)
+    else:
         write_biosamples_table(**kwargs)
-
-    if confirm_prompt("Export Callsets matrix files?", False):
-        print("=> exporting matrix files")
-        write_callsets_matrix_files(**kwargs)
-
-    if confirm_prompt("Plot CNV statistics?", False):
-        print("=> plotting CNV statistics")
-        kwargs.update( { "callsets_stats": callsets_return_stats(**kwargs) } )
-        plot_callset_stats(**kwargs)
-
-    if confirm_prompt("Create sample map?", True):
-        print("=> plotting map")
-        plot_sample_geomap(**kwargs)
 
 ################################################################################
 ################################################################################
