@@ -18,10 +18,11 @@ def respond_filtering_terms_request(**byc):
         return()
     
     rest_pars = cgi_parse_path_params( "filtering_terms" )
-    
-    pres =  [  ]
-    if "prefixes" in rest_pars:
-        pres = rest_pars["prefixes"].split(",")
+
+    filters =  [ ]
+    pres = [ ]
+    if "filters" in rest_pars:
+        pres = rest_pars["filters"].split(",")
 
     ks = [ "id", "name", "apiVersion" ]
     fks = [ "id", "label", "source" ]
@@ -32,9 +33,10 @@ def respond_filtering_terms_request(**byc):
             resp.update( { k: byc["service_info"][ k ] } )
 
     fts = { }
+
     # for the general filter response, filters from *all* datasets are
     # being provided
-    # if only one => with counts
+    # if only one => counts are added back
     dss = byc["dbstats"]["datasets"].keys()
     if "datasetId" in rest_pars:
         if rest_pars["datasetId"] in byc["dbstats"]["datasets"]:
@@ -51,12 +53,11 @@ def respond_filtering_terms_request(**byc):
                     fts[f[ "id" ]][ l ] = f[ l ]
  
     ftl = [ ]
-    split_v = re.compile(r'^(\w+?)[\:\-](\w[\w\.]+?)$')
     for key in sorted(fts):
         if len(pres) > 0:
-            if split_v.match(key):
-                pre, code = split_v.match(key).group(1, 2)
-                if pre in pres:
+            for f in pres:
+                f_t = re.compile(r'^'+f)
+                if f_t.match(key):
                     ftl.append( fts[key] )
         else: 
             ftl.append( fts[key] )
