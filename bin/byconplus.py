@@ -67,8 +67,6 @@ def byconplus():
 
     # last_time = datetime.datetime.now()
     # logging.info("Start: {}".format(last_time))
-
-#     read_beacon_v2_spec(dir_path)
     
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
         config = yaml.load( cf , Loader=yaml.FullLoader)
@@ -80,13 +78,6 @@ def byconplus():
     args = _get_args()
     rest_pars = cgi_parse_path_params( "byconplus" )
 
-    if "debug" in form_data:
-        print('Content-Type: text')
-        print()
-        cgitb.enable()
-    else:
-        pass
-
     # logging.info("Init steps: {}".format(datetime.datetime.now()-last_time))
     # last_time = datetime.datetime.now()
 
@@ -96,14 +87,18 @@ def byconplus():
         "args": args,
         "form_data": form_data,
         "rest_pars": rest_pars,
+        "filter_defs": read_filter_definitions( **config[ "paths" ] ),
+        "datasets_info": read_datasets_info( **config[ "paths" ] ),
+        "service_info": read_service_info( **config[ "paths" ] ),
+        "beacon_info": read_beacon_info( **config[ "paths" ] ),
+        "beacon_paths": read_beacon_api_paths( **config[ "paths" ] ),
         "get_filters": False
     }
-    byc.update( { "filter_defs": read_filter_definitions( **byc ) } )
     byc.update( { "dbstats": dbstats_return_latest( **byc ) } )
-    byc.update( { "beacon_info": read_beacon_info( **byc ) } )    
-    byc.update( { "service_info": read_service_info( **byc ) } )
-    byc.update( { "datasets_info": read_datasets_info( **byc ) } )
     byc["beacon_info"].update( { "datasets": update_datasets_from_db(**byc) } )
+
+    byc.update( { "endpoint": beacon_get_endpoint(**byc) } )
+
 
     for par in byc[ "beacon_info" ]:
         byc[ "service_info" ][ par ] = byc[ "beacon_info" ][ par ]

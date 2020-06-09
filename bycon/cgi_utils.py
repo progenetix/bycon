@@ -9,9 +9,30 @@ from urllib.parse import urlparse
 def cgi_parse_query():
 
     form_data = cgi.FieldStorage()
+
+    if "debug" in form_data:
+        print('Content-Type: text')
+        print()
+        cgitb.enable()
+    else:
+        pass
+
     return(form_data)
 
 ################################################################################
+
+def beacon_get_endpoint(**byc):
+
+    url_comps = urlparse( environ.get('REQUEST_URI') )
+    for path in byc["beacon_paths"].keys():
+        if path == url_comps.path:
+            # print('success: "{}"'.format(path))
+            return(path)
+    # print("error - path {} not found".format(url_comps.path))
+    # exit()
+
+################################################################################
+
 
 def cgi_parse_path_params( script_name ):
     """
@@ -40,7 +61,6 @@ def cgi_parse_path_params( script_name ):
     if not script_name in path_items:
         return(path_pars)
 
-
     i = 0
     p_i = 255
     for p in path_items:
@@ -54,6 +74,17 @@ def cgi_parse_path_params( script_name ):
                     path_pars[ par ] = val
             except Exception:
                 pass
+    
+    if "debug" in path_pars:
+        if path_pars["debug"]:
+            print('Content-Type: text')
+            print()
+
+            cgitb.enable()
+        else:
+            pass
+    else:
+        pass
 
     return(path_pars)
 

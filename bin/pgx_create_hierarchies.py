@@ -46,7 +46,7 @@ def main():
     config[ "paths" ][ "mapping_file" ] = path.join( config[ "paths" ][ "module_root" ], "rsrc", "ncit", "neoplasm-core.json" )
     config[ "paths" ][ "hier_file" ] = path.join( config[ "paths" ][ "module_root" ], "rsrc", "ncit", "Neoplasm_Core_Hierarchy_Plus.txt" )
     
-    filter_defs = read_filter_definitions( **{ "config": config } )    
+    filter_defs = read_filter_definitions( **config[ "paths" ] )    
   
     # processing ncit
     # TODO: module, reading in the different hierarchies (ICDO-M, NCIt ...)

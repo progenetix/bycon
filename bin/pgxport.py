@@ -114,7 +114,7 @@ def main():
         "config": config,
         "args": args,
         "dataset_id": args.datasetid,
-        "filter_defs": read_filter_definitions( **{ "config": config } )
+        "filter_defs": read_filter_definitions( **config[ "paths" ] )
     }
 
     print("=> files will be written to {}".format(config[ "paths" ][ "out" ]))
