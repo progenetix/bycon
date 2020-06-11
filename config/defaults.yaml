@@ -100,6 +100,9 @@ paths:
   beacon_datasets_file:
     - config
     - beacon_datasets.yaml
+  handover_types_file:
+    - config
+    - beacon_handovers.yaml
   service_info_file:
     - config
     - service_info.yaml

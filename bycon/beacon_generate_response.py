@@ -8,6 +8,53 @@ from .cgi_utils import *
 
 ################################################################################
 
+def respond_empty_request(**byc):
+
+    if not environ.get('REQUEST_URI'):
+        return()
+    if len(byc["rest_pars"]) > 0:
+        return()
+    if len(byc["form_data"]) > 0:
+        return()
+    if byc["endpoint"]:
+        if not byc["endpoint"] == "/":
+            return()
+    if byc["args"]:
+        if not byc["args"].info:
+            return()
+
+    # current default response
+    cgi_print_json_response( byc["service_info"] )
+
+################################################################################
+
+def respond_get_datasetids_request(**byc):
+
+    if not environ.get('REQUEST_URI'):
+        return()
+
+    if not "get-datasetids" in environ.get('REQUEST_URI'):
+        return()
+
+    dataset_ids = [ ]
+    for ds_id in byc["datasets_info"].keys():
+        dataset_ids.append( { "id": ds_id, "name": byc["datasets_info"][ds_id]["name"] } )
+    cgi_print_json_response( { "datasets": dataset_ids } )
+
+################################################################################
+
+def respond_service_info_request(**byc):
+
+    if not environ.get('REQUEST_URI'):
+        return()
+
+    if not "service-info" in environ.get('REQUEST_URI'):
+        return()
+
+    cgi_print_json_response( byc["service_info"] )
+
+################################################################################
+
 def respond_filtering_terms_request(**byc):
 
     # TODO: in its own module

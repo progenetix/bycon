@@ -45,27 +45,23 @@ def read_datasets_info(**paths):
 
 def dbstats_return_latest(**byc):
 
-# db.dbstats.find().sort({date:-1}).limit(1)
     dbstats_coll = MongoClient( )[ byc[ "config" ][ "info_db" ] ][ byc[ "config" ][ "beacon_info_coll" ] ]
     stats = dbstats_coll.find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
     return(stats[0])
 
 ################################################################################
 
-def update_datasets_from_db(**byc):
+def update_datasets_from_dbstats(**byc):
 
     ds_with_counts = [ ]
-    for ds in byc["datasets_info"]:
-        ds_id = ds["id"]
+    for ds_id in byc["datasets_info"].keys():
+        ds = byc["datasets_info"][ds_id]
         if ds_id in byc["dbstats"]["datasets"]:
             ds_db = byc["dbstats"]["datasets"][ ds_id ]
             for k, l in byc["config"]["beacon_info_count_labels"].items():
                 if "counts" in ds_db:
                     if k in ds_db["counts"]:
                         ds[ l ] = ds_db["counts"][ k ]
-            if "filtering_terms" in ds_db:
-                ds[ "filtering_terms" ] = ds_db[ "filtering_terms" ]
         ds_with_counts.append(ds)
 
     return(ds_with_counts)
-

@@ -2,12 +2,13 @@ parameters:
 
   assemblyId:
     dbkey: assembly_id
-    pattern: '^\w+?(\.\d+?)?$'
+    pattern: '^\w+?[\w\-]*?\w*?$' # for 2019-nCoV
     default: GRCh38
 
   referenceName:
     dbkey: reference_name
-    pattern: '^([1-9]|1\d|2[0-4]|[XY]|MT)$'
+#        pattern: '^([1-9]|1\d|2[0-4]|[XY]|MT)$'
+    pattern: '^\w+?[\w\-]*?\w*?$' # for 2019-nCoV
 
   mateName:
     dbkey: mate_name

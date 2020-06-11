@@ -11,7 +11,7 @@ def read_variant_definitions(**byc):
     variant_defs = {}
     with open( path.join(path.abspath(byc[ "config" ][ "paths" ][ "module_root" ]), "config", "variant_parameters.yaml") ) as vd:
         v_defs = yaml.load( vd , Loader=yaml.FullLoader)
-        variant_defs = v_defs["parameters"]     
+        variant_defs = v_defs["parameters"]
     
     variant_request_types = {}
     with open( path.join(path.abspath(byc[ "config" ][ "paths" ][ "module_root" ]), "config", "variant_request_types.yaml") ) as vrt:

@@ -62,7 +62,7 @@ def _check_filter_values(filters, filter_defs):
   
 ################################################################################
 
-def get_dataset_ids( **byc ):
+def select_dataset_ids( **byc ):
 
     dataset_ids = byc[ "form_data" ].getlist('datasetIds')
     dataset_ids = ','.join(dataset_ids)

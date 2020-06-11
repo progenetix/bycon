@@ -48,12 +48,11 @@ def main():
     mongo_client = MongoClient( )
     dbs = MongoClient().list_database_names()
 
-    for ds in byc["datasets_info"]:
-        ds_id = ds["id"]
+    for ds_id in byc["datasets_info"].keys():
         if not ds_id in dbs:
             print("¡¡¡ Dataset "+ds_id+" doesn't exist !!!")
         else:
-            b_info["datasets"].update( { ds["id"]: _dataset_update_counts(ds, **byc) } )      
+            b_info["datasets"].update( { ds_id: _dataset_update_counts(byc["datasets_info"][ds_id], **byc) } )      
 
     info_db = mongo_client[ byc[ "config" ][ "info_db" ] ]
     info_coll = info_db[ byc[ "config" ][ "beacon_info_coll"] ]

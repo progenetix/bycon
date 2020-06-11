@@ -94,35 +94,21 @@ def byconplus():
         "beacon_paths": read_beacon_api_paths( **config[ "paths" ] ),
         "get_filters": False
     }
+
     byc.update( { "dbstats": dbstats_return_latest( **byc ) } )
-    byc["beacon_info"].update( { "datasets": update_datasets_from_db(**byc) } )
-
+    byc["beacon_info"].update( { "datasets": update_datasets_from_dbstats(**byc) } )
     byc.update( { "endpoint": beacon_get_endpoint(**byc) } )
-
 
     for par in byc[ "beacon_info" ]:
         byc[ "service_info" ][ par ] = byc[ "beacon_info" ][ par ]
 
-    # checking & responding if `filtering_terms` endpoint
-    # 
-    # TODO: make a homogeneous strategy for the different responses
+    respond_empty_request(**byc)
+    respond_get_datasetids_request(**byc)
     respond_filtering_terms_request(**byc)
+    respond_service_info_request(**byc)
 
-    # prototyping some info endpoints => to be factored out ...
-    if environ.get('REQUEST_URI'):
-        if "service-info" in environ.get('REQUEST_URI'):
-            cgi_print_json_response( byc["service_info"] )
-
-        elif "get-datasetids" in environ.get('REQUEST_URI'):
-            dataset_ids = [ ]
-            for ds in byc["service_info"]["datasets"]:
-                dataset_ids.append( { "id": ds["id"], "name": ds["name"] } )
-            cgi_print_json_response( { "datasets": dataset_ids } )
-
-    if args.info:
-        cgi_print_json_response( byc["service_info"] )
-
-    byc.update( { "dataset_ids": get_dataset_ids( **byc ) } )
+    # adding arguments for querying / processing data
+    byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
     byc.update( { "filters":  parse_filters( **byc ) } )
     byc[ "variant_defs" ], byc[ "variant_request_types" ] = read_variant_definitions( **byc )
     byc.update( { "variant_pars": parse_variants( **byc ) } )
@@ -133,6 +119,7 @@ def byconplus():
         variant_query_generator = "create_"+byc["variant_request_type"]+"_query"
         byc["queries"].update( { "variants": getattr(cgi_parse_variant_requests, variant_query_generator)( byc["variant_request_type"], byc["variant_pars"] ) } )
 
+    # fallback - but maybe shouldbe an error response?
     if not byc[ "queries" ]:
         cgi_print_json_response(byc["service_info"])
             
