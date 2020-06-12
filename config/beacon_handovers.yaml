@@ -5,32 +5,37 @@ h->o_types:
     label: "CNV Histogram"
     description: "create a CNV histogram from matched callsets"
     h->o_key: 'cs._id'
+    script_path_web: 'http://progenetix.org/cgi-bin/beacondeliver.cgi'
   biosamplesdata:
     id: 'pgx:handover:biosamplesdata'
     label: "Biosamples"
     description: "retrieve data of the biosamples matched by the query"
     h->o_key: 'bs._id'
+    script_path_web: 'http://progenetix.org/cgi-bin/beacondeliver.cgi'
   individualsdata:
     id: 'pgx:handover:individualsdata'
     label: "Individuals"
     description: "retrieve data of the individuals matched by the query"
     h->o_key: 'is._id'
+    script_path_web: 'http://progenetix.org/cgi-bin/beacondeliver.cgi'
   variantsdata:
     id: 'pgx:handover:variantsdata'
     label: "Variants"
     description: "retrieve variants matched by the query"
     h->o_key: 'vs._id'
+    script_path_web: 'http://progenetix.org/cgi-bin/beacondeliver.cgi'
   callsetsvariants:
     id: 'pgx:handover:callsetsvariants'
     label: "Callsets Variants"
     description: "export all variants of matched callsets - potentially huge dataset..."
     h->o_key: 'cs._id'
+    script_path_web: 'http://progenetix.org/cgi-bin/beacondeliver.cgi'
   progenetixtools:
     id: 'pgx:handover:progenetixtools'
     label: "Progenetix Interface"
     description: "hand the data over to the Progenetix interface for visualization and additional information"
     h->o_key: 'cs._id'
-    script_path_web: '/cgi-bin/pgx_process.cgi'
+    script_path_web: 'http://progenetix.org/cgi-bin/pgx_process.cgi'
   UCSClink:   
     id: 'pgx:handover:bedfile2ucsc'
     label: "Variants in UCSC"

@@ -148,25 +148,69 @@ def create_dataset_response(**byc):
             if dataset_allele_resp[ this_c ] > 0:
                  dataset_allele_resp.update( { "exists": True } )
 
+    dataset_allele_resp.update( { "datasetHandover": _dataset_response_add_handovers(**byc) } )
+
+    return( dataset_allele_resp )
+
+################################################################################
+
+def _dataset_response_add_handovers(**byc):
+
+    b_h_o = [ ]
+
+    ds_h_o =  byc["datasets_info"][ byc[ "dataset_id" ] ]["handoverTypes"]
+    h_o_types = byc["h->o"]["h->o_types"]
+
     ho_client = MongoClient()
     ho_db = ho_client[ byc["config"]["info_db"] ]
     ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
 
     h_o_db_k = [ ]
-    for h_o_t in byc["datasets_info"][ byc[ "dataset_id" ] ]["handoverTypes"]:
-        for h_o in byc[ "query_results" ].keys():
-            if h_o == byc["h->o"]["h->o_types"][ h_o_t ][ "h->o_key" ]:
-                if not h_o in h_o_db_k:
-                    h_o_db_k.append(h_o)
-                    ho_coll.update_one( { "id": byc[ "query_results" ][ h_o ]["id"] }, { '$set': byc[ "query_results" ][ h_o ] }, upsert=True )
-                dataset_allele_resp["datasetHandover"].append( {
-                    "id": byc["h->o"]["h->o_types"][ h_o_t ][ "id" ],
-                    "label": byc["h->o"]["h->o_types"][ h_o_t ][ "label" ],
-                    "description": byc["h->o"]["h->o_types"][ h_o_t ][ "description" ],
-                    "h->o_id": byc[ "query_results" ][ h_o ]["id"]
-                } )
 
-    return( dataset_allele_resp )
+    for h_o_t in h_o_types.keys():
+
+        h_o_defs = h_o_types[ h_o_t ]
+
+        if not h_o_t in ds_h_o:
+            continue
+
+        for h_o_key in byc[ "query_results" ].keys():
+            h_o = byc[ "query_results" ][ h_o_key ]
+            if h_o_key == h_o_types[ h_o_t ][ "h->o_key" ]:
+                if not h_o_key in h_o_db_k:
+                    h_o_db_k.append(h_o)
+                    ho_coll.update_one( { "id": h_o["id"] }, { '$set': h_o }, upsert=True )
+
+                h_o_r = {
+                    "handoverType": {
+                        "id": h_o_defs[ "id" ],
+                        "label": h_o_defs[ "label" ],
+                    },
+                    "description": h_o_defs[ "description" ],
+                }
+
+                www = str(environ.get('SERVER_NAME'))
+
+                if "script_path_web" in h_o_defs:
+                    if re.compile( ".test" ).match( www ):
+                        h_o_defs["script_path_web"].replace( ".org", ".test")
+                    h_o_r.update( { "url": "{}?do={}&accessid={}".format(h_o_defs["script_path_web"], h_o_t, h_o["id"]) } )
+
+                b_h_o.append( h_o_r )
+
+    return( b_h_o )
+
+################################################################################
+
+# def create_handover_exporter(**byc):
+
+
+
+
+
+
+
+
 
 ################################################################################
 
@@ -183,7 +227,7 @@ def create_beacon_response(**byc):
         "exists": False,
         "beaconAlleleRequest" : byc[ "variant_pars" ]
     }
-    # print( byc[ "service_info" ].keys() )
+
     for b_a in b_attr:
         try:
             b_response[ b_a ] = byc[ "service_info" ][ b_a ]

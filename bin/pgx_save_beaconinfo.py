@@ -107,8 +107,8 @@ def _dataset_get_filters(ds_id, **byc):
 
     for s in scopes:
 
-        s_key = s+".type.id"
-        afs = bios_coll.distinct( s_key )
+        source_key = s+".type.id"
+        afs = bios_coll.distinct( source_key )
         pfs = [ ]
         for k in afs:
             try:
@@ -124,7 +124,7 @@ def _dataset_get_filters(ds_id, **byc):
             bar.next()
             pre, code = split_v.match(b).group(1, 2)          
             l = ""
-            labs = bios_coll.find_one( { s_key: b } )
+            labs = bios_coll.find_one( { source_key: b } )
             # the scope list will contain many items, not only for the
             # current code
             for bio_c in labs[ s ]:
@@ -138,7 +138,7 @@ def _dataset_get_filters(ds_id, **byc):
                 "source": byc[ "filter_defs" ][ pre ][ "name" ],
                 "id": b,
                 "label": l,
-                "count": bios_coll.count_documents( { s_key: b } )
+                "count": bios_coll.count_documents( { source_key: b } )
             }
             filter_v.append( f )
 

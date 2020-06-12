@@ -40,7 +40,7 @@ The `cytobands` and `chrobases` parameters can be used for running the script on
 * retrieve coordinates for some bands on chromosome 8
   - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=NCBI36.1&cytoBands=8q>
 * as above, just as text:
-  - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=NCBI36.1&cytoBands=8q&text=1>
+  - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=NCBI.1&cytoBands=8q&text=1>
   - *cytomapper shortcut*: <https://progenetix.org/services/cytomapper/?assemblyId=NCBI36.1&cytoBands=8q&text=1>
 * get the cytobands whith which a base range on chromosome 17 overlaps, in short and long form
   - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=GRCh38&referenceName=17&start=800000&end=24326000>

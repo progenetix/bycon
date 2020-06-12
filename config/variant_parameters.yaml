@@ -2,7 +2,7 @@ parameters:
 
   assemblyId:
     dbkey: assembly_id
-    pattern: '^\w+?[\w\-]*?\w*?$' # for 2019-nCoV
+    pattern: '^\w+?[\w\-\.]*?\w*?$' # for 2019-nCoV
     default: GRCh38
 
   referenceName:
