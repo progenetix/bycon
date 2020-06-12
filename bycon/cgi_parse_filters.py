@@ -20,19 +20,21 @@ def read_filter_definitions( **paths ):
 def parse_filters( **byc ):
 
     if "form_data" in byc:
-        filters = byc["form_data"].getlist('filters')
-        filters = ','.join(filters)
-        filters = filters.split(',')
-        filters = _check_filter_values(filters, byc["filter_defs"])
-        return(filters)
+        if len(byc["form_data"]) > 0:
+            filters = byc["form_data"].getlist('filters')
+            filters = ','.join(filters)
+            filters = filters.split(',')
+            filters = _check_filter_values(filters, byc["filter_defs"])
+            return(filters)
     
+
     if "rest_pars" in byc:
         if "filters" in byc["rest_pars"]:
             filters = byc["rest_pars"][ "filters" ].split(',')
             filters = _check_filter_values(filters, byc["filter_defs"])
             return(filters)
     
-     # for debugging
+    # for debugging
     if "args" in byc:
         if byc["args"].filters:
             filters = byc["args"].filters.split(',')

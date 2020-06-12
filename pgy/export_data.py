@@ -34,7 +34,7 @@ def write_biosamples_table(**kwargs):
     tmp_bios_file = "_tmp-"+biosfl
 
     dataset_id = kwargs[ "dataset_id" ]
-    query = { "_id": { "$in": kwargs[ "biosamples::_id" ] } }
+    query = { "_id": { "$in": kwargs[ "bs._id" ] } }
 
     bios_coll = MongoClient( )[ dataset_id ][ "biosamples" ]
 
@@ -93,7 +93,7 @@ def write_callsets_matrix_files(**kwargs):
     vmf = open( tmp_values_matrix_file, 'w' )
     sm_no = 0
     vm_no = 0
-    for cs in mongo_coll.find({"_id": {"$in": kwargs["callsets::_id"] }}) :
+    for cs in mongo_coll.find({"_id": {"$in": kwargs["cs._id"] }}) :
         cs = callsets_add_metadata( cs, **kwargs )
         cs_meta = [ cs[ "id" ] ]
         for pre in io_prefixes:

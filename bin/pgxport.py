@@ -131,8 +131,8 @@ def main():
 
     query_results = execute_bycon_queries(**kwargs)
 
-    kwargs.update( { "callsets::_id": query_results["callsets::_id"] } )
-    kwargs.update( { "biosamples::_id": query_results["biosamples::_id"] } )
+    kwargs.update( { "cs._id": query_results["cs._id"] } )
+    kwargs.update( { "bs._id": query_results["bs._id"] } )
     
     if config['prompt']:
         if confirm_prompt("Export Biosamples table?", True):

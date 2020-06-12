@@ -8,6 +8,7 @@ from .beacon_generate_response import respond_get_datasetids_request
 from .beacon_generate_response import respond_service_info_request
 from .beacon_process_specs import read_beacon_info
 from .beacon_process_specs import read_datasets_info
+from .beacon_process_specs import read_handover_info
 from .beacon_process_specs import read_service_info
 from .beacon_process_specs import read_beacon_api_paths
 from .beacon_process_specs import dbstats_return_latest

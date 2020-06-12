@@ -24,13 +24,14 @@ beacon_info:
         - arraymap
       assemblyId: GRCh38
       referenceName: '9'
-      startMin: 18000000
+      startMin: 21000000
       startMax: 21975098
       endMin: 21967753
-      endMax: 26000000
+      endMax: 25000000
       variantType: "DEL"
       filters:
         - "icdom-94403"
+        - "icdot-C71"
     - datasetIds:
         - dipg
       assemblyId: GRCh38

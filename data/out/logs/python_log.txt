@@ -10,9 +10,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.007753
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000001
-INFO:root:	 callsets::_id: 0:00:00.014798
-INFO:root:	 biosamples::id: 0:00:00.010231
-INFO:root:	 biosamples::_id: 0:00:00.019981
+INFO:root:	 cs._id: 0:00:00.014798
+INFO:root:	 bs.id: 0:00:00.010231
+INFO:root:	 bs._id: 0:00:00.019981
 INFO:root:	 counts for all callsets: 0:00:00.000459
 INFO:root:	 counts for all biosamples: 0:00:00.000302
 INFO:root:	 variant counts: 0:00:00.000290
@@ -30,9 +30,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.009105
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000001
-INFO:root:	 callsets::_id: 0:00:00.005449
-INFO:root:	 biosamples::id: 0:00:00.007602
-INFO:root:	 biosamples::_id: 0:00:00.009685
+INFO:root:	 cs._id: 0:00:00.005449
+INFO:root:	 bs.id: 0:00:00.007602
+INFO:root:	 bs._id: 0:00:00.009685
 INFO:root:	 counts for all callsets: 0:00:00.000716
 INFO:root:	 counts for all biosamples: 0:00:00.000997
 INFO:root:	 variant counts: 0:00:00.000408
@@ -55,9 +55,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.005696
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000002
-INFO:root:	 callsets::_id: 0:00:00.011739
-INFO:root:	 biosamples::id: 0:00:00.005601
-INFO:root:	 biosamples::_id: 0:00:00.004280
+INFO:root:	 cs._id: 0:00:00.011739
+INFO:root:	 bs.id: 0:00:00.005601
+INFO:root:	 bs._id: 0:00:00.004280
 INFO:root:	 counts for all callsets: 0:00:00.000409
 INFO:root:	 counts for all biosamples: 0:00:00.000312
 INFO:root:	 variant counts: 0:00:00.000296
@@ -76,9 +76,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.008072
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000003
-INFO:root:	 callsets::_id: 0:00:00.007936
-INFO:root:	 biosamples::id: 0:00:00.009326
-INFO:root:	 biosamples::_id: 0:00:00.008838
+INFO:root:	 cs._id: 0:00:00.007936
+INFO:root:	 bs.id: 0:00:00.009326
+INFO:root:	 bs._id: 0:00:00.008838
 INFO:root:	 counts for all callsets: 0:00:00.000619
 INFO:root:	 counts for all biosamples: 0:00:00.000478
 INFO:root:	 variant counts: 0:00:00.000537
@@ -97,9 +97,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.008364
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000003
-INFO:root:	 callsets::_id: 0:00:00.010912
-INFO:root:	 biosamples::id: 0:00:00.006384
-INFO:root:	 biosamples::_id: 0:00:00.007282
+INFO:root:	 cs._id: 0:00:00.010912
+INFO:root:	 bs.id: 0:00:00.006384
+INFO:root:	 bs._id: 0:00:00.007282
 INFO:root:	 counts for all callsets: 0:00:00.000705
 INFO:root:	 counts for all biosamples: 0:00:00.000480
 INFO:root:	 variant counts: 0:00:00.000436
@@ -117,9 +117,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.014058
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000002
-INFO:root:	 callsets::_id: 0:00:00.009944
-INFO:root:	 biosamples::id: 0:00:00.006995
-INFO:root:	 biosamples::_id: 0:00:00.006646
+INFO:root:	 cs._id: 0:00:00.009944
+INFO:root:	 bs.id: 0:00:00.006995
+INFO:root:	 bs._id: 0:00:00.006646
 INFO:root:	 counts for all callsets: 0:00:00.000411
 INFO:root:	 counts for all biosamples: 0:00:00.000308
 INFO:root:	 variant counts: 0:00:00.000300
@@ -143,9 +143,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.009445
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000003
-INFO:root:	 callsets::_id: 0:00:00.015992
-INFO:root:	 biosamples::id: 0:00:00.006660
-INFO:root:	 biosamples::_id: 0:00:00.008725
+INFO:root:	 cs._id: 0:00:00.015992
+INFO:root:	 bs.id: 0:00:00.006660
+INFO:root:	 bs._id: 0:00:00.008725
 INFO:root:	 counts for all callsets: 0:00:00.000671
 INFO:root:	 counts for all biosamples: 0:00:00.000449
 INFO:root:	 variant counts: 0:00:00.000434
@@ -163,9 +163,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.009023
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000004
-INFO:root:	 callsets::_id: 0:00:00.010524
-INFO:root:	 biosamples::id: 0:00:00.006832
-INFO:root:	 biosamples::_id: 0:00:00.009336
+INFO:root:	 cs._id: 0:00:00.010524
+INFO:root:	 bs.id: 0:00:00.006832
+INFO:root:	 bs._id: 0:00:00.009336
 INFO:root:	 counts for all callsets: 0:00:00.000593
 INFO:root:	 counts for all biosamples: 0:00:00.000473
 INFO:root:	 variant counts: 0:00:00.000462
@@ -183,9 +183,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.005857
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000002
-INFO:root:	 callsets::_id: 0:00:00.006730
-INFO:root:	 biosamples::id: 0:00:00.009681
-INFO:root:	 biosamples::_id: 0:00:00.007980
+INFO:root:	 cs._id: 0:00:00.006730
+INFO:root:	 bs.id: 0:00:00.009681
+INFO:root:	 bs._id: 0:00:00.007980
 INFO:root:	 counts for all callsets: 0:00:00.000486
 INFO:root:	 counts for all biosamples: 0:00:00.000325
 INFO:root:	 variant counts: 0:00:00.000402
@@ -203,9 +203,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.007978
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000002
-INFO:root:	 callsets::_id: 0:00:00.010687
-INFO:root:	 biosamples::id: 0:00:00.009078
-INFO:root:	 biosamples::_id: 0:00:00.007750
+INFO:root:	 cs._id: 0:00:00.010687
+INFO:root:	 bs.id: 0:00:00.009078
+INFO:root:	 bs._id: 0:00:00.007750
 INFO:root:	 counts for all callsets: 0:00:00.000583
 INFO:root:	 counts for all biosamples: 0:00:00.000452
 INFO:root:	 variant counts: 0:00:00.000460
@@ -223,9 +223,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.006380
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000002
-INFO:root:	 callsets::_id: 0:00:00.008528
-INFO:root:	 biosamples::id: 0:00:00.006707
-INFO:root:	 biosamples::_id: 0:00:00.007729
+INFO:root:	 cs._id: 0:00:00.008528
+INFO:root:	 bs.id: 0:00:00.006707
+INFO:root:	 bs._id: 0:00:00.007729
 INFO:root:	 counts for all callsets: 0:00:00.000581
 INFO:root:	 counts for all biosamples: 0:00:00.000446
 INFO:root:	 variant counts: 0:00:00.000436
@@ -243,9 +243,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.011931
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000002
-INFO:root:	 callsets::_id: 0:00:00.005643
-INFO:root:	 biosamples::id: 0:00:00.008316
-INFO:root:	 biosamples::_id: 0:00:00.015766
+INFO:root:	 cs._id: 0:00:00.005643
+INFO:root:	 bs.id: 0:00:00.008316
+INFO:root:	 bs._id: 0:00:00.015766
 INFO:root:	 counts for all callsets: 0:00:00.000460
 INFO:root:	 counts for all biosamples: 0:00:00.000310
 INFO:root:	 variant counts: 0:00:00.000298
@@ -263,9 +263,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.014254
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000002
-INFO:root:	 callsets::_id: 0:00:00.007184
-INFO:root:	 biosamples::id: 0:00:00.005606
-INFO:root:	 biosamples::_id: 0:00:00.021229
+INFO:root:	 cs._id: 0:00:00.007184
+INFO:root:	 bs.id: 0:00:00.005606
+INFO:root:	 bs._id: 0:00:00.021229
 INFO:root:	 counts for all callsets: 0:00:00.000455
 INFO:root:	 counts for all biosamples: 0:00:00.000303
 INFO:root:	 variant counts: 0:00:00.000348
@@ -283,9 +283,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.009341
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000003
-INFO:root:	 callsets::_id: 0:00:00.009445
-INFO:root:	 biosamples::id: 0:00:00.006998
-INFO:root:	 biosamples::_id: 0:00:00.008083
+INFO:root:	 cs._id: 0:00:00.009445
+INFO:root:	 bs.id: 0:00:00.006998
+INFO:root:	 bs._id: 0:00:00.008083
 INFO:root:	 counts for all callsets: 0:00:00.000793
 INFO:root:	 counts for all biosamples: 0:00:00.000552
 INFO:root:	 variant counts: 0:00:00.000499
@@ -303,9 +303,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.008730
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000005
-INFO:root:	 callsets::_id: 0:00:00.008300
-INFO:root:	 biosamples::id: 0:00:00.013960
-INFO:root:	 biosamples::_id: 0:00:00.008168
+INFO:root:	 cs._id: 0:00:00.008300
+INFO:root:	 bs.id: 0:00:00.013960
+INFO:root:	 bs._id: 0:00:00.008168
 INFO:root:	 counts for all callsets: 0:00:00.000680
 INFO:root:	 counts for all biosamples: 0:00:00.000835
 INFO:root:	 variant counts: 0:00:00.000643
@@ -343,9 +343,9 @@ INFO:root:		 variants count: 621
 INFO:root:		 variants_digest: 0:00:00.042964
 INFO:root:		 digests count: 582
 INFO:root:	 variants: 0:00:00.000003
-INFO:root:	 callsets::_id: 0:00:00.024636
-INFO:root:	 biosamples::id: 0:00:00.012435
-INFO:root:	 biosamples::_id: 0:00:00.022546
+INFO:root:	 cs._id: 0:00:00.024636
+INFO:root:	 bs.id: 0:00:00.012435
+INFO:root:	 bs._id: 0:00:00.022546
 INFO:root:	 counts for all callsets: 0:00:00.000806
 INFO:root:	 counts for all biosamples: 0:00:00.000527
 INFO:root:	 variant counts: 0:00:00.000461

@@ -124,7 +124,7 @@ def create_dataset_response(**byc):
         "error": None,
         "variantCount": 0,
         "callCount": 0,
-        "sampleCount": len( byc[ "query_results" ][ "biosamples::_id" ] ),
+        "sampleCount": byc[ "query_results" ][ "bs._id" ][ "target_count" ],
         "frequency": 0,
         "note": "",
         "externalUrl": "",
@@ -132,21 +132,39 @@ def create_dataset_response(**byc):
         "datasetHandover": [ ] }
 
     # TODO: The "true" may actually be fulfilled by non-variant query types in v2.
-    if "variants::_id" in byc[ "query_results" ]:
+    if "vs._id" in byc[ "query_results" ]:
         dataset_allele_resp.update( {
-            "variantCount": len( byc[ "query_results" ][ "variants::digest" ] ),
-            "callCount": len( byc[ "query_results" ][ "variants::_id" ] )
+            "variantCount": byc[ "query_results" ][ "vs.digest" ][ "target_count" ],
+            "callCount": byc[ "query_results" ][ "vs._id" ][ "target_count" ]
         } )
         if dataset_allele_resp[ "variantCount" ] > 0:
             dataset_allele_resp.update( {
                 "frequency": float("%.6f" % (dataset_allele_resp[ "callCount" ] / byc[ "dbstats" ]["datasets"][ byc[ "dataset_id" ] ][ "counts" ][ "variants_distinct" ] ) )
             } )
-            dataset_allele_resp[ "info" ].update( { "variants": byc[ "query_results" ][ "variants::digest" ] })
+            dataset_allele_resp[ "info" ].update( { "variants": byc[ "query_results" ][ "vs.digest" ][ "target_values" ] })
 
     for this_c in [ "variantCount", "callCount", "sampleCount" ]:
         if this_c in dataset_allele_resp:
             if dataset_allele_resp[ this_c ] > 0:
                  dataset_allele_resp.update( { "exists": True } )
+
+    ho_client = MongoClient()
+    ho_db = ho_client[ byc["config"]["info_db"] ]
+    ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
+
+    h_o_db_k = [ ]
+    for h_o_t in byc["datasets_info"][ byc[ "dataset_id" ] ]["handoverTypes"]:
+        for h_o in byc[ "query_results" ].keys():
+            if h_o == byc["h->o"]["h->o_types"][ h_o_t ][ "h->o_key" ]:
+                if not h_o in h_o_db_k:
+                    h_o_db_k.append(h_o)
+                    ho_coll.update_one( { "id": byc[ "query_results" ][ h_o ]["id"] }, { '$set': byc[ "query_results" ][ h_o ] }, upsert=True )
+                dataset_allele_resp["datasetHandover"].append( {
+                    "id": byc["h->o"]["h->o_types"][ h_o_t ][ "id" ],
+                    "label": byc["h->o"]["h->o_types"][ h_o_t ][ "label" ],
+                    "description": byc["h->o"]["h->o_types"][ h_o_t ][ "description" ],
+                    "h->o_id": byc[ "query_results" ][ h_o ]["id"]
+                } )
 
     return( dataset_allele_resp )
 
@@ -193,7 +211,7 @@ def callsets_return_stats(**byc):
     cs_stats["del_fs"] = []
     cs_stats["cnv_fs"] = []
 
-    for cs in mongo_coll.find({"_id": {"$in": byc["callsets::_id"] }}) :
+    for cs in mongo_coll.find({"_id": {"$in": byc["cs._id"] }}) :
         if "cnvstatistics" in cs["info"]:
             if "dupfraction" in cs["info"]["cnvstatistics"] and "delfraction" in cs["info"]["cnvstatistics"]:
                 cs_stats["dup_fs"].append(cs["info"]["cnvstatistics"]["dupfraction"])

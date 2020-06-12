@@ -43,6 +43,15 @@ def read_datasets_info(**paths):
 
 ################################################################################
 
+def read_handover_info(**paths):
+
+    hfp = path.join( paths[ "module_root" ], *paths[ "handover_types_file" ] )
+    with open(hfp) as of:
+        ho = yaml.load( of , Loader=yaml.FullLoader)
+        return(ho)
+
+################################################################################
+
 def dbstats_return_latest(**byc):
 
     dbstats_coll = MongoClient( )[ byc[ "config" ][ "info_db" ] ][ byc[ "config" ][ "beacon_info_coll" ] ]

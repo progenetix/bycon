@@ -22,7 +22,7 @@ def plot_sample_geomap(**kwargs):
         label = args.label
 
     dataset_id = kwargs[ "dataset_id" ]
-    query = { "_id": { "$in": kwargs[ "biosamples::_id" ] } }
+    query = { "_id": { "$in": kwargs[ "bs._id" ] } }
     bios_coll = MongoClient( )[ dataset_id ][ "biosamples" ]
 
     mapplot = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ dataset_id, label, "map.svg" ]) )
@@ -36,7 +36,7 @@ def plot_sample_geomap(**kwargs):
                 geo_s.append(bios["provenance"]["geo"])
 
     country_counts = _aggregate_country_counts(geo_s)
-    all_samples = len( kwargs[ "biosamples::_id" ] )
+    all_samples = len( kwargs[ "bs._id" ] )
     map_samples = sum( country_counts["count"] )
     map_countries = len( country_counts["country"] )
 

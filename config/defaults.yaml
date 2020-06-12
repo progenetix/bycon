@@ -19,6 +19,7 @@ beacon_info_count_labels:
   individuals: "individualCount"
   variants: "callCount"
   variants_distinct: "variantCount"
+handover_coll: querybuffer
 io_params:
   id:
     db_key: id

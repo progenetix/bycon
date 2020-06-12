@@ -22,8 +22,8 @@ from bycon import *
 ##### Examples
 
 * standard test deletion CNV query
-  - <https://bycon.progenetix.org?datasetIds=arraymap,progenetix/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=9/variantType=DEL/startMin=18000000/startMax=21975097/endMin=21967753/endMax=26000000/filters=icdom-94403>
-  - <https://progenetix.org/services/byconplus/datasetIds=arraymap,progenetix/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=9/variantType=DEL/startMin=18000000/startMax=21975097/endMin=21967753/endMax=26000000/filters=icdom-94403>
+  - <https://bycon.progenetix.org?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=18000000&startMax=21975097&endMin=21967753&endMax=26000000&filters=icdom-94403>
+  - <https://bycon.progenetix.org/datasetIds=arraymap,progenetix/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=9/variantType=DEL/startMin=18000000/startMax=21975097/endMin=21967753/endMax=26000000/filters=icdom-94403>
 * retrieving biosamples w/ a given filter code
   - <https://bycon.progenetix.org?assemblyId=GRCh38/datasetIds=arraymap,progenetix/filters=NCIT:C3326>
 * beacon info (i.e. missing parameters return the info)
@@ -108,6 +108,7 @@ def byconplus():
     respond_service_info_request(**byc)
 
     # adding arguments for querying / processing data
+    byc.update( { "h->o": read_handover_info( **config[ "paths" ] ) } )
     byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
     byc.update( { "filters":  parse_filters( **byc ) } )
     byc[ "variant_defs" ], byc[ "variant_request_types" ] = read_variant_definitions( **byc )
@@ -127,8 +128,8 @@ def byconplus():
 
     dataset_responses = [ ]
 
-    for ds in byc[ "dataset_ids" ]:
-        byc.update( { "dataset_id": ds, "last_time": datetime.datetime.now() } )
+    for ds_id in byc[ "dataset_ids" ]:
+        byc.update( { "dataset_id": ds_id, "last_time": datetime.datetime.now() } )
         byc.update( { "query_results": execute_bycon_queries( **byc ) } )
         dataset_responses.append( create_dataset_response( **byc ) )   
 

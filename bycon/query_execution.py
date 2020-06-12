@@ -1,8 +1,9 @@
 from pymongo import MongoClient
+from uuid import uuid4
 import logging
 import datetime
 
-def execute_bycon_queries(**kwargs):
+def execute_bycon_queries(**byc):
 
     # last_time = datetime.datetime.now()
     # logging.info("\t start query: {}".format(last_time))
@@ -14,50 +15,62 @@ def execute_bycon_queries(**kwargs):
         
     podmd"""
 
-    query_results = { "info": { } }
-    query_results[ "variants::digest" ] = [ ]
+    h_o_defs = byc[ "h->o" ]["h->o_methods"]
 
     exe_queries = { }
-    dataset_id = kwargs[ "dataset_id" ]
-    # last_time = kwargs[ "last_time" ]
+    ds_id = byc[ "dataset_id" ]
+    # last_time = byc[ "last_time" ]
 
-    mongo_client = MongoClient( )
-    query_types = kwargs[ "queries" ].keys()
-    for collname in kwargs[ "queries" ]:
-        if collname in kwargs[ "config" ][ "collections" ]:
-            exe_queries[ collname ] = kwargs[ "queries" ][ collname ]
+    data_client = MongoClient( )
+    data_db = data_client[ ds_id ]
+    ho_client = MongoClient()
+    ho_db = ho_client[ byc["config"]["info_db"] ]
+    ho_collname = byc["config"][ "handover_coll" ]
+    ho_coll = ho_db[ ho_collname ]
 
-    q_coll_name = "querybuffer"
-    if q_coll_name in exe_queries:
-        mongo_db = mongo_client[ "progenetix" ]
-        mongo_coll = mongo_db[ q_coll_name ]
+    query_types = byc[ "queries" ].keys()
+    for collname in byc[ "queries" ]:
+        if collname in byc[ "config" ][ "collections" ]:
+            exe_queries[ collname ] = byc[ "queries" ][ collname ]
+
+    # collection of results
+
+    prefetch = { }
+    prevars = { "ds_id": ds_id, "mdb": data_db, "h_o_defs": h_o_defs, "method": "", "query": { } }
+
+    # to be implemented ...
+    if ho_collname in exe_queries:
         
-        handover = mongo_coll.find_one( exe_queries[ q_coll_name ] )
-
-    mongo_db = mongo_client[ dataset_id ]
+        handover = ho_coll.find_one( exe_queries[ q_coll_name ] )
 
     if "biosamples" in exe_queries:
 
-        query_results[ "biosamples::id" ] = mongo_db[ "biosamples" ].distinct( "id", exe_queries[ "biosamples" ] )
-                
+        prevars["method"] = "bs.id"
+        prevars["query"] = exe_queries[ "biosamples" ]
+        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+
         # TODO: Introduce a way to pre-define which queries have to be
         # run. E.g. when only retrieving biosample data, it makes no
         # sense to also run a callsets query.
 
-        cs_from_bs = mongo_db[ "callsets" ].distinct( "id", { "biosample_id": {"$in": query_results["biosamples::id"] } } )
+        prevars["method"] = "cs.id"
+        prevars["query"] = { "biosample_id": {"$in": prefetch["bs.id"]["target_values"] } }
+        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
     # logging.info("\t biosamples: {}".format(datetime.datetime.now()-last_time))
     # last_time = datetime.datetime.now()
 
     if "callsets" in exe_queries:
-        query_results[ "callsets::id" ] = mongo_db[ "callsets" ].distinct( "id", exe_queries[ "callsets" ] )
+
+        prevars["method"] = "cs.id"
+        prevars["query"] = exe_queries[ "callsets" ]
+        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+
         if "biosamples" in exe_queries:
-            query_results[ "callsets::id" ] = set(cs_from_bs & query_results[ "callsets::id" ])
-    elif "biosamples" in exe_queries:
-        query_results[ "callsets::id" ] = cs_from_bs
+            csids = list( set( prefetch["cs.bsid->cs.id"]["target_values"] ) & set( prefetch["cs.id"]["target_values"] ) )
+            prefetch[ "cs.id" ].update( { "target_values": csids, "target_count": len(csids) } )
 
     # logging.info("\t callsets: {}".format(datetime.datetime.now()-last_time))
-    # logging.info("\t\t callsets count: {}".format(len(query_results[ "callsets::id" ])))
     # last_time = datetime.datetime.now()
 
     if "variants" in exe_queries:
@@ -67,41 +80,43 @@ def execute_bycon_queries(**kwargs):
 
         1. If a `variants` query exists (i.e. has been defined in `exe_queries`), in a first pass
         all `callset_id` values are retrieved.
-        2. If already a `"callsets::id"` result exists (e.g. from a biosample query), the lists
+        2. If already a `"cs.id"` result exists (e.g. from a biosample query), the lists
         of callset `id` values from the different queries are intersected. Otherwise, the callsets
         from the variants query are the final ones.
         3. Since so far not all matching variants have been retrieved (only the callsets which
         contain them), they are now fetched using the original query or a combination of the
         original query and the matching callsets from the intersect.
         podmd"""
-           
-        mongo_vars = mongo_db[ 'variants' ]
-        cs_from_vars = mongo_vars.distinct( "callset_id", exe_queries[ "variants" ] )
-        # print(exe_queries[ "variants" ])
 
+        prevars["method"] = "vs.csid->cs.id"
+        prevars["query"] = exe_queries[ "variants" ]
+        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+          
         # logging.info("\t\t cs_from_vars: {}".format(datetime.datetime.now()-last_time))
         # last_time = datetime.datetime.now()
-        # print(len(query_results[ "callsets::id" ]))
 
-        if "callsets::id" in query_results:
-            query_results[ "callsets::id" ] = list(set(cs_from_vars) & set(query_results[ "callsets::id" ]))
-            exe_queries[ "variants" ] = { "$and": [ exe_queries[ "variants" ], { "callset_id": {"$in": query_results[ "callsets::id" ] } } ] }
+        if "cs.id" in prefetch:
+            csids = list( set( prefetch["cs.id"]["target_values"] ) & set( prefetch["vs.csid->cs.id"]["target_values"] ) )
+            prefetch[ "cs.id" ].update( { "target_values": csids, "target_count": len(csids) } )
+            exe_queries[ "variants" ] = { "$and": [ exe_queries[ "variants" ], { "callset_id": { "$in": csids } } ] }
         else:
-            query_results[ "callsets::id" ] = cs_from_vars
+            prefetch[ "cs.id" ] = prefetch["vs.csid->cs.id"]
+            prefetch[ "cs.id" ].update( { "source_collection": h_o_defs["cs.id"]["source_collection"], "source_key": h_o_defs["cs.id"]["source_key"] } )
 
-        # print(len(query_results[ "callsets::id" ]))
+        prevars["method"] = "vs._id"
+        prevars["query"] = exe_queries[ "variants" ]
+        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
-        # print("requery vars")
-        query_results[ "variants::_id" ] = mongo_vars.distinct( "_id", exe_queries[ "variants" ] )
         # logging.info("\t\t variants_id: {}".format(datetime.datetime.now()-last_time))
-        # logging.info("\t\t variants count: {}".format(len(query_results[ "variants::_id" ])))
+        # logging.info("\t\t variants count: {}".format(len(query_results[ "vs._id" ])))
         # last_time = datetime.datetime.now()
 
         # print("requery vars for digests")
-        query_results[ "variants::digest" ] = mongo_vars.distinct( "digest", { "_id": {"$in": query_results[ "variants::_id" ] } } )
+        prevars["method"] = "vs.digest"
+        prevars["query"] = { "_id": { "$in": prefetch[ "vs._id" ]["target_values"] } }
+        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
         # logging.info("\t\t variants_digest: {}".format(datetime.datetime.now()-last_time))
-        # logging.info("\t\t digests count: {}".format(len(query_results[ "variants::digest" ])))
 
         # last_time = datetime.datetime.now()
 
@@ -111,27 +126,61 @@ def execute_bycon_queries(**kwargs):
     """podmd
     ### Result Aggregation
 
-    The above queries have provided `callsets::id` values which now are used to retrieve the
+    The above queries have provided `cs.id` values which now are used to retrieve the
     matching final biosample `id` and `_id` values.
 
     TODO: Benchmark if the `_id` retrieval & storage speeds up biosample and callset recovery
     in handover scenarios or if `id` is fine.
     podmd"""
 
-    query_results[ "callsets::_id" ] = mongo_db[ 'callsets' ].distinct( "_id", {
-            "id": { "$in": query_results[ "callsets::id" ] } } )        
-    # logging.info("\t callsets::_id: {}".format(datetime.datetime.now()-last_time))
+    prevars["method"] = "cs._id"
+    prevars["query"] = { "id": { "$in": prefetch[ "cs.id" ]["target_values"] } }
+    prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+
+    # logging.info("\t cs._id: {}".format(datetime.datetime.now()-last_time))
     # last_time = datetime.datetime.now()
 
-    query_results[ "biosamples::id" ] = mongo_db[ 'callsets' ].distinct( "biosample_id", {
-        "_id": { "$in": query_results[ "callsets::_id" ] } } )         
-    # logging.info("\t biosamples::id: {}".format(datetime.datetime.now()-last_time))
+    prevars["method"] = "cs.bsid->bs.id"
+    prevars["query"] = { "_id": { "$in": prefetch[ "cs._id" ]["target_values"] } }
+    prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+
+    prefetch[ "bs.id" ] = prefetch["cs.bsid->bs.id"]
+    prefetch[ "bs.id" ].update( { "source_collection": h_o_defs["bs.id"]["source_collection"], "source_key": h_o_defs["bs.id"]["source_key"] } )
+ 
+    # logging.info("\t bs.id: {}".format(datetime.datetime.now()-last_time))
     # last_time = datetime.datetime.now()
 
-    query_results[ "biosamples::_id" ] = mongo_db[ 'biosamples' ].distinct( "_id", { "id": { "$in": query_results[ "biosamples::id" ] } } )
-    # logging.info("\t biosamples::_id: {}".format(datetime.datetime.now()-last_time))
+    prevars["method"] = "bs._id"
+    prevars["query"] = { "id": { "$in": prefetch[ "bs.id" ]["target_values"] } }
+    prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+
+    # logging.info("\t bs._id: {}".format(datetime.datetime.now()-last_time))
     # last_time = datetime.datetime.now()
 
-    mongo_client.close( )   
+    data_client.close( )
+    ho_client.close( )
 
-    return query_results
+    return prefetch
+
+################################################################################
+
+def _prefetch_data( **prevars ):
+
+    method = prevars["method"]
+    data_db = prevars["mdb"]
+    h_o_defs = prevars["h_o_defs"][method]
+
+    dist = data_db[ h_o_defs["source_collection"] ].distinct( h_o_defs["source_key"], prevars["query"] )
+
+    h_o = { **h_o_defs }
+    h_o.update(
+        {
+            "id": str(uuid4()),
+            "source_db": prevars["ds_id"],
+            "target_values": dist,
+            "target_count": len(dist)
+        }
+    )
+
+    return(h_o)
+
