@@ -1,3 +1,9 @@
+web_server_domain: http://bycon.progenetix.org
+test_server_domain: http://bycon.progenetix.test
+web_handover_domain: http://progenetix.org
+test_handover_domain: http://progenetix.test
+# dataset_ids here are used for db management; the information used by Beacon
+# is defined separately
 dataset_ids:
   - arraymap
   - progenetix
@@ -79,19 +85,34 @@ io_prefixes:
   - cellosaurus
 plot_pars:
   dotalpha: 0.2
+  color_var_snv_hex: '#EE00DD'
+  color_var_snv_rgb: '238,0,221'
+  color_var_break_hex: '#EE00DD'
+  color_var_break_rgb: '238,0,221'
+  color_var_dup_hex: '#FFC633'
+  color_var_dup_rgb: '255,198,51'
+  color_var_del_hex: '#33A0FF'
+  color_var_del_rgb: '51,160,255'
+  color_var_amp_hex: '#FF6600'
+  color_var_amp_rgb: '255,102,0'
+  color_var_homoloss_hex: '#0033CC'
+  color_var_homoloss_rgb: '0,51,204'
 paths:
   status_matrix_file_label: matrix_status.tsv
   values_matrix_file_label: matrix_values.tsv
   biosamples_file_label: biosamples.tsv
   web_server_root_abs:
+    - /
     - Library
     - WebServer
     - Documents
   web_temp_dir_abs:
+    - /
     - Library
     - WebServer
     - Documents
     - tmp
+  web_temp_link: /tmp
   beacon_info_file:
     - config
     - beacon_info.yaml

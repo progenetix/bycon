@@ -71,7 +71,7 @@ def byconplus():
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
         config = yaml.load( cf , Loader=yaml.FullLoader)
     config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
-    config[ "paths" ][ "out" ] = path.abspath( path.join( *config[ "paths" ][ "web_temp_dir_abs" ] ) )
+    config[ "paths" ][ "out" ] = path.join( *config[ "paths" ][ "web_temp_dir_abs" ] )
 
     # input / definitions
     form_data = cgi_parse_query()
@@ -129,7 +129,7 @@ def byconplus():
     dataset_responses = [ ]
 
     for ds_id in byc[ "dataset_ids" ]:
-        byc.update( { "dataset_id": ds_id, "last_time": datetime.datetime.now() } )
+        byc.update( { "ds_id": ds_id, "last_time": datetime.datetime.now() } )
         byc.update( { "query_results": execute_bycon_queries( **byc ) } )
         dataset_responses.append( create_dataset_response( **byc ) )   
 

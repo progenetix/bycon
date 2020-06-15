@@ -102,7 +102,7 @@ def cytomapper():
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
         config = yaml.load( cf , Loader=yaml.FullLoader)
     config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
-    config[ "paths" ][ "out" ] = path.abspath( path.join( *config[ "paths" ][ "web_temp_dir_abs" ] ) )
+    config[ "paths" ][ "out" ] = path.join( *config[ "paths" ][ "web_temp_dir_abs" ] )
     config[ "paths" ][ "genomes" ] = path.join( config[ "paths" ][ "module_root" ], "rsrc", "genomes" )
 
     byc = {

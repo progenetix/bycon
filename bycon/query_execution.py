@@ -18,7 +18,7 @@ def execute_bycon_queries(**byc):
     h_o_defs = byc[ "h->o" ]["h->o_methods"]
 
     exe_queries = { }
-    ds_id = byc[ "dataset_id" ]
+    ds_id = byc[ "ds_id" ]
     # last_time = byc[ "last_time" ]
 
     data_client = MongoClient( )

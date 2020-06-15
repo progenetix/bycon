@@ -1,4 +1,5 @@
 # __init__.py
+from .beacon_create_handovers import dataset_response_add_handovers
 from .beacon_generate_response import respond_empty_request
 from .beacon_generate_response import callsets_return_stats
 from .beacon_generate_response import create_beacon_response
