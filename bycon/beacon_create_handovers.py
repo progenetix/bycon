@@ -148,11 +148,12 @@ def _write_variants_bedfile(h_o, **byc):
 
     for v in data_coll.find( { h_o["target_key"]: { '$in': h_o["target_values"] } }):
 
-        if v["variant_type"] == "DUP":
-            vs["DUP"].append(v)
-        elif  v["variant_type"] == "DEL":
-            vs["DEL"].append(v)
-        elif  v["reference_bases"]:
+        if "variant_type" in v:
+            if v["variant_type"] == "DUP":
+                vs["DUP"].append(v)
+            elif  v["variant_type"] == "DEL":
+                vs["DEL"].append(v)
+        elif "reference_bases" in v:
             vs["SNV"].append(v)
 
     b_f = open( bed_file, 'w' )
