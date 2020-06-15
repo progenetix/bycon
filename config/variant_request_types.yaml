@@ -13,8 +13,8 @@ parameters:
   beacon_range_request:
     all_of:
       - assemblyId
-      - start
-      - end
+      - startMin
+      - endMax
       - referenceName
     one_of:
       - variantType

@@ -72,24 +72,28 @@ def get_variant_request_type( **byc ):
     podmd"""
 
     variant_request_type = "no correct variant request"
+    brts = byc[ "variant_request_types" ]
+    vpars = byc["variant_pars"]
     vrt_matches = [ ]
 
-    for vrt in byc[ "variant_request_types" ]:
+    for vrt in brts.keys():
 
         matched_par_no = 0
         needed_par_no = 0
-        if "one_of" in byc[ "variant_request_types" ][vrt]:
+        if "one_of" in brts[vrt]:
             needed_par_no = 1
-            for one_of in byc[ "variant_request_types" ][vrt][ "one_of" ]:
-                if one_of in byc["variant_pars"]:
-                    if re.compile( byc["variant_defs"][ one_of ][ "pattern" ] ).match( str( byc["variant_pars"][ one_of ] ) ):
+            for one_of in brts[vrt][ "one_of" ]:
+                if one_of in vpars:
+                    if re.compile( byc["variant_defs"][ one_of ][ "pattern" ] ).match( str( vpars[ one_of ] ) ):
                         needed_par_no = 0
                         continue
-        needed_par_no += len( byc[ "variant_request_types" ][vrt][ "all_of" ] )
+        needed_par_no += len( brts[vrt][ "all_of" ] )
 
-        for required in byc[ "variant_request_types" ][vrt][ "all_of" ]:
-            if required in byc["variant_pars"]:
-                if re.compile( byc["variant_defs"][ required ][ "pattern" ] ).match( str( byc["variant_pars"][ required ] ) ):
+        # print("key: {}, pars: {}".format(vrt, needed_par_no))
+
+        for required in brts[vrt][ "all_of" ]:
+            if required in vpars:
+                if re.compile( byc["variant_defs"][ required ][ "pattern" ] ).match( str( vpars[ required ] ) ):
                     matched_par_no += 1
         if matched_par_no >= needed_par_no:
             vrt_matches.append( vrt )
@@ -150,23 +154,27 @@ def create_beacon_cnv_request_query(variant_request_type, variant_pars):
 
 def create_beacon_range_request_query(variant_request_type, variant_pars):
 
-
     if variant_request_type != "beacon_range_request":
         return
 
+    v_q_l = [
+        { "reference_name": variant_pars[ "referenceName" ] },
+        { "start_min": { "$lt": int(variant_pars[ "endMax" ]) } },
+        { "end_max": { "$gt": int(variant_pars[ "startMin" ]) } }
+    ]
+
     if "variantType" in variant_pars:
-        type_par_q = { "variant_type": variant_pars[ "variantType" ] }
+        v_q_l.append( { "variant_type": variant_pars[ "variantType" ] } )
     elif "alternateBases" in variant_pars:
-        type_par_q = { "alternate_bases": variant_pars[ "alternateBases" ] }
+        # the N wildcard stands for any length alt bases so can be ignored
+        if not variant_pars[ "alternateBases" ] == "N":
+            v_q_l.append( { "alternate_bases": variant_pars[ "alternateBases" ] } )
+        else:
+            v_q_l.append( { "alternate_bases": { '$regex': "\w" } } )
     else:
         return
 
-    variant_query = { "$and": [
-        { "reference_name": variant_pars[ "referenceName" ] },
-        { "start_min": { "$lt": int(variant_pars[ "end" ]) } },
-        { "end_max": { "$gt": int(variant_pars[ "start" ]) } },
-        type_par_q
-    ]}
+    variant_query = { "$and": v_q_l }
 
     return( variant_query )
 
