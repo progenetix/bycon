@@ -47,10 +47,10 @@ def main():
     config[ "paths" ][ "hier_file" ] = path.join( config[ "paths" ][ "module_root" ], "rsrc", "ncit", "Neoplasm_Core_Hierarchy_Plus.txt" )
     
     filter_defs = read_filter_definitions( **config[ "paths" ] )    
-  
+
     # processing ncit
     # TODO: module, reading in the different hierarchies (ICDO-M, NCIt ...)
-    prefix = "ncit"
+    prefix = "NCIT"
     pre_filter = re.compile( filter_defs[ prefix ][ "pattern" ] )
 
     # TODO: module, run separately for defined datasets
@@ -59,7 +59,7 @@ def main():
     mongo_coll = mongo_db[ "biosamples" ]
     onto_ids = mongo_coll.distinct( "biocharacteristics.type.id", { "biocharacteristics.type.id": { "$regex": pre_filter } } )
     onto_ids = list(filter(pre_filter.match, onto_ids))
-    print(len(onto_ids))
+    # print(len(onto_ids))
         
     print("reading "+str(config[ "paths" ][ "hier_file" ]))
     hier_lines = open( config[ "paths" ][ "hier_file" ], 'r' ).readlines()  
@@ -78,9 +78,9 @@ def main():
     for graph in ont["graphs"]:
         if "neoplasm-core" in graph["id"]:
             npl_core_graph = graph
-
-    print(npl_core_graph.keys())
-    print(npl_core_graph["id"])
+    
+    # print(npl_core_graph.keys())
+    # print(npl_core_graph["id"])
 
     npl_core_ncit_graph = { "nodes": [ ], "edges": [ ] }
 
@@ -88,16 +88,19 @@ def main():
 
     for node in npl_core_graph["nodes"]:
         if hier_match.match(node[ "id" ]):
-            node[ "id" ] = "ncit:"+hier_match.match(node[ "id" ]).group(1)
-            print(node[ "id" ])
+            node[ "id" ] = "NCIT:"+hier_match.match(node[ "id" ]).group(1)
+            # print(node[ "id" ])
             npl_core_ncit_graph[ "nodes" ].append(node)
 
+    for edge in npl_core_graph["edges"]:
+        if hier_match.match(edge['sub']) and hier_match.match(edge['obj']):
+            sub = "NCIT:"+hier_match.match(edge['sub']).group(1)
+            obj = "NCIT:"+hier_match.match(edge['obj']).group(1)
+            npl_core_ncit_graph[ "edges" ].append([sub, obj])
+
     for key in ["edges", "nodes"]:
-        print("=> no. of {}: ".format(key, len( npl_core_ncit_graph[ key ] ) ) )
+        print("=> no. of {}: {}".format(key, len( npl_core_ncit_graph[ key ] ) ) )
 
-
-    # print(ont["graphs"][0].keys())
-    # print(len(ont["graphs"][0]))
     exit()
 
     
