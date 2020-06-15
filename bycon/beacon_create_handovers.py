@@ -53,8 +53,8 @@ def dataset_response_add_handovers(**byc):
                 }
 
                 if "bedfile" in h_o_defs[ "id" ]:
-                    chro, start, end = _write_variants_bedfile(h_o, **byc)
-                    h_o_r.update( { "url": _handover_create_ext_url(h_o_server, h_o_defs, h_o_t, accessid, chro, start, end) } )
+                    ucsc_pos = _write_variants_bedfile(h_o, **byc)
+                    h_o_r.update( { "url": _handover_create_ext_url(h_o_server, h_o_defs, h_o_t, accessid, ucsc_pos ) } )
                 else:
                     h_o_r.update( { "url": _handover_create_url(h_o_server, h_o_defs, h_o_t, accessid) } )
 
@@ -86,23 +86,13 @@ def _handover_create_url(h_o_server, h_o_defs, h_o_t, accessid):
 ################################################################################
 
 
-def _handover_create_ext_url(h_o_server, h_o_defs, h_o_t, accessid, chro, start, end):
+def _handover_create_ext_url(h_o_server, h_o_defs, h_o_t, accessid, ucsc_pos):
 
     if "ext_url" in h_o_defs:
         if "bedfile" in h_o_defs["id"]:
-            return("{}&position={}:{}-{}&hgt.customText={}/tmp/{}.bed".format(h_o_defs["ext_url"], chro, start, end, h_o_server, accessid))
+            return("{}&position={}&hgt.customText={}/tmp/{}.bed".format(h_o_defs["ext_url"], ucsc_pos, h_o_server, accessid))
 
     return(False)
-
-################################################################################
-
-def _handover_add_ucscpos(url, chro, start, end):
-
-    if chro:
-        if start:
-            url = "{}&position={}:{}-{}".format(url, chro, start, end)    
-
-    return(url)    
 
 ################################################################################
 
@@ -177,7 +167,8 @@ def _write_variants_bedfile(h_o, **byc):
                 b_f.write( l )
  
     b_f.close()
-
     ucsc_range = sorted(pos)
-    return( ucsc_chr, str( ucsc_range[0] ), str( ucsc_range[-1] ) )
+    ucsc_pos = "{}:{}-{}".format(ucsc_chr, ucsc_range[0], ucsc_range[-1])
+
+    return( ucsc_pos )
 
