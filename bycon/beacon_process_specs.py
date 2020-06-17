@@ -25,6 +25,30 @@ def read_beacon_info(**paths):
 
 ################################################################################
 
+def read_filter_definitions( **paths ):
+
+    filter_defs = {}
+    ofp = path.join( paths[ "module_root" ], *paths[ "filter_definitions_file" ] )
+    with open( ofp ) as fd:
+        defs = yaml.load( fd , Loader=yaml.FullLoader)
+        for fpre in defs:
+            filter_defs[fpre] = defs[fpre]
+    
+    return filter_defs
+
+################################################################################
+
+def read_variant_definitions(**paths):
+
+    variant_defs = {}
+    ofp = path.join( paths[ "module_root" ], *paths[ "variant_definitions_file" ] )
+    with open( ofp ) as vd:
+        variant_defs = yaml.load( vd , Loader=yaml.FullLoader)
+    
+    return variant_defs
+
+################################################################################
+
 def read_beacon_api_paths(**paths):
 
     pfp = path.join( paths[ "module_root" ], *paths[ "beacon_paths_file" ] )

@@ -7,7 +7,7 @@ import sys
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.abspath(dir_path))
 
-import cgi_parse_variant_requests
+import beacon_parse_variants
 
 ################################################################################
 
@@ -108,7 +108,7 @@ def update_variants_query( **byc ):
         query_lists[c_n].append( queries[c_n] )
 
     v_q_method = "create_"+byc["variant_request_type"]+"_query"
-    v_q = getattr( cgi_parse_variant_requests, v_q_method )( byc["variant_request_type"], byc["variant_pars"] )
+    v_q = getattr( beacon_parse_variants, v_q_method )( byc["variant_request_type"], byc["variant_pars"] )
 
     if len(query_lists[c_n]) > 0:
         v_q = { '$and': query_lists[c_n].append(v_q) }

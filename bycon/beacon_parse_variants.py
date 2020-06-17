@@ -2,20 +2,7 @@ import cgi, cgitb
 import re, yaml
 import logging
 import sys
-
-from os import path as path
   
-################################################################################
-
-def read_variant_definitions(**paths):
-
-    variant_defs = {}
-    ofp = path.join( paths[ "module_root" ], *paths[ "variant_definitions_file" ] )
-    with open( ofp ) as vd:
-        variant_defs = yaml.load( vd , Loader=yaml.FullLoader)
-    
-    return variant_defs
-
 ################################################################################
 
 def parse_variants( **byc ):

@@ -1,19 +1,5 @@
 import cgi, cgitb
 import re, yaml
-from os import path as path
-
-################################################################################
-
-def read_filter_definitions( **paths ):
-
-    filter_defs = {}
-    ofp = path.join( paths[ "module_root" ], *paths[ "filter_definitions_file" ] )
-    with open( ofp ) as fd:
-        defs = yaml.load( fd , Loader=yaml.FullLoader)
-        for fpre in defs:
-            filter_defs[fpre] = defs[fpre]
-    
-    return filter_defs
 
 ################################################################################
 
