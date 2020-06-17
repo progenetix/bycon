@@ -108,11 +108,11 @@ def cytomapper():
     byc = {
         "config": config,
         "args": args,
+        "variant_defs": read_variant_definitions( **config[ "paths" ] ),
         "form_data": form_data,
         "rest_pars": rest_pars
     }
 
-    byc[ "variant_defs" ], byc[ "variant_request_types" ] = read_variant_definitions( **byc )
     byc.update( { "variant_pars": parse_variants( **byc ) } )
     byc.update( { "variant_pars": _parse_chrobases( **byc ) } )
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
@@ -160,12 +160,12 @@ def cytomapper():
 def _parse_chrobases( **byc ):
 
     variant_pars = byc["variant_pars"]
-    variant_defs = byc["variant_defs"]
+    v_p_defs = byc["variant_defs"]["parameters"]
     v_par = "chroBases"
     variant_pars[ "rangeTag" ] = "true"
 
     if v_par in variant_pars:
-        cb_re = re.compile( variant_defs[ v_par ][ "pattern" ] )
+        cb_re = re.compile( v_p_defs[ v_par ][ "pattern" ] )
         chro, start, end = cb_re.match( byc["variant_pars"][ v_par ] ).group(2, 3, 5)
         if not end:
             end = int(start) + 1

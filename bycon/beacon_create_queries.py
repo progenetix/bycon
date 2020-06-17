@@ -99,7 +99,7 @@ def update_variants_query( **byc ):
     queries = byc["queries"]
     c_n = "variants"
 
-    if not byc["variant_request_type"] in byc["variant_request_types"].keys():
+    if not byc["variant_request_type"] in byc["variant_defs"]["request_types"].keys():
         if not c_n in queries:
             return queries
 

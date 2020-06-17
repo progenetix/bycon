@@ -88,6 +88,7 @@ def byconplus():
         "form_data": form_data,
         "rest_pars": rest_pars,
         "filter_defs": read_filter_definitions( **config[ "paths" ] ),
+        "variant_defs": read_variant_definitions( **config[ "paths" ] ),
         "datasets_info": read_datasets_info( **config[ "paths" ] ),
         "service_info": read_service_info( **config[ "paths" ] ),
         "beacon_info": read_beacon_info( **config[ "paths" ] ),
@@ -112,7 +113,6 @@ def byconplus():
     byc.update( { "h->o": read_handover_info( **config[ "paths" ] ) } )
     byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
     byc.update( { "filters":  parse_filters( **byc ) } )
-    byc[ "variant_defs" ], byc[ "variant_request_types" ] = read_variant_definitions( **byc )
     byc.update( { "variant_pars": parse_variants( **byc ) } )
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } ) 
     byc.update( { "endpoint_pars": parse_endpoints( **byc ) } )

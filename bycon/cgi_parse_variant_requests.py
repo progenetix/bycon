@@ -7,34 +7,30 @@ from os import path as path
   
 ################################################################################
 
-def read_variant_definitions(**byc):
+def read_variant_definitions(**paths):
 
     variant_defs = {}
-    with open( path.join(path.abspath(byc[ "config" ][ "paths" ][ "module_root" ]), "config", "variant_parameters.yaml") ) as vd:
-        v_defs = yaml.load( vd , Loader=yaml.FullLoader)
-        variant_defs = v_defs["parameters"]
+    ofp = path.join( paths[ "module_root" ], *paths[ "variant_definitions_file" ] )
+    with open( ofp ) as vd:
+        variant_defs = yaml.load( vd , Loader=yaml.FullLoader)
     
-    variant_request_types = {}
-    with open( path.join(path.abspath(byc[ "config" ][ "paths" ][ "module_root" ]), "config", "variant_request_types.yaml") ) as vrt:
-        v_reqs = yaml.load( vrt , Loader=yaml.FullLoader)
-        variant_request_types = v_reqs["parameters"]
-    
-    return( variant_defs, variant_request_types )
+    return variant_defs
 
 ################################################################################
 
 def parse_variants( **byc ):
 
     variant_pars = { }
-    for v_par in byc[ "variant_defs" ]:
+    v_p_defs = byc["variant_defs"]["parameters"]
+    for v_par in v_p_defs:
         v_default = None
-        if "default" in byc[ "variant_defs" ][ v_par ]:
-            v_default = byc[ "variant_defs" ][ v_par ][ "default" ]
+        if "default" in v_p_defs[ v_par ]:
+            v_default = v_p_defs[ v_par ][ "default" ]
         variant_pars[ v_par ] = byc["form_data"].getvalue(v_par, v_default)
         if not variant_pars[ v_par ]:
             del( variant_pars[ v_par ] )
         try:
-            if byc[ "variant_defs" ][ v_par ][ "type" ] == "integer":
+            if v_p_defs[ v_par ][ "type" ] == "integer":
                 variant_pars[ v_par ] = int( variant_pars[ v_par ] )
         except Exception:
             pass
@@ -56,10 +52,10 @@ def parse_variants( **byc ):
 
     if "rest_pars" in byc:
         for rp in byc[ "rest_pars" ].keys():
-            if rp in byc[ "variant_defs" ]:
+            if rp in v_p_defs:
                 variant_pars[ rp ] = byc[ "rest_pars" ][ rp ]
 
-    return( variant_pars )
+    return variant_pars
 
 ################################################################################
 
@@ -74,7 +70,8 @@ def get_variant_request_type( **byc ):
     podmd"""
 
     variant_request_type = "no correct variant request"
-    brts = byc[ "variant_request_types" ]
+    brts = byc["variant_defs"]["request_types"]
+    v_p_defs = byc["variant_defs"]["parameters"]
     vpars = byc["variant_pars"]
     vrt_matches = [ ]
 
@@ -86,14 +83,14 @@ def get_variant_request_type( **byc ):
             needed_par_no = 1
             for one_of in brts[vrt][ "one_of" ]:
                 if one_of in vpars:
-                    if re.compile( byc["variant_defs"][ one_of ][ "pattern" ] ).match( str( vpars[ one_of ] ) ):
+                    if re.compile( v_p_defs[ one_of ][ "pattern" ] ).match( str( vpars[ one_of ] ) ):
                         needed_par_no = 0
                         continue
         needed_par_no += len( brts[vrt][ "all_of" ] )
 
         for required in brts[vrt][ "all_of" ]:
             if required in vpars:
-                if re.compile( byc["variant_defs"][ required ][ "pattern" ] ).match( str( vpars[ required ] ) ):
+                if re.compile( v_p_defs[ required ][ "pattern" ] ).match( str( vpars[ required ] ) ):
                     matched_par_no += 1
         if matched_par_no >= needed_par_no:
             vrt_matches.append( { "type": vrt, "par_no": matched_par_no } )

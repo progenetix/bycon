@@ -125,6 +125,12 @@ paths:
   handover_types_file:
     - config
     - beacon_handovers.yaml
+  filter_definitions_file:
+    - config
+    - filter_definitions.yaml
+  variant_definitions_file:
+    - config
+    - variant_definitions.yaml
   service_info_file:
     - config
     - service_info.yaml

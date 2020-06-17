@@ -29,7 +29,7 @@ def parse_cytoband_file( **kwargs ):
         genome = g_map[ genome ]
 
     cb_file = path.join( kwargs[ "config" ][ "paths" ][ "genomes" ], genome, "CytoBandIdeo.txt" )
-    cb_re = re.compile( kwargs["variant_defs"][ "cytoBands" ][ "pattern" ] )
+    cb_re = re.compile( kwargs["variant_defs"]["parameters"][ "cytoBands" ][ "pattern" ] )
 
     cb_keys = [ "chro", "start", "end", "cytoband", "staining" ]
     cytobands = [ ]
