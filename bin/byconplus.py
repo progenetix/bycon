@@ -113,13 +113,10 @@ def byconplus():
     byc.update( { "filters":  parse_filters( **byc ) } )
     byc[ "variant_defs" ], byc[ "variant_request_types" ] = read_variant_definitions( **byc )
     byc.update( { "variant_pars": parse_variants( **byc ) } )
-    # print(byc["variant_pars"])
+    byc.update( { "endpoint_pars": parse_endpoints( **byc ) } )
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } ) 
     byc.update( { "queries": create_queries_from_filters( **byc ) } )
-
-    if byc["variant_request_type"] in byc["variant_request_types"].keys():
-        variant_query_generator = "create_"+byc["variant_request_type"]+"_query"
-        byc["queries"].update( { "variants": getattr(cgi_parse_variant_requests, variant_query_generator)( byc["variant_request_type"], byc["variant_pars"] ) } )
+    byc["queries"].update( { "variants": create_variants_query( **byc ) } )
 
     # fallback - but maybe shouldbe an error response?
     if not byc[ "queries" ]:

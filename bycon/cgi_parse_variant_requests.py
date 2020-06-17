@@ -1,6 +1,7 @@
 import cgi, cgitb
 import re, yaml
 import logging
+import sys
 
 from os import path as path
   
@@ -67,6 +68,7 @@ def get_variant_request_type( **byc ):
     This method guesses the type of variant request, based on the complete
     fulfillment of the required parameters (all of `all_of`, at least one of
     `one_of`).
+    In case of multiple types the one with most matched parameters is prefered.
     This may be changed to using a pre-defined request type and using this as
     completeness check only.
     podmd"""
@@ -89,22 +91,34 @@ def get_variant_request_type( **byc ):
                         continue
         needed_par_no += len( brts[vrt][ "all_of" ] )
 
-        # print("key: {}, pars: {}".format(vrt, needed_par_no))
-
         for required in brts[vrt][ "all_of" ]:
             if required in vpars:
                 if re.compile( byc["variant_defs"][ required ][ "pattern" ] ).match( str( vpars[ required ] ) ):
                     matched_par_no += 1
         if matched_par_no >= needed_par_no:
-            vrt_matches.append( vrt )
+            vrt_matches.append( { "type": vrt, "par_no": matched_par_no } )
 
-    if len(vrt_matches) == 1:
-        variant_request_type = vrt_matches[0]
-    elif len(vrt_matches) > 1:
-        variant_request_type = "more than one variant request type"
+    if len(vrt_matches) > 0:
+        vrt_matches = sorted(vrt_matches, key=lambda k: k['par_no'], reverse=True)
+        variant_request_type = vrt_matches[0]["type"]
 
     return( variant_request_type )
-    
+
+
+################################################################################
+
+def create_variants_query( **byc ):
+
+    v_q = { }
+
+    if not byc["variant_request_type"] in byc["variant_request_types"].keys():
+        return(v_q)
+
+    variant_query_generator = "create_"+byc["variant_request_type"]+"_query"
+    v_q =  getattr( sys.modules[__name__], variant_query_generator )( byc["variant_request_type"], byc["variant_pars"] )
+
+    return(v_q)
+
 ################################################################################
 
 def create_beacon_allele_request_query(variant_request_type, variant_pars):
