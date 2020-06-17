@@ -87,7 +87,7 @@ def main():
         print('Pleace define a proper filter value (prefixed code, e.g. "icdom-81703").')
         exit()
 
-    kwargs.update( { "query": create_queries_from_filters(**kwargs) } )
+    kwargs.update( { "query": update_queries_from_filters(**kwargs) } )
 
     for dataset_id in dataset_ids:
         _process_update_commands(dataset_id, **kwargs)

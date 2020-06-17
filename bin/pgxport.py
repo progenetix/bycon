@@ -122,7 +122,7 @@ def main():
 
     kwargs[ "config" ].update( { "plot_pars": plotpars_from_args(**kwargs) } )
     kwargs.update( { "filters": parse_filters( **kwargs ) } )
-    kwargs.update( { "queries": create_queries_from_filters( **kwargs ) } )
+    kwargs.update( { "queries": update_queries_from_filters( **kwargs ) } )
     kwargs.update( { "queries": pgx_queries_from_js(**kwargs) } )
 
     if not "queries" in kwargs:

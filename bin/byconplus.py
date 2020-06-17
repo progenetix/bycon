@@ -92,6 +92,7 @@ def byconplus():
         "service_info": read_service_info( **config[ "paths" ] ),
         "beacon_info": read_beacon_info( **config[ "paths" ] ),
         "beacon_paths": read_beacon_api_paths( **config[ "paths" ] ),
+        "queries": {},
         "get_filters": False
     }
 
@@ -113,10 +114,11 @@ def byconplus():
     byc.update( { "filters":  parse_filters( **byc ) } )
     byc[ "variant_defs" ], byc[ "variant_request_types" ] = read_variant_definitions( **byc )
     byc.update( { "variant_pars": parse_variants( **byc ) } )
-    byc.update( { "endpoint_pars": parse_endpoints( **byc ) } )
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } ) 
-    byc.update( { "queries": create_queries_from_filters( **byc ) } )
-    byc["queries"].update( { "variants": create_variants_query( **byc ) } )
+    byc.update( { "endpoint_pars": parse_endpoints( **byc ) } )
+    byc.update( { "queries": update_queries_from_endpoints( **byc ) } )
+    byc.update( { "queries": update_queries_from_filters( **byc ) } )
+    byc.update( { "queries": update_variants_query( **byc ) } )
 
     # fallback - but maybe shouldbe an error response?
     if not byc[ "queries" ]:

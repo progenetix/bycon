@@ -104,21 +104,6 @@ def get_variant_request_type( **byc ):
 
     return( variant_request_type )
 
-
-################################################################################
-
-def create_variants_query( **byc ):
-
-    v_q = { }
-
-    if not byc["variant_request_type"] in byc["variant_request_types"].keys():
-        return(v_q)
-
-    variant_query_generator = "create_"+byc["variant_request_type"]+"_query"
-    v_q =  getattr( sys.modules[__name__], variant_query_generator )( byc["variant_request_type"], byc["variant_pars"] )
-
-    return(v_q)
-
 ################################################################################
 
 def create_beacon_allele_request_query(variant_request_type, variant_pars):

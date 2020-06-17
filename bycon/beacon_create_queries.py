@@ -1,16 +1,21 @@
 import cgi, cgitb
 import re, yaml
 from os import path as path
+import sys
 
-from .cgi_parse_variant_requests import *
+# local
+dir_path = path.dirname(path.abspath(__file__))
+sys.path.append(path.abspath(dir_path))
+
+import cgi_parse_variant_requests
 
 ################################################################################
 
-def create_queries_from_filters( **byc ):
+def update_queries_from_filters( **byc ):
 
     """podmd
 
-    #### `create_queries_from_filters`
+    #### `update_queries_from_filters`
 
     This method creates a query object (dictionary) with entries for each of the
     standard data collections.
@@ -29,10 +34,12 @@ def create_queries_from_filters( **byc ):
 
     podmd"""
         
-    queries = { }
+    queries = byc["queries"]
     query_lists = { }
-    for coll_name in byc[ "config" ][ "collections" ]:
-        query_lists[coll_name] = [ ]
+    for c_n in byc[ "config" ][ "collections" ]:
+        query_lists[c_n] = [ ]
+        if c_n in queries:
+            query_lists[c_n].append( queries[c_n] )
  
     for filterv in byc[ "filters" ]:
         pre = re.split('-|:', filterv)[0]
@@ -56,17 +63,57 @@ def create_queries_from_filters( **byc ):
                             query_lists[ scope ].append( { pre_defs[ "db_key" ]: { "$regex": "^"+filterv } } )
                         break
 
-    for coll_name in byc[ "config" ][ "collections" ]:
-        if len(query_lists[coll_name]) == 1:
-            queries[ coll_name ] = query_lists[coll_name][0]
-        elif len(query_lists[coll_name]) > 1:
+    for c_n in byc[ "config" ][ "collections" ]:
+        if len(query_lists[c_n]) == 1:
+            queries[ c_n ] = query_lists[c_n][0]
+        elif len( query_lists[c_n] ) > 1:
             if "mongostring" in byc:
-                queries[ coll_name ] = '{ $and: [ '+','.join(query_lists[coll_name])+' ] }'
+                queries[ c_n ] = '{ $and: [ '+','.join(query_lists[c_n])+' ] }'
             else:
-                queries[ coll_name ] = { "$and": query_lists[coll_name] }
+                queries[ c_n ] = { "$and": query_lists[c_n] }
 
     return queries
 
+################################################################################
 
+def update_queries_from_endpoints( **byc ):
 
+    queries = byc["queries"]
+
+    if len(byc["endpoint_pars"]) < 1:
+        return queries
+
+    for c_n in byc["endpoint_pars"]["queries"].keys():
+        epq = byc["endpoint_pars"]["queries"][c_n]
+        if c_n in queries:
+            queries[c_n] = { '$and': [ epq, queries[c_n] ] }
+        else:
+            queries[c_n] = epq
+
+    return queries
+
+################################################################################
+
+def update_variants_query( **byc ):
+
+    queries = byc["queries"]
+    c_n = "variants"
+
+    if not byc["variant_request_type"] in byc["variant_request_types"].keys():
+        if not c_n in queries:
+            return queries
+
+    query_lists = { c_n: [ ] }
+    if c_n in queries:
+        query_lists[c_n].append( queries[c_n] )
+
+    v_q_method = "create_"+byc["variant_request_type"]+"_query"
+    v_q = getattr( cgi_parse_variant_requests, v_q_method )( byc["variant_request_type"], byc["variant_pars"] )
+
+    if len(query_lists[c_n]) > 0:
+        v_q = { '$and': query_lists[c_n].append(v_q) }
+
+    queries.update( { c_n: v_q })
+
+    return queries
 

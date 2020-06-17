@@ -1,7 +1,8 @@
 # __init__.py
 from .beacon_create_handovers import dataset_response_add_handovers
-from .beacon_create_queries import create_queries_from_filters
-from .cgi_parse_variant_requests import create_variants_query
+from .beacon_create_queries import update_queries_from_endpoints
+from .beacon_create_queries import update_variants_query
+from .beacon_create_queries import update_queries_from_filters
 from .beacon_generate_response import respond_empty_request
 from .beacon_generate_response import callsets_return_stats
 from .beacon_generate_response import create_beacon_response
