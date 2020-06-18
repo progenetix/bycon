@@ -117,6 +117,8 @@ def main():
         "filter_defs": read_filter_definitions( **config[ "paths" ] )
     }
 
+    ds_id = args.datasetid
+
     print("=> files will be written to {}".format(config[ "paths" ][ "out" ]))
     print("=> looking up data in "+kwargs["dataset_id"])
 
@@ -129,7 +131,7 @@ def main():
         print('No query specified; please use "-h" for examples')
         sys.exit( )
 
-    query_results = execute_bycon_queries(**kwargs)
+    query_results = execute_bycon_queries( ds_id, **kwargs)
 
     kwargs.update( { "cs._id": query_results["cs._id"] } )
     kwargs.update( { "bs._id": query_results["bs._id"] } )

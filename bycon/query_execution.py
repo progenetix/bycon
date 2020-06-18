@@ -5,7 +5,7 @@ import datetime
 
 ################################################################################
 
-def execute_bycon_queries(**byc):
+def execute_bycon_queries(ds_id, **byc):
 
     # last_time = datetime.datetime.now()
     # logging.info("\t start query: {}".format(last_time))
@@ -20,7 +20,6 @@ def execute_bycon_queries(**byc):
     h_o_defs = byc[ "h->o" ]["h->o_methods"]
 
     exe_queries = { }
-    ds_id = byc[ "ds_id" ]
     # last_time = byc[ "last_time" ]
 
     data_client = MongoClient( )

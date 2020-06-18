@@ -37,7 +37,7 @@ def parse_endpoints(**byc):
 
     endpoint_pars.update( { "response": path_items[2] } )
 
-    return(endpoint_pars)
+    return endpoint_pars
 
     # starting with the paths with most components
 

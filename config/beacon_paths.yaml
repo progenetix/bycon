@@ -1,5 +1,15 @@
 ---
 paths:
+
+  # experimental
+  /filtering_terms:
+    get:
+      description: |
+        Receive a list of filter objects. 
+
+
+  # standard
+
   /:
     get:
       description: |
@@ -15,6 +25,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Beacon'
+
   /individuals:
     post:
       description: |

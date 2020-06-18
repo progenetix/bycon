@@ -4,39 +4,38 @@ import cgi, cgitb
 import json, yaml
 from os import path as path
 from os import environ
-import sys, os, datetime, logging, argparse
+import sys, os, datetime, argparse
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon import *
 
-# log_file = path.join( path.abspath( dir_path ), '..', "data", "out", "logs", "python_log.txt" )
-
-# logging.basicConfig(
-#     filename=log_file,
-#     level=logging.INFO) # INFO ERROR
-
 """podmd
 
 ##### Examples
 
 * standard test deletion CNV query
-  - <https://bycon.progenetix.org?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=18000000&startMax=21975097&endMin=21967753&endMax=26000000&filters=icdom-94403>
+  - <https://bycon.progenetix.org?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=20000000&startMax=21975097&endMin=21967753&endMax=23000000&filters=icdom-94403>
   - <https://bycon.progenetix.org/datasetIds=arraymap,progenetix/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=9/variantType=DEL/startMin=18000000/startMax=21975097/endMin=21967753/endMax=26000000/filters=icdom-94403>
 * retrieving biosamples w/ a given filter code
-  - <https://bycon.progenetix.org?assemblyId=GRCh38/datasetIds=arraymap,progenetix/filters=NCIT:C3326>
+  - <https://bycon.progenetix.org?assemblyId=GRCh38&datasetIds=arraymap,progenetix&filters=NCIT:C3326>
 * beacon info (i.e. missing parameters return the info)
   - <https://bycon.progenetix.org>
 * beacon info (i.e. specific request)
   - <https://bycon.progenetix.org/service-info/>
 * precise variant query together with filter
   - <https://bycon.progenetix.org?datasetIds=dipg/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=17/start=7577120/referenceBases=G/alternateBases=A/filters=icdot-C71.7>
-* retrieving filters
+
+##### Examples for v2 endpoints
+
+* `/filtering_terms`
   - <https://bycon.progenetix.org/filtering_terms/>
-  - <https://bycon.progenetix.org/filtering_terms/prefixes=PMID/>
-  - <https://bycon.progenetix.org/filtering_terms/prefixes=NCIT,icdom/>
-  - <https://bycon.progenetix.org/filtering_terms/prefixes=NCIT,icdom,icdot/datasetId=dipg/>
+  - <https://bycon.progenetix.org/filtering_terms?prefixes=PMID>
+  - <https://bycon.progenetix.org/filtering_terms?prefixes=NCIT,icdom>
+  - <https://bycon.progenetix.org/filtering_terms?prefixes=NCIT,icdom,icdot&datasetIds=dipg>
+* `/biosamples/{id}`
+  - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_GSM253289?datasetIds=arraymap>
 
 podmd"""
 
@@ -64,9 +63,6 @@ def main():
 ################################################################################
 
 def byconplus():
-
-    # last_time = datetime.datetime.now()
-    # logging.info("Start: {}".format(last_time))
     
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
         config = yaml.load( cf , Loader=yaml.FullLoader)
@@ -77,9 +73,6 @@ def byconplus():
     form_data = cgi_parse_query()
     args = _get_args()
     rest_pars = cgi_parse_path_params( "byconplus" )
-
-    # logging.info("Init steps: {}".format(datetime.datetime.now()-last_time))
-    # last_time = datetime.datetime.now()
 
     # TODO: "byc" becoming a proper object?!
     byc = {
@@ -123,27 +116,18 @@ def byconplus():
     # fallback - but maybe shouldbe an error response?
     if not byc[ "queries" ]:
         cgi_print_json_response(byc["service_info"])
-            
-    # logging.info("Parsing steps: {}".format(datetime.datetime.now()-last_time))
 
     dataset_responses = [ ]
 
     for ds_id in byc[ "dataset_ids" ]:
-        byc.update( { "ds_id": ds_id, "last_time": datetime.datetime.now() } )
-        byc.update( { "query_results": execute_bycon_queries( **byc ) } )
-        dataset_responses.append( create_dataset_response( **byc ) )   
-
-        # logging.info("Query: {}: {}".format(byc['queries'], datetime.datetime.now()-last_time))
-        # last_time = datetime.datetime.now()
+        byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
+        dataset_responses.append( create_dataset_response( ds_id, **byc ) )   
 
     byc.update( { "dataset_responses": dataset_responses } )
     beacon_response = create_beacon_response(**byc)
     
     cgi_print_json_response(beacon_response)
 
-    # logging.info("Query steps: {}".format(datetime.datetime.now()-last_time))
-    # last_time = datetime.datetime.now()
-    
 ################################################################################
 ################################################################################
 

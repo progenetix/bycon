@@ -41,6 +41,9 @@ def dataset_response_add_handovers(**byc):
     h_o_server = _handover_select_server(**byc) 
     b_h_o = [ ]
 
+    if not ds_id in byc["datasets_info"]:
+        return b_h_o
+        
     ds_h_o =  byc["datasets_info"][ ds_id ]["handoverTypes"]
     h_o_types = byc["h->o"]["h->o_types"]
 
@@ -60,6 +63,8 @@ def dataset_response_add_handovers(**byc):
 
         for h_o_key in byc[ "query_results" ].keys():
             h_o = byc[ "query_results" ][ h_o_key ]
+            if h_o["target_count"] < 1:
+                continue
             accessid = h_o["id"]
             if h_o_key == h_o_types[ h_o_t ][ "h->o_key" ]:
                 if not h_o_key in h_o_db_k:
@@ -103,10 +108,9 @@ def _handover_create_url(h_o_server, h_o_defs, h_o_t, accessid):
             server = ""
         return("{}{}?do={}&accessid={}".format(server, h_o_defs["script_path_web"], h_o_t, accessid))
 
-    return("")
+    return ""
 
 ################################################################################
-
 
 def _handover_create_ext_url(h_o_server, h_o_defs, h_o_t, accessid, ucsc_pos):
 
@@ -114,7 +118,7 @@ def _handover_create_ext_url(h_o_server, h_o_defs, h_o_t, accessid, ucsc_pos):
         if "bedfile" in h_o_defs["id"]:
             return("{}&position={}&hgt.customText={}/tmp/{}.bed".format(h_o_defs["ext_url"], ucsc_pos, h_o_server, accessid))
 
-    return(False)
+    return False
 
 ################################################################################
 
