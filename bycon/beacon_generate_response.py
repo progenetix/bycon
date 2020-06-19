@@ -177,10 +177,10 @@ def create_beacon_response(**byc):
     b_response = {}
 
     if byc["response_type"] == "return_biosamples":
-        b_response = { "biosamples": [ ] }
-        for r in byc[ "dataset_responses" ]:
-            for b in r:
-                b_response["biosamples"].append(b)
+        b_response = { "biosamples": { } }
+        for dsr in byc[ "dataset_responses" ]:
+            for k in dsr.keys():
+                b_response["biosamples"][k] = dsr[k]
         return b_response
 
     b_attr = [ "id", "beaconId", "name", "serviceUrl", 'organization', 'apiVersion', "info", "updateDateTime" ]

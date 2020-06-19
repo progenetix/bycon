@@ -126,7 +126,8 @@ def byconplus():
         byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
         query_results_save_handovers( **byc )
         if byc["response_type"] == "return_biosamples":
-            dataset_responses.append( handover_return_data( byc["query_results"]["bs._id"][ "id" ], **byc ) )
+            bios = handover_return_data( byc["query_results"]["bs._id"][ "id" ], **byc )
+            dataset_responses.append( { ds_id: bios } )
         else:
             dataset_responses.append( create_dataset_response( ds_id, **byc ) )   
 
