@@ -48,7 +48,10 @@ def parse_endpoints(**byc):
     if len(path_items) < 3:
         return(endpoint_pars)
 
-    endpoint_pars.update( { "response": path_items[2] } )
+    response = path_items[2]
+    response = response.replace("g_variants", "variants")
+
+    endpoint_pars.update( { "response": response } )
 
     return endpoint_pars
 

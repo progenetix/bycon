@@ -36,6 +36,11 @@ from bycon import *
   - <https://bycon.progenetix.org/filtering_terms?prefixes=NCIT,icdom,icdot&datasetIds=dipg>
 * `/biosamples/{id}`
   - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_GSM253289?datasetIds=arraymap>
+  - this will return an object `biosamples.__datasetid(s)__` where containing list(s) of
+  the biosamples data objects (the multi-dataset approach seems strange here but
+  in the case of progenetix & arraymap actually makes sense ...)
+* `/biosamples/{id}/g_variants`
+  - <https://bycon.progenetix.test/biosamples/PGX_AM_BS_GSM253289/g_variants?datasetIds=arraymap>
 
 podmd"""
 
@@ -120,14 +125,20 @@ def byconplus():
     if len(byc[ "dataset_ids" ]) < 1:
         cgi_exit_on_error("No `datasetIds` parameter provided.")
 
+    # TODO: vove the response modification to somewhere sensible...
     dataset_responses = [ ]
 
     for ds_id in byc[ "dataset_ids" ]:
         byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
+        # print(byc["query_results"].keys())
+        # exit()
         query_results_save_handovers( **byc )
         if byc["response_type"] == "return_biosamples":
             bios = handover_return_data( byc["query_results"]["bs._id"][ "id" ], **byc )
             dataset_responses.append( { ds_id: bios } )
+        elif byc["response_type"] == "return_variants":
+            vs = handover_return_data( byc["query_results"]["vs._id"][ "id" ], **byc )
+            dataset_responses.append( { ds_id: vs } )
         else:
             dataset_responses.append( create_dataset_response( ds_id, **byc ) )   
 

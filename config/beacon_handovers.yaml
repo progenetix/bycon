@@ -74,6 +74,11 @@ h->o_methods:
     source_key: biosample_id
     target_collection: biosamples
     target_key: id
+  cs._id->vs._id:
+    source_collection: callsets
+    source_key: _id
+    target_collection: variants
+    target_key: _id
   is._id:
     source_collection: individuals
     source_key: _id

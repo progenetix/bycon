@@ -182,6 +182,12 @@ def create_beacon_response(**byc):
             for k in dsr.keys():
                 b_response["biosamples"][k] = dsr[k]
         return b_response
+    elif byc["response_type"] == "return_variants":
+        b_response = { "g_variants": { } }
+        for dsr in byc[ "dataset_responses" ]:
+            for k in dsr.keys():
+                b_response["g_variants"][k] = dsr[k]
+        return b_response
 
     b_attr = [ "id", "beaconId", "name", "serviceUrl", 'organization', 'apiVersion', "info", "updateDateTime" ]
     b_response = {

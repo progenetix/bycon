@@ -155,6 +155,13 @@ def execute_bycon_queries(ds_id, **byc):
     prevars["query"] = { "id": { "$in": prefetch[ "bs.id" ]["target_values"] } }
     prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
+    if byc["response_type"] == "return_variants":
+        if not "vs._id" in prevars.keys():
+            prevars["method"] = "vs._id"
+            prevars["query"] = { "callset_id": { "$in": prefetch[ "cs.id" ]["target_values"] } }
+            prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+           
+
     # logging.info("\t bs._id: {}".format(datetime.datetime.now()-last_time))
     # last_time = datetime.datetime.now()
 
