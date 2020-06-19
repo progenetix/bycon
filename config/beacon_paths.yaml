@@ -7,7 +7,6 @@ paths:
       description: |
         Receive a list of filter objects. 
 
-
   # standard
 
   /:

@@ -72,14 +72,12 @@ def byconplus():
     # input / definitions
     form_data = cgi_parse_query()
     args = _get_args()
-    rest_pars = cgi_parse_path_params( "byconplus" )
 
     # TODO: "byc" becoming a proper object?!
     byc = {
         "config": config,
         "args": args,
         "form_data": form_data,
-        "rest_pars": rest_pars,
         "filter_defs": read_filter_definitions( **config[ "paths" ] ),
         "variant_defs": read_variant_definitions( **config[ "paths" ] ),
         "datasets_info": read_datasets_info( **config[ "paths" ] ),
@@ -93,6 +91,8 @@ def byconplus():
     byc.update( { "dbstats": dbstats_return_latest( **byc ) } )
     byc["beacon_info"].update( { "datasets": update_datasets_from_dbstats(**byc) } )
     byc.update( { "endpoint": beacon_get_endpoint(**byc) } )
+    byc.update( { "endpoint_pars": parse_endpoints( **byc ) } )
+    byc.update( { "response_type": select_response_type( **byc ) } )
 
     for par in byc[ "beacon_info" ]:
         byc[ "service_info" ][ par ] = byc[ "beacon_info" ][ par ]
@@ -108,7 +108,6 @@ def byconplus():
     byc.update( { "filters":  parse_filters( **byc ) } )
     byc.update( { "variant_pars": parse_variants( **byc ) } )
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } ) 
-    byc.update( { "endpoint_pars": parse_endpoints( **byc ) } )
     byc.update( { "queries": update_queries_from_endpoints( **byc ) } )
     byc.update( { "queries": update_queries_from_filters( **byc ) } )
     byc.update( { "queries": update_variants_query( **byc ) } )
@@ -117,11 +116,19 @@ def byconplus():
     if not byc[ "queries" ]:
         cgi_print_json_response(byc["service_info"])
 
+    # TODO: There should be a better pplace for this ...
+    if len(byc[ "dataset_ids" ]) < 1:
+        cgi_exit_on_error("No `datasetIds` parameter provided.")
+
     dataset_responses = [ ]
 
     for ds_id in byc[ "dataset_ids" ]:
         byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
-        dataset_responses.append( create_dataset_response( ds_id, **byc ) )   
+        query_results_save_handovers( **byc )
+        if byc["response_type"] == "return_biosamples":
+            dataset_responses.append( handover_return_data( byc["query_results"]["bs._id"][ "id" ], **byc ) )
+        else:
+            dataset_responses.append( create_dataset_response( ds_id, **byc ) )   
 
     byc.update( { "dataset_responses": dataset_responses } )
     beacon_response = create_beacon_response(**byc)

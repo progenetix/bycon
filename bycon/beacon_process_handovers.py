@@ -7,7 +7,7 @@ from .cgi_utils import *
 
 ################################################################################
 
-def dataset_response_add_handovers(**byc):
+def dataset_response_add_handovers(ds_id, **byc):
 
     """podmd
     #### Beacon "Handovers"
@@ -37,21 +37,14 @@ def dataset_response_add_handovers(**byc):
 
     podmd"""
 
-    ds_id = byc[ "ds_id" ]
     h_o_server = _handover_select_server(**byc) 
     b_h_o = [ ]
 
     if not ds_id in byc["datasets_info"]:
         return b_h_o
-        
+
     ds_h_o =  byc["datasets_info"][ ds_id ]["handoverTypes"]
     h_o_types = byc["h->o"]["h->o_types"]
-
-    ho_client = MongoClient()
-    ho_db = ho_client[ byc["config"]["info_db"] ]
-    ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
-
-    h_o_db_k = [ ]
 
     for h_o_t in h_o_types.keys():
 
@@ -67,9 +60,6 @@ def dataset_response_add_handovers(**byc):
                 continue
             accessid = h_o["id"]
             if h_o_key == h_o_types[ h_o_t ][ "h->o_key" ]:
-                if not h_o_key in h_o_db_k:
-                    h_o_db_k.append(h_o)
-                    ho_coll.update_one( { "id": accessid }, { '$set': h_o }, upsert=True )
 
                 h_o_r = {
                     "handoverType": {
@@ -87,11 +77,50 @@ def dataset_response_add_handovers(**byc):
 
                 b_h_o.append( h_o_r )
 
-    return( b_h_o )
+    return b_h_o
 
 ################################################################################
 
-def _handover_select_server(**byc):
+def query_results_save_handovers( **byc ):
+
+    ho_client = MongoClient()
+    ho_db = ho_client[ byc["config"]["info_db"] ]
+    ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
+
+    for h_o_k in byc[ "query_results" ].keys():
+        h_o = byc[ "query_results" ][ h_o_k ]
+        ho_coll.update_one( { "id": h_o["id"] }, { '$set': h_o }, upsert=True )
+
+    ho_client.close()
+
+    return True
+
+################################################################################
+
+def handover_return_data( accessid, **byc ):
+
+    mongo_client = MongoClient()
+    ho_d = byc["config"]["info_db"]
+    ho_c = byc["config"][ "handover_coll" ]
+    ho_coll = mongo_client[ ho_d ][ ho_c ]
+
+    data = [ ]
+
+    try:
+        h_o =  ho_coll.find_one( { "id": accessid } )
+        data_coll = mongo_client[ h_o["source_db"] ][ h_o[ "target_collection" ] ]
+        query = { h_o["target_key"]: { '$in': h_o["target_values"] } }
+        for c in data_coll.find( query, {'_id': False } ):
+            data.append(c)
+    except:
+        pass
+    # TODO: error messaging
+
+    return data
+
+################################################################################
+
+def _handover_select_server( **byc ):
 
     if "test" in str(environ.get('SERVER_NAME')):
         return( byc["config"]["test_handover_domain"] )

@@ -1,8 +1,11 @@
 # __init__.py
-from .beacon_create_handovers import dataset_response_add_handovers
+from .beacon_process_handovers import dataset_response_add_handovers
+from .beacon_process_handovers import handover_return_data
+from .beacon_process_handovers import query_results_save_handovers
 from .beacon_create_queries import update_queries_from_endpoints
 from .beacon_create_queries import update_variants_query
 from .beacon_create_queries import update_queries_from_filters
+from .beacon_generate_response import select_response_type
 from .beacon_generate_response import respond_empty_request
 from .beacon_generate_response import callsets_return_stats
 from .beacon_generate_response import create_beacon_response
@@ -10,6 +13,7 @@ from .beacon_generate_response import create_dataset_response
 from .beacon_generate_response import respond_filtering_terms_request
 from .beacon_generate_response import respond_get_datasetids_request
 from .beacon_generate_response import respond_service_info_request
+from .beacon_parse_endpoints import beacon_get_endpoint
 from .beacon_parse_endpoints import parse_endpoints
 from .beacon_process_specs import read_beacon_info
 from .beacon_process_specs import read_datasets_info
@@ -25,7 +29,6 @@ from .beacon_parse_filters import select_dataset_ids
 from .beacon_parse_variants import parse_variants
 from .beacon_parse_variants import get_variant_request_type
 from .beacon_parse_variants import create_beacon_cnv_request_query
-from .cgi_utils import beacon_get_endpoint
 from .cgi_utils import cgi_parse_query
 from .cgi_utils import cgi_exit_on_error
 from .cgi_utils import cgi_parse_path_params

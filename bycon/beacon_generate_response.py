@@ -5,15 +5,25 @@ from os import path as path
 from os import environ
 
 from .cgi_utils import *
-from .beacon_create_handovers import *
+from .beacon_process_handovers import *
+
+################################################################################
+
+def select_response_type(**byc):
+
+    response_type = "respond_empty_request"
+
+    if "response" in byc["endpoint_pars"]:
+        if byc["endpoint_pars"]["response"]:
+            response_type = "return_"+byc["endpoint_pars"]["response"]
+
+    return response_type
 
 ################################################################################
 
 def respond_empty_request(**byc):
 
     if not environ.get('REQUEST_URI'):
-        return()
-    if len(byc["rest_pars"]) > 0:
         return()
     if len(byc["form_data"]) > 0:
         return()
@@ -65,6 +75,7 @@ def respond_filtering_terms_request(**byc):
     if not "filtering_terms" in environ.get('REQUEST_URI'):
         return()
     
+    # TODO: This should be part of standard endpoint prrocessing...
     rest_pars = cgi_parse_path_params( "filtering_terms" )
 
     filters =  [ ]
@@ -115,11 +126,9 @@ def respond_filtering_terms_request(**byc):
 
 ################################################################################
 
-def create_dataset_response(**byc):
+def create_dataset_response(ds_id, **byc):
 
     # TODO: getting the correct response structure from the schema
-
-    ds_id = byc[ "ds_id" ]
 
     dataset_allele_resp = {
         "datasetId": ds_id,
@@ -151,9 +160,9 @@ def create_dataset_response(**byc):
             if dataset_allele_resp[ this_c ] > 0:
                  dataset_allele_resp.update( { "exists": True } )
 
-    dataset_allele_resp.update( { "datasetHandover": dataset_response_add_handovers(**byc) } )
+    dataset_allele_resp.update( { "datasetHandover": dataset_response_add_handovers( ds_id, **byc ) } )
 
-    return( dataset_allele_resp )
+    return dataset_allele_resp
 
 ################################################################################
 
@@ -164,6 +173,15 @@ def create_beacon_response(**byc):
     # print(b_defs)
 
     # TODO: getting the correct response structure from the schema
+
+    b_response = {}
+
+    if byc["response_type"] == "return_biosamples":
+        b_response = { "biosamples": [ ] }
+        for r in byc[ "dataset_responses" ]:
+            for b in r:
+                b_response["biosamples"].append(b)
+        return b_response
 
     b_attr = [ "id", "beaconId", "name", "serviceUrl", 'organization', 'apiVersion', "info", "updateDateTime" ]
     b_response = {
@@ -183,7 +201,7 @@ def create_beacon_response(**byc):
         if b_r[ "exists" ] == True:
             b_response[ "exists" ] = True
 
-    return( b_response )
+    return b_response
 
 ################################################################################
 

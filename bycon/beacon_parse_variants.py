@@ -37,6 +37,7 @@ def parse_variants( **byc ):
         if args.genome:
             variant_pars[ "assemblyId" ] = args.genome
 
+    # TODO: rest_pars shouldn't be used anymore; still for cytomapper...
     if "rest_pars" in byc:
         for rp in byc[ "rest_pars" ].keys():
             if rp in v_p_defs:

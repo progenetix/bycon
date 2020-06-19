@@ -8,6 +8,19 @@ from urllib.parse import urlparse
   
 ################################################################################
 
+def beacon_get_endpoint(**byc):
+
+    endpoint = "/"
+
+    url_comps = urlparse( environ.get('REQUEST_URI') )
+    for p in byc["beacon_paths"].keys():
+        if p == url_comps.path:
+            return p
+
+    return endpoint
+
+################################################################################
+
 def parse_endpoints(**byc):
 
     endpoint_pars = { "queries": {}, "response": None }
@@ -24,7 +37,7 @@ def parse_endpoints(**byc):
         return(endpoint_pars)
 
     scope = path_items[0]
-    scope = scope.replace("g_", "")
+    scope = scope.replace("g_variants", "variants")
     endpoint_pars.update( { "response": scope } )
 
     if len(path_items) < 2:

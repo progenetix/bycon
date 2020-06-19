@@ -21,16 +21,6 @@ def cgi_parse_query():
 
 ################################################################################
 
-def beacon_get_endpoint(**byc):
-
-    url_comps = urlparse( environ.get('REQUEST_URI') )
-    for p in byc["beacon_paths"].keys():
-        if p == url_comps.path:
-            return(p)
-
-################################################################################
-
-
 def cgi_parse_path_params( script_name ):
     """
     #### `cgi_parse_path_params`
