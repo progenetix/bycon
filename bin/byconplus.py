@@ -13,6 +13,8 @@ from bycon import *
 
 """podmd
 
+### Bycon - a Python-based environment for the Beacon v2 genomics API
+
 ##### Examples
 
 * standard test deletion CNV query
@@ -35,12 +37,41 @@ from bycon import *
   - <https://bycon.progenetix.org/filtering_terms?prefixes=NCIT,icdom>
   - <https://bycon.progenetix.org/filtering_terms?prefixes=NCIT,icdom,icdot&datasetIds=dipg>
 * `/biosamples/{id}`
-  - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_GSM253289?datasetIds=arraymap>
-  - this will return an object `biosamples.__datasetid(s)__` where containing list(s) of
+  - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_HNSCC-GSF-an-10394?datasetIds=arraymap>
+  - this will return an object `biosamples.{datasetid(s)}` where containing list(s) of
   the biosamples data objects (the multi-dataset approach seems strange here but
   in the case of progenetix & arraymap actually makes sense ...)
+```
+{
+  "biosamples": {
+    "arraymap": [
+      {
+        "id": "PGX_AM_BS_HNSCC-GSF-an-10394",
+        "individual_id": "PGX_IND_HNSCC-GSF-an-10394",
+        "age_at_collection": { "age": "P50Y" },
+        "biocharacteristics": [
+          {
+            "type" : { "id" : "icdot-C10.9", "label" : "Oropharynx" }
+          },
+          {
+            "type" : { "id" : "icdom-80703", "label" : "Squamous cell carcinoma, NOS" }
+          },
+          {
+            "type" : { "id" : "NCIT:C8181", "label" : "Oropharyngeal Squamous Cell Carcinoma" }
+          }
+        ],
+        "geo_provenance" : {
+          "label" : "Oberschleissheim, Germany",
+          "precision" : "city",
+          "city" : "Oberschleissheim",
+          "country" : "Germany",
+          "latitude" : 48.25,
+          "longitude" : 11.56
+        },
+        ...
+```
 * `/biosamples/{id}/g_variants`
-  - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_GSM253289/g_variants?datasetIds=arraymap>
+  - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_HNSCC-GSF-an-10394PGX_AM_BS_HNSCC-GSF-an-10394/g_variants?datasetIds=arraymap>
 * `/g_variants?{query}`  
   - <https://bycon.progenetix.org/g_variants?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&startMin=7572825&endMax=7579005&referenceBases=N&alternateBases=N>
 * `/g_variants/{id}`    

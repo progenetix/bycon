@@ -2,7 +2,11 @@
 
 The `bycon` project - at least at its current stage - is a mix of _Progenetix_ (i.e. GA4GH object model derived) - data structure management, and the implementation of middleware & server for the Beacon API.
 
-While the current implementation runs nicely against the >100'000 samples / millions of genomic variants of the diverse Progenetix collections, it's certainly not a drop-in Beacon implementation - unless you really know what you do (we don't).
+While the current implementation runs nicely against the >100'000 samples / millions of genomic variants of the diverse Progenetix collections, it's not yet a drop-in Beacon implementation - unless you really know what you do.
+
+More information about the current status of the package can be found in the inline
+documentation which is also [presented in an accessible format](https://info.progenetix.org/tags/Beacon.html) on the _Progenetix_
+website.
 
 ### Directory Structure
 
@@ -12,11 +16,12 @@ While the current implementation runs nicely against the >100'000 samples / mill
 
 #### `bycon`
 
-* Python modules
+* Python modules for Beacon query and response functions
 
-#### `cgi`
+#### `pgy`
 
-* web server apps - "beacon" _et al._
+* Python modules for data management in the [MogoDB](http://mongodb.org) based
+_Progenetix_ database environment
 
 #### `config`
 
