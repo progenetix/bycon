@@ -138,33 +138,30 @@ def execute_bycon_queries(ds_id, **byc):
     prevars["query"] = { "id": { "$in": prefetch[ "cs.id" ]["target_values"] } }
     prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
-    # logging.info("\t cs._id: {}".format(datetime.datetime.now()-last_time))
-    # last_time = datetime.datetime.now()
-
     prevars["method"] = "cs.bsid->bs.id"
     prevars["query"] = { "_id": { "$in": prefetch[ "cs._id" ]["target_values"] } }
     prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
     prefetch[ "bs.id" ] = prefetch["cs.bsid->bs.id"]
     prefetch[ "bs.id" ].update( { "source_collection": h_o_defs["bs.id"]["source_collection"], "source_key": h_o_defs["bs.id"]["source_key"] } )
- 
-    # logging.info("\t bs.id: {}".format(datetime.datetime.now()-last_time))
-    # last_time = datetime.datetime.now()
 
     prevars["method"] = "bs._id"
     prevars["query"] = { "id": { "$in": prefetch[ "bs.id" ]["target_values"] } }
     prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
+    """podmd
+    If no variant query was performed _but_ the response asks for variants => all
+    callset variants will be returned.
+
+    podmd"""
+
+    # TODO: This will need to be refined; queries can potentially lead to huge responses here...
     if byc["response_type"] == "return_variants":
-        if not "vs._id" in prevars.keys():
+        if not "vs._id" in prefetch.keys():
             prevars["method"] = "vs._id"
             prevars["query"] = { "callset_id": { "$in": prefetch[ "cs.id" ]["target_values"] } }
             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
-           
-
-    # logging.info("\t bs._id: {}".format(datetime.datetime.now()-last_time))
-    # last_time = datetime.datetime.now()
-
+    
     data_client.close( )
     ho_client.close( )
 

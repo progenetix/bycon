@@ -40,7 +40,18 @@ from bycon import *
   the biosamples data objects (the multi-dataset approach seems strange here but
   in the case of progenetix & arraymap actually makes sense ...)
 * `/biosamples/{id}/g_variants`
-  - <https://bycon.progenetix.test/biosamples/PGX_AM_BS_GSM253289/g_variants?datasetIds=arraymap>
+  - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_GSM253289/g_variants?datasetIds=arraymap>
+* `/g_variants?{query}`  
+  - <https://bycon.progenetix.org/g_variants?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&startMin=7572825&endMax=7579005&referenceBases=N&alternateBases=N>
+* `/g_variants/{id}`    
+  - Since the _Progenetix_ framework treats all variant instances individually
+  and an `id` parameter should be unique, variants are grouped as "equivalent"
+  using the "digest" parameter. Remapping of the positional "id" argument to `digest`
+  is handled internally.
+  - <https://bycon.progenetix.org/g_variants/DIPG_V_MAF_17_7577121_G_A?datasetIds=dipg>
+* `/g_variants/{id}/biosamples`
+  - As above, but responding with the `biosamples` data.
+  - <https://bycon.progenetix.org/g_variants/DIPG_V_MAF_17_7577121_G_A/biosamples?datasetIds=dipg>
 
 podmd"""
 
@@ -113,9 +124,9 @@ def byconplus():
     byc.update( { "filters":  parse_filters( **byc ) } )
     byc.update( { "variant_pars": parse_variants( **byc ) } )
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } ) 
-    byc.update( { "queries": update_queries_from_endpoints( **byc ) } )
     byc.update( { "queries": update_queries_from_filters( **byc ) } )
     byc.update( { "queries": update_variants_query( **byc ) } )
+    byc.update( { "queries": update_queries_from_endpoints( **byc ) } )
 
     # fallback - but maybe shouldbe an error response?
     if not byc[ "queries" ]:

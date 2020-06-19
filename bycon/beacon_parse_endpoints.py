@@ -43,7 +43,11 @@ def parse_endpoints(**byc):
     if len(path_items) < 2:
         return(endpoint_pars)
 
-    endpoint_pars.update( { "queries": { scope: { "id": path_items[1] } } } )
+    id_key = "id"
+    if scope == "variants":
+        id_key = "digest"
+
+    endpoint_pars.update( { "queries": { scope: { id_key: path_items[1] } } } )
 
     if len(path_items) < 3:
         return(endpoint_pars)
@@ -54,8 +58,5 @@ def parse_endpoints(**byc):
     endpoint_pars.update( { "response": response } )
 
     return endpoint_pars
-
-    # starting with the paths with most components
-
 
 ################################################################################
