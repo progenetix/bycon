@@ -39,10 +39,22 @@ def execute_bycon_queries(ds_id, **byc):
     prefetch = { }
     prevars = { "ds_id": ds_id, "mdb": data_db, "h_o_defs": h_o_defs, "method": "", "query": { } }
 
-    # to be implemented ...
+    # TODO: to be implemented ...
     if ho_collname in exe_queries:
         
         handover = ho_coll.find_one( exe_queries[ q_coll_name ] )
+
+    if "individuals" in exe_queries:
+
+        prevars["method"] = "is.id"
+        prevars["query"] = exe_queries[ "individuals" ]
+        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+
+        prevars["method"] = "bs.isid->bs.id"
+        prevars["query"] = { "individual_id": { '$in': prefetch["is.id"]["target_values"] }  }
+        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+
+        # TODO: finishing this ... 
 
     if "biosamples" in exe_queries:
 
@@ -54,12 +66,9 @@ def execute_bycon_queries(ds_id, **byc):
         # run. E.g. when only retrieving biosample data, it makes no
         # sense to also run a callsets query.
 
-        prevars["method"] = "cs.id"
-        prevars["query"] = { "biosample_id": {"$in": prefetch["bs.id"]["target_values"] } }
+        prevars["method"] = "cs.bsid->cs.id"
+        prevars["query"] = { "biosample_id": { '$in': prefetch["bs.id"]["target_values"] }  }
         prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
-
-    # logging.info("\t biosamples: {}".format(datetime.datetime.now()-last_time))
-    # last_time = datetime.datetime.now()
 
     if "callsets" in exe_queries:
 
@@ -67,12 +76,14 @@ def execute_bycon_queries(ds_id, **byc):
         prevars["query"] = exe_queries[ "callsets" ]
         prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
-        if "biosamples" in exe_queries:
+        if "cs.bsid->cs.id" in prefetch:
             csids = list( set( prefetch["cs.bsid->cs.id"]["target_values"] ) & set( prefetch["cs.id"]["target_values"] ) )
             prefetch[ "cs.id" ].update( { "target_values": csids, "target_count": len(csids) } )
 
-    # logging.info("\t callsets: {}".format(datetime.datetime.now()-last_time))
-    # last_time = datetime.datetime.now()
+    # if no callsets query but existing output from biosample query -> rename
+    elif "cs.bsid->cs.id" in prefetch:
+
+        prefetch[ "cs.id" ] = prefetch[ "cs.bsid->cs.id" ]
 
     if "variants" in exe_queries:
 
@@ -93,9 +104,6 @@ def execute_bycon_queries(ds_id, **byc):
         prevars["query"] = exe_queries[ "variants" ]
         prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
           
-        # logging.info("\t\t cs_from_vars: {}".format(datetime.datetime.now()-last_time))
-        # last_time = datetime.datetime.now()
-
         if "cs.id" in prefetch:
             csids = list( set( prefetch["cs.id"]["target_values"] ) & set( prefetch["vs.csid->cs.id"]["target_values"] ) )
             prefetch[ "cs.id" ].update( { "target_values": csids, "target_count": len(csids) } )
@@ -108,21 +116,9 @@ def execute_bycon_queries(ds_id, **byc):
         prevars["query"] = exe_queries[ "variants" ]
         prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
-        # logging.info("\t\t variants_id: {}".format(datetime.datetime.now()-last_time))
-        # logging.info("\t\t variants count: {}".format(len(query_results[ "vs._id" ])))
-        # last_time = datetime.datetime.now()
-
-        # print("requery vars for digests")
         prevars["method"] = "vs.digest"
         prevars["query"] = { "_id": { "$in": prefetch[ "vs._id" ]["target_values"] } }
         prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
-
-        # logging.info("\t\t variants_digest: {}".format(datetime.datetime.now()-last_time))
-
-        # last_time = datetime.datetime.now()
-
-    # logging.info("\t variants: {}".format(datetime.datetime.now()-last_time))
-    # last_time = datetime.datetime.now()
 
     """podmd
     ### Result Aggregation

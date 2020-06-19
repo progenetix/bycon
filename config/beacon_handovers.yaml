@@ -59,6 +59,11 @@ h->o_methods:
     source_key: id
     target_collection: biosamples
     target_key: id
+  bs.isid->bs.id:
+    source_collection: biosamples
+    source_key: individual_id
+    target_collection: biosamples
+    target_key: id
   cs.id:
     source_collection: callsets
     source_key: id
@@ -69,16 +74,16 @@ h->o_methods:
     source_key: _id
     target_collection: callsets
     target_key: _id
+  cs.bsid->cs.id:
+    source_collection: callsets
+    source_key: biosample_id
+    target_collection: callsets
+    target_key: id
   cs.bsid->bs.id:
     source_collection: callsets
     source_key: biosample_id
     target_collection: biosamples
     target_key: id
-  cs._id->vs._id:
-    source_collection: callsets
-    source_key: _id
-    target_collection: variants
-    target_key: _id
   is._id:
     source_collection: individuals
     source_key: _id
