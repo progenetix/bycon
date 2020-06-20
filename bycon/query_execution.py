@@ -55,7 +55,6 @@ def execute_bycon_queries(ds_id, **byc):
         prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
         # TODO: finishing this ... 
-
     if "biosamples" in exe_queries:
 
         prevars["method"] = "bs.id"
@@ -66,7 +65,7 @@ def execute_bycon_queries(ds_id, **byc):
         # run. E.g. when only retrieving biosample data, it makes no
         # sense to also run a callsets query.
 
-        prevars["method"] = "cs.bsid->cs.id"
+        prevars["method"] = "cs.id->cs.id"
         prevars["query"] = { "biosample_id": { '$in': prefetch["bs.id"]["target_values"] }  }
         prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
@@ -77,13 +76,13 @@ def execute_bycon_queries(ds_id, **byc):
         prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
         if "cs.bsid->cs.id" in prefetch:
-            csids = list( set( prefetch["cs.bsid->cs.id"]["target_values"] ) & set( prefetch["cs.id"]["target_values"] ) )
+            csids = list( set( prefetch["cs.id->cs.id"]["target_values"] ) & set( prefetch["cs.id"]["target_values"] ) )
             prefetch[ "cs.id" ].update( { "target_values": csids, "target_count": len(csids) } )
 
     # if no callsets query but existing output from biosample query -> rename
-    elif "cs.bsid->cs.id" in prefetch:
+    elif "cs.id->cs.id" in prefetch:
 
-        prefetch[ "cs.id" ] = prefetch[ "cs.bsid->cs.id" ]
+        prefetch[ "cs.id" ] = prefetch[ "cs.id->cs.id" ]
 
     if "variants" in exe_queries:
 
@@ -129,6 +128,7 @@ def execute_bycon_queries(ds_id, **byc):
     TODO: Benchmark if the `_id` retrieval & storage speeds up biosample and callset recovery
     in handover scenarios or if `id` is fine.
     podmd"""
+
 
     prevars["method"] = "cs._id"
     prevars["query"] = { "id": { "$in": prefetch[ "cs.id" ]["target_values"] } }

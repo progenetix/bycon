@@ -74,9 +74,9 @@ h->o_methods:
     source_key: _id
     target_collection: callsets
     target_key: _id
-  cs.bsid->cs.id:
+  cs.id->cs.id:                     # duplicate of cs.id, for some intersection...
     source_collection: callsets
-    source_key: biosample_id
+    source_key: id
     target_collection: callsets
     target_key: id
   cs.bsid->bs.id:
