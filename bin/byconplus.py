@@ -37,14 +37,14 @@ from bycon import *
   - <https://bycon.progenetix.org/filtering_terms?prefixes=NCIT,icdom>
   - <https://bycon.progenetix.org/filtering_terms?prefixes=NCIT,icdom,icdot&datasetIds=dipg>
 * `/biosamples/{id}`
-  - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_HNSCC-GSF-an-10394?datasetIds=arraymap>
+  - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_HNSCC-GSF-an-10394?datasetIds=progenetix>
   - this will return an object `biosamples.{datasetid(s)}` where containing list(s) of
   the biosamples data objects (the multi-dataset approach seems strange here but
-  in the case of progenetix & arraymap actually makes sense ...)
+  in the case of progenetix & arraymap could in some cases make sense ...)
 ```
 {
   "biosamples": {
-    "arraymap": [
+    "progenetix": [
       {
         "id": "PGX_AM_BS_HNSCC-GSF-an-10394",
         "individual_id": "PGX_IND_HNSCC-GSF-an-10394",
@@ -71,7 +71,7 @@ from bycon import *
         ...
 ```
 * `/biosamples/{id}/g_variants`
-  - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_HNSCC-GSF-an-10394PGX_AM_BS_HNSCC-GSF-an-10394/g_variants?datasetIds=arraymap>
+  - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_HNSCC-GSF-an-10394/g_variants?datasetIds=progenetix>
 * `/g_variants?{query}`  
   - <https://bycon.progenetix.org/g_variants?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&startMin=7572825&endMax=7579005&referenceBases=N&alternateBases=N>
 * `/g_variants/{id}`    
