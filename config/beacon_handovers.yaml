@@ -74,11 +74,6 @@ h->o_methods:
     source_key: _id
     target_collection: callsets
     target_key: _id
-  cs.id->cs.id:                     # duplicate of cs.id, for some intersection...
-    source_collection: callsets
-    source_key: id
-    target_collection: callsets
-    target_key: id
   cs.bsid->bs.id:
     source_collection: callsets
     source_key: biosample_id
@@ -99,6 +94,11 @@ h->o_methods:
     source_key: _id
     target_collection: variants
     target_key: _id
+  vs.bsid->bs.id:
+    source_collection: variants
+    source_key: biosample_id
+    target_collection: biosamples
+    target_key: id
   vs.csid->cs.id:
     source_collection: variants
     source_key: callset_id
@@ -109,9 +109,4 @@ h->o_methods:
     source_key: digest
     target_collection: variants
     target_key: digest
-  vs.bsid->bs.id:
-    source_collection: variants
-    source_key: biosample_id
-    target_collection: biosamples
-    target_key: id
 
