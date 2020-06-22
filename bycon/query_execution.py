@@ -84,11 +84,6 @@ def execute_bycon_queries(ds_id, **byc):
         else:
             prefetch["bs.id"] = prefetch["cs.bsid->bs.id"]
 
-    # if no callsets query but existing output from biosample query -> rename
-    elif "cs.id->cs.id" in prefetch:
-
-        prefetch[ "cs.id" ] = prefetch[ "cs.id->cs.id" ]
-
     if "variants" in exe_queries:
 
         """podmd
@@ -156,6 +151,15 @@ def execute_bycon_queries(ds_id, **byc):
             prevars["method"] = "vs._id"
             prevars["query"] = { "biosample_id": { "$in": prefetch[ "bs.id" ]["target_values"] } }
             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+
+    if byc["response_type"] == "return_individuals":
+        prevars["method"] = "bs.isid->is.id"
+        prevars["query"] = { "_id": { "$in": prefetch[ "bs._id" ]["target_values"] } }
+        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+
+        prevars["method"] = "is._id"
+        prevars["query"] = { "id": { "$in": prefetch[ "bs.isid->is.id" ]["target_values"] } }
+        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
     
     ############################################################################
 

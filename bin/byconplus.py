@@ -158,6 +158,7 @@ def byconplus():
     byc.update( { "queries": update_queries_from_filters( **byc ) } )
     byc.update( { "queries": update_variants_query( **byc ) } )
     byc.update( { "queries": update_queries_from_endpoints( **byc ) } )
+    byc.update( { "queries": inject_id_queries( **byc ) } )
 
     # fallback - but maybe shouldbe an error response?
     if not byc[ "queries" ]:

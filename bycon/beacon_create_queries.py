@@ -94,6 +94,36 @@ def update_queries_from_endpoints( **byc ):
 
 ################################################################################
 
+def inject_id_queries( **byc ):
+
+    # TODO comma-concatenated value split...
+    # TODO: make this a general "scoped parameters" function, with config
+    # file etc. (see Perl beacon version)
+
+    queries = byc["queries"]
+    colls = byc["config"]["collections"]
+    for c in colls:
+        k = "id"
+        if c == "variants":
+            k = "digest"
+        p = c+".id"
+        p_vals = byc["form_data"].getlist(p)
+        p_q = { }
+        if p_vals:
+            if len(p_vals) > 1:
+                p_q = { k: { '$in': p_vals } }
+            else:
+                p_q = { k: p_vals[0] }
+
+            if c in queries:
+                queries[c] = { '$and': [ queries[c], p_q ] }
+            else:
+                queries[c] = p_q
+
+    return queries
+
+################################################################################
+
 def update_variants_query( **byc ):
 
     queries = byc["queries"]
