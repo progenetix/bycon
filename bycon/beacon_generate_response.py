@@ -12,7 +12,6 @@ from .beacon_process_handovers import *
 def select_response_type(**byc):
 
     response_type = "respond_empty_request"
-
     if "response" in byc["endpoint_pars"]:
         if byc["endpoint_pars"]["response"]:
             response_type = "return_"+byc["endpoint_pars"]["response"]

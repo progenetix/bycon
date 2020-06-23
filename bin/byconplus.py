@@ -41,6 +41,7 @@ from bycon import *
   - this will return an object `biosamples.{datasetid(s)}` where containing list(s) of
   the biosamples data objects (the multi-dataset approach seems strange here but
   in the case of progenetix & arraymap could in some cases make sense ...)
+
 ```
 {
   "biosamples": {
@@ -83,6 +84,18 @@ from bycon import *
 * `/g_variants/{id}/biosamples`
   - As above, but responding with the `biosamples` data.
   - <https://bycon.progenetix.org/g_variants/DIPG_V_MAF_17_7577121_G_A/biosamples?datasetIds=dipg>
+  
+##### Custom (yet)
+
+* sample retrieval like "id" query by endpoint
+  - This type of query emulates the endpoint based queries above through the parameters
+    * `scope`
+    * `id`
+    * `response`
+    Only providing `scope` or `response` without `id` will only work if other valid
+    query parameters are provided.
+  - <https://bycon.progenetix.org?id=PGX_AM_BS_GSM253289&datasetIds=arraymap&scope=biosamples>
+  - <https://bycon.progenetix.org?id=PGX_AM_BS_GSM253289&datasetIds=arraymap&scope=biosamples&response=g_variants>
 
 podmd"""
 
@@ -158,7 +171,7 @@ def byconplus():
     byc.update( { "queries": update_queries_from_filters( **byc ) } )
     byc.update( { "queries": update_variants_query( **byc ) } )
     byc.update( { "queries": update_queries_from_endpoints( **byc ) } )
-    byc.update( { "queries": inject_id_queries( **byc ) } )
+    # byc.update( { "queries": inject_id_queries( **byc ) } )
 
     # fallback - but maybe shouldbe an error response?
     if not byc[ "queries" ]:

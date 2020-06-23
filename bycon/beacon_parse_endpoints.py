@@ -23,7 +23,7 @@ def beacon_get_endpoint(**byc):
 
 def parse_endpoints(**byc):
 
-    endpoint_pars = { "queries": {}, "response": None }
+    endpoint_pars = _endpoint_response_from_pars( **byc )
 
     url_comps = urlparse( environ.get('REQUEST_URI') )
     ep = url_comps.path
@@ -34,6 +34,9 @@ def parse_endpoints(**byc):
     path_items = [ x for x in ep.split('/') if x ]
 
     if len(path_items) < 1:
+        return(endpoint_pars)
+
+    if not path_items[0] in byc["endpoint"]:
         return(endpoint_pars)
 
     scope = path_items[0]
@@ -60,3 +63,32 @@ def parse_endpoints(**byc):
     return endpoint_pars
 
 ################################################################################
+
+def _endpoint_response_from_pars( **byc ):
+
+    colls = byc["config"]["collections"]
+    endpoint_pars = { "queries": {}, "response": "" } 
+
+    if not "scope" in byc["form_data"]:
+        return endpoint_pars
+
+    scope = byc["form_data"].getvalue("scope")
+    scope = scope.replace("g_variants", "variants")
+    if scope in colls:
+        endpoint_pars.update( { "response": scope } )
+
+        if "id" in byc["form_data"]:
+            id_key = "id"
+            if scope == "variants":
+                id_key = "digest"
+            endpoint_pars.update( { "queries": { scope: { id_key: byc["form_data"].getvalue("id") } } } )
+
+    if "response" in byc["form_data"]:
+        response = byc["form_data"].getvalue("response")
+        response = response.replace("g_variants", "variants")
+        if response in colls:
+            endpoint_pars.update( { "response": response } )
+
+    return endpoint_pars
+
+

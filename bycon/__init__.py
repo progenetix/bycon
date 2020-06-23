@@ -5,7 +5,7 @@ from .beacon_process_handovers import query_results_save_handovers
 from .beacon_create_queries import update_queries_from_endpoints
 from .beacon_create_queries import update_variants_query
 from .beacon_create_queries import update_queries_from_filters
-from .beacon_create_queries import inject_id_queries
+# from .beacon_create_queries import inject_id_queries
 from .beacon_generate_response import select_response_type
 from .beacon_generate_response import respond_empty_request
 from .beacon_generate_response import callsets_return_stats
