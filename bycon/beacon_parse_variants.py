@@ -106,13 +106,20 @@ def create_beacon_allele_request_query(variant_request_type, variant_pars):
         return
 
     # TODO: Regexes for ref or alt with wildcard characters
-        
-    variant_query = { "$and": [
+
+    v_q_p = [
         { "reference_name": variant_pars[ "referenceName" ] },
-        { "start_min": int(variant_pars[ "start" ]) },
-        { "reference_bases": variant_pars[ "referenceBases" ] },
-        { "alternate_bases": variant_pars[ "alternateBases" ] }
-    ]}
+        { "start_min": int(variant_pars[ "start" ]) }
+    ]
+    for p in [ "referenceBases", "alternateBases" ]:
+        if not variant_pars[ p ] == "N":
+            if "N" in variant_pars[ p ]:
+                rb = variant_pars[ p ].replace("N", ".")
+                v_q_p.append( { p: { '$regex': rb } } )
+            else:
+                 v_q_p.append( { p: variant_pars[ p ] } )
+        
+    variant_query = { "$and": v_q_p}
 
     return( variant_query )
 
@@ -138,6 +145,8 @@ def create_beacon_cnv_request_query(variant_request_type, variant_pars):
 
 def create_beacon_range_request_query(variant_request_type, variant_pars):
 
+    # TODO
+
     if variant_request_type != "beacon_range_request":
         return
 
@@ -153,8 +162,6 @@ def create_beacon_range_request_query(variant_request_type, variant_pars):
         # the N wildcard stands for any length alt bases so can be ignored
         if not variant_pars[ "alternateBases" ] == "N":
             v_q_l.append( { "alternate_bases": variant_pars[ "alternateBases" ] } )
-        else:
-            v_q_l.append( { "alternate_bases": { '$regex': "\w" } } )
     else:
         return
 
