@@ -113,13 +113,16 @@ def create_beacon_allele_request_query(variant_request_type, variant_pars):
     ]
     for p in [ "referenceBases", "alternateBases" ]:
         if not variant_pars[ p ] == "N":
+            p_n = p.replace("Bases", "_bases")
             if "N" in variant_pars[ p ]:
                 rb = variant_pars[ p ].replace("N", ".")
-                v_q_p.append( { p: { '$regex': rb } } )
+                v_q_p.append( { p_n: { '$regex': rb } } )
             else:
-                 v_q_p.append( { p: variant_pars[ p ] } )
+                 v_q_p.append( { p_n: variant_pars[ p ] } )
         
     variant_query = { "$and": v_q_p}
+
+    print(variant_query)
 
     return( variant_query )
 

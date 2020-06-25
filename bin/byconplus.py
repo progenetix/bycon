@@ -18,16 +18,16 @@ from bycon import *
 ##### Examples
 
 * standard test deletion CNV query
-  - <https://bycon.progenetix.org?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=20000000&startMax=21975097&endMin=21967753&endMax=23000000&filters=icdom-94403>
-  - <https://bycon.progenetix.org/datasetIds=arraymap,progenetix/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=9/variantType=DEL/startMin=18000000/startMax=21975097/endMin=21967753/endMax=26000000/filters=icdom-94403>
+  - <https://bycon.progenetix.org/query?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=20000000&startMax=21975097&endMin=21967753&endMax=23000000&filters=icdom-94403>
+  - <https://bycon.progenetix.org/query?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=18000000&startMax=21975097&endMin=21967753&endMax=26000000&filters=icdom-94403>
 * retrieving biosamples w/ a given filter code
-  - <https://bycon.progenetix.org?assemblyId=GRCh38&datasetIds=arraymap,progenetix&filters=NCIT:C3326>
+  - <https://bycon.progenetix.org/query?assemblyId=GRCh38&datasetIds=arraymap,progenetix&filters=NCIT:C3326>
 * beacon info (i.e. missing parameters return the info)
   - <https://bycon.progenetix.org>
 * beacon info (i.e. specific request)
   - <https://bycon.progenetix.org/service-info/>
 * precise variant query together with filter
-  - <https://bycon.progenetix.org?datasetIds=dipg/assemblyId=GRCh38/includeDatasetResponses=ALL/referenceName=17/start=7577120/referenceBases=G/alternateBases=A/filters=icdot-C71.7>
+  - <https://bycon.progenetix.org/query?datasetIds=dipg&assemblyId=GRCh38&start=7577120&referenceBases=G&alternateBases=A&filters=icdot-C71.7>
 
 ##### Examples for v2 endpoints
 

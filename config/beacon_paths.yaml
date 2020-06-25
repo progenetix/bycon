@@ -5,7 +5,12 @@ paths:
   /filtering_terms:
     get:
       description: |
-        Receive a list of filter objects. 
+        Receive a list of filter objects.
+
+  /query:
+    post:
+      description: |
+        Standard Beacon query
 
   # standard
 
