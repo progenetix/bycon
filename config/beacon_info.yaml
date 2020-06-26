@@ -22,12 +22,15 @@ beacon_info:
   sampleAlleleRequests:
     - datasetIds:
         - arraymap
+      requestType: variantCNVrequest
       assemblyId: GRCh38
       referenceName: '9'
-      startMin: 21000000
-      startMax: 21975098
-      endMin: 21967753
-      endMax: 25000000
+      start:
+        - 21000000
+        - 21975098
+      end:
+        - 21967753
+        - 25000000
       variantType: "DEL"
       filters:
         - "icdom-94403"
@@ -36,7 +39,8 @@ beacon_info:
         - dipg
       assemblyId: GRCh38
       referenceName: '17'
-      start: 7577121
+      start:
+        - 7577121
       alternateBases: "A"
       referenceBases: "G"
       filters:

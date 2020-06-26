@@ -2,34 +2,6 @@
 paths:
 
   # experimental
-  /filtering_terms:
-    get:
-      description: |
-        Receive a list of filter objects.
-
-  /query:
-    post:
-      description: |
-        Standard Beacon query
-
-  # standard
-
-  /:
-    get:
-      description: |
-        Get information about the beacon
-      operationId: getBeacon
-      tags:
-        - Endpoints
-      responses:
-        '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Beacon'
-
   /individuals:
     post:
       description: |
@@ -74,6 +46,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IndividualResponse'
+  /filtering_terms:
+    get:
+      description: |
+        Receive a list of filter objects.
+  /query:
+    post:
+      description: |
+        Standard Beacon query
   /individuals/{id}:
     post:
       description: |

@@ -67,20 +67,8 @@ def respond_service_info_request(**byc):
 
 def respond_filtering_terms_request(**byc):
 
-    # TODO: in its own module
-    if not environ.get('REQUEST_URI'):
+    if not "filtering_terms" in byc["endpoint"]:
         return()
-
-    if not "filtering_terms" in environ.get('REQUEST_URI'):
-        return()
-    
-    # TODO: This should be part of standard endpoint prrocessing...
-    rest_pars = cgi_parse_path_params( "filtering_terms" )
-
-    filters =  [ ]
-    pres = [ ]
-    if "filters" in rest_pars:
-        pres = rest_pars["filters"].split(",")
 
     ks = [ "id", "name", "apiVersion" ]
     fks = [ "id", "label", "source" ]
@@ -96,11 +84,12 @@ def respond_filtering_terms_request(**byc):
     # being provided
     # if only one => counts are added back
     dss = byc["dbstats"]["datasets"].keys()
-    if "datasetId" in rest_pars:
-        if rest_pars["datasetId"] in byc["dbstats"]["datasets"]:
-            dss = [ rest_pars["datasetId"] ]
+    if len(byc[ "dataset_ids" ]) == 1:
+        ds_id = byc[ "dataset_ids" ][0]
+        if ds_id in byc["dbstats"]["datasets"]:
+            dss = [ ds_id ]
             fks.append("count")
-            resp.update( { "datasetId": rest_pars["datasetId"] } )
+            resp.update( { "datasetId": ds_id } )
 
     for ds_id in dss:
         ds = byc["dbstats"]["datasets"][ ds_id ]
@@ -112,8 +101,8 @@ def respond_filtering_terms_request(**byc):
  
     ftl = [ ]
     for key in sorted(fts):
-        if len(pres) > 0:
-            for f in pres:
+        if len(byc["filters"]) > 0:
+            for f in byc["filters"]:
                 f_t = re.compile(r'^'+f)
                 if f_t.match(key):
                     ftl.append( fts[key] )

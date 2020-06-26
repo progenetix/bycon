@@ -8,7 +8,7 @@ NCIT:
       default: 1
     individuals:
       default: 0
-  pattern: '^NCIT\:C\d*?$'
+  pattern: '^NCIT(\:C\d*?)?$'
   examples:
     - 'NCIT:C27676'
     - 'NCIT:C9325'
@@ -22,7 +22,7 @@ HP:
       default: 0
     individuals:
       default: 1
-  pattern: '^HP\:\d+?$'
+  pattern: '^HP(\:\d+?)?$'
   examples:
     - 'HP:0012209'
 
@@ -35,7 +35,7 @@ PATO:
       default: 0
     individuals:
       default: 1
-  pattern: '^PATO\:\d+?$'
+  pattern: '^PATO(\:\d+?)?$'
   examples:
     - 'PATO:0020000'
 
@@ -48,7 +48,7 @@ EFO:
       default: 1
     individuals:
       default: 0
-  pattern: '^EFO\:\d+?$'
+  pattern: '^(EFO\:\d+?)?$'
   examples:
     - 'EFO:0009656'
 
@@ -59,7 +59,7 @@ icdom:
   scopes:
     biosamples:
       default: 1
-  pattern: '^icdom\-\d{1,5}?$'
+  pattern: '^icdom(\-\d{1,5}?)?$'
   examples:
     - 'icdom-85003'
     - 'icdom-94403'
@@ -71,7 +71,7 @@ icdot:
   scopes:
     biosamples:
       default: 1
-  pattern: '^icdot\-C\d\d?(\.\d)?$'
+  pattern: '^icdot(\-C\d\d?(\.\d)?)?$'
   examples:
     - 'icdot-C42.2'
     - 'icdot-C54.1'
@@ -86,7 +86,7 @@ PMID:
   scopes:
     biosamples:
       default: 1
-  pattern: '^(PMID)|(pubmed)\:\d+?$'
+  pattern: '^(PMID)|(pubmed)(\:\d+?)?$'
   examples:
     - 'PMID:28966033'
     - 'PMID:9405679'
@@ -100,7 +100,7 @@ geogse:
       default: 0
     biosamples:
       default: 1
-  pattern: '^geogse\-GSE\d+?$'
+  pattern: '^geogse(\-GSE\d+?)?$'
   examples:
     - 'geogse-GSM253289'
 
@@ -142,7 +142,7 @@ geogpl:
     biosamples:
       default: 0
       default: 1
-  pattern: '^geopl\-GPL\d+?$'
+  pattern: '^geopl(\-GPL\d+?)?$'
   examples:
     - 'geogpl-GPL6504'
 
@@ -155,7 +155,7 @@ cellosaurus:
       default: 0
     biosamples:
       default: 1
-  pattern: '^cellosaurus\:CVCL_\w+?$'
+  pattern: '^cellosaurus(\:CVCL_\w+?)?$'
   examples:
     - 'cellosaurus:CVCL_1650'
     - 'cellosaurus:CVCL_0006'

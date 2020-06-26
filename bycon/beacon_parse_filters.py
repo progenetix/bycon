@@ -71,6 +71,7 @@ def select_dataset_ids( **byc ):
 ################################################################################
 
 def cgi_exit_on_error(shout):
+
     print("Content-Type: text")
     print()
     print(shout)

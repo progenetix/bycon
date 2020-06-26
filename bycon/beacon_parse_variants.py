@@ -9,18 +9,19 @@ def parse_variants( **byc ):
 
     variant_pars = { }
     v_p_defs = byc["variant_defs"]["parameters"]
-    for v_par in v_p_defs:
+
+    for p_k in v_p_defs.keys():
         v_default = None
-        if "default" in v_p_defs[ v_par ]:
-            v_default = v_p_defs[ v_par ][ "default" ]
-        variant_pars[ v_par ] = byc["form_data"].getvalue(v_par, v_default)
-        if not variant_pars[ v_par ]:
-            del( variant_pars[ v_par ] )
-        try:
-            if v_p_defs[ v_par ][ "type" ] == "integer":
-                variant_pars[ v_par ] = int( variant_pars[ v_par ] )
-        except Exception:
-            pass
+        if "default" in v_p_defs[ p_k ]:
+            v_default = v_p_defs[ p_k ][ "default" ]
+        if "array" in v_p_defs[ p_k ]["type"]:
+            variant_pars[ p_k ] = byc["form_data"].getlist(p_k)
+        else:
+            variant_pars[ p_k ] = byc["form_data"].getvalue(p_k, v_default)
+        if not variant_pars[ p_k ]:
+            del( variant_pars[ p_k ] )
+        # except Exception:
+        #     pass
 
     # for debugging
     args = byc["args"]
@@ -43,7 +44,34 @@ def parse_variants( **byc ):
             if rp in v_p_defs:
                 variant_pars[ rp ] = byc[ "rest_pars" ][ rp ]
 
-    return variant_pars
+
+    # value checks
+    v_p_c = { }
+    for p_k in variant_pars.keys():
+        if not p_k in v_p_defs.keys():
+            continue
+        v_p = variant_pars[ p_k ]
+        if "array" in v_p_defs[ p_k ]["type"]:
+            v_l = [ ]
+            for v in v_p:
+                if re.compile( v_p_defs[ p_k ][ "items" ][ "pattern" ] ).match( str( v ) ):
+                    if "integer" in v_p_defs[ p_k ][ "items" ][ "type" ]:
+                        v = int( v )
+                    v_l.append( v )
+            v_p_c[ p_k ] = sorted( v_l )
+        else:
+            if re.compile( v_p_defs[ p_k ][ "pattern" ] ).match( str( v_p ) ):
+                if "integer" in v_p_defs[ p_k ][ "type" ]:
+                    v_p = int( v_p )
+                v_p_c[ p_k ] = v_p
+
+    # TODO: should probably be more systematic
+    for k in [ "start", "end" ]:
+        if "k" in v_p_c:
+            if len(v_p_c[ k ]) == 1:
+                v_p_c[ k ].append( v_p_c[ k ][0] + 1 )
+
+    return v_p_c
 
 ################################################################################
 
@@ -58,40 +86,51 @@ def get_variant_request_type( **byc ):
     podmd"""
 
     variant_request_type = "no correct variant request"
-    brts = byc["variant_defs"]["request_types"]
+
+    v_pars = byc["variant_pars"]
     v_p_defs = byc["variant_defs"]["parameters"]
-    vpars = byc["variant_pars"]
+    g_v_defs = byc["variant_defs"]["BeaconRequestTypes"]["g_variant"]
+
+    variant_request_type = "no correct variant request"
+
+    # TODO: The first test here is for the hard-coded g_variants types which
+    # are still pretty much in testing...
+    rts = byc["form_data"].getvalue("requestType")
+
+    if rts in g_v_defs.keys():
+        brts = g_v_defs
+        brts_k = [ rts ]
+    else:
+        brts = byc["variant_defs"]["request_types"]
+        brts_k = brts.keys()
+
     vrt_matches = [ ]
 
-    for vrt in brts.keys():
-
+    for vrt in brts_k:
         matched_par_no = 0
         needed_par_no = 0
         if "one_of" in brts[vrt]:
             needed_par_no = 1
             for one_of in brts[vrt][ "one_of" ]:
-                if one_of in vpars:
-                    if re.compile( v_p_defs[ one_of ][ "pattern" ] ).match( str( vpars[ one_of ] ) ):
-                        needed_par_no = 0
-                        continue
+                if one_of in v_pars:
+                    needed_par_no = 0
+                    continue
         needed_par_no += len( brts[vrt][ "all_of" ] )
 
         for required in brts[vrt][ "all_of" ]:
-            if required in vpars:
-                if re.compile( v_p_defs[ required ][ "pattern" ] ).match( str( vpars[ required ] ) ):
-                    matched_par_no += 1
+            if required in v_pars:
+                matched_par_no += 1
         if matched_par_no >= needed_par_no:
             vrt_matches.append( { "type": vrt, "par_no": matched_par_no } )
-
     if len(vrt_matches) > 0:
         vrt_matches = sorted(vrt_matches, key=lambda k: k['par_no'], reverse=True)
         variant_request_type = vrt_matches[0]["type"]
 
-    return( variant_request_type )
+    return variant_request_type
 
 ################################################################################
 
-def create_beacon_allele_request_query(variant_request_type, variant_pars):
+def create_variantAlleleRequest_query(variant_request_type, variant_pars):
 
     """podmd
     beacon_allele_request:
@@ -102,14 +141,14 @@ def create_beacon_allele_request_query(variant_request_type, variant_pars):
           - alternateBases
     podmd"""
 
-    if variant_request_type != "beacon_allele_request":
+    if variant_request_type != "variantAlleleRequest":
         return
 
     # TODO: Regexes for ref or alt with wildcard characters
 
     v_q_p = [
         { "reference_name": variant_pars[ "referenceName" ] },
-        { "start_min": int(variant_pars[ "start" ]) }
+        { "start_min": int(variant_pars[ "start" ][0]) }
     ]
     for p in [ "referenceBases", "alternateBases" ]:
         if not variant_pars[ p ] == "N":
@@ -122,23 +161,21 @@ def create_beacon_allele_request_query(variant_request_type, variant_pars):
         
     variant_query = { "$and": v_q_p}
 
-    print(variant_query)
-
     return( variant_query )
 
 ################################################################################
 
-def create_beacon_cnv_request_query(variant_request_type, variant_pars):
+def create_variantCNVrequest_query(variant_request_type, variant_pars):
 
-    if variant_request_type != "beacon_cnv_request":
+    if not variant_request_type in [ "variantCNVrequest" ]:
         return
-        
+
     variant_query = { "$and": [
         { "reference_name": variant_pars[ "referenceName" ] },
-        { "start_min": { "$lt": int(variant_pars[ "startMax" ]) } },
-        { "end_max": { "$gte": int(variant_pars[ "endMin" ]) } },
-        { "start_max": { "$gte": int(variant_pars[ "startMin" ]) } },
-        { "end_min": { "$lt": int(variant_pars[ "endMax" ]) } },
+        { "start_min": { "$lt": variant_pars[ "start" ][-1] } },
+        { "end_max": { "$gte": variant_pars[ "end" ][0] } },
+        { "start_max": { "$gte": variant_pars[ "start" ][0] } },
+        { "end_min": { "$lt": variant_pars[ "end" ][-1] } },
         { "variant_type": variant_pars[ "variantType" ] }
     ]}
 
@@ -146,17 +183,17 @@ def create_beacon_cnv_request_query(variant_request_type, variant_pars):
 
 ################################################################################
 
-def create_beacon_range_request_query(variant_request_type, variant_pars):
+def create_variantRangeRequest_query(variant_request_type, variant_pars):
 
     # TODO
 
-    if variant_request_type != "beacon_range_request":
+    if variant_request_type != "variantRangeRequest":
         return
 
     v_q_l = [
         { "reference_name": variant_pars[ "referenceName" ] },
-        { "start_min": { "$lt": int(variant_pars[ "endMax" ]) } },
-        { "end_max": { "$gt": int(variant_pars[ "startMin" ]) } }
+        { "start_min": { "$lt": int(variant_pars[ "end" ][-1]) } },
+        { "end_max": { "$gt": int(variant_pars[ "start" ][0]) } }
     ]
 
     if "variantType" in variant_pars:

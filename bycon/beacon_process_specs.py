@@ -76,9 +76,9 @@ def read_handover_info(**paths):
 
 ################################################################################
 
-def dbstats_return_latest(**byc):
+def dbstats_return_latest( **config ):
 
-    dbstats_coll = MongoClient( )[ byc[ "config" ][ "info_db" ] ][ byc[ "config" ][ "beacon_info_coll" ] ]
+    dbstats_coll = MongoClient( )[ config[ "info_db" ] ][ config[ "beacon_info_coll" ] ]
     stats = dbstats_coll.find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
     return(stats[0])
 

@@ -18,8 +18,8 @@ from bycon import *
 ##### Examples
 
 * standard test deletion CNV query
-  - <https://bycon.progenetix.org/query?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=20000000&startMax=21975097&endMin=21967753&endMax=23000000&filters=icdom-94403>
-  - <https://bycon.progenetix.org/query?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=18000000&startMax=21975097&endMin=21967753&endMax=26000000&filters=icdom-94403>
+  - <https://bycon.progenetix.org/query?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&requestType=variantCNVrequest&referenceName=9&variantType=DEL&start=20000000&start=21975097&end=21967753&end=23000000&filters=icdom-94403>
+  - <https://bycon.progenetix.org/query?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&requestType=variantCNVrequest&referenceName=9&variantType=DEL&start=18000000&start=21975097&end=21967753&end=26000000&filters=icdom-94403>
 * retrieving biosamples w/ a given filter code
   - <https://bycon.progenetix.org/query?assemblyId=GRCh38&datasetIds=arraymap,progenetix&filters=NCIT:C3326>
 * beacon info (i.e. missing parameters return the info)
@@ -27,7 +27,7 @@ from bycon import *
 * beacon info (i.e. specific request)
   - <https://bycon.progenetix.org/service-info/>
 * precise variant query together with filter
-  - <https://bycon.progenetix.org/query?datasetIds=dipg&assemblyId=GRCh38&start=7577120&referenceBases=G&alternateBases=A&filters=icdot-C71.7>
+  - <https://bycon.progenetix.org/query?datasetIds=dipg&assemblyId=GRCh38&requestType=variantAlleleRequest&start=7577120&referenceBases=G&alternateBases=A&filters=icdot-C71.7>
 
 ##### Examples for v2 endpoints
 
@@ -74,7 +74,8 @@ from bycon import *
 * `/biosamples/{id}/g_variants`
   - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_HNSCC-GSF-an-10394/g_variants?datasetIds=progenetix>
 * `/g_variants?{query}`  
-  - <https://bycon.progenetix.org/g_variants?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&startMin=7572825&endMax=7579005&referenceBases=N&alternateBases=N>
+  - <https://bycon.progenetix.org/g_variants?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7572825&end=7579005&referenceBases=N&alternateBases=N>
+  - <https://bycon.progenetix.org/g_variants?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&start=21500000&start=21975097&end=21967753&end=22500000&filters=icdom-94403>
 * `/g_variants/{id}`    
   - Since the _Progenetix_ framework treats all variant instances individually
   and an `id` parameter should be unique, variants are grouped as "equivalent"
@@ -144,37 +145,37 @@ def byconplus():
         "service_info": read_service_info( **config[ "paths" ] ),
         "beacon_info": read_beacon_info( **config[ "paths" ] ),
         "beacon_paths": read_beacon_api_paths( **config[ "paths" ] ),
-        "queries": {},
+        "dbstats": dbstats_return_latest( **config ),
         "get_filters": False
     }
 
-    byc.update( { "dbstats": dbstats_return_latest( **byc ) } )
     byc["beacon_info"].update( { "datasets": update_datasets_from_dbstats(**byc) } )
-    byc.update( { "endpoint": beacon_get_endpoint(**byc) } )
-    byc.update( { "endpoint_pars": parse_endpoints( **byc ) } )
-    byc.update( { "response_type": select_response_type( **byc ) } )
-
     for par in byc[ "beacon_info" ]:
         byc[ "service_info" ][ par ] = byc[ "beacon_info" ][ par ]
 
-    respond_empty_request(**byc)
-    respond_get_datasetids_request(**byc)
+    byc.update( { "endpoint": beacon_get_endpoint(**byc) } )
+    byc.update( { "endpoint_pars": parse_endpoints( **byc ) } )
+    byc.update( { "response_type": select_response_type( **byc ) } )
+    # print(byc["response_type"])
+    # exit()
+    byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
+    byc.update( { "filters":  parse_filters( **byc ) } )
+
     respond_filtering_terms_request(**byc)
     respond_service_info_request(**byc)
+    respond_empty_request(**byc)
+    respond_get_datasetids_request(**byc)
 
     # adding arguments for querying / processing data
     byc.update( { "h->o": read_handover_info( **config[ "paths" ] ) } )
-    byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
-    byc.update( { "filters":  parse_filters( **byc ) } )
     byc.update( { "variant_pars": parse_variants( **byc ) } )
-    byc.update( { "variant_request_type": get_variant_request_type( **byc ) } ) 
-    byc.update( { "queries": update_queries_from_filters( **byc ) } )
-    byc.update( { "queries": update_variants_query( **byc ) } )
-    byc.update( { "queries": update_queries_from_endpoints( **byc ) } )
-    # byc.update( { "queries": inject_id_queries( **byc ) } )
+    byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
+    # print(byc["variant_request_type"])
+    byc.update( { "queries": beacon_create_queries( **byc ) } )
+    # print(byc["queries"])
 
     # fallback - but maybe shouldbe an error response?
-    if not byc[ "queries" ]:
+    if not byc[ "queries" ].keys():
         cgi_print_json_response(byc["service_info"])
 
     # TODO: There should be a better pplace for this ...

@@ -11,10 +11,14 @@ from urllib.parse import urlparse
 def beacon_get_endpoint(**byc):
 
     endpoint = "/"
+    if not environ.get('REQUEST_URI'):
+        return endpoint
 
     url_comps = urlparse( environ.get('REQUEST_URI') )
-    for p in byc["beacon_paths"].keys():
-        if p == url_comps.path:
+
+    for p in byc["beacon_paths"]:
+        m = re.compile(r'(^.+?byconplus\.py)?'+p)
+        if m.match(url_comps.path):
             return p
 
     return endpoint

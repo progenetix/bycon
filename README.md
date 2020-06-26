@@ -45,17 +45,17 @@ _Progenetix_ database environment
 
 #### Beacon+ v1 Examples
 
-* standard test deletion CNV query
-  - <https://bycon.progenetix.org?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=20000000&startMax=21975097&endMin=21967753&endMax=23000000&filters=icdom-94403>
-  - <https://bycon.progenetix.org?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=18000000&startMax=21975097&endMin=21967753&endMax=26000000&filters=icdom-94403>
+** standard test deletion CNV query
+  - <https://bycon.progenetix.org/query?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&requestType=variantCNVrequest&referenceName=9&variantType=DEL&start=20000000&start=21975097&end=21967753&end=23000000&filters=icdom-94403>
+  - <https://bycon.progenetix.org/query?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&requestType=variantCNVrequest&referenceName=9&variantType=DEL&start=18000000&start=21975097&end=21967753&end=26000000&filters=icdom-94403>
 * retrieving biosamples w/ a given filter code
-  - <https://bycon.progenetix.org?assemblyId=GRCh38&datasetIds=arraymap,progenetix&filters=NCIT:C3326>
+  - <https://bycon.progenetix.org/query?assemblyId=GRCh38&datasetIds=arraymap,progenetix&filters=NCIT:C3326>
 * beacon info (i.e. missing parameters return the info)
   - <https://bycon.progenetix.org>
 * beacon info (i.e. specific request)
   - <https://bycon.progenetix.org/service-info/>
 * precise variant query together with filter
-  - <https://bycon.progenetix.org?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7577120&referenceBases=G&alternateBases=A&filters=icdot-C71.7>
+  - <https://bycon.progenetix.org/query?datasetIds=dipg&assemblyId=GRCh38&requestType=variantAlleleRequest&start=7577120&referenceBases=G&alternateBases=A&filters=icdot-C71.7>
 
 ##### Examples for v2 endpoints
 
@@ -102,7 +102,7 @@ _Progenetix_ database environment
 * `/biosamples/{id}/g_variants`
   - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_HNSCC-GSF-an-10394/g_variants?datasetIds=progenetix>
 * `/g_variants?{query}`  
-  - <https://bycon.progenetix.org/g_variants?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&startMin=7572825&endMax=7579005&referenceBases=N&alternateBases=N>
+  - <https://bycon.progenetix.org/g_variants?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7572825&end=7579005&referenceBases=N&alternateBases=N>
 * `/g_variants/{id}`    
   - Since the _Progenetix_ framework treats all variant instances individually
   and an `id` parameter should be unique, variants are grouped as "equivalent"
@@ -130,7 +130,7 @@ _Progenetix_ database environment
 #### Some usage additional v1+ examples against the [Progenetix resources](http://progenetix.org)
 
 * The standard Beacon+ CNV test call, retrieving samples with a focal deletion in the _CDKNA/B,MTAP_ locus in Glioblastomas
-    - https://bycon.progenetix.org?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=18000000&startMax=21975097&endMin=21967753&endMax=26000000&referenceBases=N&filters=icdom-94403
+    - https://bycon.progenetix.org?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&start=18000000&start=21975097&end=21967753&end=26000000&referenceBases=N&filters=icdom-94403
 * A pure filter call, getting the sample numbers for _NCIT:C3326_ (Adrenal Gland Pheochromocytoma):
     - https://bycon.progenetix.org?assemblyId=GRCh38&datasetIds=arraymap,progenetix&filters=NCIT:C3326
 * Service info for this Beacon:

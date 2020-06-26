@@ -11,7 +11,18 @@ import beacon_parse_variants
 
 ################################################################################
 
-def update_queries_from_filters( **byc ):
+def beacon_create_queries( **byc ):
+
+    q_s = { }
+    q_s = update_queries_from_filters( q_s, **byc )
+    q_s = update_queries_from_variants( q_s, **byc )
+    q_s = update_queries_from_endpoints( q_s, **byc )
+    
+    return q_s
+
+################################################################################
+
+def update_queries_from_filters( queries, **byc ):
 
     """podmd
 
@@ -34,7 +45,6 @@ def update_queries_from_filters( **byc ):
 
     podmd"""
         
-    queries = byc["queries"]
     query_lists = { }
     for c_n in byc[ "config" ][ "collections" ]:
         query_lists[c_n] = [ ]
@@ -76,9 +86,7 @@ def update_queries_from_filters( **byc ):
 
 ################################################################################
 
-def update_queries_from_endpoints( **byc ):
-
-    queries = byc["queries"]
+def update_queries_from_endpoints( queries, **byc ):
 
     if len(byc["endpoint_pars"]) < 1:
         return queries
@@ -92,42 +100,10 @@ def update_queries_from_endpoints( **byc ):
 
     return queries
 
-# ################################################################################
-
-# def inject_id_queries( **byc ):
-
-#     # TODO comma-concatenated value split...
-#     # TODO: make this a general "scoped parameters" function, with config
-#     # file etc. (see Perl beacon version)
-
-#     queries = byc["queries"]
-#     colls = byc["config"]["collections"]
-#     for c in colls:
-#         k = "id"
-#         if c == "variants":
-#             k = "digest"
-#         p = c+"."+k
-#         if p in byc["form_data"]:
-#             p_vals = byc["form_data"].getlist(p)
-#             p_q = { }
-#             if p_vals:
-#                 if len(p_vals) > 1:
-#                     p_q = { k: { '$in': p_vals } }
-#                 else:
-#                     p_q = { k: p_vals[0] }
-
-#                 if c in queries:
-#                     queries[c] = { '$and': [ queries[c], p_q ] }
-#                 else:
-#                     queries[c] = p_q
-
-#     return queries
-
 ################################################################################
 
-def update_variants_query( **byc ):
+def update_queries_from_variants( queries, **byc ):
 
-    queries = byc["queries"]
     c_n = "variants"
 
     if not byc["variant_request_type"] in byc["variant_defs"]["request_types"].keys():

@@ -87,7 +87,7 @@ def main():
         print('Pleace define a proper filter value (prefixed code, e.g. "icdom-81703").')
         exit()
 
-    kwargs.update( { "query": update_queries_from_filters(**kwargs) } )
+    kwargs.update( { "queries": update_queries_from_filters( { "queries": { } }, **kwargs) } )
 
     for dataset_id in dataset_ids:
         _process_update_commands(dataset_id, **kwargs)
@@ -117,7 +117,7 @@ def _process_update_commands(dataset_id, **kwargs):
     with a matching prefix.
     podmd"""
 
-    q_string = kwargs["query"]["biosamples"]
+    q_string = kwargs["queries"]["biosamples"]
 
     mcmd = 'mongo '+dataset_id+' --eval \'db.biosamples.update( '+q_string+',{ $set: { "biocharacteristics.$[elem].type.id" : "'+kwargs["args"].id+'", "biocharacteristics.$[elem].type.label" : "'+kwargs["args"].label+'" } }, { multi: true, arrayFilters: [ { "elem.type.id": { $regex: /^'+pre+'/ } } ] } )\''
 

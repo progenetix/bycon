@@ -2,8 +2,9 @@
 from .beacon_process_handovers import dataset_response_add_handovers
 from .beacon_process_handovers import handover_return_data
 from .beacon_process_handovers import query_results_save_handovers
+from .beacon_create_queries import beacon_create_queries
 from .beacon_create_queries import update_queries_from_endpoints
-from .beacon_create_queries import update_variants_query
+from .beacon_create_queries import update_queries_from_variants
 from .beacon_create_queries import update_queries_from_filters
 # from .beacon_create_queries import inject_id_queries
 from .beacon_generate_response import select_response_type
@@ -29,7 +30,7 @@ from .beacon_parse_filters import parse_filters
 from .beacon_parse_filters import select_dataset_ids
 from .beacon_parse_variants import parse_variants
 from .beacon_parse_variants import get_variant_request_type
-from .beacon_parse_variants import create_beacon_cnv_request_query
+from .beacon_parse_variants import create_variantCNVrequest_query
 from .cgi_utils import cgi_parse_query
 from .cgi_utils import cgi_exit_on_error
 from .cgi_utils import cgi_parse_path_params
