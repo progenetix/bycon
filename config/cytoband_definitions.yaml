@@ -1,0 +1,72 @@
+parameters:
+
+  species:
+    type: string
+    pattern: '^\w.+?$'
+
+  type:
+    type: string
+    pattern: '^\w.+?$'
+
+  assemblyId:
+    type: string
+    pattern: '^\w+?[\w\-\.]*?\w*?$' # for 2019-nCoV
+    default: GRCh38
+
+  referenceName:
+    type: string
+    pattern: '^\w+?[\w\-]*?\w*?$' # for 2019-nCoV
+
+  chr:
+    type: string
+    pattern: '^\w+?[\w\-]*?\w*?$' # for 2019-nCoV
+
+  mateName:
+    type: string
+    pattern: '^([1-9]|1\d|2[0-4]|[XY]|MT)$'
+
+  start:
+    type: string
+    pattern: '^\w+?(\.\w+)?$'
+
+  end:
+    type: string
+    pattern: '^\w+?(\.\w+)?$'
+
+  cytoBands:
+    pattern: ^(chro?)?([12]?[\dXY])([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?\-?([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?$
+    type: string
+
+  chroBases:
+    pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
+    type: string
+    examples:
+      - "17:12000000-194418991"
+
+request_types:
+     
+  cytobands2positions:
+    all_of:
+      - assemblyId
+      - cytoBands
+  
+  positions2cytobands:
+    all_of:
+      - assemblyId
+      - start
+      - end
+      - referenceName
+
+  chromosomeLocation2positions:
+    all_of:
+      - assemblyId
+      - type
+      - species
+      - chr
+      - start
+      - end
+
+
+
+
+

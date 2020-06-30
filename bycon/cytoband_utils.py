@@ -22,14 +22,14 @@ def parse_cytoband_file( **kwargs ):
         "grch34": "hg16"
     }
 
-    genome = kwargs["variant_pars"][ "assemblyId" ].lower()
+    genome = kwargs["cytoband_pars"][ "assemblyId" ].lower()
     genome = re.sub( r"(\w+?)([^\w]\w+?)", r"\1", genome)
 
     if genome in g_map.keys():
         genome = g_map[ genome ]
 
     cb_file = path.join( kwargs[ "config" ][ "paths" ][ "genomes" ], genome, "CytoBandIdeo.txt" )
-    cb_re = re.compile( kwargs["variant_defs"]["parameters"][ "cytoBands" ][ "pattern" ] )
+    cb_re = re.compile( kwargs["cytoband_defs"]["parameters"][ "cytoBands" ][ "pattern" ] )
 
     cb_keys = [ "chro", "start", "end", "cytoband", "staining" ]
     cytobands = [ ]
@@ -50,15 +50,17 @@ def parse_cytoband_file( **kwargs ):
 
 def filter_cytobands( **byc ):
 
-    if byc[ "variant_request_type" ] == "cytobands2positions_request":
-        cb_re = re.compile( byc["variant_defs"][ "cytoBands" ][ "pattern" ] )
-        chro, cb_start, cb_end = cb_re.match( byc["variant_pars"][ "cytoBands" ] ).group(2, 3, 9)
+    # TODO: recursive erosion of non-existing cytobands
+
+    if byc[ "cytoband_request_type" ] == "cytobands2positions":
+        cb_re = re.compile( byc["cytoband_defs"]["parameters"][ "cytoBands" ][ "pattern" ] )
+        chro, cb_start, cb_end = cb_re.match( byc["cytoband_pars"][ "cytoBands" ] ).group(2, 3, 9)
         cytobands = _subset_cytobands_by_bands(  byc[ "cytobands" ], chro, cb_start, cb_end  )
         cb_label = _cytobands_label( cytobands )
-    elif byc[ "variant_request_type" ] == "positions2cytobands_request":
-        chro = byc["variant_pars"][ "referenceName" ]
-        start = int( byc["variant_pars"][ "start" ] )
-        end = int( byc["variant_pars"][ "end" ] )
+    elif byc[ "cytoband_request_type" ] == "positions2cytobands":
+        chro = byc["cytoband_pars"][ "referenceName" ]
+        start = int( byc["cytoband_pars"][ "start" ] )
+        end = int( byc["cytoband_pars"][ "end" ] )
         cytobands = _subset_cytobands_by_bases( byc[ "cytobands" ], chro, start, end  )
         cb_label = _cytobands_label( cytobands )
     else:

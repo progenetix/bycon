@@ -165,7 +165,16 @@ request_types:
       - start
       - end
       - referenceName
-      - rangeTag  
+      - rangeTag
+
+  ChromosomeLocation:
+    all_of:
+      - type
+      - species
+      - chr
+      - start
+      - end
+
 
 
 

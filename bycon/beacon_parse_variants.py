@@ -91,8 +91,6 @@ def get_variant_request_type( **byc ):
     v_p_defs = byc["variant_defs"]["parameters"]
     g_v_defs = byc["variant_defs"]["BeaconRequestTypes"]["g_variant"]
 
-    variant_request_type = "no correct variant request"
-
     # TODO: The first test here is for the hard-coded g_variants types which
     # are still pretty much in testing...
     rts = byc["form_data"].getvalue("requestType")

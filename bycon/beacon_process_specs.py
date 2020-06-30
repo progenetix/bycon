@@ -46,6 +46,16 @@ def read_variant_definitions(**paths):
         variant_defs = yaml.load( vd , Loader=yaml.FullLoader)
     
     return variant_defs
+################################################################################
+
+def read_cytoband_definitions(**paths):
+
+    cb_defs = {}
+    ofp = path.join( paths[ "module_root" ], *paths[ "cytoband_definitions_file" ] )
+    with open( ofp ) as vd:
+        cb_defs = yaml.load( vd , Loader=yaml.FullLoader)
+    
+    return cb_defs
 
 ################################################################################
 

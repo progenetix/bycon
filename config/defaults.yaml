@@ -141,3 +141,6 @@ paths:
     - rsrc
     - icdo
     - ICDOntologies.ods
+  cytoband_definitions_file:
+    - config
+    - cytoband_definitions.yaml
