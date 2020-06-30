@@ -45,8 +45,8 @@ def main():
 
     args = _get_args()
 
-    dataset_id = args.datasetid
-    if not dataset_id in config[ "dataset_ids" ]:
+    ds_id = args.datasetid
+    if not ds_id in config[ "dataset_ids" ]:
         print("No existing dataset was provided with -d ...")
         exit()
 
@@ -69,7 +69,6 @@ def main():
     kwargs = {
         "config": config,
         "args": args,
-        "dataset_id": dataset_id,
         "update_collection": "biosamples",
         "filter_defs": read_filter_definitions( **config[ "paths" ] ) 
     }
@@ -86,9 +85,9 @@ def main():
                         
             pgx_write_mappings_to_yaml( **kwargs )
             pgx_rewrite_icdmaps_db( **kwargs )
-            od = pgx_update_biocharacteristics(**kwargs)
+            od = pgx_update_biocharacteristics( ds_id, **kwargs)
                     
-            of = path.join( config[ "paths" ][ "module_root" ], "data", "out", "logs", date.today().isoformat()+"_pgxupdate_mappings_report_"+dataset_id+".tsv")
+            of = path.join( config[ "paths" ][ "module_root" ], "data", "out", "logs", date.today().isoformat()+"_pgxupdate_mappings_report_"+ds_id+".tsv")
             write_tsv_from_list(of, od, **config)
 
     ############################################################################

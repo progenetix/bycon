@@ -113,14 +113,14 @@ def main():
     kwargs = {
         "config": config,
         "args": args,
-        "dataset_id": args.datasetid,
-        "filter_defs": read_filter_definitions( **config[ "paths" ] )
+        "filter_defs": read_filter_definitions( **config[ "paths" ] ),
+        "h->o": read_handover_info( **config[ "paths" ] )
     }
 
     ds_id = args.datasetid
 
     print("=> files will be written to {}".format(config[ "paths" ][ "out" ]))
-    print("=> looking up data in "+kwargs["dataset_id"])
+    print("=> looking up data in "+ds_id)
 
     kwargs[ "config" ].update( { "plot_pars": plotpars_from_args(**kwargs) } )
     kwargs.update( { "filters": parse_filters( **kwargs ) } )
@@ -131,11 +131,9 @@ def main():
         print('No query specified; please use "-h" for examples')
         sys.exit( )
 
-    query_results = execute_bycon_queries( ds_id, **kwargs)
+    kwargs.update( { "query_results": execute_bycon_queries( ds_id, **kwargs ) } )
+    query_results_save_handovers( **kwargs )
 
-    kwargs.update( { "cs._id": query_results["cs._id"] } )
-    kwargs.update( { "bs._id": query_results["bs._id"] } )
-    
     if config['prompt']:
         if confirm_prompt("Export Biosamples table?", True):
             print("=> exporting biosamples")
@@ -147,8 +145,8 @@ def main():
 
         if confirm_prompt("Plot CNV statistics?", False):
             print("=> plotting CNV statistics")
-            kwargs.update( { "callsets_stats": callsets_return_stats(**kwargs) } )
-            plot_callset_stats(**kwargs)
+            kwargs.update( { "callsets_stats": callsets_return_stats(ds_id, **kwargs) } )
+            plot_callset_stats(ds_id, **kwargs)
 
         if confirm_prompt("Create sample map?", True):
             print("=> plotting map")

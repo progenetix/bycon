@@ -145,6 +145,7 @@ def byconplus():
         "service_info": read_service_info( **config[ "paths" ] ),
         "beacon_info": read_beacon_info( **config[ "paths" ] ),
         "beacon_paths": read_beacon_api_paths( **config[ "paths" ] ),
+        "h->o": read_handover_info( **config[ "paths" ] ),
         "dbstats": dbstats_return_latest( **config ),
         "get_filters": False
     }
@@ -156,8 +157,7 @@ def byconplus():
     byc.update( { "endpoint": beacon_get_endpoint(**byc) } )
     byc.update( { "endpoint_pars": parse_endpoints( **byc ) } )
     byc.update( { "response_type": select_response_type( **byc ) } )
-    # print(byc["response_type"])
-    # exit()
+
     byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
     byc.update( { "filters":  parse_filters( **byc ) } )
 
@@ -167,7 +167,6 @@ def byconplus():
     respond_get_datasetids_request(**byc)
 
     # adding arguments for querying / processing data
-    byc.update( { "h->o": read_handover_info( **config[ "paths" ] ) } )
     byc.update( { "variant_pars": parse_variants( **byc ) } )
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
     # print(byc["variant_request_type"])
@@ -186,10 +185,10 @@ def byconplus():
     dataset_responses = [ ]
 
     for ds_id in byc[ "dataset_ids" ]:
+
         byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
-        # print(byc["query_results"].keys())
-        # exit()
         query_results_save_handovers( **byc )
+
         if byc["response_type"] == "return_biosamples":
             bios = handover_return_data( byc["query_results"]["bs._id"][ "id" ], **byc )
             dataset_responses.append( { ds_id: bios } )

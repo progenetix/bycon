@@ -89,12 +89,12 @@ def main():
 
     kwargs.update( { "queries": update_queries_from_filters( { "queries": { } }, **kwargs) } )
 
-    for dataset_id in dataset_ids:
-        _process_update_commands(dataset_id, **kwargs)
+    for ds_id in dataset_ids:
+        _process_update_commands(ds_id, **kwargs)
 
 ################################################################################
 
-def _process_update_commands(dataset_id, **kwargs):
+def _process_update_commands(ds_id, **kwargs):
     
     if not kwargs["args"].skipquestion:
         if not confirm_prompt("""Update Biosamples in {}:
@@ -103,11 +103,11 @@ def _process_update_commands(dataset_id, **kwargs):
 => new biocharacteristics id:       {}
 => new biocharacteristics label:    {}
 
-""".format(dataset_id, kwargs["args"].filters, kwargs["args"].id, kwargs["args"].label), False):
+""".format(ds_id, kwargs["args"].filters, kwargs["args"].id, kwargs["args"].label), False):
             exit()
 
     print("""=> updating biosamples in {}
-""".format(dataset_id))
+""".format(ds_id))
 
     split_v = re.compile(r'^(\w+?)[\:\-](\w[\w\.]+?)$')
     pre, code = split_v.match( kwargs["args"].id ).group(1, 2)
@@ -119,7 +119,7 @@ def _process_update_commands(dataset_id, **kwargs):
 
     q_string = kwargs["queries"]["biosamples"]
 
-    mcmd = 'mongo '+dataset_id+' --eval \'db.biosamples.update( '+q_string+',{ $set: { "biocharacteristics.$[elem].type.id" : "'+kwargs["args"].id+'", "biocharacteristics.$[elem].type.label" : "'+kwargs["args"].label+'" } }, { multi: true, arrayFilters: [ { "elem.type.id": { $regex: /^'+pre+'/ } } ] } )\''
+    mcmd = 'mongo '+ds_id+' --eval \'db.biosamples.update( '+q_string+',{ $set: { "biocharacteristics.$[elem].type.id" : "'+kwargs["args"].id+'", "biocharacteristics.$[elem].type.label" : "'+kwargs["args"].label+'" } }, { multi: true, arrayFilters: [ { "elem.type.id": { $regex: /^'+pre+'/ } } ] } )\''
 
     print("""
 => running MongoDB update:
@@ -133,7 +133,7 @@ def _process_update_commands(dataset_id, **kwargs):
     a second step such samples receive a new one.
     podmd"""
 
-    mcmd = 'mongo '+dataset_id+' --eval \'db.biosamples.update( { $and: [ '+q_string+', { "biocharacteristics.type.id": { $not: { $regex: /^'+pre+'/ } } } ] }, { $push: { "biocharacteristics" : { "type": { "id": "'+kwargs["args"].id+'", "label" : "'+kwargs["args"].label+'" } } } }, { multi: true } )\''
+    mcmd = 'mongo '+ds_id+' --eval \'db.biosamples.update( { $and: [ '+q_string+', { "biocharacteristics.type.id": { $not: { $regex: /^'+pre+'/ } } } ] }, { $push: { "biocharacteristics" : { "type": { "id": "'+kwargs["args"].id+'", "label" : "'+kwargs["args"].label+'" } } } }, { multi: true } )\''
 
     print("""
 

@@ -5,13 +5,12 @@ import re
 ################################################################################
 ################################################################################
 
-def callsets_add_metadata(cs, **kwargs):
+def callsets_add_metadata(ds_id, cs, **kwargs):
 
-    dataset_id = kwargs[ "dataset_id" ]
     io_prefixes = kwargs[ "config" ][ "io_prefixes" ]
 
     mongo_client = MongoClient( )
-    mongo_db = mongo_client[ dataset_id ]
+    mongo_db = mongo_client[ ds_id ]
     mongo_coll = mongo_db[ 'biosamples' ]
     
     bios = mongo_coll.find_one({"id": cs["biosample_id"] })

@@ -12,22 +12,22 @@ import dash_html_components as html
 
 ################################################################################
 
-def plot_sample_geomap(**kwargs):
+def plot_sample_geomap( **kwargs ):
 
     plotly.io.orca.config.executable = "/usr/local/bin/orca"
-    dataset_id = kwargs[ "dataset_id" ]
     args = kwargs[ "args" ]
     label = ""
     if args.label:
         label = args.label
 
-    dataset_id = kwargs[ "dataset_id" ]
-    query = { "_id": { "$in": kwargs[ "bs._id" ] } }
-    bios_coll = MongoClient( )[ dataset_id ][ "biosamples" ]
+    query = { "_id": { "$in": kwargs["query_results"][ "bs._id" ][ "target_values" ] } }
+    ds_id = kwargs["query_results"][ "bs._id" ][ "source_db" ]
 
-    mapplot = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ dataset_id, label, "map.svg" ]) )
-    country_data = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ dataset_id, label, "mapdata.tsv" ]) )    
-    city_data = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ dataset_id, label, "mapdata_city.tsv" ]) )    
+    bios_coll = MongoClient( )[ ds_id ][ "biosamples" ]
+
+    mapplot = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ ds_id, label, "map.svg" ]) )
+    country_data = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ ds_id, label, "mapdata.tsv" ]) )    
+    city_data = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ ds_id, label, "mapdata_city.tsv" ]) )    
 
     geo_s = [ ]
     for bios in bios_coll.find(query):
@@ -36,7 +36,7 @@ def plot_sample_geomap(**kwargs):
                 geo_s.append(bios["provenance"]["geo"])
 
     country_counts = _aggregate_country_counts(geo_s)
-    all_samples = len( kwargs[ "bs._id" ] )
+    all_samples = len( kwargs["query_results"][ "bs._id" ][ "target_values" ] )
     map_samples = sum( country_counts["count"] )
     map_countries = len( country_counts["country"] )
 
@@ -75,7 +75,7 @@ def plot_sample_geomap(**kwargs):
         text=city_counts['label'],
     ))
 
-    fig.update_layout( title_text=("{} Mapped <i><b>{}</b></i> Samples, from {} Cities in {} Countries").format(map_samples, dataset_id, map_cities, map_countries) )
+    fig.update_layout( title_text=("{} Mapped <i><b>{}</b></i> Samples, from {} Cities in {} Countries").format(map_samples, ds_id, map_cities, map_countries) )
     fig.update_geos( landcolor = 'rgb(255,252,225)' )
     fig.update_geos( fitbounds="locations" )
 

@@ -11,11 +11,11 @@ from .tabulating_tools import *
 ################################################################################
 ################################################################################
 
-def pgx_update_samples_from_file( **kwargs ):
+def pgx_update_samples_from_file( ds_id, **kwargs ):
     
     filter_defs = kwargs[ "filter_defs" ]
     mongo_client = MongoClient( )
-    mongo_db = mongo_client[ kwargs[ "dataset_id" ] ]
+    mongo_db = mongo_client[ ds_id ]
     bios_coll = mongo_db[ "biosamples" ]
     io_params = kwargs[ "config" ][ "io_params" ]
     io_prefixes = kwargs[ "config" ][ "io_prefixes" ]
@@ -207,13 +207,13 @@ def get_current_mappings(**kwargs):
     
     map_dic = { }
 
-    for dataset_id in kwargs["config"]["dataset_ids"]:
+    for ds_id in kwargs["config"]["dataset_ids"]:
 
         mongo_client = MongoClient( )
-        mongo_db = mongo_client[ dataset_id ]
+        mongo_db = mongo_client[ ds_id ]
         bios_coll = mongo_db[ "biosamples" ]
         
-        bar = IncrementalBar(dataset_id+' samples', max = bios_coll.estimated_document_count() )
+        bar = IncrementalBar(ds_id+' samples', max = bios_coll.estimated_document_count() )
 
         split_v = re.compile(r'^(\w+?)[\:\-](\w[\w\.]+?)$')
 
@@ -247,7 +247,6 @@ def get_current_mappings(**kwargs):
     od = [ t_k ]
 
     for m in sorted(map_dic.keys()):
-        # print("{}: {} - {}".format(dataset_id, m, map_dic[ m ]["status"]))
         if map_dic[ m ]["status"] == "TODO":
             todo += 1
         l = [ str(map_dic[ m ][ k ]) for k in t_k ]
@@ -274,12 +273,12 @@ def pgx_write_mappings_to_yaml(**kwargs):
         
     equivmaps = kwargs["equivmaps"]
 
-    for dataset_id in kwargs["config"]["dataset_ids"]:
+    for ds_id in kwargs["config"]["dataset_ids"]:
 
-        bar = IncrementalBar(dataset_id+ ' example lookup', max = len(equivmaps))
+        bar = IncrementalBar(ds_id+ ' example lookup', max = len(equivmaps))
 
         mongo_client = MongoClient( )
-        mongo_db = mongo_client[ dataset_id ]
+        mongo_db = mongo_client[ ds_id ]
         mongo_coll = mongo_db[ "biosamples" ]
 
         for e in equivmaps:
@@ -362,12 +361,12 @@ def _format_icdmap( e ):
 ################################################################################
 ################################################################################
 
-def pgx_update_biocharacteristics(**kwargs):
+def pgx_update_biocharacteristics( ds_id, **kwargs):
 
     update_report = [ "id",  *kwargs["equiv_keys"], "replaced_ncit::id", "replaced_ncit::label" ]
         
     mongo_client = MongoClient( )
-    mongo_db = mongo_client[ kwargs[ "dataset_id" ] ]
+    mongo_db = mongo_client[ ds_id ]
     mongo_coll = mongo_db[ kwargs["update_collection"] ]
     
     db_key = kwargs["filter_defs"]["icdom"][ "db_key" ]
@@ -402,7 +401,7 @@ def pgx_update_biocharacteristics(**kwargs):
     bar.finish()   
 
     mongo_client.close()
-    print(kwargs[ "dataset_id" ]+": "+str(sample_no))
+    print(ds_id+": "+str(sample_no))
     return(update_report)
 
 ################################################################################

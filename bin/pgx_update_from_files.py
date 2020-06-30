@@ -49,7 +49,7 @@ def main():
 
     args = _get_args()
     config[ "paths" ][ "update_file" ] = args.updatefile
-    dataset_id = args.datasetid
+    ds_id = args.datasetid
 
     try:
         if path.isdir( args.outdir ):
@@ -57,7 +57,7 @@ def main():
     except:
         pass
 
-    if not dataset_id in config[ "dataset_ids" ]:
+    if not ds_id in config[ "dataset_ids" ]:
         print("No existing dataset was provided with -d ...")
         exit()
     try:
@@ -75,16 +75,15 @@ def main():
     kwargs = {
         "config": config,
         "args": args,
-        "dataset_id": dataset_id,
         "update_collection": "biosamples",
         "filter_defs": read_filter_definitions( **config[ "paths" ] ) 
     }
 
    
-    if confirm_prompt("""Update Biosamples in {} from file\n{}\n""".format(dataset_id, kwargs[ "config" ][ "paths" ][ "update_file" ]), False):
+    if confirm_prompt("""Update Biosamples in {} from file\n{}\n""".format(ds_id, kwargs[ "config" ][ "paths" ][ "update_file" ]), False):
 
-        print("=> updating biosamples in "+dataset_id)
-        pgx_update_samples_from_file( **kwargs )
+        print("=> updating biosamples in "+ds_id)
+        pgx_update_samples_from_file( ds_id, **kwargs )
 
 ################################################################################
 ################################################################################

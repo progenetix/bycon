@@ -121,12 +121,12 @@ def _update_biosamples_geolocs(config, table, col_inds):
     mongo_client = MongoClient( )
     g_i = 0
 
-    for dataset_id in config[ "dataset_ids" ]:
-        bios_coll = mongo_client[ dataset_id ][ "biosamples" ]
+    for ds_id in config[ "dataset_ids" ]:
+        bios_coll = mongo_client[ ds_id ][ "biosamples" ]
 
         bio_all = bios_coll.count_documents({})
 
-        bar = IncrementalBar(dataset_id+' biosamples', max = bio_all)
+        bar = IncrementalBar(ds_id+' biosamples', max = bio_all)
 
         if config[ "iso_reset" ]:
             bios_coll.update_many( { }, { "$set": { "provenance.geo.ISO-3166-alpha3": "XXX" } } )
@@ -144,7 +144,7 @@ def _update_biosamples_geolocs(config, table, col_inds):
                 bar.next()
         
         bar.finish()
-        print(("{} locations were updated in {}.biosamples").format(g_i, dataset_id))
+        print(("{} locations were updated in {}.biosamples").format(g_i, ds_id))
         g_i = 0
 
     g_i = 0

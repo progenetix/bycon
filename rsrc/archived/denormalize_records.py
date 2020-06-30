@@ -7,7 +7,7 @@ from isodate import parse_duration
 from .tabulating_tools import *
 
 
-def pgx_populate_callset_info( **kwargs ):
+def pgx_populate_callset_info( ds_id, **kwargs ):
 
     """podmd
  
@@ -23,7 +23,7 @@ def pgx_populate_callset_info( **kwargs ):
     podmd"""
 
     mongo_client = MongoClient( )
-    mongo_db = mongo_client[ kwargs[ "dataset_id" ] ]
+    mongo_db = mongo_client[ ds_id ] ]
     bios_coll = mongo_db[ "biosamples" ]
     inds_coll = mongo_db[ "individuals" ]
     cs_coll = mongo_db[ "callsets" ]

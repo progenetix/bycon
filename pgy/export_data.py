@@ -33,10 +33,10 @@ def write_biosamples_table(**kwargs):
 
     tmp_bios_file = "_tmp-"+biosfl
 
-    dataset_id = kwargs[ "dataset_id" ]
-    query = { "_id": { "$in": kwargs[ "bs._id" ] } }
+    query = { "_id": { "$in": kwargs["query_results"][ "bs._id" ][ "target_values" ] } }
+    ds_id = kwargs["query_results"][ "bs._id" ][ "source_db" ]
 
-    bios_coll = MongoClient( )[ dataset_id ][ "biosamples" ]
+    bios_coll = MongoClient( )[ ds_id ][ "biosamples" ]
 
     bios_no = 0
 
@@ -63,7 +63,7 @@ def write_biosamples_table(**kwargs):
         bios_no += 1
 
     biosf.close()
-    biosamples_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ dataset_id, label, str(bios_no), biosfl ]) )
+    biosamples_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ ds_id, label, str(bios_no), biosfl ]) )
     rename(tmp_bios_file, biosamples_file)
 
     print(str(bios_no)+" biosamples were written to "+biosamples_file)
@@ -76,11 +76,10 @@ def write_callsets_matrix_files(**kwargs):
     smfl = kwargs["config"][ "paths" ][ "status_matrix_file_label" ]
     vmfl = kwargs["config"][ "paths" ][ "values_matrix_file_label" ]
     
-    dataset_id = kwargs[ "dataset_id" ]
+    query = { "_id": { "$in": kwargs["query_results"][ "cs._id" ][ "target_values" ] } }
+    ds_id = kwargs["query_results"][ "bs._id" ][ "source_db" ]
 
-    mongo_client = MongoClient( )
-    mongo_db = mongo_client[ dataset_id ]
-    mongo_coll = mongo_db[ 'callsets' ]
+    cs_coll = MongoClient( )[ ds_id ][ "callsets" ]
 
     tmp_status_matrix_file = "_tmp-"+smfl
     tmp_values_matrix_file = "_tmp-"+vmfl
@@ -93,8 +92,8 @@ def write_callsets_matrix_files(**kwargs):
     vmf = open( tmp_values_matrix_file, 'w' )
     sm_no = 0
     vm_no = 0
-    for cs in mongo_coll.find({"_id": {"$in": kwargs["cs._id"] }}) :
-        cs = callsets_add_metadata( cs, **kwargs )
+    for cs in cs_coll.find( query ) :
+        cs = callsets_add_metadata( ds_id, cs, **kwargs )
         cs_meta = [ cs[ "id" ] ]
         for pre in io_prefixes:
             pre_id, pre_label = "", ""
@@ -117,10 +116,9 @@ def write_callsets_matrix_files(**kwargs):
                 vm_no += 1
     smf.close()
     vmf.close()
-    mongo_client.close()
 
-    status_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ dataset_id, label, str(sm_no), smfl ]) )
-    values_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ dataset_id, label, str(vm_no), vmfl ]) )
+    status_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ ds_id, label, str(sm_no), smfl ]) )
+    values_matrix_file = path.join( kwargs[ "config" ][ "paths" ][ "out" ], "-".join([ ds_id, label, str(vm_no), vmfl ]) )
 
     rename(tmp_status_matrix_file, status_matrix_file)
     rename(tmp_values_matrix_file, values_matrix_file)
