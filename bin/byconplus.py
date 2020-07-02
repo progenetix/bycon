@@ -74,7 +74,7 @@ from bycon import *
 * `/biosamples/{id}/g_variants`
   - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_HNSCC-GSF-an-10394/g_variants?datasetIds=progenetix>
 * `/g_variants?{query}`  
-  - <https://bycon.progenetix.org/g_variants?datasetIds=dipg&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&start=7572825&end=7579005&referenceBases=N&alternateBases=N>
+  - <https://beacon.progenetix.org/cgi/bycon/bin/byconplus.py/g_variants?requestType=variantRangeRequest&datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&start=20000000&end=22000000&filters=icdom-94403>
   - <https://bycon.progenetix.org/g_variants?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&start=21500000&start=21975097&end=21967753&end=22500000&filters=icdom-94403>
 * `/g_variants/{id}`    
   - Since the _Progenetix_ framework treats all variant instances individually

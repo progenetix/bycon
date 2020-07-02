@@ -16,26 +16,38 @@ def beacon_get_endpoint(**byc):
 
     url_comps = urlparse( environ.get('REQUEST_URI') )
 
-    for p in byc["beacon_paths"]:
+    for p in byc["beacon_paths"].keys():
         m = re.compile(r'(^.+?byconplus\.py)?'+p)
         if m.match(url_comps.path):
             return p
-
     return endpoint
 
 ################################################################################
 
-def parse_endpoints(**byc):
+def parse_endpoints( **byc ):
 
     endpoint_pars = _endpoint_response_from_pars( **byc )
 
     url_comps = urlparse( environ.get('REQUEST_URI') )
-    ep = url_comps.path
+    e_path = url_comps.path
     
-    if not ep:
+    if not e_path:
+        return(endpoint_pars)
+ 
+    if not byc["endpoint"]:
         return(endpoint_pars)
 
-    path_items = [ x for x in ep.split('/') if x ]
+    ep = byc["endpoint"].split('/')[1]
+
+    all_path = [ x for x in e_path.split('/') if x ]
+    path_items = [ ]
+
+    keep = False
+    for p_i in all_path:
+        if p_i == ep:
+            keep = True
+        if keep:
+            path_items.append(p_i)
 
     if len(path_items) < 1:
         return(endpoint_pars)

@@ -25,7 +25,7 @@ RewriteRule     "^/services(.*)"     /cgi-bin/bycon/bin/services.py$1      [PT]
 
 This allows the creattion of canonical URLs, e.g.:
 
-* <https://progenetix.org/services/byconplus/?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&startMin=18000000&startMax=21975097&endMin=21967753&endMax=26000000&filters=icdom-94403>
+* <https://progenetix.org/services/byconplus/?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&start=18000000&start=21975097&end=21967753&end=26000000&filters=icdom-94403>
 * <https://progenetix.org/services/cytomapper/?assemblyId=ncbi36.1&cytoBands=8q&text=1>
 
 Also, key=value parameters can be provided as path elements:
