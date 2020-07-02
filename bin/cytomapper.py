@@ -116,8 +116,8 @@ def cytomapper():
         "rest_pars": rest_pars
     }
 
-    byc.update( { "cytoband_pars": _parse_cytobands( **byc ) } )
-    byc.update( { "cytoband_request_type": _get_cytoband_request_type( **byc ) } )
+    byc[ "cytoband_pars" ], byc[ "cytoband_request_type" ] = _parse_request( **byc )
+
     byc.update( { "cytobands": parse_cytoband_file( **byc ) } )
     cytoBands, chro, cb_label = filter_cytobands( **byc )
 
@@ -148,6 +148,7 @@ def cytomapper():
         "size": size,
         "ChromosomeLocation": {
             "type": "ChromosomeLocation",
+            "species": byc[ "cytoband_pars" ][ "species" ],
             "chr": chro,
             "start": cytoBands[0]["cytoband"],
             "end": cytoBands[-1]["cytoband"]
@@ -166,107 +167,78 @@ def cytomapper():
 ################################################################################
 
 
-def _parse_cytobands( **byc ):
+def _parse_request( **byc ):
 
     cb_pars = { }
-    v_p_defs = byc["cytoband_defs"]["parameters"]
-    args = byc["args"]
+    rq_type = "error: no valid request"
+    cb_rq_ts = byc["cytoband_defs"]["request_types"]
+    cb_def_p = byc["cytoband_defs"]["default_parameters"]
+    cb_arg_pars = byc["cytoband_defs"]["arg_pars"]
+    vargs = vars(byc["args"])
 
-    for p_k in v_p_defs.keys():
-        v_default = None
-        if "default" in v_p_defs[ p_k ]:
-            v_default = v_p_defs[ p_k ][ "default" ]
-        if "array" in v_p_defs[ p_k ]["type"]:
-            cb_pars[ p_k ] = byc["form_data"].getlist(p_k)
-        else:
-            cb_pars[ p_k ] = byc["form_data"].getvalue(p_k, v_default)
-        if not cb_pars[ p_k ]:
-            del( cb_pars[ p_k ] )
-        # except Exception:
-        #     pass
+    for rk, rt in cb_rq_ts.items():
+        cb_pars.update( { rk: {} })
 
-    # for debugging
-    args = byc["args"]
-    if "test" in args:
-        if args.test:
-            cb_pars = byc["service_info"][ "sampleAlleleRequests" ][0]
-    if "cytobands" in args:
-        if args.cytobands:
-            cb_pars[ "cytoBands" ] = args.cytobands
-    if "chrobases" in args:
-        if args.chrobases:
-            cb_pars[ "chroBases" ] = args.chrobases
-    if "genome" in args:
-        if args.genome:
-            cb_pars[ "assemblyId" ] = args.genome
+    # for terminal, where parameters may be named differently
+    for rk, rt in cb_rq_ts.items():
+        for a_k, a_v in cb_arg_pars.items():
+            if a_v in vargs:
+                if not vargs[ a_v ]:
+                    continue
+                if a_k in rt["parameters"] or a_k in cb_def_p:
+                    cb_pars[ rk ][ a_k ] = vargs[ a_v ]
 
-    # TODO: rest_pars shouldn't be used anymore; still for cytomapper...
-    if "rest_pars" in byc:
-        for rp in byc[ "rest_pars" ].keys():
-            if rp in v_p_defs:
-                cb_pars[ rp ] = byc[ "rest_pars" ][ rp ]
+    # basic parameters which may apply to all mappings
+    for rk, rt in cb_rq_ts.items():
+        for d_k, d_d in cb_def_p.items():
+            d = d_d["default"]
+            if d_k in cb_pars[ rk ]:
+                v = cb_pars[ rk ][ d_k ]
+            else:
+                v = byc["form_data"].getvalue( d_k, d )
+            v_pat = re.compile( d_d[ "pattern" ] )
+            if not v_pat.match( str( v ) ):
+                if d_k in cb_pars[ rk ]:
+                    del(cb_pars[ rk ][ d_k ])
+                continue
+            cb_pars[ rk ][ d_k ] = v
 
-    # value checks
-    # TODO: a bit hacky; reduced from the systematic variant parsing ...
-    v_p_c = { }
+    # request_type specific mappings
+    # also performing format checks & deletion of wrong types
+    for rk, rt in cb_rq_ts.items():
+        for p_k, p_d in rt["parameters"].items():
+            d = False
+            if "default" in p_d:
+                d = p_d["default"]
+            if p_k in cb_pars[ rk ]:
+                v = cb_pars[ rk ][ p_k ]
+            else:
+                v = byc["form_data"].getvalue( p_k, d )
+            if not v:
+                continue
+            v_pat = re.compile( p_d[ "pattern" ] )
+            if not v_pat.match( str( v ) ):
+                if p_k in cb_pars[ rk ]:
+                    del(cb_pars[ rk ][ p_k ])
+                continue
+            cb_pars[ rk ][ p_k ] = v
+            if "components" in p_d:
+                for c_k, c_d in p_d["components"].items():
+                    c_i = c_d[ "regexi" ]
+                    c_v = v_pat.match( v ).group( int(c_d[ "regexi" ]) )
+                    if c_d[ "type" ] == "integer":
+                        c_v = int( c_v )
+                    cb_pars[ rk ][ c_k ] = c_v
 
-    if "type" in cb_pars:
-        if cb_pars[ "type" ] == "ChromosomeLocation":
-            if "chr" in cb_pars:
-                cb_pars["cytoBands"] = cb_pars["chr"]+cb_pars["start"]+cb_pars["end"]
-                del(cb_pars["start"])
-                del(cb_pars["end"])
+    for rk, rt in cb_rq_ts.items():
+        req_no = len(rt["all_of"])
+        for req in rt["all_of"]:
+            if req in cb_pars[ rk ]:
+                req_no -= 1
+        if req_no < 1:
+            return cb_pars[ rk ], rk
 
-    for p_k in cb_pars.keys():
-        if not p_k in v_p_defs.keys():
-            continue
-        v_p = cb_pars[ p_k ]
-
-        if re.compile( v_p_defs[ p_k ][ "pattern" ] ).match( str( v_p ) ):
-            if "integer" in v_p_defs[ p_k ][ "type" ]:
-                v_p = int( v_p )
-            v_p_c[ p_k ] = v_p
-
-    v_par = "chroBases"
-    if v_par in cb_pars:
-        cb_re = re.compile( v_p_defs[ v_par ][ "pattern" ] )
-        chro, start, end = cb_re.match( v_p_c[ v_par ] ).group(2, 3, 5)
-        if not end:
-            end = int(start) + 1
-        v_p_c[ "referenceName" ] = chro
-        v_p_c[ "start" ] = int(start)
-        v_p_c[ "end" ] = int(end)
-
-    if "chr" in v_p_c:
-        v_p_c["referenceName"] = v_p_c[ "chr" ]
-
-    return v_p_c
-
-
-################################################################################
-
-def _get_cytoband_request_type( **byc ):
-    
-    cb_request_type = "no correct variant request"
-
-    c_pars = byc["cytoband_pars"]
-    c_defs = byc["cytoband_defs"]
-    r_types = c_defs["request_types"]
-
-    if not c_pars["assemblyId"]:
-        return cb_request_type
-
-    if "cytoBands" in c_pars:
-        return "cytobands2positions"
-
-    if "type" in c_pars:
-        if c_pars["type"] == "ChromosomeLocation":
-            return "cytobands2positions"
-
-    if "referenceName" in c_pars:
-        return "positions2cytobands"
-
-    return cb_request_type
+    return {}, rq_type
 
 ################################################################################
 ################################################################################

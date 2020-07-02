@@ -1,63 +1,68 @@
-parameters:
+arg_pars:
+  cytoBands: cytobands
+  chroBases: chrobases
+  assemblyId: genome
 
-  species:
-    type: string
-    pattern: '^\w.+?$'
-
-  type:
-    type: string
-    pattern: '^\w.+?$'
-
+default_parameters:
   assemblyId:
     type: string
-    pattern: '^\w+?[\w\-\.]*?\w*?$' # for 2019-nCoV
+    pattern: '^\w+?[-\.]?\w+?$'
     default: GRCh38
-
-  referenceName:
+  species:
     type: string
-    pattern: '^\w+?[\w\-]*?\w*?$' # for 2019-nCoV
-
-  chr:
-    type: string
-    pattern: '^\w+?[\w\-]*?\w*?$' # for 2019-nCoV
-
-  mateName:
-    type: string
-    pattern: '^([1-9]|1\d|2[0-4]|[XY]|MT)$'
-
-  start:
-    type: string
-    pattern: '^\w+?(\.\w+)?$'
-
-  end:
-    type: string
-    pattern: '^\w+?(\.\w+)?$'
-
-  cytoBands:
-    pattern: ^(chro?)?([12]?[\dXY])([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?\-?([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?$
-    type: string
-
-  chroBases:
-    pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
-    type: string
-    examples:
-      - "17:12000000-194418991"
+    pattern: '^\w[^\:]+?(\:[^\:]+)?$'
+    default: 'taxonomy:9606'
 
 request_types:
      
-  cytobands2positions:
+  cytobands2chrobases:
+    parameters:
+      cytoBands:
+        pattern: ^(chro?)?([12]?[\dXY])([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?\-?([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?$
+        type: string
     all_of:
       - assemblyId
       - cytoBands
   
-  positions2cytobands:
+  chrobases2cytobands:
+    parameters:
+      chroBases:
+        pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
+        type: string
+        examples:
+          - "17:12000000-194418991"
+        components:
+          chr:
+            regexi: 2
+            pattern: '^(chro?)?[12]?[\dXY]$'
+            type: string
+          start:
+            regexi: 3
+            pattern: '^\d+?$'
+            type: integer
+          end:
+            regexi: 5
+            pattern: '^\d+?$'
+            type: integer
     all_of:
       - assemblyId
-      - start
-      - end
-      - referenceName
+      - chroBases
 
-  chromosomeLocation2positions:
+  chromosomeLocation2chrobases:
+    parameters:
+      type:
+        type: string
+        pattern: 'ChromosomeLocation'
+        default: 'ChromosomeLocation'
+      chr:
+        type: string
+        pattern: '^(chro?)?[XYxy\d]\d?$'
+      start:
+        type: string
+        pattern: '^[pq]((ter)|(cen)|([1-4]([0-8](\.\d\d*?)?)?)?)$'
+      end:
+        type: string
+        pattern: '^[pq]((ter)|(cen)|([1-4]([0-8](\.\d\d*?)?)?)?)$'
     all_of:
       - assemblyId
       - type
@@ -65,8 +70,4 @@ request_types:
       - chr
       - start
       - end
-
-
-
-
 

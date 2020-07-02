@@ -12,6 +12,9 @@ def parse_cytoband_file( **kwargs ):
  
     podmd"""
 
+    cb_defs = kwargs["cytoband_defs"]["request_types"]["cytobands2chrobases"]
+
+
     # should be in a config but seems like overkill...
     # TODO: catch error for missing genome edition
     g_map = {
@@ -29,7 +32,7 @@ def parse_cytoband_file( **kwargs ):
         genome = g_map[ genome ]
 
     cb_file = path.join( kwargs[ "config" ][ "paths" ][ "genomes" ], genome, "CytoBandIdeo.txt" )
-    cb_re = re.compile( kwargs["cytoband_defs"]["parameters"][ "cytoBands" ][ "pattern" ] )
+    cb_re = re.compile( cb_defs["parameters"][ "cytoBands" ][ "pattern" ] )
 
     cb_keys = [ "chro", "start", "end", "cytoband", "staining" ]
     cytobands = [ ]
@@ -50,17 +53,19 @@ def parse_cytoband_file( **kwargs ):
 
 def filter_cytobands( **byc ):
 
+    cb_pars = byc[ "cytoband_pars" ]
+    req_type = byc[ "cytoband_request_type" ]
+
     # TODO: recursive erosion of non-existing cytobands
 
-    if byc[ "cytoband_request_type" ] == "cytobands2positions":
-        cb_re = re.compile( byc["cytoband_defs"]["parameters"][ "cytoBands" ][ "pattern" ] )
-        chro, cb_start, cb_end = cb_re.match( byc["cytoband_pars"][ "cytoBands" ] ).group(2, 3, 9)
-        cytobands = _subset_cytobands_by_bands(  byc[ "cytobands" ], chro, cb_start, cb_end  )
+    if "2chrobases" in req_type:
+        cytobands = _subset_cytobands_by_bands(  byc[ "cytobands" ], cb_pars["chr"], cb_pars["start"], cb_pars["end"]  )
         cb_label = _cytobands_label( cytobands )
-    elif byc[ "cytoband_request_type" ] == "positions2cytobands":
-        chro = byc["cytoband_pars"][ "referenceName" ]
-        start = int( byc["cytoband_pars"][ "start" ] )
-        end = int( byc["cytoband_pars"][ "end" ] )
+        chro = cb_pars["chr"]
+    elif "chrobases2" in req_type:
+        chro = cb_pars["chr"]
+        start = cb_pars["start"]
+        end = cb_pars["end"]
         cytobands = _subset_cytobands_by_bases( byc[ "cytobands" ], chro, start, end  )
         cb_label = _cytobands_label( cytobands )
     else:
