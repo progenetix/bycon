@@ -49,7 +49,7 @@ The `cytobands` and `chrobases` parameters can be used for running the script on
   - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=GRCh38&referenceName=17&start=800000&end=24326000>
   - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=NCBI36&chroBases=17:800000-24326000>
 * using `curl` to get the text format mapping of a cytoband range, using the API `services` shortcut:
-  - `curl -k https://progenetix.org/services/cytomapper/cytoBands\=8q21q24.1/assemblyId\=hg18/text\=1/`
+  - `curl -k https://progenetix.org/services/cytomapper?cytoBands\=8q21q24.1&assemblyId\=hg18&text\=1`
 * command line version of the above
   - `bin/cytomapper.py --chrobases 17:800000-24326000 -g NCBI36`
   - `bin/cytomapper.py -b 17:800000-24326000`
@@ -202,6 +202,7 @@ def _parse_request( **byc ):
                     del(cb_pars[ rk ][ d_k ])
                 continue
             cb_pars[ rk ][ d_k ] = v
+
 
     # request_type specific mappings
     # also performing format checks & deletion of wrong types
