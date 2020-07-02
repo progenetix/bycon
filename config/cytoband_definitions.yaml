@@ -20,6 +20,19 @@ request_types:
       cytoBands:
         pattern: ^(chro?)?([12]?[\dXY])([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?\-?([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?$
         type: string
+        components:
+          chr:
+            regexi: 2
+            pattern: '^(chro?)?[12]?[\dXY]$'
+            type: string
+          start:
+            regexi: 3
+            pattern: '^[pq]((ter)|(cen)|([1-4]([0-8](\.\d\d*?)?)?)?)$'
+            type: string
+          end:
+            regexi: 4
+            pattern: '^[pq]((ter)|(cen)|([1-4]([0-8](\.\d\d*?)?)?)?)$'
+            type: string
     all_of:
       - assemblyId
       - cytoBands
@@ -46,7 +59,9 @@ request_types:
             type: integer
     all_of:
       - assemblyId
-      - chroBases
+      - chr
+      - start
+      - end
 
   chromosomeLocation2chrobases:
     parameters:
