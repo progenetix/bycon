@@ -125,12 +125,7 @@ def main():
 
 def byconplus():
     
-    with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
-        config = yaml.load( cf , Loader=yaml.FullLoader)
-    config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
-    config[ "paths" ][ "out" ] = path.join( *config[ "paths" ][ "web_temp_dir_abs" ] )
-
-    # input / definitions
+    config = read_bycon_config( path.abspath( dir_path ) )
     form_data = cgi_parse_query()
     args = _get_args()
 

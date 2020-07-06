@@ -13,6 +13,7 @@ sys_path.append(path.join(path.abspath(dir_path), '..'))
 
 from bin.cytomapper import cytomapper
 from bin.byconplus import byconplus
+from bin.collations import collations
 
 """podmd
 The `services` application deparses a request URI and calls the respective
@@ -59,6 +60,8 @@ def main():
         cytomapper()
     elif f == "byconplus":
         byconplus()
+    elif f == "collations":
+        collations()
 
 ################################################################################
 ################################################################################

@@ -1,13 +1,26 @@
 arg_pars:
+
   cytoBands: cytobands
   chroBases: chrobases
   assemblyId: genome
 
 default_parameters:
+
   assemblyId:
     type: string
     pattern: '^\w+?[-\.]?\w+?$'
     default: GRCh38
+    allowed:
+      - "GRCh38"
+      - "GRCh37"
+      - "hg19"
+      - "NCBI36"
+      - "hg18"
+      - "NCBI35"
+      - "hg17"
+      - "NCBI34"
+      - "hg16"
+
   species:
     type: string
     pattern: '^\w[^\:]+?(\:[^\:]+)?$'
@@ -18,7 +31,7 @@ request_types:
   cytobands2chrobases:
     parameters:
       cytoBands:
-        pattern: ^(chro?)?([12]?[\dXY])([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?\-?([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?$
+        pattern: ^(chro?)?([12]?[\dXY])([pq]((ter)|(cen)|([1-4]([0-8](\.\d\d*?)?)?)?))?\-?([pq]((ter)|(cen)|([1-4]([0-8](\.\d\d*?)?)?)?))?$
         type: string
         components:
           chr:
@@ -30,7 +43,7 @@ request_types:
             pattern: '^[pq]((ter)|(cen)|([1-4]([0-8](\.\d\d*?)?)?)?)$'
             type: string
           end:
-            regexi: 4
+            regexi: 10
             pattern: '^[pq]((ter)|(cen)|([1-4]([0-8](\.\d\d*?)?)?)?)$'
             type: string
     all_of:

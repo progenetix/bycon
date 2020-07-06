@@ -39,15 +39,15 @@ The `cytobands` and `chrobases` parameters can be used for running the script on
 #### Examples
 
 * using the new [ChromosomeLocation](https://vr-spec.readthedocs.io/en/181-chromosomelocation/terms_and_model.html#chromosomelocation) object:
-  - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?type=ChromosomeLocation&assemblyId=GRCh38&chr=17&start=p11&end=q21>
+  - <https://progenetix.org/services/cytomapper?type=ChromosomeLocation&assemblyId=GRCh38&chr=17&start=p11&end=q21>
 * retrieve coordinates for some bands on chromosome 8
-  - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=NCBI36.1&cytoBands=8q>
+  - <https://progenetix.org/services/cytomapper?assemblyId=NCBI36.1&cytoBands=8q>
 * as above, just as text:
-  - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=NCBI.1&cytoBands=8q&text=1>
+  - <https://progenetix.org/services/cytomapper?assemblyId=NCBI.1&cytoBands=8q&text=1>
   - *cytomapper shortcut*: <https://progenetix.org/services/cytomapper/?assemblyId=NCBI36.1&cytoBands=8q&text=1>
 * get the cytobands whith which a base range on chromosome 17 overlaps, in short and long form
-  - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=GRCh38&referenceName=17&start=800000&end=24326000>
-  - <https://progenetix.org/cgi/bycon/bin/cytomapper.py?assemblyId=NCBI36&chroBases=17:800000-24326000>
+  - <https://progenetix.org/services/cytomapper?assemblyId=GRCh38&referenceName=17&start=800000&end=24326000>
+  - <https://progenetix.org/services/cytomapper?assemblyId=NCBI36&chroBases=17:800000-24326000>
 * using `curl` to get the text format mapping of a cytoband range, using the API `services` shortcut:
   - `curl -k https://progenetix.org/services/cytomapper?cytoBands\=8q21q24.1&assemblyId\=hg18&text\=1`
 * command line version of the above
@@ -90,50 +90,37 @@ def main():
 
 def cytomapper():
     
-    # input & definitions
-    form_data = cgi_parse_query()
-    args = _get_args()
-    rest_pars = cgi_parse_path_params( "cytomapper" )
-
-    if "debug" in form_data:
-        cgitb.enable()
-        print('Content-Type: text')
-        print()
-    else:
-        pass
-
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
         config = yaml.load( cf , Loader=yaml.FullLoader)
     config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
-    config[ "paths" ][ "out" ] = path.join( *config[ "paths" ][ "web_temp_dir_abs" ] )
     config[ "paths" ][ "genomes" ] = path.join( config[ "paths" ][ "module_root" ], "rsrc", "genomes" )
 
     byc = {
         "config": config,
-        "args": args,
+        "args": _get_args(),
         "cytoband_defs": read_cytoband_definitions( **config[ "paths" ] ),
-        "form_data": form_data,
-        "rest_pars": rest_pars
+        "form_data": cgi_parse_query(),
+        "error": { }
     }
 
-    byc[ "cytoband_pars" ], byc[ "cytoband_request_type" ] = _parse_request( **byc )
+    _enable_debugging( byc["form_data"] )
 
+    byc.update( _parse_request( **byc ) )
     byc.update( { "cytobands": parse_cytoband_file( **byc ) } )
-    cytoBands, chro, cb_label = filter_cytobands( **byc )
+    cytoBands, chro, cb_label, cb_match_error = filter_cytobands( **byc )
+    if cb_match_error:
+        byc["error"].update({ "cb_match_error": cb_match_error })
 
     # response prototype
-    cyto_response = { "request": byc["cytoband_pars"], "error": None }
+    cyto_response = { "request": byc["cytoband_pars"], "error": byc["error"] }
 
     if len( cytoBands ) < 1:
         cyto_response.update( { "error": "No matching cytobands!" } )
-        _print_terminal_response(args, cyto_response)
-        _print_text_response(form_data, rest_pars, cyto_response)
+        _print_terminal_response(byc["args"], cyto_response)
+        _print_text_response(byc["form_data"], cyto_response)
         cgi_print_json_response(cyto_response)
     start = int( cytoBands[0]["start"] )
     end = int( cytoBands[-1]["end"] )
-    if byc[ "cytoband_request_type" ] == "positions2cytobands":
-        start = int( byc["cytoband_pars"][ "start" ] )
-        end = int( byc["cytoband_pars"][ "end" ] )
 
     size = int(  end - start )
     chroBases = chro+":"+str(start)+"-"+str(end)
@@ -155,8 +142,8 @@ def cytomapper():
         }
     } )
 
-    _print_terminal_response(args, cyto_response)
-    _print_text_response(form_data, rest_pars, cyto_response)
+    _print_terminal_response(byc["args"], cyto_response)
+    _print_text_response(byc["form_data"], cyto_response)
 
     if "callback" in byc[ "form_data" ]:
         cgi_print_json_callback(byc["form_data"].getvalue("callback"), [cyto_response])
@@ -166,18 +153,41 @@ def cytomapper():
 ################################################################################
 ################################################################################
 
-
 def _parse_request( **byc ):
 
     cb_pars = { }
     rq_type = "error: no valid request"
     cb_rq_ts = byc["cytoband_defs"]["request_types"]
     cb_def_p = byc["cytoband_defs"]["default_parameters"]
-    cb_arg_pars = byc["cytoband_defs"]["arg_pars"]
-    vargs = vars(byc["args"])
+
+    byc[ "cytoband_pars" ], byc[ "cytoband_request_type" ] = cb_pars, None
 
     for rk, rt in cb_rq_ts.items():
         cb_pars.update( { rk: {} })
+
+    cb_pars.update( _parse_cytoband_args(cb_pars, **byc) )
+    cb_pars.update( _parse_default_parameters(cb_pars, **byc) )
+    cb_pars.update( _parse_for_request_types(cb_pars, **byc) )
+
+    for rk, rt in cb_rq_ts.items():
+        req_no = len(rt["all_of"])
+        for req in rt["all_of"]:
+            if req in cb_pars[ rk ]:
+                req_no -= 1
+        if req_no < 1:
+            byc[ "cytoband_pars" ], byc[ "cytoband_request_type" ] = cb_pars[ rk ], rk
+            return byc
+
+    return byc
+
+################################################################################
+
+def _parse_cytoband_args(cb_pars, **byc):
+
+    cb_rq_ts = byc["cytoband_defs"]["request_types"]
+    cb_def_p = byc["cytoband_defs"]["default_parameters"]
+    cb_arg_pars = byc["cytoband_defs"]["arg_pars"]
+    vargs = vars(byc["args"])
 
     # for terminal, where parameters may be named differently
     for rk, rt in cb_rq_ts.items():
@@ -187,6 +197,15 @@ def _parse_request( **byc ):
                     continue
                 if a_k in rt["parameters"] or a_k in cb_def_p:
                     cb_pars[ rk ][ a_k ] = vargs[ a_v ]
+
+    return cb_pars
+
+################################################################################
+
+def _parse_default_parameters(cb_pars, **byc):
+
+    cb_rq_ts = byc["cytoband_defs"]["request_types"]
+    cb_def_p = byc["cytoband_defs"]["default_parameters"]
 
     # basic parameters which may apply to all mappings
     for rk, rt in cb_rq_ts.items():
@@ -203,6 +222,14 @@ def _parse_request( **byc ):
                 continue
             cb_pars[ rk ][ d_k ] = v
 
+    return cb_pars
+
+################################################################################
+
+def _parse_for_request_types(cb_pars, **byc):
+
+    cb_rq_ts = byc["cytoband_defs"]["request_types"]
+    cb_def_p = byc["cytoband_defs"]["default_parameters"]
 
     # request_type specific mappings
     # also performing format checks & deletion of wrong types
@@ -226,20 +253,23 @@ def _parse_request( **byc ):
             if "components" in p_d:
                 for c_k, c_d in p_d["components"].items():
                     c_i = c_d[ "regexi" ]
-                    c_v = v_pat.match( v ).group( int(c_d[ "regexi" ]) )
+                    c_v = v_pat.match( v ).group( c_i )
                     if c_d[ "type" ] == "integer":
                         c_v = int( c_v )
                     cb_pars[ rk ][ c_k ] = c_v
 
-    for rk, rt in cb_rq_ts.items():
-        req_no = len(rt["all_of"])
-        for req in rt["all_of"]:
-            if req in cb_pars[ rk ]:
-                req_no -= 1
-        if req_no < 1:
-            return cb_pars[ rk ], rk
+    return cb_pars
 
-    return {}, rq_type
+################################################################################
+################################################################################
+
+def _enable_debugging( form_data ):
+    if "debug" in form_data:
+        cgitb.enable()
+        print('Content-Type: text')
+        print()
+    else:
+        pass
 
 ################################################################################
 ################################################################################
@@ -247,7 +277,7 @@ def _parse_request( **byc ):
 def _print_terminal_response(args, cyto_response):
 
     if not args is None:
-        if not cyto_response[ "error" ] is None:
+        if len(cyto_response[ "error" ].keys()) > 0:
             print( cyto_response[ "error" ] )
             exit()
 
@@ -263,9 +293,9 @@ def _print_terminal_response(args, cyto_response):
 ################################################################################
 ################################################################################
 
-def _print_text_response(form_data, rest_pars, cyto_response):
+def _print_text_response(form_data, cyto_response):
 
-    if "text" in form_data or "text" in rest_pars:
+    if "text" in form_data:
 
         if "cytoBands" in cyto_response[ "request" ]:
             print('Content-Type: text')

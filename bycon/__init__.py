@@ -15,8 +15,9 @@ from .beacon_generate_response import respond_get_datasetids_request
 from .beacon_generate_response import respond_service_info_request
 from .beacon_parse_endpoints import beacon_get_endpoint
 from .beacon_parse_endpoints import parse_endpoints
-from .beacon_process_specs import read_beacon_info
+from .beacon_process_specs import read_bycon_config
 from .beacon_process_specs import read_datasets_info
+from .beacon_process_specs import read_beacon_info
 from .beacon_process_specs import read_handover_info
 from .beacon_process_specs import read_service_info
 from .beacon_process_specs import read_beacon_api_paths

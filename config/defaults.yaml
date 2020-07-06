@@ -16,8 +16,17 @@ collections:
   - individuals
   - variants
 collations:
-  - biosubsets
-  - datacollections
+  biosubsets:
+    prefixes:
+      - NCIT
+      - icdom
+      - icdot
+  datacollections:
+    prefixes:
+      - PMID
+      - TCGA
+      - geogse
+      - cellosaurus
 info_db: progenetix
 beacon_info_coll: "beaconinfo"
 beacon_info_count_labels:

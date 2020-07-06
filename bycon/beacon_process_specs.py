@@ -5,6 +5,18 @@ from os import path as path
 from os import environ
 
 from .cgi_utils import *
+
+################################################################################
+
+def read_bycon_config( module_path ):
+    
+    with open( path.join( module_path, '..', "config", "defaults.yaml" ) ) as cf:
+        config = yaml.load( cf , Loader=yaml.FullLoader)
+    config[ "paths" ][ "module_root" ] = path.join( module_path, '..' )
+    config[ "paths" ][ "out" ] = path.join( *config[ "paths" ][ "web_temp_dir_abs" ] )
+
+    return config
+
 ################################################################################
 
 def read_service_info(**paths):

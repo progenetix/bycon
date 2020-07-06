@@ -6,14 +6,13 @@ import re, yaml
 ################################################################################
 ################################################################################
 
-def parse_cytoband_file( **kwargs ):
+def parse_cytoband_file( **byc ):
 
     """podmd
  
     podmd"""
 
-    cb_defs = kwargs["cytoband_defs"]["request_types"]["cytobands2chrobases"]
-
+    cb_defs = byc["cytoband_defs"]["request_types"]["cytobands2chrobases"]
 
     # should be in a config but seems like overkill...
     # TODO: catch error for missing genome edition
@@ -22,16 +21,16 @@ def parse_cytoband_file( **kwargs ):
         "grch37": "hg19",
         "ncbi36": "hg18",
         "ncbi35": "hg17",
-        "grch34": "hg16"
+        "ncbi34": "hg16"
     }
 
-    genome = kwargs["cytoband_pars"][ "assemblyId" ].lower()
+    genome = byc["cytoband_pars"][ "assemblyId" ].lower()
     genome = re.sub( r"(\w+?)([^\w]\w+?)", r"\1", genome)
 
     if genome in g_map.keys():
         genome = g_map[ genome ]
 
-    cb_file = path.join( kwargs[ "config" ][ "paths" ][ "genomes" ], genome, "CytoBandIdeo.txt" )
+    cb_file = path.join( byc[ "config" ][ "paths" ][ "genomes" ], genome, "CytoBandIdeo.txt" )
     cb_re = re.compile( cb_defs["parameters"][ "cytoBands" ][ "pattern" ] )
 
     cb_keys = [ "chro", "start", "end", "cytoband", "staining" ]
@@ -47,7 +46,7 @@ def parse_cytoband_file( **kwargs ):
             cb[ "chroband" ] = cb[ "chro" ]+cb[ "cytoband" ]
             cytobands.append(dict(cb))
 
-    return(cytobands)
+    return cytobands
 
 ################################################################################
 
@@ -55,6 +54,7 @@ def filter_cytobands( **byc ):
 
     cb_pars = byc[ "cytoband_pars" ]
     req_type = byc[ "cytoband_request_type" ]
+    cb_match_error = None
 
     # TODO: recursive erosion of non-existing cytobands
 
@@ -72,8 +72,9 @@ def filter_cytobands( **byc ):
         cytobands = [ ]
         chro = ""
         cb_label = ""
+        cb_match_error = "no matching cytobands"
 
-    return(cytobands, chro, cb_label)
+    return(cytobands, chro, cb_label, cb_match_error)
 
 ################################################################################
 
@@ -102,6 +103,13 @@ def _subset_cytobands_by_bands( cytobands, chro, cb_start, cb_end ):
             cb_start = "p"
         if cb_end == "qter":
             cb_end = "q"
+        if cb_end == "pcen":
+            cb_end = "p"
+        if cb_start == "qcen":
+            cb_start = "q"
+        if cb_start == "pcen":
+            cb_start = "q"
+ 
         cb_s_re = re.compile( "^"+cb_start )
         i = 0
 
