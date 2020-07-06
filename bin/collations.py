@@ -14,6 +14,8 @@ from bycon import *
 
 """podmd
 
+* <https://progenetix.org/services/collations/?filters=NCIT>
+
 podmd"""
 
 ################################################################################
@@ -81,12 +83,18 @@ def collations():
     query = { "id": re.compile(r'^'+f ) }
 
     for ds_id in byc["dataset_ids"]:
-        mongo_coll = mongo_client[ ds_id ][ byc["collation"] ]
+        c =  byc["collation"]
         ds_s = [ ]
+        k_s = byc["config"]["collations"][ c ]["parameters"]
+        mongo_coll = mongo_client[ ds_id ][ c ]
         for subset in mongo_coll.find( query ):
             s = { }
-            for k in ["id", "label", "count", "child_terms"]:
-                s[ k ] = subset[ k ]
+            for k in k_s:
+                # TODO: harmless hack
+                if k == "count":
+                    s[ k ] = int(subset[ k ])
+                else:
+                    s[ k ] = subset[ k ]
             ds_s.append( s )
         r["data"].append( { ds_id: ds_s } )
  

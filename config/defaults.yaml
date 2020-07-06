@@ -21,12 +21,22 @@ collations:
       - NCIT
       - icdom
       - icdot
+    parameters:
+      - id
+      - label
+      - count
+      - child_terms
   datacollections:
     prefixes:
       - PMID
       - TCGA
       - geogse
       - cellosaurus
+    parameters:
+      - id
+      - label
+      - count
+      - child_terms
 info_db: progenetix
 beacon_info_coll: "beaconinfo"
 beacon_info_count_labels:
