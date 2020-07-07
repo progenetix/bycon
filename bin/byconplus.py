@@ -88,6 +88,15 @@ from bycon import *
   
 ##### Custom (yet)
 
+* `/get-datasetids/`
+  - dataset retrieval
+  - <https://bycon.progenetix.org/get-datasetids/>
+```
+{
+    "datasets": [
+        { "id": "arraymap", "name": "arraymap" },
+        { "id": "progenetix", "name": "progenetix" ...
+```
 * sample retrieval like "id" query by endpoint
   - This type of query emulates the endpoint based queries above through the parameters
     * `scope`
