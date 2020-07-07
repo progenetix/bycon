@@ -41,7 +41,11 @@ podmd"""
 ################################################################################
 
 def main():
-
+    services = {
+        "cytomapper": cytomapper,
+        "byconplus": byconplus,
+        "collations": collations
+    }
     url_comps = urlparse( environ.get('REQUEST_URI') )
 
     if "debug" in environ.get('REQUEST_URI'):
@@ -56,12 +60,8 @@ def main():
         if p == "services":
             f = p_items[ i ]
 
-    if f == "cytomapper":
-        cytomapper()
-    elif f == "byconplus":
-        byconplus()
-    elif f == "collations":
-        collations()
+    if f in services:
+        services[f]()
 
 ################################################################################
 ################################################################################

@@ -15,10 +15,35 @@ def beacon_create_queries( **byc ):
 
     q_s = { }
     q_s = update_queries_from_filters( q_s, **byc )
+    q_s = update_queries_from_hoid( q_s, **byc)
     q_s = update_queries_from_variants( q_s, **byc )
     q_s = update_queries_from_endpoints( q_s, **byc )
     
     return q_s
+
+################################################################################
+
+def update_queries_from_hoid( queries, **byc):
+
+    if "hoid" in byc["form_data"]:
+        accessid = byc["form_data"].getvalue("accessid")
+        h_o = ho_coll.find_one( { "id": accessid } )
+        # TODO: catch error
+        # TODO: h->o queries are against a specific database ... add retrieval
+        # get_datasetids
+        t_k = h_o["target_key"]
+        t_v = h_o["target_values"]
+        c_n = h_o["target_collection"]
+        t_db = h_o["source_db"]
+        if not t_db == byc["dataset_ids"][0]:
+            return prefetch
+        h_o_q = { t_k: { '$in': t_v } }
+        if c_n in queries:
+            queries.update( { c_n: { '$and': [ h_o_q, queries[ c_n ] ] } } )
+        else:
+            queries.update( { c_n: h_o_q } )
+
+    return queries
 
 ################################################################################
 

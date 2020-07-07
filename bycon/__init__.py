@@ -4,6 +4,7 @@ from .beacon_process_handovers import handover_return_data
 from .beacon_process_handovers import query_results_save_handovers
 from .beacon_create_queries import beacon_create_queries
 from .beacon_create_queries import update_queries_from_endpoints
+from .beacon_create_queries import update_queries_from_hoid
 from .beacon_create_queries import update_queries_from_variants
 from .beacon_create_queries import update_queries_from_filters
 from .beacon_generate_response import check_service_requests
@@ -34,7 +35,6 @@ from .beacon_parse_variants import get_variant_request_type
 from .beacon_parse_variants import create_variantCNVrequest_query
 from .cgi_utils import cgi_parse_query
 from .cgi_utils import cgi_exit_on_error
-from .cgi_utils import cgi_parse_path_params
 from .cgi_utils import cgi_print_json_response
 from .cgi_utils import cgi_print_json_callback
 from .cytoband_utils import parse_cytoband_file

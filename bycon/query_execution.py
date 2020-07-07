@@ -39,11 +39,6 @@ def execute_bycon_queries(ds_id, **byc):
     prefetch = { }
     prevars = { "ds_id": ds_id, "data_db": data_db, "h_o_defs": h_o_defs, "method": "", "query": { } }
 
-    # TODO: to be implemented ...
-    if ho_collname in exe_queries:
-        
-        handover = ho_coll.find_one( exe_queries[ q_coll_name ] )
-
     """podmd
     
     All queries are aggregated towards biosamples.
