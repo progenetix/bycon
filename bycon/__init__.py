@@ -6,10 +6,12 @@ from .beacon_create_queries import beacon_create_queries
 from .beacon_create_queries import update_queries_from_endpoints
 from .beacon_create_queries import update_queries_from_variants
 from .beacon_create_queries import update_queries_from_filters
+from .beacon_generate_response import check_service_requests
 from .beacon_generate_response import select_response_type
 from .beacon_generate_response import respond_empty_request
 from .beacon_generate_response import create_beacon_response
 from .beacon_generate_response import create_dataset_response
+from .beacon_generate_response import collect_dataset_responses
 from .beacon_generate_response import respond_filtering_terms_request
 from .beacon_generate_response import respond_get_datasetids_request
 from .beacon_generate_response import respond_service_info_request

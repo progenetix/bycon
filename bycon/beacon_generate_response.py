@@ -6,6 +6,16 @@ from os import environ
 
 from .cgi_utils import *
 from .beacon_process_handovers import *
+from .query_execution import execute_bycon_queries
+
+################################################################################
+
+def check_service_requests(**byc):
+
+    respond_filtering_terms_request(**byc)
+    respond_service_info_request(**byc)
+    respond_empty_request(**byc)
+    respond_get_datasetids_request(**byc)
 
 ################################################################################
 
@@ -111,6 +121,28 @@ def respond_filtering_terms_request(**byc):
 
     resp.update( { "filteringTerms": ftl } )
     cgi_print_json_response(resp)
+
+################################################################################
+
+def collect_dataset_responses(**byc):
+
+    dataset_responses = [ ]
+
+    for ds_id in byc[ "dataset_ids" ]:
+
+        byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
+        query_results_save_handovers( **byc )
+
+        if byc["response_type"] == "return_biosamples":
+            bios = handover_return_data( byc["query_results"]["bs._id"][ "id" ], **byc )
+            dataset_responses.append( { ds_id: bios } )
+        elif byc["response_type"] == "return_variants":
+            vs = handover_return_data( byc["query_results"]["vs._id"][ "id" ], **byc )
+            dataset_responses.append( { ds_id: vs } )
+        else:
+            dataset_responses.append( create_dataset_response( ds_id, **byc ) )
+
+    return dataset_responses
 
 ################################################################################
 

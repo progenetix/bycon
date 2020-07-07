@@ -16,6 +16,10 @@ from bycon import *
 
 Please see the [documentation](./doc/byconplus.md) for more information.
 
+#### Tests
+
+* from parent directory `./bin/byconplus.py -t -n`
+
 podmd"""
 
 ################################################################################
@@ -36,7 +40,6 @@ def _get_args():
 ################################################################################
 
 def main():
-
     byconplus()
     
 ################################################################################
@@ -44,14 +47,12 @@ def main():
 def byconplus():
     
     config = read_bycon_config( path.abspath( dir_path ) )
-    form_data = cgi_parse_query()
-    args = _get_args()
 
     # TODO: "byc" becoming a proper object?!
     byc = {
         "config": config,
-        "args": args,
-        "form_data": form_data,
+        "args": _get_args(),
+        "form_data": cgi_parse_query(),
         "filter_defs": read_filter_definitions( **config[ "paths" ] ),
         "variant_defs": read_variant_definitions( **config[ "paths" ] ),
         "datasets_info": read_datasets_info( **config[ "paths" ] ),
@@ -74,44 +75,22 @@ def byconplus():
     byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
     byc.update( { "filters":  parse_filters( **byc ) } )
 
-    respond_filtering_terms_request(**byc)
-    respond_service_info_request(**byc)
-    respond_empty_request(**byc)
-    respond_get_datasetids_request(**byc)
+    check_service_requests(**byc)
 
     # adding arguments for querying / processing data
     byc.update( { "variant_pars": parse_variants( **byc ) } )
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
-    # print(byc["variant_request_type"])
     byc.update( { "queries": beacon_create_queries( **byc ) } )
-    # print(byc["queries"])
 
     # fallback - but maybe shouldbe an error response?
     if not byc[ "queries" ].keys():
         cgi_print_json_response(byc["service_info"])
 
-    # TODO: There should be a better pplace for this ...
+    # TODO: There should be a better place for this ...
     if len(byc[ "dataset_ids" ]) < 1:
         cgi_exit_on_error("No `datasetIds` parameter provided.")
 
-    # TODO: vove the response modification to somewhere sensible...
-    dataset_responses = [ ]
-
-    for ds_id in byc[ "dataset_ids" ]:
-
-        byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
-        query_results_save_handovers( **byc )
-
-        if byc["response_type"] == "return_biosamples":
-            bios = handover_return_data( byc["query_results"]["bs._id"][ "id" ], **byc )
-            dataset_responses.append( { ds_id: bios } )
-        elif byc["response_type"] == "return_variants":
-            vs = handover_return_data( byc["query_results"]["vs._id"][ "id" ], **byc )
-            dataset_responses.append( { ds_id: vs } )
-        else:
-            dataset_responses.append( create_dataset_response( ds_id, **byc ) )   
-
-    byc.update( { "dataset_responses": dataset_responses } )
+    byc.update( { "dataset_responses": collect_dataset_responses(**byc) } )
     beacon_response = create_beacon_response(**byc)
     
     cgi_print_json_response(beacon_response)
