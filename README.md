@@ -18,7 +18,7 @@ website.
 
 ##### `pgy`
 
-* Python modules for data management in the [MogoDB](http://mongodb.org) based
+* Python modules for data management in the [MongoDB](http://mongodb.org) based
 _Progenetix_ database environment
 
 ##### `config`

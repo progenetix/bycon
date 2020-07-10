@@ -36,6 +36,7 @@ h->o_types:
     description: "hand the data over to the Progenetix interface for visualization and additional information"
     h->o_key: 'cs._id'
     script_path_web: '/cgi-bin/pgx_process.cgi'
+    remove_subdomain: True
   UCSClink:   
     id: 'pgx:handover:bedfile2ucsc'
     label: "Variants in UCSC"

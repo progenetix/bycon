@@ -29,8 +29,6 @@ def update_queries_from_hoid( queries, **byc):
         accessid = byc["form_data"].getvalue("accessid")
         h_o = ho_coll.find_one( { "id": accessid } )
         # TODO: catch error
-        # TODO: h->o queries are against a specific database ... add retrieval
-        # get_datasetids
         t_k = h_o["target_key"]
         t_v = h_o["target_values"]
         c_n = h_o["target_collection"]

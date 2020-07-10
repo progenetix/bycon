@@ -57,6 +57,12 @@ def select_dataset_ids( **byc ):
     ds_ids = ','.join(ds_ids)
     ds_ids = ds_ids.split(',')
 
+    if "hoid" in byc["form_data"]:
+        accessid = byc["form_data"].getvalue("accessid")
+        h_o = ho_coll.find_one( { "id": accessid } )
+        # TODO: catch error for mismatch
+        ds_ids = [ h_o["source_db"] ]
+
     dataset_ids = [ ]
     for ds in ds_ids:
         if ds in byc["datasets_info"].keys():

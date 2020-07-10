@@ -60,7 +60,9 @@ def dataset_response_add_handovers(ds_id, **byc):
                 continue
             accessid = h_o["id"]
             if h_o_key == h_o_types[ h_o_t ][ "h->o_key" ]:
-
+                this_server = h_o_server
+                if "remove_subdomain" in h_o_types[ h_o_t ]:
+                    this_server = re.sub(r'\/\/\w+?\.(\w+?\.\w+?)$', r'//\1', this_server)
                 h_o_r = {
                     "handoverType": {
                         "id": h_o_defs[ "id" ],
@@ -71,9 +73,9 @@ def dataset_response_add_handovers(ds_id, **byc):
 
                 if "bedfile" in h_o_defs[ "id" ]:
                     ucsc_pos = _write_variants_bedfile(h_o, **byc)
-                    h_o_r.update( { "url": _handover_create_ext_url(h_o_server, h_o_defs, h_o_t, accessid, ucsc_pos ) } )
+                    h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, h_o_t, accessid, ucsc_pos ) } )
                 else:
-                    h_o_r.update( { "url": _handover_create_url(h_o_server, h_o_defs, h_o_t, accessid) } )
+                    h_o_r.update( { "url": _handover_create_url(this_server, h_o_defs, h_o_t, accessid) } )
 
                 b_h_o.append( h_o_r )
 
@@ -122,10 +124,18 @@ def handover_return_data( accessid, **byc ):
 
 def _handover_select_server( **byc ):
 
-    if "test" in str(environ.get('SERVER_NAME')):
-        return( byc["config"]["test_handover_domain"] )
+    # for e in environ:
+    #     print("{} : {}".format(e, environ.get(e)))
+
+    # if "test" in str(environ.get('SERVER_NAME')):
+    #     return( byc["config"]["test_handover_domain"] )
+    # else:
+    #     return( byc["config"]["web_handover_domain"] )
+    s_uri = str(environ.get('SCRIPT_URI'))
+    if "https:" in s_uri:
+        return "https://"+str(environ.get('HTTP_HOST'))
     else:
-        return( byc["config"]["web_handover_domain"] )
+        return "http://"+str(environ.get('HTTP_HOST'))
 
 ################################################################################
 
