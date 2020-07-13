@@ -29,8 +29,7 @@ def execute_bycon_queries(ds_id, **byc):
     ho_collname = byc["config"][ "handover_coll" ]
     ho_coll = ho_db[ ho_collname ]
 
-    query_types = byc[ "queries" ].keys()
-    for collname in byc[ "queries" ]:
+    for collname in byc[ "queries" ].keys():
         if collname in byc[ "config" ][ "collections" ]:
             exe_queries[ collname ] = byc[ "queries" ][ collname ]
 
@@ -44,6 +43,7 @@ def execute_bycon_queries(ds_id, **byc):
     All queries are aggregated towards biosamples.
         
     podmd"""
+
     if "biosamples" in exe_queries:
 
         prevars["method"] = "bs.id"
@@ -81,37 +81,41 @@ def execute_bycon_queries(ds_id, **byc):
 
     if "variants" in exe_queries:
 
-        """podmd
-        ### `variants` Query and Aggregation
+        if exe_queries["variants"]:
 
-        1. If a `variants` query exists (i.e. has been defined in `exe_queries`), in a first pass
-        all `biosample_id` values are retrieved.
-        2. If already a `"bs.id"` result exists (e.g. from a biosample query), the lists
-        of callset `id` values from the different queries are intersected. Otherwise, the callsets
-        from the variants query are the final ones.
-        3. Since so far not all matching variants have been retrieved (only the biosamples which
-        contain them), they are now fetched using the original query or a combination of the
-        original query and the matching biosamples from the intersect.
-        podmd"""
+            """podmd
+            ### `variants` Query and Aggregation
 
-        prevars["method"] = "vs.bsid->bs.id"
-        prevars["query"] = exe_queries[ "variants" ]
-        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
-          
-        if "bs.id" in prefetch:
-            bsids = list( set( prefetch["bs.id"]["target_values"] ) & set( prefetch["vs.bsid->bs.id"]["target_values"] ) )
-            prefetch[ "bs.id" ].update( { "target_values": bsids, "target_count": len(bsids) } )
-            exe_queries[ "variants" ] = { "$and": [ exe_queries[ "variants" ], { "biosample_id": { "$in": bsids } } ] }
-        else:
-            prefetch[ "bs.id" ] = prefetch["vs.bsid->bs.id"]
+            1. If a `variants` query exists (i.e. has been defined in `exe_queries`), in a first pass
+            all `biosample_id` values are retrieved.
+            2. If already a `"bs.id"` result exists (e.g. from a biosample query), the lists
+            of callset `id` values from the different queries are intersected. Otherwise, the callsets
+            from the variants query are the final ones.
+            3. Since so far not all matching variants have been retrieved (only the biosamples which
+            contain them), they are now fetched using the original query or a combination of the
+            original query and the matching biosamples from the intersect.
+            podmd"""
 
-        prevars["method"] = "vs._id"
-        prevars["query"] = exe_queries[ "variants" ]
-        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+            prevars["method"] = "vs.bsid->bs.id"
+            prevars["query"] = exe_queries[ "variants" ]
+            prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+              
+            if "bs.id" in prefetch:
+                bsids = list( set( prefetch["bs.id"]["target_values"] ) & set( prefetch["vs.bsid->bs.id"]["target_values"] ) )
+                prefetch[ "bs.id" ].update( { "target_values": bsids, "target_count": len(bsids) } )
+                exe_queries[ "variants" ] = { "$and": [ exe_queries[ "variants" ], { "biosample_id": { "$in": bsids } } ] }
+            else:
+                prefetch[ "bs.id" ] = prefetch["vs.bsid->bs.id"]
 
-        prevars["method"] = "vs.digest"
-        prevars["query"] = { "_id": { "$in": prefetch[ "vs._id" ]["target_values"] } }
-        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+            prevars["method"] = "vs._id"
+            prevars["query"] = exe_queries[ "variants" ]
+            prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+
+            prevars["method"] = "vs.digest"
+            prevars["query"] = { "_id": { "$in": prefetch[ "vs._id" ]["target_values"] } }
+            prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+
+
 
     """podmd
     ### Result Aggregation

@@ -11,6 +11,7 @@ from .beacon_generate_response import check_service_requests
 from .beacon_generate_response import select_response_type
 from .beacon_generate_response import respond_empty_request
 from .beacon_generate_response import create_beacon_response
+from .beacon_generate_response import beacon_respond_with_errors
 from .beacon_generate_response import create_dataset_response
 from .beacon_generate_response import collect_dataset_responses
 from .beacon_generate_response import respond_filtering_terms_request

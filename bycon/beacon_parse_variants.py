@@ -118,8 +118,11 @@ def get_variant_request_type( **byc ):
         for required in brts[vrt][ "all_of" ]:
             if required in v_pars:
                 matched_par_no += 1
+            # print("{} {} of {}".format(vrt, matched_par_no, needed_par_no))
+
         if matched_par_no >= needed_par_no:
             vrt_matches.append( { "type": vrt, "par_no": matched_par_no } )
+
     if len(vrt_matches) > 0:
         vrt_matches = sorted(vrt_matches, key=lambda k: k['par_no'], reverse=True)
         variant_request_type = vrt_matches[0]["type"]
@@ -205,7 +208,7 @@ def create_variantRangeRequest_query(variant_request_type, variant_pars):
 
     variant_query = { "$and": v_q_l }
 
-    return( variant_query )
+    return variant_query
 
 ################################################################################
 

@@ -18,7 +18,21 @@ def beacon_create_queries( **byc ):
     q_s = update_queries_from_hoid( q_s, **byc)
     q_s = update_queries_from_variants( q_s, **byc )
     q_s = update_queries_from_endpoints( q_s, **byc )
+    q_s = purge_empty_queries( q_s, **byc )
     
+    return q_s
+
+################################################################################
+
+def purge_empty_queries( q_s, **byc ):
+
+    empties = [ ]
+    for k, v in q_s.items():
+        if not v:
+            empties.append( k )
+    for e_k in empties:
+        del( q_s[ k ] )
+
     return q_s
 
 ################################################################################

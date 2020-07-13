@@ -30,6 +30,18 @@ def select_response_type(**byc):
 
 ################################################################################
 
+def beacon_respond_with_errors( **byc ):
+
+    if not byc[ "queries" ].keys():
+      byc["service_info"].update( { "error": "No (correct) query parameters were provided." } )
+      cgi_print_json_response(byc["service_info"])
+
+    if len(byc[ "dataset_ids" ]) < 1:
+      byc["service_info"].update( { "error": "No `datasetIds` parameter provided." } )
+      cgi_print_json_response(byc["service_info"])
+
+################################################################################
+
 def respond_empty_request(**byc):
 
     if not environ.get('REQUEST_URI'):

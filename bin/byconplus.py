@@ -84,6 +84,7 @@ def byconplus():
 
     # fallback - but maybe shouldbe an error response?
     if not byc[ "queries" ].keys():
+        byc["service_info"].update( { "error": "No (correct) query parameters were provided." } )
         cgi_print_json_response(byc["service_info"])
 
     # TODO: There should be a better place for this ...
