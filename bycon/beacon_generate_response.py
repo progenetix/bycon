@@ -93,7 +93,6 @@ def respond_filtering_terms_request(**byc):
         return()
 
     ks = [ "id", "name", "apiVersion" ]
-    fks = [ "id", "label", "source" ]
 
     resp = { }
     for k in ks:
@@ -110,17 +109,19 @@ def respond_filtering_terms_request(**byc):
         ds_id = byc[ "dataset_ids" ][0]
         if ds_id in byc["dbstats"]["datasets"]:
             dss = [ ds_id ]
-            fks.append("count")
+            # fks.append("count")
             resp.update( { "datasetId": ds_id } )
 
     for ds_id in dss:
-        ds = byc["dbstats"]["datasets"][ ds_id ]
+        ds = byc[ "dbstats" ][ "datasets" ][ ds_id ]
         if "filtering_terms" in ds:
-            for f in ds["filtering_terms"]:
-                fts[f[ "id" ]] = {  }
-                for l in fks:
-                    fts[f[ "id" ]][ l ] = f[ l ]
- 
+            for f_t in ds[ "filtering_terms" ]:
+                f_id = f_t[ "id" ]
+                if not f_id in fts:
+                    fts[ f_id ] = f_t
+                else:
+                    fts[ f_id ][ "count" ] += f_t[ "count" ]
+  
     ftl = [ ]
     for key in sorted(fts):
         if len(byc["filters"]) > 0:
