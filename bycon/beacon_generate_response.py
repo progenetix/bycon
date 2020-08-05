@@ -124,6 +124,7 @@ def respond_filtering_terms_request(**byc):
   
     ftl = [ ]
     for key in sorted(fts):
+
         if len(byc["filters"]) > 0:
             for f in byc["filters"]:
                 f_t = re.compile(r'^'+f)

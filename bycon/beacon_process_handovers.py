@@ -235,5 +235,5 @@ def _write_variants_bedfile(h_o, **byc):
     ucsc_range = sorted(pos)
     ucsc_pos = "{}:{}-{}".format(ucsc_chr, ucsc_range[0], ucsc_range[-1])
 
-    return( ucsc_pos )
+    return ucsc_pos
 

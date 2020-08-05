@@ -134,12 +134,7 @@ def get_variant_request_type( **byc ):
 def create_variantAlleleRequest_query(variant_request_type, variant_pars):
 
     """podmd
-    beacon_allele_request:
-        all_of:
-          - start
-          - referenceName
-          - referenceBases
-          - alternateBases
+ 
     podmd"""
 
     if variant_request_type != "variantAlleleRequest":

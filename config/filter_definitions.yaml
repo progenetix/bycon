@@ -13,6 +13,32 @@ NCIT:
     - 'NCIT:C27676'
     - 'NCIT:C9325'
 
+UBERON:
+  name: "Uberon cross-species anatomical structures ontology"
+  url: "https://uberon.github.io"
+  db_key: 'biocharacteristics.type.id'
+  scopes:
+    biosamples:
+      default: 1
+  pattern: '^UBERON(\:\d*?)?$'
+  examples:
+    - 'UBERON:0000970'
+    - 'UBERON:0035542'
+
+MONDO:
+  name: "Mondo Disease Ontology"
+  url: "https://mondo.monarchinitiative.org"
+  db_key: 'biocharacteristics.type.id'
+  scopes:
+    biosamples:
+      default: 1
+    individuals:
+      default: 0
+  pattern: '^MONDO([\:_]\d*?)?$'
+  examples:
+    - 'MONDO:0002974'
+    - 'MONDO:0012301'
+
 HP:
   name: "Human Phenotype Ontology"
   url: "https://hpo.jax.org/"

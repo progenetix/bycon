@@ -47,7 +47,7 @@ def _check_filter_values(filters, filter_defs):
             if re.compile( filter_defs[ pre ]["pattern"] ).match( f ):
                 checked.append( f )
 
-    return(checked)
+    return checked
   
 ################################################################################
 

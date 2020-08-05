@@ -43,6 +43,7 @@ h->o_types:
     description: "map variants matched by the query to the UCSC browser"
     h->o_key: 'vs._id'
     ext_url: 'http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg38'
+    remove_subdomain: True
   # queryaggregation:
   #   id: 'pgx:handover:queryaggregation'
   #   label: "Aggregate Query"

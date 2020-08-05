@@ -98,6 +98,8 @@ io_prefixes:
   - icdom
   - icdot
   - NCIT
+  - UBERON
+  - MONDO
   - PMID
   - geogsm
   - geogse
