@@ -23,7 +23,7 @@ def main():
 
     """podmd
 
-    This app creates codi hierarchies for the different disease code 
+    This app creates coded hierarchies for the different disease code 
     representations of Progenetix data model biosamples.
     
     For existing external hierarchies, the original model is read in first and 
