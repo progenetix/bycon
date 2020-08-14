@@ -1,6 +1,7 @@
 import cgi, cgitb
 import re, yaml
 from os import path as path
+from pymongo import MongoClient
 import sys
 
 # local
@@ -39,8 +40,11 @@ def purge_empty_queries( q_s, **byc ):
 
 def update_queries_from_hoid( queries, **byc):
 
-    if "hoid" in byc["form_data"]:
+    if "accessid" in byc["form_data"]:
         accessid = byc["form_data"].getvalue("accessid")
+        ho_client = MongoClient()
+        ho_db = ho_client[ byc["config"]["info_db"] ]
+        ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
         h_o = ho_coll.find_one( { "id": accessid } )
         # TODO: catch error
         t_k = h_o["target_key"]

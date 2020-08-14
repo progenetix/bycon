@@ -82,14 +82,7 @@ def byconplus():
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
     byc.update( { "queries": beacon_create_queries( **byc ) } )
 
-    # fallback - but maybe shouldbe an error response?
-    if not byc[ "queries" ].keys():
-        byc["service_info"].update( { "error": "No (correct) query parameters were provided." } )
-        cgi_print_json_response(byc["service_info"])
-
-    # TODO: There should be a better place for this ...
-    if len(byc[ "dataset_ids" ]) < 1:
-        cgi_exit_on_error("No `datasetIds` parameter provided.")
+    beacon_respond_with_errors( **byc )
 
     byc.update( { "dataset_responses": collect_dataset_responses(**byc) } )
     beacon_response = create_beacon_response(**byc)
