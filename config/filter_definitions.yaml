@@ -12,6 +12,7 @@ NCIT:
   examples:
     - 'NCIT:C27676'
     - 'NCIT:C9325'
+  collation: biosubsets
 
 UBERON:
   name: "Uberon cross-species anatomical structures ontology"
@@ -24,6 +25,7 @@ UBERON:
   examples:
     - 'UBERON:0000970'
     - 'UBERON:0035542'
+  collation: biosubsets
 
 MONDO:
   name: "Mondo Disease Ontology"
@@ -38,6 +40,7 @@ MONDO:
   examples:
     - 'MONDO:0002974'
     - 'MONDO:0012301'
+  collation: biosubsets
 
 HP:
   name: "Human Phenotype Ontology"
@@ -51,6 +54,7 @@ HP:
   pattern: '^HP(\:\d+?)?$'
   examples:
     - 'HP:0012209'
+  collation: biosubsets
 
 PATO:
   name: "Phenotypic Qualities Ontology"
@@ -64,6 +68,7 @@ PATO:
   pattern: '^PATO(\:\d+?)?$'
   examples:
     - 'PATO:0020000'
+  collation: biosubsets
 
 EFO:
   name: "Experimental Factor Ontology"
@@ -76,7 +81,9 @@ EFO:
       default: 0
   pattern: '^(EFO\:\d+?)?$'
   examples:
+  collation: biosubsets
     - 'EFO:0009656'
+  collation: biosubsets
 
 icdom:
   name: "ICD-O 3 Morphologies (Progenetix)"
@@ -89,6 +96,7 @@ icdom:
   examples:
     - 'icdom-85003'
     - 'icdom-94403'
+  collation: biosubsets
 
 icdot:
   name: "ICD-O 3 Topographies (Progenetix)"
@@ -102,6 +110,7 @@ icdot:
     - 'icdot-C42.2'
     - 'icdot-C54.1'
     - 'icdot-C5'
+  collation: biosubsets
 
 # Procedural Metadata
 
@@ -116,6 +125,7 @@ PMID:
   examples:
     - 'PMID:28966033'
     - 'PMID:9405679'
+  collation: datacollections
 
 geogse:
   name: "NCBI Gene Expression Omnibus Series"
@@ -129,6 +139,7 @@ geogse:
   pattern: '^geogse(\-GSE\d+?)?$'
   examples:
     - 'geogse-GSM253289'
+  collation: datacollections
 
 # geogsm:
 #   name: "NCBI Gene Expression Omnibus Experiment" 
@@ -171,6 +182,7 @@ geogpl:
   pattern: '^geopl(\-GPL\d+?)?$'
   examples:
     - 'geogpl-GPL6504'
+  collation: datacollections
 
 cellosaurus:
   name: "Cellosaurus - a knowledge resource on cell lines"
@@ -185,3 +197,4 @@ cellosaurus:
   examples:
     - 'cellosaurus:CVCL_1650'
     - 'cellosaurus:CVCL_0006'
+  collation: datacollections

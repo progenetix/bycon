@@ -15,28 +15,27 @@ collections:
   - callsets
   - individuals
   - variants
-collations:
-  biosubsets:
-    prefixes:
-      - NCIT
-      - icdom
-      - icdot
-    parameters:
-      - id
-      - label
-      - count
-      - child_terms
-  datacollections:
-    prefixes:
-      - PMID
-      - TCGA
-      - geogse
-      - cellosaurus
-    parameters:
-      - id
-      - label
-      - count
-      - child_terms
+collation_prefixes:
+  default:
+    - NCIT
+    - icdom
+    - icdot
+collation_methods:
+  default:
+    - id
+    - label
+    - count
+    - child_terms
+  paths:
+    - id
+    - label
+    - count
+    - child_terms
+    - paths
+  counts:
+    - id
+    - label
+    - count
 info_db: progenetix
 beacon_info_coll: "beaconinfo"
 beacon_info_count_labels:

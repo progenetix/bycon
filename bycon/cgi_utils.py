@@ -15,7 +15,7 @@ def cgi_parse_query():
     else:
         pass
 
-    return(form_data)
+    return form_data
 
 ################################################################################
 

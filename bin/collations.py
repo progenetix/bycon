@@ -15,21 +15,12 @@ from bycon import *
 """podmd
 
 * <https://progenetix.org/services/collations/?filters=NCIT>
+* <http://next.progenetix.org/cgi/bycon/bin/collations.py?filters=NCIT&datasetIds=progenetix&method=counts>
 
 podmd"""
 
 ################################################################################
 ################################################################################
-################################################################################
-
-def _get_args():
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--filters", help="prefixed filter values, comma concatenated")
-    args = parser.parse_args()
-
-    return(args)
-
 ################################################################################
 
 def main():
@@ -40,77 +31,72 @@ def main():
 
 def collations():
 
+    config = read_bycon_config( path.abspath( dir_path ) )
+
     byc = {
-        "config": read_bycon_config( path.abspath( dir_path ) ),
-        "args": _get_args(),
+        "config": config,
+        "filter_defs": read_filter_definitions( **config[ "paths" ] ),
+        "method": "default",
+        "dataset_ids": ["progenetix"],
         "form_data": cgi_parse_query()
     }
 
-    r = { "data": [ ], "error": "" }
+    if "method" in byc["form_data"]:
+        m = byc["form_data"].getvalue("method")
+        if m in byc["config"]["collation_methods"].keys():
+            byc["method"] = m
 
+    method_keys = byc["config"]["collation_methods"][ byc["method"] ]
 
-    byc.update( { "dataset_ids": ["progenetix", "arraymap"] } )
-    byc.update( { "filters": [ ] } )
     byc.update( { "collation": "" } )
+    byc.update( { "filters":  parse_filters( **byc ) } )
 
-    if "filters" in byc["form_data"]:
-        fs = byc["form_data"].getlist('filters')
-        fs = ','.join(fs)
-        fs = fs.split(',')
-        for f in fs:
-            c = _check_filter(f, **byc)
-    elif "args" in byc:
-        if byc["args"].filters:
-            fs = byc["args"].filters.split(',')
-            for f in fs:
-                c = _check_filter(f, **byc)
+    if "dataset_ids" in byc["form_data"]:
+        d_s = byc[ "form_data" ].getlist('datasetIds')
+        d_s = ','.join(d_s)
+        byc["dataset_ids"] = d_s.split(',')
 
-    if c:
-        byc.update( { "collation": c } )
-        byc["filters"].append( f )
+    # print(byc[ "filters" ])
+    # print(byc["config"]["collation_prefixes"][ "default" ])
+    # exit()
 
     if len(byc[ "filters" ]) < 1:
-        r.update( { "error": "No accepted filter / prefix provided." })
-        cgi_print_json_response( r )
+        byc[ "filters" ] = byc["config"]["collation_prefixes"][ "default" ]
 
-    if len(byc[ "filters" ]) > 1:
-        r.update( { "error": "Only s single prefix type is supported." })
-        cgi_print_json_response( r )
+    # response prototype
+    r = {
+        "parameters": { },
+        "data": [ ],
+        "errors": [ ]
+    }
 
-    f = byc["filters"][0]
+    for p in ["dataset_ids", "method", "filters"]:
+        r["parameters"].update( { p: byc[ p ] } )
 
     mongo_client = MongoClient( )
-    query = { "id": re.compile(r'^'+f ) }
 
     for ds_id in byc["dataset_ids"]:
-        c =  byc["collation"]
-        ds_s = [ ]
-        k_s = byc["config"]["collations"][ c ]["parameters"]
-        mongo_coll = mongo_client[ ds_id ][ c ]
-        for subset in mongo_coll.find( query ):
-            s = { }
-            for k in k_s:
-                # TODO: harmless hack
-                if k == "count":
-                    s[ k ] = int(subset[ k ])
-                else:
-                    s[ k ] = subset[ k ]
-            ds_s.append( s )
-        r["data"].append( { ds_id: ds_s } )
+        mongo_db = mongo_client[ ds_id ]
+        for f in byc[ "filters" ]:
+            query = { "id": re.compile(r'^'+f ) }
+            pre = re.split('-|:', f)[0]
+            if pre not in byc["filter_defs"]:
+                continue
+            c =  byc["filter_defs"][ pre ]["collation"]
+            ds_s = [ ]
+            mongo_coll = mongo_db[ c ]
+            for subset in mongo_coll.find( query ):
+                s = { }
+                for k in method_keys:
+                    # TODO: harmless hack
+                    if k == "count":
+                        s[ k ] = int(subset[ k ])
+                    else:
+                        s[ k ] = subset[ k ]
+                ds_s.append( s )
+            r["data"].append( { ds_id: ds_s } )
  
     cgi_print_json_response( r )
-
-################################################################################
-
-def _check_filter(f, **byc):
-
-    f_m = re.compile( r'^(\w+?)([\-\:]\w.+?)?$' )
-    pre, code = f_m.match( f ).group(1, 2)
-    for c, v in byc["config"]["collations"].items():
-        if pre in v["prefixes"]:
-            return c
-
-    return False
 
 ################################################################################
 ################################################################################
