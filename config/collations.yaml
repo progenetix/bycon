@@ -1,0 +1,24 @@
+defaults:
+  dataset_ids:
+    - progenetix
+  method: children
+  filters:
+    - NCIT
+    - icdom
+    - icdot
+methods:
+  children:
+    - id
+    - label
+    - count
+    - child_terms
+  paths:
+    - id
+    - label
+    - count
+    - child_terms
+    - paths
+  counts:
+    - id
+    - label
+    - count

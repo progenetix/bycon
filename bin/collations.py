@@ -15,7 +15,7 @@ from bycon import *
 """podmd
 
 * <https://progenetix.org/services/collations/?filters=NCIT>
-* <http://next.progenetix.org/cgi/bycon/bin/collations.py?filters=NCIT&datasetIds=progenetix&method=counts>
+* <http://progenetix.org/cgi/bycon/bin/collations.py?filters=NCIT&datasetIds=progenetix&method=counts>
 
 podmd"""
 
@@ -32,36 +32,32 @@ def main():
 def collations():
 
     config = read_bycon_config( path.abspath( dir_path ) )
+    coll_prefs = read_yaml_to_object( "collations_preference_file", **config[ "paths" ] )
 
     byc = {
         "config": config,
         "filter_defs": read_filter_definitions( **config[ "paths" ] ),
-        "method": "default",
-        "dataset_ids": ["progenetix"],
         "form_data": cgi_parse_query()
     }
 
+    for d_k, d_v in coll_prefs["defaults"].items():
+        byc.update( { d_k: d_v } )
+
     if "method" in byc["form_data"]:
         m = byc["form_data"].getvalue("method")
-        if m in byc["config"]["collation_methods"].keys():
+        if m in coll_prefs["methods"].keys():
             byc["method"] = m
 
-    method_keys = byc["config"]["collation_methods"][ byc["method"] ]
+    method_keys = coll_prefs["methods"][ byc["method"] ]
 
-    byc.update( { "collation": "" } )
-    byc.update( { "filters":  parse_filters( **byc ) } )
-
-    if "dataset_ids" in byc["form_data"]:
+    if "datasetIds" in byc["form_data"]:
         d_s = byc[ "form_data" ].getlist('datasetIds')
         d_s = ','.join(d_s)
-        byc["dataset_ids"] = d_s.split(',')
+        byc.update( { "dataset_ids": d_s.split(',') } )
 
-    # print(byc[ "filters" ])
-    # print(byc["config"]["collation_prefixes"][ "default" ])
-    # exit()
-
-    if len(byc[ "filters" ]) < 1:
-        byc[ "filters" ] = byc["config"]["collation_prefixes"][ "default" ]
+    filters = parse_filters( **byc )
+    if len(filters) > 0:
+        byc.update( { "filters":  filters } )
 
     # response prototype
     r = {
@@ -80,8 +76,6 @@ def collations():
         for f in byc[ "filters" ]:
             query = { "id": re.compile(r'^'+f ) }
             pre = re.split('-|:', f)[0]
-            if pre not in byc["filter_defs"]:
-                continue
             c =  byc["filter_defs"][ pre ]["collation"]
             ds_s = [ ]
             mongo_coll = mongo_db[ c ]

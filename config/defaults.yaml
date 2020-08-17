@@ -15,27 +15,6 @@ collections:
   - callsets
   - individuals
   - variants
-collation_prefixes:
-  default:
-    - NCIT
-    - icdom
-    - icdot
-collation_methods:
-  default:
-    - id
-    - label
-    - count
-    - child_terms
-  paths:
-    - id
-    - label
-    - count
-    - child_terms
-    - paths
-  counts:
-    - id
-    - label
-    - count
 info_db: progenetix
 beacon_info_coll: "beaconinfo"
 beacon_info_count_labels:
@@ -142,6 +121,9 @@ paths:
   beacon_datasets_file:
     - config
     - beacon_datasets.yaml
+  collations_preference_file:
+    - config
+    - collations.yaml
   handover_types_file:
     - config
     - beacon_handovers.yaml

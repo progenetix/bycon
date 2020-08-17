@@ -25,6 +25,7 @@ from .beacon_process_specs import read_beacon_info
 from .beacon_process_specs import read_handover_info
 from .beacon_process_specs import read_service_info
 from .beacon_process_specs import read_beacon_api_paths
+from .beacon_process_specs import read_yaml_to_object
 from .beacon_process_specs import dbstats_return_latest
 from .beacon_process_specs import update_datasets_from_dbstats
 from .beacon_process_specs import read_filter_definitions

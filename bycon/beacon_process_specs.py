@@ -37,6 +37,48 @@ def read_beacon_info(**paths):
 
 ################################################################################
 
+def read_yaml_to_object(f_key, **paths):
+
+    o = {}
+    ofp = path.join( paths[ "module_root" ], *paths[ f_key ] )
+    with open( ofp ) as od:
+        o = yaml.load( od , Loader=yaml.FullLoader)
+    
+    return o
+    
+################################################################################
+
+def read_variant_definitions(**paths):
+
+    variant_defs = {}
+    ofp = path.join( paths[ "module_root" ], *paths[ "variant_definitions_file" ] )
+    with open( ofp ) as vd:
+        variant_defs = yaml.load( vd , Loader=yaml.FullLoader)
+    
+    return variant_defs
+    
+################################################################################
+
+def read_cytoband_definitions(**paths):
+
+    cb_defs = {}
+    ofp = path.join( paths[ "module_root" ], *paths[ "cytoband_definitions_file" ] )
+    with open( ofp ) as vd:
+        cb_defs = yaml.load( vd , Loader=yaml.FullLoader)
+    
+    return cb_defs
+
+################################################################################
+
+def read_handover_info(**paths):
+
+    hfp = path.join( paths[ "module_root" ], *paths[ "handover_types_file" ] )
+    with open(hfp) as of:
+        ho = yaml.load( of , Loader=yaml.FullLoader)
+        return(ho)
+
+################################################################################
+
 def read_filter_definitions( **paths ):
 
     filter_defs = {}
@@ -48,26 +90,6 @@ def read_filter_definitions( **paths ):
     
     return filter_defs
 
-################################################################################
-
-def read_variant_definitions(**paths):
-
-    variant_defs = {}
-    ofp = path.join( paths[ "module_root" ], *paths[ "variant_definitions_file" ] )
-    with open( ofp ) as vd:
-        variant_defs = yaml.load( vd , Loader=yaml.FullLoader)
-    
-    return variant_defs
-################################################################################
-
-def read_cytoband_definitions(**paths):
-
-    cb_defs = {}
-    ofp = path.join( paths[ "module_root" ], *paths[ "cytoband_definitions_file" ] )
-    with open( ofp ) as vd:
-        cb_defs = yaml.load( vd , Loader=yaml.FullLoader)
-    
-    return cb_defs
 
 ################################################################################
 
@@ -87,14 +109,6 @@ def read_datasets_info(**paths):
         ds = yaml.load( of , Loader=yaml.FullLoader)
         return(ds["datasets"])
 
-################################################################################
-
-def read_handover_info(**paths):
-
-    hfp = path.join( paths[ "module_root" ], *paths[ "handover_types_file" ] )
-    with open(hfp) as of:
-        ho = yaml.load( of , Loader=yaml.FullLoader)
-        return(ho)
 
 ################################################################################
 
