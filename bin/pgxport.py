@@ -114,7 +114,7 @@ def main():
         "config": config,
         "args": args,
         "filter_defs": read_filter_definitions( **config[ "paths" ] ),
-        "h->o": read_handover_info( **config[ "paths" ] )
+        "h->o": read_yaml_to_object( "handover_types_file", **config[ "paths" ] )
     }
 
     ds_id = args.datasetid

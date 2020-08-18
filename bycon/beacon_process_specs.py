@@ -19,63 +19,30 @@ def read_bycon_config( module_path ):
 
 ################################################################################
 
-def read_service_info(**paths):
-
-    ofp = path.join( paths[ "module_root" ], *paths[ "service_info_file" ] )
-    with open(ofp) as of:
-        i = yaml.load( of , Loader=yaml.FullLoader)
-        return(i["service_info"])
-
-################################################################################
-
-def read_beacon_info(**paths):
-
-    ofp = path.join( paths[ "module_root" ], *paths[ "beacon_info_file" ] )
-    with open(ofp) as of:
-        i = yaml.load( of , Loader=yaml.FullLoader)
-        return(i["beacon_info"])
-
-################################################################################
-
-def read_yaml_to_object(f_key, **paths):
+def read_yaml_to_object(file_key, **paths):
 
     o = {}
-    ofp = path.join( paths[ "module_root" ], *paths[ f_key ] )
+    ofp = path.join( paths[ "module_root" ], *paths[ file_key ] )
     with open( ofp ) as od:
         o = yaml.load( od , Loader=yaml.FullLoader)
     
     return o
-    
-################################################################################
-
-def read_variant_definitions(**paths):
-
-    variant_defs = {}
-    ofp = path.join( paths[ "module_root" ], *paths[ "variant_definitions_file" ] )
-    with open( ofp ) as vd:
-        variant_defs = yaml.load( vd , Loader=yaml.FullLoader)
-    
-    return variant_defs
-    
-################################################################################
-
-def read_cytoband_definitions(**paths):
-
-    cb_defs = {}
-    ofp = path.join( paths[ "module_root" ], *paths[ "cytoband_definitions_file" ] )
-    with open( ofp ) as vd:
-        cb_defs = yaml.load( vd , Loader=yaml.FullLoader)
-    
-    return cb_defs
 
 ################################################################################
 
-def read_handover_info(**paths):
+def read_yaml_with_key_to_object(file_key, data_key, **paths):
 
-    hfp = path.join( paths[ "module_root" ], *paths[ "handover_types_file" ] )
-    with open(hfp) as of:
-        ho = yaml.load( of , Loader=yaml.FullLoader)
-        return(ho)
+    o = {}
+    ofp = path.join( paths[ "module_root" ], *paths[ file_key ] )
+    with open( ofp ) as od:
+        o = yaml.load( od , Loader=yaml.FullLoader)
+
+    if data_key in o:
+        return o[ data_key ]
+
+    # TODO: error capture & procedure
+
+    return o
 
 ################################################################################
 
@@ -89,26 +56,6 @@ def read_filter_definitions( **paths ):
             filter_defs[fpre] = defs[fpre]
     
     return filter_defs
-
-
-################################################################################
-
-def read_beacon_api_paths(**paths):
-
-    pfp = path.join( paths[ "module_root" ], *paths[ "beacon_paths_file" ] )
-    with open(pfp) as pf:
-        p = yaml.load( pf , Loader=yaml.FullLoader)
-        return(p["paths"])
-
-################################################################################
-
-def read_datasets_info(**paths):
-
-    ofp = path.join( paths[ "module_root" ], *paths[ "beacon_datasets_file" ] )
-    with open(ofp) as of:
-        ds = yaml.load( of , Loader=yaml.FullLoader)
-        return(ds["datasets"])
-
 
 ################################################################################
 

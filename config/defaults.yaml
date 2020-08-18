@@ -23,6 +23,8 @@ beacon_info_count_labels:
   variants: "callCount"
   variants_distinct: "variantCount"
 handover_coll: querybuffer
+filter_logic: '$and'
+filter_precision: 'start'
 io_params:
   id:
     db_key: id

@@ -98,7 +98,7 @@ def cytomapper():
     byc = {
         "config": config,
         "args": _get_args(),
-        "cytoband_defs": read_cytoband_definitions( **config[ "paths" ] ),
+        "cytoband_defs": read_yaml_to_object( "cytoband_definitions_file", **config[ "paths" ] ),
         "form_data": cgi_parse_query(),
         "error": { }
     }

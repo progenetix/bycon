@@ -87,6 +87,22 @@ def update_queries_from_filters( queries, **byc ):
     podmd"""
         
     query_lists = { }
+    logic = byc[ "config" ][ "filter_logic" ]
+    precision = byc[ "config" ][ "filter_precision" ]
+
+    if "form_data" in byc:
+        if "filterLogic" in byc[ "form_data" ]:
+            l = byc["form_data"].getvalue('filterLogic')
+            if "OR" in l:
+                logic = '$or'
+            if "AND" in l:
+                logic = '$and'
+        if "filterPrecision" in byc[ "form_data" ]:
+            precision = byc["form_data"].getvalue('filterPrecision')
+
+    if "exact_match" in byc:
+        precision = "exact"
+ 
     for c_n in byc[ "config" ][ "collections" ]:
         query_lists[c_n] = [ ]
         if c_n in queries:
@@ -99,7 +115,7 @@ def update_queries_from_filters( queries, **byc ):
             for scope in pre_defs["scopes"]:
                 m_scope = pre_defs["scopes"][scope]
                 if m_scope["default"]:
-                    if "exact_match" in byc:
+                    if "exact" in precision:
                         if "mongostring" in byc:
                             query_lists[ scope ].append( '{ "'+pre_defs[ "db_key" ]+'": "'+filterv+'" }' )
                         else:
@@ -119,9 +135,9 @@ def update_queries_from_filters( queries, **byc ):
             queries[ c_n ] = query_lists[c_n][0]
         elif len( query_lists[c_n] ) > 1:
             if "mongostring" in byc:
-                queries[ c_n ] = '{ $and: [ '+','.join(query_lists[c_n])+' ] }'
+                queries[ c_n ] = '{ '+logic+': [ '+','.join(query_lists[c_n])+' ] }'
             else:
-                queries[ c_n ] = { "$and": query_lists[c_n] }
+                queries[ c_n ] = { logic: query_lists[c_n] }
 
     return queries
 

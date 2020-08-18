@@ -54,12 +54,12 @@ def byconplus():
         "args": _get_args(),
         "form_data": cgi_parse_query(),
         "filter_defs": read_filter_definitions( **config[ "paths" ] ),
-        "variant_defs": read_variant_definitions( **config[ "paths" ] ),
-        "datasets_info": read_datasets_info( **config[ "paths" ] ),
-        "service_info": read_service_info( **config[ "paths" ] ),
-        "beacon_info": read_beacon_info( **config[ "paths" ] ),
-        "beacon_paths": read_beacon_api_paths( **config[ "paths" ] ),
-        "h->o": read_handover_info( **config[ "paths" ] ),
+        "variant_defs": read_yaml_to_object( "variant_definitions_file", **config[ "paths" ] ),
+        "datasets_info": read_yaml_with_key_to_object( "beacon_datasets_file", "datasets", **config[ "paths" ] ),
+        "service_info": read_yaml_with_key_to_object( "service_info_file", "service_info", **config[ "paths" ] ),
+        "beacon_info": read_yaml_with_key_to_object( "beacon_info_file", "beacon_info", **config[ "paths" ] ),
+        "beacon_paths": read_yaml_with_key_to_object( "beacon_paths_file", "paths", **config[ "paths" ] ),
+        "h->o": read_yaml_to_object( "handover_types_file", **config[ "paths" ] ),
         "dbstats": dbstats_return_latest( **config ),
         "get_filters": False
     }
