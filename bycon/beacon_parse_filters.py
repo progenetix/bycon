@@ -14,23 +14,26 @@ def parse_filters( **byc ):
 
     if "form_data" in byc:
         if len(byc["form_data"]) > 0:
-            filters = byc["form_data"].getlist('filters')
-            filters = ','.join(filters)
-            filters = filters.split(',')
-            filters = _check_filter_values(filters, byc["filter_defs"])
-            return filters
+            f = byc["form_data"].getlist('filters')
+            f = ','.join(f)
+            f = f.split(',')
+            f = _check_filter_values(f, byc["filter_defs"])
+            if len(f) > 0:
+                return f
     
     # for debugging
     if "args" in byc:
         if byc["args"].filters:
-            filters = byc["args"].filters.split(',')
-            filters = _check_filter_values(filters, byc["filter_defs"])
-            return filters
+            f = byc["args"].filters.split(',')
+            f = _check_filter_values(f, byc["filter_defs"])
+            if len(f) > 0:
+                return f
     
         if byc["args"].test:
-            filters = byc["service_info"][ "sampleAlleleRequests" ][0][ "filters" ]
-            filters = _check_filter_values(filters, byc["filter_defs"])
-            return filters
+            f = byc["service_info"][ "sampleAlleleRequests" ][0][ "filters" ]
+            f = _check_filter_values(f, byc["filter_defs"])
+            if len(f) > 0:
+                return f
     
     return filters
 
@@ -76,11 +79,11 @@ def _check_filter_values(filters, filter_defs):
 
 def select_dataset_ids( **byc ):
 
-    ds_ids = [ ]
+    dataset_ids = [ ]
 
     # if existing, e.g. defaults
     if "dataset_ids" in byc:
-        ds_ids = byc["dataset_ids"]
+        dataset_ids = byc["dataset_ids"]
 
     if "form_data" in byc:
 
@@ -100,18 +103,24 @@ def select_dataset_ids( **byc ):
             # TODO: catch error for mismatch
             ds_ids = [ h_o["source_db"] ]
 
+        if len(ds_ids) > 0:
+            return ds_ids
+
     # for debugging
     if "args" in byc:
         if byc["args"].test:
             ds_ids = byc["service_info"][ "sampleAlleleRequests" ][0][ "datasetIds" ]
+            if len(ds_ids) > 0:
+                return ds_ids
     
-    return ds_ids
+    return dataset_ids
   
 ################################################################################
 
 def beacon_check_dataset_ids( **byc ):
 
     dataset_ids = [ ]
+
     for ds in byc["dataset_ids"]:
         if ds in byc["datasets_info"].keys():
             dataset_ids.append(ds)

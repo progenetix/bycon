@@ -37,5 +37,4 @@ from .cgi_utils import cgi_exit_on_error
 from .cgi_utils import cgi_print_json_response
 from .cgi_utils import cgi_print_json_callback
 from .cytoband_utils import parse_cytoband_file
-from .cytoband_utils import filter_cytobands
 from .query_execution import execute_bycon_queries

@@ -24,7 +24,7 @@ def parse_cytoband_file( **byc ):
         "ncbi34": "hg16"
     }
 
-    genome = byc["cytoband_pars"][ "assemblyId" ].lower()
+    genome = byc["variant_pars"][ "assemblyId" ].lower()
     genome = re.sub( r"(\w+?)([^\w]\w+?)", r"\1", genome)
 
     if genome in g_map.keys():
@@ -47,109 +47,3 @@ def parse_cytoband_file( **byc ):
             cytobands.append(dict(cb))
 
     return cytobands
-
-################################################################################
-
-def filter_cytobands( **byc ):
-
-    cb_pars = byc[ "cytoband_pars" ]
-    req_type = byc[ "cytoband_request_type" ]
-    cb_match_error = None
-
-    # TODO: recursive erosion of non-existing cytobands
-
-    if "2chrobases" in req_type:
-        cytobands = _subset_cytobands_by_bands(  byc[ "cytobands" ], cb_pars["chr"], cb_pars["start"], cb_pars["end"]  )
-        cb_label = _cytobands_label( cytobands )
-        chro = cb_pars["chr"]
-    elif "chrobases2" in req_type:
-        chro = cb_pars["chr"]
-        start = cb_pars["start"]
-        end = cb_pars["end"]
-        cytobands = _subset_cytobands_by_bases( byc[ "cytobands" ], chro, start, end  )
-        cb_label = _cytobands_label( cytobands )
-    else:
-        cytobands = [ ]
-        chro = ""
-        cb_label = ""
-        cb_match_error = "no matching cytobands"
-
-    return(cytobands, chro, cb_label, cb_match_error)
-
-################################################################################
-
-def _cytobands_label( cytobands ):
-
-    cb_label = cytobands[0]["chro"]+cytobands[0]["cytoband"]
-    if len( cytobands ) > 1:
-        cb_label = cb_label+cytobands[-1]["cytoband"]
-
-    return(cb_label)
-
-################################################################################
-
-def _subset_cytobands_by_bands( cytobands, chro, cb_start, cb_end ):
-
-    cytobands = list(filter(lambda d: d[ "chro" ] == chro, cytobands))
-
-    if cb_start == None and cb_end == None:
-        return( cytobands )
-    else:
-
-        cb_from = 0
-        cb_to = len(cytobands)
-
-        if cb_start == None or cb_start == "pter":
-            cb_start = "p"
-        if cb_end == "qter":
-            cb_end = "q"
-        if cb_end == "pcen":
-            cb_end = "p"
-        if cb_start == "qcen":
-            cb_start = "q"
-        if cb_start == "pcen":
-            cb_start = "q"
- 
-        cb_s_re = re.compile( "^"+cb_start )
-        i = 0
-
-        # searching for the first matching band
-        for cb in cytobands:
-            if cb_s_re.match( cb[ "cytoband" ] ):
-                cb_from = i
-                break
-            i += 1
-        k = 0
-
-        # retrieving the last matching band
-        # * index at least as start to avoid "q21qter" => "all q"
-        # * if there was no end, the start band is queried again until its last match
-        if cb_end == None:
-            cb_end = cb_start
- 
-        cb_e_re = re.compile( "^"+cb_end )
-
-        for cb in cytobands:
-            if k >= i:
-                if cb_e_re.match( cb[ "cytoband" ] ):
-                    cb_to = k+1
-            k += 1
-
-        cytobands = cytobands[cb_from:cb_to]
-
-    return( cytobands )
-
-################################################################################
-
-def _subset_cytobands_by_bases( cytobands, chro, start, end ):
-
-    cytobands = list(filter(lambda d: d[ "chro" ] == chro, cytobands))
-    if isinstance(start, int):
-        cytobands = list(filter(lambda d: int(d[ "end" ]) > start, cytobands))
-
-    if isinstance(end, int):
-        cytobands = list(filter(lambda d: int(d[ "start" ]) < end, cytobands))
-
-    return( cytobands )
-
-################################################################################

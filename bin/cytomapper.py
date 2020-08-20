@@ -20,8 +20,6 @@ from bycon.cytoband_utils import *
 
 This script parses either:
 
-* a "Beacon-style" positional request (`assemblyId`, `referenceName`, `start`, `end`), to retrieve
-overlapping cytobands, or
 * a properly formatted cytoband annotation (`assemblyId`, `cytoBands`)
   - "8", "9p11q21", "8q", "1p12qter"
 * a concatenated `chroBases` parameter
@@ -38,15 +36,12 @@ The `cytobands` and `chrobases` parameters can be used for running the script on
 
 #### Examples
 
-* using the new [ChromosomeLocation](https://vr-spec.readthedocs.io/en/181-chromosomelocation/terms_and_model.html#chromosomelocation) object:
-  - <https://progenetix.org/services/cytomapper?type=ChromosomeLocation&assemblyId=GRCh38&chr=17&start=p11&end=q21>
 * retrieve coordinates for some bands on chromosome 8
   - <https://progenetix.org/services/cytomapper?assemblyId=NCBI36.1&cytoBands=8q>
 * as above, just as text:
   - <https://progenetix.org/services/cytomapper?assemblyId=NCBI.1&cytoBands=8q&text=1>
   - *cytomapper shortcut*: <https://progenetix.org/services/cytomapper/?assemblyId=NCBI36.1&cytoBands=8q&text=1>
 * get the cytobands whith which a base range on chromosome 17 overlaps, in short and long form
-  - <https://progenetix.org/services/cytomapper?assemblyId=GRCh38&referenceName=17&start=800000&end=24326000>
   - <https://progenetix.org/services/cytomapper?assemblyId=NCBI36&chroBases=17:800000-24326000>
 * using `curl` to get the text format mapping of a cytoband range, using the API `services` shortcut:
   - `curl -k https://progenetix.org/services/cytomapper?cytoBands\=8q21q24.1&assemblyId\=hg18&text\=1`
@@ -90,35 +85,39 @@ def main():
 
 def cytomapper():
     
-    with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
-        config = yaml.load( cf , Loader=yaml.FullLoader)
-    config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
+    config = read_bycon_config( path.abspath( dir_path ) )
     config[ "paths" ][ "genomes" ] = path.join( config[ "paths" ][ "module_root" ], "rsrc", "genomes" )
 
     byc = {
         "config": config,
         "args": _get_args(),
         "cytoband_defs": read_yaml_to_object( "cytoband_definitions_file", **config[ "paths" ] ),
+        "variant_defs": read_yaml_to_object( "variant_definitions_file", **config[ "paths" ] ),
         "form_data": cgi_parse_query(),
         "error": { }
     }
 
-    _enable_debugging( byc["form_data"] )
-
-    byc.update( _parse_request( **byc ) )
+    byc.update( { "variant_pars": parse_variants( **byc ) } )
     byc.update( { "cytobands": parse_cytoband_file( **byc ) } )
-    cytoBands, chro, cb_label, cb_match_error = filter_cytobands( **byc )
-    if cb_match_error:
-        byc["error"].update({ "cb_match_error": cb_match_error })
 
-    # response prototype
-    cyto_response = { "request": byc["cytoband_pars"], "error": byc["error"] }
+    cytoBands = [ ]
+
+    if "cytoBands" in byc["variant_pars"]:
+        cytoBands, chro = _bands_from_cytobands( **byc )
+    elif "chroBases" in byc["variant_pars"]:
+        cytoBands, chro = _bands_from_chrobases( **byc )
+
+    cb_label = _cytobands_label( cytoBands )
+
+    cyto_response = { "request": byc["variant_pars"], "error": byc["error"] }
 
     if len( cytoBands ) < 1:
         cyto_response.update( { "error": "No matching cytobands!" } )
         _print_terminal_response(byc["args"], cyto_response)
         _print_text_response(byc["form_data"], cyto_response)
         cgi_print_json_response(cyto_response)
+
+
     start = int( cytoBands[0]["start"] )
     end = int( cytoBands[-1]["end"] )
 
@@ -126,8 +125,9 @@ def cytomapper():
     chroBases = chro+":"+str(start)+"-"+str(end)
     
     cyto_response.update( {
-        "assemblyId": byc["cytoband_pars"][ "assemblyId" ],
+        "assemblyId": byc["variant_pars"][ "assemblyId" ],
         "cytoBands": cb_label,
+        "bandList": [x['chroband'] for x in cytoBands ],
         "chroBases": chroBases,
         "referenceName": chro,
         "start": start,
@@ -135,7 +135,7 @@ def cytomapper():
         "size": size,
         "ChromosomeLocation": {
             "type": "ChromosomeLocation",
-            "species": byc[ "cytoband_pars" ][ "species" ],
+            "species": "",
             "chr": chro,
             "start": cytoBands[0]["cytoband"],
             "end": cytoBands[-1]["cytoband"]
@@ -152,129 +152,102 @@ def cytomapper():
     else:
         cgi_print_json_response(cyto_response)
 
-################################################################################
-################################################################################
-
-def _parse_request( **byc ):
-
-    cb_pars = { }
-    rq_type = "error: no valid request"
-    cb_rq_ts = byc["cytoband_defs"]["request_types"]
-    cb_def_p = byc["cytoband_defs"]["default_parameters"]
-
-    byc[ "cytoband_pars" ], byc[ "cytoband_request_type" ] = cb_pars, None
-
-    for rk, rt in cb_rq_ts.items():
-        cb_pars.update( { rk: {} })
-
-    cb_pars.update( _parse_cytoband_args(cb_pars, **byc) )
-    cb_pars.update( _parse_default_parameters(cb_pars, **byc) )
-    cb_pars.update( _parse_for_request_types(cb_pars, **byc) )
-
-    for rk, rt in cb_rq_ts.items():
-        req_no = len(rt["all_of"])
-        for req in rt["all_of"]:
-            if req in cb_pars[ rk ]:
-                req_no -= 1
-        if req_no < 1:
-            byc[ "cytoband_pars" ], byc[ "cytoband_request_type" ] = cb_pars[ rk ], rk
-            return byc
-
-    return byc
 
 ################################################################################
 
-def _parse_cytoband_args(cb_pars, **byc):
+def _bands_from_cytobands( **byc ):
 
-    cb_rq_ts = byc["cytoband_defs"]["request_types"]
-    cb_def_p = byc["cytoband_defs"]["default_parameters"]
-    cb_arg_pars = byc["cytoband_defs"]["arg_pars"]
-    vargs = vars(byc["args"])
+    chr_bands = byc["variant_pars"]["cytoBands"]
+    cb_pat = re.compile( byc["variant_defs"]["parameters"]["cytoBands"]["pattern"] )
+    chro, cb_start, cb_end = cb_pat.match(chr_bands).group(2,3,9)
+    if not cb_end:
+        cb_end = cb_start
 
-    # for terminal, where parameters may be named differently
-    for rk, rt in cb_rq_ts.items():
-        for a_k, a_v in cb_arg_pars.items():
-            if a_v in vargs:
-                if not vargs[ a_v ]:
-                    continue
-                if a_k in rt["parameters"] or a_k in cb_def_p:
-                    cb_pars[ rk ][ a_k ] = vargs[ a_v ]
+    cytobands = list(filter(lambda d: d[ "chro" ] == chro, byc["cytobands"]))
+    if cb_start == None and cb_end == None:
+        return cytobands, chro
 
-    return cb_pars
+    cb_from = 0
+    cb_to = len(cytobands)
+
+    if cb_start == None or cb_start == "pter":
+        cb_start = "p"
+    if cb_end == "qter":
+        cb_end = "q"
+    if cb_end == "pcen":
+        cb_end = "p"
+    if cb_start == "qcen":
+        cb_start = "q"
+    if cb_start == "pcen":
+        cb_start = "q"
+
+    cb_s_re = re.compile( "^"+cb_start )
+    i = 0
+
+    # searching for the first matching band
+    for cb in cytobands:
+        if cb_s_re.match( cb[ "cytoband" ] ):
+            cb_from = i
+            break
+        i += 1
+    k = 0
+
+    # retrieving the last matching band
+    # * index at least as start to avoid "q21qter" => "all q"
+    # * if there was no end, the start band is queried again until its last match
+    if cb_end == None:
+        cb_end = cb_start
+
+    cb_e_re = re.compile( "^"+cb_end )
+
+    for cb in cytobands:
+        if k >= i:
+            if cb_e_re.match( cb[ "cytoband" ] ):
+                cb_to = k+1
+        k += 1
+
+    cytobands = cytobands[cb_from:cb_to]
+
+    return cytobands, chro
+
+################################################################################
+
+def _bands_from_chrobases( **byc ):
+
+    chr_bases = byc["variant_pars"]["chroBases"]
+    cb_pat = re.compile( byc["variant_defs"]["parameters"]["chroBases"]["pattern"] )
+
+    chro, cb_start, cb_end = cb_pat.match(chr_bases).group(2,3,5)
+    if cb_start:
+        cb_start = int(cb_start)
+        if not cb_end:
+            cb_end = cb_start + 1
+        cb_end = int(cb_end)
+
+    cytobands = list(filter(lambda d: d[ "chro" ] == chro, byc["cytobands"]))
+    if cb_start == None and cb_end == None:
+        return cytobands, chro
+
+    if isinstance(cb_start, int):
+        cytobands = list(filter(lambda d: int(d[ "end" ]) > cb_start, cytobands))
+
+    if isinstance(cb_end, int):
+        cytobands = list(filter(lambda d: int(d[ "start" ]) < cb_end, cytobands))
+
+    return cytobands, chro
 
 ################################################################################
 
-def _parse_default_parameters(cb_pars, **byc):
+def _cytobands_label( cytobands ):
 
-    cb_rq_ts = byc["cytoband_defs"]["request_types"]
-    cb_def_p = byc["cytoband_defs"]["default_parameters"]
+    cb_label = cytobands[0]["chro"]+cytobands[0]["cytoband"]
+    if len( cytobands ) > 1:
+        cb_label = cb_label+cytobands[-1]["cytoband"]
 
-    # basic parameters which may apply to all mappings
-    for rk, rt in cb_rq_ts.items():
-        for d_k, d_d in cb_def_p.items():
-            d = d_d["default"]
-            if d_k in cb_pars[ rk ]:
-                v = cb_pars[ rk ][ d_k ]
-            else:
-                v = byc["form_data"].getvalue( d_k, d )
-            v_pat = re.compile( d_d[ "pattern" ] )
-            if not v_pat.match( str( v ) ):
-                if d_k in cb_pars[ rk ]:
-                    del(cb_pars[ rk ][ d_k ])
-                continue
-            cb_pars[ rk ][ d_k ] = v
-
-    return cb_pars
+    return cb_label
 
 ################################################################################
 
-def _parse_for_request_types(cb_pars, **byc):
-
-    cb_rq_ts = byc["cytoband_defs"]["request_types"]
-    cb_def_p = byc["cytoband_defs"]["default_parameters"]
-
-    # request_type specific mappings
-    # also performing format checks & deletion of wrong types
-    for rk, rt in cb_rq_ts.items():
-        for p_k, p_d in rt["parameters"].items():
-            d = False
-            if "default" in p_d:
-                d = p_d["default"]
-            if p_k in cb_pars[ rk ]:
-                v = cb_pars[ rk ][ p_k ]
-            else:
-                v = byc["form_data"].getvalue( p_k, d )
-            if not v:
-                continue
-            v_pat = re.compile( p_d[ "pattern" ] )
-            if not v_pat.match( str( v ) ):
-                if p_k in cb_pars[ rk ]:
-                    del(cb_pars[ rk ][ p_k ])
-                continue
-            cb_pars[ rk ][ p_k ] = v
-            if "components" in p_d:
-                for c_k, c_d in p_d["components"].items():
-                    c_i = c_d[ "regexi" ]
-                    c_v = v_pat.match( v ).group( c_i )
-                    if c_d[ "type" ] == "integer":
-                        c_v = int( c_v )
-                    cb_pars[ rk ][ c_k ] = c_v
-
-    return cb_pars
-
-################################################################################
-################################################################################
-
-def _enable_debugging( form_data ):
-    if "debug" in form_data:
-        cgitb.enable()
-        print('Content-Type: text')
-        print()
-    else:
-        pass
-
-################################################################################
-################################################################################
 
 def _print_terminal_response(args, cyto_response):
 
