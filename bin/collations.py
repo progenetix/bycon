@@ -40,24 +40,18 @@ def collations():
         "form_data": cgi_parse_query()
     }
 
+    # first pre-population w/ defaults
     for d_k, d_v in coll_prefs["defaults"].items():
         byc.update( { d_k: d_v } )
 
+    # ... then modification if parameter in request
     if "method" in byc["form_data"]:
         m = byc["form_data"].getvalue("method")
         if m in coll_prefs["methods"].keys():
             byc["method"] = m
 
-    method_keys = coll_prefs["methods"][ byc["method"] ]
-
-    if "datasetIds" in byc["form_data"]:
-        d_s = byc[ "form_data" ].getlist('datasetIds')
-        d_s = ','.join(d_s)
-        byc.update( { "dataset_ids": d_s.split(',') } )
-
-    filters = parse_filters( **byc )
-    if len(filters) > 0:
-        byc.update( { "filters":  filters } )
+    byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
+    byc.update( { "filters": parse_filters( **byc ) } )
 
     # response prototype
     r = {
@@ -66,9 +60,11 @@ def collations():
         "errors": [ ]
     }
 
+    # saving the parameters to the response
     for p in ["dataset_ids", "method", "filters"]:
         r["parameters"].update( { p: byc[ p ] } )
 
+    # data retrieval & response population
     mongo_client = MongoClient( )
 
     for ds_id in byc["dataset_ids"]:
@@ -81,15 +77,21 @@ def collations():
             mongo_coll = mongo_db[ c ]
             for subset in mongo_coll.find( query ):
                 s = { }
-                for k in method_keys:
+                for k in coll_prefs["methods"][ byc["method"] ]:
                     # TODO: harmless hack
-                    if k == "count":
-                        s[ k ] = int(subset[ k ])
+                    if k in subset.keys():
+                        if k == "count":
+                            s[ k ] = int(subset[ k ])
+                        else:
+                            s[ k ] = subset[ k ]
                     else:
-                        s[ k ] = subset[ k ]
+                        s[ k ] = None
                 ds_s.append( s )
             r["data"].append( { ds_id: ds_s } )
+
+    mongo_client.close( )
  
+    # response
     cgi_print_json_response( r )
 
 ################################################################################

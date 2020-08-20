@@ -37,11 +37,11 @@ def cgi_print_json_response(data):
 
 ################################################################################
 
-def cgi_print_json_callback(callback, data):
+def cgi_print_json_callback(callback, name, data):
 
     print('Content-Type: application/json')
     print()
-    print(callback+'({"data":'+json.dumps(data, default=str)+"});\n")
+    print(callback+'({"'+name+'":'+json.dumps(data, default=str)+"});\n")
     exit()
 
 ################################################################################

@@ -79,7 +79,7 @@ EFO:
       default: 1
     individuals:
       default: 0
-  pattern: '^(EFO\:\d+?)?$'
+  pattern: '^EFO(\:\d+?)?$'
   examples:
   collation: biosubsets
     - 'EFO:0009656'
@@ -92,7 +92,7 @@ icdom:
   scopes:
     biosamples:
       default: 1
-  pattern: '^icdom(\-\d{1,5}?)?$'
+  pattern: '^icdom(\-\d{1,5}(\-\d{1,5})?)?$'
   examples:
     - 'icdom-85003'
     - 'icdom-94403'

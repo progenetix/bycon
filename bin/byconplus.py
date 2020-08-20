@@ -35,11 +35,12 @@ def _get_args():
     parser.add_argument("-n", "--filtering_terms", action='store_true', help="test filtering term response")
     args = parser.parse_args()
 
-    return(args)
+    return args
 
 ################################################################################
 
 def main():
+
     byconplus()
     
 ################################################################################
@@ -73,7 +74,9 @@ def byconplus():
     byc.update( { "response_type": select_response_type( **byc ) } )
 
     byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
-    byc.update( { "filters":  parse_filters( **byc ) } )
+    byc.update( { "dataset_ids": beacon_check_dataset_ids( **byc ) } )
+    byc.update( { "filter_flags": get_filter_flags( **byc ) } )
+    byc.update( { "filters": parse_filters( **byc ) } )
 
     check_service_requests(**byc)
 

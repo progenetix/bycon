@@ -87,21 +87,9 @@ def update_queries_from_filters( queries, **byc ):
     podmd"""
         
     query_lists = { }
-    logic = byc[ "config" ][ "filter_logic" ]
-    precision = byc[ "config" ][ "filter_precision" ]
 
-    if "form_data" in byc:
-        if "filterLogic" in byc[ "form_data" ]:
-            l = byc["form_data"].getvalue('filterLogic')
-            if "OR" in l:
-                logic = '$or'
-            if "AND" in l:
-                logic = '$and'
-        if "filterPrecision" in byc[ "form_data" ]:
-            precision = byc["form_data"].getvalue('filterPrecision')
-
-    if "exact_match" in byc:
-        precision = "exact"
+    logic = byc[ "filter_flags" ][ "logic" ]
+    precision = byc[ "filter_flags" ][ "precision" ]
  
     for c_n in byc[ "config" ][ "collections" ]:
         query_lists[c_n] = [ ]

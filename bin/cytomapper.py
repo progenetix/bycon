@@ -146,7 +146,9 @@ def cytomapper():
     _print_text_response(byc["form_data"], cyto_response)
 
     if "callback" in byc[ "form_data" ]:
-        cgi_print_json_callback(byc["form_data"].getvalue("callback"), [cyto_response])
+        cgi_print_json_callback(byc["form_data"].getvalue("callback"), "data", [ cyto_response ])
+    elif "datalist" in byc[ "form_data" ]:
+        cgi_print_json_callback(" ", "cytobands", [ cyto_response ])
     else:
         cgi_print_json_response(cyto_response)
 

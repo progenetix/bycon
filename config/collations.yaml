@@ -17,8 +17,13 @@ methods:
     - label
     - count
     - child_terms
-    - paths
+    - hierarchy_paths
   counts:
     - id
     - label
     - count
+  cnvFrequencies:
+    - id
+    - label
+    - frequencymaps
+

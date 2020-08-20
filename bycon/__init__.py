@@ -27,6 +27,8 @@ from .beacon_process_specs import update_datasets_from_dbstats
 from .beacon_process_specs import read_filter_definitions
 from .beacon_parse_filters import parse_filters
 from .beacon_parse_filters import select_dataset_ids
+from .beacon_parse_filters import beacon_check_dataset_ids
+from .beacon_parse_filters import get_filter_flags
 from .beacon_parse_variants import parse_variants
 from .beacon_parse_variants import get_variant_request_type
 from .beacon_parse_variants import create_variantCNVrequest_query
