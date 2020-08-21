@@ -34,7 +34,7 @@ def main():
 def collations():
 
     config = read_bycon_config( path.abspath( dir_path ) )
-    coll_prefs = read_yaml_to_object( "collations_preference_file", **config[ "paths" ] )
+    these_prefs = read_yaml_to_object( "collations_preference_file", **config[ "paths" ] )
 
     byc = {
         "config": config,
@@ -43,13 +43,13 @@ def collations():
     }
 
     # first pre-population w/ defaults
-    for d_k, d_v in coll_prefs["defaults"].items():
+    for d_k, d_v in these_prefs["defaults"].items():
         byc.update( { d_k: d_v } )
 
     # ... then modification if parameter in request
     if "method" in byc["form_data"]:
         m = byc["form_data"].getvalue("method")
-        if m in coll_prefs["methods"].keys():
+        if m in these_prefs["methods"].keys():
             byc["method"] = m
 
     byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
@@ -79,7 +79,7 @@ def collations():
             mongo_coll = mongo_db[ c ]
             for subset in mongo_coll.find( query ):
                 s = { }
-                for k in coll_prefs["methods"][ byc["method"] ]:
+                for k in these_prefs["methods"][ byc["method"] ]:
                     # TODO: harmless hack
                     if k in subset.keys():
                         if k == "count":

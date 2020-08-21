@@ -1,0 +1,7 @@
+defaults:
+  genespans_db: progenetix
+  genespans_coll: genespans
+  assembly_id: GRCh38
+  gene_id: ""
+assembly_ids:
+  - GRCh38

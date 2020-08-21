@@ -23,6 +23,7 @@ beacon_info_count_labels:
   variants: "callCount"
   variants_distinct: "variantCount"
 handover_coll: querybuffer
+genespans_coll: genespans
 filter_flags:
   logic: '$and'
   precision: 'start'
@@ -127,6 +128,9 @@ paths:
   collations_preference_file:
     - config
     - collations.yaml
+  genespans_preference_file:
+    - config
+    - genespans.yaml
   handover_types_file:
     - config
     - beacon_handovers.yaml

@@ -86,7 +86,7 @@ def select_dataset_ids( **byc ):
         dataset_ids = byc["dataset_ids"]
 
     if "form_data" in byc:
-
+        ds_ids = [ ]
         if "datasetIds" in byc["form_data"]:
 
             ds_ids = byc[ "form_data" ].getlist('datasetIds')

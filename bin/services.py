@@ -13,6 +13,7 @@ sys_path.append(path.join(path.abspath(dir_path), '..'))
 
 from bin.cytomapper import cytomapper
 from bin.byconplus import byconplus
+from bin.genespans import genespans
 from bin.collations import collations
 
 """podmd
@@ -44,8 +45,10 @@ def main():
     services = {
         "cytomapper": cytomapper,
         "byconplus": byconplus,
+        "genespans": genespans,
         "collations": collations
     }
+
     url_comps = urlparse( environ.get('REQUEST_URI') )
 
     if "debug" in environ.get('REQUEST_URI'):
@@ -54,6 +57,7 @@ def main():
         print()
 
     i = 0
+    f = ""
     p_items = re.split(r'\/|\&', url_comps.path)
     for p in p_items:
         i += 1
