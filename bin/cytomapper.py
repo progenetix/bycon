@@ -51,11 +51,64 @@ The `cytobands` and `chrobases` parameters can be used for running the script on
   - `bin/cytomapper.py --cytobands 9p11q21 -g GRCh38`
   - `bin/cytomapper.py -c Xpterq24`
 
+#### Response
+
+```
+{
+    "data": {
+        "ChromosomeLocation": {
+            "chr": "7",
+            "end": "q21.12",
+            "species": "",
+            "start": "p21.3",
+            "type": "ChromosomeLocation"
+        },
+        "assemblyId": "GRCh38",
+        "bandList": [
+            "7p21.3",
+            "7p21.2",
+            "7p21.1",
+            "7p15.3",
+            "7p15.2",
+            "7p15.1",
+            "7p14.3",
+            "7p14.2",
+            "7p14.1",
+            "7p13",
+            "7p12.3",
+            "7p12.2",
+            "7p12.1",
+            "7p11.2",
+            "7p11.1",
+            "7q11.1",
+            "7q11.21",
+            "7q11.22",
+            "7q11.23",
+            "7q21.11",
+            "7q21.12"
+        ],
+        "chroBases": "7:7200000-88500000",
+        "cytoBands": "7p21.3q21.12",
+        "end": 88500000,
+        "referenceName": "7",
+        "size": 81300000,
+        "start": 7200000
+    },
+    "errors": [],
+    "parameters": {
+        "assemblyId": "GRCh38",
+        "chroBases": "7:12000000-88000000"
+    },
+    "warnings": []
+}
+```
+
 #### TODO
 
 * fallback to info / documentation
 * better error capture & documentation (e.g. wrong assemblies ...)
 * warning about / correcting wrong cytoband syntax (e.g. *not* "17p11p12" *but* "17p12p11")
+* species mapping from assembly id
 
 podmd"""
 
@@ -100,6 +153,9 @@ def cytomapper():
     byc.update( { "variant_pars": parse_variants( **byc ) } )
     byc.update( { "cytobands": parse_cytoband_file( **byc ) } )
 
+    # response prototype
+    r = config["response_object_schema"]
+
     cytoBands = [ ]
 
     if "cytoBands" in byc["variant_pars"]:
@@ -109,14 +165,15 @@ def cytomapper():
 
     cb_label = _cytobands_label( cytoBands )
 
-    cyto_response = { "request": byc["variant_pars"], "error": byc["error"] }
+    r.update( { "parameters": byc["variant_pars"] } )
+    if byc["error"]:
+        r["errors"].append( byc["error"] )
 
     if len( cytoBands ) < 1:
-        cyto_response.update( { "error": "No matching cytobands!" } )
-        _print_terminal_response(byc["args"], cyto_response)
-        _print_text_response(byc["form_data"], cyto_response)
-        cgi_print_json_response(cyto_response)
-
+        r["errors"].append( "No matching cytobands!" )
+        _print_terminal_response(byc["args"], r)
+        _print_text_response(byc["form_data"], r)
+        cgi_print_json_response(**r)
 
     start = int( cytoBands[0]["start"] )
     end = int( cytoBands[-1]["end"] )
@@ -124,7 +181,7 @@ def cytomapper():
     size = int(  end - start )
     chroBases = chro+":"+str(start)+"-"+str(end)
     
-    cyto_response.update( {
+    r["data"].update( {
         "assemblyId": byc["variant_pars"][ "assemblyId" ],
         "cytoBands": cb_label,
         "bandList": [x['chroband'] for x in cytoBands ],
@@ -142,15 +199,13 @@ def cytomapper():
         }
     } )
 
-    _print_terminal_response(byc["args"], cyto_response)
-    _print_text_response(byc["form_data"], cyto_response)
+    _print_terminal_response(byc["args"], **r )
+    _print_text_response(byc["form_data"], **r )
 
     if "callback" in byc[ "form_data" ]:
-        cgi_print_json_callback(byc["form_data"].getvalue("callback"), "data", [ cyto_response ])
-    elif "datalist" in byc[ "form_data" ]:
-        cgi_print_json_callback(" ", "cytobands", [ cyto_response ])
+        cgi_print_json_callback(byc["form_data"].getvalue("callback"), **r )
     else:
-        cgi_print_json_response(cyto_response)
+        cgi_print_json_response(**r )
 
 
 ################################################################################
@@ -249,18 +304,18 @@ def _cytobands_label( cytobands ):
 ################################################################################
 
 
-def _print_terminal_response(args, cyto_response):
+def _print_terminal_response(args, **r):
 
     if not args is None:
-        if len(cyto_response[ "error" ].keys()) > 0:
-            print( cyto_response[ "error" ] )
+        if len(r[ "errors" ]) > 0:
+            print( "\n".join( r[ "errors" ] ) )
             exit()
 
     if args.cytobands:
-        print(str(cyto_response[ "chroBases" ]))
+        print(str(r["data"][ "chroBases" ]))
         exit()
     elif args.chrobases:
-        print(str(cyto_response[ "cytoBands" ]))
+        print(str(r["data"][ "cytoBands" ]))
         exit()
 
     return
@@ -268,19 +323,19 @@ def _print_terminal_response(args, cyto_response):
 ################################################################################
 ################################################################################
 
-def _print_text_response(form_data, cyto_response):
+def _print_text_response(form_data, **r):
 
     if "text" in form_data:
 
-        if "cytoBands" in cyto_response[ "request" ]:
+        if "cytoBands" in r[ "parameters" ]:
             print('Content-Type: text')
             print()
-            print(str(cyto_response[ "chroBases" ])+"\n")
+            print(str(r["data"][ "chroBases" ])+"\n")
             exit()
-        elif "chroBases" in cyto_response[ "request" ]:
+        elif "chroBases" in r[ "parameters" ]:
             print('Content-Type: text')
             print()
-            print(str(cyto_response[ "cytoBands" ])+"\n")
+            print(str(r["data"][ "cytoBands" ])+"\n")
             exit()
 
     return

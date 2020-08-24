@@ -39,11 +39,9 @@ def genespans():
         "form_data": cgi_parse_query()
     }
 
-    r = {
-        "parameters": { },
-        "genes": [ ],
-        "errors": [ ]
-    }
+    # response prototype
+    r = config["response_object_schema"]
+    r["data"].update({ "genes": [ ] })
 
     # first pre-population w/ defaults
     for d_k, d_v in these_prefs["defaults"].items():
@@ -64,7 +62,7 @@ def genespans():
     else:
         # TODO: value check & response
         r["errors"].append("No geneId value provided!")
-        cgi_print_json_response( r )
+        cgi_print_json_response( **r )
 
     r["parameters"].update( { "geneId": byc["gene_id"] })
 
@@ -75,12 +73,12 @@ def genespans():
     query = { "gene_symbol": re.compile( r'^'+byc["gene_id"] ) }
 
     for g in g_coll.find( query, { '_id': False } ):
-        r["genes"].append( g )
+        r["data"]["genes"].append( g )
 
     mongo_client.close( )
  
     # response
-    cgi_print_json_response( r )
+    cgi_print_json_response( **r )
 
 ################################################################################
 ################################################################################

@@ -33,7 +33,8 @@ from .beacon_parse_variants import parse_variants
 from .beacon_parse_variants import get_variant_request_type
 from .beacon_parse_variants import create_variantCNVrequest_query
 from .cgi_utils import cgi_parse_query
-from .cgi_utils import cgi_exit_on_error
+from .cgi_utils import cgi_print_svg_response
+from .cgi_utils import cgi_print_text_response
 from .cgi_utils import cgi_print_json_response
 from .cgi_utils import cgi_print_json_callback
 from .cytoband_utils import parse_cytoband_file

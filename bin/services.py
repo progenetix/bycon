@@ -64,7 +64,7 @@ def main():
         if p == "services":
             f = p_items[ i ]
 
-    if f in services:
+    if f in services.keys():
         services[f]()
 
 ################################################################################

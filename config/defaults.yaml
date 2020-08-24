@@ -86,6 +86,11 @@ io_prefixes:
   - geogsm
   - geogse
   - cellosaurus
+response_object_schema:
+  parameters: { }
+  data: { }
+  errors: [ ]
+  warnings: [ ]
 plot_pars:
   dotalpha: 0.2
   color_var_snv_hex: '#EE00DD'

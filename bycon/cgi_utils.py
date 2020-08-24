@@ -19,30 +19,38 @@ def cgi_parse_query():
 
 ################################################################################
 
-def cgi_exit_on_error(shout):
+def cgi_print_text_response(data):
 
-    print("Content-Type: text")
+    print('Content-Type: text')
     print()
-    print(shout)
+    print(data+"\n")
     exit()
 
 ################################################################################
 
-def cgi_print_json_response(data):
+def cgi_print_svg_response(data):
+
+    print('Content-Type: image/svg')
+    print()
+    print(data+"\n")
+    exit()
+
+################################################################################
+
+def cgi_print_json_response(**data):
 
     print('Content-Type: application/json')
     print()
-    print(json.dumps(data, indent=4, sort_keys=True, default=str))
+    print(json.dumps(data, indent=4, sort_keys=True, default=str)+"\n")
     exit()
 
 ################################################################################
 
-def cgi_print_json_callback(callback, name, data):
+def cgi_print_json_callback(callback, **data):
 
     print('Content-Type: application/json')
     print()
-    print(callback+'({"'+name+'":'+json.dumps(data, default=str)+"});\n")
+    print(callback+'('+json.dumps(data, default=str)+")\n")
     exit()
 
 ################################################################################
-

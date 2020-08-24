@@ -34,11 +34,11 @@ def beacon_respond_with_errors( **byc ):
 
     if not byc[ "queries" ].keys():
       byc["service_info"].update( { "error": "No (correct) query parameters were provided." } )
-      cgi_print_json_response(byc["service_info"])
+      cgi_print_json_response(**byc["service_info"])
 
     if len(byc[ "dataset_ids" ]) < 1:
       byc["service_info"].update( { "error": "No `datasetIds` parameter provided." } )
-      cgi_print_json_response(byc["service_info"])
+      cgi_print_json_response(**byc["service_info"])
 
 ################################################################################
 
@@ -56,7 +56,7 @@ def respond_empty_request(**byc):
             return()
 
     # current default response
-    cgi_print_json_response( byc["service_info"] )
+    cgi_print_json_response( **byc["service_info"] )
 
 ################################################################################
 
@@ -71,7 +71,7 @@ def respond_get_datasetids_request(**byc):
     dataset_ids = [ ]
     for ds_id in byc["datasets_info"].keys():
         dataset_ids.append( { "id": ds_id, "name": byc["datasets_info"][ds_id]["name"] } )
-    cgi_print_json_response( { "datasets": dataset_ids } )
+    cgi_print_json_response( **{ "datasets": dataset_ids } )
 
 ################################################################################
 
@@ -83,7 +83,7 @@ def respond_service_info_request(**byc):
     if not "service-info" in environ.get('REQUEST_URI'):
         return()
 
-    cgi_print_json_response( byc["service_info"] )
+    cgi_print_json_response( **byc["service_info"] )
 
 ################################################################################
 
@@ -134,7 +134,7 @@ def respond_filtering_terms_request(**byc):
             ftl.append( fts[key] )
 
     resp.update( { "filteringTerms": ftl } )
-    cgi_print_json_response(resp)
+    cgi_print_json_response(**resp)
 
 ################################################################################
 

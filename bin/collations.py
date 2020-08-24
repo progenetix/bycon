@@ -56,11 +56,7 @@ def collations():
     byc.update( { "filters": parse_filters( **byc ) } )
 
     # response prototype
-    r = {
-        "parameters": { },
-        "data": [ ],
-        "errors": [ ]
-    }
+    r = config["response_object_schema"]
 
     # saving the parameters to the response
     for p in ["dataset_ids", "method", "filters"]:
@@ -89,12 +85,12 @@ def collations():
                     else:
                         s[ k ] = None
                 ds_s.append( s )
-            r["data"].append( { ds_id: ds_s } )
+            r["data"].update( { ds_id: ds_s } )
 
     mongo_client.close( )
  
     # response
-    cgi_print_json_response( r )
+    cgi_print_json_response( **r )
 
 ################################################################################
 ################################################################################
