@@ -51,7 +51,7 @@ def main():
 
     url_comps = urlparse( environ.get('REQUEST_URI') )
 
-    if "debug" in environ.get('REQUEST_URI'):
+    if "debug=1" in environ.get('REQUEST_URI'):
         cgitb.enable()
         print('Content-Type: text')
         print()
