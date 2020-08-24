@@ -37,17 +37,17 @@ def cgi_print_svg_response(data):
 
 ################################################################################
 
-def cgi_print_json_response(form_data, **data):
+def cgi_print_json_response(form_data, **response):
 
     if "callback" in form_data:
         print('Content-Type: text')
         print()
-        print(form_data["callback"]+'('+json.dumps(data, default=str)+")\n")
+        print(form_data.getvalue("callback")+'('+json.dumps(response, default=str)+")\n")
         exit()
 
     print('Content-Type: application/json')
     print()
-    print(json.dumps(data, indent=4, sort_keys=True, default=str)+"\n")
+    print(json.dumps(response, indent=4, sort_keys=True, default=str)+"\n")
     exit()
 
 ################################################################################
