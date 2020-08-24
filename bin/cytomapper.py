@@ -124,7 +124,7 @@ def _get_args():
     parser.add_argument("-g", "--genome", help="genome edition, e.g. `GRCh38`")
     args = parser.parse_args()
 
-    return(args)
+    return args
 
 ################################################################################
 
@@ -171,8 +171,8 @@ def cytomapper():
 
     if len( cytoBands ) < 1:
         r["errors"].append( "No matching cytobands!" )
-        _print_terminal_response(byc["args"], r)
-        _print_text_response(byc["form_data"], r)
+        _print_terminal_response(byc["args"], **r)
+        _print_text_response(byc["form_data"], **r)
         cgi_print_json_response(**r)
 
     start = int( cytoBands[0]["start"] )
@@ -295,9 +295,13 @@ def _bands_from_chrobases( **byc ):
 
 def _cytobands_label( cytobands ):
 
-    cb_label = cytobands[0]["chro"]+cytobands[0]["cytoband"]
-    if len( cytobands ) > 1:
-        cb_label = cb_label+cytobands[-1]["cytoband"]
+    cb_label = ""
+
+    if len(cytobands) > 0:
+
+        cb_label = cytobands[0]["chro"]+cytobands[0]["cytoband"]
+        if len( cytobands ) > 1:
+            cb_label = cb_label+cytobands[-1]["cytoband"]
 
     return cb_label
 
@@ -306,7 +310,7 @@ def _cytobands_label( cytobands ):
 
 def _print_terminal_response(args, **r):
 
-    if not args is None:
+    if sys.stdin.isatty():
         if len(r[ "errors" ]) > 0:
             print( "\n".join( r[ "errors" ] ) )
             exit()

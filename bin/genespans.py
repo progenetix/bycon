@@ -78,7 +78,10 @@ def genespans():
     mongo_client.close( )
  
     # response
-    cgi_print_json_response( **r )
+    if "callback" in byc[ "form_data" ]:
+        cgi_print_json_callback(byc["form_data"].getvalue("callback"), **r )
+    else:
+        cgi_print_json_response(**r )
 
 ################################################################################
 ################################################################################
