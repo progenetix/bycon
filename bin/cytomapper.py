@@ -171,13 +171,12 @@ def cytomapper():
 
     if len( cytoBands ) < 1:
         r["errors"].append( "No matching cytobands!" )
-        _print_terminal_response(byc["args"], **r)
-        _print_text_response(byc["form_data"], **r)
-        cgi_print_json_response(**r)
+        _print_terminal_response( byc["args"], **r )
+        _print_text_response( byc["form_data"], **r )
+        cgi_print_json_response( byc["form_data"], **r )
 
     start = int( cytoBands[0]["start"] )
     end = int( cytoBands[-1]["end"] )
-
     size = int(  end - start )
     chroBases = chro+":"+str(start)+"-"+str(end)
     
@@ -199,14 +198,9 @@ def cytomapper():
         }
     } )
 
-    _print_terminal_response(byc["args"], **r )
-    _print_text_response(byc["form_data"], **r )
-
-    if "callback" in byc[ "form_data" ]:
-        cgi_print_json_callback(byc["form_data"].getvalue("callback"), **r )
-    else:
-        cgi_print_json_response(**r )
-
+    _print_terminal_response( byc["args"], **r )
+    _print_text_response( byc["form_data"], **r )
+    cgi_print_json_response( byc["form_data"], **r )
 
 ################################################################################
 

@@ -90,10 +90,7 @@ def collations():
     mongo_client.close( )
  
     # response
-    if "callback" in byc[ "form_data" ]:
-        cgi_print_json_callback(byc["form_data"].getvalue("callback"), **r )
-    else:
-        cgi_print_json_response(**r )
+    cgi_print_json_response( byc["form_data"], **r )
 
 ################################################################################
 ################################################################################

@@ -15,8 +15,6 @@ from bycon.beacon_process_specs import *
 
 """podmd
 
-* 
-
 podmd"""
 
 ################################################################################
@@ -62,26 +60,20 @@ def genespans():
     else:
         # TODO: value check & response
         r["errors"].append("No geneId value provided!")
-        cgi_print_json_response( **r )
+        cgi_print_json_response( byc["form_data"], **r )
 
     r["parameters"].update( { "geneId": byc["gene_id"] })
 
     # data retrieval & response population
     mongo_client = MongoClient( )
     g_coll = mongo_client[ byc["genespans_db"] ][ byc["genespans_coll"] ]
-
     query = { "gene_symbol": re.compile( r'^'+byc["gene_id"] ) }
-
     for g in g_coll.find( query, { '_id': False } ):
         r["data"]["genes"].append( g )
-
     mongo_client.close( )
  
     # response
-    if "callback" in byc[ "form_data" ]:
-        cgi_print_json_callback(byc["form_data"].getvalue("callback"), **r )
-    else:
-        cgi_print_json_response(**r )
+    cgi_print_json_response( byc["form_data"], **r )
 
 ################################################################################
 ################################################################################
