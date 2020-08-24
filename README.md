@@ -3,17 +3,16 @@
 The `bycon` project - at least at its current stage - is a mix of _Progenetix_ (i.e. GA4GH object model derived, _MongoDB_ implemented) - data management, and the implementation of middleware & server for the Beacon API.
 
 More information about the current status of the package can be found in the inline
-documentation which is also [presented in an accessible format](https://info.progenetix.org/tags/Beacon.html) on the _Progenetix_
-website.
+documentation which is also [presented in an accessible format](https://info.progenetix.org/tags/Beacon.html) on the _Progenetix_ website.
 
 ### More Documentation
 
-#### [ByconPlus](/byconplus.md)
+#### [ByconPlus](./doc/byconplus.md)
 
 This page provides more information about the _Beacon_ functionality, current
 implementation status and usage examples.
 
-#### [Services](/services.md)
+#### [Services](./doc/services.md)
 
 The _bycon_ environment - together with the [Progenetix](http://progenetix.org)
 resource - provide a growing numer of data services in (cancer) genomics and
