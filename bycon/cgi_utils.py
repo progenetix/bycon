@@ -42,7 +42,7 @@ def cgi_print_json_response(form_data, **data):
     if "callback" in form_data:
         print('Content-Type: text')
         print()
-        print(callback+'('+json.dumps(data, default=str)+")\n")
+        print(form_data["callback"]+'('+json.dumps(data, default=str)+")\n")
         exit()
 
     print('Content-Type: application/json')
