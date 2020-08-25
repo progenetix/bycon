@@ -19,11 +19,6 @@ databases
 
 #### _publications_
 
-* provides access to information about data "subsets" in the Progenetix project
-databases
-  - typically aggregations of samples sharing an ontology code (e.g. NCIT) or 
-  external identifier (e.g. PMID)
-
 ##### Examples
 
 * <http://progenetix.org/cgi/bycon/bin/publications.py?debug=1&filters=PMID,genomes:&gt;200,arraymap:&gt;1&method=counts>
