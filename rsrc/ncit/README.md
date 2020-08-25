@@ -20,7 +20,7 @@ Neoplasm (NCIT:C3262)
 * ncit-neoplasm-tree-labels.txt
   - the labels from the OWL file
 * hierarchies.
-  - a `__label__ (__code__), hierarchically indented file, created by the script
+  - a `__label__ (__code__)`, hierarchically indented file, created by the script
   - uses the format from the original NCIt resource site (but adds the prefix)
 * labels.tsv
   - code - tab - label
