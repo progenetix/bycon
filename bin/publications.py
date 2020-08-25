@@ -17,7 +17,7 @@ from bycon.beacon_process_specs import *
 """podmd
 
 * <https://progenetix.org/services/publications/?filters=PMID>
-* <http://progenetix.org/cgi/bycon/bin/publications.py?debug=1&filters=PMID,genomes:>200,arraymap:>1&method=details>
+* <http://progenetix.org/cgi/bycon/bin/publications.py?filters=PMID,genomes:>200,arraymap:>1&method=details>
 * <http://progenetix.org/cgi/bycon/bin/publications.py?filters=PMID:22824167&filterPrecision=exact&method=details>
 
 podmd"""
