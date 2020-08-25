@@ -1,7 +1,7 @@
 ## Bycon _services_
 
 The _bycon_ environment provides a number of data services which make use of
-resources in the _Progenetix_ environment:
+resources in the _Progenetix_ environment.
 
 #### _collations_
 
@@ -53,6 +53,14 @@ parameter
 
 The service URL format `progenetix.org/services/__service-name__?parameter=value`
 is a shorthand for `progenetix.org/cgi-bin/bycon/bin/__service-name__.py?parameter=value`.
+
+The `services` application deparses a request URI and calls the respective
+script. The functionality is combined with the correct configuration of a 
+rewrite in the server configuration:
+
+```
+RewriteRule     "^/services(.*)"     /cgi-bin/bycon/bin/services.py$1      [PT]
+```
 
 ### Callback handling
 
