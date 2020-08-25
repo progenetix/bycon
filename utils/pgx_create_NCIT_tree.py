@@ -28,10 +28,12 @@ def main():
     config[ "paths" ][ "module_root" ] = path.join( path.abspath( dir_path ), '..' )
     config[ "paths" ][ "ncit" ] = path.join( config[ "paths" ][ "module_root" ], "rsrc", "ncit" )
 
-    labels_f = path.join( config[ "paths" ][ "ncit" ], "ncit-neoplasm-tree-labels.txt" )
-    codes_f = path.join( config[ "paths" ][ "ncit" ], "ncit-neoplasm-tree-codes.txt" )
-    hierarchies_out = path.join( config[ "paths" ][ "ncit" ], "hierarchies.tsv" )
-    labels_out = path.join( config[ "paths" ][ "ncit" ], "labels.tsv" )
+    ncit_p = config[ "paths" ][ "ncit" ]
+
+    labels_f = path.join( ncit_p, "ncit-neoplasm-tree-labels.txt" )
+    codes_f = path.join( ncit_p, "ncit-neoplasm-tree-codes.txt" )
+    hierarchies_out = path.join( ncit_p, "hierarchies.tsv" )
+    labels_out = path.join( ncit_p, "labels.tsv" )
 
     l_d = { }
 
@@ -62,7 +64,6 @@ def main():
     for c, l in l_d.items():
         l_f.write( "{}\t{}\n".format(c, l) )
     l_f.close()
-
 
 ################################################################################
 ################################################################################

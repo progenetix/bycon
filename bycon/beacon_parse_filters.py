@@ -85,6 +85,7 @@ def select_dataset_ids( **byc ):
     if "dataset_ids" in byc:
         dataset_ids = byc["dataset_ids"]
 
+    # different var name & return if provided
     if "form_data" in byc:
         ds_ids = [ ]
         if "datasetIds" in byc["form_data"]:
@@ -129,7 +130,7 @@ def beacon_check_dataset_ids( **byc ):
 
 ################################################################################
 
-def cgi_exit_on_error(shout):
+def cgi_print_text_response(shout):
 
     print("Content-Type: text")
     print()
