@@ -19,9 +19,13 @@ databases
 
 #### _publications_
 
+* queries the +publications_ database & returns concise or extended information
+about th ematched articles
+
 ##### Examples
 
-* <http://progenetix.org/cgi/bycon/bin/publications.py?debug=1&filters=PMID,genomes:&gt;200,arraymap:&gt;1&method=counts>
+* <https://progenetix.org/services/publications/?filters=PMID>
+* <http://progenetix.org/cgi/bycon/bin/publications.py?filters=PMID,genomes:&gt;200,arraymap:&gt;1&method=counts>
 * <http://progenetix.org/cgi/bycon/bin/publications.py?filters=PMID:22824167&filterPrecision=exact&method=details>
 
 #### _cytomapper_

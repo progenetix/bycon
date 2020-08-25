@@ -3,7 +3,7 @@
 from os import environ as environ
 from os import path as path
 from urllib.parse import urlparse
-import re, cgitb
+import sys, re, cgitb
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
