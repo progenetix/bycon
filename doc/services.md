@@ -19,7 +19,7 @@ databases
 
 #### _publications_
 
-* queries the +publications_ database & returns concise or extended information
+* queries the _publications_ database & returns concise or extended information
 about th ematched articles
 
 ##### Examples
