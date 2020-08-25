@@ -1,15 +1,13 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 
 from os import environ as environ
 from os import path as path
-from sys import path as sys_path
-import re
-import cgitb
 from urllib.parse import urlparse
+import re, cgitb
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
-sys_path.append(path.join(path.abspath(dir_path), '..'))
+sys.path.append(path.join(path.abspath(dir_path), '..'))
 
 from bin.cytomapper import cytomapper
 from bin.byconplus import byconplus
