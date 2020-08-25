@@ -22,7 +22,11 @@ disease ontologies. _bycon_'s services are tools to enable the APIs.
 
 ##### `bin`
 
-* applications for data access & processing
+* web applications for data access
+
+##### `utils`
+
+* applications and utilities for (Progenetix) data access & processing
 
 ##### `bycon`
 
