@@ -136,6 +136,9 @@ paths:
   genespans_preference_file:
     - config
     - genespans.yaml
+  publications_preference_file:
+    - config
+    - publications.yaml
   handover_types_file:
     - config
     - beacon_handovers.yaml

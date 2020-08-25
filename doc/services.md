@@ -17,6 +17,18 @@ databases
 * <http://progenetix.org/services/collations?filters=PMID&datasetIds=progenetix&method=counts&callback=4445-9938-cbat-9891-kllt>
 
 
+#### _publications_
+
+* provides access to information about data "subsets" in the Progenetix project
+databases
+  - typically aggregations of samples sharing an ontology code (e.g. NCIT) or 
+  external identifier (e.g. PMID)
+
+##### Examples
+
+* <http://progenetix.org/cgi/bycon/bin/publications.py?debug=1&filters=PMID,genomes:&gt;200,arraymap:&gt;1&method=counts>
+* <http://progenetix.org/cgi/bycon/bin/publications.py?filters=PMID:22824167&filterPrecision=exact&method=details>
+
 #### _cytomapper_
 
 * provides mappings from genome coordinates to cytobands an vice versa

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3
 
 from os import environ as environ
 from os import path as path
@@ -13,6 +13,7 @@ from bin.cytomapper import cytomapper
 from bin.byconplus import byconplus
 from bin.genespans import genespans
 from bin.collations import collations
+from bin.publications import publications
 
 """podmd
 The `services` application deparses a request URI and calls the respective
@@ -39,7 +40,8 @@ def main():
         "cytomapper": cytomapper,
         "byconplus": byconplus,
         "genespans": genespans,
-        "collations": collations
+        "collations": collations,
+        "publications": publications
     }
 
     url_comps = urlparse( environ.get('REQUEST_URI') )
