@@ -19,15 +19,6 @@ podmd"""
 ################################################################################
 ################################################################################
 
-def _get_args():
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--filters", help="prefixed filter values, comma concatenated")
-    args = parser.parse_args()
-
-    return args
-
-################################################################################
 
 def main():
 
@@ -42,7 +33,6 @@ def biosamples():
 
     byc = {
         "config": config,
-        "args": _get_args(),
         "form_data": cgi_parse_query(),
         "filter_defs": read_filter_definitions( **config[ "paths" ] ),
         "variant_defs": read_yaml_to_object( "variant_definitions_file", **config[ "paths" ] ),
@@ -80,8 +70,8 @@ def biosamples():
     if len(r["errors"]) > 0:
       cgi_print_json_response( byc["form_data"], **r )
 
+    # TODO: shouldn't this be just for one dataset?
     for ds_id in byc[ "dataset_ids" ]:
-
         byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
         query_results_save_handovers( **byc )
         bio_s = [ ]

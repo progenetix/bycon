@@ -24,26 +24,20 @@ def parse_variants( **byc ):
         #     pass
 
     # for debugging
-    args = byc["args"]
-    if "test" in args:
-        if args.test:
-            variant_pars = byc["service_info"][ "sampleAlleleRequests" ][0]
-    if "cytobands" in args:
-        if args.cytobands:
-            variant_pars[ "cytoBands" ] = args.cytobands
-    if "chrobases" in args:
-        if args.chrobases:
-            variant_pars[ "chroBases" ] = args.chrobases
-    if "genome" in args:
-        if args.genome:
-            variant_pars[ "assemblyId" ] = args.genome
-
-    # TODO: rest_pars shouldn't be used anymore; still for cytomapper...
-    if "rest_pars" in byc:
-        for rp in byc[ "rest_pars" ].keys():
-            if rp in v_p_defs:
-                variant_pars[ rp ] = byc[ "rest_pars" ][ rp ]
-
+    if "args" in byc:
+        args = byc["args"]
+        if "test" in args:
+            if args.test:
+                variant_pars = byc["service_info"][ "sampleAlleleRequests" ][0]
+        if "cytobands" in args:
+            if args.cytobands:
+                variant_pars[ "cytoBands" ] = args.cytobands
+        if "chrobases" in args:
+            if args.chrobases:
+                variant_pars[ "chroBases" ] = args.chrobases
+        if "genome" in args:
+            if args.genome:
+                variant_pars[ "assemblyId" ] = args.genome
 
     # value checks
     v_p_c = { }

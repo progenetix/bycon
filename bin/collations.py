@@ -65,6 +65,7 @@ def collations():
     # data retrieval & response population
     mongo_client = MongoClient( )
 
+    # TODO: shouldn't this be just for one dataset?
     for ds_id in byc["dataset_ids"]:
         mongo_db = mongo_client[ ds_id ]
         for f in byc[ "filters" ]:
