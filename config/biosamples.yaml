@@ -8,7 +8,7 @@ methods:
     - id
     - description
     - biocharacteristics
-    - external_identifiers
+    - external_references
     - provenance
     - info
   biocharacteristics:

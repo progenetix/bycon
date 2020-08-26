@@ -37,7 +37,7 @@ def cgi_print_svg_response(data):
 
 ################################################################################
 
-def cgi_print_json_response(form_data, **response):
+def cgi_print_json_response(form_data, response):
 
     if "callback" in form_data:
         print('Content-Type: text')

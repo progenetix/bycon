@@ -68,7 +68,7 @@ def biosamples():
     if len(byc[ "dataset_ids" ]) < 1:
       r["errors"].append( "No `datasetIds` parameter provided." )
     if len(r["errors"]) > 0:
-      cgi_print_json_response( byc["form_data"], **r )
+      cgi_print_json_response( byc["form_data"], r )
 
     # TODO: shouldn't this be just for one dataset?
     for ds_id in byc[ "dataset_ids" ]:
@@ -86,7 +86,13 @@ def biosamples():
             bio_s.append( s )
         r["data"]["biosamples"].update( { ds_id: bio_s } )
 
-    cgi_print_json_response( byc["form_data"], **r )
+    # TODO: legacy hack here for simple list response; remove after adjusting progenetix-next
+    if "do" in byc["form_data"]:
+        do = byc["form_data"].getvalue("do")
+        if "biosamplesdata" in do:
+            cgi_print_json_response( byc["form_data"], r["data"]["biosamples"][ byc[ "dataset_ids" ][0] ] )
+
+    cgi_print_json_response( byc["form_data"], r )
 
 ################################################################################
 ################################################################################

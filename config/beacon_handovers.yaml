@@ -11,7 +11,8 @@ h->o_types:
     label: "Biosamples"
     description: "retrieve data of the biosamples matched by the query"
     h->o_key: 'bs._id'
-    script_path_web: '/cgi-bin/beacondeliver.cgi'
+    # script_path_web: '/cgi-bin/beacondeliver.cgi'
+    script_path_web: '/services/biosamples'
   individualsdata:
     id: 'pgx:handover:individualsdata'
     label: "Individuals"

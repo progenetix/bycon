@@ -91,7 +91,7 @@ def collations():
     mongo_client.close( )
  
     # response
-    cgi_print_json_response( byc["form_data"], **r )
+    cgi_print_json_response( byc["form_data"], r )
 
 ################################################################################
 ################################################################################

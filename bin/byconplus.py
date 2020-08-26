@@ -88,7 +88,7 @@ def byconplus():
     byc.update( { "dataset_responses": collect_dataset_responses(**byc) } )
     beacon_response = create_beacon_response(**byc)
     
-    cgi_print_json_response( byc["form_data"], **beacon_response )
+    cgi_print_json_response( byc["form_data"], beacon_response )
 
 ################################################################################
 ################################################################################
