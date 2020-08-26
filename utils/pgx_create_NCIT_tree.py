@@ -21,6 +21,10 @@ def main():
     This app starts out by creating the "old style" tab-indented tree file from
     Protégé C&P Neoplasn Core exports (file for labels, file for codes).
 
+    #### Source:
+
+    * <http://www.obofoundry.org/ontology/ncit.html>
+
     end_podmd"""
 
     with open( path.join( path.abspath( dir_path ), '..', "config", "defaults.yaml" ) ) as cf:
