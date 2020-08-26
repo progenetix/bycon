@@ -133,6 +133,9 @@ def update_queries_from_filters( queries, **byc ):
 
 def update_queries_from_endpoints( queries, **byc ):
 
+    if not "endpoint_pars" in byc:
+        return queries
+
     if len(byc["endpoint_pars"]) < 1:
         return queries
 

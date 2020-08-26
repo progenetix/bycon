@@ -36,7 +36,6 @@ def main():
     # input & definitions
     byc = {
         "config": config,
-        "get_filters": True,
         "filter_defs": read_filter_definitions( **config[ "paths" ] ),
         "datasets_info": read_yaml_with_key_to_object( "beacon_datasets_file", "datasets", **config[ "paths" ] )
     }

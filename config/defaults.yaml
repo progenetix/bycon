@@ -130,6 +130,9 @@ paths:
   beacon_datasets_file:
     - config
     - beacon_datasets.yaml
+  biosamples_preference_file:
+    - config
+    - biosamples.yaml
   collations_preference_file:
     - config
     - collations.yaml

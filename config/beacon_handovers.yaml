@@ -32,8 +32,8 @@ h->o_types:
     script_path_web: '/cgi-bin/beacondeliver.cgi'
   progenetixtools:
     id: 'pgx:handover:progenetixtools'
-    label: "Progenetix Interface"
-    description: "hand the data over to the Progenetix interface for visualization and additional information"
+    label: "Progenetix Legacy Interface"
+    description: "hand the data over to the old Progenetix interface for visualization and additional information"
     h->o_key: 'cs._id'
     script_path_web: '/cgi-bin/pgx_process.cgi'
     remove_subdomain: True

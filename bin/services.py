@@ -14,6 +14,7 @@ from bin.byconplus import byconplus
 from bin.genespans import genespans
 from bin.collations import collations
 from bin.publications import publications
+from bin.biosamples import biosamples
 
 """podmd
 The `services` application deparses a request URI and calls the respective
@@ -37,6 +38,7 @@ podmd"""
 
 def main():
     services = {
+        "biosamples": biosamples,
         "cytomapper": cytomapper,
         "byconplus": byconplus,
         "genespans": genespans,

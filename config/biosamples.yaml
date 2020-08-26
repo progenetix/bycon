@@ -1,0 +1,18 @@
+defaults:
+  dataset_ids:
+    - progenetix
+  method: details
+  response_type: return_biosamples
+methods:
+  details:
+    - id
+    - description
+    - biocharacteristics
+    - external_identifiers
+    - provenance
+    - info
+  biocharacteristics:
+    - id
+    - description
+    - biocharacteristics
+

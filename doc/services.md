@@ -3,6 +3,16 @@
 The _bycon_ environment provides a number of data services which make use of
 resources in the _Progenetix_ environment.
 
+#### _biosamples_
+
+This endpoint is mostly aimed at providing _biosamples_ handover functionality. 
+However, the app uses the same query processing mechanism as the main _byconplus_
+application.
+
+##### Examples
+
+* <http://progenetix.org/services/biosamples?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResonses=ALL&requestType=null&referenceName=null&filterLogic=OR&filters=NCIT:C7376&filters=NCIT:C45665&filters=NCIT:C45655&filters=NCIT:C45655>
+
 #### _collations_
 
 * provides access to information about data "subsets" in the Progenetix project
@@ -15,7 +25,6 @@ databases
 * <https://progenetix.org/services/collations?filters=NCIT>
 * <http://progenetix.org/cgi-bin/bycon/bin/collations.py?filters=NCIT&datasetIds=progenetix&method=counts>
 * <http://progenetix.org/services/collations?filters=PMID&datasetIds=progenetix&method=counts&callback=4445-9938-cbat-9891-kllt>
-
 
 #### _publications_
 
@@ -40,7 +49,6 @@ of genome coordinates
     - `7:23028447-45000000`
     - `X:99202660`
 * a different `assemblyId` then the assumed _GRCh38_ default can be provided
-
 
 ##### Examples
 
