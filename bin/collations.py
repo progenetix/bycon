@@ -52,6 +52,11 @@ def collations():
         if m in these_prefs["methods"].keys():
             byc["method"] = m
 
+    # the method keys can be overriden with "deliveryKeys"
+    d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
+    if len(d_k) < 1:
+        d_k = these_prefs["methods"][ byc["method"] ]
+
     byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
     byc.update( { "filters": parse_filters( **byc ) } )
 
@@ -76,7 +81,7 @@ def collations():
             mongo_coll = mongo_db[ c ]
             for subset in mongo_coll.find( query ):
                 s = { }
-                for k in these_prefs["methods"][ byc["method"] ]:
+                for k in d_k:
                     # TODO: harmless hack
                     if k in subset.keys():
                         if k == "count":

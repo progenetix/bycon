@@ -53,6 +53,11 @@ def publications():
         if m in these_prefs["methods"].keys():
             byc["method"] = m
 
+    # the method keys can be overriden with "deliveryKeys"
+    d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
+    if len(d_k) < 1:
+        d_k = these_prefs["methods"][ byc["method"] ]
+
     byc.update( { "filter_flags": get_filter_flags( **byc ) } )
     byc.update( { "filters": parse_filters( **byc ) } )
 
@@ -75,7 +80,7 @@ def publications():
     mongo_coll = mongo_client[ config["info_db"] ][ "publications" ]
     for pub in mongo_coll.find( query ):
         s = { }
-        for k in these_prefs["methods"][ byc["method"] ]:
+        for k in d_k:
             # TODO: harmless hack
             if k in pub.keys():
                 if k == "counts":
@@ -97,7 +102,7 @@ def publications():
     mongo_client.close( )
  
     # response
-    cgi_print_json_response( byc["form_data"], **r )
+    cgi_print_json_response( byc["form_data"], r )
 
 ################################################################################
 ################################################################################

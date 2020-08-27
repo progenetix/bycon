@@ -65,7 +65,7 @@ def deliveries():
 
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
-    d_k = _get_delivery_keys( **byc )
+    d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
 
     if e:
         r["errors"].append( e )
@@ -85,20 +85,6 @@ def deliveries():
             r["data"].update( { scope: h_o_d })
 
     cgi_print_json_response( byc["form_data"], r )
-
-################################################################################
-################################################################################
-
-def _get_delivery_keys( **byc ):
-
-    d_k = [ ]
-    if "deliveryKeys" in byc["form_data"]:
-        d = byc["form_data"].getlist('deliveryKeys')
-        if len(d) > 0:
-            d_k = ','.join(d)
-            d_k = d_k.split(',')
-
-    return d_k
 
 ################################################################################
 ################################################################################

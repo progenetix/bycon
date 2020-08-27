@@ -15,7 +15,7 @@ def parse_variants( **byc ):
         if "default" in v_p_defs[ p_k ]:
             v_default = v_p_defs[ p_k ][ "default" ]
         if "array" in v_p_defs[ p_k ]["type"]:
-            variant_pars[ p_k ] = byc["form_data"].getlist(p_k)
+            variant_pars[ p_k ] = form_return_listvalue( byc["form_data"], p_k )
         else:
             variant_pars[ p_k ] = byc["form_data"].getvalue(p_k, v_default)
         if not variant_pars[ p_k ]:

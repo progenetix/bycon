@@ -1,6 +1,7 @@
 import cgi, cgitb
 import re, yaml
 from pymongo import MongoClient
+from .cgi_utils import form_return_listvalue
 
 ################################################################################
 
@@ -13,13 +14,10 @@ def parse_filters( **byc ):
         filters = byc["filters"]
 
     if "form_data" in byc:
-        if len(byc["form_data"]) > 0:
-            f = byc["form_data"].getlist('filters')
-            f = ','.join(f)
-            f = f.split(',')
-            f = _check_filter_values(f, byc["filter_defs"])
-            if len(f) > 0:
-                return f
+        f = form_return_listvalue( byc["form_data"], "filters" )
+        f = _check_filter_values(f, byc["filter_defs"])
+        if len(f) > 0:
+            return f
     
     # for debugging
     if "args" in byc:
@@ -87,12 +85,7 @@ def select_dataset_ids( **byc ):
 
     # different var name & return if provided
     if "form_data" in byc:
-        ds_ids = [ ]
-        if "datasetIds" in byc["form_data"]:
-
-            ds_ids = byc[ "form_data" ].getlist('datasetIds')
-            ds_ids = ','.join(ds_ids)
-            ds_ids = ds_ids.split(',')
+        ds_ids = form_return_listvalue( byc["form_data"], "datasetIds" )
 
         # accessid overrides ... ?
         if "accessid" in byc["form_data"]:

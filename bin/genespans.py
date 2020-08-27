@@ -60,7 +60,7 @@ def genespans():
     else:
         # TODO: value check & response
         r["errors"].append("No geneId value provided!")
-        cgi_print_json_response( byc["form_data"], **r )
+        cgi_print_json_response( byc["form_data"], r )
 
     r["parameters"].update( { "geneId": byc["gene_id"] })
 
@@ -73,7 +73,7 @@ def genespans():
     mongo_client.close( )
  
     # response
-    cgi_print_json_response( byc["form_data"], **r )
+    cgi_print_json_response( byc["form_data"], r )
 
 ################################################################################
 ################################################################################

@@ -19,6 +19,20 @@ def cgi_parse_query():
 
 ################################################################################
 
+def form_return_listvalue( form_data, parameter ):
+
+    l_v = [ ]
+    if len(form_data) > 0:
+        if parameter in form_data:
+            v = form_data.getlist( parameter )
+            if len(v) > 0:
+                l_v  = ','.join(v)
+                l_v  = l_v .split(',')
+
+    return l_v 
+
+################################################################################
+
 def cgi_print_text_response(data):
 
     print('Content-Type: text')
