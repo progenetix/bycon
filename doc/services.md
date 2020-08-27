@@ -3,7 +3,7 @@
 The _bycon_ environment provides a number of data services which make use of
 resources in the _Progenetix_ environment.
 
-#### _biosamples_
+### _biosamples_
 
 This endpoint is mostly aimed at providing _biosamples_ handover functionality. 
 However, the app uses the same query processing mechanism as the main _byconplus_
@@ -13,7 +13,7 @@ application.
 
 * <http://progenetix.org/services/biosamples?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResonses=ALL&requestType=null&referenceName=null&filterLogic=OR&filters=NCIT:C7376&filters=NCIT:C45665&filters=NCIT:C45655&filters=NCIT:C45655>
 
-#### _collations_
+### _collations_
 
 * provides access to information about data "subsets" in the Progenetix project
 databases
@@ -26,7 +26,7 @@ databases
 * <http://progenetix.org/cgi-bin/bycon/bin/collations.py?filters=NCIT&datasetIds=progenetix&method=counts>
 * <http://progenetix.org/services/collations?filters=PMID&datasetIds=progenetix&method=counts&callback=4445-9938-cbat-9891-kllt>
 
-#### _deliveries_
+### _deliveries_
 
 * a simple app which only provides data deliveries from handover objects
 * requires a (locally existing) `accessid` parameter
@@ -69,7 +69,7 @@ The response in this example was a `biosamples` dataset (excerpt):
 }
 ```
 
-#### _publications_
+### _publications_
 
 * queries the _publications_ database & returns concise or extended information
 about th ematched articles
@@ -80,7 +80,7 @@ about th ematched articles
 * <http://progenetix.org/cgi/bycon/bin/publications.py?filters=PMID,genomes:&gt;200,arraymap:&gt;1&method=counts>
 * <http://progenetix.org/cgi/bycon/bin/publications.py?filters=PMID:22824167&filterPrecision=exact&method=details>
 
-#### _cytomapper_
+### _cytomapper_
 
 * provides mappings from genome coordinates to cytobands an vice versa
 * can be used e.g in Beacon interface implementations, to facilitate the input
@@ -99,7 +99,7 @@ of genome coordinates
 * <https://progenetix.org/services/cytomapper?cytoBands=8q21q24.1&assemblyId=hg18>
 * <https://progenetix.org/services/cytomapper?chroBases=17:800000-24326000>
 
-#### _genespans_
+### _genespans_
 
 * genomic mappings of gene coordinats
 * initially limited to _GRCh38_ and overall CDS extension
