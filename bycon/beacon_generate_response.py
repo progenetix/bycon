@@ -148,13 +148,16 @@ def collect_dataset_responses(**byc):
         query_results_save_handovers( **byc )
 
         if byc["response_type"] == "return_biosamples":
-            bios = handover_return_data( byc["query_results"]["bs._id"][ "id" ], **byc )
-            dataset_responses.append( { ds_id: bios } )
+            access_id = byc["query_results"]["bs._id"][ "id" ]
         elif byc["response_type"] == "return_variants":
-            vs = handover_return_data( byc["query_results"]["vs._id"][ "id" ], **byc )
-            dataset_responses.append( { ds_id: vs } )
+            access_id = byc["query_results"]["vs._id"][ "id" ]
         else:
             dataset_responses.append( create_dataset_response( ds_id, **byc ) )
+            continue
+
+        h_o, e = retrieve_handover( access_id, **byc )
+        h_o_d, e = handover_return_data( h_o, e )
+        dataset_responses.append( { ds_id: h_o_d } )
 
     return dataset_responses
 

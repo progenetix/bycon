@@ -74,8 +74,14 @@ def biosamples():
     for ds_id in byc[ "dataset_ids" ]:
         byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
         query_results_save_handovers( **byc )
+        access_id = byc["query_results"]["bs._id"][ "id" ]
         bio_s = [ ]
-        for b_s in handover_return_data( byc["query_results"]["bs._id"][ "id" ], **byc ):
+        h_o, e = retrieve_handover( access_id, **byc )
+        h_o_d, e = handover_return_data( h_o, e )
+        if e:
+            r["errors"].append( e )
+            continue
+        for b_s in h_o_d:
             s = { }
             for k in these_prefs["methods"][ byc["method"] ]:
                 # TODO: harmless hack

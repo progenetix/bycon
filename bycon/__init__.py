@@ -18,6 +18,7 @@ from .beacon_parse_endpoints import beacon_get_endpoint
 from .beacon_parse_endpoints import parse_endpoints
 from .beacon_process_handovers import dataset_response_add_handovers
 from .beacon_process_handovers import handover_return_data
+from .beacon_process_handovers import retrieve_handover
 from .beacon_process_handovers import query_results_save_handovers
 from .beacon_process_specs import read_bycon_config
 from .beacon_process_specs import read_yaml_to_object

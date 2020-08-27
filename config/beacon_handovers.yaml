@@ -11,19 +11,21 @@ h->o_types:
     label: "Biosamples"
     description: "retrieve data of the biosamples matched by the query"
     h->o_key: 'bs._id'
-    # script_path_web: '/cgi-bin/beacondeliver.cgi'
+    # TODO: switch to /services/deliveries only w/ accessid (self scoping)
     script_path_web: '/services/biosamples'
   individualsdata:
     id: 'pgx:handover:individualsdata'
     label: "Individuals"
     description: "retrieve data of the individuals matched by the query"
     h->o_key: 'is._id'
+    # TODO: switch to /services/deliveries only w/ accessid (self scoping)
     script_path_web: '/cgi-bin/beacondeliver.cgi'
   variantsdata:
     id: 'pgx:handover:variantsdata'
     label: "Variants"
     description: "retrieve variants matched by the query"
     h->o_key: 'vs._id'
+    # TODO: switch to /services/deliveries only w/ accessid (self scoping)
     script_path_web: '/cgi-bin/beacondeliver.cgi'
   callsetsvariants:
     id: 'pgx:handover:callsetsvariants'
@@ -33,7 +35,7 @@ h->o_types:
     script_path_web: '/cgi-bin/beacondeliver.cgi'
   progenetixtools:
     id: 'pgx:handover:progenetixtools'
-    label: "Progenetix Legacy Interface"
+    label: "Legacy Interface"
     description: "hand the data over to the old Progenetix interface for visualization and additional information"
     h->o_key: 'cs._id'
     script_path_web: '/cgi-bin/pgx_process.cgi'

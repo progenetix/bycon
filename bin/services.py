@@ -11,6 +11,7 @@ sys.path.append(path.join(path.abspath(dir_path), '..'))
 
 from bin.cytomapper import cytomapper
 from bin.byconplus import byconplus
+from bin.deliveries import deliveries
 from bin.genespans import genespans
 from bin.collations import collations
 from bin.publications import publications
@@ -40,6 +41,7 @@ def main():
     services = {
         "biosamples": biosamples,
         "cytomapper": cytomapper,
+        "deliveries": deliveries,
         "byconplus": byconplus,
         "genespans": genespans,
         "collations": collations,
