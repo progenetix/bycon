@@ -12,7 +12,7 @@ h->o_types:
     description: "retrieve data of the biosamples matched by the query"
     h->o_key: 'bs._id'
     # TODO: switch to /services/deliveries only w/ accessid (self scoping)
-    script_path_web: '/services/biosamples'
+    script_path_web: '/services/deliveries'
   individualsdata:
     id: 'pgx:handover:individualsdata'
     label: "Individuals"

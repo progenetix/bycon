@@ -43,9 +43,9 @@ def main():
         "cytomapper": cytomapper,
         "deliveries": deliveries,
         "byconplus": byconplus,
+        "publications": publications,
         "genespans": genespans,
-        "collations": collations,
-        "publications": publications
+        "collations": collations
     }
 
     url_comps = urlparse( environ.get('REQUEST_URI') )

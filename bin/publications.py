@@ -6,6 +6,7 @@ from os import path as path
 from os import environ
 import sys, os, datetime, argparse
 from pymongo import MongoClient
+from operator import itemgetter
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
@@ -56,7 +57,8 @@ def publications():
     # the method keys can be overriden with "deliveryKeys"
     d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
     if len(d_k) < 1:
-        d_k = these_prefs["methods"][ byc["method"] ]
+        if not "all" in byc["method"]:
+            d_k = these_prefs["methods"][ byc["method"] ]
 
     byc.update( { "filter_flags": get_filter_flags( **byc ) } )
     byc.update( { "filters": parse_filters( **byc ) } )
@@ -70,36 +72,55 @@ def publications():
         r["parameters"].update( { p: byc[ p ] } )
 
     # data retrieval & response population
-
- 
     query, error = _create_filters_query( **byc )
     if len(error) > 1:
         r["errors"].append( error )
 
     mongo_client = MongoClient( )
     mongo_coll = mongo_client[ config["info_db"] ][ "publications" ]
-    for pub in mongo_coll.find( query ):
+
+    p_re = re.compile( byc["filter_defs"]["PMID"]["pattern"] )
+
+    p_l = [ ]
+    for pub in mongo_coll.find( query, { "_id": 0 } ):
         s = { }
-        for k in d_k:
-            # TODO: harmless hack
-            if k in pub.keys():
-                if k == "counts":
-                    s[ k ] = { }
-                    for c in pub[ k ]:
-                        if pub[ k ][ c ]:
-                            try:
-                                s[ k ][ c ] = int(float(pub[ k ][ c ]))
-                            except:
+        if len(d_k) < 1:
+            s = pub
+        else:
+            for k in d_k:
+                # TODO: harmless hack
+                if k in pub.keys():
+                    if k == "counts":
+                        s[ k ] = { }
+                        for c in pub[ k ]:
+                            if pub[ k ][ c ]:
+                                try:
+                                    s[ k ][ c ] = int(float(pub[ k ][ c ]))
+                                except:
+                                    s[ k ][ c ] = 0
+                            else:
                                 s[ k ][ c ] = 0
-                        else:
-                            s[ k ][ c ] = 0
+                    else:
+                        s[ k ] = pub[ k ]
                 else:
-                    s[ k ] = pub[ k ]
-            else:
-                s[ k ] = None
-        r["data"]["publications"].append( s )
+                    s[ k ] = None
+        try:
+            s_v = p_re.match(s[ "id" ]).group(2)
+            s[ "sortid" ] = int(s_v)
+        except:
+            s[ "sortid" ] = -1
+
+        p_l.append( s )
+
+    r["data"]["publications"] = sorted(p_l, key=itemgetter('sortid'), reverse = True)
 
     mongo_client.close( )
+
+    # TODO: testing only or general option?
+    if "responseFormat" in byc["form_data"]:
+        r_f = byc["form_data"].getvalue("responseFormat")
+        if "simplelist" in r_f:
+            r = r["data"]["publications"]
  
     # response
     cgi_print_json_response( byc["form_data"], r )

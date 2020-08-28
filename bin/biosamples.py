@@ -19,7 +19,6 @@ podmd"""
 ################################################################################
 ################################################################################
 
-
 def main():
 
     biosamples()
@@ -27,7 +26,7 @@ def main():
 ################################################################################
 
 def biosamples():
-    
+
     config = read_bycon_config( path.abspath( dir_path ) )
     these_prefs = read_yaml_to_object( "biosamples_preference_file", **config[ "paths" ] )
 
@@ -57,46 +56,51 @@ def biosamples():
     # response prototype
     r = config["response_object_schema"]
 
-    # saving the parameters to the response
-    for p in ["dataset_ids", "method", "filters", "variant_pars"]:
-        r["parameters"].update( { p: byc[ p ] } )
-    r["data"]["biosamples"] = { }
-
     # TODO: move somewhere
     if not byc[ "queries" ].keys():
       r["errors"].append( "No (correct) query parameters were provided." )
     if len(byc[ "dataset_ids" ]) < 1:
       r["errors"].append( "No `datasetIds` parameter provided." )
+    if len(byc[ "dataset_ids" ]) > 1:
+      r["errors"].append( "More than 1 `datasetIds` value was provided." )
     if len(r["errors"]) > 0:
       cgi_print_json_response( byc["form_data"], r )
 
-    # TODO: shouldn't this be just for one dataset?
-    for ds_id in byc[ "dataset_ids" ]:
-        byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
-        query_results_save_handovers( **byc )
-        access_id = byc["query_results"]["bs._id"][ "id" ]
-        bio_s = [ ]
-        h_o, e = retrieve_handover( access_id, **byc )
-        h_o_d, e = handover_return_data( h_o, e )
-        if e:
-            r["errors"].append( e )
-            continue
-        for b_s in h_o_d:
-            s = { }
-            for k in these_prefs["methods"][ byc["method"] ]:
-                # TODO: harmless hack
-                if k in b_s.keys():
-                    s[ k ] = b_s[ k ]
-                else:
-                    s[ k ] = None
-            bio_s.append( s )
-        r["data"]["biosamples"].update( { ds_id: bio_s } )
+    ds_id = byc[ "dataset_ids" ][ 0 ]
 
-    # TODO: legacy hack here for simple list response; remove after adjusting progenetix-next
-    if "do" in byc["form_data"]:
-        do = byc["form_data"].getvalue("do")
-        if "biosamplesdata" in do:
-            cgi_print_json_response( byc["form_data"], r["data"]["biosamples"][ byc[ "dataset_ids" ][0] ] )
+    # saving the parameters to the response
+    for p in ["method", "filters", "variant_pars"]:
+        r["parameters"].update( { p: byc[ p ] } )
+    r["parameters"].update( { "dataset": ds_id } )
+    r["data"]["biosamples"] = [ ]
+
+    byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
+    query_results_save_handovers( **byc )
+    access_id = byc["query_results"]["bs._id"][ "id" ]
+    bio_s = [ ]
+    h_o, e = retrieve_handover( access_id, **byc )
+    h_o_d, e = handover_return_data( h_o, e )
+    if e:
+        r["errors"].append( e )
+
+    if len(r["errors"]) > 0:
+      cgi_print_json_response( byc["form_data"], r )
+
+    for b_s in h_o_d:
+        s = { }
+        for k in these_prefs["methods"][ byc["method"] ]:
+            # TODO: harmless hack
+            if k in b_s.keys():
+                s[ k ] = b_s[ k ]
+            else:
+                s[ k ] = None
+        r["data"]["biosamples"].append( s )
+
+    # TODO: testing only or general option?
+    if "responseFormat" in byc["form_data"]:
+        r_f = byc["form_data"].getvalue("responseFormat")
+        if "simplelist" in r_f:
+            r = r["data"]["biosamples"]
 
     cgi_print_json_response( byc["form_data"], r )
 

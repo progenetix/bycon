@@ -3,14 +3,17 @@ defaults:
   filters:
     - PMID
 methods:
+  all: [ ] # forces empty list which is interpreted to use all
   counts:
     - id
     - counts
   concise:
     - id
     - label
-    - year
+    - journal
     - counts
+    - authors
+    - title
   details:
     - id
     - label
@@ -29,7 +32,7 @@ filter_defs:
     scopes:
       publications:
         default: 1
-    pattern: '^(PMID)|(pubmed)(\:\d+?)?$'
+    pattern: '^(PMID)?\:(\d+?)?$'
     examples:
       - 'PMID:28966033'
       - 'PMID:9405679'

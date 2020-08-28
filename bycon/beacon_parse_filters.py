@@ -1,7 +1,7 @@
 import cgi, cgitb
 import re, yaml
 from pymongo import MongoClient
-from .cgi_utils import form_return_listvalue
+from .cgi_utils import *
 
 ################################################################################
 
@@ -95,7 +95,9 @@ def select_dataset_ids( **byc ):
             ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
             h_o = ho_coll.find_one( { "id": accessid } )
             # TODO: catch error for mismatch
-            ds_ids = [ h_o["source_db"] ]
+            if h_o:
+                if "source_db" in h_o:
+                    ds_ids = [ h_o["source_db"] ]
 
         if len(ds_ids) > 0:
             return ds_ids

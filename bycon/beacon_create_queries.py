@@ -4,11 +4,7 @@ from os import path as path
 from pymongo import MongoClient
 import sys
 
-# local
-dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.abspath(dir_path))
-
-import beacon_parse_variants
+from .beacon_parse_variants import *
 
 ################################################################################
 
@@ -46,18 +42,19 @@ def update_queries_from_hoid( queries, **byc):
         ho_db = ho_client[ byc["config"]["info_db"] ]
         ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
         h_o = ho_coll.find_one( { "id": accessid } )
-        # TODO: catch error
-        t_k = h_o["target_key"]
-        t_v = h_o["target_values"]
-        c_n = h_o["target_collection"]
-        t_db = h_o["source_db"]
-        if not t_db == byc["dataset_ids"][0]:
-            return prefetch
-        h_o_q = { t_k: { '$in': t_v } }
-        if c_n in queries:
-            queries.update( { c_n: { '$and': [ h_o_q, queries[ c_n ] ] } } )
-        else:
-            queries.update( { c_n: h_o_q } )
+        # accessid overrides ... ?
+        if h_o:
+            t_k = h_o["target_key"]
+            t_v = h_o["target_values"]
+            c_n = h_o["target_collection"]
+            t_db = h_o["source_db"]
+            if not t_db == byc["dataset_ids"][0]:
+                return queries
+            h_o_q = { t_k: { '$in': t_v } }
+            if c_n in queries:
+                queries.update( { c_n: { '$and': [ h_o_q, queries[ c_n ] ] } } )
+            else:
+                queries.update( { c_n: h_o_q } )
 
     return queries
 
@@ -163,7 +160,15 @@ def update_queries_from_variants( queries, **byc ):
         query_lists[c_n].append( queries[c_n] )
 
     v_q_method = "create_"+byc["variant_request_type"]+"_query"
-    v_q = getattr( beacon_parse_variants, v_q_method )( byc["variant_request_type"], byc["variant_pars"] )
+
+    if "variantCNVrequest" in byc["variant_request_type"]:
+        v_q = create_variantCNVrequest_query( byc["variant_request_type"], byc["variant_pars"] )
+    elif "variantAlleleRequest" in byc["variant_request_type"]:
+        v_q = create_variantAlleleRequest_query( byc["variant_request_type"], byc["variant_pars"] )
+    elif "variantRangeRequest" in byc["variant_request_type"]:
+        v_q = create_variantRangeRequest_query( byc["variant_request_type"], byc["variant_pars"] )
+
+    # v_q = getattr( beacon_parse_variants, v_q_method )( byc["variant_request_type"], byc["variant_pars"] ) => somehow erroring w/ "beacon_parse_variants not loaded ..."
 
     if len(query_lists[c_n]) > 0:
         v_q = { '$and': query_lists[c_n].append(v_q) }

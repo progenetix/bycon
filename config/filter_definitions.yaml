@@ -121,7 +121,7 @@ PMID:
   scopes:
     biosamples:
       default: 1
-  pattern: '^(PMID)|(pubmed)(\:\d+?)?$'
+  pattern: '^(PMID)?\:(\d+?)?$'
   examples:
     - 'PMID:28966033'
     - 'PMID:9405679'

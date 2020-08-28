@@ -2,7 +2,9 @@ import cgi, cgitb
 import re, yaml
 import logging
 import sys
-  
+
+from .cgi_utils import *
+
 ################################################################################
 
 def parse_variants( **byc ):
@@ -176,7 +178,6 @@ def create_variantCNVrequest_query(variant_request_type, variant_pars):
 def create_variantRangeRequest_query(variant_request_type, variant_pars):
 
     # TODO
-
     if variant_request_type != "variantRangeRequest":
         return
 
