@@ -25,6 +25,8 @@ def form_return_listvalue( form_data, parameter ):
     if len(form_data) > 0:
         if parameter in form_data:
             v = form_data.getlist( parameter )
+            if "null" in v:
+                v.remove("null")
             if len(v) > 0:
                 l_v  = ','.join(v)
                 l_v  = l_v .split(',')
