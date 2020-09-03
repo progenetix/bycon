@@ -1,3 +1,4 @@
+<!--podmd-->
 ## Bycon _services_
 
 The _bycon_ environment provides a number of data services which make use of
@@ -190,3 +191,4 @@ format. Here, the data is a dictionary/object with a single key (`genes`):
     "warnings": []
 }
 ```
+<!--/podmd-->
