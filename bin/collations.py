@@ -27,14 +27,14 @@ podmd"""
 
 def main():
 
-    collations()
+    collations("collations")
     
 ################################################################################
 
-def collations():
+def collations(service):
 
     config = read_bycon_config( path.abspath( dir_path ) )
-    these_prefs = read_yaml_to_object( "collations_preference_file", **config[ "paths" ] )
+    these_prefs = read_service_prefs( service, dir_path )
 
     byc = {
         "config": config,
@@ -80,12 +80,11 @@ def collations():
     # data retrieval & response population
     mongo_client = MongoClient( )
     mongo_db = mongo_client[ ds_id ]
+    r["data"].update( { "subsets": [ ] } )
     for f in byc[ "filters" ]:
         query = { "id": re.compile(r'^'+f ) }
         pre = re.split('-|:', f)[0]
         c =  byc["filter_defs"][ pre ]["collation"]
-        r["data"].update( { ds_id: [ ] } )
-        # r["data"].update( { "collations": [ ] } )
         mongo_coll = mongo_db[ c ]
         for subset in mongo_coll.find( query ):
             s = { }
@@ -98,7 +97,7 @@ def collations():
                         s[ k ] = subset[ k ]
                 else:
                     s[ k ] = None
-            r["data"][ds_id].append( s )
+            r["data"]["subsets"].append( s )
             # r["data"]["collations"].append( s )
     mongo_client.close( )
 
@@ -106,8 +105,8 @@ def collations():
     if "responseFormat" in byc["form_data"]:
         r_f = byc["form_data"].getvalue("responseFormat")
         if "simplelist" in r_f:
-            r = r["data"][ds_id]
-            # r = r["data"]["collations"]
+            r = r["data"]["subsets"]
+ 
     # response
     cgi_print_json_response( byc["form_data"], r )
 

@@ -29,14 +29,14 @@ podmd"""
 
 def main():
 
-    publications()
+    publications("publications")
     
 ################################################################################
 
-def publications():
+def publications(service):
 
     config = read_bycon_config( path.abspath( dir_path ) )
-    these_prefs = read_yaml_to_object( "publications_preference_file", **config[ "paths" ] )
+    these_prefs = read_service_prefs( service, dir_path )
 
     byc = {
         "config": config,
@@ -65,7 +65,7 @@ def publications():
 
     # response prototype
     r = config["response_object_schema"]
-    r["data"].update({ "publications": [ ] })
+    r["data"].update({ service: [ ] })
 
     # saving the parameters to the response
     for p in ["method", "filters"]:
@@ -112,7 +112,7 @@ def publications():
 
         p_l.append( s )
 
-    r["data"]["publications"] = sorted(p_l, key=itemgetter('sortid'), reverse = True)
+    r["data"][ service ] = sorted(p_l, key=itemgetter('sortid'), reverse = True)
 
     mongo_client.close( )
 
@@ -120,7 +120,7 @@ def publications():
     if "responseFormat" in byc["form_data"]:
         r_f = byc["form_data"].getvalue("responseFormat")
         if "simplelist" in r_f:
-            r = r["data"]["publications"]
+            r = r["data"][ service ]
  
     # response
     cgi_print_json_response( byc["form_data"], r )

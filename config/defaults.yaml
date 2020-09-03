@@ -139,6 +139,9 @@ paths:
   genespans_preference_file:
     - config
     - genespans.yaml
+  geolocations_preference_file:
+    - config
+    - geolocations.yaml
   publications_preference_file:
     - config
     - publications.yaml

@@ -130,13 +130,13 @@ def _get_args():
 
 def main():
 
-    cytomapper()
+    cytomapper("cytomapper")
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-def cytomapper():
+def cytomapper(service):
     
     config = read_bycon_config( path.abspath( dir_path ) )
     config[ "paths" ][ "genomes" ] = path.join( config[ "paths" ][ "module_root" ], "rsrc", "genomes" )
@@ -302,7 +302,7 @@ def _cytobands_label( cytobands ):
 ################################################################################
 
 
-def _print_terminal_response(args, **r):
+def _print_terminal_response(args, r):
 
     if sys.stdin.isatty():
         if len(r[ "errors" ]) > 0:
@@ -321,7 +321,7 @@ def _print_terminal_response(args, **r):
 ################################################################################
 ################################################################################
 
-def _print_text_response(form_data, **r):
+def _print_text_response(form_data, r):
 
     if "text" in form_data:
 

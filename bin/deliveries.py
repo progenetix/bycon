@@ -40,11 +40,11 @@ podmd"""
 
 def main():
 
-    deliveries()
+    deliveries("deliveries")
     
 ################################################################################
 
-def deliveries():
+def deliveries(service):
     
     config = read_bycon_config( path.abspath( dir_path ) )
 

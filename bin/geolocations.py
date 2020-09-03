@@ -12,7 +12,7 @@ from bycon.cgi_utils import *
 from bycon.beacon_process_specs import *
 
 """podmd
-* <https://progenetix.org/services/genespans?geneId=CDKN2>
+* <https://progenetix.org/services/geolocations?city=zurich>
 podmd"""
 
 ################################################################################
@@ -21,11 +21,11 @@ podmd"""
 
 def main():
 
-    genespans("genespans")
+    geolocations("geolocations")
     
 ################################################################################
 
-def genespans(service):
+def geolocations(service):
 
     config = read_bycon_config( os.path.abspath( dir_path ) )
     these_prefs = read_service_prefs( service, dir_path )
@@ -36,31 +36,20 @@ def genespans(service):
     r = config["response_object_schema"]
     r["data"].update({ service: [ ] })
 
-    assembly_id = defs["assembly_id"]
-    if "assemblyId" in form_data:
-        aid = form_data.getvalue("assemblyId")
-        if aid in these_prefs["assemblyId"]:
-            assembly_id = aid
-        else:
-            assembly_id = defs["assembly_id"]
-            r["warnings"].append("{} is not supported; fallback {} is being used!".format(aid, assembly_id))
-    r["parameters"].update( { "assemblyId": assembly_id })
-
-    if "geneId" in form_data:
-        gene_id = form_data.getvalue("geneId")
+    if "city" in form_data:
+        city = form_data.getvalue("city")
     else:
         # TODO: value check & response
-        r["errors"].append("No geneId value provided!")
+        r["errors"].append("No city value provided!")
         cgi_print_json_response( form_data, r )
 
-    r["parameters"].update( { "geneId": gene_id })
+    r["parameters"].update( { "city": city })
 
     # data retrieval & response population
-    # query options may be expanded - current list + sole gene_id is a bit odd
-    # TODO: positional query
+    # TODO: coordinates query
     q_list = [ ]
     for q_f in defs["query_fields"]:
-        q_list.append( { q_f: re.compile( r'^'+gene_id, re.IGNORECASE ) } )
+        q_list.append( { q_f: re.compile( r'^'+city, re.IGNORECASE ) } )
     if len(q_list) > 1:
         query = { '$and': q_list }
     else:
@@ -68,8 +57,8 @@ def genespans(service):
 
     mongo_client = MongoClient( )
     g_coll = mongo_client[ defs["db"] ][ defs["coll"] ]
-    for g in g_coll.find( query, { '_id': False } ):
-        r["data"][service].append( g )
+    for this in g_coll.find( query, { '_id': False } ):
+        r["data"][ service ].append( this )
     mongo_client.close( )
  
     # response

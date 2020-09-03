@@ -21,14 +21,14 @@ podmd"""
 
 def main():
 
-    biosamples()
+    biosamples("biosamples")
     
 ################################################################################
 
-def biosamples():
+def biosamples(service):
 
     config = read_bycon_config( path.abspath( dir_path ) )
-    these_prefs = read_yaml_to_object( "biosamples_preference_file", **config[ "paths" ] )
+    these_prefs = read_service_prefs( service, dir_path )
 
     byc = {
         "config": config,
@@ -72,7 +72,7 @@ def biosamples():
     for p in ["method", "filters", "variant_pars"]:
         r["parameters"].update( { p: byc[ p ] } )
     r["parameters"].update( { "dataset": ds_id } )
-    r["data"]["biosamples"] = [ ]
+    r["data"][service] = [ ]
 
     byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
     query_results_save_handovers( **byc )
@@ -94,13 +94,13 @@ def biosamples():
                 s[ k ] = b_s[ k ]
             else:
                 s[ k ] = None
-        r["data"]["biosamples"].append( s )
+        r["data"][service].append( s )
 
     # TODO: testing only or general option?
     if "responseFormat" in byc["form_data"]:
         r_f = byc["form_data"].getvalue("responseFormat")
         if "simplelist" in r_f:
-            r = r["data"]["biosamples"]
+            r = r["data"][service]
 
     cgi_print_json_response( byc["form_data"], r )
 

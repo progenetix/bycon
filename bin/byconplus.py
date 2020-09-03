@@ -40,11 +40,11 @@ def _get_args():
 
 def main():
 
-    byconplus()
+    byconplus("byconplus")
     
 ################################################################################
 
-def byconplus():
+def byconplus(service):
     
     config = read_bycon_config( path.abspath( dir_path ) )
 

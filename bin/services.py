@@ -14,6 +14,7 @@ from bin.byconplus import byconplus
 from bin.deliveries import deliveries
 from bin.genespans import genespans
 from bin.collations import collations
+from bin.geolocations import geolocations
 from bin.publications import publications
 from bin.biosamples import biosamples
 
@@ -42,6 +43,7 @@ def main():
         "biosamples": biosamples,
         "cytomapper": cytomapper,
         "deliveries": deliveries,
+        "geolocations": geolocations,
         "byconplus": byconplus,
         "publications": publications,
         "genespans": genespans,
@@ -64,7 +66,7 @@ def main():
             f = p_items[ i ]
 
     if f in services.keys():
-        services[f]()
+        services[f](f)
 
 ################################################################################
 ################################################################################
