@@ -87,12 +87,13 @@ def update_queries_from_filters( queries, **byc ):
 
     logic = byc[ "filter_flags" ][ "logic" ]
     precision = byc[ "filter_flags" ][ "precision" ]
- 
+
     for c_n in byc[ "config" ][ "collections" ]:
         query_lists[c_n] = [ ]
         if c_n in queries:
             query_lists[c_n].append( queries[c_n] )
  
+    mongo_client = MongoClient()
     for filterv in byc[ "filters" ]:
         pre = re.split('-|:', filterv)[0]
         if pre in byc["filter_defs"]:
@@ -104,7 +105,25 @@ def update_queries_from_filters( queries, **byc ):
                         if "mongostring" in byc:
                             query_lists[ scope ].append( '{ "'+pre_defs[ "db_key" ]+'": "'+filterv+'" }' )
                         else:
-                            query_lists[ scope ].append( { pre_defs[ "db_key" ]: filterv } )
+                            q_keys = { filterv: 1 }
+
+                            for ds_id in byc["dataset_ids"]:
+                                mongo_coll = mongo_client[ ds_id ][ byc["filter_defs"][pre]["collation"] ]
+                                f_def = mongo_coll.find_one( { "id": filterv })
+                                for c in f_def["child_terms"]:
+                                    if pre in c:
+                                        # print(c)
+                                        q_keys.update({c:1})
+
+                            if len(q_keys.keys()) == 1:
+                                query_lists[ scope ].append( { pre_defs[ "db_key" ]: filterv } )
+                            else:
+                                f_q_l = [ ]
+                                for f_c in q_keys.keys():
+                                    f_q_l.append( { pre_defs[ "db_key" ]: f_c } )
+                                query_lists[ scope ].append( { '$or': f_q_l } )
+                            # exit()
+                            # query_lists[ scope ].append( { pre_defs[ "db_key" ]: filterv } )
                         break
                     else:
                         if "mongostring" in byc:
@@ -123,6 +142,9 @@ def update_queries_from_filters( queries, **byc ):
                 queries[ c_n ] = '{ '+logic+': [ '+','.join(query_lists[c_n])+' ] }'
             else:
                 queries[ c_n ] = { logic: query_lists[c_n] }
+
+    # print(queries)
+
 
     return queries
 

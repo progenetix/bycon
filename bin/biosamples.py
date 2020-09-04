@@ -10,6 +10,7 @@ import sys, os, datetime, argparse
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon import *
+from bycon.beacon_process_specs import *
 
 """podmd
 
@@ -72,7 +73,7 @@ def biosamples(service):
     for p in ["method", "filters", "variant_pars"]:
         r["parameters"].update( { p: byc[ p ] } )
     r["parameters"].update( { "dataset": ds_id } )
-    r["data"][service] = [ ]
+    r["response_type"] = service
 
     byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
     query_results_save_handovers( **byc )
@@ -94,14 +95,9 @@ def biosamples(service):
                 s[ k ] = b_s[ k ]
             else:
                 s[ k ] = None
-        r["data"][service].append( s )
+        r["data"].append( s )
 
-    # TODO: testing only or general option?
-    if "responseFormat" in byc["form_data"]:
-        r_f = byc["form_data"].getvalue("responseFormat")
-        if "simplelist" in r_f:
-            r = r["data"][service]
-
+    r[service+"_count"] = len(r["data"])
     cgi_print_json_response( byc["form_data"], r )
 
 ################################################################################

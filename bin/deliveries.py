@@ -73,23 +73,17 @@ def deliveries(service):
 
     r["parameters"].update( { "collection": h_o["target_collection"] } )
     r["parameters"].update( { "datasetId": h_o["source_db"] } )
-    scope = h_o["target_collection"]
+    r["response_type"] = h_o["target_collection"]
+
     if len(d_k) > 0:
-        r["data"].update( { scope: [ ] } )
         for d in h_o_d:
             d_n = { }
             for k in d_k:
                 if k in d:
                     d_n[ k ] = d[ k ]
-            r["data"][ scope ].append(d_n)
+            r["data"].append(d_n)
     else:
-        r["data"].update( { scope: h_o_d })
-
-    # TODO: testing only or general option?
-    if "responseFormat" in byc["form_data"]:
-        r_f = byc["form_data"].getvalue("responseFormat")
-        if "simplelist" in r_f:
-            r = r["data"][scope]
+        r["data"] = h_o_d
 
     cgi_print_json_response( byc["form_data"], r )
 

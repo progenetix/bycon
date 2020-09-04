@@ -34,7 +34,7 @@ def geolocations(service):
     
     # response prototype
     r = config["response_object_schema"]
-    r["data"].update({ service: [ ] })
+    r["response_type"] = service
 
     if "city" in form_data:
         city = form_data.getvalue("city")
@@ -58,10 +58,11 @@ def geolocations(service):
     mongo_client = MongoClient( )
     g_coll = mongo_client[ defs["db"] ][ defs["coll"] ]
     for this in g_coll.find( query, { '_id': False } ):
-        r["data"][ service ].append( this )
+        r["data"].append( this )
     mongo_client.close( )
- 
-    # response
+
+    r[service+"_count"] = len(r["data"])
+
     cgi_print_json_response( form_data, r )
 
 ################################################################################

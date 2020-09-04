@@ -62,16 +62,13 @@ def collations(service):
 
     # response prototype
     r = config["response_object_schema"]
+    r["response_type"] = "subsets"
 
     # TODO: move somewhere
     if len(byc[ "dataset_ids" ]) < 1:
       r["errors"].append( "No `datasetIds` parameter provided." )
-    if len(byc[ "dataset_ids" ]) > 1:
-      r["errors"].append( "More than 1 `datasetIds` value was provided." )
     if len(r["errors"]) > 0:
       cgi_print_json_response( byc["form_data"], r )
-
-    ds_id = byc[ "dataset_ids" ][ 0 ]
 
     # saving the parameters to the response
     for p in ["dataset_ids", "method", "filters"]:
@@ -79,35 +76,36 @@ def collations(service):
 
     # data retrieval & response population
     mongo_client = MongoClient( )
-    mongo_db = mongo_client[ ds_id ]
-    r["data"].update( { "subsets": [ ] } )
-    for f in byc[ "filters" ]:
-        query = { "id": re.compile(r'^'+f ) }
-        pre = re.split('-|:', f)[0]
-        c =  byc["filter_defs"][ pre ]["collation"]
-        mongo_coll = mongo_db[ c ]
-        for subset in mongo_coll.find( query ):
-            s = { }
-            for k in d_k:
-                # TODO: harmless hack
-                if k in subset.keys():
-                    if k == "count":
-                        s[ k ] = int(subset[ k ])
+    s_s = { }
+    for ds_id in byc[ "dataset_ids" ]:
+        mongo_db = mongo_client[ ds_id ]
+        for f in byc[ "filters" ]:
+            query = { "id": re.compile(r'^'+f ) }
+            pre = re.split('-|:', f)[0]
+            c =  byc["filter_defs"][ pre ]["collation"]
+            mongo_coll = mongo_db[ c ]
+            for subset in mongo_coll.find( query ):
+                i_d = subset["id"]
+                if not i_d in s_s:
+                    s_s[ i_d ] = { }
+                for k in d_k:
+                    # TODO: integer format defined in config?
+                    if k in subset.keys():
+                        if k == "count":
+                            if "count" in s_s[ i_d ]:
+                                s_s[ i_d ][ k ] += int(subset[ k ])
+                            else:
+                                s_s[ i_d ][ k ] = int(subset[ k ])
+                        else:
+                            s_s[ i_d ][ k ] = subset[ k ]
                     else:
-                        s[ k ] = subset[ k ]
-                else:
-                    s[ k ] = None
-            r["data"]["subsets"].append( s )
-            # r["data"]["collations"].append( s )
+                        s[ k ] = None
+
     mongo_client.close( )
 
-    # TODO: testing only or general option?
-    if "responseFormat" in byc["form_data"]:
-        r_f = byc["form_data"].getvalue("responseFormat")
-        if "simplelist" in r_f:
-            r = r["data"]["subsets"]
- 
-    # response
+    r["data"] = list(s_s.values())   
+    r["results_count"] = len(s_s)
+
     cgi_print_json_response( byc["form_data"], r )
 
 ################################################################################

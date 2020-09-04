@@ -65,7 +65,7 @@ def publications(service):
 
     # response prototype
     r = config["response_object_schema"]
-    r["data"].update({ service: [ ] })
+    r["response_type"] = service
 
     # saving the parameters to the response
     for p in ["method", "filters"]:
@@ -112,15 +112,10 @@ def publications(service):
 
         p_l.append( s )
 
-    r["data"][ service ] = sorted(p_l, key=itemgetter('sortid'), reverse = True)
+    r["data"] = sorted(p_l, key=itemgetter('sortid'), reverse = True)
+    r[service+"_count"] = len(r["data"])
 
     mongo_client.close( )
-
-    # TODO: testing only or general option?
-    if "responseFormat" in byc["form_data"]:
-        r_f = byc["form_data"].getvalue("responseFormat")
-        if "simplelist" in r_f:
-            r = r["data"][ service ]
  
     # response
     cgi_print_json_response( byc["form_data"], r )

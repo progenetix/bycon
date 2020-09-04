@@ -155,9 +155,11 @@ def cytomapper(service):
 
     # response prototype
     r = config["response_object_schema"]
+    r["response_type"] = service
+    r["data"] = { }
+
 
     cytoBands = [ ]
-
     if "cytoBands" in byc["variant_pars"]:
         cytoBands, chro = _bands_from_cytobands( **byc )
     elif "chroBases" in byc["variant_pars"]:
@@ -191,12 +193,15 @@ def cytomapper(service):
         "size": size,
         "ChromosomeLocation": {
             "type": "ChromosomeLocation",
-            "species": "",
+            "species": "taxonomy:9606",
             "chr": chro,
             "start": cytoBands[0]["cytoband"],
             "end": cytoBands[-1]["cytoband"]
         }
     } )
+
+    # exception: onl;y data response here... r was just for errors etc.
+    r = r["data"]
 
     _print_terminal_response( byc["args"], r )
     _print_text_response( byc["form_data"], r )

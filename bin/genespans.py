@@ -34,7 +34,7 @@ def genespans(service):
     
     # response prototype
     r = config["response_object_schema"]
-    r["data"].update({ service: [ ] })
+    r["response_type"] = service
 
     assembly_id = defs["assembly_id"]
     if "assemblyId" in form_data:
@@ -69,10 +69,11 @@ def genespans(service):
     mongo_client = MongoClient( )
     g_coll = mongo_client[ defs["db"] ][ defs["coll"] ]
     for g in g_coll.find( query, { '_id': False } ):
-        r["data"][service].append( g )
+        r["data"].append( g )
     mongo_client.close( )
+
+    r[service+"_count"] = len(r["data"])
  
-    # response
     cgi_print_json_response( form_data, r )
 
 ################################################################################

@@ -61,6 +61,12 @@ def cgi_print_json_response(form_data, response):
         print(form_data.getvalue("callback")+'('+json.dumps(response, default=str)+")\n")
         exit()
 
+    if "data" in response:
+        if "responseFormat" in form_data:
+            r_f = form_data.getvalue("responseFormat")
+            if "simple" in r_f:
+                response = response["data"]
+
     print('Content-Type: application/json')
     print()
     print(json.dumps(response, indent=4, sort_keys=True, default=str)+"\n")
