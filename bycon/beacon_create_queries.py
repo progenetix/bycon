@@ -95,6 +95,7 @@ def update_queries_from_filters( queries, **byc ):
  
     mongo_client = MongoClient()
     for filterv in byc[ "filters" ]:
+        print(filterv)
         pre_code = re.split('-|:', filterv)
         pre = pre_code[0]
         if pre in byc["filter_defs"]:
@@ -102,6 +103,7 @@ def update_queries_from_filters( queries, **byc ):
             for scope in pre_defs["scopes"]:
                 m_scope = pre_defs["scopes"][scope]
                 if m_scope["default"]:
+                    print(filterv)
                     if "start" in precision or len(pre_code) == 1:
                         if "mongostring" in byc:
                             filterv = re.sub(':', '\:', filterv)

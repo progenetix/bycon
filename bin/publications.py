@@ -135,6 +135,8 @@ def _create_filters_query( **byc ):
     count_pat = re.compile( r'^(\w+?)\:([>=<])(\d+?)$' )
 
     for f in byc[ "filters" ]:
+        pre_code = re.split('-|:', f)
+        pre = pre_code[0]
         if count_pat.match( f ):
             pre, op, no = count_pat.match(f).group(1,2,3)
             dbk = byc[ "filter_defs" ][ pre ][ "db_key" ]
@@ -148,11 +150,10 @@ def _create_filters_query( **byc ):
                 error = "uncaught filter error: {}".format(f)
                 continue
             query_list.append( { dbk: { op: int(no) } } )
-
-        elif "exact" in byc[ "filter_flags" ][ "precision" ]:
-            query_list.append( { "id": f } )
-        else:
+        elif "start" in byc[ "filter_flags" ][ "precision" ] or len(pre_code) == 1:
             query_list.append( { "id": re.compile(r'^'+f ) } )
+        else:
+            query_list.append( { "id": f } )            
 
     if len(query_list) > 1:
         query = { '$and': query_list }
