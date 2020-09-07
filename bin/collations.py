@@ -39,6 +39,8 @@ def collations(service):
     byc = {
         "config": config,
         "filter_defs": read_filter_definitions( **config[ "paths" ] ),
+        "errors": [ ],
+        "warnings": [ ],
         "form_data": cgi_parse_query()
     }
 
@@ -62,6 +64,7 @@ def collations(service):
 
     # response prototype
     r = config["response_object_schema"]
+    r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
     r["response_type"] = "subsets"
 
     # TODO: move somewhere

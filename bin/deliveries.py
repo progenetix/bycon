@@ -50,7 +50,9 @@ def deliveries(service):
 
     byc = {
         "config": config,
-        "form_data": cgi_parse_query()
+        "form_data": cgi_parse_query(),
+        "errors": [ ],
+        "warnings": [ ]
     }
 
     # response prototype

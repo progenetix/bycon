@@ -102,18 +102,37 @@ def update_queries_from_filters( queries, **byc ):
                 m_scope = pre_defs["scopes"][scope]
                 if m_scope["default"]:
                     if "exact" in precision:
+                        # the mongostring option is used by some command line
+                        # helpers & probably should be removed / redone
                         if "mongostring" in byc:
                             query_lists[ scope ].append( '{ "'+pre_defs[ "db_key" ]+'": "'+filterv+'" }' )
                         else:
                             q_keys = { filterv: 1 }
 
+                            """podmd
+                            The Beacon query paradigm assumes a logical 'AND'
+                            between different filters. Also, it assumes that a
+                            query against a hierarchical term will also retrieve
+                            matches to its child terms. These two paradigms are
+                            incompatible if the targets don't store all their
+                            hierarchies with them.
+                            To resolve queries to include all child terms the 
+                            current solution is to perform a look up query for
+                            the current filter term, in the collation database
+                            (e.g. "biosubsets") that has been defined for the
+                            filter's prefix, and create an 'OR' query which
+                            replaces the single filter value (if more than one
+                            term).
+                            podmd"""
+
                             for ds_id in byc["dataset_ids"]:
                                 mongo_coll = mongo_client[ ds_id ][ byc["filter_defs"][pre]["collation"] ]
                                 f_def = mongo_coll.find_one( { "id": filterv })
-                                for c in f_def["child_terms"]:
-                                    if pre in c:
-                                        # print(c)
-                                        q_keys.update({c:1})
+                                if "child_terms" in f_def:
+                                    for c in f_def["child_terms"]:
+                                        if pre in c:
+                                            # print(c)
+                                            q_keys.update({c:1})
 
                             if len(q_keys.keys()) == 1:
                                 query_lists[ scope ].append( { pre_defs[ "db_key" ]: filterv } )
@@ -122,8 +141,6 @@ def update_queries_from_filters( queries, **byc ):
                                 for f_c in q_keys.keys():
                                     f_q_l.append( { pre_defs[ "db_key" ]: f_c } )
                                 query_lists[ scope ].append( { '$or': f_q_l } )
-                            # exit()
-                            # query_lists[ scope ].append( { pre_defs[ "db_key" ]: filterv } )
                         break
                     else:
                         if "mongostring" in byc:
@@ -133,6 +150,7 @@ def update_queries_from_filters( queries, **byc ):
                         else:
                             query_lists[ scope ].append( { pre_defs[ "db_key" ]: { "$regex": "^"+filterv } } )
                         break
+    mongo_client.close()
 
     for c_n in byc[ "config" ][ "collections" ]:
         if len(query_lists[c_n]) == 1:
@@ -142,9 +160,6 @@ def update_queries_from_filters( queries, **byc ):
                 queries[ c_n ] = '{ '+logic+': [ '+','.join(query_lists[c_n])+' ] }'
             else:
                 queries[ c_n ] = { logic: query_lists[c_n] }
-
-    # print(queries)
-
 
     return queries
 

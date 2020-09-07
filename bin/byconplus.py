@@ -60,6 +60,8 @@ def byconplus(service):
         "beacon_info": read_yaml_with_key_to_object( "beacon_info_file", "beacon_info", **config[ "paths" ] ),
         "beacon_paths": read_yaml_with_key_to_object( "beacon_paths_file", "paths", **config[ "paths" ] ),
         "h->o": read_yaml_to_object( "handover_types_file", **config[ "paths" ] ),
+        "errors": [ ],
+        "warnings": [ ],
         "dbstats": dbstats_return_latest( **config )
     }
 

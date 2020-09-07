@@ -37,6 +37,8 @@ def biosamples(service):
         "filter_defs": read_filter_definitions( **config[ "paths" ] ),
         "variant_defs": read_yaml_to_object( "variant_definitions_file", **config[ "paths" ] ),
         "h->o": read_yaml_to_object( "handover_types_file", **config[ "paths" ] ),
+        "errors": [ ],
+        "warnings": [ ],
         "datasets_info": read_yaml_with_key_to_object( "beacon_datasets_file", "datasets", **config[ "paths" ] )
     }
 
@@ -56,6 +58,7 @@ def biosamples(service):
 
     # response prototype
     r = config["response_object_schema"]
+    r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
 
     # TODO: move somewhere
     if not byc[ "queries" ].keys():

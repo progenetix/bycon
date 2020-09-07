@@ -147,7 +147,8 @@ def cytomapper(service):
         "cytoband_defs": read_yaml_to_object( "cytoband_definitions_file", **config[ "paths" ] ),
         "variant_defs": read_yaml_to_object( "variant_definitions_file", **config[ "paths" ] ),
         "form_data": cgi_parse_query(),
-        "error": { }
+        "errors": [ ],
+        "warnings": [ ]
     }
 
     byc.update( { "variant_pars": parse_variants( **byc ) } )
@@ -155,9 +156,9 @@ def cytomapper(service):
 
     # response prototype
     r = config["response_object_schema"]
+    r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
     r["response_type"] = service
     r["data"] = { }
-
 
     cytoBands = [ ]
     if "cytoBands" in byc["variant_pars"]:
@@ -168,9 +169,7 @@ def cytomapper(service):
     cb_label = _cytobands_label( cytoBands )
 
     r.update( { "parameters": byc["variant_pars"] } )
-    if byc["error"]:
-        r["errors"].append( byc["error"] )
-
+ 
     if len( cytoBands ) < 1:
         r["errors"].append( "No matching cytobands!" )
         _print_terminal_response( byc["args"], r )

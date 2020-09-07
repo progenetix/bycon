@@ -41,7 +41,9 @@ def publications(service):
     byc = {
         "config": config,
         "filter_defs": these_prefs["filter_defs"],
-        "form_data": cgi_parse_query()
+        "form_data": cgi_parse_query(),
+        "errors": [ ],
+        "warnings": [ ]
     }
 
     # first pre-population w/ defaults
@@ -65,6 +67,7 @@ def publications(service):
 
     # response prototype
     r = config["response_object_schema"]
+    r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
     r["response_type"] = service
 
     # saving the parameters to the response
