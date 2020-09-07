@@ -127,12 +127,15 @@ def update_queries_from_filters( queries, **byc ):
 
                             for ds_id in byc["dataset_ids"]:
                                 mongo_coll = mongo_client[ ds_id ][ byc["filter_defs"][pre]["collation"] ]
-                                f_def = mongo_coll.find_one( { "id": filterv })
-                                if "child_terms" in f_def:
-                                    for c in f_def["child_terms"]:
-                                        if pre in c:
-                                            # print(c)
-                                            q_keys.update({c:1})
+                                try:
+                                    f_def = mongo_coll.find_one( { "id": filterv })
+                                    if "child_terms" in f_def:
+                                        for c in f_def["child_terms"]:
+                                            if pre in c:
+                                                # print(c)
+                                                q_keys.update({c:1})
+                                except:
+                                    pass
 
                             if len(q_keys.keys()) == 1:
                                 query_lists[ scope ].append( { pre_defs[ "db_key" ]: filterv } )
