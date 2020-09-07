@@ -73,7 +73,7 @@ PATO:
 EFO:
   name: "Experimental Factor Ontology"
   url: "https://www.ebi.ac.uk/efo/"
-  db_key: 'biocharacteristics.type.id'
+  db_key: 'provenance.material.type.id'
   scopes:
     biosamples:
       default: 1

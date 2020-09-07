@@ -101,7 +101,15 @@ def update_queries_from_filters( queries, **byc ):
             for scope in pre_defs["scopes"]:
                 m_scope = pre_defs["scopes"][scope]
                 if m_scope["default"]:
-                    if "exact" in precision:
+                    if "start" in precision:
+                        if "mongostring" in byc:
+                            filterv = re.sub(':', '\:', filterv)
+                            filterv = re.sub('-', '\-', filterv)
+                            query_lists[ scope ].append( '{ "'+pre_defs[ "db_key" ]+'": { $regex: /^'+filterv+'/ } }' )
+                        else:
+                            query_lists[ scope ].append( { pre_defs[ "db_key" ]: { "$regex": "^"+filterv } } )
+                        break
+                    else:
                         # the mongostring option is used by some command line
                         # helpers & probably should be removed / redone
                         if "mongostring" in byc:
@@ -145,14 +153,7 @@ def update_queries_from_filters( queries, **byc ):
                                     f_q_l.append( { pre_defs[ "db_key" ]: f_c } )
                                 query_lists[ scope ].append( { '$or': f_q_l } )
                         break
-                    else:
-                        if "mongostring" in byc:
-                            filterv = re.sub(':', '\:', filterv)
-                            filterv = re.sub('-', '\-', filterv)
-                            query_lists[ scope ].append( '{ "'+pre_defs[ "db_key" ]+'": { $regex: /^'+filterv+'/ } }' )
-                        else:
-                            query_lists[ scope ].append( { pre_defs[ "db_key" ]: { "$regex": "^"+filterv } } )
-                        break
+
     mongo_client.close()
 
     for c_n in byc[ "config" ][ "collections" ]:
