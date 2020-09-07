@@ -95,13 +95,14 @@ def update_queries_from_filters( queries, **byc ):
  
     mongo_client = MongoClient()
     for filterv in byc[ "filters" ]:
-        pre = re.split('-|:', filterv)[0]
+        pre_code = re.split('-|:', filterv)
+        pre = pre_code[0]
         if pre in byc["filter_defs"]:
             pre_defs = byc["filter_defs"][pre]
             for scope in pre_defs["scopes"]:
                 m_scope = pre_defs["scopes"][scope]
                 if m_scope["default"]:
-                    if "start" in precision:
+                    if "start" in precision or len(pre_code) == 1:
                         if "mongostring" in byc:
                             filterv = re.sub(':', '\:', filterv)
                             filterv = re.sub('-', '\-', filterv)
