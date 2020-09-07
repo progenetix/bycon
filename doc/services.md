@@ -113,6 +113,19 @@ parameter
 
 * <https://progenetix.org/services/genespans?geneId=CDKN2>
 
+### _geolocations_
+
+This service provides geographic location mapping for cities above 25'000
+inhabitants (\~22750 cities), through matching of the (start-anchored) name.
+
+Additional search options (geographic proximity ...) may be added later.
+
+##### Examples
+
+* <https://progenetix.org/services/geolocations?city=zurich>
+* <https://progenetix.org/services/geolocations?city=Heidelberg&callback=75gytk44r4yssls8j>
+* <https://progenetix.org/services/geolocations?city=New&responseFormat=simplelist>
+
 ### URL Mapping
 
 The service URL format `progenetix.org/services/__service-name__?parameter=value`
