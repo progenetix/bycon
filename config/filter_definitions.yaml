@@ -8,7 +8,7 @@ NCIT:
       default: 1
     individuals:
       default: 0
-  pattern: '^NCIT(\:C\d*?)?$'
+  pattern: '^NCIT(\:C\d*?\-?)?$'
   examples:
     - 'NCIT:C27676'
     - 'NCIT:C9325'
@@ -21,7 +21,7 @@ UBERON:
   scopes:
     biosamples:
       default: 1
-  pattern: '^UBERON(\:\d*?)?$'
+  pattern: '^UBERON(\:\d*?\-?)?$'
   examples:
     - 'UBERON:0000970'
     - 'UBERON:0035542'
@@ -36,7 +36,7 @@ MONDO:
       default: 1
     individuals:
       default: 0
-  pattern: '^MONDO([\:_]\d*?)?$'
+  pattern: '^MONDO([\:_]\d*?\-?)?$'
   examples:
     - 'MONDO:0002974'
     - 'MONDO:0012301'
@@ -51,7 +51,7 @@ HP:
       default: 0
     individuals:
       default: 1
-  pattern: '^HP(\:\d+?)?$'
+  pattern: '^HP(\:\d+?\-?)?$'
   examples:
     - 'HP:0012209'
   collation: biosubsets
@@ -65,7 +65,7 @@ PATO:
       default: 0
     individuals:
       default: 1
-  pattern: '^PATO(\:\d+?)?$'
+  pattern: '^PATO(\:\d+?\-?)?$'
   examples:
     - 'PATO:0020000'
   collation: biosubsets
@@ -79,7 +79,7 @@ EFO:
       default: 1
     individuals:
       default: 0
-  pattern: '^EFO(\:\d+?)?$'
+  pattern: '^EFO(\:\d+?\-?)?$'
   examples:
   collation: biosubsets
     - 'EFO:0009656'
@@ -105,7 +105,7 @@ icdot:
   scopes:
     biosamples:
       default: 1
-  pattern: '^icdot(\-C\d\d?(\.\d)?)?$'
+  pattern: '^icdot(\-C\d\d?(\.\d)?\-?)?$'
   examples:
     - 'icdot-C42.2'
     - 'icdot-C54.1'

@@ -95,7 +95,6 @@ def update_queries_from_filters( queries, **byc ):
  
     mongo_client = MongoClient()
     for filterv in byc[ "filters" ]:
-        print(filterv)
         pre_code = re.split('-|:', filterv)
         pre = pre_code[0]
         if pre in byc["filter_defs"]:
@@ -103,7 +102,6 @@ def update_queries_from_filters( queries, **byc ):
             for scope in pre_defs["scopes"]:
                 m_scope = pre_defs["scopes"][scope]
                 if m_scope["default"]:
-                    print(filterv)
                     if "start" in precision or len(pre_code) == 1:
                         if "mongostring" in byc:
                             filterv = re.sub(':', '\:', filterv)
@@ -135,16 +133,17 @@ def update_queries_from_filters( queries, **byc ):
                             replaces the single filter value (if more than one
                             term).
                             podmd"""
-
-                            for ds_id in byc["dataset_ids"]:
-                                mongo_coll = mongo_client[ ds_id ][ byc["filter_defs"][pre]["collation"] ]
-                                try:
-                                    f_def = mongo_coll.find_one( { "id": filterv })
-                                    if "child_terms" in f_def:
-                                        for c in f_def["child_terms"]:
-                                            if pre in c:
-                                                # print(c)
-                                                q_keys.update({c:1})
+                            f_re = re.compile( r"\-$" )
+                            if not f_re.match(filterv)
+                                for ds_id in byc["dataset_ids"]:
+                                    mongo_coll = mongo_client[ ds_id ][ byc["filter_defs"][pre]["collation"] ]
+                                    try:
+                                        f_def = mongo_coll.find_one( { "id": filterv })
+                                        if "child_terms" in f_def:
+                                            for c in f_def["child_terms"]:
+                                                if pre in c:
+                                                    # print(c)
+                                                    q_keys.update({c:1})
                                 except:
                                     pass
 
