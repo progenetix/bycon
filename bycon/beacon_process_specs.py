@@ -19,18 +19,7 @@ def read_bycon_config( module_path ):
 
 ################################################################################
 
-def read_yaml_to_object(file_key, **paths):
-
-    o = {}
-    ofp = path.join( paths[ "module_root" ], *paths[ file_key ] )
-    with open( ofp ) as od:
-        o = yaml.load( od , Loader=yaml.FullLoader)
-    
-    return o
-
-################################################################################
-
-def read_service_prefs(service, dir_path):
+def read_named_prefs(service, dir_path):
 
     o = {}
     ofp = path.join( dir_path, "..", "config", service+".yaml" )

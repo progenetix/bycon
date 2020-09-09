@@ -36,7 +36,7 @@ def main():
 def publications(service):
 
     config = read_bycon_config( path.abspath( dir_path ) )
-    these_prefs = read_service_prefs( service, dir_path )
+    these_prefs = read_named_prefs( service, dir_path )
 
     byc = {
         "config": config,

@@ -29,14 +29,14 @@ def main():
 def biosamples(service):
 
     config = read_bycon_config( path.abspath( dir_path ) )
-    these_prefs = read_service_prefs( service, dir_path )
+    these_prefs = read_named_prefs( service, dir_path )
 
     byc = {
         "config": config,
         "form_data": cgi_parse_query(),
         "filter_defs": read_filter_definitions( **config[ "paths" ] ),
-        "variant_defs": read_yaml_to_object( "variant_definitions_file", **config[ "paths" ] ),
-        "h->o": read_yaml_to_object( "handover_types_file", **config[ "paths" ] ),
+        "variant_defs": read_named_prefs( "variant_definitions", dir_path ),
+        "h->o": read_named_prefs( "beacon_handovers", dir_path ),
         "errors": [ ],
         "warnings": [ ],
         "datasets_info": read_yaml_with_key_to_object( "beacon_datasets_file", "datasets", **config[ "paths" ] )

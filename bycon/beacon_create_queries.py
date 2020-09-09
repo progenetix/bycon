@@ -5,6 +5,7 @@ from pymongo import MongoClient
 import sys
 
 from .beacon_parse_variants import *
+from .geoquery import *
 
 ################################################################################
 
@@ -15,6 +16,7 @@ def beacon_create_queries( **byc ):
     q_s = update_queries_from_hoid( q_s, **byc)
     q_s = update_queries_from_variants( q_s, **byc )
     q_s = update_queries_from_endpoints( q_s, **byc )
+    q_s = update_queries_from_geoquery( q_s, **byc )
     q_s = purge_empty_queries( q_s, **byc )
     
     return q_s
@@ -119,6 +121,7 @@ def update_queries_from_filters( queries, **byc ):
                             q_keys = { filterv: 1 }
 
                             """podmd
+ 
                             The Beacon query paradigm assumes a logical 'AND'
                             between different filters. Also, it assumes that a
                             query against a hierarchical term will also retrieve
@@ -132,9 +135,10 @@ def update_queries_from_filters( queries, **byc ):
                             filter's prefix, and create an 'OR' query which
                             replaces the single filter value (if more than one
                             term).
+                            
                             podmd"""
                             f_re = re.compile( r"\-$" )
-                            if not f_re.match(filterv)
+                            if not f_re.match(filterv):
                                 for ds_id in byc["dataset_ids"]:
                                     mongo_coll = mongo_client[ ds_id ][ byc["filter_defs"][pre]["collation"] ]
                                     try:
@@ -144,8 +148,8 @@ def update_queries_from_filters( queries, **byc ):
                                                 if pre in c:
                                                     # print(c)
                                                     q_keys.update({c:1})
-                                except:
-                                    pass
+                                    except:
+                                        pass
 
                             if len(q_keys.keys()) == 1:
                                 query_lists[ scope ].append( { pre_defs[ "db_key" ]: filterv } )
@@ -185,6 +189,22 @@ def update_queries_from_endpoints( queries, **byc ):
             queries[c_n] = { '$and': [ epq, queries[c_n] ] }
         else:
             queries[c_n] = epq
+
+    return queries
+
+################################################################################
+
+def update_queries_from_geoquery( queries, **byc ):
+
+    geo_q = geo_query( **byc )
+
+    if not geo_q:
+        return queries
+
+    if not "biosamples" in queries:
+        queries["biosamples"] = geo_q
+    else:
+        queries["biosamples"] = { '$and': [ geo_q, queries["biosamples"] ] }
 
     return queries
 

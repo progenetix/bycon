@@ -197,4 +197,4 @@ cellosaurus:
   examples:
     - 'cellosaurus:CVCL_1650'
     - 'cellosaurus:CVCL_0006'
-  collation: datacollections 
+  collation: datacollections

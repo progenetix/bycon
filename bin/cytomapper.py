@@ -144,8 +144,8 @@ def cytomapper(service):
     byc = {
         "config": config,
         "args": _get_args(),
-        "cytoband_defs": read_yaml_to_object( "cytoband_definitions_file", **config[ "paths" ] ),
-        "variant_defs": read_yaml_to_object( "variant_definitions_file", **config[ "paths" ] ),
+        "cytoband_defs": read_named_prefs( "cytoband_definitions", dir_path ),
+        "variant_defs": read_named_prefs( "variant_definitions", dir_path ),
         "form_data": cgi_parse_query(),
         "errors": [ ],
         "warnings": [ ]

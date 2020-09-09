@@ -114,7 +114,7 @@ def main():
         "config": config,
         "args": args,
         "filter_defs": read_filter_definitions( **config[ "paths" ] ),
-        "h->o": read_yaml_to_object( "handover_types_file", **config[ "paths" ] )
+        "h->o": read_named_prefs( "beacon_handovers", dir_path )
     }
 
     ds_id = args.datasetid

@@ -1,0 +1,20 @@
+parameters:
+
+  geolatitude:
+    type: float
+    pattern: '^\d+?(\.\d+?)?$'
+  geolongitude:
+    type: float
+    pattern: '^\d+?(\.\d+?)?$'
+  geodistance:
+    type: float
+    pattern: '^\d+?(\.\d+?)?$'
+    default: 10000
+
+request_types:
+
+  geoquery:
+    all_of:
+      - geolatitude
+      - geolongitude
+      - geodistance

@@ -21,9 +21,9 @@ from .beacon_process_handovers import handover_return_data
 from .beacon_process_handovers import retrieve_handover
 from .beacon_process_handovers import query_results_save_handovers
 from .beacon_process_specs import read_bycon_config
-from .beacon_process_specs import read_yaml_to_object
 from .beacon_process_specs import read_yaml_with_key_to_object
 from .beacon_process_specs import dbstats_return_latest
+from .beacon_process_specs import read_named_prefs
 from .beacon_process_specs import update_datasets_from_dbstats
 from .beacon_process_specs import read_filter_definitions
 from .beacon_parse_filters import parse_filters
@@ -33,6 +33,7 @@ from .beacon_parse_filters import get_filter_flags
 from .beacon_parse_variants import parse_variants
 from .beacon_parse_variants import get_variant_request_type
 from .beacon_parse_variants import create_variantCNVrequest_query
+from .geoquery import geo_query
 from .cgi_utils import cgi_parse_query
 from .cgi_utils import cgi_print_svg_response
 from .cgi_utils import form_return_listvalue
