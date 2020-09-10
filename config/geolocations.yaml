@@ -1,5 +1,28 @@
 defaults:
   db: progenetix
   coll: geolocs
-  query_fields:
+  query_fields:   
     - city
+parameters:
+  geolatitude:
+    type: float
+    pattern: '^\-?\d+?(\.\d+?)?$'
+  geolongitude:
+    type: float
+    pattern: '^\-?\d+?(\.\d+?)?$'
+  geodistance:
+    type: float
+    pattern: '^\d+?(\.\d+?)?$'
+    default: 10000
+  city:
+    type: string
+    pattern: '^\w.{1,126}\w$'
+request_types:
+  geoquery:
+    all_of:
+      - geolatitude
+      - geolongitude
+      - geodistance
+  city:
+    all_of:
+      - city

@@ -8,12 +8,12 @@ from .cgi_utils import *
 
 ################################################################################
 
-def geo_query( **byc ):
+def geo_query( geojsonpar, **byc ):
 
     geo_pars = { }
     geo_query = { }
-    g_q_k = byc["extended_defs"]["request_types"]["geoquery"]["all_of"]
-    g_p_defs = byc["extended_defs"]["parameters"]
+    g_q_k = byc["geolocations"]["request_types"]["geoquery"]["all_of"]
+    g_p_defs = byc["geolocations"]["parameters"]
 
     for g_k in g_q_k:
         g_default = None
@@ -24,17 +24,35 @@ def geo_query( **byc ):
             continue
         if not re.compile( g_p_defs[ g_k ][ "pattern" ] ).match( str( g_v ) ):
             continue
-        geo_pars[ g_k ] = g_v
+        if "float" in g_p_defs[ g_k ][ "type" ]:
+            geo_pars[ g_k ] = float(g_v)
+        else:
+            geo_pars[ g_k ] = g_v
 
     if len( geo_pars ) < len( g_q_k ):
-        return geo_query
+        return geo_query, geo_pars
 
-    g_lat = float(geo_pars["geolatitude"])
-    g_long = float(geo_pars["geolongitude"])
-    g_dist = float(geo_pars["geodistance"])
+    geo_query = {
+        geojsonpar: {
+            '$near': SON(
+                [
+                    (
+                        '$geometry', SON(
+                            [
+                                ('type', 'Point'),
+                                ('coordinates', [
+                                    geo_pars["geolongitude"],
+                                    geo_pars["geolatitude"]
+                                ])
+                            ]
+                        )
+                    ),
+                    ('$maxDistance', geo_pars["geodistance"])
+                ]
+            )
+        }
+    }
 
-    geo_query = {"provenance.geo.geojson": {'$near': SON([('$geometry', SON([('type', 'Point'), ('coordinates', [g_long, g_lat])])), ('$maxDistance', g_dist)])}}
-
-    return geo_query
+    return geo_query, geo_pars
 
 ################################################################################

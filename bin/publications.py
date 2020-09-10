@@ -14,6 +14,7 @@ sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon.cgi_utils import *
 from bycon.beacon_parse_filters import *
 from bycon.beacon_process_specs import *
+from bycon.geoquery import *
 
 """podmd
 
@@ -41,6 +42,7 @@ def publications(service):
     byc = {
         "config": config,
         "filter_defs": these_prefs["filter_defs"],
+        "geolocations": read_named_prefs( "geolocations", dir_path ),
         "form_data": cgi_parse_query(),
         "errors": [ ],
         "warnings": [ ]
@@ -78,6 +80,16 @@ def publications(service):
     query, error = _create_filters_query( **byc )
     if len(error) > 1:
         r["errors"].append( error )
+
+    geo_q, geo_pars = geo_query( "provenance.geo.geojson", **byc )
+
+    if geo_q:
+        if len(query.keys()) < 1:
+            for g_k, g_v in geo_pars.items():
+                r["parameters"].update( { g_k: g_v })
+            query = geo_q
+        else:
+            query = { '$and': [ geo_q, query ] }
 
     mongo_client = MongoClient( )
     mongo_coll = mongo_client[ config["info_db"] ][ "publications" ]

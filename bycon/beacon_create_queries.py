@@ -196,7 +196,7 @@ def update_queries_from_endpoints( queries, **byc ):
 
 def update_queries_from_geoquery( queries, **byc ):
 
-    geo_q = geo_query( **byc )
+    geo_q, geo_pars = geo_query( "provenance.geo.geojson", **byc )
 
     if not geo_q:
         return queries

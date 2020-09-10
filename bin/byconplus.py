@@ -54,7 +54,7 @@ def byconplus(service):
         "args": _get_args(),
         "form_data": cgi_parse_query(),
         "filter_defs": read_filter_definitions( **config[ "paths" ] ),
-        "extended_defs": read_named_prefs( "extended_definitions", dir_path ),
+        "geolocations": read_named_prefs( "geolocations", dir_path ),
         "variant_defs": read_named_prefs( "variant_definitions", dir_path ),
         "datasets_info": read_yaml_with_key_to_object( "beacon_datasets_file", "datasets", **config[ "paths" ] ),
         "service_info": read_yaml_with_key_to_object( "service_info_file", "service_info", **config[ "paths" ] ),
