@@ -21,6 +21,7 @@ from bycon.geoquery import *
 * <https://progenetix.org/services/publications/?filters=PMID>
 * <http://progenetix.org/cgi/bycon/bin/publications.py?filters=PMID,genomes:>200,arraymap:>1&method=details>
 * <http://progenetix.org/cgi/bycon/bin/publications.py?filters=PMID:22824167&filterPrecision=exact&method=details>
+* <http://progenetix.org/cgi/bycon/bin/publications.py?geolongitude=8.55&geolatitude=47.37&geodistance=100000>
 
 podmd"""
 
@@ -81,7 +82,7 @@ def publications(service):
     if len(error) > 1:
         r["errors"].append( error )
 
-    geo_q, geo_pars = geo_query( "provenance.geo.geojson", **byc )
+    geo_q, geo_pars = geo_query( "provenance.geo", **byc )
 
     if geo_q:
         if len(query.keys()) < 1:

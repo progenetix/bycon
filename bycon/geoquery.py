@@ -8,50 +8,72 @@ from .cgi_utils import *
 
 ################################################################################
 
-def geo_query( geojsonpar, **byc ):
+def geo_query( geo_root, **byc ):
 
-    geo_pars = { }
     geo_query = { }
-    g_q_k = byc["geolocations"]["request_types"]["geoquery"]["all_of"]
+    geo_pars = { }
     g_p_defs = byc["geolocations"]["parameters"]
+    g_p_rts = byc["geolocations"]["request_types"]
 
-    for g_k in g_q_k:
-        g_default = None
-        if "default" in g_p_defs[ g_k ]:
-            g_default = g_p_defs[ g_k ][ "default" ]
-        g_v = byc["form_data"].getvalue(g_k, g_default)
-        if not g_v:
+    req_type = ""
+    for rt in g_p_rts:
+        g_p = { }
+        g_q_k = g_p_rts[ rt ]["all_of"]
+        for g_k in g_q_k:
+            g_default = None
+            if "default" in g_p_defs[ g_k ]:
+                g_default = g_p_defs[ g_k ][ "default" ]
+            g_v = byc["form_data"].getvalue(g_k, g_default)
+            if not g_v:
+                continue
+            if not re.compile( g_p_defs[ g_k ][ "pattern" ] ).match( str( g_v ) ):
+                continue
+            if "float" in g_p_defs[ g_k ][ "type" ]:
+                g_p[ g_k ] = float(g_v)
+            else:
+                g_p[ g_k ] = g_v
+
+        if len( g_p ) < len( g_q_k ):
             continue
-        if not re.compile( g_p_defs[ g_k ][ "pattern" ] ).match( str( g_v ) ):
-            continue
-        if "float" in g_p_defs[ g_k ][ "type" ]:
-            geo_pars[ g_k ] = float(g_v)
+
+        req_type = rt
+        geo_pars = g_p
+
+    if "city" in req_type:
+        if len(geo_root) > 0:
+            citypar = ".".join( (geo_root, "city") )
         else:
-            geo_pars[ g_k ] = g_v
-
-    if len( geo_pars ) < len( g_q_k ):
+            citypar = "city"
+        geo_query = { citypar: re.compile( r'^'+geo_pars["city"], re.IGNORECASE ) }
         return geo_query, geo_pars
 
-    geo_query = {
-        geojsonpar: {
-            '$near': SON(
-                [
-                    (
-                        '$geometry', SON(
-                            [
-                                ('type', 'Point'),
-                                ('coordinates', [
-                                    geo_pars["geolongitude"],
-                                    geo_pars["geolatitude"]
-                                ])
-                            ]
-                        )
-                    ),
-                    ('$maxDistance', geo_pars["geodistance"])
-                ]
-            )
+    if "geoquery" in req_type:
+        if len(geo_root) > 0:
+            geojsonpar = ".".join( (geo_root, "geojson") )
+        else:
+            geojsonpar = "geojson"
+        geo_query = {
+            geojsonpar: {
+                '$near': SON(
+                    [
+                        (
+                            '$geometry', SON(
+                                [
+                                    ('type', 'Point'),
+                                    ('coordinates', [
+                                        geo_pars["geolongitude"],
+                                        geo_pars["geolatitude"]
+                                    ])
+                                ]
+                            )
+                        ),
+                        ('$maxDistance', geo_pars["geodistance"])
+                    ]
+                )
+            }
         }
-    }
+
+        return geo_query, geo_pars
 
     return geo_query, geo_pars
 

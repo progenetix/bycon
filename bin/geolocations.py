@@ -43,15 +43,9 @@ def geolocations(service):
     r = config["response_object_schema"]
     r["response_type"] = service
 
-    query = { }
-    if "city" in form_data:
-        city = form_data.getvalue("city")
-        r["parameters"].update( { "city": city })
-        query = { "city": re.compile( r'^'+city, re.IGNORECASE ) }
-    else:
-        query, geo_pars = geo_query( "geojson", **byc )
-        for g_k, g_v in geo_pars.items():
-            r["parameters"].update( { g_k: g_v })      
+    query, geo_pars = geo_query( "", **byc )
+    for g_k, g_v in geo_pars.items():
+        r["parameters"].update( { g_k: g_v })      
 
     if len(query.keys()) < 1:
         r["errors"].append( "No query generated - missing or malformed parameters" )
