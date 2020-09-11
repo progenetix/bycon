@@ -28,49 +28,6 @@ databases
 * <http://progenetix.org/cgi-bin/bycon/bin/collations.py?filters=NCIT&datasetIds=progenetix&method=counts>
 * <http://progenetix.org/services/collations?filters=PMID&datasetIds=progenetix&method=counts&callback=4445-9938-cbat-9891-kllt>
 
-### _deliveries_
-
-* a simple app which only provides data deliveries from handover objects
-* requires a (locally existing) `accessid` parameter
-* optionally limiting the response content by supplying a `deliveryKeys` list
-(can be comma-concatenated or multiple times parameter)
-
-##### Examples
-
-Examples here need a locally existing `accessid` parameter. The context of the data
-(e.g. "biosamples") is provided from the retrieved data object itself and not
-apparent from the request.
-
-* <http://progenetix.org/services/deliveries?accessid=003d0488-0b79-4ffa-a38f-2fb932480eee&deliveryKeys=id,biocharacteristics>
-
-The response in this example was a `biosamples` dataset (excerpt):
-
-```json
-{
-    "data": {
-        "biosamples": [
-            {
-                "id": "PGX_AM_BS_20164920_SM-11YB",
-                "biocharacteristics": [
-                    {
-                        "description": "non-small cell lung carcinoma [cell line H23]",
-                        "type": {
-                            "id": "icdot-C34.9",
-                            "label": "lung and bronchus"
-                        }
-
-    }]}]},
- 
-    "errors": [],
-    "parameters": {
-        "accessid": "003d0488-0b79-4ffa-a38f-2fb932480eee",
-        "collection": "biosamples",
-        "datasetId": "progenetix"
-    },
-    "warnings": []
-}
-```
-
 ### _publications_
 
 * queries the _publications_ database & returns concise or extended information
@@ -137,6 +94,52 @@ inhabitants (\~22750 cities), through either:
 * <https://progenetix.org/services/geolocations?city=Heidelberg&callback=75gytk44r4yssls8j>
 * <https://progenetix.org/services/geolocations?city=New&responseFormat=simplelist>
 * <https://progenetix.org/services/geolocations?geolongitude=-0.13&geolatitude=51.51&geodistance=100000>
+
+
+## Internal helper services
+
+### _deliveries_
+
+* a simple app which only provides data deliveries from handover objects
+* requires a (locally existing) `accessid` parameter
+* optionally limiting the response content by supplying a `deliveryKeys` list
+(can be comma-concatenated or multiple times parameter)
+
+##### Examples
+
+Examples here need a locally existing `accessid` parameter. The context of the data
+(e.g. "biosamples") is provided from the retrieved data object itself and not
+apparent from the request.
+
+* <http://progenetix.org/services/deliveries?accessid=003d0488-0b79-4ffa-a38f-2fb932480eee&deliveryKeys=id,biocharacteristics>
+
+The response in this example was a `biosamples` dataset (excerpt):
+
+```json
+{
+    "data": {
+        "biosamples": [
+            {
+                "id": "PGX_AM_BS_20164920_SM-11YB",
+                "biocharacteristics": [
+                    {
+                        "description": "non-small cell lung carcinoma [cell line H23]",
+                        "type": {
+                            "id": "icdot-C34.9",
+                            "label": "lung and bronchus"
+                        }
+
+    }]}]},
+ 
+    "errors": [],
+    "parameters": {
+        "accessid": "003d0488-0b79-4ffa-a38f-2fb932480eee",
+        "collection": "biosamples",
+        "datasetId": "progenetix"
+    },
+    "warnings": []
+}
+```
 
 ### URL Mapping
 
