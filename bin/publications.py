@@ -82,7 +82,7 @@ def publications(service):
     if len(error) > 1:
         r["errors"].append( error )
 
-    geo_q, geo_pars = geo_query( "provenance.geo", **byc )
+    geo_q, geo_pars = geo_query( **byc )
 
     if geo_q:
         if len(query.keys()) < 1:

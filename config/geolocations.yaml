@@ -1,8 +1,8 @@
 defaults:
   db: progenetix
   coll: geolocs
-  query_fields:   
-    - city
+  request_type: city
+geo_root: 'provenance.geo'
 parameters:
   geolatitude:
     type: float

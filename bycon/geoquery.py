@@ -8,12 +8,13 @@ from .cgi_utils import *
 
 ################################################################################
 
-def geo_query( geo_root, **byc ):
+def geo_query( **byc ):
 
-    geo_query = { }
+    geo_q = { }
     geo_pars = { }
     g_p_defs = byc["geolocations"]["parameters"]
     g_p_rts = byc["geolocations"]["request_types"]
+    geo_root = byc["geolocations"]["geo_root"]
 
     req_type = ""
     for rt in g_p_rts:
@@ -40,41 +41,56 @@ def geo_query( geo_root, **byc ):
         geo_pars = g_p
 
     if "city" in req_type:
-        if len(geo_root) > 0:
-            citypar = ".".join( (geo_root, "city") )
-        else:
-            citypar = "city"
-        geo_query = { citypar: re.compile( r'^'+geo_pars["city"], re.IGNORECASE ) }
-        return geo_query, geo_pars
+        geo_q = return_geo_city_query(geo_root, geo_pars)
 
     if "geoquery" in req_type:
-        if len(geo_root) > 0:
-            geojsonpar = ".".join( (geo_root, "geojson") )
-        else:
-            geojsonpar = "geojson"
-        geo_query = {
-            geojsonpar: {
-                '$near': SON(
-                    [
-                        (
-                            '$geometry', SON(
-                                [
-                                    ('type', 'Point'),
-                                    ('coordinates', [
-                                        geo_pars["geolongitude"],
-                                        geo_pars["geolatitude"]
-                                    ])
-                                ]
-                            )
-                        ),
-                        ('$maxDistance', geo_pars["geodistance"])
-                    ]
-                )
-            }
+        geo_q = return_geo_longlat_query(geo_root, geo_pars)
+
+    return geo_q, geo_pars
+
+################################################################################
+
+def return_geo_city_query(geo_root, geo_pars):
+
+    if len(geo_root) > 0:
+        citypar = ".".join( (geo_root, "city") )
+    else:
+        citypar = "city"
+
+    geo_q = { citypar: re.compile( r'^'+geo_pars["city"], re.IGNORECASE ) }
+
+    return geo_q
+
+################################################################################
+
+def return_geo_longlat_query(geo_root, geo_pars):
+
+    if len(geo_root) > 0:
+        geojsonpar = ".".join( (geo_root, "geojson") )
+    else:
+        geojsonpar = "geojson"
+
+    geo_q = {
+        geojsonpar: {
+            '$near': SON(
+                [
+                    (
+                        '$geometry', SON(
+                            [
+                                ('type', 'Point'),
+                                ('coordinates', [
+                                    geo_pars["geolongitude"],
+                                    geo_pars["geolatitude"]
+                                ])
+                            ]
+                        )
+                    ),
+                    ('$maxDistance', geo_pars["geodistance"])
+                ]
+            )
         }
+    }
 
-        return geo_query, geo_pars
-
-    return geo_query, geo_pars
+    return geo_q
 
 ################################################################################

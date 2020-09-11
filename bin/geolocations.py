@@ -14,7 +14,7 @@ from bycon.geoquery import *
 
 """podmd
 * <https://progenetix.org/services/geolocations?city=zurich>
-* <https://progenetix.org/services/geolocations?geolongitude=-0.13&geolatitude=51.51&geodistance=100000>
+* <https://progenetix.org/services/geolocations?geolongitude=8.55&geolatitude=47.37&geodistance=100000>
 podmd"""
 
 ################################################################################
@@ -38,12 +38,14 @@ def geolocations(service):
         "form_data": form_data,
         service: these_prefs
     }
+
+    byc["geolocations"]["geo_root"] = ""
     
     # response prototype
     r = config["response_object_schema"]
     r["response_type"] = service
 
-    query, geo_pars = geo_query( "", **byc )
+    query, geo_pars = geo_query( **byc )
     for g_k, g_v in geo_pars.items():
         r["parameters"].update( { g_k: g_v })      
 
