@@ -14,6 +14,7 @@ from bycon.beacon_process_specs import *
 
 """podmd
 * <https://progenetix.org/cgi/bycon/bin/biosamples.py?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
+* https://progenetix.org/services/phenopackets?do=phenopackets&accessid=b6340d0f-1c55-42fc-9372-0f7a4f4f5581&variantsaccessid=20b15bd5-2acf-4f36-b143-c1dc24f5191f&debug=1
 podmd"""
 
 ################################################################################
@@ -100,8 +101,13 @@ def phenopackets(service):
     h_o_d_ind, e_ind = handover_return_data( h_o_ind, e_ind )
 
     var_data = [ ]
+    access_id_var = [ ]
+
     if "variantsaccessid" in byc["form_data"]:
         access_id_var = byc["form_data"].getvalue("variantsaccessid")
+    elif "vs._id" in byc["query_results"]:
+        access_id_var = byc["query_results"]["vs._id"]["id"]
+    if len(access_id_var) > 1:
         h_o_var, e_var = retrieve_handover( access_id_var, **byc )
         var_data, e_var = handover_return_data( h_o_var, e_var )
 
