@@ -123,12 +123,3 @@ def beacon_check_dataset_ids( **byc ):
 
     return dataset_ids
 
-################################################################################
-
-def cgi_print_text_response(shout):
-
-    print("Content-Type: text")
-    print()
-    print(shout)
-    exit()
-

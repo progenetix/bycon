@@ -51,7 +51,7 @@ def genespans(service):
     else:
         # TODO: value check & response
         r["errors"].append("No geneId value provided!")
-        cgi_print_json_response( form_data, r )
+        cgi_print_json_response( form_data, r, 422 )
 
     r["parameters"].update( { "geneId": gene_id })
 
@@ -73,8 +73,12 @@ def genespans(service):
     mongo_client.close( )
 
     r[service+"_count"] = len(r["data"])
+
+    if r[service+"_count"] < 1:
+        r["errors"].append("No matching gene...")
+        cgi_print_json_response( form_data, r, 422 )
  
-    cgi_print_json_response( form_data, r )
+    cgi_print_json_response( form_data, r, 200 )
 
 ################################################################################
 ################################################################################

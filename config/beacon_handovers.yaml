@@ -13,6 +13,16 @@ h->o_types:
     h->o_key: 'bs._id'
     # TODO: switch to /services/deliveries only w/ accessid (self scoping)
     script_path_web: '/services/deliveries'
+  phenopackets:
+    id: 'pgx:handover:phenopackets'
+    label: "Phenopackets"
+    description: "retrieve data of the biosamples matched by the query"
+    h->o_key: 'bs._id'
+    # TODO: switch to /services/deliveries only w/ accessid (self scoping)
+    # here, phenopackets actually want individuals; however, the phenopackets
+    # service resolves this itself by forcing the retrieval of the matching
+    # individuals 
+    script_path_web: '/services/phenopackets'
   individualsdata:
     id: 'pgx:handover:individualsdata'
     label: "Individuals"

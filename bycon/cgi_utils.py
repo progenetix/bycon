@@ -35,28 +35,21 @@ def form_return_listvalue( form_data, parameter ):
 
 ################################################################################
 
-def cgi_print_text_response(data):
+def cgi_print_text_response(data, status_code):
 
     print('Content-Type: text')
+    print('status:'+str(status_code))
     print()
     print(data+"\n")
     exit()
 
 ################################################################################
 
-def cgi_print_svg_response(data):
-
-    print('Content-Type: image/svg')
-    print()
-    print(data+"\n")
-    exit()
-
-################################################################################
-
-def cgi_print_json_response(form_data, response):
+def cgi_print_json_response(form_data, response, status_code):
 
     if "callback" in form_data:
         print('Content-Type: text')
+        print('status:'+str(status_code))
         print()
         print(form_data.getvalue("callback")+'('+json.dumps(response, default=str)+")\n")
         exit()
@@ -68,6 +61,7 @@ def cgi_print_json_response(form_data, response):
                 response = response["data"]
 
     print('Content-Type: application/json')
+    print('status:'+str(status_code))
     print()
     print(json.dumps(response, indent=4, sort_keys=True, default=str)+"\n")
     exit()

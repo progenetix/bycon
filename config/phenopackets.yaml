@@ -1,0 +1,16 @@
+defaults:
+  dataset_ids:
+    - progenetix
+  method: phenopackets
+  response_type: return_individuals
+methods:
+  ids:
+    - id
+  details:
+    - id
+    - description
+    - provenance
+    - info
+  phenopackets:
+    - id
+

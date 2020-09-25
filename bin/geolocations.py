@@ -51,7 +51,7 @@ def geolocations(service):
 
     if len(query.keys()) < 1:
         r["errors"].append( "No query generated - missing or malformed parameters" )
-        cgi_print_json_response( form_data, r )
+        cgi_print_json_response( form_data, r, 422 )
 
     mongo_client = MongoClient( )
     g_coll = mongo_client[ defs["db"] ][ defs["coll"] ]
@@ -61,7 +61,7 @@ def geolocations(service):
 
     r[service+"_count"] = len(r["data"])
 
-    cgi_print_json_response( form_data, r )
+    cgi_print_json_response( form_data, r, 200 )
 
 ################################################################################
 ################################################################################

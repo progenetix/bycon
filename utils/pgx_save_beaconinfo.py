@@ -84,7 +84,8 @@ def _dataset_update_counts(ds, **byc):
                     bar.next()
                 bar.finish()
                 b_i_ds["counts"].update( { "variants_distinct": len(v_d.keys()) } )
-                b_i_ds.update( { "filtering_terms": _dataset_get_filters(ds_id, **byc) } )
+    
+    b_i_ds.update( { "filtering_terms": _dataset_get_filters(ds_id, **byc) } )
 
     return(b_i_ds)
 

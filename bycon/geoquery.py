@@ -12,6 +12,10 @@ def geo_query( **byc ):
 
     geo_q = { }
     geo_pars = { }
+
+    if not "geolocations" in byc:
+        return geo_q, geo_pars
+
     g_p_defs = byc["geolocations"]["parameters"]
     g_p_rts = byc["geolocations"]["request_types"]
     geo_root = byc["geolocations"]["geo_root"]

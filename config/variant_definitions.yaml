@@ -140,9 +140,9 @@ request_types:
       - start
       - end
       - referenceName
-    one_of:
-      - variantType
-      - alternateBases
+    # one_of:
+    #   - variantType
+    #   - alternateBases
     
   variantAlleleRequest:
     all_of:

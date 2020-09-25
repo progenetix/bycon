@@ -77,6 +77,12 @@ def dataset_response_add_handovers(ds_id, **byc):
                 else:
                     h_o_r.update( { "url": _handover_create_url(this_server, h_o_defs, h_o_t, accessid) } )
 
+                # TODO: needs a new schema to accommodate this not as HACK ...
+                # the phenopackets URL needs matched variants, which it wouldn't know about ...
+                if "phenopackets" in h_o_t:
+                    if "vs._id" in byc[ "query_results" ].keys():
+                        h_o_r["url"] += "&variantsaccessid="+byc[ "query_results" ][ "vs._id" ][ "id" ]
+
                 b_h_o.append( h_o_r )
 
     return b_h_o
@@ -142,13 +148,6 @@ def handover_return_data( h_o, error ):
 
 def _handover_select_server( **byc ):
 
-    # for e in environ:
-    #     print("{} : {}".format(e, environ.get(e)))
-
-    # if "test" in str(environ.get('SERVER_NAME')):
-    #     return( byc["config"]["test_handover_domain"] )
-    # else:
-    #     return( byc["config"]["web_handover_domain"] )
     s_uri = str(environ.get('SCRIPT_URI'))
     if "https:" in s_uri:
         return "https://"+str(environ.get('HTTP_HOST'))

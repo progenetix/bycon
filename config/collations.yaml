@@ -22,6 +22,10 @@ methods:
     - id
     - label
     - count
+  codematches:
+    - id
+    - label
+    - code_matches
   cnvFrequencies:
     - id
     - label

@@ -4,6 +4,8 @@ defaults:
   method: details
   response_type: return_biosamples
 methods:
+  ids:
+    - id
   details:
     - id
     - description
@@ -15,4 +17,6 @@ methods:
     - id
     - description
     - biocharacteristics
+  phenopackets:
+    - id
 

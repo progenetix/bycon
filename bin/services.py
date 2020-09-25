@@ -9,14 +9,17 @@ import sys, re, cgitb
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
 
-from bin.cytomapper import cytomapper
+from bin.biosamples import biosamples
 from bin.byconplus import byconplus
+from bin.collations import collations
+from bin.cytomapper import cytomapper
+from bin.dbstats import dbstats
 from bin.deliveries import deliveries
 from bin.genespans import genespans
-from bin.collations import collations
 from bin.geolocations import geolocations
+from bin.ontologymaps import ontologymaps
+from bin.phenopackets import phenopackets
 from bin.publications import publications
-from bin.biosamples import biosamples
 
 """podmd
 The `services` application deparses a request URI and calls the respective
@@ -42,11 +45,14 @@ def main():
     services = {
         "biosamples": biosamples,
         "cytomapper": cytomapper,
+        "dbstats": dbstats,
         "deliveries": deliveries,
         "geolocations": geolocations,
         "byconplus": byconplus,
         "publications": publications,
         "genespans": genespans,
+        "ontologymaps": ontologymaps,
+        "phenopackets": phenopackets,
         "collations": collations
     }
 

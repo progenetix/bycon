@@ -63,7 +63,7 @@ def deliveries(service):
         r["parameters"].update( { "accessid": access_id } )
     else:
         r["errors"].append( "No accessid parameter." )
-        cgi_print_json_response( byc["form_data"], r )
+        cgi_print_json_response( byc["form_data"], r, 422 )
 
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
@@ -71,7 +71,7 @@ def deliveries(service):
 
     if e:
         r["errors"].append( e )
-        cgi_print_json_response( byc["form_data"], r )
+        cgi_print_json_response( byc["form_data"], r, 422 )
 
     r["parameters"].update( { "collection": h_o["target_collection"] } )
     r["parameters"].update( { "datasetId": h_o["source_db"] } )
@@ -87,7 +87,7 @@ def deliveries(service):
     else:
         r["data"] = h_o_d
 
-    cgi_print_json_response( byc["form_data"], r )
+    cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################
 ################################################################################

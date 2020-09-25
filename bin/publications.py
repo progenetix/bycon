@@ -85,12 +85,16 @@ def publications(service):
     geo_q, geo_pars = geo_query( **byc )
 
     if geo_q:
+        for g_k, g_v in geo_pars.items():
+            r["parameters"].update( { g_k: g_v })
         if len(query.keys()) < 1:
-            for g_k, g_v in geo_pars.items():
-                r["parameters"].update( { g_k: g_v })
             query = geo_q
         else:
             query = { '$and': [ geo_q, query ] }
+
+    if len(query.keys()) < 1:
+        r["errors"].append( "No query could be constructed from the parameters provided." )
+        cgi_print_json_response( byc["form_data"], r, 422 )
 
     mongo_client = MongoClient( )
     mongo_coll = mongo_client[ config["info_db"] ][ "publications" ]
@@ -128,13 +132,13 @@ def publications(service):
 
         p_l.append( s )
 
+    mongo_client.close( )
+ 
     r["data"] = sorted(p_l, key=itemgetter('sortid'), reverse = True)
     r[service+"_count"] = len(r["data"])
 
-    mongo_client.close( )
- 
     # response
-    cgi_print_json_response( byc["form_data"], r )
+    cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################
 ################################################################################

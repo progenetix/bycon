@@ -1,0 +1,211 @@
+ICDOT_id	ICDOT_label	UBERON_id	UBERON_label	score	original_parsed_UBERON_id	original_parsed_UBERON_label
+icdot-C75.1	pituitary gland	UBERON:0000007	pituitary gland	1000		
+icdot-C06.9	mouth	UBERON:0000165	mouth	1000		
+icdot-C42.0	Blood	UBERON:0000178	blood	1000		
+icdot-C50.9	Breast	UBERON:0000310	breast	1000		
+icdot-C53.0	Endocervix	UBERON:0000458	endocervix	1000		
+icdot-C62.9	testis	UBERON:0000473	testis	1000		
+icdot-C76.2	abdomen	UBERON:0000916	abdomen	1000		
+icdot-C16.9	stomach	UBERON:0000945	stomach	1000		
+icdot-C38.0	heart	UBERON:0000948	heart	1000		
+icdot-C71.9	brain	UBERON:0000955	brain	1000		
+icdot-C69.2	Retina	UBERON:0000966	retina	1000		
+icdot-C69.9	eye	UBERON:0000970	eye	1000		
+icdot-C38.4	pleura	UBERON:0000977	pleura	1000		
+icdot-C60.9	penis	UBERON:0000989	penis	1000		
+icdot-C56.9	ovary	UBERON:0000992	ovary	1000		
+icdot-C55.9	uterus	UBERON:0000995	uterus	1000		
+icdot-C52.9	Vagina	UBERON:0000996	vagina	1000		
+icdot-C72.9	Nervous system	UBERON:0001016	nervous system	1000		
+icdot-C15.9	esophagus	UBERON:0001043	esophagus	1000		
+icdot-C13.9	Hypopharynx	UBERON:0001051	hypopharynx	1000		
+icdot-C20.9	Rectum	UBERON:0001052	rectum	1000		
+icdot-C25.0	Head of pancreas	UBERON:0001069	head of pancreas	1000		
+icdot-C44.5	Skin of trunk	UBERON:0001085	skin of trunk	1000		
+icdot-C75.0	parathyroid gland	UBERON:0001132	parathyroid gland	1000		
+icdot-C25.1	Body of pancreas	UBERON:0001150	body of pancreas	1000		
+icdot-C25.2	Tail of pancreas	UBERON:0001151	tail of pancreas	1000		
+icdot-C18.2	Ascending colon	UBERON:0001156	ascending colon	1000		
+icdot-C18.4	Transverse colon	UBERON:0001157	transverse colon	1000		
+icdot-C18.6	Descending colon	UBERON:0001158	descending colon	1000		
+icdot-C16.1	Fundus of stomach	UBERON:0001160	fundus of stomach	1000		
+icdot-C16.2	Body of stomach	UBERON:0001161	body of stomach	1000		
+icdot-C16.5	Lesser curvature of stomach	UBERON:0001163	lesser curvature of stomach	1000		
+icdot-C74.0	adrenal cortex	UBERON:0001235	adrenal cortex	1000		
+icdot-C67.0	Urinary bladder	UBERON:0001255	urinary bladder	1000		
+icdot-C25.9	Pancreas	UBERON:0001264	pancreas	1000		
+icdot-C54.1	endometrium	UBERON:0001295	endometrium	1000		
+icdot-C54.2	Myometrium	UBERON:0001296	myometrium	1000		
+icdot-C72.2	Olfactory nerve	UBERON:0001579	olfactory nerve	1000		
+icdot-C41.1	Mandible	UBERON:0001684	mandible	1000		
+icdot-C44.2	External ear	UBERON:0001691	external ear	1000		
+icdot-C30.0	Nasal cavity	UBERON:0001707	nasal cavity	1000		
+icdot-C01.9	tongue	UBERON:0001723	tongue	1000		
+icdot-C11.9	nasopharynx	UBERON:0001728	nasopharynx	1000		
+icdot-C10.9	Oropharynx	UBERON:0001729	oropharynx	1000		
+icdot-C08.0	Submandibular gland	UBERON:0001736	submandibular gland	1000		
+icdot-C32.9	Larynx	UBERON:0001737	larynx	1000		
+icdot-C69.4	Ciliary body	UBERON:0001775	ciliary body	1000		
+icdot-C07.9	parotid gland	UBERON:0001831	parotid gland	1000		
+icdot-C00.9	Lip	UBERON:0001833	lip	1000		
+icdot-C71.2	Temporal lobe	UBERON:0001871	temporal lobe	1000		
+icdot-C71.3	Parietal lobe	UBERON:0001872	parietal lobe	1000		
+icdot-C58.9	placenta	UBERON:0001987	placenta	1000		
+icdot-C71.4	Occipital lobe	UBERON:0002021	occipital lobe	1000		
+icdot-C71.6	cerebellum	UBERON:0002037	cerebellum	1000		
+icdot-C73.9	Thyroid gland	UBERON:0002046	thyroid gland	1000		
+icdot-C34.8	Overlapping lesion of lung	UBERON:0002048	lung	1000		
+icdot-C42.2	Spleen	UBERON:0002106	spleen	1000		
+icdot-C22.0	Liver	UBERON:0002107	liver	1000		
+icdot-C17.9	Small intestine	UBERON:0002108	small intestine	1000		
+icdot-C64.9	kidney	UBERON:0002113	kidney	1000		
+icdot-C17.1	Jejunum	UBERON:0002115	jejunum	1000		
+icdot-C34.0	Main bronchus	UBERON:0002182	main bronchus	1000		
+icdot-C72.0	Spinal cord	UBERON:0002240	spinal cord	1000		
+icdot-C48.2	Peritoneum	UBERON:0002358	peritoneum	1000		
+icdot-C61.9	prostate gland	UBERON:0002367	prostate gland	1000		
+icdot-C37.9	Thymus	UBERON:0002370	thymus	1000		
+icdot-C42.1	Bone marrow	UBERON:0002371	bone marrow	1000		
+icdot-C09.9	tonsil	UBERON:0002372	tonsil	1000		
+icdot-C42.4	Hematopoietic system	UBERON:0002390	hematopoietic system	1000		
+icdot-C33.9	trachea	UBERON:0003126	trachea	1000		
+icdot-C05.0	Hard palate	UBERON:0003216	hard palate	1000		
+icdot-C24.0	Extrahepatic bile duct	UBERON:0003703	extrahepatic bile duct	1000		
+icdot-C38.9	mediastinum	UBERON:0003728	mediastinum	1000		
+icdot-C57.0	fallopian tube	UBERON:0003889	fallopian tube	1000		
+icdot-C63.1	Spermatic cord	UBERON:0005352	spermatic cord	1000		
+icdot-C14.0	pharynx	UBERON:0006562	pharynx	1000		
+icdot-C38.1	Anterior mediastinum	UBERON:0008820	anterior mediastinum	1000		
+icdot-C71.1	Frontal lobe	UBERON:0016525	frontal lobe	1000		
+icdot-C18.5	Splenic flexure of colon	UBERON:0022276	splenic flexure of colon	1000		
+icdot-C18.3	Hepatic flexure of colon	UBERON:0022277	hepatic flexure of colon	1000		
+icdot-C10.3	Posterior wall of oropharynx	UBERON:0035240	posterior wall of oropharynx	1000		
+icdot-C50.4	Upper-outer quadrant of breast	UBERON:0035328	upper outer quadrant of breast	1000		
+icdot-C50.5	Lower-outer quadrant of breast	UBERON:0035365	lower outer quadrant of breast	1000		
+icdot-C50.3	Lower-inner quadrant of breast	UBERON:0035477	lower inner quadrant of breast	1000		
+icdot-C50.2	Upper-inner quadrant of breast	UBERON:0035542	upper inner quadrant of breast	1000		
+icdot-C19.9	Rectosigmoid junction	UBERON:0036214	rectosigmoid junction	1000		
+icdot-C77.9	Lymph nodes	UBERON:0000029	lymph node	303.250704225352		
+icdot-C53.9	cervix uteri	UBERON:0000002	uterine cervix	6728.375		
+icdot-C49.9	connective and soft tissue	UBERON:0002384	connective tissue	-810.365358808578	UBERON:0002222	perichondrium
+icdot-C71.0	cerebrum	UBERON:0001869	cerebral hemisphere	5382.7		
+icdot-C34.9	lung and bronchus	UBERON:0002048	lung	99.4680188751884		
+icdot-C57.9	other female genital	UBERON:0000474	female reproductive system	197.726222755931		
+icdot-C40.0	bones and joints	UBERON:0004765	skeletal element	-44.2221854564047	UBERON:0001474	bone element
+icdot-C18.9	large intestine, excl. rectum and rectosigmoid junction	UBERON:0001155	colon	1065.88118811881		
+icdot-C47.9	peripheral nervs incl. Autonomous	UBERON:0001780	spinal nerve	143.730307076101		
+icdot-C44.9	Skin	UBERON:0000014	zone of skin	7.54354985635206	UBERON:0004253	skin muscle
+icdot-C70.0	meninges cerebral, spinal	UBERON:0017641	meningeal branch of spinal nerve	19.4851175244955		
+icdot-C21.9	anal canal and anus	UBERON:0001245	anus	7291.25306914416		
+icdot-C75.3	pineal gland	UBERON:0034715	pineal tract	2138.73809120439		
+icdot-C48.9	retroperitoneum and peritoneum	UBERON:0003693	retroperitoneal space	11825.6287878788		
+icdot-C71.5	Ventricle	UBERON:0002082	cardiac ventricle	165.113496932515		
+icdot-C71.7	brain stem	UBERON:0002298	brainstem	6332.58823529412		
+icdot-C41.9	bone	UBERON:0001474	bone element	36.8425735797399		
+icdot-C18.7	sigmoid incl. rectosigmoid junction	UBERON:0001155	colon	171.589882189882		
+icdot-C72.3	Optic chiasm	UBERON:0000959	optic chiasma	15379.1428571429		
+icdot-C04.9	floor of mouth	UBERON:0003679	mouth floor	1957.34545454545		
+icdot-C22.1	intrahepatic bile ducts	UBERON:0003704	intrahepatic bile duct	10092.5625		
+icdot-C69.0	orbit and lacrimal gland, excl. retina, eye	UBERON:0001817	lacrimal gland	unmatched		
+icdot-C76.1	thorax	UBERON:0000915	thoracic segment of trunk	460.059829059829		
+icdot-C51.0	vagina and labia	UBERON:0004084	genital labium	3549.03296703297		
+icdot-C51.9	vulva	UBERON:0011387	constrictor vulvae muscle	205.399006778213		
+icdot-C30.9	nasal cavity including nasal cartilage	UBERON:0012355	manual acropodium region	8825.94204495372		
+icdot-C18.0	cecum	UBERON:0000314	cecum mucosa	2044.3145280236		
+icdot-C08.9	salivary gland	UBERON:0004809	salivary gland epithelium	2204.20987143338		
+icdot-C74.9	adrenal glands	UBERON:0002369	adrenal gland	1888.66666666667		
+icdot-C26.9	unspecified digest. Organs	UBERON:0001007	digestive system	341.336369822687		
+icdot-C65.9	Renal pelvis, ureter	UBERON:0036295	renal pelvis/ureter	1993.59259259259		
+icdot-C23.9	gallbladder	UBERON:0005033	mucosa of gallbladder	997.678416912488		
+icdot-C24.9	extrahepatic and unspecified bile ducts	UBERON:0003703	extrahepatic bile duct	unmatched		
+icdot-C34.1	Upper lobe, lung	UBERON:0008948	upper lobe of lung	705.157205240175		
+icdot-C15.5	Lower third of esophagus	UBERON:0013473	lower esophagus	750.528028129168		
+icdot-C80.9	Unknown primary site	UBERON:0001062	anatomical entity	unmatched		
+icdot-C77.0	Lymph nodes of head, face and neck	UBERON:0015870	lymph node of head	308.924313568495	UBERON:0001456	face
+icdot-C67.9	Bladder	UBERON:0018707	bladder organ	-17.1204626483685		
+icdot-C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	UBERON:0003576	hip connective tissue	445.974694706087		
+icdot-C48.0	Retroperitoneum	UBERON:0003693	retroperitoneal space	13456.75		
+icdot-C69.3	Choroid	UBERON:0013398	choroidal gland	185.14602876798		
+icdot-C16.3	Gastric antrum	UBERON:0001165	pyloric antrum	1583.14705882353		
+icdot-C06.0	Cheeck mucosa	UBERON:0006956	buccal mucosa	2691.35		
+icdot-C34.3	Lower lobe, lung	UBERON:0008949	lower lobe of lung	705.157205240175		
+icdot-C49.6	Connective, Subcutaneous and other soft tissues of trunk	UBERON:0003586	trunk connective tissue	1244.63769104872	UBERON:0009648	eyelid subcutaneous connective tissue
+icdot-C48.1	Specified parts of peritoneum	UBERON:0003688	omentum	4140.53846153846		
+icdot-C67.1	Dome of bladder	UBERON:0006082	fundus of urinary bladder	11961.5555555556		
+icdot-C34.2	Middle lobe, lung	UBERON:0008955	middle lobe of lung	705.157205240175		
+icdot-C69.8	Overlapping lesion of eye and adnexa	UBERON:0035639	ocular adnexa	7689.57142857143		
+icdot-C67.4	Posterior wall of bladder	UBERON:0001256	wall of urinary bladder	302.491933120366		
+icdot-C03.9	Gum	UBERON:0001828	gingiva	3364.1875		
+icdot-C15.4	Middle third of esophagus	UBERON:0013474	middle part of esophagus	488.468631829265		
+icdot-C67.2	Lateral wall of bladder	UBERON:0001256	wall of urinary bladder	300.433564630493		
+icdot-C16.0	Cardia	UBERON:0001162	cardia of stomach	938.161220043573		
+icdot-C77.3	Lymph nodes of axilla or arm	UBERON:0016399	lymph node of upper limb	2937.14543723755	UBERON:0009472	axilla
+icdot-C49.3	Connective, Subcutaneous and other soft tissues of thorax	UBERON:0003837	thoracic segment connective tissue	967.042268768549	UBERON:0009648	eyelid subcutaneous connective tissue
+icdot-C49.5	Connective, Subcutaneous and other soft tissues of pelvis	UBERON:0003594	pelvis connective tissue	928.703949680231	UBERON:0009648	eyelid subcutaneous connective tissue
+icdot-C49.1	Connective, Subcutaneous and other soft tissues of upper limb and shoulder	UBERON:0003579	shoulder connective tissue	437.680858034284		
+icdot-C54.3	Fundus uteri	UBERON:0009853	body of uterus	1484.46659192825		
+icdot-C14.8	Overlapping lesion of lip, oral cavity and pharynx	UBERON:0001731	cavity of pharynx	213.115950226244		
+icdot-C77.4	Lymph nodes of inguinal region or leg	UBERON:0001542	inguinal lymph node	2889.16244436425		
+icdot-C67.3	Anterior wall of bladder	UBERON:0001256	wall of urinary bladder	308.171207127067		
+icdot-C44.7	Skin of lower limb and hip	UBERON:0001554	skin of hip	1918.47169027851		
+icdot-C77.2	Intra-abdominal lymph nodes	UBERON:0002507	abdominal lymph node	10579.9743339156	UBERON:0007808	adipose tissue of abdominal region
+icdot-C49.4	Connective, Subcutaneous and other soft tissues of abdomen	UBERON:0003567	abdomen connective tissue	718.852097828379	UBERON:0009648	eyelid subcutaneous connective tissue
+icdot-C03.1	Lower gum	UBERON:0011602	gingiva of lower jaw	6728.375		
+icdot-C77.5	Pelvic lymph nodes	UBERON:0015876	pelvic lymph node	727.391891891892		
+icdot-C44.4	Skin of scalp and neck	UBERON:8300000	skin of scalp	8737.13623188406		
+icdot-C44.6	Skin of upper limb and shoulder	UBERON:0001483	skin of shoulder	1910.17785360671		
+icdot-C15.3	Upper third of esophagus	UBERON:0013472	upper esophagus	750.528028129168		
+icdot-C49.0	Connective, Subcutaneous and other soft tissues of head, face, and neck	UBERON:0003566	head connective tissue	-6.24200815005725	UBERON:0009648	eyelid subcutaneous connective tissue
+icdot-C21.8	Overlapping lesion of rectum, anus and anal canal	UBERON:0001245	anus	6169.85723581082		
+icdot-C54.0	Isthmus uteri	UBERON:0009853	body of uterus	1012.04877277932		
+icdot-C32.1	Supraglottis	UBERON:0036263	supraglottic part of larynx	17942.3333333333		
+icdot-C41.0	Bones of skull and face and associated joints	UBERON:0003457	head bone	614.322477941346	UBERON:0009198	craniofacial suture
+icdot-C44.3	Skin of other and unspecified parts of face	UBERON:1000021	skin of face	2625.70731707317	UBERON:0007827	external nose
+icdot-C67.5	Bladder neck	UBERON:0012303	ureteral orifice	53.4029180040852	UBERON:0000974	neck
+icdot-C49.8	Overlapping lesion of connective, subcutaneous and other soft tissues	UBERON:0002384	connective tissue	1427.10209782838	UBERON:0009648	eyelid subcutaneous connective tissue
+icdot-C54.9	Corpus uteri	UBERON:0009853	body of uterus	6728.375		
+icdot-C74.1	Medulla of adrenal gland	UBERON:0001236	adrenal medulla	1838.17229518449		
+icdot-C76.3	Pelvis	UBERON:0008203	pelvic cavity	372.043688054251	UBERON:0001325	muscle of pelvis
+icdot-C70.1	Spinal meninges	UBERON:0017641	meningeal branch of spinal nerve	298.38149058149		
+icdot-C04.0	Anterior floor of mouth	UBERON:0003679	mouth floor	1904.26162811547		
+icdot-C40.2	Long bones of lower limb and associated joints	UBERON:0003606	limb long bone	-46.5142610305067		
+icdot-C75.5	Aortic body and other paraganglia	UBERON:0034978	paraganglion (generic)	10090.6323866896		
+icdot-C03.0	Upper Gum	UBERON:0011601	gingiva of upper jaw	6728.375		
+icdot-C15.1	Thoracic esophagus	UBERON:0035216	thoracic part of esophagus	725.591979846886		
+icdot-C06.2	Retromolar area	UBERON:0013471	retromolar space	3733.98932834476		
+icdot-C77.1	Intrathoracic lymph nodes	UBERON:0007644	thoracic lymph node	10579.9743339156	UBERON:0035815	paracardial fat
+icdot-C47.1	Peripheral nerves and autonomic nervous system of upper limb and shoulder	UBERON:0002410	autonomic nervous system	2768.50684355		
+icdot-C53.1	Exocervix	UBERON:0012249	ectocervix	17942.3333333333		
+icdot-C40.3	Short bones of lower limb and associated joints	UBERON:0013630	short bone	3998.52831312845		
+icdot-C05.9	Palate	UBERON:0007375	roof of mouth	401.361226180613	UBERON:0003682	palatal muscle
+icdot-C02.1	Border of tongue	UBERON:0015178	somite border	418.391898976228		
+icdot-C02.2	Ventral surface of tongue	UBERON:0007367	surface of tongue	1023.43537257368		
+icdot-C67.6	Ureteric orifice	UBERON:0012303	ureteral orifice	2909.56756756757		
+icdot-C76.0	Head, face or neck	UBERON:0000033	head	597.863441191375	UBERON:0001456	face
+icdot-C76.9	ill-defined	UBERON:0001062	anatomical entity	unmatched		
+icdot-C63.9	epididymis, spermatic cord, male genital	UBERON:0005352	spermatic cord	2074.32099606526		
+icdot-C68.0	other urinary organs	UBERON:0001008	renal system	-55.3425793710016		
+icdot-C30.1	middle and inner ear	UBERON:0001756	middle ear	495.550158730159		
+icdot-C26.0	Intestinal tract	UBERON:0000160	intestine	71.5477385437032		
+icdot-C70.9	Meninges	UBERON:0010743	meningeal cluster	978.672727272727		
+icdot-C40.1 	Short bones of upper limb and associated joints	UBERON:0013630	short bone	3990.23447645665		
+icdot-C41.4	Pelvic bones, sacrum, coccyx and associated joints	UBERON:0001270	bony pelvis	3308.5091889477	UBERON:0001350	coccyx
+icdot-C16.8	Overlapping lesion of stomach	UBERON:0000945	stomach	1000		
+icdot-C71	Brain	UBERON:0000955	brain	1000		
+icdot-C13	Hypopharynx	UBERON:0001051	hypopharynx	1000		
+icdot-C65	Renal pelvis	UBERON:0001224	renal pelvis	1000		
+icdot-C02.9	Tongue, NOS	UBERON:0001723	tongue	1000		
+icdot-C22.9	liver	UBERON:0002107	liver	1000		
+icdot-C17.0	Duodenum	UBERON:0002114	duodenum	1000		
+icdot-C42.15	Bone marrow	UBERON:0002371	bone marrow	1000		
+icdot-C47.4	autonomic nervous system	UBERON:0002410	autonomic nervous system	1000		
+icdot-C38.3	Mediastinum, NOS	UBERON:0003728	mediastinum	1000		
+icdot-C25.3	Pancreatic duct	UBERON:0007329	pancreatic duct	1000		
+icdot-C69.6	Orbit, NOS	UBERON:0001697	orbit of skull	127.046409636676	UBERON:3010131	orbital cartilages
+icdot-C18.1	Appendix	UBERON:0001154	vermiform appendix	557.621745231537	UBERON:0004989	mucosa of appendix
+icdot-C22.9	Liver and intrahepatic bile ducts	UBERON:0003704	intrahepatic bile duct	4093.70284736139		
+icdot-C13.1	Hypopharyngeal aspect of aryepiglottic fold	UBERON:0014385	aryepiglottic fold	5804.32131147541		
+icdot-C24.1	Ampulla of Vater	UBERON:0004913	hepatopancreatic ampulla	7823.375		
+icdot-C50.8	Overlapping lesion of breast	UBERON:0000310	breast	1000		
+icdot-C25.8	Overlapping lesion of pancreas	UBERON:0001264	pancreas	1000		
+icdot-C71.8	Overlapping lesion of brain	UBERON:0000955	brain	1000		

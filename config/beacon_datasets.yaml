@@ -16,6 +16,7 @@ datasets:
     handoverTypes:
       - cnvhistogram
       - biosamplesdata
+      - phenopackets
       - individualsdata
       - variantsdata
       - callsetsvariants
@@ -38,6 +39,7 @@ datasets:
     handoverTypes:
       - cnvhistogram
       - biosamplesdata
+      - phenopackets
       - individualsdata
       - variantsdata
       - callsetsvariants
@@ -59,6 +61,7 @@ datasets:
       accessType: PUBLIC
     handoverTypes:
       - biosamplesdata
+      - phenopackets
       - individualsdata
       - variantsdata
       - callsetsvariants
@@ -79,6 +82,7 @@ datasets:
     handoverTypes:
       - cnvhistogram
       - biosamplesdata
+      - phenopackets
       - individualsdata
       - variantsdata
       - progenetixtools

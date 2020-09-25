@@ -159,7 +159,7 @@ def update_queries_from_filters( queries, **byc ):
                                     f_q_l.append( { pre_defs[ "db_key" ]: f_c } )
                                 query_lists[ scope ].append( { '$or': f_q_l } )
                         break
-
+                        
     mongo_client.close()
 
     for c_n in byc[ "config" ][ "collections" ]:
@@ -230,8 +230,6 @@ def update_queries_from_variants( queries, **byc ):
         v_q = create_variantAlleleRequest_query( byc["variant_request_type"], byc["variant_pars"] )
     elif "variantRangeRequest" in byc["variant_request_type"]:
         v_q = create_variantRangeRequest_query( byc["variant_request_type"], byc["variant_pars"] )
-
-    # v_q = getattr( beacon_parse_variants, v_q_method )( byc["variant_request_type"], byc["variant_pars"] ) => somehow erroring w/ "beacon_parse_variants not loaded ..."
 
     if len(query_lists[c_n]) > 0:
         v_q = { '$and': query_lists[c_n].append(v_q) }

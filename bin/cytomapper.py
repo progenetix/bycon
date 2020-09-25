@@ -37,12 +37,12 @@ The `cytobands` and `chrobases` parameters can be used for running the script on
 #### Examples
 
 * retrieve coordinates for some bands on chromosome 8
-  - <https://progenetix.org/services/cytomapper?assemblyId=NCBI36.1&cytoBands=8q>
+  - <https://progenetix.org/services/cytomapper?assemblyId=NCBI36.1&cytoBands=8q24.1>
 * as above, just as text:
   - <https://progenetix.org/services/cytomapper?assemblyId=NCBI.1&cytoBands=8q&text=1>
   - *cytomapper shortcut*: <https://progenetix.org/services/cytomapper/?assemblyId=NCBI36.1&cytoBands=8q&text=1>
 * get the cytobands whith which a base range on chromosome 17 overlaps, in short and long form
-  - <https://progenetix.org/services/cytomapper?assemblyId=NCBI36&chroBases=17:800000-24326000>
+  - <https://progenetix.org/services/cytomapper?assemblyId=GRCh37&chroBases=17:800000-24326000>
 * using `curl` to get the text format mapping of a cytoband range, using the API `services` shortcut:
   - `curl -k https://progenetix.org/services/cytomapper?cytoBands\=8q21q24.1&assemblyId\=hg18&text\=1`
 * command line version of the above
@@ -55,51 +55,46 @@ The `cytobands` and `chrobases` parameters can be used for running the script on
 
 ```
 {
-    "data": {
-        "ChromosomeLocation": {
-            "chr": "7",
-            "end": "q21.12",
-            "species": "",
-            "start": "p21.3",
-            "type": "ChromosomeLocation"
-        },
-        "assemblyId": "GRCh38",
-        "bandList": [
-            "7p21.3",
-            "7p21.2",
-            "7p21.1",
-            "7p15.3",
-            "7p15.2",
-            "7p15.1",
-            "7p14.3",
-            "7p14.2",
-            "7p14.1",
-            "7p13",
-            "7p12.3",
-            "7p12.2",
-            "7p12.1",
-            "7p11.2",
-            "7p11.1",
-            "7q11.1",
-            "7q11.21",
-            "7q11.22",
-            "7q11.23",
-            "7q21.11",
-            "7q21.12"
-        ],
-        "chroBases": "7:7200000-88500000",
-        "cytoBands": "7p21.3q21.12",
-        "end": 88500000,
-        "referenceName": "7",
-        "size": 81300000,
-        "start": 7200000
+  "data": {
+    "ChromosomeLocation": {
+      "chr": "8",
+      "interval": {
+        "end": "q24.13",
+        "start": "q24.11",
+        "type": "CytobandInterval"
+      },
+      "species_id": "taxonomy:9606",
+      "type": "ChromosomeLocation"
     },
-    "errors": [],
-    "parameters": {
-        "assemblyId": "GRCh38",
-        "chroBases": "7:12000000-88000000"
+    "GenomicLocation": {
+      "chr": "8",
+      "interval": {
+        "end": 127300000,
+        "start": 117700000,
+        "type": "SimpleInterval"
+      },
+      "species_id": "taxonomy:9606",
+      "type": "GenomicLocation"
     },
-    "warnings": []
+    "info": {
+      "bandList": [
+        "8q24.11",
+        "8q24.12",
+        "8q24.13"
+      ],
+      "chroBases": "8:117700000-127300000",
+      "cytoBands": "8q24.11q24.13",
+      "referenceName": "8",
+      "size": 9600000
+    }
+  },
+  "errors": [],
+  "parameters": {
+    "assemblyId": "NCBI36.1",
+    "cytoBands": "8q24.1"
+  },
+  "response_type": "cytomapper",
+  "warnings": []
 }
 ```
 
@@ -159,12 +154,15 @@ def cytomapper(service):
     r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
     r["response_type"] = service
     r["data"] = { }
+    r["parameters"].update({ "assemblyId": byc["variant_pars"]["assemblyId"] })
 
     cytoBands = [ ]
     if "cytoBands" in byc["variant_pars"]:
-        cytoBands, chro = _bands_from_cytobands( **byc )
+        cytoBands, chro, start, end = _bands_from_cytobands( **byc )
+        r["parameters"].update({ "cytoBands": byc["variant_pars"]["cytoBands"] })
     elif "chroBases" in byc["variant_pars"]:
-        cytoBands, chro = _bands_from_chrobases( **byc )
+        cytoBands, chro, start, end = _bands_from_chrobases( **byc )
+        r["parameters"].update({ "chroBases": byc["variant_pars"]["chroBases"] })
 
     cb_label = _cytobands_label( cytoBands )
 
@@ -174,37 +172,46 @@ def cytomapper(service):
         r["errors"].append( "No matching cytobands!" )
         _print_terminal_response( byc["args"], r )
         _print_text_response( byc["form_data"], r )
-        cgi_print_json_response( byc["form_data"], r )
+        cgi_print_json_response( byc["form_data"], r, 422 )
 
-    start = int( cytoBands[0]["start"] )
-    end = int( cytoBands[-1]["end"] )
     size = int(  end - start )
     chroBases = chro+":"+str(start)+"-"+str(end)
     
     r["data"].update( {
-        "assemblyId": byc["variant_pars"][ "assemblyId" ],
-        "cytoBands": cb_label,
-        "bandList": [x['chroband'] for x in cytoBands ],
-        "chroBases": chroBases,
-        "referenceName": chro,
-        "start": start,
-        "end": end,
-        "size": size,
+        "info": {
+            "cytoBands": cb_label,
+            "bandList": [x['chroband'] for x in cytoBands ],
+            "chroBases": chroBases,
+            "referenceName": chro,
+            "size": size,
+        },        
         "ChromosomeLocation": {
             "type": "ChromosomeLocation",
-            "species": "taxonomy:9606",
+            "species_id": "taxonomy:9606",
             "chr": chro,
-            "start": cytoBands[0]["cytoband"],
-            "end": cytoBands[-1]["cytoband"]
+            "interval": {
+                "start": cytoBands[0]["cytoband"],
+                "end": cytoBands[-1]["cytoband"],
+                "type": "CytobandInterval"
+            }
+        },
+        "GenomicLocation": {
+            "type": "GenomicLocation",
+            "species_id": "taxonomy:9606",
+            "chr": chro,
+            "interval": {
+                "start": start,
+                "end": end,
+                "type": "SimpleInterval"
+            }
         }
     } )
 
-    # exception: onl;y data response here... r was just for errors etc.
-    r = r["data"]
+    # exception: only data response here... r was just for errors etc.
 
     _print_terminal_response( byc["args"], r )
     _print_text_response( byc["form_data"], r )
-    cgi_print_json_response( byc["form_data"], r )
+    cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################
 
@@ -261,7 +268,7 @@ def _bands_from_cytobands( **byc ):
 
     cytobands = cytobands[cb_from:cb_to]
 
-    return cytobands, chro
+    return cytobands, chro, int( cytobands[0]["start"] ), int( cytobands[-1]["end"] )
 
 ################################################################################
 
@@ -278,8 +285,10 @@ def _bands_from_chrobases( **byc ):
         cb_end = int(cb_end)
 
     cytobands = list(filter(lambda d: d[ "chro" ] == chro, byc["cytobands"]))
-    if cb_start == None and cb_end == None:
-        return cytobands, chro
+    if cb_start == None:
+        cb_start = 0
+    if cb_end == None:
+        cb_end = int( cytoBands[-1]["end"] )
 
     if isinstance(cb_start, int):
         cytobands = list(filter(lambda d: int(d[ "end" ]) > cb_start, cytobands))
@@ -287,7 +296,7 @@ def _bands_from_chrobases( **byc ):
     if isinstance(cb_end, int):
         cytobands = list(filter(lambda d: int(d[ "start" ]) < cb_end, cytobands))
 
-    return cytobands, chro
+    return cytobands, chro, cb_start, cb_end
 
 ################################################################################
 

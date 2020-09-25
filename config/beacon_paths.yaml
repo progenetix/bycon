@@ -306,7 +306,7 @@ paths:
     post:
       description: |
         Get the individual to whom this biosample belongs to.
-      operationId: postInvidigualsByBiosampleId
+      operationId: postIndividualsByBiosampleId
       tags:
         - Endpoints
       parameters:

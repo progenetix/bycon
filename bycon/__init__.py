@@ -35,7 +35,6 @@ from .beacon_parse_variants import get_variant_request_type
 from .beacon_parse_variants import create_variantCNVrequest_query
 from .geoquery import geo_query
 from .cgi_utils import cgi_parse_query
-from .cgi_utils import cgi_print_svg_response
 from .cgi_utils import form_return_listvalue
 from .cgi_utils import cgi_print_text_response
 from .cgi_utils import cgi_print_json_response

@@ -61,9 +61,10 @@ def parse_variants( **byc ):
                     v_p = int( v_p )
                 v_p_c[ p_k ] = v_p
 
-    # TODO: should probably be more systematic
+    # TODO: this is meant to accommodate the "<end" interbase matches; 
+    # should probably be more systematic
     for k in [ "start", "end" ]:
-        if "k" in v_p_c:
+        if k in v_p_c:
             if len(v_p_c[ k ]) == 1:
                 v_p_c[ k ].append( v_p_c[ k ][0] + 1 )
 
@@ -97,6 +98,15 @@ def get_variant_request_type( **byc ):
     else:
         brts = byc["variant_defs"]["request_types"]
         brts_k = brts.keys()
+        # HACK: setting to range request to override possible CNV match
+        # i.e. if precise, single start and end values are provided without
+        # explicit requestType => a range query w/ any overlap is assumed
+        if "start" in v_pars:
+            if v_pars[ "start" ][1] == v_pars[ "start" ][0] + 1:
+                if v_pars[ "end" ][1] == v_pars[ "end" ][0] + 1:
+                    if "referenceName" in v_pars:
+                        if "assemblyId" in v_pars:
+                            brts_k = [ "variantRangeRequest" ]
 
     vrt_matches = [ ]
 

@@ -71,7 +71,7 @@ def collations(service):
     if len(byc[ "dataset_ids" ]) < 1:
       r["errors"].append( "No `datasetIds` parameter provided." )
     if len(r["errors"]) > 0:
-      cgi_print_json_response( byc["form_data"], r )
+      cgi_print_json_response( byc["form_data"], r, 422 )
 
     # saving the parameters to the response
     for p in ["dataset_ids", "method", "filters"]:
@@ -88,14 +88,21 @@ def collations(service):
             c =  byc["filter_defs"][ pre ]["collation"]
             mongo_coll = mongo_db[ c ]
             for subset in mongo_coll.find( query ):
+
+                if "codematches" in byc["method"]:
+                    if not "code_matches" in subset:
+                        continue
+                    if int(subset[ "code_matches" ]) < 1:
+                        continue
+
                 i_d = subset["id"]
                 if not i_d in s_s:
                     s_s[ i_d ] = { }
                 for k in d_k:
                     # TODO: integer format defined in config?
                     if k in subset.keys():
-                        if k == "count":
-                            if "count" in s_s[ i_d ]:
+                        if k == "count" or k == "code_matches":
+                            if k in s_s[ i_d ]:
                                 s_s[ i_d ][ k ] += int(subset[ k ])
                             else:
                                 s_s[ i_d ][ k ] = int(subset[ k ])
@@ -109,7 +116,7 @@ def collations(service):
     r["data"] = list(s_s.values())   
     r["results_count"] = len(s_s)
 
-    cgi_print_json_response( byc["form_data"], r )
+    cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################
 ################################################################################

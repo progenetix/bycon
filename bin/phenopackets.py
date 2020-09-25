@@ -22,11 +22,11 @@ podmd"""
 
 def main():
 
-    biosamples("biosamples")
+    phenopackets("phenopackets")
     
 ################################################################################
 
-def biosamples(service):
+def phenopackets(service):
 
     config = read_bycon_config( path.abspath( dir_path ) )
     these_prefs = read_named_prefs( service, dir_path )
@@ -72,7 +72,7 @@ def biosamples(service):
     if len(byc[ "dataset_ids" ]) < 1:
       r["errors"].append( "No `datasetIds` parameter provided." )
     if len(byc[ "dataset_ids" ]) > 1:
-      r["errors"].append( "More than 1 `datasetIds` value was provided." )
+      r["errors"].append( "More than 1 `datasetIds` value were provided." )
     if len(r["errors"]) > 0:
       cgi_print_json_response( byc["form_data"], r, 422 )
 
@@ -84,9 +84,6 @@ def biosamples(service):
     r["parameters"].update( { "dataset": ds_id } )
     r["response_type"] = service
 
-    if "phenopackets" in byc["method"]:
-        byc.update( { "response_type": "return_individuals" } )
-
     byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
     query_results_save_handovers( **byc )
 
@@ -97,18 +94,56 @@ def biosamples(service):
     if e:
         r["errors"].append( e )
 
+    access_id_ind = byc["query_results"]["is._id"][ "id" ]
+    ind_s = [ ]
+    h_o_ind, e_ind = retrieve_handover( access_id_ind, **byc )
+    h_o_d_ind, e_ind = handover_return_data( h_o_ind, e_ind )
+
+    var_data = [ ]
+    if "variantsaccessid" in byc["form_data"]:
+        access_id_var = byc["form_data"].getvalue("variantsaccessid")
+        h_o_var, e_var = retrieve_handover( access_id_var, **byc )
+        var_data, e_var = handover_return_data( h_o_var, e_var )
+
+    for i_s in h_o_d_ind:
+
+        pxf = {
+            "id": "pxf__"+i_s["id"],
+            "subject": i_s["id"],
+            "biosamples": [ ]
+        }
+
+        # TODO: method here retrieves & reformats the biosamples
+        pxf_bs = list(filter(lambda d: d["individual_id"] == i_s["id"], h_o_d))
+        for bs in pxf_bs:
+            p_bs = {
+                "id": bs["id"],
+                "histologicalDiagnosis": "",
+                "externalReferences": [ ],
+            }
+            ncit = list(filter(lambda d: "NCIT" in d["type"]["id"], bs["biocharacteristics"]))
+            if ncit:
+                p_bs.update( { "histologicalDiagnosis": ncit[0]["type"] })
+            if "sampledTissue" in bs:
+                p_bs.update( { "sampledTissue": bs["sampledTissue"]})
+            if "external_references" in bs:
+                for e_r in bs["external_references"]:
+                    p_bs["externalReferences"].append(e_r["type"])
+
+            if len(var_data) > 0:
+                bs_vars = list(filter( lambda x : x['biosample_id'] == bs["id"], var_data ) )
+                p_bs.update( { "genomicVariants": [ ] } )
+                for v in bs_vars:
+                    p_bs["genomicVariants"].append( v["digest"] )
+
+            pxf["biosamples"].append( p_bs )
+
+        r["data"].append( pxf )
+
+    r["response_type"] = service
+
     if len(r["errors"]) > 0:
       cgi_print_json_response( byc["form_data"], r, 422 )
-
-    for b_s in h_o_d:
-        s = { }
-        for k in these_prefs["methods"][ byc["method"] ]:
-            # TODO: harmless hack
-            if k in b_s.keys():
-                s[ k ] = b_s[ k ]
-            else:
-                s[ k ] = None
-        r["data"].append( s )
 
     r[service+"_count"] = len(r["data"])
     cgi_print_json_response( byc["form_data"], r, 200 )

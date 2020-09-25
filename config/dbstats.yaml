@@ -1,0 +1,9 @@
+defaults:
+  method: counts
+  response_type: return_dbstats
+methods:
+  counts:
+    - counts
+  filtering_terms:
+    - counts
+    - filtering_terms

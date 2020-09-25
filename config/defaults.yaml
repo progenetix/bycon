@@ -15,6 +15,9 @@ collections:
   - callsets
   - individuals
   - variants
+  - collations
+  - biosubsets
+  - publications
 info_db: progenetix
 beacon_info_coll: "beaconinfo"
 beacon_info_count_labels:
@@ -83,8 +86,10 @@ io_prefixes:
   - UBERON
   - MONDO
   - PMID
+  - EFO
   - geogsm
   - geogse
+  - geogpl
   - cellosaurus
 response_object_schema:
   parameters: { }
