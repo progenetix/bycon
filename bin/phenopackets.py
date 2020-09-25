@@ -132,9 +132,9 @@ def phenopackets(service):
 
             if len(var_data) > 0:
                 bs_vars = list(filter( lambda x : x['biosample_id'] == bs["id"], var_data ) )
-                p_bs.update( { "genomicVariants": [ ] } )
+                p_bs.update( { "variants": [ ] } )
                 for v in bs_vars:
-                    p_bs["genomicVariants"].append( v["digest"] )
+                    p_bs["variants"].append( v["digest"] )
 
             pxf["biosamples"].append( p_bs )
 
