@@ -154,7 +154,7 @@ def execute_bycon_queries(ds_id, **byc):
                 prevars["query"] = { "biosample_id": { "$in": prefetch[ "bs.id" ]["target_values"] } }
                 prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
-        if byc["response_type"] == "return_individuals":
+        if "individuals" in byc["response_type"] or "phenopackets" in byc["response_type"]:
             prevars["method"] = "bs.isid->is.id"
             prevars["query"] = { "_id": { "$in": prefetch[ "bs._id" ]["target_values"] } }
             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )

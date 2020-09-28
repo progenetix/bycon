@@ -1,16 +1,19 @@
+parameters:
+  dataset_ids:
+    type: array
+    default:
+      - progenetix
+  response_type:
+    type: string
+    default: return_phenopackets
+  variant_format:
+    type: string
+    default: progenetix
 defaults:
   dataset_ids:
     - progenetix
-  method: phenopackets
   response_type: return_individuals
-methods:
-  ids:
-    - id
-  details:
-    - id
-    - description
-    - provenance
-    - info
-  phenopackets:
-    - id
-
+  variant_format: digest
+variant_formats:
+  - digest
+  - progenetix

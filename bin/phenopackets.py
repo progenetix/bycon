@@ -13,7 +13,7 @@ from bycon import *
 from bycon.beacon_process_specs import *
 
 """podmd
-* <https://progenetix.org/cgi/bycon/bin/biosamples.py?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
+* <https://progenetix.org/cgi/bycon/bin/phenopackets.py?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus&debug=1>
 * https://progenetix.org/services/phenopackets?do=phenopackets&accessid=b6340d0f-1c55-42fc-9372-0f7a4f4f5581&variantsaccessid=20b15bd5-2acf-4f36-b143-c1dc24f5191f&debug=1
 podmd"""
 
@@ -44,14 +44,14 @@ def phenopackets(service):
     }
 
     # first pre-population w/ defaults
-    for d_k, d_v in these_prefs["defaults"].items():
-        byc.update( { d_k: d_v } )
-
-    # ... then modification if parameter in request
-    if "method" in byc["form_data"]:
-        m = byc["form_data"].getvalue("method")
-        if m in these_prefs["methods"].keys():
-            byc["method"] = m
+    for p_k, p_v in these_prefs["parameters"].items():
+        if "default" in p_v:
+            byc.update( { p_k: p_v[ "default" ] } )
+        if p_k in byc["form_data"]:
+            if "array" in p_v[ "type" ]:
+                byc.update( { p_k: byc["form_data"].getlist( p_k ) } )
+            else:
+                byc.update( { p_k: byc["form_data"].getvalue( p_k ) } )
 
     byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
     byc.update( { "dataset_ids": beacon_check_dataset_ids( **byc ) } )
@@ -80,7 +80,7 @@ def phenopackets(service):
     ds_id = byc[ "dataset_ids" ][ 0 ]
 
     # saving the parameters to the response
-    for p in ["method", "filters", "variant_pars"]:
+    for p in ["filters", "variant_pars"]:
         r["parameters"].update( { p: byc[ p ] } )
     r["parameters"].update( { "dataset": ds_id } )
     r["response_type"] = service
@@ -136,11 +136,17 @@ def phenopackets(service):
                 for e_r in bs["external_references"]:
                     p_bs["externalReferences"].append(e_r["type"])
 
+            # TODO: The `digest` here is just a minimal drop-in representation.
+            # HGVS cannot be used since it doesn't allow DUP ...
             if len(var_data) > 0:
                 bs_vars = list(filter( lambda x : x['biosample_id'] == bs["id"], var_data ) )
-                p_bs.update( { "variants": [ ] } )
-                for v in bs_vars:
-                    p_bs["variants"].append( v["digest"] )
+                if "progenetix" in byc["variant_format"]:
+                    p_bs.update( { "variants": bs_vars } )
+                else:
+                    p_bs.update( { "variants": [ ] } )
+                    for v in bs_vars:
+                        if "digest" in byc["variant_format"]:
+                            p_bs["variants"].append( v["digest"] )
 
             pxf["biosamples"].append( p_bs )
 
