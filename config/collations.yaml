@@ -30,4 +30,7 @@ methods:
     - id
     - label
     - frequencymaps
+  codes:
+    - id
+    - label
 

@@ -4,12 +4,12 @@ from os import path as path
 from pymongo import MongoClient
 import sys
 
-from .beacon_parse_variants import *
+from .parse_variants import *
 from .geoquery import *
 
 ################################################################################
 
-def beacon_create_queries( **byc ):
+def create_queries( **byc ):
 
     q_s = { }
     q_s = update_queries_from_filters( q_s, **byc )

@@ -5,7 +5,7 @@ from os import path as path
 from os import environ
 
 from .cgi_utils import *
-from .beacon_process_handovers import *
+from .process_handovers import *
 from .query_execution import execute_bycon_queries
 
 ################################################################################

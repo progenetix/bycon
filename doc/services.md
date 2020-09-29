@@ -4,7 +4,7 @@
 The _bycon_ environment provides a number of data services which make use of
 resources in the _Progenetix_ environment.
 
-### _biosamples_
+### [_biosamples_](biosamples.md)
 
 This endpoint is mostly aimed at providing _biosamples_ handover functionality. 
 However, the app uses the same query processing mechanism as the main _byconplus_
@@ -14,19 +14,12 @@ application.
 
 * <http://progenetix.org/services/biosamples?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResonses=ALL&requestType=null&referenceName=null&filterLogic=OR&filters=NCIT:C7376&filters=NCIT:C45665&filters=NCIT:C45655&filters=NCIT:C45655>
 
-### _collations_
+### [_collations_](collations.md)
 
 * provides access to information about data "subsets" in the Progenetix project
 databases
   - typically aggregations of samples sharing an ontology code (e.g. NCIT) or 
   external identifier (e.g. PMID)
-
-##### Examples
-
-* <http://progenetix.org/services/collations?deliveryKeys=id,count&filters=cellosaurus&datasetIds=progenetix>
-* <https://progenetix.org/services/collations?filters=NCIT>
-* <http://progenetix.org/cgi-bin/bycon/bin/collations.py?filters=NCIT&datasetIds=progenetix&method=counts>
-* <http://progenetix.org/services/collations?filters=PMID&datasetIds=progenetix&method=counts&callback=4445-9938-cbat-9891-kllt>
 
 ### _publications_
 
@@ -42,18 +35,9 @@ geographic proximity; text queries are not (yet) implemented
 * <http://progenetix.org/cgi/bycon/bin/publications.py?filters=PMID:22824167&method=details>
 * <http://progenetix.org/cgi/bycon/bin/publications.py?geolongitude=8.55&geolatitude=47.37&geodistance=100000>
 
-### _cytomapper_
+### [_cytomapper_](cytomapper.md)
 
 * provides mappings from genome coordinates to cytobands an vice versa
-* can be used e.g in Beacon interface implementations, to facilitate the input
-of genome coordinates
-* requires either
-  * a properly formatted cytoband annotation (`cytoBands`)
-    - "8", "9p11q21", "8q", "1p12qter"
-  * or a concatenated `chroBases` parameter
-    - `7:23028447-45000000`
-    - `X:99202660`
-* a different `assemblyId` then the assumed _GRCh38_ default can be provided
 
 ##### Examples
 
