@@ -10,7 +10,7 @@ import sys, os, datetime, argparse
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon import *
-from bycon.beacon_process_specs import *
+from bycon.read_specs import *
 
 """podmd
 * <https://progenetix.org/cgi/bycon/bin/phenopackets.py?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus&debug=1>

@@ -10,9 +10,9 @@ import argparse
 # local
 dir_path = path.dirname(path.abspath(__file__))
 sys_path.append(path.join(path.abspath(dir_path), '..'))
-from bycon.beacon_parse_variants import *
+from bycon.parse_variants import *
 from bycon.cgi_utils import *
-from bycon.beacon_process_specs import *
+from bycon.read_specs import *
 from bycon.cytoband_utils import *
 
 
