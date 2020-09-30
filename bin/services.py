@@ -56,26 +56,38 @@ def main():
         "collations": collations
     }
 
-    url_comps = urlparse( environ.get('REQUEST_URI') )
 
     if "debug=1" in environ.get('REQUEST_URI'):
         cgitb.enable()
         print('Content-Type: text')
         print()
 
+    url_comps = urlparse( environ.get('REQUEST_URI') )
+    p_items = re.split(r'\/|\&', url_comps.path)
     i = 0
     f = ""
-    p_items = re.split(r'\/|\&', url_comps.path)
+
     for p in p_items:
-        i += 1
-        if p == "services":
-            f = p_items[ i ]
+        if len(p_items) > i:
+            i += 1
+            if p == "services":
+                if p_items[ i ] in services.keys():    
+                    f = p_items[ i ]
+                    services[f](f)
 
-    if f in services.keys():
-        services[f](f)
+    _return_error()
 
 ################################################################################
 ################################################################################
+
+def _return_error():
+
+    print('Content-Type: text')
+    print('status:422')
+    print()
+    print("No correct service path provided. Please refer to the documentation at http://info.progenetix.org/tags/services/")
+    exit()
+
 ################################################################################
 ################################################################################
 

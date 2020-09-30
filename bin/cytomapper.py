@@ -243,10 +243,10 @@ def _print_terminal_response(args, r):
             exit()
 
     if args.cytobands:
-        print(str(r["data"][ "chroBases" ]))
+        print(str(r["data"]["info"][ "chroBases" ]))
         exit()
     elif args.chrobases:
-        print(str(r["data"][ "cytoBands" ]))
+        print(str(r["data"]["info"][ "cytoBands" ]))
         exit()
 
     return
@@ -261,12 +261,12 @@ def _print_text_response(form_data, r):
         if "cytoBands" in r[ "parameters" ]:
             print('Content-Type: text')
             print()
-            print(str(r["data"][ "chroBases" ])+"\n")
+            print(str(r["data"]["info"][ "chroBases" ])+"\n")
             exit()
         elif "chroBases" in r[ "parameters" ]:
             print('Content-Type: text')
             print()
-            print(str(r["data"][ "cytoBands" ])+"\n")
+            print(str(r["data"]["info"][ "cytoBands" ])+"\n")
             exit()
 
     return
