@@ -11,12 +11,11 @@ h->o_types:
     label: "Biosamples"
     description: "retrieve data of the biosamples matched by the query"
     h->o_key: 'bs._id'
-    # TODO: switch to /services/deliveries only w/ accessid (self scoping)
     script_path_web: '/services/deliveries'
   phenopackets:
     id: 'pgx:handover:phenopackets'
     label: "Phenopackets"
-    description: "retrieve data of the biosamples matched by the query"
+    description: "retrieve data of the phenopackets matched by the query"
     h->o_key: 'bs._id'
     # TODO: switch to /services/deliveries only w/ accessid (self scoping)
     # here, phenopackets actually want individuals; however, the phenopackets
@@ -28,14 +27,12 @@ h->o_types:
     label: "Individuals"
     description: "retrieve data of the individuals matched by the query"
     h->o_key: 'is._id'
-    # TODO: switch to /services/deliveries only w/ accessid (self scoping)
-    script_path_web: '/cgi-bin/beacondeliver.cgi'
+    script_path_web: '/services/deliveries'
   variantsdata:
     id: 'pgx:handover:variantsdata'
     label: "Variants"
     description: "retrieve variants matched by the query"
     h->o_key: 'vs._id'
-    # TODO: switch to /services/deliveries only w/ accessid (self scoping)
     script_path_web: '/cgi-bin/beacondeliver.cgi'
   callsetsvariants:
     id: 'pgx:handover:callsetsvariants'
@@ -43,13 +40,6 @@ h->o_types:
     description: "export all variants of matched callsets - potentially huge dataset..."
     h->o_key: 'cs._id'
     script_path_web: '/cgi-bin/beacondeliver.cgi'
-  progenetixtools:
-    id: 'pgx:handover:progenetixtools'
-    label: "Legacy Interface"
-    description: "hand the data over to the old Progenetix interface for visualization and additional information"
-    h->o_key: 'cs._id'
-    script_path_web: '/cgi-bin/pgx_process.cgi'
-    remove_subdomain: True
   UCSClink:   
     id: 'pgx:handover:bedfile2ucsc'
     label: "Variants in UCSC"

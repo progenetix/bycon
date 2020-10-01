@@ -20,7 +20,6 @@ datasets:
       - individualsdata
       - variantsdata
       - callsetsvariants
-      - progenetixtools
       - UCSClink
       - queryaggregation
 
@@ -43,7 +42,6 @@ datasets:
       - individualsdata
       - variantsdata
       - callsetsvariants
-      - progenetixtools
       - UCSClink
       - queryaggregation
 
@@ -85,7 +83,6 @@ datasets:
       - phenopackets
       - individualsdata
       - variantsdata
-      - progenetixtools
       - callsetsvariants
       - UCSClink
 
