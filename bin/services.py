@@ -73,6 +73,7 @@ def main():
             if p == "services":
                 if p_items[ i ] in services.keys():    
                     f = p_items[ i ]
+                    # TODO: dynamic loader, then call
                     services[f](f)
 
     _return_error()
