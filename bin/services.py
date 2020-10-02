@@ -17,6 +17,7 @@ from bin.dbstats import dbstats
 from bin.deliveries import deliveries
 from bin.genespans import genespans
 from bin.geolocations import geolocations
+from bin.ids import ids
 from bin.ontologymaps import ontologymaps
 from bin.phenopackets import phenopackets
 from bin.publications import publications
@@ -44,11 +45,12 @@ podmd"""
 def main():
     services = {
         "biosamples": biosamples,
+        "byconplus": byconplus,
         "cytomapper": cytomapper,
         "dbstats": dbstats,
         "deliveries": deliveries,
         "geolocations": geolocations,
-        "byconplus": byconplus,
+        "ids": ids,
         "publications": publications,
         "genespans": genespans,
         "ontologymaps": ontologymaps,
@@ -75,13 +77,7 @@ def main():
                     f = p_items[ i ]
                     # TODO: dynamic loader, then call
                     services[f](f)
-
-    _return_error()
-
-################################################################################
-################################################################################
-
-def _return_error():
+                    exit()
 
     print('Content-Type: text')
     print('status:422')

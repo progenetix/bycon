@@ -1,0 +1,11 @@
+format_patterns:
+  - pattern: '^(pgx\:)?(pgxbs\-[\w\-\.]{4,128})$'
+    link: '/samples/details?datasetIds=progenetix&id='
+  - pattern: '^(pgx\:)?(NCIT(\:C[\d]{4,8})?)$'
+    link: '/subsets/list?datasetIds=progenetix&filters='
+  - pattern: '^(pgx\:)?(icdom(\-[\d]{5})?)$'
+    link: '/subsets/list?datasetIds=progenetix&filters='
+  - pattern: '^(pgx\:)?(icdot(\-C\d\d?\.\d)?)$'
+    link: '/subsets/list?datasetIds=progenetix&filters='
+  - pattern: ^(pgx\:)?(PMID\:\d{5,10})$'
+    link: '/publications/details?id='
