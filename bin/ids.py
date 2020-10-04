@@ -16,7 +16,8 @@ website endpoints. There is no check if the id exists; this is left to the web
 page handling itself.
 
 Stacking with the "pgx:" prefix is allowed.
-
+* <https://progenetix.org/services/ids/pgxbs-kftva5zv>
+* <https://progenetix.org/services/ids/PMID:28966033>
 * <https://progenetix.org/services/ids/NCIT:C3262>
 podmd"""
 
