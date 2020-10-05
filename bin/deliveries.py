@@ -53,6 +53,7 @@ def main():
 def deliveries(service):
     
     config = read_bycon_config( path.abspath( dir_path ) )
+    these_prefs = read_named_prefs( "services", dir_path )
 
     byc = {
         "config": config,
@@ -78,23 +79,30 @@ def deliveries(service):
 
     # TODO: sub & clean upp etc.
     if not "accessid" in q_par:
+
         byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
         if not len(byc["dataset_ids"]) == 1:
             r["errors"].append( "Not exactly one datasetIds item specified." )
-            cgi_print_json_response( byc["form_data"], r, 422 )
         ds_id = byc["dataset_ids"][0]
+        if not ds_id in byc["config"]["dataset_ids"]:
+            r["errors"].append( "Not exactly one datasetIds item specified." )
+
+        if len(r["errors"]) > 0:
+            cgi_print_json_response( byc["form_data"], r, 422 )
+
         if not "collection" in byc["form_data"]:
             r["errors"].append( "No data collection specified." )
             cgi_print_json_response( byc["form_data"], r, 422 )
-        coll = byc["form_data"].getvalue( "collection" )
 
-        q = {
-        "$or":
-            [
+        coll = byc["form_data"].getvalue( "collection" )
+        if not coll in byc["config"]["collections"]:
+            r["errors"].append( f"Collection {coll} is not specified in preferences." )
+            cgi_print_json_response( byc["form_data"], r, 422 )
+       
+        q = { "$or": [
                 { q_par: r["parameters"][ q_par ] },
                 { q_par: ObjectId( r["parameters"][ q_par ] ) }
-            ]
-        }
+            ] }
 
         mongo_client = MongoClient()
         r.update( { "data": mongo_client[ ds_id][ coll ].find_one( q ) } )
@@ -108,7 +116,9 @@ def deliveries(service):
             cgi_print_json_response( byc["form_data"], r, 422 )
         cgi_print_json_response( byc["form_data"], r, 200 )
 
+    ############################################################################
     # continuing with default -> accessid
+    ############################################################################
 
     access_id = r["parameters"][ q_par ]
 
@@ -135,7 +145,6 @@ def deliveries(service):
         r["data"] = h_o_d
 
     cgi_print_json_response( byc["form_data"], r, 200 )
-
 
 ################################################################################
 ################################################################################

@@ -1,0 +1,13 @@
+service_names:
+  - biosamples
+  - byconplus
+  - cytomapper
+  - dbstats
+  - deliveries
+  - genespans
+  - geolocations
+  - ids
+  - ontologymaps
+  - publications
+  - phenopackets
+  - collations

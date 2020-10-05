@@ -7,22 +7,11 @@ import sys, re, cgitb
 
 from importlib import import_module
 
+
 # local
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
-
-# from bin.biosamples import biosamples
-# from bin.byconplus import byconplus
-# from bin.collations import collations
-# from bin.cytomapper import cytomapper
-# from bin.dbstats import dbstats
-# from bin.deliveries import deliveries
-# from bin.genespans import genespans
-# from bin.geolocations import geolocations
-# from bin.ids import ids
-# from bin.ontologymaps import ontologymaps
-# from bin.phenopackets import phenopackets
-# from bin.publications import publications
+from bycon.read_specs import read_named_prefs
 
 """podmd
 The `services` application deparses a request URI and calls the respective
@@ -33,10 +22,10 @@ rewrite in the server configuration:
 RewriteRule     "^/services(.*)"     /cgi-bin/bycon/bin/services.py$1      [PT]
 ```
 
-This allows the creattion of canonical URLs, e.g.:
+This allows the creation of canonical URLs, e.g.:
 
-* <https://progenetix.org/services/byconplus/?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&start=18000000&start=21975097&end=21967753&end=26000000&filters=icdom-94403>
-* <https://progenetix.org/services/cytomapper/?assemblyId=ncbi36.1&cytoBands=8q&text=1>
+* <https://progenetix.org/services/byconplus?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&start=18000000&start=21975097&end=21967753&end=26000000&filters=icdom-94403>
+* <https://progenetix.org/services/cytomapper?assemblyId=ncbi36.1&cytoBands=8q&text=1>
 
 podmd"""
 
@@ -46,20 +35,7 @@ podmd"""
 
 def main():
 
-    services = [
-        "biosamples",
-        "byconplus",
-        "cytomapper",
-        "dbstats",
-        "deliveries",
-        "geolocations",
-        "ids",
-        "publications",
-        "genespans",
-        "ontologymaps",
-        "phenopackets",
-        "collations"
-    ]
+    these_prefs = read_named_prefs( "services", dir_path )
 
     if "debug=1" in environ.get('REQUEST_URI'):
         cgitb.enable()
@@ -75,7 +51,7 @@ def main():
         if len(p_items) > i:
             i += 1
             if p == "services":
-                if p_items[ i ] in services:    
+                if p_items[ i ] in these_prefs["service_names"]:    
                     f = p_items[ i ]
                     
                     # dynamic package/function loading
@@ -84,7 +60,10 @@ def main():
                         serv = getattr(mod, f)
                         serv(f)
                     except Exception as e:
-                        print('Service name error: {}'.format(e))
+                        print('Content-Type: text')
+                        print('status:422')
+                        print()
+                        print('Service {} error: {}'.format(f, e))
 
                     exit()
 
