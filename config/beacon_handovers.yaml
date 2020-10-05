@@ -5,7 +5,7 @@ h->o_types:
     label: "CNV Histogram"
     description: "create a CNV histogram from matched callsets"
     h->o_key: 'cs._id'
-    script_path_web: '/cgi-bin/beacondeliver.cgi'
+    script_path_web: '/cgi-bin/api_process.cgi'
   biosamplesdata:
     id: 'pgx:handover:biosamplesdata'
     label: "Biosamples"
