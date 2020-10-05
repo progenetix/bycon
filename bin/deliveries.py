@@ -98,11 +98,13 @@ def deliveries(service):
         if not coll in byc["config"]["collections"]:
             r["errors"].append( f"Collection {coll} is not specified in preferences." )
             cgi_print_json_response( byc["form_data"], r, 422 )
-       
-        q = { "$or": [
-                { q_par: r["parameters"][ q_par ] },
-                { q_par: ObjectId( r["parameters"][ q_par ] ) }
-            ] }
+
+        q = { q_par: r["parameters"][ q_par ] }
+        if "_id" in q_par:
+            q = { "$or": [
+                    { q_par: r["parameters"][ q_par ] },
+                    { q_par: ObjectId( r["parameters"][ q_par ] ) }
+                ] }
 
         mongo_client = MongoClient()
         r.update( { "data": mongo_client[ ds_id][ coll ].find_one( q ) } )
