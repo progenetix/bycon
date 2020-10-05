@@ -2,6 +2,8 @@
 
 import cgi, cgitb
 import json, yaml
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 from os import path as path
 from os import environ
 import sys, os, datetime, argparse
@@ -17,7 +19,9 @@ A simple app which only provides data deliveries from handover objects.
 
 #### Required
 
-* `accessid`
+* `accessid` or
+* `id` and `datasetId` and `collection` or
+* `_id` and `datasetId` and `collection`
 
 #### Optional
 
@@ -30,6 +34,8 @@ A simple app which only provides data deliveries from handover objects.
 Examples here need a locally existing `accessid` parameter.
 
 * <http://progenetix.org/services/deliveries?accessid=003d0488-0b79-4ffa-a38f-2fb932480eee&deliveryKeys=id,biocharacteristics>
+* <https://progenetix.org/services/deliveries/?datasetIds=progenetix&collection=biosamples&id=pgxbs-kftva59y>
+* https://progenetix.org/services/deliveries/?datasetIds=progenetix&collection=variants&_id=5bab576a727983b2e00b8d32>
 
 podmd"""
 
@@ -51,19 +57,60 @@ def deliveries(service):
     byc = {
         "config": config,
         "form_data": cgi_parse_query(),
-        "errors": [ ],
+        "errors": [ "No input parameter." ],
         "warnings": [ ]
     }
 
     # response prototype
     r = config["response_object_schema"]
 
-    if "accessid" in byc["form_data"]:
-        access_id = byc["form_data"].getvalue("accessid")
-        r["parameters"].update( { "accessid": access_id } )
-    else:
-        r["errors"].append( "No accessid parameter." )
+    q_par = ""
+
+    for p in ( "id", "_id", "accessid"):
+        if p in  byc["form_data"]:
+            v = byc["form_data"].getvalue( p )
+            r["parameters"].update( { p: v } )
+            r.update( { "errors": [ ] } )
+            q_par = p
+
+    if len(r["errors"]) > 0:
         cgi_print_json_response( byc["form_data"], r, 422 )
+
+    # TODO: sub & clean upp etc.
+    if not "accessid" in q_par:
+        byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
+        if not len(byc["dataset_ids"]) == 1:
+            r["errors"].append( "Not exactly one datasetIds item specified." )
+            cgi_print_json_response( byc["form_data"], r, 422 )
+        ds_id = byc["dataset_ids"][0]
+        if not "collection" in byc["form_data"]:
+            r["errors"].append( "No data collection specified." )
+            cgi_print_json_response( byc["form_data"], r, 422 )
+        coll = byc["form_data"].getvalue( "collection" )
+
+        q = {
+        "$or":
+            [
+                { q_par: r["parameters"][ q_par ] },
+                { q_par: ObjectId( r["parameters"][ q_par ] ) }
+            ]
+        }
+
+        mongo_client = MongoClient()
+        r.update( { "data": mongo_client[ ds_id][ coll ].find_one( q ) } )
+        mongo_client.close()
+
+        r["parameters"].update( { "collection": coll } )
+        r["parameters"].update( { "datasetId": ds_id } )
+        r["response_type"] = coll
+        if not r["data"]:
+            r["errors"].append( "No data found under this {}: {}!".format(q_par, r["parameters"][ q_par ] ) )
+            cgi_print_json_response( byc["form_data"], r, 422 )
+        cgi_print_json_response( byc["form_data"], r, 200 )
+
+    # continuing with default -> accessid
+
+    access_id = r["parameters"][ q_par ]
 
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
@@ -88,6 +135,7 @@ def deliveries(service):
         r["data"] = h_o_d
 
     cgi_print_json_response( byc["form_data"], r, 200 )
+
 
 ################################################################################
 ################################################################################

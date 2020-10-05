@@ -134,7 +134,7 @@ def handover_return_data( h_o, error ):
     if not error:
         data_coll = mongo_client[ h_o["source_db"] ][ h_o[ "target_collection" ] ]
         query = { h_o["target_key"]: { '$in': h_o["target_values"] } }
-        for c in data_coll.find( query, {'_id': False } ):
+        for c in data_coll.find( query ):  # , {'_id': False }
             data.append(c)
     else:
         pass
