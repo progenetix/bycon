@@ -9,3 +9,7 @@ format_patterns:
     link: '/subsets/list?datasetIds=progenetix&filters='
   - pattern: '^(pgx\:)?(PMID(\:[\d]{5,10})?)$'
     link: '/publications/details?id='
+  - pattern: '^(pgx\:)?(cellosaurus(\:CVCL_[A-Z0-9]{4})?)$'
+    link: '/biosamples/by-curie/'
+  - pattern: '^(pgx\:)?(geo\:G(PL|SM|SE|DS)\d+)$'
+    link: '/biosamples/by-curie/'
