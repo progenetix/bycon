@@ -44,6 +44,7 @@ def ontologymaps(service):
         byc.update( { d_k: d_v } )
 
     byc.update( { "filters": parse_filters( **byc ) } )
+    byc.update( { "filter_flags": get_filter_flags( **byc ) } )
     
     # response prototype
     r = config["response_object_schema"]
@@ -55,10 +56,12 @@ def ontologymaps(service):
 
     r["parameters"].update( { "filters": byc[ "filters" ] })
 
-    # data retrieval & response population
     q_list = [ ]
     for f in byc[ "filters" ]:
-        q_list.append( { byc["query_field"]: f } )
+        if "start" in byc[ "filter_flags" ][ "precision" ]:
+            q_list.append( { byc["query_field"]: { "$regex": "^"+f } } )
+        else:
+            q_list.append( { byc["query_field"]: f } )
     if len(q_list) > 1:
         query = { '$and': q_list }
     else:

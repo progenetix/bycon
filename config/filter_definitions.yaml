@@ -121,14 +121,14 @@ PMID:
   scopes:
     biosamples:
       default: 1
-  pattern: '^(PMID)?\:(\d+?)?$'
+  pattern: '^PMID(\:\d+?)?$'
   examples:
     - 'PMID:28966033'
     - 'PMID:9405679'
   collation: datacollections
 
-geogse:
-  name: "NCBI Gene Expression Omnibus Series"
+geo:
+  name: "NCBI Gene Expression Omnibus"
   url: "https://www.ncbi.nlm.nih.gov/geo/"
   db_key: 'external_references.type.id'
   scopes:
@@ -136,53 +136,45 @@ geogse:
       default: 0
     biosamples:
       default: 1
-  pattern: '^geogse(\-GSE\d+?)?$'
+  pattern: '^geo([\-\:]G(PL|SM|SE|DS)\d+)?$'
   examples:
-    - 'geogse-GSM253289'
+    - geo:GPL6504
+    - geo:GSE19331
+    - geo:GSM253289
   collation: datacollections
 
-# geogsm:
-#   name: "NCBI Gene Expression Omnibus Experiment" 
-#   url: "https://www.ncbi.nlm.nih.gov/geo/"
-#   db_key: 'external_references.type.id'
-#   scopes:
-#     callsets:
-#       default: 0
-#     biosamples:
-#       default: 1
-#   pattern: '^geogsm\-GSM\d+?$'
-#   examples:
-#     - 'geogsm-GSM253289'
-
-# tcga:
-#   name: "The Cancer Genome Atlas"
-#   url: "http://cancergenome.nih.gov"
-#   db_key: 'external_references.type.id'
-#   scopes:
-#     callsets:
-#       default: 0
-#     biosamples:
-#       default: 1
-#     individuals:
-#       db_key: 'external_references.type.id'
-#   pattern: '^tcga:[\-\w]+?$'
-#   examples:
-#     - 'tcga:000002fc-53a0-420e-b2aa-a40a358bba37'
-
-geogpl:
-  name: "NCBI Gene Expression Omnibus Platform"
+arrayexpress:
+  name: "EBI ArrayExpress"
   url: "https://www.ncbi.nlm.nih.gov/geo/"
   db_key: 'external_references.type.id'
   scopes:
     callsets:
       default: 0
     biosamples:
-      default: 0
       default: 1
-  pattern: '^geopl(\-GPL\d+?)?$'
+  pattern: '^arrayexpress([\-\:][AEP]\-\w{4}\-\d+)?$'
   examples:
-    - 'geogpl-GPL6504'
+    - geo:GPL6504
+    - geo:GSE19331
+    - geo:GSM253289
   collation: datacollections
+
+tcga:
+  name: "The Cancer Genome Atlas"
+  url: "http://cancergenome.nih.gov"
+  db_key: 'external_references.type.id'
+  scopes:
+    callsets:
+      default: 0
+    biosamples:
+      default: 1
+    individuals:
+      db_key: 'external_references.type.id'
+  pattern: '^tcga:[\-\w]+?$'
+  examples:
+    - 'tcga:000002fc-53a0-420e-b2aa-a40a358bba37'
+  collation: None
+
 
 cellosaurus:
   name: "Cellosaurus - a knowledge resource on cell lines"

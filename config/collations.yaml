@@ -6,6 +6,7 @@ defaults:
     - NCIT
     - icdom
     - icdot
+    - cellosaurus
 methods:
   children:
     - id

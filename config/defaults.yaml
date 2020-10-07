@@ -87,10 +87,11 @@ io_prefixes:
   - MONDO
   - PMID
   - EFO
-  - geogsm
-  - geogse
-  - geogpl
+  - geo:GSM
+  - geo:GSE
+  - geo:GPL
   - cellosaurus
+  - arrayexpress
 response_object_schema:
   parameters: { }
   data: [ ]

@@ -109,7 +109,7 @@ def collations(service):
                         else:
                             s_s[ i_d ][ k ] = subset[ k ]
                     else:
-                        s[ k ] = None
+                        s_s[ i_d ][ k ] = None
 
     mongo_client.close( )
 

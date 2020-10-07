@@ -29,10 +29,12 @@ def callsets_add_metadata(ds_id, cs, **kwargs):
 
 def get_id_label_for_prefix(data_list, prefix, **kwargs):
 
+    # not exactly doing a "prefix" match, since `geo:GSM` vs `geo:GSE` covered
+
     pre_id = ""
     pre_lab = ""
     for item in data_list:
-        if re.compile( r"^"+prefix+r"[\:\-]" ).match(item["type"]["id"]):
+        if re.compile( r"^"+prefix ).match(item["type"]["id"]):
             pre_id = item["type"]["id"]
             if "label" in item["type"]:
                 pre_lab = item["type"]["label"]
