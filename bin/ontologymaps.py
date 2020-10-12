@@ -70,19 +70,23 @@ def ontologymaps(service):
     r["data"] = { }
 
     c_g = [ ]
-    u_c = { }
+    u_c_d = { }
     mongo_client = MongoClient( )
     mongo_coll = mongo_client[ byc["db"] ][ byc["coll"] ]
     for o in mongo_coll.find( query, { '_id': False } ):
         for c in o["biocharacteristics"]:
             pre, code = re.split("[:-]", c["id"])
-            if not pre in u_c:
-                u_c.update( { pre: set(  ) } )
-            u_c[ pre ].add( c["id"] )
+            if not pre in u_c_d:
+                u_c_d.update( { pre: { } } )
+            u_c_d[ pre ].update( { c["id"]: { "id": c["id"], "label": c["label"] } } )
         c_g.append( o["biocharacteristics"] )
 
-    for pre in u_c:
-        u_c[ pre ] = list(u_c[ pre ])
+    u_c = { }
+    for pre in u_c_d:
+        u_c[ pre ] = []
+        for k, u in u_c_d[ pre ].items():
+            u_c[ pre ].append(u)
+
             
     mongo_client.close( )
 
