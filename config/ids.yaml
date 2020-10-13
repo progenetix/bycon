@@ -1,6 +1,6 @@
 format_patterns:
   - pattern: '^(pgx\:)?(pgxbs\-[\w\-\.]{4,128})$'
-    link: '/samples/details?datasetIds=progenetix&id='
+    link: '/biosamples/details?datasetIds=progenetix&id='
   - pattern: '^(pgx\:)?(pgxcs\-[\w\-\.]{4,128})$'
     link: '/callsets/details?datasetIds=progenetix&id='
   - pattern: '^(pgx\:)?(pgxind\-[\w\-\.]{4,128})$'

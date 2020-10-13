@@ -6,9 +6,9 @@ service_info:
   description: |
     Beacon+ provides a forward looking implementation of the Beacon API, with focus on structural variants and metadata based on the cancer and reference genome profiling data represented in the Progenetix oncogenomic data resource (https://progenetix.org).
   documentationUrl: 'https://info.progenetix.org/tags/Beacon.html'
-  serviceUrl: "https://beacon.progenetix.org/"
+  serviceUrl: "https://bycon.progenetix.org/"
   serviceType: "GA4GHBeacon"
-  welcomeUrl: "https://beacon.progenetix.org/ui/"
+  welcomeUrl: "https://progenetix.org/beacon-plus/search"
   alternativeUrl: "https://progenetix.org"
   contactUrl: 'mailto:contact@progenetix.org'
   version: '2.0.pre.2020-04-07'
@@ -25,7 +25,7 @@ service_info:
       provider:
         - 'Michael Baudis'
         - 'Theoretical Cytogenetics and Oncogenomics, Department of Molecular Life Sciences, University of Zurich'
-        - 'http://www.imls.uzh.ch/en/research/baudis.html'
+        - 'http://www.mls.uzh.ch/en/research/baudis.html'
         - 'http://info.baudisgroup.org/'
         - 'Swiss Institute of Bioinformatics - SIB'
         - 'http://www.sib.swiss/baudis-michael'
