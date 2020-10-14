@@ -9,7 +9,7 @@ from .geoquery import *
 
 ################################################################################
 
-def create_queries( **byc ):
+def generate_queries( **byc ):
 
     q_s = { }
     q_s = update_queries_from_filters( q_s, **byc )

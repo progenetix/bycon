@@ -84,7 +84,7 @@ def byconplus(service):
     # adding arguments for querying / processing data
     byc.update( { "variant_pars": parse_variants( **byc ) } )
     byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
-    byc.update( { "queries": create_queries( **byc ) } )
+    byc.update( { "queries": generate_queries( **byc ) } )
 
     beacon_respond_with_errors( **byc )
 

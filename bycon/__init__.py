@@ -1,9 +1,4 @@
 # __init__.py
-from .create_queries import create_queries
-from .create_queries import update_queries_from_endpoints
-from .create_queries import update_queries_from_hoid
-from .create_queries import update_queries_from_variants
-from .create_queries import update_queries_from_filters
 from .generate_beacon_responses import check_service_requests
 from .generate_beacon_responses import select_response_type
 from .generate_beacon_responses import respond_empty_request
@@ -20,6 +15,12 @@ from .process_handovers import dataset_response_add_handovers
 from .process_handovers import handover_return_data
 from .process_handovers import retrieve_handover
 from .process_handovers import query_results_save_handovers
+from .query_execution import execute_bycon_queries
+from .query_generation import generate_queries
+from .query_generation import update_queries_from_endpoints
+from .query_generation import update_queries_from_hoid
+from .query_generation import update_queries_from_variants
+from .query_generation import update_queries_from_filters
 from .read_specs import read_bycon_config
 from .read_specs import read_yaml_with_key_to_object
 from .read_specs import dbstats_return_latest
@@ -39,4 +40,3 @@ from .cgi_utils import form_return_listvalue
 from .cgi_utils import cgi_print_text_response
 from .cgi_utils import cgi_print_json_response
 from .cytoband_utils import parse_cytoband_file
-from .query_execution import execute_bycon_queries
