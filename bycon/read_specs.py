@@ -29,6 +29,16 @@ def read_named_prefs(service, dir_path):
 
 ################################################################################
 
+def read_local_prefs(service, dir_path):
+
+    o = {}
+    ofp = path.join( dir_path, "config", service+".yaml" )
+    with open( ofp ) as od:
+        o = yaml.load( od , Loader=yaml.FullLoader)    
+    return o
+
+################################################################################
+
 def read_yaml_with_key_to_object(file_key, data_key, **paths):
 
     o = {}

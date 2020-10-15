@@ -53,7 +53,7 @@ def main():
 def deliveries(service):
     
     config = read_bycon_config( path.abspath( dir_path ) )
-    these_prefs = read_named_prefs( "services", dir_path )
+    these_prefs = read_local_prefs( "services", dir_path )
 
     byc = {
         "config": config,
@@ -83,9 +83,10 @@ def deliveries(service):
         byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
         if not len(byc["dataset_ids"]) == 1:
             r["errors"].append( "Not exactly one datasetIds item specified." )
-        ds_id = byc["dataset_ids"][0]
-        if not ds_id in byc["config"]["dataset_ids"]:
-            r["errors"].append( "Not exactly one datasetIds item specified." )
+        else:
+            ds_id = byc["dataset_ids"][0]
+            if not ds_id in byc["config"]["dataset_ids"]:
+                r["errors"].append( "Not exactly one datasetIds item specified." )
 
         if len(r["errors"]) > 0:
             cgi_print_json_response( byc["form_data"], r, 422 )

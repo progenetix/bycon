@@ -11,7 +11,7 @@ from importlib import import_module
 # local
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
-from bycon.read_specs import read_named_prefs
+from bycon.read_specs import read_local_prefs
 
 """podmd
 The `services` application deparses a request URI and calls the respective
@@ -35,7 +35,7 @@ podmd"""
 
 def main():
 
-    these_prefs = read_named_prefs( "services", dir_path )
+    these_prefs = read_local_prefs( "services", dir_path )
 
     if "debug=1" in environ.get('REQUEST_URI'):
         cgitb.enable()

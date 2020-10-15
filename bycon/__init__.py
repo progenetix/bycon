@@ -24,6 +24,7 @@ from .query_generation import update_queries_from_filters
 from .read_specs import read_bycon_config
 from .read_specs import read_yaml_with_key_to_object
 from .read_specs import dbstats_return_latest
+from .read_specs import read_local_prefs
 from .read_specs import read_named_prefs
 from .read_specs import update_datasets_from_dbstats
 from .read_specs import read_filter_definitions

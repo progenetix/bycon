@@ -34,7 +34,7 @@ def main():
 def ids(service):
 
     # config = read_bycon_config( os.path.abspath( dir_path ) )
-    these_prefs = read_named_prefs( service, dir_path )
+    these_prefs = read_local_prefs( service, dir_path )
 
     url_comps = urlparse( environ.get('REQUEST_URI') )
     p_items = re.split(r'\/|\&', url_comps.path)
