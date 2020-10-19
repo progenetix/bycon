@@ -2,19 +2,20 @@
 
 import cgi, cgitb
 import re, yaml
-from os import path as path
 from sys import path as sys_path
+import sys
+from os import path as path
 import csv
 import argparse
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
 sys_path.append(path.join(path.abspath(dir_path), '..'))
-from bycon.parse_variants import *
-from bycon.cgi_utils import *
-from bycon.read_specs import *
-from bycon.cytoband_utils import *
 
+from bycon.lib.cgi_utils import *
+from bycon.lib.parse_variants import *
+from bycon.lib.read_specs import *
+from lib.cytoband_utils import *
 
 """podmd
 
@@ -54,13 +55,14 @@ def main():
 def cytomapper(service):
     
     config = read_bycon_config( path.abspath( dir_path ) )
-    config[ "paths" ][ "genomes" ] = path.join( config[ "paths" ][ "module_root" ], "rsrc", "genomes" )
+    config[ "paths" ][ "genomes" ] = path.join( dir_path, "rsrc", "genomes" )
+    these_prefs = read_local_prefs( service, dir_path )
 
     byc = {
         "config": config,
         "args": _get_args(),
-        "cytoband_defs": read_named_prefs( "cytoband_definitions", dir_path ),
-        "variant_defs": read_named_prefs( "variant_definitions", dir_path ),
+        "cytoband_defs": these_prefs,
+        "variant_definitions": read_named_prefs( "variant_definitions", dir_path ),
         "form_data": cgi_parse_query(),
         "errors": [ ],
         "warnings": [ ]
@@ -138,7 +140,7 @@ def cytomapper(service):
 def _bands_from_cytobands( **byc ):
 
     chr_bands = byc["variant_pars"]["cytoBands"]
-    cb_pat = re.compile( byc["variant_defs"]["parameters"]["cytoBands"]["pattern"] )
+    cb_pat = re.compile( byc["variant_definitions"]["parameters"]["cytoBands"]["pattern"] )
     chro, cb_start, cb_end = cb_pat.match(chr_bands).group(2,3,9)
     if not cb_end:
         cb_end = cb_start
@@ -195,7 +197,7 @@ def _bands_from_cytobands( **byc ):
 def _bands_from_chrobases( **byc ):
 
     chr_bases = byc["variant_pars"]["chroBases"]
-    cb_pat = re.compile( byc["variant_defs"]["parameters"]["chroBases"]["pattern"] )
+    cb_pat = re.compile( byc["variant_definitions"]["parameters"]["chroBases"]["pattern"] )
 
     chro, cb_start, cb_end = cb_pat.match(chr_bases).group(2,3,5)
     if cb_start:

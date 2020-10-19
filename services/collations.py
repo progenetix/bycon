@@ -10,9 +10,9 @@ from pymongo import MongoClient
 # local
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
-from bycon.cgi_utils import *
-from bycon.parse_filters import *
-from bycon.read_specs import *
+from bycon.lib.cgi_utils import *
+from bycon.lib.parse_filters import *
+from bycon.lib.read_specs import *
 
 """podmd
 

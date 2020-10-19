@@ -8,8 +8,8 @@ from pymongo import MongoClient
 # local
 dir_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(os.path.abspath(dir_path), '..'))
-from bycon.cgi_utils import *
-from bycon.read_specs import *
+from bycon.lib.cgi_utils import *
+from bycon.lib.read_specs import *
 
 """podmd
 * <https://progenetix.org/services/genespans?geneId=CDKN2>

@@ -11,7 +11,11 @@ import sys, os, datetime, argparse
 # local
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
-from bycon import *
+from bycon.lib.parse_filters import *
+from bycon.lib.cgi_utils import *
+from bycon.lib.handover_execution import retrieve_handover,handover_return_data
+from bycon.lib.read_specs import read_bycon_config,read_local_prefs,read_named_prefs
+
 
 """podmd
 

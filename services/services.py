@@ -11,7 +11,7 @@ from importlib import import_module
 # local
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
-from bycon.read_specs import read_local_prefs
+from bycon.lib.read_specs import read_local_prefs
 
 """podmd
 The `services` application deparses a request URI and calls the respective

@@ -8,9 +8,9 @@ from pymongo import MongoClient
 # local
 dir_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(os.path.abspath(dir_path), '..'))
-from bycon.cgi_utils import *
-from bycon.parse_filters import *
-from bycon.read_specs import *
+from bycon.lib.cgi_utils import *
+from bycon.lib.parse_filters import *
+from bycon.lib.read_specs import *
 
 """podmd
 * <https://progenetix.org/services/ontologymaps/?filters=NCIT:C3222>

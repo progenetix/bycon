@@ -8,7 +8,7 @@ from urllib.parse import urlparse
 # local
 dir_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(os.path.abspath(dir_path), '..'))
-from bycon.read_specs import *
+from bycon.lib.read_specs import *
 
 """podmd
 The `ids` service forwards compatible, prefixed ids (see `config/ids.yaml`) to specific

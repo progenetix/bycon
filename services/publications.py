@@ -11,10 +11,11 @@ from operator import itemgetter
 # local
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
-from bycon.cgi_utils import *
-from bycon.parse_filters import *
-from bycon.read_specs import *
-from bycon.geoquery import *
+
+from bycon.lib.cgi_utils import *
+from bycon.lib.parse_filters import *
+from bycon.lib.read_specs import *
+from bycon.lib.query_generation import geo_query
 
 """podmd
 
@@ -43,7 +44,7 @@ def publications(service):
     byc = {
         "config": config,
         "filter_defs": these_prefs["filter_defs"],
-        "geolocations": read_named_prefs( "geolocations", dir_path ),
+        "geoloc_definitions": read_named_prefs( "geoloc_definitions", dir_path ),
         "form_data": cgi_parse_query(),
         "errors": [ ],
         "warnings": [ ]

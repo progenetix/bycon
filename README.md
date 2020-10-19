@@ -9,12 +9,12 @@ documentation which is also [presented in an accessible format](https://info.pro
 
 ### More Documentation
 
-#### [ByconPlus](./doc/byconplus.md)
+#### [ByconPlus](./bycon/doc/byconplus.md)
 
 This page provides more information about the _Beacon_ functionality, current
 implementation status and usage examples.
 
-#### [Services](./doc/services.md)
+#### [Services](./services/doc/services.md)
 
 The _bycon_ environment - together with the [Progenetix](http://progenetix.org)
 resource - provide a growing numer of data services in (cancer) genomics and
@@ -26,13 +26,17 @@ disease ontologies. _bycon_'s services are tools to enable the APIs.
 
 * web applications for data access
 
-##### `utils`
-
-* applications and utilities for (Progenetix) data access & processing
-
 ##### `bycon`
 
 * Python modules for Beacon query and response functions
+
+##### `services`
+
+* web applications and libraries extending the `bycon` environment
+
+##### `utils`
+
+* applications and utilities for (Progenetix) data access & processing
 
 ##### `pgy`
 
@@ -52,7 +56,6 @@ _Progenetix_ database environment
 ##### `doc`
 
 * documentation, in Markdown
-* also invoked by `-h` flag
 
 ##### `rsrc`
 

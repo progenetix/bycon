@@ -9,8 +9,7 @@ import sys, os, datetime, argparse
 # local
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), '..'))
-from bycon import *
-from bycon.read_specs import *
+from bycon.lib import *
 
 """podmd
 * <https://progenetix.org/cgi/bycon/bin/biosamples.py?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
@@ -35,8 +34,8 @@ def biosamples(service):
         "config": config,
         "form_data": cgi_parse_query(),
         "filter_defs": read_filter_definitions( **config[ "paths" ] ),
-        "variant_defs": read_named_prefs( "variant_definitions", dir_path ),
-        "h->o": read_named_prefs( "beacon_handovers", dir_path ),
+        "variant_definitions": read_named_prefs( "variant_definitions", dir_path ),
+        "handover_definitions": read_named_prefs( "handover_definitions", dir_path ),
         "errors": [ ],
         "warnings": [ ],
         "datasets_info": read_yaml_with_key_to_object( "beacon_datasets_file", "datasets", **config[ "paths" ] )
