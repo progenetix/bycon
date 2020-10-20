@@ -18,7 +18,7 @@ Please see the [documentation](./doc/byconplus.md) for more information.
 
 #### Tests
 
-* from parent directory `./bin/byconplus.py -t -n`
+* from parent directory `./bycon/byconplus.py -t -n`
 
 podmd"""
 
