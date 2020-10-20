@@ -222,8 +222,8 @@ def create_query_from_variant_pars(**byc):
     for filterv in byc[ "filters" ]:
         pref = re.split('-|:', filterv)[0]
         
-        if pref in byc["filter_defs"]:
-            pref_defs = byc["filter_defs"][pref]
+        if pref in byc["filter_definitions"]:
+            pref_defs = byc["filter_definitions"][pref]
             if re.compile( pref_defs["pattern"] ).match(filterv):
                 for scope in pref_defs["scopes"]:
                     m_scope = pref_defs["scopes"][scope]

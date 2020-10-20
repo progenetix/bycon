@@ -33,11 +33,12 @@ def ontologymaps(service):
 
     byc = {
         "config": config,
-        "filter_defs": read_filter_definitions( **config[ "paths" ] ),
         "errors": [ ],
         "warnings": [ ],
         "form_data": cgi_parse_query()
     }
+    for d in ["filter_definitions"]:
+        byc.update( { d: read_named_prefs( d, dir_path ) } )
 
     # first pre-population w/ defaults
     for d_k, d_v in these_prefs["defaults"].items():

@@ -18,7 +18,7 @@ Please see the [documentation](./doc/byconplus.md) for more information.
 
 #### Tests
 
-* from parent directory `./bycon/byconplus.py -t -n`
+* from parent directory `./bycon/byconplus.py -t`
 
 podmd"""
 
@@ -53,15 +53,20 @@ def byconplus(service):
         "config": config,
         "args": _get_args(),
         "form_data": cgi_parse_query(),
-        "filter_defs": read_filter_definitions( **config[ "paths" ] ),
         "errors": [ ],
         "warnings": [ ],
         "dbstats": dbstats_return_latest( **config )
     }
 
-    for d in ["geoloc_definitions", "variant_definitions", "handover_definitions"]:
+    for d in [
+        "dataset_definitions",
+        "filter_definitions",
+        "geoloc_definitions",
+        "variant_definitions",
+        "handover_definitions"
+    ]:
         byc.update( { d: read_named_prefs( d, dir_path ) } )
-    for p in ["datasets_info", "service_info", "beacon_info", "beacon_paths"]:
+    for p in ["service_info", "beacon_info", "beacon_paths"]:
         byc.update( { p: read_local_prefs( p, dir_path ) } )
 
     byc["beacon_info"].update( { "datasets": update_datasets_from_dbstats(**byc) } )

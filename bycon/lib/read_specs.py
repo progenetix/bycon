@@ -55,19 +55,6 @@ def read_yaml_with_key_to_object(file_key, data_key, **paths):
 
 ################################################################################
 
-def read_filter_definitions( **paths ):
-
-    filter_defs = {}
-    ofp = path.join( paths[ "module_root" ], *paths[ "filter_definitions_file" ] )
-    with open( ofp ) as fd:
-        defs = yaml.load( fd , Loader=yaml.FullLoader)
-        for fpre in defs:
-            filter_defs[fpre] = defs[fpre]
-    
-    return filter_defs
-
-################################################################################
-
 def dbstats_return_latest( **config ):
 
     dbstats_coll = MongoClient( )[ config[ "info_db" ] ][ config[ "beacon_info_coll" ] ]
@@ -79,8 +66,8 @@ def dbstats_return_latest( **config ):
 def update_datasets_from_dbstats(**byc):
 
     ds_with_counts = [ ]
-    for ds_id in byc["datasets_info"].keys():
-        ds = byc["datasets_info"][ds_id]
+    for ds_id in byc["dataset_definitions"].keys():
+        ds = byc["dataset_definitions"][ds_id]
         if ds_id in byc["dbstats"]["datasets"]:
             ds_db = byc["dbstats"]["datasets"][ ds_id ]
             for k, l in byc["config"]["beacon_info_count_labels"].items():

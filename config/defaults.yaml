@@ -128,21 +128,6 @@ paths:
     - Documents
     - tmp
   web_temp_link: /tmp
-  beacon_info_file:
-    - config
-    - beacon_info.yaml
-  beacon_paths_file:
-    - config
-    - beacon_paths.yaml
-  beacon_datasets_file:
-    - config
-    - beacon_datasets.yaml
-  filter_definitions_file:
-    - config
-    - filter_definitions.yaml
-  service_info_file:
-    - config
-    - service_info.yaml
   biosamples_template_file:
     - rsrc
     - biosamples-table-template.tsv

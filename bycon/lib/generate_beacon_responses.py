@@ -70,8 +70,8 @@ def respond_get_datasetids_request( **byc ):
         return()
 
     dataset_ids = [ ]
-    for ds_id in byc["datasets_info"].keys():
-        dataset_ids.append( { "id": ds_id, "name": byc["datasets_info"][ds_id]["name"] } )
+    for ds_id in byc["dataset_definitions"].keys():
+        dataset_ids.append( { "id": ds_id, "name": byc["dataset_definitions"][ds_id]["name"] } )
     cgi_print_json_response( byc["form_data"], { "datasets": dataset_ids }, 200 )
 
 ################################################################################

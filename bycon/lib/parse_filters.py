@@ -15,7 +15,7 @@ def parse_filters( **byc ):
 
     if "form_data" in byc:
         f = form_return_listvalue( byc["form_data"], "filters" )
-        f = _check_filter_values(f, byc["filter_defs"])
+        f = _check_filter_values(f, byc["filter_definitions"])
         if len(f) > 0:
             return f
     
@@ -23,13 +23,13 @@ def parse_filters( **byc ):
     if "args" in byc:
         if byc["args"].filters:
             f = byc["args"].filters.split(',')
-            f = _check_filter_values(f, byc["filter_defs"])
+            f = _check_filter_values(f, byc["filter_definitions"])
             if len(f) > 0:
                 return f
     
         if byc["args"].test:
             f = byc["service_info"][ "sampleAlleleRequests" ][0][ "filters" ]
-            f = _check_filter_values(f, byc["filter_defs"])
+            f = _check_filter_values(f, byc["filter_definitions"])
             if len(f) > 0:
                 return f
     
@@ -118,7 +118,7 @@ def beacon_check_dataset_ids( **byc ):
     dataset_ids = [ ]
 
     for ds in byc["dataset_ids"]:
-        if ds in byc["datasets_info"].keys():
+        if ds in byc["dataset_definitions"].keys():
             dataset_ids.append(ds)
 
     return dataset_ids

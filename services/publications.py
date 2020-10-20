@@ -43,7 +43,7 @@ def publications(service):
 
     byc = {
         "config": config,
-        "filter_defs": these_prefs["filter_defs"],
+        "filter_definitions": these_prefs["filter_definitions"],
         "geoloc_definitions": read_named_prefs( "geoloc_definitions", dir_path ),
         "form_data": cgi_parse_query(),
         "errors": [ ],
@@ -100,7 +100,7 @@ def publications(service):
     mongo_client = MongoClient( )
     mongo_coll = mongo_client[ config["info_db"] ][ "publications" ]
 
-    p_re = re.compile( byc["filter_defs"]["PMID"]["pattern"] )
+    p_re = re.compile( byc["filter_definitions"]["PMID"]["pattern"] )
 
     p_l = [ ]
     for pub in mongo_coll.find( query, { "_id": 0 } ):
@@ -157,7 +157,7 @@ def _create_filters_query( **byc ):
         pre = pre_code[0]
         if count_pat.match( f ):
             pre, op, no = count_pat.match(f).group(1,2,3)
-            dbk = byc[ "filter_defs" ][ pre ][ "db_key" ]
+            dbk = byc[ "filter_definitions" ][ pre ][ "db_key" ]
             if op == ">":
                 op = '$gt'
             elif op == "<":

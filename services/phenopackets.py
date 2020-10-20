@@ -35,14 +35,16 @@ def phenopackets(service):
     byc = {
         "config": config,
         "form_data": cgi_parse_query(),
-        "filter_defs": read_filter_definitions( **config[ "paths" ] ),
-        "variant_definitions": read_named_prefs( "variant_definitions", dir_path ),
-        "handover_definitions": read_named_prefs( "handover_definitions", dir_path ),
         "errors": [ ],
         "warnings": [ ],
-        "datasets_info": read_yaml_with_key_to_object( "beacon_datasets_file", "datasets", **config[ "paths" ] )
     }
-    for d in ["geoloc_definitions", "variant_definitions"]:
+    for d in [
+        "dataset_definitions",
+        "filter_definitions",
+        "geoloc_definitions",
+        "variant_definitions",
+        "handover_definitions"
+    ]:
         byc.update( { d: read_named_prefs( d, dir_path ) } )
 
     # first pre-population w/ defaults

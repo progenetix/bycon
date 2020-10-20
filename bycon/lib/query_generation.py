@@ -99,8 +99,8 @@ def update_queries_from_filters( queries, **byc ):
     for filterv in byc[ "filters" ]:
         pre_code = re.split('-|:', filterv)
         pre = pre_code[0]
-        if pre in byc["filter_defs"]:
-            pre_defs = byc["filter_defs"][pre]
+        if pre in byc["filter_definitions"]:
+            pre_defs = byc["filter_definitions"][pre]
             for scope in pre_defs["scopes"]:
                 m_scope = pre_defs["scopes"][scope]
                 if m_scope["default"]:
@@ -140,7 +140,7 @@ def update_queries_from_filters( queries, **byc ):
                             f_re = re.compile( r"\-$" )
                             if not f_re.match(filterv):
                                 for ds_id in byc["dataset_ids"]:
-                                    mongo_coll = mongo_client[ ds_id ][ byc["filter_defs"][pre]["collation"] ]
+                                    mongo_coll = mongo_client[ ds_id ][ byc["filter_definitions"][pre]["collation"] ]
                                     try:
                                         f_def = mongo_coll.find_one( { "id": filterv })
                                         if "child_terms" in f_def:

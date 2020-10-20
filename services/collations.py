@@ -38,11 +38,12 @@ def collations(service):
 
     byc = {
         "config": config,
-        "filter_defs": read_filter_definitions( **config[ "paths" ] ),
         "errors": [ ],
         "warnings": [ ],
         "form_data": cgi_parse_query()
     }
+    for d in ["filter_definitions"]:
+        byc.update( { d: read_named_prefs( d, dir_path ) } )
 
     # first pre-population w/ defaults
     for d_k, d_v in these_prefs["defaults"].items():
@@ -85,7 +86,7 @@ def collations(service):
         for f in byc[ "filters" ]:
             query = { "id": re.compile(r'^'+f ) }
             pre = re.split('-|:', f)[0]
-            c =  byc["filter_defs"][ pre ]["collation"]
+            c =  byc["filter_definitions"][ pre ]["collation"]
             mongo_coll = mongo_db[ c ]
             for subset in mongo_coll.find( query ):
 
