@@ -16,9 +16,6 @@ from bycon.lib.read_specs import *
 
 """podmd
 
-* <https://progenetix.org/services/collations/?filters=NCIT>
-* <http://progenetix.org/cgi/bycon/bin/collations.py?filters=NCIT&datasetIds=progenetix&method=counts>
-
 podmd"""
 
 ################################################################################
