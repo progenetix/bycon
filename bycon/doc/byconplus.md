@@ -1,5 +1,9 @@
 ### Bycon - a Python-based environment for the Beacon v2 genomics API
 
+#### More Information
+
+Additional information may be available through [info.progenetix.org](https://info.progenetix.org/doc/bycon/byconplus.html).
+
 ##### Examples
 
 * standard test deletion CNV query
