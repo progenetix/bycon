@@ -51,7 +51,9 @@ def ids(service):
         pat = re.compile( f_p["pattern"] )
         link = f_p["link"]
         if pat.match(id_in):
-            lid = pat.match(id_in).group(2)
+            lid, pre, sep, code = pat.match(id_in).group(2, 3, 4, 5)
+            if "_" in sep:
+                lid = "{}:{}".format(pre, code)
             print("Status: 302")
             print("Location: {}{}".format(link, lid))
             print()

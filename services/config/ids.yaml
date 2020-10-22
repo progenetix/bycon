@@ -1,19 +1,32 @@
 format_patterns:
-  - pattern: '^(pgx\:)?(pgxbs\-[\w\-\.]{4,128})$'
+
+# local patterns
+
+  - pattern: '^(pgx\:)?((pgxbs)(\-)([\w\-\.]{4,128}))$'
     link: '/biosamples/details?datasetIds=progenetix&id='
-  - pattern: '^(pgx\:)?(pgxcs\-[\w\-\.]{4,128})$'
+
+  - pattern: '^(pgx\:)?((pgxcs)(\-)([\w\-\.]{4,128}))$'
     link: '/callsets/details?datasetIds=progenetix&id='
-  - pattern: '^(pgx\:)?(pgxind\-[\w\-\.]{4,128})$'
+
+  - pattern: '^(pgx\:)?((pgxind)(\-)([\w\-\.]{4,128}))$'
     link: '/individuals/details?datasetIds=progenetix&id='
-  - pattern: '^(pgx\:)?(NCIT([:_]C[\d]{4,8})?)$'
+
+  - pattern: '^(pgx\:)?((icdom)(\-)([\d]{5})?)$'
     link: '/subsets/list?datasetIds=progenetix&filters='
-  - pattern: '^(pgx\:)?(icdom(\-[\d]{5})?)$'
+
+  - pattern: '^(pgx\:)?((icdot)(\-)(C\d\d?\.\d)?)$'
     link: '/subsets/list?datasetIds=progenetix&filters='
-  - pattern: '^(pgx\:)?(icdot(\-C\d\d?\.\d)?)$'
+
+  - pattern: '^(pgx\:)?((NCIT)([:_])(C[\d]{4,8})?)$'
     link: '/subsets/list?datasetIds=progenetix&filters='
-  - pattern: '^(pgx\:)?(PMID([:_][\d]{5,10})?)$'
+
+# public prefix patterns (with possible underscore replacement)
+
+  - pattern: '^(pgx\:)?((PMID)([:_])([\d]{5,10})?)$'
     link: '/publications/details?id='
-  - pattern: '^(pgx\:)?(cellosaurus([:_]CVCL_[A-Z0-9]{4})?)$'
+
+  - pattern: '^(pgx\:)?(cellosaurus)(([:_])(CVCL_[A-Z0-9]{4})?)$'
     link: '/biosamples/by-curie/'
-  - pattern: '^(pgx\:)?(geo[:_]G(PL|SM|SE|DS)\d+)$'
+
+  - pattern: '^(pgx\:)?(geo)(([:_])(G(PL|SM|SE|DS)\d+))$'
     link: '/biosamples/by-curie/'
