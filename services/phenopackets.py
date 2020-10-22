@@ -27,7 +27,7 @@ def main():
 
 def phenopackets(service):
 
-    config = read_bycon_config( path.abspath( dir_path ) )
+    config = read_named_prefs( "defaults", dir_path )
     these_prefs = read_local_prefs( service, dir_path )
 
     byc = {

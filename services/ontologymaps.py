@@ -28,17 +28,16 @@ def main():
 
 def ontologymaps(service):
 
-    config = read_bycon_config( os.path.abspath( dir_path ) )
-    these_prefs = read_local_prefs( service, dir_path )
-
     byc = {
-        "config": config,
+        "config": read_named_prefs( "defaults", dir_path ),
         "errors": [ ],
         "warnings": [ ],
         "form_data": cgi_parse_query()
     }
     for d in ["filter_definitions"]:
         byc.update( { d: read_named_prefs( d, dir_path ) } )
+
+    these_prefs = read_local_prefs( service, dir_path )
 
     # first pre-population w/ defaults
     for d_k, d_v in these_prefs["defaults"].items():

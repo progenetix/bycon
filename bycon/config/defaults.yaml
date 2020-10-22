@@ -1,0 +1,137 @@
+web_server_domain: http://bycon.progenetix.org
+test_server_domain: http://bycon.progenetix.test
+web_handover_domain: http://progenetix.org
+test_handover_domain: http://progenetix.test
+# dataset_ids here are used for db management; the information used by Beacon
+# is defined separately
+dataset_ids:
+  - arraymap
+  - progenetix
+  - dipg
+  - cellosaurus
+  # - tcga
+collections:
+  - biosamples
+  - callsets
+  - individuals
+  - variants
+  - collations
+  - biosubsets
+  - publications
+info_db: progenetix
+beacon_info_coll: "beaconinfo"
+beacon_info_count_labels:
+  biosamples: "sampleCount"
+  individuals: "individualCount"
+  variants: "callCount"
+  variants_distinct: "variantCount"
+handover_coll: querybuffer
+genespans_coll: genespans
+filter_flags:
+  logic: '$and'
+  precision: exact #'start'
+io_params:
+  id:
+    db_key: id
+    type: string
+  description:
+    db_key: description
+    type: string
+  tnm:
+    db_key: info.tnm
+    type: string
+  stage:
+    db_key: info.stage
+    type: string
+  grade:
+    db_key: info.grade
+    type: string
+  age_iso:
+    db_key: age_at_collection.age
+    type: string
+  death:
+    db_key: info.death
+    type: string
+  followup_months:
+    db_key: info.followup_months
+    type: string
+  geoprov_city:
+    db_key: provenance.geo.city
+    type: string
+  geoprov_country:
+    db_key: provenance.geo.country
+    type: string
+  geoprov_iso_alpha3:
+    db_key: provenance.geo.ISO-3166-alpha3
+    type: string
+  geoprov_lat:
+    db_key: provenance.geo.latitude
+    type: float
+  geoprov_long:
+    db_key: provenance.geo.longitude
+    type: float
+  cnv_fraction:
+    db_key: info.cnvstatistics.cnvfraction
+    type: float
+  cnv_del_fraction:
+    db_key: info.cnvstatistics.delfraction
+    type: float
+  cnv_dup_fraction:
+    db_key: info.cnvstatistics.dupfraction
+    type: float
+io_prefixes:
+  - icdom
+  - icdot
+  - NCIT
+  - UBERON
+  - MONDO
+  - PMID
+  - EFO
+  - geo:GSM
+  - geo:GSE
+  - geo:GPL
+  - cellosaurus
+  - arrayexpress
+response_object_schema:
+  parameters: { }
+  data: [ ]
+  response_type: ""
+  errors: [ ]
+  warnings: [ ]
+plot_pars:
+  dotalpha: 0.2
+  color_var_snv_hex: '#EE00DD'
+  color_var_snv_rgb: '238,0,221'
+  color_var_break_hex: '#EE00DD'
+  color_var_break_rgb: '238,0,221'
+  color_var_dup_hex: '#FFC633'
+  color_var_dup_rgb: '255,198,51'
+  color_var_del_hex: '#33A0FF'
+  color_var_del_rgb: '51,160,255'
+  color_var_amp_hex: '#FF6600'
+  color_var_amp_rgb: '255,102,0'
+  color_var_homoloss_hex: '#0033CC'
+  color_var_homoloss_rgb: '0,51,204'
+paths:
+  status_matrix_file_label: matrix_status.tsv
+  values_matrix_file_label: matrix_values.tsv
+  biosamples_file_label: biosamples.tsv
+  web_server_root_abs:
+    - /
+    - Library
+    - WebServer
+    - Documents
+  web_temp_dir_abs:
+    - /
+    - Library
+    - WebServer
+    - Documents
+    - tmp
+  web_temp_link: /tmp
+  biosamples_template_file:
+    - rsrc
+    - biosamples-table-template.tsv
+  icd-ncit-mapping_file:
+    - rsrc
+    - icdo
+    - ICDOntologies.ods

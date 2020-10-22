@@ -22,24 +22,22 @@ disease ontologies. _bycon_'s services are tools to enable the APIs.
 
 ### Directory Structure
 
-##### `bin`
-
-* web applications for data access
-
 ##### `bycon`
 
-* Python modules for Beacon query and response functions
+* web applications for data access
+* Python modules for Beacon query and response functions in `lib`
 
 ##### `services`
 
 * web applications and libraries extending the `bycon` environment
 
-##### `utils`
+#### Internal structure
 
-* applications and utilities for (Progenetix) data access & processing
+
 
 ##### `pgy`
 
+* applications and utilities for (Progenetix) data access & processing
 * Python modules for data management in the [MongoDB](http://mongodb.org) based
 _Progenetix_ database environment
 

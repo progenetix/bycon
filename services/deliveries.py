@@ -14,7 +14,7 @@ sys.path.append(path.join(path.abspath(dir_path), '..'))
 from bycon.lib.parse_filters import *
 from bycon.lib.cgi_utils import *
 from bycon.lib.handover_execution import retrieve_handover,handover_return_data
-from bycon.lib.read_specs import read_bycon_config,read_local_prefs,read_named_prefs
+from bycon.lib.read_specs import read_local_prefs,read_named_prefs
 
 
 """podmd
@@ -55,16 +55,15 @@ def main():
 ################################################################################
 
 def deliveries(service):
-    
-    config = read_bycon_config( path.abspath( dir_path ) )
-    these_prefs = read_local_prefs( "services", dir_path )
 
     byc = {
-        "config": config,
+        "config": read_named_prefs( "defaults", dir_path ),
         "form_data": cgi_parse_query(),
         "errors": [ "No input parameter." ],
         "warnings": [ ]
     }
+
+    these_prefs = read_local_prefs( "services", dir_path )
 
     # response prototype
     r = config["response_object_schema"]

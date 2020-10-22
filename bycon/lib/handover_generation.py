@@ -173,7 +173,7 @@ def _write_variants_bedfile(h_o, **byc):
        
     ds_id = h_o["source_db"]
     accessid = h_o["id"]
-    bed_file = path.join( byc["config"][ "paths" ][ "out" ], h_o["id"]+'.bed' )
+    bed_file = path.join( path.join( *byc["config"][ "web_temp_dir_abs" ] ), h_o["id"]+'.bed' )
 
     vs = { "DUP": [ ], "DEL": [ ], "SNV": [ ]}
 

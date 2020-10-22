@@ -206,10 +206,6 @@ def create_dataset_response(ds_id, **byc):
 
 def create_beacon_response(**byc):
 
-    # with open( path.join(path.abspath(byc[ "config" ][ "paths" ][ "module_root" ]), "config", "beacon_info.yaml") ) as bc:
-    #     b_defs = yaml.load( bc , Loader=yaml.FullLoader)
-    # print(b_defs)
-
     # TODO: getting the correct response structure from the schema
 
     b_response = {}

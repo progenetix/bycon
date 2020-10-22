@@ -8,21 +8,10 @@ from .cgi_utils import *
 
 ################################################################################
 
-def read_bycon_config( module_path ):
-    
-    with open( path.join( module_path, '..', "config", "defaults.yaml" ) ) as cf:
-        config = yaml.load( cf , Loader=yaml.FullLoader)
-    config[ "paths" ][ "module_root" ] = path.join( module_path, '..' )
-    config[ "paths" ][ "out" ] = path.join( *config[ "paths" ][ "web_temp_dir_abs" ] )
-
-    return config
-
-################################################################################
-
 def read_named_prefs(service, dir_path):
 
     o = {}
-    ofp = path.join( dir_path, "..", "config", service+".yaml" )
+    ofp = path.join( dir_path, "..", "bycon", "config", service+".yaml" )
     with open( ofp ) as od:
         o = yaml.load( od , Loader=yaml.FullLoader)    
     return o

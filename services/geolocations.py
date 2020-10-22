@@ -9,7 +9,7 @@ from pymongo import MongoClient
 dir_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(os.path.abspath(dir_path), '..'))
 from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response
-from bycon.lib.read_specs import read_bycon_config,read_local_prefs,read_named_prefs
+from bycon.lib.read_specs import read_local_prefs,read_named_prefs
 from bycon.lib.query_generation import geo_query
 
 """podmd
@@ -29,7 +29,7 @@ def main():
 
 def geolocations(service):
 
-    config = read_bycon_config( os.path.abspath( dir_path ) )
+    config = read_named_prefs( "defaults", dir_path )
     these_prefs = read_local_prefs( service, dir_path )
     form_data = cgi_parse_query()
     defs = these_prefs["defaults"]

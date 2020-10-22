@@ -54,7 +54,7 @@ def main():
 
 def cytomapper(service):
     
-    config = read_bycon_config( path.abspath( dir_path ) )
+    config = read_named_prefs( "defaults", dir_path )
     config[ "paths" ][ "genomes" ] = path.join( dir_path, "rsrc", "genomes" )
     these_prefs = read_local_prefs( service, dir_path )
 

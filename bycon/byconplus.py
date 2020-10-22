@@ -46,7 +46,7 @@ def main():
 
 def byconplus(service):
     
-    config = read_bycon_config( path.abspath( dir_path ) )
+    config = read_named_prefs( "defaults", dir_path )
 
     # TODO: "byc" becoming a proper object?!
     byc = {
