@@ -44,10 +44,12 @@ def read_yaml_with_key_to_object(file_key, data_key, **paths):
 
 ################################################################################
 
-def dbstats_return_latest( **config ):
+def dbstats_return_latest( **byc ):
 
-    dbstats_coll = MongoClient( )[ config[ "info_db" ] ][ config[ "beacon_info_coll" ] ]
-    stats = dbstats_coll.find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
+    db = byc[ "config" ][ "info_db" ]
+    coll = byc[ "config" ][ "beacon_info_coll" ]
+
+    stats = MongoClient( )[ db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
     return(stats[0])
 
 ################################################################################

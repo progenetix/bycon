@@ -54,25 +54,23 @@ def main():
 
 def cytomapper(service):
     
-    config = read_named_prefs( "defaults", dir_path )
-    config[ "paths" ][ "genomes" ] = path.join( dir_path, "rsrc", "genomes" )
-    these_prefs = read_local_prefs( service, dir_path )
-
     byc = {
-        "config": config,
+        "config": read_named_prefs( "defaults", dir_path ),
         "args": _get_args(),
-        "cytoband_defs": these_prefs,
+        "cytoband_defs": read_local_prefs( service, dir_path ),
         "variant_definitions": read_named_prefs( "variant_definitions", dir_path ),
         "form_data": cgi_parse_query(),
         "errors": [ ],
         "warnings": [ ]
     }
 
+    byc[ "config" ][ "paths" ][ "genomes" ] = path.join( dir_path, "rsrc", "genomes" )
+
     byc.update( { "variant_pars": parse_variants( **byc ) } )
     byc.update( { "cytobands": parse_cytoband_file( **byc ) } )
 
     # response prototype
-    r = config["response_object_schema"]
+    r = byc[ "config" ]["response_object_schema"]
     r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
     r["response_type"] = service
     r["data"] = { }

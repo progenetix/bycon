@@ -27,11 +27,8 @@ def main():
 
 def phenopackets(service):
 
-    config = read_named_prefs( "defaults", dir_path )
-    these_prefs = read_local_prefs( service, dir_path )
-
     byc = {
-        "config": config,
+        "config": read_named_prefs( "defaults", dir_path ),
         "form_data": cgi_parse_query(),
         "errors": [ ],
         "warnings": [ ],
@@ -46,6 +43,7 @@ def phenopackets(service):
         byc.update( { d: read_named_prefs( d, dir_path ) } )
 
     # first pre-population w/ defaults
+    these_prefs = read_local_prefs( service, dir_path )
     for p_k, p_v in these_prefs["parameters"].items():
         if "default" in p_v:
             byc.update( { p_k: p_v[ "default" ] } )
@@ -66,7 +64,7 @@ def phenopackets(service):
     byc.update( { "queries": generate_queries( **byc ) } )
 
     # response prototype
-    r = config["response_object_schema"]
+    r = byc[ "config" ]["response_object_schema"]
     r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
 
     # TODO: move somewhere

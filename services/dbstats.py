@@ -14,8 +14,8 @@ from bycon.lib.read_specs import read_named_prefs,read_local_prefs,dbstats_retur
 
 """podmd
 
-* <https://progenetix.org/services/dbstats/?filters=NCIT>
-* <http://progenetix.org/cgi/bycon/bin/dbstats.py?method=filtering_terms>
+* <https://progenetix.org/services/dbstats/>
+* <http://progenetix.org/cgi/bycon/services/dbstats.py?method=filtering_terms>
 
 podmd"""
 
@@ -31,18 +31,17 @@ def main():
 
 def dbstats(service):
 
-    config = read_named_prefs( "defaults", dir_path )
-    these_prefs = read_local_prefs( service, dir_path )
     form_data = cgi_parse_query()
 
     byc = {
-        "config": config,
+        "config": read_named_prefs( "defaults", dir_path ),
         "form_data": cgi_parse_query(),
         "errors": [ ],
         "warnings": [ ]
     }
 
     # first pre-population w/ defaults
+    these_prefs = read_local_prefs( service, dir_path )
     for d_k, d_v in these_prefs["defaults"].items():
         byc.update( { d_k: d_v } )
 
@@ -52,19 +51,16 @@ def dbstats(service):
             byc["method"] = m
 
     # response prototype
-    r = config["response_object_schema"]
+    r = byc[ "config" ]["response_object_schema"]
     r["response_type"] = service
     r["data"] = { }
 
-    ds_stats = dbstats_return_latest( **byc["config"] )
+    ds_stats = dbstats_return_latest( **byc )
     for ds_id, ds_vs in ds_stats["datasets"].items():
         dbs = {}
         for k in these_prefs["methods"][ byc["method"] ]:
             dbs.update({k:ds_vs[k]})
         r["data"].update( { ds_id : dbs })
-
-    # response prototype
-    r = config["response_object_schema"]
 
     cgi_print_json_response( {}, r, 200 )
 

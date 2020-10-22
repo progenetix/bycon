@@ -46,16 +46,13 @@ def main():
 
 def byconplus(service):
     
-    config = read_named_prefs( "defaults", dir_path )
-
     # TODO: "byc" becoming a proper object?!
     byc = {
-        "config": config,
+        "config": read_named_prefs( "defaults", dir_path ),
         "args": _get_args(),
         "form_data": cgi_parse_query(),
         "errors": [ ],
-        "warnings": [ ],
-        "dbstats": dbstats_return_latest( **config )
+        "warnings": [ ]
     }
 
     for d in [
@@ -66,8 +63,11 @@ def byconplus(service):
         "handover_definitions"
     ]:
         byc.update( { d: read_named_prefs( d, dir_path ) } )
+
     for p in ["service_info", "beacon_info", "beacon_paths"]:
         byc.update( { p: read_local_prefs( p, dir_path ) } )
+
+    byc.update( { "dbstats": dbstats_return_latest( **byc ) } )
 
     byc["beacon_info"].update( { "datasets": update_datasets_from_dbstats(**byc) } )
     for par in byc[ "beacon_info" ]:

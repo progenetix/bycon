@@ -66,7 +66,7 @@ def deliveries(service):
     these_prefs = read_local_prefs( "services", dir_path )
 
     # response prototype
-    r = config["response_object_schema"]
+    r = byc[ "config" ]["response_object_schema"]
 
     q_par = ""
 

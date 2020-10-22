@@ -30,11 +30,9 @@ def main():
 
 def collations(service):
 
-    config = read_named_prefs( "defaults", dir_path )
-    these_prefs = read_local_prefs( service, dir_path )
 
     byc = {
-        "config": config,
+        "config": read_named_prefs( "defaults", dir_path ),
         "errors": [ ],
         "warnings": [ ],
         "form_data": cgi_parse_query()
@@ -43,6 +41,7 @@ def collations(service):
         byc.update( { d: read_named_prefs( d, dir_path ) } )
 
     # first pre-population w/ defaults
+    these_prefs = read_local_prefs( service, dir_path )
     for d_k, d_v in these_prefs["defaults"].items():
         byc.update( { d_k: d_v } )
 
@@ -61,7 +60,7 @@ def collations(service):
     byc.update( { "filters": parse_filters( **byc ) } )
 
     # response prototype
-    r = config["response_object_schema"]
+    r = byc[ "config" ]["response_object_schema"]
     r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
     r["response_type"] = "subsets"
 

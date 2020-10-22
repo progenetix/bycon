@@ -29,13 +29,12 @@ def main():
 
 def geolocations(service):
 
-    config = read_named_prefs( "defaults", dir_path )
     these_prefs = read_local_prefs( service, dir_path )
-    form_data = cgi_parse_query()
     defs = these_prefs["defaults"]
 
     byc = {
-        "form_data": form_data,
+        "config": read_named_prefs( "defaults", dir_path ),
+        "form_data": cgi_parse_query(),
         "geoloc_definitions": read_named_prefs( "geoloc_definitions", dir_path ),
         service: these_prefs
     }
@@ -43,7 +42,7 @@ def geolocations(service):
     byc["geoloc_definitions"]["geo_root"] = ""
     
     # response prototype
-    r = config["response_object_schema"]
+    r = byc[ "config" ]["response_object_schema"]
     r["response_type"] = service
 
     query, geo_pars = geo_query( **byc )
@@ -52,7 +51,7 @@ def geolocations(service):
 
     if len(query.keys()) < 1:
         r["errors"].append( "No query generated - missing or malformed parameters" )
-        cgi_print_json_response( form_data, r, 422 )
+        cgi_print_json_response( byc[ "form_data" ], r, 422 )
 
     mongo_client = MongoClient( )
     g_coll = mongo_client[ defs["db"] ][ defs["coll"] ]
@@ -62,7 +61,7 @@ def geolocations(service):
 
     r[service+"_count"] = len(r["data"])
 
-    cgi_print_json_response( form_data, r, 200 )
+    cgi_print_json_response( byc[ "form_data" ], r, 200 )
 
 ################################################################################
 ################################################################################

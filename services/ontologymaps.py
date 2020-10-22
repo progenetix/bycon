@@ -47,7 +47,7 @@ def ontologymaps(service):
     byc.update( { "filter_flags": get_filter_flags( **byc ) } )
     
     # response prototype
-    r = config["response_object_schema"]
+    r = byc[ "config" ]["response_object_schema"]
     r["response_type"] = service
 
     if len(byc[ "filters" ]) < 1:

@@ -66,7 +66,7 @@ def biosamples(service):
     byc.update( { "queries": generate_queries( **byc ) } )
 
     # response prototype
-    r = config["response_object_schema"]
+    r = byc[ "config" ]["response_object_schema"]
     r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
 
     # TODO: move somewhere

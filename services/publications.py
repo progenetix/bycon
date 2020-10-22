@@ -33,12 +33,8 @@ def main():
 
 def publications(service):
 
-    config = read_named_prefs( "defaults", dir_path )
-    these_prefs = read_local_prefs( service, dir_path )
-
     byc = {
-        "config": config,
-        "filter_definitions": these_prefs["filter_definitions"],
+        "config": read_named_prefs( "defaults", dir_path ),
         "geoloc_definitions": read_named_prefs( "geoloc_definitions", dir_path ),
         "form_data": cgi_parse_query(),
         "errors": [ ],
@@ -46,6 +42,7 @@ def publications(service):
     }
 
     # first pre-population w/ defaults
+    these_prefs = read_local_prefs( service, dir_path )
     for d_k, d_v in these_prefs["defaults"].items():
         byc.update( { d_k: d_v } )
 
@@ -55,17 +52,20 @@ def publications(service):
         if m in these_prefs["methods"].keys():
             byc["method"] = m
 
+
+
     # the method keys can be overriden with "deliveryKeys"
     d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
     if len(d_k) < 1:
         if not "all" in byc["method"]:
             d_k = these_prefs["methods"][ byc["method"] ]
 
+    byc.update( { "filter_definitions": these_prefs["filter_definitions"] } )
     byc.update( { "filter_flags": get_filter_flags( **byc ) } )
     byc.update( { "filters": parse_filters( **byc ) } )
 
     # response prototype
-    r = config["response_object_schema"]
+    r = byc[ "config" ]["response_object_schema"]
     r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
     r["response_type"] = service
 
@@ -93,7 +93,8 @@ def publications(service):
         cgi_print_json_response( byc["form_data"], r, 422 )
 
     mongo_client = MongoClient( )
-    mongo_coll = mongo_client[ config["info_db"] ][ "publications" ]
+    pub_db = byc["config"]["info_db"]
+    mongo_coll = mongo_client[ pub_db ][ "publications" ]
 
     p_re = re.compile( byc["filter_definitions"]["PMID"]["pattern"] )
 

@@ -27,13 +27,16 @@ def main():
 
 def genespans(service):
 
-    config = read_named_prefs( "defaults", dir_path )
+    byc = {
+        "config": read_named_prefs( "defaults", dir_path )
+    }
+    
     these_prefs = read_local_prefs( service, dir_path )
     form_data = cgi_parse_query()
     defs = these_prefs["defaults"]
     
     # response prototype
-    r = config["response_object_schema"]
+    r = byc[ "config" ]["response_object_schema"]
     r["response_type"] = service
 
     assembly_id = defs["assembly_id"]
