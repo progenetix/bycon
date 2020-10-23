@@ -1,9 +1,7 @@
-import cgi, cgitb
+import cgi
 import re, yaml
 import logging
-
-from os import path as path
-from os import environ
+from os import path, environ
 from urllib.parse import urlparse
   
 ################################################################################

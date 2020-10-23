@@ -2,12 +2,13 @@
 
 import cgi, cgitb
 import re, json
-import sys, os
+from os import path, pardir
+import sys
 from pymongo import MongoClient
 
 # local
-dir_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(os.path.abspath(dir_path), '..'))
+dir_path = path.dirname(path.abspath(__file__))
+sys.path.append(path.join(path.abspath(dir_path), pardir))
 from bycon.lib.cgi_utils import *
 from bycon.lib.parse_filters import *
 from bycon.lib.read_specs import *

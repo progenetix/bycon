@@ -1,8 +1,7 @@
 import re, yaml
 import json
 from pymongo import MongoClient
-from os import path as path
-from os import environ
+from os import path, pardir
 
 from .cgi_utils import *
 
@@ -11,7 +10,7 @@ from .cgi_utils import *
 def read_named_prefs(service, dir_path):
 
     o = {}
-    ofp = path.join( dir_path, "..", "bycon", "config", service+".yaml" )
+    ofp = path.join( dir_path, pardir, "bycon", "config", service+".yaml" )
     with open( ofp ) as od:
         o = yaml.load( od , Loader=yaml.FullLoader)    
     return o

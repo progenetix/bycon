@@ -4,13 +4,12 @@ import cgi, cgitb
 import json, yaml
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from os import path as path
-from os import environ
-import sys, os, datetime, argparse
+from os import path, environ, pardir
+import sys, datetime, argparse
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), '..'))
+sys.path.append(path.join(path.abspath(dir_path), pardir))
 from bycon.lib.parse_filters import *
 from bycon.lib.cgi_utils import *
 from bycon.lib.handover_execution import retrieve_handover,handover_return_data

@@ -2,15 +2,13 @@
 
 import cgi, cgitb
 import re, yaml
-from sys import path as sys_path
-import sys
-from os import path as path
+from os import path, pardir
 import csv
-import argparse
+import sys, argparse
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
-sys_path.append(path.join(path.abspath(dir_path), '..'))
+sys.path.append(path.join(path.abspath(dir_path), pardir))
 
 from bycon.lib.cgi_utils import *
 from bycon.lib.parse_variants import *

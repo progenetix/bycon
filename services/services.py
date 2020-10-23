@@ -1,16 +1,13 @@
 #!/usr/local/bin/python3
 
-from os import environ as environ
-from os import path as path
+from os import environ, path, pardir
 from urllib.parse import urlparse
 import sys, re, cgitb
-
 from importlib import import_module
-
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), '..'))
+sys.path.append(path.join(path.abspath(dir_path), pardir))
 from bycon.lib.read_specs import read_local_prefs
 
 """podmd

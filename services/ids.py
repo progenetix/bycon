@@ -2,12 +2,13 @@
 
 import cgi, cgitb
 import re, json
-import sys, os
+from os import environ, path, pardir
+import sys
 from urllib.parse import urlparse
 
 # local
-dir_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(os.path.abspath(dir_path), '..'))
+dir_path = path.dirname(path.abspath(__file__))
+sys.path.append(path.join(path.abspath(dir_path), pardir))
 from bycon.lib.read_specs import *
 
 """podmd

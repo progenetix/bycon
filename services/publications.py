@@ -2,15 +2,14 @@
 
 import cgi, cgitb
 import re, json, yaml
-from os import path as path
-from os import environ
-import sys, os, datetime, argparse
+from os import environ, path, pardir
+import sys, datetime, argparse
 from pymongo import MongoClient
 from operator import itemgetter
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), '..'))
+sys.path.append(path.join(path.abspath(dir_path), pardir))
 
 from bycon.lib.cgi_utils import *
 from bycon.lib.parse_filters import *

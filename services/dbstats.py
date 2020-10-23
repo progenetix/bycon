@@ -2,13 +2,12 @@
 
 import cgi, cgitb
 import re, json, yaml
-from os import path as path
-from os import environ
+from os import environ, pardir, path
 import sys, os, datetime
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), '..'))
+sys.path.append(path.join(path.abspath(dir_path), pardir))
 from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response
 from bycon.lib.read_specs import read_named_prefs,read_local_prefs,dbstats_return_latest
 
