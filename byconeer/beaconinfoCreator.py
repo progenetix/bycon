@@ -10,9 +10,10 @@ from progress.bar import Bar
 # local
 dir_path = path.dirname(path.abspath(__file__))
 sys.path.append(path.join(path.abspath(dir_path), pardir))
-from bycon.lib import *
-
+from bycon.lib.read_specs import read_named_prefs
 """
+
+## `beaconinfoCreator`
 
 This script reads the Beacon definitions from the configuration files, populates
 the filter definition and dataset statistics and saves the information ino the
