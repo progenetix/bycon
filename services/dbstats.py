@@ -30,8 +30,6 @@ def main():
 
 def dbstats(service):
 
-    form_data = cgi_parse_query()
-
     byc = {
         "config": read_named_prefs( "defaults", dir_path ),
         "form_data": cgi_parse_query(),
