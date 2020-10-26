@@ -120,6 +120,9 @@ def _dataset_get_filters(ds_id, **byc):
                 continue
         no = len(pfs)
         bar = Bar(ds_id+': '+s, max = no, suffix='%(percent)d%%'+" of "+str(no) )
+
+        # TODO: better loop over all biocharacteristics / ext_refs. in all 
+        # samples and update counts for matches?!
         for b in pfs:
             bar.next()
             pre, code = split_v.match(b).group(1, 2)          
