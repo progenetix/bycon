@@ -69,7 +69,7 @@ def _dataset_update_counts(ds, **byc):
 
     ds_id = ds["id"]
     ds_db = mongo_client[ ds_id ]
-    b_i_ds = { "counts": { } }
+    b_i_ds = { "counts": { }, "filtering_terms": [ ] }
     c_n = ds_db.list_collection_names()
     for c in byc["config"]["collections"]:
         if c in c_n:
@@ -84,7 +84,8 @@ def _dataset_update_counts(ds, **byc):
                 bar.finish()
                 b_i_ds["counts"].update( { "variants_distinct": len(v_d.keys()) } )
     
-    b_i_ds.update( { "filtering_terms": _dataset_get_filters(ds_id, **byc) } )
+    if b_i_ds["counts"]["biosamples"] > 0:
+        b_i_ds.update( { "filtering_terms": _dataset_get_filters(ds_id, **byc) } )
 
     return(b_i_ds)
 
@@ -127,29 +128,34 @@ def _dataset_get_filters(ds_id, **byc):
                             } } )
             except:
                 continue
+        scopedNo = len(pfs.keys())
+        if scopedNo > 0:
+            bar = Bar(ds_id+': '+s, max = sample_no, suffix='%(percent)d%%'+" of "+str(sample_no) )
+            for sample in bios_coll.find({}):
+                bar.next()
+                if s in sample:
+                    for term in sample[ s ]:
+                        tid = term["type"]["id"]
+                        if tid in pfs.keys():
+                            pfs[ tid ]["count"] += 1
+                            if "label" in term["type"]:
+                                 pfs[ tid ]["label"] = term["type"]["label"]
 
-        bar = Bar(ds_id+': '+s, max = sample_no, suffix='%(percent)d%%'+" of "+str(sample_no) )
-        for sample in bios_coll.find({}):
-            bar.next()
-            if s in sample:
-                for term in sample[ s ]:
-                    tid = term["type"]["id"]
-                    if tid in pfs.keys():
-                        pfs[ tid ]["count"] += 1
-                        if "label" in term["type"]:
-                             pfs[ tid ]["label"] = term["type"]["label"]
+            bar.finish()
 
-        bar.finish()
+            print("=> {} valid filtering terms out of {} for {} ({})".format(scopedNo, len(afs), s, ds_id) )
 
-        print("=> {} valid filtering terms out of {} for {} ({})".format(len(pfs.keys()), len(afs), s, ds_id) )
-
-        for fk, ft in pfs.items():
-            # print("{}: {}".format(ft["id"], ft["count"]))
-            filter_v.append(ft)
+            for fk, ft in pfs.items():
+                # print("{}: {}".format(ft["id"], ft["count"]))
+                filter_v.append(ft)
 
     print("=> {} filtering terms for {}".format(len(filter_v), ds_id) )
  
     return(filter_v)
+
+################################################################################
+################################################################################
+################################################################################
 
 if __name__ == '__main__':
     main()
