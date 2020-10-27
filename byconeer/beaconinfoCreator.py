@@ -131,12 +131,13 @@ def _dataset_get_filters(ds_id, **byc):
         bar = Bar(ds_id+': '+s, max = sample_no, suffix='%(percent)d%%'+" of "+str(sample_no) )
         for sample in bios_coll.find({}):
             bar.next()
-            for term in sample[ s ]:
-                tid = term["type"]["id"]
-                if tid in pfs.keys():
-                    pfs[ tid ]["count"] += 1
-                    if "label" in term["type"]:
-                         pfs[ tid ]["label"] = term["type"]["label"]
+            if s in sample:
+                for term in sample[ s ]:
+                    tid = term["type"]["id"]
+                    if tid in pfs.keys():
+                        pfs[ tid ]["count"] += 1
+                        if "label" in term["type"]:
+                             pfs[ tid ]["label"] = term["type"]["label"]
 
         bar.finish()
 
