@@ -13,12 +13,9 @@ sys.path.append(path.join(path.abspath(dir_path), pardir))
 from bycon.lib.read_specs import read_named_prefs
 """
 
-## `beaconinfoCreator`
+## `collationsCreator`
 
-This script reads the Beacon definitions from the configuration files, populates
-the filter definition and dataset statistics and saves the information ino the
-`progenetix.beaconinfo` database, from where it can be used e.g. by the Beacon
-API (`byconplus`).
+
 
 """
 
@@ -40,53 +37,9 @@ def main():
     ]:
         byc.update( { d: read_named_prefs( d, dir_path ) } )
 
-    b_info = { "date": date_isoformat(datetime.datetime.now()), "datasets": { } }
 
-    print("=> updating entry {} in {}.{}".format(b_info[ "date" ], byc[ "config" ][ "info_db" ], byc[ "config" ][ "beacon_info_coll"]) )
 
-    mongo_client = MongoClient( )
-    dbs = MongoClient().list_database_names()
 
-    for ds_id in byc["dataset_definitions"].keys():
-        if not ds_id in dbs:
-            print("¡¡¡ Dataset "+ds_id+" doesn't exist !!!")
-        else:
-            b_info["datasets"].update( { ds_id: _dataset_update_counts(byc["dataset_definitions"][ds_id], **byc) } )      
-    info_db = mongo_client[ byc[ "config" ][ "info_db" ] ]
-    info_coll = info_db[ byc[ "config" ][ "beacon_info_coll"] ]
-    info_coll.delete_many( { "date": b_info["date"] } ) #, upsert=True
-    info_coll.insert_one( b_info ) #, upsert=True 
-    
-    print("=> updated entry {} in {}.{}".format(b_info["date"], byc[ "config" ][ "info_db" ], byc[ "config" ][ "beacon_info_coll"]) )
-
-################################################################################
-################################################################################
-################################################################################
-
-def _dataset_update_counts(ds, **byc):
-
-    mongo_client = MongoClient( )
-
-    ds_id = ds["id"]
-    ds_db = mongo_client[ ds_id ]
-    b_i_ds = { "counts": { } }
-    c_n = ds_db.list_collection_names()
-    for c in byc["config"]["collections"]:
-        if c in c_n:
-            no = ds_db[ c ].estimated_document_count()
-            b_i_ds["counts"].update( { c: no } )
-            if c == "variants":
-                v_d = { }
-                bar = Bar(ds_id+' variants', max = no, suffix='%(percent)d%%'+" of "+str(no) )
-                for v in ds_db[ c ].find({}):
-                    v_d[ v["digest"] ] = 1
-                    bar.next()
-                bar.finish()
-                b_i_ds["counts"].update( { "variants_distinct": len(v_d.keys()) } )
-    
-    b_i_ds.update( { "filtering_terms": _dataset_get_filters(ds_id, **byc) } )
-
-    return(b_i_ds)
 
 ################################################################################
 ################################################################################
@@ -149,6 +102,10 @@ def _dataset_get_filters(ds_id, **byc):
     print("=> {} filtering terms for {}".format(len(filter_v), ds_id) )
  
     return(filter_v)
+
+################################################################################
+################################################################################
+################################################################################    
 
 if __name__ == '__main__':
     main()

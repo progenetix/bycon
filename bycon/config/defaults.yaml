@@ -18,6 +18,21 @@ collections:
   - collations
   - biosubsets
   - publications
+collationed:
+  NCIT:
+    pattern: '^(NCIT)[:]C'
+  icdom:
+    pattern: '^(icdom)[\-]\d'
+  icdot:
+    pattern: '^(icdot)[\-]C'
+  cellosaurus:
+    pattern: '^(cellosaurus)[:]CVCL'
+  PMID:
+    pattern: '^(PMID)[:]\d'
+  geo:
+    pattern: '^(geo)[:](GSE)|(GPL)'
+  tcga:
+    pattern: '^(TCGA)[:][\w\-]{2,20}$'
 info_db: progenetix
 beacon_info_coll: "beaconinfo"
 beacon_info_count_labels:
