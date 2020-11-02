@@ -36,7 +36,7 @@ def geolocations(service):
 
     byc = {
         "pkg_path": pkg_path,
-        "config": read_bycon_configs_by_name( "defaults", dir_path ),
+        "config": read_bycon_configs_by_name( "defaults" ),
         "form_data": cgi_parse_query(),
         "geoloc_definitions": read_bycon_configs_by_name( "geoloc_definitions" ),
         service: these_prefs

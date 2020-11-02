@@ -199,7 +199,10 @@ def _write_variants_bedfile(h_o, **byc):
 
     for vt in vs.keys():
         if len( vs[vt] ) > 0:
-            vs[vt] = sorted(vs[vt], key=lambda k: k['size'], reverse=True)
+            try:
+                vs[vt] = sorted(vs[vt], key=lambda k: k['size'], reverse=True)
+            except:
+                pass
             col_key = "color_var_"+vt.lower()+"_rgb"
             b_f.write("track name={} visibility=squish description=\"{} variants matching the query\" color={}\n".format(vt, vt, byc["config"]["plot_pars"][col_key]) )
             b_f.write("#chrom\tchromStart\tchromEnd\tbiosampleId\n")
