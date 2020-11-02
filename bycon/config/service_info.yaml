@@ -1,7 +1,10 @@
 ---
 id: org.progenetix.beacon
 name: 'Progenetix Cancer Genomics Beacon+'
-type: 'urn:ga4gh:beacon'
+type:
+  group: org.ga4gh
+  artifact: beacon
+  version: 2.0.pre
 description: |
   Beacon+ provides a forward looking implementation of the Beacon API, with focus on structural variants and metadata based on the cancer and reference genome profiling data represented in the Progenetix oncogenomic data resource (https://progenetix.org).
 documentationUrl: 'https://info.progenetix.org/tags/Beacon.html'
@@ -13,8 +16,8 @@ contactUrl: 'mailto:contact@progenetix.org'
 version: '2.0.pre.2020-04-07'
 open: true
 organization:
-id: 'org.baudisgroup'
-name: 'baudisgroup at UZH and SIB'
+  id: 'org.baudisgroup.info'
+  name: 'baudisgroup at UZH and SIB'
 description: |
   The "Theoretical Cytogenetics and Oncogenomics" group at the University of Zurich (UZH) and the Swiss Institute of Bioinformatics (SIB) performs research in cancer genomics and provides bioinformatics tools and cancer genome data resources to the scientific community.
 address: "Department of Molecular Life Sciences, University of Zurich, Winterthurerstrasse 190, CH-8057 Zurich, Switzerland"

@@ -7,8 +7,9 @@ import sys, datetime, argparse
 from pymongo import MongoClient
 
 # local
-dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), pardir))
+dir_path = path.dirname( path.abspath(__file__) )
+pkg_path = path.join( dir_path, pardir )
+sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import *
 from bycon.lib.parse_filters import *
 from bycon.lib.read_specs import *
@@ -31,13 +32,15 @@ def collations(service):
 
 
     byc = {
-        "config": read_named_prefs( "defaults", dir_path ),
+        "pkg_path": pkg_path,
+        "pkg_path": pkg_path,
+        "config": read_bycon_configs_by_name( "defaults" ),
         "errors": [ ],
         "warnings": [ ],
         "form_data": cgi_parse_query()
     }
     for d in ["filter_definitions"]:
-        byc.update( { d: read_named_prefs( d, dir_path ) } )
+        byc.update( { d: read_bycon_configs_by_name( d ) } )
 
     # first pre-population w/ defaults
     these_prefs = read_local_prefs( service, dir_path )
@@ -105,7 +108,8 @@ def collations(service):
                         else:
                             s_s[ i_d ][ k ] = subset[ k ]
                     else:
-                        s_s[ i_d ][ k ] = None
+                        continue
+                        # s_s[ i_d ][ k ] = None
 
     mongo_client.close( )
 

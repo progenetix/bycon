@@ -7,8 +7,9 @@ import sys
 from pymongo import MongoClient
 
 # local
-dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), pardir))
+dir_path = path.dirname( path.abspath(__file__) )
+pkg_path = path.join( dir_path, pardir )
+sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import *
 from bycon.lib.read_specs import *
 
@@ -29,7 +30,8 @@ def main():
 def genespans(service):
 
     byc = {
-        "config": read_named_prefs( "defaults", dir_path )
+        "pkg_path": pkg_path,
+        "config": read_bycon_configs_by_name( "defaults" )
     }
     
     these_prefs = read_local_prefs( service, dir_path )

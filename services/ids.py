@@ -7,8 +7,9 @@ import sys
 from urllib.parse import urlparse
 
 # local
-dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), pardir))
+dir_path = path.dirname( path.abspath(__file__) )
+pkg_path = path.join( dir_path, pardir )
+sys.path.append( pkg_path )
 from bycon.lib.read_specs import *
 
 """podmd

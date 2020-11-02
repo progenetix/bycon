@@ -8,14 +8,13 @@ from pymongo import MongoClient
 import argparse
 
 # local
-dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), pardir))
-from bycon.lib.read_specs import read_named_prefs
+dir_path = path.dirname( path.abspath(__file__) )
+pkg_path = path.join( dir_path, pardir )
+sys.path.append( pkg_path )
+from bycon.lib.read_specs import read_bycon_configs_by_name
 """
 
 ## `collationsCreator`
-
-
 
 """
 
@@ -37,7 +36,8 @@ def _get_args():
 def main():
 
     byc = {
-        "config": read_named_prefs( "defaults", dir_path ),
+        "pkg_path": pkg_path,
+        "config": read_bycon_configs_by_name( "defaults" ),
         "errors": [ ],
         "warnings": [ ]
     }
@@ -46,7 +46,7 @@ def main():
         "dataset_definitions",
         "filter_definitions"
     ]:
-        byc.update( { d: read_named_prefs( d, dir_path ) } )
+        byc.update( { d: read_bycon_configs_by_name( d ) } )
 
     if args.alldatasets:
         dataset_ids = byc["config"][ "dataset_ids" ]
@@ -56,9 +56,27 @@ def main():
             print("No existing dataset was provided with -d ...")
             exit()
 
+################################################################################
+
+    for ds_id in dataset_ids:
+        
+        coll_terms = dataset_count_collationed_filters(ds_id, **byc)
+        coll_types = byc["config"]["collationed"]
+
+        for pre in coll_types.keys():
+            # create /retrieve hierarchy tree; method to be developed
+            hier = get_prefix_hierarchy(pre, **byc)
 
 
+################################################################################
 
+def get_prefix_hierarchy(pre, **byc):
+
+    hier = [ ]
+
+    h_p = 
+    
+    return hier
 
 ################################################################################
 ################################################################################

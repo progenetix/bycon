@@ -8,12 +8,13 @@ from os import path, environ, pardir
 import sys, datetime, argparse
 
 # local
-dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), pardir))
+dir_path = path.dirname( path.abspath(__file__) )
+pkg_path = path.join( dir_path, pardir )
+sys.path.append( pkg_path )
 from bycon.lib.parse_filters import *
 from bycon.lib.cgi_utils import *
 from bycon.lib.handover_execution import retrieve_handover,handover_return_data
-from bycon.lib.read_specs import read_local_prefs,read_named_prefs
+from bycon.lib.read_specs import read_local_prefs,read_bycon_configs_by_name
 
 
 """podmd
@@ -56,7 +57,8 @@ def main():
 def deliveries(service):
 
     byc = {
-        "config": read_named_prefs( "defaults", dir_path ),
+        "pkg_path": pkg_path,
+        "config": read_bycon_configs_by_name( "defaults" ),
         "form_data": cgi_parse_query(),
         "errors": [ "No input parameter." ],
         "warnings": [ ]

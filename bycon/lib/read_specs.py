@@ -7,10 +7,18 @@ from .cgi_utils import *
 
 ################################################################################
 
-def read_named_prefs(service, dir_path):
+def read_bycon_configs_by_name(name):
+
+    """podmd
+    Reading the config from the same wrapper dir:
+    module
+      |
+      |- lib - read_specs.py
+      |- config - __name__.yaml
+    podmd"""
 
     o = {}
-    ofp = path.join( dir_path, pardir, "bycon", "config", service+".yaml" )
+    ofp = path.join( path.dirname( path.abspath(__file__) ), pardir, "config", name+".yaml" )
     with open( ofp ) as od:
         o = yaml.load( od , Loader=yaml.FullLoader)    
     return o

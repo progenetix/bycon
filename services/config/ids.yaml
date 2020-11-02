@@ -25,8 +25,14 @@ format_patterns:
   - pattern: '^(pgx\:)?((PMID)([:_])([\d]{5,10})?)$'
     link: '/publications/details?id='
 
-  - pattern: '^(pgx\:)?(cellosaurus)(([:_])(CVCL_[A-Z0-9]{4})?)$'
+  - pattern: '^(pgx\:)?((cellosaurus)([:_])(CVCL_[A-Z0-9]{4})?)$'
+    examples:
+      - cellosaurus:CVCL_0022
+      - pgx:cellosaurus_CVCL_0022
     link: '/biosamples/by-curie/'
 
   - pattern: '^(pgx\:)?(geo)(([:_])(G(PL|SM|SE|DS)\d+))$'
+    examples:
+      - cellosaurus:CVCL_0022
+      - pgx:cellosaurus_CVCL_0022
     link: '/biosamples/by-curie/'

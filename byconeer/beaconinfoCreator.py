@@ -9,9 +9,9 @@ from progress.bar import Bar
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), pardir))
-
-from bycon.lib.read_specs import read_named_prefs
+pkg_path = path.join( dir_path, pardir )
+sys.path.append( pkg_path )
+from bycon.lib.read_specs import read_bycon_configs_by_name
 from byconeer.lib import *
 
 """
@@ -32,7 +32,8 @@ API (`byconplus`).
 def main():
 
     byc = {
-        "config": read_named_prefs( "defaults", dir_path ),
+        "pkg_path": pkg_path,
+        "config": read_bycon_configs_by_name( "defaults" ),
         "errors": [ ],
         "warnings": [ ]
     }
@@ -41,7 +42,7 @@ def main():
         "dataset_definitions",
         "filter_definitions"
     ]:
-        byc.update( { d: read_named_prefs( d, dir_path ) } )
+        byc.update( { d: read_bycon_configs_by_name( d ) } )
 
     b_info = { "date": date_isoformat(datetime.datetime.now()), "datasets": { } }
 

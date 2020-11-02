@@ -6,8 +6,9 @@ from os import path, environ, pardir
 import sys, datetime, argparse
 
 # local
-dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), pardir))
+dir_path = path.dirname( path.abspath(__file__) )
+pkg_path = path.join( dir_path, pardir )
+sys.path.append( pkg_path )
 from bycon.lib import *
 
 """podmd
@@ -27,7 +28,8 @@ def main():
 def biosamples(service):
 
     byc = {
-        "config": read_named_prefs( "defaults", dir_path ),
+        "pkg_path": pkg_path,
+        "config": read_bycon_configs_by_name( "defaults" ),
         "form_data": cgi_parse_query(),
         "errors": [ ],
         "warnings": [ ],
@@ -40,7 +42,7 @@ def biosamples(service):
         "variant_definitions",
         "handover_definitions"
     ]:
-        byc.update( { d: read_named_prefs( d, dir_path ) } )
+        byc.update( { d: read_bycon_configs_by_name( d ) } )
 
     these_prefs = read_local_prefs( service, dir_path )
 

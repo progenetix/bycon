@@ -7,7 +7,8 @@ import sys, datetime, argparse
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), pardir))
+pkg_path = path.join( dir_path, pardir )
+sys.path.append( pkg_path )
 from bycon.lib import *
 
 """podmd
@@ -47,7 +48,8 @@ def byconplus(service):
     
     # TODO: "byc" becoming a proper object?!
     byc = {
-        "config": read_named_prefs( "defaults", dir_path ),
+        "pkg_path": pkg_path,
+        "config": read_bycon_configs_by_name( "defaults" ),
         "args": _get_args(),
         "form_data": cgi_parse_query(),
         "errors": [ ],
@@ -61,7 +63,7 @@ def byconplus(service):
         "variant_definitions",
         "handover_definitions"
     ]:
-        byc.update( { d: read_named_prefs( d, dir_path ) } )
+        byc.update( { d: read_bycon_configs_by_name( d ) } )
 
     for p in ["service_info", "beacon_info", "beacon_paths"]:
         byc.update( { p: read_local_prefs( p, dir_path ) } )

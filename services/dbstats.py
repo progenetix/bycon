@@ -7,9 +7,10 @@ import sys, os, datetime
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), pardir))
+pkg_path = path.join( dir_path, pardir )
+sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response
-from bycon.lib.read_specs import read_named_prefs,read_local_prefs,dbstats_return_latest
+from bycon.lib.read_specs import read_bycon_configs_by_name,read_local_prefs,dbstats_return_latest
 
 """podmd
 
@@ -31,7 +32,8 @@ def main():
 def dbstats(service):
 
     byc = {
-        "config": read_named_prefs( "defaults", dir_path ),
+        "pkg_path": pkg_path,
+        "config": read_bycon_configs_by_name( "defaults" ),
         "form_data": cgi_parse_query(),
         "errors": [ ],
         "warnings": [ ]

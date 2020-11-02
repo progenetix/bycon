@@ -8,9 +8,9 @@ from pymongo import MongoClient
 from operator import itemgetter
 
 # local
-dir_path = path.dirname(path.abspath(__file__))
-sys.path.append(path.join(path.abspath(dir_path), pardir))
-
+dir_path = path.dirname( path.abspath(__file__) )
+pkg_path = path.join( dir_path, pardir )
+sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import *
 from bycon.lib.parse_filters import *
 from bycon.lib.read_specs import *
@@ -33,8 +33,9 @@ def main():
 def publications(service):
 
     byc = {
-        "config": read_named_prefs( "defaults", dir_path ),
-        "geoloc_definitions": read_named_prefs( "geoloc_definitions", dir_path ),
+        "pkg_path": pkg_path,
+        "config": read_bycon_configs_by_name( "defaults" ),
+        "geoloc_definitions": read_bycon_configs_by_name( "geoloc_definitions" ),
         "form_data": cgi_parse_query(),
         "errors": [ ],
         "warnings": [ ]
@@ -50,8 +51,6 @@ def publications(service):
         m = byc["form_data"].getvalue("method")
         if m in these_prefs["methods"].keys():
             byc["method"] = m
-
-
 
     # the method keys can be overriden with "deliveryKeys"
     d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
