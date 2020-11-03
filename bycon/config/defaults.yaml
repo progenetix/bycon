@@ -42,6 +42,7 @@ beacon_info_count_labels:
   variants_distinct: "variantCount"
 handover_coll: querybuffer
 genespans_coll: genespans
+collations_coll: collations
 filter_flags:
   logic: '$and'
   precision: exact #'start'
