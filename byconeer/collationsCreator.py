@@ -56,16 +56,29 @@ def main():
             print( "Creating dummy hierarchy for " + pre)
             hiers.update( { pre: get_dummy_hierarchy(pre, **byc) } )
 
-    mongo_client = MongoClient( )
-    mongo_db = mongo_client[ byc["config"]["info_db"] ]
-    coll_coll = mongo_db[ byc["config"]["collations_coll"] ]
-
+    coll_client = MongoClient( )
+    coll_coll = coll_client[ byc["config"]["info_db"] ][ byc["config"]["collations_coll"] ]
     coll_coll.drop()
 
+    data_client = MongoClient( )
+    data_coll = data_client[ byc["dataset_id"] ][ byc["datacoll"] ]
+
     for pre in coll_types.keys():
-        print("Updating "+pre)
+
+        no = len(hiers[ pre ].keys())
+        bar = Bar("Writing "+pre+" to collations", max = no, suffix='%(percent)d%%'+" of "+str(no) )
+        
+        data_key = byc["filter_definitions"][ pre ]["db_key"]
+
         for code in hiers[ pre ].keys():
+            bar.next()
+            c_no =  data_coll.find( { data_key: code } ).count()
+            hiers[ pre ][ code ].update( { "code_matches": c_no } )
+            # print("{}: {}".format(code, hiers[ pre ][ code ]["code_matches"]))
             coll_coll.insert_one( hiers[ pre ][ code ] )
+
+        bar.finish()
+        
 
 ################################################################################
 
