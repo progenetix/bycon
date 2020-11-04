@@ -187,7 +187,18 @@ def get_dummy_hierarchy(pre, **byc):
             for s in sorted(ser_ids):
 
                 order += 1
-                hier.update( { s: _get_hierarchy_item( data_coll, dist_key, s, list_key, order, 1, [c,s] ) } )
+                ser_item = _get_hierarchy_item( data_coll, dist_key, s, list_key, order, 1, [c,s] )
+
+                if s in hier:
+                    hier[s].update(
+                        { 
+                            "parent_terms": list( set(hier[s]["parent_terms"]) | set(ser_item["parent_terms"]) ),
+                            "child_terms": list( set(hier[s]["child_terms"]) | set(ser_item["child_terms"]) )
+                        }
+                    )
+                    hier[s]["hierarchy_paths"].append( ser_item["hierarchy_paths"][0] )
+                else:
+                    hier.update( { s: ser_item } )
    
     bar.finish()
 
