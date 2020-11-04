@@ -154,40 +154,64 @@ def get_dummy_hierarchy(pre, **byc):
     no = len(pre_ids)
     bar = Bar(pre, max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
-    for c in pre_ids:
+    order = 0
+
+    for c in sorted(pre_ids):
 
         bar.next()
 
         if not pre_re.match(c):
             continue
 
-        example = data_coll.find_one( { dist: c } )
-        l = ""
-        if list_key in example.keys():
-            for o_t in example[ list_key ]:
-                if c in o_t["type"]["id"]:
-                    if "label" in o_t["type"]:
-                        l = o_t["type"]["label"]
+        order += 1
+        hier.update( { c: _get_hierarchy_item( data_coll, dist, c, list_key, order, 0, [ c ] ) } )
+        print(hier[c])
+        if byc["config"]["collationed"][ pre ]["is_series"]:
+
+            ser_ids = data_coll.distinct( dist, { dist: c } )
+            s_pat = byc["config"]["collationed"][ pre ]["child_pattern"]
+            s_re = re.compile( s_pat )
+
+            for s in sorted(ser_ids):
+                if not s_re.match(s):
                     continue
 
-        hier.update( {
-            c: {
-                "id": c,
-                "label": l,
-                "hierarchy_paths": [ [ c ] ],
-                "parent_terms": [ c ],
-                "child_terms": [ c ],
-                }
-            }
-        )
-    
+            order += 1
+            hier.update( { s: _get_hierarchy_item( data_coll, dist, s, list_key, order, 1, [c,s] ) } )
+            print(hier[s])
+
+   
     bar.finish()
 
     return hier
 
 ################################################################################
+
+def _get_hierarchy_item(data_coll, dist, code, list_key, order, depth, path):
+
+    example = data_coll.find_one( { dist: code } )
+
+    l = ""
+    if list_key in example.keys():
+        for o_t in example[ list_key ]:
+            if code in o_t["type"]["id"]:
+                if "label" in o_t["type"]:
+                    l = o_t["type"]["label"]
+                continue
+
+    return {
+        "id": code,
+        "label": l,
+        "hierarchy_paths": [ { "order": order, "depth": depth, "path": list(path) } ],
+        "parent_terms": list(path),
+        "child_terms": [ code ]
+    }
+
+
 ################################################################################
-################################################################################    
+################################################################################
+################################################################################
+
 
 if __name__ == '__main__':
     main()

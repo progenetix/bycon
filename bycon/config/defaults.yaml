@@ -19,6 +19,10 @@ collections:
   - biosubsets
   - publications
 collationed:
+  geo:
+    pattern: '^(geo)[:](GSE)|(GPL)'
+    is_series: True
+    child_pattern: '^(geo)[:]GSM'
   NCIT:
     pattern: '^(NCIT)[:]C'
   icdom:
@@ -29,8 +33,6 @@ collationed:
     pattern: '^(cellosaurus)[:]CVCL'
   PMID:
     pattern: '^(PMID)[:]\d'
-  geo:
-    pattern: '^(geo)[:](GSE)|(GPL)'
   tcga:
     pattern: '^(TCGA)[:][\w\-]{2,20}$'
 info_db: progenetix
