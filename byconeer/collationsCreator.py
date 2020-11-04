@@ -142,44 +142,39 @@ def get_dummy_hierarchy(pre, **byc):
     data_db = mongo_client[ byc["dataset_id"] ]
     data_coll = data_db[ byc["datacoll"] ]
 
-    dist = byc["filter_definitions"][ pre ]["db_key"]
     pattern = byc["config"]["collationed"][ pre ]["pattern"]
     pre_re = re.compile( pattern )
-    pre_ids = data_coll.distinct( dist, { dist: { "$regex": pre_re } } )
 
-    list_key = re.sub(".type.id", "", dist)
+    if byc["config"]["collationed"][ pre ]["is_series"]: 
+        s_pat = byc["config"]["collationed"][ pre ]["child_pattern"]
+        s_re = re.compile( s_pat )
+
+    dist_key = byc["filter_definitions"][ pre ]["db_key"]
+    list_key = re.sub(".type.id", "", dist_key)
+
+    pre_ids = data_coll.distinct( dist_key, { dist_key: { "$regex": pre_re } } )
+    pre_ids = list(filter(lambda d: pre_re.match(d), pre_ids))
 
     hier = { }
-
     no = len(pre_ids)
     bar = Bar(pre, max = no, suffix='%(percent)d%%'+" of "+str(no) )
-
     order = 0
 
     for c in sorted(pre_ids):
 
         bar.next()
-
-        if not pre_re.match(c):
-            continue
-
         order += 1
-        hier.update( { c: _get_hierarchy_item( data_coll, dist, c, list_key, order, 0, [ c ] ) } )
-        print(hier[c])
+        hier.update( { c: _get_hierarchy_item( data_coll, dist_key, c, list_key, order, 0, [ c ] ) } )
+
         if byc["config"]["collationed"][ pre ]["is_series"]:
 
-            ser_ids = data_coll.distinct( dist, { dist: c } )
-            s_pat = byc["config"]["collationed"][ pre ]["child_pattern"]
-            s_re = re.compile( s_pat )
+            ser_ids = data_coll.distinct( dist_key, { dist_key: c } )
+            ser_ids = list(filter(lambda d: s_re.match(d), ser_ids))
 
             for s in sorted(ser_ids):
-                if not s_re.match(s):
-                    continue
 
-            order += 1
-            hier.update( { s: _get_hierarchy_item( data_coll, dist, s, list_key, order, 1, [c,s] ) } )
-            print(hier[s])
-
+                order += 1
+                hier.update( { s: _get_hierarchy_item( data_coll, dist_key, s, list_key, order, 1, [c,s] ) } )
    
     bar.finish()
 
