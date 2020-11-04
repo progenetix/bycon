@@ -1,0 +1,409 @@
+icdot-C00-C14	Lip, oral cavity and pharynx	0	1
+icdot-C00	Lip	1	2
+icdot-C00.0	External upper lip	2	3
+icdot-C00.1	External lower lip	2	4
+icdot-C00.2	External lip, NOS	2	5
+icdot-C00.3	Mucosa of upper lip	2	6
+icdot-C00.4	Mucosa of lower lip	2	7
+icdot-C00.5	Mucosa of lip, NOS	2	8
+icdot-C00.6	Commissure of lip	2	9
+icdot-C00.8	Overlapping lesion of lip	2	10
+icdot-C00.9	Lip, NOS	2	11
+icdot-C01	Base of tongue	1	12
+icdot-C01.9	Base of tongue, NOS	2	13
+icdot-C02	Other and unspecified parts of tongue	1	14
+icdot-C02.0	Dorsal surface of tongue, NOS	2	15
+icdot-C02.1	Border of tongue	2	16
+icdot-C02.2	Ventral surface of tongue, NOS	2	17
+icdot-C02.3	Anterior 2/3 of tongue, NOS	2	18
+icdot-C02.4	Lingual tonsil	2	19
+icdot-C02.8	Overlapping lesion of tongue	2	20
+icdot-C02.9	Tongue, NOS	2	21
+icdot-C03	Gum	1	22
+icdot-C03.0	Upper gum	2	23
+icdot-C03.1	Lower gum	2	24
+icdot-C03.9	Gum, NOS	2	25
+icdot-C04	Floor of mouth	1	26
+icdot-C04.0	Anterior floor of mouth	2	27
+icdot-C04.1	Lateral floor of mouth	2	28
+icdot-C04.8	Overlapping lesion of floor of mouth	2	29
+icdot-C04.9	Floor of mouth, NOS	2	30
+icdot-C05	Palate	1	31
+icdot-C05.0	Hard palate	2	32
+icdot-C05.1	Soft palate, NOS	2	33
+icdot-C05.2	Uvula	2	34
+icdot-C05.8	Overlapping lesion of palate	2	35
+icdot-C05.9	Palate, NOS	2	36
+icdot-C06	Other and unspecified parts of mouth	1	37
+icdot-C06.0	Cheeck mucosa	2	38
+icdot-C06.1	Vestibule of mouth	2	39
+icdot-C06.2	Retromolar area	2	40
+icdot-C06.8	Overlapping lesion of other and unspecified parts of mouth	2	41
+icdot-C06.9	Mouth, NOS	2	42
+icdot-C07	Parotid gland	1	43
+icdot-C07.9	Parotid gland	2	44
+icdot-C08	Other and unspecified major salivary glands	1	45
+icdot-C08.0	Submandibular gland	2	46
+icdot-C08.1	Sublingual gland	2	47
+icdot-C08.8	Overlapping lesion of major salivary glands	2	48
+icdot-C08.9	Major salivary gland, NOS	2	49
+icdot-C09	Tonsil	1	50
+icdot-C09.0	Tonsillar fossa	2	51
+icdot-C09.1	Tonsillar pillar	2	52
+icdot-C09.8	Overlapping lesion of tonsil	2	53
+icdot-C09.9	Tonsil, NOS	2	54
+icdot-C10	Oropharynx	1	55
+icdot-C10.0	Vallecula	2	56
+icdot-C10.1	Anterior surface of epiglottis	2	57
+icdot-C10.2	Lateral wall of oropharynx	2	58
+icdot-C10.3	Posterior wall of oropharynx	2	59
+icdot-C10.4	Branchial cleft	2	60
+icdot-C10.8	Overlapping lesions of oropharynx	2	61
+icdot-C10.9	Oropharynx, NOS	2	62
+icdot-C11	Nasopharynx	1	63
+icdot-C11.0	Superior wall of nasopharynx	2	64
+icdot-C11.1	Posterior wall of nasopharynx	2	65
+icdot-C11.2	Lateral wall of nasopharynx	2	66
+icdot-C11.3	Anterior wall of nasopharynx	2	67
+icdot-C11.8	Overlapping lesion of nasopharynx	2	68
+icdot-C11.9	Nasopharynx, NOS	2	69
+icdot-C12	Pyriform sinus	1	70
+icdot-C12.9	Pyriform sinus	2	71
+icdot-C13	Hypopharynx	1	72
+icdot-C13.0	Postcricoid region	2	73
+icdot-C13.1	Hypopharyngeal aspect of aryepiglottic fold	2	74
+icdot-C13.2	Posterior wall of hypopharynx	2	75
+icdot-C13.8	Overlapping lesion of hypopharynx	2	76
+icdot-C13.9	Hypopharynx, NOS	2	77
+icdot-C14	Other and ill-defined sites in lip, oral cavity and pharynx	1	78
+icdot-C14.0	Pharynx, NOS	2	79
+icdot-C14.2	Waldeyer ring	2	80
+icdot-C14.8	Overlapping lesion of lip, oral cavity and pharynx	2	81
+icdot-C15-C26	Digestive organs	0	82
+icdot-C15	Esophagus	1	83
+icdot-C15.0	Cervical esophagus	2	84
+icdot-C15.1	Thoracic esophagus	2	85
+icdot-C15.2	Abdominal esophagus	2	86
+icdot-C15.3	Upper third of esophagus	2	87
+icdot-C15.4	Middle third of esophagus	2	88
+icdot-C15.5	Lower third of esophagus	2	89
+icdot-C15.8	Overlapping lesion of esophagus	2	90
+icdot-C15.9	Esophagus, NOS	2	91
+icdot-C16	Stomach	1	92
+icdot-C16.0	Cardia, NOS	2	93
+icdot-C16.1	Fundus of stomach	2	94
+icdot-C16.2	Body of stomach	2	95
+icdot-C16.3	Gastric antrum	2	96
+icdot-C16.4	Pylorus	2	97
+icdot-C16.5	Lesser curvature of stomach, NOS	2	98
+icdot-C16.6	Greater curvature of stomach, NOS	2	99
+icdot-C16.8	Overlapping lesion of stomach	2	100
+icdot-C16.9	Stomach, NOS	2	101
+icdot-C17	Small intestine	1	102
+icdot-C17.0	Duodenum	2	103
+icdot-C17.1	Jejunum	2	104
+icdot-C17.2	Ileum	2	105
+icdot-C17.3	Meckel diverticulum	2	106
+icdot-C17.8	Overlapping lesion of small intestine	2	107
+icdot-C17.9	Small intestine, NOS	2	108
+icdot-C18	Colon	1	109
+icdot-C18.0	Cecum	2	110
+icdot-C18.1	Appendix	2	111
+icdot-C18.2	Ascending colon	2	112
+icdot-C18.3	Hepatic flexure of colon	2	113
+icdot-C18.4	Transverse colon	2	114
+icdot-C18.5	Splenic flexure of colon	2	115
+icdot-C18.6	Descending colon	2	116
+icdot-C18.7	Sigmoid colon	2	117
+icdot-C18.8	Overlapping lesion of colon	2	118
+icdot-C18.9	Colon, NOS	2	119
+icdot-C19	Rectosigmoid junction	1	120
+icdot-C19.9	Rectosigmoid junction	2	121
+icdot-C20	Rectum	1	122
+icdot-C20.9	Rectum, NOS	2	123
+icdot-C21	Anus and anal canal	1	124
+icdot-C21.0	Anus, NOS	2	125
+icdot-C21.1	Anal canal	2	126
+icdot-C21.2	Cloacogenic zone	2	127
+icdot-C21.8	Overlapping lesion of rectum, anus and anal canal	2	128
+icdot-C22	Liver and intrahepatic bile ducts	1	129
+icdot-C22.0	Liver	2	130
+icdot-C22.1	Intrahepatic bile duct	2	131
+icdot-C23	Gallbladder	1	132
+icdot-C23.9	Gallbladder	2	133
+icdot-C24	Other and unspecified parts of biliary tract	1	134
+icdot-C24.0	Extrahepatic bile duct	2	135
+icdot-C24.1	Ampulla of vater	2	136
+icdot-C24.8	Overlapping lesion of billiary tract	2	137
+icdot-C24.9	Billiary tract, NOS	2	138
+icdot-C25	Pancreas	1	139
+icdot-C25.0	Head of pancreas	2	140
+icdot-C25.1	Body of pancreas	2	141
+icdot-C25.2	Tail of pancreas	2	142
+icdot-C25.3	Pancreatic duct	2	143
+icdot-C25.4	Islets of langerhans	2	144
+icdot-C25.7	Other specified parts of pancreas	2	145
+icdot-C25.8	Overlapping lesion of pancreas	2	146
+icdot-C25.9	Pancreas, NOS	2	147
+icdot-C26	Other and ill-defined digestive organs	1	148
+icdot-C26.0	Intestinal tract, NOS	2	149
+icdot-C26.8	Overlapping lesion of digestive system	2	150
+icdot-C26.9	Gastrointestinal tract, NOS	2	151
+icdot-C30-C39	Respiratory system and intrathoracic organs	0	152
+icdot-C30	Nasal cavity and middle ear	1	153
+icdot-C30.0	Nasal cavity	2	154
+icdot-C30.1	Middle ear	2	155
+icdot-C31	Accessory sinuses	1	156
+icdot-C31.0	Maxillary sinus	2	157
+icdot-C31.1	Ethmoid sinus	2	158
+icdot-C31.2	Frontal sinus	2	159
+icdot-C31.3	Sphenoid sinus	2	160
+icdot-C31.8	Overlapping lesion of accessory sinuses	2	161
+icdot-C31.9	Accessory sinus, NOS	2	162
+icdot-C32	Larynx	1	163
+icdot-C32.0	Glottis	2	164
+icdot-C32.1	Supraglottis	2	165
+icdot-C32.2	Subglottis	2	166
+icdot-C32.3	Laryngeal cartilage	2	167
+icdot-C32.8	Overlapping lesion of larynx	2	168
+icdot-C32.9	Larynx, NOS	2	169
+icdot-C33	Trachea	1	170
+icdot-C33.9	Trachea	2	171
+icdot-C34	Bronchus and lung	1	172
+icdot-C34.0	Main bronchus	2	173
+icdot-C34.1	Upper lobe, lung	2	174
+icdot-C34.2	Middle lobe, lung	2	175
+icdot-C34.3	Lower lobe, lung	2	176
+icdot-C34.8	Overlapping lesion of lung	2	177
+icdot-C34.9	Lung, NOS	2	178
+icdot-C37	Thymus	1	179
+icdot-C37.9	Thymus	2	180
+icdot-C38	Heart, mediastinum, and pleura	1	181
+icdot-C38.0	Heart	2	182
+icdot-C38.1	Anterior mediastinum	2	183
+icdot-C38.2	Posterior mediastinum	2	184
+icdot-C38.3	Mediastinum, NOS	2	185
+icdot-C38.4	Pleura, NOS	2	186
+icdot-C38.8	Overlapping lesion of heart, mediastinum and pleura	2	187
+icdot-C39	Other and ill-defined sites within respiratory system amd intrathoracic organs	1	188
+icdot-C39.0	Upper respiratory tract, NOS	2	189
+icdot-C39.8	Overlapping lesion of respiratory system and intrathoracic organs	2	190
+icdot-C39.9	Ill-defined sites within respiratory system	2	191
+icdot-C40-C41	Bones, joints and articular cartilage	0	192
+icdot-C40	Bones, joints and articular cartilage of limbs	1	193
+icdot-C40.0	Long bones of upper limb, scapula and associated joints	2	194
+icdot-C40.1	Short bones of upper limb and associated joints	2	195
+icdot-C40.2	Long bones of lower limb and associated joints	2	196
+icdot-C40.3	Short bones of lower limb and associated joints	2	197
+icdot-C40.8	Overlapping lesion of bones, joints and articular cartilage of limbs	2	198
+icdot-C40.9	Bone of limb, NOS	2	199
+icdot-C41	Bones, joints and articular cartilage of other and unspecified sites	1	200
+icdot-C41.0	Bones of skull and face and associated joints	2	201
+icdot-C41.1	Mandible	2	202
+icdot-C41.2	Vertebral column	2	203
+icdot-C41.3	Rib, sternum, clavicle and associated joints	2	204
+icdot-C41.4	Pelvic bones, sacrum, coccyx and associated joints	2	205
+icdot-C41.8	Overlapping lesion of bones, joints and articular cartilage	2	206
+icdot-C41.9	Bone, NOS	2	207
+icdot-C42	Hematopoietic and reticuloendothelial systems	0	208
+icdot-C42.0	Blood	1	209
+icdot-C42.1	Bone marrow	1	210
+icdot-C42.2	Spleen	1	211
+icdot-C42.3	Reticuloendothelial system, NOS	1	212
+icdot-C42.4	Hematopoietic system, NOS	1	213
+icdot-C44	Skin	0	214
+icdot-C44.0	Skin of lip, NOS	1	215
+icdot-C44.1	Eyelid	1	216
+icdot-C44.2	External ear	1	217
+icdot-C44.3	Skin of other and unspecified parts of face	1	218
+icdot-C44.4	Skin of scalp and neck	1	219
+icdot-C44.5	Skin of trunk	1	220
+icdot-C44.6	Skin of upper limb and shoulder	1	221
+icdot-C44.7	Skin of lower limb and hip	1	222
+icdot-C44.8	Overlapping lesion of skin	1	223
+icdot-C44.9	Skin, NOS	1	224
+icdot-C47	Peripheral nerves and autonomic nervous system	0	225
+icdot-C47.0	Peripheral nerves and autonomic nervous system of head, face, and neck	1	226
+icdot-C47.1	Peripheral nerves and autonomic nervous system of upper limb and shoulder	1	227
+icdot-C47.2	Peripheral nerves and autonomic nervous system of lower limb and hip	1	228
+icdot-C47.3	Peripheral nerves and autonomic nervous system of thorax	1	229
+icdot-C47.4	Peripheral nerves and autonomic nervous system of abdomen	1	230
+icdot-C47.5	Peripheral nerves and autonomic nervous system of pelvis	1	231
+icdot-C47.6	Peripheral nerves and autonomic nervous system of trunk, NOS	1	232
+icdot-C47.8	Overlapping lesion of peripheral nerves and autonomic nervous system	1	233
+icdot-C47.9	Autonomic nervous system, NOS	1	234
+icdot-C48	Retroperitoneum and peritoneum	0	235
+icdot-C48.0	Retroperitoneum	1	236
+icdot-C48.1	Specified parts of peritoneum	1	237
+icdot-C48.2	Peritoneum, NOS	1	238
+icdot-C48.8	Overlapping lesion of retroperitoneum and peritoneum	1	239
+icdot-C49	Connective, subcutaneous and other soft tissues	0	240
+icdot-C49.0	Connective, subcutaneous and other soft tissues of head, face, and neck	1	241
+icdot-C49.1	Connective, subcutaneous and other soft tissues of upper limb and shoulder	1	242
+icdot-C49.2	Connective, subcutaneous and other soft tissues of lower limb and hip	1	243
+icdot-C49.3	Connective, subcutaneous and other soft tissues of thorax	1	244
+icdot-C49.4	Connective, subcutaneous and other soft tissues of abdomen	1	245
+icdot-C49.5	Connective, subcutaneous and other soft tissues of pelvis	1	246
+icdot-C49.6	Connective, subcutaneous and other soft tissues of trunk, NOS	1	247
+icdot-C49.8	Overlapping lesion of connective, subcutaneous and other soft tissues	1	248
+icdot-C49.9	Connective, subcutaneous and other soft tissues, NOS	1	249
+icdot-C50	Breast	0	250
+icdot-C50.0	Nipple	1	251
+icdot-C50.1	Central portion of breast	1	252
+icdot-C50.2	Upper-inner quadrant of breast	1	253
+icdot-C50.3	Lower-inner quadrant of breast	1	254
+icdot-C50.4	Upper-outer quadrant of breast	1	255
+icdot-C50.5	Lower-outer quadrant of breast	1	256
+icdot-C50.6	Axillary tail of breast	1	257
+icdot-C50.8	Overlapping lesion of breast	1	258
+icdot-C50.9	Breast, NOS	1	259
+icdot-C51-C58	Female genital organs	0	260
+icdot-C51	Vulva	1	261
+icdot-C51.0	Labium majus	2	262
+icdot-C51.1	Labium minus	2	263
+icdot-C51.2	Clitoris	2	264
+icdot-C51.8	Overlapping lesion of vulva	2	265
+icdot-C51.9	Vulva, NOS	2	266
+icdot-C52	Vagina	1	267
+icdot-C52.9	Vagina, NOS	2	268
+icdot-C53	Cervix uteri	1	269
+icdot-C53.0	Endocervix	2	270
+icdot-C53.1	Exocervix	2	271
+icdot-C53.8	Overlapping lesion of cervix uteri	2	272
+icdot-C53.9	Cervix uteri	2	273
+icdot-C54	Corpus uteri	1	274
+icdot-C54.0	Isthmus uteri	2	275
+icdot-C54.1	Endometrium	2	276
+icdot-C54.2	Myometrium	2	277
+icdot-C54.3	Fundus uteri	2	278
+icdot-C54.8	Overlapping lesion of corpus uteri	2	279
+icdot-C54.9	Corpus uteri	2	280
+icdot-C55	Uterus, NOS	1	281
+icdot-C55.9	Uterus, NOS	2	282
+icdot-C56	Ovary	1	283
+icdot-C56.9	Ovary	2	284
+icdot-C57	Other an unspecified female genital organs	1	285
+icdot-C57.0	Fallopian tube	2	286
+icdot-C57.1	Broad ligament	2	287
+icdot-C57.2	Round ligament	2	288
+icdot-C57.3	Parametrium	2	289
+icdot-C57.4	Uterine adnexa	2	290
+icdot-C57.7	Other specified parts of female genital organs	2	291
+icdot-C57.8	Overlapping lesion of female genital organs	2	292
+icdot-C57.9	Female genital tract, NOS	2	293
+icdot-C58	Placenta	1	294
+icdot-C58.9	Placenta	2	295
+icdot-C60-C63	Male genital organs	0	296
+icdot-C60	Penis	1	297
+icdot-C60.0	Prepuce	2	298
+icdot-C60.1	Glans penis	2	299
+icdot-C60.2	Body of penis	2	300
+icdot-C60.8	Overlapping lesion of penis	2	301
+icdot-C60.9	Penis, NOS	2	302
+icdot-C61	Prostate gland	1	303
+icdot-C61.9	Prostate gland	2	304
+icdot-C62	Testis	1	305
+icdot-C62.0	Undescended testis	2	306
+icdot-C62.1	Descended testis	2	307
+icdot-C62.9	Testis, NOS	2	308
+icdot-C63	Other and unspecified male genital organs	1	309
+icdot-C63.0	Epididymis	2	310
+icdot-C63.1	Spermatic cord	2	311
+icdot-C63.2	Scrotum, NOS	2	312
+icdot-C63.7	Other specified parts of male genital organs	2	313
+icdot-C63.8	Overlapping lesion of male genital organs	2	314
+icdot-C63.9	Male genital organs, NOS	2	315
+icdot-C64-C68	Urinary tract	0	316
+icdot-C64	Kidney	1	317
+icdot-C64.9	Kidney, NOS	2	318
+icdot-C65	Renal pelvis	1	319
+icdot-C65.9	Renal pelvis	2	320
+icdot-C66	Ureter	1	321
+icdot-C66.9	Ureter	2	322
+icdot-C67	Bladder	1	323
+icdot-C67.0	Trigone of bladder	2	324
+icdot-C67.1	Dome of bladder	2	325
+icdot-C67.2	Lateral wall of bladder	2	326
+icdot-C67.3	Anterior wall of bladder	2	327
+icdot-C67.4	Posterior wall of bladder	2	328
+icdot-C67.5	Bladder neck	2	329
+icdot-C67.6	Ureteric orifice	2	330
+icdot-C67.7	Urachus	2	331
+icdot-C67.8	Overlapping lesion of bladder	2	332
+icdot-C67.9	Bladder, NOS	2	333
+icdot-C68	Other and unspecified urinary organs	1	334
+icdot-C68.0	Urethra	2	335
+icdot-C68.1	Paraurethral gland	2	336
+icdot-C68.8	Overlapping lesion of urinary organs	2	337
+icdot-C68.9	Urinary system, NOS	2	338
+icdot-C69-C72	Eye, brain and other parts of central system	0	339
+icdot-C69	Eye and adnexa	1	340
+icdot-C69.0	Conjunctiva	2	341
+icdot-C69.1	Cornea, NOS	2	342
+icdot-C69.2	Retina	2	343
+icdot-C69.3	Choroid	2	344
+icdot-C69.4	Ciliary body	2	345
+icdot-C69.5	Lacrimal gland	2	346
+icdot-C69.6	Orbit, NOS	2	347
+icdot-C69.8	Overlapping lesion of eye and adnexa	2	348
+icdot-C69.9	Eye, NOS	2	349
+icdot-C70	Meninges	1	350
+icdot-C70.0	Cerebral meninges	2	351
+icdot-C70.1	Spinal meninges	2	352
+icdot-C70.9	Meninges, NOS	2	353
+icdot-C71	Brain	1	354
+icdot-C71.0	Cerebrum	2	355
+icdot-C71.1	Frontal lobe	2	356
+icdot-C71.2	Temporal lobe	2	357
+icdot-C71.3	Parietal lobe	2	358
+icdot-C71.4	Occipital lobe	2	359
+icdot-C71.5	Ventricle, NOS	2	360
+icdot-C71.6	Cerebellum, NOS	2	361
+icdot-C71.7	Brain stem	2	362
+icdot-C71.8	Overlapping lesion of brain	2	363
+icdot-C71.9	Brain, NOS	2	364
+icdot-C72	Spinal cord, cranial nerves, and other parts of central nervous system	1	365
+icdot-C72.0	Spinal cord	2	366
+icdot-C72.1	Cauda equina	2	367
+icdot-C72.2	Olfactory nerve	2	368
+icdot-C72.3	Optic nerve	2	369
+icdot-C72.4	Acoustic nerve	2	370
+icdot-C72.5	Cranial nerve, NOS	2	371
+icdot-C72.8	Overlapping lesion of brain and central nervous system	2	372
+icdot-C72.9	Nervous system, NOS	2	373
+icdot-C73-C75	Thyroid and other endocrine glands	0	374
+icdot-C73	Thyroid gland	1	375
+icdot-C73.9	Thyroid gland	2	376
+icdot-C74	Adrenal gland	1	377
+icdot-C74.0	Cortex of adrenal gland	2	378
+icdot-C74.1	Medulla of adrenal gland	2	379
+icdot-C74.9	Adrenal gland, NOS	2	380
+icdot-C75	Other endocrine glands and related structures	1	381
+icdot-C75.0	Parathyroid gland	2	382
+icdot-C75.1	Pituitary gland	2	383
+icdot-C75.2	Craniopharyngeal duct	2	384
+icdot-C75.3	Pineal gland	2	385
+icdot-C75.4	Carotid body	2	386
+icdot-C75.5	Aortic body and other paraganglia	2	387
+icdot-C75.8	Overlapping lesion of endocrine glands and related structures	2	388
+icdot-C75.9	Endocrine gland, NOS	2	389
+icdot-C76	Other and ill-defined sites	0	390
+icdot-C76.0	Head, face or neck, NOS	1	391
+icdot-C76.1	Thorax, NOS	1	392
+icdot-C76.2	Abdomen, NOS	1	393
+icdot-C76.3	Pelvis, NOS	1	394
+icdot-C76.4	Upper limb, NOS	1	395
+icdot-C76.5	Lower limb, NOS	1	396
+icdot-C76.7	Other ill-defined sites	1	397
+icdot-C76.8	Overlapping lesion of ill-defined sites	1	398
+icdot-C77	Lymph nodes	0	399
+icdot-C77.0	Lymph nodes of head, face and neck	1	400
+icdot-C77.1	Intrathoracic lymph nodes	1	401
+icdot-C77.2	Intra-abdominal lymph nodes	1	402
+icdot-C77.3	Lymph nodes of axilla or arm	1	403
+icdot-C77.4	Lymph nodes of inguinal region or leg	1	404
+icdot-C77.5	Pelvic lymph nodes	1	405
+icdot-C77.8	Lymph nodes of multiple regions	1	406
+icdot-C77.9	Lymph node, NOS	1	407
+icdot-C80	Unknown primary site	0	408
+icdot-C80.9	Unknown primary site	1	409
