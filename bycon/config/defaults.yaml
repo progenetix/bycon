@@ -19,22 +19,28 @@ collections:
   - biosubsets
   - publications
 collationed:
+  PMID:
+    pattern: '^(PMID)[:]\d'
+    is_series: False
   geo:
     pattern: '^(geo)[:](GSE)|(GPL)'
     is_series: True
     child_pattern: '^(geo)[:]GSM'
   NCIT:
     pattern: '^(NCIT)[:]C'
+    is_series: False
   icdom:
     pattern: '^(icdom)[\-]\d'
+    is_series: False
   icdot:
     pattern: '^(icdot)[\-]C'
+    is_series: False
   cellosaurus:
     pattern: '^(cellosaurus)[:]CVCL'
-  PMID:
-    pattern: '^(PMID)[:]\d'
+    is_series: False
   tcga:
     pattern: '^(TCGA)[:][\w\-]{2,20}$'
+    is_series: False
 info_db: progenetix
 beacon_info_coll: "beaconinfo"
 beacon_info_count_labels:
