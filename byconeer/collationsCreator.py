@@ -24,12 +24,22 @@ from lib.filter_aggregation  import dataset_count_collationed_filters
 ################################################################################
 ################################################################################
 
+def _get_args():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--datasetid", help="dataset")
+    parser.add_argument("-a", "--alldatasets", action='store_true', help="process all datasets")
+    parser.add_argument("-t", "--test", help="test setting")
+    args = parser.parse_args()
+
+    return(args)
+
+################################################################################
+
 def main():
 
     byc = {
         "pkg_path": pkg_path,
-        "dataset_id": "progenetix",
-        "datacoll": "biosamples",
         "config": read_bycon_configs_by_name( "defaults" ),
         "errors": [ ],
         "warnings": [ ]
@@ -43,6 +53,24 @@ def main():
 
 ################################################################################
 
+    args = _get_args()
+
+    if args.alldatasets:
+        dataset_ids = byc["config"][ "dataset_ids" ]
+    else:
+        dataset_ids =  [ args.datasetid ]
+        if not dataset_ids[0] in byc["config"][ "dataset_ids" ]:
+            print("No existing dataset was provided with -d ...")
+            exit()
+
+    for ds_id in dataset_ids:
+        print( "Creating collations for " + ds_id)
+        _create_collations_from_dataset( ds_id, **byc )
+
+################################################################################
+
+def _create_collations_from_dataset( ds_id, **byc ):
+
     coll_types = byc["config"]["collationed"]
     # coll_types = { "cellosaurus":  {} }
     hiers = {}
@@ -54,32 +82,40 @@ def main():
         else:
             # create /retrieve hierarchy tree; method to be developed
             print( "Creating dummy hierarchy for " + pre)
-            hiers.update( { pre: get_dummy_hierarchy(pre, **byc) } )
+            hiers.update( { pre: _get_dummy_hierarchy( ds_id, pre, **byc ) } )
 
     coll_client = MongoClient( )
-    coll_coll = coll_client[ byc["config"]["info_db"] ][ byc["config"]["collations_coll"] ]
+    coll_coll = coll_client[ ds_id ][ byc["config"]["collations_coll"] ]
     coll_coll.drop()
 
     data_client = MongoClient( )
-    data_coll = data_client[ byc["dataset_id"] ][ byc["datacoll"] ]
+    data_db = data_client[ ds_id ]
+    data_coll = data_db[ byc["config"]["collations_source"] ]
 
     for pre in coll_types.keys():
 
         no = len(hiers[ pre ].keys())
-        bar = Bar("Writing "+pre+" to collations", max = no, suffix='%(percent)d%%'+" of "+str(no) )
+        ind = 0
+        # bar = Bar("Writing "+pre+" to collations", max = no, suffix='%(percent)d%%'+" of "+str(no) )
         
         data_key = byc["filter_definitions"][ pre ]["db_key"]
 
         for code in hiers[ pre ].keys():
-            bar.next()
-            c_no =  data_coll.find( { data_key: code } ).count()
-            hiers[ pre ][ code ].update( { "code_matches": c_no } )
-            # print("{}: {}".format(code, hiers[ pre ][ code ]["code_matches"]))
-            coll_coll.insert_one( hiers[ pre ][ code ] )
+            # bar.next()
+            ind += 1
+            children = hiers[ pre ][ code ][ "child_terms" ]
+            code_no =  data_coll.count_documents( { data_key: code } )
+            if len(children) < 2:
+                child_no = code_no
+            else:
+                child_no =  data_coll.count_documents( { data_key: { "$in": children } } )
+            hiers[ pre ][ code ].update( { "code_matches": code_no, "count": child_no } )
+            if child_no > 0:
+                coll_coll.insert_one( hiers[ pre ][ code ] )
+                print("{}:\t{} ({} deep) samples - {} / {} {}".format(code, code_no, child_no, ind, no, pre))
 
-        bar.finish()
+        # bar.finish()
         
-
 ################################################################################
 
 def get_prefix_hierarchy(pre, pre_h_f, **byc):
@@ -149,11 +185,11 @@ def get_prefix_hierarchy(pre, pre_h_f, **byc):
 
 ################################################################################
 
-def get_dummy_hierarchy(pre, **byc):
+def _get_dummy_hierarchy(ds_id, pre, **byc):
 
-    mongo_client = MongoClient( )
-    data_db = mongo_client[ byc["dataset_id"] ]
-    data_coll = data_db[ byc["datacoll"] ]
+    data_client = MongoClient( )
+    data_db = data_client[ ds_id ]
+    data_coll = data_db[ byc["config"]["collations_source"] ]
 
     pattern = byc["config"]["collationed"][ pre ]["pattern"]
     pre_re = re.compile( pattern )
@@ -183,22 +219,7 @@ def get_dummy_hierarchy(pre, **byc):
 
             ser_ids = data_coll.distinct( dist_key, { dist_key: c } )
             ser_ids = list(filter(lambda d: s_re.match(d), ser_ids))
-
-            for s in sorted(ser_ids):
-
-                order += 1
-                ser_item = _get_hierarchy_item( data_coll, dist_key, s, list_key, order, 1, [c,s] )
-
-                if s in hier:
-                    hier[s].update(
-                        { 
-                            "parent_terms": list( set(hier[s]["parent_terms"]) | set(ser_item["parent_terms"]) ),
-                            "child_terms": list( set(hier[s]["child_terms"]) | set(ser_item["child_terms"]) )
-                        }
-                    )
-                    hier[s]["hierarchy_paths"].append( ser_item["hierarchy_paths"][0] )
-                else:
-                    hier.update( { s: ser_item } )
+            hier[c].update( { "child_terms": list( set(ser_ids) | set(hier[c]["child_terms"]) ) } )
    
     bar.finish()
 
