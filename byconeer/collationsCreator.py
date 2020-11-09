@@ -41,6 +41,7 @@ def main():
     byc = {
         "pkg_path": pkg_path,
         "config": read_bycon_configs_by_name( "defaults" ),
+        "args": _get_args(),
         "errors": [ ],
         "warnings": [ ]
     }
@@ -53,18 +54,22 @@ def main():
 
 ################################################################################
 
-    args = _get_args()
-
-    if args.alldatasets:
+    if byc["args"].alldatasets:
         dataset_ids = byc["config"][ "dataset_ids" ]
     else:
-        dataset_ids =  [ args.datasetid ]
+        dataset_ids =  byc["args"].datasetid.split(",")
         if not dataset_ids[0] in byc["config"][ "dataset_ids" ]:
             print("No existing dataset was provided with -d ...")
             exit()
 
     for ds_id in dataset_ids:
+        if not ds_id in byc["config"][ "dataset_ids" ]:
+            print("¡¡¡ "+ds_id+" is not a registered dataset !!!")
+            continue
         print( "Creating collations for " + ds_id)
+
+        if byc["args"].test:
+            print( "¡¡¡ TEST MODE - no db update !!!")
         _create_collations_from_dataset( ds_id, **byc )
 
 ################################################################################
@@ -72,13 +77,14 @@ def main():
 def _create_collations_from_dataset( ds_id, **byc ):
 
     coll_types = byc["config"]["collationed"]
-    # coll_types = { "cellosaurus":  {} }
+    # coll_types = { "cellosaurus": { } }
+
     hiers = {}
     for pre in coll_types.keys():
         pre_h_f = path.join( dir_path, "rsrc", pre, "numbered-hierarchies.tsv" )
         if  path.exists( pre_h_f ):
             print( "Creating hierarchy for " + pre)
-            hiers.update( { pre: get_prefix_hierarchy(pre, pre_h_f, **byc) } )
+            hiers.update( { pre: get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc) } )
         else:
             # create /retrieve hierarchy tree; method to be developed
             print( "Creating dummy hierarchy for " + pre)
@@ -86,7 +92,9 @@ def _create_collations_from_dataset( ds_id, **byc ):
 
     coll_client = MongoClient( )
     coll_coll = coll_client[ ds_id ][ byc["config"]["collations_coll"] ]
-    coll_coll.drop()
+
+    if not byc["args"].test:
+        coll_coll.drop()
 
     data_client = MongoClient( )
     data_db = data_client[ ds_id ]
@@ -94,31 +102,55 @@ def _create_collations_from_dataset( ds_id, **byc ):
 
     for pre in coll_types.keys():
 
-        no = len(hiers[ pre ].keys())
-        ind = 0
-        # bar = Bar("Writing "+pre+" to collations", max = no, suffix='%(percent)d%%'+" of "+str(no) )
-        
         data_key = byc["filter_definitions"][ pre ]["db_key"]
 
+        pre_filter = re.compile( r'^'+pre )
+        onto_ids = data_coll.distinct( data_key, { data_key: { "$regex": pre_filter } } )
+        onto_ids = list(filter(pre_filter.match, onto_ids))
+
+        no = len(hiers[ pre ].keys())
+        ind = 0
+        matched = 0
+        
+        if not byc["args"].test:
+            bar = Bar("Writing "+pre+" to collations", max = no, suffix='%(percent)d%%'+" of "+str(no) )
+        
         for code in hiers[ pre ].keys():
-            # bar.next()
+
+            if not byc["args"].test:
+                bar.next()
+ 
             ind += 1
             children = hiers[ pre ][ code ][ "child_terms" ]
-            code_no =  data_coll.count_documents( { data_key: code } )
+            if not list( set( children ) & set( onto_ids ) ):
+                if byc["args"].test:
+                    print(code+" w/o children")
+                continue
+
+            code_no = data_coll.count_documents( { data_key: code } )
+
             if len(children) < 2:
                 child_no = code_no
             else:
                 child_no =  data_coll.count_documents( { data_key: { "$in": children } } )
-            hiers[ pre ][ code ].update( { "code_matches": code_no, "count": child_no } )
-            if child_no > 0:
-                coll_coll.insert_one( hiers[ pre ][ code ] )
-                print("{}:\t{} ({} deep) samples - {} / {} {}".format(code, code_no, child_no, ind, no, pre))
 
-        # bar.finish()
-        
+            hiers[ pre ][ code ].update( { "code_matches": code_no, "count": child_no } )
+ 
+            if child_no > 0:
+                matched += 1
+                if not byc["args"].test:
+                    coll_coll.insert_one( hiers[ pre ][ code ] )
+                else:
+                    print("{}:\t{} ({} deep) samples - {} / {} {}".format(code, code_no, child_no, ind, no, pre))
+
+        if not byc["args"].test:
+            bar.finish()
+
+        print("===> Found {} of {} {} codes & added them to {}.{} <===".format(matched, no, pre, ds_id, byc["config"]["collations_coll"]))
+       
 ################################################################################
 
-def get_prefix_hierarchy(pre, pre_h_f, **byc):
+def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
 
     hier = { }
 
@@ -157,6 +189,44 @@ def get_prefix_hierarchy(pre, pre_h_f, **byc):
             hier[ c ]["hierarchy_paths"].append( l_p )
     bar.finish()
 
+    # now adding terms missing from the tree ###################################
+
+    data_client = MongoClient( )
+    data_db = data_client[ ds_id ]
+    data_coll = data_db[ byc["config"]["collations_source"] ]
+    data_key = byc["filter_definitions"][ pre ]["db_key"]
+    list_key = re.sub(".type.id", "", data_key)
+    
+    pre_filter = re.compile( r'^'+pre )
+    onto_ids = data_coll.distinct( data_key, { data_key: { "$regex": pre_filter } } )
+    onto_ids = list(filter(pre_filter.match, onto_ids))
+
+    added_no = 0
+    for o in onto_ids:
+        
+        if o in hier.keys():
+            continue
+
+        added_no += 1
+        no += 1
+
+        l = _get_label_for_code(data_coll, data_key, o, list_key)
+
+        if "NCIT" in pre:
+            o_p = { "order": no, "depth": 1, "path": [ "NCIT:C3262", o ] }
+            hier.update( { o: { "id": o, "label": l, "hierarchy_paths": [ o_p ] } } )
+        else:
+            o_p = { "order": no, "depth": 0, "path": [ o ] }
+            hier.update( { o: { "id": o, "label": l, "hierarchy_paths": [ o_p ] } } )
+        print("¡¡¡ Added missing {} {} !!!".format(o, l))
+
+    if added_no > 0:
+
+        print("===> Added {} {} codes from {}.{} <===".format(added_no, pre, ds_id, byc["config"]["collations_source"] ) )
+
+
+    ############################################################################
+
     no = len(hier)
     bar = Bar("    parsing parents ", max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
@@ -170,7 +240,10 @@ def get_prefix_hierarchy(pre, pre_h_f, **byc):
 
     bar.finish()
 
+    ############################################################################
+
     bar = Bar("    parsing children ", max = no, suffix='%(percent)d%%'+" of "+str(no) )
+
     for c, h in hier.items():
         bar.next()
         all_children = { }
@@ -229,24 +302,28 @@ def _get_dummy_hierarchy(ds_id, pre, **byc):
 
 def _get_hierarchy_item(data_coll, dist, code, list_key, order, depth, path):
 
-    example = data_coll.find_one( { dist: code } )
-
-    l = ""
-    if list_key in example.keys():
-        for o_t in example[ list_key ]:
-            if code in o_t["type"]["id"]:
-                if "label" in o_t["type"]:
-                    l = o_t["type"]["label"]
-                continue
-
     return {
         "id": code,
-        "label": l,
+        "label": _get_label_for_code(data_coll, dist, code, list_key),
         "hierarchy_paths": [ { "order": order, "depth": depth, "path": list(path) } ],
         "parent_terms": list(path),
         "child_terms": [ code ]
     }
 
+################################################################################
+
+def _get_label_for_code(data_coll, data_key, code, list_key):
+
+    example = data_coll.find_one( { data_key: code } )
+
+    if list_key in example.keys():
+        for o_t in example[ list_key ]:
+            if code in o_t["type"]["id"]:
+                if "label" in o_t["type"]:
+                    return o_t["type"]["label"]
+                continue
+
+    return ""
 
 ################################################################################
 ################################################################################

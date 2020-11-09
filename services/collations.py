@@ -30,7 +30,6 @@ def main():
 
 def collations(service):
 
-
     byc = {
         "pkg_path": pkg_path,
         "pkg_path": pkg_path,
@@ -85,6 +84,7 @@ def collations(service):
             query = { "id": re.compile(r'^'+f ) }
             pre = re.split('-|:', f)[0]
             c =  byc["filter_definitions"][ pre ]["collation"]
+            c = "collations"
             mongo_coll = mongo_db[ c ]
             for subset in mongo_coll.find( query ):
 

@@ -13,10 +13,12 @@ methods:
     - label
     - count
     - child_terms
+    - code_matches
   paths:
     - id
     - label
     - count
+    - code_matches
     - child_terms
     - hierarchy_paths
   counts:
@@ -34,4 +36,6 @@ methods:
   codes:
     - id
     - label
+  ids:
+    - id
 
