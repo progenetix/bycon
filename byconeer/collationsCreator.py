@@ -27,7 +27,7 @@ from lib.filter_aggregation  import dataset_count_collationed_filters
 def _get_args():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--datasetid", help="dataset")
+    parser.add_argument("-d", "--datasetids", help="datasets, comma-separated")
     parser.add_argument("-a", "--alldatasets", action='store_true', help="process all datasets")
     parser.add_argument("-t", "--test", help="test setting")
     args = parser.parse_args()
@@ -57,7 +57,7 @@ def main():
     if byc["args"].alldatasets:
         dataset_ids = byc["config"][ "dataset_ids" ]
     else:
-        dataset_ids =  byc["args"].datasetid.split(",")
+        dataset_ids =  byc["args"].datasetids.split(",")
         if not dataset_ids[0] in byc["config"][ "dataset_ids" ]:
             print("No existing dataset was provided with -d ...")
             exit()
@@ -134,7 +134,11 @@ def _create_collations_from_dataset( ds_id, **byc ):
             else:
                 child_no =  data_coll.count_documents( { data_key: { "$in": children } } )
 
-            hiers[ pre ][ code ].update( { "code_matches": code_no, "count": child_no } )
+            hiers[ pre ][ code ].update( {
+                "code_matches": code_no,
+                "count": child_no,
+                "date": date_isoformat(datetime.datetime.now())
+            } )
  
             if child_no > 0:
                 matched += 1
@@ -221,9 +225,7 @@ def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
         print("¡¡¡ Added missing {} {} !!!".format(o, l))
 
     if added_no > 0:
-
         print("===> Added {} {} codes from {}.{} <===".format(added_no, pre, ds_id, byc["config"]["collations_source"] ) )
-
 
     ############################################################################
 

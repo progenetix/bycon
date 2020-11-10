@@ -83,7 +83,7 @@ def collations(service):
         for f in byc[ "filters" ]:
             query = { "id": re.compile(r'^'+f ) }
             pre = re.split('-|:', f)[0]
-            c =  byc["filter_definitions"][ pre ]["collation"]
+            # c =  byc["filter_definitions"][ pre ]["collation"]
             c = "collations"
             mongo_coll = mongo_db[ c ]
             for subset in mongo_coll.find( query ):
