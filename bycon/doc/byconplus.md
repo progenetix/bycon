@@ -6,7 +6,7 @@ Additional information may be available through [info.progenetix.org](https://in
 
 ##### Examples
 
-* standard test deletion CNV query
+* standard test deletion CNV queries (these may take a minute or so...)
   - <https://bycon.progenetix.org/query?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&requestType=variantCNVrequest&referenceName=9&variantType=DEL&start=20000000&start=21975097&end=21967753&end=23000000&filters=icdom-94403>
   - <https://bycon.progenetix.org/query?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&requestType=variantCNVrequest&referenceName=9&variantType=DEL&start=18000000&start=21975097&end=21967753&end=26000000&filters=icdom-94403>
 * retrieving biosamples w/ a given filter code
