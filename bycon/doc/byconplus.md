@@ -26,7 +26,7 @@ Additional information may be available through [info.progenetix.org](https://in
   - <https://bycon.progenetix.org/filtering_terms?prefixes=NCIT,icdom>
   - <https://bycon.progenetix.org/filtering_terms?prefixes=NCIT,icdom,icdot&datasetIds=dipg>
 * `/biosamples/{id}`
-  - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_HNSCC-GSF-an-10394?datasetIds=progenetix>
+  - <https://bycon.progenetix.org/biosamples/pgxbs-kftva59y?datasetIds=progenetix>
   - this will return an object `biosamples.{datasetid(s)}` where containing list(s) of
   the biosamples data objects (the multi-dataset approach seems strange here but
   in the case of progenetix & arraymap could in some cases make sense ...)
@@ -41,22 +41,55 @@ Additional information may be available through [info.progenetix.org](https://in
         "age_at_collection": { "age": "P50Y" },
         "biocharacteristics": [
           {
-            "type" : { "id" : "icdot-C10.9", "label" : "Oropharynx" }
+            "type": {
+              "id": "icdot-C71.6",
+              "label": "cerebellum"
+            }
           },
           {
-            "type" : { "id" : "icdom-80703", "label" : "Squamous cell carcinoma, NOS" }
+            "type": {
+              "id": "icdom-94703",
+              "label": "Medulloblastoma, NOS"
+            }
           },
           {
-            "type" : { "id" : "NCIT:C8181", "label" : "Oropharyngeal Squamous Cell Carcinoma" }
+            "type": {
+              "id": "NCIT:C3222",
+              "label": "Medulloblastoma"
+            }
           }
         ],
-        "geo_provenance" : {
-          "label" : "Oberschleissheim, Germany",
-          "precision" : "city",
-          "city" : "Oberschleissheim",
-          "country" : "Germany",
-          "latitude" : 48.25,
-          "longitude" : 11.56
+        "data_use_conditions": {
+          "id": "DUO:0000004",
+          "label": "no restriction"
+        },
+        "provenance": {
+          "geo": {
+            "ISO-3166-alpha3": "TUR",
+            "city": "Antalya",
+            "country": "Turkey",
+            "geojson": {
+              "coordinates": [
+                30.7,
+                36.91
+              ],
+              "type": "Point"
+            },
+            "label": "Antalya, Turkey",
+            "latitude": 36.91,
+            "longitude": 30.7,
+            "precision": "city"
+          },
+          "material": {
+            "type": {
+              "id": "EFO:0009656",
+              "label": "neoplastic sample"
+            }
+          }
+        },
+        "sampledTissue": {
+          "id": "UBERON:0002037",
+          "label": "cerebellum"
         },
         ...
 ```
