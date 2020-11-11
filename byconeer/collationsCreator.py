@@ -77,7 +77,7 @@ def main():
 def _create_collations_from_dataset( ds_id, **byc ):
 
     coll_types = byc["config"]["collationed"]
-    # coll_types = { "cellosaurus": { } }
+    # coll_types = { "NCIT": { } }
 
     hiers = {}
     for pre in coll_types.keys():
@@ -103,8 +103,8 @@ def _create_collations_from_dataset( ds_id, **byc ):
     for pre in coll_types.keys():
 
         data_key = byc["filter_definitions"][ pre ]["db_key"]
-
-        pre_filter = re.compile( r'^'+pre )
+        id_pat = byc["filter_definitions"][ pre ]["pattern_strict"]
+        pre_filter = re.compile( id_pat )
         onto_ids = data_coll.distinct( data_key, { data_key: { "$regex": pre_filter } } )
         onto_ids = list(filter(pre_filter.match, onto_ids))
 
@@ -121,15 +121,18 @@ def _create_collations_from_dataset( ds_id, **byc ):
                 bar.next()
  
             ind += 1
-            children = hiers[ pre ][ code ][ "child_terms" ]
-            if not list( set( children ) & set( onto_ids ) ):
+
+            children = list( set( hiers[ pre ][ code ][ "child_terms" ] ) & set( onto_ids ) )
+            hiers[ pre ][ code ].update(  { "child_terms": children } )
+
+            if len( children ) < 1:
                 if byc["args"].test:
                     print(code+" w/o children")
                 continue
 
             code_no = data_coll.count_documents( { data_key: code } )
 
-            if len(children) < 2:
+            if len( children ) < 2:
                 child_no = code_no
             else:
                 child_no =  data_coll.count_documents( { data_key: { "$in": children } } )
@@ -191,6 +194,7 @@ def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
             hier.update( { c: { "id": c, "label": l, "hierarchy_paths": [ l_p ] } } )
         else:
             hier[ c ]["hierarchy_paths"].append( l_p )
+
     bar.finish()
 
     # now adding terms missing from the tree ###################################
@@ -201,9 +205,7 @@ def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
     data_key = byc["filter_definitions"][ pre ]["db_key"]
     list_key = re.sub(".type.id", "", data_key)
     
-    pre_filter = re.compile( r'^'+pre )
-    onto_ids = data_coll.distinct( data_key, { data_key: { "$regex": pre_filter } } )
-    onto_ids = list(filter(pre_filter.match, onto_ids))
+    onto_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
 
     added_no = 0
     for o in onto_ids:
@@ -266,18 +268,16 @@ def _get_dummy_hierarchy(ds_id, pre, **byc):
     data_db = data_client[ ds_id ]
     data_coll = data_db[ byc["config"]["collations_source"] ]
 
-    pattern = byc["config"]["collationed"][ pre ]["pattern"]
-    pre_re = re.compile( pattern )
+    data_pat = byc["filter_definitions"][ pre ]["pattern_strict"]
 
     if byc["config"]["collationed"][ pre ]["is_series"]: 
         s_pat = byc["config"]["collationed"][ pre ]["child_pattern"]
         s_re = re.compile( s_pat )
 
-    dist_key = byc["filter_definitions"][ pre ]["db_key"]
+    data_key = byc["filter_definitions"][ pre ]["db_key"]
     list_key = re.sub(".type.id", "", dist_key)
 
-    pre_ids = data_coll.distinct( dist_key, { dist_key: { "$regex": pre_re } } )
-    pre_ids = list(filter(lambda d: pre_re.match(d), pre_ids))
+    pre_ids = _get_ids_for_prefix( data_coll, dist_key, data_pat )
 
     hier = { }
     no = len(pre_ids)
@@ -288,11 +288,11 @@ def _get_dummy_hierarchy(ds_id, pre, **byc):
 
         bar.next()
         order += 1
-        hier.update( { c: _get_hierarchy_item( data_coll, dist_key, c, list_key, order, 0, [ c ] ) } )
+        hier.update( { c: _get_hierarchy_item( data_coll, data_key, c, list_key, order, 0, [ c ] ) } )
 
         if byc["config"]["collationed"][ pre ]["is_series"]:
 
-            ser_ids = data_coll.distinct( dist_key, { dist_key: c } )
+            ser_ids = data_coll.distinct( data_key, { data_key: c } )
             ser_ids = list(filter(lambda d: s_re.match(d), ser_ids))
             hier[c].update( { "child_terms": list( set(ser_ids) | set(hier[c]["child_terms"]) ) } )
    
@@ -307,10 +307,20 @@ def _get_hierarchy_item(data_coll, dist, code, list_key, order, depth, path):
     return {
         "id": code,
         "label": _get_label_for_code(data_coll, dist, code, list_key),
-        "hierarchy_paths": [ { "order": order, "depth": depth, "path": list(path) } ],
+        "hierarchy_paths": [ { "order": int(order), "depth": int(depth), "path": list(path) } ],
         "parent_terms": list(path),
         "child_terms": [ code ]
     }
+
+################################################################################
+
+def _get_ids_for_prefix(data_coll, data_key, pattern):
+
+    pre_re = re.compile( pattern )
+    pre_ids = data_coll.distinct( dist_key, { data_key: { "$regex": pre_re } } )
+    pre_ids = list(filter(lambda d: pre_re.match(d), pre_ids))
+
+    return pre_ids
 
 ################################################################################
 

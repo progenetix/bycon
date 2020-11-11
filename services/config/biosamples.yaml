@@ -19,4 +19,8 @@ methods:
     - biocharacteristics
   phenopackets:
     - id
+  callsetstats:
+    - id
+    - biosample_id
+    - info.cnvstatistics
 

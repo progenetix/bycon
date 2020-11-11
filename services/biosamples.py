@@ -96,6 +96,10 @@ def biosamples(service):
 
     access_id = byc["query_results"]["bs._id"][ "id" ]
 
+    if "callsetstats" in byc["method"]:
+        service = "callsets"
+        access_id = byc["query_results"]["cs._id"][ "id" ]
+
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
@@ -108,7 +112,10 @@ def biosamples(service):
         s = { }
         for k in these_prefs["methods"][ byc["method"] ]:
             # TODO: harmless hack
-            if k in b_s.keys():
+            if "." in k:
+                k1, k2 = k.split('.')
+                s[ k ] = b_s[ k1 ][ k2 ]
+            elif k in b_s.keys():
                 s[ k ] = b_s[ k ]
             else:
                 s[ k ] = None

@@ -8,7 +8,8 @@ NCIT:
       default: 1
     individuals:
       default: 0
-  pattern: '^NCIT(\:C\d*?\-?)?$'
+  pattern: '^NCIT(\:C\d+?\-?)?$'
+  pattern_strict: '^NCIT\:C\d+?$'
   examples:
     - 'NCIT:C27676'
     - 'NCIT:C9325'
@@ -22,6 +23,7 @@ UBERON:
     biosamples:
       default: 1
   pattern: '^UBERON(\:\d*?\-?)?$'
+  pattern_strict: '^UBERON\:\d+?$'
   examples:
     - 'UBERON:0000970'
     - 'UBERON:0035542'
@@ -37,6 +39,7 @@ MONDO:
     individuals:
       default: 0
   pattern: '^MONDO([\:_]\d*?\-?)?$'
+  pattern_strict: '^MONDO[\:_]\d+?$'
   examples:
     - 'MONDO:0002974'
     - 'MONDO:0012301'
@@ -52,6 +55,7 @@ HP:
     individuals:
       default: 1
   pattern: '^HP(\:\d+?\-?)?$'
+  pattern_strict: '^HP\:\d+?$'
   examples:
     - 'HP:0012209'
   collation: biosubsets
@@ -66,6 +70,7 @@ PATO:
     individuals:
       default: 1
   pattern: '^PATO(\:\d+?\-?)?$'
+  pattern_strict: '^PATO\:\d+?$'
   examples:
     - 'PATO:0020000'
   collation: biosubsets
@@ -80,6 +85,7 @@ EFO:
     individuals:
       default: 0
   pattern: '^EFO(\:\d+?\-?)?$'
+  pattern_strict: '^EFO\:\d+?$'
   examples:
   collation: biosubsets
     - 'EFO:0009656'
@@ -93,6 +99,7 @@ icdom:
     biosamples:
       default: 1
   pattern: '^icdom(\-\d{1,5}(\-\d{1,5})?)?$'
+  pattern_strict: '^icdom\-\d{5}$'
   examples:
     - 'icdom-85003'
     - 'icdom-94403'
@@ -106,6 +113,7 @@ icdot:
     biosamples:
       default: 1
   pattern: '^icdot(\-C\d\d?(\.\d)?\-?)?$'
+  pattern_strict: '^icdot\-C\d\d?\.\d$'
   examples:
     - 'icdot-C42.2'
     - 'icdot-C54.1'
@@ -122,6 +130,7 @@ PMID:
     biosamples:
       default: 1
   pattern: '^PMID(\:\d+?)?$'
+  pattern_strict: '^PMID\:\d{5,9}?$'
   examples:
     - 'PMID:28966033'
     - 'PMID:9405679'
@@ -137,6 +146,7 @@ geo:
     biosamples:
       default: 1
   pattern: '^geo([\-\:]G(PL|SM|SE|DS)\d+)?$'
+  pattern_strict: '^geo[\-\:]G(PL|SM|SE|DS)\d+?$'
   examples:
     - geo:GPL6504
     - geo:GSE19331
@@ -153,6 +163,7 @@ arrayexpress:
     biosamples:
       default: 1
   pattern: '^arrayexpress([\-\:][AEP]\-\w{4}\-\d+)?$'
+  pattern_strict: '^arrayexpress[\-\:][AEP]\-\w{4}\-\d+?$'
   examples:
     - geo:GPL6504
     - geo:GSE19331
@@ -170,7 +181,8 @@ tcga:
       default: 1
     individuals:
       db_key: 'external_references.type.id'
-  pattern: '^tcga:[\-\w]+?$'
+  pattern: '^tcga(:[\-\w]+?)?$'
+  pattern_strict: '^tcga:[\-\w]+?$'
   examples:
     - 'tcga:000002fc-53a0-420e-b2aa-a40a358bba37'
   collation: None
@@ -186,6 +198,7 @@ cellosaurus:
     biosamples:
       default: 1
   pattern: '^cellosaurus(\:CVCL_\w+?)?$'
+  pattern_strict: '^cellosaurus\:CVCL_\w+?$'
   examples:
     - 'cellosaurus:CVCL_1650'
     - 'cellosaurus:CVCL_0006'
