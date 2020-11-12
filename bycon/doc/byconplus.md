@@ -6,7 +6,7 @@ Additional information may be available through [info.progenetix.org](https://in
 
 ##### Examples
 
-* standard test deletion CNV query
+* standard test deletion CNV queries (these may take a minute or so...)
   - <https://bycon.progenetix.org/query?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&requestType=variantCNVrequest&referenceName=9&variantType=DEL&start=20000000&start=21975097&end=21967753&end=23000000&filters=icdom-94403>
   - <https://bycon.progenetix.org/query?datasetIds=arraymap,progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&requestType=variantCNVrequest&referenceName=9&variantType=DEL&start=18000000&start=21975097&end=21967753&end=26000000&filters=icdom-94403>
 * retrieving biosamples w/ a given filter code
@@ -26,54 +26,103 @@ Additional information may be available through [info.progenetix.org](https://in
   - <https://bycon.progenetix.org/filtering_terms?prefixes=NCIT,icdom>
   - <https://bycon.progenetix.org/filtering_terms?prefixes=NCIT,icdom,icdot&datasetIds=dipg>
 * `/biosamples/{id}`
-  - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_HNSCC-GSF-an-10394?datasetIds=progenetix>
+  - <https://bycon.progenetix.org/biosamples/pgxbs-kftva5c8?datasetIds=progenetix>
   - this will return an object `biosamples.{datasetid(s)}` where containing list(s) of
   the biosamples data objects (the multi-dataset approach seems strange here but
   in the case of progenetix & arraymap could in some cases make sense ...)
 
 ```
-{
-  "biosamples": {
-    "progenetix": [
       {
-        "id": "PGX_AM_BS_HNSCC-GSF-an-10394",
-        "individual_id": "PGX_IND_HNSCC-GSF-an-10394",
-        "age_at_collection": { "age": "P50Y" },
+        "id": "pgxbs-kftva5c8",
+        "individual_id": "pgxind-kftx25h9",
+        "description": "Mantle cell lymphoma",
+        "sampledTissue": {
+          "id": "UBERON:0000029",
+          "label": "lymph node"
+        },
         "biocharacteristics": [
           {
-            "type" : { "id" : "icdot-C10.9", "label" : "Oropharynx" }
+            "type": {
+              "id": "icdot-C77.9",
+              "label": "Lymph nodes, NOS"
+            }
           },
           {
-            "type" : { "id" : "icdom-80703", "label" : "Squamous cell carcinoma, NOS" }
+            "type": {
+              "id": "icdom-96733",
+              "label": "Mantle cell lymphoma"
+            }
           },
           {
-            "type" : { "id" : "NCIT:C8181", "label" : "Oropharyngeal Squamous Cell Carcinoma" }
+            "type": {
+              "id": "NCIT:C4337",
+              "label": "Mantle Cell Lymphoma"
+            }
           }
         ],
-        "geo_provenance" : {
-          "label" : "Oberschleissheim, Germany",
-          "precision" : "city",
-          "city" : "Oberschleissheim",
-          "country" : "Germany",
-          "latitude" : 48.25,
-          "longitude" : 11.56
+        "individual_age_at_collection": "P42Y",
+        "data_use_conditions": {
+          "id": "DUO:0000004",
+          "label": "no restriction"
         },
-        ...
+        "external_references": [
+          {
+            "type": {
+              "id": "geo:GSE13331"
+            }
+          }
+        ],
+        "info": {
+          "callset_ids": [
+            "pgxcs-kftvlegc"
+          ],
+          "cnvstatistics": {
+            "cnvfraction": 0.053,
+            "delfraction": 0.039,
+            "dupfraction": 0.014
+          },
+          "legacy_id": "PGX_AM_BS_GSE13331_MCL98-13331"
+        },
+        "provenance": {
+          "geo": {
+            "ISO-3166-alpha3": "CAN",
+            "city": "Vancouver",
+            "country": "Canada",
+            "geojson": {
+              "coordinates": [
+                -123.12,
+                49.25
+              ],
+              "type": "Point"
+            },
+            "label": "Vancouver, Canada",
+            "latitude": 49.25,
+            "longitude": -123.12,
+            "precision": "city"
+          },
+          "material": {
+            "type": {
+              "id": "EFO:0009656",
+              "label": "neoplastic sample"
+            }
+          }
+        },
+        "updated": "2020-09-10 17:44:04.887000"
+      }
 ```
 * `/biosamples/{id}/g_variants`
-  - <https://bycon.progenetix.org/biosamples/PGX_AM_BS_HNSCC-GSF-an-10394/g_variants?datasetIds=progenetix>
+  - <https://bycon.progenetix.org/biosamples/pgxbs-kftva5c8/g_variants?datasetIds=progenetix>
 * `/g_variants?{query}`  
-  - <https://beacon.progenetix.org/cgi/bycon/bycon/byconplus.py/g_variants?requestType=variantRangeRequest&datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&start=20000000&end=22000000&filters=icdom-94403>
-  - <https://bycon.progenetix.org/g_variants?datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&start=21500000&start=21975097&end=21967753&end=22500000&filters=icdom-94403>
+  - <https://bycon.progenetix.org/g_variants?requestType=variantRangeRequest&datasetIds=arraymap&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&start=20000000&end=22000000&filters=icdom-94403>
 * `/g_variants/{id}`    
   - Since the _Progenetix_ framework treats all variant instances individually
   and an `id` parameter should be unique, variants are grouped as "equivalent"
   using the "digest" parameter. Remapping of the positional "id" argument to `digest`
   is handled internally.
-  - <https://bycon.progenetix.org/g_variants/DIPG_V_MAF_17_7577121_G_A?datasetIds=dipg>
+  - <https://bycon.progenetix.org/g_variants/11:52900000-134452384:DEL?datasetIds=progenetix>
 * `/g_variants/{id}/biosamples`
   - As above, but responding with the `biosamples` data.
-  - <https://bycon.progenetix.org/g_variants/DIPG_V_MAF_17_7577121_G_A/biosamples?datasetIds=dipg>
+  - <https://bycon.progenetix.org/g_variants/11:52900000-134452384:DEL/biosamples?datasetIds=progenetix>
   
 ##### Custom (yet)
 
