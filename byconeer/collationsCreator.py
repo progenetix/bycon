@@ -106,13 +106,14 @@ def _create_collations_from_dataset( ds_id, **byc ):
         # get the set of all parents for sample codes
         data_parents = set()
         for o_id in onto_ids:
-            data_parents.update( hier[ o_id ][ "parent_terms" ] )
+            if o_id in hier:
+                data_parents.update( hier[ o_id ][ "parent_terms" ] )
 
         no = len(hier.keys())
         matched = 0
         
         if not byc["args"].test:
-            bar = Bar("Writing "+pre+" to collations", max = no, suffix='%(percent)d%%'+" of "+str(no) )
+            bar = Bar("Writing "+pre, max = no, suffix='%(percent)d%%'+" of "+str(no) )
         
         for count, code in enumerate(hier.keys(), start=1):
 
@@ -205,7 +206,7 @@ def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
     data_db = data_client[ ds_id ]
     data_coll = data_db[ byc["config"]["collations_source"] ]
     data_key = byc["filter_definitions"][ pre ]["db_key"]
-    data_pat = byc["filter_definitions"][ pre ]["pattern_strict"]
+    data_pat = byc["config"]["collationed"][ pre ]["pattern"]
     
     onto_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
 
@@ -215,16 +216,12 @@ def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
         added_no += 1
         no += 1
         hier.update( {
-                "NCIT:C000000": {
-                    "id": "NCIT:C000000",
-                    "label": "Unplaced Entities",
-                    "hierarchy_paths":
-                    [ 
-                        { "order": no, "depth": 1, "path": [ "NCIT:C3262", "NCIT:C000000" ] }
-                    ]
-                }
+            "NCIT:C000000": {
+                "id": "NCIT:C000000",
+                "label": "Unplaced Entities",
+                "hierarchy_paths": [ { "order": no, "depth": 1, "path": [ "NCIT:C3262", "NCIT:C000000" ] } ]
             }
-        )
+        } )
 
     for o in onto_ids:
         
@@ -238,13 +235,8 @@ def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
 
         if "NCIT" in pre:
             hier.update( {
-                    o: {
-                        "id": o,
-                        "label": l,
-                        "hierarchy_paths":
-                        [ 
-                            { "order": no, "depth": 3, "path": [ "NCIT:C3262", "NCIT:C000000", o ] }
-                        ]
+                    o: { "id": o, "label": l, "hierarchy_paths":
+                        [ { "order": no, "depth": 3, "path": [ "NCIT:C3262", "NCIT:C000000", o ] } ]
                     }
                 }
             )
@@ -294,7 +286,7 @@ def _get_dummy_hierarchy(ds_id, pre, **byc):
     data_client = MongoClient( )
     data_db = data_client[ ds_id ]
     data_coll = data_db[ byc["config"]["collations_source"] ]
-    data_pat = byc["filter_definitions"][ pre ]["pattern_strict"]
+    data_pat = byc["config"]["collationed"][ pre ]["pattern"]
     data_key = byc["filter_definitions"][ pre ]["db_key"]
 
     if byc["config"]["collationed"][ pre ]["is_series"]: 
