@@ -25,6 +25,7 @@ methods:
     - id
     - label
     - count
+    - code_matches
   codematches:
     - id
     - label

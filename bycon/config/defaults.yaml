@@ -19,13 +19,6 @@ collections:
   - biosubsets
   - publications
 collationed:
-  geo:
-    pattern: '^(geo)[:](GSE)|(GPL)'
-    is_series: True
-    child_pattern: '^(geo)[:]GSM'
-  PMID:
-    pattern: '^(PMID)[:]\d'
-    is_series: False
   NCIT:
     pattern: '^(NCIT)[:]C'
     is_series: False
@@ -37,6 +30,13 @@ collationed:
     is_series: False
   cellosaurus:
     pattern: '^(cellosaurus)[:]CVCL'
+    is_series: False
+  geo:
+    pattern: '^(geo)[:](GSE)|(GPL)'
+    is_series: True
+    child_pattern: '^(geo)[:]GSM'
+  PMID:
+    pattern: '^(PMID)[:]\d'
     is_series: False
   tcga:
     pattern: '^(TCGA)[:][\w\-]{2,20}$'

@@ -79,51 +79,48 @@ def _create_collations_from_dataset( ds_id, **byc ):
     coll_types = byc["config"]["collationed"]
     # coll_types = { "NCIT": { } }
 
-    hiers = {}
     for pre in coll_types.keys():
+
         pre_h_f = path.join( dir_path, "rsrc", pre, "numbered-hierarchies.tsv" )
         if  path.exists( pre_h_f ):
             print( "Creating hierarchy for " + pre)
-            hiers.update( { pre: get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc) } )
+            hier =  get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc)
         else:
             # create /retrieve hierarchy tree; method to be developed
             print( "Creating dummy hierarchy for " + pre)
-            hiers.update( { pre: _get_dummy_hierarchy( ds_id, pre, **byc ) } )
+            hier =  _get_dummy_hierarchy( ds_id, pre, **byc )
 
-    coll_client = MongoClient( )
-    coll_coll = coll_client[ ds_id ][ byc["config"]["collations_coll"] ]
+        coll_client = MongoClient( )
+        coll_coll = coll_client[ ds_id ][ byc["config"]["collations_coll"] ]
 
-    if not byc["args"].test:
-        coll_coll.drop()
-
-    data_client = MongoClient( )
-    data_db = data_client[ ds_id ]
-    data_coll = data_db[ byc["config"]["collations_source"] ]
-
-    for pre in coll_types.keys():
+        data_client = MongoClient( )
+        data_db = data_client[ ds_id ]
+        data_coll = data_db[ byc["config"]["collations_source"] ]
 
         data_key = byc["filter_definitions"][ pre ]["db_key"]
-        id_pat = byc["filter_definitions"][ pre ]["pattern_strict"]
-        pre_filter = re.compile( id_pat )
-        onto_ids = data_coll.distinct( data_key, { data_key: { "$regex": pre_filter } } )
-        onto_ids = list(filter(pre_filter.match, onto_ids))
+        data_pat = byc["filter_definitions"][ pre ]["pattern_strict"]
+        onto_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
 
-        no = len(hiers[ pre ].keys())
-        ind = 0
+        sel_hiers = [ ]
+
+        # get the set of all parents for sample codes
+        data_parents = set()
+        for o_id in onto_ids:
+            data_parents.update( hier[ o_id ][ "parent_terms" ] )
+
+        no = len(hier.keys())
         matched = 0
         
         if not byc["args"].test:
             bar = Bar("Writing "+pre+" to collations", max = no, suffix='%(percent)d%%'+" of "+str(no) )
         
-        for code in hiers[ pre ].keys():
+        for count, code in enumerate(hier.keys(), start=1):
 
             if not byc["args"].test:
                 bar.next()
  
-            ind += 1
-
-            children = list( set( hiers[ pre ][ code ][ "child_terms" ] ) & set( onto_ids ) )
-            hiers[ pre ][ code ].update(  { "child_terms": children } )
+            children = list( set( hier[ code ][ "child_terms" ] ) & set( data_parents ) )
+            hier[ code ].update(  { "child_terms": children } )
 
             if len( children ) < 1:
                 if byc["args"].test:
@@ -136,22 +133,26 @@ def _create_collations_from_dataset( ds_id, **byc ):
                 child_no = code_no
             else:
                 child_no =  data_coll.count_documents( { data_key: { "$in": children } } )
-
-            hiers[ pre ][ code ].update( {
-                "code_matches": code_no,
-                "count": child_no,
-                "date": date_isoformat(datetime.datetime.now())
-            } )
  
             if child_no > 0:
+                hier[ code ].update( {
+                    "code_matches": code_no,
+                    "count": child_no,
+                    "date": date_isoformat(datetime.datetime.now())
+                } )
                 matched += 1
+
                 if not byc["args"].test:
-                    coll_coll.insert_one( hiers[ pre ][ code ] )
+                    sel_hiers.append( hier[ code ] )
                 else:
-                    print("{}:\t{} ({} deep) samples - {} / {} {}".format(code, code_no, child_no, ind, no, pre))
+                    print("{}:\t{} ({} deep) samples - {} / {} {}".format(code, code_no, child_no, count, no, pre))
 
         if not byc["args"].test:
             bar.finish()
+            print("==> Updating database ...")
+            coll_clean_q = { "id": { "$regex": "^"+pre } }
+            coll_coll.delete_many( coll_clean_q )
+            coll_coll.insert_many( sel_hiers )
 
         print("===> Found {} of {} {} codes & added them to {}.{} <===".format(matched, no, pre, ds_id, byc["config"]["collations_coll"]))
        
@@ -199,15 +200,32 @@ def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
 
     # now adding terms missing from the tree ###################################
 
+    print("Looking for missing {} codes in {}.{} ...".format(pre, ds_id, byc["config"]["collations_source"]))
     data_client = MongoClient( )
     data_db = data_client[ ds_id ]
     data_coll = data_db[ byc["config"]["collations_source"] ]
     data_key = byc["filter_definitions"][ pre ]["db_key"]
-    list_key = re.sub(".type.id", "", data_key)
+    data_pat = byc["filter_definitions"][ pre ]["pattern_strict"]
     
     onto_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
 
     added_no = 0
+
+    if "NCIT" in pre:
+        added_no += 1
+        no += 1
+        hier.update( {
+                "NCIT:C000000": {
+                    "id": "NCIT:C000000",
+                    "label": "Unplaced Entities",
+                    "hierarchy_paths":
+                    [ 
+                        { "order": no, "depth": 1, "path": [ "NCIT:C3262", "NCIT:C000000" ] }
+                    ]
+                }
+            }
+        )
+
     for o in onto_ids:
         
         if o in hier.keys():
@@ -216,15 +234,24 @@ def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
         added_no += 1
         no += 1
 
-        l = _get_label_for_code(data_coll, data_key, o, list_key)
+        l = _get_label_for_code(data_coll, data_key, o)
 
         if "NCIT" in pre:
-            o_p = { "order": no, "depth": 1, "path": [ "NCIT:C3262", o ] }
-            hier.update( { o: { "id": o, "label": l, "hierarchy_paths": [ o_p ] } } )
+            hier.update( {
+                    o: {
+                        "id": o,
+                        "label": l,
+                        "hierarchy_paths":
+                        [ 
+                            { "order": no, "depth": 3, "path": [ "NCIT:C3262", "NCIT:C000000", o ] }
+                        ]
+                    }
+                }
+            )
         else:
             o_p = { "order": no, "depth": 0, "path": [ o ] }
             hier.update( { o: { "id": o, "label": l, "hierarchy_paths": [ o_p ] } } )
-        print("¡¡¡ Added missing {} {} !!!".format(o, l))
+        print("Added:\t{}\t{}".format(o, l))
 
     if added_no > 0:
         print("===> Added {} {} codes from {}.{} <===".format(added_no, pre, ds_id, byc["config"]["collations_source"] ) )
@@ -267,28 +294,23 @@ def _get_dummy_hierarchy(ds_id, pre, **byc):
     data_client = MongoClient( )
     data_db = data_client[ ds_id ]
     data_coll = data_db[ byc["config"]["collations_source"] ]
-
     data_pat = byc["filter_definitions"][ pre ]["pattern_strict"]
+    data_key = byc["filter_definitions"][ pre ]["db_key"]
 
     if byc["config"]["collationed"][ pre ]["is_series"]: 
         s_pat = byc["config"]["collationed"][ pre ]["child_pattern"]
         s_re = re.compile( s_pat )
 
-    data_key = byc["filter_definitions"][ pre ]["db_key"]
-    list_key = re.sub(".type.id", "", dist_key)
-
-    pre_ids = _get_ids_for_prefix( data_coll, dist_key, data_pat )
+    pre_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
 
     hier = { }
     no = len(pre_ids)
     bar = Bar(pre, max = no, suffix='%(percent)d%%'+" of "+str(no) )
-    order = 0
 
-    for c in sorted(pre_ids):
+    for order, c in enumerate(sorted(pre_ids), start=1):
 
         bar.next()
-        order += 1
-        hier.update( { c: _get_hierarchy_item( data_coll, data_key, c, list_key, order, 0, [ c ] ) } )
+        hier.update( { c: _get_hierarchy_item( data_coll, data_key, c, order, 0, [ c ] ) } )
 
         if byc["config"]["collationed"][ pre ]["is_series"]:
 
@@ -302,11 +324,11 @@ def _get_dummy_hierarchy(ds_id, pre, **byc):
 
 ################################################################################
 
-def _get_hierarchy_item(data_coll, dist, code, list_key, order, depth, path):
+def _get_hierarchy_item(data_coll, data_key, code, order, depth, path):
 
     return {
         "id": code,
-        "label": _get_label_for_code(data_coll, dist, code, list_key),
+        "label": _get_label_for_code(data_coll, data_key, code),
         "hierarchy_paths": [ { "order": int(order), "depth": int(depth), "path": list(path) } ],
         "parent_terms": list(path),
         "child_terms": [ code ]
@@ -314,18 +336,19 @@ def _get_hierarchy_item(data_coll, dist, code, list_key, order, depth, path):
 
 ################################################################################
 
-def _get_ids_for_prefix(data_coll, data_key, pattern):
+def _get_ids_for_prefix(data_coll, data_key, data_pat):
 
-    pre_re = re.compile( pattern )
-    pre_ids = data_coll.distinct( dist_key, { data_key: { "$regex": pre_re } } )
+    pre_re = re.compile( data_pat )
+    pre_ids = data_coll.distinct( data_key, { data_key: { "$regex": pre_re } } )
     pre_ids = list(filter(lambda d: pre_re.match(d), pre_ids))
 
     return pre_ids
 
 ################################################################################
 
-def _get_label_for_code(data_coll, data_key, code, list_key):
+def _get_label_for_code(data_coll, data_key, code):
 
+    list_key = re.sub(".type.id", "", data_key)
     example = data_coll.find_one( { data_key: code } )
 
     if list_key in example.keys():
