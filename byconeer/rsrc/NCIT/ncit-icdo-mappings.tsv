@@ -1,0 +1,1676 @@
+icdom	icdom_label	icdot	icdot_label	ncit	ncit_label	ncit_depth	count
+94703	Medulloblastoma, NOS 	C71.6	Cerebellum	C3222	Medulloblastoma	9	1
+96733	Mantle cell lymphoma 	C77.9	Lymph node, NOS	C4337	Mantle Cell Lymphoma	9	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C77.9	Lymph node, NOS	C80291	High Grade B-Cell Lymphoma, Not Otherwise Specified	11	3
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C77.9	Lymph node, NOS	C80280	Diffuse Large B-Cell Lymphoma, Not Otherwise Specified	10	3
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C77.9	Lymph node, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	3
+82720	Pituitary adenoma, NOS	C75.1	Pituitary gland	C3329	Pituitary Gland Adenoma	10	1
+82710	Prolactinoma	C75.1	Pituitary gland	C3342	Prolactin-Producing Pituitary Gland Adenoma	11	1
+80702	Squamous cell carcinoma in situ, NOS	C53.9	Cervix uteri	C7347	Cervical Squamous Cell Carcinoma In Situ	11	1
+80703	Squamous cell carcinoma, NOS	C53.9	Cervix uteri	C4028	Cervical Squamous Cell Carcinoma, Not Otherwise Specified	9	1
+89603	Nephroblastoma,NOS 	C64.9	Kidney, NOS	C40407	Kidney Wilms Tumor	7	1
+98353	Precursor cell lymphoblastic leukemia, NOS 	C42.1	Bone marrow	C3167	Acute Lymphoblastic Leukemia	6	1
+81403	Adenocarcinoma, NOS	C53.9	Cervix uteri	C4029	Cervical Adenocarcinoma	9	1
+90633	Spermatocytic seminoma	C62.9	Testis, NOS	C39921	Testicular Spermatocytic Seminoma	-1	1
+81400	Adenoma, NOS	C16.9	Stomach, NOS	C7699	Gastric Adenoma	5	1
+98233	B-cell chronic lymphocytic leukemia/small lymphocytic lymphoma	C42.1	Bone marrow	C3163	Chronic lymphocytic leukemia	8	1
+90403	Synovialsarcoma,NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3400	Synovial Sarcoma	-1	1
+94403	Glioblastoma,NOS	C71.0	cerebrum	C3058	Glioblastoma	8	1
+94003	Astrocytoma,NOS	C71.9	Brain, NOS	C7173	Diffuse Astrocytoma	8	2
+94003	Astrocytoma,NOS	C71.9	Brain, NOS	C60781	Astrocytoma	7	2
+80413	Small cell carcinoma, NOS	C34.9	Lung, NOS	C4917	Small Cell Lung Carcinoma	7	1
+80133	Large cell neuroendocrine carcinoma	C34.9	Lung, NOS	C5672	Lung Large Cell Neuroendocrine Carcinoma	7	1
+82493	Atypical carcinoid tumor	C34.9	Lung, NOS	C45551	Lung Atypical Carcinoid Tumor	8	1
+82403	Carcinoid tumor, NOS	C34.9	Lung, NOS	C4038	Lung Carcinoid Tumor	7	1
+85603	Adenosquamous carcinoma 	C16.9	Stomach, NOS	C5474	Gastric adenosquamous carcinoma	6	1
+81403	Adenocarcinoma, NOS	C16.9	Stomach, NOS	C4004	Gastric Adenocarcinoma	6	1
+80103	Carcinoma, NOS	C75.0	parathyroid gland	C4906	Parathyroid Gland Carcinoma	6	1
+81400	Adenoma, NOS	C75.0	parathyroid gland	C3916	Parathyroid Gland Adenoma	5	1
+84413	Serous cystadenocarcinoma, NOS	C57.9	other female genital	C3778	Serous Cystadenocarcinoma	6	1
+88211	Aggressive fibromatosis 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C9182	Desmoid-Type Fibromatosis	6	1
+88903	Leiomyosarcoma,NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3158	Leiomyosarcoma	7	1
+80702	Squamous cell carcinoma in situ, NOS	C06.9	Mouth, NOS	C27093	Stage 0 Squamous Cell Carcinoma	6	1
+80703	Squamous cell carcinoma, NOS	C06.9	Mouth, NOS	C4833	Oral Cavity Squamous Cell Carcinoma	7	1
+84803	Mucinous adenocarcinoma	C16.9	Stomach, NOS	C5248	Mucinous Gastric Adenocarcinoma	8	1
+81403	Adenocarcinoma, NOS	C61.9	Prostate gland	C2919	Prostate Adenocarcinoma	9	1
+80103	Carcinoma, NOS	C57.9	other female genital	C2916	Carcinoma	3	1
+91863	Central osteosarcoma	C40.0	Bones and joints	C35870	Conventional Osteosarcoma	9	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C17.9	Small intestine, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C16.9	Stomach, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C18.9	Colon, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	1
+88900	Leiomyoma, NOS	C15.9	Esophagus, NOS	C3866	Esophageal Leiomyoma	9	1
+88900	Leiomyoma, NOS	C55.9	Uterus, NOS	C3434	Uterine Corpus Leiomyoma	9	1
+95600	Neurilemoma, NOS 	C47.9	Autonomic nervous system, NOS	C6970	Melanotic Schwannoma	-1	2
+95600	Neurilemoma, NOS 	C47.9	Autonomic nervous system, NOS	C3269	Schwannoma	5	2
+80703	Squamous cell carcinoma, NOS	C34.9	Lung, NOS	C3493	Lung Squamous Cell Carcinoma	6	1
+81403	Adenocarcinoma, NOS	C34.9	Lung, NOS	C3512	Lung Adenocarcinoma	7	1
+82473	Merkel cell carcinoma	C44.9	Skin, NOS	C9231	Merkel Cell Carcinoma	6	1
+97323	Multiple myeloma	C42.1	Bone marrow	C3242	Plasma Cell Myeloma	8	1
+97651	Monoclonal gammopathy of undetermined significance	C42.1	Bone marrow	C3996	Monoclonal Gammopathy of Undetermined Significance	8	1
+97613	Waldenstrom macroglobulinemia 	C42.1	Bone marrow	C80307	Waldenstrom Macroglobulinemia	11	1
+95813	Alveolar soft part sarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3750	Alveolar Soft Part Sarcoma	6	1
+90503	Mesothelioma, malignant 	C38.4	Pleura, NOS	C9351	Pleural Mesothelioma	4	2
+90503	Mesothelioma, malignant 	C38.4	Pleura, NOS	C7376	Pleural Malignant Mesothelioma	5	2
+90523	Epithelioid mesothelioma, malignant 	C38.4	Pleura, NOS	C45662	Pleural Epithelioid Mesothelioma	7	2
+90523	Epithelioid mesothelioma, malignant 	C38.4	Pleura, NOS	C7985	Epithelioid Mesothelioma	6	2
+80103	Carcinoma, NOS	C34.9	Lung, NOS	C4878	Lung Carcinoma	5	3
+80103	Carcinoma, NOS	C34.9	Lung, NOS	C35875	Bronchogenic carcinoma	6	3
+80103	Carcinoma, NOS	C34.9	Lung, NOS	C45540	Lung Sarcomatoid Carcinoma	7	3
+80123	Large cell carcinoma, NOS	C34.9	Lung, NOS	C4450	Lung Large Cell Carcinoma	7	1
+88150	Solitary fibrous tumor 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C7634	Solitary Fibrous Tumor	5	1
+91501	Hemangiopericytoma, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3087	Hemangiopericytoma	-1	1
+95300	Meningioma, NOS 	C70.0	meninges cerebral, spinal	C3230	Meningioma	5	1
+95303	Meningioma, malignant 	C70.0	meninges cerebral, spinal	C4051	Anaplastic (Malignant) Meningioma	7	1
+81403	Adenocarcinoma, NOS	C25.9	Pancreas, NOS	C8294	Pancreatic Adenocarcinoma	7	1
+84803	Mucinous adenocarcinoma	C56.9	Ovary	C5243	Ovarian Mucinous Adenocarcinoma	10	1
+84413	Serous cystadenocarcinoma, NOS	C56.9	Ovary	C7978	Ovarian serous cystadenocarcinoma	11	3
+84413	Serous cystadenocarcinoma, NOS	C56.9	Ovary	C105555	High Grade Ovarian Serous Adenocarcinoma	11	3
+84413	Serous cystadenocarcinoma, NOS	C56.9	Ovary	C7550	Ovarian Serous Adenocarcinoma	10	3
+80103	Carcinoma, NOS	C56.9	Ovary	C4908	Ovarian Carcinoma	8	2
+80103	Carcinoma, NOS	C56.9	Ovary	C4381	Ovarian Epithelial Tumor	6	2
+81403	Adenocarcinoma, NOS	C56.9	Ovary	C7700	Ovarian adenocarcinoma	9	2
+81403	Adenocarcinoma, NOS	C56.9	Ovary	C105556	Low Grade Ovarian Serous Adenocarcinoma	11	2
+94503	Oligodendroglioma, NOS 	C71.9	Brain, NOS	C3288	Oligodendroglioma	8	1
+80103	Carcinoma, NOS	C21.9	anal canal and anus	C9291	Anal Carcinoma 	5	1
+88513	Liposarcoma, well differentiated 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C4250	Well Differentiated Liposarcoma	7	1
+88500	Lipoma, NOS	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3192	Lipoma	6	1
+83803	Endometrioid adenocarcinoma, NOS	C55.9	Uterus, NOS	C6287	Endometrial Endometrioid Adenocarcinoma	12	1
+88303	Malignant fibrous histiocytoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C4247	Undifferentiated Pleomorphic Sarcoma	7	1
+88903	Leiomyosarcoma,NOS 	C55.9	Uterus, NOS	C6340	Uterine Corpus Leiomyosarcoma	9	1
+81403	Adenocarcinoma, NOS	C18.9	Colon, NOS	C4349	Colon Adenocarcinoma	8	3
+81403	Adenocarcinoma, NOS	C18.9	Colon, NOS	C5105	Colorectal Adenocarcinoma	7	3
+81403	Adenocarcinoma, NOS	C18.9	Colon, NOS	C2852	Colon Adenocarcinoma	4	3
+95003	Neuroblastoma, NOS 	C47.9	Autonomic nervous system, NOS	C3270	Neuroblastoma	7	1
+96903	Follicular lymphoma, NOS	C77.9	Lymph node, NOS	C3209	Follicular Lymphoma	9	2
+96903	Follicular lymphoma, NOS	C77.9	Lymph node, NOS	C80297	Pediatric-Type Follicular Lymphoma	10	2
+96873	Burkitt lymphoma, NOS	C77.9	Lymph node, NOS	C131911	Burkitt-Like Lymphoma with 11q Aberration	9	2
+96873	Burkitt lymphoma, NOS	C77.9	Lymph node, NOS	C2912	Burkitt lymphoma	9	2
+98233	B-cell chronic lymphocytic leukemia/small lymphocytic lymphoma	C77.9	Lymph node, NOS	C3163	Chronic lymphocytic leukemia	8	1
+92100	Osteochondroma	C40.0	Bones and joints	C3295	Osteochondroma	-1	1
+95003	Neuroblastoma, NOS 	C72.9	Nervous system, NOS	C3270	Neuroblastoma	7	1
+98743	Acute myeloid leukemia with maturation FAB M2, NOS	C42.1	Bone marrow	C3250	Acute Myeloid Leukemia with Maturation	8	1
+98733	Acute myeloid leukemia without maturation	C42.1	Bone marrow	C3249	Acute Myeloid Leukemia without Maturation	8	1
+98673	Acute myelomonocytic leukemia, NOS	C42.1	Bone marrow	C7463	Acute myelomonocytic leukemia	8	1
+98403	Acute erythroid leukemia	C42.1	Bone marrow	C8923	Acute Erythroid Leukemia	8	2
+98403	Acute erythroid leukemia	C42.1	Bone marrow	C7152	Erythroleukemia	-1	2
+98913	Acute monocytic leukemia	C42.1	Bone marrow	C9163	Childhood acute monocytic leukemia	10	3
+98913	Acute monocytic leukemia	C42.1	Bone marrow	C4861	Acute Monocytic Leukemia	9	3
+98913	Acute monocytic leukemia	C42.1	Bone marrow	C8263	Adult acute monocytic leukemia	10	3
+96993	Marginal zone B-cell lymphoma, NOS	C16.9	Stomach, NOS	C5266	Gastric Mucosa-Associated Lymphoid Tissue Lymphoma	13	1
+96993	Marginal zone B-cell lymphoma, NOS	C50.9	Breast, NOS	C4341	Marginal Zone Lymphoma	10	1
+96993	Marginal zone B-cell lymphoma, NOS	C77.9	Lymph node, NOS	C8863	Nodal Marginal Zone Lymphoma	11	2
+96993	Marginal zone B-cell lymphoma, NOS	C77.9	Lymph node, NOS	C4341	Marginal Zone Lymphoma	10	2
+96893	Splenic marginal zone B-cell lymphoma	C42.2	Spleen	C4663	Splenic Marginal Zone Lymphoma	11	1
+97333	Plasma cell leukemia	C42.1	Bone marrow	C3180	Plasma Cell Leukemia	8	1
+92603	Ewing sarcoma 	C40.0	Bones and joints	C4817	Ewing Sarcoma	4	1
+81403	Adenocarcinoma, NOS	C55.9	Uterus, NOS	C7359	Endometrial adenocarcinoma	10	1
+92203	Chondrosarcoma, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C2946	Chondrosarcoma	5	1
+81703	Hepatocellular carcinoma, NOS	C22.0	Liver	C3099	Hepatocellular Carcinoma	7	3
+81703	Hepatocellular carcinoma, NOS	C22.0	Liver	C7955	Childhood hepatocellular carcinoma	8	3
+81703	Hepatocellular carcinoma, NOS	C22.0	Liver	C7956	Adult hepatocellular carcinoma	8	3
+88503	Liposarcoma, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3194	Liposarcoma	6	1
+88523	Myxoid liposarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C27781	Myxoid Liposarcoma	7	1
+88543	Pleomorphicliposarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3705	Pleomorphic Liposarcoma	7	1
+93623	Pineoblastoma 	C75.3	Pineal gland	C9344	Pineoblastoma	9	2
+93623	Pineoblastoma 	C75.3	Pineal gland	C6967	Pineal Parenchymal Tumor of Intermediate Differentiation	9	2
+94423	Gliosarcoma	C71.9	Brain, NOS	C3796	Gliosarcoma	10	1
+81400	Adenoma, NOS	C18.9	Colon, NOS	C3864	Colon Adenoma	7	1
+81400	Adenoma, NOS	C20.9	Rectum, NOS	C5546	Rectal Adenoma	7	1
+81401	Atypical adenoma	C18.9	Colon, NOS	C7559	Atypical Adenoma	4	1
+81401	Atypical adenoma	C20.9	Rectum, NOS	C7559	Atypical Adenoma	4	1
+81403	Adenocarcinoma, NOS	C20.9	Rectum, NOS	C9383	Rectal Adenocarcinoma	8	1
+90603	Dysgerminoma	C62.9	Testis, NOS	C2996	Dysgerminoma	4	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C42.2	Spleen	C8851	Diffuse Large B-Cell Lymphoma	9	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C48.9	retroperitoneum and peritoneum	C8851	Diffuse Large B-Cell Lymphoma	9	1
+80103	Carcinoma, NOS	C53.9	Cervix uteri	C9039	Cervical Carcinoma	8	1
+80772	Squamous intraepithelial neoplasia, grade III	C53.9	Cervix uteri	C40197	High Grade Cervical Squamous Intraepithelial Neoplasia	9	1
+85003	Infiltrating duct carcinoma, NOS	C50.9	Breast, NOS	C4194	Invasive ductal carcinoma, not otherwise specified	7	3
+85003	Infiltrating duct carcinoma, NOS	C50.9	Breast, NOS	C4017	Ductal breast carcinoma	6	3
+85003	Infiltrating duct carcinoma, NOS	C50.9	Breast, NOS	C9245	Invasive Breast Carcinoma	5	3
+83173	RENAL CELL CARCINOMA, CHROMOPHOBE TYPE	C64.9	Kidney, NOS	C4146	Chromophobe Renal Cell Carcinoma	9	1
+91203	Hemangiosarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3088	Angiosarcoma	6	1
+83103	Clear cell adenocarcinoma, NOS	C56.9	Ovary	C40078	Ovarian Clear Cell Adenocarcinoma	10	1
+94003	Astrocytoma,NOS	C71.6	Cerebellum	C60781	Astrocytoma	7	1
+80703	Squamous cell carcinoma, NOS	C21.9	anal canal and anus	C2929	Squamous Cell Carcinoma	4	1
+95223	Olfactory neuroblastoma 	C72.2	Olfactory nerve	C3789	Olfactory Neuroblastoma	9	1
+83103	Clear cell adenocarcinoma, NOS	C55.9	Uterus, NOS	C3766	Clear Cell Adenocarcinoma	5	1
+96993	Marginal zone B-cell lymphoma, NOS	C17.9	Small intestine, NOS	C4341	Marginal Zone Lymphoma	10	1
+96993	Marginal zone B-cell lymphoma, NOS	C69.9	Eye, NOS	C4341	Marginal Zone Lymphoma	10	1
+85603	Adenosquamous carcinoma 	C55.9	Uterus, NOS	C3727	Adenosquamous Carcinoma	5	1
+88583	Dedifferentiated liposarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3704	Dedifferentiated Liposarcoma	7	1
+93611	Pineocytoma	C75.3	Pineal gland	C6966	Pineocytoma	10	1
+94713	Desmoplastic nodular medulloblastoma	C71.6	Cerebellum	C4956	Desmoplastic/Nodular Medulloblastoma	10	1
+84413	Serous cystadenocarcinoma, NOS	C55.9	Uterus, NOS	C3778	Serous Cystadenocarcinoma	6	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C50.9	Breast, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	1
+85203	Lobular carcinoma, NOS	C50.9	Breast, NOS	C7950	Invasive Lobular Breast Carcinoma	7	2
+85203	Lobular carcinoma, NOS	C50.9	Breast, NOS	C3771	Lobular Breast Carcinoma	6	2
+91203	Hemangiosarcoma 	C40.0	Bones and joints	C3088	Angiosarcoma	6	1
+98663	Acute promyelocytic leukemia	C42.1	Bone marrow	C3182	Acute promyelocytic leukemia with PML-RARA	8	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C49.9	Connective, subcutaneous and other soft tissues, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	1
+99823	Refractory anemia with sideroblasts	C42.1	Bone marrow	C4036	Myelodysplastic Syndrome with Ring Sideroblasts	6	1
+99833	Refractory anemia with excess blasts	C42.1	Bone marrow	C7506	Myelodysplastic Syndrome with Excess Blasts	6	1
+83123	Renal cell carcinoma, NOS	C64.9	Kidney, NOS	C9385	Renal Cell Carcinoma	8	1
+85603	Adenosquamous carcinoma 	C34.9	Lung, NOS	C9133	Lung Adenosquamous Carcinoma	7	1
+80333	Pseudosarcomatous carcinoma	C34.9	Lung, NOS	C27004	Sarcomatoid Carcinoma	4	1
+87203	Malignant melanoma, NOS 	C44.9	Skin, NOS	C165497	Spitz Melanoma	5	3
+87203	Malignant melanoma, NOS 	C44.9	Skin, NOS	C3510	Cutaneous Melanoma	4	3
+87203	Malignant melanoma, NOS 	C44.9	Skin, NOS	C3224	Melanoma	3	3
+94403	Glioblastoma,NOS	C71.6	Cerebellum	C3058	Glioblastoma	8	1
+94403	Glioblastoma,NOS	C71.9	Brain, NOS	C3058	Glioblastoma	8	1
+94403	Glioblastoma,NOS	C71.5	Ventricle, NOS	C3058	Glioblastoma	8	1
+98613	Acute myeloid leukemia, NOS 	C42.1	Bone marrow	C3171	Acute Myeloid Leukemia	6	4
+98613	Acute myeloid leukemia, NOS 	C42.1	Bone marrow	C9154	Adult acute myeloid leukemia	7	4
+98613	Acute myeloid leukemia, NOS 	C42.1	Bone marrow	C9160	Childhood acute myeloid leukemia	7	4
+98613	Acute myeloid leukemia, NOS 	C42.1	Bone marrow	C27753	Acute Myeloid Leukemia Not Otherwise Specified	7	4
+83103	Clear cell adenocarcinoma, NOS	C64.9	Kidney, NOS	C4033	Clear Cell Renal Cell Carcinoma	9	1
+82603	Papillary adenocarcinoma, NOS	C64.9	Kidney, NOS	C6975	Papillary Renal Cell Carcinoma	9	1
+97263	Primary cutaneous gamma-delta-T-cell lymphoma	C44.9	Skin, NOS	C45340	Primary cutaneous gamma-delta-T-cell lymphoma	11	1
+99893	Myelodysplastic syndrome, NOS	C42.1	Bone marrow	C3247	Myelodysplastic syndrome	5	1
+99603	Myeloproliferative neoplasm, NOS 	C42.1	Bone marrow	C4345	Myeloproliferative Neoplasm	5	1
+85103	Medullary carcinoma, NOS	C73.9	Thyroid gland	C46099	Hereditary thyroid gland medullary carcinoma	8	2
+85103	Medullary carcinoma, NOS	C73.9	Thyroid gland	C3879	Thyroid Gland Medullary Carcinoma	7	2
+94403	Glioblastoma,NOS	C71.7	Brain stem	C3058	Glioblastoma	8	1
+96733	Mantle cell lymphoma 	C18.9	Colon, NOS	C4337	Mantle Cell Lymphoma	9	1
+97273	Precursor cell lymphoblastic lymphoma, NOS	C42.1	Bone marrow	C9360	Lymphoblastic Lymphoma	7	1
+97093	Cutaneous T-cell lymphoma, NOS	C44.9	Skin, NOS	C3467	Primary cutaneous T-cell non-Hodgkin lymphoma	9	1
+93703	Chordoma, NOS 	C72.0	Spinal cord	C2947	Chordoma	6	1
+93703	Chordoma, NOS 	C41.9	Bone, NOS	C2947	Chordoma	6	1
+98013	Acute leukemia, NOS	C42.1	Bone marrow	C7464	Acute Leukemia of Ambiguous Lineage	6	1
+80003	Neoplasm, malignant	C44.9	Skin, NOS	C2920	Malignant Skin Neoplasm	3	1
+88323	Dermatofibrosarcoma, NO 	C50.9	Breast, NOS	C4683	Dermatofibrosarcoma Protuberans	6	1
+92603	Ewing sarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C4817	Ewing Sarcoma	4	1
+93803	Glioma, malignant 	C71.0	cerebrum	C4822	Malignant Glioma	6	1
+93803	Glioma, malignant 	C71.7	Brain stem	C94764	Diffuse Intrinsic Pontine Glioma	-1	2
+93803	Glioma, malignant 	C71.7	Brain stem	C4822	Malignant Glioma	6	2
+94003	Astrocytoma,NOS	C71.7	Brain stem	C60781	Astrocytoma	7	1
+83803	Endometrioid adenocarcinoma, NOS	C57.9	other female genital	C3769	Endometrioid Adenocarcinoma	6	1
+99463	Juvenile myelomonocytic leukemia	C42.1	Bone marrow	C9233	Juvenile Myelomonocytic Leukemia	6	1
+94733	CNS primitive neuroectodermal tumor (PNET)	C71.0	cerebrum	C3716	Primitive Neuroectodermal Tumor	5	1
+82203	Adenocarcinoma in adenomatous polyposis coli	C18.9	Colon, NOS	C4134	Adenocarcinoma in Adenomatous Polyposis Coli	7	1
+95003	Neuroblastoma, NOS 	C71.0	cerebrum	C3270	Neuroblastoma	7	1
+83700	Adrenal cortical adenoma, NOS	C74.0	Cortex of adrenal gland	C9003	Adrenal Cortex Adenoma	7	1
+83703	Adrenal cortical carcinoma	C74.0	Cortex of adrenal gland	C9325	Adrenal Cortex Carcinoma	7	1
+85893	Carcinoma showing thymus-like element	C73.9	Thyroid gland	C46106	Thyroid Gland Carcinoma Showing Thymus-Like Differentiation	7	1
+80463	Non-small cell carcinoma	C34.9	Lung, NOS	C2926	Lung Non-Small Cell Carcinoma	6	1
+99103	Acute megakaryoblastic leukemia	C42.1	Bone marrow	C7965	Adult acute megakaryoblastic leukemia	9	3
+99103	Acute megakaryoblastic leukemia	C42.1	Bone marrow	C3170	Acute Megakaryoblastic Leukemia	8	3
+99103	Acute megakaryoblastic leukemia	C42.1	Bone marrow	C7972	Childhood acute megakaryoblastic leukemia	9	3
+99203	acute myeloid leukemia	C42.1	Bone marrow	C27912	Therapy-Related Myeloid Neoplasm	5	1
+87203	Malignant melanoma, NOS 	C69.9	Eye, NOS	C8562	Ocular Melanoma	4	1
+95913	Malignant lymphoma, non-Hodgkin, NOS 	C77.9	Lymph node, NOS	C3457	B-cell non-Hodgkin lymphoma	7	2
+95913	Malignant lymphoma, non-Hodgkin, NOS 	C77.9	Lymph node, NOS	C3211	Non-Hodgkin Lymphoma	6	2
+81403	Adenocarcinoma, NOS	C18.7	Sigmoid colon	C43584	Rectosigmoid Adenocarcinoma	8	1
+94203	Fibrillary astrocytoma	C71.9	Brain, NOS	C4322	Fibrillary Astrocytoma	9	1
+94113	Gemistocytic astrocytoma	C71.9	Brain, NOS	C4321	Gemistocytic Astrocytoma	9	1
+93823	Mixed glioma 	C71.9	Brain, NOS	C4050	Oligoastrocytoma	8	3
+93823	Mixed glioma 	C71.9	Brain, NOS	C6959	Anaplastic Oligoastrocytoma	8	3
+93823	Mixed glioma 	C71.9	Brain, NOS	C3903	Mixed Glioma	7	3
+80703	Squamous cell carcinoma, NOS	C10.9	Oropharynx, NOS	C8181	Oropharynx Squamous Cell Carcinoma	9	1
+81403	Adenocarcinoma, NOS	C77.9	Lymph node, NOS	C2852	Colon Adenocarcinoma	4	1
+87203	Malignant melanoma, NOS 	C77.9	Lymph node, NOS	C8711	Non-Cutaneous Melanoma	4	1
+87700	Epithelioid and spindle cell nevus 	C44.9	Skin, NOS	C27007	Spitz Nevus	5	1
+84803	Mucinous adenocarcinoma	C01.9	tongue	C26712	Mucinous Adenocarcinoma	5	1
+80823	Lymphoepithelial carcinoma	C11.9	Nasopharynx, NOS	C4107	Nasopharyngeal Type Undifferentiated Carcinoma	5	1
+94403	Glioblastoma,NOS	C72.3	Optic chiasm	C3058	Glioblastoma	8	1
+96993	Marginal zone B-cell lymphoma, NOS	C42.4	Hematopoietic system, NOS	C4341	Marginal Zone Lymphoma	10	1
+84703	Mucinous cystadenocarcinoma, NOS	C56.9	Ovary	C4026	Ovarian mucinous cystadenocarcinoma	11	1
+99873	Therapy-related myelodysplastic syndrome, NOS	C42.1	Bone marrow	C27722	Therapy-Related Myelodysplastic Syndrome	7	1
+81203	Transitional cell carcinoma, NOS	C67.0	Urinary bladder	C39851	Bladder Urothelial Carcinoma	7	1
+99843	Refractory anemia with excess blasts in transformation	C42.1	Bone marrow	C27080	Refractory Anemia with Excess Blasts in Transformation	-1	1
+87433	Superficial spreading melanoma	C44.9	Skin, NOS	C9152	Superficial Spreading Melanoma	5	1
+96873	Burkitt lymphoma, NOS	C42.4	Hematopoietic system, NOS	C27694	EBV-related Burkitt lymphoma	10	2
+96873	Burkitt lymphoma, NOS	C42.4	Hematopoietic system, NOS	C2912	Burkitt lymphoma	9	2
+99453	Chronic myelomonocytic leukemia, NOS	C42.1	Bone marrow	C3178	Chronic Myelomonocytic Leukemia	6	1
+97313	Plasmacytoma, NOS	C42.1	Bone marrow	C9349	Plasmacytoma	8	1
+97023	Mature T-cell lymphoma, NOS	C42.4	Hematopoietic system, NOS	C4340	Peripheral T-Cell Lymphoma, Not Otherwise Specified	9	1
+95913	Malignant lymphoma, non-Hodgkin, NOS 	C42.4	Hematopoietic system, NOS	C3211	Non-Hodgkin Lymphoma	6	1
+96783	Primary effusion lymphoma	C42.4	Hematopoietic system, NOS	C6915	Primary effusion lymphoma	10	1
+87000	Pheochromocytoma, NOS 	C64.9	Kidney, NOS	C3326	Adrenal Gland Pheochromocytoma	7	1
+87000	Pheochromocytoma, NOS 	C71.9	Brain, NOS	C3326	Adrenal Gland Pheochromocytoma	7	1
+94211	Pilocytic astrocytoma 	C71.9	Brain, NOS	C4047	Pilocytic Astrocytoma	8	1
+98633	Chronic myeloid leukemia, NOS 	C42.1	Bone marrow	C3174	Chronic myelogenous leukemia, BCR-ABL1 positive	6	1
+94103	Protoplasmic astrocytoma	C71.9	Brain, NOS	C4320	Protoplasmic Astrocytoma	9	1
+99503	Polycythemia vera 	C42.1	Bone marrow	C3336	Polycythemia Vera	6	1
+94743	Large cell medulloblastoma	C71.6	Cerebellum	C6904	Large Cell Medulloblastoma	10	1
+94303	Astroblastoma 	C71.0	cerebrum	C4324	Astroblastoma	6	1
+86801	Paraganglioma, NOS 	C67.0	Urinary bladder	C3308	Paraganglioma	5	1
+84803	Mucinous adenocarcinoma	C49.9	Connective, subcutaneous and other soft tissues, NOS	C26712	Mucinous Adenocarcinoma	5	1
+84803	Mucinous adenocarcinoma	C77.9	Lymph node, NOS	C26712	Mucinous Adenocarcinoma	5	1
+96503	Hodgkin lymphoma, NOS 	C77.9	Lymph node, NOS	C9357	Hodgkin Lymphoma	6	2
+96503	Hodgkin lymphoma, NOS 	C77.9	Lymph node, NOS	C7164	Classic Hodgkin Lymphoma	7	2
+99313	Acute panmyelosis with myelofibrosis	C42.1	Bone marrow	C4344	Acute Panmyelosis with Myelofibrosis	8	1
+80103	Carcinoma, NOS	C15.9	Esophagus, NOS	C3513	Esophageal Carcinoma	5	1
+94243	Pleomorphic xanthoastrocytoma 	C71.0	cerebrum	C4323	Pleomorphic Xanthoastrocytoma	8	1
+80103	Carcinoma, NOS	C18.9	Colon, NOS	C4910	Colon carcinoma	7	2
+80103	Carcinoma, NOS	C18.9	Colon, NOS	C2955	Colorectal carcinoma	6	2
+85603	Adenosquamous carcinoma 	C50.9	Breast, NOS	C3727	Adenosquamous Carcinoma	5	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C42.4	Hematopoietic system, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	1
+95903	Malignant lymphoma, NOS 	C42.4	Hematopoietic system, NOS	C3208	Lymphoma	5	1
+99623	Essentialthrombocythemia 	C42.1	Bone marrow	C3407	essential thrombocythemia	6	1
+94130	Dysembryoplastic neuroepithelial tumor	C71.9	Brain, NOS	C9505	Dysembryoplastic Neuroepithelial Tumor	7	1
+95091	Central neurocytoma 	C71.9	Brain, NOS	C92554	Papillary Glioneuronal Tumor	6	1
+93913	Ependymoma, NOS 	C71.6	Cerebellum	C3017	Ependymoma	8	1
+93913	Ependymoma, NOS 	C71.9	Brain, NOS	C3017	Ependymoma	8	1
+88251	Myofibroblastic tumor, NOS 	C34.9	Lung, NOS	C39740	Lung Inflammatory Myofibroblastic Tumor	7	1
+93803	Glioma, malignant 	C71.9	Brain, NOS	C3059	Glioma	5	2
+93803	Glioma, malignant 	C71.9	Brain, NOS	C132067	Low Grade Glioma	6	2
+80103	Carcinoma, NOS	C73.9	Thyroid gland	C4815	Thyroid Gland Carcinoma	6	1
+80703	Squamous cell carcinoma, NOS	C15.9	Esophagus, NOS	C95612	Esophageal Poorly Differentiated Squamous Cell Carcinoma	7	2
+80703	Squamous cell carcinoma, NOS	C15.9	Esophagus, NOS	C4024	Esophageal Squamous Cell Carcinoma	6	2
+95051	Ganglioglioma, NOS 	C71.9	Brain, NOS	C3788	Ganglioglioma	6	1
+94003	Astrocytoma,NOS	C71.5	Ventricle, NOS	C60781	Astrocytoma	7	1
+94403	Glioblastoma,NOS	C72.0	Spinal cord	C3058	Glioblastoma	8	1
+88003	Sarcoma,NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C121792	Malignant PEComa	-1	3
+88003	Sarcoma,NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C9306	Soft Tissue Sarcoma	5	3
+88003	Sarcoma,NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C9118	Sarcoma	3	3
+98603	Myeloid leukemia, NOS	C42.1	Bone marrow	C3172	Myeloid Leukemia	5	1
+95403	Malignant peripheral nerve sheath tumor 	C47.9	Autonomic nervous system, NOS	C3798	Malignant Peripheral Nerve Sheath Tumor	5	1
+85202	Lobular carcinoma in situ, NOS	C50.9	Breast, NOS	C4018	Lobular Breast Carcinoma In Situ	7	1
+95400	Neurofibroma, NOS	C44.9	Skin, NOS	C3272	Neurofibroma	5	1
+95400	Neurofibroma, NOS	C47.9	Autonomic nervous system, NOS	C3272	Neurofibroma	5	1
+94733	CNS primitive neuroectodermal tumor (PNET)	C71.7	Brain stem	C3716	Primitive Neuroectodermal Tumor	5	1
+88230	Desmoplastic fibroma	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3740	Bone Desmoplastic Fibroma	6	1
+90803	Teratoma,malignant,NOS 	C41.9	Bone, NOS	C4286	Immature Teratoma	5	1
+94211	Pilocytic astrocytoma 	C71.0	cerebrum	C4047	Pilocytic Astrocytoma	8	1
+94211	Pilocytic astrocytoma 	C71.6	Cerebellum	C4047	Pilocytic Astrocytoma	8	1
+94003	Astrocytoma,NOS	C71.0	cerebrum	C60781	Astrocytoma	7	1
+94211	Pilocytic astrocytoma 	C71.7	Brain stem	C4047	Pilocytic Astrocytoma	8	1
+93813	Gliomatosis cerebri	C71.6	Cerebellum	C4318	Gliomatosis Cerebri	7	1
+91203	Hemangiosarcoma 	C50.9	Breast, NOS	C3088	Angiosarcoma	6	2
+91203	Hemangiosarcoma 	C50.9	Breast, NOS	C5184	Breast Angiosarcoma	8	2
+80103	Carcinoma, NOS	C50.9	Breast, NOS	C4872	Breast Carcinoma	4	2
+80103	Carcinoma, NOS	C50.9	Breast, NOS	C71428	Triple-Negative Breast Cancer Finding	-1	2
+95013	Medulloepithelioma, NOS	C71.0	cerebrum	C4327	Medulloepithelioma	6	1
+93923	Ependymoma, anaplastic 	C71.0	cerebrum	C4049	Anaplastic Ependymoma	8	1
+93913	Ependymoma, NOS 	C72.0	Spinal cord	C3017	Ependymoma	8	1
+93913	Ependymoma, NOS 	C71.7	Brain stem	C3017	Ependymoma	8	1
+88053	Undifferentiated sarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C27096	Undifferentiated (Embryonal) Sarcoma	-1	1
+97003	Mycosis Fungoides	C44.9	Skin, NOS	C3246	Mycosis Fungoides	10	1
+97183	anaplastic large cell lymphoma, cutaneous type	C44.9	Skin, NOS	C7195	Primary Cutaneous CD30-Positive T-Cell Lymphoproliferative Disorder	8	1
+96903	Follicular lymphoma, NOS	C42.4	Hematopoietic system, NOS	C3209	Follicular Lymphoma	9	1
+89633	Malignant rhabdoid tumor	C71.9	Brain, NOS	C6906	Atypical Teratoid/Rhabdoid Tumor	6	1
+89633	Malignant rhabdoid tumor	C49.9	Connective, subcutaneous and other soft tissues, NOS	C6906	Atypical Teratoid/Rhabdoid Tumor	6	1
+95083	Atypical teratoid/rhabdoid tumor	C71.9	Brain, NOS	C6906	Atypical Teratoid/Rhabdoid Tumor	6	1
+95083	Atypical teratoid/rhabdoid tumor	C72.0	Spinal cord	C6906	Atypical Teratoid/Rhabdoid Tumor	6	1
+89633	Malignant rhabdoid tumor	C64.9	Kidney, NOS	C8715	Rhabdoid tumor of the kidney	8	1
+89633	Malignant rhabdoid tumor	C22.0	Liver	C7115	Liver and Intrahepatic Bile Duct Malignant Non-Epithelial Neoplasm	6	1
+80703	Squamous cell carcinoma, NOS	C04.9	floor of mouth, NOS	C4041	Floor of mouth squamous cell carcinoma	8	1
+80703	Squamous cell carcinoma, NOS	C01.9	tongue	C4648	Tongue squamous cell carcinoma	8	1
+81603	Cholangiocarcinoma	C22.1	Intrahepatic bile duct	C35417	Intrahepatic Cholangiocarcinoma	10	1
+89633	Malignant rhabdoid tumor	C77.9	Lymph node, NOS	C6906	Atypical Teratoid/Rhabdoid Tumor	6	1
+93903	Choroid plexus carcinoma	C72.0	Spinal cord	C4715	Choroid Plexus Carcinoma	9	1
+95383	Papillary meningioma	C71.0	cerebrum	C3904	Papillary Meningioma	7	1
+82113	Tubular adenocarcinoma	C50.9	Breast, NOS	C9135	Tubular Breast Carcinoma	7	1
+85013	Comedocarcinoma, NOS	C50.9	Breast, NOS	C4188	Comedocarcinoma	4	1
+94733	CNS primitive neuroectodermal tumor (PNET)	C71.9	Brain, NOS	C5398	Central Nervous System Embryonal Tumor, Not Otherwise Specified	6	1
+81803	Combined hepatocellular carcinoma and cholangiocarcinoma	C22.1	Intrahepatic bile duct	C3828	Combined Hepatocellular Carcinoma and Cholangiocarcinoma	7	1
+95083	Atypical teratoid/rhabdoid tumor	C71.6	Cerebellum	C6906	Atypical Teratoid/Rhabdoid Tumor	6	1
+96993	Marginal zone B-cell lymphoma, NOS	C69.0	orbit and lacrimal gland, excl. retina, eye, nos	C4341	Marginal Zone Lymphoma	10	1
+80703	Squamous cell carcinoma, NOS	C32.9	Larynx, NOS	C4044	Laryngeal Squamous Cell Carcinoma	8	1
+80703	Squamous cell carcinoma, NOS	C13.9	Hypopharynx, NOS	C4043	Hypopharyngeal Squamous Cell Carcinoma	9	2
+80703	Squamous cell carcinoma, NOS	C13.9	Hypopharynx, NOS	C2929	Squamous Cell Carcinoma	4	2
+95300	Meningioma, NOS 	C71.9	Brain, NOS	C3230	Meningioma	5	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C71.9	Brain, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C62.9	Testis, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	1
+99803	Refractory anemia	C42.1	Bone marrow	C2872	Refractory Anemia	7	1
+93803	Glioma, malignant 	C71.5	Ventricle, NOS	C4822	Malignant Glioma	6	1
+97013	Sezary syndrome	C44.9	Skin, NOS	C3366	Sezary Syndrome	10	1
+82900	Oxyphilic adenoma	C64.9	Kidney, NOS	C3679	Oxyphilic Adenocarcinoma	5	2
+82900	Oxyphilic adenoma	C64.9	Kidney, NOS	C4526	Kidney Oncocytoma	7	2
+98263	Burkitt cell leukemia	C42.1	Bone marrow	C9140	Childhood B acute lymphoblastic leukemia	8	6
+98263	Burkitt cell leukemia	C42.1	Bone marrow	C9142	Adult T acute lymphoblastic leukemia	8	6
+98263	Burkitt cell leukemia	C42.1	Bone marrow	C7954	Adult Burkitt leukemia	7	6
+98263	Burkitt cell leukemia	C42.1	Bone marrow	C9143	Adult B acute lymphoblastic leukemia	8	6
+98263	Burkitt cell leukemia	C42.1	Bone marrow	C80347	B acute lymphoblastic leukemia with t(1;19)(q23;p13.3) E2A-PBX1 (TCF3-PBX1)	9	6
+98263	Burkitt cell leukemia	C42.1	Bone marrow	C8644	B acute lymphoblastic leukemia	7	6
+89823	Malignant myoepithelioma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C7596	Malignant Myoepithelioma	5	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C38.0	Heart	C8851	Diffuse Large B-Cell Lymphoma	9	1
+84813	Mucin-producing adenocarcinoma	C50.9	Breast, NOS	C27379	Mucin-Producing Adenocarcinoma	5	1
+85753	Metaplastic carcinoma, NOS	C50.9	Breast, NOS	C5164	Metaplastic Breast Carcinoma	6	1
+99853	Refractory cytopenia with multilineage dysplasia	C42.1	Bone marrow	C8574	Myelodysplastic Syndrome with Multilineage Dysplasia	6	1
+88900	Leiomyoma, NOS	C34.9	Lung, NOS	C3157	Leiomyoma	7	1
+96733	Mantle cell lymphoma 	C42.2	Spleen	C4337	Mantle Cell Lymphoma	9	1
+96993	Marginal zone B-cell lymphoma, NOS	C07.9	Parotid gland 	C4341	Marginal Zone Lymphoma	10	1
+97143	Anaplastic large cell lymphoma, T cell and Null cell type	C42.4	Hematopoietic system, NOS	C3468	Mature T-Cell and NK-Cell Non-Hodgkin Lymphoma	8	1
+81202	Transitional cell carcinoma in situ	C67.0	Urinary bladder	C4116	Stage 0 Transitional Cell Carcinoma	5	1
+90201	Phyllodes tumor, borderline	C50.9	Breast, NOS	C7503	Borderline Phyllodes Tumor	5	1
+90513	Fibrous mesothelioma, malignant 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C45655	Sarcomatoid Mesothelioma	6	1
+90703	Embryonal carcinoma, NOS 	C62.9	Testis, NOS	C3752	Embryonal Carcinoma	4	1
+90713	Yolk sac tumor 	C62.9	Testis, NOS	C3011	Yolk Sac Tumor	4	1
+90613	Seminoma, NOS 	C62.9	Testis, NOS	C9309	Seminoma	4	1
+90853	Mixed germ cell tumor 	C62.9	Testis, NOS	C4290	Mixed Germ Cell Tumor	4	1
+90803	Teratoma,malignant,NOS 	C62.9	Testis, NOS	C4286	Immature Teratoma	5	1
+84803	Mucinous adenocarcinoma	C18.9	Colon, NOS	C7966	Colon Mucinous Adenocarcinoma	9	1
+81403	Adenocarcinoma, NOS	C17.9	Small intestine, NOS	C2852	Colon Adenocarcinoma	4	1
+91803	Osteosarcoma, NOS 	C40.0	Bones and joints	C9145	Osteosarcoma	5	1
+89733	Pleuropulmonary blastoma	C76.1	thorax, NOS	C5669	Pleuropulmonary Blastoma	5	1
+83803	Endometrioid adenocarcinoma, NOS	C56.9	Ovary	C3769	Endometrioid Adenocarcinoma	6	2
+83803	Endometrioid adenocarcinoma, NOS	C56.9	Ovary	C7979	Ovarian Endometrioid Adenocarcinoma	10	2
+82003	Adenoid cystic carcinoma	C37.9	Thymus	C2970	Adenoid Cystic Carcinoma	4	1
+91600	Angiofibroma, NOS	C11.9	Nasopharynx, NOS	C3799	Angiofibroma	6	1
+96993	Marginal zone B-cell lymphoma, NOS	C34.9	Lung, NOS	C4341	Marginal Zone Lymphoma	10	1
+97173	Intestinal T-cell lymphoma	C17.9	Small intestine, NOS	C4737	Enteropathy-Associated T-Cell Lymphoma	10	1
+80703	Squamous cell carcinoma, NOS	C44.9	Skin, NOS	C4819	Skin Squamous Cell Carcinoma	5	1
+85103	Medullary carcinoma, NOS	C50.9	Breast, NOS	C9119	Medullary Breast Carcinoma	7	1
+81400	Adenoma, NOS	C22.1	Intrahepatic bile duct	C7126	Intrahepatic Bile Duct Adenoma	-1	1
+84803	Mucinous adenocarcinoma	C17.9	Small intestine, NOS	C26712	Mucinous Adenocarcinoma	5	1
+89361	Gastrointestinal stromal tumor, NOS 	C16.9	Stomach, NOS	C3868	Gastrointestinal Stromal Tumor	5	1
+95303	Meningioma, malignant 	C71.9	Brain, NOS	C4051	Anaplastic (Malignant) Meningioma	7	1
+93813	Gliomatosis cerebri	C71.9	Brain, NOS	C4318	Gliomatosis Cerebri	7	1
+84803	Mucinous adenocarcinoma	C50.9	Breast, NOS	C26712	Mucinous Adenocarcinoma	5	1
+81403	Adenocarcinoma, NOS	C50.9	Breast, NOS	C5214	Breast adenocarcinoma	5	1
+80703	Squamous cell carcinoma, NOS	C51.9	Vulva, NOS	C4052	Vulvar Squamous Cell Carcinoma	8	1
+89361	Gastrointestinal stromal tumor, NOS 	C17.9	Small intestine, NOS	C5811	Small Intestinal Gastrointestinal Stromal Tumor	7	1
+89361	Gastrointestinal stromal tumor, NOS 	C18.9	Colon, NOS	C3868	Gastrointestinal Stromal Tumor	5	1
+89361	Gastrointestinal stromal tumor, NOS 	C20.9	Rectum, NOS	C3868	Gastrointestinal Stromal Tumor	5	1
+89361	Gastrointestinal stromal tumor, NOS 	C51.0	vagina and labia	C3868	Gastrointestinal Stromal Tumor	5	1
+91600	Angiofibroma, NOS	C30.9	nasal cavity including nasal cartilage	C3799	Angiofibroma	6	1
+96843	Malignant lymphoma, large B-cell, diffuse, immunoblastic, NOS	C72.9	Nervous system, NOS	C3461	Immunoblastic Lymphoma	11	1
+85023	Secretory carcinoma of breast	C50.9	Breast, NOS	C4189	Secretory Breast Carcinoma	7	1
+89361	Gastrointestinal stromal tumor, NOS 	C76.2	abdomen, NOS	C3868	Gastrointestinal Stromal Tumor	5	1
+81303	Papillary transitional cell carcinoma	C67.0	Urinary bladder	C7383	Bladder Papillary Urothelial Carcinoma	8	1
+89361	Gastrointestinal stromal tumor, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3868	Gastrointestinal Stromal Tumor	5	1
+82110	Tubular adenoma, NOS	C18.9	Colon, NOS	C4133	Tubular Adenoma	4	1
+81403	Adenocarcinoma, NOS	C18.0	Cecum	C5543	Cecum adenocarcinoma	9	2
+81403	Adenocarcinoma, NOS	C18.0	Cecum	C4349	Colon Adenocarcinoma	8	2
+97053	Angioimmunoblastic T-cell lymphoma	C77.9	Lymph node, NOS	C7528	Angioimmunoblastic T-Cell Lymphoma	10	1
+84603	Papillary serous cystadenocarcinoma	C56.9	Ovary	C8377	Papillary Serous Cystadenocarcinoma	7	1
+84621	Serous papillary cystic tumor of borderline malignancy	C56.9	Ovary	C4183	Borderline Papillary Serous Cystadenoma	7	1
+97053	Angioimmunoblastic T-cell lymphoma	C42.4	Hematopoietic system, NOS	C7528	Angioimmunoblastic T-Cell Lymphoma	10	1
+92501	Giant cell tumor of bone, NOS	C41.9	Bone, NOS	C121932	Giant Cell Tumor of Bone	7	1
+92000	Osteoblastoma, NOS	C41.9	Bone, NOS	C3294	Osteoblastoma	6	1
+92410	Chondromyxoid fibroma	C41.9	Bone, NOS	C3830	Chondromyxoid Fibroma	-1	1
+92300	Chondroblastoma, NOS 	C41.9	Bone, NOS	C2945	Chondroblastoma	6	1
+82630	Tubulovillous adenoma, NOS	C18.9	Colon, NOS	C4143	Tubulovillous Adenoma	4	1
+91910	Osteoid osteoma, NOS	C41.9	Bone, NOS	C3297	Osteoid Osteoma	6	1
+80313	Giant cell carcinoma	C41.9	Bone, NOS	C3779	Giant Cell Carcinoma	5	1
+94243	Pleomorphic xanthoastrocytoma 	C71.9	Brain, NOS	C129327	Anaplastic Pleomorphic Xanthoastrocytoma	8	2
+94243	Pleomorphic xanthoastrocytoma 	C71.9	Brain, NOS	C4323	Pleomorphic Xanthoastrocytoma	8	2
+89003	Rhabdomyosarcoma, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3359	Rhabdomyosarcoma	7	1
+80520	Squamous cell papilloma, NOS	C44.9	Skin, NOS	C4462	Skin Squamous Cell Papilloma	6	1
+94903	Ganglioneuroblastoma	C72.9	Nervous system, NOS	C3790	Ganglioneuroblastoma	7	1
+93923	Ependymoma, anaplastic 	C71.6	Cerebellum	C4049	Anaplastic Ependymoma	8	1
+93923	Ependymoma, anaplastic 	C71.9	Brain, NOS	C4049	Anaplastic Ependymoma	8	1
+88303	Malignant fibrous histiocytoma 	C40.0	Bones and joints	C4247	Undifferentiated Pleomorphic Sarcoma	7	1
+90800	Teratoma, benign 	C72.0	Spinal cord	C9015	Mature Teratoma	6	1
+90803	Teratoma,malignant,NOS 	C75.3	Pineal gland	C4286	Immature Teratoma	5	1
+90643	Germinoma	C75.3	Pineal gland	C3753	Germinoma	4	1
+90643	Germinoma	C71.9	Brain, NOS	C3753	Germinoma	4	1
+90703	Embryonal carcinoma, NOS 	C71.9	Brain, NOS	C3752	Embryonal Carcinoma	4	1
+90713	Yolk sac tumor 	C71.9	Brain, NOS	C3011	Yolk Sac Tumor	4	1
+90813	Teratocarcinoma	C75.3	Pineal gland	C3756	Mixed Embryonal Carcinoma and Teratoma	5	1
+90703	Embryonal carcinoma, NOS 	C72.0	Spinal cord	C3752	Embryonal Carcinoma	4	1
+90713	Yolk sac tumor 	C75.3	Pineal gland	C3011	Yolk Sac Tumor	4	1
+81403	Adenocarcinoma, NOS	C15.9	Esophagus, NOS	C4025	Esophageal Adenocarcinoma	6	2
+81403	Adenocarcinoma, NOS	C15.9	Esophagus, NOS	C7027	Barrett adenocarcinoma	8	2
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C44.9	Skin, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	1
+95973	Primary cutaneous follicle center lymphoma	C44.9	Skin, NOS	C7217	Primary Cutaneous Follicle Center Lymphoma	11	1
+96903	Follicular lymphoma, NOS	C42.2	Spleen	C3209	Follicular Lymphoma	9	1
+80323	Spindle cell carcinoma, NOS	C38.4	Pleura, NOS	C27004	Sarcomatoid Carcinoma	4	1
+80223	Pleomorphic carcinoma	C38.4	Pleura, NOS	C4094	Pleomorphic Carcinoma	5	1
+89003	Rhabdomyosarcoma, NOS 	C38.4	Pleura, NOS	C3359	Rhabdomyosarcoma	7	1
+91803	Osteosarcoma, NOS 	C38.4	Pleura, NOS	C9145	Osteosarcoma	5	1
+90513	Fibrous mesothelioma, malignant 	C38.4	Pleura, NOS	C6747	Desmoplastic Mesothelioma	6	2
+90513	Fibrous mesothelioma, malignant 	C38.4	Pleura, NOS	C45663	Pleural Sarcomatoid Mesothelioma	7	2
+87200	Pigmented nevus, NOS	C44.9	Skin, NOS	C27816	Pigmented Nevus	5	1
+96793	Mediastinal large B-cell lymphoma 	C38.9	Mediastinum	C9280	Primary Mediastinal (Thymic) Large B-Cell Lymphoma	10	1
+88043	Epithelioid sarcoma 	C77.9	Lymph node, NOS	C3714	Epithelioid Sarcoma	6	1
+83610	Juxtaglomerular tumor	C64.9	Kidney, NOS	C4162	Juxtaglomerular Cell Tumor	-1	1
+89820	Myoepithelioma	C49.9	Connective, subcutaneous and other soft tissues, NOS	C40392	Myoepithelial Tumor	4	1
+80102	Carcinoma in situ, NOS	C50.9	Breast, NOS	C2917	Carcinoma In Situ	4	1
+93703	Chordoma, NOS 	C40.0	Bones and joints	C2947	Chordoma	6	1
+81400	Adenoma, NOS	C69.0	orbit and lacrimal gland, excl. retina, eye, nos	C4542	Lacrimal Gland Pleomorphic Adenoma	6	1
+95600	Neurilemoma, NOS 	C69.0	orbit and lacrimal gland, excl. retina, eye, nos	C3269	Schwannoma	5	1
+91200	Hemangioma, NOS	C69.0	orbit and lacrimal gland, excl. retina, eye, nos	C3085	Hemangioma	6	1
+82463	Neuroendocrine carcinoma, NOS	C37.9	Thymus	C3773	Neuroendocrine Carcinoma	5	1
+90800	Teratoma, benign 	C40.0	Bones and joints	C9015	Mature Teratoma	6	1
+90803	Teratoma,malignant,NOS 	C40.0	Bones and joints	C4286	Immature Teratoma	5	1
+90803	Teratoma,malignant,NOS 	C64.9	Kidney, NOS	C4286	Immature Teratoma	5	1
+90713	Yolk sac tumor 	C40.0	Bones and joints	C3011	Yolk Sac Tumor	4	1
+90603	Dysgerminoma	C56.9	Ovary	C2996	Dysgerminoma	4	1
+83801	Endometrioid adenoma, borderline malignancy	C55.9	Uterus, NOS	C7983	Borderline Ovarian Endometrioid Tumor/Atypical Proliferative Ovarian Endometrioid Tumor	8	1
+89303	Endometrial stromal sarcoma, NOS 	C55.9	Uterus, NOS	C8973	Endometrioid Stromal Sarcoma	7	1
+89313	Endometrial stromal sarcoma, low grade 	C54.1	Endometrium	C4263	Low Grade Endometrioid Stromal Sarcoma	8	1
+82003	Adenoid cystic carcinoma	C08.9	Major salivary gland, NOS	C8026	Salivary Gland Adenoid Cystic Carcinoma	6	1
+83330	Microfollicular adenoma, NOS	C73.9	Thyroid gland	C4160	Thyroid Gland Microfollicular Adenoma	-1	1
+83300	Follicular adenoma	C73.9	Thyroid gland	C3502	Thyroid Gland Follicular Adenoma	6	1
+95103	Retinoblastoma, NOS 	C69.2	Retina	C7541	Retinoblastoma	6	1
+80102	Carcinoma in situ, NOS	C34.9	Lung, NOS	C27467	Stage 0 Lung Cancer	7	1
+90803	Teratoma,malignant,NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C4286	Immature Teratoma	5	1
+90713	Yolk sac tumor 	C38.9	Mediastinum	C3011	Yolk Sac Tumor	4	1
+90800	Teratoma, benign 	C56.9	Ovary	C9015	Mature Teratoma	6	1
+90803	Teratoma,malignant,NOS 	C56.9	Ovary	C4286	Immature Teratoma	5	1
+90800	Teratoma, benign 	C48.9	retroperitoneum and peritoneum	C9015	Mature Teratoma	6	1
+90800	Teratoma, benign 	C62.9	Testis, NOS	C9015	Mature Teratoma	6	1
+90713	Yolk sac tumor 	C55.9	Uterus, NOS	C3011	Yolk Sac Tumor	4	1
+90853	Mixed germ cell tumor 	C56.9	Ovary	C4290	Mixed Germ Cell Tumor	4	1
+99613	Primary myelofibrosis 	C42.1	Bone marrow	C2862	Primary Myelofibrosis	6	1
+81700	Liver cell adenoma	C22.0	Liver	C3758	Hepatocellular Adenoma	7	1
+89713	Pancreatoblastoma 	C25.9	Pancreas, NOS	C4265	Pancreatoblastoma	-1	1
+81400	Adenoma, NOS	C15.9	Esophagus, NOS	C2855	Adenoma	3	1
+81603	Cholangiocarcinoma	C22.0	Liver	C4436	Cholangiocarcinoma	9	1
+82603	Papillary adenocarcinoma, NOS	C73.9	Thyroid gland	C4035	Thyroid Gland Papillary Carcinoma	9	1
+83403	Papillary carcinoma, follicular variant	C73.9	Thyroid gland	C126594	Follicular Variant Thyroid Gland Papillary Carcinoma	-1	1
+80203	Carcinoma, undifferentiated, NOS	C73.9	Thyroid gland	C6040	Poorly Differentiated Thyroid Carcinoma	8	1
+90100	Fibroadenoma, NOS	C50.9	Breast, NOS	C3744	Breast Fibroadenoma	5	1
+96843	Malignant lymphoma, large B-cell, diffuse, immunoblastic, NOS	C77.9	Lymph node, NOS	C3461	Immunoblastic Lymphoma	11	1
+91003	Choriocarcinoma, NOS 	C20.9	Rectum, NOS	C2948	Choriocarcinoma	3	1
+82903	Oxyphilic adenocarcinoma	C73.9	Thyroid gland	C4946	Thyroid Gland Hurthle Cell Carcinoma	-1	2
+82903	Oxyphilic adenocarcinoma	C73.9	Thyroid gland	C3679	Oxyphilic Adenocarcinoma	5	2
+91823	Fibroblastic osteosarcoma	C40.0	Bones and joints	C4020	Fibroblastic Osteosarcoma	10	1
+84803	Mucinous adenocarcinoma	C18.7	Sigmoid colon	C43592	Rectosigmoid Mucinous Adenocarcinoma	9	1
+80772	Squamous intraepithelial neoplasia, grade III	C51.9	Vulva, NOS	C8336	High Grade Squamous Intraepithelial Neoplasia	5	1
+91803	Osteosarcoma, NOS 	C41.9	Bone, NOS	C53704	Secondary Osteosarcoma	8	3
+91803	Osteosarcoma, NOS 	C41.9	Bone, NOS	C53953	Osteoblastic Osteosarcoma	10	3
+91803	Osteosarcoma, NOS 	C41.9	Bone, NOS	C9145	Osteosarcoma	5	3
+89803	Carcinosarcoma, NOS 	C55.9	Uterus, NOS	C42700	Uterine carcinosarcoma	7	2
+89803	Carcinosarcoma, NOS 	C55.9	Uterus, NOS	C9180	Uterine Corpus Carcinosarcoma	9	2
+89803	Carcinosarcoma, NOS 	C56.9	Ovary	C9192	Ovarian Carcinosarcoma	9	2
+89803	Carcinosarcoma, NOS 	C56.9	Ovary	C34448	Carcinosarcoma	4	2
+81403	Adenocarcinoma, NOS	C71.9	Brain, NOS	C2852	Colon Adenocarcinoma	4	1
+94513	Oligodendroglioma, anaplastic 	C71.9	Brain, NOS	C4326	Anaplastic Oligodendroglioma	8	1
+88903	Leiomyosarcoma,NOS 	C30.9	nasal cavity including nasal cartilage	C3158	Leiomyosarcoma	7	1
+99403	Hairy cell leukemia	C42.1	Bone marrow	C7402	Hairy Cell Leukemia	7	1
+97023	Mature T-cell lymphoma, NOS	C77.9	Lymph node, NOS	C4340	Peripheral T-Cell Lymphoma, Not Otherwise Specified	9	2
+97023	Mature T-cell lymphoma, NOS	C77.9	Lymph node, NOS	C27909	Mature T-Cell and NK-Cell Neoplasm	6	2
+97023	Mature T-cell lymphoma, NOS	C74.9	Adrenal gland, NOS	C4340	Peripheral T-Cell Lymphoma, Not Otherwise Specified	9	1
+97143	Anaplastic large cell lymphoma, T cell and Null cell type	C77.9	Lymph node, NOS	C3720	Anaplastic Large Cell Lymphoma	9	2
+97143	Anaplastic large cell lymphoma, T cell and Null cell type	C77.9	Lymph node, NOS	C37193	Anaplastic large cell lymphoma, ALK-positive	10	2
+97143	Anaplastic large cell lymphoma, T cell and Null cell type	C14.0	pharynx, NOS	C3468	Mature T-Cell and NK-Cell Non-Hodgkin Lymphoma	8	1
+98723	Acute myeloid leukemia, minimal differentiation	C42.1	Bone marrow	C8460	Acute Myeloid Leukemia with Minimal Differentiation	8	1
+91833	Telangiectatic osteosarcoma	C40.0	Bones and joints	C3902	Telangiectatic Osteosarcoma	-1	1
+84803	Mucinous adenocarcinoma	C18.0	Cecum	C7966	Colon Mucinous Adenocarcinoma	9	1
+85603	Adenosquamous carcinoma 	C53.9	Cervix uteri	C4519	Cervical Adenosquamous Carcinoma	9	1
+84303	Mucoepidermoid carcinoma	C34.9	Lung, NOS	C45544	Lung mucoepidermoid carcinoma	6	1
+82463	Neuroendocrine carcinoma, NOS	C25.9	Pancreas, NOS	C3770	Pancreatic Neuroendocrine Tumor	7	1
+95083	Atypical teratoid/rhabdoid tumor	C71.0	cerebrum	C6906	Atypical Teratoid/Rhabdoid Tumor	6	1
+81403	Adenocarcinoma, NOS	C73.9	Thyroid gland	C2852	Colon Adenocarcinoma	4	1
+94903	Ganglioneuroblastoma	C47.9	Autonomic nervous system, NOS	C3790	Ganglioneuroblastoma	7	1
+84303	Mucoepidermoid carcinoma	C07.9	Parotid gland 	C3772	Mucoepidermoid Carcinoma	5	1
+80703	Squamous cell carcinoma, NOS	C51.0	vagina and labia	C4052	Vulvar Squamous Cell Carcinoma	8	1
+80413	Small cell carcinoma, NOS	C51.0	vagina and labia	C3915	Small Cell Carcinoma	6	1
+81403	Adenocarcinoma, NOS	C51.0	vagina and labia	C2852	Colon Adenocarcinoma	4	1
+97023	Mature T-cell lymphoma, NOS	C49.9	Connective, subcutaneous and other soft tissues, NOS	C4340	Peripheral T-Cell Lymphoma, Not Otherwise Specified	9	1
+97143	Anaplastic large cell lymphoma, T cell and Null cell type	C40.0	Bones and joints	C3468	Mature T-Cell and NK-Cell Non-Hodgkin Lymphoma	8	1
+97143	Anaplastic large cell lymphoma, T cell and Null cell type	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3468	Mature T-Cell and NK-Cell Non-Hodgkin Lymphoma	8	1
+94900	Ganglioneuroma	C72.9	Nervous system, NOS	C3049	Ganglioneuroma	5	1
+95403	Malignant peripheral nerve sheath tumor 	C25.9	Pancreas, NOS	C3798	Malignant Peripheral Nerve Sheath Tumor	5	1
+93643	Peripheral neuroectodermal tumor	C47.9	Autonomic nervous system, NOS	C9341	Peripheral Primitive Neuroectodermal Tumor	6	1
+84903	Signet ring cell carcinoma	C16.9	Stomach, NOS	C5250	Gastric Signet Ring Cell Adenocarcinoma	9	1
+84903	Signet ring cell carcinoma	C18.9	Colon, NOS	C3774	Signet Ring Cell Carcinoma	5	1
+89733	Pleuropulmonary blastoma	C34.9	Lung, NOS	C5669	Pleuropulmonary Blastoma	5	1
+87423	Lentigo maligna melanoma	C44.9	Skin, NOS	C9151	Lentigo Maligna Melanoma	6	1
+87213	Nodular melanoma	C44.9	Skin, NOS	C4225	Nodular Melanoma	5	1
+95083	Atypical teratoid/rhabdoid tumor	C75.3	Pineal gland	C6906	Atypical Teratoid/Rhabdoid Tumor	6	1
+89703	Hepatoblastoma 	C22.0	Liver	C3728	Hepatoblastoma	7	1
+80703	Squamous cell carcinoma, NOS	C11.9	Nasopharynx, NOS	C102872	Pharyngeal squamous cell carcinoma	8	1
+80703	Squamous cell carcinoma, NOS	C09.9	Tonsil, NOS	C8183	Tonsillar squamous cell carcinoma	-1	2
+80703	Squamous cell carcinoma, NOS	C09.9	Tonsil, NOS	C2929	Squamous Cell Carcinoma	4	2
+81203	Transitional cell carcinoma, NOS	C56.9	Ovary	C2930	Transitional Cell Carcinoma	4	1
+84903	Signet ring cell carcinoma	C20.9	Rectum, NOS	C3774	Signet Ring Cell Carcinoma	5	1
+85763	Hepatoid adenocarcinoma	C22.0	Liver	C66950	Hepatoid Adenocarcinoma	5	1
+85763	Hepatoid adenocarcinoma	C16.9	Stomach, NOS	C66950	Hepatoid Adenocarcinoma	5	1
+85763	Hepatoid adenocarcinoma	C77.9	Lymph node, NOS	C66950	Hepatoid Adenocarcinoma	5	1
+91803	Osteosarcoma, NOS 	C71.9	Brain, NOS	C9145	Osteosarcoma	5	1
+89643	Clear cell sarcoma of kidney	C64.9	Kidney, NOS	C4264	Clear Cell Sarcoma of the Kidney	8	1
+82600	Papillary adenoma, NOS	C73.9	Thyroid gland	C6880	Glandular Papilloma	5	1
+87203	Malignant melanoma, NOS 	C51.9	Vulva, NOS	C8711	Non-Cutaneous Melanoma	4	2
+87203	Malignant melanoma, NOS 	C51.9	Vulva, NOS	C40329	Vulvar Melanoma	7	2
+80702	Squamous cell carcinoma in situ, NOS	C51.9	Vulva, NOS	C27093	Stage 0 Squamous Cell Carcinoma	6	1
+80102	Carcinoma in situ, NOS	C62.9	Testis, NOS	C2917	Carcinoma In Situ	4	1
+97193	NK/T-cell lymphoma, nasal and nasal-type	C44.9	Skin, NOS	C4684	Nasal Type Extranodal NK/T-Cell Lymphoma	9	1
+80703	Squamous cell carcinoma, NOS	C14.0	pharynx, NOS	C2929	Squamous Cell Carcinoma	4	1
+80702	Squamous cell carcinoma in situ, NOS	C14.0	pharynx, NOS	C27093	Stage 0 Squamous Cell Carcinoma	6	1
+81400	Adenoma, NOS	C22.0	Liver	C3758	Hepatocellular Adenoma	7	1
+81400	Adenoma, NOS	C73.9	Thyroid gland	C3502	Thyroid Gland Follicular Adenoma	6	1
+89013	Pleomorphic rhabdomyosarcoma, adult type 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C27369	Adult Pleomorphic Rhabdomyosarcoma	9	1
+88553	Mixed liposarcoma	C49.9	Connective, subcutaneous and other soft tissues, NOS	C4253	Mixed Liposarcoma	7	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C72.0	Spinal cord	C8851	Diffuse Large B-Cell Lymphoma	9	1
+87203	Malignant melanoma, NOS 	C30.9	nasal cavity including nasal cartilage	C8711	Non-Cutaneous Melanoma	4	1
+83193	Collecting duct carcinoma	C64.9	Kidney, NOS	C6194	Collecting Duct Carcinoma	8	1
+89823	Malignant myoepithelioma 	C08.9	Major salivary gland, NOS	C35700	Salivary Gland Myoepithelial Carcinoma	6	2
+89823	Malignant myoepithelioma 	C08.9	Major salivary gland, NOS	C7596	Malignant Myoepithelioma	5	2
+89823	Malignant myoepithelioma 	C07.9	Parotid gland 	C7596	Malignant Myoepithelioma	5	1
+89820	Myoepithelioma	C08.9	Major salivary gland, NOS	C40392	Myoepithelial Tumor	4	1
+89820	Myoepithelioma	C07.9	Parotid gland 	C40392	Myoepithelial Tumor	4	1
+81400	Adenoma, NOS	C64.9	Kidney, NOS	C8383	Kidney adenoma	7	1
+97173	Intestinal T-cell lymphoma	C26.9	unspecified digest. Organs	C4737	Enteropathy-Associated T-Cell Lymphoma	10	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C38.4	Pleura, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	1
+91611	Hemangioblastoma 	C71.6	Cerebellum	C5146	Cerebellar Hemangioblastoma	-1	1
+81400	Adenoma, NOS	C07.9	Parotid gland 	C2855	Adenoma	3	1
+81400	Adenoma, NOS	C08.9	Major salivary gland, NOS	C2855	Adenoma	3	1
+82900	Oxyphilic adenoma	C73.9	Thyroid gland	C3759	Oncocytic Adenoma	5	1
+93901	Atypical choroid plexus papilloma	C71.5	Ventricle, NOS	C53686	Atypical Choroid Plexus Papilloma	8	1
+80103	Carcinoma, NOS	C06.9	Mouth, NOS	C8990	Oral Cavity Carcinoma	6	1
+93913	Ependymoma, NOS 	C71.0	cerebrum	C3017	Ependymoma	8	1
+96993	Marginal zone B-cell lymphoma, NOS	C44.9	Skin, NOS	C4341	Marginal Zone Lymphoma	10	1
+88200	Elastofibroma	C49.9	Connective, subcutaneous and other soft tissues, NOS	C4245	Elastofibroma	-1	1
+81400	Adenoma, NOS	C56.9	Ovary	C2855	Adenoma	3	1
+81402	Adenocarcinoma in situ, NOS	C56.9	Ovary	C4123	Adenocarcinoma In Situ	5	1
+89361	Gastrointestinal stromal tumor, NOS 	C47.9	Autonomic nervous system, NOS	C3868	Gastrointestinal Stromal Tumor	5	1
+94121	Desmoplastic infantile astrocytoma	C71.9	Brain, NOS	C9476	Desmoplastic Infantile Astrocytoma	6	1
+91611	Hemangioblastoma 	C72.0	Spinal cord	C155948	Spinal Hemangioblastoma	-1	1
+81203	Transitional cell carcinoma, NOS	C65.9	Renal pelvis	C7355	Renal Pelvis Urothelial Carcinoma	9	1
+97511	Langerhans cell histiocytosis, NOS	C40.0	Bones and joints	C3107	Langerhans Cell Histiocytosis	6	1
+95913	Malignant lymphoma, non-Hodgkin, NOS 	C44.9	Skin, NOS	C6858	Cutaneous B-Cell Non-Hodgkin Lymphoma	9	1
+98233	B-cell chronic lymphocytic leukemia/small lymphocytic lymphoma	C18.9	Colon, NOS	C3163	Chronic lymphocytic leukemia	8	1
+84503	Papillary cystadenocarcinoma, NOS	C56.9	Ovary	C3777	Papillary Cystadenocarcinoma	6	1
+93941	Myxopapillary ependymoma 	C72.0	Spinal cord	C3697	Myxopapillary Ependymoma	7	1
+93923	Ependymoma, anaplastic 	C71.7	Brain stem	C4049	Anaplastic Ependymoma	8	1
+93941	Myxopapillary ependymoma 	C71.7	Brain stem	C3697	Myxopapillary Ependymoma	7	1
+93923	Ependymoma, anaplastic 	C72.0	Spinal cord	C4049	Anaplastic Ependymoma	8	1
+90803	Teratoma,malignant,NOS 	C38.9	Mediastinum	C4286	Immature Teratoma	5	1
+90853	Mixed germ cell tumor 	C38.9	Mediastinum	C4290	Mixed Germ Cell Tumor	4	1
+88103	Fibrosarcoma, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C49027	Sclerosing Epithelioid Fibrosarcoma	-1	2
+88103	Fibrosarcoma, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3043	Fibrosarcoma	5	2
+88103	Fibrosarcoma, NOS 	C48.9	retroperitoneum and peritoneum	C3043	Fibrosarcoma	5	1
+82603	Papillary adenocarcinoma, NOS	C56.9	Ovary	C2853	Papillary Adenocarcinoma	5	1
+91611	Hemangioblastoma 	C71.7	Brain stem	C5147	Brain Stem Hemangioblastoma	-1	1
+80703	Squamous cell carcinoma, NOS	C67.0	Urinary bladder	C4031	Bladder Squamous Cell Carcinoma	7	1
+93903	Choroid plexus carcinoma	C71.5	Ventricle, NOS	C4715	Choroid Plexus Carcinoma	9	1
+91600	Angiofibroma, NOS	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3799	Angiofibroma	6	1
+87000	Pheochromocytoma, NOS 	C74.9	Adrenal gland, NOS	C3326	Adrenal Gland Pheochromocytoma	7	1
+91003	Choriocarcinoma, NOS 	C38.9	Mediastinum	C2948	Choriocarcinoma	3	1
+84613	Serous surface papillary carcinoma	C56.9	Ovary	C4182	Serous Surface Papillary Carcinoma	6	2
+84613	Serous surface papillary carcinoma	C56.9	Ovary	C105555	High Grade Ovarian Serous Adenocarcinoma	11	2
+94903	Ganglioneuroblastoma	C48.9	retroperitoneum and peritoneum	C3790	Ganglioneuroblastoma	7	1
+87703	Mixed epithelioid and spindle cell melanoma	C44.9	Skin, NOS	C66756	Mixed Epithelioid and Spindle Cell Melanoma	4	1
+98233	B-cell chronic lymphocytic leukemia/small lymphocytic lymphoma	C69.9	Eye, NOS	C3163	Chronic lymphocytic leukemia	8	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C69.9	Eye, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	1
+81400	Adenoma, NOS	C75.1	Pituitary gland	C3329	Pituitary Gland Adenoma	10	1
+81503	Pancreatic endocrine tumor, malignant	C25.9	Pancreas, NOS	C27720	Pancreatic Neuroendocrine Tumor	7	1
+81521	Glucagonoma, NOS	C25.9	Pancreas, NOS	C95597	Pancreatic Glucagonoma	9	1
+81501	Islet cell tumor, NOS	C25.9	Pancreas, NOS	C27720	Pancreatic Neuroendocrine Tumor	7	1
+81531	Gastrinoma, NOS	C25.9	Pancreas, NOS	C3050	Gastrin-Producing Neuroendocrine Tumor	7	1
+91803	Osteosarcoma, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C9145	Osteosarcoma	5	1
+83803	Endometrioid adenocarcinoma, NOS	C53.9	Cervix uteri	C3769	Endometrioid Adenocarcinoma	6	2
+83803	Endometrioid adenocarcinoma, NOS	C53.9	Cervix uteri	C6343	Cervical Endometrioid Adenocarcinoma	10	2
+83843	Adenocarcinoma, endocervical type	C53.9	Cervix uteri	C66951	Adenocarcinoma, Endocervical Type	-1	1
+95903	Malignant lymphoma, NOS 	C77.9	Lymph node, NOS	C96058	Monomorphic Epitheliotropic Intestinal T-Cell Lymphoma	10	2
+95903	Malignant lymphoma, NOS 	C77.9	Lymph node, NOS	C3208	Lymphoma	5	2
+91203	Hemangiosarcoma 	C44.9	Skin, NOS	C3088	Angiosarcoma	6	1
+80903	Basal cell carcinoma, NOS	C44.9	Skin, NOS	C2921	Skin Basal Cell Carcinoma	6	2
+80903	Basal cell carcinoma, NOS	C44.9	Skin, NOS	C156767	Basal Cell Carcinoma	5	2
+82723	Pituitary carcinoma, NOS	C75.1	Pituitary gland	C4536	Pituitary Gland Carcinoma	10	1
+80103	Carcinoma, NOS	C16.9	Stomach, NOS	C4911	Gastric carcinoma	5	1
+82013	Cribriform carcinoma, NOS	C50.9	Breast, NOS	C5142	Invasive Cribriform Breast Carcinoma	6	1
+85033	Intraductal papillary adenocarcinoma with invasion 	C50.9	Breast, NOS	C7439	Intraductal Papillary Adenocarcinoma with Invasion	-1	2
+85033	Intraductal papillary adenocarcinoma with invasion 	C50.9	Breast, NOS	C9245	Invasive Breast Carcinoma	5	2
+85223	Infiltrating duct and lobular carcinoma	C50.9	Breast, NOS	C5160	Mixed Ductal and Lobular Carcinoma	6	3
+85223	Infiltrating duct and lobular carcinoma	C50.9	Breast, NOS	C6393	Invasive Ductal and Invasive Lobular Breast Carcinoma	8	3
+85223	Infiltrating duct and lobular carcinoma	C50.9	Breast, NOS	C7688	invasive ductal and lobular carcinoma	7	3
+85002	Intraductal carcinoma, noninfiltrating, NOS	C50.9	Breast, NOS	C2924	Ductal Breast Carcinoma In Situ	8	1
+82003	Adenoid cystic carcinoma	C33.9	trachea	C6051	Tracheal Adenoid Cystic Carcinoma	6	1
+82003	Adenoid cystic carcinoma	C06.9	Mouth, NOS	C2970	Adenoid Cystic Carcinoma	4	1
+82003	Adenoid cystic carcinoma	C07.9	Parotid gland 	C5937	Parotid Gland Adenoid Cystic Carcinoma	8	1
+82003	Adenoid cystic carcinoma	C34.9	Lung, NOS	C2970	Adenoid Cystic Carcinoma	4	1
+82003	Adenoid cystic carcinoma	C30.9	nasal cavity including nasal cartilage	C2970	Adenoid Cystic Carcinoma	4	1
+82003	Adenoid cystic carcinoma	C01.9	tongue	C2970	Adenoid Cystic Carcinoma	4	1
+82003	Adenoid cystic carcinoma	C69.9	Eye, NOS	C2970	Adenoid Cystic Carcinoma	4	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C23.9	Gallbladder	C8851	Diffuse Large B-Cell Lymphoma	9	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C22.1	Intrahepatic bile duct	C8851	Diffuse Large B-Cell Lymphoma	9	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C22.0	Liver	C8851	Diffuse Large B-Cell Lymphoma	9	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C20.9	Rectum, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C76.2	abdomen, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	1
+80703	Squamous cell carcinoma, NOS	C55.9	Uterus, NOS	C2929	Squamous Cell Carcinoma	4	1
+81403	Adenocarcinoma, NOS	C08.9	Major salivary gland, NOS	C8021	Salivary Gland Adenocarcinoma	6	1
+86821	Parasympathetic paraganglioma	C47.9	Autonomic nervous system, NOS	C4217	Parasympathetic Paraganglioma	7	1
+98273	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C3184	Adult T-Cell Leukemia/Lymphoma	-1	2
+98273	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C9142	Adult T acute lymphoblastic leukemia	8	2
+89913	Embryonal sarcoma	C22.0	Liver	C27096	Undifferentiated (Embryonal) Sarcoma	-1	1
+95903	Malignant lymphoma, NOS 	C71.9	Brain, NOS	C3208	Lymphoma	5	1
+92703	Odontogenic tumor, malignant 	C06.9	Mouth, NOS	C4812	Malignant Odontogenic Neoplasm	-1	1
+98953	Acute myeloid leukemia with myelodysplasia-related changes	C42.1	Bone marrow	C9289	Acute Myeloid Leukemia with Multilineage Dysplasia	8	1
+97193	NK/T-cell lymphoma, nasal and nasal-type	C77.9	Lymph node, NOS	C4684	Nasal Type Extranodal NK/T-Cell Lymphoma	9	1
+89203	Alveolar rhabdomyosarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3749	Alveolar Rhabdomyosarcoma	8	1
+80703	Squamous cell carcinoma, NOS	C60.9	Penis, NOS	C7729	Squamous Cell Carcinoma of the Penis	8	1
+82463	Neuroendocrine carcinoma, NOS	C17.9	Small intestine, NOS	C96064	Small Intestinal Neuroendocrine Carcinoma	8	2
+82463	Neuroendocrine carcinoma, NOS	C17.9	Small intestine, NOS	C95404	Digestive System Neuroendocrine Tumor	6	2
+80772	Squamous intraepithelial neoplasia, grade III	C21.9	anal canal and anus	C27275	High Grade Anal Canal Squamous Intraepithelial Neoplasia	-1	1
+87203	Malignant melanoma, NOS 	C69.2	Retina	C8711	Non-Cutaneous Melanoma	4	1
+84813	Mucin-producing adenocarcinoma	C16.9	Stomach, NOS	C27379	Mucin-Producing Adenocarcinoma	5	1
+88903	Leiomyosarcoma,NOS 	C48.9	retroperitoneum and peritoneum	C3158	Leiomyosarcoma	7	1
+88003	Sarcoma,NOS 	C40.0	Bones and joints	C9118	Sarcoma	3	1
+88953	Myosarcoma	C49.9	Connective, subcutaneous and other soft tissues, NOS	C4883	Malignant Muscle Neoplasm	5	1
+88903	Leiomyosarcoma,NOS 	C44.9	Skin, NOS	C3158	Leiomyosarcoma	7	1
+89361	Gastrointestinal stromal tumor, NOS 	C38.9	Mediastinum	C3868	Gastrointestinal Stromal Tumor	5	1
+89361	Gastrointestinal stromal tumor, NOS 	C38.4	Pleura, NOS	C3868	Gastrointestinal Stromal Tumor	5	1
+81403	Adenocarcinoma, NOS	C75.0	parathyroid gland	C4906	Parathyroid Gland Carcinoma	6	1
+82463	Neuroendocrine carcinoma, NOS	C34.9	Lung, NOS	C3773	Neuroendocrine Carcinoma	5	2
+82463	Neuroendocrine carcinoma, NOS	C34.9	Lung, NOS	C5670	Lung Neuroendocrine Neoplasm	5	2
+88913	Epithelioid leiomyosarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3700	Epithelioid Leiomyosarcoma	8	1
+87003	Pheochromocytoma, malignant	C74.9	Adrenal gland, NOS	C4220	Malignant Adrenal Gland Pheochromocytoma	8	1
+87000	Pheochromocytoma, NOS 	C47.9	Autonomic nervous system, NOS	C3326	Adrenal Gland Pheochromocytoma	7	1
+94303	Astroblastoma 	C71.9	Brain, NOS	C4324	Astroblastoma	6	1
+95061	Central neurocytoma 	C71.9	Brain, NOS	C3791	Central Neurocytoma	7	2
+95061	Central neurocytoma 	C71.9	Brain, NOS	C92555	Extraventricular Neurocytoma	7	2
+85853	Thymoma, type B3, malignant	C37.9	Thymus	C7997	Thymoma Type B3	7	1
+85863	Thymic carcinoma, NOS	C37.9	Thymus	C7569	Thymic Carcinoma	5	1
+85623	Adenosquamous carcinoma 	C50.9	Breast, NOS	C4199	Epithelial-Myoepithelial Carcinoma	4	1
+95600	Neurilemoma, NOS 	C72.0	Spinal cord	C3269	Schwannoma	5	1
+85503	Acinar cell carcinoma	C25.9	Pancreas, NOS	C7977	Pancreatic Acinar Cell Carcinoma	8	1
+96783	Primary effusion lymphoma	C48.9	retroperitoneum and peritoneum	C6915	Primary effusion lymphoma	10	1
+96783	Primary effusion lymphoma	C38.4	Pleura, NOS	C6915	Primary effusion lymphoma	10	1
+93941	Myxopapillary ependymoma 	C71.9	Brain, NOS	C3697	Myxopapillary Ependymoma	7	1
+87003	Pheochromocytoma, malignant	C47.9	Autonomic nervous system, NOS	C4220	Malignant Adrenal Gland Pheochromocytoma	8	1
+82403	Carcinoid tumor, NOS	C25.9	Pancreas, NOS	C3140	Pancreatic Insulin-Producing Neuroendocrine Tumor	8	1
+91003	Choriocarcinoma, NOS 	C58.9	Placenta	C8893	Placental Choriocarcinoma	-1	1
+91000	Hydatiform mole, NOS	C58.9	Placenta	C3110	Hydatidiform Mole	-1	1
+95033	Neuroepithelioma, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3716	Primitive Neuroectodermal Tumor	5	1
+95400	Neurofibroma, NOS	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3272	Neurofibroma	5	1
+88940	Angiomyoma	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3747	Angioleiomyoma	6	1
+88100	Fibroma, NOS	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3041	Fibroma	5	1
+80103	Carcinoma, NOS	C48.9	retroperitoneum and peritoneum	C40022	Primary Peritoneal Carcinoma	5	1
+97193	NK/T-cell lymphoma, nasal and nasal-type	C56.9	Ovary	C4684	Nasal Type Extranodal NK/T-Cell Lymphoma	9	1
+97193	NK/T-cell lymphoma, nasal and nasal-type	C42.4	Hematopoietic system, NOS	C4684	Nasal Type Extranodal NK/T-Cell Lymphoma	9	1
+99483	Aggressive NK-cell leukemia	C42.1	Bone marrow	C8647	Aggressive NK-Cell Leukemia	7	1
+92203	Chondrosarcoma, NOS 	C40.0	Bones and joints	C2946	Chondrosarcoma	5	1
+94733	CNS primitive neuroectodermal tumor (PNET)	C40.0	Bones and joints	C3716	Primitive Neuroectodermal Tumor	5	1
+81561	Somatostatinoma, NOS	C25.9	Pancreas, NOS	C95595	Pancreatic somatostatinoma	10	1
+93601	Pinealoma, NOS	C75.1	Pituitary gland	C6965	Pineal Parenchymal Cell Neoplasm	8	1
+96783	Primary effusion lymphoma	C38.0	Heart	C6915	Primary effusion lymphoma	10	1
+94900	Ganglioneuroma	C47.9	Autonomic nervous system, NOS	C3049	Ganglioneuroma	5	1
+95403	Malignant peripheral nerve sheath tumor 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3798	Malignant Peripheral Nerve Sheath Tumor	5	1
+86801	Paraganglioma, NOS 	C47.9	Autonomic nervous system, NOS	C3308	Paraganglioma	5	1
+88110	Fibromyxoma	C49.9	Connective, subcutaneous and other soft tissues, NOS	C66760	Fibromyxoid Tumor	-1	1
+81403	Adenocarcinoma, NOS	C23.9	Gallbladder	C39843	Bladder Urachal Adenocarcinoma	-1	2
+81403	Adenocarcinoma, NOS	C23.9	Gallbladder	C3844	Gallbladder Carcinoma	7	2
+81403	Adenocarcinoma, NOS	C24.9	Biliary tract, NOS	C2852	Colon Adenocarcinoma	4	1
+88250	Myofibroblastoma	C49.9	Connective, subcutaneous and other soft tissues, NOS	C49012	Myofibroblastoma	-1	1
+91403	Kaposi sarcoma	C49.9	Connective, subcutaneous and other soft tissues, NOS	C9087	Kaposi Sarcoma	7	1
+97193	NK/T-cell lymphoma, nasal and nasal-type	C30.9	nasal cavity including nasal cartilage	C4684	Nasal Type Extranodal NK/T-Cell Lymphoma	9	1
+94733	CNS primitive neuroectodermal tumor (PNET)	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3716	Primitive Neuroectodermal Tumor	5	1
+91200	Hemangioma, NOS	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3085	Hemangioma	6	1
+87203	Malignant melanoma, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C8711	Non-Cutaneous Melanoma	4	1
+81403	Adenocarcinoma, NOS	C22.0	Liver	C2852	Colon Adenocarcinoma	4	1
+93623	Pineoblastoma 	C71.0	cerebrum	C9344	Pineoblastoma	9	1
+94733	CNS primitive neuroectodermal tumor (PNET)	C71.6	Cerebellum	C3716	Primitive Neuroectodermal Tumor	5	1
+80703	Squamous cell carcinoma, NOS	C23.9	Gallbladder	C2929	Squamous Cell Carcinoma	4	2
+80703	Squamous cell carcinoma, NOS	C23.9	Gallbladder	C6165	Urethral Squamous Cell Carcinoma	7	2
+80103	Carcinoma, NOS	C25.9	Pancreas, NOS	C3850	Pancreatic carcinoma	6	1
+93823	Mixed glioma 	C71.0	cerebrum	C3903	Mixed Glioma	7	1
+81403	Adenocarcinoma, NOS	C18.2	Ascending colon	C4349	Colon Adenocarcinoma	8	1
+80703	Squamous cell carcinoma, NOS	C34.1	Upper lobe, lung	C3493	Lung Squamous Cell Carcinoma	6	1
+81403	Adenocarcinoma, NOS	C15.5	Lower third of esophagus	C4025	Esophageal Adenocarcinoma	6	1
+85843	Thymoma, type B2, malignant	C37.9	Thymus	C6889	Malignant Type B2 Thymoma	8	1
+83803	Endometrioid adenocarcinoma, NOS	C54.1	Endometrium	C6287	Endometrial Endometrioid Adenocarcinoma	12	2
+83803	Endometrioid adenocarcinoma, NOS	C54.1	Endometrium	C6290	Endometrial endometrioid adenocarcinoma, variant with squamous differentiation	13	2
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C77.0	Lymph nodes of head, face and neck	C8851	Diffuse Large B-Cell Lymphoma	9	1
+81203	Transitional cell carcinoma, NOS	C67.9	Bladder, NOS	C7716	Renal Pelvis and Ureter Urothelial Carcinoma	6	2
+81203	Transitional cell carcinoma, NOS	C67.9	Bladder, NOS	C39851	Bladder Urothelial Carcinoma	7	2
+85003	Infiltrating duct carcinoma, NOS	C25.0	Head of pancreas	C4194	Invasive ductal carcinoma, not otherwise specified	7	1
+81403	Adenocarcinoma, NOS	C34.1	Upper lobe, lung	C3512	Lung Adenocarcinoma	7	1
+85823	Thymoma, type AB, malignant	C37.9	Thymus	C6886	Malignant Type AB Thymoma	7	1
+88113	Fibromyxosarcoma 	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C6496	Myxofibrosarcoma	-1	1
+80723	Squamous cell carcinoma, large cell, nonkeratinizing, NOS	C53.9	Cervix uteri	C65173	Non-Keratinizing Large Cell Squamous Cell Carcinoma	-1	1
+81403	Adenocarcinoma, NOS	C16.5	Lesser curvature of stomach, NOS	C4004	Gastric Adenocarcinoma	6	1
+84413	Serous cystadenocarcinoma, NOS	C54.1	Endometrium	C3778	Serous Cystadenocarcinoma	6	1
+80703	Squamous cell carcinoma, NOS	C15.5	Lower third of esophagus	C4024	Esophageal Squamous Cell Carcinoma	6	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C02.9	Tongue, NOS	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+81403	Adenocarcinoma, NOS	C19.9	Rectosigmoid junction	C43584	Rectosigmoid Adenocarcinoma	8	1
+88583	Dedifferentiated liposarcoma 	C48.0	Retroperitoneum	C3704	Dedifferentiated Liposarcoma	7	1
+87743	Spindle cell melanoma, type B	C69.3	Choroid	C4239	Type B Spindle Cell Melanoma	-1	1
+84803	Mucinous adenocarcinoma	C16.3	Gastric antrum	C5248	Mucinous Gastric Adenocarcinoma	8	1
+80703	Squamous cell carcinoma, NOS	C02.9	Tongue, NOS	C4648	Tongue squamous cell carcinoma	8	1
+85503	Acinar cell carcinoma	C61.9	Prostate gland	C5596	Prostate Acinar Adenocarcinoma	10	1
+81453	Carcinoma, diffuse type	C16.3	Gastric antrum	C9159	Gastric Diffuse Adenocarcinoma	7	1
+80703	Squamous cell carcinoma, NOS	C06.0	Cheeck mucosa	C4833	Oral Cavity Squamous Cell Carcinoma	7	1
+81453	Carcinoma, diffuse type	C16.2	Body of stomach	C9159	Gastric Diffuse Adenocarcinoma	7	1
+94013	Astrocytoma, anaplastic 	C71.0	cerebrum	C9477	Anaplastic Astrocytoma	8	1
+87203	Malignant melanoma, NOS 	C77.0	Lymph nodes of head, face and neck	C8711	Non-Cutaneous Melanoma	4	1
+80703	Squamous cell carcinoma, NOS	C34.3	Lower lobe, lung	C3493	Lung Squamous Cell Carcinoma	6	1
+88903	Leiomyosarcoma,NOS 	C48.0	Retroperitoneum	C3158	Leiomyosarcoma	7	1
+81403	Adenocarcinoma, NOS	C34.3	Lower lobe, lung	C3512	Lung Adenocarcinoma	7	1
+87203	Malignant melanoma, NOS 	C49.6	Connective, Subcutaneous and other soft tissues of trunk, NOS	C8711	Non-Cutaneous Melanoma	4	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C34.3	Lower lobe, lung	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+88303	Malignant fibrous histiocytoma 	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C4247	Undifferentiated Pleomorphic Sarcoma	7	1
+81443	Adenocarcinoma, intestinal type	C16.3	Gastric antrum	C9157	Gastric Intestinal Type Adenocarcinoma	8	1
+88583	Dedifferentiated liposarcoma 	C48.1	Specified parts of peritoneum	C3704	Dedifferentiated Liposarcoma	7	1
+81203	Transitional cell carcinoma, NOS	C67.1	Dome of bladder	C39851	Bladder Urothelial Carcinoma	7	1
+81403	Adenocarcinoma, NOS	C34.2	Middle lobe, lung	C3512	Lung Adenocarcinoma	7	1
+87703	Mixed epithelioid and spindle cell melanoma	C69.8	Overlapping lesion of eye and adnexa	C66756	Mixed Epithelioid and Spindle Cell Melanoma	4	1
+81303	Papillary transitional cell carcinoma	C67.4	Posterior wall of bladder	C7383	Bladder Papillary Urothelial Carcinoma	8	1
+80703	Squamous cell carcinoma, NOS	C03.9	Gum, NOS	C129857	Gingival squamous cell carcinoma	8	1
+80703	Squamous cell carcinoma, NOS	C15.4	Middle third of esophagus	C4024	Esophageal Squamous Cell Carcinoma	6	1
+81803	Combined hepatocellular carcinoma and cholangiocarcinoma	C22.0	Liver	C3828	Combined Hepatocellular Carcinoma and Cholangiocarcinoma	7	1
+94013	Astrocytoma, anaplastic 	C71.4	occipital lobe	C9477	Anaplastic Astrocytoma	8	1
+90533	Mesothelioma, biphasic, malignant 	C38.4	Pleura, NOS	C45665	Pleural Biphasic Mesothelioma	7	1
+83701	Adrenal cortical adenoma, borderline malignancy	C74.0	Cortex of adrenal gland	C9003	Adrenal Cortex Adenoma	7	1
+94503	Oligodendroglioma, NOS 	C71.0	cerebrum	C3288	Oligodendroglioma	8	1
+81303	Papillary transitional cell carcinoma	C67.9	Bladder, NOS	C7383	Bladder Papillary Urothelial Carcinoma	8	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C17.1	Jejunum	C8851	Diffuse Large B-Cell Lymphoma	9	1
+81403	Adenocarcinoma, NOS	C16.3	Gastric antrum	C4004	Gastric Adenocarcinoma	6	1
+85503	Acinar cell carcinoma	C34.3	Lower lobe, lung	C5649	Acinar Lung Adenocarcinoma	8	1
+81203	Transitional cell carcinoma, NOS	C67.4	Posterior wall of bladder	C39851	Bladder Urothelial Carcinoma	7	1
+82113	Tubular adenocarcinoma	C16.3	Gastric antrum	C5473	Gastric Tubular Adenocarcinoma	8	1
+81203	Transitional cell carcinoma, NOS	C67.2	Lateral wall of bladder	C39851	Bladder Urothelial Carcinoma	7	1
+81403	Adenocarcinoma, NOS	C16.2	Body of stomach	C4004	Gastric Adenocarcinoma	6	1
+94513	Oligodendroglioma, anaplastic 	C71.0	cerebrum	C6959	Anaplastic Oligoastrocytoma	8	1
+84823	Mucinous adenocarcinoma, endocervical type	C53.9	Cervix uteri	C66953	Mucinous Adenocarcinoma, Endocervical Type	-1	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C32.9	Larynx, NOS	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+82113	Tubular adenocarcinoma	C16.0	Cardia, NOS	C5473	Gastric Tubular Adenocarcinoma	8	1
+89503	Mullerian mixed tumor	C54.1	Endometrium	C3730	Mixed Mesodermal (Mullerian) Tumor	5	1
+80703	Squamous cell carcinoma, NOS	C56.9	Ovary	C2929	Squamous Cell Carcinoma	4	1
+81443	Adenocarcinoma, intestinal type	C16.1	Fundus of stomach	C9157	Gastric Intestinal Type Adenocarcinoma	8	1
+87203	Malignant melanoma, NOS 	C77.3	Lymph nodes of axilla or arm	C8711	Non-Cutaneous Melanoma	4	1
+87203	Malignant melanoma, NOS 	C44.5	Skin of trunk	C3510	Cutaneous Melanoma	4	1
+87203	Malignant melanoma, NOS 	C49.3	thoracic wall	C8711	Non-Cutaneous Melanoma	4	1
+88903	Leiomyosarcoma,NOS 	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C3158	Leiomyosarcoma	7	1
+85813	Thymoma, type A, malignant	C37.9	Thymus	C7999	Malignant Type A Thymoma	7	1
+81403	Adenocarcinoma, NOS	C18.6	Descending colon	C4349	Colon Adenocarcinoma	8	1
+82553	Adenocarcinoma with mixed subtypes	C34.3	Lower lobe, lung	C65197	Lung Adenocarcinoma with Mixed Bronchioloalveolar and Invasive Components	-1	1
+88903	Leiomyosarcoma,NOS 	C49.3	thoracic wall	C3158	Leiomyosarcoma	7	1
+82523	Bronchiolo-alveolar carcinoma, non-mucinous	C34.3	Lower lobe, lung	C7269	Non-Mucinous Minimally Invasive Lung Adenocarcinoma	-1	1
+81403	Adenocarcinoma, NOS	C16.0	Cardia, NOS	C9296	Gastroesophageal Junction Adenocarcinoma	5	2
+81403	Adenocarcinoma, NOS	C16.0	Cardia, NOS	C4004	Gastric Adenocarcinoma	6	2
+87000	Pheochromocytoma, NOS 	C74.0	Cortex of adrenal gland	C3326	Adrenal Gland Pheochromocytoma	7	1
+85821	Thymoma, type AB, NOS	C37.9	Thymus	C6885	Thymoma Type AB	6	1
+81403	Adenocarcinoma, NOS	C25.1	Body of pancreas	C8294	Pancreatic Adenocarcinoma	7	1
+82603	Papillary adenocarcinoma, NOS	C34.1	Upper lobe, lung	C2853	Papillary Adenocarcinoma	5	1
+89503	Mullerian mixed tumor	C55.9	Uterus, NOS	C3730	Mixed Mesodermal (Mullerian) Tumor	5	1
+82523	Bronchiolo-alveolar carcinoma, non-mucinous	C34.8	Overlapping lesion of lung	C7269	Non-Mucinous Minimally Invasive Lung Adenocarcinoma	-1	1
+87203	Malignant melanoma, NOS 	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C8711	Non-Cutaneous Melanoma	4	1
+81403	Adenocarcinoma, NOS	C18.5	Splenic flexure of colon	C4349	Colon Adenocarcinoma	8	1
+80523	Squamous cell papilloma, NOS	C34.1	Upper lobe, lung	C4102	Papillary Squamous Cell Carcinoma	5	1
+87203	Malignant melanoma, NOS 	C71.1	frontal lobe	C8711	Non-Cutaneous Melanoma	4	1
+81453	Carcinoma, diffuse type	C16.1	Fundus of stomach	C9159	Gastric Diffuse Adenocarcinoma	7	1
+88903	Leiomyosarcoma,NOS 	C49.5	Connective, Subcutaneous and other soft tissues of pelvis	C3158	Leiomyosarcoma	7	1
+87203	Malignant melanoma, NOS 	C49.1	Connective, Subcutaneous and other soft tissues of upper limb and shoulder	C8711	Non-Cutaneous Melanoma	4	1
+87703	Mixed epithelioid and spindle cell melanoma	C69.3	Choroid	C66756	Mixed Epithelioid and Spindle Cell Melanoma	4	1
+89803	Carcinosarcoma, NOS 	C54.3	Fundus uteri	C9180	Uterine Corpus Carcinosarcoma	9	1
+81403	Adenocarcinoma, NOS	C25.0	Head of pancreas	C8294	Pancreatic Adenocarcinoma	7	1
+88053	Undifferentiated sarcoma 	C49.6	Connective, Subcutaneous and other soft tissues of trunk, NOS	C27096	Undifferentiated (Embryonal) Sarcoma	-1	1
+80833	Basaloid squamous cell carcinoma	C06.0	Cheeck mucosa	C54244	Basaloid Squamous Cell Carcinoma	5	1
+80703	Squamous cell carcinoma, NOS	C14.8	Overlapping lesion of lip, oral cavity and pharynx	C4833	Oral Cavity Squamous Cell Carcinoma	7	2
+80703	Squamous cell carcinoma, NOS	C14.8	Overlapping lesion of lip, oral cavity and pharynx	C2929	Squamous Cell Carcinoma	4	2
+90433	Synovial sarcoma, biphasic	C49.6	Connective, Subcutaneous and other soft tissues of trunk, NOS	C4279	Biphasic synovial sarcoma	-1	1
+87203	Malignant melanoma, NOS 	C77.4	Lymph nodes of inguinal region or leg	C8711	Non-Cutaneous Melanoma	4	1
+84803	Mucinous adenocarcinoma	C25.0	Head of pancreas	C26712	Mucinous Adenocarcinoma	5	1
+82553	Adenocarcinoma with mixed subtypes	C61.9	Prostate gland	C65197	Lung Adenocarcinoma with Mixed Bronchioloalveolar and Invasive Components	-1	1
+88053	Undifferentiated sarcoma 	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C27096	Undifferentiated (Embryonal) Sarcoma	-1	1
+88903	Leiomyosarcoma,NOS 	C16.9	Stomach, NOS	C3158	Leiomyosarcoma	7	1
+81403	Adenocarcinoma, NOS	C16.1	Fundus of stomach	C4004	Gastric Adenocarcinoma	6	1
+87433	Superficial spreading melanoma	C77.4	Lymph nodes of inguinal region or leg	C9152	Superficial Spreading Melanoma	5	1
+94503	Oligodendroglioma, NOS 	C71.2	temporal lobe	C3288	Oligodendroglioma	8	1
+80703	Squamous cell carcinoma, NOS	C34.2	Middle lobe, lung	C3493	Lung Squamous Cell Carcinoma	6	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C03.9	Gum, NOS	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+84803	Mucinous adenocarcinoma	C16.0	Cardia, NOS	C5248	Mucinous Gastric Adenocarcinoma	8	1
+90413	Synovial sarcoma, spindle cell	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C4277	Spindle Cell Synovial Sarcoma	-1	1
+84803	Mucinous adenocarcinoma	C20.9	Rectum, NOS	C7973	Rectal Mucinous Adenocarcinoma	9	1
+84803	Mucinous adenocarcinoma	C19.9	Rectosigmoid junction	C43592	Rectosigmoid Mucinous Adenocarcinoma	9	2
+84803	Mucinous adenocarcinoma	C19.9	Rectosigmoid junction	C43585	Colorectal Mucinous Adenocarcinoma	8	2
+80713	Squamous cell carcinoma, keratinizing, NOS	C04.9	floor of mouth, NOS	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+85823	Thymoma, type AB, malignant	C38.1	Anterior mediastinum	C6886	Malignant Type AB Thymoma	7	1
+85843	Thymoma, type B2, malignant	C38.1	Anterior mediastinum	C6889	Malignant Type B2 Thymoma	8	1
+85833	Thymoma, type B1, malignant	C37.9	Thymus	C7996	Malignant Type B1 Thymoma	8	1
+85243	Infiltrating lobular mixed with other types of carcinoma	C50.9	Breast, NOS	C5214	Breast adenocarcinoma	5	1
+81203	Transitional cell carcinoma, NOS	C67.3	Anterior wall of bladder	C39851	Bladder Urothelial Carcinoma	7	1
+87203	Malignant melanoma, NOS 	C17.9	Small intestine, NOS	C8711	Non-Cutaneous Melanoma	4	1
+87443	Acral lentiginous melanoma, malignant	C44.7	Skin of lower limb and hip	C4022	Acral Lentiginous Melanom	-1	1
+85003	Infiltrating duct carcinoma, NOS	C50.4	Upper-outer quadrant of breast	C4017	Ductal breast carcinoma	6	1
+84803	Mucinous adenocarcinoma	C34.1	Upper lobe, lung	C26712	Mucinous Adenocarcinoma	5	1
+87433	Superficial spreading melanoma	C44.5	Skin of trunk	C9152	Superficial Spreading Melanoma	5	1
+94013	Astrocytoma, anaplastic 	C71.9	Brain, NOS	C9477	Anaplastic Astrocytoma	8	1
+88903	Leiomyosarcoma,NOS 	C49.6	Connective, Subcutaneous and other soft tissues of trunk, NOS	C3158	Leiomyosarcoma	7	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C06.9	Mouth, NOS	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+87433	Superficial spreading melanoma	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C9152	Superficial Spreading Melanoma	5	1
+87203	Malignant melanoma, NOS 	C34.3	Lower lobe, lung	C8711	Non-Cutaneous Melanoma	4	1
+84803	Mucinous adenocarcinoma	C34.3	Lower lobe, lung	C26712	Mucinous Adenocarcinoma	5	1
+80703	Squamous cell carcinoma, NOS	C05.0	Hard palate	C4649	Palate Squamous Cell Carcinoma	8	1
+82553	Adenocarcinoma with mixed subtypes	C34.1	Upper lobe, lung	C65197	Lung Adenocarcinoma with Mixed Bronchioloalveolar and Invasive Components	-1	1
+81453	Carcinoma, diffuse type	C16.9	Stomach, NOS	C9159	Gastric Diffuse Adenocarcinoma	7	1
+85841	Thymoma, type B2, NOS	C37.9	Thymus	C6888	Thymoma Type B2	7	1
+85503	Acinar cell carcinoma	C34.1	Upper lobe, lung	C5649	Acinar Lung Adenocarcinoma	8	1
+88053	Undifferentiated sarcoma 	C48.0	Retroperitoneum	C27096	Undifferentiated (Embryonal) Sarcoma	-1	1
+87303	Amelanotic melanoma 	C77.3	Lymph nodes of axilla or arm	C3802	Amelanotic melanoma 	4	1
+82463	Neuroendocrine carcinoma, NOS	C25.2	Tail of pancreas	C3770	Pancreatic Neuroendocrine Tumor	7	1
+81443	Adenocarcinoma, intestinal type	C16.2	Body of stomach	C9157	Gastric Intestinal Type Adenocarcinoma	8	1
+83443	Papillary carcinoma, columnar cell	C73.9	Thyroid gland	C35830	Columnar Cell Variant Thyroid Gland Papillary Carcinoma	-1	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C53.9	Cervix uteri	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+82523	Bronchiolo-alveolar carcinoma, non-mucinous	C34.1	Upper lobe, lung	C7269	Non-Mucinous Minimally Invasive Lung Adenocarcinoma	-1	1
+83103	Clear cell adenocarcinoma, NOS	C34.3	Lower lobe, lung	C3766	Clear Cell Adenocarcinoma	5	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C77.2	Intra-abdominal lymph nodes	C8851	Diffuse Large B-Cell Lymphoma	9	1
+82113	Tubular adenocarcinoma	C16.1	Fundus of stomach	C5473	Gastric Tubular Adenocarcinoma	8	1
+85233	Infiltrating duct mixed with other types of carcinoma	C50.9	Breast, NOS	C5214	Breast adenocarcinoma	5	2
+85233	Infiltrating duct mixed with other types of carcinoma	C50.9	Breast, NOS	C40347	Invasive Mixed Breast Carcinoma	6	2
+90433	Synovial sarcoma, biphasic	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C4279	Biphasic synovial sarcoma	-1	1
+84803	Mucinous adenocarcinoma	C18.2	Ascending colon	C7966	Colon Mucinous Adenocarcinoma	9	1
+88113	Fibromyxosarcoma 	C49.3	thoracic wall	C6496	Myxofibrosarcoma	-1	1
+81603	Cholangiocarcinoma	C24.0	Extrahepatic bile duct	C7975	Extrahepatic Bile Duct Adenocarcinoma	9	2
+81603	Cholangiocarcinoma	C24.0	Extrahepatic bile duct	C4436	Cholangiocarcinoma	9	2
+87213	Nodular melanoma	C44.5	Skin of trunk	C4225	Nodular Melanoma	5	1
+86801	Paraganglioma, NOS 	C49.4	Connective, subcutaneous and other soft tissues of abdomen	C3308	Paraganglioma	5	1
+84903	Signet ring cell carcinoma	C16.3	Gastric antrum	C3774	Signet Ring Cell Carcinoma	5	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C34.2	Middle lobe, lung	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+94403	Glioblastoma,NOS	C71.4	occipital lobe	C3058	Glioblastoma	8	1
+87203	Malignant melanoma, NOS 	C44.7	Skin of lower limb and hip	C3510	Cutaneous Melanoma	4	1
+80703	Squamous cell carcinoma, NOS	C03.1	Lower gum	C8171	Lower Gingival Squamous Cell Carcinoma	9	1
+84903	Signet ring cell carcinoma	C16.2	Body of stomach	C3774	Signet Ring Cell Carcinoma	5	1
+87203	Malignant melanoma, NOS 	C77.5	Pelvic lymph nodes	C8711	Non-Cutaneous Melanoma	4	1
+82463	Neuroendocrine carcinoma, NOS	C25.1	Body of pancreas	C3770	Pancreatic Neuroendocrine Tumor	7	1
+81403	Adenocarcinoma, NOS	C18.3	Hepatic flexure of colon	C4349	Colon Adenocarcinoma	8	1
+81453	Carcinoma, diffuse type	C16.0	Cardia, NOS	C9159	Gastric Diffuse Adenocarcinoma	7	1
+88903	Leiomyosarcoma,NOS 	C54.2	Myometrium	C6340	Uterine Corpus Leiomyosarcoma	9	1
+83823	Endometrioid adenocarcinoma, secretory variant	C54.1	Endometrium	C27839	Endometrial Endometrioid Adenocarcinoma, Secretory Variant	13	1
+81443	Adenocarcinoma, intestinal type	C16.0	Cardia, NOS	C9157	Gastric Intestinal Type Adenocarcinoma	8	1
+82553	Adenocarcinoma with mixed subtypes	C34.8	Overlapping lesion of lung	C65197	Lung Adenocarcinoma with Mixed Bronchioloalveolar and Invasive Components	-1	1
+82553	Adenocarcinoma with mixed subtypes	C34.9	Lung, NOS	C65197	Lung Adenocarcinoma with Mixed Bronchioloalveolar and Invasive Components	-1	1
+85003	Infiltrating duct carcinoma, NOS	C25.9	Pancreas, NOS	C4194	Invasive ductal carcinoma, not otherwise specified	7	1
+84803	Mucinous adenocarcinoma	C16.2	Body of stomach	C5248	Mucinous Gastric Adenocarcinoma	8	1
+81403	Adenocarcinoma, NOS	C18.4	Transverse colon	C4349	Colon Adenocarcinoma	8	1
+87203	Malignant melanoma, NOS 	C52.9	Vagina, NOS	C8711	Non-Cutaneous Melanoma	4	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C34.9	Lung, NOS	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+84603	Papillary serous cystadenocarcinoma	C48.1	Specified parts of peritoneum	C8377	Papillary Serous Cystadenocarcinoma	7	1
+87203	Malignant melanoma, NOS 	C44.6	Skin of upper limb and shoulder	C3510	Cutaneous Melanoma	4	1
+82553	Adenocarcinoma with mixed subtypes	C34.2	Middle lobe, lung	C65197	Lung Adenocarcinoma with Mixed Bronchioloalveolar and Invasive Components	-1	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C09.9	Tonsil, NOS	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+82113	Tubular adenocarcinoma	C16.2	Body of stomach	C5473	Gastric Tubular Adenocarcinoma	8	1
+93823	Mixed glioma 	C71.2	temporal lobe	C3903	Mixed Glioma	7	1
+87203	Malignant melanoma, NOS 	C44.4	Hair	C3510	Cutaneous Melanoma	4	1
+80833	Basaloid squamous cell carcinoma	C34.3	Lower lobe, lung	C54244	Basaloid Squamous Cell Carcinoma	5	1
+87203	Malignant melanoma, NOS 	C76.1	thorax, NOS	C8711	Non-Cutaneous Melanoma	4	1
+85003	Infiltrating duct carcinoma, NOS	C25.2	Tail of pancreas	C4194	Invasive ductal carcinoma, not otherwise specified	7	1
+87203	Malignant melanoma, NOS 	C34.9	Lung, NOS	C8711	Non-Cutaneous Melanoma	4	1
+82503	Bronchiolo-alveolar adenocarcinoma, NOS	C34.1	Upper lobe, lung	C2923	Minimally invasive lung adenocarcinoma 	8	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C15.5	Lower third of esophagus	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+93823	Mixed glioma 	C71.1	frontal lobe	C3903	Mixed Glioma	7	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C38.1	Anterior mediastinum	C8851	Diffuse Large B-Cell Lymphoma	9	1
+81713	Hepatocellular carcinoma, fibrolamellar	C22.0	Liver	C4131	Fibrolamellar Carcinoma	8	1
+82533	Bronchiolo-alveolar carcinoma, mucinous	C34.1	Upper lobe, lung	C7268	Mucinous Minimally Invasive Lung Adenocarcinoma	9	1
+80703	Squamous cell carcinoma, NOS	C00.9	Lip, NOS	C2929	Squamous Cell Carcinoma	4	1
+88113	Fibromyxosarcoma 	C49.5	Connective, Subcutaneous and other soft tissues of pelvis	C6496	Myxofibrosarcoma	-1	1
+87723	Spindle cell melanoma, NOS	C69.4	Ciliary body	C4237	Spindle Cell Melanoma	4	1
+84803	Mucinous adenocarcinoma	C61.9	Prostate gland	C26712	Mucinous Adenocarcinoma	5	1
+82303	Solid carcinoma, NOS	C34.1	Upper lobe, lung	C4137	Solid Carcinoma	4	1
+88303	Malignant fibrous histiocytoma 	C49.3	thoracic wall	C4247	Undifferentiated Pleomorphic Sarcoma	7	1
+85833	Thymoma, type B1, malignant	C38.1	Anterior mediastinum	C7996	Malignant Type B1 Thymoma	8	1
+85243	Infiltrating lobular mixed with other types of carcinoma	C50.2	Upper-inner quadrant of breast	C5214	Breast adenocarcinoma	5	1
+80103	Carcinoma, NOS	C67.9	Bladder, NOS	C7899	Recurrent bladder carcinoma	7	3
+80103	Carcinoma, NOS	C67.9	Bladder, NOS	C4912	Bladder carcinoma	6	3
+80103	Carcinoma, NOS	C67.9	Bladder, NOS	C39851	Bladder Urothelial Carcinoma	7	3
+80503	Papillary carcinoma, NOS	C73.9	Thyroid gland	C2927	Papillary Carcinoma	4	1
+88543	Pleomorphicliposarcoma 	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C3705	Pleomorphic Liposarcoma	7	1
+95403	Malignant peripheral nerve sheath tumor 	C48.0	Retroperitoneum	C3798	Malignant Peripheral Nerve Sheath Tumor	5	1
+84603	Papillary serous cystadenocarcinoma	C54.1	Endometrium	C8377	Papillary Serous Cystadenocarcinoma	7	1
+80833	Basaloid squamous cell carcinoma	C15.5	Lower third of esophagus	C54244	Basaloid Squamous Cell Carcinoma	5	1
+87003	Pheochromocytoma, malignant	C69.3	Choroid	C4220	Malignant Adrenal Gland Pheochromocytoma	8	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C77.4	Lymph nodes of inguinal region or leg	C8851	Diffuse Large B-Cell Lymphoma	9	1
+80703	Squamous cell carcinoma, NOS	C15.3	Upper third of esophagus	C4024	Esophageal Squamous Cell Carcinoma	6	1
+85841	Thymoma, type B2, NOS	C38.1	Anterior mediastinum	C6888	Thymoma Type B2	7	1
+85813	Thymoma, type A, malignant	C38.1	Anterior mediastinum	C7999	Malignant Type A Thymoma	7	1
+80703	Squamous cell carcinoma, NOS	C34.8	Overlapping lesion of lung	C3493	Lung Squamous Cell Carcinoma	6	1
+95403	Malignant peripheral nerve sheath tumor 	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C3798	Malignant Peripheral Nerve Sheath Tumor	5	1
+87203	Malignant melanoma, NOS 	C34.1	Upper lobe, lung	C8711	Non-Cutaneous Melanoma	4	1
+85821	Thymoma, type AB, NOS	C38.1	Anterior mediastinum	C6885	Thymoma Type AB	6	1
+81303	Papillary transitional cell carcinoma	C67.2	Lateral wall of bladder	C7383	Bladder Papillary Urothelial Carcinoma	8	1
+90813	Teratocarcinoma	C62.9	Testis, NOS	C3756	Mixed Embryonal Carcinoma and Teratoma	5	1
+82533	Bronchiolo-alveolar carcinoma, mucinous	C34.3	Lower lobe, lung	C7268	Mucinous Minimally Invasive Lung Adenocarcinoma	9	1
+87303	Amelanotic melanoma 	C44.5	Skin of trunk	C3802	Amelanotic melanoma 	4	1
+87203	Malignant melanoma, NOS 	C50.9	Breast, NOS	C8711	Non-Cutaneous Melanoma	4	1
+87203	Malignant melanoma, NOS 	C49.0	Head, neck	C8711	Non-Cutaneous Melanoma	4	1
+83503	Nonencapsulated sclerosing carcinoma	C73.9	Thyroid gland	C7427	Thyroid Gland Diffuse Sclerosing Papillary Carcinoma	10	1
+84413	Serous cystadenocarcinoma, NOS	C48.1	Specified parts of peritoneum	C3778	Serous Cystadenocarcinoma	6	1
+80723	Squamous cell carcinoma, large cell, nonkeratinizing, NOS	C09.9	Tonsil, NOS	C65173	Non-Keratinizing Large Cell Squamous Cell Carcinoma	-1	1
+85003	Infiltrating duct carcinoma, NOS	C25.1	Body of pancreas	C4194	Invasive ductal carcinoma, not otherwise specified	7	1
+84903	Signet ring cell carcinoma	C34.1	Upper lobe, lung	C3774	Signet Ring Cell Carcinoma	5	1
+87713	Epithelioid cell melanoma	C69.3	Choroid	C4236	Epithelioid Cell Melanoma	4	1
+90203	Phyllodes tumor, malignant 	C50.9	Breast, NOS	C4504	Malignant Breast Phyllodes Tumor	6	1
+87203	Malignant melanoma, NOS 	C21.8	Overlapping lesion of rectum, anus and anal canal	C8711	Non-Cutaneous Melanoma	4	1
+87213	Nodular melanoma	C77.4	Lymph nodes of inguinal region or leg	C4225	Nodular Melanoma	5	1
+88963	Myxoid leiomyosarcoma 	C55.9	Uterus, NOS	C3701	Myxoid Leiomyosarcoma	8	1
+80833	Basaloid squamous cell carcinoma	C34.1	Upper lobe, lung	C54244	Basaloid Squamous Cell Carcinoma	5	1
+82633	Adenocarcinoma in tubulovillous adenoma	C20.9	Rectum, NOS	C4145	Adenocarcinoma in Tubulovillous Adenoma	6	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C00.9	Lip, NOS	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+86931	Extra-adrenal paraganglioma, NOS	C48.0	Retroperitoneum	C3309	Extra-Adrenal Paraganglioma	6	1
+88903	Leiomyosarcoma,NOS 	C02.9	Tongue, NOS	C3158	Leiomyosarcoma	7	1
+87213	Nodular melanoma	C44.4	Hair	C4225	Nodular Melanoma	5	1
+81403	Adenocarcinoma, NOS	C25.2	Tail of pancreas	C8294	Pancreatic Adenocarcinoma	7	1
+88583	Dedifferentiated liposarcoma 	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C3704	Dedifferentiated Liposarcoma	7	1
+88053	Undifferentiated sarcoma 	C49.0	Head, neck	C27096	Undifferentiated (Embryonal) Sarcoma	-1	1
+81403	Adenocarcinoma, NOS	C49.4	Connective, subcutaneous and other soft tissues of abdomen	C2852	Colon Adenocarcinoma	4	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C77.3	Lymph nodes of axilla or arm	C8851	Diffuse Large B-Cell Lymphoma	9	1
+80703	Squamous cell carcinoma, NOS	C16.0	Cardia, NOS	C2929	Squamous Cell Carcinoma	4	1
+82603	Papillary adenocarcinoma, NOS	C16.2	Body of stomach	C4004	Gastric Adenocarcinoma	6	1
+83103	Clear cell adenocarcinoma, NOS	C22.0	Liver	C3766	Clear Cell Adenocarcinoma	5	1
+82603	Papillary adenocarcinoma, NOS	C16.3	Gastric antrum	C4004	Gastric Adenocarcinoma	6	1
+81403	Adenocarcinoma, NOS	C54.1	Endometrium	C7359	Endometrial adenocarcinoma	10	1
+86931	Extra-adrenal paraganglioma, NOS	C49.3	thoracic wall	C3309	Extra-Adrenal Paraganglioma	6	1
+83803	Endometrioid adenocarcinoma, NOS	C54.0	fallopian tube	C6287	Endometrial Endometrioid Adenocarcinoma	12	1
+87203	Malignant melanoma, NOS 	C49.5	Connective, Subcutaneous and other soft tissues of pelvis	C8711	Non-Cutaneous Melanoma	4	1
+85003	Infiltrating duct carcinoma, NOS	C61.9	Prostate gland	C4194	Invasive ductal carcinoma, not otherwise specified	7	1
+88053	Undifferentiated sarcoma 	C49.3	thoracic wall	C27096	Undifferentiated (Embryonal) Sarcoma	-1	1
+93823	Mixed glioma 	C71.3	parietal lobe	C3903	Mixed Glioma	7	1
+88903	Leiomyosarcoma,NOS 	C56.9	Ovary	C5234	Ovarian leiomyosarcoma	8	1
+87723	Spindle cell melanoma, NOS	C44.5	Skin of trunk	C4237	Spindle Cell Melanoma	4	1
+86931	Extra-adrenal paraganglioma, NOS	C76.1	thorax, NOS	C3309	Extra-Adrenal Paraganglioma	6	1
+86933	Extra-adrenal paraganglioma, malignant	C48.0	Retroperitoneum	C4219	Malignant Extra-Adrenal Paraganglioma	7	1
+90413	Synovial sarcoma, spindle cell	C49.3	thoracic wall	C4277	Spindle Cell Synovial Sarcoma	-1	1
+80703	Squamous cell carcinoma, NOS	C32.1	Supraglottis	C2929	Squamous Cell Carcinoma	4	1
+82553	Adenocarcinoma with mixed subtypes	C25.0	Head of pancreas	C65197	Lung Adenocarcinoma with Mixed Bronchioloalveolar and Invasive Components	-1	1
+95403	Malignant peripheral nerve sheath tumor 	C49.6	Connective, Subcutaneous and other soft tissues of trunk, NOS	C3798	Malignant Peripheral Nerve Sheath Tumor	5	1
+87723	Spindle cell melanoma, NOS	C69.3	Choroid	C4237	Spindle Cell Melanoma	4	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C10.3	Posterior wall of oropharynx	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+85003	Infiltrating duct carcinoma, NOS	C50.3	Lower-inner quadrant of breast	C4017	Ductal breast carcinoma	6	1
+88053	Undifferentiated sarcoma 	C49.1	Connective, Subcutaneous and other soft tissues of upper limb and shoulder	C27096	Undifferentiated (Embryonal) Sarcoma	-1	1
+84803	Mucinous adenocarcinoma	C18.3	Hepatic flexure of colon	C7966	Colon Mucinous Adenocarcinoma	9	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C41.0	Maxilla	C8851	Diffuse Large B-Cell Lymphoma	9	1
+87723	Spindle cell melanoma, NOS	C44.3	Skin of other and unspecified parts of face	C4237	Spindle Cell Melanoma	4	1
+88303	Malignant fibrous histiocytoma 	C49.5	Connective, Subcutaneous and other soft tissues of pelvis	C4247	Undifferentiated Pleomorphic Sarcoma	7	1
+80223	Pleomorphic carcinoma	C50.8	Overlapping lesion of breast	C4094	Pleomorphic Carcinoma	5	1
+84803	Mucinous adenocarcinoma	C18.6	Descending colon	C7966	Colon Mucinous Adenocarcinoma	9	1
+87203	Malignant melanoma, NOS 	C30.0	Nasal cavity	C8711	Non-Cutaneous Melanoma	4	1
+88221	Abdominal fibromatosis	C48.0	Retroperitoneum	C3741	Abdominal (Mesenteric) Fibromatosis	7	1
+81403	Adenocarcinoma, NOS	C15.4	Middle third of esophagus	C4025	Esophageal Adenocarcinoma	6	1
+84803	Mucinous adenocarcinoma	C18.4	Transverse colon	C7966	Colon Mucinous Adenocarcinoma	9	1
+87703	Mixed epithelioid and spindle cell melanoma	C69.4	Ciliary body	C66756	Mixed Epithelioid and Spindle Cell Melanoma	4	1
+87423	Lentigo maligna melanoma	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C9151	Lentigo Maligna Melanoma	6	1
+88113	Fibromyxosarcoma 	C48.0	Retroperitoneum	C6496	Myxofibrosarcoma	-1	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C01.9	tongue	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+94403	Glioblastoma,NOS	C71.2	temporal lobe	C3058	Glioblastoma	8	1
+85831	Thymoma, type B1, NOS	C37.9	Thymus	C6887	Thymoma Type B1	7	1
+87433	Superficial spreading melanoma	C44.6	Skin of upper limb and shoulder	C9152	Superficial Spreading Melanoma	5	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C34.1	Upper lobe, lung	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C73.9	Thyroid gland	C8851	Diffuse Large B-Cell Lymphoma	9	1
+82603	Papillary adenocarcinoma, NOS	C34.2	Middle lobe, lung	C2853	Papillary Adenocarcinoma	5	1
+85811	Thymoma, type A, NOS	C37.9	Thymus	C6454	Thymoma Type A	6	1
+88303	Malignant fibrous histiocytoma 	C49.6	Connective, Subcutaneous and other soft tissues of trunk, NOS	C4247	Undifferentiated Pleomorphic Sarcoma	7	1
+88963	Myxoid leiomyosarcoma 	C54.0	fallopian tube	C3701	Myxoid Leiomyosarcoma	8	1
+82113	Tubular adenocarcinoma	C20.9	Rectum, NOS	C65192	Tubular Adenocarcinoma	5	1
+84903	Signet ring cell carcinoma	C16.0	Cardia, NOS	C3774	Signet Ring Cell Carcinoma	5	1
+85603	Adenosquamous carcinoma 	C18.2	Ascending colon	C3727	Adenosquamous Carcinoma	5	1
+87203	Malignant melanoma, NOS 	C71.3	parietal lobe	C8711	Non-Cutaneous Melanoma	4	1
+87203	Malignant melanoma, NOS 	C74.9	Adrenal gland, NOS	C8711	Non-Cutaneous Melanoma	4	1
+87713	Epithelioid cell melanoma	C44.7	Skin of lower limb and hip	C4236	Epithelioid Cell Melanoma	4	1
+80833	Basaloid squamous cell carcinoma	C53.9	Cervix uteri	C54244	Basaloid Squamous Cell Carcinoma	5	1
+88583	Dedifferentiated liposarcoma 	C49.5	Connective, Subcutaneous and other soft tissues of pelvis	C3704	Dedifferentiated Liposarcoma	7	1
+80523	Squamous cell papilloma, NOS	C34.3	Lower lobe, lung	C4102	Papillary Squamous Cell Carcinoma	5	1
+81203	Transitional cell carcinoma, NOS	C67.5	Bladder neck	C39851	Bladder Urothelial Carcinoma	7	1
+87203	Malignant melanoma, NOS 	C54.1	Endometrium	C8711	Non-Cutaneous Melanoma	4	1
+87423	Lentigo maligna melanoma	C44.2	External ear	C9151	Lentigo Maligna Melanoma	6	1
+88903	Leiomyosarcoma,NOS 	C49.8	Overlapping lesion of connective, subcutaneous and other soft tissues	C3158	Leiomyosarcoma	7	1
+85003	Infiltrating duct carcinoma, NOS	C25.8	Overlapping lesion of pancreas	C4194	Invasive ductal carcinoma, not otherwise specified	7	1
+88583	Dedifferentiated liposarcoma 	C16.9	Stomach, NOS	C3704	Dedifferentiated Liposarcoma	7	1
+80833	Basaloid squamous cell carcinoma	C01.9	tongue	C54244	Basaloid Squamous Cell Carcinoma	5	1
+87203	Malignant melanoma, NOS 	C49.4	Connective, subcutaneous and other soft tissues of abdomen	C8711	Non-Cutaneous Melanoma	4	1
+82603	Papillary adenocarcinoma, NOS	C67.1	Dome of bladder	C2853	Papillary Adenocarcinoma	5	1
+82603	Papillary adenocarcinoma, NOS	C34.8	Overlapping lesion of lung	C2853	Papillary Adenocarcinoma	5	1
+85413	Paget disease and infiltrating duct carcinoma of breast	C50.9	Breast, NOS	C47857	Paget Disease of the Breast	6	1
+83353	Follicular carcinoma, encapsulated	C73.9	Thyroid gland	C65200	Thyroid Gland Follicular Carcinoma, Minimally Invasive	10	2
+83353	Follicular carcinoma, encapsulated	C73.9	Thyroid gland	C8054	Thyroid Gland Follicular Carcinoma	9	2
+82603	Papillary adenocarcinoma, NOS	C34.3	Lower lobe, lung	C2853	Papillary Adenocarcinoma	5	1
+84803	Mucinous adenocarcinoma	C80.9	Unknown primary site	C26712	Mucinous Adenocarcinoma	5	1
+87213	Nodular melanoma	C44.7	Skin of lower limb and hip	C4225	Nodular Melanoma	5	1
+81743	Hepatocellular carcinoma, clear cell type	C22.0	Liver	C3099	Hepatocellular Carcinoma	7	1
+80833	Basaloid squamous cell carcinoma	C04.9	floor of mouth, NOS	C54244	Basaloid Squamous Cell Carcinoma	5	1
+80903	Basal cell carcinoma, NOS	C50.9	Breast, NOS	C2921	Skin Basal Cell Carcinoma	6	1
+86803	Paraganglioma, malignant	C72.9	Nervous system, NOS	C8559	Malignant Paraganglioma	6	1
+88023	Giant cell sarcoma	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C66759	Giant Cell Sarcoma	-1	1
+80903	Basal cell carcinoma, NOS	C54.9	Corpus uteri	C2921	Skin Basal Cell Carcinoma	6	1
+87213	Nodular melanoma	C44.6	Skin of upper limb and shoulder	C4225	Nodular Melanoma	5	1
+80723	Squamous cell carcinoma, large cell, nonkeratinizing, NOS	C01.9	tongue	C65173	Non-Keratinizing Large Cell Squamous Cell Carcinoma	-1	1
+94513	Oligodendroglioma, anaplastic 	C71.1	frontal lobe	C6959	Anaplastic Oligoastrocytoma	8	1
+80223	Pleomorphic carcinoma	C50.9	Breast, NOS	C5161	Pleomorphic breast carcinoma	-1	1
+80703	Squamous cell carcinoma, NOS	C34.0	Main bronchus	C3493	Lung Squamous Cell Carcinoma	6	1
+87003	Pheochromocytoma, malignant	C74.1	Medulla of adrenal gland	C4220	Malignant Adrenal Gland Pheochromocytoma	8	1
+87720	Spindle cell nevus, NOS	C34.3	Lower lobe, lung	C27007	Spitz Nevus	5	1
+80833	Basaloid squamous cell carcinoma	C09.9	Tonsil, NOS	C54244	Basaloid Squamous Cell Carcinoma	5	1
+88903	Leiomyosarcoma,NOS 	C49.4	Connective, subcutaneous and other soft tissues of abdomen	C3158	Leiomyosarcoma	7	1
+80723	Squamous cell carcinoma, large cell, nonkeratinizing, NOS	C34.3	Lower lobe, lung	C65173	Non-Keratinizing Large Cell Squamous Cell Carcinoma	-1	1
+80723	Squamous cell carcinoma, large cell, nonkeratinizing, NOS	C32.9	Larynx, NOS	C65173	Non-Keratinizing Large Cell Squamous Cell Carcinoma	-1	1
+84803	Mucinous adenocarcinoma	C53.9	Cervix uteri	C26712	Mucinous Adenocarcinoma	5	1
+88543	Pleomorphicliposarcoma 	C49.0	Head, neck	C3705	Pleomorphic Liposarcoma	7	1
+82553	Adenocarcinoma with mixed subtypes	C16.3	Gastric antrum	C4004	Gastric Adenocarcinoma	6	1
+86801	Paraganglioma, NOS 	C48.0	Retroperitoneum	C3308	Paraganglioma	5	1
+94403	Glioblastoma,NOS	C71.8	Overlapping lesion of brain	C3058	Glioblastoma	8	1
+80203	Carcinoma, undifferentiated, NOS	C54.1	Endometrium	C3692	Undifferentiated Carcinoma	4	2
+80203	Carcinoma, undifferentiated, NOS	C54.1	Endometrium	C126769	Endometrial Dedifferentiated Carcinoma	-1	2
+80703	Squamous cell carcinoma, NOS	C53.0	Endocervix	C4028	Cervical Squamous Cell Carcinoma, Not Otherwise Specified	9	1
+85853	Thymoma, type B3, malignant	C38.1	Anterior mediastinum	C7997	Thymoma Type B3	7	1
+83803	Endometrioid adenocarcinoma, NOS	C54.9	Corpus uteri	C6287	Endometrial Endometrioid Adenocarcinoma	12	1
+87000	Pheochromocytoma, NOS 	C74.1	Medulla of adrenal gland	C3326	Adrenal Gland Pheochromocytoma	7	1
+86931	Extra-adrenal paraganglioma, NOS	C49.4	Connective, subcutaneous and other soft tissues of abdomen	C3309	Extra-Adrenal Paraganglioma	6	1
+87203	Malignant melanoma, NOS 	C22.0	Liver	C3224	Melanoma	3	1
+85743	Adenocarcinoma with neuroendocrine differentiation	C18.9	Colon, NOS	C66745	Adenocarcinoma with Neuroendocrine Differentiation	5	1
+82603	Papillary adenocarcinoma, NOS	C16.0	Cardia, NOS	C4004	Gastric Adenocarcinoma	6	1
+86801	Paraganglioma, NOS 	C49.3	thoracic wall	C3308	Paraganglioma	5	1
+85843	Thymoma, type B2, malignant	C38.3	Mediastinum, NOS	C6889	Malignant Type B2 Thymoma	8	1
+88583	Dedifferentiated liposarcoma 	C49.3	thoracic wall	C3704	Dedifferentiated Liposarcoma	7	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C04.0	Anterior floor of mouth	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+88903	Leiomyosarcoma,NOS 	C40.2	Long bones of lower limb and associated joints	C3158	Leiomyosarcoma	7	1
+84803	Mucinous adenocarcinoma	C16.1	Fundus of stomach	C5248	Mucinous Gastric Adenocarcinoma	8	1
+81403	Adenocarcinoma, NOS	C34.0	Main bronchus	C3512	Lung Adenocarcinoma	7	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C08.0	Submandibular gland 	C8851	Diffuse Large B-Cell Lymphoma	9	1
+87723	Spindle cell melanoma, NOS	C69.8	Overlapping lesion of eye and adnexa	C4237	Spindle Cell Melanoma	4	1
+86803	Paraganglioma, malignant	C74.9	Adrenal gland, NOS	C8559	Malignant Paraganglioma	6	1
+82603	Papillary adenocarcinoma, NOS	C34.9	Lung, NOS	C5650	Lung papillary adenocarcinoma	8	1
+80833	Basaloid squamous cell carcinoma	C10.9	Oropharynx, NOS	C54244	Basaloid Squamous Cell Carcinoma	5	1
+87303	Amelanotic melanoma 	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C3802	Amelanotic melanoma 	4	1
+90523	Epithelioid mesothelioma, malignant 	C34.9	Lung, NOS	C7985	Epithelioid Mesothelioma	6	1
+82113	Tubular adenocarcinoma	C15.5	Lower third of esophagus	C65192	Tubular Adenocarcinoma	5	1
+80703	Squamous cell carcinoma, NOS	C03.0	Upper Gum	C129857	Gingival squamous cell carcinoma	8	1
+80503	Papillary carcinoma, NOS	C50.9	Breast, NOS	C2927	Papillary Carcinoma	4	1
+95403	Malignant peripheral nerve sheath tumor 	C70.1	Spinal meninges	C3798	Malignant Peripheral Nerve Sheath Tumor	5	1
+87203	Malignant melanoma, NOS 	C76.3	Pelvis, NOS	C8711	Non-Cutaneous Melanoma	4	1
+89803	Carcinosarcoma, NOS 	C54.1	Endometrium	C9180	Uterine Corpus Carcinosarcoma	9	1
+82603	Papillary adenocarcinoma, NOS	C18.2	Ascending colon	C2853	Papillary Adenocarcinoma	5	1
+85233	Infiltrating duct mixed with other types of carcinoma	C50.3	Lower-inner quadrant of breast	C5214	Breast adenocarcinoma	5	1
+84613	Serous surface papillary carcinoma	C54.1	Endometrium	C4182	Serous Surface Papillary Carcinoma	6	1
+82553	Adenocarcinoma with mixed subtypes	C18.9	Colon, NOS	C65197	Lung Adenocarcinoma with Mixed Bronchioloalveolar and Invasive Components	-1	1
+87713	Epithelioid cell melanoma	C44.6	Skin of upper limb and shoulder	C4236	Epithelioid Cell Melanoma	4	1
+86931	Extra-adrenal paraganglioma, NOS	C38.0	Heart	C3309	Extra-Adrenal Paraganglioma	6	1
+94013	Astrocytoma, anaplastic 	C71.1	frontal lobe	C9477	Anaplastic Astrocytoma	8	1
+90403	Synovialsarcoma,NOS 	C49.3	thoracic wall	C3400	Synovial Sarcoma	-1	1
+87203	Malignant melanoma, NOS 	C71.9	Brain, NOS	C8711	Non-Cutaneous Melanoma	4	1
+80723	Squamous cell carcinoma, large cell, nonkeratinizing, NOS	C34.1	Upper lobe, lung	C65173	Non-Keratinizing Large Cell Squamous Cell Carcinoma	-1	1
+85863	Thymic carcinoma, NOS	C38.1	Anterior mediastinum	C7569	Thymic Carcinoma	5	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C06.0	Cheeck mucosa	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+84013	Apocrine adenocarcinoma	C50.9	Breast, NOS	C2852	Colon Adenocarcinoma	4	1
+87003	Pheochromocytoma, malignant	C75.5	Aortic body and other paraganglia	C4220	Malignant Adrenal Gland Pheochromocytoma	8	1
+81443	Adenocarcinoma, intestinal type	C16.9	Stomach, NOS	C9157	Gastric Intestinal Type Adenocarcinoma	8	1
+85503	Acinar cell carcinoma	C34.2	Middle lobe, lung	C5649	Acinar Lung Adenocarcinoma	8	1
+81403	Adenocarcinoma, NOS	C15.1	Thoracic esophagus	C4025	Esophageal Adenocarcinoma	6	1
+87723	Spindle cell melanoma, NOS	C69.9	Eye, NOS	C4237	Spindle Cell Melanoma	4	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C06.2	Retromolar area	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+84413	Serous cystadenocarcinoma, NOS	C54.3	Fundus uteri	C3778	Serous Cystadenocarcinoma	6	1
+83303	Follicular adenocarcinoma, NOS	C73.9	Thyroid gland	C8054	Thyroid Gland Follicular Carcinoma	9	1
+82503	Bronchiolo-alveolar adenocarcinoma, NOS	C34.3	Lower lobe, lung	C2923	Minimally invasive lung adenocarcinoma 	8	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C77.1	Intrathoracic lymph nodes	C8851	Diffuse Large B-Cell Lymphoma	9	1
+95403	Malignant peripheral nerve sheath tumor 	C47.1	Peripheral nerves and autonomic nervous system of upper limb and shoulder	C3798	Malignant Peripheral Nerve Sheath Tumor	5	1
+87203	Malignant melanoma, NOS 	C41.0	Maxilla	C8711	Non-Cutaneous Melanoma	4	1
+88583	Dedifferentiated liposarcoma 	C63.1	Spermatic cord	C3704	Dedifferentiated Liposarcoma	7	1
+87203	Malignant melanoma, NOS 	C07.9	Parotid gland 	C8711	Non-Cutaneous Melanoma	4	1
+83803	Endometrioid adenocarcinoma, NOS	C53.0	Endocervix	C3769	Endometrioid Adenocarcinoma	6	1
+87203	Malignant melanoma, NOS 	C76.2	abdomen, NOS	C8711	Non-Cutaneous Melanoma	4	1
+88963	Myxoid leiomyosarcoma 	C48.0	Retroperitoneum	C3701	Myxoid Leiomyosarcoma	8	1
+94013	Astrocytoma, anaplastic 	C71.2	temporal lobe	C9477	Anaplastic Astrocytoma	8	1
+80703	Squamous cell carcinoma, NOS	C41.1	Mandible	C2929	Squamous Cell Carcinoma	4	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C71.6	Cerebellum	C8851	Diffuse Large B-Cell Lymphoma	9	1
+86911	Aortic body tumor	C49.3	thoracic wall	C4218	Aorticopulmonary Paraganglioma	-1	1
+90413	Synovial sarcoma, spindle cell	C64.9	Kidney, NOS	C4277	Spindle Cell Synovial Sarcoma	-1	1
+87713	Epithelioid cell melanoma	C44.5	Skin of trunk	C4236	Epithelioid Cell Melanoma	4	1
+88583	Dedifferentiated liposarcoma 	C18.6	Descending colon	C3704	Dedifferentiated Liposarcoma	7	1
+84413	Serous cystadenocarcinoma, NOS	C48.0	Retroperitoneum	C3778	Serous Cystadenocarcinoma	6	1
+88053	Undifferentiated sarcoma 	C49.5	Connective, Subcutaneous and other soft tissues of pelvis	C27096	Undifferentiated (Embryonal) Sarcoma	-1	1
+88513	Liposarcoma, well differentiated 	C48.0	Retroperitoneum	C4250	Well Differentiated Liposarcoma	7	1
+80703	Squamous cell carcinoma, NOS	C67.9	Bladder, NOS	C4031	Bladder Squamous Cell Carcinoma	7	1
+94403	Glioblastoma,NOS	C71.1	frontal lobe	C3058	Glioblastoma	8	1
+80703	Squamous cell carcinoma, NOS	C53.1	Exocervix	C4028	Cervical Squamous Cell Carcinoma, Not Otherwise Specified	9	1
+87203	Malignant melanoma, NOS 	C77.2	Intra-abdominal lymph nodes	C8711	Non-Cutaneous Melanoma	4	1
+89503	Mullerian mixed tumor	C54.3	Fundus uteri	C3730	Mixed Mesodermal (Mullerian) Tumor	5	1
+85003	Infiltrating duct carcinoma, NOS	C50.2	Upper-inner quadrant of breast	C4017	Ductal breast carcinoma	6	1
+85003	Infiltrating duct carcinoma, NOS	C50.5	Lower-outer quadrant of breast	C4017	Ductal breast carcinoma	6	1
+88903	Leiomyosarcoma,NOS 	C40.3	Short bones of lower limb and associated joints	C3158	Leiomyosarcoma	7	1
+87703	Mixed epithelioid and spindle cell melanoma	C49.2	Connective, Subcutaneous and other soft tissues of lower limb and hip	C66756	Mixed Epithelioid and Spindle Cell Melanoma	4	1
+88003	Sarcoma,NOS 	C48.0	Retroperitoneum	C9306	Soft Tissue Sarcoma	5	1
+88113	Fibromyxosarcoma 	C49.6	Connective, Subcutaneous and other soft tissues of trunk, NOS	C6496	Myxofibrosarcoma	-1	1
+80833	Basaloid squamous cell carcinoma	C32.9	Larynx, NOS	C54244	Basaloid Squamous Cell Carcinoma	5	1
+82603	Papillary adenocarcinoma, NOS	C16.1	Fundus of stomach	C4004	Gastric Adenocarcinoma	6	1
+95403	Malignant peripheral nerve sheath tumor 	C49.3	thoracic wall	C3798	Malignant Peripheral Nerve Sheath Tumor	5	1
+89803	Carcinosarcoma, NOS 	C54.0	fallopian tube	C9180	Uterine Corpus Carcinosarcoma	9	1
+84403	Cystadenocarcinoma, NOS	C56.9	Ovary	C5228	Ovarian Cystadenocarcinoma	10	1
+87203	Malignant melanoma, NOS 	C72.0	Spinal cord	C8711	Non-Cutaneous Melanoma	4	1
+89503	Mullerian mixed tumor	C54.2	Myometrium	C3730	Mixed Mesodermal (Mullerian) Tumor	5	1
+87713	Epithelioid cell melanoma	C69.4	Ciliary body	C4236	Epithelioid Cell Melanoma	4	1
+82553	Adenocarcinoma with mixed subtypes	C16.9	Stomach, NOS	C4004	Gastric Adenocarcinoma	6	1
+82003	Adenoid cystic carcinoma	C50.9	Breast, NOS	C2970	Adenoid Cystic Carcinoma	4	2
+82003	Adenoid cystic carcinoma	C50.9	Breast, NOS	C5130	Adenoid Cystic Breast Carcinoma	6	2
+87303	Amelanotic melanoma 	C44.7	Skin of lower limb and hip	C3802	Amelanotic melanoma 	4	1
+83103	Clear cell adenocarcinoma, NOS	C34.1	Upper lobe, lung	C3766	Clear Cell Adenocarcinoma	5	1
+87203	Malignant melanoma, NOS 	C69.3	Choroid	C8711	Non-Cutaneous Melanoma	4	1
+81733	Hepatocellular carcinoma, spindle cell variant	C22.0	Liver	C3099	Hepatocellular Carcinoma	7	1
+82603	Papillary adenocarcinoma, NOS	C18.7	Sigmoid colon	C2853	Papillary Adenocarcinoma	5	1
+88211	Aggressive fibromatosis 	C49.3	thoracic wall	C9182	Desmoid-Type Fibromatosis	6	1
+80743	Squamous cell carcinoma, spindle cell	C01.9	tongue	C27084	Sarcomatoid Squamous Cell Carcinoma	5	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C71.7	Brain stem	C8851	Diffuse Large B-Cell Lymphoma	9	1
+82553	Adenocarcinoma with mixed subtypes	C20.9	Rectum, NOS	C65197	Lung Adenocarcinoma with Mixed Bronchioloalveolar and Invasive Components	-1	1
+80703	Squamous cell carcinoma, NOS	C04.0	Anterior floor of mouth	C4041	Floor of mouth squamous cell carcinoma	8	1
+80203	Carcinoma, undifferentiated, NOS	C25.0	Head of pancreas	C3692	Undifferentiated Carcinoma	4	1
+94003	Astrocytoma,NOS	C71.1	frontal lobe	C60781	Astrocytoma	7	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C05.9	Palate, NOS	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+80703	Squamous cell carcinoma, NOS	C02.1	Border of tongue	C4648	Tongue squamous cell carcinoma	8	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C15.9	Esophagus, NOS	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+84413	Serous cystadenocarcinoma, NOS	C48.2	Peritoneum, NOS	C3778	Serous Cystadenocarcinoma	6	1
+84803	Mucinous adenocarcinoma	C15.5	Lower third of esophagus	C26712	Mucinous Adenocarcinoma	5	1
+83803	Endometrioid adenocarcinoma, NOS	C54.3	Fundus uteri	C6287	Endometrial Endometrioid Adenocarcinoma	12	1
+81403	Adenocarcinoma, NOS	C25.8	Overlapping lesion of pancreas	C8294	Pancreatic Adenocarcinoma	7	1
+90413	Synovial sarcoma, spindle cell	C49.0	Head, neck	C4277	Spindle Cell Synovial Sarcoma	-1	1
+86931	Extra-adrenal paraganglioma, NOS	C49.6	Connective, Subcutaneous and other soft tissues of trunk, NOS	C3309	Extra-Adrenal Paraganglioma	6	1
+80703	Squamous cell carcinoma, NOS	C02.2	Ventral surface of tongue, NOS	C4648	Tongue squamous cell carcinoma	8	1
+88583	Dedifferentiated liposarcoma 	C49.1	Connective, Subcutaneous and other soft tissues of upper limb and shoulder	C3704	Dedifferentiated Liposarcoma	7	1
+89513	Mesodermal mixed tumor	C55.9	Uterus, NOS	C3730	Mixed Mesodermal (Mullerian) Tumor	5	1
+85003	Infiltrating duct carcinoma, NOS	C50.8	Overlapping lesion of breast	C4017	Ductal breast carcinoma	6	1
+80133	Large cell neuroendocrine carcinoma	C50.9	Breast, NOS	C6875	Large Cell Neuroendocrine Carcinoma	6	1
+86933	Extra-adrenal paraganglioma, malignant	C38.3	Mediastinum, NOS	C4219	Malignant Extra-Adrenal Paraganglioma	7	1
+87000	Pheochromocytoma, NOS 	C48.0	Retroperitoneum	C3326	Adrenal Gland Pheochromocytoma	7	1
+87203	Malignant melanoma, NOS 	C48.2	Peritoneum, NOS	C8711	Non-Cutaneous Melanoma	4	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C49.0	Head, neck	C8851	Diffuse Large B-Cell Lymphoma	9	1
+80733	Squamous cell carcinoma, small cell, nonkeratinizing	C34.2	Middle lobe, lung	C65175	Non-Keratinizing Small Cell Squamous Cell Carcinoma	-1	1
+81303	Papillary transitional cell carcinoma	C67.3	Anterior wall of bladder	C7383	Bladder Papillary Urothelial Carcinoma	8	1
+84903	Signet ring cell carcinoma	C61.9	Prostate gland	C3774	Signet Ring Cell Carcinoma	5	1
+80523	Squamous cell papilloma, NOS	C53.9	Cervix uteri	C4102	Papillary Squamous Cell Carcinoma	5	1
+86933	Extra-adrenal paraganglioma, malignant	C76.0	Head, face or neck, NOS	C4219	Malignant Extra-Adrenal Paraganglioma	7	1
+85811	Thymoma, type A, NOS	C76.1	thorax, NOS	C6454	Thymoma Type A	6	1
+81203	Transitional cell carcinoma, NOS	C67.6	Ureteric orifice	C8993	Ureter Carcinoma	7	1
+80723	Squamous cell carcinoma, large cell, nonkeratinizing, NOS	C13.9	Hypopharynx, NOS	C65173	Non-Keratinizing Large Cell Squamous Cell Carcinoma	-1	1
+88023	Giant cell sarcoma	C64.9	Kidney, NOS	C66759	Giant Cell Sarcoma	-1	1
+82463	Neuroendocrine carcinoma, NOS	C25.0	Head of pancreas	C3770	Pancreatic Neuroendocrine Tumor	7	1
+88903	Leiomyosarcoma,NOS 	C49.1	Connective, Subcutaneous and other soft tissues of upper limb and shoulder	C3158	Leiomyosarcoma	7	1
+87743	Spindle cell melanoma, type B	C69.8	Overlapping lesion of eye and adnexa	C4239	Type B Spindle Cell Melanoma	-1	1
+90403	Synovialsarcoma,NOS 	C49.1	Connective, Subcutaneous and other soft tissues of upper limb and shoulder	C3400	Synovial Sarcoma	-1	1
+83843	Adenocarcinoma, endocervical type	C53.0	Endocervix	C66951	Adenocarcinoma, Endocervical Type	-1	1
+84803	Mucinous adenocarcinoma	C18.5	Splenic flexure of colon	C7966	Colon Mucinous Adenocarcinoma	9	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C10.9	Oropharynx, NOS	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+83103	Clear cell adenocarcinoma, NOS	C54.1	Endometrium	C3766	Clear Cell Adenocarcinoma	5	1
+82553	Adenocarcinoma with mixed subtypes	C54.1	Endometrium	C65197	Lung Adenocarcinoma with Mixed Bronchioloalveolar and Invasive Components	-1	1
+80713	Squamous cell carcinoma, keratinizing, NOS	C15.1	Thoracic esophagus	C4105	Keratinizing Squamous Cell Carcinoma	5	1
+86931	Extra-adrenal paraganglioma, NOS	C49.5	Connective, Subcutaneous and other soft tissues of pelvis	C3309	Extra-Adrenal Paraganglioma	6	1
+84823	Mucinous adenocarcinoma, endocervical type	C53.0	Endocervix	C66953	Mucinous Adenocarcinoma, Endocervical Type	-1	1
+87723	Spindle cell melanoma, NOS	C44.6	Skin of upper limb and shoulder	C4237	Spindle Cell Melanoma	4	1
+88903	Leiomyosarcoma,NOS 	C54.9	Corpus uteri	C6340	Uterine Corpus Leiomyosarcoma	9	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C48.1	Specified parts of peritoneum	C8851	Diffuse Large B-Cell Lymphoma	9	1
+87713	Epithelioid cell melanoma	C18.9	Colon, NOS	C4236	Epithelioid Cell Melanoma	4	1
+89503	Mullerian mixed tumor	C54.9	Corpus uteri	C3730	Mixed Mesodermal (Mullerian) Tumor	5	1
+88303	Malignant fibrous histiocytoma 	C48.0	Retroperitoneum	C4247	Undifferentiated Pleomorphic Sarcoma	7	1
+95403	Malignant peripheral nerve sheath tumor 	C49.0	Head, neck	C3798	Malignant Peripheral Nerve Sheath Tumor	5	1
+82113	Tubular adenocarcinoma	C16.9	Stomach, NOS	C5473	Gastric Tubular Adenocarcinoma	8	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C76.9	ill-defined	None	None	-1	2
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C76.9	ill-defined	C2897	Benign prostatic hyperplasia	-1	2
+81443	Adenocarcinoma, intestinal type	C20.9	Rectum, NOS	C4126	Intestinal Type Adenocarcinoma	5	1
+97283	Precursor B-cell lymphoblastic lymphoma	C77.9	Lymph node, NOS	C8936	B Lymphoblastic Leukemia/Lymphoma	6	1
+97293	Precursor T-cell lymphoblastic lymphoma	C77.9	Lymph node, NOS	C6919	T Lymphoblastic Lymphoma	9	1
+98343	Prolymphocytic leukemia, T-cell type	C42.1	Bone marrow	C4752	T-Cell Prolymphocytic Leukemia	7	1
+80103	Carcinoma, NOS	C57.0	Fallopian tube	C3867	Fallopian Tube Carcinoma	7	1
+80203	Carcinoma, undifferentiated, NOS	C56.9	Ovary	C3692	Undifferentiated Carcinoma	4	1
+84413	Serous cystadenocarcinoma, NOS	C54.0	fallopian tube	C40099	Fallopian Tube Serous Adenocarcinoma	9	1
+90643	Germinoma	C56.9	Ovary	C3753	Germinoma	4	1
+85603	Adenosquamous carcinoma 	C54.1	Endometrium	C114656	Endometrial adenosquamous carcinoma	10	1
+98373	Precursor T-cell lymphoblastic leukemia 	C42.1	Bone marrow	C7953	Childhood T acute lymphoblastic leukemia	8	2
+98373	Precursor T-cell lymphoblastic leukemia 	C42.1	Bone marrow	C3183	T Acute Lymphoblastic Leukemia	7	2
+82543	Bronchiolo-alveolar carcinoma, mixed mucinous and non-mucinous	C34.9	Lung, NOS	C7270	Mixed Mucinous and Non-Mucinous Bronchioloalveolar Carcinoma	-1	1
+87443	Acral lentiginous melanoma, malignant	C44.9	Skin, NOS	C4022	Acral Lentiginous Melanom	-1	1
+82513	Alveolar adenocarcinoma	C34.9	Lung, NOS	C2923	Minimally invasive lung adenocarcinoma 	8	1
+80313	Giant cell carcinoma	C34.9	Lung, NOS	C4452	Lung giant cell carcinoma	8	1
+90503	Mesothelioma, malignant 	C34.9	Lung, NOS	C4456	Malignant Mesothelioma	4	1
+94211	Pilocytic astrocytoma 	C72.3	Optic chiasm	C4047	Pilocytic Astrocytoma	8	1
+94211	Pilocytic astrocytoma 	C75.3	Pineal gland	C4047	Pilocytic Astrocytoma	8	1
+94211	Pilocytic astrocytoma 	C71.5	Ventricle, NOS	C4047	Pilocytic Astrocytoma	8	1
+80701	Premalignant squamous epithelium, NOS	C53.9	Cervix uteri	C3792	Squamous Cell Neoplasm	3	1
+84413	Serous cystadenocarcinoma, NOS	C57.0	Fallopian tube	C40099	Fallopian Tube Serous Adenocarcinoma	9	1
+88113	Fibromyxosarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C6496	Myxofibrosarcoma	-1	2
+88113	Fibromyxosarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C45202	Low Grade Fibromyxoid Sarcoma	7	2
+89403	Mixedtumor,malignant,NOS 	C16.9	Stomach, NOS	C5250	Gastric Signet Ring Cell Adenocarcinoma	9	1
+85623	Adenosquamous carcinoma 	C08.9	Major salivary gland, NOS	C35700	Salivary Gland Myoepithelial Carcinoma	6	2
+85623	Adenosquamous carcinoma 	C08.9	Major salivary gland, NOS	C4199	Epithelial-Myoepithelial Carcinoma	4	2
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C50.9	Breast, NOS	None	None	-1	2
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C50.9	Breast, NOS	C4017	Ductal breast carcinoma	6	2
+85303	Inflammatory carcinoma	C50.9	Breast, NOS	C4001	Inflammatory breast carcinoma	6	1
+95403	Malignant peripheral nerve sheath tumor 	C72.9	Nervous system, NOS	C3798	Malignant Peripheral Nerve Sheath Tumor	5	1
+95400	Neurofibroma, NOS	C72.9	Nervous system, NOS	C3272	Neurofibroma	5	1
+88333	Pigmented dermatofibrosarcoma protuberans	C44.9	Skin, NOS	C9430	Pigmented Dermatofibrosarcoma Protuberans	-1	1
+80103	Carcinoma, NOS	C61.9	Prostate gland	C4863	Prostate Carcinoma	7	1
+90613	Seminoma, NOS 	C63.9	epididymis, spermatic cord, male genital, nos	C9309	Seminoma	4	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C09.9	Tonsil, NOS	C8851	Diffuse Large B-Cell Lymphoma	9	1
+87303	Amelanotic melanoma 	C44.9	Skin, NOS	C3802	Amelanotic melanoma 	4	1
+90653	Germ cell tumor, nonseminomatous 	C63.9	epididymis, spermatic cord, male genital, nos	C121619	Nongerminomatous Germ Cell Tumor	3	1
+96793	Mediastinal large B-cell lymphoma 	C38.3	Mediastinum, NOS	C9280	Primary Mediastinal (Thymic) Large B-Cell Lymphoma	10	1
+89103	Embryonal rhabdomyosarcoma, NOS 	C76.2	abdomen, NOS	C8971	Embryonal Rhabdomyosarcoma	8	1
+89103	Embryonal rhabdomyosarcoma, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C8971	Embryonal Rhabdomyosarcoma	8	1
+89103	Embryonal rhabdomyosarcoma, NOS 	C11.9	Nasopharynx, NOS	C8971	Embryonal Rhabdomyosarcoma	8	1
+89103	Embryonal rhabdomyosarcoma, NOS 	C62.9	Testis, NOS	C8971	Embryonal Rhabdomyosarcoma	8	1
+88503	Liposarcoma, NOS 	C64.9	Kidney, NOS	C3194	Liposarcoma	6	1
+88903	Leiomyosarcoma,NOS 	C64.9	Kidney, NOS	C3158	Leiomyosarcoma	7	1
+91803	Osteosarcoma, NOS 	C80.9	Unknown primary site	C9145	Osteosarcoma	5	1
+92203	Chondrosarcoma, NOS 	C80.9	Unknown primary site	C2946	Chondrosarcoma	5	1
+91813	Chondroblastic osteosarcoma 	C41.9	Bone, NOS	C4021	Chondroblastic Osteosarcoma	10	1
+90803	Teratoma,malignant,NOS 	C80.9	Unknown primary site	C4286	Immature Teratoma	5	1
+93703	Chordoma, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C2947	Chordoma	6	1
+91813	Chondroblastic osteosarcoma 	C40.0	Bones and joints	C4021	Chondroblastic Osteosarcoma	10	1
+80003	Neoplasm, malignant	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3810	Connective and Soft Tissue Neoplasm	2	1
+89103	Embryonal rhabdomyosarcoma, NOS 	C64.9	Kidney, NOS	C8971	Embryonal Rhabdomyosarcoma	8	1
+95800	Granular cell tumor, NOS 	C56.9	Ovary	C3474	Granular Cell Tumor	5	1
+88903	Leiomyosarcoma,NOS 	C22.0	Liver	C3158	Leiomyosarcoma	7	1
+90813	Teratocarcinoma	C56.9	Ovary	C3756	Mixed Embryonal Carcinoma and Teratoma	5	1
+89103	Embryonal rhabdomyosarcoma, NOS 	C61.9	Prostate gland	C8971	Embryonal Rhabdomyosarcoma	8	1
+89103	Embryonal rhabdomyosarcoma, NOS 	C41.9	Bone, NOS	C8971	Embryonal Rhabdomyosarcoma	8	1
+81703	Hepatocellular carcinoma, NOS	C22.9	liver	C3099	Hepatocellular Carcinoma	7	1
+81301	Papillary transitional cell neoplasm of low malignant potential	C67.0	Urinary bladder	C27884	Bladder Papillary Urothelial Neoplasm of Low Malignant Potential	-1	1
+81301	Papillary transitional cell neoplasm of low malignant potential	C68.0	Urethra	C27884	Bladder Papillary Urothelial Neoplasm of Low Malignant Potential	-1	1
+98753	Chronic myelogenous leukemia, BCR/ABL positive	C42.1	Bone marrow	C7320	Childhood chronic myelogenous leukemia, BCR-ABL1 positive	7	2
+98753	Chronic myelogenous leukemia, BCR/ABL positive	C42.1	Bone marrow	C3174	Chronic myelogenous leukemia, BCR-ABL1 positive	6	2
+90505	Mesothelioma, malignant	C34.9	Lung, NOS	C3234	Mesothelioma	3	1
+90506	Mesothelioma, malignant	C34.9	Lung, NOS	C3234	Mesothelioma	3	1
+90800	Teratoma, benign 	C71.9	Brain, NOS	C9015	Mature Teratoma	6	1
+90803	Teratoma,malignant,NOS 	C71.9	Brain, NOS	C4286	Immature Teratoma	5	1
+85004	Infiltrating duct carcinoma, NOS	C50.9	Breast, NOS	C4194	Invasive ductal carcinoma, not otherwise specified	7	1
+84903	Signet ring cell carcinoma	C56.9	Ovary	C3153	Krukenberg tumor	8	1
+82403	Carcinoid tumor, NOS	C16.9	Stomach, NOS	C7709	Digestive System Neuroendocrine Tumor G1	7	2
+82403	Carcinoid tumor, NOS	C16.9	Stomach, NOS	C95404	Digestive System Neuroendocrine Tumor	6	2
+81402	Adenocarcinoma in situ, NOS	C16.9	Stomach, NOS	C4123	Adenocarcinoma In Situ	5	1
+80723	Squamous cell carcinoma, large cell, nonkeratinizing, NOS	C11.9	Nasopharynx, NOS	C3871	Nasopharyngeal Carcinoma	8	1
+98363	PRECURSOR B-CELL LYMPHOBLASTIC LYMPHOMA	C42.1	Bone marrow	C8644	B acute lymphoblastic leukemia	7	1
+84531	Intraductal papillary-mucinous tumor with moderate dysplasia	C25.9	Pancreas, NOS	C5719	Pancreatic Intraductal Papillary-Mucinous Neoplasm with Intermediate Grade Dysplasia	-1	1
+84532	Intraductal papillary-mucinous carcinoma, non-invasive	C25.9	Pancreas, NOS	C38342	Pancreatic Intraductal Papillary-Mucinous Neoplasm	6	1
+84533	Intraductal papillary-mucinous carcinoma, invasive	C25.9	Pancreas, NOS	C38342	Pancreatic Intraductal Papillary-Mucinous Neoplasm	6	2
+84533	Intraductal papillary-mucinous carcinoma, invasive	C25.9	Pancreas, NOS	C5726	Pancreatic Intraductal Papillary-Mucinous Neoplasm with an Associated Invasive Carcinoma	8	2
+98143	B lymphoblastic leukemia/lymphoma with t(12;21)(p13;q22); TEL-AML1 (ETV6-RUNX1)	C42.4	Hematopoietic system, NOS	C80334	B Lymphoblastic Leukemia/Lymphoma with t(12;21)(p13.2;q22.1); ETV6-RUNX1	8	1
+89363	Gastrointestinal stromal tumor, NOS	C16.9	Stomach, NOS	C3486	Epithelioid cell type gastrointestinal stromal tumor	-1	2
+89363	Gastrointestinal stromal tumor, NOS	C16.9	Stomach, NOS	C27243	High Risk Gastrointestinal Stromal Tumor	-1	2
+90413	Synovial sarcoma, spindle cell	C49.9	Connective, subcutaneous and other soft tissues, NOS	C4277	Spindle Cell Synovial Sarcoma	-1	1
+90433	Synovial sarcoma, biphasic	C49.9	Connective, subcutaneous and other soft tissues, NOS	C4279	Biphasic synovial sarcoma	-1	1
+99643	Chronic eosinophilic leukemia, NOS	C42.1	Bone marrow	C4563	Chronic eosinophilic leukemia, not otherwise specified	6	1
+98763	Atypical chronic myeloid leukemia, BCR/ABL negative	C42.1	Bone marrow	C3519	Atypical Chronic Myeloid Leukemia, BCR-ABL1 Negative	6	1
+95003	Neuroblastoma, NOS 	C34.9	Lung, NOS	C3270	Neuroblastoma	7	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C61.9	Prostate gland	None	None	-1	1
+80413	Small cell carcinoma, NOS	C61.9	Prostate gland	C6766	Prostate Small Cell Carcinoma	10	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C10.9	Oropharynx, NOS	None	None	-1	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C44.9	Skin, NOS	None	None	-1	1
+80703	Squamous cell carcinoma, NOS	C61.9	Prostate gland	C2929	Squamous Cell Carcinoma	4	1
+91003	Choriocarcinoma, NOS 	C76.9	ill-defined	C2948	Choriocarcinoma	3	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C34.9	Lung, NOS	None	None	-1	1
+93653	Askin tumor	C71.9	Brain, NOS	C7542	Askin tumor	7	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C49.9	Connective, subcutaneous and other soft tissues, NOS	None	None	-1	1
+80103	Carcinoma, NOS	C64.9	Kidney, NOS	C39807	Mucinous Tubular and Spindle Cell Carcinoma of the Kidney	8	3
+80103	Carcinoma, NOS	C64.9	Kidney, NOS	C9384	Kidney Carcinoma	7	3
+80103	Carcinoma, NOS	C64.9	Kidney, NOS	C6975	Papillary Renal Cell Carcinoma	9	3
+91003	Choriocarcinoma, NOS 	C55.9	Uterus, NOS	C4646	Gestational choriocarcinoma	6	2
+91003	Choriocarcinoma, NOS 	C55.9	Uterus, NOS	C2948	Choriocarcinoma	3	2
+98053	Acute biphenotypic leukemia	C42.1	Bone marrow	C4673	Acute Biphenotypic Leukemia	8	1
+83703	Adrenal cortical carcinoma	C74.9	Adrenal gland, NOS	C9325	Adrenal Cortex Carcinoma	7	1
+83823	Endometrioid adenocarcinoma, secretory variant	C55.9	Uterus, NOS	C3769	Endometrioid Adenocarcinoma	6	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C73.9	Thyroid gland	None	None	-1	1
+88023	Giant cell sarcoma	C49.9	Connective, subcutaneous and other soft tissues, NOS	C66759	Giant Cell Sarcoma	-1	1
+88910	Epithelioid leiomyoma	C64.9	Kidney, NOS	C159209	Kidney Leiomyoma	8	1
+90653	Germ cell tumor, nonseminomatous 	C62.9	Testis, NOS	C9313	Testicular Non-Seminomatous Germ Cell Tumor	7	2
+90653	Germ cell tumor, nonseminomatous 	C62.9	Testis, NOS	C5027	Malignant Testicular Non-Seminomatous Germ Cell Tumor	-1	2
+80213	Carcinoma, anaplastic, NOS	C73.9	Thyroid gland	C3878	Thyroid Gland Anaplastic Carcinoma	7	1
+80103	Carcinoma, NOS	C67.0	Urinary bladder	C4912	Bladder carcinoma	6	1
+85603	Adenosquamous carcinoma 	C25.9	Pancreas, NOS	C5721	Pancreatic Adenosquamous Carcinoma	7	1
+88003	Sarcoma,NOS 	C55.9	Uterus, NOS	C6339	Uterine Corpus Sarcoma	8	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C64.9	Kidney, NOS	None	None	-1	1
+95003	Neuroblastoma, NOS 	C76.9	ill-defined	C3270	Neuroblastoma	7	1
+91303	Hemangioendothelioma, malignant 	C22.9	liver	C3088	Angiosarcoma	6	1
+91003	Choriocarcinoma, NOS 	C16.9	Stomach, NOS	C95749	Gastric choriocarcinoma	6	1
+81563	somatostatinoma, malignant	C25.9	Pancreas, NOS	C67369	Malignant Pancreatic Somatostatinoma	11	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C42.4	Hematopoietic system, NOS	None	None	-1	1
+80701	Premalignant squamous epithelium, NOS	C06.9	Mouth, NOS	C3792	Squamous Cell Neoplasm	3	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C09.9	Tonsil, NOS	None	None	-1	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C18.9	Colon, NOS	None	None	-1	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C16.9	Stomach, NOS	None	None	-1	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C25.9	Pancreas, NOS	None	None	-1	1
+84700	Mucinous cystadenoma, NOS	C56.9	Ovary	C4512	Ovarian Mucinous Cystadenoma	9	1
+84800	Mucinous adenoma	C56.9	Ovary	C2973	Mucinous Cystadenoma	5	1
+87203	Malignant melanoma, NOS 	C76.9	ill-defined	C3224	Melanoma	3	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C77.9	Lymph node, NOS	None	None	-1	1
+90503	Mesothelioma, malignant 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C4456	Malignant Mesothelioma	4	1
+90523	Epithelioid mesothelioma, malignant 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C7985	Epithelioid Mesothelioma	6	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C06.9	Mouth, NOS	None	None	-1	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C80.9	Unknown primary site	None	None	-1	1
+89363	Gastrointestinal stromal tumor, NOS	C49.9	Connective, subcutaneous and other soft tissues, NOS	C27243	High Risk Gastrointestinal Stromal Tumor	-1	1
+80701	Premalignant squamous epithelium, NOS	C15.9	Esophagus, NOS	C3792	Squamous Cell Neoplasm	3	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C15.9	Esophagus, NOS	None	None	-1	1
+81603	Cholangiocarcinoma	C24.9	Biliary tract, NOS	C4436	Cholangiocarcinoma	9	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C24.9	Biliary tract, NOS	None	None	-1	1
+80701	Premalignant squamous epithelium, NOS	C34.9	Lung, NOS	C3792	Squamous Cell Neoplasm	3	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C56.9	Ovary	None	None	-1	1
+96953	Follicular lymphoma, grade 1	C77.9	Lymph node, NOS	C3465	Grade 1 Follicular Lymphoma	10	1
+96913	Follicular lymphoma, grade 2	C77.9	Lymph node, NOS	C8968	Grade 2 Follicular Lymphoma	10	1
+97163	Hepatosplenic T-cell lymphoma	C42.4	Hematopoietic system, NOS	C8459	Hepatosplenic T-Cell Lymphoma	10	1
+96983	Follicular lymphoma, grade 3	C77.9	Lymph node, NOS	C3460	Grade 3 Follicular Lymphoma	10	1
+80003	Neoplasm, malignant	C76.9	ill-defined	C9305	Malignant Neoplasm	2	1
+97013	Sezary syndrome	C42.4	Hematopoietic system, NOS	C3366	Sezary Syndrome	10	1
+95003	Neuroblastoma, NOS 	C40.0	Bones and joints	C3270	Neuroblastoma	7	1
+86801	Paraganglioma, NOS 	C72.9	Nervous system, NOS	C3308	Paraganglioma	5	1
+95033	Neuroepithelioma, NOS 	C72.9	Nervous system, NOS	C3716	Primitive Neuroectodermal Tumor	5	1
+82503	Bronchiolo-alveolar adenocarcinoma, NOS	C34.9	Lung, NOS	C2923	Minimally invasive lung adenocarcinoma 	8	1
+81203	Transitional cell carcinoma, NOS	C68.0	Urethra	C2930	Transitional Cell Carcinoma	4	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C22.0	Liver	None	None	-1	1
+80710	None	C44.9	Skin, NOS	C3792	Squamous Cell Neoplasm	3	1
+82003	Adenoid cystic carcinoma	C11.9	Nasopharynx, NOS	C2970	Adenoid Cystic Carcinoma	4	1
+82003	Adenoid cystic carcinoma	C10.9	Oropharynx, NOS	C2970	Adenoid Cystic Carcinoma	4	1
+82003	Adenoid cystic carcinoma	C25.9	Pancreas, NOS	C2970	Adenoid Cystic Carcinoma	4	1
+82003	Adenoid cystic carcinoma	C41.9	Bone, NOS	C2970	Adenoid Cystic Carcinoma	4	1
+96713	Malignant lymphoma, lymphoplasmacytic 	C42.4	Hematopoietic system, NOS	C3212	Lymphoplasmacytic Lymphoma	10	1
+82003	Adenoid cystic carcinoma	C69.0	orbit and lacrimal gland, excl. retina, eye, nos	C2970	Adenoid Cystic Carcinoma	4	1
+82003	Adenoid cystic carcinoma	C30.1	Middle ear	C2970	Adenoid Cystic Carcinoma	4	1
+82003	Adenoid cystic carcinoma	C32.9	Larynx, NOS	C2970	Adenoid Cystic Carcinoma	4	1
+80701	Premalignant squamous epithelium, NOS	C51.9	Vulva, NOS	C3792	Squamous Cell Neoplasm	3	1
+86801	Paraganglioma, NOS 	C74.0	Cortex of adrenal gland	C3308	Paraganglioma	5	1
+82003	Adenoid cystic carcinoma	C64.9	Kidney, NOS	C2970	Adenoid Cystic Carcinoma	4	1
+96993	Marginal zone B-cell lymphoma, NOS	C08.9	Major salivary gland, NOS	C4341	Marginal Zone Lymphoma	10	1
+81482	Glandular intraepithelial neoplasia, high grade	C61.9	Prostate gland	C7662	High Grade Glandular Intraepithelial Neoplasia	5	1
+80702	Squamous cell carcinoma in situ, NOS	C34.9	Lung, NOS	C27093	Stage 0 Squamous Cell Carcinoma	6	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C42.0	Blood	None	None	-1	1
+80103	Carcinoma, NOS	C16.0	Cardia, NOS	C6794	Gastric Cardia Carcinoma	-1	1
+95903	Malignant lymphoma, NOS 	C62.9	Testis, NOS	C3208	Lymphoma	5	1
+86800	PARAGANGLIOMA, BENIGN	C75.5	Aortic body and other paraganglia	C48314	Benign Paraganglioma	6	1
+85032	Noninfiltrating intraductal papillary adenocarcinoma	C50.9	Breast, NOS	C4190	Intraductal Papillary Breast Carcinoma	8	1
+83183	Renal cell carcinoma, sarcomatoid	C64.9	Kidney, NOS	C27893	Sarcomatoid Renal Cell Carcinoma	9	1
+90504	Mesothelioma, malignant	C34.9	Lung, NOS	C3234	Mesothelioma	3	1
+95003	Neuroblastoma, NOS 	C71.9	Brain, NOS	C3270	Neuroblastoma	7	1
+83800	Endometroid adenoma, NOS	C56.9	Ovary	C2855	Adenoma	3	1
+92603	Ewing sarcoma 	C41.9	Bone, NOS	C4817	Ewing Sarcoma	4	1
+80050	Clear cell tumor, NOS	C56.9	Ovary	C40076	Ovarian Clear Cell Tumor	7	1
+80003	Neoplasm, malignant	C56.9	Ovary	C7431	Malignant Ovarian Neoplasm	6	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C62.9	Testis, NOS	None	None	-1	1
+95300	Meningioma, NOS 	C70.9	Meninges, NOS	C3230	Meningioma	5	1
+96593	Hodgkin lymphoma, nodular lymphocyte predominance	C77.9	Lymph node, NOS	C139030	THRLBCL-Like Transformation of NLPHL	-1	2
+96593	Hodgkin lymphoma, nodular lymphocyte predominance	C77.9	Lymph node, NOS	C7258	Nodular Lymphocyte Predominant Hodgkin Lymphoma	7	2
+86203	Granulosa cell tumor	C56.9	Ovary	C6261	Ovarian granulosa cell tumor	-1	1
+82403	Carcinoid tumor, NOS	C17.9	Small intestine, NOS	C6422	Midgut carcinoid tumor	8	1
+98113	B lymphoblastic leukemia/lymphoma, NOS	C42.4	Hematopoietic system, NOS	C80326	B Lymphoblastic Leukemia/Lymphoma, Not Otherwise Specified	7	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C17.9	Small intestine, NOS	None	None	-1	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C11.9	Nasopharynx, NOS	None	None	-1	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C42.2	Spleen	None	None	-1	1
+81403	Adenocarcinoma, NOS	C26.0	Intestinal tract, NOS	C2852	Colon Adenocarcinoma	4	1
+88063	Desmoplastic small round cell tumor 	C80.9	Unknown primary site	C8300	Desmoplastic Small Round Cell Tumor	-1	1
+95401	Neurofibromatosis, NOS	C80.9	Unknown primary site	C6727	Neurofibromatosis	-1	1
+82463	Neuroendocrine carcinoma, NOS	C72.9	Nervous system, NOS	C3773	Neuroendocrine Carcinoma	5	1
+80001	Neoplasm, uncertain whether benign or malignant	C80.9	Unknown primary site	C65157	Neoplasm, Uncertain Whether Benign or Malignant	-1	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C20.9	Rectum, NOS	None	None	-1	1
+80106	Carcinoma, metastatic, NOS	C18.9	Colon, NOS	C3482	Metastatic Carcinoma	5	1
+89103	Embryonal rhabdomyosarcoma, NOS 	C30.1	Middle ear	C8971	Embryonal Rhabdomyosarcoma	8	1
+89103	Embryonal rhabdomyosarcoma, NOS 	C67.9	Bladder, NOS	C8971	Embryonal Rhabdomyosarcoma	8	1
+80103	Carcinoma, NOS	C22.0	Liver	C7927	Liver and Intrahepatic Bile Duct Carcinoma	6	1
+86800	PARAGANGLIOMA, BENIGN	C64.9	Kidney, NOS	C48314	Benign Paraganglioma	6	1
+97163	Hepatosplenic T-cell lymphoma	C22.0	Liver	C8459	Hepatosplenic T-Cell Lymphoma	10	1
+94733	CNS primitive neuroectodermal tumor (PNET)	C71.1	frontal lobe	C3716	Primitive Neuroectodermal Tumor	5	1
+80333	Pseudosarcomatous carcinoma	C49.9	Connective, subcutaneous and other soft tissues, NOS	C27004	Sarcomatoid Carcinoma	4	1
+96713	Malignant lymphoma, lymphoplasmacytic 	C77.9	Lymph node, NOS	C27910	Mature B-Cell Neoplasms	6	3
+96713	Malignant lymphoma, lymphoplasmacytic 	C77.9	Lymph node, NOS	C3898	Extranodal Marginal Zone Lymphoma of Mucosa-Associated Lymphoid Tissue	11	3
+96713	Malignant lymphoma, lymphoplasmacytic 	C77.9	Lymph node, NOS	C3212	Lymphoplasmacytic Lymphoma	10	3
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C71.9	Brain, NOS	None	None	-1	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C08.9	Major salivary gland, NOS	None	None	-1	1
+84303	Mucoepidermoid carcinoma	C08.9	Major salivary gland, NOS	C5908	Salivary Gland Mucoepidermoid Carcinoma	6	1
+85003	Infiltrating duct carcinoma, NOS	C08.9	Major salivary gland, NOS	C4194	Invasive ductal carcinoma, not otherwise specified	7	1
+80703	Squamous cell carcinoma, NOS	C76.9	ill-defined	C2929	Squamous Cell Carcinoma	4	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C42.1	Bone marrow	None	None	-1	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C58.9	Placenta	None	None	-1	1
+80703	Squamous cell carcinoma, NOS	C05.9	Palate, NOS	C4649	Palate Squamous Cell Carcinoma	8	1
+80706	Squamous cell carcinoma, metastatic	C02.9	Tongue, NOS	C150206	Metastatic Oral Cavity Squamous Cell Carcinoma	9	1
+80706	Squamous cell carcinoma, metastatic	C03.0	Upper Gum	C150206	Metastatic Oral Cavity Squamous Cell Carcinoma	9	1
+97573	Interdigitating dendritic cell sarcoma	C42.4	Hematopoietic system, NOS	C9282	Interdigitating Dendritic Cell Sarcoma	5	1
+80500	Papilloma, NOS	C34.9	Lung, NOS	C8295	Lung Papilloma	5	1
+89803	Carcinosarcoma, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C34448	Carcinosarcoma	4	1
+81400	Adenoma, NOS	C17.9	Small intestine, NOS	C5340	Small Intestinal Adenoma	6	1
+90853	Mixed germ cell tumor 	C22.0	Liver	C4290	Mixed Germ Cell Tumor	4	1
+90703	Embryonal carcinoma, NOS 	C34.9	Lung, NOS	C3752	Embryonal Carcinoma	4	1
+90713	Yolk sac tumor 	C34.9	Lung, NOS	C3011	Yolk Sac Tumor	4	1
+90853	Mixed germ cell tumor 	C74.9	Adrenal gland, NOS	C4290	Mixed Germ Cell Tumor	4	1
+90853	Mixed germ cell tumor 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C4290	Mixed Germ Cell Tumor	4	1
+90813	Teratocarcinoma	C17.9	Small intestine, NOS	C3756	Mixed Embryonal Carcinoma and Teratoma	5	1
+90853	Mixed germ cell tumor 	C34.9	Lung, NOS	C4290	Mixed Germ Cell Tumor	4	1
+90813	Teratocarcinoma	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3756	Mixed Embryonal Carcinoma and Teratoma	5	1
+92200	Chondroma, NOS	C49.9	Connective, subcutaneous and other soft tissues, NOS	C53459	Chondroma	6	1
+98653	ACUTE MYELOID LEUKEMIA WITH T(6;9)(P23;Q34); DEK-NUP214	C42.1	Bone marrow	C82423	Acute Myeloid Leukemia with t(6;9) (p23;q34.1); DEK-NUP214	8	1
+99863	Myelodyplastic syndrome, NOS	C42.1	Bone marrow	C6867	Myelodysplastic Syndrome with Isolated del(5q)	6	1
+84421	Serous cystadenoma, borderline malignancy	C56.9	Ovary	C4177	Borderline Serous Cystadenoma	6	2
+84421	Serous cystadenoma, borderline malignancy	C56.9	Ovary	C5226	Borderline Ovarian Serous Tumor	8	2
+81403	Adenocarcinoma, NOS	C48.2	Peritoneum, NOS	C2852	Colon Adenocarcinoma	4	1
+81403	Adenocarcinoma, NOS	C57.0	Fallopian tube	C2852	Colon Adenocarcinoma	4	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C44.4	Hair	None	None	-1	1
+95401	Neurofibromatosis, NOS	C71.9	Brain, NOS	C6727	Neurofibromatosis	-1	1
+92200	Chondroma, NOS	C40.1 	Short bones of upper limb and associated joints	C53459	Chondroma	6	1
+92200	Chondroma, NOS	C41.4	Pelvic bones, sacrum, coccyx and associated joints	C53459	Chondroma	6	1
+92200	Chondroma, NOS	C40.2	Long bones of lower limb and associated joints	C53459	Chondroma	6	1
+92203	Chondrosarcoma, NOS 	C41.9	Bone, NOS	C7155	Primary central chondrosarcoma	7	2
+92203	Chondrosarcoma, NOS 	C41.9	Bone, NOS	C2946	Chondrosarcoma	5	2
+92200	Chondroma, NOS	C41.9	Bone, NOS	C53459	Chondroma	6	1
+80000	Neoplasm, benign	C25.9	Pancreas, NOS	C4612	Benign Pancreatic Neoplasm	4	1
+94403	Glioblastoma,NOS	C71.3	parietal lobe	C3058	Glioblastoma	8	1
+95903	Malignant lymphoma, NOS 	C44.9	Skin, NOS	C3208	Lymphoma	5	1
+80106	Carcinoma, metastatic, NOS	C61.9	Prostate gland	C8946	Metastatic Prostate Carcinoma	8	1
+89333	Adenosarcoma 	C55.9	Uterus, NOS	C6336	Uterine Corpus Adenosarcoma	9	1
+80106	Carcinoma, metastatic, NOS	C50.9	Breast, NOS	C153238	Metastatic Breast Carcinoma	6	1
+80103	Carcinoma, NOS	C18.4	Transverse colon	C4910	Colon carcinoma	7	1
+80106	Carcinoma, metastatic, NOS	C18.4	Transverse colon	C156097	Metastatic Colon Carcinoma	8	1
+80103	Carcinoma, NOS	C18.0	Cecum	C3491	Cecum Carcinoma	8	1
+80106	Carcinoma, metastatic, NOS	C18.0	Cecum	C156097	Metastatic Colon Carcinoma	8	1
+80103	Carcinoma, NOS	C18.7	Sigmoid colon	C4910	Colon carcinoma	7	1
+80106	Carcinoma, metastatic, NOS	C18.7	Sigmoid colon	C156097	Metastatic Colon Carcinoma	8	1
+98633	Chronic myeloid leukemia, NOS 	C42.4	Hematopoietic system, NOS	C3174	Chronic myelogenous leukemia, BCR-ABL1 positive	6	1
+98233	B-cell chronic lymphocytic leukemia/small lymphocytic lymphoma	C42.4	Hematopoietic system, NOS	C3163	Chronic lymphocytic leukemia	8	2
+98233	B-cell chronic lymphocytic leukemia/small lymphocytic lymphoma	C42.4	Hematopoietic system, NOS	C27911	Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma	7	2
+97193	NK/T-cell lymphoma, nasal and nasal-type	C30.0	Nasal cavity	C4684	Nasal Type Extranodal NK/T-Cell Lymphoma	9	1
+97353	Plasmablastic lymphoma 	C77.9	Lymph node, NOS	C7224	Plasmablastic lymphoma	10	1
+96703	Malignant lymphoma, small B lymphocytic, NOS 	C77.9	Lymph node, NOS	C7540	Small lymphocytic lymphoma	9	1
+80703	Squamous cell carcinoma, NOS	C76.0	Head, face or neck, NOS	C34447	Head and Neck Squamous Cell Carcinoma	5	1
+80703	Squamous cell carcinoma, NOS	C30.0	Nasal cavity	C68611	Sinonasal Squamous Cell Carcinoma	6	2
+80703	Squamous cell carcinoma, NOS	C30.0	Nasal cavity	C8192	Nasal cavity squamous cell carcinoma	7	2
+97093	Cutaneous T-cell lymphoma, NOS	C44.9 	Skin, NOS	C3467	Primary cutaneous T-cell non-Hodgkin lymphoma	9	1
+89333 	Adenosarcoma 	C56.9	Ovary	C7317	Ovarian adenosarcoma	8	1
+80103	Carcinoma, NOS	C20.9	Rectum, NOS	C9382	Rectal Carcinoma	7	1
+98353	Precursor cell lymphoblastic leukemia, NOS 	C42.4	Hematopoietic system, NOS	C3167	Acute Lymphoblastic Leukemia	6	1
+82603	Papillary adenocarcinoma, NOS	C73.9 	Thyroid gland	C4035	Thyroid Gland Papillary Carcinoma	9	1
+91203 	Hemangiosarcoma 	C49.9 	Connective, subcutaneous and other soft tissues, NOS 	C3088	Angiosarcoma	6	1
+88903	Leiomyosarcoma,NOS 	C76.1	thorax, NOS	C3158	Leiomyosarcoma	7	1
+80103	Carcinoma, NOS	C72.9 	Nervous system, NOS 	C4627	Malignant Central Nervous System Neoplasm	4	1
+98613	Acute myeloid leukemia, NOS 	C42.4	Hematopoietic system, NOS	C3171	Acute Myeloid Leukemia	6	2
+98613	Acute myeloid leukemia, NOS 	C42.4	Hematopoietic system, NOS	C9154	Adult acute myeloid leukemia	7	2
+84803 	Mucinous adenocarcinoma 	C50.9	Breast, NOS	C9131	Mucinous Breast Carcinoma	7	1
+82003	Adenoid cystic carcinoma	C41.0	Maxilla	C2970	Adenoid Cystic Carcinoma	4	1
+82003	Adenoid cystic carcinoma	C69.6	Orbit, NOS	C2970	Adenoid Cystic Carcinoma	4	1
+82003	Adenoid cystic carcinoma	C05.0	Hard palate	C6213	Hard Palate Adenoid Cystic Carcinoma	-1	1
+82003	Adenoid cystic carcinoma	C02.9	Tongue, NOS	C171028	Tongue Adenoid Cystic Carcinoma	8	1
+83453	Medullary carcinoma with amyloid stroma	C73.9	Thyroid gland	C3879	Thyroid Gland Medullary Carcinoma	7	1
+87200 	Pigmented nevus, NOS 	C44.9	Skin, NOS	C54659	Acral Nevus	5	1
+98953	Acute myeloid leukemia with myelodysplasia-related changes	C42.4	Hematopoietic system, NOS	C9289	Acute Myeloid Leukemia with Multilineage Dysplasia	8	1
+80050	Clear cell tumor, NOS	C64.9	Kidney, NOS	C4033	Clear Cell Renal Cell Carcinoma	9	1
+00000	not in ICD-O (e.g. non-neoplastic, reference)	C73.9 	Thyroid gland	None	None	-1	1
+91303	Hemangioendothelioma, malignant 	C49.9 	Connective, subcutaneous and other soft tissues, NOS 	C3088	Angiosarcoma	6	1
+88903	Leiomyosarcoma,NOS 	C49.9 	Connective, subcutaneous and other soft tissues, NOS 	C3158	Leiomyosarcoma	7	1
+88503	Liposarcoma, NOS 	C49.9 	Connective, subcutaneous and other soft tissues, NOS 	C3194	Liposarcoma	6	1
+88303	Malignant fibrous histiocytoma 	C49,9	Connective, subcutaneous and other soft tissues, NOS	C4247	Undifferentiated Pleomorphic Sarcoma	7	1
+80106	Carcinoma, metastatic, NOS	C22.0	Liver	C154091	metastatic hepatocellular carcinoma	8	1
+82003	Adenoid cystic carcinoma	C04.9	floor of mouth, NOS	C8180	Floor of Mouth Adenoid Cystic Carcinoma	8	1
+82003	Adenoid cystic carcinoma	C08.0	Submandibular gland 	C5935	Submandibular Gland Adenoid Cystic Carcinoma	8	1
+99503	Polycythemia vera 	C42.4	Hematopoietic system, NOS	C3336	Polycythemia Vera	6	1
+99463	Juvenile myelomonocytic leukemia	C42.4	Hematopoietic system, NOS	C9233	Juvenile Myelomonocytic Leukemia	6	1
+99751	Myloproliferative neoplasm, unclassifiable 	C42.1	Bone marrow	C9290	Myeloid Neoplasm	4	1
+89203	Alveolar rhabdomyosarcoma 	C34.9	Lung, NOS	C3749	Alveolar Rhabdomyosarcoma	8	1
+93653	Askin tumor	C49.3	thoracic wall	C7542	Askin tumor	7	1
+98263	Burkitt cell leukemia	C42.4	Hematopoietic system, NOS	C8644	B acute lymphoblastic leukemia	7	1
+98333	B-cell prolymphocytic leukemia	C42.1	Bone marrow	C4753	B-cell prolymphocytic leukemia	7	1
+98743	Acute myeloid leukemia with maturation FAB M2, NOS	C42.15	Bone marrow	C9381	Childhood acute myeloid leukemia with maturation	9	1
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C42.1	Bone marrow	C36081	Diffuse large B-cell lymphoma activated B-cell type	12	3
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C42.1	Bone marrow	C36080	Diffuse large B-cell lymphoma germinal center B-cell type	12	3
+96803	Malignant lymphoma, large B-cell, diffuse, NOS	C42.1	Bone marrow	C8851	Diffuse Large B-Cell Lymphoma	9	3
+89103	Embryonal rhabdomyosarcoma, NOS 	C49.4	Connective, subcutaneous and other soft tissues of abdomen	C8971	Embryonal Rhabdomyosarcoma	8	1
+80703	Squamous cell carcinoma, NOS	C53.9 	Cervix uteri	C27676	Human papillomavirus-related cervical squamous cell carcinoma	10	1
+72000	Hyperplasia, NOS	C61.9 	Prostate	C2897	Benign prostatic hyperplasia	-1	1
+97013	Sezary syndrome	C42.1	Bone marrow	C9265	Mycosis fungoides and Sezary syndrome	9	1
+98983	Myeloid leukemia associated with Down syndrome	C42.1	Bone marrow	C43223	Myeloid Leukemia associated with Down syndrome	6	1
+95003	Neuroblastoma, NOS 	C47.4	autonomic nervous system	C3270	Neuroblastoma	7	1
+81403	Adenocarcinoma, NOS	C25.3	Pancreatic duct	C9120	Pancreatic ductal adenocarcinoma	8	1
+80703	Squamous cell carcinoma, NOS	C73.9	Thyroid gland	C46008	Thyroid gland squamous cell carcinoma	7	1
+80103	Carcinoma, NOS	C51.9	Vulva, NOS	C4866	Vulvar carcinoma	7	1
+80703	Squamous cell carcinoma, NOS	C13	Hypopharynx	C4043	Hypopharyngeal Squamous Cell Carcinoma	9	1
+98263 	Burkitt cell leukemia 	C42.4	Hematopoietic system, NOS	C8644	B acute lymphoblastic leukemia	7	1
+98373	Precursor T-cell lymphoblastic leukemia 	C42.4	Hematopoietic system, NOS	C3183	T Acute Lymphoblastic Leukemia	7	1
+88903	Leiomyosarcoma,NOS 	C51.9	Vulva, NOS	C40318	Vulvar leiomyosarcoma	8	1
+99613 	Primary myelofibrosis 	C42.1	Bone marrow	C3248	Myelofibrosis	-1	1
+98274	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C9142	Adult T acute lymphoblastic leukemia	8	1
+80753	Acantholytic squamous cell carcinoma	C49.0	Head, neck	C34447	Head and Neck Squamous Cell Carcinoma	5	1
+80413	Small cell carcinoma, NOS	C16.9	Stomach, NOS	C6764	Gastric small cell carcinoma	9	1
+80103	Carcinoma, NOS	C54.1	Endometrium	C7558	Endometrial Carcinoma	9	1
+80103	Carcinoma, NOS	C80.9	Unknown primary site	C2975	Cystic fibrosis	-1	3
+80103	Carcinoma, NOS	C80.9	Unknown primary site	C3812	Carcinoma of Unknown Primary	-1	3
+80103	Carcinoma, NOS	C80.9	Unknown primary site	C3098	Hepatitis C infection	-1	3
+99643	Chronic eosinophilic leukemia, NOS	C42.4	Hematopoietic system, NOS	C4563	Chronic eosinophilic leukemia, not otherwise specified	6	1
+80753	Acantholytic squamous cell carcinoma	C50.9	Breast, NOS	C40359	Squamous cell breast carcinoma, acantholytic variant	-1	1
+80703	Squamous cell carcinoma, NOS	C08.9	Major salivary gland, NOS	C7991	Salivary gland squamous cell carcinoma	6	1
+98277	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C9143	Adult B acute lymphoblastic leukemia	8	1
+81403	Adenocarcinoma, NOS	C17.0	Duodenum	C7889	Duodenal Adenocarcinoma	8	1
+81203	Transitional cell carcinoma, NOS	C65	Renal pelvis	C7716	Renal Pelvis and Ureter Urothelial Carcinoma	6	1
+92433	Dedifferentiated chondrosarcoma 	C41.9	Bone, NOS	C6476	Dedifferentiated Chondrosarcoma	7	1
+89303	Endometrial stromal sarcoma, NOS 	C54.1	Endometrium	C8973	Endometrioid Stromal Sarcoma	7	1
+98269	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C9140	Childhood B acute lymphoblastic leukemia	8	1
+98266	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C9140	Childhood B acute lymphoblastic leukemia	8	1
+92503	Giant cell tumor of bone, malignant	C41.9	Bone, NOS	C4304	Malignancy in giant cell tumor of bone	7	1
+80523	Squamous cell papilloma, NOS	C80.9	Unknown primary site	C3712	Squamous cell papilloma	5	1
+81233	Basaloid carcinoma	C80.9	Unknown primary site	C37290	Head and neck basaloid carcinoma	6	1
+98270	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C9142	Adult T acute lymphoblastic leukemia	8	1
+98313	T-cell large granular lymphocytic leukemia	C42.1	Bone marrow	C4664	T-cell large granular lymphocyte leukemia	7	1
+98275	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C9143	Adult B acute lymphoblastic leukemia	8	1
+95003	Neuroblastoma, NOS 	C74.9	Adrenal gland, NOS	C4827	Adrenal gland neuroblastoma	11	1
+98271	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C9142	Adult T acute lymphoblastic leukemia	8	1
+98272	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C9142	Adult T acute lymphoblastic leukemia	8	1
+98267	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C9140	Childhood B acute lymphoblastic leukemia	8	1
+88003	Sarcoma,NOS 	C73.9	Thyroid gland	C6041	Thyroid gland sarcoma	6	1
+90003	Brenner tumor, malignant	C56.9	Ovary	C4270	Malignant ovarian Brenner tumor	9	1
+98265	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C9140	Childhood B acute lymphoblastic leukemia	8	1
+98373	Precursor T-cell lymphoblastic leukemia 	C77.9	Lymph node, NOS	C7210	Childhood T lymphoblastic lymphoma	10	2
+98373	Precursor T-cell lymphoblastic leukemia 	C77.9	Lymph node, NOS	C7953	Childhood T acute lymphoblastic leukemia	8	2
+98276	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C9143	Adult B acute lymphoblastic leukemia	8	1
+98264	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C9140	Childhood B acute lymphoblastic leukemia	8	1
+80403	Adenocarcinoma, NOS	C19.9	Rectosigmoid junction	C5105	Colorectal Adenocarcinoma	7	1
+98268	Acute lymphoblastic leukemia, mature B-cell type	C42.1	Bone marrow	C9140	Childhood B acute lymphoblastic leukemia	8	1
+81623	Klatskin tumor	C22.1	Intrahepatic bile duct	C36077	Hilar Cholangiocarcinoma	10	1
+81403	Adenocarcinoma, NOS	C24.1	Ampulla of Vater	C6650	Ampulla of Vater adenocarcinoma	7	1
+94733	CNS primitive neuroectodermal tumor (PNET)	C71	Brain	C3716	Primitive Neuroectodermal Tumor	5	1
+98353	Precursor cell lymphoblastic leukemia, NOS 	C77.9	Lymph node, NOS	C9142	Adult T acute lymphoblastic leukemia	8	1
+97323	Multiple myeloma	C42.4	Hematopoietic system, NOS	C3242	Plasma Cell Myeloma	8	1
+95091	Central neurocytoma 	C71.7	Brain stem	C67559	Rosette-Forming Glioneuronal Tumor of the Fourth Ventricle	7	1
+97513	Langerhans cell histiocytosis, NOS	C42.4	Hematopoietic system, NOS	C9294	Histiocytic and Dendritic Cell Neoplasms	4	2
+97513	Langerhans cell histiocytosis, NOS	C42.4	Hematopoietic system, NOS	C3107	Langerhans Cell Histiocytosis	6	2
+80453	Combined small cell carcinoma	C34.9	Lung, NOS	C9137	Combined Lung Small Cell Carcinoma	-1	1
+80223	Pleomorphic carcinoma	C34.9	Lung, NOS	C45542	Lung Pleomorphic Carcinoma	8	1
+90503	Mesothelioma, malignant 	C48.2	Peritoneum, NOS	C7633	Peritoneal Mesothelioma	4	1
+80103	Carcinoma, NOS	C54.9	Corpus uteri	C27838	Endometrial Serous Adenocarcinoma	12	1
+83103	Clear cell adenocarcinoma, NOS	C54.9	Corpus uteri	C6344	Cervical Clear Cell Adenocarcinoma	10	1
+80203	Carcinoma, undifferentiated, NOS	C54.9	Corpus uteri	C6345	Cervical Undifferentiated Carcinoma	9	1
+88903	Leiomyosarcoma,NOS 	C54.1	Endometrium	C6340	Uterine Corpus Leiomyosarcoma	9	1
+86201	Granulosa cell tumor, adult type 	C56.9	Ovary	C3070	Granulosa Cell Tumor	-1	1
+88043	Epithelioid sarcoma 	C54.9	Corpus uteri	C127072	Uterine Corpus Malignant PEComa	-1	1
+89803	Carcinosarcoma, NOS 	C54.9	Corpus uteri	C9180	Uterine Corpus Carcinosarcoma	9	1
+82463	Neuroendocrine carcinoma, NOS	C61.9	Prostate gland	C158912	Prostate Neuroendocrine Carcinoma	9	1
+90503	Mesothelioma, malignant 	C62.9	Testis, NOS	C3234	Mesothelioma	3	1
+83373	Insular carcinoma	C73.9	Thyroid gland	C6040	Poorly Differentiated Thyroid Carcinoma	8	1
+80103	Carcinoma, NOS	C08.9	Major salivary gland, NOS	C167368	Adnexal Secretory Carcinoma	6	2
+80103	Carcinoma, NOS	C08.9	Major salivary gland, NOS	C5904	Salivary Duct Carcinoma	7	2
+80703	Squamous cell carcinoma, NOS	C21.8	Overlapping lesion of rectum, anus and anal canal	C9161	Anal Squamous Cell Carcinoma	6	1
+93411	Clear cell odontogenic tumor 	C41.1	Mandible	C54300	Clear Cell Odontogenic Carcinoma	-1	1
+88063	Desmoplastic small round cell tumor 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C8300	Desmoplastic Small Round Cell Tumor	-1	1
+80106	Carcinoma, metastatic, NOS	C80.9	Unknown primary site	C8566	Metastatic Malignant Neoplasm of Unknown Primary	-1	1
+80003	Neoplasm, malignant	C65.9	Renal pelvis	C27892	Unclassified Renal Cell Carcinoma	9	1
+88420	Ossifyingfibromyxoidtumor 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C6582	Ossifying Fibromyxoid Tumor	-1	1
+81403	Adenocarcinoma, NOS	C53.0	Endocervix	C28327	Endocervical Adenocarcinoma	9	1
+84003	Sweat gland adenocarcinoma	C44.9	Skin, NOS	C6938	Sweat Gland Carcinoma	6	1
+90801	Teratoma, NOS 	C62.9	Testis, NOS	C3403	Teratoma	4	1
+97583	Follicular dendritic cell sarcoma 	C41.9	Bone, NOS	C9281	Follicular Dendritic Cell Sarcoma	5	1
+92313	Myxoid chondrosarcoma 	C41.9	Bone, NOS	C4303	Myxoid Chondrosarcoma	6	1
+81403	Adenocarcinoma, NOS	C67.9	Bladder, NOS	C4032	Bladder Adenocarcinoma	7	1
+80103	Carcinoma, NOS	C23.9	Gallbladder	C3844	Gallbladder Carcinoma	7	1
+84903	Signet ring cell carcinoma	C23.9	Gallbladder	C6163	Bladder Signet Ring Cell Adenocarcinoma	-1	1
+84301	Mucoepidermoid tumor	C08.9	Major salivary gland, NOS	C5908	Salivary Gland Mucoepidermoid Carcinoma	6	1
+93913	Ependymoma, NOS 	C71.5	Ventricle, NOS	C3017	Ependymoma	8	1
+85503	Acinar cell carcinoma	C08.9	Major salivary gland, NOS	C8013	Salivary Gland Acinic Cell Carcinoma	-1	1
+83903	Skin appendage carcinoma	C44.9	Skin, NOS	C3775	Adnexal Carcinoma	5	1
+83123	Renal cell carcinoma, NOS	C65.9	Renal pelvis	C9385	Renal Cell Carcinoma	8	1
+90403	Synovialsarcoma,NOS 	C44.9	Skin, NOS	C3400	Synovial Sarcoma	-1	1
+82463	Neuroendocrine carcinoma, NOS	C19.9	Rectosigmoid junction	C96156	Colorectal Neuroendocrine Carcinoma	8	1
+91373	Intimal sarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C53677	Intimal Sarcoma	-1	1
+80103	Carcinoma, NOS	C11.9	Nasopharynx, NOS	C3871	Nasopharyngeal Carcinoma	8	1
+97493	Erdheim-Chester disease	C42.0	Blood	C53972	Erdheim-Chester Disease	5	1
+84803	Mucinous adenocarcinoma	C18.1	Appendix	C43558	Appendix Mucinous Adenocarcinoma	7	1
+88600	Angiomyolipoma 	C64.9	Kidney, NOS	C3888	Kidney Angiomyolipoma	-1	1
+92313 	Myxoid chondrosarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C27502	Extraskeletal Myxoid Chondrosarcoma	-1	1
+87203	Malignant melanoma, NOS 	C80.9	Unknown primary site	C154473	Melanoma of Unknown Primary	-1	1
+80103	Carcinoma, NOS	C17.9	Small intestine, NOS	C7724	Small Intestinal Carcinoma	6	1
+82703	Chromophobe carcinoma	C64.9	Kidney, NOS	C4146	Chromophobe Renal Cell Carcinoma	9	1
+87203	Malignant melanoma, NOS 	C69.4	Ciliary body	C7712	Uveal Melanoma	5	1
+85901	Sex cord-gonadal stromal tumor, NOS 	C56.9	Ovary	C3794	Sex Cord-Stromal Tumor	4	1
+90443	Clearcellsarcoma,NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3745	Clear Cell Sarcoma of Soft Tissue	6	1
+82463	Neuroendocrine carcinoma, NOS	C54.9	Corpus uteri	C3773	Neuroendocrine Carcinoma	5	1
+82463	Neuroendocrine carcinoma, NOS	C18.1	Appendix	C96422	Appendix Neuroendocrine Tumor	8	1
+89123	Spindle cell rhabdomyosarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C6519	Spindle Cell Rhabdomyosarcoma	9	1
+88971	Smooth muscle tumor of uncertain malignant potential 	C54.9	Corpus uteri	C40177	Uterine Corpus Smooth Muscle Tumor of Uncertain Malignant Potential	9	1
+81403	Adenocarcinoma, NOS	C18.1	Appendix	C7718	Appendix Adenocarcinoma	6	1
+87463 	Mucosal lentiginous melanoma 	C21.8	Overlapping lesion of rectum, anus and anal canal	C114828	Mucosal melanoma	5	1
+91853	Small cell osteosarcoma 	C41.9	Bone, NOS	C4023	Small Cell Osteosarcoma	-1	1
+88043	Epithelioid sarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C27472	Proximal-Type Epithelioid Sarcoma	-1	2
+88043	Epithelioid sarcoma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3714	Epithelioid Sarcoma	6	2
+86311	Sertoli-Leydig cell tumor of intermediate differentiation 	C56.9	Ovary	C2880	Ovarian Sertoli-Leydig Cell Tumor	-1	1
+91501	Hemangiopericytoma, NOS 	C72.9	Nervous system, NOS	C4660	Meningeal Solitary Fibrous Tumor/Hemangiopericytoma	7	1
+84743	Seromucinous carcinoma	C56.9	Ovary	C40090	Ovarian Seromucinous Carcinoma	9	1
+95303	Meningioma, malignant 	C70.9	Meninges, NOS	C4051	Anaplastic (Malignant) Meningioma	7	1
+88913	Epithelioid leiomyosarcoma 	C54.1	Endometrium	C40174	Uterine Corpus Epithelioid Leiomyosarcoma	10	1
+90703	Embryonal carcinoma, NOS 	C56.9	Ovary	C3752	Embryonal Carcinoma	4	1
+82463	Neuroendocrine carcinoma, NOS	C80.9	Unknown primary site	C163975	Neuroendocrine Carcinoma of Unknown Primary	-1	1
+80703	Squamous cell carcinoma, NOS	C80.9	Unknown primary site	C34447	Head and Neck Squamous Cell Carcinoma	5	2
+80703	Squamous cell carcinoma, NOS	C80.9	Unknown primary site	C8099	Squamous Cell Carcinoma of Unknown Primary	-1	2
+95600	Neurilemoma, NOS 	C47.1	Peripheral nerves and autonomic nervous system of upper limb and shoulder	C3269	Schwannoma	5	1
+85801	Thymoma, NOS	C37.9	Thymus	C3411	Thymoma	5	1
+80103	Carcinoma, NOS	C24.1	Ampulla of Vater	C3908	Ampulla of Vater Carcinoma	6	1
+88963	Myxoid leiomyosarcoma 	C54.9	Corpus uteri	C40175	Uterine Corpus Myxoid Leiomyosarcoma	10	1
+88053	Undifferentiated sarcoma 	C54.9	Corpus uteri	C8972	Uterine Corpus Undifferentiated Sarcoma	-1	1
+80703	Squamous cell carcinoma, NOS	C13.1	Hypopharyngeal aspect of aryepiglottic fold	C4043	Hypopharyngeal Squamous Cell Carcinoma	9	1
+88323	Dermatofibrosarcoma, NO 	C44.9	Skin, NOS	C4683	Dermatofibrosarcoma Protuberans	6	1
+91611	Hemangioblastoma 	C71.9	Brain, NOS	C3801	Hemangioblastoma	3	1
+89013	Pleomorphic rhabdomyosarcoma, adult type 	C49.4	Connective, subcutaneous and other soft tissues of abdomen	C4258	Pleomorphic Rhabdomyosarcoma	8	1
+88320	Dermatofibroma, NOS 	C44.9	Skin, NOS	C6801	Skin Fibrous Histiocytoma	8	1
+82463	Neuroendocrine carcinoma, NOS	C76.0	Head, face or neck, NOS	C160980	Head and Neck Neuroendocrine Carcinoma	6	1
+88003	Sarcoma,NOS 	C54.9	Corpus uteri	C6339	Uterine Corpus Sarcoma	8	1
+89403	Mixedtumor,malignant,NOS 	C56.9	Ovary	C40090	Ovarian Seromucinous Carcinoma	9	1
+87463 	Mucosal lentiginous melanoma 	C76.0	Head, face or neck, NOS	C133187	Mucosal Melanoma of the Head and Neck	6	1
+82433	Goblet cell carcinoid	C18.1	Appendix	C3689	Appendix Goblet Cell Adenocarcinoma	7	1
+88251	Myofibroblastic tumor, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C6481	Inflammatory Myofibroblastic Tumor	6	1
+85103	Medullary carcinoma, NOS	C64.9	Kidney, NOS	C7572	Kidney Medullary Carcinoma	8	1
+84903	Signet ring cell carcinoma	C19.9	Rectosigmoid junction	C43586	Colorectal Signet Ring Cell Carcinoma	9	1
+87203	Malignant melanoma, NOS 	C68.0	Urethra	C159665	Urethral Melanoma	6	1
+84903	Signet ring cell carcinoma	C18.1	Appendix	C43554	Appendix Signet Ring Cell Carcinoma	7	1
+97413	Malignant mastocytosis 	C42.1	Bone marrow	C9235	Systemic Mastocytosis	7	1
+89333	Adenosarcoma 	C54.9	Corpus uteri	C6336	Uterine Corpus Adenosarcoma	9	1
+80823	Lymphoepithelial carcinoma	C34.9	Lung, NOS	C45519	Lung Lymphoepithelioma-Like Carcinoma	7	1
+97613	Waldenstrom macroglobulinemia 	C42.0	Blood	C80307	Waldenstrom Macroglobulinemia	11	1
+90800	Teratoma, benign 	C77.9	Lymph node, NOS	C9015	Mature Teratoma	6	1
+91303	Hemangioendothelioma, malignant 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3800	Epithelioid Hemangioendothelioma	6	1
+95800	Granular cell tumor, NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C3474	Granular Cell Tumor	5	1
+95223	Olfactory neuroblastoma 	C30.0	Nasal cavity	C3789	Olfactory Neuroblastoma	9	1
+92403	Mesenchymal chondrosarcoma 	C41.9	Bone, NOS	C3737	Mesenchymal Chondrosarcoma	6	1
+90843	Teratomawithmalignanttransformation 	C62.9	Testis, NOS	C4289	Teratoma with Somatic-Type Malignancy	5	1
+92703	Odontogenic tumor, malignant 	C41.1	Mandible	C4812	Malignant Odontogenic Neoplasm	-1	1
+94321	Pituicytoma 	C75.1	Pituitary gland	C94524	Pituicytoma	-1	1
+95053	Ganglioglioma, anaplastic 	C71.9	Brain, NOS	C4717	Anaplastic Ganglioglioma	6	1
+88150	Solitary fibrous tumor 	C72.9	Nervous system, NOS	C129526	Central Nervous System Solitary Fibrous Tumor/Hemangiopericytoma	6	1
+80333	Pseudosarcomatous carcinoma	C23.9	Gallbladder	C39824	Infiltrating Bladder Urothelial Carcinoma, Sarcomatoid Variant	9	1
+80323	Spindle cell carcinoma, NOS	C34.9	Lung, NOS	C45541	Lung Spindle Cell Carcinoma	8	1
+86700 	Lipid cell tumor of ovary 	C56.9	Ovary	C39979	Ovarian Steroid Cell Tumor, Not Otherwise Specified	-1	1
+84103	Sebaceous adenocarcinoma	C44.9	Skin, NOS	C40310	Sebaceous Carcinoma	6	1
+95391	Atypical meningioma 	C70.9	Meninges, NOS	C4723	Atypical Meningioma	7	1
+81403	Adenocarcinoma, NOS	C80.9	Unknown primary site	C4039	Adenocarcinoma of Unknown Primary	-1	1
+98373	Precursor T-cell lymphoblastic leukemia 	C42.2	Spleen	C8694	T Lymphoblastic Leukemia/Lymphoma	6	1
+97583 	Follicular dendritic cell sarcoma 	C42.4	Hematopoietic system, NOS	C9281	Follicular Dendritic Cell Sarcoma	5	1
+80203	Carcinoma, undifferentiated, NOS	C30.0	Nasal cavity	C54294	Sinonasal Undifferentiated Carcinoma	6	1
+80413	Small cell carcinoma, NOS	C53.9	Cervix uteri	C7982	Cervical Small Cell Carcinoma	10	1
+85423	Paget disease, extramammary	C44.9	Skin, NOS	C3302	Extramammary Paget Disease	6	1
+84521	Solid pseudopapillary tumor	C52.9	Vagina, NOS	C37212	Solid Pseudopapillary Neoplasm of the Pancreas	6	1
+80413	Small cell carcinoma, NOS	C56.9	Ovary	C27390	Ovarian Small Cell Carcinoma	9	1
+83103	Clear cell adenocarcinoma, NOS	C53.9	Cervix uteri	C6344	Cervical Clear Cell Adenocarcinoma	10	1
+80050	Clear cell tumor, NOS	C23.9	Gallbladder	C6179	Bladder Clear Cell Adenocarcinoma	-1	1
+81203	Transitional cell carcinoma, NOS	C23.9	Gallbladder	C6166	Urethral Urothelial Carcinoma	7	1
+80203	Carcinoma, undifferentiated, NOS	C16.8	Overlapping lesion of stomach	C5476	Gastric Undifferentiated Carcinoma	6	1
+88240	Myofibroma 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C7052	Myofibroma	6	1
+80413	Small cell carcinoma, NOS	C80.9	Unknown primary site	C3915	Small Cell Carcinoma	6	1
+95600	Neurilemoma, NOS 	C72.9	Nervous system, NOS	C4724	Cellular Schwannoma	6	1
+81233 	Basaloid carcinoma	C34.9	Lung, NOS	C7266	Lung Basaloid Large Cell Carcinoma	8	1
+93511	Craniopharyngioma, adamantinomatous 	C71.9	Brain, NOS	C4726	Adamantinomatous Craniopharyngioma	9	1
+80103	Carcinoma, NOS	C76.0	Head, face or neck, NOS	C35850	Head and Neck Carcinoma	4	1
+82463	Neuroendocrine carcinoma, NOS	C56.9	Ovary	C171032	Ovarian Neuroendocrine Carcinoma	9	1
+80203	Carcinoma, undifferentiated, NOS	C80.9	Unknown primary site	C8566	Metastatic Malignant Neoplasm of Unknown Primary	-1	1
+87103	Glomangiosarcoma 	C75.5	Aortic body and other paraganglia	C4221	Malignant Glomus Tumor	6	1
+83233	Mixed cell adenocarcinoma	C64.9	Kidney, NOS	C121955	Clear Cell Papillary Renal Neoplasm	-1	1
+94703	Medulloblastoma, NOS 	C71.9	Brain, NOS	C3222	Medulloblastoma	9	1
+87463 	Mucosal lentiginous melanoma 	C15.9	Esophagus, NOS	C5707	Esophageal Melanoma	7	1
+84703	Mucinous cystadenocarcinoma, NOS	C25.9	Pancreas, NOS	C41247	Pancreatic Mucinous-Cystic Neoplasm	5	1
+80833	Basaloid squamous cell carcinoma	C60.9	Penis, NOS	C6980	Basaloid Squamous Cell Carcinoma of the Penis	-1	1
+80203	Carcinoma, undifferentiated, NOS	C25.9	Pancreas, NOS	C5722	Pancreatic Undifferentiated Carcinoma	9	1
+93941	Myxopapillary ependymoma 	C72.9	Nervous system, NOS	C3697	Myxopapillary Ependymoma	7	1
+80413	Small cell carcinoma, NOS	C23.9	Gallbladder	C9461	Bladder Small Cell Carcinoma	8	1
+81403	Adenocarcinoma, NOS	C30.0	Nasal cavity	C160976	Sinonasal Adenocarcinoma	6	1
+84410	Serous cystadenoma, NOS	C25.9	Pancreas, NOS	C5712	Pancreatic Serous Cystadenoma	7	1
+95033	Neuroepithelioma, NOS 	C71.9	Brain, NOS	C3716	Primitive Neuroectodermal Tumor	5	1
+88400	Myxoma,NOS 	C49.9	Connective, subcutaneous and other soft tissues, NOS	C6577	Myxoma	6	1
+85103	Medullary carcinoma, NOS	C18.9	Colon, NOS	C60641	Colon Medullary Carcinoma	9	1
+81623	Klatskin tumor	C24.0	Extrahepatic bile duct	C36077	Hilar Cholangiocarcinoma	10	1
+95061	Central neurocytoma 	C72.9	Nervous system, NOS	C3791	Central Neurocytoma	7	1
+87203	Malignant melanoma, NOS 	C15.9	Esophagus, NOS	C5707	Esophageal Melanoma	7	1

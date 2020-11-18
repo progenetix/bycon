@@ -1,4 +1,2 @@
 defaults:
-  db: progenetix
-  coll: ontologymap
   query_field: "biocharacteristics.id"

@@ -75,7 +75,7 @@ def ontologymaps(service):
     c_g = [ ]
     u_c_d = { }
     mongo_client = MongoClient( )
-    mongo_coll = mongo_client[ byc["db"] ][ byc["coll"] ]
+    mongo_coll = mongo_client[ byc["config"]["info_db"] ][ byc["config"]["ontologymaps_coll"] ]
     for o in mongo_coll.find( query, { '_id': False } ):
         for c in o["biocharacteristics"]:
             pre, code = re.split("[:-]", c["id"])

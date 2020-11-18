@@ -151,9 +151,10 @@ def _create_collations_from_dataset( ds_id, **byc ):
         if not byc["args"].test:
             bar.finish()
             print("==> Updating database ...")
-            coll_clean_q = { "id": { "$regex": "^"+pre } }
-            coll_coll.delete_many( coll_clean_q )
-            coll_coll.insert_many( sel_hiers )
+            if matched > 0:
+                coll_clean_q = { "id": { "$regex": "^"+pre } }
+                coll_coll.delete_many( coll_clean_q )
+                coll_coll.insert_many( sel_hiers )
 
         print("===> Found {} of {} {} codes & added them to {}.{} <===".format(matched, no, pre, ds_id, byc["config"]["collations_coll"]))
        

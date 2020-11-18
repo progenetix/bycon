@@ -1,0 +1,10 @@
+---
+dataset_ids:
+  - arraymap
+  - progenetix
+data_collections:
+  - biosamples
+ontologymaps_prefixes:
+  - NCIT
+  - icdom
+  - icdot

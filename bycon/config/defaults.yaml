@@ -38,11 +38,12 @@ collationed:
   PMID:
     pattern: '^(PMID)[:]\d'
     is_series: False
-  tcga:
-    pattern: '^(TCGA)[:][\w\-]{2,20}$'
-    is_series: False
+  # tcga:
+  #   pattern: '^(TCGA)[:][\w\-]{2,20}$'
+  #   is_series: False
 collations_coll: collations
 collations_source: biosamples
+ontologymaps_coll: ontologymaps
 info_db: progenetix
 beacon_info_coll: "beaconinfo"
 beacon_info_count_labels:
