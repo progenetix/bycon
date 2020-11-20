@@ -75,7 +75,7 @@ def main():
         for s in bios_coll.find({}):
 
             """
-            The following code will refress callset ids and their statistics into
+            The following code will refresh callset ids and their statistics into
             the biosamples entries.
             If no callsets are found this will result in empty attributes; if
             more than one callset is found the average of the CNV statistics will be used.

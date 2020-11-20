@@ -1,0 +1,6 @@
+---
+dataset_ids:
+  # - arraymap
+  - progenetix
+refreshing:
+  cnv_min_length: 3
