@@ -1,0 +1,12 @@
+---
+dataset_ids:
+  - arraymap
+  - progenetix
+refreshing:
+  cnvstatistics:
+    cnvcoverage: []
+    delfraction: []
+    cnvfraction: []
+    delcoverage: []
+    dupfraction: []
+    dupcoverage: []

@@ -5,6 +5,10 @@ dataset_ids:
 data_collections:
   - biosamples
 ontologymaps_prefixes:
-  - NCIT
-  - icdom
-  - icdot
+  ICD2UBERON:
+    - icdot
+    - UBERON
+  ICDOntologies:
+    - NCIT
+    - icdom
+    - icdot

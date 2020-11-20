@@ -48,23 +48,35 @@ def ontologymaps(service):
 
     byc.update( { "filters": parse_filters( **byc ) } )
     byc.update( { "filter_flags": get_filter_flags( **byc ) } )
-    
+
     # response prototype
     r = byc[ "config" ]["response_object_schema"]
     r["response_type"] = service
 
-    if len(byc[ "filters" ]) < 1:
-        r["errors"].append("No input codes provided!")
-        cgi_print_json_response( byc["form_data"], r, 422 )
+    # if len(byc[ "filters" ]) < 1:
+    #     r["errors"].append("No input codes provided!")
+    #     cgi_print_json_response( byc["form_data"], r, 422 )
 
     r["parameters"].update( { "filters": byc[ "filters" ] })
 
     q_list = [ ]
+    pre_re = re.compile(r'^(\w+?)([:-].*?)?$')
     for f in byc[ "filters" ]:
-        if "start" in byc[ "filter_flags" ][ "precision" ]:
-            q_list.append( { byc["query_field"]: { "$regex": "^"+f } } )
-        else:
-            q_list.append( { byc["query_field"]: f } )
+        if pre_re.match( f ):
+            pre = pre_re.match( f ).group(1)
+            if pre in byc["filter_definitions"]:
+                f_re = re.compile( byc["filter_definitions"][ pre ]["pattern"] )
+                if f_re.match( f ):
+                    if "start" in byc[ "filter_flags" ][ "precision" ]:
+                        q_list.append( { byc["query_field"]: { "$regex": "^"+f } } )
+                    elif f == pre:
+                        q_list.append( { byc["query_field"]: { "$regex": "^"+f } } )
+                    else:
+                        q_list.append( { byc["query_field"]: f } )
+    if len(q_list) < 1:
+        r["errors"].append("No correct filter value provided!")
+        cgi_print_json_response( byc["form_data"], r, 422 )
+
     if len(q_list) > 1:
         query = { '$and': q_list }
     else:

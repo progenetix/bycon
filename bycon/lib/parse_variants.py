@@ -150,7 +150,7 @@ def create_variantAlleleRequest_query(variant_request_type, variant_pars):
 
     v_q_p = [
         { "reference_name": variant_pars[ "referenceName" ] },
-        { "start_min": int(variant_pars[ "start" ][0]) }
+        { "start": int(variant_pars[ "start" ][0]) }
     ]
     for p in [ "referenceBases", "alternateBases" ]:
         if not variant_pars[ p ] == "N":
@@ -174,10 +174,10 @@ def create_variantCNVrequest_query(variant_request_type, variant_pars):
 
     variant_query = { "$and": [
         { "reference_name": variant_pars[ "referenceName" ] },
-        { "start_min": { "$lt": variant_pars[ "start" ][-1] } },
-        { "end_max": { "$gte": variant_pars[ "end" ][0] } },
-        { "start_max": { "$gte": variant_pars[ "start" ][0] } },
-        { "end_min": { "$lt": variant_pars[ "end" ][-1] } },
+        { "start": { "$lt": variant_pars[ "start" ][-1] } },
+        { "end": { "$gte": variant_pars[ "end" ][0] } },
+        { "start": { "$gte": variant_pars[ "start" ][0] } },
+        { "end": { "$lt": variant_pars[ "end" ][-1] } },
         { "variant_type": variant_pars[ "variantType" ] }
     ]}
 
@@ -193,8 +193,8 @@ def create_variantRangeRequest_query(variant_request_type, variant_pars):
 
     v_q_l = [
         { "reference_name": variant_pars[ "referenceName" ] },
-        { "start_min": { "$lt": int(variant_pars[ "end" ][-1]) } },
-        { "end_max": { "$gt": int(variant_pars[ "start" ][0]) } }
+        { "start": { "$lt": int(variant_pars[ "end" ][-1]) } },
+        { "end": { "$gt": int(variant_pars[ "start" ][0]) } }
     ]
 
     if "variantType" in variant_pars:

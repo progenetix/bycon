@@ -183,7 +183,7 @@ def _write_variants_bedfile(h_o, **byc):
     for v in data_coll.find( { h_o["target_key"]: { '$in': h_o["target_values"] } }):
 
         if "variant_type" in v:
-            v.update({"size": v["end_max"] - v["start_min"] })
+            v.update({"size": v["end"] - v["start"] })
             if v["variant_type"] == "DUP":
                 vs["DUP"].append(v)
             elif  v["variant_type"] == "DEL":
@@ -208,8 +208,8 @@ def _write_variants_bedfile(h_o, **byc):
             b_f.write("#chrom\tchromStart\tchromEnd\tbiosampleId\n")
             for v in vs[vt]:
                 ucsc_chr = "chr"+v["reference_name"]
-                ucsc_min = int( v["start_min"] + 1 )
-                ucsc_max = int( v["end_max"] )
+                ucsc_min = int( v["start"] + 1 )
+                ucsc_max = int( v["end"] )
                 l = "{}\t{}\t{}\t{}\n".format( ucsc_chr, ucsc_min, ucsc_max, v["biosample_id"] )
                 pos.add(ucsc_min)
                 pos.add(ucsc_max)

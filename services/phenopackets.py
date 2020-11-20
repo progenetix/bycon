@@ -124,12 +124,10 @@ def phenopackets(service):
         for bs in pxf_bs:
             p_bs = {
                 "id": bs["id"],
-                "histologicalDiagnosis": "",
                 "externalReferences": [ ],
             }
-            ncit = list(filter(lambda d: "NCIT" in d["type"]["id"], bs["biocharacteristics"]))
-            if ncit:
-                p_bs.update( { "histologicalDiagnosis": ncit[0]["type"] })
+            if "histological_diagnosis" in bs:
+                p_bs.update( { "histologicalDiagnosis": bs["histological_diagnosis"]})
             if "sampledTissue" in bs:
                 p_bs.update( { "sampledTissue": bs["sampledTissue"]})
             if "external_references" in bs:

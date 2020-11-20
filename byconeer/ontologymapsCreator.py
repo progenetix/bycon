@@ -59,56 +59,58 @@ def main():
     if byc["args"].test:
         print( "¡¡¡ TEST MODE - no db update !!!")
 
-    o_l_max = len(byc["ontologymaps_prefixes"])
 
     mongo_client = MongoClient( )
-
     o_m = { }
 
-    for ds_id in byc["dataset_ids"]:
-        data_db = mongo_client[ ds_id ]
-        for coll in byc["data_collections"]:
-            no =  data_db[ coll ].estimated_document_count()
-            if not byc["args"].test:
-                bar = Bar("Analyzing samples", max = no, suffix='%(percent)d%%'+" of "+str(no) )
-            for s in data_db[ coll ].find({}):
-                o_l_c = 0
-                k_l = [ ]
-                o_l = [ ]
-                for pre in byc["ontologymaps_prefixes"]:
-                    data_key = byc["filter_definitions"][ pre ]["db_key"]
-                    list_key = re.sub(".type.id", "", data_key)
-                    data_re = re.compile( byc["filter_definitions"][ pre ]["pattern_strict"] )
+    for scope in byc["ontologymaps_prefixes"]:
 
-                    for o in s[ list_key ]:
-                        if data_re.match( o["type"]["id"] ):
-                            k_l.append( o["type"]["id"] )
-                            o_l.append( o["type"] )
-                            o_l_c += 1
-                            if o_l_max > o_l_c:
-                                break
-                            d = ""
-                            if "description" in s:
-                                d = s["description"]
-                            k = "::".join(k_l)
-                            if byc["args"].test:
-                                print(k)
-                            o_m.update(
-                                { k:
-                                    { 
-                                        "id": k,
-                                        "example": d,
-                                        "biocharacteristics": o_l
-                                    }
+        o_l_max = len(byc["ontologymaps_prefixes"][ scope ])
 
-                                }
-                            )
+        for ds_id in byc["dataset_ids"]:
+            data_db = mongo_client[ ds_id ]
+            for coll in byc["data_collections"]:
+                no =  data_db[ coll ].estimated_document_count()
                 if not byc["args"].test:
-                    bar.next()
-            if not byc["args"].test:
-                bar.finish()
-                    
-    print("{} code combinations".format(len(o_m.keys())))
+                    bar = Bar("Analyzing samples", max = no, suffix='%(percent)d%%'+" of "+str(no) )
+                for s in data_db[ coll ].find({}):
+                    o_l_c = 0
+                    k_l = [ ]
+                    o_l = [ ]
+                    for pre in byc["ontologymaps_prefixes"][ scope ]:
+                        data_key = byc["filter_definitions"][ pre ]["db_key"]
+                        list_key = re.sub(".type.id", "", data_key)
+                        data_re = re.compile( byc["filter_definitions"][ pre ]["pattern_strict"] )
+
+                        for o in s[ list_key ]:
+                            if data_re.match( o["type"]["id"] ):
+                                k_l.append( o["type"]["id"] )
+                                o_l.append( o["type"] )
+                                o_l_c += 1
+                                if o_l_max > o_l_c:
+                                    break
+                                d = ""
+                                if "description" in s:
+                                    d = s["description"]
+                                k = "::".join(k_l)
+                                if byc["args"].test:
+                                    print(k)
+                                o_m.update(
+                                    { k:
+                                        { 
+                                            "id": k,
+                                            "example": d,
+                                            "biocharacteristics": o_l
+                                        }
+
+                                    }
+                                )
+                    if not byc["args"].test:
+                        bar.next()
+                if not byc["args"].test:
+                    bar.finish()
+                        
+        print("{} code combinations for {}".format(len(o_m.keys()), scope))
 
     if not byc["args"].test:
         om_coll = mongo_client[ byc["config"]["info_db"] ][ byc["config"]["ontologymaps_coll"] ]
