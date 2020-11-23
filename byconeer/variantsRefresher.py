@@ -27,6 +27,8 @@ from bycon.lib.read_specs import *
 def _get_args():
 
     parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--datasetids", help="datasets, comma-separated")
+    parser.add_argument("-a", "--alldatasets", action='store_true', help="process all datasets")
     parser.add_argument("-t", "--test", help="test setting")
     args = parser.parse_args()
 
@@ -59,11 +61,22 @@ def main():
     if byc["args"].test:
         print( "¡¡¡ TEST MODE - no db update !!!")
 
+    if byc["args"].alldatasets:
+        dataset_ids = byc["config"][ "dataset_ids" ]
+    else:
+        dataset_ids =  byc["args"].datasetids.split(",")
+        if not dataset_ids[0] in byc["config"][ "dataset_ids" ]:
+            print("No existing dataset was provided with -d ...")
+            exit()
+
     mongo_client = MongoClient( )
 
     min_l = byc["refreshing"]["cnv_min_length"]
 
-    for ds_id in byc["dataset_ids"]:
+    for ds_id in dataset_ids:
+        if not ds_id in byc["config"][ "dataset_ids" ]:
+            print("¡¡¡ "+ds_id+" is not a registered dataset !!!")
+            continue
 
         v_short = 0
         v_no_type = 0

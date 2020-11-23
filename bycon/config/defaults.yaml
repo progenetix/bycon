@@ -38,6 +38,9 @@ collationed:
   PMID:
     pattern: '^(PMID)[:]\d'
     is_series: False
+  UBERON:
+    pattern: '^(UBERON)[:]\d'
+    is_series: False
   # tcga:
   #   pattern: '^(TCGA)[:][\w\-]{2,20}$'
   #   is_series: False

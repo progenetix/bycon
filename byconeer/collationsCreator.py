@@ -54,6 +54,9 @@ def main():
 
 ################################################################################
 
+    if byc["args"].test:
+        print( "¡¡¡ TEST MODE - no db update !!!")
+
     if byc["args"].alldatasets:
         dataset_ids = byc["config"][ "dataset_ids" ]
     else:
@@ -68,8 +71,6 @@ def main():
             continue
         print( "Creating collations for " + ds_id)
 
-        if byc["args"].test:
-            print( "¡¡¡ TEST MODE - no db update !!!")
         _create_collations_from_dataset( ds_id, **byc )
 
 ################################################################################
