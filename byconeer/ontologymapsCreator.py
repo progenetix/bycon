@@ -7,6 +7,8 @@ from isodate import date_isoformat
 from pymongo import MongoClient
 import argparse
 from progress.bar import Bar
+from pyexcel import get_sheet
+
 
 # local
 dir_path = path.dirname( path.abspath(__file__) )
@@ -63,9 +65,9 @@ def main():
     mongo_client = MongoClient( )
     o_m = { }
 
-    for scope in byc["ontologymaps_prefixes"]:
+    for scope in byc["ontologymaps"]:
 
-        o_l_max = len(byc["ontologymaps_prefixes"][ scope ])
+        o_l_max = len(byc["ontologymaps"][ scope ]["prefixes"])
 
         for ds_id in byc["dataset_ids"]:
             data_db = mongo_client[ ds_id ]
@@ -77,7 +79,7 @@ def main():
                     o_l_c = 0
                     k_l = [ ]
                     o_l = [ ]
-                    for pre in byc["ontologymaps_prefixes"][ scope ]:
+                    for pre in byc["ontologymaps"][ scope ]["prefixes"]:
                         data_key = byc["filter_definitions"][ pre ]["db_key"]
                         list_key = re.sub(".type.id", "", data_key)
                         data_re = re.compile( byc["filter_definitions"][ pre ]["pattern_strict"] )
@@ -112,6 +114,14 @@ def main():
                         
         print("{} code combinations for {}".format(len(o_m.keys()), scope))
 
+        def_m = pgx_read_icdom_ncit_defaults(dir_path, scope, **byc)
+
+        for def_k in def_m:
+            if not def_k in o_m.keys():
+                o_m.update( { def_k: def_m[def_k] } )
+        print("Now {} code combinations after defaults ...".format(len(o_m.keys())))
+
+
     if not byc["args"].test:
         om_coll = mongo_client[ byc["config"]["info_db"] ][ byc["config"]["ontologymaps_coll"] ]
         om_coll.drop()
@@ -122,6 +132,76 @@ def main():
 ################################################################################
 ################################################################################
 
+def pgx_read_icdom_ncit_defaults(dir_path, scope, **byc):
+
+    if not "mappingfile" in byc["ontologymaps"][ scope ]:
+        return {}
+    
+    mf = path.join( dir_path, *byc["ontologymaps"][ scope ]["mappingfile"] )
+    o_m_r = { }
+    equiv_keys = [ ]
+    pre_fs = byc["ontologymaps"][ scope ]["prefixes"]
+    o_l_max = len(pre_fs)
+
+    for pre in pre_fs:
+        equiv_keys.append( pre+"::id" )
+        equiv_keys.append( pre+"::label" )
+
+    sheet_name = "__".join(pre_fs)+"__matched"
+
+    try:
+        table = get_sheet(file_name=mf, sheet_name=sheet_name)
+    except Exception as e:
+        print(e)
+        print("No matching mapping file could be found!")
+        exit()
+        
+    header = table[0]
+    col_inds = { }
+    hi = 0
+    fi = 0
+    for col_name in header:
+        if col_name in equiv_keys:
+            print(col_name+": "+str(hi))
+            col_inds[ col_name ] = hi
+            
+        hi += 1
+        
+    for i in range(1, len(table)):
+        id_s = [ ]
+        bioc_s = [ ]
+        bioc = { }
+        col_match_count = 0
+        for col_name in equiv_keys:
+            try:
+                cell_val = table[ i, col_inds[ col_name ] ]
+                if "id" in col_name:
+                    if len(cell_val) > 4:
+                        bioc = { "id": cell_val }
+                        id_s.append( cell_val )
+                else:
+                    bioc.update( { "label": cell_val } )
+                    bioc_s.append(bioc)
+                    if len(id_s) == o_l_max:
+                        o_k = "::".join(id_s)
+                        o_m_r.update(
+                            { o_k:
+                                { 
+                                    "id": o_k,
+                                    "biocharacteristics": bioc_s
+                                }
+                            }
+                        )
+                        fi += 1
+            except:
+                continue
+        
+    print("default mappings: "+str(fi))
+    return o_m_r
+
+################################################################################
+################################################################################
+################################################################################
 
 if __name__ == '__main__':
     main()

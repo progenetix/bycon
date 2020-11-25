@@ -4,11 +4,16 @@ dataset_ids:
   - progenetix
 data_collections:
   - biosamples
-ontologymaps_prefixes:
+ontologymaps:
   ICD2UBERON:
-    - icdot
-    - UBERON
+    prefixes:
+      - icdot
+      - UBERON
   ICDOntologies:
-    - NCIT
-    - icdom
-    - icdot
+    prefixes:
+      - NCIT
+      - icdom
+      - icdot
+    mappingfile:
+      - rsrc
+      - ICDOntologies.ods
