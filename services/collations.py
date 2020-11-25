@@ -15,7 +15,10 @@ from bycon.lib.parse_filters import *
 from bycon.lib.read_specs import *
 
 """podmd
-
+* <http://progenetix.org/services/collations?deliveryKeys=id,count&filters=cellosaurus&datasetIds=progenetix>
+* <https://progenetix.org/services/collations?filters=NCIT>
+* <https://progenetix.org/services/collations?filters=NCIT&method=codematches>
+* <http://progenetix.org/cgi-bin/bycon/bin/collations.py?filters=NCIT&datasetIds=progenetix&method=counts>
 podmd"""
 
 ################################################################################
