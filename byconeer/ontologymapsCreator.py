@@ -37,6 +37,8 @@ def _get_args():
 
 def main():
 
+    service = "ontologymaps"
+
     byc = {
         "pkg_path": pkg_path,
         "config": read_bycon_configs_by_name( "defaults" ),
@@ -52,7 +54,7 @@ def main():
         byc.update( { d: read_bycon_configs_by_name( d ) } )
 
     # first pre-population w/ defaults
-    these_prefs = read_local_prefs( "ontologymapsCreator", dir_path )
+    these_prefs = read_local_prefs( service, dir_path )
     for d_k, d_v in these_prefs.items():
         byc.update( { d_k: d_v } )
 
@@ -65,21 +67,25 @@ def main():
     mongo_client = MongoClient( )
     o_m = { }
 
-    for scope in byc["ontologymaps"]:
+    for map_type in byc["map_types"]:
 
-        o_l_max = len(byc["ontologymaps"][ scope ]["prefixes"])
+        o_l_max = len(byc["map_types"][ map_type ]["prefixes"])
 
         for ds_id in byc["dataset_ids"]:
             data_db = mongo_client[ ds_id ]
             for coll in byc["data_collections"]:
                 no =  data_db[ coll ].estimated_document_count()
                 if not byc["args"].test:
-                    bar = Bar("Analyzing samples", max = no, suffix='%(percent)d%%'+" of "+str(no) )
+                    bar = Bar("Analyzing samples", max = no, suffix="%(percent)d%%"+" of "+str(no) )
                 for s in data_db[ coll ].find({}):
                     o_l_c = 0
                     k_l = [ ]
                     o_l = [ ]
-                    for pre in byc["ontologymaps"][ scope ]["prefixes"]:
+                    d = ""
+                    if "description" in s:
+                        d = s["description"].strip()
+
+                    for pre in byc["map_types"][ map_type ]["prefixes"]:
                         data_key = byc["filter_definitions"][ pre ]["db_key"]
                         list_key = re.sub(".type.id", "", data_key)
                         data_re = re.compile( byc["filter_definitions"][ pre ]["pattern_strict"] )
@@ -91,36 +97,38 @@ def main():
                                 o_l_c += 1
                                 if o_l_max > o_l_c:
                                     break
-                                d = ""
-                                if "description" in s:
-                                    d = s["description"]
-                                k = "::".join(k_l)
-                                if byc["args"].test:
-                                    print(k)
-                                o_m.update(
-                                    { k:
-                                        { 
-                                            "id": k,
-                                            "example": d,
-                                            "biocharacteristics": o_l
-                                        }
 
-                                    }
-                                )
+                                k = "::".join(k_l)
+
+                    if byc["args"].test:
+                        print(k)
+                    # if k == 'NCIT:C3372::icdom-80003::icdot-C44.9':
+                    #     print(d, o_l)
+                    if k in o_m:
+                        if len(o_m[k]["examples"]) < byc["example_length"]:
+                            o_m[k]["examples"].update([d])
+
+                    else:
+                        o_m[k]={
+                                "id": k,
+                                "examples": set([d]),
+                                "code_group": o_l
+                                }
+
                     if not byc["args"].test:
                         bar.next()
                 if not byc["args"].test:
                     bar.finish()
-                        
-        print("{} code combinations for {}".format(len(o_m.keys()), scope))
 
-        def_m = pgx_read_icdom_ncit_defaults(dir_path, scope, **byc)
+        print("{} code combinations for {}".format(len(o_m.keys()), map_type))
+
+        def_m = pgx_read_icdom_ncit_defaults(dir_path, map_type, **byc)
 
         for def_k in def_m:
             if not def_k in o_m.keys():
                 o_m.update( { def_k: def_m[def_k] } )
         print("Now {} code combinations after defaults ...".format(len(o_m.keys())))
-
+        _export_ontologymaps(dir_path, service, map_type, o_m)
 
     if not byc["args"].test:
         om_coll = mongo_client[ byc["config"]["info_db"] ][ byc["config"]["ontologymaps_coll"] ]
@@ -132,15 +140,28 @@ def main():
 ################################################################################
 ################################################################################
 
-def pgx_read_icdom_ncit_defaults(dir_path, scope, **byc):
+def _export_ontologymaps(dir_path, service, map_type, o_m):
+    for k, content in o_m.items():
+        if "examples" in content:
+            content["examples"] = sorted(content["examples"])
+    export = [ ]
+    for o_k in sorted(o_m.keys()):
+        export.append(o_m[o_k])
+    yaml.dump(export, open(path.join(dir_path, "exports", service, "{}.yaml".format(map_type)),"w"))
 
-    if not "mappingfile" in byc["ontologymaps"][ scope ]:
+################################################################################
+################################################################################
+################################################################################
+
+def pgx_read_icdom_ncit_defaults(dir_path, map_type, **byc):
+
+    if not "mappingfile" in byc["map_types"][ map_type ]:
         return {}
-    
-    mf = path.join( dir_path, *byc["ontologymaps"][ scope ]["mappingfile"] )
+
+    mf = path.join( dir_path, *byc["map_types"][ map_type ]["mappingfile"] )
     o_m_r = { }
     equiv_keys = [ ]
-    pre_fs = byc["ontologymaps"][ scope ]["prefixes"]
+    pre_fs = byc["map_types"][ map_type ]["prefixes"]
     o_l_max = len(pre_fs)
 
     for pre in pre_fs:
@@ -155,7 +176,7 @@ def pgx_read_icdom_ncit_defaults(dir_path, scope, **byc):
         print(e)
         print("No matching mapping file could be found!")
         exit()
-        
+
     header = table[0]
     col_inds = { }
     hi = 0
@@ -164,9 +185,9 @@ def pgx_read_icdom_ncit_defaults(dir_path, scope, **byc):
         if col_name in equiv_keys:
             print(col_name+": "+str(hi))
             col_inds[ col_name ] = hi
-            
+
         hi += 1
-        
+
     for i in range(1, len(table)):
         id_s = [ ]
         bioc_s = [ ]
@@ -176,6 +197,7 @@ def pgx_read_icdom_ncit_defaults(dir_path, scope, **byc):
             try:
                 cell_val = table[ i, col_inds[ col_name ] ]
                 if "id" in col_name:
+                    # TODO: check the id from filter_definitions
                     if len(cell_val) > 4:
                         bioc = { "id": cell_val }
                         id_s.append( cell_val )
@@ -186,16 +208,16 @@ def pgx_read_icdom_ncit_defaults(dir_path, scope, **byc):
                         o_k = "::".join(id_s)
                         o_m_r.update(
                             { o_k:
-                                { 
+                                {
                                     "id": o_k,
-                                    "biocharacteristics": bioc_s
+                                    "code_group": bioc_s
                                 }
                             }
                         )
                         fi += 1
             except:
                 continue
-        
+
     print("default mappings: "+str(fi))
     return o_m_r
 
@@ -203,5 +225,5 @@ def pgx_read_icdom_ncit_defaults(dir_path, scope, **byc):
 ################################################################################
 ################################################################################
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -1,2 +1,2 @@
 defaults:
-  query_field: "biocharacteristics.id"
+  query_field: "code_group.id"

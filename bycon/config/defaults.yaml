@@ -41,6 +41,9 @@ collationed:
   UBERON:
     pattern: '^(UBERON)[:]\d'
     is_series: False
+  cBP:
+    pattern: '^(cBP)[\-]\w'
+    is_series: False
   # tcga:
   #   pattern: '^(TCGA)[:][\w\-]{2,20}$'
   #   is_series: False

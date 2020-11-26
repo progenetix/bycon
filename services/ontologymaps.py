@@ -53,10 +53,6 @@ def ontologymaps(service):
     r = byc[ "config" ]["response_object_schema"]
     r["response_type"] = service
 
-    # if len(byc[ "filters" ]) < 1:
-    #     r["errors"].append("No input codes provided!")
-    #     cgi_print_json_response( byc["form_data"], r, 422 )
-
     r["parameters"].update( { "filters": byc[ "filters" ] })
 
     q_list = [ ]
@@ -89,12 +85,12 @@ def ontologymaps(service):
     mongo_client = MongoClient( )
     mongo_coll = mongo_client[ byc["config"]["info_db"] ][ byc["config"]["ontologymaps_coll"] ]
     for o in mongo_coll.find( query, { '_id': False } ):
-        for c in o["biocharacteristics"]:
+        for c in o["code_group"]:
             pre, code = re.split("[:-]", c["id"])
             if not pre in u_c_d:
                 u_c_d.update( { pre: { } } )
             u_c_d[ pre ].update( { c["id"]: { "id": c["id"], "label": c["label"] } } )
-        c_g.append( o["biocharacteristics"] )
+        c_g.append( o["code_group"] )
 
     u_c = { }
     for pre in u_c_d:

@@ -38,6 +38,8 @@ def _get_args():
 
 def main():
 
+    service = "biosamples"
+
     byc = {
         "pkg_path": pkg_path,
         "config": read_bycon_configs_by_name( "defaults" ),
@@ -53,7 +55,7 @@ def main():
         byc.update( { d: read_bycon_configs_by_name( d ) } )
 
     # first pre-population w/ defaults
-    these_prefs = read_local_prefs( "biosamplesRefresher", dir_path )
+    these_prefs = read_local_prefs( service, dir_path )
     for d_k, d_v in these_prefs.items():
         byc.update( { d_k: d_v } )
 
