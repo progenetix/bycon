@@ -122,7 +122,7 @@ def main():
 
         print("{} code combinations for {}".format(len(o_m.keys()), map_type))
 
-        def_m = pgx_read_icdom_ncit_defaults(dir_path, map_type, **byc)
+        def_m = _read_mapping_defaults(dir_path, map_type, **byc)
 
         for def_k in def_m:
             if not def_k in o_m.keys():
@@ -153,7 +153,7 @@ def _export_ontologymaps(dir_path, service, map_type, o_m):
 ################################################################################
 ################################################################################
 
-def pgx_read_icdom_ncit_defaults(dir_path, map_type, **byc):
+def _read_mapping_defaults(dir_path, map_type, **byc):
 
     if not "mappingfile" in byc["map_types"][ map_type ]:
         return {}
@@ -183,7 +183,6 @@ def pgx_read_icdom_ncit_defaults(dir_path, map_type, **byc):
     fi = 0
     for col_name in header:
         if col_name in equiv_keys:
-            print(col_name+": "+str(hi))
             col_inds[ col_name ] = hi
 
         hi += 1
@@ -197,8 +196,9 @@ def pgx_read_icdom_ncit_defaults(dir_path, map_type, **byc):
             try:
                 cell_val = table[ i, col_inds[ col_name ] ]
                 if "id" in col_name:
-                    # TODO: check the id from filter_definitions
-                    if len(cell_val) > 4:
+                    pre, code = re.split("[:-]", cell_val)
+                    data_re = re.compile( byc["filter_definitions"][ pre ]["pattern_strict"] )
+                    if data_re.match( cell_val ):
                         bioc = { "id": cell_val }
                         id_s.append( cell_val )
                 else:
