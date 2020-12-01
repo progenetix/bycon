@@ -32,7 +32,7 @@ def _get_args():
     parser.add_argument("-t", "--test", help="test setting")
     args = parser.parse_args()
 
-    return(args)
+    return args
 
 ################################################################################
 
@@ -59,11 +59,17 @@ def main():
 
     if byc["args"].alldatasets:
         dataset_ids = byc["config"][ "dataset_ids" ]
-    else:
+    elif byc["args"].datasetids:
         dataset_ids =  byc["args"].datasetids.split(",")
         if not dataset_ids[0] in byc["config"][ "dataset_ids" ]:
             print("No existing dataset was provided with -d ...")
             exit()
+    else:
+        dataset_ids = [ ]
+
+    if len(dataset_ids) < 1:
+        print("No existing dataset was provided with -d and -a wasn't invoked ...")
+        exit()
 
     for ds_id in dataset_ids:
         if not ds_id in byc["config"][ "dataset_ids" ]:
@@ -79,6 +85,7 @@ def _create_collations_from_dataset( ds_id, **byc ):
 
     coll_types = byc["config"]["collationed"]
     # coll_types = { "NCIT": { } }
+    # coll_types = { "PMID": { } }
 
     for pre in coll_types.keys():
 
@@ -86,6 +93,8 @@ def _create_collations_from_dataset( ds_id, **byc ):
         if  path.exists( pre_h_f ):
             print( "Creating hierarchy for " + pre)
             hier =  get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc)
+        elif "PMID" in pre:
+            hier =  _make_dummy_publication_hierarchy(**byc)
         else:
             # create /retrieve hierarchy tree; method to be developed
             print( "Creating dummy hierarchy for " + pre)
@@ -283,6 +292,37 @@ def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
 
 ################################################################################
 
+def _make_dummy_publication_hierarchy(**byc):
+
+    mongo_client = MongoClient( )
+    pub_db = byc["config"]["info_db"]
+    mongo_coll = mongo_client[ pub_db ][ "publications" ]
+    query = { "id": { "$regex": byc["filter_definitions"]["PMID"]["pattern"] } }
+
+    hier = { }
+
+    no = mongo_coll.count_documents( query )
+    bar = Bar("Publications...", max = no, suffix='%(percent)d%%'+" of "+str(no) )
+
+    for order, pub in enumerate( mongo_coll.find( query, { "_id": 0 } ) ):
+        code = pub["id"]
+        bar.next()
+        hier.update( { 
+            code: {
+                "id":  code,
+                "label": pub["label"],
+                "hierarchy_paths": [ { "order": int(order), "depth": 0, "path": [ code ] } ],
+                "parent_terms": [ code ],
+                "child_terms": [ code ]
+            }
+        } )
+ 
+    bar.finish()
+
+    return hier
+
+################################################################################
+
 def _get_dummy_hierarchy(ds_id, pre, **byc):
 
     data_client = MongoClient( )
@@ -341,7 +381,6 @@ def _get_ids_for_prefix(data_coll, data_key, data_pat):
 ################################################################################
 
 def _get_label_for_code(data_coll, data_key, code):
-
     list_key = re.sub(".type.id", "", data_key)
     example = data_coll.find_one( { data_key: code } )
 

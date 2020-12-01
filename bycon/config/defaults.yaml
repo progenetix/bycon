@@ -9,14 +9,12 @@ dataset_ids:
   - progenetix
   - dipg
   - cellosaurus
-  # - tcga
 collections:
   - biosamples
   - callsets
   - individuals
   - variants
   - collations
-  - biosubsets
   - publications
 collationed:
   geo:
@@ -44,9 +42,10 @@ collationed:
   cBP:
     pattern: '^(cBP)[\-]\w'
     is_series: False
-  # tcga:
-  #   pattern: '^(TCGA)[:][\w\-]{2,20}$'
-  #   is_series: False
+  tcga:
+    pattern: '^(tcga)[:]TCGA[\w\-]{2,20}$'
+    is_series: True
+    child_pattern: '^(tcga)[:]\w+?\-[\w\-]{15,30}$'
 collations_coll: collations
 collations_source: biosamples
 ontologymaps_coll: ontologymaps
@@ -145,9 +144,6 @@ plot_pars:
   color_var_homoloss_hex: '#0033CC'
   color_var_homoloss_rgb: '0,51,204'
 paths:
-  status_matrix_file_label: matrix_status.tsv
-  values_matrix_file_label: matrix_values.tsv
-  biosamples_file_label: biosamples.tsv
   web_server_root_abs:
     - /
     - Library
@@ -159,11 +155,3 @@ paths:
     - WebServer
     - Documents
     - tmp
-  web_temp_link: /tmp
-  biosamples_template_file:
-    - rsrc
-    - biosamples-table-template.tsv
-  icd-ncit-mapping_file:
-    - rsrc
-    - icdo
-    - ICDOntologies.ods

@@ -12,15 +12,15 @@ format_patterns:
     link: '/individuals/details?datasetIds=progenetix&id='
 
   - pattern: '^(pgx\:)?((icdom)(\-)([\d]{5})?)$'
-    link: '/subsets/list?datasetIds=progenetix&filters='
+    link: '/subsets/biosubsets?datasetIds=progenetix&filters='
 
   - pattern: '^(pgx\:)?((icdot)(\-)(C\d\d?\.\d)?)$'
-    link: '/subsets/list?datasetIds=progenetix&filters='
+    link: '/subsets/biosubsets?datasetIds=progenetix&filters='
 
 # public prefix patterns (with possible underscore replacement)
 
   - pattern: '^(pgx\:)?((NCIT)([:_])(C[\d]{4,8})?)$'
-    link: '/subsets/list?datasetIds=progenetix&filters='
+    link: '/subsets/biosubsets?datasetIds=progenetix&filters='
 
   - pattern: '^(pgx\:)?((PMID)([:_])([\d]{5,10})?)$'
     link: '/publications/details?id='
@@ -29,7 +29,7 @@ format_patterns:
     examples:
       - cellosaurus:CVCL_0022
       - pgx:cellosaurus_CVCL_0022
-    link: '/biosamples/by-curie/'
+    link: '/subsets/cohorts?datasetIds=progenetix&filters='
 
   - pattern: '^(pgx\:)?(geo)(([:_])(G(PL|SM|SE|DS)\d+))$'
     examples:

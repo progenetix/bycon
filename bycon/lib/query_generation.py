@@ -130,9 +130,7 @@ def update_queries_from_filters( queries, **byc ):
                             hierarchies with them.
                             To resolve queries to include all child terms the 
                             current solution is to perform a look up query for
-                            the current filter term, in the collation database
-                            (e.g. "biosubsets") that has been defined for the
-                            filter's prefix, and create an 'OR' query which
+                            the current filter term, in the `collations` database, and create an 'OR' query which
                             replaces the single filter value (if more than one
                             term).
                             
@@ -140,13 +138,12 @@ def update_queries_from_filters( queries, **byc ):
                             f_re = re.compile( r"\-$" )
                             if not f_re.match(filterv):
                                 for ds_id in byc["dataset_ids"]:
-                                    mongo_coll = mongo_client[ ds_id ][ byc["filter_definitions"][pre]["collation"] ]
+                                    mongo_coll = mongo_client[ ds_id ][ "collations" ]
                                     try:
                                         f_def = mongo_coll.find_one( { "id": filterv })
                                         if "child_terms" in f_def:
                                             for c in f_def["child_terms"]:
                                                 if pre in c:
-                                                    # print(c)
                                                     q_keys.update({c:1})
                                     except:
                                         pass
