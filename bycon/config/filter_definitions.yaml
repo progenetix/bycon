@@ -8,8 +8,8 @@ NCIT:
       default: 1
     individuals:
       default: 0
-  pattern: '^NCIT(\:C\d+?\-?)?$'
-  pattern_strict: '^NCIT\:C\d+?$'
+  pattern: '^NCIT([_\:]C\d+?\-?)?$'
+  pattern_strict: '^NCIT[_\:]C\d+?$'
   examples:
     - 'NCIT:C27676'
     - 'NCIT:C9325'
@@ -21,8 +21,8 @@ UBERON:
   scopes:
     biosamples:
       default: 1
-  pattern: '^UBERON(\:\d*?\-?)?$'
-  pattern_strict: '^UBERON\:\d+?$'
+  pattern: '^UBERON([_\:]\d*?\-?)?$'
+  pattern_strict: '^UBERON[_\:]\d+?$'
   examples:
     - 'UBERON:0000970'
     - 'UBERON:0035542'
@@ -36,8 +36,8 @@ MONDO:
       default: 1
     individuals:
       default: 0
-  pattern: '^MONDO([\:_]\d*?\-?)?$'
-  pattern_strict: '^MONDO[\:_]\d+?$'
+  pattern: '^MONDO([_\:]\d*?\-?)?$'
+  pattern_strict: '^MONDO[_\:]\d+?$'
   examples:
     - 'MONDO:0002974'
     - 'MONDO:0012301'
@@ -51,8 +51,8 @@ HP:
       default: 0
     individuals:
       default: 1
-  pattern: '^HP(\:\d+?\-?)?$'
-  pattern_strict: '^HP\:\d+?$'
+  pattern: '^HP([_\:]\d+?\-?)?$'
+  pattern_strict: '^HP[_\:]\d+?$'
   examples:
     - 'HP:0012209'
 
@@ -65,8 +65,8 @@ PATO:
       default: 0
     individuals:
       default: 1
-  pattern: '^PATO(\:\d+?\-?)?$'
-  pattern_strict: '^PATO\:\d+?$'
+  pattern: '^PATO([_\:]\d+?\-?)?$'
+  pattern_strict: '^PATO[_\:]\d+?$'
   examples:
     - 'PATO:0020000'
 
@@ -77,8 +77,8 @@ EFO:
   scopes:
     biosamples:
       default: 1
-  pattern: '^EFO(\:\d+?\-?)?$'
-  pattern_strict: '^EFO\:\d+?$'
+  pattern: '^EFO([_\:]\d+?\-?)?$'
+  pattern_strict: '^EFO[_\:]\d+?$'
   examples:
   collation: biosubsets
     - 'EFO:0009656'
@@ -119,8 +119,8 @@ PMID:
   scopes:
     biosamples:
       default: 1
-  pattern: '^PMID(\:\d+?)?$'
-  pattern_strict: '^PMID\:\d{5,9}?$'
+  pattern: '^PMID([_\:]\d+?)?$'
+  pattern_strict: '^PMID[_\:]\d{5,9}?$'
   examples:
     - 'PMID:28966033'
     - 'PMID:9405679'
@@ -132,8 +132,8 @@ geo:
   scopes:
     biosamples:
       default: 1
-  pattern: '^geo([\-\:]G(PL|SM|SE|DS)\d+)?$'
-  pattern_strict: '^geo[\-\:]G(PL|SM|SE|DS)\d+?$'
+  pattern: '^geo([_\:]G(PL|SM|SE|DS)\d+)?$'
+  pattern_strict: '^geo[_\:]G(PL|SM|SE|DS)\d+?$'
   examples:
     - geo:GPL6504
     - geo:GSE19331
@@ -146,8 +146,8 @@ arrayexpress:
   scopes:
     biosamples:
       default: 1
-  pattern: '^arrayexpress([\-\:][AEP]\-\w{4}\-\d+)?$'
-  pattern_strict: '^arrayexpress[\-\:][AEP]\-\w{4}\-\d+?$'
+  pattern: '^arrayexpress([_\:][AEP]\-\w{4}\-\d+)?$'
+  pattern_strict: '^arrayexpress[_\:][AEP]\-\w{4}\-\d+?$'
   examples:
     - geo:GPL6504
     - geo:GSE19331
@@ -161,8 +161,8 @@ tcga:
     biosamples:
       default: 1
   db_key: 'external_references.type.id'
-  pattern: '^tcga(:[\-\w]+?)?$'
-  pattern_strict: '^tcga:[\-\w]+?$'
+  pattern: '^tcga([_\:][\-\w]+?)?$'
+  pattern_strict: '^tcga[_\:][\-\w]+?$'
   examples:
     - 'tcga:000002fc-53a0-420e-b2aa-a40a358bba37'
 
@@ -187,8 +187,8 @@ cellosaurus:
   scopes:
     biosamples:
       default: 1
-  pattern: '^cellosaurus(\:CVCL_\w+?)?$'
-  pattern_strict: '^cellosaurus\:CVCL_\w+?$'
+  pattern: '^cellosaurus([_\:]CVCL_\w+?)?$'
+  pattern_strict: '^cellosaurus[_\:]CVCL_\w+?$'
   examples:
     - 'cellosaurus:CVCL_1650'
     - 'cellosaurus:CVCL_0006'
