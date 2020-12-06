@@ -1,0 +1,15 @@
+defaults:
+  dataset_ids:
+    - progenetix
+  method: details
+  response_type: return_variants
+methods:
+  digests:
+    - digest
+  details:
+    - id
+    - description
+    - biocharacteristics
+    - external_references
+    - provenance
+    - info
