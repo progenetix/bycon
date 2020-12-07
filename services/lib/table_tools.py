@@ -49,8 +49,6 @@ def get_id_label_for_prefix(data_list, prefix, **byc):
 
 ################################################################################
 
-################################################################################
-
 def get_nested_value(parent, dotted_key):
 
     ps = dotted_key.split('.')
@@ -99,6 +97,6 @@ def assign_value_type(v, v_type):
     if v == None:
         v = ""
 
-    return( v )
+    return v
 
 
