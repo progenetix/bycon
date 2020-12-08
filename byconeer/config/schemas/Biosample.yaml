@@ -45,5 +45,6 @@ properties:
     type: object
   Updated:
     type: string
+    format: date-time
     examples:
       - "2020-09-10T17:44:10.170Z"

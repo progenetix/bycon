@@ -25,6 +25,20 @@ from bycon.lib.table_tools import *
 """
 
 ################################################################################
+################################################################################
+
+def _get_args():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-t', '--test', help='No. of samples for test run')
+    parser.add_argument('-d', '--output_db', help='the database to write into.')
+    parser.add_argument('-s', '--source', help='which repo is input data from')
+    args = parser.parse_args()
+
+    return(args)
+
+
+################################################################################
 
 def main():
 
@@ -87,7 +101,7 @@ def main():
         bar_length = test
         rdm_row = random.sample(range(no_row), test)
         mytable = mytable.iloc[rdm_row, :]
-        print( "¡¡¡ TEST MODE - no db update !!!")
+        print( f"TEST MODE for {test} of samples.")
     else:
         bar_length = no_row
 
@@ -155,11 +169,12 @@ def main():
         info_field[cs]['legacy_id'] = 'pgxcs::{}::{}'.format(info_field['experiment'], info_field['uid'])
         info_field[ind]['legacy_id'] = 'PGX_IND_' + info_field['uid']
 
-        info_field[bs]['id'] = generate_id('pgxbs')
-        info_field[cs]['id'] = generate_id('pgxcs')
+        info_field[bs]['id'] = _generate_id('pgxbs')
+        info_field[cs]['id'] = _generate_id('pgxcs')
         info_field[cs]['biosample_id'] = info_field[bs]['id']
-        info_field[ind]['id'] = generate_id('pgxind')
+        info_field[ind]['id'] = _generate_id('pgxind')
         info_field[bs]['individual_id'] = info_field[ind]['id']
+
         info_field[bs]['EFO::id'] = 'EFO:0009654' if info_field[bs]['icdom::id'] == '00000' else 'EFO:0009656'
         info_field[bs]['EFO::label'] = 'reference sample' if info_field[bs]['icdom::id'] == '00000' else 'neoplastic sample'
         info_field[ind]['NCBITaxon::id'] = 'NCBITaxon:9606'
@@ -167,34 +182,11 @@ def main():
         for collection in [bs, cs, ind]:
             info_field[collection]['DUO::id'] = 'DUO:0000004'
             info_field[collection]['DUO::label'] = 'no restriction'
-                
-        geo_provenance = {
-                            { 'label': info_field[bs]['geoprov_label'],
-                            'precision': info_field[bs]['geoprov_precision'],
-                            'city': info_field[bs]['geoprov_city'],
-                            'country': info_field[bs]['geoprov_country'],
-                            'latitude': info_field[bs]['latitude'],
-                            'longitude': info_field[bs]['longitude'],
-                            'geojson': {
-                                        'type': 'Point',
-                                        'coordinates': [
-                                            info_field[bs]['longitude'],
-                                            info_field[bs]['latitude']
-                                        ]
-                                    },
-                            'ISO-3166-alpha3': info_field[bs]['geoprov_iso_alpha3']
-                            }
-                        }
 
         ############################
         ##   variants & callsets  ##
         ############################
         variants, callset  = _initiate_vs_cs(byc['json_file_root'], info_field['experiment'], info_field['uid'])
-
-        ### check if callset_id exists already in the dababase and in the current process.
-        
-        if callset_id in exist_callset_id[db_name]:
-            continue ### if callset exists then the sample shouldn't be processed.
 
         ## variants
         for variant in variants:
@@ -219,7 +211,6 @@ def main():
         ############################
 
         biosample= {
-                    'id': info_field[ind]['id'],
                     'updated': curr_time,
                     }
         
@@ -238,8 +229,6 @@ def main():
         ############################
 
         individual = {
-                        'id': info_field[ind]['id'],
-                        'geo_provenance': geo_provenance,
                         'updated': curr_time
                      }
 
@@ -255,10 +244,10 @@ def main():
     ###   database write-in  ###
     ############################
 
-    confirm = input("""I have processed {} variants, {} callsets, {} biosamples and {} individuals for update.
+    confirm = input("""Processed {} variants, {} callsets, {} biosamples and {} individuals for update.
 Do you want to continue? [y/n]""".format(sum([len(v) for v in variants_list]), len(callsets_dict), len(biosamples_dict),
                      len(individuals_dict)))
-
+    update = input("""In case of existing record (matching info.legacy_id). Do you want to update? [y/n] """)
     if confirm == 'y':
 
         for variant_obj in variants_list:
@@ -268,39 +257,28 @@ Do you want to continue? [y/n]""".format(sum([len(v) for v in variants_list]), l
                 pass
 
         for callset_id_leg, callset_obj in callsets_dict.items():
-            if callset_id_leg in exist_callset_id[db_name]:
+            if (not update) and (callset_id_leg in exist_callset_id[db_name]):
                 continue
             data_db.callsets.insert_one(callset_obj)
 
         for biosample_id_leg, biosample_obj in biosamples_dict.items():
-            if biosample_id_leg in exist_biosample_id[db_name]:
+            if (not update) and (biosample_id_leg in exist_biosample_id[db_name]):
                 continue
             data_db.biosamples.insert_one(biosample_obj)
 
         for individual_id_leg, individual_obj in individuals_dict.items():
-            if individual_id_leg in exist_individual_id[db_name]:
+            if (not update) and (individual_id_leg in exist_individual_id[db_name]):
                 continue
             data_db.individuals.insert_one(individual_obj)
 
+
+
 ################################################################################
 ################################################################################
 
-def _get_args():
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-t', '--test', help='No. of samples for test run')
-    parser.add_argument('-d', '--output_db', help='the database to write into.')
-    parser.add_argument('-s', '--source', help='which repo is input data from')
-    args = parser.parse_args()
-
-    return(args)
-
-def generate_id(prefix):
+def _generate_id(prefix):
     time.sleep(.001)
     return '{}-{}'.format(prefix, base36.dumps(int(time.time() * 1000))) ## for time in ms
-
-################################################################################
-################################################################################
 
 def _initiate_vs_cs(rootdir, ser, arr):
 

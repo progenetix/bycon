@@ -42,5 +42,6 @@ properties:
         cnv_length: 81552384
   Updated:
     type: string
+    format: date-time
     examples:
       - "2018-09-26 09:50:51.957159"
