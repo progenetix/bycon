@@ -8,7 +8,7 @@ io_params:
       type: string
     callset_ids:
       db_key: info.callset_ids
-      type: list
+      type: array
     description:
       db_key: description
       type: string
@@ -128,7 +128,7 @@ io_params:
       type: string
 io_prefixes:
   biosamples:
-    sampledTissue:
+    sampled_tissue:
       - UBERON
     histological_diagnosis:
       - NCIT

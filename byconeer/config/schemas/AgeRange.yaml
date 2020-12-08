@@ -1,0 +1,7 @@
+properties:
+  Start:
+    type: object
+    $ref: "#/Age"
+  End:
+    type: object
+    $ref: "#/Age"

@@ -33,5 +33,4 @@ properties:
     examples:
       - city
   Geojson:
-    type: object
-    schema: ./GeojsonPoint
+    $ref: "#/GeojsonPoint"

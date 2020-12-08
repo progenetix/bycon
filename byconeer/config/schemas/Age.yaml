@@ -1,0 +1,5 @@
+properties:
+  Age:
+    type: string
+    examples:
+      - P12Y

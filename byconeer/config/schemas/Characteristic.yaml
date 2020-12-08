@@ -1,6 +1,5 @@
 properties:
   Type:
-    type: object
-    schema: ./OntologyTerm
+    $ref: "#/OntologyTerm"
   Description:
     type: string

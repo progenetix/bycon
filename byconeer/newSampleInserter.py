@@ -8,15 +8,16 @@ import pandas as pd
 from pymongo import MongoClient
 import random
 from os import path, environ, pardir
-from progress.bar import Bar
+from progressbar import Bar
 from pydoc import locate
+from jsonschema import validate
 
 # local
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.read_specs import *
-from bycon.lib.table_tools import *
+from services.lib.table_tools import *
 
 """
 

@@ -1,11 +1,11 @@
 properties:
   Id:
     type: string
-    exammples:
+    examples:
       - pgxbs-kftvjtgm
   IndividualId:
     type: string
-    exammples:
+    examples:
       - pgxind-kftx5ruq
   Description:
     type: string
@@ -15,7 +15,7 @@ properties:
   Biocharacteristics:
     type: array
     elements: object
-    schema: ./Characteristic
+    $ref: "#/Characteristic"
     examples:
       - type:
           id: NCIT:C4029
@@ -30,20 +30,15 @@ properties:
       - type:
           id: PMID:9892199
   IndividualAgeAtCollection:
-    type: object
-    schema: ./Age
+    $ref: "#/Age"
   Provenance:
-    type: object
-    schema: Provenance
+    $ref: "#/Provenance"
   DataUseConditions:
-    type: object
-    schema: ./OntologyTerm
+    $ref: "#/OntologyTerm"
   SampledTissue:
-    type: object
-    schema: ./OntologyTerm
+    $ref: "#/OntologyTerm"
   HistologicalDiagnosis:
-    type: object
-    schema: ./OntologyTerm
+    $ref: "#/OntologyTerm"
   Info:
     type: object
   Updated:

@@ -1,7 +1,5 @@
 properties:
   Material:
-    type: object
-    schema: ./Characteristic
+    $ref: "#/Characteristic"
   Geo:
-    type: object
-    schema: ./Geodata
+    $ref: "#/Geodata"

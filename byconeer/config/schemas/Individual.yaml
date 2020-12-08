@@ -8,8 +8,7 @@ properties:
     examples:
       - HapMap project contributor
   KaryotypicSex:
-    type: obbject
-    schema: ./OntologyTerm
+    $ref: "#/OntologyTerm"
   DateOfBirth:
     type: string
     format: date-time
@@ -21,11 +20,9 @@ properties:
           id: NA19625
           label: HapMap individual
   Provenance:
-    type: object
-    schema: Provenance
+    $ref: "#/Provenance"
   DataUseConditions:
-    type: object
-    schema: ./OntologyTerm
+    $ref: "#/OntologyTerm"
   Info:
     type: object
   Updated:

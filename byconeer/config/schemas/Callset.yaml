@@ -5,7 +5,7 @@ properties:
       - pgxcs-kftvldsu
   BiosampleId:
     type: string
-    exammples:
+    examples:
       - pgxbs-kftva59y
   Description:
     type: string
@@ -18,11 +18,9 @@ properties:
       - type:
           id: geo:GSM224836
   Provenance:
-    type: object
-    schema: Provenance
+    $ref: "#/Provenance"
   DataUseConditions:
-    type: object
-    schema: ./OntologyTerm
+    $ref: "#/OntologyTerm"
   Info:
     type: object
   Updated:
