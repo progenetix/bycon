@@ -1,0 +1,32 @@
+properties:
+  Id:
+    type: string
+    examples:
+      - pgxcs-kftvldsu
+  BiosampleId:
+    type: string
+    exammples:
+      - pgxbs-kftva59y
+  Description:
+    type: string
+    examples:
+      - SNP6 array
+  ExternalReferences:
+    type: array
+    elements: object
+    examples:
+      - type:
+          id: geo:GSM224836
+  Provenance:
+    type: object
+    schema: Provenance
+  DataUseConditions:
+    type: object
+    schema: ./OntologyTerm
+  Info:
+    type: object
+  Updated:
+    type: string
+    format: date-time
+    examples:
+      - "2020-09-10T17:44:10.170Z"
