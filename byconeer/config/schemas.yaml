@@ -1,0 +1,183 @@
+
+schemas:
+  variant:
+    attributes:
+      Digest:
+        type: string
+        examples:
+          - 11:52900000-134452384:DEL
+      BiosampleId:
+        type: string
+        exammples:
+          - pgxbs-kftvjtgm
+      CallsetId:
+        type: string
+        exammples:
+          - pgxcs-kftvldsu
+      ReferenceName:
+        type: string
+        exammples:
+          - 11
+      ReferenceBases:
+        type: string
+        exammples:
+          - A
+      Start:
+        type: integer
+        exammples:
+          - 52900000
+      End:
+        type: integer
+        exammples:
+          - 134452384
+      AlternateBases:
+        type: string
+        exammples:
+          - GC
+      VariantType:
+        type: string
+        exammples:
+          - DEL
+      Info:
+        type: object
+        exammples:
+          - cnv_value: 3
+            cnv_length: 81552384
+      Updated:
+        type: string
+        examples:
+          - "2018-09-26 09:50:51.957159"
+
+  biosample:
+    attributes:
+      Id:
+        type: string
+        exammples:
+          - pgxbs-kftvjtgm
+      IndividualId:
+        type: string
+        exammples:
+          - pgxind-kftx5ruq
+      Description:
+        type: string
+        examples:
+          - breast carcinoma
+          - adenocarcinoma [cell line HeLa]
+      Biocharacteristics:
+        type: array
+        elements: object
+        schema: "#/schemas/Characteristic"
+        examples:
+          - type:
+              id: NCIT:C4029
+              label: Cervical Adenocarcinoma
+            type:
+              id: UBERON:0000002
+              label: uterine cervix
+      ExternalReferences:
+        type: array
+        elements: object
+        examples:
+          - type:
+              id: PMID:9892199
+      Provenance:
+        type: object
+        schema: Provenance
+      DataUseConditions:
+        type: object
+        schema: "#/schemas/OntologyClass"
+      SampledTissue:
+        type: object
+        schema: "#/schemas/OntologyClass"
+      HistologicalDiagnosis:
+        type: object
+        schema: "#/schemas/OntologyClass"
+      Info:
+        type: object
+      Updated:
+        type: string
+        examples:
+          - "2020-09-10T17:44:10.170Z"
+
+# low-level components
+
+  Provenance:
+    attributes:
+      Material:
+        type: object
+        schema: "#/schemas/Characteristic"
+      Geo:
+        type: object
+        schema: "#/schemas/Geodata"
+
+  Geodata:
+    attributes:
+      Label:
+        type: string
+        examples:
+          - Heidelberg, Germany
+          - Gainesville, United States of America
+          - Zürich, Switzerland
+      City:
+        type: string
+        examples:
+          - Heidelberg
+      Country:
+        type: string
+        examples:
+          - Switzerland
+      ISO-3166-alpha3:
+        type: string
+        examples:
+          - USA
+          - CHE
+      Latitude:
+        type: float
+        examples:
+          - 47.37
+      Longitude:
+        type: float
+        examples:
+          - 8.55
+      Precision:
+        type: string
+        examples:
+          - city
+      Geojson:
+        type: object
+        schema: "#/schemas/GeojsonPoint"
+
+  GeojsonPoint:
+    attributes:
+      Type:
+        type: string
+        value: "Point"
+      Coordinates:
+        type: array
+        values: float
+  
+  Characteristic:
+    attributes:
+      Type:
+        type: object
+        schema: "#/schemas/OntologyClass"
+      Description:
+        type: string
+
+  OntologyClass:
+    attributes:
+      Id:
+        type: string
+        examples:
+          - UBERON:0000002
+          - PMID:9892199
+      Label:
+        type: string
+          - neoplastic sample
+          - Adenocarcinoma, NOS
+
+
+  
+
+
+

@@ -12,29 +12,5 @@ platform_rename:
   GPL6801: SNP6
   GPL6894: SNP5
   GPL2641: Xba142
-column_names:
-  - status
-  - SERIESID
-  - UID
-  - PLATFORMID
-  - ICDO_T_label
-  - ICDO_T
-  - ICDO_M_label
-  - ICDO_M
-  - NCIT
-  - NCIT_label
-  - DIAGNOSISTEXT
-  - AGE
-  - SEX
-  - PMID
-  - TNM
-  - CITY
-  - COUNTRY
-  - CELLLINEID
-  - CELLOSAURUS_ID
-str_type_columns:
-  - AGE
-  - YEAR
-  - PMID
 json_file_root: /Volumes/arrayMaster/arraymap/grch38/
-meta_path: imports/new_data.tsv
+import_path: imports/new_data.tsv

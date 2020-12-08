@@ -1,0 +1,118 @@
+io_params:
+  biosamples:
+    description:
+      db_key: description
+      type: str
+    tnm:
+      db_key: info.tnm
+      type: str
+    stage:
+      db_key: info.stage
+      type: str
+    grade:
+      db_key: info.grade
+      type: str
+    age_iso:
+      db_key: individual_age_at_collection.age
+      type: str
+    death:
+      db_key: info.death
+      type: str
+    followup_months:
+      db_key: info.followup_months
+      type: str
+    geoprov_label:
+      db_key: provenance.geo.label
+      type: str
+    geoprov_precision:
+      db_key: provenance.geo.precision
+      type: str
+    geoprov_city:
+      db_key: provenance.geo.city
+      type: str
+    geoprov_country:
+      db_key: provenance.geo.country
+      type: str
+    geoprov_iso_alpha3:
+      db_key: provenance.geo.ISO-3166-alpha3
+      type: str
+    geoprov_lat:
+      db_key: provenance.geo.latitude
+      type: float
+    geoprov_long:
+      db_key: provenance.geo.longitude
+      type: float
+    cnv_fraction:
+      db_key: info.cnvstatistics.cnvfraction
+      type: float
+    cnv_del_fraction:
+      db_key: info.cnvstatistics.delfraction
+      type: float
+    cnv_dup_fraction:
+      db_key: info.cnvstatistics.dupfraction
+      type: float
+    cell_line:
+      db_key: info.cell_line
+      type: str
+    legacy_id:
+      db_key: info.legacy_id
+      type: str
+    individual_id:
+      db_key: individual_id
+      type: str
+  individuals:
+    legacy_id:
+      db_key: info.legacy_id
+      type: str
+  callsets:
+    biosample_id:
+      db_key: biosample_id
+      type: str
+    legacy_id:
+      db_key: info.legacy_id
+      type: str
+  non-collection:
+    uid:
+      db_key: None
+      type: str
+    status:
+      db_key: None
+      type: str
+    experiment:
+      db_key: None
+      type: str
+    age:
+      db_key: None
+      type: str
+    sex:
+      db_key: None
+      type: str
+    platform_id:
+      db_key: None
+      type: str
+io_prefixes:
+  biosamples:
+    sampledTissue:
+      - UBERON
+    histological_diagnosis:
+      - NCIT
+    biocharacteristics:
+      - icdom
+      - icdot
+      - NCIT
+      - UBERON
+      - MONDO
+    external_references:
+      - PMID
+      - geo:GSM
+      - geo:GSE
+      - geo:GPL
+      - cellosaurus
+      - arrayexpress
+    provenance.material:
+      - EFO
+  individuals:
+    biocharacteristics:
+      - PATO
+      - NCBITaxon
+  

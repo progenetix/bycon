@@ -15,6 +15,8 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.read_specs import *
+from bycon.lib.table_tools import *
+
 """
 
 ## `newSampleInserter`
@@ -25,7 +27,7 @@ from bycon.lib.read_specs import *
 
 def main():
 
-    service = "inserts"
+    configs = ["inserts", "datatables"]
 
     byc = {
         "pkg_path": pkg_path,
@@ -42,9 +44,10 @@ def main():
         byc.update( { d: read_bycon_configs_by_name( d ) } )
 
     # first pre-population w/ defaults
-    these_prefs = read_local_prefs( service, dir_path )
-    for d_k, d_v in these_prefs.items():
-        byc.update( { d_k: d_v } )
+    for config in configs:
+        these_prefs = read_local_prefs( config, dir_path )
+        for d_k, d_v in these_prefs.items():
+            byc.update( { d_k: d_v } )
 
     if not byc['args'].source in byc['data_sources']:
         print( 'Does not recognize data source!')
@@ -52,7 +55,8 @@ def main():
 ################################################################################
 
     ### read in meta table
-    mytable = pd.read_csv(byc['meta_path'], sep = '\t', dtype = {k: str for k in byc['str_type_columns']})
+    metapath = byc['import_path']
+    mytable = pd.read_csv(metapath, sep = '\t', dtype = str)
     mytable = mytable.where((pd.notnull(mytable)), None) ## convert pd.nan to None
 
     ### define list/dictionary of objects to insert in 4 collections
@@ -74,6 +78,8 @@ def main():
     exist_biosample_id[db_name] = data_db.biosamples.distinct('info.legacy_id')
     exist_individual_id[db_name] = data_db.individuals.distinct('info.legacy_id')
 
+    metafile_time = retrieveTime(metapath, 'date')
+
     no_row = mytable.shape[0]
    
     if byc['args'].test:
@@ -87,68 +93,93 @@ def main():
 
     bar = Bar("Reading in metadata table", max = bar_length, suffix="%(percent)d%%"+" of "+str(bar_length) )
     for row in mytable.itertuples():
-         
 
-        ### assign variables from info fields
-        status, ser, arr, plf, icdt, icdtc, icdm, icdmc, ncidcode, ncitterm, diagnosis, age, sex, pmid, tnm, city, country, cellline_id, cellosaurus_id = \
-                  [row.loc[column_name] for column_name in byc['column_names']]
-
-        if status.startswith('excluded'):
+        if row.loc['status'].startswith('excluded'):
             continue
 
-        if byc['args'].source == 'arrayexpress':
-            arr = 'AE-'+ ser.replace('E-','').replace('-','_') + '-' +\
-                arr.replace("-", "_").replace(' ', '_').replace('.CEL','') + '-' +\
-                byc['platform_rename'][plf]  ## initial rename 
-           
-        if not icdtc:
-                icdtc = 'C42.0'
-                icdt = 'Blood'
-
-        if icdmc:
-            icdmc = icdmc.replace('/','')
-        else:
-            icdmc = '00000'
-            icdm = 'Normal'
+        ### assign variables from info fields
         
-        if not diagnosis:
-                diagnosis = ''
+        info_field = {}
+        column_names = io_table_header( **byc )
+        field_to_db = io_map_to_db( **byc )
+        bs = 'biosamples'
+        cs = 'callsets'
+        ind = 'individuals'
+        for field in column_names:
+            if field in row:
+                if field in field_to_db:
+                    info_field[field_to_db[field][0]][field] = row.loc[field]
+                else:
+                    info_field[field] = row.loc[field]
+                
+        if byc['args'].source == 'arrayexpress':
+            info_field['uid'] = 'AE-'+ info_field['experiment'].replace('E-','').replace('-','_') + '-' +\
+                info_field['uid'].replace("-", "_").replace(' ', '_').replace('.CEL','') + '-' +\
+                byc['platform_rename'][info_field['platform_id']]  ## initial rename 
+           
+        if not info_field[bs]['icdot::id']:
+            info_field[bs]['icdot::id'] = 'C42.0'
+        if not info_field[bs]['icdot::label']:
+            info_field[bs]['icdot::label'] = 'Blood'
 
-        if age:  
-            if type(age) == str:
-                age = re.sub('[A-Za-z _]','',age)
-            
+        if info_field[bs]['icdom::id']:
+            info_field[bs]['icdom::id'] = info_field[bs]['icdom::id'].replace('/','')
+        else:
+            info_field[bs]['icdom::id'] = '00000'
+            info_field[bs]['icdom::label'] = 'Normal'
+        
+        if not 'description' in info_field:
+                info_field[bs]['description'] = ''
+
+        if 'age_iso' not in info_field[bs] and info_field['age']:
             try:
-                age = int(age)
-                isoage = 'P'+str(age)+'Y'
+                age = int(info_field['age'])
+                info_field[bs]['age_iso'] = 'P'+str(v)+'Y'
             except ValueError:
-                age = float(age)
+                age = float(info_field['age'])
                 rem_age = age - int(age)
-                isoage = 'P'+str(int(age)) +'Y'+ str(round(rem_age*12)) + 'M' 
+                info_field[bs]['age_iso'] = 'P'+str(int(age)) +'Y'+ str(round(rem_age*12)) + 'M' 
 
-        if sex:
-            sex = sex.lower()
+        if 'PATO::id' not in info_field[ind] and info_field['sex']:
+            sex = info_field['sex'].lower()
             if sex == 'male':
-                sex_id = 'PATO:0020001'  
-                sex_label = 'male genotypic sex'
+                info_field[ind]['PATO::id'] = 'PATO:0020001'  
+                info_field[ind]['PATO::label'] = 'male genotypic sex'
 
             if sex == 'female':
-                sex_id = 'PATO:0020002'
-                sex_label = 'female genotypic sex'
-        else:
-            sex_id = sex_label = None
-
+                info_field[ind]['PATO::id'] = 'PATO:0020002'
+                info_field[ind]['PATO::label'] = 'female genotypic sex'
+        
         ### derived attributes that are shared by collections
-        biosample_id_leg = 'PGX_AM_BS_' + arr
-        callset_id_leg = 'pgxcs::{}::{}'.format(ser, arr)
-        individual_id_leg = 'PGX_IND_' + arr
+        info_field[bs]['legacy_id'] = 'PGX_AM_BS_' + info_field['uid']
+        info_field[cs]['legacy_id'] = 'pgxcs::{}::{}'.format(info_field['experiment'], info_field['uid'])
+        info_field[ind]['legacy_id'] = 'PGX_IND_' + info_field['uid']
 
-        biosample_id = generate_id('pgxbs')
-        callset_id = generate_id('pgxcs')
-        individual_id = generate_id('pgxind')
-        material_id = 'EFO:0009654' if icdmc == '00000' else 'EFO:0009656'
-        material_label = 'reference sample' if icdmc == '00000' else 'neoplastic sample'
-        geo_provenance = _retrieveGEO(mongo_client, city, country)
+        info_field[bs]['id'] = generate_id('pgxbs')
+        info_field[cs]['id'] = generate_id('pgxcs')
+        info_field[ind]['id'] = generate_id('pgxind')
+        info_field[bs]['EFO::id'] = 'EFO:0009654' if info_field[bs]['icdom::id'] == '00000' else 'EFO:0009656'
+        info_field[bs]['EFO::label'] = 'reference sample' if info_field[bs]['icdom::id'] == '00000' else 'neoplastic sample'
+        info_field[ind]['NCBITaxon::id'] = 'NCBITaxon:9606'
+        info_field[ind]['NCBITaxon::label'] = 'Homo sapiens'
+                
+        geo_provenance = {
+                        { 'label': info_field[bs]['geoprov_label'],
+                        'precision': info_field[bs]['geoprov_precision'],
+                        'city': info_field[bs]['geoprov_city'],
+                        'country': info_field[bs]['geoprov_country'],
+                        'latitude': info_field[bs]['latitude'],
+                        'longitude': info_field[bs]['longitude'],
+                        'geojson': {
+                                    'type': 'Point',
+                                    'coordinates': [
+                                        info_field[bs]['longitude'],
+                                        info_field[bs]['latitude']
+                                    ]
+                                },
+                        'ISO-3166-alpha3': iso_country
+                        }   
+                        }
         data_use = {
                 'label' : 'no restriction',
                 'id' : 'DUO:0000004'
@@ -160,196 +191,64 @@ def main():
         variants, callset  = _initiate_vs_cs(byc['json_file_root'], ser, arr)
 
         ### check if callset_id exists already in the dababase and in the current process.
-
-        check_callset = [callset_id in exist_callset_id[db_name] for db_name in output_db]
         
-        if all(check_callset):
+        if callset_id in exist_callset_id[db_name]:
             continue ### if callset exists then the sample shouldn't be processed.
 
         ## variants
         for variant in variants:
-            variant['callset_id'] = callset_id
-            variant['biosample_id'] = biosample_id
-            variant['updated'] = retrieveTime(metapath, 'str')
+            variant['callset_id'] = info_field[cs]['id']
+            variant['biosample_id'] = info_field[bs]['id']
+            variant['updated'] = metafile_time
 
         variants_list.append(variants)
 
         ## callsets
-        callset['id'] = callset_id
-        callset['biosample_id'] = biosample_id
-        callset['updated'] = retrieveTime(metapath, 'date')
-        callset['info']['legacy_id'] = callset_id_leg
-        if plf:
-            callset['description'] = _retrievePlatformLabel(mongo_client, plf)
-        else:
-            callset['description'] = plf_text
+        for k,v in info_field[cs].items():
+            assign_nested_value(callset, field_to_db['.'.join([cs,k])][1], v)
+        if info_field['platform_id']:
+            callset['description'] = _retrievePlatformLabel(mongo_client, info_field['platform_id'])
         callset['data_use_conditions'] = data_use
-
-        # if age:
-        #     callset['info']['isoage'] = isoage
-        #     callset['info']['age_years'] = age
-
-        if sex:
-            callset['info']['PATO'] = {
-                                        'id': sex_id,
-                                        'label': sex_label
-                                        }
-        callsets_dict[callset_id_leg] = callset
+        
+        callsets_dict[info_field[cs]['legacy_id']] = callset
 
         ############################
         ######   biosamples  #######
         ############################
 
         biosample= {
-                'id': biosample_id,
-                'description': diagnosis,
-                'biocharacteristics':[
-                        {
-                                'type': {
-                                        'id':  'icdot-' + icdtc,
-                                        'label': icdt
-                                },
-                        },
-                        {
-                                'type': {
-                                        'id':  'icdom-' + icdmc,
-                                        'label': icdm
-                                 }
-                                }
-                        ],
-                'updated': retrieveTime(metapath, 'date'),
-                'individual_id': individual_id,
-                'project_id': 'A' + ser,
-                'provenance':{
-                        'material':{
-                                'type':{
-                                        'id': material_id,
-                                        'label': material_label
-                                        }
-                                },
-                        'geo': geo_provenance
-                        },
-                'info':{
-                        'death': None,
-                        'followup_months': None,
-                        'legacy_id': biosample_id_leg
-                        # 'samplesource': samplesource
-                        },
-                'data_use_conditions': data_use
-
-                }
+                    'updated': metafile_time,
+                    'data_use_conditions': data_use
+                    }
+        
         if byc['args']['source'] == 'arrayexpress':
-            biosample['external_references'] =[
-                                                {
-                                                        'type': {
-                                                                'id': 'arrayexpress:'+ ser,
-                                                        }
-                                                },
-                        ]
-        elif byc['args']['source'] == 'geo':
-            biosample['external_references'] =[
-                                                {
-                                                        'type': {
-                                                                'id': 'geo:' + ser,
-                                                        }
-                                                },
-                                                {
-                                                        'type':{
-                                                                'id': 'geo:' + arr,
-                                                        }
-                                                },
-                                                {
-                                                        'type': {
-                                                                'id': 'geo:' + plf,
-                                                        }
-                                                }
-                                                ]
-
-        if ncitcode:
-            biosample['biocharacteristics'].append(
-                                               {
-                                                'type': {
-                                                        'id':  'NCIT:' + ncitcode.capitalize(),
-                                                        'label': ncitterm
-                                                 }
-                                                }
-                                                )
-                                
-        if age:
-            biosample['individual_age_at_collection'] = {
-                    
-                                            'age_class': ### to be added later
-                                                {
-                                                        'id': None,
-                                                        'label': None
-                                                    },
-                                            'age': isoage
-                                            }
+            info_field[bs][bs+'.'+'arrayexpress::id'] = 'arrayexpress:'+ info_field['experiment'],
+            biosample['project_id'] = 'A' + info_field['experiment']
+        
+        for k,v in info_field[bs].items():
+            assign_nested_value(biosample, field_to_db['.'.join([bs,k])][1], v)
                 
-        if tnm:
-            biosample['info']['tnm'] = tnm
-
-        if plf:
-            biosample['external_references'].append(
-                    {
-                                'type': {
-                                        'id': 'geo:' + plf,
-                                }
-                    })
-
-        if pmid:
-            biosample['external_references'].append(
-                    {
-                                'type': {
-                                        'id': 'PMID:' + pmid,
-                                        'relation': 'pubmed'
-                                }
-                    })
-
-        if cellosaurus_id:
-            biosample['external_references'].append(
-                    {
-                                'type':{
-                                        'id': 'cellosaurus:' + cellosaurus_id,
-                                
-                                        'relation': 'cellosaurus'
-                                }
-                    })  
-
-        if cellline_id:
-            biosample['info']['cell_line'] = cellline_id
-
-        biosamples_dict[biosample_id_leg] = biosample
+        biosamples_dict[info_field[bs]['legacy_id']] = biosample
 
         ############################
         ######   individuals  ######
         ############################
 
         individual = {
-                'id': individual_id,
-                'description': None,
-                'biocharacteristics':[
-                        {
-                                'description': sex,
+                'id': info_field[ind]['id'],
+                'data_use_conditions' : data_use,
+                'geo_provenance': geo_provenance,
+                 'updated': metafile_time
+                 }
 
-                                'type': {
-                                        'id': sex_id,
-                                        'label': sex_label}
-                                },
-                        {
-                                'description': None,
-                                'type':{
-                                        'id' : 'NCBITaxon:9606',
-                                        'label' : 'Homo sapiens'
-                                }
-                        }],
-                 'data_use_conditions' : data_use,
-                 'geo_provenance': geo_provenance,
-                 'updated': retrieveTime(metapath, 'date'),
-                 'info': {'legacy_id': individual_id_leg}
+                
+                
+                
+
+                 'info': {'legacy_id': info_field[ind]['legacy_id']}
                 }
 
-        individuals_dict[individual_id_leg] = individual
+        individuals_dict[info_field[ind]['legacy_id']] = individual
 
         bar.next()
     bar.finish()
@@ -371,17 +270,17 @@ Do you want to continue? [y/n]""".format(sum([len(v) for v in variants_list]), l
                 pass
 
         for callset_id_leg, callset_obj in callsets_dict.items():
-            if callset_id in exist_callset_id[db_name]:
+            if callset_id_leg in exist_callset_id[db_name]:
                 continue
             data_db.callsets.insert_one(callset_obj)
 
         for biosample_id_leg, biosample_obj in biosamples_dict.items():
-            if biosample_id in exist_biosample_id[db_name]:
+            if biosample_id_leg in exist_biosample_id[db_name]:
                 continue
             data_db.biosamples.insert_one(biosample_obj)
 
         for individual_id_leg, individual_obj in individuals_dict.items():
-            if individual_id in exist_individual_id[db_name]:
+            if individual_id_leg in exist_individual_id[db_name]:
                 continue
             data_db.individuals.insert_one(individual_obj)
 
@@ -486,7 +385,7 @@ def _retrievePlatformLabel(client, platformID):
         return plf_obj['PLATFORMLABEL']
     except:
         print('{} has no platform description in arraymap.platforms'.format(platformID))
-        pass
+        return None
 
 ################################################################################
 ################################################################################

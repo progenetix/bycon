@@ -2,24 +2,49 @@ from os import path as path
 
 ################################################################################
 
-def biosample_table_header(**datatables):
+def io_table_header(io_params, io_prefixes):
     """podmd
-
  
     podmd"""
 
-    io_params = datatables[ "io_params" ]
-    io_prefixes = datatables[ "io_prefixes" ]
-
     header_labs = [ ]
 
-    for par in io_params.keys():
-        header_labs.append( par )
-    for pre in io_prefixes:
-        header_labs.append( pre+"::id" )
-        header_labs.append( pre+"::label" )
+    for collection, pars in io_params.items():
+        if collection is 'non_collection':
+            collection = ''
+        else:
+            collection += '.'
+        for par in pars.keys():
+            header_labs.append( collection+par )
+    for collection, pres in io_prefixes.items():
+        for pre in pres:
+            header_labs.append( collection+pre+"::id" )
+            header_labs.append( collection+pre+"::label" )
 
     return header_labs
+
+################################################################################
+
+def io_map_to_db(io_params, io_prefixes):
+
+    field_to_db = { }
+
+    for collection, fields in io_params.items():
+
+        if collection is 'non_collection':
+            continue
+
+        for field_name, field_info in fields.items():
+            field_to_db[collection+'.'+field_name] = [field_info['db_key'], field_info['type']]
+
+    for collection, field_category in io_prefixes.items():
+
+        for prefix in field_category:
+
+            field_to_db[collection+'.'+prefix+'::id'] = [field_category+'.type.id', 'string']
+            field_to_db[collection+'.'+prefix+'::label'] = [field_category+'.type.label', 'string']
+
+    return field_to_db
 
 ################################################################################
 
@@ -28,7 +53,7 @@ def write_biosamples_template_file(**config):
     btf = path.join( config[ "paths" ][ "module_root" ], *config[ "paths" ][ "biosamples_template_file" ] )
 
     with open( btf, 'w' ) as bt:
-        header = biosample_table_header( **config )   
+        header = biosample_table_header( **config )
         bt.write( "\t".join( header ) + "\n" )
 
 ################################################################################
@@ -46,6 +71,8 @@ def get_id_label_for_prefix(data_list, prefix, **byc):
                 pre_lab = item["type"]["label"]
 
     return(pre_id, pre_lab)
+
+################################################################################
 
 ################################################################################
 
@@ -97,6 +124,6 @@ def assign_value_type(v, v_type):
     if v == None:
         v = ""
 
-    return v
+    return( v )
 
 
