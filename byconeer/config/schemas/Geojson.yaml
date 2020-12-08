@@ -19,11 +19,13 @@ properties:
       - USA
       - CHE
   Latitude:
-    type: float
+    type: number
+    format: float
     examples:
       - 47.37
   Longitude:
-    type: float
+    type: number
+    format: float
     examples:
       - 8.55
   Precision:

@@ -29,6 +29,9 @@ properties:
     examples:
       - type:
           id: PMID:9892199
+  IndividualAgeAtCollection:
+    type: object
+    schema: ./Age
   Provenance:
     type: object
     schema: Provenance

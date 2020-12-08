@@ -1,0 +1,35 @@
+properties:
+  Id:
+    type: string
+    examples:
+      - pgxind-kftx25eh
+  Description:
+    type: string
+    examples:
+      - HapMap project contributor
+  KaryotypicSex:
+    type: obbject
+    schema: ./OntologyTerm
+  DateOfBirth:
+    type: string
+    format: date-time
+  ExternalReferences:
+    type: array
+    elements: object
+    examples:
+      - type:
+          id: NA19625
+          label: HapMap individual
+  Provenance:
+    type: object
+    schema: Provenance
+  DataUseConditions:
+    type: object
+    schema: ./OntologyTerm
+  Info:
+    type: object
+  Updated:
+    type: string
+    format: date-time
+    examples:
+      - "2020-09-10T17:44:10.170Z"

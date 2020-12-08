@@ -4,4 +4,6 @@ properties:
     value: "Point"
   Coordinates:
     type: array
-    values: float
+    values:
+      type: number
+      format: float

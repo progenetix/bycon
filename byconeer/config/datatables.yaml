@@ -2,130 +2,130 @@ io_params:
   biosamples:
     id:
       db_key: id
-      type: str
+      type: string
     individual_id:
       db_key: individual_id
-      type: str
+      type: string
     callset_ids:
       db_key: info.callset_ids
       type: list
     description:
       db_key: description
-      type: str
+      type: string
     tnm:
       db_key: info.tnm
-      type: str
+      type: string
     stage:
       db_key: info.stage
-      type: str
+      type: string
     grade:
       db_key: info.grade
-      type: str
+      type: string
     age_iso:
       db_key: individual_age_at_collection.age
-      type: str
+      type: string
     death:
       db_key: info.death
-      type: str
+      type: string
     followup_months:
       db_key: info.followup_months
-      type: str
+      type: string
     geoprov_label:
       db_key: provenance.geo.label
-      type: str
+      type: string
     geoprov_precision:
       db_key: provenance.geo.precision
-      type: str
+      type: string
     geoprov_city:
       db_key: provenance.geo.city
-      type: str
+      type: string
     geoprov_country:
       db_key: provenance.geo.country
-      type: str
+      type: string
     geoprov_iso_alpha3:
       db_key: provenance.geo.ISO-3166-alpha3
-      type: str
+      type: string
     geoprov_lat:
       db_key: provenance.geo.latitude
-      type: float
+      type: number
     geoprov_long:
       db_key: provenance.geo.longitude
-      type: float
+      type: number
     cnv_fraction:
       db_key: info.cnvstatistics.cnvfraction
-      type: float
+      type: number
     cnv_del_fraction:
       db_key: info.cnvstatistics.delfraction
-      type: float
+      type: number
     cnv_dup_fraction:
       db_key: info.cnvstatistics.dupfraction
-      type: float
+      type: number
     cell_line:
       db_key: info.cell_line
-      type: str
+      type: string
     legacy_id:
       db_key: info.legacy_id
-      type: str
+      type: string
     individual_id:
       db_key: individual_id
-      type: str
+      type: string
   individuals:
     id:
       db_key: id
-      type: str
+      type: string
     legacy_id:
       db_key: info.legacy_id
-      type: str
+      type: string
     geoprov_label:
       db_key: geo_provenance.label
-      type: str
+      type: string
     geoprov_precision:
       db_key: geo_provenance.precision
-      type: str
+      type: string
     geoprov_city:
       db_key: geo_provenance.city
-      type: str
+      type: string
     geoprov_country:
       db_key: geo_provenance.country
-      type: str
+      type: string
     geoprov_iso_alpha3:
       db_key: geo_provenance.ISO-3166-alpha3
-      type: str
+      type: string
     geoprov_lat:
       db_key: geo_provenance.latitude
-      type: float
+      type: number
     geoprov_long:
       db_key: geo_provenance.longitude
-      type: float
+      type: number
   callsets:
     id:
       db_key: id
-      type: str
+      type: string
     biosample_id:
       db_key: biosample_id
-      type: str
+      type: string
     legacy_id:
       db_key: info.legacy_id
-      type: str
+      type: string
   non-collection:
     uid:
       db_key: None
-      type: str
+      type: string
     status:
       db_key: None
-      type: str
+      type: string
     experiment:
       db_key: None
-      type: str
+      type: string
     age:
       db_key: None
-      type: str
+      type: string
     sex:
       db_key: None
-      type: str
+      type: string
     platform_id:
       db_key: None
-      type: str
+      type: string
 io_prefixes:
   biosamples:
     sampledTissue:

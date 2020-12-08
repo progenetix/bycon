@@ -47,17 +47,11 @@ def main():
 
     byc = {
         "pkg_path": pkg_path,
-        "config": read_bycon_configs_by_name( "defaults" ),
         'args': _get_args(),
         "errors": [ ],
         "warnings": [ ]
     }
 
-    for d in [
-        "dataset_definitions",
-        "filter_definitions"
-    ]:
-        byc.update( { d: read_bycon_configs_by_name( d ) } )
 
     # first pre-population w/ defaults
     for config in configs:
@@ -297,7 +291,6 @@ def _initiate_vs_cs(rootdir, ser, arr):
         v['variantset_id'] = 'AM_VS_GRCH38'
 
         variant_obj.append(v)
-
 
     ## callset collections
     with open('{0}/{1}/{2}/callset.json'.format(rootdir,ser,arr),'r') as json_data:
