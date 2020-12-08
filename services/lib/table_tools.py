@@ -99,7 +99,11 @@ def assign_nested_value(parent, dotted_key, v):
     ps = dotted_key.split('.')
 
     if len(ps) == 1:
-        parent[dotted_key] = v
+        try: # if field is a list -> will append
+            if type(parent[dotted_key]) == list:
+                parent[dotted_key] += list(v)
+        except KeyError:
+            parent[dotted_key] = v
         return parent
     else:
         current_key = ps[0]

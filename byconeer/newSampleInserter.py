@@ -9,6 +9,7 @@ from pymongo import MongoClient
 import random
 from os import path, environ, pardir
 from progress.bar import Bar
+from pydoc import locate
 
 # local
 dir_path = path.dirname( path.abspath(__file__) )
@@ -27,6 +28,7 @@ from bycon.lib.table_tools import *
 
 def main():
 
+    curr_time = datetime.datetime.now()
     configs = ["inserts", "datatables"]
 
     byc = {
@@ -77,8 +79,6 @@ def main():
     exist_callset_id[db_name] = data_db.callsets.distinct('info.legacy_id')
     exist_biosample_id[db_name] = data_db.biosamples.distinct('info.legacy_id')
     exist_individual_id[db_name] = data_db.individuals.distinct('info.legacy_id')
-
-    metafile_time = retrieveTime(metapath, 'date')
 
     no_row = mytable.shape[0]
    
@@ -157,38 +157,39 @@ def main():
 
         info_field[bs]['id'] = generate_id('pgxbs')
         info_field[cs]['id'] = generate_id('pgxcs')
+        info_field[cs]['biosample_id'] = info_field[bs]['id']
         info_field[ind]['id'] = generate_id('pgxind')
+        info_field[bs]['individual_id'] = info_field[ind]['id']
         info_field[bs]['EFO::id'] = 'EFO:0009654' if info_field[bs]['icdom::id'] == '00000' else 'EFO:0009656'
         info_field[bs]['EFO::label'] = 'reference sample' if info_field[bs]['icdom::id'] == '00000' else 'neoplastic sample'
         info_field[ind]['NCBITaxon::id'] = 'NCBITaxon:9606'
         info_field[ind]['NCBITaxon::label'] = 'Homo sapiens'
+        for collection in [bs, cs, ind]:
+            info_field[collection]['DUO::id'] = 'DUO:0000004'
+            info_field[collection]['DUO::label'] = 'no restriction'
                 
         geo_provenance = {
-                        { 'label': info_field[bs]['geoprov_label'],
-                        'precision': info_field[bs]['geoprov_precision'],
-                        'city': info_field[bs]['geoprov_city'],
-                        'country': info_field[bs]['geoprov_country'],
-                        'latitude': info_field[bs]['latitude'],
-                        'longitude': info_field[bs]['longitude'],
-                        'geojson': {
-                                    'type': 'Point',
-                                    'coordinates': [
-                                        info_field[bs]['longitude'],
-                                        info_field[bs]['latitude']
-                                    ]
-                                },
-                        'ISO-3166-alpha3': iso_country
-                        }   
+                            { 'label': info_field[bs]['geoprov_label'],
+                            'precision': info_field[bs]['geoprov_precision'],
+                            'city': info_field[bs]['geoprov_city'],
+                            'country': info_field[bs]['geoprov_country'],
+                            'latitude': info_field[bs]['latitude'],
+                            'longitude': info_field[bs]['longitude'],
+                            'geojson': {
+                                        'type': 'Point',
+                                        'coordinates': [
+                                            info_field[bs]['longitude'],
+                                            info_field[bs]['latitude']
+                                        ]
+                                    },
+                            'ISO-3166-alpha3': info_field[bs]['geoprov_iso_alpha3']
+                            }
                         }
-        data_use = {
-                'label' : 'no restriction',
-                'id' : 'DUO:0000004'
-                }
 
         ############################
         ##   variants & callsets  ##
         ############################
-        variants, callset  = _initiate_vs_cs(byc['json_file_root'], ser, arr)
+        variants, callset  = _initiate_vs_cs(byc['json_file_root'], info_field['experiment'], info_field['uid'])
 
         ### check if callset_id exists already in the dababase and in the current process.
         
@@ -199,16 +200,17 @@ def main():
         for variant in variants:
             variant['callset_id'] = info_field[cs]['id']
             variant['biosample_id'] = info_field[bs]['id']
-            variant['updated'] = metafile_time
+            variant['updated'] = curr_time
 
         variants_list.append(variants)
 
         ## callsets
         for k,v in info_field[cs].items():
-            assign_nested_value(callset, field_to_db['.'.join([cs,k])][1], v)
+            db_key, attr_type = field_to_db['.'.join([cs,k])]
+            assign_nested_value(callset, db_key, locate(attr_type)(v))
+
         if info_field['platform_id']:
             callset['description'] = _retrievePlatformLabel(mongo_client, info_field['platform_id'])
-        callset['data_use_conditions'] = data_use
         
         callsets_dict[info_field[cs]['legacy_id']] = callset
 
@@ -217,8 +219,8 @@ def main():
         ############################
 
         biosample= {
-                    'updated': metafile_time,
-                    'data_use_conditions': data_use
+                    'id': info_field[ind]['id'],
+                    'updated': curr_time,
                     }
         
         if byc['args']['source'] == 'arrayexpress':
@@ -226,7 +228,8 @@ def main():
             biosample['project_id'] = 'A' + info_field['experiment']
         
         for k,v in info_field[bs].items():
-            assign_nested_value(biosample, field_to_db['.'.join([bs,k])][1], v)
+            db_key, attr_type = field_to_db['.'.join([bs,k])]
+            assign_nested_value(biosample, db_key, locate(attr_type)(v))
                 
         biosamples_dict[info_field[bs]['legacy_id']] = biosample
 
@@ -235,19 +238,14 @@ def main():
         ############################
 
         individual = {
-                'id': info_field[ind]['id'],
-                'data_use_conditions' : data_use,
-                'geo_provenance': geo_provenance,
-                 'updated': metafile_time
-                 }
+                        'id': info_field[ind]['id'],
+                        'geo_provenance': geo_provenance,
+                        'updated': curr_time
+                     }
 
-                
-                
-                
-
-                 'info': {'legacy_id': info_field[ind]['legacy_id']}
-                }
-
+        for k,v in info_field[ind].items():
+            db_key, attr_type = field_to_db['.'.join([ind,k])]
+            assign_nested_value(individual, db_key, locate(attr_type)(v))
         individuals_dict[info_field[ind]['legacy_id']] = individual
 
         bar.next()
@@ -301,14 +299,6 @@ def generate_id(prefix):
     time.sleep(.001)
     return '{}-{}'.format(prefix, base36.dumps(int(time.time() * 1000))) ## for time in ms
 
-
-def retrieveTime(filename, return_type):
-    time = datetime.datetime.now()
-    if return_type == 'str':
-        return time.isoformat()
-    elif return_type == 'date':
-        return time
-
 ################################################################################
 ################################################################################
 
@@ -339,53 +329,6 @@ def _initiate_vs_cs(rootdir, ser, arr):
     callset_obj = callset_json
 
     return variant_obj, callset_obj
-
-def _retrieveGEO(client, city, country):
-    cl = client['progenetix'].geolocs
-    geo_obj = cl.find_one({'$and':[{'city':city},{'country':country}]})
-    if geo_obj:
-        geoPrecision = 'city'
-        country = geo_obj['country']
-        geoLabel = city + ', ' + country
-        geojson = geo_obj['geojson']
-        [geolong, geolat] = geojson['coordinates']
-        geoLabel = city + ', ' + country
-        try:
-            iso_country = geo_obj['ISO-3166-alpha3']
-        except KeyError:
-            iso_country = None
-
-    else:
-        print(city)
-        geoLabel = None
-        geoPrecision = None
-        city = None
-        country = None
-        geolat = None
-        geolong = None
-        geojson = None
-        iso_country = None
-        
-    geo_info = { 'label': geoLabel,
-            'precision': geoPrecision,
-            'city': city,
-            'country': country,
-            'latitude': geolat,
-            'longitude': geolong,
-            'geojson': geojson,
-            'ISO-3166-alpha3': iso_country
-            }
-
-    return geo_info
-
-def _retrievePlatformLabel(client, platformID):
-    cl = client['arraymap'].platforms
-    plf_obj = cl.find_one({'PLATFORMID':platformID})
-    try:
-        return plf_obj['PLATFORMLABEL']
-    except:
-        print('{} has no platform description in arraymap.platforms'.format(platformID))
-        return None
 
 ################################################################################
 ################################################################################

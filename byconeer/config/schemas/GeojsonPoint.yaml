@@ -1,0 +1,7 @@
+properties:
+  Type:
+    type: string
+    value: "Point"
+  Coordinates:
+    type: array
+    values: float

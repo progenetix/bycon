@@ -1,0 +1,6 @@
+properties:
+  Type:
+    type: object
+    schema: ./OntologyTerm
+  Description:
+    type: string

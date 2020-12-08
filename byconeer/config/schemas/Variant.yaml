@@ -1,0 +1,46 @@
+properties:
+  Digest:
+    type: string
+    examples:
+      - 11:52900000-134452384:DEL
+  BiosampleId:
+    type: string
+    exammples:
+      - pgxbs-kftvjtgm
+  CallsetId:
+    type: string
+    exammples:
+      - pgxcs-kftvldsu
+  ReferenceName:
+    type: string
+    exammples:
+      - 11
+  ReferenceBases:
+    type: string
+    exammples:
+      - A
+  Start:
+    type: integer
+    exammples:
+      - 52900000
+  End:
+    type: integer
+    exammples:
+      - 134452384
+  AlternateBases:
+    type: string
+    exammples:
+      - GC
+  VariantType:
+    type: string
+    exammples:
+      - DEL
+  Info:
+    type: object
+    exammples:
+      - cnv_value: 3
+        cnv_length: 81552384
+  Updated:
+    type: string
+    examples:
+      - "2018-09-26 09:50:51.957159"

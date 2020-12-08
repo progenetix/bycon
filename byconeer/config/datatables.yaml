@@ -1,5 +1,14 @@
 io_params:
   biosamples:
+    id:
+      db_key: id
+      type: str
+    individual_id:
+      db_key: individual_id
+      type: str
+    callset_ids:
+      db_key: info.callset_ids
+      type: list
     description:
       db_key: description
       type: str
@@ -61,10 +70,37 @@ io_params:
       db_key: individual_id
       type: str
   individuals:
+    id:
+      db_key: id
+      type: str
     legacy_id:
       db_key: info.legacy_id
       type: str
+    geoprov_label:
+      db_key: geo_provenance.label
+      type: str
+    geoprov_precision:
+      db_key: geo_provenance.precision
+      type: str
+    geoprov_city:
+      db_key: geo_provenance.city
+      type: str
+    geoprov_country:
+      db_key: geo_provenance.country
+      type: str
+    geoprov_iso_alpha3:
+      db_key: geo_provenance.ISO-3166-alpha3
+      type: str
+    geoprov_lat:
+      db_key: geo_provenance.latitude
+      type: float
+    geoprov_long:
+      db_key: geo_provenance.longitude
+      type: float
   callsets:
+    id:
+      db_key: id
+      type: str
     biosample_id:
       db_key: biosample_id
       type: str
@@ -111,8 +147,16 @@ io_prefixes:
       - arrayexpress
     provenance.material:
       - EFO
+    data_use_conditions:
+      -DUO
   individuals:
     biocharacteristics:
       - PATO
       - NCBITaxon
+    data_use_conditions:
+      - DUO
+  callsets:
+    data_use_conditions:
+      - DUO
+
   

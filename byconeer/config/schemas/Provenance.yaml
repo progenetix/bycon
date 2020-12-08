@@ -1,0 +1,7 @@
+properties:
+  Material:
+    type: object
+    schema: ./Characteristic
+  Geo:
+    type: object
+    schema: ./Geodata

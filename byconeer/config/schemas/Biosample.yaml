@@ -1,0 +1,49 @@
+properties:
+  Id:
+    type: string
+    exammples:
+      - pgxbs-kftvjtgm
+  IndividualId:
+    type: string
+    exammples:
+      - pgxind-kftx5ruq
+  Description:
+    type: string
+    examples:
+      - breast carcinoma
+      - adenocarcinoma [cell line HeLa]
+  Biocharacteristics:
+    type: array
+    elements: object
+    schema: ./Characteristic
+    examples:
+      - type:
+          id: NCIT:C4029
+          label: Cervical Adenocarcinoma
+        type:
+          id: UBERON:0000002
+          label: uterine cervix
+  ExternalReferences:
+    type: array
+    elements: object
+    examples:
+      - type:
+          id: PMID:9892199
+  Provenance:
+    type: object
+    schema: Provenance
+  DataUseConditions:
+    type: object
+    schema: ./OntologyTerm
+  SampledTissue:
+    type: object
+    schema: ./OntologyTerm
+  HistologicalDiagnosis:
+    type: object
+    schema: ./OntologyTerm
+  Info:
+    type: object
+  Updated:
+    type: string
+    examples:
+      - "2020-09-10T17:44:10.170Z"
