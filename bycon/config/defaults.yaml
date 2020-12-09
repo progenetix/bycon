@@ -42,10 +42,10 @@ collationed:
   cBP:
     pattern: '^(cBP)[\-]\w'
     is_series: False
-  tcga:
-    pattern: '^(tcga)[:]TCGA[\w\-]{2,20}$'
+  TCGA:
+    pattern: '^(TCGA)[\-][\w\-]{2,20}$'
     is_series: True
-    child_pattern: '^(tcga)[:]\w+?\-[\w\-]{15,30}$'
+    child_pattern: '^(TCGA)[\-]\w+?\-[\w\-]{15,30}$'
 collations_coll: collations
 collations_source: biosamples
 ontologymaps_coll: ontologymaps

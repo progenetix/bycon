@@ -125,7 +125,8 @@ def main():
             info_field['uid'] = 'AE-'+ info_field['experiment'].replace('E-','').replace('-','_') + '-' +\
                 info_field['uid'].replace("-", "_").replace(' ', '_').replace('.CEL','') + '-' +\
                 byc['platform_rename'][info_field['platform_id']]  ## initial rename 
-           
+        
+        # TODO: default should **not** be blood but rather icdot-C76.9: ill-defined 
         if not info_field[bs]['icdot::id']:
             info_field[bs]['icdot::id'] = 'C42.0'
         if not info_field[bs]['icdot::label']:
@@ -151,13 +152,13 @@ def main():
 
         if 'PATO::id' not in info_field[ind] and info_field['sex']:
             sex = info_field['sex'].lower()
-            if sex == 'male':
-                info_field[ind]['PATO::id'] = 'PATO:0020001'  
-                info_field[ind]['PATO::label'] = 'male genotypic sex'
-
             if sex == 'female':
                 info_field[ind]['PATO::id'] = 'PATO:0020002'
                 info_field[ind]['PATO::label'] = 'female genotypic sex'
+            elif sex == 'male':
+                info_field[ind]['PATO::id'] = 'PATO:0020001'  
+                info_field[ind]['PATO::label'] = 'male genotypic sex'
+
         
         ### derived attributes that are shared by collections
         info_field[bs]['legacy_id'] = 'PGX_AM_BS_' + info_field['uid']
@@ -275,9 +276,12 @@ def _generate_id(prefix):
     time.sleep(.001)
     return '{}-{}'.format(prefix, base36.dumps(int(time.time() * 1000))) ## for time in ms
 
+################################################################################
+
 def _initiate_vs_cs(rootdir, ser, arr):
 
     ## variant collections
+    # TODO: use path.join(  )
     with open('{0}/{1}/{2}/variants.json'.format(rootdir,ser,arr),'r') as json_data:
         variants_json = json.load(json_data)
 
@@ -294,6 +298,7 @@ def _initiate_vs_cs(rootdir, ser, arr):
         variant_obj.append(v)
 
     ## callset collections
+    # TODO: use path.join(  )
     with open('{0}/{1}/{2}/callset.json'.format(rootdir,ser,arr),'r') as json_data:
         callset_json = json.load(json_data)
 
