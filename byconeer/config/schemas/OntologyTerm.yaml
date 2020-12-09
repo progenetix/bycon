@@ -1,12 +1,13 @@
 "$schema": http://json-schema.org/draft-07/schema#
 "$id": https://progenetix.org/schemas/OntologyTerm/v2020-12-08
+title: OntologyTerm
 properties:
-  Id:
+  id:
     type: string
     examples:
       - UBERON:0000002
       - PMID:9892199
-  Label:
+  label:
     type: string
       - neoplastic sample
       - Adenocarcinoma, NOS

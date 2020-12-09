@@ -1,9 +1,8 @@
 "$schema": http://json-schema.org/draft-07/schema#
 "$id": https://progenetix.org/schemas/AgeRange/v2020-12-08
+title: AgeRange
 properties:
-  Start:
-    type: object
-    $ref: "#/Age"
-  End:
-    type: object
-    $ref: "#/Age"
+  start:
+    "$ref": "#/Age"
+  end:
+    "$ref": "#/Age"

@@ -1,48 +1,56 @@
 "$schema": http://json-schema.org/draft-07/schema#
 "$id": https://progenetix.org/schemas/Variant/v2020-12-08
+title: Variant
 properties:
-  Digest:
+  digest:
     type: string
     examples:
       - 11:52900000-134452384:DEL
-  BiosampleId:
+  biosampleId:
     type: string
     exammples:
       - pgxbs-kftvjtgm
-  CallsetId:
+  callsetId:
     type: string
     exammples:
       - pgxcs-kftvldsu
-  ReferenceName:
+  referenceName:
     type: string
     exammples:
       - 11
-  ReferenceBases:
+  referenceBases:
     type: string
     exammples:
       - A
-  Start:
+  start:
     type: integer
     exammples:
       - 52900000
-  End:
+  end:
     type: integer
     exammples:
       - 134452384
-  AlternateBases:
+  alternateBases:
     type: string
     exammples:
       - GC
-  VariantType:
+  variantType:
     type: string
     exammples:
       - DEL
-  Info:
+  externalReferences:
+    type: array
+    items:
+      "$ref": "#/OntologyTerm"
+    examples:
+      - type:
+          id: clinvar:163840
+  info:
     type: object
     exammples:
       - cnv_value: 3
         cnv_length: 81552384
-  Updated:
+  updated:
     type: string
     format: date-time
     examples:

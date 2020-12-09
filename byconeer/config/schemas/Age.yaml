@@ -1,7 +1,13 @@
 "$schema": http://json-schema.org/draft-07/schema#
 "$id": https://progenetix.org/schemas/Age/v2020-12-08
+title: Age
 properties:
-  Age:
+  age:
+    description: |
+      The ISO 8601 age of this object as ISO8601
+      duration or time intervals. The use of time intervals makes an additional
+      anchor unnecessary (i.e. DOB and age can be represented as start-anchored
+      time interval, e.g. 1967-11-21/P40Y10M05D)
     type: string
     examples:
       - P12Y

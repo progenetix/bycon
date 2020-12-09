@@ -1,0 +1,11 @@
+"$schema": http://json-schema.org/draft-07/schema#
+"$id": https://progenetix.org/schemas/Ancestry/v2020-12-08
+title: Ancestry
+properties:
+  ancestry:
+    "$ref": "#/OntologyTerm"
+  description:
+    type: string
+  confidenceScore:
+    type: number
+    format: float

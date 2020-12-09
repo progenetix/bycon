@@ -1,23 +1,24 @@
 "$schema": http://json-schema.org/draft-07/schema#
 "$id": https://progenetix.org/schemas/Biosample/v2020-12-08
+title: Biosample
 properties:
-  Id:
+  id:
     type: string
     examples:
       - pgxbs-kftvjtgm
-  IndividualId:
+  individualId:
     type: string
     examples:
       - pgxind-kftx5ruq
-  Description:
+  description:
     type: string
     examples:
       - breast carcinoma
       - adenocarcinoma [cell line HeLa]
-  Biocharacteristics:
+  biocharacteristics:
     type: array
-    elements: object
-    $ref: "#/Characteristic"
+    items:
+      "$ref": "#/Characteristic"
     examples:
       - type:
           id: NCIT:C4029
@@ -25,25 +26,26 @@ properties:
         type:
           id: UBERON:0000002
           label: uterine cervix
-  ExternalReferences:
+  externalReferences:
     type: array
-    elements: object
+    items:
+      "$ref": "#/Characteristic"
     examples:
       - type:
           id: PMID:9892199
-  IndividualAgeAtCollection:
-    $ref: "#/Age"
-  Provenance:
-    $ref: "#/Provenance"
-  DataUseConditions:
-    $ref: "#/OntologyTerm"
-  SampledTissue:
-    $ref: "#/OntologyTerm"
-  HistologicalDiagnosis:
-    $ref: "#/OntologyTerm"
-  Info:
+  individualAgeAtCollection:
+    "$ref": "#/Age"
+  provenance:
+    "$ref": "#/Provenance"
+  dataUseConditions:
+    "$ref": "#/OntologyTerm"
+  sampledTissue:
+    "$ref": "#/OntologyTerm"
+  histologicalDiagnosis:
+    "$ref": "#/OntologyTerm"
+  info:
     type: object
-  Updated:
+  updated:
     type: string
     format: date-time
     examples:

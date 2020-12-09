@@ -1,31 +1,33 @@
 "$schema": http://json-schema.org/draft-07/schema#
 "$id": https://progenetix.org/schemas/Callset/v2020-12-08
+title: Callset
 properties:
-  Id:
+  id:
     type: string
     examples:
       - pgxcs-kftvldsu
-  BiosampleId:
+  biosampleId:
     type: string
     examples:
       - pgxbs-kftva59y
-  Description:
+  description:
     type: string
     examples:
       - SNP6 array
-  ExternalReferences:
+  externalReferences:
     type: array
-    elements: object
+    items:
+      "$ref": "#/OntologyTerm"
     examples:
       - type:
           id: geo:GSM224836
-  Provenance:
-    $ref: "#/Provenance"
-  DataUseConditions:
-    $ref: "#/OntologyTerm"
-  Info:
+  provenance:
+    "$ref": "#/Provenance"
+  dataUseConditions:
+    "$ref": "#/OntologyTerm"
+  info:
     type: object
-  Updated:
+  updated:
     type: string
     format: date-time
     examples:

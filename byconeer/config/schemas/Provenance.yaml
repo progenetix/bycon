@@ -1,7 +1,8 @@
 "$schema": http://json-schema.org/draft-07/schema#
 "$id": https://progenetix.org/schemas/Provenance/v2020-12-08
+title: Provenance
 properties:
-  Material:
-    $ref: "#/Characteristic"
-  Geo:
-    $ref: "#/Geodata"
+  material:
+    "$ref": "#/Characteristic"
+  geo:
+    "$ref": "#/Geodata"

@@ -1,17 +1,18 @@
 "$schema": http://json-schema.org/draft-07/schema#
 "$id": https://progenetix.org/schemas/Geojson/v2020-12-08
+title: Geojson
 properties:
-  Label:
+  label:
     type: string
     examples:
       - Heidelberg, Germany
       - Gainesville, United States of America
       - Zürich, Switzerland
-  City:
+  city:
     type: string
     examples:
       - Heidelberg
-  Country:
+  country:
     type: string
     examples:
       - Switzerland
@@ -20,19 +21,19 @@ properties:
     examples:
       - USA
       - CHE
-  Latitude:
+  latitude:
     type: number
     format: float
     examples:
       - 47.37
-  Longitude:
+  longitude:
     type: number
     format: float
     examples:
       - 8.55
-  Precision:
+  precision:
     type: string
     examples:
       - city
-  Geojson:
-    $ref: "#/GeojsonPoint"
+  geojson:
+    "$ref": "#/GeojsonPoint"
