@@ -1,4 +1,4 @@
-ALL-SAMPLES	TCGA (all samples)	0	1
+TCGA-ALL-SAMPLES	TCGA (all samples)	0	1
 TCGA-ACC	Adrenocortical carcinoma	1	2
 TCGA-BLCA	Bladder Urothelial Carcinoma	1	3
 TCGA-BRCA	Breast Invasive carcinoma	1	4
