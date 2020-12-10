@@ -25,7 +25,6 @@ def create_db_schema(schemaname, **schemas):
 
     return {s_n: convert_case_for_keys(s, camel_to_snake)}
 
-
 ################################################################################
 
 def convert_case_for_keys (schema_dict, convert_function):
