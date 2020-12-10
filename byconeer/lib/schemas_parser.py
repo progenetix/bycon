@@ -18,3 +18,21 @@ def read_schema_files(**byc):
 
     return schemas
 
+################################################################################
+
+def create_db_schema(schemaname, **schemas):
+
+	coll_s = { }
+
+	s_n = schemaname # TODO: convert to PascalCase
+	s = schemas[ s_n ]
+
+	for s_p, s_s in s.items():
+		n = s_p # TODO: convert to snake_case
+		n_v = True # just a placeholder
+		# adding the proper empty property values
+		# the $ref ones should be accessible through schemas[ s_p ]
+
+		coll_s = update( { n: n_v })
+
+	return coll_s
