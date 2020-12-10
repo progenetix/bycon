@@ -3,6 +3,6 @@
 title: AgeRange
 properties:
   start:
-    "$ref": "#/Age"
+    "$ref": Age.yaml#/properties
   end:
-    "$ref": "#/Age"
+    "$ref": Age.yaml#/properties

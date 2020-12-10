@@ -1,0 +1,10 @@
+definitions:
+  id: "#root"
+  biosample: 
+    $ref: Biosample.yaml#/properties
+  individual:
+    $ref: Individual.yaml#/properties
+  callset:
+    $ref: Callset.yaml#/properties
+  variant:
+    $ref: Variant.yaml#/properties

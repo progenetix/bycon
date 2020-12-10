@@ -36,4 +36,4 @@ properties:
     examples:
       - city
   geojson:
-    "$ref": "#/GeojsonPoint"
+    "$ref": GeojsonPoint.yaml#/properties

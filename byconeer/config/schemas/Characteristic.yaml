@@ -3,6 +3,6 @@
 title: Characteristic
 properties:
   type:
-    "$ref": "#/OntologyTerm"
+    "$ref": OntologyTerm.yaml#/properties
   description:
     type: string

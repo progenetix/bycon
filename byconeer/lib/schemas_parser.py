@@ -1,38 +1,56 @@
 import re, json, yaml
 from os import path, scandir
+from json_ref_dict import RefDict, materialize
 
 ################################################################################
 
 def read_schema_files(**byc):
 
-	schemas = { }
+    schemas = { }
 
-	s_path = path.join( byc["pkg_path"], "byconeer", "config", "schemas" )
-	s_files = [ f.path for f in scandir() if f.is_file() ]
-	s_files = [ f for f in s_files if f.endswith(".yaml") ]
+    s_path = path.join( byc["pkg_path"], "byconeer", "config", "schemas", "Master.yaml#/definitions" )
 
-	for s_f in s_files:
-		with open( s_f ) as s_f_h:
-        	s = yaml.load( s_f_h , Loader=yaml.FullLoader)
-        	schemas.update( { s["title"]: s["properties"] } )
+    root_def = RefDict(s_path)
 
-    return schemas
+    return materialize(root_def)
 
 ################################################################################
 
 def create_db_schema(schemaname, **schemas):
 
-	coll_s = { }
+    coll_s = { }
 
-	s_n = schemaname # TODO: convert to PascalCase
-	s = schemas[ s_n ]
+    s_n = camel_to_pascal(schemaname)
+    s = schemas[ schemaname ]
 
-	for s_p, s_s in s.items():
-		n = s_p # TODO: convert to snake_case
-		n_v = True # just a placeholder
-		# adding the proper empty property values
-		# the $ref ones should be accessible through schemas[ s_p ]
+    return {s_n: convert_case_for_keys(s, camel_to_snake)}
 
-		coll_s = update( { n: n_v })
 
-	return coll_s
+################################################################################
+def convert_case_for_keys (schema_dict, convert_function):
+    
+    old_keys = list(schema_dict)
+
+    for key in old_keys:
+        new_key = convert_function(key)
+
+        if type(schema_dict[key]) == dict:
+            schema_dict[key] = convert_case_for_keys(schema_dict[key], convert_function)
+
+        schema_dict[new_key] = schema_dict.pop(key)
+
+    return schema_dict
+
+################################################################################
+
+def camel_to_snake(name):
+
+    name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
+
+################################################################################
+
+def camel_to_pascal(name):
+
+    return name.capitalize()
+

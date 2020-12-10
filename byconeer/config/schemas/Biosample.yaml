@@ -26,7 +26,7 @@ properties:
   biocharacteristics:
     type: array
     items:
-      "$ref": "#/Characteristic"
+      "$ref": Characteristic.yaml#/properties
     examples:
       - type:
           id: NCIT:C4029
@@ -37,20 +37,20 @@ properties:
   externalReferences:
     type: array
     items:
-      "$ref": "#/Characteristic"
+      "$ref": Characteristic.yaml#/properties
     examples:
       - type:
           id: PMID:9892199
   individualAgeAtCollection:
-    "$ref": "#/Age"
+    "$ref": Age.yaml#/properties
   provenance:
-    "$ref": "#/Provenance"
+    "$ref": Provenance.yaml#/properties
   dataUseConditions:
-    "$ref": "#/OntologyTerm"
+    "$ref": OntologyTerm.yaml#/properties
   sampledTissue:
-    "$ref": "#/OntologyTerm"
+    "$ref": OntologyTerm.yaml#/properties
   histologicalDiagnosis:
-    "$ref": "#/OntologyTerm"
+    "$ref": OntologyTerm.yaml#/properties
   info:
     type: object
   updated:
