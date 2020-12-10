@@ -41,7 +41,7 @@ properties:
   externalReferences:
     type: array
     items:
-      "$ref": "#/OntologyTerm"
+      "$ref": OntologyTerm.yaml#/properties
     examples:
       - type:
           id: clinvar:163840

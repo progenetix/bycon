@@ -143,6 +143,7 @@ def main():
 
         if 'age_iso' not in info_field[bs] and info_field['age']:
             try:
+                # TODO: separate method; also e.g. using a split or regex after stringify
                 age = int(info_field['age'])
                 info_field[bs]['age_iso'] = 'P'+str(v)+'Y'
             except ValueError:
