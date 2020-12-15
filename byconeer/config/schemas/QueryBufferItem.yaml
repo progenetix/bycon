@@ -1,5 +1,5 @@
 "$schema": http://json-schema.org/draft-07/schema#
-"$id": https://progenetix.org/schemas/QueryBufferItem/v2020-12-08
+"$id": https://progenetix.org/services/schemas/QueryBufferItem/v2020-12-08
 title: QueryBufferItem
 description: |
   This schema represents objects for the temporary storage of Progenetix / bycon
@@ -52,7 +52,7 @@ properties:
       The identifiers (e.g. biosample_id values or _id ObjectId values) used to
       retrieve tha data through matching them to the targetKey in the
       targetCollection.
-      Note: While the type here is given as string they may also be internal
+      NOTE - While the type here is given as string they may also be internal
       identifiers such as MongoDB ObjectId entries.
     items:
       type: string

@@ -10,3 +10,4 @@ service_names:
   - publications
   - phenopackets
   - collations
+  - schemas

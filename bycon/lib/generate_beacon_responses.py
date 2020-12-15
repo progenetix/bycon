@@ -207,7 +207,8 @@ def create_beacon_response(**byc):
 
     # TODO: getting the correct response structure from the schema
 
-    b_response = {}
+    b_response = { "exists": False, "resultsHandover": [ ] }
+    b_meta = { "receivedRequest": { "query": byc[ "variant_pars" ] } }
 
     if byc["response_type"] == "return_biosamples":
         b_response = { "biosamples": { } }
@@ -223,14 +224,10 @@ def create_beacon_response(**byc):
         return b_response
 
     b_attr = [ "id", "beaconId", "name", "serviceUrl", 'organization', 'apiVersion', "info", "updateDateTime" ]
-    b_response = {
-        "exists": False,
-        "beaconAlleleRequest" : byc[ "variant_pars" ]
-    }
 
     for b_a in b_attr:
         try:
-            b_response[ b_a ] = byc[ "service_info" ][ b_a ]
+            b_meta[ b_a ] = byc[ "service_info" ][ b_a ]
         except Exception:
             pass
  
@@ -240,6 +237,6 @@ def create_beacon_response(**byc):
         if b_r[ "exists" ] == True:
             b_response[ "exists" ] = True
 
-    return b_response
+    return { "meta": b_meta, "response": { "datasetAlleleResponses": byc[ "dataset_responses" ] } }
 
 ################################################################################

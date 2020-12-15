@@ -1,5 +1,5 @@
 "$schema": http://json-schema.org/draft-07/schema#
-"$id": https://progenetix.org/schemas/AgeRange/v2020-12-08
+"$id": https://progenetix.org/services/schemas/AgeRange/v2020-12-08
 title: AgeRange
 properties:
   start:
