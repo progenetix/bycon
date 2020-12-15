@@ -8,7 +8,7 @@ def read_schema_files(**byc):
 
     schemas = { }
 
-    s_path = path.join( byc["pkg_path"], "byconeer", "config", "schemas", "Master.yaml#/definitions" )
+    s_path = path.join( byc["pkg_path"], "byconeer", "config", "schemas", "Progenetix.yaml#/definitions" )
 
     root_def = RefDict(s_path)
 

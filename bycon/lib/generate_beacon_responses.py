@@ -102,7 +102,7 @@ def respond_filtering_terms_request( **byc ):
     fts = { }
 
     # for the general filter response, filters from *all* datasets are
-    # being provided
+    # provided
     # if only one => counts are added back
     dss = byc["dbstats"]["datasets"].keys()
     if len(byc[ "dataset_ids" ]) == 1:

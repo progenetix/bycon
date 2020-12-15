@@ -23,7 +23,6 @@ def dataset_count_collationed_filters(ds_id, **byc):
         source_key = s+".type.id"
         afs = bios_coll.distinct( source_key )
         for k in afs:
-            # print(k)
             try:
                 if split_v.match(k):
                     pre = split_v.match(k).group(1)
@@ -35,7 +34,7 @@ def dataset_count_collationed_filters(ds_id, **byc):
                                 "id": k,
                                 "count": 0,
                                 # "source": byc[ "filter_definitions" ][ pre ][ "name" ],
-                                "scope": s
+                                # "scope": s
                             } } )
             except:
                 continue
