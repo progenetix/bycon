@@ -1,0 +1,59 @@
+"$schema": http://json-schema.org/draft-07/schema#
+"$id": https://progenetix.org/services/schemas/Publication/v2020-12-08
+title: Publication
+description: >
+  A Publication represents basic information about a scientific article used
+  in the Progenetix resource to indicate and annotate sources for genomic
+  screening experiments.
+properties:
+  id:
+    type: string
+    examples:
+      - PMID:22824167
+  pubmedid:
+    type: string
+    examples:
+      - "22824167"
+  pmcid:
+    type: string
+    description: >
+      Id of article in PMC, if there.
+      TODO: into external_references?
+  title:
+    type: string
+  authors:
+    type: string
+  affiliation:
+    type: string
+  journal:
+    type: string
+  year:
+    type: string
+  abstract:
+    type: string
+  label:
+    description: >
+      A shortened concatenation of 
+    type: string
+    examples:
+      - "Weber RG, Boström J, Wolter M, Baudis M, Collins et al. (1997): Analysis of genomic alterations in benign, atypical, and anaplastic meningiomas: toward a genetic model of meningioma ..."
+  status:
+    type: string
+  contact:
+    type: string
+    description: >
+      Name of contact (e.g. corresponding author).
+      TODO: With email, affiliation ... into new address schema, in provenance?
+  email:
+    type: string
+  note:
+    type: string
+  provenance:
+    "$ref": Provenance.yaml#/properties
+  info:
+    type: object
+  updated:
+    type: string
+    format: date-time
+    examples:
+      - "2020-09-10T17:44:10.170Z"

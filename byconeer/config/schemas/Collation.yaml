@@ -1,0 +1,37 @@
+"$schema": http://json-schema.org/draft-07/schema#
+"$id": https://progenetix.org/services/schemas/Collation/v2020-12-08
+title: Collation
+description: >
+  A Collation summarizes information of all biosamples matching a given term
+  (e.g. PMID or NCIT code), as well as the connected items if the code is part
+  of a hierarchy (paths leading to the code, child terms).
+properties:
+  id:
+    type: string
+    examples:
+      - NCIT:C9272
+  label:
+    type: string
+    examples:
+      - "Salivary Gland Carcinoma"
+  childTerms:
+    type: array
+    description: >
+      All downstream terms of this term in a hierarchical system.
+  hierarchyPaths:
+    type: array
+    items:
+      "$ref": HierarchyPath.yaml#/properties  
+    description: >
+      All term paths leading to any instance of this code from the hierarchy
+      root term.
+  count:
+    type: integer
+    description: >
+      The number of biosamples in the collection with this code or one of its
+      child terms.
+  codeMatches:
+    type: integer
+    description: >
+      The number of biosamples in the collection with this code. This can be 0
+      if the entity is only represented through its child terms.
