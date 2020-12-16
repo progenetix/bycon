@@ -15,8 +15,7 @@ from bycon.lib.read_specs import read_bycon_configs_by_name,read_local_prefs,dbs
 
 """podmd
 
-* <https://progenetix.org/services/dbstats/>
-* <http://progenetix.org/cgi/bycon/services/dbstats.py?method=filtering_terms>
+* <>
 
 podmd"""
 

@@ -68,7 +68,7 @@ def main():
     print('Content-Type: text')
     print('status:422')
     print()
-    print("No correct service path provided. Please refer to the documentation at http://info.progenetix.org/tags/services/")
+    print("No correct service path provided. Please refer to the documentation at http://info.progenetix.org/tags/services")
     exit()
 
 ################################################################################
