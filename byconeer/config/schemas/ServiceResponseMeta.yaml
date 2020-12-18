@@ -1,0 +1,14 @@
+"$schema": http://json-schema.org/draft-07/schema#
+"$id": https://progenetix.org/services/schemas/ServiceResponseMeta/v2020-12-18
+title: ServiceResponseMeta
+description: >
+  The metadata (e.g. query, environment) of the service request and response.
+properties:
+  responseType:
+    type: string
+  errors:
+    type: array
+    items: string
+  parameters:
+    type: list
+    items: object

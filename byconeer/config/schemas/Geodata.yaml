@@ -1,6 +1,6 @@
 "$schema": http://json-schema.org/draft-07/schema#
 "$id": https://progenetix.org/services/schemas/Geojson/v2020-12-08
-title: Geojson
+title: Geodata
 properties:
   label:
     type: string

@@ -20,7 +20,6 @@ from bycon.lib.read_specs import *
 from services.lib.table_tools import *
 
 """
-
 ## `newSampleInserter`
 
 """
@@ -38,7 +37,6 @@ def _get_args():
 
     return(args)
 
-
 ################################################################################
 
 def main():
@@ -53,7 +51,6 @@ def main():
         "warnings": [ ]
     }
 
-
     # first pre-population w/ defaults
     for config in configs:
         these_prefs = read_local_prefs( config, dir_path )
@@ -62,6 +59,10 @@ def main():
 
     if not byc['args'].source in byc['data_sources']:
         print( 'Does not recognize data source!')
+
+    # TODO: check for import_path
+    # TODO: check for dataset => if not byc['args'].output_db in byc["config"][ "dataset_ids" ]:
+    # ... prompt for continuation w/ Q "new dataset ??? etc."
 
 ################################################################################
 
@@ -83,11 +84,11 @@ def main():
 
     mongo_client = MongoClient( )
 
-    db_name = byc['args'].output_db
-    data_db = mongo_client[db_name]
-    exist_callset_id[db_name] = data_db.callsets.distinct('info.legacy_id')
-    exist_biosample_id[db_name] = data_db.biosamples.distinct('info.legacy_id')
-    exist_individual_id[db_name] = data_db.individuals.distinct('info.legacy_id')
+    ds_id = byc['args'].output_db
+    data_db = mongo_client[ds_id]
+    exist_callset_id[ds_id] = data_db.callsets.distinct('info.legacy_id')
+    exist_biosample_id[ds_id] = data_db.biosamples.distinct('info.legacy_id')
+    exist_individual_id[ds_id] = data_db.individuals.distinct('info.legacy_id')
 
     no_row = mytable.shape[0]
    
@@ -159,7 +160,6 @@ def main():
             elif sex == 'male':
                 info_field[ind]['PATO::id'] = 'PATO:0020001'  
                 info_field[ind]['PATO::label'] = 'male genotypic sex'
-
         
         ### derived attributes that are shared by collections
         info_field[bs]['legacy_id'] = 'PGX_AM_BS_' + info_field['uid']
@@ -254,17 +254,17 @@ Do you want to continue? [y/n]""".format(sum([len(v) for v in variants_list]), l
                 pass
 
         for callset_id_leg, callset_obj in callsets_dict.items():
-            if (not update) and (callset_id_leg in exist_callset_id[db_name]):
+            if (not update) and (callset_id_leg in exist_callset_id[ds_id]):
                 continue
             data_db.callsets.insert_one(callset_obj)
 
         for biosample_id_leg, biosample_obj in biosamples_dict.items():
-            if (not update) and (biosample_id_leg in exist_biosample_id[db_name]):
+            if (not update) and (biosample_id_leg in exist_biosample_id[ds_id]):
                 continue
             data_db.biosamples.insert_one(biosample_obj)
 
         for individual_id_leg, individual_obj in individuals_dict.items():
-            if (not update) and (individual_id_leg in exist_individual_id[db_name]):
+            if (not update) and (individual_id_leg in exist_individual_id[ds_id]):
                 continue
             data_db.individuals.insert_one(individual_obj)
 

@@ -63,7 +63,6 @@ def main():
     if byc["args"].test:
         print( "¡¡¡ TEST MODE - no db update !!!")
 
-
     mongo_client = MongoClient( )
     o_m = { }
 

@@ -11,9 +11,12 @@ from progress.bar import Bar
 
 # local
 dir_path = path.dirname( path.abspath(__file__) )
+pkg_sub = path.dirname(__file__)
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.read_specs import *
+from lib.schemas_parser import *
+
 """
 
 ## `biosamplesRefresher`
@@ -42,6 +45,7 @@ def main():
 
     byc = {
         "pkg_path": pkg_path,
+        "pkg_sub": pkg_sub,
         "config": read_bycon_configs_by_name( "defaults" ),
         "args": _get_args(),
         "errors": [ ],
@@ -58,6 +62,10 @@ def main():
     these_prefs = read_local_prefs( service, dir_path )
     for d_k, d_v in these_prefs.items():
         byc.update( { d_k: d_v } )
+
+    # schemas = read_schema_files("Progenetix", "definitions", dir_path)
+    # bs_proto = create_db_schema("biosample", **schemas)
+    # print(json.dumps(bs_proto["Biosample"], indent=4, sort_keys=True, default=str)+"\n")
 
 ################################################################################
 

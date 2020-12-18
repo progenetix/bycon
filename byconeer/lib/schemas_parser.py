@@ -4,11 +4,9 @@ from json_ref_dict import RefDict, materialize
 
 ################################################################################
 
-def read_schema_files(**byc):
+def read_schema_files(schema_root, item, dir_path):
 
-    schemas = { }
-
-    s_path = path.join( byc["pkg_path"], "byconeer", "config", "schemas", "Progenetix.yaml#/definitions" )
+    s_path = path.join( dir_path, "config", "schemas", schema_root+".yaml#/"+item )
 
     root_def = RefDict(s_path)
 
@@ -17,8 +15,6 @@ def read_schema_files(**byc):
 ################################################################################
 
 def create_db_schema(schemaname, **schemas):
-
-    coll_s = { }
 
     s_n = camel_to_pascal(schemaname)
     s = schemas[ schemaname ]
