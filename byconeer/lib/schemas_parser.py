@@ -10,16 +10,52 @@ def read_schema_files(schema_root, item, dir_path):
 
     root_def = RefDict(s_path)
 
-    return materialize(root_def)
+    with open(path.join( dir_path, "config", "schemas.yaml" )) as f:
+        exclude_keys = yaml.load(f)['exclude_keys']
+    
+    return materialize(root_def, exclude_keys = exclude_keys)
 
 ################################################################################
 
-def create_db_schema(schemaname, **schemas):
+def read_type_map(dir_path):
+
+    with open(path.join( dir_path, "config", "schemas.yaml" )) as f:
+        type_map = yaml.load(f)['default_types']
+        
+    return type_map
+    
+################################################################################
+
+def instantiate_schema (schema, type_map):
+
+    if 'type' in schema.keys() and schema['type'] in list(type_map):
+    
+        if schema['type'] == 'array' and 'items' in schema:
+            schema = [instantiate_schema(schema['items'], type_map)]
+            
+        else:
+            schema = type_map[schema['type']]
+            
+        return schema
+        
+    else:
+        for k, val in schema.items():
+        
+            if isinstance(val, dict):
+                schema[k] = instantiate_schema(val, type_map)
+                
+    return schema
+        
+################################################################################
+
+def create_db_schema(schemaname, dir_path, **schemas):
 
     s_n = camel_to_pascal(schemaname)
     s = schemas[ schemaname ]
-
-    return {s_n: convert_case_for_keys(s, camel_to_snake)}
+	s_convert = convert_case_for_keys(s, camel_to_snake)
+	empty_instance = instantiate_schema(s_convert, read_type_map(dir_path))
+	
+    return {s_n: empty_instance}
 
 ################################################################################
 

@@ -9,5 +9,6 @@ properties:
       - PMID:9892199
   label:
     type: string
+    examples:
       - neoplastic sample
       - Adenocarcinoma, NOS

@@ -7,6 +7,6 @@ properties:
     value: "Point"
   coordinates:
     type: array
-    values:
+    items:
       type: number
       format: float

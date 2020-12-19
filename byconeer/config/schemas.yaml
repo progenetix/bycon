@@ -1,0 +1,11 @@
+exclude_keys:
+  - format
+  - examples
+  - description
+default_types:
+  string: ''
+  array: []
+  object: {}
+  integer: 0
+  boolean: false
+  number: 0.0

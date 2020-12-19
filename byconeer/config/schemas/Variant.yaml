@@ -8,35 +8,35 @@ properties:
       - 11:52900000-134452384:DEL
   biosampleId:
     type: string
-    exammples:
+    examples:
       - pgxbs-kftvjtgm
   callsetId:
     type: string
-    exammples:
+    examples:
       - pgxcs-kftvldsu
   referenceName:
     type: string
-    exammples:
+    examples:
       - 11
   referenceBases:
     type: string
-    exammples:
+    examples:
       - A
   start:
     type: integer
-    exammples:
+    examples:
       - 52900000
   end:
     type: integer
-    exammples:
+    examples:
       - 134452384
   alternateBases:
     type: string
-    exammples:
+    examples:
       - GC
   variantType:
     type: string
-    exammples:
+    examples:
       - DEL
   externalReferences:
     type: array
@@ -47,7 +47,7 @@ properties:
           id: clinvar:163840
   info:
     type: object
-    exammples:
+    examples:
       - cnv_value: 3
         cnv_length: 81552384
   updated:
