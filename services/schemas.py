@@ -3,14 +3,13 @@
 import cgi, cgitb
 import re, json, yaml
 from os import environ, pardir, path, scandir
-from urllib.parse import urlparse
 import sys, os, datetime
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response
+from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response, rest_path_value
 from bycon.lib.read_specs import read_bycon_configs_by_name,read_local_prefs,dbstats_return_latest
 from byconeer.lib.schemas_parser import *
 
@@ -50,18 +49,10 @@ def schemas(service):
         f_name = os.path.splitext( s_f )[0]
         s_data.update( { f_name: read_schema_files(f_name, "", s_pkg_path) } )
 
-    url_comps = urlparse( environ.get('REQUEST_URI') )
-    p_items = re.split(r'\/|\&', url_comps.path)
-    i = 0
-    f = ""
-
-    for p in p_items:
-        if len(p_items) > i:
-            i += 1
-            if p == "schemas":
-                if p_items[ i ] in s_data.keys():    
-                    cgi_print_json_response( {}, s_data[ p_items[ i ] ], 200 )
-                    exit()
+    schema_name = rest_path_value("schemas")
+    if schema_name in s_data.keys():    
+        cgi_print_json_response( {}, s_data[ schema_name ], 200 )
+        exit()
 
     r = byc[ "config" ]["response_object_schema"]
     r["errors"].append("No correct schema name provided!")

@@ -1,7 +1,6 @@
 #!/usr/local/bin/python3
 
 from os import environ, path, pardir
-from urllib.parse import urlparse
 import sys, re, cgitb
 from importlib import import_module
 
@@ -9,7 +8,7 @@ from importlib import import_module
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.read_specs import read_local_prefs
+from bycon.lib.read_specs import read_local_prefs, rest_path_value
 
 """podmd
 The `services` application deparses a request URI and calls the respective
@@ -40,30 +39,23 @@ def main():
         print('Content-Type: text')
         print()
 
-    url_comps = urlparse( environ.get('REQUEST_URI') )
-    p_items = re.split(r'\/|\&', url_comps.path)
-    i = 0
-    f = ""
+    service_name = rest_path_value("services")
 
-    for p in p_items:
-        if len(p_items) > i:
-            i += 1
-            if p == "services":
-                if p_items[ i ] in these_prefs["service_names"]:    
-                    f = p_items[ i ]
-                    
-                    # dynamic package/function loading
-                    try:
-                        mod = import_module(f)
-                        serv = getattr(mod, f)
-                        serv(f)
-                    except Exception as e:
-                        print('Content-Type: text')
-                        print('status:422')
-                        print()
-                        print('Service {} error: {}'.format(f, e))
+    if service_name in these_prefs["service_names"]:    
+        f = service_name
+        
+        # dynamic package/function loading
+        try:
+            mod = import_module(f)
+            serv = getattr(mod, f)
+            serv(f)
+        except Exception as e:
+            print('Content-Type: text')
+            print('status:422')
+            print()
+            print('Service {} error: {}'.format(f, e))
 
-                    exit()
+            exit()
 
     print('Content-Type: text')
     print('status:422')

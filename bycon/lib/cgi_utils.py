@@ -1,4 +1,6 @@
 import cgi, cgitb
+from urllib.parse import urlparse
+from os import environ
 import json
 import re
 
@@ -16,6 +18,23 @@ def cgi_parse_query():
         pass
 
     return form_data
+
+################################################################################
+
+def rest_path_value(key):
+
+    url_comps = urlparse( environ.get('REQUEST_URI') )
+    p_items = re.split(r'\/|\&', url_comps.path)
+    i = 0
+    f = ""
+
+    for p in p_items:
+        if len(p_items) > i:
+            i += 1
+            if p == key:
+                return p_items[ i ]
+
+    return False
 
 ################################################################################
 
