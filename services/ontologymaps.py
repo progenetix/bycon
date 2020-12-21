@@ -14,7 +14,7 @@ from bycon.lib.cgi_utils import *
 from bycon.lib.parse_filters import *
 from bycon.lib.read_specs import *
 from byconeer.lib.schemas_parser import *
-
+from lib.service_utils import *
 
 """podmd
 * <https://progenetix.org/services/ontologymaps/?filters=NCIT:C3222>
@@ -54,14 +54,12 @@ def ontologymaps(service):
     byc.update( { "filter_flags": get_filter_flags( **byc ) } )
 
     # response prototype
-    r_s = read_schema_files("ServiceResponse", "properties", dir_path)
-    r = create_empty_instance(r_s, dir_path)
-    print(json.dumps(r, indent=4, sort_keys=True, default=str)+"\n")
-    r = byc[ "config" ]["response_object_schema"]
-    r["response_type"] = service
+    r = create_empty_service_response()
 
-    r["parameters"].update( { "filters": byc[ "filters" ] })
 
+    r["meta"]["response_type"] = service
+
+    r["meta"]["parameters"].append( { "filters": byc[ "filters" ] })
     q_list = [ ]
     pre_re = re.compile(r'^(\w+?)([:-].*?)?$')
     for f in byc[ "filters" ]:
@@ -77,7 +75,7 @@ def ontologymaps(service):
                     else:
                         q_list.append( { byc["query_field"]: f } )
     if len(q_list) < 1:
-        r["errors"].append("No correct filter value provided!")
+        r["meta"]["errors"].append("No correct filter value provided!")
         cgi_print_json_response( byc["form_data"], r, 422 )
 
     if len(q_list) > 1:
@@ -85,7 +83,7 @@ def ontologymaps(service):
     else:
         query = q_list[0]
 
-    r["data"] = { }
+    r["response"]["results"] = { }
 
     c_g = [ ]
     u_c_d = { }
@@ -105,12 +103,13 @@ def ontologymaps(service):
         for k, u in u_c_d[ pre ].items():
             u_c[ pre ].append(u)
 
+
             
     mongo_client.close( )
 
-    r["data"].update( { "code_groups": c_g, "unique_codes": u_c } )
+    r["response"]["results"].update( { "code_groups": c_g, "unique_codes": u_c } )
 
-    r[service+"_count"] = len(r["data"]["code_groups"])
+    r[service+"_count"] = len(r["response"]["results"]["code_groups"])
  
     cgi_print_json_response( byc["form_data"], r, 200 )
 

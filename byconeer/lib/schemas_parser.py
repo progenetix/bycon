@@ -26,16 +26,27 @@ def read_type_map(dir_path):
     
 ################################################################################
 
-def instantiate_schema (schema, type_map):
+def instantiate_schema(schema, type_map):
 
     if 'type' in schema.keys() and schema['type'] in list(type_map):
     
-        if schema['type'] == 'array' and 'items' in schema:
-            schema = [instantiate_schema(schema['items'], type_map)]
+        # # if schema['type'] == 'array' and 'items' in schema:
+        # #     schema = [instantiate_schema(schema['items'], type_map)]
             
+        # else:
+        if schema['type'] == 'array':
+            schema = []
+        elif schema['type'] == 'object':
+            schema = { }
+        elif schema['type'] == 'integer':
+            schema = int()
+        elif schema['type'] == 'number':
+            schema = float()
+        elif schema['type'] == 'boolean':
+            schema = False
         else:
-            schema = type_map[schema['type']]
-            
+            schema = ""
+           
         return schema
         
     else:
