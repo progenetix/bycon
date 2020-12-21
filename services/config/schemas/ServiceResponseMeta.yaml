@@ -8,7 +8,8 @@ properties:
     type: string
   errors:
     type: array
-    items: string
+    items:
+      type: string
   parameters:
     type: array
     items:
