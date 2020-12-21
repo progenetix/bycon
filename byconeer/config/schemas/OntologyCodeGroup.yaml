@@ -1,0 +1,8 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/OntologyCodeGroup/v2020-12-21
+title: OntologyCodeGroup
+properties:
+  codeGroup:
+    type: array
+    items:
+      "$ref": OntologyTerm.yaml#/properties

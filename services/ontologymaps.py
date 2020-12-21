@@ -56,11 +56,10 @@ def ontologymaps(service):
     # response prototype
     r = create_empty_service_response()
 
-
     r["meta"]["response_type"] = service
 
     r["meta"]["parameters"].append( { "filters": byc[ "filters" ] })
-    r["meta"]["returned_schemas"].append( 'https://progenetix.org/services/schemas/Collation/v2020-12-08' )
+    r["meta"]["returned_schemas"].append( 'https://progenetix.org/services/schemas/OntologyCodeGroup/v2020-12-21' )
 
     q_list = [ ]
     pre_re = re.compile(r'^(\w+?)([:-].*?)?$')

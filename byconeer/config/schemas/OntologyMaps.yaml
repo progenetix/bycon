@@ -1,0 +1,12 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/OntologyMaps/v2020-12-21
+title: OntologyMaps
+properties:
+  codeGroups:
+    type: array
+    items:
+      "$ref": OntologyCodeGroup.yaml#/properties
+  codeGroup:
+    type: array
+    items:
+      "$ref": OntologyTerm.yaml#/properties
