@@ -14,3 +14,7 @@ properties:
     type: array
     items:
       type: object
+  returnedSchemas:
+    type: array
+    items:
+      type: string

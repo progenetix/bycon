@@ -60,6 +60,8 @@ def ontologymaps(service):
     r["meta"]["response_type"] = service
 
     r["meta"]["parameters"].append( { "filters": byc[ "filters" ] })
+    r["meta"]["returned_schemas"].append( 'https://progenetix.org/services/schemas/Collation/v2020-12-08' )
+
     q_list = [ ]
     pre_re = re.compile(r'^(\w+?)([:-].*?)?$')
     for f in byc[ "filters" ]:
@@ -83,8 +85,6 @@ def ontologymaps(service):
     else:
         query = q_list[0]
 
-    r["response"]["results"] = { }
-
     c_g = [ ]
     u_c_d = { }
     mongo_client = MongoClient( )
@@ -102,14 +102,16 @@ def ontologymaps(service):
         u_c[ pre ] = []
         for k, u in u_c_d[ pre ].items():
             u_c[ pre ].append(u)
-
-
             
     mongo_client.close( )
 
-    r["response"]["results"].update( { "code_groups": c_g, "unique_codes": u_c } )
+    r["response"]["results"].append( { "code_groups": c_g, "unique_codes": u_c } )
 
-    r[service+"_count"] = len(r["response"]["results"]["code_groups"])
+    r_no = len(r["response"]["results"][0]["code_groups"])
+
+    if r_no > 0:
+        r["response"]["exists"] = True
+    r["response"]["info"]["count"] = r_no
  
     cgi_print_json_response( byc["form_data"], r, 200 )
 
