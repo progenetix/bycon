@@ -54,8 +54,9 @@ def ontologymaps(service):
     byc.update( { "filter_flags": get_filter_flags( **byc ) } )
 
     # response prototype
-    # r = read_schema_files("ServiceResponse", "properties", dir_path),
-    # print(json.dumps(r, indent=4, sort_keys=True, default=str)+"\n")
+    r_s = read_schema_files("ServiceResponse", "properties", dir_path)
+    r = create_empty_instance(r_s, dir_path)
+    print(json.dumps(r, indent=4, sort_keys=True, default=str)+"\n")
     r = byc[ "config" ]["response_object_schema"]
     r["response_type"] = service
 
