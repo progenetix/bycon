@@ -11,4 +11,5 @@ properties:
     items: string
   parameters:
     type: array
-    items: object
+    items:
+      type: object

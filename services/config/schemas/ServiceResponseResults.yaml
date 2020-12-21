@@ -10,3 +10,5 @@ properties:
     type: object
   results:
     type: array
+    items:
+      type: object
