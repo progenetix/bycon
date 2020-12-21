@@ -13,6 +13,8 @@ sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import *
 from bycon.lib.parse_filters import *
 from bycon.lib.read_specs import *
+from byconeer.lib.schemas_parser import *
+
 
 """podmd
 * <https://progenetix.org/services/ontologymaps/?filters=NCIT:C3222>
@@ -40,6 +42,8 @@ def ontologymaps(service):
     for d in ["filter_definitions"]:
         byc.update( { d: read_bycon_configs_by_name( d ) } )
 
+    # print(json.dumps(byc["response"], indent=4, sort_keys=True, default=str)+"\n")
+
     these_prefs = read_local_prefs( service, dir_path )
 
     # first pre-population w/ defaults
@@ -50,6 +54,8 @@ def ontologymaps(service):
     byc.update( { "filter_flags": get_filter_flags( **byc ) } )
 
     # response prototype
+    # r = read_schema_files("ServiceResponse", "properties", dir_path),
+    # print(json.dumps(r, indent=4, sort_keys=True, default=str)+"\n")
     r = byc[ "config" ]["response_object_schema"]
     r["response_type"] = service
 
@@ -106,6 +112,18 @@ def ontologymaps(service):
     r[service+"_count"] = len(r["data"]["code_groups"])
  
     cgi_print_json_response( byc["form_data"], r, 200 )
+
+################################################################################
+################################################################################
+
+def schema_detyper(parameter):
+
+    if "type" in parameter:
+        if "array" in parameter["type"]:
+            return [ ]
+        elif "object" in parameter["type"]:
+            return { }
+        return ""
 
 ################################################################################
 ################################################################################
