@@ -6,7 +6,3 @@ properties:
     type: array
     items:
       "$ref": OntologyCodeGroup.yaml#/properties
-  codeGroup:
-    type: array
-    items:
-      "$ref": OntologyTerm.yaml#/properties
