@@ -29,8 +29,8 @@ def rest_path_value(key):
     f = ""
 
     for p in p_items:
+        i += 1
         if len(p_items) > i:
-            i += 1
             if p == key:
                 return p_items[ i ]
 
