@@ -8,7 +8,8 @@ from importlib import import_module
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.read_specs import read_local_prefs, rest_path_value
+from bycon.lib.read_specs import read_local_prefs
+from bycon.lib.cgi_utils import rest_path_value
 
 """podmd
 The `services` application deparses a request URI and calls the respective

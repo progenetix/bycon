@@ -9,13 +9,13 @@ import sys, os, datetime
 dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response, rest_path_value
-from bycon.lib.read_specs import read_bycon_configs_by_name,read_local_prefs,dbstats_return_latest
+from bycon.lib.cgi_utils import cgi_parse_query, cgi_print_json_response, rest_path_value
+from bycon.lib.read_specs import read_bycon_configs_by_name
 from byconeer.lib.schemas_parser import *
 
 """podmd
 
-* <>
+* <https://progenetix.org/services/schemas/Biosample>
 
 podmd"""
 

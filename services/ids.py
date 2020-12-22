@@ -9,7 +9,8 @@ import sys
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.read_specs import *
+from bycon.lib.read_specs import read_local_prefs
+from bycon.lib.cgi_utils import rest_path_value
 
 """podmd
 The `ids` service forwards compatible, prefixed ids (see `config/ids.yaml`) to specific
