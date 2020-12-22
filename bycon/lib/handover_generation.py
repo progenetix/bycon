@@ -123,7 +123,7 @@ def _handover_create_url(h_o_server, h_o_defs, h_o_t, accessid):
         # TODO: hacking deliveries to force simple list for interface => next
         opts = ""
         if "deliveries" in h_o_defs["script_path_web"]:
-            opts = "&responseFormat=simplelist"
+            opts = "&responseFormat=simple"
         return("{}{}?do={}&accessid={}{}".format(server, h_o_defs["script_path_web"], h_o_t, accessid, opts))
 
     return ""

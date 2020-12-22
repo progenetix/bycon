@@ -111,6 +111,11 @@ def ontologymaps(service):
     if r_no > 0:
         r["response"]["exists"] = True
     r["response"]["info"]["count"] = r_no
+
+    if "responseType" in byc["form_data"]:
+        r_t = byc["form_data"].getvalue("responseType")
+        if "simple" in r_t:
+            r = { "data": r["response"]["results"][0] }
  
     cgi_print_json_response( byc["form_data"], r, 200 )
 

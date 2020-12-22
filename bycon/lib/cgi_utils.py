@@ -66,6 +66,9 @@ def cgi_print_text_response(form_data, data, status_code):
 
 def cgi_print_json_response(form_data, response, status_code):
 
+    if "responseType" in form_data:
+        r_t = form_data.getvalue("responseType")
+
     if "callback" in form_data:
         data = form_data.getvalue("callback")+'('+json.dumps(response, default=str)+")\n"
         cgi_print_text_response(form_data, data, status_code)
@@ -92,6 +95,10 @@ def cgi_print_json_response(form_data, response, status_code):
             r_f = form_data.getvalue("responseFormat")
             if "simple" in r_f:
                 response = response["data"]
+    elif "response" in response:
+        if "results" in response["response"]:
+            if "simple" in r_f:
+                response = response["response"]["results"]
 
     print('Content-Type: application/json')
     print('status:'+str(status_code))
