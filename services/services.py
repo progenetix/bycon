@@ -11,21 +11,11 @@ sys.path.append( pkg_path )
 from bycon.lib.read_specs import read_local_prefs
 from bycon.lib.cgi_utils import rest_path_value
 
-"""podmd
+"""
 The `services` application deparses a request URI and calls the respective
 script. The functionality is combined with the correct configuration of a 
-rewrite in the server configuration:
-
-```
-RewriteRule     "^/services(.*)"     /cgi-bin/bycon/bin/services.py$1      [PT]
-```
-
-This allows the creation of canonical URLs, e.g.:
-
-* <https://progenetix.org/services/biosamples?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=9&variantType=DEL&start=18000000&start=21975097&end=21967753&end=26000000&filters=icdom-94403>
-* <https://progenetix.org/services/cytomapper?assemblyId=ncbi36.1&cytoBands=8q&text=1>
-
-podmd"""
+rewrite in the server configuration for creation of canonical URLs.
+"""
 
 ################################################################################
 ################################################################################

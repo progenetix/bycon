@@ -10,39 +10,32 @@ def read_schema_files(schema_root, item, dir_path):
 
     root_def = RefDict(s_path)
 
-    with open(path.join( dir_path, "config", "schemas", "_meta.yaml" )) as f:
-        exclude_keys = yaml.load( f , Loader=yaml.FullLoader)['exclude_keys']
-    
+    exclude_keys = [ "format", "examples", "description" ]
+
     return materialize(root_def, exclude_keys = exclude_keys)
 
 ################################################################################
 
-def read_type_map(dir_path):
+def instantiate_schema(schema):
 
-    with open(path.join( dir_path, "config", "schemas", "_meta.yaml" )) as f:
-        type_map = yaml.load( f , Loader=yaml.FullLoader)['default_types']
-        
-    return type_map
-    
-################################################################################
+    if 'type' in schema.keys():
 
-def instantiate_schema(schema, type_map):
-
-    if 'type' in schema.keys() and schema['type'] in list(type_map):
+        t = schema['type']
     
         # # if schema['type'] == 'array' and 'items' in schema:
-        # #     schema = [instantiate_schema(schema['items'], type_map)]
+        # #     schema = [instantiate_schema(schema['items'])]
             
         # else:
-        if schema['type'] == 'array':
+
+        if t == 'array' or t == 'list':
             schema = []
-        elif schema['type'] == 'object':
+        elif t == 'object':
             schema = { }
-        elif schema['type'] == 'integer':
+        elif t == 'integer':
             schema = int()
-        elif schema['type'] == 'number':
+        elif t == 'number':
             schema = float()
-        elif schema['type'] == 'boolean':
+        elif t == 'boolean':
             schema = False
         else:
             schema = ""
@@ -53,7 +46,7 @@ def instantiate_schema(schema, type_map):
         for k, val in schema.items():
         
             if isinstance(val, dict):
-                schema[k] = instantiate_schema(val, type_map)
+                schema[k] = instantiate_schema(val)
                 
     return schema
         
@@ -61,7 +54,7 @@ def instantiate_schema(schema, type_map):
 
 def create_empty_instance(schema, dir_path):
     s_convert = convert_case_for_keys(schema, camel_to_snake)
-    return instantiate_schema(s_convert, read_type_map(dir_path))
+    return instantiate_schema(s_convert)
 
 ################################################################################
 
