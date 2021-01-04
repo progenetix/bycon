@@ -57,7 +57,6 @@ def ontologymaps(service):
     r = create_empty_service_response()
 
     r["meta"]["response_type"] = service
-
     r["meta"]["parameters"].append( { "filters": byc[ "filters" ] })
     r["meta"]["returned_schemas"].append( 'https://progenetix.org/services/schemas/OntologyCodeGroup/v2020-12-21' )
 
