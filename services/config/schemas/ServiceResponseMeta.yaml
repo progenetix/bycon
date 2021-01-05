@@ -18,3 +18,5 @@ properties:
     type: array
     items:
       type: string
+  info:
+    type: object

@@ -54,12 +54,9 @@ def ontologymaps(service):
     byc.update( { "filter_flags": get_filter_flags( **byc ) } )
 
     # response prototype
-    r = create_empty_service_response()
-
-    r["meta"]["response_type"] = service
+    r = create_empty_service_response(**these_prefs)    
     r["meta"]["parameters"].append( { "filters": byc[ "filters" ] })
-    r["meta"]["returned_schemas"].append( 'https://progenetix.org/services/schemas/OntologyCodeGroup/v2020-12-21' )
-
+ 
     q_list = [ ]
     pre_re = re.compile(r'^(\w+?)([:-].*?)?$')
     for f in byc[ "filters" ]:
@@ -111,11 +108,8 @@ def ontologymaps(service):
         r["response"]["exists"] = True
     r["response"]["info"]["count"] = r_no
 
-    if "responseType" in byc["form_data"]:
-        r_t = byc["form_data"].getvalue("responseType")
-        if "simple" in r_t:
-            r = { "data": r["response"]["results"][0] }
- 
+    r = cgi_select_data_response(byc["form_data"], r, r["response"]["results"][0])
+
     cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################

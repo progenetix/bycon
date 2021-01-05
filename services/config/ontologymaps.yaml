@@ -1,2 +1,9 @@
 defaults:
   query_field: "code_group.id"
+meta:
+  response_type: ontologymaps
+  returned_schemas:
+    - https://progenetix.org/services/schemas/OntologyCodeGroup/
+  info: >
+    The main code groups payload can be accessed in `response.results.code_groups[0]`.
+

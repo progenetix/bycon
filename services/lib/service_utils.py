@@ -10,9 +10,13 @@ from byconeer.lib.schemas_parser import *
 
 ################################################################################
 
-def create_empty_service_response():
+def create_empty_service_response(**these_prefs):
 
     r_s = read_schema_files("ServiceResponse", "properties", dir_path)
     r = create_empty_instance(r_s, dir_path)
+
+    if "meta" in these_prefs:
+    	for k, v in these_prefs["meta"].items():
+    		r["meta"].update( { k: v } )
 
     return r

@@ -8,10 +8,11 @@ import re
 
 def set_debug_state():
 
-    if "debug=1" in environ.get('REQUEST_URI'):
-        cgitb.enable()
-        print('Content-Type: text')
-        print()
+    if environ.get('REQUEST_URI'):
+        if "debug=1" in environ.get('REQUEST_URI'):
+            cgitb.enable()
+            print('Content-Type: text')
+            print()
 
 ################################################################################
 
@@ -66,6 +67,29 @@ def cgi_print_text_response(form_data, data, status_code):
 
 ################################################################################
 
+def cgi_select_data_response(form_data, response, simpledata):
+
+    if "responseFormat" in form_data:
+        r_f = form_data.getvalue("responseFormat")
+        if "simple" in r_f:
+            response = { "data": simpledata }
+
+    return response
+
+################################################################################
+
+def cgi_simplify_response(response):
+
+    if "data" in response:            
+        return response["data"]
+    elif "response" in response:
+        if "results" in response["response"]:
+            return response["response"]["results"]
+
+    return response
+
+################################################################################
+
 def cgi_print_json_response(form_data, response, status_code):
 
     r_f = ""
@@ -80,9 +104,13 @@ def cgi_print_json_response(form_data, response, status_code):
         data = form_data.getvalue("callback")+'('+json.dumps(response, default=str)+")\n"
         cgi_print_text_response(form_data, data, status_code)
 
+
+    # This is a simple "de-jsonify", intended to be used for already
+    # pre-formatted list-like items (i.e. lists only containing objects)
+    # with simple key-value pairs)
+    # TODO: universal text table converter
     if "text" in r_t:
-        if "data" in response:
-            response = response["data"]
+        response = cgi_simplify_response(response)      
         if isinstance(response, dict):
             response = json.dumps(response, default=str)
         if isinstance(response, list):
@@ -95,13 +123,8 @@ def cgi_print_json_response(form_data, response, status_code):
             response = "\n".join(l_d)
         cgi_print_text_response(form_data, response, status_code)
 
-    if "data" in response:
-        if "simple" in r_f:
-            response = response["data"]
-    elif "response" in response:
-        if "results" in response["response"]:
-            if "simple" in r_f:
-                response = response["response"]["results"]
+    if "simple" in r_f:
+        response = cgi_simplify_response(response)
 
     print('Content-Type: application/json')
     print('status:'+str(status_code))
@@ -110,3 +133,6 @@ def cgi_print_json_response(form_data, response, status_code):
     exit()
 
 ################################################################################
+
+
+

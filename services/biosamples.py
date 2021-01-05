@@ -10,9 +10,11 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib import *
+from lib.service_utils import *
 
 """podmd
 * <https://progenetix.org/cgi/bycon/bin/biosamples.py?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
+* <https://progenetix.org/services/biosamples?responseFormat=simple&datasetIds=progenetix&filters=cellosaurus:CVCL_0030>
 podmd"""
 
 ################################################################################
@@ -67,26 +69,26 @@ def biosamples(service):
     byc.update( { "queries": generate_queries( **byc ) } )
 
     # response prototype
-    r = byc[ "config" ]["response_object_schema"]
-    r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
+    r = create_empty_service_response(**these_prefs)
+    r["meta"]["errors"].extend(byc["errors"])
 
     # TODO: move somewhere
     if not byc[ "queries" ].keys():
-      r["errors"].append( "No (correct) query parameters were provided." )
+      r["meta"]["errors"].append( "No (correct) query parameters were provided." )
     if len(byc[ "dataset_ids" ]) < 1:
-      r["errors"].append( "No `datasetIds` parameter provided." )
+      r["meta"]["errors"].append( "No `datasetIds` parameter provided." )
     if len(byc[ "dataset_ids" ]) > 1:
-      r["errors"].append( "More than 1 `datasetIds` value was provided." )
-    if len(r["errors"]) > 0:
+      r["meta"]["errors"].append( "More than 1 `datasetIds` value was provided." )
+
+    if len(r["meta"]["errors"]) > 0:
       cgi_print_json_response( byc["form_data"], r, 422 )
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
 
     # saving the parameters to the response
     for p in ["method", "filters", "variant_pars"]:
-        r["parameters"].update( { p: byc[ p ] } )
-    r["parameters"].update( { "dataset": ds_id } )
-    r["response_type"] = service
+        r["meta"]["parameters"].append( { p: byc[ p ] } )
+    r["meta"]["parameters"].append( { "dataset": ds_id } )
 
     if "phenopackets" in byc["method"]:
         byc.update( { "response_type": "return_individuals" } )
@@ -104,9 +106,9 @@ def biosamples(service):
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
-        r["errors"].append( e )
+        r["meta"]["errors"].append( e )
 
-    if len(r["errors"]) > 0:
+    if len(r["meta"]["errors"]) > 0:
       cgi_print_json_response( byc["form_data"], r, 422 )
 
     for b_s in h_o_d:
@@ -120,9 +122,14 @@ def biosamples(service):
                 s[ k ] = b_s[ k ]
             else:
                 s[ k ] = None
-        r["data"].append( s )
+        r["response"]["results"].append( s )
 
-    r[service+"_count"] = len(r["data"])
+    r_no = len( r["response"]["results"] )
+
+    r["response"]["info"].update({"count": r_no })
+    if r_no > 0:
+        r["response"].update({"exists": True })
+
     cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################
