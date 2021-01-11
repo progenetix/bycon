@@ -111,6 +111,8 @@ def biosamples(service):
     if len(r["meta"]["errors"]) > 0:
       cgi_print_json_response( byc["form_data"], r, 422 )
 
+    results = [ ]
+
     for b_s in h_o_d:
         s = { }
         for k in these_prefs["methods"][ byc["method"] ]:
@@ -122,14 +124,9 @@ def biosamples(service):
                 s[ k ] = b_s[ k ]
             else:
                 s[ k ] = None
-        r["response"]["results"].append( s )
+        results.append( s )
 
-    r_no = len( r["response"]["results"] )
-
-    r["response"]["info"].update({"count": r_no })
-    if r_no > 0:
-        r["response"].update({"exists": True })
-
+    populate_service_response(r, results)
     cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################

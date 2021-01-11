@@ -87,28 +87,21 @@ def ontologymaps(service):
     for o in mongo_coll.find( query, { '_id': False } ):
         for c in o["code_group"]:
             pre, code = re.split("[:-]", c["id"])
-            if not pre in u_c_d:
-                u_c_d.update( { pre: { } } )
-            u_c_d[ pre ].update( { c["id"]: { "id": c["id"], "label": c["label"] } } )
+            u_c_d.update( { c["id"]: { "id": c["id"], "label": c["label"] } } )
         c_g.append( o["code_group"] )
 
-    u_c = { }
-    for pre in u_c_d:
-        u_c[ pre ] = []
-        for k, u in u_c_d[ pre ].items():
-            u_c[ pre ].append(u)
+    u_c = [ ]
+    for k, u in u_c_d.items():
+        u_c.append(u)
             
     mongo_client.close( )
 
-    r["response"]["results"].append( { "code_groups": c_g, "unique_codes": u_c } )
-
-    r_no = len(r["response"]["results"][0]["code_groups"])
-
+    results =  [ { "term_groups": c_g, "unique_terms": u_c } ]
+    r_no = len(results[0]["term_groups"])
+    r["response"]["info"]["count"] = r_no
     if r_no > 0:
         r["response"]["exists"] = True
-    r["response"]["info"]["count"] = r_no
-
-    r = cgi_select_data_response(byc["form_data"], r, r["response"]["results"][0])
+        r["response"]["results"] = results
 
     cgi_print_json_response( byc["form_data"], r, 200 )
 

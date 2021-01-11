@@ -67,17 +67,6 @@ def cgi_print_text_response(form_data, data, status_code):
 
 ################################################################################
 
-def cgi_select_data_response(form_data, response, simpledata):
-
-    if "responseFormat" in form_data:
-        r_f = form_data.getvalue("responseFormat")
-        if "simple" in r_f:
-            response = { "data": simpledata }
-
-    return response
-
-################################################################################
-
 def cgi_simplify_response(response):
 
     if "data" in response:            

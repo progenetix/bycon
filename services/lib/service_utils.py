@@ -20,3 +20,17 @@ def create_empty_service_response(**these_prefs):
     		r["meta"].update( { k: v } )
 
     return r
+
+################################################################################
+
+def populate_service_response(r, results):
+
+    if isinstance(results, list):
+        r_no = len( results )
+        r["response"]["info"].update({"count": r_no })
+        if r_no > 0:
+            r["response"].update({"exists": True })
+    
+    r["response"].update({"results": results })
+
+    return r

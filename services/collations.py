@@ -13,12 +13,13 @@ sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import *
 from bycon.lib.parse_filters import *
 from bycon.lib.read_specs import *
+from lib.service_utils import *
 
 """podmd
 * <http://progenetix.org/services/collations?deliveryKeys=id,count&filters=cellosaurus&datasetIds=progenetix>
 * <https://progenetix.org/services/collations?filters=NCIT>
 * <https://progenetix.org/services/collations?filters=NCIT&method=codematches>
-* <http://progenetix.org/cgi-bin/bycon/bin/collations.py?filters=NCIT&datasetIds=progenetix&method=counts>
+* <http://progenetix.org/cgi-bin/bycon/services/collations.py?filters=NCIT&datasetIds=progenetix&method=counts>
 podmd"""
 
 ################################################################################
@@ -34,7 +35,6 @@ def main():
 def collations(service):
 
     byc = {
-        "pkg_path": pkg_path,
         "pkg_path": pkg_path,
         "config": read_bycon_configs_by_name( "defaults" ),
         "errors": [ ],
@@ -64,29 +64,28 @@ def collations(service):
     byc.update( { "filters": parse_filters( **byc ) } )
 
     # response prototype
-    r = byc[ "config" ]["response_object_schema"]
-    r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
-    r["response_type"] = "subsets"
+    r = create_empty_service_response(**these_prefs)    
+    r["meta"]["errors"].extend(byc["errors"])
 
     # TODO: move somewhere
     if len(byc[ "dataset_ids" ]) < 1:
-      r["errors"].append( "No `datasetIds` parameter provided." )
-    if len(r["errors"]) > 0:
+      r["meta"]["errors"].extend( "No `datasetIds` parameter provided." )
+    if len(r["meta"]["errors"]) > 0:
       cgi_print_json_response( byc["form_data"], r, 422 )
 
     # saving the parameters to the response
     for p in ["dataset_ids", "method", "filters"]:
-        r["parameters"].update( { p: byc[ p ] } )
+        r["meta"]["parameters"].append( { p: byc[ p ] } )
 
     # data retrieval & response population
     mongo_client = MongoClient( )
     s_s = { }
+
     for ds_id in byc[ "dataset_ids" ]:
         mongo_db = mongo_client[ ds_id ]
         for f in byc[ "filters" ]:
             query = { "id": re.compile(r'^'+f ) }
             pre = re.split('-|:', f)[0]
-            # c =  byc["filter_definitions"][ pre ]["collation"]
             c = "collations"
             mongo_coll = mongo_db[ c ]
             for subset in mongo_coll.find( query ):
@@ -116,8 +115,9 @@ def collations(service):
 
     mongo_client.close( )
 
-    r["data"] = list(s_s.values())   
-    r["results_count"] = len(s_s)
+    results = list(s_s.values())
+
+    populate_service_response(r, results)
 
     cgi_print_json_response( byc["form_data"], r, 200 )
 
