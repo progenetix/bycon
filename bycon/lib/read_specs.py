@@ -57,7 +57,7 @@ def dbstats_return_latest( **byc ):
     coll = byc[ "config" ][ "beacon_info_coll" ]
 
     stats = MongoClient( )[ db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
-    return(stats[0])
+    return stats[0]
 
 ################################################################################
 

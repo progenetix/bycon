@@ -13,6 +13,7 @@ sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response
 from bycon.lib.read_specs import read_local_prefs,read_bycon_configs_by_name
 from bycon.lib.query_generation import geo_query
+from bycon.lib.query_execution import mongo_result_list
 from lib.service_utils import *
 
 """podmd
@@ -44,14 +45,11 @@ def geolocations(service):
     byc["geoloc_definitions"]["geo_root"] = ""
 
     these_prefs = read_local_prefs( service, dir_path )
-
-    # first pre-population w/ defaults
     for d_k, d_v in these_prefs["defaults"].items():
         byc.update( { d_k: d_v } )
     
     # response prototype
-    # response prototype
-    r = create_empty_service_response(**these_prefs)    
+    r = create_empty_service_response(**these_prefs)
 
     query, geo_pars = geo_query( **byc )
     for g_k, g_v in geo_pars.items():
@@ -61,13 +59,12 @@ def geolocations(service):
         r["meta"]["errors"].append( "No query generated - missing or malformed parameters" )
         cgi_print_json_response( byc[ "form_data" ], r, 422 )
 
-    mongo_client = MongoClient( )
-    g_coll = mongo_client[ byc["geo_db"] ][ byc["geo_coll"] ]
-    results = list( g_coll.find( query, { '_id': False } ) )
-    mongo_client.close( )
+    results, error = mongo_result_list( byc["geo_db"], byc["geo_coll"], query, { '_id': False } )
+    if error:
+        r["meta"]["errors"].append( error )
+        cgi_print_json_response( byc[ "form_data" ], r, 422 )
 
     populate_service_response(r, results)
-
     cgi_print_json_response( byc[ "form_data" ], r, 200 )
 
 ################################################################################

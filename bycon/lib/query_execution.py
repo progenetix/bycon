@@ -6,6 +6,25 @@ import datetime
 
 ################################################################################
 
+def mongo_result_list(db_name, coll_name, query, fields):
+
+    results = [ ]
+    error = False
+
+    mongo_client = MongoClient( )
+
+    try:
+        results = list( mongo_client[ db_name ][ coll_name ].find( query, fields ) )
+    except Exception as e:
+        error = e
+
+    mongo_client.close( )
+ 
+    return results, error
+
+
+################################################################################
+
 def execute_bycon_queries(ds_id, **byc):
 
     # last_time = datetime.datetime.now()
