@@ -1,6 +1,6 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/OntologyTerm/v2021-01-12
-title: OntologyTerm
+"$id": https://progenetix.org/services/schemas/OntologyClass/v2021-01-12
+title: OntologyClass
 properties:
   id:
     type: string

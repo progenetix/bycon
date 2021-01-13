@@ -3,7 +3,7 @@
 title: Ancestry
 properties:
   ancestry:
-    "$ref": OntologyTerm.yaml#/properties
+    "$ref": OntologyClass.yaml#/properties
   description:
     type: string
   confidenceScore:

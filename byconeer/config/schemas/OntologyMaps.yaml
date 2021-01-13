@@ -5,4 +5,4 @@ properties:
   codeGroups:
     type: array
     items:
-      "$ref": OntologyTermGroup.yaml#/properties
+      "$ref": OntologyClassGroup.yaml#/properties

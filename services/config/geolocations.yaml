@@ -1,7 +1,13 @@
 defaults:
-  db: progenetix
-  coll: geolocs
+  geo_db: progenetix
+  geo_coll: geolocs
   request_type: city
+meta:
+  response_type: geolocs
+  returned_schemas:
+    - https://progenetix.org/services/schemas/Geodata/
+  info: >
+    The main geolocs payload can be accessed in `response.results`.
 geo_root: 'provenance.geo'
 parameters:
   geolatitude:

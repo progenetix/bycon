@@ -3,6 +3,6 @@
 title: Provenance
 properties:
   material:
-    "$ref": Characteristic.yaml#/properties
+    "$ref": OntologyClass.yaml#/properties
   geo:
     "$ref": Geodata.yaml#/properties

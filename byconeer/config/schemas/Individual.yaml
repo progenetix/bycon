@@ -11,14 +11,14 @@ properties:
     examples:
       - HapMap project contributor
   karyotypicSex:
-    "$ref": OntologyTerm.yaml#/properties
+    "$ref": OntologyClass.yaml#/properties
   dateOfBirth:
     type: string
     format: date-time
   externalReferences:
     type: array
     items:
-      "$ref": OntologyTerm.yaml#/properties
+      "$ref": OntologyClass.yaml#/properties
     examples:
       - type:
           id: NA19625
@@ -30,7 +30,7 @@ properties:
     items:
       "$ref": Ancestry.yaml#/properties
   dataUseConditions:
-    "$ref": OntologyTerm.yaml#/properties
+    "$ref": OntologyClass.yaml#/properties
   info:
     type: object
   updated:

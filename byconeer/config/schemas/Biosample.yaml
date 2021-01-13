@@ -26,31 +26,28 @@ properties:
   biocharacteristics:
     type: array
     items:
-      "$ref": Characteristic.yaml#/properties
+      "$ref": OntologyClass.yaml#/properties
     examples:
-      - type:
-          id: NCIT:C4029
+      - - id: NCIT:C4029
           label: Cervical Adenocarcinoma
-        type:
-          id: UBERON:0000002
+        - id: UBERON:0000002
           label: uterine cervix
   externalReferences:
     type: array
     items:
-      "$ref": Characteristic.yaml#/properties
+      "$ref": OntologyClass.yaml#/properties
     examples:
-      - type:
-          id: PMID:9892199
+      - - id: PMID:9892199
   individualAgeAtCollection:
     "$ref": Age.yaml#/properties
   provenance:
     "$ref": Provenance.yaml#/properties
   dataUseConditions:
-    "$ref": OntologyTerm.yaml#/properties
+    "$ref": OntologyClass.yaml#/properties
   sampledTissue:
-    "$ref": OntologyTerm.yaml#/properties
+    "$ref": OntologyClass.yaml#/properties
   histologicalDiagnosis:
-    "$ref": OntologyTerm.yaml#/properties
+    "$ref": OntologyClass.yaml#/properties
   info:
     type: object
   updated:

@@ -43,7 +43,7 @@ properties:
     type: string
     examples:
       - A
-        CGT
+      - CGT
   start:
     type: integer
     examples:
@@ -63,10 +63,10 @@ properties:
   externalReferences:
     type: array
     items:
-      "$ref": OntologyTerm.yaml#/properties
+      "$ref": OntologyClass.yaml#/properties
     examples:
       - type: Clinvar variant
-          id: clinvar:163840
+        id: clinvar:163840
   info:
     type: object
     examples:

@@ -17,14 +17,14 @@ properties:
   externalReferences:
     type: array
     items:
-      "$ref": OntologyTerm.yaml#/properties
+      "$ref": OntologyClass.yaml#/properties
     examples:
       - type:
           id: geo:GSM224836
   provenance:
     "$ref": Provenance.yaml#/properties
   dataUseConditions:
-    "$ref": OntologyTerm.yaml#/properties
+    "$ref": OntologyClass.yaml#/properties
   info:
     type: object
   updated:

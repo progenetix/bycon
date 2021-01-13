@@ -35,14 +35,12 @@ def ontologymaps(service):
     byc = {
         "pkg_path": pkg_path,
         "config": read_bycon_configs_by_name( "defaults" ),
+        "form_data": cgi_parse_query(),
         "errors": [ ],
-        "warnings": [ ],
-        "form_data": cgi_parse_query()
+        "warnings": [ ]
     }
     for d in ["filter_definitions"]:
         byc.update( { d: read_bycon_configs_by_name( d ) } )
-
-    # print(json.dumps(byc["response"], indent=4, sort_keys=True, default=str)+"\n")
 
     these_prefs = read_local_prefs( service, dir_path )
 
