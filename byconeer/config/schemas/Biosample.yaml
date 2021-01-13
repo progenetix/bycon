@@ -1,5 +1,5 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/Biosample/v2020-12-08
+"$id": https://progenetix.org/services/schemas/Biosample/v2021-01-12
 title: Biosample
 description: >
   A Biosample refers to a unit of biological material from which the substrate

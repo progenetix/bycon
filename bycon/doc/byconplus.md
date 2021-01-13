@@ -42,22 +42,16 @@ Additional information may be available through [info.progenetix.org](https://in
         },
         "biocharacteristics": [
           {
-            "type": {
-              "id": "icdot-C77.9",
-              "label": "Lymph nodes, NOS"
-            }
+            "id": "icdot-C77.9",
+            "label": "Lymph nodes, NOS"
           },
           {
-            "type": {
-              "id": "icdom-96733",
-              "label": "Mantle cell lymphoma"
-            }
+            "id": "icdom-96733",
+            "label": "Mantle cell lymphoma"
           },
           {
-            "type": {
-              "id": "NCIT:C4337",
-              "label": "Mantle Cell Lymphoma"
-            }
+            "id": "NCIT:C4337",
+            "label": "Mantle Cell Lymphoma"
           }
         ],
         "individual_age_at_collection": "P42Y",
@@ -67,9 +61,7 @@ Additional information may be available through [info.progenetix.org](https://in
         },
         "external_references": [
           {
-            "type": {
-              "id": "geo:GSE13331"
-            }
+            "id": "geo:GSE13331"
           }
         ],
         "info": {
@@ -101,10 +93,8 @@ Additional information may be available through [info.progenetix.org](https://in
             "precision": "city"
           },
           "material": {
-            "type": {
-              "id": "EFO:0009656",
-              "label": "neoplastic sample"
-            }
+            "id": "EFO:0009656",
+            "label": "neoplastic sample"
           }
         },
         "updated": "2020-09-10 17:44:04.887000"

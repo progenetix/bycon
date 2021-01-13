@@ -41,8 +41,8 @@ def io_map_to_db(io_params, io_prefixes):
 
         for prefix in field_category:
 
-            field_to_db[collection+'.'+prefix+'::id'] = [field_category+'.type.id', 'string']
-            field_to_db[collection+'.'+prefix+'::label'] = [field_category+'.type.label', 'string']
+            field_to_db[collection+'.'+prefix+'::id'] = [field_category+'.id', 'string']
+            field_to_db[collection+'.'+prefix+'::label'] = [field_category+'.label', 'string']
 
     return field_to_db
 
@@ -65,10 +65,10 @@ def get_id_label_for_prefix(data_list, prefix, **byc):
     pre_id = ""
     pre_lab = ""
     for item in data_list:
-        if re.compile( r"^"+prefix ).match(item["type"]["id"]):
-            pre_id = item["type"]["id"]
-            if "label" in item["type"]:
-                pre_lab = item["type"]["label"]
+        if re.compile( r"^"+prefix ).match(item["id"]):
+            pre_id = item["id"]
+            if "label" in item:
+                pre_lab = item["label"]
 
     return(pre_id, pre_lab)
 

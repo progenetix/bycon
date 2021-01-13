@@ -1,7 +1,22 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
 "$id": https://progenetix.org/services/schemas/Variant/v2020-12-08
 title: Variant
+description: >
+  Genomic variant, representing a sequence variation on a genomic allele or a structural modification (e.g. copy number variation or ).
+required:
+  all_of:
+    - referenceName
+      start
+  one_of:
+    - variantType
+      alternateBases
 properties:
+  id:
+    type: string
+    description: >
+      An internal variant id.
+    examples:
+      - pgxvar-kftzldsu
   digest:
     type: string
     examples:
@@ -17,11 +32,18 @@ properties:
   referenceName:
     type: string
     examples:
-      - 11
+      - "11"
+  mateName:
+    type: string
+    description: >
+      An optional second chromosome, indicating the fusion partner in translocation events.
+    examples:
+      - X
   referenceBases:
     type: string
     examples:
       - A
+        CGT
   start:
     type: integer
     examples:
@@ -43,7 +65,7 @@ properties:
     items:
       "$ref": OntologyTerm.yaml#/properties
     examples:
-      - type:
+      - type: Clinvar variant
           id: clinvar:163840
   info:
     type: object

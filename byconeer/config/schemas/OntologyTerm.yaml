@@ -1,5 +1,5 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/OntologyTerm/v2020-12-08
+"$id": https://progenetix.org/services/schemas/OntologyTerm/v2021-01-12
 title: OntologyTerm
 properties:
   id:
@@ -12,3 +12,7 @@ properties:
     examples:
       - neoplastic sample
       - Adenocarcinoma, NOS
+  description:
+    type: string
+    examples:
+      - adenocarcinoma sample from right colonic flexure

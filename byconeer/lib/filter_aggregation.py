@@ -20,7 +20,7 @@ def dataset_count_collationed_filters(ds_id, **byc):
 
     for s in scopes:
         pfs = { }
-        source_key = s+".type.id"
+        source_key = s+".id"
         afs = bios_coll.distinct( source_key )
         for k in afs:
             try:
@@ -45,11 +45,11 @@ def dataset_count_collationed_filters(ds_id, **byc):
                 bar.next()
                 if s in sample:
                     for term in sample[ s ]:
-                        tid = term["type"]["id"]
+                        tid = term["id"]
                         if tid in pfs.keys():
                             pfs[ tid ]["count"] += 1
-                            if "label" in term["type"]:
-                                 pfs[ tid ]["label"] = term["type"]["label"]
+                            if "label" in term:
+                                 pfs[ tid ]["label"] = term["label"]
 
             bar.finish()
 

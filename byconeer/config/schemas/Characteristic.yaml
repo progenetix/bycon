@@ -1,8 +1,0 @@
-"$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/Characteristic/v2020-12-08
-title: Characteristic
-properties:
-  type:
-    "$ref": OntologyTerm.yaml#/properties
-  description:
-    type: string

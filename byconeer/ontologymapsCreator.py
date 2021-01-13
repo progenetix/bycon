@@ -86,13 +86,13 @@ def main():
 
                     for pre in byc["map_types"][ map_type ]["prefixes"]:
                         data_key = byc["filter_definitions"][ pre ]["db_key"]
-                        list_key = re.sub(".type.id", "", data_key)
+                        list_key = re.sub(".id", "", data_key)
                         data_re = re.compile( byc["filter_definitions"][ pre ]["pattern_strict"] )
 
                         for o in s[ list_key ]:
-                            if data_re.match( o["type"]["id"] ):
-                                k_l.append( o["type"]["id"] )
-                                o_l.append( o["type"] )
+                            if data_re.match( o["id"] ):
+                                k_l.append( o["id"] )
+                                o_l.append( o )
                                 o_l_c += 1
                                 if o_l_max > o_l_c:
                                     break

@@ -25,10 +25,8 @@ The response in this example was a `biosamples` dataset (excerpt):
                 "biocharacteristics": [
                     {
                         "description": "non-small cell lung carcinoma [cell line H23]",
-                        "type": {
-                            "id": "icdot-C34.9",
-                            "label": "lung and bronchus"
-                        }
+                        "id": "icdot-C34.9",
+                        "label": "lung and bronchus"
 
     }]}]},
  

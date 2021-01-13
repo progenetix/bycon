@@ -2,7 +2,7 @@
 NCIT:
   name: "National Cancer Institute Thesaurus"
   url: "https://ncit.nci.nih.gov/"
-  db_key: 'biocharacteristics.type.id'
+  db_key: 'biocharacteristics.id'
   scopes:
     biosamples:
       default: 1
@@ -17,7 +17,7 @@ NCIT:
 UBERON:
   name: "Uberon cross-species anatomical structures ontology"
   url: "https://uberon.github.io"
-  db_key: 'biocharacteristics.type.id'
+  db_key: 'biocharacteristics.id'
   scopes:
     biosamples:
       default: 1
@@ -30,7 +30,7 @@ UBERON:
 MONDO:
   name: "Mondo Disease Ontology"
   url: "https://mondo.monarchinitiative.org"
-  db_key: 'biocharacteristics.type.id'
+  db_key: 'biocharacteristics.id'
   scopes:
     biosamples:
       default: 1
@@ -45,7 +45,7 @@ MONDO:
 HP:
   name: "Human Phenotype Ontology"
   url: "https://hpo.jax.org/"
-  db_key: 'biocharacteristics.type.id'
+  db_key: 'biocharacteristics.id'
   scopes:
     biosamples:
       default: 0
@@ -59,7 +59,7 @@ HP:
 PATO:
   name: "Phenotypic Qualities Ontology"
   url: "http://obofoundry.org/ontology/pato.html"
-  db_key: 'biocharacteristics.type.id'
+  db_key: 'biocharacteristics.id'
   scopes:
     biosamples:
       default: 0
@@ -73,7 +73,7 @@ PATO:
 EFO:
   name: "Experimental Factor Ontology"
   url: "https://www.ebi.ac.uk/efo/"
-  db_key: 'provenance.material.type.id'
+  db_key: 'provenance.material.id'
   scopes:
     biosamples:
       default: 1
@@ -86,7 +86,7 @@ EFO:
 icdom:
   name: "ICD-O 3 Morphologies (Progenetix)"
   url: "https://progenetix.org/"
-  db_key: 'biocharacteristics.type.id'
+  db_key: 'biocharacteristics.id'
   scopes:
     biosamples:
       default: 1
@@ -99,7 +99,7 @@ icdom:
 icdot:
   name: "ICD-O 3 Topographies (Progenetix)"
   url: "https://progenetix.org/"
-  db_key: 'biocharacteristics.type.id'
+  db_key: 'biocharacteristics.id'
   scopes:
     biosamples:
       default: 1
@@ -115,7 +115,7 @@ icdot:
 PMID:
   name: "NCBI PubMed"
   url: "https://www.ncbi.nlm.nih.gov/pubmed/"
-  db_key: 'external_references.type.id'
+  db_key: 'external_references.id'
   scopes:
     biosamples:
       default: 1
@@ -128,7 +128,7 @@ PMID:
 geo:
   name: "NCBI Gene Expression Omnibus"
   url: "https://www.ncbi.nlm.nih.gov/geo/"
-  db_key: 'external_references.type.id'
+  db_key: 'external_references.id'
   scopes:
     biosamples:
       default: 1
@@ -142,7 +142,7 @@ geo:
 arrayexpress:
   name: "EBI ArrayExpress"
   url: "https://www.ncbi.nlm.nih.gov/geo/"
-  db_key: 'external_references.type.id'
+  db_key: 'external_references.id'
   scopes:
     biosamples:
       default: 1
@@ -156,11 +156,11 @@ arrayexpress:
 TCGA:
   name: "The Cancer Genome Atlas"
   url: "http://cancergenome.nih.gov"
-  db_key: 'external_references.type.id'
+  db_key: 'external_references.id'
   scopes:
     biosamples:
       default: 1
-  db_key: 'external_references.type.id'
+  db_key: 'external_references.id'
   pattern: '^TCGA([_\-][\-\w]+?)?$'
   pattern_strict: '^TCGA[_\-][\-\w]+?$'
   examples:
@@ -169,11 +169,11 @@ TCGA:
 cBP:
   name: "cBioPortal"
   url: "https://www.cbioportal.org"
-  db_key: 'external_references.type.id'
+  db_key: 'external_references.id'
   scopes:
     biosamples:
       default: 1
-  db_key: 'external_references.type.id'
+  db_key: 'external_references.id'
   pattern: '^cBP(\-\w+?)?$'
   pattern_strict: '^cBP\-\w+?$'
   examples:
@@ -183,7 +183,7 @@ cBP:
 cellosaurus:
   name: "Cellosaurus - a knowledge resource on cell lines"
   url: "https://web.expasy.org/cellosaurus/"
-  db_key: 'external_references.type.id'
+  db_key: 'external_references.id'
   scopes:
     biosamples:
       default: 1

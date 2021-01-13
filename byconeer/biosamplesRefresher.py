@@ -140,16 +140,16 @@ def main():
 
             if "sampledTissue" in s:
                 if "UBERON" in s["sampledTissue"]["id"]:
-                    biocs = [ { "type": s["sampledTissue"] } ]
+                    biocs = [ s["sampledTissue"] ]
                     for b_c in s[ "biocharacteristics" ]:
-                        if not "UBERON" in b_c["type"]["id"]:
+                        if not "UBERON" in b_c["id"]:
                             biocs.append(b_c)
                     update_obj.update( { "biocharacteristics": biocs } )
 
             if "biocharacteristics" in s:
                 for b_c in s[ "biocharacteristics" ]:
-                     if "NCIT:C" in b_c["type"]["id"]:
-                        update_obj.update( { "histological_diagnosis": b_c["type"] } ) 
+                     if "NCIT:C" in b_c["id"]:
+                        update_obj.update( { "histological_diagnosis": b_c } ) 
 
             ####################################################################
 

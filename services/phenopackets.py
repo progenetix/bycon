@@ -131,8 +131,7 @@ def phenopackets(service):
             if "sampledTissue" in bs:
                 p_bs.update( { "sampledTissue": bs["sampledTissue"]})
             if "external_references" in bs:
-                for e_r in bs["external_references"]:
-                    p_bs["externalReferences"].append(e_r["type"])
+                p_bs.update( { "externalReferences": bs["external_references"]})
 
             # TODO: The `digest` here is just a minimal drop-in representation.
             # HGVS cannot be used since it doesn't allow DUP ...
