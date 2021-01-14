@@ -58,9 +58,6 @@ def byconplus(service):
         "warnings": [ ]
     }
 
-    # print(json.dumps(byc["paths"]["/biosamples"], indent=4, sort_keys=True, default=str)+"\n")
-    # exit()
-
     for d in [
         "dataset_definitions",
         "filter_definitions",
@@ -73,7 +70,8 @@ def byconplus(service):
     for p in ["service_info", "beacon_info", "beacon_paths"]:
         byc.update( { p: read_local_prefs( p, dir_path ) } )
 
-    byc.update( { "dbstats": dbstats_return_latest( **byc ) } )
+    dbstats = dbstats_return_latest( 1, **byc )
+    byc.update( { "dbstats": dbstats[0] } )
 
     byc["beacon_info"].update( { "datasets": update_datasets_from_dbstats(**byc) } )
     for par in byc[ "beacon_info" ]:

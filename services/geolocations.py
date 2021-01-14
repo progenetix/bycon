@@ -48,7 +48,6 @@ def geolocations(service):
     for d_k, d_v in these_prefs["defaults"].items():
         byc.update( { d_k: d_v } )
     
-    # response prototype
     r = create_empty_service_response(**these_prefs)
 
     query, geo_pars = geo_query( **byc )

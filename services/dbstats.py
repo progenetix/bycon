@@ -11,6 +11,7 @@ pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response
 from bycon.lib.read_specs import read_bycon_configs_by_name,read_local_prefs,dbstats_return_latest
+from lib.service_utils import *
 
 """podmd
 
@@ -48,20 +49,32 @@ def dbstats(service):
         m = byc["form_data"].getvalue("method")
         if m in these_prefs["methods"].keys():
             byc["method"] = m
+    if "statsNumber" in byc["form_data"]:
+        s_n = byc["form_data"].getvalue("statsNumber")
+        try:
+            s_n = int(s_n)
+        except:
+            pass
+        if type(s_n) == int:
+            if s_n > 0:
+                byc["stats_number"] = s_n
 
     # response prototype
-    r = byc[ "config" ]["response_object_schema"]
-    r["response_type"] = service
-    r["data"] = { }
+    r = create_empty_service_response(**these_prefs)
 
-    ds_stats = dbstats_return_latest( **byc )
-    for ds_id, ds_vs in ds_stats["datasets"].items():
-        dbs = {}
-        for k in these_prefs["methods"][ byc["method"] ]:
-            dbs.update({k:ds_vs[k]})
-        r["data"].update( { ds_id : dbs })
+    results = [ ]
+    ds_stats = dbstats_return_latest( byc["stats_number"], **byc )
+    for stat in ds_stats:
+        db_latest = { }
+        for ds_id, ds_vs in stat["datasets"].items():
+            dbs = {}
+            for k in these_prefs["methods"][ byc["method"] ]:
+                dbs.update({k:ds_vs[k]})
+            db_latest.update( { ds_id : dbs })
+        results.append(db_latest)
 
-    cgi_print_json_response( {}, r, 200 )
+    populate_service_response( r, results )
+    cgi_print_json_response( byc[ "form_data" ], r, 200 )
 
 ################################################################################
 ################################################################################

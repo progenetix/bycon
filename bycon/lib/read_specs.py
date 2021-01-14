@@ -51,13 +51,16 @@ def read_yaml_with_key_to_object(file_key, data_key, **paths):
 
 ################################################################################
 
-def dbstats_return_latest( **byc ):
+def dbstats_return_latest( limit, **byc ):
+
+    if not limit:
+        limit = 1
 
     db = byc[ "config" ][ "info_db" ]
     coll = byc[ "config" ][ "beacon_info_coll" ]
 
-    stats = MongoClient( )[ db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
-    return stats[0]
+    stats = MongoClient( )[ db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( limit )
+    return stats
 
 ################################################################################
 
