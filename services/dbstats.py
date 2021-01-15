@@ -16,6 +16,7 @@ from lib.service_utils import *
 """podmd
 
 * <https://progenetix.org/services/dbstats/>
+* <https://progenetix.org/services/dbstats/?statsNumber=3&responseFormat=simple>
 * <http://progenetix.org/cgi/bycon/services/dbstats.py?method=filtering_terms>
 
 podmd"""
@@ -59,18 +60,18 @@ def dbstats(service):
             if s_n > 0:
                 byc["stats_number"] = s_n
 
-    # response prototype
     r = create_empty_service_response(**these_prefs)
 
-    results = [ ]
     ds_stats = dbstats_return_latest( byc["stats_number"], **byc )
+
+    results = [ ]
     for stat in ds_stats:
-        db_latest = { }
+        db_latest = { "date": stat["date"], "datasets": { } }
         for ds_id, ds_vs in stat["datasets"].items():
             dbs = {}
             for k in these_prefs["methods"][ byc["method"] ]:
                 dbs.update({k:ds_vs[k]})
-            db_latest.update( { ds_id : dbs })
+            db_latest["datasets"].update( { ds_id : dbs } )
         results.append(db_latest)
 
     populate_service_response( r, results )
