@@ -59,37 +59,52 @@ format. Here, the data is a dictionary/object with a single key (`genes`):
 
 ```
 {
-    "parameters": {
-        "assemblyId": "GRCh38",
-        "geneId": "CDKN2A"
+    "meta": {
+    "errors": [],
+    "info": "The main geolocs payload can be accessed in `response.results`.\n",
+    "parameters": [
+      {
+        "assemblyId": "GRCh38"
+      },
+      {
+        "geneId": "TP53"
+      }
+    ],
+    "response_type": "genespans",
+    "returned_schemas": [
+      "https://progenetix.org/services/schemas/Geodata/"
+    ],
+    "warnings": []
     },
-    "data": {
-        "genes": [
+        "response": {
+        "exists": true,
+        "info": {
+          "count": 17
+        },
+        "results": [
             {
-                "cds_end_max": 21994330,
-                "cds_start_min": 21968228,
+                "end": 21994330,
+                "start": 21968228,
                 "gene_entrez_id": 1029,
                 "gene_symbol": "CDKN2A",
                 "reference_name": "9"
             },
             {
-                "cds_end_max": 183447426,
-                "cds_start_min": 183444797,
+                "end": 183447426,
+                "start": 183444797,
                 "gene_entrez_id": 55602,
                 "gene_symbol": "CDKN2AIP",
                 "reference_name": "4"
             },
             {
-                "cds_end_max": 134411853,
-                "cds_start_min": 134402914,
+                "end": 134411853,
+                "start": 134402914,
                 "gene_entrez_id": 91368,
                 "gene_symbol": "CDKN2AIPNL",
                 "reference_name": "5"
             }
         ]
-    },
-    "errors": [],
-    "warnings": []
+    }
 }
 ```
 <!--/podmd-->

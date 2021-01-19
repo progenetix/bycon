@@ -1,0 +1,34 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/Genespan/v2021-01-19
+title: Genespan
+description: >
+  Genomic mapping position of the coding region of a gene.
+required:
+  all_of:
+    - referenceName
+      start
+      end
+  one_of:
+    - geneSymbol
+      entrezId
+properties:
+  geneSymbol:
+    type: string
+    examples:
+      - TP53
+  entrezId:
+    type: string
+    examples:
+      - "7157"
+  referenceName:
+    type: string
+    examples:
+      - "17"
+  start:
+    type: integer
+    examples:
+      - 7669608
+  end:
+    type: integer
+    examples:
+      - 7676593
