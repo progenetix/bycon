@@ -68,6 +68,9 @@ def parse_variants( **byc ):
             if len(v_p_c[ k ]) == 1:
                 v_p_c[ k ].append( v_p_c[ k ][0] + 1 )
 
+    if not "referenceName" in v_p_c:
+        v_p_c = { }
+
     return v_p_c
 
 ################################################################################

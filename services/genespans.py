@@ -12,6 +12,8 @@ pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import *
 from bycon.lib.read_specs import *
+from bycon.lib.query_execution import mongo_result_list
+from lib.service_utils import *
 
 """podmd
 * <https://progenetix.org/services/genespans?geneId=CDKN2>
@@ -31,60 +33,50 @@ def genespans(service):
 
     byc = {
         "pkg_path": pkg_path,
-        "config": read_bycon_configs_by_name( "defaults" )
+        "config": read_bycon_configs_by_name( "defaults" ),
+        "form_data": cgi_parse_query()
     }
     
     these_prefs = read_local_prefs( service, dir_path )
-    form_data = cgi_parse_query()
-    defs = these_prefs["defaults"]
     
-    # response prototype
-    r = byc[ "config" ]["response_object_schema"]
-    r["response_type"] = service
+    r = create_empty_service_response(**these_prefs)
 
-    assembly_id = defs["assembly_id"]
-    if "assemblyId" in form_data:
-        aid = form_data.getvalue("assemblyId")
-        if aid in these_prefs["assemblyId"]:
+    assembly_id = these_prefs["defaults"]["assembly_id"]
+    if "assemblyId" in byc[ "form_data" ]:
+        aid = byc[ "form_data" ].getvalue("assemblyId")
+        if aid in these_prefs["assembly_ids"]:
             assembly_id = aid
         else:
-            assembly_id = defs["assembly_id"]
-            r["warnings"].append("{} is not supported; fallback {} is being used!".format(aid, assembly_id))
-    r["parameters"].update( { "assemblyId": assembly_id })
+            r["meta"]["warnings"].append("{} is not supported; fallback {} is being used!".format(aid, assembly_id))
+    r["meta"]["parameters"].append( { "assemblyId": assembly_id })
 
-    if "geneId" in form_data:
-        gene_id = form_data.getvalue("geneId")
+    if "geneId" in byc[ "form_data" ]:
+        gene_id = byc[ "form_data" ].getvalue("geneId")
     else:
         # TODO: value check & response
-        r["errors"].append("No geneId value provided!")
-        cgi_print_json_response( form_data, r, 422 )
+        r["meta"]["errors"].append("No geneId value provided!")
+        cgi_print_json_response( byc[ "form_data" ], r, 422 )
 
-    r["parameters"].update( { "geneId": gene_id })
+    r["meta"]["parameters"].append( { "geneId": gene_id })
 
     # data retrieval & response population
     # query options may be expanded - current list + sole gene_id is a bit odd
     # TODO: positional query
     q_list = [ ]
-    for q_f in defs["query_fields"]:
+    for q_f in these_prefs["defaults"]["query_fields"]:
         q_list.append( { q_f: re.compile( r'^'+gene_id, re.IGNORECASE ) } )
     if len(q_list) > 1:
         query = { '$and': q_list }
     else:
         query = q_list[0]
 
-    mongo_client = MongoClient( )
-    g_coll = mongo_client[ defs["db"] ][ defs["coll"] ]
-    for g in g_coll.find( query, { '_id': False } ):
-        r["data"].append( g )
-    mongo_client.close( )
+    results, error = mongo_result_list( these_prefs["defaults"]["db"], these_prefs["defaults"]["coll"], query, { '_id': False } )
+    if error:
+        r["meta"]["errors"].append( error )
+        cgi_print_json_response( byc[ "form_data" ], r, 422 )
 
-    r[service+"_count"] = len(r["data"])
-
-    if r[service+"_count"] < 1:
-        r["errors"].append("No matching gene...")
-        cgi_print_json_response( form_data, r, 422 )
- 
-    cgi_print_json_response( form_data, r, 200 )
+    populate_service_response(r, results)
+    cgi_print_json_response( byc[ "form_data" ], r, 200 )
 
 ################################################################################
 ################################################################################

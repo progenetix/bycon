@@ -4,5 +4,11 @@ defaults:
   assembly_id: GRCh38
   query_fields:
     - gene_symbol
+meta:
+  response_type: genespans
+  returned_schemas:
+    - https://progenetix.org/services/schemas/Geodata/
+  info: >
+    The main geolocs payload can be accessed in `response.results`.
 assembly_ids:
   - GRCh38
