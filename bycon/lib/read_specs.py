@@ -27,20 +27,13 @@ def read_bycon_configs_by_name(name):
 
 def read_local_prefs(service, dir_path):
 
-    o = {}
-    ofp = path.join( dir_path, "config", service+".yaml" )
-    with open( ofp ) as od:
-        o = yaml.load( od , Loader=yaml.FullLoader)    
-    return o
+    return load_yaml( path.join( dir_path, "config", service+".yaml" ) )
 
 ################################################################################
 
 def read_yaml_with_key_to_object(file_key, data_key, **paths):
 
-    o = {}
-    ofp = path.join( paths[ "module_root" ], *paths[ file_key ] )
-    with open( ofp ) as od:
-        o = yaml.load( od , Loader=yaml.FullLoader)
+    o = load_yaml( path.join( paths[ "module_root" ], *paths[ file_key ] ) )
 
     if data_key in o:
         return o[ data_key ]
@@ -78,3 +71,18 @@ def update_datasets_from_dbstats(**byc):
         ds_with_counts.append(ds)
 
     return(ds_with_counts)
+
+################################################################################
+
+def load_yaml(yp):
+
+    y = { }
+
+    try:
+        with open( yp ) as yd:
+            y = yaml.load( yd , Loader=yaml.FullLoader)
+    except:
+        pass
+
+    return y
+

@@ -11,3 +11,4 @@ service_names:
   - phenopackets
   - collations
   - schemas
+  - variants

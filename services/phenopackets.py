@@ -10,6 +10,7 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib import *
+from lib.service_utils import *
 
 """podmd
 podmd"""
@@ -26,13 +27,8 @@ def main():
 
 def phenopackets(service):
 
-    byc = {
-        "pkg_path": pkg_path,
-        "config": read_bycon_configs_by_name( "defaults" ),
-        "form_data": cgi_parse_query(),
-        "errors": [ ],
-        "warnings": [ ],
-    }
+    byc = initialize_service(service)
+
     for d in [
         "dataset_definitions",
         "filter_definitions",
@@ -42,11 +38,7 @@ def phenopackets(service):
     ]:
         byc.update( { d: read_bycon_configs_by_name( d ) } )
 
-    # first pre-population w/ defaults
-    these_prefs = read_local_prefs( service, dir_path )
-    for p_k, p_v in these_prefs["parameters"].items():
-        if "default" in p_v:
-            byc.update( { p_k: p_v[ "default" ] } )
+    for p_k, p_v in byc["these_prefs"]["parameters"].items():
         if p_k in byc["form_data"]:
             if "array" in p_v[ "type" ]:
                 byc.update( { p_k: byc["form_data"].getlist( p_k ) } )

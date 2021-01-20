@@ -29,13 +29,7 @@ def main():
 
 def biosamples(service):
 
-    byc = {
-        "pkg_path": pkg_path,
-        "config": read_bycon_configs_by_name( "defaults" ),
-        "form_data": cgi_parse_query(),
-        "errors": [ ],
-        "warnings": [ ],
-    }
+    byc = initialize_service(service)
 
     for d in [
         "dataset_definitions",
@@ -45,18 +39,6 @@ def biosamples(service):
         "handover_definitions"
     ]:
         byc.update( { d: read_bycon_configs_by_name( d ) } )
-
-    these_prefs = read_local_prefs( service, dir_path )
-
-    # first pre-population w/ defaults
-    for d_k, d_v in these_prefs["defaults"].items():
-        byc.update( { d_k: d_v } )
-
-    # ... then modification if parameter in request
-    if "method" in byc["form_data"]:
-        m = byc["form_data"].getvalue("method")
-        if m in these_prefs["methods"].keys():
-            byc["method"] = m
 
     byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
     byc.update( { "dataset_ids": beacon_check_dataset_ids( **byc ) } )
@@ -69,7 +51,7 @@ def biosamples(service):
     byc.update( { "queries": generate_queries( **byc ) } )
 
     # response prototype
-    r = create_empty_service_response(**these_prefs)
+    r = create_empty_service_response(**byc)
     r["meta"]["errors"].extend(byc["errors"])
 
     # TODO: move somewhere
@@ -115,7 +97,7 @@ def biosamples(service):
 
     for b_s in h_o_d:
         s = { }
-        for k in these_prefs["methods"][ byc["method"] ]:
+        for k in byc["these_prefs"]["methods"][ byc["method"] ]:
             # TODO: harmless hack
             if "." in k:
                 k1, k2 = k.split('.')

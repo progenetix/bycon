@@ -2,7 +2,7 @@
 "$id": https://progenetix.org/services/schemas/HierarchyPath/v2020-12-08
 title: HierarchyPath
 description: >
-  A path from the root of a hierarchy to - and including a given term id.
+  A path from the root of a hierarchy to - and including - a given term id.
 properties:
   depth:
     type: integer

@@ -33,22 +33,13 @@ def main():
 
 def geolocations(service):
 
-    byc = {
-        "pkg_path": pkg_path,
-        "config": read_bycon_configs_by_name( "defaults" ),
-        "geoloc_definitions": read_bycon_configs_by_name( "geoloc_definitions" ),
-        "form_data": cgi_parse_query(),
-        "errors": [ ],
-        "warnings": [ ]
-    }
+    byc = initialize_service(service)
+    byc.update( { "geoloc_definitions": read_bycon_configs_by_name( "geoloc_definitions" ) } )
 
+    # for the geolocs database, not the provenance object
     byc["geoloc_definitions"]["geo_root"] = ""
-
-    these_prefs = read_local_prefs( service, dir_path )
-    for d_k, d_v in these_prefs["defaults"].items():
-        byc.update( { d_k: d_v } )
     
-    r = create_empty_service_response(**these_prefs)
+    r = create_empty_service_response(**byc)
 
     query, geo_pars = geo_query( **byc )
     for g_k, g_v in geo_pars.items():

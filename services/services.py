@@ -11,7 +11,6 @@ sys.path.append( pkg_path )
 from bycon.lib.read_specs import read_local_prefs
 from bycon.lib.cgi_utils import rest_path_value, cgi_print_json_response, set_debug_state
 
-
 """
 The `services` application deparses a request URI and calls the respective
 script. The functionality is combined with the correct configuration of a 

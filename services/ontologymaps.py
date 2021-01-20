@@ -32,27 +32,16 @@ def main():
 
 def ontologymaps(service):
 
-    byc = {
-        "pkg_path": pkg_path,
-        "config": read_bycon_configs_by_name( "defaults" ),
-        "form_data": cgi_parse_query(),
-        "errors": [ ],
-        "warnings": [ ]
-    }
+    byc = initialize_service(service)
+
     for d in ["filter_definitions"]:
         byc.update( { d: read_bycon_configs_by_name( d ) } )
-
-    these_prefs = read_local_prefs( service, dir_path )
-
-    # first pre-population w/ defaults
-    for d_k, d_v in these_prefs["defaults"].items():
-        byc.update( { d_k: d_v } )
 
     byc.update( { "filters": parse_filters( **byc ) } )
     byc.update( { "filter_flags": get_filter_flags( **byc ) } )
 
     # response prototype
-    r = create_empty_service_response(**these_prefs)    
+    r = create_empty_service_response(**byc)    
     r["meta"]["parameters"].append( { "filters": byc[ "filters" ] })
  
     q_list = [ ]

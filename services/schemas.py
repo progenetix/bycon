@@ -12,6 +12,7 @@ sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import cgi_parse_query, cgi_print_json_response, rest_path_value
 from bycon.lib.read_specs import read_bycon_configs_by_name
 from byconeer.lib.schemas_parser import *
+from lib.service_utils import *
 
 """podmd
 
@@ -31,12 +32,7 @@ def main():
 
 def schemas(service):
 
-    byc = {
-        "pkg_path": pkg_path,
-        "config": read_bycon_configs_by_name( "defaults" ),
-        "errors": [ ],
-        "warnings": [ ]
-    }
+    byc = initialize_service(service)
 
     s_data = { }
     s_pkg_path = path.join( byc["pkg_path"], "byconeer")

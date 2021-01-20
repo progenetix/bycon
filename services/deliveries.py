@@ -15,31 +15,11 @@ from bycon.lib.parse_filters import *
 from bycon.lib.cgi_utils import *
 from bycon.lib.handover_execution import retrieve_handover,handover_return_data
 from bycon.lib.read_specs import read_local_prefs,read_bycon_configs_by_name
-
+from lib.service_utils import *
 
 """podmd
 
-A simple app which only provides data deliveries from handover objects.
-
-#### Required
-
-* `accessid` or
-* `id` and `datasetId` and `collection` or
-* `_id` and `datasetId` and `collection`
-
-#### Optional
-
-* `deliveryKeys`
-  - list (can be comma-concatenated or multiple times parameter) to select the
-  returned data fields
-
-#### Examples
-
-Examples here need a locally existing `accessid` parameter.
-
-* <http://progenetix.org/services/deliveries?accessid=003d0488-0b79-4ffa-a38f-2fb932480eee&deliveryKeys=id,biocharacteristics>
 * <https://progenetix.org/services/deliveries/?datasetIds=progenetix&collection=biosamples&id=pgxbs-kftva59y>
-* https://progenetix.org/services/deliveries/?datasetIds=progenetix&collection=variants&_id=5bab576a727983b2e00b8d32>
 
 podmd"""
 
@@ -56,15 +36,7 @@ def main():
 
 def deliveries(service):
 
-    byc = {
-        "pkg_path": pkg_path,
-        "config": read_bycon_configs_by_name( "defaults" ),
-        "form_data": cgi_parse_query(),
-        "errors": [ "No input parameter." ],
-        "warnings": [ ]
-    }
-
-    these_prefs = read_local_prefs( "services", dir_path )
+    byc = initialize_service(service)
 
     # response prototype
     r = byc[ "config" ]["response_object_schema"]

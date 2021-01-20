@@ -52,19 +52,17 @@ def main():
 
 def cytomapper(service):
     
-    byc = {
-        "pkg_path": pkg_path,
-        "config": read_bycon_configs_by_name( "defaults" ),
-        "args": _get_args(),
-        "cytoband_defs": read_local_prefs( service, dir_path ),
-        "variant_definitions": read_bycon_configs_by_name( "variant_definitions" ),
-        "form_data": cgi_parse_query(),
-        "errors": [ ],
-        "warnings": [ ]
-    }
+    byc = initialize_service(service)
+
+    byc.update( { "args": _get_args() } )
+
+    for d in [
+        "variant_definitions"
+    ]:
+        byc.update( { d: read_bycon_configs_by_name( d ) } )
 
     byc[ "config" ][ "paths" ][ "genomes" ] = path.join( dir_path, "rsrc", "genomes" )
-
+    
     byc.update( { "variant_pars": parse_variants( **byc ) } )
     byc.update( { "cytobands": parse_cytoband_file( **byc ) } )
 

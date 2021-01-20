@@ -33,12 +33,12 @@ def main():
 
     byc = {
         "pkg_path": pkg_path,
-        "config": read_bycon_configs_by_name( "defaults" ),
         "errors": [ ],
         "warnings": [ ]
     }
 
     for d in [
+        "config",
         "dataset_definitions",
         "filter_definitions"
     ]:

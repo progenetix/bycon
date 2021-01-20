@@ -11,6 +11,7 @@ pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib import *
 from byconeer.lib.schemas_parser import *
+from services.lib.service_utils import *
 
 """podmd
 ### Bycon - a Python-based environment for the Beacon v2 genomics API
@@ -47,16 +48,7 @@ def main():
 
 def byconplus(service):
     
-    # TODO: "byc" becoming a proper object?!
-    byc = {
-        "pkg_path": pkg_path,
-        "config": read_bycon_configs_by_name( "defaults" ),
-        "args": _get_args(),
-        # "paths": read_schema_files("beacon", "paths", dir_path),
-        "form_data": cgi_parse_query(),
-        "errors": [ ],
-        "warnings": [ ]
-    }
+    byc = initialize_service(service)
 
     for d in [
         "dataset_definitions",

@@ -31,20 +31,14 @@ def main():
 
 def genespans(service):
 
-    byc = {
-        "pkg_path": pkg_path,
-        "config": read_bycon_configs_by_name( "defaults" ),
-        "form_data": cgi_parse_query()
-    }
-    
-    these_prefs = read_local_prefs( service, dir_path )
-    
-    r = create_empty_service_response(**these_prefs)
+    byc = initialize_service(service)
+        
+    r = create_empty_service_response(**byc)
 
-    assembly_id = these_prefs["defaults"]["assembly_id"]
+    assembly_id = byc["these_prefs"]["defaults"]["assembly_id"]
     if "assemblyId" in byc[ "form_data" ]:
         aid = byc[ "form_data" ].getvalue("assemblyId")
-        if aid in these_prefs["assembly_ids"]:
+        if aid in byc["these_prefs"]["assembly_ids"]:
             assembly_id = aid
         else:
             r["meta"]["warnings"].append("{} is not supported; fallback {} is being used!".format(aid, assembly_id))
@@ -63,14 +57,14 @@ def genespans(service):
     # query options may be expanded - current list + sole gene_id is a bit odd
     # TODO: positional query
     q_list = [ ]
-    for q_f in these_prefs["defaults"]["query_fields"]:
+    for q_f in byc["these_prefs"]["defaults"]["query_fields"]:
         q_list.append( { q_f: re.compile( r'^'+gene_id, re.IGNORECASE ) } )
     if len(q_list) > 1:
         query = { '$and': q_list }
     else:
         query = q_list[0]
 
-    results, error = mongo_result_list( these_prefs["defaults"]["db"], these_prefs["defaults"]["coll"], query, { '_id': False } )
+    results, error = mongo_result_list( byc["these_prefs"]["defaults"]["db"], byc["these_prefs"]["defaults"]["coll"], query, { '_id': False } )
     if error:
         r["meta"]["errors"].append( error )
         cgi_print_json_response( byc[ "form_data" ], r, 422 )

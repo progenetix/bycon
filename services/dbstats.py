@@ -33,23 +33,8 @@ def main():
 
 def dbstats(service):
 
-    byc = {
-        "pkg_path": pkg_path,
-        "config": read_bycon_configs_by_name( "defaults" ),
-        "form_data": cgi_parse_query(),
-        "errors": [ ],
-        "warnings": [ ]
-    }
+    byc = initialize_service(service)
 
-    # first pre-population w/ defaults
-    these_prefs = read_local_prefs( service, dir_path )
-    for d_k, d_v in these_prefs["defaults"].items():
-        byc.update( { d_k: d_v } )
-
-    if "method" in byc["form_data"]:
-        m = byc["form_data"].getvalue("method")
-        if m in these_prefs["methods"].keys():
-            byc["method"] = m
     if "statsNumber" in byc["form_data"]:
         s_n = byc["form_data"].getvalue("statsNumber")
         try:
@@ -60,7 +45,7 @@ def dbstats(service):
             if s_n > 0:
                 byc["stats_number"] = s_n
 
-    r = create_empty_service_response(**these_prefs)
+    r = create_empty_service_response(**byc)
 
     ds_stats = dbstats_return_latest( byc["stats_number"], **byc )
 
@@ -69,7 +54,7 @@ def dbstats(service):
         db_latest = { "date": stat["date"], "datasets": { } }
         for ds_id, ds_vs in stat["datasets"].items():
             dbs = {}
-            for k in these_prefs["methods"][ byc["method"] ]:
+            for k in byc["these_prefs"]["methods"][ byc["method"] ]:
                 dbs.update({k:ds_vs[k]})
             db_latest["datasets"].update( { ds_id : dbs } )
         results.append(db_latest)
