@@ -70,10 +70,6 @@ def byconplus(service):
         read_bycon_configs_by_name( d, byc )
 
     update_datasets_from_dbstats(byc)
-
-    for par in byc[ "beacon_info" ]:
-        byc[ "service_info" ][ par ] = byc[ "beacon_info" ][ par ]
-
     beacon_get_endpoint(byc)
     parse_endpoints(byc)
     select_response_type(byc)
@@ -89,12 +85,14 @@ def byconplus(service):
     get_variant_request_type(byc)
     generate_queries(byc)
 
-    beacon_respond_with_errors( **byc )
-
-    byc.update( { "dataset_responses": collect_dataset_responses(**byc) } )
-    beacon_response = create_beacon_response(**byc)
-    
-    cgi_print_json_response( byc["form_data"], beacon_response, 200 )
+    beacon_respond_with_errors(byc)
+    collect_dataset_responses(byc)   
+    create_beacon_response(byc)    
+    cgi_print_json_response(
+        byc["form_data"],
+        create_beacon_response(byc),
+        200
+    )
 
 ################################################################################
 ################################################################################

@@ -23,7 +23,7 @@ def read_bycon_configs_by_name(name, byc):
         o = yaml.load( od , Loader=yaml.FullLoader)
 
     byc.update({ name: o })
-    
+
     return byc
 
 ################################################################################
@@ -66,7 +66,6 @@ def update_datasets_from_dbstats(byc):
 
     dbstats = dbstats_return_latest( 1, **byc )
 
-
     ds_with_counts = [ ]
     for ds_id in byc["dataset_definitions"].keys():
         ds = byc["dataset_definitions"][ds_id]
@@ -80,6 +79,10 @@ def update_datasets_from_dbstats(byc):
 
     byc.update({ "dbstats": dbstats[0] })
     byc["beacon_info"].update( { "datasets": ds_with_counts } )
+
+    if "service_info" in byc:
+        for par in byc[ "beacon_info" ]:
+            byc[ "service_info" ].update( { par: byc[ "beacon_info" ][ par ] } )
 
     return byc
 

@@ -30,7 +30,7 @@ def select_response_type(byc):
 
 ################################################################################
 
-def beacon_respond_with_errors( **byc ):
+def beacon_respond_with_errors( byc ):
 
     if not byc[ "queries" ].keys():
       byc["service_info"].update( { "warning": "No (correct) query parameters were provided." } )
@@ -138,9 +138,9 @@ def respond_filtering_terms_request( byc ):
 
 ################################################################################
 
-def collect_dataset_responses(**byc):
+def collect_dataset_responses(byc):
 
-    dataset_responses = [ ]
+    byc.update( { "dataset_responses": [ ] } )
 
     for ds_id in byc[ "dataset_ids" ]:
 
@@ -152,18 +152,18 @@ def collect_dataset_responses(**byc):
         elif byc["response_type"] == "return_variants":
             access_id = byc["query_results"]["vs._id"][ "id" ]
         else:
-            dataset_responses.append( create_dataset_response( ds_id, **byc ) )
+            byc["dataset_responses"].append( create_dataset_response( ds_id, byc ) )
             continue
 
         h_o, e = retrieve_handover( access_id, **byc )
         h_o_d, e = handover_return_data( h_o, e )
-        dataset_responses.append( { ds_id: h_o_d } )
+        byc["dataset_responses"].append( { ds_id: h_o_d } )
 
-    return dataset_responses
+    return byc
 
 ################################################################################
 
-def create_dataset_response(ds_id, **byc):
+def create_dataset_response(ds_id, byc):
 
     # TODO: getting the correct response structure from the schema
 
@@ -203,7 +203,7 @@ def create_dataset_response(ds_id, **byc):
 
 ################################################################################
 
-def create_beacon_response(**byc):
+def create_beacon_response(byc):
 
     # TODO: getting the correct response structure from the schema
 
