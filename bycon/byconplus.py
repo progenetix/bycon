@@ -48,39 +48,23 @@ def main():
 
 def byconplus(service):
     
-    byc =  {
-        "pkg_path": pkg_path,
-        "form_data": cgi_parse_query(),
-        "args": _get_args(),
-        "errors": [ ],
-        "warnings": [ ]
-    }
-
-    for d in [
-        "config",
-        "dataset_definitions",
-        "filter_definitions",
-        "geoloc_definitions",
-        "variant_definitions",
-        "handover_definitions",
-        "service_info",
-        "beacon_info",
-        "beacon_paths"
-    ]:
-        read_bycon_configs_by_name( d, byc )
+    byc = initialize_service(service)
 
     update_datasets_from_dbstats(byc)
+
     beacon_get_endpoint(byc)
     parse_endpoints(byc)
+
     select_response_type(byc)
+
     select_dataset_ids(byc)
     beacon_check_dataset_ids(byc)
+
     get_filter_flags(byc)  
     parse_filters(byc)
 
     check_service_requests(byc)
 
-    # adding arguments for querying / processing data
     parse_variants(byc)
     get_variant_request_type(byc)
     generate_queries(byc)

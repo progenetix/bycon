@@ -1,3 +1,6 @@
+bycon_definition_files:
+  - config
+  - filter_definitions
 defaults:
   dataset_ids:
     - progenetix

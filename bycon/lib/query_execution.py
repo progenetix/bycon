@@ -22,7 +22,6 @@ def mongo_result_list(db_name, coll_name, query, fields):
  
     return results, error
 
-
 ################################################################################
 
 def execute_bycon_queries(ds_id, **byc):

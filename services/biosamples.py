@@ -13,7 +13,7 @@ from bycon.lib import *
 from lib.service_utils import *
 
 """podmd
-* <https://progenetix.org/cgi/bycon/bin/biosamples.py?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
+* <https://progenetix.org/cgi/bycon/services/biosamples.py?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
 * <https://progenetix.org/services/biosamples?responseFormat=simple&datasetIds=progenetix&filters=cellosaurus:CVCL_0030>
 podmd"""
 
@@ -30,15 +30,6 @@ def main():
 def biosamples(service):
 
     byc = initialize_service(service)
-
-    for d in [
-        "dataset_definitions",
-        "filter_definitions",
-        "geoloc_definitions",
-        "variant_definitions",
-        "handover_definitions"
-    ]:
-        read_bycon_configs_by_name( d, byc )
 
     select_dataset_ids(byc)
     beacon_check_dataset_ids(byc)

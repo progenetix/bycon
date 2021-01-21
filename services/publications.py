@@ -34,7 +34,6 @@ def main():
 def publications(service):
 
     byc = initialize_service(service)
-    read_bycon_configs_by_name( "geoloc_definitions", byc )
 
     # the method keys can be overriden with "deliveryKeys"
     d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
@@ -42,36 +41,32 @@ def publications(service):
         if not "all" in byc["method"]:
             d_k = byc["these_prefs"]["methods"][ byc["method"] ]
 
-    byc.update( { "filter_definitions": byc["these_prefs"]["filter_definitions"] } )
     get_filter_flags(byc)
     parse_filters(byc)
 
-    # response prototype
-    r = byc[ "config" ]["response_object_schema"]
-    r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
-    r["response_type"] = service
+    r = create_empty_service_response(**byc)
 
     # saving the parameters to the response
     for p in ["method", "filters"]:
-        r["parameters"].update( { p: byc[ p ] } )
+        r["meta"]["parameters"].append( { p: byc[ p ] } )
 
     # data retrieval & response population
     query, error = _create_filters_query( **byc )
     if len(error) > 1:
-        r["errors"].append( error )
+        r["meta"]["errors"].append( error )
 
     geo_q, geo_pars = geo_query( **byc )
 
     if geo_q:
         for g_k, g_v in geo_pars.items():
-            r["parameters"].update( { g_k: g_v })
+            r["meta"]["parameters"].update( { g_k: g_v })
         if len(query.keys()) < 1:
             query = geo_q
         else:
             query = { '$and': [ geo_q, query ] }
 
     if len(query.keys()) < 1:
-        r["errors"].append( "No query could be constructed from the parameters provided." )
+        r["meta"]["errors"].append( "No query could be constructed from the parameters provided." )
         cgi_print_json_response( byc["form_data"], r, 422 )
 
     mongo_client = MongoClient( )
@@ -113,11 +108,10 @@ def publications(service):
 
     mongo_client.close( )
  
-    r["data"] = sorted(p_l, key=itemgetter('sortid'), reverse = True)
-    r[service+"_count"] = len(r["data"])
+    results = sorted(p_l, key=itemgetter('sortid'), reverse = True)
 
-    # response
-    cgi_print_json_response( byc["form_data"], r, 200 )
+    populate_service_response(r, results)
+    cgi_print_json_response( byc[ "form_data" ], r, 200 )
 
 ################################################################################
 ################################################################################

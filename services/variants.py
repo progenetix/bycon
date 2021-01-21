@@ -30,15 +30,6 @@ def variants(service):
 
     byc = initialize_service(service)
 
-    for d in [
-        "dataset_definitions",
-        "filter_definitions",
-        "geoloc_definitions",
-        "variant_definitions",
-        "handover_definitions"
-    ]:
-        read_bycon_configs_by_name( d, byc )
-
     select_dataset_ids(byc)
     beacon_check_dataset_ids(byc)
     get_filter_flags(byc)

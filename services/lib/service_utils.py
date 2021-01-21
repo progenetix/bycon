@@ -1,4 +1,5 @@
 from os import path, pardir
+import inspect
 import sys
 
 # local
@@ -14,16 +15,24 @@ from byconeer.lib.schemas_parser import *
 
 def initialize_service(service):
 
+    frm = inspect.stack()[1]
+    mod = inspect.getmodule(frm[0])
+    sub_path = path.join(pkg_path, path.dirname(mod.__file__))
+
     byc =  {
         "pkg_path": pkg_path,
         "form_data": cgi_parse_query(),
-        "these_prefs": read_local_prefs( service, dir_path ),
+        "these_prefs": read_local_prefs( service, sub_path ),
         "method": "",
         "errors": [ ],
         "warnings": [ ]
     }
 
-    read_bycon_configs_by_name( "config", byc )
+    if "bycon_definition_files" in byc["these_prefs"]:
+        for d in byc["these_prefs"]["bycon_definition_files"]:
+            read_bycon_configs_by_name( d, byc )
+    else:
+        read_bycon_configs_by_name( "config", byc )
 
     if "defaults" in byc["these_prefs"]:
         for d_k, d_v in byc["these_prefs"]["defaults"].items():

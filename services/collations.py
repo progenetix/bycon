@@ -35,10 +35,6 @@ def main():
 def collations(service):
 
     byc = initialize_service(service)
-    for d in [
-        "filter_definitions"
-    ]:
-        read_bycon_configs_by_name( d, byc )
 
     # the method keys can be overriden with "deliveryKeys"
     d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )

@@ -29,15 +29,6 @@ def phenopackets(service):
 
     byc = initialize_service(service)
 
-    for d in [
-        "dataset_definitions",
-        "filter_definitions",
-        "geoloc_definitions",
-        "variant_definitions",
-        "handover_definitions"
-    ]:
-        byc.update( { d: read_bycon_configs_by_name( d ) } )
-
     for p_k, p_v in byc["these_prefs"]["parameters"].items():
         if p_k in byc["form_data"]:
             if "array" in p_v[ "type" ]:
