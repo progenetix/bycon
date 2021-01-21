@@ -20,7 +20,7 @@ Please see the [documentation](./doc/byconplus.md) for more information.
 
 #### Tests
 
-* from parent directory `./bycon/byconplus.py -t`
+* `./bycon/byconplus.py -t`
 
 podmd"""
 
