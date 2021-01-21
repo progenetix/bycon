@@ -13,6 +13,7 @@ from bycon.lib import *
 from lib.service_utils import *
 
 """podmd
+
 podmd"""
 
 ################################################################################
@@ -41,42 +42,33 @@ def phenopackets(service):
     get_filter_flags(byc)
     parse_filters(byc)
 
-    # adding arguments for querying / processing data
     parse_variants(byc)
     get_variant_request_type(byc)
     generate_queries(byc)
 
-    # response prototype
-    r = byc[ "config" ]["response_object_schema"]
-    r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
+    r = create_empty_service_response(byc)    
 
     # TODO: move somewhere
     if not byc[ "queries" ].keys():
-      r["errors"].append( "No (correct) query parameters were provided." )
+      r["meta"]["errors"].append( "No (correct) query parameters were provided." )
     if len(byc[ "dataset_ids" ]) < 1:
-      r["errors"].append( "No `datasetIds` parameter provided." )
+      r["meta"]["errors"].append( "No `datasetIds` parameter provided." )
     if len(byc[ "dataset_ids" ]) > 1:
-      r["errors"].append( "More than 1 `datasetIds` value were provided." )
-    if len(r["errors"]) > 0:
+      r["meta"]["errors"].append( "More than 1 `datasetIds` value were provided." )
+    if len(r["meta"]["errors"]) > 0:
       cgi_print_json_response( byc["form_data"], r, 422 )
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
 
-    # saving the parameters to the response
-    for p in ["filters", "variant_pars"]:
-        r["parameters"].update( { p: byc[ p ] } )
-    r["parameters"].update( { "dataset": ds_id } )
-    r["response_type"] = service
-
-    byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
-    query_results_save_handovers( **byc )
+    execute_bycon_queries( ds_id, byc )
+    query_results_save_handovers(byc)
 
     access_id = byc["query_results"]["bs._id"][ "id" ]
 
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
-        r["errors"].append( e )
+        r["meta"]["errors"].append( e )
 
     access_id_ind = byc["query_results"]["is._id"][ "id" ]
     ind_s = [ ]
@@ -93,6 +85,8 @@ def phenopackets(service):
     if len(access_id_var) > 1:
         h_o_var, e_var = retrieve_handover( access_id_var, **byc )
         var_data, e_var = handover_return_data( h_o_var, e_var )
+
+    results = [ ]
 
     for i_s in h_o_d_ind:
 
@@ -130,14 +124,9 @@ def phenopackets(service):
 
             pxf["biosamples"].append( p_bs )
 
-        r["data"].append( pxf )
+        results.append( pxf )
 
-    r["response_type"] = service
-
-    if len(r["errors"]) > 0:
-      cgi_print_json_response( byc["form_data"], r, 422 )
-
-    r[service+"_count"] = len(r["data"])
+    populate_service_response(r, results)
     cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################

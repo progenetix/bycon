@@ -33,7 +33,7 @@ def genespans(service):
 
     byc = initialize_service(service)
         
-    r = create_empty_service_response(**byc)
+    r = create_empty_service_response(byc)
 
     assembly_id = byc["these_prefs"]["defaults"]["assembly_id"]
     if "assemblyId" in byc[ "form_data" ]:

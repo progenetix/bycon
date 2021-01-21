@@ -45,7 +45,7 @@ def dbstats(service):
             if s_n > 0:
                 byc["stats_number"] = s_n
 
-    r = create_empty_service_response(**byc)
+    r = create_empty_service_response(byc)
 
     ds_stats = dbstats_return_latest( byc["stats_number"], **byc )
 

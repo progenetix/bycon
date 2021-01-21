@@ -42,7 +42,7 @@ def biosamples(service):
     generate_queries(byc)
 
     # response prototype
-    r = create_empty_service_response(**byc)
+    r = create_empty_service_response(byc)
 
     # TODO: move somewhere
     if not byc[ "queries" ].keys():
@@ -56,17 +56,13 @@ def biosamples(service):
       cgi_print_json_response( byc["form_data"], r, 422 )
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
-
-    # saving the parameters to the response
-    for p in ["method", "filters", "variant_pars"]:
-        r["meta"]["parameters"].append( { p: byc[ p ] } )
     r["meta"]["parameters"].append( { "dataset": ds_id } )
 
     if "phenopackets" in byc["method"]:
         byc.update( { "response_type": "return_individuals" } )
 
-    byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
-    query_results_save_handovers( **byc )
+    execute_bycon_queries( ds_id, byc )
+    query_results_save_handovers(byc)
 
     access_id = byc["query_results"]["bs._id"][ "id" ]
 

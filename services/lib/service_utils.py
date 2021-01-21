@@ -48,7 +48,7 @@ def initialize_service(service):
 
 ################################################################################
 
-def create_empty_service_response(**byc):
+def create_empty_service_response(byc):
 
     r_s = read_schema_files("ServiceResponse", "properties", dir_path)
     r = create_empty_instance(r_s, dir_path)
@@ -60,6 +60,11 @@ def create_empty_service_response(**byc):
     if "errors" in byc:
         if len(byc["errors"]) > 0:
             r["meta"]["errors"].extend(byc["errors"])
+
+    # saving the parameters to the response
+    for p in ["method", "dataset_ids", "filters", "variant_pars"]:
+        if p in byc:
+            r["meta"]["parameters"].append( { p: byc[ p ] } )
 
     return r
 

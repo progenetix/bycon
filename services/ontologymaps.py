@@ -41,8 +41,7 @@ def ontologymaps(service):
     get_filter_flags(byc)
 
     # response prototype
-    r = create_empty_service_response(**byc)    
-    r["meta"]["parameters"].append( { "filters": byc[ "filters" ] })
+    r = create_empty_service_response(byc)    
  
     q_list = [ ]
     pre_re = re.compile(r'^(\w+?)([:-].*?)?$')

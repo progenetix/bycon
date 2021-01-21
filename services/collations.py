@@ -44,18 +44,13 @@ def collations(service):
     select_dataset_ids(byc)
     parse_filters(byc)
 
-    # response prototype
-    r = create_empty_service_response(**byc)    
+    r = create_empty_service_response(byc)    
 
     # TODO: move somewhere
     if len(byc[ "dataset_ids" ]) < 1:
       r["meta"]["errors"].extend( "No `datasetIds` parameter provided." )
     if len(r["meta"]["errors"]) > 0:
       cgi_print_json_response( byc["form_data"], r, 422 )
-
-    # saving the parameters to the response
-    for p in ["dataset_ids", "method", "filters"]:
-        r["meta"]["parameters"].append( { p: byc[ p ] } )
 
     # data retrieval & response population
     mongo_client = MongoClient( )
@@ -98,7 +93,6 @@ def collations(service):
     results = list(s_s.values())
 
     populate_service_response(r, results)
-
     cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################

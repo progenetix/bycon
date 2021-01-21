@@ -144,8 +144,8 @@ def collect_dataset_responses(byc):
 
     for ds_id in byc[ "dataset_ids" ]:
 
-        byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
-        query_results_save_handovers( **byc )
+        execute_bycon_queries( ds_id, byc )
+        query_results_save_handovers(byc)
 
         if byc["response_type"] == "return_biosamples":
             access_id = byc["query_results"]["bs._id"][ "id" ]

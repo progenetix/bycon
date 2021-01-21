@@ -24,7 +24,7 @@ def mongo_result_list(db_name, coll_name, query, fields):
 
 ################################################################################
 
-def execute_bycon_queries(ds_id, **byc):
+def execute_bycon_queries(ds_id, byc):
 
     # last_time = datetime.datetime.now()
     # logging.info("\t start query: {}".format(last_time))
@@ -186,7 +186,9 @@ def execute_bycon_queries(ds_id, **byc):
     data_client.close( )
     ho_client.close( )
 
-    return prefetch
+    byc.update( { "query_results": prefetch } )
+
+    return byc
 
 ################################################################################
 

@@ -39,7 +39,7 @@ def geolocations(service):
     # for the geolocs database, not the provenance object
     byc["geoloc_definitions"]["geo_root"] = ""
     
-    r = create_empty_service_response(**byc)
+    r = create_empty_service_response(byc)
 
     query, geo_pars = geo_query( **byc )
     for g_k, g_v in geo_pars.items():

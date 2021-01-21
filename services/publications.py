@@ -44,11 +44,7 @@ def publications(service):
     get_filter_flags(byc)
     parse_filters(byc)
 
-    r = create_empty_service_response(**byc)
-
-    # saving the parameters to the response
-    for p in ["method", "filters"]:
-        r["meta"]["parameters"].append( { p: byc[ p ] } )
+    r = create_empty_service_response(byc)
 
     # data retrieval & response population
     query, error = _create_filters_query( **byc )

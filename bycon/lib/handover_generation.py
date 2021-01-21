@@ -63,7 +63,7 @@ def dataset_response_add_handovers(ds_id, **byc):
 
 ################################################################################
 
-def query_results_save_handovers( **byc ):
+def query_results_save_handovers(byc):
 
     ho_client = MongoClient()
     ho_db = ho_client[ byc["config"]["info_db"] ]

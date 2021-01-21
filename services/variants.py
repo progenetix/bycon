@@ -65,8 +65,8 @@ def variants(service):
     if "phenopackets" in byc["method"]:
         byc.update( { "response_type": "return_individuals" } )
 
-    byc.update( { "query_results": execute_bycon_queries( ds_id, **byc ) } )
-    query_results_save_handovers( **byc )
+    execute_bycon_queries( ds_id, byc )
+    query_results_save_handovers(byc)
 
     access_id = byc["query_results"]["bs._id"][ "id" ]
 
