@@ -34,7 +34,7 @@ def main():
 def publications(service):
 
     byc = initialize_service(service)
-    byc.update( { "geoloc_definitions": read_bycon_configs_by_name( "geoloc_definitions" ) } )
+    read_bycon_configs_by_name( "geoloc_definitions", byc )
 
     # the method keys can be overriden with "deliveryKeys"
     d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
@@ -43,8 +43,8 @@ def publications(service):
             d_k = byc["these_prefs"]["methods"][ byc["method"] ]
 
     byc.update( { "filter_definitions": byc["these_prefs"]["filter_definitions"] } )
-    byc.update( { "filter_flags": get_filter_flags( **byc ) } )
-    byc.update( { "filters": parse_filters( **byc ) } )
+    get_filter_flags(byc)
+    parse_filters(byc)
 
     # response prototype
     r = byc[ "config" ]["response_object_schema"]

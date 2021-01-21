@@ -14,6 +14,7 @@ from bycon.lib.cgi_utils import *
 from bycon.lib.parse_variants import *
 from bycon.lib.read_specs import *
 from lib.cytoband_utils import *
+from lib.service_utils import *
 
 """podmd
 
@@ -59,11 +60,11 @@ def cytomapper(service):
     for d in [
         "variant_definitions"
     ]:
-        byc.update( { d: read_bycon_configs_by_name( d ) } )
+        read_bycon_configs_by_name( d, byc )
 
     byc[ "config" ][ "paths" ][ "genomes" ] = path.join( dir_path, "rsrc", "genomes" )
     
-    byc.update( { "variant_pars": parse_variants( **byc ) } )
+    parse_variants(byc)
     byc.update( { "cytobands": parse_cytoband_file( **byc ) } )
 
     # response prototype

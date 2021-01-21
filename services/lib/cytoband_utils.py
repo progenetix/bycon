@@ -12,7 +12,7 @@ def parse_cytoband_file( **byc ):
  
     podmd"""
 
-    cb_defs = byc["cytoband_defs"]["request_types"]["cytobands2chrobases"]
+    cb_defs = byc["these_prefs"]["request_types"]["cytobands2chrobases"]
 
     # should be in a config but seems like overkill...
     # TODO: catch error for missing genome edition

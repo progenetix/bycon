@@ -7,7 +7,7 @@ from .cgi_utils import *
 
 ################################################################################
 
-def read_bycon_configs_by_name(name):
+def read_bycon_configs_by_name(name, byc):
 
     """podmd
     Reading the config from the same wrapper dir:
@@ -20,14 +20,19 @@ def read_bycon_configs_by_name(name):
     o = {}
     ofp = path.join( path.dirname( path.abspath(__file__) ), pardir, "config", name+".yaml" )
     with open( ofp ) as od:
-        o = yaml.load( od , Loader=yaml.FullLoader)    
-    return o
+        o = yaml.load( od , Loader=yaml.FullLoader)
+
+    byc.update({ name: o })
+    
+    return byc
 
 ################################################################################
 
 def read_local_prefs(service, dir_path):
 
-    return load_yaml( path.join( dir_path, "config", service+".yaml" ) )
+    p = path.join( dir_path, "config", service+".yaml" )
+
+    return load_yaml( p )
 
 ################################################################################
 
@@ -57,20 +62,26 @@ def dbstats_return_latest( limit, **byc ):
 
 ################################################################################
 
-def update_datasets_from_dbstats(**byc):
+def update_datasets_from_dbstats(byc):
+
+    dbstats = dbstats_return_latest( 1, **byc )
+
 
     ds_with_counts = [ ]
     for ds_id in byc["dataset_definitions"].keys():
         ds = byc["dataset_definitions"][ds_id]
-        if ds_id in byc["dbstats"]["datasets"]:
-            ds_db = byc["dbstats"]["datasets"][ ds_id ]
+        if ds_id in dbstats[0]["datasets"]:
+            ds_db = dbstats[0]["datasets"][ ds_id ]
             for k, l in byc["config"]["beacon_info_count_labels"].items():
                 if "counts" in ds_db:
                     if k in ds_db["counts"]:
                         ds[ l ] = ds_db["counts"][ k ]
         ds_with_counts.append(ds)
 
-    return(ds_with_counts)
+    byc.update({ "dbstats": dbstats[0] })
+    byc["beacon_info"].update( { "datasets": ds_with_counts } )
+
+    return byc
 
 ################################################################################
 

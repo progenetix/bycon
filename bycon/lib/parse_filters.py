@@ -5,19 +5,14 @@ from .cgi_utils import *
 
 ################################################################################
 
-def parse_filters( **byc ):
-
-    filters = [ ]
-
-    # if existing, e.g. defaults
-    if "filters" in byc:
-        filters = byc["filters"]
+def parse_filters(byc):
 
     if "form_data" in byc:
         f = form_return_listvalue( byc["form_data"], "filters" )
         f = _check_filter_values(f, byc["filter_definitions"])
         if len(f) > 0:
-            return f
+            byc.update( { "filters": f } )
+            return byc
     
     # for debugging
     if "args" in byc:
@@ -25,19 +20,21 @@ def parse_filters( **byc ):
             f = byc["args"].filters.split(',')
             f = _check_filter_values(f, byc["filter_definitions"])
             if len(f) > 0:
-                return f
+                byc.update( { "filters": f } )
+                return byc
     
         if byc["args"].test:
             f = byc["service_info"][ "sampleAlleleRequests" ][0][ "filters" ]
             f = _check_filter_values(f, byc["filter_definitions"])
             if len(f) > 0:
-                return f
+                byc.update( { "filters": f } )
+                return byc
     
-    return filters
+    return byc
 
 ################################################################################
 
-def get_filter_flags( **byc ):
+def get_filter_flags(byc):
 
     ff = {
         "logic": byc[ "config" ][ "filter_flags" ][ "logic" ],
@@ -58,7 +55,9 @@ def get_filter_flags( **byc ):
     if "exact_match" in byc:
         ff["precision"] = "exact"
 
-    return ff
+    byc.update( { "filter_flags": ff } )
+
+    return byc
 
 ################################################################################
 
@@ -75,13 +74,7 @@ def _check_filter_values(filters, filter_defs):
   
 ################################################################################
 
-def select_dataset_ids( **byc ):
-
-    dataset_ids = [ ]
-
-    # if existing, e.g. defaults
-    if "dataset_ids" in byc:
-        dataset_ids = byc["dataset_ids"]
+def select_dataset_ids(byc):
 
     # different var name & return if provided
     if "form_data" in byc:
@@ -100,26 +93,31 @@ def select_dataset_ids( **byc ):
                     ds_ids = [ h_o["source_db"] ]
 
         if len(ds_ids) > 0:
-            return ds_ids
+            byc.update( { "dataset_ids": ds_ids } )
+            return byc
 
     # for debugging
     if "args" in byc:
         if byc["args"].test:
             ds_ids = byc["service_info"][ "sampleAlleleRequests" ][0][ "datasetIds" ]
             if len(ds_ids) > 0:
-                return ds_ids
+                byc.update( { "dataset_ids": ds_ids } )
+                return byc
     
-    return dataset_ids
+    return byc
   
 ################################################################################
 
-def beacon_check_dataset_ids( **byc ):
+def beacon_check_dataset_ids(byc):
 
     dataset_ids = [ ]
 
-    for ds in byc["dataset_ids"]:
-        if ds in byc["dataset_definitions"].keys():
-            dataset_ids.append(ds)
+    if "dataset_ids" in byc:
+        for ds in byc["dataset_ids"]:
+            if ds in byc["dataset_definitions"].keys():
+                dataset_ids.append(ds)
 
-    return dataset_ids
+    byc.update( { "dataset_ids": dataset_ids } )
+
+    return byc
 

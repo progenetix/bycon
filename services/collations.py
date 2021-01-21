@@ -38,19 +38,18 @@ def collations(service):
     for d in [
         "filter_definitions"
     ]:
-        byc.update( { d: read_bycon_configs_by_name( d ) } )
+        read_bycon_configs_by_name( d, byc )
 
     # the method keys can be overriden with "deliveryKeys"
     d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
     if len(d_k) < 1:
         d_k = byc["these_prefs"]["methods"][ byc["method"] ]
 
-    byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
-    byc.update( { "filters": parse_filters( **byc ) } )
+    select_dataset_ids(byc)
+    parse_filters(byc)
 
     # response prototype
     r = create_empty_service_response(**byc)    
-    r["meta"]["errors"].extend(byc["errors"])
 
     # TODO: move somewhere
     if len(byc[ "dataset_ids" ]) < 1:

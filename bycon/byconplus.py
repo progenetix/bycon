@@ -48,42 +48,46 @@ def main():
 
 def byconplus(service):
     
-    byc = initialize_service(service)
+    byc =  {
+        "pkg_path": pkg_path,
+        "form_data": cgi_parse_query(),
+        "args": _get_args(),
+        "errors": [ ],
+        "warnings": [ ]
+    }
 
     for d in [
+        "config",
         "dataset_definitions",
         "filter_definitions",
         "geoloc_definitions",
         "variant_definitions",
-        "handover_definitions"
+        "handover_definitions",
+        "service_info",
+        "beacon_info",
+        "beacon_paths"
     ]:
-        byc.update( { d: read_bycon_configs_by_name( d ) } )
+        read_bycon_configs_by_name( d, byc )
 
-    for p in ["service_info", "beacon_info", "beacon_paths"]:
-        byc.update( { p: read_local_prefs( p, dir_path ) } )
+    update_datasets_from_dbstats(byc)
 
-    dbstats = dbstats_return_latest( 1, **byc )
-    byc.update( { "dbstats": dbstats[0] } )
-
-    byc["beacon_info"].update( { "datasets": update_datasets_from_dbstats(**byc) } )
     for par in byc[ "beacon_info" ]:
         byc[ "service_info" ][ par ] = byc[ "beacon_info" ][ par ]
 
-    byc.update( { "endpoint": beacon_get_endpoint(**byc) } )
-    byc.update( { "endpoint_pars": parse_endpoints( **byc ) } )
-    byc.update( { "response_type": select_response_type( **byc ) } )
+    beacon_get_endpoint(byc)
+    parse_endpoints(byc)
+    select_response_type(byc)
+    select_dataset_ids(byc)
+    beacon_check_dataset_ids(byc)
+    get_filter_flags(byc)  
+    parse_filters(byc)
 
-    byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
-    byc.update( { "dataset_ids": beacon_check_dataset_ids( **byc ) } )
-    byc.update( { "filter_flags": get_filter_flags( **byc ) } )
-    byc.update( { "filters": parse_filters( **byc ) } )
-
-    check_service_requests(**byc)
+    check_service_requests(byc)
 
     # adding arguments for querying / processing data
-    byc.update( { "variant_pars": parse_variants( **byc ) } )
-    byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
-    byc.update( { "queries": generate_queries( **byc ) } )
+    parse_variants(byc)
+    get_variant_request_type(byc)
+    generate_queries(byc)
 
     beacon_respond_with_errors( **byc )
 

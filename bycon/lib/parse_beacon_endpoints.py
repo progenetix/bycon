@@ -6,34 +6,36 @@ from urllib.parse import urlparse
   
 ################################################################################
 
-def beacon_get_endpoint(**byc):
+def beacon_get_endpoint(byc):
 
-    endpoint = "/"
+    byc.update( { "endpoint": '/' } )
+
     if not environ.get('REQUEST_URI'):
-        return endpoint
+        return byc
 
     url_comps = urlparse( environ.get('REQUEST_URI') )
 
     for p in byc["beacon_paths"].keys():
         m = re.compile(r'(^.+?byconplus(\.py)?)?'+p)
         if m.match(url_comps.path):
-            return p
-    return endpoint
+            return byc.update( { "endpoint": p } )
+
+    return byc
 
 ################################################################################
 
-def parse_endpoints( **byc ):
+def parse_endpoints(byc):
 
-    endpoint_pars = _endpoint_response_from_pars( **byc )
+    byc.update( { "endpoint_pars": _endpoint_response_from_pars( **byc ) } )
 
     url_comps = urlparse( environ.get('REQUEST_URI') )
     e_path = url_comps.path
     
     if not e_path:
-        return(endpoint_pars)
+        return byc
  
     if not byc["endpoint"]:
-        return(endpoint_pars)
+        return byc
 
     ep = byc["endpoint"].split('/')[1]
 
@@ -48,33 +50,33 @@ def parse_endpoints( **byc ):
             path_items.append(p_i)
 
     if len(path_items) < 1:
-        return(endpoint_pars)
+        return byc
 
     if not path_items[0] in byc["endpoint"]:
-        return(endpoint_pars)
+        return byc
 
     scope = path_items[0]
     scope = scope.replace("g_variants", "variants")
-    endpoint_pars.update( { "response": scope } )
+    byc["endpoint_pars"].update( { "response": scope } )
 
     if len(path_items) < 2:
-        return(endpoint_pars)
+        return byc
 
     id_key = "id"
     if scope == "variants":
         id_key = "digest"
 
-    endpoint_pars.update( { "queries": { scope: { id_key: path_items[1] } } } )
+    byc["endpoint_pars"].update( { "queries": { scope: { id_key: path_items[1] } } } )
 
     if len(path_items) < 3:
-        return(endpoint_pars)
+        return byc
 
     response = path_items[2]
     response = response.replace("g_variants", "variants")
 
-    endpoint_pars.update( { "response": response } )
+    byc["endpoint_pars"].update( { "response": response } )
 
-    return endpoint_pars
+    return byc
 
 ################################################################################
 

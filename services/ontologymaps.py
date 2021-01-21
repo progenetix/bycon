@@ -35,10 +35,10 @@ def ontologymaps(service):
     byc = initialize_service(service)
 
     for d in ["filter_definitions"]:
-        byc.update( { d: read_bycon_configs_by_name( d ) } )
+        read_bycon_configs_by_name( d, byc )
 
-    byc.update( { "filters": parse_filters( **byc ) } )
-    byc.update( { "filter_flags": get_filter_flags( **byc ) } )
+    parse_filters(byc)
+    get_filter_flags(byc)
 
     # response prototype
     r = create_empty_service_response(**byc)    

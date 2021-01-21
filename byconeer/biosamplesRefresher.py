@@ -56,7 +56,7 @@ def main():
         "dataset_definitions",
         "filter_definitions"
     ]:
-        byc.update( { d: read_bycon_configs_by_name( d ) } )
+        read_bycon_configs_by_name( d, byc )
 
     # first pre-population w/ defaults
     these_prefs = read_local_prefs( service, dir_path )

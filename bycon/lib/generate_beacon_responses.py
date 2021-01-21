@@ -10,30 +10,30 @@ from .query_execution import execute_bycon_queries
 
 ################################################################################
 
-def check_service_requests(**byc):
+def check_service_requests(byc):
 
-    respond_filtering_terms_request(**byc)
-    respond_service_info_request(**byc)
-    respond_empty_request(**byc)
-    respond_get_datasetids_request(**byc)
+    respond_filtering_terms_request(byc)
+    respond_service_info_request(byc)
+    respond_empty_request(byc)
+    respond_get_datasetids_request(byc)
 
 ################################################################################
 
-def select_response_type(**byc):
+def select_response_type(byc):
 
-    response_type = "respond_empty_request"
+    byc.update( { "response_type": "respond_empty_request" } )
     if "response" in byc["endpoint_pars"]:
         if byc["endpoint_pars"]["response"]:
-            response_type = "return_"+byc["endpoint_pars"]["response"]
+            byc.update( { "response_type": "return_"+byc["endpoint_pars"]["response"] } )
 
-    return response_type
+    return byc
 
 ################################################################################
 
 def beacon_respond_with_errors( **byc ):
 
     if not byc[ "queries" ].keys():
-      byc["service_info"].update( { "error": "No (correct) query parameters were provided." } )
+      byc["service_info"].update( { "warning": "No (correct) query parameters were provided." } )
       cgi_print_json_response( byc["form_data"], byc["service_info"], 422)
 
     if len(byc[ "dataset_ids" ]) < 1:
@@ -42,16 +42,16 @@ def beacon_respond_with_errors( **byc ):
 
 ################################################################################
 
-def respond_empty_request( **byc ):
+def respond_empty_request( byc ):
 
     if not environ.get('REQUEST_URI'):
         return()
     if len(byc["form_data"]) > 0:
         return()
-    if byc["endpoint"]:
+    if "endpoint" in byc:
         if not byc["endpoint"] == "/":
             return()
-    if byc["args"]:
+    if "args" in byc:
         if not byc["args"].info:
             return()
 
@@ -60,7 +60,7 @@ def respond_empty_request( **byc ):
 
 ################################################################################
 
-def respond_get_datasetids_request( **byc ):
+def respond_get_datasetids_request( byc ):
 
     if not environ.get('REQUEST_URI'):
         return()
@@ -75,7 +75,7 @@ def respond_get_datasetids_request( **byc ):
 
 ################################################################################
 
-def respond_service_info_request( **byc ):
+def respond_service_info_request( byc ):
 
     if not environ.get('REQUEST_URI'):
         return()
@@ -87,7 +87,7 @@ def respond_service_info_request( **byc ):
 
 ################################################################################
 
-def respond_filtering_terms_request( **byc ):
+def respond_filtering_terms_request( byc ):
 
     if not "filtering_terms" in byc["endpoint"]:
         return()

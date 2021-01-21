@@ -14,7 +14,6 @@ sys.path.append( pkg_path )
 from bycon.lib.parse_filters import *
 from bycon.lib.cgi_utils import *
 from bycon.lib.handover_execution import retrieve_handover,handover_return_data
-from bycon.lib.read_specs import read_local_prefs,read_bycon_configs_by_name
 from lib.service_utils import *
 
 """podmd
@@ -56,7 +55,7 @@ def deliveries(service):
     # TODO: sub & clean upp etc.
     if not "accessid" in q_par:
 
-        byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
+        select_dataset_ids(byc)
         if not len(byc["dataset_ids"]) == 1:
             r["errors"].append( "Not exactly one datasetIds item specified." )
         else:

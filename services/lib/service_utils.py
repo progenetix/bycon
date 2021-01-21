@@ -17,12 +17,13 @@ def initialize_service(service):
     byc =  {
         "pkg_path": pkg_path,
         "form_data": cgi_parse_query(),
-        "config": read_bycon_configs_by_name("config"),
         "these_prefs": read_local_prefs( service, dir_path ),
         "method": "",
         "errors": [ ],
         "warnings": [ ]
     }
+
+    read_bycon_configs_by_name( "config", byc )
 
     if "defaults" in byc["these_prefs"]:
         for d_k, d_v in byc["these_prefs"]["defaults"].items():
@@ -46,6 +47,10 @@ def create_empty_service_response(**byc):
     if "meta" in byc["these_prefs"]:
     	for k, v in byc["these_prefs"]["meta"].items():
     		r["meta"].update( { k: v } )
+
+    if "errors" in byc:
+        if len(byc["errors"]) > 0:
+            r["meta"]["errors"].extend(byc["errors"])
 
     return r
 

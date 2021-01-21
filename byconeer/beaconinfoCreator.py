@@ -42,7 +42,7 @@ def main():
         "dataset_definitions",
         "filter_definitions"
     ]:
-        byc.update( { d: read_bycon_configs_by_name( d ) } )
+        read_bycon_configs_by_name( d, byc )
 
     b_info = { "date": date_isoformat(datetime.datetime.now()), "datasets": { } }
 

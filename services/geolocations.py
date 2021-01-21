@@ -11,7 +11,7 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response
-from bycon.lib.read_specs import read_local_prefs,read_bycon_configs_by_name
+from bycon.lib.read_specs import read_bycon_configs_by_name
 from bycon.lib.query_generation import geo_query
 from bycon.lib.query_execution import mongo_result_list
 from lib.service_utils import *
@@ -34,7 +34,7 @@ def main():
 def geolocations(service):
 
     byc = initialize_service(service)
-    byc.update( { "geoloc_definitions": read_bycon_configs_by_name( "geoloc_definitions" ) } )
+    read_bycon_configs_by_name( "geoloc_definitions", byc )
 
     # for the geolocs database, not the provenance object
     byc["geoloc_definitions"]["geo_root"] = ""

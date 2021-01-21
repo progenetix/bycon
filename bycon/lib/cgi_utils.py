@@ -89,10 +89,10 @@ def cgi_print_json_response(form_data, response, status_code):
     if "responseFormat" in form_data:
         r_f = form_data.getvalue("responseFormat")
 
+    # TODO: fix callback ...
     if "callback" in form_data:
-        data = form_data.getvalue("callback")+'('+json.dumps(response, default=str)+")\n"
-        cgi_print_text_response(form_data, data, status_code)
-
+        response = form_data.getvalue("callback")+'('+json.dumps(response, default=str)+")\n"
+        # cgi_print_text_response(form_data, data, status_code)
 
     # This is a simple "de-jsonify", intended to be used for already
     # pre-formatted list-like items (i.e. lists only containing objects)

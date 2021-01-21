@@ -45,15 +45,15 @@ def phenopackets(service):
             else:
                 byc.update( { p_k: byc["form_data"].getvalue( p_k ) } )
 
-    byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
-    byc.update( { "dataset_ids": beacon_check_dataset_ids( **byc ) } )
-    byc.update( { "filter_flags": get_filter_flags( **byc ) } )
-    byc.update( { "filters": parse_filters( **byc ) } )
+    select_dataset_ids(byc)
+    beacon_check_dataset_ids(byc)
+    get_filter_flags(byc)
+    parse_filters(byc)
 
     # adding arguments for querying / processing data
-    byc.update( { "variant_pars": parse_variants( **byc ) } )
-    byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
-    byc.update( { "queries": generate_queries( **byc ) } )
+    parse_variants(byc)
+    get_variant_request_type(byc)
+    generate_queries(byc)
 
     # response prototype
     r = byc[ "config" ]["response_object_schema"]

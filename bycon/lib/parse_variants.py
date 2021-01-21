@@ -7,7 +7,7 @@ from .cgi_utils import *
 
 ################################################################################
 
-def parse_variants( **byc ):
+def parse_variants(byc):
 
     variant_pars = { }
     v_p_defs = byc["variant_definitions"]["parameters"]
@@ -71,11 +71,13 @@ def parse_variants( **byc ):
     if not "referenceName" in v_p_c:
         v_p_c = { }
 
-    return v_p_c
+    byc.update( { "variant_pars": v_p_c } )
+
+    return byc
 
 ################################################################################
 
-def get_variant_request_type( **byc ):
+def get_variant_request_type(byc):
     """podmd
     This method guesses the type of variant request, based on the complete
     fulfillment of the required parameters (all of `all_of`, at least one of
@@ -136,7 +138,9 @@ def get_variant_request_type( **byc ):
         vrt_matches = sorted(vrt_matches, key=lambda k: k['par_no'], reverse=True)
         variant_request_type = vrt_matches[0]["type"]
 
-    return variant_request_type
+    byc.update( { "variant_request_type": variant_request_type } )
+
+    return byc
 
 ################################################################################
 

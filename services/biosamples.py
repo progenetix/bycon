@@ -38,21 +38,20 @@ def biosamples(service):
         "variant_definitions",
         "handover_definitions"
     ]:
-        byc.update( { d: read_bycon_configs_by_name( d ) } )
+        read_bycon_configs_by_name( d, byc )
 
-    byc.update( { "dataset_ids": select_dataset_ids( **byc ) } )
-    byc.update( { "dataset_ids": beacon_check_dataset_ids( **byc ) } )
-    byc.update( { "filter_flags": get_filter_flags( **byc ) } )
-    byc.update( { "filters": parse_filters( **byc ) } )
+    select_dataset_ids(byc)
+    beacon_check_dataset_ids(byc)
+    get_filter_flags(byc)
+    parse_filters(byc)
 
     # adding arguments for querying / processing data
-    byc.update( { "variant_pars": parse_variants( **byc ) } )
-    byc.update( { "variant_request_type": get_variant_request_type( **byc ) } )
-    byc.update( { "queries": generate_queries( **byc ) } )
+    parse_variants(byc)
+    get_variant_request_type(byc)
+    generate_queries(byc)
 
     # response prototype
     r = create_empty_service_response(**byc)
-    r["meta"]["errors"].extend(byc["errors"])
 
     # TODO: move somewhere
     if not byc[ "queries" ].keys():

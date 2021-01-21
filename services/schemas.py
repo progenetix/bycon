@@ -10,7 +10,6 @@ dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import cgi_parse_query, cgi_print_json_response, rest_path_value
-from bycon.lib.read_specs import read_bycon_configs_by_name
 from byconeer.lib.schemas_parser import *
 from lib.service_utils import *
 
