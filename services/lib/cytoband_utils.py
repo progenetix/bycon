@@ -6,7 +6,7 @@ import re
 ################################################################################
 ################################################################################
 
-def parse_cytoband_file( **byc ):
+def parse_cytoband_file(byc):
 
     """podmd
  
@@ -45,5 +45,7 @@ def parse_cytoband_file( **byc ):
             cb[ "chro" ] = cb[ "chro" ].replace( "chr", "")
             cb[ "chroband" ] = cb[ "chro" ]+cb[ "cytoband" ]
             cytobands.append(dict(cb))
+    
+    byc.update( { "cytobands": cytobands } )
 
-    return cytobands
+    return byc

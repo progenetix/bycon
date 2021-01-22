@@ -20,10 +20,9 @@ def parse_variants(byc):
             variant_pars[ p_k ] = form_return_listvalue( byc["form_data"], p_k )
         else:
             variant_pars[ p_k ] = byc["form_data"].getvalue(p_k, v_default)
+
         if not variant_pars[ p_k ]:
             del( variant_pars[ p_k ] )
-        # except Exception:
-        #     pass
 
     # for debugging
     if "args" in byc:
@@ -43,6 +42,7 @@ def parse_variants(byc):
 
     # value checks
     v_p_c = { }
+
     for p_k in variant_pars.keys():
         if not p_k in v_p_defs.keys():
             continue
@@ -67,9 +67,6 @@ def parse_variants(byc):
         if k in v_p_c:
             if len(v_p_c[ k ]) == 1:
                 v_p_c[ k ].append( v_p_c[ k ][0] + 1 )
-
-    if not "referenceName" in v_p_c:
-        v_p_c = { }
 
     byc.update( { "variant_pars": v_p_c } )
 

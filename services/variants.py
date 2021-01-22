@@ -62,9 +62,6 @@ def variants(service):
     r["parameters"].update( { "dataset": ds_id } )
     r["response_type"] = service
 
-    if "phenopackets" in byc["method"]:
-        byc.update( { "response_type": "return_individuals" } )
-
     execute_bycon_queries( ds_id, byc )
     query_results_save_handovers(byc)
 

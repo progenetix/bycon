@@ -51,11 +51,12 @@ def publications(service):
     if len(error) > 1:
         r["meta"]["errors"].append( error )
 
+
     geo_q, geo_pars = geo_query( **byc )
 
     if geo_q:
         for g_k, g_v in geo_pars.items():
-            r["meta"]["parameters"].update( { g_k: g_v })
+            r["meta"]["parameters"].append( { g_k: g_v })
         if len(query.keys()) < 1:
             query = geo_q
         else:

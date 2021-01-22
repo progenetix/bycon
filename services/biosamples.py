@@ -58,9 +58,6 @@ def biosamples(service):
     ds_id = byc[ "dataset_ids" ][ 0 ]
     r["meta"]["parameters"].append( { "dataset": ds_id } )
 
-    if "phenopackets" in byc["method"]:
-        byc.update( { "response_type": "return_individuals" } )
-
     execute_bycon_queries( ds_id, byc )
     query_results_save_handovers(byc)
 

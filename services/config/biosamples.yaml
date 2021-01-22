@@ -29,8 +29,6 @@ methods:
     - id
     - description
     - biocharacteristics
-  phenopackets:
-    - id
   callsetstats:
     - id
     - biosample_id

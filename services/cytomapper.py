@@ -56,80 +56,70 @@ def cytomapper(service):
     byc = initialize_service(service)
 
     byc.update( { "args": _get_args() } )
-
-    for d in [
-        "variant_definitions"
-    ]:
-        read_bycon_configs_by_name( d, byc )
-
     byc[ "config" ][ "paths" ][ "genomes" ] = path.join( dir_path, "rsrc", "genomes" )
     
     parse_variants(byc)
-    byc.update( { "cytobands": parse_cytoband_file( **byc ) } )
+    parse_cytoband_file(byc)
 
     # response prototype
-    r = byc[ "config" ]["response_object_schema"]
-    r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
-    r["response_type"] = service
-    r["data"] = { }
-    r["parameters"].update({ "assemblyId": byc["variant_pars"]["assemblyId"] })
+    r = create_empty_service_response(byc)
 
     cytoBands = [ ]
     if "cytoBands" in byc["variant_pars"]:
         cytoBands, chro, start, end = _bands_from_cytobands( **byc )
-        r["parameters"].update({ "cytoBands": byc["variant_pars"]["cytoBands"] })
+        r["meta"]["parameters"].append({ "cytoBands": byc["variant_pars"]["cytoBands"] })
     elif "chroBases" in byc["variant_pars"]:
         cytoBands, chro, start, end = _bands_from_chrobases( **byc )
-        r["parameters"].update({ "chroBases": byc["variant_pars"]["chroBases"] })
+        r["meta"]["parameters"].append({ "chroBases": byc["variant_pars"]["chroBases"] })
 
     cb_label = _cytobands_label( cytoBands )
 
     r.update( { "parameters": byc["variant_pars"] } )
  
     if len( cytoBands ) < 1:
-        r["errors"].append( "No matching cytobands!" )
+        r["meta"]["errors"].append( "No matching cytobands!" )
         _print_terminal_response( byc["args"], r )
-        _print_text_response( byc["form_data"], r )
         cgi_print_json_response( byc["form_data"], r, 422 )
 
     size = int(  end - start )
     chroBases = chro+":"+str(start)+"-"+str(end)
     
-    r["data"].update( {
-        "info": {
-            "cytoBands": cb_label,
-            "bandList": [x['chroband'] for x in cytoBands ],
-            "chroBases": chroBases,
-            "referenceName": chro,
-            "size": size,
-        },        
-        "ChromosomeLocation": {
-            "type": "ChromosomeLocation",
-            "species_id": "taxonomy:9606",
-            "chr": chro,
-            "interval": {
-                "start": cytoBands[0]["cytoband"],
-                "end": cytoBands[-1]["cytoband"],
-                "type": "CytobandInterval"
-            }
-        },
-        "GenomicLocation": {
-            "type": "GenomicLocation",
-            "species_id": "taxonomy:9606",
-            "chr": chro,
-            "interval": {
-                "start": start,
-                "end": end,
-                "type": "SimpleInterval"
+    results = [
+        {
+            "info": {
+                "cytoBands": cb_label,
+                "bandList": [x['chroband'] for x in cytoBands ],
+                "chroBases": chroBases,
+                "referenceName": chro,
+                "size": size,
+            },        
+            "ChromosomeLocation": {
+                "type": "ChromosomeLocation",
+                "species_id": "taxonomy:9606",
+                "chr": chro,
+                "interval": {
+                    "start": cytoBands[0]["cytoband"],
+                    "end": cytoBands[-1]["cytoband"],
+                    "type": "CytobandInterval"
+                }
+            },
+            "GenomicLocation": {
+                "type": "GenomicLocation",
+                "species_id": "taxonomy:9606",
+                "chr": chro,
+                "interval": {
+                    "start": start,
+                    "end": end,
+                    "type": "SimpleInterval"
+                }
             }
         }
-    } )
-
-    # exception: only data response here... r was just for errors etc.
+    ]
 
     _print_terminal_response( byc["args"], r )
-    _print_text_response( byc["form_data"], r )
-    cgi_print_json_response( byc["form_data"], r, 200 )
+
+    populate_service_response(r, results)
+    cgi_print_json_response( byc[ "form_data" ], r, 200 )
 
 ################################################################################
 
@@ -246,26 +236,6 @@ def _print_terminal_response(args, r):
     elif args.chrobases:
         print(str(r["data"]["info"][ "cytoBands" ]))
         exit()
-
-    return
-
-################################################################################
-################################################################################
-
-def _print_text_response(form_data, r):
-
-    if "text" in form_data:
-
-        if "cytoBands" in r[ "parameters" ]:
-            print('Content-Type: text')
-            print()
-            print(str(r["data"]["info"][ "chroBases" ])+"\n")
-            exit()
-        elif "chroBases" in r[ "parameters" ]:
-            print('Content-Type: text')
-            print()
-            print(str(r["data"]["info"][ "cytoBands" ])+"\n")
-            exit()
 
     return
 

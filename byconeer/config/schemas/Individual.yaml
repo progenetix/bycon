@@ -15,6 +15,15 @@ properties:
   dateOfBirth:
     type: string
     format: date-time
+  biocharacteristics:
+    type: array
+    items:
+      "$ref": OntologyClass.yaml#/properties
+    examples:
+      - - id: NCIT:C142079
+          label: Limb-girdle muscular dystrophy type 2A
+        - id: NCIT:C3969
+          label: Xeroderma pigmentosum, complementation group G
   externalReferences:
     type: array
     items:
