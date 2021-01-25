@@ -21,4 +21,4 @@ properties:
       - id: EFO:0010937
         label: comparative genomic hybridization (CGH)
   geo:
-    "$ref": Geodata.yaml#/properties
+    "$ref": GeoLocation.yaml#/properties
