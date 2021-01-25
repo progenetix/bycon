@@ -7,7 +7,7 @@ defaults:
 meta:
   response_type: genespans
   returned_schemas:
-    - https://progenetix.org/services/schemas/Geodata/
+    - https://progenetix.org/services/schemas/GeneSpan/
   info: >
     The main geolocs payload can be accessed in `response.results`.
 assembly_ids:
