@@ -293,9 +293,9 @@ def geo_query( **byc ):
 def return_geo_city_query(geo_root, geo_pars):
 
     if len(geo_root) > 0:
-        citypar = ".".join( (geo_root, "city") )
+        citypar = ".".join( (geo_root, "properties", "city") )
     else:
-        citypar = "city"
+        citypar = "properties.city"
 
     geo_q = { citypar: re.compile( r'^'+geo_pars["city"], re.IGNORECASE ) }
 
@@ -306,9 +306,9 @@ def return_geo_city_query(geo_root, geo_pars):
 def return_geo_longlat_query(geo_root, geo_pars):
 
     if len(geo_root) > 0:
-        geojsonpar = ".".join( (geo_root, "geojson") )
+        geojsonpar = ".".join( (geo_root, "geometry") )
     else:
-        geojsonpar = "geojson"
+        geojsonpar = "geo_location.geometry"
 
     geo_q = {
         geojsonpar: {

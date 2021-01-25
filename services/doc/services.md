@@ -72,7 +72,7 @@ format. Here, the data is a dictionary/object with a single key (`genes`):
     ],
     "response_type": "genespans",
     "returned_schemas": [
-      "https://progenetix.org/services/schemas/Geodata/"
+      "https://progenetix.org/services/schemas/GeneSpan/"
     ],
     "warnings": []
     },

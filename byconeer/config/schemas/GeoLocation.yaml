@@ -1,0 +1,13 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/GeoLocation/v2021-01-22
+title: GeoLocation
+description: >
+  A GeoLocation object represents a geographic location formatted as a *GeoJSON feature*. The format is compatible with RFC 7946, while currently limiting its scope to features of type "Point". Also, the schema defines some optional parameters compatible with the GeoJSON feature *properties* wrapper object.
+properties:
+  type:
+    type: string
+    value: "Feature"
+  geometry:
+    "$ref": GeoJSONgeometry.yaml#/properties
+  properties:
+    "$ref": GeoLabels.yaml#/properties

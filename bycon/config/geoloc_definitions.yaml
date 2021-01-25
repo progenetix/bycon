@@ -1,4 +1,4 @@
-geo_root: 'provenance.geo'
+geo_root: 'provenance.geo_location'
 parameters:
   geolatitude:
     type: float

@@ -37,7 +37,7 @@ def geolocations(service):
     read_bycon_configs_by_name( "geoloc_definitions", byc )
 
     # for the geolocs database, not the provenance object
-    byc["geoloc_definitions"]["geo_root"] = ""
+    byc["geoloc_definitions"]["geo_root"] = "geo_location"
     
     r = create_empty_service_response(byc)
 

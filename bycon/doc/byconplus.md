@@ -76,21 +76,24 @@ Additional information may be available through [info.progenetix.org](https://in
           "legacy_id": "PGX_AM_BS_GSE13331_MCL98-13331"
         },
         "provenance": {
-          "geo": {
-            "ISO-3166-alpha3": "CAN",
-            "city": "Vancouver",
-            "country": "Canada",
-            "geojson": {
+          "geo_location": {
+            "type: "Feature",
+            "properties": {
+              "ISO3166alpha3": "CAN",
+              "city": "Vancouver",
+              "country": "Canada",
+              "label": "Vancouver, Canada",
+              "latitude": 49.25,
+              "longitude": -123.12,
+              "precision": "city"
+            },
+            "geometry": {
               "coordinates": [
                 -123.12,
                 49.25
               ],
               "type": "Point"
             },
-            "label": "Vancouver, Canada",
-            "latitude": 49.25,
-            "longitude": -123.12,
-            "precision": "city"
           },
           "material": {
             "id": "EFO:0009656",

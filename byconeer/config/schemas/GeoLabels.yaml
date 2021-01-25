@@ -1,6 +1,6 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/Geojson/v2020-12-08
-title: Geodata
+"$id": https://progenetix.org/services/schemas/GeoLabels/v2022-01-22
+title: GeoLabels
 properties:
   label:
     type: string
@@ -16,7 +16,7 @@ properties:
     type: string
     examples:
       - Switzerland
-  ISO-3166-alpha3:
+  ISO3166alpha3:
     type: string
     examples:
       - USA
@@ -35,5 +35,3 @@ properties:
     type: string
     examples:
       - city
-  geojson:
-    "$ref": GeojsonPoint.yaml#/properties
