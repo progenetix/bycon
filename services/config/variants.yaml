@@ -19,4 +19,6 @@ methods:
     - start
     - end
     - variant_type
+    - reference_bases
+    - alternate_bases
     - info

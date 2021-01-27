@@ -35,68 +35,60 @@ def variants(service):
     get_filter_flags(byc)
     parse_filters(byc)
 
-    # adding arguments for querying / processing data
     parse_variants(byc)
     get_variant_request_type(byc)
     generate_queries(byc)
 
-    # response prototype
-    r = byc[ "config" ]["response_object_schema"]
-    r.update( { "errors": byc["errors"], "warnings": byc["warnings"] } )
+    r = create_empty_service_response(byc)
 
     # TODO: move somewhere
     if not byc[ "queries" ].keys():
-      r["errors"].append( "No (correct) query parameters were provided." )
+      response_add_error(r, "No (correct) query parameters were provided." )
     if len(byc[ "dataset_ids" ]) < 1:
-      r["errors"].append( "No `datasetIds` parameter provided." )
+      response_add_error(r, "No `datasetIds` parameter provided." )
     if len(byc[ "dataset_ids" ]) > 1:
-      r["errors"].append( "More than 1 `datasetIds` value was provided." )
-    if len(r["errors"]) > 0:
-      cgi_print_json_response( byc["form_data"], r, 422 )
+      response_add_error(r, "More than 1 `datasetIds` value was provided." )
+    cgi_break_on_errors(r, byc)
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
-
-    # saving the parameters to the response
-    for p in ["method", "filters", "variant_pars"]:
-        if p in byc:
-            r["parameters"].update( { p: byc[ p ] } )
-    r["parameters"].update( { "dataset": ds_id } )
-    r["response_type"] = service
+    response_add_parameter(r, "dataset", ds_id )
 
     execute_bycon_queries( ds_id, byc )
     query_results_save_handovers(byc)
 
     access_id = byc["query_results"]["vs._id"][ "id" ]
 
-    # TODO: 
-    if "callsetstats" in byc["method"]:
-        service = "callsets"
-        access_id = byc["query_results"]["cs._id"][ "id" ]
+    # # TODO: 
+    # if "callsetstats" in byc["method"]:
+    #     service = "callsets"
+    #     access_id = byc["query_results"]["cs._id"][ "id" ]
 
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
-        r["errors"].append( e )
+        response_add_error(r, e)
 
-    if len(r["errors"]) > 0:
-      cgi_print_json_response( byc["form_data"], r, 422 )
+    cgi_break_on_errors(r, byc)
 
-    for b_s in h_o_d:
+    results = [ ]
+
+    for v in h_o_d:
         s = { }
         for k in byc["these_prefs"]["methods"][ byc["method"] ]:
             # TODO: harmless hack
             if "." in k:
                 k1, k2 = k.split('.')
-                s[ k ] = b_s[ k1 ][ k2 ]
-            elif "start" in k or "end" in k:
-                s[ k ] = int(b_s[ k ])
-            elif k in b_s.keys():
-                s[ k ] = b_s[ k ]
-            else:
-                s[ k ] = None
-        r["data"].append( s )
+                s[ k ] = v[ k1 ][ k2 ]
+            elif k in v.keys():
+                if "start" in k or "end" in k:
+                    s[ k ] = int(v[ k ])
+                else:
+                    s[ k ] = v[ k ]
+            # else:
+            #     s[ k ] = None
+        results.append( s )
 
-    r[service+"_count"] = len(r["data"])
+    populate_service_response(r, results)
     cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################

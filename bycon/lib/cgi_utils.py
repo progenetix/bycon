@@ -79,6 +79,15 @@ def cgi_simplify_response(response):
 
 ################################################################################
 
+def cgi_break_on_errors(r, byc):
+
+    if "meta" in r and "form_data" in byc:
+        if "errors" in r:
+            if len(r["meta"]["errors"]) > 0:
+              cgi_print_json_response( byc["form_data"], r, 422 )
+
+################################################################################
+
 def cgi_print_json_response(form_data, response, status_code):
 
     r_f = ""

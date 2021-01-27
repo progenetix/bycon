@@ -58,13 +58,37 @@ def create_empty_service_response(byc):
     		r["meta"].update( { k: v } )
 
     if "errors" in byc:
-        if len(byc["errors"]) > 0:
-            r["meta"]["errors"].extend(byc["errors"])
+        response_add_error(r, byc["errors"])
 
     # saving the parameters to the response
     for p in ["method", "dataset_ids", "filters", "variant_pars"]:
         if p in byc:
-            r["meta"]["parameters"].append( { p: byc[ p ] } )
+            response_add_parameter(r, p, byc[ p ])
+
+    return r
+
+################################################################################
+
+def response_add_parameter(r, name, value):
+
+    r["meta"]["parameters"].append( { name: value } )
+
+    return r
+
+################################################################################
+
+def response_add_error(r, errors):
+
+    if len(errors) > 0:
+        r["meta"]["errors"].extend(errors)
+
+    return r
+
+################################################################################
+
+def response_append_result(r, result):
+
+    r["response"]["results"].append( result )
 
     return r
 
