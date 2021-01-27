@@ -231,6 +231,10 @@ def update_queries_from_variants( queries, byc ):
         v_q = create_variantAlleleRequest_query( byc["variant_request_type"], byc["variant_pars"] )
     elif "variantRangeRequest" in byc["variant_request_type"]:
         v_q = create_variantRangeRequest_query( byc["variant_request_type"], byc["variant_pars"] )
+    else:
+        return queries
+
+
 
     if len(query_lists[c_n]) > 0:
         v_q = { '$and': query_lists[c_n].append(v_q) }

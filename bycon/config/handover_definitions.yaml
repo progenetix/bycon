@@ -34,12 +34,12 @@ h->o_types:
     description: "retrieve variants matched by the query"
     h->o_key: 'vs._id'
     script_path_web: '/services/deliveries'
-  callsetsvariants:
-    id: 'pgx:handover:callsetsvariants'
-    label: "Callsets Variants"
-    description: "export all variants of matched callsets - potentially huge dataset..."
-    h->o_key: 'cs._id'
-    script_path_web: '/cgi-bin/beacondeliver.cgi'
+  # callsetsvariants:
+  #   id: 'pgx:handover:callsetvariants'
+  #   label: "Callsets Variants"
+  #   description: "export all variants of matched callsets - potentially huge dataset..."
+  #   h->o_key: 'cs._id'
+  #   script_path_web: '/services/deliveries'
   UCSClink:   
     id: 'pgx:handover:bedfile2ucsc'
     label: "Variants in UCSC"

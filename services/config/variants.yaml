@@ -14,9 +14,9 @@ methods:
   digests:
     - digest
   details:
-    - id
-    - description
-    - biocharacteristics
-    - external_references
-    - provenance
+    - digest
+    - reference_name
+    - start
+    - end
+    - variant_type
     - info

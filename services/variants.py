@@ -58,14 +58,15 @@ def variants(service):
 
     # saving the parameters to the response
     for p in ["method", "filters", "variant_pars"]:
-        r["parameters"].update( { p: byc[ p ] } )
+        if p in byc:
+            r["parameters"].update( { p: byc[ p ] } )
     r["parameters"].update( { "dataset": ds_id } )
     r["response_type"] = service
 
     execute_bycon_queries( ds_id, byc )
     query_results_save_handovers(byc)
 
-    access_id = byc["query_results"]["bs._id"][ "id" ]
+    access_id = byc["query_results"]["vs._id"][ "id" ]
 
     # TODO: 
     if "callsetstats" in byc["method"]:
@@ -87,6 +88,8 @@ def variants(service):
             if "." in k:
                 k1, k2 = k.split('.')
                 s[ k ] = b_s[ k1 ][ k2 ]
+            elif "start" in k or "end" in k:
+                s[ k ] = int(b_s[ k ])
             elif k in b_s.keys():
                 s[ k ] = b_s[ k ]
             else:
