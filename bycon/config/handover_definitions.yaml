@@ -11,7 +11,8 @@ h->o_types:
     label: "Biosamples"
     description: "retrieve data of the biosamples matched by the query"
     h->o_key: 'bs._id'
-    script_path_web: '/services/deliveries'
+    script_path_web: '/services/biosamples'
+    url_opts: "&responseFormat=simple"
   phenopackets:
     id: 'pgx:handover:phenopackets'
     label: "Phenopackets"
@@ -28,18 +29,21 @@ h->o_types:
     description: "retrieve data of the individuals matched by the query"
     h->o_key: 'is._id'
     script_path_web: '/services/deliveries'
+    url_opts: "&responseFormat=simple"
   variantsdata:
     id: 'pgx:handover:variantsdata'
-    label: "Variants"
+    label: "Found Variants"
     description: "retrieve variants matched by the query"
     h->o_key: 'vs._id'
-    script_path_web: '/services/deliveries'
-  # callsetsvariants:
-  #   id: 'pgx:handover:callsetvariants'
-  #   label: "Callsets Variants"
-  #   description: "export all variants of matched callsets - potentially huge dataset..."
-  #   h->o_key: 'cs._id'
-  #   script_path_web: '/services/deliveries'
+    script_path_web: '/services/variants'
+    url_opts: "&responseFormat=simple"
+  callsetsvariants:
+    id: 'pgx:handover:callsetsvariants'
+    label: "Callset Variants"
+    description: "export all variants of matched callsets - potentially huge dataset..."
+    h->o_key: 'cs._id'
+    script_path_web: '/services/variants'
+    url_opts: "&responseFormat=simple"
   UCSClink:   
     id: 'pgx:handover:bedfile2ucsc'
     label: "Variants in UCSC"

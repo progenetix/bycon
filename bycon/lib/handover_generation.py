@@ -40,16 +40,20 @@ def dataset_response_add_handovers(ds_id, **byc):
                 h_o_r = {
                     "handoverType": {
                         "id": h_o_defs[ "id" ],
-                        "label": h_o_defs[ "label" ],
+                        "label": "{}".format(h_o_defs[ "label" ]),
                     },
                     "description": h_o_defs[ "description" ],
                 }
+
+                url_opts = ""
+                if "url_opts" in h_o_defs:
+                    url_opts = h_o_defs["url_opts"]
 
                 if "bedfile" in h_o_defs[ "id" ]:
                     ucsc_pos = _write_variants_bedfile(h_o, **byc)
                     h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, h_o_t, accessid, ucsc_pos ) } )
                 else:
-                    h_o_r.update( { "url": _handover_create_url(this_server, h_o_defs, h_o_t, accessid) } )
+                    h_o_r.update( { "url": _handover_create_url(this_server, h_o_defs, h_o_t, accessid, url_opts) } )
 
                 # TODO: needs a new schema to accommodate this not as HACK ...
                 # the phenopackets URL needs matched variants, which it wouldn't know about ...
@@ -89,17 +93,13 @@ def _handover_select_server( **byc ):
 
 ################################################################################
 
-def _handover_create_url(h_o_server, h_o_defs, h_o_t, accessid):
+def _handover_create_url(h_o_server, h_o_defs, h_o_t, accessid, url_opts):
 
     if "script_path_web" in h_o_defs:
         server = h_o_server
         if "http" in h_o_defs["script_path_web"]:
             server = ""
-        # TODO: hacking deliveries to force simple list for interface => next
-        opts = ""
-        if "deliveries" in h_o_defs["script_path_web"]:
-            opts = "&responseFormat=simple"
-        return("{}{}?do={}&accessid={}{}".format(server, h_o_defs["script_path_web"], h_o_t, accessid, opts))
+        return("{}{}?do={}&accessid={}{}".format(server, h_o_defs["script_path_web"], h_o_t, accessid, url_opts))
 
     return ""
 

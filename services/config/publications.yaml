@@ -98,3 +98,4 @@ methods:
     - year
     - counts
     - provenance
+    - status
