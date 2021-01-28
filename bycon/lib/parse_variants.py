@@ -167,7 +167,7 @@ def create_variantAlleleRequest_query(variant_request_type, variant_pars):
         
     variant_query = { "$and": v_q_p}
 
-    return( variant_query )
+    return variant_query
 
 ################################################################################
 
@@ -182,10 +182,10 @@ def create_variantCNVrequest_query(variant_request_type, variant_pars):
         { "end": { "$gte": variant_pars[ "end" ][0] } },
         { "start": { "$gte": variant_pars[ "start" ][0] } },
         { "end": { "$lt": variant_pars[ "end" ][-1] } },
-        { "variant_type": variant_pars[ "variantType" ] }
+        create_and_or_query_for_parameter("variantType", "variant_type", "$or", variant_pars)
     ]}
 
-    return( variant_query )
+    return variant_query
 
 ################################################################################
 
@@ -216,30 +216,36 @@ def create_variantRangeRequest_query(variant_request_type, variant_pars):
 
 ################################################################################
 
-def create_query_from_variant_pars(**byc):
-        
-    queries = { }
-    query_lists = { }
-    for coll_name in byc[ "config" ][ "collections" ]:
-        query_lists[coll_name] = [ ]
- 
-    for filterv in byc[ "filters" ]:
-        pref = re.split('-|:', filterv)[0]
-        
-        if pref in byc["filter_definitions"]:
-            pref_defs = byc["filter_definitions"][pref]
-            if re.compile( pref_defs["pattern"] ).match(filterv):
-                for scope in pref_defs["scopes"]:
-                    m_scope = pref_defs["scopes"][scope]
-                    if m_scope["default"]:
-                        query_lists[ scope ].append( { pref_defs[ "db_key" ]: { "$regex": "^"+filterv } } )
+def create_and_or_query_for_list(logic, q_list):
 
-    for coll_name in byc[ "config" ][ "collections" ]:
-        if len(query_lists[coll_name]) == 1:
-            queries[ coll_name ] = query_lists[coll_name][0]
-        elif len(query_lists[coll_name]) > 1:
-            queries[ coll_name ] = { "$and": query_lists[coll_name] }
-        
-    return queries
+    if not isinstance(q_list, list):
+        return q_list
+
+    if not q_list:
+        return [ ]
+
+    if len(q_list) > 1:
+        return { boolish: q_list }
+
+    return q_list[0]
+
+################################################################################
+
+def create_and_or_query_for_parameter(par, qpar, logic, q_pars):
+
+    if not isinstance(q_pars[ par ], list):
+        return { qpar: q_pars[ par ] }
+
+    if not q_pars[ par ][0]:
+        return { }
+
+    if len(q_pars[ par ]) > 1:
+        v_t_l = [ ]
+        for v_t in q_pars[ par ]:
+            v_t_l.append( { qpar: v_t } )
+        return { logic: v_t_l }
+
+    return { qpar: q_pars[ par ][0] }
+
 
 ################################################################################
