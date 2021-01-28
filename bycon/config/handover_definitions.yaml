@@ -6,10 +6,16 @@ h->o_types:
     description: "create a CNV histogram from matched callsets"
     h->o_key: 'cs._id'
     script_path_web: '/cgi-bin/api_process.cgi'
-  biosamplesdata:
-    id: 'pgx:handover:biosamplesdata'
+  biosamples:
+    id: 'pgx:handover:biosamples'
     label: "Biosamples"
     description: "retrieve data of the biosamples matched by the query"
+    h->o_key: 'bs._id'
+    script_path_web: '/services/biosamples'
+  biosampleslist:
+    id: 'pgx:handover:biosampleslist'
+    label: "Biosamples"
+    description: "retrieve data of the biosamples matched by the query as simple JSON list"
     h->o_key: 'bs._id'
     script_path_web: '/services/biosamples'
     url_opts: "&responseFormat=simple"
@@ -30,20 +36,25 @@ h->o_types:
     h->o_key: 'is._id'
     script_path_web: '/services/deliveries'
     url_opts: "&responseFormat=simple"
-  variantsdata:
-    id: 'pgx:handover:variantsdata'
+  variantslist:
+    id: 'pgx:handover:variantslist'
+    label: "List of ound Variants"
+    description: "retrieve variants matched by the query as JSON list of variant objects"
+    h->o_key: 'vs._id'
+    script_path_web: '/services/variants'
+    url_opts: "&responseFormat=simple"
+  variants:
+    id: 'pgx:handover:variants'
     label: "Found Variants"
     description: "retrieve variants matched by the query"
     h->o_key: 'vs._id'
     script_path_web: '/services/variants'
-    url_opts: "&responseFormat=simple"
   callsetsvariants:
     id: 'pgx:handover:callsetsvariants'
     label: "Callset Variants"
     description: "export all variants of matched callsets - potentially huge dataset..."
     h->o_key: 'cs._id'
     script_path_web: '/services/variants'
-    url_opts: "&responseFormat=simple"
   UCSClink:   
     id: 'pgx:handover:bedfile2ucsc'
     label: "Variants in UCSC"

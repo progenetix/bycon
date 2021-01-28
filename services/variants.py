@@ -14,6 +14,7 @@ from lib.service_utils import *
 
 """podmd
 * <https://progenetix.org/services/variants/?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
+* <https://progenetix.test/services/variants/?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus&deliveryKeys=reference_name,start,end>
 podmd"""
 
 ################################################################################
@@ -40,14 +41,7 @@ def variants(service):
     generate_queries(byc)
 
     r = create_empty_service_response(byc)
-
-    # TODO: move somewhere
-    if not byc[ "queries" ].keys():
-      response_add_error(r, "No (correct) query parameters were provided." )
-    if len(byc[ "dataset_ids" ]) < 1:
-      response_add_error(r, "No `datasetIds` parameter provided." )
-    if len(byc[ "dataset_ids" ]) > 1:
-      response_add_error(r, "More than 1 `datasetIds` value was provided." )
+    response_collect_errors(r, byc)
     cgi_break_on_errors(r, byc)
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
@@ -58,11 +52,6 @@ def variants(service):
 
     access_id = byc["query_results"]["vs._id"][ "id" ]
 
-    # # TODO: 
-    # if "callsetstats" in byc["method"]:
-    #     service = "callsets"
-    #     access_id = byc["query_results"]["cs._id"][ "id" ]
-
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
@@ -70,25 +59,7 @@ def variants(service):
 
     cgi_break_on_errors(r, byc)
 
-    results = [ ]
-
-    for v in h_o_d:
-        s = { }
-        for k in byc["these_prefs"]["methods"][ byc["method"] ]:
-            # TODO: harmless hack
-            if "." in k:
-                k1, k2 = k.split('.')
-                s[ k ] = v[ k1 ][ k2 ]
-            elif k in v.keys():
-                if "start" in k or "end" in k:
-                    s[ k ] = int(v[ k ])
-                else:
-                    s[ k ] = v[ k ]
-            # else:
-            #     s[ k ] = None
-        results.append( s )
-
-    populate_service_response(r, results)
+    populate_service_response(r, response_map_results(h_o_d, byc))
     cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################

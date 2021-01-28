@@ -47,19 +47,12 @@ def phenopackets(service):
     generate_queries(byc)
 
     r = create_empty_service_response(byc)    
-
-    # TODO: move somewhere
-    if not byc[ "queries" ].keys():
-      r["meta"]["errors"].append( "No (correct) query parameters were provided." )
-    if len(byc[ "dataset_ids" ]) < 1:
-      r["meta"]["errors"].append( "No `datasetIds` parameter provided." )
-    if len(byc[ "dataset_ids" ]) > 1:
-      r["meta"]["errors"].append( "More than 1 `datasetIds` value were provided." )
-    if len(r["meta"]["errors"]) > 0:
-      cgi_print_json_response( byc["form_data"], r, 422 )
+    response_collect_errors(r, byc)
+    cgi_break_on_errors(r, byc)
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
-
+    response_add_parameter(r, "dataset", ds_id )
+    
     execute_bycon_queries( ds_id, byc )
     query_results_save_handovers(byc)
 
@@ -68,7 +61,7 @@ def phenopackets(service):
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
-        r["meta"]["errors"].append( e )
+        response_add_error(r, e)
 
     access_id_ind = byc["query_results"]["is._id"][ "id" ]
     ind_s = [ ]

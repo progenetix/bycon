@@ -35,12 +35,6 @@ def publications(service):
 
     byc = initialize_service(service)
 
-    # the method keys can be overriden with "deliveryKeys"
-    d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
-    if len(d_k) < 1:
-        if not "all" in byc["method"]:
-            d_k = byc["these_prefs"]["methods"][ byc["method"] ]
-
     get_filter_flags(byc)
     parse_filters(byc)
 
@@ -49,22 +43,22 @@ def publications(service):
     # data retrieval & response population
     query, error = _create_filters_query( **byc )
     if len(error) > 1:
-        r["meta"]["errors"].append( error )
-
+        response_add_error(r, error )
 
     geo_q, geo_pars = geo_query( **byc )
 
     if geo_q:
         for g_k, g_v in geo_pars.items():
-            r["meta"]["parameters"].append( { g_k: g_v })
+            response_add_parameter(r, g_k, g_v)
         if len(query.keys()) < 1:
             query = geo_q
         else:
             query = { '$and': [ geo_q, query ] }
 
     if len(query.keys()) < 1:
-        r["meta"]["errors"].append( "No query could be constructed from the parameters provided." )
-        cgi_print_json_response( byc["form_data"], r, 422 )
+        response_add_error(r, "No query could be constructed from the parameters provided." )
+
+    cgi_break_on_errors(r, byc)
 
     mongo_client = MongoClient( )
     pub_db = byc["config"]["info_db"]
@@ -73,6 +67,8 @@ def publications(service):
     p_re = re.compile( byc["filter_definitions"]["PMID"]["pattern"] )
 
     p_l = [ ]
+    d_k = response_set_delivery_keys(byc)
+    
     for pub in mongo_coll.find( query, { "_id": 0 } ):
         s = { }
         if len(d_k) < 1:

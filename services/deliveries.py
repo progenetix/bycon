@@ -37,91 +37,88 @@ def deliveries(service):
 
     byc = initialize_service(service)
 
-    # response prototype
-    r = byc[ "config" ]["response_object_schema"]
+    r = create_empty_service_response(byc)
 
     q_par = ""
-
-    for p in ( "id", "_id", "accessid"):
+    for p in byc["these_prefs"]["query_keys"]:
         if p in  byc["form_data"]:
-            v = byc["form_data"].getvalue( p )
-            r["parameters"].update( { p: v } )
-            r.update( { "errors": [ ] } )
+            q_val = byc["form_data"].getvalue( p )
+            response_add_parameter(r, p, q_val)
+            # last one is kept
             q_par = p
-
-    if len(r["errors"]) > 0:
-        cgi_print_json_response( byc["form_data"], r, 422 )
 
     # TODO: sub & clean upp etc.
     if not "accessid" in q_par:
 
         select_dataset_ids(byc)
         if not len(byc["dataset_ids"]) == 1:
-            r["errors"].append( "Not exactly one datasetIds item specified." )
+            response_add_error(r, "Not exactly one datasetIds item specified." )
         else:
             ds_id = byc["dataset_ids"][0]
             if not ds_id in byc["config"]["dataset_ids"]:
-                r["errors"].append( "Not exactly one datasetIds item specified." )
-
-        if len(r["errors"]) > 0:
-            cgi_print_json_response( byc["form_data"], r, 422 )
+                response_add_error(r, "Not exactly one datasetIds item specified." )
 
         if not "collection" in byc["form_data"]:
-            r["errors"].append( "No data collection specified." )
-            cgi_print_json_response( byc["form_data"], r, 422 )
+            response_add_error(r, "No data collection specified." )
+
+        cgi_break_on_errors(r, byc)
 
         coll = byc["form_data"].getvalue( "collection" )
         if not coll in byc["config"]["collections"]:
-            r["errors"].append( f"Collection {coll} is not specified in preferences." )
-            cgi_print_json_response( byc["form_data"], r, 422 )
+            response_add_error(r, f"Collection {coll} is not specified in preferences." )
 
-        q = { q_par: r["parameters"][ q_par ] }
+        cgi_break_on_errors(r, byc)
+
+        q = { q_par: q_val }
         if "_id" in q_par:
             q = { "$or": [
-                    { q_par: r["parameters"][ q_par ] },
-                    { q_par: ObjectId( r["parameters"][ q_par ] ) }
+                    { q_par: q_val },
+                    { q_par: ObjectId( q_val ) }
                 ] }
 
         mongo_client = MongoClient()
-        r.update( { "data": mongo_client[ ds_id][ coll ].find_one( q ) } )
+        results = [ mongo_client[ ds_id][ coll ].find_one( q ) ]
         mongo_client.close()
 
-        r["parameters"].update( { "collection": coll } )
-        r["parameters"].update( { "datasetId": ds_id } )
-        r["response_type"] = coll
-        if not r["data"]:
-            r["errors"].append( "No data found under this {}: {}!".format(q_par, r["parameters"][ q_par ] ) )
-            cgi_print_json_response( byc["form_data"], r, 422 )
+        response_add_parameter(r, "collection", coll )
+        response_add_parameter(r, "datasetId", ds_id )
+
+        if not results:
+            response_add_error(r, "No data found under this {}: {}!".format(q_par, q_val) )
+
+        cgi_break_on_errors(r, byc)
+        populate_service_response(r, results)
         cgi_print_json_response( byc["form_data"], r, 200 )
 
     ############################################################################
     # continuing with default -> accessid
     ############################################################################
 
-    access_id = r["parameters"][ q_par ]
+    access_id = q_par
 
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
 
     if e:
-        r["errors"].append( e )
-        cgi_print_json_response( byc["form_data"], r, 422 )
+        response_add_error(r, e)
 
-    r["parameters"].update( { "collection": h_o["target_collection"] } )
-    r["parameters"].update( { "datasetId": h_o["source_db"] } )
-    r["response_type"] = h_o["target_collection"]
+    response_add_parameter(r, "collection", h_o["target_collection"] )
+    response_add_parameter(r, "datasetId", h_o["source_db"] )
+    # r["response_type"] = h_o["target_collection"]
 
+    results = [ ]
     if len(d_k) > 0:
         for d in h_o_d:
             d_n = { }
             for k in d_k:
                 if k in d:
                     d_n[ k ] = d[ k ]
-            r["data"].append(d_n)
+            results.append(d_n)
     else:
-        r["data"] = h_o_d
+        results = h_o_d
 
+    populate_service_response(r, results)
     cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################

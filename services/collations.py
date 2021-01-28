@@ -36,26 +36,21 @@ def collations(service):
 
     byc = initialize_service(service)
 
-    # the method keys can be overriden with "deliveryKeys"
-    d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
-    if len(d_k) < 1:
-        d_k = byc["these_prefs"]["methods"][ byc["method"] ]
-
     select_dataset_ids(byc)
     parse_filters(byc)
 
     r = create_empty_service_response(byc)    
 
-    # TODO: move somewhere
     if len(byc[ "dataset_ids" ]) < 1:
-      r["meta"]["errors"].extend( "No `datasetIds` parameter provided." )
-    if len(r["meta"]["errors"]) > 0:
-      cgi_print_json_response( byc["form_data"], r, 422 )
+      response_add_error(r, "No `datasetIds` parameter provided." )
+ 
+    cgi_break_on_errors(r, byc)
 
     # data retrieval & response population
-    mongo_client = MongoClient( )
     s_s = { }
+    d_k = response_set_delivery_keys(byc)
 
+    mongo_client = MongoClient( )
     for ds_id in byc[ "dataset_ids" ]:
         mongo_db = mongo_client[ ds_id ]
         for f in byc[ "filters" ]:
@@ -90,9 +85,7 @@ def collations(service):
 
     mongo_client.close( )
 
-    results = list(s_s.values())
-
-    populate_service_response(r, results)
+    populate_service_response(r, response_map_results( list(s_s.values()), byc))
     cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################

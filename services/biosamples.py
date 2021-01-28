@@ -42,14 +42,7 @@ def biosamples(service):
     generate_queries(byc)
 
     r = create_empty_service_response(byc)
-
-    # TODO: move somewhere
-    if not byc[ "queries" ].keys():
-      response_add_error(r, "No (correct) query parameters were provided." )
-    if len(byc[ "dataset_ids" ]) < 1:
-      response_add_error(r, "No `datasetIds` parameter provided." )
-    if len(byc[ "dataset_ids" ]) > 1:
-      response_add_error(r, "More than 1 `datasetIds` value was provided." )
+    response_collect_errors(r, byc)
     cgi_break_on_errors(r, byc)
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
@@ -72,22 +65,7 @@ def biosamples(service):
 
     cgi_break_on_errors(r, byc)
 
-    results = [ ]
-
-    for b_s in h_o_d:
-        s = { }
-        for k in byc["these_prefs"]["methods"][ byc["method"] ]:
-            # TODO: harmless hack
-            if "." in k:
-                k1, k2 = k.split('.')
-                s[ k ] = b_s[ k1 ][ k2 ]
-            elif k in b_s.keys():
-                s[ k ] = b_s[ k ]
-            else:
-                s[ k ] = None
-        results.append( s )
-
-    populate_service_response(r, results)
+    populate_service_response(r, response_map_results(h_o_d, byc))
     cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################

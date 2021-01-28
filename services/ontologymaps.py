@@ -34,13 +34,9 @@ def ontologymaps(service):
 
     byc = initialize_service(service)
 
-    for d in ["filter_definitions"]:
-        read_bycon_configs_by_name( d, byc )
-
     parse_filters(byc)
     get_filter_flags(byc)
 
-    # response prototype
     r = create_empty_service_response(byc)    
  
     q_list = [ ]
@@ -58,8 +54,9 @@ def ontologymaps(service):
                     else:
                         q_list.append( { byc["query_field"]: f } )
     if len(q_list) < 1:
-        r["meta"]["errors"].append("No correct filter value provided!")
-        cgi_print_json_response( byc["form_data"], r, 422 )
+        response_add_error(r, "No correct filter value provided!")
+
+    cgi_break_on_errors(r, byc)
 
     if len(q_list) > 1:
         query = { '$and': q_list }
@@ -83,12 +80,9 @@ def ontologymaps(service):
     mongo_client.close( )
 
     results =  [ { "term_groups": c_g, "unique_terms": u_c } ]
-    r_no = len(results[0]["term_groups"])
-    r["response"]["info"]["count"] = r_no
-    if r_no > 0:
-        r["response"]["exists"] = True
-        r["response"]["results"] = results
 
+    populate_service_response(r, results)
+    r["response"]["info"]["count"] = len(results[0]["term_groups"])
     cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################

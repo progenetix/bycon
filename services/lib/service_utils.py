@@ -7,7 +7,7 @@ lib_path = path.dirname( path.abspath(__file__) )
 dir_path = path.join( lib_path, pardir )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import cgi_parse_query
+from bycon.lib.cgi_utils import cgi_parse_query,form_return_listvalue
 from bycon.lib.read_specs import read_bycon_configs_by_name,read_local_prefs
 from byconeer.lib.schemas_parser import *
 
@@ -77,6 +77,18 @@ def response_add_parameter(r, name, value):
 
 ################################################################################
 
+def response_collect_errors(r, byc):
+
+    # TODO: flexible list of errors
+    if not byc[ "queries" ].keys():
+      response_add_error(r, "No (correct) query parameters were provided." )
+    if len(byc[ "dataset_ids" ]) < 1:
+      response_add_error(r, "No `datasetIds` parameter provided." )
+    if len(byc[ "dataset_ids" ]) > 1:
+      response_add_error(r, "More than 1 `datasetIds` value was provided." )
+      
+################################################################################
+
 def response_add_error(r, errors):
 
     if len(errors) > 0:
@@ -91,6 +103,47 @@ def response_append_result(r, result):
     r["response"]["results"].append( result )
 
     return r
+
+################################################################################
+
+def response_set_delivery_keys(byc):
+
+    # the method keys can be overriden with "deliveryKeys"
+    d_k = [ ]
+    if "deliveryKeys" in byc["form_data"]:
+        d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
+    elif byc["method"] in byc["these_prefs"]["methods"]:
+        d_k = byc["these_prefs"]["methods"][ byc["method"] ]
+
+    return d_k
+
+################################################################################
+
+def response_map_results(data, byc):
+
+    # the method keys can be overriden with "deliveryKeys"
+    d_k = response_set_delivery_keys(byc)
+
+    if len(d_k) < 1:
+        return data
+
+    results = [ ]
+
+    for res in data:
+        s = { }
+        for k in d_k:
+            # TODO: cleanup and add types in config ...
+            if "." in k:
+                k1, k2 = k.split('.')
+                s[ k ] = res[ k1 ][ k2 ]
+            elif k in res.keys():
+                if "start" in k or "end" in k:
+                    s[ k ] = int(res[ k ])
+                else:
+                    s[ k ] = res[ k ]
+        results.append( s )
+
+    return results
 
 ################################################################################
 

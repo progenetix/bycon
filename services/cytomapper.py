@@ -16,17 +16,6 @@ from bycon.lib.read_specs import *
 from lib.cytoband_utils import *
 from lib.service_utils import *
 
-"""podmd
-
-#### TODO
-
-* fallback to info / documentation
-* better error capture & documentation (e.g. wrong assemblies ...)
-* warning about / correcting wrong cytoband syntax (e.g. *not* "17p11p12" *but* "17p12p11")
-* species mapping from assembly id
-
-podmd"""
-
 ################################################################################
 ################################################################################
 ################################################################################
@@ -74,12 +63,10 @@ def cytomapper(service):
 
     cb_label = _cytobands_label( cytoBands )
 
-    r.update( { "parameters": byc["variant_pars"] } )
- 
     if len( cytoBands ) < 1:
-        r["meta"]["errors"].append( "No matching cytobands!" )
+        response_add_error(r, "No matching cytobands!" )
         _print_terminal_response( byc["args"], r )
-        cgi_print_json_response( byc["form_data"], r, 422 )
+        cgi_break_on_errors(r, byc)
 
     size = int(  end - start )
     chroBases = chro+":"+str(start)+"-"+str(end)

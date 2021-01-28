@@ -1,0 +1,8 @@
+meta:
+  response_type: deliveries
+  info: >
+    Deliveries can be in any of the core data schemas.
+query_keys:
+  - _id
+  - id
+  - accessid
