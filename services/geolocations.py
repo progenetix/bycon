@@ -10,7 +10,7 @@ from pymongo import MongoClient
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response
+from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response,cgi_break_on_errors
 from bycon.lib.read_specs import read_bycon_configs_by_name
 from bycon.lib.query_generation import geo_query
 from bycon.lib.query_execution import mongo_result_list

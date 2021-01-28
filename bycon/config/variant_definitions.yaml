@@ -23,7 +23,7 @@ parameters:
 
   variantType:
     type: string
-    pattern: '^((:?DUP)|(:?DEL)|(:?BND)|(:?INS)|(:?INV)|(:?CNV)|(:?INDEL)|(:?SNP)|(:?SNV))$'
+    pattern: '^((:?DUP)|(:?DEL)|(:?BND)|(:?LOH)|(:?INS)|(:?INV)|(:?CNV)|(:?INDEL)|(:?SNP)|(:?SNV))$'
 
   start:
     type: array
@@ -46,10 +46,6 @@ parameters:
   chroBases:
     pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
     type: string
-
-  rangeTag:
-    type: string
-    pattern: 'true'
 
 BeaconRequestTypes:
 

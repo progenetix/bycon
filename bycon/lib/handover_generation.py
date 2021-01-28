@@ -149,7 +149,7 @@ def _write_variants_bedfile(h_o, **byc):
     accessid = h_o["id"]
     bed_file = path.join( *byc["config"][ "paths" ][ "web_temp_dir_abs" ], h_o["id"]+'.bed' )
 
-    vs = { "DUP": [ ], "DEL": [ ], "SNV": [ ]}
+    vs = { "DUP": [ ], "DEL": [ ], "LOH": [ ], "SNV": [ ]}
 
     data_client = MongoClient( )
     data_db = data_client[ ds_id ]
@@ -163,6 +163,8 @@ def _write_variants_bedfile(h_o, **byc):
                 vs["DUP"].append(v)
             elif  v["variant_type"] == "DEL":
                 vs["DEL"].append(v)
+            elif  v["variant_type"] == "LOH":
+                vs["LOH"].append(v)
         elif "reference_bases" in v:
             vs["SNV"].append(v)
 

@@ -944,6 +944,7 @@ components:
             * DUP: duplication of sequence following `start`; not necessarily in
             situ
             * DEL: deletion of sequence following `start`
+            * LOH: loss of heterozygosity, with or without copy number change
             * BND: breakend, i.e. termination of the allele at position
                   `start` or in the `startMin` => `startMax` interval, or fusion
                   of the sequence to distant partner
