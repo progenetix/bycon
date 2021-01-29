@@ -90,25 +90,17 @@ def get_variant_request_type(byc):
     v_p_defs = byc["variant_definitions"]["parameters"]
     g_v_defs = byc["variant_definitions"]["BeaconRequestTypes"]["g_variant"]
 
-    # TODO: The first test here is for the hard-coded g_variants types which
-    # are still pretty much in testing...
-    rts = byc["form_data"].getvalue("requestType")
-
-    if rts in g_v_defs.keys():
-        brts = g_v_defs
-        brts_k = [ rts ]
-    else:
-        brts = byc["variant_definitions"]["request_types"]
-        brts_k = brts.keys()
-        # HACK: setting to range request to override possible CNV match
-        # i.e. if precise, single start and end values are provided without
-        # explicit requestType => a range query w/ any overlap is assumed
-        if "start" in v_pars:
-            if v_pars[ "start" ][1] == v_pars[ "start" ][0] + 1:
-                if v_pars[ "end" ][1] == v_pars[ "end" ][0] + 1:
-                    if "referenceName" in v_pars:
-                        if "assemblyId" in v_pars:
-                            brts_k = [ "variantRangeRequest" ]
+    brts = byc["variant_definitions"]["request_types"]
+    brts_k = brts.keys()
+    # HACK: setting to range request to override possible CNV match
+    # i.e. if precise, single start and end values are provided without
+    # explicit requestType => a range query w/ any overlap is assumed
+    if "start" in v_pars:
+        if v_pars[ "start" ][1] == v_pars[ "start" ][0] + 1:
+            if v_pars[ "end" ][1] == v_pars[ "end" ][0] + 1:
+                if "referenceName" in v_pars:
+                    if "assemblyId" in v_pars:
+                        brts_k = [ "variantRangeRequest" ]
 
     vrt_matches = [ ]
 

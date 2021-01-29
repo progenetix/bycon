@@ -14,7 +14,7 @@ sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import *
 from bycon.lib.parse_filters import *
 from bycon.lib.read_specs import *
-from bycon.lib.query_generation import geo_query
+from bycon.lib.query_generation import geo_query, create_and_or_query_for_list
 from lib.service_utils import *
 
 """podmd
@@ -114,7 +114,7 @@ def _create_filters_query( **byc ):
     query = { }
     error = ""
 
-    query_list = [ ]
+    q_list = [ ]
     count_pat = re.compile( r'^(\w+?)\:([>=<])(\d+?)$' )
 
     for f in byc[ "filters" ]:
@@ -132,16 +132,13 @@ def _create_filters_query( **byc ):
             else:
                 error = "uncaught filter error: {}".format(f)
                 continue
-            query_list.append( { dbk: { op: int(no) } } )
+            q_list.append( { dbk: { op: int(no) } } )
         elif "start" in byc[ "filter_flags" ][ "precision" ] or len(pre_code) == 1:
-            query_list.append( { "id": re.compile(r'^'+f ) } )
+            q_list.append( { "id": re.compile(r'^'+f ) } )
         else:
-            query_list.append( { "id": f } )            
+            q_list.append( { "id": f } )            
 
-    if len(query_list) > 1:
-        query = { '$and': query_list }
-    else:
-        query = query_list[0]
+    query = create_and_or_query_for_list('$and', q_list)
 
     return query, error
 

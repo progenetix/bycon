@@ -58,10 +58,7 @@ def ontologymaps(service):
 
     cgi_break_on_errors(r, byc)
 
-    if len(q_list) > 1:
-        query = { '$and': q_list }
-    else:
-        query = q_list[0]
+    query = create_and_or_query_for_list('$and', q_list)
 
     c_g = [ ]
     u_c_d = { }

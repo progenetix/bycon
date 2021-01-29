@@ -12,6 +12,7 @@ pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import *
 from bycon.lib.read_specs import *
+from bycon.lib.query_generation import create_and_or_query_for_list
 from bycon.lib.query_execution import mongo_result_list
 from lib.service_utils import *
 
@@ -35,7 +36,7 @@ def genespans(service):
         
     r = create_empty_service_response(byc)
 
-    assembly_id = byc["these_prefs"]["defaults"]["assembly_id"]
+    assembly_id = byc["assembly_id"]
     if "assemblyId" in byc[ "form_data" ]:
         aid = byc[ "form_data" ].getvalue("assemblyId")
         if aid in byc["these_prefs"]["assembly_ids"]:
@@ -58,14 +59,12 @@ def genespans(service):
     # query options may be expanded - current list + sole gene_id is a bit odd
     # TODO: positional query
     q_list = [ ]
-    for q_f in byc["these_prefs"]["defaults"]["query_fields"]:
+    for q_f in byc["query_fields"]:
         q_list.append( { q_f: re.compile( r'^'+gene_id, re.IGNORECASE ) } )
-    if len(q_list) > 1:
-        query = { '$and': q_list }
-    else:
-        query = q_list[0]
 
-    results, error = mongo_result_list( byc["these_prefs"]["defaults"]["db"], byc["these_prefs"]["defaults"]["coll"], query, { '_id': False } )
+    query = create_and_or_query_for_list('$and', q_list)
+
+    results, error = mongo_result_list( byc["db"], byc["coll"], query, { '_id': False } )
     if error:
         response_add_error(r, error)
 
