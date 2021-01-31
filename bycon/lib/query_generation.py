@@ -20,7 +20,7 @@ def generate_queries(byc):
     q_s = purge_empty_queries( q_s, byc )
 
     byc.update( { "queries": q_s } )
-    
+
     return byc
 
 ################################################################################

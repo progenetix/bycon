@@ -1,3 +1,4 @@
+<!--podmd-->
 ## _collations_
 
 * provides access to information about data "subsets" in the Progenetix project
@@ -24,3 +25,5 @@ databases
 * <http://progenetix.org/cgi-bin/bycon/bin/collations.py?filters=NCIT&datasetIds=progenetix&method=counts>
 * <http://progenetix.org/services/collations?filters=PMID&datasetIds=progenetix&method=counts&callback=4445-9938-cbat-9891-kllt>
 * <https://progenetix.org/services/collations?filters=icdom&method=codes&responseType=text>
+
+<!--/podmd-->

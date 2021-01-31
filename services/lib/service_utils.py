@@ -91,8 +91,12 @@ def response_collect_errors(r, byc):
 
 def response_add_error(r, errors):
 
-    if len(errors) > 0:
-        r["meta"]["errors"].extend(errors)
+    if isinstance(errors, list):
+        if len(errors) > 0:
+            r["meta"]["errors"].extend(errors)
+    else:
+        if len(errors) > 0:
+            r["meta"]["errors"].append(errors)
 
     return r
 

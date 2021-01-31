@@ -61,12 +61,12 @@ def parse_variants(byc):
                     v_p = int( v_p )
                 v_p_c[ p_k ] = v_p
 
-    # TODO: this is meant to accommodate the "<end" interbase matches; 
-    # should probably be more systematic
-    for k in [ "start", "end" ]:
-        if k in v_p_c:
-            if len(v_p_c[ k ]) == 1:
-                v_p_c[ k ].append( v_p_c[ k ][0] + 1 )
+    # # TODO: this is meant to accommodate the "<end" interbase matches; 
+    # # should probably be more systematic
+    # for k in [ "start", "end" ]:
+    #     if k in v_p_c:
+    #         if len(v_p_c[ k ]) == 1:
+    #             v_p_c[ k ].append( v_p_c[ k ][0] + 1 )
 
     byc.update( { "variant_pars": v_p_c } )
 
@@ -92,15 +92,12 @@ def get_variant_request_type(byc):
 
     brts = byc["variant_definitions"]["request_types"]
     brts_k = brts.keys()
-    # HACK: setting to range request to override possible CNV match
-    # i.e. if precise, single start and end values are provided without
-    # explicit requestType => a range query w/ any overlap is assumed
-    if "start" in v_pars:
-        if v_pars[ "start" ][1] == v_pars[ "start" ][0] + 1:
-            if v_pars[ "end" ][1] == v_pars[ "end" ][0] + 1:
-                if "referenceName" in v_pars:
-                    if "assemblyId" in v_pars:
-                        brts_k = [ "variantRangeRequest" ]
+    
+    # HACK: setting to range request if start and end with one value
+    if "start" in v_pars and "end" in v_pars:
+        if len(v_pars[ "start" ]) == 1:
+            if len(v_pars[ "end" ]) == 1:
+                brts_k = [ "variantRangeRequest" ]
 
     vrt_matches = [ ]
 
@@ -118,7 +115,8 @@ def get_variant_request_type(byc):
         for required in brts[vrt][ "all_of" ]:
             if required in v_pars:
                 matched_par_no += 1
-            # print("{} {} of {}".format(vrt, matched_par_no, needed_par_no))
+        
+        # print("{} {} of {}".format(vrt, matched_par_no, needed_par_no))
 
         if matched_par_no >= needed_par_no:
             vrt_matches.append( { "type": vrt, "par_no": matched_par_no } )
@@ -194,7 +192,8 @@ def create_variantRangeRequest_query(variant_request_type, variant_pars):
     ]
 
     if "variantType" in variant_pars:
-        v_q_l.append( { "variant_type": variant_pars[ "variantType" ] } )
+        v_q_l.append(         create_and_or_query_for_parameter("variantType", "variant_type", "$or", variant_pars)
+ )
     elif "alternateBases" in variant_pars:
         # the N wildcard stands for any length alt bases so can be ignored
         if not variant_pars[ "alternateBases" ] == "N":

@@ -114,6 +114,11 @@ BeaconRequestTypes:
         - referenceName
         - start
         - end
+      limits:
+        start:
+          items: 1
+        end:
+          items: 1
       optional:
         - variantType
         - referenceBases

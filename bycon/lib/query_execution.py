@@ -118,7 +118,7 @@ def execute_bycon_queries(ds_id, byc):
             prevars["method"] = "vs.bsid->bs.id"
             prevars["query"] = exe_queries[ "variants" ]
             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
-              
+
             if "bs.id" in prefetch:
                 bsids = list( set( prefetch["bs.id"]["target_values"] ) & set( prefetch["vs.bsid->bs.id"]["target_values"] ) )
                 prefetch[ "bs.id" ].update( { "target_values": bsids, "target_count": len(bsids) } )
@@ -133,6 +133,8 @@ def execute_bycon_queries(ds_id, byc):
             prevars["method"] = "vs.digest"
             prevars["query"] = { "_id": { "$in": prefetch[ "vs._id" ]["target_values"] } }
             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+
+            # print(prefetch["vs.digest"]["target_values"])
 
 
 

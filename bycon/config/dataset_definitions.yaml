@@ -63,7 +63,26 @@ cellosaurus:
       - biosamples
       - phenopackets
       - individualsdata
-      - variantsdata
+      - variants
+      - variantslist
+      - callsetsvariants
+      - UCSClink
+
+1000genomesDRAGEN:
+    id: 1000genomesDRAGEN
+    name: 1000genomesDRAGEN
+    identifier: 'org.progenetix::1000genomesDRAGEN'
+    description: "1000 genomes DRAGEN analysis CNV dataset"
+    variantCount: 1
+    assemblyId: 'GRCh38'
+    createDateTime: 2021-01-29
+    updateDateTime: 2021-01-29
+    info:
+      authorized: true
+      accessType: PUBLIC
+    handoverTypes:
+      - variants
+      - variantslist
       - callsetsvariants
       - UCSClink
 

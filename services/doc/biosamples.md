@@ -1,3 +1,4 @@
+<!--podmd-->
 ## _biosamples_ Service
 
 This endpoint is mostly aimed at providing _biosamples_ handover functionality. 
@@ -27,3 +28,4 @@ application.
 * <http://progenetix.org/services/biosamples?datasetIds=progenetix&filterLogic=OR&filters=NCIT:C7376,NCIT:C45665,NCIT:C45655,NCIT:C45655&method=ids>
 
 
+<!--/podmd-->

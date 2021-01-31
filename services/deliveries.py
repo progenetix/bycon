@@ -51,11 +51,12 @@ def deliveries(service):
     if not "accessid" in q_par:
 
         select_dataset_ids(byc)
+
         if not len(byc["dataset_ids"]) == 1:
             response_add_error(r, "Not exactly one datasetIds item specified." )
         else:
             ds_id = byc["dataset_ids"][0]
-            if not ds_id in byc["config"]["dataset_ids"]:
+            if not ds_id in byc["dataset_definitions"]:
                 response_add_error(r, "Not exactly one datasetIds item specified." )
 
         if not "collection" in byc["form_data"]:

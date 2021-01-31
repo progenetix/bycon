@@ -12,11 +12,6 @@ sys.path.append( pkg_path )
 from bycon.lib import *
 from lib.service_utils import *
 
-"""podmd
-* <https://progenetix.org/services/variants/?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
-* <https://progenetix.test/services/variants/?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus&deliveryKeys=reference_name,start,end>
-podmd"""
-
 ################################################################################
 ################################################################################
 ################################################################################

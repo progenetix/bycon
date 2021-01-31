@@ -16,10 +16,6 @@ from bycon.lib.query_generation import create_and_or_query_for_list
 from bycon.lib.query_execution import mongo_result_list
 from lib.service_utils import *
 
-"""podmd
-* <https://progenetix.org/services/genespans?geneId=CDKN2>
-podmd"""
-
 ################################################################################
 ################################################################################
 ################################################################################
