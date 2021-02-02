@@ -81,6 +81,7 @@ cellosaurus:
       authorized: true
       accessType: PUBLIC
     handoverTypes:
+      - biosamples
       - variants
       - variantslist
       - callsetsvariants

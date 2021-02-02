@@ -192,14 +192,11 @@ def create_variantRangeRequest_query(variant_request_type, variant_pars):
     ]
 
     if "variantType" in variant_pars:
-        v_q_l.append(         create_and_or_query_for_parameter("variantType", "variant_type", "$or", variant_pars)
- )
+        v_q_l.append( create_and_or_query_for_parameter("variantType", "variant_type", "$or", variant_pars) )
     elif "alternateBases" in variant_pars:
         # the N wildcard stands for any length alt bases so can be ignored
         if not variant_pars[ "alternateBases" ] == "N":
             v_q_l.append( { "alternate_bases": variant_pars[ "alternateBases" ] } )
-    else:
-        return
 
     variant_query = { "$and": v_q_l }
 

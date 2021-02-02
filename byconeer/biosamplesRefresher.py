@@ -108,7 +108,7 @@ def main():
 
             cs_ids = [ ]
             cnv_stats = { }
-            cnvstatistics = byc["refreshing"]["cnvstatistics"].copy()
+            cnvstatistics = {k:[] for k in byc["refreshing"]["cnvstatistics"]}
             cs_query = { "biosample_id": s["id"] }
             for cs in cs_coll.find( cs_query ):
                 cs_ids.append(cs["id"])
