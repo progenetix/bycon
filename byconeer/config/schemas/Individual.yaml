@@ -1,5 +1,5 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/Individual/v2020-12-08
+"$id": https://progenetix.org/services/schemas/Individual/v2021-02-05
 title: Individual
 properties:
   id:
