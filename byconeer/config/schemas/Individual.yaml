@@ -4,34 +4,62 @@ title: Individual
 properties:
   id:
     type: string
+    description: >
+      The resource-local identifier for this individual.
     examples:
       - pgxind-kftx25eh
   description:
     type: string
     examples:
       - HapMap project contributor
-  karyotypicSex:
+  genotypicSex:
     "$ref": OntologyClass.yaml#/properties
+    examples:
+      - id: PATO:0020002
+        label: female genotypic sex
+      - id: PATO:0020001
+        label: male genotypic sex
+  karyotypicSex:
+    description: >
+      Chromosomal sex of an individual as being used by Phenopackets. Following the definition there
+    type: string
+    enum:
+      - UNKNOWN_KARYOTYPE
+      - XX
+      - XY
+      - XO
+      - XXY
+      - XXX
+      - XXYY
+      - XXXY
+      - XXXX
+      - XYY
+      - OTHER_KARYOTYPE
   dateOfBirth:
     type: string
     format: date-time
+    examples:
+      - 1967-11-11
+      - 2002-09-21
   biocharacteristics:
     type: array
     items:
       "$ref": OntologyClass.yaml#/properties
     examples:
-      - - id: NCIT:C142079
-          label: Limb-girdle muscular dystrophy type 2A
-        - id: NCIT:C3969
-          label: Xeroderma pigmentosum, complementation group G
+      - id: NCIT:C142079
+        label: Limb-girdle muscular dystrophy type 2A
+      - id: NCIT:C3969
+        label: Xeroderma pigmentosum, complementation group G
   externalReferences:
     type: array
     items:
       "$ref": OntologyClass.yaml#/properties
     examples:
-      - type:
-          id: NA19625
-          label: HapMap individual
+      - id: biosample:SAME122868
+        label: HapMap individual
+      - id: PMID:9950502
+      - id: geo:GSE13331
+        label: Prognostic analysis of mantle cell lymphoma genomes
   provenance:
     "$ref": Provenance.yaml#/properties
   ancestries:
@@ -40,6 +68,9 @@ properties:
       "$ref": Ancestry.yaml#/properties
   dataUseConditions:
     "$ref": OntologyClass.yaml#/properties
+    examples:
+      - id: DUO:0000004
+        label: no restriction
   info:
     type: object
   updated:
