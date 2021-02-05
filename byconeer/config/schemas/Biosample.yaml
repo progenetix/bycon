@@ -28,16 +28,25 @@ properties:
     items:
       "$ref": OntologyClass.yaml#/properties
     examples:
-      - - id: NCIT:C4029
-          label: Cervical Adenocarcinoma
-        - id: UBERON:0000002
-          label: uterine cervix
+      - id: NCIT:C4029
+        label: Cervical Adenocarcinoma
+      - id: UBERON:0000002
+        label: uterine cervix
   externalReferences:
     type: array
     items:
       "$ref": OntologyClass.yaml#/properties
     examples:
-      - - id: PMID:9892199
+      - id: PMID:9892199
+  cohorts:
+    description: >
+      Cohorts describe collections of samples or individuals which are part of a common epistemic group, e.g. have been used for a study or share a set of features.
+    type: array
+    items:
+      "$ref": OntologyClass.yaml#/properties
+    examples:
+      - id: pgxcohort-arraymap
+        label: arrayMap collection
   individualAgeAtCollection:
     "$ref": Age.yaml#/properties
   provenance:

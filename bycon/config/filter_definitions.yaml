@@ -57,16 +57,16 @@ HP:
     - 'HP:0012209'
 
 PATO:
+  description: >
+    PATO codes specific for genotypic sex...
   name: "Phenotypic Qualities Ontology"
   url: "http://obofoundry.org/ontology/pato.html"
-  db_key: 'biocharacteristics.id'
+  db_key: 'genotypic_sex.id'
   scopes:
-    biosamples:
-      default: 0
     individuals:
       default: 1
-  pattern: '^PATO([_\:]\d+?\-?)?$'
-  pattern_strict: '^PATO[_\:]\d+?$'
+  pattern: '^PATO([_\:]002000[012]\-?)?$'
+  pattern_strict: '^PATO[_\:]002000[012]$'
   examples:
     - 'PATO:0020000'
 
@@ -179,7 +179,6 @@ cBP:
   examples:
     - 'cBP-MSK_IMPACT_2017'
 
-
 cellosaurus:
   name: "Cellosaurus - a knowledge resource on cell lines"
   url: "https://web.expasy.org/cellosaurus/"
@@ -192,3 +191,19 @@ cellosaurus:
   examples:
     - 'cellosaurus:CVCL_1650'
     - 'cellosaurus:CVCL_0006'
+
+pgxcohort:
+  name: "Progenetix cohorts"
+  url: "https://arraymap.progenetix.org"
+  db_key: 'cohorts.id'
+  scopes:
+    biosamples:
+      default: 1
+  pattern: '^pgxcohort(\-\w+?)?$'
+  pattern_strict: '^pgxcohort\-\w+?$'
+  examples:
+    - 'pgxcohort-arraymap'
+
+
+
+

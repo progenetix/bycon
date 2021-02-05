@@ -8,3 +8,4 @@ properties:
     type: string
     examples:
       - P12Y
+      - P3M12D
