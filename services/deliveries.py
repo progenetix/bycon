@@ -70,6 +70,7 @@ def deliveries(service):
 
         cgi_break_on_errors(r, byc)
 
+
         q = { q_par: q_val }
         if "_id" in q_par:
             q = { "$or": [
@@ -84,7 +85,7 @@ def deliveries(service):
         response_add_parameter(r, "collection", coll )
         response_add_parameter(r, "datasetId", ds_id )
 
-        if not results:
+        if not results or results[0] == None:
             response_add_error(r, "No data found under this {}: {}!".format(q_par, q_val) )
 
         cgi_break_on_errors(r, byc)
