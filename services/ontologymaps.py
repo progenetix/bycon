@@ -12,6 +12,7 @@ pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import *
 from bycon.lib.parse_filters import *
+from bycon.lib.parse_variants import create_and_or_query_for_list
 from bycon.lib.read_specs import *
 from byconeer.lib.schemas_parser import *
 from lib.service_utils import *
