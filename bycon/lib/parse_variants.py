@@ -4,6 +4,7 @@ import logging
 import sys
 
 from .cgi_utils import *
+from .query_execution import mongo_result_list
 
 ################################################################################
 
@@ -88,7 +89,6 @@ def get_variant_request_type(byc):
 
     v_pars = byc["variant_pars"]
     v_p_defs = byc["variant_definitions"]["parameters"]
-    g_v_defs = byc["variant_definitions"]["BeaconRequestTypes"]["g_variant"]
 
     brts = byc["variant_definitions"]["request_types"]
     brts_k = brts.keys()
@@ -131,78 +131,126 @@ def get_variant_request_type(byc):
 
 ################################################################################
 
-def create_variantAlleleRequest_query(variant_request_type, variant_pars):
+def create_geneVariantRequest_query( byc ):
+
+    if byc["variant_request_type"] != "geneVariantRequest":
+        return byc
+
+    # query database for gene and use coordinates to create range query
+    vp = byc["variant_pars"]
+
+    query = { "gene_symbol" : vp[ "geneSymbol" ] }
+
+    results, error = mongo_result_list( "progenetix", "genespans", query, { '_id': False } )
+
+    byc["variant_pars"].update( {
+        "referenceName": results[0]["reference_name"],
+        "start": [ results[0]["start"] ],
+        "end": [ results[0]["end"] ]
+    } )
+    byc.update( {"variant_request_type": "variantRangeRequest"} )
+
+    create_variantRangeRequest_query( byc )
+
+    return byc
+
+################################################################################
+
+def create_variantAlleleRequest_query( byc ):
 
     """podmd
  
     podmd"""
 
-    if variant_request_type != "variantAlleleRequest":
-        return
+    if byc["variant_request_type"] != "variantAlleleRequest":
+        return byc
+
+    vp = byc["variant_pars"]
 
     # TODO: Regexes for ref or alt with wildcard characters
 
-    v_q_p = [
-        { "reference_name": variant_pars[ "referenceName" ] },
-        { "start": int(variant_pars[ "start" ][0]) }
+    v_q_l = [
+        { "reference_name": vp[ "referenceName" ] },
+        { "start": int(vp[ "start" ][0]) }
     ]
     for p in [ "referenceBases", "alternateBases" ]:
-        if not variant_pars[ p ] == "N":
+        if not vp[ p ] == "N":
             p_n = p.replace("Bases", "_bases")
-            if "N" in variant_pars[ p ]:
-                rb = variant_pars[ p ].replace("N", ".")
-                v_q_p.append( { p_n: { '$regex': rb } } )
+            if "N" in vp[ p ]:
+                rb = vp[ p ].replace("N", ".")
+                v_q_l.append( { p_n: { '$regex': rb } } )
             else:
-                 v_q_p.append( { p_n: variant_pars[ p ] } )
+                 v_q_l.append( { p_n: vp[ p ] } )
         
-    variant_query = { "$and": v_q_p}
+    v_q = { "$and": v_q_l }
 
-    return variant_query
+    expand_variant_query(v_q, byc)
+
+    return byc
 
 ################################################################################
 
-def create_variantCNVrequest_query(variant_request_type, variant_pars):
+def create_variantCNVrequest_query( byc ):
 
-    if not variant_request_type in [ "variantCNVrequest" ]:
-        return
+    if not byc["variant_request_type"] in [ "variantCNVrequest" ]:
+        return byc
 
-    variant_query = { "$and": [
-        { "reference_name": variant_pars[ "referenceName" ] },
-        { "start": { "$lt": variant_pars[ "start" ][-1] } },
-        { "end": { "$gte": variant_pars[ "end" ][0] } },
-        { "start": { "$gte": variant_pars[ "start" ][0] } },
-        { "end": { "$lt": variant_pars[ "end" ][-1] } },
-        create_and_or_query_for_parameter("variantType", "variant_type", "$or", variant_pars)
+    vp = byc["variant_pars"]
+
+    v_q = { "$and": [
+        { "reference_name": vp[ "referenceName" ] },
+        { "start": { "$lt": vp[ "start" ][-1] } },
+        { "end": { "$gte": vp[ "end" ][0] } },
+        { "start": { "$gte": vp[ "start" ][0] } },
+        { "end": { "$lt": vp[ "end" ][-1] } },
+        create_and_or_query_for_parameter("variantType", "variant_type", "$or", vp)
     ]}
 
-    return variant_query
+    expand_variant_query(v_q, byc)
+
+    return byc
 
 ################################################################################
 
-def create_variantRangeRequest_query(variant_request_type, variant_pars):
+def create_variantRangeRequest_query( byc ):
 
-    # TODO
-    if variant_request_type != "variantRangeRequest":
-        return
+    if not byc["variant_request_type"] in [ "variantRangeRequest" ]:
+        return byc
+    
+    vp = byc["variant_pars"]
 
     v_q_l = [
-        { "reference_name": variant_pars[ "referenceName" ] },
-        { "start": { "$lt": int(variant_pars[ "end" ][-1]) } },
-        { "end": { "$gt": int(variant_pars[ "start" ][0]) } }
+        { "reference_name": vp[ "referenceName" ] },
+        { "start": { "$lt": int(vp[ "end" ][-1]) } },
+        { "end": { "$gt": int(vp[ "start" ][0]) } }
     ]
 
-    if "variantType" in variant_pars:
-        v_q_l.append( create_and_or_query_for_parameter("variantType", "variant_type", "$or", variant_pars) )
-    elif "alternateBases" in variant_pars:
+    if "variantType" in vp:
+        v_q_l.append( create_and_or_query_for_parameter("variantType", "variant_type", "$or", vp) )
+    elif "alternateBases" in vp:
         # the N wildcard stands for any length alt bases so can be ignored
-        if not variant_pars[ "alternateBases" ] == "N":
-            v_q_l.append( { "alternate_bases": variant_pars[ "alternateBases" ] } )
+        if not vp[ "alternateBases" ] == "N":
+            v_q_l.append( { "alternate_bases": vp[ "alternateBases" ] } )
 
-    variant_query = { "$and": v_q_l }
+    v_q = { "$and": v_q_l }
 
-    return variant_query
+    expand_variant_query(v_q, byc)
+
+    return byc
 
 ################################################################################
+
+def expand_variant_query(variant_query, byc):
+
+    if "variants" in byc["queries"]:
+        byc["queries"].update({"variants": { "$and": [ byc["queries"]["variants"], variant_query ] } } )
+    else:
+        byc["queries"].update( {"variants": variant_query } )
+
+    return byc
+
+################################################################################
+
 
 def create_and_or_query_for_list(logic, q_list):
 

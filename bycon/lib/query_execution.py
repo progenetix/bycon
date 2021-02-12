@@ -39,7 +39,6 @@ def execute_bycon_queries(ds_id, byc):
     h_o_defs = byc[ "handover_definitions" ]["h->o_methods"]
 
     exe_queries = { }
-    # last_time = byc[ "last_time" ]
 
     data_client = MongoClient( )
     data_db = data_client[ ds_id ]

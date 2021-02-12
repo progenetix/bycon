@@ -51,8 +51,8 @@ h->o_types:
     script_path_web: '/services/variants'
   callsetsvariants:
     id: 'pgx:handover:callsetsvariants'
-    label: "Callset Variants"
-    description: "export all variants of matched callsets - potentially huge dataset..."
+    label: "All Sample Variants (potentially huge)"
+    description: "Export all variants of matched callsets - potentially huge dataset..."
     h->o_key: 'cs._id'
     script_path_web: '/services/variants'
   UCSClink:   

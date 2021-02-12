@@ -38,6 +38,10 @@ parameters:
       type: integer
       pattern: '^\d+?$'
 
+  geneSymbol:
+    type: string
+    pattern: '^\w+?(\w+?(\-\w+?)?)?$'
+
 # custom parameters
 
   cytoBands:
@@ -48,87 +52,26 @@ parameters:
     pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
     type: string
 
-BeaconRequestTypes:
-
-  g_variant:
-
-    variantIdRequest:
-      description:
-        A query for a specific variant by its `id`.
-      all_of:
-        - id
-
-    variantAlleleRequest:
-      description: |
-        This type corresponds to the original BeaconAlleleRequest, in which at a
-        specified genome position a query looks for a combination of reference and
-        replacement base(s).
-      all_of:
-        - assemblyId
-        - referenceName
-        - start
-        - referenceBases
-        - alternateBases
-
-    variantCNVrequest:
-      description: |
-        This specific request allows for the bracketed search of genomic variants
-        with start and end coordinates and a variant type. in contrast to a
-        beaconRangeRequest, the start and end positions of the matched variants 
-        have to fall into the (1 base or longer) intervals for start and end,
-        respectively (while for the range request variants falling between start
-        and end are being matched).
-        `start` and `end` parameters are lists of 1 or 2 integers. The most common
-        use here would be a use of 2 integers both for start and end, to allow
-        fuzzy matching of CNVs and similar variants of imprecise length and
-        position.
-      all_of:
-        - assemblyId
-        - referenceName
-        - start
-        - end
-        - variantType
-
-    variantFusionRequest:
-      description: |
-        This request is similar to the CNV request in using possibly fuzzy
-        intervals for start and end of structural variants. However, here the
-        "end" position refers to the fusion partner on the same or different
-        chromosome as specified through "mateName".
-        Conventions:
-        * `mateName` can be the same or different to `referenceName`
-        * `mateName` is the higher numbered/named chromosome
-      all_of:
-        - assemblyId
-        - referenceName
-        - mateName
-        - start
-        - end
-
-    variantRangeRequest:
-      description: |
-        The beaconRangeRequest queries variants falling between start and end.
-        `start` and `end` parameters should be single values.
-      all_of:
-        - assemblyId
-        - referenceName
-        - start
-        - end
-      limits:
-        start:
-          items: 1
-        end:
-          items: 1
-      optional:
-        - variantType
-        - referenceBases
-        - alternateBases
-
-# disambiguation of legacy requests
-
 request_types:
 
+  variantIdRequest:
+    description: >
+      A query for a specific variant by its `id`.
+    all_of:
+      - id
+
   variantCNVrequest:
+    description: >
+      This specific request allows for the bracketed search of genomic variants
+      with start and end coordinates and a variant type. in contrast to a
+      beaconRangeRequest, the start and end positions of the matched variants 
+      have to fall into the (1 base or longer) intervals for start and end,
+      respectively (while for the range request variants falling between start
+      and end are being matched).
+      `start` and `end` parameters are lists of 1 or 2 integers. The most common
+      use here would be a use of 2 integers both for start and end, to allow
+      fuzzy matching of CNVs and similar variants of imprecise length and
+      position.
     all_of:
       - assemblyId
       - start
@@ -137,16 +80,20 @@ request_types:
       - variantType
     
   variantRangeRequest:
+    description: |
+      The beaconRangeRequest queries variants falling between start and end.
+      `start` and `end` parameters should be single values.
     all_of:
       - assemblyId
       - start
       - end
       - referenceName
-    # one_of:
-    #   - variantType
-    #   - alternateBases
     
-  variantAlleleRequest:
+  variantAlleleRequest: 
+    description: >
+      This type corresponds to the original BeaconAlleleRequest, in which at a
+      specified genome position a query looks for a combination of reference and
+      replacement base(s).
     all_of:
       - assemblyId
       - start
@@ -155,7 +102,33 @@ request_types:
       - alternateBases
 
 # custom
-     
+
+  variantFusionRequest:
+    description: |
+      This request is similar to the CNV request in using possibly fuzzy
+      intervals for start and end of structural variants. However, here the
+      "end" position refers to the fusion partner on the same or different
+      chromosome as specified through "mateName".
+      Conventions:
+      * `mateName` can be the same or different to `referenceName`
+      * `mateName` is the higher numbered/named chromosome
+    all_of:
+      - assemblyId
+      - referenceName
+      - mateName
+      - start
+      - end
+    
+  geneVariantRequest:
+    description: >
+      A variant overlapping with the genomic coordinates of a gene or other named sequence element.
+    all_of:
+      - geneSymbol
+    optional:
+      - variantType
+      - referenceBases
+      - alternateBases
+
   cytobands2positions_request:
     all_of:
       - assemblyId

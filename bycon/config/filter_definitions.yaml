@@ -203,6 +203,7 @@ pgxcohort:
   pattern_strict: '^pgxcohort\-\w+?$'
   examples:
     - 'pgxcohort-arraymap'
+    - 'pgxcohort-TCGA'
 
 
 

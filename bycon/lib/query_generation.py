@@ -11,34 +11,35 @@ from .parse_variants import *
 
 def generate_queries(byc):
 
-    q_s = { }
-    q_s = update_queries_from_filters( q_s, byc )
-    q_s = update_queries_from_hoid( q_s, byc)
-    q_s = update_queries_from_variants( q_s, byc )
-    q_s = update_queries_from_endpoints( q_s, byc )
-    q_s = update_queries_from_geoquery( q_s, byc )
-    q_s = purge_empty_queries( q_s, byc )
+    if not "queries" in byc:
+        byc.update({"queries": { }})
 
-    byc.update( { "queries": q_s } )
+    update_queries_from_filters( byc )
+    update_queries_from_hoid( byc)
+    update_queries_from_variants( byc )
+    update_queries_from_endpoints( byc )
+    update_queries_from_geoquery( byc )
+    purge_empty_queries( byc )
+
 
     return byc
 
 ################################################################################
 
-def purge_empty_queries( q_s, byc ):
+def purge_empty_queries( byc ):
 
     empties = [ ]
-    for k, v in q_s.items():
+    for k, v in byc["queries"].items():
         if not v:
             empties.append( k )
     for e_k in empties:
-        del( q_s[ k ] )
+        del( byc["queries"][ k ] )
 
-    return q_s
+    return byc
 
 ################################################################################
 
-def update_queries_from_hoid( queries, byc):
+def update_queries_from_hoid( byc):
 
     if "accessid" in byc["form_data"]:
         accessid = byc["form_data"].getvalue("accessid")
@@ -53,18 +54,18 @@ def update_queries_from_hoid( queries, byc):
             c_n = h_o["target_collection"]
             t_db = h_o["source_db"]
             if not t_db == byc["dataset_ids"][0]:
-                return queries
+                return byc
             h_o_q = { t_k: { '$in': t_v } }
-            if c_n in queries:
-                queries.update( { c_n: { '$and': [ h_o_q, queries[ c_n ] ] } } )
+            if c_n in byc["queries"]:
+                byc["queries"].update( { c_n: { '$and': [ h_o_q, byc["queries"][ c_n ] ] } } )
             else:
-                queries.update( { c_n: h_o_q } )
+                byc["queries"].update( { c_n: h_o_q } )
 
-    return queries
+    return byc
 
 ################################################################################
 
-def update_queries_from_filters( queries, byc ):
+def update_queries_from_filters( byc ):
 
     """podmd
 
@@ -94,8 +95,8 @@ def update_queries_from_filters( queries, byc ):
 
     for c_n in byc[ "config" ][ "collections" ]:
         query_lists[c_n] = [ ]
-        if c_n in queries:
-            query_lists[c_n].append( queries[c_n] )
+        if c_n in byc["queries"]:
+            query_lists[c_n].append( byc["queries"][c_n] )
  
     mongo_client = MongoClient()
 
@@ -155,78 +156,69 @@ def update_queries_from_filters( queries, byc ):
 
     for c_n in byc[ "config" ][ "collections" ]:
         if len(query_lists[c_n]) == 1:
-            queries[ c_n ] = query_lists[c_n][0]
+            byc["queries"][ c_n ] = query_lists[c_n][0]
         elif len( query_lists[c_n] ) > 1:
-            queries[ c_n ] = { logic: query_lists[c_n] }
+            byc["queries"][ c_n ] = { logic: query_lists[c_n] }
 
-    return queries
+    return byc
 
 ################################################################################
 
-def update_queries_from_endpoints( queries, byc ):
+def update_queries_from_endpoints( byc ):
 
     if not "endpoint_pars" in byc:
-        return queries
+        return byc
 
     if len(byc["endpoint_pars"]) < 1:
-        return queries
+        return byc
 
     for c_n in byc["endpoint_pars"]["queries"].keys():
         epq = byc["endpoint_pars"]["queries"][c_n]
-        if c_n in queries:
-            queries[c_n] = { '$and': [ epq, queries[c_n] ] }
+        if c_n in byc["queries"]:
+            byc["queries"][c_n] = { '$and': [ epq, byc["queries"][c_n] ] }
         else:
-            queries[c_n] = epq
+            byc["queries"][c_n] = epq
 
-    return queries
+    return byc
 
 ################################################################################
 
-def update_queries_from_geoquery( queries, byc ):
+def update_queries_from_geoquery( byc ):
 
     geo_q, geo_pars = geo_query( **byc )
 
     if not geo_q:
-        return queries
+        return byc
 
-    if not "biosamples" in queries:
-        queries["biosamples"] = geo_q
+    if not "biosamples" in byc["queries"]:
+        byc["queries"]["biosamples"] = geo_q
     else:
-        queries["biosamples"] = { '$and': [ geo_q, queries["biosamples"] ] }
+        byc["queries"]["biosamples"] = { '$and': [ geo_q, byc["queries"]["biosamples"] ] }
 
-    return queries
+    return byc
 
 ################################################################################
 
-def update_queries_from_variants( queries, byc ):
-
-    c_n = "variants"
+def update_queries_from_variants( byc ):
 
     if not byc["variant_request_type"] in byc["variant_definitions"]["request_types"].keys():
-        if not c_n in queries:
-            return queries
+        if not "variants" in byc["queries"]:
+            return byc
 
-    query_lists = { c_n: [ ] }
-    if c_n in queries:
-        query_lists[c_n].append( queries[c_n] )
-
-    v_q_method = "create_"+byc["variant_request_type"]+"_query"
+    # v_q_method = "create_"+byc["variant_request_type"]+"_query"
 
     if "variantCNVrequest" in byc["variant_request_type"]:
-        v_q = create_variantCNVrequest_query( byc["variant_request_type"], byc["variant_pars"] )
+        create_variantCNVrequest_query( byc )
     elif "variantAlleleRequest" in byc["variant_request_type"]:
-        v_q = create_variantAlleleRequest_query( byc["variant_request_type"], byc["variant_pars"] )
+        create_variantAlleleRequest_query( byc )
     elif "variantRangeRequest" in byc["variant_request_type"]:
-        v_q = create_variantRangeRequest_query( byc["variant_request_type"], byc["variant_pars"] )
+        create_variantRangeRequest_query( byc )
+    elif "geneVariantRequest" in byc["variant_request_type"]:
+        create_geneVariantRequest_query( byc )
     else:
-        return queries
+        return byc
 
-    if len(query_lists[c_n]) > 0:
-        v_q = { '$and': query_lists[c_n].append(v_q) }
-
-    queries.update( { c_n: v_q })
-
-    return queries
+    return byc
 
 ################################################################################
 ################################################################################
