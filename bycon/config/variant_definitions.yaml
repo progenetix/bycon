@@ -38,11 +38,23 @@ parameters:
       type: integer
       pattern: '^\d+?$'
 
+# custom parameters
+
+  varMinLength:
+    type: integer
+    pattern: '^\d+?$'
+    description: >
+      The minimal length, in bases, of a genomic variant. This parameter can be applied to e.g. CNV queries.
+
+  varMaxLength:
+    type: integer
+    pattern: '^\d+?$'
+    description: >
+      The maximal length, in bases, of a genomic variant. This parameter can be applied to e.g. CNV queries.
+
   geneSymbol:
     type: string
     pattern: '^\w+?(\w+?(\-\w+?)?)?$'
-
-# custom parameters
 
   cytoBands:
     pattern: ^(chro?)?([12]?[\dXY])([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?\-?([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?$
@@ -88,6 +100,12 @@ request_types:
       - start
       - end
       - referenceName
+    optional:
+      - variantType
+      - referenceBases
+      - alternateBases
+      - varMinlength
+      - varMaxLength
     
   variantAlleleRequest: 
     description: >
@@ -128,6 +146,8 @@ request_types:
       - variantType
       - referenceBases
       - alternateBases
+      - varMinlength
+      - varMaxLength
 
   cytobands2positions_request:
     all_of:

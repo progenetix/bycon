@@ -2,7 +2,7 @@
 "$id": https://progenetix.org/services/schemas/Variant/v2020-12-08
 title: Variant
 description: >
-  Genomic variant, representing a sequence variation on a genomic allele or a structural modification (e.g. copy number variation or ).
+  Genomic variant, representing a sequence variation on a single genomic allele or a structural modification (e.g. copy number variation or LOH). In contrast to the use in e.g. VCF, multi-allelic alterations are reported as single variants.
 required:
   all_of:
     - referenceName
@@ -19,8 +19,11 @@ properties:
       - pgxvar-kftzldsu
   digest:
     type: string
+    description: >
+      The `digest` patrameter represents a compact concatenation of the essential variant parameters, limited to positional information and either variant type or the combination of reference and alternate bases. Variants which contain a sequence of nucleotides are represented without variant type. The `digest` parameter allows the efficient recovery of "identical" allelic alteration events.
     examples:
       - 11:52900000-134452384:DEL
+      - 4:55133558:A>G
   biosampleId:
     type: string
     examples:
@@ -71,7 +74,7 @@ properties:
     type: object
     examples:
       - cnv_value: 3
-        cnv_length: 81552384
+        var_length: 81552384
   updated:
     type: string
     format: date-time

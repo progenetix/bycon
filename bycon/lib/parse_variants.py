@@ -225,6 +225,11 @@ def create_variantRangeRequest_query( byc ):
         { "end": { "$gt": int(vp[ "start" ][0]) } }
     ]
 
+    if "varMinLength" in vp:
+        v_q_l.append( { "info.var_length": { "$gte" : vp[ "varMinLength" ] } } )
+    if "varMaxLength" in vp:
+        v_q_l.append( { "info.var_length": { "$lte" : vp[ "varMaxLength" ] } } )
+
     if "variantType" in vp:
         v_q_l.append( create_and_or_query_for_parameter("variantType", "variant_type", "$or", vp) )
     elif "alternateBases" in vp:

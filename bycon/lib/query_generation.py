@@ -21,7 +21,6 @@ def generate_queries(byc):
     update_queries_from_geoquery( byc )
     purge_empty_queries( byc )
 
-
     return byc
 
 ################################################################################

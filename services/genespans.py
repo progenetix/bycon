@@ -42,12 +42,12 @@ def genespans(service):
     
     response_add_parameter(r, "assemblyId", assembly_id)
 
-    if "geneId" in byc[ "form_data" ]:
-        gene_id = byc[ "form_data" ].getvalue("geneId")
-        response_add_parameter(r, "geneId", gene_id)
+    if "geneSymbol" in byc[ "form_data" ]:
+        gene_id = byc[ "form_data" ].getvalue("geneSymbol")
+        response_add_parameter(r, "geneSymbol", gene_id)
     else:
         # TODO: value check & response
-        response_add_error(r, "No geneId value provided!")
+        response_add_error(r, "No geneSymbol value provided!")
 
     cgi_break_on_errors(r, byc)
 

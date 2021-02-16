@@ -292,7 +292,7 @@ def _initiate_vs_cs(rootdir, ser, arr):
 
         v.pop('no', None)
         v['info']['cnv_value'] = v['info'].pop('value')
-        v['info']['cnv_length'] = v['info'].pop('svlen')
+        v['info']['var_length'] = v['info'].pop('svlen')
         v['info'].pop('probes', None)
         v['variantset_id'] = 'AM_VS_GRCH38'
 

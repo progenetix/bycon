@@ -105,7 +105,7 @@ def main():
                                 var_coll.delete_one( { "_id": v["_id"] }  )
                                 continue
                         else:
-                            update_obj.update( { "info.cnv_length": cnv_l } )
+                            update_obj.update( { "info.var_length": cnv_l } )
                     except:
                         update_obj.update( { "error.start_end": 1 } )
                 else:
