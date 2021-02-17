@@ -1,12 +1,12 @@
 defaults:
   dataset_ids:
     - progenetix
-  method: compact
+  method: details
   response_type: return_variants
 meta:
   response_type: return_variants
   returned_schemas:
-    - https://progenetix.org/services/schemas/Variant/
+    Variant: https://progenetix.org/services/schemas/Variant/
   info: >
     The main variants payload can be accessed in `response.results`.
 bycon_definition_files:
@@ -20,6 +20,7 @@ methods:
   digests:
     - digest
   compact:
+    - _id
     - biosample_id
     - reference_name
     - start

@@ -13,7 +13,7 @@ defaults:
 meta:
   response_type: collations
   returned_schemas:
-    - https://progenetix.org/services/schemas/Collation/
+    Collation: https://progenetix.org/services/schemas/Collation/
   info: >
     The main collations payload can be accessed in `response.results`.
 methods:

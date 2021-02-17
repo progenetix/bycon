@@ -7,8 +7,8 @@ defaults:
 meta:
   response_type: genespans
   returned_schemas:
-    - https://progenetix.org/services/schemas/GeneSpan/
+    GeneSpan: https://progenetix.org/services/schemas/GeneSpan/
   info: >
-    The main geolocs payload can be accessed in `response.results`.
+    The main genes payload can be accessed in `response.results`.
 assembly_ids:
   - GRCh38

@@ -7,7 +7,6 @@ test_handover_domain: http://progenetix.test
 dataset_ids:
   - arraymap
   - progenetix
-  - dipg
   - cellosaurus
 collections:
   - biosamples

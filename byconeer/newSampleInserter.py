@@ -10,7 +10,7 @@ import random
 from os import path, environ, pardir
 from progressbar import Bar
 from pydoc import locate
-from jsonschema import validate
+# from jsonschema import validate
 
 # local
 dir_path = path.dirname( path.abspath(__file__) )

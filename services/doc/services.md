@@ -60,23 +60,18 @@ format. Here, the data is a dictionary/object with a single key (`genes`):
 ```
 {
     "meta": {
-    "errors": [],
-    "info": "The main geolocs payload can be accessed in `response.results`.\n",
-    "parameters": [
-      {
-        "assemblyId": "GRCh38"
-      },
-      {
+      "info": "The main geolocs payload can be accessed in `response.results`.\n",
+      "parameters": {
+        "assemblyId": "GRCh38",
         "geneSymbol": "TP53"
-      }
-    ],
-    "response_type": "genespans",
-    "returned_schemas": [
-      "https://progenetix.org/services/schemas/GeneSpan/"
-    ],
-    "warnings": []
+      },
+      "response_type": "genespans",
+      "returned_schemas": {
+        "GeneSpan": "https://progenetix.org/services/schemas/GeneSpan/"
+      },
     },
-        "response": {
+    "response": {
+        "error": {},
         "exists": true,
         "info": {
           "count": 17

@@ -61,7 +61,7 @@ def phenopackets(service):
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
-        response_add_error(r, e)
+        response_add_error(r, **{ "data_error": e } )
 
     access_id_ind = byc["query_results"]["is._id"][ "id" ]
     ind_s = [ ]

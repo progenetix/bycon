@@ -4,6 +4,7 @@ import cgi, cgitb
 import json, yaml
 from os import environ, pardir, path
 import sys, datetime, argparse
+from json_ref_dict import RefDict, materialize
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
@@ -49,13 +50,26 @@ def main():
 def byconplus(service):
     
     byc = initialize_service(service)
-
+        
     update_datasets_from_dbstats(byc)
 
     beacon_get_endpoint(byc)
     parse_endpoints(byc)
 
     select_response_type(byc)
+
+    # exclude_keys = [ "format", "examples", "description", "example", "required" ]
+    # empty_meta = create_empty_instance( materialize(byc["beacon-schema"]["components"]["schemas"]["BiosampleResponse"]["properties"]["meta"]["properties"], exclude_keys = exclude_keys) )
+    # empty_resp = create_empty_instance( materialize(byc["beacon-schema"]["components"]["schemas"]["BiosampleResponse"]["properties"]["response"]["properties"], exclude_keys = exclude_keys) )
+    # print( json.dumps({ "meta": empty_meta, "response": empty_resp }, indent=4, sort_keys=True, default=str)+"\n")
+
+    # r = create_empty_service_response(byc)
+    # for p in ["api_version", "beacon_id"]: 
+    #     r["meta"].update({p: byc["beacon_info"][ snake_to_camel(p) ]})
+
+    # print( json.dumps(r, indent=4, sort_keys=True, default=str)+"\n")
+
+    # exit()
 
     select_dataset_ids(byc)
     beacon_check_dataset_ids(byc)
@@ -70,7 +84,10 @@ def byconplus(service):
     generate_queries(byc)
 
     beacon_respond_with_errors(byc)
-    collect_dataset_responses(byc)   
+    collect_dataset_responses(byc)
+
+
+
     create_beacon_response(byc)    
     cgi_print_json_response(
         byc["form_data"],

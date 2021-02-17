@@ -1,14 +1,15 @@
 ---
 id: 'org.progenetix.beacon'
+beaconId: 'org.progenetix.beacon'
 name: 'Progenetix Cancer Genomics Beacon+'
-apiVersion: '2.0.pre.2020-10-13'
-version: 2020-12-15
+apiVersion: '2.0.pre.2021-02-16'
+version: 2021-02-16
 description:  |
   Beacon+ provides a forward looking implementation of the Beacon API, with focus on structural variants and metadata based on the cancer and reference genome profiling data represented in the Progenetix oncogenomic data resource (https://progenetix.org).
 welcomeUrl: 'https://progenetix.org/beacon-plus/search'
 alternativeUrl: "https://progenetix.org"
 createDateTime: 2015-11-13
-updateDateTime: 2020-12-15
+updateDateTime: 2021-02-16
 organization: 
   id: 'org.baudisgroup.info'
   name: 'baudisgroup at UZH and SIB'

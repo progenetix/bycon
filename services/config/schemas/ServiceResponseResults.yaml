@@ -4,11 +4,21 @@ title: ServiceResponseResults
 description: >
   The results of the service request.
 properties:
+  error:
+    type: object
   exists:
     type: boolean
   info:
     type: object
   results:
+    type: array
+    items:
+      type: object
+  beaconHandover:
+    type: array
+    items:
+      type: object
+  resultsHandover:
     type: array
     items:
       type: object

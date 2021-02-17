@@ -51,14 +51,15 @@ def initialize_service(service):
 def create_empty_service_response(byc):
 
     r_s = read_schema_files("ServiceResponse", "properties", dir_path)
-    r = create_empty_instance(r_s, dir_path)
+    r = create_empty_instance(r_s)
 
     if "meta" in byc["these_prefs"]:
     	for k, v in byc["these_prefs"]["meta"].items():
     		r["meta"].update( { k: v } )
 
     if "errors" in byc:
-        response_add_error(r, byc["errors"])
+        if len(byc["errors"]) > 0:
+            response_add_error(r, **{ "preprocessing_errors": byc["errors"] } )
 
     # saving the parameters to the response
     for p in ["method", "dataset_ids", "filters", "variant_pars"]:
@@ -71,7 +72,8 @@ def create_empty_service_response(byc):
 
 def response_add_parameter(r, name, value):
 
-    r["meta"]["parameters"].append( { name: value } )
+    if value:
+        r["meta"]["received_request"].update( { name: value } )
 
     return r
 
@@ -81,22 +83,21 @@ def response_collect_errors(r, byc):
 
     # TODO: flexible list of errors
     if not byc[ "queries" ].keys():
-      response_add_error(r, "No (correct) query parameters were provided." )
+      response_add_error(r, **{ "query_error": "No (correct) query parameters were provided." } )
     if len(byc[ "dataset_ids" ]) < 1:
-      response_add_error(r, "No `datasetIds` parameter provided." )
+      response_add_error(r, **{ "dataset_error": "No `datasetIds` parameter provided." } )
     if len(byc[ "dataset_ids" ]) > 1:
-      response_add_error(r, "More than 1 `datasetIds` value was provided." )
+      response_add_error(r, **{ "dataset_error": "More than 1 `datasetIds` value was provided." } )
       
 ################################################################################
 
-def response_add_error(r, errors):
+def response_add_error(r, **errors):
 
-    if isinstance(errors, list):
-        if len(errors) > 0:
-            r["meta"]["errors"].extend(errors)
-    else:
-        if len(errors) > 0:
-            r["meta"]["errors"].append(errors)
+    if not errors:
+        return r
+
+    for k, e in errors.items():
+        r["response"]["error"].update( { k: e } )
 
     return r
 

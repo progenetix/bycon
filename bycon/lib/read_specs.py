@@ -2,6 +2,7 @@ import re, yaml
 import json
 from pymongo import MongoClient
 from os import path, pardir
+from json_ref_dict import RefDict, materialize
 
 from .cgi_utils import *
 
@@ -23,6 +24,11 @@ def read_bycon_configs_by_name(name, byc):
         o = yaml.load( od , Loader=yaml.FullLoader)
 
     byc.update({ name: o })
+
+    # TODO Move ...
+
+    if name == "beacon":
+        byc.update({ "beacon-schema": RefDict(ofp) })
 
     return byc
 

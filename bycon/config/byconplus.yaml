@@ -1,5 +1,6 @@
 bycon_definition_files:
   - config
+  - beacon
   - dataset_definitions
   - filter_definitions
   - geoloc_definitions
@@ -7,4 +8,3 @@ bycon_definition_files:
   - handover_definitions
   - service_info
   - beacon_info
-  - beacon_paths

@@ -4,20 +4,18 @@ title: ServiceResponseMeta
 description: >
   The metadata (e.g. query, environment) of the service request and response.
 properties:
+  apiVersion:
+    type: string
+  beaconId:
+    type: string
   responseType:
     type: string
-  errors:
-    type: array
-    items:
-      type: string
   warnings:
     type: array
     items:
       type: string
-  parameters:
-    type: array
-    items:
-      type: object
+  receivedRequest:
+    type: object
   returnedSchemas:
     type: array
     items:

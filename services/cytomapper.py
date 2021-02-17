@@ -56,15 +56,15 @@ def cytomapper(service):
     cytoBands = [ ]
     if "cytoBands" in byc["variant_pars"]:
         cytoBands, chro, start, end = _bands_from_cytobands( **byc )
-        r["meta"]["parameters"].append({ "cytoBands": byc["variant_pars"]["cytoBands"] })
+        r["meta"]["received_request"].update({ "cytoBands": byc["variant_pars"]["cytoBands"] })
     elif "chroBases" in byc["variant_pars"]:
         cytoBands, chro, start, end = _bands_from_chrobases( **byc )
-        r["meta"]["parameters"].append({ "chroBases": byc["variant_pars"]["chroBases"] })
+        r["meta"]["received_request"].update({ "chroBases": byc["variant_pars"]["chroBases"] })
 
     cb_label = _cytobands_label( cytoBands )
 
     if len( cytoBands ) < 1:
-        response_add_error(r, "No matching cytobands!" )
+        response_add_error(r, **{ "cytoband_error": "No matching cytobands!" } )
         _print_terminal_response( byc["args"], r )
         cgi_break_on_errors(r, byc)
 
@@ -213,8 +213,8 @@ def _cytobands_label( cytobands ):
 def _print_terminal_response(args, r):
 
     if sys.stdin.isatty():
-        if len(r[ "errors" ]) > 0:
-            print( "\n".join( r[ "errors" ] ) )
+        if r["response"][ "error" ]:
+            print( "\n".r["response"][ "error" ] )
             exit()
 
     if args.cytobands:

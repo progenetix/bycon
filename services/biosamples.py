@@ -61,7 +61,7 @@ def biosamples(service):
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
-        response_add_error(r, e )
+        response_add_error(r, **{"handover_error": e } )
 
     cgi_break_on_errors(r, byc)
 

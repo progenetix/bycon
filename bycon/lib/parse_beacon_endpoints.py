@@ -15,7 +15,9 @@ def beacon_get_endpoint(byc):
 
     url_comps = urlparse( environ.get('REQUEST_URI') )
 
-    for p in byc["beacon_paths"].keys():
+    for p in byc["beacon"]["paths"].keys():
+        if p == '/':
+            continue
         m = re.compile(r'(^.+?byconplus(\.py)?)?'+p)
         if m.match(url_comps.path):
             return byc.update( { "endpoint": p } )

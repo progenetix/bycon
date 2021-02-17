@@ -42,7 +42,7 @@ def collations(service):
     r = create_empty_service_response(byc)    
 
     if len(byc[ "dataset_ids" ]) < 1:
-      response_add_error(r, "No `datasetIds` parameter provided." )
+      response_add_error(r, **{ "dataset_error": "No `datasetIds` parameter provided." } )
  
     cgi_break_on_errors(r, byc)
 

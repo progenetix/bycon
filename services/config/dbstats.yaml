@@ -5,7 +5,7 @@ defaults:
 meta:
   response_type: dbstats
   returned_schemas:
-    - https://progenetix.org/services/schemas/DBstats/
+    DBstats: https://progenetix.org/services/schemas/DBstats/
   info: >
     The latest dbstats payload can be accessed in `response.results[0]`.
 methods:

@@ -45,13 +45,13 @@ def geolocations(service):
         response_add_parameter(r, g_k, g_v)
 
     if len(query.keys()) < 1:
-        response_add_error(r, "No query generated - missing or malformed parameters" )
+        response_add_error(r, **{ "parameter_error": "No query generated - missing or malformed parameters" } )
     
     cgi_break_on_errors(r, byc)
 
     results, error = mongo_result_list( byc["geo_db"], byc["geo_coll"], query, { '_id': False } )
     if error:
-        response_add_error(r, error)
+        response_add_error(r, **{ "data_error": error } )
     
     cgi_break_on_errors(r, byc)
 

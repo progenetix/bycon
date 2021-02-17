@@ -3,7 +3,8 @@ bycon_definition_files:
   - variant_definitions
 meta:
   returned_schemas:
-    - https://progenetix.org/services/schemas/
+    GeneSpan: https://progenetix.org/services/schemas/GeneSpan/
+    Cytobands: https://progenetix.org/services/schemas/Cytobands/
   info: >
     The main cytomapper payload can be accessed in `response.results[0]`.
 arg_pars:

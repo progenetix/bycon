@@ -6,8 +6,8 @@ defaults:
 meta:
   response_type: ontologymaps
   returned_schemas:
-    - https://progenetix.org/services/schemas/OntologyClassGroup/
-    - https://progenetix.org/services/schemas/OntologyClass/
+    OntologyClassGroup: https://progenetix.org/services/schemas/OntologyClassGroup/
+    OntologyClass: https://progenetix.org/services/schemas/OntologyClass/
   info: >
     The main code groups payload can be accessed in `response.results[0].term_groups`. All ontology terms are
     provided in `response.results[0].unique_terms`.

@@ -41,7 +41,13 @@ def instantiate_schema(schema):
             schema = ""
            
         return schema
+
+    # elif 'properties' in schema.keys():
+    #     for k, val in schema["properties"].items():
         
+    #         if isinstance(val, dict):
+    #             schema["properties"][k] = instantiate_schema(val)
+      
     else:
         for k, val in schema.items():
         
@@ -52,7 +58,7 @@ def instantiate_schema(schema):
         
 ################################################################################
 
-def create_empty_instance(schema, dir_path):
+def create_empty_instance(schema):
     s_convert = convert_case_for_keys(schema, camel_to_snake)
     return instantiate_schema(s_convert)
 
@@ -78,6 +84,13 @@ def camel_to_snake(name):
 
     name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
+
+################################################################################
+
+def snake_to_camel(name):
+
+    comps = name.split('_')
+    return comps[0] + ''.join(x.title() for x in comps[1:])
 
 ################################################################################
 

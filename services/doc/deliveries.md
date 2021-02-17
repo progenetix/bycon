@@ -18,8 +18,8 @@ The response in this example was a `biosamples` dataset (excerpt):
 
 ```json
 {
-    "data": {
-        "biosamples": [
+    "response": {
+        "results": [
             {
                 "id": "PGX_AM_BS_20164920_SM-11YB",
                 "biocharacteristics": [
