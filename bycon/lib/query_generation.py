@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from bson.son import SON
 import sys
 
-from .parse_variants import *
+from parse_variants import *
 
 ################################################################################
 

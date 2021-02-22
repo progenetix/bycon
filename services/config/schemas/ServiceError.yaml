@@ -1,0 +1,14 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/ServiceError/v2021-02-17
+title: ServiceError
+description: >
+  An error message, as in Beaconv2.
+required:
+  - errorCode
+properties:
+  errorCode:
+    type: integer
+    format: int32
+    description: 'same as HTTP status code'
+  errorMessage:
+    type: string

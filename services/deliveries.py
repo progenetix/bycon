@@ -53,20 +53,20 @@ def deliveries(service):
         select_dataset_ids(byc)
 
         if not len(byc["dataset_ids"]) == 1:
-            response_add_error(r, **{ "dataset_error": "Not exactly one datasetIds item specified." } )
+            response_add_error(r, 422, "Not exactly one datasetIds item specified." )
         else:
             ds_id = byc["dataset_ids"][0]
             if not ds_id in byc["dataset_definitions"]:
-                response_add_error(r, **{ "dataset_error": "Not exactly one datasetIds item specified." } )
+                response_add_error(r, 422, "Not exactly one datasetIds item specified." )
 
         if not "collection" in byc["form_data"]:
-            response_add_error(r, **{ "collection_error": "No data collection specified." } )
+            response_add_error(r, 422, "No data collection specified." )
 
         cgi_break_on_errors(r, byc)
 
         coll = byc["form_data"].getvalue( "collection" )
         if not coll in byc["config"]["collections"]:
-            response_add_error(r, **{ "collection_error": f"Collection {coll} is not specified in preferences." } )
+            response_add_error(r, 422, f"Collection {coll} is not specified in preferences." )
 
         cgi_break_on_errors(r, byc)
 
@@ -86,7 +86,7 @@ def deliveries(service):
         response_add_parameter(r, "datasetId", ds_id )
 
         if not results or results[0] == None:
-            response_add_error(r, **{ "data_error": "No data found under this {}: {}!".format(q_par, q_val) } )
+            response_add_error(r, 422, "No data found under this {}: {}!".format(q_par, q_val) )
 
         cgi_break_on_errors(r, byc)
         populate_service_response(r, results)
@@ -103,7 +103,7 @@ def deliveries(service):
     d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
 
     if e:
-        response_add_error(r, **{ "handover_error": e } )
+        response_add_error(r, 422, e )
 
     response_add_parameter(r, "collection", h_o["target_collection"] )
     response_add_parameter(r, "datasetId", h_o["source_db"] )

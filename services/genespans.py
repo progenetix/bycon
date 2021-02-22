@@ -47,7 +47,7 @@ def genespans(service):
         response_add_parameter(r, "geneSymbol", gene_id)
     else:
         # TODO: value check & response
-        response_add_error(r, **{ "gene_error": "No geneSymbol value provided!" } )
+        response_add_error(r, 422, "No geneSymbol value provided!" )
 
     cgi_break_on_errors(r, byc)
 
@@ -60,9 +60,9 @@ def genespans(service):
 
     query = create_and_or_query_for_list('$and', q_list)
 
-    results, error = mongo_result_list( byc["db"], byc["coll"], query, { '_id': False } )
-    if error:
-        response_add_error(r, **{ "data_error": error } )
+    results, e = mongo_result_list( byc["db"], byc["coll"], query, { '_id': False } )
+    if e:
+        response_add_error(r, 422, e )
 
     cgi_break_on_errors(r, byc)
 

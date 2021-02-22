@@ -8,9 +8,11 @@ import sys, datetime, argparse
 # local
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
+service_lib_path = path.join( pkg_path, "services", "lib" )
+sys.path.append( service_lib_path )
 sys.path.append( pkg_path )
 from bycon.lib import *
-from lib.service_utils import *
+from service_utils import *
 
 ################################################################################
 ################################################################################
@@ -64,7 +66,7 @@ def variants(service):
             close_json_streaming(info)
 
     select_dataset_ids(byc)
-    beacon_check_dataset_ids(byc)
+    check_dataset_ids(byc)
     get_filter_flags(byc)
     parse_filters(byc)
 
@@ -86,7 +88,7 @@ def variants(service):
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
-        response_add_error(r, **{ "handover_error": e } )
+        response_add_error(r, 422, e)
 
     cgi_break_on_errors(r, byc)
 

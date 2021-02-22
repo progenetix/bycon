@@ -1,7 +1,8 @@
 import cgi, cgitb
 import re, yaml
 from pymongo import MongoClient
-from .cgi_utils import *
+
+from cgi_utils import *
 
 ################################################################################
 
@@ -108,7 +109,7 @@ def select_dataset_ids(byc):
   
 ################################################################################
 
-def beacon_check_dataset_ids(byc):
+def check_dataset_ids(byc):
 
     dataset_ids = [ ]
 

@@ -3,8 +3,8 @@ import re, yaml
 import logging
 import sys
 
-from .cgi_utils import *
-from .query_execution import mongo_result_list
+from cgi_utils import *
+from query_execution import mongo_result_list
 
 ################################################################################
 

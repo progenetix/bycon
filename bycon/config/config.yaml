@@ -5,7 +5,6 @@ test_handover_domain: http://progenetix.test
 # dataset_ids here are used for db management; the information used by Beacon
 # is defined separately
 dataset_ids:
-  - arraymap
   - progenetix
   - cellosaurus
 collections:
@@ -15,36 +14,6 @@ collections:
   - variants
   - collations
   - publications
-collationed:
-  geo:
-    pattern: '^(geo)[:]((GSE)|(GPL))'
-    is_series: True
-    child_pattern: '^(geo)[:]GSM'
-  NCIT:
-    pattern: '^(NCIT)[:]C'
-    is_series: False
-  icdom:
-    pattern: '^(icdom)[\-]\d'
-    is_series: False
-  icdot:
-    pattern: '^(icdot)[\-]C'
-    is_series: False
-  cellosaurus:
-    pattern: '^(cellosaurus)[:]CVCL'
-    is_series: False
-  PMID:
-    pattern: '^(PMID)[:]\d'
-    is_series: False
-  UBERON:
-    pattern: '^(UBERON)[:]\d'
-    is_series: False
-  cBP:
-    pattern: '^(cBP)[\-]\w'
-    is_series: False
-  TCGA:
-    pattern: '^(TCGA)[\-][\w\-]{2,20}$'
-    is_series: True
-    child_pattern: '^(TCGA)[\-]\w+?\-[\w\-]{15,30}$'
 collations_coll: collations
 collations_source: biosamples
 ontologymaps_coll: ontologymaps

@@ -55,7 +55,7 @@ def ontologymaps(service):
                     else:
                         q_list.append( { byc["query_field"]: f } )
     if len(q_list) < 1:
-        response_add_error(r, **{ "filter_error": "No correct filter value provided!" } )
+        response_add_error(r, 422, "No correct filter value provided!" )
 
     cgi_break_on_errors(r, byc)
 

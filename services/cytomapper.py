@@ -64,7 +64,7 @@ def cytomapper(service):
     cb_label = _cytobands_label( cytoBands )
 
     if len( cytoBands ) < 1:
-        response_add_error(r, **{ "cytoband_error": "No matching cytobands!" } )
+        response_add_error(r, 422, "No matching cytobands!" )
         _print_terminal_response( byc["args"], r )
         cgi_break_on_errors(r, byc)
 
@@ -213,9 +213,10 @@ def _cytobands_label( cytobands ):
 def _print_terminal_response(args, r):
 
     if sys.stdin.isatty():
-        if r["response"][ "error" ]:
-            print( "\n".r["response"][ "error" ] )
-            exit()
+        if "error" in r["response"]:
+            if r["response"][ "error" ][ "error_code" ] > 200:
+                print( "\n".r["response"][ "error" ][ "error_message" ] )
+                exit()
 
     if args.cytobands:
         print(str(r["data"]["info"][ "chroBases" ]))

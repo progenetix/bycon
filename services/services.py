@@ -7,9 +7,10 @@ from importlib import import_module
 # local
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
-sys.path.append( pkg_path )
-from bycon.lib.read_specs import read_local_prefs
-from bycon.lib.cgi_utils import rest_path_value, cgi_print_json_response, set_debug_state
+bycon_lib_path = path.join( pkg_path, "bycon", "lib" )
+sys.path.append( bycon_lib_path )
+from read_specs import read_local_prefs
+from cgi_utils import rest_path_value, cgi_print_json_response, set_debug_state
 
 """
 The `services` application deparses a request URI and calls the respective
@@ -23,9 +24,19 @@ rewrite in the server configuration for creation of canonical URLs.
 
 def main():
 
+    services("")
+    
+################################################################################
+
+def services(service):
+
     set_debug_state()
     these_prefs = read_local_prefs( "services", dir_path )
-    service_name = rest_path_value("services")
+
+    if service in these_prefs["service_names"]:
+        service_name = service
+    else:
+        service_name = rest_path_value("services")
 
     if service_name in these_prefs["service_names"]:    
         f = service_name

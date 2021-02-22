@@ -83,8 +83,8 @@ def cgi_break_on_errors(r, byc):
 
     if "response" in r and "form_data" in byc:
         if "error" in r["response"]:
-            if len(r["response"]["error"]) > 0:
-                cgi_print_json_response( byc["form_data"], r, 422 )
+            if r["response"]["error"]["error_code"] > 200:
+                cgi_print_json_response( byc["form_data"], r, r["response"]["error"]["error_code"] )
 
 ################################################################################
 

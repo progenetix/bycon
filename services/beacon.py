@@ -14,8 +14,6 @@ from bycon.lib import *
 from lib import *
 
 """podmd
-* <https://progenetix.org/cgi/bycon/services/biosamples.py?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
-* <https://progenetix.org/services/biosamples?responseFormat=simple&datasetIds=progenetix&filters=cellosaurus:CVCL_0030>
 podmd"""
 
 ################################################################################
@@ -24,23 +22,33 @@ podmd"""
 
 def main():
 
-    biosamples("biosamples")
+    beacon("beacon")
     
 ################################################################################
 
-def biosamples(service):
+def beacon(service):
 
     byc = initialize_service(service)
 
+    update_datasets_from_dbstats(byc)
+
+    beacon_get_endpoint(byc)
+    parse_endpoints(byc)
+    select_response_type(byc)
     select_dataset_ids(byc)
     check_dataset_ids(byc)
+
     get_filter_flags(byc)
     parse_filters(byc)
 
-    # adding arguments for querying / processing data
+    check_service_requests(byc)
+
     parse_variants(byc)
     get_variant_request_type(byc)
+    
     generate_queries(byc)
+
+    beacon_respond_with_errors(byc)
 
     r = create_empty_service_response(byc)
     response_collect_errors(r, byc)
@@ -52,13 +60,14 @@ def biosamples(service):
     execute_bycon_queries( ds_id, byc )
     query_results_save_handovers(byc)
 
+    # TODO: Beacon stats, dataset responses ...
     access_id = byc["query_results"]["bs._id"][ "id" ]
-
-    # TODO: 
-    if "callsetstats" in byc["method"]:
-        service = "callsets"
-        access_id = byc["query_results"]["cs._id"][ "id" ]
-
+    if "variants" in byc["response_type"]:
+        if "vs._id" in byc["query_results"]:
+            access_id = byc["query_results"]["vs._id"][ "id" ]
+        else:
+            response_add_error(r, 422, "No variants were retrieved." )
+ 
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:

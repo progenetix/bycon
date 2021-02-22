@@ -50,7 +50,7 @@ def schemas(service):
         exit()
 
     r = byc[ "config" ]["response_object_schema"]
-    response_add_error(r, **{ "parameter_error": "No correct schema name provided!" } )
+    response_add_error(r, 422, "No correct schema name provided!")
  
     cgi_print_json_response( {}, r, 422 )
 

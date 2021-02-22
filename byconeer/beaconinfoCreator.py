@@ -31,18 +31,7 @@ API (`byconplus`).
 
 def main():
 
-    byc = {
-        "pkg_path": pkg_path,
-        "errors": [ ],
-        "warnings": [ ]
-    }
-
-    for d in [
-        "config",
-        "dataset_definitions",
-        "filter_definitions"
-    ]:
-        read_bycon_configs_by_name( d, byc )
+    byc = initialize_service("collations")
 
     b_info = { "date": date_isoformat(datetime.datetime.now()), "datasets": { } }
 
@@ -83,15 +72,77 @@ def _dataset_update_counts(ds, **byc):
                 v_d = { }
                 bar = Bar(ds_id+' variants', max = no, suffix='%(percent)d%%'+" of "+str(no) )
                 for v in ds_db[ c ].find({}):
-                    v_d[ v["digest"] ] = 1
+                    if "digest" in v:
+                        v_d[ v["digest"] ] = 1
                     bar.next()
                 bar.finish()
                 b_i_ds["counts"].update( { "variants_distinct": len(v_d.keys()) } )
     
     if b_i_ds["counts"]["biosamples"] > 0:
-        b_i_ds.update( { "filtering_terms": dataset_count_collationed_filters(ds_id, **byc) } )
+        b_i_ds.update( { "filtering_terms": _dataset_count_collationed_filters(ds_id, **byc) } )
 
     return(b_i_ds)
+
+################################################################################
+
+def _dataset_count_collationed_filters(ds_id, **byc):
+
+    mongo_client = MongoClient( )
+    mongo_db = mongo_client[ ds_id ]
+    bios_coll = mongo_db[ 'biosamples' ]
+
+    sample_no =  bios_coll.estimated_document_count()
+
+    filter_v = [ ]
+
+    scopes = ( "external_references", "biocharacteristics", "cohorts" )
+
+    split_v = re.compile(r'^(\w+?)[\:\-].+?$')
+
+    for s in scopes:
+        pfs = { }
+        source_key = s+".id"
+        afs = bios_coll.distinct( source_key )
+        for k in afs:
+            try:
+                if split_v.match(k):
+                    pre = split_v.match(k).group(1)
+
+                    if pre in byc["these_prefs"]["collationed"]:
+                        coll_p = re.compile( byc["these_prefs"]["collationed"][ pre ]["pattern"] )
+                        if coll_p.match(k):
+                            pfs.update( { k: { 
+                                "id": k,
+                                "count": 0,
+                                # "source": byc[ "filter_definitions" ][ pre ][ "name" ],
+                                # "scope": s
+                            } } )
+            except:
+                continue
+        scopedNo = len(pfs.keys())
+        if scopedNo > 0:
+            bar = Bar(ds_id+': '+s, max = sample_no, suffix='%(percent)d%%'+" of "+str(sample_no) )
+            for sample in bios_coll.find({}):
+                bar.next()
+                if s in sample:
+                    for term in sample[ s ]:
+                        tid = term["id"]
+                        if tid in pfs.keys():
+                            pfs[ tid ]["count"] += 1
+                            if "label" in term:
+                                 pfs[ tid ]["label"] = term["label"]
+
+            bar.finish()
+
+            print("=> {} valid filtering terms out of {} for {} ({})".format(scopedNo, len(afs), s, ds_id) )
+
+            for fk, ft in pfs.items():
+                # print("{}: {}".format(ft["id"], ft["count"]))
+                filter_v.append(ft)
+
+    print("=> {} filtering terms for {}".format(len(filter_v), ds_id) )
+ 
+    return filter_v
 
 ################################################################################
 ################################################################################

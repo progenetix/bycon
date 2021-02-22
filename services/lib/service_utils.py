@@ -17,7 +17,10 @@ def initialize_service(service):
 
     frm = inspect.stack()[1]
     mod = inspect.getmodule(frm[0])
-    sub_path = path.join(pkg_path, path.dirname(mod.__file__))
+    # sub_path = path.join(pkg_path, path.dirname(mod.__file__))
+
+    sub_path = path.dirname( path.abspath(mod.__file__) )
+    # print(path.dirname( path.abspath(mod.__file__) ) )
 
     byc =  {
         "pkg_path": pkg_path,
@@ -59,7 +62,7 @@ def create_empty_service_response(byc):
 
     if "errors" in byc:
         if len(byc["errors"]) > 0:
-            response_add_error(r, **{ "preprocessing_errors": byc["errors"] } )
+            response_add_error(r, 422, "::".join(byc["errors"]))
 
     # saving the parameters to the response
     for p in ["method", "dataset_ids", "filters", "variant_pars"]:
@@ -83,21 +86,23 @@ def response_collect_errors(r, byc):
 
     # TODO: flexible list of errors
     if not byc[ "queries" ].keys():
-      response_add_error(r, **{ "query_error": "No (correct) query parameters were provided." } )
+      response_add_error(r, 422, "No (correct) query parameters were provided." )
     if len(byc[ "dataset_ids" ]) < 1:
-      response_add_error(r, **{ "dataset_error": "No `datasetIds` parameter provided." } )
+      response_add_error(r, 422, "No `datasetIds` parameter provided." )
     if len(byc[ "dataset_ids" ]) > 1:
-      response_add_error(r, **{ "dataset_error": "More than 1 `datasetIds` value was provided." } )
+      response_add_error(r, 422, "More than 1 `datasetIds` value was provided." )
       
 ################################################################################
 
-def response_add_error(r, **errors):
+def response_add_error(r, code, message):
 
-    if not errors:
+    if not code:
         return r
 
-    for k, e in errors.items():
-        r["response"]["error"].update( { k: e } )
+    r["response"]["error"].update( { "error_code": code } )
+
+    if message:
+        r["response"]["error"].update( { "error_message": message } )
 
     return r
 

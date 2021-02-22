@@ -119,6 +119,8 @@ Additional information may be available through [info.progenetix.org](https://in
   
 ##### Custom (yet)
 
+* <https://beacon.progenetix.org/?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&variantType=DUP&filterLogic=AND&geneSymbol=MYC&varMinLength=1000000&varMaxLength=3000000&filters=icdom-80463>
+
 * `/get-datasetids/`
   - dataset retrieval
   - <https://bycon.progenetix.org/get-datasetids/>

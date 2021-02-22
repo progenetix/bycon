@@ -10,16 +10,11 @@ from pymongo import MongoClient
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import *
-from bycon.lib.parse_filters import *
-from bycon.lib.read_specs import *
-from lib.service_utils import *
+
+from bycon.lib import *
+from lib import *
 
 """podmd
-* <http://progenetix.org/services/collations?deliveryKeys=id,count&filters=cellosaurus&datasetIds=progenetix>
-* <https://progenetix.org/services/collations?filters=NCIT>
-* <https://progenetix.org/services/collations?filters=NCIT&method=codematches>
-* <http://progenetix.org/cgi-bin/bycon/services/collations.py?filters=NCIT&datasetIds=progenetix&method=counts>
 podmd"""
 
 ################################################################################
@@ -42,7 +37,7 @@ def collations(service):
     r = create_empty_service_response(byc)    
 
     if len(byc[ "dataset_ids" ]) < 1:
-      response_add_error(r, **{ "dataset_error": "No `datasetIds` parameter provided." } )
+      response_add_error(r, 422, "No `datasetIds` parameter provided." )
  
     cgi_break_on_errors(r, byc)
 

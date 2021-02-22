@@ -2,7 +2,7 @@ import re, yaml
 from pymongo import MongoClient
 from os import environ, pardir, path
 
-from .cgi_utils import *
+from cgi_utils import *
 
 ################################################################################
 

@@ -12,8 +12,9 @@ from progress.bar import Bar
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.read_specs import read_bycon_configs_by_name
-from lib.filter_aggregation  import dataset_count_collationed_filters
+
+from bycon.lib import *
+from services.lib import *
 """
 
 ## `collationsCreator`
@@ -38,19 +39,8 @@ def _get_args():
 
 def main():
 
-    byc = {
-        "pkg_path": pkg_path,
-        "args": _get_args(),
-        "errors": [ ],
-        "warnings": [ ]
-    }
-
-    for d in [
-        "config",
-        "dataset_definitions",
-        "filter_definitions"
-    ]:
-        byc.update( { d: read_bycon_configs_by_name( d ) } )
+    byc = initialize_service("collations")
+    byc.update( { "args": _get_args() } )
 
 ################################################################################
 
@@ -83,13 +73,13 @@ def main():
 
 def _create_collations_from_dataset( ds_id, **byc ):
 
-    coll_types = byc["config"]["collationed"]
+    coll_types = byc["these_prefs"]["collationed"]
     # coll_types = { "NCIT": { } }
     # coll_types = { "PMID": { } }
 
     for pre in coll_types.keys():
 
-        pre_h_f = path.join( dir_path, "rsrc", pre, "numbered-hierarchies.tsv" )
+        pre_h_f = path.join( byc["pkg_path"], "byconeer", "rsrc", pre, "numbered-hierarchies.tsv" )
         if  path.exists( pre_h_f ):
             print( "Creating hierarchy for " + pre)
             hier =  get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc)
@@ -217,7 +207,7 @@ def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
     data_db = data_client[ ds_id ]
     data_coll = data_db[ byc["config"]["collations_source"] ]
     data_key = byc["filter_definitions"][ pre ]["db_key"]
-    data_pat = byc["config"]["collationed"][ pre ]["pattern"]
+    data_pat = byc["these_prefs"]["collationed"][ pre ]["pattern"]
     
     onto_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
 
@@ -328,11 +318,11 @@ def _get_dummy_hierarchy(ds_id, pre, **byc):
     data_client = MongoClient( )
     data_db = data_client[ ds_id ]
     data_coll = data_db[ byc["config"]["collations_source"] ]
-    data_pat = byc["config"]["collationed"][ pre ]["pattern"]
+    data_pat = byc["these_prefs"]["collationed"][ pre ]["pattern"]
     data_key = byc["filter_definitions"][ pre ]["db_key"]
 
-    if byc["config"]["collationed"][ pre ]["is_series"]: 
-        s_pat = byc["config"]["collationed"][ pre ]["child_pattern"]
+    if byc["these_prefs"]["collationed"][ pre ]["is_series"]: 
+        s_pat = byc["these_prefs"]["collationed"][ pre ]["child_pattern"]
         s_re = re.compile( s_pat )
 
     pre_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
@@ -346,7 +336,7 @@ def _get_dummy_hierarchy(ds_id, pre, **byc):
         bar.next()
         hier.update( { c: _get_hierarchy_item( data_coll, data_key, c, order, 0, [ c ] ) } )
 
-        if byc["config"]["collationed"][ pre ]["is_series"]:
+        if byc["these_prefs"]["collationed"][ pre ]["is_series"]:
 
             ser_ids = data_coll.distinct( data_key, { data_key: c } )
             ser_ids = list(filter(lambda d: s_re.match(d), ser_ids))

@@ -3,10 +3,10 @@ import json
 from pymongo import MongoClient
 from os import environ
 
-from .cgi_utils import *
-from .handover_execution import *
-from .handover_generation import *
-from .query_execution import execute_bycon_queries
+from cgi_utils import *
+from handover_execution import *
+from handover_generation import *
+from query_execution import execute_bycon_queries
 
 ################################################################################
 
@@ -33,11 +33,11 @@ def select_response_type(byc):
 def beacon_respond_with_errors( byc ):
 
     if not byc[ "queries" ].keys():
-      byc["service_info"].update( { "warning": "No (correct) query parameters were provided." } )
+      byc["service_info"].update( { "error": { "error_code": 422, "error_message": "No (correct) query parameters were provided." } } )
       cgi_print_json_response( byc["form_data"], byc["service_info"], 422)
 
     if len(byc[ "dataset_ids" ]) < 1:
-      byc["service_info"].update( { "error": "No `datasetIds` parameter provided." } )
+      byc["service_info"].update( { "error": { "error_code": 422, "error_message": "No `datasetIds` parameter provided." } } )
       cgi_print_json_response( byc["form_data"], byc["service_info"], 422)
 
 ################################################################################

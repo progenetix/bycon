@@ -41,9 +41,9 @@ def publications(service):
     r = create_empty_service_response(byc)
 
     # data retrieval & response population
-    query, error = _create_filters_query( **byc )
-    if len(error) > 1:
-        response_add_error(r, **{ "query_errors": error } )
+    query, e = _create_filters_query( **byc )
+    if len(e) > 1:
+        response_add_error(r, 422, e )
 
     geo_q, geo_pars = geo_query( **byc )
 
@@ -56,7 +56,7 @@ def publications(service):
             query = { '$and': [ geo_q, query ] }
 
     if len(query.keys()) < 1:
-        response_add_error(r, **{ "query_error": "No query could be constructed from the parameters provided." } )
+        response_add_error(r, 422, "No query could be constructed from the parameters provided." )
 
     cgi_break_on_errors(r, byc)
 

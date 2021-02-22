@@ -4,7 +4,7 @@ from pymongo import MongoClient
 from os import path, pardir
 from json_ref_dict import RefDict, materialize
 
-from .cgi_utils import *
+from cgi_utils import *
 
 ################################################################################
 

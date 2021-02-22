@@ -1,11 +1,11 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/ServiceResponseResults/v2020-12-18
+"$id": https://progenetix.org/services/schemas/ServiceResponseResults/v2021-02-17
 title: ServiceResponseResults
 description: >
   The results of the service request.
 properties:
   error:
-    type: object
+    "$ref": ServiceError.yaml#/properties
   exists:
     type: boolean
   info:

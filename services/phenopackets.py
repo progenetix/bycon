@@ -38,7 +38,7 @@ def phenopackets(service):
                 byc.update( { p_k: byc["form_data"].getvalue( p_k ) } )
 
     select_dataset_ids(byc)
-    beacon_check_dataset_ids(byc)
+    check_dataset_ids(byc)
     get_filter_flags(byc)
     parse_filters(byc)
 
@@ -61,7 +61,7 @@ def phenopackets(service):
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
-        response_add_error(r, **{ "data_error": e } )
+        response_add_error(r, 422, e )
 
     access_id_ind = byc["query_results"]["is._id"][ "id" ]
     ind_s = [ ]
