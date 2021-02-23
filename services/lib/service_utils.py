@@ -1,5 +1,6 @@
 from os import path, pardir
 import inspect
+import json
 import sys
 
 # local
@@ -63,6 +64,9 @@ def create_empty_service_response(byc):
     if "errors" in byc:
         if len(byc["errors"]) > 0:
             response_add_error(r, 422, "::".join(byc["errors"]))
+
+    if "queries" in byc:
+        r["response"]["info"].update({ "database_queries": json.dumps(byc["queries"]) } )
 
     # saving the parameters to the response
     for p in ["method", "dataset_ids", "filters", "variant_pars"]:
