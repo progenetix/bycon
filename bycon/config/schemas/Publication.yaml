@@ -23,20 +23,26 @@ properties:
     type: string
   authors:
     type: string
+    examples:
+      - "Weber RG, Boström J, Wolter M, Baudis M, Collins VP, Reifenberger G, Lichter P."
   affiliation:
     type: string
   journal:
     type: string
+    examples:
+      - "Proc. Natl. Acad. Sci. U.S.A. 94(26), 1997"
   year:
     type: string
+    examples:
+      - "2021"
   abstract:
     type: string
   label:
     description: >
-      A shortened concatenation of 
+      An optional informative shortened concatenation of authors / year / title, to be used for labels etc.
     type: string
     examples:
-      - "Weber RG, Boström J, Wolter M, Baudis M, Collins et al. (1997): Analysis of genomic alterations in benign, atypical, and anaplastic meningiomas: toward a genetic model of meningioma ..."
+      - "Peralta R, Baudis M, Vazquez G, Juárez S, Ortiz R, Decanini et al. (2010): Increased expression of cellular retinol-binding protein 1 in laryngeal squamous cell carcinoma."
   status:
     type: string
   contact:
