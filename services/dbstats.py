@@ -11,6 +11,7 @@ pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response,cgi_break_on_errors
 from bycon.lib.read_specs import dbstats_return_latest
+from bycon.lib.parse_filters import select_dataset_ids, check_dataset_ids
 from lib.service_utils import *
 
 """podmd
@@ -35,6 +36,9 @@ def dbstats(service):
 
     byc = initialize_service(service)
 
+    select_dataset_ids(byc)
+    check_dataset_ids(byc)
+
     if "statsNumber" in byc["form_data"]:
         s_n = byc["form_data"].getvalue("statsNumber")
         try:
@@ -51,13 +55,15 @@ def dbstats(service):
 
     results = [ ]
     for stat in ds_stats:
-        db_latest = { "date": stat["date"], "datasets": { } }
+        r["response"]["info"].update({ "date": stat["date"] })
         for ds_id, ds_vs in stat["datasets"].items():
-            dbs = {}
+            if len(byc[ "dataset_ids" ]) > 0:
+                if not ds_id in byc[ "dataset_ids" ]:
+                    continue
+            dbs = { "dataset_id": ds_id }
             for k in byc["these_prefs"]["methods"][ byc["method"] ]:
                 dbs.update({k:ds_vs[k]})
-            db_latest["datasets"].update( { ds_id : dbs } )
-        results.append(db_latest)
+            results.append( dbs )
 
     populate_service_response( r, results )
     cgi_print_json_response( byc[ "form_data" ], r, 200 )

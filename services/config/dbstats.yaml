@@ -1,3 +1,7 @@
+bycon_definition_files:
+  - config
+  - dataset_definitions
+  - filter_definitions
 defaults:
   method: counts
   response_type: return_dbstats
@@ -7,7 +11,7 @@ meta:
   returned_schemas:
     DBstats: https://progenetix.org/services/schemas/DBstats/
   info: >
-    The latest dbstats payload can be accessed in `response.results[0]`.
+    The latest dbstats payload can be accessed in `response.results`.
 methods:
   counts:
     - counts

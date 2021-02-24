@@ -63,10 +63,6 @@ def main():
     for d_k, d_v in these_prefs.items():
         byc.update( { d_k: d_v } )
 
-    # schemas = read_schema_files("Progenetix", "definitions", dir_path)
-    # bs_proto = create_db_schema("biosample", dir_path, **schemas)
-    # print(json.dumps(bs_proto["Biosample"], indent=4, sort_keys=True, default=str)+"\n")
-
 ################################################################################
 
     if byc["args"].test:

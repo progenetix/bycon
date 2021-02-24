@@ -1,12 +1,14 @@
 from os import path, pardir
 import inspect
 import json
+from bson import json_util
 import sys
 
 # local
 lib_path = path.dirname( path.abspath(__file__) )
 dir_path = path.join( lib_path, pardir )
 pkg_path = path.join( dir_path, pardir )
+schema_path = path.join( pkg_path, "bycon" )
 sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import cgi_parse_query,form_return_listvalue
 from bycon.lib.read_specs import read_bycon_configs_by_name,read_local_prefs
@@ -54,7 +56,7 @@ def initialize_service(service):
 
 def create_empty_service_response(byc):
 
-    r_s = read_schema_files("ServiceResponse", "properties", dir_path)
+    r_s = read_schema_files("ServiceResponse", "properties", schema_path)
     r = create_empty_instance(r_s)
 
     if "meta" in byc["these_prefs"]:
@@ -66,7 +68,7 @@ def create_empty_service_response(byc):
             response_add_error(r, 422, "::".join(byc["errors"]))
 
     if "queries" in byc:
-        r["response"]["info"].update({ "database_queries": json.dumps(byc["queries"]) } )
+        r["response"]["info"].update({ "database_queries": json.loads(json_util.dumps( byc["queries"] ) ) } )
 
     # saving the parameters to the response
     for p in ["method", "dataset_ids", "filters", "variant_pars"]:

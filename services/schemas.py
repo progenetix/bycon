@@ -34,7 +34,7 @@ def schemas(service):
     byc = initialize_service(service)
 
     s_data = { }
-    s_pkg_path = path.join( byc["pkg_path"], "byconeer")
+    s_pkg_path = path.join( pkg_path, "bycon")
     s_path = path.join( s_pkg_path, "config", "schemas" )
     s_files = [ f.name for f in scandir(s_path) if f.is_file() ]
     s_files = [ f for f in s_files if f.endswith(".yaml") ]
@@ -49,7 +49,7 @@ def schemas(service):
         cgi_print_json_response( {}, s_data[ schema_name ], 200 )
         exit()
 
-    r = byc[ "config" ]["response_object_schema"]
+    r = create_empty_service_response(byc)    
     response_add_error(r, 422, "No correct schema name provided!")
  
     cgi_print_json_response( {}, r, 422 )
