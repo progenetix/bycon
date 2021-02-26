@@ -23,13 +23,13 @@ podmd"""
 
 def main():
 
-    collations("collations")
+    collations()
     
 ################################################################################
 
-def collations(service):
+def collations():
 
-    byc = initialize_service(service)
+    byc = initialize_service("collations")
 
     select_dataset_ids(byc)
     parse_filters(byc)

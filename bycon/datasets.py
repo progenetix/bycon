@@ -12,13 +12,18 @@ sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response,cgi_break_on_errors
 from bycon.lib.read_specs import dbstats_return_latest
 from bycon.lib.parse_filters import select_dataset_ids, check_dataset_ids
-from lib.service_utils import *
+
+service_lib_path = path.join( pkg_path, "services", "lib" )
+sys.path.append( service_lib_path )
+
+from service_utils import initialize_service, create_empty_service_response, populate_service_response, response_add_error, response_add_parameter, response_collect_errors, response_map_results
+
+from byconeer.lib.schemas_parser import *
+
 
 """podmd
 
-* <https://progenetix.org/services/dbstats/>
-* <https://progenetix.org/services/dbstats/?statsNumber=3&responseFormat=simple>
-* <http://progenetix.org/cgi/bycon/services/dbstats.py?method=filtering_terms>
+* <https://beacon.progenetix.org/datasets/>
 
 podmd"""
 
@@ -28,13 +33,13 @@ podmd"""
 
 def main():
 
-    dbstats()
+    datasets()
     
 ################################################################################
 
-def dbstats():
+def datasets():
 
-    byc = initialize_service("dbstats")
+    byc = initialize_service()
 
     select_dataset_ids(byc)
     check_dataset_ids(byc)

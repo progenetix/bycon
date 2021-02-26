@@ -27,13 +27,13 @@ podmd"""
 
 def main():
 
-    publications("publications")
+    publications()
     
 ################################################################################
 
-def publications(service):
+def publications():
 
-    byc = initialize_service(service)
+    byc = initialize_service()
 
     get_filter_flags(byc)
     parse_filters(byc)

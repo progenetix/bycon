@@ -4,6 +4,8 @@ defaults:
   assembly_id: GRCh38
   query_fields:
     - gene_symbol
+    - gene_entrez_id
+  query_precision: "exact"
 meta:
   response_type: genespans
   returned_schemas:

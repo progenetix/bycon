@@ -24,13 +24,13 @@ podmd"""
 
 def main():
 
-    biosamples("biosamples")
+    biosamples()
     
 ################################################################################
 
-def biosamples(service):
+def biosamples():
 
-    byc = initialize_service(service)
+    byc = initialize_service("biosamples")
 
     select_dataset_ids(byc)
     check_dataset_ids(byc)
@@ -56,7 +56,6 @@ def biosamples(service):
 
     # TODO: 
     if "callsetstats" in byc["method"]:
-        service = "callsets"
         access_id = byc["query_results"]["cs._id"][ "id" ]
 
     h_o, e = retrieve_handover( access_id, **byc )

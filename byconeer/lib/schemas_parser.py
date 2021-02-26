@@ -1,12 +1,30 @@
 import re, json, yaml
-from os import path, scandir
+from os import path, scandir, pardir
 from json_ref_dict import RefDict, materialize
+import sys
+
+# local
+lib_path = path.dirname( path.abspath(__file__) )
+dir_path = path.join( lib_path, pardir )
+pkg_path = path.join( dir_path, pardir )
+schema_path = path.join( pkg_path, "bycon", "config", "schemas" )
 
 ################################################################################
 
-def read_schema_files(schema_root, item, dir_path):
+def parse_beacon_schema(byc):
 
-    s_path = path.join( dir_path, "config", "schemas", schema_root+".yaml#/"+item )
+    bsp = path.join( schema_path, "beacon.yaml" )
+    with open( bsp ) as bs:
+
+        byc.update({ "beacon": yaml.load( bs , Loader=yaml.FullLoader) })
+
+    return byc
+
+################################################################################
+
+def read_schema_files(schema_root, item, schema_path):
+
+    s_path = path.join( schema_path, schema_root+".yaml#/"+item )
 
     root_def = RefDict(s_path)
 

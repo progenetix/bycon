@@ -45,7 +45,7 @@ def services(service):
         try:
             mod = import_module(f)
             serv = getattr(mod, f)
-            serv(f)
+            serv()
             exit()
         except Exception as e:
             print('Content-Type: text')

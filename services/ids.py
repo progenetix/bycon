@@ -29,13 +29,13 @@ podmd"""
 
 def main():
 
-    ids("ids")
+    ids()
     
 ################################################################################
 
-def ids(service):
+def ids():
 
-    these_prefs = read_local_prefs( service, dir_path )
+    these_prefs = read_local_prefs( "ids", dir_path )
 
     id_in = rest_path_value("ids")
 

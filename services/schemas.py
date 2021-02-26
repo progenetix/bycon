@@ -25,13 +25,13 @@ podmd"""
 
 def main():
 
-    schemas("schemas")
+    schemas()
     
 ################################################################################
 
-def schemas(service):
+def schemas():
 
-    byc = initialize_service(service)
+    byc = initialize_service("schemas")
 
     s_data = { }
     s_pkg_path = path.join( pkg_path, "bycon")

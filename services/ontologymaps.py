@@ -27,13 +27,13 @@ podmd"""
 
 def main():
 
-    ontologymaps("ontologymaps")
+    ontologymaps()
     
 ################################################################################
 
-def ontologymaps(service):
+def ontologymaps():
 
-    byc = initialize_service(service)
+    byc = initialize_service()
 
     parse_filters(byc)
     get_filter_flags(byc)

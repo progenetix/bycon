@@ -1,6 +1,5 @@
 bycon_definition_files:
   - config
-  - beacon
   - dataset_definitions
   - filter_definitions
   - geoloc_definitions

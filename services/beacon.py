@@ -22,13 +22,13 @@ podmd"""
 
 def main():
 
-    beacon("beacon")
+    beacon()
     
 ################################################################################
 
-def beacon(service):
+def beacon():
 
-    byc = initialize_service(service)
+    byc = initialize_service("beacon")
 
     update_datasets_from_dbstats(byc)
 

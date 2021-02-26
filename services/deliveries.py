@@ -29,13 +29,13 @@ podmd"""
 
 def main():
 
-    deliveries("deliveries")
+    deliveries()
     
 ################################################################################
 
-def deliveries(service):
+def deliveries():
 
-    byc = initialize_service(service)
+    byc = initialize_service("deliveries")
 
     r = create_empty_service_response(byc)
 

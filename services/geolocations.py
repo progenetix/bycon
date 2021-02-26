@@ -27,13 +27,13 @@ podmd"""
 
 def main():
 
-    geolocations("geolocations")
+    geolocations()
     
 ################################################################################
 
-def geolocations(service):
+def geolocations():
 
-    byc = initialize_service(service)
+    byc = initialize_service("geolocations")
 
     # for the geolocs database, not the provenance object
     byc["geoloc_definitions"]["geo_root"] = "geo_location"

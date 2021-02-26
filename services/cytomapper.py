@@ -34,15 +34,15 @@ def _get_args():
 
 def main():
 
-    cytomapper("cytomapper")
+    cytomapper()
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-def cytomapper(service):
+def cytomapper():
     
-    byc = initialize_service(service)
+    byc = initialize_service("cytomapper")
 
     byc.update( { "args": _get_args() } )
     byc[ "config" ][ "paths" ][ "genomes" ] = path.join( dir_path, "rsrc", "genomes" )

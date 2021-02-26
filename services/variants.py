@@ -20,13 +20,13 @@ from service_utils import *
 
 def main():
 
-    variants("variants")
+    variants()
     
 ################################################################################
 
-def variants(service):
+def variants():
 
-    byc = initialize_service(service)
+    byc = initialize_service("variants")
 
     r = create_empty_service_response(byc)
 

@@ -22,13 +22,13 @@ podmd"""
 
 def main():
 
-    phenopackets("phenopackets")
+    phenopackets()
     
 ################################################################################
 
-def phenopackets(service):
+def phenopackets():
 
-    byc = initialize_service(service)
+    byc = initialize_service("phenopackets")
 
     for p_k, p_v in byc["these_prefs"]["parameters"].items():
         if p_k in byc["form_data"]:

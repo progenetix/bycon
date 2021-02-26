@@ -12,6 +12,7 @@ dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.read_specs import read_bycon_configs_by_name
+from services.lib import *
 from byconeer.lib import *
 
 """
@@ -31,7 +32,13 @@ API (`byconplus`).
 
 def main():
 
-    byc = initialize_service("collations")
+    collations()
+
+################################################################################
+
+def collations():
+
+    byc = initialize_service()
 
     b_info = { "date": date_isoformat(datetime.datetime.now()), "datasets": { } }
 

@@ -22,13 +22,13 @@ from lib.service_utils import *
 
 def main():
 
-    genespans("genespans")
+    genespans()
     
 ################################################################################
 
-def genespans(service):
+def genespans():
 
-    byc = initialize_service(service)
+    byc = initialize_service("genespans")
         
     r = create_empty_service_response(byc)
 
@@ -39,6 +39,8 @@ def genespans(service):
             assembly_id = aid
         else:
             r["meta"]["warnings"].append("{} is not supported; fallback {} is being used!".format(aid, assembly_id))
+    if "filterPrecision" in byc[ "form_data" ]:
+        byc["query_precision"] = byc["form_data"].getvalue('filterPrecision')
     
     response_add_parameter(r, "assemblyId", assembly_id)
 
@@ -52,13 +54,13 @@ def genespans(service):
     cgi_break_on_errors(r, byc)
 
     # data retrieval & response population
-    # query options may be expanded - current list + sole gene_id is a bit odd
-    # TODO: positional query
     q_list = [ ]
     for q_f in byc["query_fields"]:
-        q_list.append( { q_f: re.compile( r'^'+gene_id, re.IGNORECASE ) } )
-
-    query = create_and_or_query_for_list('$and', q_list)
+        if "start" in byc["query_precision"]:
+            q_list.append( { q_f: re.compile( r'^'+gene_id, re.IGNORECASE ) } )
+        else:
+            q_list.append( { q_f: re.compile( r'^'+gene_id+'$', re.IGNORECASE ) } )
+    query = create_and_or_query_for_list('$or', q_list)
 
     results, e = mongo_result_list( byc["db"], byc["coll"], query, { '_id': False } )
     if e:

@@ -16,19 +16,17 @@ from byconeer.lib.schemas_parser import *
 
 ################################################################################
 
-def initialize_service(service):
+def initialize_service():
 
     frm = inspect.stack()[1]
     mod = inspect.getmodule(frm[0])
-    # sub_path = path.join(pkg_path, path.dirname(mod.__file__))
-
     sub_path = path.dirname( path.abspath(mod.__file__) )
-    # print(path.dirname( path.abspath(mod.__file__) ) )
+    serv = frm.function
 
     byc =  {
         "pkg_path": pkg_path,
         "form_data": cgi_parse_query(),
-        "these_prefs": read_local_prefs( service, sub_path ),
+        "these_prefs": read_local_prefs( serv, sub_path ),
         "method": "",
         "errors": [ ],
         "warnings": [ ]

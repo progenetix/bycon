@@ -32,6 +32,8 @@ from service_utils import initialize_service, create_empty_service_response, pop
 
 from byconeer.lib.schemas_parser import *
 
+from datasets import *
+
 """podmd
 ### Bycon - a Python-based environment for the Beacon v2 genomics API
 
@@ -61,13 +63,15 @@ def _get_args():
 
 def main():
 
-    byconplus("byconplus")
+    byconplus()
     
 ################################################################################
 
-def byconplus(service):
+def byconplus():
     
-    byc = initialize_service(service)
+    byc = initialize_service()
+
+    parse_beacon_schema(byc)
         
     update_datasets_from_dbstats(byc)
 
@@ -103,9 +107,13 @@ def byconplus(service):
 
     check_service_requests(byc)
 
+    # datasets(datasets)
+
     parse_variants(byc)
     get_variant_request_type(byc)
     generate_queries(byc)
+
+    print(byc["queries"])
 
     beacon_respond_with_errors(byc)
     collect_dataset_responses(byc)
