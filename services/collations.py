@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+w#!/usr/local/bin/python3
 
 import cgi, cgitb
 import re, json, yaml
@@ -29,7 +29,7 @@ def main():
 
 def collations():
 
-    byc = initialize_service("collations")
+    byc = initialize_service()
 
     select_dataset_ids(byc)
     parse_filters(byc)

@@ -35,7 +35,7 @@ def main():
 
 def deliveries():
 
-    byc = initialize_service("deliveries")
+    byc = initialize_service()
 
     r = create_empty_service_response(byc)
 

@@ -28,7 +28,7 @@ def main():
 
 def phenopackets():
 
-    byc = initialize_service("phenopackets")
+    byc = initialize_service()
 
     for p_k, p_v in byc["these_prefs"]["parameters"].items():
         if p_k in byc["form_data"]:

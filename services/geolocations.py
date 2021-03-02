@@ -33,7 +33,7 @@ def main():
 
 def geolocations():
 
-    byc = initialize_service("geolocations")
+    byc = initialize_service()
 
     # for the geolocs database, not the provenance object
     byc["geoloc_definitions"]["geo_root"] = "geo_location"

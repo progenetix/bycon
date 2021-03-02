@@ -31,7 +31,7 @@ def main():
 
 def schemas():
 
-    byc = initialize_service("schemas")
+    byc = initialize_service()
 
     s_data = { }
     s_pkg_path = path.join( pkg_path, "bycon")

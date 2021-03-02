@@ -30,7 +30,7 @@ def main():
 
 def biosamples():
 
-    byc = initialize_service("biosamples")
+    byc = initialize_service()
 
     select_dataset_ids(byc)
     check_dataset_ids(byc)

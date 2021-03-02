@@ -28,7 +28,7 @@ def main():
 
 def beacon():
 
-    byc = initialize_service("beacon")
+    byc = initialize_service()
 
     update_datasets_from_dbstats(byc)
 

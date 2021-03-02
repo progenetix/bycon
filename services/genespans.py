@@ -28,7 +28,7 @@ def main():
 
 def genespans():
 
-    byc = initialize_service("genespans")
+    byc = initialize_service()
         
     r = create_empty_service_response(byc)
 

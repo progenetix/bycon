@@ -42,7 +42,7 @@ def main():
 
 def cytomapper():
     
-    byc = initialize_service("cytomapper")
+    byc = initialize_service()
 
     byc.update( { "args": _get_args() } )
     byc[ "config" ][ "paths" ][ "genomes" ] = path.join( dir_path, "rsrc", "genomes" )

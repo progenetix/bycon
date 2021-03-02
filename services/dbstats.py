@@ -34,7 +34,7 @@ def main():
 
 def dbstats():
 
-    byc = initialize_service("dbstats")
+    byc = initialize_service()
 
     select_dataset_ids(byc)
     check_dataset_ids(byc)
