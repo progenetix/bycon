@@ -1,4 +1,4 @@
-w#!/usr/local/bin/python3
+#!/usr/local/bin/python3
 
 import cgi, cgitb
 import re, json, yaml

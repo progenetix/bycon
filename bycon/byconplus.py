@@ -113,8 +113,6 @@ def byconplus():
     get_variant_request_type(byc)
     generate_queries(byc)
 
-    print(byc["queries"])
-
     beacon_respond_with_errors(byc)
     collect_dataset_responses(byc)
 

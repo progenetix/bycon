@@ -24,11 +24,13 @@ def parse_beacon_schema(byc):
 
 def read_schema_files(schema_root, item, schema_path):
 
+
     s_path = path.join( schema_path, schema_root+".yaml#/"+item )
+    # print(s_path)
 
     root_def = RefDict(s_path)
 
-    exclude_keys = [ "format", "examples", "description" ]
+    exclude_keys = [ "format", "examples" ]
 
     return materialize(root_def, exclude_keys = exclude_keys)
 
