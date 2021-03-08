@@ -78,6 +78,12 @@ def main():
 
     mongo_client = MongoClient( )
 
+    pub_labels = { }
+    pub_db = byc["config"]["info_db"]
+    pub_coll = mongo_client[ pub_db ][ "publications" ]
+    for pub in pub_coll.find( { "label": { "$regex": "..." } }, { "_id": 0, "id": 1, "label": 1 } ):
+        pub_labels.update( { pub["id"] : pub["label"] } )
+
     no_cs_no = 0
     no_stats_no = 0
 
@@ -103,16 +109,19 @@ def main():
             """
 
             cs_ids = [ ]
+            cs_stats_no = 0
             cnv_stats = { }
             cnvstatistics = {k:[] for k in byc["refreshing"]["cnvstatistics"]}
             cs_query = { "biosample_id": s["id"] }
             for cs in cs_coll.find( cs_query ):
                 cs_ids.append(cs["id"])
-                for s_k in cnvstatistics.keys():
-                    if s_k in cs["info"]["cnvstatistics"]:
-                        cnvstatistics[ s_k ].append(cs["info"]["cnvstatistics"][ s_k ])
+                if "cnvstatistics" in cs["info"]:
+                    cs_stats_no = cs_stats_no + 1
+                    for s_k in cnvstatistics.keys():
+                        if s_k in cs["info"]["cnvstatistics"]:
+                            cnvstatistics[ s_k ].append(cs["info"]["cnvstatistics"][ s_k ])
             any_stats = False
-            if len(cs_ids) > 0:
+            if cs_stats_no > 0:
                 for s_k in cnvstatistics.keys():
                     n = len(cnvstatistics[ s_k ])
                     if n > 0:
@@ -146,6 +155,15 @@ def main():
                 for b_c in s[ "biocharacteristics" ]:
                      if "NCIT:C" in b_c["id"]:
                         update_obj.update( { "histological_diagnosis": b_c } ) 
+
+            if "external_references" in s:
+                e_r_u = [ ]
+                for e_r in s[ "external_references" ]:
+                    if "PMID" in e_r["id"]:
+                        if e_r["id"] in pub_labels:
+                            e_r.update( {"label": pub_labels[ e_r["id"] ] } )
+                    e_r_u.append(e_r)                   
+                update_obj.update( { "external_references": e_r_u } ) 
 
             ####################################################################
 

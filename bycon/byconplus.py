@@ -116,15 +116,6 @@ def byconplus():
     beacon_respond_with_errors(byc)
     collect_dataset_responses(byc)
 
-    # r = create_empty_service_response(byc)
-    # for p in ["api_version", "beacon_id"]: 
-    #     r["meta"].update({p: byc["beacon_info"][ snake_to_camel(p) ]})
-
-    # if "biosamples" in byc["response_type"]:
-    #     results = byc["dataset_responses"][0][ byc["dataset_ids"][0] ]
-    #     populate_service_response(r, results)
-    #     cgi_print_json_response( byc["form_data"], r, 200 )
-
     create_beacon_response(byc)    
     cgi_print_json_response(
         byc["form_data"],

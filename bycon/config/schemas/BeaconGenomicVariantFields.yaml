@@ -1,0 +1,89 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/BeaconGenomicVariantFields/v2021-03-07
+title: BeaconGenomicVariantFields
+meta:
+  contributors:
+    - description: "ELIXIR Beacon project team"
+      id: "http://beacon-project.io"
+    - description: "Michael Baudis"
+      id: "orcid:0000-0002-9903-4248"
+  provenance:
+    - description: "Beacon v2"
+      id: "https://github.com/ga4gh-beacon/specification-v2"
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+  used_by:
+    - description: "Progenetix database schema (Beacon+ backend)"
+      id: 'https://github.com/progenetix/schemas/'
+  sb_status: community
+description: |
+  All the required fields to query any kind of variant (e.g. SNP, DUP, 
+  etc.).
+type: object
+properties:
+  id:
+    description: |
+      Id of the variant to display.
+    type: string
+  assemblyId:
+    $ref: 'BeaconGenomicComponents.yaml#/schemas/Assembly'
+  referenceName:
+    $ref: 'BeaconGenomicComponents.yaml#/schemas/Chromosome'
+  start:
+    description: |
+      Precise or fuzzy start coordinate position(s), allele locus 
+      (0-based, inclusive).
+      * `start` only:
+        - for single positions, e.g. the start of a specified sequence 
+        alteration where the size is given through the specified 
+        `alternateBases`
+        - typical use are queries for SNV and small InDels
+        - the use of `start` without an `end` parameter requires the use 
+        of `referenceBases`
+      * `start` and `end`:
+        - if used with `variantType`, for special use case for exactly 
+        determined structural changes
+        - without `variantType`, for searching any variant falling within 
+        this range (a.k.a. range query)
+      * use 2 values for querying imprecise positions (e.g. identifying 
+      all structural variants starting anywhere between `start[0]` <-> 
+      `start[1]`, and ending anywhere between `end[0]` <-> `end[1]`)
+      * single or double sided precise matches 
+      can be achieved by setting `start[1]=start[0]+1` and `end[1]=end[0]+1`
+    type: array
+    items:
+      type: integer
+      format: int64
+      minimum: 0
+    minItems: 1
+    maxItems: 2
+  end:
+    description: |
+      Precise or fuzzy end coordinate(s) (0-based, exclusive). See `start`. 
+      
+      For fuzzy matches, provide 2 values in the array (e.g. [111,222]).
+    type: array
+    items:
+      type: integer
+      format: int64
+      minimum: 1
+    minItems: 0
+    maxItems: 2
+  referenceBases:
+    $ref: 'BeaconReferenceBases.yaml'
+  alternateBases:
+    $ref: 'BeaconAlternateBases.yaml'
+  variantType:
+    description: |
+      The `variantType` is used to denote e.g. structural variants.
+      Examples:
+      * DUP: duplication of sequence following `start`; not necessarily in
+      situ
+      * DEL: deletion of sequence following `start`
+      * BND: breakend, i.e. termination of the allele at position
+            `start` or in the `startMin` => `startMax` interval, or fusion
+            of the sequence to distant partner
+      Optional: either `alternateBases` or `variantType` is required.
+    type: string
+  mateName:
+    $ref: 'BeaconGenomicComponents.yaml#/schemas/Chromosome'

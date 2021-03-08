@@ -1,6 +1,29 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
 "$id": https://progenetix.org/services/schemas/OntologyClass/v2021-01-12
 title: OntologyClass
+meta:
+  contributors:
+    - description: "GA4GH Metadata Task Team"
+    - description: "Michael Baudis"
+      id: "orcid:0000-0002-9903-4248"
+    - description: "Chris Mungall"
+    - description: "Jules Jacobsen"
+      id: "orcid:0000-0002-3265-15918"
+    - description: "Peter Robinson"
+      id: "orcid:0000-0002-0736-91998"
+  provenance:
+    - description: "Developer branch of original GA4GH schema"
+      id: 'https://github.com/ga4gh-metadata/metadata-schemas/blob/master/schemas/shared.proto#L39'
+    - description: "Phenopackets"
+      id: 'https://github.com/phenopackets/phenopacket-schema/blob/master/docs/ontologyclass.rst'
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+  used_by:
+    - description: "Progenetix database schema (Beacon+ backend)"
+      id: 'https://github.com/progenetix/schemas/'
+  sb_status: community
+description: >
+  The `OntologyClass` object is the main wrapper for identifiers, used for well-formed CURIE representations of ontology classes for biological or technical concepts and knowledge resources, as well as for "private" identifiers such as internal classifications. 
 type: object
 required:
     - id
@@ -8,7 +31,7 @@ properties:
   id:
     type: string
     description: >
-      The `OntologyClass` object is the main wrapper for identifiers, used for well-formed CURIE representations of ontology classes for biological or technical concepts and knowledge resources, as well as for "private" identifiers such as internal classifications. 
+      Identifier as string (CURIE highly recommended). 
     examples:
       - UBERON:0000002
       - PMID:9892199

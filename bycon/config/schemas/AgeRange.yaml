@@ -1,8 +1,25 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/AgeRange/v2020-12-08
+"$id": https://progenetix.org/services/schemas/AgeRange/v2021-03-05
 title: AgeRange
+meta:
+  contributors:
+    - description: "Jules Jacobsen"
+      id: "orcid:0000-0002-3265-15918"
+    - description: "Peter Robinson"
+      id: "orcid:0000-0002-0736-91998"
+    - description: "Michael Baudis"
+      id: "orcid:0000-0002-9903-4248"
+  provenance:
+    - description: "Phenopackets"
+      id: 'https://github.com/phenopackets/phenopacket-schema/blob/master/docs/age.rst#agerange'
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+  used_by:
+    - description: "Progenetix database schema (Beacon+ backend)"
+      id: 'https://github.com/progenetix/schemas/'
+  sb_status: community
 properties:
   start:
-    "$ref": Age.yaml#/properties
+    "$ref": Age.yaml#/properties/age
   end:
-    "$ref": Age.yaml#/properties
+    "$ref": Age.yaml#/properties/age

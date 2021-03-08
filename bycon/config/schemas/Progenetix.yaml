@@ -1,4 +1,6 @@
 title: Progenetix
+description: >
+  This is the root schema for the Progenetix resource, corresponding to the principle elements of the core data schema.
 definitions:
   id: "#root"
   biosample: 

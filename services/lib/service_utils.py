@@ -54,7 +54,7 @@ def initialize_service():
 
 def create_empty_service_response(byc):
 
-    r_s = read_schema_files("ServiceResponse", "properties", schema_path)
+    r_s = read_schema_files("BeaconServiceResponse", "properties", schema_path)
     r = create_empty_instance(r_s)
 
     if "meta" in byc["these_prefs"]:

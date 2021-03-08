@@ -1,6 +1,20 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
 "$id": https://progenetix.org/services/schemas/Variant/v2020-12-08
 title: Variant
+meta:
+  contributors:
+    - description: "GA4GH Data Working Group"
+    - description: "Michael Baudis"
+      id: "orcid:0000-0002-9903-4248"
+  provenance:
+    - description: "GA4GH schemas"
+      id: 'https://github.com/ga4gh/ga4gh-schemas/blob/master/src/main/proto/ga4gh/variants.proto#L145'
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+  used_by:
+    - description: "Progenetix database schema (Beacon+ backend)"
+      id: 'https://github.com/progenetix/schemas/'
+  sb_status: community
 description: >
   Genomic variant, representing a sequence variation on a single genomic allele or a structural modification (e.g. copy number variation or LOH). In contrast to the use in e.g. VCF, multi-allelic alterations are reported as single variants.
 required:

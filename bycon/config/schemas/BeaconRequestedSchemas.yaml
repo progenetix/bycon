@@ -1,0 +1,58 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/BeaconRequestedSchemas/v2021-03-07
+title: BeaconRequestedSchemas
+meta:
+  contributors:
+    - description: "ELIXIR Beacon project team"
+      id: "http://beacon-project.io"
+    - description: "Michael Baudis"
+      id: "orcid:0000-0002-9903-4248"
+  provenance:
+    - description: "Beacon v2"
+      id: "https://github.com/ga4gh-beacon/specification-v2"
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+  used_by:
+    - description: "Progenetix database schema (Beacon+ backend)"
+      id: 'https://github.com/progenetix/schemas/'
+  sb_status: community
+description: |
+  Format of the responses and version of the Beacon handling this request.
+type: object
+properties:
+  VariantIdentification:
+    type: string
+    examples:
+      - ga4gh-variant-representation-v0.1
+  VariantAnnotation:
+    type: string
+    examples:
+      - beacon-variant-annotation-draft-2
+  Individual:
+    type: string
+    examples:
+      - ga4gh-phenopacket-individual-v0.1
+  Biosample:
+    type: string
+    examples:
+      - ga4gh-schemablocks-biosample-v0.1
+  Run:
+    type: string
+    examples:
+      - beacon-run-draft-2
+  Analysis:
+    type: string
+    examples:
+      - beacon-analysis-draft-2
+  VariantInSample:
+    type: string
+    examples:
+      - beacon-variant-in-sample-draft-2
+  VariantInterpretation:
+    type: string
+    examples:
+      - beacon-variant-interpretation-draft-2
+  Interactor:
+    type: string
+    examples:
+      - beacon-interactor-draft-2

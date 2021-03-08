@@ -62,14 +62,14 @@ def publications():
 
     mongo_client = MongoClient( )
     pub_db = byc["config"]["info_db"]
-    mongo_coll = mongo_client[ pub_db ][ "publications" ]
+    pub_coll = mongo_client[ pub_db ][ "publications" ]
 
     p_re = re.compile( byc["filter_definitions"]["PMID"]["pattern"] )
 
     p_l = [ ]
     d_k = response_set_delivery_keys(byc)
     
-    for pub in mongo_coll.find( query, { "_id": 0 } ):
+    for pub in pub_coll.find( query, { "_id": 0 } ):
         s = { }
         if len(d_k) < 1:
             s = pub

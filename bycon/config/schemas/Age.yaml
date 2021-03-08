@@ -1,11 +1,27 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/Age/v2020-12-08
+"$id": https://progenetix.org/services/schemas/Age/v2021-03-05
 title: Age
+meta:
+  contributors:
+    - description: "GA4GH Metadata Task Team"
+    - description: "Michael Baudis"
+      id: "orcid:0000-0002-9903-4248"
+  provenance:
+    - description: "Developer branch of original GA4GH schema"
+      id: 'https://github.com/ga4gh-metadata/metadata-schemas/blob/master/schemas/biometadata.proto#L145'
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+  used_by:
+    - description: "Progenetix database schema (Beacon+ backend)"
+      id: 'https://github.com/progenetix/schemas/'
+  sb_status: community
 description: |
     The ISO 8601 age of this object as ISO8601 duration. While the use of time intervals would make an additional birth date or other anchor unnecessary (i.e. DOB and age can be represented as start-anchored time interval, e.g. 1967-11-11/P40Y10M05D), this is not recommended since such a use does not reflect common practice.
 properties:
   age:
     type: string
+    description: The age as non-anchored ISO8601 duration string.
+    pattern: '^P(\d+?(\.\d+?)?Y)?(\d+?(\.\d+?)?M)?(\d+?(\.\d+?)?D)?$'
     examples:
       - P12Y
       - P3M12D
