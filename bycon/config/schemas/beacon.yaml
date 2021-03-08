@@ -1,4 +1,6 @@
 title: Beacon
+meta:
+  $ref: 'ByconBeaconMeta.yaml#/properties'
 description: >
   This is the root Beacon schema, translated from the OpenAPI version.
 definitions:
