@@ -1,8 +1,8 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/InteractorFields/v2021-03-07
-title: InteractorFields
+"$id": https://progenetix.org/services/schemas/BeaconInteractorFields/v2021-03-07
+title: BeaconInteractorFields
 meta:
-  $ref: 'byconBeaconMeta.yaml#/properties'
+  $ref: 'Beacon.yaml#/meta'
 description: |
   Fields to filter by interactor.
 type: object

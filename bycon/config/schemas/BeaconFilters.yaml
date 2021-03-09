@@ -2,7 +2,7 @@
 "$id": https://progenetix.org/services/schemas/BeaconFilters/v2021-03-07
 title: BeaconFilters
 meta:
-  $ref: 'ByconBeaconMeta.yaml#/properties'
+  $ref: 'Beacon.yaml#/meta'
 description: >
   Filters are usually CURIE based or in case of custom filters "CURIE styled" query parameters.
 schemas:

@@ -2,7 +2,7 @@
 "$id": https://progenetix.org/services/schemas/BeaconError/v2021-03-07
 title: BeaconError
 meta:
-  $ref: 'ByconBeaconMeta.yaml#/properties'
+  $ref: 'Beacon.yaml#/meta'
 description: >
   An error message, as in Beaconv2.
 required:

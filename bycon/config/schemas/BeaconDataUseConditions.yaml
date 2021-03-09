@@ -1,8 +1,8 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
 "$id": https://progenetix.org/services/schemas/BeaconDataUseConditions/v2021-03-08
-title: DataUseConditions
+title: BeaconDataUseConditions
 meta:
-  $ref: 'ByconBeaconMeta.yaml#/properties'
+  $ref: 'Beacon.yaml#/meta'
 description: |
   Data use conditions ruling this dataset.
 type: object

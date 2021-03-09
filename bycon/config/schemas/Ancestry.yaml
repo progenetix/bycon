@@ -14,9 +14,10 @@ meta:
     - description: "Progenetix database schema (Beacon+ backend)"
       id: 'https://github.com/progenetix/schemas/'
   sb_status: community
+type: object
 properties:
   ancestry:
-    "$ref": OntologyClass.yaml#/properties
+    $ref: OntologyClass.yaml#/properties
   description:
     type: string
   confidenceScore:

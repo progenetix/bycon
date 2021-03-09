@@ -18,8 +18,9 @@ meta:
     - description: "Progenetix database schema (Beacon+ backend)"
       id: 'https://github.com/progenetix/schemas/'
   sb_status: community
+type: object
 properties:
   start:
-    "$ref": Age.yaml#/properties/age
+    $ref: Age.yaml#/properties/age
   end:
-    "$ref": Age.yaml#/properties/age
+    $ref: Age.yaml#/properties/age

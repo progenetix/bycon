@@ -2,7 +2,7 @@
 "$id": https://progenetix.org/services/schemas/BeaconGenomicComponents/v2021-03-07
 title: BeaconGenomicComponents
 meta:
-  $ref: 'ByconBeaconMeta.yaml#/properties'
+  $ref: 'Beacon.yaml#/meta'
 schemas:
   Assembly:
     description: |

@@ -40,7 +40,6 @@ def schemas():
     s_files = [ f for f in s_files if f.endswith(".yaml") ]
     s_files = [ f for f in s_files if not f.startswith("_") ]
     # commenting beacon since remote $ref are not handled yet
-    s_files = [ f for f in s_files if not f.startswith("beacon_v2") ]
     # s_files = [ f for f in s_files if not f.startswith("Beacon") ]
 
     for s_f in s_files:

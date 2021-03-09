@@ -2,7 +2,7 @@
 "$id": https://progenetix.org/services/schemas/BeaconInfo/v2021-03-07
 title: BeaconInfo
 meta:
-  $ref: 'ByconBeaconMeta.yaml#/properties'
+  $ref: 'Beacon.yaml#/meta'
 description: |
   Metadata describing a beacon instance.
 type: object

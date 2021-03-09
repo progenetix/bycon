@@ -2,7 +2,7 @@
 "$id": https://progenetix.org/services/schemas/BeaconAlternativeSchema/v2021-03-08
 title: BeaconAlternativeSchema
 meta:
-  $ref: 'ByconBeaconMeta.yaml#/properties'
+  $ref: 'Beacon.yaml#/meta'
 description: |
   Alternative schema for describing this Beacon object.
 type: object

@@ -1,8 +1,8 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/AnalysisFields/v2021-03-07
-title: AnalysisFields
+"$id": https://progenetix.org/services/schemas/BeaconAnalysisFields/v2021-03-07
+title: BeaconAnalysisFields
 meta:
-  $ref: 'ByconBeaconMeta.yaml#/properties'
+  $ref: 'Beacon.yaml#/meta'
 description: |
   Fields to filter by analysis.
 type: object

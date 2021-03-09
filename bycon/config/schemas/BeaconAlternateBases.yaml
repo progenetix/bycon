@@ -2,7 +2,7 @@
 "$id": https://progenetix.org/services/schemas/BeaconAlternateBases/v2021-03-07
 title: BeaconAlternateBases
 meta:
-  $ref: 'ByconBeaconMeta.yaml#/properties'
+  $ref: 'Beacon.yaml#/meta'
 description: |
   The bases that appear instead of the reference bases. Accepted 
   values: [ACGTN]*. N is a wildcard, that denotes the position of any 

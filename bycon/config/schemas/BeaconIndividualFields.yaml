@@ -2,7 +2,7 @@
 "$id": https://progenetix.org/services/schemas/BeaconIndividualFields/v2021-03-07
 title: BeaconIndividualFields
 meta:
-  $ref: 'ByconBeaconMeta.yaml#/properties'
+  $ref: 'Beacon.yaml#/meta'
 description: |
   Fields to filter by individual.
 type: object

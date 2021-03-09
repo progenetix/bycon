@@ -17,6 +17,7 @@ meta:
   sb_status: community
 description: |
     The ISO 8601 age of this object as ISO8601 duration. While the use of time intervals would make an additional birth date or other anchor unnecessary (i.e. DOB and age can be represented as start-anchored time interval, e.g. 1967-11-11/P40Y10M05D), this is not recommended since such a use does not reflect common practice.
+type: object
 properties:
   age:
     type: string

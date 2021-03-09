@@ -2,7 +2,7 @@
 "$id": https://progenetix.org/services/schemas/BeaconDataset/v2021-03-08
 title: BeaconDataset
 meta:
-  $ref: 'ByconBeaconMeta.yaml#/properties'
+  $ref: 'Beacon.yaml#/meta'
 description: |
   A dataset available in the beacon.
 type: object

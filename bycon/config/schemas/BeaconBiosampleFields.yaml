@@ -2,7 +2,7 @@
 "$id": https://progenetix.org/services/schemas/BeaconBiosampleFields/v2021-03-07
 title: BeaconBiosampleFields
 meta:
-  $ref: 'ByconBeaconMeta.yaml#/properties'
+  $ref: 'Beacon.yaml#/meta'
 description: |
   Fields to filter by biosample.
 type: object

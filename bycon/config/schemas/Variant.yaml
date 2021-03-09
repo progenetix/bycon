@@ -80,7 +80,7 @@ properties:
   externalReferences:
     type: array
     items:
-      "$ref": OntologyClass.yaml#/properties
+      $ref: OntologyClass.yaml#/properties
     examples:
       - type: Clinvar variant
         id: clinvar:163840

@@ -32,7 +32,7 @@ properties:
   hierarchyPaths:
     type: array
     items:
-      "$ref": HierarchyPath.yaml#/properties  
+      $ref: HierarchyPath.yaml#/properties  
     description: >
       All term paths leading to any instance of this code from the hierarchy
       root term.

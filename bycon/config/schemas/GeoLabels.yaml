@@ -14,13 +14,14 @@ meta:
   sb_status: proposed
 description: >
   GeoLabels represent an instance of the GeoJSON `properties` object. The parameters provide additional information for the interpretation of the location parameters, and also serve for optional "sanity checks" off the corresponding latitude, longitude (, altitude).
+type: object
 properties:
   label:
     type: string
     examples:
       - Heidelberg, Germany
       - Gainesville, United States of America
-      - Zürich, Switzerland
+      - Zurich, Switzerland
       - 'Str Marasesti 5, 300077 Timisoara, Romania'
   city:
     type: string

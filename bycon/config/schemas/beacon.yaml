@@ -1,6 +1,25 @@
 title: Beacon
 meta:
-  $ref: 'ByconBeaconMeta.yaml#/properties'
+  contributors:
+    - description: "ELIXIR Beacon project team"
+      id: "https://beacon-project.io/categories/people.html"
+    - description: "Jordi Rambla"
+      id: 'github:@jrambla'
+    - description: "Sabele de la Torre"
+      id: 'github:@sdelatorrep'
+    - description: "Mamana Mbiyavanga"
+      id: 'github:@mamanambiya'
+    - description: "Michael Baudis"
+      id: "orcid:0000-0002-9903-4248"
+  provenance:
+    - description: "Beacon v2"
+      id: "https://github.com/ga4gh-beacon/specification-v2"
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+  used_by:
+    - description: "Progenetix database schema (Beacon+ backend)"
+      id: 'https://github.com/progenetix/schemas/'
+  sb_status: community
 description: >
   This is the root Beacon schema, translated from the OpenAPI version.
 definitions:

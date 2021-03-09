@@ -29,13 +29,13 @@ properties:
     type: string
     description: >
       Id of article in PMC, if there.
-      TODO: into external_references?
+      TODO: into `external_references`?
   title:
     type: string
   authors:
     type: string
     examples:
-      - "Weber RG, Boström J, Wolter M, Baudis M, Collins VP, Reifenberger G, Lichter P."
+      - "Weber RG, Bostrom J, Wolter M, Baudis M, Collins VP, Reifenberger G, Lichter P."
   affiliation:
     type: string
   journal:
@@ -53,7 +53,7 @@ properties:
       An optional informative shortened concatenation of authors / year / title, to be used for labels etc.
     type: string
     examples:
-      - "Peralta R, Baudis M, Vazquez G, Juárez S, Ortiz R, Decanini et al. (2010): Increased expression of cellular retinol-binding protein 1 in laryngeal squamous cell carcinoma."
+      - "Peralta R, Baudis M, Vazquez G, Juarez S, Ortiz R, Decanini et al. (2010): Increased expression of cellular retinol-binding protein 1 in laryngeal squamous cell carcinoma."
   status:
     type: string
   contact:
@@ -66,7 +66,7 @@ properties:
   note:
     type: string
   provenance:
-    "$ref": Provenance.yaml#/properties
+    $ref: Provenance.yaml#/properties
   info:
     type: object
   updated:

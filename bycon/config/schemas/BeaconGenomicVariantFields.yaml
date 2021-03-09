@@ -2,7 +2,7 @@
 "$id": https://progenetix.org/services/schemas/BeaconGenomicVariantFields/v2021-03-07
 title: BeaconGenomicVariantFields
 meta:
-  $ref: 'ByconBeaconMeta.yaml#/properties'
+  $ref: 'Beacon.yaml#/meta'
 description: |
   All the required fields to query any kind of variant (e.g. SNP, DUP, 
   etc.).

@@ -33,7 +33,7 @@ properties:
     examples:
       - HapMap project contributor
   genotypicSex:
-    "$ref": OntologyClass.yaml#/properties
+    $ref: OntologyClass.yaml#/properties
     examples:
       - id: PATO:0020002
         label: female genotypic sex
@@ -64,7 +64,7 @@ properties:
   biocharacteristics:
     type: array
     items:
-      "$ref": OntologyClass.yaml#/properties
+      $ref: OntologyClass.yaml#/properties
     examples:
       - id: NCIT:C142079
         label: Limb-girdle muscular dystrophy type 2A
@@ -73,7 +73,7 @@ properties:
   externalReferences:
     type: array
     items:
-      "$ref": OntologyClass.yaml#/properties
+      $ref: OntologyClass.yaml#/properties
     examples:
       - id: biosample:SAME122868
         label: HapMap individual
@@ -81,13 +81,13 @@ properties:
       - id: geo:GSE13331
         label: Prognostic analysis of mantle cell lymphoma genomes
   provenance:
-    "$ref": Provenance.yaml#/properties
+    $ref: Provenance.yaml#/properties
   ancestries:
     type: array
     items:
-      "$ref": Ancestry.yaml#/properties
+      $ref: Ancestry.yaml#/properties
   dataUseConditions:
-    "$ref": OntologyClass.yaml#/properties
+    $ref: OntologyClass.yaml#/properties
     examples:
       - id: DUO:0000004
         label: no restriction

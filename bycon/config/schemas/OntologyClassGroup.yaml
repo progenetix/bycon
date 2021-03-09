@@ -16,4 +16,4 @@ properties:
   codeGroup:
     type: array
     items:
-      "$ref": OntologyClass.yaml#/properties
+      $ref: OntologyClass.yaml#/properties
