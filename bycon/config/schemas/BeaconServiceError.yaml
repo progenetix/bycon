@@ -1,6 +1,6 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/BeaconServiceResponse/v2021-03-07
-title: BeaconServiceResponse
+"$id": https://progenetix.org/services/schemas/BeaconServiceError/v2021-03-07
+title: BeaconServiceError
 meta:
   contributors:
     - description: "ELIXIR Beacon project team"
@@ -17,9 +17,13 @@ meta:
       id: 'https://github.com/progenetix/schemas/'
   sb_status: community
 description: >
-  This schema represents the wrapper for Progenetx service responses.
+  An error message, as in Beaconv2.
+required:
+  - errorCode
 properties:
-  meta:
-    "$ref": BeaconServiceResponseMeta.yaml#/properties
-  response:
-    "$ref": BeaconServiceResponseResults.yaml#/properties
+  errorCode:
+    type: integer
+    format: int32
+    description: 'same as HTTP status code'
+  errorMessage:
+    type: string

@@ -2,6 +2,7 @@ import cgi, cgitb
 import re, yaml
 import logging
 import sys
+from bson.objectid import ObjectId
 
 from cgi_utils import *
 from query_execution import mongo_result_list
@@ -108,24 +109,53 @@ def get_variant_request_type(byc):
             needed_par_no = 1
             for one_of in brts[vrt][ "one_of" ]:
                 if one_of in v_pars:
-                    needed_par_no = 0
+                    matched_par_no = 1
                     continue
-        needed_par_no += len( brts[vrt][ "all_of" ] )
+        
+        if "all_of" in brts[vrt]:
+            needed_par_no += len( brts[vrt][ "all_of" ] )
 
-        for required in brts[vrt][ "all_of" ]:
-            if required in v_pars:
-                matched_par_no += 1
+            for required in brts[vrt][ "all_of" ]:
+                if required in v_pars:
+                    matched_par_no += 1
         
         # print("{} {} of {}".format(vrt, matched_par_no, needed_par_no))
 
         if matched_par_no >= needed_par_no:
             vrt_matches.append( { "type": vrt, "par_no": matched_par_no } )
 
+
     if len(vrt_matches) > 0:
         vrt_matches = sorted(vrt_matches, key=lambda k: k['par_no'], reverse=True)
         variant_request_type = vrt_matches[0]["type"]
 
     byc.update( { "variant_request_type": variant_request_type } )
+
+    return byc
+
+################################################################################
+
+def create_variantIdRequest_query( byc ):
+
+    if byc["variant_request_type"] != "variantIdRequest":
+        return byc
+
+    # query database for gene and use coordinates to create range query
+    vp = byc["variant_pars"]
+
+    if "_id" in vp:
+        v_q = { "_id" : ObjectId( vp[ "_id" ] ) }
+    elif "id" in vp:
+        v_q = { 
+            "$or": [
+                { "_id" : ObjectId( vp[ "id" ] ) },
+                { "id" : vp[ "id" ] }
+            ]
+        }
+    else:
+        return byc
+
+    expand_variant_query(v_q, byc)
 
     return byc
 

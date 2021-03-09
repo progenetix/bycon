@@ -40,6 +40,24 @@ parameters:
 
 # custom parameters
 
+  _id:
+    type: string
+    pattern: '^[a-fA-F\d]{24}$'
+    description: >
+      The internal object id, as string.
+
+  id:
+    type: string
+    pattern: '^\w[\w\:\-\,]+?\w$'
+    description: >
+      A variant id, if existing in the database.
+
+  digest:
+    type: string
+    pattern: '^\w[\w\:>\-\,]+?\w$'
+    description: >
+      A variant digest.
+
   varMinLength:
     type: integer
     pattern: '^\d+?$'
@@ -68,9 +86,16 @@ request_types:
 
   variantIdRequest:
     description: >
-      A query for a specific variant by its `id`.
-    all_of:
+      A query for a specific variant by its `id` or internal `_id`.
+    one_of:
       - id
+      - _id
+
+  variantDigestRequest:
+    description: >
+      A query for a specific variant by its `id` or internal `_id`.
+    all_of:
+      - digest
 
   variantCNVrequest:
     description: >

@@ -70,7 +70,6 @@ def deliveries():
 
         cgi_break_on_errors(r, byc)
 
-
         q = { q_par: q_val }
         if "_id" in q_par:
             q = { "$or": [

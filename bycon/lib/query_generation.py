@@ -206,7 +206,9 @@ def update_queries_from_variants( byc ):
 
     # v_q_method = "create_"+byc["variant_request_type"]+"_query"
 
-    if "variantCNVrequest" in byc["variant_request_type"]:
+    if "variantIdRequest" in byc["variant_request_type"]:
+        create_variantIdRequest_query( byc )
+    elif "variantCNVrequest" in byc["variant_request_type"]:
         create_variantCNVrequest_query( byc )
     elif "variantAlleleRequest" in byc["variant_request_type"]:
         create_variantAlleleRequest_query( byc )

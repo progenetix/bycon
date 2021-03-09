@@ -1,6 +1,6 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/BeaconServiceResponse/v2021-03-07
-title: BeaconServiceResponse
+"$id": https://progenetix.org/services/schemas/BeaconServiceResponseMeta/v2021-03-07
+title: BeaconServiceResponseMeta
 meta:
   contributors:
     - description: "ELIXIR Beacon project team"
@@ -17,9 +17,23 @@ meta:
       id: 'https://github.com/progenetix/schemas/'
   sb_status: community
 description: >
-  This schema represents the wrapper for Progenetx service responses.
+  The metadata (e.g. query, environment) of the service request and response.
 properties:
-  meta:
-    "$ref": BeaconServiceResponseMeta.yaml#/properties
-  response:
-    "$ref": BeaconServiceResponseResults.yaml#/properties
+  apiVersion:
+    type: string
+  beaconId:
+    type: string
+  responseType:
+    type: string
+  warnings:
+    type: array
+    items:
+      type: string
+  receivedRequest:
+    type: object
+  returnedSchemas:
+    type: array
+    items:
+      type: string
+  info:
+    type: object
