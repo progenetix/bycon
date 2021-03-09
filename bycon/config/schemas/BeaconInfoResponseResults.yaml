@@ -8,4 +8,4 @@ description: |
 type: object
 oneOf:
   - $ref: 'BeaconInfo.yaml#/properties'
-  - $ref: 'BeaconAlternativeSchema.yaml#/'
+  - $ref: 'BeaconAlternativeSchema.yaml#/properties'

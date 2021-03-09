@@ -25,6 +25,8 @@ properties:
     $ref: 'BeaconVariantInterpretationFields.yaml#/properties'
   datasets:
     $ref: 'BeaconRequestDatasets.yaml#/properties'
+  cohort:
+    $ref: 'BeaconCohortFields.yaml#/properties'
   filters:
    $ref: 'BeaconFilters.yaml#/schemas/Filters'
   customFilters:

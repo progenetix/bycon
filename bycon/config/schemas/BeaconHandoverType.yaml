@@ -1,0 +1,24 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/BeaconHandoverType/v2021-03-09
+title: BeaconHandoverType
+meta:
+  $ref: 'Beacon.yaml#/meta'
+type: object
+required:
+  - id
+description: |
+      Handover type, as an Ontology_term object with CURIE syntax for the 
+      `id` value. 
+properties:
+  id:
+    type: string
+    description: >-
+      Use `CUSTOM` for the `id` when no ontology is available.
+    default: CUSTOM
+    example: "EFO:0004157"
+  label:
+    type: string
+    description: >-
+      This would be the "preferred Label" in the case of an ontology term.
+    default: null
+    example: "BAM format"

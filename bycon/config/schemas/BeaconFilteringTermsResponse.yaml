@@ -1,0 +1,26 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/BeaconFilteringTermsResponse/v2021-03-09
+title: BeaconFilteringTermsResponse
+meta:
+  $ref: 'Beacon.yaml#/meta'
+type: object
+description: |
+  Filtering terms available in this Beacon.
+required:
+  - beaconId
+  - apiVersion
+  - filteringTerms
+properties:
+  beaconId:
+    description: |
+      Identifier of the beacon, as defined in `Beacon`.
+    type: string
+  apiVersion:
+    description: |
+      Version of the API implemented by this Beacon.
+    type: string
+    example: 'v2.0'
+  filteringTerms:
+    type: array
+    items:
+      $ref: 'BeaconFilteringTerm.yaml#/properties'

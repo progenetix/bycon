@@ -1,0 +1,11 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/BeaconVariantInSampleResponseResults/v2021-03-09
+title: BeaconVariantInSampleResponseResults
+meta:
+  $ref: 'Beacon.yaml#/meta'
+description: |
+  Default schema for describing runs.
+type: object
+oneOf:
+  # - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_in_sample_schema.yaml#/components/schemas/VariantInSample'
+  - $ref: 'BeaconAlternativeSchema.yaml#/properties'

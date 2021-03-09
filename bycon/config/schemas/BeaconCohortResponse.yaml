@@ -1,0 +1,16 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/BeaconCohortResponse/v2021-03-09
+title: BeaconCohortResponse
+meta:
+  $ref: 'Beacon.yaml#/meta'
+description: |
+  Response of a query over cohorts.
+type: object
+required:
+  - meta
+  - response
+properties:
+  meta:
+    $ref: 'BeaconResponseMeta.yaml#/properties'
+  response:
+    $ref: 'BeaconCohortResponseContent.yaml#/properties'

@@ -1,0 +1,11 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/BeaconAnalysisResponseResults/v2021-03-09
+title: BeaconAnalysisResponseResults
+meta:
+  $ref: 'Beacon.yaml#/meta'
+description: |
+  Default schema for describing analyses.
+type: object
+oneOf:
+  - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_analysis_schema.yaml#/components/schemas/Analysis'
+  - $ref: 'BeaconAlternativeSchema.yaml#/properties'

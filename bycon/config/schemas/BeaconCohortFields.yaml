@@ -1,0 +1,17 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/BeaconCohortFields/v2021-03-09
+title: BeaconCohortFields
+meta:
+  $ref: 'Beacon.yaml#/meta'
+description: >
+  Fields to filter by cohort.
+type: object
+properties:
+  id:
+    description: |
+      `id` of the cohort to display.
+    type: string
+  individualId:
+    description: |
+      `individualId` of the cohorts to display.
+    type: string

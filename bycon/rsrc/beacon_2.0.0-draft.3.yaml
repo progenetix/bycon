@@ -1,11 +1,11 @@
 openapi: 3.0.2
 servers: []
 info:
-  version: "2.0.0-draft.2"
+  version: "2.0.0-draft.3"
   title: GA4GH Beacon API Specification
   description: >-
     A Beacon is a web service for genetic data sharing that can be queried for 
-    information about variants, individuals or samples.
+    information about variants, individuals, biosamples, and other entities.
   contact:
     email: beacon@ga4gh.org
   license:
@@ -191,7 +191,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Request'
-        required: true
+        required: false
       responses:
         '200':
           description: |
@@ -242,7 +242,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Request'
-        required: true
+        required: false
       responses:
         '200':
           description: |
@@ -293,7 +293,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Request'
-        required: true
+        required: false
       responses:
         '200':
           description: |
@@ -328,7 +328,7 @@ paths:
   /individuals/{id}/g_variants:
     post:
       description: |
-        Get variants that have been stored for  this individual.
+        Get variants that have been stored for this individual.
       operationId: postVariantsByIndividualId
       tags:
         - Endpoints
@@ -344,7 +344,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Request'
-        required: true
+        required: false
       responses:
         '200':
           description: |
@@ -376,6 +376,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenomicVariantResponse'
+  /individuals/{id}/cohorts:
+    post:
+      description: |
+        Get cohort(s) of this individual.
+      operationId: postCohortsByIndividual
+      tags:
+        - Endpoints
+      parameters:
+        - name: id
+          in: path
+          description: Individual ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+      responses:
+        '200':
+          description: |
+            Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohortResponse'
+        '400':
+          description: |
+            Bad request (e.g. missing mandatory parameter)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohortResponse'
+        '401':
+          description: >-
+            Unauthorised (e.g. when an unauthenticated user tries to access a
+            protected resource)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohortResponse'
+        '403':
+          description: >-
+            Forbidden (e.g. the resource is protected for all users or the user
+            is authenticated but they are not granted for this resource)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohortResponse'
   /biosamples:
     post:
       description: |
@@ -388,7 +438,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Request'
-        required: true
+        required: false
       responses:
         '200':
           description: |
@@ -439,7 +489,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Request'
-        required: true
+        required: false
       responses:
         '200':
           description: |
@@ -490,7 +540,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Request'
-        required: true
+        required: false
       responses:
         '200':
           description: |
@@ -541,7 +591,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Request'
-        required: true
+        required: false
       responses:
         '200':
           description: |
@@ -623,56 +673,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RunResponse'
-  # /biosamples/{id}/variants_in_sample:  
-  #   post:
-  #     description: |
-  #       Get the variants in sample in which this biosample is found.
-  #     operationId: getVariantsInSampleByBiosampleId
-  #     tags:
-  #       - Endpoints
-  #     parameters:
-  #       - name: id
-  #         in: path
-  #         description: Biosample ID
-  #         required: true
-  #         schema:
-  #           type: string
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: '#/components/schemas/Request'
-  #     responses:
-  #       '200':
-  #         description: |
-  #           Successful operation
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/VariantInSampleResponse'
-  #       '400':
-  #         description: |
-  #           Bad request (e.g. missing mandatory parameter)
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/VariantInSampleResponse'
-  #       '401':
-  #         description: >-
-  #           Unauthorised (e.g. when an unauthenticated user tries to access a
-  #           protected resource)
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/VariantInSampleResponse'
-  #       '403':
-  #         description: >-
-  #           Forbidden (e.g. the resource is protected for all users or the user
-  #           is authenticated but they are not granted for this resource)
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/VariantInSampleResponse'
+  /biosamples/{id}/variants_in_sample:  
+    post:
+      description: |
+        Get the variants in sample in which this biosample is found.
+      operationId: getVariantsInSampleByBiosampleId
+      tags:
+        - Endpoints
+      parameters:
+        - name: id
+          in: path
+          description: Biosample ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+      responses:
+        '200':
+          description: |
+            Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariantInSampleResponse'
+        '400':
+          description: |
+            Bad request (e.g. missing mandatory parameter)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariantInSampleResponse'
+        '401':
+          description: >-
+            Unauthorised (e.g. when an unauthenticated user tries to access a
+            protected resource)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariantInSampleResponse'
+        '403':
+          description: >-
+            Forbidden (e.g. the resource is protected for all users or the user
+            is authenticated but they are not granted for this resource)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariantInSampleResponse'
   /g_variants:
     post:
       description: |
@@ -685,7 +735,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Request'
-        required: true
+        required: false
       responses:
         '200':
           description: |
@@ -1582,6 +1632,149 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IndividualResponse'
+  /cohorts:
+    post:
+      description: |
+        Any kind of query that wants to query cohorts.
+      operationId: postCohorts
+      tags:
+        - Endpoints
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+      responses:
+        '200':
+          description: |
+            Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohortResponse'
+        '400':
+          description: |
+            Bad request (e.g. missing mandatory parameter)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohortResponse'
+        '401':
+          description: >-
+            Unauthorised (e.g. when an unauthenticated user tries to access a
+            protected resource)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohortResponse'
+        '403':
+          description: >-
+            Forbidden (e.g. the resource is protected for all users or the user
+            is authenticated but they are not granted for this resource)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohortResponse'
+  /cohorts/{id}:
+    post:
+      description: |
+        Get a cohort by its `id`.
+      operationId: postCohortById
+      tags:
+        - Endpoints
+      parameters:
+        - name: id
+          in: path
+          description: Cohort ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+      responses:
+        '200':
+          description: |
+            Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohortResponse'
+        '400':
+          description: |
+            Bad request (e.g. missing mandatory parameter)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohortResponse'
+        '401':
+          description: >-
+            Unauthorised (e.g. when an unauthenticated user tries to access a
+            protected resource)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohortResponse'
+        '403':
+          description: >-
+            Forbidden (e.g. the resource is protected for all users or the user
+            is authenticated but they are not granted for this resource)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CohortResponse'
+  /cohorts/{id}/individuals:
+    post:
+      description: |
+        Get the individuals linked to this cohort.
+      operationId: postIndividualsByCohortId
+      tags:
+        - Endpoints
+      parameters:
+        - name: id
+          in: path
+          description: Cohort ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+      responses:
+        '200':
+          description: |
+            Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndividualResponse'
+        '400':
+          description: |
+            Bad request (e.g. missing mandatory parameter)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndividualResponse'
+        '401':
+          description: >-
+            Unauthorised (e.g. when an unauthenticated user tries to access a
+            protected resource)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndividualResponse'
+        '403':
+          description: >-
+            Forbidden (e.g. the resource is protected for all users or the user
+            is authenticated but they are not granted for this resource)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndividualResponse'
 components:
   schemas:
     Chromosome:
@@ -1694,11 +1887,11 @@ components:
       properties:
         Info:
           type: string
-          example: 'beacon-info-v2.0.0-draft.2'
+          example: 'beacon-info-v2.0.0-draft.3'
         Dataset:
           type: string
           example:
-            'beacon-dataset-v2.0.0-draft.2'
+            'beacon-dataset-v2.0.0-draft.3'
     RequestedSchemas:
       description: |
         Format of the responses and version of the Beacon handling this request.
@@ -1719,19 +1912,22 @@ components:
           example: ga4gh-schemablocks-biosample-v0.1
         Run:
           type: string
-          example: beacon-run-draft-2
+          example: beacon-run-draft-3
         Analysis:
           type: string
           example: beacon-analysis-draft-2
         VariantInSample:
           type: string
-          example: beacon-variant-in-sample-draft-2
+          example: beacon-variant-in-sample-draft-3
         VariantInterpretation:
           type: string
           example: beacon-variant-interpretation-draft-2
         Interactor:
           type: string
           example: beacon-interactor-draft-2
+        Cohort:
+          type: string
+          example: beacon-cohort-draft-3
     
     InfoRequestMeta:
       description: |
@@ -1770,14 +1966,14 @@ components:
         Variant description using either the default or an alternative schema.
       type: object
       oneOf:
-        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft-1/default_variant_schema.yaml#/components/schemas/VariantDetails'
+        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_identification_schema.yaml#/components/schemas/VariantIdentification'
         - $ref: '#/components/schemas/AlternativeSchema'
     VariantAnnotation:
       description: |
         Default schema for variant annotation
       type: object
       oneOf:
-        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft-1/default_variant_annotations_schema.yaml#/components/schemas/VariantAnnotations'
+        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_annotations_schema.yaml#/components/schemas/VariantAnnotation'
         - $ref: '#/components/schemas/AlternativeSchema'
     VariantReponseResults:
       description: |
@@ -1860,6 +2056,8 @@ components:
           $ref: '#/components/schemas/VariantInSampleFields'
         variant_interpretation:
           $ref: '#/components/schemas/VariantInterpretationFields'
+        cohort:
+          $ref: '#/components/schemas/CohortFields'
         datasets:
           $ref: '#/components/schemas/RequestDatasets'
         filters:
@@ -2027,6 +2225,19 @@ components:
           description: |
             `datasetId` of the variant(s) interpretation to display.
           type: string
+    CohortFields:
+      description: |
+        Fields to filter by cohort.
+      type: object
+      properties:
+        id:
+          description: |
+            `id` of the cohort to display.
+          type: string
+        individualId:
+          description: |
+            `individualId` of the cohorts to display.
+          type: string
     
     ResponseMeta:
       description: |
@@ -2171,7 +2382,7 @@ components:
         Default schema for describing invididuals.
       type: object
       oneOf:
-        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft-1/default_individual_schema.yaml#/components/schemas/Individual'
+        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_individual_schema.yaml#/components/schemas/Individual'
         - $ref: '#/components/schemas/AlternativeSchema'
 
     # BiosampleRequest:
@@ -2236,7 +2447,7 @@ components:
         Default schema for describing biosamples.
       type: object
       oneOf:
-        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft-1/default_biosample_schema.yaml#/components/schemas/Biosample'
+        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_biosample_schema.yaml#/components/schemas/Biosample'
         - $ref: '#/components/schemas/AlternativeSchema'
     
     RunResponse:
@@ -2289,7 +2500,7 @@ components:
         Default schema for describing runs.
       type: object
       oneOf:
-        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.2/default_run_schema.yaml#/components/schemas/Run'
+        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_run_schema.yaml#/components/schemas/Run'
         - $ref: '#/components/schemas/AlternativeSchema'
     
     AnalysisResponse:
@@ -2342,7 +2553,7 @@ components:
         Default schema for describing runs.
       type: object
       oneOf:
-        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.2/default_analysis_schema.yaml#/components/schemas/Analysis'
+        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_analysis_schema.yaml#/components/schemas/Analysis'
         - $ref: '#/components/schemas/AlternativeSchema'
     
     VariantInSampleResponse:
@@ -2395,7 +2606,7 @@ components:
         Default schema for describing runs.
       type: object
       oneOf:
-        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.2/default_variant_in_sample_schema.yaml#/components/schemas/VariantInSample'
+        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_in_sample_schema.yaml#/components/schemas/VariantInSample'
         - $ref: '#/components/schemas/AlternativeSchema'
     
     VariantInterpretationResponse:
@@ -2448,7 +2659,7 @@ components:
         Default schema for describing runs.
       type: object
       oneOf:
-        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.2/default_variant_interpretation_schema.yaml#/components/schemas/VariantInterpretation'
+        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_interpretation_schema.yaml#/components/schemas/VariantInterpretation'
         - $ref: '#/components/schemas/AlternativeSchema'
     
     InteractorResponse:
@@ -2501,9 +2712,62 @@ components:
         Default schema for describing runs.
       type: object
       oneOf:
-        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.2/default_interactor_schema.yaml#/components/schemas/Interactor'
+        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_interactor_schema.yaml#/components/schemas/Interactor'
         - $ref: '#/components/schemas/AlternativeSchema'
     
+    CohortResponse:
+      description: |
+        Response of a query over cohorts.
+      type: object
+      required:
+        - meta
+        - response
+      properties:
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+        response:
+          $ref: '#/components/schemas/CohortResponseContent'
+    CohortResponseContent:
+      description: |
+        TODO
+      type: object
+      required:
+        - exists
+        - results
+      properties:
+        exists:
+          description: |
+            Indicator of whether any cohort was observed in any of the
+            datasets queried. This should be non-null, unless there was an
+            error, in which case `error` has to be non-null.
+          type: boolean
+        error:
+          $ref: '#/components/schemas/BeaconError'
+        numTotalResults:
+          type: integer
+          minimum: 0
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CohortResponseResults'
+        info:
+          type: object
+        resultsHandover:
+          type: array
+          items:
+            $ref: '#/components/schemas/Handover'
+        beaconHandover:
+          type: array
+          items:
+            $ref: '#/components/schemas/Handover'
+    CohortResponseResults:
+      description: |
+        Default schema for describing runs.
+      type: object
+      oneOf:
+        - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_cohort_schema.yaml#/components/schemas/Cohort'
+        - $ref: '#/components/schemas/AlternativeSchema'
+       
     InfoResponse:
       description: |
         Response of a query over Beacon info. Use `InfoResponseContent` when querying the Beacon info endpoints, and `DatasetResponseContent` when querying the datasets endpoint.

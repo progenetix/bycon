@@ -1,0 +1,21 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/BeaconGenomicVariantReponseResults/v2021-03-09
+title: BeaconGenomicVariantReponseResults
+meta:
+  $ref: 'Beacon.yaml#/meta'
+description: >
+  Description pending
+properties:
+  variant:
+    $ref: 'BeaconGenomicVariant.yaml#/'
+  variantAnnotations:
+    $ref: 'BeaconVariantAnnotation.yaml#/'
+  variantHandover:
+    type: array
+    items:
+      $ref: 'BeaconHandover.yaml#/properties'
+  datasetAlleleRespones:
+    type: array
+    items:
+      $ref: 'BeaconDatasetAlleleResponse.yaml#/properties'
+

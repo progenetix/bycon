@@ -1,0 +1,21 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/BeaconFilteringTerm/v2021-03-09
+title: BeaconFilteringTerm
+meta:
+  $ref: 'Beacon.yaml#/meta'
+type: object
+description: |
+  Entities can be filtered using this term.
+required:
+  - id
+properties:
+  id:
+    description: |
+      CURIE syntax.
+    type: string
+    example: 'NCIT:C102872'
+  label:
+    description: |
+      This would be the "preferred Label" in the case of an ontology term.
+    type: string
+    example: 'Pharyngeal squamous cell carcinoma'

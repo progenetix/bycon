@@ -27,7 +27,4 @@ definitions:
   info: 
     $ref: BeaconInfo.yaml#/properties
   # paths: 
-  #   $ref: BeaconPaths.yaml#/properties
-  # schemas:
-  #   $ref: BeaconSchemas.yaml#/properties
-
+  #   $ref: BeaconPaths.yaml#/paths

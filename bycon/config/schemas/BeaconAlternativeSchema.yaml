@@ -6,3 +6,4 @@ meta:
 description: |
   Alternative schema for describing this Beacon object.
 type: object
+properties: { }
