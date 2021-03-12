@@ -1,9 +1,0 @@
-"$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/BeaconAlternativeSchema/v2021-03-08
-title: BeaconAlternativeSchema
-meta:
-  $ref: 'Beacon.yaml#/meta'
-description: |
-  Alternative schema for describing this Beacon object.
-type: object
-properties: { }

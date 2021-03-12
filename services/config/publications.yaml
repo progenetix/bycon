@@ -13,7 +13,7 @@ defaults:
       scopes:
         publications:
           default: 1
-      pattern: '^(PMID)?\:(\d+?)?$'
+      pattern: '^(PMID)(\:(\d+?))?$'
       examples:
         - 'PMID:28966033'
         - 'PMID:9405679'

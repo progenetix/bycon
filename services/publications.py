@@ -119,6 +119,7 @@ def _create_filters_query( **byc ):
 
     for f in byc[ "filters" ]:
         pre_code = re.split('-|:', f)
+        # print(f, byc[ "filter_flags" ][ "precision" ], len(pre_code), pre_code[1])
         pre = pre_code[0]
         if count_pat.match( f ):
             pre, op, no = count_pat.match(f).group(1,2,3)
