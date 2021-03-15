@@ -119,7 +119,6 @@ def _create_filters_query( **byc ):
 
     for f in byc[ "filters" ]:
         pre_code = re.split('-|:', f)
-        # print(f, byc[ "filter_flags" ][ "precision" ], len(pre_code), pre_code[1])
         pre = pre_code[0]
         if count_pat.match( f ):
             pre, op, no = count_pat.match(f).group(1,2,3)
@@ -135,6 +134,10 @@ def _create_filters_query( **byc ):
                 continue
             q_list.append( { dbk: { op: int(no) } } )
         elif "start" in byc[ "filter_flags" ][ "precision" ] or len(pre_code) == 1:
+            """podmd
+            If there was only prefix a regex match is enforced - basically here
+            for the selection of PMID labeled publications.
+            podmd"""
             q_list.append( { "id": re.compile(r'^'+f ) } )
         else:
             q_list.append( { "id": f } )            
