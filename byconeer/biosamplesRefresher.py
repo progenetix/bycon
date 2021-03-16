@@ -46,11 +46,11 @@ def _get_args(byc):
 
 def main():
 
-    biosamples()
+    biosamples_refresher()
 
 ################################################################################
 
-def biosamples():
+def biosamples_refresher():
 
     byc = initialize_service()
     _get_args(byc)
