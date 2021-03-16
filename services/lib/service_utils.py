@@ -18,6 +18,11 @@ from byconeer.lib.schemas_parser import *
 
 def initialize_service(service="NA"):
 
+    """
+    For consistency, the name of the local configuration file should usually
+    correspond to the calling main function. However, an overwrite can be
+    provided."""
+
     frm = inspect.stack()[1]
     mod = inspect.getmodule(frm[0])
     sub_path = path.dirname( path.abspath(mod.__file__) )
