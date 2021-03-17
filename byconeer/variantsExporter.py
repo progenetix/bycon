@@ -97,7 +97,7 @@ def variants_exporter():
                 if "cnv_value" in v["info"]:
                     if type(v["info"]["cnv_value"]) == int or float:
                         val = v["info"]["cnv_value"]
-            f.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(bs_id, v["reference_name"], v["start"], v["end"], v["variant_type"], val) )
+            f.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(bs_id, v["reference_name"], int(v["start"]), int(v["end"]), v["variant_type"], val) )
 
     f.close()
 
