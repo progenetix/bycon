@@ -24,9 +24,9 @@ sys.path.append( service_lib_path )
 from service_utils import initialize_service
 
 """
+## `variantsExporter`
 
-## `biosamplesRefresher`
-
+* variantsExporter.py -f "icdot-C71.6" -d progenetix -o ~/Downloads/test.pgxseg
 """
 
 ################################################################################
@@ -83,7 +83,7 @@ def variants_exporter():
         h_line = "# sample_id={}".format(bs_id)
         for b_c in bs[ "biocharacteristics" ]:
             if "NCIT:C" in b_c["id"]:
-                h_line = '{};group_id={};group_label="{}"'.format(h_line, b_c["id"], b_c["label"])
+                h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, b_c["id"], b_c["label"], b_c["id"], b_c["label"])
         f.write(h_line+"\n")
 
     v_no = 0
