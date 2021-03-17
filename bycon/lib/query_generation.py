@@ -81,10 +81,7 @@ def update_queries_from_filters( byc ):
 
     * `exact_match` creates query items with exact (string) matches, in contrast
     to the standard teatment of query terms as start-anchored partial matches
-    * `mongostring` leads to creation of MongoDB compatible query strings
-    instead of `pymongo` objects (i.e. the result is to be used in `mongo`
-    commands)
-
+    
     podmd"""
         
     query_lists = { }
@@ -199,6 +196,9 @@ def update_queries_from_geoquery( byc ):
 ################################################################################
 
 def update_queries_from_variants( byc ):
+
+    if not "variant_request_type" in byc:
+        return byc
 
     if not byc["variant_request_type"] in byc["variant_definitions"]["request_types"].keys():
         if not "variants" in byc["queries"]:

@@ -72,20 +72,6 @@
     label: Nongerminomatous Germ Cell Tumor
   - id: icdom-90653
     label: Germ cell tumor, nonseminomatous
-  - id: icdot-C62.9
-    label: testis
-  examples:
-  - normal blood
-  - normal tissue
-  - testicular embryonal carcinoma [cell line NEC8]
-  - testicular germ cell tumor
-  - testicular teratoma [cell line SuSA]
-  id: NCIT:C121619::icdom-90653::icdot-C62.9
-- code_group:
-  - id: NCIT:C121619
-    label: Nongerminomatous Germ Cell Tumor
-  - id: icdom-90653
-    label: Germ cell tumor, nonseminomatous
   - id: icdot-C63.9
     label: epididymis, spermatic cord, male genital, nos
   examples:
@@ -529,11 +515,11 @@
   - id: icdot-C50.9
     label: Breast, NOS
   examples:
+  - Blood Derived Normal
   - Mucinous adenocarcinoma
-  - breast carcinoma [Prneg]
+  - Primary Tumor
+  - Solid Tissue Normal
   - breast carcinoma [mucinous]
-  - breast ductal adenocarcinoma [Left]
-  - normal tissue
   id: NCIT:C26712::icdom-84803::icdot-C50.9
 - code_group:
   - id: NCIT:C26712
@@ -566,10 +552,6 @@
     label: Mucinous adenocarcinoma
   - id: icdot-C76.9
     label: ill-defined
-  examples:
-  - Colon Mucinous Adenocarcinoma [Cecum]
-  - Colon Mucinous Adenocarcinoma [Sigmoid Colon]
-  - normal tissue
   id: NCIT:C26712::icdom-84803::icdot-C76.9
 - code_group:
   - id: NCIT:C26712
@@ -630,7 +612,7 @@
   - id: icdot-C44.9
     label: Skin, NOS
   examples:
-  - Spitz nevi
+  - atypical Spitz tumor [abdomen]
   - atypical Spitz tumor [buttock]
   - atypical Spitz tumor [ear]
   - atypical Spitz tumor [eyebrow]
@@ -836,11 +818,11 @@
   - id: icdot-C16.9
     label: stomach
   examples:
+  - Gastrointestinal Stromal Tumor
   - Gastrointestinal stromal tumor
-  - gastrointestinal stroma tumor [cell line GIST882X]
+  - gastric gastrointestinal stromal tumor
   - gastrointestinal stromal tumor [cell line GIST48]
-  - gastrointestinal stromal tumor [cell line GIST522]
-  - gastrointestinal stromal tumor [cell line GIST62]
+  - normal tissue
   id: NCIT:C27243::icdom-89363::icdot-C16.9
 - code_group:
   - id: NCIT:C27243
@@ -849,8 +831,6 @@
     label: Gastrointestinal stromal sarcoma
   - id: icdot-C17.9
     label: small intestine
-  examples:
-  - gastrointestinal stromal tumor [high biological potential]
   id: NCIT:C27243::icdom-89363::icdot-C17.9
 - code_group:
   - id: NCIT:C27243
@@ -859,8 +839,6 @@
     label: Gastrointestinal stromal sarcoma
   - id: icdot-C48.9
     label: retroperitoneum and peritoneum
-  examples:
-  - gastrointestinal stromal tumor [high biological potential]
   id: NCIT:C27243::icdom-89363::icdot-C48.9
 - code_group:
   - id: NCIT:C27243
@@ -882,8 +860,6 @@
     label: Gastrointestinal stromal sarcoma
   - id: icdot-C56.9
     label: ovary
-  examples:
-  - gastrointestinal stromal tumor [high biological potential]
   id: NCIT:C27243::icdom-89363::icdot-C56.9
 - code_group:
   - id: NCIT:C27243
@@ -892,8 +868,6 @@
     label: Gastrointestinal stromal sarcoma
   - id: icdot-C76.2
     label: abdomen, NOS
-  examples:
-  - gastrointestinal stromal tumor [high biological potential]
   id: NCIT:C27243::icdom-89363::icdot-C76.2
 - code_group:
   - id: NCIT:C27243
@@ -902,8 +876,6 @@
     label: Gastrointestinal stromal sarcoma
   - id: icdot-C76.9
     label: ill-defined
-  examples:
-  - gastrointestinal stromal tumor [high biological potential]
   id: NCIT:C27243::icdom-89363::icdot-C76.9
 - code_group:
   - id: NCIT:C27275
@@ -1062,11 +1034,11 @@
   - id: icdot-C42.1
     label: Bone marrow
   examples:
-  - Acute Myeloid Leukemia
-  - Acute myeloid leukemia [relapse]
-  - acute myeloid leukemia
-  - acute myeloid leukemia [relapse]
-  - remission sample [AML]
+  - Acute myeloid leukemia
+  - Acute myeloid leukemia [with minimal differentiation]
+  - Acute myeloid leukemia [with myelodysplasia-related changes]
+  - Acute myeloid leukemia [with recurrent genetic abnormalities]
+  - acute panmyelosis with myelofibrosis
   id: NCIT:C27753::icdom-98613::icdot-C42.1
 - code_group:
   - id: NCIT:C27753
@@ -1117,8 +1089,8 @@
   - Benign nevus [cellular, mixed pattern]
   - Benign nevus [cellular,fascicle]
   - Nevus [combined ordinary and blue]
-  - Pigmented nevus [benign]
   - dermal melanocytic proliferation
+  - nevus [deep pen]
   id: NCIT:C27816::icdom-87200::icdot-C44.9
 - code_group:
   - id: NCIT:C27838
@@ -1225,15 +1197,15 @@
   - id: NCIT:C27912
     label: Therapy-Related Myeloid Neoplasm
   - id: icdom-99203
-    label: acute myeloid leukemia
+    label: Therapy related myeloid neoplasm
   - id: icdot-C42.1
     label: Bone marrow
   examples:
   - Acute myeloid leukemia [Therapy-related myeloid neoplasms]
-  - Therapy related myeloid neoplasm [cell line OHN-GM]
   - therapy-related acute leukemia [RAEB, after ovarian ca.]
   - therapy-related acute leukemia [breast liposarcoma]
   - therapy-related acute leukemia [esophagus cancer]
+  - therapy-related acute leukemia [multiple myeloma]
   id: NCIT:C27912::icdom-99203::icdot-C42.1
 - code_group:
   - id: NCIT:C27912
@@ -1265,7 +1237,7 @@
   - Adenocarcinoma [in FAP, duodenum, Poorly differentiated]
   - Adenocarcinoma [in FAP, duodenum, Poorly/Moderately differentiated]
   - Adenocarcinoma [small intestine]
-  - adenocarcinoma [small intestine]
+  - Adenocarcinoma [sporadic, duodenum, Well differentiated]
   id: NCIT:C2852::icdom-81403::icdot-C17.9
 - code_group:
   - id: NCIT:C2852
@@ -1362,19 +1334,7 @@
     label: thyroid gland
   examples:
   - Thyroid carcinoma [poorly differentiated]
-  - normal tissue
-  - thyroid carcinoma
   id: NCIT:C2852::icdom-81403::icdot-C73.9
-- code_group:
-  - id: NCIT:C2852
-    label: Adenocarcinoma
-  - id: icdom-81403
-    label: Adenocarcinoma, NOS
-  - id: icdot-C76.9
-    label: ill-defined
-  examples:
-  - Colorectal adenocarcinoma [mucinous, Ascending Colon]
-  id: NCIT:C2852::icdom-81403::icdot-C76.9
 - code_group:
   - id: NCIT:C2852
     label: Adenocarcinoma
@@ -1620,11 +1580,11 @@
   - id: icdot-C42.4
     label: Hematopoietic system, NOS
   examples:
-  - Burkitt Lymphoma [cell line Wien 133]
-  - Burkitt lymphoma [cell line Elijah]
-  - Burkitt lymphoma [cell line NAB-2]
-  - Burkitt lymphoma [cell line PL-29018]
-  - Burkitt lymphoma [cell line Seraphina]
+  - Burkitt like lymphoma
+  - Burkitt lymphoma, NOS
+  - burkitt lymphoma [cell line BL31]
+  - burkitt lymphoma [cell line BL84]
+  - burkitt lymphoma, NOS
   id: NCIT:C2912::icdom-96873::icdot-C42.4
 - code_group:
   - id: NCIT:C2912
@@ -1636,20 +1596,10 @@
   examples:
   - Burkitt lymphoma
   - Burkitt lymphoma [cell line DG-75]
-  - Burkitt lymphoma [cell line EB1]
   - Burkitt lymphoma [cell line P32/ISH]
-  - Burkitt/Burkitt-like lymphomas
+  - Burkitt/Burkitt-like lymphomas [post transplantation lymphoproloferative disorder]
+  - burkitt lymphoma
   id: NCIT:C2912::icdom-96873::icdot-C77.9
-- code_group:
-  - id: NCIT:C2916
-    label: Carcinoma
-  - id: icdom-80103
-    label: Carcinoma, NOS
-  - id: icdot-C22.0
-    label: Liver
-  examples:
-  - Hepatocellular Carcinoma
-  id: NCIT:C2916::icdom-80103::icdot-C22.0
 - code_group:
   - id: NCIT:C2916
     label: Carcinoma
@@ -1660,16 +1610,6 @@
   examples:
   - Carcinoma
   id: NCIT:C2916::icdom-80103::icdot-C57.9
-- code_group:
-  - id: NCIT:C2916
-    label: Carcinoma
-  - id: icdom-80103
-    label: Carcinoma, NOS
-  - id: icdot-C64.9
-    label: kidney
-  examples:
-  - transformed cell line HK-2
-  id: NCIT:C2916::icdom-80103::icdot-C64.9
 - code_group:
   - id: NCIT:C2917
     label: Carcinoma In Situ
@@ -1701,13 +1641,13 @@
   - id: icdom-81403
     label: Adenocarcinoma, NOS
   - id: icdot-C61.9
-    label: Prostate gland
+    label: prostate gland
   examples:
-  - normal tissue
-  - prostate adenocarcinoma
-  - prostate adenocarcinoma [cell line]
-  - prostate adenocarcinoma [metastatic]
-  - transformed cell line NP69SV40T
+  - Prostate adenocarcinoma [recurrent, hormon-refractory]
+  - Prostate adenocarcinoma [untreated]
+  - prostate carcinoma
+  - prostate carcinoma [cell line DU-145]
+  - prostate carcinoma [cell line LNCaP]
   id: NCIT:C2919::icdom-81403::icdot-C61.9
 - code_group:
   - id: NCIT:C2920
@@ -1811,11 +1751,11 @@
   - id: icdot-C50.9
     label: Breast, NOS
   examples:
-  - Breast duct carcinoma in situ
-  - Ductal Carcinoma In Situ of the Breast
-  - atypical ductal hyperplasia of the breast [grade 1]
-  - atypical ductal hyperplasia of the breast [grade 2]
-  - ductal carcinoma in situ [breast, cell line]
+  - Adenocarcinoma [breast, DCIS]
+  - Ductal carcinoma in situ [mucinous]
+  - Ductal carcinoma in situ [papillary]
+  - Ductal carcinoma in situ [poorly differentiated]
+  - Ductal carcinoma in situ, recurrent
   id: NCIT:C2924::icdom-85002::icdot-C50.9
 - code_group:
   - id: NCIT:C2926
@@ -1825,11 +1765,11 @@
   - id: icdot-C34.9
     label: lung and bronchus
   examples:
-  - Large cell lung carcinoma [cell line NCI-H157]
   - Non-Small Cell Lung Cancer
-  - lung adenocarcinoma [cell line NCI-H2122]
-  - lung adenocarcinoma [cell line NCI-H2347]
-  - non-small cell Lung carcinoma [cell line NCI-H2887]
+  - Non-small cell carcinoma [lung]
+  - non-small cell lung carcinoma
+  - non-small cell lung carcinoma [cell line H1355]
+  - non-small cell lung carcinoma [cell line H23]
   id: NCIT:C2926::icdom-80463::icdot-C34.9
 - code_group:
   - id: NCIT:C2927
@@ -1870,11 +1810,11 @@
   - id: icdot-C09.9
     label: tonsil
   examples:
+  - Head and neck squamous cell carcinoma [Tonsil, stage II, T3N2M0]
+  - Primary Tumor
   - Squamous cell carcinoma
   - Squamous cell carcinoma [HPVpos]
-  - carcinoma [head and neck, tonsil]
-  - head and neck squamous cell carcinoma [Tonsil]
-  - normal tissue
+  - Squamous cell carcinoma [Tonsil, gradeII]
   id: NCIT:C2929::icdom-80703::icdot-C09.9
 - code_group:
   - id: NCIT:C2929
@@ -1882,11 +1822,11 @@
   - id: icdom-80703
     label: Squamous cell carcinoma, NOS
   - id: icdot-C13.9
-    label: hypopharynx
+    label: Hypopharynx
   examples:
   - Carcinoma [hypopharynx, stage T2N0M0]
-  - head and neck squamous cell carcinoma [Hypopharynx]
-  - normal tissue
+  - Carcinoma [hypopharynx, stage T2N1M0]
+  - Carcinoma [hypopharynx, stage T2N3M0]
   - squamous cell carcinoma [head-neck, anemic]
   - squamous cell carcinoma [head-neck, non-anemic]
   id: NCIT:C2929::icdom-80703::icdot-C13.9
@@ -1898,11 +1838,11 @@
   - id: icdot-C14.0
     label: pharynx, NOS
   examples:
+  - Head and neck squamous cell carcinoma [Metastasis, T2N3M0]
   - Head and neck squamous cell carcinoma [Metastasis]
+  - Head and neck squamous cell carcinoma [squamous cell carcinoma, T3N0]
+  - Head and neck squamous cell carcinoma [squamous cell carcinoma, T3N2b]
   - Head and neck squamous cell carcinoma [squamous cell carcinoma, T3N2c]
-  - head and neck squamous cell carcinoma
-  - head and neck squamous cell carcinoma [Alveolar Ridge]
-  - normal tissue
   id: NCIT:C2929::icdom-80703::icdot-C14.0
 - code_group:
   - id: NCIT:C2929
@@ -1910,7 +1850,7 @@
   - id: icdom-80703
     label: Squamous cell carcinoma, NOS
   - id: icdot-C14.8
-    label: Overlapping lession of lip, oral cavity and pharynx
+    label: Overlapping lesion of lip, oral cavity and pharynx
   examples:
   - Blood Derived Normal
   - Primary Tumor
@@ -2050,24 +1990,12 @@
   - id: icdot-C40.0
     label: bones and joints
   examples:
-  - Chondrosarcoma [Sacrum]
   - Chondrosarcoma [grade I, femur]
+  - Chondrosarcoma [grade I, pelvis]
   - Chondrosarcoma [grade I, tibia]
-  - chondrosarcoma
-  - chondrosarcoma [cell line H-EMC-SS]
+  - Chondrosarcoma [grade II, pelvis]
+  - Chondrosarcoma [grade II, rib VIII]
   id: NCIT:C2946::icdom-92203::icdot-C40.0
-- code_group:
-  - id: NCIT:C2946
-    label: Chondrosarcoma
-  - id: icdom-92203
-    label: Chondrosarcoma, NOS
-  - id: icdot-C40.0
-    label: bones and joints
-  - id: icdot-C40.0
-    label: bones and joints
-  examples:
-  - Chondrosarcoma, NOS
-  id: NCIT:C2946::icdom-92203::icdot-C40.0::icdot-C40.0
 - code_group:
   - id: NCIT:C2946
     label: Chondrosarcoma
@@ -2092,9 +2020,9 @@
   examples:
   - Chondrosarcoma
   - Chondrosarcoma [grade II, soft tissue]
+  - Chondrosarcoma [grade III, gluteal muscle]
   - Chondrosarcoma [grade III, soft tissue]
   - Chondrosarcoma, NOS
-  - chondrosarcoma [Mafucci syndrome]
   id: NCIT:C2946::icdom-92203::icdot-C49.9
 - code_group:
   - id: NCIT:C2946
@@ -2128,10 +2056,10 @@
     label: bone, NOS
   examples:
   - Chordoma [Sacrum]
+  - chordoma [Coccyx]
   - chordoma [Sacrum]
-  - chordoma [cell line p13]
   - chordoma [cell line p5]
-  - chordoma tumor
+  - normal tissue [buccal cell]
   id: NCIT:C2947::icdom-93703::icdot-C41.9
 - code_group:
   - id: NCIT:C2947
@@ -2155,7 +2083,6 @@
   - Chordoma
   - chordoma
   - chordoma [Spinal]
-  - normal tissue
   id: NCIT:C2947::icdom-93703::icdot-C72.0
 - code_group:
   - id: NCIT:C2948
@@ -2194,7 +2121,7 @@
   - id: icdom-91003
     label: Choriocarcinoma, NOS
   - id: icdot-C76.9
-    label: Testes
+    label: ill-defined
   examples:
   - Choriocarcinoma
   - choriocarcinoma
@@ -2485,9 +2412,9 @@
   examples:
   - Blood Derived Normal
   - Primary Tumor
+  - Solid Tissue Normal
   - germ cell tumor [yolk sac tumor]
   - testicular germ cell tumor [yolk sac tumor, cell line]
-  - yolk sac tumour
   id: NCIT:C3011::icdom-90713::icdot-C62.9
 - code_group:
   - id: NCIT:C3011
@@ -2495,7 +2422,7 @@
   - id: icdom-90713
     label: Yolk sac tumor
   - id: icdot-C71.9
-    label: Brain, NOS
+    label: brain, NOS
   examples:
   - CNS germ cell tumor [yolk sac tumor ]
   - CNS germ cell tumor [yolk sac tumor with embryonal carcinoma and choriocarcinoma]
@@ -2568,13 +2495,13 @@
   - id: icdom-93913
     label: Ependymoma, NOS
   - id: icdot-C71.9
-    label: Brain, NOS
+    label: brain, NOS
   examples:
-  - Ependymoma
-  - ependymoma [infratentorial]
-  - normal tissue
-  - reference dna [commercial, female]
-  - subependymoma [left lateral ventricle]
+  - Ependymoma [temporal]
+  - ependymoma [Left cerebral]
+  - ependymoma [Temporal]
+  - ependymoma [cervical]
+  - ependymoma [left occipital]
   id: NCIT:C3017::icdom-93913::icdot-C71.9
 - code_group:
   - id: NCIT:C3017
@@ -2587,7 +2514,7 @@
   - ependymoma [Conus]
   - ependymoma [cauda equina]
   - ependymoma [spinal cord]
-  - ependymoma [spinal]
+  - myxopapillary ependymoma [Conus]
   - myxopapillary ependymoma [cauda equina]
   id: NCIT:C3017::icdom-93913::icdot-C72.0
 - code_group:
@@ -2617,13 +2544,13 @@
   - id: icdom-88103
     label: Fibrosarcoma, NOS
   - id: icdot-C49.9
-    label: connective and soft tissue, nos
+    label: connective and soft tissue, NOS
   examples:
-  - Fibrosarcoma [cell line A-204]
-  - Fibrosarcoma [cell line HT-1080, modified]
-  - Fibrosarcoma [cell line HT-1080]
-  - Fibrosarcoma [cell line SW684]
-  - fibrosarcoma [cell line Hs 633.T]
+  - adult fibrosarcoma [grade 1, head]
+  - adult fibrosarcoma [grade 2, thorax]
+  - adult fibrosarcoma [grade 3, belly wall]
+  - adult fibrosarcoma [grade 3, lower extremity]
+  - adult fibrosarcoma [grade 3, thorax]
   id: NCIT:C3043::icdom-88103::icdot-C49.9
 - code_group:
   - id: NCIT:C3049
@@ -2661,7 +2588,7 @@
   - id: icdom-94403
     label: Glioblastoma
   - id: icdot-C71.0
-    label: Cerebrum
+    label: cerebrum
   examples:
   - Glioblastoma
   - Glioblastoma [familial]
@@ -2675,7 +2602,7 @@
   - id: icdom-94403
     label: Glioblastoma
   - id: icdot-C71.1
-    label: frontal lobe
+    label: Frontal lobe
   examples:
   - Blood Derived Normal
   - Primary Tumor
@@ -2688,7 +2615,7 @@
   - id: icdom-94403
     label: Glioblastoma
   - id: icdot-C71.2
-    label: temporal lobe
+    label: Temporal lobe
   examples:
   - Blood Derived Normal
   - Primary Tumor
@@ -2711,7 +2638,7 @@
   - id: icdom-94403
     label: Glioblastoma
   - id: icdot-C71.4
-    label: occipital lobe
+    label: Occipital lobe
   examples:
   - Primary Tumor
   - glioblastoma [occipital lobe]
@@ -2746,7 +2673,6 @@
     label: brain stem
   examples:
   - Glioblastoma
-  - normal tissue
   id: NCIT:C3058::icdom-94403::icdot-C71.7
 - code_group:
   - id: NCIT:C3058
@@ -2767,11 +2693,11 @@
   - id: icdot-C71.9
     label: Brain, NOS
   examples:
-  - glioblastoma
-  - glioblastoma [cell line LN-18]
-  - glioblastoma [cell line LN-229]
-  - glioblastoma [cell line T98G]
-  - glioblastoma [xenograft]
+  - Blood Derived Normal
+  - Glioblastoma
+  - Primary Tumor
+  - Solid Tissue Normal
+  - glioblastoma [stem cell]
   id: NCIT:C3058::icdom-94403::icdot-C71.9
 - code_group:
   - id: NCIT:C3058
@@ -2799,13 +2725,13 @@
   - id: icdom-93803
     label: Glioma, malignant
   - id: icdot-C71.9
-    label: brain, nos
+    label: brain, NOS
   examples:
-  - glioma [cell line 8-MG-BA]
-  - glioma [cell line DK-MG]
-  - glioma [cell line GA-MG]
-  - glioma [cell line HS-683]
-  - glioma [cell line LN-18]
+  - Glioma
+  - Glioma [cell line 10627]
+  - Glioma [cell line LN229]
+  - Glioma [cell line U87]
+  - Papillary glioneuronal tumor [brain, right temporal]
   id: NCIT:C3059::icdom-93803::icdot-C71.9
 - code_group:
   - id: NCIT:C3070
@@ -2823,7 +2749,7 @@
   - id: icdom-91200
     label: Hemangioma, NOS
   - id: icdot-C49.9
-    label: connective and soft tissue, nos
+    label: connective and soft tissue, NOS
   examples:
   - Hemangioma
   - Hemangiosarcoma
@@ -2906,7 +2832,6 @@
     label: liver
   examples:
   - Epithelioid hemangioendothelioma [cell line LI90]
-  - transformed cell line BEAS-2B
   id: NCIT:C3088::icdom-91303::icdot-C22.9
 - code_group:
   - id: NCIT:C3088
@@ -2937,10 +2862,10 @@
     label: Liver
   examples:
   - Hepatocellular carcinoma
-  - Hepatocellular carcinoma [cell line Hep3B]
-  - Hepatocellular carcinoma [cell line HepG2]
-  - Hepatocellular carcinoma [cell line SNU423]
+  - Hepatocellular carcinoma [chronic Hepatitis B]
   - hepatocellular carcinoma
+  - hepatocellular carcinoma [epithelial, cell line HCC-1.2]
+  - hepatocellular carcinoma [fibroblastoid, cell line HCC-1.1]
   id: NCIT:C3099::icdom-81703::icdot-C22.0
 - code_group:
   - id: NCIT:C3099
@@ -2954,7 +2879,7 @@
   - hepatocellular carcinoma [cell line Hep-G2]
   - hepatocellular carcinoma [cell line Huh-7]
   - hepatocellular carcinoma [cell line PLC/PRF/5]
-  - hepatocellular carcinoma [cell line SNU-182]
+  - hepatocellular carcinoma [cell line SK-HEP-1]
   id: NCIT:C3099::icdom-81703::icdot-C22.9
 - code_group:
   - id: NCIT:C3099
@@ -3017,9 +2942,9 @@
   - id: NCIT:C3110
     label: Hydatidiform Mole
   - id: icdom-91000
-    label: Hydatiform mole, NOS
+    label: Hydatidiform mole, NOS
   - id: icdot-C58.9
-    label: Placenta
+    label: placenta
   examples:
   - choriocarcinoma
   - complete hydatidiform mole
@@ -3240,11 +3165,11 @@
   - id: icdot-C49.9
     label: connective and soft tissue, NOS
   examples:
-  - Leiomyosarcoma
-  - Leiomyosarcoma [cell line LMS05]
-  - Leiomyosarcoma [cell line LMS]
-  - leiomyosarcoma
-  - normal tissue
+  - Leiomyosarcoma [Head and neck, cutaneous]
+  - Leiomyosarcoma [Large tumor, between 5 and 20 cm]
+  - Leiomyosarcoma [Small tumor, less than 5 cm]
+  - Leiomyosarcoma [Very large tumor, more than 20 cm]
+  - Leiomyosarcoma [cell line LMS05p13]
   id: NCIT:C3158::icdom-88903::icdot-C49.9
 - code_group:
   - id: NCIT:C3158
@@ -3284,11 +3209,11 @@
   - id: icdot-C42.1
     label: Bone marrow
   examples:
-  - B-cell chronic lymphocytic leukemia
-  - B-cell chronic lymphocytic leukemia/small lymphocytic lymphoma
-  - Chronic Lymphocytic Leukemia
-  - normal blood
-  - normal tissue
+  - Chronic lymphocytic leukemia
+  - Chronic lymphocytic leukemia [bone marrow]
+  - Chronic lymphocytic leukemia [peripheral blood]
+  - Small Lymphocytic Lymphoma
+  - chronic lymphocytic leukemia
   id: NCIT:C3163::icdom-98233::icdot-C42.1
 - code_group:
   - id: NCIT:C3163
@@ -3321,7 +3246,7 @@
   - id: icdom-98233
     label: B-cell chronic lymphocytic leukemia/small lymphocytic lymphoma
   - id: icdot-C77.9
-    label: Lymph node, NOS
+    label: Lymph nodes, NOS
   examples:
   - B-cell chronic lymphocytic leukemia
   - B-cell chronic lymphocytic leukemia/small lymphocytic lymphoma
@@ -3336,10 +3261,10 @@
     label: Bone marrow
   examples:
   - Acute lymphoblastic leukemia
-  - B-cell precursor acute lymphoblastic leukemia
+  - Acute lymphoblastic leukemia [High hyperdiploid]
+  - Acute lymphoblastic leukemia [also Down syndrome]
+  - Acute lymphoblastic leukemia [child]
   - acute lymphoblastic leukemia
-  - acute lymphoblastic leukemia [common]
-  - normal tissue
   id: NCIT:C3167::icdom-98353::icdot-C42.1
 - code_group:
   - id: NCIT:C3167
@@ -3433,10 +3358,10 @@
   - id: icdot-C42.1
     label: Bone marrow
   examples:
-  - Chronic myelogenous leukemia [cell line MEG-01]
   - Chronic myeloid leukemia
+  - Chronic myeloid leukemia [cell line MEG01]
+  - Chronic myeloid leukemia, NOS
   - chronic myeloid leukemia
-  - transformed cell line MCF10CA1a
   - transformed cell line MCF10CA1h
   id: NCIT:C3174::icdom-98633::icdot-C42.1
 - code_group:
@@ -3533,11 +3458,11 @@
   - id: icdot-C42.1
     label: Bone marrow
   examples:
+  - T acute lymphoblastic leukemia [cell line Jurkat D1.1]
   - T-cell acute lymphoblastic leukemia
   - acute lymphoblastic leukemia [T-cell]
   - acute lymphoblastic leukemia [pediatric; T-cell]
-  - normal tissue
-  - remission sample [T-ALL]
+  - peripheral blood
   id: NCIT:C3183::icdom-98373::icdot-C42.1
 - code_group:
   - id: NCIT:C3183
@@ -3557,11 +3482,11 @@
   - id: icdot-C42.1
     label: Bone marrow
   examples:
-  - Adult T-cell leukemia/lymphoma
   - Adult T-cell leukemia/lymphoma [HTLV-1 pos., acute]
+  - Adult T-cell leukemia/lymphoma [HTLV-1 pos., chronic]
   - Adult T-cell leukemia/lymphoma [HTLV-1 pos., crisis]
+  - Adult T-cell leukemia/lymphoma [HTLV-1 pos., lymphoma]
   - Adult T-cell leukemia/lymphoma [HTLV-1 pos., relapse]
-  - adult T-cell leukemia
   id: NCIT:C3184::icdom-98273::icdot-C42.1
 - code_group:
   - id: NCIT:C3192
@@ -3584,11 +3509,11 @@
   - id: icdot-C49.9
     label: connective and soft tissue, NOS
   examples:
-  - Liposarcoma
-  - Liposarcoma NOS [cell line LS14]
-  - Liposarcoma [cell line SW872]
-  - Pleomorphic liposarcoma [cell line LiSa-2]
-  - normal tissue
+  - Liposarcoma NOS [cell line LiSa-2]
+  - Liposarcoma NOS [cell line SW872]
+  - Liposarcoma [or MFH]
+  - liposarcoma
+  - liposarcoma [well differentiated]
   id: NCIT:C3194::icdom-88503::icdot-C49.9
 - code_group:
   - id: NCIT:C3194
@@ -3640,7 +3565,7 @@
   - id: icdom-95903
     label: Malignant lymphoma, NOS
   - id: icdot-C71.9
-    label: Brain, NOS
+    label: brain, NOS
   examples:
   - Primary CNS lymphoma
   - Primary Central Nervous System Lymphoma
@@ -3689,10 +3614,10 @@
     label: Lymph nodes, NOS
   examples:
   - Follicular lymphoma
+  - Follicular lymphoma [t(14;18) neg]
+  - Follicular lymphoma [t(14;18) pos]
   - Follicular lymphoma, NOS
-  - follicular lymphoma
-  - lymphoma primary specimen
-  - normal tissue
+  - follicular lymphoma [large cell]
   id: NCIT:C3209::icdom-96903::icdot-C77.9
 - code_group:
   - id: NCIT:C3211
@@ -3702,11 +3627,11 @@
   - id: icdot-C42.4
     label: Hematopoietic system, NOS
   examples:
-  - B acute lymphoblastic leukemia [cell line 380]
-  - Burkitt lymphoma [cell line BL-41]
-  - Burkitt lymphoma [cell line NAMALWA]
-  - Non-Hodgkin Lymphoma [cell line HBL-2]
-  - diffuse large B-cell lymphoma [cell line PR1]
+  - B-cell non-Hodgkin lymphoma [cell line 380]
+  - B-cell non-Hodgkin lymphoma [cell line BEVA]
+  - B-cell non-Hodgkin lymphoma [cell line CA46]
+  - non-Hodgkins Lymphoma [B-cell, in myelodysplastic syndrome]
+  - non-Hodgkins Lymphoma [B-cell]
   id: NCIT:C3211::icdom-95913::icdot-C42.4
 - code_group:
   - id: NCIT:C3211
@@ -3716,11 +3641,11 @@
   - id: icdot-C77.9
     label: Lymph nodes, NOS
   examples:
-  - B-cell lymphoma
+  - B-cell lymphoma, NOS [IG-IRF4 pos.]
   - B-cell non-Hodgkin lymphoma [cell line SCC-3]
   - B-cell non-Hodgkin lymphoma [cell line TK]
-  - polymorphic B-cell lymphoma
-  - transformed cell line WIL2 NS
+  - Malignant lymphoma, B-cell NOS
+  - polymorphic B-cell lymphoma [post transplantation lymphoproloferative disorder]
   id: NCIT:C3211::icdom-95913::icdot-C77.9
 - code_group:
   - id: NCIT:C3212
@@ -3753,8 +3678,8 @@
   - Medulloblastoma
   - classic medulloblastoma
   - medulloblastoma
-  - medulloblastoma [classic]
-  - nodular/desmoplastic medulloblastoma
+  - medulloblastoma [CSF metastasis]
+  - medulloblastoma [p53 mut., Li-Fraumeni syndrome]
   id: NCIT:C3222::icdom-94703::icdot-C71.6
 - code_group:
   - id: NCIT:C3222
@@ -3812,11 +3737,11 @@
   - id: icdot-C70.0
     label: meninges cerebral, spinal
   examples:
-  - Meningioma
+  - Meningioma [WHO grade I, benign]
+  - Meningioma [grade I, Diff. class.]
+  - Meningioma [grade I, Fibroblastic]
+  - Meningioma [grade I, Meningothelial]
   - Meningioma [grade I, Transitional]
-  - Meningioma [recurrent, primary]
-  - meningioma
-  - normal blood
   id: NCIT:C3230::icdom-95300::icdot-C70.0
 - code_group:
   - id: NCIT:C3230
@@ -3858,13 +3783,7 @@
   - id: icdom-90503
     label: Mesothelioma, malignant
   - id: icdot-C38.4
-    label: pleura
-  examples:
-  - normal tissue
-  - pleural malignant mesothelioma [cell line Y-MESO-12]
-  - pleural malignant mesothelioma [cell line Y-MESO-14]
-  - pleural malignant mesothelioma [cell line Y-MESO-9]
-  - pleural mesothelioma
+    label: Pleura
   id: NCIT:C3234::icdom-90503::icdot-C38.4
 - code_group:
   - id: NCIT:C3234
@@ -3884,11 +3803,11 @@
   - id: icdot-C42.1
     label: Bone marrow
   examples:
-  - Plasma cell myeloma [cell line COLO 677]
-  - Plasma cell myeloma [cell line KMS-12-PE]
-  - Plasma cell myeloma [cell line U266B1]
-  - plasma cell myeloma [cell line EJM]
-  - plasma cell myeloma [cell line RPMI-8226]
+  - Multiple Myeloma
+  - Multiple myeloma
+  - Plasmacytoma [Femur]
+  - Plasmacytoma [Vertebra]
+  - multiple myeloma
   id: NCIT:C3242::icdom-97323::icdot-C42.1
 - code_group:
   - id: NCIT:C3242
@@ -3908,8 +3827,8 @@
   - id: icdot-C44.9
     label: Skin, NOS
   examples:
-  - MF
   - Mycosis fungoides
+  - Mycosis fungoides [stage IA]
   - Mycosis fungoides [stage IB]
   - Mycosis fungoides [stage IIA]
   - mycosis fungoides [tumor stage]
@@ -3922,11 +3841,11 @@
   - id: icdot-C42.1
     label: Bone marrow
   examples:
-  - Myelodysplasia
-  - Myelodysplastic syndrome
-  - myelodysplastic syndrome
-  - normal tissue
-  - remission sample [T-ALL]
+  - Myelodysplastic syndrome [bone marrow]
+  - Myelodysplastic syndrome [leukemic blood]
+  - Myelodysplastic syndrome [refractory cytopenia with multilineage dysplasia]
+  - Refractory cytopenia with unilineage dysplasia
+  - myelodysplastic syndrome [acute myeloid leukemia]
   id: NCIT:C3247::icdom-99893::icdot-C42.1
 - code_group:
   - id: NCIT:C3247
@@ -3990,85 +3909,6 @@
     label: Hematopoietic system, NOS
   id: NCIT:C3250::icdom-98743::icdot-C42.4
 - code_group:
-  - id: NCIT:C3262
-    label: Neoplasm
-  - id: icdom-83800
-    label: Endometroid adenoma, NOS
-  - id: icdot-C56.9
-    label: ovary
-  examples:
-  - Endometrioid ovarian tumor
-  - Ovarian endometrioid adenocarcinoma [cell line A2780]
-  - Ovarian endometrioid adenocarcinoma [cell line OCI-E1p]
-  - Ovarian endometrioid adenocarcinoma [cell line OCI-E3x]
-  - Ovarian endometrioid adenocarcinoma [cell line OCI-EP1p]
-  id: NCIT:C3262::icdom-83800::icdot-C56.9
-- code_group:
-  - id: NCIT:C3262
-    label: Neoplasm
-  - id: icdom-84013
-    label: Apocrine adenocarcinoma
-  - id: icdot-C50.9
-    label: Breast, NOS
-  examples:
-  - breast ductal adenocarcinoma [Right Upper Outer Quadrant]
-  - normal tissue
-  id: NCIT:C3262::icdom-84013::icdot-C50.9
-- code_group:
-  - id: NCIT:C3262
-    label: Neoplasm
-  - id: icdom-84531
-    label: Intraductal papillary-mucinous tumor with moderate dysplasia
-  - id: icdot-C25.9
-    label: Pancreas, NOS
-  examples:
-  - intraductal papillary mucinous neoplasms of the pancreas [Moderate ]
-  - intraductal papillary mucinous neoplasms of the pancreas [Moderate]
-  id: NCIT:C3262::icdom-84531::icdot-C25.9
-- code_group:
-  - id: NCIT:C3262
-    label: Neoplasm
-  - id: icdom-84532
-    label: Intraductal papillary-mucinous carcinoma, non-invasive
-  - id: icdot-C25.9
-    label: Pancreas, NOS
-  examples:
-  - intraductal papillary mucinous neoplasms of the pancreas [High grade ]
-  - intraductal papillary mucinous neoplasms of the pancreas [High grade]
-  - intraductal papillary mucinous neoplasms of the pancreas [High-grade, of 10a]
-  id: NCIT:C3262::icdom-84532::icdot-C25.9
-- code_group:
-  - id: NCIT:C3262
-    label: Neoplasm
-  - id: icdom-85004
-    label: Infiltrating duct carcinoma, NOS
-  - id: icdot-C50.9
-    label: Breast, NOS
-  examples:
-  - breast adenocarcinoma [cell line MDA-MB-231]
-  id: NCIT:C3262::icdom-85004::icdot-C50.9
-- code_group:
-  - id: NCIT:C3262
-    label: Neoplasm
-  - id: icdom-85233
-    label: Infiltrating duct mixed with other types of carcinoma
-  - id: icdot-C50.9
-    label: Breast, NOS
-  examples:
-  - breast ductal adenocarcinoma [Right]
-  - normal tissue
-  id: NCIT:C3262::icdom-85233::icdot-C50.9
-- code_group:
-  - id: NCIT:C3262
-    label: Neoplasm
-  - id: icdom-85243
-    label: Infiltrating lobular mixed with other types of carcinoma
-  - id: icdot-C50.9
-    label: Breast, NOS
-  examples:
-  - breast carcinoma [cell line HCC2185]
-  id: NCIT:C3262::icdom-85243::icdot-C50.9
-- code_group:
   - id: NCIT:C3269
     label: Schwannoma
   - id: icdom-95600
@@ -4084,7 +3924,7 @@
   - id: icdom-95600
     label: Neurilemoma, NOS
   - id: icdot-C47.9
-    label: peripheral nervs incl. autonomous
+    label: peripheral nervs incl. Autonomous
   examples:
   - Schwannoma
   - Schwannoma [Stomach]
@@ -4158,11 +3998,11 @@
   - id: icdot-C47.9
     label: peripheral nervs incl. autonomous
   examples:
-  - Neuroblastoma [cell line CHP-134]
-  - neuroblastoma
-  - neuroblastoma [cell line GOTO]
-  - neuroblastoma [cell line LA-N-1]
-  - neuroblastoma [cell line LA-N-2]
+  - neuroblastoma [cell line GI-ME-N]
+  - neuroblastoma [cell line IMR32]
+  - neuroblastoma [cell line NGP]
+  - neuroblastoma [cell line SMS-KCR]
+  - neuroblastoma [cell line UHG-NP]
   id: NCIT:C3270::icdom-95003::icdot-C47.9
 - code_group:
   - id: NCIT:C3270
@@ -4184,11 +4024,11 @@
   - id: icdot-C71.9
     label: Brain, NOS
   examples:
-  - Neuroblastoma
   - Neuroblastoma [cell line CLB-Ma]
+  - Neuroblastoma [cell line SH-EP]
+  - Neuroblastoma [cell line SH-SY5Y]
+  - Neuroblastoma [cell line SK-N-SH]
   - Neuroblastoma [cell line STA-NB-10]
-  - Neuroblastoma [metastatic bone marrow]
-  - normal tissue
   id: NCIT:C3270::icdom-95003::icdot-C71.9
 - code_group:
   - id: NCIT:C3270
@@ -4268,13 +4108,12 @@
   - id: icdom-94503
     label: Oligodendroglioma, NOS
   - id: icdot-C71.0
-    label: cerebrum
+    label: Cerebrum
   examples:
   - Blood Derived Normal
-  - Oligodendroglioma [Supratentorial Frontal Lobe]
-  - Oligodendroglioma [Supratentorial Temporal Lobe]
   - Primary Tumor
-  - normal tissue
+  - Recurrent Tumor
+  - Solid Tissue Normal
   id: NCIT:C3288::icdom-94503::icdot-C71.0
 - code_group:
   - id: NCIT:C3288
@@ -4293,15 +4132,15 @@
   - id: NCIT:C3288
     label: Oligodendroglioma
   - id: icdom-94503
-    label: Glioblastoma, NOS
+    label: Oligodendroglioma, NOS
   - id: icdot-C71.9
-    label: Brain, NOS
+    label: brain, NOS
   examples:
-  - Oligodendroglioma [cell line Hs 683]
-  - oilgodendroglioma
-  - oilgodendroglioma [cell line KG-1-C]
+  - Oligodendroglioma
+  - Oligodendroglioma [grade II]
+  - oligoastrocytoma [familial]
   - oligodendroglioma
-  - oligodendroglioma [grade 2]
+  - oligodendroglioma [familial]
   id: NCIT:C3288::icdom-94503::icdot-C71.9
 - code_group:
   - id: NCIT:C3294
@@ -4544,7 +4383,7 @@
   - id: icdom-87000
     label: Pheochromocytoma, NOS
   - id: icdot-C74.0
-    label: adrenal cortex
+    label: Cortex of adrenal gland
   examples:
   - Blood Derived Normal
   - Pheochromocytoma
@@ -4567,13 +4406,13 @@
   - id: icdom-87000
     label: Pheochromocytoma, NOS
   - id: icdot-C74.9
-    label: Adrenal glands
+    label: adrenal glands
   examples:
-  - ACTH-Independent Macronodular Adrenal Hyperplasia (AIMAH)
-  - Left adrenal pheochromocyroma, benign
-  - Normal tissue
-  - Right adrenal pheochromocytoma [Benign]
-  - adrenal pheochromocytoma
+  - Pheochromocytoma [multiple endocrine neoplasia type II]
+  - pheochromocytoma
+  - pheochromocytoma [benign, sporadic]
+  - pheochromocytoma [bilateral, benign, sporadic]
+  - pheochromocytoma [von Hippel-Lindau associated]
   id: NCIT:C3326::icdom-87000::icdot-C74.9
 - code_group:
   - id: NCIT:C3329
@@ -4660,10 +4499,10 @@
     label: connective and soft tissue, NOS
   examples:
   - Alveolar rhabdomyosarcoma [cell line Rh18c]
-  - Embryonal rhabdomyosarcoma [cell line RH36]
   - Rhabdomyosarcoma
+  - Rhabdomyosarcoma [Sclerosing, pseudovascular]
   - Rhabdomyosarcoma [cell line GCT]
-  - Rhabdomyosarcoma [cell line Rh30]
+  - rhabdomyosarcoma
   id: NCIT:C3359::icdom-89003::icdot-C49.9
 - code_group:
   - id: NCIT:C3366
@@ -4683,10 +4522,10 @@
   - id: icdot-C44.9
     label: Skin, NOS
   examples:
-  - Sezary
   - Sezary syndrome
-  - normal tissue
-  - normal tissueSezary syndrome
+  - Sezary syndrome [stage IIIb]
+  - Sezary syndrome [stage IVa]
+  - Sezary syndrome [stage IVb]
   - sezary syndrome
   id: NCIT:C3366::icdom-97013::icdot-C44.9
 - code_group:
@@ -4789,7 +4628,7 @@
   - id: icdom-88900
     label: Leiomyoma, NOS
   - id: icdot-C55.9
-    label: Uterus, NOS
+    label: uterus, nos
   examples:
   - Leiomyoma [Uterus]
   - Uterine Leiomyoma
@@ -4947,11 +4786,11 @@
   - id: icdot-C42.4
     label: Hematopoietic system, NOS
   examples:
-  - Anaplastic large cell lymphoma [cell line FE-PD]
-  - Anaplastic large cell lymphoma [cell line JB6]
-  - Anaplastic large cell lymphoma [cell line Karpas-299]
-  - Anaplastic large cell lymphoma [cell line L-82]
-  - anaplastic large cell lymphoma [cell line SR]
+  - Anaplastic large cell lymphoma, NOS
+  - Anaplastic large cell lymphoma, NOS [AIDS related]
+  - Anaplastic large cell lymphomas [cell line HL-60]
+  - anaplastic large cell lymphoma [ALK neg.]
+  - anaplastic large cell lymphoma [ALK pos.]
   id: NCIT:C3468::icdom-97143::icdot-C42.4
 - code_group:
   - id: NCIT:C3468
@@ -5083,11 +4922,11 @@
   - id: icdot-C34.9
     label: lung and bronchus
   examples:
-  - Squamous cell lung carcinoma [cell line NCI-H520]
-  - non-small cell Lung carcinoma [cell line LouNH91]
-  - squamous cell Lung carcinoma [cell line NCI-H2882]
-  - squamous cell lung carcinoma [HCC15]
-  - squamous cell lung carcinoma [HCC44]
+  - Squamous cell carcinoma
+  - Squamous cell carcinoma [stage III]
+  - Squamous cell carcinoma [stage II]
+  - Squamous cell carcinoma [stage I]
+  - squamous cell carcinoma [lung]
   id: NCIT:C3493::icdom-80703::icdot-C34.9
 - code_group:
   - id: NCIT:C3502
@@ -5169,11 +5008,11 @@
   - id: icdot-C44.9
     label: Skin, NOS
   examples:
-  - malignant melanoma [cell line 1205Lu]
-  - malignant melanoma [cell line WM1366]
-  - malignant melanoma [cell line WM3248]
-  - malignant melanoma [cell line WM88]
-  - normal tissue
+  - Melanoma [cell line M000310]
+  - Melanoma [cell line M010320]
+  - Spitzoid melanoma [arm]
+  - malignant melanoma [high risk]
+  - malignant melanoma [low risk]
   id: NCIT:C3510::icdom-87203::icdot-C44.9
 - code_group:
   - id: NCIT:C3512
@@ -5230,11 +5069,11 @@
   - id: icdot-C34.9
     label: lung and bronchus
   examples:
-  - Lung adenocarcinoma [cell line HCC1171]
-  - Lung adenocarcinoma [cell line HCC193]
-  - Lung adenocarcinoma [cell line HCC461]
-  - Lung adenocarcinoma [cell line HCC515]
-  - lung adenocarcinoma [cell line NCI-H1819]
+  - Adenocarcinoma [lung, stage III]
+  - Adenocarcinoma [lung, stage IV]
+  - Adenocarcinoma [lung, stage I]
+  - adenocarcinoma
+  - adenocarcinoma [lung]
   id: NCIT:C3512::icdom-81403::icdot-C34.9
 - code_group:
   - id: NCIT:C3513
@@ -5245,9 +5084,9 @@
     label: esophagus
   examples:
   - Barret adenocarcinoma [cell line OE33]
-  - Esophageal Cancer
   - Esophageal cancer
   - esophageal carcinoma
+  - normal blood
   - normal tissue
   id: NCIT:C3513::icdom-80103::icdot-C15.9
 - code_group:
@@ -5274,10 +5113,10 @@
   - id: icdom-81603
     label: Cholangiocarcinoma
   - id: icdot-C22.1
-    label: Intrahepatic bile duct
+    label: intrahepatic bile ducts
   examples:
-  - Cholangiocarcinoma
-  - Intrahepatic cholangiocarcinoma [cell line HuCC-T1]
+  - Cholangiocarcinoma [intrahepatic, moderately differentiated]
+  - Cholangiocarcinoma [intrahepatic, poorly differentiated]
   - cholangiocarcinoma
   - cholangiocarcinoma [Cholangiofibrosis]
   - cholangiocarcinoma [hepatitis C pos.]
@@ -5447,41 +5286,11 @@
     label: Undifferentiated Carcinoma
   - id: icdom-80203
     label: Carcinoma, undifferentiated, NOS
-  - id: icdot-C55.9
-    label: Uterus, NOS
-  examples:
-  - uterine corpus endometrioid carcinoma
-  id: NCIT:C3692::icdom-80203::icdot-C55.9
-- code_group:
-  - id: NCIT:C3692
-    label: Undifferentiated Carcinoma
-  - id: icdom-80203
-    label: Carcinoma, undifferentiated, NOS
   - id: icdot-C56.9
     label: ovary
   examples:
   - Ovarian Carcinoma
   id: NCIT:C3692::icdom-80203::icdot-C56.9
-- code_group:
-  - id: NCIT:C3692
-    label: Undifferentiated Carcinoma
-  - id: icdom-80213
-    label: Carcinoma, anaplastic, NOS
-  - id: icdot-C09.9
-    label: tonsil
-  examples:
-  - anaplastic carcinoma [palatine tonsil]
-  id: NCIT:C3692::icdom-80213::icdot-C09.9
-- code_group:
-  - id: NCIT:C3692
-    label: Undifferentiated Carcinoma
-  - id: icdom-80213
-    label: Carcinoma, anaplastic, NOS
-  - id: icdot-C50.9
-    label: Breast, NOS
-  examples:
-  - breast carcinoma [anaplastic carcinoma, cell line SUM185PE]
-  id: NCIT:C3692::icdom-80213::icdot-C50.9
 - code_group:
   - id: NCIT:C3697
     label: Myxopapillary Ependymoma
@@ -5666,10 +5475,10 @@
     label: connective and soft tissue, NOS
   examples:
   - Dedifferentiated Liposarcoma [cell line DDLS8817]
-  - Dedifferentiated Liposarcoma [cell line FU-DDLS-1]
-  - Dedifferentiated Liposarcoma [cell line LPS141]
   - Dedifferentiated liposarcoma
-  - Liposarcoma,Dedifferentiated
+  - Dedifferentiated liposarcoma [relapsed]
+  - Liposarcoma, dedifferentiated [grade III, primary]
+  - liposarcoma [dedifferentiated]
   id: NCIT:C3704::icdom-88583::icdot-C49.9
 - code_group:
   - id: NCIT:C3704
@@ -5776,11 +5585,15 @@
   - id: icdot-C71.0
     label: cerebrum
   examples:
-  - Primitive neuroectodermal tumor [supratentorial]
-  - Supratentorial Primitive Neuroectodermal Tumor
-  - primitive neuroectodermal tumor [frontal lobe]
-  - primitive neuroectodermal tumor [parietal]
-  - primitive neuroepidermal tumor [PNET; supratentorial]
+  - Central nervous system primitive neuroectodermal tumor [cerebral region     temporal
+    lobe]
+  - Central nervous system primitive neuroectodermal tumor [cerebral region   frontal
+    lobe, temporal lobe]
+  - Central nervous system primitive neuroectodermal tumor [cerebral region   frontal
+    lobe]
+  - Central nervous system primitive neuroectodermal tumor [cerebral region - posterior
+    fossa]
+  - Central nervous system primitive neuroectodermal tumor [cerebral region]
   id: NCIT:C3716::icdom-94733::icdot-C71.0
 - code_group:
   - id: NCIT:C3716
@@ -5865,12 +5678,12 @@
   - id: icdom-97143
     label: Anaplastic large cell lymphoma, T cell and Null cell type
   - id: icdot-C77.9
-    label: lymph nodes
+    label: Lymph nodes, NOS
   examples:
-  - ALK+ALCL
-  - Anaplastic large cell lymphoma
-  - Anaplastic large cell lymphoma [cell line SR]
-  - Anaplastic large cell lymphoma [cell line Sup-M2-TS]
+  - Anaplastic large cell lymphoma [Lymph node]
+  - Anaplastic large cell lymphoma [Subcutaneous lymph node]
+  - Anaplastic large cell lymphoma, systemic type [ALK neg.]
+  - Anaplastic large cell lymphoma, systemic type [ALK pos.]
   - anaplastic large cell lymphoma [cell line SR]
   id: NCIT:C3720::icdom-97143::icdot-C77.9
 - code_group:
@@ -5917,15 +5730,15 @@
   - id: NCIT:C3728
     label: Hepatoblastoma
   - id: icdom-89703
-    label: hepatoblastoma
+    label: Hepatoblastoma
   - id: icdot-C22.0
-    label: liver
+    label: Liver
   examples:
-  - Hepatoblastoma
   - Hepatoblastoma [Mesenchymal-epithelial, recurrence]
   - Hepatoblastoma [Mesenchymal-epithelial]
+  - Hepatoblastoma [post chemotherapy]
+  - Hepatoblastoma [pre chemotherapy]
   - hepatoblastoma
-  - normal tissue
   id: NCIT:C3728::icdom-89703::icdot-C22.0
 - code_group:
   - id: NCIT:C3728
@@ -6090,7 +5903,7 @@
   - id: icdom-89203
     label: Alveolar rhabdomyosarcoma
   - id: icdot-C49.9
-    label: connective and soft tissue, nos
+    label: connective and soft tissue, NOS
   examples:
   - Alveolar Rhabdomyosarcoma
   - Alveolar rhabdomyosarcoma
@@ -6140,7 +5953,7 @@
   examples:
   - Blood Derived Normal
   - Primary Tumor
-  - embryonal carcinoma
+  - Solid Tissue Normal
   - testicular germ cell tumor [embryonal carcinoma, cell line]
   - testicular germ cell tumor [non-seminoma, embryonal carcinoma]
   id: NCIT:C3752::icdom-90703::icdot-C62.9
@@ -6180,7 +5993,7 @@
   - id: icdom-90643
     label: Germinoma
   - id: icdot-C71.9
-    label: Brain, NOS
+    label: brain, NOS
   examples:
   - CNS germ cell tumor [germinoma]
   - immature teratoma and germinoma
@@ -6235,7 +6048,7 @@
   - id: icdom-90813
     label: Teratocarcinoma
   - id: icdot-C62.9
-    label: testis
+    label: Testis, NOS
   examples:
   - Primary Tumor
   - Teratocarcinoma
@@ -6324,17 +6137,6 @@
     label: Clear Cell Adenocarcinoma
   - id: icdom-83103
     label: Clear cell adenocarcinoma, NOS
-  - id: icdot-C34.9
-    label: lung and bronchus
-  examples:
-  - lung adenocarcinoma [L-Lower]
-  - normal tissue
-  id: NCIT:C3766::icdom-83103::icdot-C34.9
-- code_group:
-  - id: NCIT:C3766
-    label: Clear Cell Adenocarcinoma
-  - id: icdom-83103
-    label: Clear cell adenocarcinoma, NOS
   - id: icdot-C54.1
     label: Endometrium
   examples:
@@ -6382,11 +6184,11 @@
   - id: icdot-C56.9
     label: ovary
   examples:
-  - Ovarian endometrioid adenocarcinoma [cell line A2780]
-  - Ovarian endometrioid adenocarcinoma [cell line TOV-112D]
-  - ovarian endometrioid adenocarcinoma (Taxene treated) [cell line 1A9/T80]
-  - ovarian endometrioid adenocarcinoma (taxene treated) [cell line 1A9]
-  - ovarian endometrioid adenocarcinoma [cell line OV-TRL-90T]
+  - Clear cell adenocarcinoma, NOS
+  - Endometrioid adenocarcinoma, NOS
+  - Endometrioid carcinoma
+  - Papillary serous cystadenocarcinoma
+  - ovarian carcinoma [endometroid]
   id: NCIT:C3769::icdom-83803::icdot-C56.9
 - code_group:
   - id: NCIT:C3769
@@ -6408,12 +6210,11 @@
   - id: icdom-83823
     label: Endometrioid adenocarcinoma, secretory variant
   - id: icdot-C55.9
-    label: Uterus, NOS
+    label: uterus, nos
   examples:
   - Endometrial adenocarcinoma [cell line HEC-1]
   - Endometrial adenocarcinoma [cell line Ishikawa (Heraklio) 02 ER-]
   - endometrial adenocarcinoma [cell line AN3-CA]
-  - uterine corpus endometrioid carcinoma
   id: NCIT:C3769::icdom-83823::icdot-C55.9
 - code_group:
   - id: NCIT:C3770
@@ -6469,10 +6270,10 @@
   - id: icdot-C50.9
     label: Breast, NOS
   examples:
-  - Invasive lobular breast carcinoma [cell line SUM44PE]
+  - Adenocarcinoma [breast, sporadic, Lobular, grade II, T2N0]
   - Invasive lobular carcinoma
-  - Metastatic lobular breast carcinoma [cell line HCC2185]
-  - breast ductal adenocarcinoma [Left]
+  - Lobular carcinoma
+  - Lobular carcinoma, NOS
   - invasive pleomorphic lobular carcinoma [breast]
   id: NCIT:C3771::icdom-85203::icdot-C50.9
 - code_group:
@@ -6688,12 +6489,9 @@
   - id: icdom-84413
     label: Serous cystadenocarcinoma, NOS
   - id: icdot-C55.9
-    label: Uterus, NOS
+    label: uterus, nos
   examples:
-  - adenocarcinoma [uterine corpus]
   - endometrial carcinoma [papillary serous ca., FIGO stage III, FIGO grade 3]
-  - normal tissue
-  - uterine corpus endometrioid carcinoma
   id: NCIT:C3778::icdom-84413::icdot-C55.9
 - code_group:
   - id: NCIT:C3778
@@ -6715,36 +6513,6 @@
   examples:
   - giant cell granuloma
   id: NCIT:C3779::icdom-80313::icdot-C41.9
-- code_group:
-  - id: NCIT:C3786
-    label: Mesothelial Neoplasm
-  - id: icdom-90504
-    label: Mesothelioma, malignant
-  - id: icdot-C34.9
-    label: lung and bronchus
-  examples:
-  - mesothelioma [cell line NCI-H226]
-  id: NCIT:C3786::icdom-90504::icdot-C34.9
-- code_group:
-  - id: NCIT:C3786
-    label: Mesothelial Neoplasm
-  - id: icdom-90505
-    label: Mesothelioma, malignant
-  - id: icdot-C34.9
-    label: lung and bronchus
-  examples:
-  - mesothelioma [cell line NCI-H226]
-  id: NCIT:C3786::icdom-90505::icdot-C34.9
-- code_group:
-  - id: NCIT:C3786
-    label: Mesothelial Neoplasm
-  - id: icdom-90506
-    label: Mesothelioma, malignant
-  - id: icdot-C34.9
-    label: lung and bronchus
-  examples:
-  - mesothelioma [cell line NCI-H226]
-  id: NCIT:C3786::icdom-90506::icdot-C34.9
 - code_group:
   - id: NCIT:C3788
     label: Ganglioglioma
@@ -6779,18 +6547,6 @@
   - Olfactory neuroblastoma
   - esthesioneuroblastoma
   id: NCIT:C3789::icdom-95223::icdot-C72.2
-- code_group:
-  - id: NCIT:C3789
-    label: Olfactory Neuroblastoma
-  - id: icdom-95223
-    label: Olfactory neuroblastoma
-  - id: icdot-C72.2
-    label: Olfactory nerve
-  - id: icdot-C72.2
-    label: Olfactory nerve
-  examples:
-  - Olfactory neuroblastoma
-  id: NCIT:C3789::icdom-95223::icdot-C72.2::icdot-C72.2
 - code_group:
   - id: NCIT:C3790
     label: Ganglioneuroblastoma
@@ -6912,17 +6668,6 @@
   - cervix dysplasia [high-grade]
   id: NCIT:C3792::icdom-80701::icdot-C53.9
 - code_group:
-  - id: NCIT:C3792
-    label: Squamous Cell Neoplasm
-  - id: icdom-80710
-    label: null
-  - id: icdot-C44.9
-    label: Skin, NOS
-  examples:
-  - Actinic keratosis
-  - normal blood
-  id: NCIT:C3792::icdom-80710::icdot-C44.9
-- code_group:
   - id: NCIT:C3794
     label: Sex Cord-Stromal Tumor
   - id: icdom-85901
@@ -6938,13 +6683,13 @@
   - id: icdom-94423
     label: Gliosarcoma
   - id: icdot-C71.9
-    label: Brain, NOS
+    label: brain, NOS
   examples:
   - Gliosarcoma
-  - Gliosarcoma  [cell line  SF-539]
-  - Gliosarcoma [cell line SF-539]
-  - Gliosarcoma [cell line SF539]
+  - Gliosarcoma [glioma component]
   - gliosarcoma
+  - gliosarcoma [glioma component]
+  - gliosarcoma [sarcoma component]
   id: NCIT:C3796::icdom-94423::icdot-C71.9
 - code_group:
   - id: NCIT:C3798
@@ -6976,9 +6721,9 @@
   - id: icdot-C47.9
     label: peripheral nervs incl. autonomous
   examples:
-  - Malignant peripheral nerve sheath tumor [Buttock]
-  - Malignant peripheral nerve sheath tumor [Thigh]
+  - Malignant peripheral nerve sheath tumor [Leg]
   - Malignant peripheral nerve sheath tumor [neurofibromatosis type 1,Lower trunk]
+  - Malignant peripheral nerve sheath tumor [neurofibromatosis type 1,Pelvis]
   - Malignant peripheral nerve sheath tumor [neurofibromatosis type 1,Retroperitoneum]
   - Malignant peripheral nerve sheath tumor [neurofibromatosis type 1,Thigh]
   id: NCIT:C3798::icdom-95403::icdot-C47.9
@@ -7197,8 +6942,6 @@
     label: Malignant rhabdoid tumor
   - id: icdot-C49.9
     label: connective and soft tissue, NOS
-  examples:
-  - extra-renal rhabdoid tumour [p53mut, Li-Fraumeni syndrome]
   id: NCIT:C3808::icdom-89633::icdot-C49.9
 - code_group:
   - id: NCIT:C3808
@@ -7328,7 +7071,7 @@
   - id: icdom-80103
     label: Carcinoma, NOS
   - id: icdot-C25.9
-    label: pancreas
+    label: Pancreas, NOS
   examples:
   - C25;Carcinoma
   - Carcinoma [cell line]
@@ -7341,13 +7084,13 @@
   - id: icdom-81400
     label: Adenoma, NOS
   - id: icdot-C18.9
-    label: colon, NOS
+    label: large intestine, excl. rectum and rectosigmoid junction
   examples:
   - Adenoma [colorectal]
-  - Colorectal adenoma with high grade dysplasia
   - adenoma [colorectal, low-grade]
-  - colorectal adenoma
+  - colorectal adenoma [in MYH-associated polyposis, MAP]
   - colorectal adenoma [in familial adenomatous polyposis, FAP]
+  - colorectal adenoma [sporadic]
   id: NCIT:C3864::icdom-81400::icdot-C18.9
 - code_group:
   - id: NCIT:C3866
@@ -7378,11 +7121,11 @@
   - id: icdot-C16.9
     label: stomach
   examples:
-  - gastrointestinal stromal tumor [KIT-mutant ]
-  - gastrointestinal stromal tumor [KIT/PDGFRA/NF1]
-  - gastrointestinal stromal tumor [NF1-associated]
+  - Gastrointestinal stromal tumor, borderline
+  - Gastrointestinal stromal tumor, uncertain malignant potential
+  - gastrointestinal stroma tumor [Low Malignant Potential]
   - gastrointestinal stromal tumor [PDGFRA-mutant]
-  - gastrointestinal stromal tumor [low biological potential]
+  - gastrointestinal stromal tumor, low biological potential
   id: NCIT:C3868::icdom-89361::icdot-C16.9
 - code_group:
   - id: NCIT:C3868
@@ -7452,7 +7195,6 @@
   - id: icdot-C51.0
     label: vagina and labia
   examples:
-  - gastrointestinal stromal tumor [low biological potential]
   - gastrointestinal stromal tumor, low biological potential
   id: NCIT:C3868::icdom-89361::icdot-C51.0
 - code_group:
@@ -7483,11 +7225,11 @@
   - id: icdot-C11.9
     label: nasopharynx
   examples:
-  - Nasopharyngeal carcinoma [cell line 5-8F]
-  - Nasopharyngeal carcinoma [cell line 6-10B]
+  - Nasopharyngeal carcinoma
+  - Nasopharyngeal carcinoma [cell line C666]
   - Nasopharyngeal carcinoma [cell line HONE-1]
-  - hybrid cell line CNE-1
-  - hybrid cell line CNE-2
+  - Nasopharyngeal carcinoma [cell line NPC-TW01]
+  - normal tissue
   id: NCIT:C3871::icdom-80723::icdot-C11.9
 - code_group:
   - id: NCIT:C3878
@@ -7522,9 +7264,9 @@
   - id: icdot-C73.9
     label: Thyroid gland
   examples:
-  - Medullary thyroid carcinoma
-  - Medullary thyroid carcinoma [cervical node metastasis]
   - Medullary thyroid carcinoma [familial, Sporadic, RET status M918T, Node]
+  - Medullary thyroid carcinoma [familial, Sporadic, RET status M918T, Primary]
+  - Medullary thyroid carcinoma [familial, Sporadic, RET status WT, Primary]
   - sporadic medullary thyroid carcinoma
   - sporadic medullary thyroid carcinoma [metastasis]
   id: NCIT:C3879::icdom-85103::icdot-C73.9
@@ -7566,13 +7308,12 @@
   - id: icdom-93823
     label: Mixed glioma
   - id: icdot-C71.0
-    label: cerebrum
+    label: Cerebrum
   examples:
-  - Oligoastrocytoma [Supratentorial Frontal Lobe]
-  - Oligoastrocytoma [Supratentorial Occipital Lobe]
-  - Oligoastrocytoma [Supratentorial Parietal Lobe]
-  - Oligoastrocytoma [Supratentorial Temporal Lobe]
-  - normal tissue
+  - Blood Derived Normal
+  - Primary Tumor
+  - Recurrent Tumor
+  - Solid Tissue Normal
   id: NCIT:C3903::icdom-93823::icdot-C71.0
 - code_group:
   - id: NCIT:C3903
@@ -7615,13 +7356,13 @@
   - id: icdom-93823
     label: Mixed glioma
   - id: icdot-C71.9
-    label: brain, nos
+    label: Brain, NOS
   examples:
-  - Glioma [mixed, grade 2]
-  - Glioma [mixed, grade 3]
   - Glioma, mixed
   - Oligoastrocytoma
-  - anaplastic oligoastrocytoma
+  - anaplastic astrocytoma
+  - oligoastrocytoma
+  - oligoastrocytoma [with palisaded necrosis]
   id: NCIT:C3903::icdom-93823::icdot-C71.9
 - code_group:
   - id: NCIT:C3904
@@ -7737,11 +7478,11 @@
   - id: icdot-C67.0
     label: Urinary bladder
   examples:
-  - bladder cancer [cell line T110]
-  - bladder cancer [cell line T63]
-  - bladder carcinoma [cell line 5637]
-  - bladder carcinoma [cell line HT-1197]
-  - bladder carcinoma [cell line HT-1376]
+  - bladder carcinoma
+  - urothelial tumor [stage NA, G2]
+  - urothelial tumor [stage pT1, G2]
+  - urothelial tumor [stage pT1, G3]
+  - urothelial tumor [stage pT2, G3]
   id: NCIT:C39851::icdom-81203::icdot-C67.0
 - code_group:
   - id: NCIT:C39851
@@ -7810,9 +7551,9 @@
   examples:
   - Blood Derived Normal
   - Buccal Cell Normal
+  - Metastatic
   - Primary Tumor
-  - Urothelial bladder tumor
-  - urothelial carcinoma
+  - Solid Tissue Normal
   id: NCIT:C39851::icdom-81203::icdot-C67.9
 - code_group:
   - id: NCIT:C39921
@@ -7837,8 +7578,8 @@
   - Immunoglobulin light-chain amyloidosis
   - Monoclonal Gammopathy of Uncertain Significance
   - Monoclonal gammopathy
-  - Normal tissue
   - monoclonal gammopathy of unknown significance
+  - normal tissue [obsessive-compulsive disorder]
   id: NCIT:C3996::icdom-97651::icdot-C42.1
 - code_group:
   - id: NCIT:C3996
@@ -7868,9 +7609,8 @@
   examples:
   - Inflammatory breast carcinoma [cell line SUM149PT]
   - Inflammatory breast carcinoma [cell line SUM190PT]
-  - breast carcinoma [Inflammatory carcinoma, cell line SUM149PT]
-  - breast carcinoma [Inflammatory carcinoma, cell line SUM225CWN]
-  - normal tissue
+  - breast carcinoma [Inflammatory]
+  - inflammatory breast carcinoma [cell line KPL-4]
   id: NCIT:C4001::icdom-85303::icdot-C50.9
 - code_group:
   - id: NCIT:C40022
@@ -7948,11 +7688,11 @@
   - id: icdot-C16.9
     label: stomach
   examples:
-  - Adenocarcinoma [gastric, cell line]
-  - Gastric adenocarcinoma [cell line Hs 746T]
-  - Signe ring gastric adenocarcinoma [cell line KATO III]
-  - gastric adenocarcinoma [cell line AGS]
-  - gastric tumor
+  - gastric adenocarcinoma [Antrum, Diffuse]
+  - gastric adenocarcinoma [Cardia, Diffuse]
+  - gastric adenocarcinoma [Corpus, Diffuse]
+  - gastric carcinoma [sporadic, diffuse]
+  - gastric carcinoma [with HNPCC, diffuse]
   id: NCIT:C4004::icdom-81403::icdot-C16.9
 - code_group:
   - id: NCIT:C4004
@@ -8026,8 +7766,6 @@
     label: Papillary adenocarcinoma, NOS
   - id: icdot-C16.9
     label: stomach
-  examples:
-  - gastric adenocarcinoma [Antrum/Distal]
   id: NCIT:C4004::icdom-82603::icdot-C16.9
 - code_group:
   - id: NCIT:C40076
@@ -8048,11 +7786,11 @@
   - id: icdot-C56.9
     label: ovary
   examples:
-  - ovarian carcinoma [cell line RMG-I]
-  - ovarian clear cell adenocarcinoma [cell line ES-2]
-  - ovarian clear cell adenocarcinoma [cell line OVMANA]
-  - ovarian clear cell adenocarcinoma [cell line OVTOKO]
-  - ovarian clear cell adenocarcinoma [cell line TOV21G]
+  - Adenocarcinoma, NOS
+  - Clear cell adenocarcinoma
+  - Papillary serous cystadenocarcinoma
+  - Pleomorphic adenoma
+  - ovarian carcinoma [clear cell, grade NA]
   id: NCIT:C40078::icdom-83103::icdot-C56.9
 - code_group:
   - id: NCIT:C40090
@@ -8199,11 +7937,11 @@
   - id: icdot-C50.9
     label: Breast, NOS
   examples:
-  - Breast carcinoma [metastasis, brain]
-  - breast ductal adenocarcinoma [breast]
-  - breast ductal adenocarcinoma [lymph node]
-  - breast ductal adenocarcinoma [metastases ovary]
-  - multifocal breast ductal adenocarcinoma [breast]
+  - Infiltrating duct carcinoma
+  - breast carcinoma [ERneg, PRneg., ERBB2neg., Basal-like]
+  - breast carcinoma [ERneg, PRpos., ERBB2neg., Luminal A]
+  - breast carcinoma [ERpos, PRneg., ERBB2neg., Luminal A]
+  - breast carcinoma [ERpos, PRpos., ERBB2neg., Luminal A]
   id: NCIT:C4017::icdom-85003::icdot-C50.9
 - code_group:
   - id: NCIT:C4018
@@ -8215,9 +7953,9 @@
   examples:
   - Breast lobular carcinoma in situ
   - Lobular intraepithelial neoplasia
-  - breast lobular carcinoma in situ [pleomorphic, breast]
-  - lobular intraepithelial neoplasia
+  - classic lobular carcinomas
   - lobular neoplastic breast lesion
+  - pleomorphic lobular carcinoma in situ [breast]
   id: NCIT:C4018::icdom-85202::icdot-C50.9
 - code_group:
   - id: NCIT:C40197
@@ -8286,7 +8024,6 @@
   examples:
   - Acral Melanoma
   - Acral lentiginous melanoma [cell line WM3211]
-  - normal tissue
   id: NCIT:C4022::icdom-87443::icdot-C44.9
 - code_group:
   - id: NCIT:C4023
@@ -8341,11 +8078,11 @@
   - id: icdot-C15.9
     label: esophagus
   examples:
-  - Esophageal squamous cell carcinoma
-  - esophageal squamous cell carcinoma
-  - esophageal squamous cell carcinoma [cell line TE-1]
-  - esophageal squamous cell carcinoma [cell line TE-2]
-  - peripheral blood
+  - Esophageal squamous
+  - Esophageal squamous [cell line HCE4]
+  - Esophageal squamous [cell line TE7]
+  - Squamous cell carcinoma [esophageal]
+  - squamous cell carcinoma [esophagus, endemic, Henan]
   id: NCIT:C4024::icdom-80703::icdot-C15.9
 - code_group:
   - id: NCIT:C4025
@@ -8386,19 +8123,19 @@
   - id: icdom-81403
     label: Adenocarcinoma, NOS
   - id: icdot-C15.9
-    label: esophagus
+    label: Esophagus
   examples:
-  - Esophageal adenocarcinoma
-  - Esophageal adenocarcinoma [cell line OE19]
-  - adenocarcinoma [esophagus]
-  - esophageal adenocarcinoma
-  - normal tissue
+  - adenocarcinoma
+  - adenocarcinoma [esophagus, cell line BIC]
+  - adenocarcinoma [esophagus, cell line OE19]
+  - adenocarcinoma [esophagus, cell line SEG-1]
+  - adenocarcinoma [esophagus, cell line TE7]
   id: NCIT:C4025::icdom-81403::icdot-C15.9
 - code_group:
   - id: NCIT:C4026
     label: Ovarian Mucinous Cystadenocarcinoma
   - id: icdom-84703
-    label: Mucinous Cystadenocarcinoma, NOS
+    label: Mucinous cystadenocarcinoma, NOS
   - id: icdot-C56.9
     label: ovary
   examples:
@@ -8439,11 +8176,11 @@
   - id: icdot-C53.9
     label: cervix uteri
   examples:
-  - cervix squamous carcinoma [cell line C-4-I]
-  - cervix squamous cell carcinoma [cell line C-33 A]
-  - cervix squamous cell carcinoma [cell line Ca Ski]
-  - cervix squamous cell carcinoma [cell line HT-3]
-  - cervix squamous cell carcinoma [cell line ME-180]
+  - Carcinoma [cervix, stage IIIb]
+  - Squamous cell carcinoma [cervix, I b]
+  - Squamous cell carcinoma [cervix, II b]
+  - Squamous cell carcinoma [cervix, III b]
+  - Squamous cell carcinoma [cervix, IV b]
   id: NCIT:C4028::icdom-80703::icdot-C53.9
 - code_group:
   - id: NCIT:C4029
@@ -8453,11 +8190,11 @@
   - id: icdot-C53.9
     label: cervix uteri
   examples:
-  - Cervix adenocarcinoma [cell line HeLa]
   - adenocarcinoma [cell line HeLa]
+  - adenocarcinoma [cervix, HPV16 pos.]
+  - adenocarcinoma [cervix, HPV18 pos.]
   - adenocarcinoma [cervix, cell line HeLa]
   - adenocarcinoma [cervix]
-  - cervix carcinoma [adenocarcinoma]
   id: NCIT:C4029::icdom-81403::icdot-C53.9
 - code_group:
   - id: NCIT:C40310
@@ -8547,11 +8284,11 @@
   - id: icdot-C64.9
     label: kidney
   examples:
-  - Renal cell carcinoma [cell line KU-19-20]
-  - clear cell renal carcinoma
-  - renal cell carcinoma [cell line KC12]
-  - renal cell carcinoma [cell line SK-RC-29]
-  - renal cell carcinoma [cell line SLR 22]
+  - renal cell carcinoma [clear cell RCC]
+  - renal cell carcinoma [clear cell, cell line 769-P]
+  - renal cell carcinoma [clear cell, cell line A-704]
+  - renal cell carcinoma [clear cell, cell line Caki-2]
+  - renal cell carcinoma [clear cell]
   id: NCIT:C4033::icdom-83103::icdot-C64.9
 - code_group:
   - id: NCIT:C40347
@@ -8581,11 +8318,11 @@
   - id: icdot-C73.9
     label: thyroid gland
   examples:
+  - Papillary carcinoma of thyroid [grade High]
   - Papillary carcinoma of thyroid [stage PT2N1aM0, grade Low]
   - Papillary carcinoma of thyroid [stage PT2N1bMx, grade Moderate]
   - Papillary carcinoma of thyroid [stage PT3NO, grade High]
   - Papillary carcinoma of thyroid [stage PT4N1M0, grade Moderate]
-  - papillary thyroid carcinoma [cell line IHH-4]
   id: NCIT:C4035::icdom-82603::icdot-C73.9
 - code_group:
   - id: NCIT:C4036
@@ -8645,8 +8382,8 @@
   - Myoepithelioma [Hard palate; epitheloid]
   - Myoepithelioma [Palate; plasmacytoid]
   - Myoepithelioma [Palate; spindled]
+  - Myoepithelioma [Parapharyngeal; spindled]
   - Myoepithelioma [Soft palate; plasmacytoid]
-  - salivary gland myoepitheliomas
   id: NCIT:C40392::icdom-89820::icdot-C08.9
 - code_group:
   - id: NCIT:C40392
@@ -8677,11 +8414,11 @@
   - id: icdot-C64.9
     label: kidney
   examples:
-  - Nephroblastoma
   - Wilms tumor
-  - Wilms' tumour
-  - wilms tumor [anaplastic]
-  - wilms tumor [favorable]
+  - Wilms tumor [histology n.d., stage I]
+  - Wilms tumor [histology n.d., stage n.a.]
+  - Wilms tumor [necrotic, stage I]
+  - Wilms tumor [with fibroadematous structures, stage I]
   id: NCIT:C40407::icdom-89603::icdot-C64.9
 - code_group:
   - id: NCIT:C4041
@@ -8701,11 +8438,11 @@
   - id: icdot-C04.9
     label: floor of mouth
   examples:
-  - Floor of mouth squamous cell carcinoma [cell line UT-SCC-47]
-  - oral cavity squamous cell carcinoma [cell line Ho-1-u-1l]
-  - 'oral squamous cell carcinoma tumor [floor of mouth, Stage: 1]'
-  - 'oral squamous cell carcinoma tumor [floor of mouth, Stage: 3]'
-  - 'oral squamous cell carcinoma tumor [floor of mouth, Stage: 4]'
+  - Blood Derived Normal
+  - Metastatic
+  - Primary Tumor
+  - Solid Tissue Normal
+  - squamous cell carcinoma [mouth]
   id: NCIT:C4041::icdom-80703::icdot-C04.9
 - code_group:
   - id: NCIT:C4043
@@ -8733,13 +8470,13 @@
   - id: icdom-80703
     label: Squamous cell carcinoma, NOS
   - id: icdot-C32.9
-    label: larynx
+    label: Larynx
   examples:
-  - HNSCC, laringeal tumor
-  - HNSCC, laringeal tumor [metastasis]
-  - HNSCC,laringeal tumor [metastasis]
-  - head and neck squamous cell carcinoma [Larynx]
-  - normal tissue
+  - Carcinoma [larynx, stage T2N0M0]
+  - Carcinoma [larynx, stage T3N0M0]
+  - Carcinoma [larynx, stage T3N1M0]
+  - squamous cell carcinoma [head-neck, anemic]
+  - squamous cell carcinoma [head-neck, non-anemic]
   id: NCIT:C4044::icdom-80703::icdot-C32.9
 - code_group:
   - id: NCIT:C4047
@@ -8772,7 +8509,7 @@
   - id: icdot-C71.6
     label: cerebellum
   examples:
-  - Pilocytic astrocytoma
+  - pilocytic astrocytoma [4th ventricle]
   - pilocytic astrocytoma [Cerebellum]
   - pilocytic astrocytoma [Posterior fossa]
   - pilocytic astrocytoma [Vermis]
@@ -8796,11 +8533,11 @@
   - id: icdom-94211
     label: Pilocytic astrocytoma
   - id: icdot-C71.9
-    label: Brain, NOS
+    label: brain, NOS
   examples:
-  - Pilocytic astrocytoma
+  - Astrocytoma, pilocytic/juvenile
+  - Astrocytoma, pilocytic/juvenile [familial]
   - astrocytoma
-  - astrocytoma [low grade]
   - pilocytic astrocytoma
   - pilocytic astrocytoma [optic chiasm]
   id: NCIT:C4047::icdom-94211::icdot-C71.9
@@ -8949,9 +8686,9 @@
   - id: icdot-C51.9
     label: vulva, nos
   examples:
-  - Squamous cell carcinoma
   - squamous cell carcinoma [vulva, stage 3B, HPV16neg, HPV18neg]
   - squamous cell carcinoma [vulva, stage 3B, HPV18pos, HPVpos]
+  - squamous cell carcinoma [vulva, stage 4A, HPV16pos, HPVpos]
   - squamous cell carcinomas [HPVneg]
   - squamous cell carcinomas [HPVpos]
   id: NCIT:C4052::icdom-80703::icdot-C51.9
@@ -9420,11 +9157,11 @@
   - id: icdot-C64.9
     label: kidney
   examples:
-  - Chromophobe Renal carcinoma
+  - Renal cell carcinoma [T3bN0M0, G3, chromophobe, without microsatellite alterations]
+  - Renal cell carcinoma [T3bN2M0, G3, chromoohobe, without microsatellite alterations]
   - Renal cell carcinoma, chromophobe type
-  - Renal neoplasm, Chromophobe
-  - normal tissue
   - renal cell carcinoma [chromophobe RCC]
+  - renal cell carcinoma [chromophobe]
   id: NCIT:C4146::icdom-83173::icdot-C64.9
 - code_group:
   - id: NCIT:C4160
@@ -10292,16 +10029,6 @@
     label: Pleura
   id: NCIT:C4282::icdom-90533::icdot-C38.4
 - code_group:
-  - id: NCIT:C4282
-    label: Biphasic Mesothelioma
-  - id: icdom-90533
-    label: Mesothelioma, biphasic, malignant
-  - id: icdot-C49.9
-    label: connective and soft tissue, NOS
-  examples:
-  - mesothelioma [biphasic]
-  id: NCIT:C4282::icdom-90533::icdot-C49.9
-- code_group:
   - id: NCIT:C4286
     label: Immature Teratoma
   - id: icdom-90803
@@ -10362,15 +10089,15 @@
   - id: NCIT:C4286
     label: Immature Teratoma
   - id: icdom-90803
-    label: Teratoma, malignant. NOS
+    label: Teratoma, malignant, NOS
   - id: icdot-C62.9
     label: testis
   examples:
+  - germ cell tumor [mature and immature teratoma]
   - testicular germ cell tumor [non-seminoma, malignant teratoma differentiated]
   - testicular germ cell tumor [non-seminoma, malignant teratoma intermediate]
   - testicular germ cell tumor [non-seminoma, malignant teratoma undifferentiated]
   - testicular germ cell tumor [non-seminoma, malignant teratoma]
-  - testicular teratoma [cell line GCT 27]
   id: NCIT:C4286::icdom-90803::icdot-C62.9
 - code_group:
   - id: NCIT:C4286
@@ -10454,14 +10181,16 @@
   - id: icdot-C38.9
     label: mediastinum
   examples:
+  - Combined germ cell tumor [mediastinal, embryonal carcinoma, mature teratoma, stage
+    n.d.]
   - Combined germ cell tumor [mediastinal, immature teratoma, yolk sac tumor, stage
     II]
+  - Combined germ cell tumor [mediastinal, yolk sac tumor, chorioncarcinoma, stage
+    IV]
   - Combined germ cell tumor [mediastinal, yolk sac tumor, mature teratoma, stage
     IV]
-  - Mixed germ cell tumor [Teratocarcinoma,sarcoma]
-  - Mixed germ cell tumor [embryonal carcinoma, teratocarcinoma,Teratoma with malignant
-    transformation]
-  - Mixed germ cell tumor [yolk sac tumour,trophs]
+  - Combined germ cell tumor [mediastinal, yolk sac tumor, mature teratoma, stage
+    n.d.]
   id: NCIT:C4290::icdom-90853::icdot-C38.9
 - code_group:
   - id: NCIT:C4290
@@ -10493,11 +10222,12 @@
   - id: icdot-C62.9
     label: testis
   examples:
-  - Mixed germ cell tumor [embryonal carcinoma and seminoma]
-  - Mixed germ cell tumor [embryonal carcinoma and teratocarcinoma]
-  - Mixed germ cell tumor [embryonal carcinoma, choriocarcinoma]
-  - Mixed germ cell tumor [embryonal carcinoma,yolk sac tumour,Teratocarcinoma,Trophoblast]
-  - Mixed germ cell tumor [yolk sac tumour,Teratocarcinoma,seminoma,Trophoblast]
+  - Primary Tumor
+  - testicular germ cell tumor [seminoma and embryonal carcinoma]
+  - testicular germ cell tumor [seminoma and malignant teratoma intermediate and yolk
+    sac tumor]
+  - testicular germ cell tumor [seminoma and malignant teratoma intermediate]
+  - testicular germ cell tumor [seminoma and malignant teratoma undifferentiated]
   id: NCIT:C4290::icdom-90853::icdot-C62.9
 - code_group:
   - id: NCIT:C4290
@@ -10608,7 +10338,7 @@
   - id: icdom-94243
     label: Pleomorphic xanthoastrocytoma
   - id: icdot-C71.9
-    label: brain, nos
+    label: brain, NOS
   examples:
   - Anaplastic pleomorphic xanthoastrocytoma
   - Pleomorphic xanthoastrocytoma [WHO grade II, recurrent]
@@ -10632,7 +10362,7 @@
   - id: icdom-94303
     label: Astroblastoma
   - id: icdot-C71.9
-    label: brain, nos
+    label: brain, NOS
   examples:
   - Astroblastoma
   - Malignant Astroblastoma
@@ -10644,13 +10374,13 @@
   - id: icdom-94513
     label: Oligodendroglioma, anaplastic
   - id: icdot-C71.9
-    label: brain, nos
+    label: brain, NOS
   examples:
-  - Anaplastic oligodendroglioma
-  - Oligodendroglioma, anaplastic
+  - Blood Derived Normal
+  - Oligodendroglioma (Grade IV)
+  - Primary Tumor
+  - Solid Tissue Normal
   - anaplastic oligodendroglioma
-  - oligodendroglioma [grade 4]
-  - oligodendroglioma[anaplastic]
   id: NCIT:C4326::icdom-94513::icdot-C71.9
 - code_group:
   - id: NCIT:C4327
@@ -10681,7 +10411,6 @@
     label: Spleen
   examples:
   - Mantle cell lymphoma
-  - normal tissue
   id: NCIT:C4337::icdom-96733::icdot-C42.2
 - code_group:
   - id: NCIT:C4337
@@ -10692,10 +10421,10 @@
     label: Lymph nodes, NOS
   examples:
   - Mantle cell lymphoma
-  - mantle cell lymphoma [Blastoid]
-  - mantle cell lymphoma [Classic]
-  - mantle cell lymphoma [Leukemic]
-  - mantle cell lymphoma [cell line Granta-519]
+  - mantle cell lymphoma [blastoid, recurrence]
+  - mantle cell lymphoma [blastoid]
+  - mantle cell lymphoma [classic]
+  - mantle cell lymphoma [small cell]
   id: NCIT:C4337::icdom-96733::icdot-C77.9
 - code_group:
   - id: NCIT:C4340
@@ -10737,9 +10466,9 @@
   examples:
   - Peripheral T-cell lymphoma
   - Peripheral T-cell lymphoma [Nodal]
+  - T-NHL [stage IV]
   - natural killer lymphoma [Pulmonary lymph node]
   - normal tissue
-  - peripheral T-cell lymphoma, unspecified
   id: NCIT:C4340::icdom-97023::icdot-C77.9
 - code_group:
   - id: NCIT:C4341
@@ -10791,10 +10520,10 @@
     label: Hematopoietic system, NOS
   examples:
   - Extranodal marginal zone B-cell lymphoma
+  - MALT [pulmonary]
   - MALT lymphoma
-  - Marginal zone lymphoma
-  - Marginal zone lymphoma [cell line SSK41]
   - Nodal marginal zone lymphoma
+  - normal blood
   id: NCIT:C4341::icdom-96993::icdot-C42.4
 - code_group:
   - id: NCIT:C4341
@@ -10872,7 +10601,7 @@
     label: Bone marrow
   examples:
   - Myeloproliferative neoplasm
-  - myeloproliferative neoplasm
+  - myeloid proliferative disorder
   - normal tissue
   - post-essential thrombocythemia myelofibrosis
   - post-polycythemia vera myelofibrosis
@@ -10894,10 +10623,9 @@
     label: cecum
   examples:
   - Blood Derived Normal
-  - Colorectal adenocarcinoma [Cecum]
   - Primary Tumor
+  - Solid Tissue Normal
   - adenocarcinoma [cecum]
-  - normal tissue
   id: NCIT:C4349::icdom-81403::icdot-C18.0
 - code_group:
   - id: NCIT:C4349
@@ -10964,13 +10692,13 @@
   - id: icdom-81403
     label: Adenocarcinoma, NOS
   - id: icdot-C18.9
-    label: Colon, NOS
+    label: large intestine, excl. rectum and rectosigmoid junction
   examples:
-  - Colorectal tissue
-  - colorectal carcinoma [left, moderately differentiated]
-  - colorectal carcinoma [left, well differentiated, lymph node metastasis]
-  - colorectal carcinoma [left, well differentiated]
-  - colorectal carcinoma [right, well differentiated]
+  - Adenocarcinoma [colorectal]
+  - adenomacarcinoma [colorectal]
+  - colon carcinoma [colitis ulcerosa related]
+  - colorectal adenocarcinoma
+  - colorectal cancer [sporadic microsatellite stable, distal colon]
   id: NCIT:C4349::icdom-81403::icdot-C18.9
 - code_group:
   - id: NCIT:C43554
@@ -11000,11 +10728,11 @@
   - id: icdot-C18.7
     label: sigmoid incl. rectosigmoid junction
   examples:
-  - Colorectal adenocarcinoma [Rectosigmoid Junction]
-  - Colorectal adenocarcinoma [Sigmoid Colon]
-  - normal tissue
-  - rectum adenocarcinoma [Rectosigmoid Junction]
-  - rectum adenocarcinoma [Sigmoid Colon]
+  - adenocarcinoma [sigma, liver metastasis]
+  - adenocarcinoma [sigma]
+  - colorectal cancer [Distal,Sigmoid colon]
+  - mismatch repair-proficient colorectal cancer [Rectosigmoid]
+  - mismatch repair-proficient colorectal cancer [Sigmoid]
   id: NCIT:C43584::icdom-81403::icdot-C18.7
 - code_group:
   - id: NCIT:C43584
@@ -11048,11 +10776,10 @@
   - id: icdot-C18.7
     label: sigmoid incl. rectosigmoid junction
   examples:
-  - Colon Mucinous Adenocarcinoma [Sigmoid Colon]
-  - Colorectal adenocarcinoma [Sigmoid Colon]
+  - Blood Derived Normal
   - Mucinous colorectal carcinoma [Sigmoid colon, pT3N0M0, stage I]
-  - normal tissue
-  - rectum adenocarcinoma [Rectosigmoid Junction]
+  - Mucinous colorectal carcinoma [Sigmoid colon, pT3N0M1, stage V]
+  - Primary Tumor
   id: NCIT:C43592::icdom-84803::icdot-C18.7
 - code_group:
   - id: NCIT:C43592
@@ -11120,10 +10847,10 @@
     label: lung and bronchus
   examples:
   - Large cell carcinoma
-  - Large cell lung carcinoma [cell line LCLC-97TMI]
+  - Large cell carcinoma [anaplastic]
   - Large cell lung carcinoma [cell line NCI-H1299]
+  - large cell carcinoma [lung]
   - large cell lung carcinoma [cell line LCLC-103-H]
-  - large cell lung carcinoma [cell line NCI-H661]
   id: NCIT:C4450::icdom-80123::icdot-C34.9
 - code_group:
   - id: NCIT:C4452
@@ -11136,8 +10863,8 @@
   - Lung giant cell carcinoma [cell line HCC1359]
   - Lung giant cell carcinoma [cell line LU-65A]
   - Lung giant cell carcinoma [cell line LU-65B]
-  - Lung giant cell carcinoma [cell line Lu-65]
-  - transformed cell line PWRE-1
+  - transformed cell line PWRE-2
+  - transformed cell line PWRE2-W99
   id: NCIT:C4452::icdom-80313::icdot-C34.9
 - code_group:
   - id: NCIT:C4456
@@ -11161,11 +10888,11 @@
   - id: icdot-C49.9
     label: connective and soft tissue, NOS
   examples:
-  - Pleural malignant mesothelioma [cell line GAY2911]
   - Pleural malignant mesothelioma [cell line JU77]
-  - pleural biphasic mesothelioma [cell line JMN]
   - pleural malignant mesothelioma [cell line HO275]
-  - pleural malignant mesothelioma [cell line LO68]
+  - pleural malignant mesothelioma [cell line MH]
+  - pleural malignant mesothelioma [cell line Meso-9]
+  - pleural malignant mesothelioma [cell line Meso37]
   id: NCIT:C4456::icdom-90503::icdot-C49.9
 - code_group:
   - id: NCIT:C4462
@@ -11208,10 +10935,10 @@
     label: cervix uteri
   examples:
   - Cervical adenosquamous carcinoma [cell line CC-10A]
-  - Cervical adenosquamous carcinoma [cell line CC-10B]
-  - Cervical adenosquamous carcinoma [cell line CC-11+]
-  - Cervical adenosquamous carcinoma [cell line CC-11-]
   - Cervical adenosquamous carcinoma [cell line CC-8]
+  - Primary Tumor
+  - Solid Tissue Normal
+  - squamous cell carcinoma [cervix, stage 2b, HPV16pos, HPVpos]
   id: NCIT:C4519::icdom-85603::icdot-C53.9
 - code_group:
   - id: NCIT:C45202
@@ -11396,11 +11123,11 @@
   - id: icdom-90533
     label: Mesothelioma, biphasic, malignant
   - id: icdot-C38.4
-    label: pleura
+    label: Pleura, NOS
   examples:
+  - Blood Derived Normal
   - Primary Tumor
   - Solid Tissue Normal
-  - pleural biphasic mesothelioma [cell line H-MESO-1A]
   - pleural biphasic mesothelioma [cell line H-MESO-1]
   - pleural biphasic mesothelioma [cell line Y-MESO-8D
   id: NCIT:C45665::icdom-90533::icdot-C38.4
@@ -11475,11 +11202,11 @@
   - id: icdot-C01.9
     label: tongue
   examples:
-  - salivary gland squamous cell carcinoma [cell line A-253]
-  - tongue squamous cell carcinoma [cell line CAL-27]
-  - tongue squamous cell carcinoma [cell line SCC-15]
-  - tongue squamous cell carcinoma [cell line SCC-4]
-  - tongue squamous cell carcinoma [cell line SCC-9]
+  - oral squamous cell carcinoma [cell line HSC-3]
+  - oral squamous cell carcinoma [cell line HSC-4]
+  - oral squamous cell carcinoma [cell line OSC70]
+  - oral squamous cell carcinoma [cell line SAS]
+  - squamous cell carcinoma [mouth]
   id: NCIT:C4648::icdom-80703::icdot-C01.9
 - code_group:
   - id: NCIT:C4648
@@ -11510,11 +11237,11 @@
   - id: icdot-C02.9
     label: Tongue, NOS
   examples:
+  - Blood Derived Normal
   - Head and Neck carcinoma [cell line UT-SCC-16]
+  - Primary Tumor
+  - Solid Tissue Normal
   - Tongue squamous cell carcinoma [cell line UT-SCC-15]
-  - Tongue squamous cell carcinoma [cell line UT-SCC-25]
-  - 'oral squamous cell carcinoma tumor [tongue, Stage: 2]'
-  - 'oral squamous cell carcinoma tumor [tongue, Stage: 3]'
   id: NCIT:C4648::icdom-80703::icdot-C02.9
 - code_group:
   - id: NCIT:C4649
@@ -11555,11 +11282,11 @@
   - id: icdot-C42.2
     label: Spleen
   examples:
+  - Marginal Zone B-cell Lymphoma [Spleen, BM, LN, PB]
+  - Marginal Zone B-cell Lymphoma [Spleen, BM, PB]
+  - Marginal Zone B-cell Lymphoma [Spleen, BM]
+  - Marginal Zone B-cell Lymphoma [Spleen, Liver, BM, PB]
   - Marginal Zone B-cell Lymphoma [Spleen, PB, BM]
-  - Marginal zone lymphoma
-  - Splenic Marginal Zone Lymphoma
-  - Splenic marginal zone lymphoma
-  - Splenic marginal zone lymphoma [cell line VL51]
   id: NCIT:C4663::icdom-96893::icdot-C42.2
 - code_group:
   - id: NCIT:C4664
@@ -11583,7 +11310,6 @@
   - Acute mixed lineage leukemia [remission]
   - acute biphenotypic leukemia [cell line MY]
   - normal tissue
-  - transformed cell line PWR-1E
   id: NCIT:C4673::icdom-98053::icdot-C42.1
 - code_group:
   - id: NCIT:C4673
@@ -11809,8 +11535,6 @@
   - Blood Derived Normal
   - Primary Tumor
   - Solid Tissue Normal
-  - breast ductal adenocarcinoma
-  - normal tissue
   id: NCIT:C47857::icdom-85413::icdot-C50.9
 - code_group:
   - id: NCIT:C4812
@@ -11840,11 +11564,11 @@
   - id: icdot-C73.9
     label: thyroid gland
   examples:
-  - thyroid carcinoma [cell line TH13]
+  - thyroid carcinoma
   - thyroid carcinoma [cell line TH15]
-  - thyroid carcinoma [cell line TH17]
+  - thyroid carcinoma [cell line TH16]
+  - thyroid carcinoma [cell line TH1]
   - thyroid carcinoma [cell line TH5]
-  - thyroid carcinoma [cell line TH7]
   id: NCIT:C4815::icdom-80103::icdot-C73.9
 - code_group:
   - id: NCIT:C4817
@@ -11855,16 +11579,16 @@
     label: bones and joints
   examples:
   - Ewing sarcoma
-  - Ewing sarcoma [cell line SCMS-ES1]
-  - Ewing sarcoma [cell line SJES-3]
-  - Ewing sarcoma [cell line SK-ES-1]
-  - peripheral blood
+  - Ewing sarcoma [Iliac]
+  - Ewing sarcoma [Pelvis]
+  - Ewing sarcoma [Sacrum]
+  - Ewing sarcoma [Vertebra]
   id: NCIT:C4817::icdom-92603::icdot-C40.0
 - code_group:
   - id: NCIT:C4817
     label: Ewing Sarcoma
   - id: icdom-92603
-    label: Ewing sarcoma
+    label: EWING SARCOMA
   - id: icdot-C41.9
     label: Bone, NOS
   examples:
@@ -11892,11 +11616,11 @@
   - id: icdot-C44.9
     label: Skin, NOS
   examples:
-  - Cutaneous squamous cell carcinoma
+  - Squamous cell carcinoma [arm]
   - Squamous cell carcinoma [ear]
-  - Vulvar squamous cell carcinoma [cell line A-431]
-  - normal blood
-  - squamous cell carcinoma [cell line]
+  - Squamous cell carcinoma [hand]
+  - Squamous cell carcinoma [metastasis, axillary lymph node]
+  - Squamous cell carcinoma [scalp]
   id: NCIT:C4819::icdom-80703::icdot-C44.9
 - code_group:
   - id: NCIT:C4822
@@ -11927,21 +11651,11 @@
     label: brain stem
   examples:
   - Diffuse Intrinsic Pontine Glioma
+  - Malignant glioma
   - dfiffuse intrinsic pontine glioma
-  - diffuse intrinsic pontine glioma
   - diffuse intrinsic pontine glioma [cell line]
   - normal tissue
   id: NCIT:C4822::icdom-93803::icdot-C71.7
-- code_group:
-  - id: NCIT:C4822
-    label: Malignant Glioma
-  - id: icdom-93803
-    label: Glioma, malignant
-  - id: icdot-C76.9
-    label: ill-defined
-  examples:
-  - Malignant glioma
-  id: NCIT:C4822::icdom-93803::icdot-C76.9
 - code_group:
   - id: NCIT:C4827
     label: Adrenal gland neuroblastoma
@@ -11993,11 +11707,11 @@
   - id: icdot-C06.9
     label: mouth, NOS
   examples:
-  - head and neck squamous cell carcinoma [Buccal Mucosa]
-  - head and neck squamous cell carcinoma [Floor of Mouth]
-  - head and neck squamous cell carcinoma [Oral Cavity]
-  - normal tissue
-  - squamous cell carcinoma [oral]
+  - Squamous cell carcinoma [oral]
+  - oral squamous cell carcinoma [cell line BHY]
+  - oral squamous cell carcinoma [cell line H-1]
+  - squamous cell carcinoma [head-neck, anemic]
+  - squamous cell carcinoma [head-neck, non-anemic]
   id: NCIT:C4833::icdom-80703::icdot-C06.9
 - code_group:
   - id: NCIT:C4833
@@ -12013,15 +11727,15 @@
   - id: NCIT:C4861
     label: Acute Monocytic Leukemia
   - id: icdom-98913
-    label: acute monocytic leukemia
+    label: Acute monocytic leukemia
   - id: icdot-C42.1
     label: Bone marrow
   examples:
+  - Acute monoblastic leukemia (FAB type M5)
+  - Acute monoblastic leukemia [FAB M5, refractory]
+  - Acute monoblastic leukemia [FAB M5]
   - Acute monoblastic leukemia with differentiation [FAB M5b]
-  - Acute monocytic leukemia [cell line U937]
-  - acute monocytic leukemia
-  - acute monocytic leukemia [cell line Mono-Mac-1]
-  - acute monocytic leukemia [cell line TUR]
+  - acute myeloid leukemia [FAB M5]
   id: NCIT:C4861::icdom-98913::icdot-C42.1
 - code_group:
   - id: NCIT:C4863
@@ -12031,11 +11745,11 @@
   - id: icdot-C61.9
     label: Prostate gland
   examples:
+  - Prostate carcinoma [cell line DU145/RC0.1]
   - Prostate carcinoma [cell line LNCaP clone FGC]
-  - benign prostate hyperplasia [cell line BPH-1]
   - prostate carcinoma [cell line 22Rv1]
   - prostate carcinoma [cell line DU145]
-  - transformed cell line WPE1-NB14
+  - transformed cell line CA-HPV-10
   id: NCIT:C4863::icdom-80103::icdot-C61.9
 - code_group:
   - id: NCIT:C4866
@@ -12056,10 +11770,10 @@
     label: Breast, NOS
   examples:
   - Carcinoma [breast, cell lines]
-  - Primary Breast Cancer [BRCA1mutation]
-  - Primary Breast Cancer [BRCA2mutation]
-  - Primary Breast Cancer [BRCAXmutation]
-  - Primary Breast Cancer [CHEK2mutation]
+  - breast carcinoma [cell line HCC3153]
+  - breast carcinoma [cell line MCF12A]
+  - breast carcinoma [cell line MDAMB134]
+  - breast carcinoma [cell line MDAMB175]
   id: NCIT:C4872::icdom-80103::icdot-C50.9
 - code_group:
   - id: NCIT:C4878
@@ -12069,11 +11783,11 @@
   - id: icdot-C34.9
     label: lung and bronchus
   examples:
-  - Lung carcinoma [cell line UMC-11]
+  - Carcinoma [bronchial, after carcinoma in situ of left main bronchus]
   - Lung carcinoma [cell line]
-  - lung carcinoma
-  - lung carcinoma [brain metastasis]
-  - lung carcinoma [primary]
+  - bronchoalveolar carcinoma
+  - carcinoma [lung]
+  - carcinoma of the lung or bronchus
   id: NCIT:C4878::icdom-80103::icdot-C34.9
 - code_group:
   - id: NCIT:C4883
@@ -12135,11 +11849,11 @@
   - id: icdot-C56.9
     label: ovary
   examples:
-  - Ovarian Carcinoma
+  - Carcinoma
   - Ovarian carcinoma
-  - Ovarian carcinoma [cell line LK2]
-  - Ovarian carcinoma [omentum metastasis]
-  - ovarian carcinoma [cell line]
+  - ovarian carcinoma
+  - ovarian carcinoma [Recurrence, grade NA]
+  - ovarian carcinoma [carboplatin resistant]
   id: NCIT:C4908::icdom-80103::icdot-C56.9
 - code_group:
   - id: NCIT:C4910
@@ -12167,13 +11881,13 @@
   - id: icdom-80103
     label: Carcinoma, NOS
   - id: icdot-C18.9
-    label: Colon, NOS
+    label: large intestine, excl. rectum and rectosigmoid junction
   examples:
-  - Colorectal cancer
-  - Colorectal carcinoma [cell line VACO 394]
-  - Colorectal carcinoma [cell line VACO 410]
-  - Colorectal carcinoma [cell line VACO 503]
-  - colorectal cancer [liver metastasis]
+  - colon cancer
+  - colorectal cancer [Distal,Descending colon]
+  - colorectal cancer [Proximal,Ascending colon]
+  - colorectal cancer [Proximal,Coekum]
+  - colorectal cancer [Rectum]
   id: NCIT:C4910::icdom-80103::icdot-C18.9
 - code_group:
   - id: NCIT:C4911
@@ -12187,7 +11901,7 @@
   - Gastric carcinoma [cell line SNU-16]
   - Gastric carcinoma [cell line SNU-1]
   - Gastric carcinoma [cell line SNU-5]
-  - gastric carcinoma [cell line HGC-27]
+  - Krukenberg tumor
   id: NCIT:C4911::icdom-80103::icdot-C16.9
 - code_group:
   - id: NCIT:C4912
@@ -12220,11 +11934,11 @@
   - id: icdot-C34.9
     label: lung and bronchus
   examples:
-  - Small cell lung carcinoma [cell line NCI-H1417]
-  - Small cell lung carcinoma [cell line NCI-H1963]
-  - Small cell lung carcinoma [cell line NCI-H748]
-  - Small cell lung carcinoma [cell line NCI-H889]
-  - small cell Lung carcinoma [cell line NCI-H146]
+  - Small Cell Carcinoma
+  - Small cell carcinoma
+  - small cell carcinoma [lung]
+  - small cell carcinoma with squamous cell carcinoma [lung]
+  - small cell lung carcinoma
   id: NCIT:C4917::icdom-80413::icdot-C34.9
 - code_group:
   - id: NCIT:C4946
@@ -12244,10 +11958,10 @@
   - id: icdot-C71.6
     label: cerebellum
   examples:
-  - classic medulloblastoma
-  - large cell/anaplastic medulloblastoma
-  - medulloblastoma [Meduloblastoma with extensive neuronal differentiation]
+  - Desmoplastic medulloblastoma [hemisphere]
   - medulloblastoma [desmoplastic]
+  - medulloblastoma [desmoplatic]
+  - medulloblastoma [extensive neuronal differentiation]
   - nodular/desmoplastic medulloblastoma
   id: NCIT:C4956::icdom-94713::icdot-C71.6
 - code_group:
@@ -12363,11 +12077,11 @@
   - id: icdot-C50.9
     label: Breast, NOS
   examples:
+  - Blood Derived Normal
   - Metaplastic carcinoma, NOS
   - Primary Tumor
   - breast carcinoma [metaplastic carcinoma, cell line HCC1569]
   - breast carcinoma [metaplastic carcinoma, cell line MDAMB157]
-  - metaplastic breast carcinoma
   id: NCIT:C5164::icdom-85753::icdot-C50.9
 - code_group:
   - id: NCIT:C5184
@@ -12387,11 +12101,11 @@
   - id: icdot-C50.9
     label: Breast, NOS
   examples:
-  - breast cancer
-  - breast cancer [cell line ERN1]
-  - breast cancer [cell line IMR90]
-  - breast cancer [cell line MCF7]
-  - breast tumor
+  - Adenocarcinoma, NOS
+  - breast carcinoma [adenocarcinoma, cell line CAMA1]
+  - breast carcinoma [adenocarcinoma, cell line HCC1428]
+  - breast carcinoma [adenocarcinoma, cell line MDAMB361]
+  - breast carcinoma [adenocarcinoma, cell line MDAMB468]
   id: NCIT:C5214::icdom-81403::icdot-C50.9
 - code_group:
   - id: NCIT:C5214
@@ -12454,13 +12168,13 @@
   - id: icdom-84403
     label: Cystadenocarcinoma, NOS
   - id: icdot-C56.9
-    label: ovary
+    label: Ovary
   examples:
+  - Blood Derived Normal
   - Ovarian cystadenocarcinoma [cell line OAW42]
-  - Ovarian cystadenocarcinoma [cell line PEO6]
   - Ovarian cystoadenocarcinoma [cell line IGROV-1]
   - Primary Tumor
-  - normal tissue
+  - Solid Tissue Normal
   id: NCIT:C5228::icdom-84403::icdot-C56.9
 - code_group:
   - id: NCIT:C5234
@@ -12468,7 +12182,7 @@
   - id: icdom-88903
     label: Leiomyosarcoma, NOS
   - id: icdot-C56.9
-    label: ovary
+    label: Ovary
   examples:
   - Mixed Cancer Types
   - Primary Tumor
@@ -12482,8 +12196,8 @@
   - id: icdot-C56.9
     label: ovary
   examples:
-  - Mucinous ovarian tumor
-  - Ovarian mucinous adenocarcinoma [cell line OCI-M1p]
+  - Ovarian carcinoma [Mucinous adenocarcinoma]
+  - ovarian carcinoma [mucinous, grade 1]
   - ovarian carcinoma [mucinous, grade 2]
   - ovarian carcinoma [mucinous, grade LMP]
   - ovarian carcinoma [mucinous]
@@ -12544,11 +12258,11 @@
   - id: icdot-C16.9
     label: stomach
   examples:
+  - Blood Derived Normal
+  - Gastric Type Mucinous Carcinoma
+  - Mixed Cancer Types
   - Primary Tumor
-  - gastric adenocarcinoma [Antrum/Distal]
-  - gastric adenocarcinoma [Fundus/Body]
   - gastric carcinoma [with HNPCC, mucinous]
-  - normal tissue
   id: NCIT:C5248::icdom-84803::icdot-C16.9
 - code_group:
   - id: NCIT:C5250
@@ -12560,9 +12274,9 @@
   examples:
   - Carcinoma [gastric, diffuse-type, mucosa]
   - Carcinoma [gastric, diffuse-type, muscularis propria]
+  - Carcinoma [gastric, diffuse-type, serosa]
   - Carcinoma [gastric, diffuse-type, submucosa]
-  - signet ring gastric adenocarcinoma [cell line NUGC-4]
-  - signet ring gastric adenocarcinoma [cell line OCUM-1]
+  - signet-ring cell carcinoma [stomach, mid-body, mucosa]
   id: NCIT:C5250::icdom-84903::icdot-C16.9
 - code_group:
   - id: NCIT:C5250
@@ -12585,10 +12299,10 @@
     label: stomach
   examples:
   - Extranodal marginal zone B-cell lymphoma
-  - MALT Lymphoma
+  - Extranodal marginal zone B-cell lymphoma [large cell]
+  - Extranodal marginal zone B-cell lymphoma [small cell]
   - MALT lymphoma [gastric]
   - Marginal Zone B-cell Lymphoma [Stomach]
-  - gastric MALT lymphoma
   id: NCIT:C5266::icdom-96993::icdot-C16.9
 - code_group:
   - id: NCIT:C5340
@@ -12620,7 +12334,6 @@
     label: Long bones of lower limb and associated joints
   examples:
   - Enchondroma [femur]
-  - Enchondroma [phalanx]
   - Enchondroma [tibia]
   id: NCIT:C53459::icdom-92200::icdot-C40.2
 - code_group:
@@ -12633,8 +12346,6 @@
   examples:
   - Enchondroma [iliac bone]
   - Enchondroma [ilium]
-  - Enchondroma [metacarpal]
-  - Enchondroma [phalanx]
   id: NCIT:C53459::icdom-92200::icdot-C41.4
 - code_group:
   - id: NCIT:C53459
@@ -12716,11 +12427,11 @@
   - id: icdot-C71.9
     label: Brain, NOS
   examples:
+  - Brain neuroblastoma (Primitive neuroectodermal tumor)
+  - Central nervous system primitive neuroectodermal tumor [ETANTR]
   - Primitive neuroectodermal tumor
-  - Primitive neuroectodermal tumor [ependymal or ependymoblastic differentiation]
-  - Primitive neuroectodermal tumor [medulloepithelioma]
-  - normal tissue
-  - primitive neuroectodermal tumor
+  - Primitive neuroectodermal tumor [non-pineal]
+  - primitive neuroectodermal tumor [midbrain]
   id: NCIT:C5398::icdom-94733::icdot-C71.9
 - code_group:
   - id: NCIT:C54244
@@ -12915,11 +12626,11 @@
   - id: icdot-C16.9
     label: stomach
   examples:
-  - Gastric tubular adenocarcinoma [cell line MKN28]
   - Gastric tubular adenocarcinoma [cell line MKN74]
-  - gastric adenocarcinoma [Fundus/Body]
+  - Gastric tubular adenocarcinoma [cell line NCI-N87]
+  - gastric adenocarcinoma [tubular]
+  - gastric tubular adenocarcinoma [cell line MKN7]
   - gastric tubular adenocarcinoma [cell line NCI-N87]
-  - normal tissue
   id: NCIT:C5473::icdom-82113::icdot-C16.9
 - code_group:
   - id: NCIT:C5474
@@ -13020,9 +12731,6 @@
     label: Acinar cell carcinoma
   - id: icdot-C34.9
     label: lung and bronchus
-  examples:
-  - lung adenocarcinoma [L-Upper]
-  - lung adenocarcinoma [R-Upper]
   id: NCIT:C5649::icdom-85503::icdot-C34.9
 - code_group:
   - id: NCIT:C5650
@@ -13030,7 +12738,7 @@
   - id: icdom-82603
     label: Papillary adenocarcinoma, NOS
   - id: icdot-C34.9
-    label: lung and bronchus
+    label: Lung, NOS
   examples:
   - Blood Derived Normal
   - C34;Adenocarcinoma
@@ -13048,7 +12756,6 @@
   examples:
   - Pleuropulmonary blastoma [rhabdomyoblastic and chondroid differentiation; right
     lung]
-  - normal tissue
   - pleuropulmonary blastoma
   id: NCIT:C5669::icdom-89733::icdot-C34.9
 - code_group:
@@ -13170,7 +12877,6 @@
   examples:
   - Gastrointestinal stromal tumor, uncertain malignant potential
   - gastrointestinal stroma tumor [Low Malignant Potential]
-  - gastrointestinal stromal tumor [low biological potential]
   - gastrointestinal stromal tumor, low biological potential
   id: NCIT:C5811::icdom-89361::icdot-C17.9
 - code_group:
@@ -13289,11 +12995,11 @@
   - id: icdot-C71.0
     label: cerebrum
   examples:
-  - Astrocytoma [Supratentorial Frontal Lobe]
-  - Astrocytoma [Supratentorial Parietal Lobe]
-  - Oligoastrocytoma [Supratentorial Temporal Lobe]
-  - astrocytoma [Supratentorial Frontal Lobe]
-  - normal tissue
+  - Blood Derived Normal
+  - Primary Tumor
+  - Solid Tissue Normal
+  - diffuse astrocytoma [supratentorial]
+  - subependymal giant cell astrocytoma [supratentorial]
   id: NCIT:C60781::icdom-94003::icdot-C71.0
 - code_group:
   - id: NCIT:C60781
@@ -13337,11 +13043,11 @@
   - id: icdot-C71.7
     label: brain stem
   examples:
-  - Anaplastic oligoastrocytoma
+  - Astrocytoma [brainstem]
+  - Astrocytoma, anaplastic [grade II, Primary, Dorsal medulla]
   - Diffusely infiltrating astrocytoma
   - Low-grade Astrocytoma
   - Pilocytic astrocytoma
-  - normal tissue
   id: NCIT:C60781::icdom-94003::icdot-C71.7
 - code_group:
   - id: NCIT:C60781
@@ -13349,13 +13055,13 @@
   - id: icdom-94003
     label: Astrocytoma, NOS
   - id: icdot-C71.9
-    label: Brain, NOS
+    label: brain, NOS
   examples:
-  - Astrocytoma [cell line SNB-19]
-  - astrocystoma [cell line U-138MG]
-  - astrocytoma [cell line CCF-STTG1]
-  - astrocytoma [cell line NMC-G1]
-  - glioblastoma [cell line H4]
+  - Astrocytoma [familial]
+  - astrocytoma
+  - astrocytoma [fronto-basal]
+  - astrocytoma [parieto-occipital]
+  - astrocytoma [temporal]
   id: NCIT:C60781::icdom-94003::icdot-C71.9
 - code_group:
   - id: NCIT:C6163
@@ -13447,11 +13153,11 @@
   - id: icdot-C54.1
     label: Endometrium
   examples:
+  - Blood Derived Normal
   - Ovarian Carcinoma
-  - endometrial adenocarcinoma [cell line AN3-CA]
-  - endometrial adenocarcinoma [cell line Ischikawa]
-  - endometrial carcinoma
-  - endometrial carcinoma [cell line EFE-184]
+  - Primary Tumor
+  - Recurrent Tumor
+  - Solid Tissue Normal
   id: NCIT:C6287::icdom-83803::icdot-C54.1
 - code_group:
   - id: NCIT:C6287
@@ -13483,7 +13189,7 @@
   - id: icdot-C55.9
     label: uterus, nos
   examples:
-  - endometrial adenocarcinoma [cell line SNG-M]
+  - Endometrial
   - endometrioid adenocarcinoma [grade G1]
   - endometrioid adenocarcinoma [grade G2]
   - endometrioid adenocarcinoma [grade G3]
@@ -13540,7 +13246,6 @@
   - C49;Sarcoma
   - Mixed Cancer Types
   - Uterine corpus sarcoma [cell line MES-SA/Dx5]
-  - transformed cell line PWRE2-W99
   - uterus sarcoma [cell line MES-SA]
   id: NCIT:C6339::icdom-88003::icdot-C55.9
 - code_group:
@@ -13586,10 +13291,10 @@
     label: uterus, nos
   examples:
   - Uterine Leiomyosarcoma [grade I, stage C]
+  - Uterine Leiomyosarcoma [grade III, stage A]
+  - Uterine Leiomyosarcoma [grade III, stage C]
   - Uterine Leiomyosarcoma [grade IV]
   - Uterine Leiomyosarcoma [grade I]
-  - Uterine corpus leiomyosarcoma [cell line SK-UT-1B]
-  - uterine corpus sarcoma [cell line SKN]
   id: NCIT:C6340::icdom-88903::icdot-C55.9
 - code_group:
   - id: NCIT:C6343
@@ -13639,11 +13344,11 @@
   - id: icdot-C50.9
     label: Breast, NOS
   examples:
+  - Adenocarcinoma [breast, ductal lobular]
+  - Blood Derived Normal
   - Infiltrating duct and lobular carcinoma
-  - breast carcinoma [cell line T-47D]
-  - breast ductal adenocarcinoma
-  - breast ductal adenocarcinoma [Right Upper Outer Quadrant]
-  - normal tissue
+  - Primary Tumor
+  - Solid Tissue Normal
   id: NCIT:C6393::icdom-85223::icdot-C50.9
 - code_group:
   - id: NCIT:C6422
@@ -13763,7 +13468,6 @@
   - id: icdot-C49.9
     label: connective and soft tissue, NOS
   examples:
-  - Desmoplastic fibroma [myxofibrosarcoma-like component]
   - Myxofibrosarcoma
   - myxoinflammatory fibroblastic sarcoma
   id: NCIT:C6496::icdom-88113::icdot-C49.9
@@ -14020,7 +13724,7 @@
   - id: icdom-83353
     label: Follicular carcinoma, minimally invasive
   - id: icdot-C73.9
-    label: thyroid gland
+    label: Thyroid gland
   examples:
   - Blood Derived Normal
   - Follicular carcinoma [cell line FTC-133]
@@ -14332,11 +14036,7 @@
   - id: icdot-C16.0
     label: cardia, NOS
   examples:
-  - Normal tissue [Lynch syndrome]
   - cardia cancer
-  - normal tissue
-  - normal tissue [colon]
-  - normal tissue [colorectal]
   id: NCIT:C6794::icdom-80103::icdot-C16.0
 - code_group:
   - id: NCIT:C6801
@@ -14356,10 +14056,10 @@
   - id: icdot-C44.9
     label: Skin, NOS
   examples:
+  - B-cell lymphoma [cutaneous, not subtyped]
   - LPP
   - PP
   - Pseudolymphoma
-  - SPP
   - cBNHL
   id: NCIT:C6858::icdom-95913::icdot-C44.9
 - code_group:
@@ -14376,11 +14076,10 @@
   - id: NCIT:C6867
     label: Myelodysplastic Syndrome with Isolated del(5q)
   - id: icdom-99863
-    label: Myelodysplastic syndrome with 5q deletion (5q-) syndrome
+    label: Myelodyplastic syndrome, NOS
   - id: icdot-C42.1
     label: Bone marrow
   examples:
-  - myelodysplastic syndrome [5q-]
   - myelodysplastic syndromes
   - normal tissue
   id: NCIT:C6867::icdom-99863::icdot-C42.1
@@ -14528,11 +14227,11 @@
   - id: icdot-C71.6
     label: Cerebellum
   examples:
-  - Anaplastic medulloblastoma [diffuse moderate anaplasia]
-  - classic medulloblastoma
   - large cell/anaplastic medulloblastoma
-  - medulloblastoma [Large Cell/Anaplastic]
-  - nodular/desmoplastic medulloblastoma
+  - medulloblastoma [anaplastic]
+  - medulloblastoma [large cell / anaplastic]
+  - medulloblastoma [moderate to severe anaplasia]
+  - medulloblastoma [severe anaplasia ]
   id: NCIT:C6904::icdom-94743::icdot-C71.6
 - code_group:
   - id: NCIT:C6906
@@ -14641,9 +14340,9 @@
   - id: icdot-C38.4
     label: pleura
   examples:
-  - primary effusion lymphoma [cell line BC-2]
+  - Effusion Lymphoma [Pleura]
+  - Effusion Lymphoma [Pleural]
   - primary effusion lymphoma [cell line BC-3]
-  - primary effusion lymphoma [cell line CRO-AP2]
   - primary effusion lymphoma [cell line CRO-AP5]
   - primary effusion lymphoma [cell line JSC-1]
   id: NCIT:C6915::icdom-96783::icdot-C38.4
@@ -14788,11 +14487,11 @@
   - id: icdot-C64.9
     label: kidney
   examples:
-  - kidney renal papillary cell carcinoma
-  - lung adenocarcinoma [R-Upper]
-  - normal tissue
-  - papillary renal cell carcinoma
+  - Papillary renal carcinoma [lung metastasis derived cell line]
+  - Renal cell carcinoma [T3aN0M0, G2, papillary, microsatellite alterations]
+  - Renal cell carcinoma [papillary]
   - renal cell carcinoma [papillary RCC]
+  - renal cell carcinoma [papillary]
   id: NCIT:C6975::icdom-82603::icdot-C64.9
 - code_group:
   - id: NCIT:C6980
@@ -14915,9 +14614,9 @@
     label: Skin, NOS
   examples:
   - Anaplastic large cell lymphoma [cutaneous]
-  - LPP
-  - LPP/MF
-  - Pseudolymphoma
+  - Anaplastic large cell lymphoma [pleomorphic, CD30 pos., stage IVa]
+  - Anaplastic large cell lymphoma, cutaneous type
+  - Anaplastic large cell lymphoma[pleomorphic, CD30 pos., stage IIIb]
   - cALCL
   id: NCIT:C7195::icdom-97183::icdot-C44.9
 - code_group:
@@ -15079,7 +14778,7 @@
   - id: icdom-81203
     label: Transitional cell carcinoma, NOS
   - id: icdot-C65.9
-    label: renal pelvis, ureter
+    label: Renal pelvis, ureter
   examples:
   - Urothelial carcinoma
   - normal tissue
@@ -15106,13 +14805,13 @@
   - id: icdom-81403
     label: Adenocarcinoma, NOS
   - id: icdot-C55.9
-    label: Uterus, NOS
+    label: uterus, nos
   examples:
-  - Endometrial adenocarcinoma [cell line COLO 684]
-  - endometrial adenocarcinoma [cell line COLO 685]
+  - endometrial carcinoma [adenocarcinoma, FIGO stage III, FIGO grade 2]
   - endometrial carcinoma [adenocarcinoma, FIGO stage Ia, FIGO grade 1]
-  - normal tissue
-  - uterine corpus endometrioid carcinoma
+  - endometrial carcinoma [adenocarcinoma, FIGO stage Ia, FIGO grade 2]
+  - endometrial carcinoma [adenocarcinoma, FIGO stage Ib, FIGO grade 1]
+  - endometrial carcinoma [adenocarcinoma, FIGO stage Ib, FIGO grade 2]
   id: NCIT:C7359::icdom-81403::icdot-C55.9
 - code_group:
   - id: NCIT:C7376
@@ -15136,11 +14835,11 @@
   - id: icdot-C67.0
     label: Urinary bladder
   examples:
+  - Blood Derived Normal
   - Papillary transitional cell carcinoma [high grade]
   - Papillary transitional cell carcinoma [low grade]
-  - bladder urothelial carcinoma
-  - bladder urothelial carcinoma [Dome]
-  - normal tissue
+  - Primary Tumor
+  - Solid Tissue Normal
   id: NCIT:C7383::icdom-81303::icdot-C67.0
 - code_group:
   - id: NCIT:C7383
@@ -15249,7 +14948,7 @@
   - id: NCIT:C7463
     label: Acute myelomonocytic leukemia
   - id: icdom-98673
-    label: Acute myelomonocytic leukemia, NOS
+    label: Acute myelomonocytic leukemia
   - id: icdot-C42.1
     label: Bone marrow
   examples:
@@ -15257,7 +14956,7 @@
   - Acute myelomonocytic leukemia [FAB M4, refractory]
   - Acute myelomonocytic leukemia [FAB M4]
   - Acute myelomonocytic leukemia [FAB type M4]
-  - Acute myelomonocytic leukemia [cell line KY821]
+  - acute myeloid leukemia [FAB M4]
   id: NCIT:C7463::icdom-98673::icdot-C42.1
 - code_group:
   - id: NCIT:C7463
@@ -15275,10 +14974,10 @@
   - id: icdot-C42.1
     label: Bone marrow
   examples:
+  - Acute myeloid leukemia [cell line NOMO-1]
   - Leukemia NOS [cell line F36P]
   - Leukemia NOS [cell line HL60]
   - Leukemia NOS [cell line MONOMAC1]
-  - acute myeloid leukemia [cell line OCI-AML3]
   - mixed-phenotype acute leukemia
   id: NCIT:C7464::icdom-98013::icdot-C42.1
 - code_group:
@@ -15358,7 +15057,7 @@
     label: Retina
   examples:
   - Retinoblastoma
-  - Retinoblastoma [cell line Cone2]
+  - Retinoblastoma [bilateral]
   - Retinoblastoma [familial, bilateral]
   - Retinoblastoma [familial]
   - retinoblastoma
@@ -15384,7 +15083,6 @@
   examples:
   - Askin tumor [cell line SK-N-MC]
   - askin tumor [cell line TASK1]
-  - normal diploid lung [cell line IMR-90]
   id: NCIT:C7542::icdom-93653::icdot-C71.9
 - code_group:
   - id: NCIT:C7550
@@ -15414,13 +15112,13 @@
   - id: icdom-81401
     label: Atypical adenoma
   - id: icdot-C18.9
-    label: Colon, NOS
+    label: large intestine, excl. rectum and rectosigmoid junction
   examples:
-  - colon mucosa [low grade dysplastic tumor; fap; apcmut]
-  - colon mucosa [low grade dysplastic tumor; myhmut]
-  - colon mucosa [normal mucosa; fap; apcmut]
-  - colon mucosa [normal mucosa; myhmut]
-  - reference dna [commercial, female]
+  - adenoma [colon, mild dysplasia in FAP]
+  - adenoma [colon, moderate dysplasia in FAP]
+  - adenoma [colorectal, FAP, APC mutated, dysplastic]
+  - adenoma [colorectal, MYH mutated, dysplastic]
+  - adenoma [colorectal, high-grade]
   id: NCIT:C7559::icdom-81401::icdot-C18.9
 - code_group:
   - id: NCIT:C7559
@@ -15556,10 +15254,10 @@
     label: stomach
   examples:
   - adenoma [gastric, moderate dysplasia]
+  - adenoma [gastric, severe dysplasia]
   - adenoma [stomach, tubular]
   - adenoma [stomach, tubulovilous]
   - gastric adenoma
-  - hyperplastic polyp [stomach]
   id: NCIT:C7699::icdom-81400::icdot-C16.9
 - code_group:
   - id: NCIT:C7700
@@ -15569,11 +15267,11 @@
   - id: icdot-C56.9
     label: ovary
   examples:
-  - Adenocarcinoma [metastasis omentum]
-  - Adenocarcinoma [ovary]
-  - Ovarian carcinoma
-  - ovarian endometrioid adenocarcinoma [cell line A2780ADR]
-  - ovarian endometrioid adenocarcinoma [cell line A2780cis]
+  - Ovarian carcinoma [epithelial tumor, stage IIIc]
+  - Ovarian carcinoma [epithelial tumor, stage IV]
+  - Papillary serous cystadenocarcinoma
+  - ovarian carcinoma
+  - ovarian carcinoma [Recurrence, grade NA]
   id: NCIT:C7700::icdom-81403::icdot-C56.9
 - code_group:
   - id: NCIT:C7709
@@ -15761,10 +15459,10 @@
     label: cecum
   examples:
   - Blood Derived Normal
-  - Colon Mucinous Adenocarcinoma [Cecum]
   - Mucinous colorectal carcinoma [Cecum, pT3N0M0, stage I]
   - Mucinous colorectal carcinoma [Cecum, pT3N1M1, stage V]
   - Primary Tumor
+  - Solid Tissue Normal
   id: NCIT:C7966::icdom-84803::icdot-C18.0
 - code_group:
   - id: NCIT:C7966
@@ -15829,13 +15527,13 @@
   - id: icdom-84803
     label: Mucinous adenocarcinoma
   - id: icdot-C18.9
-    label: Colon, NOS
+    label: large intestine, excl. rectum and rectosigmoid junction
   examples:
-  - Colon Mucinous Adenocarcinoma [Ascending Colon]
-  - Colon Mucinous Adenocarcinoma [Transverse Colon]
-  - Colorectal tissue
-  - colorectal carcinoma [right, mucinous, lymph node metastasis]
-  - normal tissue
+  - Mucinous carcinoma [colorectal]
+  - Mucinous colorectal carcinoma [Ascending colon, pT1N0M0, stage ]
+  - Mucinous colorectal carcinoma [Ascending colon, pT3N1M0, stage II]
+  - Mucinous colorectal carcinoma [Rectum [above], pT3N0M0, stage I]
+  - Mucinous colorectal carcinoma [Rectum [below], pT1N0M0, stage ]
   id: NCIT:C7966::icdom-84803::icdot-C18.9
 - code_group:
   - id: NCIT:C7972
@@ -15857,9 +15555,7 @@
   examples:
   - Blood Derived Normal
   - Primary Tumor
-  - normal tissue
-  - rectum adenocarcinoma [Rectum]
-  - rectum adenocarcinoma [mucinous]
+  - Solid Tissue Normal
   id: NCIT:C7973::icdom-84803::icdot-C20.9
 - code_group:
   - id: NCIT:C7975
@@ -15892,11 +15588,11 @@
   - id: icdot-C56.9
     label: ovary
   examples:
-  - Ovarian Carcinoma
-  - Ovarian serous adenocarcinoma [cell line INT.Ov2]
-  - Serous ovarian carcinoma
-  - peritoneum carcinoma
-  - serous adenocarcinoma of the ovary [cell line 41M]
+  - Serous adenocarcinoma [ovary, chemoresistant]
+  - ovarian carcinoma [serous, grade 2]
+  - ovarian carcinoma [serous, grade 3]
+  - ovarian carcinoma [serous, grade NA]
+  - ovarian carcinoma [serous]
   id: NCIT:C7978::icdom-84413::icdot-C56.9
 - code_group:
   - id: NCIT:C7979
@@ -15951,13 +15647,13 @@
   - id: icdom-90523
     label: Epithelioid mesothelioma, malignant
   - id: icdot-C38.4
-    label: Pleura
+    label: pleura
   examples:
-  - malignant mesothelioma
-  - malignant mesothelioma [cell line MM]
+  - Epithelioid mesothelioma
+  - Epithelioid mesothelioma [familial occurence]
+  - Epitheloid mesothelioma [familial]
+  - malignant mesothelioma [epithelioid]
   - mesothelioma [epithelioid]
-  - pleural epithelioid mesothelioma [cell line ACC-MESO-1]
-  - pleural epithelioid mesothelioma [cell line ACC-MESO-4]
   id: NCIT:C7985::icdom-90523::icdot-C38.4
 - code_group:
   - id: NCIT:C7985
@@ -16082,8 +15778,8 @@
   - id: icdot-C08.9
     label: salivary gland, NOS
   examples:
-  - Adenoid cystic carcinoma
   - adenoid cystic carcinoma [salivary gland, cribriform, Maxilla]
+  - adenoid cystic carcinoma [salivary gland, cribriform, Upper lip]
   - adenoid cystic carcinoma [salivary gland, solid, Parotid gland]
   - adenoid cystic carcinoma [salivary gland, solid, Upper lip]
   - adenoid cystic carcinoma [salivary gland, tubular, Maxilla]
@@ -16096,11 +15792,11 @@
   - id: icdot-C77.9
     label: Lymph nodes, NOS
   examples:
-  - Diffuse large B-cell lymphoma [cell line RL]
-  - diffuse large B-cell lymphoma
-  - diffuse large B-cell lymphoma [cell line Karpas-422]
-  - diffuse large B-cell lymphoma [transformed FCL]
-  - remission Bone Marrow
+  - Diffuse large B-cell lymphoma [IG-MYC maybe, 3q2 break neg., t(14;18) neg.]
+  - Diffuse large B-cell lymphoma [IG-MYC neg., 3q2 break maybe, t(14;18) neg.]
+  - Diffuse large B-cell lymphoma [IG-MYC neg., 3q2 break neg., t(14;18) neg.]
+  - Diffuse large B-cell lymphoma [IG-MYC neg., 3q2 break neg., t(14;18) pos.]
+  - Diffuse large B-cell lymphoma, NOS
   id: NCIT:C80280::icdom-96803::icdot-C77.9
 - code_group:
   - id: NCIT:C80291
@@ -16222,11 +15918,11 @@
   - id: icdot-C03.1
     label: Lower gum
   examples:
+  - Primary Tumor
+  - Solid Tissue Normal
   - 'oral squamous cell carcinoma tumor [lower gingiva, Stage: 1]'
   - 'oral squamous cell carcinoma tumor [lower gingiva, Stage: 2]'
-  - 'oral squamous cell carcinoma tumor [lower gingiva, Stage: 3]'
   - 'oral squamous cell carcinoma tumor [lower gingiva, Stage: 4]'
-  - 'oral squamous cell carcinoma tumor [lower gingiva, Stage: 4a]'
   id: NCIT:C8171::icdom-80703::icdot-C03.1
 - code_group:
   - id: NCIT:C8180
@@ -16246,11 +15942,11 @@
   - id: icdot-C10.9
     label: Oropharynx
   examples:
-  - Gingival squamous cell carcinoma [cell line Ca9-22]
-  - Oral cavity squamous cell carcinoma [cell line HSC-2]
-  - head and neck squamous cell carcinoma
-  - head and neck squamous cell carcinoma [cell line H1]
-  - oral squamous cell carcinoma
+  - Head and neck squamous cell carcinoma [Oropharynx, stage I, T4NoMo]
+  - Head and neck squamous cell carcinoma [primary tumor, Oropharynx, T4N2cM0]
+  - Oral squamous cell carcinoma
+  - squamous cell carcinoma [head-neck, anemic]
+  - squamous cell carcinoma [head-neck, non-anemic]
   id: NCIT:C8181::icdom-80703::icdot-C10.9
 - code_group:
   - id: NCIT:C8183
@@ -16344,11 +16040,11 @@
   - id: icdot-C25.9
     label: Pancreas, NOS
   examples:
-  - Pancreatic ductal adenocarcinoma
-  - Pancreatic ductal adenocarcinoma [cell line PANC-1]
-  - pancreas adenocarcinoma [cell line]
-  - pancreatic ductal adenocarcinoma
-  - pancreatic ductal adenocarcinoma [cell line PancTu-I]
+  - Pancreatic adenocarcinoma [short term culture]
+  - Pancreatic ductal Adenocarcinoma
+  - pancreas ductal adenocarcinoma [cell line MiaPaCa2, primary]
+  - pancreas ductal adenocarcinoma [cell line PaTu1, primary]
+  - pancreatic adenocarcinoma
   id: NCIT:C8294::icdom-81403::icdot-C25.9
 - code_group:
   - id: NCIT:C8295
@@ -16420,10 +16116,10 @@
   - id: icdot-C56.9
     label: ovary
   examples:
+  - Micropapillary serous carcinoma
   - Mucinous cystic tumor of borderline malignancy
   - Papillary serous cystadenocarcinoma
-  - Papillary serous ovarian tumor
-  - Papillary serous tumor [xenograft]
+  - Serous cystadenoma borderline malignancy
   - Serous papillary cystic tumor of borderline malignancy
   id: NCIT:C8377::icdom-84603::icdot-C56.9
 - code_group:
@@ -16460,7 +16156,6 @@
     label: Hematopoietic system, NOS
   examples:
   - Hepatosplenic T-cell lymphoma
-  - normal blood
   id: NCIT:C8459::icdom-97163::icdot-C42.4
 - code_group:
   - id: NCIT:C8460
@@ -16501,12 +16196,12 @@
   - id: icdom-87203
     label: Malignant melanoma, NOS
   - id: icdot-C69.9
-    label: Eye, NOS
+    label: eye, nos
   examples:
   - Choroidal melanoma
+  - Malgnant melanoma [conjunctiva]
   - Maligant melanoma [iris]
-  - Uveal melanoma
-  - Uveal melanoma [hepatic metastatic]
+  - Malignant melanoma [ciliary body]
   - uveal melanoma
   id: NCIT:C8562::icdom-87203::icdot-C69.9
 - code_group:
@@ -16548,9 +16243,9 @@
     label: Bone marrow
   examples:
   - Acute lymphoblastic leukemia, mature B-cell type [cell line U-293]
-  - B acute lymphoblastic leukemia [cell line Granta-452]
   - B acute lymphoblastic leukemia [cell line P30/OHK]
   - B acute lymphoblastic leukemia [cell line Reh]
+  - Burkitt cell leukemia
   - Burkitt leukemia [cell line KHM-10B]
   id: NCIT:C8644::icdom-98263::icdot-C42.1
 - code_group:
@@ -16887,7 +16582,6 @@
   - Malignant melanoma [uvea]
   - malignant melanoma [uvea, long-term survivor]
   - malignant melanoma [uvea, metastasized]
-  - normal blood
   - normal tissue
   id: NCIT:C8711::icdom-87203::icdot-C69.2
 - code_group:
@@ -17263,11 +16957,11 @@
   - id: icdot-C42.4
     label: Hematopoietic system, NOS
   examples:
-  - Diffuse large B-cell lymphoma
-  - diffuse large B-cell lymphoma [cell line DoHH2]
-  - diffuse large B-cell lymphoma [cell line Sci-1]
+  - Diffuse large B-cell lymphoma, NOS
+  - Diffuse large B-cell lymphoma, NOS [AIDS related]
+  - Large B-cell lymphoma
+  - diffuse large B-cell lymphoma [cell line]
   - diffuse large B-cell lymphoma [transformed FCL]
-  - remission Bone Marrow
   id: NCIT:C8851::icdom-96803::icdot-C42.4
 - code_group:
   - id: NCIT:C8851
@@ -17397,11 +17091,13 @@
   examples:
   - Diffuse large B-cell lymphoma [primary CNS lymphoma, Centroblastic, Deep left
     frontal basal]
+  - Diffuse large B-cell lymphoma [primary CNS lymphoma, Immunoblastic, Left cerebral
+    hemisphere]
   - Diffuse large B-cell lymphoma [primary CNS lymphoma, Immunoblastic, Left frontal/left
     parietal]
+  - Diffuse large B-cell lymphoma [primary CNS lymphoma, Polymorphic centroblastic,
+    Left frontal parietal]
   - Diffuse large B-cell lymphoma, NOS
-  - diffuse large B-cell lymphoma [CNS]
-  - normal tissue
   id: NCIT:C8851::icdom-96803::icdot-C71.9
 - code_group:
   - id: NCIT:C8851
@@ -17510,11 +17206,11 @@
   - id: icdot-C77.9
     label: Lymph nodes, NOS
   examples:
-  - Marginal zone lymphoma
-  - Marginal zone lymphoma [MALT]
-  - Marginal zone lymphoma [cell line Karpas-1718]
-  - Nodal Marginal Zone Lymphoma
-  - marginal zone lymphoma
+  - Marginal Zone B-cell Lymphoma [LN, Liver, BM]
+  - Marginal Zone B-cell Lymphoma [LN, Pleura, Spleen]
+  - Marginal Zone B-cell Lymphoma [LN, Stomach, Pleura]
+  - Marginal Zone B-cell Lymphoma [LN]
+  - Marginal Zone B-cell Lymphoma [Soft tissue, LN]
   id: NCIT:C8863::icdom-96993::icdot-C77.9
 - code_group:
   - id: NCIT:C8893
@@ -17530,14 +17226,14 @@
   - id: NCIT:C8923
     label: Acute Erythroid Leukemia
   - id: icdom-98403
-    label: Erythroleukemia
+    label: Acute myeloid leukemia, M6 type
   - id: icdot-C42.1
     label: Bone marrow
   examples:
+  - Acute erythroid leukemia [FAB M6, refractory]
+  - Acute erythroid leukemia [FAB M6]
   - Erythroleukemia [cell line HEL]
-  - Transformed cell line UE6E7T-2
   - acute myeloid leukemia [cell line KO52]
-  - acute myeloid leukemia [cell line MOLM-13]
   - acute myeloid leukemia [cell line OCI-AML2]
   id: NCIT:C8923::icdom-98403::icdot-C42.1
 - code_group:
@@ -17746,9 +17442,9 @@
   examples:
   - Adrenocortical tumor [adenoma, left]
   - Adrenocortical tumor [adenoma, right]
-  - adrenocortical adenoma
+  - adrenocortical tumor [Adenoma, Aldosterone]
+  - adrenocortical tumor [Adenoma, Cortisol]
   - adrenocortical tumor [Adenoma, Nil]
-  - cortisol producing adrenocortical adenoma
   id: NCIT:C9003::icdom-83700::icdot-C74.0
 - code_group:
   - id: NCIT:C9003
@@ -17848,8 +17544,8 @@
   - Carcinoma
   - carcinoma, NOS [cervix, cell line C33-A]
   - carcinoma, NOS [cervix, cell line CaSki]
+  - carcinoma, NOS [cervix, cell line HT-3]
   - carcinoma, NOS [cervix, cell line ME180]
-  - cervix carcinoma [cell line DoTc2 4510]
   id: NCIT:C9039::icdom-80103::icdot-C53.9
 - code_group:
   - id: NCIT:C9087
@@ -17890,9 +17586,9 @@
   - id: icdot-C50.9
     label: Breast, NOS
   examples:
+  - Adenocarcinoma [breast, BRCAX - familial, Medullar, grade , T3N0]
   - Adenocarcinoma [breast, BRCAX - familial, Medullar, grade , T3N1]
   - Adenocarcinoma [breast, sporadic, Medullar, grade, T3N1]
-  - Breast medullary carcinoma
   - Medullary carcinoma
   - Medullary carcinoma, NOS
   id: NCIT:C9119::icdom-85103::icdot-C50.9
@@ -17928,7 +17624,7 @@
   examples:
   - Adenosquamous lung carcinoma [cell line HCC1195]
   - Adenosquamous lung carcinoma [cell line NCI-H596]
-  - Adenosquamous lung carcinoma [cell line NCI-H647]
+  - adenosquamous carcinoma [lung]
   - adenosquamous lung carcinoma [cell line HCC2279]
   - adenosquamous lung carcinoma [cell line HCC366]
   id: NCIT:C9133::icdom-85603::icdot-C34.9
@@ -18022,10 +17718,10 @@
     label: bones and joints
   examples:
   - Osteosarcoma [Osteoblastic]
-  - Osteosarcoma [cell line 143B]
-  - Osteosarcoma [cell line IOR/OS10]
   - osteosarcoma [cell line HOS]
-  - osteosarcoma [high-grade, pre-chemotherapy]
+  - osteosarcoma [cell line MG-63]
+  - osteosarcoma [cell line SAOS-2]
+  - osteosarcoma [cell line U-2OS]
   id: NCIT:C9145::icdom-91803::icdot-C40.0
 - code_group:
   - id: NCIT:C9145
@@ -18035,11 +17731,11 @@
   - id: icdot-C41.9
     label: bone, NOS
   examples:
-  - Osteosarcoma
-  - Osteosarcoma [cell line Saos-2]
-  - Osteosarcoma [cell line U2OS]
-  - osteosarcoma [cell line HOS]
-  - osteosarcoma [cell line MG-63]
+  - osteosarcoma [IOR/OS9 cell line, osteoblastic, metastasis]
+  - osteosarcoma [primary tumor, femur, small cell]
+  - osteosarcoma [primary tumor, femur]
+  - osteosarcoma [primary tumor, tibia, fibrohistiocytic]
+  - osteosarcoma [primary tumor, tibia]
   id: NCIT:C9145::icdom-91803::icdot-C41.9
 - code_group:
   - id: NCIT:C9145
@@ -18238,13 +17934,13 @@
   - id: icdom-81443
     label: Adenocarcinoma, intestinal type
   - id: icdot-C16.9
-    label: stomach
+    label: Stomach, NOS
   examples:
+  - Blood Derived Normal
   - Gastric adenocarcinoma [intestinal type, MSI-H]
   - Gastric adenocarcinoma [intestinal type, MSI-L, LOH-H]
-  - carcinoma [gastric, intestinal]
-  - gastric adenocarcinoma
-  - normal tissue
+  - Primary Tumor
+  - Solid Tissue Normal
   id: NCIT:C9157::icdom-81443::icdot-C16.9
 - code_group:
   - id: NCIT:C9159
@@ -18299,13 +17995,13 @@
   - id: icdom-81453
     label: Carcinoma, diffuse type
   - id: icdot-C16.9
-    label: stomach
+    label: Stomach, NOS
   examples:
+  - Blood Derived Normal
+  - Diffuse adenocarcinoma [poorly differentiated, Lymph node and pancreatic metastasis]
+  - Primary Tumor
   - carcinoma [gastric, diffuse-type]
   - carcinoma [gastric,diffuse-type]
-  - gastric adenocarcinoma [Antrum/Distal]
-  - gastric adenocarcinoma [Fundus/Body]
-  - normal tissue
   id: NCIT:C9159::icdom-81453::icdot-C16.9
 - code_group:
   - id: NCIT:C9160
@@ -18435,10 +18131,10 @@
     label: Skin, NOS
   examples:
   - Merkel cell carcinoma
-  - Merkel cell carcinoma [cell line AlDo]
-  - Merkel cell carcinoma [cell line Broli]
-  - Merkel cell carcinoma [cell line Loke]
-  - merkel cell carcinoma [lip]
+  - Merkel cell carcinoma [left ankle]
+  - Merkel cell carcinoma [right cheek]
+  - merkel cell carcinoma [primary]
+  - merkel cell carcinoma [recurrence]
   id: NCIT:C9231::icdom-82473::icdot-C44.9
 - code_group:
   - id: NCIT:C9233
@@ -18533,7 +18229,7 @@
   - id: icdot-C38.3
     label: Mediastinum, NOS
   examples:
-  - Mediastinal large B-cell lymphoma [cell line MedB-1]
+  - Primary Mediastinal B-cell Lymphoma
   - Primary mediastinal B-cell lymphoma
   - mediastinal B-cell lymphoma [cell line Karpas-1106P]
   - primary mediastinal B-cell lymphoma
@@ -18648,16 +18344,6 @@
     label: Malignant Neoplasm
   - id: icdom-80003
     label: Neoplasm, malignant
-  - id: icdot-C56.9
-    label: ovary
-  examples:
-  - Ovarian cancer [cell line OCI-P9a]
-  id: NCIT:C9305::icdom-80003::icdot-C56.9
-- code_group:
-  - id: NCIT:C9305
-    label: Malignant Neoplasm
-  - id: icdom-80003
-    label: Neoplasm, malignant
   - id: icdot-C76.9
     label: ill-defined
   examples:
@@ -18684,11 +18370,11 @@
   - id: icdot-C49.9
     label: connective and soft tissue, NOS
   examples:
+  - Intimal sarcoma [Aorta]
   - Pulmonary artery intimal sarcoma
   - Sarcoma NOS
-  - Sarcoma, NOS
-  - Undifferentiated Pleomorphic Sarcoma
-  - soft tissue sarcoma
+  - Sarcoma NOS [cell line LS14]
+  - Sarcoma [G1]
   id: NCIT:C9306::icdom-88003::icdot-C49.9
 - code_group:
   - id: NCIT:C9309
@@ -18700,7 +18386,7 @@
   examples:
   - Blood Derived Normal
   - Primary Tumor
-  - seminoma
+  - Solid Tissue Normal
   - testicular germ cell tumor [seminoma, cell line]
   - testicular germ cell tumor [seminoma]
   id: NCIT:C9309::icdom-90613::icdot-C62.9
@@ -18732,11 +18418,11 @@
   - id: icdot-C74.0
     label: adrenal cortex
   examples:
+  - Adrenal cortical carcinoma [pediatric]
   - Adrenocortical carcinoma
+  - Adrenocortical carcinoma [Nil]
   - Adrenocortical tumor [carcinoma, left]
   - Adrenocortical tumor [carcinoma, right]
-  - adrenocortical carcinoma
-  - adrenocortical carcinoma [p53mut; Li-Fraumeni syndrome]
   id: NCIT:C9325::icdom-83703::icdot-C74.0
 - code_group:
   - id: NCIT:C9325
@@ -18799,9 +18485,9 @@
   - id: icdot-C42.1
     label: Bone marrow
   examples:
-  - Multiple Myeloma
-  - Multiple myeloma
+  - Plasmacytoma, NOS
   - multiple myeloma
+  - normal tissue
   - peripheral blood
   - plasma cell myeloma [cell line RPMI-8226]
   id: NCIT:C9349::icdom-97313::icdot-C42.1
@@ -18821,13 +18507,13 @@
   - id: icdom-96503
     label: Hodgkin lymphoma, NOS
   - id: icdot-C77.9
-    label: lymph nodes
+    label: Lymph nodes, NOS
   examples:
-  - Hodgkin lymphoma
-  - Hodgkin lymphoma [cell line HDLM-2]
+  - Classical Hodgkin lymphoma
   - Hodgkin lymphoma [cell line KM-H2]
+  - Hodgkin lymphoma [cell line L-1236]
   - Hodgkin lymphoma [cell line L-428]
-  - Hodgkin lymphoma [cell line L-540]
+  - Hodgkin lymphoma, NOS
   id: NCIT:C9357::icdom-96503::icdot-C77.9
 - code_group:
   - id: NCIT:C9360
@@ -18875,11 +18561,11 @@
   - id: icdot-C20.9
     label: Rectum, NOS
   examples:
-  - Rectal adenocarcinoma [cell line SW837]
-  - normal tissue
-  - rectal adenocarcinoma
-  - rectum adenocarcinoma
-  - rectum adenocarcinoma [Rectum]
+  - Adenocarcinoma
+  - Adenocarcinoma [colorectal]
+  - adenocarcinoma [rectum]
+  - adenomacarcinoma [colorectal]
+  - colorectal cancer [sporadic microsatellite stable, rectum]
   id: NCIT:C9383::icdom-81403::icdot-C20.9
 - code_group:
   - id: NCIT:C9384
@@ -18900,11 +18586,11 @@
   - id: icdot-C64.9
     label: Kidney, NOS
   examples:
-  - Renal cell carcinoma [cell line A-704]
-  - renal cell carcinoma
-  - renal cell carcinoma [cell line SW156]
-  - renal cell carcinoma [cell line UM-RC-6]
-  - renal cell carcinoma [lymphovascular invasion]
+  - Renal cell carcinoma with prominent smooth muscle stroma
+  - renal carcinoma
+  - renal carcinoma [cell line SLR 26]
+  - renal cell carcinoma [RCC metastasis]
+  - renal cell carcinoma [mixed papillary and clear cell RCC]
   id: NCIT:C9385::icdom-83123::icdot-C64.9
 - code_group:
   - id: NCIT:C9385
@@ -19016,24 +18702,13 @@
     label: Anaplastic Astrocytoma
   - id: icdom-94013
     label: Astrocytoma, anaplastic
-  - id: icdot-C71.7
-    label: brain stem
-  examples:
-  - Anaplastic astrocytoma
-  - normal tissue
-  id: NCIT:C9477::icdom-94013::icdot-C71.7
-- code_group:
-  - id: NCIT:C9477
-    label: Anaplastic Astrocytoma
-  - id: icdom-94013
-    label: Astrocytoma, anaplastic
   - id: icdot-C71.9
-    label: brain, nos
+    label: Brain, NOS
   examples:
   - Anaplastic Astrocytoma
-  - Anaplastic astrocytoma
-  - Anaplastic astrocytoma [cell line MOG-G-CCM]
-  - Astrocytoma, anaplastic
+  - Blood Derived Normal
+  - Primary Tumor
+  - Solid Tissue Normal
   - anaplastic astrocytoma
   id: NCIT:C9477::icdom-94013::icdot-C71.9
 - code_group:
@@ -19173,11 +18848,11 @@
   - id: UBERON:0001723
     label: tongue
   examples:
-  - salivary gland squamous cell carcinoma [cell line A-253]
-  - tongue squamous cell carcinoma [cell line CAL-27]
-  - tongue squamous cell carcinoma [cell line SCC-15]
-  - tongue squamous cell carcinoma [cell line SCC-4]
-  - tongue squamous cell carcinoma [cell line SCC-9]
+  - Mucinous adenocarcinoma [right ventral surface of the tongue]
+  - oral squamous cell carcinoma [cell line HSC-3]
+  - oral squamous cell carcinoma [cell line HSC-4]
+  - oral squamous cell carcinoma [cell line OSC70]
+  - squamous cell carcinoma [mouth]
   id: icdot-C01.9::UBERON:0001723
 - code_group:
   - id: icdot-C02.1
@@ -19202,10 +18877,10 @@
     label: tongue
   examples:
   - Head and Neck carcinoma [cell line UT-SCC-16]
+  - Primary Tumor
   - Tongue squamous cell carcinoma [cell line UT-SCC-15]
   - Tongue squamous cell carcinoma [cell line UT-SCC-25]
   - 'oral squamous cell carcinoma tumor [tongue, Stage: 2]'
-  - 'oral squamous cell carcinoma tumor [tongue, Stage: 3]'
   id: icdot-C02.9::UBERON:0001723
 - code_group:
   - id: icdot-C03.0
@@ -19223,9 +18898,9 @@
   - id: UBERON:0011602
     label: gingiva of lower jaw
   examples:
+  - Primary Tumor
   - 'oral squamous cell carcinoma tumor [lower gingiva, Stage: 1]'
   - 'oral squamous cell carcinoma tumor [lower gingiva, Stage: 2]'
-  - 'oral squamous cell carcinoma tumor [lower gingiva, Stage: 3]'
   - 'oral squamous cell carcinoma tumor [lower gingiva, Stage: 4]'
   - 'oral squamous cell carcinoma tumor [lower gingiva, Stage: 4a]'
   id: icdot-C03.1::UBERON:0011602
@@ -19254,10 +18929,10 @@
     label: mouth floor
   examples:
   - Floor of mouth squamous cell carcinoma [cell line UT-SCC-47]
+  - Metastatic
+  - Primary Tumor
   - oral cavity squamous cell carcinoma [cell line Ho-1-u-1l]
-  - 'oral squamous cell carcinoma tumor [floor of mouth, Stage: 1]'
-  - 'oral squamous cell carcinoma tumor [floor of mouth, Stage: 3]'
-  - 'oral squamous cell carcinoma tumor [floor of mouth, Stage: 4]'
+  - squamous cell carcinoma [mouth]
   id: icdot-C04.9::UBERON:0003679
 - code_group:
   - id: icdot-C05.0
@@ -19299,11 +18974,11 @@
   - id: UBERON:0000165
     label: mouth
   examples:
-  - head and neck squamous cell carcinoma [Buccal Mucosa]
-  - head and neck squamous cell carcinoma [Floor of Mouth]
-  - head and neck squamous cell carcinoma [Hard Palate]
-  - head and neck squamous cell carcinoma [Oral Cavity]
-  - squamous cell carcinoma [oral]
+  - Squamous cell carcinoma [oral]
+  - carcinoma in situ [oral]
+  - oral squamous cell carcinoma [cell line BHY]
+  - squamous cell carcinoma [head-neck, anemic]
+  - squamous cell carcinoma [head-neck, non-anemic]
   id: icdot-C06.9::UBERON:0000165
 - code_group:
   - id: icdot-C07.9
@@ -19311,11 +18986,11 @@
   - id: UBERON:0001831
     label: parotid gland
   examples:
-  - Adenoid cystic carcinoma
   - Extranodal marginal zone B-cell lymphoma
   - Mucoepidermoid Carcinoma [cell line]
   - Myoepithelial carcinoma [Parotid gland; epitheloid]
   - Myoepithelial carcinoma [Parotid gland; plasmacytoid]
+  - Myoepithelioma [Parotid gland; spindled]
   id: icdot-C07.9::UBERON:0001831
 - code_group:
   - id: icdot-C08.0
@@ -19332,23 +19007,23 @@
   - id: UBERON:0004809
     label: salivary gland epithelium
   examples:
-  - Adenoid cystic carcinoma
-  - Mucoepidermoid carcinoma
-  - ductal carcinoma of the salivary glands
-  - normal tissue
-  - salivary gland myoepitheliomas
+  - adenoid cystic carcinoma [salivary gland, cribriform, Maxilla]
+  - adenoid cystic carcinoma [salivary gland, cribriform, Upper lip]
+  - adenoid cystic carcinoma [salivary gland, solid, Parotid gland]
+  - adenoid cystic carcinoma [salivary gland, solid, Upper lip]
+  - adenoid cystic carcinoma [salivary gland, tubular, Maxilla]
   id: icdot-C08.9::UBERON:0004809
 - code_group:
   - id: icdot-C09.9
-    label: Tonsil
+    label: tonsil
   - id: UBERON:0002372
     label: tonsil
   examples:
-  - Diffuse large B-cell lymphoma
-  - anaplastic carcinoma [palatine tonsil]
-  - carcinoma [head and neck, tonsil]
-  - head and neck squamous cell carcinoma [Tonsil]
-  - normal tissue
+  - Head and neck squamous cell carcinoma [Tonsil, stage II, T3N2M0]
+  - Primary Tumor
+  - Squamous cell carcinoma
+  - Squamous cell carcinoma [HPVpos]
+  - Squamous cell carcinoma [Tonsil, gradeII]
   id: icdot-C09.9::UBERON:0002372
 - code_group:
   - id: icdot-C10.3
@@ -19364,11 +19039,11 @@
   - id: UBERON:0001729
     label: oropharynx
   examples:
-  - Gingival squamous cell carcinoma [cell line Ca9-22]
-  - Oral cavity squamous cell carcinoma [cell line HSC-2]
-  - head and neck squamous cell carcinoma
-  - head and neck squamous cell carcinoma [cell line H1]
-  - oral squamous cell carcinoma
+  - Head and neck squamous cell carcinoma [Oropharynx, stage I, T4NoMo]
+  - Head and neck squamous cell carcinoma [primary tumor, Oropharynx, T4N2cM0]
+  - Oral squamous cell carcinoma
+  - squamous cell carcinoma [head-neck, anemic]
+  - squamous cell carcinoma [head-neck, non-anemic]
   id: icdot-C10.9::UBERON:0001729
 - code_group:
   - id: icdot-C11.9
@@ -19376,11 +19051,11 @@
   - id: UBERON:0001728
     label: nasopharynx
   examples:
-  - Nasopharyngeal carcinoma [cell line 5-8F]
-  - Nasopharyngeal carcinoma [cell line 6-10B]
-  - Nasopharyngeal carcinoma [cell line HONE-1]
-  - hybrid cell line CNE-1
-  - transformed cell line NP69SV40T
+  - Juvenile nasopharyngeal angiofibroma [Fischl class. III]
+  - Juvenile nasopharyngeal angiofibroma [Fischl class. II]
+  - Juvenile nasopharyngeal angiofibroma [Fischl class. IV]
+  - Juvenile nasopharyngeal angiofibroma [Fischl class. I]
+  - Nasopharyngeal carcinoma
   id: icdot-C11.9::UBERON:0001728
 - code_group:
   - id: icdot-C13.1
@@ -19392,13 +19067,13 @@
   id: icdot-C13.1::UBERON:0014385
 - code_group:
   - id: icdot-C13.9
-    label: hypopharynx
+    label: Hypopharynx
   - id: UBERON:0001051
     label: hypopharynx
   examples:
   - Carcinoma [hypopharynx, stage T2N0M0]
   - Carcinoma [hypopharynx, stage T2N1M0]
-  - head and neck squamous cell carcinoma [Hypopharynx]
+  - Carcinoma [hypopharynx, stage T2N3M0]
   - squamous cell carcinoma [head-neck, anemic]
   - squamous cell carcinoma [head-neck, non-anemic]
   id: icdot-C13.9::UBERON:0001051
@@ -19411,12 +19086,12 @@
   - Anaplastic large cell lymphoma, systemic type [ALK neg.]
   - Head and neck squamous cell carcinoma [Metastasis]
   - 'Head and neck squamous cell carcinoma [mucosa 1cm from tumor: CIS]'
-  - head and neck squamous cell carcinoma
-  - head and neck squamous cell carcinoma [Alveolar Ridge]
+  - Head and neck squamous cell carcinoma [squamous cell carcinoma, T3N2b]
+  - Head and neck squamous cell carcinoma [squamous cell carcinoma, T3N2c]
   id: icdot-C14.0::UBERON:0006562
 - code_group:
   - id: icdot-C14.8
-    label: Overlapping lession of lip, oral cavity and pharynx
+    label: Overlapping lesion of lip, oral cavity and pharynx
   - id: UBERON:0001731
     label: cavity of pharynx
   examples:
@@ -19463,15 +19138,15 @@
   - id: UBERON:0001043
     label: esophagus
   examples:
-  - Esophageal squamous cell carcinoma
-  - adenocarcinoma [esophagus]
-  - esophageal squamous cell carcinoma
-  - esophageal squamous cell carcinoma [cell line TE-1]
-  - esophageal squamous cell carcinoma [cell line TE-2]
+  - Esophageal squamous
+  - Esophageal squamous [cell line HCE4]
+  - Leiomyoma [Esophagus]
+  - Squamous cell carcinoma [esophageal]
+  - esophageal carcinoma
   id: icdot-C15.9::UBERON:0001043
 - code_group:
   - id: icdot-C16.0
-    label: cardia, NOS
+    label: Cardia, NOS
   - id: UBERON:0001162
     label: cardia of stomach
   examples:
@@ -19526,11 +19201,11 @@
   - id: UBERON:0000945
     label: stomach
   examples:
-  - Gastric adenocarcinoma [cell line Hs 746T]
-  - Gastric carcinoma [cell line SNU-1]
-  - Signe ring gastric adenocarcinoma [cell line KATO III]
-  - gastric adenocarcinoma [cell line AGS]
-  - gastric tubular adenocarcinoma [cell line NCI-N87]
+  - Diffuse large B-cell lymphoma [gastrointestinal]
+  - adenoma [gastric, moderate dysplasia]
+  - adenoma [gastric, severe dysplasia]
+  - gastric carcinoma [sporadic, diffuse]
+  - gastric carcinoma [with HNPCC, mucinous]
   id: icdot-C16.9::UBERON:0000945
 - code_group:
   - id: icdot-C17.0
@@ -19551,15 +19226,15 @@
   id: icdot-C17.1::UBERON:0002115
 - code_group:
   - id: icdot-C17.9
-    label: small intestine
+    label: Small intestine
   - id: UBERON:0002108
     label: small intestine
   examples:
-  - Enteropathy type T-cell lymphoma
-  - Small bowel juvenile polyps
-  - Teratocarcinoma
-  - adenocarcinoma [small intestine]
-  - gastrointestinal stromal tumor [low biological potential]
+  - Adenocarcinoma [colorectal]
+  - Adenocarcinoma [small intestine]
+  - Diffuse Large B-cell Lymphoma [extranodal, small bowel]
+  - Diffuse large B-cell lymphoma [gastrointestinal]
+  - Marginal Zone B-cell Lymphoma [Ileum, Pleura, LN]
   id: icdot-C17.9::UBERON:0002108
 - code_group:
   - id: icdot-C18.0
@@ -19567,11 +19242,11 @@
   - id: UBERON:0000314
     label: cecum mucosa
   examples:
-  - Colon Mucinous Adenocarcinoma [Cecum]
-  - Colorectal adenocarcinoma [Cecum]
   - Mucinous colorectal carcinoma [Cecum, pT3N0M0, stage I]
   - Mucinous colorectal carcinoma [Cecum, pT3N1M1, stage V]
+  - Primary Tumor
   - adenocarcinoma [cecum]
+  - colon cancer
   id: icdot-C18.0::UBERON:0000314
 - code_group:
   - id: icdot-C18.1
@@ -19633,23 +19308,23 @@
   - id: UBERON:0001155
     label: colon
   examples:
-  - Colon Mucinous Adenocarcinoma [Sigmoid Colon]
-  - Colorectal adenocarcinoma [Rectosigmoid Junction]
-  - Colorectal adenocarcinoma [Sigmoid Colon]
-  - rectum adenocarcinoma [Rectosigmoid Junction]
-  - rectum adenocarcinoma [Sigmoid Colon]
+  - adenocarcinoma [sigma, liver metastasis]
+  - adenocarcinoma [sigma]
+  - colorectal cancer [Distal,Sigmoid colon]
+  - mismatch repair-proficient colorectal cancer [Rectosigmoid]
+  - mismatch repair-proficient colorectal cancer [Sigmoid]
   id: icdot-C18.7::UBERON:0001155
 - code_group:
   - id: icdot-C18.9
-    label: Colon, NOS
+    label: large intestine, excl. rectum and rectosigmoid junction
   - id: UBERON:0001155
     label: colon
   examples:
-  - colorectal carcinoma [left, moderately differentiated]
-  - colorectal carcinoma [left, well differentiated, lymph node metastasis]
-  - colorectal carcinoma [left, well differentiated]
-  - colorectal carcinoma [right, mucinous, lymph node metastasis]
-  - colorectal carcinoma [right, well differentiated]
+  - Diffuse large B-cell lymphoma [gastrointestinal]
+  - adenoma [colorectal, high-grade]
+  - adenoma [colorectal, low-grade]
+  - adenomacarcinoma [colorectal]
+  - colon carcinoma [colitis ulcerosa related]
   id: icdot-C18.9::UBERON:0001155
 - code_group:
   - id: icdot-C19.9
@@ -19669,11 +19344,11 @@
   - id: UBERON:0001052
     label: rectum
   examples:
-  - colorectal carcinoma [rectum, moderately differentiated, lymph node metastasis]
-  - colorectal carcinoma [rectum, moderately differentiated]
-  - colorectal carcinoma [rectum, poorly differentiated, lymph node metastasis]
-  - colorectal carcinoma [rectum, well differentiated, lymph node metastasis]
-  - colorectal carcinoma [rectum, well differentiated]
+  - Adenocarcinoma [colorectal]
+  - adenoma [colorectal, high-grade]
+  - adenoma [colorectal, low-grade]
+  - adenomacarcinoma [colorectal]
+  - colorectal cancer [sporadic microsatellite stable, rectum]
   id: icdot-C20.9::UBERON:0001052
 - code_group:
   - id: icdot-C21.8
@@ -19702,22 +19377,22 @@
     label: liver
   examples:
   - Hepatocellular carcinoma
-  - Hepatocellular carcinoma [cell line Hep3B]
-  - Leiomyosarcoma
-  - Mixed germ cell tumor [embryonal carcinoma and teratocarcinoma]
+  - Hepatocellular carcinoma [chronic Hepatitis B]
   - hepatocellular carcinoma
+  - hepatocellular carcinoma [epithelial, cell line HCC-1.2]
+  - hepatocellular carcinoma [fibroblastoid, cell line HCC-1.1]
   id: icdot-C22.0::UBERON:0002107
 - code_group:
   - id: icdot-C22.1
-    label: Intrahepatic bile duct
+    label: intrahepatic bile ducts
   - id: UBERON:0003704
     label: intrahepatic bile duct
   examples:
-  - Cholangiocarcinoma
-  - Intrahepatic cholangiocarcinoma [cell line HuCC-T1]
   - cholangiocarcinoma
   - cholangiocarcinoma [Cholangiofibrosis]
   - cholangiocarcinoma [hepatitis C pos.]
+  - combined hepatocellular carcinoma and cholangiocarcinoma
+  - combined hepatocellular carcinoma and cholangiocarcinoma [Chronic cholangitis]
   id: icdot-C22.1::UBERON:0003704
 - code_group:
   - id: icdot-C22.9
@@ -19729,7 +19404,7 @@
   - hepatocellular carcinoma [cell line Hep-G2]
   - hepatocellular carcinoma [cell line Huh-7]
   - hepatocellular carcinoma [cell line PLC/PRF/5]
-  - hepatocellular carcinoma [cell line SNU-182]
+  - hepatocellular carcinoma [cell line SK-HEP-1]
   id: icdot-C22.9::UBERON:0003704
 - code_group:
   - id: icdot-C23.9
@@ -19825,11 +19500,11 @@
   - id: UBERON:0001264
     label: pancreas
   examples:
-  - Pancreatic ductal adenocarcinoma
-  - Pancreatic ductal adenocarcinoma [cell line PANC-1]
-  - pancreas adenocarcinoma [cell line]
-  - pancreatic ductal adenocarcinoma
-  - pancreatic ductal adenocarcinoma [cell line PancTu-I]
+  - Pancreatic adenocarcinoma [short term culture]
+  - Pancreatic ductal Adenocarcinoma
+  - pancreas ductal adenocarcinoma [cell line MiaPaCa2, primary]
+  - pancreas ductal adenocarcinoma [cell line PaTu1, primary]
+  - pancreatic adenocarcinoma
   id: icdot-C25.9::UBERON:0001264
 - code_group:
   - id: icdot-C26.0
@@ -19894,15 +19569,15 @@
   id: icdot-C32.1::UBERON:0036263
 - code_group:
   - id: icdot-C32.9
-    label: larynx
+    label: Larynx
   - id: UBERON:0001737
     label: larynx
   examples:
-  - Adenoid cystic carcinoma
-  - HNSCC, laringeal tumor
-  - HNSCC, laringeal tumor [metastasis]
-  - HNSCC,laringeal tumor [metastasis]
-  - head and neck squamous cell carcinoma [Larynx]
+  - Carcinoma [larynx, stage T2N0M0]
+  - Carcinoma [larynx, stage T3N0M0]
+  - Carcinoma [larynx, stage T3N1M0]
+  - squamous cell carcinoma [head-neck, anemic]
+  - squamous cell carcinoma [head-neck, non-anemic]
   id: icdot-C32.9::UBERON:0001737
 - code_group:
   - id: icdot-C33.9
@@ -19963,11 +19638,11 @@
   - id: UBERON:0002048
     label: lung
   examples:
-  - Non-Small Cell Lung Cancer
-  - lung adenocarcinoma [cell line NCI-H1819]
-  - lung adenocarcinoma [cell line NCI-H2122]
-  - lung adenocarcinoma [cell line NCI-H2347]
-  - non-small cell Lung carcinoma [cell line NCI-H2887]
+  - Carcinoid tumor
+  - Large cell neuroendocrine carcinoma
+  - atypical carcinoid tumor [lung]
+  - small cell lung carcinoma
+  - squamous cell carcinoma [lung]
   id: icdot-C34.9::UBERON:0002048
 - code_group:
   - id: icdot-C37.9
@@ -20005,7 +19680,7 @@
   - id: UBERON:0003728
     label: mediastinum
   examples:
-  - Mediastinal large B-cell lymphoma [cell line MedB-1]
+  - Primary Tumor
   - Primary mediastinal B-cell lymphoma
   - mediastinal B-cell lymphoma [cell line Karpas-1106P]
   - primary mediastinal B-cell lymphoma
@@ -20013,15 +19688,15 @@
   id: icdot-C38.3::UBERON:0003728
 - code_group:
   - id: icdot-C38.4
-    label: Pleura
+    label: pleura
   - id: UBERON:0000977
     label: pleura
   examples:
+  - Epithelioid mesothelioma
+  - Smooth muscle tumour, malignant
+  - fibromatous mesothelioma
+  - malignant mesothelioma
   - mesothelioma [epithelioid]
-  - pleural biphasic mesothelioma [cell line Y-MESO-8D
-  - pleural epithelioid mesothelioma [cell line ACC-MESO-1]
-  - pleural epithelioid mesothelioma [cell line ACC-MESO-4]
-  - pleural mesothelioma
   id: icdot-C38.4::UBERON:0000977
 - code_group:
   - id: icdot-C38.9
@@ -20029,12 +19704,12 @@
   - id: UBERON:0003728
     label: mediastinum
   examples:
-  - Mixed germ cell tumor [Teratocarcinoma,sarcoma]
-  - Mixed germ cell tumor [embryonal carcinoma, teratocarcinoma,Teratoma with malignant
-    transformation]
-  - Mixed germ cell tumor [yolk sac tumour,trophs]
-  - diffuse large B-cell lymphoma [cell line Karpas-231]
-  - yolk sac tumour
+  - Combined germ cell tumor [mediastinal, immature teratoma, yolk sac tumor, stage
+    II]
+  - Diffuse large B-cell lymphoma
+  - germ cell tumor [yolk sac tumor]
+  - mediastinal germ cell tumor [immature teratoma, stage I]
+  - mediastinal germ cell tumor [mature teratoma, stage I]
   id: icdot-C38.9::UBERON:0003728
 - code_group:
   - id: icdot-C40.0
@@ -20042,11 +19717,11 @@
   - id: UBERON:0004765
     label: skeletal element
   examples:
-  - Chondroblastic osteosarcoma
-  - Chondrosarcoma [Sacrum]
-  - Chondrosarcoma, NOS
   - Ewing sarcoma
-  - chondrosarcoma
+  - central osteosarcoma
+  - osteochondroma [femur]
+  - osteochondroma [humerus]
+  - osteochondroma [tibia]
   id: icdot-C40.0::UBERON:0004765
 - code_group:
   - id: icdot-C40.1
@@ -20064,7 +19739,6 @@
     label: limb long bone
   examples:
   - Enchondroma [femur]
-  - Enchondroma [phalanx]
   - Enchondroma [tibia]
   - Primary Tumor
   id: icdot-C40.2::UBERON:0003606
@@ -20104,8 +19778,6 @@
   examples:
   - Enchondroma [iliac bone]
   - Enchondroma [ilium]
-  - Enchondroma [metacarpal]
-  - Enchondroma [phalanx]
   id: icdot-C41.4::UBERON:0001270
 - code_group:
   - id: icdot-C41.9
@@ -20113,11 +19785,11 @@
   - id: UBERON:0001474
     label: bone element
   examples:
-  - Osteosarcoma
-  - Osteosarcoma [cell line Saos-2]
-  - Osteosarcoma [cell line U2OS]
-  - osteosarcoma [cell line HOS]
-  - osteosarcoma [cell line MG-63]
+  - Giant cell tumor of bone
+  - chordoma [Coccyx]
+  - chordoma [Sacrum]
+  - congenital sacrococcygeal teratoma
+  - osteoblastoma
   id: icdot-C41.9::UBERON:0001474
 - code_group:
   - id: icdot-C42.0
@@ -20125,10 +19797,10 @@
   - id: UBERON:0000178
     label: blood
   examples:
-  - Normal tissue
-  - Normal tissue [Herbert Immunodeficiency Syndrome]
-  - Normal tissue [Minor histocompatibility (H) antigens in Allo-immunity]
+  - Blood Derived Normal
   - normal tissue
+  - normal tissue [multiple myeloma]
+  - normal tissue [prostate cancer]
   - normal tissue [white blood cells]
   id: icdot-C42.0::UBERON:0000178
 - code_group:
@@ -20138,10 +19810,10 @@
     label: bone marrow
   examples:
   - Acute lymphoblastic leukemia
-  - Acute myeloid leukemia [relapse]
-  - B-cell chronic lymphocytic leukemia
-  - Chronic Lymphocytic Leukemia
-  - acute myeloid leukemia
+  - Acute lymphoblastic leukemia [also Down syndrome]
+  - Multiple Myeloma
+  - Small Lymphocytic Lymphoma
+  - acute lymphoblastic leukemia
   id: icdot-C42.1::UBERON:0002371
 - code_group:
   - id: icdot-C42.2
@@ -20149,11 +19821,12 @@
   - id: UBERON:0002106
     label: spleen
   examples:
-  - Mantle cell lymphoma
-  - Marginal zone lymphoma
-  - Splenic Marginal Zone Lymphoma
-  - Splenic marginal zone lymphoma
-  - Splenic marginal zone lymphoma [cell line VL51]
+  - Diffuse large B-cell lymphoma [spleen, IG-MYC maybe, 3q2 break neg., t(14;18)
+    neg.]
+  - Marginal Zone B-cell Lymphoma [Spleen, BM, LN, PB]
+  - Marginal Zone B-cell Lymphoma [Spleen, BM, PB]
+  - Marginal Zone B-cell Lymphoma [Spleen, BM]
+  - Marginal Zone B-cell Lymphoma [Spleen, PB, BM]
   id: icdot-C42.2::UBERON:0002106
 - code_group:
   - id: icdot-C42.4
@@ -20161,11 +19834,11 @@
   - id: UBERON:0002390
     label: hematopoietic system
   examples:
-  - Marginal zone lymphoma
-  - diffuse large B-cell lymphoma [cell line DoHH2]
-  - diffuse large B-cell lymphoma [cell line Sci-1]
-  - diffuse large B-cell lymphoma [transformed FCL]
-  - follicular lymphoma
+  - Burkitt lymphoma, NOS
+  - Extranodal marginal zone B-cell lymphoma
+  - Large B-cell lymphoma
+  - non-Hodgkins Lymphoma
+  - non-Hodgkins Lymphoma [B-cell, in myelodysplastic syndrome]
   id: icdot-C42.4::UBERON:0002390
 - code_group:
   - id: icdot-C44.2
@@ -20185,7 +19858,7 @@
   id: icdot-C44.3::UBERON:1000021
 - code_group:
   - id: icdot-C44.4
-    label: Hair
+    label: Skin of scalp and neck
   - id: UBERON:8300000
     label: skin of scalp
   examples:
@@ -20227,11 +19900,11 @@
   - id: UBERON:0000014
     label: zone of skin
   examples:
-  - malignant melanoma [cell line 1205Lu]
-  - malignant melanoma [cell line WM1366]
-  - malignant melanoma [cell line WM3248]
-  - malignant melanoma [cell line WM35]
-  - malignant melanoma [cell line WM88]
+  - Merkel cell carcinoma
+  - Peripheral T-cell lymphoma, not otherwise specified
+  - Primary cutaneous gamma-delta T-cell lymphoma
+  - malignant melanoma [high risk]
+  - malignant melanoma [low risk]
   id: icdot-C44.9::UBERON:0000014
 - code_group:
   - id: icdot-C47.1
@@ -20257,15 +19930,15 @@
   id: icdot-C47.4::UBERON:0002410
 - code_group:
   - id: icdot-C47.9
-    label: peripheral nervs incl. autonomous
+    label: peripheral nervs incl. Autonomous
   - id: UBERON:0001780
     label: spinal nerve
   examples:
-  - Neuroblastoma [cell line CHP-134]
-  - neuroblastoma
-  - neuroblastoma [cell line GOTO]
-  - neuroblastoma [cell line LA-N-1]
-  - neuroblastoma [cell line LA-N-2]
+  - Schwannoma [Stomach]
+  - neuroblastoma [cell line GI-ME-N]
+  - neuroblastoma [cell line NGP]
+  - neuroblastoma [cell line SMS-KCR]
+  - neuroblastoma [cell line UHG-NP]
   id: icdot-C47.9::UBERON:0001780
 - code_group:
   - id: icdot-C48.0
@@ -20304,7 +19977,7 @@
     neg.]
   - Diffuse Large B-cell Lymphoma [extranodal, mesentery]
   - adult fibrosarcoma [grade 2, retroperitoneum]
-  - gastrointestinal stromal tumor [high biological potential]
+  - adult fibrosarcoma [grade 3, retroperitoneum]
   - germ cell tumor [mature teratoma]
   id: icdot-C48.9::UBERON:0003693
 - code_group:
@@ -20391,11 +20064,11 @@
   - id: UBERON:0002384
     label: connective tissue
   examples:
-  - Leiomyosarcoma
-  - Liposarcoma
-  - Rhabdomyosarcoma
-  - myoepithelioma
-  - myxoinflammatory fibroblastic sarcoma
+  - Desmoid tumor
+  - Desmoid tumor [ass. with Pregnancy]
+  - Desmoid tumor[ass. with Pregnancy]
+  - Synovial sarcoma
+  - Synovial sarcoma [poorly differentiated]
   id: icdot-C49.9::UBERON:0002384
 - code_group:
   - id: icdot-C50.2
@@ -20444,11 +20117,12 @@
   - id: UBERON:0000310
     label: breast
   examples:
-  - Breast carcinoma [metastasis, brain]
-  - breast ductal adenocarcinoma [breast]
-  - breast ductal adenocarcinoma [lymph node]
-  - breast ductal adenocarcinoma [metastases ovary]
-  - multifocal breast ductal adenocarcinoma [breast]
+  - Diffuse Large B-cell Lymphoma [extranodal, breast, IG-MYC neg., 3q2 break neg.,
+    t(14;18) neg.]
+  - Infiltrating duct carcinoma
+  - Lobular carcinoma
+  - Marginal Zone B-cell Lymphoma [Breast]
+  - breast carcinoma [ERpos, PRpos., ERBB2neg., Luminal A]
   id: icdot-C50.9::UBERON:0000310
 - code_group:
   - id: icdot-C51.0
@@ -20459,7 +20133,6 @@
   - Adenocarcinoma
   - Small cell carcinoma
   - Squamous cell carcinoma
-  - gastrointestinal stromal tumor [low biological potential]
   - gastrointestinal stromal tumor, low biological potential
   id: icdot-C51.0::UBERON:0004084
 - code_group:
@@ -20468,9 +20141,9 @@
   - id: UBERON:0011387
     label: constrictor vulvae muscle
   examples:
-  - Squamous cell carcinoma
-  - Vulvar hyperplasia
   - squamous cell carcinoma [vulva, stage 3B, HPV16neg, HPV18neg]
+  - squamous cell carcinoma [vulva, stage 3B, HPV18pos, HPVpos]
+  - squamous cell carcinoma [vulva, stage 4A, HPV16pos, HPVpos]
   - squamous cell carcinomas [HPVneg]
   - squamous cell carcinomas [HPVpos]
   id: icdot-C51.9::UBERON:0011387
@@ -20506,15 +20179,15 @@
   - id: UBERON:0000002
     label: uterine cervix
   examples:
-  - Cervix adenocarcinoma [cell line HeLa]
-  - cervix squamous carcinoma [cell line C-4-I]
-  - cervix squamous cell carcinoma [cell line C-33 A]
-  - cervix squamous cell carcinoma [cell line Ca Ski]
-  - cervix squamous cell carcinoma [cell line HT-3]
+  - Squamous cell carcinoma [cervix, I b]
+  - Squamous cell carcinoma [cervix, II b]
+  - Squamous cell carcinoma [cervix, III b]
+  - Squamous cell carcinoma [cervix, IV b]
+  - Squamous cell carcinoma in situ [cervix]
   id: icdot-C53.9::UBERON:0000002
 - code_group:
   - id: icdot-C54.0
-    label: fallopian tube
+    label: Isthmus uteri
   - id: UBERON:0009853
     label: body of uterus
   examples:
@@ -20523,15 +20196,15 @@
   id: icdot-C54.0::UBERON:0009853
 - code_group:
   - id: icdot-C54.1
-    label: Endometrium
+    label: endometrium
   - id: UBERON:0001295
     label: endometrium
   examples:
+  - Endometrial stromal sarcoma [low grade]
+  - Metastatic
   - Ovarian Carcinoma
-  - endometrial adenocarcinoma [cell line AN3-CA]
-  - endometrial adenocarcinoma [cell line Ischikawa]
-  - endometrial carcinoma
-  - endometrial carcinoma [cell line EFE-184]
+  - Primary Tumor
+  - Recurrent Tumor
   id: icdot-C54.1::UBERON:0001295
 - code_group:
   - id: icdot-C54.2
@@ -20567,11 +20240,11 @@
   - id: UBERON:0000995
     label: uterus
   examples:
-  - Uterine corpus leiomyosarcoma [cell line SK-UT-1B]
-  - adenocarcinoma [uterine corpus]
-  - germ cell tumor [yolk sac tumor]
-  - uterine corpus endometrioid carcinoma
-  - uterine corpus sarcoma [cell line SKN]
+  - Leiomyoma [Uterus]
+  - clear cell adenocarcinoma
+  - endometrioid adenocarcinoma [grade G1]
+  - endometrioid adenocarcinoma [grade G2]
+  - endometrioid adenocarcinoma [grade G3]
   id: icdot-C55.9::UBERON:0000995
 - code_group:
   - id: icdot-C56.9
@@ -20579,11 +20252,11 @@
   - id: UBERON:0000992
     label: ovary
   examples:
-  - Ovarian Carcinoma
-  - Ovarian carcinoma
-  - Ovarian carcinoma [omentum metastasis]
-  - ovarian carcinoma [cell line]
-  - peritoneum carcinoma
+  - ovarian carcinoma [clear cell, grade NA]
+  - ovarian carcinoma [mucinous, grade 2]
+  - ovarian carcinoma [mucinous, grade LMP]
+  - ovarian carcinoma [serous, grade 2]
+  - ovarian carcinoma [serous, grade NA]
   id: icdot-C56.9::UBERON:0000992
 - code_group:
   - id: icdot-C57.0
@@ -20630,15 +20303,15 @@
   id: icdot-C60.9::UBERON:0000989
 - code_group:
   - id: icdot-C61.9
-    label: Prostate gland
+    label: prostate gland
   - id: UBERON:0002367
     label: prostate gland
   examples:
-  - prostate adenocarcinoma
-  - prostate adenocarcinoma [cell line]
-  - prostate adenocarcinoma [metastatic]
-  - prostate carcinoma [cell line DU145]
-  - prostate carcinoma [cell line MDA-PCa-2a]
+  - Prostate adenocarcinoma [recurrent, hormon-refractory]
+  - Prostate adenocarcinoma [untreated]
+  - prostate carcinoma
+  - prostate carcinoma [cell line DU-145]
+  - prostate carcinoma [cell line LNCaP]
   id: icdot-C61.9::UBERON:0002367
 - code_group:
   - id: icdot-C62.9
@@ -20646,11 +20319,11 @@
   - id: UBERON:0000473
     label: testis
   examples:
-  - Embryonal rhabdomyosarcoma
-  - Mixed germ cell tumor [embryonal carcinoma and seminoma]
-  - Mixed germ cell tumor [embryonal carcinoma and teratocarcinoma]
-  - Mixed germ cell tumor [yolk sac tumour,Teratocarcinoma,seminoma,Trophoblast]
-  - seminoma
+  - Diffuse large B-cell lymphoma, NOS
+  - germ cell tumor [testicular]
+  - spermatocytic seminoma
+  - testicular germ cell tumor [embryonal carcinoma, cell line]
+  - testicular germ cell tumor [seminoma]
   id: icdot-C62.9::UBERON:0000473
 - code_group:
   - id: icdot-C63.1
@@ -20671,19 +20344,19 @@
   id: icdot-C63.9::UBERON:0005352
 - code_group:
   - id: icdot-C64.9
-    label: Kidney, NOS
+    label: kidney
   - id: UBERON:0002113
     label: kidney
   examples:
-  - Renal cell carcinoma [cell line A-704]
-  - clear cell renal carcinoma
-  - renal cell carcinoma
-  - renal cell carcinoma [cell line SLR 22]
-  - renal cell carcinoma [lymphovascular invasion]
+  - Wilms tumor
+  - Wilms tumor [histology n.d., stage I]
+  - Wilms tumor [histology n.d., stage n.a.]
+  - Wilms tumor [necrotic, stage I]
+  - Wilms tumor [with fibroadematous structures, stage I]
   id: icdot-C64.9::UBERON:0002113
 - code_group:
   - id: icdot-C65.9
-    label: renal pelvis, ureter
+    label: Renal pelvis, ureter
   - id: UBERON:0036295
     label: renal pelvis/ureter
   examples:
@@ -20699,11 +20372,11 @@
   - id: UBERON:0001255
     label: urinary bladder
   examples:
-  - bladder cancer [cell line T110]
-  - bladder cancer [cell line T63]
-  - bladder carcinoma [cell line 5637]
-  - bladder carcinoma [cell line HT-1197]
-  - bladder carcinoma [cell line HT-1376]
+  - Paraganglioma [urinary bladder]
+  - bladder carcinoma
+  - urothelial tumor [stage pT1, G2]
+  - urothelial tumor [stage pT1, G3]
+  - urothelial tumor [stage pT2, G3]
   id: icdot-C67.0::UBERON:0001255
 - code_group:
   - id: icdot-C67.1
@@ -20781,9 +20454,9 @@
   - id: UBERON:0001817
     label: lacrimal gland
   examples:
-  - Adenoid cystic carcinoma
   - Cavernous hemangioma
   - MALT [ocular adnexal]
+  - Marginal zone lymphoma lymphoma of the orbit [Lacrimal gland]
   - Pleomorphic adenoma
   - Schwannoma
   id: icdot-C69.0::UBERON:0001817
@@ -20794,9 +20467,9 @@
     label: retina
   examples:
   - Retinoblastoma
+  - Retinoblastoma [bilateral]
   - Retinoblastoma [familial, bilateral]
   - Retinoblastoma [familial]
-  - malignant melanoma [uvea, long-term survivor]
   - retinoblastoma
   id: icdot-C69.2::UBERON:0000966
 - code_group:
@@ -20838,10 +20511,10 @@
   - id: UBERON:0000970
     label: eye
   examples:
+  - Choroidal melanoma
   - Extranodal marginal zone B-cell lymphoma
+  - Maligant melanoma [iris]
   - Marginal Zone B-cell Lymphoma [Orbita]
-  - Uveal melanoma
-  - Uveal melanoma [hepatic metastatic]
   - uveal melanoma
   id: icdot-C69.9::UBERON:0000970
 - code_group:
@@ -20850,11 +20523,11 @@
   - id: UBERON:0017641
     label: meningeal branch of spinal nerve
   examples:
-  - Meningioma
+  - Meningioma [WHO grade III, Anaplastic]
+  - Meningioma [grade I, Diff. class.]
+  - Meningioma [grade I, Fibroblastic]
   - Meningioma [grade I, Meningothelial]
   - Meningioma [grade I, Transitional]
-  - Meningioma [recurrent, primary]
-  - meningioma
   id: icdot-C70.0::UBERON:0017641
 - code_group:
   - id: icdot-C70.1
@@ -20882,15 +20555,16 @@
   - id: UBERON:0001869
     label: cerebral hemisphere
   examples:
-  - Pilocytic astrocytoma
-  - Pilocytic astrocytoma [Left frontal lobe]
-  - Pilocytic astrocytoma [Right temporal lobe]
-  - Primitive neuroectodermal tumor [supratentorial]
-  - primitive neuroepidermal tumor [PNET; supratentorial]
+  - Central nervous system primitive neuroectodermal tumor [cerebral region   frontal
+    lobe]
+  - Glioblastoma
+  - Glioblastoma [familial]
+  - Malignant glioma
+  - glioblastoma
   id: icdot-C71.0::UBERON:0001869
 - code_group:
   - id: icdot-C71.1
-    label: frontal lobe
+    label: Frontal lobe
   - id: UBERON:0016525
     label: frontal lobe
   examples:
@@ -20901,7 +20575,7 @@
   id: icdot-C71.1::UBERON:0016525
 - code_group:
   - id: icdot-C71.2
-    label: temporal lobe
+    label: Temporal lobe
   - id: UBERON:0001871
     label: temporal lobe
   examples:
@@ -20911,7 +20585,7 @@
   id: icdot-C71.2::UBERON:0001871
 - code_group:
   - id: icdot-C71.3
-    label: parietal lobe
+    label: Parietal lobe
   - id: UBERON:0001872
     label: parietal lobe
   examples:
@@ -20921,7 +20595,7 @@
   id: icdot-C71.3::UBERON:0001872
 - code_group:
   - id: icdot-C71.4
-    label: occipital lobe
+    label: Occipital lobe
   - id: UBERON:0002021
     label: occipital lobe
   examples:
@@ -20930,13 +20604,13 @@
   id: icdot-C71.4::UBERON:0002021
 - code_group:
   - id: icdot-C71.5
-    label: ventricle
+    label: Ventricle
   - id: UBERON:0002082
     label: cardiac ventricle
   examples:
   - Astrocytoma [3rd ventricle]
+  - Choroid plexus papilloma [grade 1]
   - Glioblastoma
-  - Pilocytic astrocytoma
   - chordoid glioma
   - choroid plexus papillomas
   id: icdot-C71.5::UBERON:0002082
@@ -20946,11 +20620,11 @@
   - id: UBERON:0002037
     label: cerebellum
   examples:
+  - Medulloblastoma
+  - classic medulloblastoma
   - medulloblastoma
-  - medulloblastoma [Large Cell/Anaplastic]
-  - medulloblastoma [Meduloblastoma with extensive neuronal differentiation]
-  - medulloblastoma [classic]
-  - medulloblastoma [desmoplastic]
+  - medulloblastoma [CSF metastasis]
+  - medulloblastoma [p53 mut., Li-Fraumeni syndrome]
   id: icdot-C71.6::UBERON:0002037
 - code_group:
   - id: icdot-C71.7
@@ -20958,11 +20632,11 @@
   - id: UBERON:0002298
     label: brainstem
   examples:
-  - Diffuse Intrinsic Pontine Glioma
+  - Diffusely infiltrating astrocytoma
   - Glioblastoma
+  - Malignant glioma
   - Pilocytic astrocytoma
-  - Primitive neuroectodermal tumor [brain stem]
-  - ependymoma [Medulla]
+  - diffuse intrinsic pontine glioma [cell line]
   id: icdot-C71.7::UBERON:0002298
 - code_group:
   - id: icdot-C71.8
@@ -20974,15 +20648,15 @@
   id: icdot-C71.8::UBERON:0000955
 - code_group:
   - id: icdot-C71.9
-    label: Brain, NOS
+    label: brain, NOS
   - id: UBERON:0000955
     label: brain
   examples:
-  - astrocytoma [cell line NMC-G1]
-  - glioblastoma
-  - glioblastoma [cell line LN-18]
-  - glioblastoma [cell line LN-229]
-  - glioblastoma [xenograft]
+  - Astrocytoma [familial]
+  - astrocytoma
+  - astrocytoma [parieto-occipital]
+  - oligoastrocytoma [familial]
+  - oligodendroglioma [familial]
   id: icdot-C71.9::UBERON:0000955
 - code_group:
   - id: icdot-C72.0
@@ -20990,11 +20664,11 @@
   - id: UBERON:0002240
     label: spinal cord
   examples:
-  - Chordoma
-  - chordoma
-  - ependymoma [Conus]
+  - Glioblastoma
+  - chordoma [Spinal]
   - ependymoma [cauda equina]
-  - ependymoma [spinal cord]
+  - myxopapillary ependymoma [Conus]
+  - myxopapillary ependymoma [cauda equina]
   id: icdot-C72.0::UBERON:0002240
 - code_group:
   - id: icdot-C72.2
@@ -21020,23 +20694,23 @@
   - id: UBERON:0001016
     label: nervous system
   examples:
-  - Malignant peripheral nerve sheath tumor
-  - Neuroendocrine carcinoma
-  - Neurofibroma
-  - Neurofibromatosis
-  - Plexiform neurofibroma
+  - ML, large B-cell, diffuse, immunoblastic, NOS [CNS, AIDS related]
+  - Neuroblastoma
+  - Neuroblastoma [cell line]
+  - Neuroblastoma [familial]
+  - neuroblastoma
   id: icdot-C72.9::UBERON:0001016
 - code_group:
   - id: icdot-C73.9
-    label: thyroid gland
+    label: Thyroid gland
   - id: UBERON:0002046
     label: thyroid gland
   examples:
-  - thyroid carcinoma [cell line TH13]
+  - Carcinoma showing thymus-like elements
+  - sporadic medullary thyroid carcinoma
+  - sporadic medullary thyroid carcinoma [metastasis]
+  - thyroid carcinoma
   - thyroid carcinoma [cell line TH15]
-  - thyroid carcinoma [cell line TH17]
-  - thyroid carcinoma [cell line TH5]
-  - thyroid carcinoma [cell line TH7]
   id: icdot-C73.9::UBERON:0002046
 - code_group:
   - id: icdot-C74.0
@@ -21044,11 +20718,11 @@
   - id: UBERON:0001235
     label: adrenal cortex
   examples:
-  - Adrenocortical carcinoma
-  - Pheochromocytoma
-  - adrenocortical carcinoma
-  - adrenocortical carcinoma [p53mut; Li-Fraumeni syndrome]
-  - cortisol producing adrenocortical adenoma
+  - Adrenal cortical carcinoma [pediatric]
+  - Adrenocortical tumor [adenoma, left]
+  - Adrenocortical tumor [adenoma, right]
+  - Adrenocortical tumor [carcinoma, left]
+  - Adrenocortical tumor [carcinoma, right]
   id: icdot-C74.0::UBERON:0001235
 - code_group:
   - id: icdot-C74.1
@@ -21064,11 +20738,11 @@
   - id: UBERON:0002369
     label: adrenal gland
   examples:
-  - ACTH-Independent Macronodular Adrenal Hyperplasia (AIMAH)
-  - Adrenal cortex carcinoma [cell line SW13]
-  - Left adrenal pheochromocyroma, benign
-  - Mixed germ cell tumor [embryonal carcinoma,yolk sac tumour]
-  - adrenal pheochromocytoma
+  - Peripheral T-cell lymphoma [Adrenal]
+  - Pheochromocytoma [multiple endocrine neoplasia type II]
+  - pheochromocytoma [bilateral, benign, sporadic]
+  - pheochromocytoma [malignant, sporadic]
+  - pheochromocytoma [von Hippel-Lindau associated]
   id: icdot-C74.9::UBERON:0002369
 - code_group:
   - id: icdot-C75.0
@@ -21088,8 +20762,8 @@
   - id: UBERON:0000007
     label: pituitary gland
   examples:
-  - non-invasive prolactin pituitary tumour
-  - prolactin pituitary tumor [agressive-invasive]
+  - ptituitary adenoma [Cushing disease, primary]
+  - ptituitary adenoma [acromegaly, primary]
   - ptituitary adenoma [endocrinologically inactive, primary]
   - ptituitary adenoma [endocrinologically inactive, recurrent]
   - ptituitary adenoma [prolactinoma, primary]
@@ -21100,8 +20774,8 @@
   - id: UBERON:0034715
     label: pineal tract
   examples:
+  - CNS germ cell tumor [germinoma and teratoma]
   - CNS germ cell tumor [immature teratoma]
-  - Pilocytic astrocytoma
   - Pineoblastoma [pineal region]
   - Pineocytoma
   - pineoblastoma
@@ -21150,7 +20824,6 @@
   - Embryonal rhabdomyosarcoma
   - Gastrointestinal stromal tumor, uncertain malignant potential
   - Metastatic
-  - gastrointestinal stromal tumor [high biological potential]
   id: icdot-C76.2::UBERON:0000916
 - code_group:
   - id: icdot-C76.3
@@ -21168,9 +20841,9 @@
   examples:
   - Colorectal tissue
   - Peripheral blood
-  - normal cervix
-  - normal renal cortex
   - normal tissue
+  - peripheral blood
+  - remission sample [T-ALL]
   id: icdot-C76.9::UBERON:0001062
 - code_group:
   - id: icdot-C77.0
@@ -21231,21 +20904,21 @@
   - id: UBERON:0000029
     label: lymph node
   examples:
-  - diffuse large B-cell lymphoma
-  - diffuse large B-cell lymphoma [transformed FCL]
-  - follicular lymphoma
-  - lymphoblastic lymphoma [B-cell]
-  - lymphoblastic lymphoma [T-cell]
+  - Diffuse large B-cell lymphoma, NOS
+  - Mantle cell lymphoma
+  - Marginal Zone B-cell Lymphoma [LN]
+  - Marginal Zone B-cell Lymphoma [Soft tissue, LN]
+  - follicular lymphoma [large cell]
   id: icdot-C77.9::UBERON:0000029
 - code_group:
   - id: icdot-C80.9
-    label: unknown
+    label: Unknown primary site
   - id: UBERON:0001062
     label: anatomical entity
   examples:
+  - Chondrosarcoma, NOS
   - Osteosarcoma
+  - Primary Tumor
+  - Solid Tissue Normal
   - Teratoma
-  - normal blood
-  - normal tissue
-  - peripheral blood
   id: icdot-C80.9::UBERON:0001062

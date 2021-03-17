@@ -38,11 +38,11 @@ def _get_args():
 ################################################################################
 
 def main():
-    collations()
+    collations_creator()
 
 ################################################################################
 
-def collations():
+def collations_creator():
 
     byc = initialize_service()
     byc.update( { "args": _get_args() } )
