@@ -17,7 +17,13 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.read_specs import *
-from services.lib.table_tools import *
+from bycon.lib.parse_filters import *
+
+service_lib_path = path.join( pkg_path, "services", "lib" )
+sys.path.append( service_lib_path )
+
+from service_utils import initialize_service
+from table_tools import *
 
 """
 ## `newSampleInserter`
@@ -41,32 +47,32 @@ def _get_args(byc):
 
 def main():
 
+    biosamples_inserter()
+
+################################################################################
+
+def biosamples_inserter():
+
     curr_time = datetime.datetime.now()
 
-    byc = {
-        "pkg_path": pkg_path,
-        "errors": [ ],
-        "warnings": [ ]
-    }
+    byc = initialize_service()
     _get_args(byc)
-
-    configs = ["inserts", "datatables"]
-    for config in configs:
-        these_prefs = read_local_prefs( config, dir_path )
-        for d_k, d_v in these_prefs.items():
-            byc.update( { d_k: d_v } )
 
     if not byc['args'].source in byc['data_sources']:
         print( 'Does not recognize data source!')
+        exit()
+
+    these_prefs = read_local_prefs( "datatables", dir_path )
+    for d_k, d_v in these_prefs.items():
+        byc.update( { d_k: d_v } )
 
     # TODO: check for import_path
-    # TODO: check for dataset => if not byc['args'].output_db in byc["config"][ "dataset_ids" ]:
     # ... prompt for continuation w/ Q "new dataset ??? etc."
 
 ################################################################################
 
     ### read in meta table
-    metapath = byc['import_path']
+    metapath = path.join(byc['import_path'])s
     mytable = pd.read_csv(metapath, sep = '\t', dtype = str)
     mytable = mytable.where((pd.notnull(mytable)), None) ## convert pd.nan to None
 
@@ -182,7 +188,7 @@ def main():
         ############################
         ##   variants & callsets  ##
         ############################
-        variants, callset  = _initiate_vs_cs(byc['json_file_root'], info_field['experiment'], info_field['uid'])
+        variants, callset  = _initiate_vs_cs(info_field['experiment'], info_field['uid'], **byc)
 
         ## variants
         for variant in variants:
@@ -278,11 +284,12 @@ def _generate_id(prefix):
 
 ################################################################################
 
-def _initiate_vs_cs(rootdir, ser, arr):
+def _initiate_vs_cs(ser, arr, **byc):
 
     ## variant collections
     # TODO: use path.join(  )
-    with open('{0}/{1}/{2}/variants.json'.format(rootdir,ser,arr),'r') as json_data:
+    v_j_p == path.join(byc['json_file_root'], ser, arr, "variants.json")
+    with open(v_j_p) as json_data:
         variants_json = json.load(json_data)
 
     variant_obj = []
@@ -299,7 +306,8 @@ def _initiate_vs_cs(rootdir, ser, arr):
 
     ## callset collections
     # TODO: use path.join(  )
-    with open('{0}/{1}/{2}/callset.json'.format(rootdir,ser,arr),'r') as json_data:
+    cs_j_p == path.join(byc['json_file_root'], ser, arr, "callset.json")
+    with open(cs_j_p) as json_data:
         callset_json = json.load(json_data)
 
     callset_json.pop('callset_id', None)

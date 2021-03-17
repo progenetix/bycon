@@ -52,26 +52,21 @@ def collations():
     if byc["args"].test:
         print( "¡¡¡ TEST MODE - no db update !!!")
 
-    if byc["args"].alldatasets:
-        dataset_ids = byc["config"][ "dataset_ids" ]
-    elif byc["args"].datasetids:
-        dataset_ids =  byc["args"].datasetids.split(",")
-        if not dataset_ids[0] in byc["config"][ "dataset_ids" ]:
-            print("No existing dataset was provided with -d ...")
-            exit()
-    else:
-        dataset_ids = [ ]
+    byc = initialize_service()
+    _get_args(byc)
 
-    if len(dataset_ids) < 1:
-        print("No existing dataset was provided with -d and -a wasn't invoked ...")
+    if byc["args"].test:
+        print( "¡¡¡ TEST MODE - no db update !!!")
+
+    select_dataset_ids(byc)
+    check_dataset_ids(byc)
+
+    if len(byc["dataset_ids"]) < 1:
+        print("No existing dataset was provided with -d ...")
         exit()
-
-    for ds_id in dataset_ids:
-        if not ds_id in byc["config"][ "dataset_ids" ]:
-            print("¡¡¡ "+ds_id+" is not a registered dataset !!!")
-            continue
+ 
+    for ds_id in byc["dataset_ids"]:
         print( "Creating collations for " + ds_id)
-
         _create_collations_from_dataset( ds_id, **byc )
 
 ################################################################################

@@ -15,6 +15,8 @@ pkg_sub = path.dirname(__file__)
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.read_specs import *
+from bycon.lib.parse_filters import *
+
 from lib.schemas_parser import *
 
 service_lib_path = path.join( pkg_path, "services", "lib" )
@@ -60,14 +62,11 @@ def biosamples_refresher():
     if byc["args"].test:
         print( "¡¡¡ TEST MODE - no db update !!!")
 
-    dataset_ids = [ ]
-    if byc["args"].alldatasets:
-        dataset_ids = byc["config"][ "dataset_ids" ]
-    elif byc["args"].datasetids:
-        dataset_ids =  byc["args"].datasetids.split(",")
+    select_dataset_ids(byc)
+    check_dataset_ids(byc)
 
-    if not dataset_ids:
-        print("No dataset was provided with -d ...")
+    if len(byc["dataset_ids"]) < 1:
+        print("No existing dataset was provided with -d ...")
         exit()
 
     pub_labels = _map_publication_labels(byc)
@@ -75,7 +74,7 @@ def biosamples_refresher():
     no_cs_no = 0
     no_stats_no = 0
 
-    for ds_id in dataset_ids:
+    for ds_id in byc["dataset_ids"]:
 
         if not ds_id in byc["config"][ "dataset_ids" ]:
             print("¡¡¡ "+ds_id+" is not a registered dataset !!!")
