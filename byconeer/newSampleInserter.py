@@ -27,31 +27,30 @@ from services.lib.table_tools import *
 ################################################################################
 ################################################################################
 
-def _get_args():
+def _get_args(byc):
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--test', help='No. of samples for test run')
     parser.add_argument('-d', '--output_db', help='the database to write into.')
     parser.add_argument('-s', '--source', help='which repo is input data from')
-    args = parser.parse_args()
+    byc.update({"args": parser.parse_args() })
 
-    return(args)
+    return byc
 
 ################################################################################
 
 def main():
 
     curr_time = datetime.datetime.now()
-    configs = ["inserts", "datatables"]
 
     byc = {
         "pkg_path": pkg_path,
-        'args': _get_args(),
         "errors": [ ],
         "warnings": [ ]
     }
+    _get_args(byc)
 
-    # first pre-population w/ defaults
+    configs = ["inserts", "datatables"]
     for config in configs:
         these_prefs = read_local_prefs( config, dir_path )
         for d_k, d_v in these_prefs.items():

@@ -15,7 +15,6 @@ def parse_filters(byc):
             byc.update( { "filters": f } )
             return byc
     
-    # for debugging
     if "args" in byc:
         if byc["args"].filters:
             f = byc["args"].filters.split(',')
@@ -23,14 +22,7 @@ def parse_filters(byc):
             if len(f) > 0:
                 byc.update( { "filters": f } )
                 return byc
-    
-        if byc["args"].test:
-            f = byc["service_info"][ "sampleAlleleRequests" ][0][ "filters" ]
-            f = _check_filter_values(f, byc["filter_definitions"])
-            if len(f) > 0:
-                byc.update( { "filters": f } )
-                return byc
-    
+        
     return byc
 
 ################################################################################
@@ -78,8 +70,12 @@ def _check_filter_values(filters, filter_defs):
 def select_dataset_ids(byc):
 
     # different var name & return if provided
+
+    ds_ids = [ ]
+
     if "form_data" in byc:
-        ds_ids = form_return_listvalue( byc["form_data"], "datasetIds" )
+        if "datasetIds" in byc["form_data"]:
+            ds_ids = form_return_listvalue( byc["form_data"], "datasetIds" )
 
         # accessid overrides ... ?
         if "accessid" in byc["form_data"]:
@@ -93,17 +89,25 @@ def select_dataset_ids(byc):
                 if "source_db" in h_o:
                     ds_ids = [ h_o["source_db"] ]
 
-        if len(ds_ids) > 0:
-            byc.update( { "dataset_ids": ds_ids } )
-            return byc
+    if len(ds_ids) > 0:
+        byc.update( { "dataset_ids": ds_ids } )
+        return byc
 
-    # for debugging
     if "args" in byc:
-        if byc["args"].test:
-            ds_ids = byc["service_info"][ "sampleAlleleRequests" ][0][ "datasetIds" ]
-            if len(ds_ids) > 0:
-                byc.update( { "dataset_ids": ds_ids } )
+        try:
+            if byc["args"].alldatasets:
+                byc.update( { "dataset_ids": byc["config"][ "dataset_ids" ] } )
                 return byc
+        except AttributeError:
+            pass
+        try:
+            if byc["args"].datasetids:
+                ds_ids = byc["args"].datasetids.split(",")
+                if ds_ids[0] in byc["config"][ "dataset_ids" ]:
+                    byc.update( { "dataset_ids": ds_ids } )
+                    return byc
+        except AttributeError:
+            pass
     
     return byc
   

@@ -69,17 +69,8 @@ def biosamples_refresher():
     if not dataset_ids:
         print("No dataset was provided with -d ...")
         exit()
-    if not dataset_ids[0] in byc["config"][ "dataset_ids" ]:
-        print("No existing dataset was provided with -d ...")
-        exit()
 
-    mongo_client = MongoClient( )
-
-    pub_labels = { }
-    pub_db = byc["config"]["info_db"]
-    pub_coll = mongo_client[ pub_db ][ "publications" ]
-    for pub in pub_coll.find( { "label": { "$regex": "..." } }, { "_id": 0, "id": 1, "label": 1 } ):
-        pub_labels.update( { pub["id"] : pub["label"] } )
+    pub_labels = _map_publication_labels(byc)
 
     no_cs_no = 0
     no_stats_no = 0
@@ -90,7 +81,8 @@ def biosamples_refresher():
             print("¡¡¡ "+ds_id+" is not a registered dataset !!!")
             continue
 
-        data_db = mongo_client[ ds_id ]
+        data_client = MongoClient( )
+        data_db = data_client[ ds_id ]
         bios_coll = data_db[ "biosamples" ]
         cs_coll = data_db[ "callsets" ]
         no =  bios_coll.estimated_document_count()
@@ -104,7 +96,6 @@ def biosamples_refresher():
             If no callsets are found this will result in empty attributes; if
             more than one callset is found the average of the CNV statistics will be used.
             """
-
             cs_ids = [ ]
             cs_stats_no = 0
             cnv_stats = { }
@@ -173,6 +164,19 @@ def biosamples_refresher():
 
         print("{} {} biosamples had no callsets".format(no_cs_no, ds_id))
         print("{} {} biosamples received no CNV statistics".format(no_stats_no, ds_id))         
+
+################################################################################
+
+def _map_publication_labels(byc):
+
+    pub_client = MongoClient( )
+    pub_labels = { }
+    pub_db = byc["config"]["info_db"]
+    pub_coll = pub_client[ pub_db ][ "publications" ]
+    for pub in pub_coll.find( { "label": { "$regex": "..." } }, { "_id": 0, "id": 1, "label": 1 } ):
+        pub_labels.update( { pub["id"] : pub["label"] } )
+
+    return pub_labels
 
 ################################################################################
 ################################################################################

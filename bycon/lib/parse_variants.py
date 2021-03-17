@@ -307,9 +307,11 @@ def create_and_or_query_for_parameter(par, qpar, logic, q_pars):
     if not isinstance(q_pars[ par ], list):
         return { qpar: q_pars[ par ] }
 
-    if not q_pars[ par ][0]:
+    try:
+        q_pars[ par ][0]
+    except IndexError:
         return { }
-
+ 
     if len(q_pars[ par ]) > 1:
         v_t_l = [ ]
         for v_t in q_pars[ par ]:

@@ -17,7 +17,7 @@ def dataset_response_add_handovers(ds_id, **byc):
     if not ds_id in byc["dataset_definitions"]:
         return b_h_o
 
-    ds_h_o =  byc["dataset_definitions"][ ds_id ]["handoverTypes"]
+    ds_h_o =  byc["dataset_definitions"][ ds_id ]["info"]["handoverTypes"]
     h_o_types = byc["handover_definitions"]["h->o_types"]
 
     for h_o_t in h_o_types.keys():
