@@ -47,11 +47,6 @@ def collations():
     byc = initialize_service()
     byc.update( { "args": _get_args() } )
 
-################################################################################
-
-    if byc["args"].test:
-        print( "¡¡¡ TEST MODE - no db update !!!")
-
     byc = initialize_service()
     _get_args(byc)
 
