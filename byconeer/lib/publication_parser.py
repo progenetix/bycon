@@ -1,12 +1,13 @@
 import requests
 import json
 import re
+from pymongo import MongoClient
 
 ################################################################################
 
-pub = {}
+def get_publication(pmid):
 
-def get_publications(pmid):
+    pub = {}    # inside function
     
     parameters = {
         "query": str(pmid), 
@@ -15,7 +16,7 @@ def get_publications(pmid):
     response = requests.get("https://www.ebi.ac.uk/europepmc/webservices/rest/search", params = parameters)
     results = response.json()["resultList"]["result"]
        
-    for el in results:
+    for el in results:  # this should be one result? If list => results[0] - or check number & report if >1
         abstract = el["abstractText"]
         author = el["authorString"]
         ID = el["pmid"]
@@ -25,22 +26,27 @@ def get_publications(pmid):
         title = el["title"]
         year = el["pubYear"]
     
-        abstract_no_html = re.sub(r'<[^\>]+?>', "", abstract)
-        title_no_html = re.sub(r'<[^\>]+?>', "", title)
+        abstract = re.sub(r'<[^\>]+?>', "", abstract)   # just modify the originals
+        title = re.sub(r'<[^\>]+?>', "", title)
     
-    pub.update({"abstract": abstract_no_html,
-                "authors": author,
-                "id": "PMID:" + str(ID),
-                "journal": medlineAbbreviation,
-                "sortid": None, 
-                "status" : pub[10],
-                "title": title_no_html,
-                "year": year})    
+    pub.update({
+        "abstract": abstract,
+        "authors": author,
+        "id": "PMID:" + str(ID),
+        "journal": medlineAbbreviation,
+        "sortid": None, 
+        "status" : pub[10],
+        "title": title,
+        "year": year
+    })    # more list like indentation style ... my preference, maybe odd
     
     return pub
 
+################################################################################
 
-def get_geolocation(city, locationID):
+def get_geolocation(city, locationID, pub):
+
+    # this should better be done via a local MongoDB call
     
     where = {"city": city}
     location = requests.get("https://progenetix.org/services/geolocations", params = where)
@@ -53,7 +59,8 @@ def get_geolocation(city, locationID):
     pub.update({"provenance": provenance})
     
     return pub
-   
+
+################################################################################  
     
 def fill_counts(pmid):
     
@@ -65,6 +72,7 @@ def fill_counts(pmid):
     
     return pub
         
+################################################################################  
         
 def generate_publication_label(pub):
 
