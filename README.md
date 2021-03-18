@@ -31,29 +31,65 @@ disease ontologies. _bycon_'s services are tools to enable the APIs.
 
 * web applications and libraries extending the `bycon` environment
 
-#### Internal structure
-
-
-
-##### `pgy`
+##### `byconeer`
 
 * applications and utilities for (Progenetix) data access & processing
 * Python modules for data management in the [MongoDB](http://mongodb.org) based
 _Progenetix_ database environment
+
+#### Internal structure
+
+```
+bycon
+  |
+  |- bycon
+  |    |- byconplus.py
+  |    |- datasets.py
+  |    |- filteringTerms.py
+  |    |- ... .py
+  |    |
+  |    |    |- config
+  |    |    |-schemas
+  |    |    |   |- beacon.yaml
+  |    |    |   |- ... .yaml
+  |    |    |
+  |    |    |- config.yaml
+  |    |    |- dataset_definitions.yaml
+  |    |    |- filter_definitions.yaml
+  |    |    |- ..._definitions.yaml
+  |    |
+  |    |- doc
+  |    |    |- byconplus.md
+  |    |    |- handovers.md
+  |    |    |- ... .md
+  |    |
+  |    |- lib
+  |    |    |- cgi_utils.py
+  |    |    |- read_specs.py
+  |    |    |- parse_filters.py
+  |    |    |- query_generation.py
+  |    |    |- query_execution.py
+  |    |
+  |    |- rsrc
+  |         |- ...
+  |
+  |- services
+  |    |- config
+...
+```
 
 ##### `config`
 
 * configuration files, separated for topic/scope
 * YAML ...
 
-##### `data/in`, `data/out`, `data/out/yaml`
-
-* input and output for example and test data
-* in `.gitignore`
-
 ##### `doc`
 
 * documentation, in Markdown
+
+##### `lib`
+
+* Python libraries
 
 ##### `rsrc`
 
