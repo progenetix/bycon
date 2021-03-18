@@ -2,47 +2,57 @@ import requests
 import json
 import re
 from pymongo import MongoClient
+import csv
 
-################################################################################
+l = []
+with open("/Users/sofiapfund/Desktop/Internship/Scripts/publications.txt") as f: # file that contains tab-separated annotations (pmid, counts, city, ...)
+   rd = csv.reader(f, delimiter="\t", quotechar='"')
+   for row in rd:
+        l.append(row)
+
+########################################################################################
+      
+def jprint(obj):
+    text = json.dumps(obj, sort_keys= True, indent = 4, ensure_ascii = False)
+    print(text)
+
+########################################################################################
 
 def get_publication(pmid):
 
     pub = {}    # inside function - why inside? Isn't it better if it's a global variable, since I will be updating it with the other functions too?
     
     parameters = {
-        "query": str(pmid), 
+        "query": pmid, 
         "format": "json",
         "resultType": "core"}
     response = requests.get("https://www.ebi.ac.uk/europepmc/webservices/rest/search", params = parameters)
-    results = response.json()["resultList"]["result"]
-       
-    for el in results:  # this should be one result? If list => results[0] - or check number & report if >1
-        abstract = el["abstractText"]
-        author = el["authorString"]
-        ID = el["pmid"]
-        journalInfo = el["journalInfo"]
-        journal = journalInfo["journal"]
-        medlineAbbreviation = journal["medlineAbbreviation"]
-        title = el["title"]
-        year = el["pubYear"]
     
-        abstract = re.sub(r'<[^\>]+?>', "", abstract)   # just modify the originals
-        title = re.sub(r'<[^\>]+?>', "", title)
-    
-    pub.update({
-        "abstract": abstract,
-        "authors": author,
-        "id": "PMID:" + str(ID),
-        "journal": medlineAbbreviation,
-        "sortid": None, 
-        "status" : pub[10],
-        "title": title,
-        "year": year
-    })    # more list like indentation style ... my preference, maybe odd
+    if response.status_code == 200:
+        results = response.json()["resultList"]["result"]
+        info = results[0]
+        
+        abstract = info["abstractText"]
+        ID = info["pmid"]
+        author = info["authorString"]
+        journal = info["journalInfo"]["journal"]["medlineAbbreviation"]
+        title = info["title"]
+        year = info["pubYear"]
+        
+        abstract_no_html = re.sub(r'<[^\>]+?>', "", abstract)
+        title_no_html = re.sub(r'<[^\>]+?>', "", title)
+        
+        pub.update({"abstract": abstract_no_html,
+                         "authors": author,
+                         "id": "PMID:" + str(ID),
+                         "journal": journal,
+                         "sortid": None, 
+                         "title": title_no_html,
+                         "year": year})  
     
     return pub
 
-################################################################################
+################################################################################  
 
 def get_geolocation(city, locationID, pub):
 
@@ -53,20 +63,31 @@ def get_geolocation(city, locationID, pub):
     coordinates = location.json()["response"]["results"]
     
     for info in coordinates:
-        if info["id"] == locationID: # e.g. locationID = heidelberg::germany
+        if info["id"] == locationID: #locationID = heidelberg::germany
             provenance = info
     
     pub.update({"provenance": provenance})
     
     return pub
 
-################################################################################  
+# for i, row in enumerate(l):
+#     if i > 0: # 1st row contains names of columns
+#         p = get_geolocation(row[8], row[9])
+#         #jprint(p)
+
+########################################################################################  
     
-def fill_counts(pmid):
+def fill_counts(row):
     
     counts = {}
-    
-    #...
+    counts.update({"acgh": row[1],
+                    "arraymap": 0,
+                    "ccgh": row[2],
+                    "genomes": row[3],
+                    "ngs": row[4],
+                    "progenetix": row[5],
+                    "wes": row[6],
+                    "wgs": row[7]})
     
     pub.update({"counts": counts})
     
@@ -74,7 +95,7 @@ def fill_counts(pmid):
         
 ################################################################################  
         
-def generate_publication_label(pub):
+def generate_publication_label(pub): # still working on this - use REs
 
     label = ""
 
