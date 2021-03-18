@@ -70,7 +70,8 @@ def respond_get_datasetids_request( byc ):
 
     dataset_ids = [ ]
     for ds_id in byc["dbstats"]["datasets"].keys():
-        dataset_ids.append( { "id": ds_id, "name": byc["dataset_definitions"][ds_id]["name"] } )
+        if ds_id in byc["config"][ "dataset_ids" ]:
+            dataset_ids.append( { "id": ds_id, "name": byc["dataset_definitions"][ds_id]["name"] } )
     cgi_print_json_response( byc["form_data"], { "datasets": dataset_ids }, 200 )
 
 ################################################################################
@@ -135,6 +136,48 @@ def respond_filtering_terms_request( byc ):
 
     resp.update( { "filteringTerms": ftl } )
     cgi_print_json_response( byc["form_data"], resp, 200 )
+
+################################################################################
+
+def return_filtering_terms( byc ):
+
+    fts = { }
+
+    # for the general filter response, filters from *all* datasets are
+    # provided
+    # if only one => counts are added back
+    dss = byc["dbstats"]["datasets"].keys()
+
+    if len(byc[ "dataset_ids" ]) == 1:
+        ds_id = byc[ "dataset_ids" ][0]
+        if ds_id in byc["dbstats"]["datasets"]:
+            dss = [ ds_id ]
+
+    for ds_id in dss:
+        ds = byc[ "dbstats" ][ "datasets" ][ ds_id ]
+        if "filtering_terms" in ds:
+            for f_t in ds[ "filtering_terms" ]:
+                f_id = f_t[ "id" ]
+                if not f_id in fts:
+                    fts[ f_id ] = f_t
+                else:
+                    fts[ f_id ][ "count" ] += f_t[ "count" ]
+  
+    ftl = [ ]
+    for key in sorted(fts):
+        f_t = fts[key]
+        if len(dss) > 1:
+            del(f_t["count"])
+        if "filters" in byc:
+            if len(byc["filters"]) > 0:
+                for f in byc["filters"]:
+                    f_t = re.compile(r'^'+f)
+                    if f_t.match(key):
+                        ftl.append( f_t )
+        else: 
+            ftl.append( f_t )
+
+    return ftl
 
 ################################################################################
 
