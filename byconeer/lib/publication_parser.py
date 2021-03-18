@@ -7,7 +7,7 @@ from pymongo import MongoClient
 
 def get_publication(pmid):
 
-    pub = {}    # inside function
+    pub = {}    # inside function - why inside? Isn't it better if it's a global variable, since I will be updating it with the other functions too?
     
     parameters = {
         "query": str(pmid), 
