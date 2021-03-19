@@ -18,11 +18,9 @@ def jprint(obj):
 
 ########################################################################################
 
-def get_publication(pmid):
+def get_publication(row):
 
     pub = {}    # inside function - why inside? Isn't it better if it's a global variable, since I will be updating it with the other functions too?
-    
-    def get_publications(row):
     
     parameters = {
         "query": row[0], #pmid
