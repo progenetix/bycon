@@ -29,6 +29,7 @@ sys.path.append( service_lib_path )
 
 from service_utils import initialize_service, create_empty_service_response,  response_collect_errors, response_add_parameter, populate_service_response, response_map_results
 
+from byconeer.lib.schemas_parser import *
 
 """podmd
 * <https://progenetix.org/cgi/bycon/services/biosamples.py?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
@@ -48,9 +49,11 @@ def main():
 def biosamples():
 
     byc = initialize_service()
+    parse_beacon_schema(byc)
 
     select_dataset_ids(byc)
     check_dataset_ids(byc)
+
     get_filter_flags(byc)
     parse_filters(byc)
 
@@ -69,8 +72,8 @@ def biosamples():
     execute_bycon_queries( ds_id, byc )
     query_results_save_handovers(byc)
 
-    if "vs._id" in byc["query_results"]:
-        print(byc["query_results"]["vs._id"][ "target_count" ])
+    # if "vs._id" in byc["query_results"]:
+    #     print(byc["query_results"]["vs._id"][ "target_count" ])
 
     access_id = byc["query_results"]["bs._id"][ "id" ]
 

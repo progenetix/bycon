@@ -121,7 +121,7 @@ def variants_exporter():
                         val = v["info"]["cnv_value"]
             if (not byc["args"].value_only) or (val != ""):
                 used_v_no +=1
-                f.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(bs_id, v["reference_name"], int(v["start"]), int(v["end"]), v["variant_type"], val) )
+                f.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(bs_id, v["reference_name"], int(v["start"]), int(v["end"]), v["variant_type"], '{:.4f}'.format(val)) )
 
         bar.next()
     bar.finish()

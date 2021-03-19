@@ -92,6 +92,10 @@ def variants():
 
     cgi_break_on_errors(r, byc)
 
+
+    # TODO: pgxseg creator
+
+
     populate_service_response(r, response_map_results(h_o_d, byc))
     cgi_print_json_response( byc["form_data"], r, 200 )
 

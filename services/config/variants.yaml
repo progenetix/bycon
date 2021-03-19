@@ -40,3 +40,10 @@ methods:
     - reference_bases
     - alternate_bases
     - info
+  pgxseg:
+    - biosample_id
+    - reference_name
+    - start
+    - end
+    - info.cnv_value
+    - variant_type

@@ -68,6 +68,12 @@ def create_empty_service_response(byc):
     	for k, v in byc["these_prefs"]["meta"].items():
     		r["meta"].update( { k: v } )
 
+    if "beacon" in byc:
+        try:
+            r["meta"].update({ "api_version": byc["beacon"]["info"]["version"] })
+        except:
+            pass
+
     if "errors" in byc:
         if len(byc["errors"]) > 0:
             response_add_error(r, 422, "::".join(byc["errors"]))
