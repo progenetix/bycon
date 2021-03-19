@@ -14,6 +14,13 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.read_specs import *
+from bycon.lib.parse_filters import *
+
+service_lib_path = path.join( pkg_path, "services", "lib" )
+sys.path.append( service_lib_path )
+
+from service_utils import initialize_service
+
 """
 
 ## `biosamplesRefresher`
@@ -24,61 +31,44 @@ from bycon.lib.read_specs import *
 ################################################################################
 ################################################################################
 
-def _get_args():
+def _get_args(byc):
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--datasetids", help="datasets, comma-separated")
     parser.add_argument("-a", "--alldatasets", action='store_true', help="process all datasets")
     parser.add_argument("-t", "--test", help="test setting")
-    args = parser.parse_args()
+    byc.update({ "args": parser.parse_args() })
 
-    return(args)
+    return byc
 
 ################################################################################
 
 def main():
 
-    service = "variants"
-
-    byc = {
-        "pkg_path": pkg_path,
-        "args": _get_args(),
-        "errors": [ ],
-        "warnings": [ ]
-    }
-
-    for d in [
-        "config",
-        "dataset_definitions"
-    ]:
-        read_bycon_configs_by_name( d, byc )
-
-    # first pre-population w/ defaults
-    these_prefs = read_local_prefs( service, dir_path )
-    for d_k, d_v in these_prefs.items():
-        byc.update( { d_k: d_v } )
+    variants_refresher()
 
 ################################################################################
+
+def variants_refresher():
+
+    byc = initialize_service()
+    _get_args(byc)
 
     if byc["args"].test:
         print( "¡¡¡ TEST MODE - no db update !!!")
 
-    if byc["args"].alldatasets:
-        dataset_ids = byc["config"][ "dataset_ids" ]
-    else:
-        dataset_ids =  byc["args"].datasetids.split(",")
-        if not dataset_ids[0] in byc["config"][ "dataset_ids" ]:
-            print("No existing dataset was provided with -d ...")
-            exit()
+    select_dataset_ids(byc)
+    check_dataset_ids(byc)
+
+    if len(byc["dataset_ids"]) < 1:
+        print("No existing dataset was provided with -d ...")
+        exit()
 
     mongo_client = MongoClient( )
 
-    min_l = byc["refreshing"]["cnv_min_length"]
+    min_l = byc["these_prefs"]["refreshing"]["cnv_min_length"]
 
-    for ds_id in dataset_ids:
-        if not ds_id in byc["config"][ "dataset_ids" ]:
-            print("¡¡¡ "+ds_id+" is not a registered dataset !!!")
-            continue
+    for ds_id in byc["dataset_ids"]:
 
         v_short = 0
         v_no_type = 0
@@ -86,8 +76,7 @@ def main():
         data_db = mongo_client[ ds_id ]
         var_coll = data_db[ "variants" ]
         no =  var_coll.estimated_document_count()
-        if not byc["args"].test:
-            bar = Bar("Refreshing {} vars".format(ds_id), max = no, suffix='%(percent)d%%'+" of "+str(no) )
+        bar = Bar("{} vars".format(ds_id), max = no, suffix='%(percent)d%%'+" of "+str(no) )
         for v in var_coll.find({}):
             update_obj = { }
             """
@@ -119,10 +108,9 @@ def main():
 
             if not byc["args"].test:
                 var_coll.update_one( { "_id": v["_id"] }, { '$set': update_obj }  )
-                bar.next()
-
-        if not byc["args"].test:
-            bar.finish()
+            
+            bar.next()
+        bar.finish()
 
         print("{} {} variants had no type {}".format(v_no_type, ds_id, min_l))
         print("{} {} CNV variants had a length below {}".format(v_short, ds_id, min_l))

@@ -15,6 +15,12 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.read_specs import *
+from bycon.lib.parse_filters import *
+
+service_lib_path = path.join( pkg_path, "services", "lib" )
+sys.path.append( service_lib_path )
+
+from service_utils import initialize_service
 """
 
 ## `ontologymapsCreator`
@@ -25,40 +31,26 @@ from bycon.lib.read_specs import *
 ################################################################################
 ################################################################################
 
-def _get_args():
+def _get_args(byc):
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--test", help="test setting")
-    args = parser.parse_args()
+    byc.update({"args": parser.parse_args() })
 
-    return(args)
+    return byc
 
 ################################################################################
 
 def main():
 
-    service = "ontologymaps"
-
-    byc = {
-        "pkg_path": pkg_path,
-        "args": _get_args(),
-        "errors": [ ],
-        "warnings": [ ]
-    }
-
-    for d in [
-        "config",
-        "dataset_definitions",
-        "filter_definitions"
-    ]:
-        read_bycon_configs_by_name( d, byc )
-
-    # first pre-population w/ defaults
-    these_prefs = read_local_prefs( service, dir_path )
-    for d_k, d_v in these_prefs.items():
-        byc.update( { d_k: d_v } )
+    ontologymaps_creator()
 
 ################################################################################
+
+def ontologymaps_creator():
+
+    byc = initialize_service()
+    _get_args(byc)
 
     if byc["args"].test:
         print( "¡¡¡ TEST MODE - no db update !!!")
@@ -66,13 +58,13 @@ def main():
     mongo_client = MongoClient( )
     o_m = { }
 
-    for map_type in byc["map_types"]:
+    for mt, mv in byc["these_prefs"]["map_types"].items():
 
-        o_l_max = len(byc["map_types"][ map_type ]["prefixes"])
+        o_l_max = len(mv["prefixes"])
 
-        for ds_id in byc["dataset_ids"]:
+        for ds_id in byc["these_prefs"]["dataset_ids"]:
             data_db = mongo_client[ ds_id ]
-            for coll in byc["data_collections"]:
+            for coll in byc["these_prefs"]["data_collections"]:
                 no =  data_db[ coll ].estimated_document_count()
                 if not byc["args"].test:
                     bar = Bar("Analyzing samples", max = no, suffix="%(percent)d%%"+" of "+str(no) )
@@ -84,7 +76,7 @@ def main():
                     if "description" in s:
                         d = s["description"].strip()
 
-                    for pre in byc["map_types"][ map_type ]["prefixes"]:
+                    for pre in mv["prefixes"]:
                         data_key = byc["filter_definitions"][ pre ]["db_key"]
                         list_key = re.sub(".id", "", data_key)
                         data_re = re.compile( byc["filter_definitions"][ pre ]["pattern_strict"] )
@@ -104,7 +96,7 @@ def main():
                     # if k == 'NCIT:C3372::icdom-80003::icdot-C44.9':
                     #     print(d, o_l)
                     if k in o_m:
-                        if len(o_m[k]["examples"]) < byc["example_length"]:
+                        if len(o_m[k]["examples"]) < byc["these_prefs"]["example_length"]:
                             o_m[k]["examples"].update([d])
 
                     else:
@@ -119,15 +111,15 @@ def main():
                 if not byc["args"].test:
                     bar.finish()
 
-        print("{} code combinations for {}".format(len(o_m.keys()), map_type))
+        print("{} code combinations for {}".format(len(o_m.keys()), mt))
 
-        def_m = _read_mapping_defaults(dir_path, map_type, **byc)
+        def_m = _read_mapping_defaults(dir_path, mt, **byc)
 
         for def_k in def_m:
             if not def_k in o_m.keys():
                 o_m.update( { def_k: def_m[def_k] } )
         print("Now {} code combinations after defaults ...".format(len(o_m.keys())))
-        _export_ontologymaps(dir_path, service, map_type, o_m)
+        _export_ontologymaps(dir_path, mt, o_m)
 
     if not byc["args"].test:
         om_coll = mongo_client[ byc["config"]["info_db"] ][ byc["config"]["ontologymaps_coll"] ]
@@ -139,14 +131,14 @@ def main():
 ################################################################################
 ################################################################################
 
-def _export_ontologymaps(dir_path, service, map_type, o_m):
+def _export_ontologymaps(dir_path, map_type, o_m):
     for k, content in o_m.items():
         if "examples" in content:
             content["examples"] = sorted(content["examples"])
     export = [ ]
     for o_k in sorted(o_m.keys()):
         export.append(o_m[o_k])
-    yaml.dump(export, open(path.join(dir_path, "exports", service, "{}.yaml".format(map_type)),"w"))
+    yaml.dump(export, open(path.join(dir_path, "exports", "ontologymaps", "{}.yaml".format(map_type)),"w"))
 
 ################################################################################
 ################################################################################
@@ -154,13 +146,13 @@ def _export_ontologymaps(dir_path, service, map_type, o_m):
 
 def _read_mapping_defaults(dir_path, map_type, **byc):
 
-    if not "mappingfile" in byc["map_types"][ map_type ]:
+    if not "mappingfile" in byc["these_prefs"]["map_types"][ map_type ]:
         return {}
 
-    mf = path.join( dir_path, *byc["map_types"][ map_type ]["mappingfile"] )
+    mf = path.join( dir_path, *byc["these_prefs"]["map_types"][ map_type ]["mappingfile"] )
     o_m_r = { }
     equiv_keys = [ ]
-    pre_fs = byc["map_types"][ map_type ]["prefixes"]
+    pre_fs = byc["these_prefs"]["map_types"][ map_type ]["prefixes"]
     o_l_max = len(pre_fs)
 
     for pre in pre_fs:

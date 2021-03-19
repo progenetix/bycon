@@ -49,15 +49,16 @@ podmd"""
 ################################################################################
 ################################################################################
 
-def _get_args():
+def _get_args(byc):
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--filters", help="prefixed filter values, comma concatenated")
-    parser.add_argument("-t", "--test", action='store_true', help="test from command line with default parameters")
+    # parser.add_argument("-t", "--test", action='store_true', help="test from command line with default parameters")
+    parser.add_argument("-d", "--datasetids", help="datasets, comma-separated")
     parser.add_argument("-i", "--info", action='store_true', help="test from command line for info")
-    args = parser.parse_args()
+    byc.update({ "args": parser.parse_args() })
 
-    return args
+    return byc
 
 ################################################################################
 
@@ -70,6 +71,7 @@ def main():
 def byconplus():
     
     byc = initialize_service()
+    _get_args(byc)
 
     parse_beacon_schema(byc)
         
@@ -106,8 +108,6 @@ def byconplus():
     parse_filters(byc)
 
     check_service_requests(byc)
-
-    # datasets(datasets)
 
     parse_variants(byc)
     get_variant_request_type(byc)

@@ -1,6 +1,7 @@
 import requests
 import json
 import re
+from pymongo import MongoClient
 import csv
 
 l = []
@@ -17,9 +18,9 @@ def jprint(obj):
 
 ########################################################################################
 
-pub = {}
+def get_publication(pmid):
 
-def get_publications(pmid):
+    pub = {}    # inside function - why inside? Isn't it better if it's a global variable, since I will be updating it with the other functions too?
     
     def get_publications(row):
     
@@ -96,6 +97,8 @@ for i, row in enumerate(l):
         p = get_publications(row)
         jprint(p)
 
+
+  
 
 
     

@@ -12,5 +12,11 @@ platform_rename:
   GPL6801: SNP6
   GPL6894: SNP5
   GPL2641: Xba142
-json_file_root: /Volumes/arrayMaster/arraymap/grch38/
-import_path: imports/new_data.tsv
+json_file_root:
+  - Volumes
+  - arrayMaster
+  - arraymap
+  - grch38
+import_path:
+  - imports
+  - new_data.tsv
