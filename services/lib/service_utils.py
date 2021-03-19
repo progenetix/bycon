@@ -156,7 +156,9 @@ def response_map_results(data, byc):
             # TODO: cleanup and add types in config ...
             if "." in k:
                 k1, k2 = k.split('.')
-                s[ k ] = res[ k1 ][ k2 ]
+                if k1 in res.keys():
+                    if k2 in res[ k1 ]:
+                        s[ k ] = res[ k1 ][ k2 ]
             elif k in res.keys():
                 if "start" in k or "end" in k:
                     s[ k ] = int(res[ k ])
@@ -172,7 +174,7 @@ def populate_service_response(r, results):
 
     if isinstance(results, list):
         r_no = len( results )
-        r["response"]["info"].update({"count": r_no })
+        r["response"].update({"numTotalResults": r_no })
         if r_no > 0:
             r["response"].update({"exists": True })
     
