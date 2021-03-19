@@ -22,16 +22,20 @@ def get_publication(pmid):
 
     pub = {}    # inside function - why inside? Isn't it better if it's a global variable, since I will be updating it with the other functions too?
     
+    def get_publications(row):
+    
     parameters = {
-        "query": pmid, 
+        "query": row[0], #pmid
         "format": "json",
-        "resultType": "core"}
+        "resultType": "core"
+        }
     response = requests.get("https://www.ebi.ac.uk/europepmc/webservices/rest/search", params = parameters)
     
     if response.status_code == 200:
         results = response.json()["resultList"]["result"]
         info = results[0]
         
+        # Get basic informations:
         abstract = info["abstractText"]
         ID = info["pmid"]
         author = info["authorString"]
@@ -39,78 +43,65 @@ def get_publication(pmid):
         title = info["title"]
         year = info["pubYear"]
         
+        # Make label:
+        short_author = re.sub(r'(.{2,32}[\w\.\-]+? \w\-?\w?\w?)(\,| and ).*?$', r'\1 et al.', author)
+        
+        if len(title) <= 100:
+            label = short_author + f' ({year}) ' + title
+        else:
+            label = short_author + f' ({year}) ' + ' '.join(title.split(' ')[:12]) + ' ...'
+        
+        # Remove HTML formatting:
         abstract_no_html = re.sub(r'<[^\>]+?>', "", abstract)
         title_no_html = re.sub(r'<[^\>]+?>', "", title)
+        label_no_html = re.sub(r'<[^\>]+?>', "", label)        
+        
+        # Fill in counts:
+        counts = {}
+        counts.update({"acgh": int(row[1]),
+                        "arraymap": 0,
+                        "ccgh": int(row[2]),
+                        "genomes": int(row[3]),
+                        "ngs": int(row[4]),
+                        "progenetix": int(row[5]),
+                        "wes": int(row[6]),
+                        "wgs": int(row[7])
+                        })
         
         pub.update({"abstract": abstract_no_html,
-                         "authors": author,
-                         "id": "PMID:" + str(ID),
-                         "journal": journal,
-                         "sortid": None, 
-                         "title": title_no_html,
-                         "year": year})  
-    
-    return pub
-
-################################################################################  
-
-def get_geolocation(city, locationID, pub):
-
-    # this should better be done via a local MongoDB call
-    
-    where = {"city": city}
+                    "authors": author,
+                    "counts": counts,
+                    "id": "PMID:" + str(ID),
+                    "label": label_no_html, 
+                    "journal": journal,
+                    "sortid": None, 
+                    "title": title_no_html,
+                    "year": year
+                    })  
+        
+    # Get geolocation:
+    where = {"city": row[8]} #city
     location = requests.get("https://progenetix.org/services/geolocations", params = where)
     coordinates = location.json()["response"]["results"]
     
     for info in coordinates:
-        if info["id"] == locationID: #locationID = heidelberg::germany
+        if info["id"] == row[9]: #locationID = heidelberg::germany
             provenance = info
     
     pub.update({"provenance": provenance})
     
     return pub
 
-# for i, row in enumerate(l):
-#     if i > 0: # 1st row contains names of columns
-#         p = get_geolocation(row[8], row[9])
-#         #jprint(p)
+for i, row in enumerate(l):
+    if i > 0: # 1st row contains names of columns
+        p = get_publications(row)
+        jprint(p)
 
-########################################################################################  
-    
-def fill_counts(row):
-    
-    counts = {}
-    counts.update({"acgh": row[1],
-                    "arraymap": 0,
-                    "ccgh": row[2],
-                    "genomes": row[3],
-                    "ngs": row[4],
-                    "progenetix": row[5],
-                    "wes": row[6],
-                    "wgs": row[7]})
-    
-    pub.update({"counts": counts})
-    
-    return pub
-        
-################################################################################  
-        
-def generate_publication_label(pub): # still working on this - use REs
 
-    label = ""
+  
 
-    if "authors" in pub:
-        pa = pub["authors"].copy()
-        title = pub["title"].copy()
-        year = pub["year"].copy()
-        
-        lab = pa[:50] + f' et al. ({year}): ' 
-        
-        if len(title) <= 100:
-            label = lab + title
-        else:
-            label = lab + ' '.join(title.split(' ')[:12]) + ' ...'
-        
-    pub.update({"label": label})
 
-    return pub
+    
+ 
+                
+
