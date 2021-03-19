@@ -39,6 +39,8 @@ def _get_args(byc):
     parser.add_argument("-d", "--datasetids", help="dataset")
     parser.add_argument("-o", "--outfile", help="output file")
     parser.add_argument("-f", "--filters", help="prefixed filter values, comma concatenated")
+    parser.add_argument("--value-only", dest='value_only', action='store_true', help="only output variants with values")
+    parser.set_defaults(value_only=False)
     byc.update({ "args": parser.parse_args() })
 
     return byc
@@ -63,22 +65,43 @@ def variants_exporter():
         print("No existing dataset was provided with -d ...")
         exit()
 
-    get_filter_flags(byc)  
-    parse_filters(byc)
-
-    generate_queries(byc)
-
     ds_id = byc[ "dataset_ids" ][ 0 ]
 
+    get_filter_flags(byc)  
+    parse_filters(byc)
+    generate_queries(byc)
     execute_bycon_queries( ds_id, byc )
 
-    print("{} biosamples will be parsed for variants".format(byc["query_results"]["bs.id"]["target_count"]) )
-
+    all_bs_no = byc["query_results"]["bs.id"]["target_count"]
     mongo_client = MongoClient( )
+    vs_coll = mongo_client[ ds_id ][ "variants" ]
+    bs_coll = mongo_client[ ds_id ][ "biosamples" ]
+
+    bar = Bar("Testing {} {} samples".format(all_bs_no, ds_id), max = all_bs_no, suffix='%(percent)d%%' )
+
+    used_bs_ids = set()
+    all_v_no = 0
+    for bs_id in byc["query_results"]["bs.id"]["target_values"]:
+        for v in vs_coll.find({ "biosample_id": bs_id }):
+            all_v_no += 1
+            val = ""
+            if "info" in v:
+                if "cnv_value" in v["info"]:
+                    if isinstance(v["info"]["cnv_value"],float):
+                        val = v["info"]["cnv_value"]
+            break
+        if (not byc["args"].value_only) or (val != ""):
+            used_bs_ids.add(bs_id)
+        bar.next()
+    bar.finish()
+
+    used_bs_no = len(used_bs_ids)
+
+    print("=> Writing header data for {} samples with variants...".format(used_bs_no))
 
     f = open(byc["args"].outfile, "w")
 
-    for bs_id in byc["query_results"]["bs.id"]["target_values"]:
+    for bs_id in used_bs_ids:
         bs = mongo_client[ ds_id ][ "biosamples" ].find_one( { "id": bs_id } )
         h_line = "# sample_id={}".format(bs_id)
         for b_c in bs[ "biocharacteristics" ]:
@@ -86,27 +109,30 @@ def variants_exporter():
                 h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, b_c["id"], b_c["label"], b_c["id"], b_c["label"])
         f.write(h_line+"\n")
 
-    v_no = 0
+    bar = Bar("Variants from {} {} samples".format(used_bs_no, ds_id), max = used_bs_no, suffix='%(percent)d%%' )
 
-    bs_coll = mongo_client[ ds_id ][ "biosamples" ]
-    for bs_id in byc["query_results"]["bs.id"]["target_values"]:
-        for v in mongo_client[ ds_id ][ "variants" ].find({ "biosample_id": bs_id }):
-            v_no += 1
+    used_v_no = 0
+    for bs_id in used_bs_ids:
+        for v in vs_coll.find({ "biosample_id": bs_id }):
             val = ""
             if "info" in v:
                 if "cnv_value" in v["info"]:
-                    if type(v["info"]["cnv_value"]) == int or float:
+                    if isinstance(v["info"]["cnv_value"],float):
                         val = v["info"]["cnv_value"]
-            f.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(bs_id, v["reference_name"], int(v["start"]), int(v["end"]), v["variant_type"], val) )
+            if (not byc["args"].value_only) or (val != ""):
+                used_v_no +=1
+                f.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(bs_id, v["reference_name"], int(v["start"]), int(v["end"]), v["variant_type"], val) )
+
+        bar.next()
+    bar.finish()
 
     f.close()
 
-    print("{} variants were written to {}".format(v_no, byc["args"].outfile) )
+    print("{} variants from {} biosamples were written to {}".format(used_v_no, len(used_bs_ids) ,byc["args"].outfile) )
 
 ################################################################################
 ################################################################################
 ################################################################################
-
 
 if __name__ == '__main__':
     main()
