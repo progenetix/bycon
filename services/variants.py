@@ -92,11 +92,37 @@ def variants():
 
     cgi_break_on_errors(r, byc)
 
-
-    # TODO: pgxseg creator
-
+     # TODO: pgxseg creator
 
     populate_service_response(r, response_map_results(h_o_d, byc))
+
+    ############################################################################
+
+    if "pgxseg" in byc["method"]:
+        mongo_client = MongoClient()
+        response = [ ]
+        for bs_id in byc["query_results"]["bs.id"][ "target_values" ]:
+            bs = mongo_client[ ds_id ][ "biosamples" ].find_one( { "id": bs_id } )
+            h_line = "# sample_id={}".format(bs_id)
+            for b_c in bs[ "biocharacteristics" ]:
+                if "NCIT:C" in b_c["id"]:
+                    h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, b_c["id"], b_c["label"], b_c["id"], b_c["label"])
+            response.append(h_line)
+        datamap = cgi_simplify_response(r)
+
+        d_k = response_set_delivery_keys(byc)
+        response.append("\t".join(d_k))
+
+        l_d = [ ]
+        for dp in datamap:
+            v_l = [ ]
+            for v in dp.values():
+                v_l.append(str(v))
+            response.append("\t".join(v_l))
+        cgi_print_text_response(byc["form_data"], "\n".join(response), 200)
+
+    ############################################################################
+
     cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################
