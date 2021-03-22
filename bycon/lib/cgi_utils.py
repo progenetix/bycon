@@ -131,6 +131,46 @@ def cgi_print_json_response(form_data, response, status_code):
     exit()
 
 ################################################################################
+################################################################################
+################################################################################
+
+def open_json_streaming(response, filename="data.json"):
+
+    print('Content-Type: application/json')
+    print('Content-Disposition: attachment; filename="{}"'.format(filename))
+    print('status: 200')
+    print()
+    print("{")
+    print('"meta":')
+
+    print(json.dumps(response["meta"], indent=None, sort_keys=True, default=str)+",")
+    print('"response": {')
+    print('"results": [')
+
+################################################################################
+
+def close_json_streaming():
+    print("]")
+    print("}")
+    print("}")
+    exit()
+
+################################################################################
+
+def open_text_streaming(filename="data.pgxseg"):
+
+    print('Content-Type: text/pgxseg')
+    print('Content-Disposition: attachment; filename="{}"'.format(filename))
+    print('status: 200')
+    print()
+
+################################################################################
+
+def close_text_streaming():
+
+    print()
+    exit()
+
 
 
 

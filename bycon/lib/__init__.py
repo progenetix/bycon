@@ -15,3 +15,4 @@ from parse_variants import *
 from query_execution import *
 from query_generation import *
 from read_specs import *
+from variant_responses import *
