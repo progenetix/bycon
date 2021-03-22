@@ -26,6 +26,8 @@ def mongo_result_list(db_name, coll_name, query, fields):
 
 def execute_bycon_queries(ds_id, byc):
 
+    max_bs_number_for_v_in_query = 2500
+
     # last_time = datetime.datetime.now()
     # logging.info("\t start query: {}".format(last_time))
 
@@ -167,11 +169,17 @@ def execute_bycon_queries(ds_id, byc):
 
     if "response_type" in byc:
 
-        if byc["response_type"] == "return_variants":
-            if not "vs._id" in prefetch.keys():
-                prevars["method"] = "vs._id"
-                prevars["query"] = { "biosample_id": { "$in": prefetch[ "bs.id" ]["target_values"] } }
-                prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+        # print(byc["response_type"])
+
+        # if byc["response_type"] == "return_variants":
+        #     if not "vs._id" in prefetch.keys():
+                
+        #         prevars["method"] = "vs._id"                
+        #         if prefetch[ "bs.id" ]["target_count"] < max_bs_number_for_v_in_query:
+        #             prevars["query"] = { "biosample_id": { "$in": prefetch[ "bs.id" ]["target_values"] } }
+        #             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+        #         else:
+        #             prefetch.update( { prevars["method"]: _prefetch_vars_from_biosample_loop( *prefetch[ "bs.id" ]["target_values"], **prevars ) } )
 
         if "individuals" in byc["response_type"] or "phenopackets" in byc["response_type"]:
             prevars["method"] = "bs.isid->is.id"
@@ -187,7 +195,8 @@ def execute_bycon_queries(ds_id, byc):
     data_client.close( )
     ho_client.close( )
 
-    byc.update( { "query_results": prefetch } )
+    # byc.update( { "query_results": prefetch } )
+    byc["query_results"] = prefetch
 
     return byc
 
@@ -228,4 +237,24 @@ def _prefetch_data( **prevars ):
     return(h_o)
 
 ################################################################################
+
+def _prefetch_vars_from_biosample_loop( *bs_ids, **prevars ):
+
+    method = prevars["method"]
+    data_db = prevars["data_db"]
+    h_o_defs = prevars["h_o_defs"][method]
+
+    h_o = { **h_o_defs }
+    h_o["target_values"] = [ ]
+
+    for bs_id in bs_ids:
+        for v in data_db[ "variants" ].find( { "biosample_id": bs_id} ):
+            h_o["target_values"].append( v["_id"])
+
+    h_o["id"] = str(uuid4())
+    h_o["source_db"] = prevars["ds_id"],
+    h_o["target_count"] = len(h_o["target_values"])
+
+    return(h_o)
+
 

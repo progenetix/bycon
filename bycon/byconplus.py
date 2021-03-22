@@ -80,7 +80,6 @@ def byconplus():
     beacon_get_endpoint(byc)
     parse_endpoints(byc)
 
-    select_response_type(byc)
 
     # for s in ["biosamples","variants"]:
     #     if s in byc["response_type"]:
@@ -107,6 +106,7 @@ def byconplus():
     get_filter_flags(byc)  
     parse_filters(byc)
 
+    select_response_type(byc)
     check_service_requests(byc)
 
     parse_variants(byc)

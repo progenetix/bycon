@@ -6,6 +6,24 @@ from bson.son import SON
 import sys
 
 from parse_variants import *
+from parse_filters import *
+
+################################################################################
+
+def initialize_beacon_queries(byc):
+
+    select_dataset_ids(byc)
+    check_dataset_ids(byc)
+
+    get_filter_flags(byc)
+    parse_filters(byc)
+
+    parse_variants(byc)
+    get_variant_request_type(byc)
+
+    generate_queries(byc)
+
+    return byc
 
 ################################################################################
 

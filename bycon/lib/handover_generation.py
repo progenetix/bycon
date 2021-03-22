@@ -99,7 +99,7 @@ def _handover_create_url(h_o_server, h_o_defs, h_o_t, accessid, url_opts):
         server = h_o_server
         if "http" in h_o_defs["script_path_web"]:
             server = ""
-        return("{}{}?do={}&accessid={}{}".format(server, h_o_defs["script_path_web"], h_o_t, accessid, url_opts))
+        return("{}{}?method={}&accessid={}{}".format(server, h_o_defs["script_path_web"], h_o_t, accessid, url_opts))
 
     return ""
 

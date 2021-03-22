@@ -16,6 +16,9 @@ bycon_definition_files:
   - geoloc_definitions
   - variant_definitions
   - handover_definitions
+all_variants_methods:
+  - callsetsvariants
+  - pgxseg
 methods:
   digests:
     - digest
@@ -41,6 +44,13 @@ methods:
     - alternate_bases
     - info
   pgxseg:
+    - biosample_id
+    - reference_name
+    - start
+    - end
+    - info.cnv_value
+    - variant_type
+  callsetsvariants:
     - biosample_id
     - reference_name
     - start

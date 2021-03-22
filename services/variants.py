@@ -4,6 +4,7 @@ import cgi, cgitb
 import json, yaml
 from os import path, environ, pardir
 import sys, datetime, argparse
+from bson.objectid import ObjectId
 
 # local
 dir_path = path.dirname( path.abspath(__file__) )
@@ -18,6 +19,10 @@ from service_utils import *
 ################################################################################
 ################################################################################
 
+"""
+https://progenetix.test/services/variants/?datasetIds=progenetix&filters=NCIT:C7712&method=pgxseg&debug=1
+"""
+
 def main():
 
     variants()
@@ -28,59 +33,83 @@ def variants():
 
     byc = initialize_service()
 
+    parse_beacon_schema(byc)
+
+    initialize_beacon_queries(byc)
+
     r = create_empty_service_response(byc)
-
-    if "do" in byc["form_data"]:
-        do = byc["form_data"].getvalue("do")
-        access_id = byc["form_data"].getvalue("accessid")
-
-        response_add_parameter(r, "accessid", access_id)
-
-        if do == "callsetsvariants":
-
-            open_json_streaming(r, "variants.json")
-
-            results = [ ]
-
-            count = 0;
-            biosamples = { }
-
-            h_o, e = retrieve_handover( access_id, **byc )
-            mongo_client = MongoClient()
-            ds_id = h_o["source_db"]
-            cs_coll = mongo_client[ ds_id ][ "callsets" ]
-            v_coll = mongo_client[ ds_id ][ "variants" ]
-            for cs_id in h_o["target_values"]:
-                cs = cs_coll.find_one( { "_id": cs_id } )
-                v_q = { "callset_id": cs["id"] }
-                for v in v_coll.find( v_q, { '_id': False, 'digest': False, 'updated': False, 'assembly_id': False, 'callset_id': False, 'info': False  } ):
-                    v["start"] = int(v["start"])
-                    v["end"] = int(v["end"])
-                    if "biosample_id" in v:
-                        biosamples.update({ v["biosample_id"] : 1 } )
-                    count = count + 1
-                    print(json.dumps(v, indent=None, sort_keys=False, default=str)+",")
-
-            info = { "variant_count": count, "biosample_count": len(biosamples.keys()) }
-
-            close_json_streaming(info)
-
-    select_dataset_ids(byc)
-    check_dataset_ids(byc)
-    get_filter_flags(byc)
-    parse_filters(byc)
-
-    parse_variants(byc)
-    get_variant_request_type(byc)
-    generate_queries(byc)
-
     response_collect_errors(r, byc)
     cgi_break_on_errors(r, byc)
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
     response_add_parameter(r, "dataset", ds_id )
-
     execute_bycon_queries( ds_id, byc )
+
+    ############################################################################
+
+    mongo_client = MongoClient()
+    v_coll = mongo_client[ ds_id ][ "variants" ]
+    bs_coll = mongo_client[ ds_id ][ "biosamples" ]
+    response = [ ]
+
+    ############################################################################
+
+    if byc["method"] in byc["these_prefs"]["all_variants_methods"]:
+
+        vs = [ ]
+        for bs_id in byc["query_results"]["bs.id"][ "target_values" ]:
+            for v in v_coll.find(
+                    {"biosample_id": bs_id },
+                    { "_id": 0, "assembly_id": 0, "digest": 0, "callset_id": 0 }
+            ):
+                val = ""
+                if "info" in v:
+                    if "cnv_value" in v["info"]:
+                        if isinstance(v["info"]["cnv_value"],float):
+                            val = '{:.3f}'.format(v["info"]["cnv_value"])
+                v["start"] = int(v["start"])
+                v["end"] = int(v["end"])
+                vs.append(v)
+
+        r["response"]["info"].update({
+            "variant_count": len(vs),
+            "biosample_count": byc["query_results"]["bs.id"][ "target_count" ]
+        })
+
+        if "callsetsvariants" in byc["method"]:
+            open_json_streaming(r, "variants.json")
+        elif "pgxseg" in byc["method"]:
+            open_text_streaming()
+            for d in ["id", "assemblyId"]:
+                print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
+            for m in ["variant_count", "biosample_count"]:
+                print("#meta=>{}={}".format(m, r["response"]["info"][m]))
+            print("#meta=>filters="+','.join(r["meta"]["received_request"]["filters"]))
+            for bs_id in byc["query_results"]["bs.id"][ "target_values" ]:
+                bs = bs_coll.find_one( { "id": bs_id } )
+                h_line = "#sample_id={}".format(bs_id)
+                for b_c in bs[ "biocharacteristics" ]:
+                    if "NCIT:C" in b_c["id"]:
+                        h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, b_c["id"], b_c["label"], b_c["id"], b_c["label"])
+                print(h_line)
+            print("{}\t{}\t{}\t{}\t{}\t{}".format("biosample_id", "reference_name", "start", "end", "variant_type", "log2" ) )
+
+        # faster to loop over the biosamples again instead of over each variant
+        # TODO: get rid of the original vs._id generation in query_execution
+        # ... which here basically only would be needed for the variant count
+        for v in vs:
+            if "callsetsvariants" in byc["method"]:
+                print(json.dumps(v, indent=None, sort_keys=False, default=str, separators=(',', ':'))+",")
+            elif "pgxseg" in byc["method"]:
+                print("{}\t{}\t{}\t{}\t{}\t{}".format(bs_id, v["reference_name"], v["start"], v["end"], v["variant_type"], val) )
+
+        if "callsetsvariants" in byc["method"]:
+            close_json_streaming()
+        elif "pgxseg" in byc["method"]:
+            close_text_streaming()
+
+    ############################################################################
+
     query_results_save_handovers(byc)
 
     access_id = byc["query_results"]["vs._id"][ "id" ]
@@ -88,50 +117,15 @@ def variants():
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
-        response_add_error(r, 422, e)
-
-    cgi_break_on_errors(r, byc)
-
-     # TODO: pgxseg creator
+        response_add_error(r, 422, e )
 
     populate_service_response(r, response_map_results(h_o_d, byc))
-
-    ############################################################################
-
-    if "pgxseg" in byc["method"]:
-        mongo_client = MongoClient()
-        response = [ ]
-        for bs_id in byc["query_results"]["bs.id"][ "target_values" ]:
-            bs = mongo_client[ ds_id ][ "biosamples" ].find_one( { "id": bs_id } )
-            h_line = "# sample_id={}".format(bs_id)
-            for b_c in bs[ "biocharacteristics" ]:
-                if "NCIT:C" in b_c["id"]:
-                    h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, b_c["id"], b_c["label"], b_c["id"], b_c["label"])
-            response.append(h_line)
-        datamap = cgi_simplify_response(r)
-
-        d_k = response_set_delivery_keys(byc)
-        response.append("\t".join(d_k))
-
-        l_d = [ ]
-        for dp in datamap:
-            v_l = [ ]
-            for v in dp.values():
-                v_l.append(str(v))
-            response.append("\t".join(v_l))
-        cgi_print_text_response(byc["form_data"], "\n".join(response), 200)
-
-    ############################################################################
-
     cgi_print_json_response( byc["form_data"], r, 200 )
 
 ################################################################################
 ################################################################################
 
-def open_json_streaming(response, filename):
-
-    if not filename:
-        filename = "data.json"
+def open_json_streaming(response, filename="data.json"):
 
     print('Content-Type: application/json')
     print('Content-Disposition: attachment; filename="{}"'.format(filename))
@@ -144,12 +138,28 @@ def open_json_streaming(response, filename):
     print('"response": {')
     print('"results": [')
 
-def close_json_streaming(info):
+################################################################################
+
+def close_json_streaming():
     print("],")
-    print('"info":')
-    print(json.dumps(info, indent=None, sort_keys=True, default=str))
     print("}")
     print("}")
+    exit()
+
+################################################################################
+
+def open_text_streaming(filename="data.pgxseg"):
+
+    print('Content-Type: text/pgxseg')
+    print('Content-Disposition: attachment; filename="{}"'.format(filename))
+    print('status: 200')
+    print()
+
+################################################################################
+
+def close_text_streaming():
+
+    print()
     exit()
 
 ################################################################################
