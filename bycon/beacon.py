@@ -29,12 +29,14 @@ def main():
 def beacon(path=""):
 
     set_debug_state(debug=0)
-    these_prefs = read_local_prefs( "beacon_services", dir_path )
+    these_prefs = read_local_prefs( "beacon_mappings", dir_path )
+
+    s_name = path.splitext(path.basename(__file__))[0]
 
     if path in these_prefs["service_names"]:
         service_name = path
     else:
-        service_name = rest_path_value("beacon")
+        service_name = rest_path_value(s_name)
 
     if service_name in these_prefs["service_names"]:    
         f = these_prefs["service_names"][ service_name ]
@@ -53,7 +55,7 @@ def beacon(path=""):
 
             exit()
 
-    cgi_print_json_response( {}, { "errors" : [ "No correct service path provided. Please refer to the documentation at http://info.progenetix.org/tags/services" ] }, 422 )
+    cgi_print_json_response( {}, { "errors" : [ "No correct Beacon path provided. Please refer to the documentation at http://info.progenetix.org/tags/services" ] }, 422 )
 
 ################################################################################
 ################################################################################

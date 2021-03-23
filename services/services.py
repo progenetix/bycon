@@ -14,6 +14,7 @@ sys.path.append( bycon_path )
 # services that have been moved need to be imported
 from info import info
 from beacon import beacon
+from biosamples import biosamples
 from variants import variants
 from filteringTerms import filteringTerms
 
@@ -41,12 +42,14 @@ def main():
 def services(service):
 
     set_debug_state(debug=0)
-    these_prefs = read_local_prefs( "services", dir_path )
+    these_prefs = read_local_prefs( "service_mappings", dir_path )
+
+    s_name = path.splitext(path.basename(__file__))[0]
 
     if path in these_prefs["service_names"]:
         service_name = path
     else:
-        service_name = rest_path_value("beacon")
+        service_name = rest_path_value(s_name)
 
     if service_name in these_prefs["service_names"]:    
         f = these_prefs["service_names"][ service_name ]
