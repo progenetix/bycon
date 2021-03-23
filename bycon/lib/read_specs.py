@@ -55,7 +55,12 @@ def read_yaml_with_key_to_object(file_key, data_key, **paths):
 
 ################################################################################
 
-def dbstats_return_latest( limit=1, **byc ):
+def dbstats_return_latest(byc):
+
+    limit = 1
+    if "stats_number" in byc:
+        if byc["stats_number"] > 1:
+            limit = byc["stats_number"]
 
     db = byc[ "config" ][ "info_db" ]
     coll = byc[ "config" ][ "beacon_info_coll" ]
@@ -67,7 +72,7 @@ def dbstats_return_latest( limit=1, **byc ):
 
 def update_datasets_from_dbstats(byc):
 
-    dbstats = dbstats_return_latest( 1, **byc )
+    dbstats = dbstats_return_latest( byc )
 
     ds_with_counts = [ ]
     for ds_id in byc["dataset_definitions"].keys():

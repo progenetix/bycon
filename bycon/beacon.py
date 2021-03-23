@@ -28,7 +28,7 @@ def main():
 
 def beacon(path=""):
 
-    set_debug_state()
+    set_debug_state(debug=0)
     these_prefs = read_local_prefs( "beacon_services", dir_path )
 
     if path in these_prefs["service_names"]:
@@ -37,7 +37,7 @@ def beacon(path=""):
         service_name = rest_path_value("beacon")
 
     if service_name in these_prefs["service_names"]:    
-        f = service_name
+        f = these_prefs["service_names"][ service_name ]
         
         # dynamic package/function loading
         try:

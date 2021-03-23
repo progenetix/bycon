@@ -51,7 +51,7 @@ def dbstats():
 
     r = create_empty_service_response(byc)
 
-    ds_stats = dbstats_return_latest( byc["stats_number"], **byc )
+    ds_stats = dbstats_return_latest(byc)
 
     results = [ ]
     for stat in ds_stats:

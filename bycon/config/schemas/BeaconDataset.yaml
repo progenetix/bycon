@@ -1,0 +1,99 @@
+$schema: http://json-schema.org/draft-07/schema#
+$id: https://schemablocks.org/schemas/beacon-v2/BeaconDataset/2.0.0-draft.3
+meta:
+  contributors:
+    - label: ELIXIR Beacon project team
+      id: https://beacon-project.io/categories/people.html
+    - label: Jordi Rambla
+      id: github:@jrambla
+    - label: Sabele de la Torre
+      id: github:@sdelatorrep
+    - label: Mamana Mbiyavanga
+      id: github:@mamanambiya
+    - label: Michael Baudis
+      id: orcid:0000-0002-9903-4248
+  provenance:
+    - label: Beacon v2
+      id: https://github.com/ga4gh-beacon/specification-v2
+  used_by:
+    - label: Progenetix database schema (Beacon+ backend)
+      id: https://github.com/progenetix/schemas/
+  sb_status: community
+version: 2.0.0-draft.3
+title: BeaconDataset
+description: |
+  A dataset available in the beacon.
+type: object
+required:
+  - id
+  - name
+  - assemblyId
+  - createDateTime
+  - updateDateTime
+properties:
+  id:
+    type: string
+    description: |
+      Unique identifier of the dataset.
+  name:
+    type: string
+    description: |
+      Name of the dataset.
+  description:
+    type: string
+    description: |
+      Description of the dataset.
+  assemblyId:
+    description: |
+      Assembly identifier (GRC notation, e.g. `GRCh37`).
+    type: string
+    example: GRCh38
+  createDateTime:
+    type: string
+    description: |
+      The time the dataset was created (ISO 8601 format).
+    example: 2012-07-29 or 2017-01-17T20:33:40Z
+  updateDateTime:
+    type: string
+    description: |
+      The time the dataset was updated in (ISO 8601 format).
+    example: 2012-07-19 or 2017-01-17T20:33:40Z
+  version:
+    type: string
+    description: |
+      Version of the dataset.
+  variantCount:
+    type: integer
+    format: int64
+    description: |
+      Total number of variants in the dataset.
+    minimum: 0
+  callCount:
+    type: integer
+    format: int64
+    description: |
+      Total number of calls in the dataset.
+    minimum: 0
+  sampleCount:
+    type: integer
+    format: int64
+    description: |
+      Total number of samples in the dataset.
+    minimum: 0
+  externalUrl:
+    type: string
+    description: >-
+      URL to an external system providing more dataset information (RFC
+      3986 format).
+    example: http://example.org/wiki/Main_Page
+  info:
+    description: |
+      Additional unspecified metadata about the dataset.
+    type: object
+    example:
+      additionalInfoKey1:
+        - additionalInfoValue1
+        - additionalInfoValue2]
+      additionalInfoKey2: additionalInfoValue3
+  dataUseConditions:
+    $ref: DataUseConditions.yaml#/

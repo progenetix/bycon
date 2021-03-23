@@ -1,0 +1,157 @@
+---
+arraymap:
+    id: arraymap
+    name: arraymap
+    identifier: 'org.progenetix::arraymap'
+    description: "arraymap cancer CNV datasets"
+    variantCount: 1
+    assemblyId: 'GRCh38'
+    createDateTime: 2012-01-01
+    updateDateTime: 2019-10-01
+    info:
+      authorized: true
+      accessType: PUBLIC
+    handoverTypes:
+      - cnvhistogram
+      - biosamples
+      - biosampleslist
+      - phenopackets
+      - individualsdata
+      - variants
+      - variantslist
+      - callsetsvariants
+      - UCSClink
+      - queryaggregation
+
+progenetix:
+    id: progenetix
+    name: progenetix
+    identifier: 'org.progenetix::progenetix'
+    description: "Progenetix cancer genome profiles"
+    variantCount: 1
+    assemblyId: 'GRCh38'
+    createDateTime: 2001-01-01
+    updateDateTime: 2019-10-01
+    info:
+      authorized: true
+      accessType: PUBLIC
+      handoverTypes:
+        - cnvhistogram
+        - biosamples
+        - biosampleslist
+        - phenopackets
+        - individualsdata
+        - variants
+        - variantslist
+        - callsetsvariants
+        - UCSClink
+        - queryaggregation
+
+cellosaurus:
+    id: cellosaurus
+    name: cellosaurus
+    identifier: 'org.progenetix::cellosaurus'
+    description: "annotated cellosaurus cell line variants"
+    variantCount: 1
+    assemblyId: 'GRCh38'
+    createDateTime: 2020-06-01
+    updateDateTime: 2020-06-01
+    info:
+      authorized: true
+      accessType: PUBLIC
+      handoverTypes:
+        - biosamples
+        - phenopackets
+        - individualsdata
+        - variants
+        - variantslist
+        - callsetsvariants
+        - UCSClink
+
+1000genomesDRAGEN:
+    id: 1000genomesDRAGEN
+    name: 1000genomesDRAGEN
+    identifier: 'org.progenetix::1000genomesDRAGEN'
+    description: "1000 genomes DRAGEN analysis CNV dataset"
+    variantCount: 1
+    assemblyId: 'GRCh38'
+    createDateTime: 2021-01-29
+    updateDateTime: 2021-01-29
+    info:
+      authorized: true
+      accessType: PUBLIC
+      handoverTypes:
+        - biosamples
+        - variants
+        - variantslist
+        - callsetsvariants
+        - UCSClink
+
+dipg:
+    id: dipg
+    name: dipg
+    identifier: 'org.progenetix::dipg'
+    description: "DIPG data from publication Mackay et al., 2017"
+    variantCount: 1
+    assemblyId: 'GRCh38'
+    createDateTime: 2015-01-01
+    updateDateTime: 2017-10-01
+    info:
+      authorized: true
+      accessType: PUBLIC
+    handoverTypes:
+      - cnvhistogram
+      - biosamples
+      - phenopackets
+      - individualsdata
+      - variantsdata
+      - callsetsvariants
+      - UCSClink
+
+sars-cov2:
+    id: sars-cov2
+    name: sars-cov2
+    identifier: 'org.progenetix::sars-cov2'
+    description: "sars-cov2 variants"
+    variantCount: 1
+    assemblyId: 'GCA_009858895.3'
+    createDateTime: 2020-06-10
+    updateDateTime: 2020-06-10
+    info:
+      authorized: true
+      accessType: PUBLIC
+    handoverTypes:
+      - variantsdata
+      - UCSClink
+
+GRCh38:beacon_test2:2030-01-01:
+    id: 'GRCh38:beacon_test2:2030-01-01'
+    name: 'BeaconSpecTest2'
+    identifier: 'org.progenetix::test2'
+    description: "Beacon schema test"
+    variantCount: 1
+    assemblyId: 'GRCh38'
+    createDateTime: 2019-01-01
+    updateDateTime: 2019-10-01
+    info:
+      authorized: true
+      accessType: PUBLIC
+    handoverTypes:
+      - variantsdata
+      - UCSClink
+
+GRCh38:beacon_test:2030-01-01:
+    id: 'GRCh38:beacon_test:2030-01-01'
+    name: 'BeaconSpecTest'
+    identifier: 'org.progenetix::test'
+    description: "Beacon schema test"
+    variantCount: 1
+    createDateTime: 2019-01-01
+    updateDateTime: 2019-10-01
+    assemblyId: 'GRCh38'
+    info:
+      authorized: true
+      accessType: PUBLIC
+    handoverTypes:
+      - variantsdata
+      - UCSClink

@@ -12,6 +12,10 @@ service_lib_path = path.join( pkg_path, "services", "lib" )
 sys.path.append( service_lib_path )
 sys.path.append( pkg_path )
 from bycon.lib import *
+
+service_lib_path = path.join( pkg_path, "services", "lib" )
+sys.path.append( service_lib_path )
+
 from service_utils import *
 
 ################################################################################

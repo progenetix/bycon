@@ -7,6 +7,16 @@ from importlib import import_module
 # local
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
+
+bycon_path = path.join( pkg_path, "bycon" )
+sys.path.append( bycon_path )
+
+# services that have been moved need to be imported
+from info import info
+from beacon import beacon
+from variants import variants
+from filteringTerms import filteringTerms
+
 bycon_lib_path = path.join( pkg_path, "bycon", "lib" )
 sys.path.append( bycon_lib_path )
 from read_specs import read_local_prefs
@@ -30,16 +40,16 @@ def main():
 
 def services(service):
 
-    set_debug_state()
+    set_debug_state(debug=0)
     these_prefs = read_local_prefs( "services", dir_path )
 
-    if service in these_prefs["service_names"]:
-        service_name = service
+    if path in these_prefs["service_names"]:
+        service_name = path
     else:
-        service_name = rest_path_value("services")
+        service_name = rest_path_value("beacon")
 
     if service_name in these_prefs["service_names"]:    
-        f = service_name
+        f = these_prefs["service_names"][ service_name ]
         
         # dynamic package/function loading
         try:

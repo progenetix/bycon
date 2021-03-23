@@ -6,9 +6,13 @@ import re
 
 ################################################################################
 
-def set_debug_state():
+def set_debug_state(debug=0):
 
-    if environ.get('REQUEST_URI'):
+    if debug == 1:
+        cgitb.enable()
+        print('Content-Type: text')
+        print()
+    elif environ.get('REQUEST_URI'):
         if "debug=1" in environ.get('REQUEST_URI'):
             cgitb.enable()
             print('Content-Type: text')
@@ -28,6 +32,10 @@ def rest_path_value(key):
 
     url_comps = urlparse( environ.get('REQUEST_URI') )
     p_items = re.split(r'\/|\&', url_comps.path)
+
+    if "debug=1" in p_items:
+        p_items.remove("debug=1")
+
     i = 0
     f = ""
 
@@ -36,6 +44,8 @@ def rest_path_value(key):
         if len(p_items) > i:
             if p == key:
                 return p_items[ i ]
+        elif p == key:
+            return "root_path"
 
     return False
 

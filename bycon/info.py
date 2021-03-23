@@ -9,7 +9,7 @@ import sys, os, datetime
 dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response,cgi_break_on_errors
+from bycon.lib.cgi_utils import cgi_print_json_response
 from bycon.lib.read_specs import dbstats_return_latest
 from bycon.lib.parse_filters import select_dataset_ids, check_dataset_ids
 
@@ -23,7 +23,7 @@ from byconeer.lib.schemas_parser import *
 
 """podmd
 
-* <https://progenetix.org/beacon/datasets/>
+* <https://progenetix.org/beacon/info/>
 
 podmd"""
 
@@ -33,19 +33,15 @@ podmd"""
 
 def main():
 
-    datasets()
+    info()
     
 ################################################################################
 
-def datasets():
+def info():
 
     byc = initialize_service()
 
     parse_beacon_schema(byc)
-
-    select_dataset_ids(byc)
-    check_dataset_ids(byc)
-    _get_history_depth(byc)
 
     r = create_empty_service_response(byc)
 
@@ -53,46 +49,23 @@ def datasets():
         "api_version": byc["beacon"]["info"]["version"],
     })
 
-    ds_stats = dbstats_return_latest( byc )
+    stat = dbstats_return_latest(byc)[0]
 
-    results = [ ]
-    for stat in ds_stats:
-        r["response"]["info"].update({ "date": stat["date"] })
-        for ds_id, ds_vs in stat["datasets"].items():
-            if len(byc[ "dataset_ids" ]) > 0:
-                if not ds_id in byc[ "dataset_ids" ]:
-                    continue
-            if not ds_id in byc[ "dataset_definitions" ].keys():
-                continue
+    for ds_id, ds in byc["dataset_definitions"].items():
+        if ds_id in stat["datasets"]:
+            ds_vs = stat["datasets"][ds_id]
+            if "counts" in ds_vs:
+                if ds_vs["counts"]["variants"]:
+                    ds["callCount"] = ds_vs["counts"]["variants"]
+                if ds_vs["counts"]["variants_distinct"]:
+                    ds["variantCount"] = ds_vs["counts"]["variants_distinct"]
+                if ds_vs["counts"]["biosamples"]:
+                    ds["sampleCount"] = ds_vs["counts"]["biosamples"]
 
-            bds = byc["dataset_definitions"][ds_id]
-            bds.update( {
-                "updateDateTime": stat["date"],
-                "version": stat["date"],
-                "variantCount": ds_vs["counts"]["variants_distinct"],
-                "callCount": ds_vs["counts"]["variants"],
-                "sampleCount": ds_vs["counts"]["biosamples"]
-            } )
+        byc["beacon_info"]["datasets"].append(ds)
 
-            results.append( bds )
-
-    populate_service_response( r, results )
+    populate_service_response( r, [ byc["beacon_info"] ] )
     cgi_print_json_response( byc[ "form_data" ], r, 200 )
-
-################################################################################
-
-def _get_history_depth(byc):
-
-    if "statsNumber" in byc["form_data"]:
-        s_n = byc["form_data"].getvalue("statsNumber")
-        try:
-            s_n = int(s_n)
-        except:
-            pass
-        if type(s_n) == int:
-            if s_n > 0:
-                byc.update({"stats_number": s_n})
-    return byc
 
 ################################################################################
 ################################################################################
