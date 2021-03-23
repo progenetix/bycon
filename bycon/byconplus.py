@@ -80,26 +80,6 @@ def byconplus():
     beacon_get_endpoint(byc)
     parse_endpoints(byc)
 
-
-    # for s in ["biosamples","variants"]:
-    #     if s in byc["response_type"]:
-    #         mod = import_module(s)
-    #         serv = getattr(mod, s)
-    #         serv(s)
-
-    # exclude_keys = [ "format", "examples", "description", "example", "required" ]
-    # empty_meta = create_empty_instance( materialize(byc["beacon-schema"]["components"]["schemas"]["BiosampleResponse"]["properties"]["meta"]["properties"], exclude_keys = exclude_keys) )
-    # empty_resp = create_empty_instance( materialize(byc["beacon-schema"]["components"]["schemas"]["BiosampleResponse"]["properties"]["response"]["properties"], exclude_keys = exclude_keys) )
-    # print( json.dumps({ "meta": empty_meta, "response": empty_resp }, indent=4, sort_keys=True, default=str)+"\n")
-
-    # r = create_empty_service_response(byc)
-    # for p in ["api_version", "beacon_id"]: 
-    #     r["meta"].update({p: byc["beacon_info"][ snake_to_camel(p) ]})
-
-    # print( json.dumps(r, indent=4, sort_keys=True, default=str)+"\n")
-
-    # exit()
-
     select_dataset_ids(byc)
     check_dataset_ids(byc)
 

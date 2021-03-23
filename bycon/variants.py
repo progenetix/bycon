@@ -23,7 +23,7 @@ from service_utils import *
 ################################################################################
 
 """
-https://progenetix.test/services/variants/?datasetIds=progenetix&filters=NCIT:C7712&method=pgxseg&debug=1
+https://progenetix.test/beacon/variants/?datasetIds=progenetix&filters=NCIT:C7712&method=pgxseg&debug=1
 """
 
 def main():
@@ -56,6 +56,8 @@ def variants():
         "variant_count": len(vs),
         "biosample_count": byc["query_results"]["bs.id"][ "target_count" ]
     })
+
+    ############################################################################
 
     if "pgxseg" in byc["method"]:
         export_pgxseg_download(ds_id, r, vs, byc)

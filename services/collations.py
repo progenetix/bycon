@@ -11,11 +11,9 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-from bycon.lib import *
-from lib import *
-
-"""podmd
-podmd"""
+from bycon.lib.cgi_utils import *
+from bycon.lib.parse_filters import *
+from lib.service_utils import *
 
 ################################################################################
 ################################################################################
@@ -67,7 +65,7 @@ def collations():
                 for k in d_k:
                     # TODO: integer format defined in config?
                     if k in subset.keys():
-                        if k == "count" or k == "code_matches":
+                        if k in byc["these_prefs"]["integer_keys"]:
                             if k in s_s[ i_d ]:
                                 s_s[ i_d ][ k ] += int(subset[ k ])
                             else:
@@ -76,7 +74,6 @@ def collations():
                             s_s[ i_d ][ k ] = subset[ k ]
                     else:
                         continue
-                        # s_s[ i_d ][ k ] = None
 
     mongo_client.close( )
 

@@ -17,6 +17,9 @@ meta:
     Collation: https://progenetix.org/services/schemas/Collation/
   info: >
     The main collations payload can be accessed in `response.results`.
+integer_keys:
+  - count
+  - code_matches
 methods:
   children:
     - id

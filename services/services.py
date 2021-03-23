@@ -42,14 +42,15 @@ def main():
 def services(service):
 
     set_debug_state(debug=0)
+
     these_prefs = read_local_prefs( "service_mappings", dir_path )
 
-    s_name = path.splitext(path.basename(__file__))[0]
+    rest_base_name = "services"
 
     if path in these_prefs["service_names"]:
         service_name = path
     else:
-        service_name = rest_path_value(s_name)
+        service_name = rest_path_value(rest_base_name)
 
     if service_name in these_prefs["service_names"]:    
         f = these_prefs["service_names"][ service_name ]
