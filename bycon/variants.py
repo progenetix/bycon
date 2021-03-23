@@ -8,15 +8,25 @@ import sys, datetime, argparse
 # local
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
-service_lib_path = path.join( pkg_path, "services", "lib" )
-sys.path.append( service_lib_path )
-sys.path.append( pkg_path )
-from bycon.lib import *
+
+bycon_lib_path = path.join( pkg_path, "bycon", "lib" )
+sys.path.append( bycon_lib_path )
+
+from cgi_utils import cgi_break_on_errors, cgi_print_json_response
+from variant_responses import export_pgxseg_download, export_variants_download, retrieve_variants
+from handover_generation import query_results_save_handovers
+from query_generation import initialize_beacon_queries
+from query_execution import execute_bycon_queries
 
 service_lib_path = path.join( pkg_path, "services", "lib" )
 sys.path.append( service_lib_path )
 
-from service_utils import *
+from service_utils import create_empty_service_response, initialize_service, populate_service_response, response_add_parameter, response_collect_errors
+
+byconeer_lib_path = path.join( pkg_path, "byconeer", "lib" )
+sys.path.append( byconeer_lib_path )
+
+from schemas_parser import parse_beacon_schema
 
 ################################################################################
 ################################################################################
