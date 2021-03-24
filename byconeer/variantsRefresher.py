@@ -78,7 +78,8 @@ def variants_refresher():
         no =  var_coll.estimated_document_count()
         bar = Bar("{} vars".format(ds_id), max = no, suffix='%(percent)d%%'+" of "+str(no) )
         for v in var_coll.find({}):
-            update_obj = { }
+            update_obj = { "id": str(v["_id"]) }
+
             """
  
             """

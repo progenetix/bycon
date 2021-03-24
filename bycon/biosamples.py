@@ -72,9 +72,6 @@ def biosamples():
     execute_bycon_queries( ds_id, byc )
     query_results_save_handovers(byc)
 
-    # if "vs._id" in byc["query_results"]:
-    #     print(byc["query_results"]["vs._id"][ "target_count" ])
-
     access_id = byc["query_results"]["bs._id"][ "id" ]
 
     # TODO: 

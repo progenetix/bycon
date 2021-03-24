@@ -29,6 +29,10 @@ description: >
   sequencing or a protein fraction from a gradient centrifugation. Several
   instances (e.g. technical replicates) or types of experiments (e.g.
   genomic array as well as RNA-seq experiments) may refer to the same Biosample.
+required:
+  - id
+  - biocharacteristics
+  - externalReferences
 properties:
   id:
     type: string

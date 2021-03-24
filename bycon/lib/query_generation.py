@@ -32,8 +32,10 @@ def generate_queries(byc):
     if not "queries" in byc:
         byc.update({"queries": { }})
 
+    update_queries_from_path_id( byc )
     update_queries_from_filters( byc )
     update_queries_from_hoid( byc)
+    # print(byc["queries"])
     update_queries_from_variants( byc )
     update_queries_from_endpoints( byc )
     update_queries_from_geoquery( byc )
@@ -56,6 +58,26 @@ def purge_empty_queries( byc ):
 
 ################################################################################
 
+def update_queries_from_path_id( byc ):
+
+    if not environ.get('REQUEST_URI'):
+        return byc
+
+    url_comps = urlparse( environ.get('REQUEST_URI') )
+
+    if "service_name" in byc:
+        rest_base_name = byc["service_name"]
+        if rest_base_name in ["variants", "callsets", "biosamples", "individuals"]:
+            s_id = rest_path_value(rest_base_name)
+            if s_id:
+                if not "root" in s_id:
+                    byc["queries"].update(
+                        { rest_base_name: { "id": s_id } } )
+    return byc
+
+################################################################################
+
+
 def update_queries_from_hoid( byc):
 
     if "accessid" in byc["form_data"]:
@@ -64,6 +86,7 @@ def update_queries_from_hoid( byc):
         ho_db = ho_client[ byc["config"]["info_db"] ]
         ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
         h_o = ho_coll.find_one( { "id": accessid } )
+
         # accessid overrides ... ?
         if h_o:
             t_k = h_o["target_key"]

@@ -31,6 +31,7 @@ def initialize_service(service="NA"):
         service = frm.function
 
     byc =  {
+        "service_name": path.splitext(path.basename(mod.__file__))[0],
         "pkg_path": pkg_path,
         "form_data": cgi_parse_query(),
         "these_prefs": read_local_prefs( service, sub_path ),
