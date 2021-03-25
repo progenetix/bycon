@@ -11,6 +11,7 @@ meta:
     The main variants payload can be accessed in `response.results`.
 bycon_definition_files:
   - config
+  - beacon_info
   - dataset_definitions
   - filter_definitions
   - geoloc_definitions

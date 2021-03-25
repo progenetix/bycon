@@ -10,7 +10,7 @@ dir_path = path.join( lib_path, pardir )
 pkg_path = path.join( dir_path, pardir )
 schema_path = path.join( pkg_path, "bycon" )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import cgi_parse_query,form_return_listvalue
+from bycon.lib.cgi_utils import *
 from bycon.lib.read_specs import read_bycon_configs_by_name,read_local_prefs
 from byconeer.lib.schemas_parser import *
 
@@ -69,9 +69,10 @@ def create_empty_service_response(byc):
     	for k, v in byc["these_prefs"]["meta"].items():
     		r["meta"].update( { k: v } )
 
-    if "beacon" in byc:
+    if "beacon_info" in byc:
         try:
-            r["meta"].update({ "api_version": byc["beacon"]["info"]["version"] })
+            for i_k in ["api_version", "beacon_id", "create_date_time", "update_date_time"]:
+                r["meta"].update({ i_k: byc["beacon_info"][ i_k ] })
         except:
             pass
 
@@ -112,15 +113,12 @@ def response_collect_errors(r, byc):
       
 ################################################################################
 
-def response_add_error(r, code, message):
+def response_add_error(r, code=200, message=""):
 
-    if not code:
-        return r
-
-    r["response"]["error"].update( { "error_code": code } )
-
-    if message:
-        r["response"]["error"].update( { "error_message": message } )
+    r["response"]["error"].update( {
+        "error_code": code,
+        "error_message": message
+    } )
 
     return r
 
@@ -177,14 +175,98 @@ def response_map_results(data, byc):
 
 ################################################################################
 
-def populate_service_response(r, results):
+def populate_service_header(r, results):
 
     if isinstance(results, list):
         r_no = len( results )
         r["response"].update({"numTotalResults": r_no })
         if r_no > 0:
             r["response"].update({"exists": True })
-    
+            response_add_error(r, 200)
+
+    return r
+
+
+################################################################################
+
+
+def populate_service_response(r, results):
+
+    populate_service_header(r, results)
     r["response"].update({"results": results })
 
     return r
+
+################################################################################
+
+def create_pgxseg_header(ds_id, r, byc):
+
+    p_h = []
+
+    mongo_client = MongoClient()
+    bs_coll = mongo_client[ ds_id ][ "biosamples" ]
+
+    if not "pgxseg" in byc["method"]:
+        return p_h
+
+    for d in ["id", "assemblyId"]:
+        p_h.append("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
+    for m in ["variant_count", "biosample_count"]:
+        p_h.append("#meta=>{}={}".format(m, r["response"]["info"][m]))
+    if "filters" in r["meta"]["received_request"]:
+        p_h.append("#meta=>filters="+','.join(r["meta"]["received_request"]["filters"]))
+
+    for bs_id in byc["query_results"]["bs.id"][ "target_values" ]:
+        bs = bs_coll.find_one( { "id": bs_id } )
+        h_line = "#sample=>sample_id={}".format(bs_id)
+        for b_c in bs[ "biocharacteristics" ]:
+            if "NCIT:C" in b_c["id"]:
+                h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, b_c["id"], b_c["label"], b_c["id"], b_c["label"])
+        p_h.append(h_line)
+    p_h.append("{}\t{}\t{}\t{}\t{}\t{}".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type" ) )
+
+    return p_h
+
+################################################################################
+
+def print_variants_json(vs):
+
+    l_i = len(vs) - 1
+    for i,v in enumerate(vs):
+        if i == l_i:
+            print(json.dumps(v, indent=None, sort_keys=False, default=str, separators=(',', ':')), end = '')
+        else:
+            print(json.dumps(v, indent=None, sort_keys=False, default=str, separators=(',', ':')), end = ',')
+
+################################################################################
+
+def export_variants_download(vs, r, byc):
+
+    populate_service_header(r, vs)
+    open_json_streaming(r, "variants.json")
+    print_variants_json(vs)
+    close_json_streaming()
+
+################################################################################
+
+def print_variants_pgxseg(vs):
+
+    for v in vs:
+        if not "log2" in v:
+            v["log2"] = "."
+        print("{}\t{}\t{}\t{}\t{}\t{}".format(v["biosample_id"], v["reference_name"], v["start"], v["end"], v["log2"], v["variant_type"]) )
+
+################################################################################
+
+def export_pgxseg_download(ds_id, r, vs, byc):
+
+    p_h = create_pgxseg_header(ds_id, r, byc)
+
+    open_text_streaming()
+    for h_l in p_h:
+        print(h_l)
+    print_variants_pgxseg(vs)
+    close_text_streaming()
+
+################################################################################
+

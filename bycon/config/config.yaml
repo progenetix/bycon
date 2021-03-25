@@ -14,10 +14,10 @@ collections:
   - variants
   - collations
   - publications
+info_db: progenetix
 collations_coll: collations
 collations_source: biosamples
 ontologymaps_coll: ontologymaps
-info_db: progenetix
 beacon_info_coll: "beaconinfo"
 beacon_info_count_labels:
   biosamples: "sampleCount"

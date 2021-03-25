@@ -50,10 +50,6 @@ def datasets():
 
     r = create_empty_service_response(byc)
 
-    r["meta"].update({
-        "api_version": byc["beacon"]["info"]["version"],
-    })
-
     ds_stats = dbstats_return_latest( byc )
 
     results = [ ]

@@ -45,22 +45,15 @@ def info():
 
     r = create_empty_service_response(byc)
 
-    r["meta"].update({
-        "api_version": byc["beacon"]["info"]["version"],
-    })
-
     stat = dbstats_return_latest(byc)[0]
 
     for ds_id, ds in byc["dataset_definitions"].items():
         if ds_id in stat["datasets"]:
             ds_vs = stat["datasets"][ds_id]
             if "counts" in ds_vs:
-                if ds_vs["counts"]["variants"]:
-                    ds["callCount"] = ds_vs["counts"]["variants"]
-                if ds_vs["counts"]["variants_distinct"]:
-                    ds["variantCount"] = ds_vs["counts"]["variants_distinct"]
-                if ds_vs["counts"]["biosamples"]:
-                    ds["sampleCount"] = ds_vs["counts"]["biosamples"]
+                for c_k, b_k in byc["config"]["beacon_info_count_labels"].items():
+                    if c_k in ds_vs["counts"]:
+                        ds[ b_k ] = ds_vs["counts"][ c_k ]
 
         byc["beacon_info"]["datasets"].append(ds)
 

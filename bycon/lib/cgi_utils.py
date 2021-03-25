@@ -134,6 +134,10 @@ def cgi_print_json_response(form_data, response, status_code):
     if "simple" in r_f:
         response = cgi_simplify_response(response)
 
+    if "response" in response:
+        if "error" in response["response"]:
+            response["response"]["error"].update({"error_code": status_code })
+
     print('Content-Type: application/json')
     print('status:'+str(status_code))
     print()
@@ -150,19 +154,20 @@ def open_json_streaming(response, filename="data.json"):
     print('Content-Disposition: attachment; filename="{}"'.format(filename))
     print('status: 200')
     print()
-    print("{")
-    print('"meta":')
-
-    print(json.dumps(response["meta"], indent=None, sort_keys=True, default=str)+",")
-    print('"response": {')
-    print('"results": [')
+    print('{"meta":', end = '')
+    print(json.dumps(response["meta"], indent=None, sort_keys=True, default=str), end = ",")
+    print('"response":{', end = '')
+    for r_k, r_v in response["response"].items():
+        if "results" in r_k:
+            continue
+        print('"'+r_k+'":', end = '')
+        print(json.dumps(r_v, indent=None, sort_keys=True, default=str), end = ",")
+    print('"results":[', end = "")
 
 ################################################################################
 
 def close_json_streaming():
-    print("]")
-    print("}")
-    print("}")
+    print(']}}')
     exit()
 
 ################################################################################

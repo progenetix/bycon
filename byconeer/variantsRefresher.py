@@ -100,7 +100,7 @@ def variants_refresher():
                         update_obj.update( { "error.start_end": 1 } )
                 else:
                     v_no_type += 1
-                    update_obj.update( { "error.variant_type": v["variant_type"] } )
+                    # update_obj.update( { "error.variant_type": v["variant_type"] } )
             else:
                 v_no_type += 1
                 print("!!! no type".format(v["_id"]))

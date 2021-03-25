@@ -20,7 +20,7 @@ progenetix:
         - cnvhistogram
         - biosamples
         - biosampleslist
-        - phenopackets
+        # - phenopackets
         - individualsdata
         - variants
         - variantslist
@@ -45,7 +45,7 @@ cellosaurus:
       accessType: PUBLIC
       handoverTypes:
         - biosamples
-        - phenopackets
+        # - phenopackets
         - individualsdata
         - variants
         - variantslist

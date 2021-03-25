@@ -1,7 +1,7 @@
 ---
-id: 'org.progenetix.beacon'
+beacon_id: 'org.progenetix.beacon'
 name: 'Progenetix Cancer Genomics Beacon+'
-apiVersion: '2.0.0-draft.3'
+api_version: '2.0.0-draft.3'
 environment: dev
 organization:
   id: "org.baudisgroup.info"
@@ -19,8 +19,8 @@ description: >
 version: v2
 welcomeUrl: "https://progenetix.org/beacon-plus/search"
 alternativeUrl: "https://progenetix.org/biosamples/search/"
-createDateTime: 2015-11-13
-updateDateTime: 2021-03-23
+create_date_time: 2015-11-13
+update_date_time: 2021-03-23
 datasets: [ ] # populated from script
 info:
   sampleAlleleRequests:

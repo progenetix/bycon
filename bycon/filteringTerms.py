@@ -57,10 +57,6 @@ def filtering_terms():
     
     r = create_empty_service_response(byc)
 
-    r["meta"].update({
-        "api_version": byc["beacon"]["info"]["version"],
-    })
-
     results = return_filtering_terms(byc)
 
     populate_service_response( r, results )
