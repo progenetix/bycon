@@ -97,11 +97,7 @@ def byconplus():
     collect_dataset_responses(byc)
 
     create_beacon_response(byc)    
-    cgi_print_json_response(
-        byc["form_data"],
-        create_beacon_response(byc),
-        200
-    )
+    cgi_print_json_response( byc, create_beacon_response(byc), 200 )
 
 ################################################################################
 ################################################################################

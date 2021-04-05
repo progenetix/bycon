@@ -62,14 +62,9 @@ def variants():
 
     vs = retrieve_variants(ds_id, r, byc)
 
-    r["response"]["info"].update({
-        "variant_count": len(vs),
-        "biosample_count": byc["query_results"]["bs.id"][ "target_count" ]
-    })
-
     ############################################################################
 
-    if "pgxseg" in byc["method"]:
+    if "callsetspgxseg" in byc["method"]:
         export_pgxseg_download(ds_id, r, vs, byc)
 
     if "callsetsvariants" in byc["method"]:
@@ -78,8 +73,12 @@ def variants():
     ############################################################################
 
     query_results_save_handovers(byc)
-    populate_service_response(r, vs)
-    cgi_print_json_response( byc["form_data"], r, 200 )
+
+    if "pgxseg" in byc["method"]:
+        export_pgxseg_download(ds_id, r, vs, byc)
+
+    populate_service_response( byc, r, vs)
+    cgi_print_json_response( byc, r, 200 )
 
 ################################################################################
 ################################################################################

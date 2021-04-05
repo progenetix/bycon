@@ -27,7 +27,7 @@ from read_specs import update_datasets_from_dbstats
 service_lib_path = path.join( pkg_path, "services", "lib" )
 sys.path.append( service_lib_path )
 
-from service_utils import initialize_service, create_empty_service_response,  response_collect_errors, response_add_parameter, populate_service_response, response_map_results
+from service_utils import initialize_service, create_empty_service_response,  response_collect_errors, response_add_parameter, populate_service_response,response_map_results
 
 from byconeer.lib.schemas_parser import *
 
@@ -85,8 +85,9 @@ def biosamples():
 
     cgi_break_on_errors(r, byc)
 
-    populate_service_response(r, response_map_results(h_o_d, byc))
-    cgi_print_json_response( byc["form_data"], r, 200 )
+    populate_service_response( byc, r, response_map_results(h_o_d, byc))
+
+    cgi_print_json_response( byc, r, 200 )
 
 ################################################################################
 ################################################################################

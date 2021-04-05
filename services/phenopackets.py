@@ -119,8 +119,8 @@ def phenopackets():
 
         results.append( pxf )
 
-    populate_service_response(r, results)
-    cgi_print_json_response( byc["form_data"], r, 200 )
+    populate_service_response( byc, r, results)
+    cgi_print_json_response( byc, r, 200 )
 
 ################################################################################
 ################################################################################

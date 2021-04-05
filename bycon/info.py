@@ -10,7 +10,7 @@ dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import cgi_print_json_response
-from bycon.lib.read_specs import dbstats_return_latest
+from bycon.lib.read_specs import datasets_update_latest_stats
 from bycon.lib.parse_filters import select_dataset_ids, check_dataset_ids
 
 service_lib_path = path.join( pkg_path, "services", "lib" )
@@ -45,20 +45,10 @@ def info():
 
     r = create_empty_service_response(byc)
 
-    stat = dbstats_return_latest(byc)[0]
+    byc["beacon_info"].update({"datasets": datasets_update_latest_stats(byc) })
 
-    for ds_id, ds in byc["dataset_definitions"].items():
-        if ds_id in stat["datasets"]:
-            ds_vs = stat["datasets"][ds_id]
-            if "counts" in ds_vs:
-                for c_k, b_k in byc["config"]["beacon_info_count_labels"].items():
-                    if c_k in ds_vs["counts"]:
-                        ds[ b_k ] = ds_vs["counts"][ c_k ]
-
-        byc["beacon_info"]["datasets"].append(ds)
-
-    populate_service_response( r, [ byc["beacon_info"] ] )
-    cgi_print_json_response( byc[ "form_data" ], r, 200 )
+    populate_service_response( byc, r, [ byc["beacon_info"] ] )
+    cgi_print_json_response( byc, r, 200 )
 
 ################################################################################
 ################################################################################

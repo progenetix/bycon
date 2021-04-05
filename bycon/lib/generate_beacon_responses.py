@@ -34,11 +34,11 @@ def beacon_respond_with_errors( byc ):
 
     if not byc[ "queries" ].keys():
       byc["service_info"].update( { "error": { "error_code": 422, "error_message": "No (correct) query parameters were provided." } } )
-      cgi_print_json_response( byc["form_data"], byc["service_info"], 422)
+      cgi_print_json_response( byc, byc["service_info"], 422)
 
     if len(byc[ "dataset_ids" ]) < 1:
       byc["service_info"].update( { "error": { "error_code": 422, "error_message": "No `datasetIds` parameter provided." } } )
-      cgi_print_json_response( byc["form_data"], byc["service_info"], 422)
+      cgi_print_json_response( byc, byc["service_info"], 422)
 
 ################################################################################
 
@@ -56,7 +56,7 @@ def respond_empty_request( byc ):
             return()
 
     # current default response
-    cgi_print_json_response( byc["form_data"], byc["service_info"], 200 )
+    cgi_print_json_response( byc, byc["service_info"], 200 )
 
 ################################################################################
 
@@ -69,10 +69,10 @@ def respond_get_datasetids_request( byc ):
         return()
 
     dataset_ids = [ ]
-    for ds_id in byc["dbstats"]["datasets"].keys():
+    for ds_id in byc["beacon_info"]["datasets"].keys():
         if ds_id in byc["config"][ "dataset_ids" ]:
             dataset_ids.append( { "id": ds_id, "name": byc["dataset_definitions"][ds_id]["name"] } )
-    cgi_print_json_response( byc["form_data"], { "datasets": dataset_ids }, 200 )
+    cgi_print_json_response( byc, { "datasets": dataset_ids }, 200 )
 
 ################################################################################
 
@@ -84,7 +84,7 @@ def respond_service_info_request( byc ):
     if not "service-info" in environ.get('REQUEST_URI'):
         return()
 
-    cgi_print_json_response( byc["form_data"], byc["service_info"], 200 )
+    cgi_print_json_response( byc, byc["service_info"], 200 )
 
 ################################################################################
 
@@ -105,16 +105,16 @@ def respond_filtering_terms_request( byc ):
     # for the general filter response, filters from *all* datasets are
     # provided
     # if only one => counts are added back
-    dss = byc["dbstats"]["datasets"].keys()
+    dss = byc["beacon_info"]["datasets"].keys()
     if len(byc[ "dataset_ids" ]) == 1:
         ds_id = byc[ "dataset_ids" ][0]
-        if ds_id in byc["dbstats"]["datasets"]:
+        if ds_id in byc["beacon_info"]["datasets"]:
             dss = [ ds_id ]
             # fks.append("count")
             resp.update( { "datasetId": ds_id } )
 
     for ds_id in dss:
-        ds = byc[ "dbstats" ][ "datasets" ][ ds_id ]
+        ds = byc[ "beacon_info" ][ "datasets" ][ ds_id ]
         if "filtering_terms" in ds:
             for f_t in ds[ "filtering_terms" ]:
                 f_id = f_t[ "id" ]
@@ -135,7 +135,7 @@ def respond_filtering_terms_request( byc ):
             ftl.append( fts[key] )
 
     resp.update( { "filteringTerms": ftl } )
-    cgi_print_json_response( byc["form_data"], resp, 200 )
+    cgi_print_json_response( byc, resp, 200 )
 
 ################################################################################
 
@@ -146,15 +146,15 @@ def return_filtering_terms( byc ):
     # for the general filter response, filters from *all* datasets are
     # provided
     # if only one => counts are added back
-    dss = byc["dbstats"]["datasets"].keys()
+    dss = byc["beacon_info"]["datasets"].keys()
 
     if len(byc[ "dataset_ids" ]) == 1:
         ds_id = byc[ "dataset_ids" ][0]
-        if ds_id in byc["dbstats"]["datasets"]:
+        if ds_id in byc["beacon_info"]["datasets"]:
             dss = [ ds_id ]
 
     for ds_id in dss:
-        ds = byc[ "dbstats" ][ "datasets" ][ ds_id ]
+        ds = byc[ "beacon_info" ][ "datasets" ][ ds_id ]
         if "filtering_terms" in ds:
             for f_t in ds[ "filtering_terms" ]:
                 f_id = f_t[ "id" ]
@@ -230,9 +230,11 @@ def create_dataset_response(ds_id, byc):
             "callCount": byc[ "query_results" ][ "vs._id" ][ "target_count" ]
         } )
         if dataset_allele_resp[ "variantCount" ] > 0:
-            dataset_allele_resp.update( {
-                "frequency": float("%.6f" % (dataset_allele_resp[ "callCount" ] / byc[ "dbstats" ]["datasets"][ds_id][ "counts" ][ "callsets" ] ) )
-            } )
+            for b_i_ds in byc[ "beacon_info" ]["datasets"]:
+                if ds_id == b_i_ds["id"]:
+                    dataset_allele_resp.update({
+                        "frequency": float("%.6f" % (dataset_allele_resp[ "callCount" ] / b_i_ds[ "callCount"] ) )
+                        } )
             dataset_allele_resp[ "info" ].update( { "variants": byc[ "query_results" ][ "vs.digest" ][ "target_values" ] })
 
     for this_c in [ "variantCount", "callCount", "sampleCount" ]:

@@ -1,6 +1,7 @@
 from os import path, pardir
 import inspect
 import json
+from pymongo import MongoClient
 from bson import json_util
 import sys
 
@@ -12,6 +13,7 @@ schema_path = path.join( pkg_path, "bycon" )
 sys.path.append( pkg_path )
 from bycon.lib.cgi_utils import *
 from bycon.lib.read_specs import read_bycon_configs_by_name,read_local_prefs
+from bycon.lib.handover_generation import dataset_response_add_handovers
 from byconeer.lib.schemas_parser import *
 
 ################################################################################
@@ -186,13 +188,48 @@ def populate_service_header(r, results):
 
     return r
 
+################################################################################
+
+def populate_service_response_handovers(r, byc):
+
+    if not "query_results" in byc:
+        return r
+    if not "dataset_ids" in byc:
+        return r
+
+    r["response"].update({ "results_handover": dataset_response_add_handovers(byc[ "dataset_ids" ][ 0 ], **byc) })
+
+    return r
+
+################################################################################
+
+def populate_service_response_counts(r, byc):
+
+    if not "query_results" in byc:
+        return r
+    if not "dataset_ids" in byc:
+        return r
+
+    counts = { }
+
+    for c, c_d in byc["config"]["beacon_counts"].items():
+
+        if c_d["h->o_key"] in byc["query_results"]:
+            counts[ c ] = byc["query_results"][ c_d["h->o_key"] ]["target_count"]
+
+    r["response"]["info"].update({ "counts": counts })
+
+    return r
+
 
 ################################################################################
 
 
-def populate_service_response(r, results):
+def populate_service_response( byc, r, results):
 
     populate_service_header(r, results)
+    populate_service_response_handovers(r, byc)
+    populate_service_response_counts(r, byc)
     r["response"].update({"results": results })
 
     return r
@@ -252,8 +289,18 @@ def export_variants_download(vs, r, byc):
 def print_variants_pgxseg(vs):
 
     for v in vs:
+        if not "variant_type" in v:
+            continue
         if not "log2" in v:
             v["log2"] = "."
+        try:
+            v["start"] = int(v["start"])
+        except:
+            v["start"] = "."
+        try:
+            v["end"] = int(v["end"])
+        except:
+            v["end"] = "."
         print("{}\t{}\t{}\t{}\t{}\t{}".format(v["biosample_id"], v["reference_name"], v["start"], v["end"], v["log2"], v["variant_type"]) )
 
 ################################################################################

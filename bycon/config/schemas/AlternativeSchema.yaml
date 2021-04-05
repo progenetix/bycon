@@ -1,5 +1,5 @@
 $schema: http://json-schema.org/draft-07/schema#
-$id: https://schemablocks.org/schemas/beacon-v2/DataUseConditions/2.0.0-draft.3
+$id: https://schemablocks.org/schemas/beacon-v2/AlternativeSchema/2.0.0-draft.3
 meta:
   contributors:
     - label: ELIXIR Beacon project team
@@ -20,17 +20,8 @@ meta:
       id: https://github.com/progenetix/schemas/
   sb_status: community
 version: 2.0.0-draft.3
-title: DataUseConditions
-type: object
-required:
-  - consentCodeDataUse
-  - adamDataUse
+title: AlternativeSchema
 description: |
-  Data use conditions ruling this dataset.
-properties:
-  consentCodeDataUse:
-    $ref: >-
-      https://raw.githubusercontent.com/ga4gh/ga4gh-consent-policy/v1.1.0/consent_code.yaml#/components/schemas/ConsentCodeDataUse
-    adamDataUse:
-    $ref: >-
-      https://raw.githubusercontent.com/ga4gh/ADA-M/v1.0.1/adam.yaml#/components/schemas/Adam.yaml#/
+  Alternative schema for describing this object.
+type: object
+

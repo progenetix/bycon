@@ -70,22 +70,34 @@ def dbstats_return_latest(byc):
 
 ################################################################################
 
+def datasets_update_latest_stats(byc):
+
+    datasets = [ ]
+
+    stat = dbstats_return_latest(byc)[0]
+
+    for ds_id, ds in byc["dataset_definitions"].items():
+        if "dataset_ids" in byc:
+            if len(byc[ "dataset_ids" ]) > 0:
+                if not ds_id in byc[ "dataset_ids" ]:
+                    continue
+        if ds_id in stat["datasets"].keys():
+            ds_vs = stat["datasets"][ds_id]
+            if "counts" in ds_vs:
+                for c, c_d in byc["config"]["beacon_counts"].items():
+                    if c_d["info_key"] in ds_vs["counts"]:
+                        ds.update({ c: ds_vs["counts"][ c_d["info_key"] ] })
+
+        datasets.append( ds )
+
+    return datasets
+
+################################################################################
+
 def update_datasets_from_dbstats(byc):
 
-    dbstats = dbstats_return_latest( byc )
+    ds_with_counts = datasets_update_latest_stats(byc)
 
-    ds_with_counts = [ ]
-    for ds_id in byc["dataset_definitions"].keys():
-        ds = byc["dataset_definitions"][ds_id]
-        if ds_id in dbstats[0]["datasets"]:
-            ds_db = dbstats[0]["datasets"][ ds_id ]
-            for k, l in byc["config"]["beacon_info_count_labels"].items():
-                if "counts" in ds_db:
-                    if k in ds_db["counts"]:
-                        ds[ l ] = ds_db["counts"][ k ]
-        ds_with_counts.append(ds)
-
-    byc.update({ "dbstats": dbstats[0] })
     if not "beacon_info" in byc:
         byc["beacon_info"] = { }
     byc["beacon_info"].update( { "datasets": ds_with_counts } )

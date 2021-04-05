@@ -48,13 +48,25 @@ h->o_types:
     label: "Found Variants"
     description: "retrieve variants matched by the query"
     h->o_key: 'vs._id'
-    script_path_web: '/services/variants'
+    script_path_web: '/beacon/variants'
+  pgxseg:
+    id: 'pgx:handover:pgxseg'
+    label: "Found Variants as .pgxseg"
+    description: "retrieve variants matched by the query as .pgxseg download"
+    h->o_key: 'vs._id'
+    script_path_web: '/beacon/variants'
   callsetsvariants:
     id: 'pgx:handover:callsetsvariants'
     label: "All Sample Variants (potentially huge)"
-    description: "Export all variants of matched callsets - potentially huge dataset..."
-    h->o_key: 'cs._id'
-    script_path_web: '/services/variants'
+    description: "Download all variants of matched samples - potentially huge dataset..."
+    h->o_key: 'bs._id'
+    script_path_web: '/beacon/variants'
+  callsetspgxseg:
+    id: 'pgx:handover:callsetspgxseg'
+    label: "All Sample Variants as .pgxseg"
+    description: "Download all variants of matched samples - potentially huge dataset..."
+    h->o_key: 'bs._id'
+    script_path_web: '/beacon/variants'
   UCSClink:   
     id: 'pgx:handover:bedfile2ucsc'
     label: "Variants in UCSC"

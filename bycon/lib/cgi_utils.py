@@ -94,7 +94,7 @@ def cgi_break_on_errors(r, byc):
     if "response" in r and "form_data" in byc:
         if "error" in r["response"]:
             if r["response"]["error"]["error_code"] > 200:
-                cgi_print_json_response( byc["form_data"], r, r["response"]["error"]["error_code"] )
+                cgi_print_json_response( byc, r, r["response"]["error"]["error_code"] )
 
 ################################################################################
 
@@ -109,8 +109,8 @@ def cgi_print_json_response(form_data, response, status_code):
         r_f = form_data.getvalue("responseFormat")
 
     # TODO: fix callback ...
-    if "callback" in form_data:
-        response = form_data.getvalue("callback")+'('+json.dumps(response, default=str)+")\n"
+    # if "callback" in form_data:
+    #     response = form_data.getvalue("callback")+'('+json.dumps(response, default=str)+")\n"
         # cgi_print_text_response(form_data, data, status_code)
 
     # This is a simple "de-jsonify", intended to be used for already

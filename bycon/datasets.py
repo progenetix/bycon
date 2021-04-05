@@ -11,7 +11,7 @@ pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
 from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response,cgi_break_on_errors
-from bycon.lib.read_specs import dbstats_return_latest
+from bycon.lib.read_specs import datasets_update_latest_stats
 from bycon.lib.parse_filters import select_dataset_ids, check_dataset_ids
 
 service_lib_path = path.join( pkg_path, "services", "lib" )
@@ -50,31 +50,10 @@ def datasets():
 
     r = create_empty_service_response(byc)
 
-    ds_stats = dbstats_return_latest( byc )
+    results = datasets_update_latest_stats(byc)
 
-    results = [ ]
-    for stat in ds_stats:
-        r["response"]["info"].update({ "date": stat["date"] })
-        for ds_id, ds_vs in stat["datasets"].items():
-            if len(byc[ "dataset_ids" ]) > 0:
-                if not ds_id in byc[ "dataset_ids" ]:
-                    continue
-            if not ds_id in byc[ "dataset_definitions" ].keys():
-                continue
-
-            bds = byc["dataset_definitions"][ds_id]
-            bds.update( {
-                "updateDateTime": stat["date"],
-                "version": stat["date"],
-                "variantCount": ds_vs["counts"]["variants_distinct"],
-                "callCount": ds_vs["counts"]["variants"],
-                "sampleCount": ds_vs["counts"]["biosamples"]
-            } )
-
-            results.append( bds )
-
-    populate_service_response( r, results )
-    cgi_print_json_response( byc[ "form_data" ], r, 200 )
+    populate_service_response( byc, r, results )
+    cgi_print_json_response( byc, r, 200 )
 
 ################################################################################
 

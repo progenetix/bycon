@@ -25,6 +25,8 @@ progenetix:
         - variants
         - variantslist
         - callsetsvariants
+        - callsetspgxseg
+        - pgxseg
         - UCSClink
         - queryaggregation
 cellosaurus:
@@ -72,5 +74,7 @@ cellosaurus:
         - variants
         - variantslist
         - callsetsvariants
+        - callsetspgxseg
+        - pgxseg
         - UCSClink
 

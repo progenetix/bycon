@@ -35,7 +35,6 @@ def generate_queries(byc):
     update_queries_from_path_id( byc )
     update_queries_from_filters( byc )
     update_queries_from_hoid( byc)
-    # print(byc["queries"])
     update_queries_from_variants( byc )
     update_queries_from_endpoints( byc )
     update_queries_from_geoquery( byc )
@@ -86,7 +85,7 @@ def update_queries_from_hoid( byc):
         ho_db = ho_client[ byc["config"]["info_db"] ]
         ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
         h_o = ho_coll.find_one( { "id": accessid } )
-
+        
         # accessid overrides ... ?
         if h_o:
             t_k = h_o["target_key"]

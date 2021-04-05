@@ -16,6 +16,7 @@ def retrieve_variants(ds_id, r, byc):
     v_coll = mongo_client[ ds_id ][ "variants" ]
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
 
+
     if not byc["method"] in byc["these_prefs"]["all_variants_methods"]:
         if "vs._id" in byc["query_results"]:
             for v in v_coll.find({"_id": { "$in": byc["query_results"]["vs._id"]["target_values"] } }):

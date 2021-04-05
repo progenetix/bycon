@@ -19,7 +19,7 @@ bycon_definition_files:
   - handover_definitions
 all_variants_methods:
   - callsetsvariants
-  - pgxseg
+  - callsetspgxseg
 methods:
   digests:
     - digest
@@ -52,6 +52,13 @@ methods:
     - info.cnv_value
     - variant_type
   callsetsvariants:
+    - biosample_id
+    - reference_name
+    - start
+    - end
+    - info.cnv_value
+    - variant_type
+  callsetspgxseg:
     - biosample_id
     - reference_name
     - start

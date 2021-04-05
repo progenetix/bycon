@@ -88,8 +88,8 @@ def deliveries():
             response_add_error(r, 422, "No data found under this {}: {}!".format(q_par, q_val) )
 
         cgi_break_on_errors(r, byc)
-        populate_service_response(r, results)
-        cgi_print_json_response( byc["form_data"], r, 200 )
+        populate_service_response( byc, r, results)
+        cgi_print_json_response( byc, r, 200 )
 
     ############################################################################
     # continuing with default -> accessid
@@ -119,8 +119,8 @@ def deliveries():
     else:
         results = h_o_d
 
-    populate_service_response(r, results)
-    cgi_print_json_response( byc["form_data"], r, 200 )
+    populate_service_response( byc, r, results)
+    cgi_print_json_response( byc, r, 200 )
 
 ################################################################################
 ################################################################################
