@@ -169,18 +169,6 @@ def execute_bycon_queries(ds_id, byc):
 
     if "response_type" in byc:
 
-        # print(byc["response_type"])
-
-        # if byc["response_type"] == "return_variants":
-        #     if not "vs._id" in prefetch.keys():
-                
-        #         prevars["method"] = "vs._id"                
-        #         if prefetch[ "bs.id" ]["target_count"] < max_bs_number_for_v_in_query:
-        #             prevars["query"] = { "biosample_id": { "$in": prefetch[ "bs.id" ]["target_values"] } }
-        #             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
-        #         else:
-        #             prefetch.update( { prevars["method"]: _prefetch_vars_from_biosample_loop( *prefetch[ "bs.id" ]["target_values"], **prevars ) } )
-
         if "individuals" in byc["response_type"] or "phenopackets" in byc["response_type"]:
             prevars["method"] = "bs.isid->is.id"
             prevars["query"] = { "_id": { "$in": prefetch[ "bs._id" ]["target_values"] } }

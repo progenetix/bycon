@@ -35,7 +35,7 @@ beacon_counts:
   individualCount:
     collection: individuals
     info_key: individuals
-    h->o_key: ind._id
+    h->o_key: is._id
   sampleCount:
     collection: biosamples
     info_key: biosamples

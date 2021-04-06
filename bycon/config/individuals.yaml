@@ -2,8 +2,8 @@ defaults:
   dataset_ids:
     - progenetix
   method: details
-  response_type: return_biosamples
-  h->o_access_key: "bs._id"
+  response_type: return_individuals
+  h->o_access_key: "is._id"
 bycon_definition_files:
   - config
   - beacon_info
@@ -13,11 +13,11 @@ bycon_definition_files:
   - variant_definitions
   - handover_definitions
 meta:
-  response_type: return_biosamples
+  response_type: return_individuals
   returned_schemas:
-    Biosample: https://progenetix.org/services/schemas/Biosample/
+    Biosample: https://progenetix.org/services/schemas/Individual/
   info: >
-    The main biosamples payload can be accessed in `response.results`.
+    The main individuals payload can be accessed in `response.results`.
 methods:
   ids:
     - id
@@ -32,8 +32,3 @@ methods:
     - id
     - description
     - biocharacteristics
-  callsetstats:
-    - id
-    - biosample_id
-    - info.cnvstatistics
-

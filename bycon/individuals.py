@@ -32,8 +32,8 @@ from service_utils import initialize_service, create_empty_service_response,  re
 from byconeer.lib.schemas_parser import *
 
 """podmd
-* <https://progenetix.org/cgi/bycon/services/biosamples.py?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
-* <https://progenetix.org/beacon/biosamples?datasetIds=progenetix&filters=cellosaurus:CVCL_0030>
+* <https://progenetix.org/cgi/bycon/services/individuals.py?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
+* <https://progenetix.org/beacon/individuals?datasetIds=progenetix&filters=cellosaurus:CVCL_0030>
 podmd"""
 
 ################################################################################
@@ -42,11 +42,11 @@ podmd"""
 
 def main():
 
-    biosamples()
+    individuals()
     
 ################################################################################
 
-def biosamples():
+def individuals():
 
     byc = initialize_service()
     parse_beacon_schema(byc)

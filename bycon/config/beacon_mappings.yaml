@@ -5,6 +5,7 @@ service_names:
   filteringTerms: filteringTerms
   datasets: datasets
   biosamples: biosamples
+  individuals: individuals
   g_variants: variants
   variants: variants
 
