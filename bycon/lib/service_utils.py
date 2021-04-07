@@ -9,12 +9,13 @@ import sys
 lib_path = path.dirname( path.abspath(__file__) )
 dir_path = path.join( lib_path, pardir )
 pkg_path = path.join( dir_path, pardir )
+
+from cgi_utils import *
+from read_specs import read_bycon_configs_by_name,read_local_prefs
+from handover_generation import dataset_response_add_handovers
+from schemas_parser import *
+
 schema_path = path.join( pkg_path, "bycon" )
-sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import *
-from bycon.lib.read_specs import read_bycon_configs_by_name,read_local_prefs
-from bycon.lib.handover_generation import dataset_response_add_handovers
-from byconeer.lib.schemas_parser import *
 
 ################################################################################
 
@@ -64,7 +65,7 @@ def initialize_service(service="NA"):
 
 def create_empty_service_response(byc):
 
-    r_s = read_schema_files("BeaconServiceResponse", "properties", schema_path)
+    r_s = read_schema_files("BeaconServiceResponse", "properties")
     r = create_empty_instance(r_s)
 
     if "meta" in byc["these_prefs"]:
@@ -253,7 +254,7 @@ def create_pgxseg_header(ds_id, r, byc):
     if "filters" in r["meta"]["received_request"]:
         p_h.append("#meta=>filters="+','.join(r["meta"]["received_request"]["filters"]))
 
-    for bs_id in byc["query_results"]["bs.id"][ "target_values" ]:
+    for bs_id in byc["query_results"]["biosamples.id"][ "target_values" ]:
         bs = bs_coll.find_one( { "id": bs_id } )
         h_line = "#sample=>sample_id={}".format(bs_id)
         for b_c in bs[ "biocharacteristics" ]:

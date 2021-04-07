@@ -14,7 +14,7 @@ from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response,cgi_brea
 from bycon.lib.read_specs import read_bycon_configs_by_name
 from bycon.lib.query_generation import geo_query
 from bycon.lib.query_execution import mongo_result_list
-from lib.service_utils import *
+from bycon.lib.service_utils import *
 
 """podmd
 * <https://progenetix.org/services/geolocations?city=zurich>

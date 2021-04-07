@@ -14,7 +14,7 @@ sys.path.append( pkg_path )
 from bycon.lib.parse_filters import *
 from bycon.lib.cgi_utils import *
 from bycon.lib.handover_execution import retrieve_handover,handover_return_data
-from lib.service_utils import *
+from bycon.lib.service_utils import *
 
 """podmd
 

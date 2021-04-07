@@ -9,9 +9,10 @@ import sys, os, datetime
 dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
+
 from bycon.lib.cgi_utils import cgi_parse_query, cgi_print_json_response, rest_path_value
-from byconeer.lib.schemas_parser import *
-from lib.service_utils import *
+from bycon.lib.schemas_parser import *
+from bycon.lib.service_utils import *
 
 """podmd
 
@@ -44,9 +45,10 @@ def schemas():
 
     for s_f in s_files:
         f_name = os.path.splitext( s_f )[0]
-        s_data.update( { f_name: read_schema_files(f_name, "", s_path) } )
+        s_data.update( { f_name: read_schema_files(f_name, "") } )
 
     schema_name = rest_path_value("schemas")
+    print(schema_name)
     if schema_name in s_data.keys():    
         cgi_print_json_response( {}, s_data[ schema_name ], 200 )
         exit()

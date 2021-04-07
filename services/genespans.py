@@ -14,7 +14,7 @@ from bycon.lib.cgi_utils import *
 from bycon.lib.read_specs import *
 from bycon.lib.query_generation import create_and_or_query_for_list
 from bycon.lib.query_execution import mongo_result_list
-from lib.service_utils import *
+from bycon.lib.service_utils import *
 
 ################################################################################
 ################################################################################

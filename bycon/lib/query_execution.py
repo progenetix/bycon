@@ -66,38 +66,38 @@ def execute_bycon_queries(ds_id, byc):
 
     if "biosamples" in exe_queries:
 
-        prevars["method"] = "bs.id"
+        prevars["method"] = "biosamples.id"
         prevars["query"] = exe_queries[ "biosamples" ]
         prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
     if "individuals" in exe_queries:
 
-        prevars["method"] = "is.id"
+        prevars["method"] = "individuals.id"
         prevars["query"] = exe_queries[ "individuals" ]
         prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
-        prevars["method"] = "bs.isid->bs.id"
-        prevars["query"] = { "individual_id": { '$in': prefetch["is.id"]["target_values"] }  }
+        prevars["method"] = "bs.isid->biosamples.id"
+        prevars["query"] = { "individual_id": { '$in': prefetch["individuals.id"]["target_values"] }  }
         prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
-        if "bs.id" in prefetch:
-            bsids = list( set( prefetch["bs.isid->bs.id"]["target_values"] ) & set( prefetch["bs.id"]["target_values"] ) )
-            prefetch[ "bs.id" ].update( { "target_values": bsids, "target_count": len(bsids) } )
+        if "biosamples.id" in prefetch:
+            bsids = list( set( prefetch["bs.isid->biosamples.id"]["target_values"] ) & set( prefetch["biosamples.id"]["target_values"] ) )
+            prefetch[ "biosamples.id" ].update( { "target_values": bsids, "target_count": len(bsids) } )
         else:
-            prefetch["bs.id"] = prefetch["bs.isid->bs.id"]
+            prefetch["biosamples.id"] = prefetch["bs.isid->biosamples.id"]
 
     if "callsets" in exe_queries:
 
         # since callsets contain biosample_id no double calling is required
-        prevars["method"] = "cs.bsid->bs.id"
+        prevars["method"] = "callsets.bsid->biosamples.id"
         prevars["query"] = exe_queries[ "callsets" ]
         prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
-        if "bs.id" in prefetch:
-            bsids = list( set( prefetch["cs.bsid->bs.id"]["target_values"] ) & set( prefetch["bs.id"]["target_values"] ) )
-            prefetch[ "bs.id" ].update( { "target_values": bsids, "target_count": len(bsids) } )
+        if "biosamples.id" in prefetch:
+            bsids = list( set( prefetch["callsets.bsid->biosamples.id"]["target_values"] ) & set( prefetch["biosamples.id"]["target_values"] ) )
+            prefetch[ "biosamples.id" ].update( { "target_values": bsids, "target_count": len(bsids) } )
         else:
-            prefetch["bs.id"] = prefetch["cs.bsid->bs.id"]
+            prefetch["biosamples.id"] = prefetch["callsets.bsid->biosamples.id"]
 
     if "variants" in exe_queries:
 
@@ -108,7 +108,7 @@ def execute_bycon_queries(ds_id, byc):
 
             1. If a `variants` query exists (i.e. has been defined in `exe_queries`), in a first pass
             all `biosample_id` values are retrieved.
-            2. If already a `"bs.id"` result exists (e.g. from a biosample query), the lists
+            2. If already a `"biosamples.id"` result exists (e.g. from a biosample query), the lists
             of callset `id` values from the different queries are intersected. Otherwise, the callsets
             from the variants query are the final ones.
             3. Since so far not all matching variants have been retrieved (only the biosamples which
@@ -116,33 +116,33 @@ def execute_bycon_queries(ds_id, byc):
             original query and the matching biosamples from the intersect.
             podmd"""
 
-            prevars["method"] = "vs.bsid->bs.id"
+            prevars["method"] = "variants.bsid->biosamples.id"
             prevars["query"] = exe_queries[ "variants" ]
             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
-            if "bs.id" in prefetch:
-                bsids = list( set( prefetch["bs.id"]["target_values"] ) & set( prefetch["vs.bsid->bs.id"]["target_values"] ) )
-                prefetch[ "bs.id" ].update( { "target_values": bsids, "target_count": len(bsids) } )
+            if "biosamples.id" in prefetch:
+                bsids = list( set( prefetch["biosamples.id"]["target_values"] ) & set( prefetch["variants.bsid->biosamples.id"]["target_values"] ) )
+                prefetch[ "biosamples.id" ].update( { "target_values": bsids, "target_count": len(bsids) } )
                 exe_queries[ "variants" ] = { "$and": [ exe_queries[ "variants" ], { "biosample_id": { "$in": bsids } } ] }
             else:
-                prefetch[ "bs.id" ] = prefetch["vs.bsid->bs.id"]
+                prefetch[ "biosamples.id" ] = prefetch["variants.bsid->biosamples.id"]
 
-            prevars["method"] = "vs._id"
+            prevars["method"] = "variants._id"
             prevars["query"] = exe_queries[ "variants" ]
             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
-            prevars["method"] = "vs.digest"
-            prevars["query"] = { "_id": { "$in": prefetch[ "vs._id" ]["target_values"] } }
+            prevars["method"] = "variants.digest"
+            prevars["query"] = { "_id": { "$in": prefetch[ "variants._id" ]["target_values"] } }
             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
-            # print(prefetch["vs.digest"]["target_values"])
+            # print(prefetch["variants.digest"]["target_values"])
 
 
 
     """podmd
     ### Result Aggregation
 
-    The above queries have provided `bs.id` values which now are used to retrieve the
+    The above queries have provided `biosamples.id` values which now are used to retrieve the
     matching final biosample and callset `_id` values.
 
     For variants the `_id` values only exist if a variants query had been performed.
@@ -159,23 +159,23 @@ def execute_bycon_queries(ds_id, byc):
     potentially lead to huge responses here...
     podmd"""
 
-    prevars["method"] = "cs._id"
-    prevars["query"] = { "biosample_id": { "$in": prefetch[ "bs.id" ]["target_values"] } }
+    prevars["method"] = "callsets._id"
+    prevars["query"] = { "biosample_id": { "$in": prefetch[ "biosamples.id" ]["target_values"] } }
     prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
-    prevars["method"] = "bs._id"
-    prevars["query"] = { "id": { "$in": prefetch[ "bs.id" ]["target_values"] } }
+    prevars["method"] = "biosamples._id"
+    prevars["query"] = { "id": { "$in": prefetch[ "biosamples.id" ]["target_values"] } }
     prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
     if "response_type" in byc:
 
         if "individuals" in byc["response_type"] or "phenopackets" in byc["response_type"]:
-            prevars["method"] = "bs.isid->is.id"
-            prevars["query"] = { "_id": { "$in": prefetch[ "bs._id" ]["target_values"] } }
+            prevars["method"] = "bs.isid->individuals.id"
+            prevars["query"] = { "_id": { "$in": prefetch[ "biosamples._id" ]["target_values"] } }
             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
-            prevars["method"] = "is._id"
-            prevars["query"] = { "id": { "$in": prefetch[ "bs.isid->is.id" ]["target_values"] } }
+            prevars["method"] = "individuals._id"
+            prevars["query"] = { "id": { "$in": prefetch[ "bs.isid->individuals.id" ]["target_values"] } }
             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
     
     ############################################################################

@@ -35,19 +35,19 @@ beacon_counts:
   individualCount:
     collection: individuals
     info_key: individuals
-    h->o_key: is._id
+    h->o_key: individuals._id
   sampleCount:
     collection: biosamples
     info_key: biosamples
-    h->o_key: bs._id
+    h->o_key: biosamples._id
   variantCount:
     collection: variants
     info_key: variants_distinct
-    h->o_key: vs.digest
+    h->o_key: variants.digest
   callCount:
     collection: variants
     info_key: variants
-    h->o_key: vs._id
+    h->o_key: variants._id
 handover_coll: querybuffer
 genespans_coll: genespans
 filter_flags:

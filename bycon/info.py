@@ -9,17 +9,11 @@ import sys, os, datetime
 dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
+
 from bycon.lib.cgi_utils import cgi_print_json_response
 from bycon.lib.read_specs import datasets_update_latest_stats
-from bycon.lib.parse_filters import select_dataset_ids, check_dataset_ids
-
-service_lib_path = path.join( pkg_path, "services", "lib" )
-sys.path.append( service_lib_path )
-
-from service_utils import initialize_service, create_empty_service_response, populate_service_response, response_add_error,response_add_parameter,response_collect_errors,response_map_results
-
-from byconeer.lib.schemas_parser import *
-
+from bycon.lib.schemas_parser import *
+from bycon.lib.service_utils import create_empty_service_response,initialize_service,populate_service_response
 
 """podmd
 

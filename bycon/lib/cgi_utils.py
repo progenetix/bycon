@@ -28,10 +28,12 @@ def cgi_parse_query():
 
 ################################################################################
 
-def rest_path_value(key):
+def rest_path_value(key="xxx"):
 
     url_comps = urlparse( environ.get('REQUEST_URI') )
     p_items = re.split(r'\/|\&', url_comps.path)
+
+    matches = [key, key+".py"]
 
     if "debug=1" in p_items:
         p_items.remove("debug=1")
@@ -42,7 +44,7 @@ def rest_path_value(key):
     for p in p_items:
         i += 1
         if len(p_items) > i:
-            if p == key:
+            if p in matches:
                 return p_items[ i ]
         elif p == key:
             return "root_path"

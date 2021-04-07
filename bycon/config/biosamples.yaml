@@ -3,7 +3,7 @@ defaults:
     - progenetix
   method: details
   response_type: return_biosamples
-  h->o_access_key: "bs._id"
+  h->o_access_key: "biosamples._id"
 bycon_definition_files:
   - config
   - beacon_info

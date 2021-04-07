@@ -15,7 +15,7 @@ from bycon.lib.cgi_utils import *
 from bycon.lib.parse_filters import *
 from bycon.lib.read_specs import *
 from bycon.lib.query_generation import geo_query, create_and_or_query_for_list
-from lib.service_utils import *
+from bycon.lib.service_utils import *
 
 """podmd
 

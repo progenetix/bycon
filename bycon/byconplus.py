@@ -24,13 +24,12 @@ from parse_variants import parse_variants, get_variant_request_type
 from query_execution import execute_bycon_queries
 from query_generation import generate_queries
 from read_specs import update_datasets_from_dbstats
+from schemas_parser import parse_beacon_schema
 
 service_lib_path = path.join( pkg_path, "services", "lib" )
 sys.path.append( service_lib_path )
 
 from service_utils import initialize_service, create_empty_service_response, populate_service_response, response_add_error, response_add_parameter, response_collect_errors, response_map_results
-
-from byconeer.lib.schemas_parser import *
 
 from datasets import *
 

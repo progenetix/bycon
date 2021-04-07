@@ -3,7 +3,7 @@ defaults:
     - progenetix
   method: details
   response_type: return_individuals
-  h->o_access_key: "is._id"
+  h->o_access_key: "individuals._id"
 bycon_definition_files:
   - config
   - beacon_info

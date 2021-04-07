@@ -136,6 +136,8 @@ def _dataset_count_collationed_filters(ds_id, **byc):
                 bar.next()
                 if s in sample:
                     for term in sample[ s ]:
+                        if not "id" in term:
+                            continue
                         tid = term["id"]
                         if tid in pfs.keys():
                             pfs[ tid ]["count"] += 1

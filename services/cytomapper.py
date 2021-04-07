@@ -14,7 +14,7 @@ from bycon.lib.cgi_utils import *
 from bycon.lib.parse_variants import *
 from bycon.lib.read_specs import *
 from lib.cytoband_utils import *
-from lib.service_utils import *
+from bycon.lib.service_utils import *
 
 ################################################################################
 ################################################################################

@@ -18,8 +18,8 @@ def retrieve_variants(ds_id, r, byc):
 
 
     if not byc["method"] in byc["these_prefs"]["all_variants_methods"]:
-        if "vs._id" in byc["query_results"]:
-            for v in v_coll.find({"_id": { "$in": byc["query_results"]["vs._id"]["target_values"] } }):
+        if "variants._id" in byc["query_results"]:
+            for v in v_coll.find({"_id": { "$in": byc["query_results"]["variants._id"]["target_values"] } }):
                 vs.append(v)
             return vs
         else:
@@ -27,7 +27,7 @@ def retrieve_variants(ds_id, r, byc):
 
     ############################################################################
 
-    for bs_id in byc["query_results"]["bs.id"][ "target_values" ]:
+    for bs_id in byc["query_results"]["biosamples.id"][ "target_values" ]:
         for v in v_coll.find(
                 {"biosample_id": bs_id },
                 { "_id": 0, "assembly_id": 0, "digest": 0, "callset_id": 0 }

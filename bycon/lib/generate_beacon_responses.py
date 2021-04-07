@@ -12,9 +12,7 @@ from query_execution import execute_bycon_queries
 
 def check_service_requests(byc):
 
-    respond_filtering_terms_request(byc)
     respond_service_info_request(byc)
-    respond_get_datasetids_request(byc)
     respond_empty_request(byc)
 
 ################################################################################
@@ -60,22 +58,6 @@ def respond_empty_request( byc ):
 
 ################################################################################
 
-def respond_get_datasetids_request( byc ):
-
-    if not environ.get('REQUEST_URI'):
-        return()
-
-    if not "get-datasetids" in environ.get('REQUEST_URI'):
-        return()
-
-    dataset_ids = [ ]
-    for ds_id in byc["beacon_info"]["datasets"].keys():
-        if ds_id in byc["config"][ "dataset_ids" ]:
-            dataset_ids.append( { "id": ds_id, "name": byc["dataset_definitions"][ds_id]["name"] } )
-    cgi_print_json_response( byc, { "datasets": dataset_ids }, 200 )
-
-################################################################################
-
 def respond_service_info_request( byc ):
 
     if not environ.get('REQUEST_URI'):
@@ -88,57 +70,6 @@ def respond_service_info_request( byc ):
 
 ################################################################################
 
-def respond_filtering_terms_request( byc ):
-
-    if not "filtering_terms" in byc["endpoint"]:
-        return()
-
-    ks = [ "id", "name", "apiVersion" ]
-
-    resp = { }
-    for k in ks:
-        if k in byc["service_info"]:
-            resp.update( { k: byc["service_info"][ k ] } )
-
-    fts = { }
-
-    # for the general filter response, filters from *all* datasets are
-    # provided
-    # if only one => counts are added back
-    dss = byc["beacon_info"]["datasets"].keys()
-    if len(byc[ "dataset_ids" ]) == 1:
-        ds_id = byc[ "dataset_ids" ][0]
-        if ds_id in byc["beacon_info"]["datasets"]:
-            dss = [ ds_id ]
-            # fks.append("count")
-            resp.update( { "datasetId": ds_id } )
-
-    for ds_id in dss:
-        ds = byc[ "beacon_info" ][ "datasets" ][ ds_id ]
-        if "filtering_terms" in ds:
-            for f_t in ds[ "filtering_terms" ]:
-                f_id = f_t[ "id" ]
-                if not f_id in fts:
-                    fts[ f_id ] = f_t
-                else:
-                    fts[ f_id ][ "count" ] += f_t[ "count" ]
-  
-    ftl = [ ]
-    for key in sorted(fts):
-        if "filters" in byc:
-            if len(byc["filters"]) > 0:
-                for f in byc["filters"]:
-                    f_t = re.compile(r'^'+f)
-                    if f_t.match(key):
-                        ftl.append( fts[key] )
-        else: 
-            ftl.append( fts[key] )
-
-    resp.update( { "filteringTerms": ftl } )
-    cgi_print_json_response( byc, resp, 200 )
-
-################################################################################
-
 def return_filtering_terms( byc ):
 
     fts = { }
@@ -146,15 +77,11 @@ def return_filtering_terms( byc ):
     # for the general filter response, filters from *all* datasets are
     # provided
     # if only one => counts are added back
-    dss = byc["beacon_info"]["datasets"].keys()
 
-    if len(byc[ "dataset_ids" ]) == 1:
-        ds_id = byc[ "dataset_ids" ][0]
-        if ds_id in byc["beacon_info"]["datasets"]:
-            dss = [ ds_id ]
-
-    for ds_id in dss:
-        ds = byc[ "beacon_info" ][ "datasets" ][ ds_id ]
+    for ds in byc[ "beacon_info" ][ "datasets" ]:
+        if len(byc[ "dataset_ids" ]) > 0:
+            if not ds["id"] in byc[ "dataset_ids" ]:
+                continue
         if "filtering_terms" in ds:
             for f_t in ds[ "filtering_terms" ]:
                 f_id = f_t[ "id" ]
@@ -166,7 +93,7 @@ def return_filtering_terms( byc ):
     ftl = [ ]
     for key in sorted(fts):
         f_t = fts[key]
-        if len(dss) > 1:
+        if len(byc[ "dataset_ids" ]) > 1:
             del(f_t["count"])
         if "filters" in byc:
             if len(byc["filters"]) > 0:
@@ -191,9 +118,9 @@ def collect_dataset_responses(byc):
         query_results_save_handovers(byc)
 
         if byc["response_type"] == "return_biosamples":
-            access_id = byc["query_results"]["bs._id"][ "id" ]
+            access_id = byc["query_results"]["biosamples._id"][ "id" ]
         elif byc["response_type"] == "return_variants":
-            access_id = byc["query_results"]["vs._id"][ "id" ]
+            access_id = byc["query_results"]["variants._id"][ "id" ]
         else:
             byc["dataset_responses"].append( create_dataset_response( ds_id, byc ) )
             continue
@@ -216,7 +143,7 @@ def create_dataset_response(ds_id, byc):
         "error": None,
         "variantCount": 0,
         "callCount": 0,
-        "sampleCount": byc[ "query_results" ][ "bs._id" ][ "target_count" ],
+        "sampleCount": byc[ "query_results" ][ "biosamples._id" ][ "target_count" ],
         "frequency": 0,
         "note": "",
         "externalUrl": "",
@@ -224,10 +151,10 @@ def create_dataset_response(ds_id, byc):
         "datasetHandover": [ ] }
 
     # TODO: The "true" may actually be fulfilled by non-variant query types in v2.
-    if "vs._id" in byc[ "query_results" ]:
+    if "variants._id" in byc[ "query_results" ]:
         dataset_allele_resp.update( {
-            "variantCount": byc[ "query_results" ][ "vs.digest" ][ "target_count" ],
-            "callCount": byc[ "query_results" ][ "vs._id" ][ "target_count" ]
+            "variantCount": byc[ "query_results" ][ "variants.digest" ][ "target_count" ],
+            "callCount": byc[ "query_results" ][ "variants._id" ][ "target_count" ]
         } )
         if dataset_allele_resp[ "variantCount" ] > 0:
             for b_i_ds in byc[ "beacon_info" ]["datasets"]:
@@ -235,7 +162,7 @@ def create_dataset_response(ds_id, byc):
                     dataset_allele_resp.update({
                         "frequency": float("%.6f" % (dataset_allele_resp[ "callCount" ] / b_i_ds[ "callCount"] ) )
                         } )
-            dataset_allele_resp[ "info" ].update( { "variants": byc[ "query_results" ][ "vs.digest" ][ "target_values" ] })
+            dataset_allele_resp[ "info" ].update( { "variants": byc[ "query_results" ][ "variants.digest" ][ "target_values" ] })
 
     for this_c in [ "variantCount", "callCount", "sampleCount" ]:
         if this_c in dataset_allele_resp:

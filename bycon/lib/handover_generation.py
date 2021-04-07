@@ -58,8 +58,8 @@ def dataset_response_add_handovers(ds_id, **byc):
                 # TODO: needs a new schema to accommodate this not as HACK ...
                 # the phenopackets URL needs matched variants, which it wouldn't know about ...
                 if "phenopackets" in h_o_t:
-                    if "vs._id" in byc[ "query_results" ].keys():
-                        h_o_r["url"] += "&variantsaccessid="+byc[ "query_results" ][ "vs._id" ][ "id" ]
+                    if "variants._id" in byc[ "query_results" ].keys():
+                        h_o_r["url"] += "&variantsaccessid="+byc[ "query_results" ][ "variants._id" ][ "id" ]
 
                 b_h_o.append( h_o_r )
 

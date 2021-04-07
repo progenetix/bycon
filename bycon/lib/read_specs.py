@@ -1,6 +1,7 @@
 import re, yaml
 import json
 from pymongo import MongoClient
+import sys
 from os import path, pardir
 from json_ref_dict import RefDict, materialize
 
@@ -87,6 +88,9 @@ def datasets_update_latest_stats(byc):
                 for c, c_d in byc["config"]["beacon_counts"].items():
                     if c_d["info_key"] in ds_vs["counts"]:
                         ds.update({ c: ds_vs["counts"][ c_d["info_key"] ] })
+            if "endpoint" in byc: 
+                if "filtering_terms" in byc["endpoint"]:
+                    ds.update({ "filtering_terms": stat["datasets"][ds_id]["filtering_terms"] } )
 
         datasets.append( ds )
 

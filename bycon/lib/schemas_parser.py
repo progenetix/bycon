@@ -7,6 +7,7 @@ import sys
 lib_path = path.dirname( path.abspath(__file__) )
 dir_path = path.join( lib_path, pardir )
 pkg_path = path.join( dir_path, pardir )
+
 schema_path = path.join( pkg_path, "bycon", "config", "schemas" )
 
 ################################################################################
@@ -22,8 +23,7 @@ def parse_beacon_schema(byc):
 
 ################################################################################
 
-def read_schema_files(schema_root, item, schema_path):
-
+def read_schema_files(schema_root, item):
 
     s_path = path.join( schema_path, schema_root+".yaml#/"+item )
     # print(s_path)

@@ -14,8 +14,8 @@ from bycon.lib.cgi_utils import *
 from bycon.lib.parse_filters import *
 from bycon.lib.parse_variants import create_and_or_query_for_list
 from bycon.lib.read_specs import *
-from byconeer.lib.schemas_parser import *
-from lib.service_utils import *
+from bycon.lib.schemas_parser import *
+from bycon.lib.service_utils import *
 
 """podmd
 * <https://progenetix.org/services/ontologymaps/?filters=NCIT:C3222>

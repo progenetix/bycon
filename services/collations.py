@@ -13,7 +13,7 @@ sys.path.append( pkg_path )
 
 from bycon.lib.cgi_utils import *
 from bycon.lib.parse_filters import *
-from lib.service_utils import *
+from bycon.lib.service_utils import *
 
 ################################################################################
 ################################################################################
