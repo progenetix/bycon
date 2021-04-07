@@ -48,12 +48,12 @@ def datasets():
     check_dataset_ids(byc)
     _get_history_depth(byc)
 
-    r = create_empty_service_response(byc)
+    create_empty_service_response(byc)
 
     results = datasets_update_latest_stats(byc)
 
-    populate_service_response( byc, r, results )
-    cgi_print_json_response( byc, r, 200 )
+    populate_service_response( byc, results )
+    cgi_print_json_response( byc, 200 )
 
 ################################################################################
 

@@ -55,8 +55,19 @@ def beacon(path=""):
 
             exit()
 
-    cgi_print_json_response( {}, { "errors" : [ "No correct Beacon path provided. Please refer to the documentation at http://info.progenetix.org/tags/services" ] }, 422 )
-
+    cgi_print_json_response( {
+        "service_response": {
+            "response" : {
+                "error" : {
+                    "error_code": 422,
+                    "error_message": "No correct service path provided. Please refer to the documentation at http://info.progenetix.org/tags/services"
+                    },
+                }
+            }
+        },
+        422
+    )
+    
 ################################################################################
 ################################################################################
 

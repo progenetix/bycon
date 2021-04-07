@@ -81,57 +81,60 @@ def create_empty_service_response(byc):
 
     if "errors" in byc:
         if len(byc["errors"]) > 0:
-            response_add_error(r, 422, "::".join(byc["errors"]))
+            response_add_error(byc, 422, "::".join(byc["errors"]))
 
     if "queries" in byc:
         r["response"]["info"].update({ "database_queries": json.loads(json_util.dumps( byc["queries"] ) ) } )
 
+    # moving to byc
+    byc.update( {"service_response": r })
+
     # saving the parameters to the response
     for p in ["method", "dataset_ids", "filters", "variant_pars"]:
         if p in byc:
-            response_add_parameter(r, p, byc[ p ])
+            response_add_parameter(byc, p, byc[ p ])
 
-    return r
+    return byc
 
 ################################################################################
 
-def response_add_parameter(r, name, value):
+def response_add_parameter(byc, name, value):
 
     if value:
-        r["meta"]["received_request"].update( { name: value } )
+        byc["service_response"]["meta"]["received_request"].update( { name: value } )
 
-    return r
+    return byc
 
 ################################################################################
 
-def response_collect_errors(r, byc):
+def response_collect_errors(byc):
 
     # TODO: flexible list of errors
     if not byc[ "queries" ].keys():
-      response_add_error(r, 422, "No (correct) query parameters were provided." )
+      response_add_error(byc, 422, "No (correct) query parameters were provided." )
     if len(byc[ "dataset_ids" ]) < 1:
-      response_add_error(r, 422, "No `datasetIds` parameter provided." )
+      response_add_error(byc, 422, "No `datasetIds` parameter provided." )
     if len(byc[ "dataset_ids" ]) > 1:
-      response_add_error(r, 422, "More than 1 `datasetIds` value was provided." )
+      response_add_error(byc, 422, "More than 1 `datasetIds` value was provided." )
       
 ################################################################################
 
-def response_add_error(r, code=200, message=""):
+def response_add_error(byc, code=200, message=""):
 
-    r["response"]["error"].update( {
+    byc["service_response"]["response"]["error"].update( {
         "error_code": code,
         "error_message": message
     } )
 
-    return r
+    return byc
 
 ################################################################################
 
-def response_append_result(r, result):
+def response_append_result(byc, result):
 
-    r["response"]["results"].append( result )
+    byc["service_response"]["response"]["results"].append( result )
 
-    return r
+    return byc
 
 ################################################################################
 
@@ -178,38 +181,38 @@ def response_map_results(data, byc):
 
 ################################################################################
 
-def populate_service_header(r, results):
+def populate_service_header(byc, results):
 
     if isinstance(results, list):
         r_no = len( results )
-        r["response"].update({"numTotalResults": r_no })
+        byc["service_response"]["response"].update({"numTotalResults": r_no })
         if r_no > 0:
-            r["response"].update({"exists": True })
-            response_add_error(r, 200)
+            byc["service_response"]["response"].update({"exists": True })
+            response_add_error(byc, 200)
 
-    return r
-
-################################################################################
-
-def populate_service_response_handovers(r, byc):
-
-    if not "query_results" in byc:
-        return r
-    if not "dataset_ids" in byc:
-        return r
-
-    r["response"].update({ "results_handover": dataset_response_add_handovers(byc[ "dataset_ids" ][ 0 ], **byc) })
-
-    return r
+    return byc
 
 ################################################################################
 
-def populate_service_response_counts(r, byc):
+def populate_service_response_handovers(byc):
 
     if not "query_results" in byc:
-        return r
+        return byc
     if not "dataset_ids" in byc:
-        return r
+        return byc
+
+    byc["service_response"]["response"].update({ "results_handover": dataset_response_add_handovers(byc[ "dataset_ids" ][ 0 ], **byc) })
+
+    return byc
+
+################################################################################
+
+def populate_service_response_counts(byc):
+
+    if not "query_results" in byc:
+        return byc
+    if not "dataset_ids" in byc:
+        return byc
 
     counts = { }
 
@@ -218,26 +221,26 @@ def populate_service_response_counts(r, byc):
         if c_d["h->o_key"] in byc["query_results"]:
             counts[ c ] = byc["query_results"][ c_d["h->o_key"] ]["target_count"]
 
-    r["response"]["info"].update({ "counts": counts })
+    byc["service_response"]["response"]["info"].update({ "counts": counts })
 
-    return r
+    return byc
 
 
 ################################################################################
 
 
-def populate_service_response( byc, r, results):
+def populate_service_response( byc, results):
 
-    populate_service_header(r, results)
-    populate_service_response_handovers(r, byc)
-    populate_service_response_counts(r, byc)
-    r["response"].update({"results": results })
+    populate_service_header(byc, results)
+    populate_service_response_handovers(byc)
+    populate_service_response_counts(byc)
+    byc["service_response"]["response"].update({"results": results })
 
-    return r
+    return byc
 
 ################################################################################
 
-def create_pgxseg_header(ds_id, r, byc):
+def create_pgxseg_header(ds_id, byc):
 
     p_h = []
 
@@ -249,10 +252,11 @@ def create_pgxseg_header(ds_id, r, byc):
 
     for d in ["id", "assemblyId"]:
         p_h.append("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
-    for m in ["variant_count", "biosample_count"]:
-        p_h.append("#meta=>{}={}".format(m, r["response"]["info"][m]))
-    if "filters" in r["meta"]["received_request"]:
-        p_h.append("#meta=>filters="+','.join(r["meta"]["received_request"]["filters"]))
+    for m in ["variantCount", "biosampleCount"]:
+        if m in byc["service_response"]["response"]["info"]["counts"]:
+            p_h.append("#meta=>{}={}".format(m, byc["service_response"]["response"]["info"]["counts"][m]))
+    if "filters" in byc["service_response"]["meta"]["received_request"]:
+        p_h.append("#meta=>filters="+','.join(byc["service_response"]["meta"]["received_request"]["filters"]))
 
     for bs_id in byc["query_results"]["biosamples.id"][ "target_values" ]:
         bs = bs_coll.find_one( { "id": bs_id } )
@@ -278,10 +282,10 @@ def print_variants_json(vs):
 
 ################################################################################
 
-def export_variants_download(vs, r, byc):
+def export_variants_download(vs, byc):
 
-    populate_service_header(r, vs)
-    open_json_streaming(r, "variants.json")
+    populate_service_header(byc, vs)
+    open_json_streaming(byc, "variants.json")
     print_variants_json(vs)
     close_json_streaming()
 
@@ -306,9 +310,9 @@ def print_variants_pgxseg(vs):
 
 ################################################################################
 
-def export_pgxseg_download(ds_id, r, vs, byc):
+def export_pgxseg_download(ds_id, vs, byc):
 
-    p_h = create_pgxseg_header(ds_id, r, byc)
+    p_h = create_pgxseg_header(ds_id, byc)
 
     open_text_streaming()
     for h_l in p_h:

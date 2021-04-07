@@ -46,12 +46,12 @@ def phenopackets():
     get_variant_request_type(byc)
     generate_queries(byc)
 
-    r = create_empty_service_response(byc)    
-    response_collect_errors(r, byc)
-    cgi_break_on_errors(r, byc)
+    create_empty_service_response(byc)    
+    response_collect_errors(byc)
+    cgi_break_on_errors(byc)
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
-    response_add_parameter(r, "dataset", ds_id )
+    response_add_parameter(byc, "dataset", ds_id )
     
     execute_bycon_queries( ds_id, byc )
     query_results_save_handovers(byc)
@@ -61,7 +61,7 @@ def phenopackets():
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
-        response_add_error(r, 422, e )
+        response_add_error(byc, 422, e )
 
     access_id_ind = byc["query_results"]["individuals._id"][ "id" ]
     ind_s = [ ]
@@ -119,8 +119,8 @@ def phenopackets():
 
         results.append( pxf )
 
-    populate_service_response( byc, r, results)
-    cgi_print_json_response( byc, r, 200 )
+    populate_service_response( byc, results)
+    cgi_print_json_response( byc, 200 )
 
 ################################################################################
 ################################################################################

@@ -48,12 +48,12 @@ def filtering_terms():
 
     update_datasets_from_dbstats(byc)
     
-    r = create_empty_service_response(byc)
+    create_empty_service_response(byc)
 
     results = return_filtering_terms(byc)
 
-    populate_service_response( byc, r, results )
-    cgi_print_json_response( byc, r, 200 )
+    populate_service_response( byc, results )
+    cgi_print_json_response( byc, 200 )
 
 ################################################################################
 ################################################################################

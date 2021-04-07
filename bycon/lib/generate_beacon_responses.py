@@ -209,6 +209,8 @@ def create_beacon_response(byc):
         if b_r[ "exists" ] == True:
             b_response[ "exists" ] = True
 
-    return { "meta": b_meta, "response": { "datasetAlleleResponses": byc[ "dataset_responses" ] } }
+    byc.update( { "service_response":{ "meta": b_meta, "response": { "datasetAlleleResponses": byc[ "dataset_responses" ] } } } )
+
+    return byc
 
 ################################################################################

@@ -38,7 +38,7 @@ paths:
           required: false
           schema:
             type: string
-            enum: 
+            enum:
               - 'ga4gh-service-info-v1.0'
       responses:
         '200':
@@ -72,7 +72,7 @@ paths:
           required: false
           schema:
             type: string
-            enum: 
+            enum:
               - 'ga4gh-service-info-v1.0'
       responses:
         '200':
@@ -114,7 +114,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InfoResponse'
-  /datasets/{id}/variant_interpretations:  
+  /datasets/{id}/variant_interpretations:
     post:
       description: |
         Get the variants interpretations by datasetId.
@@ -767,7 +767,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenomicVariantResponse'
-  /g_variants/{id}:  
+  /g_variants/{id}:
     post:
       description: |
         Get a variant by its Id.
@@ -817,7 +817,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GenomicVariantResponse'
-  /g_variants/{id}/biosamples:  
+  /g_variants/{id}/biosamples:
     post:
       description: |
         Get the biosamples where this variant is found.
@@ -867,7 +867,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BiosampleResponse'
-  /g_variants/{id}/individuals:  
+  /g_variants/{id}/individuals:
     post:
       description: |
         Get the individuals in which this variant is found.
@@ -917,7 +917,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IndividualResponse'
-  /g_variants/{id}/variants_in_sample:  
+  /g_variants/{id}/variants_in_sample:
     post:
       description: |
         Get the variants in sample in which this variant is found.
@@ -967,7 +967,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VariantInSampleResponse'
-  /g_variants/{id}/variant_interpretations:  
+  /g_variants/{id}/variant_interpretations:
     post:
       description: |
         Get the variants interpretations by variantId.
@@ -1353,7 +1353,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RunResponse'
-  /analyses/{id}/variants_in_sample:  
+  /analyses/{id}/variants_in_sample:
     post:
       description: |
         Get the variants in sample in which this analysis is found.
@@ -1813,34 +1813,32 @@ components:
       type: string
       example: GRCh38
     ReferenceBases:
-      description: |
-        Reference bases for this variant (starting from `start`). 
-        Accepted values: [ACGTN]*. N is a wildcard, that denotes the 
-        position of any base, and can be used as a standalone base of any 
-        type or within a partially known sequence. For example a sequence 
-        where the first and last bases are known, but the middle portion can 
-        exhibit countless variations of [ACGT], or the bases are unknown: 
-        ANNT the Ns can take take any form of [ACGT], which makes both ACCT 
-        and ATGT (or any other combination) viable sequences.
+      description: >
+        Reference bases for this variant (starting from `start`).
+        * Accepted values: [ACGTN]*.
+        * N is a wildcard, that denotes the position of any base, and can be
+        used as a standalone base of any type or within a partially known
+        sequence. As example, a query of `ANNT` the Ns can take take any form of
+        [ACGT] and will match `ANNT`, `ACNT`, `ACCT`, `ACGT` ... and so forth.
+        * an *empty value* is used in the case of insertions with the maximally
+        trimmed, inserted sequence being indicated in `AlternateBases`
       type: string
-      pattern: '^([ACGTN]+)$'
+      pattern: '^([ACGTN]*)$'
     AlternateBases:
       description: |
-        The bases that appear instead of the reference bases. Accepted 
-        values: [ACGTN]*. N is a wildcard, that denotes the position of any 
-        base, and can be used as a standalone base of any type or within a 
-        partially known sequence. For example a sequence where the first and 
-        last bases are known, but the middle portion can exhibit countless 
-        variations of [ACGT], or the bases are unknown: ANNT the Ns can take 
-        take any form of [ACGT], which makes both ACCT and ATGT (or any 
-        other combination) viable sequences.
-        
-        Categorical variant queries, e.g. such *not* being represented through 
-        sequence & position,  make use of the `variantType` parameter.
-        
-        Optional: either `alternateBases` or `variantType` is required.
+        Alternate bases for this variant (starting from `start`).
+        * Accepted values: [ACGTN]*.
+        * N is a wildcard, that denotes the position of any base, and can be
+        used as a standalone base of any type or within a partially known
+        sequence. As example, a query of `ANNT` the Ns can take take any form of
+        [ACGT] and will match `ANNT`, `ACNT`, `ACCT`, `ACGT` ... and so forth.
+        * an *empty value* is used in the case of deletions with the maximally
+        trimmed, deleted sequence being indicated in `ReferenceBases`
+        * Categorical variant queries, e.g. such *not* being represented through
+        sequence & position, make use of the `variantType` parameter.
+        * either `alternateBases` or `variantType` is required.
       type: string
-      pattern: '^([ACGTN]+)$'
+      pattern: '^([ACGTN]*)$'
     Filters:
       description: |
         Ontology based filters. CURIE syntax is encouraged to be used.
@@ -1855,7 +1853,7 @@ components:
       items:
         type: string
       example: 'mydict.aterm:avalue,mydict.aterm2:avalue2'
-    
+
     RequestDatasets:
       description: >-
         Identifiers of datasets, as defined in `BeaconDataset`. If this
@@ -1928,7 +1926,6 @@ components:
         Cohort:
           type: string
           example: beacon-cohort-draft-3
-    
     InfoRequestMeta:
       description: |
         Requested schemas and versions to be used in the response.
@@ -1938,7 +1935,7 @@ components:
           $ref: '#/components/schemas/InfoRequestedSchemas'
         apiVersion:
           description: |
-            Schemas & versions default for this Beacon version will be used to 
+            Schemas & versions default for this Beacon version will be used to
             format the response.
           type: string
           example: 'v2.0'
@@ -1951,16 +1948,16 @@ components:
           $ref: '#/components/schemas/RequestedSchemas'
         apiVersion:
           description: |
-            Schemas & versions default for this Beacon version will be used to 
+            Schemas & versions default for this Beacon version will be used to
             format the response.
           type: string
           example: 'v2.0'
-          
+
     AlternativeSchema:
       description: |
         Alternative schema for describing this object.
       type: object
-    
+
     Variant:
       description: |
         Variant description using either the default or an alternative schema.
@@ -1991,7 +1988,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BeaconDatasetAlleleResponse'
-    
+
     Pagination:
       description: |
         Pagination to apply on the results.
@@ -2006,14 +2003,14 @@ components:
           example: 1
         limit:
           description: |
-            Size of the page. 
-            
+            Size of the page.
+
             Use  `0` to return all the results or the maximum allowed by the Beacon, if there is any.
           type: integer
           minimum: 0
           default: 10
           example: 10
-    
+
     InfoRequest:
       description: |
         Request parameters for information endpoints.
@@ -2068,7 +2065,7 @@ components:
           $ref: '#/components/schemas/Pagination'
     GenomicVariantFields:
       description: |
-        All the required fields to query any kind of variant (e.g. SNP, DUP, 
+        All the required fields to query any kind of variant (e.g. SNP, DUP,
         etc.).
       type: object
       properties:
@@ -2082,25 +2079,32 @@ components:
           $ref: '#/components/schemas/Chromosome'
         start:
           description: |
-            Precise or fuzzy start coordinate position(s), allele locus 
+            Precise or fuzzy start coordinate position(s), allele locus
             (0-based, inclusive).
             * `start` only:
-              - for single positions, e.g. the start of a specified sequence 
-              alteration where the size is given through the specified 
+              - for single positions, e.g. the start of a specified sequence
+              alteration where the size is given through the specified
               `alternateBases`
               - typical use are queries for SNV and small InDels
-              - the use of `start` without an `end` parameter requires the use 
-              of `referenceBases`
+              - the use of `start` without an `end` parameter requires the use
+              of `alternateBases`
+
             * `start` and `end`:
-              - if used with `variantType`, for special use case for exactly 
-              determined structural changes
-              - without `variantType`, for searching any variant falling within 
-              this range (a.k.a. range query)
-            * use 2 values for querying imprecise positions (e.g. identifying 
-            all structural variants starting anywhere between `start[0]` <-> 
-            `start[1]`, and ending anywhere between `end[0]` <-> `end[1]`)
-            * single or double sided precise matches 
-            can be achieved by setting `start[1]=start[0]+1` and `end[1]=end[0]+1`
+              - for searching any variant falling fully or partially within the
+              range between `start` and `end` (a.k.a. "range query")
+              - additional use of `variantType` OR `alternateBases` can limit the
+              scope of the query
+              - by convention, partial overlaps of variants with the indicated
+              genomic range are accepted; for specific overlap requirements the
+              4-parammeter "Bracket Queries" should be employed
+            * use of 2 values in both `start` and `end` for constructing a
+            "Bracket Query":
+              - can be used to match any contiguous genomic interval, e.g. for
+              querying imprecise positions
+                * identifying all structural variants starting between `start[0]`
+                and `start[1]`, and ending between `end[0]` <-> `end[1]`
+                * single or double sided precise matches can be achieved by
+                setting `start[1]=start[0]+1` and `end[1]=end[0]+1`
           type: array
           items:
             type: integer
@@ -2110,9 +2114,9 @@ components:
           maxItems: 2
         end:
           description: |
-            Precise or fuzzy end coordinate(s) (0-based, exclusive). See `start`. 
-            
-            For fuzzy matches, provide 2 values in the array (e.g. [111,222]).
+            Precise or bracketing the end of the variants of interest:
+            * (0-based, exclusive) - see `start`
+            * for bracket queries, provide 2 values (e.g. [111,222]).
           type: array
           items:
             type: integer
@@ -2126,15 +2130,20 @@ components:
           $ref: '#/components/schemas/AlternateBases'
         variantType:
           description: |
-            The `variantType` is used to denote e.g. structural variants.
-            Examples:
-            * DUP: duplication of sequence following `start`; not necessarily in
-            situ
+            The `variantType` is used to query variants which are not defined
+            through a sequenc of one or more bases using the `alternateBases`
+            parameter. Examples here are e.g. structural variants:
+            * DUP
+              - increased allelic count of material from the genomic region
+              between `start` and `end` positions
+              - no assumption about the placement of the additional sequences is
+              being made (i.e. no _in situ_ requirement as tandem duplications)
             * DEL: deletion of sequence following `start`
             * BND: breakend, i.e. termination of the allele at position
                   `start` or in the `startMin` => `startMax` interval, or fusion
                   of the sequence to distant partner
-            Optional: either `alternateBases` or `variantType` is required.
+            Either `alternateBases` or `variantType` is required, with the
+            exception of range queries (single `start` and `end` parameters).
           type: string
         mateName:
           $ref: '#/components/schemas/Chromosome'
@@ -2275,7 +2284,7 @@ components:
           $ref: '#/components/schemas/InfoRequest'
         returnedSchemas:
           $ref: '#/components/schemas/InfoRequestedSchemas'
-    
+
     GenomicVariantResponse:
       description: |
         Response of a genomic variant query
@@ -2322,7 +2331,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Handover'
-    
+
     # IndividualRequest:
     #   description: |
     #     Description pending
@@ -2449,7 +2458,7 @@ components:
       oneOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_biosample_schema.yaml#/components/schemas/Biosample'
         - $ref: '#/components/schemas/AlternativeSchema'
-    
+
     RunResponse:
       description: |
         Response of a query over runs.
@@ -2502,7 +2511,7 @@ components:
       oneOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_run_schema.yaml#/components/schemas/Run'
         - $ref: '#/components/schemas/AlternativeSchema'
-    
+
     AnalysisResponse:
       description: |
         Response of a query over analyses.
@@ -2555,7 +2564,7 @@ components:
       oneOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_analysis_schema.yaml#/components/schemas/Analysis'
         - $ref: '#/components/schemas/AlternativeSchema'
-    
+
     VariantInSampleResponse:
       description: |
         Response of a query over variants in sample.
@@ -2608,7 +2617,7 @@ components:
       oneOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_in_sample_schema.yaml#/components/schemas/VariantInSample'
         - $ref: '#/components/schemas/AlternativeSchema'
-    
+
     VariantInterpretationResponse:
       description: |
         Response of a query over variants in sample.
@@ -2661,7 +2670,7 @@ components:
       oneOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_interpretation_schema.yaml#/components/schemas/VariantInterpretation'
         - $ref: '#/components/schemas/AlternativeSchema'
-    
+
     InteractorResponse:
       description: |
         Response of a query over variants in sample.
@@ -2714,7 +2723,6 @@ components:
       oneOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_interactor_schema.yaml#/components/schemas/Interactor'
         - $ref: '#/components/schemas/AlternativeSchema'
-    
     CohortResponse:
       description: |
         Response of a query over cohorts.
@@ -2804,7 +2812,7 @@ components:
       oneOf:
         - $ref: '#/components/schemas/BeaconInfo'
         - $ref: '#/components/schemas/AlternativeSchema'
-    
+
     DatasetResponseContent:
       description: |
         Description pending
@@ -2820,7 +2828,7 @@ components:
             $ref: '#/components/schemas/BeaconDataset' #'#/components/schemas/DatasetResponseResults'
         info:
           type: object
-    
+
     BeaconInfo:
       description: |
         Metadata describing a beacon instance.
@@ -2849,7 +2857,7 @@ components:
         environment:
           type: string
           description: |
-            Environment the service is running in. Use this to distinguish 
+            Environment the service is running in. Use this to distinguish
             between production, development and testing/staging deployments.
           enum:
           - prod
@@ -2902,7 +2910,7 @@ components:
           type: object
           example:
             additionalInfoKey1: additionalInfoValue1
-            additionalInfoKey2: 
+            additionalInfoKey2:
                 - additionalInfoValue2
                 - additionalInfoValue3
     BeaconOrganization:
@@ -3020,7 +3028,7 @@ components:
             Additional unspecified metadata about the dataset.
           type: object
           example:
-            additionalInfoKey1: 
+            additionalInfoKey1:
               - additionalInfoValue1
               - additionalInfoValue2]
             additionalInfoKey2: additionalInfoValue3
@@ -3053,21 +3061,21 @@ components:
           type: integer
           format: int64
           description: |
-            Number of times the requested allele has been observed in the 
+            Number of times the requested allele has been observed in the
             dataset.
           minimum: 0
         callCount:
           type: integer
           format: int64
           description: |
-            Total number of calls in the dataset. Missing calls are not 
+            Total number of calls in the dataset. Missing calls are not
             included.
           minimum: 0
         sampleCount:
           type: integer
           format: int64
           description: |
-            Number of samples in the dataset where the requested allele is 
+            Number of samples in the dataset where the requested allele is
             found.
           minimum: 0
         note:
@@ -3081,11 +3089,11 @@ components:
             providing more information about a given allele (RFC 3986 format).
         info:
           description: |
-            Additional unspecified metadata about the dataset response or its 
+            Additional unspecified metadata about the dataset response or its
             content.
           type: object
           example:
-            additionalInfoKey1: 
+            additionalInfoKey1:
               - additionalInfoValue1
               - additionalInfoValue2]
             additionalInfoKey2: additionalInfoValue3
@@ -3132,16 +3140,16 @@ components:
         note:
           type: string
           description: |
-            An optional text including considerations on the handover link 
+            An optional text including considerations on the handover link
             provided.
           example: |
-            This handover link provides access to a summarized VCF. To access 
-            the VCF containing the details for each sample filling an 
+            This handover link provides access to a summarized VCF. To access
+            the VCF containing the details for each sample filling an
             application is required. See Beacon contact information details.
         url:
           type: string
           description: |
-            URL endpoint to where the handover process could progress (in RFC 
+            URL endpoint to where the handover process could progress (in RFC
             3986 format).
           example: |
             "https://api.mygenomeservice.org/handover/9dcc48d7-fc88-11e8-9110-b0c592dbf8c0/"
@@ -3150,8 +3158,8 @@ components:
       required:
         - id
       description: |
-            Handover type, as an Ontology_term object with CURIE syntax for the 
-            `id` value. 
+            Handover type, as an Ontology_term object with CURIE syntax for the
+            `id` value.
       properties:
         id:
           type: string

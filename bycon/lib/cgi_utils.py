@@ -81,36 +81,44 @@ def cgi_print_text_response(form_data, data, status_code):
 
 ################################################################################
 
-def cgi_simplify_response(response):
+def cgi_simplify_response(byc):
 
-    if "data" in response:            
-        return response["data"]
-    elif "response" in response:
-        if "results" in response["response"]:
-            return response["response"]["results"]
+    r = byc["service_response"]
 
-    return response
+    if "data" in r:            
+        byc.update({ "service_response": r["data"] })
+    elif "response" in r:
+        if "results" in r["response"]:
+            byc.update({ "service_response": r["response"]["results"] })
+
+    return byc
 
 ################################################################################
 
-def cgi_break_on_errors(r, byc):
+def cgi_break_on_errors(byc):
 
+    r = byc["service_response"]
+    
     if "response" in r and "form_data" in byc:
         if "error" in r["response"]:
             if r["response"]["error"]["error_code"] > 200:
-                cgi_print_json_response( byc, r, r["response"]["error"]["error_code"] )
+                cgi_print_json_response( byc, r["response"]["error"]["error_code"] )
 
 ################################################################################
 
-def cgi_print_json_response(form_data, response, status_code):
+# def cgi_print_json_response(form_data, response, status_code):
+def cgi_print_json_response(byc, status_code):
 
     r_f = ""
     r_t = ""
+    f_d = {}
+    if "form_data" in byc:
+        f_d = byc["form_data"]
 
-    if "responseType" in form_data:
-        r_t = form_data.getvalue("responseType")
-    if "responseFormat" in form_data:
-        r_f = form_data.getvalue("responseFormat")
+    if "responseType" in f_d:
+        r_t = f_d.getvalue("responseType")
+    if "responseFormat" in f_d:
+        r_f = f_d.getvalue("responseFormat")
 
     # TODO: fix callback ...
     # if "callback" in form_data:
@@ -122,46 +130,46 @@ def cgi_print_json_response(form_data, response, status_code):
     # with simple key-value pairs)
     # TODO: universal text table converter
     if "text" in r_t:
-        response = cgi_simplify_response(response)      
-        if isinstance(response, dict):
-            response = json.dumps(response, default=str)
-        if isinstance(response, list):
+        cgi_simplify_response(byc)      
+        if isinstance(byc["service_response"], dict):
+            byc.update({ "service_response": json.dumps(byc["service_response"], default=str) })
+        if isinstance(byc["service_response"], list):
             l_d = [ ]
-            for dp in response:
+            for dp in byc["service_response"]:
                 v_l = [ ]
                 for v in dp.values():
                     v_l.append(str(v))
                 l_d.append("\t".join(v_l))
-            response = "\n".join(l_d)
-        cgi_print_text_response(form_data, response, status_code)
+            byc.update({ "service_response": "\n".join(l_d) })
+        cgi_print_text_response(byc, status_code)
 
     if "simple" in r_f:
-        response = cgi_simplify_response(response)
+        cgi_simplify_response(byc)
 
-    if "response" in response:
-        if "error" in response["response"]:
-            response["response"]["error"].update({"error_code": status_code })
+    if "response" in byc["service_response"]:
+        if "error" in byc["service_response"]["response"]:
+            byc["service_response"]["response"]["error"].update({"error_code": status_code })
 
     print('Content-Type: application/json')
     print('status:'+str(status_code))
     print()
-    print(json.dumps(response, indent=4, sort_keys=True, default=str)+"\n")
+    print(json.dumps(byc["service_response"], indent=4, sort_keys=True, default=str)+"\n")
     exit()
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-def open_json_streaming(response, filename="data.json"):
+def open_json_streaming(byc, filename="data.json"):
 
     print('Content-Type: application/json')
     print('Content-Disposition: attachment; filename="{}"'.format(filename))
     print('status: 200')
     print()
     print('{"meta":', end = '')
-    print(json.dumps(response["meta"], indent=None, sort_keys=True, default=str), end = ",")
+    print(json.dumps(byc["service_response"]["meta"], indent=None, sort_keys=True, default=str), end = ",")
     print('"response":{', end = '')
-    for r_k, r_v in response["response"].items():
+    for r_k, r_v in byc["service_response"]["response"].items():
         if "results" in r_k:
             continue
         print('"'+r_k+'":', end = '')

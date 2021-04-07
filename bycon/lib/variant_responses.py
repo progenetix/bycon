@@ -8,7 +8,7 @@ from cgi_utils import *
 
 ################################################################################
 
-def retrieve_variants(ds_id, r, byc):
+def retrieve_variants(ds_id, byc):
 
     vs = [ ]
 

@@ -6,6 +6,8 @@ service_names:
   datasets: datasets
   biosamples: biosamples
   individuals: individuals
+  gVariants: variants
   g_variants: variants
+  variants_in_sample: variants
+  variantsInSample: variants
   variants: variants
-

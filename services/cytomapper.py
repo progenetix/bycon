@@ -44,29 +44,30 @@ def cytomapper():
     
     byc = initialize_service()
 
+    local_path = path.dirname( path.abspath(__file__) )
     byc.update( { "args": _get_args() } )
-    byc[ "config" ][ "paths" ][ "genomes" ] = path.join( dir_path, "rsrc", "genomes" )
+    byc[ "config" ][ "paths" ][ "genomes" ] = path.join( local_path, "rsrc", "genomes" )
     
     parse_variants(byc)
     parse_cytoband_file(byc)
 
     # response prototype
-    r = create_empty_service_response(byc)
+    create_empty_service_response(byc)
 
     cytoBands = [ ]
     if "cytoBands" in byc["variant_pars"]:
         cytoBands, chro, start, end = _bands_from_cytobands( **byc )
-        r["meta"]["received_request"].update({ "cytoBands": byc["variant_pars"]["cytoBands"] })
+        byc["service_response"]["meta"]["received_request"].update({ "cytoBands": byc["variant_pars"]["cytoBands"] })
     elif "chroBases" in byc["variant_pars"]:
         cytoBands, chro, start, end = _bands_from_chrobases( **byc )
-        r["meta"]["received_request"].update({ "chroBases": byc["variant_pars"]["chroBases"] })
+        byc["service_response"]["meta"]["received_request"].update({ "chroBases": byc["variant_pars"]["chroBases"] })
 
     cb_label = _cytobands_label( cytoBands )
 
     if len( cytoBands ) < 1:
-        response_add_error(r, 422, "No matching cytobands!" )
-        _print_terminal_response( byc["args"], r )
-        cgi_break_on_errors(r, byc)
+        response_add_error(byc, 422, "No matching cytobands!" )
+        _print_terminal_response( byc["args"], byc["service_response"] )
+        cgi_break_on_errors(byc)
 
     size = int(  end - start )
     chroBases = chro+":"+str(start)+"-"+str(end)
@@ -103,10 +104,10 @@ def cytomapper():
         }
     ]
 
-    _print_terminal_response( byc["args"], r )
+    _print_terminal_response( byc["args"], byc["service_response"] )
 
-    populate_service_response( byc, r, results)
-    cgi_print_json_response( byc, r, 200 )
+    populate_service_response( byc, results)
+    cgi_print_json_response( byc, 200 )
 
 ################################################################################
 

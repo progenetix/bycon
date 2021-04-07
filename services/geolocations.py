@@ -38,25 +38,25 @@ def geolocations():
     # for the geolocs database, not the provenance object
     byc["geoloc_definitions"]["geo_root"] = "geo_location"
     
-    r = create_empty_service_response(byc)
+    create_empty_service_response(byc)
 
     query, geo_pars = geo_query( **byc )
     for g_k, g_v in geo_pars.items():
-        response_add_parameter(r, g_k, g_v)
+        response_add_parameter(byc, g_k, g_v)
 
     if len(query.keys()) < 1:
-        response_add_error(r, 422, "No query generated - missing or malformed parameters" )
+        response_add_error(byc, 422, "No query generated - missing or malformed parameters" )
     
-    cgi_break_on_errors(r, byc)
+    cgi_break_on_errors(byc)
 
     results, e = mongo_result_list( byc["geo_db"], byc["geo_coll"], query, { '_id': False } )
     if e:
-        response_add_error(r, 422, e)
+        response_add_error(byc, 422, e)
     
-    cgi_break_on_errors(r, byc)
+    cgi_break_on_errors(byc)
 
-    populate_service_response( byc, r, results)
-    cgi_print_json_response( byc, r, 200 )
+    populate_service_response( byc, results)
+    cgi_print_json_response( byc, 200 )
 
 ################################################################################
 ################################################################################

@@ -48,15 +48,15 @@ def schemas():
         s_data.update( { f_name: read_schema_files(f_name, "") } )
 
     schema_name = rest_path_value("schemas")
-    print(schema_name)
+
     if schema_name in s_data.keys():    
-        cgi_print_json_response( {}, s_data[ schema_name ], 200 )
+        cgi_print_json_response( {"service_response": s_data[ schema_name ] }, 200 )
         exit()
 
-    r = create_empty_service_response(byc)    
-    response_add_error(r, 422, "No correct schema name provided!")
+    create_empty_service_response(byc)
+    response_add_error(byc, 422, "No correct schema name provided!")
  
-    cgi_print_json_response( {}, r, 422 )
+    cgi_print_json_response( {}, 422 )
 
 ################################################################################
 ################################################################################

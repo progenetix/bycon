@@ -34,15 +34,11 @@ def main():
 def info():
 
     byc = initialize_service()
-
     parse_beacon_schema(byc)
-
-    r = create_empty_service_response(byc)
-
+    create_empty_service_response(byc)
     byc["beacon_info"].update({"datasets": datasets_update_latest_stats(byc) })
-
-    populate_service_response( byc, r, [ byc["beacon_info"] ] )
-    cgi_print_json_response( byc, r, 200 )
+    populate_service_response( byc, [ byc["beacon_info"] ] )
+    cgi_print_json_response( byc, 200 )
 
 ################################################################################
 ################################################################################

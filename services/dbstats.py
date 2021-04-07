@@ -49,13 +49,13 @@ def dbstats():
             if s_n > 0:
                 byc["stats_number"] = s_n
 
-    r = create_empty_service_response(byc)
+    create_empty_service_response(byc)
 
     ds_stats = dbstats_return_latest(byc)
 
     results = [ ]
     for stat in ds_stats:
-        r["response"]["info"].update({ "date": stat["date"] })
+        byc["service_response"]["response"]["info"].update({ "date": stat["date"] })
         for ds_id, ds_vs in stat["datasets"].items():
             if len(byc[ "dataset_ids" ]) > 0:
                 if not ds_id in byc[ "dataset_ids" ]:
@@ -65,8 +65,8 @@ def dbstats():
                 dbs.update({k:ds_vs[k]})
             results.append( dbs )
 
-    populate_service_response( byc, r, results )
-    cgi_print_json_response( byc, r, 200 )
+    populate_service_response( byc, results )
+    cgi_print_json_response( byc, 200 )
 
 ################################################################################
 ################################################################################

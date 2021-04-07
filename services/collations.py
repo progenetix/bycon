@@ -32,12 +32,12 @@ def collations():
     select_dataset_ids(byc)
     parse_filters(byc)
 
-    r = create_empty_service_response(byc)    
+    create_empty_service_response(byc)    
 
     if len(byc[ "dataset_ids" ]) < 1:
-      response_add_error(r, 422, "No `datasetIds` parameter provided." )
+      response_add_error(byc, 422, "No `datasetIds` parameter provided." )
  
-    cgi_break_on_errors(r, byc)
+    cgi_break_on_errors(byc)
 
     # data retrieval & response population
     s_s = { }
@@ -77,8 +77,8 @@ def collations():
 
     mongo_client.close( )
 
-    populate_service_response( byc, r, response_map_results( list(s_s.values()), byc))
-    cgi_print_json_response( byc, r, 200 )
+    populate_service_response( byc, response_map_results( list(s_s.values()), byc))
+    cgi_print_json_response( byc, 200 )
 
 ################################################################################
 ################################################################################
