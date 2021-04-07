@@ -40,7 +40,7 @@ def beacon(path=""):
 
     if service_name in these_prefs["service_names"]:    
         f = these_prefs["service_names"][ service_name ]
-        
+
         # dynamic package/function loading
         try:
             mod = import_module(f)
