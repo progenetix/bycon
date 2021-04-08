@@ -4,6 +4,7 @@ bycon_definition_files:
   - filter_definitions
 defaults:
   method: ""
+  endpoint: filtering_terms
 meta:
   beacon_id: org.progenetix
   response_type: InfoResponse

@@ -1,7 +1,6 @@
 import re, json, yaml
 from os import path, scandir, pardir
 from json_ref_dict import RefDict, materialize
-import sys
 
 # local
 lib_path = path.dirname( path.abspath(__file__) )

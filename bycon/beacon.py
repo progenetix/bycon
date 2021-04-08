@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 
-from os import path, pardir
 import sys, re, cgitb
+from os import path, pardir
 from importlib import import_module
 
 # local

@@ -1,9 +1,7 @@
 from os import path, pardir
-import inspect
-import json
+import inspect, json
 from pymongo import MongoClient
 from bson import json_util
-import sys
 
 # local
 lib_path = path.dirname( path.abspath(__file__) )

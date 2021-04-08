@@ -1,7 +1,5 @@
-import re, yaml
-import json
+import re, yaml, json
 from pymongo import MongoClient
-import sys
 from os import path, pardir
 from json_ref_dict import RefDict, materialize
 

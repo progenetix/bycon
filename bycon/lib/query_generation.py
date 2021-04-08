@@ -1,9 +1,7 @@
 import cgi, cgitb
 import re, yaml
-from os import path as path
 from pymongo import MongoClient
 from bson.son import SON
-import sys
 
 from parse_variants import *
 from parse_filters import *

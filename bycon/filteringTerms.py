@@ -13,10 +13,9 @@ sys.path.append( pkg_path )
 
 from bycon import *
 
-
 """podmd
 
-* <https://beacon.progenetix.org/datasets/>
+* <https://beacon.progenetix.org/beacon/filteringTerms
 
 podmd"""
 
@@ -40,8 +39,6 @@ def filtering_terms():
 
     byc = initialize_service()
 
-    byc.update({"endpoint": "filtering_terms"})
-
     parse_beacon_schema(byc)
     select_dataset_ids(byc)
     check_dataset_ids(byc)
@@ -50,9 +47,7 @@ def filtering_terms():
     
     create_empty_service_response(byc)
 
-    results = return_filtering_terms(byc)
-
-    populate_service_response( byc, results )
+    populate_service_response( byc, return_filtering_terms(byc) )
     cgi_print_json_response( byc, 200 )
 
 ################################################################################

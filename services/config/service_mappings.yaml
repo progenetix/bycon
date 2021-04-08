@@ -1,14 +1,5 @@
 service_names:
   root_path: info
-  info: info
-  filtering_terms: filteringTerms
-  filteringTerms: filteringTerms
-  datasets: datasets
-  biosamples: biosamples
-  g_variants: variants
-  variants: variants
-  beacon: beacon
-  biosamples: biosamples
   cytomapper: cytomapper
   dbstats: dbstats
   deliveries: deliveries

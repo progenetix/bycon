@@ -2,7 +2,6 @@ import json
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from os import path, pardir
-import sys
 
 from cgi_utils import *
 
