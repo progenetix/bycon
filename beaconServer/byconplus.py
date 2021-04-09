@@ -12,7 +12,7 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-from bycon import *
+from beaconServer import *
 from datasets import *
 
 """podmd
@@ -58,21 +58,17 @@ def byconplus():
         
     update_datasets_from_dbstats(byc)
 
+    initialize_beacon_queries(byc)
+
+    create_empty_service_response(byc)
+    response_collect_errors(byc)
+    cgi_break_on_errors(byc)
+
     beacon_get_endpoint(byc)
     parse_endpoints(byc)
 
-    select_dataset_ids(byc)
-    check_dataset_ids(byc)
-
-    get_filter_flags(byc)  
-    parse_filters(byc)
-
     select_response_type(byc)
     check_service_requests(byc)
-
-    parse_variants(byc)
-    get_variant_request_type(byc)
-    generate_queries(byc)
 
     beacon_respond_with_errors(byc)
     collect_dataset_responses(byc)

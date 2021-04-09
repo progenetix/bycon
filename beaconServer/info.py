@@ -7,10 +7,10 @@ dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-from bycon.lib.cgi_utils import cgi_print_json_response
-from bycon.lib.read_specs import datasets_update_latest_stats
-from bycon.lib.schemas_parser import *
-from bycon.lib.service_utils import create_empty_service_response,initialize_service,populate_service_response
+from beaconServer.lib.cgi_utils import cgi_print_json_response
+from beaconServer.lib.read_specs import datasets_update_latest_stats
+from beaconServer.lib.schemas_parser import *
+from beaconServer.lib.service_utils import create_empty_service_response,initialize_service,populate_service_response
 
 """podmd
 

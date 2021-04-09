@@ -10,12 +10,12 @@ from pymongo import MongoClient
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import *
-from bycon.lib.parse_filters import *
-from bycon.lib.parse_variants import create_and_or_query_for_list
-from bycon.lib.read_specs import *
-from bycon.lib.schemas_parser import *
-from bycon.lib.service_utils import *
+from beaconServer.lib.cgi_utils import *
+from beaconServer.lib.parse_filters import *
+from beaconServer.lib.parse_variants import create_and_or_query_for_list
+from beaconServer.lib.read_specs import *
+from beaconServer.lib.schemas_parser import *
+from beaconServer.lib.service_utils import *
 
 """podmd
 * <https://progenetix.org/services/ontologymaps/?filters=NCIT:C3222>

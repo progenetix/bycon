@@ -10,11 +10,11 @@ import sys, argparse
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import *
-from bycon.lib.parse_variants import *
-from bycon.lib.read_specs import *
+from beaconServer.lib.cgi_utils import *
+from beaconServer.lib.parse_variants import *
+from beaconServer.lib.read_specs import *
 from lib.cytoband_utils import *
-from bycon.lib.service_utils import *
+from beaconServer.lib.service_utils import *
 
 ################################################################################
 ################################################################################

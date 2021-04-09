@@ -3,8 +3,6 @@ from pymongo import MongoClient
 from os import path, pardir
 from json_ref_dict import RefDict, materialize
 
-from cgi_utils import *
-
 ################################################################################
 
 def read_bycon_configs_by_name(name, byc):

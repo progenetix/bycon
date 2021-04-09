@@ -117,7 +117,8 @@ paths:
   /datasets/{id}/variant_interpretations:
     post:
       description: |
-        Get the variants interpretations by datasetId.
+        Get the variants interpretations (`VariantInterpretationResponse`) by 
+        dataset ID.
       operationId: getVariantsInterpretationsByDatasetId
       tags:
         - Endpoints
@@ -135,35 +136,13 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInterpretationResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInterpretationResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInterpretationResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInterpretationResponse'
+          $ref: '#/components/responses/Forbidden'
   /filtering_terms:
     get:
       description: |
@@ -182,7 +161,8 @@ paths:
   /individuals:
     post:
       description: |
-        Get response to a beacon query for individual information.
+        Get response to a beacon query for individual information 
+        (`IndividualResponse`).
       operationId: postIndividualResponse
       tags:
         - Endpoints
@@ -194,39 +174,17 @@ paths:
         required: false
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but s/he is not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Forbidden'
   /individuals/{id}:
     post:
       description: |
-        Get an individual by its Id.
+        Get an individual (`IndividualResponse`) by its Id.
       operationId: postIndividualById
       tags:
         - Endpoints
@@ -245,39 +203,17 @@ paths:
         required: false
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but s/he is not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Forbidden'
   /individuals/{id}/biosamples:
     post:
       description: |
-        Get biosamples found in this individual.
+        Get biosamples (`BiosampleResponse`) found in this individual.
       operationId: postBiosamplesByIndividualId
       tags:
         - Endpoints
@@ -296,39 +232,18 @@ paths:
         required: false
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but s/he is not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/Forbidden'
   /individuals/{id}/g_variants:
     post:
       description: |
-        Get variants that have been stored for this individual.
+        Get variants (`GenomicVariantResponse`) that have been stored for this 
+        individual.
       operationId: postVariantsByIndividualId
       tags:
         - Endpoints
@@ -347,39 +262,17 @@ paths:
         required: false
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but s/he is not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/Forbidden'
   /individuals/{id}/cohorts:
     post:
       description: |
-        Get cohort(s) of this individual.
+        Get cohort(s) (`CohortResponse`) of this individual.
       operationId: postCohortsByIndividual
       tags:
         - Endpoints
@@ -397,39 +290,46 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CohortResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CohortResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CohortResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CohortResponse'
+          $ref: '#/components/responses/Forbidden'
+  /individuals/{id}/interactors:
+    post:
+      description: |
+        Get interactor(s) (`InteractorResponse`) of this individual.
+      operationId: postInteractorsByIndividual
+      tags:
+        - Endpoints
+      parameters:
+        - name: id
+          in: path
+          description: Individual ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
   /biosamples:
     post:
       description: |
-        Get response to a beacon query for biosample information.
+        Get response to a beacon query for biosample information 
+        (`BiosampleResponse`).
       operationId: postSampleResponse
       tags:
         - Endpoints
@@ -441,39 +341,17 @@ paths:
         required: false
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/Forbidden'
   /biosamples/{id}:
     post:
       description: |
-        Get a biosample by its Id.
+        Get a biosample (`BiosampleResponse`) by its Id.
       operationId: postBiosampleById
       tags:
         - Endpoints
@@ -492,39 +370,18 @@ paths:
         required: false
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/Forbidden'
   /biosamples/{id}/individuals:
     post:
       description: |
-        Get the individual to whom this biosample belongs to.
+        Get the individual information (`IndividualResponse`) to whom this 
+        biosample belongs to.
       operationId: postInvidigualsByBiosampleId
       tags:
         - Endpoints
@@ -543,39 +400,18 @@ paths:
         required: false
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but s/he is not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Forbidden'
   /biosamples/{id}/g_variants:
     post:
       description: |
-        Get the variants that have been stored for this biosample.
+        Get the variants (`GenomicVariantResponse`) that have been stored for 
+        this biosample.
       operationId: postVariantsByBiosampleId
       tags:
         - Endpoints
@@ -594,39 +430,17 @@ paths:
         required: false
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but s/he is not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/Forbidden'
   /biosamples/{id}/runs:
     post:
       description: |
-        Get the runs that have been stored for this biosample.
+        Get the runs (`RunResponse`) that have been stored for this biosample.
       operationId: postRunsByBiosampleId
       tags:
         - Endpoints
@@ -644,39 +458,18 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but s/he is not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/Forbidden'
   /biosamples/{id}/variants_in_sample:  
     post:
       description: |
-        Get the variants in sample in which this biosample is found.
+        Get the variants in sample (`VariantInSampleResponse`) in which this 
+        biosample is found.
       operationId: getVariantsInSampleByBiosampleId
       tags:
         - Endpoints
@@ -694,39 +487,18 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/Forbidden'
   /g_variants:
     post:
       description: |
-        Any kind of genomic query that wants to query variants.
+        Any kind of genomic query that wants to query variants 
+        (`GenomicVariantResponse`).
       operationId: postGenomicVariant
       tags:
         - Endpoints
@@ -738,39 +510,17 @@ paths:
         required: false
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but s/he is not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/Forbidden'
   /g_variants/{id}:
     post:
       description: |
-        Get a variant by its Id.
+        Get a variant (`GenomicVariantResponse`) by its Id.
       operationId: getGenomicVariantById
       tags:
         - Endpoints
@@ -788,39 +538,17 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but s/he is not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenomicVariantResponse'
+          $ref: '#/components/responses/Forbidden'
   /g_variants/{id}/biosamples:
     post:
       description: |
-        Get the biosamples where this variant is found.
+        Get the biosamples (`BiosampleResponse`) where this variant is found.
       operationId: getBiosamplesByVariantId
       tags:
         - Endpoints
@@ -838,39 +566,18 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but s/he is not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/Forbidden'
   /g_variants/{id}/individuals:
     post:
       description: |
-        Get the individuals in which this variant is found.
+        Get the individuals (`IndividualResponse`) in which this variant is 
+        found.
       operationId: getIndividualsByVariantId
       tags:
         - Endpoints
@@ -888,39 +595,18 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Forbidden'
   /g_variants/{id}/variants_in_sample:
     post:
       description: |
-        Get the variants in sample in which this variant is found.
+        Get the variants in sample (`VariantInSampleResponse`) in which this 
+        variant is found.
       operationId: getVariantsInSampleByVariantId
       tags:
         - Endpoints
@@ -938,39 +624,18 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/Forbidden'
   /g_variants/{id}/variant_interpretations:
     post:
       description: |
-        Get the variants interpretations by variantId.
+        Get the variants interpretations (`VariantInterpretationResponse`) by 
+        variant ID.
       operationId: getVariantsInterpretationsByVariantId
       tags:
         - Endpoints
@@ -988,39 +653,17 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInterpretationResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInterpretationResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInterpretationResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInterpretationResponse'
+          $ref: '#/components/responses/Forbidden'
   /runs:
     post:
       description: |
-        Any kind of genomic query that wants to query runs.
+        Any kind of genomic query that wants to query runs (`RunResponse`).
       operationId: postRun
       tags:
         - Endpoints
@@ -1031,39 +674,17 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/Forbidden'
   /runs/{id}:
     post:
       description: |
-        Get a run by its `id`.
+        Get a run (`RunResponse`) by its `id`.
       operationId: postRunById
       tags:
         - Endpoints
@@ -1081,39 +702,17 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/Forbidden'
   /runs/{id}/biosamples:
     post:
       description: |
-        Get the biosamples in which this run is found.
+        Get the biosamples (`BiosampleResponse`) in which this run is found.
       operationId: postBiosamplesByRunId
       tags:
         - Endpoints
@@ -1131,39 +730,17 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BiosampleResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/Forbidden'
   /runs/{id}/analyses:
     post:
       description: |
-        Get the analyses in which this run is found.
+        Get the analyses (`AnalysisResponse`) in which this run is found.
       operationId: postAnalysesByRunId
       tags:
         - Endpoints
@@ -1181,39 +758,17 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AnalysisResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AnalysisResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AnalysisResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AnalysisResponse'
+          $ref: '#/components/responses/Forbidden'
   /analyses:
     post:
       description: |
-        Any kind of query that wants to query analysis.
+        Any kind of query that wants to query analysis (`AnalysisResponse`).
       operationId: postAnalyses
       tags:
         - Endpoints
@@ -1224,39 +779,17 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AnalysisResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AnalysisResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AnalysisResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/Forbidden'
   /analyses/{id}:
     post:
       description: |
-        Get an analysis by its `id`.
+        Get an analysis (`AnalysisResponse`) by its `id`.
       operationId: postAnalysisById
       tags:
         - Endpoints
@@ -1274,39 +807,17 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AnalysisResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AnalysisResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AnalysisResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AnalysisResponse'
+          $ref: '#/components/responses/Forbidden'
   /analyses/{id}/runs:
     post:
       description: |
-        Get the runs in which this analysis is found.
+        Get the runs (`RunResponse`) in which this analysis is found.
       operationId: postRunsByAnalysisId
       tags:
         - Endpoints
@@ -1324,39 +835,18 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RunResponse'
+          $ref: '#/components/responses/Forbidden'
   /analyses/{id}/variants_in_sample:
     post:
       description: |
-        Get the variants in sample in which this analysis is found.
+        Get the variants in sample (`VariantInSampleResponse`) in which this 
+        analysis is found.
       operationId: getVariantsInSampleByAnalysisId
       tags:
         - Endpoints
@@ -1374,39 +864,18 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/Forbidden'
   /variants_in_sample:
     post:
       description: |
-        Any kind of query that wants to query variants in sample.
+        Any kind of query that wants to query variants in sample 
+        (`VariantInSampleResponse`).
       operationId: postVariantsInSample
       tags:
         - Endpoints
@@ -1417,39 +886,18 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInSampleResponse'
+          $ref: '#/components/responses/Forbidden'
   /variants_interpretations:
     post:
       description: |
-        Any kind of query that wants to query variant interpretations.
+        Any kind of query that wants to query variant interpretations 
+        (`VariantInterpretationResponse`).
       operationId: postVariantInterpretation
       tags:
         - Endpoints
@@ -1460,39 +908,17 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInterpretationResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInterpretationResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInterpretationResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VariantInterpretationResponse'
+          $ref: '#/components/responses/Forbidden'
   /interactors:
     post:
       description: |
-        Any kind of query that wants to query interactors.
+        Any kind of query that wants to query interactors (`InteractorResponse`).
       operationId: postInteractors
       tags:
         - Endpoints
@@ -1503,39 +929,17 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InteractorResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InteractorResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InteractorResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InteractorResponse'
+          $ref: '#/components/responses/Forbidden'
   /interactors/{id}:
     post:
       description: |
-        Get an interactor by its `id`.
+        Get an interactor (`InteractorResponse`) by its `id`.
       operationId: postInteractorById
       tags:
         - Endpoints
@@ -1553,39 +957,18 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InteractorResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InteractorResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InteractorResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InteractorResponse'
+          $ref: '#/components/responses/Forbidden'
   /interactors/{id}/individuals:
     post:
       description: |
-        Get the individuals in which this interactor is found.
+        Get the individuals (`IndividualResponse`) in which this interactor is 
+        found.
       operationId: postIndividualsByInteractorId
       tags:
         - Endpoints
@@ -1603,39 +986,17 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IndividualResponse'
+          $ref: '#/components/responses/Forbidden'
   /cohorts:
     post:
       description: |
-        Any kind of query that wants to query cohorts.
+        Any kind of query that wants to query cohorts (`CohortResponse`).
       operationId: postCohorts
       tags:
         - Endpoints
@@ -1646,39 +1007,17 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CohortResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CohortResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CohortResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CohortResponse'
+          $ref: '#/components/responses/Forbidden'
   /cohorts/{id}:
     post:
       description: |
-        Get a cohort by its `id`.
+        Get a cohort (`CohortResponse`) by its `id`.
       operationId: postCohortById
       tags:
         - Endpoints
@@ -1696,39 +1035,17 @@ paths:
               $ref: '#/components/schemas/Request'
       responses:
         '200':
-          description: |
-            Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CohortResponse'
+          $ref: '#/components/responses/Success'
         '400':
-          description: |
-            Bad request (e.g. missing mandatory parameter)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CohortResponse'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: >-
-            Unauthorised (e.g. when an unauthenticated user tries to access a
-            protected resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CohortResponse'
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          description: >-
-            Forbidden (e.g. the resource is protected for all users or the user
-            is authenticated but they are not granted for this resource)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CohortResponse'
+          $ref: '#/components/responses/Forbidden'
   /cohorts/{id}/individuals:
     post:
       description: |
-        Get the individuals linked to this cohort.
+        Get the individuals (`IndividualResponse`) linked to this cohort.
       operationId: postIndividualsByCohortId
       tags:
         - Endpoints
@@ -1776,6 +1093,73 @@ paths:
               schema:
                 $ref: '#/components/schemas/IndividualResponse'
 components:
+  responses:
+    Success:
+      description: |
+        Successful operation.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/VariantInterpretationResponse'
+              - $ref: '#/components/schemas/IndividualResponse'
+              - $ref: '#/components/schemas/BiosampleResponse'
+              - $ref: '#/components/schemas/GenomicVariantResponse'
+              - $ref: '#/components/schemas/CohortResponse'
+              - $ref: '#/components/schemas/RunResponse'
+              - $ref: '#/components/schemas/VariantInSampleResponse'
+              - $ref: '#/components/schemas/AnalysisResponse'
+              - $ref: '#/components/schemas/InteractorResponse'
+    BadRequest:
+      description: |
+        Bad request (e.g. missing mandatory parameter).
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/VariantInterpretationResponse'
+              - $ref: '#/components/schemas/IndividualResponse'
+              - $ref: '#/components/schemas/BiosampleResponse'
+              - $ref: '#/components/schemas/GenomicVariantResponse'
+              - $ref: '#/components/schemas/CohortResponse'
+              - $ref: '#/components/schemas/RunResponse'
+              - $ref: '#/components/schemas/VariantInSampleResponse'
+              - $ref: '#/components/schemas/AnalysisResponse'
+              - $ref: '#/components/schemas/InteractorResponse'
+    Unauthorized:
+      description: |
+        Unauthorised (e.g. when an unauthenticated user tries to access a 
+        protected resource).
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/VariantInterpretationResponse'
+              - $ref: '#/components/schemas/IndividualResponse'
+              - $ref: '#/components/schemas/BiosampleResponse'
+              - $ref: '#/components/schemas/GenomicVariantResponse'
+              - $ref: '#/components/schemas/CohortResponse'
+              - $ref: '#/components/schemas/RunResponse'
+              - $ref: '#/components/schemas/VariantInSampleResponse'
+              - $ref: '#/components/schemas/AnalysisResponse'
+              - $ref: '#/components/schemas/InteractorResponse'
+    Forbidden:
+      description: |
+        Forbidden (e.g. the resource is protected for all users or the user
+        is authenticated but they are not granted for this resource).
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/VariantInterpretationResponse'
+              - $ref: '#/components/schemas/IndividualResponse'
+              - $ref: '#/components/schemas/BiosampleResponse'
+              - $ref: '#/components/schemas/GenomicVariantResponse'
+              - $ref: '#/components/schemas/CohortResponse'
+              - $ref: '#/components/schemas/RunResponse'
+              - $ref: '#/components/schemas/VariantInSampleResponse'
+              - $ref: '#/components/schemas/AnalysisResponse'
+              - $ref: '#/components/schemas/InteractorResponse'
   schemas:
     Chromosome:
       description: |

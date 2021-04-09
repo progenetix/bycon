@@ -14,9 +14,9 @@ from pyexcel import get_sheet
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.read_specs import *
-from bycon.lib.parse_filters import *
-from bycon.lib.service_utils import initialize_service
+from beaconServer.lib.read_specs import *
+from beaconServer.lib.parse_filters import *
+from beaconServer.lib.service_utils import initialize_service
 
 
 """

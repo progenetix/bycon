@@ -13,10 +13,10 @@ from progress.bar import Bar
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.read_specs import *
-from bycon.lib.parse_filters import *
-from bycon.lib.query_execution import execute_bycon_queries
-from bycon.lib.query_generation import generate_queries
+from beaconServer.lib.read_specs import *
+from beaconServer.lib.parse_filters import *
+from beaconServer.lib.query_execution import execute_bycon_queries
+from beaconServer.lib.query_generation import generate_queries
 
 service_lib_path = path.join( pkg_path, "services", "lib" )
 sys.path.append( service_lib_path )

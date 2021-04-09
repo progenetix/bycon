@@ -11,11 +11,11 @@ from operator import itemgetter
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import *
-from bycon.lib.parse_filters import *
-from bycon.lib.read_specs import *
-from bycon.lib.query_generation import geo_query, create_and_or_query_for_list
-from bycon.lib.service_utils import *
+from beaconServer.lib.cgi_utils import *
+from beaconServer.lib.parse_filters import *
+from beaconServer.lib.read_specs import *
+from beaconServer.lib.query_generation import geo_query, create_and_or_query_for_list
+from beaconServer.lib.service_utils import *
 
 """podmd
 

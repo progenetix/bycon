@@ -9,8 +9,8 @@ import sys, datetime, argparse
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib import *
-from bycon.lib.service_utils import *
+from beaconServer.lib import *
+from beaconServer.lib.service_utils import *
 
 """podmd
 

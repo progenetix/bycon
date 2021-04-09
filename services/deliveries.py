@@ -11,10 +11,10 @@ import sys, datetime, argparse
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.parse_filters import *
-from bycon.lib.cgi_utils import *
-from bycon.lib.handover_execution import retrieve_handover,handover_return_data
-from bycon.lib.service_utils import *
+from beaconServer.lib.parse_filters import *
+from beaconServer.lib.cgi_utils import *
+from beaconServer.lib.handover_execution import retrieve_handover,handover_return_data
+from beaconServer.lib.service_utils import *
 
 """podmd
 
