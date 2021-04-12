@@ -29,7 +29,6 @@ def variants():
     byc = initialize_service()
 
     parse_beacon_schema(byc)
-
     initialize_beacon_queries(byc)
 
     create_empty_service_response(byc)
