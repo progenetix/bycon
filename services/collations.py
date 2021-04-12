@@ -43,13 +43,14 @@ def collations():
     s_s = { }
     d_k = response_set_delivery_keys(byc)
 
+    c = byc["these_prefs"]["collection_name"]
+
     mongo_client = MongoClient( )
     for ds_id in byc[ "dataset_ids" ]:
         mongo_db = mongo_client[ ds_id ]
         for f in byc[ "filters" ]:
             query = { "id": re.compile(r'^'+f ) }
             pre = re.split('-|:', f)[0]
-            c = "collations"
             mongo_coll = mongo_db[ c ]
             for subset in mongo_coll.find( query ):
 

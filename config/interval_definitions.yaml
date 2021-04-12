@@ -1,0 +1,9 @@
+binning:
+  1M:
+    bases: 1000000
+  100k:
+    bases: 100000
+  cytobands:
+    bases: 0
+cytobands:
+  pattern: ^(chro?)?([12]?[\dXY])([pq]((ter)|(cen)|([1-4]([0-8](\.\d\d*?)?)?)?))?\-?([pq]((ter)|(cen)|([1-4]([0-8](\.\d\d*?)?)?)?))?$

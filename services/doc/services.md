@@ -11,6 +11,7 @@ documentation.
 * [_deliveries_](deliveries.md)
 * [_genespans_](genespans.md)
 * [_geolocations_](geolocations.md)
+* [_intervalFrequencies_](intervalFrequencies.md)
 * [_ids_](ids.md)
 * [_publications_](publications.md)
 

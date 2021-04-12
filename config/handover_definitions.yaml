@@ -45,31 +45,31 @@ h->o_types:
   #   url_opts: "&responseFormat=simple"
   variants:
     id: 'pgx:handover:variants'
-    label: "Found Variants"
+    label: "Found Variants (.json)"
     description: "retrieve variants matched by the query"
     h->o_key: 'variants._id'
     script_path_web: '/beacon/variants'
   pgxseg:
     id: 'pgx:handover:pgxseg'
-    label: "Found Variants as .pgxseg"
+    label: "Found Variants (.pgxseg)"
     description: "retrieve variants matched by the query as .pgxseg download"
     h->o_key: 'variants._id'
     script_path_web: '/beacon/variants'
   callsetsvariants:
     id: 'pgx:handover:callsetsvariants'
-    label: "All Sample Variants (potentially huge)"
+    label: "All Sample Variants (.json)"
     description: "Download all variants of matched samples - potentially huge dataset..."
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/variants'
   callsetspgxseg:
     id: 'pgx:handover:callsetspgxseg'
-    label: "All Sample Variants as .pgxseg"
+    label: "All Sample Variants (.pgxseg)"
     description: "Download all variants of matched samples - potentially huge dataset..."
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/variants'
   UCSClink:   
     id: 'pgx:handover:bedfile2ucsc'
-    label: "Variants in UCSC"
+    label: "Show Variants in UCSC"
     description: "map variants matched by the query to the UCSC browser"
     h->o_key: 'variants._id'
     ext_url: 'http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg38'

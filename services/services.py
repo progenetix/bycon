@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 
-from os import path, pardir
+from os import path, pardir, environ
 import sys, re, cgitb
 from importlib import import_module
 
@@ -15,7 +15,7 @@ sys.path.append( bycon_path )
 # services that have been moved need to be imported
 
 from beaconServer.lib.read_specs import read_local_prefs
-from beaconServer.lib.cgi_utils import rest_path_value, cgi_print_json_response,set_debug_state
+from beaconServer.lib.cgi_utils import rest_path_value, cgi_print_json_response,set_debug_state, cgi_print_rewrite_response
 
 """
 The `services` application deparses a request URI and calls the respective
@@ -36,6 +36,8 @@ def main():
 def services(service):
 
     set_debug_state(debug=0)
+
+    uri = environ.get('REQUEST_URI')
 
     these_prefs = read_local_prefs( "service_mappings", dir_path )
 
@@ -62,6 +64,12 @@ def services(service):
             print('Service {} error: {}'.format(f, e))
 
             exit()
+
+    if service_name in these_prefs["rewrites"]:    
+        pat = re.compile( rf"^.+\/{service_name}\/?(.*?)$" )
+        if pat.match(uri):
+            stuff = pat.match(uri).group(1)
+            cgi_print_rewrite_response(these_prefs["rewrites"][service_name], stuff)
 
     cgi_print_json_response( {
         "service_response": {

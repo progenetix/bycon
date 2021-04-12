@@ -71,6 +71,15 @@ def form_return_listvalue( form_data, parameter ):
 
 ################################################################################
 
+def cgi_print_rewrite_response(uri_base="", uri_stuff=""):
+
+    print("Status: 302")
+    print("Location: {}{}".format(uri_base, uri_stuff))
+    print()
+    exit()
+
+################################################################################
+
 def cgi_print_text_response(form_data, data, status_code):
 
     print('Content-Type: text')

@@ -6,8 +6,16 @@ service_names:
   genespans: genespans
   geolocations: geolocations
   ids: ids
+  interval_frequencies: interval_frequencies
+  intervalFrequencies: intervalFrequencies
   ontologymaps: ontologymaps
   publications: publications
   phenopackets: phenopackets
   collations: collations
   schemas: schemas
+rewrites:
+  collationplots: '/cgi/PGX/cgi/collationPlots.cgi'
+  sampleplots: '/cgi/PGX/cgi/samplePlots.cgi'
+  uploader: '/cgi/PGX/cgi/uploader.cgi'
+  biosamples: '/beacon/biosamples/'
+  variants: '/beacon/variants/'

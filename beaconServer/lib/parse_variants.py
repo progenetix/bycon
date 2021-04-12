@@ -264,10 +264,15 @@ def create_variantRangeRequest_query( byc ):
         v_q_l.append( create_and_or_query_for_parameter("variantType", "variant_type", "$or", vp) )
     elif "alternateBases" in vp:
         # the N wildcard stands for any length alt bases so can be ignored
-        if not vp[ "alternateBases" ] == "N":
+        if vp[ "alternateBases" ] == "N":
+             v_q_l.append( { "alternate_bases": {'$regex': "." } } )
+        else:
             v_q_l.append( { "alternate_bases": vp[ "alternateBases" ] } )
 
     v_q = { "$and": v_q_l }
+
+    # print(v_q)
+    # exit()
 
     expand_variant_query(v_q, byc)
 

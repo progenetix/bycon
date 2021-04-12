@@ -1,58 +1,25 @@
 bycon_definition_files:
   - config
   - filter_definitions
+  - variant_definitions
   - dataset_definitions
-collection_name: collations
+  - interval_definitions
+collection_name: frequencymaps
 defaults:
   dataset_ids:
     - progenetix
-  method: children
-  filters:
-    - NCIT
-    - icdom
-    - icdot
-    - cellosaurus
+  method: frequencies
 meta:
-  response_type: collations
+  response_type: interval_frequencies
   returned_schemas:
-    Collation: https://progenetix.org/services/schemas/Collation/
+    Collation: TBD
   info: >
     The main collations payload can be accessed in `response.results`.
+methods:
+  - frequencies
 integer_keys:
   - count
   - code_matches
-methods:
-  children:
-    - id
-    - label
-    - count
-    - child_terms
-    - code_matches
-  paths:
-    - id
-    - label
-    - count
-    - code_matches
-    - child_terms
-    - hierarchy_paths
-  counts:
-    - id
-    - label
-    - count
-    - code_matches
-  codematches:
-    - id
-    - label
-    - code_matches
-  cnvFrequencies:
-    - id
-    - label
-    - frequencymaps
-  codes:
-    - id
-    - label
-  ids:
-    - id
 collationed:
   geo:
     pattern: '^(geo)[:]((GSE)|(GPL))'

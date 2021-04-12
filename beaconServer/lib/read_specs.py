@@ -16,7 +16,7 @@ def read_bycon_configs_by_name(name, byc):
     podmd"""
 
     o = {}
-    ofp = path.join( path.dirname( path.abspath(__file__) ), pardir, "config", name+".yaml" )
+    ofp = path.join( byc["pkg_path"], "config", name+".yaml" )
     with open( ofp ) as od:
         o = yaml.load( od , Loader=yaml.FullLoader)
 

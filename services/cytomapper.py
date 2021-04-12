@@ -49,24 +49,24 @@ def cytomapper():
     byc[ "config" ][ "paths" ][ "genomes" ] = path.join( local_path, "rsrc", "genomes" )
     
     parse_variants(byc)
-    parse_cytoband_file(byc)
+    generate_genomic_intervals(byc, "cytobands")
 
     # response prototype
     create_empty_service_response(byc)
 
     cytoBands = [ ]
     if "cytoBands" in byc["variant_pars"]:
-        cytoBands, chro, start, end = _bands_from_cytobands( **byc )
+        cytoBands, chro, start, end = _bands_from_cytobands(byc)
         byc["service_response"]["meta"]["received_request"].update({ "cytoBands": byc["variant_pars"]["cytoBands"] })
     elif "chroBases" in byc["variant_pars"]:
-        cytoBands, chro, start, end = _bands_from_chrobases( **byc )
+        cytoBands, chro, start, end = _bands_from_chrobases(byc)
         byc["service_response"]["meta"]["received_request"].update({ "chroBases": byc["variant_pars"]["chroBases"] })
 
     cb_label = _cytobands_label( cytoBands )
 
     if len( cytoBands ) < 1:
         response_add_error(byc, 422, "No matching cytobands!" )
-        _print_terminal_response( byc["args"], byc["service_response"] )
+        _print_terminal_response( byc )
         cgi_break_on_errors(byc)
 
     size = int(  end - start )
@@ -111,7 +111,7 @@ def cytomapper():
 
 ################################################################################
 
-def _bands_from_cytobands( **byc ):
+def _bands_from_cytobands(byc):
 
     chr_bands = byc["variant_pars"]["cytoBands"]
     cb_pat = re.compile( byc["variant_definitions"]["parameters"]["cytoBands"]["pattern"] )
@@ -168,7 +168,7 @@ def _bands_from_cytobands( **byc ):
 
 ################################################################################
 
-def _bands_from_chrobases( **byc ):
+def _bands_from_chrobases( byc ):
 
     chr_bases = byc["variant_pars"]["chroBases"]
     cb_pat = re.compile( byc["variant_definitions"]["parameters"]["chroBases"]["pattern"] )
@@ -211,19 +211,19 @@ def _cytobands_label( cytobands ):
 ################################################################################
 
 
-def _print_terminal_response(args, r):
+def _print_terminal_response(byc):
 
     if sys.stdin.isatty():
-        if "error" in r["response"]:
-            if r["response"][ "error" ][ "error_code" ] > 200:
-                print( "\n".r["response"][ "error" ][ "error_message" ] )
+        if "error" in byc["service_response"]["response"]:
+            if byc["service_response"]["response"][ "error" ][ "error_code" ] > 200:
+                print( "\n"+byc["service_response"]["response"][ "error" ][ "error_message" ] )
                 exit()
 
     if args.cytobands:
-        print(str(r["data"]["info"][ "chroBases" ]))
+        print(str(byc["service_response"]["response"]["results"][0]["info"][ "chroBases" ]))
         exit()
     elif args.chrobases:
-        print(str(r["data"]["info"][ "cytoBands" ]))
+        print(str(byc["service_response"]["response"]["results"][0]["info"][ "cytoBands" ]))
         exit()
 
     return
