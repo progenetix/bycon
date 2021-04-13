@@ -13,6 +13,6 @@ def create_short_publication_label(author="", title="", year=""):
     if len(title) <= 50:
         label = short_author + f' ({year}) ' + title
     else:
-        label = short_author + f' ({year}): ' + ' '.join(title.split(' ')[:6]) + '...'
+        label = short_author + f' ({year}): ' + ' '.join(title.split(' ')[:9]) + '...'
         
     return label
