@@ -20,7 +20,7 @@ from beaconServer.lib.parse_filters import *
 from beaconServer.lib.service_utils import initialize_service
 from beaconServer.lib.schemas_parser import *
 
-# from lib.publication_parser import * # TODO ...
+from lib.publication_utils import * # TODO ...
 
 """
 
@@ -75,10 +75,22 @@ def publications_refresher():
 
     for p in pub_coll.find({}):
 
+        if not test_mode:
+            bar.next()
+
+        if "status" in p:
+            try:
+                if "exclude" in p["status"]:
+                    continue
+            except:
+                pass
+
         update_obj = { "counts": p["counts"] }
         update_flag = 1 # now always true, since fixing progenetix counts
         sts = {}
         progenetix_count = 0
+
+        pl = create_short_publication_label(p["authors"], p["title"], p["year"])
 
         for s in bios_coll.find({ "external_references.id" : p["id"] }):
             progenetix_count += 1
@@ -94,18 +106,20 @@ def publications_refresher():
         update_obj["counts"].update({"progenetix": progenetix_count})
 
         if test_mode:
-            print("Progenetix count for {}: {}".format(p["id"], progenetix_count))
+            print(pl)
+            print("{}: {}".format(p["id"], progenetix_count))
 
         if sts.keys():
-            update_flag = 1
             update_obj.update( {"sample_types": [ ] })
             for k, st in sts.items():
                 update_obj["sample_types"].append(st)
 
+        if len(pl) > 5:
+            update_obj.update( {"label": pl })
+
         if not test_mode:
             if update_flag:
                 pub_coll.update_one( { "_id": p["_id"] }, { '$set': update_obj }  )
-            bar.next()
  
     if not test_mode:
         bar.finish()
