@@ -75,11 +75,13 @@ def publications_refresher():
 
     for p in pub_coll.find({}):
 
-        update_obj = { "sample_types": [ ] }
-        update_flag = False
+        update_obj = { "counts": p["counts"] }
+        update_flag = 1 # now always true, since fixing progenetix counts
         sts = {}
+        progenetix_count = 0
 
         for s in bios_coll.find({ "external_references.id" : p["id"] }):
+            progenetix_count += 1
             if "biocharacteristics" in s:
                 for b_c in s[ "biocharacteristics" ]:
                      if "NCIT:C" in b_c["id"]:
@@ -89,8 +91,14 @@ def publications_refresher():
                             sts.update( { b_c["id"]: b_c } )
                             sts[ b_c["id"] ][ "count" ] = 1
 
+        update_obj["counts"].update({"progenetix": progenetix_count})
+
+        if test_mode:
+            print("Progenetix count for {}: {}".format(p["id"], progenetix_count))
+
         if sts.keys():
             update_flag = 1
+            update_obj.update( {"sample_types": [ ] })
             for k, st in sts.items():
                 update_obj["sample_types"].append(st)
 
