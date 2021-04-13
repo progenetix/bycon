@@ -1,3 +1,5 @@
+defaults:
+  response_type: return_biosamples
 bycon_definition_files:
   - config
   - beacon_info

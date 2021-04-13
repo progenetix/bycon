@@ -20,18 +20,6 @@ from beaconServer.lib.service_utils import *
 ################################################################################
 ################################################################################
 
-def _get_args():
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--cytobands", help="cytoband(s), e.g. `8q21q24.1`")
-    parser.add_argument("-b", "--chrobases", help="chromosome and base(s), e.g. `17:12003942-18903371`")
-    parser.add_argument("-g", "--genome", help="genome edition, e.g. `GRCh38`")
-    args = parser.parse_args()
-
-    return args
-
-################################################################################
-
 def main():
 
     cytomapper()
@@ -45,7 +33,6 @@ def cytomapper():
     byc = initialize_service()
 
     local_path = path.dirname( path.abspath(__file__) )
-    byc.update( { "args": _get_args() } )
     byc[ "config" ][ "paths" ][ "genomes" ] = path.join( local_path, "rsrc", "genomes" )
     
     parse_variants(byc)
@@ -66,7 +53,6 @@ def cytomapper():
 
     if len( cytoBands ) < 1:
         response_add_error(byc, 422, "No matching cytobands!" )
-        _print_terminal_response( byc )
         cgi_break_on_errors(byc)
 
     size = int(  end - start )
@@ -103,8 +89,6 @@ def cytomapper():
             }
         }
     ]
-
-    _print_terminal_response( byc["args"], byc["service_response"] )
 
     populate_service_response( byc, results)
     cgi_print_json_response( byc, 200 )
@@ -207,26 +191,6 @@ def _cytobands_label( cytobands ):
             cb_label = cb_label+cytobands[-1]["cytoband"]
 
     return cb_label
-
-################################################################################
-
-
-def _print_terminal_response(byc):
-
-    if sys.stdin.isatty():
-        if "error" in byc["service_response"]["response"]:
-            if byc["service_response"]["response"][ "error" ][ "error_code" ] > 200:
-                print( "\n"+byc["service_response"]["response"][ "error" ][ "error_message" ] )
-                exit()
-
-    if args.cytobands:
-        print(str(byc["service_response"]["response"]["results"][0]["info"][ "chroBases" ]))
-        exit()
-    elif args.chrobases:
-        print(str(byc["service_response"]["response"]["results"][0]["info"][ "cytoBands" ]))
-        exit()
-
-    return
 
 ################################################################################
 ################################################################################
