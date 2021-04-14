@@ -35,8 +35,7 @@ def schemas():
     byc = initialize_service()
     create_empty_service_response(byc)
 
-    s_pkg_path = path.join( pkg_path, "beaconServer")
-    s_path = path.join( s_pkg_path, "config", "schemas" )
+    s_path = path.join( pkg_path, "schemas" )
     s_files = [ f.name for f in scandir(s_path) if f.is_file() ]
     s_files = [ f for f in s_files if f.endswith(".yaml") ]
     s_files = [ f for f in s_files if not f.startswith("_") ]

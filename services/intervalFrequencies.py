@@ -20,6 +20,8 @@ from lib.cytoband_utils import *
 """podmd
 
 * https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C7376,PMID:22824167
+* https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&id=pgxcohort-TCGAcancers
+* https://progenetix.org/cgi/bycon/services/intervalFrequencies.py/?method=pgxseg&datasetIds=progenetix&filters=NCIT:C7376
 
 podmd"""
 
@@ -75,7 +77,12 @@ def interval_frequencies():
                     continue
 
             i_d = subset["id"]
-            r_o = { "dataset_id": ds_id, "id": i_d, "interval_frequencies": [ ] }
+            r_o = {
+                "dataset_id": ds_id,
+                "collation_id": i_d,
+                "label": re.sub(r';', ',', subset["label"]),
+                # "sample_count": subset["count"],
+                "interval_frequencies": [ ] }
             for interval in byc["genomic_intervals"]:
                 i = interval["index"]
                 # TODO: Error if length ...
@@ -92,11 +99,43 @@ def interval_frequencies():
 
     mongo_client.close( )
 
+    _export_pgxseg_frequencies(byc, results)
     populate_service_response( byc, results)
     cgi_print_json_response( byc, 200 )
 
 ################################################################################
 ################################################################################
+
+def _export_pgxseg_frequencies(byc, results):
+
+    if not "pgxseg" in byc["method"]:
+        return
+
+    open_text_streaming("interval_frequencies.pgxseg")
+
+    h_ks = ["chro", "start", "end", "gain_frequency", "loss_frequency", "index"]
+
+    for f_set in results:
+        m_line = []
+        for k in ["collation_id", "label", "dataset_id"]: #, "sample_count"
+            m_line.append(k+"="+str(f_set[k]))
+        print("#"+';'.join(m_line))
+
+    print("collation_id\t"+"\t".join(h_ks))
+
+    for f_set in results:
+        for intv in f_set["interval_frequencies"]:
+            v_line = [ ]
+            v_line.append(f_set[ "collation_id" ])
+            for k in h_ks:
+                v_line.append(str(intv[k]))
+            print("\t".join(v_line))
+
+    close_text_streaming()
+
+################################################################################
+################################################################################
+
 
 if __name__ == '__main__':
     main()

@@ -33,6 +33,8 @@ def parse_cytoband_file(byc):
     genome = byc["variant_pars"][ "assemblyId" ].lower()
     genome = re.sub( r"(\w+?)([^\w]\w+?)", r"\1", genome)
 
+    chromosomes = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,"X","Y"]
+
     if genome in g_map.keys():
         genome = g_map[ genome ]
 
@@ -43,14 +45,21 @@ def parse_cytoband_file(byc):
     cytobands = [ ]
     i = 0
 
+    c_bands = [ ]
     with open(cb_file) as cb_f:                                                                                          
-        cb_reader = csv.DictReader(filter(lambda row: row[0]!='#', cb_f), fieldnames=cb_keys, delimiter='\t')
-        for cb in cb_reader:
-            cb[ "i" ] = i
-            cb[ "chro" ] = cb[ "chro" ].replace( "chr", "")
-            cb[ "chroband" ] = cb[ "chro" ]+cb[ "cytoband" ]
-            cytobands.append(dict(cb))
-            i += 1
+        for c_band in csv.DictReader(filter(lambda row: row[0]!='#', cb_f), fieldnames=cb_keys, delimiter='\t'):
+            c_bands.append(c_band)
+
+    # making sure the chromosomes are sorted!
+    for chro in chromosomes:
+        c_m = "chr"+str(chro)
+        for cb in c_bands:
+            if cb[ "chro" ] == c_m:
+                cb[ "i" ] = i
+                cb[ "chro" ] = cb[ "chro" ].replace( "chr", "")
+                cb[ "chroband" ] = cb[ "chro" ]+cb[ "cytoband" ]
+                cytobands.append(dict(cb))
+                i += 1
     
     byc.update( { "cytobands": cytobands } )
 
