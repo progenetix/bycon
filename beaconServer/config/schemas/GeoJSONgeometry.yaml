@@ -1,5 +1,5 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/GeoJSONgeometry/v2021-01-23
+"$id": https://progenetix.org/services/schemas/GeoJSONgeometry/v2021-04-14
 title: GeoJSONgeometry
 meta:
   contributors:
@@ -13,6 +13,8 @@ meta:
   provenance:
     - description: "Developer branch of original GA4GH schema"
       id: 'https://github.com/ga4gh-metadata/metadata-schemas/blob/master/schemas/shared.proto#L60'
+    - description: "IETF GeoJSON pecification"
+      id: 'https://tools.ietf.org/html/rfc7946'
     - description: "Progenetix"
       id: 'https://github.com/progenetix/schemas/'
   used_by:
@@ -21,6 +23,7 @@ meta:
   sb_status: proposed
 description: >
   The geographic point object uses the default units from the [DCMI point scheme](http://dublincore.org/documents/dcmi-point/) and avoids optional representation in non-standard units.
+type: object
 properties:
   type:
     type: string
@@ -34,3 +37,9 @@ properties:
       format: float
     minItems: 2
     maxItems: 3
+    examples:
+      - - 47.37
+        - 8.55
+      - - 86.925026
+        - 27.987850
+        - 8848.86

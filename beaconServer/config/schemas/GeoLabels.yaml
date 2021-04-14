@@ -1,11 +1,13 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/GeoLabels/v2021-03-05
+"$id": https://progenetix.org/services/schemas/GeoLabels/v2021-04-14
 title: GeoLabels
 meta:
   contributors:
     - description: "Michael Baudis"
       id: "orcid:0000-0002-9903-4248"
   provenance:
+    - description: "IETF GeoJSON pecification"
+      id: 'https://tools.ietf.org/html/rfc7946'
     - description: "Progenetix `bycon` project"
       id: 'https://github.com/progenetix/bycon/'
   used_by:

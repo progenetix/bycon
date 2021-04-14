@@ -42,11 +42,3 @@ properties:
     type: string
     examples:
       - adenocarcinoma sample from right colonic flexure
-  count:
-    description: >
-      An optional number describing the occrrences of the OntologyClass when
-      used in a group labeling context.
-      This is a "non-standard" extension of the minimal OntologyClass schema. 
-    type: integer
-    examples:
-      - 23

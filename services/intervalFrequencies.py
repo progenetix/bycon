@@ -17,6 +17,12 @@ from beaconServer.lib.parse_variants import *
 from beaconServer.lib.service_utils import *
 from lib.cytoband_utils import *
 
+"""podmd
+
+* https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C7376,PMID:22824167
+
+podmd"""
+
 ################################################################################
 ################################################################################
 ################################################################################
