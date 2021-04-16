@@ -8,7 +8,7 @@ from byconeer.lib.publication_utils import (read_annotation_table, create_progen
 """
 
 dir_path = path.dirname( path.abspath(__file__) ) ### prints the path of the directory where file is found
-file_path = path.join(dir_path, 'annotation_test1.txt') ### name of your annotation file (! tab-separated values !)
+file_path = path.join(dir_path, 'annotation_table.txt') ### name of your annotation file (! tab-separated values !)
 
 ##############################################################################
 ##############################################################################
