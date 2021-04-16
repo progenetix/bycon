@@ -149,9 +149,7 @@ arrayexpress:
   pattern: '^arrayexpress([_\:][AEP]\-\w{4}\-\d+)?$'
   pattern_strict: '^arrayexpress[_\:][AEP]\-\w{4}\-\d+?$'
   examples:
-    - geo:GPL6504
-    - geo:GSE19331
-    - geo:GSM253289
+    - arrayexpress:E-MEXP-1008
 
 TCGA:
   name: "The Cancer Genome Atlas"

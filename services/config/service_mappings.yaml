@@ -1,5 +1,5 @@
 service_names:
-  root_path: info
+  empty_value: info
   cytomapper: cytomapper
   dbstats: dbstats
   deliveries: deliveries

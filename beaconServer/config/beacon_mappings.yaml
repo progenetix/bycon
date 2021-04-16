@@ -1,5 +1,5 @@
 service_names:
-  root_path: info
+  empty_value: info
   info: info
   filtering_terms: filteringTerms
   filteringTerms: filteringTerms

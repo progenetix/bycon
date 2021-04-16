@@ -67,7 +67,7 @@ def update_queries_from_path_id( byc ):
         if rest_base_name in ["variants", "callsets", "biosamples", "individuals"]:
             s_id = rest_path_value(rest_base_name)
             if s_id:
-                if not "root" in s_id:
+                if not "empty_value" in s_id:
                     byc["queries"].update(
                         { rest_base_name: { "id": s_id } } )
     return byc

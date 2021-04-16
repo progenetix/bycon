@@ -49,7 +49,7 @@ def rest_path_value(key=""):
             if p in [key, key+".py"]:
                 return p_items[ i ]
         elif p == key:
-            return "root_path"
+            return "empty_value"
 
     return False
 

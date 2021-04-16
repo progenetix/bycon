@@ -15,7 +15,8 @@ from beaconServer.lib.cgi_utils import *
 from beaconServer.lib.parse_filters import *
 from beaconServer.lib.parse_variants import *
 from beaconServer.lib.service_utils import *
-from lib.cytoband_utils import *
+from beaconServer.lib.cytoband_utils import *
+from beaconServer.lib.interval_utils import *
 
 """podmd
 
@@ -52,36 +53,44 @@ def interval_frequencies():
 
     create_empty_service_response(byc)    
 
-    if len(byc[ "dataset_ids" ]) < 1:
-      response_add_error(byc, 422, "No `datasetIds` parameter provided." )
- 
     cgi_break_on_errors(byc)
 
-    if "id" in byc["form_data"]:
+    id_rest = rest_path_value("intervalFrequencies")
+
+    if not "empty_value" in id_rest:
+        byc[ "filters" ] = [ id_rest ]
+    elif "id" in byc["form_data"]:
         byc[ "filters" ] = [ byc["form_data"].getvalue( "id" ) ]
 
+    if not "filters" in byc:
+        response_add_error(byc, 422, "No value was provided for collation `id` or `filters`.")  
+    cgi_break_on_errors(byc)
+
     # data retrieval & response population
-    c = byc["these_prefs"]["collection_name"]
+    f_coll_name = byc["these_prefs"]["frequency_collection_name"]
+    c_coll_name = "collations"
 
     results = [ ]
 
     mongo_client = MongoClient( )
     for ds_id in byc[ "dataset_ids" ]:
-        mongo_coll = mongo_client[ ds_id ][ c ]
         for f in byc[ "filters" ]:
-            subset = mongo_coll.find_one( { "id": f } )
-            if "codematches" in byc["method"]:
-                if not "code_matches" in subset:
-                    continue
-                if int(subset[ "code_matches" ]) < 1:
-                    continue
+ 
+            collation_f = mongo_client[ ds_id ][ f_coll_name ].find_one( { "id": f } )
+            collation_c = mongo_client[ ds_id ][ c_coll_name ].find_one( { "id": f } )
 
-            i_d = subset["id"]
+            if not collation_f:
+                response_add_error(byc, 422, "No collation {} was found in {}.{}".format(f, ds_id, f_coll_name))
+            if not collation_c:
+                response_add_error(byc, 422, "No collation {} was found in {}.{}".format(f, ds_id, c_coll_name))
+            cgi_break_on_errors(byc)
+
+            i_d = collation_c["id"]
             r_o = {
                 "dataset_id": ds_id,
-                "collation_id": i_d,
-                "label": re.sub(r';', ',', subset["label"]),
-                # "sample_count": subset["count"],
+                "group_id": i_d,
+                "label": re.sub(r';', ',', collation_c["label"]),
+                "sample_count": collation_c["count"],
                 "interval_frequencies": [ ] }
             for interval in byc["genomic_intervals"]:
                 i = interval["index"]
@@ -91,8 +100,8 @@ def interval_frequencies():
                     "chro": interval["chro"],
                     "start": interval["start"],
                     "end": interval["end"],
-                    "gain_frequency": round(subset["frequencymaps"]["dupfrequencies"][i], 2),
-                    "loss_frequency": round(subset["frequencymaps"]["delfrequencies"][i], 2)
+                    "gain_frequency": round(collation_f["frequencymaps"]["dupfrequencies"][i], 2),
+                    "loss_frequency": round(collation_f["frequencymaps"]["delfrequencies"][i], 2)
                     })
 
             results.append(r_o)
@@ -113,20 +122,23 @@ def _export_pgxseg_frequencies(byc, results):
 
     open_text_streaming("interval_frequencies.pgxseg")
 
+    print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
     h_ks = ["chro", "start", "end", "gain_frequency", "loss_frequency", "index"]
+
+    # should get error checking if made callable
 
     for f_set in results:
         m_line = []
-        for k in ["collation_id", "label", "dataset_id"]: #, "sample_count"
+        for k in ["group_id", "label", "dataset_id", "sample_count"]:
             m_line.append(k+"="+str(f_set[k]))
-        print("#"+';'.join(m_line))
+        print("#group=>"+';'.join(m_line))
 
-    print("collation_id\t"+"\t".join(h_ks))
+    print("group_id\t"+"\t".join(h_ks))
 
     for f_set in results:
         for intv in f_set["interval_frequencies"]:
             v_line = [ ]
-            v_line.append(f_set[ "collation_id" ])
+            v_line.append(f_set[ "group_id" ])
             for k in h_ks:
                 v_line.append(str(intv[k]))
             print("\t".join(v_line))

@@ -4,11 +4,12 @@ bycon_definition_files:
   - variant_definitions
   - dataset_definitions
   - interval_definitions
-collection_name: frequencymaps
+frequency_collection_name: frequencymaps
 defaults:
   dataset_ids:
     - progenetix
   method: frequencies
+  genome_binning: 1Mb
 meta:
   response_type: interval_frequencies
   returned_schemas:
