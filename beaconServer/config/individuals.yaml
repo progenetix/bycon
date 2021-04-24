@@ -1,6 +1,7 @@
 defaults:
   dataset_ids:
     - progenetix
+    - beacon_mappings
   method: details
   response_type: return_individuals
   h->o_access_key: "individuals._id"

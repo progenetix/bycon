@@ -25,6 +25,10 @@ methods:
     - interval_frequencies
     - id
     - label
+  pgxmatrix:
+    - interval_frequencies
+    - id
+    - label
 integer_keys:
   - count
   - code_matches

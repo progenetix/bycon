@@ -2,9 +2,8 @@ defaults:
   dataset_ids:
     - progenetix
   method: details
-  response_type: return_variants
+  response_type: VariantInSampleResponse
 meta:
-  response_type: return_variants
   returned_schemas:
     Variant: https://progenetix.org/services/schemas/Variant/
   info: >
@@ -12,6 +11,7 @@ meta:
 bycon_definition_files:
   - config
   - beacon_info
+  - beacon_mappings
   - dataset_definitions
   - filter_definitions
   - geoloc_definitions
@@ -20,6 +20,9 @@ bycon_definition_files:
 all_variants_methods:
   - callsetsvariants
   - callsetspgxseg
+response_types:
+  - VariantInSampleResponse
+  - BiosampleResponse
 methods:
   digests:
     - digest

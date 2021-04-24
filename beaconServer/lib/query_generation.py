@@ -63,13 +63,26 @@ def update_queries_from_path_id( byc ):
     url_comps = urlparse( environ.get('REQUEST_URI') )
 
     if "service_name" in byc:
-        rest_base_name = byc["service_name"]
-        if rest_base_name in ["variants", "callsets", "biosamples", "individuals"]:
-            s_id = rest_path_value(rest_base_name)
-            if s_id:
-                if not "empty_value" in s_id:
-                    byc["queries"].update(
-                        { rest_base_name: { "id": s_id } } )
+        pgx_base = byc["service_name"]
+
+    rb_t = rest_path_value("beacon")
+
+    if not rb_t == pgx_base:
+        if not rb_t in byc["beacon_base_paths"]:
+            return byc
+
+    s_id = rest_path_value(rb_t)
+    if s_id:
+        if not "empty_value" in s_id:
+            byc["queries"].update(
+                { pgx_base: { "id": s_id } } )
+            if not "response_types" in byc["these_prefs"]:
+                return byc
+
+            r_t = rest_path_value(s_id)
+            if r_t in byc["beacon_mappings"]["response_types"]:
+                byc.update({"response_type": byc["beacon_mappings"]["response_types"][r_t]["id"]})
+
     return byc
 
 ################################################################################

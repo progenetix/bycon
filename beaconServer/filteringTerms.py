@@ -43,6 +43,9 @@ def filtering_terms():
     select_dataset_ids(byc)
     check_dataset_ids(byc)
 
+    get_filter_flags(byc)
+    parse_filters(byc)
+
     update_datasets_from_dbstats(byc)
     
     create_empty_service_response(byc)

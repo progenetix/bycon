@@ -2,22 +2,26 @@ defaults:
   dataset_ids:
     - progenetix
   method: details
-  response_type: return_biosamples
+  response_type: BiosampleResponse
   h->o_access_key: "biosamples._id"
+  beacon_path_end: biosamples
 bycon_definition_files:
   - config
   - beacon_info
+  - beacon_mappings
   - dataset_definitions
   - filter_definitions
   - geoloc_definitions
   - variant_definitions
   - handover_definitions
 meta:
-  response_type: return_biosamples
   returned_schemas:
     Biosample: https://progenetix.org/services/schemas/Biosample/
   info: >
     The main biosamples payload can be accessed in `response.results`.
+response_types:
+  - BiosampleResponse
+  - VariantInSampleResponse
 methods:
   ids:
     - id
@@ -36,4 +40,3 @@ methods:
     - id
     - biosample_id
     - info.cnvstatistics
-

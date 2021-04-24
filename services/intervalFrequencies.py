@@ -109,6 +109,7 @@ def interval_frequencies():
     mongo_client.close( )
 
     _export_pgxseg_frequencies(byc, results)
+    _export_pgxmatrix_frequencies(byc, results)
     populate_service_response( byc, results)
     cgi_print_json_response( byc, 200 )
 
@@ -142,6 +143,45 @@ def _export_pgxseg_frequencies(byc, results):
             for k in h_ks:
                 v_line.append(str(intv[k]))
             print("\t".join(v_line))
+
+    close_text_streaming()
+
+################################################################################
+################################################################################
+
+def _export_pgxmatrix_frequencies(byc, results):
+
+    if not "pgxmatrix" in byc["method"]:
+        return
+
+    open_text_streaming("interval_frequencies.pgxmatrix")
+
+    print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
+
+    # should get error checking if made callable
+    for f_set in results:
+        m_line = []
+        for k in ["group_id", "label", "dataset_id", "sample_count"]:
+            m_line.append(k+"="+str(f_set[k]))
+        print("#group=>"+';'.join(m_line))
+    # header
+
+    h_line = [ "group_id" ]
+    for ex_int in results[0]["interval_frequencies"]:
+        h_line.append("{}:{}-{}:gainF".format(ex_int["chro"], ex_int["start"], ex_int["end"]))
+    for ex_int in results[0]["interval_frequencies"]:
+        h_line.append("{}:{}-{}:lossF".format(ex_int["chro"], ex_int["start"], ex_int["end"]))
+
+    print("\t".join(h_line))
+
+    for f_set in results:
+        f_line = [ f_set[ "group_id" ] ]
+        for intv in f_set["interval_frequencies"]:
+            f_line.append( str(intv["gain_frequency"]) )
+        for intv in f_set["interval_frequencies"]:
+            f_line.append( str(intv["loss_frequency"]) )
+
+        print("\t".join(f_line))
 
     close_text_streaming()
 

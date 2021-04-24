@@ -19,6 +19,8 @@ paths:
 dataset_ids:
   - progenetix
   - cellosaurus
+  - 1000genomesDragen
+dataset_default: progenetix
 collections:
   - biosamples
   - callsets

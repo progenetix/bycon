@@ -177,6 +177,11 @@ def execute_bycon_queries(ds_id, byc):
             prevars["method"] = "individuals._id"
             prevars["query"] = { "id": { "$in": prefetch[ "bs.isid->individuals.id" ]["target_values"] } }
             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+
+        elif "VariantInSampleResponse" in byc["response_type"] and not "variants._id"  in prefetch:
+            prevars["method"] = "variants._id"
+            prevars["query"] = { "biosample_id": { "$in": prefetch[ "biosamples.id" ]["target_values"] } }
+            prefetch.update( { prevars["method"]: _prefetch_vars_from_biosample_loop( prevars ) } )
     
     ############################################################################
 
@@ -222,11 +227,11 @@ def _prefetch_data( **prevars ):
         }
     )
 
-    return(h_o)
+    return h_o
 
 ################################################################################
 
-def _prefetch_vars_from_biosample_loop( *bs_ids, **prevars ):
+def _prefetch_vars_from_biosample_loop( prevars ):
 
     method = prevars["method"]
     data_db = prevars["data_db"]
@@ -235,14 +240,18 @@ def _prefetch_vars_from_biosample_loop( *bs_ids, **prevars ):
     h_o = { **h_o_defs }
     h_o["target_values"] = [ ]
 
-    for bs_id in bs_ids:
+    for bs_id in prevars["query"]["biosample_id"]["$in"]:
         for v in data_db[ "variants" ].find( { "biosample_id": bs_id} ):
             h_o["target_values"].append( v["_id"])
 
-    h_o["id"] = str(uuid4())
-    h_o["source_db"] = prevars["ds_id"],
-    h_o["target_count"] = len(h_o["target_values"])
+    h_o.update(
+        {
+            "id": str(uuid4()),
+            "source_db": prevars["ds_id"],
+            "target_count": len(h_o["target_values"])
+        }
+    )
 
-    return(h_o)
+    return h_o
 
 

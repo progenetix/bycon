@@ -86,6 +86,11 @@ def create_empty_service_response(byc):
     if "queries" in byc:
         r["response"]["info"].update({ "database_queries": json.loads(json_util.dumps( byc["queries"] ) ) } )
 
+    if "response_type" in byc:
+        for r_t, r_d in byc["beacon_mappings"]["response_types"].items():
+            if r_d["id"] == byc["response_type"]:
+                r["meta"].update( { "returned_schemas": r_d["schema"] } )
+
     # moving to byc
     byc.update( {"service_response": r })
 
@@ -112,8 +117,8 @@ def response_collect_errors(byc):
     # TODO: flexible list of errors
     if not byc[ "queries" ].keys():
       response_add_error(byc, 422, "No (correct) query parameters were provided." )
-    if len(byc[ "dataset_ids" ]) < 1:
-      response_add_error(byc, 422, "No `datasetIds` parameter provided." )
+    # if len(byc[ "dataset_ids" ]) < 1:
+    #   response_add_error(byc, 422, "No `datasetIds` parameter provided." )
     if len(byc[ "dataset_ids" ]) > 1:
       response_add_error(byc, 422, "More than 1 `datasetIds` value was provided." )
       

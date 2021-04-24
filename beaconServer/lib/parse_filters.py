@@ -117,12 +117,22 @@ def check_dataset_ids(byc):
 
     dataset_ids = [ ]
 
-    if "dataset_ids" in byc:
-        for ds in byc["dataset_ids"]:
-            if ds in byc["dataset_definitions"].keys():
-                dataset_ids.append(ds)
+    if not "dataset_ids" in byc:
+        byc.update( { "dataset_ids": [ ] } )
+
+
+    if len(byc["dataset_ids"]) < 1:
+        if "dataset_default" in byc["config"]:
+            byc["dataset_ids"].append(byc["config"]["dataset_default"])
+
+    for ds in byc["dataset_ids"]:
+        if ds in byc["dataset_definitions"].keys():
+            dataset_ids.append(ds)
 
     byc.update( { "dataset_ids": dataset_ids } )
 
     return byc
+
+################################################################################
+
 

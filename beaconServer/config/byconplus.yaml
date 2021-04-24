@@ -1,8 +1,9 @@
 defaults:
-  response_type: return_biosamples
+  response_type: BiosampleResponse
 bycon_definition_files:
   - config
   - beacon_info
+  - beacon_mappings
   - dataset_definitions
   - filter_definitions
   - geoloc_definitions

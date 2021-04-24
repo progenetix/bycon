@@ -29,7 +29,7 @@ def main():
 def beacon(path=""):
 
     set_debug_state(debug=0)
-    these_prefs = read_local_prefs( "beacon_mappings", dir_path )
+    these_prefs = read_local_prefs( "beacon_mappings", pkg_path )
 
     rest_base_name = "beacon"
 

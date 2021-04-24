@@ -43,6 +43,7 @@ _Progenetix_ database environment
 bycon
   |
   |- config
+  |    |- beacon_mappings.yaml
   |    |- config.yaml
   |    |- dataset_definitions.yaml
   |    |- filter_definitions.yaml
@@ -61,7 +62,6 @@ bycon
   |    |    |   |- beacon.yaml
   |    |    |   |- ... .yaml
   |    |    |
-  |    |    |- beacon_mappings.yaml
   |    |    |- biosamples.yaml
   |    |    |- ... .yaml
   |    |

@@ -18,6 +18,28 @@ def parse_beacon_schema(byc):
 
         byc.update({ "beacon": yaml.load( bs , Loader=yaml.FullLoader) })
 
+    beacon_get_base_paths(byc)
+
+    return byc
+
+################################################################################
+
+def beacon_get_base_paths(byc):
+
+    byc.update({"beacon_path_bases":[]})
+
+    if not "beacon" in byc:
+        return byc
+    if not "paths" in byc["beacon"]:
+        return byc
+
+    r_p_bs = set()
+    for p in byc["beacon"]["paths"].keys():
+        p = re.sub(r'^\/',"", p )
+        if len(p) > 1:
+            r_p_bs.add( re.split('/', p)[0] )
+    byc.update({"beacon_base_paths": list(r_p_bs) })
+
     return byc
 
 ################################################################################
