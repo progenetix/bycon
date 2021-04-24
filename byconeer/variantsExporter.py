@@ -13,10 +13,10 @@ from progress.bar import Bar
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.read_specs import *
-from bycon.lib.parse_filters import *
-from bycon.lib.query_execution import execute_bycon_queries
-from bycon.lib.query_generation import generate_queries
+from beaconServer.lib.read_specs import *
+from beaconServer.lib.parse_filters import *
+from beaconServer.lib.query_execution import execute_bycon_queries
+from beaconServer.lib.query_generation import generate_queries
 
 service_lib_path = path.join( pkg_path, "services", "lib" )
 sys.path.append( service_lib_path )
@@ -72,7 +72,7 @@ def variants_exporter():
     generate_queries(byc)
     execute_bycon_queries( ds_id, byc )
 
-    all_bs_no = byc["query_results"]["bs.id"]["target_count"]
+    all_bs_no = byc["query_results"]["biosamples.id"]["target_count"]
     mongo_client = MongoClient( )
     vs_coll = mongo_client[ ds_id ][ "variants" ]
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
@@ -81,7 +81,7 @@ def variants_exporter():
 
     used_bs_ids = set()
     all_v_no = 0
-    for bs_id in byc["query_results"]["bs.id"]["target_values"]:
+    for bs_id in byc["query_results"]["biosamples.id"]["target_values"]:
         for v in vs_coll.find({ "biosample_id": bs_id }):
             all_v_no += 1
             val = ""
@@ -121,7 +121,7 @@ def variants_exporter():
                         val = v["info"]["cnv_value"]
             if (not byc["args"].value_only) or (val != ""):
                 used_v_no +=1
-                f.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(bs_id, v["reference_name"], int(v["start"]), int(v["end"]), v["variant_type"], val) )
+                f.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(bs_id, v["reference_name"], int(v["start"]), int(v["end"]), v["variant_type"], '{:.4f}'.format(val)) )
 
         bar.next()
     bar.finish()

@@ -1,0 +1,70 @@
+defaults:
+  dataset_ids:
+    - progenetix
+  method: details
+  response_type: VariantInSampleResponse
+meta:
+  returned_schemas:
+    Variant: https://progenetix.org/services/schemas/Variant/
+  info: >
+    The main variants payload can be accessed in `response.results`.
+bycon_definition_files:
+  - config
+  - beacon_info
+  - beacon_mappings
+  - dataset_definitions
+  - filter_definitions
+  - geoloc_definitions
+  - variant_definitions
+  - handover_definitions
+all_variants_methods:
+  - callsetsvariants
+  - callsetspgxseg
+response_types:
+  - VariantInSampleResponse
+  - BiosampleResponse
+methods:
+  digests:
+    - digest
+  compact:
+    - _id
+    - biosample_id
+    - reference_name
+    - start
+    - end
+    - variant_type
+    - reference_bases
+    - alternate_bases
+  details:
+    - _id
+    - biosample_id
+    - callset_id
+    - digest
+    - reference_name
+    - start
+    - end
+    - variant_type
+    - reference_bases
+    - alternate_bases
+    - info
+  pgxseg:
+    - biosample_id
+    - reference_name
+    - start
+    - end
+    - info.cnv_value
+    - variant_type
+  callsetsvariants:
+    - biosample_id
+    - reference_name
+    - start
+    - end
+    - info.cnv_value
+    - variant_type
+  callsetspgxseg:
+    - biosample_id
+    - reference_name
+    - start
+    - end
+    - info.cnv_value
+    - variant_type

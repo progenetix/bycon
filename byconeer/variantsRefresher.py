@@ -13,8 +13,8 @@ from progress.bar import Bar
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.read_specs import *
-from bycon.lib.parse_filters import *
+from beaconServer.lib.read_specs import *
+from beaconServer.lib.parse_filters import *
 
 service_lib_path = path.join( pkg_path, "services", "lib" )
 sys.path.append( service_lib_path )
@@ -78,7 +78,8 @@ def variants_refresher():
         no =  var_coll.estimated_document_count()
         bar = Bar("{} vars".format(ds_id), max = no, suffix='%(percent)d%%'+" of "+str(no) )
         for v in var_coll.find({}):
-            update_obj = { }
+            update_obj = { "id": str(v["_id"]) }
+
             """
  
             """
@@ -99,7 +100,7 @@ def variants_refresher():
                         update_obj.update( { "error.start_end": 1 } )
                 else:
                     v_no_type += 1
-                    update_obj.update( { "error.variant_type": v["variant_type"] } )
+                    # update_obj.update( { "error.variant_type": v["variant_type"] } )
             else:
                 v_no_type += 1
                 print("!!! no type".format(v["_id"]))

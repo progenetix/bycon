@@ -9,10 +9,10 @@ import sys, os, datetime
 dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import cgi_parse_query,cgi_print_json_response,cgi_break_on_errors
-from bycon.lib.read_specs import dbstats_return_latest
-from bycon.lib.parse_filters import select_dataset_ids, check_dataset_ids
-from lib.service_utils import *
+from beaconServer.lib.cgi_utils import cgi_parse_query,cgi_print_json_response,cgi_break_on_errors
+from beaconServer.lib.read_specs import dbstats_return_latest
+from beaconServer.lib.parse_filters import select_dataset_ids, check_dataset_ids
+from beaconServer.lib.service_utils import *
 
 """podmd
 
@@ -49,13 +49,13 @@ def dbstats():
             if s_n > 0:
                 byc["stats_number"] = s_n
 
-    r = create_empty_service_response(byc)
+    create_empty_service_response(byc)
 
-    ds_stats = dbstats_return_latest( byc["stats_number"], **byc )
+    ds_stats = dbstats_return_latest(byc)
 
     results = [ ]
     for stat in ds_stats:
-        r["response"]["info"].update({ "date": stat["date"] })
+        byc["service_response"]["response"]["info"].update({ "date": stat["date"] })
         for ds_id, ds_vs in stat["datasets"].items():
             if len(byc[ "dataset_ids" ]) > 0:
                 if not ds_id in byc[ "dataset_ids" ]:
@@ -65,8 +65,8 @@ def dbstats():
                 dbs.update({k:ds_vs[k]})
             results.append( dbs )
 
-    populate_service_response( r, results )
-    cgi_print_json_response( byc[ "form_data" ], r, 200 )
+    populate_service_response( byc, results )
+    cgi_print_json_response( byc, 200 )
 
 ################################################################################
 ################################################################################

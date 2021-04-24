@@ -11,10 +11,10 @@ import sys, datetime, argparse
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.parse_filters import *
-from bycon.lib.cgi_utils import *
-from bycon.lib.handover_execution import retrieve_handover,handover_return_data
-from lib.service_utils import *
+from beaconServer.lib.parse_filters import *
+from beaconServer.lib.cgi_utils import *
+from beaconServer.lib.handover_execution import retrieve_handover,handover_return_data
+from beaconServer.lib.service_utils import *
 
 """podmd
 
@@ -37,13 +37,13 @@ def deliveries():
 
     byc = initialize_service()
 
-    r = create_empty_service_response(byc)
+    create_empty_service_response(byc)
 
     q_par = ""
     for p in byc["these_prefs"]["query_keys"]:
         if p in  byc["form_data"]:
             q_val = byc["form_data"].getvalue( p )
-            response_add_parameter(r, p, q_val)
+            response_add_parameter(byc, p, q_val)
             # last one is kept
             q_par = p
 
@@ -53,22 +53,22 @@ def deliveries():
         select_dataset_ids(byc)
 
         if not len(byc["dataset_ids"]) == 1:
-            response_add_error(r, 422, "Not exactly one datasetIds item specified." )
+            response_add_error(byc, 422, "Not exactly one datasetIds item specified." )
         else:
             ds_id = byc["dataset_ids"][0]
             if not ds_id in byc["dataset_definitions"]:
-                response_add_error(r, 422, "Not exactly one datasetIds item specified." )
+                response_add_error(byc, 422, "Not exactly one datasetIds item specified." )
 
         if not "collection" in byc["form_data"]:
-            response_add_error(r, 422, "No data collection specified." )
+            response_add_error(byc, 422, "No data collection specified." )
 
-        cgi_break_on_errors(r, byc)
+        cgi_break_on_errors(byc)
 
         coll = byc["form_data"].getvalue( "collection" )
         if not coll in byc["config"]["collections"]:
-            response_add_error(r, 422, f"Collection {coll} is not specified in preferences." )
+            response_add_error(byc, 422, f"Collection {coll} is not specified in preferences." )
 
-        cgi_break_on_errors(r, byc)
+        cgi_break_on_errors(byc)
 
         q = { q_par: q_val }
         if "_id" in q_par:
@@ -81,15 +81,15 @@ def deliveries():
         results = [ mongo_client[ ds_id][ coll ].find_one( q ) ]
         mongo_client.close()
 
-        response_add_parameter(r, "collection", coll )
-        response_add_parameter(r, "datasetId", ds_id )
+        response_add_parameter(byc, "collection", coll )
+        response_add_parameter(byc, "datasetId", ds_id )
 
         if not results or results[0] == None:
-            response_add_error(r, 422, "No data found under this {}: {}!".format(q_par, q_val) )
+            response_add_error(byc, 422, "No data found under this {}: {}!".format(q_par, q_val) )
 
-        cgi_break_on_errors(r, byc)
-        populate_service_response(r, results)
-        cgi_print_json_response( byc["form_data"], r, 200 )
+        cgi_break_on_errors(byc)
+        populate_service_response( byc, results)
+        cgi_print_json_response( byc, 200 )
 
     ############################################################################
     # continuing with default -> accessid
@@ -102,11 +102,10 @@ def deliveries():
     d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
 
     if e:
-        response_add_error(r, 422, e )
+        response_add_error(byc, 422, e )
 
-    response_add_parameter(r, "collection", h_o["target_collection"] )
-    response_add_parameter(r, "datasetId", h_o["source_db"] )
-    # r["response_type"] = h_o["target_collection"]
+    response_add_parameter(byc, "collection", h_o["target_collection"] )
+    response_add_parameter(byc, "datasetId", h_o["source_db"] )
 
     results = [ ]
     if len(d_k) > 0:
@@ -119,8 +118,8 @@ def deliveries():
     else:
         results = h_o_d
 
-    populate_service_response(r, results)
-    cgi_print_json_response( byc["form_data"], r, 200 )
+    populate_service_response( byc, results)
+    cgi_print_json_response( byc, 200 )
 
 ################################################################################
 ################################################################################

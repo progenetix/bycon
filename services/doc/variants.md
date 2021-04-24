@@ -2,8 +2,8 @@
 ## _variants_ Service
 
 This endpoint is mostly aimed at providing _variants_ handover functionality. 
-However, the app uses the same query processing mechanism as the main _byconplus_
-application.
+Since March 2021 the app represents a standard Beacon v2 endpoint and has been
+moved to the `/beacon/variants/` path (still aliased unser `/services/variants/`).
 
 #### Methods
 
@@ -24,8 +24,8 @@ application.
 
 ##### Examples
 
-* <https://progenetix.org/services/variants/?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
-* <https://progenetix.test/services/variants/?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus&deliveryKeys=reference_name,start,end>
+* <https://progenetix.org/beacon/variants/?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
+* <https://progenetix.test/beacon/variants/?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus&deliveryKeys=reference_name,start,end>
 
 <!--/podmd-->
 

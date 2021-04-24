@@ -1,0 +1,31 @@
+$schema: http://json-schema.org/draft-07/schema#
+$id: https://schemablocks.org/schemas/beacon-v2/InfoRequest/2.0.0-draft.3
+meta:
+  contributors:
+    - label: ELIXIR Beacon project team
+      id: https://beacon-project.io/categories/people.html
+    - label: Jordi Rambla
+      id: github:@jrambla
+    - label: Sabele de la Torre
+      id: github:@sdelatorrep
+    - label: Mamana Mbiyavanga
+      id: github:@mamanambiya
+    - label: Michael Baudis
+      id: orcid:0000-0002-9903-4248
+  provenance:
+    - label: Beacon v2
+      id: https://github.com/ga4gh-beacon/specification-v2
+  used_by:
+    - label: Progenetix database schema (Beacon+ backend)
+      id: https://github.com/progenetix/schemas/
+  sb_status: community
+version: 2.0.0-draft.3
+title: InfoRequest
+description: |
+  Request parameters for information endpoints.
+type: object
+required:
+  - meta
+properties:
+  meta:
+    $ref: InfoRequestMeta.yaml#/

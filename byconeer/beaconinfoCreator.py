@@ -11,9 +11,9 @@ from progress.bar import Bar
 dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.read_specs import read_bycon_configs_by_name
+from beaconServer.lib.read_specs import read_bycon_configs_by_name
 from services.lib import *
-from byconeer.lib import *
+from beaconServereer.lib import *
 
 """
 
@@ -32,13 +32,13 @@ API (`byconplus`).
 
 def main():
 
-    collations()
+    beaconinfo_creator()
 
 ################################################################################
 
-def collations():
+def beaconinfo_creator():
 
-    byc = initialize_service()
+    byc = initialize_service("collations_creator")
 
     b_info = { "date": date_isoformat(datetime.datetime.now()), "datasets": { } }
 
@@ -51,7 +51,10 @@ def collations():
         if not ds_id in dbs:
             print("¡¡¡ Dataset "+ds_id+" doesn't exist !!!")
         else:
-            b_info["datasets"].update( { ds_id: _dataset_update_counts(byc["dataset_definitions"][ds_id], **byc) } )      
+        # elif ds_id == "cellosaurus":
+            b_info["datasets"].update( { ds_id: _dataset_update_counts(byc["dataset_definitions"][ds_id], **byc) } )
+        # else:
+        #     continue
     info_db = mongo_client[ byc[ "config" ][ "info_db" ] ]
     info_coll = info_db[ byc[ "config" ][ "beacon_info_coll"] ]
     info_coll.delete_many( { "date": b_info["date"] } ) #, upsert=True
@@ -133,6 +136,8 @@ def _dataset_count_collationed_filters(ds_id, **byc):
                 bar.next()
                 if s in sample:
                     for term in sample[ s ]:
+                        if not "id" in term:
+                            continue
                         tid = term["id"]
                         if tid in pfs.keys():
                             pfs[ tid ]["count"] += 1

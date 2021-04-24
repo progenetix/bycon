@@ -9,8 +9,8 @@ import sys, datetime, argparse
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib import *
-from lib.service_utils import *
+from beaconServer.lib import *
+from beaconServer.lib.service_utils import *
 
 """podmd
 
@@ -46,24 +46,24 @@ def phenopackets():
     get_variant_request_type(byc)
     generate_queries(byc)
 
-    r = create_empty_service_response(byc)    
-    response_collect_errors(r, byc)
-    cgi_break_on_errors(r, byc)
+    create_empty_service_response(byc)    
+    response_collect_errors(byc)
+    cgi_break_on_errors(byc)
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
-    response_add_parameter(r, "dataset", ds_id )
+    response_add_parameter(byc, "dataset", ds_id )
     
     execute_bycon_queries( ds_id, byc )
     query_results_save_handovers(byc)
 
-    access_id = byc["query_results"]["bs._id"][ "id" ]
+    access_id = byc["query_results"]["biosamples._id"][ "id" ]
 
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
-        response_add_error(r, 422, e )
+        response_add_error(byc, 422, e )
 
-    access_id_ind = byc["query_results"]["is._id"][ "id" ]
+    access_id_ind = byc["query_results"]["individuals._id"][ "id" ]
     ind_s = [ ]
     h_o_ind, e_ind = retrieve_handover( access_id_ind, **byc )
     h_o_d_ind, e_ind = handover_return_data( h_o_ind, e_ind )
@@ -73,8 +73,8 @@ def phenopackets():
 
     if "variantsaccessid" in byc["form_data"]:
         access_id_var = byc["form_data"].getvalue("variantsaccessid")
-    elif "vs._id" in byc["query_results"]:
-        access_id_var = byc["query_results"]["vs._id"]["id"]
+    elif "variants._id" in byc["query_results"]:
+        access_id_var = byc["query_results"]["variants._id"]["id"]
     if len(access_id_var) > 1:
         h_o_var, e_var = retrieve_handover( access_id_var, **byc )
         var_data, e_var = handover_return_data( h_o_var, e_var )
@@ -119,8 +119,8 @@ def phenopackets():
 
         results.append( pxf )
 
-    populate_service_response(r, results)
-    cgi_print_json_response( byc["form_data"], r, 200 )
+    populate_service_response( byc, results)
+    cgi_print_json_response( byc, 200 )
 
 ################################################################################
 ################################################################################

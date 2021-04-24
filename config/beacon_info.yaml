@@ -1,0 +1,51 @@
+---
+beacon_id: 'org.progenetix.beacon'
+name: 'Progenetix Cancer Genomics Beacon+'
+api_version: '2.0.0-draft.3'
+environment: dev
+organization:
+  id: "org.baudisgroup.info"
+  name: "baudisgroup at UZH and SIB"
+  description: >
+    The "Theoretical Cytogenetics and Oncogenomics" group at the University of Zurich (UZH) and the Swiss Institute of Bioinformatics (SIB) performs research in cancer genomics and provides bioinformatics tools and cancer genome data resources to the scientific community.
+  address: "Department of Molecular Life Sciences, University of Zurich, Winterthurerstrasse 190, CH-8057"
+  welcomeUrl: "https://info.baudisgroup.org"
+  contactUrl: "mailto:contact@progenetix.org"
+  logoUrl: "https://progenetix.org/p/progenetix.png"
+  info:
+    updateDateTime: 2021-03-23
+description: >
+  Beacon+ provides a forward looking implementation of the Beacon API, with focus on structural variants and metadata based on the cancer and reference genome profiling data represented in the Progenetix oncogenomic data resource (https://progenetix.org).
+version: v2
+welcomeUrl: "https://progenetix.org/beacon-plus/search"
+alternativeUrl: "https://progenetix.org/biosamples/search/"
+create_date_time: 2015-11-13
+update_date_time: 2021-03-23
+datasets: [ ] # populated from script
+info:
+  sampleAlleleRequests:
+    - datasetIds:
+        - progenetix
+      requestType: variantCNVrequest
+      assemblyId: GRCh38
+      referenceName: '9'
+      start:
+        - 21000000
+        - 21975098
+      end:
+        - 21967753
+        - 25000000
+      variantType: "DEL"
+      filters:
+        - "icdom-94403"
+        - "icdot-C71"
+    - datasetIds:
+        - progenetix
+      assemblyId: GRCh38
+      referenceName: '17'
+      start:
+        - 7577121
+      alternateBases: "A"
+      referenceBases: "G"
+      filters:
+        - "icdot-C71.7"

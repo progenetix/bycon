@@ -1,0 +1,22 @@
+bycon_definition_files:
+  - config
+  - beacon_mappings
+  - dataset_definitions
+  - filter_definitions
+defaults:
+  method: ""
+  response_type: return_filtering_terms
+  stats_number: 1
+meta:
+  beacon_id: org.progenetix
+  response_type: InfoResponse
+  returned_schemas:
+    BeaconDataset: "https://beacon-project.io/schemas/beacon-v2/current/FilteringTerm.json"
+  info: >
+    The latest dbstats payload can be accessed in `response.results`.
+methods:
+  counts:
+    - counts
+  filtering_terms:
+    - counts
+    - filtering_terms

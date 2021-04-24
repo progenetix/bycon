@@ -14,15 +14,11 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_sub = path.dirname(__file__)
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.read_specs import *
-from bycon.lib.parse_filters import *
 
-from lib.schemas_parser import *
-
-service_lib_path = path.join( pkg_path, "services", "lib" )
-sys.path.append( service_lib_path )
-
-from service_utils import initialize_service
+from beaconServer.lib.read_specs import *
+from beaconServer.lib.parse_filters import *
+from beaconServer.lib.service_utils import initialize_service
+from beaconServer.lib.schemas_parser import *
 
 """
 

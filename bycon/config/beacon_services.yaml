@@ -1,5 +1,0 @@
-service_names:
-  - filteringTerms
-  - datasets
-  - biosamples
-  - variants

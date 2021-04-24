@@ -1,0 +1,32 @@
+service_names:
+  empty_value: info
+  info: info
+  filtering_terms: filteringTerms
+  filteringTerms: filteringTerms
+  datasets: datasets
+  biosamples: biosamples
+  individuals: individuals
+  gVariants: variants
+  g_variants: variants
+  variants_in_sample: variants
+  variantsInSample: variants
+  variants: variants
+
+response_types:
+  biosamples:
+    id: BiosampleResponse
+    schema: https://progenetix.org/services/schemas/Biosample/
+    h->o_access_key: "biosamples._id"
+  variants:
+    id: VariantInSampleResponse
+    schema: https://progenetix.org/services/schemas/Variant/
+    h->o_access_key: "variants._id"
+  g_variants:
+    id: VariantInSampleResponse
+    schema: https://progenetix.org/services/schemas/Variant/
+    h->o_access_key: "variants._id"
+  variants_in_sample:
+    id: VariantInSampleResponse
+    schema: https://progenetix.org/services/schemas/Variant/
+    h->o_access_key: "variants._id"
+

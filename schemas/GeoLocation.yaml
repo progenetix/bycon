@@ -1,0 +1,39 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/GeoLocation/v2021-04-14
+title: GeoLocation
+meta:
+  contributors:
+    - description: "GA4GH Metadata Task Team"
+    - description: "Michael Baudis"
+      id: "orcid:0000-0002-9903-4248"
+    - description: "Isuru Liyanage"
+      id: "orcid:0000-0002-4839-5158"
+    - description: "Melanie Courtot"
+      id: "orcid:0000-0002-9551-6370"
+  provenance:
+    - description: "IETF GeoJSON pecification"
+      id: 'https://tools.ietf.org/html/rfc7946'
+    - description: "Developer branch of original GA4GH schema"
+      id: 'https://github.com/ga4gh-metadata/metadata-schemas/blob/master/schemas/shared.proto#L60'
+    - description: "Progenetix"
+      id: 'https://github.com/progenetix/schemas/'
+  used_by:
+    - description: "Progenetix database schema (Beacon+ backend)"
+      id: 'https://github.com/progenetix/schemas/'
+  sb_status: proposed
+description: >
+  A GeoLocation object represents a geographic location formatted as a *GeoJSON feature*. The format is compatible with RFC 7946, while currently limiting its scope to features of type "Point". Also, the schema defines some optional parameters compatible with the GeoJSON feature *properties* wrapper object.
+  Examples could be:  
+  * an address, e.g. of a lab performing an analysis
+  * provenance of an individual, obfuscated to a larger order 
+  administrative entity (Suffolk, U.K.)
+  * a lat/long/alt position where an environmental sample was collected  
+type: object
+properties:
+  type:
+    type: string
+    value: "Feature"
+  geometry:
+    $ref: GeoJSONgeometry.yaml#/properties
+  properties:
+    $ref: GeoLabels.yaml#/properties

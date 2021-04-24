@@ -1,0 +1,208 @@
+# Bio-Metadata
+NCIT:
+  name: "National Cancer Institute Thesaurus"
+  url: "https://ncit.nci.nih.gov/"
+  db_key: 'biocharacteristics.id'
+  scopes:
+    biosamples:
+      default: 1
+    individuals:
+      default: 0
+  pattern: '^NCIT([_\:]C\d+?\-?)?$'
+  pattern_strict: '^NCIT[_\:]C\d+?$'
+  examples:
+    - 'NCIT:C27676'
+    - 'NCIT:C9325'
+
+UBERON:
+  name: "Uberon cross-species anatomical structures ontology"
+  url: "https://uberon.github.io"
+  db_key: 'biocharacteristics.id'
+  scopes:
+    biosamples:
+      default: 1
+  pattern: '^UBERON([_\:]\d*?\-?)?$'
+  pattern_strict: '^UBERON[_\:]\d+?$'
+  examples:
+    - 'UBERON:0000970'
+    - 'UBERON:0035542'
+
+MONDO:
+  name: "Mondo Disease Ontology"
+  url: "https://mondo.monarchinitiative.org"
+  db_key: 'biocharacteristics.id'
+  scopes:
+    biosamples:
+      default: 1
+    individuals:
+      default: 0
+  pattern: '^MONDO([_\:]\d*?\-?)?$'
+  pattern_strict: '^MONDO[_\:]\d+?$'
+  examples:
+    - 'MONDO:0002974'
+    - 'MONDO:0012301'
+
+HP:
+  name: "Human Phenotype Ontology"
+  url: "https://hpo.jax.org/"
+  db_key: 'biocharacteristics.id'
+  scopes:
+    biosamples:
+      default: 0
+    individuals:
+      default: 1
+  pattern: '^HP([_\:]\d+?\-?)?$'
+  pattern_strict: '^HP[_\:]\d+?$'
+  examples:
+    - 'HP:0012209'
+
+PATO:
+  description: >
+    PATO codes specific for genotypic sex...
+  name: "Phenotypic Qualities Ontology"
+  url: "http://obofoundry.org/ontology/pato.html"
+  db_key: 'genotypic_sex.id'
+  scopes:
+    individuals:
+      default: 1
+  pattern: '^PATO([_\:]002000[012]\-?)?$'
+  pattern_strict: '^PATO[_\:]002000[012]$'
+  examples:
+    - 'PATO:0020000'
+
+EFO:
+  name: "Experimental Factor Ontology"
+  url: "https://www.ebi.ac.uk/efo/"
+  db_key: 'provenance.material.id'
+  scopes:
+    biosamples:
+      default: 1
+  pattern: '^EFO([_\:]\d+?\-?)?$'
+  pattern_strict: '^EFO[_\:]\d+?$'
+  examples:
+  collation: biosubsets
+    - 'EFO:0009656'
+
+icdom:
+  name: "ICD-O 3 Morphologies (Progenetix)"
+  url: "https://progenetix.org/"
+  db_key: 'biocharacteristics.id'
+  scopes:
+    biosamples:
+      default: 1
+  pattern: '^icdom(\-\d{1,5}(\-\d{1,5})?)?$'
+  pattern_strict: '^icdom\-\d{5}$'
+  examples:
+    - 'icdom-85003'
+    - 'icdom-94403'
+
+icdot:
+  name: "ICD-O 3 Topographies (Progenetix)"
+  url: "https://progenetix.org/"
+  db_key: 'biocharacteristics.id'
+  scopes:
+    biosamples:
+      default: 1
+  pattern: '^icdot(\-C\d\d?(\.\d)?\-?)?$'
+  pattern_strict: '^icdot\-C\d\d?\.\d$'
+  examples:
+    - 'icdot-C42.2'
+    - 'icdot-C54.1'
+    - 'icdot-C5'
+
+# Procedural Metadata
+
+PMID:
+  name: "NCBI PubMed"
+  url: "https://www.ncbi.nlm.nih.gov/pubmed/"
+  db_key: 'external_references.id'
+  scopes:
+    biosamples:
+      default: 1
+  pattern: '^PMID([_\:]\d+?)?$'
+  pattern_strict: '^PMID[_\:]\d{5,9}?$'
+  examples:
+    - 'PMID:28966033'
+    - 'PMID:9405679'
+
+geo:
+  name: "NCBI Gene Expression Omnibus"
+  url: "https://www.ncbi.nlm.nih.gov/geo/"
+  db_key: 'external_references.id'
+  scopes:
+    biosamples:
+      default: 1
+  pattern: '^geo([_\:]G(PL|SM|SE|DS)\d+)?$'
+  pattern_strict: '^geo[_\:]G(PL|SM|SE|DS)\d+?$'
+  examples:
+    - geo:GPL6504
+    - geo:GSE19331
+    - geo:GSM253289
+
+arrayexpress:
+  name: "EBI ArrayExpress"
+  url: "https://www.ncbi.nlm.nih.gov/geo/"
+  db_key: 'external_references.id'
+  scopes:
+    biosamples:
+      default: 1
+  pattern: '^arrayexpress([_\:][AEP]\-\w{4}\-\d+)?$'
+  pattern_strict: '^arrayexpress[_\:][AEP]\-\w{4}\-\d+?$'
+  examples:
+    - arrayexpress:E-MEXP-1008
+
+TCGA:
+  name: "The Cancer Genome Atlas"
+  url: "http://cancergenome.nih.gov"
+  db_key: 'external_references.id'
+  scopes:
+    biosamples:
+      default: 1
+  db_key: 'external_references.id'
+  pattern: '^TCGA([_\-][\-\w]+?)?$'
+  pattern_strict: '^TCGA[_\-][\-\w]+?$'
+  examples:
+    - 'TCGA-000002fc-53a0-420e-b2aa-a40a358bba37'
+
+cBP:
+  name: "cBioPortal"
+  url: "https://www.cbioportal.org"
+  db_key: 'external_references.id'
+  scopes:
+    biosamples:
+      default: 1
+  db_key: 'external_references.id'
+  pattern: '^cBP(\-\w+?)?$'
+  pattern_strict: '^cBP\-\w+?$'
+  examples:
+    - 'cBP-MSK_IMPACT_2017'
+
+cellosaurus:
+  name: "Cellosaurus - a knowledge resource on cell lines"
+  url: "https://web.expasy.org/cellosaurus/"
+  db_key: 'external_references.id'
+  scopes:
+    biosamples:
+      default: 1
+  pattern: '^cellosaurus([_\:]CVCL_\w+?)?$'
+  pattern_strict: '^cellosaurus[_\:]CVCL_\w+?$'
+  examples:
+    - 'cellosaurus:CVCL_1650'
+    - 'cellosaurus:CVCL_0006'
+
+pgxcohort:
+  name: "Progenetix cohorts"
+  url: "https://arraymap.progenetix.org"
+  db_key: 'cohorts.id'
+  scopes:
+    biosamples:
+      default: 1
+  pattern: '^pgxcohort(\-\w+?)?$'
+  pattern_strict: '^pgxcohort\-\w+?$'
+  examples:
+    - 'pgxcohort-arraymap'
+    - 'pgxcohort-TCGA'
+
+
+
+

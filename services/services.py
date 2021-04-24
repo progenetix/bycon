@@ -1,16 +1,21 @@
 #!/usr/local/bin/python3
 
-from os import path, pardir
+from os import path, pardir, environ
 import sys, re, cgitb
 from importlib import import_module
 
 # local
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
-bycon_lib_path = path.join( pkg_path, "bycon", "lib" )
-sys.path.append( bycon_lib_path )
-from read_specs import read_local_prefs
-from cgi_utils import rest_path_value, cgi_print_json_response, set_debug_state
+sys.path.append( pkg_path )
+
+bycon_path = path.join( pkg_path, "bycon" )
+sys.path.append( bycon_path )
+
+# services that have been moved need to be imported
+
+from beaconServer.lib.read_specs import read_local_prefs
+from beaconServer.lib.cgi_utils import rest_path_value, cgi_print_json_response,set_debug_state, cgi_print_rewrite_response
 
 """
 The `services` application deparses a request URI and calls the respective
@@ -30,16 +35,21 @@ def main():
 
 def services(service):
 
-    set_debug_state()
-    these_prefs = read_local_prefs( "services", dir_path )
+    set_debug_state(debug=0)
 
-    if service in these_prefs["service_names"]:
-        service_name = service
+    uri = environ.get('REQUEST_URI')
+
+    these_prefs = read_local_prefs( "service_mappings", dir_path )
+
+    rest_base_name = "services"
+
+    if path in these_prefs["service_names"]:
+        service_name = path
     else:
-        service_name = rest_path_value("services")
+        service_name = rest_path_value(rest_base_name)
 
     if service_name in these_prefs["service_names"]:    
-        f = service_name
+        f = these_prefs["service_names"][ service_name ]
         
         # dynamic package/function loading
         try:
@@ -55,7 +65,24 @@ def services(service):
 
             exit()
 
-    cgi_print_json_response( {}, { "errors" : [ "No correct service path provided. Please refer to the documentation at http://info.progenetix.org/tags/services" ] }, 422 )
+    if service_name in these_prefs["rewrites"]:    
+        pat = re.compile( rf"^.+\/{service_name}\/?(.*?)$" )
+        if pat.match(uri):
+            stuff = pat.match(uri).group(1)
+            cgi_print_rewrite_response(these_prefs["rewrites"][service_name], stuff)
+
+    cgi_print_json_response( {
+        "service_response": {
+            "response" : {
+                "error" : {
+                    "error_code": 422,
+                    "error_message": "No correct service path provided. Please refer to the documentation at http://info.progenetix.org/tags/services"
+                    },
+                }
+            }
+        },
+        422
+    )
 
 ################################################################################
 ################################################################################

@@ -1,0 +1,35 @@
+defaults:
+  dataset_ids:
+    - progenetix
+    - beacon_mappings
+  method: details
+  response_type: return_individuals
+  h->o_access_key: "individuals._id"
+bycon_definition_files:
+  - config
+  - beacon_info
+  - dataset_definitions
+  - filter_definitions
+  - geoloc_definitions
+  - variant_definitions
+  - handover_definitions
+meta:
+  response_type: return_individuals
+  returned_schemas:
+    Biosample: https://progenetix.org/services/schemas/Individual/
+  info: >
+    The main individuals payload can be accessed in `response.results`.
+methods:
+  ids:
+    - id
+  details:
+    - id
+    - description
+    - biocharacteristics
+    - external_references
+    - provenance
+    - info
+  biocharacteristics:
+    - id
+    - description
+    - biocharacteristics

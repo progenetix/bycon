@@ -11,11 +11,11 @@ from operator import itemgetter
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import *
-from bycon.lib.parse_filters import *
-from bycon.lib.read_specs import *
-from bycon.lib.query_generation import geo_query, create_and_or_query_for_list
-from lib.service_utils import *
+from beaconServer.lib.cgi_utils import *
+from beaconServer.lib.parse_filters import *
+from beaconServer.lib.read_specs import *
+from beaconServer.lib.query_generation import geo_query, create_and_or_query_for_list
+from beaconServer.lib.service_utils import *
 
 """podmd
 
@@ -38,27 +38,27 @@ def publications():
     get_filter_flags(byc)
     parse_filters(byc)
 
-    r = create_empty_service_response(byc)
+    create_empty_service_response(byc)
 
     # data retrieval & response population
     query, e = _create_filters_query( **byc )
     if len(e) > 1:
-        response_add_error(r, 422, e )
+        response_add_error(byc, 422, e )
 
     geo_q, geo_pars = geo_query( **byc )
 
     if geo_q:
         for g_k, g_v in geo_pars.items():
-            response_add_parameter(r, g_k, g_v)
+            response_add_parameter(byc, g_k, g_v)
         if len(query.keys()) < 1:
             query = geo_q
         else:
             query = { '$and': [ geo_q, query ] }
 
     if len(query.keys()) < 1:
-        response_add_error(r, 422, "No query could be constructed from the parameters provided." )
+        response_add_error(byc, 422, "No query could be constructed from the parameters provided." )
 
-    cgi_break_on_errors(r, byc)
+    cgi_break_on_errors(byc)
 
     mongo_client = MongoClient( )
     pub_db = byc["config"]["info_db"]
@@ -103,8 +103,8 @@ def publications():
  
     results = sorted(p_l, key=itemgetter('sortid'), reverse = True)
 
-    populate_service_response(r, results)
-    cgi_print_json_response( byc[ "form_data" ], r, 200 )
+    populate_service_response( byc, results)
+    cgi_print_json_response( byc, 200 )
 
 ################################################################################
 ################################################################################

@@ -9,8 +9,8 @@ import sys
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.read_specs import read_local_prefs
-from bycon.lib.cgi_utils import rest_path_value
+from beaconServer.lib.read_specs import read_local_prefs
+from beaconServer.lib.cgi_utils import rest_path_value, cgi_print_rewrite_response
 
 """podmd
 The `ids` service forwards compatible, prefixed ids (see `config/ids.yaml`) to specific
@@ -47,10 +47,7 @@ def ids():
                 lid, pre, sep, code = pat.match(id_in).group(2, 3, 4, 5)
                 if "_" in sep:
                     lid = "{}:{}".format(pre, code)
-                print("Status: 302")
-                print("Location: {}{}".format(link, lid))
-                print()
-                exit()
+                cgi_print_rewrite_response(link, lid)
 
     print('Content-Type: text')
     print('status:422')

@@ -1,0 +1,73 @@
+web_server_domain: http://beacon.progenetix.org
+test_server_domain: http://beacon.progenetix.test
+web_handover_domain: http://progenetix.org
+test_handover_domain: http://progenetix.test
+paths:
+  web_server_root_abs:
+    - /
+    - Library
+    - WebServer
+    - Documents
+  web_temp_dir_abs:
+    - /
+    - Library
+    - WebServer
+    - Documents
+    - tmp
+# dataset_ids here are used for db management; the information used by Beacon
+# is defined separately
+dataset_ids:
+  - progenetix
+  - cellosaurus
+  - 1000genomesDragen
+dataset_default: progenetix
+collections:
+  - biosamples
+  - callsets
+  - individuals
+  - variants
+  - collations
+  - publications
+info_db: progenetix
+collations_coll: collations
+collations_source: biosamples
+ontologymaps_coll: ontologymaps
+beacon_info_coll: beaconinfo
+beacon_counts:
+  individualCount:
+    collection: individuals
+    info_key: individuals
+    h->o_key: individuals._id
+  sampleCount:
+    collection: biosamples
+    info_key: biosamples
+    h->o_key: biosamples._id
+  variantCount:
+    collection: variants
+    info_key: variants_distinct
+    h->o_key: variants.digest
+  callCount:
+    collection: variants
+    info_key: variants
+    h->o_key: variants._id
+handover_coll: querybuffer
+genespans_coll: genespans
+filter_flags:
+  logic: '$and'
+  precision: exact #'start'
+plot_pars:
+  dotalpha: 0.2
+  color_var_snv_hex: '#EE00DD'
+  color_var_snv_rgb: '238,0,221'
+  color_var_break_hex: '#EE00DD'
+  color_var_break_rgb: '238,0,221'
+  color_var_dup_hex: '#FFC633'
+  color_var_dup_rgb: '255,198,51'
+  color_var_del_hex: '#33A0FF'
+  color_var_del_rgb: '51,160,255'
+  color_var_loh_hex: '#9326de'
+  color_var_loh_rgb: '147,38,222'
+  color_var_amp_hex: '#FF6600'
+  color_var_amp_rgb: '255,102,0'
+  color_var_homoloss_hex: '#0033CC'
+  color_var_homoloss_rgb: '0,51,204'

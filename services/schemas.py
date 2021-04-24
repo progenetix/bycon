@@ -9,9 +9,10 @@ import sys, os, datetime
 dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import cgi_parse_query, cgi_print_json_response, rest_path_value
-from byconeer.lib.schemas_parser import *
-from lib.service_utils import *
+
+from beaconServer.lib.cgi_utils import cgi_parse_query, cgi_print_json_response, rest_path_value
+from beaconServer.lib.schemas_parser import *
+from beaconServer.lib.service_utils import *
 
 """podmd
 
@@ -32,29 +33,31 @@ def main():
 def schemas():
 
     byc = initialize_service()
+    create_empty_service_response(byc)
 
-    s_data = { }
-    s_pkg_path = path.join( pkg_path, "bycon")
-    s_path = path.join( s_pkg_path, "config", "schemas" )
+    s_path = path.join( pkg_path, "schemas" )
     s_files = [ f.name for f in scandir(s_path) if f.is_file() ]
     s_files = [ f for f in s_files if f.endswith(".yaml") ]
     s_files = [ f for f in s_files if not f.startswith("_") ]
     # commenting beacon since remote $ref are not handled yet
     # s_files = [ f for f in s_files if not f.startswith("beacon") ]
 
-    for s_f in s_files:
-        f_name = os.path.splitext( s_f )[0]
-        s_data.update( { f_name: read_schema_files(f_name, "", s_path) } )
-
     schema_name = rest_path_value("schemas")
-    if schema_name in s_data.keys():    
-        cgi_print_json_response( {}, s_data[ schema_name ], 200 )
-        exit()
 
-    r = create_empty_service_response(byc)    
-    response_add_error(r, 422, "No correct schema name provided!")
+    if schema_name is not False:
+        for s_f in s_files:
+            f_name = os.path.splitext( s_f )[0]
+            if f_name == schema_name:
+                s = read_schema_files(f_name, "")
+                if "$id" in s:
+                    byc["service_response"]["meta"]["returned_schemas"] = [ s["$id"] ]
+                populate_service_response(byc, [s])
+                cgi_print_json_response( byc, 200 )
+                exit()
+    
+    response_add_error(byc, 422, "No correct schema name provided!")
  
-    cgi_print_json_response( {}, r, 422 )
+    cgi_print_json_response( byc, 422 )
 
 ################################################################################
 ################################################################################

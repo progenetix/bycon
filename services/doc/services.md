@@ -11,6 +11,7 @@ documentation.
 * [_deliveries_](deliveries.md)
 * [_genespans_](genespans.md)
 * [_geolocations_](geolocations.md)
+* [_intervalFrequencies_](intervalFrequencies.md)
 * [_ids_](ids.md)
 * [_publications_](publications.md)
 
@@ -27,25 +28,21 @@ rewrite in the server configuration:
 RewriteRule     "^/services(.*)"     /cgi-bin/bycon/services/services.py$1      [PT]
 ```
 
-### Callback handling
-
-The JSON response (see below) will be wrapped in a callback function if a `callback` 
-parameter is provided e.g. for Ajax functionality.
-
-* <http://progenetix.org/services/collations?filters=PMID&datasetIds=progenetix&method=counts&callback=4445-9938-cbat-9891-kllt>
-
 ### Response formats
 
 Standard responses are provided as `Content-Type: application/json`. The wrapper
-format, as defined in the cofigurartion (`config/config.yaml`) provides a `data`
-root parameter:
+format is based on the Beacon v2 response format, with the data returned in the
+`response.results` array: 
 
 ```
-response_object_schema:
-  parameters: { }
-  data: { }
-  errors: [ ]
-  warnings: [ ]
+meta:
+  api_version: ...
+  returned_schemas: { }
+response:
+  exists: true | false
+  info: { }
+  results: [ ]
+  errors: { }
 ```
 
 This (incomplete) example response may help with understanding the general
@@ -61,7 +58,7 @@ format. Here, the data is a dictionary/object with a single key (`genes`):
 {
     "meta": {
       "info": "The main geolocs payload can be accessed in `response.results`.\n",
-      "parameters": {
+      "received_request": {
         "assemblyId": "GRCh38",
         "geneSymbol": "TP53"
       },

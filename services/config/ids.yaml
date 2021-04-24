@@ -17,6 +17,11 @@ format_patterns:
   - pattern: '^(pgx\:)?((icdot)(\-)(C\d\d?\.\d)?)$'
     link: '/subsets/biosubsets?datasetIds=progenetix&filters='
 
+  - pattern: '^(pgx\:)?((pgxcohort)(\-)(\w[\w\-]+?)?)$'
+    examples:
+      - pgxcohort-TCGAcancers
+    link: '/subsets/cohorts?datasetIds=progenetix&filters='
+
 # public prefix patterns (with possible underscore replacement)
 
   - pattern: '^(pgx\:)?((NCIT)([:_])(C[\d]{4,8})?)$'

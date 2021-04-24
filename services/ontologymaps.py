@@ -10,12 +10,12 @@ from pymongo import MongoClient
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import *
-from bycon.lib.parse_filters import *
-from bycon.lib.parse_variants import create_and_or_query_for_list
-from bycon.lib.read_specs import *
-from byconeer.lib.schemas_parser import *
-from lib.service_utils import *
+from beaconServer.lib.cgi_utils import *
+from beaconServer.lib.parse_filters import *
+from beaconServer.lib.parse_variants import create_and_or_query_for_list
+from beaconServer.lib.read_specs import *
+from beaconServer.lib.schemas_parser import *
+from beaconServer.lib.service_utils import *
 
 """podmd
 * <https://progenetix.org/services/ontologymaps/?filters=NCIT:C3222>
@@ -38,7 +38,7 @@ def ontologymaps():
     parse_filters(byc)
     get_filter_flags(byc)
 
-    r = create_empty_service_response(byc)    
+    create_empty_service_response(byc)    
  
     q_list = [ ]
     pre_re = re.compile(r'^(\w+?)([:-].*?)?$')
@@ -55,9 +55,9 @@ def ontologymaps():
                     else:
                         q_list.append( { byc["query_field"]: f } )
     if len(q_list) < 1:
-        response_add_error(r, 422, "No correct filter value provided!" )
+        response_add_error(byc, 422, "No correct filter value provided!" )
 
-    cgi_break_on_errors(r, byc)
+    cgi_break_on_errors(byc)
 
     query = create_and_or_query_for_list('$and', q_list)
 
@@ -79,9 +79,9 @@ def ontologymaps():
 
     results =  [ { "term_groups": c_g, "unique_terms": u_c } ]
 
-    populate_service_response(r, results)
-    r["response"]["info"]["count"] = len(results[0]["term_groups"])
-    cgi_print_json_response( byc["form_data"], r, 200 )
+    populate_service_response( byc, results)
+    byc["service_response"]["response"]["info"]["count"] = len(results[0]["term_groups"])
+    cgi_print_json_response( byc, 200 )
 
 ################################################################################
 ################################################################################

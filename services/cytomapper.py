@@ -4,32 +4,22 @@ import cgi, cgitb
 import re, yaml
 from os import path, pardir
 import csv
-import sys, argparse
+import sys
 
 # local
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from bycon.lib.cgi_utils import *
-from bycon.lib.parse_variants import *
-from bycon.lib.read_specs import *
-from lib.cytoband_utils import *
-from lib.service_utils import *
+
+from beaconServer.lib.cgi_utils import *
+from beaconServer.lib.cytoband_utils import *
+from beaconServer.lib.interval_utils import *
+from beaconServer.lib.parse_variants import *
+from beaconServer.lib.read_specs import *
+from beaconServer.lib.service_utils import *
 
 ################################################################################
 ################################################################################
-################################################################################
-
-def _get_args():
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--cytobands", help="cytoband(s), e.g. `8q21q24.1`")
-    parser.add_argument("-b", "--chrobases", help="chromosome and base(s), e.g. `17:12003942-18903371`")
-    parser.add_argument("-g", "--genome", help="genome edition, e.g. `GRCh38`")
-    args = parser.parse_args()
-
-    return args
-
 ################################################################################
 
 def main():
@@ -44,29 +34,28 @@ def cytomapper():
     
     byc = initialize_service()
 
-    byc.update( { "args": _get_args() } )
-    byc[ "config" ][ "paths" ][ "genomes" ] = path.join( dir_path, "rsrc", "genomes" )
+    local_path = path.dirname( path.abspath(__file__) )
+    byc[ "config" ][ "paths" ][ "genomes" ] = path.join( local_path, "rsrc", "genomes" )
     
     parse_variants(byc)
-    parse_cytoband_file(byc)
+    generate_genomic_intervals(byc, "cytobands")
 
     # response prototype
-    r = create_empty_service_response(byc)
+    create_empty_service_response(byc)
 
     cytoBands = [ ]
     if "cytoBands" in byc["variant_pars"]:
-        cytoBands, chro, start, end = _bands_from_cytobands( **byc )
-        r["meta"]["received_request"].update({ "cytoBands": byc["variant_pars"]["cytoBands"] })
+        cytoBands, chro, start, end = _bands_from_cytobands(byc)
+        byc["service_response"]["meta"]["received_request"].update({ "cytoBands": byc["variant_pars"]["cytoBands"] })
     elif "chroBases" in byc["variant_pars"]:
-        cytoBands, chro, start, end = _bands_from_chrobases( **byc )
-        r["meta"]["received_request"].update({ "chroBases": byc["variant_pars"]["chroBases"] })
+        cytoBands, chro, start, end = _bands_from_chrobases(byc)
+        byc["service_response"]["meta"]["received_request"].update({ "chroBases": byc["variant_pars"]["chroBases"] })
 
     cb_label = _cytobands_label( cytoBands )
 
     if len( cytoBands ) < 1:
-        response_add_error(r, 422, "No matching cytobands!" )
-        _print_terminal_response( byc["args"], r )
-        cgi_break_on_errors(r, byc)
+        response_add_error(byc, 422, "No matching cytobands!" )
+        cgi_break_on_errors(byc)
 
     size = int(  end - start )
     chroBases = chro+":"+str(start)+"-"+str(end)
@@ -103,14 +92,12 @@ def cytomapper():
         }
     ]
 
-    _print_terminal_response( byc["args"], r )
-
-    populate_service_response(r, results)
-    cgi_print_json_response( byc[ "form_data" ], r, 200 )
+    populate_service_response( byc, results)
+    cgi_print_json_response( byc, 200 )
 
 ################################################################################
 
-def _bands_from_cytobands( **byc ):
+def _bands_from_cytobands(byc):
 
     chr_bands = byc["variant_pars"]["cytoBands"]
     cb_pat = re.compile( byc["variant_definitions"]["parameters"]["cytoBands"]["pattern"] )
@@ -167,7 +154,7 @@ def _bands_from_cytobands( **byc ):
 
 ################################################################################
 
-def _bands_from_chrobases( **byc ):
+def _bands_from_chrobases( byc ):
 
     chr_bases = byc["variant_pars"]["chroBases"]
     cb_pat = re.compile( byc["variant_definitions"]["parameters"]["chroBases"]["pattern"] )
@@ -206,26 +193,6 @@ def _cytobands_label( cytobands ):
             cb_label = cb_label+cytobands[-1]["cytoband"]
 
     return cb_label
-
-################################################################################
-
-
-def _print_terminal_response(args, r):
-
-    if sys.stdin.isatty():
-        if "error" in r["response"]:
-            if r["response"][ "error" ][ "error_code" ] > 200:
-                print( "\n".r["response"][ "error" ][ "error_message" ] )
-                exit()
-
-    if args.cytobands:
-        print(str(r["data"]["info"][ "chroBases" ]))
-        exit()
-    elif args.chrobases:
-        print(str(r["data"]["info"][ "cytoBands" ]))
-        exit()
-
-    return
 
 ################################################################################
 ################################################################################

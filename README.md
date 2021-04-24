@@ -9,7 +9,7 @@ documentation which is also [presented in an accessible format](https://info.pro
 
 ### More Documentation
 
-#### [ByconPlus](./bycon/doc/byconplus.md)
+#### [Beaconplus](./beaconServer/doc/bycon.md)
 
 This page provides more information about the _Beacon_ functionality, current
 implementation status and usage examples.
@@ -42,24 +42,31 @@ _Progenetix_ database environment
 ```
 bycon
   |
-  |- bycon
+  |- config
+  |    |- beacon_mappings.yaml
+  |    |- config.yaml
+  |    |- dataset_definitions.yaml
+  |    |- filter_definitions.yaml
+  |    |- ..._definitions.yaml
+  |
+  |- beaconServer
   |    |- byconplus.py
   |    |- datasets.py
+  |    |- biosamples.py
   |    |- filteringTerms.py
+  |    |- variants.py
   |    |- ... .py
   |    |
   |    |    |- config
-  |    |    |-schemas
+  |    |    |- schemas
   |    |    |   |- beacon.yaml
   |    |    |   |- ... .yaml
   |    |    |
-  |    |    |- config.yaml
-  |    |    |- dataset_definitions.yaml
-  |    |    |- filter_definitions.yaml
-  |    |    |- ..._definitions.yaml
+  |    |    |- biosamples.yaml
+  |    |    |- ... .yaml
   |    |
   |    |- doc
-  |    |    |- byconplus.md
+  |    |    |- bycon.md
   |    |    |- handovers.md
   |    |    |- ... .md
   |    |
@@ -80,7 +87,10 @@ bycon
 
 ##### `config`
 
-* configuration files, separated for topic/scope
+* top-level, general configurations
+* in `beaconServer`, `services` ... specific configuration files for the
+individual endpoints
+  - these specify e.g. which configurations are loaded or response content
 * YAML ...
 
 ##### `doc`
