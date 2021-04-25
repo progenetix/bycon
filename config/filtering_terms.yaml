@@ -12,6 +12,8 @@ meta:
     FilteringTerm: "https://beacon-project.io/schemas/beacon-v2/current/FilteringTerm.json"
   info: >
     The latest filtering terms payload can be accessed in `response.results`.
+response_types:
+  - InfoResponse
 methods:
   counts:
     - counts

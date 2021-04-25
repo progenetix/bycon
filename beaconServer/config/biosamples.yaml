@@ -4,7 +4,6 @@ defaults:
   method: details
   response_type: BiosampleResponse
   h->o_access_key: "biosamples._id"
-  beacon_path_end: biosamples
 bycon_definition_files:
   - config
   - beacon_info
@@ -21,6 +20,7 @@ meta:
     The main biosamples payload can be accessed in `response.results`.
 response_types:
   - BiosampleResponse
+  - IndividualResponse
   - VariantInSampleResponse
 methods:
   ids:

@@ -26,8 +26,6 @@ def parse_beacon_schema(byc):
 
 def beacon_get_base_paths(byc):
 
-    byc.update({"beacon_path_bases":[]})
-
     if not "beacon" in byc:
         return byc
     if not "paths" in byc["beacon"]:

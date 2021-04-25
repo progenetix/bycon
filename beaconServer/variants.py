@@ -27,28 +27,8 @@ def main():
 def variants():
 
     byc = initialize_service()
-    parse_beacon_schema(byc)
-
-    initialize_beacon_queries(byc)
-
-    create_empty_service_response(byc)
-    response_collect_errors(byc)
-    cgi_break_on_errors(byc)
-
-    ds_id = byc[ "dataset_ids" ][ 0 ]
-    response_add_parameter(byc, "dataset", ds_id )
-    execute_bycon_queries( ds_id, byc )
-
-    ############################################################################
-
-    h_o, e = handover_retrieve_from_query_results(byc)
-    h_o_d, e = handover_return_data( h_o, e )
-    if e:
-        response_add_error(byc, 422, e )
-
-    # vs = retrieve_variants(ds_id, byc)
-
-    populate_service_response( byc, h_o_d)
+    run_beacon_init_stack(byc)
+    run_beacon_one_dataset(byc)
     
     ############################################################################
 

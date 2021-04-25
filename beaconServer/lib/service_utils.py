@@ -9,11 +9,47 @@ dir_path = path.join( lib_path, pardir )
 pkg_path = path.join( dir_path, pardir )
 
 from cgi_utils import *
+from handover_execution import handover_retrieve_from_query_results, handover_return_data
+from handover_generation import dataset_response_add_handovers, query_results_save_handovers
+from query_execution import execute_bycon_queries
+from query_generation import  initialize_beacon_queries
 from read_specs import read_bycon_configs_by_name,read_local_prefs
-from handover_generation import dataset_response_add_handovers
 from schemas_parser import *
 
 schema_path = path.join( pkg_path, "bycon" )
+
+################################################################################
+
+def run_beacon_init_stack(byc):
+
+    parse_beacon_schema(byc)
+
+    initialize_beacon_queries(byc)
+
+    create_empty_service_response(byc)
+    response_collect_errors(byc)
+    cgi_break_on_errors(byc)
+
+    return byc
+
+################################################################################
+
+def run_beacon_one_dataset(byc):
+
+    ds_id = byc[ "dataset_ids" ][ 0 ]
+    response_add_parameter(byc, "dataset", ds_id )
+    execute_bycon_queries( ds_id, byc )
+
+    h_o, e = handover_retrieve_from_query_results(byc)
+    h_o_d, e = handover_return_data( h_o, e )
+    if e:
+        response_add_error(byc, 422, e )
+
+    cgi_break_on_errors(byc)
+    populate_service_response( byc, h_o_d)
+
+    return byc
+
 
 ################################################################################
 
@@ -32,6 +68,7 @@ def initialize_service(service="NA"):
         service = frm.function
 
     service = camel_to_snake(service)
+    print(service)
 
     byc =  {
         "service_name": path.splitext(path.basename(mod.__file__))[0],
