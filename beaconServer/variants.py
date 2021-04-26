@@ -32,16 +32,7 @@ def variants():
     
     ############################################################################
 
-    # TODO: unify ...
-
-    if "callsetspgxseg" in byc["method"]:
-        export_pgxseg_download(ds_id, h_o_d, byc)
-
-    if "callsetsvariants" in byc["method"]:
-        export_variants_download(h_o_d, byc)
-
-    if "pgxseg" in byc["method"]:
-        export_pgxseg_download(ds_id, h_o_d, byc)
+    check_alternative_deliveries(byc)
 
     ############################################################################
 

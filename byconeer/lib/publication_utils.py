@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import requests
-import json
-import re
+import json, re
 import csv
+from os import path
 
 ##############################################################################
 
@@ -13,13 +13,25 @@ def jprint(obj):
 
 ##############################################################################
 
-def read_annotation_table(file_path):
+def read_annotation_table(args):
+
+    f_p = args.filepath
+
+    if not args.filepath:
+        print("!!! No file provided using `-f` !!!")
+        exit()
+
+    if not path.isfile( args.filepath ):
+        print("!!! No file at {} !!!".format(args.filepath))
+        exit()
+
     l = [] 
-    with open(file_path) as f:
+    with open(f_p) as f:
        rd = csv.reader(f, delimiter="\t", quotechar='"')
        for i, row in enumerate(rd):
            if i > 0:
                l.append(row)
+
     return l
 
 ##############################################################################

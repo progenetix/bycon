@@ -50,6 +50,25 @@ def run_beacon_one_dataset(byc):
 
     return byc
 
+################################################################################
+
+def check_alternative_deliveries(byc):
+
+    if not "VariantInSampleResponse" in byc["response_type"]:
+        return byc
+
+    ds_id = byc[ "dataset_ids" ][ 0 ]
+
+    if "callsetspgxseg" in byc["method"]:
+        export_pgxseg_download(ds_id, byc)
+
+    if "callsetsvariants" in byc["method"]:
+        export_variants_download(byc)
+
+    if "pgxseg" in byc["method"]:
+        export_pgxseg_download(ds_id, byc)
+
+    return byc
 
 ################################################################################
 
@@ -323,11 +342,11 @@ def print_variants_json(vs):
 
 ################################################################################
 
-def export_variants_download(vs, byc):
+def export_variants_download(byc):
 
-    populate_service_header(byc, vs)
+    populate_service_header(byc, byc["service_response"]["response"]["results"])
     open_json_streaming(byc, "variants.json")
-    print_variants_json(vs)
+    print_variants_json(byc["service_response"]["response"]["results"])
     close_json_streaming()
 
 ################################################################################
@@ -351,14 +370,14 @@ def print_variants_pgxseg(vs):
 
 ################################################################################
 
-def export_pgxseg_download(ds_id, vs, byc):
+def export_pgxseg_download(ds_id, byc):
 
     p_h = create_pgxseg_header(ds_id, byc)
 
     open_text_streaming()
     for h_l in p_h:
         print(h_l)
-    print_variants_pgxseg(vs)
+    print_variants_pgxseg(byc["service_response"]["response"]["results"])
     close_text_streaming()
 
 ################################################################################
