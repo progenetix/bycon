@@ -111,53 +111,50 @@ def get_ncit_tumor_type(tumors, fullNames):
 
 ##############################################################################
 
-def create_progenetix_posts(rows):
+def create_progenetix_post(row):
 
-    posts = []
-    
-    for row in rows:
-        pub = {}
-        info = retrieve_epmc_publications(row[0]) 
-        if info != None: ### only if publication PMID matched the query
-            abstract = info["abstractText"]
-            ID = info["pmid"]
-            author = info["authorString"]
-            journal = info["journalInfo"]["journal"]["medlineAbbreviation"]
-            title = info["title"]
-            year = info["pubYear"]
-            
-            # Remove HTML formatting:
-            abstract_no_html = re.sub(r'<[^\>]+?>', "", abstract)
-            title_no_html = re.sub(r'<[^\>]+?>', "", title)
-            abstract, title = abstract_no_html, title_no_html
-            
-            # Fill in counts:
-            counts = {}
-            counts.update({"acgh": int(row[1]),
-                            "arraymap": 0,
-                            "ccgh": int(row[2]),
-                            "genomes": int(row[3]),
-                            "ngs": int(row[4]),
-                            "progenetix": int(row[5]),
-                            "wes": int(row[6]),
-                            "wgs": int(row[7])
-                             })
-               
-            pub.update({"abstract": abstract,
-                        "authors": author,
-                        "counts": counts,
-                        "id": "PMID:" + str(ID),
-                        "label": create_short_publication_label(author, title, year), 
-                        "journal": journal,
-                        "provenance": get_geolocation(row[8], row[9]),
-                        "sample_types": get_ncit_tumor_type(row[11], row[12]), 
-                        "sortid": None, 
-                        "title": title,
-                        "year": year
-                        })  
-            
-            pub_copy = pub.copy()
-            posts.append(pub_copy)
+
+    pub = {}
+    info = retrieve_epmc_publications(row[0]) 
+    if info != None: ### only if publication PMID matched the query
+        abstract = info["abstractText"]
+        ID = info["pmid"]
+        author = info["authorString"]
+        journal = info["journalInfo"]["journal"]["medlineAbbreviation"]
+        title = info["title"]
+        year = info["pubYear"]
         
-    return posts
+        # Remove HTML formatting:
+        abstract_no_html = re.sub(r'<[^\>]+?>', "", abstract)
+        title_no_html = re.sub(r'<[^\>]+?>', "", title)
+        abstract, title = abstract_no_html, title_no_html
+        
+        # Fill in counts:
+        counts = {}
+        counts.update({"acgh": int(row[1]),
+                        "arraymap": 0,
+                        "ccgh": int(row[2]),
+                        "genomes": int(row[3]),
+                        "ngs": int(row[4]),
+                        "progenetix": int(row[5]),
+                        "wes": int(row[6]),
+                        "wgs": int(row[7])
+                         })
+           
+        pub.update({"abstract": abstract,
+                    "authors": author,
+                    "counts": counts,
+                    "id": "PMID:" + str(ID),
+                    "label": create_short_publication_label(author, title, year), 
+                    "journal": journal,
+                    "provenance": get_geolocation(row[8], row[9]),
+                    "sample_types": get_ncit_tumor_type(row[11], row[12]), 
+                    "sortid": None, 
+                    "title": title,
+                    "year": year
+                    })  
+        
+        pub_copy = pub.copy()
+        
+    return pub_copy
 

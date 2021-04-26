@@ -4,7 +4,11 @@ from os import path
 from pymongo import MongoClient
 import argparse
 
-from lib.publication_utils import jprint, read_annotation_table, create_progenetix_posts
+from lib.publication_utils import jprint, read_annotation_table, create_progenetix_post
+
+"""
+* pubUpdater.py -t 1 -f "../rsrc/publications.txt"
+"""
 
 ##############################################################################
 ##############################################################################
@@ -37,8 +41,7 @@ def update_publications():
     # Read annotation table:
     rows = read_annotation_table(args)
 
-    # Use retrieval to generate posts to be uploaded on MongoDB
-    posts = create_progenetix_posts(rows)
+    print("=> {} publications will be looked up".format(len(rows)))
 
     # Connect to MongoDB and load publication collection
     client = MongoClient()
@@ -46,13 +49,15 @@ def update_publications():
     ids = cl.distinct("id")
 
     # Update the database
-    for post in posts:
+    for row in rows:
+
+        post = create_progenetix_post(row)
 
         if post["id"] in ids:
-            print(post["id"], ": this article is already on the progenetix publications collection.")
+            print(post["id"], ": skipped - already in progenetix.publications")
 
         else:
-            print(post["id"], ": this article isn't on the progenetix publications collection yet.")
+            print(post["id"], ": inserting this into progenetix.publications")
 
             if not args.test:
                 result = cl.insert_one(post)
