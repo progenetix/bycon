@@ -68,15 +68,16 @@ def create_short_publication_label(author, title, year):
 
 def get_geolocation(city, locationID): #heidelberg, heidelberg::germany
 
-   where = {"city": city} 
-   location = requests.get("https://progenetix.org/services/geolocations", params = where)
-   coordinates = location.json()["response"]["results"]
-  
-   for info in coordinates:
-       if info["id"] == locationID: 
-          provenance = info
+    where = {"city": city} 
+    location = requests.get("https://progenetix.org/services/geolocations", params = where)
+    coordinates = location.json()["response"]["results"]
+
+    for info in coordinates:
+        if info["id"] == locationID:
+            del(info["id"])
+            provenance = info
           
-   return provenance
+    return provenance
 
 ##############################################################################
 
