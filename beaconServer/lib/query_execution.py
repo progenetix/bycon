@@ -188,8 +188,7 @@ def execute_bycon_queries(ds_id, byc):
     data_client.close( )
     ho_client.close( )
 
-    # byc.update( { "query_results": prefetch } )
-    byc["query_results"] = prefetch
+    byc.update( { "query_results": prefetch } )
 
     return byc
 

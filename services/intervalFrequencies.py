@@ -67,8 +67,8 @@ def interval_frequencies():
     cgi_break_on_errors(byc)
 
     # data retrieval & response population
-    f_coll_name = byc["these_prefs"]["frequency_collection_name"]
-    c_coll_name = "collations"
+    f_coll_name = byc["config"]["frequencymaps_coll"]
+    c_coll_name = byc["config"]["collations_coll"]
 
     results = [ ]
 
@@ -97,7 +97,7 @@ def interval_frequencies():
                 # TODO: Error if length ...
                 r_o["interval_frequencies"].append( {
                     "index": i,
-                    "chro": interval["chro"],
+                    "reference_name": interval["reference_name"],
                     "start": interval["start"],
                     "end": interval["end"],
                     "gain_frequency": round(collation_f["frequencymaps"]["dupfrequencies"][i], 2),
@@ -124,7 +124,7 @@ def _export_pgxseg_frequencies(byc, results):
     open_text_streaming("interval_frequencies.pgxseg")
 
     print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
-    h_ks = ["chro", "start", "end", "gain_frequency", "loss_frequency", "index"]
+    h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "index"]
 
     # should get error checking if made callable
 
@@ -168,9 +168,9 @@ def _export_pgxmatrix_frequencies(byc, results):
 
     h_line = [ "group_id" ]
     for ex_int in results[0]["interval_frequencies"]:
-        h_line.append("{}:{}-{}:gainF".format(ex_int["chro"], ex_int["start"], ex_int["end"]))
+        h_line.append("{}:{}-{}:gainF".format(ex_int["reference_name"], ex_int["start"], ex_int["end"]))
     for ex_int in results[0]["interval_frequencies"]:
-        h_line.append("{}:{}-{}:lossF".format(ex_int["chro"], ex_int["start"], ex_int["end"]))
+        h_line.append("{}:{}-{}:lossF".format(ex_int["reference_name"], ex_int["start"], ex_int["end"]))
 
     print("\t".join(h_line))
 

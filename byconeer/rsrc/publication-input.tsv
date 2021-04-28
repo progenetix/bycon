@@ -1,0 +1,17 @@
+PMID	acgh	ccgh	genomes	ngs	progenetix	wes	wgs	provenance	provenance_id	status	sample_types	tumor_names	note	
+33567541	1	0	4	0	0	3	0	buenos aires	buenosaires::argentina	sample data not accessible	C7541, 4	Retinoblastoma	international samples	
+33544757	0	0	67	67	0	67	0	seoul	seoul::koreanrepublic	sample data in Progenetix	C35813, 67	Hematopoietic and Lymphoid System Neoplasm	0	
+33560380	0	0	24	24	0	24	0	graz	graz::austria	sample data not accessible	C7217, 24	Primary Cutaneous Follicle Center Lymphoma	international samples	
+33509126	79	0	88	9	0	9	0	goeteborg	goeteborg::sweden	sample data in Progenetix	C96064, 88	Small Intestinal Neuroendocrine Carcinoma	0	
+32796005	914	0	1049	135	0	0	135	new york city	newyorkcity::unitedstates	sample data in Progenetix	C3270, 1049	Neuroblastoma	international samples	
+33562188	1	0	1	0	0	0	0	rome	rome::italy	sample data not accessible	C3222, 1	Medulloblastoma	0	
+32899953	66	0	66	0	0	0	0	villejuif	villejuif::france	sample data in Progenetix	C8054, 66	Thyroid Gland Follicular Carcinoma	international samples	
+32895052	0	0	4	4	0	4	0	berlin	berlin::germany	sample data in Progenetix	C2955, 4	Colorectal Carcinoma	0	
+32802958	0	0	13	13	0	13	0	boston	boston::unitedstates	sample data not accessible	C4878, 13	Lung Carcinoma	0	
+33147338	0	0	1190	1190	0	0	1190	munich	munich::germany	sample data in Progenetix	C27753, 1190	Acute Myeloid Leukemia Not Otherwise Specified	0	
+10092127	0	58	58	0	0	0	0	kyoto	kyoto::japan	sample data in Progenetix	C4004, 58	Gastric Adenocarcinoma	0	
+33802025	0	0	8	8	0	8	0	helsinki	helsinki::finland	sample data in Progenetix	C9290, 8	Myeloid Neoplasm	0	
+33767857	0	0	5	5	0	5	0	seoul	seoul::koreanrepublic	sample data in Progenetix	C3017, 5	Ependymoma	0	
+33643802	0	0	186	186	0	186	0	shanghai	shanghai::china	sample data in Progenetix	"C2926, 145; C4917, 41"	"Lung Non-Small Cell Carcinoma; Lung Small Cell Carcinoma"	0	
+33627664	0	0	165	165	0	0	165	heidelberg	heidelberg::germany	sample data in Progenetix	C3270, 165	Neuroblastoma	international samples	
+33732635	0	0	8	8	0	8	0	suwon-si	suwonsi::koreanrepublic	sample data in Progenetix	C9131, 8	Mucinous Breast Carcinoma	0	

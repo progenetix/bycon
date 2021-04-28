@@ -2,7 +2,8 @@
 
 from os import path
 from pymongo import MongoClient
-import argparse
+import argparse, datetime
+from isodate import date_isoformat
 
 from lib.publication_utils import jprint, read_annotation_table, create_progenetix_post
 
@@ -58,6 +59,8 @@ def update_publications():
 
         else:
             print(post["id"], ": inserting this into progenetix.publications")
+
+            post.update( { "updated": date_isoformat(datetime.datetime.now()) } )
 
             if not args.test:
                 result = cl.insert_one(post)

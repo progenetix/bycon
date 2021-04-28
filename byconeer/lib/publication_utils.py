@@ -57,7 +57,7 @@ def create_short_publication_label(author, title, year):
     
     short_author = re.sub(r'(.{2,32}[\w\.\-]+? \w\-?\w?\w?)(\,| and ).*?$', r'\1 et al.', author)
 
-    if len(title) <= 100:
+    if len(title) <= 80:
         label = short_author + f' ({year}) ' + title
     else:
         label = short_author + f' ({year}) ' + ' '.join(title.split(' ')[:12]) + ' ...'
