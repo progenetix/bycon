@@ -1,0 +1,1331 @@
+ICD-O Code	Level	Term Type	Term type Desc	ICD-O string	NCIm CUI	NCIt Code (if present)	NCIt PT String (Preferred term)
+T	1	HT	Hierarchical term	TOPOGRAPHY	C1522605	C38034	Topography
+C00-C14	2	HT	Hierarchical term	LIP, ORAL CAVITY AND PHARYNX	CL018645		
+C00	3	HT	Hierarchical term	LIP	C0023759	C12220	Lip
+C00.0	4	PT	Preferred term	External upper lip	C0226936	C12221	External Upper Lip
+C00.0	Related	RT	Related term	Upper lip, NOS	C0458582		
+C00.0	Related	RT	Related term	Vermilion border of upper lip	C0226935		
+C00.1	4	PT	Preferred term	External lower lip	C0226942	C12222	External Lower Lip
+C00.1	Related	RT	Related term	Lower lip, NOS	C0226942	C12222	External Lower Lip
+C00.1	Related	RT	Related term	Vermilion border of lower lip	C0226941		
+C00.2	4	PT	Preferred term	External lip, NOS	C0226926	C12223	External Lip
+C00.2	Related	RT	Related term	Vermilion border of lip, NOS	C0226925		
+C00.3	4	PT	Preferred term	Mucosa of upper lip	C0226933	C12224	Mucosa of the Upper Lip
+C00.3	Related	RT	Related term	Frenulum of upper lip	C0226937		
+C00.3	Synonym	SY	Synonym	Inner aspect of upper lip	C0226933	C12224	Mucosa of the Upper Lip
+C00.4	4	PT	Preferred term	Mucosa of lower lip	C0226939	C12225	Mucosa of the Lower Lip
+C00.4	Related	RT	Related term	Frenulum of lower lip	C0226943		
+C00.4	Synonym	SY	Synonym	Inner aspect of lower lip	C0226939	C12225	Mucosa of the Lower Lip
+C00.5	4	PT	Preferred term	Mucosa of lip, NOS	C0226927	C12226	Mucosa of the Lip
+C00.5	Related	RT	Related term	Frenulum of lip, NOS	C0022861		
+C00.5	Synonym	SY	Synonym	Frenulum labii, NOS	C0022861		
+C00.5	Synonym	SY	Synonym	Inner aspect of lip, NOS	C0226927	C12226	Mucosa of the Lip
+C00.5	Synonym	SY	Synonym	Internal lip, NOS	C0226927	C12226	Mucosa of the Lip
+C00.6	4	PT	Preferred term	Commissure of lip	C0226924	C12227	Commissure of the Lip
+C00.6	Related	RT	Related term	Labial commissure	C0226924	C12227	Commissure of the Lip
+C00.8	4	PT	Preferred term	Overlapping lesion of lip	CL018298		
+C00.9	4	PT	Preferred term	Lip, NOS	C0023759	C12220	Lip
+C01	3	HT	Hierarchical term	BASE OF TONGUE	C0226958	C12228	Base of the Tongue
+C01.9	4	PT	Preferred term	Base of tongue, NOS	C0226958	C12228	Base of the Tongue
+C01.9	Related	RT	Related term	Dorsal surface of base of tongue	C0226961		
+C01.9	Related	RT	Related term	Posterior third of tongue	C0226958	C12228	Base of the Tongue
+C01.9	Related	RT	Related term	Posterior tongue, NOS	C0226958	C12228	Base of the Tongue
+C01.9	Related	RT	Related term	Root of tongue	C0226958	C12228	Base of the Tongue
+C02	3	HT	Hierarchical term	OTHER AND UNSPECIFIED PARTS OF TONGUE	CL018300		
+C02.0	4	PT	Preferred term	Dorsal surface of tongue, NOS	C0226954		
+C02.0	Related	RT	Related term	Anterior 2/3 of tongue, dorsal surface	CL018301		
+C02.0	Related	RT	Related term	Dorsal surface of anterior tongue	CL018303		
+C02.0	Related	RT	Related term	Midline of tongue	CL018302		
+C02.1	4	PT	Preferred term	Border of tongue	C0278437		
+C02.1	Related	RT	Related term	Tip of tongue	C0226946	C32130	Apex of the Tongue
+C02.2	4	PT	Preferred term	Ventral surface of tongue, NOS	C0226957		
+C02.2	Related	RT	Related term	Anterior 2/3 of tongue, ventral surface	CL018304		
+C02.2	Related	RT	Related term	Frenulum linguae	C0023739		
+C02.2	Related	RT	Related term	Ventral surface of anterior tongue, NOS	CL018305		
+C02.3	4	PT	Preferred term	Anterior 2/3 of tongue, NOS	C0226945		
+C02.3	Synonym	SY	Synonym	Anterior tongue, NOS	C0226945		
+C02.4	4	PT	Preferred term	Lingual tonsil	C0229871	C32988	Lingual Tonsil
+C02.8	4	PT	Preferred term	Overlapping lesion of tongue	CL018306		
+C02.8	Related	RT	Related term	Junctional zone of tongue	CL018307		
+C02.9	4	PT	Preferred term	Tongue, NOS	C0040408	C12422	Tongue
+C02.9	Synonym	SY	Synonym	Lingual, NOS	C0040408	C12422	Tongue
+C03	3	HT	Hierarchical term	GUM	C0017562	C32677	Gingiva
+C03.0	4	PT	Preferred term	Upper gum	C0227121	C54205	Upper Gingiva
+C03.0	Synonym	SY	Synonym	Maxillary gingiva	C0227121	C54205	Upper Gingiva
+C03.0	Synonym	SY	Synonym	Upper alveolar mucosa	C0227121	C54205	Upper Gingiva
+C03.0	Synonym	SY	Synonym	Upper alveolar ridge mucosa	C0227126		
+C03.0	Synonym	SY	Synonym	Upper alveolus	C0227121	C54205	Upper Gingiva
+C03.0	Synonym	SY	Synonym	Upper gingiva	C0227121	C54205	Upper Gingiva
+C03.1	4	PT	Preferred term	Lower gum	C0227123	C54204	Lower Gingiva
+C03.1	Synonym	SY	Synonym	Lower alveolar mucosa	C0227123	C54204	Lower Gingiva
+C03.1	Synonym	SY	Synonym	Lower alveolar ridge mucosa	C0227127		
+C03.1	Synonym	SY	Synonym	Lower alveolus	C0227123	C54204	Lower Gingiva
+C03.1	Synonym	SY	Synonym	Lower gingiva	C0227123	C54204	Lower Gingiva
+C03.1	Synonym	SY	Synonym	Mandibular gingiva	C0227123	C54204	Lower Gingiva
+C03.9	4	PT	Preferred term	Gum, NOS	C0017562	C32677	Gingiva
+C03.9	Related	RT	Related term	Periodontal tissue	C0031104		
+C03.9	Related	RT	Related term	Tooth socket	C0227130	C94543	Tooth Socket
+C03.9	Synonym	SY	Synonym	Alveolar mucosa, NOS	C0542363		
+C03.9	Synonym	SY	Synonym	Alveolar ridge mucosa, NOS	C0542363		
+C03.9	Synonym	SY	Synonym	Alveolus, NOS	C0542363		
+C03.9	Synonym	SY	Synonym	Gingiva, NOS	C0017562	C32677	Gingiva
+C04	3	HT	Hierarchical term	FLOOR OF MOUTH	CL435388	C54187	Floor of Mouth
+C04.0	4	PT	Preferred term	Anterior floor of mouth	C0226914		
+C04.1	4	PT	Preferred term	Lateral floor of mouth	C0226915		
+C04.8	4	PT	Preferred term	Overlapping lesion of floor of mouth	CL018311		
+C04.9	4	PT	Preferred term	Floor of mouth, NOS	CL435388	C54187	Floor of Mouth
+C05	3	HT	Hierarchical term	PALATE	C0700374	C12229	Palate
+C05.0	4	PT	Preferred term	Hard palate	C0226901	C12230	Hard Palate
+C05.1	4	PT	Preferred term	Soft palate, NOS	C0521367	C12762	Oropharynx
+C05.2	4	PT	Preferred term	Uvula	C0042173	C12232	Uvula
+C05.8	4	PT	Preferred term	Overlapping lesion of palate	CL413530		
+C05.8	Related	RT	Related term	Junction of hard and soft palate	C0447423		
+C05.9	4	PT	Preferred term	Palate, NOS	C0700374	C12229	Palate
+C05.9	Synonym	SY	Synonym	Roof of mouth	C0700374	C12229	Palate
+C06	3	HT	Hierarchical term	OTHER AND UNSPECIFIED PARTS OF MOUTH	CL025603		
+C06.0	4	PT	Preferred term	Cheek mucosa	C1578559	C12505	Buccal Mucosa
+C06.0	Synonym	SY	Synonym	Buccal mucosa	C1578559	C12505	Buccal Mucosa
+C06.0	Synonym	SY	Synonym	Internal cheek	C1578559	C12505	Buccal Mucosa
+C06.1	4	PT	Preferred term	Vestibule of mouth	C0226897		
+C06.1	Related	RT	Related term	Alveolar sulcus	CL018314		
+C06.1	Related	RT	Related term	Buccal sulcus	C0226897		
+C06.1	Related	RT	Related term	Labial sulcus	C0447431		
+C06.2	4	PT	Preferred term	Retromolar area	C0226920	C54223	Retromolar Trigone
+C06.2	Synonym	SY	Synonym	Retromolar triangle	C0226920	C54223	Retromolar Trigone
+C06.2	Synonym	SY	Synonym	Retromolar trigone	C0226920	C54223	Retromolar Trigone
+C06.8	4	PT	Preferred term	Overlapping lesion of other and unspecified parts of mouth	C0496761		
+C06.9	4	PT	Preferred term	Mouth, NOS	C0226896	C12421	Oral Cavity
+C06.9	Related	RT	Related term	Minor salivary gland, NOS	C0036099	C33129	Minor Salivary Gland
+C06.9	Synonym	SY	Synonym	Buccal cavity	C0226896	C12421	Oral Cavity
+C06.9	Synonym	SY	Synonym	Oral cavity	C0226896	C12421	Oral Cavity
+C06.9	Synonym	SY	Synonym	Oral mucosa	C1578559	C12505	Buccal Mucosa
+C07	3	HT	Hierarchical term	PAROTID GLAND	C0030580	C12427	Parotid Gland
+C07.9	4	PT	Preferred term	Parotid gland	C0030580	C12427	Parotid Gland
+C07.9	Related	RT	Related term	Stensen duct	C0227458	C33277	Parotid Duct
+C07.9	Synonym	SY	Synonym	Parotid gland duct	C0227458	C33277	Parotid Duct
+C07.9	Synonym	SY	Synonym	Parotid, NOS	C0030580	C12427	Parotid Gland
+C08	3	HT	Hierarchical term	OTHER AND UNSPECIFIED MAJOR SALIVARY GLANDS	CL018317		
+C08.0	4	PT	Preferred term	Submandibular gland	C0038556	C12233	Submandibular Gland
+C08.0	Related	RT	Related term	Wharton duct	C0227472	C33649	Submandibular Duct
+C08.0	Synonym	SY	Synonym	Submaxillary gland duct	C0227472	C33649	Submandibular Duct
+C08.0	Synonym	SY	Synonym	Submaxillary gland	C0038556	C12233	Submandibular Gland
+C08.1	4	PT	Preferred term	Sublingual gland	C0038553	C12234	Sublingual Salivary Gland
+C08.1	Related	RT	Related term	Sublingual gland duct	CL018318		
+C08.8	4	PT	Preferred term	Overlapping lesion of major salivary glands	CL018319		
+C08.9	4	PT	Preferred term	Major salivary gland, NOS	C0036098	C12426	Salivary Gland
+C08.9	Synonym	SY	Synonym	Salivary gland, NOS	C0036098	C12426	Salivary Gland
+C09	3	HT	Hierarchical term	TONSIL	C0040421	C33250	Palatine Tonsil
+C09.0	4	PT	Preferred term	Tonsillar fossa	C0229881	C12235	Tonsillar Fossa
+C09.1	4	PT	Preferred term	Tonsillar pillar	C0229872	C12236	Tonsillar Pillar
+C09.1	Synonym	SY	Synonym	Faucial pillar	C0229872	C12236	Tonsillar Pillar
+C09.1	Synonym	SY	Synonym	Glossopalatine fold	C0229872	C12236	Tonsillar Pillar
+C09.8	4	PT	Preferred term	Overlapping lesion of tonsil	CL018320		
+C09.9	4	PT	Preferred term	Tonsil, NOS	C0040421	C33250	Palatine Tonsil
+C09.9	Synonym	SY	Synonym	Faucial tonsil	C0040421	C33250	Palatine Tonsil
+C09.9	Synonym	SY	Synonym	Palatine tonsil	C0040421	C33250	Palatine Tonsil
+C10	3	HT	Hierarchical term	OROPHARYNX	C0521367	C12762	Oropharynx
+C10.0	4	PT	Preferred term	Vallecula	C0227157	C12237	Vallecula
+C10.1	4	PT	Preferred term	Anterior surface of epiglottis	C0227160	C12238	Anterior Surface of the Epiglottis
+C10.2	4	PT	Preferred term	Lateral wall of oropharynx	C0227156	C12239	Lateral Wall of the Oropharynx
+C10.2	Synonym	SY	Synonym	Lateral wall of mesopharynx	C0227156	C12239	Lateral Wall of the Oropharynx
+C10.3	4	PT	Preferred term	Posterior wall of oropharynx	C0227155	C12240	Posterior Wall of the Oropharynx
+C10.3	Synonym	SY	Synonym	Posterior wall of mesopharynx	C0227155	C12240	Posterior Wall of the Oropharynx
+C10.4	4	PT	Preferred term	Branchial cleft	C0079037	C104813	Branchial Cleft Remnant
+C10.8	4	PT	Preferred term	Overlapping lesion of oropharynx	CL413529		
+C10.8	Related	RT	Related term	Junctional region of oropharynx	C0227175		
+C10.9	4	PT	Preferred term	Oropharynx, NOS	C0521367	C12762	Oropharynx
+C10.9	Synonym	SY	Synonym	Fauces, NOS	C0521367	C12762	Oropharynx
+C10.9	Synonym	SY	Synonym	Mesopharynx, NOS	C0521367	C12762	Oropharynx
+C11	3	HT	Hierarchical term	NASOPHARYNX	C0027442	C12423	Nasopharynx
+C11.0	4	PT	Preferred term	Superior wall of nasopharynx	C0225492	C12242	Superior Wall of the Nasopharynx
+C11.0	Synonym	SY	Synonym	Roof of nasopharynx	C0225492	C12242	Superior Wall of the Nasopharynx
+C11.1	4	PT	Preferred term	Posterior wall of nasopharynx	C0225484	C12243	Posterior Wall of the Nasopharynx
+C11.1	Related	RT	Related term	Adenoid	C0001428	C33318	Pharyngeal Tonsil
+C11.1	Synonym	SY	Synonym	Pharyngeal tonsil	C0001428	C33318	Pharyngeal Tonsil
+C11.2	4	PT	Preferred term	Lateral wall of nasopharynx	C0225486	C12244	Lateral Wall of the Nasopharynx
+C11.2	Related	RT	Related term	Fossa of Rosenmuller	C0227164		
+C11.3	4	PT	Preferred term	Anterior wall of nasopharynx	C0225489	C12245	Anterior Wall of the Nasopharynx
+C11.3	Related	RT	Related term	Choana	C0225432	C32856	Internal Nare
+C11.3	Related	RT	Related term	Nasopharyngeal surface of soft palate	C0226905		
+C11.3	Related	RT	Related term	Pharyngeal fornix	C0225492	C12242	Superior Wall of the Nasopharynx
+C11.3	Related	RT	Related term	Posterior margin of nasal septum	C0225430		
+C11.8	4	PT	Preferred term	Overlapping lesion of nasopharynx	CL018321		
+C11.9	4	PT	Preferred term	Nasopharynx, NOS	C0027442	C12423	Nasopharynx
+C11.9	Related	RT	Related term	Nasopharyngeal wall	C0225502		
+C12	3	HT	Hierarchical term	PYRIFORM SINUS	C0227170	C33439	Pyriform Sinus
+C12.9	4	PT	Preferred term	Pyriform sinus	C0227170	C33439	Pyriform Sinus
+C12.9	Synonym	SY	Synonym	Piriform fossa	C0227170	C33439	Pyriform Sinus
+C12.9	Synonym	SY	Synonym	Piriform sinus	C0227170	C33439	Pyriform Sinus
+C12.9	Synonym	SY	Synonym	Pyriform fossa	C0227170	C33439	Pyriform Sinus
+C13	3	HT	Hierarchical term	HYPOPHARYNX	C0020629	C12246	Hypopharynx
+C13.0	4	PT	Preferred term	Postcricoid region	C0225516	C54221	Postcricoid Region
+C13.0	Related	RT	Related term	Cricoid, NOS	CL497936		
+C13.0	Related	RT	Related term	Cricopharynx	C0225516	C54221	Postcricoid Region
+C13.1	4	PT	Preferred term	Hypopharyngeal aspect of aryepiglottic fold	C0225567		
+C13.1	Related	RT	Related term	Aryepiglottic fold, NOS	C0225560	C32147	Aryepiglottic Fold
+C13.1	Related	RT	Related term	Arytenoid fold	CL018322		
+C13.2	4	PT	Preferred term	Posterior wall of hypopharynx	C0227174	C12249	Posterior Wall of the Hypopharynx
+C13.8	4	PT	Preferred term	Overlapping lesion of hypopharynx	CL018323		
+C13.9	4	PT	Preferred term	Hypopharynx, NOS	C0020629	C12246	Hypopharynx
+C13.9	Related	RT	Related term	Hypopharyngeal wall	C0020629	C12246	Hypopharynx
+C13.9	Related	RT	Related term	Laryngopharynx	C0020629	C12246	Hypopharynx
+C14	3	HT	Hierarchical term	OTHER AND ILL-DEFINED SITES IN LIP, ORAL CAVITY AND PHARYNX	CL025608		
+C14.0	4	PT	Preferred term	Pharynx, NOS	C0031354	C12425	Pharynx
+C14.0	Related	RT	Related term	Lateral wall of pharynx, NOS	C0227151	C129817	Lateral Wall of the Pharynx
+C14.0	Related	RT	Related term	Pharyngeal wall, NOS	C0227149	C129816	Wall of the Pharynx
+C14.0	Related	RT	Related term	Posterior wall of pharynx, NOS	C0227150	C54222	Posterior Wall of the Pharynx
+C14.0	Related	RT	Related term	Retropharynx	CL092451		
+C14.0	Related	RT	Related term	Throat	C0031354	C12425	Pharynx
+C14.0	Synonym	SY	Synonym	Wall of pharynx, NOS	C0227149	C129816	Wall of the Pharynx
+C14.2	4	PT	Preferred term	Waldeyer ring	C0459892	C73468	Waldeyer's Tonsillar Ring
+C14.8	4	PT	Preferred term	Overlapping lesion of lip, oral cavity and pharynx	CL018327		
+C15-C26	2	HT	Hierarchical term	DIGESTIVE ORGANS	C0227435		
+C15	3	HT	Hierarchical term	ESOPHAGUS	C0014876	C12389	Esophagus
+C15.0	4	PT	Preferred term	Cervical esophagus	C0227186	C12250	Cervical Esophagus
+C15.1	4	PT	Preferred term	Thoracic esophagus	C0227188	C12251	Thoracic Esophagus
+C15.2	4	PT	Preferred term	Abdominal esophagus	C0227190	C12252	Abdominal Esophagus
+C15.3	4	PT	Preferred term	Upper third of esophagus	C0227187	C12253	Upper Third of the Esophagus
+C15.3	Synonym	SY	Synonym	Proximal third of esophagus	C0227187	C12253	Upper Third of the Esophagus
+C15.4	4	PT	Preferred term	Middle third of esophagus	C0227189	C12254	Middle Third of the Esophagus
+C15.5	4	PT	Preferred term	Lower third of esophagus	C0227191	C12255	Lower Third of the Esophagus
+C15.5	Synonym	SY	Synonym	Distal third of esophagus	C0227191	C12255	Lower Third of the Esophagus
+C15.8	4	PT	Preferred term	Overlapping lesion of esophagus	CL018328		
+C15.9	4	PT	Preferred term	Esophagus, NOS	C0014876	C12389	Esophagus
+C16	3	HT	Hierarchical term	STOMACH	C0038351	C12391	Stomach
+C16.0	4	PT	Preferred term	Cardia, NOS	C0007144	C12256	Gastric Cardia
+C16.0	Related	RT	Related term	Cardioesophageal junction	C0014871	C32668	Gastroesophageal Junction
+C16.0	Synonym	SY	Synonym	Esophagogastric junction	C0014871	C32668	Gastroesophageal Junction
+C16.0	Synonym	SY	Synonym	Gastric cardia	C0007144	C12256	Gastric Cardia
+C16.0	Synonym	SY	Synonym	Gastroesophageal junction	C0014871	C32668	Gastroesophageal Junction
+C16.1	4	PT	Preferred term	Fundus of stomach	C0017129	C12257	Fundus of the Stomach
+C16.1	Synonym	SY	Synonym	Gastric fundus	C0017129	C12257	Fundus of the Stomach
+C16.2	4	PT	Preferred term	Body of stomach	C0227230	C12258	Body of Stomach
+C16.2	Synonym	SY	Synonym	Corpus of stomach	C0227230	C12258	Body of Stomach
+C16.2	Synonym	SY	Synonym	Gastric corpus	C0227230	C12258	Body of Stomach
+C16.3	4	PT	Preferred term	Gastric antrum	C0034193	C12259	Antrum Pylori
+C16.3	Synonym	SY	Synonym	Antrum of stomach	C0034193	C12259	Antrum Pylori
+C16.3	Synonym	SY	Synonym	Pyloric antrum	C0034193	C12259	Antrum Pylori
+C16.4	4	PT	Preferred term	Pylorus	C0034196	C12260	Pylorus
+C16.4	Related	RT	Related term	Prepylorus	C0447510		
+C16.4	Synonym	SY	Synonym	Pyloric canal	C0227233		
+C16.5	4	PT	Preferred term	Lesser curvature of stomach, NOS	C0227221	C12261	Lesser Curvature of the Stomach
+C16.6	4	PT	Preferred term	Greater curvature of stomach, NOS	C0227223	C12262	Greater Curvature of the Stomach
+C16.8	4	PT	Preferred term	Overlapping lesion of stomach	CL497887		
+C16.8	Related	RT	Related term	Anterior wall of stomach, NOS	CL497887		
+C16.8	Related	RT	Related term	Posterior wall of stomach, NOS	C0227226		
+C16.9	4	PT	Preferred term	Stomach, NOS	C0038351	C12391	Stomach
+C16.9	Synonym	SY	Synonym	Gastric, NOS	C0038351	C12391	Stomach
+C17	3	HT	Hierarchical term	SMALL INTESTINE	C0021852	C12386	Small Intestine
+C17.0	4	PT	Preferred term	Duodenum	C0013303	C12263	Duodenum
+C17.1	4	PT	Preferred term	Jejunum	C0022378	C12388	Jejunum
+C17.2	4	PT	Preferred term	Ileum	C0020885	C12387	Ileum
+C17.3	4	PT	Preferred term	Meckel diverticulum	C0025037	C12264	Meckel Diverticulum
+C17.8	4	PT	Preferred term	Overlapping lesion of small intestine	CL018331		
+C17.9	4	PT	Preferred term	Small intestine, NOS	C0021852	C12386	Small Intestine
+C17.9	Synonym	SY	Synonym	Small bowel, NOS	C0021852	C12386	Small Intestine
+C18	3	HT	Hierarchical term	COLON	C0009368	C12382	Colon
+C18.0	4	PT	Preferred term	Cecum	C0007531	C12381	Cecum
+C18.0	Related	RT	Related term	Ileocecal junction	C0475433		
+C18.0	Related	RT	Related term	Ileocecal valve	C0020880	C13066	Ileocecal Valve
+C18.1	4	PT	Preferred term	Appendix	C0003617	C12380	Appendix
+C18.2	4	PT	Preferred term	Ascending colon	C0227375	C12265	Ascending Colon
+C18.2	Synonym	SY	Synonym	Right colon	C0227375	C12265	Ascending Colon
+C18.3	4	PT	Preferred term	Hepatic flexure of colon	C0227385	C12266	Hepatic Flexure
+C18.4	4	PT	Preferred term	Transverse colon	C0227386	C12385	Transverse Colon
+C18.5	4	PT	Preferred term	Splenic flexure of colon	C0227387	C12267	Splenic Flexure
+C18.6	4	PT	Preferred term	Descending colon	C0227389	C12268	Descending Colon
+C18.6	Synonym	SY	Synonym	Left colon	C0227389	C12268	Descending Colon
+C18.7	4	PT	Preferred term	Sigmoid colon	C0227391	C12384	Sigmoid Colon
+C18.7	Synonym	SY	Synonym	Pelvic colon	C0227391	C12384	Sigmoid Colon
+C18.7	Synonym	SY	Synonym	Sigmoid flexure of colon	C0227391	C12384	Sigmoid Colon
+C18.7	Synonym	SY	Synonym	Sigmoid, NOS	C0227391	C12384	Sigmoid Colon
+C18.8	4	PT	Preferred term	Overlapping lesion of colon	CL018333		
+C18.9	4	PT	Preferred term	Colon, NOS	C0009368	C12382	Colon
+C18.9	Synonym	SY	Synonym	Large bowel, NOS	C0021851	C12379	Large Intestine
+C18.9	Synonym	SY	Synonym	Large intestine	C0021851	C12379	Large Intestine
+C19	3	HT	Hierarchical term	RECTOSIGMOID JUNCTION	C1709868	C54188	Rectosigmoid Region
+C19.9	4	PT	Preferred term	Rectosigmoid junction	C1709868	C54188	Rectosigmoid Region
+C19.9	Related	RT	Related term	Colon and rectum	CL018336		
+C19.9	Related	RT	Related term	Pelvirectal junction	CL018337		
+C19.9	Synonym	SY	Synonym	Rectosigmoid colon	C1709868	C54188	Rectosigmoid Region
+C19.9	Synonym	SY	Synonym	Rectosigmoid, NOS	C0521377	C103438	Rectosigmoid Colon
+C20	3	HT	Hierarchical term	RECTUM	C0034896	C12390	Rectum
+C20.9	4	PT	Preferred term	Rectum, NOS	C0034896	C12390	Rectum
+C20.9	Related	RT	Related term	Rectal ampulla	C0227404		
+C21	3	HT	Hierarchical term	ANUS AND ANAL CANAL	CL018338		
+C21.0	4	PT	Preferred term	Anus, NOS	C0003461	C43362	Anus
+C21.1	4	PT	Preferred term	Anal canal	C0227411	C12375	Anal Canal
+C21.1	Related	RT	Related term	Anal sphincter	C0002760		
+C21.2	4	PT	Preferred term	Cloacogenic zone	C0443181	C32072	Anal Transitional Zone
+C21.8	4	PT	Preferred term	Overlapping lesion of rectum, anus and anal canal	CL018340		
+C21.8	Related	RT	Related term	Anorectal junction	C0227410		
+C21.8	Related	RT	Related term	Anorectum	CL018341		
+C22	3	HT	Hierarchical term	LIVER AND INTRAHEPATIC BILE DUCTS	CL018342		
+C22.0	4	PT	Preferred term	Liver	C0023884	C12392	Liver
+C22.0	Synonym	SY	Synonym	Hepatic, NOS	C0205054	C13308	Hepatic
+C22.1	4	PT	Preferred term	Intrahepatic bile duct	C0005401	C12677	Intrahepatic Bile Duct
+C22.1	Related	RT	Related term	Biliary canaliculus	C0005393	C32202	Bile Canaliculus
+C22.1	Related	RT	Related term	Cholangiole	C0227516		
+C23	3	HT	Hierarchical term	GALLBLADDER	C0016976	C12377	Gallbladder
+C23.9	4	PT	Preferred term	Gallbladder	C0016976	C12377	Gallbladder
+C24	3	HT	Hierarchical term	OTHER AND UNSPECIFIED PARTS OF BILIARY TRACT	CL018343		
+C24.0	4	PT	Preferred term	Extrahepatic bile duct	C0206187	C32573	Extrahepatic Bile Duct
+C24.0	Related	RT	Related term	Choledochal duct	CL018344		
+C24.0	Related	RT	Related term	Common bile duct	C0009437	C12698	Common Bile Duct
+C24.0	Related	RT	Related term	Cystic bile duct	CL018345		
+C24.0	Related	RT	Related term	Hepatic bile duct	CL018346		
+C24.0	Related	RT	Related term	Sphincter of Oddi	C0028872	C13065	Sphincter of Oddi
+C24.0	Synonym	SY	Synonym	Bile duct, NOS	C0005400	C12376	Bile Duct
+C24.0	Synonym	SY	Synonym	Biliary duct, NOS	C0005400	C12376	Bile Duct
+C24.0	Synonym	SY	Synonym	Common duct	CL378903		
+C24.0	Synonym	SY	Synonym	Cystic duct	C0010672	C32421	Cystic Duct
+C24.0	Synonym	SY	Synonym	Hepatic duct	C0917710	C32730	Hepatic Duct
+C24.1	4	PT	Preferred term	Ampulla of Vater	C0042425	C13011	Ampulla of Vater
+C24.1	Related	RT	Related term	Periampullary	CL018347		
+C24.8	4	PT	Preferred term	Overlapping lesion of biliary tract	CL018348		
+C24.9	4	PT	Preferred term	Biliary tract, NOS	C0005423	C12678	Biliary Tract
+C25	3	HT	Hierarchical term	PANCREAS	C0030274	C12393	Pancreas
+C25.0	4	PT	Preferred term	Head of pancreas	C0227579	C12269	Head of the Pancreas
+C25.1	4	PT	Preferred term	Body of pancreas	C0227582	C12270	Body of the Pancreas
+C25.2	4	PT	Preferred term	Tail of pancreas	C0227590	C12271	Tail of the Pancreas
+C25.3	4	PT	Preferred term	Pancreatic duct	C0030288	C12272	Pancreatic Duct
+C25.3	Related	RT	Related term	Duct of Santorini	C0227573	C32487	Ductus Santorini
+C25.3	Related	RT	Related term	Duct of Wirsung	C0447557		
+C25.4	4	PT	Preferred term	Islets of Langerhans	C0022131	C12608	Islet of Langerhans
+C25.4	Synonym	SY	Synonym	Endocrine pancreas	C0022131	C12608	Islet of Langerhans
+C25.4	Synonym	SY	Synonym	Islands of Langerhans	C0022131	C12608	Islet of Langerhans
+C25.7	4	PT	Preferred term	Other specified parts of pancreas	C1518669	C12273	Other Specified Parts of Pancreas
+C25.7	Related	RT	Related term	Neck of pancreas	C0447556		
+C25.8	4	PT	Preferred term	Overlapping lesion of pancreas	CL018351		
+C25.9	4	PT	Preferred term	Pancreas, NOS	C0030274	C12393	Pancreas
+C26	3	HT	Hierarchical term	OTHER AND ILL-DEFINED DIGESTIVE ORGANS	CL018352		
+C26.0	4	PT	Preferred term	Intestinal tract, NOS	C0021853	C12736	Intestine
+C26.0	Synonym	SY	Synonym	Bowel, NOS	C0021853	C12736	Intestine
+C26.0	Synonym	SY	Synonym	Intestine, NOS	C0021853	C12736	Intestine
+C26.8	4	PT	Preferred term	Overlapping lesion of digestive system	CL018353		
+C26.9	4	PT	Preferred term	Gastrointestinal tract, NOS	C0017189	C34082	Gastrointestinal Tract
+C26.9	Related	RT	Related term	Alimentary tract, NOS	C0017189	C34082	Gastrointestinal Tract
+C26.9	Related	RT	Related term	Digestive organs, NOS	C0227435		
+C30-C39	2	HT	Hierarchical term	RESPIRATORY SYSTEM AND INTRATORACIC ORGANS	CL018354		
+C30	3	HT	Hierarchical term	NASAL CAVITY AND MIDDLE EAR	CL018355		
+C30.0	4	PT	Preferred term	Nasal cavity	C0027423	C12424	Nasal Cavity
+C30.0	Related	RT	Related term	Naris	C0595944	C33178	Nostril
+C30.0	Related	RT	Related term	Nasal cartilage	C0225415	C49593	Nasal Cartilage
+C30.0	Related	RT	Related term	Nasal mucosa	C0027428		
+C30.0	Related	RT	Related term	Nasal septum, NOS	C0027432	C33160	Nasal Septum
+C30.0	Related	RT	Related term	Nasal turbinate	C1266928	C49594	Nasal Turbinate
+C30.0	Related	RT	Related term	Nostril	C0595944	C33178	Nostril
+C30.0	Related	RT	Related term	Vestibule of nose	CL098934		
+C30.0	Synonym	SY	Synonym	Internal nose	C0225425		
+C30.1	4	PT	Preferred term	Middle ear	C0013455	C12274	Middle Ear
+C30.1	Related	RT	Related term	Auditory tube	C0015183	C12500	Eustachian Tube
+C30.1	Related	RT	Related term	Eustachian tube	C0015183	C12500	Eustachian Tube
+C30.1	Related	RT	Related term	Inner ear	C0022889	C12499	Inner Ear
+C30.1	Related	RT	Related term	Mastoid antrum	C0229428		
+C30.1	Related	RT	Related term	Tympanic cavity	C0242255		
+C31	3	HT	Hierarchical term	ACCESSORY SINUSES	C0030471	C12763	Paranasal Sinus
+C31.0	4	PT	Preferred term	Maxillary sinus	C0024957	C12275	Maxillary Sinus
+C31.0	Synonym	SY	Synonym	Antrum, NOS	C0024957	C12275	Maxillary Sinus
+C31.0	Synonym	SY	Synonym	Maxillary antrum	C0024957	C12275	Maxillary Sinus
+C31.1	4	PT	Preferred term	Ethmoid sinus	C0015028	C12276	Ethmoid Sinus
+C31.2	4	PT	Preferred term	Frontal sinus	C0016734	C12277	Frontal Sinus
+C31.3	4	PT	Preferred term	Sphenoid sinus	C0037885	C12278	Sphenoid Sinus
+C31.8	4	PT	Preferred term	Overlapping lesion of accessory sinuses	CL018359		
+C31.9	4	PT	Preferred term	Accessory sinus, NOS	C0030471	C12763	Paranasal Sinus
+C31.9	Synonym	SY	Synonym	Accessory nasal sinus	C0030471	C12763	Paranasal Sinus
+C31.9	Synonym	SY	Synonym	Paranasal sinus	C0030471	C12763	Paranasal Sinus
+C32	3	HT	Hierarchical term	LARYNX	C0023078	C12420	Larynx
+C32.0	4	PT	Preferred term	Glottis	C0017681	C12724	Glottis
+C32.0	Related	RT	Related term	Intrinsic larynx	C0225583		
+C32.0	Related	RT	Related term	Laryngeal commissure	C0225577		
+C32.0	Related	RT	Related term	Vocal cord, NOS	C0042930	C12822	Vocal Cord
+C32.0	Synonym	SY	Synonym	True cord	CL321357	C33815	True Vocal Cord
+C32.0	Synonym	SY	Synonym	True vocal cord	CL321357	C33815	True Vocal Cord
+C32.1	4	PT	Preferred term	Supraglottis	C0225574	C12279	Supraglottis
+C32.1	Related	RT	Related term	Epiglottis, NOS	C0014540	C12709	Epiglottis
+C32.1	Related	RT	Related term	Extrinsic larynx	C0225582		
+C32.1	Related	RT	Related term	Laryngeal aspect of aryepiglottic fold	C0687029		
+C32.1	Related	RT	Related term	Posterior surface of epiglottis	CL018361		
+C32.1	Related	RT	Related term	Ventricular band of larynx	C0149596	C32583	False Vocal Cord
+C32.1	Synonym	SY	Synonym	False cord	C0149596	C32583	False Vocal Cord
+C32.1	Synonym	SY	Synonym	False vocal cord	C0149596	C32583	False Vocal Cord
+C32.2	4	PT	Preferred term	Subglottis	C0456475	C12280	Subglottis
+C32.3	4	PT	Preferred term	Laryngeal cartilage	C0023050	C12281	Laryngeal Cartilage
+C32.3	Related	RT	Related term	Arytenoid cartilage	C0003943	C32148	Arytenoid Cartilage
+C32.3	Related	RT	Related term	Cricoid cartilage	C0010323	C32400	Cricoid Cartilage
+C32.3	Related	RT	Related term	Cuneiform cartilage	C0225557	C32417	Cuneiform Cartilage
+C32.3	Related	RT	Related term	Thyroid cartilage	C0040126	C33780	Thyroid Cartilage
+C32.8	4	PT	Preferred term	Overlapping lesion of larynx	CL018362		
+C32.9	4	PT	Preferred term	Larynx, NOS	C0023078	C12420	Larynx
+C33	3	HT	Hierarchical term	TRACHEA	C0040578	C12428	Trachea
+C33.9	4	PT	Preferred term	Trachea	C0040578	C12428	Trachea
+C34	3	HT	Hierarchical term	BRONCHUS AND LUNG	CL435409		
+C34.0	4	PT	Preferred term	Main bronchus	C0024496	C12284	Main Bronchus
+C34.0	Related	RT	Related term	Carina	C0225594	C25264	Carina
+C34.0	Related	RT	Related term	Hilus of lung	CL018364		
+C34.1	4	PT	Preferred term	Upper lobe, lung	C0225756	C12285	Upper Lobe of the Lung
+C34.1	Related	RT	Related term	Lingula of lung	C0225740	C40373	Lingula of the Lung
+C34.1	Related	RT	Related term	Upper lobe, bronchus	C1283266		
+C34.2	4	PT	Preferred term	Middle lobe, lung	C0225757	C12286	Middle Lobe of the Right Lung
+C34.2	Related	RT	Related term	Middle lobe, bronchus	CL018365		
+C34.3	4	PT	Preferred term	Lower lobe, lung	C0225758	C12287	Lower Lobe of the Lung
+C34.3	Related	RT	Related term	Lower lobe, bronchus	C1283267		
+C34.8	4	PT	Preferred term	Overlapping lesion of lung	CL018366		
+C34.9	4	PT	Preferred term	Lung, NOS	C0024109	C12468	Lung
+C34.9	Related	RT	Related term	Bronchiole	C0006270	C12684	Bronchiole
+C34.9	Related	RT	Related term	Bronchogenic	CL072099		
+C34.9	Related	RT	Related term	Bronchus, NOS	C0006255	C12683	Bronchus
+C34.9	Related	RT	Related term	Pulmonary, NOS	C2709248	C13304	Pulmonary
+C37	3	HT	Hierarchical term	THYMUS	C0040113	C12433	Thymus Gland
+C37.9	4	PT	Preferred term	Thymus	C0040113	C12433	Thymus Gland
+C38	3	HT	Hierarchical term	HEART, MEDIASTINUM, AND PLEURA	CL018367		
+C38.0	4	PT	Preferred term	Heart	C0018787	C12727	Heart
+C38.0	Related	RT	Related term	Cardiac atrium	C0018792	C12728	Cardiac Atrium
+C38.0	Related	RT	Related term	Cardiac ventricle	C0018827	C12730	Cardiac Ventricle
+C38.0	Related	RT	Related term	Endocardium	C0014124	C13004	Endocardium
+C38.0	Related	RT	Related term	Epicardium	C0225968	C13164	Epicardium
+C38.0	Related	RT	Related term	Myocardium	C0027061	C12371	Myocardium
+C38.0	Related	RT	Related term	Pericardium	C0031050	C13005	Pericardium
+C38.1	4	PT	Preferred term	Anterior mediastinum	C0230148	C32098	Anterior Mediastinum
+C38.2	4	PT	Preferred term	Posterior mediastinum	C0230150	C33368	Posterior Mediastinum
+C38.3	4	PT	Preferred term	Mediastinum, NOS	C0025066	C12748	Mediastinum
+C38.4	4	PT	Preferred term	Pleura, NOS	C0032225	C12469	Pleura
+C38.4	Related	RT	Related term	Parietal pleura	C0225777	C33273	Parietal Pleura
+C38.4	Related	RT	Related term	Visceral pleura	C0225776	C33881	Visceral Pleura
+C38.8	4	PT	Preferred term	Overlapping lesion of heart, mediastinum and pleura	CL497933		
+C39	3	HT	Hierarchical term	OTHER AND ILL-DEFINED SITES WITHIN RESPIRATORY SYSTEM AND INTRATHORACIC ORGANS	CL025607		
+C39.0	4	PT	Preferred term	Upper respiratory tract, NOS	C0458578		
+C39.8	4	PT	Preferred term	Overlapping lesion of respiratory system and intrathoracic organs	CL018371		
+C39.9	4	PT	Preferred term	Ill-defined sites within respiratory system	C0282335		
+C39.9	Synonym	SY	Synonym	Respiratory tract, NOS	C0282335		
+C40-C41	2	HT	Hierarchical term	BONES, JOINTS and ARTICULAR CARTILAGE	CL018372		
+C40	3	HT	Hierarchical term	BONES, JOINTS AND ARTICULAR CARTILAGE OF LIMBS	CL018373		
+C40.0	4	PT	Preferred term	Long bones of upper limb, scapula and associated joints	CL018374		
+C40.0	Related	RT	Related term	Acromioclavicular joint	C0001208	C32047	Acromioclavicular Joint
+C40.0	Related	RT	Related term	Bone of arm	C0520509		
+C40.0	Related	RT	Related term	Bone of forearm	C0576459		
+C40.0	Related	RT	Related term	Bone of shoulder	C0223625		
+C40.0	Related	RT	Related term	Elbow joint	C0013770	C32497	Elbow Joint
+C40.0	Related	RT	Related term	Humerus	C0020164	C12731	Humerus
+C40.0	Related	RT	Related term	Radius	C0034627	C12777	Radius Bone
+C40.0	Related	RT	Related term	Scapula	C0036277	C12783	Scapula
+C40.0	Related	RT	Related term	Shoulder girdle	C0427245	C33547	Shoulder Girdle
+C40.0	Related	RT	Related term	Shoulder joint	C0037009	C33548	Shoulder Joint
+C40.0	Related	RT	Related term	Ulna	C0041600	C12809	Ulna
+C40.1	4	PT	Preferred term	Short bones of upper limb and associated joints	CL018376		
+C40.1	Related	RT	Related term	Bone of finger	C0223792	C52771	Hand Phalanx
+C40.1	Related	RT	Related term	Bone of hand	C0448064		
+C40.1	Related	RT	Related term	Bone of thumb	C0560733		
+C40.1	Related	RT	Related term	Bone of wrist	C0007285	C12688	Carpal Bone
+C40.1	Related	RT	Related term	Carpal bone	C0007285	C12688	Carpal Bone
+C40.1	Related	RT	Related term	Hand joint	C0459470		
+C40.1	Related	RT	Related term	Metacarpal bone	C0025526	C12751	Metacarpal Bone
+C40.1	Related	RT	Related term	Phalanx of hand	C0223792	C52771	Hand Phalanx
+C40.1	Related	RT	Related term	Wrist joint	C1322271	C33894	Wrist Joint
+C40.2	4	PT	Preferred term	Long bones of lower limb and associated joints	CL018377		
+C40.2	Related	RT	Related term	Bone of leg	C0023217		
+C40.2	Related	RT	Related term	Femur	C0015811	C12717	Femur
+C40.2	Related	RT	Related term	Fibula	C0016068	C12718	Fibula
+C40.2	Related	RT	Related term	Knee joint, NOS	C0022745	C32898	Knee Joint
+C40.2	Related	RT	Related term	Semilunar cartilage	C0348072	C33097	Meniscus Lateralis
+C40.2	Related	RT	Related term	Tibia	C0040184	C12800	Tibia
+C40.2	Synonym	SY	Synonym	Lateral meniscus of knee joint	C0348072	C33097	Meniscus Lateralis
+C40.2	Synonym	SY	Synonym	Medial meniscus of knee joint	C0348073	C33098	Meniscus Medialis
+C40.3	4	PT	Preferred term	Short bones of lower limb and associated joints	CL018379		
+C40.3	Related	RT	Related term	Ankle joint	C0003087	C32078	Ankle Joint
+C40.3	Related	RT	Related term	Bone of ankle	C0039316	C12796	Tarsal Bone
+C40.3	Related	RT	Related term	Bone of foot	C0016505	C13068	Foot Bone
+C40.3	Related	RT	Related term	Bone of heel	C0006655	C32250	Calcaneum
+C40.3	Related	RT	Related term	Bone of toe	C0584876	C52772	Foot Phalanx
+C40.3	Related	RT	Related term	Foot joint	C0039318		
+C40.3	Related	RT	Related term	Metatarsal bone	C0025584	C12752	Metatarsal Bone
+C40.3	Related	RT	Related term	Patella	C0030647	C33282	Patella
+C40.3	Related	RT	Related term	Phalanx of foot	C0584876	C52772	Foot Phalanx
+C40.3	Related	RT	Related term	Tarsal bone	C0039316	C12796	Tarsal Bone
+C40.8	4	PT	Preferred term	Overlapping lesion of bones, joints and articular cartilage of limbs	CL018380		
+C40.9	4	PT	Preferred term	Bone of limb, NOS	C0582791	C32223	Bone of the Extremity
+C40.9	Related	RT	Related term	Articular cartilage of limb, NOS	CL018383		
+C40.9	Related	RT	Related term	Cartilage of limb, NOS	CL018381		
+C40.9	Related	RT	Related term	Joint of limb, NOS	CL018382		
+C41	3	HT	Hierarchical term	BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES	CL018384		
+C41.0	4	PT	Preferred term	Bones of skull and face and associated joints	CL018385		
+C41.0	Related	RT	Related term	Calvarium	C0205950	C81188	Skullcap
+C41.0	Related	RT	Related term	Cranial bone	C0447962		
+C41.0	Related	RT	Related term	Ethmoid bone	C0015027	C12711	Ethmoid Bone
+C41.0	Related	RT	Related term	Facial bone	C0015455	C63706	Facial Bone
+C41.0	Related	RT	Related term	Frontal bone	C0016732	C32635	Frontal Bone
+C41.0	Related	RT	Related term	Hyoid bone	C0020417	C32752	Hyoid Bone
+C41.0	Related	RT	Related term	Maxilla	C0024947	C26470	Maxilla
+C41.0	Related	RT	Related term	Nasal bone	C0027422	C33157	Nasal Bone
+C41.0	Related	RT	Related term	Occipital bone	C0028784	C12757	Occipital Bone
+C41.0	Related	RT	Related term	Orbital bone	C0043539		
+C41.0	Related	RT	Related term	Parietal bone	C0030558	C12766	Parietal Bone
+C41.0	Related	RT	Related term	Skull, NOS	C0037303	C12789	Skull
+C41.0	Related	RT	Related term	Sphenoid bone	C0037884	C12790	Sphenoid Bone
+C41.0	Related	RT	Related term	Temporal bone	C0039484	C12797	Temporal Bone
+C41.0	Related	RT	Related term	Zygomatic bone	C0043539		
+C41.0	Synonym	SY	Synonym	Upper jaw bone	C0024947	C26470	Maxilla
+C41.1	4	PT	Preferred term	Mandible	C0024687	C12290	Mandible
+C41.1	Related	RT	Related term	Temporomandibular joint	C0039493	C32888	Jaw Joint
+C41.1	Synonym	SY	Synonym	Jaw bone, NOS	C0024687	C12290	Mandible
+C41.1	Synonym	SY	Synonym	Lower jaw bone	C0024687	C12290	Mandible
+C41.2	4	PT	Preferred term	Vertebral column	C0037949	C12998	Vertebral Column
+C41.2	Related	RT	Related term	Atlas	C0004170	C32239	C1 Vertebra
+C41.2	Related	RT	Related term	Axis	C0004457	C32240	C2 Vertebra
+C41.2	Related	RT	Related term	Bone of back	CL018388		
+C41.2	Related	RT	Related term	Intervertebral disc	C0021815	C49571	Intervertebral Disc
+C41.2	Related	RT	Related term	Nucleus pulposus	C0223086		
+C41.2	Related	RT	Related term	Spinal column	C0037949	C12998	Vertebral Column
+C41.2	Related	RT	Related term	Spine	C0037949	C12998	Vertebral Column
+C41.2	Related	RT	Related term	Vertebra	C0549207	C12933	Vertebra
+C41.3	4	PT	Preferred term	Rib, sternum, clavicle and associated joints	CL018389		
+C41.3	Related	RT	Related term	Costal cartilage	C0222787	C32391	Costal Cartilage
+C41.3	Related	RT	Related term	Costovertebral joint	C0224681	C32394	Costovertebral Joint
+C41.3	Related	RT	Related term	Sternocostal joint	C1305902	C33617	Sternocostal Joint
+C41.4	4	PT	Preferred term	Pelvic bones, sacrum, coccyx and associated joints	CL018390		
+C41.4	Related	RT	Related term	Acetabulum	C0000962	C32042	Acetabulum
+C41.4	Related	RT	Related term	Bone of hip	C0030786		
+C41.4	Related	RT	Related term	Coccyx	C0009194	C12696	Coccyx
+C41.4	Related	RT	Related term	Hip joint	C0019558	C32742	Hip Joint
+C41.4	Related	RT	Related term	Ilium	C0020889	C32765	Ilium
+C41.4	Related	RT	Related term	Innominate bone	C0030786		
+C41.4	Related	RT	Related term	Ischium	C0022122	C32884	Ischium
+C41.4	Related	RT	Related term	Pelvic bone	C0030786		
+C41.4	Related	RT	Related term	Pubic bone	C0034014	C33423	Pubic Bone
+C41.4	Related	RT	Related term	Sacrum	C0036037	C33504	Sacral Bone
+C41.4	Related	RT	Related term	Symphysis pubis	C0034015	C33425	Pubic Symphysis
+C41.8	4	PT	Preferred term	Overlapping lesion of bones, joints and articular cartilage	CL018391		
+C41.9	4	PT	Preferred term	Bone, NOS	C0262950	C12366	Bone
+C41.9	Related	RT	Related term	Articular cartilage, NOS	C0007303	C32144	Articular Cartilage
+C41.9	Related	RT	Related term	Cartilage, NOS	C0007301	C12373	Cartilage
+C41.9	Related	RT	Related term	Joint, NOS	C0022417	C13044	Joint
+C41.9	Related	RT	Related term	Skeletal bone	C0262950	C12366	Bone
+C42	3	HT	Hierarchical term	HEMATOPOIETIC AND RETICULOENDOTHELIAL SYSTEMS	CL028727		
+C42.0	4	PT	Preferred term	Blood	C0005767	C12434	Blood
+C42.1	4	PT	Preferred term	Bone marrow	C0005953	C12431	Bone Marrow
+C42.2	4	PT	Preferred term	Spleen	C0037993	C12432	Spleen
+C42.3	4	PT	Preferred term	Reticuloendothelial system, NOS	C0035287	C12780	Reticuloendothelial System
+C42.4	4	PT	Preferred term	Hematopoietic system, NOS	C0018957	C12909	Hematopoietic System
+C44	3	HT	Hierarchical term	SKIN	C1123023	C12470	Skin
+C44.0	4	PT	Preferred term	Skin of lip, NOS	C0222101	C12291	Skin of the Lip
+C44.0	Related	RT	Related term	Skin of lower lip	C0222103		
+C44.0	Related	RT	Related term	Skin of upper lip	C0222102		
+C44.1	4	PT	Preferred term	Eyelid	C0015426	C12713	Eyelid
+C44.1	Related	RT	Related term	Canthus, NOS	C0229245		
+C44.1	Related	RT	Related term	Inner canthus	C1708516	C49564	Inner Canthus
+C44.1	Related	RT	Related term	Lower lid	CL018396		
+C44.1	Related	RT	Related term	Meibomian gland	C0025181	C33075	Meibomian Gland
+C44.1	Related	RT	Related term	Outer canthus	C1711189	C49597	Outer Canthus
+C44.1	Related	RT	Related term	Upper lid	CL018398		
+C44.1	Synonym	SY	Synonym	Lid, NOS	C0015426	C12713	Eyelid
+C44.1	Synonym	SY	Synonym	Palpebra	C0015426	C12713	Eyelid
+C44.2	4	PT	Preferred term	External ear	C0013453	C12292	External Ear
+C44.2	Related	RT	Related term	Auricle, NOS	C0013453	C12292	External Ear
+C44.2	Related	RT	Related term	Ceruminal gland	C0229352	C32294	Ceruminous Gland
+C44.2	Related	RT	Related term	Concha	C0229316	C32362	Concha
+C44.2	Related	RT	Related term	Ear lobule	C0229315	C32999	Lobule of the Auricle
+C44.2	Related	RT	Related term	Ear, NOS	C0013443	C12394	Ear
+C44.2	Related	RT	Related term	External auditory canal	C0013444	C12498	External Acoustic Meatus
+C44.2	Related	RT	Related term	Helix	C0229304	C32724	Helix
+C44.2	Related	RT	Related term	Skin of auricle	C0222112		
+C44.2	Related	RT	Related term	Tragus	C0229312	C33801	Tragus
+C44.2	Synonym	SY	Synonym	Auditory canal, NOS	C0013444	C12498	External Acoustic Meatus
+C44.2	Synonym	SY	Synonym	Auricular canal, NOS	C0013444	C12498	External Acoustic Meatus
+C44.2	Synonym	SY	Synonym	Ear canal	C0013444	C12498	External Acoustic Meatus
+C44.2	Synonym	SY	Synonym	Earlobe	C0229315	C32999	Lobule of the Auricle
+C44.2	Synonym	SY	Synonym	External auditory meatus	C0013444	C12498	External Acoustic Meatus
+C44.2	Synonym	SY	Synonym	External auricular canal	C0013444	C12498	External Acoustic Meatus
+C44.2	Synonym	SY	Synonym	Pinna	C0013453	C12292	External Ear
+C44.2	Synonym	SY	Synonym	Skin of ear, NOS	C0222110	C49481	Ear Skin
+C44.3	4	PT	Preferred term	Skin of other and unspecified parts of face	C0222084	C33561	Skin of the Face
+C44.3	Related	RT	Related term	Ala nasi	C0458563		
+C44.3	Related	RT	Related term	Chin, NOS	C0008114	C81169	Mentum
+C44.3	Related	RT	Related term	Columnella	CL018403		
+C44.3	Related	RT	Related term	External cheek	CL018404		
+C44.3	Related	RT	Related term	External nose	C0458561	C32566	External Nose
+C44.3	Related	RT	Related term	Eyebrow	C0015420	C32575	Eyebrow
+C44.3	Related	RT	Related term	Forehead, NOS	C0016540	C89803	Forehead
+C44.3	Related	RT	Related term	Skin of cheek	C0222085		
+C44.3	Related	RT	Related term	Skin of chin	C0222106		
+C44.3	Related	RT	Related term	Skin of face	C0222084	C33561	Skin of the Face
+C44.3	Related	RT	Related term	Skin of forehead	C0222074		
+C44.3	Related	RT	Related term	Skin of jaw	C0222109		
+C44.3	Related	RT	Related term	Skin of nose	C0222095		
+C44.3	Related	RT	Related term	Skin of temple	C0448792		
+C44.3	Related	RT	Related term	Temple, NOS	CL018405		
+C44.3	Synonym	SY	Synonym	Brow	C0015420	C32575	Eyebrow
+C44.4	4	PT	Preferred term	Skin of scalp and neck	C1522650	C12294	Skin of the Scalp and Neck
+C44.4	Related	RT	Related term	Skin of cervical region	CL018407		
+C44.4	Related	RT	Related term	Skin of head, NOS	C0205029	C52757	Head Skin
+C44.4	Related	RT	Related term	Skin of neck	C0205030	C52756	Neck Skin
+C44.4	Related	RT	Related term	Skin of scalp	C0699772		
+C44.4	Related	RT	Related term	Skin of supraclavicular region	CL018408		
+C44.4	Synonym	SY	Synonym	Scalp, NOS	C0036270	C89807	Scalp
+C44.5	4	PT	Preferred term	Skin of trunk	C0205031	C12295	Skin of the Trunk
+C44.5	Related	RT	Related term	Perianal skin	C1704244		
+C44.5	Related	RT	Related term	Skin of abdomen	C0222166	C52758	Abdominal Skin
+C44.5	Related	RT	Related term	Skin of abdominal wall	CL018409		
+C44.5	Related	RT	Related term	Skin of anus	C0222181		
+C44.5	Related	RT	Related term	Skin of axilla	CL497335	C116164	Skin Of The Axilla
+C44.5	Related	RT	Related term	Skin of back	C0222155		
+C44.5	Related	RT	Related term	Skin of breast	C0149538		
+C44.5	Related	RT	Related term	Skin of buttock	C0222165		
+C44.5	Related	RT	Related term	Skin of chest wall	CL018410		
+C44.5	Related	RT	Related term	Skin of chest	C0222149		
+C44.5	Related	RT	Related term	Skin of flank	C1261041		
+C44.5	Related	RT	Related term	Skin of gluteal region	C0222165		
+C44.5	Related	RT	Related term	Skin of groin	C0222173		
+C44.5	Related	RT	Related term	Skin of infraclavicular region	C0222145		
+C44.5	Related	RT	Related term	Skin of inguinal region	C0222173		
+C44.5	Related	RT	Related term	Skin of perineum	C0222176		
+C44.5	Related	RT	Related term	Skin of sacrococcygeal region	C0222161		
+C44.5	Related	RT	Related term	Skin of scapular region	C0448817		
+C44.5	Related	RT	Related term	Skin of thoracic wall	CL018411		
+C44.5	Related	RT	Related term	Skin of thorax	C0816233		
+C44.5	Related	RT	Related term	Skin of trunk	C0205031	C12295	Skin of the Trunk
+C44.5	Related	RT	Related term	Skin of umbilicus	C0222169		
+C44.5	Related	RT	Related term	Umbilicus, NOS	C0041638	C77533	Umbilicus
+C44.6	4	PT	Preferred term	Skin of upper limb and shoulder	C0222212	C12296	Skin of the Upper Limb and Shoulder
+C44.6	Related	RT	Related term	Finger nail	C0222001	C32609	Fingernail
+C44.6	Related	RT	Related term	Palmar skin	CL018416		
+C44.6	Related	RT	Related term	Skin of antecubital space	CL018415		
+C44.6	Related	RT	Related term	Skin of arm	C0222204	C52754	Arm Skin
+C44.6	Related	RT	Related term	Skin of elbow	C0222213	C52755	Elbow Skin
+C44.6	Related	RT	Related term	Skin of finger	C0222234		
+C44.6	Related	RT	Related term	Skin of forearm	C0222215		
+C44.6	Related	RT	Related term	Skin of hand	C0222224	C52753	Hand Skin
+C44.6	Related	RT	Related term	Skin of palm	C0222226		
+C44.6	Related	RT	Related term	Skin of shoulder	C0222141		
+C44.6	Related	RT	Related term	Skin of thumb	C0222239		
+C44.6	Related	RT	Related term	Skin of upper limb	C0205032		
+C44.6	Related	RT	Related term	Skin of wrist	C0222223	C52752	Wrist Skin
+C44.7	4	PT	Preferred term	Skin of lower limb and hip	C0222268	C12297	Skin of the Lower Limb and Hip
+C44.7	Related	RT	Related term	Plantar skin	CL018420		
+C44.7	Related	RT	Related term	Skin of ankle	C0222286	C52751	Ankle Skin
+C44.7	Related	RT	Related term	Skin of calf	C0448909		
+C44.7	Related	RT	Related term	Skin of foot	C0222289	C52750	Foot Skin
+C44.7	Related	RT	Related term	Skin of heel	C0222287		
+C44.7	Related	RT	Related term	Skin of hip	C0222164		
+C44.7	Related	RT	Related term	Skin of knee	C0222275	C64859	Knee Skin
+C44.7	Related	RT	Related term	Skin of leg	C0222279	C52749	Leg Skin
+C44.7	Related	RT	Related term	Skin of lower limb	C1266887		
+C44.7	Related	RT	Related term	Skin of popliteal space	CL018419		
+C44.7	Related	RT	Related term	Skin of thigh	C0222269		
+C44.7	Related	RT	Related term	Skin of toe	C0222297		
+C44.7	Related	RT	Related term	Sole of foot	C0230463	C33326	Plantar Region
+C44.7	Related	RT	Related term	Toe nail	C0222007	C33790	Toenail
+C44.8	4	PT	Preferred term	Overlapping lesion of skin	CL018421		
+C44.9	4	PT	Preferred term	Skin, NOS	C1123023	C12470	Skin
+C47	3	HT	Hierarchical term	PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM	CL018422		
+C47.0	4	PT	Preferred term	Peripheral nerves and autonomic nervous system of head, face, and neck	CL018423		
+C47.0	Related	RT	Related term	Cervical plexus	C0007854		
+C47.0	Related	RT	Related term	Peripheral nerves and autonomic nervous system of cervical region	CL018432		
+C47.0	Related	RT	Related term	Peripheral nerves and autonomic nervous system of cheek	CL018424		
+C47.0	Related	RT	Related term	Peripheral nerves and autonomic nervous system of chin	CL018425		
+C47.0	Related	RT	Related term	Peripheral nerves and autonomic nervous system of face	CL018426		
+C47.0	Related	RT	Related term	Peripheral nerves and autonomic nervous system of forehead	CL018427		
+C47.0	Related	RT	Related term	Peripheral nerves and autonomic nervous system of head	CL018428		
+C47.0	Related	RT	Related term	Peripheral nerves and autonomic nervous system of neck	CL018429		
+C47.0	Related	RT	Related term	Peripheral nerves and autonomic nervous system of pterygoid fossa	CL018433		
+C47.0	Related	RT	Related term	Peripheral nerves and autonomic nervous system of scalp	CL018430		
+C47.0	Related	RT	Related term	Peripheral nerves and autonomic nervous system of supraclavicular region	CL018434		
+C47.0	Related	RT	Related term	Peripheral nerves and autonomic nervous system of temple	CL018431		
+C47.1	4	PT	Preferred term	Peripheral nerves and autonomic nervous system of upper limb and shoulder	CL018435		
+C47.1	Related	RT	Related term	Brachial nerve	CL018445		
+C47.1	Related	RT	Related term	Brachial plexus	C0006090	C12682	Brachial Plexus
+C47.1	Related	RT	Related term	Median nerve	C0025058	C52815	Median Nerve
+C47.1	Related	RT	Related term	Peripheral nerves and autonomic nervous system of antecubital space	CL018436		
+C47.1	Related	RT	Related term	Peripheral nerves and autonomic nervous system of arm	CL018438		
+C47.1	Related	RT	Related term	Peripheral nerves and autonomic nervous system of elbow	CL018437		
+C47.1	Related	RT	Related term	Peripheral nerves and autonomic nervous system of finger	CL018439		
+C47.1	Related	RT	Related term	Peripheral nerves and autonomic nervous system of forearm	CL018440		
+C47.1	Related	RT	Related term	Peripheral nerves and autonomic nervous system of hand	CL018441		
+C47.1	Related	RT	Related term	Peripheral nerves and autonomic nervous system of shoulder	CL018442		
+C47.1	Related	RT	Related term	Peripheral nerves and autonomic nervous system of thumb	CL018443		
+C47.1	Related	RT	Related term	Peripheral nerves and autonomic nervous system of wrist	CL018444		
+C47.1	Related	RT	Related term	Radial nerve	C0034518	C52812	Radial Nerve
+C47.1	Related	RT	Related term	Ulnar nerve	C0041602	C52807	Ulnar Nerve
+C47.2	4	PT	Preferred term	Peripheral nerves and autonomic nervous system of lower limband hip	CL497934		
+C47.2	Related	RT	Related term	Femoral nerve	C0015808	C52816	Femoral Nerve
+C47.2	Related	RT	Related term	Obturator nerve	C0028783	C75909	Obturator Nerve
+C47.2	Related	RT	Related term	Peripheral nerves and autonomic nervous system of ankle	CL018447		
+C47.2	Related	RT	Related term	Peripheral nerves and autonomic nervous system of calf	CL018448		
+C47.2	Related	RT	Related term	Peripheral nerves and autonomic nervous system of foot	CL018449		
+C47.2	Related	RT	Related term	Peripheral nerves and autonomic nervous system of heel	CL018450		
+C47.2	Related	RT	Related term	Peripheral nerves and autonomic nervous system of hip	CL018451		
+C47.2	Related	RT	Related term	Peripheral nerves and autonomic nervous system of knee	CL018452		
+C47.2	Related	RT	Related term	Peripheral nerves and autonomic nervous system of leg	CL018453		
+C47.2	Related	RT	Related term	Peripheral nerves and autonomic nervous system of popliteal space	CL018454		
+C47.2	Related	RT	Related term	Peripheral nerves and autonomic nervous system of thigh	CL018455		
+C47.2	Related	RT	Related term	Peripheral nerves and autonomic nervous system of toe	CL018456		
+C47.2	Related	RT	Related term	Sciatic nerve	C0036394	C52810	Sciatic Nerve
+C47.3	4	PT	Preferred term	Peripheral nerves and autonomic nervous system of thorax	CL018457		
+C47.3	Related	RT	Related term	Intercostal nerve	C1285089	C32825	Intercostal Nerve
+C47.3	Related	RT	Related term	Peripheral nerves and autonomic nervous system of axilla	CL018458		
+C47.3	Related	RT	Related term	Peripheral nerves and autonomic nervous system of chest wall	CL018460		
+C47.3	Related	RT	Related term	Peripheral nerves and autonomic nervous system of chest	CL018459		
+C47.3	Related	RT	Related term	Peripheral nerves and autonomic nervous system of infraclavicular region	CL018462		
+C47.3	Related	RT	Related term	Peripheral nerves and autonomic nervous system of scapular region	CL018463		
+C47.3	Related	RT	Related term	Peripheral nerves and autonomic nervous system of thoracic wall	CL018461		
+C47.4	4	PT	Preferred term	Peripheral nerves and autonomic nervous system of abdomen	CL018464		
+C47.4	Related	RT	Related term	Peripheral nerves and autonomic nervous system of abdominal wall	CL018465		
+C47.4	Related	RT	Related term	Peripheral nerves and autonomic nervous system of umbilicus	CL018466		
+C47.5	4	PT	Preferred term	Peripheral nerves and autonomic nervous system of pelvis	CL018467		
+C47.5	Related	RT	Related term	Lumbosacral plexus	C0024093	C52805	Lumbosacral Plexus
+C47.5	Related	RT	Related term	Peripheral nerves and autonomic nervous system of buttock	CL018468		
+C47.5	Related	RT	Related term	Peripheral nerves and autonomic nervous system of gluteal region	CL018471		
+C47.5	Related	RT	Related term	Peripheral nerves and autonomic nervous system of groin	CL018469		
+C47.5	Related	RT	Related term	Peripheral nerves and autonomic nervous system of inguinal region	CL018472		
+C47.5	Related	RT	Related term	Peripheral nerves and autonomic nervous system of perineum	CL018470		
+C47.5	Related	RT	Related term	Peripheral nerves and autonomic nervous system of sacrococcygeal region	CL018473		
+C47.5	Related	RT	Related term	Sacral nerve	C0228922	C33505	Sacral Nerve
+C47.5	Related	RT	Related term	Sacral plexus	C0205827	C12846	Sacral Plexus
+C47.6	4	PT	Preferred term	Peripheral nerves and autonomic nervous system of trunk, NOS	CL018474		
+C47.6	Related	RT	Related term	Lumbar nerve	C0228897	C33015	Lumbar Nerve
+C47.6	Related	RT	Related term	Peripheral nerves and autonomic nervous system of back	CL018475		
+C47.6	Related	RT	Related term	Peripheral nerves and autonomic nervous system of flank	CL018476		
+C47.6	Related	RT	Related term	Peripheral nerves and autonomic nervous system of trunk	CL018474		
+C47.8	4	PT	Preferred term	Overlapping lesion of peripheral nerves and autonomic nervous system	CL018477		
+C47.9	4	PT	Preferred term	Autonomic nervous system, NOS	C0004388	C12673	Autonomic Nervous System
+C47.9	Related	RT	Related term	Ganglia, NOS	C1258666		
+C47.9	Related	RT	Related term	Nerve, NOS	C0027740	C12466	Nerve
+C47.9	Related	RT	Related term	Parasympathetic nervous system, NOS	C0030510	C12764	Parasympathetic Nervous System
+C47.9	Related	RT	Related term	Peripheral nerve, NOS	C0031119	C12768	Peripheral Nerve
+C47.9	Related	RT	Related term	Spinal nerve, NOS	C0037941	C12792	Spinal Nerve
+C47.9	Related	RT	Related term	Sympathetic nervous system, NOS	C0039044	C12795	Sympathetic Nervous System
+C48	3	HT	Hierarchical term	RETROPERITONEUM AND PERITONEUM	CL018479		
+C48.0	4	PT	Preferred term	Retroperitoneum	C0035359	C12298	Retroperitoneum
+C48.0	Related	RT	Related term	Periadrenal tissue	C0229569		
+C48.0	Related	RT	Related term	Perinephric tissue	C0227636		
+C48.0	Related	RT	Related term	Peripancreatic tissue	C0227593		
+C48.0	Related	RT	Related term	Perirenal tissue	C0227636		
+C48.0	Related	RT	Related term	Retrocecal tissue	C0227345		
+C48.0	Related	RT	Related term	Retroperitoneal tissue	CL018480		
+C48.1	4	PT	Preferred term	Specified parts of peritoneum	CL018481		
+C48.1	Related	RT	Related term	Mesentery	C0025474	C33103	Mesentery
+C48.1	Related	RT	Related term	Mesoappendix	C0230257		
+C48.1	Related	RT	Related term	Mesocolon	C0025483		
+C48.1	Related	RT	Related term	Omentum	C0028977	C33209	Omentum
+C48.1	Related	RT	Related term	Pelvic peritoneum	C0230295		
+C48.1	Related	RT	Related term	Rectouterine pouch	C0013075	C113599	Cul-de-sac
+C48.1	Synonym	SY	Synonym	Cul de sac	C0013075	C113599	Cul-de-sac
+C48.1	Synonym	SY	Synonym	Pouch of Douglas	C0013075	C113599	Cul-de-sac
+C48.2	4	PT	Preferred term	Peritoneum, NOS	C0031153	C12770	Peritoneum
+C48.2	Related	RT	Related term	Peritoneal cavity	C1704247	C12769	Peritoneal Cavity
+C48.8	4	PT	Preferred term	Overlapping lesion of retroperitoneum and peritoneum	CL018483		
+C49	3	HT	Hierarchical term	CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES	CL497937		
+C49.0	4	PT	Preferred term	Connective, subcutaneous and other soft tissues of head, face, and neck	CL018485		
+C49.0	Related	RT	Related term	Auricular cartilage	C0229320		
+C49.0	Related	RT	Related term	Carotid artery	C0007272	C12687	Carotid Artery
+C49.0	Related	RT	Related term	Connective, subcutaneous and other soft tissues of cervical region	CL018494		
+C49.0	Related	RT	Related term	Connective, subcutaneous and other soft tissues of cheek	CL018486		
+C49.0	Related	RT	Related term	Connective, subcutaneous and other soft tissues of chin	CL018487		
+C49.0	Related	RT	Related term	Connective, subcutaneous and other soft tissues of face	CL018488		
+C49.0	Related	RT	Related term	Connective, subcutaneous and other soft tissues of forehead	CL018489		
+C49.0	Related	RT	Related term	Connective, subcutaneous and other soft tissues of head	CL018490		
+C49.0	Related	RT	Related term	Connective, subcutaneous and other soft tissues of neck	CL018491		
+C49.0	Related	RT	Related term	Connective, subcutaneous and other soft tissues of pterygoid fossa	CL018495		
+C49.0	Related	RT	Related term	Connective, subcutaneous and other soft tissues of scalp	CL018492		
+C49.0	Related	RT	Related term	Connective, subcutaneous and other soft tissues of supraclavicular region	CL018496		
+C49.0	Related	RT	Related term	Connective, subcutaneous and other soft tissues of temple	CL018493		
+C49.0	Related	RT	Related term	Masseter muscle	C0024876	C13074	Masseter Muscle
+C49.0	Related	RT	Related term	Sternocleidomastoid muscle	C0224153	C33616	Sternocleidomastoid Muscle
+C49.0	Synonym	SY	Synonym	Cartilage of ear	C0229320		
+C49.1	4	PT	Preferred term	Connective, subcutaneous and other soft tissues of upper limb and shoulder	CL018497		
+C49.1	Related	RT	Related term	Biceps brachii muscle	C0559499	C32200	Biceps
+C49.1	Related	RT	Related term	Brachialis muscle	C0224240	C53149	Brachialis
+C49.1	Related	RT	Related term	Connective, subcutaneous and other soft tissues of antecubital space	CL018498		
+C49.1	Related	RT	Related term	Connective, subcutaneous and other soft tissues of arm	CL018499		
+C49.1	Related	RT	Related term	Connective, subcutaneous and other soft tissues of elbow	CL018500		
+C49.1	Related	RT	Related term	Connective, subcutaneous and other soft tissues of finger	CL018501		
+C49.1	Related	RT	Related term	Connective, subcutaneous and other soft tissues of forearm	CL018502		
+C49.1	Related	RT	Related term	Connective, subcutaneous and other soft tissues of hand	CL018503		
+C49.1	Related	RT	Related term	Connective, subcutaneous and other soft tissues of shoulder	CL018504		
+C49.1	Related	RT	Related term	Connective, subcutaneous and other soft tissues of thumb	CL018505		
+C49.1	Related	RT	Related term	Connective, subcutaneous and other soft tissues of wrist	CL018506		
+C49.1	Related	RT	Related term	Coracobrachialis muscle	C0224246	C53151	Coracobrachialis
+C49.1	Related	RT	Related term	Deltoideus muscle	CL018507		
+C49.1	Related	RT	Related term	Palmar aponeurosis	C0225244	C33251	Palmar Fascia
+C49.1	Related	RT	Related term	Palmar fascia	C0225244	C33251	Palmar Fascia
+C49.1	Related	RT	Related term	Radial artery	C0162857	C12838	Radial Artery
+C49.1	Related	RT	Related term	Triceps brachii muscle	C0559502	C90604	Triceps Brachii
+C49.1	Related	RT	Related term	Ulnar artery	C0162858	C12839	Ulnar Artery
+C49.2	4	PT	Preferred term	Connective, subcutaneous and other soft tissues of lower limb and hip	CL018508		
+C49.2	Related	RT	Related term	Biceps femoris muscle	C0224449	C53147	Biceps Femoris
+C49.2	Related	RT	Related term	Connective, subcutaneous and other soft tissues of ankle	CL018509		
+C49.2	Related	RT	Related term	Connective, subcutaneous and other soft tissues of calf	CL018510		
+C49.2	Related	RT	Related term	Connective, subcutaneous and other soft tissues of foot	CL018511		
+C49.2	Related	RT	Related term	Connective, subcutaneous and other soft tissues of heel	CL018512		
+C49.2	Related	RT	Related term	Connective, subcutaneous and other soft tissues of hip	CL018513		
+C49.2	Related	RT	Related term	Connective, subcutaneous and other soft tissues of knee	CL018514		
+C49.2	Related	RT	Related term	Connective, subcutaneous and other soft tissues of leg	CL018515		
+C49.2	Related	RT	Related term	Connective, subcutaneous and other soft tissues of popliteal space	CL018516		
+C49.2	Related	RT	Related term	Connective, subcutaneous and other soft tissues of thigh	CL018517		
+C49.2	Related	RT	Related term	Connective, subcutaneous and other soft tissues of toe	CL018518		
+C49.2	Related	RT	Related term	Femoral artery	C0015801	C12715	Femoral Artery
+C49.2	Related	RT	Related term	Gastrocnemius muscle	C0242691	C32666	Gastrocnemius Muscle
+C49.2	Related	RT	Related term	Plantar aponeurosis	C1261337		
+C49.2	Related	RT	Related term	Plantar fascia	C0549109	C33325	Plantar Fascia
+C49.2	Related	RT	Related term	Quadriceps femoris muscle	C0224440	C33441	Quadriceps Muscle of the Thigh
+C49.3	4	PT	Preferred term	Connective, subcutaneous and other soft tissues of thorax	CL018519		
+C49.3	Related	RT	Related term	Aorta, NOS	C0003483	C12669	Aorta
+C49.3	Related	RT	Related term	Axillary artery	C0004455	C32169	Axillary Artery
+C49.3	Related	RT	Related term	Connective, subcutaneous and other soft tissues of axilla	CL018520		
+C49.3	Related	RT	Related term	Connective, subcutaneous and other soft tissues of chest wall	CL018522		
+C49.3	Related	RT	Related term	Connective, subcutaneous and other soft tissues of chest	CL018521		
+C49.3	Related	RT	Related term	Connective, subcutaneous and other soft tissues of infraclavicular region	CL018524		
+C49.3	Related	RT	Related term	Connective, subcutaneous and other soft tissues of scapular region	CL018525		
+C49.3	Related	RT	Related term	Connective, subcutaneous and other soft tissues of thoracic wall	CL018523		
+C49.3	Related	RT	Related term	Connective, subcutaneous and other soft tissues of thorax	CL018519		
+C49.3	Related	RT	Related term	Diaphragm	C0011980	C12702	Diaphragm
+C49.3	Related	RT	Related term	Intercostal muscle	C0021724	C32824	Intercostal Muscle
+C49.3	Related	RT	Related term	Internal mammary artery	C0226276	C52941	Internal Mammary Artery
+C49.3	Related	RT	Related term	Latissimus dorsi muscle	C0224362	C33150	Musculus Latissimus Dorsi
+C49.3	Related	RT	Related term	Pectoralis major muscle	C0585574	C33284	Pectoralis Major
+C49.3	Related	RT	Related term	Subclavian artery	C0038530	C33643	Subclavian Artery
+C49.3	Related	RT	Related term	Superior vena cava	C0042459	C12816	Superior Vena Cava
+C49.3	Related	RT	Related term	Thoracic duct	C0039979	C33768	Thoracic Duct
+C49.3	Related	RT	Related term	Trapezius muscle	C0224361	C33809	Trapezius Muscle
+C49.4	4	PT	Preferred term	Connective, subcutaneous and other soft tissues of abdomen	CL018527		
+C49.4	Related	RT	Related term	Abdominal aorta	C0003484	C32038	Abdominal Aorta
+C49.4	Related	RT	Related term	Abdominal vena cava	CL018530		
+C49.4	Related	RT	Related term	Abdominal wall muscle	C0000739	C32040	Abdominal Muscle
+C49.4	Related	RT	Related term	Celiac artery	C0007569	C52846	Celiac Artery
+C49.4	Related	RT	Related term	Connective, subcutaneous and other soft tissues of abdomen	CL018527		
+C49.4	Related	RT	Related term	Connective, subcutaneous and other soft tissues of abdominal wall	CL018528		
+C49.4	Related	RT	Related term	Connective, subcutaneous and other soft tissues of umbilicus	CL018529		
+C49.4	Related	RT	Related term	Iliopsoas muscle	C0224417	C32764	Iliopsoas Muscle
+C49.4	Related	RT	Related term	Inferior vena cava	C0042458	C12815	Inferior Vena Cava
+C49.4	Related	RT	Related term	Mesenteric artery	C0025465	C52975	Mesenteric Artery
+C49.4	Related	RT	Related term	Psoas muscle	C0085221	C33422	Psoas Muscle
+C49.4	Related	RT	Related term	Rectus abdominis muscle	C0206066	C33449	Rectus Abdominis
+C49.4	Related	RT	Related term	Renal artery	C0035065	C12778	Renal Artery
+C49.4	Related	RT	Related term	Vena cava, NOS	C0042460	C12817	Vena Cava
+C49.5	4	PT	Preferred term	Connective, subcutaneous and other soft tissues of pelvis	CL018531		
+C49.5	Related	RT	Related term	Connective, subcutaneous and other soft tissues of buttock	CL018532		
+C49.5	Related	RT	Related term	Gluteus maximus muscle	C0224424	C52560	Gluteus Maximus
+C49.5	Related	RT	Related term	Iliac artery	C0020887	C12733	Iliac Artery
+C49.5	Related	RT	Related term	Iliac vein	C0020888	C12734	Iliac Vein
+C49.5	Related	RT	Related term	gluteal region	C0282082		
+C49.5	Related	RT	Related term	groin	C0018246	C12726	Inguinal Region
+C49.5	Related	RT	Related term	inguinal region	C0018246	C12726	Inguinal Region
+C49.5	Related	RT	Related term	perineum	C0031066	C33301	Perineum
+C49.5	Related	RT	Related term	sacrococcygeal region	C0036035		
+C49.6	4	PT	Preferred term	Connective, subcutaneous and other soft tissues of trunk NOS	CL018538		
+C49.6	Related	RT	Related term	Connective, subcutaneous and other soft tissues of back	CL018539		
+C49.6	Related	RT	Related term	Connective, subcutaneous and other soft tissues of flank	CL018540		
+C49.6	Related	RT	Related term	Connective, subcutaneous and other soft tissues of trunk	CL018538		
+C49.8	4	PT	Preferred term	Overlapping lesion of connective, subcutaneous and other soft tissues	CL018541		
+C49.9	4	PT	Preferred term	Connective, subcutaneous and other soft tissues, NOS	CL497937		
+C49.9	Related	RT	Related term	Adipose tissue, NOS	C0001527	C12472	Adipose Tissue
+C49.9	Related	RT	Related term	Aponeurosis, NOS	C0225205	C32133	Aponeurosis
+C49.9	Related	RT	Related term	Artery, NOS	C0003842	C12372	Artery
+C49.9	Related	RT	Related term	Blood vessel, NOS	C0005847	C12679	Blood Vessel
+C49.9	Related	RT	Related term	Bursa, NOS	C0006441	C33717	Synovial Bursa
+C49.9	Related	RT	Related term	Connective tissue, NOS	C0009780	C12374	Connective Tissue
+C49.9	Related	RT	Related term	Fascia, NOS	C0015641	C13108	Fascia
+C49.9	Related	RT	Related term	Fatty tissue, NOS	C0001527	C12472	Adipose Tissue
+C49.9	Related	RT	Related term	Fibrous tissue, NOS	C0225331	C129504	Fibrous Tissue
+C49.9	Related	RT	Related term	Ligament, NOS	C0023685	C13046	Ligament
+C49.9	Related	RT	Related term	Lymphatic, NOS	C1522604	C25267	Lymphatic
+C49.9	Related	RT	Related term	Muscle, NOS	C0026845	C13056	Muscle
+C49.9	Related	RT	Related term	Skeletal muscle, NOS	C0242692	C13050	Skeletal Muscle Tissue
+C49.9	Related	RT	Related term	Subcutaneous tissue, NOS	C0278403	C33645	Subcutis
+C49.9	Related	RT	Related term	Synovia, NOS	C0039097	C33718	Synovial Fluid
+C49.9	Related	RT	Related term	Tendon sheath, NOS	C0224856	C96299	Tendon Sheath
+C49.9	Related	RT	Related term	Tendon, NOS	C0039508	C13045	Tendon
+C49.9	Related	RT	Related term	Vein, NOS	C0042449	C12814	Vein
+C49.9	Related	RT	Related term	Vessel, NOS	C0042591		
+C50	3	HT	Hierarchical term	BREAST	C0006141	C12971	Breast
+C50.0	4	PT	Preferred term	Nipple	C0028109	C12299	Nipple
+C50.0	Related	RT	Related term	Areola	C0222608	C12368	Areola
+C50.1	4	PT	Preferred term	Central portion of breast	C0222595	C12300	Central Portion of the Breast
+C50.2	4	PT	Preferred term	Upper-inner quadrant of breast	C0222596	C12301	Upper-Inner Quadrant of the Breast
+C50.3	4	PT	Preferred term	Lower-inner quadrant of breast	C0222597	C12302	Lower-Inner Quadrant of the Breast
+C50.4	4	PT	Preferred term	Upper-outer quadrant of breast	C0222598	C12303	Upper-Outer Quadrant of the Breast
+C50.5	4	PT	Preferred term	Lower-outer quadrant of breast	C0222599	C12304	Lower-Outer Quadrant of the Breast
+C50.6	4	PT	Preferred term	Axillary tail of breast	C0222611	C12305	Axillary Tail of the Breast
+C50.6	Synonym	SY	Synonym	Tail of breast, NOS	C0222611	C12305	Axillary Tail of the Breast
+C50.8	4	PT	Preferred term	Overlapping lesion of breast	CL018543		
+C50.8	Related	RT	Related term	Inner breast	CL018544		
+C50.8	Related	RT	Related term	Lower breast	CL018545		
+C50.8	Related	RT	Related term	Midline of breast	CL018546		
+C50.8	Related	RT	Related term	Outer breast	CL018547		
+C50.8	Related	RT	Related term	Upper breast	CL018548		
+C50.9	4	PT	Preferred term	Breast, NOS	C0006141	C12971	Breast
+C50.9	Synonym	SY	Synonym	Mammary gland	C0929301	C12367	Mammary Gland
+C51-C58	2	HT	Hierarchical term	FEMALE GENITAL ORGANS	C0017421	C61600	Female Genitalia
+C51	3	HT	Hierarchical term	VULVA	C0042993	C12408	Vulva
+C51.0	4	PT	Preferred term	Labium majus	C0227760	C12306	Labium Majus
+C51.0	Related	RT	Related term	Bartholin gland	C0004768	C12675	Bartholin Gland
+C51.0	Related	RT	Related term	Skin of labia majora	CL018549		
+C51.0	Synonym	SY	Synonym	Labia majora, NOS	C0227760	C12306	Labium Majus
+C51.1	4	PT	Preferred term	Labium minus	C0227766	C12307	Labium Minus
+C51.1	Synonym	SY	Synonym	Labia minora	C0227766	C12307	Labium Minus
+C51.2	4	PT	Preferred term	Clitoris	C0008984	C12308	Clitoris
+C51.8	4	PT	Preferred term	Overlapping lesion of vulva	CL018550		
+C51.9	4	PT	Preferred term	Vulva, NOS	C0042993	C12408	Vulva
+C51.9	Related	RT	Related term	External female genitalia	C0227747		
+C51.9	Related	RT	Related term	Fourchette	C0458840		
+C51.9	Related	RT	Related term	Labia, NOS	C0227759	C52559	Labium
+C51.9	Related	RT	Related term	Labium, NOS	C0227759	C52559	Labium
+C51.9	Related	RT	Related term	Mons pubis	C0230190	C33139	Mons Pubis
+C51.9	Related	RT	Related term	Mons veneris	C0230190	C33139	Mons Pubis
+C51.9	Related	RT	Related term	Pudendum	C0738643		
+C51.9	Related	RT	Related term	Skin of vulva	C1261042		
+C52	3	HT	Hierarchical term	VAGINA	C0042232	C12407	Vagina
+C52.9	4	PT	Preferred term	Vagina, NOS	C0042232	C12407	Vagina
+C52.9	Related	RT	Related term	Fornix of vagina	C0227794	C33848	Vaginal Fornix
+C52.9	Related	RT	Related term	Gartner duct	C0086336	C32485	Duct of Gartner
+C52.9	Related	RT	Related term	Hymen	C0020412	C32750	Hymen
+C52.9	Related	RT	Related term	Vaginal vault	C0227794	C33848	Vaginal Fornix
+C53	3	HT	Hierarchical term	CERVIX UTERI	C0007874	C12311	Cervix Uteri
+C53.0	4	PT	Preferred term	Endocervix	C0227837	C12309	Endocervix
+C53.0	Related	RT	Related term	Cervical canal	C0227841		
+C53.0	Related	RT	Related term	Endocervical canal	C0227841		
+C53.0	Related	RT	Related term	Endocervical gland	C2724437	C32296	Cervical Gland
+C53.0	Related	RT	Related term	Nabothian gland	CL018553		
+C53.0	Synonym	SY	Synonym	Internal os	C0227842		
+C53.1	4	PT	Preferred term	Exocervix	C0227829	C12310	Ectocervix
+C53.1	Related	RT	Related term	External os	C0227833		
+C53.8	4	PT	Preferred term	Overlapping lesion of cervix uteri	CL018554		
+C53.8	Related	RT	Related term	Cervical stump	CL018555		
+C53.8	Related	RT	Related term	Squamocolumnar junction of cervix	C0459469		
+C53.9	4	PT	Preferred term	Cervix uteri	C0007874	C12311	Cervix Uteri
+C53.9	Synonym	SY	Synonym	Cervix, NOS	C0007874	C12311	Cervix Uteri
+C53.9	Synonym	SY	Synonym	Uterine cervix	C0007874	C12311	Cervix Uteri
+C54	3	HT	Hierarchical term	CORPUS UTERI	C0227813	C12316	Corpus Uteri
+C54.0	4	PT	Preferred term	Isthmus uteri	C1288329	C12312	Isthmus Uteri
+C54.0	Synonym	SY	Synonym	Lower uterine segment	C1288329	C12312	Isthmus Uteri
+C54.1	4	PT	Preferred term	Endometrium	C0014180	C12313	Endometrium
+C54.1	Related	RT	Related term	Endometrial gland	C0227848	C33842	Uterine Gland
+C54.1	Related	RT	Related term	Endometrial stroma	C0227849	C32516	Endometrial Stroma
+C54.2	4	PT	Preferred term	Myometrium	C0027088	C12314	Myometrium
+C54.3	4	PT	Preferred term	Fundus uteri	C0227817	C12315	Fundus Uteri
+C54.8	4	PT	Preferred term	Overlapping lesion of corpus uteri	CL018557		
+C54.9	4	PT	Preferred term	Corpus uteri	C0227813	C12316	Corpus Uteri
+C54.9	Synonym	SY	Synonym	Body of uterus	C0227813	C12316	Corpus Uteri
+C55	3	HT	Hierarchical term	UTERUS, NOS	C0042149	C12405	Uterus
+C55.9	4	PT	Preferred term	Uterus, NOS	C0042149	C12405	Uterus
+C55.9	Synonym	SY	Synonym	Uterine, NOS	C0042149	C12405	Uterus
+C56	3	HT	Hierarchical term	OVARY	C0029939	C12404	Ovary
+C56.9	4	PT	Preferred term	Ovary	C0029939	C12404	Ovary
+C57	3	HT	Hierarchical term	OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS	CL025605		
+C57.0	4	PT	Preferred term	Fallopian tube	C0015560	C12403	Fallopian Tube
+C57.0	Synonym	SY	Synonym	Uterine tube	C0015560	C12403	Fallopian Tube
+C57.1	4	PT	Preferred term	Broad ligament	C0006205	C12318	Broad Ligament
+C57.1	Related	RT	Related term	Mesovarium	C0230310	C92440	Mesovarium
+C57.1	Related	RT	Related term	Parovarian region	C0227899		
+C57.2	4	PT	Preferred term	Round ligament	C0035877	C34009	Round Ligament of the Uterus
+C57.3	4	PT	Preferred term	Parametrium	C0227822	C12320	Parametrium
+C57.3	Related	RT	Related term	Uterine ligament	C0230299	C61360	Uterine Ligament
+C57.3	Related	RT	Related term	Uterosacral ligament	C0230306		
+C57.4	4	PT	Preferred term	Uterine adnexa	C0001575	C12321	Appendage of the Uterus
+C57.4	Related	RT	Related term	Adnexa, NOS	C0001575	C12321	Appendage of the Uterus
+C57.7	4	PT	Preferred term	Other specified parts of female genital organs	CL102945		
+C57.7	Synonym	SY	Synonym	Wolffian body	C0025492	C26467	Mesonephros
+C57.7	Synonym	SY	Synonym	Wolffian duct	C0043204	C26469	Mesonephric Duct
+C57.8	4	PT	Preferred term	Overlapping lesion of female genital organs	CL018562		
+C57.8	Related	RT	Related term	Tubo-ovarian	C0456917		
+C57.8	Related	RT	Related term	Utero-ovarian	CL098405		
+C57.9	4	PT	Preferred term	Female genital tract, NOS	C0017421	C61600	Female Genitalia
+C57.9	Related	RT	Related term	Female genitourinary tract, NOS	CL497886		
+C57.9	Related	RT	Related term	Urethrovaginal septum	CL018563		
+C57.9	Related	RT	Related term	Vesicocervical tissue	CL018564		
+C57.9	Related	RT	Related term	Vesicovaginal septum	C0738219		
+C57.9	Synonym	SY	Synonym	Female genital organs, NOS	C0017421	C61600	Female Genitalia
+C58	3	HT	Hierarchical term	PLACENTA	C0032043	C13272	Placenta
+C58.9	4	PT	Preferred term	Placenta	C0032043	C13272	Placenta
+C58.9	Related	RT	Related term	Fetal membranes	C0015943		
+C60-C63	2	HT	Hierarchical term	MALE GENITAL ORGANS	C0017422	C61599	Male Genitalia
+C60	3	HT	Hierarchical term	PENIS	C0030851	C12409	Penis
+C60.0	4	PT	Preferred term	Prepuce	C0227952	C33049	Male Prepuce
+C60.0	Synonym	SY	Synonym	Foreskin	C0227952	C33049	Male Prepuce
+C60.1	4	PT	Preferred term	Glans penis	C0227948	C12324	Glans Penis
+C60.2	4	PT	Preferred term	Body of penis	C0227936	C12325	Body of the Penis
+C60.2	Synonym	SY	Synonym	Corpus cavernosum	C0227936	C12325	Body of the Penis
+C60.2	Synonym	SY	Synonym	Corpus of penis	C0227936	C12325	Body of the Penis
+C60.8	4	PT	Preferred term	Overlapping lesion of penis	CL018566		
+C60.9	4	PT	Preferred term	Penis, NOS	C0030851	C12409	Penis
+C60.9	Related	RT	Related term	Skin of penis	C0222193		
+C61	3	HT	Hierarchical term	PROSTATE GLAND	C0033572	C12410	Prostate Gland
+C61.9	4	PT	Preferred term	Prostate gland	C0033572	C12410	Prostate Gland
+C61.9	Synonym	SY	Synonym	Prostate, NOS	C0033572	C12410	Prostate Gland
+C62	3	HT	Hierarchical term	TESTIS	C0039597	C12412	Testis
+C62.0	4	PT	Preferred term	Undescended testis	C0010417	C12326	Undescended Testes
+C62.0	Synonym	SY	Synonym	Ectopic testis	C0302889		
+C62.0	Synonym	SY	Synonym	Retained testis	C0010417	C12326	Undescended Testes
+C62.1	4	PT	Preferred term	Descended testis	CL018568		
+C62.1	Synonym	SY	Synonym	Scrotal testis	CL018568		
+C62.9	4	PT	Preferred term	Testis, NOS	C0039597	C12412	Testis
+C62.9	Synonym	SY	Synonym	Testicle, NOS	C0039597	C12412	Testis
+C63	3	HT	Hierarchical term	OTHER AND UNSPECIFIED MALE GENITAL ORGANS	CL365219		
+C63.0	4	PT	Preferred term	Epididymis	C0014533	C12328	Epididymis
+C63.1	4	PT	Preferred term	Spermatic cord	C0037855	C12329	Spermatic Cord
+C63.1	Related	RT	Related term	Vas deferens	C0042360	C12813	Vas Deferens
+C63.2	4	PT	Preferred term	Scrotum, NOS	C0036471	C12785	Scrotum
+C63.2	Related	RT	Related term	Skin of scrotum	C0222198		
+C63.7	4	PT	Preferred term	Other specified parts of male genital organs	CL018571		
+C63.7	Related	RT	Related term	Seminal vesicle	C0036628	C12787	Seminal Vesicle
+C63.7	Related	RT	Related term	Tunica vaginalis	C0228014	C33822	Tunica Vaginalis
+C63.8	4	PT	Preferred term	Overlapping lesion of male genital organs	CL018573		
+C63.9	4	PT	Preferred term	Male genital organs, NOS	C0017422	C61599	Male Genitalia
+C63.9	Related	RT	Related term	Male genitourinary tract, NOS	CL497888		
+C63.9	Synonym	SY	Synonym	Male genital tract, NOS	CL497888		
+C64-C68	2	HT	Hierarchical term	URINARY TRACT	C0042027		
+C64	3	HT	Hierarchical term	KIDNEY	C0022646	C12415	Kidney
+C64.9	4	PT	Preferred term	Kidney, NOS	C0022646	C12415	Kidney
+C64.9	Synonym	SY	Synonym	Kidney parenchyma	C0227628		
+C64.9	Synonym	SY	Synonym	Renal, NOS	CL317975	C25225	Renal
+C65	3	HT	Hierarchical term	RENAL PELVIS	C0227666	C12887	Renal Pelvis
+C65.9	4	PT	Preferred term	Renal pelvis	C0227666	C12887	Renal Pelvis
+C65.9	Related	RT	Related term	Pelviureteric junction	C0227680	C106203	Ureteropelvic Junction
+C65.9	Related	RT	Related term	Renal calyces	C0022651	C12927	Renal Calyx
+C65.9	Related	RT	Related term	Renal calyx	C0022651	C12927	Renal Calyx
+C65.9	Synonym	SY	Synonym	Pelvis of kidney	C0227666	C12887	Renal Pelvis
+C66	3	HT	Hierarchical term	URETER	C0041951	C12416	Ureter
+C66.9	4	PT	Preferred term	Ureter	C0041951	C12416	Ureter
+C67	3	HT	Hierarchical term	BLADDER	C0005682	C12414	Bladder
+C67.0	4	PT	Preferred term	Trigone of bladder	C0447586	C12331	Bladder Trigone
+C67.1	4	PT	Preferred term	Dome of bladder	C1288328	C12332	Dome of the Bladder
+C67.2	4	PT	Preferred term	Lateral wall of bladder	C0447583	C12333	Lateral Wall of the Bladder
+C67.3	4	PT	Preferred term	Anterior wall of bladder	C0559280	C12334	Anterior Wall of the Bladder
+C67.4	4	PT	Preferred term	Posterior wall of bladder	C0227701	C12335	Posterior Wall of the Bladder
+C67.5	4	PT	Preferred term	Bladder neck	C0227716	C12336	Bladder Neck
+C67.5	Related	RT	Related term	Internal urethral orifice	C0227717		
+C67.6	4	PT	Preferred term	Ureteric orifice	C0447577	C12337	Ureteric Orifice
+C67.7	4	PT	Preferred term	Urachus	C0041916	C12338	Urachus
+C67.8	4	PT	Preferred term	Overlapping lesion of bladder	CL018574		
+C67.9	4	PT	Preferred term	Bladder, NOS	C0005682	C12414	Bladder
+C67.9	Synonym	SY	Synonym	Bladder wall, NOS	C0005682	C12414	Bladder
+C67.9	Synonym	SY	Synonym	Urinary bladder, NOS	C0005682	C12414	Bladder
+C68	3	HT	Hierarchical term	OTHER AND UNSPECIFIED URINARY ORGANS	C0227666	C12887	Renal Pelvis
+C68.0	4	PT	Preferred term	Urethra	C0041967	C12417	Urethra
+C68.0	Related	RT	Related term	Cowper gland	C0006366	C32395	Cowper Gland
+C68.0	Related	RT	Related term	Prostatic utricle	C0227736	C63862	Prostatic Utricle
+C68.0	Related	RT	Related term	Urethral gland	C1314737	C49311	Gland of Littre
+C68.1	4	PT	Preferred term	Paraurethral gland	C0221315		
+C68.8	4	PT	Preferred term	Overlapping lesion of urinary organs	CL018578		
+C68.9	4	PT	Preferred term	Urinary system, NOS	C0042027		
+C69-C72	2	HT	Hierarchical term	EYE, BRAIN AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM	CL018579		
+C69	3	HT	Hierarchical term	EYE AND ADNEXA	CL018580		
+C69.0	4	PT	Preferred term	Conjunctiva	C0009758	C12341	Conjunctiva
+C69.1	4	PT	Preferred term	Cornea, NOS	C0010031	C12342	Cornea
+C69.1	Related	RT	Related term	Limbus of cornea	C0085376	C12823	Corneoscleral Limbus
+C69.2	4	PT	Preferred term	Retina	C0035298	C12343	Retina
+C69.3	4	PT	Preferred term	Choroid	C0008520	C12344	Choroid
+C69.4	4	PT	Preferred term	Ciliary body	C0008779	C12345	Ciliary Body
+C69.4	Related	RT	Related term	Crystalline lens	C0023317	C12743	Lens
+C69.4	Related	RT	Related term	Eyeball	C0015392	C12401	Eye
+C69.4	Related	RT	Related term	Intraocular	C1522223	C38255	Intraocular Route of Administration
+C69.4	Related	RT	Related term	Iris	C0022077	C12737	Iris
+C69.4	Related	RT	Related term	Sclera	C0036410	C12784	Sclera
+C69.4	Related	RT	Related term	Uveal tract	C0042160	C12811	Uvea
+C69.5	4	PT	Preferred term	Lacrimal gland	C0022907	C12346	Lacrimal Gland
+C69.5	Related	RT	Related term	Lacrimal duct, NOS	C0459624		
+C69.5	Related	RT	Related term	Lacrimal sac	C0229289	C32909	Lacrimal Sac
+C69.5	Synonym	SY	Synonym	Nasal lacrimal duct	C0459624		
+C69.5	Synonym	SY	Synonym	Nasolacrimal duct	C0027437	C33161	Nasolacrimal Duct
+C69.6	4	PT	Preferred term	Orbit, NOS	C0029180	C12347	Orbit
+C69.6	Related	RT	Related term	Autonomic nervous system of orbit	CL018586		
+C69.6	Related	RT	Related term	Connective tissue of orbit	CL018587		
+C69.6	Related	RT	Related term	Extraocular muscle	C0028863	C33199	Oculomotor Muscle
+C69.6	Related	RT	Related term	Peripheral nerves of orbit	CL018588		
+C69.6	Related	RT	Related term	Retrobulbar tissue	C0230066		
+C69.6	Related	RT	Related term	Soft tissue of orbit	C0229088		
+C69.8	4	PT	Preferred term	Overlapping lesion of eye and adnexa	CL018589		
+C69.9	4	PT	Preferred term	Eye, NOS	C0015392	C12401	Eye
+C70	3	HT	Hierarchical term	MENINGES	C0025285	C12348	Meninges
+C70.0	4	PT	Preferred term	Cerebral meninges	C0228116	C12349	Cerebral Meninges
+C70.0	Related	RT	Related term	Cranial dura mater	C0459393	C49332	Brain Dura Mater
+C70.0	Related	RT	Related term	Cranial meninges	C0228116	C12349	Cerebral Meninges
+C70.0	Related	RT	Related term	Cranial pia mater	C0228131		
+C70.0	Related	RT	Related term	Falx cerebelli	C0228122	C32584	Falx Cerebelli
+C70.0	Related	RT	Related term	Falx cerebri	C0228120	C12890	Falx Cerebri
+C70.0	Related	RT	Related term	Falx, NOS	CL018590		
+C70.0	Related	RT	Related term	Intracranial arachnoid	C0228127		
+C70.0	Related	RT	Related term	Intracranial meninges	CL018591		
+C70.0	Related	RT	Related term	Tentorium cerebelli	C0228121	C33749	Tentorium Cerebelli
+C70.0	Synonym	SY	Synonym	Tentorium, NOS	C0228121	C33749	Tentorium Cerebelli
+C70.1	4	PT	Preferred term	Spinal meninges	C0037938	C12350	Spinal Meninges
+C70.1	Related	RT	Related term	Spinal arachnoid	C0228128		
+C70.1	Related	RT	Related term	Spinal dura mater	C0228124	C49799	Spinal Cord Dura Mater
+C70.1	Related	RT	Related term	Spinal pia mater	C0228132		
+C70.9	4	PT	Preferred term	Meninges, NOS	C0025285	C12348	Meninges
+C70.9	Related	RT	Related term	Arachnoid, NOS	C0003707		
+C70.9	Related	RT	Related term	Dura mater, NOS	C0013313	C32488	Dura Mater
+C70.9	Related	RT	Related term	Dura, NOS	C0013313	C32488	Dura Mater
+C70.9	Related	RT	Related term	Pia mater, NOS	C0031869	C33321	Pia Mater
+C71	3	HT	Hierarchical term	BRAIN	C0006104	C12439	Brain
+C71.0	4	PT	Preferred term	Cerebrum	C0242202		
+C71.0	Related	RT	Related term	Basal ganglia	C0004781	C12447	Basal Ganglia
+C71.0	Related	RT	Related term	Central white matter	CL018593		
+C71.0	Related	RT	Related term	Cerebral cortex	C0007776	C12443	Cerebral Cortex
+C71.0	Related	RT	Related term	Cerebral hemisphere	C0228174	C12351	Cerebral Hemisphere
+C71.0	Related	RT	Related term	Cerebral white matter	C0152295	C49347	Cerebral White Matter
+C71.0	Related	RT	Related term	Corpus striatum	C0010097	C12448	Corpus Striatum
+C71.0	Related	RT	Related term	Globus pallidus	C0017651	C12449	Globus Pallidus
+C71.0	Related	RT	Related term	Hypothalamus	C0020663	C12458	Hypothalamus
+C71.0	Related	RT	Related term	Insula	C0021640		
+C71.0	Related	RT	Related term	Internal capsule	C0152341	C13082	Internal Capsule
+C71.0	Related	RT	Related term	Island of Reil	C0021640		
+C71.0	Related	RT	Related term	Operculum	C0228262		
+C71.0	Related	RT	Related term	Pallium	C0007776	C12443	Cerebral Cortex
+C71.0	Related	RT	Related term	Putamen	C0034169	C12452	Putamen
+C71.0	Related	RT	Related term	Rhinencephalon	C0035454		
+C71.0	Related	RT	Related term	Supratentorial brain, NOS	C1522407	C12512	Supratentorial Brain
+C71.0	Related	RT	Related term	Thalamus	C0039729	C12459	Thalamus
+C71.1	4	PT	Preferred term	Frontal lobe	C0016733	C12352	Frontal Lobe
+C71.1	Synonym	SY	Synonym	Frontal pole	C0149546	C126737	Frontal Pole
+C71.2	4	PT	Preferred term	Temporal lobe	C0039485	C12353	Temporal Lobe
+C71.2	Related	RT	Related term	Hippocampus	C0019564	C12444	Hippocampus
+C71.2	Related	RT	Related term	Uncus	C0228252	C33831	Uncus
+C71.3	4	PT	Preferred term	Parietal lobe	C0030560	C12354	Parietal Lobe
+C71.4	4	PT	Preferred term	Occipital lobe	C0028785	C12355	Occipital Lobe
+C71.4	Synonym	SY	Synonym	Occipital pole	C0228217		
+C71.5	4	PT	Preferred term	Ventricle, NOS	C0007799	C12356	Brain Ventricle
+C71.5	Related	RT	Related term	Cerebral ventricle	C0007799	C12356	Brain Ventricle
+C71.5	Related	RT	Related term	Choroid plexus of lateral ventricle	C0152289	C32309	Choroid Plexus of the Lateral Ventricle
+C71.5	Related	RT	Related term	Choroid plexus of third ventricle	C0152291	C49782	Choroid Plexus of the Third Ventricle
+C71.5	Related	RT	Related term	Choroid plexus, NOS	C0008524	C12694	Choroid Plexus
+C71.5	Related	RT	Related term	Ependyma	C0014472	C13078	Ependyma
+C71.5	Related	RT	Related term	Lateral ventricle, NOS	C0152279	C12834	Lateral Ventricle
+C71.5	Related	RT	Related term	Third ventricle, NOS	C0149555	C12827	Third Ventricle
+C71.6	4	PT	Preferred term	Cerebellum, NOS	C0007765	C12445	Cerebellum
+C71.6	Related	RT	Related term	Cerebellopontine angle	C0007764	C54057	Cerebellopontine Angle
+C71.6	Related	RT	Related term	Vermis of cerebellum	C0228482	C33866	Vermis
+C71.7	4	PT	Preferred term	Brain stem	C0006121	C12441	Brain Stem
+C71.7	Related	RT	Related term	Cerebral peduncle	C0007793	C32291	Cerebral Peduncle
+C71.7	Related	RT	Related term	Choroid plexus of fourth ventricle	C0152293	C32308	Choroid Plexus of the Fourth Ventricle
+C71.7	Related	RT	Related term	Fourth ventricle, NOS	C0149556	C12828	Fourth Ventricle
+C71.7	Related	RT	Related term	Infratentorial brain, NOS	C0228067	C12509	Infratentorial Brain
+C71.7	Related	RT	Related term	Medulla oblongata	C0025148	C12442	Medulla Oblongata
+C71.7	Related	RT	Related term	Midbrain	C0025462	C12510	Mesencephalon
+C71.7	Related	RT	Related term	Olive	C0228539		
+C71.7	Related	RT	Related term	Pons	C0032639	C12511	Pons Varolii
+C71.7	Related	RT	Related term	Pyramid	C0262324		
+C71.7	Synonym	SY	Synonym	Basis pedunculi	C0007793	C32291	Cerebral Peduncle
+C71.8	4	PT	Preferred term	Overlapping lesion of brain	CL018595		
+C71.8	Related	RT	Related term	Corpus callosum	C0010090	C12446	Corpus Callosum
+C71.8	Related	RT	Related term	Tapetum	C0152326		
+C71.9	4	PT	Preferred term	Brain, NOS	C0006104	C12439	Brain
+C71.9	Related	RT	Related term	Anterior cranial fossa	C0230044	C32090	Anterior Cranial Fossa
+C71.9	Related	RT	Related term	Cranial fossa, NOS	C0230042		
+C71.9	Related	RT	Related term	Intracranial site	CL018596		
+C71.9	Related	RT	Related term	Middle cranial fossa	C0230045	C33117	Middle Cranial Fossa
+C71.9	Related	RT	Related term	Posterior cranial fossa	C0010265	C33361	Posterior Cranial Fossa
+C71.9	Related	RT	Related term	Suprasellar	C0230054	C42602	Suprasellar Region
+C72	3	HT	Hierarchical term	SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM	CL497935		
+C72.0	4	PT	Preferred term	Spinal cord	C0037925	C12464	Spinal Cord
+C72.0	Related	RT	Related term	Cervical cord	C0457846		
+C72.0	Related	RT	Related term	Conus medullaris	C0149601	C12832	Conus Medullaris
+C72.0	Related	RT	Related term	Filum terminale	C0016109		
+C72.0	Related	RT	Related term	Lumbar cord	C3853029		
+C72.0	Related	RT	Related term	Sacral cord	C3852946		
+C72.0	Related	RT	Related term	Thoracic cord	C3853028		
+C72.1	4	PT	Preferred term	Cauda equina	C0007458	C12689	Cauda Equina
+C72.2	4	PT	Preferred term	Olfactory nerve	C0028938	C12759	Olfactory Nerve
+C72.3	4	PT	Preferred term	Optic nerve	C0029130	C12761	Optic Nerve
+C72.3	Related	RT	Related term	Optic chiasm	C0029126	C90609	Optic Chiasm
+C72.3	Related	RT	Related term	Optic tract	C0152405	C33218	Optic Tract
+C72.4	4	PT	Preferred term	Acoustic nerve	C0009201	C12697	Cochlear Nerve
+C72.5	4	PT	Preferred term	Cranial nerve, NOS	C0010268	C12700	Cranial Nerve
+C72.5	Related	RT	Related term	Abducens nerve	C0000741	C12665	Abducens Nerve
+C72.5	Related	RT	Related term	Accessory nerve, NOS	C0000905	C32041	Accessory Nerve
+C72.5	Related	RT	Related term	Facial nerve	C0015462	C12714	Facial Nerve
+C72.5	Related	RT	Related term	Glossopharyngeal nerve	C0017679	C12723	Glossopharyngeal Nerve
+C72.5	Related	RT	Related term	Hypoglossal nerve	C0020614	C12732	Hypoglossal Nerve
+C72.5	Related	RT	Related term	Oculomotor nerve	C0028864	C12758	Oculomotor Nerve
+C72.5	Related	RT	Related term	Trigeminal nerve	C0040996	C12806	Trigeminal Nerve
+C72.5	Related	RT	Related term	Trochlear nerve	C0041159	C12808	Trochlear Nerve
+C72.5	Related	RT	Related term	Vagus nerve	C0042276	C12812	Vagus Nerve
+C72.5	Synonym	SY	Synonym	Spinal accessory nerve	C0000905	C32041	Accessory Nerve
+C72.8	4	PT	Preferred term	Overlapping lesion of brain and central nervous system	CL018605		
+C72.9	4	PT	Preferred term	Nervous system, NOS	C0027763	C12755	Nervous System
+C72.9	Related	RT	Related term	Central nervous system	C3714787	C12438	Central Nervous System
+C72.9	Related	RT	Related term	Epidural	C0014537	C41449	Epidural Spinal Canal Space
+C72.9	Related	RT	Related term	Extradural	CL078039		
+C72.9	Related	RT	Related term	Parasellar	CL018606		
+C73-C75	2	HT	Hierarchical term	THYROID AND OTHER ENDOCRINE GLANDS	CL018607		
+C73	3	HT	Hierarchical term	THYROID GLAND	C0040132	C12400	Thyroid Gland
+C73.9	4	PT	Preferred term	Thyroid gland	C0040132	C12400	Thyroid Gland
+C73.9	Related	RT	Related term	Thyroglossal duct	C0231104	C49783	Thyroglossal Duct
+C73.9	Synonym	SY	Synonym	Thyroid, NOS	C0040132	C12400	Thyroid Gland
+C74	3	HT	Hierarchical term	ADRENAL GLAND	C0001625	C12666	Adrenal Gland
+C74.0	4	PT	Preferred term	Cortex of adrenal gland	C0001613	C12396	Adrenal Cortex
+C74.1	4	PT	Preferred term	Medulla of adrenal gland	C0001629	C12397	Adrenal Medulla
+C74.9	4	PT	Preferred term	Adrenal gland, NOS	C0001625	C12666	Adrenal Gland
+C74.9	Synonym	SY	Synonym	Adrenal, NOS	C0001625	C12666	Adrenal Gland
+C74.9	Synonym	SY	Synonym	Suprarenal gland	C0001625	C12666	Adrenal Gland
+C75	3	HT	Hierarchical term	OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES	CL025599		
+C75.0	4	PT	Preferred term	Parathyroid gland	C0030518	C12765	Parathyroid Gland
+C75.1	4	PT	Preferred term	Pituitary gland	C0032005	C12399	Pituitary Gland
+C75.1	Related	RT	Related term	Pituitary fossa	C0036609	C12497	Sella Turcica
+C75.1	Related	RT	Related term	Rathke pouch	C0229548	C34281	Rathke Pouch
+C75.1	Related	RT	Related term	Sella turcica	C0036609	C12497	Sella Turcica
+C75.1	Synonym	SY	Synonym	Hypophysis	C0032005	C12399	Pituitary Gland
+C75.1	Synonym	SY	Synonym	Pituitary, NOS	C0032005	C12399	Pituitary Gland
+C75.2	4	PT	Preferred term	Craniopharyngeal duct	C0229549	C12357	Craniopharyngeal Duct
+C75.3	4	PT	Preferred term	Pineal gland	C0031939	C12398	Pineal Gland
+C75.4	4	PT	Preferred term	Carotid body	C0007277	C66852	Carotid Body
+C75.5	4	PT	Preferred term	Aortic body and other paraganglia	CL375688		
+C75.5	Related	RT	Related term	Coccygeal body	C0229573		
+C75.5	Related	RT	Related term	Coccygeal glomus	C0229573		
+C75.5	Related	RT	Related term	Glomus jugulare	C0017670		
+C75.5	Related	RT	Related term	Para-aortic body	C0030378		
+C75.5	Related	RT	Related term	Paraganglion	C0030419	C94826	Paraganglion
+C75.5	Synonym	SY	Synonym	Organ of Zuckerkandl	C0030378		
+C75.8	4	PT	Preferred term	Overlapping lesion of endocrine glands and related structures	CL018611		
+C75.8	Related	RT	Related term	Multiple endocrine glands	CL018611		
+C75.8	Synonym	SY	Synonym	Pluriglandular	CL018611		
+C75.9	4	PT	Preferred term	Endocrine gland, NOS	C0014133	C12704	Endocrine Gland
+C76	3	HT	Hierarchical term	OTHER AND ILL-DEFINED SITES	CL018612		
+C76.0	4	PT	Preferred term	Head, face or neck, NOS	CL018613		
+C76.0	Related	RT	Related term	Cervical region, NOS	CL111479		
+C76.0	Related	RT	Related term	Cheek, NOS	C0007966	C13070	Cheek
+C76.0	Related	RT	Related term	Jaw, NOS	C0022359	C48821	Jaw Bone
+C76.0	Related	RT	Related term	Nose, NOS	C0028429	C12756	Nose
+C76.0	Related	RT	Related term	Supraclavicular region, NOS	C0446461	C25329	Supraclavicular
+C76.1	4	PT	Preferred term	Thorax, NOS	C0817096	C12799	Thorax
+C76.1	Related	RT	Related term	Axilla, NOS	C0004454	C12674	Axilla
+C76.1	Related	RT	Related term	Chest wall, NOS	C0205076	C62484	Chest Wall
+C76.1	Related	RT	Related term	Chest, NOS	C1527391	C25389	Chest
+C76.1	Related	RT	Related term	Infraclavicular region, NOS	C0230108	C25268	Infraclavicular Region
+C76.1	Related	RT	Related term	Intrathoracic site, NOS	CL018614		
+C76.1	Related	RT	Related term	Scapular region, NOS	C0230105		
+C76.1	Related	RT	Related term	Thoracic wall, NOS	C0205076	C62484	Chest Wall
+C76.2	4	PT	Preferred term	Abdomen, NOS	C0000726		
+C76.2	Related	RT	Related term	Abdominal wall, NOS	C0836916	C77608	Abdominal Wall
+C76.2	Related	RT	Related term	Intra-abdominal site, NOS	CL018616		
+C76.3	4	PT	Preferred term	Pelvis, NOS	C0030797	C12767	Pelvis
+C76.3	Related	RT	Related term	Buttock, NOS	C0006497	C89806	Buttock
+C76.3	Related	RT	Related term	Gluteal region, NOS	C0282082		
+C76.3	Related	RT	Related term	Groin, NOS	C0018246	C12726	Inguinal Region
+C76.3	Related	RT	Related term	Inguinal region, NOS	C0018246	C12726	Inguinal Region
+C76.3	Related	RT	Related term	Ischiorectal fossa	C0225295	C103455	Ischiorectal Fossa
+C76.3	Related	RT	Related term	Pelvic wall, NOS	C0230284		
+C76.3	Related	RT	Related term	Perineum, NOS	C0031066	C33301	Perineum
+C76.3	Related	RT	Related term	Perirectal region, NOS	C0230290		
+C76.3	Related	RT	Related term	Presacral region, NOS	C0230118		
+C76.3	Related	RT	Related term	Rectovaginal septum	C0230285		
+C76.3	Related	RT	Related term	Rectovesical septum	C0230286		
+C76.3	Related	RT	Related term	Sacrococcygeal region, NOS	C0036035		
+C76.4	4	PT	Preferred term	Upper limb, NOS	C1140618	C12671	Upper Extremity
+C76.4	Related	RT	Related term	Antecubital space, NOS	C0230355	C111032	Antecubital Region
+C76.4	Related	RT	Related term	Arm, NOS	C1140618	C12671	Upper Extremity
+C76.4	Related	RT	Related term	Elbow, NOS	C0013769		
+C76.4	Related	RT	Related term	Finger, NOS	C0016129	C32608	Finger
+C76.4	Related	RT	Related term	Forearm, NOS	C0016536	C32628	Forearm
+C76.4	Related	RT	Related term	Hand, NOS	C0018563	C32712	Hand
+C76.4	Related	RT	Related term	Shoulder, NOS	C0037004	C25203	Shoulder
+C76.4	Related	RT	Related term	Thumb, NOS	C0040067	C52834	Hand Digit 1
+C76.4	Related	RT	Related term	Wrist, NOS	C0043262	C111033	Carpal Region
+C76.5	4	PT	Preferred term	Lower limb, NOS	C0023216	C12742	Lower Extremity
+C76.5	Related	RT	Related term	Ankle, NOS	C0003086		
+C76.5	Related	RT	Related term	Calf, NOS	C0230445	C93027	Calf
+C76.5	Related	RT	Related term	Foot, NOS	C0016504	C32622	Foot
+C76.5	Related	RT	Related term	Heel, NOS	C0018870		
+C76.5	Related	RT	Related term	Hip, NOS	C0019552	C64193	Hip
+C76.5	Related	RT	Related term	Knee, NOS	C0022742		
+C76.5	Related	RT	Related term	Leg, NOS	C0023216	C12742	Lower Extremity
+C76.5	Related	RT	Related term	Popliteal space, NOS	CL018618		
+C76.5	Related	RT	Related term	Thigh, NOS	C0039866	C33763	Thigh
+C76.5	Related	RT	Related term	Toe, NOS	C0040357	C33788	Toe
+C76.7	4	PT	Preferred term	Other ill-defined sites	CL018612		
+C76.7	Related	RT	Related term	Back, NOS	C0004600	C13062	Back
+C76.7	Related	RT	Related term	Flank, NOS	C0230171	C93028	Flank
+C76.7	Related	RT	Related term	Trunk, NOS	C0460005	C33816	Trunk
+C76.8	4	PT	Preferred term	Overlapping lesion of ill-defined sites	CL018621		
+C77	3	HT	Hierarchical term	LYMPH NODES	C0024204	C12745	Lymph Node
+C77.0	4	PT	Preferred term	Lymph nodes of head, face and neck	C1185605	C12358	Head and Neck Lymph Node
+C77.0	Related	RT	Related term	Auricular lymph node	CL018623		
+C77.0	Related	RT	Related term	Cervical lymph node	C0588054	C32298	Cervical Lymph Node
+C77.0	Related	RT	Related term	Facial lymph node	C0229719		
+C77.0	Related	RT	Related term	Jugular lymph node	C0229731		
+C77.0	Related	RT	Related term	Mandibular lymph node	C0229724		
+C77.0	Related	RT	Related term	Occipital lymph node	C0229711	C98188	Occipital Lymph Node
+C77.0	Related	RT	Related term	Parotid lymph node	C0229715	C33278	Parotid Gland Lymph Node
+C77.0	Related	RT	Related term	Preauricular lymph node	C0229713	C103429	Preauricular Lymph Node
+C77.0	Related	RT	Related term	Prelaryngeal lymph node	C0229740		
+C77.0	Related	RT	Related term	Pretracheal lymph node	C0229742		
+C77.0	Related	RT	Related term	Retropharyngeal lymph node	C0229737	C77649	Retropharyngeal Lymph Node
+C77.0	Related	RT	Related term	Scalene lymph node	C0229744	C89780	Scalene Lymph Node
+C77.0	Related	RT	Related term	Sublingual lymph node	C2985100	C92434	Sublingual Lymph Node
+C77.0	Related	RT	Related term	Submandibular lymph node	C0229722	C77650	Submandibular Lymph Node
+C77.0	Related	RT	Related term	Submaxillary lymph node	C0229725		
+C77.0	Related	RT	Related term	Submental lymph node	C0229723		
+C77.0	Related	RT	Related term	Supraclavicular lymph node	C0229730	C12903	Supraclavicular Lymph Node
+C77.1	4	PT	Preferred term	Intrathoracic lymph nodes	C1517562	C12359	Intrathoracic Lymph Node
+C77.1	Related	RT	Related term	Bronchial lymph node	C1305372	C32232	Bronchial Lymph Node
+C77.1	Related	RT	Related term	Bronchopulmonary lymph node	C1305372	C32232	Bronchial Lymph Node
+C77.1	Related	RT	Related term	Diaphragmatic lymph node	C0229762	C132391	Diaphragmatic Lymph Node
+C77.1	Related	RT	Related term	Esophageal lymph node	C0229760		
+C77.1	Related	RT	Related term	Hilar lymph node, NOS	C1305372	C32232	Bronchial Lymph Node
+C77.1	Related	RT	Related term	Innominate lymph node	C0229763		
+C77.1	Related	RT	Related term	Intercostal lymph node	C0229761	C77652	Intercostal Lymph Node
+C77.1	Related	RT	Related term	Mediastinal lymph node	C0588055	C33073	Mediastinal Lymph Node
+C77.1	Related	RT	Related term	Parasternal lymph node	C0229755	C32853	Internal Mammary Lymph Node
+C77.1	Related	RT	Related term	Pulmonary hilar lymph node	C0733936	C98187	Pulmonary Hilar Lymph Node
+C77.1	Related	RT	Related term	Pulmonary lymph node, NOS	C0229749		
+C77.1	Related	RT	Related term	Thoracic lymph node	C0229745	C33769	Thoracic Lymph Node
+C77.1	Related	RT	Related term	Tracheal lymph node	C0229754	C103426	Paratracheal Lymph Node
+C77.1	Related	RT	Related term	Tracheobronchial lymph node	C0229751	C77651	Tracheobronchial Lymph Node
+C77.2	4	PT	Preferred term	Intra-abdominal lymph nodes	C0588058	C12360	Intra-Abdominal Lymph Node
+C77.2	Related	RT	Related term	Abdominal lymph node	C0588058	C12360	Intra-Abdominal Lymph Node
+C77.2	Related	RT	Related term	Aortic lymph node	C0229789	C77643	Paraaortic Lymph Node
+C77.2	Related	RT	Related term	Celiac lymph node	C0229766	C65166	Celiac Lymph Node
+C77.2	Related	RT	Related term	Colic lymph node	C0229800		
+C77.2	Related	RT	Related term	Common duct lymph node	C0229801		
+C77.2	Related	RT	Related term	Gastric lymph node	C1282334	C92222	Gastric Lymph Node
+C77.2	Related	RT	Related term	Hepatic lymph node	C0229769	C77640	Hepatic Lymph Node
+C77.2	Related	RT	Related term	Ileocolic lymph node	C0229796		
+C77.2	Related	RT	Related term	Inferior mesenteric lymph node	C0229793		
+C77.2	Related	RT	Related term	Intestinal lymph node	C0229791		
+C77.2	Related	RT	Related term	Lumbar lymph node	C0229790	C118775	Aortocaval Lymph Node
+C77.2	Related	RT	Related term	Mesenteric lymph node, NOS	C0229792	C77641	Mesenteric Lymph Node
+C77.2	Related	RT	Related term	Midcolic lymph node	C0229798		
+C77.2	Related	RT	Related term	Pancreatic lymph node, NOS	C0229783	C77642	Pancreatic Lymph Node
+C77.2	Related	RT	Related term	Para-aortic lymph node	C0229789	C77643	Paraaortic Lymph Node
+C77.2	Related	RT	Related term	Periaortic lymph node	C0229789	C77643	Paraaortic Lymph Node
+C77.2	Related	RT	Related term	Peripancreatic lymph node	C0733938		
+C77.2	Related	RT	Related term	Porta hepatis lymph node	CL387033	C77645	Portal Lymph Node
+C77.2	Related	RT	Related term	Portal lymph node	C0229769	C77640	Hepatic Lymph Node
+C77.2	Related	RT	Related term	Pyloric lymph node	C0229777		
+C77.2	Related	RT	Related term	Retroperitoneal lymph node	C0229802	C98189	Retroperitoneal Lymph Node
+C77.2	Related	RT	Related term	Splenic hilar lymph node	C0229782	C33600	Splenic Hilar Lymph Node
+C77.2	Related	RT	Related term	Splenic lymph node, NOS	C0229782	C33600	Splenic Hilar Lymph Node
+C77.2	Related	RT	Related term	Superior mesenteric lymph node	C0229767		
+C77.3	4	PT	Preferred term	Lymph nodes of axilla or arm	CL018631		
+C77.3	Related	RT	Related term	Axillary lymph node	C0729594	C12904	Axillary Lymph Node
+C77.3	Related	RT	Related term	Brachial lymph node	C0229840	C92221	Brachial Lymph Node
+C77.3	Related	RT	Related term	Cubital lymph node	C0229846		
+C77.3	Related	RT	Related term	Epitrochlear lymph node	C0229847	C98182	Epitrochlear Lymph Node
+C77.3	Related	RT	Related term	Infraclavicular lymph node	C0229743	C63705	Infraclavicular Lymph Node
+C77.3	Related	RT	Related term	Lymph node of upper limb	C0729769		
+C77.3	Related	RT	Related term	Pectoral lymph node	C0229843	C120322	Pectoral Lymph Node
+C77.3	Related	RT	Related term	Subclavicular lymph node	C0229743	C63705	Infraclavicular Lymph Node
+C77.3	Related	RT	Related term	Subscapular lymph node	C0588052		
+C77.4	4	PT	Preferred term	Lymph nodes of inguinal region or leg	C1518054	C12362	Lymph Node of Inguinal Region or Leg
+C77.4	Related	RT	Related term	Femoral lymph node	C0877794	C98183	Femoral Lymph Node
+C77.4	Related	RT	Related term	Inguinal lymph node	C0729596	C32801	Inguinal Lymph Node
+C77.4	Related	RT	Related term	Lymph node of Cloquet	C0229852		
+C77.4	Related	RT	Related term	Lymph node of Rosenmuller	C0229852		
+C77.4	Related	RT	Related term	Lymph node of groin	C0729596	C32801	Inguinal Lymph Node
+C77.4	Related	RT	Related term	Lymph node of lower limb	C0729767		
+C77.4	Related	RT	Related term	Popliteal lymph node	C0588057	C53146	Popliteal Lymph Node
+C77.4	Related	RT	Related term	Subinguinal lymph node	C0229855		
+C77.4	Related	RT	Related term	Tibial lymph node	C0229859		
+C77.5	4	PT	Preferred term	Pelvic lymph nodes	CL455365	C12363	Pelvic Lymph Node
+C77.5	Related	RT	Related term	Hypogastric lymph node	C0447192	C88142	Internal Iliac Lymph Node
+C77.5	Related	RT	Related term	Iliac lymph node	C0229807	C32761	Iliac Lymph Node
+C77.5	Related	RT	Related term	Inferior epigastric lymph node	C0458784		
+C77.5	Related	RT	Related term	Intrapelvic lymph node	CL018638		
+C77.5	Related	RT	Related term	Obturator lymph node	C0229822	C88141	Obturator Lymph Node
+C77.5	Related	RT	Related term	Paracervical lymph node	CL018639		
+C77.5	Related	RT	Related term	Parametrial lymph node	C0229828		
+C77.5	Related	RT	Related term	Presymphysial lymph node	C0229830		
+C77.5	Related	RT	Related term	Sacral lymph node	C0229827	C77647	Sacral Lymph Node
+C77.8	4	PT	Preferred term	Lymph nodes of multiple regions	CL018640		
+C77.9	4	PT	Preferred term	Lymph node, NOS	C0024204	C12745	Lymph Node
+C80	3	HT	Hierarchical term	UNKNOWN PRIMARY SITE	CL497885		
+C80.9	4	PT	Preferred term	Unknown primary site	CL497885		
