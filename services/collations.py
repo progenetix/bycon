@@ -48,6 +48,9 @@ def collations():
     mongo_client = MongoClient( )
     for ds_id in byc[ "dataset_ids" ]:
         mongo_db = mongo_client[ ds_id ]
+        # TODO: Not very elegant to allow for empty filters through a regex...
+        if len(byc[ "filters" ]) < 1:
+            byc[ "filters" ] = [ ".?" ]
         for f in byc[ "filters" ]:
             query = { "id": re.compile(r'^'+f ) }
             pre = re.split('-|:', f)[0]

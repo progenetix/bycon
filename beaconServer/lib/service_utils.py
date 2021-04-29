@@ -9,11 +9,66 @@ dir_path = path.join( lib_path, pardir )
 pkg_path = path.join( dir_path, pardir )
 
 from cgi_utils import *
+from handover_execution import handover_retrieve_from_query_results, handover_return_data
+from handover_generation import dataset_response_add_handovers, query_results_save_handovers
+from query_execution import execute_bycon_queries
+from query_generation import  initialize_beacon_queries
 from read_specs import read_bycon_configs_by_name,read_local_prefs
-from handover_generation import dataset_response_add_handovers
 from schemas_parser import *
 
 schema_path = path.join( pkg_path, "bycon" )
+
+################################################################################
+
+def run_beacon_init_stack(byc):
+
+    parse_beacon_schema(byc)
+
+    initialize_beacon_queries(byc)
+
+    create_empty_service_response(byc)
+    response_collect_errors(byc)
+    cgi_break_on_errors(byc)
+
+    return byc
+
+################################################################################
+
+def run_beacon_one_dataset(byc):
+
+    ds_id = byc[ "dataset_ids" ][ 0 ]
+    response_add_parameter(byc, "dataset", ds_id )
+    execute_bycon_queries( ds_id, byc )
+
+    h_o, e = handover_retrieve_from_query_results(byc)
+    h_o_d, e = handover_return_data( h_o, e )
+    if e:
+        response_add_error(byc, 422, e )
+
+    cgi_break_on_errors(byc)
+    populate_service_response( byc, h_o_d)
+
+    return byc
+
+################################################################################
+
+def check_alternative_deliveries(byc):
+
+    if not "VariantInSampleResponse" in byc["response_type"]:
+        return byc
+
+    ds_id = byc[ "dataset_ids" ][ 0 ]
+
+    if "callsetspgxseg" in byc["method"]:
+        export_pgxseg_download(ds_id, byc)
+
+    if "callsetsvariants" in byc["method"]:
+        export_variants_download(byc)
+
+    if "pgxseg" in byc["method"]:
+        export_pgxseg_download(ds_id, byc)
+
+    return byc
 
 ################################################################################
 
@@ -287,11 +342,11 @@ def print_variants_json(vs):
 
 ################################################################################
 
-def export_variants_download(vs, byc):
+def export_variants_download(byc):
 
-    populate_service_header(byc, vs)
+    populate_service_header(byc, byc["service_response"]["response"]["results"])
     open_json_streaming(byc, "variants.json")
-    print_variants_json(vs)
+    print_variants_json(byc["service_response"]["response"]["results"])
     close_json_streaming()
 
 ################################################################################
@@ -315,14 +370,14 @@ def print_variants_pgxseg(vs):
 
 ################################################################################
 
-def export_pgxseg_download(ds_id, vs, byc):
+def export_pgxseg_download(ds_id, byc):
 
     p_h = create_pgxseg_header(ds_id, byc)
 
     open_text_streaming()
     for h_l in p_h:
         print(h_l)
-    print_variants_pgxseg(vs)
+    print_variants_pgxseg(byc["service_response"]["response"]["results"])
     close_text_streaming()
 
 ################################################################################

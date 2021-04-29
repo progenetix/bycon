@@ -31,7 +31,10 @@ def parse_variants(byc):
         args = byc["args"]
         if "test" in args:
             if args.test:
-                variant_pars = byc["service_info"]["info"][ "sampleAlleleRequests" ][0]
+                try:
+                    variant_pars = byc["service_info"]["info"][ "sampleAlleleRequests" ][0]
+                except:
+                    pass
         if "cytobands" in args:
             if args.cytobands:
                 variant_pars[ "cytoBands" ] = args.cytobands

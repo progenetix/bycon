@@ -10,7 +10,7 @@ def io_table_header(io_params, io_prefixes):
     header_labs = [ ]
 
     for collection, pars in io_params.items():
-        if collection is 'non_collection':
+        if 'non_collection' in collection:
             collection = ''
         else:
             collection += '.'

@@ -1,9 +1,7 @@
 #!/usr/local/bin/python3
 
-import cgi, cgitb
-import json, yaml
-from os import path, environ, pardir
-import sys, datetime, argparse
+from os import path, pardir
+import sys
 
 # local
 dir_path = path.dirname( path.abspath(__file__) )
@@ -31,29 +29,8 @@ def main():
 def biosamples():
 
     byc = initialize_service()
-    parse_beacon_schema(byc)
-
-    initialize_beacon_queries(byc)
-
-    create_empty_service_response(byc)
-    response_collect_errors(byc)
-    cgi_break_on_errors(byc)
-
-    ds_id = byc[ "dataset_ids" ][ 0 ]
-    response_add_parameter(byc, "dataset", ds_id )
-    execute_bycon_queries( ds_id, byc )
-
-    ############################################################################
-
-    h_o, e = handover_retrieve_from_query_results(byc)
-    h_o_d, e = handover_return_data( h_o, e )
-    if e:
-        response_add_error(byc, 422, e )
-
-    cgi_break_on_errors(byc)
-
-    populate_service_response( byc, h_o_d)
-    # populate_service_response( byc, response_map_results(h_o_d, byc))
+    run_beacon_init_stack(byc)
+    run_beacon_one_dataset(byc)
 
     query_results_save_handovers(byc)
     cgi_print_json_response( byc, 200 )

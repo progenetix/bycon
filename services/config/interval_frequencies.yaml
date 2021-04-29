@@ -4,7 +4,6 @@ bycon_definition_files:
   - variant_definitions
   - dataset_definitions
   - interval_definitions
-frequency_collection_name: frequencymaps
 defaults:
   dataset_ids:
     - progenetix

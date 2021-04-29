@@ -25,15 +25,15 @@ from services.lib import *
 ################################################################################
 ################################################################################
 
-def _get_args():
+def _get_args(byc):
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--datasetids", help="datasets, comma-separated")
     parser.add_argument("-a", "--alldatasets", action='store_true', help="process all datasets")
     parser.add_argument("-t", "--test", help="test setting")
-    args = parser.parse_args()
+    byc.update({ "args": parser.parse_args() })
 
-    return args
+    return byc
 
 ################################################################################
 
@@ -43,9 +43,6 @@ def main():
 ################################################################################
 
 def collations_creator():
-
-    byc = initialize_service()
-    byc.update( { "args": _get_args() } )
 
     byc = initialize_service()
     _get_args(byc)

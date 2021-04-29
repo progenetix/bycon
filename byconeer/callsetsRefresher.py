@@ -42,11 +42,11 @@ def _get_args(byc):
 
 def main():
 
-    biosamples_refresher()
+    callsets_refresher()
 
 ################################################################################
 
-def biosamples_refresher():
+def callsets_refresher():
 
     byc = initialize_service()
     _get_args(byc)
@@ -67,16 +67,15 @@ def biosamples_refresher():
         exit()
 
     generate_genomic_intervals(byc)
-    pub_labels = _map_publication_labels(byc)
 
     for ds_id in byc["dataset_ids"]:
-        _process_dataset(ds_id, pub_labels, byc)
+        _process_dataset(ds_id, byc)
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-def _process_dataset(ds_id, pub_labels, byc):
+def _process_dataset(ds_id, byc):
 
     no_cs_no = 0
     no_stats_no = 0
@@ -95,6 +94,7 @@ def _process_dataset(ds_id, pub_labels, byc):
     cs_coll = data_db[ "callsets" ]
     v_coll = data_db[ "variants" ]
 
+
     bs_ids = []
 
     for bs in bios_coll.find (bios_query, {"id":1} ):
@@ -103,21 +103,14 @@ def _process_dataset(ds_id, pub_labels, byc):
     no =  len(bs_ids)
 
     bar = Bar("{} samples from {}".format(no, ds_id), max = no, suffix='%(percent)d%%'+" of "+str(no) )
-
+    
     for bsid in bs_ids:
+
+        bar.next()
 
         s = bios_coll.find_one({ "id":bsid })
 
-        """
-        The following code will refresh callset ids and their statistics into
-        the biosamples entries.
-        If no callsets are found this will result in empty attributes; if
-        more than one callset is found the average of the CNV statistics will be used.
-        """
         cs_ids = [ ]
-        cs_stats_no = 0
-        cnv_stats = { }
-        cnvstatistics = {k:[] for k in byc["these_prefs"]["refreshing"]["cnvstatistics"]}
         cs_query = { "biosample_id": s["id"] }
 
         cs_ids = cs_coll.distinct( "id", cs_query )
@@ -129,80 +122,28 @@ def _process_dataset(ds_id, pub_labels, byc):
         for cs in cs_coll.find( cs_query ):
             cs_ids.append(cs["id"])
 
-            if "cnvstatistics" in cs["info"]:
-                cs_stats_no = cs_stats_no + 1
-                for s_k in cnvstatistics.keys():
-                    if s_k in cs["info"]["cnvstatistics"]:
-                        cnvstatistics[ s_k ].append(cs["info"]["cnvstatistics"][ s_k ])
-        any_stats = False
-        if cs_stats_no > 0:
-            for s_k in cnvstatistics.keys():
-                n = len(cnvstatistics[ s_k ])
-                if n > 0:
-                    any_stats = True
-                    cnv_stats[ s_k ] = sum(cnvstatistics[ s_k ]) / n
-                    if cnv_stats[ s_k ] < 1:
-                        cnv_stats[ s_k ] = round( cnv_stats[ s_k ], 3)
-                    else:
-                        cnv_stats[ s_k ] = int( cnv_stats[ s_k ] )
-        else:
-            no_cs_no += 1
+            ####################################################################
+            # TODO: callset stats as as function
+            ####################################################################
 
-        if not any_stats:
-            no_stats_no += 1
+            cs_vs = list(v_coll.find( { "callset_id": cs["id"] } ))
+            maps, cs_cnv_stats = interval_cnv_maps(cs_vs, byc)
 
-        update_obj = { "info.callset_ids": cs_ids, "info.cnvstatistics": cnv_stats }
+            cs["info"].update({"statusmaps": maps})
+            cs["info"].update({"cnvstatistics": cs_cnv_stats})
 
-        """
-        --- other biosample modification code
-        """
+            cs_update_obj = { "info.statusmaps": maps, "info.cnvstatistics": cs_cnv_stats }
 
-        if "sampledTissue" in s:
-            if "UBERON" in s["sampledTissue"]["id"]:
-                biocs = [ s["sampledTissue"] ]
-                for b_c in s[ "biocharacteristics" ]:
-                    if not "UBERON" in b_c["id"]:
-                        biocs.append(b_c)
-                update_obj.update( { "biocharacteristics": biocs } )
+            if not byc["args"].test:
+                cs_coll.update_one( { "_id": cs["_id"] }, { '$set': cs_update_obj }  )
 
-        if "biocharacteristics" in s:
-            for b_c in s[ "biocharacteristics" ]:
-                 if "NCIT:C" in b_c["id"]:
-                    update_obj.update( { "histological_diagnosis": b_c } ) 
-
-        if "external_references" in s:
-            e_r_u = [ ]
-            for e_r in s[ "external_references" ]:
-                if "PMID" in e_r["id"]:
-                    if e_r["id"] in pub_labels:
-                        e_r.update( {"label": pub_labels[ e_r["id"] ] } )
-                e_r_u.append(e_r)                   
-            update_obj.update( { "external_references": e_r_u } ) 
-
-        ####################################################################
-
-        if not byc["args"].test:
-            bios_coll.update_one( { "_id": s["_id"] }, { '$set': update_obj }  )
-        
-        bar.next()
+            ####################################################################
+            ####################################################################
+            ####################################################################
 
     bar.finish()
 
     print("{} {} biosamples had no callsets".format(no_cs_no, ds_id))
-    print("{} {} biosamples received no CNV statistics".format(no_stats_no, ds_id))         
-
-################################################################################
-
-def _map_publication_labels(byc):
-
-    pub_client = MongoClient( )
-    pub_labels = { }
-    pub_db = byc["config"]["info_db"]
-    pub_coll = pub_client[ pub_db ][ "publications" ]
-    for pub in pub_coll.find( { "label": { "$regex": "..." } }, { "_id": 0, "id": 1, "label": 1 } ):
-        pub_labels.update( { pub["id"] : pub["label"] } )
-
-    return pub_labels
 
 ################################################################################
 ################################################################################

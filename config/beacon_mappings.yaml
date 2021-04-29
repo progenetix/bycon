@@ -17,6 +17,10 @@ response_types:
     id: BiosampleResponse
     schema: https://progenetix.org/services/schemas/Biosample/
     h->o_access_key: "biosamples._id"
+  individuals:
+    id: IndividualResponse
+    schema: https://progenetix.org/services/schemas/Individual/
+    h->o_access_key: "individuals._id"
   variants:
     id: VariantInSampleResponse
     schema: https://progenetix.org/services/schemas/Variant/

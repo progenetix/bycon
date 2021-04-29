@@ -169,7 +169,7 @@ def execute_bycon_queries(ds_id, byc):
 
     if "response_type" in byc:
 
-        if "individuals" in byc["response_type"] or "phenopackets" in byc["response_type"]:
+        if "IndividualResponse" in byc["response_type"] or "phenopackets" in byc["response_type"]:
             prevars["method"] = "bs.isid->individuals.id"
             prevars["query"] = { "_id": { "$in": prefetch[ "biosamples._id" ]["target_values"] } }
             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
@@ -188,8 +188,7 @@ def execute_bycon_queries(ds_id, byc):
     data_client.close( )
     ho_client.close( )
 
-    # byc.update( { "query_results": prefetch } )
-    byc["query_results"] = prefetch
+    byc.update( { "query_results": prefetch } )
 
     return byc
 

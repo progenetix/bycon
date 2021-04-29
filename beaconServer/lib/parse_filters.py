@@ -8,6 +8,8 @@ from cgi_utils import *
 
 def parse_filters(byc):
 
+    byc.update({"filters":[]})
+
     if "form_data" in byc:
         f = form_return_listvalue( byc["form_data"], "filters" )
         f = _check_filter_values(f, byc["filter_definitions"])

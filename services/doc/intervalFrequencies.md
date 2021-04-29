@@ -33,7 +33,7 @@ direct access to the frequecy list at `response.results[0].interval_frequencies`
         "id": "pgxcohort-TCGAcancers",
         "interval_frequencies": [
           {
-            "chro": "1",
+            "reference_name": "1",
             "end": 1000000,
             "gain_frequency": 0,
             "index": 0,
@@ -41,7 +41,7 @@ direct access to the frequecy list at `response.results[0].interval_frequencies`
             "start": 0
           },
           {
-            "chro": "1",
+            "reference_name": "1",
             "end": 2000000,
             "gain_frequency": 0,
             "index": 1,

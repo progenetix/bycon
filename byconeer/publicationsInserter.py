@@ -1,10 +1,14 @@
+#!/usr/local/bin/python3
+
 from os import path
 from pymongo import MongoClient
-from byconeer.lib.publication_utils import (read_annotation_table, create_progenetix_posts) ### do I import them like this?
+import argparse, datetime
+from isodate import date_isoformat
+
+from lib.publication_utils import jprint, read_annotation_table, create_progenetix_post
 
 """
-## `publicationUpdater`
-
+* pubUpdater.py -t 1 -f "../rsrc/publications.txt"
 """
 
 ##############################################################################
@@ -12,9 +16,13 @@ from byconeer.lib.publication_utils import (read_annotation_table, create_progen
 ##############################################################################
 
 def _get_args():
+
     parser = argparse.ArgumentParser(description="Read publication annotations, create MongoDB posts and update the database.")
-    parser.add_argument("-f", "--filepath", help="Path of the .tsv file containing the annotations on the publicationßs.", type=str)
+    parser.add_argument("-f", "--filepath", help="Path of the .tsv file containing the annotations on the publications.", type=str)
+    parser.add_argument("-t", "--test", help="test setting")
+
     args = parser.parse_args()
+
     return args
 
 ##############################################################################
@@ -26,13 +34,15 @@ def main():
 
 def update_publications():
 
-    file_path = _get_args()
+    args = _get_args()
+
+    if args.test:
+        print( "¡¡¡ TEST MODE - no db update !!!")
 
     # Read annotation table:
-    rows = read_annotation_table(file_path)
+    rows = read_annotation_table(args)
 
-    # Use retrieval to generate posts to be uploaded on MongoDB
-    posts = create_progenetix_posts(rows)
+    print("=> {} publications will be looked up".format(len(rows)))
 
     # Connect to MongoDB and load publication collection
     client = MongoClient()
@@ -40,15 +50,23 @@ def update_publications():
     ids = cl.distinct("id")
 
     # Update the database
-    for post in posts:
+    for row in rows:
+
+        post = create_progenetix_post(row)
 
         if post["id"] in ids:
-            print(post["id"], ": this article is already on the progenetix publications collection.")
+            print(post["id"], ": skipped - already in progenetix.publications")
 
         else:
-            print(post["id"], ": this article isn't on the progenetix publications collection yet.")
-            result = cl.insert_one(post)
-            result.inserted_id
+            print(post["id"], ": inserting this into progenetix.publications")
+
+            post.update( { "updated": date_isoformat(datetime.datetime.now()) } )
+
+            if not args.test:
+                result = cl.insert_one(post)
+                result.inserted_id
+            else:
+                jprint(post)
 
 ##############################################################################
 
