@@ -8,7 +8,7 @@ import pandas as pd
 from pymongo import MongoClient
 import random
 from os import path, environ, pardir
-from progressbar import Bar
+from progress.bar import Bar
 from pydoc import locate
 # from jsonschema import validate
 
@@ -18,12 +18,9 @@ pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from beaconServer.lib.read_specs import *
 from beaconServer.lib.parse_filters import *
+from beaconServer.lib.service_utils import *
 
-service_lib_path = path.join( pkg_path, "services", "lib" )
-sys.path.append( service_lib_path )
-
-from service_utils import initialize_service
-from table_tools import *
+from lib.table_tools import *
 
 """
 ## `newSampleInserter`
@@ -58,12 +55,12 @@ def biosamples_inserter():
     byc = initialize_service()
     _get_args(byc)
 
-    if not byc['args'].source in byc['data_sources']:
-        print( 'Does not recognize data source!')
+    if not byc['args'].source in byc["these_prefs"]['data_sources']:
+        print( 'No accepted "--source" data source has been provided...')
         exit()
 
-    these_prefs = read_local_prefs( "datatables", dir_path )
-    for d_k, d_v in these_prefs.items():
+    table_prefs = read_local_prefs( "datatables", dir_path )
+    for d_k, d_v in table_prefs.items():
         byc.update( { d_k: d_v } )
 
     # TODO: check for import_path
@@ -72,7 +69,7 @@ def biosamples_inserter():
 ################################################################################
 
     ### read in meta table
-    metapath = path.join(byc['import_path'])s
+    metapath = path.join(byc['import_path'])
     mytable = pd.read_csv(metapath, sep = '\t', dtype = str)
     mytable = mytable.where((pd.notnull(mytable)), None) ## convert pd.nan to None
 

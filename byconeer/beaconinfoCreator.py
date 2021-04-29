@@ -13,7 +13,7 @@ pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from beaconServer.lib.read_specs import read_bycon_configs_by_name
 from services.lib import *
-from beaconServereer.lib import *
+from beaconServer.lib import *
 
 """
 
