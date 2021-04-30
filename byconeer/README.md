@@ -5,7 +5,6 @@ setup and maintenance of a Progenetix-style Beacon environment.
 
 ### Progenetix Update Commands
 
-
 1. Import / generate `variants`
 
 2. Import / generate `callsets`
@@ -41,6 +40,19 @@ byconeer/callsetsRefresher.py -d progenetix -t 1 -f "icdom-85002"
 ```
 
 4. Import / refresh `biosamples`
+
+##### biosamplesInserter
+
+##### biosamplesRefresher
+
+The `biosamplesRefresher.py` script is used for global "data fixes", e.g. the
+addition of CNV statistics from callsets or population of attributes from
+other collections. This is a utility scriopt hich needs occasional adjustments
+depending on the use cases and changing data schemas.
+
+```
+byconeer/biosamplesRefresher.py -d progenetix
+```
 
 5. Import / refresh `individuals`
 

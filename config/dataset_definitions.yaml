@@ -41,7 +41,7 @@ cellosaurus:
     variantCount: 1446
     callCount: 8702
     sampleCount: 6617
-    externalUrl: "https://progenetix.org/cellosaurus/search/"
+    externalUrl: "https://progenetix.org/cellosaurus/"
     info:
       authorized: true
       accessType: PUBLIC
@@ -65,7 +65,7 @@ cellosaurus:
     callCount: 3945868
     sampleCount: 3200
     assemblyId: 'GRCh38'
-    externalUrl: "https://progenetix.org/1000-genomes-cnv/search/"
+    externalUrl: "https://progenetix.org/1000-genomes-cnv/"
     info:
       authorized: true
       accessType: PUBLIC
