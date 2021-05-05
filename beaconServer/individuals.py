@@ -32,7 +32,7 @@ def individuals():
     run_beacon_one_dataset(byc)
 
     query_results_save_handovers(byc)
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

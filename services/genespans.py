@@ -69,7 +69,7 @@ def genespans():
     cgi_break_on_errors(byc)
 
     populate_service_response( byc, results)
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

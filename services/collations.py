@@ -82,7 +82,7 @@ def collations():
     mongo_client.close( )
 
     populate_service_response( byc, response_map_results( list(s_s.values()), byc))
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

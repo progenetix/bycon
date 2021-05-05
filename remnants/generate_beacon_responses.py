@@ -32,11 +32,11 @@ def beacon_respond_with_errors( byc ):
 
     if not byc[ "queries" ].keys():
       byc["service_response"].update( { "error": { "error_code": 422, "error_message": "No (correct) query parameters were provided." } } )
-      cgi_print_json_response( byc, 422)
+      cgi_print_response( byc, 422)
 
     if len(byc[ "dataset_ids" ]) < 1:
       byc["service_response"].update( { "error": { "error_code": 422, "error_message": "No `datasetIds` parameter provided." } } )
-      cgi_print_json_response( byc, 422)
+      cgi_print_response( byc, 422)
 
 ################################################################################
 
@@ -54,7 +54,7 @@ def respond_empty_request( byc ):
             return()
 
     # current default response
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 
@@ -66,7 +66,7 @@ def respond_service_info_request( byc ):
     if not "service-info" in environ.get('REQUEST_URI'):
         return()
 
-    cgi_print_json_response( byc, byc["service_info"], 200 )
+    cgi_print_response( byc, byc["service_info"], 200 )
 
 ################################################################################
 

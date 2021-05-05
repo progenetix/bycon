@@ -82,12 +82,12 @@ def cgi_print_rewrite_response(uri_base="", uri_stuff=""):
 
 ################################################################################
 
-def cgi_print_text_response(form_data, data, status_code):
+def cgi_print_text_response(byc, status_code):
 
     print('Content-Type: text')
     print('status:'+str(status_code))
     print()
-    print(data+"\n")
+    print(byc["service_response"]+"\n")
     exit()
 
 ################################################################################
@@ -113,12 +113,12 @@ def cgi_break_on_errors(byc):
     if "response" in r and "form_data" in byc:
         if "error" in r["response"]:
             if r["response"]["error"]["error_code"] > 200:
-                cgi_print_json_response( byc, r["response"]["error"]["error_code"] )
+                cgi_print_response( byc, r["response"]["error"]["error_code"] )
 
 ################################################################################
 
-# def cgi_print_json_response(form_data, response, status_code):
-def cgi_print_json_response(byc, status_code):
+# def cgi_print_response(form_data, response, status_code):
+def cgi_print_response(byc, status_code):
 
     r_f = ""
     r_t = ""

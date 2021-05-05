@@ -89,7 +89,7 @@ def deliveries():
 
         cgi_break_on_errors(byc)
         populate_service_response( byc, results)
-        cgi_print_json_response( byc, 200 )
+        cgi_print_response( byc, 200 )
 
     ############################################################################
     # continuing with default -> accessid
@@ -119,7 +119,7 @@ def deliveries():
         results = h_o_d
 
     populate_service_response( byc, results)
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

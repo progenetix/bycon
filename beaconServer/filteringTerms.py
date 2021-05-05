@@ -51,7 +51,7 @@ def filtering_terms():
     create_empty_service_response(byc)
 
     populate_service_response( byc, return_filtering_terms(byc) )
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

@@ -120,7 +120,7 @@ def phenopackets():
         results.append( pxf )
 
     populate_service_response( byc, results)
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

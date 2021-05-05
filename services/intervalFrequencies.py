@@ -111,7 +111,7 @@ def interval_frequencies():
     _export_pgxseg_frequencies(byc, results)
     _export_pgxmatrix_frequencies(byc, results)
     populate_service_response( byc, results)
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################
