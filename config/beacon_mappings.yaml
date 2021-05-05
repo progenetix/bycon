@@ -11,6 +11,8 @@ service_names:
   variants_in_sample: variants
   variantsInSample: variants
   variants: variants
+  analyses: callsets
+  callsets: callsets
 
 response_types:
   biosamples:
@@ -33,4 +35,12 @@ response_types:
     id: VariantInSampleResponse
     schema: https://progenetix.org/services/schemas/Variant/
     h->o_access_key: "variants._id"
+  callsets:
+    id: AnalysisResponse
+    schema: https://progenetix.org/services/schemas/Callset/
+    h->o_access_key: "callsets._id"
+  analyses:
+    id: AnalysisResponse
+    schema: https://progenetix.org/services/schemas/Callset/
+    h->o_access_key: "callsets._id"
 
