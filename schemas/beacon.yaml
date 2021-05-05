@@ -1328,14 +1328,14 @@ components:
       description: |
         Variant description using either the default or an alternative schema.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_identification_schema.yaml#/components/schemas/VariantIdentification'
         - $ref: '#/components/schemas/AlternativeSchema'
     VariantAnnotation:
       description: |
         Default schema for variant annotation
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_annotations_schema.yaml#/components/schemas/VariantAnnotation'
         - $ref: '#/components/schemas/AlternativeSchema'
     VariantReponseResults:
@@ -1756,7 +1756,7 @@ components:
       description: |
         Default schema for describing invididuals.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_individual_schema.yaml#/components/schemas/Individual'
         - $ref: '#/components/schemas/AlternativeSchema'
 
@@ -1821,7 +1821,7 @@ components:
       description: |
         Default schema for describing biosamples.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_biosample_schema.yaml#/components/schemas/Biosample'
         - $ref: '#/components/schemas/AlternativeSchema'
 
@@ -1874,7 +1874,7 @@ components:
       description: |
         Default schema for describing runs.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_run_schema.yaml#/components/schemas/Run'
         - $ref: '#/components/schemas/AlternativeSchema'
 
@@ -1927,7 +1927,7 @@ components:
       description: |
         Default schema for describing runs.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_analysis_schema.yaml#/components/schemas/Analysis'
         - $ref: '#/components/schemas/AlternativeSchema'
 
@@ -1980,7 +1980,7 @@ components:
       description: |
         Default schema for describing runs.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_in_sample_schema.yaml#/components/schemas/VariantInSample'
         - $ref: '#/components/schemas/AlternativeSchema'
 
@@ -2033,7 +2033,7 @@ components:
       description: |
         Default schema for describing runs.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_interpretation_schema.yaml#/components/schemas/VariantInterpretation'
         - $ref: '#/components/schemas/AlternativeSchema'
 
@@ -2086,7 +2086,7 @@ components:
       description: |
         Default schema for describing runs.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_interactor_schema.yaml#/components/schemas/Interactor'
         - $ref: '#/components/schemas/AlternativeSchema'
     CohortResponse:
@@ -2138,7 +2138,7 @@ components:
       description: |
         Default schema for describing runs.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_cohort_schema.yaml#/components/schemas/Cohort'
         - $ref: '#/components/schemas/AlternativeSchema'
        
@@ -2181,7 +2181,7 @@ components:
       description: |
         Default schema for describing Beacon info.
       type: object
-      oneOf:
+      anyOf:
         - $ref: '#/components/schemas/BeaconInfo'
         - $ref: '#/components/schemas/AlternativeSchema'
 

@@ -33,6 +33,21 @@ def biosamples():
     run_beacon_one_dataset(byc)
 
     query_results_save_handovers(byc)
+
+    # TODO: This is a stop-gap for Progenetix, adding the original structure
+    # for parsing by the front-end, for now
+
+    if "includeDatasetResponses" in byc["form_data"]:
+    	byc["service_response"]["response"].update({
+    		"datasetAlleleResponses": [ { "datasetId": byc[ "dataset_ids" ][0], "datasetHandover": byc["service_response"]["response"]["results_handover"] }]})
+    	for c_k, c_v in byc["service_response"]["response"]["info"]["counts"].items():
+    		byc["service_response"]["response"]["datasetAlleleResponses"][0].update({ c_k: c_v })
+    	for k in ["exists", "results"]:
+    		byc["service_response"]["response"]["datasetAlleleResponses"][0].update({ k: byc["service_response"]["response"][k] })
+    	for d in ["results", "results_handover"]:
+    		del(byc["service_response"]["response"][d])
+
+ 
     cgi_print_json_response( byc, 200 )
 
 ################################################################################

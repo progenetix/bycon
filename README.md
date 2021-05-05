@@ -50,7 +50,6 @@ bycon
   |    |- ..._definitions.yaml
   |
   |- beaconServer
-  |    |- byconplus.py
   |    |- datasets.py
   |    |- biosamples.py
   |    |- filteringTerms.py

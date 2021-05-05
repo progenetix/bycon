@@ -63,6 +63,8 @@ def form_return_listvalue( form_data, parameter ):
             v = form_data.getlist( parameter )
             if "null" in v:
                 v.remove("null")
+            if "undefined" in v:
+                v.remove("undefined")
             if len(v) > 0:
                 l_v  = ','.join(v)
                 l_v  = l_v .split(',')

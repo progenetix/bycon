@@ -22,7 +22,7 @@ from beaconServer.lib import *
 This script reads the Beacon definitions from the configuration files, populates
 the filter definition and dataset statistics and saves the information ino the
 `progenetix.beaconinfo` database, from where it can be used e.g. by the Beacon
-API (`byconplus`).
+API (`bycon`).
 
 """
 

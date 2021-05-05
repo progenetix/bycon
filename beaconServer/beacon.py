@@ -60,7 +60,7 @@ def beacon(path=""):
             "response" : {
                 "error" : {
                     "error_code": 422,
-                    "error_message": "No correct service path provided. Please refer to the documentation at http://info.progenetix.org/tags/services"
+                    "error_message": "No correct service path provided. Please refer to the documentation at http://info.progenetix.org/tags/Beacon"
                     },
                 }
             }

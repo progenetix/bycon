@@ -7,13 +7,13 @@ Additional information may be available through [info.progenetix.org](https://in
 **NOTE** The Beacon v2 endpoints are _currently_ implemented under
 `https://progenetix.org/beacon/...`. Documentation for Beacon v2 endpoints & use can be found through [[this link]](beacon_v2.md).
 
-##### Examples
+##### DEPRECATED Examples
 
 * standard test deletion CNV queries (these may take a minute or so...)
   - <https://bycon.progenetix.org/query?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&requestType=variantCNVrequest&referenceName=9&variantType=DEL&start=20000000&start=21975097&end=21967753&end=23000000&filters=icdom-94403>
   - <https://bycon.progenetix.org/query?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&requestType=variantCNVrequest&referenceName=9&variantType=DEL&start=18000000&start=21975097&end=21967753&end=26000000&filters=icdom-94403>
 * retrieving biosamples w/ a given filter code
-  - <https://bycon.progenetix.org/query?assemblyId=GRCh38&datasetIds=progenetix&filters=NCIT:C3326>
+  - <https://progenetix.org/query?assemblyId=GRCh38&datasetIds=progenetix&filters=NCIT:C3326>
 <!-- * beacon info (i.e. missing parameters return the info)
   - <https://bycon.progenetix.org>
  -->

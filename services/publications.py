@@ -92,7 +92,7 @@ def publications():
                 else:
                     s[ k ] = None
         try:
-            s_v = p_re.match(s[ "id" ]).group(2)
+            s_v = p_re.match(s[ "id" ]).group(3)
             s[ "sortid" ] = int(s_v)
         except:
             s[ "sortid" ] = -1

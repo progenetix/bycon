@@ -32,7 +32,7 @@ def collations():
     select_dataset_ids(byc)
     parse_filters(byc)
 
-    create_empty_service_response(byc)    
+    create_empty_service_response(byc)
 
     if len(byc[ "dataset_ids" ]) < 1:
       response_add_error(byc, 422, "No `datasetIds` parameter provided." )

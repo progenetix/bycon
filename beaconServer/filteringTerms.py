@@ -55,6 +55,48 @@ def filtering_terms():
 
 ################################################################################
 ################################################################################
+################################################################################
+
+def return_filtering_terms( byc ):
+
+    fts = { }
+
+    # for the general filter response, filters from *all* datasets are
+    # provided
+    # if only one => counts are added back
+
+    for ds in byc[ "beacon_info" ][ "datasets" ]:
+        if len(byc[ "dataset_ids" ]) > 0:
+            if not ds["id"] in byc[ "dataset_ids" ]:
+                continue
+        if "filtering_terms" in ds:
+            for f_t in ds[ "filtering_terms" ]:
+                f_id = f_t[ "id" ]
+                if not f_id in fts:
+                    fts[ f_id ] = f_t
+                else:
+                    fts[ f_id ][ "count" ] += f_t[ "count" ]
+  
+    ftl = [ ]
+    for key in sorted(fts):
+        f_t = fts[key]
+        if len(byc[ "dataset_ids" ]) > 1:
+            del(f_t["count"])
+        if "filters" in byc:
+            if len(byc["filters"]) > 0:
+                for f in byc["filters"]:
+                    f_re = re.compile(r'^'+f)
+                    if f_re.match(key):
+                        ftl.append( f_t )
+        else: 
+            ftl.append( f_t )
+
+    return ftl
+
+################################################################################
+################################################################################
+################################################################################
+   
 
 if __name__ == '__main__':
     main()
