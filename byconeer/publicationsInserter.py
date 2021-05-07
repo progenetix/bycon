@@ -1,9 +1,18 @@
 #!/usr/local/bin/python3
 
-from os import path
+from os import path, pardir
 from pymongo import MongoClient
 import argparse, datetime
 from isodate import date_isoformat
+import cgi, cgitb
+import sys
+
+
+# local
+dir_path = path.dirname( path.abspath(__file__) )
+pkg_path = path.join( dir_path, pardir )
+sys.path.append( pkg_path )
+from beaconServer.lib.cgi_utils import *
 
 from lib.publication_utils import jprint, read_annotation_table, create_progenetix_post
 
@@ -38,6 +47,21 @@ def update_publications():
 
     if args.test:
         print( "¡¡¡ TEST MODE - no db update !!!")
+
+    ##########################################
+    # for Sofia => testing ... ###############
+    ##########################################
+
+    form_data = cgi_parse_query()
+    new_pmid = form_data.getfirst("newPMID", "")
+    if len(new_pmid) > 0:
+        set_debug_state(1)
+        print(new_pmid)
+        exit()
+
+    ##########################################
+    ##########################################
+    ##########################################
 
     # Read annotation table:
     rows = read_annotation_table(args)

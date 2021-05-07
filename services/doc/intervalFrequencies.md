@@ -55,7 +55,7 @@ direct access to the frequecy list at `response.results[0].interval_frequencies`
 ##### `id`
 
 * standard parameter to retrieve a frequency set by its `id`
-* available values can be looked up using the [`collationc`](collations.md)
+* available values can be looked up using the [`collations`](collations.md)
 service:
   - <https://progenetix.org/services/collations?method=ids&filters=NCIT&datasetIds=progenetix>
 * an `id` value will override any given `filters`
@@ -84,8 +84,9 @@ The method parameter here can set set autput format. Options are:
 
 #### Examples
 
-* <https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&id=pgxcohort-TCGAcancers>
-* <https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C7376,PMID:22824167>
-* <https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&method=pgxmatrix&filters=NCIT:C7376,PMID:22824167>
+* <https://progenetix.org/services/intervalFrequencies/?id=pgxcohort-TCGAcancers>
+* <https://progenetix.org/services/intervalFrequencies/?filters=NCIT:C7376,PMID:22824167>
+* <https://progenetix.org/services/intervalFrequencies/?method=pgxseg&filters=NCIT:C7376,PMID:22824167>
+* <https://progenetix.org/services/intervalFrequencies/?method=pgxmatrix&filters=NCIT:C7376,PMID:22824167>
 
 <!--/podmd-->
