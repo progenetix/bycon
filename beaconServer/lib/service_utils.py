@@ -11,6 +11,7 @@ pkg_path = path.join( dir_path, pardir )
 from cgi_utils import *
 from handover_execution import handover_retrieve_from_query_results, handover_return_data
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers
+from interval_utils import generate_genomic_intervals
 from query_execution import execute_bycon_queries
 from query_generation import  initialize_beacon_queries
 from read_specs import read_bycon_configs_by_name,read_local_prefs
@@ -23,9 +24,8 @@ schema_path = path.join( pkg_path, "bycon" )
 def run_beacon_init_stack(byc):
 
     parse_beacon_schema(byc)
-
     initialize_beacon_queries(byc)
-
+    generate_genomic_intervals(byc)
     create_empty_service_response(byc)
     response_collect_errors(byc)
     cgi_break_on_errors(byc)
@@ -47,26 +47,6 @@ def run_beacon_one_dataset(byc):
 
     cgi_break_on_errors(byc)
     populate_service_response( byc, h_o_d)
-
-    return byc
-
-################################################################################
-
-def check_alternative_deliveries(byc):
-
-    if not "VariantInSampleResponse" in byc["response_type"]:
-        return byc
-
-    ds_id = byc[ "dataset_ids" ][ 0 ]
-
-    if "callsetspgxseg" in byc["method"]:
-        export_pgxseg_download(ds_id, byc)
-
-    if "callsetsvariants" in byc["method"]:
-        export_variants_download(byc)
-
-    if "pgxseg" in byc["method"]:
-        export_pgxseg_download(ds_id, byc)
 
     return byc
 
@@ -288,7 +268,6 @@ def populate_service_response_counts(byc):
 
 ################################################################################
 
-
 def populate_service_response( byc, results):
 
     populate_service_header(byc, results)
@@ -298,17 +277,95 @@ def populate_service_response( byc, results):
 
     return byc
 
+
 ################################################################################
 
-def create_pgxseg_header(ds_id, byc):
+def check_alternative_variant_deliveries(byc):
 
-    p_h = []
+    if not "VariantInSampleResponse" in byc["response_type"]:
+        return byc
+
+    ds_id = byc[ "dataset_ids" ][ 0 ]
+
+    if "callsetspgxseg" in byc["method"]:
+        export_pgxseg_download(ds_id, byc)
+
+    if "callsetsvariants" in byc["method"]:
+        export_variants_download(byc)
+
+    if "pgxseg" in byc["method"]:
+        export_pgxseg_download(ds_id, byc)
+
+    return byc
+
+################################################################################
+
+def check_alternative_callset_deliveries(byc):
+
+    if not "pgxmatrix" in byc["method"]:
+        return byc
+
+    ds_id = byc[ "dataset_ids" ][ 0 ]
 
     mongo_client = MongoClient()
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
+    cs_coll = mongo_client[ ds_id ][ "callsets" ]
 
-    if not "pgxseg" in byc["method"]:
+    open_text_streaming("interval_callset_matrix.pgxmatrix")
+
+    for d in ["id", "assemblyId"]:
+        print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
+
+    if "filters" in byc["service_response"]["meta"]["received_request"]:
+        print("#meta=>filters="+','.join(byc["service_response"]["meta"]["received_request"]["filters"]))
+
+    info_columns = [ "analysis_id", "biosample_id", "group_id" ]
+    h_line = interval_header(info_columns, byc)
+    print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
+    print("#meta=>no_info_columns={};no_interval_columns={}".format(len(info_columns), len(h_line) - len(info_columns)))
+
+    cs_ids = { }
+
+    for bs_id in byc["query_results"]["biosamples.id"][ "target_values" ]:
+        bs = bs_coll.find_one( { "id": bs_id } )
+        bs_csids = cs_coll.distinct( "id", {"biosample_id": bs_id} )
+        for bsid in bs_csids:
+            cs_ids.update( { bsid: "" } )
+        s_line = "#sample=>biosample_id={};analysis_ids={}".format(bs_id, ','.join(bs_csids))
+        for b_c in bs[ "biocharacteristics" ]:
+            if "NCIT:C" in b_c["id"]:
+                s_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(s_line, b_c["id"], b_c["label"], b_c["id"], b_c["label"])
+                cs_ids[bsid] = b_c["id"]
+        print(s_line)
+    
+    print("#meta=>biosampleCount={};analysisCount={}".format(byc["query_results"]["biosamples.id"][ "target_count" ], len(cs_ids)))
+    print("\t".join(h_line))
+
+    for cs_id, group_id in cs_ids.items():
+        cs = cs_coll.find_one({"id":cs_id})
+        f_line = [cs_id, cs["biosample_id"], group_id]
+        for intv in cs["info"]["statusmaps"]["dupcoverage"]:
+            f_line.append( str(intv) )
+        for intv in cs["info"]["statusmaps"]["delcoverage"]:
+            f_line.append( str(intv) )
+        print("\t".join(f_line))
+
+    close_text_streaming()
+        
+    return byc
+
+################################################################################
+
+def create_pgx_column_header(ds_id, byc):
+
+    p_h = []
+
+    if not "pgxseg" in byc["method"] and not "pgxmatrix" in byc["method"]:
         return p_h
+
+    mongo_client = MongoClient()
+    bs_coll = mongo_client[ ds_id ][ "biosamples" ]
+    cs_coll = mongo_client[ ds_id ][ "callsets" ]
 
     for d in ["id", "assemblyId"]:
         p_h.append("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
@@ -320,12 +377,14 @@ def create_pgxseg_header(ds_id, byc):
 
     for bs_id in byc["query_results"]["biosamples.id"][ "target_values" ]:
         bs = bs_coll.find_one( { "id": bs_id } )
-        h_line = "#sample=>sample_id={}".format(bs_id)
+        h_line = "#sample=>biosample_id={}".format(bs_id)
         for b_c in bs[ "biocharacteristics" ]:
             if "NCIT:C" in b_c["id"]:
                 h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, b_c["id"], b_c["label"], b_c["id"], b_c["label"])
         p_h.append(h_line)
-    p_h.append("{}\t{}\t{}\t{}\t{}\t{}".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type" ) )
+
+    if "pgxseg" in byc["method"]:
+        p_h.append("{}\t{}\t{}\t{}\t{}\t{}".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type" ) )
 
     return p_h
 
@@ -372,7 +431,7 @@ def print_variants_pgxseg(vs):
 
 def export_pgxseg_download(ds_id, byc):
 
-    p_h = create_pgxseg_header(ds_id, byc)
+    p_h = create_pgx_column_header(ds_id, byc)
 
     open_text_streaming()
     for h_l in p_h:
@@ -381,4 +440,20 @@ def export_pgxseg_download(ds_id, byc):
     close_text_streaming()
 
 ################################################################################
+
+def interval_header(info_columns, byc):
+
+    int_line = info_columns.copy()
+
+    for iv in byc["genomic_intervals"]:
+        int_line.append("{}:{}-{}:DUP".format(iv["reference_name"], iv["start"], iv["end"]))
+    for iv in byc["genomic_intervals"]:
+        int_line.append("{}:{}-{}:DEL".format(iv["reference_name"], iv["start"], iv["end"]))
+
+    return int_line
+
+
+
+
+
 

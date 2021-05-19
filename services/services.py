@@ -65,6 +65,7 @@ def services(service):
 
             exit()
 
+
     if service_name in these_prefs["rewrites"]:    
         pat = re.compile( rf"^.+\/{service_name}\/?(.*?)$" )
         if pat.match(uri):

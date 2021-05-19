@@ -31,6 +31,7 @@ def _get_args(byc):
     parser.add_argument("-d", "--datasetids", help="datasets, comma-separated")
     parser.add_argument("-a", "--alldatasets", action='store_true', help="process all datasets")
     parser.add_argument("-t", "--test", help="test setting")
+    parser.add_argument("-p", "--prefixes", help="selected prefixes")
     byc.update({ "args": parser.parse_args() })
 
     return byc
@@ -58,6 +59,9 @@ def frequencymaps_creator():
         print("No existing dataset was provided with -d ...")
         exit()
 
+    if byc["args"].prefixes:
+        byc.update({"filters": re.split(",", byc["args"].prefixes)})
+
     generate_genomic_intervals(byc)
  
     for ds_id in byc["dataset_ids"]:
@@ -81,14 +85,29 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
     data_client = MongoClient()
     cs_coll = data_client[ ds_id ]["callsets"]
 
-    coll_no = coll_coll.estimated_document_count()
+    id_query = {}
 
+    if "filters" in byc:
+        if len(byc["filters"]) > 0:
+            f_l = []
+            for pre in byc["filters"]:
+                f_l.append( { "id": { "$regex": "^"+pre } })
+            if len(f_l) > 1:
+                id_query = { "$or": f_l }
+            else:
+                id_query = f_l[0]
+
+    coll_no = coll_coll.count_documents(id_query)
+   
     bar = Bar("Writing {} {} fMaps".format(coll_no, ds_id), max = coll_no, suffix='%(percent)d%%'+" of "+str(coll_no) )
 
-    for coll in coll_coll.find({}):
+    for coll in coll_coll.find(id_query):
+
+        bar.next()
 
         bios_query = { "$or": [
             { "biocharacteristics.id": { '$in': coll["child_terms"] } },
+            { "cohorts.id": { '$in': coll["child_terms"] } },
             { "external_references.id": { '$in': coll["child_terms"] } }
         ] }
 
@@ -123,7 +142,6 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
         if not byc["args"].test:
             fm_coll.update_one( { "id": coll["id"] }, { '$set': update_obj }, upsert=True )
 
-        bar.next()
 
     bar.finish()
 

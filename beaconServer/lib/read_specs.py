@@ -86,10 +86,10 @@ def datasets_update_latest_stats(byc):
                 for c, c_d in byc["config"]["beacon_counts"].items():
                     if c_d["info_key"] in ds_vs["counts"]:
                         ds.update({ c: ds_vs["counts"][ c_d["info_key"] ] })
-            if "filtering_terms" in byc["response_type"]:
+            if "InfoResponse" in byc["response_type"]:
                 ds.update({ "filtering_terms": stat["datasets"][ds_id]["filtering_terms"] } )
 
-        datasets.append( ds )
+            datasets.append(ds)
 
     return datasets
 
@@ -98,6 +98,8 @@ def datasets_update_latest_stats(byc):
 def update_datasets_from_dbstats(byc):
 
     ds_with_counts = datasets_update_latest_stats(byc)
+
+    print()
 
     if not "beacon_info" in byc:
         byc["beacon_info"] = { }

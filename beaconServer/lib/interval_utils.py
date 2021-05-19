@@ -187,7 +187,6 @@ def interval_cnv_maps(variants, byc):
 
     return maps, cnv_stats
 
-
 ################################################################################
 
 def _has_overlap(interval, v):

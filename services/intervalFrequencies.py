@@ -167,11 +167,7 @@ def _export_pgxmatrix_frequencies(byc, results):
     # header
 
     h_line = [ "group_id" ]
-    for ex_int in results[0]["interval_frequencies"]:
-        h_line.append("{}:{}-{}:gainF".format(ex_int["reference_name"], ex_int["start"], ex_int["end"]))
-    for ex_int in results[0]["interval_frequencies"]:
-        h_line.append("{}:{}-{}:lossF".format(ex_int["reference_name"], ex_int["start"], ex_int["end"]))
-
+    h_line = interval_header(h_line, byc)
     print("\t".join(h_line))
 
     for f_set in results:

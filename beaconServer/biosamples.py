@@ -32,6 +32,8 @@ def biosamples():
     run_beacon_init_stack(byc)
     run_beacon_one_dataset(byc)
 
+    check_alternative_callset_deliveries(byc)
+
     query_results_save_handovers(byc)
 
     # TODO: This is a stop-gap for Progenetix, adding the original structure

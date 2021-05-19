@@ -34,6 +34,8 @@ def _get_args(byc):
     parser.add_argument("-a", "--alldatasets", action='store_true', help="process all datasets")
     parser.add_argument("-f", "--filters", help="prefixed filter values, comma concatenated")
     parser.add_argument("-t", "--test", help="test setting")
+    parser.add_argument('-i', '--inputfile', help='accustom file  to specify input data')
+    parser.add_argument('-m', '--mode', help='update modus')
     byc.update({ "args": parser.parse_args() })
 
     return byc

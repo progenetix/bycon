@@ -47,7 +47,7 @@ def filtering_terms():
     parse_filters(byc)
 
     update_datasets_from_dbstats(byc)
-    
+
     create_empty_service_response(byc)
 
     populate_service_response( byc, return_filtering_terms(byc) )
@@ -69,7 +69,7 @@ def return_filtering_terms( byc ):
         if len(byc[ "dataset_ids" ]) > 0:
             if not ds["id"] in byc[ "dataset_ids" ]:
                 continue
-        if "filtering_terms" in ds:
+        if "filtering_terms" in ds.keys():
             for f_t in ds[ "filtering_terms" ]:
                 f_id = f_t[ "id" ]
                 if not f_id in fts:
@@ -88,8 +88,12 @@ def return_filtering_terms( byc ):
                     f_re = re.compile(r'^'+f)
                     if f_re.match(key):
                         ftl.append( f_t )
+            else: 
+                ftl.append( f_t )
         else: 
             ftl.append( f_t )
+
+
 
     return ftl
 

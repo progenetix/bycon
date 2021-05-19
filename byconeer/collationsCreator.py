@@ -31,6 +31,8 @@ def _get_args(byc):
     parser.add_argument("-d", "--datasetids", help="datasets, comma-separated")
     parser.add_argument("-a", "--alldatasets", action='store_true', help="process all datasets")
     parser.add_argument("-t", "--test", help="test setting")
+    parser.add_argument("-p", "--prefixes", help="selected prefixes")
+   
     byc.update({ "args": parser.parse_args() })
 
     return byc
@@ -56,7 +58,19 @@ def collations_creator():
     if len(byc["dataset_ids"]) < 1:
         print("No existing dataset was provided with -d ...")
         exit()
- 
+
+    if byc["args"].prefixes:
+        s_p = {}
+        for p in re.split(",", byc["args"].prefixes):
+            print(p)
+            if p in byc["these_prefs"]["collationed"].keys():
+                s_p.update({p:byc["these_prefs"]["collationed"][p]})
+        if len(byc["these_prefs"]["collationed"].keys()) < 1:
+            print("No existing collation prefix was provided with -p ...")
+            exit()
+
+        byc["these_prefs"].update({"collationed":s_p})
+
     for ds_id in byc["dataset_ids"]:
         print( "Creating collations for " + ds_id)
         _create_collations_from_dataset( ds_id, **byc )
@@ -66,8 +80,6 @@ def collations_creator():
 def _create_collations_from_dataset( ds_id, **byc ):
 
     coll_types = byc["these_prefs"]["collationed"]
-    # coll_types = { "NCIT": { } }
-    # coll_types = { "PMID": { } }
 
     for pre in coll_types.keys():
 
