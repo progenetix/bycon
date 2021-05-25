@@ -5,7 +5,7 @@ genome_binning:
   10kb: 10000
   cytobands: 4000000    # fallback to numeric value
 
-interval_min_fraction: 0.01
+interval_min_fraction: 0.001
 
 chromosomes:            # defined in order & as strings
   - "1"

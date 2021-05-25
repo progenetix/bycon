@@ -344,10 +344,10 @@ def check_alternative_callset_deliveries(byc):
     for cs_id, group_id in cs_ids.items():
         cs = cs_coll.find_one({"id":cs_id})
         f_line = [cs_id, cs["biosample_id"], group_id]
-        for intv in cs["info"]["statusmaps"]["dupcoverage"]:
-            f_line.append( str(intv) )
-        for intv in cs["info"]["statusmaps"]["delcoverage"]:
-            f_line.append( str(intv) )
+        for intv in cs["info"]["statusmaps"]["interval_values"]:
+            f_line.append( str(intv["dupcoverage"]) )
+        for intv in cs["info"]["statusmaps"]["interval_values"]:
+            f_line.append( str(intv["delcoverage"]) )
         print("\t".join(f_line))
 
     close_text_streaming()
@@ -356,24 +356,24 @@ def check_alternative_callset_deliveries(byc):
 
 ################################################################################
 
-def create_pgx_column_header(ds_id, byc):
-
-    p_h = []
+def print_pgx_column_header(ds_id, byc):
 
     if not "pgxseg" in byc["method"] and not "pgxmatrix" in byc["method"]:
-        return p_h
+        return
 
     mongo_client = MongoClient()
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
     cs_coll = mongo_client[ ds_id ][ "callsets" ]
 
+    open_text_streaming()
+
     for d in ["id", "assemblyId"]:
-        p_h.append("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
+        print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
     for m in ["variantCount", "biosampleCount"]:
         if m in byc["service_response"]["response"]["info"]["counts"]:
-            p_h.append("#meta=>{}={}".format(m, byc["service_response"]["response"]["info"]["counts"][m]))
+            print("#meta=>{}={}".format(m, byc["service_response"]["response"]["info"]["counts"][m]))
     if "filters" in byc["service_response"]["meta"]["received_request"]:
-        p_h.append("#meta=>filters="+','.join(byc["service_response"]["meta"]["received_request"]["filters"]))
+        print("#meta=>filters="+','.join(byc["service_response"]["meta"]["received_request"]["filters"]))
 
     for bs_id in byc["query_results"]["biosamples.id"][ "target_values" ]:
         bs = bs_coll.find_one( { "id": bs_id } )
@@ -383,10 +383,9 @@ def create_pgx_column_header(ds_id, byc):
                 h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, b_c["id"], b_c["label"], b_c["id"], b_c["label"])
         p_h.append(h_line)
 
-    if "pgxseg" in byc["method"]:
-        p_h.append("{}\t{}\t{}\t{}\t{}\t{}".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type" ) )
+    print("{}\t{}\t{}\t{}\t{}\t{}".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type" ) )
 
-    return p_h
+    return
 
 ################################################################################
 
@@ -431,11 +430,7 @@ def print_variants_pgxseg(vs):
 
 def export_pgxseg_download(ds_id, byc):
 
-    p_h = create_pgx_column_header(ds_id, byc)
-
-    open_text_streaming()
-    for h_l in p_h:
-        print(h_l)
+    print_pgx_column_header(ds_id, byc)
     print_variants_pgxseg(byc["service_response"]["response"]["results"])
     close_text_streaming()
 

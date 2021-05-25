@@ -91,19 +91,8 @@ def interval_frequencies():
                 "group_id": i_d,
                 "label": re.sub(r';', ',', collation_c["label"]),
                 "sample_count": collation_c["count"],
-                "interval_frequencies": [ ] }
-            for interval in byc["genomic_intervals"]:
-                i = interval["index"]
-                # TODO: Error if length ...
-                r_o["interval_frequencies"].append( {
-                    "index": i,
-                    "reference_name": interval["reference_name"],
-                    "start": interval["start"],
-                    "end": interval["end"],
-                    "gain_frequency": round(collation_f["frequencymaps"]["dupfrequencies"][i], 2),
-                    "loss_frequency": round(collation_f["frequencymaps"]["delfrequencies"][i], 2)
-                    })
-
+                "interval_frequencies": collation_f["frequencymap"]["interval_frequencies"] }
+                
             results.append(r_o)
 
     mongo_client.close( )

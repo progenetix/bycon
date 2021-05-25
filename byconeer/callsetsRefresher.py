@@ -94,7 +94,6 @@ def _process_dataset(ds_id, byc):
     cs_coll = data_db[ "callsets" ]
     v_coll = data_db[ "variants" ]
 
-
     bs_ids = []
 
     for bs in bios_coll.find (bios_query, {"id":1} ):
@@ -126,8 +125,8 @@ def _process_dataset(ds_id, byc):
             # TODO: callset stats as as function
             ####################################################################
 
-            cs_vs = list(v_coll.find( { "callset_id": cs["id"] } ))
-            maps, cs_cnv_stats = interval_cnv_maps(cs_vs, byc)
+            maps, cs_cnv_stats = interval_cnv_arrays(v_coll, { "callset_id": cs["id"] }, byc)
+            # maps, cs_cnv_stats = interval_cnv_maps(v_coll, { "callset_id": cs["id"] }, byc)
 
             cs["info"].update({"statusmaps": maps})
             cs["info"].update({"cnvstatistics": cs_cnv_stats})
@@ -136,6 +135,8 @@ def _process_dataset(ds_id, byc):
 
             if not byc["args"].test:
                 cs_coll.update_one( { "_id": cs["_id"] }, { '$set': cs_update_obj }  )
+            else:
+                print(json.dumps(maps, sort_keys=True, default=str))
 
             ####################################################################
             ####################################################################

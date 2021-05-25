@@ -31,7 +31,7 @@ def io_map_to_db(io_params, io_prefixes):
 
     for collection, fields in io_params.items():
 
-        if collection is 'non_collection':
+        if 'non_collection' in collection:
             continue
 
         for field_name, field_info in fields.items():
