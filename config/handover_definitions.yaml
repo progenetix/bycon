@@ -151,4 +151,9 @@ h->o_methods:
     source_key: digest
     target_collection: variants
     target_key: digest
+  variants.variantannotation_id:
+    source_collection: variants
+    source_key: variantannotation_id
+    target_collection: variants
+    target_key: variantannotation_id
 

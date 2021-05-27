@@ -26,6 +26,7 @@ collections:
   - callsets
   - individuals
   - variants
+  - variant_annotations
   - collations
   - publications
 info_db: progenetix

@@ -135,7 +135,11 @@ def execute_bycon_queries(ds_id, byc):
             prevars["query"] = { "_id": { "$in": prefetch[ "variants._id" ]["target_values"] } }
             prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
-            # print(prefetch["variants.digest"]["target_values"])
+            prevars["method"] = "variants.variantannotation_id"
+            prevars["query"] = { "_id": { "$in": prefetch[ "variants._id" ]["target_values"] } }
+            prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+
+           # print(prefetch["variants.digest"]["target_values"])
 
 
 

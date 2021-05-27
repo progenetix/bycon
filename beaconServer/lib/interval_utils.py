@@ -1,7 +1,7 @@
 from cytoband_utils import *
 import statistics
 from progress.bar import Bar
-
+import numpy as np
 
 ################################################################################
 ################################################################################
@@ -78,7 +78,7 @@ def interval_cnv_arrays(v_coll, query, byc):
 
 
     maps = {
-        "intervals": int_no,
+        "interval_count": int_no,
         "binning": byc["genome_binning"]
     }
 
@@ -161,6 +161,57 @@ def interval_cnv_arrays(v_coll, query, byc):
                 maps["min"][i] = round(values_map[ i ][0], 3)
 
     return maps, cnv_stats
+
+################################################################################
+
+def interval_counts_from_callsets(callsets, byc):
+
+    """
+    This method will analyze a set (either list or MongoDB Cursor) of Progenetix
+    callsets with CNV statusmaps and return a list of standard genomic interval
+    objects with added per-interval quantitative data.
+    """
+
+    min_f = byc["interval_definitions"]["interval_min_fraction"]
+    int_fs = byc["genomic_intervals"].copy()
+    int_no = len(int_fs)
+
+    # callsets can be either a list or a MongoDB Cursor (which has to be re-set)
+    if type(callsets).__name__ == "Cursor":
+        callsets.rewind()
+    cs_no = len(list(callsets))
+
+    fFactor = 100 / cs_no;
+    pars = {
+        "gain": {"cov_l": "dup", "val_l": "max" },
+        "loss": {"cov_l": "del", "val_l": "min" }
+    }
+
+    for t in pars.keys():
+
+        covs = np.zeros( (cs_no, int_no) )
+        vals = np.zeros( (cs_no, int_no) )
+
+        if type(callsets).__name__ == "Cursor":
+            callsets.rewind()
+
+        for i, cs in enumerate(callsets):
+            covs[i] = cs["info"]["statusmaps"][ pars[t]["cov_l"] ]
+            vals[i] = cs["info"]["statusmaps"][ pars[t]["val_l"] ]
+
+        counts = np.count_nonzero(covs >= min_f, axis=0)
+        frequencies = np.around(counts * fFactor, 3)
+        medians = np.around(np.ma.median(np.ma.masked_where(covs < min_f, vals), axis=0).filled(0), 3)
+        means = np.around(np.ma.mean(np.ma.masked_where(covs < min_f, vals), axis=0).filled(0), 3)
+
+        for i, interval in enumerate(int_fs):
+            int_fs[i].update( {
+                t+"_frequency": frequencies[i],
+                t+"_median": medians[i],
+                t+"_mean": means[i]
+            } )
+
+    return int_fs
 
 ################################################################################
 
