@@ -221,6 +221,26 @@ def response_map_results(data, byc):
 
 ################################################################################
 
+def populate_service_response( byc, results):
+
+    populate_service_header(byc, results)
+    populate_service_response_handovers(byc)
+    populate_service_response_counts(byc)
+    byc["service_response"]["response"].update({"results": results })
+    # byc["service_response"]["response"].update({"result_sets": wrap_results_in_result_set( results ) })
+
+    return byc
+
+################################################################################
+
+def wrap_results_in_result_set( results ):
+
+    return {
+        "results": results
+    }
+
+################################################################################
+
 def populate_service_header(byc, results):
 
     if isinstance(results, list):
@@ -264,19 +284,6 @@ def populate_service_response_counts(byc):
     byc["service_response"]["response"]["info"].update({ "counts": counts })
 
     return byc
-
-
-################################################################################
-
-def populate_service_response( byc, results):
-
-    populate_service_header(byc, results)
-    populate_service_response_handovers(byc)
-    populate_service_response_counts(byc)
-    byc["service_response"]["response"].update({"results": results })
-
-    return byc
-
 
 ################################################################################
 

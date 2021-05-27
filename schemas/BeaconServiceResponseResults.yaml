@@ -25,6 +25,10 @@ properties:
     type: boolean
   info:
     type: object
+  resultSets:
+    type: array
+    items:
+      type: object
   results:
     type: array
     items:

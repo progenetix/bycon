@@ -101,6 +101,8 @@ def cgi_simplify_response(byc):
     elif "response" in r:
         if "results" in r["response"]:
             byc.update({ "service_response": r["response"]["results"] })
+        elif "result_sets" in r["response"]:
+            byc.update({ "service_response": r["response"]["result_sets"][0]["results"] })
 
     return byc
 
