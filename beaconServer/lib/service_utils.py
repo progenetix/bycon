@@ -34,6 +34,64 @@ def run_beacon_init_stack(byc):
 
 ################################################################################
 
+def run_beacon(byc):
+
+    # TODO: Proper schema use
+
+    # r_schema = read_schema_files("BeaconServiceResponseResultSet", "properties")
+
+    for ds_id in byc[ "dataset_ids" ]:
+
+        # r_set = create_empty_instance(r_schema.copy())
+        r_set = {
+            "id": ds_id,
+            "type": "dataset",
+            "resultsCount": 0,
+            "exists": False,
+            "info": { "counts": { } }
+        }
+
+        if not "counts" in byc["service_response"]["response"]["info"]:
+            byc["service_response"]["response"]["info"].update({"counts":{}})
+
+        execute_bycon_queries( ds_id, byc )
+
+        h_o, e = handover_retrieve_from_query_results(byc)
+        h_o_d, e = handover_return_data( h_o, e )
+        if e:
+            response_add_error(byc, 422, e )
+        else:
+            # query_results_save_handovers(byc)
+            r_set.update({ "results_handovers": dataset_response_add_handovers(ds_id, byc) })
+
+        for c, c_d in byc["config"]["beacon_counts"].items():
+            if c_d["h->o_key"] in byc["query_results"]:
+                r_c = byc["query_results"][ c_d["h->o_key"] ]["target_count"]
+                r_set["info"]["counts"].update({ c: r_c })
+                if c in byc["service_response"]["response"]["info"]["counts"]:
+                    byc["service_response"]["response"]["info"]["counts"][c] += r_c
+                else:
+                    byc["service_response"]["response"]["info"]["counts"].update({c:r_c})
+
+        if isinstance(h_o_d, list):
+            r_no = len( h_o_d )
+            r_set.update({"resultsCount": r_no })
+            if r_no > 0:
+                r_set.update({ "exists": True, "results": h_o_d })
+                byc["service_response"]["response"]["num_total_results"] += r_no
+
+        byc["service_response"]["response"]["result_sets"].append(r_set)
+
+    if byc["service_response"]["response"]["num_total_results"] > 0:
+        byc["service_response"]["response"].update({"exists": True })
+        response_add_error(byc, 200)
+
+    cgi_break_on_errors(byc)
+
+    return byc
+
+################################################################################
+
 def run_beacon_one_dataset(byc):
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
@@ -221,6 +279,13 @@ def response_map_results(data, byc):
 
 ################################################################################
 
+def populate_resultset_response( ds_id, byc, results):
+
+
+    return byc
+
+################################################################################
+
 def populate_service_response( byc, results):
 
     populate_service_header(byc, results)
@@ -243,12 +308,14 @@ def wrap_results_in_result_set( results ):
 
 def populate_service_header(byc, results):
 
+    r_no = 0
+
     if isinstance(results, list):
         r_no = len( results )
         byc["service_response"]["response"].update({"numTotalResults": r_no })
-        if r_no > 0:
-            byc["service_response"]["response"].update({"exists": True })
-            response_add_error(byc, 200)
+    if r_no > 0:
+        byc["service_response"]["response"].update({"exists": True })
+        response_add_error(byc, 200)
 
     return byc
 
@@ -261,7 +328,7 @@ def populate_service_response_handovers(byc):
     if not "dataset_ids" in byc:
         return byc
 
-    byc["service_response"]["response"].update({ "results_handover": dataset_response_add_handovers(byc[ "dataset_ids" ][ 0 ], **byc) })
+    byc["service_response"]["response"].update({ "results_handover": dataset_response_add_handovers(byc[ "dataset_ids" ][ 0 ], byc) })
 
     return byc
 
@@ -377,8 +444,8 @@ def print_pgx_column_header(ds_id, byc):
     for d in ["id", "assemblyId"]:
         print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
     for m in ["variantCount", "biosampleCount"]:
-        if m in byc["service_response"]["response"]["info"]["counts"]:
-            print("#meta=>{}={}".format(m, byc["service_response"]["response"]["info"]["counts"][m]))
+        if m in byc["service_response"]["response"]["result_sets"][0]["info"]["counts"]:
+            print("#meta=>{}={}".format(m, byc["service_response"]["response"]["result_sets"][0]["info"]["counts"][m]))
     if "filters" in byc["service_response"]["meta"]["received_request"]:
         print("#meta=>filters="+','.join(byc["service_response"]["meta"]["received_request"]["filters"]))
 
@@ -388,7 +455,7 @@ def print_pgx_column_header(ds_id, byc):
         for b_c in bs[ "biocharacteristics" ]:
             if "NCIT:C" in b_c["id"]:
                 h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, b_c["id"], b_c["label"], b_c["id"], b_c["label"])
-        p_h.append(h_line)
+        print(h_line)
 
     print("{}\t{}\t{}\t{}\t{}\t{}".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type" ) )
 
@@ -409,9 +476,9 @@ def print_variants_json(vs):
 
 def export_variants_download(byc):
 
-    populate_service_header(byc, byc["service_response"]["response"]["results"])
+    populate_service_header(byc, byc["service_response"]["response"]["result_sets"][0]["results"])
     open_json_streaming(byc, "variants.json")
-    print_variants_json(byc["service_response"]["response"]["results"])
+    print_variants_json(byc["service_response"]["response"]["result_sets"][0]["results"])
     close_json_streaming()
 
 ################################################################################
@@ -438,7 +505,7 @@ def print_variants_pgxseg(vs):
 def export_pgxseg_download(ds_id, byc):
 
     print_pgx_column_header(ds_id, byc)
-    print_variants_pgxseg(byc["service_response"]["response"]["results"])
+    print_variants_pgxseg(byc["service_response"]["response"]["result_sets"][0]["results"])
     close_text_streaming()
 
 ################################################################################

@@ -19,7 +19,7 @@ meta:
   returned_schemas:
     Biosample: https://progenetix.org/services/schemas/Biosample/
   info: >
-    The main biosamples payload can be accessed in `response.results`.
+    The main biosamples payload can be accessed in `response.result_sets`.
 response_types:
   - BiosampleResponse
   - IndividualResponse

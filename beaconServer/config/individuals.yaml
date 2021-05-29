@@ -19,7 +19,7 @@ meta:
   returned_schemas:
     Individual: https://progenetix.org/services/schemas/Individual/
   info: >
-    The main individuals payload can be accessed in `response.results`.
+    The main individuals payload can be accessed in `response.result_sets`.
 response_types:
   - BiosampleResponse
   - IndividualResponse

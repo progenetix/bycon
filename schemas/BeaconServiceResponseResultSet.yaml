@@ -1,6 +1,6 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/BeaconServiceResponseResults/v2021-03-07
-title: BeaconServiceResponseResults
+"$id": https://progenetix.org/services/schemas/BeaconServiceResponseResultSet/v2021-05-28
+title: BeaconServiceResponseResultSet
 meta:
   contributors:
     - description: "ELIXIR Beacon project team"
@@ -18,30 +18,35 @@ meta:
   sb_status: community
 description: >
   The results of the service request.
+type: object
+required:
+  - id
+  - type
+  - exists
 properties:
-  error:
-    $ref: BeaconServiceError.yaml#/properties
+  id:
+    description: |
+      TBD
+    type: string
+    example: |
+      datasetA
+  type:
+    description: |
+      TBD
+    type: string
+    default: 'dataset'
   exists:
+    description: |
+      TBD
     type: boolean
-  info:
-    type: object
-  resultSets:
-    type: array
-    items:
-      $ref: BeaconServiceResponseResultSet.yaml#/properties
-  results:
-    type: array
-    items:
-      type: object
-  beaconHandover:
-    type: array
-    items:
-      type: object
-  resultsHandover:
-    type: array
-    items:
-      type: object
-  numTotalResults:
+  resultsCount:
     description: |
       TBD
     type: integer
+  resultsHandovers:
+    type: array
+    items:
+      type: object
+      # $ref: '#/components/schemas/Handover'
+  info:
+    type: object

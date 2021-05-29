@@ -42,7 +42,6 @@ def filtering_terms():
     parse_beacon_schema(byc)
     select_dataset_ids(byc)
     check_dataset_ids(byc)
-
     get_filter_flags(byc)
     parse_filters(byc)
 
@@ -50,7 +49,8 @@ def filtering_terms():
 
     create_empty_service_response(byc)
 
-    populate_service_response( byc, return_filtering_terms(byc) )
+    return_filtering_terms( byc )
+
     cgi_print_response( byc, 200 )
 
 ################################################################################
@@ -61,41 +61,55 @@ def return_filtering_terms( byc ):
 
     fts = { }
 
-    # for the general filter response, filters from *all* datasets are
-    # provided
-    # if only one => counts are added back
+    ft_fs = []
+    if "filters" in byc:
+        if len(byc["filters"]) > 0:
+            for f in byc["filters"]:
+                ft_fs.append('('+f+')')
+    f_s = '|'.join(ft_fs)
+    f_re = re.compile(r'^'+f_s)
 
     for ds in byc[ "beacon_info" ][ "datasets" ]:
-        if len(byc[ "dataset_ids" ]) > 0:
-            if not ds["id"] in byc[ "dataset_ids" ]:
-                continue
+
+        ds_id = ds["id"]
+
+        if not ds_id in byc[ "dataset_ids" ]:
+            continue
+
+        # r_set = create_empty_instance(r_schema.copy())
+        r_set = {
+            "id": ds_id,
+            "type": "dataset",
+            "resultsCount": 0,
+            "exists": False,
+            "filtering_terms": [ ]
+        }
+
         if "filtering_terms" in ds.keys():
-            for f_t in ds[ "filtering_terms" ]:
-                f_id = f_t[ "id" ]
-                if not f_id in fts:
-                    fts[ f_id ] = f_t
-                else:
-                    fts[ f_id ][ "count" ] += f_t[ "count" ]
-  
-    ftl = [ ]
-    for key in sorted(fts):
-        f_t = fts[key]
-        if len(byc[ "dataset_ids" ]) > 1:
-            del(f_t["count"])
-        if "filters" in byc:
-            if len(byc["filters"]) > 0:
-                for f in byc["filters"]:
-                    f_re = re.compile(r'^'+f)
-                    if f_re.match(key):
-                        ftl.append( f_t )
-            else: 
-                ftl.append( f_t )
-        else: 
-            ftl.append( f_t )
+            if len(ds[ "filtering_terms" ]) > 0:
+                for f_t in ds[ "filtering_terms" ]:
+                    if len(byc["filters"]) > 0:
+                        if f_re.match(f_t[ "id" ]):
+                            r_set["filtering_terms"].append(f_t)
+                            fts.update({ f_t["id"]: f_t })
+                    else:
+                        r_set["filtering_terms"].append(f_t)
+                        fts.update({ f_t["id"]: f_t })
+        if len(r_set["filtering_terms"]) > 0:
+            r_set.update({
+                "filtering_terms": r_set["filtering_terms"],
+                "resultsCount": len(r_set["filtering_terms"]),
+                "exists": True
+            })
 
+        byc["service_response"]["response"]["result_sets"].append(r_set)
 
+    # for key in sorted(fts):
+    #     f_t_a = fts[key]
+    #     del(f_t_a["count"])
+    #         ftl.append( f_t )
 
-    return ftl
+    return byc
 
 ################################################################################
 ################################################################################

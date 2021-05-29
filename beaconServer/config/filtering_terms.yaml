@@ -13,7 +13,7 @@ meta:
   returned_schemas:
     FilteringTerm: "https://beacon-project.io/schemas/beacon-v2/current/FilteringTerm.json"
   info: >
-    The filtering terms can be accessed in `response.results`.
+    The filtering terms can be accessed in `response.result_sets`.
 methods:
   counts:
     - counts

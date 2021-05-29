@@ -29,15 +29,19 @@ def callsets():
 
     byc = initialize_service()
     run_beacon_init_stack(byc)
-    run_beacon_one_dataset(byc)
+    run_beacon(byc)
 
+    ############################################################################
+    # TODO: Fix for multiple datasets
     check_alternative_callset_deliveries(byc)
+    ############################################################################
 
     query_results_save_handovers(byc)
     cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################
+############################################################################
 
 if __name__ == '__main__':
     main()

@@ -6,7 +6,7 @@ from cgi_utils import *
 
 ################################################################################
 
-def dataset_response_add_handovers(ds_id, **byc):
+def dataset_response_add_handovers(ds_id, byc):
 
     """podmd
     podmd"""

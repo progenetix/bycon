@@ -163,6 +163,10 @@ def cgi_print_response(byc, status_code):
         if "error" in byc["service_response"]["response"]:
             byc["service_response"]["response"]["error"].update({"error_code": status_code })
 
+    if "exists" in byc["service_response"]["response"]:
+        if byc["service_response"]["response"]["exists"] is False:
+            status_code = 422
+
     print('Content-Type: application/json')
     print('status:'+str(status_code))
     print()
