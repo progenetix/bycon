@@ -133,6 +133,7 @@ def cgi_print_response(byc, status_code):
     if "responseFormat" in f_d:
         r_f = f_d.getvalue("responseFormat")
 
+
     # TODO: fix callback ...
     # if "callback" in form_data:
     #     response = form_data.getvalue("callback")+'('+json.dumps(response, default=str)+")\n"

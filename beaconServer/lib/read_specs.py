@@ -99,8 +99,6 @@ def update_datasets_from_dbstats(byc):
 
     ds_with_counts = datasets_update_latest_stats(byc)
 
-    print()
-
     if not "beacon_info" in byc:
         byc["beacon_info"] = { }
     byc["beacon_info"].update( { "datasets": ds_with_counts } )

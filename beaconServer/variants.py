@@ -31,9 +31,7 @@ def variants():
     run_beacon(byc)
     
     ############################################################################
-
     check_alternative_variant_deliveries(byc)
-
     ############################################################################
 
     query_results_save_handovers(byc)

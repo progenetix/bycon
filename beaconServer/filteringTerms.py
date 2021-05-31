@@ -101,6 +101,7 @@ def return_filtering_terms( byc ):
                 "resultsCount": len(r_set["filtering_terms"]),
                 "exists": True
             })
+            byc["service_response"]["response"]["exists"] = True
 
         byc["service_response"]["response"]["result_sets"].append(r_set)
 
