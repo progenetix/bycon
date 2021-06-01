@@ -17,12 +17,6 @@ sys.path.append( pkg_path )
 
 from beaconServer.lib import *
 
-"""
-
-## `biosamplesRefresher`
-
-"""
-
 ################################################################################
 ################################################################################
 ################################################################################
@@ -121,17 +115,15 @@ def _process_dataset(ds_id, byc):
         for cs in cs_coll.find( cs_query ):
             cs_ids.append(cs["id"])
 
-            ####################################################################
-            # TODO: callset stats as as function
-            ####################################################################
+            if not "info" in cs:
+                cs_update_obj = { "info":{} }
+            else:
+                cs_update_obj = { "info": cs["info"] }
 
             maps, cs_cnv_stats = interval_cnv_arrays(v_coll, { "callset_id": cs["id"] }, byc)
-            # maps, cs_cnv_stats = interval_cnv_maps(v_coll, { "callset_id": cs["id"] }, byc)
 
-            cs["info"].update({"statusmaps": maps})
-            cs["info"].update({"cnvstatistics": cs_cnv_stats})
-
-            cs_update_obj = { "info.statusmaps": maps, "info.cnvstatistics": cs_cnv_stats }
+            cs_update_obj["info"].update({"statusmaps": maps})
+            cs_update_obj["info"].update({"cnvstatistics": cs_cnv_stats})
 
             if not byc["args"].test:
                 cs_coll.update_one( { "_id": cs["_id"] }, { '$set': cs_update_obj }  )
