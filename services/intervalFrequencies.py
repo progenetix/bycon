@@ -91,7 +91,7 @@ def interval_frequencies():
                 "group_id": i_d,
                 "label": re.sub(r';', ',', collation_c["label"]),
                 "sample_count": collation_c["count"],
-                "interval_frequencies": collation_f["frequencymap"]["interval_frequencies"] }
+                "interval_frequencies": collation_f["frequencymap"]["intervals"] }
                 
             results.append(r_o)
 

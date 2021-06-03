@@ -44,7 +44,7 @@ def schemas():
 
     schema_name = rest_path_value("schemas")
 
-    if schema_name is not False:
+    if not "empty_value" in schema_name:
         for s_f in s_files:
             f_name = os.path.splitext( s_f )[0]
             if f_name == schema_name:

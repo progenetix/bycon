@@ -30,6 +30,8 @@ def cgi_parse_query():
 
 def rest_path_value(key=""):
 
+    r_p_v = "empty_value"
+
     url_comps = urlparse( environ.get('REQUEST_URI') )
     url_p = url_comps.path
     p_items = re.split('/', url_p)
@@ -49,9 +51,9 @@ def rest_path_value(key=""):
             if p in [key, key+".py"]:
                 return p_items[ i ]
         elif p == key:
-            return "empty_value"
+            return r_p_v
 
-    return False
+    return r_p_v
 
 ################################################################################
 
