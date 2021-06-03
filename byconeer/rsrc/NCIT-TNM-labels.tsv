@@ -1,0 +1,117 @@
+Cancer TNM Finding Category
+	Postneoadjuvant Therapy Pathologic TNM Finding
+	Posttherapy Clinical TNM Finding
+	Pathologic TNM Finding
+		Pathologic Distant Metastasis TNM Finding
+			pM0 Stage Finding
+			pM1 Stage Finding
+				pM1a Stage Finding
+				pM1b Stage Finding
+				pM1c Stage Finding
+		Pathologic Regional Lymph Nodes TNM Finding
+			pN0 Stage Finding
+			pN1 Stage Finding
+				pN1a Stage Finding
+				pN1b Stage Finding
+				pN1c Stage Finding
+			pN2 Stage Finding
+				pN2a Stage Finding
+				pN2b Stage Finding
+				pN2c Stage Finding
+			pN3 Stage Finding
+				pN3a Stage Finding
+				pN3b Stage Finding
+				pN3c Stage Finding
+		Pathologic Primary Tumor TNM Finding
+			pT0 Stage Finding
+			pT1 Stage Finding
+				pT1a Stage Finding
+				pT1b Stage Finding
+				pT1c Stage Finding
+			pT2 Stage Finding
+				pT2a Stage Finding
+				pT2b Stage Finding
+				pT2c Stage Finding
+			pT3 Stage Finding
+				pT3a Stage Finding
+				pT3b Stage Finding
+				pT3c Stage Finding
+			pT4 Stage Finding
+				pT4a Stage Finding
+				pT4b Stage Finding
+				pT4c Stage Finding
+				pT4d Stage Finding
+	Generic TNM Finding
+		Cancer TNM Vessel Invasion Finding Category
+			Lymphovascular Invasion 0
+			Lymphovascular Invasion 1
+			Lymphovascular Invasion 9
+			Lymphovascular Invasion 2
+			Lymphovascular Invasion 3
+			Lymphovascular Invasion 4
+		Generic Distant Metastasis TNM Finding
+			M0 Stage Finding
+				cM0 (i+) Stage Finding
+			M1 Stage Finding
+				M1a Stage Finding
+				M1b Stage Finding
+				M1c Stage Finding
+			MX Stage Finding
+		Generic Regional Lymph Nodes TNM Finding
+			N0 Stage Finding
+				N0 (i-) Stage Finding
+				N0 (i+) Stage Finding
+				N0 (mol-) Stage Finding
+				N0 (mol+) Stage Finding
+			N1 Stage Finding
+				N1a Stage Finding
+				N1b Stage Finding
+					N1bI Stage Finding
+					N1bII Stage Finding
+					N1bIII Stage Finding
+					N1bIV Stage Finding
+				N1c Stage Finding
+				N1mi Stage Finding
+			N3 Stage Finding
+				N3a Stage Finding
+				N3b Stage Finding
+				N3c Stage Finding
+			NX Stage Finding
+			N2 Stage Finding
+				N2a Stage Finding
+				N2b Stage Finding
+				N2c Stage Finding
+			N4 Stage Finding
+		Generic Primary Tumor TNM Finding
+			Any T
+			T5 Stage Finding
+			T0 Stage Finding
+			T1 Stage Finding
+				T1a Stage Finding
+				T1b Stage Finding
+				T1c Stage Finding
+				T1mi Stage Finding
+			T2 Stage Finding
+				T2d Stage Finding
+				T2a Stage Finding
+				T2b Stage Finding
+				T2c Stage Finding
+			T3 Stage Finding
+				T3d Stage Finding
+				T3a Stage Finding
+				T3b Stage Finding
+				T3c Stage Finding
+			T4 Stage Finding
+				T4a Stage Finding
+				T4b Stage Finding
+				T4c Stage Finding
+				T4d Stage Finding
+			TX Stage Finding
+			Tis Stage Finding
+				Ta Stage Finding
+	Recurrent Cancer TNM Finding
+	Clinical TNM Finding
+		Clinical Primary Tumor TNM Finding
+		Clinical Regional Lymph Nodes TNM Finding
+		Clinical Distant Metastasis TNM Finding
+	Autopsy TNM Finding
