@@ -49,7 +49,7 @@ def geolocations():
     
     cgi_break_on_errors(byc)
 
-    results, e = mongo_result_list( byc["geo_db"], byc["geo_coll"], query, { '_id': False } )
+    results, e = mongo_result_list( byc["dataset_ids"][0], byc["geo_coll"], query, { '_id': False } )
     if e:
         response_add_error(byc, 422, e)
     

@@ -3,6 +3,8 @@ bycon_definition_files:
   - dataset_definitions
   - filter_definitions
 defaults:
+  dataset_ids:
+    - progenetix
   method: counts
   response_type: return_dbstats
   stats_number: 1

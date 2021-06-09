@@ -81,9 +81,42 @@ def collations():
 
     mongo_client.close( )
 
-    populate_service_response( byc, response_map_results( list(s_s.values()), byc))
+    populate_service_response( byc, _response_map_results( list(s_s.values()), byc))
     cgi_print_response( byc, 200 )
 
+################################################################################
+################################################################################
+################################################################################
+
+def _response_map_results(data, byc):
+
+    # the method keys can be overriden with "deliveryKeys"
+    d_k = response_set_delivery_keys(byc)
+
+    if len(d_k) < 1:
+        return data
+
+    results = [ ]
+
+    for res in data:
+        s = { }
+        for k in d_k:
+            # TODO: cleanup and add types in config ...
+            if "." in k:
+                k1, k2 = k.split('.')
+                if k1 in res.keys():
+                    if k2 in res[ k1 ]:
+                        s[ k ] = res[ k1 ][ k2 ]
+            elif k in res.keys():
+                if "start" in k or "end" in k:
+                    s[ k ] = int(res[ k ])
+                else:
+                    s[ k ] = res[ k ]
+        results.append( s )
+
+    return results
+
+################################################################################
 ################################################################################
 ################################################################################
 

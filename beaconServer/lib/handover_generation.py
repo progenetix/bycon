@@ -1,6 +1,7 @@
 import re, yaml
 from pymongo import MongoClient
 from os import environ, pardir, path
+import sys
 
 from cgi_utils import *
 
@@ -75,7 +76,10 @@ def query_results_save_handovers(byc):
 
     for h_o_k in byc[ "query_results" ].keys():
         h_o = byc[ "query_results" ][ h_o_k ]
-        ho_coll.update_one( { "id": h_o["id"] }, { '$set': h_o }, upsert=True )
+        h_o_size = sys.getsizeof(h_o["target_values"])
+        # print("Storage size for {}: {}Mb".format(h_o_k, h_o_size / 1000000))
+        if h_o_size < 15000000:
+            ho_coll.update_one( { "id": h_o["id"] }, { '$set': h_o }, upsert=True )
 
     ho_client.close()
 

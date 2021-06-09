@@ -36,32 +36,22 @@ def run_beacon_init_stack(byc):
 
 def run_beacon(byc):
 
-    # TODO: Proper schema use
+    for r_set in byc["service_response"]["response"]["result_sets"]:
 
-    # r_schema = read_schema_files("BeaconServiceResponseResultSet", "properties")
-
-    for ds_id in byc[ "dataset_ids" ]:
-
-        # r_set = create_empty_instance(r_schema.copy())
-        r_set = {
-            "id": ds_id,
-            "type": "dataset",
-            "resultsCount": 0,
-            "exists": False,
-            "info": { "counts": { } }
-        }
+        ds_id = r_set["id"]
 
         if not "counts" in byc["service_response"]["response"]["info"]:
             byc["service_response"]["response"]["info"].update({"counts":{}})
 
         execute_bycon_queries( ds_id, byc )
 
+        check_alternative_variant_deliveries(ds_id, byc)
+
         h_o, e = handover_retrieve_from_query_results(byc)
         h_o_d, e = handover_return_data( h_o, e )
         if e:
             response_add_error(byc, 422, e )
         else:
-            # query_results_save_handovers(byc)
             r_set.update({ "results_handovers": dataset_response_add_handovers(ds_id, byc) })
 
         for c, c_d in byc["config"]["beacon_counts"].items():
@@ -80,7 +70,7 @@ def run_beacon(byc):
                 r_set.update({ "exists": True, "results": h_o_d })
                 byc["service_response"]["response"]["num_total_results"] += r_no
 
-        byc["service_response"]["response"]["result_sets"].append(r_set)
+        # byc["service_response"]["response"]["result_sets"].append(r_set)
 
     if byc["service_response"]["response"]["num_total_results"] > 0:
         byc["service_response"]["response"].update({"exists": True })
@@ -184,7 +174,17 @@ def create_empty_service_response(byc):
             if r_d["id"] == byc["response_type"]:
                 r["meta"].update( { "returned_schemas": r_d["schema"] } )
 
-    # moving to byc
+    for ds_id in byc[ "dataset_ids" ]:
+
+        r["response"]["result_sets"].append( {
+            "id": ds_id,
+            "type": "dataset",
+            "resultsCount": 0,
+            "exists": False,
+            "info": { "counts": { } }
+
+        } )
+
     byc.update( {"service_response": r })
 
     # saving the parameters to the response
@@ -246,36 +246,6 @@ def response_set_delivery_keys(byc):
         d_k = byc["these_prefs"]["methods"][ byc["method"] ]
 
     return d_k
-
-################################################################################
-
-def response_map_results(data, byc):
-
-    # the method keys can be overriden with "deliveryKeys"
-    d_k = response_set_delivery_keys(byc)
-
-    if len(d_k) < 1:
-        return data
-
-    results = [ ]
-
-    for res in data:
-        s = { }
-        for k in d_k:
-            # TODO: cleanup and add types in config ...
-            if "." in k:
-                k1, k2 = k.split('.')
-                if k1 in res.keys():
-                    if k2 in res[ k1 ]:
-                        s[ k ] = res[ k1 ][ k2 ]
-            elif k in res.keys():
-                if "start" in k or "end" in k:
-                    s[ k ] = int(res[ k ])
-                else:
-                    s[ k ] = res[ k ]
-        results.append( s )
-
-    return results
 
 ################################################################################
 
@@ -354,21 +324,16 @@ def populate_service_response_counts(byc):
 
 ################################################################################
 
-def check_alternative_variant_deliveries(byc):
+def check_alternative_variant_deliveries(ds_id, byc):
 
     if not "VariantInSampleResponse" in byc["response_type"]:
         return byc
 
-    ds_id = byc[ "dataset_ids" ][ 0 ]
-
-    if "callsetspgxseg" in byc["method"]:
-        export_pgxseg_download(ds_id, byc)
-
-    if "callsetsvariants" in byc["method"]:
-        export_variants_download(byc)
-
     if "pgxseg" in byc["method"]:
         export_pgxseg_download(ds_id, byc)
+
+    if "variants" in byc["method"]:
+        export_variants_download(ds_id, byc)
 
     return byc
 
@@ -457,55 +422,41 @@ def print_pgx_column_header(ds_id, byc):
                 h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, b_c["id"], b_c["label"], b_c["id"], b_c["label"])
         print(h_line)
 
-    print("{}\t{}\t{}\t{}\t{}\t{}".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type" ) )
+    print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type", "reference_bases", "alternate_bases" ) )
 
     return
 
 ################################################################################
 
-def print_variants_json(vs):
+def export_variants_download(ds_id, byc):
 
-    l_i = len(vs) - 1
-    for i,v in enumerate(vs):
-        if i == l_i:
-            print(json.dumps(v, indent=None, sort_keys=False, default=str, separators=(',', ':')), end = '')
-        else:
-            print(json.dumps(v, indent=None, sort_keys=False, default=str, separators=(',', ':')), end = ',')
+    data_client = MongoClient( )
+    v_coll = data_client[ ds_id ][ "variants" ]
 
-################################################################################
-
-def export_variants_download(byc):
-
-    populate_service_header(byc, byc["service_response"]["response"]["result_sets"][0]["results"])
     open_json_streaming(byc, "variants.json")
-    print_variants_json(byc["service_response"]["response"]["result_sets"][0]["results"])
+
+    for v_id in byc["query_results"]["variants._id"]["target_values"][:-1]:
+        v = v_coll.find_one( { "_id": v_id }, { "_id": 0 } )
+        print(json.dumps(v, indent=None, sort_keys=False, default=str, separators=(',', ':')), end = ',')
+    v = v_coll.find_one( { "_id": byc["query_results"]["variants._id"]["target_values"][-1]}, { "_id": -1 }  )
+    print(json.dumps(v, indent=None, sort_keys=False, default=str, separators=(',', ':')), end = '')
+
     close_json_streaming()
 
-################################################################################
-
-def print_variants_pgxseg(vs):
-
-    for v in vs:
-        if not "variant_type" in v:
-            continue
-        if not "log2" in v:
-            v["log2"] = "."
-        try:
-            v["start"] = int(v["start"])
-        except:
-            v["start"] = "."
-        try:
-            v["end"] = int(v["end"])
-        except:
-            v["end"] = "."
-        print("{}\t{}\t{}\t{}\t{}\t{}".format(v["biosample_id"], v["reference_name"], v["start"], v["end"], v["log2"], v["variant_type"]) )
 
 ################################################################################
 
 def export_pgxseg_download(ds_id, byc):
 
+    data_client = MongoClient( )
+    v_coll = data_client[ ds_id ][ "variants" ]
+
     print_pgx_column_header(ds_id, byc)
-    print_variants_pgxseg(byc["service_response"]["response"]["result_sets"][0]["results"])
+
+    for v_id in byc["query_results"]["variants._id"]["target_values"]:
+        v = v_coll.find_one( { "_id": v_id} )
+        print_variant_pgxseg(v)
+
     close_text_streaming()
 
 ################################################################################
@@ -521,6 +472,27 @@ def interval_header(info_columns, byc):
 
     return int_line
 
+################################################################################
+
+def print_variant_pgxseg(v):
+
+    if not "variant_type" in v:
+        return
+    if not "log2" in v:
+        v["log2"] = "."
+    try:
+        v["start"] = int(v["start"])
+    except:
+        v["start"] = "."
+    try:
+        v["end"] = int(v["end"])
+    except:
+        v["end"] = "."
+    if not "reference_bases" in v:
+        v["reference_bases"] = "."
+    if not "alternate_bases" in v:
+        v["alternate_bases"] = "."
+    print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(v["biosample_id"], v["reference_name"], v["start"], v["end"], v["log2"], v["variant_type"], v["reference_bases"], v["alternate_bases"]) )
 
 
 

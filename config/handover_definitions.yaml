@@ -49,6 +49,14 @@ h->o_types:
     description: "retrieve variants matched by the query"
     h->o_key: 'variants._id'
     script_path_web: '/beacon/variants'
+
+  variantsinterpretations:
+    id: 'pgx:handover:variantsinterpretations'
+    label: "Annotations and interpretations for found Variants (.json)"
+    description: "retrieve the annotations - if existing - for the found variants"
+    h->o_key: 'variant_annotations._id'
+    script_path_web: '/beacon/variantsInterpretations'
+
   pgxseg:
     id: 'pgx:handover:pgxseg'
     label: "Found Variants (.pgxseg)"
@@ -80,7 +88,14 @@ h->o_types:
   #   description: "Start new query limited to the current samples"
   #   h->o_key: 'callsets._id'
   #   script_path_web: 'http://beacon.progenetix.org/ui/'
+
+# handover methods describe the source and target collections for stored
+# document identifiers (so far _id, id or digest). The source parameters are
+# used for creating a `distinct` operation for the `source_key` in the
+# `source_collection`, using a provided query.
+
 h->o_methods:
+
   biosamples._id:
     source_collection: biosamples
     source_key: _id
@@ -91,31 +106,28 @@ h->o_methods:
     source_key: id
     target_collection: biosamples
     target_key: id
-  bs.isid->biosamples.id:
-    source_collection: biosamples
-    source_key: id
-    target_collection: biosamples
-    target_key: id
-  bs.isid->individuals.id:
+  biosamples.individual_id->individuals.id:
     source_collection: biosamples
     source_key: individual_id
     target_collection: individuals
     target_key: id
-  cs.id:
-    source_collection: callsets
-    source_key: id
-    target_collection: callsets
-    target_key: id
+
   callsets._id:
     source_collection: callsets
     source_key: _id
     target_collection: callsets
     target_key: _id
-  callsets.bsid->biosamples.id:
+  callsets.id:
+    source_collection: callsets
+    source_key: id
+    target_collection: callsets
+    target_key: id
+  callsets.biosample_id->biosamples.id:
     source_collection: callsets
     source_key: biosample_id
     target_collection: biosamples
     target_key: id
+
   individuals._id:
     source_collection: individuals
     source_key: _id
@@ -126,34 +138,41 @@ h->o_methods:
     source_key: id
     target_collection: individuals
     target_key: id
+
   variants._id:
     source_collection: variants
     source_key: _id
     target_collection: variants
     target_key: _id
-  variants.bsid->biosamples.id:
-    source_collection: variants
-    source_key: biosample_id
-    target_collection: biosamples
-    target_key: id
-  variants.bsid->variants._id:
-    source_collection: variants
-    source_key: biosample_id
-    target_collection: variants
-    target_key: _id
-  vs.csid->cs.id:
-    source_collection: variants
-    source_key: callset_id
-    target_collection: callsets
-    target_key: id
   variants.digest:
     source_collection: variants
     source_key: digest
     target_collection: variants
     target_key: digest
-  variants.variantannotation_id:
+  variants.biosample_id->biosamples.id:
+    source_collection: variants
+    source_key: biosample_id
+    target_collection: biosamples
+    target_key: id
+  variants.callset_id->callsets.id:
+    source_collection: variants
+    source_key: callset_id
+    target_collection: callsets
+    target_key: id
+  variants.variantannotation_id->variant_annotations.id:
     source_collection: variants
     source_key: variantannotation_id
-    target_collection: variants
-    target_key: variantannotation_id
+    target_collection: variant_annotations
+    target_key: id
 
+  variant_annotations.id->variant_annotations._id:
+    source_collection: variant_annotations
+    source_key: id
+    target_collection: variant_annotations
+    target_key: _id
+
+  variant_annotations._id:
+    source_collection: variant_annotations
+    source_key: _id
+    target_collection: variant_annotations
+    target_key: _id

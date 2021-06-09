@@ -1245,14 +1245,14 @@ components:
         Format of the response.
       type: object
       properties:
-        Info:
+        info:
           type: string
           example: 'beacon-info-v2.0.0-draft.3'
-        Dataset:
+        dataset:
           type: string
           example:
             'beacon-dataset-v2.0.0-draft.3'
-        FilterTerm:
+        filteringTerm:
           type: string
           example:
             'beacon-filtering-term-v2.0.0-draft.3'
@@ -1261,35 +1261,35 @@ components:
         Format of the responses and version of the Beacon handling this request.
       type: object
       properties:
-        VariantIdentification:
+        variantIdentification:
           type: string
           example:
             ga4gh-variant-representation-v0.1
-        VariantAnnotation:
+        variantAnnotation:
           type: string
           example: beacon-variant-annotation-draft-2
-        Individual:
+        individual:
           type: string
           example: ga4gh-phenopacket-individual-v0.1
-        Biosample:
+        biosample:
           type: string
           example: ga4gh-schemablocks-biosample-v0.1
-        Run:
+        run:
           type: string
           example: beacon-run-draft-3
-        Analysis:
+        analysis:
           type: string
           example: beacon-analysis-draft-2
-        VariantInSample:
+        variantInSample:
           type: string
           example: beacon-variant-in-sample-draft-3
-        VariantInterpretation:
+        variantInterpretation:
           type: string
           example: beacon-variant-interpretation-draft-2
-        Interactor:
+        interactor:
           type: string
           example: beacon-interactor-draft-2
-        Cohort:
+        cohort:
           type: string
           example: beacon-cohort-draft-3
     InfoRequestMeta:
@@ -1338,7 +1338,7 @@ components:
       anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_annotations_schema.yaml#/components/schemas/VariantAnnotation'
         - $ref: '#/components/schemas/AlternativeSchema'
-    VariantReponseResults:
+    VariantResponseResults:
       description: |
         TBD
       properties:
@@ -1638,7 +1638,7 @@ components:
     
     ResponseMeta:
       description: |
-        Meta information about the reponse.
+        Meta information about the response.
       type: object
       properties:
         beaconId:
@@ -1731,7 +1731,7 @@ components:
           results:
             type: array
             items:
-              $ref: '#/components/schemas/VariantReponseResults'
+              $ref: '#/components/schemas/VariantResponseResults'
 
     GenomicVariantResponseContent:
       description: |

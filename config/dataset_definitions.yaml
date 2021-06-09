@@ -51,6 +51,7 @@ cellosaurus:
         - individualsdata
         - variants
         - variantslist
+        - variantsinterpretations
         - callsetsvariants
         - UCSClink
 1000genomesDRAGEN:

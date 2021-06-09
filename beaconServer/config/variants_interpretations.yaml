@@ -1,0 +1,40 @@
+defaults:
+  dataset_ids:
+    - progenetix
+  method: details
+  response_type: VariantInterpretationResponse
+  collection_name: variant_annotations
+meta:
+  returned_schemas:
+    Variant: https://progenetix.org/services/schemas/Variant/
+  info: >
+    The main variants interpretations payload can be accessed in `response.result_sets`.
+bycon_definition_files:
+  - config
+  - beacon_info
+  - beacon_mappings
+  - dataset_definitions
+  - filter_definitions
+  - handover_definitions
+  - interval_definitions
+  - variant_definitions
+all_variants_methods:
+  - callsetsvariants
+  - callsetspgxseg
+response_types:
+  - VariantInterpretationResponse
+  - IndividualResponse
+  - BiosampleResponse
+methods:
+  details:
+    - _id
+    - clinical_relevances
+    - reference_name
+    - start
+    - end
+    - variant_type
+    - reference_bases
+    - alternate_bases
+    - variant_name
+    - gene_id
+    - cytoband

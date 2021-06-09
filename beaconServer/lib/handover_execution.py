@@ -19,7 +19,8 @@ def handover_retrieve_from_query_results(byc):
 
     for r_t, r_d in byc["beacon_mappings"]["response_types"].items():
         if r_d["id"] == byc["response_type"]:
-            return byc["query_results"][ r_d["h->o_access_key"] ], False
+            if r_d["h->o_access_key"] in byc["query_results"]:
+                return byc["query_results"][ r_d["h->o_access_key"] ], False
 
     return h_o, e
 

@@ -3,6 +3,8 @@ bycon_definition_files:
   - geoloc_definitions
 defaults:
   method: concise
+  dataset_ids:
+    - progenetix
   filters:
     - PMID
   filter_definitions:

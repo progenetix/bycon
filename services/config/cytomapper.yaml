@@ -2,6 +2,9 @@ bycon_definition_files:
   - config
   - variant_definitions
   - interval_definitions
+defaults:
+  dataset_ids:
+    - progenetix
 meta:
   returned_schemas:
     GeneSpan: https://progenetix.org/services/schemas/GeneSpan/

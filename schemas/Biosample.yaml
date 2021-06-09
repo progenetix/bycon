@@ -106,6 +106,8 @@ properties:
     type: array
     items:
       "$ref": OntologyClass.yaml#/properties
+    examples:
+      - - 
   diagnosticMarkers:
     type: array
     items:

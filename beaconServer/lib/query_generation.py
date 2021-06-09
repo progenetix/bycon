@@ -80,6 +80,7 @@ def update_queries_from_path_id( byc ):
                 return byc
 
             r_t = rest_path_value(s_id)
+
             if r_t in byc["beacon_mappings"]["response_types"]:
                 byc.update({"response_type": byc["beacon_mappings"]["response_types"][r_t]["id"]})
 
@@ -315,9 +316,11 @@ def geo_query( **byc ):
     if "city" in req_type:
         geo_q = return_geo_city_query(geo_root, geo_pars)
 
+    if "id" in req_type:
+        geo_q = { "id": re.compile( r'^'+geo_pars["id"], re.IGNORECASE ) }
+
     if "geoquery" in req_type:
         geo_q = return_geo_longlat_query(geo_root, geo_pars)
-
 
     return geo_q, geo_pars
 
