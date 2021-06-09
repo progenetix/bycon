@@ -10,9 +10,6 @@ from parse_filters import *
 
 def initialize_beacon_queries(byc):
 
-    select_dataset_ids(byc)
-    check_dataset_ids(byc)
-
     get_filter_flags(byc)
     parse_filters(byc)
 
@@ -20,6 +17,9 @@ def initialize_beacon_queries(byc):
     get_variant_request_type(byc)
 
     generate_queries(byc)
+
+    select_dataset_ids(byc)
+    check_dataset_ids(byc)
 
     return byc
 
@@ -74,6 +74,7 @@ def update_queries_from_path_id( byc ):
     s_id = rest_path_value(rb_t)
     if s_id:
         if not "empty_value" in s_id:
+            byc.update({ "id_from_path": s_id })
             byc["queries"].update(
                 { pgx_base: { "id": s_id } } )
             if not "response_types" in byc["these_prefs"]:
@@ -317,10 +318,12 @@ def geo_query( **byc ):
         geo_q = return_geo_city_query(geo_root, geo_pars)
 
     if "id" in req_type:
-        geo_q = { "id": re.compile( r'^'+geo_pars["id"], re.IGNORECASE ) }
+        geo_q = { id: re.compile( r'^'+geo_pars["id"], re.IGNORECASE ) }
 
     if "geoquery" in req_type:
         geo_q = return_geo_longlat_query(geo_root, geo_pars)
+
+
 
     return geo_q, geo_pars
 

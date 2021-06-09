@@ -2,6 +2,7 @@
 progenetix:
     id: progenetix
     name: progenetix
+    idMatch: pgx
     identifier: 'org.progenetix::progenetix'
     description: "Progenetix cancer genome profiles"
     assemblyId: 'GRCh38'
@@ -32,6 +33,7 @@ progenetix:
 cellosaurus:
     id: cellosaurus
     name: cellosaurus
+    idMatch: cellos
     identifier: 'org.progenetix::cellosaurus'
     description: "annotated cellosaurus cell line variants"
     assemblyId: 'GRCh38'
@@ -57,6 +59,7 @@ cellosaurus:
 1000genomesDRAGEN:
     id: 1000genomesDRAGEN
     name: 1000genomesDRAGEN
+    idMatch: onekg
     identifier: 'org.progenetix::1000genomesDRAGEN'
     description: "1000 genomes DRAGEN analysis CNV dataset"
     createDateTime: 2021-01-29

@@ -75,6 +75,13 @@ def select_dataset_ids(byc):
 
     ds_ids = [ ]
 
+    if "id_from_path" in byc:
+        for ds_id, ds in byc[ "dataset_definitions" ].items():
+            if "idMatch" in ds:
+                if ds["idMatch"] in byc["id_from_path"]:
+                    byc.update( { "dataset_ids": [ds_id] } )
+                    return byc
+
     if "form_data" in byc:
         if "datasetIds" in byc["form_data"]:
             ds_ids = form_return_listvalue( byc["form_data"], "datasetIds" )
