@@ -98,15 +98,13 @@ def update_queries_from_hoid( byc):
         ho_db = ho_client[ byc["config"]["info_db"] ]
         ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
         h_o = ho_coll.find_one( { "id": accessid } )
-        
+
         # accessid overrides ... ?
         if h_o:
             t_k = h_o["target_key"]
             t_v = h_o["target_values"]
             c_n = h_o["target_collection"]
             t_db = h_o["source_db"]
-            if not t_db == byc["dataset_ids"][0]:
-                return byc
             h_o_q = { t_k: { '$in': t_v } }
             if c_n in byc["queries"]:
                 byc["queries"].update( { c_n: { '$and': [ h_o_q, byc["queries"][ c_n ] ] } } )

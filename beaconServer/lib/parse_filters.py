@@ -89,6 +89,7 @@ def select_dataset_ids(byc):
         # accessid overrides ... ?
         if "accessid" in byc["form_data"]:
             accessid = byc["form_data"].getvalue("accessid")
+
             ho_client = MongoClient()
             ho_db = ho_client[ byc["config"]["info_db"] ]
             ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
@@ -97,6 +98,7 @@ def select_dataset_ids(byc):
             if h_o:
                 if "source_db" in h_o:
                     ds_ids = [ h_o["source_db"] ]
+                    
 
     if len(ds_ids) > 0:
         byc.update( { "dataset_ids": ds_ids } )
