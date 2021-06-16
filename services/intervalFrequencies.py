@@ -22,7 +22,7 @@ from beaconServer.lib.interval_utils import *
 
 * https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C7376,PMID:22824167
 * https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&id=pgxcohort-TCGAcancers
-* https://progenetix.org/cgi/bycon/services/intervalFrequencies.py/?method=pgxseg&datasetIds=progenetix&filters=NCIT:C7376
+* https://progenetix.org/cgi/bycon/services/intervalFrequencies.py/?output=pgxseg&datasetIds=progenetix&filters=NCIT:C7376
 
 podmd"""
 
@@ -74,10 +74,18 @@ def interval_frequencies():
 
     mongo_client = MongoClient( )
     for ds_id in byc[ "dataset_ids" ]:
+
+        if "NCIT:C999999" in byc[ "filters" ]:
+            byc[ "filters" ] = mongo_client[ ds_id ][ f_coll_name ].distinct( "id", { "id": {"$regex": "NCIT" } } )
+
         for f in byc[ "filters" ]:
  
             collation_f = mongo_client[ ds_id ][ f_coll_name ].find_one( { "id": f } )
             collation_c = mongo_client[ ds_id ][ c_coll_name ].find_one( { "id": f } )
+
+            if byc["form_data"].getvalue("withSamples", 1) > 0:
+                if int(collation_c[ "code_matches" ]) < 1:
+                    continue
 
             if not collation_f:
                 response_add_error(byc, 422, "No collation {} was found in {}.{}".format(f, ds_id, f_coll_name))
@@ -107,7 +115,7 @@ def interval_frequencies():
 
 def _export_pgxseg_frequencies(byc, results):
 
-    if not "pgxseg" in byc["method"]:
+    if not "pgxseg" in byc["output"]:
         return
 
     open_text_streaming("interval_frequencies.pgxseg")
@@ -140,7 +148,7 @@ def _export_pgxseg_frequencies(byc, results):
 
 def _export_pgxmatrix_frequencies(byc, results):
 
-    if not "pgxmatrix" in byc["method"]:
+    if not "pgxmatrix" in byc["output"]:
         return
 
     open_text_streaming("interval_frequencies.pgxmatrix")

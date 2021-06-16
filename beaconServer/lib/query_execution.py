@@ -25,11 +25,6 @@ def mongo_result_list(db_name, coll_name, query, fields):
 
 ################################################################################
 
-# def execute_variant_interpretation_query(byc):
-
-
-
-
 def execute_bycon_queries(ds_id, byc):
 
     max_bs_number_for_v_in_query = 2500

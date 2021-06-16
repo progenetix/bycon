@@ -22,14 +22,13 @@ progenetix:
         - biosamples
         - biosampleslist
         # - phenopackets
-        - individualsdata
+        - individuals
         - variants
-        - variantslist
         - callsetsvariants
         - callsetspgxseg
         - pgxseg
         - UCSClink
-        - queryaggregation
+
 cellosaurus:
     id: cellosaurus
     name: cellosaurus
@@ -49,13 +48,12 @@ cellosaurus:
       accessType: PUBLIC
       handoverTypes:
         - biosamples
-        # - phenopackets
-        - individualsdata
+        - individuals
         - variants
-        - variantslist
         - variantsinterpretations
         - callsetsvariants
         - UCSClink
+
 1000genomesDRAGEN:
     id: 1000genomesDRAGEN
     name: 1000genomesDRAGEN
@@ -76,7 +74,6 @@ cellosaurus:
       handoverTypes:
         - biosamples
         - variants
-        - variantslist
         - callsetsvariants
         - callsetspgxseg
         - pgxseg

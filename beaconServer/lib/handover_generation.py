@@ -52,9 +52,9 @@ def dataset_response_add_handovers(ds_id, byc):
 
                 if "bedfile" in h_o_defs[ "id" ]:
                     ucsc_pos = _write_variants_bedfile(h_o, **byc)
-                    h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, h_o_t, accessid, ucsc_pos ) } )
+                    h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, accessid, ucsc_pos ) } )
                 else:
-                    h_o_r.update( { "url": _handover_create_url(this_server, h_o_defs, h_o_t, accessid, url_opts) } )
+                    h_o_r.update( { "url": _handover_create_url(this_server, h_o_defs, accessid, url_opts) } )
 
                 # TODO: needs a new schema to accommodate this not as HACK ...
                 # the phenopackets URL needs matched variants, which it wouldn't know about ...
@@ -97,19 +97,25 @@ def _handover_select_server( **byc ):
 
 ################################################################################
 
-def _handover_create_url(h_o_server, h_o_defs, h_o_t, accessid, url_opts):
+def _handover_create_url(h_o_server, h_o_defs, accessid, url_opts):
 
     if "script_path_web" in h_o_defs:
         server = h_o_server
         if "http" in h_o_defs["script_path_web"]:
             server = ""
-        return("{}{}?method={}&accessid={}{}".format(server, h_o_defs["script_path_web"], h_o_t, accessid, url_opts))
+        url = "{}{}?accessid={}".format(server, h_o_defs["script_path_web"], accessid)
+        for p in ["method", "output"]:
+            if p in h_o_defs:
+                url += "&{}={}".format(p, h_o_defs[p])
+        url += url_opts
+
+        return url
 
     return ""
 
 ################################################################################
 
-def _handover_create_ext_url(h_o_server, h_o_defs, h_o_t, accessid, ucsc_pos):
+def _handover_create_ext_url(h_o_server, h_o_defs, accessid, ucsc_pos):
 
     if "ext_url" in h_o_defs:
         if "bedfile" in h_o_defs["id"]:

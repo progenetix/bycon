@@ -316,7 +316,7 @@ def geo_query( **byc ):
         geo_q = return_geo_city_query(geo_root, geo_pars)
 
     if "id" in req_type:
-        geo_q = { id: re.compile( r'^'+geo_pars["id"], re.IGNORECASE ) }
+        geo_q = { "id": re.compile( geo_pars["id"], re.IGNORECASE ) }
 
     if "geoquery" in req_type:
         geo_q = return_geo_longlat_query(geo_root, geo_pars)

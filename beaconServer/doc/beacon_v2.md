@@ -226,7 +226,7 @@ If using `g_variants` or `variants_in_sample`, those will be treated as aliases.
           "id": "pgx:handover:cnvhistogram",
           "label": "CNV Histogram"
         },
-        "url": "https://progenetix.org/cgi-bin/PGX/cgi/samplePlots.cgi?method=cnvhistogram&;amp;accessid=30830aaa-27e9-45fc-becf-34e6f2e5a38f"
+        "url": "https://progenetix.org/cgi-bin/PGX/cgi/samplePlots.cgi?output=cnvhistogram&;amp;accessid=30830aaa-27e9-45fc-becf-34e6f2e5a38f"
       },
       {
         "description": "retrieve data of the biosamples matched by the query",
@@ -242,7 +242,7 @@ If using `g_variants` or `variants_in_sample`, those will be treated as aliases.
           "id": "pgx:handover:callsetsvariants",
           "label": "All Sample Variants (.json)"
         },
-        "url": "https://progenetix.org/beacon/variants?method=callsetsvariants&;amp;accessid=f42df9bc-5d27-4afc-846a-5e49c734c7ab"
+        "url": "https://progenetix.org/beacon/variants?output=callsetsvariants&;amp;accessid=f42df9bc-5d27-4afc-846a-5e49c734c7ab"
       },
       {
         "description": "Download all variants of matched samples - potentially huge dataset...",
@@ -250,7 +250,7 @@ If using `g_variants` or `variants_in_sample`, those will be treated as aliases.
           "id": "pgx:handover:callsetspgxseg",
           "label": "All Sample Variants (.pgxseg)"
         },
-        "url": "https://progenetix.org/beacon/variants?method=callsetspgxseg&;amp;accessid=f42df9bc-5d27-4afc-846a-5e49c734c7ab"
+        "url": "https://progenetix.org/beacon/variants?output=callsetspgxseg&;amp;accessid=f42df9bc-5d27-4afc-846a-5e49c734c7ab"
       }
     ]
   }

@@ -101,10 +101,11 @@ def cgi_simplify_response(byc):
     if "data" in r:            
         byc.update({ "service_response": r["data"] })
     elif "response" in r:
-        if "results" in r["response"]:
-            byc.update({ "service_response": r["response"]["results"] })
-        elif "result_sets" in r["response"]:
+
+        if "result_sets" in r["response"]:
             byc.update({ "service_response": r["response"]["result_sets"][0]["results"] })
+        elif "results" in r["response"]:
+            byc.update({ "service_response": r["response"]["results"] })
 
     return byc
 
@@ -125,13 +126,10 @@ def cgi_break_on_errors(byc):
 def cgi_print_response(byc, status_code):
 
     r_f = ""
-    r_t = ""
     f_d = {}
     if "form_data" in byc:
         f_d = byc["form_data"]
 
-    if "responseType" in f_d:
-        r_t = f_d.getvalue("responseType")
     if "responseFormat" in f_d:
         r_f = f_d.getvalue("responseFormat")
 
@@ -145,8 +143,9 @@ def cgi_print_response(byc, status_code):
     # pre-formatted list-like items (i.e. lists only containing objects)
     # with simple key-value pairs)
     # TODO: universal text table converter
-    if "text" in r_t:
-        cgi_simplify_response(byc)      
+    if "text" in byc["output"]:
+        cgi_simplify_response(byc)
+
         if isinstance(byc["service_response"], dict):
             byc.update({ "service_response": json.dumps(byc["service_response"], default=str) })
         if isinstance(byc["service_response"], list):

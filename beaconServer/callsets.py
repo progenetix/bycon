@@ -11,7 +11,7 @@ sys.path.append( pkg_path )
 from beaconServer import *
 
 """podmd
-* <https://progenetix.org/beacon/callsets/?referenceName=17&variantType=DEL&start=5000000&start=7676592&end=7669607&end=10000000&filters=cellosaurus&method=pgxmatrix>
+* <https://progenetix.org/beacon/callsets/?referenceName=17&variantType=DEL&start=5000000&start=7676592&end=7669607&end=10000000&filters=cellosaurus&output=pgxmatrix>
 * <https://progenetix.org/beacon/callsets?datasetIds=progenetix&filters=cellosaurus:CVCL_0030>
 podmd"""
 

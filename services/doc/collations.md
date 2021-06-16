@@ -23,6 +23,6 @@ databases
 * <https://progenetix.org/services/collations?filters=NCIT>
 * <https://progenetix.org/services/collations?filters=NCIT&method=codematches>
 * <http://progenetix.org/cgi-bin/bycon/bin/collations.py?filters=NCIT&datasetIds=progenetix&method=counts>
-* <https://progenetix.org/services/collations?filters=icdom&method=codes&responseType=text>
+* <https://progenetix.org/services/collations?filters=icdom&method=codes&output=text>
 
 <!--/podmd-->

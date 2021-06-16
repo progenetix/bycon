@@ -122,6 +122,7 @@ def initialize_service(service="NA"):
         "form_data": cgi_parse_query(),
         "these_prefs": read_local_prefs( service, sub_path ),
         "method": "",
+        "output": "",
         "errors": [ ],
         "warnings": [ ]
     }
@@ -141,6 +142,11 @@ def initialize_service(service="NA"):
         if "methods" in byc["these_prefs"]:
             if m in byc["these_prefs"]["methods"].keys():
                 byc["method"] = m
+
+    if "output" in byc["form_data"]:
+        byc["output"] = byc["form_data"].getvalue("output")
+    elif byc["method"] == "pgxseg" or byc["method"] == "pgxmatrix":
+        byc["output"] = byc["method"]
 
     return byc
 
@@ -262,17 +268,8 @@ def populate_service_response( byc, results):
     populate_service_response_handovers(byc)
     populate_service_response_counts(byc)
     byc["service_response"]["response"].update({"results": results })
-    # byc["service_response"]["response"].update({"result_sets": wrap_results_in_result_set( results ) })
 
     return byc
-
-################################################################################
-
-def wrap_results_in_result_set( results ):
-
-    return {
-        "results": results
-    }
 
 ################################################################################
 
@@ -329,7 +326,7 @@ def check_alternative_variant_deliveries(ds_id, byc):
     if not "VariantInSampleResponse" in byc["response_type"]:
         return byc
 
-    if "pgxseg" in byc["method"]:
+    if "pgxseg" in byc["output"]:
         export_pgxseg_download(ds_id, byc)
 
     if "variants" in byc["method"]:
@@ -341,7 +338,7 @@ def check_alternative_variant_deliveries(ds_id, byc):
 
 def check_alternative_callset_deliveries(byc):
 
-    if not "pgxmatrix" in byc["method"]:
+    if not "pgxmatrix" in byc["output"]:
         return byc
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
@@ -397,7 +394,7 @@ def check_alternative_callset_deliveries(byc):
 
 def print_pgx_column_header(ds_id, byc):
 
-    if not "pgxseg" in byc["method"] and not "pgxmatrix" in byc["method"]:
+    if not "pgxseg" in byc["output"] and not "pgxmatrix" in byc["output"]:
         return
 
     mongo_client = MongoClient()

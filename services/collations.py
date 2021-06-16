@@ -53,7 +53,6 @@ def collations():
             byc[ "filters" ] = [ ".?" ]
         for f in byc[ "filters" ]:
             query = { "id": re.compile(r'^'+f ) }
-            pre = re.split('-|:', f)[0]
             mongo_coll = mongo_db[ c ]
             for subset in mongo_coll.find( query ):
 

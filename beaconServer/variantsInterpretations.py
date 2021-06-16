@@ -15,7 +15,7 @@ from beaconServer import *
 ################################################################################
 
 """
-https://progenetix.test/beacon/variants/?filters=NCIT:C7712&method=pgxseg&debug=1
+https://progenetix.test/beacon/variants/?filters=NCIT:C7712&output=pgxseg&debug=1
 """
 
 ################################################################################
