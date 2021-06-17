@@ -101,9 +101,12 @@ def cgi_simplify_response(byc):
     if "data" in r:            
         byc.update({ "service_response": r["data"] })
     elif "response" in r:
-
+        # TODO
         if "result_sets" in r["response"]:
-            byc.update({ "service_response": r["response"]["result_sets"][0]["results"] })
+            if "results" in r["response"]["result_sets"][0]:
+                byc.update({ "service_response": r["response"]["result_sets"][0]["results"] })
+            elif "results" in r["response"]:
+                byc.update({ "service_response": r["response"]["results"] })
         elif "results" in r["response"]:
             byc.update({ "service_response": r["response"]["results"] })
 
