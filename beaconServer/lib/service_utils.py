@@ -255,13 +255,6 @@ def response_set_delivery_keys(byc):
 
 ################################################################################
 
-def populate_resultset_response( ds_id, byc, results):
-
-
-    return byc
-
-################################################################################
-
 def populate_service_response( byc, results):
 
     populate_service_header(byc, results)

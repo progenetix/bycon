@@ -1,5 +1,5 @@
 io_params:
-  biosamples:
+  BiosampleResponse:
     id:
       db_key: id
       type: string
@@ -65,17 +65,20 @@ io_params:
       type: string
     legacy_id:
       db_key: info.legacy_id
-      type: string
+      type: array
     individual_id:
       db_key: individual_id
       type: string
-  individuals:
+    provenance:
+      db_key: info.provenance
+      type: string
+  IndividualResponse:
     id:
       db_key: id
       type: string
     legacy_id:
       db_key: info.legacy_id
-      type: string
+      type: array
     geoprov_label:
       db_key: provenance.geo_location.properties.label
       type: string
@@ -93,11 +96,12 @@ io_params:
       type: string
     geoprov_lat:
       db_key: provenance.geo_location.properties.latitude
-      type: number
+      type: float
     geoprov_long:
       db_key: provenance.geo_location.properties.longitude
-      type: number
-  callsets:
+      type: float
+
+  AnalysisResponse:
     id:
       db_key: id
       type: string
@@ -106,57 +110,71 @@ io_params:
       type: string
     legacy_id:
       db_key: info.legacy_id
+      type: array
+
+  VariantInSampleResponse:
+    id:
+      db_key: id
       type: string
-  non-collection:
-    uid:
-      db_key: None
+    digest:
+      db_key: digest
       type: string
-    status:
-      db_key: None
+    reference_name:
+      db_key: reference_name
       type: string
-    experiment:
-      db_key: None
+    start:
+      db_key: start
+      type: integer
+    end:
+      db_key: end
+      type: integer
+    variant_type:
+      db_key: variant_type
       type: string
-    age:
-      db_key: None
+    reference_bases:
+      db_key: reference_bases
       type: string
-    sex:
-      db_key: None
+    alternate_bases:
+      db_key: alternate_bases
       type: string
-    platform_id:
-      db_key: None
-      type: string
+
 io_prefixes:
-  biosamples:
+  BiosampleResponse:
     sampled_tissue:
-      - UBERON
+      type: string
+      pre: UBERON
     histological_diagnosis:
-      - NCIT
+      type: string
+      pre: NCIT
     biocharacteristics:
-      - icdom
-      - icdot
-      - NCIT
-      - UBERON
-      - MONDO
+      type: array
+      pres:
+        - icdom
+        - icdot
+        - NCIT
+        - UBERON
+        - MONDO
     external_references:
-      - PMID
-      - geo:GSM
-      - geo:GSE
-      - geo:GPL
-      - cellosaurus
-      - arrayexpress
-    provenance.material:
-      - EFO
+      type: array
+      pres:
+        - PMID
+        - geo:GSM
+        - geo:GSE
+        - geo:GPL
+        - cellosaurus
+        - arrayexpress
     data_use_conditions:
-      - DUO
-  individuals:
+      type: string
+      pre: DUO
+  IndividualResponse:
     biocharacteristics:
       - PATO
       - NCBITaxon
     data_use_conditions:
       - DUO
-  callsets:
+  AnalysisResponse:
     data_use_conditions:
       - DUO
 
+  VariantInSampleResponse: {}
   

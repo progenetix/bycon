@@ -30,6 +30,7 @@ def callsets():
     byc = initialize_service()
     run_beacon_init_stack(byc)
     run_beacon(byc)
+    export_datatable(byc)
 
     ############################################################################
     # TODO: Fix for multiple datasets

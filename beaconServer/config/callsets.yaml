@@ -10,6 +10,7 @@ bycon_definition_files:
   - beacon_info
   - beacon_mappings
   - dataset_definitions
+  - datatable_mappings
   - filter_definitions
   - geoloc_definitions
   - handover_definitions
