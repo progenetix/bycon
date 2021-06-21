@@ -36,6 +36,12 @@ def run_beacon_init_stack(byc):
 
 def run_beacon(byc):
 
+    # TODO
+    if "results" in byc["service_response"]["response"]:
+        byc["service_response"]["response"].pop("results")
+    if "results_handover" in byc["service_response"]["response"]:
+        byc["service_response"]["response"].pop("results_handover")
+
     for r_set in byc["service_response"]["response"]["result_sets"]:
 
         ds_id = r_set["id"]
@@ -65,7 +71,7 @@ def run_beacon(byc):
 
         if isinstance(h_o_d, list):
             r_no = len( h_o_d )
-            r_set.update({"resultsCount": r_no })
+            r_set.update({"results_count": r_no })
             if r_no > 0:
                 r_set.update({ "exists": True, "results": h_o_d })
                 byc["service_response"]["response"]["num_total_results"] += r_no
@@ -77,24 +83,6 @@ def run_beacon(byc):
         response_add_error(byc, 200)
 
     cgi_break_on_errors(byc)
-
-    return byc
-
-################################################################################
-
-def run_beacon_one_dataset(byc):
-
-    ds_id = byc[ "dataset_ids" ][ 0 ]
-    response_add_parameter(byc, "dataset", ds_id )
-    execute_bycon_queries( ds_id, byc )
-
-    h_o, e = handover_retrieve_from_query_results(byc)
-    h_o_d, e = handover_return_data( h_o, e )
-    if e:
-        response_add_error(byc, 422, e )
-
-    cgi_break_on_errors(byc)
-    populate_service_response( byc, h_o_d)
 
     return byc
 
@@ -185,7 +173,7 @@ def create_empty_service_response(byc):
         r["response"]["result_sets"].append( {
             "id": ds_id,
             "type": "dataset",
-            "resultsCount": 0,
+            "results_count": 0,
             "exists": False,
             "info": { "counts": { } }
 

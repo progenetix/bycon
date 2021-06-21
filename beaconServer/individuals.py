@@ -34,6 +34,8 @@ def individuals():
 
     # Phenopackets
 
+    # print()
+
     query_results_save_handovers(byc)
     cgi_print_response( byc, 200 )
 

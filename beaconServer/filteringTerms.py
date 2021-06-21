@@ -80,7 +80,7 @@ def return_filtering_terms( byc ):
         r_set = {
             "id": ds_id,
             "type": "dataset",
-            "resultsCount": 0,
+            "results_count": 0,
             "exists": False,
             "filtering_terms": [ ]
         }
@@ -98,17 +98,12 @@ def return_filtering_terms( byc ):
         if len(r_set["filtering_terms"]) > 0:
             r_set.update({
                 "filtering_terms": r_set["filtering_terms"],
-                "resultsCount": len(r_set["filtering_terms"]),
+                "results_count": len(r_set["filtering_terms"]),
                 "exists": True
             })
             byc["service_response"]["response"]["exists"] = True
 
         byc["service_response"]["response"]["result_sets"].append(r_set)
-
-    # for key in sorted(fts):
-    #     f_t_a = fts[key]
-    #     del(f_t_a["count"])
-    #         ftl.append( f_t )
 
     return byc
 
