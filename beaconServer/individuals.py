@@ -32,6 +32,8 @@ def individuals():
     run_beacon(byc)
     export_datatable(byc)
 
+    # Phenopackets
+
     query_results_save_handovers(byc)
     cgi_print_response( byc, 200 )
 

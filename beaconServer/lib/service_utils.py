@@ -261,6 +261,7 @@ def populate_service_response( byc, results):
     populate_service_response_handovers(byc)
     populate_service_response_counts(byc)
     byc["service_response"]["response"].update({"results": results })
+    byc["service_response"]["response"].pop("result_sets")
 
     return byc
 
@@ -272,7 +273,7 @@ def populate_service_header(byc, results):
 
     if isinstance(results, list):
         r_no = len( results )
-        byc["service_response"]["response"].update({"numTotalResults": r_no })
+        byc["service_response"]["response"].update({"num_total_results": r_no })
     if r_no > 0:
         byc["service_response"]["response"].update({"exists": True })
         response_add_error(byc, 200)

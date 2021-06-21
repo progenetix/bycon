@@ -103,7 +103,9 @@ If using `g_variants` or `variants_in_sample`, those will be treated as aliases.
 
 --------------------------------------------------------------------------------
 
-### Structure of the Response
+### Structure of the 
+
+(Subject to change ...)
 
 ```
 {
@@ -146,78 +148,80 @@ If using `g_variants` or `variants_in_sample`, those will be treated as aliases.
         }
       }
     },
-    "numTotalResults": 1,
-    "results": [
-      {
-        "biocharacteristics": [
-          {
-            "id": "UBERON:0000029",
-            "label": "lymph node"
-          },
-          {
-            "id": "icdot-C77.9",
-            "label": "Lymph nodes, NOS"
-          },
-          {
-            "id": "icdom-96733",
-            "label": "Mantle cell lymphoma"
-          },
-          {
-            "id": "NCIT:C4337",
-            "label": "Mantle Cell Lymphoma"
-          }
-        ],
-        "description": "Mantle cell lymphoma",
-        "external_references": [
-          {
-            "id": "geo:GSE13331",
-            "label": null
-          }
-        ],
-        "id": "pgxbs-kftva5c8",
-        "info": {
-          "callset_ids": [
-            "pgxcs-kftvlegc"
+    "num_total_results": 1,
+    "result_sets": [
+      "results": [
+        {
+          "biocharacteristics": [
+            {
+              "id": "UBERON:0000029",
+              "label": "lymph node"
+            },
+            {
+              "id": "icdot-C77.9",
+              "label": "Lymph nodes, NOS"
+            },
+            {
+              "id": "icdom-96733",
+              "label": "Mantle cell lymphoma"
+            },
+            {
+              "id": "NCIT:C4337",
+              "label": "Mantle Cell Lymphoma"
+            }
           ],
-          "cnvstatistics": {
-            "cnvcoverage": 161672483,
-            "cnvfraction": 0.056,
-            "delcoverage": 119340049,
-            "delfraction": 0.042,
-            "dupcoverage": 42332434,
-            "dupfraction": 0.015
-          },
-          "legacy_id": [
-            "PGX_AM_BS_GSE13331_MCL98-13331"
-          ]
-        },
-        "provenance": {
-          "geo_location": {
-            "geometry": {
-              "coordinates": [
-                -123.12,
-                49.25
-              ],
-              "type": "Point"
+          "description": "Mantle cell lymphoma",
+          "external_references": [
+            {
+              "id": "geo:GSE13331",
+              "label": null
+            }
+          ],
+          "id": "pgxbs-kftva5c8",
+          "info": {
+            "callset_ids": [
+              "pgxcs-kftvlegc"
+            ],
+            "cnvstatistics": {
+              "cnvcoverage": 161672483,
+              "cnvfraction": 0.056,
+              "delcoverage": 119340049,
+              "delfraction": 0.042,
+              "dupcoverage": 42332434,
+              "dupfraction": 0.015
             },
-            "properties": {
-              "ISO3166alpha3": "CAN",
-              "city": "Vancouver",
-              "country": "Canada",
-              "label": "Vancouver, Canada",
-              "latitude": 49.25,
-              "longitude": -123.12,
-              "precision": "city"
-            },
-            "type": "Feature"
+            "legacy_id": [
+              "PGX_AM_BS_GSE13331_MCL98-13331"
+            ]
           },
-          "material": {
-            "description": null,
-            "id": "EFO:0009656",
-            "label": "neoplastic sample"
+          "provenance": {
+            "geo_location": {
+              "geometry": {
+                "coordinates": [
+                  -123.12,
+                  49.25
+                ],
+                "type": "Point"
+              },
+              "properties": {
+                "ISO3166alpha3": "CAN",
+                "city": "Vancouver",
+                "country": "Canada",
+                "label": "Vancouver, Canada",
+                "latitude": 49.25,
+                "longitude": -123.12,
+                "precision": "city"
+              },
+              "type": "Feature"
+            },
+            "material": {
+              "description": null,
+              "id": "EFO:0009656",
+              "label": "neoplastic sample"
+            }
           }
         }
-      }
+      ],
     ],
     "results_handover": [
       {

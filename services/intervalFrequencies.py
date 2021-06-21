@@ -70,6 +70,10 @@ def interval_frequencies():
     f_coll_name = byc["config"]["frequencymaps_coll"]
     c_coll_name = byc["config"]["collations_coll"]
 
+    fmap_name = "frequencymap"
+    if "codematches" in byc["method"]:
+        fmap_name = "frequencymap_codematches"
+
     results = [ ]
 
     mongo_client = MongoClient( )
@@ -83,9 +87,15 @@ def interval_frequencies():
             collation_f = mongo_client[ ds_id ][ f_coll_name ].find_one( { "id": f } )
             collation_c = mongo_client[ ds_id ][ c_coll_name ].find_one( { "id": f } )
 
-            if byc["form_data"].getvalue("withSamples", 1) > 0:
+            if collation_f is None:
+                continue
+ 
+            if byc["form_data"].getvalue("withSamples", 0) > 0:
                 if int(collation_c[ "code_matches" ]) < 1:
                     continue
+
+            if not fmap_name in collation_f:
+                continue
 
             if not collation_f:
                 response_add_error(byc, 422, "No collation {} was found in {}.{}".format(f, ds_id, f_coll_name))
@@ -93,13 +103,17 @@ def interval_frequencies():
                 response_add_error(byc, 422, "No collation {} was found in {}.{}".format(f, ds_id, c_coll_name))
             cgi_break_on_errors(byc)
 
+            s_c = collation_c["count"]
+            if "analysis_count" in collation_f[ fmap_name ]:
+               s_c = collation_f[ fmap_name ]["analysis_count"]
+
             i_d = collation_c["id"]
             r_o = {
                 "dataset_id": ds_id,
                 "group_id": i_d,
                 "label": re.sub(r';', ',', collation_c["label"]),
-                "sample_count": collation_c["count"],
-                "interval_frequencies": collation_f["frequencymap"]["intervals"] }
+                "sample_count": s_c,
+                "interval_frequencies": collation_f[ fmap_name ]["intervals"] }
                 
             results.append(r_o)
 

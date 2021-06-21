@@ -3,12 +3,12 @@
 title: Phenopacket
 meta:
   contributors:
-    - description: "Michael Baudis"
-      id: "orcid:0000-0002-9903-4248"
     - description: "Jules Jacobsen"
       id: "orcid:0000-0002-3265-15918"
     - description: "Peter Robinson"
       id: "orcid:0000-0002-0736-91998"
+    - description: "Michael Baudis"
+      id: "orcid:0000-0002-9903-4248"
   provenance:
     - description: "Progenetix `bycon` project"
       id: 'https://github.com/progenetix/bycon/'
@@ -17,7 +17,8 @@ meta:
       id: 'https://github.com/progenetix/schemas/'
   sb_status: community
 description: >
-  The Phenopacket class is a JSON-schema rewrite of the Phenopackets v2 standard.
+  The Phenopacket class is a JSON-schema rewrite of the Phenopackets v2(beta)
+  standard.
 properties:
   id:
     type: string
