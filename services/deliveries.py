@@ -42,7 +42,7 @@ def deliveries():
     q_par = ""
     for p in byc["these_prefs"]["query_keys"]:
         if p in  byc["form_data"]:
-            q_val = byc["form_data"].getvalue( p )
+            q_val = byc["form_data"][p]
             response_add_parameter(byc, p, q_val)
             # last one is kept
             q_par = p
@@ -64,7 +64,7 @@ def deliveries():
 
         cgi_break_on_errors(byc)
 
-        coll = byc["form_data"].getvalue( "collection" )
+        coll = byc["form_data"]["collection"]
         if not coll in byc["config"]["collections"]:
             response_add_error(byc, 422, f"Collection {coll} is not specified in preferences." )
 

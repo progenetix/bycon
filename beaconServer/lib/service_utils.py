@@ -126,13 +126,12 @@ def initialize_service(service="NA"):
             byc.update( { d_k: d_v } )
 
     if "method" in byc["form_data"]:
-        m = byc["form_data"].getvalue("method")
         if "methods" in byc["these_prefs"]:
-            if m in byc["these_prefs"]["methods"].keys():
-                byc["method"] = m
+            if byc["form_data"]["method"] in byc["these_prefs"]["methods"].keys():
+                byc["method"] = byc["form_data"]["method"]
 
     if "output" in byc["form_data"]:
-        byc["output"] = byc["form_data"].getvalue("output")
+        byc["output"] = byc["form_data"]["output"]
     elif byc["method"] == "pgxseg" or byc["method"] == "pgxmatrix":
         byc["output"] = byc["method"]
 

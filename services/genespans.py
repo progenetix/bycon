@@ -34,17 +34,21 @@ def genespans():
 
     assembly_id = byc["assembly_id"]
     if "assemblyId" in byc[ "form_data" ]:
-        aid = byc[ "form_data" ].getvalue("assemblyId")
+        aid = byc[ "form_data" ]["assemblyId"]
         if aid in byc["these_prefs"]["assembly_ids"]:
             assembly_id = aid
         else:
             byc["service_response"]["meta"]["warnings"].append("{} is not supported; fallback {} is being used!".format(aid, assembly_id))
-    byc["query_precision"] = byc["form_data"].getfirst('filterPrecision', "start")
+            
+    if "filterPrecision" in byc["form_data"]:
+        byc["query_precision"] = byc["form_data"]["filterPrecision"]
+    else:
+        byc["query_precision"] = "start"
     
     response_add_parameter(byc, "assemblyId", assembly_id)
 
     if "geneSymbol" in byc[ "form_data" ]:
-        gene_id = byc[ "form_data" ].getvalue("geneSymbol")
+        gene_id = byc[ "form_data" ]["geneSymbol"]
         response_add_parameter(byc, "geneSymbol", gene_id)
     else:
         # TODO: value check & response

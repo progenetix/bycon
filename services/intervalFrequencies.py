@@ -60,7 +60,7 @@ def interval_frequencies():
     if not "empty_value" in id_rest:
         byc[ "filters" ] = [ id_rest ]
     elif "id" in byc["form_data"]:
-        byc[ "filters" ] = [ byc["form_data"].getvalue( "id" ) ]
+        byc[ "filters" ] = [ byc["form_data"]["id"] ]
 
     if not "filters" in byc:
         response_add_error(byc, 422, "No value was provided for collation `id` or `filters`.")  
@@ -89,10 +89,11 @@ def interval_frequencies():
 
             if collation_f is None:
                 continue
- 
-            if byc["form_data"].getvalue("withSamples", 0) > 0:
-                if int(collation_c[ "code_matches" ]) < 1:
-                    continue
+
+            if "withSamples" in byc["form_data"]: 
+                if int(byc["form_data"]["withSamples"]) > 0:
+                    if int(collation_c[ "code_matches" ]) < 1:
+                        continue
 
             if not fmap_name in collation_f:
                 continue

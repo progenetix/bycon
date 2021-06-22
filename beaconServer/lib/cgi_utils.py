@@ -1,7 +1,7 @@
 import cgi, cgitb
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 from os import environ
-import json
+import json, sys
 import re
 
 ################################################################################
@@ -22,9 +22,34 @@ def set_debug_state(debug=0):
 
 def cgi_parse_query():
 
+    content_len = environ.get('CONTENT_LENGTH', '0')
+    method = environ.get('REQUEST_METHOD', '')
+
+    if "POST" in method:
+        query_string = environ.get('QUERY_STRING', '')
+        body = sys.stdin.read(int(content_len))
+        pars = json.loads(body)
+        if "debug" in pars:
+            if pars["debug"] > 0:
+                set_debug_state(1)
+        return pars
+
     set_debug_state()
 
-    return cgi.FieldStorage()
+    # TODO: The structure, types of the request/form object need to go to a
+    # config and some deeper processing, for proper beacon request objects
+    # also, defaults etc.
+    list_ps = ["start", "end", "datasetIds", "filters"]
+    get = cgi.FieldStorage()
+    pars = {}
+
+    for p in get:
+        if p in list_ps:
+            pars.update({p: form_return_listvalue( get, p )})
+        else:
+            pars.update({p: get.getvalue(p)})
+    
+    return pars
 
 ################################################################################
 
@@ -125,7 +150,6 @@ def cgi_break_on_errors(byc):
 
 ################################################################################
 
-# def cgi_print_response(form_data, response, status_code):
 def cgi_print_response(byc, status_code):
 
     r_f = ""
@@ -134,13 +158,7 @@ def cgi_print_response(byc, status_code):
         f_d = byc["form_data"]
 
     if "responseFormat" in f_d:
-        r_f = f_d.getvalue("responseFormat")
-
-
-    # TODO: fix callback ...
-    # if "callback" in form_data:
-    #     response = form_data.getvalue("callback")+'('+json.dumps(response, default=str)+")\n"
-        # cgi_print_text_response(form_data, data, status_code)
+        r_f = f_d["responseFormat"]
 
     # This is a simple "de-jsonify", intended to be used for already
     # pre-formatted list-like items (i.e. lists only containing objects)

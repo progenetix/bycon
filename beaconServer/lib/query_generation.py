@@ -93,7 +93,7 @@ def update_queries_from_path_id( byc ):
 def update_queries_from_hoid( byc):
 
     if "accessid" in byc["form_data"]:
-        accessid = byc["form_data"].getvalue("accessid")
+        accessid = byc["form_data"]["accessid"]
         ho_client = MongoClient()
         ho_db = ho_client[ byc["config"]["info_db"] ]
         ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
@@ -296,8 +296,11 @@ def geo_query( **byc ):
             g_default = None
             if "default" in g_p_defs[ g_k ]:
                 g_default = g_p_defs[ g_k ][ "default" ]
-            g_v = byc["form_data"].getvalue(g_k, g_default)
-            if not g_v:
+            if g_k in byc["form_data"]:
+                g_v = byc["form_data"][g_k]
+            else:
+                g_v = g_default
+            if g_v is None:
                 continue
             if not re.compile( g_p_defs[ g_k ][ "pattern" ] ).match( str( g_v ) ):
                 continue
