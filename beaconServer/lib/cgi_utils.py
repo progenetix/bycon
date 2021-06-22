@@ -23,15 +23,18 @@ def set_debug_state(debug=0):
 def cgi_parse_query():
 
     content_len = environ.get('CONTENT_LENGTH', '0')
+    content_typ = environ.get('CONTENT_TYPE', '')
     method = environ.get('REQUEST_METHOD', '')
 
     if "POST" in method:
         query_string = environ.get('QUERY_STRING', '')
         body = sys.stdin.read(int(content_len))
-        pars = json.loads(body)
-        if "debug" in pars:
-            if pars["debug"] > 0:
-                set_debug_state(1)
+        pars = {}
+        if "json" in content_typ:
+            pars = json.loads(body)
+            if "debug" in pars:
+                if pars["debug"] > 0:
+                    set_debug_state(1)
         return pars
 
     set_debug_state()
