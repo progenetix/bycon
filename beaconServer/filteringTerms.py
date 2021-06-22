@@ -46,9 +46,7 @@ def filtering_terms():
     parse_filters(byc)
 
     update_datasets_from_dbstats(byc)
-
     create_empty_service_response(byc)
-
     return_filtering_terms( byc )
 
     cgi_print_response( byc, 200 )
