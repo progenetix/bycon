@@ -20,3 +20,16 @@ refreshing:
     delcoverage: []
     dupfraction: []
     dupcoverage: []
+pathologicalTnmFindings:
+  T3:
+    id: "NCIT:C48728"
+    label: "T3 Stage Finding"
+    pattern: "^.*?T3[^abcd]*?$"
+  T3d:
+    id: "NCIT:C148412"
+    label: "T3d Stage Finding"
+    pattern: "^.*?T3d.*?$"
+  N2:
+    id: "NCIT:C48786"
+    label: "N2 Stage Finding"
+    pattern: "^.*?N2[^abcd]*?$"

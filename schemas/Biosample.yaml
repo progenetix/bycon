@@ -103,6 +103,8 @@ properties:
   pathologicalStage:
     "$ref": OntologyClass.yaml#/properties
   pathologicalTnmFinding:
+    description: >
+      A child class of NCIT:C48698 Cancer TNM Finding Category
     type: array
     items:
       "$ref": OntologyClass.yaml#/properties
