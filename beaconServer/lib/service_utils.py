@@ -107,13 +107,15 @@ def initialize_service(service="NA"):
     byc =  {
         "service_name": path.splitext(path.basename(mod.__file__))[0],
         "pkg_path": pkg_path,
-        "form_data": cgi_parse_query(),
         "these_prefs": read_local_prefs( service, sub_path ),
         "method": "",
         "output": "",
         "errors": [ ],
         "warnings": [ ]
     }
+
+    form_data, query_meta = cgi_parse_query()
+    byc.update({ "form_data": form_data, "query_meta": query_meta })
 
     if "bycon_definition_files" in byc["these_prefs"]:
         for d in byc["these_prefs"]["bycon_definition_files"]:

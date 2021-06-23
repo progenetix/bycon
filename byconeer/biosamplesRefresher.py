@@ -106,7 +106,8 @@ def _process_dataset(ds_id, pub_labels, byc):
 
     no =  len(bs_ids)
 
-    bar = Bar("{} samples from {}".format(no, ds_id), max = no, suffix='%(percent)d%%'+" of "+str(no) )
+    if not byc["args"].test:
+        bar = Bar("{} samples from {}".format(no, ds_id), max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
     count = 0
     for bsid in bs_ids:
@@ -147,8 +148,8 @@ def _process_dataset(ds_id, pub_labels, byc):
             if "tnm" in s["info"]:
                 if not isinstance(s["info"]["tnm"], str):
                     continue
-                for tnm_def in byc["these_prefs"]["pathologicalTnmFindings"].values():
-                    if re.compile( tnm_def["pattern"] ).match( s["info"]["tnm"] ):
+                for k, tnm_def in byc["these_prefs"]["pathologicalTnmFindings"].items():
+                    if re.match(r'{0}'.format(tnm_def["pattern"]), s["info"]["tnm"], re.IGNORECASE):
                         update_obj["pathological_tnm_findings"].append({
                             "id": tnm_def["id"],
                             "label": tnm_def["label"]
@@ -159,10 +160,10 @@ def _process_dataset(ds_id, pub_labels, byc):
 
         if not byc["args"].test:
             bios_coll.update_one( { "_id": s["_id"] }, { '$set': update_obj }  )
-        
-        bar.next()
+            bar.next()
 
-    bar.finish()
+    if not byc["args"].test:
+        bar.finish()
 
     print("TNMs: {}".format(count))
 

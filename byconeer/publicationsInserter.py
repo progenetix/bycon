@@ -52,7 +52,7 @@ def update_publications():
     # for Sofia => testing ... ###############
     ##########################################
 
-    form_data = cgi_parse_query()
+    form_data, query_meta = cgi_parse_query()
     new_pmid = form_data.getfirst("newPMID", "")
     if len(new_pmid) > 0:
         set_debug_state(1)

@@ -155,7 +155,7 @@ pathologicalTnmFindings:
     pattern: "^.*?T1c.*?$"
   T1mi:
     id: "NCIT:C95805"
-    label: "T1mi Stage Finding"
+    label: "T1b Stage Finding"
     pattern: "^.*?T1mi.*?$"
   T2:
     id: "NCIT:C48724"
@@ -227,7 +227,7 @@ pathologicalTnmFindings:
     pattern: "^.*?Tis.*?$"
   Ta:
     id: "NCIT:C96025"
-    label: "Ta Stage Finding"
+    label: "T4d Stage Finding"
     pattern: "^.*?Ta.*?$"
 
   

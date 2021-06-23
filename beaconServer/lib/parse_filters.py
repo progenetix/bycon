@@ -47,10 +47,6 @@ def get_filter_flags(byc):
         if "filterPrecision" in byc[ "form_data" ]:
             ff["precision"] = byc["form_data"]['filterPrecision']
 
-    # command line / legacy
-    if "exact_match" in byc:
-        ff["precision"] = "exact"
-
     byc.update( { "filter_flags": ff } )
 
     return byc

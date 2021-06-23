@@ -8,7 +8,7 @@ import re
 
 def set_debug_state(debug=0):
 
-    if debug == 1:
+    if debug > 0:
         cgitb.enable()
         print('Content-Type: text')
         print()
@@ -26,16 +26,36 @@ def cgi_parse_query():
     content_typ = environ.get('CONTENT_TYPE', '')
     method = environ.get('REQUEST_METHOD', '')
 
+    # print('Content-Type: text')
+    # print()
+    # print(method)
+
+    form_data = {}
+    query_meta = {}
+
     if "POST" in method:
-        query_string = environ.get('QUERY_STRING', '')
         body = sys.stdin.read(int(content_len))
-        pars = {}
         if "json" in content_typ:
-            pars = json.loads(body)
-            if "debug" in pars:
-                if pars["debug"] > 0:
+            jbod = json.loads(body)
+            # print(jbod)
+            if "debug" in jbod:
+                if jbod["debug"] > 0:                 
                     set_debug_state(1)
-        return pars
+            # TODO: this hacks the v2b4 structure
+            if "query" in jbod:
+                for p, v in jbod["query"].items():
+                    if p == "requestParameters":
+                        for rp, rv in v.items():
+                            form_data[rp] = rv
+                    else:
+                        form_data[p] = v
+            if "filters" in jbod:
+                form_data["filters"] = jbod["filters"]
+            if "meta" in jbod:
+                query_meta = jbod["meta"]
+
+
+        return form_data, query_meta
 
     set_debug_state()
 
@@ -44,15 +64,15 @@ def cgi_parse_query():
     # also, defaults etc.
     list_ps = ["start", "end", "datasetIds", "filters"]
     get = cgi.FieldStorage()
-    pars = {}
+    form_data = {}
 
     for p in get:
         if p in list_ps:
-            pars.update({p: form_return_listvalue( get, p )})
+            form_data.update({p: form_return_listvalue( get, p )})
         else:
-            pars.update({p: get.getvalue(p)})
+            form_data.update({p: get.getvalue(p)})
     
-    return pars
+    return form_data, query_meta
 
 ################################################################################
 

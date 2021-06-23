@@ -127,11 +127,6 @@ def update_queries_from_filters( byc ):
     Filter values are not checked for their correct syntax; this should have
     happened in a pre-parsing step and allows to use the method with non-standard
     values, e.g. to fix erroneous database entries.
-
-    ###### Options
-
-    * `exact_match` creates query items with exact (string) matches, in contrast
-    to the standard teatment of query terms as start-anchored partial matches
     
     podmd"""
         

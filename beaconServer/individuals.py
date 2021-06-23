@@ -34,6 +34,8 @@ def individuals():
 
     # Phenopackets
 
+    # if "IndividualResponse" in byc["response_type"]:
+
     # print()
 
     query_results_save_handovers(byc)
