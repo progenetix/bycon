@@ -170,16 +170,14 @@ def update_ncit_tumor_type():
     converted = converter(to_convert)
     new_annotations = make_ncit_annotation(converted)  
     
-    # Update the database
+    # Rename 'cancertype' field to 'sample_types' for all the publications in the collection:
+    cl.updateMany({'cancertype': {'$exists': True}}, {'$rename': {'cancertype': 'sample_types'}})
+    
+    # Update 'sample_type' annotations with the new NCIt annotations:
     print("\n...Updating sample type annotations on progenetix.publications...\n")
     for post in new_annotations:  
-        cl.update_one({'id': post['pmid']}, {'$set': {'cancertype': post['sample_types']}})
-        cl.update_one({'id': post['pmid']}, {'$rename': {'cancertype': 'sample_types'}})
-        
-        for p in cl.find({'id': post['pmid']}):
-            print(f'Updated tumor type annotation for the publication with "id" {post["pmid"]}.')
-            print(p)
-        
+        cl.update_one({'id': post['pmid']}, {'$set': {'sample_types': post['sample_types']}})
+        print(f'Updated tumor type annotation for the publication with "id" {post["pmid"]}.')        
 
 ##############################################################################
 
