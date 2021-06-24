@@ -34,7 +34,7 @@ def individuals():
 
     # Phenopackets
 
-    # if "IndividualResponse" in byc["response_type"]:
+    # if "individual" in byc["response_type"]:
 
     # print()
 

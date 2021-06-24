@@ -55,7 +55,7 @@ def dbstats():
 
     results = [ ]
     for stat in ds_stats:
-        byc["service_response"]["response"]["info"].update({ "date": stat["date"] })
+        byc["service_response"]["info"].update({ "date": stat["date"] })
         for ds_id, ds_vs in stat["datasets"].items():
             if len(byc[ "dataset_ids" ]) > 0:
                 if not ds_id in byc[ "dataset_ids" ]:

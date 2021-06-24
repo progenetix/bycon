@@ -33,7 +33,6 @@ def read_bycon_configs_by_name(name, byc):
 
 def read_local_prefs(service, dir_path):
 
-
     p = path.join( dir_path, "config", service+".yaml" )
 
     return load_yaml( p )
@@ -86,7 +85,7 @@ def datasets_update_latest_stats(byc):
                 for c, c_d in byc["config"]["beacon_counts"].items():
                     if c_d["info_key"] in ds_vs["counts"]:
                         ds.update({ c: ds_vs["counts"][ c_d["info_key"] ] })
-            if "InfoResponse" in byc["response_type"]:
+            if "info" in byc["response_type"]:
                 ds.update({ "filtering_terms": stat["datasets"][ds_id]["filtering_terms"] } )
 
             datasets.append(ds)

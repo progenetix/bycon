@@ -58,9 +58,9 @@ def interval_frequencies():
     id_rest = rest_path_value("intervalFrequencies")
 
     if not "empty_value" in id_rest:
-        byc[ "filters" ] = [ id_rest ]
+        byc[ "filters" ] = [ {"id": id_rest } ]
     elif "id" in byc["form_data"]:
-        byc[ "filters" ] = [ byc["form_data"]["id"] ]
+        byc[ "filters" ] = [ {"id": byc["form_data"]["id"]} ]
 
     if not "filters" in byc:
         response_add_error(byc, 422, "No value was provided for collation `id` or `filters`.")  
@@ -79,13 +79,12 @@ def interval_frequencies():
     mongo_client = MongoClient( )
     for ds_id in byc[ "dataset_ids" ]:
 
-        if "NCIT:C999999" in byc[ "filters" ]:
-            byc[ "filters" ] = mongo_client[ ds_id ][ f_coll_name ].distinct( "id", { "id": {"$regex": "NCIT" } } )
-
         for f in byc[ "filters" ]:
+
+            f_val = f["id"]
  
-            collation_f = mongo_client[ ds_id ][ f_coll_name ].find_one( { "id": f } )
-            collation_c = mongo_client[ ds_id ][ c_coll_name ].find_one( { "id": f } )
+            collation_f = mongo_client[ ds_id ][ f_coll_name ].find_one( { "id": f_val } )
+            collation_c = mongo_client[ ds_id ][ c_coll_name ].find_one( { "id": f_val } )
 
             if collation_f is None:
                 continue
@@ -99,9 +98,9 @@ def interval_frequencies():
                 continue
 
             if not collation_f:
-                response_add_error(byc, 422, "No collation {} was found in {}.{}".format(f, ds_id, f_coll_name))
+                response_add_error(byc, 422, "No collation {} was found in {}.{}".format(f_val, ds_id, f_coll_name))
             if not collation_c:
-                response_add_error(byc, 422, "No collation {} was found in {}.{}".format(f, ds_id, c_coll_name))
+                response_add_error(byc, 422, "No collation {} was found in {}.{}".format(f_val, ds_id, c_coll_name))
             cgi_break_on_errors(byc)
 
             s_c = collation_c["count"]

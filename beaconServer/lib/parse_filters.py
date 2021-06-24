@@ -12,18 +12,18 @@ def parse_filters(byc):
 
     if "form_data" in byc:
         if "filters" in byc["form_data"]:
-            f = byc["form_data"]["filters"]
-            f = _check_filter_values(f, byc["filter_definitions"])
-            if len(f) > 0:
-                byc.update( { "filters": f } )
+            fs = byc["form_data"]["filters"]
+            fs = _check_filter_values(fs, byc["filter_definitions"])
+            if len(fs) > 0:
+                byc.update( { "filters": fs } )
                 return byc
     
     if "args" in byc:
         if byc["args"].filters:
             f = byc["args"].filters.split(',')
-            f = _check_filter_values(f, byc["filter_definitions"])
-            if len(f) > 0:
-                byc.update( { "filters": f } )
+            fs = _check_filter_values(f, byc["filter_definitions"])
+            if len(fs) > 0:
+                byc.update( { "filters": fs } )
                 return byc
         
     return byc
@@ -57,9 +57,13 @@ def _check_filter_values(filters, filter_defs):
 
     checked = [ ]
     for f in filters:
-        pre = re.split('-|:', f)[0]
+        if not isinstance(f, dict):
+            f = {"id":f}
+        if not "id" in f:
+            continue
+        pre = re.split('-|:', f["id"])[0]
         if pre in filter_defs:
-            if re.compile( filter_defs[ pre ]["pattern"] ).match( f ):
+            if re.compile( filter_defs[ pre ]["pattern"] ).match( f["id"] ):
                 checked.append( f )
 
     return checked

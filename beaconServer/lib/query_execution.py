@@ -183,9 +183,9 @@ def execute_bycon_queries(ds_id, byc):
     prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
 
     if "response_type" in byc:
-        if "IndividualResponse" in byc["response_type"] or "phenopackets" in byc["response_type"]:
+        if "individual" in byc["response_type"] or "phenopackets" in byc["response_type"]:
             _prefetch_add_individuals(prevars, prefetch)
-        elif "VariantInSampleResponse" in byc["response_type"] and not "variants._id"  in prefetch:
+        elif "variantInSample" in byc["response_type"] and not "variants._id"  in prefetch:
             _prefetch_add_all_sample_variants(prevars, prefetch)
 
     if "variant_annotations" in data_collnames:

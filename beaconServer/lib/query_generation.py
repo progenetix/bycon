@@ -38,6 +38,7 @@ def generate_queries(byc):
     update_queries_from_geoquery( byc )
     purge_empty_queries( byc )
 
+
     return byc
 
 ################################################################################
@@ -143,19 +144,24 @@ def update_queries_from_filters( byc ):
     mongo_client = MongoClient()
 
     if "filters" in byc:
-        for filterv in byc[ "filters" ]:
-            pre_code = re.split('-|:', filterv)
+        for f in byc[ "filters" ]:
+            f_val = f["id"]
+            pre_code = re.split('-|:', f_val)
             pre = pre_code[0]
             if pre in byc["filter_definitions"]:
                 pre_defs = byc["filter_definitions"][pre]
+                if "remove" in pre_defs:
+                    f_val = re.sub(pre_defs["remove"], "", f_val)
+                    pre = re.sub(pre_defs["remove"], "", pre)
                 for scope in pre_defs["scopes"]:
                     m_scope = pre_defs["scopes"][scope]
+
                     if m_scope["default"]:
                         if "start" in precision or len(pre_code) == 1:
-                            query_lists[ scope ].append( { pre_defs[ "db_key" ]: { "$regex": "^"+filterv } } )
+                            query_lists[ scope ].append( { pre_defs[ "db_key" ]: { "$regex": "^"+f_val } } )
                             break
                         else:
-                            q_keys = { filterv: 1 }
+                            q_keys = { f_val: 1 }
 
                             """podmd
  
@@ -173,11 +179,11 @@ def update_queries_from_filters( byc ):
                             
                             podmd"""
                             f_re = re.compile( r"\-$" )
-                            if not f_re.match(filterv):
+                            if not f_re.match(f_val):
                                 for ds_id in byc["dataset_ids"]:
                                     mongo_coll = mongo_client[ ds_id ][ "collations" ]
                                     try:
-                                        f_def = mongo_coll.find_one( { "id": filterv })
+                                        f_def = mongo_coll.find_one( { "id": f_val })
                                         if "child_terms" in f_def:
                                             for c in f_def["child_terms"]:
                                                 if pre in c:
@@ -186,7 +192,7 @@ def update_queries_from_filters( byc ):
                                         pass
 
                             if len(q_keys.keys()) == 1:
-                                query_lists[ scope ].append( { pre_defs[ "db_key" ]: filterv } )
+                                query_lists[ scope ].append( { pre_defs[ "db_key" ]: f_val } )
                             else:
                                 f_q_l = [ ]
                                 for f_c in q_keys.keys():

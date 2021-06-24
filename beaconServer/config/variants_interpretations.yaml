@@ -2,7 +2,7 @@ defaults:
   dataset_ids:
     - progenetix
   method: details
-  response_type: VariantInterpretationResponse
+  response_type: variantInterpretation
   collection_name: variant_annotations
 meta:
   returned_schemas:
@@ -22,9 +22,9 @@ all_variants_methods:
   - callsetsvariants
   - callsetspgxseg
 response_types:
-  - VariantInterpretationResponse
-  - IndividualResponse
-  - BiosampleResponse
+  - variantInterpretation
+  - individual
+  - biosample
 methods:
   details:
     - _id

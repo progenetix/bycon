@@ -148,15 +148,12 @@ def cgi_simplify_response(byc):
 
     if "data" in r:            
         byc.update({ "service_response": r["data"] })
-    elif "response" in r:
         # TODO
-        if "result_sets" in r["response"]:
-            if "results" in r["response"]["result_sets"][0]:
-                byc.update({ "service_response": r["response"]["result_sets"][0]["results"] })
-            elif "results" in r["response"]:
-                byc.update({ "service_response": r["response"]["results"] })
-        elif "results" in r["response"]:
-            byc.update({ "service_response": r["response"]["results"] })
+    elif "result_sets" in r:
+        if "results" in r["result_sets"][0]:
+            byc.update({ "service_response": r["result_sets"][0]["results"] })
+    elif "results" in r:
+        byc.update({ "service_response": r["results"] })
 
     return byc
 
@@ -167,9 +164,9 @@ def cgi_break_on_errors(byc):
     r = byc["service_response"]
     
     if "response" in r and "form_data" in byc:
-        if "error" in r["response"]:
-            if r["response"]["error"]["error_code"] > 200:
-                cgi_print_response( byc, r["response"]["error"]["error_code"] )
+        if "error" in r:
+            if r["error"]["error_code"] > 200:
+                cgi_print_response( byc, r["error"]["error_code"] )
 
 ################################################################################
 
@@ -206,11 +203,11 @@ def cgi_print_response(byc, status_code):
         cgi_simplify_response(byc)
 
     if "response" in byc["service_response"]:
-        if "error" in byc["service_response"]["response"]:
-            byc["service_response"]["response"]["error"].update({"error_code": status_code })
+        if "error" in byc["service_response"]:
+            byc["service_response"]["error"].update({"error_code": status_code })
 
-    if "exists" in byc["service_response"]["response"]:
-        if byc["service_response"]["response"]["exists"] is False:
+    if "exists" in byc["service_response"]["response_summary"]:
+        if byc["service_response"]["response_summary"]["exists"] is False:
             status_code = 422
 
     print('Content-Type: application/json')
@@ -232,7 +229,7 @@ def open_json_streaming(byc, filename="data.json"):
     print('{"meta":', end = '')
     print(json.dumps(byc["service_response"]["meta"], indent=None, sort_keys=True, default=str), end = ",")
     print('"response":{', end = '')
-    for r_k, r_v in byc["service_response"]["response"].items():
+    for r_k, r_v in byc["service_response"].items():
         if "results" in r_k:
             continue
         print('"'+r_k+'":', end = '')

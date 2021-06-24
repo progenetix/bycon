@@ -61,7 +61,8 @@ def frequencymaps_creator():
         exit()
 
     if byc["args"].prefixes:
-        byc.update({"filters": re.split(",", byc["args"].prefixes)})
+        # using "filterlist" in contrast to the standard objects
+        byc.update({"filterlist": re.split(",", byc["args"].prefixes)})
 
     generate_genomic_intervals(byc)
  
@@ -88,10 +89,10 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
 
     id_query = {}
 
-    if "filters" in byc:
+    if "filterlist" in byc:
         if len(byc["filters"]) > 0:
             f_l = []
-            for pre in byc["filters"]:
+            for pre in byc["filterlist"]:
                 f_l.append( { "id": { "$regex": "^"+pre } })
             if len(f_l) > 1:
                 id_query = { "$or": f_l }

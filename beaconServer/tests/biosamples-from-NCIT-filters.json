@@ -3,22 +3,19 @@
     "meta": {
         "apiVersion": "2.0",
         "requestedSchemas": [
-          { "entityType": "Biosample", "schema:": "https://progenetix.org/services/schemas/Biosample/"}
+          { "entityType": "biosample", "schema:": "https://progenetix.org/services/schemas/Biosample/"}
         ]
     },
     "query": {
         "requestParameters": {
-            "datasetIds": [
-                "progenetix"
-            ]
+            "datasetIds": ["progenetix"]
         },
         "filterLogic": "OR"
     },
     "filters": [
-        "NCIT:C4536",
-        "NCIT:C95597",
-        "NCIT:C7712"
-
+        { "id": "NCIT:C4536" },
+        { "id": "NCIT:C95597" },
+        { "id": "NCIT:C7712" }
     ],
     "debug": 0
 }

@@ -124,7 +124,7 @@ If using `g_variants` or `variants_in_sample`, those will be treated as aliases.
         "assemblyId": "GRCh38"
       }
     },
-    "response_type": "BiosampleResponse",
+    "response_type": "biosample",
     "returned_schemas": {
       "Biosample": "https://progenetix.org/services/schemas/Biosample/"
     },

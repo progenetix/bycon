@@ -2,7 +2,7 @@ defaults:
   dataset_ids:
     - progenetix
   method: details
-  response_type: AnalysisResponse
+  response_type: analysis
   h->o_access_key: "callsets._id"
   genome_binning: 1Mb
 bycon_definition_files:
@@ -22,10 +22,10 @@ meta:
   info: >
     The main individuals payload can be accessed in `response.results`.
 response_types:
-  - BiosampleResponse
-  - AnalysisResponse
-  - IndividualResponse
-  - VariantInSampleResponse
+  - biosample
+  - analysis
+  - individual
+  - variantInSample
 methods:
   ids:
     - id

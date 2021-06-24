@@ -1,5 +1,5 @@
 io_params:
-  BiosampleResponse:
+  biosample:
     id:
       db_key: id
       type: string
@@ -72,7 +72,7 @@ io_params:
     provenance:
       db_key: info.provenance
       type: string
-  IndividualResponse:
+  individual:
     id:
       db_key: id
       type: string
@@ -101,7 +101,7 @@ io_params:
       db_key: provenance.geo_location.properties.longitude
       type: float
 
-  AnalysisResponse:
+  analysis:
     id:
       db_key: id
       type: string
@@ -112,7 +112,7 @@ io_params:
       db_key: info.legacy_id
       type: array
 
-  VariantInSampleResponse:
+  variantInSample:
     id:
       db_key: id
       type: string
@@ -139,7 +139,7 @@ io_params:
       type: string
 
 io_prefixes:
-  BiosampleResponse:
+  biosample:
     sampled_tissue:
       type: string
       pre: UBERON
@@ -166,15 +166,15 @@ io_prefixes:
     data_use_conditions:
       type: string
       pre: DUO
-  IndividualResponse:
+  individual:
     biocharacteristics:
       - PATO
       - NCBITaxon
     data_use_conditions:
       - DUO
-  AnalysisResponse:
+  analysis:
     data_use_conditions:
       - DUO
 
-  VariantInSampleResponse: {}
+  variantInSample: {}
   

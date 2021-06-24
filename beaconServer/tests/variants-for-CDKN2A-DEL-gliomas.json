@@ -1,0 +1,26 @@
+{
+    "$schema":"beaconRequestBody.json",
+    "meta": {
+        "apiVersion": "2.0",
+        "requestedSchemas": [
+            {
+                "entityType": "variantInSample",
+                "schema:": "https://progenetix.org/services/schemas/Variant/"
+            }
+        ]
+    },
+    "query": {
+        "requestParameters": {
+            "datasetIds": ["progenetix"],
+            "assemblyid": "GRCh38",
+            "referenceName": "9",
+            "start": [21500001, 21975098],
+            "end": [21967753, 22500000], 
+            "variantType": "DEL"
+        }
+    },
+    "filters": [
+        { "id": "NCIT:C3058" }
+    ],
+    "debug": 1
+}

@@ -10,6 +10,9 @@ collationed:
   NCIT:
     pattern: '^(NCIT)[:]C'
     is_series: False
+  NCIT-TNM:
+    pattern: '^(NCIT)[:]C'
+    is_series: False
   icdom:
     pattern: '^(icdom)[\-]\d'
     is_series: False

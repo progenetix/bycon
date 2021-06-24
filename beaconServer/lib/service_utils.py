@@ -37,17 +37,17 @@ def run_beacon_init_stack(byc):
 def run_beacon(byc):
 
     # TODO
-    if "results" in byc["service_response"]["response"]:
-        byc["service_response"]["response"].pop("results")
-    if "results_handover" in byc["service_response"]["response"]:
-        byc["service_response"]["response"].pop("results_handover")
+    if "results" in byc["service_response"]:
+        byc["service_response"].pop("results")
+    if "results_handover" in byc["service_response"]:
+        byc["service_response"].pop("results_handover")
 
-    for r_set in byc["service_response"]["response"]["result_sets"]:
+    for r_set in byc["service_response"]["result_sets"]:
 
         ds_id = r_set["id"]
 
-        if not "counts" in byc["service_response"]["response"]["info"]:
-            byc["service_response"]["response"]["info"].update({"counts":{}})
+        if not "counts" in byc["service_response"]["info"]:
+            byc["service_response"]["info"].update({"counts":{}})
 
         execute_bycon_queries( ds_id, byc )
 
@@ -64,22 +64,22 @@ def run_beacon(byc):
             if c_d["h->o_key"] in byc["query_results"]:
                 r_c = byc["query_results"][ c_d["h->o_key"] ]["target_count"]
                 r_set["info"]["counts"].update({ c: r_c })
-                if c in byc["service_response"]["response"]["info"]["counts"]:
-                    byc["service_response"]["response"]["info"]["counts"][c] += r_c
+                if c in byc["service_response"]["info"]["counts"]:
+                    byc["service_response"]["info"]["counts"][c] += r_c
                 else:
-                    byc["service_response"]["response"]["info"]["counts"].update({c:r_c})
+                    byc["service_response"]["info"]["counts"].update({c:r_c})
 
         if isinstance(h_o_d, list):
             r_no = len( h_o_d )
             r_set.update({"results_count": r_no })
             if r_no > 0:
                 r_set.update({ "exists": True, "results": h_o_d })
-                byc["service_response"]["response"]["num_total_results"] += r_no
+                byc["service_response"]["response_summary"]["num_total_results"] += r_no
 
-        # byc["service_response"]["response"]["result_sets"].append(r_set)
+        # byc["service_response"]["result_sets"].append(r_set)
 
-    if byc["service_response"]["response"]["num_total_results"] > 0:
-        byc["service_response"]["response"].update({"exists": True })
+    if byc["service_response"]["response_summary"]["num_total_results"] > 0:
+        byc["service_response"]["response_summary"].update({"exists": True })
         response_add_error(byc, 200)
 
     cgi_break_on_errors(byc)
@@ -162,16 +162,25 @@ def create_empty_service_response(byc):
             response_add_error(byc, 422, "::".join(byc["errors"]))
 
     if "queries" in byc:
-        r["response"]["info"].update({ "database_queries": json.loads(json_util.dumps( byc["queries"] ) ) } )
+        r["info"].update({ "database_queries": json.loads(json_util.dumps( byc["queries"] ) ) } )
 
     if "response_type" in byc:
         for r_t, r_d in byc["beacon_mappings"]["response_types"].items():
             if r_d["id"] == byc["response_type"]:
                 r["meta"].update( { "returned_schemas": r_d["schema"] } )
 
+    if "requestedSchemas" in byc["query_meta"]:
+        if byc["query_meta"]["requestedSchemas"][0]:
+            if "entityType" in byc["query_meta"]["requestedSchemas"][0]:
+                e_t = byc["query_meta"]["requestedSchemas"][0]["entityType"]
+                for r_t, r_d in byc["beacon_mappings"]["response_types"].items():
+                    if r_d["id"] == e_t:
+                        r["meta"].update( { "returned_schemas": r_d["schema"] } )
+                        byc.update({"response_type":e_t})
+
     for ds_id in byc[ "dataset_ids" ]:
 
-        r["response"]["result_sets"].append( {
+        r["result_sets"].append( {
             "id": ds_id,
             "type": "dataset",
             "results_count": 0,
@@ -214,7 +223,7 @@ def response_collect_errors(byc):
 
 def response_add_error(byc, code=200, message=""):
 
-    byc["service_response"]["response"]["error"].update( {
+    byc["service_response"]["error"].update( {
         "error_code": code,
         "error_message": message
     } )
@@ -225,7 +234,7 @@ def response_add_error(byc, code=200, message=""):
 
 def response_append_result(byc, result):
 
-    byc["service_response"]["response"]["results"].append( result )
+    byc["service_response"]["results"].append( result )
 
     return byc
 
@@ -249,8 +258,8 @@ def populate_service_response( byc, results):
     populate_service_header(byc, results)
     populate_service_response_handovers(byc)
     populate_service_response_counts(byc)
-    byc["service_response"]["response"].update({"results": results })
-    byc["service_response"]["response"].pop("result_sets")
+    byc["service_response"].update({"results": results })
+    byc["service_response"].pop("result_sets")
 
     return byc
 
@@ -262,9 +271,9 @@ def populate_service_header(byc, results):
 
     if isinstance(results, list):
         r_no = len( results )
-        byc["service_response"]["response"].update({"num_total_results": r_no })
+        byc["service_response"]["response_summary"].update({"num_total_results": r_no })
     if r_no > 0:
-        byc["service_response"]["response"].update({"exists": True })
+        byc["service_response"]["response_summary"].update({"exists": True })
         response_add_error(byc, 200)
 
     return byc
@@ -278,7 +287,7 @@ def populate_service_response_handovers(byc):
     if not "dataset_ids" in byc:
         return byc
 
-    byc["service_response"]["response"].update({ "results_handover": dataset_response_add_handovers(byc[ "dataset_ids" ][ 0 ], byc) })
+    byc["service_response"].update({ "results_handover": dataset_response_add_handovers(byc[ "dataset_ids" ][ 0 ], byc) })
 
     return byc
 
@@ -298,7 +307,7 @@ def populate_service_response_counts(byc):
         if c_d["h->o_key"] in byc["query_results"]:
             counts[ c ] = byc["query_results"][ c_d["h->o_key"] ]["target_count"]
 
-    byc["service_response"]["response"]["info"].update({ "counts": counts })
+    byc["service_response"]["info"].update({ "counts": counts })
 
     return byc
 
@@ -306,7 +315,7 @@ def populate_service_response_counts(byc):
 
 def check_alternative_variant_deliveries(ds_id, byc):
 
-    if not "VariantInSampleResponse" in byc["response_type"]:
+    if not "variantInSample" in byc["response_type"]:
         return byc
 
     if "pgxseg" in byc["output"]:
@@ -335,8 +344,7 @@ def check_alternative_callset_deliveries(byc):
     for d in ["id", "assemblyId"]:
         print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
 
-    if "filters" in byc["service_response"]["meta"]["received_request"]:
-        print("#meta=>filters="+','.join(byc["service_response"]["meta"]["received_request"]["filters"]))
+    _print_filters_meta_line(byc)
 
     info_columns = [ "analysis_id", "biosample_id", "group_id" ]
     h_line = interval_header(info_columns, byc)
@@ -389,10 +397,10 @@ def print_pgx_column_header(ds_id, byc):
     for d in ["id", "assemblyId"]:
         print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
     for m in ["variantCount", "biosampleCount"]:
-        if m in byc["service_response"]["response"]["result_sets"][0]["info"]["counts"]:
-            print("#meta=>{}={}".format(m, byc["service_response"]["response"]["result_sets"][0]["info"]["counts"][m]))
-    if "filters" in byc["service_response"]["meta"]["received_request"]:
-        print("#meta=>filters="+','.join(byc["service_response"]["meta"]["received_request"]["filters"]))
+        if m in byc["service_response"]["result_sets"][0]["info"]["counts"]:
+            print("#meta=>{}={}".format(m, byc["service_response"]["result_sets"][0]["info"]["counts"][m]))
+            
+    _print_filters_meta_line(byc)
 
     for bs_id in byc["query_results"]["biosamples.id"][ "target_values" ]:
         bs = bs_coll.find_one( { "id": bs_id } )
@@ -403,6 +411,18 @@ def print_pgx_column_header(ds_id, byc):
         print(h_line)
 
     print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type", "reference_bases", "alternate_bases" ) )
+
+    return
+
+################################################################################
+
+def _print_filters_meta_line(byc):
+
+    if "filters" in byc["service_response"]["meta"]["received_request"]:
+        f_vs = []
+        for f in byc["service_response"]["meta"]["received_request"]["filters"]:
+            f_vs.append(f["id"])
+        print("#meta=>filters="+','.join(f_vs))
 
     return
 

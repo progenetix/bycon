@@ -63,7 +63,7 @@ def return_filtering_terms( byc ):
     if "filters" in byc:
         if len(byc["filters"]) > 0:
             for f in byc["filters"]:
-                ft_fs.append('('+f+')')
+                ft_fs.append('('+f["id"]+')')
     f_s = '|'.join(ft_fs)
     f_re = re.compile(r'^'+f_s)
 
@@ -99,9 +99,9 @@ def return_filtering_terms( byc ):
                 "results_count": len(r_set["filtering_terms"]),
                 "exists": True
             })
-            byc["service_response"]["response"]["exists"] = True
+            byc["service_response"]["response_summary"]["exists"] = True
 
-        byc["service_response"]["response"]["result_sets"].append(r_set)
+        byc["service_response"]["result_sets"].append(r_set)
 
     return byc
 

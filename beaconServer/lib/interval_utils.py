@@ -23,7 +23,7 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
         for cb in byc["cytobands"]:
             byc["genomic_intervals"].append( {
                     "index": int(cb["i"]),
-                    "id": "{}:{}-{}".format(chro, cb["start"], cb["end"]),
+                    "id": "{}:{}-{}".format(cb["chro"], cb["start"], cb["end"]),
                     "reference_name": cb["chro"],
                     "start": int(cb["start"]),
                     "end": int(cb["end"]),

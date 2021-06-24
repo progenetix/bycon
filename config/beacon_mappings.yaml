@@ -18,35 +18,35 @@ service_names:
 
 response_types:
   biosamples:
-    id: BiosampleResponse
+    id: biosample
     schema: https://progenetix.org/services/schemas/Biosample/
     h->o_access_key: "biosamples._id"
   individuals:
-    id: IndividualResponse
+    id: individual
     schema: https://progenetix.org/services/schemas/Individual/
     h->o_access_key: "individuals._id"
   variants:
-    id: VariantInSampleResponse
+    id: variantInSample
     schema: https://progenetix.org/services/schemas/Variant/
     h->o_access_key: "variants._id"
   g_variants:
-    id: VariantInSampleResponse
+    id: variantInSample
     schema: https://progenetix.org/services/schemas/Variant/
     h->o_access_key: "variants._id"
   variants_in_sample:
-    id: VariantInSampleResponse
+    id: variantInSample
     schema: https://progenetix.org/services/schemas/Variant/
     h->o_access_key: "variants._id"
   variants_interpretations:
-    id: VariantInterpretationResponse
+    id: variantInterpretation
     schema: https://progenetix.org/services/schemas/Variant/
     h->o_access_key: "variant_annotations._id"
   callsets:
-    id: AnalysisResponse
+    id: analysis
     schema: https://progenetix.org/services/schemas/Callset/
     h->o_access_key: "callsets._id"
   analyses:
-    id: AnalysisResponse
+    id: analysis
     schema: https://progenetix.org/services/schemas/Callset/
     h->o_access_key: "callsets._id"
 

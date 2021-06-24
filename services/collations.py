@@ -50,9 +50,9 @@ def collations():
         mongo_db = mongo_client[ ds_id ]
         # TODO: Not very elegant to allow for empty filters through a regex...
         if len(byc[ "filters" ]) < 1:
-            byc[ "filters" ] = [ ".?" ]
+            byc[ "filters" ] = [ {"id": ".?"} ]
         for f in byc[ "filters" ]:
-            query = { "id": re.compile(r'^'+f ) }
+            query = { "id": re.compile(r'^'+f["id"] ) }
             mongo_coll = mongo_db[ c ]
             for subset in mongo_coll.find( query ):
 

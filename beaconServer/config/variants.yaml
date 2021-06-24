@@ -2,7 +2,7 @@ defaults:
   dataset_ids:
     - progenetix
   method: details
-  response_type: VariantInSampleResponse
+  response_type: variantInSample
   genome_binning: 1Mb
 meta:
   returned_schemas:
@@ -24,10 +24,10 @@ all_variants_methods:
   - callsetsvariants
   - callsetspgxseg
 response_types:
-  - VariantInSampleResponse
-  - VariantInterpretationResponse
-  - IndividualResponse
-  - BiosampleResponse
+  - variantInSample
+  - variantInterpretation
+  - individual
+  - biosample
 methods:
   digests:
     - digest

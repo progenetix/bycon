@@ -9,7 +9,7 @@ defaults:
   stats_number: 1
 meta:
   beacon_id: org.progenetix
-  response_type: InfoResponse
+  response_type: info
   returned_schemas:
     BeaconDataset: "https://beacon-project.io/schemas/beacon-v2/current/BeaconDataset.json"
   info: >

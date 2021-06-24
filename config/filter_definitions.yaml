@@ -1,3 +1,19 @@
+TNM.NCIT:
+  name: "National Cancer Institute Thesaurus Cancer TNM Finding"
+  url: "https://ncit.nci.nih.gov/"
+  db_key: 'pathological_tnm_findings.id'
+  scopes:
+    biosamples:
+      default: 1
+    individuals:
+      default: 0
+  pattern: '^TNM.NCIT([_\:]C\d+?\-?)?$'
+  pattern_strict: '^TNM.NCIT[_\:]C\d+?$'
+  remove: 'TNM.'
+  examples:
+    - 'TNM.NCIT:C48700'
+    - 'TNM.NCIT:C48786'
+
 # Bio-Metadata
 NCIT:
   name: "National Cancer Institute Thesaurus"

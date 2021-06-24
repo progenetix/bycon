@@ -79,9 +79,9 @@ def collect_dataset_responses(byc):
         execute_bycon_queries( ds_id, byc )
         query_results_save_handovers(byc)
 
-        if byc["response_type"] == "BiosampleResponse":
+        if byc["response_type"] == "biosample":
             access_id = byc["query_results"]["biosamples._id"][ "id" ]
-        elif byc["response_type"] == "VariantInSampleResponse":
+        elif byc["response_type"] == "variantInSample":
             access_id = byc["query_results"]["variants._id"][ "id" ]
         else:
             byc["dataset_responses"].append( create_dataset_response( ds_id, byc ) )
@@ -144,13 +144,13 @@ def create_beacon_response(byc):
     b_response = { "exists": False, "resultsHandover": [ ] }
     b_meta = { "receivedRequest": { "query": byc[ "variant_pars" ] } }
 
-    if byc["response_type"] == "BiosampleResponse":
+    if byc["response_type"] == "biosample":
         b_response = { "biosamples": { } }
         for dsr in byc[ "dataset_responses" ]:
             for k in dsr.keys():
                 b_response["biosamples"][k] = dsr[k]
         return b_response
-    elif byc["response_type"] == "VariantInSampleResponse":
+    elif byc["response_type"] == "variantInSample":
         b_response = { "g_variants": { } }
         for dsr in byc[ "dataset_responses" ]:
             for k in dsr.keys():

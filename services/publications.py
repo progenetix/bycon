@@ -118,10 +118,11 @@ def _create_filters_query( **byc ):
     count_pat = re.compile( r'^(\w+?)\:([>=<])(\d+?)$' )
 
     for f in byc[ "filters" ]:
-        pre_code = re.split('-|:', f)
+        f_val = f["id"]
+        pre_code = re.split('-|:', f_val)
         pre = pre_code[0]
-        if count_pat.match( f ):
-            pre, op, no = count_pat.match(f).group(1,2,3)
+        if count_pat.match( f_val ):
+            pre, op, no = count_pat.match(f_val).group(1,2,3)
             dbk = byc[ "filter_definitions" ][ pre ][ "db_key" ]
             if op == ">":
                 op = '$gt'
@@ -130,7 +131,7 @@ def _create_filters_query( **byc ):
             elif op == "=":
                 op = '$eq'
             else:
-                error = "uncaught filter error: {}".format(f)
+                error = "uncaught filter error: {}".format(f_val)
                 continue
             q_list.append( { dbk: { op: int(no) } } )
         elif "start" in byc[ "filter_flags" ][ "precision" ] or len(pre_code) == 1:
@@ -138,9 +139,9 @@ def _create_filters_query( **byc ):
             If there was only prefix a regex match is enforced - basically here
             for the selection of PMID labeled publications.
             podmd"""
-            q_list.append( { "id": re.compile(r'^'+f ) } )
+            q_list.append( { "id": re.compile(r'^'+f_val ) } )
         else:
-            q_list.append( { "id": f } )            
+            q_list.append( { "id": f_val } )            
 
     query = create_and_or_query_for_list('$and', q_list)
 

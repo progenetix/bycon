@@ -70,7 +70,7 @@ def get_geolocation(city, locationID): #heidelberg, heidelberg::germany
 
     where = {"city": city} 
     location = requests.get("https://progenetix.org/services/geolocations", params = where)
-    coordinates = location.json()["response"]["results"]
+    coordinates = location.json()["results"]
 
     for info in coordinates:
         if info["id"] == locationID:

@@ -43,17 +43,18 @@ def ontologymaps():
     q_list = [ ]
     pre_re = re.compile(r'^(\w+?)([:-].*?)?$')
     for f in byc[ "filters" ]:
-        if pre_re.match( f ):
-            pre = pre_re.match( f ).group(1)
+        f_val = f["id"]
+        if pre_re.match( f_val ):
+            pre = pre_re.match( f_val ).group(1)
             if pre in byc["filter_definitions"]:
                 f_re = re.compile( byc["filter_definitions"][ pre ]["pattern"] )
-                if f_re.match( f ):
+                if f_re.match( f_val ):
                     if "start" in byc[ "filter_flags" ][ "precision" ]:
-                        q_list.append( { byc["query_field"]: { "$regex": "^"+f } } )
+                        q_list.append( { byc["query_field"]: { "$regex": "^"+f_val } } )
                     elif f == pre:
-                        q_list.append( { byc["query_field"]: { "$regex": "^"+f } } )
+                        q_list.append( { byc["query_field"]: { "$regex": "^"+f_val } } )
                     else:
-                        q_list.append( { byc["query_field"]: f } )
+                        q_list.append( { byc["query_field"]: f_val } )
     if len(q_list) < 1:
         response_add_error(byc, 422, "No correct filter value provided!" )
 
@@ -80,7 +81,7 @@ def ontologymaps():
     results =  [ { "term_groups": c_g, "unique_terms": u_c } ]
 
     populate_service_response( byc, results)
-    byc["service_response"]["response"]["info"]["count"] = len(results[0]["term_groups"])
+    byc["service_response"]["info"]["count"] = len(results[0]["term_groups"])
     cgi_print_response( byc, 200 )
 
 ################################################################################
