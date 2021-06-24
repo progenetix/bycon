@@ -10,17 +10,16 @@ dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-from beaconServer.lib.cgi_utils import cgi_parse_query,cgi_print_json_response,cgi_break_on_errors
+from beaconServer.lib.cgi_utils import cgi_parse_query,cgi_print_response,cgi_break_on_errors
 from beaconServer.lib.read_specs import datasets_update_latest_stats
 from beaconServer.lib.parse_filters import select_dataset_ids, check_dataset_ids
 
 service_lib_path = path.join( pkg_path, "services", "lib" )
 sys.path.append( service_lib_path )
 
-from service_utils import initialize_service, create_empty_service_response, populate_service_response, response_add_error,response_add_parameter,response_collect_errors,response_map_results
+from service_utils import initialize_service, create_empty_service_response, populate_service_response, response_add_error,response_add_parameter,response_collect_errors
 
 from beaconServer.lib.schemas_parser import *
-
 
 """podmd
 
@@ -53,14 +52,14 @@ def datasets():
     results = datasets_update_latest_stats(byc)
 
     populate_service_response( byc, results )
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 
 def _get_history_depth(byc):
 
     if "statsNumber" in byc["form_data"]:
-        s_n = byc["form_data"].getvalue("statsNumber")
+        s_n = byc["form_data"]["statsNumber"]
         try:
             s_n = int(s_n)
         except:

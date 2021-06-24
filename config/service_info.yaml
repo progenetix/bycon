@@ -10,7 +10,7 @@ description: |
 documentationUrl: 'https://info.progenetix.org/tags/Beacon.html'
 serviceUrl: "https://bycon.progenetix.org/"
 serviceType: "GA4GHBeacon"
-welcomeUrl: "https://progenetix.org/beacon-plus/search"
+welcomeUrl: "https://progenetix.org/beacon-plus/"
 alternativeUrl: "https://progenetix.org"
 contactUrl: 'mailto:contact@progenetix.org'
 version: '2.0.pre.2020-04-07'

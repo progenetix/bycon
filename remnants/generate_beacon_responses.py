@@ -32,11 +32,11 @@ def beacon_respond_with_errors( byc ):
 
     if not byc[ "queries" ].keys():
       byc["service_response"].update( { "error": { "error_code": 422, "error_message": "No (correct) query parameters were provided." } } )
-      cgi_print_json_response( byc, 422)
+      cgi_print_response( byc, 422)
 
     if len(byc[ "dataset_ids" ]) < 1:
       byc["service_response"].update( { "error": { "error_code": 422, "error_message": "No `datasetIds` parameter provided." } } )
-      cgi_print_json_response( byc, 422)
+      cgi_print_response( byc, 422)
 
 ################################################################################
 
@@ -54,7 +54,7 @@ def respond_empty_request( byc ):
             return()
 
     # current default response
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 
@@ -66,45 +66,7 @@ def respond_service_info_request( byc ):
     if not "service-info" in environ.get('REQUEST_URI'):
         return()
 
-    cgi_print_json_response( byc, byc["service_info"], 200 )
-
-################################################################################
-
-def return_filtering_terms( byc ):
-
-    fts = { }
-
-    # for the general filter response, filters from *all* datasets are
-    # provided
-    # if only one => counts are added back
-
-    for ds in byc[ "beacon_info" ][ "datasets" ]:
-        if len(byc[ "dataset_ids" ]) > 0:
-            if not ds["id"] in byc[ "dataset_ids" ]:
-                continue
-        if "filtering_terms" in ds:
-            for f_t in ds[ "filtering_terms" ]:
-                f_id = f_t[ "id" ]
-                if not f_id in fts:
-                    fts[ f_id ] = f_t
-                else:
-                    fts[ f_id ][ "count" ] += f_t[ "count" ]
-  
-    ftl = [ ]
-    for key in sorted(fts):
-        f_t = fts[key]
-        if len(byc[ "dataset_ids" ]) > 1:
-            del(f_t["count"])
-        if "filters" in byc:
-            if len(byc["filters"]) > 0:
-                for f in byc["filters"]:
-                    f_re = re.compile(r'^'+f)
-                    if f_re.match(key):
-                        ftl.append( f_t )
-        else: 
-            ftl.append( f_t )
-
-    return ftl
+    cgi_print_response( byc, byc["service_info"], 200 )
 
 ################################################################################
 

@@ -20,3 +20,214 @@ refreshing:
     delcoverage: []
     dupfraction: []
     dupcoverage: []
+pathologicalTnmFindings:
+  M0:
+    id: "NCIT:C48699"
+    label: "M0 Stage Finding"
+    pattern: "^.*?T0[^abcd]*?$"
+  cM0:
+    id: "NCIT:C95956"
+    label: "cM0 (i+) Stage Finding"
+    pattern: "^.*?cM0.*?$"
+  M1a:
+    id: "NCIT:C48701"
+    label: "M1a Stage Finding"
+    pattern: "^.*?M1a.*?$"
+  M1b:
+    id: "NCIT:C48702"
+    label: "M1b Stage Finding"
+    pattern: "^.*?M1b.*?$"
+  M1c:
+    id: "NCIT:C48703"
+    label: "M1c Stage Finding"
+    pattern: "^.*?M1c.*?$"
+  M1:
+    id: "NCIT:C48700"
+    label: "M1 Stage Finding"
+    pattern: "^.*?M1[^abcd]*?$"
+  MX:
+    id: "NCIT:C48704"
+    label: "MX Stage Finding"
+    pattern: "^.*?MX[^abcd]*?$"
+  N0:
+    id: "NCIT:C48705"
+    label: "N0 Stage Finding"
+    pattern: "^.*?N0[^abcd]*?$"
+  N1:
+    id: "NCIT:C48706"
+    label: "N1 Stage Finding"
+    pattern: "^.*?N1[^abciI]*?$"
+  N1a:
+    id: "NCIT:C48707"
+    label: "N1a Stage Finding"
+    pattern: "^.*?N1a.*?$"
+  N1b:
+    id: "NCIT:C48708"
+    label: "N1b Stage Finding"
+    pattern: "^.*?N1b[^I]*?$"
+  N1bI:
+    id: "NCIT:C95929"
+    label: "N1bI Stage Finding"
+    pattern: "^.*?N1bI[^IV]*?$"
+  N1bII:
+    id: "NCIT:C95935"
+    label: "N1bII Stage Finding"
+    pattern: "^.*?N1bII[^I]*?$"
+  N1bIII:
+    id: "NCIT:C95936"
+    label: "N1bIII Stage Finding"
+    pattern: "^.*?N1bIII.*?$"
+  N1bIV:
+    id: "NCIT:C95937"
+    label: "N1bIV Stage Finding"
+    pattern: "^.*?N1bIV.*?$"
+  N1c:
+    id: "NCIT:C48709"
+    label: "N1c Stage Finding"
+    pattern: "^.*?N1c.*?$"
+  N1mi:
+    id: "NCIT:C95955"
+    label: "N1mi Stage Finding"
+    pattern: "^.*?N1mi.*?$"
+  N2:
+    id: "NCIT:C48786"
+    label: "N2 Stage Finding"
+    pattern: "^.*?N2[^abciI]*?$"
+  N2a:
+    id: "NCIT:C48711"
+    label: "N2a Stage Finding"
+    pattern: "^.*?N2a.*?$"
+  N2b:
+    id: "NCIT:C48712"
+    label: "N2b Stage Finding"
+    pattern: "^.*?N2b.*?$"
+  N2c:
+    id: "NCIT:C48713"
+    label: "N2c Stage Finding"
+    pattern: "^.*?N2c.*?$"
+  N3:
+    id: "NCIT:C48714"
+    label: "N3 Stage Finding"
+    pattern: "^.*?N1[^abciI]*?$"
+  N3a:
+    id: "NCIT:C48715"
+    label: "N3a Stage Finding"
+    pattern: "^.*?N3a.*?$"
+  N3b:
+    id: "NCIT:C48716"
+    label: "N3b Stage Finding"
+    pattern: "^.*?N3b.*?$"
+  N3c:
+    id: "NCIT:C48717"
+    label: "N3c Stage Finding"
+    pattern: "^.*?N3c.*?$"
+  NX:
+    id: "NCIT:C48718"
+    label: "NX Stage Finding"
+    pattern: "^.*?NX.*?$"
+  N4:
+    id: "NCIT:C96026"
+    label: "N4 Stage Finding"
+    pattern: "^.*?N4.*?$"
+  T5:
+    id: "NCIT:C132010"
+    label: "T5 Stage Finding"
+    pattern: "^.*?T5.*?$"
+  T0:
+    id: "NCIT:C48719"
+    label: "T0 Stage Finding"
+    pattern: "^.*?T0.*?$"
+  T1:
+    id: "NCIT:C48720"
+    label: "T1 Stage Finding"
+    pattern: "^.*?T1[^abcdi]*?$"
+  T1a:
+    id: "NCIT:C48721"
+    label: "T1a Stage Finding"
+    pattern: "^.*?T1a.*?$"
+  T1b:
+    id: "NCIT:C48722"
+    label: "T1b Stage Finding"
+    pattern: "^.*?T1b.*?$"
+  T1c:
+    id: "NCIT:C48723"
+    label: "T1c Stage Finding"
+    pattern: "^.*?T1c.*?$"
+  T1mi:
+    id: "NCIT:C95805"
+    label: "T1mi Stage Finding"
+    pattern: "^.*?T1mi.*?$"
+  T2:
+    id: "NCIT:C48724"
+    label: "T2 Stage Finding"
+    pattern: "^.*?T2[^abcdi]*?$"
+  T2a:
+    id: "NCIT:C48725"
+    label: "T2a Stage Finding"
+    pattern: "^.*?T2a.*?$"
+  T2b:
+    id: "NCIT:C48726"
+    label: "T2b Stage Finding"
+    pattern: "^.*?T2b.*?$"
+  T2c:
+    id: "NCIT:C48727"
+    label: "T2c Stage Finding"
+    pattern: "^.*?T2c.*?$"
+  T2d:
+    id: "NCIT:C148411"
+    label: "T2d Stage Finding"
+    pattern: "^.*?T2d.*?$"
+  T3:
+    id: "NCIT:C48728"
+    label: "T3 Stage Finding"
+    pattern: "^.*?T3[^abcd]*?$"
+  T3a:
+    id: "NCIT:C48729"
+    label: "T3a Stage Finding"
+    pattern: "^.*?T3a.*?$"
+  T3b:
+    id: "NCIT:C48730"
+    label: "T3b Stage Finding"
+    pattern: "^.*?T3b.*?$"
+  T3c:
+    id: "NCIT:C48731"
+    label: "T3c Stage Finding"
+    pattern: "^.*?T3c.*?$"
+  T3d:
+    id: "NCIT:C148412"
+    label: "T3d Stage Finding"
+    pattern: "^.*?T3d.*?$"
+  T4:
+    id: "NCIT:C48732"
+    label: "T4 Stage Finding"
+    pattern: "^.*?T4[^abcd]*?$"
+  T4a:
+    id: "NCIT:C48733"
+    label: "T2a Stage Finding"
+    pattern: "^.*?T2a.*?$"
+  T4b:
+    id: "NCIT:C48734"
+    label: "T4b Stage Finding"
+    pattern: "^.*?T4b.*?$"
+  T4c:
+    id: "NCIT:C48735"
+    label: "T4c Stage Finding"
+    pattern: "^.*?T4c.*?$"
+  T4d:
+    id: "NCIT:C48736"
+    label: "T4d Stage Finding"
+    pattern: "^.*?T4d.*?$"
+  TX:
+    id: "NCIT:C48737"
+    label: "TX Stage Finding"
+    pattern: "^.*?TX.*?$"
+  Tis:
+    id: "NCIT:C48738"
+    label: "Tis Stage Finding"
+    pattern: "^.*?Tis.*?$"
+  Ta:
+    id: "NCIT:C96025"
+    label: "Ta Stage Finding"
+    pattern: "^.*?Ta.*?$"
+
+  

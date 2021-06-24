@@ -72,6 +72,8 @@ properties:
       - id: pgxcohort-arraymap
         label: arrayMap collection
   individualAgeAtCollection:
+    description: >
+      The age of the individual at time of sample collection.
     "$ref": Age.yaml#/properties
   provenance:
     "$ref": Provenance.yaml#/properties
@@ -81,6 +83,37 @@ properties:
     "$ref": OntologyClass.yaml#/properties
   histologicalDiagnosis:
     "$ref": OntologyClass.yaml#/properties
+  tumorProgression:
+    "$ref": OntologyClass.yaml#/properties
+    examples:
+      - id: NCIT:C3677
+        label: Benign Neoplasm
+      - id: NCIT:C8450
+        label: Primary Malignant Neoplasm
+      - id: NCIT:C95606
+        label: Second Primary Malignant Neoplasm
+      - id: NCIT:C3261
+        label: Metastatic Neoplasm
+      - id: NCIT:C4813
+        label: Recurrent Malignant Neoplasm
+  tumorGrade:
+    description: >
+      child term of NCIT:C28076 (Disease Grade Qualifier) or equivalent
+    "$ref": OntologyClass.yaml#/properties
+  pathologicalStage:
+    "$ref": OntologyClass.yaml#/properties
+  pathologicalTnmFinding:
+    description: >
+      A child class of NCIT:C48698 Cancer TNM Finding Category
+    type: array
+    items:
+      "$ref": OntologyClass.yaml#/properties
+    examples:
+      - - 
+  diagnosticMarkers:
+    type: array
+    items:
+      "$ref": OntologyClass.yaml#/properties
   info:
     type: object
   updated:

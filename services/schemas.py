@@ -10,7 +10,7 @@ dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-from beaconServer.lib.cgi_utils import cgi_parse_query, cgi_print_json_response, rest_path_value
+from beaconServer.lib.cgi_utils import cgi_parse_query, cgi_print_response, rest_path_value
 from beaconServer.lib.schemas_parser import *
 from beaconServer.lib.service_utils import *
 
@@ -44,7 +44,7 @@ def schemas():
 
     schema_name = rest_path_value("schemas")
 
-    if schema_name is not False:
+    if not "empty_value" in schema_name:
         for s_f in s_files:
             f_name = os.path.splitext( s_f )[0]
             if f_name == schema_name:
@@ -52,12 +52,12 @@ def schemas():
                 if "$id" in s:
                     byc["service_response"]["meta"]["returned_schemas"] = [ s["$id"] ]
                 populate_service_response(byc, [s])
-                cgi_print_json_response( byc, 200 )
+                cgi_print_response( byc, 200 )
                 exit()
     
     response_add_error(byc, 422, "No correct schema name provided!")
  
-    cgi_print_json_response( byc, 422 )
+    cgi_print_response( byc, 422 )
 
 ################################################################################
 ################################################################################

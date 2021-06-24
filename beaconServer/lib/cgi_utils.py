@@ -1,14 +1,14 @@
 import cgi, cgitb
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 from os import environ
-import json
+import json, sys
 import re
 
 ################################################################################
 
 def set_debug_state(debug=0):
 
-    if debug == 1:
+    if debug > 0:
         cgitb.enable()
         print('Content-Type: text')
         print()
@@ -22,13 +22,63 @@ def set_debug_state(debug=0):
 
 def cgi_parse_query():
 
+    content_len = environ.get('CONTENT_LENGTH', '0')
+    content_typ = environ.get('CONTENT_TYPE', '')
+    method = environ.get('REQUEST_METHOD', '')
+
+    # print('Content-Type: text')
+    # print()
+    # print(method)
+
+    form_data = {}
+    query_meta = {}
+
+    if "POST" in method:
+        body = sys.stdin.read(int(content_len))
+        if "json" in content_typ:
+            jbod = json.loads(body)
+            # print(jbod)
+            if "debug" in jbod:
+                if jbod["debug"] > 0:                 
+                    set_debug_state(1)
+            # TODO: this hacks the v2b4 structure
+            if "query" in jbod:
+                for p, v in jbod["query"].items():
+                    if p == "requestParameters":
+                        for rp, rv in v.items():
+                            form_data[rp] = rv
+                    else:
+                        form_data[p] = v
+            if "filters" in jbod:
+                form_data["filters"] = jbod["filters"]
+            if "meta" in jbod:
+                query_meta = jbod["meta"]
+
+
+        return form_data, query_meta
+
     set_debug_state()
 
-    return cgi.FieldStorage()
+    # TODO: The structure, types of the request/form object need to go to a
+    # config and some deeper processing, for proper beacon request objects
+    # also, defaults etc.
+    list_ps = ["start", "end", "datasetIds", "filters"]
+    get = cgi.FieldStorage()
+    form_data = {}
+
+    for p in get:
+        if p in list_ps:
+            form_data.update({p: form_return_listvalue( get, p )})
+        else:
+            form_data.update({p: get.getvalue(p)})
+    
+    return form_data, query_meta
 
 ################################################################################
 
 def rest_path_value(key=""):
+
+    r_p_v = "empty_value"
 
     url_comps = urlparse( environ.get('REQUEST_URI') )
     url_p = url_comps.path
@@ -49,9 +99,9 @@ def rest_path_value(key=""):
             if p in [key, key+".py"]:
                 return p_items[ i ]
         elif p == key:
-            return "empty_value"
+            return r_p_v
 
-    return False
+    return r_p_v
 
 ################################################################################
 
@@ -63,6 +113,8 @@ def form_return_listvalue( form_data, parameter ):
             v = form_data.getlist( parameter )
             if "null" in v:
                 v.remove("null")
+            if "undefined" in v:
+                v.remove("undefined")
             if len(v) > 0:
                 l_v  = ','.join(v)
                 l_v  = l_v .split(',')
@@ -80,12 +132,12 @@ def cgi_print_rewrite_response(uri_base="", uri_stuff=""):
 
 ################################################################################
 
-def cgi_print_text_response(form_data, data, status_code):
+def cgi_print_text_response(byc, status_code):
 
     print('Content-Type: text')
     print('status:'+str(status_code))
     print()
-    print(data+"\n")
+    print(byc["service_response"]+"\n")
     exit()
 
 ################################################################################
@@ -97,7 +149,13 @@ def cgi_simplify_response(byc):
     if "data" in r:            
         byc.update({ "service_response": r["data"] })
     elif "response" in r:
-        if "results" in r["response"]:
+        # TODO
+        if "result_sets" in r["response"]:
+            if "results" in r["response"]["result_sets"][0]:
+                byc.update({ "service_response": r["response"]["result_sets"][0]["results"] })
+            elif "results" in r["response"]:
+                byc.update({ "service_response": r["response"]["results"] })
+        elif "results" in r["response"]:
             byc.update({ "service_response": r["response"]["results"] })
 
     return byc
@@ -111,35 +169,27 @@ def cgi_break_on_errors(byc):
     if "response" in r and "form_data" in byc:
         if "error" in r["response"]:
             if r["response"]["error"]["error_code"] > 200:
-                cgi_print_json_response( byc, r["response"]["error"]["error_code"] )
+                cgi_print_response( byc, r["response"]["error"]["error_code"] )
 
 ################################################################################
 
-# def cgi_print_json_response(form_data, response, status_code):
-def cgi_print_json_response(byc, status_code):
+def cgi_print_response(byc, status_code):
 
     r_f = ""
-    r_t = ""
     f_d = {}
     if "form_data" in byc:
         f_d = byc["form_data"]
 
-    if "responseType" in f_d:
-        r_t = f_d.getvalue("responseType")
     if "responseFormat" in f_d:
-        r_f = f_d.getvalue("responseFormat")
-
-    # TODO: fix callback ...
-    # if "callback" in form_data:
-    #     response = form_data.getvalue("callback")+'('+json.dumps(response, default=str)+")\n"
-        # cgi_print_text_response(form_data, data, status_code)
+        r_f = f_d["responseFormat"]
 
     # This is a simple "de-jsonify", intended to be used for already
     # pre-formatted list-like items (i.e. lists only containing objects)
     # with simple key-value pairs)
     # TODO: universal text table converter
-    if "text" in r_t:
-        cgi_simplify_response(byc)      
+    if "text" in byc["output"]:
+        cgi_simplify_response(byc)
+
         if isinstance(byc["service_response"], dict):
             byc.update({ "service_response": json.dumps(byc["service_response"], default=str) })
         if isinstance(byc["service_response"], list):
@@ -158,6 +208,10 @@ def cgi_print_json_response(byc, status_code):
     if "response" in byc["service_response"]:
         if "error" in byc["service_response"]["response"]:
             byc["service_response"]["response"]["error"].update({"error_code": status_code })
+
+    if "exists" in byc["service_response"]["response"]:
+        if byc["service_response"]["response"]["exists"] is False:
+            status_code = 422
 
     print('Content-Type: application/json')
     print('status:'+str(status_code))

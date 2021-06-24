@@ -22,7 +22,7 @@ from beaconServer.lib.interval_utils import *
 
 * https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C7376,PMID:22824167
 * https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&id=pgxcohort-TCGAcancers
-* https://progenetix.org/cgi/bycon/services/intervalFrequencies.py/?method=pgxseg&datasetIds=progenetix&filters=NCIT:C7376
+* https://progenetix.org/cgi/bycon/services/intervalFrequencies.py/?output=pgxseg&datasetIds=progenetix&filters=NCIT:C7376
 
 podmd"""
 
@@ -60,7 +60,7 @@ def interval_frequencies():
     if not "empty_value" in id_rest:
         byc[ "filters" ] = [ id_rest ]
     elif "id" in byc["form_data"]:
-        byc[ "filters" ] = [ byc["form_data"].getvalue( "id" ) ]
+        byc[ "filters" ] = [ byc["form_data"]["id"] ]
 
     if not "filters" in byc:
         response_add_error(byc, 422, "No value was provided for collation `id` or `filters`.")  
@@ -70,14 +70,33 @@ def interval_frequencies():
     f_coll_name = byc["config"]["frequencymaps_coll"]
     c_coll_name = byc["config"]["collations_coll"]
 
+    fmap_name = "frequencymap"
+    if "codematches" in byc["method"]:
+        fmap_name = "frequencymap_codematches"
+
     results = [ ]
 
     mongo_client = MongoClient( )
     for ds_id in byc[ "dataset_ids" ]:
+
+        if "NCIT:C999999" in byc[ "filters" ]:
+            byc[ "filters" ] = mongo_client[ ds_id ][ f_coll_name ].distinct( "id", { "id": {"$regex": "NCIT" } } )
+
         for f in byc[ "filters" ]:
  
             collation_f = mongo_client[ ds_id ][ f_coll_name ].find_one( { "id": f } )
             collation_c = mongo_client[ ds_id ][ c_coll_name ].find_one( { "id": f } )
+
+            if collation_f is None:
+                continue
+
+            if "withSamples" in byc["form_data"]: 
+                if int(byc["form_data"]["withSamples"]) > 0:
+                    if int(collation_c[ "code_matches" ]) < 1:
+                        continue
+
+            if not fmap_name in collation_f:
+                continue
 
             if not collation_f:
                 response_add_error(byc, 422, "No collation {} was found in {}.{}".format(f, ds_id, f_coll_name))
@@ -85,25 +104,18 @@ def interval_frequencies():
                 response_add_error(byc, 422, "No collation {} was found in {}.{}".format(f, ds_id, c_coll_name))
             cgi_break_on_errors(byc)
 
+            s_c = collation_c["count"]
+            if "analysis_count" in collation_f[ fmap_name ]:
+               s_c = collation_f[ fmap_name ]["analysis_count"]
+
             i_d = collation_c["id"]
             r_o = {
                 "dataset_id": ds_id,
                 "group_id": i_d,
                 "label": re.sub(r';', ',', collation_c["label"]),
-                "sample_count": collation_c["count"],
-                "interval_frequencies": [ ] }
-            for interval in byc["genomic_intervals"]:
-                i = interval["index"]
-                # TODO: Error if length ...
-                r_o["interval_frequencies"].append( {
-                    "index": i,
-                    "reference_name": interval["reference_name"],
-                    "start": interval["start"],
-                    "end": interval["end"],
-                    "gain_frequency": round(collation_f["frequencymaps"]["dupfrequencies"][i], 2),
-                    "loss_frequency": round(collation_f["frequencymaps"]["delfrequencies"][i], 2)
-                    })
-
+                "sample_count": s_c,
+                "interval_frequencies": collation_f[ fmap_name ]["intervals"] }
+                
             results.append(r_o)
 
     mongo_client.close( )
@@ -111,14 +123,14 @@ def interval_frequencies():
     _export_pgxseg_frequencies(byc, results)
     _export_pgxmatrix_frequencies(byc, results)
     populate_service_response( byc, results)
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################
 
 def _export_pgxseg_frequencies(byc, results):
 
-    if not "pgxseg" in byc["method"]:
+    if not "pgxseg" in byc["output"]:
         return
 
     open_text_streaming("interval_frequencies.pgxseg")
@@ -151,7 +163,7 @@ def _export_pgxseg_frequencies(byc, results):
 
 def _export_pgxmatrix_frequencies(byc, results):
 
-    if not "pgxmatrix" in byc["method"]:
+    if not "pgxmatrix" in byc["output"]:
         return
 
     open_text_streaming("interval_frequencies.pgxmatrix")
@@ -167,11 +179,7 @@ def _export_pgxmatrix_frequencies(byc, results):
     # header
 
     h_line = [ "group_id" ]
-    for ex_int in results[0]["interval_frequencies"]:
-        h_line.append("{}:{}-{}:gainF".format(ex_int["reference_name"], ex_int["start"], ex_int["end"]))
-    for ex_int in results[0]["interval_frequencies"]:
-        h_line.append("{}:{}-{}:lossF".format(ex_int["reference_name"], ex_int["start"], ex_int["end"]))
-
+    h_line = interval_header(h_line, byc)
     print("\t".join(h_line))
 
     for f_set in results:

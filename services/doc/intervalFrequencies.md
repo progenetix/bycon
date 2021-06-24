@@ -55,7 +55,7 @@ direct access to the frequecy list at `response.results[0].interval_frequencies`
 ##### `id`
 
 * standard parameter to retrieve a frequency set by its `id`
-* available values can be looked up using the [`collationc`](collations.md)
+* available values can be looked up using the [`collations`](collations.md)
 service:
   - <https://progenetix.org/services/collations?method=ids&filters=NCIT&datasetIds=progenetix>
 * an `id` value will override any given `filters`
@@ -70,22 +70,23 @@ service:
 * default use is 1Mb, i.e. megabase binning (with diverging size for each
 chromosome's q-terminal interval)
 
-##### `method`
+##### `output`
 
-The method parameter here can set set autput format. Options are:
+The output parameter here can set set autput format. Options are:
 
 * not set ...
   - standard JSON response
-* `method=pgxseg`
+* `output=pgxseg`
   - Proggenetix `.pgxseg` columnar format, with a line for each interval and gain, loss frequencies
-* `method=pgxmatrix`
-  - Proggenetix `.pgxmatrix` matrix format, with a line for each frequency set and interval frequencies provided in the columns (i.e. usually first all gain frequencies, then all loss frequencies)
+* `output=pgxmatrix`
+  - Progenetix `.pgxmatrix` matrix format, with a line for each frequency set and interval frequencies provided in the columns (i.e. usually first all gain frequencies, then all loss frequencies)
   - makes sense for multiple frequency sets, e.g. for clustering
 
 #### Examples
 
-* <https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&id=pgxcohort-TCGAcancers>
-* <https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C7376,PMID:22824167>
-* <https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&method=pgxmatrix&filters=NCIT:C7376,PMID:22824167>
+* <https://progenetix.org/services/intervalFrequencies/?id=pgxcohort-TCGAcancers>
+* <https://progenetix.org/services/intervalFrequencies/?filters=NCIT:C7376,PMID:22824167>
+* <https://progenetix.org/services/intervalFrequencies/?output=pgxseg&filters=NCIT:C7376,PMID:22824167>
+* <https://progenetix.org/services/intervalFrequencies/?output=pgxmatrix&filters=NCIT:C7376,PMID:22824167>
 
 <!--/podmd-->

@@ -7,6 +7,7 @@ from isodate import date_isoformat
 from pymongo import MongoClient
 import argparse
 from progress.bar import Bar
+import time
 
 # local
 dir_path = path.dirname( path.abspath(__file__) )
@@ -31,6 +32,7 @@ def _get_args(byc):
     parser.add_argument("-d", "--datasetids", help="datasets, comma-separated")
     parser.add_argument("-a", "--alldatasets", action='store_true', help="process all datasets")
     parser.add_argument("-t", "--test", help="test setting")
+    parser.add_argument("-p", "--prefixes", help="selected prefixes")
     byc.update({ "args": parser.parse_args() })
 
     return byc
@@ -58,6 +60,9 @@ def frequencymaps_creator():
         print("No existing dataset was provided with -d ...")
         exit()
 
+    if byc["args"].prefixes:
+        byc.update({"filters": re.split(",", byc["args"].prefixes)})
+
     generate_genomic_intervals(byc)
  
     for ds_id in byc["dataset_ids"]:
@@ -81,51 +86,117 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
     data_client = MongoClient()
     cs_coll = data_client[ ds_id ]["callsets"]
 
-    coll_no = coll_coll.estimated_document_count()
+    id_query = {}
 
-    bar = Bar("Writing {} {} fMaps".format(coll_no, ds_id), max = coll_no, suffix='%(percent)d%%'+" of "+str(coll_no) )
+    if "filters" in byc:
+        if len(byc["filters"]) > 0:
+            f_l = []
+            for pre in byc["filters"]:
+                f_l.append( { "id": { "$regex": "^"+pre } })
+            if len(f_l) > 1:
+                id_query = { "$or": f_l }
+            else:
+                id_query = f_l[0]
 
-    for coll in coll_coll.find({}):
+    coll_no = coll_coll.count_documents(id_query)
+   
+    print("Writing {} {} fMaps".format(coll_no, ds_id))
 
-        bios_query = { "$or": [
-            { "biocharacteristics.id": { '$in': coll["child_terms"] } },
-            { "external_references.id": { '$in': coll["child_terms"] } }
-        ] }
+    coll_i = 0
 
-        bios_ids = bios_coll.distinct( "id" , bios_query )
-        bios_no = len(bios_ids)
+    for coll in coll_coll.find(id_query):
 
-        cs_query = { "biosample_id": { "$in": bios_ids } }
+        coll_i += 1
 
-        cs_no = cs_coll.count_documents(cs_query)
-        callsets = cs_coll.find(cs_query)
+        bios_query = _make_child_terms_query(coll)
+        bios_no, cs_cursor = _cs_cursor_from_bios_query(bios_coll, cs_coll, bios_query)
+        cs_no = len(list(cs_cursor))
 
         if cs_no < 1:
             continue
 
-        cnvmaps = [ ]
+        i_t = coll_i % 100
+        start_time = time.time()
+        if i_t == 0 or cs_no > 1000:
+            print("{}: {} bios, {} cs\t{}/{}\t{:.1f}%".format(coll["id"], bios_no, cs_no, coll_i, coll_no, 100*coll_i/coll_no))
 
-        for cs in callsets:
-            if "dupcoverage" in cs["info"]["statusmaps"]:
-                cnvmaps.append(cs["info"]["statusmaps"])
+        intf = interval_counts_from_callsets(cs_cursor, byc)
 
         update_obj = {
             "id": coll["id"],
             "label": coll["label"],
             "child_terms": coll["child_terms"],
             "updated": date_isoformat(datetime.datetime.now()),
-            "counts": {"biosamples": bios_no, "callsets": len(cnvmaps) },
-            "frequencymaps": interval_cnv_frequencies(cnvmaps, byc)
+            "counts": {"biosamples": bios_no, "callsets": cs_no },
+            "frequencymap": {
+                "interval_count": len(byc["genomic_intervals"]),
+                "binning": byc["genome_binning"],
+                "biosample_count": bios_no,
+                "analysis_count": cs_no,
+                "intervals": intf
+            }
         }
 
-        # print("{}: {} samples".format(coll["id"], bios_no))
+        if coll["code_matches"] > 0:
+            if cs_no != coll["code_matches"]:
+                bios_query = _make_exact_query(coll)
+                bios_no, cs_cursor = _cs_cursor_from_bios_query(bios_coll, cs_coll, bios_query)
+                cs_no = len(list(cs_cursor))
+                intf = interval_counts_from_callsets(cs_cursor, byc)
+
+                print("found {} exact code matches".format(cs_no))
+
+            update_obj.update({ "frequencymap_codematches": {
+                    "interval_count": len(byc["genomic_intervals"]),
+                    "binning": byc["genome_binning"],
+                    "biosample_count": bios_no,
+                    "analysis_count": cs_no,
+                    "intervals": intf
+                }
+            })
+
+        proc_time = time.time() - start_time
+        if cs_no > 1000:
+            print(" => Processed in {:.2f}s: {:.4f}s per callset".format(proc_time, (proc_time/cs_no)))
 
         if not byc["args"].test:
             fm_coll.update_one( { "id": coll["id"] }, { '$set': update_obj }, upsert=True )
 
-        bar.next()
 
-    bar.finish()
+################################################################################
+
+def _make_exact_query(coll):
+
+    return { "$or": [
+            { "biocharacteristics.id": coll["id"] },
+            { "cohorts.id": coll["id"] },
+            { "external_references.id": coll["id"] }
+        ] }
+
+################################################################################
+
+def _make_child_terms_query(coll):
+
+    return { "$or": [
+            { "biocharacteristics.id": { '$in': coll["child_terms"] } },
+            { "cohorts.id": { '$in': coll["child_terms"] } },
+            { "external_references.id": { '$in': coll["child_terms"] } }
+        ] }
+
+################################################################################
+
+def _cs_cursor_from_bios_query(bios_coll, cs_coll, query):
+
+    bios_ids = bios_coll.distinct( "id" , query )
+    bios_no = len(bios_ids)
+    cs_query = { "biosample_id": { "$in": bios_ids } }
+    cs_cursor = cs_coll.find(cs_query)
+
+    return bios_no, cs_cursor
+
+################################################################################
+
+
 
 ################################################################################
 ################################################################################

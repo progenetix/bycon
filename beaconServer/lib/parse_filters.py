@@ -11,11 +11,12 @@ def parse_filters(byc):
     byc.update({"filters":[]})
 
     if "form_data" in byc:
-        f = form_return_listvalue( byc["form_data"], "filters" )
-        f = _check_filter_values(f, byc["filter_definitions"])
-        if len(f) > 0:
-            byc.update( { "filters": f } )
-            return byc
+        if "filters" in byc["form_data"]:
+            f = byc["form_data"]["filters"]
+            f = _check_filter_values(f, byc["filter_definitions"])
+            if len(f) > 0:
+                byc.update( { "filters": f } )
+                return byc
     
     if "args" in byc:
         if byc["args"].filters:
@@ -38,17 +39,13 @@ def get_filter_flags(byc):
 
     if "form_data" in byc:
         if "filterLogic" in byc[ "form_data" ]:
-            l = byc["form_data"].getvalue('filterLogic')
+            l = byc["form_data"]['filterLogic']
             if "OR" in l:
                 ff["logic"] = '$or'
             if "AND" in l:
                 ff["logic"] = '$and'
         if "filterPrecision" in byc[ "form_data" ]:
-            ff["precision"] = byc["form_data"].getvalue('filterPrecision')
-
-    # command line / legacy
-    if "exact_match" in byc:
-        ff["precision"] = "exact"
+            ff["precision"] = byc["form_data"]['filterPrecision']
 
     byc.update( { "filter_flags": ff } )
 
@@ -75,13 +72,21 @@ def select_dataset_ids(byc):
 
     ds_ids = [ ]
 
+    if "id_from_path" in byc:
+        for ds_id, ds in byc[ "dataset_definitions" ].items():
+            if "idMatch" in ds:
+                if ds["idMatch"] in byc["id_from_path"]:
+                    byc.update( { "dataset_ids": [ds_id] } )
+                    return byc
+
     if "form_data" in byc:
         if "datasetIds" in byc["form_data"]:
-            ds_ids = form_return_listvalue( byc["form_data"], "datasetIds" )
+            ds_ids = byc["form_data"]["datasetIds"]
 
         # accessid overrides ... ?
         if "accessid" in byc["form_data"]:
-            accessid = byc["form_data"].getvalue("accessid")
+            accessid = byc["form_data"]["accessid"]
+
             ho_client = MongoClient()
             ho_db = ho_client[ byc["config"]["info_db"] ]
             ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
@@ -90,6 +95,7 @@ def select_dataset_ids(byc):
             if h_o:
                 if "source_db" in h_o:
                     ds_ids = [ h_o["source_db"] ]
+                    
 
     if len(ds_ids) > 0:
         byc.update( { "dataset_ids": ds_ids } )

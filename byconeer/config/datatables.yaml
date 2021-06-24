@@ -31,25 +31,25 @@ io_params:
       db_key: info.followup_months
       type: string
     geoprov_label:
-      db_key: geo_location.properties.label
+      db_key: provenance.geo_location.properties.label
       type: string
     geoprov_precision:
-      db_key: geo_location.properties.precision
+      db_key: provenance.geo_location.properties.precision
       type: string
     geoprov_city:
-      db_key: geo_location.properties.city
+      db_key: provenance.geo_location.properties.city
       type: string
     geoprov_country:
-      db_key: geo_location.properties.country
+      db_key: provenance.geo_location.properties.country
       type: string
     geoprov_iso_alpha3:
-      db_key: geo_location.properties.ISO3166alpha3
+      db_key: provenance.geo_location.properties.ISO3166alpha3
       type: string
     geoprov_lat:
-      db_key: geo_location.properties.latitude
+      db_key: provenance.geo_location.properties.latitude
       type: number
     geoprov_long:
-      db_key: geo_location.properties.longitude
+      db_key: provenance.geo_location.properties.longitude
       type: number
     cnv_fraction:
       db_key: info.cnvstatistics.cnvfraction
@@ -77,25 +77,25 @@ io_params:
       db_key: info.legacy_id
       type: string
     geoprov_label:
-      db_key: geo_location.properties.label
+      db_key: provenance.geo_location.properties.label
       type: string
     geoprov_precision:
-      db_key: geo_location.properties.precision
+      db_key: provenance.geo_location.properties.precision
       type: string
     geoprov_city:
-      db_key: geo_location.properties.city
+      db_key: provenance.geo_location.properties.city
       type: string
     geoprov_country:
-      db_key: geo_location.properties.country
+      db_key: provenance.geo_location.properties.country
       type: string
     geoprov_iso_alpha3:
-      db_key: geo_location.properties.ISO3166alpha3
+      db_key: provenance.geo_location.properties.ISO3166alpha3
       type: string
     geoprov_lat:
-      db_key: geo_location.properties.latitude
+      db_key: provenance.geo_location.properties.latitude
       type: number
     geoprov_long:
-      db_key: geo_location.properties.longitude
+      db_key: provenance.geo_location.properties.longitude
       type: number
   callsets:
     id:
@@ -148,7 +148,7 @@ io_prefixes:
     provenance.material:
       - EFO
     data_use_conditions:
-      -DUO
+      - DUO
   individuals:
     biocharacteristics:
       - PATO

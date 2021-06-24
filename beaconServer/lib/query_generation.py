@@ -10,9 +10,6 @@ from parse_filters import *
 
 def initialize_beacon_queries(byc):
 
-    select_dataset_ids(byc)
-    check_dataset_ids(byc)
-
     get_filter_flags(byc)
     parse_filters(byc)
 
@@ -20,6 +17,9 @@ def initialize_beacon_queries(byc):
     get_variant_request_type(byc)
 
     generate_queries(byc)
+
+    select_dataset_ids(byc)
+    check_dataset_ids(byc)
 
     return byc
 
@@ -74,12 +74,14 @@ def update_queries_from_path_id( byc ):
     s_id = rest_path_value(rb_t)
     if s_id:
         if not "empty_value" in s_id:
+            byc.update({ "id_from_path": s_id })
             byc["queries"].update(
                 { pgx_base: { "id": s_id } } )
             if not "response_types" in byc["these_prefs"]:
                 return byc
 
             r_t = rest_path_value(s_id)
+
             if r_t in byc["beacon_mappings"]["response_types"]:
                 byc.update({"response_type": byc["beacon_mappings"]["response_types"][r_t]["id"]})
 
@@ -91,20 +93,18 @@ def update_queries_from_path_id( byc ):
 def update_queries_from_hoid( byc):
 
     if "accessid" in byc["form_data"]:
-        accessid = byc["form_data"].getvalue("accessid")
+        accessid = byc["form_data"]["accessid"]
         ho_client = MongoClient()
         ho_db = ho_client[ byc["config"]["info_db"] ]
         ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
         h_o = ho_coll.find_one( { "id": accessid } )
-        
+
         # accessid overrides ... ?
         if h_o:
             t_k = h_o["target_key"]
             t_v = h_o["target_values"]
             c_n = h_o["target_collection"]
             t_db = h_o["source_db"]
-            if not t_db == byc["dataset_ids"][0]:
-                return byc
             h_o_q = { t_k: { '$in': t_v } }
             if c_n in byc["queries"]:
                 byc["queries"].update( { c_n: { '$and': [ h_o_q, byc["queries"][ c_n ] ] } } )
@@ -127,11 +127,6 @@ def update_queries_from_filters( byc ):
     Filter values are not checked for their correct syntax; this should have
     happened in a pre-parsing step and allows to use the method with non-standard
     values, e.g. to fix erroneous database entries.
-
-    ###### Options
-
-    * `exact_match` creates query items with exact (string) matches, in contrast
-    to the standard teatment of query terms as start-anchored partial matches
     
     podmd"""
         
@@ -296,8 +291,11 @@ def geo_query( **byc ):
             g_default = None
             if "default" in g_p_defs[ g_k ]:
                 g_default = g_p_defs[ g_k ][ "default" ]
-            g_v = byc["form_data"].getvalue(g_k, g_default)
-            if not g_v:
+            if g_k in byc["form_data"]:
+                g_v = byc["form_data"][g_k]
+            else:
+                g_v = g_default
+            if g_v is None:
                 continue
             if not re.compile( g_p_defs[ g_k ][ "pattern" ] ).match( str( g_v ) ):
                 continue
@@ -315,8 +313,12 @@ def geo_query( **byc ):
     if "city" in req_type:
         geo_q = return_geo_city_query(geo_root, geo_pars)
 
+    if "id" in req_type:
+        geo_q = { "id": re.compile( geo_pars["id"], re.IGNORECASE ) }
+
     if "geoquery" in req_type:
         geo_q = return_geo_longlat_query(geo_root, geo_pars)
+
 
 
     return geo_q, geo_pars

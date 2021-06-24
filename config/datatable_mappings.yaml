@@ -1,0 +1,180 @@
+io_params:
+  BiosampleResponse:
+    id:
+      db_key: id
+      type: string
+    individual_id:
+      db_key: individual_id
+      type: string
+    callset_ids:
+      db_key: info.callset_ids
+      type: array
+    description:
+      db_key: description
+      type: string
+    tnm:
+      db_key: info.tnm
+      type: string
+    stage:
+      db_key: info.stage
+      type: string
+    grade:
+      db_key: info.grade
+      type: string
+    age_iso:
+      db_key: individual_age_at_collection.age
+      type: string
+    death:
+      db_key: info.death
+      type: string
+    followup_months:
+      db_key: info.followup_months
+      type: string
+    geoprov_label:
+      db_key: provenance.geo_location.properties.label
+      type: string
+    geoprov_precision:
+      db_key: provenance.geo_location.properties.precision
+      type: string
+    geoprov_city:
+      db_key: provenance.geo_location.properties.city
+      type: string
+    geoprov_country:
+      db_key: provenance.geo_location.properties.country
+      type: string
+    geoprov_iso_alpha3:
+      db_key: provenance.geo_location.properties.ISO3166alpha3
+      type: string
+    geoprov_lat:
+      db_key: provenance.geo_location.properties.latitude
+      type: number
+    geoprov_long:
+      db_key: provenance.geo_location.properties.longitude
+      type: number
+    cnv_fraction:
+      db_key: info.cnvstatistics.cnvfraction
+      type: number
+    cnv_del_fraction:
+      db_key: info.cnvstatistics.delfraction
+      type: number
+    cnv_dup_fraction:
+      db_key: info.cnvstatistics.dupfraction
+      type: number
+    cell_line:
+      db_key: info.cell_line
+      type: string
+    legacy_id:
+      db_key: info.legacy_id
+      type: array
+    individual_id:
+      db_key: individual_id
+      type: string
+    provenance:
+      db_key: info.provenance
+      type: string
+  IndividualResponse:
+    id:
+      db_key: id
+      type: string
+    legacy_id:
+      db_key: info.legacy_id
+      type: array
+    geoprov_label:
+      db_key: provenance.geo_location.properties.label
+      type: string
+    geoprov_precision:
+      db_key: provenance.geo_location.properties.precision
+      type: string
+    geoprov_city:
+      db_key: provenance.geo_location.properties.city
+      type: string
+    geoprov_country:
+      db_key: provenance.geo_location.properties.country
+      type: string
+    geoprov_iso_alpha3:
+      db_key: provenance.geo_location.properties.ISO3166alpha3
+      type: string
+    geoprov_lat:
+      db_key: provenance.geo_location.properties.latitude
+      type: float
+    geoprov_long:
+      db_key: provenance.geo_location.properties.longitude
+      type: float
+
+  AnalysisResponse:
+    id:
+      db_key: id
+      type: string
+    biosample_id:
+      db_key: biosample_id
+      type: string
+    legacy_id:
+      db_key: info.legacy_id
+      type: array
+
+  VariantInSampleResponse:
+    id:
+      db_key: id
+      type: string
+    digest:
+      db_key: digest
+      type: string
+    reference_name:
+      db_key: reference_name
+      type: string
+    start:
+      db_key: start
+      type: integer
+    end:
+      db_key: end
+      type: integer
+    variant_type:
+      db_key: variant_type
+      type: string
+    reference_bases:
+      db_key: reference_bases
+      type: string
+    alternate_bases:
+      db_key: alternate_bases
+      type: string
+
+io_prefixes:
+  BiosampleResponse:
+    sampled_tissue:
+      type: string
+      pre: UBERON
+    histological_diagnosis:
+      type: string
+      pre: NCIT
+    biocharacteristics:
+      type: array
+      pres:
+        - icdom
+        - icdot
+        - NCIT
+        - UBERON
+        - MONDO
+    external_references:
+      type: array
+      pres:
+        - PMID
+        - geo:GSM
+        - geo:GSE
+        - geo:GPL
+        - cellosaurus
+        - arrayexpress
+    data_use_conditions:
+      type: string
+      pre: DUO
+  IndividualResponse:
+    biocharacteristics:
+      - PATO
+      - NCBITaxon
+    data_use_conditions:
+      - DUO
+  AnalysisResponse:
+    data_use_conditions:
+      - DUO
+
+  VariantInSampleResponse: {}
+  

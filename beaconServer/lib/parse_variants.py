@@ -18,13 +18,12 @@ def parse_variants(byc):
         v_default = None
         if "default" in v_p_defs[ p_k ]:
             v_default = v_p_defs[ p_k ][ "default" ]
-        if "array" in v_p_defs[ p_k ]["type"]:
-            variant_pars[ p_k ] = form_return_listvalue( byc["form_data"], p_k )
-        else:
-            variant_pars[ p_k ] = byc["form_data"].getvalue(p_k, v_default)
+        variant_pars[ p_k ] = v_default
+        if p_k in byc["form_data"]:
+            variant_pars[ p_k ] = byc["form_data"][p_k]
 
-        if not variant_pars[ p_k ]:
-            del( variant_pars[ p_k ] )
+        if variant_pars[ p_k ] is None:
+            variant_pars.pop(p_k)
 
     # for debugging
     if "args" in byc:
@@ -65,13 +64,6 @@ def parse_variants(byc):
                 if "integer" in v_p_defs[ p_k ][ "type" ]:
                     v_p = int( v_p )
                 v_p_c[ p_k ] = v_p
-
-    # # TODO: this is meant to accommodate the "<end" interbase matches; 
-    # # should probably be more systematic
-    # for k in [ "start", "end" ]:
-    #     if k in v_p_c:
-    #         if len(v_p_c[ k ]) == 1:
-    #             v_p_c[ k ].append( v_p_c[ k ][0] + 1 )
 
     byc.update( { "variant_pars": v_p_c } )
 

@@ -19,13 +19,14 @@ paths:
 dataset_ids:
   - progenetix
   - cellosaurus
-  - 1000genomesDragen
+  - 1000genomesDRAGEN
 dataset_default: progenetix
 collections:
   - biosamples
   - callsets
   - individuals
   - variants
+  - variant_annotations
   - collations
   - publications
 info_db: progenetix
@@ -35,19 +36,19 @@ collations_source: biosamples
 ontologymaps_coll: ontologymaps
 beacon_info_coll: beaconinfo
 beacon_counts:
-  individualCount:
+  individual_count:
     collection: individuals
     info_key: individuals
     h->o_key: individuals._id
-  sampleCount:
+  sample_count:
     collection: biosamples
     info_key: biosamples
     h->o_key: biosamples._id
-  variantCount:
+  variant_count:
     collection: variants
     info_key: variants_distinct
     h->o_key: variants.digest
-  callCount:
+  call_count:
     collection: variants
     info_key: variants
     h->o_key: variants._id

@@ -21,6 +21,10 @@ meta:
     - description: "Progenetix database schema (Beacon+ backend)"
       id: 'https://github.com/progenetix/schemas/'
   sb_status: community
+required:
+  - id
+  - biocharacteristics
+  - externalReferences
 properties:
   id:
     type: string

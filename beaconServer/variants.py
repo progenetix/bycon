@@ -15,7 +15,7 @@ from beaconServer import *
 ################################################################################
 
 """
-https://progenetix.test/beacon/variants/?filters=NCIT:C7712&method=pgxseg&debug=1
+https://progenetix.test/beacon/variants/?filters=NCIT:C7712&output=pgxseg&debug=1
 """
 
 def main():
@@ -28,16 +28,10 @@ def variants():
 
     byc = initialize_service()
     run_beacon_init_stack(byc)
-    run_beacon_one_dataset(byc)
-    
-    ############################################################################
-
-    check_alternative_deliveries(byc)
-
-    ############################################################################
-
+    run_beacon(byc)
+    export_datatable(byc)
     query_results_save_handovers(byc)
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

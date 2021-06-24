@@ -14,14 +14,11 @@ arraymap:
     handoverTypes:
       - cnvhistogram
       - biosamples
-      - biosampleslist
       - phenopackets
-      - individualsdata
+      - individuals
       - variants
-      - variantslist
       - callsetsvariants
       - UCSClink
-      - queryaggregation
 
 progenetix:
     id: progenetix
@@ -38,14 +35,11 @@ progenetix:
       handoverTypes:
         - cnvhistogram
         - biosamples
-        - biosampleslist
         - phenopackets
-        - individualsdata
+        - individuals
         - variants
-        - variantslist
         - callsetsvariants
         - UCSClink
-        - queryaggregation
 
 cellosaurus:
     id: cellosaurus
@@ -62,9 +56,8 @@ cellosaurus:
       handoverTypes:
         - biosamples
         - phenopackets
-        - individualsdata
+        - individuals
         - variants
-        - variantslist
         - callsetsvariants
         - UCSClink
 
@@ -103,7 +96,7 @@ dipg:
       - cnvhistogram
       - biosamples
       - phenopackets
-      - individualsdata
+      - individuals
       - variantsdata
       - callsetsvariants
       - UCSClink

@@ -1,5 +1,6 @@
 defaults:
-  db: progenetix
+  dataset_ids:
+    - progenetix
   coll: genespans
   assembly_id: GRCh38
   query_fields:

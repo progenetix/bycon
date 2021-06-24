@@ -23,8 +23,6 @@ properties:
     type: string
   beaconId:
     type: string
-  # responseType:
-  #   type: string
   warnings:
     type: array
     items:

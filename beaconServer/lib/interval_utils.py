@@ -1,4 +1,7 @@
 from cytoband_utils import *
+import statistics
+from progress.bar import Bar
+import numpy as np
 
 ################################################################################
 ################################################################################
@@ -20,6 +23,7 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
         for cb in byc["cytobands"]:
             byc["genomic_intervals"].append( {
                     "index": int(cb["i"]),
+                    "id": "{}:{}-{}".format(chro, cb["start"], cb["end"]),
                     "reference_name": cb["chro"],
                     "start": int(cb["start"]),
                     "end": int(cb["end"]),
@@ -42,6 +46,7 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
                 end = chro_maxes[chro]
             byc["genomic_intervals"].append( {
                     "index": i,
+                    "id": "{}:{}-{}".format(chro, start, end),
                     "reference_name": chro,
                     "start": start,
                     "end": end,
@@ -59,57 +64,28 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
 
     return byc
 
-################################################################################
-       
-def interval_cnv_frequencies(cnvmaps, byc):
-
-    int_cov_labs = { "DUP": 'dupcoverage', "DEL": 'delcoverage' }
-    int_f_labs = { "DUP": 'dupfrequencies', "DEL": 'delfrequencies' }
-
-    int_no = len(byc["genomic_intervals"])
-
-    maps = {
-        "intervals": int_no,
-        "binning": byc["genome_binning"],
-        "frequencymaps": { }
-    }
-
-    fFactor = 100;
-    if len(cnvmaps) > 1:
-        fFactor = 100 / len(cnvmaps)
-
-    min_f = byc["interval_definitions"]["interval_min_fraction"]
-
-    for cnv_type, cnv_lab in int_cov_labs.items():
-
-        f_label = int_f_labs[ cnv_type ]
-
-        maps.update({ f_label: [ ] })
-
-        for i, interval in enumerate(byc["genomic_intervals"]):
-            m_count = 0
-            for m in cnvmaps:
-                if float(m[ cnv_lab ][i]) >= min_f:
-                    m_count += 1
-
-            f = round(fFactor * m_count, 3)
-            maps[ f_label ].append( f )
-
-    return maps
 
 ################################################################################
 
-def interval_cnv_maps(variants, byc):
+def interval_cnv_arrays(v_coll, query, byc):
 
-    int_cov_labs = { "DUP": 'dupcoverage', "DEL": 'delcoverage' }
-    int_val_labs = { "DUP": 'dupmax', "DEL": 'delmin' }
+    cov_labs = { "DUP": 'dup', "DEL": 'del' }
+    val_labs = { "DUP": 'max', "DEL": 'min' }
+    cnv_val_defaults = { "DUP": 0.58, "DEL": -1 }
 
     int_no = len(byc["genomic_intervals"])
+    proto = [0 for i in range(int_no)] 
+
 
     maps = {
-        "intervals": int_no,
+        "interval_count": int_no,
         "binning": byc["genome_binning"]
     }
+
+    for cov_lab in cov_labs.values():
+        maps.update({cov_lab: proto.copy()})
+    for val_lab in val_labs.values():
+        maps.update({val_lab: proto.copy()})
 
     cnv_stats = {
         "cnvcoverage": 0,
@@ -120,24 +96,23 @@ def interval_cnv_maps(variants, byc):
         "delfraction": 0
     }
 
-    for cov_lab in int_cov_labs.values():
-        maps.update( { cov_lab: [ 0 for i in range(int_no) ] } )
-    for val_lab in int_val_labs.values():
-        maps.update( { val_lab: [ 0 for i in range(int_no) ] } )
+    v_no = v_coll.count_documents( query )
 
-    if len(variants) < 1:
+    if v_no < 1:
         return maps, cnv_stats
 
     # the values_map collects all values for the given interval to retrieve
     # the min and max values of each interval
     values_map = [  [ ] for i in range(int_no) ]
 
-    for v in variants:
+    for v in v_coll.find( query ):
 
         if not "variant_type" in v:
             continue
-        if not v["variant_type"] in int_cov_labs.keys():
+        if not v["variant_type"] in cov_labs.keys():
             continue
+
+        cov_lab = cov_labs[ v["variant_type"] ]
 
         for i, interval in enumerate(byc["genomic_intervals"]):
 
@@ -147,22 +122,24 @@ def interval_cnv_maps(variants, byc):
                 ov_start = max(interval["start"], v["start"])
                 ov = ov_end - ov_start
 
-                maps[ int_cov_labs[ v["variant_type"] ] ][ i ] += ov
+                maps[ cov_lab ][i] += ov
 
                 try:
                     # print(type(v["info"]["cnv_value"]))
                     if type(v["info"]["cnv_value"]) == int or type(v["info"]["cnv_value"]) == float:
                         values_map[ i ].append(v["info"]["cnv_value"])
+                    else:
+                        values_map[ i ].append(cnv_val_defaults[ v["variant_type"] ])
                 except:
                     pass
 
     # statistics
-    for lab in int_cov_labs.values():
+    for cov_lab in cov_labs.values():
         for i, interval in enumerate(byc["genomic_intervals"]):
-            if maps[ lab ][ i ] > 0:
-                cnv_stats[ lab ] += maps[ lab ][ i ]
-                cnv_stats[ "cnvcoverage" ] += maps[ lab ][ i ]
-                maps[ lab ][ i ] = round( maps[ lab ][ i ] / byc["genomic_intervals"][ i ]["size"], 4 )
+            if maps[cov_lab][i] > 0:
+                cnv_stats[ cov_lab+"coverage" ] += maps[cov_lab][i]
+                cnv_stats[ "cnvcoverage" ] += maps[cov_lab][i]
+                maps[cov_lab][i] = round( maps[cov_lab][i] / byc["genomic_intervals"][ i ]["size"], 3 )
 
     for s_k in cnv_stats.keys():
         if "coverage" in s_k:
@@ -174,19 +151,67 @@ def interval_cnv_maps(variants, byc):
 
     # the values for each interval are sorted, to allow extracting the min/max 
     # values by position
-        
-
     # the last of the sorted values is assigned iF > 0
     for i in range(len(values_map)):
         if values_map[ i ]:
             values_map[ i ].sort()
             if values_map[ i ][-1] > 0:
-                maps["dupmax"][ i ] = round(values_map[ i ][-1], 3)
+                maps["max"][i] = round(values_map[ i ][-1], 3)
             if values_map[ i ][0] < 0:
-                maps["delmin"][ i ] = round(values_map[ i ][0], 3)
+                maps["min"][i] = round(values_map[ i ][0], 3)
 
     return maps, cnv_stats
 
+################################################################################
+
+def interval_counts_from_callsets(callsets, byc):
+
+    """
+    This method will analyze a set (either list or MongoDB Cursor) of Progenetix
+    callsets with CNV statusmaps and return a list of standard genomic interval
+    objects with added per-interval quantitative data.
+    """
+
+    min_f = byc["interval_definitions"]["interval_min_fraction"]
+    int_fs = byc["genomic_intervals"].copy()
+    int_no = len(int_fs)
+
+    # callsets can be either a list or a MongoDB Cursor (which has to be re-set)
+    if type(callsets).__name__ == "Cursor":
+        callsets.rewind()
+    cs_no = len(list(callsets))
+
+    fFactor = 100 / cs_no;
+    pars = {
+        "gain": {"cov_l": "dup", "val_l": "max" },
+        "loss": {"cov_l": "del", "val_l": "min" }
+    }
+
+    for t in pars.keys():
+
+        covs = np.zeros( (cs_no, int_no) )
+        vals = np.zeros( (cs_no, int_no) )
+
+        if type(callsets).__name__ == "Cursor":
+            callsets.rewind()
+
+        for i, cs in enumerate(callsets):
+            covs[i] = cs["info"]["statusmaps"][ pars[t]["cov_l"] ]
+            vals[i] = cs["info"]["statusmaps"][ pars[t]["val_l"] ]
+
+        counts = np.count_nonzero(covs >= min_f, axis=0)
+        frequencies = np.around(counts * fFactor, 3)
+        medians = np.around(np.ma.median(np.ma.masked_where(covs < min_f, vals), axis=0).filled(0), 3)
+        means = np.around(np.ma.mean(np.ma.masked_where(covs < min_f, vals), axis=0).filled(0), 3)
+
+        for i, interval in enumerate(int_fs):
+            int_fs[i].update( {
+                t+"_frequency": frequencies[i],
+                t+"_median": medians[i],
+                t+"_mean": means[i]
+            } )
+
+    return int_fs
 
 ################################################################################
 

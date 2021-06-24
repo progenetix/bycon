@@ -31,11 +31,9 @@ def phenopackets():
     byc = initialize_service()
 
     for p_k, p_v in byc["these_prefs"]["parameters"].items():
+        # TODO: parameter checks ...
         if p_k in byc["form_data"]:
-            if "array" in p_v[ "type" ]:
-                byc.update( { p_k: byc["form_data"].getlist( p_k ) } )
-            else:
-                byc.update( { p_k: byc["form_data"].getvalue( p_k ) } )
+            byc.update( { p_k: byc["form_data"][p_k] } )
 
     select_dataset_ids(byc)
     check_dataset_ids(byc)
@@ -72,7 +70,7 @@ def phenopackets():
     access_id_var = [ ]
 
     if "variantsaccessid" in byc["form_data"]:
-        access_id_var = byc["form_data"].getvalue("variantsaccessid")
+        access_id_var = byc["form_data"]["variantsaccessid"]
     elif "variants._id" in byc["query_results"]:
         access_id_var = byc["query_results"]["variants._id"]["id"]
     if len(access_id_var) > 1:
@@ -120,7 +118,7 @@ def phenopackets():
         results.append( pxf )
 
     populate_service_response( byc, results)
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

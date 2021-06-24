@@ -1,4 +1,6 @@
 defaults:
+  dataset_ids:
+    - progenetix
   geo_db: progenetix
   geo_coll: geolocs
   request_type: city
@@ -12,26 +14,3 @@ meta:
   info: >
     The main geolocs payload can be accessed in `response.results`.
 geo_root: 'provenance.geo'
-parameters:
-  geolatitude:
-    type: float
-    pattern: '^\-?\d+?(\.\d+?)?$'
-  geolongitude:
-    type: float
-    pattern: '^\-?\d+?(\.\d+?)?$'
-  geodistance:
-    type: float
-    pattern: '^\d+?(\.\d+?)?$'
-    default: 10000
-  city:
-    type: string
-    pattern: '^\w.{1,126}\w$'
-request_types:
-  geoquery:
-    all_of:
-      - geolatitude
-      - geolongitude
-      - geodistance
-  city:
-    all_of:
-      - city

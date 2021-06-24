@@ -29,10 +29,17 @@ def individuals():
 
     byc = initialize_service()
     run_beacon_init_stack(byc)
-    run_beacon_one_dataset(byc)
+    run_beacon(byc)
+    export_datatable(byc)
+
+    # Phenopackets
+
+    # if "IndividualResponse" in byc["response_type"]:
+
+    # print()
 
     query_results_save_handovers(byc)
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

@@ -3,25 +3,29 @@ defaults:
     - progenetix
   method: details
   response_type: VariantInSampleResponse
+  genome_binning: 1Mb
 meta:
   returned_schemas:
     Variant: https://progenetix.org/services/schemas/Variant/
   info: >
-    The main variants payload can be accessed in `response.results`.
+    The main variants payload can be accessed in `response.result_sets`.
 bycon_definition_files:
   - config
   - beacon_info
   - beacon_mappings
   - dataset_definitions
+  - datatable_mappings
   - filter_definitions
   - geoloc_definitions
-  - variant_definitions
   - handover_definitions
+  - interval_definitions
+  - variant_definitions
 all_variants_methods:
   - callsetsvariants
   - callsetspgxseg
 response_types:
   - VariantInSampleResponse
+  - VariantInterpretationResponse
   - IndividualResponse
   - BiosampleResponse
 methods:
@@ -48,24 +52,3 @@ methods:
     - reference_bases
     - alternate_bases
     - info
-  pgxseg:
-    - biosample_id
-    - reference_name
-    - start
-    - end
-    - info.cnv_value
-    - variant_type
-  callsetsvariants:
-    - biosample_id
-    - reference_name
-    - start
-    - end
-    - info.cnv_value
-    - variant_type
-  callsetspgxseg:
-    - biosample_id
-    - reference_name
-    - start
-    - end
-    - info.cnv_value
-    - variant_type

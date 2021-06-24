@@ -90,7 +90,9 @@ def _endpoint_response_from_pars( **byc ):
     if not "scope" in byc["form_data"]:
         return endpoint_pars
 
-    scope = byc["form_data"].getvalue("scope")
+    scope = ""
+    if "scope" in byc["form_data"]:
+        scope = byc["form_data"]["scope"]
     scope = scope.replace("g_variants", "variants")
     if scope in colls:
         endpoint_pars.update( { "response": scope } )
@@ -99,10 +101,10 @@ def _endpoint_response_from_pars( **byc ):
             id_key = "id"
             if scope == "variants":
                 id_key = "digest"
-            endpoint_pars.update( { "queries": { scope: { id_key: byc["form_data"].getvalue("id") } } } )
+            endpoint_pars.update( { "queries": { scope: { id_key: byc["form_data"]["id"] } } } )
 
     if "response" in byc["form_data"]:
-        response = byc["form_data"].getvalue("response")
+        response = byc["form_data"]["response"]
         response = response.replace("g_variants", "variants")
         if response in colls:
             endpoint_pars.update( { "response": response } )

@@ -2,6 +2,7 @@
 progenetix:
     id: progenetix
     name: progenetix
+    idMatch: pgx
     identifier: 'org.progenetix::progenetix'
     description: "Progenetix cancer genome profiles"
     assemblyId: 'GRCh38'
@@ -21,17 +22,17 @@ progenetix:
         - biosamples
         - biosampleslist
         # - phenopackets
-        - individualsdata
+        - individuals
         - variants
-        - variantslist
         - callsetsvariants
         - callsetspgxseg
         - pgxseg
         - UCSClink
-        - queryaggregation
+
 cellosaurus:
     id: cellosaurus
     name: cellosaurus
+    idMatch: cellos
     identifier: 'org.progenetix::cellosaurus'
     description: "annotated cellosaurus cell line variants"
     assemblyId: 'GRCh38'
@@ -41,21 +42,22 @@ cellosaurus:
     variantCount: 1446
     callCount: 8702
     sampleCount: 6617
-    externalUrl: "https://progenetix.org/cellosaurus/search/"
+    externalUrl: "https://progenetix.org/cellosaurus/"
     info:
       authorized: true
       accessType: PUBLIC
       handoverTypes:
         - biosamples
-        # - phenopackets
-        - individualsdata
+        - individuals
         - variants
-        - variantslist
+        - variantsinterpretations
         - callsetsvariants
         - UCSClink
+
 1000genomesDRAGEN:
     id: 1000genomesDRAGEN
     name: 1000genomesDRAGEN
+    idMatch: onekg
     identifier: 'org.progenetix::1000genomesDRAGEN'
     description: "1000 genomes DRAGEN analysis CNV dataset"
     createDateTime: 2021-01-29
@@ -65,14 +67,13 @@ cellosaurus:
     callCount: 3945868
     sampleCount: 3200
     assemblyId: 'GRCh38'
-    externalUrl: "https://progenetix.org/1000-genomes-cnv/search/"
+    externalUrl: "https://progenetix.org/1000-genomes-cnv/"
     info:
       authorized: true
       accessType: PUBLIC
       handoverTypes:
         - biosamples
         - variants
-        - variantslist
         - callsetsvariants
         - callsetspgxseg
         - pgxseg

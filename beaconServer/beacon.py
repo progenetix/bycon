@@ -11,7 +11,7 @@ bycon_lib_path = path.join( pkg_path, "beaconServer", "lib" )
 
 sys.path.append( bycon_lib_path )
 from read_specs import read_local_prefs
-from cgi_utils import rest_path_value, cgi_print_json_response, set_debug_state
+from cgi_utils import rest_path_value, cgi_print_response, set_debug_state
 
 """
 """
@@ -55,12 +55,12 @@ def beacon(path=""):
 
             exit()
 
-    cgi_print_json_response( {
+    cgi_print_response( {
         "service_response": {
             "response" : {
                 "error" : {
                     "error_code": 422,
-                    "error_message": "No correct service path provided. Please refer to the documentation at http://info.progenetix.org/tags/services"
+                    "error_message": "No correct service path provided. Please refer to the documentation at http://info.progenetix.org/tags/Beacon"
                     },
                 }
             }

@@ -1245,14 +1245,14 @@ components:
         Format of the response.
       type: object
       properties:
-        Info:
+        info:
           type: string
           example: 'beacon-info-v2.0.0-draft.3'
-        Dataset:
+        dataset:
           type: string
           example:
             'beacon-dataset-v2.0.0-draft.3'
-        FilterTerm:
+        filteringTerm:
           type: string
           example:
             'beacon-filtering-term-v2.0.0-draft.3'
@@ -1261,35 +1261,35 @@ components:
         Format of the responses and version of the Beacon handling this request.
       type: object
       properties:
-        VariantIdentification:
+        variantIdentification:
           type: string
           example:
             ga4gh-variant-representation-v0.1
-        VariantAnnotation:
+        variantAnnotation:
           type: string
           example: beacon-variant-annotation-draft-2
-        Individual:
+        individual:
           type: string
           example: ga4gh-phenopacket-individual-v0.1
-        Biosample:
+        biosample:
           type: string
           example: ga4gh-schemablocks-biosample-v0.1
-        Run:
+        run:
           type: string
           example: beacon-run-draft-3
-        Analysis:
+        analysis:
           type: string
           example: beacon-analysis-draft-2
-        VariantInSample:
+        variantInSample:
           type: string
           example: beacon-variant-in-sample-draft-3
-        VariantInterpretation:
+        variantInterpretation:
           type: string
           example: beacon-variant-interpretation-draft-2
-        Interactor:
+        interactor:
           type: string
           example: beacon-interactor-draft-2
-        Cohort:
+        cohort:
           type: string
           example: beacon-cohort-draft-3
     InfoRequestMeta:
@@ -1328,17 +1328,17 @@ components:
       description: |
         Variant description using either the default or an alternative schema.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_identification_schema.yaml#/components/schemas/VariantIdentification'
         - $ref: '#/components/schemas/AlternativeSchema'
     VariantAnnotation:
       description: |
         Default schema for variant annotation
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_annotations_schema.yaml#/components/schemas/VariantAnnotation'
         - $ref: '#/components/schemas/AlternativeSchema'
-    VariantReponseResults:
+    VariantResponseResults:
       description: |
         TBD
       properties:
@@ -1364,8 +1364,8 @@ components:
           description: |
             Number of pages to skip.
           type: integer
-          minimum: 1
-          default: 1
+          minimum: 0
+          default: 0
           example: 1
         limit:
           description: |
@@ -1511,6 +1511,28 @@ components:
             Either `alternateBases` or `variantType` is required, with the
             exception of range queries (single `start` and `end` parameters).
           type: string
+        variantMinLength:
+          description: >
+            Minimum length in bases of a genomic variant. This is an optional
+            parameter without prescribed use. While a length is commonly available
+            for structural variants such as copy number variations, it is
+            recommended that length based queries should also be supported for
+            variants with indicated referenceBases and alternateBases, to enable
+            length-specific wildcard queries.
+          type: integer
+          format: int64
+          minimum: 0
+        variantMaxLength:
+          description: >
+            Maximum length in bases of a genomic variant. This is an optional
+            parameter without prescribed use. While a length is commonly available
+            for structural variants such as copy number variations, it is
+            recommended that length based queries should also be supported for
+            variants with indicated referenceBases and alternateBases, to enable
+            length-specific wildcard queries.
+          type: integer
+          format: int64
+          minimum: 1
         mateName:
           $ref: '#/components/schemas/Chromosome'
     IndividualFields:
@@ -1616,7 +1638,7 @@ components:
     
     ResponseMeta:
       description: |
-        Meta information about the reponse.
+        Meta information about the response.
       type: object
       properties:
         beaconId:
@@ -1664,13 +1686,59 @@ components:
         response:
           $ref: '#/components/schemas/GenomicVariantResponseContent'
 
+    ResultSet:
+      description: |
+        TBD
+      type: object
+      required:
+        - id
+        - type
+        - exists
+      properties:
+        id:
+          description: |
+            TBD
+          type: string
+          example: |
+            datasetA
+        type:
+          description: |
+            TBD
+          type: string
+          default: 'dataset'
+        exists:
+          description: |
+            TBD
+          type: boolean
+        resultsCount:
+          description: |
+            TBD
+          type: integer
+        resultsHandovers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Handover'
+        info:
+          type: object
+
+    VariantResultSet:
+      allOf:
+      - description: |
+          TBD
+      - $ref: '#/components/schemas/ResultSet'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/VariantResponseResults'
+
     GenomicVariantResponseContent:
       description: |
         TBD
       type: object
       required:
         - exists
-        - results
       properties:
         exists:
           description: |
@@ -1683,33 +1751,17 @@ components:
         numTotalResults:
           type: integer
           minimum: 0
-        results:
+        resultSets:
           type: array
           items:
-            $ref: '#/components/schemas/VariantReponseResults'
+            $ref: '#/components/schemas/VariantResultSet'
         info:
           type: object
-        resultsHandover:
-          type: array
-          items:
-            $ref: '#/components/schemas/Handover'
         beaconHandover:
           type: array
           items:
             $ref: '#/components/schemas/Handover'
 
-    # IndividualRequest:
-    #   description: |
-    #     TBD
-    #   type: object
-    #   required:
-    #     - meta
-    #     - query
-    #   properties:
-    #     meta:
-    #       $ref: '#/components/schemas/RequestMeta'
-    #     query:
-    #       $ref: '#/components/schemas/RequestQuery'
     IndividualResponse:
       description: |
         Response of a query over individuals.
@@ -1722,14 +1774,25 @@ components:
           $ref: '#/components/schemas/ResponseMeta'
         response:
           $ref: '#/components/schemas/IndividualResponseContent'
+    
+    IndividualResultSet:
+      allOf:
+      - description: |
+          TBD
+      - $ref: '#/components/schemas/ResultSet'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/IndividualResponseResults'
+    
     IndividualResponseContent:
       description: |
         TBD
       type: object
       required:
         - exists
-        - numTotalResults
-        - results
       properties:
         exists:
           description: |
@@ -1742,36 +1805,22 @@ components:
         numTotalResults:
           type: integer
           minimum: 0
-        results:
+        resultSets:
           type: array
           items:
-            $ref: '#/components/schemas/IndividualResponseResults'
+            $ref: '#/components/schemas/IndividualResultSet'
         info:
           type: object
-        resultsHandover:
-          $ref: '#/components/schemas/Handover'
         beaconHandover:
           $ref: '#/components/schemas/Handover'
     IndividualResponseResults:
       description: |
         Default schema for describing invididuals.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_individual_schema.yaml#/components/schemas/Individual'
         - $ref: '#/components/schemas/AlternativeSchema'
 
-    # BiosampleRequest:
-    #   description: |
-    #     TBD
-    #   type: object
-    #   required:
-    #     - meta
-    #     - query
-    #   properties:
-    #     meta:
-    #       $ref: '#/components/schemas/RequestMeta'
-    #     query:
-    #       $ref: '#/components/schemas/RequestQuery'
     BiosampleResponse:
       description: |
         Response of a query over biosamples.
@@ -1784,13 +1833,25 @@ components:
           $ref: '#/components/schemas/ResponseMeta'
         response:
           $ref: '#/components/schemas/BiosampleResponseContent'
+    
+    BiosampleResultSet:
+      allOf:
+      - description: |
+          TBD
+      - $ref: '#/components/schemas/ResultSet'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/BiosampleResponseResults'    
+    
     BiosampleResponseContent:
       description: |
         TBD
       type: object
       required:
         - exists
-        - results
       properties:
         exists:
           description: |
@@ -1803,16 +1864,12 @@ components:
         numTotalResults:
           type: integer
           minimum: 0
-        results:
+        resultSets:
           type: array
           items:
-            $ref: '#/components/schemas/BiosampleResponseResults'
+            $ref: '#/components/schemas/BiosampleResultSet'
         info:
           type: object
-        resultsHandover:
-          type: array
-          items:
-            $ref: '#/components/schemas/Handover'
         beaconHandover:
           type: array
           items:
@@ -1821,7 +1878,7 @@ components:
       description: |
         Default schema for describing biosamples.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_biosample_schema.yaml#/components/schemas/Biosample'
         - $ref: '#/components/schemas/AlternativeSchema'
 
@@ -1837,13 +1894,25 @@ components:
           $ref: '#/components/schemas/ResponseMeta'
         response:
           $ref: '#/components/schemas/RunResponseContent'
+    
+    RunResultSet:
+      allOf:
+      - description: |
+          TBD
+      - $ref: '#/components/schemas/ResultSet'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/RunResponseResults'    
+    
     RunResponseContent:
       description: |
         TBD
       type: object
       required:
         - exists
-        - results
       properties:
         exists:
           description: |
@@ -1856,16 +1925,12 @@ components:
         numTotalResults:
           type: integer
           minimum: 0
-        results:
+        resultSets:
           type: array
           items:
-            $ref: '#/components/schemas/RunResponseResults'
+            $ref: '#/components/schemas/RunResultSet'
         info:
           type: object
-        resultsHandover:
-          type: array
-          items:
-            $ref: '#/components/schemas/Handover'
         beaconHandover:
           type: array
           items:
@@ -1874,7 +1939,7 @@ components:
       description: |
         Default schema for describing runs.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_run_schema.yaml#/components/schemas/Run'
         - $ref: '#/components/schemas/AlternativeSchema'
 
@@ -1890,13 +1955,25 @@ components:
           $ref: '#/components/schemas/ResponseMeta'
         response:
           $ref: '#/components/schemas/AnalysisResponseContent'
+    
+    AnalysisResultSet:
+      allOf:
+      - description: |
+          TBD
+      - $ref: '#/components/schemas/ResultSet'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/AnalysisResponseResults' 
+    
     AnalysisResponseContent:
       description: |
         TBD
       type: object
       required:
         - exists
-        - results
       properties:
         exists:
           description: |
@@ -1909,16 +1986,12 @@ components:
         numTotalResults:
           type: integer
           minimum: 0
-        results:
+        resultSets:
           type: array
           items:
-            $ref: '#/components/schemas/AnalysisResponseResults'
+            $ref: '#/components/schemas/AnalysisResultSet'
         info:
           type: object
-        resultsHandover:
-          type: array
-          items:
-            $ref: '#/components/schemas/Handover'
         beaconHandover:
           type: array
           items:
@@ -1927,7 +2000,7 @@ components:
       description: |
         Default schema for describing runs.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_analysis_schema.yaml#/components/schemas/Analysis'
         - $ref: '#/components/schemas/AlternativeSchema'
 
@@ -1943,13 +2016,25 @@ components:
           $ref: '#/components/schemas/ResponseMeta'
         response:
           $ref: '#/components/schemas/VariantInSampleResponseContent'
+    
+    VariantInSampleResultSet:
+      allOf:
+      - description: |
+          TBD
+      - $ref: '#/components/schemas/ResultSet'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/VariantInSampleResponseResults' 
+    
     VariantInSampleResponseContent:
       description: |
         TBD
       type: object
       required:
         - exists
-        - results
       properties:
         exists:
           description: |
@@ -1962,16 +2047,12 @@ components:
         numTotalResults:
           type: integer
           minimum: 0
-        results:
+        resultSets:
           type: array
           items:
-            $ref: '#/components/schemas/VariantInSampleResponseResults'
+            $ref: '#/components/schemas/VariantInSampleResultSet'
         info:
           type: object
-        resultsHandover:
-          type: array
-          items:
-            $ref: '#/components/schemas/Handover'
         beaconHandover:
           type: array
           items:
@@ -1980,7 +2061,7 @@ components:
       description: |
         Default schema for describing runs.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_in_sample_schema.yaml#/components/schemas/VariantInSample'
         - $ref: '#/components/schemas/AlternativeSchema'
 
@@ -1996,13 +2077,25 @@ components:
           $ref: '#/components/schemas/ResponseMeta'
         response:
           $ref: '#/components/schemas/VariantInterpretationResponseContent'
+    
+    VariantInterpretationResultSet:
+      allOf:
+      - description: |
+          TBD
+      - $ref: '#/components/schemas/ResultSet'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/VariantInterpretationResponseResults' 
+    
     VariantInterpretationResponseContent:
       description: |
         TBD
       type: object
       required:
         - exists
-        - results
       properties:
         exists:
           description: |
@@ -2015,16 +2108,12 @@ components:
         numTotalResults:
           type: integer
           minimum: 0
-        results:
+        resultSets:
           type: array
           items:
-            $ref: '#/components/schemas/VariantInterpretationResponseResults'
+            $ref: '#/components/schemas/VariantInterpretationResultSet'
         info:
           type: object
-        resultsHandover:
-          type: array
-          items:
-            $ref: '#/components/schemas/Handover'
         beaconHandover:
           type: array
           items:
@@ -2033,7 +2122,7 @@ components:
       description: |
         Default schema for describing runs.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_variant_interpretation_schema.yaml#/components/schemas/VariantInterpretation'
         - $ref: '#/components/schemas/AlternativeSchema'
 
@@ -2049,13 +2138,25 @@ components:
           $ref: '#/components/schemas/ResponseMeta'
         response:
           $ref: '#/components/schemas/InteractorResponseContent'
+    
+    InteractorResultSet:
+      allOf:
+      - description: |
+          TBD
+      - $ref: '#/components/schemas/ResultSet'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/InteractorResponseResults' 
+    
     InteractorResponseContent:
       description: |
         TBD
       type: object
       required:
         - exists
-        - results
       properties:
         exists:
           description: |
@@ -2068,16 +2169,12 @@ components:
         numTotalResults:
           type: integer
           minimum: 0
-        results:
+        resultSets:
           type: array
           items:
-            $ref: '#/components/schemas/InteractorResponseResults'
+            $ref: '#/components/schemas/InteractorResultSet'
         info:
           type: object
-        resultsHandover:
-          type: array
-          items:
-            $ref: '#/components/schemas/Handover'
         beaconHandover:
           type: array
           items:
@@ -2086,9 +2183,10 @@ components:
       description: |
         Default schema for describing runs.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_interactor_schema.yaml#/components/schemas/Interactor'
         - $ref: '#/components/schemas/AlternativeSchema'
+    
     CohortResponse:
       description: |
         Response of a query over cohorts.
@@ -2101,13 +2199,25 @@ components:
           $ref: '#/components/schemas/ResponseMeta'
         response:
           $ref: '#/components/schemas/CohortResponseContent'
+    
+    CohortResultSet:
+      allOf:
+      - description: |
+          TBD
+      - $ref: '#/components/schemas/ResultSet'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/CohortResponseResults' 
+    
     CohortResponseContent:
       description: |
         TBD
       type: object
       required:
         - exists
-        - results
       properties:
         exists:
           description: |
@@ -2120,16 +2230,12 @@ components:
         numTotalResults:
           type: integer
           minimum: 0
-        results:
+        resultSets:
           type: array
           items:
-            $ref: '#/components/schemas/CohortResponseResults'
+            $ref: '#/components/schemas/CohortResultSet'
         info:
           type: object
-        resultsHandover:
-          type: array
-          items:
-            $ref: '#/components/schemas/Handover'
         beaconHandover:
           type: array
           items:
@@ -2138,7 +2244,7 @@ components:
       description: |
         Default schema for describing runs.
       type: object
-      oneOf:
+      anyOf:
         - $ref: 'https://raw.githubusercontent.com/ga4gh-beacon/specification-v2-default-schemas/draft.3/default_cohort_schema.yaml#/components/schemas/Cohort'
         - $ref: '#/components/schemas/AlternativeSchema'
        
@@ -2181,7 +2287,7 @@ components:
       description: |
         Default schema for describing Beacon info.
       type: object
-      oneOf:
+      anyOf:
         - $ref: '#/components/schemas/BeaconInfo'
         - $ref: '#/components/schemas/AlternativeSchema'
 

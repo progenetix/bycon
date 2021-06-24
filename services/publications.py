@@ -92,7 +92,7 @@ def publications():
                 else:
                     s[ k ] = None
         try:
-            s_v = p_re.match(s[ "id" ]).group(2)
+            s_v = p_re.match(s[ "id" ]).group(3)
             s[ "sortid" ] = int(s_v)
         except:
             s[ "sortid" ] = -1
@@ -104,7 +104,7 @@ def publications():
     results = sorted(p_l, key=itemgetter('sortid'), reverse = True)
 
     populate_service_response( byc, results)
-    cgi_print_json_response( byc, 200 )
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

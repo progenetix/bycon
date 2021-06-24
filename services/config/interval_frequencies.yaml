@@ -16,18 +16,8 @@ meta:
   info: >
     The main collations payload can be accessed in `response.results`.
 methods:
-  frequencies:
-    - interval_frequencies
-    - id
-    - label
-  pgxseg:
-    - interval_frequencies
-    - id
-    - label
-  pgxmatrix:
-    - interval_frequencies
-    - id
-    - label
+  frequencies: [ ]
+  codematches: [ ]
 integer_keys:
   - count
   - code_matches

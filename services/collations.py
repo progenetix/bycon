@@ -32,7 +32,7 @@ def collations():
     select_dataset_ids(byc)
     parse_filters(byc)
 
-    create_empty_service_response(byc)    
+    create_empty_service_response(byc)
 
     if len(byc[ "dataset_ids" ]) < 1:
       response_add_error(byc, 422, "No `datasetIds` parameter provided." )
@@ -53,7 +53,6 @@ def collations():
             byc[ "filters" ] = [ ".?" ]
         for f in byc[ "filters" ]:
             query = { "id": re.compile(r'^'+f ) }
-            pre = re.split('-|:', f)[0]
             mongo_coll = mongo_db[ c ]
             for subset in mongo_coll.find( query ):
 
@@ -81,9 +80,42 @@ def collations():
 
     mongo_client.close( )
 
-    populate_service_response( byc, response_map_results( list(s_s.values()), byc))
-    cgi_print_json_response( byc, 200 )
+    populate_service_response( byc, _response_map_results( list(s_s.values()), byc))
+    cgi_print_response( byc, 200 )
 
+################################################################################
+################################################################################
+################################################################################
+
+def _response_map_results(data, byc):
+
+    # the method keys can be overriden with "deliveryKeys"
+    d_k = response_set_delivery_keys(byc)
+
+    if len(d_k) < 1:
+        return data
+
+    results = [ ]
+
+    for res in data:
+        s = { }
+        for k in d_k:
+            # TODO: cleanup and add types in config ...
+            if "." in k:
+                k1, k2 = k.split('.')
+                if k1 in res.keys():
+                    if k2 in res[ k1 ]:
+                        s[ k ] = res[ k1 ][ k2 ]
+            elif k in res.keys():
+                if "start" in k or "end" in k:
+                    s[ k ] = int(res[ k ])
+                else:
+                    s[ k ] = res[ k ]
+        results.append( s )
+
+    return results
+
+################################################################################
 ################################################################################
 ################################################################################
 

@@ -1,25 +1,25 @@
 ---
 h->o_types:
+
   cnvhistogram:
     id: 'pgx:handover:cnvhistogram'
     label: "CNV Histogram"
     description: "create a CNV histogram from matched callsets"
     h->o_key: 'callsets._id'
     script_path_web: '/cgi-bin/PGX/cgi/samplePlots.cgi'
+    method: cnvhistogram
+    output: cnvhistogram
+
   biosamples:
+    method: biosamples
     id: 'pgx:handover:biosamples'
     label: "Biosamples"
     description: "retrieve data of the biosamples matched by the query"
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/biosamples'
-  # biosampleslist:
-  #   id: 'pgx:handover:biosampleslist'
-  #   label: "Biosamples"
-  #   description: "retrieve data of the biosamples matched by the query as simple JSON list"
-  #   h->o_key: 'biosamples._id'
-  #   script_path_web: '/services/biosamples'
-  #   url_opts: "&responseFormat=simple"
+
   phenopackets:
+    method: phenopackets
     id: 'pgx:handover:phenopackets'
     label: "Phenopackets"
     description: "retrieve data of the phenopackets matched by the query"
@@ -29,58 +29,74 @@ h->o_types:
     # service resolves this itself by forcing the retrieval of the matching
     # individuals 
     script_path_web: '/services/phenopackets'
-  individualsdata:
-    id: 'pgx:handover:individualsdata'
+
+  individuals:
+    method: individuals
+    id: 'pgx:handover:individuals'
     label: "Individuals"
     description: "retrieve data of the individuals matched by the query"
     h->o_key: 'individuals._id'
     script_path_web: '/services/deliveries'
     url_opts: "&responseFormat=simple"
-  # variantslist:
-  #   id: 'pgx:handover:variantslist'
-  #   label: "List of ound Variants"
-  #   description: "retrieve variants matched by the query as JSON list of variant objects"
-  #   h->o_key: 'variants._id'
-  #   script_path_web: '/services/variants'
-  #   url_opts: "&responseFormat=simple"
+    output: cnvhistogram
+
   variants:
+    method: variants
     id: 'pgx:handover:variants'
     label: "Found Variants (.json)"
     description: "retrieve variants matched by the query"
     h->o_key: 'variants._id'
     script_path_web: '/beacon/variants'
+
+  variantsinterpretations:
+    id: 'pgx:handover:variantsinterpretations'
+    label: "Annotations and interpretations for found Variants (.json)"
+    description: "retrieve the annotations - if existing - for the found variants"
+    h->o_key: 'variant_annotations._id'
+    script_path_web: '/beacon/variantsInterpretations'
+
   pgxseg:
+    method: variants
+    output: pgxseg
     id: 'pgx:handover:pgxseg'
     label: "Found Variants (.pgxseg)"
     description: "retrieve variants matched by the query as .pgxseg download"
     h->o_key: 'variants._id'
     script_path_web: '/beacon/variants'
+  
   callsetsvariants:
+    method: callsetsvariants
     id: 'pgx:handover:callsetsvariants'
     label: "All Sample Variants (.json)"
     description: "Download all variants of matched samples - potentially huge dataset..."
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/variants'
+
   callsetspgxseg:
+    method: callsetsvariants
+    output: pgxseg
     id: 'pgx:handover:callsetspgxseg'
     label: "All Sample Variants (.pgxseg)"
     description: "Download all variants of matched samples - potentially huge dataset..."
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/variants'
-  UCSClink:   
+  UCSClink:
+    
+    method: UCSClink
     id: 'pgx:handover:bedfile2ucsc'
     label: "Show Variants in UCSC"
     description: "map variants matched by the query to the UCSC browser"
     h->o_key: 'variants._id'
     ext_url: 'http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg38'
     remove_subdomain: True
-  # queryaggregation:
-  #   id: 'pgx:handover:queryaggregation'
-  #   label: "Aggregate Query"
-  #   description: "Start new query limited to the current samples"
-  #   h->o_key: 'callsets._id'
-  #   script_path_web: 'http://beacon.progenetix.org/ui/'
+
+# handover methods describe the source and target collections for stored
+# document identifiers (so far _id, id or digest). The source parameters are
+# used for creating a `distinct` operation for the `source_key` in the
+# `source_collection`, using a provided query.
+
 h->o_methods:
+
   biosamples._id:
     source_collection: biosamples
     source_key: _id
@@ -91,31 +107,28 @@ h->o_methods:
     source_key: id
     target_collection: biosamples
     target_key: id
-  bs.isid->biosamples.id:
-    source_collection: biosamples
-    source_key: id
-    target_collection: biosamples
-    target_key: id
-  bs.isid->individuals.id:
+  biosamples.individual_id->individuals.id:
     source_collection: biosamples
     source_key: individual_id
     target_collection: individuals
     target_key: id
-  cs.id:
-    source_collection: callsets
-    source_key: id
-    target_collection: callsets
-    target_key: id
+
   callsets._id:
     source_collection: callsets
     source_key: _id
     target_collection: callsets
     target_key: _id
-  callsets.bsid->biosamples.id:
+  callsets.id:
+    source_collection: callsets
+    source_key: id
+    target_collection: callsets
+    target_key: id
+  callsets.biosample_id->biosamples.id:
     source_collection: callsets
     source_key: biosample_id
     target_collection: biosamples
     target_key: id
+
   individuals._id:
     source_collection: individuals
     source_key: _id
@@ -126,29 +139,41 @@ h->o_methods:
     source_key: id
     target_collection: individuals
     target_key: id
+
   variants._id:
     source_collection: variants
     source_key: _id
     target_collection: variants
     target_key: _id
-  variants.bsid->biosamples.id:
-    source_collection: variants
-    source_key: biosample_id
-    target_collection: biosamples
-    target_key: id
-  variants.bsid->variants._id:
-    source_collection: variants
-    source_key: biosample_id
-    target_collection: variants
-    target_key: _id
-  vs.csid->cs.id:
-    source_collection: variants
-    source_key: callset_id
-    target_collection: callsets
-    target_key: id
   variants.digest:
     source_collection: variants
     source_key: digest
     target_collection: variants
     target_key: digest
+  variants.biosample_id->biosamples.id:
+    source_collection: variants
+    source_key: biosample_id
+    target_collection: biosamples
+    target_key: id
+  variants.callset_id->callsets.id:
+    source_collection: variants
+    source_key: callset_id
+    target_collection: callsets
+    target_key: id
+  variants.variantannotation_id->variant_annotations.id:
+    source_collection: variants
+    source_key: variantannotation_id
+    target_collection: variant_annotations
+    target_key: id
 
+  variant_annotations.id->variant_annotations._id:
+    source_collection: variant_annotations
+    source_key: id
+    target_collection: variant_annotations
+    target_key: _id
+
+  variant_annotations._id:
+    source_collection: variant_annotations
+    source_key: _id
+    target_collection: variant_annotations
+    target_key: _id

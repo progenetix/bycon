@@ -5,15 +5,15 @@ bycon_definition_files:
   - filter_definitions
 defaults:
   method: ""
-  response_type: return_filtering_terms
+  response_type: InfoResponse
   stats_number: 1
 meta:
   beacon_id: org.progenetix
   response_type: InfoResponse
   returned_schemas:
-    BeaconDataset: "https://beacon-project.io/schemas/beacon-v2/current/FilteringTerm.json"
+    FilteringTerm: "https://beacon-project.io/schemas/beacon-v2/current/FilteringTerm.json"
   info: >
-    The latest dbstats payload can be accessed in `response.results`.
+    The filtering terms can be accessed in `response.result_sets`.
 methods:
   counts:
     - counts

@@ -13,6 +13,9 @@ parameters:
   city:
     type: string
     pattern: '^\w.{1,126}\w$'
+  id:
+    type: string
+    pattern: '^\w+?(\:\:\w+?)?$'
 request_types:
   geoquery:
     all_of:
@@ -22,3 +25,6 @@ request_types:
   city:
     all_of:
       - city
+  id:
+    all_of:
+      - id

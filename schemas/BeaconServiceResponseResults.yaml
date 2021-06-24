@@ -20,11 +20,15 @@ description: >
   The results of the service request.
 properties:
   error:
-    "$ref": BeaconServiceError.yaml#/properties
+    $ref: BeaconServiceError.yaml#/properties
   exists:
     type: boolean
   info:
     type: object
+  resultSets:
+    type: array
+    items:
+      $ref: BeaconServiceResponseResultSet.yaml#/properties
   results:
     type: array
     items:
@@ -37,3 +41,7 @@ properties:
     type: array
     items:
       type: object
+  numTotalResults:
+    description: |
+      TBD
+    type: integer
