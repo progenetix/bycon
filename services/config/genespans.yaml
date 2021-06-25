@@ -14,6 +14,6 @@ meta:
   returned_schemas:
     GeneSpan: https://progenetix.org/services/schemas/GeneSpan/
   info: >
-    The main genes payload can be accessed in `response.results`.
+    The main genes payload can be accessed in `results`.
 assembly_ids:
   - GRCh38

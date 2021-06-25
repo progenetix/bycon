@@ -14,7 +14,7 @@ meta:
   returned_schemas:
     DBstats: https://progenetix.org/services/schemas/DBstats/
   info: >
-    The latest dbstats payload can be accessed in `response.results`.
+    The latest dbstats payload can be accessed in `results`.
 methods:
   counts:
     - counts

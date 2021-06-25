@@ -12,5 +12,5 @@ meta:
   returned_schemas:
     GeoLocation: https://progenetix.org/services/schemas/GeoLocation/
   info: >
-    The main geolocs payload can be accessed in `response.results`.
+    The main geolocs payload can be accessed in `results`.
 geo_root: 'provenance.geo'

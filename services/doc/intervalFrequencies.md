@@ -8,12 +8,12 @@ retrieval of data for a single collation, e.g. by its identifier (e.g.
 
 #### Response
 
-Results are provides in a JSON Beacon v2 response, inside the `response.results`
+Results are provides in a JSON Beacon v2 response, inside the `results`
 array. Each frequency set is provided as object, with the single bin frequencies
 in `interval_frequencies`.
 
 For the usual "single frequency set" use case this would result in a possible
-direct access to the frequecy list at `response.results[0].interval_frequencies`.
+direct access to the frequecy list at `results[0].interval_frequencies`.
 
 ```
 {

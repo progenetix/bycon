@@ -32,7 +32,7 @@ RewriteRule     "^/services(.*)"     /cgi-bin/bycon/services/services.py$1      
 
 Standard responses are provided as `Content-Type: application/json`. The wrapper
 format is based on the Beacon v2 response format, with the data returned in the
-`response.results` array: 
+`results` array: 
 
 ```
 meta:
@@ -57,7 +57,7 @@ format. Here, the data is a dictionary/object with a single key (`genes`):
 ```
 {
     "meta": {
-      "info": "The main geolocs payload can be accessed in `response.results`.\n",
+      "info": "The main geolocs payload can be accessed in `results`.\n",
       "received_request": {
         "assemblyId": "GRCh38",
         "geneSymbol": "TP53"
