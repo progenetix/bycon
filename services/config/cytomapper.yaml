@@ -10,7 +10,7 @@ meta:
     GeneSpan: https://progenetix.org/services/schemas/GeneSpan/
     Cytobands: https://progenetix.org/services/schemas/Cytobands/
   info: >
-    The main cytomapper payload can be accessed in `response.results[0]`.
+    The main cytomapper payload can be accessed in `results[0]`.
 arg_pars:
 
   cytoBands: cytobands

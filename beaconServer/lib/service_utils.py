@@ -50,10 +50,9 @@ def run_beacon(byc):
             byc["service_response"]["info"].update({"counts":{}})
 
         execute_bycon_queries( ds_id, byc )
-
         check_alternative_variant_deliveries(ds_id, byc)
 
-        h_o, e = handover_retrieve_from_query_results(byc)
+        h_o, e = handover_retrieve_from_query_results(ds_id, byc)
         h_o_d, e = handover_return_data( h_o, e )
         if e:
             response_add_error(byc, 422, e )
@@ -61,8 +60,8 @@ def run_beacon(byc):
             r_set.update({ "results_handovers": dataset_response_add_handovers(ds_id, byc) })
 
         for c, c_d in byc["config"]["beacon_counts"].items():
-            if c_d["h->o_key"] in byc["query_results"]:
-                r_c = byc["query_results"][ c_d["h->o_key"] ]["target_count"]
+            if c_d["h->o_key"] in byc["dataset_results"][ds_id]:
+                r_c = byc["dataset_results"][ds_id][ c_d["h->o_key"] ]["target_count"]
                 r_set["info"]["counts"].update({ c: r_c })
                 if c in byc["service_response"]["info"]["counts"]:
                     byc["service_response"]["info"]["counts"][c] += r_c
@@ -282,11 +281,12 @@ def populate_service_header(byc, results):
 
 def populate_service_response_handovers(byc):
 
-    if not "query_results" in byc:
+    if not "dataset_results" in byc:
         return byc
     if not "dataset_ids" in byc:
         return byc
 
+    # TODO: Needed? Switching to result_test?
     byc["service_response"].update({ "results_handover": dataset_response_add_handovers(byc[ "dataset_ids" ][ 0 ], byc) })
 
     return byc
@@ -295,17 +295,22 @@ def populate_service_response_handovers(byc):
 
 def populate_service_response_counts(byc):
 
-    if not "query_results" in byc:
+    if not "dataset_results" in byc:
         return byc
     if not "dataset_ids" in byc:
+        return byc
+
+    ds_id = byc["dataset_ids"][0]
+
+    if not ds_id in byc["dataset_results"]:
         return byc
 
     counts = { }
 
     for c, c_d in byc["config"]["beacon_counts"].items():
 
-        if c_d["h->o_key"] in byc["query_results"]:
-            counts[ c ] = byc["query_results"][ c_d["h->o_key"] ]["target_count"]
+        if c_d["h->o_key"] in byc["dataset_results"][ds_id]:
+            counts[ c ] = byc["dataset_results"][ds_id][ c_d["h->o_key"] ]["target_count"]
 
     byc["service_response"]["info"].update({ "counts": counts })
 
@@ -335,6 +340,8 @@ def check_alternative_callset_deliveries(byc):
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
 
+    ds_results = byc["dataset_results"][ds_id]
+
     mongo_client = MongoClient()
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
     cs_coll = mongo_client[ ds_id ][ "callsets" ]
@@ -353,7 +360,7 @@ def check_alternative_callset_deliveries(byc):
 
     cs_ids = { }
 
-    for bs_id in byc["query_results"]["biosamples.id"][ "target_values" ]:
+    for bs_id in ds_results["biosamples.id"][ "target_values" ]:
         bs = bs_coll.find_one( { "id": bs_id } )
         bs_csids = cs_coll.distinct( "id", {"biosample_id": bs_id} )
         for bsid in bs_csids:
@@ -365,7 +372,7 @@ def check_alternative_callset_deliveries(byc):
                 cs_ids[bsid] = b_c["id"]
         print(s_line)
     
-    print("#meta=>biosampleCount={};analysisCount={}".format(byc["query_results"]["biosamples.id"][ "target_count" ], len(cs_ids)))
+    print("#meta=>biosampleCount={};analysisCount={}".format(ds_results["biosamples.id"][ "target_count" ], len(cs_ids)))
     print("\t".join(h_line))
 
     for cs_id, group_id in cs_ids.items():
@@ -392,6 +399,8 @@ def print_pgx_column_header(ds_id, byc):
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
     cs_coll = mongo_client[ ds_id ][ "callsets" ]
 
+    ds_results = byc["dataset_results"][ds_id]
+
     open_text_streaming()
 
     for d in ["id", "assemblyId"]:
@@ -402,7 +411,7 @@ def print_pgx_column_header(ds_id, byc):
             
     _print_filters_meta_line(byc)
 
-    for bs_id in byc["query_results"]["biosamples.id"][ "target_values" ]:
+    for bs_id in ds_results["biosamples.id"][ "target_values" ]:
         bs = bs_coll.find_one( { "id": bs_id } )
         h_line = "#sample=>biosample_id={}".format(bs_id)
         for b_c in bs[ "biocharacteristics" ]:
@@ -432,13 +441,14 @@ def export_variants_download(ds_id, byc):
 
     data_client = MongoClient( )
     v_coll = data_client[ ds_id ][ "variants" ]
+    ds_results = byc["dataset_results"][ds_id]
 
     open_json_streaming(byc, "variants.json")
 
-    for v_id in byc["query_results"]["variants._id"]["target_values"][:-1]:
+    for v_id in ds_results["variants._id"]["target_values"][:-1]:
         v = v_coll.find_one( { "_id": v_id }, { "_id": 0 } )
         print(json.dumps(v, indent=None, sort_keys=False, default=str, separators=(',', ':')), end = ',')
-    v = v_coll.find_one( { "_id": byc["query_results"]["variants._id"]["target_values"][-1]}, { "_id": -1 }  )
+    v = v_coll.find_one( { "_id": ds_results["variants._id"]["target_values"][-1]}, { "_id": -1 }  )
     print(json.dumps(v, indent=None, sort_keys=False, default=str, separators=(',', ':')), end = '')
 
     close_json_streaming()
@@ -450,10 +460,11 @@ def export_pgxseg_download(ds_id, byc):
 
     data_client = MongoClient( )
     v_coll = data_client[ ds_id ][ "variants" ]
+    ds_results = byc["dataset_results"][ds_id]
 
     print_pgx_column_header(ds_id, byc)
 
-    for v_id in byc["query_results"]["variants._id"]["target_values"]:
+    for v_id in ds_results["variants._id"]["target_values"]:
         v = v_coll.find_one( { "_id": v_id} )
         print_variant_pgxseg(v)
 

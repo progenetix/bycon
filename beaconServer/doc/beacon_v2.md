@@ -113,7 +113,7 @@ If using `g_variants` or `variants_in_sample`, those will be treated as aliases.
     "api_version": "2.0.0-draft.3",
     "beacon_id": "org.progenetix.beacon",
     "create_date_time": "2015-11-13",
-    "info": "The main biosamples payload can be accessed in `response.results`.\n",
+    "info": "The main biosamples payload can be accessed in `results`.\n",
     "received_request": {
       "dataset": "progenetix",
       "dataset_ids": [

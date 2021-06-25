@@ -11,7 +11,9 @@
     },
     "query": {
         "requestParameters": {
-            "datasetIds": ["progenetix"],
+            "datasets": {
+                "datasetIds": ["progenetix"]
+            },
             "assemblyid": "GRCh38",
             "referenceName": "9",
             "start": [21500001, 21975098],

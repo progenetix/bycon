@@ -8,7 +8,7 @@ meta:
   returned_schemas:
     Variant: https://progenetix.org/services/schemas/Variant/
   info: >
-    The main variants payload can be accessed in `response.result_sets`.
+    The main variants payload can be accessed in `result_sets`.
 bycon_definition_files:
   - config
   - beacon_info

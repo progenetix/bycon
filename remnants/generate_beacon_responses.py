@@ -79,10 +79,12 @@ def collect_dataset_responses(byc):
         execute_bycon_queries( ds_id, byc )
         query_results_save_handovers(byc)
 
+        ds_results = byc["dataset_results"][ds_id]
+
         if byc["response_type"] == "biosample":
-            access_id = byc["query_results"]["biosamples._id"][ "id" ]
+            access_id = ds_results["biosamples._id"][ "id" ]
         elif byc["response_type"] == "variantInSample":
-            access_id = byc["query_results"]["variants._id"][ "id" ]
+            access_id = ds_results["variants._id"][ "id" ]
         else:
             byc["dataset_responses"].append( create_dataset_response( ds_id, byc ) )
             continue

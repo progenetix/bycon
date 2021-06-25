@@ -15,10 +15,11 @@ def retrieve_variants(ds_id, byc):
     v_coll = mongo_client[ ds_id ][ "variants" ]
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
 
+    ds_results = byc["dataset_results"][ds_id]
 
     if not byc["method"] in byc["these_prefs"]["all_variants_methods"]:
-        if "variants._id" in byc["query_results"]:
-            for v in v_coll.find({"_id": { "$in": byc["query_results"]["variants._id"]["target_values"] } }):
+        if "variants._id" in ds_results:
+            for v in v_coll.find({"_id": { "$in": ds_results["variants._id"]["target_values"] } }):
                 vs.append(v)
             return vs
         else:
@@ -26,7 +27,7 @@ def retrieve_variants(ds_id, byc):
 
     ############################################################################
 
-    for bs_id in byc["query_results"]["biosamples.id"][ "target_values" ]:
+    for bs_id in ds_results["biosamples.id"][ "target_values" ]:
         for v in v_coll.find(
                 {"biosample_id": bs_id },
                 { "_id": 0, "assembly_id": 0, "digest": 0, "callset_id": 0 }

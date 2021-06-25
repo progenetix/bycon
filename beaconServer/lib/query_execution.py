@@ -67,7 +67,7 @@ def execute_bycon_queries(ds_id, byc):
         prevars["method"] = "variant_annotations._id"
         prevars["query"] = exe_queries[ "variant_annotations" ]
         prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
-        byc.update( { "query_results": prefetch } )
+        byc.update( { "dataset_results": { ds_id: prefetch } } )
 
         return byc
 
@@ -197,7 +197,7 @@ def execute_bycon_queries(ds_id, byc):
     data_client.close( )
     ho_client.close( )
 
-    byc.update( { "query_results": prefetch } )
+    byc.update( { "dataset_results": { ds_id: prefetch } } )
 
     return byc
 

@@ -84,7 +84,13 @@ def select_dataset_ids(byc):
                     return byc
 
     if "form_data" in byc:
-        if "datasetIds" in byc["form_data"]:
+
+        # TODO: deparsing the different request object formats shouldn't ne 
+        # necessarily here...
+        if "datasets" in byc["form_data"]:
+            if "datasetIds" in byc["form_data"]["datasets"]:
+                ds_ids = byc["form_data"]["datasets"]["datasetIds"]
+        elif "datasetIds" in byc["form_data"]:
             ds_ids = byc["form_data"]["datasetIds"]
 
         # accessid overrides ... ?

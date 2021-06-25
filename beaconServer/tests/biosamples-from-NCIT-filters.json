@@ -8,7 +8,9 @@
     },
     "query": {
         "requestParameters": {
-            "datasetIds": ["progenetix"]
+            "datasets": {
+                "datasetIds": ["progenetix"]
+            }
         },
         "filterLogic": "OR"
     },

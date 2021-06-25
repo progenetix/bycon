@@ -54,14 +54,16 @@ def phenopackets():
     execute_bycon_queries( ds_id, byc )
     query_results_save_handovers(byc)
 
-    access_id = byc["query_results"]["biosamples._id"][ "id" ]
+    ds_results = byc["dataset_results"][ds_id]
+
+    access_id = ds_results["biosamples._id"][ "id" ]
 
     h_o, e = retrieve_handover( access_id, **byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
         response_add_error(byc, 422, e )
 
-    access_id_ind = byc["query_results"]["individuals._id"][ "id" ]
+    access_id_ind = ds_results["individuals._id"][ "id" ]
     ind_s = [ ]
     h_o_ind, e_ind = retrieve_handover( access_id_ind, **byc )
     h_o_d_ind, e_ind = handover_return_data( h_o_ind, e_ind )
@@ -71,8 +73,8 @@ def phenopackets():
 
     if "variantsaccessid" in byc["form_data"]:
         access_id_var = byc["form_data"]["variantsaccessid"]
-    elif "variants._id" in byc["query_results"]:
-        access_id_var = byc["query_results"]["variants._id"]["id"]
+    elif "variants._id" in ds_results:
+        access_id_var = ds_results["variants._id"]["id"]
     if len(access_id_var) > 1:
         h_o_var, e_var = retrieve_handover( access_id_var, **byc )
         var_data, e_var = handover_return_data( h_o_var, e_var )

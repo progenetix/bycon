@@ -29,8 +29,7 @@ def dataset_response_add_handovers(ds_id, byc):
         if not h_o_t in ds_h_o:
             continue
 
-        for h_o_key in byc[ "query_results" ].keys():
-            h_o = byc[ "query_results" ][ h_o_key ]
+        for h_o_key, h_o in byc["dataset_results"][ds_id].items():
             if h_o["target_count"] < 1:
                 continue
             accessid = h_o["id"]
@@ -59,8 +58,8 @@ def dataset_response_add_handovers(ds_id, byc):
                 # TODO: needs a new schema to accommodate this not as HACK ...
                 # the phenopackets URL needs matched variants, which it wouldn't know about ...
                 if "phenopackets" in h_o_t:
-                    if "variants._id" in byc[ "query_results" ].keys():
-                        h_o_r["url"] += "&variantsaccessid="+byc[ "query_results" ][ "variants._id" ][ "id" ]
+                    if "variants._id" in byc["dataset_results"][ds_id].keys():
+                        h_o_r["url"] += "&variantsaccessid="+byc["dataset_results"][ds_id][ "variants._id" ][ "id" ]
 
                 b_h_o.append( h_o_r )
 
@@ -70,12 +69,21 @@ def dataset_response_add_handovers(ds_id, byc):
 
 def query_results_save_handovers(byc):
 
+    for ds_id in byc["dataset_results"].keys():
+        dataset_results_save_handovers(ds_id, byc)
+
+    return True
+
+################################################################################
+
+def dataset_results_save_handovers(ds_id, byc):
+
     ho_client = MongoClient()
     ho_db = ho_client[ byc["config"]["info_db"] ]
     ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
 
-    for h_o_k in byc[ "query_results" ].keys():
-        h_o = byc[ "query_results" ][ h_o_k ]
+    for h_o_k in byc["dataset_results"][ds_id].keys():
+        h_o = byc["dataset_results"][ds_id][ h_o_k ]
         h_o_size = sys.getsizeof(h_o["target_values"])
         # print("Storage size for {}: {}Mb".format(h_o_k, h_o_size / 1000000))
         if h_o_size < 15000000:

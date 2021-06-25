@@ -13,7 +13,7 @@ meta:
   returned_schemas:
     BeaconDataset: "https://beacon-project.io/schemas/beacon-v2/current/BeaconDataset.json"
   info: >
-    The latest dbstats payload can be accessed in `response.results`.
+    The latest dbstats payload can be accessed in `results`.
 methods:
   counts:
     - counts

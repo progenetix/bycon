@@ -64,6 +64,9 @@ def variants_exporter():
     if len(byc["dataset_ids"]) < 1:
         print("No existing dataset was provided with -d ...")
         exit()
+    if len(byc["dataset_ids"]) > 1:
+        print("Only one dataset can be provided with -d ...")
+        exit()
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
 
@@ -72,7 +75,9 @@ def variants_exporter():
     generate_queries(byc)
     execute_bycon_queries( ds_id, byc )
 
-    all_bs_no = byc["query_results"]["biosamples.id"]["target_count"]
+    ds_results = byc["dataset_results"][ds_id]
+
+    all_bs_no = ds_results["biosamples.id"]["target_count"]
     mongo_client = MongoClient( )
     vs_coll = mongo_client[ ds_id ][ "variants" ]
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
@@ -81,7 +86,7 @@ def variants_exporter():
 
     used_bs_ids = set()
     all_v_no = 0
-    for bs_id in byc["query_results"]["biosamples.id"]["target_values"]:
+    for bs_id in ds_results["biosamples.id"]["target_values"]:
         for v in vs_coll.find({ "biosample_id": bs_id }):
             all_v_no += 1
             val = ""

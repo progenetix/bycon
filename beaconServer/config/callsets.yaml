@@ -20,7 +20,7 @@ meta:
   returned_schemas:
     Analysis: https://progenetix.org/services/schemas/Callset/
   info: >
-    The main individuals payload can be accessed in `response.results`.
+    The main individuals payload can be accessed in `results`.
 response_types:
   - biosample
   - analysis
