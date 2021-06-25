@@ -1,0 +1,110 @@
+PMID, n_samples	Sample Types	Tumor Names
+10337990 12.0	C156096, 12	Metastatic Colorectal Carcinoma
+10214356 23.0	C9245, 23	Invasive Breast Carcinoma
+10070331 23.0	C2955, 14; C5105, 9	Colorectal Carcinoma; Colorectal Adenocarcinoma
+27255164 16	C9474, 16	Adenosarcoma
+27491809 5	C5130, 5	Adenoid Cystic Breast Carcinoma
+27716627 29	C2910, 29	Breast Neoplasm
+27846907 4	C9231, 4	Merkel Cell Carcinoma
+28770103 3	C7950, 3	Invasive Lobular Breast Carcinoma
+29203589 33	C156096, 33	Metastatic Colorectal Carcinoma
+27974698 38	C4024, 38	Esophageal Squamous Cell Carcinoma
+27713405 77	C27892, 77	Unclassified Renal Cell Carcinoma
+29296715 4	C3163, 4	Chronic Lymphocytic Leukemia
+29963223 5	C6340, 5	Uterine Corpus Leiomyosarcoma
+32218851 1.0	C9140, 1	Childhood B Acute Lymphoblastic Leukemia
+32221012 1.0	C39851, 1	Infiltrating Urothelial Carcinoma
+32227592 2.0	C3084, 2	Hemangioendothelioma
+32317181 5	C3343, 5	Prostate Neoplasm
+32245453 6.0	C3512, 6	Lung Adenocarcinoma
+32245699 15.0	C9335, 15	Malignant Breast Neoplasm
+31564440 18	C3343, 18	Prostate Neoplasm
+32212199 20.0	C9061, 20	Penile Carcinoma
+32437664 32	C9331, 32	Malignant Gastric Neoplasm
+32220886 56.0	C2924, 30; C4194, 26	Ductal Breast Carcinoma In Situ; Invasive Ductal Carcinoma Not Otherwise Specified
+32203465 73.0	C3512, 73	Lung Adenocarcinoma
+32299819 108	C6339, 108	Uterine Corpus Sarcoma
+32167160 173.0	C3077, 173	Head and Neck Neoplasm
+30697976 1.0	C4563, 1	Chronic Eosinophilic Leukemia Not Otherwise Specified
+30675202 1.0	C8936, 1	B Lymphoblastic Leukemia/Lymphoma
+31741760 2.0	C156096, 2	Metastatic Colorectal Carcinoma
+30694556 4.0	C3512, 4	Lung Adenocarcinoma
+30898102 4.0	C2955, 4	Colorectal Carcinoma
+30869813 5.0	C4833, 5	Oral Cavity Squamous Cell Carcinoma
+30675227 6.0	C4326, 6	Anaplastic Oligodendroglioma
+30733272 7	C131911, 7	Burkitt-Like Lymphoma with 11q Aberration
+30851086 12.0	C3744, 12	Breast Fibroadenoma
+30629797 13.0	C2921, 13	Skin Basal Cell Carcinoma
+30684551 15.0	C148153, 15	Metastatic Head and Neck Squamous Cell Carcinoma
+30843206 20.0	C4872, 20	Breast Carcinoma
+30867592 22	C9294, 22	Histiocytic and Dendritic Cell Neoplasm
+30861105 28.0	C4869, 28	Brain Stem Neoplasm
+30867899 29.0	C35778, 29	Gastrointestinal Stromal Tumor of the Gastrointestinal Tract
+30938900 31	C4872, 31	Breast Carcinoma
+30651561 50.0	C3171, 50	Acute Myeloid Leukemia
+30871622 62.0	C3172, 62	Myeloid Leukemia
+30675060 91	C4822, 91	Malignant Glioma
+31031003 105	C4910, 105	Colon Carcinoma
+30686769 303.0	C9120, 303	Pancreatic Ductal Adenocarcinoma
+30853353 424	C2910, 424	Breast Neoplasm
+31263031 833	C4822, 833	Malignant Glioma
+30692124 1766.0	C3242, 1766	Plasma Cell Myeloma
+29749539 1.0	C40076, 1	Ovarian Clear Cell Tumor
+30284660 1.0	C27390, 1	Ovarian Small Cell Carcinoma
+30631260 1.0	C4910, 1	Colon Carcinoma
+29688850 1.0	C3171, 1	Acute Myeloid Leukemia
+29679510 1.0	C3107, 1	Langerhans Cell Histiocytosis
+29872726 1.0	C6938, 1	Sweat Gland Carcinoma
+29862022 1.0	C9345, 1	Malignant Tongue Neoplasm
+29888014 1.0	C8851, 1	Diffuse Large B-Cell Lymphoma
+29764516 2.0	C4628, 2	Malignant Neoplasm of the Meninges
+29925043 2.0	C9385, 2	Renal Cell Carcinoma
+30241415 3.0	C4035, 3	Thyroid Gland Papillary Carcinoma
+29689243 3.0	C3547, 3	Malignant Pleural Neoplasm
+29854299 3.0	C3798, 3	Malignant Peripheral Nerve Sheath Tumor
+29892687 3.0	C105555, 3	High Grade Ovarian Serous Adenocarcinoma
+29755658 4.0	C7164, 4	Classic Hodgkin Lymphoma
+30284611 4.0	C2924, 4; C4194, 4	Ductal Breast Carcinoma In Situ; Invasive Ductal Carcinoma Not Otherwise Specified
+30124550 5.0	C7633, 5	Peritoneal Mesothelioma
+29963223 5	C3434, 5	Uterine Corpus Leiomyoma
+29849115 6.0	C96064, 6	Small Intestinal Neuroendocrine Carcinoma
+30256787 6.0	C9385, 6	Renal Cell Carcinoma
+29884406 6.0	C4833, 6	Oral Cavity Squamous Cell Carcinoma
+30120715 7.0	C27380, 7	Thyroid Gland Adenocarcinoma
+29879995 7.0	C2910, 7	Breast Neoplasm
+29854292 8.0	C2910, 8	Breast Neoplasm
+30514778 9.0	C3058, 9	Glioblastoma
+29788985 10.0	C3200, 10	Lung Neoplasm
+29891567 10.0	C9140, 10	Childhood B Acute Lymphoblastic Leukemia
+29764005 11.0	C3171, 11	Acute Myeloid Leukemia
+29933930 12.0	C2910, 12	Breast Neoplasm
+30241526 12.0	C156096, 12	Metastatic Colorectal Carcinoma
+30505706 12.0	C3262, 12	Neoplasm
+29968962 14.0	C40407, 14	Kidney Wilms Tumor
+30232607 14.0	C7548, 14	Malignant Kidney Neoplasm
+29755111 16.0	C4337, 16	Mantle Cell Lymphoma
+29949741 16.0	C3099, 16	Hepatocellular Carcinoma
+29675105 16.0	C3099, 16	Hepatocellular Carcinoma
+29674644 16.0	C8647, 16	Aggressive NK-Cell Leukemia
+29721177 18.0	C170728, 18	Metastatic Malignant Breast Neoplasm
+30339972 18.0	C3208, 18	Lymphoma
+30627328 18.0	C7715, 18	Childhood Soft Tissue Sarcoma
+29753010 19.0	C4035, 19	Thyroid Gland Papillary Carcinoma
+30052636 19	C3099, 10; C3758, 9	Hepatocellular Carcinoma; Hepatocellular Adenoma
+29955147 20.0	C4683, 20	Dermatofibrosarcoma Protuberans
+29674500 21.0	C3898, 21	Extranodal Marginal Zone Lymphoma of Mucosa-Associated Lymphoid Tissue
+30257982 21.0	C8946, 21	Metastatic Prostate Carcinoma
+29665859 23.0	C9335, 23	Malignant Breast Neoplasm
+29909985 23.0	C8946, 23	Metastatic Prostate Carcinoma
+29967378 25.0	C8644, 25	B Acute Lymphoblastic Leukemia
+30245085 25.0	C4863, 25	Prostate Carcinoma
+29569716 26.0	C53707, 26	Bone Osteosarcoma
+30514790 29.0	C2926, 29	Lung Non-Small Cell Carcinoma
+30266815 30.0	C53707, 30	Bone Osteosarcoma
+30248580 30.0	C7203, 30	Blastic Plasmacytoid Dendritic Cell Neoplasm
+29556019 30.0	C4997, 30	Refractory Nodal Marginal Zone Lymphoma
+29955141 31.0	C3510, 31	Cutaneous Melanoma
+29760388 32.0	C40310, 32	Sebaceous Carcinoma
+29968252 32.0	C4978, 32	Malignant Colorectal Neoplasm
+29961079 32.0	C5250, 32	Gastric Signet Ring Cell Adenocarcinoma
+29203589 33	C156097, 33	Metastatic Colon Carcinoma
