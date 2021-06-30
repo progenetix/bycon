@@ -14,15 +14,13 @@
             "datasets": {
                 "datasetIds": ["progenetix"]
             },
-            "assemblyid": "GRCh38",
-            "referenceName": "9",
-            "start": [21500001, 21975098],
-            "end": [21967753, 22500000], 
-            "variantType": "DEL"
+            "biosampleIds": [
+                "pgxbs-kftvhab8",
+                "pgxbs-kftvhaqa",
+                "pgxbs-kftvj1nt"
+            ]
         }
     },
-    "filters": [
-        { "id": "NCIT:C3058" }
-    ],
+    "filters": [ ],
     "debug": 0
 }

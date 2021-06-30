@@ -29,22 +29,25 @@ def individuals():
 
     byc = initialize_service()
     run_beacon_init_stack(byc)
+
     run_beacon(byc)
     export_datatable(byc)
+    query_results_save_handovers(byc)
 
     # Phenopackets
+    # TODO: very hacky, for testing so far ...
+    if "requestedSchemas" in byc["query_meta"]:
 
-    if "individual" in byc["response_type"]:
-        
+        if re.match(r".*?Phenopacket.*?", byc["query_meta"]["requestedSchemas"][0]["schema"]):
+            
+            for i, r_set in enumerate(byc["service_response"]["result_sets"]):
+                ds_id = r_set["id"]
+                ds_results = byc["dataset_results"][ds_id]
+                results = ds_results_phenopack_individuals(ds_id, ds_results)
+                byc["service_response"]["result_sets"][i].update( {"results": results } )
+                
+            byc["service_response"]["meta"].update({ "returned_schemas": byc["query_meta"]["requestedSchemas"][0]["schema"] })
 
-
-
-
-
-
-    # print()
-
-    query_results_save_handovers(byc)
     cgi_print_response( byc, 200 )
 
 ################################################################################

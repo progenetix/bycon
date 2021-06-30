@@ -113,14 +113,14 @@ def initialize_service(service="NA"):
         "warnings": [ ]
     }
 
-    form_data, query_meta = cgi_parse_query()
-    byc.update({ "form_data": form_data, "query_meta": query_meta })
-
     if "bycon_definition_files" in byc["these_prefs"]:
         for d in byc["these_prefs"]["bycon_definition_files"]:
             read_bycon_configs_by_name( d, byc )
     else:
         read_bycon_configs_by_name( "config", byc )
+
+    form_data, query_meta = cgi_parse_query(byc)
+    byc.update({ "form_data": form_data, "query_meta": query_meta })
 
     if "defaults" in byc["these_prefs"]:
         for d_k, d_v in byc["these_prefs"]["defaults"].items():

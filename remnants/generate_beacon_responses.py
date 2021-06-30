@@ -89,7 +89,7 @@ def collect_dataset_responses(byc):
             byc["dataset_responses"].append( create_dataset_response( ds_id, byc ) )
             continue
 
-        h_o, e = retrieve_handover( access_id, **byc )
+        h_o, e = retrieve_handover( access_id, byc )
         h_o_d, e = handover_return_data( h_o, e )
         byc["dataset_responses"].append( { ds_id: h_o_d } )
 

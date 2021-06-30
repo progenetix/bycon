@@ -16,7 +16,7 @@ def handover_retrieve_from_query_results(ds_id, byc):
 
 ################################################################################
 
-def retrieve_handover( accessid, **byc ):
+def retrieve_handover( accessid, byc ):
 
     mongo_client = MongoClient()
     ho_d = byc["config"]["info_db"]

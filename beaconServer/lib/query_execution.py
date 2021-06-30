@@ -57,8 +57,13 @@ def execute_bycon_queries(ds_id, byc):
             exe_queries[ collname ] = byc[ "queries" ][ collname ]
 
     # collection of results
-
     prefetch = { }
+
+
+
+
+
+
     prevars = { "ds_id": ds_id, "data_db": data_db, "h_o_defs": h_o_defs, "method": "", "query": { } }
 
     ############################################################################
@@ -66,7 +71,7 @@ def execute_bycon_queries(ds_id, byc):
     if "variant_annotations" in exe_queries:
         prevars["method"] = "variant_annotations._id"
         prevars["query"] = exe_queries[ "variant_annotations" ]
-        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+        prefetch.update( { prevars["method"]: _prefetch_data(prevars) } )
         byc.update( { "dataset_results": { ds_id: prefetch } } )
 
         return byc
@@ -83,17 +88,17 @@ def execute_bycon_queries(ds_id, byc):
 
         prevars["method"] = "biosamples.id"
         prevars["query"] = exe_queries[ "biosamples" ]
-        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+        prefetch.update( { prevars["method"]: _prefetch_data(prevars) } )
 
     if "individuals" in exe_queries:
 
         prevars["method"] = "individuals.id"
         prevars["query"] = exe_queries[ "individuals" ]
-        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+        prefetch.update( { prevars["method"]: _prefetch_data(prevars) } )
 
         prevars["method"] = "biosamples.id"
         prevars["query"] = { "individual_id": { '$in': prefetch["individuals.id"]["target_values"] }  }
-        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+        prefetch.update( { prevars["method"]: _prefetch_data(prevars) } )
 
         if "biosamples.id" in prefetch:
             bsids = list( set( prefetch["biosamples.id"]["target_values"] ) & set( prefetch["biosamples.id"]["target_values"] ) )
@@ -106,7 +111,7 @@ def execute_bycon_queries(ds_id, byc):
         # since callsets contain biosample_id no double calling is required
         prevars["method"] = "callsets.biosample_id->biosamples.id"
         prevars["query"] = exe_queries[ "callsets" ]
-        prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+        prefetch.update( { prevars["method"]: _prefetch_data(prevars) } )
 
         if "biosamples.id" in prefetch:
             bsids = list( set( prefetch["callsets.biosample_id->biosamples.id"]["target_values"] ) & set( prefetch["biosamples.id"]["target_values"] ) )
@@ -133,7 +138,7 @@ def execute_bycon_queries(ds_id, byc):
 
             prevars["method"] = "variants.biosample_id->biosamples.id"
             prevars["query"] = exe_queries[ "variants" ]
-            prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+            prefetch.update( { prevars["method"]: _prefetch_data(prevars) } )
 
             if "biosamples.id" in prefetch:
                 bsids = list( set( prefetch["biosamples.id"]["target_values"] ) & set( prefetch["variants.biosample_id->biosamples.id"]["target_values"] ) )
@@ -144,11 +149,11 @@ def execute_bycon_queries(ds_id, byc):
 
             prevars["method"] = "variants._id"
             prevars["query"] = exe_queries[ "variants" ]
-            prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+            prefetch.update( { prevars["method"]: _prefetch_data(prevars) } )
 
             prevars["method"] = "variants.digest"
             prevars["query"] = { "_id": { "$in": prefetch[ "variants._id" ]["target_values"] } }
-            prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+            prefetch.update( { prevars["method"]: _prefetch_data(prevars) } )
 
            # print(prefetch["variants.digest"]["target_values"])
 
@@ -174,13 +179,29 @@ def execute_bycon_queries(ds_id, byc):
     potentially lead to huge responses here...
     podmd"""
 
+    if not "biosamples.id" in prefetch:
+
+        prefetch.update({"biosamples.id": { **prevars["h_o_defs"]["biosamples.id"]}})
+        prefetch["biosamples.id"].update({
+            "id": str(uuid4()),
+            "source_db": ds_id,
+            "target_values": [],
+            "target_count": 0
+            })
+
+        byc.update( { "dataset_results": { ds_id: prefetch } } )
+        return byc
+
+
+
+
     prevars["method"] = "callsets._id"
     prevars["query"] = { "biosample_id": { "$in": prefetch[ "biosamples.id" ]["target_values"] } }
-    prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+    prefetch.update( { prevars["method"]: _prefetch_data(prevars) } )
 
     prevars["method"] = "biosamples._id"
     prevars["query"] = { "id": { "$in": prefetch[ "biosamples.id" ]["target_values"] } }
-    prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+    prefetch.update( { prevars["method"]: _prefetch_data(prevars) } )
 
     if "response_type" in byc:
         if "individual" in byc["response_type"] or "phenopackets" in byc["response_type"]:
@@ -203,7 +224,7 @@ def execute_bycon_queries(ds_id, byc):
 
 ################################################################################
 
-def _prefetch_data( **prevars ):
+def _prefetch_data(prevars):
 
     """podmd
     The prefetch method queries the specified collection `source_collection` of
@@ -268,11 +289,11 @@ def _prefetch_add_individuals(prevars, prefetch):
 
     prevars["method"] = "biosamples.individual_id->individuals.id"
     prevars["query"] = { "_id": { "$in": prefetch[ "biosamples._id" ]["target_values"] } }
-    prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+    prefetch.update( { "individuals.id": _prefetch_data(prevars) } )
 
     prevars["method"] = "individuals._id"
-    prevars["query"] = { "id": { "$in": prefetch[ "biosamples.individual_id->individuals.id" ]["target_values"] } }
-    prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+    prevars["query"] = { "id": { "$in": prefetch[ "individuals.id" ]["target_values"] } }
+    prefetch.update( { prevars["method"]: _prefetch_data(prevars) } )
 
     return prefetch
 
@@ -293,11 +314,11 @@ def _prefetch_add_variant_annotations(prevars, prefetch):
 
     prevars["method"] = "variants.variantannotation_id->variant_annotations.id"
     prevars["query"] = { "_id": { "$in": prefetch[ "variants._id" ]["target_values"] } }
-    prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+    prefetch.update( { prevars["method"]: _prefetch_data(prevars) } )
 
     prevars["method"] = "variant_annotations._id"
     prevars["query"] = { "id": { "$in": prefetch[ "variants.variantannotation_id->variant_annotations.id" ]["target_values"] } }
-    prefetch.update( { prevars["method"]: _prefetch_data( **prevars ) } )
+    prefetch.update( { prevars["method"]: _prefetch_data(prevars) } )
 
     return prefetch
 

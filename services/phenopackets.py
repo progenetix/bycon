@@ -58,14 +58,14 @@ def phenopackets():
 
     access_id = ds_results["biosamples._id"][ "id" ]
 
-    h_o, e = retrieve_handover( access_id, **byc )
+    h_o, e = retrieve_handover( access_id, byc )
     h_o_d, e = handover_return_data( h_o, e )
     if e:
         response_add_error(byc, 422, e )
 
     access_id_ind = ds_results["individuals._id"][ "id" ]
     ind_s = [ ]
-    h_o_ind, e_ind = retrieve_handover( access_id_ind, **byc )
+    h_o_ind, e_ind = retrieve_handover( access_id_ind, byc )
     h_o_d_ind, e_ind = handover_return_data( h_o_ind, e_ind )
 
     var_data = [ ]
@@ -76,7 +76,7 @@ def phenopackets():
     elif "variants._id" in ds_results:
         access_id_var = ds_results["variants._id"]["id"]
     if len(access_id_var) > 1:
-        h_o_var, e_var = retrieve_handover( access_id_var, **byc )
+        h_o_var, e_var = retrieve_handover( access_id_var, byc )
         var_data, e_var = handover_return_data( h_o_var, e_var )
 
     results = [ ]

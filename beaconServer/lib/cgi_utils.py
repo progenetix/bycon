@@ -20,15 +20,11 @@ def set_debug_state(debug=0):
 
 ################################################################################
 
-def cgi_parse_query():
+def cgi_parse_query(byc):
 
     content_len = environ.get('CONTENT_LENGTH', '0')
     content_typ = environ.get('CONTENT_TYPE', '')
     method = environ.get('REQUEST_METHOD', '')
-
-    # print('Content-Type: text')
-    # print()
-    # print(method)
 
     form_data = {}
     query_meta = {}
@@ -54,7 +50,6 @@ def cgi_parse_query():
             if "meta" in jbod:
                 query_meta = jbod["meta"]
 
-
         return form_data, query_meta
 
     set_debug_state()
@@ -62,12 +57,11 @@ def cgi_parse_query():
     # TODO: The structure, types of the request/form object need to go to a
     # config and some deeper processing, for proper beacon request objects
     # also, defaults etc.
-    list_ps = ["start", "end", "datasetIds", "filters"]
     get = cgi.FieldStorage()
     form_data = {}
 
     for p in get:
-        if p in list_ps:
+        if p in byc["config"]["list_pars"]:
             form_data.update({p: form_return_listvalue( get, p )})
         else:
             form_data.update({p: get.getvalue(p)})
@@ -180,6 +174,7 @@ def cgi_print_response(byc, status_code):
     if "responseFormat" in f_d:
         r_f = f_d["responseFormat"]
 
+
     # This is a simple "de-jsonify", intended to be used for already
     # pre-formatted list-like items (i.e. lists only containing objects)
     # with simple key-value pairs)
@@ -209,6 +204,7 @@ def cgi_print_response(byc, status_code):
     if "exists" in byc["service_response"]["response_summary"]:
         if byc["service_response"]["response_summary"]["exists"] is False:
             status_code = 422
+#    print(byc["service_response"]["result_sets"])
 
     print('Content-Type: application/json')
     print('status:'+str(status_code))

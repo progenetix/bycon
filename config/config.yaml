@@ -54,9 +54,25 @@ beacon_counts:
     h->o_key: variants._id
 handover_coll: querybuffer
 genespans_coll: genespans
+
+list_pars:
+  - start
+  - end
+  - datasetIds
+  - filters
+  - biosampleIds
+  - variantIds
+  - individualIds
+  - callsetIds
+id_query_map:
+  biosampleIds: biosamples
+  variantIds: variants
+  individualIds: individuals
+  callsetIds: callsets
 filter_flags:
   logic: '$and'
   precision: exact #'start'
+
 plot_pars:
   dotalpha: 0.2
   color_var_snv_hex: '#EE00DD'

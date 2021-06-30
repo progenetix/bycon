@@ -31,6 +31,7 @@ def generate_queries(byc):
         byc.update({"queries": { }})
 
     update_queries_from_path_id( byc )
+    update_queries_from_id_values( byc )
     update_queries_from_filters( byc )
     update_queries_from_hoid( byc)
     update_queries_from_variants( byc )
@@ -85,6 +86,33 @@ def update_queries_from_path_id( byc ):
 
             if r_t in byc["beacon_mappings"]["response_types"]:
                 byc.update({"response_type": byc["beacon_mappings"]["response_types"][r_t]["id"]})
+
+    return byc
+
+
+################################################################################
+
+
+def update_queries_from_id_values(byc):
+
+    id_re = re.compile(r'^\w[\w\-]+?\w$')
+
+    for par, scope in byc["config"]["id_query_map"].items():
+        if par in byc["form_data"]:
+            q_list = [ ]
+            q = False
+            for id_v in byc["form_data"][par]:
+                if id_re.match(id_v):
+                    q_list.append({"id":id_v})
+            if len(q_list) == 1:
+                q = q_list[0]
+            elif len(q_list) > 1:
+                q = { '$or': q_list }
+            if q:
+                if scope in byc["queries"]:
+                    byc["queries"].update( { scope: { '$and': [ q, byc["queries"][ scope ] ] } } )
+                else:
+                    byc["queries"].update( { scope: q } )
 
     return byc
 

@@ -97,7 +97,7 @@ def deliveries():
 
     access_id = q_par
 
-    h_o, e = retrieve_handover( access_id, **byc )
+    h_o, e = retrieve_handover( access_id, byc )
     h_o_d, e = handover_return_data( h_o, e )
     d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
 
