@@ -10,7 +10,6 @@ service_names:
   intervalFrequencies: intervalFrequencies
   ontologymaps: ontologymaps
   publications: publications
-  phenopackets: phenopackets
   collations: collations
   schemas: schemas
 rewrites:
@@ -19,3 +18,5 @@ rewrites:
   uploader: '/cgi/PGX/cgi/uploader.cgi'
   biosamples: '/beacon/biosamples/'
   variants: '/beacon/variants/'
+  individuals: '/beacon/individuals/'
+  phenopackets: '/beacon/individuals/'

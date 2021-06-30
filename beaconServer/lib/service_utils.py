@@ -126,15 +126,18 @@ def initialize_service(service="NA"):
         for d_k, d_v in byc["these_prefs"]["defaults"].items():
             byc.update( { d_k: d_v } )
 
+    if "output" in byc["form_data"]:
+        byc["output"] = byc["form_data"]["output"]
+    elif "method" in byc["form_data"]:
+        if byc["form_data"]["method"] == "pgxseg" or byc["form_data"]["method"] == "pgxmatrix":
+            byc["output"] = byc["form_data"]["method"]
+            byc["form_data"].pop("method")
+
     if "method" in byc["form_data"]:
         if "methods" in byc["these_prefs"]:
             if byc["form_data"]["method"] in byc["these_prefs"]["methods"].keys():
                 byc["method"] = byc["form_data"]["method"]
 
-    if "output" in byc["form_data"]:
-        byc["output"] = byc["form_data"]["output"]
-    elif byc["method"] == "pgxseg" or byc["method"] == "pgxmatrix":
-        byc["output"] = byc["method"]
 
     return byc
 
@@ -177,16 +180,15 @@ def create_empty_service_response(byc):
                         r["meta"].update( { "returned_schemas": r_d["schema"] } )
                         byc.update({"response_type":e_t})
 
-    for ds_id in byc[ "dataset_ids" ]:
-
-        r["result_sets"].append( {
-            "id": ds_id,
-            "type": "dataset",
-            "results_count": 0,
-            "exists": False,
-            "info": { "counts": { } }
-
-        } )
+    if "dataset_ids" in byc:
+        for ds_id in byc[ "dataset_ids" ]:
+            r["result_sets"].append( {
+                "id": ds_id,
+                "type": "dataset",
+                "results_count": 0,
+                "exists": False,
+                "info": { "counts": { } }
+            } )
 
     byc.update( {"service_response": r })
 
@@ -504,8 +506,3 @@ def print_variant_pgxseg(v):
     if not "alternate_bases" in v:
         v["alternate_bases"] = "."
     print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(v["biosample_id"], v["reference_name"], v["start"], v["end"], v["log2"], v["variant_type"], v["reference_bases"], v["alternate_bases"]) )
-
-
-
-
-
