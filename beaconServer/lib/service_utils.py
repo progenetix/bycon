@@ -16,6 +16,7 @@ from query_execution import execute_bycon_queries
 from query_generation import  initialize_beacon_queries
 from read_specs import read_bycon_configs_by_name,read_local_prefs
 from schemas_parser import *
+from variant_responses import normalize_variant_values_for_export
 
 schema_path = path.join( pkg_path, "bycon" )
 
@@ -128,6 +129,7 @@ def initialize_service(service="NA"):
 
     if "output" in byc["form_data"]:
         byc["output"] = byc["form_data"]["output"]
+ 
     elif "method" in byc["form_data"]:
         if byc["form_data"]["method"] == "pgxseg" or byc["form_data"]["method"] == "pgxmatrix":
             byc["output"] = byc["form_data"]["method"]
@@ -137,7 +139,6 @@ def initialize_service(service="NA"):
         if "methods" in byc["these_prefs"]:
             if byc["form_data"]["method"] in byc["these_prefs"]["methods"].keys():
                 byc["method"] = byc["form_data"]["method"]
-
 
     return byc
 
@@ -468,7 +469,7 @@ def export_pgxseg_download(ds_id, byc):
 
     for v_id in ds_results["variants._id"]["target_values"]:
         v = v_coll.find_one( { "_id": v_id} )
-        print_variant_pgxseg(v)
+        print_variant_pgxseg(v, byc)
 
     close_text_streaming()
 
@@ -487,10 +488,15 @@ def interval_header(info_columns, byc):
 
 ################################################################################
 
-def print_variant_pgxseg(v):
+def print_variant_pgxseg(v, byc):
+
+    drop_fields = ["_id", "info"]
 
     if not "variant_type" in v:
         return
+
+    v = normalize_variant_values_for_export(v, byc, drop_fields)
+
     if not "log2" in v:
         v["log2"] = "."
     try:

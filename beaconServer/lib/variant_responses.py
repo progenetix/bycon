@@ -76,30 +76,33 @@ def retrieve_variants_for_individual_by_individual_id(data_db, ind_id):
 
 ################################################################################
 
-def normalize_variants_values_for_export(vs, drop_fields=None):
+def normalize_variant_values_for_export(v, byc, drop_fields=None):
 
-    for i, v in enumerate(vs):
+    drop_fields = [] if drop_fields is None else drop_fields
 
-        drop_fields = [] if drop_fields is None else drop_fields
+    v["log2"] = False
+    if "info" in v:
+        if "cnv_value" in v["info"]:
+            if isinstance(v["info"]["cnv_value"],float):
+                v["log2"] = round(v["info"]["cnv_value"], 3)
+        if not "info" in drop_fields:
+            drop_fields.append("info")
 
-        vs[i]["log2"] = False
-        if "info" in v:
-            if "cnv_value" in v["info"]:
-                if isinstance(v["info"]["cnv_value"],float):
-                    vs[i]["log2"] = round(v["info"]["cnv_value"], 3)
-            if not "info" in drop_fields:
-                drop_fields.append("info")
+    if v["log2"] == False:
+        if "variant_type" in v:
+            if v["variant_type"] in byc["variant_definitions"]["cnv_dummy_values"].keys():
+                v["log2"] = byc["variant_definitions"]["cnv_dummy_values"][ v["variant_type"] ]
 
-        if vs[i]["log2"] == False:
-            drop_fields.append("log2")
+    if v["log2"] == False:
+        drop_fields.append("log2")
 
-        vs[i]["start"] = int(v["start"])
-        vs[i]["end"] = int(v["end"])
+    v["start"] = int(v["start"])
+    v["end"] = int(v["end"])
 
-        for d_f in drop_fields:   
-            v[d_f].drop()
+    for d_f in drop_fields:   
+        v.pop(d_f, None)
 
-    return vs
+    return v
 
 ################################################################################
 

@@ -174,7 +174,6 @@ def cgi_print_response(byc, status_code):
     if "responseFormat" in f_d:
         r_f = f_d["responseFormat"]
 
-
     # This is a simple "de-jsonify", intended to be used for already
     # pre-formatted list-like items (i.e. lists only containing objects)
     # with simple key-value pairs)
@@ -223,14 +222,14 @@ def open_json_streaming(byc, filename="data.json"):
     print('status: 200')
     print()
     print('{"meta":', end = '')
-    print(json.dumps(byc["service_response"]["meta"], indent=None, sort_keys=True, default=str), end = ",")
-    print('"response":{', end = '')
+    print(json.dumps(byc["service_response"]["meta"], indent=None, sort_keys=True, default=str), end=",")
+    print('"response":{', end='')
     for r_k, r_v in byc["service_response"].items():
         if "results" in r_k:
             continue
-        print('"'+r_k+'":', end = '')
-        print(json.dumps(r_v, indent=None, sort_keys=True, default=str), end = ",")
-    print('"results":[', end = "")
+        print('"'+r_k+'":', end='')
+        print(json.dumps(r_v, indent=None, sort_keys=True, default=str), end=",")
+    print('"results":[', end="")
 
 ################################################################################
 

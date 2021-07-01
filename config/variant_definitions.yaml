@@ -1,3 +1,7 @@
+cnv_dummy_values:
+  DUP: 0.58
+  DEL: -1
+
 parameters:
 
   assemblyId:
