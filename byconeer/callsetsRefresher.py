@@ -147,7 +147,7 @@ def _process_dataset(ds_id, byc):
             else:
                 cs_coll.update_one( { "_id": cs["_id"] }, { '$set': cs_update_obj }  )
         else:
-            print(json.dumps(maps, sort_keys=True, default=str))
+            print(json.dumps(camelize(maps), sort_keys=True, default=str))
 
         ####################################################################
         ####################################################################

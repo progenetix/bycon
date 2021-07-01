@@ -3,6 +3,7 @@ from urllib.parse import urlparse, parse_qs
 from os import environ
 import json, sys
 import re
+from humps import camelize
 
 ################################################################################
 
@@ -28,6 +29,8 @@ def cgi_parse_query(byc):
 
     form_data = {}
     query_meta = {}
+
+    # set_debug_state(1)
 
     if "POST" in method:
         body = sys.stdin.read(int(content_len))
@@ -182,7 +185,7 @@ def cgi_print_response(byc, status_code):
         cgi_simplify_response(byc)
 
         if isinstance(byc["service_response"], dict):
-            byc.update({ "service_response": json.dumps(byc["service_response"], default=str) })
+            byc.update({ "service_response": json.dumps(camelize(byc["service_response"]), default=str) })
         if isinstance(byc["service_response"], list):
             l_d = [ ]
             for dp in byc["service_response"]:
@@ -200,15 +203,16 @@ def cgi_print_response(byc, status_code):
         if "error" in byc["service_response"]:
             byc["service_response"]["error"].update({"error_code": status_code })
 
-    if "exists" in byc["service_response"]["response_summary"]:
-        if byc["service_response"]["response_summary"]["exists"] is False:
-            status_code = 422
+    if "response_summary" in byc["service_response"]:
+        if "exists" in byc["service_response"]["response_summary"]:
+            if byc["service_response"]["response_summary"]["exists"] is False:
+                status_code = 422
 #    print(byc["service_response"]["result_sets"])
 
     print('Content-Type: application/json')
     print('status:'+str(status_code))
     print()
-    print(json.dumps(byc["service_response"], indent=4, sort_keys=True, default=str)+"\n")
+    print(json.dumps(camelize(byc["service_response"]), indent=4, sort_keys=True, default=str)+"\n")
     exit()
 
 ################################################################################
@@ -222,13 +226,13 @@ def open_json_streaming(byc, filename="data.json"):
     print('status: 200')
     print()
     print('{"meta":', end = '')
-    print(json.dumps(byc["service_response"]["meta"], indent=None, sort_keys=True, default=str), end=",")
+    print(json.dumps(camelize(byc["service_response"]["meta"]), indent=None, sort_keys=True, default=str), end=",")
     print('"response":{', end='')
     for r_k, r_v in byc["service_response"].items():
         if "results" in r_k:
             continue
         print('"'+r_k+'":', end='')
-        print(json.dumps(r_v, indent=None, sort_keys=True, default=str), end=",")
+        print(json.dumps(camelize(r_v), indent=None, sort_keys=True, default=str), end=",")
     print('"results":[', end="")
 
 ################################################################################

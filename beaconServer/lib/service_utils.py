@@ -2,6 +2,7 @@ from os import path, pardir
 import inspect, json
 from pymongo import MongoClient
 from bson import json_util
+from humps import camelize
 
 # local
 lib_path = path.dirname( path.abspath(__file__) )
@@ -450,9 +451,9 @@ def export_variants_download(ds_id, byc):
 
     for v_id in ds_results["variants._id"]["target_values"][:-1]:
         v = v_coll.find_one( { "_id": v_id }, { "_id": 0 } )
-        print(json.dumps(v, indent=None, sort_keys=False, default=str, separators=(',', ':')), end = ',')
+        print(json.dumps(camelize(v), indent=None, sort_keys=False, default=str, separators=(',', ':')), end = ',')
     v = v_coll.find_one( { "_id": ds_results["variants._id"]["target_values"][-1]}, { "_id": -1 }  )
-    print(json.dumps(v, indent=None, sort_keys=False, default=str, separators=(',', ':')), end = '')
+    print(json.dumps(camelize(v), indent=None, sort_keys=False, default=str, separators=(',', ':')), end = '')
 
     close_json_streaming()
 
