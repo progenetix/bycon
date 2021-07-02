@@ -12,7 +12,7 @@ meta:
   beacon_id: org.progenetix.beacon
   response_type: info
   returned_schemas:
-    FilteringTerm: "https://progenetix.org/services/schemas/BeaconFilteringTermsResponse/"
+    FilteringTerm: "https://progenetix.org/services/schemas/BeaconFilteringTermsResponse.properties.response/"
   info: >
     The filtering terms can be accessed in `response`.
 methods:

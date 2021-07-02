@@ -114,7 +114,7 @@ def form_return_listvalue( form_data, parameter ):
                 v.remove("undefined")
             if len(v) > 0:
                 l_v  = ','.join(v)
-                l_v  = l_v .split(',')
+                l_v  = l_v.split(',')
 
     return l_v 
 
