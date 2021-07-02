@@ -8,7 +8,8 @@ defaults:
   response_type: info
   stats_number: 1
 meta:
-  beacon_id: org.progenetix
+  api_version: 2.0.0-draft.4
+  beacon_id: org.progenetix.beacon
   response_type: info
   returned_schemas:
     FilteringTerm: "https://progenetix.org/services/schemas/BeaconFilteringTermsResponse/"

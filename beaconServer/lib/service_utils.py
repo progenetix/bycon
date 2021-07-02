@@ -182,7 +182,7 @@ def create_empty_service_response(byc, response_schema="BeaconServiceResponse"):
                         r["meta"].update( { "returned_schemas": r_d["schema"] } )
                         byc.update({"response_type":e_t})
 
-    if not "response" in r:
+    if "result_sets" in r:
         if "dataset_ids" in byc:
             for ds_id in byc[ "dataset_ids" ]:
                 r["result_sets"].append( {
