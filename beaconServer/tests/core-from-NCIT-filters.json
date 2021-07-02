@@ -1,0 +1,23 @@
+{
+    "$schema":"beaconRequestBody.json",
+    "meta": {
+        "apiVersion": "2.0",
+        "requestedSchemas": [
+          { "entityType": "core", "schema:": "https://progenetix.org/services/schemas/Core/"}
+        ]
+    },
+    "query": {
+        "requestParameters": {
+            "datasets": {
+                "datasetIds": ["progenetix"]
+            }
+        },
+        "filterLogic": "OR"
+    },
+    "filters": [
+        { "id": "NCIT:C4536" },
+        { "id": "NCIT:C95597" },
+        { "id": "NCIT:C7712" }
+    ],
+    "debug": 1
+}

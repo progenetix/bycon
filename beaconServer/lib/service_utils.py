@@ -44,6 +44,12 @@ def run_beacon(byc):
     if "results_handover" in byc["service_response"]:
         byc["service_response"].pop("results_handover")
 
+
+    if "BeaconCoreResponse" in byc["response_type"]:
+        execute_bycon_queries( "progenetix", byc )
+        check_core_delivery("progenetix", byc)
+        return byc
+
     for r_set in byc["service_response"]["result_sets"]:
 
         ds_id = r_set["id"]
@@ -107,6 +113,7 @@ def initialize_service(service="NA"):
 
     byc =  {
         "service_name": path.splitext(path.basename(mod.__file__))[0],
+        "response_schema": "BeaconServiceResponse",
         "pkg_path": pkg_path,
         "these_prefs": read_local_prefs( service, sub_path ),
         "method": "",
@@ -145,9 +152,9 @@ def initialize_service(service="NA"):
 
 ################################################################################
 
-def create_empty_service_response(byc, response_schema="BeaconServiceResponse"):
+def create_empty_service_response(byc):
 
-    r_s = read_schema_files(response_schema, "properties")
+    r_s = read_schema_files(byc["response_schema"], "properties")
     r = create_empty_instance(r_s)
 
     if "meta" in byc["these_prefs"]:
@@ -165,8 +172,8 @@ def create_empty_service_response(byc, response_schema="BeaconServiceResponse"):
         if len(byc["errors"]) > 0:
             response_add_error(byc, 422, "::".join(byc["errors"]))
 
-    if "queries" in byc:
-        r["info"].update({ "database_queries": json.loads(json_util.dumps( byc["queries"] ) ) } )
+    # if "queries" in byc:
+    #     r["info"].update({ "database_queries": json.loads(json_util.dumps( byc["queries"] ) ) } )
 
     if "response_type" in byc:
         for r_t, r_d in byc["beacon_mappings"]["response_types"].items():
@@ -325,6 +332,18 @@ def populate_service_response_counts(byc):
     return byc
 
 ################################################################################
+
+def check_core_delivery(ds_id, byc):
+    
+    for ds_rk, ds_rv in byc["dataset_results"][ds_id].items():
+        if "target_count" in ds_rv:
+            if ds_rv["target_count"] > 0:
+                byc["service_response"]["response_summary"].update({"exists": True })
+
+    return byc
+
+################################################################################
+
 
 def check_alternative_variant_deliveries(ds_id, byc):
 

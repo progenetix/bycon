@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/BeaconFilteringTermsResponse.properties.response/v2021-07-02
+$id: https://progenetix.org/services/schemas/responses/sections/BeaconFilteringTermsResponse/v2021-07-02
 title: BeaconFilteringTermsResults
 description: >-
   Filtering terms available in this Beacon.

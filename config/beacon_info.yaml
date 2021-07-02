@@ -1,7 +1,7 @@
 ---
 beacon_id: 'org.progenetix.beacon'
 name: 'Progenetix Cancer Genomics Beacon+'
-api_version: '2.0.0-draft.3'
+api_version: '2.0.0-draft.4'
 environment: dev
 organization:
   id: "org.baudisgroup.info"
@@ -13,7 +13,7 @@ organization:
   contactUrl: "mailto:contact@progenetix.org"
   logoUrl: "https://progenetix.org/p/progenetix.png"
   info:
-    updateDateTime: 2021-03-23
+    updateDateTime: 2021-07-02
 description: >
   Beacon+ provides a forward looking implementation of the Beacon API, with focus on structural variants and metadata based on the cancer and reference genome profiling data represented in the Progenetix oncogenomic data resource (https://progenetix.org).
 version: v2
@@ -22,30 +22,30 @@ alternativeUrl: "https://progenetix.org/biosamples/"
 create_date_time: 2015-11-13
 update_date_time: 2021-03-23
 datasets: [ ] # populated from script
-info:
-  sampleAlleleRequests:
-    - datasetIds:
-        - progenetix
-      requestType: variantCNVrequest
-      assemblyId: GRCh38
-      referenceName: '9'
-      start:
-        - 21000000
-        - 21975098
-      end:
-        - 21967753
-        - 25000000
-      variantType: "DEL"
-      filters:
-        - "icdom-94403"
-        - "icdot-C71"
-    - datasetIds:
-        - progenetix
-      assemblyId: GRCh38
-      referenceName: '17'
-      start:
-        - 7577121
-      alternateBases: "A"
-      referenceBases: "G"
-      filters:
-        - "icdot-C71.7"
+# info:
+#   sampleAlleleRequests:
+#     - datasetIds:
+#         - progenetix
+#       requestType: variantCNVrequest
+#       assemblyId: GRCh38
+#       referenceName: '9'
+#       start:
+#         - 21000000
+#         - 21975098
+#       end:
+#         - 21967753
+#         - 25000000
+#       variantType: "DEL"
+#       filters:
+#         - "icdom-94403"
+#         - "icdot-C71"
+#     - datasetIds:
+#         - progenetix
+#       assemblyId: GRCh38
+#       referenceName: '17'
+#       start:
+#         - 7577121
+#       alternateBases: "A"
+#       referenceBases: "G"
+#       filters:
+#         - "icdot-C71.7"

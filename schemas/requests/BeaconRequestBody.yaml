@@ -1,0 +1,46 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/BeaconRequestBody/v2021-07-02
+title: BeaconRequestBody
+description: >-
+  Schema for the Beacon request. It is named `RequestBody` to keep the same nomenclature used by OpenAPI v3, but it actually contains the definition of the whole HTTP POST request payload.
+type: object
+properties:
+  $schema:
+    $ref: ../common/BeaconCommonComponents.yaml#/definitions/$schema
+  meta:
+    description: >-
+      Information that is relevant to build the response.
+    $ref: ./BeaconRequestMeta.yaml
+  query:
+    description: >-
+      Parameters to limit the list of returned results.
+    type: object
+    properties:
+      requestParameters:
+        description: >-
+          TBD.
+        $ref: ./RequestParameters.yaml
+      filters:
+        description: >-
+          Ontology based filters. Using CURIE syntax is encouraged.
+        $ref: ./FilteringTerms.yaml
+      includeResultsetResponses:
+        $ref: "#/definitions/IncludeResultsetResponses"
+      pagination:
+        description: >-
+          Pagination to apply on the results.
+        $ref": ../common/BeaconCommonComponents.yaml#/definitions/Pagination
+definitions:
+  IncludeResultsetResponses:
+    description: >-
+      Indicator of whether responses from every Resultset should be included in the response (`BeaconAlleleResponse`) to this request or not. If null (not specified), the default value of 'HIT' is assumed. This parameter allows for returning boolean/counting results although the Beacon instance is able to return record level details.
+    type: string
+    enum:
+      - ALL
+      - HIT
+      - MISS
+      - NONE
+    default: HIT
+required:
+  - meta
+

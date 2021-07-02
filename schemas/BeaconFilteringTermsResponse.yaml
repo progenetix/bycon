@@ -8,11 +8,11 @@ properties:
   meta:
     description: >-
       Information about the response that could be relevant for the Beacon client in order to interpret the results.
-    $ref: "./sections/BeaconInformationalResponseMeta.yaml"
+    $ref: "./responses/sections/BeaconInformationalResponseMeta.yaml"
   response:
     description: >-
       Actual list of filtering terms.
-    $ref: "./sections/BeaconFilteringTermsResults.yaml"
+    $ref: "./responses/sections/BeaconFilteringTermsResults.yaml"
 required:
   - meta
   - response

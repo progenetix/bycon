@@ -25,25 +25,6 @@ def parse_variants(byc):
         if variant_pars[ p_k ] is None:
             variant_pars.pop(p_k)
 
-    # for debugging
-    if "args" in byc:
-        args = byc["args"]
-        if "test" in args:
-            if args.test:
-                try:
-                    variant_pars = byc["service_info"]["info"][ "sampleAlleleRequests" ][0]
-                except:
-                    pass
-        if "cytobands" in args:
-            if args.cytobands:
-                variant_pars[ "cytoBands" ] = args.cytobands
-        if "chrobases" in args:
-            if args.chrobases:
-                variant_pars[ "chroBases" ] = args.chrobases
-        if "genome" in args:
-            if args.genome:
-                variant_pars[ "assemblyId" ] = args.genome
-
     # value checks
     v_p_c = { }
 

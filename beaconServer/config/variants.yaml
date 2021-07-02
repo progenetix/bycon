@@ -3,6 +3,7 @@ defaults:
     - progenetix
   method: details
   response_type: variantInSample
+  response_schema: BeaconServiceResponse
   genome_binning: 1Mb
 meta:
   returned_schemas:

@@ -3,6 +3,7 @@ defaults:
     - progenetix
   method: details
   response_type: variantInterpretation
+  response_schema: BeaconServiceResponse
   collection_name: variant_annotations
 meta:
   returned_schemas:

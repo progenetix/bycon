@@ -160,10 +160,9 @@ def cgi_break_on_errors(byc):
 
     r = byc["service_response"]
     
-    if "response" in r and "form_data" in byc:
-        if "error" in r:
-            if r["error"]["error_code"] > 200:
-                cgi_print_response( byc, r["error"]["error_code"] )
+    if "error" in r:
+        if r["error"]["error_code"] > 200:
+            cgi_print_response( byc, r["error"]["error_code"] )
 
 ################################################################################
 
@@ -181,20 +180,21 @@ def cgi_print_response(byc, status_code):
     # pre-formatted list-like items (i.e. lists only containing objects)
     # with simple key-value pairs)
     # TODO: universal text table converter
-    if "text" in byc["output"]:
-        cgi_simplify_response(byc)
+    if "output" in byc:
+        if "text" in byc["output"]:
+            cgi_simplify_response(byc)
 
-        if isinstance(byc["service_response"], dict):
-            byc.update({ "service_response": json.dumps(camelize(byc["service_response"]), default=str) })
-        if isinstance(byc["service_response"], list):
-            l_d = [ ]
-            for dp in byc["service_response"]:
-                v_l = [ ]
-                for v in dp.values():
-                    v_l.append(str(v))
-                l_d.append("\t".join(v_l))
-            byc.update({ "service_response": "\n".join(l_d) })
-        cgi_print_text_response(byc, status_code)
+            if isinstance(byc["service_response"], dict):
+                byc.update({ "service_response": json.dumps(camelize(byc["service_response"]), default=str) })
+            if isinstance(byc["service_response"], list):
+                l_d = [ ]
+                for dp in byc["service_response"]:
+                    v_l = [ ]
+                    for v in dp.values():
+                        v_l.append(str(v))
+                    l_d.append("\t".join(v_l))
+                byc.update({ "service_response": "\n".join(l_d) })
+            cgi_print_text_response(byc, status_code)
 
     if "simple" in r_f:
         cgi_simplify_response(byc)
@@ -208,6 +208,9 @@ def cgi_print_response(byc, status_code):
             if byc["service_response"]["response_summary"]["exists"] is False:
                 status_code = 422
 #    print(byc["service_response"]["result_sets"])
+
+    if "error" in byc["service_response"]:
+        byc["service_response"]["error"].update({"error_code": status_code})
 
     print('Content-Type: application/json')
     print('status:'+str(status_code))

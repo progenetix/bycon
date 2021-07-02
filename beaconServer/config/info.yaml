@@ -6,6 +6,7 @@ bycon_definition_files:
 defaults:
   method: ""
   response_type: return_beacon_info
+  response_schema: BeaconServiceResponse #TODO
   stats_number: 1
 meta:
   beacon_id: org.progenetix

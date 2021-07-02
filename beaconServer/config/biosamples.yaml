@@ -3,11 +3,13 @@ defaults:
     - progenetix
   method: all
   response_type: biosample
+  response_schema: BeaconServiceResponse
   h->o_access_key: "biosamples._id"
   genome_binning: 1Mb
 bycon_definition_files:
   - config
   - beacon_info
+  - beacon_endpoints
   - beacon_mappings
   - dataset_definitions
   - datatable_mappings

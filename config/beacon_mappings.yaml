@@ -1,6 +1,7 @@
 service_names:
   empty_value: info
   info: info
+  core: core
   filtering_terms: filteringTerms
   filteringTerms: filteringTerms
   datasets: datasets
