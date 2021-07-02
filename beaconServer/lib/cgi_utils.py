@@ -159,6 +159,14 @@ def cgi_simplify_response(byc):
 def cgi_break_on_errors(byc):
 
     r = byc["service_response"]
+
+    # TODO: temp hack
+    for k in byc["service_response"].keys():
+        if "any_of" in byc["service_response"][k]:
+            byc["service_response"][k].pop("any_of")
+        if "all_of" in byc["service_response"][k]:
+            byc["service_response"][k].pop("all_of")
+
     
     if "error" in r:
         if r["error"]["error_code"] > 200:

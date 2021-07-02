@@ -38,6 +38,8 @@ def core():
     run_beacon(byc)
     if "any_of" in byc["service_response"]["response_summary"]:
         byc["service_response"]["response_summary"].pop("any_of")
+    if "all_of" in byc["service_response"]["response_summary"]:
+        byc["service_response"]["response_summary"].pop("all_of")
     cgi_print_response( byc, 200 )
 
 ################################################################################

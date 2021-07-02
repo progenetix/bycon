@@ -44,10 +44,10 @@ def run_beacon(byc):
     if "results_handover" in byc["service_response"]:
         byc["service_response"].pop("results_handover")
 
-
-    if "BeaconCoreResponse" in byc["response_type"]:
-        execute_bycon_queries( "progenetix", byc )
-        check_core_delivery("progenetix", byc)
+    if "BeaconCoreResponse" in byc["response_schema"]:
+        for ds_id in byc["dataset_ids"]:
+            execute_bycon_queries( ds_id, byc )
+            check_core_delivery(ds_id, byc)
         return byc
 
     for r_set in byc["service_response"]["result_sets"]:
@@ -157,6 +157,10 @@ def create_empty_service_response(byc):
     r_s = read_schema_files(byc["response_schema"], "properties")
     r = create_empty_instance(r_s)
 
+    if "response_summary" in r:
+        r["response_summary"].update({ "exists": False })
+
+
     if "meta" in byc["these_prefs"]:
     	for k, v in byc["these_prefs"]["meta"].items():
     		r["meta"].update( { k: v } )
@@ -237,10 +241,9 @@ def response_collect_errors(byc):
 
 def response_add_error(byc, code=200, message=""):
 
-    byc["service_response"]["error"].update( {
-        "error_code": code,
-        "error_message": message
-    } )
+    e = { "error_code": code, "error_message": message }
+
+    byc["service_response"].update({ "error": e })
 
     return byc
 
