@@ -123,10 +123,10 @@ def _dataset_count_collationed_filters(ds_id, **byc):
                         if coll_p.match(k):
                             pfs.update( { k: { 
                                 "id": k,
-                                "count": 0,
-                                # "source": byc[ "filter_definitions" ][ pre ][ "name" ],
-                                # "scope": s
-                            } } )
+                                "count": 0
+                             } } )
+                            if pre in byc[ "filter_definitions" ]:
+                                pfs["k"].update({"type":byc[ "filter_definitions" ][ pre ][ "name" ]})
             except:
                 continue
         scopedNo = len(pfs.keys())

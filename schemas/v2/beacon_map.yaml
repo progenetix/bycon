@@ -1,0 +1,8 @@
+$schema: "../schemas/v2/beaconMapSchema.yaml"
+endpointSets:
+  dataset:
+    entryType: dataset
+    openAPIEndpointsDefinition: "./datasets/endpoints.yaml"
+    rootUrl: https://progenetix.org/beacon/datasets
+    singleEntryUrl: https://progenetix.org/beacon/datasets/{id}
+    filteringTermsUrl: https://progenetix.org/beacon/filteringTerms/?datasetIds={id}

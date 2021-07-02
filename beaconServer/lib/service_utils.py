@@ -145,9 +145,9 @@ def initialize_service(service="NA"):
 
 ################################################################################
 
-def create_empty_service_response(byc):
+def create_empty_service_response(byc, response_schema="BeaconServiceResponse"):
 
-    r_s = read_schema_files("BeaconServiceResponse", "properties")
+    r_s = read_schema_files(response_schema, "properties")
     r = create_empty_instance(r_s)
 
     if "meta" in byc["these_prefs"]:
@@ -182,15 +182,16 @@ def create_empty_service_response(byc):
                         r["meta"].update( { "returned_schemas": r_d["schema"] } )
                         byc.update({"response_type":e_t})
 
-    if "dataset_ids" in byc:
-        for ds_id in byc[ "dataset_ids" ]:
-            r["result_sets"].append( {
-                "id": ds_id,
-                "type": "dataset",
-                "results_count": 0,
-                "exists": False,
-                "info": { "counts": { } }
-            } )
+    if not "response" in r:
+        if "dataset_ids" in byc:
+            for ds_id in byc[ "dataset_ids" ]:
+                r["result_sets"].append( {
+                    "id": ds_id,
+                    "type": "dataset",
+                    "results_count": 0,
+                    "exists": False,
+                    "info": { "counts": { } }
+                } )
 
     byc.update( {"service_response": r })
 
@@ -204,6 +205,9 @@ def create_empty_service_response(byc):
 ################################################################################
 
 def response_add_parameter(byc, name, value):
+
+    if not "received_request" in byc["service_response"]["meta"]:
+        return byc
 
     if value:
         byc["service_response"]["meta"]["received_request"].update( { name: value } )

@@ -11,9 +11,9 @@ meta:
   beacon_id: org.progenetix
   response_type: info
   returned_schemas:
-    FilteringTerm: "https://beacon-project.io/schemas/beacon-v2/current/FilteringTerm.json"
+    FilteringTerm: "https://progenetix.org/services/schemas/BeaconFilteringTermsResponse/"
   info: >
-    The filtering terms can be accessed in `result_sets`.
+    The filtering terms can be accessed in `response`.
 methods:
   counts:
     - counts

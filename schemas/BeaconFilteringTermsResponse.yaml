@@ -1,0 +1,20 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/BeaconFilteringTermsResponse/v2021-07-02
+title: BeaconFilteringTermsResponse
+type: object
+description: >-
+  List of filtering terms responses.
+properties:
+  meta:
+    description: >-
+      Information about the response that could be relevant for the Beacon client in order to interpret the results.
+    $ref: "./sections/BeaconInformationalResponseMeta.yaml"
+  response:
+    description: >-
+      Actual list of filtering terms.
+    $ref: "./sections/BeaconFilteringTermsResults.yaml"
+required:
+  - meta
+  - response
+additionalProperties: true
+
