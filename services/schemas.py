@@ -3,7 +3,7 @@
 import cgi, cgitb
 import re, json, yaml
 from os import environ, pardir, path, scandir
-import sys, os, datetime
+import sys, datetime
 from humps import camelize
 
 # local
@@ -36,32 +36,21 @@ def schemas():
     byc = initialize_service()
     create_empty_service_response(byc)
 
-    s_path = path.join( pkg_path, "schemas" )
-    s_files = [ f.name for f in scandir(s_path) if f.is_file() ]
-    s_files = [ f for f in s_files if f.endswith(".yaml") ]
-    s_files = [ f for f in s_files if not f.startswith("_") ]
-
     schema_name = rest_path_value("schemas")
     comps = schema_name.split('.')
     schema_name = comps.pop(0)
 
     if not "empty_value" in schema_name:
-        for s_f in s_files:
-            f_name = os.path.splitext( s_f )[0]
-            if f_name == schema_name:
-                s = read_schema_files(f_name, "")     
-                for p in comps:        
-                    if p in s:
-                        s = s[p]
-                    elif camelize(p) in s:
-                        s = s[camelize(p)]
-                    else:
-                        break
-                print('Content-Type: application/json')
-                print('status:200')
-                print()
-                print(json.dumps(camelize(s), indent=4, sort_keys=True, default=str)+"\n")
-                exit()
+
+        s = read_schema_files(schema_name, "", byc)
+
+        if not s is False:
+
+            print('Content-Type: application/json')
+            print('status:200')
+            print()
+            print(json.dumps(camelize(s), indent=4, sort_keys=True, default=str)+"\n")
+            exit()
     
     response_add_error(byc, 422, "No correct schema name provided!")
     cgi_print_response( byc, 422 )

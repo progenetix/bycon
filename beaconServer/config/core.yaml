@@ -18,7 +18,7 @@ bycon_definition_files:
   - variant_definitions
 meta:
   returned_schemas:
-    BeaconBooleanResponse: https://progenetix.org/services/schemas/BeaconCoreResponse.properties.responseSummary/
+    BeaconBooleanResponse: https://progenetix.org/services/schemas/BeaconBooleanResponseSection/
   info: >
     Minimal Beacon response.
 response_types:

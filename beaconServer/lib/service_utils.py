@@ -19,8 +19,6 @@ from read_specs import read_bycon_configs_by_name,read_local_prefs
 from schemas_parser import *
 from variant_responses import normalize_variant_values_for_export
 
-schema_path = path.join( pkg_path, "bycon" )
-
 ################################################################################
 
 def run_beacon_init_stack(byc):
@@ -154,7 +152,7 @@ def initialize_service(service="NA"):
 
 def create_empty_service_response(byc):
 
-    r_s = read_schema_files(byc["response_schema"], "properties")
+    r_s = read_schema_files(byc["response_schema"], "properties", byc)
     r = create_empty_instance(r_s)
 
     if "response_summary" in r:
@@ -210,6 +208,11 @@ def create_empty_service_response(byc):
     for p in ["method", "dataset_ids", "filters", "variant_pars"]:
         if p in byc:
             response_add_parameter(byc, p, byc[ p ])
+
+    e_s = read_schema_files("BeaconErrorResponse", "properties", byc)
+    e = create_empty_instance(e_s)
+
+    byc.update( {"error_response": e })
 
     return byc
 

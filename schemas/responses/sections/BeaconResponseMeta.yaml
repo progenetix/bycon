@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/responses/sections/BeaconResponseMeta/v2021-07-02
+$id: https://progenetix.org/services/schemas/BeaconResponseMeta/v2021-07-02
 title: BeaconResponseMeta
 description: >-
   Information about the response that could be relevant for the Beacon

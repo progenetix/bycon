@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/responses/sections/BeaconBooleanResponseSection/v2021-07-02
+$id: https://progenetix.org/services/schemas/BeaconBooleanResponseSection/v2021-07-02
 title: BeaconBooleanResponseSection
 description: >-
   Boolean (true/false) response section.

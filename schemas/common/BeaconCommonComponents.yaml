@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/common/BeaconCommonComponents/v2021-07-02
+$id: https://progenetix.org/services/schemas/BeaconCommonComponents/v2021-07-02
 title: BeaconCommonComponents
 description: >-
   Definition of relatively simple components used in different points of the Beacon specification, both in requests and responses, therefore not associated exclusively with one or the other.

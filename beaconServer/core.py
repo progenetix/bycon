@@ -12,13 +12,6 @@ from beaconServer import *
 
 """podmd
 
-* <https://progenetix.org/cgi/bycon/services/biosamples.py?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
-* <https://progenetix.org/beacon/biosamples?datasetIds=progenetix&filters=cellosaurus:CVCL_0030>
-* https://progenetix.org/cgi/bycon/services/biosamples.py?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&referenceName=17&variantType=DEL&filterLogic=AND&start=4999999&start=7676592&end=7669607&end=10000000&filters=cellosaurus>
-* <https://progenetix.org/cgi/bycon/services/biosamples.py?datasetIds=progenetix&filters=cellosaurus:CVCL_0030
-* <https://progenetix.org/beacon/biosamples/pgxbs-kftva5c8/variants/>
-* <http://progenetix.test/beacon/biosamples/?filters=icdom-85002&output=table&debug=1>
-
 podmd"""
 
 ################################################################################

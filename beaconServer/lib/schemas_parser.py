@@ -42,16 +42,40 @@ def beacon_get_base_paths(byc):
 
 ################################################################################
 
-def read_schema_files(schema_root, item):
+def get_schema_file_path(schema_name, byc):
 
-    s_path = path.join( schema_path, schema_root+".yaml#/"+item )
-    # print(s_path)
+    for s_p in byc["config"]["schema_paths"]:
 
-    root_def = RefDict(s_path)
+        p = path.join( pkg_path, *s_p )
+        s_fs = [ f.name for f in scandir(p) if f.is_file() ]
+        s_fs = [ f for f in s_fs if f.endswith(".yaml") ]
+        s_fs = [ f for f in s_fs if not f.startswith("_") ]
 
-    exclude_keys = [ "format", "examples" ]
+        for s_f in s_fs:
 
-    return materialize(root_def, exclude_keys = exclude_keys)
+            f_name = path.splitext( s_f )[0]
+
+            if f_name == schema_name:
+
+                # return path.join(p, s_f)
+                return p
+
+    return False
+
+################################################################################
+
+def read_schema_files(schema_name, item, byc):
+
+    s_f_p = get_schema_file_path(schema_name, byc)
+
+    if not s_f_p is False:
+
+        s_path = path.join( s_f_p, schema_name+".yaml#/"+item )
+        root_def = RefDict(s_path)
+        exclude_keys = [ "format", "examples" ]
+        return materialize(root_def, exclude_keys = exclude_keys)
+
+    return False
 
 ################################################################################
 

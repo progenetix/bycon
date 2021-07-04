@@ -14,6 +14,19 @@ paths:
     - WebServer
     - Documents
     - tmp
+
+schema_paths:
+  - - schemas
+  - - schemas
+    - common
+  - - schemas
+    - requests
+  - - schemas
+    - responses
+  - - schemas
+    - responses
+    - sections
+
 # dataset_ids here are used for db management; the information used by Beacon
 # is defined separately
 dataset_ids:
