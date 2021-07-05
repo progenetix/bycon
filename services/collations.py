@@ -41,7 +41,7 @@ def collations():
 
     # data retrieval & response population
     s_s = { }
-    d_k = response_set_delivery_keys(byc)
+    d_k = collations_set_delivery_keys(byc)
 
     c = byc["these_prefs"]["collection_name"]
 
@@ -66,13 +66,19 @@ def collations():
                 if not i_d in s_s:
                     s_s[ i_d ] = { }
                 for k in d_k:
-                    # TODO: integer format defined in config?
                     if k in subset.keys():
                         if k in byc["these_prefs"]["integer_keys"]:
                             if k in s_s[ i_d ]:
                                 s_s[ i_d ][ k ] += int(subset[ k ])
                             else:
                                 s_s[ i_d ][ k ] = int(subset[ k ])
+                        elif k == "hierarchy_paths":
+                            h_p = []
+                            for p in subset[ k ]:
+                                if "order" in p:
+                                   p.update({"order": int(p["order"]) })
+                                h_p.append(p)
+                            s_s[ i_d ][ k ] = h_p
                         else:
                             s_s[ i_d ][ k ] = subset[ k ]
                     else:
@@ -90,7 +96,7 @@ def collations():
 def _response_map_results(data, byc):
 
     # the method keys can be overriden with "deliveryKeys"
-    d_k = response_set_delivery_keys(byc)
+    d_k = collations_set_delivery_keys(byc)
 
     if len(d_k) < 1:
         return data

@@ -136,7 +136,7 @@ def initialize_service(service="NA"):
     if "output" in byc["form_data"]:
         byc["output"] = byc["form_data"]["output"]
  
-    elif "method" in byc["form_data"]:
+    elif "method" in byc["form_data"]: # TODO: legacy
         if byc["form_data"]["method"] == "pgxseg" or byc["form_data"]["method"] == "pgxmatrix":
             byc["output"] = byc["form_data"]["method"]
             byc["form_data"].pop("method")
@@ -154,10 +154,11 @@ def create_empty_service_response(byc):
 
     r_s = read_schema_files(byc["response_schema"], "properties", byc)
     r = create_empty_instance(r_s)
+    e_s = read_schema_files("BeaconErrorResponse", "properties", byc)
+    e = create_empty_instance(e_s)
 
     if "response_summary" in r:
         r["response_summary"].update({ "exists": False })
-
 
     if "meta" in byc["these_prefs"]:
     	for k, v in byc["these_prefs"]["meta"].items():
@@ -170,10 +171,6 @@ def create_empty_service_response(byc):
         except:
             pass
 
-    if "errors" in byc:
-        if len(byc["errors"]) > 0:
-            response_add_error(byc, 422, "::".join(byc["errors"]))
-
     # if "queries" in byc:
     #     r["info"].update({ "database_queries": json.loads(json_util.dumps( byc["queries"] ) ) } )
 
@@ -182,9 +179,9 @@ def create_empty_service_response(byc):
             if r_d["id"] == byc["response_type"]:
                 r["meta"].update( { "returned_schemas": r_d["schema"] } )
 
-    if "requestedSchemas" in byc["query_meta"]:
-        if byc["query_meta"]["requestedSchemas"][0]:
-            if "entityType" in byc["query_meta"]["requestedSchemas"][0]:
+    if "requested_schemas" in byc["query_meta"]:
+        if byc["query_meta"]["requested_schemas"][0]:
+            if "entityType" in byc["query_meta"]["requested_schemas"][0]:
                 e_t = byc["query_meta"]["requestedSchemas"][0]["entityType"]
                 for r_t, r_d in byc["beacon_mappings"]["response_types"].items():
                     if r_d["id"] == e_t:
@@ -202,17 +199,17 @@ def create_empty_service_response(byc):
                     "info": { "counts": { } }
                 } )
 
-    byc.update( {"service_response": r })
+    byc.update( {"service_response": r, "error_response": e })
 
     # saving the parameters to the response
     for p in ["method", "dataset_ids", "filters", "variant_pars"]:
         if p in byc:
             response_add_parameter(byc, p, byc[ p ])
 
-    e_s = read_schema_files("BeaconErrorResponse", "properties", byc)
-    e = create_empty_instance(e_s)
+    if "errors" in byc:
+        if len(byc["errors"]) > 0:
+            response_add_error(byc, 422, "::".join(byc["errors"]))
 
-    byc.update( {"error_response": e })
 
     return byc
 
@@ -246,7 +243,7 @@ def response_add_error(byc, code=200, message=""):
 
     e = { "error_code": code, "error_message": message }
 
-    byc["service_response"].update({ "error": e })
+    byc["error_response"]["error"].update(e)
 
     return byc
 
@@ -260,7 +257,7 @@ def response_append_result(byc, result):
 
 ################################################################################
 
-def response_set_delivery_keys(byc):
+def collations_set_delivery_keys(byc):
 
     # the method keys can be overriden with "deliveryKeys"
     d_k = [ ]
@@ -349,7 +346,6 @@ def check_core_delivery(ds_id, byc):
     return byc
 
 ################################################################################
-
 
 def check_alternative_variant_deliveries(ds_id, byc):
 

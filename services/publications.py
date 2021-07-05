@@ -67,7 +67,7 @@ def publications():
     p_re = re.compile( byc["filter_definitions"]["PMID"]["pattern"] )
 
     p_l = [ ]
-    d_k = response_set_delivery_keys(byc)
+    d_k = collations_set_delivery_keys(byc)
     
     for pub in pub_coll.find( query, { "_id": 0 } ):
         s = { }

@@ -20,6 +20,8 @@ schema_paths:
   - - schemas
     - common
   - - schemas
+    - configuration
+  - - schemas
     - requests
   - - schemas
     - responses

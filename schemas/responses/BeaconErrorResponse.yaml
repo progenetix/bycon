@@ -8,12 +8,11 @@ properties:
   meta:
     description: >-
       Information about the response that could be relevant for the Beacon client in order to interpret the results.
-    $ref: "./responses/sections/BeaconResponseMeta.yaml"
+    $ref: "./sections/BeaconResponseMeta.yaml#/properties"
   error:
-    description: 'Returning an error.
-
-      '
-    "$ref": "./common/BeaconCommonComponents.yaml#/definitions/BeaconError"
+    description: >-
+      Returning an error.
+    $ref: "../common/BeaconCommonComponents.yaml#/definitions/BeaconError/properties"
 required:
   - meta
   - error

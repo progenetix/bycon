@@ -1,0 +1,18 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/FilteringTermsSchema/v2021-07-05
+title: FilteringTermsSchema
+description: >-
+  Schema for the Filtering Terms list related to the hosting entry type. It is kept separated to allow updating it independently.
+type: object
+properties:
+  filteringTerms:
+    description: >-
+      List of filtering terms that could be used to filter this concept in this instance of Beacon.
+    type: array
+    items:
+      $ref: "../common/OntologyTerm.yaml#/properties"
+    minItems: 0
+required:
+  - filteringTerms
+additionalProperties: true
+

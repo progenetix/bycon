@@ -3,7 +3,7 @@ from urllib.parse import urlparse, parse_qs
 from os import environ
 import json, sys
 import re
-from humps import camelize
+import humps
 
 ################################################################################
 
@@ -25,14 +25,14 @@ def cgi_parse_query(byc):
 
     content_len = environ.get('CONTENT_LENGTH', '0')
     content_typ = environ.get('CONTENT_TYPE', '')
-    method = environ.get('REQUEST_METHOD', '')
+    r_m = environ.get('REQUEST_METHOD', '')
 
     form_data = {}
     query_meta = {}
 
     # set_debug_state(1)
 
-    if "POST" in method:
+    if "POST" in r_m:
         body = sys.stdin.read(int(content_len))
         if "json" in content_typ:
             jbod = json.loads(body)
@@ -159,6 +159,7 @@ def cgi_simplify_response(byc):
 def cgi_break_on_errors(byc):
 
     r = byc["service_response"]
+    e = byc["error_response"]
 
     # TODO: temp hack
     for k in byc["service_response"].keys():
@@ -167,14 +168,14 @@ def cgi_break_on_errors(byc):
         if "all_of" in byc["service_response"][k]:
             byc["service_response"][k].pop("all_of")
 
-    
-    if "error" in r:
-        if r["error"]["error_code"] > 200:
-            cgi_print_response( byc, r["error"]["error_code"] )
+    if e["error"]["error_code"] > 200:
+        cgi_print_response( byc, e["error"]["error_code"] )
 
 ################################################################################
 
 def cgi_print_response(byc, status_code):
+
+    e = byc["error_response"]
 
     r_f = ""
     f_d = {}
@@ -193,7 +194,7 @@ def cgi_print_response(byc, status_code):
             cgi_simplify_response(byc)
 
             if isinstance(byc["service_response"], dict):
-                byc.update({ "service_response": json.dumps(camelize(byc["service_response"]), default=str) })
+                byc.update({ "service_response": json.dumps(humps.camelize(byc["service_response"]), default=str) })
             if isinstance(byc["service_response"], list):
                 l_d = [ ]
                 for dp in byc["service_response"]:
@@ -207,23 +208,19 @@ def cgi_print_response(byc, status_code):
     if "simple" in r_f:
         cgi_simplify_response(byc)
 
-    if "response" in byc["service_response"]:
-        if "error" in byc["service_response"]:
-            byc["service_response"]["error"].update({"error_code": status_code })
-
     if "response_summary" in byc["service_response"]:
         if "exists" in byc["service_response"]["response_summary"]:
             if byc["service_response"]["response_summary"]["exists"] is False:
                 status_code = 422
-#    print(byc["service_response"]["result_sets"])
 
-    if "error" in byc["service_response"]:
-        byc["service_response"]["error"].update({"error_code": status_code})
-
+    if e["error"]["error_code"] > 200:
+        if "meta" in byc["service_response"]:
+            byc["error_response"].update({ "meta": byc["service_response"]["meta"]})
+        byc["service_response"] = byc["error_response"]
     print('Content-Type: application/json')
     print('status:'+str(status_code))
     print()
-    print(json.dumps(camelize(byc["service_response"]), indent=4, sort_keys=True, default=str)+"\n")
+    print(json.dumps(humps.camelize(byc["service_response"]), indent=4, sort_keys=True, default=str)+"\n")
     exit()
 
 ################################################################################
@@ -237,13 +234,13 @@ def open_json_streaming(byc, filename="data.json"):
     print('status: 200')
     print()
     print('{"meta":', end = '')
-    print(json.dumps(camelize(byc["service_response"]["meta"]), indent=None, sort_keys=True, default=str), end=",")
+    print(json.dumps(humps.camelize(byc["service_response"]["meta"]), indent=None, sort_keys=True, default=str), end=",")
     print('"response":{', end='')
     for r_k, r_v in byc["service_response"].items():
         if "results" in r_k:
             continue
         print('"'+r_k+'":', end='')
-        print(json.dumps(camelize(r_v), indent=None, sort_keys=True, default=str), end=",")
+        print(json.dumps(humps.camelize(r_v), indent=None, sort_keys=True, default=str), end=",")
     print('"results":[', end="")
 
 ################################################################################

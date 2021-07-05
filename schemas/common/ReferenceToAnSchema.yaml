@@ -1,0 +1,21 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/ReferenceToAnSchema/v2021-07-05
+title: ReferenceToAnSchema
+description: >-
+  Definition of an annotated URL address or a file reference.
+type: object
+allOf:
+  - $ref: ./ElementWithDescription.yaml#/allOf
+  - type: object
+    properties:
+      referenceToSchemaDefinition:
+        type: string
+        $comment: This should map to a resolvable reference
+      schemaVersion:
+        type: string
+        description: >-
+          This version reference is only used for readability in the client. The `referenceToSchemaDefinition` property is the only source for determining the actual schema used.
+    required:
+      - referenceToSchemaDefinition
+additionalProperties: true
+

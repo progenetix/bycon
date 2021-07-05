@@ -1,6 +1,7 @@
 import re, json, yaml
 from os import path, scandir, pardir
 from json_ref_dict import RefDict, materialize
+import humps
 
 # local
 lib_path = path.dirname( path.abspath(__file__) )
@@ -85,11 +86,6 @@ def instantiate_schema(schema):
 
         t = schema['type']
     
-        # # if schema['type'] == 'array' and 'items' in schema:
-        # #     schema = [instantiate_schema(schema['items'])]
-            
-        # else:
-
         if t == 'array' or t == 'list':
             schema = []
         elif t == 'object':
@@ -104,12 +100,6 @@ def instantiate_schema(schema):
             schema = ""
            
         return schema
-
-    # elif 'properties' in schema.keys():
-    #     for k, val in schema["properties"].items():
-        
-    #         if isinstance(val, dict):
-    #             schema["properties"][k] = instantiate_schema(val)
       
     else:
         for k, val in schema.items():
@@ -127,7 +117,7 @@ def create_empty_instance(schema):
 
 ################################################################################
 
-def convert_case_for_keys (schema_dict, convert_function):
+def convert_case_for_keys(schema_dict, convert_function):
 
     old_keys = list(schema_dict)
 
@@ -145,15 +135,13 @@ def convert_case_for_keys (schema_dict, convert_function):
 
 def camel_to_snake(name):
 
-    name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
+    return humps.decamelize(name)
 
 ################################################################################
 
 def snake_to_camel(name):
 
-    comps = name.split('_')
-    return comps[0] + ''.join(x.title() for x in comps[1:])
+    return humps.camelize(name)
 
 ################################################################################
 

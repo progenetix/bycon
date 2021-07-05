@@ -31,8 +31,6 @@ properties:
     type: array
     items:
       type: object
-  error:
-    $ref: BeaconServiceError.yaml#/properties
   info:
     type: object
   # response:
