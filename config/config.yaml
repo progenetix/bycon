@@ -18,6 +18,8 @@ paths:
 schema_paths:
   - - schemas
   - - schemas
+    - progenetix
+  - - schemas
     - common
   - - schemas
     - configuration
