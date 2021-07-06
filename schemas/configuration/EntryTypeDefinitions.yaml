@@ -48,8 +48,7 @@ properties:
       Reference to the file with the list of filtering terms that could be used to filter this concept in this instance of Beacon. The referenced file could be used to populate the `filteringTerms`endpoint. Having it independently should allow for updating the list of accepted filtering terms when it is necessary.
     type: string
     $comment: >-
-      TODO: Double-check the proper way of referencing a path or relative
-      path. `format: uri` is throwing validation errors for relative file paths.
+      TODO: Double-check the proper way of referencing a path or relative path. `format: uri` is throwing validation errors for relative file paths.
 required:
   - id
   - name

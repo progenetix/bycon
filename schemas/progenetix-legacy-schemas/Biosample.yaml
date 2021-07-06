@@ -74,17 +74,17 @@ properties:
   individualAgeAtCollection:
     description: >
       The age of the individual at time of sample collection.
-    "$ref": Age.yaml#/properties
+    $ref: Age.yaml#/properties
   provenance:
-    "$ref": Provenance.yaml#/properties
+    $ref: Provenance.yaml#/properties
   dataUseConditions:
-    "$ref": OntologyClass.yaml#/properties
+    $ref: OntologyClass.yaml#/properties
   sampledTissue:
-    "$ref": OntologyClass.yaml#/properties
+    $ref: OntologyClass.yaml#/properties
   histologicalDiagnosis:
-    "$ref": OntologyClass.yaml#/properties
+    $ref: OntologyClass.yaml#/properties
   tumorProgression:
-    "$ref": OntologyClass.yaml#/properties
+    $ref: OntologyClass.yaml#/properties
     examples:
       - id: NCIT:C3677
         label: Benign Neoplasm
@@ -109,7 +109,10 @@ properties:
     items:
       "$ref": OntologyClass.yaml#/properties
     examples:
-      - - 
+      - - id: NCIT:C48700
+          label: M1 Stage Finding
+        - id: NCIT:C48720
+          label: T1 Stage Finding
   diagnosticMarkers:
     type: array
     items:
