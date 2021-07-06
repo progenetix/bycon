@@ -14,8 +14,9 @@ schema_path = path.join( pkg_path, "schemas" )
 
 def parse_beacon_schema(byc):
 
-    bsp = path.join( schema_path, "beacon.yaml" )
-    with open( bsp ) as bs:
+    s_f_p = get_schema_file_path("beacon", byc)
+    s_path = path.join( s_f_p, "beacon.yaml" )
+    with open( s_path ) as bs:
 
         byc.update({ "beacon": yaml.load( bs , Loader=yaml.FullLoader) })
 

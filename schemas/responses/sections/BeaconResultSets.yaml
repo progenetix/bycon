@@ -1,0 +1,28 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/BeaconResultSets/v2021-07-06
+title: BeaconResultSets
+description: >-
+  Section of the response that includes the record level details grouped in resultsets.
+type: object
+properties:
+  $schema:
+    type: string
+    description: >-
+      Reference to the schema used to describe the attributes below.
+    $comments: >-
+      The '$schema' property is added to allow proper JSON schema+objects debugging in VSCode. It probably could be deleted for other tools or later in the process
+  resultSets:
+    type: array
+    items:
+      $ref: "#/definitions/resultSetInstance/oneOf"
+    minItems: 0
+definitions:
+  resultSetInstance:
+    type: object
+    oneOf:
+      - $ref: ./BeaconEmptyResultset.yaml
+      - $ref: ./BeaconNonEmptyResultset.yaml
+required:
+  - resultSets
+additionalProperties: true
+

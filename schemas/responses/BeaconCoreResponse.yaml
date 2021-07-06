@@ -20,7 +20,7 @@ properties:
     - description: >-
         Total number of results section.
       $ref: ./sections/BeaconCountResponseSection.yaml#/properties
-  extendedInfo:
+  info:
     description: >-
       Additional details that could be of interest. Provided to clearly enclose any attribute that is not part of the Beacon specification.
     $ref: ../common/BeaconCommonComponents.yaml#/definitions/Info

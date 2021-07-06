@@ -1,0 +1,37 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/BeaconResultSetsResponse/v2021-07-06
+title: BeaconResultSetsResponse
+description: >
+  Complete definition for a Response that includes record level details, grouped in Resultsets.
+type: object
+properties:
+  meta:
+    description: >-
+      Information about the response that could be relevant for the Beacon client in order to interpret the results.
+    $ref: ./sections/BeaconResponseMeta.yaml#/properties
+  responseSummary:
+    description: >-
+      TODO: Here using only the count response, in contrast to original.
+    $ref: ./sections/BeaconCountResponseSection.yaml#/properties
+    # anyOf:
+    # - description: >-
+    #     Boolean (true/false) response section.
+    #   $ref: ./sections/BeaconBooleanResponseSection.yaml#/properties
+    # - description: >-
+    #     Total number of results section.
+    #   $ref: ./sections/BeaconCountResponseSection.yaml#/properties
+  info:
+    description: >-
+      Additional details that could be of interest. Provided to clearly enclose any attribute that is not part of the Beacon specification.
+    $ref: ../common/BeaconCommonComponents.yaml#/definitions/Info
+  beaconHandovers:
+    description: >-
+      List of handovers that apply to the whole response, not to any resultset or result in particular.
+    $ref: ../common/BeaconCommonComponents.yaml#/definitions/ListOfHandovers
+  resultSets:
+    description: >-
+      TODO: This diverges from the main schema in that only the non-empty resultSet is being used, directly.
+    type: array
+    items:
+      $ref: ./sections/BeaconNonEmptyResultset.yaml#/properties
+    # $ref: ./sections/BeaconResultSets.yaml#/properties
