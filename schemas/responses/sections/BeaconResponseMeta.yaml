@@ -18,7 +18,7 @@ properties:
   receivedRequestSummary:
     description: >-
       Section of the response that summarize the request received as it has been interpreted by teh Beacon server.
-    $ref: ./BeaconReceivedRequestSummary.yaml
+    $ref: ./BeaconReceivedRequestSummary.yaml#/properties
 required:
   - beaconId
   - apiVersion

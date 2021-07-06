@@ -11,15 +11,15 @@ properties:
   meta:
     description: >-
       Information about the response that could be relevant for the Beacon client in order to interpret the results.
-    $ref: ./sections/BeaconResponseMeta.yaml
+    $ref: ./sections/BeaconResponseMeta.yaml#/properties
   responseSummary:
     anyOf:
     - description: >-
         Boolean (true/false) response section.
-      $ref: ./sections/BeaconBooleanResponseSection.yaml#
+      $ref: ./sections/BeaconBooleanResponseSection.yaml#/properties
     - description: >-
         Total number of results section.
-      $ref: ./sections/BeaconCountResponseSection.yaml
+      $ref: ./sections/BeaconCountResponseSection.yaml#/properties
   extendedInfo:
     description: >-
       Additional details that could be of interest. Provided to clearly enclose any attribute that is not part of the Beacon specification.
