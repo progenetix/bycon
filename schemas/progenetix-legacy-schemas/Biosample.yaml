@@ -48,6 +48,8 @@ properties:
       - breast carcinoma
       - adenocarcinoma [cell line HeLa]
   biocharacteristics:
+    description: >-
+      Biocharacteristics are a list of OntologyClass objects which - in Progenetix - contain diagnostic classifiers and other "biological" information. Terms here may duplicate information found in single-value attributes elsewhere (e.g. `histologicalDiagnosis`).
     type: array
     items:
       "$ref": OntologyClass.yaml#/properties

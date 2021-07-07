@@ -114,7 +114,8 @@ def instantiate_schema(schema):
 
 def create_empty_instance(schema):
     s_convert = convert_case_for_keys(schema, camel_to_snake)
-    return instantiate_schema(s_convert)
+    s_i = instantiate_schema(s_convert)
+    return s_i
 
 ################################################################################
 

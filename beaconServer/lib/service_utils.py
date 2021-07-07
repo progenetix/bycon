@@ -81,8 +81,6 @@ def run_beacon(byc):
                 r_set.update({ "exists": True, "results": h_o_d })
                 byc["service_response"]["response_summary"]["num_total_results"] += r_no
 
-        # byc["service_response"]["result_sets"].append(r_set)
-
     if byc["service_response"]["response_summary"]["num_total_results"] > 0:
         byc["service_response"]["response_summary"].update({"exists": True })
         response_add_error(byc, 200)
@@ -171,9 +169,6 @@ def create_empty_service_response(byc):
         except:
             pass
 
-    # if "queries" in byc:
-    #     r["info"].update({ "database_queries": json.loads(json_util.dumps( byc["queries"] ) ) } )
-
     if "response_type" in byc:
         for r_t, r_d in byc["beacon_mappings"]["response_types"].items():
             if r_d["id"] == byc["response_type"]:
@@ -188,16 +183,23 @@ def create_empty_service_response(byc):
                         r["meta"].update( { "returned_schemas": r_d["schema"] } )
                         byc.update({"response_type":e_t})
 
+
     if "result_sets" in r:
+
+        r_set_s = read_schema_files("BeaconNonEmptyResultset", "properties", byc)
+        r_set = create_empty_instance(r_set_s)
+   
         if "dataset_ids" in byc:
             for ds_id in byc[ "dataset_ids" ]:
-                r["result_sets"].append( {
+                ds_rset = r_set.copy()
+                ds_rset.update({
                     "id": ds_id,
-                    "type": "dataset",
+                    "set_type": "dataset",
                     "results_count": 0,
                     "exists": False,
                     "info": { "counts": { } }
-                } )
+                })
+                r["result_sets"].append(ds_rset)
 
     byc.update( {"service_response": r, "error_response": e })
 

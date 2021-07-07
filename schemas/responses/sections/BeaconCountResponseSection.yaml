@@ -5,9 +5,13 @@ description: >-
   Total number of results section.
 type: object
 properties:
+  exists:
+    description: Indicator of whether any entry was observed. This should be non-null,
+      unless there was an error, in which case an error response is expected instead
+      of this one.
+    $ref: ../../common/BeaconCommonComponents.yaml#/definitions/Exists
   numTotalResults:
     description: Total number of results.
     $ref: "../../common/BeaconCommonComponents.yaml#/definitions/NumTotalResults"
 required:
   - exists
-

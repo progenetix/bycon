@@ -81,12 +81,14 @@ def _create_collations_from_dataset( ds_id, **byc ):
 
     coll_types = byc["these_prefs"]["collationed"]
 
-    for pre in coll_types.keys():
+    for hier_type in coll_types.keys():
 
-        pre_h_f = path.join( byc["pkg_path"], "byconeer", "rsrc", pre, "numbered-hierarchies.tsv" )
+        pre = coll_types[hier_type]["prefix"]
+
+        pre_h_f = path.join( byc["pkg_path"], "byconeer", "rsrc", hier_type, "numbered-hierarchies.tsv" )
         if  path.exists( pre_h_f ):
             print( "Creating hierarchy for " + pre)
-            hier =  get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc)
+            hier =  get_prefix_hierarchy( ds_id, hier_type, pre_h_f, **byc)
         elif "PMID" in pre:
             hier =  _make_dummy_publication_hierarchy(**byc)
         else:
@@ -101,8 +103,8 @@ def _create_collations_from_dataset( ds_id, **byc ):
         data_db = data_client[ ds_id ]
         data_coll = data_db[ byc["config"]["collations_source"] ]
 
-        data_key = byc["filter_definitions"][ pre ]["db_key"]
-        data_pat = byc["filter_definitions"][ pre ]["pattern_strict"]
+        data_key = byc["filter_definitions"][ hier_type ]["db_key"]
+        data_pat = byc["these_prefs"]["collationed"][ hier_type ]["pattern"]
         onto_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
 
         sel_hiers = [ ]
@@ -110,7 +112,7 @@ def _create_collations_from_dataset( ds_id, **byc ):
         # get the set of all parents for sample codes
         data_parents = set()
         for o_id in onto_ids:
-            if o_id in hier:
+            if o_id in hier.keys():
                 data_parents.update( hier[ o_id ][ "parent_terms" ] )
 
         no = len(hier.keys())
@@ -164,7 +166,7 @@ def _create_collations_from_dataset( ds_id, **byc ):
        
 ################################################################################
 
-def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
+def get_prefix_hierarchy( ds_id, hier_type, pre_h_f, **byc):
 
     hier = { }
 
@@ -175,7 +177,7 @@ def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
     parents = [ ]
 
     no = len(h_in)
-    bar = Bar(pre, max = no, suffix='%(percent)d%%'+" of "+str(no) )
+    bar = Bar(hier_type, max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
     for c_l in h_in:
 
@@ -206,18 +208,18 @@ def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
 
     # now adding terms missing from the tree ###################################
 
-    print("Looking for missing {} codes in {}.{} ...".format(pre, ds_id, byc["config"]["collations_source"]))
+    print("Looking for missing {} codes in {}.{} ...".format(hier_type, ds_id, byc["config"]["collations_source"]))
     data_client = MongoClient( )
     data_db = data_client[ ds_id ]
     data_coll = data_db[ byc["config"]["collations_source"] ]
-    data_key = byc["filter_definitions"][ pre ]["db_key"]
-    data_pat = byc["these_prefs"]["collationed"][ pre ]["pattern"]
+    data_key = byc["filter_definitions"][ hier_type ]["db_key"]
+    data_pat = byc["these_prefs"]["collationed"][ hier_type ]["pattern"]
     
     onto_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
 
     added_no = 0
 
-    if "NCIT" in pre:
+    if hier_type == "NCIT":
         added_no += 1
         no += 1
         hier.update( {
@@ -238,7 +240,7 @@ def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
 
         l = _get_label_for_code(data_coll, data_key, o)
 
-        if "NCIT" in pre:
+        if hier_type == "NCIT":
             hier.update( {
                     o: { "id": o, "label": l, "hierarchy_paths":
                         [ { "order": no, "depth": 3, "path": [ "NCIT:C3262", "NCIT:C000000", o ] } ]
@@ -251,7 +253,7 @@ def get_prefix_hierarchy( ds_id, pre, pre_h_f, **byc):
         print("Added:\t{}\t{}".format(o, l))
 
     if added_no > 0:
-        print("===> Added {} {} codes from {}.{} <===".format(added_no, pre, ds_id, byc["config"]["collations_source"] ) )
+        print("===> Added {} {} codes from {}.{} <===".format(added_no, hier_type, ds_id, byc["config"]["collations_source"] ) )
 
     ############################################################################
 
@@ -367,6 +369,7 @@ def _get_hierarchy_item(data_coll, data_key, code, order, depth, path):
 def _get_ids_for_prefix(data_coll, data_key, data_pat):
 
     pre_re = re.compile( data_pat )
+
     pre_ids = data_coll.distinct( data_key, { data_key: { "$regex": pre_re } } )
     pre_ids = list(filter(lambda d: pre_re.match(d), pre_ids))
 

@@ -13,7 +13,7 @@ properties:
     description: id of the resultSet.
     type: string
     example: datasetA
-  type:
+  setType:
     description: >-
       Entry type of resultSet. It SHOULD MATCH an entry type declared as collection in the Beacon configuration.
     type: string

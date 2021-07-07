@@ -4,37 +4,48 @@ bycon_definition_files:
   - dataset_definitions
 collationed:
   geo:
+    prefix: geo
     pattern: '^(geo)[:]((GSE)|(GPL))'
     is_series: True
     child_pattern: '^(geo)[:]GSM'
   NCIT:
+    prefix: NCIT
     pattern: '^(NCIT)[:]C'
     is_series: False
-  NCIT-TNM:
+  TNM.NCIT:
+    prefix: NCIT
     pattern: '^(NCIT)[:]C'
     is_series: False
   icdom:
+    prefix: icdom
     pattern: '^(icdom)[\-]\d'
     is_series: False
   icdot:
+    prefix: icdot
     pattern: '^(icdot)[\-]C'
     is_series: False
   cellosaurus:
+    prefix: cellosaurus
     pattern: '^(cellosaurus)[:]CVCL'
     is_series: False
   PMID:
+    prefix: PMID
     pattern: '^(PMID)[:]\d'
     is_series: False
   UBERON:
+    prefix: UBERON
     pattern: '^(UBERON)[:]\d'
     is_series: False
   cBP:
+    prefix: cBP
     pattern: '^(cBP)[\-]\w'
     is_series: False
   TCGA:
+    prefix: TCGA
     pattern: '^(TCGA)[\-][\w\-]{2,20}$'
     is_series: True
     child_pattern: '^(TCGA)[\-]\w+?\-[\w\-]{15,30}$'
   pgxcohort:
+    prefix: pgxcohort
     pattern: '^(pgxcohort)[\-]\w+?$'
     is_series: False

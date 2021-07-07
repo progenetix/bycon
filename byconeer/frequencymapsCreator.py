@@ -90,7 +90,7 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
     id_query = {}
 
     if "filterlist" in byc:
-        if len(byc["filters"]) > 0:
+        if len(byc["filterlist"]) > 0:
             f_l = []
             for pre in byc["filterlist"]:
                 f_l.append( { "id": { "$regex": "^"+pre } })
@@ -170,6 +170,7 @@ def _make_exact_query(coll):
 
     return { "$or": [
             { "biocharacteristics.id": coll["id"] },
+            { "pathological_tnm_findings.id": coll["id"] },
             { "cohorts.id": coll["id"] },
             { "external_references.id": coll["id"] }
         ] }
@@ -180,6 +181,7 @@ def _make_child_terms_query(coll):
 
     return { "$or": [
             { "biocharacteristics.id": { '$in': coll["child_terms"] } },
+            { "pathological_tnm_findings.id": { '$in': coll["child_terms"] } },
             { "cohorts.id": { '$in': coll["child_terms"] } },
             { "external_references.id": { '$in': coll["child_terms"] } }
         ] }
