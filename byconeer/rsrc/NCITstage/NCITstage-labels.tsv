@@ -1,0 +1,164 @@
+Disease Stage Qualifier
+	BCLC Stage
+	CNS Leukemia at Diagnosis
+		CNS1
+		CNS2
+			CNS 2a
+			CNS 2b
+			CNS 2c
+		CNS3
+			CNS 3a
+			CNS 3b
+			CNS 3c
+	FIGO Stage
+		FIGO Stage 0
+		FIGO Stage I
+			FIGO Stage IA
+				FIGO Stage IA1
+				FIGO Stage IA2
+			FIGO Stage IB
+				FIGO Stage IB3
+				FIGO Stage IB1
+				FIGO Stage IB2
+			FIGO Stage IC
+				FIGO Stage IC1
+				FIGO Stage IC2
+				FIGO Stage IC3
+		FIGO Stage II
+			FIGO Stage IIA
+				FIGO Stage IIA1
+				FIGO Stage IIA2
+			FIGO Stage IIB
+		FIGO Stage III
+			FIGO Stage IIIA
+				FIGO Stage IIIA1
+					FIGO Stage IIIA1(i)
+					FIGO Stage IIIA1(ii)
+				FIGO Stage IIIA2
+			FIGO Stage IIIB
+			FIGO Stage IIIC
+				FIGO Stage IIIC1
+				FIGO Stage IIIC2
+		FIGO Stage IV
+			FIGO Stage IVA
+			FIGO Stage IVB
+	AJCC v8 Stage
+		Differentiated Thyroid Gland Carcinoma Under 55 Years AJCC v8 Stage
+		Differentiated Thyroid Gland Carcinoma 55 Years and Older AJCC v8 Stage
+	AIDS-Related Kaposi Sarcoma Stage
+		AIDS-Related Kaposi Sarcoma T (Tumor) Status
+			AIDS-Related Kaposi Sarcoma T0 (Good Risk): Localized Tumor
+				AIDS-Related Kaposi Sarcoma T0 (Good Risk): Skin and/or Lymph Nodes
+				AIDS-Related Kaposi Sarcoma T0 (Good Risk): Minimal Oral Disease
+			AIDS-Related Kaposi Sarcoma T1 (Poor Risk): Widespread Tumor
+				AIDS-Related Kaposi Sarcoma T1 (Poor Risk): Edema or Ulceration
+				AIDS-Related Kaposi Sarcoma T1 (Poor Risk): Extensive Oral Involvement
+				AIDS-Related Kaposi Sarcoma T1 (Poor Risk): Gastrointestinal Tract Involvement
+				AIDS-Related Kaposi Sarcoma T1 (Poor Risk): Pulmonary Involvement
+				AIDS-Related Kaposi Sarcoma T1 (Poor Risk): Other Non-Nodal Viscera Involvement
+		AIDS-Related Kaposi Sarcoma I (Immune System) Status
+			AIDS-Related Kaposi Sarcoma I0 (Good Risk)
+			AIDS-Related Kaposi Sarcoma I1 (Poor Risk)
+		AIDS-Related Kaposi Sarcoma S (Systemic Illness) Status
+			AIDS-Related Kaposi Sarcoma S0 (Good Risk)
+			AIDS-Related Kaposi Sarcoma S1 (Poor Risk)
+		AIDS-Related Kaposi Sarcoma Overall Risk Group
+			AIDS-Related Kaposi Sarcoma Good Risk
+			AIDS-Related Kaposi Sarcoma Poor Risk
+	Durie/Salmon Stage
+	International Staging System Stage
+	Breast Cancer Anatomic Stage
+	Breast Cancer Prognostic Stage
+	Stage R
+		Stage R0
+		Stage R1
+		Stage R2
+		Stage RX
+	Whitmore-Jewett Stage
+	ENSAT Stage
+	Ann Arbor Stage
+	Lugano Stage
+	Stage IE
+	Stage IIE
+	Rai Stage
+	Binet Stage
+		Binet Stage A
+		Binet Stage B
+		Binet Stage C
+	St. Jude Stage
+	RISS Stage
+	Occult Stage
+	Masaoka-Koga Stage
+	Mediastinal Malignant Germ Cell Tumor Stage
+	Staging Incomplete
+		Incomplete Staging (cM)
+		Incomplete Staging (pM)
+	Stage I
+		Stage IA
+			Stage IA3
+			Stage IA1
+			Stage IA2
+		Stage IB
+			Stage IB Cervix
+				Stage IB1
+				Stage IB2
+		Stage IC
+	Stage III
+		Stage IIID
+		Stage IIIA
+			Stage IIIA1
+			Stage IIIA2
+		Stage IIIB
+		Stage IIIC
+			Stage IIIC1
+			Stage IIIC2
+	Stage IV
+		Stage IVS
+		Stage IVA
+			Stage IVA1
+			Stage IVA2
+		Stage IVB
+		Stage IVC
+	Stage V
+	Stage 0
+		Stage 0a
+		Stage 0is
+	Stage II
+		Stage IIA
+			Stage IIA Cervix
+				Stage IIA1
+				Stage IIA2
+		Stage IIB
+		Stage IIC
+		Stage II Cervix
+			Stage IIA Cervix
+				Stage IIA1
+				Stage IIA2
+	Stage A
+	Stage B
+		Stage B1
+		Stage B2
+	Stage C
+	Stage D
+		Stage D1
+		Stage D2
+	Extensive Stage
+	Limited Stage
+	Stage Unspecified
+	Hepatoblastoma Stage
+		Postsurgical Stage I
+		Postsurgical Stage II
+		Postsurgical Stage III
+		Postsurgical Stage IV
+		PRETEXT Stage 1
+		PRETEXT Stage 2
+		PRETEXT Stage 3
+		PRETEXT Stage 4
+	Stage Is
+	AJCC v6 Stage
+	AJCC v7 Stage
+		Differentiated Thyroid Gland Carcinoma Under 45 Years AJCC v7 Stage
+		Differentiated Thyroid Gland Carcinoma 45 Years and Older AJCC v7 Stage
+	Stage Unknown
+	Advanced Stage
+	Stage X

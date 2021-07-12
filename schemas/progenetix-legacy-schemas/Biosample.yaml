@@ -103,7 +103,7 @@ properties:
         label: Recurrent Malignant Neoplasm
   tumorGrade:
     description: >
-      child term of NCIT:C28076 (Disease Grade Qualifier) or equivalent
+      Tumor grade as child term of NCIT:C28076 (Disease Grade Qualifier) or equivalent.
     $ref: OntologyClass.yaml#/properties
     examples:
       - id: NCIT:C28076
@@ -113,7 +113,14 @@ properties:
       - id: NCIT:C62397
         label: WHO Central Nervous System Grade IV
   pathologicalStage:
-    "$ref": OntologyClass.yaml#/properties
+    description: >
+      Pathological stage, as subclass of NCIT:C28108 - Disease Stage Qualifier.
+    $ref: OntologyClass.yaml#/properties
+    examples:
+      - id: NCIT:C27977
+        label: Stage IIIA
+      - id: NCIT:C80136
+        label: Binet Stage C
   pathologicalTnmFinding:
     description: >
       A child class of NCIT:C48698 Cancer TNM Finding Category
