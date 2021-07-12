@@ -87,7 +87,7 @@ def _create_collations_from_dataset( ds_id, **byc ):
 
         pre_h_f = path.join( byc["pkg_path"], "byconeer", "rsrc", hier_type, "numbered-hierarchies.tsv" )
         if  path.exists( pre_h_f ):
-            print( "Creating hierarchy for " + pre)
+            print( "Creating hierarchy for " + hier_type)
             hier =  get_prefix_hierarchy( ds_id, hier_type, pre_h_f, **byc)
         elif "PMID" in pre:
             hier =  _make_dummy_publication_hierarchy(**byc)
@@ -142,27 +142,32 @@ def _create_collations_from_dataset( ds_id, **byc ):
                 child_no =  data_coll.count_documents( { data_key: { "$in": children } } )
  
             if child_no > 0:
-                hier[ code ].update( {
+
+                sub_id = re.sub(pre, hier_type, code)
+                update_obj = hier[ code ].copy()
+                update_obj.update({
+                    "id": sub_id,
                     "code_matches": code_no,
+                    "code": code,
                     "count": child_no,
                     "date": date_isoformat(datetime.datetime.now())
-                } )
+                })
                 matched += 1
 
                 if not byc["args"].test:
-                    sel_hiers.append( hier[ code ] )
+                    sel_hiers.append( update_obj )
                 else:
-                    print("{}:\t{} ({} deep) samples - {} / {} {}".format(code, code_no, child_no, count, no, pre))
+                    print("{}:\t{} ({} deep) samples - {} / {} {}".format(sub_id, code_no, child_no, count, no, pre))
 
         if not byc["args"].test:
             bar.finish()
             print("==> Updating database ...")
             if matched > 0:
-                coll_clean_q = { "id": { "$regex": "^"+pre } }
+                coll_clean_q = { "id": { "$regex": "^"+hier_type } }
                 coll_coll.delete_many( coll_clean_q )
                 coll_coll.insert_many( sel_hiers )
 
-        print("===> Found {} of {} {} codes & added them to {}.{} <===".format(matched, no, pre, ds_id, byc["config"]["collations_coll"]))
+        print("===> Found {} of {} {} codes & added them to {}.{} <===".format(matched, no, hier_type, ds_id, byc["config"]["collations_coll"]))
        
 ################################################################################
 

@@ -5,7 +5,7 @@ description: >-
   Filtering terms available in this Beacon.
 type: array
 items:
-  $ref: "#/definitions/FilteringTerm"
+  $ref: "#/definitions/FilteringTerm/properties"
 minItems: 0
 definitions:
   FilteringTerm:
@@ -13,10 +13,10 @@ definitions:
     description: >-
       Entities can be filtered using this term.
     required:
-      - type
+      - filterType
       - id
     properties:
-      type:
+      filterType:
         type: string
         description: >-
           Either "custom", "alphanumeric" or ontology/terminology full name.

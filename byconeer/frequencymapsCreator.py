@@ -143,18 +143,19 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
                 bios_query = _make_exact_query(coll)
                 bios_no, cs_cursor = _cs_cursor_from_bios_query(bios_coll, cs_coll, bios_query)
                 cs_no = len(list(cs_cursor))
-                intf = interval_counts_from_callsets(cs_cursor, byc)
+                if cs_no > 0:
+                    intf = interval_counts_from_callsets(cs_cursor, byc)
 
-                print("found {} exact code matches".format(cs_no))
+                    print("found {} exact code matches".format(cs_no))
 
-            update_obj.update({ "frequencymap_codematches": {
-                    "interval_count": len(byc["genomic_intervals"]),
-                    "binning": byc["genome_binning"],
-                    "biosample_count": bios_no,
-                    "analysis_count": cs_no,
-                    "intervals": intf
-                }
-            })
+                    update_obj.update({ "frequencymap_codematches": {
+                            "interval_count": len(byc["genomic_intervals"]),
+                            "binning": byc["genome_binning"],
+                            "biosample_count": bios_no,
+                            "analysis_count": cs_no,
+                            "intervals": intf
+                        }
+                    })
 
         proc_time = time.time() - start_time
         if cs_no > 1000:

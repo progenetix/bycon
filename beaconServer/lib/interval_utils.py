@@ -179,9 +179,13 @@ def interval_counts_from_callsets(callsets, byc):
     # callsets can be either a list or a MongoDB Cursor (which has to be re-set)
     if type(callsets).__name__ == "Cursor":
         callsets.rewind()
-    cs_no = len(list(callsets))
 
-    fFactor = 100 / cs_no;
+    cs_no = len(list(callsets))
+    fFactor = 0
+
+    if cs_no > 0:
+        fFactor = 100 / cs_no;
+
     pars = {
         "gain": {"cov_l": "dup", "val_l": "max" },
         "loss": {"cov_l": "del", "val_l": "min" }

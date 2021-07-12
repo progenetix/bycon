@@ -12,9 +12,9 @@ collationed:
     prefix: NCIT
     pattern: '^(NCIT)[:]C'
     is_series: False
-  TNM.NCIT:
-    prefix: NCIT
-    pattern: '^(NCIT)[:]C'
+  TNM:
+    prefix: TNM
+    pattern: '^(TNM)[\-]C'
     is_series: False
   icdom:
     prefix: icdom

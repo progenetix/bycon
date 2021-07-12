@@ -1,18 +1,30 @@
-TNM.NCIT:
-  name: "National Cancer Institute Thesaurus Cancer TNM Finding"
+NCITgrade:
+  name: "National Cancer Institute Thesaurus Disease Grade Qualifier"
   url: "https://ncit.nci.nih.gov/"
-  db_key: 'pathological_tnm_findings.id'
+  db_key: 'tumor_grade.id'
+  description: Pseudo-prefix recoding of Disease Grade codes
   scopes:
     biosamples:
       default: 1
-    individuals:
-      default: 0
-  pattern: '^TNM.NCIT([_\:]C\d+?\-?)?$'
-  pattern_strict: '^TNM.NCIT[_\:]C\d+?$'
-  remove: 'TNM.'
+  pattern: '^NCITgrade([\-_\:]C\d+?\-?)?$'
+  pattern_strict: '^NCITgrade[\-_\:]C\d+?$'
   examples:
-    - 'TNM.NCIT:C48700'
-    - 'TNM.NCIT:C48786'
+    - 'NCITgrade-C28078'
+    - 'NCITgrade-C28080'
+
+TNM:
+  name: "National Cancer Institute Thesaurus Cancer TNM Finding"
+  url: "https://ncit.nci.nih.gov/"
+  db_key: 'pathological_tnm_findings.id'
+  description: Pseudo-prefix recoding of NCIT TNM codes
+  scopes:
+    biosamples:
+      default: 1
+  pattern: '^TNM([\-_\:]C\d+?\-?)?$'
+  pattern_strict: '^TNM[\-_\:]C\d+?$'
+  examples:
+    - 'TNM-C48700'
+    - 'TNM-C48786'
 
 # Bio-Metadata
 NCIT:

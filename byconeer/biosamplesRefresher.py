@@ -148,7 +148,7 @@ def _process_dataset(ds_id, pub_labels, byc):
             if "tnm" in s["info"]:
                 if not isinstance(s["info"]["tnm"], str):
                     continue
-                for k, tnm_def in byc["these_prefs"]["pathologicalTnmFindings"].items():
+                for k, tnm_def in byc["these_prefs"]["pathological_tnm_findings"].items():
                     if re.match(r'{0}'.format(tnm_def["pattern"]), s["info"]["tnm"], re.IGNORECASE):
                         update_obj["pathological_tnm_findings"].append({
                             "id": tnm_def["id"],

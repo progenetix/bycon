@@ -218,7 +218,8 @@ def cgi_print_response(byc, status_code):
             byc["error_response"].update({ "meta": byc["service_response"]["meta"]})
         byc["service_response"] = byc["error_response"]
     print('Content-Type: application/json')
-    print('status:'+str(status_code))
+    print('status:200')
+    # print('status:'+str(status_code))
     print()
     print(json.dumps(humps.camelize(byc["service_response"]), indent=4, sort_keys=True, default=str)+"\n")
     exit()

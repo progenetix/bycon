@@ -12,7 +12,7 @@ properties:
   response:
     description: >-
       Actual list of filtering terms.
-    $ref: ./sections/BeaconFilteringTermsResults.yaml#/properties
+    $ref: ./sections/BeaconFilteringTermsResults.yaml
 required:
   - meta
   - response

@@ -85,6 +85,9 @@ properties:
     $ref: OntologyClass.yaml#/properties
   histologicalDiagnosis:
     $ref: OntologyClass.yaml#/properties
+    examples:
+      - id: NCIT:C3778
+        label : Serous Cystadenocarcinoma
   tumorProgression:
     $ref: OntologyClass.yaml#/properties
     examples:
@@ -101,7 +104,14 @@ properties:
   tumorGrade:
     description: >
       child term of NCIT:C28076 (Disease Grade Qualifier) or equivalent
-    "$ref": OntologyClass.yaml#/properties
+    $ref: OntologyClass.yaml#/properties
+    examples:
+      - id: NCIT:C28076
+        label: grade 3
+      - id: NCIT:C28080
+        label: Grade 3a
+      - id: NCIT:C62397
+        label: WHO Central Nervous System Grade IV
   pathologicalStage:
     "$ref": OntologyClass.yaml#/properties
   pathologicalTnmFinding:

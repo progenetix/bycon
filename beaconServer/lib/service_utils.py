@@ -458,9 +458,9 @@ def print_pgx_column_header(ds_id, byc):
 
 def _print_filters_meta_line(byc):
 
-    if "filters" in byc["service_response"]["meta"]["received_request"]:
+    if "filters" in byc["service_response"]["meta"]["received_request_summary"]:
         f_vs = []
-        for f in byc["service_response"]["meta"]["received_request"]["filters"]:
+        for f in byc["service_response"]["meta"]["received_request_summary"]["filters"]:
             f_vs.append(f["id"])
         print("#meta=>filters="+','.join(f_vs))
 
