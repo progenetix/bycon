@@ -16,6 +16,10 @@ collationed:
     prefix: NCITgrade
     pattern: '^(NCITgrade)[\-]C'
     is_series: False
+  NCITstage:
+    prefix: NCITstage
+    pattern: '^(NCITstage)[\-]C'
+    is_series: False
   TNM:
     prefix: TNM
     pattern: '^(TNM)[\-]C'

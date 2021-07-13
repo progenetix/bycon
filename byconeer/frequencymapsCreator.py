@@ -169,9 +169,13 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
 
 def _make_exact_query(coll):
 
+    # TODO: have the correct field from prefs.
+
     return { "$or": [
             { "biocharacteristics.id": coll["id"] },
             { "pathological_tnm_findings.id": coll["id"] },
+            { "pathological_stage.id": coll["id"] },
+            { "tumor_grade.id": coll["id"] },
             { "cohorts.id": coll["id"] },
             { "external_references.id": coll["id"] }
         ] }
@@ -183,6 +187,8 @@ def _make_child_terms_query(coll):
     return { "$or": [
             { "biocharacteristics.id": { '$in': coll["child_terms"] } },
             { "pathological_tnm_findings.id": { '$in': coll["child_terms"] } },
+            { "pathological_stage.id": coll["id"] },
+            { "tumor_grade.id": coll["id"] },
             { "cohorts.id": { '$in': coll["child_terms"] } },
             { "external_references.id": { '$in': coll["child_terms"] } }
         ] }

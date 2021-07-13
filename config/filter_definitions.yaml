@@ -12,6 +12,20 @@ NCITgrade:
     - 'NCITgrade-C28078'
     - 'NCITgrade-C28080'
 
+NCITstage:
+  name: "National Cancer Institute Thesaurus Disease Stage Qualifier"
+  url: "https://ncit.nci.nih.gov/"
+  db_key: 'pathological_stage.id'
+  description: Pseudo-prefix recoding of Disease Stage codes
+  scopes:
+    biosamples:
+      default: 1
+  pattern: '^NCITstage([\-_\:]C\d+?\-?)?$'
+  pattern_strict: '^NCITstage[\-_\:]C\d+?$'
+  examples:
+    - 'NCITstage-C27970'
+    - 'NCITstage-C27969'
+
 TNM:
   name: "National Cancer Institute Thesaurus Cancer TNM Finding"
   url: "https://ncit.nci.nih.gov/"
