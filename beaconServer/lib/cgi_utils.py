@@ -13,11 +13,16 @@ def set_debug_state(debug=0):
         cgitb.enable()
         print('Content-Type: text')
         print()
+        return True
+
     elif environ.get('REQUEST_URI'):
         if "debug=1" in environ.get('REQUEST_URI'):
             cgitb.enable()
             print('Content-Type: text')
             print()
+            return True
+
+    return False
 
 ################################################################################
 
@@ -29,6 +34,7 @@ def cgi_parse_query(byc):
 
     form_data = {}
     query_meta = {}
+    debug_state = False
 
     # set_debug_state(1)
 
@@ -39,7 +45,8 @@ def cgi_parse_query(byc):
             # print(jbod)
             if "debug" in jbod:
                 if jbod["debug"] > 0:                 
-                    set_debug_state(1)
+                    debug_state = set_debug_state(1)
+
             # TODO: this hacks the v2b4 structure
             if "query" in jbod:
                 for p, v in jbod["query"].items():
@@ -53,9 +60,9 @@ def cgi_parse_query(byc):
             if "meta" in jbod:
                 query_meta = jbod["meta"]
 
-        return form_data, query_meta
+        return form_data, query_meta, debug_state
 
-    set_debug_state()
+    debug_state = set_debug_state()
 
     # TODO: The structure, types of the request/form object need to go to a
     # config and some deeper processing, for proper beacon request objects
@@ -69,7 +76,7 @@ def cgi_parse_query(byc):
         else:
             form_data.update({p: get.getvalue(p)})
     
-    return form_data, query_meta
+    return form_data, query_meta, debug_state
 
 ################################################################################
 
@@ -173,6 +180,17 @@ def cgi_break_on_errors(byc):
 
 ################################################################################
 
+def cgi_debug_message(byc, label, debug_object):
+
+    try:
+        if byc["debug_state"]:
+            print("{}:\n\n{}\n\n".format(label, debug_object))
+    except:
+        pass
+
+################################################################################
+
+
 def cgi_print_response(byc, status_code):
 
     e = byc["error_response"]
@@ -209,9 +227,15 @@ def cgi_print_response(byc, status_code):
         cgi_simplify_response(byc)
 
     if "response_summary" in byc["service_response"]:
+        if "any_of" in byc["service_response"]["response_summary"]:
+            byc["service_response"]["response_summary"].pop("any_of")
+        if "all_of" in byc["service_response"]["response_summary"]:
+            byc["service_response"]["response_summary"].pop("all_of")
         if "exists" in byc["service_response"]["response_summary"]:
             if byc["service_response"]["response_summary"]["exists"] is False:
                 status_code = 422
+
+
 
     if e["error"]["error_code"] > 200:
         if "meta" in byc["service_response"]:

@@ -5,6 +5,8 @@ from uuid import uuid4
 import datetime
 import sys
 
+from cgi_utils import cgi_print_debug_message
+
 ################################################################################
 
 def mongo_result_list(db_name, coll_name, query, fields):
@@ -60,6 +62,10 @@ def execute_bycon_queries(ds_id, byc):
     prefetch = { }
 
     prevars = { "ds_id": ds_id, "data_db": data_db, "h_o_defs": h_o_defs, "pref_m": "", "query": { } }
+
+    ############################################################################
+
+    cgi_debug_message(byc, "queries at execution", exe_queries)
 
     ############################################################################
 

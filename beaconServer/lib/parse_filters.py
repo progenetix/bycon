@@ -76,10 +76,12 @@ def select_dataset_ids(byc):
 
     ds_ids = [ ]
 
-    if "id_from_path" in byc:
-        for ds_id, ds in byc[ "dataset_definitions" ].items():
-            if "idMatch" in ds:
-                if ds["idMatch"] in byc["id_from_path"]:
+    p_id = rest_path_value("datasets")
+
+    if p_id:
+        if not "empty_value" in p_id:
+            for ds_id, ds in byc[ "dataset_definitions" ].items():
+                if p_id == ds_id:
                     byc.update( { "dataset_ids": [ds_id] } )
                     return byc
 

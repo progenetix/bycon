@@ -124,8 +124,8 @@ def initialize_service(service="NA"):
     else:
         read_bycon_configs_by_name( "config", byc )
 
-    form_data, query_meta = cgi_parse_query(byc)
-    byc.update({ "form_data": form_data, "query_meta": query_meta })
+    form_data, query_meta, debug_state = cgi_parse_query(byc)
+    byc.update({ "form_data": form_data, "query_meta": query_meta, "debug_state": debug_state })
 
     if "defaults" in byc["these_prefs"]:
         for d_k, d_v in byc["these_prefs"]["defaults"].items():

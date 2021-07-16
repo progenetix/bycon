@@ -20,15 +20,24 @@ podmd"""
 
 def main():
 
-    core()
+    map()
     
 ################################################################################
 
-def core():
+def map():
 
     byc = initialize_service()
-    run_beacon_init_stack(byc)
-    run_beacon(byc)
+    create_empty_service_response(byc)
+
+    # for e_s_k, e_s in byc["beacon_map"]["endpointSets"].items():
+    #     print(e_s["rootUrl"])
+
+
+    byc.update({"service_response": byc["beacon_map"] })
+
+
+
+
     cgi_print_response( byc, 200 )
 
 ################################################################################

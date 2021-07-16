@@ -1,0 +1,26 @@
+defaults:
+  dataset_ids:
+    - progenetix
+  response_type: core
+  response_schema: BeaconCoreResponse
+  h->o_access_key: "biosamples._id"
+  genome_binning: 1Mb
+bycon_definition_files:
+  - config
+  - beacon_info
+  - beacon_endpoints
+  - beacon_mappings
+  - beacon_map
+  - dataset_definitions
+  - filter_definitions
+  - geoloc_definitions
+  - handover_definitions
+  - interval_definitions
+  - variant_definitions
+meta:
+  returned_schemas:
+    BeaconBooleanResponse: https://progenetix.org/services/schemas/BeaconBooleanResponseSection/
+  info: >
+    Minimal Beacon response.
+response_types:
+  - core

@@ -21,6 +21,7 @@ def parse_beacon_schema(byc):
         byc.update({ "beacon": yaml.load( bs , Loader=yaml.FullLoader) })
 
     beacon_get_base_paths(byc)
+    beacon_get_endpoint_base_paths(byc)
 
     return byc
 
@@ -28,13 +29,31 @@ def parse_beacon_schema(byc):
 
 def beacon_get_base_paths(byc):
 
-    if not "beacon" in byc:
-        return byc
-    if not "paths" in byc["beacon"]:
+    try:
+        p_s = byc["beacon"]["paths"].keys()
+    except:
         return byc
 
     r_p_bs = set()
-    for p in byc["beacon"]["paths"].keys():
+    for p in p_s:
+        p = re.sub(r'^\/',"", p )
+        if len(p) > 1:
+            r_p_bs.add( re.split('/', p)[0] )
+    byc.update({"beacon_base_paths": list(r_p_bs) })
+
+    return byc
+
+################################################################################
+
+def beacon_get_endpoint_base_paths(byc):
+
+    try:
+        p_s = byc["these_prefs"]["openapi_definitions"]["paths"].keys()
+    except:
+        return byc
+
+    r_p_bs = set()
+    for p in p_s:
         p = re.sub(r'^\/',"", p )
         if len(p) > 1:
             r_p_bs.add( re.split('/', p)[0] )
@@ -149,4 +168,4 @@ def snake_to_camel(name):
 
 def camel_to_pascal(name):
 
-    return name.capitalize()
+    return name.capitalize( snake_to_camel(name) )

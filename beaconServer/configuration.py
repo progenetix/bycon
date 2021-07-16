@@ -20,15 +20,17 @@ podmd"""
 
 def main():
 
-    core()
+    configuration()
     
 ################################################################################
 
-def core():
+def configuration():
 
     byc = initialize_service()
-    run_beacon_init_stack(byc)
-    run_beacon(byc)
+    create_empty_service_response(byc)
+
+    byc.update({"service_response": byc["beacon_configuration"] })
+
     cgi_print_response( byc, 200 )
 
 ################################################################################
