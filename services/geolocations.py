@@ -40,7 +40,7 @@ def geolocations():
     
     create_empty_service_response(byc)
 
-    query, geo_pars = geo_query( **byc )
+    query, geo_pars = geo_query( byc )
     for g_k, g_v in geo_pars.items():
         response_add_parameter(byc, g_k, g_v)
 

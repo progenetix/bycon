@@ -261,7 +261,7 @@ def update_queries_from_endpoints( byc ):
 
 def update_queries_from_geoquery( byc ):
 
-    geo_q, geo_pars = geo_query( **byc )
+    geo_q, geo_pars = geo_query( byc )
 
     if not geo_q:
         return byc
@@ -305,7 +305,7 @@ def update_queries_from_variants( byc ):
 ################################################################################
 ################################################################################
 
-def geo_query( **byc ):
+def geo_query( byc ):
 
     geo_q = { }
     geo_pars = { }

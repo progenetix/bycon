@@ -3,7 +3,16 @@
 import requests
 import json, re
 import csv
-from os import path
+from pymongo import MongoClient
+from os import path, pardir
+from humps import decamelize
+
+# local
+lib_path = path.dirname( path.abspath(__file__) )
+dir_path = path.join( lib_path, pardir )
+pkg_path = path.join( dir_path, pardir )
+
+from beaconServer.lib.schemas_parser import read_schema_files, create_empty_instance
 
 ##############################################################################
 
@@ -13,20 +22,18 @@ def jprint(obj):
 
 ##############################################################################
 
-def read_annotation_table(args):
+def read_annotation_table(byc):
 
-    f_p = args.filepath
-
-    if not args.filepath:
+    if not byc["args"].filepath:
         print("!!! No file provided using `-f` !!!")
         exit()
 
-    if not path.isfile( args.filepath ):
-        print("!!! No file at {} !!!".format(args.filepath))
+    if not path.isfile( byc["args"].filepath ):
+        print("!!! No file at {} !!!".format(byc["args"].filepath))
         exit()
 
     l = [] 
-    with open(f_p) as f:
+    with open(byc["args"].filepath) as f:
        rd = csv.reader(f, delimiter="\t", quotechar='"')
        for i, row in enumerate(rd):
            if i > 0:
@@ -37,6 +44,8 @@ def read_annotation_table(args):
 ##############################################################################
 
 def retrieve_epmc_publications(pmid):
+
+    informations = { "pmid" : "" } # dirty, to avoind another test
     
     parameters = {
         "query": "ext_id:" + pmid,
@@ -47,7 +56,8 @@ def retrieve_epmc_publications(pmid):
     
     if response.status_code == 200:
         results = response.json()["resultList"]["result"]
-        informations = results[0]
+        if len(results) > 0:
+            informations = results[0]
             
     return informations if (informations["pmid"] == pmid) else print(f"Warning: PMID of the retrieved publication doesn't match with the query (PMID:{pmid})")
     
@@ -66,53 +76,78 @@ def create_short_publication_label(author, title, year):
 
 ##############################################################################
 
-def get_geolocation(city, locationID): #heidelberg, heidelberg::germany
+def get_geolocation(locationID, byc):
 
-    where = {"city": city} 
-    location = requests.get("https://progenetix.org/services/geolocations", params = where)
-    coordinates = location.json()["results"]
+    #heidelberg, heidelberg::germany
 
-    for info in coordinates:
-        if info["id"] == locationID:
-            del(info["id"])
-            provenance = info
-          
-    return provenance
+    g_p = read_schema_files("GeoLocation", "properties", byc)
+    provenance = {
+        "type" : "Feature",
+        "geometry" : {
+            "type" : "Point",
+            "coordinates" : [
+                0,
+                0
+            ]
+        },
+        "properties" : {
+            "ISO3166alpha2" : "XX",
+            "ISO3166alpha3" : "XXX",
+            "city" : "Atlantis",
+            "continent" : "Null Island",
+            "country" : "Null Island"
+        }
+    }
+
+    locationID = re.sub(" ", "", locationID)
+
+    mongo_client = MongoClient()
+    geo_info = mongo_client["progenetix"]["geolocs"].find_one({"id": locationID})
+    if not geo_info:
+        print("!!! no geo match for {}".format(locationID))
+        return provenance
+
+    return geo_info["geo_location"]
 
 ##############################################################################
 
 def get_ncit_tumor_type(tumors, fullNames):
     
     # Convert "tumor" in a list containing [[ncit, counts], [ncit, counts], ...]
-    types = tumors.split('; ') # if >1 tumor type is present, information must be separated by "; " (see test.txt)
+    tumors = re.sub(" ", "", tumors)
+    types = ';'.split(tumors) # if >1 tumor type is present, information must be separated by ";" (see test.txt)
     list_types = []
     for t in types:
-        typ = t.split(', ')
+        typ = t.split(',')
         list_types.append(typ)
     
     # Convert fullNames string into a list
-    names = fullNames.split('; ')
+    fullNames = re.sub("; ", ";", fullNames)
+    names = fullNames.split(';')
 
     # Fill in sample_types list
     sample_types = []
     for i, typ in enumerate(list_types):
-        tumor_type = {}
-        ID = "NCIT:" + typ[0]
-        counts = int(typ[1])
-        tumor_type.update({"id": ID,
-                           "label": names[i],
-                           "counts": counts,
-                           })
-        
-        tumor_copy = tumor_type.copy()
-        sample_types.append(tumor_copy)
+        if "C" in typ:
+            tumor_type = {}
+            print(typ)
+            ID = "NCIT:" + typ[0]
+            counts = int(typ[1])
+            tumor_type.update({"id": ID,
+                               "label": names[i],
+                               "counts": counts,
+                               })
+            
+            tumor_copy = tumor_type.copy()
+            sample_types.append(tumor_copy)
         
     return sample_types
 
 ##############################################################################
 
-def create_progenetix_post(row):
+def create_progenetix_post(row, byc):
 
+    pub_copy = False
 
     pub = {}
     info = retrieve_epmc_publications(row[0]) 
@@ -147,7 +182,7 @@ def create_progenetix_post(row):
                     "id": "PMID:" + str(ID),
                     "label": create_short_publication_label(author, title, year), 
                     "journal": journal,
-                    "provenance": get_geolocation(row[8], row[9]),
+                    "provenance": {"geo_location":get_geolocation(row[9], byc) },
                     "sample_types": get_ncit_tumor_type(row[11], row[12]), 
                     "sortid": None, 
                     "title": title,

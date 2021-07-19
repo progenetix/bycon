@@ -45,7 +45,7 @@ def publications():
     if len(e) > 1:
         response_add_error(byc, 422, e )
 
-    geo_q, geo_pars = geo_query( **byc )
+    geo_q, geo_pars = geo_query( byc )
 
     if geo_q:
         for g_k, g_v in geo_pars.items():

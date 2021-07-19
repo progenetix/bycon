@@ -12,7 +12,8 @@ import sys
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from beaconServer.lib.cgi_utils import *
+
+from beaconServer.lib import *
 
 from lib.publication_utils import jprint, read_annotation_table, create_progenetix_post
 
@@ -24,15 +25,16 @@ from lib.publication_utils import jprint, read_annotation_table, create_progenet
 ##############################################################################
 ##############################################################################
 
-def _get_args():
+def _get_args(byc):
 
     parser = argparse.ArgumentParser(description="Read publication annotations, create MongoDB posts and update the database.")
     parser.add_argument("-f", "--filepath", help="Path of the .tsv file containing the annotations on the publications.", type=str)
     parser.add_argument("-t", "--test", help="test setting")
+    parser.add_argument('-u', '--update', help='overwrite existing publications')
 
-    args = parser.parse_args()
+    byc.update({"args": parser.parse_args() })
 
-    return args
+    return byc
 
 ##############################################################################
 
@@ -43,9 +45,10 @@ def main():
 
 def update_publications():
 
-    args = _get_args()
+    byc = initialize_service()
+    _get_args(byc)
 
-    if args.test:
+    if byc["args"].test:
         print( "¡¡¡ TEST MODE - no db update !!!")
 
     ##########################################
@@ -64,7 +67,7 @@ def update_publications():
     ##########################################
 
     # Read annotation table:
-    rows = read_annotation_table(args)
+    rows = read_annotation_table(byc)
 
     print("=> {} publications will be looked up".format(len(rows)))
 
@@ -73,24 +76,33 @@ def update_publications():
     cl = client['progenetix'].publications
     ids = cl.distinct("id")
 
+    up_count = 0
+
     # Update the database
     for row in rows:
 
-        post = create_progenetix_post(row)
+        post = create_progenetix_post(row, byc)
 
-        if post["id"] in ids:
-            print(post["id"], ": skipped - already in progenetix.publications")
+        if post:
+            
+            if post["id"] in ids:
+                if not byc["args"].update:
+                    print(post["id"], ": skipped - already in progenetix.publications")
+                    continue
+                else:
+                    print(post["id"], ": existed but overwritten since *update* in effect")
 
-        else:
             print(post["id"], ": inserting this into progenetix.publications")
 
             post.update( { "updated": date_isoformat(datetime.datetime.now()) } )
 
-            if not args.test:
-                result = cl.insert_one(post)
-                result.inserted_id
+            if not byc["args"].test:
+                result = cl.update_one({"id": post["id"] }, {"$set": post }, upsert=True )
+                up_count += 1
             else:
                 jprint(post)
+
+    print("{} publications were inserted or updated".format(up_count))
 
 ##############################################################################
 
