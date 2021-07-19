@@ -12,8 +12,6 @@ lib_path = path.dirname( path.abspath(__file__) )
 dir_path = path.join( lib_path, pardir )
 pkg_path = path.join( dir_path, pardir )
 
-from beaconServer.lib.schemas_parser import read_schema_files, create_empty_instance
-
 ##############################################################################
 
 def jprint(obj):
@@ -80,7 +78,7 @@ def get_geolocation(locationID, byc):
 
     #heidelberg, heidelberg::germany
 
-    g_p = read_schema_files("GeoLocation", "properties", byc)
+    # TODO: Use schema file & parser for empty instance.
     provenance = {
         "type" : "Feature",
         "geometry" : {
