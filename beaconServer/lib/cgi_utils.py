@@ -84,6 +84,9 @@ def rest_path_value(key=""):
 
     r_p_v = "empty_value"
 
+    if not environ.get('REQUEST_URI'):
+        return r_p_v
+
     url_comps = urlparse( environ.get('REQUEST_URI') )
     url_p = url_comps.path
     p_items = re.split('/', url_p)

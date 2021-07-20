@@ -109,7 +109,7 @@ def _process_dataset(ds_id, pub_labels, byc):
     if not byc["args"].test:
         bar = Bar("{} samples from {}".format(no, ds_id), max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
-    count = 0
+    counts = { "pathological_tnm_findings": 0, "pathological_stage": 0, "tumor_grade": 0 }
     for bsid in bs_ids:
 
         s = bios_coll.find_one({ "id":bsid })
@@ -143,18 +143,34 @@ def _process_dataset(ds_id, pub_labels, byc):
         #     update_obj.update( { "pathological_tnm_findings": s["pathological_tnm_findings"] } )
         # else:    
         # TODO: check existing content first  
-        update_obj.update( { "pathological_tnm_findings": [] } )
+        update_key = "pathological_tnm_findings"
         if "info" in s:
             if "tnm" in s["info"]:
                 if not isinstance(s["info"]["tnm"], str):
                     continue
-                for k, tnm_def in byc["these_prefs"]["pathological_tnm_findings"].items():
-                    if re.match(r'{0}'.format(tnm_def["pattern"]), s["info"]["tnm"], re.IGNORECASE):
-                        update_obj["pathological_tnm_findings"].append({
-                            "id": tnm_def["id"],
-                            "label": tnm_def["label"]
+                update_obj.update( { update_key: [] } )
+                for c_p in byc["these_prefs"][update_key]["class_patterns"]:
+                    if re.match(r'{0}'.format(c_p["pattern"]), s["info"]["tnm"], re.IGNORECASE):
+                        update_obj[update_key].append({
+                            "id": c_p["id"],
+                            "label": c_p["label"]
                         })
-                        count += 1
+                        counts[update_key] += 1
+
+        update_key = "pathological_stage"
+        if "info" in s:
+            if "tumor_stage" in s["info"]:
+                if not isinstance(s["info"]["tumor_stage"], str):
+                    continue
+                for c_p in byc["these_prefs"][update_key]["class_patterns"]:
+                    if re.match(r'{0}'.format(c_p["pattern"]), s["info"]["tumor_stage"], re.IGNORECASE):
+                        update_obj.update({
+                            update_key: {
+                                "id": c_p["id"],
+                                "label": c_p["label"]
+                            }
+                        })
+                        counts[update_key] += 1
 
         ####################################################################
 
@@ -165,7 +181,8 @@ def _process_dataset(ds_id, pub_labels, byc):
     if not byc["args"].test:
         bar.finish()
 
-    print("TNMs: {}".format(count))
+    for k, n in counts.items():
+        print("=> updated {}: {}".format(k, n))
 
 ################################################################################
 

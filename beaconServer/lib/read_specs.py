@@ -17,6 +17,7 @@ def read_bycon_configs_by_name(name, byc):
 
     o = {}
     ofp = path.join( byc["pkg_path"], "config", name+".yaml" )
+
     with open( ofp ) as od:
         o = yaml.load( od , Loader=yaml.FullLoader)
 
@@ -34,7 +35,6 @@ def read_bycon_configs_by_name(name, byc):
 def read_local_prefs(service, dir_path):
 
     p = path.join( dir_path, "config", service+".yaml" )
-
     return load_yaml( p )
 
 ################################################################################
