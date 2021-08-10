@@ -21,6 +21,6 @@ meta:
   returned_schemas:
     BeaconBooleanResponse: https://progenetix.org/services/schemas/BeaconBooleanResponseSection/
   info: >
-    Minimal Beacon response.
+    Beacon map.
 response_types:
   - core

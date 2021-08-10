@@ -8,6 +8,9 @@ data/out/logs/*.tsv
 data/out/yaml/*.yaml
 rsrc/specification-v2/*git
 rsrc/specification-v2/
+rsrc/specification-v2/*git
+beaconServer/model/*git
+beaconServer/framework/*git
 rsrc/icdo/.~lock.ICDOntologies.ods#
 byconeer/rsrc/icdot/.~lock.ICDOntologies.ods#
 *.ods#

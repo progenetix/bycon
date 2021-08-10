@@ -1,0 +1,5 @@
+$schema: ../beaconRequestMeta.json
+apiVersion: '2.0'
+requestedSchemas:
+  - entityType: EntryTypeA
+    schema: entry-typeA-schema-v0.1

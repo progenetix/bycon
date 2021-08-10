@@ -1,0 +1,28 @@
+$schema: http://json-schema.org/draft-07/schema
+description: "Schema for the Beacon request. It is named `RequestBody` to keep the\
+  \ same nomenclature used by OpenAPI v3, but it actually contains the definition\
+  \ of the whole HTTP POST request payload.\n"
+type: object
+properties:
+  $schema:
+    $ref: ../common/beaconCommonComponents.json#/definitions/$schema
+  meta:
+    description: Information that is relevant to build the response.
+    $ref: ./beaconRequestMeta.json
+  query:
+    description: Parameters to limit the list of returned results.
+    type: object
+    properties:
+      requestParameters:
+        description: "TBD.\n"
+        $ref: ./requestParameters.json
+      filters:
+        description: "Ontology based filters. Using CURIE syntax is encouraged.\n"
+        $ref: ./filteringTerms.json
+      includeResultsetResponses:
+        $ref: ../common/beaconCommonComponents.json#/definitions/IncludeResultsetResponses
+      pagination:
+        description: "Pagination to apply on the results.\n"
+        $ref: ../common/beaconCommonComponents.json#/definitions/Pagination
+required:
+  - meta

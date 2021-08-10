@@ -20,7 +20,7 @@ version: v2
 welcomeUrl: "https://progenetix.org/beacon-plus/"
 alternativeUrl: "https://progenetix.org/biosamples/"
 create_date_time: 2015-11-13
-update_date_time: 2021-03-23
+update_date_time: 2021-07-21
 datasets: [ ] # populated from script
 # info:
 #   sampleAlleleRequests:

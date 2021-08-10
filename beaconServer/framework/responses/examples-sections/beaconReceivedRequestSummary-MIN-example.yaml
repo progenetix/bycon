@@ -1,0 +1,4 @@
+$schema: ../sections/beaconReceivedRequestSummary.json
+apiVersion: v2.0
+requestedSchemas: []
+pagination: {}

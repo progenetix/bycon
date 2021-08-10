@@ -2,6 +2,7 @@ service_names:
   empty_value: info
   analyses: callsets
   callsets: callsets
+  configuration: configuration
   core: core
   filtering_terms: filteringTerms
   filteringTerms: filteringTerms

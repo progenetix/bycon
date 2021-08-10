@@ -1,0 +1,18 @@
+$schema: http://json-schema.org/draft-07/schema
+description: "Meta information about the response.\n"
+type: object
+properties:
+  beaconId:
+    description: "Identifier of the beacon, as defined in `Beacon`.\n"
+    $ref: ../../common/beaconCommonComponents.json#/definitions/BeaconId
+  apiVersion:
+    description: Version of the API.
+    $ref: ../../common/beaconCommonComponents.json#/definitions/ApiVersion
+  returnedSchemas:
+    $ref: ../../common/beaconCommonComponents.json#/definitions/ListOfSchemas
+$comment: 'TO REVIEW: the required properties below results in a warning in the example.'
+required:
+  - beaconId
+  - apiVersion
+  - returnedSchemas
+additionalProperties: true

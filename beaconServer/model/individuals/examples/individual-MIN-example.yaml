@@ -1,0 +1,5 @@
+$schema: ../defaultSchema.json
+id: Ind001
+sex:
+  id: NCIT:C16576
+  label: female

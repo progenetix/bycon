@@ -33,8 +33,25 @@ def info():
     check_dataset_ids(byc)
     create_empty_service_response(byc)
     byc["beacon_info"].update({"datasets": datasets_update_latest_stats(byc) })
-    # TODO: Adjust to new format???
-    populate_service_response( byc, [ byc["beacon_info"] ] )
+ 
+
+    # HOT FIX
+    byc["service_response"].pop("info")
+
+    byc["service_response"]["meta"].update({
+        "info": "Progentix Beacon v2 information (transitional)",
+        "returned_schemas": [
+          {
+            "info": "https://progenetix.org/services/schemas/BeaconInfoResults"
+          }
+        ]
+    })
+
+    byc["service_response"].update({
+        "$schema": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconInfoResponse.json",
+        "response": byc["beacon_info"],
+     })
+
     cgi_print_response( byc, 200 )
 
 ################################################################################

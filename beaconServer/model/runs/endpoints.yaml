@@ -1,0 +1,224 @@
+openapi: 3.0.2
+servers: []
+info:
+  version: 2.0.0-draft.4
+  title: GA4GH Beacon API Specification - Runs endpoints
+  description: TBD
+  contact:
+    email: beacon@ga4gh.org
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /runs:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/requestedSchema'
+        - $ref: '#/components/parameters/skip'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/includeResultsetResponses'
+      description: Get a list of sequencing runs
+      operationId: getRuns
+      tags:
+        - GET Endpoints
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+        default:
+          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
+    post:
+      description: Get a list of sequencing runs
+      operationId: postRunsRequest
+      tags:
+        - POST Endpoints
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/requests/beaconRequestBody.json
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+        default:
+          description: An unsuccessful operation
+          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
+  /runs/{id}:
+    parameters:
+      - $ref: '#/components/parameters/entryId'
+    get:
+      description: Get details about one sequencing run, identified by its (unique)
+        'id'
+      operationId: getOneRun
+      tags:
+        - GET Endpoints
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+        default:
+          description: An unsuccessful operation
+          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
+    post:
+      description: Get details about one Run, identified by its (unique) 'id'
+      operationId: postOneRun
+      tags:
+        - POST Endpoints
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/requests/beaconRequestBody.json
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+        default:
+          description: An unsuccessful operation
+          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
+  /runs/{id}/g_variants:
+    parameters:
+      - $ref: '#/components/parameters/entryId'
+    get:
+      parameters:
+        - $ref: '#/components/parameters/requestedSchema'
+        - $ref: '#/components/parameters/skip'
+        - $ref: '#/components/parameters/limit'
+      description: Get the genomic variants list from one run, identified by its (unique)
+        'id'
+      operationId: getOneRunGenomicVariants
+      tags:
+        - GET Endpoints
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+        default:
+          description: An unsuccessful operation
+          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
+    post:
+      description: Get the genomic variants list from one run, identified by its (unique)
+        'id'
+      operationId: potOneRunGenomicVariants
+      tags:
+        - POST Endpoints
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/requests/beaconRequestBody.json
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+        default:
+          description: An unsuccessful operation
+          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
+  /runs/{id}/analyses:
+    parameters:
+      - $ref: '#/components/parameters/entryId'
+    get:
+      parameters:
+        - $ref: '#/components/parameters/requestedSchema'
+        - $ref: '#/components/parameters/skip'
+        - $ref: '#/components/parameters/limit'
+      description: Get the analysis list from one sequencing run, identified by its
+        (unique) 'id'
+      operationId: getOneRunAnalysis
+      tags:
+        - GET Endpoints
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+        default:
+          description: An unsuccessful operation
+          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
+    post:
+      description: Get the analysis list from one sequencing run, identified by its
+        (unique) 'id'
+      operationId: postOneRunAnalysis
+      tags:
+        - POST Endpoints
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/requests/beaconRequestBody.json
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+        default:
+          description: An unsuccessful operation
+          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
+components:
+  parameters:
+    requestedSchema:
+      name: requestedSchema
+      description: Schema to be used to format the `result` field in the resposne.
+        The response will use Beacon format.
+      in: query
+      required: false
+      schema:
+        type: string
+      example: ga4gh-service-info-v1.0
+    skip:
+      name: skip
+      in: query
+      schema:
+        $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/beaconCommonComponents.json#/definitions/Skip
+    limit:
+      name: limit
+      in: query
+      schema:
+        $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/beaconCommonComponents.json#/definitions/Limit
+    includeResultsetResponses:
+      $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/requests/beaconRequestBody.json#/definitions/IncludeResultsetResponses
+    entryId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    individualId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    biosampleId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string

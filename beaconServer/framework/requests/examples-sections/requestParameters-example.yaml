@@ -1,0 +1,9 @@
+$schema: ../requestParameters.json
+exampleEntry:
+  description: "All the required fields to query any kind of variant (e.g. SNP, DUP,\n\
+    etc.).\n"
+  type: object
+  properties:
+    id:
+      description: "Id of the entry to display.\n"
+      type: string
