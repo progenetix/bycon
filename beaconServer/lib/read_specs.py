@@ -1,6 +1,7 @@
 import re, yaml, json
 from pymongo import MongoClient
 from os import path, pardir
+from pathlib import Path
 from json_ref_dict import RefDict, materialize
 
 ################################################################################
@@ -23,10 +24,10 @@ def read_bycon_configs_by_name(name, byc):
 
     byc.update({ name: o })
 
-    # TODO Move ...
+    # # TODO Move ...
 
-    if name == "beacon":
-        byc.update({ "beacon-schema": RefDict(ofp) })
+    # if name == "beacon":
+    #     byc.update({ "beacon-schema": RefDict(ofp) })
 
     return byc
 
@@ -34,8 +35,25 @@ def read_bycon_configs_by_name(name, byc):
 
 def read_local_prefs(service, dir_path):
 
-    p = path.join( dir_path, "config", service+".yaml" )
-    return load_yaml( p )
+    d = Path( path.join( dir_path, "config", service ) )
+    f = Path( path.join( dir_path, "config", service+".yaml" ) )
+
+    if f.is_file():
+        return load_yaml( f )
+    elif d.is_dir():
+        these_prefs = load_yaml( Path( path.join( d, "config.yaml" ) ) )
+
+        c_files = {
+            "openapi_definitions": "endpoints.yaml",
+            "request_parameters": "requestParameters.yaml"
+        }
+        for c_k, c_n in c_files.items():
+            these_prefs.update({c_k:{}})
+            c_f = Path( path.join( d, c_n ) )
+            if c_f.is_file():
+                these_prefs.update({c_k:load_yaml( c_f )})
+
+        return these_prefs        
 
 ################################################################################
 

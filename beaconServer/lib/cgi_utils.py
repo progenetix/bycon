@@ -38,11 +38,11 @@ def cgi_parse_query(byc):
 
     # set_debug_state(1)
 
-    if "POST" in r_m:
+    if r_m == "POST":
         body = sys.stdin.read(int(content_len))
+
         if "json" in content_typ:
             jbod = json.loads(body)
-            # print(jbod)
             if "debug" in jbod:
                 if jbod["debug"] > 0:                 
                     debug_state = set_debug_state(1)
@@ -55,10 +55,14 @@ def cgi_parse_query(byc):
                             form_data[rp] = rv
                     else:
                         form_data[p] = v
-            if "filters" in jbod:
-                form_data["filters"] = jbod["filters"]
-            if "meta" in jbod:
-                query_meta = jbod["meta"]
+
+            for sp in ["skip", "limit"]:
+                if "pagination" in jbod:
+                    if sp in jbod["pagination"]:
+                        form_data[sp] = jbod["pagination"][sp]
+
+            form_data["filters"] = jbod.get("filters", [] )
+            query_meta = jbod.get("meta", {})
 
         return form_data, query_meta, debug_state
 
@@ -200,6 +204,7 @@ def cgi_print_response(byc, status_code):
 
     r_f = ""
     f_d = {}
+
     if "form_data" in byc:
         f_d = byc["form_data"]
 
@@ -238,12 +243,11 @@ def cgi_print_response(byc, status_code):
             if byc["service_response"]["response_summary"]["exists"] is False:
                 status_code = 422
 
-
-
     if e["error"]["error_code"] > 200:
         if "meta" in byc["service_response"]:
             byc["error_response"].update({ "meta": byc["service_response"]["meta"]})
         byc["service_response"] = byc["error_response"]
+
     print('Content-Type: application/json')
     print('status:200')
     # print('status:'+str(status_code))

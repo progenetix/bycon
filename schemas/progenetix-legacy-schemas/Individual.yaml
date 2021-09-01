@@ -23,7 +23,6 @@ meta:
   sb_status: community
 required:
   - id
-  - biocharacteristics
   - externalReferences
 properties:
   id:
@@ -65,15 +64,15 @@ properties:
     examples:
       - 1967-11-11
       - 2002-09-21
-  biocharacteristics:
-    type: array
-    items:
-      $ref: OntologyClass.yaml#/properties
-    examples:
-      - id: NCIT:C142079
-        label: Limb-girdle muscular dystrophy type 2A
-      - id: NCIT:C3969
-        label: Xeroderma pigmentosum, complementation group G
+  # biocharacteristics:
+  #   type: array
+  #   items:
+  #     $ref: OntologyClass.yaml#/properties
+  #   examples:
+  #     - id: NCIT:C142079
+  #       label: Limb-girdle muscular dystrophy type 2A
+  #     - id: NCIT:C3969
+  #       label: Xeroderma pigmentosum, complementation group G
   externalReferences:
     type: array
     items:

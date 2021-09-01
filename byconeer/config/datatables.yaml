@@ -132,12 +132,14 @@ io_prefixes:
       - UBERON
     histological_diagnosis:
       - NCIT
-    biocharacteristics:
+    icdo_morphology:
       - icdom
+    icdo_topography:
       - icdot
-      - NCIT
+    # biocharacteristics:
+    #   - MONDO
+    sampled_tissue:
       - UBERON
-      - MONDO
     external_references:
       - PMID
       - geo:GSM
@@ -150,9 +152,9 @@ io_prefixes:
     data_use_conditions:
       - DUO
   individuals:
-    biocharacteristics:
-      - PATO
-      - NCBITaxon
+    # biocharacteristics:
+    #   - PATO
+    #   - NCBITaxon
     data_use_conditions:
       - DUO
   callsets:

@@ -1,7 +1,6 @@
 defaults:
   dataset_ids:
     - progenetix
-  method: details
   response_type: variantInterpretation
   response_schema: BeaconServiceResponse
   collection_name: variant_annotations
@@ -26,16 +25,3 @@ response_types:
   - variantInterpretation
   - individual
   - biosample
-methods:
-  details:
-    - _id
-    - clinical_relevances
-    - reference_name
-    - start
-    - end
-    - variant_type
-    - reference_bases
-    - alternate_bases
-    - variant_name
-    - gene_id
-    - cytoband

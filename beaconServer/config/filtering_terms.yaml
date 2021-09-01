@@ -4,7 +4,6 @@ bycon_definition_files:
   - dataset_definitions
   - filter_definitions
 defaults:
-  method: ""
   response_type: info
   response_schema: BeaconFilteringTermsResponse
   stats_number: 1
@@ -16,9 +15,3 @@ meta:
     FilteringTerm: "https://progenetix.org/services/schemas/BeaconFilteringTermsResponse/"
   info: >
     The filtering terms can be accessed in `response`.
-methods:
-  counts:
-    - counts
-  filtering_terms:
-    - counts
-    - filtering_terms

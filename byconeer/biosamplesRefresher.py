@@ -107,28 +107,45 @@ def _process_dataset(ds_id, pub_labels, byc):
     no =  len(bs_ids)
 
     if not byc["args"].test:
-        bar = Bar("{} samples from {}".format(no, ds_id), max = no, suffix='%(percent)d%%'+" of "+str(no) )
+        bar = Bar("{} {} samples".format(no, ds_id), max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
     counts = { "pathological_tnm_findings": 0, "pathological_stage": 0, "tumor_grade": 0 }
     for bsid in bs_ids:
 
         s = bios_coll.find_one({ "id":bsid })
-        update_obj = {}
+        update_obj = {
+            "biocharacteristics": []
+        }
 
         _update_cnv_stats(cs_coll, bsid, update_obj, byc)
 
-        if "sampledTissue" in s:
-            if "UBERON" in s["sampledTissue"]["id"]:
-                biocs = [ s["sampledTissue"] ]
-                for b_c in s[ "biocharacteristics" ]:
-                    if not "UBERON" in b_c["id"]:
-                        biocs.append(b_c)
-                update_obj.update( { "biocharacteristics": biocs } )
+        ncit = { "id": "", "label": "" }
+        icdom = { "id": "", "label": "" }
+        icdot = { "id": "", "label": "" }
+        UBERON = { "id": "", "label": "" }
 
-        if "biocharacteristics" in s:
-            for b_c in s[ "biocharacteristics" ]:
-                 if "NCIT:C" in b_c["id"]:
-                    update_obj.update( { "histological_diagnosis": b_c } ) 
+        try:
+            if "UBERON" in s["sampled_tissue"]["id"]:
+                UBERON = s["sampled_tissue"]
+        except KeyError:
+            pass
+        try:            
+            if "NCIT:C" in s["histological_diagnosis"]["id"]:
+                NCIT = s["histological_diagnosis"]
+        except KeyError:
+            pass
+        try:            
+            if "icdom" in s["icdo_morphology"]["id"]:
+                icdom = s["icdo_morphology"]
+        except KeyError:
+            pass
+        try:            
+            if "icdot" in s["icdo_topography"]["id"]:
+                icdot = s["icdo_topography"]
+        except KeyError:
+            pass
+
+        update_obj.update({"biocharacteristics": [ icdom, icdot, NCIT, UBERON ]})
 
         if "external_references" in s:
             e_r_u = [ ]

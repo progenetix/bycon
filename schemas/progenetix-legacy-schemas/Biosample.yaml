@@ -21,7 +21,7 @@ meta:
     - description: "Progenetix database schema (Beacon+ backend)"
       id: 'https://github.com/progenetix/schemas/'
   sb_status: community
-description: >
+description: >-
   A Biosample refers to a unit of biological material from which the substrate
   molecules (e.g. genomic DNA, RNA, proteins) for molecular analyses (e.g.
   sequencing, array hybridisation, mass-spectrometry) are extracted. Examples
@@ -31,8 +31,6 @@ description: >
   genomic array as well as RNA-seq experiments) may refer to the same Biosample.
 required:
   - id
-  - biocharacteristics
-  - externalReferences
 properties:
   id:
     type: string
@@ -47,17 +45,6 @@ properties:
     examples:
       - breast carcinoma
       - adenocarcinoma [cell line HeLa]
-  biocharacteristics:
-    description: >-
-      Biocharacteristics are a list of OntologyClass objects which - in Progenetix - contain diagnostic classifiers and other "biological" information. Terms here may duplicate information found in single-value attributes elsewhere (e.g. `histologicalDiagnosis`).
-    type: array
-    items:
-      "$ref": OntologyClass.yaml#/properties
-    examples:
-      - id: NCIT:C4029
-        label: Cervical Adenocarcinoma
-      - id: UBERON:0000002
-        label: uterine cervix
   externalReferences:
     type: array
     items:
@@ -74,7 +61,7 @@ properties:
       - id: pgxcohort-arraymap
         label: arrayMap collection
   individualAgeAtCollection:
-    description: >
+    description: >-
       The age of the individual at time of sample collection.
     $ref: Age.yaml#/properties
   provenance:
@@ -88,6 +75,20 @@ properties:
     examples:
       - id: NCIT:C3778
         label : Serous Cystadenocarcinoma
+  icdoMorphology:
+    description: >-
+      The ICD-O 3 morphology code of this biosample, in a "pseudo-prefixed" transformation (since no direct ICD-O 3 registry can be referenced).
+    $ref: OntologyClass.yaml#/properties
+    examples:
+      - id: icdom-94703
+        label : Medulloblastoma, NOS
+  icdoTopography:
+    description: >-
+      The ICD-O 3 topography code of this biosample, in a "pseudo-prefixed" transformation (since no direct ICD-O 3 registry can be referenced).
+    $ref: OntologyClass.yaml#/properties
+    examples:
+      - id: icdot-C71.6
+        label : cerebellum
   tumorProgression:
     $ref: OntologyClass.yaml#/properties
     examples:

@@ -383,15 +383,22 @@ def _get_ids_for_prefix(data_coll, data_key, data_pat):
 ################################################################################
 
 def _get_label_for_code(data_coll, data_key, code):
-    list_key = re.sub(".id", "", data_key)
+
+    id_key = re.sub(".id", "", data_key)
     example = data_coll.find_one( { data_key: code } )
 
-    if list_key in example.keys():
-        for o_t in example[ list_key ]:
+    if id_key in example.keys():
+        if isinstance(example[ id_key ], list):
+            for o_t in example[ id_key ]:
+                if code in o_t["id"]:
+                    if "label" in o_t:
+                        return o_t["label"]
+                    continue
+        else:
+            o_t = example[ id_key ]
             if code in o_t["id"]:
                 if "label" in o_t:
                     return o_t["label"]
-                continue
 
     return ""
 

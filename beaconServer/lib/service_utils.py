@@ -2,7 +2,7 @@ from os import path, pardir
 import inspect, json
 from pymongo import MongoClient
 from bson import json_util
-from humps import camelize
+from humps import camelize, decamelize
 
 # local
 lib_path = path.dirname( path.abspath(__file__) )
@@ -23,7 +23,7 @@ from variant_responses import normalize_variant_values_for_export
 
 def run_beacon_init_stack(byc):
 
-    parse_beacon_schema(byc)
+    beacon_get_endpoint_base_paths(byc)
     initialize_beacon_queries(byc)
     generate_genomic_intervals(byc)
     create_empty_service_response(byc)
@@ -52,14 +52,11 @@ def run_beacon(byc):
 
         ds_id = r_set["id"]
 
-        if not "counts" in byc["service_response"]["info"]:
-            byc["service_response"]["info"].update({"counts":{}})
-
         execute_bycon_queries( ds_id, byc )
         check_alternative_variant_deliveries(ds_id, byc)
 
         h_o, e = handover_retrieve_from_query_results(ds_id, byc)
-        h_o_d, e = handover_return_data( h_o, e )
+        h_o_d, e = handover_return_data( h_o, byc, e )
         if e:
             response_add_error(byc, 422, e )
         else:
@@ -69,17 +66,20 @@ def run_beacon(byc):
             if c_d["h->o_key"] in byc["dataset_results"][ds_id]:
                 r_c = byc["dataset_results"][ds_id][ c_d["h->o_key"] ]["target_count"]
                 r_set["info"]["counts"].update({ c: r_c })
-                if c in byc["service_response"]["info"]["counts"]:
-                    byc["service_response"]["info"]["counts"][c] += r_c
-                else:
-                    byc["service_response"]["info"]["counts"].update({c:r_c})
 
         if isinstance(h_o_d, list):
-            r_no = len( h_o_d )
-            r_set.update({"results_count": r_no })
-            if r_no > 0:
+            results_count = len( h_o_d )
+
+            r_set.update({"results_count": results_count })
+
+            if results_count > 0:
+
+                byc["service_response"]["response_summary"]["num_total_results"] += results_count
                 r_set.update({ "exists": True, "results": h_o_d })
-                byc["service_response"]["response_summary"]["num_total_results"] += r_no
+
+                if byc["pagination"]["limit"] > 0:
+                    res_range = _pagination_range(results_count, byc)
+                    r_set.update({ "results": h_o_d[res_range[0]:res_range[-1]] })
 
     if byc["service_response"]["response_summary"]["num_total_results"] > 0:
         byc["service_response"]["response_summary"].update({"exists": True })
@@ -91,10 +91,27 @@ def run_beacon(byc):
 
 ################################################################################
 
+def _pagination_range(results_count, byc):
+
+    r_range = [
+        byc["pagination"]["skip"] * byc["pagination"]["limit"],
+        byc["pagination"]["skip"] * byc["pagination"]["limit"] + byc["pagination"]["limit"],
+    ]
+
+    r_l_i = results_count - 1
+
+    if r_range[0] > r_l_i:
+        r_range[0] = r_l_i
+    if r_range[-1] > results_count:
+        r_range[-1] = results_count
+
+    return r_range
+
+################################################################################
+
 def initialize_service(service="NA"):
 
-    """
-    For consistency, the name of the local configuration file should usually
+    """For consistency, the name of the local configuration file should usually
     correspond to the calling main function. However, an overwrite can be
     provided."""
 
@@ -105,7 +122,7 @@ def initialize_service(service="NA"):
     if service == "NA":
         service = frm.function
 
-    service = camel_to_snake(service)
+    service = decamelize(service)
 
     byc =  {
         "service_name": path.splitext(path.basename(mod.__file__))[0],
@@ -133,26 +150,45 @@ def initialize_service(service="NA"):
 
     if "output" in byc["form_data"]:
         byc["output"] = byc["form_data"]["output"]
- 
-    elif "method" in byc["form_data"]: # TODO: legacy
-        if byc["form_data"]["method"] == "pgxseg" or byc["form_data"]["method"] == "pgxmatrix":
-            byc["output"] = byc["form_data"]["method"]
-            byc["form_data"].pop("method")
 
     if "method" in byc["form_data"]:
         if "methods" in byc["these_prefs"]:
             if byc["form_data"]["method"] in byc["these_prefs"]["methods"].keys():
                 byc["method"] = byc["form_data"]["method"]
 
+    # TODO: proper defaults, separate function
+    byc["pagination"] = {
+        "skip": byc["form_data"].get("skip", 0),
+        "limit": byc["form_data"].get("limit", 0)
+    }
+
     return byc
+
+################################################################################
+
+def response_meta_add_request_summary(meta, byc):
+
+    if not "received_request_summary" in meta:
+        meta.update( { "received_request_summary":{} } )
+
+    meta["received_request_summary"].update({ "filters": byc.get("filters", []) })
+    meta["received_request_summary"].update({ "pagination": byc.get("pagination", {}) })
+
+    # TODO: This is a private extension so far.
+    meta["received_request_summary"].update({ "processed_query": byc.get("queries", {}) })
+
+    return meta
+
 
 ################################################################################
 
 def create_empty_service_response(byc):
 
+    """The response relies on the pre-processing of input parameters (queries etc)."""
+
     r_s = read_schema_files(byc["response_schema"], "properties", byc)
     r = create_empty_instance(r_s)
-    e_s = read_schema_files("BeaconErrorResponse", "properties", byc)
+    e_s = read_schema_files("beaconErrorResponse", "properties", byc)
     e = create_empty_instance(e_s)
 
     if "response_summary" in r:
@@ -161,6 +197,8 @@ def create_empty_service_response(byc):
     if "meta" in byc["these_prefs"]:
     	for k, v in byc["these_prefs"]["meta"].items():
     		r["meta"].update( { k: v } )
+
+    response_meta_add_request_summary(r["meta"], byc)
 
     if "beacon_info" in byc:
         try:
@@ -182,7 +220,6 @@ def create_empty_service_response(byc):
                     if r_d["id"] == e_t:
                         r["meta"].update( { "returned_schemas": r_d["schema"] } )
                         byc.update({"response_type":e_t})
-
 
     if "result_sets" in r:
 
@@ -263,9 +300,15 @@ def collations_set_delivery_keys(byc):
 
     # the method keys can be overriden with "deliveryKeys"
     d_k = [ ]
+    
     if "deliveryKeys" in byc["form_data"]:
         d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
-    elif byc["method"] in byc["these_prefs"]["methods"]:
+        return d_k
+
+    if not "methods" in byc["these_prefs"]:
+        return d_k
+
+    if byc["method"] in byc["these_prefs"]["methods"]:
         d_k = byc["these_prefs"]["methods"][ byc["method"] ]
 
     return d_k
@@ -397,10 +440,9 @@ def check_alternative_callset_deliveries(byc):
         for bsid in bs_csids:
             cs_ids.update( { bsid: "" } )
         s_line = "#sample=>biosample_id={};analysis_ids={}".format(bs_id, ','.join(bs_csids))
-        for b_c in bs[ "biocharacteristics" ]:
-            if "NCIT:C" in b_c["id"]:
-                s_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(s_line, b_c["id"], b_c["label"], b_c["id"], b_c["label"])
-                cs_ids[bsid] = b_c["id"]
+        h_d = bs["histological_diagnosis"]
+        s_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(s_line, h_d.get("id", "NA"), h_d.get("label", "NA"), h_d.get("id", "NA"), h_d.get("label", "NA"))
+        cs_ids[bsid] = h_d.get("id", "NA")
         print(s_line)
     
     print("#meta=>biosampleCount={};analysisCount={}".format(ds_results["biosamples.id"][ "target_count" ], len(cs_ids)))
@@ -408,12 +450,15 @@ def check_alternative_callset_deliveries(byc):
 
     for cs_id, group_id in cs_ids.items():
         cs = cs_coll.find_one({"id":cs_id})
-        f_line = [cs_id, cs["biosample_id"], group_id]
-        for intv in cs["info"]["statusmaps"]["interval_values"]:
-            f_line.append( str(intv["dupcoverage"]) )
-        for intv in cs["info"]["statusmaps"]["interval_values"]:
-            f_line.append( str(intv["delcoverage"]) )
-        print("\t".join(f_line))
+        print("\t".join(
+            [
+                cs_id,
+                cs.get("biosample_id", "NA"),
+                group_id,
+                *map(str, cs["info"]["statusmaps"]["max"]),
+                *map(str, cs["info"]["statusmaps"]["min"])
+            ]
+        ))
 
     close_text_streaming()
         
@@ -445,9 +490,8 @@ def print_pgx_column_header(ds_id, byc):
     for bs_id in ds_results["biosamples.id"][ "target_values" ]:
         bs = bs_coll.find_one( { "id": bs_id } )
         h_line = "#sample=>biosample_id={}".format(bs_id)
-        for b_c in bs[ "biocharacteristics" ]:
-            if "NCIT:C" in b_c["id"]:
-                h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, b_c["id"], b_c["label"], b_c["id"], b_c["label"])
+        h_d = bs["histological_diagnosis"]
+        h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, h_d.get("id", "NA"), h_d.get("label", "NA"), h_d.get("id", "NA"), h_d.get("label", "NA"))
         print(h_line)
 
     print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type", "reference_bases", "alternate_bases" ) )

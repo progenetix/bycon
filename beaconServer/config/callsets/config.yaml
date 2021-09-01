@@ -1,0 +1,28 @@
+defaults:
+  dataset_ids:
+    - progenetix
+  response_type: analysis
+  response_schema: beaconResultsetsResponse
+  h->o_access_key: "callsets._id"
+  genome_binning: 1Mb
+bycon_definition_files:
+  - config
+  - beacon_info
+  - beacon_mappings
+  - dataset_definitions
+  - datatable_mappings
+  - filter_definitions
+  - geoloc_definitions
+  - handover_definitions
+  - interval_definitions
+  - variant_definitions
+meta:
+  returned_schemas:
+    Analysis: https://progenetix.org/services/schemas/Callset/
+  info: >
+    The main individuals payload can be accessed in `results`.
+response_types:
+  - biosample
+  - analysis
+  - individual
+  - variantInSample

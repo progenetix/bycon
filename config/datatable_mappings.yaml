@@ -146,14 +146,19 @@ io_prefixes:
     histological_diagnosis:
       type: string
       pre: NCIT
-    biocharacteristics:
-      type: array
-      pres:
-        - icdom
-        - icdot
-        - NCIT
-        - UBERON
-        - MONDO
+    icdo_morphology:
+      type: string
+      pre: icdom
+    icdo_topography:
+      type: string
+      pre: icdot
+    sampled_tissue:
+      type: string
+      pre: UBERON
+    # biocharacteristics:
+    #   type: array
+    #   pres:
+    #     - MONDO
     external_references:
       type: array
       pres:
@@ -167,9 +172,9 @@ io_prefixes:
       type: string
       pre: DUO
   individual:
-    biocharacteristics:
-      - PATO
-      - NCBITaxon
+    # biocharacteristics:
+    #   - PATO
+    #   - NCBITaxon
     data_use_conditions:
       - DUO
   analysis:

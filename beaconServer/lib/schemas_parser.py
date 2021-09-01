@@ -12,36 +12,18 @@ schema_path = path.join( pkg_path, "schemas" )
 
 ################################################################################
 
-def parse_beacon_schema(byc):
+# def parse_beacon_schema(byc):
 
-    s_f_p = get_schema_file_path("beacon", byc)
-    s_path = path.join( s_f_p, "beacon.yaml" )
-    with open( s_path ) as bs:
+#     # s_f_p = get_schema_file_path("beacon", byc)
+#     # s_path = path.join( s_f_p, "beacon.yaml" )
+#     # with open( s_path ) as bs:
 
-        byc.update({ "beacon": yaml.load( bs , Loader=yaml.FullLoader) })
+#     #     byc.update({ "beacon": yaml.load( bs , Loader=yaml.FullLoader) })
 
-    beacon_get_base_paths(byc)
-    beacon_get_endpoint_base_paths(byc)
+#     # beacon_get_base_paths(byc)
+#     beacon_get_endpoint_base_paths(byc)
 
-    return byc
-
-################################################################################
-
-def beacon_get_base_paths(byc):
-
-    try:
-        p_s = byc["beacon"]["paths"].keys()
-    except:
-        return byc
-
-    r_p_bs = set()
-    for p in p_s:
-        p = re.sub(r'^\/',"", p )
-        if len(p) > 1:
-            r_p_bs.add( re.split('/', p)[0] )
-    byc.update({"beacon_base_paths": list(r_p_bs) })
-
-    return byc
+#     return byc
 
 ################################################################################
 
@@ -75,10 +57,8 @@ def get_schema_file_path(schema_name, byc):
         for s_f in s_fs:
 
             f_name = path.splitext( s_f )[0]
-
+            
             if f_name == schema_name:
-
-                # return path.join(p, s_f)
                 return p
 
     return False
@@ -132,7 +112,8 @@ def instantiate_schema(schema):
 ################################################################################
 
 def create_empty_instance(schema):
-    s_convert = convert_case_for_keys(schema, camel_to_snake)
+    # s_convert = convert_case_for_keys(schema, camel_to_snake)
+    s_convert = humps.decamelize(schema)
     s_i = instantiate_schema(s_convert)
     return s_i
 

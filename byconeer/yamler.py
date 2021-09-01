@@ -89,6 +89,10 @@ def convert_file(in_file, clean):
     yaml = YAML()
     yaml.indent(mapping=2, sequence=4, offset=2)
 
+    replace = {
+        "$schema": { "replaceValue": 'https://json-schema.org/draft/2020-12/schema', "add": False}
+    }
+
     try:
         
         with open(in_file, 'r') as in_f:
@@ -96,6 +100,7 @@ def convert_file(in_file, clean):
             if f_e == ".json":
                 i_d = in_f.read()
                 s = json.loads(i_d)
+                par_replace(s, replace)
                 o_f = re.sub(".json", ".yaml", in_file)
                 with open(o_f, 'w') as f:
                     yaml.dump(s, f)
@@ -106,16 +111,32 @@ def convert_file(in_file, clean):
 
             elif f_e == ".yaml":
                 s = yaml.load( in_f )
+                par_replace(s, replace)
                 o_f = re.sub(".yaml", ".json", in_file)
                 json.dump(s, o_f, indent = 4)
                 print("Dumped to {}".format(o_f))
                 if clean is True:
                     deleteFile(in_file)
 
-
     except Exception as e:
         print("Error loading the file ({}): {}".format(in_file, e) )
         exit()
+
+################################################################################
+
+def par_replace(schema, replace):
+
+    for r, rv in replace.items():
+        if r in schema:
+            schema.update({r: rv["replaceValue"]})
+        else:
+            if "add" in r:
+                if rv["add"] is True:
+                    schema.update({r: rv["replaceValue"]})
+
+    return schema
+
+
 
 ################################################################################
 ################################################################################

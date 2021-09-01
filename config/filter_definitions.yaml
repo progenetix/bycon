@@ -44,7 +44,7 @@ TNM:
 NCIT:
   name: "National Cancer Institute Thesaurus"
   url: "https://ncit.nci.nih.gov/"
-  db_key: 'biocharacteristics.id'
+  db_key: 'histological_diagnosis.id'
   scopes:
     biosamples:
       default: 1
@@ -59,7 +59,7 @@ NCIT:
 UBERON:
   name: "Uberon cross-species anatomical structures ontology"
   url: "https://uberon.github.io"
-  db_key: 'biocharacteristics.id'
+  db_key: 'sampled_tissue.id'
   scopes:
     biosamples:
       default: 1
@@ -69,20 +69,20 @@ UBERON:
     - 'UBERON:0000970'
     - 'UBERON:0035542'
 
-MONDO:
-  name: "Mondo Disease Ontology"
-  url: "https://mondo.monarchinitiative.org"
-  db_key: 'biocharacteristics.id'
-  scopes:
-    biosamples:
-      default: 1
-    individuals:
-      default: 0
-  pattern: '^MONDO([_\:]\d*?\-?)?$'
-  pattern_strict: '^MONDO[_\:]\d+?$'
-  examples:
-    - 'MONDO:0002974'
-    - 'MONDO:0012301'
+# MONDO:
+#   name: "Mondo Disease Ontology"
+#   url: "https://mondo.monarchinitiative.org"
+#   db_key: 'biocharacteristics.id'
+#   scopes:
+#     biosamples:
+#       default: 1
+#     individuals:
+#       default: 0
+#   pattern: '^MONDO([_\:]\d*?\-?)?$'
+#   pattern_strict: '^MONDO[_\:]\d+?$'
+#   examples:
+#     - 'MONDO:0002974'
+#     - 'MONDO:0012301'
 
 HP:
   name: "Human Phenotype Ontology"
@@ -128,7 +128,7 @@ EFO:
 icdom:
   name: "ICD-O 3 Morphologies (Progenetix)"
   url: "https://progenetix.org/"
-  db_key: 'biocharacteristics.id'
+  db_key: 'icdo_morphology.id'
   scopes:
     biosamples:
       default: 1
@@ -141,7 +141,7 @@ icdom:
 icdot:
   name: "ICD-O 3 Topographies (Progenetix)"
   url: "https://progenetix.org/"
-  db_key: 'biocharacteristics.id'
+  db_key: 'icdo_topography.id'
   scopes:
     biosamples:
       default: 1

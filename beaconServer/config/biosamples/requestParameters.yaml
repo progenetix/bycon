@@ -1,0 +1,8 @@
+biosample:
+  type: object
+  properties:
+    id:
+      description: "Id of the biological sample to display."
+      type: string
+    filters:
+      $ref: https://progenetix.org/services/schemas/filteringTermsSchema/

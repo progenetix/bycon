@@ -1,5 +1,0 @@
-$schema: ../beaconMapSchema.json
-endpointSets:
-  datasets:
-    entryType: dataset
-    rootUrl: https://exampleBeacons.org/datasets

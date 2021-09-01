@@ -4,36 +4,32 @@ h->o_types:
   cnvhistogram:
     id: 'pgx:handover:cnvhistogram'
     label: "CNV Histogram"
+    method: cnvhistogram
     description: "create a CNV histogram from matched callsets"
     h->o_key: 'callsets._id'
     script_path_web: '/cgi-bin/PGX/cgi/samplePlots.cgi'
-    method: cnvhistogram
     output: cnvhistogram
 
   biosamples:
-    method: biosamples
     id: 'pgx:handover:biosamples'
+    method: biosamples
     label: "Biosamples"
     description: "retrieve data of the biosamples matched by the query"
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/biosamples'
 
   phenopackets:
-    method: phenopackets
     id: 'pgx:handover:phenopackets'
     label: "Phenopackets"
+    method: phenopackets
     description: "retrieve data of the phenopackets matched by the query"
     h->o_key: 'biosamples._id'
-    # TODO: switch to /services/deliveries only w/ accessid (self scoping)
-    # here, phenopackets actually want individuals; however, the phenopackets
-    # service resolves this itself by forcing the retrieval of the matching
-    # individuals 
     script_path_web: '/services/phenopackets'
 
   individuals:
-    method: individuals
     id: 'pgx:handover:individuals'
     label: "Individuals"
+    method: individuals
     description: "retrieve data of the individuals matched by the query"
     h->o_key: 'individuals._id'
     script_path_web: '/services/deliveries'
@@ -41,9 +37,9 @@ h->o_types:
     output: cnvhistogram
 
   variants:
-    method: variants
     id: 'pgx:handover:variants'
     label: "Found Variants (.json)"
+    method: variants
     description: "retrieve variants matched by the query"
     h->o_key: 'variants._id'
     script_path_web: '/beacon/variants'
@@ -56,35 +52,35 @@ h->o_types:
     script_path_web: '/beacon/variantsInterpretations'
 
   pgxseg:
-    method: variants
-    output: pgxseg
     id: 'pgx:handover:pgxseg'
     label: "Found Variants (.pgxseg)"
+    method: variants
+    output: pgxseg
     description: "retrieve variants matched by the query as .pgxseg download"
     h->o_key: 'variants._id'
     script_path_web: '/beacon/variants'
   
   callsetsvariants:
-    method: callsetsvariants
     id: 'pgx:handover:callsetsvariants'
     label: "All Sample Variants (.json)"
+    method: callsetsvariants
     description: "Download all variants of matched samples - potentially huge dataset..."
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/variants'
 
   callsetspgxseg:
-    method: callsetsvariants
-    output: pgxseg
     id: 'pgx:handover:callsetspgxseg'
     label: "All Sample Variants (.pgxseg)"
+    method: callsetsvariants
+    output: pgxseg
     description: "Download all variants of matched samples - potentially huge dataset..."
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/variants'
-  UCSClink:
-    
-    method: UCSClink
+
+  UCSClink:    
     id: 'pgx:handover:bedfile2ucsc'
     label: "Show Variants in UCSC"
+    method: UCSClink
     description: "map variants matched by the query to the UCSC browser"
     h->o_key: 'variants._id'
     ext_url: 'http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg38'

@@ -5,10 +5,8 @@ The _bycon_ environment provides a number of data services which make use of
 resources in the _Progenetix_ environment. Please refer to their specific
 documentation.
 
-* [_biosamples_](biosamples.md)
 * [_collations_](collations.md)
 * [_cytomapper_](cytomapper.md)
-* [_deliveries_](deliveries.md)
 * [_genespans_](genespans.md)
 * [_geolocations_](geolocations.md)
 * [_intervalFrequencies_](intervalFrequencies.md)

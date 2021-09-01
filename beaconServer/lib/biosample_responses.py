@@ -69,6 +69,3 @@ def retrieve_biosamples_for_variants(data_db, vs):
             bio_s.append( data_db["biosamples"].find_one({"id": v["biosample_id"]}) )
 
     return bio_s
-
-
-

@@ -20,14 +20,19 @@ schema_paths:
   - - schemas
     - progenetix-legacy-schemas
   - - schemas
+    - framework
     - common
   - - schemas
+    - framework
     - configuration
   - - schemas
+    - framework
     - requests
   - - schemas
+    - framework
     - responses
   - - schemas
+    - framework
     - responses
     - sections
 

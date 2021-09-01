@@ -109,9 +109,8 @@ def variants_exporter():
     for bs_id in used_bs_ids:
         bs = mongo_client[ ds_id ][ "biosamples" ].find_one( { "id": bs_id } )
         h_line = "#biosample_id={}".format(bs_id)
-        for b_c in bs[ "biocharacteristics" ]:
-            if "NCIT:C" in b_c["id"]:
-                h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, b_c["id"], b_c["label"], b_c["id"], b_c["label"])
+        h_d = bs[ "histological_diagnosis" ]
+        h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, h_d.get("id", "NA"), h_d.get("label", "NA"), h_d.get("id", "NA"), h_d.get("label", "NA"))
         f.write(h_line+"\n")
 
     bar = Bar("Variants from {} {} samples".format(used_bs_no, ds_id), max = used_bs_no, suffix='%(percent)d%%' )

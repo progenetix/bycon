@@ -39,7 +39,7 @@ def filtering_terms():
 
     byc = initialize_service()
 
-    parse_beacon_schema(byc)
+    # parse_beacon_schema(byc)
     select_dataset_ids(byc)
     check_dataset_ids(byc)
     get_filter_flags(byc)

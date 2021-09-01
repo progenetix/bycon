@@ -1,0 +1,19 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/beaconErrorResponse/v2021-07-03
+title: beaconErrorResponse
+type: object
+description: >-
+  An unsuccessful operation.
+properties:
+  meta:
+    description: >-
+      Information about the response that could be relevant for the Beacon client in order to interpret the results.
+    $ref: "./sections/BeaconResponseMeta.yaml#/properties"
+  error:
+    description: >-
+      Returning an error.
+    $ref: "../common/beaconCommonComponents.yaml#/definitions/BeaconError/properties"
+required:
+  - meta
+  - error
+additionalProperties: true

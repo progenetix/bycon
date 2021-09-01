@@ -15,4 +15,3 @@ meta:
     BeaconInfo: "https://beacon-project.io/schemas/beacon-v2/current/BeaconInfo.json"
   info: >
     The latest BeaconInfo payload can be accessed in `resultSets`.
-methods: {}

@@ -28,7 +28,7 @@ def main():
 def info():
 
     byc = initialize_service()
-    parse_beacon_schema(byc)
+    # parse_beacon_schema(byc)
     select_dataset_ids(byc)
     check_dataset_ids(byc)
     create_empty_service_response(byc)

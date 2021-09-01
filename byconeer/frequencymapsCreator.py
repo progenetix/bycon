@@ -172,7 +172,10 @@ def _make_exact_query(coll):
     # TODO: have the correct field from prefs.
 
     return { "$or": [
-            { "biocharacteristics.id": coll["id"] },
+            { "sampled_tissue.id": coll["id"] },
+            { "histological_diagnosis.id": coll["id"] },
+            { "icdo_topography.id": coll["id"] },
+            { "icdo_morphology.id": coll["id"] },
             { "pathological_tnm_findings.id": coll["id"] },
             { "pathological_stage.id": coll["id"] },
             { "tumor_grade.id": coll["id"] },
@@ -185,7 +188,10 @@ def _make_exact_query(coll):
 def _make_child_terms_query(coll):
 
     return { "$or": [
-            { "biocharacteristics.id": { '$in': coll["child_terms"] } },
+            { "sampled_tissue.id": { '$in': coll["child_terms"] } },
+            { "histological_diagnosis.id": { '$in': coll["child_terms"] } },
+            { "icdo_topography.id": { '$in': coll["child_terms"] } },
+            { "icdo_morphology.id": { '$in': coll["child_terms"] } },
             { "pathological_tnm_findings.id": { '$in': coll["child_terms"] } },
             { "pathological_stage.id": coll["id"] },
             { "tumor_grade.id": coll["id"] },

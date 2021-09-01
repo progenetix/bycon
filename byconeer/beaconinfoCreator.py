@@ -105,7 +105,7 @@ def _dataset_count_collationed_filters(ds_id, **byc):
 
     filter_v = [ ]
 
-    scopes = ( "external_references", "biocharacteristics", "cohorts" )
+    scopes = ( "external_references", "histological_diagnosis", "icdo_morphology", "icdo_topography", "sampled_tissue", "cohorts" )
 
     split_v = re.compile(r'^(\w+?)[\:\-].+?$')
 
@@ -135,7 +135,17 @@ def _dataset_count_collationed_filters(ds_id, **byc):
             for sample in bios_coll.find({}):
                 bar.next()
                 if s in sample:
-                    for term in sample[ s ]:
+                    if isinstance(sample[ s ], list):
+                        for term in sample[ s ]:
+                            if not "id" in term:
+                                continue
+                            tid = term["id"]
+                            if tid in pfs.keys():
+                                pfs[ tid ]["count"] += 1
+                                if "label" in term:
+                                     pfs[ tid ]["label"] = term["label"]
+                    else:
+                        term = sample[ s ]
                         if not "id" in term:
                             continue
                         tid = term["id"]
