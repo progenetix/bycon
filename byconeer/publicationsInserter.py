@@ -69,6 +69,25 @@ def update_publications():
     # Read annotation table:
     rows = read_annotation_table(byc)
 
+    """
+    To be changed - cvs reader w/ column names ...
+
+    import csv
+
+    newPubs = {}
+
+    with open('...........csv', newline='') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+
+        pubid = "PMID:"+str(row["PMID"])
+
+        newPubs.update( { pubid: { "id": pubid } } )
+
+        ... then update the parametrs according to a value -> (nested) dict
+        field mapping
+    """
+
     print("=> {} publications will be looked up".format(len(rows)))
 
     # Connect to MongoDB and load publication collection
