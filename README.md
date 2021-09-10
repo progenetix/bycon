@@ -33,9 +33,8 @@ disease ontologies. _bycon_'s services are tools to enable the APIs.
 
 ##### `byconeer`
 
-* applications and utilities for (Progenetix) data access & processing
-* Python modules for data management in the [MongoDB](http://mongodb.org) based
-_Progenetix_ database environment
+* locally run applications and utilities for (Progenetix) data import, access & processing
+* data management in the [MongoDB](http://mongodb.org) based _Progenetix_ database environment
 
 #### Internal structure
 
