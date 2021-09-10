@@ -22,7 +22,7 @@ disease ontologies. _bycon_'s services are tools to enable the APIs.
 
 ### Directory Structure
 
-##### `bycon`
+##### `beaconServer`
 
 * web applications for data access
 * Python modules for Beacon query and response functions in `lib`
