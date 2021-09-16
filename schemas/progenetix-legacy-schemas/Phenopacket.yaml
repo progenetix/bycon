@@ -40,22 +40,22 @@ properties:
     type: array
     items:
       $ref: Biosample.yaml#/properties
-  interpretations:
-    type: array
-    items:
-      $ref: Interpretation.yaml#/properties
+  # interpretations:
+  #   type: array
+  #   items:
+  #     $ref: Interpretation.yaml#/properties
   diseases:
     type: array
     items:
       $ref: Disease.yaml#/properties
-  medicalActions:
-    type: array
-    items:
-      $ref: MedicalAction.yaml#/properties
-  htsFiles:
-    type: array
-    items:
-      $ref: HtsFile.yaml#/properties
+  # medicalActions:
+  #   type: array
+  #   items:
+  #     $ref: MedicalAction.yaml#/properties
+  # htsFiles:
+  #   type: array
+  #   items:
+  #     $ref: HtsFile.yaml#/properties
   metaData:
     type: object
 

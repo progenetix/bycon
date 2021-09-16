@@ -36,6 +36,7 @@ def individuals():
 
     # Phenopackets
     # TODO: very hacky, for testing so far ...
+
     if "requestedSchemas" in byc["query_meta"]:
 
         if re.match(r".*?Phenopacket.*?", byc["query_meta"]["requestedSchemas"][0]["schema"]):
@@ -47,6 +48,7 @@ def individuals():
                 byc["service_response"]["result_sets"][i].update( {"results": results } )
                 
             byc["service_response"]["meta"].update({ "returned_schemas": byc["query_meta"]["requestedSchemas"][0]["schema"] })
+            byc["service_response"]["meta"]["received_request_summary"].update({ "requested_schemas": byc["query_meta"]["requestedSchemas"][0]["schema"] })
 
     cgi_print_response( byc, 200 )
 

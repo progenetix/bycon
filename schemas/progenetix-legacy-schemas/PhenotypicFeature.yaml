@@ -34,9 +34,9 @@ properties:
     items:
       $ref: OntologyClass.yaml#/properties
   onset:
-    $ref: TimeElement.yaml#/properties
+    $ref: TimeElement.yaml
   resolution:
-    $ref: TimeElement.yaml#/properties
+    $ref: TimeElement.yaml
   evidence:
     type: array
     items:

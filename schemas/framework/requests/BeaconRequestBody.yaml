@@ -10,7 +10,7 @@ properties:
   meta:
     description: >-
       Information that is relevant to build the response.
-    $ref: ./BeaconRequestMeta.yaml
+    $ref: ./beaconRequestMeta.yaml
   query:
     description: >-
       Parameters to limit the list of returned results.
@@ -23,7 +23,7 @@ properties:
       filters:
         description: >-
           Ontology based filters. Using CURIE syntax is encouraged.
-        $ref: ./FilteringTerms.yaml
+        $ref: ./filteringTerms.yaml
       includeResultsetResponses:
         $ref: "#/definitions/IncludeResultsetResponses"
       pagination:

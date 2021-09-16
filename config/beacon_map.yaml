@@ -6,7 +6,6 @@ endpointSets:
     rootUrl: https://progenetix.org/beacon/datasets
     singleEntryUrl: https://progenetix.org/beacon/datasets/{id}
     filteringTermsUrl: https://progenetix.org/beacon/filteringTerms/?datasetIds={id}
-    endpoints: https://progenetix.org/beacon/datasets
   biosample:
     entryType: biosample
     openAPIEndpointsDefinition: "./biosamples/endpoints.yaml"
@@ -21,8 +20,24 @@ endpointSets:
         returnedEntryType: biosample
         url: https://progenetix.org/beacon/biosamples/{id}/biosample
       individual:
-        returnedEntryType: biosample
+        returnedEntryType: individual
         url: https://progenetix.org/beacon/biosamples/{id}/individual
+  individual:
+    entryType: individual
+    openAPIEndpointsDefinition: "./individuals/endpoints.yaml"
+    rootUrl: https://progenetix.org/beacon/individuals
+    singleEntryUrl: https://progenetix.org/beacon/individuals/{id}
+    filteringTermsUrl: https://progenetix.org/beacon/filteringTerms
+    endpoints:
+      variantInSample:
+        returnedEntryType: variantInSample
+        url: https://progenetix.org/beacon/individuals/{id}/variantsInSample
+      biosample:
+        returnedEntryType: biosample
+        url: https://progenetix.org/beacon/individuals/{id}/biosample
+      individual:
+        returnedEntryType: individual
+        url: https://progenetix.org/beacon/individuals/{id}/individual
   variantInSample:
     entryType: genomicVariant
     openAPIEndpointsDefinition: "./variantsInSample/endpoints.yaml"

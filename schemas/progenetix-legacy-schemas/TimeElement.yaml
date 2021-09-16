@@ -20,23 +20,17 @@ description: >
   The TimeElement class from Phenopackets v2.
 type: object
 oneOf:
-  - properties:
-      gestationalAge:
-        $ref: GestationalAge.yaml#/properties
-  - properties:
-      age:
-        $ref: Age.yaml#/properties
-  - properties:
-      ageRange:
-        $ref: AgeRange.yaml#/properties
-  - properties:
-      ontologyClass:
-        $ref: OntologyClass.yaml#/properties
-  - properties:
-      timestamp:
-        description: ISO8601 time
-        type: string
-  - properties:
-      interval:
-        description: time interval
-        $ref: TimeInterval.yaml#/properties
+  - gestationalAge:
+      $ref: GestationalAge.yaml#/properties
+  - age:
+      $ref: Age.yaml#/properties
+  - ageRange:
+      $ref: AgeRange.yaml#/properties
+  - ontologyClass:
+      $ref: OntologyClass.yaml#/properties
+  - timestamp:
+      description: ISO8601 time
+      type: string
+  - interval:
+      description: time interval
+      $ref: TimeInterval.yaml#/properties

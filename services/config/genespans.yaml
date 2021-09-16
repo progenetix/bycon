@@ -1,18 +1,17 @@
 defaults:
   dataset_ids:
     - progenetix
-  coll: genespans
   assembly_id: GRCh38
   query_fields:
-    - gene_symbol
-    - gene_entrez_id
-  query_precision: "exact"
+    - symbol
+    - ensembl_gene_ids
+    - synonyms
   db: progenetix
-  coll: genespans
+  coll: genes
 meta:
   response_type: genespans
   returned_schemas:
-    GeneSpan: https://progenetix.org/services/schemas/GeneSpan/
+    ProgenetixGene: https://progenetix.org/services/schemas/ProgenetixGene/
   info: >
     The main genes payload can be accessed in `results`.
 assembly_ids:

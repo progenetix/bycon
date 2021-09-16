@@ -22,7 +22,7 @@ properties:
       Ontology based filters. CURIE syntax is encouraged to be used.
     $ref: ../../common/beaconCommonComponents.yaml#/definitions/Filters
   includeResultsetResponses:
-    $ref: ../../requests/BeaconRequestBody.yaml#/definitions/IncludeResultsetResponses
+    $ref: ../../requests/beaconRequestBody.yaml#/definitions/IncludeResultsetResponses
   pagination:
     description: >-
       Pagination to apply on the results.

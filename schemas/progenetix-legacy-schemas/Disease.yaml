@@ -24,9 +24,9 @@ properties:
   excluded:
     type: boolean
   onset:
-    $ref: TimeElement.yaml#/properties
+    $ref: TimeElement.yaml
   resolution:
-    $ref: TimeElement.yaml#/properties
+    $ref: TimeElement.yaml
   diseaseStage:
     description: child terms of NCIT:C28108 (Disease Stage Qualifier)
     type: array

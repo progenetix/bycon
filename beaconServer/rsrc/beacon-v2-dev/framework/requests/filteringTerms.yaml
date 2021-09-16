@@ -33,17 +33,16 @@ definitions:
           - medium
           - low
         default: exact
-        description: Allow the Beacon to return results which do not match the filter
-          exactly, but do match to a certain degree of similarity. The Beacon defines
-          the semantic similarity model implemented and how to apply the thresholds
-          of 'high', 'medium' and 'low' similarity.
+        description: >-
+          Allow the Beacon to return results which do not match the filter exactly, but do match to a the semantic similarity model implemented and how to apply the thresholds of 'high', 'medium' and 'low' similarity.
       scope:
         type: string
-        description: The entry type to which the filter applies
+        description: >-
+          The entry type to which the filter applies
         example: biosamples
   AlphanumericFilter:
-    description: Filter results based on operators and values applied to alphanumeric
-      fields.
+    description: >-
+      Filter results based on operators and values applied to alphanumeric fields.
     type: object
     required:
       - id

@@ -31,10 +31,13 @@ def export_datatable(byc):
         for par, d in io_prefixes.items():
             if "string" in d["type"]:
                 if par in pgxdoc:
-                    line.append(str(pgxdoc[par]["id"]))
-                    if "label" in pgxdoc[par]:
+                    try:
+                        line.append(str(pgxdoc[par]["id"]))
+                    except:
+                        line.append("")
+                    try:
                         line.append(str(pgxdoc[par]["label"]))
-                    else:
+                    except:
                         line.append("")
                 else:
                     line.append("")
@@ -44,11 +47,14 @@ def export_datatable(byc):
                     status = False
                     for o in pgxdoc[par]:
                         if pre in o["id"]:
-                            line.append(str(o["id"]))
-                            status = True
-                            if "label" in o:
+                            try:
+                                line.append(str(o["id"]))
+                                status = True
+                            except:
+                                continue
+                            try:
                                 line.append(str(o["label"]))
-                            else:
+                            except:
                                 line.append("")
                     if status is False:
                         line.append("")
@@ -59,7 +65,7 @@ def export_datatable(byc):
 
 ################################################################################
 
-def create_table_header(params, prefixes):
+def create_table_header(params, io_prefixes):
 
     """podmd
     podmd"""
@@ -68,10 +74,14 @@ def create_table_header(params, prefixes):
 
     for par in params.keys():
         header_labs.append( par )
-    for par in prefixes:
-        for pre in prefixes[par]:
-            header_labs.append( pre+"::id" )
-            header_labs.append( pre+"::label" )
+    for par, d in io_prefixes.items():
+        if "pres" in d:
+            for pre in d["pres"]:
+                header_labs.append( par+"___"+pre+"::id" )
+                header_labs.append( par+"___"+pre+"::label" )
+        else:
+            header_labs.append( par+"::id" )
+            header_labs.append( par+"::label" )
 
     return header_labs
 

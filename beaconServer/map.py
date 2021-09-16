@@ -47,7 +47,7 @@ def map():
     byc["service_response"].update({
         "$schema": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconMapResponse.json",
         "response": byc["beacon_map"],
-     })
+    })
 
     cgi_print_response( byc, 200 )
 

@@ -4,9 +4,10 @@ service_names:
   dbstats: dbstats
   deliveries: deliveries
   genespans: genespans
+  genes: genespans
   geolocations: geolocations
   ids: ids
-  interval_frequencies: interval_frequencies
+  interval_frequencies: intervalFrequencies
   intervalFrequencies: intervalFrequencies
   ontologymaps: ontologymaps
   publications: publications

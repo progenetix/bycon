@@ -69,9 +69,7 @@ io_params:
     individual_id:
       db_key: individual_id
       type: string
-    provenance:
-      db_key: info.provenance
-      type: string
+
   individual:
     id:
       db_key: id

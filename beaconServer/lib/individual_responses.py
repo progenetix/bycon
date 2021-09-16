@@ -72,16 +72,36 @@ def ds_results_phenopack_individuals(ds_id, ds_results):
 
 def phenopack_individual(ind, ds_results, data_db):
 
-    bio_s = retrieve_biosamples_from_individual_id(data_db, ind["id"])
+    # TODO: key removal based on the ones not part of the respective PXF schemas
+
+    pxf_bios = []
+
+    # biosamples = retrieve_biosamples_from_individual_id(data_db, ind["id"])
+
+    for bio_s in retrieve_biosamples_from_individual_id(data_db, ind["id"]):
+        pxf_bios.append(remove_keys(bio_s, *["info", "provenance", "_id"]))
     # bio_s = data_db["biosamples"].find({"individual_id":ind["id"]})
 
+    pxf_ind = remove_keys(ind, *["geo_provenance", "_id"])
+
     pxf = {
-        "id": ind["id"],
-        "subject": ind,
-        "biosamples": list(bio_s),
+        "id": pxf_ind["id"],
+        "subject": pxf_ind,
+        "biosamples": pxf_bios,
         "metaData": {}
     }
 
     return pxf
+
+################################################################################
+
+def remove_keys(d, *keylist):
+    r = dict(d)
+    for k in keylist:
+        try:
+            del r[k]
+        except:
+            pass
+    return r
 
 
