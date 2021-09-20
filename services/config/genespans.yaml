@@ -16,3 +16,9 @@ meta:
     The main genes payload can be accessed in `results`.
 assembly_ids:
   - GRCh38
+methods:
+  genespan:
+    - start
+    - end
+    - reference_name
+    - symbol

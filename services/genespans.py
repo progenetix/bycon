@@ -71,6 +71,17 @@ def genespans():
 
     cgi_break_on_errors(byc)
 
+    if "method" in byc:
+        if "genespan" in byc["method"]:
+            for i, g in enumerate(results):
+                g_n = {}
+                for k in byc["these_prefs"]["methods"]["genespan"]:
+                    if not k in g:
+                        continue
+                    g_n.update({k:g[k]})
+                results[i] = g_n
+
+
     populate_service_response( byc, results)
     cgi_print_response( byc, 200 )
 
