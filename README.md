@@ -9,11 +9,6 @@ documentation which is also [presented in an accessible format](https://info.pro
 
 ### More Documentation
 
-#### [Beaconplus](./beaconServer/doc/bycon.md)
-
-This page provides more information about the _Beacon_ functionality, current
-implementation status and usage examples.
-
 #### [Services](./services/doc/services.md)
 
 The _bycon_ environment - together with the [Progenetix](http://progenetix.org)
