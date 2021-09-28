@@ -17,8 +17,8 @@ service_names:
   variants_in_sample: variants
   variantsInSample: variants
   variants: variants
-  variantsInterpretations: variantsInterpretations
-  variants_interpretations: variantsInterpretations
+  variantInterpretations: variantInterpretations
+  variant_interpretations: variantInterpretations
 
 response_types:
   biosamples:
@@ -45,7 +45,7 @@ response_types:
     id: variantInSample
     schema: https://progenetix.org/services/schemas/Variant/
     h->o_access_key: "variants._id"
-  variants_interpretations:
+  variant_interpretations:
     id: variantInterpretation
     schema: https://progenetix.org/services/schemas/Variant/
     h->o_access_key: "variant_annotations._id"

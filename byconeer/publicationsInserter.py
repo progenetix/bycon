@@ -6,7 +6,7 @@ import argparse, datetime
 from isodate import date_isoformat
 import cgi, cgitb
 import sys
-
+import csv
 
 # local
 dir_path = path.dirname( path.abspath(__file__) )
@@ -15,7 +15,7 @@ sys.path.append( pkg_path )
 
 from beaconServer.lib import *
 
-from lib.publication_utils import jprint, read_annotation_table, create_progenetix_post
+from lib.publication_utils import jprint, read_annotation_table, create_progenetix_post, create_short_publication_label, get_empty_publication, retrieve_epmc_publications
 
 """
 * pubUpdater.py -t 1 -f "../rsrc/publications.txt"
@@ -66,29 +66,94 @@ def update_publications():
     ##########################################
     ##########################################
 
-    # Read annotation table:
-    rows = read_annotation_table(byc)
+    rows = []
 
-    """
-    To be changed - cvs reader w/ column names ...
+    mongo_client = MongoClient()
 
-    import csv
+    pub_coll = mongo_client["progenetix"]["publications"]
+    bios_coll = mongo_client["progenetix"]["biosamples"]
 
-    newPubs = {}
+    publication_ids = pub_coll.distinct("id")
 
-    with open('...........csv', newline='') as csvfile:
-    reader = csv.DictReader(csvfile)
-    for row in reader:
+    progenetix_ids = bios_coll.distinct("external_references.id")
+    progenetix_ids = [item for item in progenetix_ids if item is not None]
+    progenetix_ids = list(filter(lambda x: x.startswith("PMID"), progenetix_ids))
 
-        pubid = "PMID:"+str(row["PMID"])
+    # TODO: Use schema ...
 
-        newPubs.update( { pubid: { "id": pubid } } )
+    with open(byc["args"].filepath, newline='') as csvfile:
+        in_pubs = list(csv.DictReader(csvfile, delimiter="\t", quotechar='"'))
+        print("=> {} publications will be looked up".format(len(in_pubs)))
 
-        ... then update the parametrs according to a value -> (nested) dict
-        field mapping
-    """
+        for pub in in_pubs:
+            include = False
+            if len(pub["pubmedid"]) > 5:
+                pmid = pub["pubmedid"]
+                p_k = "PMID:"+pmid
 
-    print("=> {} publications will be looked up".format(len(rows)))
+                """Publications are either created from an empty dummy or - if id exists and
+                `-u 1` taken from the existing one."""
+
+                if p_k in publication_ids:
+                    if not byc["args"].update:
+                        print(p_k, ": skipped - already in progenetix.publications")
+                        continue
+                    else:
+                        n_p = mongo_client["progenetix"]["publications"].find_one({"id": p_k })
+                        print(p_k, ": existed but overwritten since *update* in effect")
+                else:
+                    n_p = get_empty_publication()
+                    n_p.update({"id":p_k})
+
+                for k, v in pub.items():
+                    if not k.startswith("_"):
+                        # TODO: create dotted
+                        assign_nested_value(n_p, k, v)
+
+                if len(pub["_provenance_id"]) > 4:
+                    geo_info = mongo_client["progenetix"]["geolocs"].find_one({"id": pub["_provenance_id"]}, {"_id": 0, "id": 0})
+                    if geo_info is not None:
+                        n_p["provenance"].update({"geo_location":geo_info})
+
+                sts = {}
+
+                pubmed_data = retrieve_epmc_publications(pmid)
+
+                if pubmed_data is not None:
+                    n_p.update({"abstract": re.sub(r'<[^\>]+?>', "", pubmed_data["abstractText"])})
+                    n_p.update({"authors":pubmed_data["authorString"]})
+                    n_p.update({"journal":pubmed_data["journalInfo"]["journal"]["medlineAbbreviation"]})
+                    n_p.update({"title":re.sub(r'<[^\>]+?>', "", pubmed_data["title"])})
+                    n_p.update({"year":pubmed_data["pubYear"]})
+                
+                n_p.update({"label": create_short_publication_label(n_p["authors"], n_p["title"], n_p["year"]) })
+
+                if p_k in progenetix_ids:
+
+                    n_p["counts"].update({"progenetix" : 0})
+
+                    for s in bios_coll.find({ "external_references.id" : p_k }):
+                        n_p["counts"]["progenetix"] += 1
+                        h_d_id = s["histological_diagnosis"]
+                        if "NCIT:C" in h_d_id["id"]:
+                            if h_d in sts.keys():
+                                sts[ h_d["id"] ][ "count" ] += 1
+                            else:
+                                sts.update( { h_d["id"]: h_d } )
+                                sts[ h_d["id"] ].update({"count": 1})
+
+
+
+
+
+                    
+
+
+
+                jprint(n_p)
+                    
+
+    exit()
 
     # Connect to MongoDB and load publication collection
     client = MongoClient()
@@ -113,8 +178,6 @@ def update_publications():
 
             print(post["id"], ": inserting this into progenetix.publications")
 
-            post.update( { "updated": date_isoformat(datetime.datetime.now()) } )
-
             if not byc["args"].test:
                 result = cl.update_one({"id": post["id"] }, {"$set": post }, upsert=True )
                 up_count += 1
@@ -123,6 +186,7 @@ def update_publications():
 
     print("{} publications were inserted or updated".format(up_count))
 
+##############################################################################
 ##############################################################################
 
 if __name__ == '__main__':

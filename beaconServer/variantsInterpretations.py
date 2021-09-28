@@ -22,23 +22,23 @@ https://progenetix.test/beacon/variants/?filters=NCIT:C7712&output=pgxseg&debug=
 
 def main():
 
-    variants_interpretations()
+    variant_interpretations()
 
 ################################################################################
 
-def variantsInterpretations():
+def variantInterpretations():
 
-    variants_interpretations()
+    variant_interpretations()
 
 ################################################################################
 
 def variantAnnotations():
 
-    variants_interpretations()
+    variant_interpretations()
 
 ################################################################################
 
-def variants_interpretations():
+def variant_interpretations():
 
     byc = initialize_service()
     run_beacon_init_stack(byc)

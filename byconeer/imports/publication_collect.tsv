@@ -1,0 +1,26 @@
+pubmedid	counts.ccgh	counts.acgh	counts.wes	counts.wgs	counts.ngs	counts.genomes	_provenance_id	status	_sample_types	note
+34103027	0	79	0	0	0	79	newhaven::unitedstates		C3099::Hepatocellular Carcinoma::79	
+34059130	0	0	5	113	118	118	newyorkcity::unitedstates		C3482::Metastatic Carcinoma::118	
+34285259	0	0	10	0	10	10	washingtondc::unitedstates		C4024::10::Esophageal Squamous Cell Carcinoma	
+34012790	0	0	41	0	41	41	shanghai:: china		C4917::41::Lung Small Cell Carcinoma	
+34203905	0	0	0	135	135	135	madrid::spain		C9290::135::Myeloid Neoplasm	
+34070898	0	36	43	0	43	79	bucharest::romania		C3171::79::Acute Myeloid Leukemia	
+33512416	0	0	21	0	21	21	nagoyashi::japan		C8936::21::B Lymphoblastic Leukemia/Lymphoma	
+32929114	0	0	10	10	10	10	seoul::koreanrepublic		C5904::10::Salivary Duct Carcinoma	
+31439678	0	0	21	0	21	21	bethesda::unitedstates		C9294::21::Histiocytic and Dendritic Cell Neoplasm	
+31431620	0	0	16	3	19	19	lyon::france		C4038::19::Lung Carcinoid Tumor	
+31237044	0	0	18	0	18	18	indianapolis::unitedstates		C8851::18::Diffuse Large B-Cell Lymphoma	
+31123420	0	0	2	0	2	2	wenzhou::china		C3230::2::Meningioma	
+34285259	0	0	20	0	20	20	washingtondc::unitedstates		C4024::20::Esophageal Squamous Cell Carcinoma	
+32028173	0	0	0	26	26	26	rome::italy		C3771::26::Lobular Breast Carcinoma	
+31648986	0	190	0	0	0	190	rouen::france		C3208::190::Lymphoma	
+30916311	0	0	40	0	40	40	guangzhou::china		C3099::40::Hepatocellular Carcinoma	
+30675227	0	3	0	0	0	3	kualalumpur::malaysia		C3288::3::Oligodendroglioma	
+33767857	0	0	13	0	13	13	busan::koreanrepublic		C3268::13::Nervous System Neoplasm	
+33747936	0	0	25	0	25	25	xiangcheng::china		C8936::25::B Lymphoblastic Leukemia/Lymphoma	
+33168091	195	0	0	0	0	195	lyon::france		C94540::195::Anterior Pituitary Gland Endocrine Neoplasm	
+31130341	0	0	173	41	214	214	beijing::china		C3828::214::Combined Hepatocellular Carcinoma and Cholangiocarcinoma	
+30672146	0	0	10	10	20	20	beijing::china		C4824::30::Tongue Carcinoma	
+34307137	0	0	0	123	123	123	tianjin::china		C3411::Thymoma::97,C7997::Thymoma Type B3::15,C7569::Thymic Carcinoma::11	
+34205964	0	0	17	0	17	17	munich::germany		C156781::Biliary Tract Carcinoma::11,C95505::Pancreatic Intraductal Neoplasm::6	
+30867899	0	0	29	0	29	29	portland::unitedstates		C3868::29::Gastrointestinal Stromal Tumor	

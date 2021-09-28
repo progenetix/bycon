@@ -49,7 +49,7 @@ h->o_types:
     label: "Annotations and interpretations for found Variants (.json)"
     description: "retrieve the annotations - if existing - for the found variants"
     h->o_key: 'variant_annotations._id'
-    script_path_web: '/beacon/variantsInterpretations'
+    script_path_web: '/beacon/variantInterpretations'
 
   pgxseg:
     id: 'pgx:handover:pgxseg'

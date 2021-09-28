@@ -82,7 +82,7 @@ def phenopack_individual(ind, ds_results, data_db):
         pxf_bios.append(remove_keys(bio_s, *["info", "provenance", "_id"]))
     # bio_s = data_db["biosamples"].find({"individual_id":ind["id"]})
 
-    pxf_ind = remove_keys(ind, *["geo_provenance", "_id"])
+    pxf_ind = remove_keys(ind, *["_id"])
 
     pxf = {
         "id": pxf_ind["id"],
@@ -96,6 +96,7 @@ def phenopack_individual(ind, ds_results, data_db):
 ################################################################################
 
 def remove_keys(d, *keylist):
+
     r = dict(d)
     for k in keylist:
         try:

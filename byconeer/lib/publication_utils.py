@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
 import requests
-import json, re
+import json, re, datetime
 import csv
 from pymongo import MongoClient
 from os import path, pardir
 from humps import decamelize
+from isodate import date_isoformat
+
 
 # local
 lib_path = path.dirname( path.abspath(__file__) )
@@ -15,8 +17,8 @@ pkg_path = path.join( dir_path, pardir )
 ##############################################################################
 
 def jprint(obj):
-    text = json.dumps(obj, sort_keys= True, indent = 4, ensure_ascii = False)
-    print(text)
+
+    print(json.dumps(obj, indent=2, sort_keys=True, default=str))
 
 ##############################################################################
 
@@ -49,7 +51,8 @@ def retrieve_epmc_publications(pmid):
         "query": "ext_id:" + pmid,
         "format": "json",
         "resultType": "core"
-        }
+    }
+
     response = requests.get("https://www.ebi.ac.uk/europepmc/webservices/rest/search", params = parameters)
     
     if response.status_code == 200:
@@ -71,41 +74,6 @@ def create_short_publication_label(author, title, year):
         label = short_author + f' ({year}) ' + ' '.join(title.split(' ')[:12]) + ' ...'
         
     return label
-
-##############################################################################
-
-def get_geolocation(locationID, byc):
-
-    #heidelberg, heidelberg::germany
-
-    # TODO: Use schema file & parser for empty instance.
-    provenance = {
-        "type" : "Feature",
-        "geometry" : {
-            "type" : "Point",
-            "coordinates" : [
-                0,
-                0
-            ]
-        },
-        "properties" : {
-            "ISO3166alpha2" : "XX",
-            "ISO3166alpha3" : "XXX",
-            "city" : "Atlantis",
-            "continent" : "Null Island",
-            "country" : "Null Island"
-        }
-    }
-
-    locationID = re.sub(" ", "", locationID)
-
-    mongo_client = MongoClient()
-    geo_info = mongo_client["progenetix"]["geolocs"].find_one({"id": locationID})
-    if not geo_info:
-        print("!!! no geo match for {}".format(locationID))
-        return provenance
-
-    return geo_info["geo_location"]
 
 ##############################################################################
 
@@ -190,4 +158,43 @@ def create_progenetix_post(row, byc):
         pub_copy = pub.copy()
         
     return pub_copy
+
+##############################################################################
+
+def get_empty_publication():
+    return {
+        "updated": date_isoformat(datetime.datetime.now()),
+        "provenance": {
+            "geo_location": {
+              "type": 'Feature',
+              "geometry": { "type": 'Point', "coordinates": [ 0, 0 ] },
+              "properties": {
+                "label": 'Atlantis, Null Island',
+                "city": 'Atlantis',
+                "country": 'Null Island',
+                "continent": 'Africa',
+                "latitude": 0,
+                "longitude": 0,
+                "ISO3166alpha3": 'AAA',
+                "precision": 'city'
+              }
+            }
+        },
+        "counts": { "ccgh": 0, "acgh": 0, "wes": 0, "wgs": 0, "ngs": 0, "genomes": 0, "progenetix": 0},
+        "id": '',
+        "abstract": '',
+        "affiliation": '',
+        "authors": '',
+        "email": '',
+        "journal": '',
+        "note": '',
+        "status": '',
+        "title": '',
+        "year": '',
+        "pubmedid": '',
+        "info": {},
+        "label": '',
+        "sample_types": []
+    }
+
 

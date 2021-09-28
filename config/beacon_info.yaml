@@ -17,8 +17,8 @@ organization:
 description: >
   Beacon+ provides a forward looking implementation of the Beacon API, with focus on structural variants and metadata based on the cancer and reference genome profiling data represented in the Progenetix oncogenomic data resource (https://progenetix.org).
 version: v2
-welcomeUrl: "https://progenetix.org/beacon-plus/"
-alternativeUrl: "https://progenetix.org/biosamples/"
+welcomeUrl: "https://progenetix.org/beaconplus-instances/beaconplus/"
+alternativeUrl: "https://progenetix.org"
 create_date_time: 2015-11-13
 update_date_time: 2021-07-21
 datasets: [ ] # populated from script

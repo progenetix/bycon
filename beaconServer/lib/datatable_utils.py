@@ -65,25 +65,60 @@ def export_datatable(byc):
 
 ################################################################################
 
-def create_table_header(params, io_prefixes):
+def create_table_header(io_params, io_prefixes):
 
     """podmd
     podmd"""
 
     header_labs = [ ]
 
-    for par in params.keys():
+    for par in io_params.keys():
         header_labs.append( par )
     for par, d in io_prefixes.items():
         if "pres" in d:
             for pre in d["pres"]:
-                header_labs.append( par+"___"+pre+"::id" )
-                header_labs.append( par+"___"+pre+"::label" )
+                header_labs.append( par+"::id"+"___"+pre )
+                header_labs.append( par+"::label"+"___"+pre )
         else:
             header_labs.append( par+"::id" )
             header_labs.append( par+"::label" )
 
     return header_labs
+
+################################################################################
+
+def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
+
+    ps = dotted_key.split('.')
+
+    if len(ps) == 1:
+        if "array" in parameter_type:
+            parent.update({ps[0]: [ v ]})
+        else:
+            parent.update({ps[0]: v })
+    elif len(ps) == 2:
+        if "array" in parameter_type:
+            parent[ ps[0] ].update({ps[1]: [ v ]})
+        else:
+            parent[ ps[0] ].update({ps[1]: v })
+    elif len(ps) == 3:
+        if "array" in parameter_type:
+            parent[ ps[0] ][ ps[1] ].update({ps[2]: [ v ]})
+        else:
+            parent[ ps[0] ][ ps[1] ].update({ps[2]: v })
+    elif len(ps) == 4:
+        if "array" in parameter_type:
+            parent[ ps[0] ][ ps[1] ][ ps[2] ].update({ps[3]: [ v ]})
+        else:
+            parent[ ps[0] ][ ps[1] ][ ps[2] ].update({ps[3]: v })
+    elif len(ps) > 4:
+        print("¡¡¡ Parameter key "+dotted_key+" nested too deeply (>4) !!!")
+        return '_too_deep_'
+
+    return parent
+
+
+################################################################################
 
 ################################################################################
 

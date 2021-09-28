@@ -53,7 +53,9 @@ def read_local_prefs(service, dir_path):
             if c_f.is_file():
                 these_prefs.update({c_k:load_yaml( c_f )})
 
-        return these_prefs        
+        return these_prefs
+    else:
+        return {}    
 
 ################################################################################
 
