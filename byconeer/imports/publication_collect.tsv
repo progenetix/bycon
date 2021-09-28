@@ -24,4 +24,4 @@ pubmedid	counts.ccgh	counts.acgh	counts.wes	counts.wgs	counts.ngs	counts.genomes
 34307137	0	0	0	123	123	123	tianjin::china		C3411::Thymoma::97,C7997::Thymoma Type B3::15,C7569::Thymic Carcinoma::11	
 34205964	0	0	17	0	17	17	munich::germany		C156781::Biliary Tract Carcinoma::11,C95505::Pancreatic Intraductal Neoplasm::6	
 30867899	0	0	29	0	29	29	portland::unitedstates		C3868::29::Gastrointestinal Stromal Tumor	
-34573430  0	0	0	7 7 7	kotabharu::malaysia	C2955::7::Colorectal Carcinoma
+34573430 	0	0	0	7	7	7	kotabharu::malaysia	C2955::7::Colorectal Carcinoma
