@@ -75,6 +75,7 @@ def create_short_publication_label(author, title, year):
         
     return label
 
+
 ##############################################################################
 
 def get_ncit_tumor_type(tumors, fullNames):
