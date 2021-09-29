@@ -21,7 +21,7 @@ pubmedid	counts.ccgh	counts.acgh	counts.wes	counts.wgs	counts.ngs	counts.genomes
 33168091	195	0	0	0	0	195	lyon::france		C94540::195::Anterior Pituitary Gland Endocrine Neoplasm	
 31130341	0	0	173	41	214	214	beijing::china		C3828::214::Combined Hepatocellular Carcinoma and Cholangiocarcinoma	
 30672146	0	0	10	10	20	20	beijing::china		C4824::30::Tongue Carcinoma	
-34307137	0	0	0	123	123	123	tianjin::china		C3411::Thymoma::97,C7997::Thymoma Type B3::15,C7569::Thymic Carcinoma::11	
-34205964	0	0	17	0	17	17	munich::germany		C156781::Biliary Tract Carcinoma::11,C95505::Pancreatic Intraductal Neoplasm::6	
+34307137	0	0	0	123	123	123	tianjin::china		C3411::97::Thymoma,C7997::15::Thymoma Type B3,C7569::11::Thymic Carcinoma	
+34205964	0	0	17	0	17	17	munich::germany		C156781::11::Biliary Tract Carcinoma,C95505::6::Pancreatic Intraductal Neoplasm	
 30867899	0	0	29	0	29	29	portland::unitedstates		C3868::29::Gastrointestinal Stromal Tumor	
 34573430 	0	0	0	7	7	7	kotabharu::malaysia	 	C2955::7::Colorectal Carcinoma 	
