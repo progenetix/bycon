@@ -45,9 +45,6 @@ properties:
     examples:
       - "Weber RG, Bostrom J, Wolter M, Baudis M, Collins VP, Reifenberger G, Lichter P."
 
-  affiliation:
-    type: string
-
   journal:
     type: string
     examples:
@@ -100,18 +97,6 @@ properties:
           label: Thoracic Neoplasm
           count: 68
 
-  contact:
-    type: string
-    description: >
-      Name of contact (e.g. corresponding author).
-      TODO: With email, affiliation ... into new address schema, in provenance?
-    examples:
-      - "Rasd-Coduresa Diziet Embless Sma da' Marenhide"
-      - Ion Tichy
-
-  email:
-    type: string
-
   note:
     type: string
 
@@ -126,3 +111,19 @@ properties:
     format: date-time
     examples:
       - "2020-09-10T17:44:10.170Z"
+
+definitions:
+  Contact:
+    properties:
+      name:
+        description: >-
+          Name of contact (e.g. corresponding author).
+        type: string
+        examples:
+          - "Rasd-Coduresa Diziet Embless Sma da' Marenhide"
+          - Ion Tichy
+      email:
+        type: string
+      affiliation:
+        type: string
+

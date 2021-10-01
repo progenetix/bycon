@@ -82,6 +82,7 @@ def update_publications():
     # TODO: Use schema ...
 
     with open(byc["args"].filepath, newline='') as csvfile:
+
         in_pubs = list(csv.DictReader(csvfile, delimiter="\t", quotechar='"'))
         print("=> {} publications will be looked up".format(len(in_pubs)))
 
@@ -120,6 +121,7 @@ def update_publications():
                 pubmed_data = retrieve_epmc_publications(pmid)
 
                 if pubmed_data is not None:
+
                     n_p.update({"abstract": re.sub(r'<[^\>]+?>', "", pubmed_data["abstractText"])})
                     n_p.update({"authors":pubmed_data["authorString"]})
                     n_p.update({"journal":pubmed_data["journalInfo"]["journal"]["medlineAbbreviation"]})
@@ -141,12 +143,6 @@ def update_publications():
                             else:
                                 sts.update( { h_d["id"]: h_d } )
                                 sts[ h_d["id"] ].update({"count": 1})
-
-
-
-
-
-                    
 
 
 

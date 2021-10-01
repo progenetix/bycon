@@ -6,54 +6,72 @@ collationed:
   geo:
     prefix: geo
     pattern: '^(geo)[:]((GSE)|(GPL))'
+    db_key: 'external_references.id'
     is_series: True
     child_pattern: '^(geo)[:]GSM'
   NCIT:
     prefix: NCIT
     pattern: '^(NCIT)[:]C'
+    db_key: 'histological_diagnosis.id'
     is_series: False
   NCITgrade:
     prefix: NCITgrade
     pattern: '^(NCITgrade)[\-]C'
+    db_key: 'tumor_grade.id'
     is_series: False
   NCITstage:
     prefix: NCITstage
     pattern: '^(NCITstage)[\-]C'
+    db_key: 'pathological_stage.id'
+    is_series: False
+  EFO:
+    prefix: EFO
+    pattern: '^((?:EFO)|(?:OBI))[\:]\d+?$'
+    db_key: 'provenance.material.id'
     is_series: False
   TNM:
     prefix: TNM
     pattern: '^(TNM)[\-]C'
+    db_key: 'pathological_tnm_findings.id'
     is_series: False
   icdom:
     prefix: icdom
     pattern: '^(icdom)[\-]\d'
+    db_key: 'icdo_morphology.id'
     is_series: False
   icdot:
     prefix: icdot
     pattern: '^(icdot)[\-]C'
+    db_key: 'icdo_topography.id'
     is_series: False
   cellosaurus:
     prefix: cellosaurus
     pattern: '^(cellosaurus)[:]CVCL'
+    db_key: 'external_references.id'
     is_series: False
   PMID:
     prefix: PMID
     pattern: '^(PMID)[:]\d'
+    db_key: 'external_references.id'
     is_series: False
   UBERON:
     prefix: UBERON
     pattern: '^(UBERON)[:]\d'
+    db_key: 'sampled_tissue.id'
     is_series: False
   cBP:
     prefix: cBP
     pattern: '^(cBP)[\-]\w'
+    db_key: 'external_references.id'
     is_series: False
   TCGA:
     prefix: TCGA
     pattern: '^(TCGA)[\-][\w\-]{2,20}$'
+    db_key: 'external_references.id'
     is_series: True
     child_pattern: '^(TCGA)[\-]\w+?\-[\w\-]{15,30}$'
   pgxcohort:
     prefix: pgxcohort
     pattern: '^(pgxcohort)[\-]\w+?$'
+    db_key: 'cohorts.id'
     is_series: False

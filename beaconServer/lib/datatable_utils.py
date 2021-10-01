@@ -14,6 +14,11 @@ def export_datatable(byc):
 
     io_params = byc["datatable_mappings"]["io_params"][ byc["response_type"] ]
     io_prefixes = byc["datatable_mappings"]["io_prefixes"][ byc["response_type"] ]
+
+    if "idtable" in byc["output"]:
+        io_params = {"id": {"db_key":"id", "type": "string" } }
+        io_prefixes = {}
+
     header = create_table_header(io_params, io_prefixes)
 
     print("\t".join( header ))    

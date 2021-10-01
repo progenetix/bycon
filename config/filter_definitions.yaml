@@ -119,10 +119,9 @@ EFO:
   scopes:
     biosamples:
       default: 1
-  pattern: '^EFO([_\:]\d+?\-?)?$'
-  pattern_strict: '^EFO[_\:]\d+?$'
+  pattern: '^(?:EFO)|(?:OBI)([_\:]\d+?\-?)?$'
+  pattern_strict: '^(?:EFO)|(?:OBI)[_\:]\d+?$'
   examples:
-  collation: biosubsets
     - 'EFO:0009656'
 
 icdom:

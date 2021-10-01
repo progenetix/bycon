@@ -32,7 +32,7 @@ def _get_args(byc):
     parser.add_argument("-d", "--datasetids", help="datasets, comma-separated")
     parser.add_argument("-a", "--alldatasets", action='store_true', help="process all datasets")
     parser.add_argument("-t", "--test", help="test setting")
-    parser.add_argument("-p", "--prefixes", help="selected prefixes")
+    parser.add_argument("-c", "--collationtypes", help='selected collation types, e.g. "EFO"')
     byc.update({ "args": parser.parse_args() })
 
     return byc
@@ -60,9 +60,9 @@ def frequencymaps_creator():
         print("No existing dataset was provided with -d ...")
         exit()
 
-    if byc["args"].prefixes:
-        # using "filterlist" in contrast to the standard objects
-        byc.update({"filterlist": re.split(",", byc["args"].prefixes)})
+    if byc["args"].collationtypes:
+        # using "coll_filters" in contrast to the standard objects
+        byc.update({"coll_filters": re.split(",", byc["args"].collationtypes)})
 
     generate_genomic_intervals(byc)
  
@@ -89,10 +89,11 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
 
     id_query = {}
 
-    if "filterlist" in byc:
-        if len(byc["filterlist"]) > 0:
+    if "coll_filters" in byc:
+
+        if len(byc["coll_filters"]) > 0:
             f_l = []
-            for pre in byc["filterlist"]:
+            for pre in byc["coll_filters"]:
                 f_l.append( { "id": { "$regex": "^"+pre } })
             if len(f_l) > 1:
                 id_query = { "$or": f_l }
@@ -110,6 +111,8 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
         coll_i += 1
 
         bios_query = _make_child_terms_query(coll)
+        # print(bios_query)
+
         bios_no, cs_cursor = _cs_cursor_from_bios_query(bios_coll, cs_coll, bios_query)
         cs_no = len(list(cs_cursor))
 
@@ -180,7 +183,9 @@ def _make_exact_query(coll):
             { "pathological_stage.id": coll["id"] },
             { "tumor_grade.id": coll["id"] },
             { "cohorts.id": coll["id"] },
-            { "external_references.id": coll["id"] }
+            { "external_references.id": coll["id"] },
+            { "provenance.material.id": coll["id"] },
+
         ] }
 
 ################################################################################
@@ -196,7 +201,8 @@ def _make_child_terms_query(coll):
             { "pathological_stage.id": coll["id"] },
             { "tumor_grade.id": coll["id"] },
             { "cohorts.id": { '$in': coll["child_terms"] } },
-            { "external_references.id": { '$in': coll["child_terms"] } }
+            { "external_references.id": { '$in': coll["child_terms"] } },
+            { "provenance.material.id": { '$in': coll["child_terms"] } }
         ] }
 
 ################################################################################

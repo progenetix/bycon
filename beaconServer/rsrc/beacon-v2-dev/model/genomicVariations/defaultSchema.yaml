@@ -347,9 +347,9 @@ definitions:
         description: Reference to run (Run.runId)
         type: string
         example: SRR10903401
-      zigosity:
-        description: Ontology term for zigosity in which variant is present in the
-          sample from the Zigosity Ontology (GENO:0000391) , e.g "heterozygous" (GENO:0000135)
+      zygosity:
+        description: Ontology term for zygosity in which variant is present in the
+          sample from the Zygosity Ontology (GENO:0000391) , e.g "heterozygous" (GENO:0000135)
         $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/ontologyTerm.json
         examples:
           - id: GENO:0000135
