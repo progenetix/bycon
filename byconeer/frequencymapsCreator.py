@@ -108,9 +108,12 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
 
     for coll in coll_coll.find(id_query):
 
+        pre, code = re.split("[:-]", coll["id"])
+        db_key = byc["filter_definitions"][pre]["db_key"]
+
         coll_i += 1
 
-        bios_query = _make_child_terms_query(coll)
+        bios_query = { db_key: { '$in': coll["child_terms"] } }
         # print(bios_query)
 
         bios_no, cs_cursor = _cs_cursor_from_bios_query(bios_coll, cs_coll, bios_query)
@@ -143,7 +146,7 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
 
         if coll["code_matches"] > 0:
             if cs_no != coll["code_matches"]:
-                bios_query = _make_exact_query(coll)
+                bios_query = { db_key: coll["id"] }
                 bios_no, cs_cursor = _cs_cursor_from_bios_query(bios_coll, cs_coll, bios_query)
                 cs_no = len(list(cs_cursor))
                 if cs_no > 0:
@@ -167,43 +170,6 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
         if not byc["args"].test:
             fm_coll.update_one( { "id": coll["id"] }, { '$set': update_obj }, upsert=True )
 
-
-################################################################################
-
-def _make_exact_query(coll):
-
-    # TODO: have the correct field from prefs.
-
-    return { "$or": [
-            { "sampled_tissue.id": coll["id"] },
-            { "histological_diagnosis.id": coll["id"] },
-            { "icdo_topography.id": coll["id"] },
-            { "icdo_morphology.id": coll["id"] },
-            { "pathological_tnm_findings.id": coll["id"] },
-            { "pathological_stage.id": coll["id"] },
-            { "tumor_grade.id": coll["id"] },
-            { "cohorts.id": coll["id"] },
-            { "external_references.id": coll["id"] },
-            { "provenance.material.id": coll["id"] },
-
-        ] }
-
-################################################################################
-
-def _make_child_terms_query(coll):
-
-    return { "$or": [
-            { "sampled_tissue.id": { '$in': coll["child_terms"] } },
-            { "histological_diagnosis.id": { '$in': coll["child_terms"] } },
-            { "icdo_topography.id": { '$in': coll["child_terms"] } },
-            { "icdo_morphology.id": { '$in': coll["child_terms"] } },
-            { "pathological_tnm_findings.id": { '$in': coll["child_terms"] } },
-            { "pathological_stage.id": coll["id"] },
-            { "tumor_grade.id": coll["id"] },
-            { "cohorts.id": { '$in': coll["child_terms"] } },
-            { "external_references.id": { '$in': coll["child_terms"] } },
-            { "provenance.material.id": { '$in': coll["child_terms"] } }
-        ] }
 
 ################################################################################
 

@@ -133,6 +133,15 @@ properties:
           label: M1 Stage Finding
         - id: NCIT:C48720
           label: T1 Stage Finding
+  followupState:
+    $ref: OntologyClass.yaml#/properties
+    examples:
+      - id: pgx:FU0005
+        label : death from disease
+  followupTime:
+    type: string
+    examples:
+      - P23M
   diagnosticMarkers:
     type: array
     items:

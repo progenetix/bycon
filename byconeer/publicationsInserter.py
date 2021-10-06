@@ -15,7 +15,7 @@ sys.path.append( pkg_path )
 
 from beaconServer.lib import *
 
-from lib.publication_utils import jprint, read_annotation_table, create_progenetix_post, create_short_publication_label, get_empty_publication, retrieve_epmc_publications
+from lib.publication_utils import jprint, create_short_publication_label, get_empty_publication, get_ncit_tumor_types, retrieve_epmc_publications
 
 """
 * pubUpdater.py -t 1 -f "../rsrc/publications.txt"
@@ -81,9 +81,12 @@ def update_publications():
 
     # TODO: Use schema ...
 
+    up_count = 0
+
     with open(byc["args"].filepath, newline='') as csvfile:
 
         in_pubs = list(csv.DictReader(csvfile, delimiter="\t", quotechar='"'))
+
         print("=> {} publications will be looked up".format(len(in_pubs)))
 
         for pub in in_pubs:
@@ -130,6 +133,8 @@ def update_publications():
                 
                 n_p.update({"label": create_short_publication_label(n_p["authors"], n_p["title"], n_p["year"]) })
 
+                get_ncit_tumor_types(n_p, pub)
+
                 if p_k in progenetix_ids:
 
                     n_p["counts"].update({"progenetix" : 0})
@@ -144,42 +149,20 @@ def update_publications():
                                 sts.update( { h_d["id"]: h_d } )
                                 sts[ h_d["id"] ].update({"count": 1})
 
+                for c in n_p["counts"].keys():
+                    if isinstance(n_p["counts"][c], str):
+                        try:
+                            n_p["counts"].update({c: int(n_p["counts"][c])})
+                        except:
+                            pass
 
-
-                jprint(n_p)
-                    
-
-    exit()
-
-    # Connect to MongoDB and load publication collection
-    client = MongoClient()
-    cl = client['progenetix'].publications
-    ids = cl.distinct("id")
-
-    up_count = 0
-
-    # Update the database
-    for row in rows:
-
-        post = create_progenetix_post(row, byc)
-
-        if post:
-            
-            if post["id"] in ids:
-                if not byc["args"].update:
-                    print(post["id"], ": skipped - already in progenetix.publications")
-                    continue
+                if not byc["args"].test:
+                    entry = pub_coll.update_one({"id": n_p["id"] }, {"$set": n_p }, upsert=True )
+                    up_count += 1
+                    print(n_p["id"]+": inserting this into progenetix.publications")
                 else:
-                    print(post["id"], ": existed but overwritten since *update* in effect")
-
-            print(post["id"], ": inserting this into progenetix.publications")
-
-            if not byc["args"].test:
-                result = cl.update_one({"id": post["id"] }, {"$set": post }, upsert=True )
-                up_count += 1
-            else:
-                jprint(post)
-
+                    jprint(n_p)
+                    
     print("{} publications were inserted or updated".format(up_count))
 
 ##############################################################################

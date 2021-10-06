@@ -30,6 +30,9 @@ io_params:
     followup_months:
       db_key: info.followup_months
       type: string
+    followup_time:
+      db_key: info.followup_time
+      type: string
     geoprov_label:
       db_key: provenance.geo_location.properties.label
       type: string
@@ -137,6 +140,7 @@ io_params:
       type: string
 
 io_prefixes:
+
   biosample:
     sampled_tissue:
       type: string
@@ -166,18 +170,25 @@ io_prefixes:
         - geo:GPL
         - cellosaurus
         - arrayexpress
+    followup_state:
+      type: string
+      pre: pgxfus
     data_use_conditions:
       type: string
       pre: DUO
+
   individual:
-    # biocharacteristics:
-    #   - PATO
-    #   - NCBITaxon
+    genotypic_sex:
+      type: string
+      pre: PATO
     data_use_conditions:
-      - DUO
+      type: string
+      pre: DUO
+
   analysis:
     data_use_conditions:
-      - DUO
+      type: string
+      pre: DUO
 
   variantInSample: {}
   

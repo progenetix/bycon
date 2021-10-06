@@ -99,13 +99,13 @@ def execute_bycon_queries(ds_id, byc):
 
         prevars["pref_m"] = "biosamples.id"
         prevars["query"] = { "individual_id": { '$in': prefetch["individuals.id"]["target_values"] }  }
-        prefetch.update( { prevars["pref_m"]: _prefetch_data(prevars) } )
+        biosids_from_indq =  _prefetch_data(prevars)
 
         if "biosamples.id" in prefetch:
-            bsids = list( set( prefetch["biosamples.id"]["target_values"] ) & set( prefetch["biosamples.id"]["target_values"] ) )
+            bsids = list( set( biosids_from_indq["target_values"] ) & set( prefetch["biosamples.id"]["target_values"] ) )
             prefetch[ "biosamples.id" ].update( { "target_values": bsids, "target_count": len(bsids) } )
         else:
-            prefetch["biosamples.id"] = prefetch["biosamples.id"]
+            prefetch["biosamples.id"] = biosids_from_indq
 
     if "callsets" in exe_queries:
 

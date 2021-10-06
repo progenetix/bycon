@@ -1,0 +1,12 @@
+pgxfus-0001	followup	0	1
+pgxfus-0002	no followup status	1	2
+pgxfus-0003	recorded followup status	1	3
+pgxfus-0004	alive	2	4
+pgxfus-0005	alive with disease	3	5
+pgxfus-0006	alive with recurrent disease	4	6
+pgxfus-0007	alive with progressive disease	4	7
+pgxfus-0008	alive with metastatic disease	4	8
+pgxfus-0009	alive in complete remission	3	9
+pgxfus-0010	dead	2	10
+pgxfus-0011	death from disease	3	11
+pgxfus-0012	death from other causes	3	12

@@ -34,6 +34,7 @@ def export_datatable(byc):
                 line.append(str(v))
 
         for par, d in io_prefixes.items():
+
             if "string" in d["type"]:
                 if par in pgxdoc:
                     try:
