@@ -117,7 +117,7 @@ def update_publications():
                 if len(pub["_provenance_id"]) > 4:
                     geo_info = mongo_client["progenetix"]["geolocs"].find_one({"id": pub["_provenance_id"]}, {"_id": 0, "id": 0})
                     if geo_info is not None:
-                        n_p["provenance"].update({"geo_location":geo_info})
+                        n_p["provenance"].update({"geo_location":geo_info["geo_location"]})
 
                 sts = {}
 

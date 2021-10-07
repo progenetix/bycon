@@ -90,14 +90,5 @@ methods:
     - counts
     - authors
     - title
-  details:
-    - id
-    - label
-    - authors
-    - title
-    - journal
-    - abstract
-    - year
-    - counts
-    - provenance
-    - status
+  details: []
+
