@@ -2,7 +2,7 @@ pubmedid	counts.ccgh	counts.acgh	counts.wes	counts.wgs	counts.ngs	counts.genomes
 34103027	0	79	0	0	0	79	"Peining Li"	"peining.li@yale.edu"	"Department of Genetics, School of Medicine, Yale University, New Haven, Connecticut"	newhaven::unitedstates		NCIT:C3099::Hepatocellular Carcinoma::79		Michael Baudis
 34059130	0	0	5	113	118	118				newyorkcity::unitedstates		C3482::Metastatic Carcinoma::118		Sofia Pfund
 34285259	0	0	10	0	10	10				washingtondc::unitedstates		C4024::Esophageal Squamous Cell Carcinoma::10		Sofia Pfund
-34012790	0	0	41	0	41	41				shanghai:: china		C4917::Lung Small Cell Carcinoma::41		Sofia Pfund
+34012790	0	0	41	0	41	41				shanghai::china		C4917::Lung Small Cell Carcinoma::41		Sofia Pfund
 34203905	0	0	0	135	135	135				madrid::spain		C9290::Myeloid Neoplasm::135		Sofia Pfund
 34070898	0	36	43	0	43	79				bucharest::romania		C3171::Acute Myeloid Leukemia::79		Sofia Pfund
 33512416	0	0	21	0	21	21				nagoyashi::japan		C8936::B Lymphoblastic Leukemia/Lymphoma::21		Sofia Pfund
@@ -26,3 +26,4 @@ pubmedid	counts.ccgh	counts.acgh	counts.wes	counts.wgs	counts.ngs	counts.genomes
 30867899	0	0	29	0	29	29				portland::unitedstates		C3868::Gastrointestinal Stromal Tumor::29		Sofia Pfund
 34573430	0	0	0	7	7	7				kotabharu::malaysia	 	C2955::Colorectal Carcinoma::7		Michael Baudis
 28231327	0	116	0	0	0	116				kuwaitcity::kuwait		C2955::Colorectal Carcinoma::116		Upasana Maity
+34604048	0	0	122	0	122	122	Yayi He	yayi.he@tongji.edu.cn	"Department of Medical Oncology, Shanghai Pulmonary Hospital, Tongji University Medical School Cancer Institute, Tongji University School of Medicine"	shanghai::china		NCIT:C4917::Lung Small Cell Carcinoma::36;NCIT:C2926::Lung Non-Small Cell Carcinoma::86		Michael Baudis
