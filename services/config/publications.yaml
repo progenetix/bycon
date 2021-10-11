@@ -8,6 +8,13 @@ defaults:
   filters:
     - PMID
   filter_definitions:
+    pgxuse:
+      db_key: 'progenetix_use'
+      scopes:
+        publications:
+          default: 1
+      pattern: '^pgxuse\:(.+?)$'
+      remove_prefix: true  
     PMID:
       name: "NCBI PubMed"
       url: "https://www.ncbi.nlm.nih.gov/pubmed/"

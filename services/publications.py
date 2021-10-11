@@ -41,7 +41,7 @@ def publications():
     create_empty_service_response(byc)
 
     # data retrieval & response population
-    query, e = _create_filters_query( **byc )
+    query, e = _create_filters_query( byc )
     if len(e) > 1:
         response_add_error(byc, 422, e )
 
@@ -109,7 +109,7 @@ def publications():
 ################################################################################
 ################################################################################
 
-def _create_filters_query( **byc ):
+def _create_filters_query( byc ):
 
     query = { }
     error = ""
@@ -121,6 +121,8 @@ def _create_filters_query( **byc ):
         f_val = f["id"]
         pre_code = re.split('-|:', f_val)
         pre = pre_code[0]
+        dbk = byc[ "filter_definitions" ][ pre ][ "db_key" ]
+
         if count_pat.match( f_val ):
             pre, op, no = count_pat.match(f_val).group(1,2,3)
             dbk = byc[ "filter_definitions" ][ pre ][ "db_key" ]
@@ -140,8 +142,14 @@ def _create_filters_query( **byc ):
             for the selection of PMID labeled publications.
             podmd"""
             q_list.append( { "id": re.compile(r'^'+f_val ) } )
+        elif pre in byc[ "filter_definitions" ].keys():
+            # TODO: hacky method for pgxuse => redo
+            q_v = f_val
+            if byc[ "filter_definitions" ][ pre ][ "remove_prefix" ] is True:
+                q_v = pre_code[1]
+            q_list.append( { dbk: q_v } )
         else:
-            q_list.append( { "id": f_val } )            
+            q_list.append( { "id": f_val } )
 
     query = create_and_or_query_for_list('$and', q_list)
 

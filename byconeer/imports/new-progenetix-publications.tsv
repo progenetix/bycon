@@ -1,29 +1,37 @@
-pubmedid	counts.ccgh	counts.acgh	counts.wes	counts.wgs	counts.ngs	counts.genomes	contact.name	contact.email	contact.affiliation	_provenance_id	status	_sample_types	note	progenetix_curator
-34103027	0	79	0	0	0	79	"Peining Li"	"peining.li@yale.edu"	"Department of Genetics, School of Medicine, Yale University, New Haven, Connecticut"	newhaven::unitedstates		NCIT:C3099::Hepatocellular Carcinoma::79		Michael Baudis
-34059130	0	0	5	113	118	118				newyorkcity::unitedstates		C3482::Metastatic Carcinoma::118		Sofia Pfund
+pubmedid	counts.ccgh	counts.acgh	counts.wes	counts.wgs	counts.ngs	counts.genomes	contact.name	contact.email	contact.affiliation	_provenance_id	status	_sample_types	note	progenetix_use	progenetix_curator
+34103027	0	79	0	0	0	79	"Peining Li"	"peining.li@yale.edu"	"Department of Genetics, School of Medicine, Yale University, New Haven, Connecticut"	newhaven::unitedstates		NCIT:C3099::Hepatocellular Carcinoma::79			Michael Baudis
+34059130	0	0	5	113	118	118				newyorkcity::unitedstates		C3482::Metastatic Carcinoma::118			Sofia Pfund
 34285259	0	0	10	0	10	10				washingtondc::unitedstates		C4024::Esophageal Squamous Cell Carcinoma::10		Sofia Pfund
-34012790	0	0	41	0	41	41				shanghai::china		C4917::Lung Small Cell Carcinoma::41		Sofia Pfund
-34203905	0	0	0	135	135	135				madrid::spain		C9290::Myeloid Neoplasm::135		Sofia Pfund
-34070898	0	36	43	0	43	79				bucharest::romania		C3171::Acute Myeloid Leukemia::79		Sofia Pfund
-33512416	0	0	21	0	21	21				nagoyashi::japan		C8936::B Lymphoblastic Leukemia/Lymphoma::21		Sofia Pfund
-32929114	0	0	10	10	10	10				seoul::koreanrepublic		C5904::Salivary Duct Carcinoma::10		
-31439678	0	0	21	0	21	21				bethesda::unitedstates		C9294::Histiocytic and Dendritic Cell Neoplasm::21		Sofia Pfund
-31431620	0	0	16	3	19	19				lyon::france		C4038::Lung Carcinoid Tumor::19		Sofia Pfund
-31237044	0	0	18	0	18	18				indianapolis::unitedstates		C8851::Diffuse Large B-Cell Lymphoma::18		Sofia Pfund
-31123420	0	0	2	0	2	2				wenzhou::china		C3230::Meningioma::2		Sofia Pfund
-34285259	0	0	20	0	20	20				washingtondc::unitedstates		C4024::Esophageal Squamous Cell Carcinoma::20		Sofia Pfund
-32028173	0	0	0	26	26	26				rome::italy		C3771::Lobular Breast Carcinoma::26		Sofia Pfund
+34012790	0	0	41	0	41	41				shanghai::china		C4917::Lung Small Cell Carcinoma::41			Sofia Pfund
+34203905	0	0	0	135	135	135				madrid::spain		C9290::Myeloid Neoplasm::135			Sofia Pfund
+34070898	0	36	43	0	43	79				bucharest::romania		C3171::Acute Myeloid Leukemia::79			Sofia Pfund
+33512416	0	0	21	0	21	21				nagoyashi::japan		C8936::B Lymphoblastic Leukemia/Lymphoma::21			Sofia Pfund
+32929114	0	0	10	10	10	10				seoul::koreanrepublic		C5904::Salivary Duct Carcinoma::10			Sofia Pfund
+31439678	0	0	21	0	21	21				bethesda::unitedstates		C9294::Histiocytic and Dendritic Cell Neoplasm::21			Sofia Pfund
+31431620	0	0	16	3	19	19				lyon::france		C4038::Lung Carcinoid Tumor::19			Sofia Pfund
+31237044	0	0	18	0	18	18				indianapolis::unitedstates		C8851::Diffuse Large B-Cell Lymphoma::18			Sofia Pfund
+31123420	0	0	2	0	2	2				wenzhou::china		C3230::Meningioma::2			Sofia Pfund
+34285259	0	0	20	0	20	20				washingtondc::unitedstates		C4024::Esophageal Squamous Cell Carcinoma::20			Sofia Pfund
+32028173	0	0	0	26	26	26				rome::italy		C3771::Lobular Breast Carcinoma::26			Sofia Pfund
 31648986	0	190	0	0	0	190				rouen::france		C3208::Lymphoma::190		Sofia Pfund
-30916311	0	0	40	0	40	40				guangzhou::china		C3099::Hepatocellular Carcinoma::40		Sofia Pfund
-30675227	0	3	0	0	0	3				kualalumpur::malaysia		C3288::Oligodendroglioma::3		Sofia Pfund
-33767857	0	0	13	0	13	13				busan::koreanrepublic		C3268::Nervous System Neoplasm::13		Sofia Pfund
-33747936	0	0	25	0	25	25				xiangcheng::china		C8936::B Lymphoblastic Leukemia/Lymphoma::25		
-33168091	195	0	0	0	0	195				lyon::france		C94540::Anterior Pituitary Gland Endocrine Neoplasm::195		Sofia Pfund
-31130341	0	0	173	41	214	214				beijing::china		C3828::Combined Hepatocellular Carcinoma and Cholangiocarcinoma::214		Sofia Pfund
-30672146	0	0	10	10	20	20				beijing::china		C4824::Tongue Carcinoma::30		Sofia Pfund
-34307137	0	0	0	123	123	123				tianjin::china		C3411::Thymoma::97;C7997::Thymoma Type B3::15;C7569::Thymic Carcinoma::11		Sofia Pfund
-34205964	0	0	17	0	17	17				munich::germany		C156781::Biliary Tract Carcinoma::11;C95505::Pancreatic Intraductal Neoplasm::6		Sofia Pfund
-30867899	0	0	29	0	29	29				portland::unitedstates		C3868::Gastrointestinal Stromal Tumor::29		Sofia Pfund
-34573430	0	0	0	7	7	7				kotabharu::malaysia	 	C2955::Colorectal Carcinoma::7		Michael Baudis
-28231327	0	116	0	0	0	116				kuwaitcity::kuwait		C2955::Colorectal Carcinoma::116		Upasana Maity
-34604048	0	0	122	0	122	122	Yayi He	yayi.he@tongji.edu.cn	"Department of Medical Oncology, Shanghai Pulmonary Hospital, Tongji University Medical School Cancer Institute, Tongji University School of Medicine"	shanghai::china		NCIT:C4917::Lung Small Cell Carcinoma::36;NCIT:C2926::Lung Non-Small Cell Carcinoma::86		Michael Baudis
+30916311	0	0	40	0	40	40				guangzhou::china		C3099::Hepatocellular Carcinoma::40			Sofia Pfund
+30675227	0	3	0	0	0	3				kualalumpur::malaysia		C3288::Oligodendroglioma::3			Sofia Pfund
+33767857	0	0	13	0	13	13				busan::koreanrepublic		C3268::Nervous System Neoplasm::13			Sofia Pfund
+33747936	0	0	25	0	25	25				xiangcheng::china		C8936::B Lymphoblastic Leukemia/Lymphoma::25			Sofia Pfund
+33168091	195	0	0	0	0	195				lyon::france		C94540::Anterior Pituitary Gland Endocrine Neoplasm::195			Sofia Pfund
+31130341	0	0	173	41	214	214				beijing::china		C3828::Combined Hepatocellular Carcinoma and Cholangiocarcinoma::214			Sofia Pfund
+30672146	0	0	10	10	20	20				beijing::china		C4824::Tongue Carcinoma::30			Sofia Pfund
+34307137	0	0	0	123	123	123				tianjin::china		C3411::Thymoma::97;C7997::Thymoma Type B3::15;C7569::Thymic Carcinoma::11			Sofia Pfund
+34205964	0	0	17	0	17	17				munich::germany		C156781::Biliary Tract Carcinoma::11;C95505::Pancreatic Intraductal Neoplasm::6			Sofia Pfund
+30867899	0	0	29	0	29	29				portland::unitedstates		C3868::Gastrointestinal Stromal Tumor::29			Sofia Pfund
+34573430	0	0	0	7	7	7				kotabharu::malaysia	 	C2955::Colorectal Carcinoma::7			Michael Baudis
+28231327	0	116	0	0	0	116				kuwaitcity::kuwait		C2955::Colorectal Carcinoma::116			Upasana Maity
+34604048	0	0	122	0	122	122	Yayi He	yayi.he@tongji.edu.cn	"Department of Medical Oncology, Shanghai Pulmonary Hospital, Tongji University Medical School Cancer Institute, Tongji University School of Medicine"	shanghai::china		NCIT:C4917::Lung Small Cell Carcinoma::36;NCIT:C2926::Lung Non-Small Cell Carcinoma::86			Michael Baudis
+33692831	0	0	0	0	0	0				tiruchirappalli::india	excluded [bioinformatics] 			yes	Michael Baudis
+33406109	0	0	0	0	0	0				zurich::switzerland	excluded [text mining] 			yes	Michael Baudis
+33637676	0	0	0	0	0	0				seoul::koreanrepublic	excluded [bioinformatics] 			yes	Michael Baudis
+33262783	0	0	0	0	0	0				beijing::china	excluded [bioinformatics] 			yes	Michael Baudis
+33020483	0	26	0	0	0	26	Melanie Werner-Klein	melanie.werner-klein@ukr.de	Experimental Medicine and Therapy Research, University of Regensburg	regensburg::germany	 	NCIT:C4017::Ductal Breast Carcinoma::26 		yes	Michael Baudis
+32523653	0	100	0	0	0	100	Nikolai Litviakov	nvlitv72@yandex.ru	Laboratory of Oncovirology, Cancer Research Institute Tomsk NRMC	tomsk::russia		NCIT:C4017::Ductal Breast Carcinoma::100		yes	Michael Baudis
+32512721	0	0	0	0	0	0				regensburg::germany	excluded [bioinformatics] 			yes	Michael Baudis
+34063545	0	43	0	0	0	43	Caius Solovan		"Research Center for the Morphologic Study of the Skin, Department of Dermatology and Venereology, "Victor Babeș" University of Medicine and Pharmacy, Eftimie Murgu Sq. No. 2, 300041 Timișoara"	timisoara::romania		NCIT:C3246::Mycosis Fungoides::22;NCIT:C171101::Cutaneous Lymphoma::21		yes	Michael Baudis

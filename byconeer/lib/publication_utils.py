@@ -59,6 +59,9 @@ def create_short_publication_label(author, title, year):
 
 def get_ncit_tumor_types(n_p, pub):
 
+    if not "::" in pub["_sample_types"]:
+        return n_p
+
     s_t_s = pub["_sample_types"].split(';')
 
     s_t_l = []
