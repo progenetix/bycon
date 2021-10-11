@@ -145,8 +145,11 @@ def _create_filters_query( byc ):
         elif pre in byc[ "filter_definitions" ].keys():
             # TODO: hacky method for pgxuse => redo
             q_v = f_val
-            if byc[ "filter_definitions" ][ pre ][ "remove_prefix" ] is True:
-                q_v = pre_code[1]
+            try:
+                if byc[ "filter_definitions" ][ pre ][ "remove_prefix" ] is True:
+                    q_v = pre_code[1]
+            except:
+                pass
             q_list.append( { dbk: q_v } )
         else:
             q_list.append( { "id": f_val } )

@@ -31,6 +31,7 @@ def _get_args(byc):
     parser.add_argument("-f", "--filepath", help="Path of the .tsv file containing the annotations on the publications.", type=str)
     parser.add_argument("-t", "--test", help="test setting")
     parser.add_argument('-u', '--update', help='overwrite existing publications')
+    parser.add_argument('-x', '--pgxuse', help='add entry for progenetix_use')    
 
     byc.update({"args": parser.parse_args() })
 
@@ -164,6 +165,11 @@ def update_publications():
                     jprint(n_p)
                     
     print("{} publications were inserted or updated".format(up_count))
+
+##############################################################################
+##############################################################################
+
+
 
 ##############################################################################
 ##############################################################################

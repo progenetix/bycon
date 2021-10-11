@@ -1,0 +1,89 @@
+pubmedid	counts.ccgh	counts.acgh	counts.wes	counts.wgs	counts.ngs	counts.genomes	contact.name	contact.email	contact.affiliation	_provenance_id	status	_sample_types	note	progenetix_use	progenetix_curator
+33692831	0	0	0	0	0	0				tiruchirappalli::india	excluded [bioinformatics] 			yes	Michael Baudis
+33406109	0	0	0	0	0	0				zurich::switzerland	excluded [text mining] 			yes	Michael Baudis
+33637676	0	0	0	0	0	0				seoul::koreanrepublic	excluded [bioinformatics] 			yes	Michael Baudis
+33262783	0	0	0	0	0	0				beijing::china	excluded [bioinformatics] 			yes	Michael Baudis
+32512721	0	0	0	0	0	0				regensburg::germany	excluded [bioinformatics] 			yes	Michael Baudis
+34272855	0	0	0	0	0	0	Michael Baudis	contact@progenetix.org	University of Zurich and Swiss Institute of Bioinformatics	zurich::switzerland	excluded [Progenetix use search result] 			yes	Michael Baudis
+34054918	0	0	0	0	0	0	Michael Baudis	contact@progenetix.org	University of Zurich and Swiss Institute of Bioinformatics	zurich::switzerland	excluded [Progenetix use search result] 			yes	Michael Baudis
+32239182	0	0	0	0	0	0	Michael Baudis	contact@progenetix.org	University of Zurich and Swiss Institute of Bioinformatics	zurich::switzerland	excluded [Progenetix use search result] 			yes	Michael Baudis
+32111235	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+31897174	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+31250881	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+30886647	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+30858407	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+30796006	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+30659659	0	0	0	0	0	0				timisoara::romania	excluded [Progenetix use search result] 			yes	Michael Baudis
+30290038	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+29657279	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+29492108	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+28835717	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+28728164	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+28522871	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+28110411	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+27974799	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+27308428	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+27072875	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+26992233	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+26615188	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+26193259	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+25883951	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+25847947	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+25716227	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+25502777	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+25458841	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+25369839	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+25344860	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+25043044	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+24747001	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+24316579	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+24278162	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+24225322	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+24148783	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+24147022	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+24065821	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+23857251	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+23406336	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+23205091	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+22754537	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+22629346	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+22622037	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+22585707	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+22228017	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+21903633	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+21793975	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+21606880	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+21548942	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+21478459	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+21460242	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+21371302	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+19616622	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+20233444	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+19692554	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+19402918	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+16790693	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+20228784	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+20093386	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+20146264	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+20170400	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+20354523	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+20108112	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+20087350	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+20049717	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+19455256	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+18562223	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+18586749	0	0	0	0	0	0				gainesville::unitedstates	excluded [Progenetix use search result] 			yes	Michael Baudis
+18088415	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+16817944	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+16042799	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+15934046	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+15910681	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+19144156	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+15035667	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+19087340	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+19528087	0	0	0	0	0	0				gainesville::unitedstates	excluded [Progenetix use search result] 			yes	Michael Baudis
+19383377	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+16682279	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+15993270	0	0	0	0	0	0					excluded [Progenetix use search result] 			yes	Michael Baudis
+25428357	0	0	0	0	0	0	Michael Baudis	contact@progenetix.org	University of Zurich and Swiss Institute of Bioinformatics	zurich::switzerland	excluded [Progenetix use search result] 			yes	Michael Baudis
+24225322	0	0	0	0	0	0	Michael Baudis	contact@progenetix.org	University of Zurich and Swiss Institute of Bioinformatics	zurich::switzerland	excluded [Progenetix use search result] 			yes	Michael Baudis
