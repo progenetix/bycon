@@ -2,7 +2,7 @@ openapi: 3.0.2
 servers: []
 info:
   version: 2.0.0-draft.4
-  title: GA4GH Beacon API Specification - Runs endpoints
+  title: GA4GH Beacon API Specification - Runs Endpoints
   description: TBD
   contact:
     email: beacon@ga4gh.org

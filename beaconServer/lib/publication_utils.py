@@ -21,6 +21,8 @@ def jprint(obj):
 def retrieve_epmc_publications(pmid):
 
     informations = { "pmid" : "" } # dirty, to avoind another test
+
+    pmid = re.sub(" ", "", pmid)
     
     parameters = {
         "query": "ext_id:" + pmid,
@@ -29,7 +31,7 @@ def retrieve_epmc_publications(pmid):
     }
 
     response = requests.get("https://www.ebi.ac.uk/europepmc/webservices/rest/search", params = parameters)
-    
+
     if response.status_code == 200:
         results = response.json()["resultList"]["result"]
         if len(results) > 0:

@@ -161,7 +161,7 @@ paths:
     post:
       description: Get the genomic variants list from one biosample, identified by
         its (unique) 'id'
-      operationId: potOneBiosampleGenomicVariants
+      operationId: postOneBiosampleGenomicVariants
       tags:
         - POST Endpoints
       requestBody:

@@ -93,7 +93,7 @@ def update_publications():
             if not "pubmedid" in pub:
                 continue
             if "#" in pub:
-                if len(pub["#"]) > 0:
+                if "#" in pub["#"]:
                     print(pub["pubmedid"], ": skipped due to skip mark")
                     continue
 

@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-id: var123
+variantInternalId: var123
 variantType: SNP
 referenceBases: G
 alternateBases: A

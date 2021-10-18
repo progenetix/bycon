@@ -1,4 +1,4 @@
-id: https://progenetix.org/services/schemas/publication
+id: https://progenetix.org/services/schemas/Publication
 name: publication
 description: >-
   Schema for annoptated publications in Progenetix.
@@ -21,7 +21,7 @@ classes:
     attributes:
       _id:
         description: >-
-          internal identifier; not part of the schema per se but included for
+          internal identifier; not part of the schema _per se_ but included for
           convenience
       pubmedid:
         slot_uri: schema:identifier    
@@ -72,7 +72,8 @@ classes:
       email:
         description: email
       affiliation:
-        description: affiliation - usually institution - of the contact      
+        description: >-
+          affiliation - usually institution - of the contact      
     slots:
       - name
 

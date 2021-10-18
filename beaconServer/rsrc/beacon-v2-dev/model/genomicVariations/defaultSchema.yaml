@@ -4,20 +4,20 @@ $comment: 'version: ga4gh-beacon-variant-v2.0.0-draft.4'
 description: Schema for a genomic variant entry.
 type: object
 required:
-  - id
+  - variantInternalId
   - variantType
   - alternateBases
   - position
 properties:
-  id:
-    description: "The internal id of the variant. This is not supposed to be used\
-      \ for a public id, but rather as the 'primary key/identifier' of that variant\
-      \ inside a given Beacon instance. Therefore, e,g, `'id': 'var1'` could refer\
-      \ to completely unrelated variants in different resources. The public, standard,\
-      \ popular identifiers or the GA4GH Variant Representation Id (VRSid) MUST be\
-      \ returned in the 'identifiers' section. A Beacon instance can, of course, use\
-      \ the VRSid as their own internal id, in such case, the VRSid would be repeated\
-      \ in both places."
+  variantInternalId:
+    description: Reference to the variant ID (internal ID). This is no a public Id,
+      but the 'primary key/identifier' of that variant inside a given Beacon instance.
+      Therefore, different Beacon instances could have a variantInternalId = 1 and
+      they could refer to completely unrelated variants. The public, standard, popular
+      identifiers or the GA4GH Variant Representation Id (VRSid) MUST be returned
+      in the  'identifiers' section. A Beacon instance can, of course, use the VRSid
+      as their own internal id, in such case, the VRSid would be repeated in both
+      places.
     type: string
   variantType:
     description: "The `variantType` declares the nature of the variation in relation\
@@ -347,9 +347,9 @@ definitions:
         description: Reference to run (Run.runId)
         type: string
         example: SRR10903401
-      zygosity:
-        description: Ontology term for zygosity in which variant is present in the
-          sample from the Zygosity Ontology (GENO:0000391) , e.g "heterozygous" (GENO:0000135)
+      zigosity:
+        description: Ontology term for zigosity in which variant is present in the
+          sample from the Zigosity Ontology (GENO:0000391) , e.g "heterozygous" (GENO:0000135)
         $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/ontologyTerm.json
         examples:
           - id: GENO:0000135
