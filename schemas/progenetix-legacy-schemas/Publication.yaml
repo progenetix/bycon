@@ -1,5 +1,5 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/Publication/v2021-04-13
+"$id": https://progenetix.org/services/schemas/Publication/v2021-10-13
 title: Publication
 
 meta:
@@ -50,7 +50,7 @@ properties:
     examples:
       - "Proc. Natl. Acad. Sci. U.S.A. 94(26), 1997"
 
-  year:
+  pubYear:
     type: string
     examples:
       - "2021"
@@ -60,7 +60,7 @@ properties:
 
   label:
     description: >
-      An optional informative shortened concatenation of authors / year / title, to be used for labels etc.
+      An optional informative shortened concatenation of authors / pubYear / title, to be used for labels etc.
     type: string
     examples:
       - "Peralta R, Baudis M, Vazquez G, Juarez S, Ortiz R, Decanini et al. (2010): Increased expression of cellular retinol-binding protein 1 in laryngeal squamous cell carcinoma."
@@ -99,6 +99,9 @@ properties:
 
   note:
     type: string
+
+  contact:
+    $ref: definitions/Contact/properties
 
   provenance:
     $ref: Provenance.yaml#/properties

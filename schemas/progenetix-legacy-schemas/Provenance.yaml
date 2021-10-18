@@ -33,5 +33,5 @@ properties:
         label: oligonucleotide DNA microarray
       - id: EFO:0010937
         label: comparative genomic hybridization (CGH)
-  geo:
+  geo_location:
     $ref: GeoLocation.yaml#/properties

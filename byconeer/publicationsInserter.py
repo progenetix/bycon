@@ -15,8 +15,6 @@ sys.path.append( pkg_path )
 
 from beaconServer.lib import *
 
-from lib.publication_utils import jprint, create_short_publication_label, get_empty_publication, get_ncit_tumor_types, retrieve_epmc_publications
-
 """
 * pubUpdater.py -t 1 -f "../rsrc/publications.txt"
 """
@@ -91,6 +89,14 @@ def update_publications():
         print("=> {} publications will be looked up".format(len(in_pubs)))
 
         for pub in in_pubs:
+
+            if not "pubmedid" in pub:
+                continue
+            if "#" in pub:
+                if len(pub["#"]) > 0:
+                    print(pub["pubmedid"], ": skipped due to skip mark")
+                    continue
+
             include = False
             if len(pub["pubmedid"]) > 5:
                 pmid = pub["pubmedid"]
@@ -107,48 +113,37 @@ def update_publications():
                         n_p = mongo_client["progenetix"]["publications"].find_one({"id": p_k })
                         print(p_k, ": existed but overwritten since *update* in effect")
                 else:
-                    n_p = get_empty_publication()
+                    n_p = get_empty_publication(byc)
                     n_p.update({"id":p_k})
 
                 for k, v in pub.items():
-                    if not k.startswith("_"):
-                        # TODO: create dotted
-                        assign_nested_value(n_p, k, v)
+                    if k:
+                        if k[0].isalpha():
+                            # TODO: create dotted
+                            assign_nested_value(n_p, k, v)
 
-                if len(pub["_provenance_id"]) > 4:
-                    geo_info = mongo_client["progenetix"]["geolocs"].find_one({"id": pub["_provenance_id"]}, {"_id": 0, "id": 0})
-                    if geo_info is not None:
-                        n_p["provenance"].update({"geo_location":geo_info["geo_location"]})
+                try:
+                    if len(pub["#provenance_id"]) > 4:
+                        geo_info = mongo_client["progenetix"]["geolocs"].find_one({"id": pub["#provenance_id"]}, {"_id": 0, "id": 0})
+                        if geo_info is not None:
+                            n_p["provenance"].update({"geo_location":geo_info["geo_location"]})
+                except KeyError:
+                    pass
 
-                sts = {}
-
-                pubmed_data = retrieve_epmc_publications(pmid)
-
-                if pubmed_data is not None:
-
-                    n_p.update({"abstract": re.sub(r'<[^\>]+?>', "", pubmed_data["abstractText"])})
-                    n_p.update({"authors":pubmed_data["authorString"]})
-                    n_p.update({"journal":pubmed_data["journalInfo"]["journal"]["medlineAbbreviation"]})
-                    n_p.update({"title":re.sub(r'<[^\>]+?>', "", pubmed_data["title"])})
-                    n_p.update({"year":pubmed_data["pubYear"]})
-                
-                n_p.update({"label": create_short_publication_label(n_p["authors"], n_p["title"], n_p["year"]) })
-
+                epmc = retrieve_epmc_publications(pmid)
+                update_from_epmc_publication(n_p, epmc)            
+                create_short_publication_label(n_p)
                 get_ncit_tumor_types(n_p, pub)
 
                 if p_k in progenetix_ids:
 
-                    n_p["counts"].update({"progenetix" : 0})
+                    n_p["counts"].update({ "progenetix" : 0 })
+                    n_p["counts"].update({ "arraymap" : 0 })
 
                     for s in bios_coll.find({ "external_references.id" : p_k }):
                         n_p["counts"]["progenetix"] += 1
-                        h_d_id = s["histological_diagnosis"]
-                        if "NCIT:C" in h_d_id["id"]:
-                            if h_d in sts.keys():
-                                sts[ h_d["id"] ][ "count" ] += 1
-                            else:
-                                sts.update( { h_d["id"]: h_d } )
-                                sts[ h_d["id"] ].update({"count": 1})
+                    for s in bios_coll.find({ "cohorts.id" : "pgxcohort-arraymap" }):
+                        n_p["counts"]["arraymap"] += 1
 
                 for c in n_p["counts"].keys():
                     if isinstance(n_p["counts"][c], str):
@@ -156,6 +151,7 @@ def update_publications():
                             n_p["counts"].update({c: int(n_p["counts"][c])})
                         except:
                             pass
+                n_p["counts"]["ngs"] = n_p["counts"]["wes"] + n_p["counts"]["wgs"]
 
                 if not byc["args"].test:
                     entry = pub_coll.update_one({"id": n_p["id"] }, {"$set": n_p }, upsert=True )

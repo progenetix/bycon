@@ -1,0 +1,249 @@
+{
+   "$defs": {
+      "Contact": {
+         "additionalProperties": false,
+         "description": "",
+         "properties": {
+            "affiliation": {
+               "description": "affiliation - usually institution - of the contact",
+               "type": "string"
+            },
+            "email": {
+               "description": "email",
+               "type": "string"
+            },
+            "name": {
+               "description": "human readable name examples: * \"Rasd-Coduresa Diziet Embless Sma da' Marenhide\" * Ion Tichy",
+               "type": "string"
+            }
+         },
+         "required": [],
+         "title": "Contact",
+         "type": "object"
+      },
+      "GeoJSONgeometry": {
+         "additionalProperties": false,
+         "description": "",
+         "properties": {
+            "coordinates": {
+               "items": {
+                  "type": "number"
+               },
+               "type": "array"
+            },
+            "type": {
+               "type": "string"
+            }
+         },
+         "required": [],
+         "title": "GeoJSONgeometry",
+         "type": "object"
+      },
+      "GeoJSONproperties": {
+         "additionalProperties": false,
+         "description": "",
+         "properties": {
+            "ISO3166alpha3": {
+               "type": "string"
+            },
+            "city": {
+               "type": "string"
+            },
+            "continent": {
+               "type": "string"
+            },
+            "country": {
+               "type": "string"
+            },
+            "label": {
+               "description": "An informative text which e.g. can serve to indicate the meaning of id values but should not be used as identifier.",
+               "type": "string"
+            },
+            "latitude": {
+               "description": "Geographic latitude of the location.",
+               "type": "number"
+            },
+            "longitude": {
+               "description": "Geographic longitude of the location.",
+               "type": "number"
+            },
+            "precision": {
+               "type": "string"
+            }
+         },
+         "required": [],
+         "title": "GeoJSONproperties",
+         "type": "object"
+      },
+      "GeoLocation": {
+         "additionalProperties": false,
+         "description": "",
+         "properties": {
+            "geometry": {
+               "$ref": "#/$defs/GeoJSONgeometry"
+            },
+            "properties": {
+               "$ref": "#/$defs/GeoJSONproperties"
+            },
+            "type": {
+               "type": "string"
+            }
+         },
+         "required": [],
+         "title": "GeoLocation",
+         "type": "object"
+      },
+      "Provenance": {
+         "additionalProperties": false,
+         "description": "",
+         "properties": {
+            "geo_location": {
+               "$ref": "#/$defs/GeoLocation"
+            }
+         },
+         "required": [],
+         "title": "Provenance",
+         "type": "object"
+      },
+      "Publication": {
+         "additionalProperties": false,
+         "description": "A Publication represents basic information about a scientific article used in the Progenetix resource to indicate and annotate sources for genomic screening experiments.",
+         "properties": {
+            "_id": {
+               "description": "internal identifier; not part of the schema per se but included for convenience",
+               "type": "string"
+            },
+            "abstract": {
+               "type": "string"
+            },
+            "authors": {
+               "description": "Author names, as usually represented in article citations (e.g. comma-concatenated).",
+               "type": "string"
+            },
+            "contact": {
+               "$ref": "#/$defs/Contact"
+            },
+            "counts": {
+               "$ref": "#/$defs/TechnologyCounts"
+            },
+            "id": {
+               "type": "string"
+            },
+            "info": {
+               "type": "string"
+            },
+            "journal": {
+               "description": "Journal name, as usually represented in article citations.",
+               "type": "string"
+            },
+            "label": {
+               "description": "An informative text which e.g. can serve to indicate the meaning of id values but should not be used as identifier.",
+               "type": "string"
+            },
+            "note": {
+               "type": "string"
+            },
+            "pmcid": {
+               "type": "string"
+            },
+            "progenetix_curator": {
+               "type": "string"
+            },
+            "progenetix_use": {
+               "type": "string"
+            },
+            "provenance": {
+               "type": "string"
+            },
+            "pubYear": {
+               "type": "string"
+            },
+            "pubmedid": {
+               "type": "string"
+            },
+            "sample_types": {
+               "items": {
+                  "$ref": "#/$defs/SampleTypeCount"
+               },
+               "type": "array"
+            },
+            "status": {
+               "description": "The status label is used to * disambiguate between Progenetix collection publications and \"excluded\" ones (i.e. not containing original genotyping data * add some information about reasons for the exclusion, e.g. for later access to currently out off scope articles",
+               "type": "string"
+            },
+            "title": {
+               "type": "string"
+            },
+            "updated": {
+               "type": "string"
+            }
+         },
+         "required": [
+            "id"
+         ],
+         "title": "Publication",
+         "type": "object"
+      },
+      "SampleTypeCount": {
+         "additionalProperties": false,
+         "description": "",
+         "properties": {
+            "count": {
+               "type": "integer"
+            },
+            "id": {
+               "type": "string"
+            },
+            "label": {
+               "description": "An informative text which e.g. can serve to indicate the meaning of id values but should not be used as identifier.",
+               "type": "string"
+            }
+         },
+         "required": [
+            "id"
+         ],
+         "title": "SampleTypeCount",
+         "type": "object"
+      },
+      "TechnologyCounts": {
+         "additionalProperties": false,
+         "description": "",
+         "properties": {
+            "acgh": {
+               "type": "integer"
+            },
+            "arraymap": {
+               "type": "integer"
+            },
+            "ccgh": {
+               "type": "integer"
+            },
+            "genomes": {
+               "type": "integer"
+            },
+            "ngs": {
+               "type": "integer"
+            },
+            "progenetix": {
+               "type": "integer"
+            },
+            "wes": {
+               "type": "integer"
+            },
+            "wgs": {
+               "type": "integer"
+            }
+         },
+         "required": [],
+         "title": "TechnologyCounts",
+         "type": "object"
+      }
+   },
+   "$id": "https://progenetix.org/services/schemas/publication",
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "additionalProperties": true,
+   "properties": {},
+   "title": "publication",
+   "type": "object"
+}
+

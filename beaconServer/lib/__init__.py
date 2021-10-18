@@ -12,6 +12,7 @@ from handover_generation import *
 from interval_utils import *
 from parse_filters import *
 from parse_variants import *
+from publication_utils import *
 from query_execution import *
 from query_generation import *
 from read_specs import *

@@ -12,21 +12,6 @@ schema_path = path.join( pkg_path, "schemas" )
 
 ################################################################################
 
-# def parse_beacon_schema(byc):
-
-#     # s_f_p = get_schema_file_path("beacon", byc)
-#     # s_path = path.join( s_f_p, "beacon.yaml" )
-#     # with open( s_path ) as bs:
-
-#     #     byc.update({ "beacon": yaml.load( bs , Loader=yaml.FullLoader) })
-
-#     # beacon_get_base_paths(byc)
-#     beacon_get_endpoint_base_paths(byc)
-
-#     return byc
-
-################################################################################
-
 def beacon_get_endpoint_base_paths(byc):
 
     try:

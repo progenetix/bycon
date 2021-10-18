@@ -90,7 +90,7 @@ def publications_refresher():
         sts = {}
         progenetix_count = 0
 
-        pl = create_short_publication_label(p["authors"], p["title"], p["year"])
+        pl = create_short_publication_label(p["authors"], p["title"], p["pub_year"])
 
         for s in bios_coll.find({ "external_references.id" : p["id"] }):
             progenetix_count += 1

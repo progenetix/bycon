@@ -95,34 +95,40 @@ def create_table_header(io_params, io_prefixes):
 
 def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
 
+    if v is None:
+        return parent
+
     ps = dotted_key.split('.')
 
     if len(ps) == 1:
         if "array" in parameter_type:
             parent.update({ps[0]: [ v ]})
         else:
-            parent.update({ps[0]: v })
+            if len(v) > 0:
+                parent.update({ps[0]: v })
     elif len(ps) == 2:
         if "array" in parameter_type:
             parent[ ps[0] ].update({ps[1]: [ v ]})
         else:
-            parent[ ps[0] ].update({ps[1]: v })
+            if len(v) > 0:
+                parent[ ps[0] ].update({ps[1]: v })
     elif len(ps) == 3:
         if "array" in parameter_type:
             parent[ ps[0] ][ ps[1] ].update({ps[2]: [ v ]})
         else:
-            parent[ ps[0] ][ ps[1] ].update({ps[2]: v })
+            if len(v) > 0:
+                parent[ ps[0] ][ ps[1] ].update({ps[2]: v })
     elif len(ps) == 4:
         if "array" in parameter_type:
             parent[ ps[0] ][ ps[1] ][ ps[2] ].update({ps[3]: [ v ]})
         else:
-            parent[ ps[0] ][ ps[1] ][ ps[2] ].update({ps[3]: v })
+            if len(v) > 0:
+                parent[ ps[0] ][ ps[1] ][ ps[2] ].update({ps[3]: v })
     elif len(ps) > 4:
         print("¡¡¡ Parameter key "+dotted_key+" nested too deeply (>4) !!!")
         return '_too_deep_'
 
     return parent
-
 
 ################################################################################
 

@@ -18,8 +18,6 @@ meta:
 description: >
   The `OntologyClass` object is the main wrapper for identifiers, used for well-formed CURIE representations of ontology classes for biological or technical concepts and knowledge resources, as well as for "private" identifiers such as internal classifications. 
 type: object
-required:
-    - id
 properties:
   id:
     type: string
@@ -34,11 +32,6 @@ properties:
     examples:
       - neoplastic sample
       - Adenocarcinoma, NOS
-  description:
-    description: >
-      An optional text providing convenience information about the term or the
-      context of its use. This is a "non-standard" extension of the minimal
-      OntologyClass schema. 
-    type: string
-    examples:
-      - adenocarcinoma sample from right colonic flexure
+required:
+    - id
+additionalProperties: true
