@@ -6,3 +6,14 @@ rsrc/remnants
 remnants
 *~lock*
 *.ods#
+*/ncbi-geo-soft-files/GSE*
+byconeer/imports/ncbi-geo-soft-files/GSE11275/GSM232080.txt
+byconeer/imports/ncbi-geo-soft-files/GSE11275/GSM232082.txt
+byconeer/imports/ncbi-geo-soft-files/GSE11275/GSM232087.txt
+byconeer/imports/ncbi-geo-soft-files/GSE11275/GSM232088.txt
+byconeer/imports/ncbi-geo-soft-files/GSE9193/GSM232081.txt
+byconeer/imports/ncbi-geo-soft-files/GSE9193/GSM232083.txt
+byconeer/imports/ncbi-geo-soft-files/GSE9193/GSM232084.txt
+byconeer/imports/ncbi-geo-soft-files/GSE9193/GSM232085.txt
+byconeer/imports/ncbi-geo-soft-files/GSE9193/GSM232086.txt
+byconeer/imports/ncbi-geo-soft-files/GSE9193/GSM232089.txt

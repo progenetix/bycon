@@ -160,34 +160,21 @@ def _process_dataset(ds_id, pub_labels, byc):
         #     update_obj.update( { "pathological_tnm_findings": s["pathological_tnm_findings"] } )
         # else:    
         # TODO: check existing content first  
-        update_key = "pathological_tnm_findings"
         if "info" in s:
-            if "tnm" in s["info"]:
-                if not isinstance(s["info"]["tnm"], str):
-                    continue
-                update_obj.update( { update_key: [] } )
-                for c_p in byc["these_prefs"][update_key]["class_patterns"]:
-                    if re.match(r'{0}'.format(c_p["pattern"]), s["info"]["tnm"], re.IGNORECASE):
-                        update_obj[update_key].append({
-                            "id": c_p["id"],
-                            "label": c_p["label"]
-                        })
-                        counts[update_key] += 1
 
-        update_key = "pathological_stage"
-        if "info" in s:
+            update_key = "pathological_tnm_findings"
+            if "tnm" in s["info"]:
+                t_s = remap_from_pattern(update_key, s["info"]["tnm"], byc)
+                if t_s:
+                    update_obj.update({ update_key: t_s })
+                    counts[update_key] += 1
+
+            update_key = "pathological_stage"
             if "tumor_stage" in s["info"]:
-                if not isinstance(s["info"]["tumor_stage"], str):
-                    continue
-                for c_p in byc["these_prefs"][update_key]["class_patterns"]:
-                    if re.match(r'{0}'.format(c_p["pattern"]), s["info"]["tumor_stage"], re.IGNORECASE):
-                        update_obj.update({
-                            update_key: {
-                                "id": c_p["id"],
-                                "label": c_p["label"]
-                            }
-                        })
-                        counts[update_key] += 1
+                t_s = remap_from_pattern(update_key, s["info"]["tumor_stage"], byc)
+                if t_s:
+                    update_obj.update({ update_key: t_s })
+                    counts[update_key] += 1
 
         ####################################################################
 

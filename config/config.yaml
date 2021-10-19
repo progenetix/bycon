@@ -8,12 +8,18 @@ paths:
     - Library
     - WebServer
     - Documents
+
   web_temp_dir_abs:
     - /
     - Library
     - WebServer
     - Documents
     - tmp
+
+  geosoft_file_root:
+    - byconeer
+    - imports
+    - ncbi-geo-soft-files
 
 schema_paths:
   - - schemas
