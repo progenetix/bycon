@@ -1,0 +1,14 @@
+followup
+	no followup status
+	recorded followup status
+		alive (follow-up status)
+			alive with disease
+				alive in partial remission
+				alive with stable disease
+				alive with recurrent disease
+				alive with progressive disease
+				alive with metastatic disease
+			alive in complete remission
+		dead (follow-up status)
+			death from disease
+			death from other causes

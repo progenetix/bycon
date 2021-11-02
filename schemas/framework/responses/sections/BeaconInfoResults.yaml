@@ -1,6 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/BeaconInfoResults/v2021-07-05
-title: BeaconInfoResults
+$id: https://progenetix.org/services/schemas/beaconInfoResults/v2021-10-26
+title: beaconInfoResults
 description: >-
   Metadata describing a Beacon instance.\n"
 type: object

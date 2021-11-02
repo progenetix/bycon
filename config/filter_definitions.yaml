@@ -112,19 +112,19 @@ PATO:
   examples:
     - 'PATO:0020000'
 
-pgxfus:
+EFOfus:
   description: >
     Followup state classes; currently as private filter
-  name: "Progenetix followup classes"
-  url: "http://info.progenetix.org/tags/ontologies"
+  name: "EFO followup status classes"
+  url: "http://www.ebi.ac.uk/efo/EFO_0030038"
   db_key: 'followup_state.id'
   scopes:
     biosamples:
       default: 1
-  pattern: '^pgxfus([\-_\:]\d+?)?$'
-  pattern_strict: '^pgxfus[\-_\:]\d+?$'
+  pattern: '^EFO([\-_\:]\d+?)?$'
+  pattern_strict: '^EFO[\-_\:]\d+?$'
   examples:
-    - 'pgxfus-0004'
+    - 'EFO:0030039'
 
 EFO:
   name: "Experimental Factor Ontology"

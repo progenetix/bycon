@@ -2,7 +2,7 @@ defaults:
   dataset_ids:
     - progenetix
   response_type: core
-  response_schema: BeaconCoreResponse
+  response_schema: beaconMapResponse
   h->o_access_key: "biosamples._id"
   genome_binning: 1Mb
 bycon_definition_files:
@@ -10,7 +10,6 @@ bycon_definition_files:
   - beacon_info
   - beacon_endpoints
   - beacon_mappings
-  - beacon_map
   - dataset_definitions
   - filter_definitions
   - geoloc_definitions
@@ -19,8 +18,67 @@ bycon_definition_files:
   - variant_definitions
 meta:
   returned_schemas:
-    BeaconBooleanResponse: https://progenetix.org/services/schemas/BeaconBooleanResponseSection/
+    - entity_type: map
+      schema: https://progenetix.org/services/schemas/beaconMapResponse/
   info: >
     Beacon map.
 response_types:
-  - core
+  - map
+response:
+  $schema: https://progenetix.org/services/schemas/beaconMapResponse/
+  endpointSets:
+    dataset:
+      entry_type: dataset
+      root_url: https://progenetix.org/beacon/datasets
+      single_entry_url: https://progenetix.org/beacon/datasets/___id___
+      filtering_terms_url: https://progenetix.org/beacon/filteringTerms/?datasetIds=___id___
+    biosample:
+      entry_type: biosample
+      root_url: https://progenetix.org/beacon/biosamples
+      single_entry_url: https://progenetix.org/beacon/biosamples/___id___
+      filtering_terms_url: https://progenetix.org/beacon/filteringTerms
+      endpoints:
+        genomic_variation:
+          returned_entry_type: variant_in_sample
+          url: https://progenetix.org/beacon/biosamples/___id___/genomicVariations
+        biosample:
+          returned_entry_type: biosample
+          url: https://progenetix.org/beacon/biosamples/___id___/biosamples
+        individual:
+          returned_entry_type: individual
+          url: https://progenetix.org/beacon/biosamples/___id___/individuals
+    analysis:
+      entry_type: analysis
+      root_url: https://progenetix.org/beacon/analyses
+      single_entry_url: https://progenetix.org/beacon/analyses/pgxcs-kftvmpc0
+      filtering_terms_url: https://progenetix.org/beacon/filteringTerms
+      endpoints:
+        genomic_variation:
+          returned_entry_type: genomic_variation
+          url: https://progenetix.org/beacon/analyses/___id___/genomicVariations
+        biosample:
+          returned_entry_type: biosample
+          url: https://progenetix.org/beacon/analyses/___id___/biosamples
+        individual:
+          returned_entry_type: individual
+          url: https://progenetix.org/beacon/analyses/___id___/individuals
+    individual:
+      entry_type: individual
+      root_url: https://progenetix.org/beacon/individuals
+      single_entry_url: https://progenetix.org/beacon/individuals/___id___
+      filtering_terms_url: https://progenetix.org/beacon/filteringTerms
+      endpoints:
+        genomic_variation:
+          returned_entry_type: genomicVariation
+          url: https://progenetix.org/beacon/individuals/___id___/genomicVariations
+        biosample:
+          returned_entry_type: biosample
+          url: https://progenetix.org/beacon/individuals/___id___/biosamples
+        individual:
+          returned_entry_type: individual
+          url: https://progenetix.org/beacon/individuals/___id___/individuals
+    genomic_variation:
+      entry_type: genomicVariation
+      root_url: https://progenetix.org/beacon/variantsInSample
+      single_entry_url: https://progenetix.org/beacon/variantsInSample/___id___
+      filtering_terms_url: https://progenetix.org/beacon/filteringTerms/?datasetIds=___id___

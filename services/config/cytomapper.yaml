@@ -7,8 +7,10 @@ defaults:
     - progenetix
 meta:
   returned_schemas:
-    GeneSpan: https://progenetix.org/services/schemas/GeneSpan/
-    Cytobands: https://progenetix.org/services/schemas/Cytobands/
+    - entity_type: genespan
+      schema: https://progenetix.org/services/schemas/GeneSpan/
+    - entity_type: cytobands
+      schema: https://progenetix.org/services/schemas/Cytobands/
   info: >
     The main cytomapper payload can be accessed in `results[0]`.
 arg_pars:

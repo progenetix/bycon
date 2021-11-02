@@ -1,27 +1,57 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/BeaconResultSets/v2021-07-06
-title: BeaconResultSets
+$id: https://progenetix.org/services/schemas/beaconResultSets/v2021-10-26
+title: beaconResultSets
 description: >-
-  Section of the response that includes the record level details grouped in resultsets.
+  Sets of results to be returned as query response.
 type: object
 properties:
   $schema:
     type: string
     description: >-
       Reference to the schema used to describe the attributes below.
-    $comments: >-
-      The '$schema' property is added to allow proper JSON schema+objects debugging in VSCode. It probably could be deleted for other tools or later in the process
+    $ref: "../../common/beaconCommonComponents.yaml#/definitions/$schema"
   resultSets:
     type: array
     items:
-      $ref: "#/definitions/resultSetInstance/oneOf"
+      $ref: "#/definitions/resultSetInstance/properties"
     minItems: 0
+
 definitions:
   resultSetInstance:
     type: object
-    oneOf:
-      - $ref: ./BeaconEmptyResultset.yaml
-      - $ref: ./BeaconNonEmptyResultset.yaml
+    required:
+      - id
+      - type
+      - exists
+    properties:
+      id:
+        description: id of the resultSet.
+        type: string
+        example: datasetA
+      setType:
+        description: >-
+          Entry type of resultSet. It SHOULD MATCH an entry type declared as collection in the Beacon configuration.
+        type: string
+        default: dataset
+      exists:
+        type: boolean
+        enum:
+          - "true"
+      results:
+        type: array
+        items:
+          type: object
+      resultsCount:
+        description: Number of results in this Resulset.
+        type: integer
+      resultsHandovers:
+        description": >-
+          List of handovers that apply to this resultset, not to the whole Beacon or to a result in particular.
+        $ref: ../../common/beaconCommonComponents.yaml#/definitions/ListOfHandovers
+      info:
+        description: >-
+          Additional details that could be of interest about the Resultset. Provided to clearly enclose any attribute that is not part of the Beacon specification.
+        type: object
 required:
   - resultSets
 additionalProperties: true

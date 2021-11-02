@@ -1,6 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/BeaconReceivedRequestSummary/v2021-07-02
-title: BeaconReceivedRequestSummary
+$id: https://progenetix.org/services/schemas/beaconReceivedRequestSummary/v2021-10-26
+title: beaconReceivedRequestSummary
 description: >-
   Section of the response that summarize the request received as it has been interpreted by teh Beacon server. Although it is not expected to differ from the request received, in case of unexpected results or formats, this summary could help to determine the source of confusion or errors. The required properties include those that every request should have implicitly or explicitly. The request summary is making them explicit.
 type: object
@@ -21,8 +21,14 @@ properties:
     description: >-
       Ontology based filters. CURIE syntax is encouraged to be used.
     $ref: ../../common/beaconCommonComponents.yaml#/definitions/Filters
+  requestParameters:
+    description: >-
+      Dictionary of request parameters received in the RequestBody
+    $ref: ../../requests/requestParameters.yaml#/properties
   includeResultsetResponses:
-    $ref: ../../requests/beaconRequestBody.yaml#/definitions/IncludeResultsetResponses
+    $ref: ../../common/beaconCommonComponents.yaml#/definitions/IncludeResultsetResponses
+  requestedGranularity:
+    $ref: ../../common/beaconCommonComponents.yaml#/definitions/Granularity
   pagination:
     description: >-
       Pagination to apply on the results.

@@ -23,15 +23,12 @@ properties:
     "$ref": BeaconServiceResponseMeta.yaml#/properties
   responseSummary:
     "$ref": BeaconServiceResponseSummary.yaml#/properties
-  resultSets:
-    type: array
-    items:
-      $ref: BeaconServiceResponseResultSet.yaml#/properties
-  results:
+  # resultSets:
+  #   type: array
+  #   items:
+  #     $ref: BeaconServiceResponseResultSet.yaml#/properties
+  response:
     type: array
     items:
       type: object
-  info:
-    type: object
-  # response:
-  #   "$ref": BeaconServiceResponseResults.yaml#/properties
+ 

@@ -28,7 +28,7 @@ properties:
       - id: EFO:0009655
         label: abnormal sample
       - id: EFO:0009656
-        label: neoplasic sample
+        label: neoplastic sample
       - id: EFO:0010941
         label: metastasis sample
       - id: EFO:0010942
@@ -36,7 +36,7 @@ properties:
       - id: EFO:0010943
         label: recurrent tumor sample
   collectionDate:
-    description: Date of biosample collection in the ISO8601  format.
+    description: Date of biosample collection in ISO8601 format.
     type: string
     format: date
     example: '2021-04-23'

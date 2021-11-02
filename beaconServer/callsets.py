@@ -29,7 +29,7 @@ def callsets():
 
     byc = initialize_service()
     run_beacon_init_stack(byc)
-    run_beacon(byc)
+    run_result_sets_beacon("callsets", byc)
     export_datatable(byc)
 
     ############################################################################
@@ -39,6 +39,29 @@ def callsets():
 
     query_results_save_handovers(byc)
     cgi_print_response( byc, 200 )
+    cgi_break_on_errors(byc)
+
+    return byc
+
+################################################################################
+
+def retrieve_analyses(ds_id, byc):
+
+    mongo_client = MongoClient()
+    data_db = mongo_client[ ds_id ]
+    bs_coll = mongo_client[ ds_id ][ "callsets" ]
+
+    ds_results = byc["dataset_results"][ds_id]
+    r_key = "callsets._id"
+
+    if r_key in ds_results:
+        beacon_res = []
+        for b in bs_coll.find({"_id":{"$in": ds_results[ r_key ]["target_values"] }}):
+            beacon_res.append(b)
+
+        return beacon_res
+
+    return False
 
 ################################################################################
 ################################################################################

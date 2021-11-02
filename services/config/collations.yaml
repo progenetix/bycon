@@ -15,7 +15,8 @@ defaults:
 meta:
   response_type: collations
   returned_schemas:
-    Collation: https://progenetix.org/services/schemas/Collation/
+    - entity_type: collation
+      schema: https://progenetix.org/services/schemas/Collation/
   info: >
     The main collations payload can be accessed in `results`.
 integer_keys:

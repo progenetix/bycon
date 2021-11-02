@@ -43,10 +43,5 @@ properties:
     description: |
       TBD
     type: integer
-  resultsHandovers:
-    type: array
-    items:
-      type: object
-      # $ref: '#/components/schemas/Handover'
   info:
     type: object

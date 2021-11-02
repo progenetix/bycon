@@ -1,6 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/BeaconInformationalResponseMeta/v2021-07-02
-title: BeaconInformationalResponseMeta
+$id: https://progenetix.org/services/schemas/beaconInformationalResponseMeta/v2021-07-02
+title: beaconInformationalResponseMeta
 description: >-
   Meta information about the response.
 type: object

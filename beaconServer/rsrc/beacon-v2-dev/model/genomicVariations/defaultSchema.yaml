@@ -10,31 +10,26 @@ required:
   - position
 properties:
   variantInternalId:
-    description: Reference to the variant ID (internal ID). This is no a public Id,
-      but the 'primary key/identifier' of that variant inside a given Beacon instance.
-      Therefore, different Beacon instances could have a variantInternalId = 1 and
-      they could refer to completely unrelated variants. The public, standard, popular
-      identifiers or the GA4GH Variant Representation Id (VRSid) MUST be returned
-      in the  'identifiers' section. A Beacon instance can, of course, use the VRSid
-      as their own internal id, in such case, the VRSid would be repeated in both
-      places.
+    description: Reference to the **internal** variant ID. This represents the primary
+      key/identifier of that variant **inside** a given Beacon instance. Different
+      Beacon instances may use identical id values, referring to unrelated variants.
+      Public identifiers such as the GA4GH Variant Representation Id (VRSid) MUST
+      be returned in the `identifiers` section. A Beacon instance can, of course,
+      use the VRSid as their own internal id but still MUST represent this then in
+      the `identifiers` section.
     type: string
   variantType:
-    description: "The `variantType` declares the nature of the variation in relation\
-      \ to a reference. It could be a single change, a short insertion or deletion,\
-      \ a bigger structural change, etc. In a response, it is used to describe the\
-      \ variation. In a request, it is used to declare the type of event the Beacon\
-      \ client is looking for. It could be used standalone (without `alternateBases`\
-      \ parameter) in cases in which query variants could not be defined through a\
-      \ sequence of one or more bases. Examples here are e.g. structural variants:\
-      \ \n* DUP - increased allelic count of material from the genomic region  between\
-      \ `start` and `end` positions  - no assumption about the placement of the additional\
-      \ sequences is  being made (i.e. no _in situ_ requirement as tandem duplications)\n\
-      \ * DEL: deletion of sequence following `start` \n* BND: breakend, i.e. termination\
-      \ of the allele at position `start` or in the `start[0]]` => `start[1]` interval,\
-      \ or fusion of the sequence to distant partner.\n Either `alternateBases` or\
-      \ `variantType` is required, with the exception of range queries (single `start`\
-      \ and `end` parameters)."
+    description: The `variantType` declares the nature of the variation in relation
+      to a reference. In a response, it is used to describe the variation. In a request,
+      it is used to declare the type of event the Beacon client is looking for. If
+      in queries variants can not be defined through a sequence of one or more bases
+      (`precise` variants) it can be used standalone (i.e. without `alternateBases`)
+      together with positional parameters. Examples here are e.g. queries for structural
+      variants such as `DUP` (increased allelic count of material from the genomic
+      region  between `start` and `end` positions without assumption about the placement
+      of the additional sequence) or `DEL` (deletion of sequence following `start`).
+      Either `alternateBases` or `variantType` is required, with the exception of
+      range queries (single `start` and `end` parameters).
     type: string
     examples:
       - SNP
@@ -43,28 +38,29 @@ properties:
       - BND
     default: SNP
   referenceBases:
-    description: "Reference bases for this variant (starting from `start`). * Accepted\
-      \ values: IUPAC codes for nucleotides (e.g. 'https://www.bioinformatics.org/sms/iupac.html').\
-      \ N is a wildcard, that denotes the position of any base, and can be used as\
-      \ a standalone base of any type or within a partially known sequence. As example,\
-      \ a query of `ANNT` the Ns can take take any form of [ACGT] and will match `ANNT`,\
-      \ `ACNT`, `ACCT`, `ACGT` ... and so forth. * an *empty value* is used in the\
-      \ case of insertions with the maximally trimmed, inserted sequence being indicated\
-      \ in `AlternateBases`. NOTE: Many Beacon instances could not support UIPAC codes\
-      \ and it is not mandatory for them to do so. In such cases the [ACGTN] is mand"
+    description: 'Reference bases for this variant (starting from `start`). * Accepted
+      values: IUPAC codes for nucleotides (e.g. `https://www.bioinformatics.org/sms/iupac.html`).
+      N is a wildcard, that denotes the position of any base, and can be used as a
+      standalone base of any type or within a partially known sequence. As example,
+      a query of `ANNT` the Ns can take take any form of `[ACGT]` and will match `ANNT`,
+      `ACNT`, `ACCT`, `ACGT` ... and so forth. * an *empty value* is used in the case
+      of insertions with the maximally trimmed, inserted sequence being indicated
+      in `AlternateBases`. NOTE: Many Beacon instances could not support UIPAC codes
+      and it is not mandatory for them to do so. In such cases the use of [ACGTN]
+      is mandated.'
     type: string
     pattern: ^([ACGTUNRYSWKMBDHV\-\.]*)$
   alternateBases:
-    description: "Alternate bases for this variant (starting from `start`).* Accepted\
-      \ values: IUPAC codes for nucleotides (e.g. 'https://www.bioinformatics.org/sms/iupac.html').\
-      \ N is a wildcard, that denotes the position of any base, and can beused as\
-      \ a standalone base of any type or within a partially knownsequence. As example,\
-      \ a query of `ANNT` the Ns can take take any form of[ACGT] and will match `ANNT`,\
-      \ `ACNT`, `ACCT`, `ACGT` ... and so forth.* an *empty value* is used in the\
-      \ case of deletions with the maximally trimmed, deleted sequence being indicated\
-      \ in `ReferenceBases`* Categorical variant queries, e.g. such *not* being represented\
-      \ through sequence & position, make use of the `variantType` parameter.* either\
-      \ `alternateBases` or `variantType` is required."
+    description: 'Alternate bases for this variant (starting from `start`). * Accepted
+      values: IUPAC codes for nucleotides (e.g. `https://www.bioinformatics.org/sms/iupac.html`).
+      N is a wildcard, that denotes the position of any base, and can beused as a
+      standalone base of any type or within a partially knownsequence. As example,
+      a query of `ANNT` the Ns can take take any form of[ACGT] and will match `ANNT`,
+      `ACNT`, `ACCT`, `ACGT` ... and so forth.* an *empty value* is used in the case
+      of deletions with the maximally trimmed, deleted sequence being indicated in
+      `ReferenceBases`* Categorical variant queries, e.g. such *not* being represented
+      through sequence & position, make use of the `variantType` parameter. * Either
+      `alternateBases` or `variantType` is required.'
     type: string
     pattern: ^([ACGTUNRYSWKMBDHV\-\.]*)$
   position:
@@ -75,7 +71,8 @@ properties:
     $ref: '#/definitions/MolecularAttributes'
   caseLevelData:
     type: array
-    description: ''
+    description: caseLevelData reports about the variation instances observed in individual
+      analyses.
     items:
       $ref: '#/definitions/CaseLevelVariant'
   variantLevelData:
@@ -87,14 +84,14 @@ properties:
 definitions:
   Position:
     type: object
-    description: This section groups all attributes that allows to 'identify' a variant
+    description: This section groups all attributes that allows to identify a variant
       via its position in the genome.
     properties:
       assemblyId:
         description: Genomic assembly accession and version as RefSqeq assembly accession
-          (e.g. "GCF_000001405.39") or a versioned assembly name or synonym such as
-          UCSC Genome Browser assembly (e.g. "hg38") or Genome Reference Consortium
-          Human (e.g. "GRCh38.p13") names.
+          (e.g. 'GCF_000001405.39') or a versioned assembly name or synonym such as
+          UCSC Genome Browser assembly (e.g. 'hg38') or Genome Reference Consortium
+          Human (e.g. 'GRCh38.p13') names.
         type: string
         example:
           - GCF_000001405.39
@@ -102,9 +99,9 @@ definitions:
           - GRCh38.p13
       refseqId:
         description: Reference sequence id for genomic reference sequence in which
-          variant coordinates are given, e.g. "NC_000009" for human chromosome 9.
+          variant coordinates are given, e.g. 'NC_000009' for human chromosome 9.
           Preferably the RefSeqId, alternatively, names, synonymous or aliases e.g.
-          "Chr9" could be used.
+          'Chr9' could be used.
         type: string
         example:
           - NC_000009
@@ -121,7 +118,9 @@ definitions:
         minItems: 1
         maxItems: 2
         examples:
-          - '[1000], [1000,1100]'
+          -   - 1000
+          -   - 1000
+              - 1100
       end:
         description: Precise or bracketing the end of the variant, for variants not
           specified by their sequence content (e.g. structural variants, particularly
@@ -134,7 +133,10 @@ definitions:
         minItems: 0
         maxItems: 2
         examples:
-          - '[], [1200], [1200,1350]'
+          - []
+          -   - 1200
+          -   - 1200
+              - 1350
     required:
       - assemblyId
       - refseqId
@@ -143,7 +145,7 @@ definitions:
     variantAlternativeIds:
       description: List of cross-referencing ID(s), for the variant in other databases
         (e.g. dbSNP, clinVarId, ClinGen, COSMIC), , preferably CURIE(s) where available,
-        e.g. "VCV000055583.1", "ClinGen:CA003410".
+        e.g. 'VCV000055583.1', 'ClinGen:CA003410'.
       type: array
       items:
         type: string
@@ -223,8 +225,8 @@ definitions:
       featureID:
         description: Where applicable, ID/accession/name of genomic feature related
           to the `featureClass`. Preferably in CURIE format. If the value is a gene
-          id or name, it points to the gene related to the 'featureClass', e.g. 'the
-          5 prime UTR upstream of TP53'
+          id or name, it points to the gene related to the `featureClass`, e.g. `the
+          5 prime UTR upstream of TP53`
         $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/ontologyTerm.json
         examples:
           - id: HGNC:11998
@@ -319,7 +321,7 @@ definitions:
       population:
         type: string
         description: A name for the population. A population could an ethnic, geographical
-          one or just the 'members`of a study.
+          one or just the `members`of a study.
         examples:
           - East Asian
           - ICGC Chronic Lymphocytic Leukemia-ES
@@ -337,6 +339,10 @@ definitions:
     type: object
     description: ''
     properties:
+      id:
+        description: >-
+          Internal id of this case level *instance* of the variant. This is an optional housekeeping parameter and should not be confused with the identifier of the variant (`variantInternalId`).",
+        type: string
       individualId:
         description: Reference to individual ID.
         type: string
@@ -347,9 +353,9 @@ definitions:
         description: Reference to run (Run.runId)
         type: string
         example: SRR10903401
-      zigosity:
-        description: Ontology term for zigosity in which variant is present in the
-          sample from the Zigosity Ontology (GENO:0000391) , e.g "heterozygous" (GENO:0000135)
+      zygosity:
+        description: Ontology term for zygosity in which variant is present in the
+          sample from the Zygosity Ontology (GENO:0000391) , e.g `heterozygous` (GENO:0000135)
         $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/ontologyTerm.json
         examples:
           - id: GENO:0000135
@@ -360,9 +366,9 @@ definitions:
             label: hemizygous X-linked
       alleleOrigin:
         description: Ontology value for allele origin of variant in sample from the
-          Variant Origin (SO:0001762). Categories are "somatic variant", "germline
-          variant", "maternal variant", "paternal variant", "de novo variant", "pedigree
-          specific variant", "population specific variant". Corresponds to Variant
+          Variant Origin (SO:0001762). Categories are `somatic variant`, `germline
+          variant`, `maternal variant`, `paternal variant`, `de novo variant`, `pedigree
+          specific variant`, `population specific variant`. Corresponds to Variant
           Inheritance in FHIR.
         $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/ontologyTerm.json
         examples:

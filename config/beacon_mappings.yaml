@@ -3,9 +3,11 @@ service_names:
   analyses: callsets
   callsets: callsets
   configuration: configuration
-  core: core
+  entryTypes: entryTypes
+  entry_types: entryTypes
   filtering_terms: filteringTerms
   filteringTerms: filteringTerms
+  collections: datasets
   datasets: datasets
   biosamples: biosamples
   individuals: individuals

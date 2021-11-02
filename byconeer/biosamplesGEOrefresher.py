@@ -100,9 +100,8 @@ def biosamples_refresher():
     if not test_mode:
         bar = Bar("{} {} samples".format(no, ds_id), max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
-    counts = { "new_stages" : 0 }
+    counts = { "new_stages" : 0,  "new_grades" : 0 }
 
-    stage_re = re.compile(r'^.*?stage[^\w]+?(\w+?)(:?[^\w]|$)', re.IGNORECASE)
     platform_re = re.compile(r'^.*?(GPL\d+?)(:?[^\d]|$)', re.IGNORECASE)
     series_re = re.compile(r'^.*?(GSE\d+?)(:?[^\d]|$)', re.IGNORECASE)
     experiment_re = re.compile(r'^.*?(GSM\d+?)(:?[^\d]|$)', re.IGNORECASE)
@@ -127,11 +126,11 @@ def biosamples_refresher():
                 "experiment_id": "",
                 "platform_id": "",
                 "series_id": ""
-            }
+            },
+            "info": s["info"]
         }
 
         if "external_references" in s:
-            e_r_u = [ ]
             for e_r in s[ "external_references" ]:
                 if "GSM" in e_r["id"]:
                     update_obj["analysis_info"].update({"experiment_id":e_r["id"]})
@@ -142,114 +141,48 @@ def biosamples_refresher():
                 if "GPL" in e_r["id"]:
                     update_obj["analysis_info"].update({"platform_id":e_r["id"]})
 
-            if gse is not False and gsm is not False:
-                e_path = path.join( pkg_path, *byc["config"]["paths"]["geosoft_file_root"], gse, gsm+".txt" )
+        if gse is False or gsm is False:
 
-                if path.isfile(e_path):               
+            print("\n{} did not have GEO ids in external_references!!".format(bsid))
+            continue
+        
+        gse_path = path.join( pkg_path, *byc["config"]["paths"]["geosoft_file_root"], gse )
+        gsm_path = path.join( gse_path, gsm+".txt" )
 
-                    with open(e_path) as f:
-                        
-                        gsm_soft = f.readlines()
-
-        if not "GSM" in update_obj["analysis_info"]["experiment_id"]:
-
-            """
-            One of the "need GEO .soft file" is the extraction of series and
-            platform identifiers which may have been lost ...
-            """
-            gsm = experiment_re.match(s["info"]["legacy_id"][0]).group(1)
-            update_obj["analysis_info"].update({"experiment_id": "geo:"+gsm })
-            get_geosoft = True
-
-        if get_geosoft is True:
-
-            if gsm_soft is False:
-
-                gsm_url = "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc={}&targ=self&form=text&view=quick".format(gsm)
-
-                response = requests.get(gsm_url)
-                gsm_soft = re.split("\n", response.text)
-
-            gsm_soft = list(filter(lambda x:'Sample_' in x, gsm_soft))
-            # getting rid of some verbose stuff
-            gsm_soft = list(filter(lambda x:'_protocol' not in x, gsm_soft))
-
+        if path.isfile(gsm_path):               
+            with open(gsm_path) as f:                        
+                gsm_soft = f.readlines()
+        else:
+            gsm_soft = retrieve_geosoft_file(gsm, byc)
+            if not path.isdir(gse_path):
+                mkdir(gse_path)
+            s_f = open(gsm_path, 'w')
             for l in gsm_soft:
+                s_f.write(l)
+            s_f.close()
 
-                if "!Sample_characteristics" in l:
-                    """
-                    ## STAGE
+        # getting rid of data header and some verbose stuff
+        gsm_soft = list(filter(lambda x:'Sample_' in x, gsm_soft))
+        gsm_soft = list(filter(lambda x:'_protocol' not in x, gsm_soft))
 
-                    This is a test for some metadata extraction...
-                    This already requires "stage" to be mentioned on the line
-                    which may not always be the case. This avoids the expensive
-                    use of the regex patterns...
+        geosoft_retrieve_tumor_stage(gsm, gsm_soft, update_obj, byc, counts)
+        geosoft_retrieve_tumor_grade(gsm, gsm_soft, update_obj, byc, counts)
 
-                    TODO: Expand in library.
-                    """
-                    if "stage" in l.lower():
+        for l in gsm_soft:
 
-                        matched = False
-                        update_key = "pathological_stage"
-
-                        for p in byc["remap_definitions"]["line_patterns"][update_key]:
-
-                            if re.match(r'{0}'.format(p), l, re.IGNORECASE):
-
-                                stage = re.match(r'{0}'.format(p), l, re.IGNORECASE).group(1)
-                                stage = re.sub("4", "IV", stage)
-                                stage = re.sub("3", "III", stage)
-                                stage = re.sub("2", "II", stage)
-                                stage = re.sub("1", "IV", stage)
-
-                                if not "tumor_stage" in s["info"]:
-                                    print("!!!! {}: found new stage {}".format(gsm, stage))
-                                    counts["new_stages"] += 1
-                                
-                                t_s = remap_from_pattern(update_key, stage, byc)
-                                # Data is only updated if there was a correct pattern
-                                if t_s:
-                                    update_obj.update({"info":s["info"]})
-                                    update_obj["info"].update({"tumor_stage":stage})
-                                    update_obj.update({ update_key: t_s })
-                                    matched = True
-                                    continue
-
-                        if not matched:
-                            print("\nno stage regex match {}".format(l))
-
-                if "!Sample_platform_id" in l:
-                    update_obj["analysis_info"].update({"platform_id": "geo:"+platform_re.match(l).group(1)}) 
-                if "!Sample_series_id" in l:
-                    update_obj["analysis_info"].update({"series_id": "geo:"+series_re.match(l).group(1)})
+            if "!Sample_platform_id" in l:
+                update_obj["analysis_info"].update({"platform_id": "geo:"+platform_re.match(l).group(1)}) 
+            if "!Sample_series_id" in l:
+                update_obj["analysis_info"].update({"series_id": "geo:"+series_re.match(l).group(1)})
 
             series_id = series_re.match(update_obj["analysis_info"]["series_id"]).group(1)
 
-            series_path = path.join( pkg_path, *byc["config"]["paths"]["geosoft_file_root"], series_id )
-            gsm_path = path.join( series_path, gsm+".txt" )
-           
-            if not path.isdir(series_path):
-                mkdir(series_path)
-
-            if not path.isfile(gsm_path):
-
-                s_f = open(gsm_path, 'w')
-
-                for l in gsm_soft:
-                    s_f.write(l)
-                s_f.close()
-
         if not test_mode:
             bios_coll.update_one( { "_id": s["_id"] }, { '$set': update_obj }  )
-
-        if test_mode:
+            bar.next()
+        else:
             print(update_obj)
 
-        ####################################################################
-
-        if not byc["args"].test:
-            # bios_coll.update_one( { "_id": s["_id"] }, { '$set': update_obj }  )
-            bar.next()
 
     if not byc["args"].test:
         bar.finish()

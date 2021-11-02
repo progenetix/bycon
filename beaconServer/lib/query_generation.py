@@ -59,6 +59,8 @@ def purge_empty_queries( byc ):
 
 def update_queries_from_path_id( byc ):
 
+    dummy_id_patterns = ["_id_", "__id__", "___id___", '{id}' ]
+
     if not environ.get('REQUEST_URI'):
         return byc
 
@@ -74,8 +76,13 @@ def update_queries_from_path_id( byc ):
             return byc
 
     s_id = rest_path_value(rb_t)
+
     if s_id:
         if not "empty_value" in s_id:
+            if s_id in dummy_id_patterns:
+                if "defaults" in byc["these_prefs"]:
+                    s_id = byc["these_prefs"]["defaults"].get("test_document_id", "")
+
             byc.update({ "id_from_path": s_id })
             byc["queries"].update(
                 { pgx_base: { "id": s_id } } )
@@ -91,7 +98,6 @@ def update_queries_from_path_id( byc ):
 
 
 ################################################################################
-
 
 def update_queries_from_id_values(byc):
 

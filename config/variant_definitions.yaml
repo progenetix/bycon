@@ -25,11 +25,16 @@ parameters:
     type: string
     pattern: '^[ACGTN]+$'
 
+  # variantType:
+  #   type: array
+  #   items:
+  #     type: string
+  #     pattern: '^((:?DUP)|(:?DEL)|(:?BND)|(:?LOH)|(:?INS)|(:?INV)|(:?CNV)|(:?INDEL)|(:?SNP)|(:?SNV))$'
+
   variantType:
-    type: array
-    items:
-      type: string
-      pattern: '^((:?DUP)|(:?DEL)|(:?BND)|(:?LOH)|(:?INS)|(:?INV)|(:?CNV)|(:?INDEL)|(:?SNP)|(:?SNV))$'
+    type: string
+    pattern: '^((:?DUP)|(:?DEL)|(:?BND)|(:?LOH)|(:?INS)|(:?INV)|(:?CNV)|(:?INDEL)|(:?SNP)|(:?SNV))$'
+
   start:
     type: array
     items:

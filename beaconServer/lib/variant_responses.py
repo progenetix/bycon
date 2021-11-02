@@ -6,32 +6,6 @@ from cgi_utils import *
 
 ################################################################################
 
-def retrieve_variants(ds_id, byc):
-
-    vs = [ ]
-
-    mongo_client = MongoClient()
-    data_db = mongo_client[ ds_id ]
-    bs_coll = mongo_client[ ds_id ][ "biosamples" ]
-
-    ds_results = byc["dataset_results"][ds_id]
-
-    if not byc["method"] in byc["these_prefs"]["all_variants_methods"]:
-        if "variants._id" in ds_results:
-            for v in v_coll.find({"_id": { "$in": ds_results["variants._id"]["target_values"] } }):
-                vs.append(v)
-            return vs
-        else:
-            return vs
-
-    ############################################################################
-
-    vs = retrieve_variants_from_biosample_ids(data_db, ds_results["biosamples.id"]["target_values"])
-
-    return vs
-
-################################################################################
-
 def retrieve_variants_from_biosample_ids(data_db, bs_ids):
 
     vs = [ ]

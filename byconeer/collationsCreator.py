@@ -79,14 +79,14 @@ def collations_creator():
 
 def _create_collations_from_dataset( ds_id, **byc ):
 
-    for coll_key, coll_defs in byc["these_prefs"]["collationed"].items():
+    for coll_type, coll_defs in byc["these_prefs"]["collationed"].items():
 
         pre = coll_defs["prefix"]
-        pre_h_f = path.join( byc["pkg_path"], "byconeer", "rsrc", coll_key, "numbered-hierarchies.tsv" )
+        pre_h_f = path.join( byc["pkg_path"], "byconeer", "rsrc", coll_type, "numbered-hierarchies.tsv" )
 
         if  path.exists( pre_h_f ):
-            print( "Creating hierarchy for " + coll_key)
-            hier =  get_prefix_hierarchy( ds_id, coll_key, pre_h_f, **byc)
+            print( "Creating hierarchy for " + coll_type)
+            hier =  get_prefix_hierarchy( ds_id, coll_type, pre_h_f, **byc)
         elif "PMID" in pre:
             hier =  _make_dummy_publication_hierarchy(**byc)
         else:
@@ -141,10 +141,11 @@ def _create_collations_from_dataset( ds_id, **byc ):
  
             if child_no > 0:
 
-                sub_id = re.sub(pre, coll_key, code)
+                sub_id = re.sub(pre, coll_type, code)
                 update_obj = hier[ code ].copy()
                 update_obj.update({
                     "id": sub_id,
+                    "collation_type": coll_type,
                     "code_matches": code_no,
                     "code": code,
                     "count": child_no,
@@ -161,15 +162,15 @@ def _create_collations_from_dataset( ds_id, **byc ):
             bar.finish()
             print("==> Updating database ...")
             if matched > 0:
-                coll_clean_q = { "id": { "$regex": "^"+coll_key } }
+                coll_clean_q = { "id": { "$regex": "^"+coll_type } }
                 coll_coll.delete_many( coll_clean_q )
                 coll_coll.insert_many( sel_hiers )
 
-        print("===> Found {} of {} {} codes & added them to {}.{} <===".format(matched, no, coll_key, ds_id, byc["config"]["collations_coll"]))
+        print("===> Found {} of {} {} codes & added them to {}.{} <===".format(matched, no, coll_type, ds_id, byc["config"]["collations_coll"]))
        
 ################################################################################
 
-def get_prefix_hierarchy( ds_id, coll_key, pre_h_f, **byc):
+def get_prefix_hierarchy( ds_id, coll_type, pre_h_f, **byc):
 
     hier = { }
 
@@ -180,7 +181,7 @@ def get_prefix_hierarchy( ds_id, coll_key, pre_h_f, **byc):
     parents = [ ]
 
     no = len(h_in)
-    bar = Bar(coll_key, max = no, suffix='%(percent)d%%'+" of "+str(no) )
+    bar = Bar(coll_type, max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
     for c_l in h_in:
 
@@ -211,18 +212,18 @@ def get_prefix_hierarchy( ds_id, coll_key, pre_h_f, **byc):
 
     # now adding terms missing from the tree ###################################
 
-    print("Looking for missing {} codes in {}.{} ...".format(coll_key, ds_id, byc["config"]["collations_source"]))
+    print("Looking for missing {} codes in {}.{} ...".format(coll_type, ds_id, byc["config"]["collations_source"]))
     data_client = MongoClient( )
     data_db = data_client[ ds_id ]
     data_coll = data_db[ byc["config"]["collations_source"] ]
-    data_key = byc["these_prefs"]["collationed"][ coll_key ]["db_key"]
-    data_pat = byc["these_prefs"]["collationed"][ coll_key ]["pattern"]
+    data_key = byc["these_prefs"]["collationed"][ coll_type ]["db_key"]
+    data_pat = byc["these_prefs"]["collationed"][ coll_type ]["pattern"]
     
     onto_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
 
     added_no = 0
 
-    if coll_key == "NCIT":
+    if coll_type == "NCIT":
         added_no += 1
         no += 1
         hier.update( {
@@ -243,7 +244,7 @@ def get_prefix_hierarchy( ds_id, coll_key, pre_h_f, **byc):
 
         l = _get_label_for_code(data_coll, data_key, o)
 
-        if coll_key == "NCIT":
+        if coll_type == "NCIT":
             hier.update( {
                     o: { "id": o, "label": l, "hierarchy_paths":
                         [ { "order": no, "depth": 3, "path": [ "NCIT:C3262", "NCIT:C000000", o ] } ]
@@ -256,7 +257,7 @@ def get_prefix_hierarchy( ds_id, coll_key, pre_h_f, **byc):
         print("Added:\t{}\t{}".format(o, l))
 
     if added_no > 0:
-        print("===> Added {} {} codes from {}.{} <===".format(added_no, coll_key, ds_id, byc["config"]["collations_source"] ) )
+        print("===> Added {} {} codes from {}.{} <===".format(added_no, coll_type, ds_id, byc["config"]["collations_source"] ) )
 
     ############################################################################
 

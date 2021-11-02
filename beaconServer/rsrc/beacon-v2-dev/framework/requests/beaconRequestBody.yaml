@@ -24,5 +24,10 @@ properties:
       pagination:
         description: Pagination to apply on the results.
         $ref: ../common/beaconCommonComponents.json#/definitions/Pagination
+      requestedGranularity:
+        description: Requested granularity. Targeted Beacon could respond or not with
+          the requested granularity. E.g. record level granularity could be requested,
+          but the Beacon could respond only with boolean or count results.
+        $ref: ../common/beaconCommonComponents.json#/definitions/Granularity
 required:
   - meta

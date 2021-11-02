@@ -35,12 +35,11 @@ format is based on the Beacon v2 response format, with the data returned in the
 ```
 meta:
   api_version: ...
-  returned_schemas: { }
+  returned_schemas: [ ]
 response:
   exists: true | false
   info: { }
-  results: [ ]
-  errors: { }
+  resultSets: [ ]
 ```
 
 This (incomplete) example response may help with understanding the general

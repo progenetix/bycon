@@ -1,6 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/BeaconFilteringTermsResponse/v2021-07-02
-title: BeaconFilteringTermsResponse
+$id: https://progenetix.org/services/schemas/beaconFilteringTermsResponse/v2021-07-02
+title: beaconFilteringTermsResponse
 type: object
 description: >-
   List of filtering terms responses.
@@ -8,13 +8,12 @@ properties:
   meta:
     description: >-
       Information about the response that could be relevant for the Beacon client in order to interpret the results.
-    $ref: ./sections/BeaconInformationalResponseMeta.yaml#/properties
+    $ref: ./sections/beaconInformationalResponseMeta.yaml#/properties
   response:
     description: >-
       Actual list of filtering terms.
-    $ref: ./sections/BeaconFilteringTermsResults.yaml
+    $ref: ./sections/beaconFilteringTermsResults.yaml
 required:
   - meta
   - response
 additionalProperties: true
-

@@ -108,8 +108,11 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
 
     for coll in coll_coll.find(id_query):
 
-        pre, code = re.split("[:-]", coll["id"])
-        db_key = byc["filter_definitions"][pre]["db_key"]
+        pre, code = re.split("[:-]", coll["id"], 1)
+
+        coll_type = coll["collation_type"]
+
+        db_key = byc["filter_definitions"][coll_type]["db_key"]
 
         coll_i += 1
 
@@ -132,6 +135,7 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
         update_obj = {
             "id": coll["id"],
             "label": coll["label"],
+            "collation_type": coll["collation_type"],
             "child_terms": coll["child_terms"],
             "updated": date_isoformat(datetime.datetime.now()),
             "counts": {"biosamples": bios_no, "callsets": cs_no },

@@ -27,6 +27,19 @@ def mongo_result_list(db_name, coll_name, query, fields):
 
 ################################################################################
 
+def process_empty_request(ds_id, collname, byc):
+
+    mongo_client = MongoClient()
+    data_db = mongo_client[ ds_id ]
+    data_coll = mongo_client[ ds_id ][ collname ]
+
+    c = data_coll.estimated_document_count()
+    r = [ data_coll.find_one({}) ]
+
+    return r, c
+
+################################################################################
+
 def execute_bycon_queries(ds_id, byc):
 
     max_bs_number_for_v_in_query = 2500
@@ -53,6 +66,8 @@ def execute_bycon_queries(ds_id, byc):
     ho_db = ho_client[ byc["config"]["info_db"] ]
     ho_collname = byc["config"][ "handover_coll" ]
     ho_coll = ho_db[ ho_collname ]
+
+
 
     for collname in byc[ "queries" ].keys():
         if collname in byc[ "config" ][ "collections" ]:
@@ -120,6 +135,7 @@ def execute_bycon_queries(ds_id, byc):
         else:
             prefetch["biosamples.id"] = prefetch["callsets.biosample_id->biosamples.id"]
 
+
     if "variants" in exe_queries:
 
         if exe_queries["variants"]:
@@ -156,7 +172,7 @@ def execute_bycon_queries(ds_id, byc):
             prevars["query"] = { "_id": { "$in": prefetch[ "variants._id" ]["target_values"] } }
             prefetch.update( { prevars["pref_m"]: _prefetch_data(prevars) } )
 
-           # print(prefetch["variants.digest"]["target_values"])
+            # print(prefetch["variants.digest"]["target_values"])
 
 
     ############################################################################
@@ -192,9 +208,6 @@ def execute_bycon_queries(ds_id, byc):
 
         byc.update( { "dataset_results": { ds_id: prefetch } } )
         return byc
-
-
-
 
     prevars["pref_m"] = "callsets._id"
     prevars["query"] = { "biosample_id": { "$in": prefetch[ "biosamples.id" ]["target_values"] } }

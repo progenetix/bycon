@@ -84,7 +84,7 @@ def ontologymaps():
     results =  [ { "term_groups": c_g, "unique_terms": u_c } ]
 
     populate_service_response( byc, results)
-    byc["service_response"]["info"]["count"] = len(results[0]["term_groups"])
+    # byc["service_response"]["info"]["count"] = len(results[0]["term_groups"])
     cgi_print_response( byc, 200 )
 
 ################################################################################

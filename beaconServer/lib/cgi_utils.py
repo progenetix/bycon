@@ -160,6 +160,10 @@ def cgi_simplify_response(byc):
     if "data" in r:            
         byc.update({ "service_response": r["data"] })
         # TODO
+    elif "response" in r:
+        if "result_sets" in r:
+            if "results" in r["result_sets"][0]:
+                byc.update({ "service_response": r["result_sets"][0]["results"] })
     elif "result_sets" in r:
         if "results" in r["result_sets"][0]:
             byc.update({ "service_response": r["result_sets"][0]["results"] })
@@ -197,10 +201,7 @@ def cgi_debug_message(byc, label, debug_object):
 
 ################################################################################
 
-
 def cgi_print_response(byc, status_code):
-
-    e = byc["error_response"]
 
     r_f = ""
     f_d = {}
@@ -234,26 +235,60 @@ def cgi_print_response(byc, status_code):
     if "simple" in r_f:
         cgi_simplify_response(byc)
 
-    if "response_summary" in byc["service_response"]:
-        if "any_of" in byc["service_response"]["response_summary"]:
-            byc["service_response"]["response_summary"].pop("any_of")
-        if "all_of" in byc["service_response"]["response_summary"]:
-            byc["service_response"]["response_summary"].pop("all_of")
-        if "exists" in byc["service_response"]["response_summary"]:
-            if byc["service_response"]["response_summary"]["exists"] is False:
-                status_code = 422
+    response_clean_legacy(byc)
+    update_error_code_from_response_summary(byc)
+    switch_to_error_response(byc)
 
-    if e["error"]["error_code"] > 200:
+    print('Content-Type: application/json')
+    print('status:200')
+    print()
+    prjsoncam(byc["service_response"])
+    exit()
+
+################################################################################
+
+def response_clean_legacy(byc):
+
+    legacy = ["result_sets", "data"]
+
+    for k in legacy:
+        byc["service_response"].pop(k, None)
+
+    # if "response_summary" in byc["service_response"]:
+        # if "any_of" in byc["service_response"]["response_summary"]:
+        #     byc["service_response"]["response_summary"].pop("any_of")
+        # if "all_of" in byc["service_response"]["response_summary"]:
+        #     byc["service_response"]["response_summary"].pop("all_of")
+
+    return byc
+
+################################################################################
+
+def update_error_code_from_response_summary(byc):
+
+    if not "response_summary" in byc["service_response"]:
+        return byc
+
+    if not "exists" in byc["service_response"]["response_summary"]:
+        return byc
+
+    # if byc["service_response"]["response_summary"]["exists"] is False:
+    #     try:
+    #         byc["error_response"]["error"].update({"error_code": 422})
+    #         return byc
+    #     except:
+    #         return byc
+
+################################################################################
+
+def switch_to_error_response(byc):
+
+    if byc["error_response"]["error"]["error_code"] > 200:
         if "meta" in byc["service_response"]:
             byc["error_response"].update({ "meta": byc["service_response"]["meta"]})
         byc["service_response"] = byc["error_response"]
 
-    print('Content-Type: application/json')
-    print('status:200')
-    # print('status:'+str(status_code))
-    print()
-    print(json.dumps(humps.camelize(byc["service_response"]), indent=4, sort_keys=True, default=str)+"\n")
-    exit()
+    return byc
 
 ################################################################################
 ################################################################################
@@ -296,6 +331,11 @@ def close_text_streaming():
 
     print()
     exit()
+
+################################################################################
+
+def prjsoncam(this):
+    print(json.dumps(humps.camelize(this), indent=4, sort_keys=True, default=str)+"\n")
 
 
 

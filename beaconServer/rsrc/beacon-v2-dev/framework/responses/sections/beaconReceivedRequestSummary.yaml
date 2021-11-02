@@ -20,12 +20,21 @@ properties:
   filters:
     description: Ontology based filters. CURIE syntax is encouraged to be used.
     $ref: ../../common/beaconCommonComponents.json#/definitions/Filters
+  requestParameters:
+    description: Dictionary of request parameters received in the RequestBody
+    $ref: ../../requests/requestParameters.json
   includeResultsetResponses:
     $ref: ../../common/beaconCommonComponents.json#/definitions/IncludeResultsetResponses
   pagination:
     description: Pagination to apply on the results.
     $ref: ../../common/beaconCommonComponents.json#/definitions/Pagination
+  requestedGranularity:
+    description: Requested granularity. Targeted Beacon could respond or not with
+      the requested granularity. E.g. record level granularity could be requested,
+      but the Beacon could respond only with boolean or count results.
+    $ref: ../../common/beaconCommonComponents.json#/definitions/Granularity
 required:
   - apiVersion
   - requestedSchemas
   - pagination
+  - requestedGranularity

@@ -1,7 +1,7 @@
 openapi: 3.0.2
 servers: []
 info:
-  version: 2.0.0-draft.4
+  version: v2.0.0-draft4
   title: GA4GH Beacon API Specification - Biosamples endpoints
   description: TBD.
   contact:
@@ -201,7 +201,7 @@ components:
       schema:
         $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/beaconCommonComponents.json#/definitions/Limit
     includeResultsetResponses:
-      $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/requests/beaconRequestBody.json#/definitions/IncludeResultsetResponses
+      $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/requests/beaconCommonComponents.json#/definitions/IncludeResultsetResponses
     entryId:
       name: id
       in: path

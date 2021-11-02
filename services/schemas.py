@@ -34,11 +34,15 @@ def main():
 def schemas():
 
     byc = initialize_service()
-    create_empty_service_response(byc)
+    # create_empty_service_response(byc)
 
     schema_name = rest_path_value("schemas")
     comps = schema_name.split('.')
     schema_name = comps.pop(0)
+
+    # if "empty_value" in schema_name:
+
+    #     schema_name = "Biosample"
 
     if not "empty_value" in schema_name:
 
@@ -52,8 +56,9 @@ def schemas():
             print(json.dumps(camelize(s), indent=4, sort_keys=True, default=str)+"\n")
             exit()
     
-    response_add_error(byc, 422, "No correct schema name provided!")
-    cgi_print_response( byc, 422 )
+    # create_empty_service_response(byc)
+    # response_add_error(byc, 422, "No correct schema name provided!")
+    # cgi_print_response( byc, 422 )
 
 ################################################################################
 ################################################################################

@@ -6,12 +6,12 @@ bycon_definition_files:
 defaults:
   method: ""
   response_type: info
-  response_schema: BeaconServiceResponse #TODO
+  response_schema: beaconInfoResponse #TODO
   stats_number: 1
 meta:
   beacon_id: org.progenetix
   response_type: info
   returned_schemas:
-    BeaconInfo: "https://progenetix.org/services/schemas/BeaconInfoResponse/"
-  info: >
-    The latest BeaconInfo payload can be accessed in `results`.
+    BeaconInfo: "https://progenetix.org/services/schemas/beaconInfoResponse/"
+  info: >-
+    The latest BeaconInfo payload can be accessed in `response`.

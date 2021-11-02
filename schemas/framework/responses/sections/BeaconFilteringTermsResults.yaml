@@ -1,6 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/BeaconFilteringTermsResponse/v2021-07-02
-title: BeaconFilteringTermsResults
+$id: https://progenetix.org/services/schemas/beaconFilteringTermsResults/v2021-10-26
+title: beaconFilteringTermsResults
 description: >-
   Filtering terms available in this Beacon.
 type: array

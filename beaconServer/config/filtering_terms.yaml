@@ -5,13 +5,14 @@ bycon_definition_files:
   - filter_definitions
 defaults:
   response_type: info
-  response_schema: BeaconFilteringTermsResponse
+  response_schema: beaconFilteringTermsResponse
   stats_number: 1
 meta:
-  api_version: 2.0.0-draft.4
+  api_version: v2.0.0-draft4
   beacon_id: org.progenetix.beacon
   response_type: info
   returned_schemas:
-    FilteringTerm: "https://progenetix.org/services/schemas/BeaconFilteringTermsResponse/"
+    - entity_type: filtering_term
+      schema: https://progenetix.org/services/schemas/beaconFilteringTermsResults#/definitions/FilteringTerm
   info: >
     The filtering terms can be accessed in `response`.

@@ -8,7 +8,7 @@ properties:
   meta:
     description: >-
       Information about the response that could be relevant for the Beacon client in order to interpret the results.
-    $ref: "./sections/BeaconResponseMeta.yaml#/properties"
+    $ref: "./sections/beaconResponseMeta.yaml#/properties"
   error:
     description: >-
       Returning an error.

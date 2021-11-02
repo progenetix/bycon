@@ -1,25 +1,18 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/beaconResultsetsResponse/v2021-07-06
+$id: https://progenetix.org/services/schemas/beaconResultsetsResponse/v2021-10-25
 title: beaconResultsetsResponse
-description: >
-  Complete definition for a Response that includes record level details, grouped in Resultsets.
+description: >-
+  Complete definition for a Response that includes record level details, grouped in resultSets.
 type: object
 properties:
   meta:
     description: >-
       Information about the response that could be relevant for the Beacon client in order to interpret the results.
-    $ref: ./sections/BeaconResponseMeta.yaml#/properties
+    $ref: ./sections/beaconResponseMeta.yaml#/properties
   responseSummary:
     description: >-
       TODO: Here using only the count response, in contrast to original.
-    $ref: ./sections/BeaconCountResponseSection.yaml#/properties
-    # anyOf:
-    # - description: >-
-    #     Boolean (true/false) response section.
-    #   $ref: ./sections/BeaconBooleanResponseSection.yaml#/properties
-    # - description: >-
-    #     Total number of results section.
-    #   $ref: ./sections/BeaconCountResponseSection.yaml#/properties
+    $ref: ./sections/beaconSummaryResponseSection.yaml#/properties
   info:
     description: >-
       Additional details that could be of interest. Provided to clearly enclose any attribute that is not part of the Beacon specification.
@@ -28,10 +21,8 @@ properties:
     description: >-
       List of handovers that apply to the whole response, not to any resultset or result in particular.
     $ref: ../common/beaconCommonComponents.yaml#/definitions/ListOfHandovers
-  resultSets:
+  response:
     description: >-
-      TODO: This diverges from the main schema in that only the non-empty resultSet is being used, directly.
-    type: array
-    items:
-      $ref: ./sections/BeaconNonEmptyResultset.yaml#/properties
-    # $ref: ./sections/BeaconResultSets.yaml#/properties
+      Response for queries that recovers any result.
+    $ref: ./sections/beaconResultsets.yaml#/properties
+    # $ref: ./sections/beaconResultSets.yaml#/properties

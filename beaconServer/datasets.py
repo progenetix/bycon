@@ -34,14 +34,18 @@ podmd"""
 def main():
 
     datasets()
+
+################################################################################
+
+def collections():
+
+    datasets()
     
 ################################################################################
 
 def datasets():
 
     byc = initialize_service()
-
-    # parse_beacon_schema(byc)
 
     select_dataset_ids(byc)
     check_dataset_ids(byc)

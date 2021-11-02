@@ -1,0 +1,41 @@
+bycon_definition_files:
+  - config
+  - beacon_info
+  - beacon_mappings
+  - dataset_definitions
+  - filter_definitions
+defaults:
+  response_type: info
+  response_schema: beaconEntryTypesResponse
+meta:
+  response_type: info
+  returned_schemas:
+    - entity_type: entryType
+      schema: https://progenetix.org/services/schemas/entryTypesSchema
+response:
+  entry_types:
+    - $schema: https://progenetix.org/services/schemas/dataset
+      id: dataset
+      name: Dataset
+      description: >-
+        A dataset contains related genomic variations, biological
+        information and technical metadata.
+      ontology_term_for_this_type:
+        id: NCIT:C47824
+        label: data set
+      part_of_specification: Beacon v2.0.0-draft4
+      default_schema: https://progenetix.org/services/schemas/dataset
+    - $schema: https://progenetix.org/services/schemas/Biosample
+      id: biosample
+      name: Biosample
+      description: >-
+        A biological sample from which material - e.g. DNA - has been
+        extracted for molecular profiling.
+      ontology_term_for_this_type:
+        id: OBI:0000747
+        label: material sample
+      part_of_specification: Beacon v2.0.0-draft4
+      default_schema: https://progenetix.org/services/schemas/Biosample
+
+
+

@@ -1,6 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/BeaconResponseMeta/v2021-07-02
-title: BeaconResponseMeta
+$id: https://progenetix.org/services/schemas/beaconResponseMeta/v2021-10-26
+title: beaconResponseMeta
 description: >-
   Information about the response that could be relevant for the Beacon
   client in order to interpret the results.
@@ -15,13 +15,16 @@ properties:
     $ref: ../../common/beaconCommonComponents.yaml#/definitions/ApiVersion
   returnedSchemas:
     $ref: ../../common/beaconCommonComponents.yaml#/definitions/ListOfSchemas
+  returnedGranularity:
+    $ref: ../../common/beaconCommonComponents.yaml#/definitions/Granularity
   receivedRequestSummary:
     description: >-
       Section of the response that summarize the request received as it has been interpreted by teh Beacon server.
-    $ref: ./BeaconReceivedRequestSummary.yaml#/properties
+    $ref: ./beaconReceivedRequestSummary.yaml#/properties
 required:
   - beaconId
   - apiVersion
   - returnedSchemas
+  - returnedGranularity
   - receivedRequestSummary
 

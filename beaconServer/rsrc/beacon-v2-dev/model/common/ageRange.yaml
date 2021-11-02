@@ -5,7 +5,7 @@ type: object
 properties:
   start:
     description: Represents age as a ISO8601 duration (e.g., P18Y).
-    $ref: ./Age.json
+    $ref: ./age.json
   end:
     description: Represents age as a ISO8601 duration (e.g., P59Y).
-    $ref: ./Age.json
+    $ref: ./age.json

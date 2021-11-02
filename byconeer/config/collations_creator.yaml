@@ -24,9 +24,9 @@ collationed:
     pattern: '^(NCITstage)[\-]C'
     db_key: 'pathological_stage.id'
     is_series: False
-  pgxfus:
-    prefix: pgxfus
-    pattern: '^(pgxfus)[\-]\d'
+  EFOfus:
+    prefix: EFO
+    pattern: '^(EFO)[\:]\d'
     db_key: 'followup_state.id'
     is_series: False
   EFO:

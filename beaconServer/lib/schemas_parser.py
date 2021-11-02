@@ -30,6 +30,25 @@ def beacon_get_endpoint_base_paths(byc):
 
 ################################################################################
 
+def read_schema_files(schema_name, item, byc):
+
+    s_f_p = get_schema_file_path(schema_name, byc)
+
+    # print(schema_name, s_f_p)
+
+    if not s_f_p is False:
+
+        s_path = path.join( s_f_p, schema_name+".yaml#/"+item )
+        root_def = RefDict(s_path)
+        exclude_keys = [ "format", "examples" ]
+        s = materialize(root_def, exclude_keys = exclude_keys)
+        # print(s)
+        return s
+
+    return False
+
+################################################################################
+
 def get_schema_file_path(schema_name, byc):
 
     for s_p in byc["config"]["schema_paths"]:
@@ -41,25 +60,12 @@ def get_schema_file_path(schema_name, byc):
 
         for s_f in s_fs:
 
+
             f_name = path.splitext( s_f )[0]
-            
+            # print(schema_name, f_name)
+
             if f_name == schema_name:
                 return p
-
-    return False
-
-################################################################################
-
-def read_schema_files(schema_name, item, byc):
-
-    s_f_p = get_schema_file_path(schema_name, byc)
-
-    if not s_f_p is False:
-
-        s_path = path.join( s_f_p, schema_name+".yaml#/"+item )
-        root_def = RefDict(s_path)
-        exclude_keys = [ "format", "examples" ]
-        return materialize(root_def, exclude_keys = exclude_keys)
 
     return False
 
@@ -97,7 +103,7 @@ def instantiate_schema(schema):
 ################################################################################
 
 def create_empty_instance(schema):
-    # s_convert = convert_case_for_keys(schema, camel_to_snake)
+
     s_convert = humps.decamelize(schema)
     s_i = instantiate_schema(s_convert)
     return s_i

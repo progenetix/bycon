@@ -36,13 +36,11 @@ def info():
  
 
     # HOT FIX
-    byc["service_response"].pop("info")
-
     byc["service_response"]["meta"].update({
         "info": "Progentix Beacon v2 information (transitional)",
         "returned_schemas": [
           {
-            "info": "https://progenetix.org/services/schemas/BeaconInfoResults"
+            "info": "https://progenetix.org/services/schemas/beaconInfoResults"
           }
         ]
     })

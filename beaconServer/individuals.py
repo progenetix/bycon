@@ -30,7 +30,8 @@ def individuals():
     byc = initialize_service()
     run_beacon_init_stack(byc)
 
-    run_beacon(byc)
+    run_result_sets_beacon("individuals", byc)
+    
     export_datatable(byc)
     query_results_save_handovers(byc)
 

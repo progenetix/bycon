@@ -1,7 +1,7 @@
 ---
 beacon_id: 'org.progenetix.beacon'
 name: 'Progenetix Cancer Genomics Beacon+'
-api_version: '2.0.0-draft.4'
+api_version: v2.0.0-draft.4
 environment: dev
 organization:
   id: "org.baudisgroup.info"
@@ -14,7 +14,7 @@ organization:
   logoUrl: "https://progenetix.org/p/progenetix.png"
   info:
     updateDateTime: 2021-07-02
-description: >
+description: >-
   Beacon+ provides a forward looking implementation of the Beacon API, with focus on structural variants and metadata based on the cancer and reference genome profiling data represented in the Progenetix oncogenomic data resource (https://progenetix.org).
 version: v2
 welcomeUrl: "https://progenetix.org/beaconplus-instances/beaconplus/"

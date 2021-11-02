@@ -11,7 +11,8 @@ defaults:
 meta:
   response_type: genespans
   returned_schemas:
-    ProgenetixGene: https://progenetix.org/services/schemas/ProgenetixGene/
+    - entity_type: progenetixgene
+      schema: https://progenetix.org/services/schemas/ProgenetixGene/
   info: >
     The main genes payload can be accessed in `results`.
 assembly_ids:

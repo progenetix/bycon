@@ -67,7 +67,6 @@ def read_yaml_with_key_to_object(file_key, data_key, **paths):
         return o[ data_key ]
 
     # TODO: error capture & procedure
-
     return o
 
 ################################################################################

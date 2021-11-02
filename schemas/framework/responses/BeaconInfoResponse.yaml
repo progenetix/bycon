@@ -1,7 +1,7 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/BeaconInfoResponse/v2021-07-02
-title: BeaconInfoResponse
-description: >
+$id: https://progenetix.org/services/schemas/beaconInfoResponse/v2021-10-27
+title: beaconInfoResponse
+description: >-
   Information about the Beacon. Aimed to Beacon clients like web pages or Beacon networks.
 type: object
 required:
@@ -11,9 +11,8 @@ properties:
   meta:
     description: >-
       Information about the response that could be relevant for the Beacon client in order to interpret the results.
-    $ref: ./sections/BeaconInformationalResponseMeta.yaml#/properties
+    $ref: ./sections/beaconInformationalResponseMeta.yaml#/properties
   response:
     description: >-
       Metadata describing a Beacon instance.
-    $ref: ./sections/BeaconInfoResults.yaml#/properties
-
+    $ref: ./sections/beaconInfoResults.yaml#/properties

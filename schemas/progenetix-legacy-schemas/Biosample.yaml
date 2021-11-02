@@ -1,6 +1,7 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
 "$id": https://progenetix.org/services/schemas/Biosample/v2021-03-05
 title: Biosample
+type: object
 meta:
   contributors:
     - description: "GA4GH Metadata Task Team"

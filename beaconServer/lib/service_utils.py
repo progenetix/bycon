@@ -13,7 +13,7 @@ from cgi_utils import *
 from handover_execution import handover_retrieve_from_query_results, handover_return_data
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers
 from interval_utils import generate_genomic_intervals
-from query_execution import execute_bycon_queries
+from query_execution import execute_bycon_queries, process_empty_request
 from query_generation import  initialize_beacon_queries
 from read_specs import read_bycon_configs_by_name,read_local_prefs
 from schemas_parser import *
@@ -37,11 +37,10 @@ def run_beacon_init_stack(byc):
 def run_beacon(byc):
 
     # TODO
-    if "results" in byc["service_response"]:
-        byc["service_response"].pop("results")
     if "results_handover" in byc["service_response"]:
         byc["service_response"].pop("results_handover")
 
+    # TODO: Wrong response etc.
     if "BeaconCoreResponse" in byc["response_schema"]:
         for ds_id in byc["dataset_ids"]:
             execute_bycon_queries( ds_id, byc )
@@ -91,6 +90,53 @@ def run_beacon(byc):
 
 ################################################################################
 
+def run_result_sets_beacon(collname, byc):
+
+    for i, r_set in enumerate(byc["service_response"]["response"]["result_sets"]):
+
+        results_count = 0
+
+        ds_id = r_set["id"]
+        if len(byc["queries"].keys()) > 0:
+            execute_bycon_queries( ds_id, byc )
+            beacon_res = retrieve_analyses(ds_id, byc)
+            r_set.update({ "results_handovers": dataset_response_add_handovers(ds_id, byc) })
+
+            for c, c_d in byc["config"]["beacon_counts"].items():
+                if c_d["h->o_key"] in byc["dataset_results"][ds_id]:
+                    r_c = byc["dataset_results"][ds_id][ c_d["h->o_key"] ]["target_count"]
+                    r_set["info"]["counts"].update({ c: r_c })
+            if isinstance(beacon_res, list):
+                results_count = len( beacon_res )
+
+        else:
+            beacon_res, results_count = process_empty_request(ds_id, collname, byc)
+            byc["service_response"]["meta"]["received_request_summary"].update({"pagination":{"limit": 1, "skip": 0}})
+
+            r_set.update({"results_count": results_count })
+
+        if isinstance(beacon_res, list):
+            if results_count > 0:
+
+                byc["service_response"]["response_summary"]["num_total_results"] += results_count
+                r_set.update({ "exists": True, "results": beacon_res })
+
+                if byc["pagination"]["limit"] > 0:
+                    res_range = _pagination_range(results_count, byc)
+                    r_set.update({ "results": beacon_res[res_range[0]:res_range[-1]] })
+
+        byc["service_response"]["response"]["result_sets"][i] = r_set
+
+    if byc["service_response"]["response_summary"]["num_total_results"] > 0:
+        byc["service_response"]["response_summary"].update({"exists": True })
+        response_add_error(byc, 200)
+
+    cgi_break_on_errors(byc)
+
+    return byc
+
+################################################################################
+
 def _pagination_range(results_count, byc):
 
     r_range = [
@@ -127,6 +173,7 @@ def initialize_service(service="NA"):
     byc =  {
         "service_name": path.splitext(path.basename(mod.__file__))[0],
         "response_schema": "BeaconServiceResponse",
+        "beacon_info": {},
         "pkg_path": pkg_path,
         "these_prefs": read_local_prefs( service, sub_path ),
         "method": "",
@@ -142,6 +189,7 @@ def initialize_service(service="NA"):
         read_bycon_configs_by_name( "config", byc )
 
     form_data, query_meta, debug_state = cgi_parse_query(byc)
+
     byc.update({ "form_data": form_data, "query_meta": query_meta, "debug_state": debug_state })
 
     if "defaults" in byc["these_prefs"]:
@@ -169,16 +217,22 @@ def initialize_service(service="NA"):
 def response_meta_add_request_summary(meta, byc):
 
     if not "received_request_summary" in meta:
-        meta.update( { "received_request_summary":{} } )
+        meta.update( { "received_request_summary":{} } )        
 
-    meta["received_request_summary"].update({ "filters": byc.get("filters", []) })
-    meta["received_request_summary"].update({ "pagination": byc.get("pagination", {}) })
+    meta["received_request_summary"].update({
+        "filters": byc.get("filters", []), 
+        "pagination": byc.get("pagination", {}),
+        "api_version": byc["beacon_info"].get("api_version", "v2.n")
+    })
+
+    if "received_request_summary" in byc["these_prefs"]["meta"]:
+        for rrs_k, rrs_v in byc["these_prefs"]["meta"]["received_request_summary"].items():
+            meta["received_request_summary"].update( {rrs_k: rrs_v })
 
     # TODO: This is a private extension so far.
     meta["received_request_summary"].update({ "processed_query": byc.get("queries", {}) })
 
     return meta
-
 
 ################################################################################
 
@@ -188,6 +242,7 @@ def create_empty_service_response(byc):
 
     r_s = read_schema_files(byc["response_schema"], "properties", byc)
     r = create_empty_instance(r_s)
+
     e_s = read_schema_files("beaconErrorResponse", "properties", byc)
     e = create_empty_instance(e_s)
 
@@ -199,18 +254,13 @@ def create_empty_service_response(byc):
     		r["meta"].update( { k: v } )
 
     response_meta_add_request_summary(r["meta"], byc)
+    for i_k in ["api_version", "beacon_id", "create_date_time", "update_date_time"]:
+        r["meta"].update({ i_k: byc["beacon_info"].get(i_k, "") })
 
-    if "beacon_info" in byc:
-        try:
-            for i_k in ["api_version", "beacon_id", "create_date_time", "update_date_time"]:
-                r["meta"].update({ i_k: byc["beacon_info"][ i_k ] })
-        except:
-            pass
-
-    if "response_type" in byc:
-        for r_t, r_d in byc["beacon_mappings"]["response_types"].items():
-            if r_d["id"] == byc["response_type"]:
-                r["meta"].update( { "returned_schemas": r_d["schema"] } )
+    # if "response_type" in byc:
+    #     for r_t, r_d in byc["beacon_mappings"]["response_types"].items():
+    #         if r_d["id"] == byc["response_type"]:
+    #             r["meta"].update( { "returned_schemas": r_d["schema"] } )
 
     if "requested_schemas" in byc["query_meta"]:
         if byc["query_meta"]["requested_schemas"][0]:
@@ -221,9 +271,18 @@ def create_empty_service_response(byc):
                         r["meta"].update( { "returned_schemas": r_d["schema"] } )
                         byc.update({"response_type":e_t})
 
-    if "result_sets" in r:
+    try:
+        if len(byc["these_prefs"]["defaults"]["include_resultset_responses"]) > 2:
+            r.update({"result_sets":[]})
+    except KeyError:
+        pass
 
-        r_set_s = read_schema_files("BeaconNonEmptyResultset", "properties", byc)
+    if "result_sets" in r["response"]:
+
+        # TODO: stringent definition on when this is being used
+
+        r_set_s = read_schema_files("beaconResultSets", "definitions/resultSetInstance/properties", byc)
+
         r_set = create_empty_instance(r_set_s)
    
         if "dataset_ids" in byc:
@@ -236,7 +295,7 @@ def create_empty_service_response(byc):
                     "exists": False,
                     "info": { "counts": { } }
                 })
-                r["result_sets"].append(ds_rset)
+                r["response"]["result_sets"].append(ds_rset)
 
     byc.update( {"service_response": r, "error_response": e })
 
@@ -245,10 +304,28 @@ def create_empty_service_response(byc):
         if p in byc:
             response_add_parameter(byc, p, byc[ p ])
 
-    if "errors" in byc:
-        if len(byc["errors"]) > 0:
-            response_add_error(byc, 422, "::".join(byc["errors"]))
+    return byc
 
+ ################################################################################
+
+def create_empty_non_data_response(byc):
+
+    # print(byc["response_schema"])
+    r_s = read_schema_files(byc["response_schema"], "properties", byc)
+    r = create_empty_instance(r_s)
+    e_s = read_schema_files("beaconErrorResponse", "properties", byc)
+    e = create_empty_instance(e_s)
+
+    response_meta_add_request_summary(r["meta"], byc)
+    for i_k in ["api_version", "beacon_id", "create_date_time", "update_date_time"]:
+        r["meta"].update({ i_k: byc["beacon_info"].get(i_k, "") })
+
+    for k, v in byc["these_prefs"]["meta"].items():
+        r["meta"].update( { k: v } )
+    for r_k, r_v in byc["these_prefs"]["response"].items():
+        r["response"].update({r_k: r_v})
+
+    byc.update( {"service_response": r, "error_response": e })
 
     return byc
 
@@ -260,7 +337,7 @@ def response_add_parameter(byc, name, value):
         return byc
 
     if value:
-        byc["service_response"]["meta"]["received_request"].update( { name: value } )
+        byc["service_response"]["meta"]["received_request_summary"].update( { name: value } )
 
     return byc
 
@@ -270,11 +347,9 @@ def response_collect_errors(byc):
 
     # TODO: flexible list of errors
     if not byc[ "queries" ].keys():
-      response_add_error(byc, 422, "No (correct) query parameters were provided." )
-    # if len(byc[ "dataset_ids" ]) < 1:
-    #   response_add_error(byc, 422, "No `datasetIds` parameter provided." )
+      response_add_error(byc, 200, "No (correct) query parameters were provided." )
     if len(byc[ "dataset_ids" ]) > 1:
-      response_add_error(byc, 422, "More than 1 `datasetIds` value was provided." )
+      response_add_error(byc, 200, "More than 1 `datasetIds` value was provided." )
       
 ################################################################################
 
@@ -318,10 +393,9 @@ def collations_set_delivery_keys(byc):
 def populate_service_response( byc, results):
 
     populate_service_header(byc, results)
-    populate_service_response_handovers(byc)
     populate_service_response_counts(byc)
     byc["service_response"].update({"results": results })
-    byc["service_response"].pop("result_sets")
+    # byc["service_response"].pop("result_sets")
 
     return byc
 
@@ -337,20 +411,6 @@ def populate_service_header(byc, results):
     if r_no > 0:
         byc["service_response"]["response_summary"].update({"exists": True })
         response_add_error(byc, 200)
-
-    return byc
-
-################################################################################
-
-def populate_service_response_handovers(byc):
-
-    if not "dataset_results" in byc:
-        return byc
-    if not "dataset_ids" in byc:
-        return byc
-
-    # TODO: Needed? Switching to result_test?
-    byc["service_response"].update({ "results_handover": dataset_response_add_handovers(byc[ "dataset_ids" ][ 0 ], byc) })
 
     return byc
 

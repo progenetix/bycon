@@ -17,6 +17,7 @@ from query_execution import *
 from query_generation import *
 from read_specs import *
 from remap_utils import *
+from repository_utils import *
 from schemas_parser import *
 from service_utils import *
 from biosample_responses import *

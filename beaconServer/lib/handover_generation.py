@@ -69,6 +69,9 @@ def dataset_response_add_handovers(ds_id, byc):
 
 def query_results_save_handovers(byc):
 
+    if not "dataset_results" in byc:
+        return False
+
     for ds_id in byc["dataset_results"].keys():
         dataset_results_save_handovers(ds_id, byc)
 
