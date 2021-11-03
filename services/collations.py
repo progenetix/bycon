@@ -43,7 +43,7 @@ def collations():
     s_s = { }
     d_k = collations_set_delivery_keys(byc)
 
-    c = byc["these_prefs"]["collection_name"]
+    c = byc["this_config"]["collection_name"]
 
     mongo_client = MongoClient( )
     for ds_id in byc[ "dataset_ids" ]:
@@ -67,7 +67,7 @@ def collations():
                     s_s[ i_d ] = { }
                 for k in d_k:
                     if k in subset.keys():
-                        if k in byc["these_prefs"]["integer_keys"]:
+                        if k in byc["this_config"]["integer_keys"]:
                             if k in s_s[ i_d ]:
                                 s_s[ i_d ][ k ] += int(subset[ k ])
                             else:

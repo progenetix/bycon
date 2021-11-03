@@ -25,6 +25,7 @@ def run_beacon_init_stack(byc):
 
     beacon_get_endpoint_base_paths(byc)
     initialize_beacon_queries(byc)
+    print_parameters_response(byc)
     generate_genomic_intervals(byc)
     create_empty_service_response(byc)
     response_collect_errors(byc)
@@ -172,18 +173,20 @@ def initialize_service(service="NA"):
 
     byc =  {
         "service_name": path.splitext(path.basename(mod.__file__))[0],
+        "service_id": service,
         "response_schema": "BeaconServiceResponse",
         "beacon_info": {},
         "pkg_path": pkg_path,
-        "these_prefs": read_local_prefs( service, sub_path ),
         "method": "",
         "output": "",
         "errors": [ ],
         "warnings": [ ]
     }
 
-    if "bycon_definition_files" in byc["these_prefs"]:
-        for d in byc["these_prefs"]["bycon_definition_files"]:
+    read_local_prefs( service, sub_path, byc )
+
+    if "bycon_definition_files" in byc["this_config"]:
+        for d in byc["this_config"]["bycon_definition_files"]:
             read_bycon_configs_by_name( d, byc )
     else:
         read_bycon_configs_by_name( "config", byc )
@@ -192,16 +195,16 @@ def initialize_service(service="NA"):
 
     byc.update({ "form_data": form_data, "query_meta": query_meta, "debug_state": debug_state })
 
-    if "defaults" in byc["these_prefs"]:
-        for d_k, d_v in byc["these_prefs"]["defaults"].items():
+    if "defaults" in byc["this_config"]:
+        for d_k, d_v in byc["this_config"]["defaults"].items():
             byc.update( { d_k: d_v } )
 
     if "output" in byc["form_data"]:
         byc["output"] = byc["form_data"]["output"]
 
     if "method" in byc["form_data"]:
-        if "methods" in byc["these_prefs"]:
-            if byc["form_data"]["method"] in byc["these_prefs"]["methods"].keys():
+        if "methods" in byc["this_config"]:
+            if byc["form_data"]["method"] in byc["this_config"]["methods"].keys():
                 byc["method"] = byc["form_data"]["method"]
 
     # TODO: proper defaults, separate function
@@ -225,8 +228,8 @@ def response_meta_add_request_summary(meta, byc):
         "api_version": byc["beacon_info"].get("api_version", "v2.n")
     })
 
-    if "received_request_summary" in byc["these_prefs"]["meta"]:
-        for rrs_k, rrs_v in byc["these_prefs"]["meta"]["received_request_summary"].items():
+    if "received_request_summary" in byc["this_config"]["meta"]:
+        for rrs_k, rrs_v in byc["this_config"]["meta"]["received_request_summary"].items():
             meta["received_request_summary"].update( {rrs_k: rrs_v })
 
     # TODO: This is a private extension so far.
@@ -249,8 +252,8 @@ def create_empty_service_response(byc):
     if "response_summary" in r:
         r["response_summary"].update({ "exists": False })
 
-    if "meta" in byc["these_prefs"]:
-    	for k, v in byc["these_prefs"]["meta"].items():
+    if "meta" in byc["this_config"]:
+    	for k, v in byc["this_config"]["meta"].items():
     		r["meta"].update( { k: v } )
 
     response_meta_add_request_summary(r["meta"], byc)
@@ -272,7 +275,7 @@ def create_empty_service_response(byc):
                         byc.update({"response_type":e_t})
 
     try:
-        if len(byc["these_prefs"]["defaults"]["include_resultset_responses"]) > 2:
+        if len(byc["this_config"]["defaults"]["include_resultset_responses"]) > 2:
             r.update({"result_sets":[]})
     except KeyError:
         pass
@@ -320,12 +323,31 @@ def create_empty_non_data_response(byc):
     for i_k in ["api_version", "beacon_id", "create_date_time", "update_date_time"]:
         r["meta"].update({ i_k: byc["beacon_info"].get(i_k, "") })
 
-    for k, v in byc["these_prefs"]["meta"].items():
+    for k, v in byc["this_config"]["meta"].items():
         r["meta"].update( { k: v } )
-    for r_k, r_v in byc["these_prefs"]["response"].items():
+    for r_k, r_v in byc["this_config"]["response"].items():
         r["response"].update({r_k: r_v})
 
     byc.update( {"service_response": r, "error_response": e })
+
+    return byc
+
+################################################################################
+
+def print_parameters_response(byc):
+
+    if not "queries" in byc:
+        return byc
+
+    if not byc["service_id"] in byc["queries"].keys():
+        return byc
+
+    s_i_d = byc["service_id"]
+
+    if "requestParameters" in byc["queries"][ s_i_d ]["id"]:
+        prjsonresp(byc["this_request_parameters"])
+    elif "endpoints" in byc["queries"][ s_i_d ]["id"]:
+        prjsonresp(byc["this_endpoints"])
 
     return byc
 
@@ -380,11 +402,11 @@ def collations_set_delivery_keys(byc):
         d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
         return d_k
 
-    if not "methods" in byc["these_prefs"]:
+    if not "methods" in byc["this_config"]:
         return d_k
 
-    if byc["method"] in byc["these_prefs"]["methods"]:
-        d_k = byc["these_prefs"]["methods"][ byc["method"] ]
+    if byc["method"] in byc["this_config"]["methods"]:
+        d_k = byc["this_config"]["methods"][ byc["method"] ]
 
     return d_k
 
@@ -438,6 +460,10 @@ def populate_service_response_counts(byc):
     byc["service_response"]["info"].update({ "counts": counts })
 
     return byc
+
+################################################################################
+
+
 
 ################################################################################
 

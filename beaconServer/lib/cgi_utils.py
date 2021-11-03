@@ -337,6 +337,15 @@ def close_text_streaming():
 def prjsoncam(this):
     print(json.dumps(humps.camelize(this), indent=4, sort_keys=True, default=str)+"\n")
 
+################################################################################
+
+def prjsonresp(this={}):
+
+    print('Content-Type: application/json')
+    print('status:200')
+    print()
+    prjsoncam(this)
+    exit()
 
 
 

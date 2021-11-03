@@ -35,12 +35,14 @@ def main():
 
 def ids():
 
-    these_prefs = read_local_prefs( "ids", dir_path )
+    byc = {}
+
+    read_local_prefs( "ids", dir_path, byc )
 
     id_in = rest_path_value("ids")
 
     if id_in:
-        for f_p in these_prefs["format_patterns"]:
+        for f_p in byc["this_config"]["format_patterns"]:
             pat = re.compile( f_p["pattern"] )
             link = f_p["link"]
             if pat.match(id_in):

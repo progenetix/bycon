@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from os import path, pardir
 from pathlib import Path
 from json_ref_dict import RefDict, materialize
+import humps
 
 ################################################################################
 
@@ -33,29 +34,32 @@ def read_bycon_configs_by_name(name, byc):
 
 ################################################################################
 
-def read_local_prefs(service, dir_path):
+def read_local_prefs(service, dir_path, byc):
+
+    these_pars = ["config", "endpoints", "request_parameters"]
+
+    for t_p in these_pars:
+        t_k = "this_"+t_p
+        byc.update({t_k: {}})
 
     d = Path( path.join( dir_path, "config", service ) )
+
+    # old style named config
     f = Path( path.join( dir_path, "config", service+".yaml" ) )
 
     if f.is_file():
-        return load_yaml( f )
+        byc.update({"this_config": load_yaml( f ) })
+        return byc
+
     elif d.is_dir():
-        these_prefs = load_yaml( Path( path.join( d, "config.yaml" ) ) )
+        for t_p in these_pars:
+            t_k = "this_"+t_p
+            t_f_n = "{}.yaml".format(humps.camelize(t_p))
+            t_f_p = Path( path.join( d, t_f_n ) )
+            if t_f_p.is_file():
+                byc.update({ t_k:load_yaml( t_f_p ) } )
 
-        c_files = {
-            "openapi_definitions": "endpoints.yaml",
-            "request_parameters": "requestParameters.yaml"
-        }
-        for c_k, c_n in c_files.items():
-            these_prefs.update({c_k:{}})
-            c_f = Path( path.join( d, c_n ) )
-            if c_f.is_file():
-                these_prefs.update({c_k:load_yaml( c_f )})
-
-        return these_prefs
-    else:
-        return {}    
+    return byc   
 
 ################################################################################
 

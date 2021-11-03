@@ -56,13 +56,13 @@ def ontologymaps_creator():
     mongo_client = MongoClient( )
     o_m = { }
 
-    for mt, mv in byc["these_prefs"]["map_types"].items():
+    for mt, mv in byc["this_config"]["map_types"].items():
 
         o_l_max = len(mv["prefixes"])
 
-        for ds_id in byc["these_prefs"]["dataset_ids"]:
+        for ds_id in byc["this_config"]["dataset_ids"]:
             data_db = mongo_client[ ds_id ]
-            for coll in byc["these_prefs"]["data_collections"]:
+            for coll in byc["this_config"]["data_collections"]:
                 no =  data_db[ coll ].estimated_document_count()
                 if not byc["args"].test:
                     bar = Bar("Analyzing samples", max = no, suffix="%(percent)d%%"+" of "+str(no) )
@@ -94,7 +94,7 @@ def ontologymaps_creator():
                     # if k == 'NCIT:C3372::icdom-80003::icdot-C44.9':
                     #     print(d, o_l)
                     if k in o_m:
-                        if len(o_m[k]["examples"]) < byc["these_prefs"]["example_length"]:
+                        if len(o_m[k]["examples"]) < byc["this_config"]["example_length"]:
                             o_m[k]["examples"].update([d])
 
                     else:
@@ -144,13 +144,13 @@ def _export_ontologymaps(dir_path, map_type, o_m):
 
 def _read_mapping_defaults(dir_path, map_type, **byc):
 
-    if not "mappingfile" in byc["these_prefs"]["map_types"][ map_type ]:
+    if not "mappingfile" in byc["this_config"]["map_types"][ map_type ]:
         return {}
 
-    mf = path.join( dir_path, *byc["these_prefs"]["map_types"][ map_type ]["mappingfile"] )
+    mf = path.join( dir_path, *byc["this_config"]["map_types"][ map_type ]["mappingfile"] )
     o_m_r = { }
     equiv_keys = [ ]
-    pre_fs = byc["these_prefs"]["map_types"][ map_type ]["prefixes"]
+    pre_fs = byc["this_config"]["map_types"][ map_type ]["prefixes"]
     o_l_max = len(pre_fs)
 
     for pre in pre_fs:

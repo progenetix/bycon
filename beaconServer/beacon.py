@@ -29,17 +29,18 @@ def main():
 def beacon(path=""):
 
     set_debug_state(debug=0)
-    these_prefs = read_local_prefs( "beacon_mappings", pkg_path )
+    byc = {}
+    read_local_prefs( "beacon_mappings", pkg_path, byc )
 
     rest_base_name = "beacon"
 
-    if path in these_prefs["service_names"]:
+    if path in byc["this_config"]["service_names"]:
         service_name = path
     else:
         service_name = rest_path_value(rest_base_name)
 
-    if service_name in these_prefs["service_names"]:    
-        f = these_prefs["service_names"][ service_name ]
+    if service_name in byc["this_config"]["service_names"]:    
+        f = byc["this_config"]["service_names"][ service_name ]
 
         # dynamic package/function loading
         try:

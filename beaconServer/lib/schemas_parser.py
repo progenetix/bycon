@@ -15,7 +15,7 @@ schema_path = path.join( pkg_path, "schemas" )
 def beacon_get_endpoint_base_paths(byc):
 
     try:
-        p_s = byc["these_prefs"]["openapi_definitions"]["paths"].keys()
+        p_s = byc["this_endpoints"]["paths"].keys()
     except:
         return byc
 

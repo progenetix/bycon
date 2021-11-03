@@ -97,7 +97,7 @@ def retrieve_variants(ds_id, byc):
 
     ds_results = byc["dataset_results"][ds_id]
 
-    if not byc["method"] in byc["these_prefs"]["all_variants_methods"]:
+    if not byc["method"] in byc["this_config"]["all_variants_methods"]:
 
         if "variants.digest" in ds_results:
             beacon_res = []

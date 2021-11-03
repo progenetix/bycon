@@ -63,13 +63,13 @@ def collations_creator():
         s_p = {}
         for p in re.split(",", byc["args"].collationtypes):
             print(p)
-            if p in byc["these_prefs"]["collationed"].keys():
-                s_p.update({p:byc["these_prefs"]["collationed"][p]})
-        if len(byc["these_prefs"]["collationed"].keys()) < 1:
+            if p in byc["this_config"]["collationed"].keys():
+                s_p.update({p:byc["this_config"]["collationed"][p]})
+        if len(byc["this_config"]["collationed"].keys()) < 1:
             print("No existing collation prefix was provided with -p ...")
             exit()
 
-        byc["these_prefs"].update({"collationed":s_p})
+        byc["this_config"].update({"collationed":s_p})
 
     for ds_id in byc["dataset_ids"]:
         print( "Creating collations for " + ds_id)
@@ -79,7 +79,7 @@ def collations_creator():
 
 def _create_collations_from_dataset( ds_id, **byc ):
 
-    for coll_type, coll_defs in byc["these_prefs"]["collationed"].items():
+    for coll_type, coll_defs in byc["this_config"]["collationed"].items():
 
         pre = coll_defs["prefix"]
         pre_h_f = path.join( byc["pkg_path"], "byconeer", "rsrc", coll_type, "numbered-hierarchies.tsv" )
@@ -216,8 +216,8 @@ def get_prefix_hierarchy( ds_id, coll_type, pre_h_f, **byc):
     data_client = MongoClient( )
     data_db = data_client[ ds_id ]
     data_coll = data_db[ byc["config"]["collations_source"] ]
-    data_key = byc["these_prefs"]["collationed"][ coll_type ]["db_key"]
-    data_pat = byc["these_prefs"]["collationed"][ coll_type ]["pattern"]
+    data_key = byc["this_config"]["collationed"][ coll_type ]["db_key"]
+    data_pat = byc["this_config"]["collationed"][ coll_type ]["pattern"]
     
     onto_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
 
@@ -328,11 +328,11 @@ def _get_dummy_hierarchy(ds_id, pre, **byc):
     data_client = MongoClient( )
     data_db = data_client[ ds_id ]
     data_coll = data_db[ byc["config"]["collations_source"] ]
-    data_pat = byc["these_prefs"]["collationed"][ pre ]["pattern"]
-    data_key = byc["these_prefs"]["collationed"][ pre ]["db_key"]
+    data_pat = byc["this_config"]["collationed"][ pre ]["pattern"]
+    data_key = byc["this_config"]["collationed"][ pre ]["db_key"]
 
-    if byc["these_prefs"]["collationed"][ pre ]["is_series"]: 
-        s_pat = byc["these_prefs"]["collationed"][ pre ]["child_pattern"]
+    if byc["this_config"]["collationed"][ pre ]["is_series"]: 
+        s_pat = byc["this_config"]["collationed"][ pre ]["child_pattern"]
         s_re = re.compile( s_pat )
 
     pre_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
@@ -346,7 +346,7 @@ def _get_dummy_hierarchy(ds_id, pre, **byc):
         bar.next()
         hier.update( { c: _get_hierarchy_item( data_coll, data_key, c, order, 0, [ c ] ) } )
 
-        if byc["these_prefs"]["collationed"][ pre ]["is_series"]:
+        if byc["this_config"]["collationed"][ pre ]["is_series"]:
 
             ser_ids = data_coll.distinct( data_key, { data_key: c } )
             ser_ids = list(filter(lambda d: s_re.match(d), ser_ids))

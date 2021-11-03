@@ -118,8 +118,8 @@ def _dataset_count_collationed_filters(ds_id, **byc):
                 if split_v.match(k):
                     pre = split_v.match(k).group(1)
 
-                    if pre in byc["these_prefs"]["collationed"]:
-                        coll_p = re.compile( byc["these_prefs"]["collationed"][ pre ]["pattern"] )
+                    if pre in byc["this_config"]["collationed"]:
+                        coll_p = re.compile( byc["this_config"]["collationed"][ pre ]["pattern"] )
                         if coll_p.match(k):
                             pfs.update( { k: { 
                                 "id": k,

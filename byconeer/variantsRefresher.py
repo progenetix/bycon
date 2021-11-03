@@ -66,7 +66,7 @@ def variants_refresher():
 
     mongo_client = MongoClient( )
 
-    min_l = byc["these_prefs"]["refreshing"]["cnv_min_length"]
+    min_l = byc["this_config"]["refreshing"]["cnv_min_length"]
 
     for ds_id in byc["dataset_ids"]:
 

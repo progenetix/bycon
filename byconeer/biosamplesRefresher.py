@@ -219,7 +219,7 @@ def _update_cnv_stats(cs_coll, bsid, update_obj, byc):
     cs_ids = [ ]
     cs_stats_no = 0
     cnv_stats = { }
-    cnvstatistics = {k:[] for k in byc["these_prefs"]["refreshing"]["cnvstatistics"]}
+    cnvstatistics = {k:[] for k in byc["this_config"]["refreshing"]["cnvstatistics"]}
     cs_query = { "biosample_id": bsid }
 
     cs_ids = cs_coll.distinct( "id", cs_query )

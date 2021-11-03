@@ -35,7 +35,7 @@ def genespans():
     assembly_id = byc["assembly_id"]
     if "assemblyId" in byc[ "form_data" ]:
         aid = byc[ "form_data" ]["assemblyId"]
-        if aid in byc["these_prefs"]["assembly_ids"]:
+        if aid in byc["this_config"]["assembly_ids"]:
             assembly_id = aid
         else:
             byc["service_response"]["meta"]["warnings"].append("{} is not supported; fallback {} is being used!".format(aid, assembly_id))
@@ -75,7 +75,7 @@ def genespans():
         if "genespan" in byc["method"]:
             for i, g in enumerate(results):
                 g_n = {}
-                for k in byc["these_prefs"]["methods"]["genespan"]:
+                for k in byc["this_config"]["methods"]["genespan"]:
                     if not k in g:
                         continue
                     g_n.update({k:g[k]})

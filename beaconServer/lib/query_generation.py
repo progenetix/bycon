@@ -39,7 +39,6 @@ def generate_queries(byc):
     update_queries_from_geoquery( byc )
     purge_empty_queries( byc )
 
-
     return byc
 
 ################################################################################
@@ -80,13 +79,13 @@ def update_queries_from_path_id( byc ):
     if s_id:
         if not "empty_value" in s_id:
             if s_id in dummy_id_patterns:
-                if "defaults" in byc["these_prefs"]:
-                    s_id = byc["these_prefs"]["defaults"].get("test_document_id", "")
+                if "defaults" in byc["this_config"]:
+                    s_id = byc["this_config"]["defaults"].get("test_document_id", "")
 
             byc.update({ "id_from_path": s_id })
             byc["queries"].update(
                 { pgx_base: { "id": s_id } } )
-            if not "response_types" in byc["these_prefs"]:
+            if not "response_types" in byc["this_config"]:
                 return byc
 
             r_t = rest_path_value(s_id)
@@ -123,7 +122,6 @@ def update_queries_from_id_values(byc):
     return byc
 
 ################################################################################
-
 
 def update_queries_from_hoid( byc):
 
