@@ -1,0 +1,2 @@
+id	analysis_info.experiment_id	analysis_info.series_id	analysis_info.platform_id	info.tumor_stage	_old_stage	_input_stage	_note_stage	info.tumor_grade	_old_grade	_input_grade	_note_grade
+pgxbs-kftvj10e	GSM675740	GSE27332	GPL13177			 histopathological tumour grade: III / late stage	no stage match	3	grade	 histopathological tumour grade: III / late stage	

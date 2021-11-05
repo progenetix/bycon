@@ -21,6 +21,10 @@ paths:
     - imports
     - ncbi-geo-soft-files
 
+  tmp_file_root:
+    - byconeer
+    - tmp
+
 schema_paths:
   - - schemas
   - - schemas

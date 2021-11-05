@@ -36,8 +36,9 @@ def _get_args(byc):
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--datasetids", help="datasets, comma-separated")
     parser.add_argument("-f", "--filters", help="prefixed filter value for ext. identifier")
-    parser.add_argument("-t", "--test", help="test setting")
+    # parser.add_argument("-t", "--test", help="test setting")
     parser.add_argument('-i', '--inputfile', help='a custom file to specify input data')
+    parser.add_argument('-s', '--scopes', help='scopes, e.g. "stage", comma-separated')
     byc.update({ "args": parser.parse_args() })
 
     return byc
@@ -52,15 +53,35 @@ def main():
 
 def biosamples_refresher():
 
+    # TODO: Clean solution?
+    s_scopes = {
+        "grade": {
+            "t_head": "info.tumor_grade",
+            "p_info": "tumor_grade",
+            "p_ontologized": "tumor_grade"
+        },
+        "stage": {
+            "t_head": "info.tumor_stage",
+            "p_info": "tumor_stage",
+            "p_ontologized": "pathological_stage"
+        }
+    }
+
     byc = initialize_service()
+
     _get_args(byc)
 
-    test_mode = False
-    if byc["args"].test:
-        test_mode = 1
+    if not byc["args"].scopes:
+        print( "You have to provide at least one of the scopes in `-s {}`".format(",".join(supported_scopes)))
+        exit()
 
-    if test_mode:
-        print( "¡¡¡ TEST MODE - no db update !!!")
+    sel_scopes = []
+
+    for scope in re.split(",", byc["args"].scopes):
+        if scope in s_scopes.keys():
+            sel_scopes.append(scope)
+        else:
+            print("{} is not a supported scope".format(scope))
 
     byc["dataset_ids"] = ["progenetix"]
 
@@ -75,6 +96,7 @@ def biosamples_refresher():
     no_stats_no = 0
     ds_id = byc["dataset_ids"][0]
     id_filter = "GSM"
+
     if byc["args"].filters:
         id_filter = byc["args"].filters
 
@@ -82,8 +104,6 @@ def biosamples_refresher():
         { "external_references.id": { "$regex": id_filter } },
         { "info.legacy_id": { "$regex": id_filter } }
     ] }
-
-    # print(bios_query)
 
     data_client = MongoClient( )
     data_db = data_client[ ds_id ]
@@ -97,20 +117,30 @@ def biosamples_refresher():
 
     no =  len(bs_ids)
 
-    if not test_mode:
-        bar = Bar("{} {} samples".format(no, ds_id), max = no, suffix='%(percent)d%%'+" of "+str(no) )
+    bar = Bar("{} {} samples".format(no, ds_id), max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
-    counts = { "new_stages" : 0,  "new_grades" : 0 }
-
-    platform_re = re.compile(r'^.*?(GPL\d+?)(:?[^\d]|$)', re.IGNORECASE)
     series_re = re.compile(r'^.*?(GSE\d+?)(:?[^\d]|$)', re.IGNORECASE)
     experiment_re = re.compile(r'^.*?(GSM\d+?)(:?[^\d]|$)', re.IGNORECASE)
+    platform_re = re.compile(r'^.*?(GPL\d+?)(:?[^\d]|$)', re.IGNORECASE)
+
+    missing_ids = []
+    collected = []
+
+    header = ["id", "analysis_info.experiment_id", "analysis_info.series_id", "analysis_info.platform_id"]
+    for scp in sel_scopes:
+        header.append(s_scopes[scp]["t_head"])
+        header.append("_old_"+scp)
+        header.append("_input_"+scp)
+        header.append("_note_"+scp)
+
+    collected.append("\t".join(header))
 
     for bsid in bs_ids:
 
         get_geosoft = True
-        gsm = False
-        gse = False
+        gsm = ""
+        gse = ""
+        gpl = ""
         gsm_soft = False
 
         # TODO: Read in files if existing ... 
@@ -118,77 +148,130 @@ def biosamples_refresher():
 
         s = bios_coll.find_one({ "id":bsid })
 
-        # if not "tumor_stage" in s["info"]:
-        #     get_geosoft = True
-
-        update_obj = {
-            "analysis_info": {
-                "experiment_id": "",
-                "platform_id": "",
-                "series_id": ""
-            },
-            "info": s["info"]
-        }
-
         if "external_references" in s:
             for e_r in s[ "external_references" ]:
                 if "GSM" in e_r["id"]:
-                    update_obj["analysis_info"].update({"experiment_id":e_r["id"]})
                     gsm = experiment_re.match(e_r["id"]).group(1)
                 if "GSE" in e_r["id"]:
-                    update_obj["analysis_info"].update({"series_id":e_r["id"]})
                     gse = series_re.match(e_r["id"]).group(1)
                 if "GPL" in e_r["id"]:
-                    update_obj["analysis_info"].update({"platform_id":e_r["id"]})
+                    gpl = platform_re.match(e_r["id"]).group(1)
 
-        if gse is False or gsm is False:
+        if len(gse) < 5 or len(gsm) < 5:
 
-            print("\n{} did not have GEO ids in external_references!!".format(bsid))
+            # print("\n{} did not have GEO ids in external_references!!".format(bsid))
+            missing_ids.append("\t".join([bsid, gse, gsm, gpl]))
+            bar.next()
             continue
-        
-        gse_path = path.join( pkg_path, *byc["config"]["paths"]["geosoft_file_root"], gse )
-        gsm_path = path.join( gse_path, gsm+".txt" )
 
-        if path.isfile(gsm_path):               
-            with open(gsm_path) as f:                        
-                gsm_soft = f.readlines()
-        else:
-            gsm_soft = retrieve_geosoft_file(gsm, byc)
-            if not path.isdir(gse_path):
-                mkdir(gse_path)
-            s_f = open(gsm_path, 'w')
-            for l in gsm_soft:
-                s_f.write(l)
-            s_f.close()
+        gsm_soft = _read_retrieve_save_gsm_soft(pkg_path, gsm, gse, byc)
 
-        # getting rid of data header and some verbose stuff
-        gsm_soft = list(filter(lambda x:'Sample_' in x, gsm_soft))
-        gsm_soft = list(filter(lambda x:'_protocol' not in x, gsm_soft))
+        if not gsm_soft:
+            print("\n!!!! No soft file for {}".format(gsm))
+            bar.next()
+            continue
 
-        geosoft_retrieve_tumor_stage(gsm, gsm_soft, update_obj, byc, counts)
-        geosoft_retrieve_tumor_grade(gsm, gsm_soft, update_obj, byc, counts)
+        _filter_gsm_soft(gsm_soft)
 
-        for l in gsm_soft:
+        updating_scopes = False
 
-            if "!Sample_platform_id" in l:
-                update_obj["analysis_info"].update({"platform_id": "geo:"+platform_re.match(l).group(1)}) 
-            if "!Sample_series_id" in l:
-                update_obj["analysis_info"].update({"series_id": "geo:"+series_re.match(l).group(1)})
+        collector = {}
+        for h_i in header:
+            collector.update({h_i:""})
+        collector.update({
+            "id": bsid,
+            "analysis_info.experiment_id": gsm,
+            "analysis_info.series_id": gse,
+            "analysis_info.platform_id": gpl
+        })
 
-            series_id = series_re.match(update_obj["analysis_info"]["series_id"]).group(1)
+        new_info = s["info"].copy()
 
-        if not test_mode:
-            bios_coll.update_one( { "_id": s["_id"] }, { '$set': update_obj }  )
+        sample_characteristics = geosoft_preclean_sample_characteristics(gsm_soft, byc)
+
+        for scp in sel_scopes:
+
+            collector.update({"_old_"+scp: s["info"].get(s_scopes[scp]["p_info"], "")})
+            scope_update_f = "geosoft_extract_tumor_"+scp
+            globals()[scope_update_f](sample_characteristics, collector, s_scopes[scp], byc)
+            if len(collector[s_scopes[scp]["t_head"]]) > 0 or len(collector["_note_"+scp]) > 0:
+                new_info.update({scope:collector[s_scopes[scp]["t_head"]]})
+                updating_scopes = True
+
+        coll_line = ""
+        if updating_scopes:
+            line = []
+            for h_k in header:
+                line.append(collector.get(h_k, ""))
+            coll_line = "\t".join(line)
+            collected.append(coll_line)
             bar.next()
         else:
-            print(update_obj)
+            bar.next()
+            continue
 
+        # TODO: make sure the DB update is being handled by dedicated script
+        #     update_obj = {
+        #         "analysis_info": {
+        #             "experiment_id": gsm,
+        #             "platform_id": geosoft_extract_gpl(gsm_soft, platform_re),
+        #             "series_id": gse
+        #         },
+        #         "info": new_info
+        #     }
+        #     print("\nupdating {}".format(s["id"]))
+        #     bios_coll.update_one( { "_id": s["_id"] }, { '$set': update_obj }  )
+        #     bar.next()
 
-    if not byc["args"].test:
-        bar.finish()
+    bar.finish()
 
-    for k, n in counts.items():
-        print("=> updated {}: {}".format(k, n))
+    tmp_path = _save_tmp_file("gsm-metadata_"+"_".join(sel_scopes)+".tsv", collected, byc)
+    print("=> Wrote {}".format(tmp_path))
+    print("=> metadata for {} samples".format(len(collected) - 1))
+
+################################################################################
+
+def _read_retrieve_save_gsm_soft(pkg_path, gsm, gse, byc):
+
+    gse_path = path.join( pkg_path, *byc["config"]["paths"]["geosoft_file_root"], gse )
+    gsm_path = path.join( gse_path, gsm+".txt" )
+
+    if path.isfile(gsm_path):               
+        gsm_soft = open(gsm_path).read().splitlines()
+        return gsm_soft
+    else:
+        gsm_soft = retrieve_geosoft_file(gsm, byc)
+        if not path.isdir(gse_path):
+            mkdir(gse_path)
+        s_f = open(gsm_path, 'w')
+        for l in gsm_soft:
+            s_f.write(l)
+        s_f.close()
+        return gsm_soft
+
+    return False
+
+################################################################################
+
+def _filter_gsm_soft(gsm_soft):
+
+    # getting rid of data header and some verbose stuff
+    gsm_soft = list(filter(lambda x:'Sample_' in x, gsm_soft))
+    gsm_soft = list(filter(lambda x:'_protocol' not in x, gsm_soft))
+    
+    return gsm_soft
+
+################################################################################
+
+def _save_tmp_file(filename, content, byc):
+
+    f_p = path.join( pkg_path, *byc["config"]["paths"]["tmp_file_root"], filename )
+    t_f = open(f_p, 'w')
+    for l in content:
+        t_f.write(l+"\n")
+    t_f.close()
+
+    return f_p
 
 ################################################################################
 ################################################################################

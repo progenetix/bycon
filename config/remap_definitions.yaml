@@ -1,9 +1,22 @@
 ---
 line_patterns:
+  cleanup:
+    - m: '!Sample_characteristics_ch\d ='
+      s: ""
+    - m: '(?i)grade[^\w]+?not applicable'
+      s: ""
+    - m: '(?i)stage[^\w]+?not applicable'
+      s: ""
+    - m: '(?i)grade[^\w]+?grade'
+      s: "grade:"
+
   pathological_stage:
-    - '^.*?stage[^\w]+?(\w+?)(:?[^\w]|$)'
+    - '(?i)^.*?stage[^\w]+?(Dukes.? \w)(:?[^\w]|$)'
+    - '(?i)^.*?stage[^\w]+?(Binet \w)(:?[^\w]|$)'
+    - '(?i)^.*?stage[^\w]+?([i12340]\w*?)(:?[^\w]|$)'
   tumor_grade:
-    - '^.*?grade[^\w]+?(\w+?)(:?[^\w]|$)'
+    - '(?i)^.*?[^\-]grade[^\w]+?(\w+?)(:?[^\w]|$)'
+    - '(?i)^.*?grade[^\w]+?((?:(?:well)|(?:moderately)|(?:poorly)) differentiated)(:?[^\w]|$)'
 
 ontology_remaps:
   pathological_tnm_findings:
