@@ -25,7 +25,8 @@ meta:
     requested_granularity: record
     include_resultset_responses: HIT
     requested_schemas:
-      - https://progenetix.org/services/schemas/analysis/
+      - entity_type: analysis
+        schema: https://progenetix.org/services/schemas/analysis/
   returned_granularity: record
   info: >-
     The main individuals payload can be accessed in `results`.

@@ -55,6 +55,7 @@ def publications():
         else:
             query = { '$and': [ geo_q, query ] }
 
+
     if len(query.keys()) < 1:
         response_add_error(byc, 422, "No query could be constructed from the parameters provided." )
 

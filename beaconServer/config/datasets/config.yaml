@@ -15,12 +15,12 @@ meta:
   response_type: info
   returned_schemas:
     - entity_type: dataset
-      schema: https://progenetix.org/services/schemas/dataset/
+      schema: https://progenetix.org/services/schemas/dataset
   received_request_summary:
     requested_granularity: record
     include_resultset_responses: HIT
-    requested_schemas:
-      - https://progenetix.org/services/schemas/dataset/
+      - entity_type: dataset
+        schema: https://progenetix.org/services/schemas/dataset
   returned_granularity: record
   info: >
     The latest dbstats payload can be accessed in `results`.

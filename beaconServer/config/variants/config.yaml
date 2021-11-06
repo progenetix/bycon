@@ -8,13 +8,14 @@ defaults:
   test_document_id: pgxvar-5bab576a727983b2e00b8d32
 meta:
   returned_schemas:
-    - entity_type: dataset
-      schema: https://progenetix.org/services/schemas/Variant/
+    - entity_type: variant
+      schema: https://progenetix.org/services/schemas/Variant
   received_request_summary:
     requested_granularity: record
     include_resultset_responses: HIT
     requested_schemas:
-      - https://progenetix.org/services/schemas/Variant/
+      - entity_type: variant
+        schema: https://progenetix.org/services/schemas/Variant
   returned_granularity: record
   info: >
     The main variants payload can be accessed in `resultSets`.

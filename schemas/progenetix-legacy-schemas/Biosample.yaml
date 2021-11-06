@@ -1,5 +1,5 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/Biosample/v2021-03-05
+"$id": https://progenetix.org/services/schemas/Biosample/v2021-11-05
 title: Biosample
 type: object
 meta:
@@ -90,6 +90,10 @@ properties:
     examples:
       - id: icdot-C71.6
         label : cerebellum
+  biosampleStatus:
+    description: >-
+      Ontology value from Experimental Factor Ontology (EFO) Material Entity term (BFO:0000040).
+    $ref: OntologyClass.yaml#/properties
   tumorProgression:
     $ref: OntologyClass.yaml#/properties
     examples:

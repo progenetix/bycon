@@ -178,7 +178,7 @@ io_prefixes:
       pre: DUO
 
   individual:
-    genotypic_sex:
+    sex:
       type: string
       pre: PATO
     data_use_conditions:

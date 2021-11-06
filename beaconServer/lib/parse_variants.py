@@ -274,7 +274,7 @@ def create_and_or_query_for_list(logic, q_list):
         return q_list
 
     if not q_list:
-        return [ ]
+        return {}
 
     if len(q_list) > 1:
         return { logic: q_list }

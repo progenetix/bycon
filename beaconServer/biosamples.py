@@ -36,54 +36,10 @@ def biosamples():
 
     byc = initialize_service()
     run_beacon_init_stack(byc)
-    run_biosamples_beacon(byc)
+    run_result_sets_beacon("biosamples", byc)
     export_datatable(byc)
     query_results_save_handovers(byc)
     cgi_print_response( byc, 200 )
-
-################################################################################
-
-def run_biosamples_beacon(byc):
-
-    for i, r_set in enumerate(byc["service_response"]["response"]["result_sets"]):
-
-        results_count = 0
-        ds_id = r_set["id"]
-        
-        if len(byc["queries"].keys()) > 0:
-            execute_bycon_queries( ds_id, byc )
-            beacon_res = retrieve_biosamples(ds_id, byc)
-            r_set.update({ "results_handovers": dataset_response_add_handovers(ds_id, byc) })
-            for c, c_d in byc["config"]["beacon_counts"].items():
-                if c_d["h->o_key"] in byc["dataset_results"][ds_id]:
-                    r_c = byc["dataset_results"][ds_id][ c_d["h->o_key"] ]["target_count"]
-                    r_set["info"]["counts"].update({ c: r_c })
-            if isinstance(beacon_res, list):
-                results_count = len( beacon_res )
-        else:
-            beacon_res, results_count = process_empty_request(ds_id, "biosamples", byc)
-            byc["service_response"]["meta"]["received_request_summary"].update({"pagination":{"limit": 1, "skip": 0}})
-
-        if isinstance(beacon_res, list):
-            r_set.update({"results_count": results_count })
-            if results_count > 0:
-
-                byc["service_response"]["response_summary"]["num_total_results"] += results_count
-                r_set.update({ "exists": True, "results": beacon_res })
-
-                if byc["pagination"]["limit"] > 0:
-                    res_range = _pagination_range(results_count, byc)
-                    r_set.update({ "results": beacon_res[res_range[0]:res_range[-1]] })
-
-        byc["service_response"]["response"]["result_sets"][i] = r_set
-
-    if byc["service_response"]["response_summary"]["num_total_results"] > 0:
-        byc["service_response"]["response_summary"].update({"exists": True })
-        response_add_error(byc, 200)
-
-    cgi_break_on_errors(byc)
-
-    return byc
 
 ################################################################################
 

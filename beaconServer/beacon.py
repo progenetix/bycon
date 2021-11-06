@@ -52,7 +52,7 @@ def beacon(path=""):
             print('Content-Type: text')
             print('status:422')
             print()
-            print('Service {} error: {}'.format(f, e))
+            print('Service {} WTF error: {}'.format(f, e))
 
             exit()
 

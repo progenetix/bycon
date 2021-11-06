@@ -44,26 +44,6 @@ def callsets():
     return byc
 
 ################################################################################
-
-def retrieve_analyses(ds_id, byc):
-
-    mongo_client = MongoClient()
-    data_db = mongo_client[ ds_id ]
-    bs_coll = mongo_client[ ds_id ][ "callsets" ]
-
-    ds_results = byc["dataset_results"][ds_id]
-    r_key = "callsets._id"
-
-    if r_key in ds_results:
-        beacon_res = []
-        for b in bs_coll.find({"_id":{"$in": ds_results[ r_key ]["target_values"] }}):
-            beacon_res.append(b)
-
-        return beacon_res
-
-    return False
-
-################################################################################
 ################################################################################
 ############################################################################
 

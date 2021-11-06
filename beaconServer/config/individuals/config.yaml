@@ -19,13 +19,14 @@ bycon_definition_files:
   - variant_definitions
 meta:
   returned_schemas:
-    - entity_type: dataset
-      schema: https://progenetix.org/services/schemas/Individual/
+    - entity_type: individual
+      schema: https://progenetix.org/services/schemas/Individual
   received_request_summary:
     requested_granularity: record
     include_resultset_responses: HIT
     requested_schemas:
-      - https://progenetix.org/services/schemas/Individual/
+      - entity_type: individual
+        schema: https://progenetix.org/services/schemas/Individual
   returned_granularity: record
   info: >
     The main payload can be accessed in `response.resultSets`.

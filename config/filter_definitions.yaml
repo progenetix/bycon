@@ -103,7 +103,7 @@ PATO:
     PATO codes specific for genotypic sex...
   name: "Phenotypic Qualities Ontology"
   url: "http://obofoundry.org/ontology/pato.html"
-  db_key: 'genotypic_sex.id'
+  db_key: 'sex.id'
   scopes:
     individuals:
       default: 1

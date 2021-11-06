@@ -1,5 +1,5 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/Provenance/v2021-01-19
+"$id": https://progenetix.org/services/schemas/Provenance/v2021-11-05
 title: Provenance
 meta:
   contributors:
@@ -15,13 +15,6 @@ meta:
 description: >
   The Provenance class is the wrapper object for schemas informing about technical, geographic or collection associated origin of a higher oreder object such as an Individual or Biosample.
 properties:
-  material:
-    $ref: OntologyClass.yaml#/properties
-    examples:
-      - id: EFO:0009656
-        label: neoplastic sample
-      - id: EFO:0009654
-        label: reference sample
   assay:
     $ref: OntologyClass.yaml#/properties
     examples:

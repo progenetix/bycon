@@ -27,7 +27,8 @@ meta:
     requested_granularity: record
     include_resultset_responses: HIT
     requested_schemas:
-      - https://progenetix.org/services/schemas/Biosample/
+      - entity_type: biosample
+        schema: https://progenetix.org/services/schemas/Biosample/
   returned_granularity: record
   info: >
     The main biosamples payload can be accessed in `response.resultSets`.

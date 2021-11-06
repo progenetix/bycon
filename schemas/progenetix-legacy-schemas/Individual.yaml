@@ -1,5 +1,5 @@
-"$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/Individual/v2021-03-05
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/Individual/v2021-03-05
 title: Individual
 type: object
 required:
@@ -16,7 +16,7 @@ properties:
     type: string
     examples:
       - HapMap project contributor
-  genotypicSex:
+  sex:
     $ref: OntologyClass.yaml#/properties
     examples:
       - id: PATO:0020002
