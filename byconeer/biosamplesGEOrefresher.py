@@ -56,14 +56,25 @@ def biosamples_refresher():
     # TODO: Clean solution?
     s_scopes = {
         "grade": {
-            "t_head": "info.tumor_grade",
+            "t_head": "info.tumor_grade_text",
+            "input_head": "_input_grade",
+            "note_head": "_note_grade",
             "p_info": "tumor_grade",
             "p_ontologized": "tumor_grade"
         },
         "stage": {
-            "t_head": "info.tumor_stage",
+            "t_head": "info.tumor_stage_text",
+            "input_head": "_input_stage",
+            "note_head": "_note_stage",
             "p_info": "tumor_stage",
             "p_ontologized": "pathological_stage"
+        },
+        "tnm": {
+            "t_head": "info.tumor_tnm_text",
+            "input_head": "_input_tnm",
+            "note_head": "_note_tnm",
+            "p_info": "tumor_tnm_text",
+            "p_ontologized": "pathological_tnm_findings"
         }
     }
 
@@ -192,8 +203,9 @@ def biosamples_refresher():
         for scp in sel_scopes:
 
             collector.update({"_old_"+scp: s["info"].get(s_scopes[scp]["p_info"], "")})
-            scope_update_f = "geosoft_extract_tumor_"+scp
-            globals()[scope_update_f](sample_characteristics, collector, s_scopes[scp], byc)
+            # scope_update_f = "geosoft_extract_tumor_"+scp
+            # globals()[scope_update_f](sample_characteristics, collector, s_scopes[scp], byc)
+            geosoft_extract_geo_meta(sample_characteristics, collector, s_scopes[scp], byc)
             if len(collector[s_scopes[scp]["t_head"]]) > 0 or len(collector["_note_"+scp]) > 0:
                 new_info.update({scope:collector[s_scopes[scp]["t_head"]]})
                 updating_scopes = True

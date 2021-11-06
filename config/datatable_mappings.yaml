@@ -13,13 +13,13 @@ io_params:
       db_key: description
       type: string
     tnm:
-      db_key: info.tnm
+      db_key: info.tumor_tnm_text
       type: string
     stage:
-      db_key: info.stage
+      db_key: info.tumor_stage_text
       type: string
     grade:
-      db_key: info.grade
+      db_key: info.tumor_grade_text
       type: string
     age_iso:
       db_key: individual_age_at_collection.age
@@ -101,6 +101,15 @@ io_params:
     geoprov_long:
       db_key: provenance.geo_location.properties.longitude
       type: float
+    experiment_id:
+      db_key: analysis_info.experiment_id
+      type: string
+    series_id:
+      db_key: analysis_info.series_id
+      type: string
+    platform_id:
+      db_key: analysis_info.platform_id
+      type: string
 
   analysis:
     id:
@@ -112,6 +121,15 @@ io_params:
     legacy_id:
       db_key: info.legacy_id
       type: array
+    experiment_id:
+      db_key: analysis_info.experiment_id
+      type: string
+    series_id:
+      db_key: analysis_info.series_id
+      type: string
+    platform_id:
+      db_key: analysis_info.platform_id
+      type: string
 
   variantInSample:
     id:

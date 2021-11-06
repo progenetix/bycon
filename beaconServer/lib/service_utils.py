@@ -190,7 +190,7 @@ def retrieve_variants(ds_id, byc):
     if not byc["method"] in byc["this_config"]["all_variants_methods"]:
         if "variants.digest" in ds_results:
             digests = ds_results["variants.digest"]["target_values"]
-            beacon_res = variants_for_digest(ds_id, digests, byc)
+            beacon_res = variants_for_digests(ds_id, digests, byc)
             return beacon_res
 
     return False
