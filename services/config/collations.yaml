@@ -29,6 +29,7 @@ methods:
     - count
     - child_terms
     - code_matches
+    - collation_type
   paths:
     - id
     - label
@@ -36,15 +37,18 @@ methods:
     - code_matches
     - child_terms
     - hierarchy_paths
+    - collation_type
   counts:
     - id
     - label
     - count
     - code_matches
+    - collation_type
   codematches:
     - id
     - label
     - code_matches
+    - collation_type
   cnvFrequencies:
     - id
     - label
@@ -54,36 +58,3 @@ methods:
     - label
   ids:
     - id
-collationed:
-  geo:
-    pattern: '^(geo)[:]((GSE)|(GPL))'
-    is_series: True
-    child_pattern: '^(geo)[:]GSM'
-  NCIT:
-    pattern: '^(NCIT)[:]C'
-    is_series: False
-  icdom:
-    pattern: '^(icdom)[\-]\d'
-    is_series: False
-  icdot:
-    pattern: '^(icdot)[\-]C'
-    is_series: False
-  cellosaurus:
-    pattern: '^(cellosaurus)[:]CVCL'
-    is_series: False
-  PMID:
-    pattern: '^(PMID)[:]\d'
-    is_series: False
-  UBERON:
-    pattern: '^(UBERON)[:]\d'
-    is_series: False
-  cBP:
-    pattern: '^(cBP)[\-]\w'
-    is_series: False
-  TCGA:
-    pattern: '^(TCGA)[\-][\w\-]{2,20}$'
-    is_series: True
-    child_pattern: '^(TCGA)[\-]\w+?\-[\w\-]{15,30}$'
-  pgxcohort:
-    pattern: '^(pgxcohort)[\-]\w+?$'
-    is_series: False
