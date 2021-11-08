@@ -41,7 +41,7 @@ def geosoft_preclean_sample_characteristics(gsm_soft, byc):
 
     for l in s_c:
 
-        for p in byc["remap_definitions"]["line_cleanup"]["cleanup"]:
+        for p in byc["text_patterns"]["line_cleanup"]["cleanup"]:
             l = re.sub(r'{0}'.format(p["m"]), p["s"], l)
             
         # since matches require some length (label ...)
@@ -55,7 +55,7 @@ def geosoft_preclean_sample_characteristics(gsm_soft, byc):
 def geosoft_extract_geo_meta(s_c, collector, scope, byc):
 
     update_key = scope["p_ontologized"]
-    patterns = byc["remap_definitions"]["extraction_scopes"][update_key]
+    patterns = byc["text_patterns"]["extraction_scopes"][update_key]
 
     s_c = list(filter(lambda x:re.match(r'{0}'.format(patterns["filter"]), x), s_c))
 

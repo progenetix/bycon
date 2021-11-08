@@ -7,6 +7,7 @@ bycon_definition_files:
   - handover_definitions
   - variant_definitions
   - remap_definitions
+  - text_patterns
 defaults:
     genome_binning: 1Mb
 geosoft_root:
