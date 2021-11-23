@@ -6,7 +6,7 @@ collection_name: collations
 defaults:
   dataset_ids:
     - progenetix
-  method: children
+  method: counts
   filters:
     - NCIT
     - icdom
@@ -23,7 +23,7 @@ integer_keys:
   - count
   - code_matches
 methods:
-  children:
+  child_terms:
     - id
     - label
     - count
@@ -49,10 +49,6 @@ methods:
     - label
     - code_matches
     - collation_type
-  cnvFrequencies:
-    - id
-    - label
-    - frequencymaps
   codes:
     - id
     - label

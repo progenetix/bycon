@@ -10,20 +10,18 @@ dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-from beaconServer.lib.cgi_utils import cgi_parse_query,cgi_print_response,cgi_break_on_errors
+from beaconServer.lib.cgi_parse import cgi_parse_query,cgi_print_response,cgi_break_on_errors
 from beaconServer.lib.read_specs import datasets_update_latest_stats
 from beaconServer.lib.parse_filters import select_dataset_ids, check_dataset_ids
 
 service_lib_path = path.join( pkg_path, "services", "lib" )
 sys.path.append( service_lib_path )
 
-from service_utils import initialize_service, create_empty_service_response, populate_service_response, response_add_error,response_add_parameter,response_collect_errors
-
-from beaconServer.lib.schemas_parser import *
+from beaconServer import *
 
 """podmd
 
-* <https://progenetix.org/beacon/datasets/>
+* <https://progenetix.org/beacon/cohorts/>
 
 podmd"""
 
@@ -46,16 +44,22 @@ def collections():
 def datasets():
 
     byc = initialize_service()
-
-    select_dataset_ids(byc)
-    check_dataset_ids(byc)
+    
     _get_history_depth(byc)
+    dbstats = datasets_update_latest_stats(byc)
 
-    create_empty_service_response(byc)
-
-    results = datasets_update_latest_stats(byc)
-
-    populate_service_response( byc, results )
+    beacon_get_endpoint_base_paths(byc)
+    initialize_beacon_queries(byc)
+    if "beaconResultsetsResponse" in byc["response_entity"]["response_schema"]:
+        create_empty_service_response(byc)
+        byc["queries"].pop("datasets", None)
+        run_result_sets_beacon(byc)
+        query_results_save_handovers(byc)
+    else:
+        create_empty_service_response(byc)
+        populate_service_response( byc, dbstats )
+        byc["service_response"]["response"]["collections"] = byc["service_response"]["response"].pop("results", None)
+    # byc["service_response"]["response"]["result_sets"] = byc["service_response"]["response"].pop("results")
     cgi_print_response( byc, 200 )
 
 ################################################################################

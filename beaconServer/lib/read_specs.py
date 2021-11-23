@@ -25,11 +25,6 @@ def read_bycon_configs_by_name(name, byc):
 
     byc.update({ name: o })
 
-    # # TODO Move ...
-
-    # if name == "beacon":
-    #     byc.update({ "beacon-schema": RefDict(ofp) })
-
     return byc
 
 ################################################################################
@@ -57,7 +52,7 @@ def read_local_prefs(service, dir_path, byc):
             t_f_n = "{}.yaml".format(humps.camelize(t_p))
             t_f_p = Path( path.join( d, t_f_n ) )
             if t_f_p.is_file():
-                byc.update({ t_k:load_yaml( t_f_p ) } )
+                byc.update({ t_k: load_yaml(t_f_p) } )
 
     return byc   
 
@@ -90,30 +85,34 @@ def dbstats_return_latest(byc):
 
 ################################################################################
 
-def datasets_update_latest_stats(byc):
+def datasets_update_latest_stats(byc, collection_type="datasets"):
 
-    datasets = [ ]
+    results = [ ]
+
+    def_k = re.sub(r's$', "_definitions", collection_type)
+    q_k = re.sub(r's$', "_ids", collection_type)
 
     stat = dbstats_return_latest(byc)[0]
 
-    for ds_id, ds in byc["dataset_definitions"].items():
-        if "dataset_ids" in byc:
-            if len(byc[ "dataset_ids" ]) > 0:
-                if not ds_id in byc[ "dataset_ids" ]:
+    for coll_id, coll in byc[ def_k ].items():
+        if q_k in byc:
+            if len(byc[ q_k ]) > 0:
+                if not coll_id in byc[ q_k ]:
                     continue
 
-        if ds_id in stat["datasets"].keys():
-            ds_vs = stat["datasets"][ds_id]
-            if "counts" in ds_vs:
-                for c, c_d in byc["config"]["beacon_counts"].items():
-                    if c_d["info_key"] in ds_vs["counts"]:
-                        ds.update({ c: ds_vs["counts"][ c_d["info_key"] ] })
-            if "info" in byc["response_type"]:
-                ds.update({ "filtering_terms": stat["datasets"][ds_id]["filtering_terms"] } )
+        if collection_type in stat:
+            if coll_id in stat[ collection_type ].keys():
+                ds_vs = stat[ collection_type ][coll_id]
+                if "counts" in ds_vs:
+                    for c, c_d in byc["config"]["beacon_counts"].items():
+                        if c_d["info_key"] in ds_vs["counts"]:
+                            coll["info"].update({ c: ds_vs["counts"][ c_d["info_key"] ] })
+                if "filtering_terms" in byc["response_type"]:
+                    coll.update({ "filtering_terms": stat[ collection_type ][coll_id]["filtering_terms"] } )
 
-            datasets.append(ds)
+        results.append(coll)
 
-    return datasets
+    return results
 
 ################################################################################
 

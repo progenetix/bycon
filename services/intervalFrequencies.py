@@ -11,7 +11,7 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-from beaconServer.lib.cgi_utils import *
+from beaconServer.lib.cgi_parse import *
 from beaconServer.lib.parse_filters import *
 from beaconServer.lib.parse_variants import *
 from beaconServer.lib.service_utils import *

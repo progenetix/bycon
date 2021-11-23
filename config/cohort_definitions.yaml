@@ -1,0 +1,22 @@
+---
+TCGA:
+  cohort_id: pgxcohort-TCGA
+  cohort_type: beacon-defined
+  cohort_name: TCGA samples including controls
+
+celllines:
+  cohort_id: pgxcohort-celllines
+  cohort_type: beacon-defined
+  cohort_name: Cancer cell lines
+
+TCGAcancers:
+  cohort_id: pgxcohort-TCGAcancers
+  cohort_type: beacon-defined
+  cohort_name: TCGA Cancer samples
+  cohort_size: 11090
+
+arraymap:
+  cohort_id: pgxcohort-arraymap
+  cohort_type: beacon-defined
+  cohort_name: arrayMap collection
+

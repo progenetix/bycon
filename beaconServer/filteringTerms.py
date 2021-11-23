@@ -155,7 +155,7 @@ def _get_fitering_term_type(f_t_id, byc):
 #             })
 #             byc["service_response"]["response_summary"]["exists"] = True
 
-#         byc["service_response"]["result_sets"].append(r_set)
+#         byc["service_response"]["response"]["result_sets"].append(r_set)
 
 #     return byc
 

@@ -13,6 +13,7 @@ service_names:
   publications: publications
   collations: collations
   schemas: schemas
+  endpoints: endpoints
 rewrites:
   collationPlots: '/cgi/PGX/cgi/collationPlots.cgi'
   samplePlots: '/cgi/PGX/cgi/samplePlots.cgi'

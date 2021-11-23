@@ -1,0 +1,5 @@
+bycon_definition_files:
+  - config
+  - beacon_info
+methods:
+  - ""

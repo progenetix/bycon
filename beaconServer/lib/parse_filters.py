@@ -2,7 +2,7 @@ import cgi, cgitb
 import re, yaml
 from pymongo import MongoClient
 
-from cgi_utils import *
+from cgi_parse import *
 
 ################################################################################
 

@@ -244,7 +244,7 @@ components:
       schema:
         $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/beaconCommonComponents.json#/definitions/Limit
     includeResultsetResponses:
-      $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/requests/beaconRequestBody.json#/definitions/IncludeResultsetResponses
+      $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/beaconCommonComponents.json#/definitions/IncludeResultsetResponses
     entryId:
       name: id
       in: path

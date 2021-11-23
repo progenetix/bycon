@@ -1,0 +1,87 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/run/v2021-11-09
+title: Run
+name: Run
+description: >-
+  Schema for the experimental run (e.g. sequencing run, array processing...)
+  leading to the raw data for the (computational) analysis.
+type: object
+properties:
+  id:
+    description: Run ID.
+    type: string
+    example: SRR10903401
+  biosampleId:
+    description: Reference to the biosample ID.
+    type: string
+    example: 008dafdd-a3d1-4801-8c0a-8714e2b58e48
+  individualId:
+    description: Reference to the individual ID.
+    type: string
+    example: TCGA-AO-A0JJ
+  runDate:
+    description: Date at which the experiment was performed.
+    type: string
+    format: date
+  librarySource:
+    description: >-
+      Ontology value for the source of the sequencing or hybridization library,
+      e.g "genomic source", "transcriptomic source"
+    $ref: ../common/ontologyTerm.yaml#/properties
+    examples:
+      - id: GENEPIO:0001966
+        label: genomic source
+      - id: GENEPIO:0001965
+        label: metagenomic source
+  librarySelection:
+    description: >-
+      Selection method for library preparation, e.g "RANDOM", "RT-PCR"
+    type: string
+    example:
+      - RANDOM
+      - RT-PCR
+  libraryStrategy:
+    description: >-
+      Library strategy, e.g. "WGS"
+    type: string
+  libraryLayout:
+    description: >-
+      Ontology value for the library layout e.g "PAIRED", "SINGLE"
+      #TODO add Ontology name?
+    type: string
+    enum:
+      - PAIRED
+      - SINGLE
+  platform:
+    description: >-
+      General platform technology label. It SHOULD be a subset of the
+      platformModel and used only for query convenience, e.g. "return everything
+      sequenced with Illimuna", where the specific model is not relevant
+    type: string
+    examples:
+      - Illumina
+      - Oxford Nanopore
+      - Affymetrix
+  platformModel:
+    description: >-
+      Ontology value for experimental platform or methodology used.
+      For nsequencing platforms the use of "OBI:0400103 - DNA sequencer" is
+      suggested.
+    $ref: ../common/ontologyTerm.yaml#/properties
+    examples:
+      - id: OBI:0002048
+        label: Illumina HiSeq 3000
+      - id: OBI:0002750
+        label: Oxford Nanopore MinION
+      - id: EFO:0010938
+        label: large-insert clone DNA microarray
+  info:
+    description: >-
+      Additional structured data which may not be common across different Beacon
+      instances.
+    type: object
+required:
+  - id
+  - biosampleId
+  - runDate
+additionalProperties: true

@@ -80,7 +80,7 @@ properties:
   frequencyInPopulations:
     type: array
     items:
-      $ref: '#/definitions/FreqInPops'
+      $ref: '#/definitions/FrequencyInPopulations'
 definitions:
   Position:
     type: object
@@ -286,7 +286,7 @@ definitions:
     required:
       - conditionId
       - effect
-  FreqInPops:
+  FrequencyInPopulations:
     type: object
     properties:
       source:
@@ -309,13 +309,13 @@ definitions:
       frequencies:
         type: array
         items:
-          $ref: '#/definitions/PopulationFreq'
+          $ref: '#/definitions/PopulationFrequency'
         minItems: 1
     required:
       - source
       - sourceReference
       - frequencies
-  PopulationFreq:
+  PopulationFrequency:
     type: object
     properties:
       population:
@@ -340,17 +340,22 @@ definitions:
     description: ''
     properties:
       id:
-        description: >-
-          Internal id of this case level *instance* of the variant. This is an optional housekeeping parameter and should not be confused with the identifier of the variant (`variantInternalId`).",
+        description: Internal id of this case level *instance* of the variant. This
+          is an optional housekeeping parameter and should not be confused with the
+          identifier of the variant (`variantInternalId`).
         type: string
       individualId:
-        description: Reference to individual ID.
+        description: Reference to individual ID (`individual.id`)
         type: string
       biosampleId:
-        description: Reference to biosample ID.
+        description: Reference to biosample ID (`biosample.id`)
         type: string
       analysisId:
-        description: Reference to run (Run.runId)
+        description: Reference to the bioinformatics analysis ID (`analysis.id`)
+        type: string
+        example: pgxcs-kftvldsu
+      runId:
+        description: Reference to the experimental run ID (`run.id`)
         type: string
         example: SRR10903401
       zygosity:

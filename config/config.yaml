@@ -28,7 +28,17 @@ paths:
 schema_paths:
   - - schemas
   - - schemas
+    - model
     - progenetix-legacy-schemas
+  - - schemas
+    - model
+    - alternative-schemas
+  - - schemas
+    - model
+    - default-schemas
+  - - schemas
+    - model
+    - common
   - - schemas
     - framework
     - common
@@ -82,7 +92,7 @@ beacon_counts:
   variant_count:
     collection: variants
     info_key: variants_distinct
-    h->o_key: variants.digest
+    h->o_key: variants.variant_internal_id
   call_count:
     collection: variants
     info_key: variants

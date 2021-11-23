@@ -1,0 +1,111 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/individual/v2021-11-12
+title: Individual
+type: object
+
+required:
+  - id
+  - sex
+properties:
+  id:
+    type: string
+    description: >-
+      The resource-local identifier for this individual.
+    examples:
+      - pgxind-kftx25eh
+  sex:
+    $ref: ../common/commonDefinitions.yaml#/definitions/Sex
+  ethnicity:
+    $ref: ../common/commonDefinitions.yaml#/definitions/Ethnicity
+  geographicOrigin:
+    $ref: ../common/commonDefinitions.yaml#/definitions/GeographicLocation
+  diseases:
+    type: array
+    items:
+      $ref: ../common/disease.yaml#/properties
+  pedigrees:
+    type: array
+    items:
+      $ref: ../common/pedigree.yaml#/properties
+  phenotypicFeatures:
+    type: array
+    items:
+      $ref: ../common/phenotypicFeature.yaml#/properties
+  treatments:
+    type: array
+    items:
+      $ref: ../common/treatment.yaml#/properties
+  interventionsOrProcedures:
+    type: array
+    items:
+      $ref: ../common/procedure.yaml#/properties
+  measures:
+    type: array
+    items:
+      $ref: ../common/measurement.yaml#/properties
+  exposures:
+    type: array
+    items:
+      $ref: ../common/exposure.yaml#/properties
+  info:
+    description: >-
+      Additional structured data which may not be common across different Beacon
+      instances.
+    type: object
+
+# additional properties from Phenopackets and/or Progenetix
+  description:
+    type: string
+    examples:
+      - HapMap project contributor
+  karyotypicSex:
+    description: >-
+      Chromosomal sex of an individual as being used by Phenopackets. Following the definition there
+    type: string
+    enum:
+      - UNKNOWN_KARYOTYPE
+      - XX
+      - XY
+      - XO
+      - XXY
+      - XXX
+      - XXYY
+      - XXXY
+      - XXXX
+      - XYY
+      - OTHER_KARYOTYPE
+  dateOfBirth:
+    type: string
+    format: date-time
+    examples:
+      - 1967-11-11
+      - 2002-09-21
+  externalReferences:
+    type: array
+    items:
+      $ref: ../common/externalReference.yaml#/properties
+    examples:
+      - id: biosample:SAME122868
+        label: HapMap individual
+      - id: PMID:9950502
+      - id: geo:GSE13331
+        label: Prognostic analysis of mantle cell lymphoma genomes
+  provenance:
+    $ref: ../common/provenance.yaml#/properties
+  ancestries:
+    type: array
+    items:
+      $ref: ../common/ancestry.yaml#/properties
+  dataUseConditions:
+    $ref: ../common/ontologyTerm.yaml#/properties
+    examples:
+      - id: DUO:0000004
+        label: no restriction
+  updated:
+    type: string
+    format: date-time
+    examples:
+      - "2020-09-10T17:44:10.170Z"
+
+additionalProperties: true
+

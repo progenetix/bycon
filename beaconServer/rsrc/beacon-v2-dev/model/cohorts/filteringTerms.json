@@ -1,0 +1,10 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/configuration/filteringTermsSchema.json",
+  "filteringTerms": [
+    {
+      "id": "DUO:0000006",
+      "label": "health or medical or biomedical research",
+      "version": "2021-02-23"
+    }
+  ]
+}

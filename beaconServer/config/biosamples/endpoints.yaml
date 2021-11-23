@@ -23,7 +23,7 @@ paths:
         - GET Endpoints
       responses:
         '200':
-          description: "Successful operation.\n"
+          description: "Successful operation."
           content:
             application/json:
               schema:
@@ -55,22 +55,22 @@ paths:
     get:
       parameters:
         - $ref: '#/components/parameters/entryId'
-      description: "Get details about one biosample, identified by its (unique) 'id'.\n"
+      description: "Get details about one biosample, identified by its (unique) 'id'."
       operationId: getOneBiosample
       tags:
         - GET Endpoints
       responses:
         '200':
-          description: "Successful operation.\n"
+          description: "Successful operation."
           content:
             application/json:
               schema:
                 $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
         default:
-          description: "An unsuccessful operation.\n"
+          description: "An unsuccessful operation."
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
     post:
-      description: "Get details about one Biosample, identified by its (unique) 'id'.\n"
+      description: "Get details about one Biosample, identified by its (unique) 'id'."
       operationId: postOneBiosample
       tags:
         - POST Endpoints
@@ -97,24 +97,28 @@ paths:
         - $ref: '#/components/parameters/skip'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/entryId'
-      description: "Get the list of variants instances, from samples, for one biosample,\
-        \ identified by its (unique) 'id'.\n"
+      description: >-
+        Get the list of variants instances, from samples, for one biosample,
+        identified by its (unique) `id`.\n
       operationId: getOneBiosampleVariantsInSample
       tags:
         - GET Endpoints
       responses:
         '200':
-          description: "Successful operation.\n"
+          description: >-
+            Successful operation.
           content:
             application/json:
               schema:
                 $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
         default:
-          description: "An unsuccessful operation.\n"
+          description: >-
+            An unsuccessful operation.
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
     post:
-      description: "Get the list of variants instances, from samples, for one biosample,\
-        \ identified by its (unique) 'id'.\n"
+      description: >-
+        Get the list of variants instances, from samples, for one biosample,
+        identified by its (unique) 'id'.
       operationId: postOneBiosampleVariantsInSample
       tags:
         - POST Endpoints
@@ -126,13 +130,15 @@ paths:
         required: true
       responses:
         '200':
-          description: "Successful operation.\n"
+          description: >-
+            Successful operation.
           content:
             application/json:
               schema:
                 $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
         default:
-          description: "An unsuccessful operation.\n"
+          description: >-
+            An unsuccessful operation.
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
   /biosamples/{id}/g_variants:
     get:
@@ -141,14 +147,16 @@ paths:
         - $ref: '#/components/parameters/skip'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/entryId'
-      description: "Get the genomic variants list from one biosample, identified by\
-        \ its (unique) 'id'.\n"
+      description: >-
+        Get the genomic variants list from one biosample, identified by its
+        (unique) 'id'.
       operationId: getOneBiosampleGenomicVariants
       tags:
         - GET Endpoints
       responses:
         '200':
-          description: "Successful operation.\n"
+          description: >-
+            Successful operation.
           content:
             application/json:
               schema:
@@ -157,8 +165,9 @@ paths:
           description: "An unsuccessful operation.\n"
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
     post:
-      description: "Get the genomic variants list from one biosample, identified by\
-        \ its (unique) 'id'.\n"
+      description: >-
+        Get the genomic variants list from one biosample, identified by its
+        (unique) 'id'.
       operationId: potOneBiosampleGenomicVariants
       tags:
         - POST Endpoints
@@ -170,13 +179,15 @@ paths:
         required: true
       responses:
         '200':
-          description: "Successful operation.\n"
+          description: >-
+            Successful operation.
           content:
             application/json:
               schema:
                 $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
         default:
-          description: "An unsuccessful operation.\n"
+          description: >-
+            An unsuccessful operation.
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
 
 components:
@@ -189,7 +200,7 @@ components:
       required: false
       schema:
         type: string
-      example: "ga4gh-service-info-v1.0\n"
+      example: "ga4gh-service-info-v1.0"
     skip:
       name: skip
       in: query
@@ -201,7 +212,7 @@ components:
       schema:
         $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/beaconCommonComponents.json#/definitions/Limit
     includeResultsetResponses:
-      $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/requests/beaconCommonComponents.json#/definitions/IncludeResultsetResponses
+      $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/beaconCommonComponents.json#/definitions/IncludeResultsetResponses
     entryId:
       name: id
       in: path

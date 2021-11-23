@@ -63,12 +63,12 @@ definitions:
           OpenAPI definition referenced in the `openAPIEndpointsDefinition` attribute.
         type: object
         additionalProperties:
-          $ref: '#/definitions/RelatedEndpoints'
+          $ref: '#/definitions/RelatedEndpoint'
         minProperties: 0
     required:
       - entryType
       - rootUrl
-  RelatedEndpoints:
+  RelatedEndpoint:
     type: object
     properties:
       url:

@@ -30,9 +30,9 @@ def individuals():
     byc = initialize_service()
     run_beacon_init_stack(byc)
 
-    run_result_sets_beacon("individuals", byc)
-    
+    run_result_sets_beacon(byc)
     export_datatable(byc)
+    check_alternative_variant_deliveries(byc)
     query_results_save_handovers(byc)
 
     # Phenopackets
@@ -42,11 +42,11 @@ def individuals():
 
         if re.match(r".*?Phenopacket.*?", byc["query_meta"]["requestedSchemas"][0]["schema"]):
             
-            for i, r_set in enumerate(byc["service_response"]["result_sets"]):
+            for i, r_set in enumerate(byc["service_response"]["response"]["result_sets"]):
                 ds_id = r_set["id"]
                 ds_results = byc["dataset_results"][ds_id]
                 results = ds_results_phenopack_individuals(ds_id, ds_results)
-                byc["service_response"]["result_sets"][i].update( {"results": results } )
+                byc["service_response"]["response"]["result_sets"][i].update( {"results": results } )
                 
             byc["service_response"]["meta"].update({ "returned_schemas": byc["query_meta"]["requestedSchemas"][0]["schema"] })
             byc["service_response"]["meta"]["received_request_summary"].update({ "requested_schemas": byc["query_meta"]["requestedSchemas"][0]["schema"] })

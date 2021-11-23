@@ -1,0 +1,56 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/phenopacket/v2021-11-12
+title: Phenopacket
+meta:
+  provenance:
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+    - description: "Phenopackets v2"
+      id: "https://github.com/phenopackets/phenopacket-schema"
+  used_by:
+    - description: "Progenetix database schema (Beacon+ backend)"
+      id: 'https://github.com/progenetix/schemas/'
+description: >-
+  The Phenopacket class is a bare-bones JSON-schema rewrite of the Phenopackets v2
+  standard.
+properties:
+  id:
+    type: string
+    description: >-
+      The resource-local identifier for this Phenopacket.
+    examples:
+      - pgxpxf-kftx25eh
+  subject:
+    $ref: ../default-schemas/individual.yaml#/properties
+  phenotypicFeatures:
+    type: array
+    items:
+      $ref: ../common/phenotypicFeature.yaml#/properties
+  measurements:
+    type: array
+    items:
+      $ref: ../common/measurement.yaml#/properties
+  biosamples:
+    type: array
+    items:
+      $ref: ../default-schemas/biosample.yaml#/properties
+  # interpretations:
+  #   type: array
+  #   items:
+  #     $ref: Interpretation.yaml#/properties
+  diseases:
+    type: array
+    items:
+      $ref: ../common/disease.yaml#/properties
+  # medicalActions:
+  #   type: array
+  #   items:
+  #     $ref: MedicalAction.yaml#/properties
+  # htsFiles:
+  #   type: array
+  #   items:
+  #     $ref: HtsFile.yaml#/properties
+  metaData:
+    type: object
+
+

@@ -33,8 +33,9 @@ def variants():
 
     byc = initialize_service()
     run_beacon_init_stack(byc)
-    run_result_sets_beacon("variants", byc)
+    run_result_sets_beacon(byc)
     export_datatable(byc)
+    check_alternative_variant_deliveries(byc)
     query_results_save_handovers(byc)
     cgi_print_response( byc, 200 )
 

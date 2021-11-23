@@ -1,0 +1,98 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/commonDefinitions/v2021-11-11
+title: Common Definitions
+description: >-
+  Definitions for concepts used in several entry types, but that having only one
+  property are not complex enough to require a full independent schema document.
+definitions:
+  Sex:
+    description: >-
+      (Genomic) sex of the individual.
+      The standard specification recommends values from NCIT General Qualifier
+      (NCIT:C27993):
+      
+      * NCIT:C17998 - unknown
+      * NCIT:C16576 - female
+      * NCIT:C20197 - male
+
+      Another option is to use PATO `genotypic sex` classes.
+
+      Progenetix uses PATO `genotypic sex` classes.
+    $ref: ontologyTerm.yaml#/properties
+    examples:
+      - id: PATO:0020002
+        label: female genotypic sex
+      - id: PATO:0020001
+        label: male genotypic sex
+
+  Ethnicity:
+    description: >-
+      Ethnic background of the individual. Value from NCIT Race (NCIT:C17049)
+      ontology term descendants can be used, e.g. NCIT:C126531 (Latin American).
+      "A geographic ancestral origin category that is assigned to a population
+      group based mainly on physical characteristics that are thought to be distinct
+      and inherent."
+      CAVE: Contentious and potentially misleading concept.
+    $ref: ontologyTerm.yaml#/properties
+    examples:
+      - id: NCIT:C42331
+        label: African
+      - id: NCIT:C41260
+        label: Asian
+      - id: NCIT:C126535
+        label: Australian
+      - id: NCIT:C43851
+        label: European
+      - id: NCIT:C77812
+        label: North American
+      - id: NCIT:C126531
+        label: Latin American
+      - id: NCIT:C104495
+        label: Other race
+
+  GeographicLocation:
+    description: >-
+      Individual's country or region of origin (birthplace or residence
+      place regardless of ethnic origin). Value from GAZ Geographic Location ontology
+      (GAZ:00000448), e.g. GAZ:00002459 (United States of America).
+    $ref: ontologyTerm.yaml#/properties
+    examples:
+      - id: GAZ:00002955
+        label: Slovenia
+      - id: GAZ:00002459
+        label: United States of America
+      - id: GAZ:00316959
+        label: Municipality of El Masnou
+      - id: GAZ:00000460
+        label: Eurasia
+
+  SeverityLevel:
+    description: >-
+      Level/severity ontology when and as applicable to phenotype observed.
+      Value from Human Phenotype Ontology (HP:0012824), e.g "mild". The intensity
+      or degree of a manifestation. [ HPO:probinson ]
+    $ref: ontologyTerm.yaml#/properties
+    examples:
+      - id: HP:0012825
+        label: Severe
+      - id: HP:0012829
+        label: Profound
+      - id: HP:0012826
+        label: Moderate
+      - id: HP:0012825
+        label: Mild
+      - id: HP:0012827
+        label: Bordeline
+
+  Units:
+    description: >-
+      The kind of unit. Recommended from NCIT Unit of Category ontology
+      term (NCIT:C42568) descendants.
+    $ref: ontologyTerm.yaml#/properties
+    examples:
+      - id: NCIT:C70575
+        label: Roentgen
+      - id: NCIT:C28252
+        label: Kilogram
+      - id: NCIT:C28253
+        label: Milligram

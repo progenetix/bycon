@@ -1,7 +1,7 @@
 openapi: 3.0.2
 servers: []
 info:
-  version: v2.0.0-draft4
+  version: 2.0.0-draft.4
   title: GA4GH Beacon API Specification - Genomic Variations Endpoints
   description: TBD
   contact:
@@ -18,19 +18,15 @@ paths:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/includeResultsetResponses'
         - $ref: '#/components/parameters/genomicAlleleShortForm'
-        - $ref: '#/components/parameters/gene'
-        - $ref: '#/components/parameters/aaChange'
+        - $ref: '#/components/parameters/geneId'
+        - $ref: '#/components/parameters/aminoacidChange'
       description: Get a list of example entries
       operationId: getExampleEntries
       tags:
         - GET Endpoints
       responses:
         '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+          $ref: '#/components/responses/ResultsOKResponse'
         default:
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
     post:
@@ -46,11 +42,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+          $ref: '#/components/responses/ResultsOKResponse'
         default:
           description: An unsuccessful operation
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
@@ -64,11 +56,7 @@ paths:
         - GET Endpoints
       responses:
         '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+          $ref: '#/components/responses/ResultsOKResponse'
         default:
           description: An unsuccessful operation
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
@@ -85,11 +73,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+          $ref: '#/components/responses/ResultsOKResponse'
         default:
           description: An unsuccessful operation
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
@@ -108,11 +92,7 @@ paths:
         - GET Endpoints
       responses:
         '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+          $ref: '#/components/responses/ResultsOKResponse'
         default:
           description: An unsuccessful operation
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
@@ -130,11 +110,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+          $ref: '#/components/responses/ResultsOKResponse'
         default:
           description: An unsuccessful operation
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
@@ -153,11 +129,7 @@ paths:
         - GET Endpoints
       responses:
         '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+          $ref: '#/components/responses/ResultsOKResponse'
         default:
           description: An unsuccessful operation
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
@@ -175,15 +147,21 @@ paths:
         required: true
       responses:
         '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
+          $ref: '#/components/responses/ResultsOKResponse'
         default:
           description: An unsuccessful operation
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
 components:
+  responses:
+    ResultsOKResponse:
+      description: Successful operation.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconBooleanResponse.json
+              - $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconCountResponse.json
+              - $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconResultsetsResponse.json
   parameters:
     requestedSchema:
       name: requestedSchema
@@ -205,7 +183,7 @@ components:
       schema:
         $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/beaconCommonComponents.json#/definitions/Limit
     includeResultsetResponses:
-      $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/requests/beaconRequestBody.json#/definitions/IncludeResultsetResponses
+      $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/beaconCommonComponents.json#/definitions/IncludeResultsetResponses
     entryId:
       name: id
       in: path
@@ -218,14 +196,14 @@ components:
       schema:
         type: string
       example: NM_004006.2:c.4375C>T
-    gene:
-      name: gene
+    geneId:
+      name: geneid
       in: query
       schema:
         type: string
       example: BRAF
-    aaChange:
-      name: aachange
+    aminoacidChange:
+      name: aminoacidchange
       in: query
       schema:
         type: string

@@ -5,8 +5,8 @@ line_cleanup:
     "empirically determined" lint from the input files, where this may
     interfere with later regexing.
   cleanup:
-    - m: '!Sample_characteristics_ch\d ='
-      s: ""
+    - m: '!Sample_characteristics_ch'
+      s: "channel "
     - m: '(?i)grade[^\w]+?not applicable'
       s: ""
     - m: '(?i)stage[^\w]+?not applicable'
@@ -29,12 +29,109 @@ extraction_scopes:
     5. checking the correct structure (`final_check` - a global pattern can be
     used if other post-processing is performed)
 
+
+  survival_status:
+    filter: '(?i).*?(?:(?:dea(?:d|th))|alive|surviv|outcome|status)'
+    preclean:
+      - m: '(?i)days to death or last seen alive[^\w]+?\d+?(?:[^\w\.]|$)'
+        s: ''
+      - m: '[^\w]+?NA(?:[^\w\.]|$)'
+        s: ' '
+      - m: 'remission status past double induction .cr. complete remission. RD. refractory disease. ED. early death[^\w]+?ED'
+        s: 'survival: dead'      
+      - m: 'remission status past double induction .cr. complete remission. RD. refractory disease. ED. early death[^\w]+?NA'
+        s: ''
+      - m: 'remission status past double induction .cr. complete remission. RD. refractory disease. ED. early death[^\w]+?CR'
+        s: 'survival: alive'      
+      - m: 'remission status past double induction .cr. complete remission. RD. refractory disease. ED. early death[^\w]+?RD'
+        s: '' # alive but not responding to therapy so removed?      
+      - m: 'Event Free Survival[^\w]+?no event'
+        s: 'recurrence: no'
+      - m: 'Event Free Survival.event'
+        s: 'recurrence: yes'
+      - m: 'Outcome[^\w]+?no event'
+        s: 'survival: alive'
+      - m: 'Outcome[^\w]+?event'
+        s: 'survival: dead'
+      - m: 'survival status[^\w]+?0'
+        s: 'survival: dead'
+      - m: 'survival status[^\w]+?1'
+        s: 'survival: alive'
+      - m: 'overall[^\w]+?survival[^\w]+?days[^\w]+?NA'
+        s: ''
+      - m: 'survival(?: time|from diagnosis)?[^\w]+?(days|months|years?)[^\w]+?(\d\d?\d?\d?\.?\d?\d?)'
+        s: 'survival: \2\1'
+      - m: 'survival[^\w]+?months[^\w]+?(\d\d?\d?\.?\d?\d?)'
+        s: 'survival: \1months'
+      - m: 'dead or alive at the end of follow.?up'
+        s: 'survival'
+      - m: 'survival after surgery[^\w]+?(\d\d?\d?\d?\.?\d?\d?)'
+        s: 'survival: \1months'
+      - m: 'survival after surgery: not applicable'
+        s: ''
+      - m: 'alive.?dead at the end of recorded survival'
+        s: 'survival'
+      - m: 'patient survival probability[^\w]+?'
+        s: ''
+      - m: 'perioperative death[^\w]+?(?:FALSE|NA)'
+        s: ''
+      - m: 'dead of disease[^\w]+?NO'
+        s: 'survival: alive'      
+      - m: 'dead of disease[^\w]+?YES'
+        s: 'survival: dead'
+      - m: 'days_to_death[^\w]+?\d+?(?:[^\w\.]|$)'
+        s: 'survival: dead'
+      - m: 'progression-free survival[^\w]+?\d\d?\d?months'
+        s: ''
+      - m: 'status os \(0=alive, 1=dead\)[^\w]+?1'
+        s: 'survival: dead'
+      - m: 'status os \(0=alive, 1=dead\)[^\w]+?0'
+        s: 'survival: alive'
+      - m: 'status os \(0=alive, 1=dead\)[^\w]+?NA'
+        s: ''
+      - m: 'status [re]f?s \(0=no event, 1=event\)[^\w]+?NA'
+        s: ''
+      - m: 'survival[^\w]+?\d+?\w+?(?:[^\w\.]|$)'
+        s: ''
+    find:
+      - '(?i).*?((?:survival|outcome)(?: status)?[^\w]+?\w+?)(?:[^\w\.]|$)'
+      - '(?i).*?vital status[^\w]+?(\w+?)(?:[^\w]|$)'
+      - '(?i).*?(alive[^\w]+?\w+?)(?:[^\w]|$)'
+      - '(?i).*?(dea(?:d|th)[^\w]+?\w+?)(?:[^\w]|$)'
+    cleanup:
+      - m: '[\s]'
+        s: ''
+      - m: '(?:survival[^\d]+?)null'
+        s: ''
+      - m: 'unknown'
+        s: ''
+      - m: '^NA$'
+        s: ''
+      - m: '(?i)(?:survival|outcome)[^\w]+?(dead|alive)'
+        s: '\1'
+      - m: '(?i)dea(?:d|th)[^\w]+?1'
+        s: 'dead'
+      - m: '(?i)dea(?:d|th)[^\w]+?0'
+        s: 'alive'
+      - m: '(?i)alive'
+        s: 'alive'
+      - m: '(?i)dea(?:d|th)'
+        s: 'dead'
+      - m: '(?i)dea(?:d|th)[^\w]+?TRUE'
+        s: 'dead'
+      - m: '(?i)deceased'
+        s: 'dead'
+      - m: '(?i)deador'
+        s: ''
+    final_check: '.+?'
+
+
   pathological_stage:
     filter: '(?i).*?stage'
     find:
-      - '(?i).*?stage[^\w]+?(Dukes.? \w)(:?[^\w]|$)'
-      - '(?i).*?stage[^\w]+?(Binet \w)(:?[^\w]|$)'
-      - '(?i).*?stage[^\w]+?([i12340]\w*?)(:?[^\w]|$)'
+      - '(?i).*?stage[^\w]+?(Dukes.? \w)(?:[^\w]|$)'
+      - '(?i).*?stage[^\w]+?(Binet \w)(?:[^\w]|$)'
+      - '(?i).*?stage[^\w]+?([i12340]\w*?)(?:[^\w]|$)'
     cleanup:
       - m: '(?i)IV'
         s: '4'
@@ -47,6 +144,7 @@ extraction_scopes:
       - m: '(?i)S'
         s: 's'
     final_check: '.+?'
+
 
   tumor_grade:
     filter: '(?i).*?grade'

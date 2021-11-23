@@ -22,30 +22,3 @@ alternativeUrl: "https://progenetix.org"
 create_date_time: 2015-11-13
 update_date_time: 2021-07-21
 datasets: [ ] # populated from script
-# info:
-#   sampleAlleleRequests:
-#     - datasetIds:
-#         - progenetix
-#       requestType: variantCNVrequest
-#       assemblyId: GRCh38
-#       referenceName: '9'
-#       start:
-#         - 21000000
-#         - 21975098
-#       end:
-#         - 21967753
-#         - 25000000
-#       variantType: "DEL"
-#       filters:
-#         - "icdom-94403"
-#         - "icdot-C71"
-#     - datasetIds:
-#         - progenetix
-#       assemblyId: GRCh38
-#       referenceName: '17'
-#       start:
-#         - 7577121
-#       alternateBases: "A"
-#       referenceBases: "G"
-#       filters:
-#         - "icdot-C71.7"

@@ -4,8 +4,7 @@ description: Definition of a complex value class.
 type: object
 properties:
   typedQuantities:
-    description: List of quantities required to fully describe the complex value.
-      REQUIRED.
+    description: List of quantities required to fully describe the complex value
     type: array
     items:
       $ref: '#/definitions/TypedQuantity'
@@ -13,13 +12,13 @@ definitions:
   TypedQuantity:
     properties:
       quantityType:
-        description: OntologyClass to describe the type of the measurement. REQUIRED.
+        description: OntologyClass to describe the type of the measurement
         $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/ontologyTerm.json
         example:
           id: NCIT:C25298
           label: Systolic Blood Pressure
       quantity:
-        description: Quantity denoting the outcome of the measurement. REQUIRED.
+        description: Quantity denoting the outcome of the measurement
         $ref: ./quantity.json
         example:
           quentity:

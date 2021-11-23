@@ -2,21 +2,19 @@
 progenetix:
     id: progenetix
     name: progenetix
-    idMatch: pgx
     identifier: 'org.progenetix::progenetix'
     description: "Progenetix cancer genome profiles"
-    assemblyId: 'GRCh38'
     createDateTime: 2001-01-01
     updateDateTime: 2021-03-01
-    version: 2020-12-15
-    variantCount: 7656759
-    callCount: 20988819
-    sampleCount: 138663
+    version: 2021-11-11
     externalUrl: "https://progenetix.org/about/"
-#    dataUseConditions:
+    assemblyId: GRCh38
+    dataUseConditions:
+      duoDataUse:
+        - id: DUO:0000004
+          label: no restriction
+          version: 2021-11-11
     info:
-      authorized: true
-      accessType: PUBLIC
       handoverTypes:
         - cnvhistogram
         - biosamples
@@ -28,24 +26,26 @@ progenetix:
         - callsetspgxseg
         - pgxseg
         - UCSClink
+      variantCount: 7656759
+      callCount: 20988819
+      sampleCount: 138663
 
 cellosaurus:
     id: cellosaurus
     name: cellosaurus
-    idMatch: cellos
     identifier: 'org.progenetix::cellosaurus'
     description: "annotated cellosaurus cell line variants"
-    assemblyId: 'GRCh38'
     createDateTime: 2020-06-01
     updateDateTime: 2020-12-15
     version: 2020-12-15
-    variantCount: 1446
-    callCount: 8702
-    sampleCount: 6617
     externalUrl: "https://progenetix.org/cellosaurus/"
+    assemblyId: GRCh38
+    dataUseConditions:
+      duoDataUse:
+        - id: DUO:0000004
+          label: no restriction
+          version: 2021-11-11
     info:
-      authorized: true
-      accessType: PUBLIC
       handoverTypes:
         - biosamples
         - individuals
@@ -53,24 +53,26 @@ cellosaurus:
         - variantsinterpretations
         - callsetsvariants
         - UCSClink
+      variantCount: 1446
+      callCount: 8702
+      sampleCount: 6617
 
 1000genomesDRAGEN:
     id: 1000genomesDRAGEN
     name: 1000genomesDRAGEN
-    idMatch: onekg
     identifier: 'org.progenetix::1000genomesDRAGEN'
     description: "1000 genomes DRAGEN analysis CNV dataset"
     createDateTime: 2021-01-29
     updateDateTime: 2021-03-01
     version: 2021-03-01
-    variantCount: 3945868
-    callCount: 3945868
-    sampleCount: 3200
-    assemblyId: 'GRCh38'
     externalUrl: "https://progenetix.org/1000-genomes-cnv/"
+    assemblyId: GRCh38
+    dataUseConditions:
+      duoDataUse:
+        - id: DUO:0000004
+          label: no restriction
+          version: 2021-11-11
     info:
-      authorized: true
-      accessType: PUBLIC
       handoverTypes:
         - biosamples
         - variants
@@ -78,4 +80,7 @@ cellosaurus:
         - callsetspgxseg
         - pgxseg
         - UCSClink
+      variantCount: 3945868
+      callCount: 3945868
+      sampleCount: 3200
 

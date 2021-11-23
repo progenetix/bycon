@@ -11,7 +11,7 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-from beaconServer.lib.cgi_utils import *
+from beaconServer.lib.cgi_parse import *
 from beaconServer.lib.parse_filters import *
 from beaconServer.lib.service_utils import *
 
@@ -85,6 +85,10 @@ def collations():
                         continue
 
     mongo_client.close( )
+
+    # if "text" in byc["output"]:
+    #     print(list(s_s.values()))
+    #     exit()
 
     populate_service_response( byc, _response_map_results( list(s_s.values()), byc))
     cgi_print_response( byc, 200 )

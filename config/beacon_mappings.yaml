@@ -2,6 +2,7 @@ service_names:
   empty_value: info
   analyses: callsets
   callsets: callsets
+  cohorts: cohorts
   configuration: configuration
   entryTypes: entryTypes
   entry_types: entryTypes
@@ -15,6 +16,7 @@ service_names:
   g_variants: variants
   info: info
   map: map
+  runs: runs
   service-info: info
   variants_in_sample: variants
   variantsInSample: variants
@@ -22,42 +24,113 @@ service_names:
   variantInterpretations: variantInterpretations
   variant_interpretations: variantInterpretations
 
+#response_type_aliases:
+path_response_type_mappings:
+
+  analyses: analysis
+  callsets: analysis
+  cohorts: cohort
+  collections: dataset
+  datasets: dataset
+  biosamples: biosample
+  individuals: individual
+  runs: run
+  gVariants: variant
+  g_variants: variant
+  variants: variant
+  variants_in_sample: variant
+  variantsInSample: variant
+  variantInterpretations: variant
+  variant_interpretations: variant
+  info: info
+
 response_types:
-  biosamples:
-    id: biosample
-    schema: https://progenetix.org/services/schemas/Biosample/
-    h->o_access_key: "biosamples._id"
-  individuals:
-    id: individual
-    schema: https://progenetix.org/services/schemas/Individual/
+
+  - entity_type: info
+    collection: Null
+    response_schema: beaconInfoResponse
+    beacon_schema:
+      entity_type: configuration
+      schema: https://progenetix.org/services/schemas/beaconInfoResults/
+    h->o_access_key: Null
+
+  - entity_type: configuration
+    collection: Null
+    response_schema: beaconConfigurationResponse
+    beacon_schema:
+      entity_type: configuration
+      schema: https://progenetix.org/services/schemas/beaconMapSchema/
+    h->o_access_key: Null
+
+  - entity_type: entryTypes
+    collection: Null
+    response_schema: beaconEntryTypesResponse
+    beacon_schema:
+      entity_type: entryType
+      schema: https://progenetix.org/services/schemas/beaconConfigurationSchema/
+    h->o_access_key: Null
+
+  - entity_type: map
+    collection: Null
+    response_schema: beaconMapResponse
+    beacon_schema:
+      entity_type: map
+      schema: https://progenetix.org/services/schemas/beaconMapSchema/
+    h->o_access_key: Null
+
+  - entity_type: dataset
+    collection: dbstats
+    response_schema: beaconCollectionsResponse
+    beacon_schema:
+      entity_type: dataset
+      schema: https://progenetix.org/services/schemas/dataset/
+    h->o_access_key: Null
+
+  - entity_type: cohort
+    collection: dbstats
+    response_schema: beaconCollectionsResponse
+    beacon_schema:
+      entity_type: cohort
+      schema: https://progenetix.org/services/schemas/cohort/
+    h->o_access_key: Null
+
+  - entity_type: individual
+    collection: individuals
+    response_schema: beaconResultsetsResponse
+    beacon_schema:
+      entity_type: individual
+      schema: https://progenetix.org/services/schemas/individual/
     h->o_access_key: "individuals._id"
-  variants:
-    id: variantInSample
-    schema: https://progenetix.org/services/schemas/Variant/
-    h->o_access_key: "variants._id"
-  g_variants:
-    id: variantInSample
-    schema: https://progenetix.org/services/schemas/Variant/
-    h->o_access_key: "variants._id"
-  variants_in_sample:
-    id: variantInSample
-    schema: https://progenetix.org/services/schemas/Variant/
-    h->o_access_key: "variants._id"
-  variantsInSample:
-    id: variantInSample
-    schema: https://progenetix.org/services/schemas/Variant/
-    h->o_access_key: "variants._id"
-  variant_interpretations:
-    id: variantInterpretation
-    schema: https://progenetix.org/services/schemas/Variant/
-    h->o_access_key: "variant_annotations._id"
-  callsets:
-    id: analysis
-    schema: https://progenetix.org/services/schemas/Callset/
-    h->o_access_key: "callsets._id"
-  analyses:
-    id: analysis
-    schema: https://progenetix.org/services/schemas/Callset/
+
+  - entity_type: biosample
+    collection: biosamples
+    response_schema: beaconResultsetsResponse
+    beacon_schema:
+      entity_type: biosample
+      schema: https://progenetix.org/services/schemas/biosample/
+    h->o_access_key: "biosamples._id"
+
+  - entity_type: analysis
+    collection: callsets  
+    response_schema: beaconResultsetsResponse
+    beacon_schema:
+      entity_type: analysis
+      schema: https://progenetix.org/services/schemas/analysis/
     h->o_access_key: "callsets._id"
 
+  - entity_type: run
+    collection: callsets
+    response_schema: beaconResultsetsResponse
+    beacon_schema:
+      entity_type: run
+      schema: https://progenetix.org/services/schemas/run/
+    h->o_access_key: "callsets._id"
+
+  - entity_type: variant
+    response_schema: beaconResultsetsResponse
+    collection: variants
+    beacon_schema:
+      entity_type: genomicVariation
+      schema: https://progenetix.org/services/schemas/genomicVariation/    
+    h->o_access_key: "variants._id"
 

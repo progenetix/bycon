@@ -8,11 +8,13 @@ defaults:
 meta:
   returned_schemas:
     - entity_type: genespan
-      schema: https://progenetix.org/services/schemas/GeneSpan/
+      schema: https://progenetix.org/services/schemas/GenomicLocation/
     - entity_type: cytobands
-      schema: https://progenetix.org/services/schemas/Cytobands/
+      schema: https://progenetix.org/services/schemas/ChromosomeLocation/
   info: >
-    The main cytomapper payload can be accessed in `results[0]`.
+    The main cytomapper payload can be accessed in `response.results[0]`.
+# TODO: proper link to either VRS or local schemas
+
 arg_pars:
 
   cytoBands: cytobands

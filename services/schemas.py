@@ -11,13 +11,13 @@ dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-from beaconServer.lib.cgi_utils import set_debug_state, cgi_parse_query, cgi_print_response, rest_path_value
+from beaconServer.lib.cgi_parse import set_debug_state, cgi_parse_query, cgi_print_response, rest_path_value
 from beaconServer.lib.schemas_parser import *
 from beaconServer.lib.service_utils import *
 
 """podmd
 
-* <https://progenetix.org/services/schemas/Biosample>
+* <https://progenetix.org/services/schemas/biosample>
 
 podmd"""
 
@@ -41,8 +41,7 @@ def schemas():
     schema_name = comps.pop(0)
 
     # if "empty_value" in schema_name:
-
-    #     schema_name = "Biosample"
+    #     schema_name = "biosample"
 
     if not "empty_value" in schema_name:
 

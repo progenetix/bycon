@@ -21,6 +21,11 @@ def initialize_beacon_queries(byc):
     select_dataset_ids(byc)
     check_dataset_ids(byc)
 
+    # TODO: HOT FIX
+    if "runs" in byc["queries"].keys():
+        if not "callsets" in byc["queries"].keys():
+            byc["queries"]["callsets"] = byc["queries"].pop("runs")
+
     return byc
 
 ################################################################################
@@ -56,9 +61,35 @@ def purge_empty_queries( byc ):
 
 ################################################################################
 
+def generate_empty_query_items_request(ds_id, byc, ret_no=10):
+
+    # This is called separately, only for specific collections
+
+    collname = byc["response_entity"]["collection"]
+
+    if byc["empty_query_all_response"] is False:
+        return byc
+
+    mongo_client = MongoClient()
+    data_db = mongo_client[ ds_id ]
+    data_coll = mongo_client[ ds_id ][ collname ]
+
+    rs = list( data_coll.aggregate([{"$sample": {"size":ret_no}}]) )
+    _ids = []
+    for r in rs:
+        _ids.append(r["_id"])
+
+    byc["queries"].update( { collname: { "_id": {"$in": _ids } } } )
+
+    byc.update( { "empty_query_all_count": data_coll.estimated_document_count() } )
+
+    return byc
+
+################################################################################
+
 def update_queries_from_path_id( byc ):
 
-    dummy_id_patterns = ["_id_", "__id__", "___id___", '{id}' ]
+    dummy_id_patterns = ["_id_", "__id__", "___id___", "_test_", "__test__", "___test___", r'{id}' ]
 
     if not environ.get('REQUEST_URI'):
         return byc
@@ -74,10 +105,11 @@ def update_queries_from_path_id( byc ):
         if not rb_t in byc["beacon_base_paths"]:
             return byc
 
-    s_id = rest_path_value(rb_t)
+    p_id = rest_path_value(rb_t)
 
-    if s_id:
-        if not "empty_value" in s_id:
+    if p_id:
+        if not "empty_value" in p_id:
+            s_id = p_id
             if s_id in dummy_id_patterns:
                 if "defaults" in byc["this_config"]:
                     s_id = byc["this_config"]["defaults"].get("test_document_id", "")
@@ -88,10 +120,16 @@ def update_queries_from_path_id( byc ):
             if not "response_types" in byc["this_config"]:
                 return byc
 
-            r_t = rest_path_value(s_id)
+            # That's why the original path id was kept...
+            r_t = rest_path_value(p_id)
 
-            if r_t in byc["beacon_mappings"]["response_types"]:
-                byc.update({"response_type": byc["beacon_mappings"]["response_types"][r_t]["id"]})
+            try:
+                t = byc["beacon_mappings"]["path_response_type_mappings"][r_t]
+                for r_d in byc["beacon_mappings"]["response_types"]:
+                    if r_d["entity_type"] == t:
+                        byc.update({"response_type": r_d["entity_type"]})
+            except:
+                pass
 
     return byc
 
@@ -126,6 +164,7 @@ def update_queries_from_id_values(byc):
 def update_queries_from_hoid( byc):
 
     if "accessid" in byc["form_data"]:
+
         accessid = byc["form_data"]["accessid"]
         ho_client = MongoClient()
         ho_db = ho_client[ byc["config"]["info_db"] ]

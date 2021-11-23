@@ -36,30 +36,11 @@ def biosamples():
 
     byc = initialize_service()
     run_beacon_init_stack(byc)
-    run_result_sets_beacon("biosamples", byc)
+    run_result_sets_beacon(byc)
     export_datatable(byc)
+    check_alternative_variant_deliveries(byc)
     query_results_save_handovers(byc)
     cgi_print_response( byc, 200 )
-
-################################################################################
-
-def retrieve_biosamples(ds_id, byc):
-
-    mongo_client = MongoClient()
-    data_db = mongo_client[ ds_id ]
-    bs_coll = mongo_client[ ds_id ][ "biosamples" ]
-
-    ds_results = byc["dataset_results"][ds_id]
-    r_key = "biosamples._id"
-
-    if r_key in ds_results:
-        beacon_res = []
-        for b in bs_coll.find({"_id":{"$in": ds_results[ r_key ]["target_values"] }}):
-            beacon_res.append(b)
-
-        return beacon_res
-
-    return False
 
 ################################################################################
 ################################################################################

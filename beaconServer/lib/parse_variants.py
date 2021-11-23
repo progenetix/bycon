@@ -4,7 +4,7 @@ import logging
 import sys
 from bson.objectid import ObjectId
 
-from cgi_utils import *
+from cgi_parse import *
 from query_execution import mongo_result_list
 
 ################################################################################

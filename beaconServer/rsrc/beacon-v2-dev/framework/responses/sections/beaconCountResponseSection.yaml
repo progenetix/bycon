@@ -12,3 +12,4 @@ properties:
     $ref: ../../common/beaconCommonComponents.json#/definitions/NumTotalResults
 required:
   - exists
+  - numTotalResults

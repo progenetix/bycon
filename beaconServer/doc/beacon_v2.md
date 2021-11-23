@@ -126,7 +126,7 @@ If using `g_variants` or `variants_in_sample`, those will be treated as aliases.
     },
     "response_type": "biosample",
     "returned_schemas": {
-      "Biosample": "https://progenetix.org/services/schemas/Biosample/"
+      "Biosample": "https://progenetix.org/services/schemas/biosample/"
     },
     "update_date_time": "2021-03-23",
     "warnings": []

@@ -1,7 +1,7 @@
 openapi: 3.0.2
 servers: []
 info:
-  version: v2.0.0-draft4
+  version: 2.0.0-draft.4
   title: GA4GH Beacon API Specification
   description: A Beacon is a web service for data discovery and sharing that can be
     queried for information about entry types defined by a Model.
@@ -65,17 +65,7 @@ paths:
             application/json:
               schema:
                 description: Response of a request for information about a Beacon
-                type: object
-                required:
-                  - meta
-                  - response
-                properties:
-                  meta:
-                    description: TBD
-                    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/sections/beaconInformationalResponseMeta.json
-                  response:
-                    description: TBD
-                    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/configuration/beaconConfigurationSchema.json
+                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconConfigurationResponse.json
         default:
           description: An unsuccessful operation
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
@@ -93,17 +83,7 @@ paths:
             application/json:
               schema:
                 description: Response of a request for information about a Beacon
-                type: object
-                required:
-                  - meta
-                  - response
-                properties:
-                  meta:
-                    description: TBD
-                    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/sections/beaconInformationalResponseMeta.json
-                  response:
-                    description: TBD
-                    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/configuration/beaconConfigurationSchema.json#/definitions/EntryTypes
+                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconEntryTypesResponse.json
         default:
           description: An unsuccessful operation
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
@@ -120,18 +100,8 @@ paths:
           content:
             application/json:
               schema:
-                description: Response of a request for the Beacon Map of endpoints
-                type: object
-                required:
-                  - meta
-                  - response
-                properties:
-                  meta:
-                    description: TBD
-                    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/sections/beaconInformationalResponseMeta.json
-                  response:
-                    description: TBD
-                    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/configuration/beaconMapSchema.json
+                description: Response of a request for information about a Beacon
+                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconMapResponse.json
         default:
           description: An unsuccessful operation
           $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconErrorResponse.json
@@ -158,17 +128,7 @@ components:
         application/json:
           schema:
             description: Response of a request for information about a Beacon
-            type: object
-            required:
-              - meta
-              - response
-            properties:
-              meta:
-                description: TBD
-                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/sections/beaconInformationalResponseMeta.json
-              response:
-                description: TBD
-                $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/sections/beaconInfoResults.json
+            $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/beaconInfoResponse.json
   parameters:
     requestedSchema:
       name: requestedSchema

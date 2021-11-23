@@ -1,0 +1,45 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/GeoJSONgeometry/v2021-04-14
+title: GeoJSON Geometry
+meta:
+  contributors:
+    - description: "GA4GH Metadata Task Team"
+    - description: "Michael Baudis"
+      id: "orcid:0000-0002-9903-4248"
+    - description: "Isuru Liyanage"
+      id: "orcid:0000-0002-4839-5158"
+    - description: "Melanie Courtot"
+      id: "orcid:0000-0002-9551-6370"
+  provenance:
+    - description: "Developer branch of original GA4GH schema"
+      id: 'https://github.com/ga4gh-metadata/metadata-schemas/blob/master/schemas/shared.proto#L60'
+    - description: "IETF GeoJSON pecification"
+      id: 'https://tools.ietf.org/html/rfc7946'
+    - description: "Progenetix"
+      id: 'https://github.com/progenetix/schemas/'
+  used_by:
+    - description: "Progenetix database schema (Beacon+ backend)"
+      id: 'https://github.com/progenetix/schemas/'
+  sb_status: proposed
+description: >
+  The geographic point object uses the default units from the [DCMI point scheme](http://dublincore.org/documents/dcmi-point/) and avoids optional representation in non-standard units.
+type: object
+properties:
+  type:
+    type: string
+    value: "Point"
+  coordinates:
+    description: >
+      An array of 2 (longitude, latitude) or 3 (longitude, latitude, altitude) values.
+    type: array
+    items:
+      type: number
+      format: float
+    minItems: 2
+    maxItems: 3
+    examples:
+      - - 47.37
+        - 8.55
+      - - 86.925026
+        - 27.987850
+        - 8848.86

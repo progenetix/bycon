@@ -3,7 +3,7 @@
     "meta": {
         "apiVersion": "2.0",
         "requestedSchemas": [
-          { "entityType": "individual", "schema:": "https://progenetix.org/services/schemas/Individual/"}
+          { "entityType": "individual", "schema:": "https://progenetix.org/services/schemas/individual/"}
         ]
     },
     "query": {

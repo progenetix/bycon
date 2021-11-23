@@ -5,7 +5,7 @@ import sys
 dir_path = path.dirname( path.abspath(__file__) )
 sys.path.append( dir_path )
 
-from cgi_utils import *
+from cgi_parse import *
 from datatable_utils import *
 from handover_execution import *
 from handover_generation import *

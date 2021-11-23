@@ -2,20 +2,6 @@ from pymongo import MongoClient
 
 ################################################################################
 
-def handover_retrieve_from_query_results(ds_id, byc):
-
-    h_o = { }
-    e = "No data fround for {} response type!".format(byc["response_type"])
-
-    for r_t, r_d in byc["beacon_mappings"]["response_types"].items():
-        if r_d["id"] == byc["response_type"]:
-            if r_d["h->o_access_key"] in byc["dataset_results"][ds_id]:
-                return byc["dataset_results"][ds_id][ r_d["h->o_access_key"] ], False
-
-    return h_o, e
-
-################################################################################
-
 def retrieve_handover( accessid, byc ):
 
     mongo_client = MongoClient()

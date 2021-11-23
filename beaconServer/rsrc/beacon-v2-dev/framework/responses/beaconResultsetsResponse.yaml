@@ -5,21 +5,21 @@ properties:
   meta:
     description: Information about the response that could be relevant for the Beacon
       client in order to interpret the results.
-    $ref: ./sections/beaconResponseMeta.json
+    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/sections/beaconResponseMeta.json
   responseSummary:
     description: Response summary, including Boolean and optionally results count.
-    $ref: ./sections/beaconSummaryResponseSection.json
+    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/sections/beaconSummaryResponseSection.json
   info:
     description: Additional details that could be of interest. Provided to clearly
       enclose any attribute that is not part of the Beacon specification.
-    $ref: ../common/beaconCommonComponents.json#/definitions/Info
+    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/beaconCommonComponents.json#/definitions/Info
   beaconHandovers:
     description: List of handovers that apply to the whole response, not to any resultset
       or result in particular.
-    $ref: ../common/beaconCommonComponents.json#/definitions/ListOfHandovers
+    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/beaconCommonComponents.json#/definitions/ListOfHandovers
   response:
     description: Response for queries that recovers any result.
-    $ref: ./sections/beaconResultsets.json
+    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/responses/sections/beaconResultsets.json
 required:
   - meta
   - responseSummary

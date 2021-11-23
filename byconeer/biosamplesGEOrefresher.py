@@ -54,38 +54,15 @@ def main():
 def biosamples_refresher():
 
     # TODO: Clean solution?
-    s_scopes = {
-        "grade": {
-            "t_head": "info.tumor_grade_text",
-            "input_head": "_input_grade",
-            "note_head": "_note_grade",
-            "p_info": "tumor_grade",
-            "p_ontologized": "tumor_grade"
-        },
-        "stage": {
-            "t_head": "info.tumor_stage_text",
-            "input_head": "_input_stage",
-            "note_head": "_note_stage",
-            "p_info": "tumor_stage",
-            "p_ontologized": "pathological_stage"
-        },
-        "tnm": {
-            "t_head": "info.tumor_tnm_text",
-            "input_head": "_input_tnm",
-            "note_head": "_note_tnm",
-            "p_info": "tumor_tnm_text",
-            "p_ontologized": "pathological_tnm_findings"
-        }
-    }
 
     byc = initialize_service()
-
     _get_args(byc)
 
     if not byc["args"].scopes:
         print( "You have to provide at least one of the scopes in `-s {}`".format(",".join(supported_scopes)))
         exit()
 
+    s_scopes = byc["this_config"]["text_processing_scopes"]
     sel_scopes = []
 
     for scope in re.split(",", byc["args"].scopes):
@@ -135,16 +112,17 @@ def biosamples_refresher():
     platform_re = re.compile(r'^.*?(GPL\d+?)(:?[^\d]|$)', re.IGNORECASE)
 
     missing_ids = []
-    collected = []
+    coll_lines = []
+    coll_objs = []
 
     header = ["id", "analysis_info.experiment_id", "analysis_info.series_id", "analysis_info.platform_id"]
     for scp in sel_scopes:
-        header.append(s_scopes[scp]["t_head"])
+        header.append(s_scopes[scp]["db_key"])
         header.append("_old_"+scp)
         header.append("_input_"+scp)
         header.append("_note_"+scp)
 
-    collected.append("\t".join(header))
+    coll_lines.append("\t".join(header))
 
     for bsid in bs_ids:
 
@@ -186,10 +164,10 @@ def biosamples_refresher():
 
         updating_scopes = False
 
-        collector = {}
+        line_coll = {}
         for h_i in header:
-            collector.update({h_i:""})
-        collector.update({
+            line_coll.update({h_i:""})
+        line_coll.update({
             "id": bsid,
             "analysis_info.experiment_id": gsm,
             "analysis_info.series_id": gse,
@@ -202,21 +180,22 @@ def biosamples_refresher():
 
         for scp in sel_scopes:
 
-            collector.update({"_old_"+scp: s["info"].get(s_scopes[scp]["p_info"], "")})
+            line_coll.update({"_old_"+scp: s["info"].get(s_scopes[scp]["info_parameter"], "")})
             # scope_update_f = "geosoft_extract_tumor_"+scp
-            # globals()[scope_update_f](sample_characteristics, collector, s_scopes[scp], byc)
-            geosoft_extract_geo_meta(sample_characteristics, collector, s_scopes[scp], byc)
-            if len(collector[s_scopes[scp]["t_head"]]) > 0 or len(collector["_note_"+scp]) > 0:
-                new_info.update({scope:collector[s_scopes[scp]["t_head"]]})
+            # globals()[scope_update_f](sample_characteristics, line_coll, s_scopes[scp], byc)
+            geosoft_extract_geo_meta(sample_characteristics, line_coll, s_scopes[scp], byc)
+            if len(line_coll[s_scopes[scp]["db_key"]]) > 0 or len(line_coll["_note_"+scp]) > 0:
+                new_info.update({scope:line_coll[s_scopes[scp]["db_key"]]})
                 updating_scopes = True
 
         coll_line = ""
         if updating_scopes:
             line = []
             for h_k in header:
-                line.append(collector.get(h_k, ""))
+                line.append(line_coll.get(h_k, ""))
             coll_line = "\t".join(line)
-            collected.append(coll_line)
+            coll_lines.append(coll_line)
+            coll_objs.append(line_coll)
             bar.next()
         else:
             bar.next()
@@ -237,9 +216,18 @@ def biosamples_refresher():
 
     bar.finish()
 
-    tmp_path = _save_tmp_file("gsm-metadata_"+"_".join(sel_scopes)+".tsv", collected, byc)
+    tmp_path = _save_tmp_file("gsm-metadata_"+"_".join(sel_scopes)+".tsv", coll_lines, byc)
     print("=> Wrote {}".format(tmp_path))
-    print("=> metadata for {} samples".format(len(collected) - 1))
+    print("=> metadata for {} samples".format(len(coll_lines) - 1))
+
+    for scp in sel_scopes:
+        scp_dists = {}
+        for c in coll_objs:
+            if len(c[ s_scopes[scp]["db_key"] ]) > 0:
+                scp_dists.update({ c[ s_scopes[scp]["db_key"] ] :1})
+        print("=> Values in scope \"{}\":\n{}".format(s_scopes[scp]["id"], "\n".join(list(scp_dists.keys()))))
+
+
 
 ################################################################################
 

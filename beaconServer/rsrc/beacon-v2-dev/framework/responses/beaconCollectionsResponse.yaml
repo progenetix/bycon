@@ -10,7 +10,7 @@ properties:
     description: Response summary, including Boolean and optionally results count.
     $ref: ./sections/beaconSummaryResponseSection.json
   response:
-    description: Returning the Beacon Map.
+    description: Returning the Beacon Collections list, filtered or unfiltered.
     type: object
     properties:
       collections:

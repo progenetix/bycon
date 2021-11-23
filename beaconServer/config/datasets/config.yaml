@@ -4,11 +4,12 @@ bycon_definition_files:
   - beacon_mappings
   - dataset_definitions
   - filter_definitions
+  - variant_definitions
+  - interval_definitions
+  - handover_definitions
 defaults:
-  response_type: return_dbstats
-  response_schema: beaconCollectionsResponse
+  response_type: dataset
   stats_number: 1
-  include_resultset_responses: HIT
   test_document_id: progenetix
 meta:
   beacon_id: org.progenetix
@@ -18,13 +19,20 @@ meta:
       schema: https://progenetix.org/services/schemas/dataset
   received_request_summary:
     requested_granularity: record
-    include_resultset_responses: HIT
+    requested_schemas:
       - entity_type: dataset
         schema: https://progenetix.org/services/schemas/dataset
   returned_granularity: record
-  info: >
-    The latest dbstats payload can be accessed in `results`.
 include_resultset_responses:
   - HIT
   - ALL
   - NONE
+response_types:
+  - biosample
+  - individual
+  - genomicVariation
+  - run
+  - analysis
+  - dataset
+  - info
+

@@ -61,16 +61,16 @@ parameters:
     description: >
       A variant id, if existing in the database.
 
-  digest:
+  variantId:
     type: string
     pattern: '^\w[\w\:>\-\,]+?\w$'
     description: >
-      A variant digest.
+      A variant_internal_id, defining a genomically distinct variant through it's "digest".
 
   varMinLength:
     type: integer
     pattern: '^\d+?$'
-    description: >
+    description: >-
       The minimal length, in bases, of a genomic variant. This parameter can be applied to e.g. CNV queries.
 
   varMaxLength:
@@ -99,6 +99,7 @@ request_types:
     one_of:
       - id
       - _id
+      - variantId
 
   variantDigestRequest:
     description: >

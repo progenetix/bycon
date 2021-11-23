@@ -135,8 +135,8 @@ io_params:
     id:
       db_key: id
       type: string
-    digest:
-      db_key: digest
+    variant_internal_id:
+      db_key: variant_internal_id
       type: string
     reference_name:
       db_key: reference_name

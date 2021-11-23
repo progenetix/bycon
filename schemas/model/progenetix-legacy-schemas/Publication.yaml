@@ -1,0 +1,132 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/Publication/v2021-10-13
+title: Publication
+
+meta:
+  contributors:
+    - description: "Michael Baudis"
+      id: "orcid:0000-0002-9903-4248"
+  provenance:
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+  used_by:
+    - description: "Progenetix database schema (Beacon+ backend)"
+      id: 'https://github.com/progenetix/schemas/'
+  sb_status: community
+
+description: >
+  A Publication represents basic information about a scientific article used
+  in the Progenetix resource to indicate and annotate sources for genomic
+  screening experiments.
+
+properties:
+
+  id:
+    type: string
+    examples:
+      - PMID:22824167
+
+  pubmedid:
+    type: string
+    examples:
+      - "22824167"
+
+  pmcid:
+    type: string
+    description: >
+      Id of article in PMC, if there.
+      TODO: into `external_references`?
+
+  title:
+    type: string
+
+  authors:
+    type: string
+    examples:
+      - "Weber RG, Bostrom J, Wolter M, Baudis M, Collins VP, Reifenberger G, Lichter P."
+
+  journal:
+    type: string
+    examples:
+      - "Proc. Natl. Acad. Sci. U.S.A. 94(26), 1997"
+
+  pubYear:
+    type: string
+    examples:
+      - "2021"
+
+  abstract:
+    type: string
+
+  label:
+    description: >
+      An optional informative shortened concatenation of authors / pubYear / title, to be used for labels etc.
+    type: string
+    examples:
+      - "Peralta R, Baudis M, Vazquez G, Juarez S, Ortiz R, Decanini et al. (2010): Increased expression of cellular retinol-binding protein 1 in laryngeal squamous cell carcinoma."
+
+  status:
+    description: >
+      The status label is used to
+      * disambiguate between Progenetix collection publications and "excluded"
+      ones (i.e. not containing original genotyping data
+      * add some information about reasons for the exclusion, e.g. for later
+      access to currently out off scope articles
+    type: string
+    examples:
+      - "excluded [non-sensical study of invented disease]"
+      - "excluded [pooled samples]"
+      - "excluded [population study]"
+      - "excluded [review]"
+
+  counts:
+    $ref: PublicationSampleCounts.yaml#/properties
+
+  sampleTypes:
+    description: >
+      A list of ontology with counts objects, indicating the best approximation
+      of the diagnoses or other features of the analyzed samples.
+    type: array
+    items:
+      $ref: OntologyClass.yaml#/properties
+    examples:
+      - - id: NCIT:C96963
+          label: Digestive System Carcinoma
+          count: 221
+        - id: NCIT:C3406
+          label: Thoracic Neoplasm
+          count: 68
+
+  note:
+    type: string
+
+  contact:
+    $ref: '#/definitions/Contact/properties'
+
+  provenance:
+    $ref: Provenance.yaml#/properties
+
+  info:
+    type: object
+
+  updated:
+    type: string
+    format: date-time
+    examples:
+      - "2020-09-10T17:44:10.170Z"
+
+definitions:
+  Contact:
+    properties:
+      name:
+        description: >-
+          Name of contact (e.g. corresponding author).
+        type: string
+        examples:
+          - "Rasd-Coduresa Diziet Embless Sma da' Marenhide"
+          - Ion Tichy
+      email:
+        type: string
+      affiliation:
+        type: string
+

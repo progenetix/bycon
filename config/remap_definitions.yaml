@@ -1,5 +1,18 @@
 ---
 ontology_remaps:
+
+  survival_status:
+    search_fields:
+      - info.survival_status
+    class_patterns:
+      - id: "EFO:0030041"
+        label: "alive (follow-up status)"
+        pattern: "^alive$"
+      - id: "EFO:0030049"
+        label: "dead (follow-up status)"
+        pattern: "^dea(?:d|th)$"
+
+
   pathological_tnm_findings:
     search_fields:
       - info.tumor_tnm_text

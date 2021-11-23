@@ -15,7 +15,7 @@ sys.path.append( bycon_path )
 # services that have been moved need to be imported
 
 from beaconServer.lib.read_specs import read_local_prefs
-from beaconServer.lib.cgi_utils import rest_path_value, cgi_print_response,set_debug_state, cgi_print_rewrite_response
+from beaconServer.lib.cgi_parse import rest_path_value, cgi_print_response,set_debug_state, cgi_print_rewrite_response
 
 """
 The `services` application deparses a request URI and calls the respective

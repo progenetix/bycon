@@ -3,7 +3,7 @@ title: Common Definitions
 description: Definitions for concepts used in several entry types, but that having
   only one property are not complex enough to require a full independent schema document.
 definitions:
-  Gender:
+  Sex:
     description: "Sex of the individual. Value from NCIT General Qualifier (NCIT:C27993):\
       \ 'unknown' (not assessed or not available) (NCIT:C17998), 'female' (NCIT:C16576),\
       \ or 'male', (NCIT:C20197)."
@@ -69,7 +69,7 @@ definitions:
         label: Bordeline
   Units:
     description: The kind of unit. Recommended from NCIT Unit of Category ontology
-      term (NCIT:C42568) descendants. REQUIRED.
+      term (NCIT:C42568) descendants
     $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/ontologyTerm.json
     examples:
       - id: NCIT:C70575

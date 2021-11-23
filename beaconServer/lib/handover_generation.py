@@ -3,7 +3,7 @@ from pymongo import MongoClient
 from os import environ, pardir, path
 import sys
 
-from cgi_utils import *
+from cgi_parse import *
 
 ################################################################################
 
@@ -12,7 +12,7 @@ def dataset_response_add_handovers(ds_id, byc):
     """podmd
     podmd"""
 
-    h_o_server = _handover_select_server(**byc) 
+    h_o_server = _handover_select_server(byc) 
     b_h_o = [ ]
 
     if not ds_id in byc["dataset_definitions"]:
@@ -23,7 +23,7 @@ def dataset_response_add_handovers(ds_id, byc):
 
     for h_o_t in h_o_types.keys():
 
-        # testing if this handover is active fo the specified dataset
+        # testing if this handover is active for the specified dataset
         h_o_defs = h_o_types[ h_o_t ]
 
         if not h_o_t in ds_h_o:
@@ -98,7 +98,7 @@ def dataset_results_save_handovers(ds_id, byc):
 
 ################################################################################
 
-def _handover_select_server( **byc ):
+def _handover_select_server( byc ):
 
     s_uri = str(environ.get('SCRIPT_URI'))
     if "https:" in s_uri:

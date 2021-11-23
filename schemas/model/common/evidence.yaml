@@ -1,0 +1,21 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/evidence/v2021-11-12
+title: Evidence
+description: Definition of an evidence class.
+type: object
+properties:
+  evidenceCode:
+    description: An ontology class that represents the evidence type
+    $ref: ontologyTerm.yaml#/properties
+    example:
+      id: ECO:0006017
+      label: author statement from published clinical study used in manual assertion
+  reference:
+    description: Representation of the source of the evidence
+    $ref: externalReference.yaml#/properties
+    example:
+      id: PMID:30962759
+      label: Recurrent Erythema Nodosum in a Child with a SHOC2 Gene Mutation
+required:
+  - evidenceCode
+additionalProperties: true

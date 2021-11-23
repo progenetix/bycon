@@ -60,7 +60,6 @@ def get_schema_file_path(schema_name, byc):
 
         for s_f in s_fs:
 
-
             f_name = path.splitext( s_f )[0]
             # print(schema_name, f_name)
 

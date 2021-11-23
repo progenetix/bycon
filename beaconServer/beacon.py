@@ -11,7 +11,7 @@ bycon_lib_path = path.join( pkg_path, "beaconServer", "lib" )
 
 sys.path.append( bycon_lib_path )
 from read_specs import read_local_prefs
-from cgi_utils import rest_path_value, cgi_print_response, set_debug_state
+from cgi_parse import rest_path_value, cgi_print_response, set_debug_state
 
 """
 """

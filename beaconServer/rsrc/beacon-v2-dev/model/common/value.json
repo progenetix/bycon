@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Value",
+  "description": "Definition of a value class.",
+  "type": "object",
+  "oneOf": [
+    { "$ref" : "./quantity.json" },
+    { "$ref" : "https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/common/ontologyTerm.json" }
+  ]
+}

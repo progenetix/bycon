@@ -22,20 +22,20 @@ bycon_definition_files:
 meta:
   returned_schemas:
     - entity_type: biosample
-      schema: https://progenetix.org/services/schemas/Biosample/
+      schema: https://progenetix.org/services/schemas/biosample/
   received_request_summary:
     requested_granularity: record
     include_resultset_responses: HIT
     requested_schemas:
       - entity_type: biosample
-        schema: https://progenetix.org/services/schemas/Biosample/
+        schema: https://progenetix.org/services/schemas/biosample/
   returned_granularity: record
-  info: >
-    The main biosamples payload can be accessed in `response.resultSets`.
 response_types:
   - biosample
   - individual
-  - variantInSample
+  - genomicVariation
+  - run
+  - analysis
 include_resultset_responses:
   - HIT
   - ALL

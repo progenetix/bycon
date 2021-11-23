@@ -87,7 +87,7 @@ h->o_types:
     remove_subdomain: True
 
 # handover methods describe the source and target collections for stored
-# document identifiers (so far _id, id or digest). The source parameters are
+# document identifiers (so far _id, id or variant_internal_id). The source parameters are
 # used for creating a `distinct` operation for the `source_key` in the
 # `source_collection`, using a provided query.
 
@@ -141,11 +141,11 @@ h->o_methods:
     source_key: _id
     target_collection: variants
     target_key: _id
-  variants.digest:
+  variants.variant_internal_id:
     source_collection: variants
-    source_key: digest
+    source_key: variant_internal_id
     target_collection: variants
-    target_key: digest
+    target_key: variant_internal_id
   variants.biosample_id->biosamples.id:
     source_collection: variants
     source_key: biosample_id

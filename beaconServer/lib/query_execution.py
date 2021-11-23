@@ -5,7 +5,7 @@ from uuid import uuid4
 import datetime
 import sys
 
-from cgi_utils import cgi_debug_message
+from cgi_parse import cgi_debug_message
 
 ################################################################################
 
@@ -27,14 +27,14 @@ def mongo_result_list(db_name, coll_name, query, fields):
 
 ################################################################################
 
-def process_empty_request(ds_id, collname, byc):
+def process_empty_request(ds_id, collname, byc, ret_no=10):
 
     mongo_client = MongoClient()
     data_db = mongo_client[ ds_id ]
     data_coll = mongo_client[ ds_id ][ collname ]
 
     c = data_coll.estimated_document_count()
-    r = [ data_coll.find_one({}) ]
+    r = list( data_coll.aggregate([{"$sample": {"size":ret_no}}]) )
 
     return r, c
 
@@ -66,8 +66,6 @@ def execute_bycon_queries(ds_id, byc):
     ho_db = ho_client[ byc["config"]["info_db"] ]
     ho_collname = byc["config"][ "handover_coll" ]
     ho_coll = ho_db[ ho_collname ]
-
-
 
     for collname in byc[ "queries" ].keys():
         if collname in byc[ "config" ][ "collections" ]:
@@ -135,7 +133,6 @@ def execute_bycon_queries(ds_id, byc):
         else:
             prefetch["biosamples.id"] = prefetch["callsets.biosample_id->biosamples.id"]
 
-
     if "variants" in exe_queries:
 
         if exe_queries["variants"]:
@@ -168,11 +165,11 @@ def execute_bycon_queries(ds_id, byc):
             prevars["query"] = exe_queries[ "variants" ]
             prefetch.update( { prevars["pref_m"]: _prefetch_data(prevars) } )
 
-            prevars["pref_m"] = "variants.digest"
+            prevars["pref_m"] = "variants.variant_internal_id"
             prevars["query"] = { "_id": { "$in": prefetch[ "variants._id" ]["target_values"] } }
             prefetch.update( { prevars["pref_m"]: _prefetch_data(prevars) } )
 
-            # print(prefetch["variants.digest"]["target_values"])
+            # print(prefetch["variants.variant_internal_id"]["target_values"])
 
 
     ############################################################################
@@ -220,7 +217,7 @@ def execute_bycon_queries(ds_id, byc):
     if "response_type" in byc:
         if "individual" in byc["response_type"] or "phenopackets" in byc["response_type"]:
             _prefetch_add_individuals(prevars, prefetch)
-        elif "variantInSample" in byc["response_type"] and not "variants._id"  in prefetch:
+        elif "variant" in byc["response_type"] and not "variants._id"  in prefetch:
             _prefetch_add_all_sample_variants(prevars, prefetch)
 
     if "variant_annotations" in data_collnames:

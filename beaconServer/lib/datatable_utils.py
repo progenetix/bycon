@@ -22,7 +22,7 @@ def export_datatable(byc):
     header = create_table_header(io_params, io_prefixes)
 
     print("\t".join( header ))    
-    for pgxdoc in byc["service_response"]["result_sets"][0]["results"]:
+    for pgxdoc in byc["service_response"]["response"]["result_sets"][0]["results"]:
         line = [ ]
         for p, k in io_params.items():
             v = _get_nested_value(pgxdoc, k["db_key"])

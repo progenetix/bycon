@@ -5,7 +5,7 @@
         "requestedSchemas": [
             {
                 "entityType": "biosample",
-                "schema:": "https://progenetix.org/services/schemas/Biosample/"
+                "schema:": "https://progenetix.org/services/schemas/biosample/"
             }
         ]
     },

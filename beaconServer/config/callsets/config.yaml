@@ -34,7 +34,7 @@ response_types:
   - biosample
   - analysis
   - individual
-  - variantInSample
+  - genomicVariation
 include_resultset_responses:
   - HIT
   - ALL

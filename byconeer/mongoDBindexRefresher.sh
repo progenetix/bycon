@@ -27,7 +27,7 @@ do
 		echo "=> index for $db.$dbcoll.id"
 		mongo $db --eval "db.$dbcoll.createIndex( { 'id' : 1 }, { 'unique': true } )"
 
-		for field in variant_type reference_bases reference_name callset_id alternate_bases biosample_id start \"end\" \"info.var_length\" digest
+		for field in variant_type reference_bases reference_name callset_id alternate_bases biosample_id start \"end\" \"info.var_length\" variant_internal_id
 		do
 			echo "=> index for $db.variants.$field"
 			mongo $db --eval "db.variants.createIndex( { $field : 1 } )"

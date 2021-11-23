@@ -1,0 +1,41 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/exposure/v2021-11-12
+title: Exposure
+description: >-
+  Exposures (lifestyle, behavioural exposures) occurred to individual, defined
+  by exposure ID, date and age of onset, dose, and duration.
+type: object
+properties:
+  exposureCode:
+    description: >-
+      Exposure ID. Value from Environment Exposure Ontology.
+    $ref: ontologyTerm.yaml#/properties
+    examples:
+      - id: CHEBI:46661
+        label: asbestos
+      - id: ENVO:21001217
+        label: X-ray radiation
+  value:
+    description: Quantification of the exposure.
+    type: number
+  units:
+    description: >-
+      Units of the exposure. Recommended from NCIT Unit of Category ontology
+      term (NCIT:C42568) descendants.
+    $ref: commonDefinitions.yaml#/definitions/Units
+  duration:
+    description: Exposure duration in ISO8601 format
+    type: string
+    example: P32Y6M1D
+  date:
+    description: Date of the exposure in ISO8601 format.
+    type: string
+    format: date-time
+  ageAtExposure:
+    $ref: age.yaml#/properties
+required:
+  - exposureCode
+  - ageAtExposure
+  - units
+  - duration
+additionalProperties: true

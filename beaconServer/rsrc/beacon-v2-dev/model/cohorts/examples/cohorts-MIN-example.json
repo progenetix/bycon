@@ -1,0 +1,6 @@
+{
+  "$schema": "../defaultSchema.json",
+  "cohortId": "cohort0001",
+  "cohortName": "GCAT Genomes for Life",
+  "cohortType": "study-defined"
+}

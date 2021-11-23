@@ -1,0 +1,19 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/quantity/v2021-11-12
+title: Quantity
+description: Definition of a quantity class.
+type: object
+properties:
+  units:
+    $ref: commonDefinitions.yaml#/definitions/Units
+  value:
+    description: The value of the quantity in the units
+    type: number
+  referenceRange:
+    description: The normal range for the value.
+    $ref: referenceRange.yaml#/properties
+    example: {}
+required:
+  - unit
+  - value
+additionalProperties: true

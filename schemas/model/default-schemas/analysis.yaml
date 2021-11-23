@@ -1,0 +1,43 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/analysis/v2021-11-01
+title: analysis
+type: object
+properties:
+  id:
+    type: string
+    examples:
+      - pgxcs-kftvldsu
+  biosampleId:
+    type: string
+    examples:
+      - pgxbs-kftva59y
+  individualId:
+    type: string
+    examples:
+      - pgxbs-kftva59y
+  description:
+    type: string
+    examples:
+      - SNP6 array
+  externalReferences:
+    type: array
+    items:
+      "$ref": ../common/ontologyTerm.yaml#/properties
+    examples:
+      - type:
+          id: geo:GSM224836
+  provenance:
+    "$ref": ../common/provenance.yaml#/properties
+  dataUseConditions:
+    "$ref": ../common/ontologyTerm.yaml#/properties
+  info:
+    type: object
+  updated:
+    type: string
+    format: date-time
+    examples:
+      - "2020-09-10T17:44:10.170Z"
+required:
+  - id
+  - biosampleId
+additionalProperties: true

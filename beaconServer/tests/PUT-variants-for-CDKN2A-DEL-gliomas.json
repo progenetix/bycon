@@ -4,8 +4,8 @@
         "apiVersion": "2.0",
         "requestedSchemas": [
             {
-                "entityType": "variantInSample",
-                "schema:": "https://progenetix.org/services/schemas/Variant/"
+                "entityType": "genomicVariation",
+                "schema:": "https://progenetix.org/services/schemas/variant/"
             }
         ]
     },

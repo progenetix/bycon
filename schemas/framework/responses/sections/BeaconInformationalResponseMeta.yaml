@@ -15,7 +15,7 @@ properties:
   returnedSchemas:
     $ref: "../../common/beaconCommonComponents.yaml#/definitions/ListOfSchemas"
 $comment: >-
-  TODO: the required properties below results in a warning in the example.'
+  TODO: the required properties below results in a warning in the example.
 required:
   - beaconId
   - apiVersion

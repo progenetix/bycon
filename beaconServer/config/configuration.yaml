@@ -45,73 +45,31 @@ response:
       defaultSchema:
         id: ga4gh-beacon-dataset-v2.0.0-draft.4
         name: Default schema for datasets
-        referenceToSchemaDefinition: ./datasets/defaultSchema.json
+        referenceToSchemaDefinition: https://progenetix.org/services/schemas/dataset
         schemaVersion: v2.0.0-draft.4
       aCollectionOf:
-        - id: genomicVariant
-          name: Genomic Variants
+        - id: biosample
+          name: Biosamples
       additionalSupportedSchemas: []
-    # cohort:
-    #   id: cohort
-    #   name: Cohort
-    #   ontologyTermForThisType:
-    #     id: NCIT:C61512
-    #     label: Cohort
-    #   partOfSpecification: Beacon v2.0.0-draft.4
-    #   description: A group of individuals, identified by a common characteristic. [
-    #     NCI ]
-    #   defaultSchema:
-    #     id: ga4gh-beacon-cohort-v2.0.0-draft.4
-    #     name: Default schema for cohorts
-    #     referenceToSchemaDefinition: ./cohorts/defaultSchema.json
-    #     schemaVersion: v2.0.0-draft.4
-    #   aCollectionOf:
-    #     - id: individual
-    #       name: Individuals
-    #   additionalSupportedSchemas: []
-    # genomicVariant:
-    #   id: genomicVariant
-    #   name: Genomic Variants
-    #   ontologyTermForThisType:
-    #     id: SO:0000735
-    #     label: sequence_location
-    #   partOfSpecification: Beacon v2.0.0-draft.4
-    #   description: The location of a sequence.
-    #   defaultSchema:
-    #     id: ga4gh-beacon-variant-v2.0.0-draft.4
-    #     name: Default schema for a genomic variation
-    #     referenceToSchemaDefinition: ./genomicVariations/defaultSchema.json
-    #     schemaVersion: v2.0.0-draft.4
-    #   additionallySupportedSchemas: []
-    # variantAnnotation:
-    #   id: variantAnnotation
-    #   name: Genomic Variant Annotation
-    #   ontologyTermForThisType:
-    #     id: SO:0000110
-    #     label: sequence_feature
-    #   partOfSpecification: Beacon v2.0.0-draft.4
-    #   description: Any extent of continuous biological sequence.
-    #   defaultSchema:
-    #     id: ga4gh-beacon-variant-annotation-v2.0.0-draft.4
-    #     name: Default schema for variant annotations
-    #     referenceToSchemaDefinition: ./variantAnnotations/defaultSchema.json
-    #     schemaVersion: v2.0.0-draft.4
-    #   additionallySupportedSchemas: []
-    # variantInterpretation:
-    #   id: variantInterpretation
-    #   name: Genomic Variant Interpretation
-    #   ontologyTermForThisType:
-    #     id: SO:0000400
-    #     label: sequence_attribute
-    #   partOfSpecification: Beacon v2.0.0-draft.4
-    #   description: An attribute describes a quality of sequence  .
-    #   defaultSchema:
-    #     id: ga4gh-beacon-variant-interpretation-v2.0.0-draft.4
-    #     name: Default schema for variant Interpretations
-    #     referenceToSchemaDefinition: ./variantInterpretations/defaultSchema.json
-    #     schemaVersion: v2.0.0-draft.4
-    #   additionallySupportedSchemas: []
-    genomicVariations:
+    cohort:
+      id: cohort
+      name: Cohort
+      ontologyTermForThisType:
+        id: NCIT:C61512
+        label: Cohort
+      partOfSpecification: Beacon v2.0.0-draft.4
+      description: A group of individuals, identified by a common characteristic. [
+        NCI ]
+      defaultSchema:
+        id: ga4gh-beacon-cohort-v2.0.0-draft.4
+        name: Default schema for cohorts
+        referenceToSchemaDefinition: https://progenetix.org/services/schemas/cohort
+        schemaVersion: v2.0.0-draft.4
+      aCollectionOf:
+        - id: individual
+          name: Individuals
+      additionalSupportedSchemas: []
+    variant:
       id: genomicVariations
       name: Genomic Variant in a Sample
       ontologyTermForThisType:
@@ -122,7 +80,7 @@ response:
       defaultSchema:
         id: ga4gh-beacon-variant-in-sample-v2.0.0-draft.4
         name: Default schema for variant in sample
-        referenceToSchemaDefinition: https://progenetix.org/services/schemas/Variant
+        referenceToSchemaDefinition: https://progenetix.org/services/schemas/variant
         schemaVersion: v2.0.0-draft.4
       additionallySupportedSchemas: []
     individual:
@@ -137,7 +95,7 @@ response:
       defaultSchema:
         id: ga4gh-beacon-individual-v2.0.0-draft.4
         name: Default schema for an individual
-        referenceToSchemaDefinition: https://progenetix.org/services/schemas/Individual
+        referenceToSchemaDefinition: https://progenetix.org/services/schemas/individual
         schemaVersion: v2.0.0-draft.4
       additionallySupportedSchemas: []
     biosample:
@@ -152,21 +110,35 @@ response:
       defaultSchema:
         id: ga4gh-beacon-biosample-v2.0.0-draft.4
         name: Default schema for a biological sample
-        referenceToSchemaDefinition: https://progenetix.org/services/schemas/Biosample
+        referenceToSchemaDefinition: https://progenetix.org/services/schemas/biosample
         schemaVersion: v2.0.0-draft.4
       additionallySupportedSchemas: []
-    # analysis:
-    #   id: analysis
-    #   name: Bioinformatics analysis
-    #   ontologyTermForThisType:
-    #     id: edam:operation_2945
-    #     label: Analysis
-    #   partOfSpecification: Beacon v2.0.0-draft.4
-    #   description: Apply analytical methods to existing data of a specific type.
-    #   defaultSchema:
-    #     id: ga4gh-beacon-analysis-v2.0.0-draft.4
-    #     name: Default schema for a bioinformatics analysis
-    #     referenceToSchemaDefinition: ./analysis/defaultSchema.json
-    #     schemaVersion: v2.0.0-draft.4
-    #   additionallySupportedSchemas: []
+    analysis:
+      id: analysis
+      name: Bioinformatics analysis
+      ontologyTermForThisType:
+        id: edam:operation_2945
+        label: Analysis
+      partOfSpecification: Beacon v2.0.0-draft.4
+      description: Apply analytical methods to existing data of a specific type.
+      defaultSchema:
+        id: ga4gh-beacon-analysis-v2.0.0-draft.4
+        name: Default schema for a bioinformatics analysis
+        referenceToSchemaDefinition: https://progenetix.org/services/schemas/individual
+        schemaVersion: v2.0.0-draft.4
+    run:
+      id: run
+      name: Experimental run
+      ontologyTermForThisType:
+        id: edam:operation_2478
+        label: Nucleic acid sequence analysis
+      partOfSpecification: Beacon v2.0.0-draft.4
+      description: >-
+        Analyse a nucleic acid sequence (using methods that are only applicable to nucleic acid sequences).
+      defaultSchema:
+        id: ga4gh-beacon-analysis-v2.0.0-draft.4
+        name: Default schema for an experimental run
+        referenceToSchemaDefinition: https://progenetix.org/services/schemas/run
+        schemaVersion: v2.0.0-draft.4
+      additionallySupportedSchemas: []
 

@@ -1,0 +1,5 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/configuration/filteringTermsSchema.json",
+  "filteringTerms": [ 
+  ]
+}

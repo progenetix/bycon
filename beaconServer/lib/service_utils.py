@@ -9,12 +9,12 @@ lib_path = path.dirname( path.abspath(__file__) )
 dir_path = path.join( lib_path, pardir )
 pkg_path = path.join( dir_path, pardir )
 
-from cgi_utils import *
-from handover_execution import handover_retrieve_from_query_results, handover_return_data
+from cgi_parse import *
+from handover_execution import handover_return_data
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers
 from interval_utils import generate_genomic_intervals
 from query_execution import execute_bycon_queries, process_empty_request
-from query_generation import  initialize_beacon_queries
+from query_generation import  initialize_beacon_queries, generate_empty_query_items_request
 from read_specs import read_bycon_configs_by_name,read_local_prefs
 from schemas_parser import *
 from variant_responses import normalize_variant_values_for_export
@@ -35,179 +35,150 @@ def run_beacon_init_stack(byc):
 
 ################################################################################
 
-def run_beacon(byc):
+def run_result_sets_beacon(byc):
 
-    # TODO
-    if "results_handover" in byc["service_response"]:
-        byc["service_response"].pop("results_handover")
+    sr_r = byc["service_response"]["response"]
 
-    # TODO: Wrong response etc.
-    if "BeaconCoreResponse" in byc["response_schema"]:
-        for ds_id in byc["dataset_ids"]:
-            execute_bycon_queries( ds_id, byc )
-            check_core_delivery(ds_id, byc)
-        return byc
+    ######## result sets loop ##################################################
 
-    for r_set in byc["service_response"]["result_sets"]:
+    for i, r_set in enumerate(sr_r["result_sets"]):
 
+        # TODO: put this into function
+        r_set.update({"results_count": 0})
         ds_id = r_set["id"]
 
+        # TODO: beter definition of when to query
+        check_empty_query_all_response(byc)
+        generate_empty_query_items_request(ds_id, byc, ret_no=10)
         execute_bycon_queries( ds_id, byc )
-        check_alternative_variant_deliveries(ds_id, byc)
-
-        h_o, e = handover_retrieve_from_query_results(ds_id, byc)
-        h_o_d, e = handover_return_data( h_o, byc, e )
-        if e:
-            response_add_error(byc, 422, e )
-        else:
-            r_set.update({ "results_handovers": dataset_response_add_handovers(ds_id, byc) })
+        r_s_res = retrieve_data(ds_id, byc)
+        r_set.update({ "results_handovers": dataset_response_add_handovers(ds_id, byc) })
 
         for c, c_d in byc["config"]["beacon_counts"].items():
             if c_d["h->o_key"] in byc["dataset_results"][ds_id]:
                 r_c = byc["dataset_results"][ds_id][ c_d["h->o_key"] ]["target_count"]
                 r_set["info"]["counts"].update({ c: r_c })
+        if byc["empty_query_all_count"]:
+            r_set.update({"results_count": byc["empty_query_all_count"] })
+        elif isinstance(r_s_res, list):
+            r_set.update({"results_count": len( r_s_res ) })
 
-        if isinstance(h_o_d, list):
-            results_count = len( h_o_d )
+        if r_set["results_count"] < 1:
+            continue
 
-            r_set.update({"results_count": results_count })
+        r_s_res = remap_variants(r_s_res, byc)
+        r_s_res = remap_analyses(r_s_res, byc)
+        r_s_res = remap_biosamples(r_s_res, byc)
+        r_s_res = remap_runs(r_s_res, byc)
+        r_s_res = remap_all(r_s_res)
+        
+        r_set.update({ "exists": True, "results": r_s_res })
 
-            if results_count > 0:
+        if byc["pagination"]["limit"] > 0:
+            res_range = _pagination_range(r_set["results_count"], byc)
+            r_set.update({ "results": r_s_res[res_range[0]:res_range[-1]] })
 
-                byc["service_response"]["response_summary"]["num_total_results"] += results_count
-                r_set.update({ "exists": True, "results": h_o_d })
+    ######## end of result sets loop ###########################################
 
-                if byc["pagination"]["limit"] > 0:
-                    res_range = _pagination_range(results_count, byc)
-                    r_set.update({ "results": h_o_d[res_range[0]:res_range[-1]] })
+    sr_rs = byc["service_response"]["response_summary"]
+    for r_set in sr_r["result_sets"]:
+        sr_rs["num_total_results"] += r_set["results_count"]
 
-    if byc["service_response"]["response_summary"]["num_total_results"] > 0:
-        byc["service_response"]["response_summary"].update({"exists": True })
-        response_add_error(byc, 200)
-
-    cgi_break_on_errors(byc)
-
-    return byc
-
-################################################################################
-
-def run_result_sets_beacon(collname, byc):
-
-    for i, r_set in enumerate(byc["service_response"]["response"]["result_sets"]):
-
-        r_set.update({"results_count": 0})
-
-        ds_id = r_set["id"]
-        if len(byc["queries"].keys()) > 0:
-            execute_bycon_queries( ds_id, byc )
-            beacon_res = retrieve_data(ds_id, collname, byc)
-            r_set.update({ "results_handovers": dataset_response_add_handovers(ds_id, byc) })
-
-            for c, c_d in byc["config"]["beacon_counts"].items():
-                if c_d["h->o_key"] in byc["dataset_results"][ds_id]:
-                    r_c = byc["dataset_results"][ds_id][ c_d["h->o_key"] ]["target_count"]
-                    r_set["info"]["counts"].update({ c: r_c })
-            if isinstance(beacon_res, list):
-                r_set.update({"results_count": len( beacon_res ) })
-
-        else:
-            beacon_res, results_count = process_empty_request(ds_id, collname, byc)
-            if "variants" in collname:
-                digests = []
-                for v in beacon_res:
-                    try:
-                        digests.append(v["digest"])
-                    except:
-                        pass
-                digests = list(set(digests))
-                beacon_res = variants_for_digests(ds_id, digests, byc)
-                results_count = len(beacon_res)
-            byc["service_response"]["meta"]["received_request_summary"].update({"pagination":{"limit": 1, "skip": 0}})
-            r_set.update({"results_count": results_count })
-
-        if isinstance(beacon_res, list):
-            if r_set["results_count"] > 0:
-
-                # TODO: REMOVE VERIFIER HACKS
-                if "callsets" in collname:
-                    for cs_i, cs_r in enumerate(beacon_res):
-                        beacon_res[cs_i].update({"pipeline_name": "progenetix", "analysis_date": "1967-11-11" })
-                elif "biosamples" in collname:
-                    for bs_i, bs_r in enumerate(beacon_res):
-                        beacon_res[bs_i].update({"sample_origin_type": { "id": "OBI:0001479", "label": "specimen from organism"} })
-                        if not beacon_res[bs_i]["tumor_grade"]:
-                            beacon_res[bs_i].pop("tumor_grade")
-                        if not beacon_res[bs_i]["pathological_stage"]:
-                            beacon_res[bs_i].pop("pathological_stage")
-
-                byc["service_response"]["response_summary"]["num_total_results"] += r_set["results_count"]
-                r_set.update({ "exists": True, "results": beacon_res })
-
-                if byc["pagination"]["limit"] > 0:
-                    res_range = _pagination_range(r_set["results_count"], byc)
-                    r_set.update({ "results": beacon_res[res_range[0]:res_range[-1]] })
-
-        byc["service_response"]["response"]["result_sets"][i] = r_set
-
-    if byc["service_response"]["response_summary"]["num_total_results"] > 0:
-        byc["service_response"]["response_summary"].update({"exists": True })
-        response_add_error(byc, 200)
-
-    cgi_break_on_errors(byc)
+    if sr_rs["num_total_results"] > 0:
+        sr_rs.update({"exists": True })
 
     return byc
 
 ################################################################################
 
-def retrieve_data(ds_id, collname, byc):
+def check_empty_query_all_response(byc):
 
-    if "variants" in collname:
-        beacon_res = retrieve_variants(ds_id, byc)
-        return beacon_res
+    if len(byc["queries"].keys()) > 0:
+        return byc
+
+    byc.update({ "empty_query_all_response": True })   
+    return byc
+
+################################################################################
+
+def retrieve_data(ds_id, byc):
+
+    r_c = byc["response_entity"]["collection"]
+    r_k = r_c+"_id"
+
+    for r_d in byc["beacon_mappings"]["response_types"]:
+        if r_d["entity_type"] == byc["response_type"]:
+            r_k = r_d["h->o_access_key"]
+
+    if "variants" in r_c:
+        r_s_res = retrieve_variants(ds_id, byc)
+        return r_s_res
 
     mongo_client = MongoClient()
     data_db = mongo_client[ ds_id ]
-    bs_coll = mongo_client[ ds_id ][ collname ]
+    data_coll = mongo_client[ ds_id ][ r_c ]
 
     ds_results = byc["dataset_results"][ds_id]
-    r_key = collname+"._id"
 
-    if r_key in ds_results:
-        beacon_res = []
-        for b in bs_coll.find({"_id":{"$in": ds_results[ r_key ]["target_values"] }}):
-            #TODO: callset fix
-            beacon_res.append(b)
+    if r_k in ds_results:
+        r_s_res = []
+        for d in data_coll.find({"_id":{"$in": ds_results[ r_k ]["target_values"] }}):
+            r_s_res.append(d)
 
-        return beacon_res
+        return r_s_res
 
-    return False
+    return []
 
 ################################################################################
 
 def retrieve_variants(ds_id, byc):
 
     ds_results = byc["dataset_results"][ds_id]
-    if not byc["method"] in byc["this_config"]["all_variants_methods"]:
-        if "variants.digest" in ds_results:
-            digests = ds_results["variants.digest"]["target_values"]
-            beacon_res = variants_for_digests(ds_id, digests, byc)
-            return beacon_res
 
-    return False
-
-################################################################################
-
-def variants_for_digests(ds_id, digests, byc):
-
-    variants = []
+    if "all_variants_methods" in byc["this_config"]:
+        if byc["method"] in byc["this_config"]["all_variants_methods"]:
+            return False
 
     mongo_client = MongoClient()
     data_db = mongo_client[ ds_id ]
     v_coll = mongo_client[ ds_id ][ "variants" ]
 
-    for d in digests:
+    r_s_res = []
 
-        d_vs = v_coll.find({"digest": d })
+    if "variants._id" in ds_results:
+        for v_id in ds_results["variants._id"]["target_values"]:
+            v = v_coll.find_one({"_id":v_id})
+            r_s_res.append(v)
+        return r_s_res
+    elif "variants.variant_internal_id" in ds_results:
+        for v_id in ds_results["variants.variant_internal_id"]["target_values"]:
+            vs = v_coll.find({"variant_internal_id":v_id})
+            for v in vs:
+                r_s_res.append(v)
+        return r_s_res
+
+    return False
+
+################################################################################
+
+def remap_variants(r_s_res, byc):
+
+    if not "variant" in byc["response_type"]:
+        return r_s_res
+
+    variant_ids = []
+    for v in r_s_res:
+        try:
+            variant_ids.append(v["variant_internal_id"])
+        except:
+            pass
+    variant_ids = list(set(variant_ids))
+
+    variants = []
+
+    for d in variant_ids:
+
+        d_vs = [v for v in r_s_res if v['variant_internal_id'] == d]
 
         v = {
             "variant_internal_id": d,
@@ -238,6 +209,77 @@ def variants_for_digests(ds_id, digests, byc):
         variants.append(v)
 
     return variants
+
+################################################################################
+
+def remap_analyses(r_s_res, byc):
+
+    # TODO: REMOVE VERIFIER HACKS
+    if not "analysis" in byc["response_type"]:
+        return r_s_res
+
+    for cs_i, cs_r in enumerate(r_s_res):
+        r_s_res[cs_i].update({"pipeline_name": "progenetix", "analysis_date": "1967-11-11" })
+        try:
+            r_s_res[cs_i]["info"].pop("statusmaps")
+        except:
+            pass
+
+    return r_s_res
+
+################################################################################
+
+def remap_runs(r_s_res, byc):
+
+    # TODO: REMOVE VERIFIER HACKS
+    if not "run" in byc["response_type"]:
+        return r_s_res
+
+    runs = []
+    for cs_i, cs_r in enumerate(r_s_res):
+        r = {
+                "id": cs_r.get("id", ""),
+                "analysis_id": cs_r.get("id", ""),
+                "biosample_id": cs_r.get("biosample_id", ""),
+                "individual_id": cs_r.get("individual_id", ""),
+                "run_date": cs_r.get("updated", "")
+            }
+        runs.append(r)
+
+    return runs
+
+################################################################################
+
+def remap_biosamples(r_s_res, byc):
+
+    # TODO: REMOVE VERIFIER HACKS
+    if not "biosample" in byc["response_type"]:
+        return r_s_res
+
+    for bs_i, bs_r in enumerate(r_s_res):
+        r_s_res[bs_i].update({"sample_origin_type": { "id": "OBI:0001479", "label": "specimen from organism"} })
+        try:
+            if not r_s_res[bs_i]["tumor_grade"]:
+                r_s_res[bs_i].pop("tumor_grade")
+        except:
+            pass
+        try:
+            if not r_s_res[bs_i]["pathological_stage"]:
+                r_s_res[bs_i].pop("pathological_stage")
+        except:
+            pass
+
+    return r_s_res
+
+################################################################################
+
+def remap_all(r_s_res):
+
+    for br_i, br_r in enumerate(r_s_res):
+        r_s_res[br_i].pop("_id", None)
+        r_s_res[br_i].pop("description", None)
+
+    return r_s_res
 
 ################################################################################
 
@@ -277,11 +319,22 @@ def initialize_service(service="NA"):
     byc =  {
         "service_name": path.splitext(path.basename(mod.__file__))[0],
         "service_id": service,
-        "response_schema": "BeaconServiceResponse",
+        "response_entity": {
+            "entity_type": "dataset",
+            "collection": "dbstats",
+            "response_schema": "progenetixServiceResponse",
+            "beacon_schema": {
+                "entity_type": "dataset",
+                "schema": "https://progenetix.org/services/schemas/dataset/"
+            },
+            "h->o_access_key": False
+        },
         "beacon_info": {},
         "pkg_path": pkg_path,
         "method": "",
         "output": "",
+        "empty_query_all_response": False,
+        "empty_query_all_count": False,        
         "errors": [ ],
         "warnings": [ ]
     }
@@ -320,12 +373,12 @@ def initialize_service(service="NA"):
 
 ################################################################################
 
-def response_meta_add_request_summary(meta, byc):
+def response_meta_add_request_summary(r, byc):
 
-    if not "received_request_summary" in meta:
-        meta.update( { "received_request_summary":{} } )        
+    if not "received_request_summary" in r["meta"]:
+        return r        
 
-    meta["received_request_summary"].update({
+    r["meta"]["received_request_summary"].update({
         "filters": byc.get("filters", []), 
         "pagination": byc.get("pagination", {}),
         "api_version": byc["beacon_info"].get("api_version", "v2.n")
@@ -333,22 +386,24 @@ def response_meta_add_request_summary(meta, byc):
 
     try:
         for rrs_k, rrs_v in byc["this_config"]["meta"]["received_request_summary"].items():
-            meta["received_request_summary"].update( {rrs_k: rrs_v })
+            r["meta"]["received_request_summary"].update( {rrs_k: rrs_v })
     except:
         pass
 
     # TODO: This is a private extension so far.
-    meta["received_request_summary"].update({ "processed_query": byc.get("queries", {}) })
+    r["meta"]["received_request_summary"].update({ "processed_query": byc.get("queries", {}) })
 
-    return meta
+    return r
 
 ################################################################################
 
 def create_empty_service_response(byc):
 
-    """The response relies on the pre-processing of input parameters (queries etc)."""
+    response_update_type_from_request(byc)
+    response_set_entity(byc)
 
-    r_s = read_schema_files(byc["response_schema"], "properties", byc)
+    """The response relies on the pre-processing of input parameters (queries etc)."""
+    r_s = read_schema_files(byc["response_entity"]["response_schema"], "properties", byc)
     r = create_empty_instance(r_s)
 
     e_s = read_schema_files("beaconErrorResponse", "properties", byc)
@@ -357,27 +412,10 @@ def create_empty_service_response(byc):
     if "response_summary" in r:
         r["response_summary"].update({ "exists": False })
 
-    if "meta" in byc["this_config"]:
-    	for k, v in byc["this_config"]["meta"].items():
-    		r["meta"].update( { k: v } )
-
-    response_meta_add_request_summary(r["meta"], byc)
-    for i_k in ["api_version", "beacon_id", "create_date_time", "update_date_time"]:
-        r["meta"].update({ i_k: byc["beacon_info"].get(i_k, "") })
-
-    # if "response_type" in byc:
-    #     for r_t, r_d in byc["beacon_mappings"]["response_types"].items():
-    #         if r_d["id"] == byc["response_type"]:
-    #             r["meta"].update( { "returned_schemas": r_d["schema"] } )
-
-    if "requested_schemas" in byc["query_meta"]:
-        if byc["query_meta"]["requested_schemas"][0]:
-            if "entityType" in byc["query_meta"]["requested_schemas"][0]:
-                e_t = byc["query_meta"]["requestedSchemas"][0]["entityType"]
-                for r_t, r_d in byc["beacon_mappings"]["response_types"].items():
-                    if r_d["id"] == e_t:
-                        r["meta"].update( { "returned_schemas": r_d["schema"] } )
-                        byc.update({"response_type":e_t})
+    response_meta_set_info_defaults(r, byc)
+    response_meta_set_config_defaults(r, byc)
+    response_meta_set_entity_values(r, byc)
+    response_meta_add_request_summary(r, byc)
 
     try:
         if len(byc["this_config"]["defaults"]["include_resultset_responses"]) > 2:
@@ -385,12 +423,11 @@ def create_empty_service_response(byc):
     except KeyError:
         pass
 
-    if "result_sets" in r["response"]:
+    if "beaconResultsetsResponse" in byc["response_entity"]["response_schema"]:
 
         # TODO: stringent definition on when this is being used
 
         r_set_s = read_schema_files("beaconResultSets", "definitions/resultSetInstance/properties", byc)
-
         r_set = create_empty_instance(r_set_s)
    
         if "dataset_ids" in byc:
@@ -418,18 +455,23 @@ def create_empty_service_response(byc):
 
 def create_empty_non_data_response(byc):
 
-    # print(byc["response_schema"])
-    r_s = read_schema_files(byc["response_schema"], "properties", byc)
+    response_update_type_from_request(byc)
+    response_set_entity(byc)
+
+    r_s = read_schema_files(byc["response_entity"]["response_schema"], "properties", byc)
     r = create_empty_instance(r_s)
+
     e_s = read_schema_files("beaconErrorResponse", "properties", byc)
     e = create_empty_instance(e_s)
 
-    response_meta_add_request_summary(r["meta"], byc)
-    for i_k in ["api_version", "beacon_id", "create_date_time", "update_date_time"]:
-        r["meta"].update({ i_k: byc["beacon_info"].get(i_k, "") })
+    if "response_summary" in r:
+        r["response_summary"].update({ "exists": False })
 
-    for k, v in byc["this_config"]["meta"].items():
-        r["meta"].update( { k: v } )
+    response_meta_set_info_defaults(r, byc)
+    response_meta_set_config_defaults(r, byc)
+    response_meta_set_entity_values(r, byc)
+    response_meta_add_request_summary(r, byc)
+
     for r_k, r_v in byc["this_config"]["response"].items():
         r["response"].update({r_k: r_v})
 
@@ -461,9 +503,60 @@ def print_parameters_response(byc):
 
 ################################################################################
 
+def response_meta_set_info_defaults(r, byc):
+
+    for i_k in ["api_version", "beacon_id", "create_date_time", "update_date_time"]:
+#DEBUG        print(byc["beacon_info"].get(i_k, ""))
+        r["meta"].update({ i_k: byc["beacon_info"].get(i_k, "") })
+
+    return r
+
+################################################################################
+
+def response_meta_set_config_defaults(r, byc):
+    if "meta" in byc["this_config"]:
+        for k, v in byc["this_config"]["meta"].items():
+            r["meta"].update( { k: v } )
+
+    return r
+
+################################################################################
+
+def response_meta_set_entity_values(r, byc):
+ 
+    try:
+        r["meta"]["received_request_summary"].update({
+            "requested_schemas": [ byc["response_entity"]["beacon_schema"] ]
+        })
+        r["meta"].update( { "returned_schemas": [ byc["response_entity"]["beacon_schema"] ] } )
+    except:
+        pass
+
+    return r
+
+
+################################################################################
+
+def response_update_type_from_request(byc):
+
+    try:
+        b_mps = byc["beacon_mappings"]
+        if byc["query_meta"]["requested_schemas"][0]:
+            if "entityType" in byc["query_meta"]["requested_schemas"][0]:
+                e_t = byc["query_meta"]["requestedSchemas"][0]["entityType"]
+                for rd in b_mps["response_types"]:
+                    if r_d["entity_type"] == e_t:
+                        byc.update({"response_type":e_t})
+    except:
+        pass
+
+    return byc
+
+################################################################################
+
 def response_add_parameter(byc, name, value):
 
-    if not "received_request" in byc["service_response"]["meta"]:
+    if not "received_request_summary" in byc["service_response"]["meta"]:
         return byc
 
     if value:
@@ -493,9 +586,16 @@ def response_add_error(byc, code=200, message=""):
 
 ################################################################################
 
-def response_append_result(byc, result):
+def response_set_entity(byc):
 
-    byc["service_response"]["results"].append( result )
+    try:
+        for r_d in byc["beacon_mappings"]["response_types"]:
+
+            if r_d["entity_type"] == byc["response_type"]:
+                byc.update({"response_entity": r_d })
+                return byc
+    except:
+        pass
 
     return byc
 
@@ -524,14 +624,16 @@ def populate_service_response( byc, results):
 
     populate_service_header(byc, results)
     populate_service_response_counts(byc)
-    byc["service_response"].update({"results": results })
-    # byc["service_response"].pop("result_sets")
+    byc["service_response"]["response"].update({"results": results })
 
     return byc
 
 ################################################################################
 
 def populate_service_header(byc, results):
+
+    if not "response_summary" in byc["service_response"]:
+        return byc
 
     r_no = 0
 
@@ -571,10 +673,6 @@ def populate_service_response_counts(byc):
 
 ################################################################################
 
-
-
-################################################################################
-
 def check_core_delivery(ds_id, byc):
     
     for ds_rk, ds_rv in byc["dataset_results"][ds_id].items():
@@ -586,16 +684,21 @@ def check_core_delivery(ds_id, byc):
 
 ################################################################################
 
-def check_alternative_variant_deliveries(ds_id, byc):
+def check_alternative_variant_deliveries(byc):
 
-    if not "variantInSample" in byc["response_type"]:
+    if not "variant" in byc["response_type"]:
         return byc
 
+    try:
+        first_ds_id = byc["service_response"]["response"]["result_sets"][0].get("id", "progenetix")
+    except:
+        first_ds_id = "progentix"
+        
     if "pgxseg" in byc["output"]:
-        export_pgxseg_download(ds_id, byc)
+        export_pgxseg_download(first_ds_id, byc)
 
     if "variants" in byc["method"]:
-        export_variants_download(ds_id, byc)
+        export_variants_download(first_ds_id, byc)
 
     return byc
 
@@ -676,8 +779,8 @@ def print_pgx_column_header(ds_id, byc):
     for d in ["id", "assemblyId"]:
         print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
     for m in ["variantCount", "biosampleCount"]:
-        if m in byc["service_response"]["result_sets"][0]["info"]["counts"]:
-            print("#meta=>{}={}".format(m, byc["service_response"]["result_sets"][0]["info"]["counts"][m]))
+        if m in byc["service_response"]["response"]["result_sets"][0]["info"]["counts"]:
+            print("#meta=>{}={}".format(m, byc["service_response"]["response"]["result_sets"][0]["info"]["counts"][m]))
             
     _print_filters_meta_line(byc)
 

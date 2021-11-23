@@ -4,14 +4,13 @@ bycon_definition_files:
   - beacon_info
   - beacon_mappings
 defaults:
-  method: ""
   response_type: info
-  response_schema: beaconInfoResponse #TODO
   stats_number: 1
 meta:
   beacon_id: org.progenetix
   response_type: info
   returned_schemas:
-    BeaconInfo: "https://progenetix.org/services/schemas/beaconInfoResponse/"
+    - entity_type: info
+      schema: https://progenetix.org/services/schemas/beaconInfoResponse
   info: >-
     The latest BeaconInfo payload can be accessed in `response`.

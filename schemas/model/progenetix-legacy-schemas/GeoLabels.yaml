@@ -1,0 +1,57 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/GeoLabels/v2021-04-14
+title: GeoLabels
+meta:
+  provenance:
+    - description: "IETF GeoJSON pecification"
+      id: 'https://tools.ietf.org/html/rfc7946'
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+  used_by:
+    - description: "Progenetix database schema (Beacon+ backend)"
+      id: 'https://github.com/progenetix/schemas/'
+  sb_status: proposed
+description: >
+  GeoLabels represent an instance of the GeoJSON `properties` object. The parameters provide additional information for the interpretation of the location parameters, and also serve for optional "sanity checks" off the corresponding latitude, longitude (, altitude).
+type: object
+properties:
+  label:
+    type: string
+    examples:
+      - Heidelberg, Germany
+      - Gainesville, United States of America
+      - Zurich, Switzerland
+      - 'Str Marasesti 5, 300077 Timisoara, Romania'
+  city:
+    type: string
+    description: >
+      The optional name of the city the point location maps to. While this is a commonly used the point location, it should be considered secondary to the location values in interpreting the geographic location.
+  country:
+    type: string
+    description: >
+      The optional name of the country the location maps to, for sanity checks and procedural convenience (see notes for "city").
+    examples:
+      - Switzerland
+  ISO3166alpha3:
+    type: string
+    examples:
+      - USA
+      - CHE
+  latitude:
+    type: number
+    format: float
+    description: 'signed decimal degrees (North, relative to Equator)'
+    examples:
+      - 47.37
+  longitude:
+    type: number
+    format: float
+    description: 'signed decimal degrees (East, relative to IERS Reference Meridian)'
+    examples:
+      - 8.55
+  precision:
+    type: string
+    description: >
+      Used together with coordinate annotation, precision represents an optional label describing the precision that can be inferred from the coordinates. For a precision level of "city"", coordinates would have to be interpreted as representing any possible location within the city's administrative boundaries, not necessarily at the exact position of the point coordinates. The `precision` parameter can be used to indicate an obfuscation of the coordinates, e.g. for privacy protection.
+    examples:
+      - city

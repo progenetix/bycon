@@ -11,7 +11,7 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-from beaconServer.lib.cgi_utils import *
+from beaconServer.lib.cgi_parse import *
 from beaconServer.lib.cytoband_utils import *
 from beaconServer.lib.interval_utils import *
 from beaconServer.lib.parse_variants import *
@@ -43,13 +43,15 @@ def cytomapper():
     # response prototype
     create_empty_service_response(byc)
 
+    # print(byc["service_response"]["meta"]["received_request_summary"])
+
     cytoBands = [ ]
     if "cytoBands" in byc["variant_pars"]:
         cytoBands, chro, start, end = _bands_from_cytobands(byc)
-        byc["service_response"]["meta"]["received_request"].update({ "cytoBands": byc["variant_pars"]["cytoBands"] })
+        byc["service_response"]["meta"]["received_request_summary"].update({ "cytoBands": byc["variant_pars"]["cytoBands"] })
     elif "chroBases" in byc["variant_pars"]:
         cytoBands, chro, start, end = _bands_from_chrobases(byc)
-        byc["service_response"]["meta"]["received_request"].update({ "chroBases": byc["variant_pars"]["chroBases"] })
+        byc["service_response"]["meta"]["received_request_summary"].update({ "chroBases": byc["variant_pars"]["chroBases"] })
 
     cb_label = _cytobands_label( cytoBands )
 

@@ -29,8 +29,9 @@ def callsets():
 
     byc = initialize_service()
     run_beacon_init_stack(byc)
-    run_result_sets_beacon("callsets", byc)
+    run_result_sets_beacon(byc)
     export_datatable(byc)
+    check_alternative_variant_deliveries(byc)
 
     ############################################################################
     # TODO: Fix for multiple datasets

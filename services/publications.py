@@ -11,7 +11,7 @@ from operator import itemgetter
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from beaconServer.lib.cgi_utils import *
+from beaconServer.lib.cgi_parse import *
 from beaconServer.lib.parse_filters import *
 from beaconServer.lib.read_specs import *
 from beaconServer.lib.query_generation import geo_query, create_and_or_query_for_list

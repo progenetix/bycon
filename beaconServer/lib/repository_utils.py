@@ -54,12 +54,19 @@ def geosoft_preclean_sample_characteristics(gsm_soft, byc):
 
 def geosoft_extract_geo_meta(s_c, collector, scope, byc):
 
-    update_key = scope["p_ontologized"]
-    patterns = byc["text_patterns"]["extraction_scopes"][update_key]
+    patterns = byc["text_patterns"]["extraction_scopes"][ scope["ontologized_parameter"] ]
 
     s_c = list(filter(lambda x:re.match(r'{0}'.format(patterns["filter"]), x), s_c))
 
     for l in s_c:
+        o_l = l
+        if "preclean" in patterns:
+            for p in patterns["preclean"]:
+                l = re.sub(r'{0}'.format(p["m"]), p["s"], l)
+        if len(l) < 2:
+            print(o_l)
+            continue
+
         for p in patterns["find"]:
             if re.match(r'{0}'.format(p), l):
                 m = re.match(r'{0}'.format(p), l).group(1)
@@ -69,11 +76,11 @@ def geosoft_extract_geo_meta(s_c, collector, scope, byc):
                 if not re.match(r'{0}'.format(patterns["final_check"]), m):
                     continue
 
-                collector.update({ scope["t_head"]: m, scope["input_head"]: l })
+                collector.update({ scope["db_key"]: m, scope["text_input"]: l })
                 return collector
 
         # Fallback in case of no match for some feedback
-        collector.update({ scope["input_head"]: l, scope["note_head"]: "no stage match" })
+        collector.update({ scope["text_input"]: o_l, scope["error"]: "no "+scope["id"]+" match" })
 
     return collector
 

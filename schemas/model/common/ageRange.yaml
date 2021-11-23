@@ -1,0 +1,12 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/ageRange/v2021-11-12
+title: Age Range
+description: Age range definition.
+type: object
+properties:
+  start:
+    description: Represents age as a ISO8601 duration (e.g., P18Y).
+    $ref: age.yaml#/properties
+  end:
+    description: Represents age as a ISO8601 duration (e.g., P59Y).
+    $ref: age.yaml#/properties

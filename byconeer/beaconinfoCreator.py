@@ -82,8 +82,8 @@ def _dataset_update_counts(ds, **byc):
                 v_d = { }
                 bar = Bar(ds_id+' variants', max = no, suffix='%(percent)d%%'+" of "+str(no) )
                 for v in ds_db[ c ].find({}):
-                    if "digest" in v:
-                        v_d[ v["digest"] ] = 1
+                    if "variant_id" in v:
+                        v_d[ v["variant_id"] ] = 1
                     bar.next()
                 bar.finish()
                 b_i_ds["counts"].update( { "variants_distinct": len(v_d.keys()) } )

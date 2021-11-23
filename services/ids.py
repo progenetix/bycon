@@ -10,7 +10,7 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 from beaconServer.lib.read_specs import read_local_prefs
-from beaconServer.lib.cgi_utils import rest_path_value, cgi_print_rewrite_response
+from beaconServer.lib.cgi_parse import rest_path_value, cgi_print_rewrite_response
 
 """podmd
 The `ids` service forwards compatible, prefixed ids (see `config/ids.yaml`) to specific

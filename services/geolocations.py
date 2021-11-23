@@ -10,7 +10,7 @@ from pymongo import MongoClient
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from beaconServer.lib.cgi_utils import cgi_parse_query,cgi_print_response,cgi_break_on_errors
+from beaconServer.lib.cgi_parse import cgi_parse_query,cgi_print_response,cgi_break_on_errors
 from beaconServer.lib.read_specs import read_bycon_configs_by_name
 from beaconServer.lib.query_generation import geo_query
 from beaconServer.lib.query_execution import mongo_result_list
