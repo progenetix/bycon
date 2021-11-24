@@ -13,7 +13,6 @@ defaults:
   test_document_id: progenetix
 meta:
   beacon_id: org.progenetix
-  response_type: info
   returned_schemas:
     - entity_type: dataset
       schema: https://progenetix.org/services/schemas/dataset

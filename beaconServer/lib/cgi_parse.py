@@ -56,10 +56,13 @@ def cgi_parse_query(byc):
                     else:
                         form_data[p] = v
 
-            for sp in ["skip", "limit"]:
-                if "pagination" in jbod:
-                    if sp in jbod["pagination"]:
-                        form_data[sp] = jbod["pagination"][sp]
+            # TODO: define somewhere else with proper defaults
+            form_data["requested_granularity"] = jbod.get("requestedGranularity", "record")
+            form_data["include_resultset_responses"] = jbod.get("includeResultsetResponses", "HIT")
+
+            if "pagination" in jbod:
+                for sp in ["skip", "limit"]:
+                    form_data[sp] = jbod["pagination"].get(sp, 0)
 
             form_data["filters"] = jbod.get("filters", [] )
             query_meta = jbod.get("meta", {})
@@ -79,6 +82,9 @@ def cgi_parse_query(byc):
             form_data.update({p: form_return_listvalue( get, p )})
         else:
             form_data.update({p: get.getvalue(p)})
+
+    form_data.update({"requested_granularity": get.getvalue("requestedGranularity", "record")})
+    form_data.update({"include_resultset_responses": get.getvalue("includeResultsetResponses", "HIT")})
     
     return form_data, query_meta, debug_state
 
@@ -277,6 +283,33 @@ def switch_to_error_response(byc):
         if "meta" in byc["service_response"]:
             byc["error_response"].update({ "meta": byc["service_response"]["meta"]})
         byc["service_response"] = byc["error_response"]
+
+    return byc
+
+################################################################################
+
+def check_switch_to_boolean_response(byc):
+
+    try:
+        if byc["service_response"]["meta"]["received_request_summary"]["requested_granularity"] == "boolean":
+            byc["service_response"].pop("response", None)
+            byc["service_response"]["response_summary"].pop("num_total_results", None)
+            byc["service_response"]["meta"].update({"returned_granularity": "boolean"})
+    except:
+        pass
+
+    return byc
+
+################################################################################
+
+def check_switch_to_count_response(byc):
+
+    try:
+        if byc["service_response"]["meta"]["received_request_summary"]["requested_granularity"] == "count":
+            byc["service_response"].pop("response", None)
+            byc["service_response"]["meta"].update({"returned_granularity": "count"})
+    except:
+        pass
 
     return byc
 

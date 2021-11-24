@@ -51,6 +51,8 @@ def individuals():
             byc["service_response"]["meta"].update({ "returned_schemas": byc["query_meta"]["requestedSchemas"][0]["schema"] })
             byc["service_response"]["meta"]["received_request_summary"].update({ "requested_schemas": byc["query_meta"]["requestedSchemas"][0]["schema"] })
 
+    check_switch_to_count_response(byc)
+    check_switch_to_boolean_response(byc)
     cgi_print_response( byc, 200 )
 
 ################################################################################

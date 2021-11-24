@@ -59,7 +59,7 @@ response_types:
     response_schema: beaconConfigurationResponse
     beacon_schema:
       entity_type: configuration
-      schema: https://progenetix.org/services/schemas/beaconMapSchema/
+      schema: https://progenetix.org/services/schemas/beaconConfigurationSchema/
     h->o_access_key: Null
 
   - entity_type: entryTypes
@@ -67,7 +67,7 @@ response_types:
     response_schema: beaconEntryTypesResponse
     beacon_schema:
       entity_type: entryType
-      schema: https://progenetix.org/services/schemas/beaconConfigurationSchema/
+      schema: https://progenetix.org/services/schemas/entryTypesSchema/
     h->o_access_key: Null
 
   - entity_type: map

@@ -11,7 +11,6 @@ defaults:
   test_document_id: TCGAcancers
 meta:
   beacon_id: org.progenetix
-  response_type: info
   returned_schemas:
     - entity_type: cohort
       schema: https://progenetix.org/services/schemas/cohort

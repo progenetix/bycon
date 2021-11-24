@@ -96,7 +96,8 @@ def check_empty_query_all_response(byc):
     if len(byc["queries"].keys()) > 0:
         return byc
 
-    byc.update({ "empty_query_all_response": True })   
+    byc.update({ "empty_query_all_response": True })
+    byc["service_response"]["meta"]["received_request_summary"].update({"include_resultset_responses":"ALL"})
     return byc
 
 ################################################################################
@@ -383,6 +384,12 @@ def response_meta_add_request_summary(r, byc):
         "pagination": byc.get("pagination", {}),
         "api_version": byc["beacon_info"].get("api_version", "v2.n")
     })
+
+    for p in ["include_resultset_responses", "requested_granularity"]:
+        if p in byc["form_data"]:
+            r["meta"]["received_request_summary"].update({p:byc["form_data"].get(p)})
+            if "requested_granularity" in p:
+                r["meta"].update({"returned_granularity": byc["form_data"].get(p)})
 
     try:
         for rrs_k, rrs_v in byc["this_config"]["meta"]["received_request_summary"].items():

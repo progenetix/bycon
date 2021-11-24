@@ -214,63 +214,67 @@ def update_queries_from_filters( byc ):
  
     mongo_client = MongoClient()
 
-    if "filters" in byc:
-        for f in byc[ "filters" ]:
-            f_val = f["id"]
-            pre_code = re.split('-|:', f_val)
-            pre = pre_code[0]
-            if pre in byc["filter_definitions"]:
-                pre_defs = byc["filter_definitions"][pre]
-                if "remove" in pre_defs:
-                    f_val = re.sub(pre_defs["remove"], "", f_val)
-                    pre = re.sub(pre_defs["remove"], "", pre)
-                for scope in pre_defs["scopes"]:
-                    m_scope = pre_defs["scopes"][scope]
+    filters = byc.get("filters", {})
+    for f in filters:
+        f_val = f["id"]
+        f_desc = f.get("includeDescendantTerms", True)
+        f_scope = f.get("scope", False)
+        pre_code = re.split('-|:', f_val)
+        pre = pre_code[0]
+        if pre in byc["filter_definitions"]:
+            pre_defs = byc["filter_definitions"][pre]
+            if "remove" in pre_defs:
+                f_val = re.sub(pre_defs["remove"], "", f_val)
+                pre = re.sub(pre_defs["remove"], "", pre)
 
-                    if m_scope["default"]:
-                        if "start" in precision or len(pre_code) == 1:
-                            query_lists[ scope ].append( { pre_defs[ "db_key" ]: { "$regex": "^"+f_val } } )
-                            break
-                        else:
-                            q_keys = { f_val: 1 }
+            if f_scope is False:
+                f_scope = pre_defs["scopes"][0]
 
-                            """podmd
- 
-                            The Beacon query paradigm assumes a logical 'AND'
-                            between different filters. Also, it assumes that a
-                            query against a hierarchical term will also retrieve
-                            matches to its child terms. These two paradigms are
-                            incompatible if the targets don't store all their
-                            hierarchies with them.
-                            To resolve queries to include all child terms the 
-                            current solution is to perform a look up query for
-                            the current filter term, in the `collations` database, and create an 'OR' query which
-                            replaces the single filter value (if more than one
-                            term).
-                            
-                            podmd"""
-                            f_re = re.compile( r"\-$" )
-                            if not f_re.match(f_val):
-                                for ds_id in byc["dataset_ids"]:
-                                    mongo_coll = mongo_client[ ds_id ][ "collations" ]
-                                    try:
-                                        f_def = mongo_coll.find_one( { "id": f_val })
-                                        if "child_terms" in f_def:
-                                            for c in f_def["child_terms"]:
-                                                if pre in c:
-                                                    q_keys.update({c:1})
-                                    except:
-                                        pass
+            if f_scope not in query_lists.keys():
+                continue
 
-                            if len(q_keys.keys()) == 1:
-                                query_lists[ scope ].append( { pre_defs[ "db_key" ]: f_val } )
-                            else:
-                                f_q_l = [ ]
-                                for f_c in q_keys.keys():
-                                    f_q_l.append( { pre_defs[ "db_key" ]: f_c } )
-                                query_lists[ scope ].append( { '$or': f_q_l } )
-                            break
-                            
+            if "start" in precision or len(pre_code) == 1:
+                query_lists[ f_scope ].append( { pre_defs[ "db_key" ]: { "$regex": "^"+f_val } } )
+                break
+            else:
+                q_keys = { f_val: 1 }
+
+                """podmd
+
+                The Beacon query paradigm assumes a logical 'AND'
+                between different filters. Also, it assumes that a
+                query against a hierarchical term will also retrieve
+                matches to its child terms. These two paradigms are
+                incompatible if the targets don't store all their
+                hierarchies with them.
+                To resolve queries to include all child terms the 
+                current solution is to perform a look up query for
+                the current filter term, in the `collations` database,
+                and create an 'OR' query which replaces the single
+                filter value (if more than one term).
+                
+                podmd"""
+                if f_desc is True:
+                    for ds_id in byc["dataset_ids"]:
+                        mongo_coll = mongo_client[ ds_id ][ "collations" ]
+                        try:
+                            f_def = mongo_coll.find_one( { "id": f_val })
+                            if "child_terms" in f_def:
+                                for c in f_def["child_terms"]:
+                                    if pre in c:
+                                        q_keys.update({c:1})
+                        except:
+                            pass
+
+                if len(q_keys.keys()) == 1:
+                    query_lists[ f_scope ].append( { pre_defs[ "db_key" ]: f_val } )
+                else:
+                    f_q_l = [ ]
+                    for f_c in q_keys.keys():
+                        f_q_l.append( { pre_defs[ "db_key" ]: f_c } )
+                    query_lists[ f_scope ].append( { '$or': f_q_l } )
+                break
+                        
     mongo_client.close()
 
     for c_n in byc[ "config" ][ "collections" ]:

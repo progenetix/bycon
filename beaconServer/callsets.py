@@ -39,10 +39,9 @@ def callsets():
     ############################################################################
 
     query_results_save_handovers(byc)
+    check_switch_to_count_response(byc)
+    check_switch_to_boolean_response(byc)
     cgi_print_response( byc, 200 )
-    cgi_break_on_errors(byc)
-
-    return byc
 
 ################################################################################
 ################################################################################

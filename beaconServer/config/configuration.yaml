@@ -2,8 +2,6 @@ defaults:
   dataset_ids:
     - progenetix
   response_type: configuration
-  response_schema: beaconConfigurationResponse
-  h->o_access_key: "biosamples._id"
   genome_binning: 1Mb
 bycon_definition_files:
   - config
@@ -16,23 +14,16 @@ bycon_definition_files:
   - handover_definitions
   - interval_definitions
   - variant_definitions
-meta:
-  returned_schemas:
-    - entity_type: configuration
-      schema: https://progenetix.org/services/schemas/beaconConfigurationResponse/
-  info: >
-    Beacon configuration response.
-response_types:
-  - configuration
+meta: {}
 response:
-  $schema: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/configuration/beaconConfigurationSchema.json
-  maturityAttributes:
-    productionStatus: DEV
-  securityAttributes:
-    defaultGranularity: record
-    securityLevels:
+  $schema: https://progenetix.org/services/schemas/beaconConfigurationSchema/
+  maturity_attributes:
+    production_status: DEV
+  security_attributes:
+    default_granularity: record
+    security_levels:
       - PUBLIC
-  entryTypes:
+  entry_types:
     dataset:
       id: dataset
       name: Dataset
