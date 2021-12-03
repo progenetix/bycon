@@ -50,6 +50,7 @@ def datasets():
 
     beacon_get_endpoint_base_paths(byc)
     initialize_beacon_queries(byc)
+
     if "beaconResultsetsResponse" in byc["response_entity"]["response_schema"]:
         create_empty_service_response(byc)
         byc["queries"].pop("datasets", None)
@@ -59,6 +60,16 @@ def datasets():
         create_empty_service_response(byc)
         populate_service_response( byc, dbstats )
         byc["service_response"]["response"]["collections"] = byc["service_response"]["response"].pop("results", None)
+        for i, d_s in enumerate(byc["service_response"]["response"]["collections"]):
+            # TODO: remove verifier hack
+            for t in ["createDateTime", "updateDateTime"]:
+                d = str(d_s[t])
+                try:
+                    if re.match(r'^\d\d\d\d\-\d\d\-\d\d$', d):
+                        byc["service_response"]["response"]["collections"][i].update({t:d+"T00:00:00+00:00"})
+                except:
+                    pass
+
     # byc["service_response"]["response"]["result_sets"] = byc["service_response"]["response"].pop("results")
     cgi_print_response( byc, 200 )
 

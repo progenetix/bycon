@@ -13,7 +13,7 @@ from cgi_parse import *
 from handover_execution import handover_return_data
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers
 from interval_utils import generate_genomic_intervals
-from query_execution import execute_bycon_queries, process_empty_request
+from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
 from query_generation import  initialize_beacon_queries, generate_empty_query_items_request
 from read_specs import read_bycon_configs_by_name,read_local_prefs
 from schemas_parser import *
@@ -33,6 +33,76 @@ def run_beacon_init_stack(byc):
 
     return byc
 
+################################################################################
+
+def initialize_service(service="NA"):
+
+    """For consistency, the name of the local configuration file should usually
+    correspond to the calling main function. However, an overwrite can be
+    provided."""
+
+    frm = inspect.stack()[1]
+    mod = inspect.getmodule(frm[0])
+    sub_path = path.dirname( path.abspath(mod.__file__) )
+
+    if service == "NA":
+        service = frm.function
+
+    service = decamelize(service)
+
+    byc =  {
+        "service_name": path.splitext(path.basename(mod.__file__))[0],
+        "service_id": service,
+        "response_entity": {
+            "entity_type": "dataset",
+            "collection": "dbstats",
+            "response_schema": "progenetixServiceResponse",
+            "beacon_schema": {
+                "entity_type": "dataset",
+                "schema": "https://progenetix.org/services/schemas/dataset/"
+            },
+            "h->o_access_key": False
+        },
+        "beacon_info": {},
+        "pkg_path": pkg_path,
+        "method": "",
+        "output": "",
+        "empty_query_all_response": False,
+        "empty_query_all_count": False,        
+        "errors": [],
+        "warnings": []
+    }
+
+    read_local_prefs( service, sub_path, byc )
+
+    if "bycon_definition_files" in byc["this_config"]:
+        for d in byc["this_config"]["bycon_definition_files"]:
+            read_bycon_configs_by_name( d, byc )
+    else:
+        read_bycon_configs_by_name( "config", byc )
+
+    form_data, query_meta, debug_state = cgi_parse_query(byc)
+    byc.update({ "form_data": form_data, "query_meta": query_meta, "debug_state": debug_state })
+
+    if "defaults" in byc["this_config"]:
+        for d_k, d_v in byc["this_config"]["defaults"].items():
+            byc.update( { d_k: d_v } )
+
+    if "output" in byc["form_data"]:
+        byc["output"] = byc["form_data"]["output"]
+
+    if "method" in byc["form_data"]:
+        if "methods" in byc["this_config"]:
+            if byc["form_data"]["method"] in byc["this_config"]["methods"].keys():
+                byc["method"] = byc["form_data"]["method"]
+
+    # TODO: proper defaults, separate function
+    byc["pagination"] = {
+        "skip": byc["form_data"].get("skip", 0),
+        "limit": byc["form_data"].get("limit", 0)
+    }
+
+    return byc
 ################################################################################
 
 def run_result_sets_beacon(byc):
@@ -259,16 +329,13 @@ def remap_biosamples(r_s_res, byc):
 
     for bs_i, bs_r in enumerate(r_s_res):
         r_s_res[bs_i].update({"sample_origin_type": { "id": "OBI:0001479", "label": "specimen from organism"} })
-        try:
-            if not r_s_res[bs_i]["tumor_grade"]:
-                r_s_res[bs_i].pop("tumor_grade")
-        except:
-            pass
-        try:
-            if not r_s_res[bs_i]["pathological_stage"]:
-                r_s_res[bs_i].pop("pathological_stage")
-        except:
-            pass
+
+        for f in ["tumor_grade", "pathological_stage", "histological_diagnosis"]:
+            try:
+                if not r_s_res[bs_i][f]:
+                    r_s_res[bs_i].pop(f)
+            except:
+                pass
 
     return r_s_res
 
@@ -300,77 +367,6 @@ def _pagination_range(results_count, byc):
 
     return r_range
 
-################################################################################
-
-def initialize_service(service="NA"):
-
-    """For consistency, the name of the local configuration file should usually
-    correspond to the calling main function. However, an overwrite can be
-    provided."""
-
-    frm = inspect.stack()[1]
-    mod = inspect.getmodule(frm[0])
-    sub_path = path.dirname( path.abspath(mod.__file__) )
-
-    if service == "NA":
-        service = frm.function
-
-    service = decamelize(service)
-
-    byc =  {
-        "service_name": path.splitext(path.basename(mod.__file__))[0],
-        "service_id": service,
-        "response_entity": {
-            "entity_type": "dataset",
-            "collection": "dbstats",
-            "response_schema": "progenetixServiceResponse",
-            "beacon_schema": {
-                "entity_type": "dataset",
-                "schema": "https://progenetix.org/services/schemas/dataset/"
-            },
-            "h->o_access_key": False
-        },
-        "beacon_info": {},
-        "pkg_path": pkg_path,
-        "method": "",
-        "output": "",
-        "empty_query_all_response": False,
-        "empty_query_all_count": False,        
-        "errors": [ ],
-        "warnings": [ ]
-    }
-
-    read_local_prefs( service, sub_path, byc )
-
-    if "bycon_definition_files" in byc["this_config"]:
-        for d in byc["this_config"]["bycon_definition_files"]:
-            read_bycon_configs_by_name( d, byc )
-    else:
-        read_bycon_configs_by_name( "config", byc )
-
-    form_data, query_meta, debug_state = cgi_parse_query(byc)
-
-    byc.update({ "form_data": form_data, "query_meta": query_meta, "debug_state": debug_state })
-
-    if "defaults" in byc["this_config"]:
-        for d_k, d_v in byc["this_config"]["defaults"].items():
-            byc.update( { d_k: d_v } )
-
-    if "output" in byc["form_data"]:
-        byc["output"] = byc["form_data"]["output"]
-
-    if "method" in byc["form_data"]:
-        if "methods" in byc["this_config"]:
-            if byc["form_data"]["method"] in byc["this_config"]["methods"].keys():
-                byc["method"] = byc["form_data"]["method"]
-
-    # TODO: proper defaults, separate function
-    byc["pagination"] = {
-        "skip": byc["form_data"].get("skip", 0),
-        "limit": byc["form_data"].get("limit", 0)
-    }
-
-    return byc
 
 ################################################################################
 
@@ -413,6 +409,7 @@ def create_empty_service_response(byc):
     r_s = read_schema_files(byc["response_entity"]["response_schema"], "properties", byc)
     r = create_empty_instance(r_s)
 
+    # print(r_s["response"]["title"])
     e_s = read_schema_files("beaconErrorResponse", "properties", byc)
     e = create_empty_instance(e_s)
 
@@ -465,6 +462,7 @@ def create_empty_non_data_response(byc):
     response_update_type_from_request(byc)
     response_set_entity(byc)
 
+    """The response relies on the pre-processing of input parameters (queries etc)."""
     r_s = read_schema_files(byc["response_entity"]["response_schema"], "properties", byc)
     r = create_empty_instance(r_s)
 
@@ -541,7 +539,6 @@ def response_meta_set_entity_values(r, byc):
 
     return r
 
-
 ################################################################################
 
 def response_update_type_from_request(byc):
@@ -597,7 +594,6 @@ def response_set_entity(byc):
 
     try:
         for r_d in byc["beacon_mappings"]["response_types"]:
-
             if r_d["entity_type"] == byc["response_type"]:
                 byc.update({"response_entity": r_d })
                 return byc
@@ -680,17 +676,6 @@ def populate_service_response_counts(byc):
 
 ################################################################################
 
-def check_core_delivery(ds_id, byc):
-    
-    for ds_rk, ds_rv in byc["dataset_results"][ds_id].items():
-        if "target_count" in ds_rv:
-            if ds_rv["target_count"] > 0:
-                byc["service_response"]["response_summary"].update({"exists": True })
-
-    return byc
-
-################################################################################
-
 def check_alternative_variant_deliveries(byc):
 
     if not "variant" in byc["response_type"]:
@@ -708,6 +693,58 @@ def check_alternative_variant_deliveries(byc):
         export_variants_download(first_ds_id, byc)
 
     return byc
+
+################################################################################
+
+def return_filtering_terms_response( byc ):
+
+    if not "filteringTerm" in byc["response_type"]:
+        return byc
+
+    # TODO: correct response w/o need to fix
+    byc["service_response"].update({"response": { "filteringTerms": []} })
+
+    f_db = byc["config"]["info_db"]
+    f_coll = byc["config"]["collations_coll"]
+
+    fts = { }
+
+    ft_fs = []
+    if "filters" in byc:
+        if len(byc["filters"]) > 0:
+            for f in byc["filters"]:
+                ft_fs.append('('+f["id"]+')')
+    f_s = '|'.join(ft_fs)
+    f_re = re.compile(r'^'+f_s)
+
+    for ds_id in byc[ "dataset_ids" ]:
+
+        query = { "dataset_id": ds_id }
+
+        try:
+            if len(byc["form_data"]["scope"]) > 4:
+                query.update({"scope": byc["form_data"]["scope"]})
+        except:
+            pass
+
+        fields = {
+            "_id": 0,
+            "id": 1,
+            "label": 1,
+            "type": 1,
+            "count": 1,
+            # "dataset_id": 1,
+            # "scope": 1
+        }
+
+        f_s, e = mongo_result_list(f_db, f_coll, query, fields)
+
+        byc["service_response"]["response"]["filteringTerms"].extend(f_s)
+
+    cgi_print_response( byc, 200 )
+
+################################################################################
+
 
 ################################################################################
 

@@ -1,50 +1,49 @@
 NCITgrade:
   name: "National Cancer Institute Thesaurus Disease Grade Qualifier"
+  prefix: NCIT
   url: "https://ncit.nci.nih.gov/"
   db_key: 'tumor_grade.id'
-  description: Pseudo-prefix recoding of Disease Grade codes
-  scopes:
-    - biosamples
-  pattern: '^NCITgrade([\-_\:]C\d+?\-?)?$'
-  pattern_strict: '^NCITgrade[\-_\:]C\d+?$'
+  description: Disease Grade codes
+  scope: biosamples
+  pattern: '^NCIT([\:]C\d+?\-?)?$'
+  pattern_strict: '^NCIT[\:]C\d+?$'
   examples:
-    - 'NCITgrade-C28078'
-    - 'NCITgrade-C28080'
+    - 'NCIT:C28078'
+    - 'NCIT:C28080'
 
 NCITstage:
   name: "National Cancer Institute Thesaurus Disease Stage Qualifier"
+  prefix: NCIT
   url: "https://ncit.nci.nih.gov/"
   db_key: 'pathological_stage.id'
   description: Pseudo-prefix recoding of Disease Stage codes
-  scopes:
-    - biosamples
-  pattern: '^NCITstage([\-_\:]C\d+?\-?)?$'
-  pattern_strict: '^NCITstage[\-_\:]C\d+?$'
+  scope: biosamples
+  pattern: '^NCIT([\:]C\d+?\-?)?$'
+  pattern_strict: '^NCIT[\:]C\d+?$'
   examples:
-    - 'NCITstage-C27970'
-    - 'NCITstage-C27969'
+    - 'NCIT:C27970'
+    - 'NCIT:C27969'
 
-TNM:
+NCITtnm:
   name: "National Cancer Institute Thesaurus Cancer TNM Finding"
+  prefix: NCIT
   url: "https://ncit.nci.nih.gov/"
   db_key: 'pathological_tnm_findings.id'
   description: Pseudo-prefix recoding of NCIT TNM codes
-  scopes:
-    - biosamples
-  pattern: '^TNM([\-_\:]C\d+?\-?)?$'
-  pattern_strict: '^TNM[\-_\:]C\d+?$'
+  scope: biosamples
+  pattern: '^NCIT([\:]C\d+?\-?)?$'
+  pattern_strict: '^NCIT[\:]C\d+?$'
   examples:
-    - 'TNM-C48700'
-    - 'TNM-C48786'
+    - 'NCIT:C48700'
+    - 'NCIT:C48786'
 
 # Bio-Metadata
 NCIT:
-  name: "National Cancer Institute Thesaurus"
+  name: "National Cancer Institute Thesaurus neoplasias"
+  prefix: NCIT
   url: "https://ncit.nci.nih.gov/"
   db_key: 'histological_diagnosis.id'
-  scopes:
-    - biosamples
-    - individuals
+  scope: biosamples
   pattern: '^NCIT([_\:]C\d+?\-?)?$'
   pattern_strict: '^NCIT[_\:]C\d+?$'
   examples:
@@ -53,64 +52,46 @@ NCIT:
 
 UBERON:
   name: "Uberon cross-species anatomical structures ontology"
+  prefix: UBERON
   url: "https://uberon.github.io"
   db_key: 'sampled_tissue.id'
-  scopes:
-    - biosamples
+  scope: biosamples
   pattern: '^UBERON([_\:]\d*?\-?)?$'
   pattern_strict: '^UBERON[_\:]\d+?$'
   examples:
     - 'UBERON:0000970'
     - 'UBERON:0035542'
 
-# MONDO:
-#   name: "Mondo Disease Ontology"
-#   url: "https://mondo.monarchinitiative.org"
-#   db_key: 'biocharacteristics.id'
-#   scopes:
-#     biosamples:
-#       default: 1
-#     individuals:
-#       default: 0
-#   pattern: '^MONDO([_\:]\d*?\-?)?$'
-#   pattern_strict: '^MONDO[_\:]\d+?$'
-#   examples:
-#     - 'MONDO:0002974'
-#     - 'MONDO:0012301'
-
 HP:
   name: "Human Phenotype Ontology"
+  prefix: HP
   url: "https://hpo.jax.org/"
   db_key: 'biocharacteristics.id'
-  scopes:
-    - individuals
-    - biosamples
+  scope: individuals
   pattern: '^HP([_\:]\d+?\-?)?$'
   pattern_strict: '^HP[_\:]\d+?$'
   examples:
     - 'HP:0012209'
 
-PATO:
+PATOsex:
   description: >
     PATO codes specific for genotypic sex...
   name: "Phenotypic Qualities Ontology"
+  prefix: PATO
   url: "http://obofoundry.org/ontology/pato.html"
   db_key: 'sex.id'
-  scopes:
-    - individuals
+  scope: individuals
   pattern: '^PATO([_\:]002000[012]\-?)?$'
   pattern_strict: '^PATO[_\:]002000[012]$'
   examples:
     - 'PATO:0020000'
 
 EFOfus:
-  description: >
-    Followup state classes
   name: "EFO followup status classes"
+  prefix: EFOfus
   url: "http://www.ebi.ac.uk/efo/EFO_0030038"
   db_key: 'followup_state.id'
-  scopes:
-    - biosamples
+  scope: biosamples
   pattern: '^EFO([\-_\:]\d+?)?$'
   pattern_strict: '^EFO[\-_\:]\d+?$'
   examples:
@@ -118,10 +99,10 @@ EFOfus:
 
 EFO:
   name: "Experimental Factor Ontology"
+  prefix: EFO
   url: "https://www.ebi.ac.uk/efo/"
-  db_key: 'provenance.material.id'
-  scopes:
-    - biosamples
+  db_key: 'biosample_status.id'
+  scope: biosamples
   pattern: '^(?:EFO)|(?:OBI)([_\:]\d+?\-?)?$'
   pattern_strict: '^(?:EFO)|(?:OBI)[_\:]\d+?$'
   examples:
@@ -129,10 +110,10 @@ EFO:
 
 icdom:
   name: "ICD-O 3 Morphologies (Progenetix)"
+  prefix: icdom
   url: "https://progenetix.org/"
   db_key: 'icdo_morphology.id'
-  scopes:
-    - biosamples
+  scope: biosamples
   pattern: '^icdom(\-\d{1,5}(\-\d{1,5})?)?$'
   pattern_strict: '^icdom\-\d{5}$'
   examples:
@@ -141,10 +122,10 @@ icdom:
 
 icdot:
   name: "ICD-O 3 Topographies (Progenetix)"
+  prefix: icdot
   url: "https://progenetix.org/"
   db_key: 'icdo_topography.id'
-  scopes:
-    - biosamples
+  scope: biosamples
   pattern: '^icdot(\-C\d\d?(\.\d)?\-?)?$'
   pattern_strict: '^icdot\-C\d\d?\.\d$'
   examples:
@@ -156,10 +137,10 @@ icdot:
 
 PMID:
   name: "NCBI PubMed"
+  prefix: PMID
   url: "https://www.ncbi.nlm.nih.gov/pubmed/"
   db_key: 'external_references.id'
-  scopes:
-    - biosamples
+  scope: biosamples
   pattern: '^PMID([_\:]\d+?)?$'
   pattern_strict: '^PMID[_\:]\d{5,9}?$'
   examples:
@@ -168,10 +149,10 @@ PMID:
 
 geo:
   name: "NCBI Gene Expression Omnibus"
+  prefix: geo
   url: "https://www.ncbi.nlm.nih.gov/geo/"
   db_key: 'external_references.id'
-  scopes:
-    - biosamples
+  scope: biosamples
   pattern: '^geo([_\:]G(PL|SM|SE|DS)\d+)?$'
   pattern_strict: '^geo[_\:]G(PL|SM|SE|DS)\d+?$'
   examples:
@@ -181,21 +162,21 @@ geo:
 
 arrayexpress:
   name: "EBI ArrayExpress"
+  prefix: arrayexpress
   url: "https://www.ncbi.nlm.nih.gov/geo/"
   db_key: 'external_references.id'
-  scopes:
-    - biosamples
+  scope: biosamples
   pattern: '^arrayexpress([_\:][AEP]\-\w{4}\-\d+)?$'
   pattern_strict: '^arrayexpress[_\:][AEP]\-\w{4}\-\d+?$'
   examples:
     - arrayexpress:E-MEXP-1008
 
-TCGA:
+TCGAproject:
   name: "The Cancer Genome Atlas"
+  prefix: TCGA
   url: "http://cancergenome.nih.gov"
   db_key: 'external_references.id'
-  scopes:
-    - biosamples
+  scope: biosamples
   db_key: 'external_references.id'
   pattern: '^TCGA([_\-][\-\w]+?)?$'
   pattern_strict: '^TCGA[_\-][\-\w]+?$'
@@ -204,10 +185,10 @@ TCGA:
 
 cBP:
   name: "cBioPortal"
+  prefix: cBP
   url: "https://www.cbioportal.org"
   db_key: 'external_references.id'
-  scopes:
-    - biosamples
+  scope: biosamples
   db_key: 'external_references.id'
   pattern: '^cBP(\-\w+?)?$'
   pattern_strict: '^cBP\-\w+?$'
@@ -216,10 +197,10 @@ cBP:
 
 cellosaurus:
   name: "Cellosaurus - a knowledge resource on cell lines"
+  prefix: cellosaurus
   url: "https://web.expasy.org/cellosaurus/"
   db_key: 'external_references.id'
-  scopes:
-    - biosamples
+  scope: biosamples
   pattern: '^cellosaurus([_\:]CVCL_\w+?)?$'
   pattern_strict: '^cellosaurus[_\:]CVCL_\w+?$'
   examples:
@@ -228,10 +209,10 @@ cellosaurus:
 
 pgxcohort:
   name: "Progenetix cohorts"
+  prefix: pgxcohort
   url: "https://arraymap.progenetix.org"
   db_key: 'cohorts.id'
-  scopes:
-    - biosamples
+  scope: biosamples
   pattern: '^pgxcohort(\-\w+?)?$'
   pattern_strict: '^pgxcohort\-\w+?$'
   examples:

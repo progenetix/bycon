@@ -10,11 +10,11 @@ data_collections:
 example_length: 5
 map_types:
   ICD2UBERON:
-    prefixes:
+    ontology_types:
       - icdot
       - UBERON
   ICDOntologies:
-    prefixes:
+    ontology_types:
       - NCIT
       - icdom
       - icdot

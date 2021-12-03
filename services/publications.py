@@ -118,6 +118,8 @@ def _create_filters_query( byc ):
     q_list = [ ]
     count_pat = re.compile( r'^(\w+?)\:([>=<])(\d+?)$' )
 
+    # TODO: This doesn't apply any more?
+
     for f in byc[ "filters" ]:
         f_val = f["id"]
         pre_code = re.split('-|:', f_val)

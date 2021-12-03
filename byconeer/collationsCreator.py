@@ -62,48 +62,47 @@ def collations_creator():
     if byc["args"].collationtypes:
         s_p = {}
         for p in re.split(",", byc["args"].collationtypes):
-            print(p)
-            if p in byc["this_config"]["collationed"].keys():
-                s_p.update({p:byc["this_config"]["collationed"][p]})
-        if len(byc["this_config"]["collationed"].keys()) < 1:
-            print("No existing collation prefix was provided with -p ...")
+            if p in byc["collation_definitions"].keys():
+                s_p.update({p:byc["collation_definitions"][p]})
+        if len(s_p.keys()) < 1:
+            print("No existing collation type was provided with -c ...")
             exit()
 
-        byc["this_config"].update({"collationed":s_p})
+        byc.update({"collation_definitions":s_p})
 
     for ds_id in byc["dataset_ids"]:
         print( "Creating collations for " + ds_id)
-        _create_collations_from_dataset( ds_id, **byc )
+        _create_collations_from_dataset( ds_id, byc )
 
 ################################################################################
 
-def _create_collations_from_dataset( ds_id, **byc ):
+def _create_collations_from_dataset( ds_id, byc ):
 
-    for coll_type, coll_defs in byc["this_config"]["collationed"].items():
+    for coll_type, coll_defs in byc["collation_definitions"].items():
 
         pre = coll_defs["prefix"]
         pre_h_f = path.join( byc["pkg_path"], "byconeer", "rsrc", coll_type, "numbered-hierarchies.tsv" )
+        collection = coll_defs["scope"]
+        db_key = coll_defs["db_key"]
 
         if  path.exists( pre_h_f ):
             print( "Creating hierarchy for " + coll_type)
-            hier =  get_prefix_hierarchy( ds_id, coll_type, pre_h_f, **byc)
+            hier =  get_prefix_hierarchy( ds_id, coll_type, pre_h_f, byc)
         elif "PMID" in pre:
             hier =  _make_dummy_publication_hierarchy(**byc)
         else:
             # create /retrieve hierarchy tree; method to be developed
-            print( "Creating dummy hierarchy for " + pre)
-            hier =  _get_dummy_hierarchy( ds_id, pre, **byc )
+            print( "Creating dummy hierarchy for " + coll_type)
+            hier =  _get_dummy_hierarchy( ds_id, coll_type, coll_defs, byc )
 
         coll_client = MongoClient( )
         coll_coll = coll_client[ ds_id ][ byc["config"]["collations_coll"] ]
 
         data_client = MongoClient( )
         data_db = data_client[ ds_id ]
-        data_coll = data_db[ byc["config"]["collations_source"] ]
+        data_coll = data_db[ collection ]
 
-        data_key = coll_defs["db_key"]
-        data_pat = coll_defs["pattern"]
-        onto_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
+        onto_ids = _get_ids_for_prefix( data_coll, coll_defs )
 
         sel_hiers = [ ]
 
@@ -132,24 +131,30 @@ def _create_collations_from_dataset( ds_id, **byc ):
                     print(code+" w/o children")
                 continue
 
-            code_no = data_coll.count_documents( { data_key: code } )
+            code_no = data_coll.count_documents( { db_key: code } )
 
             if len( children ) < 2:
                 child_no = code_no
             else:
-                child_no =  data_coll.count_documents( { data_key: { "$in": children } } )
+                child_no =  data_coll.count_documents( { db_key: { "$in": children } } )
  
             if child_no > 0:
 
-                sub_id = re.sub(pre, coll_type, code)
+                # sub_id = re.sub(pre, coll_type, code)
+                sub_id = code
                 update_obj = hier[ code ].copy()
                 update_obj.update({
                     "id": sub_id,
+                    "type": coll_defs.get("type", ""),
                     "collation_type": coll_type,
+                    "prefix": coll_defs.get("prefix", ""),
+                    "scope": coll_defs.get("scope", ""),
                     "code_matches": code_no,
                     "code": code,
                     "count": child_no,
-                    "date": date_isoformat(datetime.datetime.now())
+                    "dataset_id": ds_id,
+                    "date": date_isoformat(datetime.datetime.now()),
+                    "db_key": db_key
                 })
                 matched += 1
 
@@ -158,20 +163,22 @@ def _create_collations_from_dataset( ds_id, **byc ):
                 else:
                     print("{}:\t{} ({} deep) samples - {} / {} {}".format(sub_id, code_no, child_no, count, no, pre))
 
+
+        # UPDATE   
         if not byc["args"].test:
             bar.finish()
             print("==> Updating database ...")
             if matched > 0:
-                coll_clean_q = { "id": { "$regex": "^"+coll_type } }
-                coll_coll.delete_many( coll_clean_q )
+                coll_coll.delete_many( { "collation_type": coll_type } )
                 coll_coll.insert_many( sel_hiers )
 
         print("===> Found {} of {} {} codes & added them to {}.{} <===".format(matched, no, coll_type, ds_id, byc["config"]["collations_coll"]))
        
 ################################################################################
 
-def get_prefix_hierarchy( ds_id, coll_type, pre_h_f, **byc):
+def get_prefix_hierarchy( ds_id, coll_type, pre_h_f, byc):
 
+    coll_defs = byc["collation_definitions"][coll_type]
     hier = { }
 
     f = open(pre_h_f, 'r+')
@@ -215,11 +222,9 @@ def get_prefix_hierarchy( ds_id, coll_type, pre_h_f, **byc):
     print("Looking for missing {} codes in {}.{} ...".format(coll_type, ds_id, byc["config"]["collations_source"]))
     data_client = MongoClient( )
     data_db = data_client[ ds_id ]
-    data_coll = data_db[ byc["config"]["collations_source"] ]
-    data_key = byc["this_config"]["collationed"][ coll_type ]["db_key"]
-    data_pat = byc["this_config"]["collationed"][ coll_type ]["pattern"]
+    data_coll = data_db[coll_defs["scope"]]
     
-    onto_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
+    onto_ids = _get_ids_for_prefix( data_coll, coll_defs )
 
     added_no = 0
 
@@ -230,6 +235,11 @@ def get_prefix_hierarchy( ds_id, coll_type, pre_h_f, **byc):
             "NCIT:C000000": {
                 "id": "NCIT:C000000",
                 "label": "Unplaced Entities",
+                "type": coll_defs.get("type", ""),
+                "collation_type": coll_type,
+                "prefix": coll_defs.get("prefix", ""),
+                "scope": coll_defs.get("scope", ""),
+                "db_key": coll_defs.get("db_key", ""),
                 "hierarchy_paths": [ { "order": no, "depth": 1, "path": [ "NCIT:C3262", "NCIT:C000000" ] } ]
             }
         } )
@@ -242,7 +252,7 @@ def get_prefix_hierarchy( ds_id, coll_type, pre_h_f, **byc):
         added_no += 1
         no += 1
 
-        l = _get_label_for_code(data_coll, data_key, o)
+        l = _get_label_for_code(data_coll, coll_defs, o)
 
         if coll_type == "NCIT":
             hier.update( {
@@ -294,23 +304,29 @@ def get_prefix_hierarchy( ds_id, coll_type, pre_h_f, **byc):
 
 def _make_dummy_publication_hierarchy(**byc):
 
-    mongo_client = MongoClient( )
-    pub_db = byc["config"]["info_db"]
-    mongo_coll = mongo_client[ pub_db ][ "publications" ]
-    query = { "id": { "$regex": byc["filter_definitions"]["PMID"]["pattern"] } }
+    coll_type = "PMID"
+    coll_defs = byc["collation_definitions"][coll_type]
+    data_db = byc["config"]["info_db"]
+    data_coll = MongoClient( )[ data_db ][ "publications" ]
+    query = { "id": { "$regex": coll_defs["pattern"] } }
 
     hier = { }
 
-    no = mongo_coll.count_documents( query )
+    no = data_coll.count_documents( query )
     bar = Bar("Publications...", max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
-    for order, pub in enumerate( mongo_coll.find( query, { "_id": 0 } ) ):
+    for order, pub in enumerate( data_coll.find( query, { "_id": 0 } ) ):
         code = pub["id"]
         bar.next()
         hier.update( { 
             code: {
                 "id":  code,
                 "label": pub["label"],
+                "type": coll_defs.get("type", ""),
+                "collation_type": coll_type,
+                "prefix": coll_defs.get("prefix", ""),
+                "scope": coll_defs.get("scope", ""),
+                "db_key": coll_defs.get("db_key", ""),
                 "hierarchy_paths": [ { "order": int(order), "depth": 0, "path": [ code ] } ],
                 "parent_terms": [ code ],
                 "child_terms": [ code ]
@@ -323,32 +339,32 @@ def _make_dummy_publication_hierarchy(**byc):
 
 ################################################################################
 
-def _get_dummy_hierarchy(ds_id, pre, **byc):
+def _get_dummy_hierarchy(ds_id, coll_type, coll_defs, byc):
 
     data_client = MongoClient( )
     data_db = data_client[ ds_id ]
-    data_coll = data_db[ byc["config"]["collations_source"] ]
-    data_pat = byc["this_config"]["collationed"][ pre ]["pattern"]
-    data_key = byc["this_config"]["collationed"][ pre ]["db_key"]
+    data_coll = data_db[ coll_defs["scope"] ]
+    data_pat = coll_defs["pattern"]
+    db_key = coll_defs["db_key"]
 
-    if byc["this_config"]["collationed"][ pre ]["is_series"]: 
-        s_pat = byc["this_config"]["collationed"][ pre ]["child_pattern"]
+    if coll_defs["is_series"]: 
+        s_pat = coll_defs["child_pattern"]
         s_re = re.compile( s_pat )
 
-    pre_ids = _get_ids_for_prefix( data_coll, data_key, data_pat )
+    pre_ids = _get_ids_for_prefix( data_coll, coll_defs )
 
     hier = { }
     no = len(pre_ids)
-    bar = Bar(pre, max = no, suffix='%(percent)d%%'+" of "+str(no) )
+    bar = Bar(coll_type, max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
     for order, c in enumerate(sorted(pre_ids), start=1):
 
         bar.next()
-        hier.update( { c: _get_hierarchy_item( data_coll, data_key, c, order, 0, [ c ] ) } )
+        hier.update( { c: _get_hierarchy_item( data_coll, coll_defs, coll_type, c, order, 0, [ c ] ) } )
 
-        if byc["this_config"]["collationed"][ pre ]["is_series"]:
+        if coll_defs["is_series"]:
 
-            ser_ids = data_coll.distinct( data_key, { data_key: c } )
+            ser_ids = data_coll.distinct( db_key, { db_key: c } )
             ser_ids = list(filter(lambda d: s_re.match(d), ser_ids))
             hier[c].update( { "child_terms": list( set(ser_ids) | set(hier[c]["child_terms"]) ) } )
    
@@ -358,11 +374,16 @@ def _get_dummy_hierarchy(ds_id, pre, **byc):
 
 ################################################################################
 
-def _get_hierarchy_item(data_coll, data_key, code, order, depth, path):
+def _get_hierarchy_item(data_coll, coll_defs, coll_type, code, order, depth, path):
 
     return {
-        "id": code,
-        "label": _get_label_for_code(data_coll, data_key, code),
+        "id":  code,
+        "label": _get_label_for_code(data_coll, coll_defs, code),
+        "type": coll_defs.get("type", ""),
+        "collation_type": coll_type,
+        "prefix": coll_defs.get("prefix", ""),
+        "scope": coll_defs.get("scope", ""),
+        "db_key": coll_defs.get("db_key", ""),
         "hierarchy_paths": [ { "order": int(order), "depth": int(depth), "path": list(path) } ],
         "parent_terms": list(path),
         "child_terms": [ code ]
@@ -370,21 +391,23 @@ def _get_hierarchy_item(data_coll, data_key, code, order, depth, path):
 
 ################################################################################
 
-def _get_ids_for_prefix(data_coll, data_key, data_pat):
+def _get_ids_for_prefix(data_coll, coll_defs):
 
-    pre_re = re.compile( data_pat )
+    db_key = coll_defs["db_key"]
+    pre_re = re.compile( coll_defs["pattern"] )
 
-    pre_ids = data_coll.distinct( data_key, { data_key: { "$regex": pre_re } } )
+    pre_ids = data_coll.distinct( db_key, { db_key: { "$regex": pre_re } } )
     pre_ids = list(filter(lambda d: pre_re.match(d), pre_ids))
 
     return pre_ids
 
 ################################################################################
 
-def _get_label_for_code(data_coll, data_key, code):
+def _get_label_for_code(data_coll, coll_defs, code):
 
-    id_key = re.sub(".id", "", data_key)
-    example = data_coll.find_one( { data_key: code } )
+    db_key = coll_defs["db_key"]
+    id_key = re.sub(".id", "", db_key)
+    example = data_coll.find_one( { db_key: code } )
 
     if id_key in example.keys():
         if isinstance(example[ id_key ], list):

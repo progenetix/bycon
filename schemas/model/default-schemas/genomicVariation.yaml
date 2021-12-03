@@ -189,11 +189,13 @@ definitions:
       example:
         - NP_009225.1:p.Glu1817Ter
         - LRG 199p1:p.Val25Gly (preferred)
-    clinVarIds:
-      type: string
+    clinvarIds:
+      type: array
+      items:
+        type: string
       examples:
-        - RCV000009910.19
-        - '9325'
+        - - RCV000009910.19
+          - '9325'
         - VCV000009325.28
 
   MolecularAttributes:

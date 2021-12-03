@@ -58,7 +58,7 @@ def ontologymaps_creator():
 
     for mt, mv in byc["this_config"]["map_types"].items():
 
-        o_l_max = len(mv["prefixes"])
+        o_l_max = len(mv["ontology_types"])
 
         for ds_id in byc["this_config"]["dataset_ids"]:
             data_db = mongo_client[ ds_id ]
@@ -74,10 +74,10 @@ def ontologymaps_creator():
                     if "description" in s:
                         d = s["description"].strip()
 
-                    for pre in mv["prefixes"]:
-                        data_key = byc["filter_definitions"][ pre ]["db_key"]
+                    for o_t in mv["ontology_types"]:
+                        data_key = byc["filter_definitions"][ o_t ]["db_key"]
                         list_key = re.sub(".id", "", data_key)
-                        data_re = re.compile( byc["filter_definitions"][ pre ]["pattern_strict"] )
+                        data_re = re.compile( byc["filter_definitions"][ o_t ]["pattern_strict"] )
 
                         for o in s[ list_key ]:
                             if data_re.match( o["id"] ):
@@ -150,12 +150,12 @@ def _read_mapping_defaults(dir_path, map_type, **byc):
     mf = path.join( dir_path, *byc["this_config"]["map_types"][ map_type ]["mappingfile"] )
     o_m_r = { }
     equiv_keys = [ ]
-    pre_fs = byc["this_config"]["map_types"][ map_type ]["prefixes"]
+    pre_fs = byc["this_config"]["map_types"][ map_type ]["ontology_types"]
     o_l_max = len(pre_fs)
 
-    for pre in pre_fs:
-        equiv_keys.append( pre+"::id" )
-        equiv_keys.append( pre+"::label" )
+    for o_t in pre_fs:
+        equiv_keys.append( o_t+"::id" )
+        equiv_keys.append( o_t+"::label" )
 
     sheet_name = "__".join(pre_fs)+"__matched"
 
@@ -185,8 +185,8 @@ def _read_mapping_defaults(dir_path, map_type, **byc):
             try:
                 cell_val = table[ i, col_inds[ col_name ] ]
                 if "id" in col_name:
-                    pre, code = re.split("[:-]", cell_val)
-                    data_re = re.compile( byc["filter_definitions"][ pre ]["pattern_strict"] )
+                    o_t, code = re.split("[:-]", cell_val)
+                    data_re = re.compile( byc["filter_definitions"][ o_t ]["pattern_strict"] )
                     if data_re.match( cell_val ):
                         bioc = { "id": cell_val }
                         id_s.append( cell_val )

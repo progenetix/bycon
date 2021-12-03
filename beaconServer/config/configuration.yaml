@@ -14,7 +14,10 @@ bycon_definition_files:
   - handover_definitions
   - interval_definitions
   - variant_definitions
-meta: {}
+meta:
+  returned_schemas:
+    - entity_type: map
+      schema: https://progenetix.org/services/schemas/beaconConfigurationResponse/
 response:
   $schema: https://progenetix.org/services/schemas/beaconConfigurationSchema/
   maturity_attributes:

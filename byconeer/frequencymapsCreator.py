@@ -68,11 +68,11 @@ def frequencymaps_creator():
  
     for ds_id in byc["dataset_ids"]:
         print( "Creating collations for " + ds_id)
-        _create_frequencymaps_for_collations( ds_id, **byc )
+        _create_frequencymaps_for_collations( ds_id, byc )
 
 ################################################################################
 
-def _create_frequencymaps_for_collations( ds_id, **byc ):
+def _create_frequencymaps_for_collations( ds_id, byc ):
 
     coll_client = MongoClient()
     coll_coll = coll_client[ ds_id ][ byc["config"]["collations_coll"] ]
@@ -84,6 +84,9 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
     bios_client = MongoClient()
     bios_coll = bios_client[ ds_id ][ byc["config"]["collations_source"] ]
 
+    ind_client = MongoClient()
+    ind_coll = ind_client[ ds_id ]["individuals"]
+
     data_client = MongoClient()
     cs_coll = data_client[ ds_id ]["callsets"]
 
@@ -93,8 +96,8 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
 
         if len(byc["coll_filters"]) > 0:
             f_l = []
-            for pre in byc["coll_filters"]:
-                f_l.append( { "id": { "$regex": "^"+pre } })
+            for c_t in byc["coll_filters"]:
+                f_l.append( { "collation_type": { "$regex": "^"+c_t } })
             if len(f_l) > 1:
                 id_query = { "$or": f_l }
             else:
@@ -112,14 +115,13 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
 
         coll_type = coll["collation_type"]
 
-        db_key = byc["filter_definitions"][coll_type]["db_key"]
+        db_key = coll["db_key"]
 
         coll_i += 1
 
-        bios_query = { db_key: { '$in': coll["child_terms"] } }
-        # print(bios_query)
+        query = { db_key: { '$in': coll["child_terms"] } }
 
-        bios_no, cs_cursor = _cs_cursor_from_bios_query(bios_coll, cs_coll, bios_query)
+        bios_no, cs_cursor = _cs_cursor_from_bios_query(bios_coll, ind_coll, cs_coll, coll["scope"], query)
         cs_no = len(list(cs_cursor))
 
         if cs_no < 1:
@@ -135,6 +137,9 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
         update_obj = {
             "id": coll["id"],
             "label": coll["label"],
+            "dataset_id": coll["dataset_id"],
+            "scope": coll["scope"],
+            "db_key": coll["db_key"],
             "collation_type": coll["collation_type"],
             "child_terms": coll["child_terms"],
             "updated": date_isoformat(datetime.datetime.now()),
@@ -150,8 +155,8 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
 
         if coll["code_matches"] > 0:
             if cs_no != coll["code_matches"]:
-                bios_query = { db_key: coll["id"] }
-                bios_no, cs_cursor = _cs_cursor_from_bios_query(bios_coll, cs_coll, bios_query)
+                query = { db_key: coll["id"] }
+                bios_no, cs_cursor = _cs_cursor_from_bios_query(bios_coll, ind_coll, cs_coll, coll["scope"], query)
                 cs_no = len(list(cs_cursor))
                 if cs_no > 0:
                     intf = interval_counts_from_callsets(cs_cursor, byc)
@@ -177,18 +182,19 @@ def _create_frequencymaps_for_collations( ds_id, **byc ):
 
 ################################################################################
 
-def _cs_cursor_from_bios_query(bios_coll, cs_coll, query):
+def _cs_cursor_from_bios_query(bios_coll, ind_coll, cs_coll, scope, query):
 
-    bios_ids = bios_coll.distinct( "id" , query )
+    if scope == "individuals":
+        ind_ids = ind_coll.distinct( "id" , query )
+        bios_ids = bios_coll.distinct( "id" , {"individual_id":{"$in": ind_ids } } )
+    else:
+        bios_ids = bios_coll.distinct( "id" , query )
+
     bios_no = len(bios_ids)
     cs_query = { "biosample_id": { "$in": bios_ids } }
     cs_cursor = cs_coll.find(cs_query)
 
     return bios_no, cs_cursor
-
-################################################################################
-
-
 
 ################################################################################
 ################################################################################

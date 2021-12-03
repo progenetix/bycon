@@ -142,8 +142,11 @@ def _dataset_count_collationed_filters(ds_id, **byc):
                             tid = term["id"]
                             if tid in pfs.keys():
                                 pfs[ tid ]["count"] += 1
-                                if "label" in term:
-                                     pfs[ tid ]["label"] = term["label"]
+
+                                for l in ["label", "description", "reference"]:
+                                    if l in term:
+                                         pfs[ tid ][ l ] = term[ l ]
+
                     else:
                         term = sample[ s ]
                         if not "id" in term:
@@ -151,9 +154,9 @@ def _dataset_count_collationed_filters(ds_id, **byc):
                         tid = term["id"]
                         if tid in pfs.keys():
                             pfs[ tid ]["count"] += 1
-                            if "label" in term:
-                                 pfs[ tid ]["label"] = term["label"]
-
+                            for l in ["label", "description", "reference"]:
+                                if l in term:
+                                     pfs[ tid ][ l ] = term[ l ]
             bar.finish()
 
             print("=> {} valid filtering terms out of {} for {} ({})".format(scopedNo, len(afs), s, ds_id) )

@@ -113,49 +113,7 @@ def _process_dataset(ds_id, pub_labels, byc):
     for bsid in bs_ids:
 
         s = bios_coll.find_one({ "id":bsid })
-        update_obj = {
-            "biocharacteristics": []
-        }
-
-        _update_cnv_stats(cs_coll, bsid, update_obj, byc)
-
-        ncit = { "id": "", "label": "" }
-        icdom = { "id": "", "label": "" }
-        icdot = { "id": "", "label": "" }
-        UBERON = { "id": "", "label": "" }
-
-        try:
-            if "UBERON" in s["sampled_tissue"]["id"]:
-                UBERON = s["sampled_tissue"]
-        except KeyError:
-            pass
-        try:            
-            if "NCIT:C" in s["histological_diagnosis"]["id"]:
-                NCIT = s["histological_diagnosis"]
-        except KeyError:
-            pass
-        try:            
-            if "icdom" in s["icdo_morphology"]["id"]:
-                icdom = s["icdo_morphology"]
-        except KeyError:
-            pass
-        try:            
-            if "icdot" in s["icdo_topography"]["id"]:
-                icdot = s["icdo_topography"]
-        except KeyError:
-            pass
-
-        update_obj.update({"biocharacteristics": [ icdom, icdot, NCIT, UBERON ]})
-
-        if "external_references" in s:
-            e_r_u = [ ]
-            for e_r in s[ "external_references" ]:
-                if "PMID" in e_r["id"]:
-                    if e_r["id"] in pub_labels:
-                        e_r.update( {"label": pub_labels[ e_r["id"] ] } )
-                e_r_u.append(e_r)                   
-            update_obj.update( { "external_references": e_r_u } ) 
-
+ 
         # if "pathological_tnm_findings" in s:
         #     update_obj.update( { "pathological_tnm_findings": s["pathological_tnm_findings"] } )
         # else:    

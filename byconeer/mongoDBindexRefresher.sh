@@ -33,13 +33,13 @@ do
 			mongo $db --eval "db.variants.createIndex( { $field : 1 } )"
 		done
 	
-		for field in \"biocharacteristics.id\" \"external_references.id\" \"external_references.label\" \"biocharacteristics.label\" description \"provenance.material.id\" \"provenance.geo_location.properties.city\" \"provenance.geo_location.properties.country\" individual_id age_at_collection
+		for field in \"biocharacteristics.id\" \"external_references.id\" \"external_references.label\" \"biocharacteristics.label\" description \"provenance.geo_location.properties.city\" \"provenance.geo_location.properties.country\" individual_id age_at_collection biosample_status.id
 		do
 			echo "=> index for $db.biosamples.$field"
 			mongo $db --eval "db.biosamples.createIndex( { $field : 1 } )"
 		done
 	
-		for field in \"provenance.geo_location.properties.city\" \"provenance.geo_location.properties.country\" biosample_id
+		for field in \"provenance.geo_location.properties.city\" \"provenance.geo_location.properties.country\" biosample_id individual_id
 		do
 			echo "=> index for $db.callsets.$field"
 			mongo $db --eval "db.callsets.createIndex( { $field : 1 } )"

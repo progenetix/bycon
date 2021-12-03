@@ -22,7 +22,7 @@ io_params:
       db_key: info.tumor_grade_text
       type: string
     age_iso:
-      db_key: individual_age_at_collection.age
+      db_key: time_of_collection.age
       type: string
     death:
       db_key: info.death

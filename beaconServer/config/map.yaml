@@ -42,7 +42,7 @@ response:
       openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/biosamples/
       root_url: https://progenetix.org/beacon/biosamples
       single_entry_url: https://progenetix.org/beacon/biosamples/{id}
-      filtering_terms_url: https://progenetix.org/beacon/filteringTerms
+      filtering_terms_url: https://progenetix.org/beacon/biosamples/filteringTerms
       endpoints:
         genomic_variation:
           returned_entry_type: variant
@@ -83,7 +83,7 @@ response:
       openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/runs/
       root_url: https://progenetix.org/beacon/runs
       single_entry_url: https://progenetix.org/beacon/runs/{id}
-      filtering_terms_url: https://progenetix.org/beacon/filteringTerms
+      filtering_terms_url: https://progenetix.org/beacon/runs/filteringTerms
       endpoints:
         genomic_variation:
           returned_entry_type: genomic_variation
@@ -99,7 +99,7 @@ response:
       entry_type: individual
       root_url: https://progenetix.org/beacon/individuals
       single_entry_url: https://progenetix.org/beacon/individuals/{id}
-      filtering_terms_url: https://progenetix.org/beacon/filteringTerms
+      filtering_terms_url: https://progenetix.org/beacon/individuals/filteringTerms
       endpoints:
         genomic_variation:
           returned_entry_type: genomicVariation
@@ -112,6 +112,7 @@ response:
           url: https://progenetix.org/beacon/individuals/{id}/individuals
     genomic_variation:
       openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/variants/
+      filtering_terms_url: https://progenetix.org/beacon/variants/filteringTerms
       entry_type: variant
       root_url: https://progenetix.org/beacon/variants
       single_entry_url: https://progenetix.org/beacon/variants/{id}

@@ -83,6 +83,10 @@ def cgi_parse_query(byc):
         else:
             form_data.update({p: get.getvalue(p)})
 
+    #TODO: re-evaluate hack of empty filters which avoids dirty errors downstream
+    if not "filters" in form_data:
+        form_data.update({"filters": []})
+
     form_data.update({"requested_granularity": get.getvalue("requestedGranularity", "record")})
     form_data.update({"include_resultset_responses": get.getvalue("includeResultsetResponses", "HIT")})
     
@@ -267,13 +271,6 @@ def update_error_code_from_response_summary(byc):
 
     if not "exists" in byc["service_response"]["response_summary"]:
         return byc
-
-    # if byc["service_response"]["response_summary"]["exists"] is False:
-    #     try:
-    #         byc["error_response"]["error"].update({"error_code": 422})
-    #         return byc
-    #     except:
-    #         return byc
 
 ################################################################################
 

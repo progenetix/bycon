@@ -13,7 +13,7 @@ def parse_filters(byc):
     if "form_data" in byc:
         if "filters" in byc["form_data"]:
             fs = byc["form_data"]["filters"]
-            fs = _check_filter_values(fs, byc["filter_definitions"])
+            fs = _check_filter_values(fs, byc)
             if len(fs) > 0:
                 byc.update( { "filters": fs } )
                 return byc
@@ -21,7 +21,7 @@ def parse_filters(byc):
     if "args" in byc:
         if byc["args"].filters:
             f = byc["args"].filters.split(',')
-            fs = _check_filter_values(f, byc["filter_definitions"])
+            fs = _check_filter_values(f, byc)
             if len(fs) > 0:
                 byc.update( { "filters": fs } )
                 return byc
@@ -53,7 +53,7 @@ def get_filter_flags(byc):
 
 ################################################################################
 
-def _check_filter_values(filters, filter_defs):
+def _check_filter_values(filters, byc):
 
     checked = [ ]
     for f in filters:
@@ -62,9 +62,10 @@ def _check_filter_values(filters, filter_defs):
         if not "id" in f:
             continue
         pre = re.split('-|:', f["id"])[0]
-        if pre in filter_defs:
-            if re.compile( filter_defs[ pre ]["pattern"] ).match( f["id"] ):
-                checked.append( f )
+        for f_t, f_d in byc["filter_definitions"].items():
+            if re.compile( f_d["pattern"] ).match( f["id"] ):       
+                if f not in checked:
+                    checked.append( f )
 
     return checked
   
@@ -106,8 +107,7 @@ def select_dataset_ids(byc):
             # TODO: catch error for mismatch
             if h_o:
                 if "source_db" in h_o:
-                    ds_ids = [ h_o["source_db"] ]
-                    
+                    ds_ids = [ h_o["source_db"] ]               
 
     if len(ds_ids) > 0:
         byc.update( { "dataset_ids": ds_ids } )
@@ -139,7 +139,6 @@ def check_dataset_ids(byc):
 
     if not "dataset_ids" in byc:
         byc.update( { "dataset_ids": [ ] } )
-
 
     if len(byc["dataset_ids"]) < 1:
         if "dataset_default" in byc["config"]:

@@ -2,6 +2,7 @@
 beacon_id: 'org.progenetix.beacon'
 name: 'Progenetix Cancer Genomics Beacon+'
 api_version: v2.0.0-draft.4
+id: org.baudisgroup.info
 environment: dev
 organization:
   id: "org.baudisgroup.info"
@@ -19,6 +20,6 @@ description: >-
 version: v2
 welcomeUrl: "https://progenetix.org/beaconplus-instances/beaconplus/"
 alternativeUrl: "https://progenetix.org"
-create_date_time: 2015-11-13
-update_date_time: 2021-07-21
+create_date_time: "2015-11-13T00:00:00"
+update_date_time: "2021-07-21T00:00:00"
 datasets: [ ] # populated from script

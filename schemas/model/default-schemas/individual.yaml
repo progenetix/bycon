@@ -58,6 +58,7 @@ properties:
     type: string
     examples:
       - HapMap project contributor
+
   karyotypicSex:
     description: >-
       Chromosomal sex of an individual as being used by Phenopackets. Following the definition there
@@ -74,28 +75,36 @@ properties:
       - XXXX
       - XYY
       - OTHER_KARYOTYPE
+
   dateOfBirth:
     type: string
     format: date-time
     examples:
       - 1967-11-11
       - 2002-09-21
+
   externalReferences:
     type: array
     items:
       $ref: ../common/externalReference.yaml#/properties
     examples:
       - id: biosample:SAME122868
-        label: HapMap individual
+        description: HapMap individual
       - id: PMID:9950502
       - id: geo:GSE13331
-        label: Prognostic analysis of mantle cell lymphoma genomes
+        description: Prognostic analysis of mantle cell lymphoma genomes
+
+  vitalStatus:
+    $ref: ../common/vitalStatus.yaml#/properties
+
   provenance:
     $ref: ../common/provenance.yaml#/properties
+
   ancestries:
     type: array
     items:
       $ref: ../common/ancestry.yaml#/properties
+
   dataUseConditions:
     $ref: ../common/ontologyTerm.yaml#/properties
     examples:

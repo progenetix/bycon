@@ -43,6 +43,7 @@ path_response_type_mappings:
   variantInterpretations: variant
   variant_interpretations: variant
   info: info
+  filtering_terms: filteringTerm
 
 response_types:
 
@@ -76,6 +77,14 @@ response_types:
     beacon_schema:
       entity_type: map
       schema: https://progenetix.org/services/schemas/beaconMapSchema/
+    h->o_access_key: Null
+
+  - entity_type: filteringTerm
+    collection: Null
+    response_schema: beaconFilteringTermsResponse
+    beacon_schema:
+      entity_type: filteringTerm
+      schema: https://progenetix.org/services/schemas/filteringTermsSchema/
     h->o_access_key: Null
 
   - entity_type: dataset

@@ -105,7 +105,15 @@ def update_queries_from_path_id( byc ):
         if not rb_t in byc["beacon_base_paths"]:
             return byc
 
+    byc.update({"response_type": _get_response_type_from_path(rb_t, byc) })
+
     p_id = rest_path_value(rb_t)
+
+    # TODO: prototyping here ...
+    if p_id == "filteringTerms":
+        byc.update({"response_type": "filteringTerm" })
+        byc["form_data"].update({"scope": rb_t })
+        return byc
 
     if p_id:
         if not "empty_value" in p_id:
@@ -115,24 +123,30 @@ def update_queries_from_path_id( byc ):
                     s_id = byc["this_config"]["defaults"].get("test_document_id", "")
 
             byc.update({ "id_from_path": s_id })
+
             byc["queries"].update(
                 { pgx_base: { "id": s_id } } )
-            if not "response_types" in byc["this_config"]:
-                return byc
 
             # That's why the original path id was kept...
             r_t = rest_path_value(p_id)
-
-            try:
-                t = byc["beacon_mappings"]["path_response_type_mappings"][r_t]
-                for r_d in byc["beacon_mappings"]["response_types"]:
-                    if r_d["entity_type"] == t:
-                        byc.update({"response_type": r_d["entity_type"]})
-            except:
-                pass
+            if not "empty_value" in r_t:
+                byc.update({"response_type": _get_response_type_from_path(r_t, byc) })
 
     return byc
 
+################################################################################
+
+def _get_response_type_from_path(path_element, byc):
+
+    try:
+        t = byc["beacon_mappings"]["path_response_type_mappings"][path_element]
+        for r_d in byc["beacon_mappings"]["response_types"]:
+            if r_d["entity_type"] == t:
+                path_element = r_d["entity_type"]
+    except:
+        pass
+
+    return path_element
 
 ################################################################################
 
@@ -187,101 +201,75 @@ def update_queries_from_hoid( byc):
 
 ################################################################################
 
-def update_queries_from_filters( byc ):
+def update_queries_from_filters(byc):
 
-    """podmd
+    """The new version assumes that dataset_id, scope (collection) and field are
+    stored in the collation entries. Only filters with exact match to an entry
+    in the lookup "collations" collection will be evaluated.
+    While the Beacon v2 protocol assumes a logical `AND` between filters, bycon
+    has a slightly differing approach:
+    * filters against the same field (in the same collection) are treated as
+    logical `OR` since this seems logical; and also allows the use of the same
+    query object for hierarchical (`child_terms`) query expansion
+    * the bycon API allows to pass a `filterLogic` parameter with either `AND`
+    (default value) or `OR`
+    """
 
-    #### `update_queries_from_filters`
-
-    This method creates a query object (dictionary) with entries for each of the
-    standard data collections.
-
-    Filter values are not checked for their correct syntax; this should have
-    happened in a pre-parsing step and allows to use the method with non-standard
-    values, e.g. to fix erroneous database entries.
-    
-    podmd"""
-        
-    query_lists = { }
+    filter_lists = {}
 
     logic = byc[ "filter_flags" ][ "logic" ]
-    precision = byc[ "filter_flags" ][ "precision" ]
+    # precision = byc[ "filter_flags" ][ "precision" ]
 
-    for c_n in byc[ "config" ][ "collections" ]:
-        query_lists[c_n] = [ ]
-        if c_n in byc["queries"]:
-            query_lists[c_n].append( byc["queries"][c_n] )
- 
     mongo_client = MongoClient()
+    coll_coll = mongo_client[ byc["config"]["info_db"] ][ byc["config"]["collations_coll"] ]
 
-    filters = byc.get("filters", {})
+    filters = byc.get("filters", [])
+
     for f in filters:
+
         f_val = f["id"]
         f_desc = f.get("includeDescendantTerms", True)
         f_scope = f.get("scope", False)
-        pre_code = re.split('-|:', f_val)
-        pre = pre_code[0]
-        if pre in byc["filter_definitions"]:
-            pre_defs = byc["filter_definitions"][pre]
-            if "remove" in pre_defs:
-                f_val = re.sub(pre_defs["remove"], "", f_val)
-                pre = re.sub(pre_defs["remove"], "", pre)
 
-            if f_scope is False:
-                f_scope = pre_defs["scopes"][0]
+        f_info = coll_coll.find_one({"id": f["id"]})
 
-            if f_scope not in query_lists.keys():
-                continue
+        if f_info is None:
+            continue
 
-            if "start" in precision or len(pre_code) == 1:
-                query_lists[ f_scope ].append( { pre_defs[ "db_key" ]: { "$regex": "^"+f_val } } )
-                break
+        f_field = f_info.get("db_key", "id")
+
+        if f_scope is False:
+            f_scope = f_info["scope"]
+
+        if f_scope not in byc[ "config" ][ "collections" ]:
+            continue
+
+        if f_scope not in filter_lists.keys():
+            filter_lists.update({f_scope:{}})
+        if f_field not in filter_lists[f_scope].keys():
+            filter_lists[f_scope].update({f_field:[]})
+
+        if f_desc is True:
+            filter_lists[f_scope][f_field].extend(f_info["child_terms"])
+        else:
+            filter_lists[f_scope][f_field].append(f_info["id"])
+
+    # creating the queries & combining w/ possible existing ones
+    for f_scope in filter_lists.keys():
+        f_s_l = []
+        for f_field, f_queries in filter_lists[f_scope].items():
+            if len(f_queries) == 1:
+                f_s_l.append({ f_field: f_queries[0] })
             else:
-                q_keys = { f_val: 1 }
+                f_s_l.append({ f_field: {"$in": f_queries } })
 
-                """podmd
+        if f_scope in byc["queries"]:
+            f_s_l.append(byc["queries"][f_scope])
 
-                The Beacon query paradigm assumes a logical 'AND'
-                between different filters. Also, it assumes that a
-                query against a hierarchical term will also retrieve
-                matches to its child terms. These two paradigms are
-                incompatible if the targets don't store all their
-                hierarchies with them.
-                To resolve queries to include all child terms the 
-                current solution is to perform a look up query for
-                the current filter term, in the `collations` database,
-                and create an 'OR' query which replaces the single
-                filter value (if more than one term).
-                
-                podmd"""
-                if f_desc is True:
-                    for ds_id in byc["dataset_ids"]:
-                        mongo_coll = mongo_client[ ds_id ][ "collations" ]
-                        try:
-                            f_def = mongo_coll.find_one( { "id": f_val })
-                            if "child_terms" in f_def:
-                                for c in f_def["child_terms"]:
-                                    if pre in c:
-                                        q_keys.update({c:1})
-                        except:
-                            pass
-
-                if len(q_keys.keys()) == 1:
-                    query_lists[ f_scope ].append( { pre_defs[ "db_key" ]: f_val } )
-                else:
-                    f_q_l = [ ]
-                    for f_c in q_keys.keys():
-                        f_q_l.append( { pre_defs[ "db_key" ]: f_c } )
-                    query_lists[ f_scope ].append( { '$or': f_q_l } )
-                break
-                        
-    mongo_client.close()
-
-    for c_n in byc[ "config" ][ "collections" ]:
-        if len(query_lists[c_n]) == 1:
-            byc["queries"][ c_n ] = query_lists[c_n][0]
-        elif len( query_lists[c_n] ) > 1:
-            byc["queries"][ c_n ] = { logic: query_lists[c_n] }
+        if len(f_s_l) == 1:
+            byc["queries"].update({ f_scope: f_s_l[0] })
+        elif len(f_s_l) > 1:
+            byc["queries"].update({ f_scope: { logic: f_s_l } })
 
     return byc
 

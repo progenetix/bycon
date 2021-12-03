@@ -29,7 +29,6 @@ extraction_scopes:
     5. checking the correct structure (`final_check` - a global pattern can be
     used if other post-processing is performed)
 
-
   survival_status:
     filter: '(?i).*?(?:(?:dea(?:d|th))|alive|surviv|outcome|status)'
     preclean:

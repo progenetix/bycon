@@ -30,6 +30,7 @@ methods:
     - child_terms
     - code_matches
     - collation_type
+    - type
   paths:
     - id
     - label
@@ -38,17 +39,20 @@ methods:
     - child_terms
     - hierarchy_paths
     - collation_type
+    - type
   counts:
     - id
     - label
     - count
     - code_matches
     - collation_type
+    - type
   codematches:
     - id
     - label
     - code_matches
     - collation_type
+    - type
   codes:
     - id
     - label

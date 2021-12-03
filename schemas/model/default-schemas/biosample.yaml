@@ -29,7 +29,7 @@ properties:
   externalReferences:
     type: array
     items:
-      $ref: ../common/ontologyTerm.yaml#/properties
+      $ref: ../common/externalReferences.yaml#/properties
     examples:
       - id: PMID:9892199
   cohorts:
@@ -41,10 +41,11 @@ properties:
     examples:
       - id: pgxcohort-arraymap
         label: arrayMap collection
-  individualAgeAtCollection:
+  timeOfCollection:
     description: >-
-      The age of the individual at time of sample collection.
-    $ref: ../common/age.yaml#/properties
+      The age of the individual at time of sample collection or alternative time
+      element.
+    $ref: ../common/timeElement.yaml#/properties
   provenance:
     $ref: ../common/provenance.yaml#/properties
   dataUseConditions:

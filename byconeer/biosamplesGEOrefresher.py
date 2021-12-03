@@ -137,14 +137,14 @@ def biosamples_refresher():
 
         s = bios_coll.find_one({ "id":bsid })
 
-        if "external_references" in s:
-            for e_r in s[ "external_references" ]:
-                if "GSM" in e_r["id"]:
-                    gsm = experiment_re.match(e_r["id"]).group(1)
-                if "GSE" in e_r["id"]:
-                    gse = series_re.match(e_r["id"]).group(1)
-                if "GPL" in e_r["id"]:
-                    gpl = platform_re.match(e_r["id"]).group(1)
+        e_r_s = s.get("external_references", [])
+        for e_r in e_r_s:
+            if "GSM" in e_r["id"]:
+                gsm = experiment_re.match(e_r["id"]).group(1)
+            if "GSE" in e_r["id"]:
+                gse = series_re.match(e_r["id"]).group(1)
+            if "GPL" in e_r["id"]:
+                gpl = platform_re.match(e_r["id"]).group(1)
 
         if len(gse) < 5 or len(gsm) < 5:
 

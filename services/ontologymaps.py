@@ -47,10 +47,9 @@ def ontologymaps():
         if pre_re.match( f_val ):
             pre = pre_re.match( f_val ).group(1)
 
-            if pre in byc["filter_definitions"]:
-                f_re = re.compile( byc["filter_definitions"][ pre ]["pattern"] )
-                if f_re.match( f_val ):
-
+            # TODO TEST
+            for f_t, f_d in byc["filter_definitions"].items():
+                if re.compile( f_d["pattern"] ).match( f_val ):
                     if "start" in byc[ "filter_flags" ][ "precision" ]:
                         q_list.append( { byc["query_field"]: { "$regex": "^"+f_val } } )
                     elif f["id"] == pre:
@@ -71,7 +70,7 @@ def ontologymaps():
     mongo_coll = mongo_client[ byc["config"]["info_db"] ][ byc["config"]["ontologymaps_coll"] ]
     for o in mongo_coll.find( query, { '_id': False } ):
         for c in o["code_group"]:
-            pre, code = re.split("[:-]", c["id"])
+            pre, code = re.split("[:-]", c["id"], maxsplit=1)
             u_c_d.update( { c["id"]: { "id": c["id"], "label": c["label"] } } )
         c_g.append( o["code_group"] )
 

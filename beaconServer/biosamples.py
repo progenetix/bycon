@@ -36,6 +36,7 @@ def biosamples():
 
     byc = initialize_service()
     run_beacon_init_stack(byc)
+    return_filtering_terms_response(byc)
     run_result_sets_beacon(byc)
     export_datatable(byc)
     check_alternative_variant_deliveries(byc)
