@@ -190,7 +190,7 @@ If using `g_variants` or `variants_in_sample`, those will be treated as aliases.
               "dupcoverage": 42332434,
               "dupfraction": 0.015
             },
-            "legacy_id": [
+            "legacy_ids": [
               "PGX_AM_BS_GSE13331_MCL98-13331"
             ]
           },

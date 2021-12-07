@@ -66,8 +66,8 @@ io_params:
     cell_line:
       db_key: info.cell_line
       type: string
-    legacy_id:
-      db_key: info.legacy_id
+    legacy_ids:
+      db_key: info.legacy_ids
       type: array
     individual_id:
       db_key: individual_id
@@ -77,8 +77,8 @@ io_params:
     id:
       db_key: id
       type: string
-    legacy_id:
-      db_key: info.legacy_id
+    legacy_ids:
+      db_key: info.legacy_ids
       type: array
     geoprov_label:
       db_key: provenance.geo_location.properties.label
@@ -118,8 +118,8 @@ io_params:
     biosample_id:
       db_key: biosample_id
       type: string
-    legacy_id:
-      db_key: info.legacy_id
+    legacy_ids:
+      db_key: info.legacy_ids
       type: array
     experiment_id:
       db_key: analysis_info.experiment_id

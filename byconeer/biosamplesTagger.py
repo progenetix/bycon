@@ -107,7 +107,7 @@ def biosamples_tagger():
             if row[0].startswith('#'):
                 continue
 
-            bs = bios_coll.find_one({"info.legacy_id":row[0]})
+            bs = bios_coll.find_one({"info.legacy_ids":row[0]})
 
             if not bs:
                 not_found.append(row[0])
@@ -115,7 +115,7 @@ def biosamples_tagger():
                 continue
 
             bios_coll.update_one(
-                {"info.legacy_id":row[0]},
+                {"info.legacy_ids":row[0]},
                 {"$addToSet": { "cohorts": cohort} }
             )
 

@@ -90,7 +90,7 @@ def biosamples_refresher():
 
     bios_query = { "$or": [
         { "external_references.id": { "$regex": id_filter } },
-        { "info.legacy_id": { "$regex": id_filter } }
+        { "info.legacy_ids": { "$regex": id_filter } }
     ] }
 
     data_client = MongoClient( )
