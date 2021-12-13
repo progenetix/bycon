@@ -27,13 +27,13 @@ do
 		echo "=> index for $db.$dbcoll.id"
 		mongo $db --eval "db.$dbcoll.createIndex( { 'id' : 1 }, { 'unique': true } )"
 
-		for field in variant_type reference_bases reference_name callset_id alternate_bases biosample_id start \"end\" \"info.var_length\" variant_internal_id
+		for field in variant_type reference_bases reference_name callset_id alternate_bases individual_id biosample_id start \"end\" \"info.var_length\" variant_internal_id
 		do
 			echo "=> index for $db.variants.$field"
 			mongo $db --eval "db.variants.createIndex( { $field : 1 } )"
 		done
 	
-		for field in \"biocharacteristics.id\" \"external_references.id\" \"external_references.label\" \"biocharacteristics.label\" description \"provenance.geo_location.properties.city\" \"provenance.geo_location.properties.country\" individual_id age_at_collection biosample_status.id
+		for field in \"external_references.id\" \"external_references.description\" description \"provenance.geo_location.properties.city\" \"provenance.geo_location.properties.country\" individual_id age_at_collection biosample_status.id
 		do
 			echo "=> index for $db.biosamples.$field"
 			mongo $db --eval "db.biosamples.createIndex( { $field : 1 } )"
@@ -45,13 +45,16 @@ do
 			mongo $db --eval "db.callsets.createIndex( { $field : 1 } )"
 		done
 	
-		for field in child_terms id label count
+	done
+	
+    for dbcoll in collations
+	do
+		for field in child_terms id label count collation_type prefix
 		do
 			echo "=> index for $db.collations.$field"
 			mongo $db --eval "db.collations.createIndex( { $field : 1 } )"
-		done
+		done	
 	done
-
 
 	for dbcoll in biosamples individuals callsets
 	do

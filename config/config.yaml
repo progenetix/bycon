@@ -57,7 +57,10 @@ schema_paths:
     - sections
 
 resource_urls:
-  ncbi_geosoft: "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?form=text&acc="
+  ncbi_geosoft: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?form=text&acc=
+  ncbi_geoweb: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
+  europepmc_pmid: https://europepmc.org/article/MED/
+  cellosaurus_web: https://web.expasy.org/cellosaurus/
 
 # dataset_ids here are used for db management; the information used by Beacon
 # is defined separately

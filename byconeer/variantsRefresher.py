@@ -80,30 +80,32 @@ def variants_refresher():
         for v in var_coll.find({}):
             update_obj = { "id": str(v["_id"]) }
 
+            
+
             """
  
             """
-            if "variant_type" in v:
-                if "DUP" in v["variant_type"] or "DEL" in v["variant_type"]:
-                    try:
-                        cnv_l = int( v["end"] - v["start"])
-                        if cnv_l < min_l:
-                            v_short += 1
-                            if byc["args"].test:
-                                print("!!! too short {}".format(cnv_l))
-                            else:
-                                var_coll.delete_one( { "_id": v["_id"] }  )
-                                continue
-                        else:
-                            update_obj.update( { "info.var_length": cnv_l } )
-                    except:
-                        update_obj.update( { "error.start_end": 1 } )
-                else:
-                    v_no_type += 1
-                    # update_obj.update( { "error.variant_type": v["variant_type"] } )
-            else:
-                v_no_type += 1
-                print("!!! no type".format(v["_id"]))
+            # if "variant_type" in v:
+            #     if "DUP" in v["variant_type"] or "DEL" in v["variant_type"]:
+            #         try:
+            #             cnv_l = int( v["end"] - v["start"])
+            #             if cnv_l < min_l:
+            #                 v_short += 1
+            #                 if byc["args"].test:
+            #                     print("!!! too short {}".format(cnv_l))
+            #                 else:
+            #                     var_coll.delete_one( { "_id": v["_id"] }  )
+            #                     continue
+            #             else:
+            #                 update_obj.update( { "info.var_length": cnv_l } )
+            #         except:
+            #             update_obj.update( { "error.start_end": 1 } )
+            #     else:
+            #         v_no_type += 1
+            #         # update_obj.update( { "error.variant_type": v["variant_type"] } )
+            # else:
+            #     v_no_type += 1
+            #     print("!!! no type".format(v["_id"]))
 
             ####################################################################
 

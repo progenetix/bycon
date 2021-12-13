@@ -110,29 +110,60 @@ def _process_dataset(ds_id, pub_labels, byc):
         bar = Bar("{} {} samples".format(no, ds_id), max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
     counts = { "pathological_tnm_findings": 0, "pathological_stage": 0, "tumor_grade": 0 }
+
+    pmid_url = byc["config"]["resource_urls"]["europepmc_pmid"]
+    ncbigeo_url = byc["config"]["resource_urls"]["ncbi_geoweb"]
+    cellosaurus_url = byc["config"]["resource_urls"]["cellosaurus_web"]
+
     for bsid in bs_ids:
 
         s = bios_coll.find_one({ "id":bsid })
- 
+
+        update_obj = {}
+        update_key = "external_references"
+        if update_key in s:
+            n_e_s = []
+            for e_r in s[update_key]:
+                n_e_r = {"id":e_r["id"]}
+
+                try:
+                    if len(e_r["description"]) > 2:
+                        n_e_r.update({"description":e_r["description"]})
+                except:
+                    pass
+
+                pre, code = re.split("[:-]", e_r["id"], 1)
+                if "PMID" in pre:
+                    n_e_r.update({"reference": pmid_url+code })
+                elif "geo" in pre:
+                    n_e_r.update({"reference": ncbigeo_url+code })
+                elif "cellosaurus" in pre:
+                    n_e_r.update({"reference": cellosaurus_url+code })
+
+                n_e_s.append(n_e_r)
+
+            update_obj.update({ update_key: n_e_s })
+        update_key = ""
+
         # if "pathological_tnm_findings" in s:
         #     update_obj.update( { "pathological_tnm_findings": s["pathological_tnm_findings"] } )
         # else:    
         # TODO: check existing content first  
-        if "info" in s:
+        # if "info" in s:
 
-            update_key = "pathological_tnm_findings"
-            if "tnm" in s["info"]:
-                t_s = remap_from_pattern(update_key, s["info"]["tnm"], byc)
-                if t_s:
-                    update_obj.update({ update_key: t_s })
-                    counts[update_key] += 1
+        #     update_key = "pathological_tnm_findings"
+        #     if "tnm" in s["info"]:
+        #         t_s = remap_from_pattern(update_key, s["info"]["tnm"], byc)
+        #         if t_s:
+        #             update_obj.update({ update_key: t_s })
+        #             counts[update_key] += 1
 
-            update_key = "pathological_stage"
-            if "tumor_stage" in s["info"]:
-                t_s = remap_from_pattern(update_key, s["info"]["tumor_stage"], byc)
-                if t_s:
-                    update_obj.update({ update_key: t_s })
-                    counts[update_key] += 1
+        #     update_key = "pathological_stage"
+        #     if "tumor_stage" in s["info"]:
+        #         t_s = remap_from_pattern(update_key, s["info"]["tumor_stage"], byc)
+        #         if t_s:
+        #             update_obj.update({ update_key: t_s })
+        #             counts[update_key] += 1
 
         ####################################################################
 
