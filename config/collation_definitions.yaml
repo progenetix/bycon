@@ -1,25 +1,25 @@
 GEOseries:
   prefix: geo
   type: Gene Expression Omnibus series
-  pattern: '^(geo)[:]GSE\d+?$'
+  pattern: '^(geo):GSE\d+?$'
   scope: biosamples
   db_key: 'external_references.id'
   is_series: True
-  child_pattern: '^(geo)[:]GSM'
+  child_pattern: '^(geo):GSM'
 
 GEOplatform:
   prefix: geo
   type: Gene Expression Omnibus platform
-  pattern: '^(geo)[:]GPL\d+?$'
+  pattern: '^(geo):GPL\d+?$'
   scope: biosamples
   db_key: 'external_references.id'
   is_series: True
-  child_pattern: '^(geo)[:]GSM'
+  child_pattern: '^(geo):GSM'
 
 NCIT:
   prefix: NCIT
   type: National Cancer Institute Thesaurus Neoplasia Code
-  pattern: '^(NCIT)[:]C'
+  pattern: '^(NCIT):C'
   scope: biosamples
   db_key: 'histological_diagnosis.id'
   is_series: False
@@ -27,7 +27,7 @@ NCIT:
 NCITgrade:
   prefix: NCIT
   type: National Cancer Institute Thesaurus Disease Grade Qualifier
-  pattern: '^(NCIT)[\:]C'
+  pattern: '^(NCIT):C'
   scope: biosamples
   db_key: 'tumor_grade.id'
   is_series: False
@@ -35,7 +35,7 @@ NCITgrade:
 NCITstage:
   prefix: NCIT
   type: National Cancer Institute Thesaurus Disease Stage Qualifier
-  pattern: '^(NCIT)[\:]C'
+  pattern: '^(NCIT):C'
   scope: biosamples
   db_key: 'pathological_stage.id'
   is_series: False
@@ -43,7 +43,7 @@ NCITstage:
 EFOfus:
   prefix: EFO
   type: EFO followup status classes
-  pattern: '^(EFO)[\:]\d'
+  pattern: '^(EFO):\d'
   scope: biosamples
   db_key: 'followup_state.id'
   is_series: False
@@ -51,7 +51,7 @@ EFOfus:
 PATOsex:
   prefix: PATO
   type: Phenotypic Qualities Ontology codes for genotypic sex
-  pattern: '^(PATO)[\:]\d'
+  pattern: '^(PATO):\d'
   scope: individuals
   db_key: 'sex.id'
   is_series: False
@@ -59,7 +59,7 @@ PATOsex:
 EFO:
   prefix: EFO
   type: Experimental Factor Ontology Biosample Status
-  pattern: '^((?:EFO)|(?:OBI))[\:]\d+?$'
+  pattern: '^((?:EFO)|(?:OBI)):\d+?$'
   scope: biosamples
   db_key: 'biosample_status.id'
   is_series: False
@@ -67,23 +67,23 @@ EFO:
 NCITtnm:
   prefix: NCIT
   type: National Cancer Institute Thesaurus Cancer TNM Finding
-  pattern: '^(NCIT)[\:]C'
+  pattern: '^(NCIT):C'
   scope: biosamples
   db_key: 'pathological_tnm_findings.id'
   is_series: False
 
 icdom:
-  prefix: icdom
+  prefix: pgx
   type: ICD-O 3 Morphologies (Progenetix)
-  pattern: '^(icdom)[\-]\d'
+  pattern: '^(pgx):icdom-\d'
   scope: biosamples
   db_key: 'icdo_morphology.id'
   is_series: False
 
 icdot:
-  prefix: icdot
+  prefix: pgx
   type: ICD-O 3 Topographies (Progenetix)
-  pattern: '^(icdot)[\-]C'
+  pattern: '^(pgx):icdot-C'
   scope: biosamples
   db_key: 'icdo_topography.id'
   is_series: False
@@ -91,7 +91,7 @@ icdot:
 cellosaurus:
   prefix: cellosaurus
   type: Cellosaurus cell line identifiers
-  pattern: '^(cellosaurus)[:]CVCL'
+  pattern: '^(cellosaurus):CVCL'
   scope: biosamples
   db_key: 'external_references.id'
   is_series: False
@@ -99,7 +99,7 @@ cellosaurus:
 PMID:
   prefix: PMID
   type: PubMed publication identifier
-  pattern: '^(PMID)[:]\d'
+  pattern: '^(PMID):\d'
   scope: biosamples
   db_key: 'external_references.id'
   is_series: False
@@ -107,32 +107,32 @@ PMID:
 UBERON:
   prefix: UBERON
   type: Uberon cross-species anatomical structures ontology
-  pattern: '^(UBERON)[:]\d'
+  pattern: '^(UBERON):\d'
   scope: biosamples
   db_key: 'sampled_tissue.id'
   is_series: False
 
-cBP:
-  prefix: cBP
+cbioportal:
+  prefix: cbioportal
   type: cBioPortal Study
-  pattern: '^(cBP)[\-]\w'
+  pattern: '^(cbioportal):\w'
   scope: biosamples
   db_key: 'external_references.id'
   is_series: False
 
 TCGAproject:
-  prefix: TCGA
+  prefix: pgx
   type: The Cancer Genome Atlas Project
-  pattern: '^(TCGA)[\-][\w\-]{2,6}$'
+  pattern: '^(pgx):TCGA-[\w\-]{2,6}$'
   scope: biosamples
   db_key: 'external_references.id'
   is_series: True
-  child_pattern: '^(TCGA)[\-]\w+?\-[\w\-]{15,30}$'
+  child_pattern: '^(pgx):TCGA-\w+?\-[\w\-]{15,30}$'
 
 pgxcohort:
-  prefix: pgxcohort
+  prefix: pgx
   type: Progenetix cohort identifier
-  pattern: '^(pgxcohort)[\-]\w+?$'
+  pattern: '^(pgx):cohort-\w+?$'
   scope: biosamples
   db_key: 'cohorts.id'
   is_series: False

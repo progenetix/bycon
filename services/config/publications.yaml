@@ -97,5 +97,6 @@ methods:
     - counts
     - authors
     - title
+    - status
   details: []
 

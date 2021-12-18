@@ -1,7 +1,0 @@
----
-bycon_definition_files:
-  - config
-  - dataset_definitions
-  - filter_definitions
-  - variant_definitions
-  - handover_definitions

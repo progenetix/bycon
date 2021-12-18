@@ -332,8 +332,13 @@ def remap_biosamples(r_s_res, byc):
 
         for f in ["tumor_grade", "pathological_stage", "histological_diagnosis"]:
             try:
-                if not r_s_res[bs_i][f]:
-                    r_s_res[bs_i].pop(f)
+                if f in r_s_res[bs_i]:
+                    if not r_s_res[bs_i][f]:
+                        r_s_res[bs_i].pop(f)
+                    elif not r_s_res[bs_i][f]["id"]:
+                        r_s_res[bs_i].pop(f)
+                    elif len(r_s_res[bs_i][f]["id"]) < 4:
+                        r_s_res[bs_i].pop(f)
             except:
                 pass
 

@@ -9,9 +9,6 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-bycon_path = path.join( pkg_path, "bycon" )
-sys.path.append( bycon_path )
-
 # services that have been moved need to be imported
 
 from beaconServer.lib.read_specs import read_local_prefs
