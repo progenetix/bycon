@@ -5,10 +5,7 @@ import humps
 
 # local
 lib_path = path.dirname( path.abspath(__file__) )
-dir_path = path.join( lib_path, pardir )
-pkg_path = path.join( dir_path, pardir )
-
-schema_path = path.join( pkg_path, "schemas" )
+pkg_path = path.join( lib_path, pardir )
 
 ################################################################################
 

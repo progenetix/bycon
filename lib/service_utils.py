@@ -6,8 +6,7 @@ from humps import camelize, decamelize
 
 # local
 lib_path = path.dirname( path.abspath(__file__) )
-dir_path = path.join( lib_path, pardir )
-pkg_path = path.join( dir_path, pardir )
+pkg_path = path.join( lib_path, pardir )
 
 from cgi_parse import *
 from handover_execution import handover_return_data

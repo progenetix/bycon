@@ -6,7 +6,6 @@ from os import path, environ, pardir
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-
 # local
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )

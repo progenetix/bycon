@@ -3,7 +3,8 @@ from os import pardir, path
 import sys
 
 dir_path = path.dirname( path.abspath(__file__) )
-lib_path = path.join( dir_path, "lib" )
+pkg_path = path.join( dir_path, pardir )
+lib_path = path.join( pkg_path, "lib" )
 sys.path.append( lib_path )
 
 from cgi_parse import *

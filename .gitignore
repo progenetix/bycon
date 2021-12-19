@@ -1,9 +1,6 @@
 .DS_Store
-*_pycache_*
-beaconServer/model/*git
-beaconServer/framework/*git
 rsrc/remnants
 remnants
 *~lock*
 *.ods#
-byconeer/imports/ncbi-geo-soft-files/*
+*__pycache__*

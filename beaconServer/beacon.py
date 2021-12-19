@@ -7,9 +7,9 @@ from importlib import import_module
 # local
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
-bycon_lib_path = path.join( pkg_path, "beaconServer", "lib" )
-
+bycon_lib_path = path.join( pkg_path, "lib" )
 sys.path.append( bycon_lib_path )
+
 from read_specs import read_local_prefs
 from cgi_parse import rest_path_value, cgi_print_response, set_debug_state
 

@@ -10,16 +10,7 @@ dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-from beaconServer.lib.cgi_parse import cgi_parse_query,cgi_print_response,cgi_break_on_errors
-from beaconServer.lib.read_specs import datasets_update_latest_stats
-from beaconServer.lib.parse_filters import select_dataset_ids, check_dataset_ids
-
-service_lib_path = path.join( pkg_path, "services", "lib" )
-sys.path.append( service_lib_path )
-
-from service_utils import initialize_service, create_empty_service_response, populate_service_response, response_add_error,response_add_parameter,response_collect_errors
-
-from beaconServer.lib.schemas_parser import *
+from beaconServer import *
 
 """podmd
 
