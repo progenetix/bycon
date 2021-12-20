@@ -1,7 +1,8 @@
-from cytoband_utils import *
 import statistics
 from progress.bar import Bar
 import numpy as np
+
+from cytoband_utils import *
 
 ################################################################################
 ################################################################################

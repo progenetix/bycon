@@ -36,7 +36,7 @@ def collections():
 
 def datasets():
 
-    byc = initialize_service()
+    initialize_service(byc)
     
     _get_history_depth(byc)
     dbstats = datasets_update_latest_stats(byc)

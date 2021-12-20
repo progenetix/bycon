@@ -1,5 +1,4 @@
 bycon_definition_files:
-  - config
   - beacon_info
   - beacon_mappings
   - cohort_definitions

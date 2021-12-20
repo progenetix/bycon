@@ -10,11 +10,8 @@ from pymongo import MongoClient
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from beaconServer.lib.cgi_parse import cgi_parse_query,cgi_print_response,cgi_break_on_errors
-from beaconServer.lib.read_specs import read_bycon_configs_by_name
-from beaconServer.lib.query_generation import geo_query
-from beaconServer.lib.query_execution import mongo_result_list
-from beaconServer.lib.service_utils import *
+
+from beaconServer import *
 
 """podmd
 * <https://progenetix.org/services/geolocations?city=zurich>
@@ -33,7 +30,7 @@ def main():
 
 def geolocations():
 
-    byc = initialize_service()
+    initialize_service(byc)
 
     # for the geolocs database, not the provenance object
     byc["geoloc_definitions"]["geo_root"] = "geo_location"

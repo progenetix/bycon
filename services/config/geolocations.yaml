@@ -5,7 +5,6 @@ defaults:
   geo_coll: geolocs
   request_type: city
 bycon_definition_files:
-  - config
   - geoloc_definitions
 meta:
   response_type: geolocs

@@ -5,14 +5,13 @@ import sys, re, cgitb
 from importlib import import_module
 
 # local
-dir_path = path.dirname( path.abspath(__file__) )
-pkg_path = path.join( dir_path, pardir )
+services_path = path.dirname( path.abspath(__file__) )
+pkg_path = path.join( services_path, pardir )
 sys.path.append( pkg_path )
 
 # services that have been moved need to be imported
 
-from beaconServer.lib.read_specs import read_local_prefs
-from beaconServer.lib.cgi_parse import rest_path_value, cgi_print_response,set_debug_state, cgi_print_rewrite_response
+from beaconServer import *
 
 """
 The `services` application deparses a request URI and calls the respective
@@ -36,9 +35,7 @@ def services(service):
 
     uri = environ.get('REQUEST_URI')
 
-    byc = {}
-
-    read_local_prefs( "service_mappings", dir_path, byc )
+    read_local_prefs( "service_mappings", services_path, byc )
 
     rest_base_name = "services"
 

@@ -32,7 +32,7 @@ def entryTypes():
 
 def entry_types():
 
-    byc = initialize_service()
+    initialize_service(byc)
     # create_empty_service_response(byc)
 
     create_empty_non_data_response(byc)

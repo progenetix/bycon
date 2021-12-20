@@ -132,8 +132,6 @@ def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
 
 ################################################################################
 
-################################################################################
-
 def _get_nested_value(parent, dotted_key):
 
     ps = dotted_key.split('.')
@@ -170,6 +168,5 @@ def _get_nested_value(parent, dotted_key):
         return '_too_deep_'
 
     return v
-
 
 ################################################################################

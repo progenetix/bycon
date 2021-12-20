@@ -40,7 +40,7 @@ def variantAnnotations():
 
 def variant_interpretations():
 
-    byc = initialize_service()
+    initialize_service(byc)
     run_beacon_init_stack(byc)
     run_result_sets_beacon(byc)
     query_results_save_handovers(byc)

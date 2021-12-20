@@ -1,5 +1,4 @@
 bycon_definition_files:
-  - config
   - variant_definitions
   - interval_definitions
 defaults:

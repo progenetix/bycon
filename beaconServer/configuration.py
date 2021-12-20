@@ -26,7 +26,7 @@ def main():
 
 def configuration():
 
-    byc = initialize_service()
+    initialize_service(byc)
     create_empty_non_data_response(byc)
     cgi_print_response( byc, 200 )
 

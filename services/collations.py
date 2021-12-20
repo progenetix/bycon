@@ -11,9 +11,7 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-from beaconServer.lib.cgi_parse import *
-from beaconServer.lib.parse_filters import *
-from beaconServer.lib.service_utils import *
+from beaconServer import *
 
 ################################################################################
 ################################################################################
@@ -27,7 +25,7 @@ def main():
 
 def collations():
 
-    byc = initialize_service()
+    initialize_service(byc)
 
     select_dataset_ids(byc)
     # first the filter => collation_type which removes the filter if type match

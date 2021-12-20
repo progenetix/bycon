@@ -10,11 +10,8 @@ from pymongo import MongoClient
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from beaconServer.lib.cgi_parse import *
-from beaconServer.lib.read_specs import *
-from beaconServer.lib.query_generation import create_and_or_query_for_list
-from beaconServer.lib.query_execution import mongo_result_list
-from beaconServer.lib.service_utils import *
+
+from beaconServer import *
 
 ################################################################################
 ################################################################################
@@ -28,7 +25,7 @@ def main():
 
 def genespans():
 
-    byc = initialize_service()
+    initialize_service(byc)
         
     create_empty_service_response(byc)
 

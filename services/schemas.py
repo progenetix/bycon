@@ -11,9 +11,7 @@ dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-from beaconServer.lib.cgi_parse import set_debug_state, cgi_parse_query, cgi_print_response, rest_path_value
-from beaconServer.lib.schemas_parser import *
-from beaconServer.lib.service_utils import *
+from beaconServer import *
 
 """podmd
 
@@ -33,7 +31,7 @@ def main():
 
 def schemas():
 
-    byc = initialize_service()
+    initialize_service(byc)
     # create_empty_service_response(byc)
 
     schema_name = rest_path_value("schemas")

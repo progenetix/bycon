@@ -4,7 +4,6 @@ defaults:
   response_type: map
   genome_binning: 1Mb
 bycon_definition_files:
-  - config
   - beacon_info
   - beacon_endpoints
   - beacon_mappings

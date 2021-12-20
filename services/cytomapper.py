@@ -11,12 +11,7 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
-from beaconServer.lib.cgi_parse import *
-from beaconServer.lib.cytoband_utils import *
-from beaconServer.lib.interval_utils import *
-from beaconServer.lib.parse_variants import *
-from beaconServer.lib.read_specs import *
-from beaconServer.lib.service_utils import *
+from beaconServer import *
 
 ################################################################################
 ################################################################################
@@ -32,7 +27,7 @@ def main():
 
 def cytomapper():
     
-    byc = initialize_service()
+    initialize_service(byc)
 
     local_path = path.dirname( path.abspath(__file__) )
     byc[ "config" ][ "paths" ][ "genomes" ] = path.join( local_path, "rsrc", "genomes" )
@@ -42,8 +37,6 @@ def cytomapper():
 
     # response prototype
     create_empty_service_response(byc)
-
-    # print(byc["service_response"]["meta"]["received_request_summary"])
 
     cytoBands = [ ]
     if "cytoBands" in byc["variant_pars"]:
@@ -61,6 +54,8 @@ def cytomapper():
 
     size = int(  end - start )
     chroBases = chro+":"+str(start)+"-"+str(end)
+
+    # TODO: response objects from schema
     
     results = [
         {

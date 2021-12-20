@@ -36,7 +36,7 @@ def collections():
 
 def cohorts():
 
-    byc = initialize_service()
+    initialize_service(byc)
 
     select_dataset_ids(byc)
     check_dataset_ids(byc)

@@ -43,7 +43,7 @@ def read_local_prefs(service, dir_path, byc):
     f = Path( path.join( dir_path, "config", service+".yaml" ) )
 
     if f.is_file():
-        byc.update({"this_config": load_yaml( f ) })
+        byc.update({"this_config": load_yaml_empty_fallback( f ) })
         return byc
 
     elif d.is_dir():
@@ -52,7 +52,7 @@ def read_local_prefs(service, dir_path, byc):
             t_f_n = "{}.yaml".format(humps.camelize(t_p))
             t_f_p = Path( path.join( d, t_f_n ) )
             if t_f_p.is_file():
-                byc.update({ t_k: load_yaml(t_f_p) } )
+                byc.update({ t_k: load_yaml_empty_fallback(t_f_p) } )
 
     return byc   
 
@@ -60,7 +60,7 @@ def read_local_prefs(service, dir_path, byc):
 
 def read_yaml_with_key_to_object(file_key, data_key, **paths):
 
-    o = load_yaml( path.join( paths[ "module_root" ], *paths[ file_key ] ) )
+    o = load_yaml_empty_fallback( path.join( paths[ "module_root" ], *paths[ file_key ] ) )
 
     if data_key in o:
         return o[ data_key ]
@@ -132,7 +132,7 @@ def update_datasets_from_dbstats(byc):
 
 ################################################################################
 
-def load_yaml(yp):
+def load_yaml_empty_fallback(yp):
 
     y = { }
 

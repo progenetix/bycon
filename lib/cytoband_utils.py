@@ -3,9 +3,8 @@ import re
 from os import path, pardir
 
 # local
-lib_path = path.dirname( path.abspath(__file__) )
-dir_path = path.join( lib_path, pardir )
-pkg_path = path.join( dir_path, pardir )
+bycon_lib_path = path.dirname( path.abspath(__file__) )
+pkg_path = path.join( bycon_lib_path, pardir )
 
 ################################################################################
 ################################################################################

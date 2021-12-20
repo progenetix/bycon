@@ -5,8 +5,8 @@ from bson import json_util
 from humps import camelize, decamelize
 
 # local
-lib_path = path.dirname( path.abspath(__file__) )
-pkg_path = path.join( lib_path, pardir )
+bycon_lib_path = path.dirname( path.abspath(__file__) )
+pkg_path = path.join( bycon_lib_path, pardir )
 
 from cgi_parse import *
 from handover_execution import handover_return_data
@@ -34,24 +34,11 @@ def run_beacon_init_stack(byc):
 
 ################################################################################
 
-def initialize_service(service="NA"):
-
-    """For consistency, the name of the local configuration file should usually
-    correspond to the calling main function. However, an overwrite can be
-    provided."""
-
-    frm = inspect.stack()[1]
-    mod = inspect.getmodule(frm[0])
-    sub_path = path.dirname( path.abspath(mod.__file__) )
-
-    if service == "NA":
-        service = frm.function
-
-    service = decamelize(service)
+def initialize_bycon():
 
     byc =  {
-        "service_name": path.splitext(path.basename(mod.__file__))[0],
-        "service_id": service,
+        "service_name": "beacon",
+        "service_id": "beacon",
         "response_entity": {
             "entity_type": "dataset",
             "collection": "dbstats",
@@ -72,13 +59,36 @@ def initialize_service(service="NA"):
         "warnings": []
     }
 
+    return byc
+
+################################################################################
+
+
+def initialize_service(byc, service="NA"):
+
+    """For consistency, the name of the local configuration file should usually
+    correspond to the calling main function. However, an overwrite can be
+    provided."""
+
+    # print(config)
+
+    frm = inspect.stack()[1]
+    mod = inspect.getmodule(frm[0])
+    sub_path = path.dirname( path.abspath(mod.__file__) )
+
+    if service == "NA":
+        service = frm.function
+
+    service = decamelize(service)
+
+    byc.update({"service_name": path.splitext(path.basename(mod.__file__))[0]})
+    byc.update({"service": service})
+
     read_local_prefs( service, sub_path, byc )
 
     if "bycon_definition_files" in byc["this_config"]:
         for d in byc["this_config"]["bycon_definition_files"]:
             read_bycon_configs_by_name( d, byc )
-    else:
-        read_bycon_configs_by_name( "config", byc )
 
     form_data, query_meta, debug_state = cgi_parse_query(byc)
     byc.update({ "form_data": form_data, "query_meta": query_meta, "debug_state": debug_state })
@@ -102,6 +112,7 @@ def initialize_service(service="NA"):
     }
 
     return byc
+
 ################################################################################
 
 def run_result_sets_beacon(byc):

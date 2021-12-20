@@ -27,7 +27,7 @@ def main():
 
 def callsets():
 
-    byc = initialize_service()
+    initialize_service(byc)
     run_beacon_init_stack(byc)
     return_filtering_terms_response(byc)
     run_result_sets_beacon(byc)

@@ -9,10 +9,8 @@ import sys, os, datetime
 dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
-from beaconServer.lib.cgi_parse import cgi_parse_query,cgi_print_response,cgi_break_on_errors
-from beaconServer.lib.read_specs import dbstats_return_latest
-from beaconServer.lib.parse_filters import select_dataset_ids, check_dataset_ids
-from beaconServer.lib.service_utils import *
+
+from beaconServer import *
 
 """podmd
 
@@ -34,7 +32,7 @@ def main():
 
 def dbstats():
 
-    byc = initialize_service()
+    initialize_service(byc)
 
     select_dataset_ids(byc)
     check_dataset_ids(byc)

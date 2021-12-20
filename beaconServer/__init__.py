@@ -1,11 +1,11 @@
 # __init__.py
 from os import pardir, path
-import sys
+import sys, inspect
 
-dir_path = path.dirname( path.abspath(__file__) )
-pkg_path = path.join( dir_path, pardir )
-lib_path = path.join( pkg_path, "lib" )
-sys.path.append( lib_path )
+beacon_server_script_path = path.dirname( path.abspath(__file__) )
+bycon_path = path.join( beacon_server_script_path, pardir )
+bycon_lib_path = path.join( bycon_path, "lib" )
+sys.path.append( bycon_lib_path )
 
 from cgi_parse import *
 from datatable_utils import *
@@ -25,3 +25,8 @@ from service_utils import *
 from biosample_responses import *
 from individual_responses import *
 from variant_responses import *
+
+byc = initialize_bycon()
+
+c_f = Path( path.join( pkg_path, "config", "config.yaml" ) )
+byc.update({"config": load_yaml_empty_fallback( c_f )})
