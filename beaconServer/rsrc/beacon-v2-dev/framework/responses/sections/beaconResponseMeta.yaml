@@ -16,6 +16,10 @@ properties:
       the requested granularity. E.g. record level granularity could be requested,
       but the Beacon could respond only with boolean or count results.
     $ref: ../../common/beaconCommonComponents.json#/definitions/Granularity
+  testMode:
+    description: Used for indicating that a response is returned in a test context.
+      Purposed for compliance testing. Information returned could be fake.
+    $ref: ../../common/beaconCommonComponents.json#/definitions/TestMode
   receivedRequestSummary:
     description: Section of the response that summarize the request received as it
       has been interpreted by teh Beacon server.

@@ -33,6 +33,8 @@ properties:
       could be generated upon the query that defined the cohort, but could be later
       edited by the user.
     type: string
+    examples:
+      - cohort-T2D-2010
   cohortName:
     description: Name of the cohort. For ´user-defined´ this field could be generated
       upon the query, e.g. a value that is a concatenationor some representation of
@@ -84,9 +86,9 @@ definitions:
         type: string
         format: datetime
         examples:
-          - 2018-10-1
-          - '2019-04-23'
-          - '2020-09-11'
+          - '2018-10-01T13:23:45Z'
+          - '2019-04-23T09:11:13Z'
+          - '2017-01-17T20:33:40Z'
       eventTimeline:
         description: Aggregated information of dates of visit/diagnostic/inclusion
           in study obtained from individual level info in database. Will coincide
@@ -97,10 +99,18 @@ definitions:
             description: earliest date of visit
             type: string
             format: datetime
+            examples:
+              - '2018-10-01T13:23:45Z'
+              - '2019-04-23T09:11:13Z'
+              - '2017-01-17T20:33:40Z'
           end:
             description: latest date of visit
             type: string
             format: datetime
+            examples:
+              - '2018-10-01T13:23:45Z'
+              - '2019-04-23T09:11:13Z'
+              - '2017-01-17T20:33:40Z'
       eventSize:
         description: Count of individuals in cohort at data point (for ´user-defined´
           cohorts, this is individuals meeting criteria) obtained from individual

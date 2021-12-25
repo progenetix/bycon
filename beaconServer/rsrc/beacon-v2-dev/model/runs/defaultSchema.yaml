@@ -8,19 +8,24 @@ properties:
   id:
     description: Run ID.
     type: string
-    example: SRR10903401
+    examples:
+      - SRR10903401
   biosampleId:
     description: Reference to the biosample ID.
     type: string
-    example: 008dafdd-a3d1-4801-8c0a-8714e2b58e48
+    examples:
+      - 008dafdd-a3d1-4801-8c0a-8714e2b58e48
   individualId:
     description: Reference to the individual ID.
     type: string
-    example: TCGA-AO-A0JJ
+    examples:
+      - TCGA-AO-A0JJ
   runDate:
     description: Date at which the experiment was performed.
     type: string
     format: date
+    examples:
+      - '2021-10-18'
   librarySource:
     description: Ontology value for the source of the sequencing or hybridization
       library, e.g "genomic source", "transcriptomic source"
@@ -33,12 +38,14 @@ properties:
   librarySelection:
     description: Selection method for library preparation, e.g "RANDOM", "RT-PCR"
     type: string
-    example:
+    examples:
       - RANDOM
       - RT-PCR
   libraryStrategy:
     description: Library strategy, e.g. "WGS"
     type: string
+    examples:
+      - WGS
   libraryLayout:
     description: 'Ontology value for the library layout e.g "PAIRED", "SINGLE" #todo
       add Ontology name?'

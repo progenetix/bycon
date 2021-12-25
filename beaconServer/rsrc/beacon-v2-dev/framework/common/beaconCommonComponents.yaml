@@ -67,6 +67,18 @@ definitions:
         $ref: '#/definitions/Skip'
       limit:
         $ref: '#/definitions/Limit'
+      current_page:
+        description: Token of the returned page. To be used only in the response to
+          allow the client to check if the returned page is the one requested.
+        $ref: '#/definitions/PageToken'
+      next_page:
+        description: Token of the next page. Used to navigate forward. If empty, it
+          is assumed that no more pages are available
+        $ref: '#/definitions/PageToken'
+      previous_page:
+        description: Token of the previous page. Used to navigate backwards. If empty,
+          it is assumed that the current page is the first one.
+        $ref: '#/definitions/PageToken'
   Skip:
     description: "In the request: number of pages to skip.\n In the response: number\
       \ of pages that has been skipped."
@@ -81,6 +93,12 @@ definitions:
     minimum: 0
     default: 10
     example: 10
+  PageToken:
+    description: A hash or similar that allows the server to use it as a cursor over
+      a query. It could be or not a readable value, like a word or a key. E.g. it
+      could be an encrypted value of primary keys to navigate next and previous page.
+    type: string
+    example: ab0sc&fe1dd
   Granularity:
     description: "Granularity or level of detail of the response. - `boolean`: returns\
       \ 'true/false' responses.\n\n - `count`: adds the total number of positive results\
@@ -98,6 +116,23 @@ definitions:
       - aggregated
       - record
     default: boolean
+  TestMode:
+    description: Used for indicating that a request or response is done in a test
+      context. Purposed for compliance testing. It DOES NOT mean that the Beacon instance
+      is a test instance, but that this specific request-response cycle is a testing
+      one. When 'true' the Beacon instance MUST respond the request but it SHOULD
+      use fake or non-sensitive data or content as what is being evaluated is the
+      acceptance/understanding of a request and the structure of the returned response
+      by the Beacon instance.
+    type: boolean
+    default: false
+  NonFilteredQueriesAllowed:
+    description: Switch that declares if this Beacon instance, for a given entry type,
+      admits queries that does not include any element that restrict returning all
+      the results, like filters, parameters, ids, etc. The default value is 'true'
+      for backward compatibility and for clarity in the request-response dialog.
+    type: boolean
+    default: true
   IncludeResultsetResponses:
     description: Indicator of whether responses from every Resultset should be included
       in the response to this request or just the ones with positive, negative results

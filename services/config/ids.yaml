@@ -1,42 +1,44 @@
 format_patterns:
 
 # local patterns
+# TODO: adjust the internal ids w/ prefix
 
-  - pattern: '^(pgx\:)?((pgxbs)(\-)([\w\-\.]{4,128}))$'
+  - pattern: '^pgx:(pgxbs-[\w\-\.]{4,128})$'
     link: '/biosamples/details?datasetIds=progenetix&id='
 
-  - pattern: '^(pgx\:)?((pgxcs)(\-)([\w\-\.]{4,128}))$'
+  - pattern: '^pgx:(pgxcs-[\w\-\.]{4,128})$'
     link: '/callsets/details?datasetIds=progenetix&id='
 
-  - pattern: '^(pgx\:)?((pgxind)(\-)([\w\-\.]{4,128}))$'
+  - pattern: '^pgx:(pgxind-[\w\-\.]{4,128})$'
     link: '/individuals/details?datasetIds=progenetix&id='
 
-  - pattern: '^(pgx\:)?((icdom)(\-)([\d]{5})?)$'
-    link: '/subsets/biosubsets?datasetIds=progenetix&filters='
+  - pattern: '^(pgx:icdom-[\d]{1,5}(?:-\d{1,5})?)$'
+    link: '/subsets/subsetdetails/?datasetIds=progenetix&id='
 
-  - pattern: '^(pgx\:)?((icdot)(\-)(C\d\d?\.\d)?)$'
-    link: '/subsets/biosubsets?datasetIds=progenetix&filters='
+  - pattern: '^(pgx:icdot-C\d\d?(?:\.\d)?)$'
+    link: '/subsets/subsetdetails/?datasetIds=progenetix&id='
 
-  - pattern: '^(pgx\:)?((pgxcohort)(\-)(\w[\w\-]+?)?)$'
+  - pattern: '^(pgx:cohort-\w+)$'
     examples:
       - pgxcohort-TCGAcancers
-    link: '/subsets/cohorts?datasetIds=progenetix&filters='
+    link: '/subsets/cohorts/?datasetIds=progenetix&filters='
 
 # public prefix patterns (with possible underscore replacement)
 
-  - pattern: '^(pgx\:)?((NCIT)([:_])(C[\d]{4,8})?)$'
-    link: '/subsets/biosubsets?datasetIds=progenetix&filters='
+  - pattern: '^(?:pgx:)?(NCIT:C\d{4,8})$'
+    link: '/subsets/subsetdetails/?datasetIds=progenetix&id='
 
-  - pattern: '^(pgx\:)?((PMID)([:_])([\d]{5,10})?)$'
+  - pattern: '^(?:pgx:)?(PMID:\d{5,10})$'
     link: '/publications/details?id='
 
-  - pattern: '^(pgx\:)?((cellosaurus)([:_])(CVCL_[A-Z0-9]{4})?)$'
+  - pattern: '^(?:pgx:)?(cellosaurus:CVCL_[A-Z0-9]{4})$'
     examples:
       - cellosaurus:CVCL_0022
-      - pgx:cellosaurus_CVCL_0022
+      - pgx:cellosaurus:CVCL_0022
     link: '/subsets/cohorts?datasetIds=progenetix&filters='
 
-  - pattern: '^(pgx\:)?((geo)([:_])(G(?:PL|SM|SE|DS)\d+)?)$'
+  - pattern: '^(?:pgx:)?(geo:G(?:PL|SE|DS)\d+)$'
     examples:
-      - geo:GSM253297
-    link: '/biosamples/by-curie/'
+      - geo:GPL6801
+    link: '/subsets/subsetdetails/?datasetIds=progenetix&id='
+

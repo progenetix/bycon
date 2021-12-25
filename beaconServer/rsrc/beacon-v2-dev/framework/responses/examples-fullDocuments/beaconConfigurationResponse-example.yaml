@@ -3,7 +3,8 @@ meta:
   beaconId: string
   apiVersion: string
   returnedSchemas:
-    - map: beacon-configuration-v2.0.0-draft.3
+    - entityType: info
+      schema: beacon-map-v2.0.0-draft.4
 response:
   $schema: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/configuration/beaconConfigurationSchema.json
   maturityAttributes:
@@ -34,7 +35,7 @@ response:
           name: Example entries
       endpoint: /datasets
       filteringTermsReference: ./datasets/filteringTerms.json
-      additionalSupportedSchemas: []
+      additionallySupportedSchemas: []
     exampleEntry:
       id: exampleEntry
       name: Example Entry

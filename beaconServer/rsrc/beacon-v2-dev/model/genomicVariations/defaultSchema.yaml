@@ -18,6 +18,9 @@ properties:
       use the VRSid as their own internal id but still MUST represent this then in
       the `identifiers` section.
     type: string
+    examples:
+      - var00001
+      - v110112
   variantType:
     description: The `variantType` declares the nature of the variation in relation
       to a reference. In a response, it is used to describe the variation. In a request,
@@ -50,6 +53,12 @@ properties:
       is mandated.'
     type: string
     pattern: ^([ACGTUNRYSWKMBDHV\-\.]*)$
+    examples:
+      - A
+      - T
+      - N
+      - ''
+      - ACG
   alternateBases:
     description: 'Alternate bases for this variant (starting from `start`). * Accepted
       values: IUPAC codes for nucleotides (e.g. `https://www.bioinformatics.org/sms/iupac.html`).
@@ -63,6 +72,12 @@ properties:
       `alternateBases` or `variantType` is required.'
     type: string
     pattern: ^([ACGTUNRYSWKMBDHV\-\.]*)$
+    examples:
+      - T
+      - G
+      - N
+      - AG
+      - ''
   position:
     $ref: '#/definitions/Position'
   identifiers:
@@ -93,7 +108,7 @@ definitions:
           UCSC Genome Browser assembly (e.g. 'hg38') or Genome Reference Consortium
           Human (e.g. 'GRCh38.p13') names.
         type: string
-        example:
+        examples:
           - GCF_000001405.39
           - hg38
           - GRCh38.p13
@@ -103,7 +118,7 @@ definitions:
           Preferably the RefSeqId, alternatively, names, synonymous or aliases e.g.
           'Chr9' could be used.
         type: string
-        example:
+        examples:
           - NC_000009
           - Chr9
           - NC_012920.1
@@ -144,45 +159,57 @@ definitions:
   Identifiers:
     variantAlternativeIds:
       description: List of cross-referencing ID(s), for the variant in other databases
-        (e.g. dbSNP, clinVarId, ClinGen, COSMIC), , preferably CURIE(s) where available,
-        e.g. 'VCV000055583.1', 'ClinGen:CA003410'.
+        (e.g. dbSNP, ClinVar, ClinGen, COSMIC), as `externalReferences` with CURIE(s).
       type: array
       items:
-        type: string
-      example:
-        - dbSNP:rs3975092470
-        - ClinGen:CA003410
-        - VCV000055583.1
+        $ref: ../common/externalReference.json
+      examples:
+        -   - id: dbSNP:rs587780345
+              reference: https://www.ncbi.nlm.nih.gov/snp/rs587780345
+              notes: dbSNP id
+            - id: ClinGen:CA152954
+              reference: http://reg.clinicalgenome.org/redmine/projects/registry/genboree_registry/by_caid?caid=CA152954
+              notes: ClinGen Allele Registry id
+            - id: UniProtKB:P35557#VAR_003699
+              reference: https://www.uniprot.org/uniprot/P35557#VAR_003699
+        -   - id: OMIM:164757.0001
+              reference: https://www.omim.org/entry/164757#0001
     genomicHGVSId:
       description: HGVSId descriptor.
       type: string
-      example: NC_000017.11:g.43057063G>A
+      examples:
+        - NC_000017.11:g.43057063G>A
     transcriptHGVSIds:
       description: List of HGVSId descriptor(s) at transcript level.
       type: array
       items:
         type: string
-      example:
-        - NC 000023.10(NM004006.2):c.357+1G
+      examples:
+        -   - NC 000023.10(NM004006.2):c.357+1G
     proteinHGVSIds:
       description: List of HGVSId descriptor(s) at protein level (for protein-altering
         variants).
       type: array
       items:
         type: string
-      example:
-        - NP_009225.1:p.Glu1817Ter
-        - LRG 199p1:p.Val25Gly (preferred)
-    clinVarIds:
+      examples:
+        -   - NP_009225.1:p.Glu1817Ter
+        -   - LRG 199p1:p.Val25Gly (preferred)
+    clinvarVariantId:
+      description: ClinVar variant id. Other id values used by ClinVar can be added
+        to `variantAlternativeIds`
+      pattern: ^(clinvar:)?\d+$
       type: string
       examples:
-        - RCV000009910.19
+        - clinvar:12345
         - '9325'
-        - VCV000009325.28
   MolecularAttributes:
     geneIds:
       type: array
       items: string
+      examples:
+        -   - ACE2
+        -   - BRCA1
     genomicFeatures:
       description: List of Genomic feature(s) affected by the variant.
       type: array
@@ -206,8 +233,8 @@ definitions:
       type: array
       items:
         type: string
-      example:
-        - V304*
+      examples:
+        -   - V304*
   GenomicFeature:
     description: 'Genomic feature(s) related to the variant. NOTE: Although genes
       could also be referenced using these attributes, they have an independent section
@@ -344,20 +371,28 @@ definitions:
           is an optional housekeeping parameter and should not be confused with the
           identifier of the variant (`variantInternalId`).
         type: string
+        examples:
+          - id0001-var101101118
       individualId:
         description: Reference to individual ID (`individual.id`)
         type: string
+        examples:
+          - ind0001
       biosampleId:
         description: Reference to biosample ID (`biosample.id`)
         type: string
+        examples:
+          - bs001104
       analysisId:
         description: Reference to the bioinformatics analysis ID (`analysis.id`)
         type: string
-        example: pgxcs-kftvldsu
+        examples:
+          - pgxcs-kftvldsu
       runId:
         description: Reference to the experimental run ID (`run.id`)
         type: string
-        example: SRR10903401
+        examples:
+          - SRR10903401
       zygosity:
         description: Ontology term for zygosity in which variant is present in the
           sample from the Zygosity Ontology (GENO:0000391) , e.g `heterozygous` (GENO:0000135)
@@ -416,11 +451,13 @@ definitions:
       toolName:
         description: Name of the tool.
         type: string
-        example: Ensembl Variant Effect Predictor (VEP)
+        examples:
+          - Ensembl Variant Effect Predictor (VEP)
       version:
         description: Version used.
         type: string
-        example: rel 104
+        examples:
+          - rel 104
       toolReferences:
         description: References to the tool
         type: object

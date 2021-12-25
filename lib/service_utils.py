@@ -90,9 +90,6 @@ def initialize_service(byc, service="NA"):
         for d in byc["this_config"]["bycon_definition_files"]:
             read_bycon_configs_by_name( d, byc )
 
-    form_data, query_meta, debug_state = cgi_parse_query(byc)
-    byc.update({ "form_data": form_data, "query_meta": query_meta, "debug_state": debug_state })
-
     if "defaults" in byc["this_config"]:
         for d_k, d_v in byc["this_config"]["defaults"].items():
             byc.update( { d_k: d_v } )
@@ -622,17 +619,24 @@ def response_set_entity(byc):
 def collations_set_delivery_keys(byc):
 
     # the method keys can be overriden with "deliveryKeys"
-    d_k = [ ]
-    
-    if "deliveryKeys" in byc["form_data"]:
-        d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
+
+    method = byc.get("method", False)
+    d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
+
+    if len(d_k) > 0:
+        return d_k
+
+    if method is False:
+        return d_k
+
+    if "details" in method:
         return d_k
 
     if not "methods" in byc["this_config"]:
         return d_k
 
-    if byc["method"] in byc["this_config"]["methods"]:
-        d_k = byc["this_config"]["methods"][ byc["method"] ]
+    if method in byc["this_config"]["methods"]:
+        d_k = byc["this_config"]["methods"][ method ]
 
     return d_k
 

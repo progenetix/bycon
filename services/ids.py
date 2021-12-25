@@ -40,16 +40,15 @@ def ids():
     read_local_prefs( "ids", dir_path, byc )
 
     id_in = rest_path_value("ids")
+    output = rest_path_value(id_in)
 
     if id_in:
         for f_p in byc["this_config"]["format_patterns"]:
             pat = re.compile( f_p["pattern"] )
             link = f_p["link"]
             if pat.match(id_in):
-                lid, pre, sep, code = pat.match(id_in).group(2, 3, 4, 5)
-                if "_" in sep:
-                    lid = "{}:{}".format(pre, code)
-                cgi_print_rewrite_response(link, lid)
+                lid = pat.match(id_in).group(1)
+                cgi_print_rewrite_response(link, lid, output)
 
     print('Content-Type: text')
     print('status:422')

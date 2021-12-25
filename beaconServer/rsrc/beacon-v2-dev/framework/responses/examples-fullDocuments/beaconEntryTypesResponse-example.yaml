@@ -3,7 +3,8 @@ meta:
   beaconId: string
   apiVersion: string
   returnedSchemas:
-    - map: beacon-entry-types-v2.0.0-draft.3
+    - entityType: info
+      schema: beacon-map-v2.0.0-draft.4
 response:
   $schema: ../../configuration/entryTypesSchema.json
   entryTypes:
@@ -26,7 +27,7 @@ response:
           name: Example entries
       endpoint: /datasets
       filteringTermsReference: ./datasets/filteringTerms.json
-      additionalSupportedSchemas: []
+      additionallySupportedSchemas: []
     exampleEntry:
       id: exampleEntry
       name: Example Entry

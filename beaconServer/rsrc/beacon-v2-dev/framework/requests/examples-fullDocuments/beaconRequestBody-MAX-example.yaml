@@ -17,4 +17,5 @@ query:
   pagination:
     skip: 0
     limit: 10
+  testMode: false
   requestedGranularity: boolean

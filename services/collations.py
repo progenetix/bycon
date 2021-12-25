@@ -58,6 +58,10 @@ def collations():
             i_d = subset["id"]
             if not i_d in s_s:
                 s_s[ i_d ] = { }
+            if len(d_k) < 1:
+                d_k = list(subset.keys())
+                if "_id" in d_k:
+                    d_k.remove("_id")
             for k in d_k:
                 if k in subset.keys():
                     if k in byc["this_config"]["integer_keys"]:
@@ -79,7 +83,7 @@ def collations():
 
     mongo_client.close( )
 
-    populate_service_response( byc, _response_map_results( list(s_s.values()), byc))
+    populate_service_response( byc, list(s_s.values()))
     cgi_print_response( byc, 200 )
 
 ################################################################################
@@ -89,6 +93,11 @@ def collations():
 def _check_collation_type_query(byc):
 
     byc["queries"] = {}
+
+    if "id" in byc["form_data"]:
+        if re.match(r'^\w[^:]+?:\w.+?$', byc["form_data"]["id"]):
+            byc.update({"queries": {"id": byc["form_data"]["id"] } } )
+            return byc
 
     if "filters" in byc:
         # TODO: This hack fixes the translation of filters for collation types
@@ -129,36 +138,6 @@ def _check_collation_type_query(byc):
         byc.update({"queries": {"$and": q_l } } )
 
     return byc
-
-################################################################################
-
-def _response_map_results(data, byc):
-
-    # the method keys can be overriden with "deliveryKeys"
-    d_k = collations_set_delivery_keys(byc)
-
-    if len(d_k) < 1:
-        return data
-
-    results = [ ]
-
-    for res in data:
-        s = { }
-        for k in d_k:
-            # TODO: cleanup and add types in config ...
-            if "." in k:
-                k1, k2 = k.split('.')
-                if k1 in res.keys():
-                    if k2 in res[ k1 ]:
-                        s[ k ] = res[ k1 ][ k2 ]
-            elif k in res.keys():
-                if "start" in k or "end" in k:
-                    s[ k ] = int(res[ k ])
-                else:
-                    s[ k ] = res[ k ]
-        results.append( s )
-
-    return results
 
 ################################################################################
 ################################################################################

@@ -61,6 +61,8 @@ properties:
     type: string
     $comment: "TO DO: Double-check the proper way of referencing a path or relative\
       \ path. 'format: uri' is throwing validation errors for relative file paths"
+  nonFilteredQueriesAllowed:
+    $ref: ../common/beaconCommonComponents.json#/definitions/NonFilteredQueriesAllowed
 required:
   - id
   - name

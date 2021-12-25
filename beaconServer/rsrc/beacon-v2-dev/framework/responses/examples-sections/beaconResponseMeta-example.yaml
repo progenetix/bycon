@@ -13,4 +13,5 @@ receivedRequestSummary:
   pagination:
     skip: 0
     limit: 10
+  testMode: true
   requestedGranularity: count

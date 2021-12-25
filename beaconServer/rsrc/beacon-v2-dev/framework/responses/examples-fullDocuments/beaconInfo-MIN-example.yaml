@@ -3,7 +3,8 @@ meta:
   beaconId: string
   apiVersion: string
   returnedSchemas:
-    - info: beacon-info-v2.0.0-draft.3
+    - entityType: info
+      schema: beacon-info-v2.0.0-draft.4
 response:
   id: org.ga4gh.beacon
   name: string

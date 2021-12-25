@@ -22,6 +22,7 @@ integer_keys:
   - count
   - code_matches
 methods:
+  details: []
   child_terms:
     - id
     - label
