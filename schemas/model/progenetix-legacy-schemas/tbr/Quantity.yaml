@@ -3,8 +3,8 @@ title: Quantity
 description: Definition of a quantity class.
 type: object
 properties:
-  units:
-    $ref: ./CommonDefinitions.yaml#/definitions/Units
+  unit:
+    $ref: ./CommonDefinitions.yaml#/definitions/Unit
   value:
     description: The value of the quantity in the units. REQUIRED.
     type: number

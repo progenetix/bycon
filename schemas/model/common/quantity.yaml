@@ -4,8 +4,8 @@ title: Quantity
 description: Definition of a quantity class.
 type: object
 properties:
-  units:
-    $ref: commonDefinitions.yaml#/definitions/Units
+  unit:
+    $ref: commonDefinitions.yaml#/definitions/Unit
   value:
     description: The value of the quantity in the units
     type: number

@@ -35,7 +35,12 @@ format_patterns:
     examples:
       - cellosaurus:CVCL_0022
       - pgx:cellosaurus:CVCL_0022
-    link: '/subsets/cohorts?datasetIds=progenetix&filters='
+    link: '/subsets/subsetdetails/?datasetIds=progenetix&id='
+
+  - pattern: '^(?:pgx:)?(cbioportal:\w[\w\-]+?\w)$'
+    examples:
+      - cbioportal:prad_p1000
+    link: '/subsets/subsetdetails/?datasetIds=progenetix&id='
 
   - pattern: '^(?:pgx:)?(geo:G(?:PL|SE|DS)\d+)$'
     examples:

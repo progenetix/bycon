@@ -31,7 +31,7 @@ measures:
     date: '2017-05-03'
     measurementValue:
       value: 55345
-      units:
+      unit:
         id: NCIT:C103452
         label: Per Milliliter
     observationMoment:

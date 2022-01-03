@@ -6,7 +6,6 @@ NCITgrade:
   description: Disease Grade codes
   scope: biosamples
   pattern: '^NCIT(:C\d+?)?$'
-  pattern_strict: '^NCIT:C\d+?$'
   examples:
     - 'NCIT:C28078'
     - 'NCIT:C28080'
@@ -16,10 +15,9 @@ NCITstage:
   prefix: NCIT
   url: "https://ncit.nci.nih.gov/"
   db_key: 'pathological_stage.id'
-  description: Pseudo-prefix recoding of Disease Stage codes
+  description: Disease Stage codes
   scope: biosamples
   pattern: '^NCIT(:C\d+?)?$'
-  pattern_strict: '^NCIT:C\d+?$'
   examples:
     - 'NCIT:C27970'
     - 'NCIT:C27969'
@@ -29,10 +27,9 @@ NCITtnm:
   prefix: NCIT
   url: "https://ncit.nci.nih.gov/"
   db_key: 'pathological_tnm_findings.id'
-  description: Pseudo-prefix recoding of NCIT TNM codes
+  description: NCIT TNM codes
   scope: biosamples
   pattern: '^NCIT(:C\d+?)?$'
-  pattern_strict: '^NCIT:C\d+?$'
   examples:
     - 'NCIT:C48700'
     - 'NCIT:C48786'
@@ -45,7 +42,6 @@ NCIT:
   db_key: 'histological_diagnosis.id'
   scope: biosamples
   pattern: '^NCIT(:C\d+?)?$'
-  pattern_strict: '^NCIT:C\d+?$'
   examples:
     - 'NCIT:C27676'
     - 'NCIT:C9325'
@@ -57,7 +53,6 @@ UBERON:
   db_key: 'sampled_tissue.id'
   scope: biosamples
   pattern: '^UBERON(:\d*?)?$'
-  pattern_strict: '^UBERON:\d+?$'
   examples:
     - 'UBERON:0000970'
     - 'UBERON:0035542'
@@ -69,7 +64,6 @@ HP:
   db_key: 'biocharacteristics.id'
   scope: individuals
   pattern: '^HP(:\d+?)?$'
-  pattern_strict: '^HP:\d+?$'
   examples:
     - 'HP:0012209'
 
@@ -82,7 +76,6 @@ PATOsex:
   db_key: 'sex.id'
   scope: individuals
   pattern: '^PATO(:002000[012])?$'
-  pattern_strict: '^PATO:002000[012]$'
   examples:
     - 'PATO:0020000'
 
@@ -93,41 +86,39 @@ EFOfus:
   db_key: 'followup_state.id'
   scope: biosamples
   pattern: '^EFO(:\d+?)?$'
-  pattern_strict: '^EFO:\d+?$'
   examples:
     - 'EFO:0030039'
 
-EFO:
+EFOmaterial:
   name: "Experimental Factor Ontology"
   prefix: EFO
   url: "https://www.ebi.ac.uk/efo/"
   db_key: 'biosample_status.id'
   scope: biosamples
-  pattern: '^(?:EFO)|(?:OBI)(:\d+?)?$'
-  pattern_strict: '^(?:EFO)|(?:OBI):\d+?$'
+  pattern: '^(?:EFO)|(?:OBI):\d+?$'
   examples:
     - 'EFO:0009656'
 
 icdom:
-  name: "ICD-O 3 Morphologies (Progenetix)"
+  name: "ICD-O 3 Morphologies (Progenetix transcription)"
   prefix: pgx
-  url: "https://progenetix.org/"
+  url: https://progenetix.org/
+  reference_root: https://progenetix.org/services/ids/
   db_key: 'icdo_morphology.id'
   scope: biosamples
-  pattern: '^pgx(:icdom-\d{1,5}(-\d{1,5})?)?$'
-  pattern_strict: '^pgx:icdom-\d{5}$'
+  pattern: '^(?:pgx:)?icdom-\d{1,5}(-\d{1,5})?$'
   examples:
     - 'pgx:icdom-85003'
     - 'pgx:icdom-94403'
 
 icdot:
-  name: "ICD-O 3 Topographies (Progenetix)"
+  name: "ICD-O 3 Topographies (Progenetix transcription)"
   prefix: pgx
   url: "https://progenetix.org/"
+  reference_root: https://progenetix.org/services/ids/
   db_key: 'icdo_topography.id'
   scope: biosamples
-  pattern: '^pgx(:icdot-C\d\d?(\.\d)?)?$'
-  pattern_strict: '^pgx:icdot-C\d\d?\.\d$'
+  pattern: '^(?:pgx:)?icdot-C\d\d?(\.\d)?$'
   examples:
     - 'pgx:icdot-C42.2'
     - 'pgx:icdot-C54.1'
@@ -142,22 +133,45 @@ PMID:
   db_key: 'external_references.id'
   scope: biosamples
   pattern: '^PMID(:\d+?)?$'
-  pattern_strict: '^PMID:\d{5,9}?$'
   examples:
     - 'PMID:28966033'
     - 'PMID:9405679'
 
-geo:
-  name: "NCBI Gene Expression Omnibus"
+GEOseries:
   prefix: geo
+  name: Gene Expression Omnibus series
   url: "https://www.ncbi.nlm.nih.gov/geo/"
-  db_key: 'external_references.id'
+  pattern: '^(?:geo:)?GSE\d+?$'
   scope: biosamples
-  pattern: '^geo(:G(PL|SM|SE|DS)\d+)?$'
-  pattern_strict: '^geo:G(PL|SM|SE|DS)\d+?$'
+  db_key: 'external_references.id'
+  is_series: True
+  child_pattern: '^(?:geo:)?GSM'
+  examples:
+    - geo:GSE19331
+
+GEOplatform:
+  prefix: geo
+  name: Gene Expression Omnibus platform
+  url: "https://www.ncbi.nlm.nih.gov/geo/"
+  pattern: '^(?:geo:)?GPL\d+?$'
+  scope: biosamples
+  db_key: 'external_references.id'
+  is_series: True
+  child_pattern: '^(?:geo:)?GSM'
   examples:
     - geo:GPL6504
-    - geo:GSE19331
+    - geo:GPL6801
+
+GEOexperiment:
+  prefix: geo
+  url: "https://www.ncbi.nlm.nih.gov/geo/"
+  name: Gene Expression Omnibus experiment
+  pattern: '^(?:geo:)?GSM\d+?$'
+  scope: biosamples
+  db_key: 'external_references.id'
+  is_series: False
+  collationed: False
+  examples:
     - geo:GSM253289
 
 arrayexpress:
@@ -166,8 +180,7 @@ arrayexpress:
   url: "https://www.ncbi.nlm.nih.gov/geo/"
   db_key: 'external_references.id'
   scope: biosamples
-  pattern: '^arrayexpress(:[AEP]-\w{4}-\d+)?$'
-  pattern_strict: '^arrayexpress:[AEP]-\w{4}-\d+?$'
+  pattern: '^arrayexpress:[AEP]-\w{4}-\d+$'
   examples:
     - arrayexpress:E-MEXP-1008
 
@@ -175,23 +188,32 @@ TCGAproject:
   name: "The Cancer Genome Atlas"
   prefix: pgx
   url: "http://cancergenome.nih.gov"
-  db_key: 'external_references.id'
   scope: biosamples
+  pattern: '^(?:pgx:)TCGA-[\-\w]+?$'
   db_key: 'external_references.id'
-  pattern: '^pgx(:TCGA-[\-\w]+?)?$'
-  pattern_strict: '^pgx:TCGA-[\-\w]+?$'
+  is_series: True
+  child_pattern: '^(?:pgx:)?TCGA-\w+?\-[\w\-]{15,30}$'
   examples:
     - pgx:TCGA-000002fc-53a0-420e-b2aa-a40a358bba37
+
+UBERON:
+  name: Uberon cross-species anatomical structures ontology
+  prefix: UBERON
+  url: "http://uberon.org"
+  scope: biosamples
+  db_key: 'sampled_tissue.id'
+  pattern: '^UBERON:\d+?$'
+  examples:
+    - UBERON:0000959
+    - UBERON:0001869
 
 cbioportal:
   name: "cBioPortal"
   prefix: cbioportal
   url: "https://www.cbioportal.org"
-  db_key: 'external_references.id'
   scope: biosamples
   db_key: 'external_references.id'
-  pattern: '^cbioportal(:\w+?)?$'
-  pattern_strict: '^cbioportal:\w+?$'
+  pattern: '^cbioportal:\w+?$'
   examples:
     - 'cbioportal:msk_impact_2017'
 
@@ -201,8 +223,7 @@ cellosaurus:
   url: "https://web.expasy.org/cellosaurus/"
   db_key: 'external_references.id'
   scope: biosamples
-  pattern: '^cellosaurus(:CVCL_\w+?)?$'
-  pattern_strict: '^cellosaurus:CVCL_\w+?$'
+  pattern: '^cellosaurus:CVCL_\w+?$'
   examples:
     - 'cellosaurus:CVCL_1650'
     - 'cellosaurus:CVCL_0006'
@@ -213,8 +234,7 @@ pgxcohort:
   url: "https://arraymap.progenetix.org"
   db_key: 'cohorts.id'
   scope: biosamples
-  pattern: '^pgx(:cohort-\w+?)?$'
-  pattern_strict: '^pgx:cohort-\w+?$'
+  pattern: '^pgx:cohort-\w+?$'
   examples:
     - 'pgx:cohort-arraymap'
     - 'pgx:cohort-TCGA'

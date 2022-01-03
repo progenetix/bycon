@@ -84,7 +84,7 @@ definitions:
       - id: HP:0012827
         label: Bordeline
 
-  Units:
+  Unit:
     description: >-
       The kind of unit. Recommended from NCIT Unit of Category ontology
       term (NCIT:C42568) descendants.

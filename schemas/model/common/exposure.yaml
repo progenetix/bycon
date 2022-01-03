@@ -18,11 +18,11 @@ properties:
   value:
     description: Quantification of the exposure.
     type: number
-  units:
+  unit:
     description: >-
-      Units of the exposure. Recommended from NCIT Unit of Category ontology
+      Unit of the exposure. Recommended from NCIT Unit of Category ontology
       term (NCIT:C42568) descendants.
-    $ref: commonDefinitions.yaml#/definitions/Units
+    $ref: commonDefinitions.yaml#/definitions/Unit
   duration:
     description: Exposure duration in ISO8601 format
     type: string

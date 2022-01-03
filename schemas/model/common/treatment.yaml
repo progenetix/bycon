@@ -31,9 +31,9 @@ properties:
       The amount of any substance administered over a specific period of time.
       source: NCIT:C15682
     type: number
-  units:
+  unit:
     description: Treatment dose units
-    $ref: commonDefinitions.yaml#/definitions/Units
+    $ref: commonDefinitions.yaml#/definitions/Unit
   frequency:
     description: >-
       The number of times a substance is administered within a specific
