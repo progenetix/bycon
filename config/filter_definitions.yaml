@@ -46,17 +46,6 @@ NCIT:
     - NCIT:C27676
     - NCIT:C9325
 
-UBERON:
-  name: "Uberon cross-species anatomical structures ontology"
-  prefix: UBERON
-  url: "https://uberon.github.io"
-  db_key: 'sampled_tissue.id'
-  scope: biosamples
-  pattern: '^UBERON(:\d*?)?$'
-  examples:
-    - 'UBERON:0000970'
-    - 'UBERON:0035542'
-
 HP:
   name: "Human Phenotype Ontology"
   prefix: HP
@@ -110,8 +99,8 @@ icdom:
   scope: biosamples
   pattern: '^(?:pgx:)?icdom-\d{1,5}(-\d{1,5})?$'
   examples:
-    - 'pgx:icdom-85003'
-    - 'pgx:icdom-94403'
+    - pgx:icdom-85003
+    - pgx:icdom-94403
 
 icdot:
   name: "ICD-O 3 Topographies (Progenetix transcription)"
@@ -123,9 +112,9 @@ icdot:
   scope: biosamples
   pattern: '^(?:pgx:)?icdot-C\d\d?(\.\d)?$'
   examples:
-    - 'pgx:icdot-C42.2'
-    - 'pgx:icdot-C54.1'
-    - 'pgx:icdot-C5'
+    - pgx:icdot-C42.2
+    - pgx:icdot-C54.1
+    - pgx:icdot-C5
 
 # Procedural Metadata
 
@@ -174,7 +163,6 @@ GEOplatform:
   pattern: '^(?:geo:)?GPL\d+?$'
   scope: biosamples
   db_key: 'external_references.id'
-  is_series: True
   child_pattern: '^(?:geo:)?GSM'
   examples:
     - geo:GPL6504
@@ -192,7 +180,6 @@ GEOexperiment:
   pattern: '^(?:geo:)?GSM\d+?$'
   scope: biosamples
   db_key: 'external_references.id'
-  is_series: False
   collationed: False
   examples:
     - geo:GSM253289
