@@ -31,6 +31,7 @@ methods:
     - code_matches
     - collation_type
     - type
+    - reference
   paths:
     - id
     - label
@@ -40,6 +41,7 @@ methods:
     - hierarchy_paths
     - collation_type
     - type
+    - reference
   counts:
     - id
     - label
@@ -47,12 +49,14 @@ methods:
     - code_matches
     - collation_type
     - type
+    - reference
   codematches:
     - id
     - label
     - code_matches
     - collation_type
     - type
+    - reference
   codes:
     - id
     - label

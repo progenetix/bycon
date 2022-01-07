@@ -2,6 +2,11 @@ NCITgrade:
   name: "National Cancer Institute Thesaurus Disease Grade Qualifier"
   prefix: NCIT
   url: "https://ncit.nci.nih.gov/"
+  reference:
+    root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
+    replace:
+      - "NCIT:"
+      - ""
   db_key: 'tumor_grade.id'
   description: Disease Grade codes
   scope: biosamples
@@ -14,6 +19,11 @@ NCITstage:
   name: "National Cancer Institute Thesaurus Disease Stage Qualifier"
   prefix: NCIT
   url: "https://ncit.nci.nih.gov/"
+  reference:
+    root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
+    replace:
+      - "NCIT:"
+      - ""
   db_key: 'pathological_stage.id'
   description: Disease Stage codes
   scope: biosamples
@@ -26,6 +36,11 @@ NCITtnm:
   name: "National Cancer Institute Thesaurus Cancer TNM Finding"
   prefix: NCIT
   url: "https://ncit.nci.nih.gov/"
+  reference:
+    root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
+    replace:
+      - "NCIT:"
+      - ""
   db_key: 'pathological_tnm_findings.id'
   description: NCIT TNM codes
   scope: biosamples
@@ -39,6 +54,11 @@ NCIT:
   name: "National Cancer Institute Thesaurus neoplasias"
   prefix: NCIT
   url: "https://ncit.nci.nih.gov/"
+  reference:
+    root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
+    replace:
+      - "NCIT:"
+      - ""
   db_key: 'histological_diagnosis.id'
   scope: biosamples
   pattern: '^NCIT(:C\d+?)?$'

@@ -1,0 +1,50 @@
+{
+  "alternateBases": "",
+  "caseLevelData": [
+    {
+      "analysisId": "pgxcs-kftwfq4h",
+      "biosampleId": "pgxbs-kftvj7cy",
+      "id": "pgxvar-5c86661b09d374f2dc4e4a48"
+    }
+  ],
+  "position": {
+    "assemblyId": "GRCh38",
+    "end": [
+      91643662
+    ],
+    "refseqId": "chr5",
+    "start": [
+      91586193
+    ]
+  },
+  "referenceBases": "",
+  "variantInternalId": "5:91586193-91643662:DEL",
+  "variantType": "DEL"
+},
+
+{
+  "caseLevelData": [
+    {
+      "analysisId": "pgxcs-kftwfq4h",
+      "biosampleId": "pgxbs-kftvj7cy",
+      "id": "pgxvar-5c86661b09d374f2dc4e4a48"
+    }
+  ],
+  "location": {
+    "type": "SequenceLocation",
+    "sequenceId": "refseq:NC_000005.10",
+    "interval": {
+      "type": "SequenceInterval",
+      "start": {
+        "type": "Number",
+        "value": 91586193
+      },
+      "end": {
+        "type": "Number",
+        "value": 91643662
+      },
+    },
+
+  "variantInternalId": "5:91586193-91643662:DEL",
+  "variantType": "DEL"
+},
