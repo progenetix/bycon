@@ -27,9 +27,6 @@ from individual_responses import *
 from variant_responses import *
 
 byc = initialize_bycon()
-
 c_f = Path( path.join( pkg_path, "config", "config.yaml" ) )
 byc.update({"config": load_yaml_empty_fallback( c_f )})
-
-form_data, query_meta, debug_state = cgi_parse_query(byc)
-byc.update({ "form_data": form_data, "query_meta": query_meta, "debug_state": debug_state })
+cgi_parse_query(byc)

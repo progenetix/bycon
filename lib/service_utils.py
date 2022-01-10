@@ -53,6 +53,9 @@ def initialize_bycon():
         "pkg_path": pkg_path,
         "method": "",
         "output": "",
+        "form_data": {},
+        "query_meta": {},
+        "debug_state": False,
         "empty_query_all_response": False,
         "empty_query_all_count": False,        
         "errors": [],
@@ -81,8 +84,10 @@ def initialize_service(byc, service="NA"):
 
     service = decamelize(service)
 
-    byc.update({"service_name": path.splitext(path.basename(mod.__file__))[0]})
-    byc.update({"service": service})
+    byc.update({
+        "service_name": path.splitext(path.basename(mod.__file__))[0],
+        "service": service
+    })
 
     read_local_prefs( service, sub_path, byc )
 

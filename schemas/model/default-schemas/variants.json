@@ -23,16 +23,8 @@
 },
 
 {
-  "caseLevelData": [
-    {
-      "analysisId": "pgxcs-kftwfq4h",
-      "biosampleId": "pgxbs-kftvj7cy",
-      "id": "pgxvar-5c86661b09d374f2dc4e4a48"
-    }
-  ],
   "location": {
     "type": "SequenceLocation",
-    "sequenceId": "refseq:NC_000005.10",
     "interval": {
       "type": "SequenceInterval",
       "start": {
@@ -44,7 +36,15 @@
         "value": 91643662
       },
     },
-
+    "sequenceId": "refseq:NC_000005.10",
+  },
+  "caseLevelData": [
+    {
+      "analysisId": "pgxcs-kftwfq4h",
+      "biosampleId": "pgxbs-kftvj7cy",
+      "id": "pgxvar-5c86661b09d374f2dc4e4a48"
+    }
+  ],
   "variantInternalId": "5:91586193-91643662:DEL",
   "variantType": "DEL"
 },

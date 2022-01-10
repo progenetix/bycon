@@ -32,12 +32,6 @@ def cgi_parse_query(byc):
     content_typ = environ.get('CONTENT_TYPE', '')
     r_m = environ.get('REQUEST_METHOD', '')
 
-    form_data = {}
-    query_meta = {}
-    debug_state = False
-
-    # set_debug_state(1)
-
     if r_m == "POST":
         body = sys.stdin.read(int(content_len))
 
@@ -45,52 +39,55 @@ def cgi_parse_query(byc):
             jbod = json.loads(body)
             if "debug" in jbod:
                 if jbod["debug"] > 0:                 
-                    debug_state = set_debug_state(1)
+                    byc.update({"debug_state": set_debug_state(1)})
 
             # TODO: this hacks the v2b4 structure
             if "query" in jbod:
                 for p, v in jbod["query"].items():
                     if p == "requestParameters":
                         for rp, rv in v.items():
-                            form_data[rp] = rv
+                            byc["form_data"].update({rp: rv})
                     else:
-                        form_data[p] = v
+                        byc["form_data"].update({p: v})
 
             # TODO: define somewhere else with proper defaults
-            form_data["requested_granularity"] = jbod.get("requestedGranularity", "record")
-            form_data["include_resultset_responses"] = jbod.get("includeResultsetResponses", "HIT")
+            byc["form_data"].update({
+                "requested_granularity": jbod.get("requestedGranularity", "record"),
+                "include_resultset_responses": jbod.get("includeResultsetResponses", "HIT"),
+                "filters": jbod.get("filters", [] )
+            })
 
             if "pagination" in jbod:
                 for sp in ["skip", "limit"]:
-                    form_data[sp] = jbod["pagination"].get(sp, 0)
+                    byc["form_data"].update({ sp: jbod["pagination"].get(sp, 0) })
 
-            form_data["filters"] = jbod.get("filters", [] )
-            query_meta = jbod.get("meta", {})
+            byc.update({"query_meta": jbod.get("meta", {}) })
 
-        return form_data, query_meta, debug_state
+        return byc
 
-    debug_state = set_debug_state()
+    byc.update({"debug_state": set_debug_state()})
 
     # TODO: The structure, types of the request/form object need to go to a
     # config and some deeper processing, for proper beacon request objects
     # also, defaults etc.
     get = cgi.FieldStorage()
-    form_data = {}
 
     for p in get:
         if p in byc["config"]["list_pars"]:
-            form_data.update({p: form_return_listvalue( get, p )})
+            byc["form_data"].update({p: form_return_listvalue( get, p )})
         else:
-            form_data.update({p: get.getvalue(p)})
+            byc["form_data"].update({p: get.getvalue(p)})
 
     #TODO: re-evaluate hack of empty filters which avoids dirty errors downstream
-    if not "filters" in form_data:
-        form_data.update({"filters": []})
+    if not "filters" in byc["form_data"]:
+        byc["form_data"].update({"filters": []})
 
-    form_data.update({"requested_granularity": get.getvalue("requestedGranularity", "record")})
-    form_data.update({"include_resultset_responses": get.getvalue("includeResultsetResponses", "HIT")})
+    byc["form_data"].update({
+        "requested_granularity": get.getvalue("requestedGranularity", "record"),
+        "include_resultset_responses": get.getvalue("includeResultsetResponses", "HIT")
+    })
     
-    return form_data, query_meta, debug_state
+    return byc
 
 ################################################################################
 
