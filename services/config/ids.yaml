@@ -3,25 +3,31 @@ format_patterns:
 # local patterns
 # TODO: adjust the internal ids w/ prefix
 
-  - pattern: '^pgx:(pgxbs-[\w\-\.]{4,128})$'
+  - pattern: '^(?:pgx:)?(pgxbs-[\w\-\.]{4,128})$'
     link: '/biosamples/details?datasetIds=progenetix&id='
+    prepend_if_missing: "pgx:"
 
-  - pattern: '^pgx:(pgxcs-[\w\-\.]{4,128})$'
+  - pattern: '^(?:pgx:)?(pgxcs-[\w\-\.]{4,128})$'
     link: '/callsets/details?datasetIds=progenetix&id='
+    prepend_if_missing: "pgx:"
 
-  - pattern: '^pgx:(pgxind-[\w\-\.]{4,128})$'
+  - pattern: '^(?:pgx:)?(pgxind-[\w\-\.]{4,128})$'
     link: '/individuals/details?datasetIds=progenetix&id='
+    prepend_if_missing: "pgx:"
 
-  - pattern: '^(pgx:icdom-[\d]{1,5}(?:-\d{1,5})?)$'
+  - pattern: '^(?:pgx:)?(icdom-[\d]{1,5}(?:-\d{1,5})?)$'
     link: '/subsets/subsetdetails/?datasetIds=progenetix&id='
+    prepend_if_missing: "pgx:"
 
-  - pattern: '^(pgx:icdot-C\d\d?(?:\.\d)?)$'
+  - pattern: '^(?:pgx:)?(icdot-C\d\d?(?:\.\d)?)$'
     link: '/subsets/subsetdetails/?datasetIds=progenetix&id='
+    prepend_if_missing: "pgx:"
 
-  - pattern: '^(pgx:cohort-\w+)$'
+  - pattern: '^(?:pgx:)?(cohort-\w+)$'
     examples:
       - pgxcohort-TCGAcancers
     link: '/subsets/cohorts/?datasetIds=progenetix&filters='
+    prepend_if_missing: "pgx:"
 
 # public prefix patterns (with possible underscore replacement)
 

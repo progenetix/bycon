@@ -35,7 +35,7 @@ def main():
 
 def ids():
 
-    byc = {}
+    set_debug_state(debug=0)
 
     read_local_prefs( "ids", dir_path, byc )
 
@@ -45,9 +45,16 @@ def ids():
     if id_in:
         for f_p in byc["this_config"]["format_patterns"]:
             pat = re.compile( f_p["pattern"] )
-            link = f_p["link"]
             if pat.match(id_in):
-                lid = pat.match(id_in).group(1)
+                lid = id_in  
+                link = f_p["link"]
+                pim = f_p.get("prepend_if_missing", "")
+                if len(pim) > 0:
+                    if pim in lid:
+                        pass
+                    else:
+                        lid = pim+lid
+
                 cgi_print_rewrite_response(link, lid, output)
 
     print('Content-Type: text')

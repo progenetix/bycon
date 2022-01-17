@@ -34,7 +34,8 @@ def get_filter_flags(byc):
 
     ff = {
         "logic": byc[ "config" ][ "filter_flags" ][ "logic" ],
-        "precision": byc[ "config" ][ "filter_flags" ][ "precision" ]
+        "precision": byc[ "config" ][ "filter_flags" ][ "precision" ],
+        "descendants": byc[ "config" ][ "filter_flags" ][ "includeDescendantTerms" ]
     }
 
     if "form_data" in byc:
@@ -46,6 +47,10 @@ def get_filter_flags(byc):
                 ff["logic"] = '$and'
         if "filterPrecision" in byc[ "form_data" ]:
             ff["precision"] = byc["form_data"]['filterPrecision']
+        if "includeDescendantTerms" in byc[ "form_data" ]:
+            i_d_t = str(byc[ "form_data" ].get("includeDescendantTerms", 1)).lower()
+            if i_d_t in ["0", "-1", "no", "false"]:
+                ff["descendants"] = False
 
     byc.update( { "filter_flags": ff } )
 

@@ -88,9 +88,20 @@ PATOsex:
   examples:
     - PATO:0020000
 
+EFOcnvassessment:
+  name: "EFO CNV Assessment"
+  prefix: EFO
+  url: "http://www.ebi.ac.uk/efo/EFO_0030063"
+  db_key: 'variant_state.id'
+  scope: variants
+  pattern: '^EFO(:\d+?)?$'
+  collationed: False
+  examples:
+    - EFO:0030070
+
 EFOfus:
   name: "EFO followup status classes"
-  prefix: EFOfus
+  prefix: EFO
   url: "http://www.ebi.ac.uk/efo/EFO_0030038"
   db_key: 'followup_state.id'
   scope: biosamples
@@ -247,7 +258,7 @@ UBERON:
       - "_"
   scope: biosamples
   db_key: 'sampled_tissue.id'
-  pattern: '^UBERON:\d+?$'
+  pattern: '^UBERON(:\d+?)?$'
   examples:
     - UBERON:0000959
     - UBERON:0001869

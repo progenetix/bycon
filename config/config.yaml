@@ -107,6 +107,7 @@ list_pars:
   - start
   - end
   - datasetIds
+  - variantType
   - filters
   - biosampleIds
   - variantIds
@@ -121,6 +122,7 @@ id_query_map:
 filter_flags:
   logic: '$and'
   precision: exact #'start'
+  includeDescendantTerms: True
 
 plot_pars:
   dotalpha: 0.2

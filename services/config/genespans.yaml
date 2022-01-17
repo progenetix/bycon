@@ -2,6 +2,7 @@ defaults:
   dataset_ids:
     - progenetix
   assembly_id: GRCh38
+  response_schema: beaconResultsetsResponse
   query_fields:
     - symbol
     - ensembl_gene_ids
@@ -11,8 +12,15 @@ defaults:
 meta:
   response_type: genespans
   returned_schemas:
-    - entity_type: progenetixgene
-      schema: https://progenetix.org/services/schemas/ProgenetixGene/
+    - entity_type: gene
+      schema: https://progenetix.org/services/schemas/ProgenetixGene
+  received_request_summary:
+    requested_granularity: record
+    assembly_id: GRCh38
+    requested_schemas:
+      - entity_type: gene
+        schema: https://progenetix.org/services/schemas/ProgenetixGene
+  returned_granularity: record
   info: >
     The main genes payload can be accessed in `results`.
 assembly_ids:

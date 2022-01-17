@@ -25,8 +25,7 @@ def main():
 
 def genespans():
 
-    initialize_service(byc)
-        
+    initialize_service(byc)        
     create_empty_service_response(byc)
 
     assembly_id = byc["assembly_id"]
@@ -41,12 +40,17 @@ def genespans():
         byc["query_precision"] = byc["form_data"]["filterPrecision"]
     else:
         byc["query_precision"] = "start"
-    
-    response_add_parameter(byc, "assemblyId", assembly_id)
 
-    if "geneSymbol" in byc[ "form_data" ]:
+    for mk, mv in byc["this_config"]["meta"].items():
+        byc["service_response"]["meta"].update({mk: mv})
+
+    gene_id = rest_path_value("genespans")
+
+    if not "empty_value" in gene_id:
+        response_add_received_request_summary_parameter(byc, "geneSymbol", gene_id)
+    elif "geneSymbol" in byc[ "form_data" ]:
         gene_id = byc[ "form_data" ]["geneSymbol"]
-        response_add_parameter(byc, "geneSymbol", gene_id)
+        response_add_received_request_summary_parameter(byc, "gene_symbol", gene_id)
     else:
         # TODO: value check & response
         response_add_error(byc, 422, "No geneSymbol value provided!" )
@@ -61,6 +65,7 @@ def genespans():
         else:
             q_list.append( { q_f: re.compile( r'^'+gene_id+'$', re.IGNORECASE ) } )
     query = create_and_or_query_for_list('$or', q_list)
+    response_add_received_request_summary_parameter(byc, "processed_query", query)
 
     results, e = mongo_result_list( byc["db"], byc["coll"], query, { '_id': False } )
     if e:

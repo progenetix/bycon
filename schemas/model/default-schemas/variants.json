@@ -48,3 +48,44 @@
   "variantInternalId": "5:91586193-91643662:DEL",
   "variantType": "DEL"
 },
+
+{
+  "type": "CopyNumber",
+  "subject": {
+    "type": "DerivedSequenceExpression",
+    "location": {
+      "type": "SequenceLocation",
+      "interval": {
+        "type": "SequenceInterval",
+        "start": {
+          "type": "Number",
+          "value": 91586193
+        },
+        "end": {
+          "type": "Number",
+          "value": 91643662
+        },
+      },
+      "sequenceId": "refseq:NC_000005.10",
+    },
+    "reverse_complement": false
+  },
+  "copies": {
+    "type": "IndefiniteRange",
+    "comparator": "<=",
+    "value": 2
+  },
+  "variant_state": {
+    "id": "EFO:0030067",
+    "label": "copy number loss"
+  },
+  "caseLevelData": [
+    {
+      "analysisId": "pgxcs-kftwfq4h",
+      "biosampleId": "pgxbs-kftvj7cy",
+      "id": "pgxvar-5c86661b09d374f2dc4e4a48"
+    }
+  ],
+  "variantInternalId": "5:91586193-91643662:DEL",
+  "variantType": "DEL"
+},

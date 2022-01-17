@@ -218,6 +218,7 @@ def update_queries_from_filters(byc):
     filter_lists = {}
 
     logic = byc[ "filter_flags" ][ "logic" ]
+    f_desc = byc[ "filter_flags" ][ "descendants" ]
     # precision = byc[ "filter_flags" ][ "precision" ]
 
     mongo_client = MongoClient()
@@ -228,7 +229,7 @@ def update_queries_from_filters(byc):
     for f in filters:
 
         f_val = f["id"]
-        f_desc = f.get("includeDescendantTerms", True)
+        f_desc = f.get("includeDescendantTerms", f_desc)
         f_scope = f.get("scope", False)
 
         f_info = coll_coll.find_one({"id": f["id"]})

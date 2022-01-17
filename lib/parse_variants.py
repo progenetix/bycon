@@ -13,6 +13,7 @@ def parse_variants(byc):
 
     variant_pars = { }
     v_p_defs = byc["variant_definitions"]["parameters"]
+    v_t_defs = byc["variant_definitions"]["variant_types"]
 
     for p_k in v_p_defs.keys():
         v_default = None
@@ -33,13 +34,21 @@ def parse_variants(byc):
             continue
         v_p = variant_pars[ p_k ]
         if "array" in v_p_defs[ p_k ]["type"]:
-            v_l = [ ]
+            v_l = set()
             for v in v_p:
-                if re.compile( v_p_defs[ p_k ][ "items" ][ "pattern" ] ).match( str( v ) ):
+                if "variantType" in p_k:
+                    if v in v_t_defs.keys():
+                        v_l.add( v )
+                elif re.compile( v_p_defs[ p_k ][ "items" ][ "pattern" ] ).match( str( v ) ):
                     if "integer" in v_p_defs[ p_k ][ "items" ][ "type" ]:
                         v = int( v )
-                    v_l.append( v )
-            v_p_c[ p_k ] = sorted( v_l )
+                    v_l.add( v )
+            if "variantType" in p_k:
+                v_t_l = set()
+                for v_t in list(v_l):
+                    v_t_l.update(v_t_defs[v_t]["child_terms"])
+                v_l = v_t_l
+            v_p_c[ p_k ] = sorted( list(v_l) )
         else:
             if re.compile( v_p_defs[ p_k ][ "pattern" ] ).match( str( v_p ) ):
                 if "integer" in v_p_defs[ p_k ][ "type" ]:
@@ -209,7 +218,7 @@ def create_variantCNVrequest_query( byc ):
         { "end": { "$gte": vp[ "end" ][0] } },
         { "start": { "$gte": vp[ "start" ][0] } },
         { "end": { "$lt": vp[ "end" ][-1] } },
-        create_and_or_query_for_parameter("variantType", "variant_type", "$or", vp)
+        create_in_query_for_parameter("variantType", "variant_state.id", vp)
     ]}
 
     expand_variant_query(v_q, byc)
@@ -237,7 +246,7 @@ def create_variantRangeRequest_query( byc ):
         v_q_l.append( { "info.var_length": { "$lte" : vp[ "varMaxLength" ] } } )
 
     if "variantType" in vp:
-        v_q_l.append( create_and_or_query_for_parameter("variantType", "variant_type", "$or", vp) )
+        v_q_l.append( create_in_query_for_parameter("variantType", "variant_state.id", vp) )
     elif "alternateBases" in vp:
         # the N wildcard stands for any length alt bases so can be ignored
         if vp[ "alternateBases" ] == "N":
@@ -246,9 +255,6 @@ def create_variantRangeRequest_query( byc ):
             v_q_l.append( { "alternate_bases": vp[ "alternateBases" ] } )
 
     v_q = { "$and": v_q_l }
-
-    # print(v_q)
-    # exit()
 
     expand_variant_query(v_q, byc)
 
@@ -283,7 +289,7 @@ def create_and_or_query_for_list(logic, q_list):
 
 ################################################################################
 
-def create_and_or_query_for_parameter(par, qpar, logic, q_pars):
+def create_in_query_for_parameter(par, qpar, q_pars):
 
     if not isinstance(q_pars[ par ], list):
         return { qpar: q_pars[ par ] }
@@ -294,10 +300,7 @@ def create_and_or_query_for_parameter(par, qpar, logic, q_pars):
         return { }
  
     if len(q_pars[ par ]) > 1:
-        v_t_l = [ ]
-        for v_t in q_pars[ par ]:
-            v_t_l.append( { qpar: v_t } )
-        return { logic: v_t_l }
+        return { qpar: {"$in": q_pars[ par ]} }
 
     return { qpar: q_pars[ par ][0] }
 

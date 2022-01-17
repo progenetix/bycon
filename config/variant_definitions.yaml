@@ -124,6 +124,55 @@ refseq_chromosomes: # GRCh38.p13
     refseq_id: "NC_000024.10"
     length: 57227415
 
+variant_types:
+  DUP:
+    variant_state: EFO:0030070
+    child_terms:
+      - EFO:0030070
+      - EFO:0030071
+      - EFO:0030072
+      - EFO:0030073
+  EFO:0030070:
+    variant_state: EFO:0030070
+    child_terms:
+      - EFO:0030070
+      - EFO:0030071
+      - EFO:0030072
+      - EFO:0030073
+  EFO:0030071:
+    variant_state: EFO:0030071
+    child_terms:
+      - EFO:0030071
+  EFO:0030072:
+    variant_state: EFO:0030072
+    child_terms:
+      - EFO:0030072
+      - EFO:0030073
+  EFO:0030073:
+    variant_state: EFO:0030073
+    child_terms:
+      - EFO:0030073
+  DEL:
+    variant_state: EFO:0030067
+    child_terms:
+      - EFO:0030067
+      - EFO:0030068
+      - EFO:0030069
+  EFO:0030067:
+    variant_state: EFO:0030067
+    child_terms:
+      - EFO:0030067
+      - EFO:0030068
+      - EFO:0030069
+  EFO:0030068:
+    variant_state: EFO:0030068
+    child_terms:
+      - EFO:0030068
+  EFO:0030069:
+    variant_state: EFO:0030069
+    child_terms:
+      - EFO:0030069
+
 parameters:
 
   assemblyId:
@@ -147,15 +196,11 @@ parameters:
     type: string
     pattern: '^[ACGTN]+$'
 
-  # variantType:
-  #   type: array
-  #   items:
-  #     type: string
-  #     pattern: '^((:?DUP)|(:?DEL)|(:?BND)|(:?LOH)|(:?INS)|(:?INV)|(:?CNV)|(:?INDEL)|(:?SNP)|(:?SNV))$'
-
   variantType:
-    type: string
-    pattern: '^((:?DUP)|(:?DEL)|(:?BND)|(:?LOH)|(:?INS)|(:?INV)|(:?CNV)|(:?INDEL)|(:?SNP)|(:?SNV))$'
+    type: array
+    items:
+      type: string
+      pattern: '^((:?EFO:\d+)|(:?DUP)|(:?DEL)|(:?BND)|(:?LOH)|(:?INS)|(:?INV)|(:?CNV)|(:?INDEL)|(:?SNP)|(:?SNV))$'
 
   start:
     type: array

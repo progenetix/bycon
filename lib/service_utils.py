@@ -468,7 +468,7 @@ def create_empty_service_response(byc):
     # saving the parameters to the response
     for p in ["method", "dataset_ids", "filters", "variant_pars"]:
         if p in byc:
-            response_add_parameter(byc, p, byc[ p ])
+            response_add_received_request_summary_parameter(byc, p, byc[ p ])
 
     return byc
 
@@ -575,7 +575,7 @@ def response_update_type_from_request(byc):
 
 ################################################################################
 
-def response_add_parameter(byc, name, value):
+def response_add_received_request_summary_parameter(byc, name, value):
 
     if not "received_request_summary" in byc["service_response"]["meta"]:
         return byc

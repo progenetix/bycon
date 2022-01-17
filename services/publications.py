@@ -45,7 +45,7 @@ def publications():
 
     if geo_q:
         for g_k, g_v in geo_pars.items():
-            response_add_parameter(byc, g_k, g_v)
+            response_add_received_request_summary_parameter(byc, g_k, g_v)
         if len(query.keys()) < 1:
             query = geo_q
         else:
