@@ -55,14 +55,14 @@ def update_from_epmc_publication(publication, epmc):
 
 ##############################################################################
 
-def create_short_publication_label(publication):
+def publication_update_label(publication):
     
     short_author = re.sub(r'(.{2,32}[\w\.\-]+? \w\-?\w?\w?)(\,| and ).*?$', r'\1 et al.', publication["authors"])
 
     if len(publication["title"]) <= 80:
-        publication.update({"description": short_author + f' ({publication["pub_year"]}) ' + publication["title"]})
+        publication.update({"label": short_author + f' ({publication["pub_year"]}) ' + publication["title"]})
     else:
-        publication.update({"description": short_author + f' ({publication["pub_year"]}) ' + ' '.join(publication['title'].split(' ')[:12]) + ' ...' })
+        publication.update({"label": short_author + f' ({publication["pub_year"]}) ' + ' '.join(publication['title'].split(' ')[:12]) + ' ...' })
         
     return publication
 
