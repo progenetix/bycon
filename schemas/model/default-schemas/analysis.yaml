@@ -19,13 +19,43 @@ properties:
     type: string
     examples:
       - SNP6 array
-  externalReferences:
-    type: array
-    items:
-      "$ref": ../common/ontologyTerm.yaml#/properties
+  platformModel:
+    description: Ontology value for experimental platform or methodology used. For
+      sequencing platforms the use of "OBI:0400103 - DNA sequencer" is suggested.
+    $ref: ../common/ontologyTerm.yaml#/properties
     examples:
-      - type:
-          id: geo:GSM224836
+      - id: geo:GPL3381
+        label: "Stanford Microarray Facility cDNA array [SHDV]"
+      - id: OBI:0002750
+        label: Oxford Nanopore MinION
+      - id: EFO:0010938
+        label: large-insert clone DNA microarray
+  experimentAccession:
+    description: >-
+      Identifier for primary experimental data.
+      Provenance: progenetix.org
+    $ref: ../common/ontologyTerm.yaml#/properties
+    examples:
+      - id: geo:GSM93480
+  seriesAccession:
+    description: >-
+      Identifier for primary experimental series.
+      Provenance: progenetix.org
+    $ref: ../common/ontologyTerm.yaml#/properties
+    examples:
+      - id: geo:GSE4079
+  platformModel:
+    description: >-
+      Ontology value for experimental platform or methodology used. For
+      sequencing platforms the use of "OBI:0400103 - DNA sequencer" is suggested.
+    $ref: ../common/ontologyTerm.yaml#/properties
+    examples:
+      - id: geo:GPL3381
+        label: "Stanford Microarray Facility cDNA array [SHDV]"
+      - id: OBI:0002750
+        label: Oxford Nanopore MinION
+      - id: EFO:0010938
+        label: large-insert clone DNA microarray
   provenance:
     "$ref": ../common/provenance.yaml#/properties
   dataUseConditions:

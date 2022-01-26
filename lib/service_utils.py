@@ -726,20 +726,22 @@ def return_filtering_terms_response( byc ):
         return byc
 
     # TODO: correct response w/o need to fix
-    byc["service_response"].update({"response": { "filteringTerms": []} })
+    byc["service_response"].update({"response": { "filteringTerms": [], "resources": []} })
 
     f_db = byc["config"]["info_db"]
     f_coll = byc["config"]["collations_coll"]
 
-    fts = { }
+    f_t_s = [ ]
+    ft_fs = [ ]
 
-    ft_fs = []
     if "filters" in byc:
         if len(byc["filters"]) > 0:
             for f in byc["filters"]:
                 ft_fs.append('('+f["id"]+')')
     f_s = '|'.join(ft_fs)
     f_re = re.compile(r'^'+f_s)
+
+    r_s_l = {}
 
     for ds_id in byc[ "dataset_ids" ]:
 
@@ -751,24 +753,54 @@ def return_filtering_terms_response( byc ):
         except:
             pass
 
-        fields = {
-            "_id": 0,
-            "id": 1,
-            "label": 1,
-            "type": 1,
-            "count": 1,
-            # "dataset_id": 1,
-            # "scope": 1
-        }
+        fields = { "_id": 0 }
 
         f_s, e = mongo_result_list(f_db, f_coll, query, fields)
 
-        byc["service_response"]["response"]["filteringTerms"].extend(f_s)
+        t_f_t_s = [ ]
+
+        for f in f_s:
+            f_t = { "count": f.get("count", 0)}
+            for k in ["id", "type", "label"]:
+                f_t.update({k:f.get(k, 0)})
+            t_f_t_s.append(f_t)
+
+            r_id = {
+
+
+            }
+
+            r_s_l.update({})
+
+        f_t_s.extend(t_f_t_s)
+
+    byc["service_response"]["response"].update({ "filteringTerms": f_t_s })
+    byc["service_response"]["response"].update({ "resources": _create_resource_response(byc) })
 
     cgi_print_response( byc, 200 )
 
 ################################################################################
 
+def _create_resource_response(byc):
+
+    r_o = {}
+    resources = []
+
+    for res in byc["filter_definitions"].values():
+
+        r_o.update(
+            {res["name_space_prefix"]: {
+                "id": res.get("name_space_prefix", "").lower(),
+                "name": res.get("name", ""),
+                "name_space_prefix": res.get("name_space_prefix", ""),
+                "url": res.get("url", "")
+            }
+        })
+
+    for k, v in r_o.items():
+        resources.append(v)
+
+    return resources
 
 ################################################################################
 

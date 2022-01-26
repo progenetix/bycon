@@ -13,7 +13,7 @@ meta:
     - entity_type: dbstats
       schema: https://progenetix.org/services/schemas/DBstats/
   info: >
-    The latest dbstats payload can be accessed in `results`.
+    The latest dbstats payload can be accessed in `response.results`.
 methods:
   counts:
     - counts

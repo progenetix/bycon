@@ -17,7 +17,7 @@ meta:
     - entity_type: collation
       schema: https://progenetix.org/services/schemas/Collation/
   info: >
-    The main collations payload can be accessed in `results`.
+    The main collations payload can be accessed in `response.results`.
 integer_keys:
   - count
   - code_matches

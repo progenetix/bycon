@@ -13,7 +13,7 @@ meta:
   returned_schemas:
     Collation: TBD
   info: >
-    The main collations payload can be accessed in `results`.
+    The main collations payload can be accessed in `response.results`.
 methods:
   frequencies: [ ]
   codematches: [ ]

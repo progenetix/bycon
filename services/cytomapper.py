@@ -33,20 +33,20 @@ def cytomapper():
     byc[ "config" ][ "paths" ][ "genomes" ] = path.join( local_path, "rsrc", "genomes" )
     
     parse_variants(byc)
-    generate_genomic_intervals(byc, "cytobands")
+    generate_genomic_intervals(byc)
 
     # response prototype
     create_empty_service_response(byc)
 
     cytoBands = [ ]
     if "cytoBands" in byc["variant_pars"]:
-        cytoBands, chro, start, end = _bands_from_cytobands(byc)
+        cytoBands, chro, start, end, error = bands_from_cytobands(byc["variant_pars"]["cytoBands"], byc)
         byc["service_response"]["meta"]["received_request_summary"].update({ "cytoBands": byc["variant_pars"]["cytoBands"] })
     elif "chroBases" in byc["variant_pars"]:
         cytoBands, chro, start, end = _bands_from_chrobases(byc)
         byc["service_response"]["meta"]["received_request_summary"].update({ "chroBases": byc["variant_pars"]["chroBases"] })
 
-    cb_label = _cytobands_label( cytoBands )
+    cb_label = cytobands_label( cytoBands )
 
     if len( cytoBands ) < 1:
         response_add_error(byc, 422, "No matching cytobands!" )
@@ -94,63 +94,6 @@ def cytomapper():
 
 ################################################################################
 
-def _bands_from_cytobands(byc):
-
-    chr_bands = byc["variant_pars"]["cytoBands"]
-    cb_pat = re.compile( byc["variant_definitions"]["parameters"]["cytoBands"]["pattern"] )
-    chro, cb_start, cb_end = cb_pat.match(chr_bands).group(2,3,9)
-    if not cb_end:
-        cb_end = cb_start
-
-    cytobands = list(filter(lambda d: d[ "chro" ] == chro, byc["cytobands"]))
-    if cb_start == None and cb_end == None:
-        return cytobands, chro
-
-    cb_from = 0
-    cb_to = len(cytobands)
-
-    if cb_start == None or cb_start == "pter":
-        cb_start = "p"
-    if cb_end == "qter":
-        cb_end = "q"
-    if cb_end == "pcen":
-        cb_end = "p"
-    if cb_start == "qcen":
-        cb_start = "q"
-    if cb_start == "pcen":
-        cb_start = "q"
-
-    cb_s_re = re.compile( "^"+cb_start )
-    i = 0
-
-    # searching for the first matching band
-    for cb in cytobands:
-        if cb_s_re.match( cb[ "cytoband" ] ):
-            cb_from = i
-            break
-        i += 1
-    k = 0
-
-    # retrieving the last matching band
-    # * index at least as start to avoid "q21qter" => "all q"
-    # * if there was no end, the start band is queried again until its last match
-    if cb_end == None:
-        cb_end = cb_start
-
-    cb_e_re = re.compile( "^"+cb_end )
-
-    for cb in cytobands:
-        if k >= i:
-            if cb_e_re.match( cb[ "cytoband" ] ):
-                cb_to = k+1
-        k += 1
-
-    cytobands = cytobands[cb_from:cb_to]
-
-    return cytobands, chro, int( cytobands[0]["start"] ), int( cytobands[-1]["end"] )
-
-################################################################################
-
 def _bands_from_chrobases( byc ):
 
     chr_bases = byc["variant_pars"]["chroBases"]
@@ -177,19 +120,6 @@ def _bands_from_chrobases( byc ):
 
     return cytobands, chro, cb_start, cb_end
 
-################################################################################
-
-def _cytobands_label( cytobands ):
-
-    cb_label = ""
-
-    if len(cytobands) > 0:
-
-        cb_label = cytobands[0]["chro"]+cytobands[0]["cytoband"]
-        if len( cytobands ) > 1:
-            cb_label = cb_label+cytobands[-1]["cytoband"]
-
-    return cb_label
 
 ################################################################################
 ################################################################################

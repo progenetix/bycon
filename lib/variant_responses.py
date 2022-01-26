@@ -80,6 +80,23 @@ def normalize_variant_values_for_export(v, byc, drop_fields=None):
 
 ################################################################################
 
+def variant_create_digest(v):
+
+    t = "var"
+    if "variant_state" in v:
+        if "id" in v["variant_state"]:
+            t = v["variant_state"]["id"]
+            t = re.sub(":", "_", t)
+    elif "variant_type" in v:
+        t = v["variant_type"]
+
+    p = str(v["start"])
+    if "end" in v:
+        p = p+"-"+str(v["end"])
+
+    return ":".join( [v["reference_name"], p, t])
+
+################################################################################
 
 
 

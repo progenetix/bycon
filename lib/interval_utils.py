@@ -14,25 +14,35 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
         parse_cytoband_file(byc)
 
     chro_maxes = {}
+    genome_size = 0
     for cb in byc["cytobands"]:               # assumes the bands are sorted
         chro_maxes.update({ cb["chro"]: int(cb["end"])})
+    for chro in chro_maxes:
+        genome_size += chro_maxes[chro]
+
+    byc.update({"genome_size": genome_size})
+
+    # cytobands ################################################################
+    
+    byc["cytoband_intervals"] = []
+    for cb in byc["cytobands"]:
+        byc["cytoband_intervals"].append( {
+                "index": int(cb["i"]),
+                "id": "{}:{}-{}".format(cb["chro"], cb["start"], cb["end"]),
+                "reference_name": cb["chro"],
+                "start": int(cb["start"]),
+                "end": int(cb["end"]),
+                "size": int(cb["end"]) - int(cb[ "start"])
+            })
+
+    if genome_binning == "cytobands":
+        byc.update({"genomic_intervals": byc["cytoband_intervals"].copy() })
+        return byc
+
+    # otherwise intervals ######################################################
 
     byc["genomic_intervals"] = []
     i = 0
-
-    if genome_binning == "cytobands":
-        for cb in byc["cytobands"]:
-            byc["genomic_intervals"].append( {
-                    "index": int(cb["i"]),
-                    "id": "{}:{}-{}".format(cb["chro"], cb["start"], cb["end"]),
-                    "reference_name": cb["chro"],
-                    "start": int(cb["start"]),
-                    "end": int(cb["end"]),
-                    "size": int(cb["end"]) - int(cb[ "start"])
-                })
-        return byc
-
-    # otherwise intervals
 
     if not genome_binning in byc["interval_definitions"]:
         genome_binning = "default"
@@ -57,14 +67,7 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
             end += int_b
             i += 1
 
-    genome_size = 0
-    for chro in chro_maxes:
-        genome_size += chro_maxes[chro]
-
-    byc.update({"genome_size": genome_size})
-
     return byc
-
 
 ################################################################################
 
@@ -76,7 +79,6 @@ def interval_cnv_arrays(v_coll, query, byc):
 
     int_no = len(byc["genomic_intervals"])
     proto = [0 for i in range(int_no)] 
-
 
     maps = {
         "interval_count": int_no,
@@ -107,6 +109,8 @@ def interval_cnv_arrays(v_coll, query, byc):
     values_map = [  [ ] for i in range(int_no) ]
 
     for v in v_coll.find( query ):
+
+        # print("Variant: {} <=> {}".format(v["callset_id"], v["biosample_id"]))
 
         if not "variant_type" in v:
             continue

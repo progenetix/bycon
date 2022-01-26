@@ -12,5 +12,5 @@ meta:
     - entity_type: genespan
       schema: https://progenetix.org/services/schemas/GeoLocation/
   info: >
-    The main geolocs payload can be accessed in `results`.
+    The main geolocs payload can be accessed in `response.results`.
 geo_root: 'provenance.geo'

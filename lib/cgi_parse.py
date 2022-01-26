@@ -224,7 +224,7 @@ def cgi_print_response(byc, status_code):
             cgi_simplify_response(byc)
 
             if isinstance(byc["service_response"], dict):
-                byc.update({ "service_response": json.dumps(humps.camelize(byc["service_response"]), default=str) })
+                byc.update({ "service_response": json.dumps(humps.camelize(byc["service_response"]["response"]), default=str) })
             if isinstance(byc["service_response"], list):
                 l_d = [ ]
                 for dp in byc["service_response"]:
@@ -348,6 +348,11 @@ def close_text_streaming():
 
     print()
     exit()
+
+################################################################################
+
+def prjsonnice(this):
+    print(json.dumps(this, indent=4, sort_keys=True, default=str)+"\n")
 
 ################################################################################
 

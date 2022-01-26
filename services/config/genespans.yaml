@@ -22,7 +22,7 @@ meta:
         schema: https://progenetix.org/services/schemas/ProgenetixGene
   returned_granularity: record
   info: >
-    The main genes payload can be accessed in `results`.
+    The main genes payload can be accessed in `response.results`.
 assembly_ids:
   - GRCh38
 methods:

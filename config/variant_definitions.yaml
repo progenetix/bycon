@@ -1,6 +1,38 @@
 cnv_dummy_values:
   DUP: 0.58
   DEL: -1
+  AMP: 2
+  HOMODEL: -3
+
+cnv_iscn_defs:
+  DUP:
+    info:
+      revish_label: enh
+    variant_type: DUP
+    variant_state:
+      id: EFO:0030070
+      label: copy number gain
+  DEL:
+    info:
+      revish_label: dim
+    variant_type: DEL
+    variant_state:
+      id: EFO:0030067
+      label: copy number loss
+  AMP:
+    info:
+      revish_label: amp
+    variant_type: DUP
+    variant_state:
+      id: EFO:0030072
+      label: high-level copy number gain
+  HOMODEL:
+    info:
+      revish_label: homodel
+    variant_type: DEL
+    variant_state:
+      id: EFO:0030069
+      label: complete genomic deletion
 
 refseq_chromosomes: # GRCh38.p13
   chr1:
@@ -200,7 +232,7 @@ parameters:
     type: array
     items:
       type: string
-      pattern: '^((:?EFO:\d+)|(:?DUP)|(:?DEL)|(:?BND)|(:?LOH)|(:?INS)|(:?INV)|(:?CNV)|(:?INDEL)|(:?SNP)|(:?SNV))$'
+      pattern: '^((?:EFO:\d+)|(?:DUP)|(?:DEL)|(?:BND)|(?:LOH)|(?:INS)|(?:INV)|(?:CNV)|(?:INDEL)|(?:SNP)|(?:SNV))$'
 
   start:
     type: array
@@ -251,7 +283,7 @@ parameters:
     pattern: '^\w+?(\w+?(\-\w+?)?)?$'
 
   cytoBands:
-    pattern: ^(chro?)?([12]?[\dXY])([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?\-?([pq]((ter)|([1-4]([0-8](\.\d\d*?)?)?)?))?$
+    pattern: ^(?:chro?)?([12]?[\dXY])([pq](?:(?:ter)|(?:cen)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?\-?([pq](?:(?:cen)|(?:ter)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?$
     type: string
 
   chroBases:

@@ -54,7 +54,7 @@ format. Here, the data is a dictionary/object with a single key (`genes`):
 ```
 {
     "meta": {
-      "info": "The main geolocs payload can be accessed in `results`.\n",
+      "info": "The main geolocs payload can be accessed in `response.results`.\n",
       "received_request": {
         "assemblyId": "GRCh38",
         "geneSymbol": "TP53"

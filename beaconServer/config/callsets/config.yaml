@@ -28,7 +28,7 @@ meta:
         schema: https://progenetix.org/services/schemas/analysis/
   returned_granularity: record
   info: >-
-    The main individuals payload can be accessed in `results`.
+    The main individuals payload can be accessed in `response.results`.
 response_types:
   - biosample
   - analysis

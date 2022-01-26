@@ -1,6 +1,6 @@
 NCITgrade:
-  name: "National Cancer Institute Thesaurus Disease Grade Qualifier"
-  prefix: NCIT
+  name: "National Cancer Institute Thesaurus"
+  name_space_prefix: NCIT
   url: "https://ncit.nci.nih.gov/"
   reference:
     root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
@@ -16,8 +16,8 @@ NCITgrade:
     - 'NCIT:C28080'
 
 NCITstage:
-  name: "National Cancer Institute Thesaurus Disease Stage Qualifier"
-  prefix: NCIT
+  name: "National Cancer Institute Thesaurus"
+  name_space_prefix: NCIT
   url: "https://ncit.nci.nih.gov/"
   reference:
     root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
@@ -33,8 +33,8 @@ NCITstage:
     - NCIT:C27969
 
 NCITtnm:
-  name: "National Cancer Institute Thesaurus Cancer TNM Finding"
-  prefix: NCIT
+  name: "National Cancer Institute Thesaurus"
+  name_space_prefix: NCIT
   url: "https://ncit.nci.nih.gov/"
   reference:
     root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
@@ -51,8 +51,8 @@ NCITtnm:
 
 # Bio-Metadata
 NCIT:
-  name: "National Cancer Institute Thesaurus neoplasias"
-  prefix: NCIT
+  name: "National Cancer Institute Thesaurus"
+  name_space_prefix: NCIT
   url: "https://ncit.nci.nih.gov/"
   reference:
     root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
@@ -68,7 +68,7 @@ NCIT:
 
 HP:
   name: "Human Phenotype Ontology"
-  prefix: HP
+  name_space_prefix: HP
   url: "https://hpo.jax.org/"
   db_key: 'biocharacteristics.id'
   scope: individuals
@@ -80,7 +80,7 @@ PATOsex:
   description: >
     PATO codes specific for genotypic sex...
   name: "Phenotypic Qualities Ontology"
-  prefix: PATO
+  name_space_prefix: PATO
   url: "http://obofoundry.org/ontology/pato.html"
   db_key: 'sex.id'
   scope: individuals
@@ -89,8 +89,8 @@ PATOsex:
     - PATO:0020000
 
 EFOcnvassessment:
-  name: "EFO CNV Assessment"
-  prefix: EFO
+  name: "Experimental Factor Ontology"
+  name_space_prefix: EFO
   url: "http://www.ebi.ac.uk/efo/EFO_0030063"
   db_key: 'variant_state.id'
   scope: variants
@@ -100,8 +100,8 @@ EFOcnvassessment:
     - EFO:0030070
 
 EFOfus:
-  name: "EFO followup status classes"
-  prefix: EFO
+  name: "Experimental Factor Ontology"
+  name_space_prefix: EFO
   url: "http://www.ebi.ac.uk/efo/EFO_0030038"
   db_key: 'followup_state.id'
   scope: biosamples
@@ -111,7 +111,7 @@ EFOfus:
 
 EFOmaterial:
   name: "Experimental Factor Ontology"
-  prefix: EFO
+  name_space_prefix: EFO
   url: "https://www.ebi.ac.uk/efo/"
   db_key: 'biosample_status.id'
   scope: biosamples
@@ -122,7 +122,7 @@ EFOmaterial:
 
 icdom:
   name: "ICD-O 3 Morphologies (Progenetix transcription)"
-  prefix: pgx
+  name_space_prefix: pgx
   url: https://progenetix.org/
   reference:
     root: https://progenetix.org/services/ids/
@@ -135,7 +135,7 @@ icdom:
 
 icdot:
   name: "ICD-O 3 Topographies (Progenetix transcription)"
-  prefix: pgx
+  name_space_prefix: pgx
   url: "https://progenetix.org/"
   reference:
     root: https://progenetix.org/services/ids/
@@ -151,7 +151,7 @@ icdot:
 
 PMID:
   name: "NCBI PubMed"
-  prefix: PMID
+  name_space_prefix: PMID
   url: "https://www.ncbi.nlm.nih.gov/pubmed/"
   reference:
     root: https://europepmc.org/article/MED/
@@ -166,8 +166,8 @@ PMID:
     - PMID:9405679
 
 GEOseries:
-  prefix: geo
-  name: Gene Expression Omnibus series
+  name_space_prefix: geo
+  name: Gene Expression Omnibus
   url: "https://www.ncbi.nlm.nih.gov/geo/"
   reference:
     root: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
@@ -177,32 +177,29 @@ GEOseries:
   pattern: '^(?:geo:)?GSE\d+?$'
   scope: biosamples
   db_key: 'external_references.id'
-  is_series: True
-  child_pattern: '^(?:geo:)?GSM'
   examples:
     - geo:GSE19331
 
-GEOplatform:
-  prefix: geo
-  name: Gene Expression Omnibus platform
+GenomePlatforms:
+  name_space_prefix: geo
+  name: Gene Expression Omnibus
   url: "https://www.ncbi.nlm.nih.gov/geo/"
   reference:
     root: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
     replace:
       - "geo:"
       - ""
-  pattern: '^(?:geo:)?GPL\d+?$'
-  scope: biosamples
-  db_key: 'external_references.id'
-  child_pattern: '^(?:geo:)?GSM'
+  pattern: '^(?:EFO:)|(?:(?:geo:)?GPL)\d+?$'
+  scope: callsets
+  db_key: 'platform_model.id'
   examples:
     - geo:GPL6504
     - geo:GPL6801
 
 GEOexperiment:
-  prefix: geo
+  name_space_prefix: geo
   url: "https://www.ncbi.nlm.nih.gov/geo/"
-  name: Gene Expression Omnibus experiment
+  name: Gene Expression Omnibus
   reference:
     root: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
     replace:
@@ -217,7 +214,7 @@ GEOexperiment:
 
 arrayexpress:
   name: "EBI ArrayExpress"
-  prefix: arrayexpress
+  name_space_prefix: arrayexpress
   url: "https://www.ncbi.nlm.nih.gov/geo/"
   reference:
     root: https://www.ebi.ac.uk/arrayexpress/experiments/
@@ -232,7 +229,7 @@ arrayexpress:
 
 TCGAproject:
   name: "The Cancer Genome Atlas"
-  prefix: pgx
+  name_space_prefix: pgx
   url: "http://cancergenome.nih.gov"
   reference:
     root: https://portal.gdc.cancer.gov/projects/
@@ -242,14 +239,15 @@ TCGAproject:
   scope: biosamples
   pattern: '^(?:pgx:)?TCGA-[\w\-]{2,8}?$'
   db_key: 'external_references.id'
-  is_series: true
-  child_pattern: '^(?:pgx:)?TCGA-\w+?\-[\w\-]{15,30}$'
   examples:
-    - pgx:TCGA-000002fc-53a0-420e-b2aa-a40a358bba37
+    - pgx:TCGA-samples
+    - pgx:TCGA-DLBC
+    - pgx:TCGA-ESCA
+    - pgx:TCGA-GBM
 
 UBERON:
   name: Uberon cross-species anatomical structures ontology
-  prefix: UBERON
+  name_space_prefix: UBERON
   url: "http://uberon.org"
   reference:
     root: http://purl.obolibrary.org/obo/
@@ -265,7 +263,7 @@ UBERON:
 
 cbioportal:
   name: "cBioPortal"
-  prefix: cbioportal
+  name_space_prefix: cbioportal
   url: "https://www.cbioportal.org"
   reference:
     root: https://www.cbioportal.org/study/summary?id=
@@ -280,7 +278,7 @@ cbioportal:
 
 cellosaurus:
   name: "Cellosaurus - a knowledge resource on cell lines"
-  prefix: cellosaurus
+  name_space_prefix: cellosaurus
   url: "https://web.expasy.org/cellosaurus/"
   reference:
     root: https://web.expasy.org/cellosaurus/
@@ -296,7 +294,7 @@ cellosaurus:
 
 pgxcohort:
   name: "Progenetix cohorts"
-  prefix: pgx
+  name_space_prefix: pgx
   url: "https://arraymap.progenetix.org"
   db_key: 'cohorts.id'
   scope: biosamples
