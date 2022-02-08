@@ -5,15 +5,15 @@ format_patterns:
 
   - pattern: '^(?:pgx:)?(pgxbs-[\w\-\.]{4,128})$'
     link: '/biosamples/details?datasetIds=progenetix&id='
-    prepend_if_missing: "pgx:"
+    prepend_if_missing: ""
 
   - pattern: '^(?:pgx:)?(pgxcs-[\w\-\.]{4,128})$'
     link: '/callsets/details?datasetIds=progenetix&id='
-    prepend_if_missing: "pgx:"
+    prepend_if_missing: ""
 
   - pattern: '^(?:pgx:)?(pgxind-[\w\-\.]{4,128})$'
     link: '/individuals/details?datasetIds=progenetix&id='
-    prepend_if_missing: "pgx:"
+    prepend_if_missing: ""
 
   - pattern: '^(?:pgx:)?(icdom-[\d]{1,5}(?:-\d{1,5})?)$'
     link: '/subsets/subsetdetails/?datasetIds=progenetix&id='
@@ -52,4 +52,9 @@ format_patterns:
     examples:
       - geo:GPL6801
     link: '/subsets/subsetdetails/?datasetIds=progenetix&id='
+
+  - pattern: '^(?:pgx:)?(geo:GSM\d+)$'
+    examples:
+      - geo:GSM491153
+    link: '/biosamples/details?datasetIds=progenetix&id='
 

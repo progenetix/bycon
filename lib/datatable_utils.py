@@ -25,7 +25,7 @@ def export_datatable(byc):
     for pgxdoc in byc["service_response"]["response"]["result_sets"][0]["results"]:
         line = [ ]
         for p, k in io_params.items():
-            v = _get_nested_value(pgxdoc, k["db_key"])
+            v = get_nested_value(pgxdoc, k["db_key"])
             if isinstance(v, list):
                 line.append("::".join(v))
             else:
@@ -83,11 +83,11 @@ def create_table_header(io_params, io_prefixes):
     for par, d in io_prefixes.items():
         if "pres" in d:
             for pre in d["pres"]:
-                header_labs.append( par+"::id"+"___"+pre )
-                header_labs.append( par+"::label"+"___"+pre )
+                header_labs.append( par+"__id"+"___"+pre )
+                header_labs.append( par+"__label"+"___"+pre )
         else:
-            header_labs.append( par+"::id" )
-            header_labs.append( par+"::label" )
+            header_labs.append( par+"__id" )
+            header_labs.append( par+"__label" )
 
     return header_labs
 
@@ -132,7 +132,7 @@ def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
 
 ################################################################################
 
-def _get_nested_value(parent, dotted_key):
+def get_nested_value(parent, dotted_key):
 
     ps = dotted_key.split('.')
 

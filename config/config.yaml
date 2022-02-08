@@ -69,6 +69,7 @@ dataset_ids:
   - cellosaurus
   - 1000genomesDRAGEN
 dataset_default: progenetix
+dataset_junk: progenetix_junk
 collections:
   - biosamples
   - callsets

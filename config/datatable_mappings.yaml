@@ -31,7 +31,13 @@ io_params:
       db_key: info.followup_months
       type: string
     followup_time:
-      db_key: info.followup_time
+      db_key: followup_time
+      type: string
+    recurrence:
+      db_key: info.recurrence
+      type: string
+    recurrence_time:
+      db_key: info_recurrence_time
       type: string
     geoprov_label:
       db_key: provenance.geo_location.properties.label
@@ -172,9 +178,6 @@ io_prefixes:
     icdo_topography:
       type: string
       pre: icdot
-    sampled_tissue:
-      type: string
-      pre: UBERON
     # biocharacteristics:
     #   type: array
     #   pres:
@@ -190,7 +193,7 @@ io_prefixes:
         - arrayexpress
     followup_state:
       type: string
-      pre: pgxfus
+      pre: EFO
     data_use_conditions:
       type: string
       pre: DUO

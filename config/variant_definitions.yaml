@@ -1,8 +1,11 @@
 cnv_dummy_values:
   DUP: 0.58
   DEL: -1
-  AMP: 2
+  HLDUP: 2.33
+  AMP: 3
   HOMODEL: -3
+
+amp_max_size: 5000000
 
 cnv_iscn_defs:
   DUP:
@@ -19,13 +22,20 @@ cnv_iscn_defs:
     variant_state:
       id: EFO:0030067
       label: copy number loss
+  HLDUP:
+    info:
+      revish_label: hldup
+    variant_type: DUP
+    variant_state:
+      id: EFO:0030072
+      label: high-level copy number gain
   AMP:
     info:
       revish_label: amp
     variant_type: DUP
     variant_state:
-      id: EFO:0030072
-      label: high-level copy number gain
+      id: EFO:0030073
+      label: focal genome amplification
   HOMODEL:
     info:
       revish_label: homodel

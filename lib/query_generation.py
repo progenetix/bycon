@@ -152,24 +152,35 @@ def _get_response_type_from_path(path_element, byc):
 
 def update_queries_from_id_values(byc):
 
-    id_re = re.compile(r'^\w[\w\-]+?\w$')
+    # TODO: Hacking some translation of ids ...
 
-    for par, scope in byc["config"]["id_query_map"].items():
-        if par in byc["form_data"]:
-            q_list = [ ]
-            q = False
-            for id_v in byc["form_data"][par]:
-                if id_re.match(id_v):
-                    q_list.append({"id":id_v})
-            if len(q_list) == 1:
-                q = q_list[0]
-            elif len(q_list) > 1:
-                q = { '$or': q_list }
-            if q:
-                if scope in byc["queries"]:
-                    byc["queries"].update( { scope: { '$and': [ q, byc["queries"][ scope ] ] } } )
-                else:
-                    byc["queries"].update( { scope: q } )
+    if "biosamples" in byc["queries"]:
+        if "id" in byc["queries"]["biosamples"]:
+            bs_id = byc["queries"]["biosamples"]["id"]
+            if isinstance(bs_id, str):
+
+                gsm_re = re.compile(r'^geo:GSM\d+?$')
+                if gsm_re.match(bs_id):
+                    byc["queries"].update({"biosamples":{"external_references.id":bs_id}})
+
+    # id_re = re.compile(r'^\w[\w\:\-]+?\w$')
+
+    # for par, scope in byc["config"]["id_query_map"].items():
+    #     if par in byc["form_data"]:
+    #         q_list = [ ]
+    #         q = False
+    #         for id_v in byc["form_data"][par]:
+    #             if id_re.match(id_v):
+    #                 q_list.append({"id":id_v})
+    #         if len(q_list) == 1:
+    #             q = q_list[0]
+    #         elif len(q_list) > 1:
+    #             q = { '$or': q_list }
+    #         if q:
+    #             if scope in byc["queries"]:
+    #                 byc["queries"].update( { scope: { '$and': [ q, byc["queries"][ scope ] ] } } )
+    #             else:
+    #                 byc["queries"].update( { scope: q } )
 
     return byc
 
@@ -215,7 +226,8 @@ def update_queries_from_filters(byc):
     (default value) or `OR`
     """
 
-    filter_lists = {}
+    f_defs = byc["filter_definitions"]
+    f_lists = {}
 
     logic = byc[ "filter_flags" ][ "logic" ]
     f_desc = byc[ "filter_flags" ][ "descendants" ]
@@ -233,6 +245,20 @@ def update_queries_from_filters(byc):
         f_scope = f.get("scope", False)
 
         f_info = coll_coll.find_one({"id": f["id"]})
+ 
+        if f_info is None:
+
+            for f_d in f_defs.values():
+                f_re = re.compile(f_d["pattern"])
+                if f_re.match(f["id"]):
+                    if f_d["collationed"] is False:
+                        f_info = {
+                            "id": f["id"],
+                            "scope": f_d["scope"],
+                            "db_key": f_d["db_key"],
+                            "child_terms": [f["id"]]
+                        }
+                        f_desc = False
 
         if f_info is None:
             continue
@@ -245,20 +271,20 @@ def update_queries_from_filters(byc):
         if f_scope not in byc[ "config" ][ "collections" ]:
             continue
 
-        if f_scope not in filter_lists.keys():
-            filter_lists.update({f_scope:{}})
-        if f_field not in filter_lists[f_scope].keys():
-            filter_lists[f_scope].update({f_field:[]})
+        if f_scope not in f_lists.keys():
+            f_lists.update({f_scope:{}})
+        if f_field not in f_lists[f_scope].keys():
+            f_lists[f_scope].update({f_field:[]})
 
         if f_desc is True:
-            filter_lists[f_scope][f_field].extend(f_info["child_terms"])
+            f_lists[f_scope][f_field].extend(f_info["child_terms"])
         else:
-            filter_lists[f_scope][f_field].append(f_info["id"])
+            f_lists[f_scope][f_field].append(f_info["id"])
 
     # creating the queries & combining w/ possible existing ones
-    for f_scope in filter_lists.keys():
+    for f_scope in f_lists.keys():
         f_s_l = []
-        for f_field, f_queries in filter_lists[f_scope].items():
+        for f_field, f_queries in f_lists[f_scope].items():
             if len(f_queries) == 1:
                 f_s_l.append({ f_field: f_queries[0] })
             else:

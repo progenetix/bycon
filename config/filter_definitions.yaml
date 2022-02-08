@@ -11,6 +11,7 @@ NCITgrade:
   description: Disease Grade codes
   scope: biosamples
   pattern: '^NCIT(:C\d+?)?$'
+  collationed: True
   examples:
     - 'NCIT:C28078'
     - 'NCIT:C28080'
@@ -28,6 +29,7 @@ NCITstage:
   description: Disease Stage codes
   scope: biosamples
   pattern: '^NCIT(:C\d+?)?$'
+  collationed: True
   examples:
     - NCIT:C27970
     - NCIT:C27969
@@ -45,6 +47,7 @@ NCITtnm:
   description: NCIT TNM codes
   scope: biosamples
   pattern: '^NCIT(:C\d+?)?$'
+  collationed: True
   examples:
     - NCIT:C48700
     - NCIT:C48786
@@ -62,6 +65,7 @@ NCIT:
   db_key: 'histological_diagnosis.id'
   scope: biosamples
   pattern: '^NCIT(:C\d+?)?$'
+  collationed: True
   examples:
     - NCIT:C27676
     - NCIT:C9325
@@ -73,6 +77,7 @@ HP:
   db_key: 'biocharacteristics.id'
   scope: individuals
   pattern: '^HP(:\d+?)?$'
+  collationed: True
   examples:
     - HP:0012209
 
@@ -85,6 +90,7 @@ PATOsex:
   db_key: 'sex.id'
   scope: individuals
   pattern: '^PATO(:002000[012])?$'
+  collationed: True
   examples:
     - PATO:0020000
 
@@ -106,6 +112,7 @@ EFOfus:
   db_key: 'followup_state.id'
   scope: biosamples
   pattern: '^EFO(:\d+?)?$'
+  collationed: True
   examples:
     - EFO:0030039
 
@@ -116,6 +123,7 @@ EFOmaterial:
   db_key: 'biosample_status.id'
   scope: biosamples
   pattern: '^(?:EFO)|(?:OBI):\d+?$'
+  collationed: True
   examples:
     - EFO:0009656
     - EFO:0030035
@@ -129,6 +137,7 @@ icdom:
   db_key: 'icdo_morphology.id'
   scope: biosamples
   pattern: '^(?:pgx:)?icdom-\d{1,5}(-\d{1,5})?$'
+  collationed: True
   examples:
     - pgx:icdom-85003
     - pgx:icdom-94403
@@ -142,6 +151,7 @@ icdot:
   db_key: 'icdo_topography.id'
   scope: biosamples
   pattern: '^(?:pgx:)?icdot-C\d\d?(\.\d)?$'
+  collationed: True
   examples:
     - pgx:icdot-C42.2
     - pgx:icdot-C54.1
@@ -161,6 +171,7 @@ PMID:
   db_key: 'external_references.id'
   scope: biosamples
   pattern: '^PMID(:\d+?)?$'
+  collationed: True
   examples:
     - PMID:28966033
     - PMID:9405679
@@ -177,6 +188,9 @@ GEOseries:
   pattern: '^(?:geo:)?GSE\d+?$'
   scope: biosamples
   db_key: 'external_references.id'
+  is_series: True
+  series_pattern: '^(?:geo:)?GSM\d+?$'
+  collationed: True
   examples:
     - geo:GSE19331
 
@@ -192,6 +206,7 @@ GenomePlatforms:
   pattern: '^(?:EFO:)|(?:(?:geo:)?GPL)\d+?$'
   scope: callsets
   db_key: 'platform_model.id'
+  collationed: True
   examples:
     - geo:GPL6504
     - geo:GPL6801
@@ -224,6 +239,7 @@ arrayexpress:
   db_key: 'external_references.id'
   scope: biosamples
   pattern: '^arrayexpress:[AEP]-\w{4}-\d+$'
+  collationed: True
   examples:
     - arrayexpress:E-MEXP-1008
 
@@ -239,6 +255,7 @@ TCGAproject:
   scope: biosamples
   pattern: '^(?:pgx:)?TCGA-[\w\-]{2,8}?$'
   db_key: 'external_references.id'
+  collationed: True
   examples:
     - pgx:TCGA-samples
     - pgx:TCGA-DLBC
@@ -257,6 +274,7 @@ UBERON:
   scope: biosamples
   db_key: 'sampled_tissue.id'
   pattern: '^UBERON(:\d+?)?$'
+  collationed: True
   examples:
     - UBERON:0000959
     - UBERON:0001869
@@ -273,6 +291,7 @@ cbioportal:
   scope: biosamples
   db_key: 'external_references.id'
   pattern: '^cbioportal:\w+?$'
+  collationed: True
   examples:
     - 'cbioportal:msk_impact_2017'
 
@@ -288,6 +307,7 @@ cellosaurus:
   db_key: 'external_references.id'
   scope: biosamples
   pattern: '^cellosaurus:CVCL_\w+?$'
+  collationed: True
   examples:
     - 'cellosaurus:CVCL_1650'
     - 'cellosaurus:CVCL_0006'
@@ -299,6 +319,7 @@ pgxcohort:
   db_key: 'cohorts.id'
   scope: biosamples
   pattern: '^pgx:cohort-\w+?$'
+  collationed: True
   examples:
     - 'pgx:cohort-arraymap'
     - 'pgx:cohort-TCGA'

@@ -98,6 +98,56 @@ def variant_create_digest(v):
 
 ################################################################################
 
+def deparse_ISCN_to_variants(iscn, technique, byc):
 
+    iscn = "".join(iscn.split())
+    variants = []
+    vd = byc["variant_definitions"]
+    cb_pat = re.compile( vd["parameters"]["cytoBands"]["pattern"] )
+    errors = []
+
+    for cnv_t, cnv_defs in vd["cnv_iscn_defs"].items():
+
+        revish = cnv_defs["info"]["revish_label"]
+
+        iscn_re = re.compile(rf"^.*?{revish}\(([\w.,]+)\).*?$", re.IGNORECASE)
+
+        if iscn_re.match(iscn):
+
+            m = iscn_re.match(iscn).group(1)
+
+            for i_v in re.split(",", m):
+
+                if not cb_pat.match(i_v):
+                    continue
+
+                cytoBands, chro, start, end, error = bands_from_cytobands(i_v, byc)
+                if len(error) > 0:
+                    errors.append(error)
+                    continue
+
+                v_l = end - start
+                t = cnv_t
+                v = cnv_defs.copy()
+
+                if "AMP" in cnv_t and v_l > vd["amp_max_size"]:
+                    t = "HLDUP"
+                    v = vd["cnv_iscn_defs"][t].copy()
+               
+                v.update({
+                    "reference_name": chro,
+                    "start": start,
+                    "end": end,
+                    "type": "CopyNumber",
+                    "info": {
+                        "var_length": v_l,
+                        "cnv_value": vd["cnv_dummy_values"][t],
+                        "provenance": technique+" ISCN conversion"
+                    }
+                })
+
+                variants.append(v)
+
+    return variants, " :: ".join(errors)
 
 

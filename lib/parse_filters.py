@@ -60,6 +60,8 @@ def get_filter_flags(byc):
 
 def _check_filter_values(filters, byc):
 
+    f_defs = byc["filter_definitions"]
+
     checked = [ ]
     for f in filters:
         if not isinstance(f, dict):
@@ -67,7 +69,7 @@ def _check_filter_values(filters, byc):
         if not "id" in f:
             continue
         pre = re.split('-|:', f["id"])[0]
-        for f_t, f_d in byc["filter_definitions"].items():
+        for f_t, f_d in f_defs.items():
             if re.compile( f_d["pattern"] ).match( f["id"] ):       
                 if f not in checked:
                     checked.append( f )
