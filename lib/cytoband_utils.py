@@ -36,6 +36,7 @@ def parse_cytoband_file(byc):
 
     cb_keys = [ "chro", "start", "end", "cytoband", "staining" ]
     cytobands = [ ]
+    cytolimits = {}
     i = 0
 
     c_bands = [ ]
@@ -46,15 +47,29 @@ def parse_cytoband_file(byc):
     # !!! making sure the chromosomes are sorted !!!
     for chro in byc["interval_definitions"][ "chromosomes" ]:
         c_m = "chr"+str(chro)
+        chrobands = [ ]
         for cb in c_bands:
             if cb[ "chro" ] == c_m:
                 cb[ "i" ] = i
                 cb[ "chro" ] = cb[ "chro" ].replace( "chr", "")
                 cb[ "chroband" ] = cb[ "chro" ]+cb[ "cytoband" ]
                 cytobands.append(dict(cb))
+                chrobands.append(dict(cb))
                 i += 1
+        cytolimits.update({
+            chro: {
+                "chro": [ int(cytobands[0]["start"]), int(cytobands[-1]["end"]) ],
+                "size": int(cytobands[-1]["end"]) - int(cytobands[0]["start"]),
+                "p": arm_base_range(chro, "p", cytobands),
+                "q": arm_base_range(chro, "q", cytobands)
+            }
+        })
+
     
-    byc.update( { "cytobands": cytobands } )
+    byc.update( {
+        "cytobands": cytobands,
+        "cytolimits": cytolimits
+    } )
 
     return byc
 
@@ -174,22 +189,18 @@ def match_bands(band, cytobands):
     m_b_s = list( filter(lambda d:cb_re.match(d["cytoband"]), cytobands) )
     return m_b_s
 
-###############################################################################
+################################################################################
 
-# def match_bands_index(band, cytobands):
+def arm_base_range(chro, arm, cytobands):
 
-#     cb_re = re.compile(rf"^{band}", re.IGNORECASE)
-#     end_re = re.compile(r"^([pq]\d.*?)\.?\d$")
-#     m_b_i = []
-#     for cb in cytobands:
-#         if cb_re.match(cb["cytoband"])
-#             m_b_i.append(cb["i"])
-#     if len(m_b_i) < 1:
-#         if end_re.match(band):
-#             band = end_re.match(band).group(1)
-#             match_bands_index(band, cytobands)
+    if arm not in ["p","q", "P", "Q"]:
+        return 0, 1
 
-#     return m_b_i
+    arm_re = re.compile(rf"^{arm}", re.IGNORECASE)
+    bands = list(filter(lambda d: d[ "chro" ] == chro, cytobands))
+    bands = list(filter(lambda d: arm_re.match(d[ "cytoband" ]), bands))
+
+    return [ int(bands[0]["start"]), int(bands[-1]["end"]) ]
 
 ################################################################################
 
@@ -206,4 +217,5 @@ def cytobands_label( cytobands ):
     return cb_label
 
 ################################################################################
+
 

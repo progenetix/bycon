@@ -29,7 +29,7 @@ properties:
   externalReferences:
     type: array
     items:
-      $ref: ../common/externalReferences.yaml#/properties
+      $ref: ../common/externalReference.yaml#/properties
     examples:
       - id: PMID:9892199
   cohorts:

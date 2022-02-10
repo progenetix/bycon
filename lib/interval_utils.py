@@ -96,7 +96,8 @@ def interval_cnv_arrays(v_coll, query, byc):
         "delcoverage": 0,
         "cnvfraction": 0,
         "dupfraction": 0,
-        "delfraction": 0
+        "delfraction": 0,
+        "chrofractions": {}
     }
 
     v_no = v_coll.count_documents( query )
