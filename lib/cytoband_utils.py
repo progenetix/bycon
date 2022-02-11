@@ -35,8 +35,11 @@ def parse_cytoband_file(byc):
     cb_re = re.compile( byc["interval_definitions"][ "cytobands" ][ "pattern" ] )
 
     cb_keys = [ "chro", "start", "end", "cytoband", "staining" ]
+
     cytobands = [ ]
-    cytolimits = {}
+    cytolimits = { }
+    genome_size = 0
+
     i = 0
 
     c_bands = [ ]
@@ -64,11 +67,13 @@ def parse_cytoband_file(byc):
                 "q": arm_base_range(chro, "q", cytobands)
             }
         })
+        genome_size += int(chrobands[-1]["end"])
 
     
     byc.update( {
         "cytobands": cytobands,
-        "cytolimits": cytolimits
+        "cytolimits": cytolimits,
+        "genome_size": genome_size
     } )
 
     return byc
