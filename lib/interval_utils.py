@@ -39,13 +39,15 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
         genome_binning = "default"
 
     int_b = i_d["genome_binning"][genome_binning]
-    e_p = i_d["last_interval_soft_expansion"]
+    e_p = i_d["terminal_intervals_soft_expansion"]
 
     byc["genomic_intervals"] = []
     i = 1
 
     for chro in c_l:
+
         p_max = c_l[chro]["p"][-1]
+        q_max = c_l[chro]["size"]
         arm = "p"
         start = 0
 
@@ -55,12 +57,12 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
             p_first -= int_b
 
         end = start + p_first
-        while start < c_l[chro]["size"]:
+        while start < q_max:
             int_p = int_b
-            if end > c_l[chro]["size"]:
-                end = c_l[chro]["size"]
-            elif c_l[chro]["size"] < end + e_p:
-                end = c_l[chro]["size"]
+            if end > q_max:
+                end = q_max
+            elif q_max < end + e_p:
+                end = q_max
                 int_p += e_p
             if end >= p_max:
                 arm = "q"
@@ -77,7 +79,7 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
             # if size > 1000000:
             #     print("{}{}:{}-{}\t{}".format(chro, arm, start, end, size))
             start = end
-            end = start + int_p
+            end += int_p
             i += 1
 
     return byc
