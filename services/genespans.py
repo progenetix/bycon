@@ -77,7 +77,7 @@ def genespans():
         if "genespan" in byc["method"]:
             for i, g in enumerate(results):
                 g_n = {}
-                for k in byc["this_config"]["methods"]["genespan"]:
+                for k in byc["this_config"]["method_keys"]["genespan"]:
                     if not k in g:
                         continue
                     g_n.update({k:g[k]})

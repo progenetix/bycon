@@ -42,7 +42,7 @@ def cohorts():
     check_dataset_ids(byc)
     _get_history_depth(byc)
 
-    create_empty_service_response(byc)
+    create_empty_beacon_response(byc)
 
     results = datasets_update_latest_stats(byc, "cohorts")
 

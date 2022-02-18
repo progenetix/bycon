@@ -21,7 +21,7 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
     byc["cytoband_intervals"] = []
     for cb in byc["cytobands"]:
         byc["cytoband_intervals"].append( {
-                "index": int(cb["i"]),
+                "no": int(cb["i"]),
                 "id": "{}:{}-{}".format(cb["chro"], cb["start"], cb["end"]),
                 "reference_name": cb["chro"],
                 "start": int(cb["start"]),
@@ -35,59 +35,38 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
 
     # otherwise intervals ######################################################
 
-    byc["genomic_intervals"] = []
-    # byc["genomic_intervals_pq"] = []
-
-
     if not genome_binning in i_d:
         genome_binning = "default"
 
     int_b = i_d["genome_binning"][genome_binning]
-
-    # i = 0
-    # for chro in c_l:
-    #     start = 0
-    #     end = start + int_b
-    #     while start <= c_l[chro]["size"]:
-    #         if end > c_l[chro]["size"]:
-    #             end = c_l[chro]["size"]
-    #         size = end - start
-    #         byc["genomic_intervals"].append( {
-    #                 "index": i,
-    #                 "id": "{}:{}-{}".format(chro, start, end),
-    #                 "reference_name": chro,
-    #                 "start": start,
-    #                 "end": end,
-    #                 "size": end - start
-    #             })
-    #         start += int_b
-    #         end += int_b
-    #         i += 1
-
-    i = 0
     e_p = i_d["last_interval_soft_expansion"]
+
+    byc["genomic_intervals"] = []
+    i = 1
 
     for chro in c_l:
         p_max = c_l[chro]["p"][-1]
         arm = "p"
         start = 0
-        end = start + int_b
-        while start <= c_l[chro]["size"]:
+
+        # calculate first interval to end p-arm with a full sized one
+        p_first = p_max
+        while p_first >= int_b + e_p:
+            p_first -= int_b
+
+        end = start + p_first
+        while start < c_l[chro]["size"]:
             int_p = int_b
             if end > c_l[chro]["size"]:
                 end = c_l[chro]["size"]
             elif c_l[chro]["size"] < end + e_p:
                 end = c_l[chro]["size"]
                 int_p += e_p
-            elif p_max:
-                if end >= p_max:
-                    end = p_max
-                    int_p = end - start
-                    p_max = None
-                    arm = "q"
+            if end >= p_max:
+                arm = "q"
             size = end - start
             byc["genomic_intervals"].append( {
-                    "index": i,
+                    "no": i,
                     "id": "{}{}:{}-{}".format(chro, arm, start, end),
                     "reference_name": chro,
                     "arm": arm,
@@ -95,10 +74,10 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
                     "end": end,
                     "size": size
                 })
-            # if size < 100000000:
+            # if size > 1000000:
             #     print("{}{}:{}-{}\t{}".format(chro, arm, start, end, size))
-            start += int_p
-            end = start + int_b
+            start = end
+            end = start + int_p
             i += 1
 
     return byc

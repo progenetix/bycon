@@ -124,6 +124,7 @@ EFOmaterial:
   scope: biosamples
   pattern: '^(?:EFO)|(?:OBI):\d+?$'
   collationed: True
+  collation_include_normals: true
   examples:
     - EFO:0009656
     - EFO:0030035
@@ -196,20 +197,22 @@ GEOseries:
 
 GenomePlatforms:
   name_space_prefix: geo
-  name: Gene Expression Omnibus
+  name: Genomic Analysis Platforms
   url: "https://www.ncbi.nlm.nih.gov/geo/"
   reference:
     root: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
     replace:
       - "geo:"
       - ""
-  pattern: '^(?:EFO:)|(?:(?:geo:)?GPL)\d+?$'
+  pattern: '^(?:EFO:)|(?:(?:geo:)?GPL)|(?:(?:arrayexpress:)?)[\w\-]+?$'
   scope: callsets
   db_key: 'platform_model.id'
   collationed: True
   examples:
     - geo:GPL6504
     - geo:GPL6801
+    - arrayexpress:A-AFFY-72
+    - EFO:0010938
 
 GEOexperiment:
   name_space_prefix: geo
@@ -230,7 +233,7 @@ GEOexperiment:
 arrayexpress:
   name: "EBI ArrayExpress"
   name_space_prefix: arrayexpress
-  url: "https://www.ncbi.nlm.nih.gov/geo/"
+  url: "https://www.ebi.ac.uk/arrayexpress/"
   reference:
     root: https://www.ebi.ac.uk/arrayexpress/experiments/
     replace:

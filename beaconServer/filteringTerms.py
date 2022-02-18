@@ -42,7 +42,7 @@ def filtering_terms():
     select_dataset_ids(byc)
     check_dataset_ids(byc)
     update_datasets_from_dbstats(byc)
-    create_empty_service_response(byc)
+    create_empty_beacon_response(byc)
 
     return_filtering_terms_response( byc )
 

@@ -32,20 +32,18 @@ def main():
 def services(service):
 
     set_debug_state(debug=0)
+    initialize_service(byc)
 
     uri = environ.get('REQUEST_URI')
-
-    read_local_prefs( "service_mappings", services_path, byc )
-
     rest_base_name = "services"
 
-    if path in byc["this_config"]["service_names"]:
+    if path in byc["service_mappings"]["service_names"]:
         service_name = path
     else:
         service_name = rest_path_value(rest_base_name)
 
-    if service_name in byc["this_config"]["service_names"]:    
-        f = byc["this_config"]["service_names"][ service_name ]
+    if service_name in byc["service_mappings"]["service_names"]:    
+        f = byc["service_mappings"]["service_names"][ service_name ]
         
         # dynamic package/function loading
         try:
@@ -62,11 +60,11 @@ def services(service):
             exit()
 
 
-    if service_name in byc["this_config"]["rewrites"]:    
+    if service_name in byc["service_mappings"]["rewrites"]:    
         pat = re.compile( rf"^.+\/{service_name}\/?(.*?)$" )
         if pat.match(uri):
             stuff = pat.match(uri).group(1)
-            cgi_print_rewrite_response(byc["this_config"]["rewrites"][service_name], stuff)
+            cgi_print_rewrite_response(byc["service_mappings"]["rewrites"][service_name], stuff)
 
     cgi_print_response( {
         "service_response": {

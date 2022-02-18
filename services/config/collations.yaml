@@ -1,6 +1,7 @@
 bycon_definition_files:
   - filter_definitions
   - dataset_definitions
+  - service_mappings
 collection_name: collations
 defaults:
   dataset_ids:
@@ -11,17 +12,15 @@ defaults:
     - icdom
     - icdot
     - cellosaurus
+  response_type: collation
+
 meta:
-  response_type: collations
-  returned_schemas:
-    - entity_type: collation
-      schema: https://progenetix.org/services/schemas/Collation/
   info: >
     The main collations payload can be accessed in `response.results`.
 integer_keys:
   - count
   - code_matches
-methods:
+method_keys:
   details: []
   child_terms:
     - id

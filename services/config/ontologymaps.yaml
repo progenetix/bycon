@@ -1,11 +1,12 @@
 bycon_definition_files:
   - filter_definitions
+  - service_mappings
 defaults:
   dataset_ids:
     - progenetix
   query_field: "code_group.id"
+  response_type: ontologymap
 meta:
-  response_type: ontologymaps
   returned_schemas:
     - entity_type: ontologyclassgroup
       schema: https://progenetix.org/services/schemas/OntologyClassGroup/
@@ -14,4 +15,3 @@ meta:
   info: >
     The main code groups payload can be accessed in `results[0].term_groups`. All ontology terms are
     provided in `results[0].unique_terms`.
-

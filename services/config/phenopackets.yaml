@@ -4,6 +4,7 @@ bycon_definition_files:
   - geoloc_definitions
   - variant_definitions
   - handover_definitions
+  - service_mappings
 parameters:
   dataset_ids:
     type: array

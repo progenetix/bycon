@@ -1,0 +1,69 @@
+service_names:
+  empty_value: info
+  endpoints: endpoints
+  collations: collations
+  cytomapper: cytomapper
+  dbstats: dbstats
+  deliveries: deliveries
+  genespans: genespans
+  genes: genespans
+  geolocations: geolocations
+  ids: ids
+  interval_frequencies: intervalFrequencies
+  intervalFrequencies: intervalFrequencies
+  ontologymaps: ontologymaps
+  ontologyMaps: ontologymaps
+  publications: publications
+  schemas: schemas
+
+rewrites:
+  collationPlots: '/cgi/PGX/cgi/collationPlots.cgi'
+  samplePlots: '/cgi/PGX/cgi/samplePlots.cgi'
+  uploader: '/cgi/PGX/cgi/uploader.cgi'
+  biosamples: '/beacon/biosamples/'
+  variants: '/beacon/variants/'
+  individuals: '/beacon/individuals/'
+  phenopackets: '/beacon/individuals/'
+
+#response_type_aliases:
+path_response_type_mappings:
+
+  ontologymaps: ontologymap
+  ontologyMaps: ontologymap
+  collations: collation
+  genespans: gene
+  intervalFrequencies: 
+
+response_types:
+
+  - entity_type: ontologymap
+    collection: Null
+    response_schema: progenetixServiceResponse
+    beacon_schema:
+      entity_type: ontologymap
+      schema: https://progenetix.org/services/schemas/OntologyClassGroup/
+    h->o_access_key: Null
+
+  - entity_type: collation
+    collection: Null
+    response_schema: progenetixServiceResponse
+    beacon_schema:
+      entity_type: collation
+      schema: https://progenetix.org/services/schemas/Collation/
+    h->o_access_key: Null
+
+  - entity_type: gene
+    collection: Null
+    response_schema: progenetixServiceResponse
+    beacon_schema:
+      entity_type: gene
+      schema: https://progenetix.org/services/schemas/ProgenetixGene/
+    h->o_access_key: Null
+
+  - entity_type: interval_frequencies
+    collection: Null
+    response_schema: progenetixServiceResponse
+    beacon_schema:
+      entity_type: interval_frequencies
+      schema: https://progenetix.org/services/schemas/IntervalFrequencies/
+    h->o_access_key: Null

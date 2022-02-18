@@ -36,7 +36,7 @@ direct access to the frequecy list at `results[0].interval_frequencies`.
             "referenceName": "1",
             "end": 1000000,
             "gainFrequency": 0,
-            "index": 0,
+            "no": 1,
             "loss_frequency": 0,
             "start": 0
           },
@@ -44,7 +44,7 @@ direct access to the frequecy list at `results[0].interval_frequencies`.
             "referenceName": "1",
             "end": 2000000,
             "gainFrequency": 0,
-            "index": 1,
+            "no": 2,
             "lossFrequency": 0,
             "start": 1000000
           },

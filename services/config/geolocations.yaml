@@ -1,11 +1,12 @@
+bycon_definition_files:
+  - geoloc_definitions
+  - service_mappings
 defaults:
   dataset_ids:
     - progenetix
   geo_db: progenetix
   geo_coll: geolocs
   request_type: city
-bycon_definition_files:
-  - geoloc_definitions
 meta:
   response_type: geolocs
   returned_schemas:

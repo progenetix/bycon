@@ -1,9 +1,9 @@
 cnv_dummy_values:
   DUP: 0.58
   DEL: -1
-  HLDUP: 2.33
-  AMP: 3
-  HOMODEL: -3
+  HLDUP: 1.32
+  AMP: 2
+  HOMODEL: -2
 
 amp_max_size: 5000000
 

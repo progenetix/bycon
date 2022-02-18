@@ -31,7 +31,7 @@ def info():
     # parse_beacon_schema(byc)
     select_dataset_ids(byc)
     check_dataset_ids(byc)
-    create_empty_service_response(byc)
+    create_empty_beacon_response(byc)
     # byc["beacon_info"].update({"datasets": datasets_update_latest_stats(byc) })
 
     byc["service_response"].update({

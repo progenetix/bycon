@@ -130,7 +130,7 @@ def _export_pgxseg_frequencies(byc, results):
     open_text_streaming("interval_frequencies.pgxseg")
 
     print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
-    h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "index"]
+    h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
 
     # should get error checking if made callable
 

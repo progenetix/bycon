@@ -59,7 +59,7 @@ def dbstats():
                 if not ds_id in byc[ "dataset_ids" ]:
                     continue
             dbs = { "dataset_id": ds_id }
-            for k in byc["this_config"]["methods"][ byc["method"] ]:
+            for k in byc["this_config"]["method_keys"][ byc["method"] ]:
                 dbs.update({k:ds_vs[k]})
             results.append( dbs )
 

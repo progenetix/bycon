@@ -1,5 +1,5 @@
 bycon_definition_files:
-  - beacon_mappings
+  - service_mappings
   - dataset_definitions
   - filter_definitions
 defaults:
@@ -14,7 +14,7 @@ meta:
       schema: https://progenetix.org/services/schemas/DBstats/
   info: >
     The latest dbstats payload can be accessed in `response.results`.
-methods:
+method_keys:
   counts:
     - counts
   filtering_terms:

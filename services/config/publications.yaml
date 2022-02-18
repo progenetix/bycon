@@ -1,5 +1,6 @@
 bycon_definition_files:
   - geoloc_definitions
+  - service_mappings
 defaults:
   method: concise
   dataset_ids:
@@ -84,7 +85,7 @@ defaults:
           default: 1
       pattern: '^arraymap\:([>=<]?\d+?)$'
       remove_prefix: true
-methods:
+method_keys:
   all: [ ] # forces empty list which is interpreted to use all
   counts:
     - id

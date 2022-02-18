@@ -1,6 +1,7 @@
 bycon_definition_files:
   - variant_definitions
   - interval_definitions
+  - service_mappings
 defaults:
   dataset_ids:
     - progenetix
