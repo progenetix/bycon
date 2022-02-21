@@ -3,6 +3,7 @@ from progress.bar import Bar
 import numpy as np
 
 from cytoband_utils import *
+from cgi_parse import prjsoncam
 
 ################################################################################
 ################################################################################
@@ -13,38 +14,29 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
     if not "cytobands" in byc:
         parse_cytoband_file(byc)
 
-    c_l = byc["cytolimits"]
-    i_d = byc["interval_definitions"]
+    generate_cytoband_intervals(byc)
 
     # cytobands ################################################################
     
-    byc["cytoband_intervals"] = []
-    for cb in byc["cytobands"]:
-        byc["cytoband_intervals"].append( {
-                "no": int(cb["i"]),
-                "id": "{}:{}-{}".format(cb["chro"], cb["start"], cb["end"]),
-                "reference_name": cb["chro"],
-                "start": int(cb["start"]),
-                "end": int(cb["end"]),
-                "size": int(cb["end"]) - int(cb[ "start"])
-            })
-
     if genome_binning == "cytobands":
         byc.update({"genomic_intervals": byc["cytoband_intervals"].copy() })
         return byc
 
     # otherwise intervals ######################################################
 
-    if not genome_binning in i_d:
+    if not "genome_binning" in byc:
         genome_binning = "default"
+
+    c_l = byc["cytolimits"]
+    i_d = byc["interval_definitions"]
 
     int_b = i_d["genome_binning"][genome_binning]
     e_p = i_d["terminal_intervals_soft_expansion"]
 
-    byc["genomic_intervals"] = []
+    intervals = []
     i = 1
 
-    for chro in c_l:
+    for chro in c_l.keys():
 
         p_max = c_l[chro]["p"][-1]
         q_max = c_l[chro]["size"]
@@ -67,7 +59,7 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
             if end >= p_max:
                 arm = "q"
             size = end - start
-            byc["genomic_intervals"].append( {
+            intervals.append( {
                     "no": i,
                     "id": "{}{}:{}-{}".format(chro, arm, start, end),
                     "reference_name": chro,
@@ -76,11 +68,32 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
                     "end": end,
                     "size": size
                 })
-            # if size > 1000000:
-            #     print("{}{}:{}-{}\t{}".format(chro, arm, start, end, size))
+
             start = end
             end += int_p
             i += 1
+
+    byc.update({ "genomic_intervals": intervals })
+
+    return byc
+
+################################################################################
+
+def generate_cytoband_intervals(byc):
+
+    intervals = []
+
+    for cb in byc["cytobands"]:
+        intervals.append( {
+                "no": int(cb["i"]),
+                "id": "{}:{}-{}".format(cb["chro"], cb["start"], cb["end"]),
+                "reference_name": cb["chro"],
+                "start": int(cb["start"]),
+                "end": int(cb["end"]),
+                "size": int(cb["end"]) - int(cb[ "start"])
+            })
+
+    byc.update({ "cytoband_intervals": intervals })
 
     return byc
 
@@ -88,9 +101,11 @@ def generate_genomic_intervals(byc, genome_binning="1Mb"):
 
 def interval_cnv_arrays(v_coll, query, byc):
 
+    v_defs = byc["variant_definitions"]
+    c_l = byc["cytolimits"]
+
     cov_labs = { "DUP": 'dup', "DEL": 'del' }
     val_labs = { "DUP": 'max', "DEL": 'min' }
-    cnv_val_defaults = { "DUP": 0.58, "DEL": -1 }
 
     int_no = len(byc["genomic_intervals"])
     proto = [0 for i in range(int_no)] 
@@ -111,9 +126,15 @@ def interval_cnv_arrays(v_coll, query, byc):
         "delcoverage": 0,
         "cnvfraction": 0,
         "dupfraction": 0,
-        "delfraction": 0,
-        "chrofractions": {}
+        "delfraction": 0       
     }
+
+    chro_f = {}
+    for chro in c_l.keys():
+        chro_f.update({chro: cnv_stats.copy()})
+        for arm in ['p', 'q']:
+            c_a = chro+arm
+            chro_f.update({c_a: cnv_stats.copy()})
 
     v_no = v_coll.count_documents( query )
 
@@ -130,10 +151,13 @@ def interval_cnv_arrays(v_coll, query, byc):
 
         if not "variant_type" in v:
             continue
-        if not v["variant_type"] in cov_labs.keys():
+
+        v_t = v["variant_type"]
+
+        if not v_t in cov_labs.keys():
             continue
 
-        cov_lab = cov_labs[ v["variant_type"] ]
+        cov_lab = cov_labs[ v_t ]
 
         for i, interval in enumerate(byc["genomic_intervals"]):
 
@@ -150,7 +174,7 @@ def interval_cnv_arrays(v_coll, query, byc):
                     if type(v["info"]["cnv_value"]) == int or type(v["info"]["cnv_value"]) == float:
                         values_map[ i ].append(v["info"]["cnv_value"])
                     else:
-                        values_map[ i ].append(cnv_val_defaults[ v["variant_type"] ])
+                        values_map[ i ].append(v_defs["cnv_dummy_values"][ v_t ])
                 except:
                     pass
 
@@ -158,21 +182,38 @@ def interval_cnv_arrays(v_coll, query, byc):
     for cov_lab in cov_labs.values():
         for i, interval in enumerate(byc["genomic_intervals"]):
             if maps[cov_lab][i] > 0:
-                cnv_stats[ cov_lab+"coverage" ] += maps[cov_lab][i]
-                cnv_stats[ "cnvcoverage" ] += maps[cov_lab][i]
+                cov = maps[cov_lab][i]
+                lab = cov_lab+"coverage"
+                chro = str(interval["reference_name"])
+                c_a = chro+interval["arm"]
+                cnv_stats[ lab ] += cov
+                # print(chro_f.keys())
+                chro_f[chro][ lab ] += cov
+                chro_f[c_a][ lab ] += cov
+                cnv_stats[ "cnvcoverage" ] += cov
+                chro_f[chro][ "cnvcoverage" ] += cov
+                chro_f[c_a][ "cnvcoverage" ] += cov
+
                 maps[cov_lab][i] = round( maps[cov_lab][i] / byc["genomic_intervals"][ i ]["size"], 3 )
 
     for s_k in cnv_stats.keys():
         if "coverage" in s_k:
             f_k = re.sub("coverage", "fraction", s_k)
             cnv_stats.update({s_k: int(cnv_stats[ s_k ]) })
-            cnv_stats.update({f_k: round(cnv_stats[ s_k ] / byc["genome_size"] , 3) })
-            if cnv_stats[f_k] > 1:
-                print("!!! {} => {}: {}".format(v["callset_id"], f_k, cnv_stats[f_k]))
+            cnv_stats.update({f_k: _round_frac(cnv_stats[ s_k ], byc["genome_size"], 3, f_k, v["callset_id"]) })
+
+            for chro in c_l.keys():
+                chro_f[chro].update({s_k: int(chro_f[chro][ s_k ]) })
+                chro_f[chro].update({f_k: _round_frac(chro_f[chro][ s_k ], c_l[chro]['size'], 3, f_k+"_"+chro, v["callset_id"]) })
+                for arm in ['p', 'q']:
+                    c_a = chro+arm
+                    s_a = c_l[chro][arm][-1] - c_l[chro][arm][0]
+                    chro_f[c_a].update({s_k: int(chro_f[c_a][ s_k ]) })
+                    chro_f[c_a].update({f_k: _round_frac(chro_f[c_a][ s_k ], s_a, 3, f_k+"_"+c_a, v["callset_id"]) })
 
     # the values for each interval are sorted, to allow extracting the min/max 
     # values by position
-    # the last of the sorted values is assigned iF > 0
+    # the last of the sorted values is assigned if > 0
     for i in range(len(values_map)):
         if values_map[ i ]:
             values_map[ i ].sort()
@@ -181,7 +222,20 @@ def interval_cnv_arrays(v_coll, query, byc):
             if values_map[ i ][0] < 0:
                 maps["min"][i] = round(values_map[ i ][0], 3)
 
+    cnv_stats.update({"chrofractions":chro_f})
+    # prjsoncam(chro_f)
+
     return maps, cnv_stats
+
+################################################################################
+
+def _round_frac(val, maxval, digits=3, ftype="", label=""):
+
+    f = round(val / maxval, digits)
+    if f > 1:
+        # print("!!! {} => {} fraction {}".format(label, ftype, f))
+        f = 1
+    return f
 
 ################################################################################
 

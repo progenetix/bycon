@@ -71,6 +71,8 @@ def execute_bycon_queries(ds_id, byc):
         if collname in byc[ "config" ][ "collections" ]:
             exe_queries[ collname ] = byc[ "queries" ][ collname ]
 
+    byc.update({"queries_at_execution": exe_queries})
+
     # collection of results
     prefetch = { }
 

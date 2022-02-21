@@ -57,9 +57,7 @@ def cgi_parse_query(byc):
                 "filters": jbod.get("filters", [] )
             })
 
-            if "pagination" in jbod:
-                for sp in ["skip", "limit"]:
-                    byc["form_data"].update({ sp: jbod["pagination"].get(sp, 0) })
+            byc["form_data"].update({ "pagination": jbod.get("pagination", {}) })
 
             byc.update({"query_meta": jbod.get("meta", {}) })
 
@@ -85,6 +83,13 @@ def cgi_parse_query(byc):
     byc["form_data"].update({
         "requested_granularity": get.getvalue("requestedGranularity", "record"),
         "include_resultset_responses": get.getvalue("includeResultsetResponses", "HIT")
+    })
+
+    byc["form_data"].update({
+        "pagination": {
+            "skip": int(get.getvalue("skip", 0)),
+            "limit": int(get.getvalue("limit", 0))
+        }
     })
     
     return byc

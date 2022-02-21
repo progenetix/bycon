@@ -1,5 +1,6 @@
 from os import path, pardir
 import inspect, json
+import random
 from pymongo import MongoClient
 from bson import json_util
 from humps import camelize, decamelize
@@ -12,7 +13,7 @@ from beacon_response_remaps import *
 from cgi_parse import *
 from handover_execution import handover_return_data
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers
-from interval_utils import generate_genomic_intervals
+from interval_utils import generate_genomic_intervals, interval_counts_from_callsets
 from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
 from query_generation import  initialize_beacon_queries, generate_empty_query_items_request
 from read_specs import read_bycon_configs_by_name,read_local_prefs
@@ -102,6 +103,14 @@ def initialize_service(byc, service="NA"):
         for d_k, d_v in conf["defaults"].items():
             byc.update( { d_k: d_v } )
 
+    if not "pagination" in byc:
+        byc.update( { "pagination": {"skip": 0, "limit": 0 } } )
+
+    for sp in ["skip", "limit"]:
+        if sp in form["pagination"]:
+            if form["pagination"][sp] > 0:
+                byc["pagination"].update({sp: form["pagination"][sp]})
+
     if "output" in form:
         byc["output"] = form["output"]
 
@@ -110,12 +119,6 @@ def initialize_service(byc, service="NA"):
             m = form.get("method", "___none___")
             if m in conf["method_keys"].keys():
                 byc["method"] = m
-
-    # TODO: proper defaults, separate function
-    byc["pagination"] = {
-        "skip": form.get("skip", 0),
-        "limit": form.get("limit", 0)
-    }
 
     return byc
 
@@ -157,12 +160,12 @@ def run_result_sets_beacon(byc):
         r_s_res = remap_biosamples(r_s_res, byc)
         r_s_res = remap_runs(r_s_res, byc)
         r_s_res = remap_all(r_s_res)
-        
-        r_set.update({ "exists": True, "results": r_s_res })
+        results_pagination_range(len(r_s_res), byc)
+        r_s_res = paginate_results(r_s_res, byc)
 
-        if byc["pagination"]["limit"] > 0:
-            res_range = _pagination_range(r_set["results_count"], byc)
-            r_set.update({ "results": r_s_res[res_range[0]:res_range[-1]] })
+        r_set.update({"paginated_results_count": len( r_s_res ) })
+
+        r_set.update({ "exists": True, "results": r_s_res })
 
     ######## end of result sets loop ###########################################
 
@@ -248,21 +251,36 @@ def retrieve_variants(ds_id, byc):
 
 ################################################################################
 
-def _pagination_range(results_count, byc):
+def results_pagination_range(count, byc):
 
     r_range = [
         byc["pagination"]["skip"] * byc["pagination"]["limit"],
         byc["pagination"]["skip"] * byc["pagination"]["limit"] + byc["pagination"]["limit"],
     ]
 
-    r_l_i = results_count - 1
+    r_l_i = count - 1
 
     if r_range[0] > r_l_i:
         r_range[0] = r_l_i
-    if r_range[-1] > results_count:
-        r_range[-1] = results_count
+    if r_range[-1] > count:
+        r_range[-1] = count
 
-    return r_range
+    byc["pagination"].update({"range":r_range})
+
+    return byc
+
+################################################################################
+
+def paginate_results(results, byc):
+
+    if byc["pagination"]["limit"] < 1:
+        return results
+
+    r = byc["pagination"]["range"]
+
+    results = results[r[0]:r[-1]]
+
+    return results
 
 ################################################################################
 
@@ -378,6 +396,24 @@ def create_empty_non_data_response(byc):
     byc.update( {"service_response": r, "error_response": e })
 
     return byc
+
+################################################################################
+
+def check_switch_to_plot_response(byc):
+
+    if not "plot" in byc["output"]:
+        return
+    if not "result_sets" in byc["service_response"]["response"]:
+        return
+
+    h_o_s = byc["service_response"]["response"]["result_sets"][0]["results_handovers"]
+
+    for h_o in h_o_s:
+        if "cnvhistogram" in h_o["handoverType"]["id"]:
+            cgi_print_rewrite_response(h_o["url"], "", "")
+            exit()
+
+    return
 
 ################################################################################
 
@@ -714,7 +750,54 @@ def _create_resource_response(byc):
 
 ################################################################################
 
-def check_alternative_callset_deliveries(byc):
+def check_computed_interval_frequency_delivery(byc):
+
+    if not "frequencies" in byc["output"]:
+        return byc
+
+    ds_id = byc[ "dataset_ids" ][ 0 ]
+    ds_results = byc["dataset_results"][ds_id]
+    p_r = byc["pagination"]
+
+    if not "callsets._id" in ds_results:
+        return byc
+
+    mongo_client = MongoClient()
+    cs_coll = mongo_client[ ds_id ][ "callsets" ]
+
+    open_text_streaming("interval_cnv_frequencies.pgxseg")
+
+    for d in ["id", "assemblyId"]:
+        print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
+    
+    print('#meta=>query="{}"'.format(json.dumps(byc["queries_at_execution"], indent=None, sort_keys=True, default=str)))
+    print('#meta=>skip={};limit={}'.format(p_r["skip"], p_r["limit"]))
+
+    q_vals = ds_results["callsets._id"]["target_values"]
+    r_no = len(q_vals)
+    if r_no > p_r["limit"]:
+        q_vals = paginate_results(q_vals, byc)
+        print('#meta=>"WARNING: Only samples {} - {} used for calculations due to pagination skip and limit"'.format(p_r["range"][0], p_r["range"][-1]))
+
+    print("#meta=>sample_no={}".format(ds_results["callsets._id"]["target_count"]))
+    h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
+    print("group_id\t"+"\t".join(h_ks))
+
+    cs_cursor = cs_coll.find({"_id": {"$in": q_vals } } )
+
+    intervals = interval_counts_from_callsets(cs_cursor, byc)
+    for intv in intervals:
+        v_line = [ ]
+        v_line.append("query_result")
+        for k in h_ks:
+            v_line.append(str(intv[k]))
+        print("\t".join(v_line))
+
+    exit()
+
+################################################################################
+
+def check_callsets_matrix_delivery(byc):
 
     if not "pgxmatrix" in byc["output"]:
         return byc
@@ -724,7 +807,6 @@ def check_alternative_callset_deliveries(byc):
         m_format = "values"
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
-
     ds_results = byc["dataset_results"][ds_id]
 
     mongo_client = MongoClient()
@@ -757,7 +839,7 @@ def check_alternative_callset_deliveries(byc):
         s_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(s_line, h_d.get("id", "NA"), h_d.get("label", "NA"), h_d.get("id", "NA"), h_d.get("label", "NA"))
         cs_ids[bsid] = h_d.get("id", "NA")
         print(s_line)
-    
+
     print("#meta=>biosampleCount={};analysisCount={}".format(ds_results["biosamples.id"][ "target_count" ], len(cs_ids)))
     print("\t".join(h_line))
 
