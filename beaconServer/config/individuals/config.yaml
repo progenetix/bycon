@@ -15,6 +15,9 @@ defaults:
   response_schema: beaconResultsetsResponse
   genome_binning: 1Mb
   test_document_id: pgxind-kftx25eh
+  pagination:
+    skip: 0
+    limit: 2000
 meta:
   returned_schemas:
     - entity_type: individual

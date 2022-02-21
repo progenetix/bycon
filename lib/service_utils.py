@@ -687,7 +687,7 @@ def return_filtering_terms_response( byc ):
     f_s = '|'.join(ft_fs)
     f_re = re.compile(r'^'+f_s)
 
-    r_s_l = {}
+    # r_s_l = {}
 
     for ds_id in byc[ "dataset_ids" ]:
 
@@ -711,12 +711,12 @@ def return_filtering_terms_response( byc ):
                 f_t.update({k:f.get(k, 0)})
             t_f_t_s.append(f_t)
 
-            r_id = {
+            # r_id = {
 
 
-            }
+            # }
 
-            r_s_l.update({})
+            # r_s_l.update({})
 
         f_t_s.extend(t_f_t_s)
 
@@ -762,6 +762,8 @@ def check_computed_interval_frequency_delivery(byc):
     if not "callsets._id" in ds_results:
         return byc
 
+    cs_r = ds_results["callsets._id"]
+
     mongo_client = MongoClient()
     cs_coll = mongo_client[ ds_id ][ "callsets" ]
 
@@ -769,17 +771,17 @@ def check_computed_interval_frequency_delivery(byc):
 
     for d in ["id", "assemblyId"]:
         print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
-    
+    _print_filters_meta_line(byc)
     print('#meta=>query="{}"'.format(json.dumps(byc["queries_at_execution"], indent=None, sort_keys=True, default=str)))
     print('#meta=>skip={};limit={}'.format(p_r["skip"], p_r["limit"]))
+    print("#meta=>sample_no={}".format(cs_r["target_count"]))
 
-    q_vals = ds_results["callsets._id"]["target_values"]
+    q_vals = cs_r["target_values"]
     r_no = len(q_vals)
     if r_no > p_r["limit"]:
         q_vals = paginate_results(q_vals, byc)
-        print('#meta=>"WARNING: Only samples {} - {} used for calculations due to pagination skip and limit"'.format(p_r["range"][0], p_r["range"][-1]))
+        print('#meta=>"WARNING: Only analyses {} - {} (out of {}) used for calculations due to pagination skip and limit"'.format((p_r["range"][0] + 1), p_r["range"][-1], cs_r["target_count"]))
 
-    print("#meta=>sample_no={}".format(ds_results["callsets._id"]["target_count"]))
     h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
     print("group_id\t"+"\t".join(h_ks))
 
@@ -793,7 +795,7 @@ def check_computed_interval_frequency_delivery(byc):
             v_line.append(str(intv[k]))
         print("\t".join(v_line))
 
-    exit()
+    close_text_streaming()
 
 ################################################################################
 
@@ -808,6 +810,12 @@ def check_callsets_matrix_delivery(byc):
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
     ds_results = byc["dataset_results"][ds_id]
+    p_r = byc["pagination"]
+
+    if not "callsets._id" in ds_results:
+        return byc
+
+    cs_r = ds_results["callsets._id"]
 
     mongo_client = MongoClient()
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
@@ -817,30 +825,33 @@ def check_callsets_matrix_delivery(byc):
 
     for d in ["id", "assemblyId"]:
         print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
-
-    print("#meta=>data_format=interval_"+m_format)
-
     _print_filters_meta_line(byc)
+    print("#meta=>data_format=interval_"+m_format)
 
     info_columns = [ "analysis_id", "biosample_id", "group_id" ]
     h_line = interval_header(info_columns, byc)
     print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
     print("#meta=>no_info_columns={};no_interval_columns={}".format(len(info_columns), len(h_line) - len(info_columns)))
 
-    cs_ids = { }
+    q_vals = cs_r["target_values"]
+    r_no = len(q_vals)
+    if r_no > p_r["limit"]:
+        q_vals = paginate_results(q_vals, byc)
+        print('#meta=>"WARNING: Only analyses {} - {} (from {}) will be included pagination skip and limit"'.format((p_r["range"][0] + 1), p_r["range"][-1], cs_r["target_count"]))
 
-    for bs_id in ds_results["biosamples.id"][ "target_values" ]:
-        bs = bs_coll.find_one( { "id": bs_id } )
-        bs_csids = cs_coll.distinct( "id", {"biosample_id": bs_id} )
-        for bsid in bs_csids:
-            cs_ids.update( { bsid: "" } )
-        s_line = "#sample=>biosample_id={};analysis_ids={}".format(bs_id, ','.join(bs_csids))
-        h_d = bs["histological_diagnosis"]
+    bios_ids = set()
+    cs_ids = {}
+    cs_cursor = cs_coll.find({"_id": {"$in": q_vals } } )
+    for cs in cs_cursor:
+        bios = bs_coll.find_one( { "id": cs["biosample_id"] } )
+        bios_ids.add(bios["id"])
+        s_line = "#sample=>biosample_id={};analysis_id={}".format(bios["id"], cs["id"])
+        h_d = bios["histological_diagnosis"]
+        cs_ids.update({cs["id"]: h_d.get("id", "NA")})
         s_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(s_line, h_d.get("id", "NA"), h_d.get("label", "NA"), h_d.get("id", "NA"), h_d.get("label", "NA"))
-        cs_ids[bsid] = h_d.get("id", "NA")
         print(s_line)
 
-    print("#meta=>biosampleCount={};analysisCount={}".format(ds_results["biosamples.id"][ "target_count" ], len(cs_ids)))
+    print("#meta=>biosampleCount={};analysisCount={}".format(len(bios_ids), cs_r["target_count"]))
     print("\t".join(h_line))
 
     for cs_id, group_id in cs_ids.items():
@@ -868,8 +879,6 @@ def check_callsets_matrix_delivery(byc):
 
     close_text_streaming()
         
-    return byc
-
 ################################################################################
 
 def print_pgx_column_header(ds_id, byc):

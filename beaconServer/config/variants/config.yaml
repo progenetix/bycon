@@ -15,6 +15,9 @@ defaults:
   response_schema: beaconResultsetsResponse
   genome_binning: 1Mb
   test_document_id: pgxvar-5bab576a727983b2e00b8d32
+  pagination:
+    skip: 0
+    limit: 2000
 meta:
   returned_schemas:
     - entity_type: variant

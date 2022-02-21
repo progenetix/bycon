@@ -43,6 +43,7 @@ def biosamples():
     query_results_save_handovers(byc)
     check_switch_to_plot_response(byc)
     check_computed_interval_frequency_delivery(byc)
+    check_callsets_matrix_delivery(byc)
     check_switch_to_count_response(byc)
     check_switch_to_boolean_response(byc)
     cgi_print_response( byc, 200 )
