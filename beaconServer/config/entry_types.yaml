@@ -22,7 +22,7 @@ response:
       ontology_term_for_this_type:
         id: NCIT:C47824
         label: data set
-      part_of_specification: Beacon v2.0.0-draft4
+      part_of_specification: Beacon v2.0.0
       default_schema: https://progenetix.org/services/schemas/dataset
     - $schema: https://progenetix.org/services/schemas/cohort
       id: cohort
@@ -33,7 +33,7 @@ response:
       ontology_term_for_this_type:
         id: NCIT:C61512
         label: Cohort
-      part_of_specification: Beacon v2.0.0-draft4
+      part_of_specification: Beacon v2.0.0
       default_schema: https://progenetix.org/services/schemas/cohort
     - $schema: https://progenetix.org/services/schemas/biosample
       id: biosample
@@ -44,7 +44,7 @@ response:
       ontology_term_for_this_type:
         id: OBI:0000747
         label: material sample
-      part_of_specification: Beacon v2.0.0-draft4
+      part_of_specification: Beacon v2.0.0
       default_schema: https://progenetix.org/services/schemas/biosample
     - $schema: https://progenetix.org/services/schemas/individual
       id: individual
@@ -54,5 +54,5 @@ response:
       ontology_term_for_this_type:
         id: NCIT:C25190
         label: Person
-      part_of_specification: Beacon v2.0.0-draft4
+      part_of_specification: Beacon v2.0.0
       default_schema: https://progenetix.org/services/schemas/individual

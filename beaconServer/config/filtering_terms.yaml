@@ -7,7 +7,7 @@ defaults:
   response_schema: beaconFilteringTermsResponse
   stats_number: 1
 meta:
-  api_version: v2.0.0-draft4
+  api_version: v2.0.0
   beacon_id: org.progenetix.beacon
   response_type: filteringTerm
   returned_schemas:

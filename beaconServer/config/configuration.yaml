@@ -32,14 +32,14 @@ response:
       ontologyTermForThisType:
         id: NCIT:C47824
         label: Data set
-      partOfSpecification: Beacon v2.0.0-draft.4
+      partOfSpecification: Beacon v2.0.0
       description: >-
         A Dataset is a collection of records, like rows in a database or cards in a cardholder.
       defaultSchema:
-        id: ga4gh-beacon-dataset-v2.0.0-draft.4
+        id: ga4gh-beacon-dataset-v2.0.0
         name: Default schema for datasets
         referenceToSchemaDefinition: https://progenetix.org/services/schemas/dataset
-        schemaVersion: v2.0.0-draft.4
+        schemaVersion: v2.0.0
       aCollectionOf:
         - id: biosample
           name: Biosamples
@@ -50,14 +50,14 @@ response:
       ontologyTermForThisType:
         id: NCIT:C61512
         label: Cohort
-      partOfSpecification: Beacon v2.0.0-draft.4
+      partOfSpecification: Beacon v2.0.0
       description: A group of individuals, identified by a common characteristic. [
         NCI ]
       defaultSchema:
-        id: ga4gh-beacon-cohort-v2.0.0-draft.4
+        id: ga4gh-beacon-cohort-v2.0.0
         name: Default schema for cohorts
         referenceToSchemaDefinition: https://progenetix.org/services/schemas/cohort
-        schemaVersion: v2.0.0-draft.4
+        schemaVersion: v2.0.0
       aCollectionOf:
         - id: individual
           name: Individuals
@@ -68,13 +68,13 @@ response:
       ontologyTermForThisType:
         id: SO:0001507
         label: variant_collection
-      partOfSpecification: Beacon v2.0.0-draft.4
+      partOfSpecification: Beacon v2.0.0
       description: A collection of one or more sequences of an individual.
       defaultSchema:
-        id: ga4gh-beacon-variant-in-sample-v2.0.0-draft.4
+        id: ga4gh-beacon-variant-in-sample-v2.0.0
         name: Default schema for variant in sample
         referenceToSchemaDefinition: https://progenetix.org/services/schemas/variant
-        schemaVersion: v2.0.0-draft.4
+        schemaVersion: v2.0.0
       additionallySupportedSchemas: []
     individual:
       id: individual
@@ -82,14 +82,14 @@ response:
       ontologyTermForThisType:
         id: NCIT:C25190
         label: Person
-      partOfSpecification: Beacon v2.0.0-draft.4
+      partOfSpecification: Beacon v2.0.0
       description: >-
         A human being. It could be a Patient, a Tissue Donor, a Participant, a Human Study Subject, etc.
       defaultSchema:
-        id: ga4gh-beacon-individual-v2.0.0-draft.4
+        id: ga4gh-beacon-individual-v2.0.0
         name: Default schema for an individual
         referenceToSchemaDefinition: https://progenetix.org/services/schemas/individual
-        schemaVersion: v2.0.0-draft.4
+        schemaVersion: v2.0.0
       additionallySupportedSchemas: []
     biosample:
       id: biosample
@@ -97,14 +97,14 @@ response:
       ontologyTermForThisType:
         id: NCIT:C70699
         label: Biospecimen
-      partOfSpecification: Beacon v2.0.0-draft.4
+      partOfSpecification: Beacon v2.0.0
       description: >-
         Any material sample taken from a biological entity for testing, diagnostic, propagation, treatment or research purposes, including a sample obtained from a living organism or taken from the biological object after halting of all its life functions. Biospecimen can contain one or more components including but not limited to cellular molecules, cells, tissues, organs, body fluids, embryos, and body excretory products. [ NCI ]
       defaultSchema:
-        id: ga4gh-beacon-biosample-v2.0.0-draft.4
+        id: ga4gh-beacon-biosample-v2.0.0
         name: Default schema for a biological sample
         referenceToSchemaDefinition: https://progenetix.org/services/schemas/biosample
-        schemaVersion: v2.0.0-draft.4
+        schemaVersion: v2.0.0
       additionallySupportedSchemas: []
     analysis:
       id: analysis
@@ -112,26 +112,26 @@ response:
       ontologyTermForThisType:
         id: edam:operation_2945
         label: Analysis
-      partOfSpecification: Beacon v2.0.0-draft.4
+      partOfSpecification: Beacon v2.0.0
       description: Apply analytical methods to existing data of a specific type.
       defaultSchema:
-        id: ga4gh-beacon-analysis-v2.0.0-draft.4
+        id: ga4gh-beacon-analysis-v2.0.0
         name: Default schema for a bioinformatics analysis
         referenceToSchemaDefinition: https://progenetix.org/services/schemas/individual
-        schemaVersion: v2.0.0-draft.4
+        schemaVersion: v2.0.0
     run:
       id: run
       name: Experimental run
       ontologyTermForThisType:
         id: edam:operation_2478
         label: Nucleic acid sequence analysis
-      partOfSpecification: Beacon v2.0.0-draft.4
+      partOfSpecification: Beacon v2.0.0
       description: >-
         Analyse a nucleic acid sequence (using methods that are only applicable to nucleic acid sequences).
       defaultSchema:
-        id: ga4gh-beacon-analysis-v2.0.0-draft.4
+        id: ga4gh-beacon-analysis-v2.0.0
         name: Default schema for an experimental run
         referenceToSchemaDefinition: https://progenetix.org/services/schemas/run
-        schemaVersion: v2.0.0-draft.4
+        schemaVersion: v2.0.0
       additionallySupportedSchemas: []
 

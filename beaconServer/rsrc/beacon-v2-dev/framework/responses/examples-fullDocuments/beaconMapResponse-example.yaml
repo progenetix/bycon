@@ -4,7 +4,7 @@ meta:
   apiVersion: string
   returnedSchemas:
     - entityType: info
-      schema: beacon-map-v2.0.0-draft.4
+      schema: beacon-map-v2.0.0
 response:
   $schema: ../../configuration/beaconMapSchema.json
   endpointSets:

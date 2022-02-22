@@ -1,6 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 description: A dataset available in the beacon
-$comment: 'version: ga4gh-beacon-dataset-v2.0.0-draft.4'
+$comment: 'version: ga4gh-beacon-dataset-v2.0.0'
 type: object
 properties:
   id:

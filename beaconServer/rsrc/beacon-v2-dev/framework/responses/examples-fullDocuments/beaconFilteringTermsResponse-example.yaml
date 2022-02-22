@@ -3,7 +3,7 @@ meta:
   beaconId: string
   apiVersion: string
   returnedSchemas:
-    - map: beacon-map-v2.0.0-draft.3
+    - map: beacon-map-v2.0.0
 response:
   resources:
     - id: hp

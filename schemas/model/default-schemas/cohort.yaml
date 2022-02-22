@@ -1,6 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://progenetix.org/services/schemas/cohort/v2021-11-12
-$comment: 'version: ga4gh-beacon-cohort-v2.0.0-draft.4'
+$comment: 'version: ga4gh-beacon-cohort-v2.0.0'
 description: A cohort available in the beacon.
 type: object
 properties:

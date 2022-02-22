@@ -1,7 +1,7 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://progenetix.org/services/schemas/genomicVariation/v2021-11-12
 title: Genomic Variation
-$comment: 'version: ga4gh-beacon-variant-v2.0.0-draft.4'
+$comment: 'version: ga4gh-beacon-variant-v2.0.0'
 description: >-
   Schema for a genomic variant entry.
 type: object

@@ -120,6 +120,9 @@ def initialize_service(byc, service="NA"):
             if m in conf["method_keys"].keys():
                 byc["method"] = m
 
+    # TODO: standardize the general defaults / entity defaults / form values merging
+    #       through pre-parsing into identical structures and then use deepmerge etc.
+
     return byc
 
 ################################################################################

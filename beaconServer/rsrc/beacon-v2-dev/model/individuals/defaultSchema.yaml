@@ -1,6 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 title: Individual
-$comment: 'version: ga4gh-beacon-individual-v2.0.0-draft.4'
+$comment: 'version: ga4gh-beacon-individual-v2.0.0'
 description: Schema for an individual entry.
 type: object
 properties:
