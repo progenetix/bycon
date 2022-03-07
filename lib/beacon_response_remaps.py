@@ -60,7 +60,7 @@ def remap_analyses(r_s_res, byc):
     for cs_i, cs_r in enumerate(r_s_res):
         r_s_res[cs_i].update({"pipeline_name": "progenetix", "analysis_date": "1967-11-11" })
         try:
-            r_s_res[cs_i]["info"].pop("statusmaps")
+            r_s_res[cs_i].pop("cnv_statusmaps")
         except:
             pass
 

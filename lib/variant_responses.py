@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 from cgi_parse import *
+from cytoband_utils import bands_from_cytobands
 
 ################################################################################
 
@@ -132,6 +133,8 @@ def deparse_ISCN_to_variants(iscn, technique, byc):
                 t = cnv_t
                 v = cnv_defs.copy()
 
+                cytostring = "{}({})".format(cnv_t, i_v)
+
                 if "AMP" in cnv_t and v_l > vd["amp_max_size"]:
                     t = "HLDUP"
                     v = vd["cnv_iscn_defs"][t].copy()
@@ -142,6 +145,7 @@ def deparse_ISCN_to_variants(iscn, technique, byc):
                     "end": end,
                     "type": "CopyNumber",
                     "info": {
+                        "ISCN": cytostring,
                         "var_length": v_l,
                         "cnv_value": vd["cnv_dummy_values"][t],
                         "provenance": technique+" ISCN conversion"

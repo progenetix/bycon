@@ -103,11 +103,12 @@ def interval_cnv_arrays(v_coll, query, byc):
 
     v_defs = byc["variant_definitions"]
     c_l = byc["cytolimits"]
+    intervals = byc["genomic_intervals"]
 
     cov_labs = { "DUP": 'dup', "DEL": 'del' }
     val_labs = { "DUP": 'max', "DEL": 'min' }
 
-    int_no = len(byc["genomic_intervals"])
+    int_no = len(intervals)
     proto = [0 for i in range(int_no)] 
 
     maps = {
@@ -129,44 +130,41 @@ def interval_cnv_arrays(v_coll, query, byc):
         "delfraction": 0       
     }
 
-    chro_f = {}
+    chro_stats = {}
+
     for chro in c_l.keys():
-        chro_f.update({chro: cnv_stats.copy()})
+        chro_stats.update({chro: cnv_stats.copy()})
         for arm in ['p', 'q']:
             c_a = chro+arm
-            chro_f.update({c_a: cnv_stats.copy()})
+            chro_stats.update({c_a: cnv_stats.copy()})
 
-    v_no = v_coll.count_documents( query )
+    v_s = v_coll.find( query )
+    v_no = len(list(v_s))
 
     if v_no < 1:
-        return maps, cnv_stats
+        return maps, cnv_stats, chro_stats
 
     # the values_map collects all values for the given interval to retrieve
     # the min and max values of each interval
     values_map = [  [ ] for i in range(int_no) ]
 
-    for v in v_coll.find( query ):
-
-        # print("Variant: {} <=> {}".format(v["callset_id"], v["biosample_id"]))
+    for v in v_s.rewind():
 
         if not "variant_type" in v:
             continue
-
         v_t = v["variant_type"]
-
         if not v_t in cov_labs.keys():
             continue
 
         cov_lab = cov_labs[ v_t ]
 
-        for i, interval in enumerate(byc["genomic_intervals"]):
+        for i, intv in enumerate(intervals):
 
-            if _has_overlap(interval, v):
+            if _has_overlap(intv, v):
 
-                ov_end = min(interval["end"], v["end"])
-                ov_start = max(interval["start"], v["start"])
+                ov_end = min(intv["end"], v["end"])
+                ov_start = max(intv["start"], v["start"])
                 ov = ov_end - ov_start
-
                 maps[ cov_lab ][i] += ov
 
                 try:
@@ -180,21 +178,19 @@ def interval_cnv_arrays(v_coll, query, byc):
 
     # statistics
     for cov_lab in cov_labs.values():
-        for i, interval in enumerate(byc["genomic_intervals"]):
+        for i, intv in enumerate(intervals):
             if maps[cov_lab][i] > 0:
                 cov = maps[cov_lab][i]
                 lab = cov_lab+"coverage"
-                chro = str(interval["reference_name"])
-                c_a = chro+interval["arm"]
+                chro = str(intv["reference_name"])
+                c_a = chro+intv["arm"]
                 cnv_stats[ lab ] += cov
-                # print(chro_f.keys())
-                chro_f[chro][ lab ] += cov
-                chro_f[c_a][ lab ] += cov
+                chro_stats[chro][ lab ] += cov
+                chro_stats[c_a][ lab ] += cov
                 cnv_stats[ "cnvcoverage" ] += cov
-                chro_f[chro][ "cnvcoverage" ] += cov
-                chro_f[c_a][ "cnvcoverage" ] += cov
-
-                maps[cov_lab][i] = round( maps[cov_lab][i] / byc["genomic_intervals"][ i ]["size"], 3 )
+                chro_stats[chro][ "cnvcoverage" ] += cov
+                chro_stats[c_a][ "cnvcoverage" ] += cov
+                maps[cov_lab][i] = round( maps[cov_lab][i] / intervals[ i ]["size"], 3 )
 
     for s_k in cnv_stats.keys():
         if "coverage" in s_k:
@@ -203,13 +199,13 @@ def interval_cnv_arrays(v_coll, query, byc):
             cnv_stats.update({f_k: _round_frac(cnv_stats[ s_k ], byc["genome_size"], 3, f_k, v["callset_id"]) })
 
             for chro in c_l.keys():
-                chro_f[chro].update({s_k: int(chro_f[chro][ s_k ]) })
-                chro_f[chro].update({f_k: _round_frac(chro_f[chro][ s_k ], c_l[chro]['size'], 3, f_k+"_"+chro, v["callset_id"]) })
+                chro_stats[chro].update({s_k: int(chro_stats[chro][ s_k ]) })
+                chro_stats[chro].update({f_k: _round_frac(chro_stats[chro][ s_k ], c_l[chro]['size'], 3, f_k+"_"+chro, v["callset_id"]) })
                 for arm in ['p', 'q']:
                     c_a = chro+arm
                     s_a = c_l[chro][arm][-1] - c_l[chro][arm][0]
-                    chro_f[c_a].update({s_k: int(chro_f[c_a][ s_k ]) })
-                    chro_f[c_a].update({f_k: _round_frac(chro_f[c_a][ s_k ], s_a, 3, f_k+"_"+c_a, v["callset_id"]) })
+                    chro_stats[c_a].update({s_k: int(chro_stats[c_a][ s_k ]) })
+                    chro_stats[c_a].update({f_k: _round_frac(chro_stats[c_a][ s_k ], s_a, 3, f_k+"_"+c_a, v["callset_id"]) })
 
     # the values for each interval are sorted, to allow extracting the min/max 
     # values by position
@@ -222,10 +218,7 @@ def interval_cnv_arrays(v_coll, query, byc):
             if values_map[ i ][0] < 0:
                 maps["min"][i] = round(values_map[ i ][0], 3)
 
-    cnv_stats.update({"chrofractions":chro_f})
-    # prjsoncam(chro_f)
-
-    return maps, cnv_stats
+    return maps, cnv_stats, chro_stats
 
 ################################################################################
 
@@ -275,8 +268,8 @@ def interval_counts_from_callsets(callsets, byc):
             callsets.rewind()
 
         for i, cs in enumerate(callsets):
-            covs[i] = cs["info"]["statusmaps"][ pars[t]["cov_l"] ]
-            vals[i] = cs["info"]["statusmaps"][ pars[t]["val_l"] ]
+            covs[i] = cs["cnv_statusmaps"][ pars[t]["cov_l"] ]
+            vals[i] = cs["cnv_statusmaps"][ pars[t]["val_l"] ]
 
         counts = np.count_nonzero(covs >= min_f, axis=0)
         frequencies = np.around(counts * fFactor, 3)

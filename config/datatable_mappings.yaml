@@ -1,6 +1,6 @@
 io_params:
   biosample:
-    id:
+    biosample_id:
       db_key: id
       type: string
     individual_id:
@@ -8,6 +8,12 @@ io_params:
       type: string
     callset_ids:
       db_key: info.callset_ids
+      type: array
+    pgx_legacy_sample_id:
+      db_key: pgx_legacy_sample_id
+      type: string
+    legacy_ids:
+      db_key: info.legacy_ids
       type: array
     description:
       db_key: description
@@ -22,7 +28,7 @@ io_params:
       db_key: info.tumor_grade_text
       type: string
     age_iso:
-      db_key: time_of_collection.age
+      db_key: time_of_collection.age.iso8601duration
       type: string
     death:
       db_key: info.death
@@ -37,7 +43,7 @@ io_params:
       db_key: info.recurrence
       type: string
     recurrence_time:
-      db_key: info_recurrence_time
+      db_key: info.recurrence_time
       type: string
     geoprov_label:
       db_key: provenance.geo_location.properties.label
@@ -72,15 +78,18 @@ io_params:
     cell_line:
       db_key: info.cell_line
       type: string
-    legacy_ids:
-      db_key: info.legacy_ids
-      type: array
-    individual_id:
-      db_key: individual_id
+    experiment_id:
+      db_key: analysis_info.experiment_id
+      type: string
+    series_id:
+      db_key: analysis_info.series_id
+      type: string
+    platform_id:
+      db_key: analysis_info.platform_id
       type: string
 
   individual:
-    id:
+    individual_id:
       db_key: id
       type: string
     legacy_ids:
@@ -107,15 +116,6 @@ io_params:
     geoprov_long:
       db_key: provenance.geo_location.properties.longitude
       type: float
-    experiment_id:
-      db_key: analysis_info.experiment_id
-      type: string
-    series_id:
-      db_key: analysis_info.series_id
-      type: string
-    platform_id:
-      db_key: analysis_info.platform_id
-      type: string
 
   analysis:
     id:
@@ -136,6 +136,10 @@ io_params:
     platform_id:
       db_key: analysis_info.platform_id
       type: string
+    data_provenance:
+      db_key: info.data_provenance
+      type: string
+
 
   variantInSample:
     id:
@@ -174,10 +178,10 @@ io_prefixes:
       pre: NCIT
     icdo_morphology:
       type: string
-      pre: icdom
+      pre: pgx:icdom
     icdo_topography:
       type: string
-      pre: icdot
+      pre: pgx:icdot
     # biocharacteristics:
     #   type: array
     #   pres:
@@ -191,6 +195,7 @@ io_prefixes:
         - geo:GPL
         - cellosaurus
         - arrayexpress
+        - cbioportal
     followup_state:
       type: string
       pre: EFO

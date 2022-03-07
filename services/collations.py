@@ -26,7 +26,6 @@ def main():
 def collations():
 
     initialize_service(byc)
-
     select_dataset_ids(byc)
     # first the filter => collation_type which removes the filter if type match
     parse_filters(byc)

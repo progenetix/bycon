@@ -32,6 +32,9 @@ schema_paths:
     - progenetix-legacy-schemas
   - - schemas
     - model
+    - progenetix-database-schemas
+  - - schemas
+    - model
     - alternative-schemas
   - - schemas
     - model

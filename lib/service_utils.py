@@ -68,7 +68,7 @@ def run_beacon_init_stack(byc):
 
 ################################################################################
 
-def initialize_service(byc, service="NA"):
+def initialize_service(byc, service=False):
 
     """For consistency, the name of the local configuration file should usually
     correspond to the calling main function. However, an overwrite can be
@@ -80,7 +80,7 @@ def initialize_service(byc, service="NA"):
     mod = inspect.getmodule(frm[0])
     sub_path = path.dirname( path.abspath(mod.__file__) )
 
-    if service == "NA":
+    if service is False:
         service = frm.function
 
     service = decamelize(service)
@@ -297,7 +297,7 @@ def response_meta_add_request_summary(r, byc):
     r["meta"]["received_request_summary"].update({
         "filters": byc.get("filters", []), 
         "pagination": byc.get("pagination", {}),
-        "api_version": byc["beacon_info"].get("api_version", "v2.n")
+        "api_version": byc["beacon_info"].get("api_version", "v2")
     })
 
     for p in ["include_resultset_responses", "requested_granularity"]:
@@ -865,8 +865,8 @@ def check_callsets_matrix_delivery(byc):
                     cs_id,
                     cs.get("biosample_id", "NA"),
                     group_id,
-                    *map(str, cs["info"]["statusmaps"]["max"]),
-                    *map(str, cs["info"]["statusmaps"]["min"])
+                    *map(str, cs["cnv_statusmaps"]["max"]),
+                    *map(str, cs["cnv_statusmaps"]["min"])
                 ]
             ))
         else:
@@ -875,8 +875,8 @@ def check_callsets_matrix_delivery(byc):
                     cs_id,
                     cs.get("biosample_id", "NA"),
                     group_id,
-                    *map(str, cs["info"]["statusmaps"]["dup"]),
-                    *map(str, cs["info"]["statusmaps"]["del"])
+                    *map(str, cs["cnv_statusmaps"]["dup"]),
+                    *map(str, cs["cnv_statusmaps"]["del"])
                 ]
             ))
 

@@ -1,0 +1,42 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/pgxVariant/v2022-03-04
+title: Progenetix Variant
+type: object
+description: >-
+  Schema for a genomic variant in Progenetix collections.
+required:
+  - variantInternalId
+  - variantType
+  - position
+properties:
+  id:
+    type: string
+  variantInternalId:
+    type: string
+  callsetId:
+    type: string
+  biosampleId:
+    type: string
+  variantType:
+    type: string
+  variantState:
+    $ref: ../common/ontologyTerm.yaml#/properties
+  referenceBases:
+    type: string
+    pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'
+  alternateBases:
+    type: string
+    pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'
+  start:
+    type: integer
+  end:
+    type: integer
+  info:
+    type: object
+  updated:
+    type: string
+    format: date-time
+    examples:
+      - "2020-09-10T17:44:10.170Z"
+
+additionalProperties: true
