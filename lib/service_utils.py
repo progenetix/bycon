@@ -456,9 +456,9 @@ def print_parameters_response(byc):
 
     try:
         if "requestParameters" in byc["queries"][ s_i_d ]["id"]:
-            prjsonresp(byc["this_request_parameters"])
+            cgi_print_json_response(byc["this_request_parameters"])
         elif "endpoints" in byc["queries"][ s_i_d ]["id"]:
-            prjsonresp(byc["this_endpoints"])
+            cgi_print_json_response(byc["this_endpoints"])
     except:
         pass
 

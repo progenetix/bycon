@@ -147,25 +147,6 @@ def form_return_listvalue( form_data, parameter ):
 
 ################################################################################
 
-def cgi_print_rewrite_response(uri_base="", uri_stuff="", output_par="empty_value"):
-
-    print("Status: 302")
-    print("Location: {}{}".format(uri_base, uri_stuff))
-    print()
-    exit()
-
-################################################################################
-
-def cgi_print_text_response(byc, status_code):
-
-    print('Content-Type: text')
-    print('status:'+str(status_code))
-    print()
-    print(byc["service_response"]+"\n")
-    exit()
-
-################################################################################
-
 def cgi_simplify_response(byc):
 
     r = byc["service_response"]
@@ -238,7 +219,7 @@ def cgi_print_response(byc, status_code):
                         v_l.append(str(v))
                     l_d.append("\t".join(v_l))
                 byc.update({ "service_response": "\n".join(l_d) })
-            cgi_print_text_response(byc, status_code)
+            cgi_print_text_response(byc["service_response"], status_code)
 
     if "simple" in r_f:
         cgi_simplify_response(byc)
@@ -246,12 +227,7 @@ def cgi_print_response(byc, status_code):
     response_clean_legacy(byc)
     update_error_code_from_response_summary(byc)
     switch_to_error_response(byc)
-
-    print('Content-Type: application/json')
-    print('status:200')
-    print()
-    prjsoncam(byc["service_response"])
-    exit()
+    cgi_print_json_response(byc["service_response"])
 
 ################################################################################
 
@@ -318,15 +294,19 @@ def check_switch_to_count_response(byc):
 
 def open_json_streaming(byc, filename="data.json"):
 
+    meta = byc["service_response"].get("meta", {})
+
     print('Content-Type: application/json')
     print('Content-Disposition: attachment; filename="{}"'.format(filename))
     print('status: 200')
     print()
     print('{"meta":', end = '')
-    print(json.dumps(humps.camelize(byc["service_response"]["meta"]), indent=None, sort_keys=True, default=str), end=",")
+    print(json.dumps(humps.camelize(meta), indent=None, sort_keys=True, default=str), end=",")
     print('"response":{', end='')
     for r_k, r_v in byc["service_response"].items():
         if "results" in r_k:
+            continue
+        if "meta" in r_k:
             continue
         print('"'+r_k+'":', end='')
         print(json.dumps(humps.camelize(r_v), indent=None, sort_keys=True, default=str), end=",")
@@ -342,7 +322,7 @@ def close_json_streaming():
 
 def open_text_streaming(filename="data.pgxseg"):
 
-    print('Content-Type: text/pgxseg')
+    print('Content-Type: text/plain')
     print('Content-Disposition: attachment; filename="{}"'.format(filename))
     print('status: 200')
     print()
@@ -366,12 +346,33 @@ def prjsoncam(this):
 
 ################################################################################
 
-def prjsonresp(this={}):
+def cgi_print_json_response(this={}, status_code=200):
 
     print('Content-Type: application/json')
-    print('status:200')
+    print('status:'+str(status_code))
     print()
     prjsoncam(this)
+    print()
+    exit()
+
+################################################################################
+
+def cgi_print_text_response(this="", status_code=200):
+
+    print('Content-Type: text/plain')
+    print('status:'+str(status_code))
+    print()
+    print(this)
+    print()
+    exit()
+
+################################################################################
+
+def cgi_print_rewrite_response(uri_base="", uri_stuff="", output_par="empty_value"):
+
+    print("Status: 302")
+    print("Location: {}{}".format(uri_base, uri_stuff))
+    print()
     exit()
 
 
