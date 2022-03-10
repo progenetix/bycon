@@ -2,7 +2,27 @@ biosample:
   type: object
   properties:
     id:
-      description: "Id of the biological sample to display."
+      description: "Id of the biological sample to match."
       type: string
     filters:
       $ref: https://progenetix.org/services/schemas/filteringTermsSchema/
+    biosampleIds:
+      description: >-
+        Ids of the biological sample to match.
+      type: array
+      items: string
+    analysisIds:
+      description: >-
+        Ids of analyses to match.
+      type: array
+      items: string
+    individualIds:
+      description: >-
+        Ids of analyses to match.
+      type: array
+      items: string
+    variantIds:
+      description: >-
+        Ids of analyses to match.
+      type: array
+      items: string

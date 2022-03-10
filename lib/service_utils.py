@@ -113,17 +113,14 @@ def initialize_service(byc, service=False):
             if form["pagination"][sp] > 0:
                 byc["pagination"].update({sp: form["pagination"][sp]})
 
-    if "output" in form:
-        byc["output"] = form["output"]
+    byc["output"] = form.get("output", "")
 
-    if "method" in form:
-        if "method_keys" in conf:
-            m = form.get("method", "___none___")
-            if m in conf["method_keys"].keys():
-                byc["method"] = m
+    if "method_keys" in conf:
+        m = form.get("method", "___none___")
+        if m in conf["method_keys"].keys():
+            byc["method"] = m
 
-    test_mode = form.get("testMode", None)
-    if test_mode:
+    if form.get("testMode", "false").lower() in ["1", "true", "y", "yes"]:
         byc.update({"test_mode": True })
 
     # TODO: standardize the general defaults / entity defaults / form values merging
