@@ -3,6 +3,7 @@ import re, yaml
 from pymongo import MongoClient
 from bson.son import SON
 
+from cgi_parse import *
 from parse_variants import *
 from parse_filters import *
 
@@ -35,27 +36,26 @@ def generate_queries(byc):
     if not "queries" in byc:
         byc.update({"queries": { }})
 
-    update_queries_from_path_id( byc )
-    update_queries_from_id_values( byc )
-    update_queries_from_filters( byc )
-    update_queries_from_hoid( byc)
-    update_queries_from_variants( byc )
-    update_queries_from_endpoints( byc )
-    update_queries_from_geoquery( byc )
-    purge_empty_queries( byc )
+    _update_queries_from_path_id( byc )
+    _update_queries_from_id_values( byc )
+    _update_queries_from_filters( byc )
+    _update_queries_from_hoid( byc)
+    _update_queries_from_variants( byc )
+    _update_queries_from_geoquery( byc )
+    _purge_empty_queries( byc )
 
     return byc
 
 ################################################################################
 
-def purge_empty_queries( byc ):
+def _purge_empty_queries( byc ):
 
     empties = [ ]
     for k, v in byc["queries"].items():
         if not v:
             empties.append( k )
     for e_k in empties:
-        del( byc["queries"][ k ] )
+        byc["queries"].pop(k, None)
 
     return byc
 
@@ -87,7 +87,7 @@ def generate_empty_query_items_request(ds_id, byc, ret_no=10):
 
 ################################################################################
 
-def update_queries_from_path_id( byc ):
+def _update_queries_from_path_id( byc ):
 
     dummy_id_patterns = ["_id_", "__id__", "___id___", "_test_", "__test__", "___test___", r'{id}' ]
 
@@ -150,43 +150,27 @@ def _get_response_type_from_path(path_element, byc):
 
 ################################################################################
 
-def update_queries_from_id_values(byc):
+def _update_queries_from_id_values(byc):
 
-    # TODO: Hacking some translation of ids ...
+    id_f_v = byc["beacon_mappings"]["id_queryscope_mappings"]
+    f_d = byc["form_data"]
 
-    if "biosamples" in byc["queries"]:
-        if "id" in byc["queries"]["biosamples"]:
-            bs_id = byc["queries"]["biosamples"]["id"]
-            if isinstance(bs_id, str):
-
-                gsm_re = re.compile(r'^geo:GSM\d+?$')
-                if gsm_re.match(bs_id):
-                    byc["queries"].update({"biosamples":{"external_references.id":bs_id}})
-
-    # id_re = re.compile(r'^\w[\w\:\-]+?\w$')
-
-    # for par, scope in byc["config"]["id_query_map"].items():
-    #     if par in byc["form_data"]:
-    #         q_list = [ ]
-    #         q = False
-    #         for id_v in byc["form_data"][par]:
-    #             if id_re.match(id_v):
-    #                 q_list.append({"id":id_v})
-    #         if len(q_list) == 1:
-    #             q = q_list[0]
-    #         elif len(q_list) > 1:
-    #             q = { '$or': q_list }
-    #         if q:
-    #             if scope in byc["queries"]:
-    #                 byc["queries"].update( { scope: { '$and': [ q, byc["queries"][ scope ] ] } } )
-    #             else:
-    #                 byc["queries"].update( { scope: q } )
+    for id_k, id_s in id_f_v.items():
+        q = False
+        if id_k in f_d:
+            id_v = f_d[id_k]
+            if len(id_v) > 1:
+                q = {"id":{"$in":id_v}}
+            elif len(id_v) == 1:
+                q = {"id":id_v[0]}
+        if q is not False:
+            update_query_for_scope( byc, q, id_s, "AND")
 
     return byc
 
 ################################################################################
 
-def update_queries_from_hoid( byc):
+def _update_queries_from_hoid( byc):
 
     if "accessid" in byc["form_data"]:
 
@@ -212,7 +196,7 @@ def update_queries_from_hoid( byc):
 
 ################################################################################
 
-def update_queries_from_filters(byc):
+def _update_queries_from_filters(byc):
 
     """The new version assumes that dataset_id, scope (collection) and field are
     stored in the collation entries. Only filters with exact match to an entry
@@ -302,42 +286,33 @@ def update_queries_from_filters(byc):
 
 ################################################################################
 
-def update_queries_from_endpoints( byc ):
+def update_query_for_scope( byc, query, scope, bool_mode="AND"):
 
-    if not "endpoint_pars" in byc:
-        return byc
+    logic = boolean_to_mongo_logic(bool_mode)
 
-    if len(byc["endpoint_pars"]) < 1:
-        return byc
-
-    for c_n in byc["endpoint_pars"]["queries"].keys():
-        epq = byc["endpoint_pars"]["queries"][c_n]
-        if c_n in byc["queries"]:
-            byc["queries"][c_n] = { '$and': [ epq, byc["queries"][c_n] ] }
-        else:
-            byc["queries"][c_n] = epq
+    if not scope in byc["queries"]:
+        byc["queries"][scope] = query
+    else:
+        byc["queries"][scope] = { logic: [ byc["queries"][scope], query ] }
 
     return byc
 
 ################################################################################
 
-def update_queries_from_geoquery( byc ):
+def _update_queries_from_geoquery( byc ):
 
     geo_q, geo_pars = geo_query( byc )
 
     if not geo_q:
         return byc
 
-    if not "biosamples" in byc["queries"]:
-        byc["queries"]["biosamples"] = geo_q
-    else:
-        byc["queries"]["biosamples"] = { '$and': [ geo_q, byc["queries"]["biosamples"] ] }
+    update_query_for_scope( byc, geo_q, "biosamples", bool_mode="AND")
 
     return byc
 
 ################################################################################
 
-def update_queries_from_variants( byc ):
+def _update_queries_from_variants( byc ):
 
     if not "variant_request_type" in byc:
         return byc
@@ -463,6 +438,4 @@ def return_geo_longlat_query(geo_root, geo_pars):
     }
 
     return geo_q
-
-################################################################################
 

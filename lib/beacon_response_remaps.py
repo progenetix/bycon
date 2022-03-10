@@ -1,3 +1,5 @@
+import datetime
+
 ################################################################################
 
 def remap_variants(r_s_res, byc):
@@ -81,7 +83,7 @@ def remap_runs(r_s_res, byc):
                 "analysis_id": cs_r.get("id", ""),
                 "biosample_id": cs_r.get("biosample_id", ""),
                 "individual_id": cs_r.get("individual_id", ""),
-                "run_date": cs_r.get("updated", "")
+                "run_date": datetime.datetime.fromisoformat(cs_r.get("updated", datetime.datetime.now().isoformat())).isoformat()
             }
         runs.append(r)
 

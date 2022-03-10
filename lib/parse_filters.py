@@ -40,11 +40,7 @@ def get_filter_flags(byc):
 
     if "form_data" in byc:
         if "filterLogic" in byc[ "form_data" ]:
-            l = byc["form_data"]['filterLogic']
-            if "OR" in l:
-                ff["logic"] = '$or'
-            if "AND" in l:
-                ff["logic"] = '$and'
+            ff["logic"] = boolean_to_mongo_logic( byc["form_data"]['filterLogic'] )
         if "filterPrecision" in byc[ "form_data" ]:
             ff["precision"] = byc["form_data"]['filterPrecision']
         if "includeDescendantTerms" in byc[ "form_data" ]:

@@ -49,7 +49,7 @@ response_types:
     response_schema: progenetixServiceResponse
     beacon_schema:
       entity_type: collation
-      schema: https://progenetix.org/services/schemas/Collation/
+      schema: https://progenetix.org/services/schemas/pgxCollation/
     h->o_access_key: Null
 
   - entity_type: gene

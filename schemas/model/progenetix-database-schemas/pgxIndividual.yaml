@@ -33,22 +33,6 @@ properties:
     type: string
     examples:
       - HapMap project contributor
-  karyotypicSex:
-    description: >-
-      Chromosomal sex of an individual as being used by Phenopackets. Following the definition there
-    type: string
-    enum:
-      - UNKNOWN_KARYOTYPE
-      - XX
-      - XY
-      - XO
-      - XXY
-      - XXX
-      - XXYY
-      - XXXY
-      - XXXX
-      - XYY
-      - OTHER_KARYOTYPE
   externalReferences:
     type: array
     items:

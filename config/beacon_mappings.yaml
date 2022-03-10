@@ -1,3 +1,10 @@
+id_queryscope_mappings:
+  biosampleIds: biosamples
+  variantIds: variants
+  callsetIds: callsets
+  analysisIds: callsets
+  individualIds: individuals
+
 service_names:
 
   empty_value: info

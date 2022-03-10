@@ -56,11 +56,11 @@ properties:
     $ref: ../common/provenance.yaml#/properties
   dataUseConditions:
     $ref: ../common/ontologyTerm.yaml#/properties
-  cnv_statusmaps:
+  cnvStatusmaps:
     $ref: "#/definitions/Statusmaps/properties"
-  cnv_stats:
+  cnvStats:
     $ref: "#/definitions/Cnvstatistics/properties"
-  cnv_chro_stats:
+  cnvChroStats:
     $ref: "#/definitions/Cnvstatistics/properties"
   info:
     type: object

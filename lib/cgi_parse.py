@@ -26,6 +26,15 @@ def set_debug_state(debug=0):
 
 ################################################################################
 
+def boolean_to_mongo_logic( logic="AND" ):
+
+    if "OR" in logic:
+        return '$or'
+    
+    return '$and'
+
+################################################################################
+
 def cgi_parse_query(byc):
 
     content_len = environ.get('CONTENT_LENGTH', '0')
