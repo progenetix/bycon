@@ -25,4 +25,3 @@ properties:
     description: >-
       Response for queries that recovers any result.
     $ref: ./sections/beaconResultsets.yaml#/properties
-    # $ref: ./sections/beaconResultSets.yaml#/properties

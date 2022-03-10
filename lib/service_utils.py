@@ -15,7 +15,7 @@ from handover_execution import handover_return_data
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers
 from interval_utils import generate_genomic_intervals, interval_counts_from_callsets
 from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
-from query_generation import  initialize_beacon_queries, generate_empty_query_items_request
+from query_generation import  initialize_beacon_queries, replace_queries_in_test_mode
 from read_specs import read_bycon_configs_by_name,read_local_prefs
 from schemas_parser import *
 from variant_responses import normalize_variant_values_for_export
@@ -45,7 +45,8 @@ def initialize_bycon():
         "query_meta": {},
         "debug_state": False,
         "empty_query_all_response": False,
-        "empty_query_all_count": False,        
+        "empty_query_all_count": False,
+        "test_mode": False,    
         "errors": [],
         "warnings": []
     }
@@ -61,6 +62,7 @@ def run_beacon_init_stack(byc):
     print_parameters_response(byc)
     generate_genomic_intervals(byc)
     create_empty_beacon_response(byc)
+    replace_queries_in_test_mode(byc, 5)
     response_collect_errors(byc)
     cgi_break_on_errors(byc)
 
@@ -120,6 +122,10 @@ def initialize_service(byc, service=False):
             if m in conf["method_keys"].keys():
                 byc["method"] = m
 
+    test_mode = form.get("testMode", None)
+    if test_mode:
+        byc.update({"test_mode": True })
+
     # TODO: standardize the general defaults / entity defaults / form values merging
     #       through pre-parsing into identical structures and then use deepmerge etc.
 
@@ -141,7 +147,6 @@ def run_result_sets_beacon(byc):
 
         # TODO: beter definition of when to query
         check_empty_query_all_response(byc)
-        generate_empty_query_items_request(ds_id, byc, ret_no=10)
         execute_bycon_queries( ds_id, byc )
         r_s_res = retrieve_data(ds_id, byc)
         r_set.update({ "results_handovers": dataset_response_add_handovers(ds_id, byc) })
@@ -441,6 +446,7 @@ def response_update_meta(r, byc):
     response_meta_set_config_defaults(r, byc)
     response_meta_set_entity_values(r, byc)
     response_meta_add_request_summary(r, byc)
+    r["meta"].update({"test_mode": byc["test_mode"]})
 
 ################################################################################
 

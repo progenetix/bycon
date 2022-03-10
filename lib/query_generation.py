@@ -61,25 +61,32 @@ def _purge_empty_queries( byc ):
 
 ################################################################################
 
-def generate_empty_query_items_request(ds_id, byc, ret_no=10):
+def replace_queries_in_test_mode(byc, ret_no=10):
 
-    # This is called separately, only for specific collections
-
-    collname = byc["response_entity"]["collection"]
-
-    if byc["empty_query_all_response"] is False:
+    if byc["test_mode"] is not True:
         return byc
 
+    try:
+        collname = byc["response_entity"]["collection"]
+    except:
+        return byc
+
+    ds_id = byc["dataset_ids"][0]
     mongo_client = MongoClient()
     data_db = mongo_client[ ds_id ]
-    data_coll = mongo_client[ ds_id ][ collname ]
+    data_collnames = data_db.list_collection_names()
 
+    if not collname in data_collnames:
+        return byc
+
+    data_coll = mongo_client[ ds_id ][ collname ]
     rs = list( data_coll.aggregate([{"$sample": {"size":ret_no}}]) )
     _ids = []
     for r in rs:
         _ids.append(r["_id"])
 
-    byc["queries"].update( { collname: { "_id": {"$in": _ids } } } )
+    byc["queries"] = { collname: { "_id": {"$in": _ids } } }
+    # byc["queries"].update( { collname: { "_id": {"$in": _ids } } } )
 
     byc.update( { "empty_query_all_count": data_coll.estimated_document_count() } )
 

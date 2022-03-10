@@ -17,6 +17,10 @@ properties:
     $ref: ../../common/beaconCommonComponents.yaml#/definitions/ListOfSchemas
   returnedGranularity:
     $ref: ../../common/beaconCommonComponents.yaml#/definitions/Granularity
+  testMode:
+    description: Used for indicating that a response is returned in a test context.
+      Purposed for compliance testing. Information returned could be fake.
+    $ref: ../../common/beaconCommonComponents.yaml#/definitions/TestMode
   receivedRequestSummary:
     description: >-
       Section of the response that summarize the request received as it has been interpreted by teh Beacon server.

@@ -92,6 +92,16 @@ definitions:
     example:
       - BTO:0000199
       - PATO:0000383
+  TestMode:
+    description: Used for indicating that a request or response is done in a test
+      context. Purposed for compliance testing. It DOES NOT mean that the Beacon instance
+      is a test instance, but that this specific request-response cycle is a testing
+      one. When 'true' the Beacon instance MUST respond the request but it SHOULD
+      use fake or non-sensitive data or content as what is being evaluated is the
+      acceptance/understanding of a request and the structure of the returned response
+      by the Beacon instance.
+    type: boolean
+    default: false
   Exists:
     description: >-
       Indicator of whether any record was observed in any of the collections queried. This should be non-null.
