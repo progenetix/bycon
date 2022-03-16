@@ -339,9 +339,7 @@ def create_empty_beacon_response(byc):
     if "beaconResultsetsResponse" in byc["response_entity"]["response_schema"]:
 
         # TODO: stringent definition on when this is being used
-
-        r_set_s = read_schema_files("beaconResultSets", "definitions/resultSetInstance/properties", byc)
-        r_set = create_empty_instance(r_set_s)
+        r_set = object_instance_from_schema_name(byc, "beaconResultSets", "definitions/resultSetInstance/properties")
    
         if "dataset_ids" in byc:
             for ds_id in byc[ "dataset_ids" ]:
@@ -425,11 +423,8 @@ def check_switch_to_plot_response(byc):
 def instantiate_response_and_error(byc):
 
     """The response relies on the pre-processing of input parameters (queries etc)."""
-    r_s = read_schema_files(byc["response_entity"]["response_schema"], "properties", byc)
-    r = create_empty_instance(r_s)
-
-    e_s = read_schema_files("beaconErrorResponse", "properties", byc)
-    e = create_empty_instance(e_s)
+    r = object_instance_from_schema_name(byc, byc["response_entity"]["response_schema"])
+    e = object_instance_from_schema_name(byc, "beaconErrorResponse")
 
     return r, e
 

@@ -1,0 +1,29 @@
+{
+    "$schema":"beaconRequestBody.json",
+    "meta": {
+        "apiVersion": "2.0",
+        "requestedSchemas": [
+            {
+                "entityType": "genomicVariation",
+                "schema:": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2-unity-testing/main/models/json/beacon-v2-default-model/genomicVariations/defaultSchema.json"
+            }
+        ]
+    },
+    "query": {
+        "requestParameters": {
+            "datasets": {
+                "datasetIds": ["progenetix"]
+            },
+            "referenceName": "NC_000017.11",
+            "start": [7577120],
+            "referenceBases": "G",
+            "alternateBases": "A"
+        }
+    },
+    "requestedGranularity": "record",
+    "pagination": {
+        "skip": 0,
+        "limit": 5
+    },
+    "filters": []
+}

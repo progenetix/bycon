@@ -28,6 +28,7 @@ def parse_variants(byc):
 
     # value checks
     v_p_c = { }
+    translate_reference_name(variant_pars, byc)
 
     for p_k in variant_pars.keys():
         if not p_k in v_p_defs.keys():
@@ -58,6 +59,34 @@ def parse_variants(byc):
     byc.update( { "variant_pars": v_p_c } )
 
     return byc
+
+################################################################################
+
+def translate_reference_name(variant_pars, byc):
+
+    if not "referenceName" in variant_pars:
+        return
+
+    r_n = variant_pars[ "referenceName" ]
+
+    v_d_refsc = byc["variant_definitions"]["refseq_chromosomes"]
+
+    c_map = {}
+
+    for c, c_d in v_d_refsc.items():
+        c_map.update({
+            c: c_d["chr"],
+            c_d["chr"]: c_d["chr"],
+            c_d["refseq_id"]: c_d["chr"],
+            c_d["genbank_id"]: c_d["chr"]
+        })
+
+    if not r_n in c_map.keys():
+        variant_pars.pop("referenceName")
+        return variant_pars
+
+    variant_pars.update({"referenceName": c_map[r_n] })
+    return variant_pars
 
 ################################################################################
 

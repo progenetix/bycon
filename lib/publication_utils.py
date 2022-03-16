@@ -107,7 +107,7 @@ def get_empty_publication(byc):
     root_def = RefDict(pub_p)
     exclude_keys = [ "format", "examples", "_id" ]
     e_p_s = materialize(root_def, exclude_keys = exclude_keys)
-    # e_p_s = read_schema_files("Publication", "properties", byc)
+    # e_p_s = read_schema_file("Publication", "properties", byc)
     p = create_empty_instance(e_p_s)
     _assign_publication_defaults(p)
     

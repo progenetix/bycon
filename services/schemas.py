@@ -32,7 +32,7 @@ def main():
 def schemas():
 
     initialize_service(byc)
-    create_empty_service_response(byc)
+    # create_empty_service_response(byc)
 
     schema_name = rest_path_value("schemas")
     comps = schema_name.split('.')
@@ -43,7 +43,8 @@ def schemas():
 
     if not "empty_value" in schema_name:
 
-        s = read_schema_files(schema_name, "", byc)
+        # print(schema_name)
+        s = read_schema_file(schema_name, "", byc)
         # print(s)
 
         if not s is False:
@@ -54,7 +55,7 @@ def schemas():
             print(json.dumps(camelize(s), indent=4, sort_keys=True, default=str)+"\n")
             exit()
     
-    response_add_error(byc, 422, "No correct schema name provided!")
+    # response_add_error(byc, 422, "No correct schema name provided!")
     cgi_print_response( byc, 422 )
 
 ################################################################################

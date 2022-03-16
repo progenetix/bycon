@@ -27,7 +27,7 @@ def beacon_get_endpoint_base_paths(byc):
 
 ################################################################################
 
-def read_schema_files(schema_name, item, byc):
+def read_schema_file(schema_name, item, byc):
 
     s_f_p = get_schema_file_path(schema_name, byc)
 
@@ -37,8 +37,9 @@ def read_schema_files(schema_name, item, byc):
 
         s_path = path.join( s_f_p, schema_name+".yaml#/"+item )
         root_def = RefDict(s_path)
-        exclude_keys = [ "format", "examples" ]
+        exclude_keys = [ "examples" ] #"format", 
         s = materialize(root_def, exclude_keys = exclude_keys)
+        assert isinstance(s, dict)
         # print(s)
         return s
 
@@ -67,32 +68,33 @@ def get_schema_file_path(schema_name, byc):
 
 ################################################################################
 
-def instantiate_schema(schema):
+def instantiate_schema(schema, is_root=True):
 
     if 'type' in schema.keys():
 
-        t = schema['type']
-    
-        if t == 'array' or t == 'list':
-            schema = []
-        elif t == 'object':
-            schema = { }
-        elif t == 'integer':
-            schema = int()
-        elif t == 'number':
-            schema = float()
-        elif t == 'boolean':
-            schema = False
-        else:
-            schema = ""
-           
-        return schema
+        if is_root is not True:
+
+            t = schema['type']
+        
+            if t == 'array' or t == 'list':
+                schema = []
+            elif t == 'object':
+                schema = { }
+            elif t == 'integer':
+                schema = int()
+            elif t == 'number':
+                schema = float()
+            elif t == 'boolean':
+                schema = False
+            else:
+                schema = ""
+               
+            return schema
       
     else:
         for k, val in schema.items():
-        
             if isinstance(val, dict):
-                schema[k] = instantiate_schema(val)
+                schema.update({ k: instantiate_schema(val, False) })
                 
     return schema
         
@@ -100,8 +102,15 @@ def instantiate_schema(schema):
 
 def create_empty_instance(schema):
 
-    s_convert = humps.decamelize(schema)
-    s_i = instantiate_schema(s_convert)
+    s_i = instantiate_schema(schema, True)
+    s_i = humps.decamelize(s_i)
+    return s_i
+
+################################################################################
+
+def object_instance_from_schema_name(byc, schema_name, root_key="properties"):
+
+    s_i = create_empty_instance( read_schema_file(schema_name, root_key, byc) )
     return s_i
 
 ################################################################################
