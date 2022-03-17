@@ -7,6 +7,35 @@ cnv_dummy_values:
 
 amp_max_size: 5000000
 
+efo_vrs_map:
+  EFO:0030064:
+    label: regional base ploidy
+    vrs: copy neutral
+  EFO:0030065:
+    label: copy-neutral loss of heterozygosity
+    vrs: copy neutral
+  EFO:0030067:
+    label: copy number loss
+    vrs: partial loss
+  EFO:0030068:
+    label: low-level copy number loss
+    vrs: partial loss
+  EFO:0030069:
+    label: complete genomic deletion
+    vrs: complete loss
+  EFO:0030070:
+    label: copy number gain
+    vrs: low-level gain
+  EFO:0030071:
+    label: low-level copy number gain
+    vrs: low-level gain
+  EFO:0030072:
+    label: high-level copy number gain
+    vrs: high-level gain
+  EFO:0030073:
+    label: focal genome amplification
+    vrs: high-level gain
+
 cnv_iscn_defs:
   DUP:
     info:

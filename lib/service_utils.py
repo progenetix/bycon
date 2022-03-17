@@ -101,6 +101,13 @@ def initialize_service(byc, service=False):
         for d in conf["bycon_definition_files"]:
             read_bycon_configs_by_name( d, byc )
 
+    if "variant_definitions" in byc:
+        v_d_refsc = byc["variant_definitions"]["refseq_chromosomes"]
+        c_r = {}
+        for c, c_d in v_d_refsc.items():
+            c_r.update({ c_d["chr"]: c_d["refseq_id"] })
+        byc["variant_definitions"].update({"chro_refseq_ids": c_r })
+
     if "defaults" in conf:
         for d_k, d_v in conf["defaults"].items():
             byc.update( { d_k: d_v } )
@@ -119,9 +126,8 @@ def initialize_service(byc, service=False):
         m = form.get("method", "___none___")
         if m in conf["method_keys"].keys():
             byc["method"] = m
-
-    if form.get("testMode", "false").lower() in ["1", "true", "y", "yes"]:
-        byc.update({"test_mode": True })
+    
+    byc.update({"test_mode": test_truthyness( form.get("testMode", "false") ) })
 
     # TODO: standardize the general defaults / entity defaults / form values merging
     #       through pre-parsing into identical structures and then use deepmerge etc.

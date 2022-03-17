@@ -1,4 +1,4 @@
-import datetime
+import datetime, re
 
 ################################################################################
 
@@ -6,6 +6,8 @@ def remap_variants(r_s_res, byc):
 
     if not "variant" in byc["response_type"]:
         return r_s_res
+
+    v_d = byc["variant_definitions"]
 
     variant_ids = []
     for v in r_s_res:
@@ -21,22 +23,30 @@ def remap_variants(r_s_res, byc):
 
         d_vs = [v for v in r_s_res if v['variant_internal_id'] == d]
 
+        v_p = d_vs[0]
+
+        variation = vrsify_variant(v_p, v_d)
+        v_t = v_p.get("variant_type", "CNV")
+
+        vrs_class = None
+        if "variant_state" in v_p:
+            vrs_class = efo_to_vrs_class(v_p["variant_state"].get("id", None), v_d)
+
+        if vrs_class is None:
+            continue
+
         v = {
             "variant_internal_id": d,
-            "variant_type": d_vs[0].get("variant_type", "SNV"),
-            "position":{
-                "assembly_id": "GRCh38",
-                "refseq_id": "chr"+d_vs[0]["reference_name"],
-                "start": [ int(d_vs[0]["start"]) ]
-            },
+            "variant_type": v_t,
+            "variant_state": vrs_class,
+            "variation": variation,
             "case_level_data": []
         }
 
-        if "end" in d_vs[0]:
-            v["position"].update({ "end": [ int(d_vs[0]["end"]) ] })
-
-        for v_t in ["variant_type", "reference_bases", "alternate_bases"]:
-            v.update({ v_t: d_vs[0].get(v_t, "") })
+        for v_v in ["reference_bases", "alternate_bases"]:
+            b = v_p.get(v_v, "")
+            if len(b) > 0:
+                v.update({ v_v: b })
 
         for d_v in d_vs:
             v["case_level_data"].append(
@@ -50,6 +60,113 @@ def remap_variants(r_s_res, byc):
         variants.append(v)
 
     return variants
+
+################################################################################
+
+def vrsify_variant(v, v_d):
+
+    v_t = v.get("variant_type", "SNV")
+    if "SNV" in "variant_type":
+        return vrsify_snv(v, v_d)
+    else:
+        return vrsify_cnv(v, v_d)
+
+################################################################################
+
+def vrsify_cnv(v, v_d):
+
+    v_t = v.get("variant_type", "CNV")
+    ref_id = refseq_from_chro(v["reference_name"], v_d)
+    start_v = int(v["start"])
+    end_v = int( v.get("end",start_v + 1 ) )
+
+    vrs_class = None
+    if "variant_state" in v:
+        vrs_class = efo_to_vrs_class(v["variant_state"].get("id", None), v_d)
+
+    vrs_v = {
+                "type": "RelativeCopyNumber",
+                "relative_copy_class": vrs_class,
+                "subject": {
+                    "type": "DerivedSequenceExpression",
+                    "location":{
+                        "sequence_id": ref_id,
+                        "type": "SequenceLocation",
+                        "interval": {
+                            "start": {
+                                "type": "Number",
+                                "value": start_v
+                            },
+                            "end": {
+                                "type": "Number",
+                                "value": end_v
+                            }
+                        }
+                    }
+                }
+            }
+
+    return vrs_v
+
+################################################################################
+
+def vrsify_snv(v, v_d):
+
+    ref_id = refseq_from_chro(v["reference_name"], v_d)
+    alt = v.get("alternate_bases", None)
+
+    if alt is None:
+        return {}
+
+    ref_id = refseq_from_chro(v["reference_name"], v_d)
+    start_v = int(v["start"])
+    end_v = int( v.get("end",start_v + len(alt) ) )
+
+    vrs_v = {
+                "type": "Allele",
+                "state": {
+                    "type": "LiteralSequenceExpression",
+                    "sequence": alt
+                },
+                "location":{
+                    "sequence_id": ref_id,
+                    "type": "SequenceLocation",
+                    "interval": {
+                        "type": "SequenceInterval",
+                        "start": {
+                            "type": "Number",
+                            "value": start_v
+                        },
+                        "end": {
+                            "type": "Number",
+                            "value": end_v
+                        }
+                    }
+                }
+            }
+
+    return vrs_v
+
+################################################################################
+
+def efo_to_vrs_class(efo_id, v_d):
+    
+    efo_vrs = v_d["efo_vrs_map"]
+    if efo_id in efo_vrs:
+        return efo_vrs[ efo_id ]["vrs"]
+
+    return None
+
+################################################################################
+
+def refseq_from_chro(chro, v_d):
+
+    chro = re.sub("chr", "", chro) # just making sure ...
+
+    if not chro in v_d["chro_refseq_ids"]:
+        return chro
+
+    return "refseq:" + v_d["chro_refseq_ids"][ chro ]
 
 ################################################################################
 

@@ -41,7 +41,7 @@ def cgi_parse_query(byc):
     content_typ = environ.get('CONTENT_TYPE', '')
     r_m = environ.get('REQUEST_METHOD', '')
 
-    if r_m == "POST":
+    if "POST" in r_m:
         body = sys.stdin.read(int(content_len))
 
         if "json" in content_typ:
@@ -152,7 +152,16 @@ def form_return_listvalue( form_data, parameter ):
                 l_v  = ','.join(v)
                 l_v  = l_v.split(',')
 
-    return l_v 
+    return l_v
+
+################################################################################
+
+def test_truthyness(this):
+
+    if str(this).lower() in ["1", "true", "y", "yes"]:
+        return True
+
+    return False
 
 ################################################################################
 
