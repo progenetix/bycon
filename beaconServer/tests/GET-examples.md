@@ -1,6 +1,8 @@
-#### Variants for filter as pgxseg
+#### Various test examples
 
 https://progenetix.test/cgi/bycon/beaconServer/variants.py?filters=NCIT:C7712&debug=1
+
+http://progenetix.test/cgi/bycon/beaconServer/variants.py/?referenceName=NC_000017.11&start=7577120&referenceBases=G&alternateBases=A&debug=1
 
 https://progenetix.test/beacon/variants/?filters=NCIT:C7712&output=pgxseg&debug=1
 

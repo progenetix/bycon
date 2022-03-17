@@ -26,14 +26,12 @@ def remap_variants(r_s_res, byc):
         v_p = d_vs[0]
 
         variation = vrsify_variant(v_p, v_d)
-        v_t = v_p.get("variant_type", "CNV")
+        # TODO: This default variant_type assignment may break at some point...
+        v_t = v_p.get("variant_type", "SNV")
 
         vrs_class = None
         if "variant_state" in v_p:
             vrs_class = efo_to_vrs_class(v_p["variant_state"].get("id", None), v_d)
-
-        if vrs_class is None:
-            continue
 
         v = {
             "variant_internal_id": d,
@@ -66,7 +64,7 @@ def remap_variants(r_s_res, byc):
 def vrsify_variant(v, v_d):
 
     v_t = v.get("variant_type", "SNV")
-    if "SNV" in "variant_type":
+    if "SNV" in v_t:
         return vrsify_snv(v, v_d)
     else:
         return vrsify_cnv(v, v_d)
