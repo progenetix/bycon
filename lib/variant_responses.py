@@ -143,7 +143,7 @@ def deparse_ISCN_to_variants(iscn, technique, byc):
                     "reference_name": chro,
                     "start": start,
                     "end": end,
-                    "type": "CopyNumber",
+                    "type": "RelativeCopyNumber",
                     "info": {
                         "ISCN": cytostring,
                         "var_length": v_l,

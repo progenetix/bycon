@@ -20,6 +20,11 @@ properties:
     type: string
   variantState:
     $ref: ../common/ontologyTerm.yaml#/properties
+  type:
+    type: string
+    enum:
+      - "Allele"
+      - "RelativeCopyNumber"
   referenceBases:
     type: string
     pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'

@@ -63,8 +63,8 @@ def remap_variants(r_s_res, byc):
 
 def vrsify_variant(v, v_d):
 
-    v_t = v.get("variant_type", "SNV")
-    if "SNV" in v_t:
+    v_t = v.get("type", "Allele")
+    if "Allele" in v_t:
         return vrsify_snv(v, v_d)
     else:
         return vrsify_cnv(v, v_d)
@@ -73,7 +73,7 @@ def vrsify_variant(v, v_d):
 
 def vrsify_cnv(v, v_d):
 
-    v_t = v.get("variant_type", "CNV")
+    v_t = v.get("type", "RelativeCopyNumber")
     ref_id = refseq_from_chro(v["reference_name"], v_d)
     start_v = int(v["start"])
     end_v = int( v.get("end",start_v + 1 ) )
@@ -83,7 +83,7 @@ def vrsify_cnv(v, v_d):
         vrs_class = efo_to_vrs_class(v["variant_state"].get("id", None), v_d)
 
     vrs_v = {
-                "type": "RelativeCopyNumber",
+                "type": v_t,
                 "relative_copy_class": vrs_class,
                 "subject": {
                     "type": "DerivedSequenceExpression",
@@ -110,6 +110,7 @@ def vrsify_cnv(v, v_d):
 
 def vrsify_snv(v, v_d):
 
+    v_t = v.get("type", "Allele")
     ref_id = refseq_from_chro(v["reference_name"], v_d)
     alt = v.get("alternate_bases", None)
 
@@ -121,7 +122,7 @@ def vrsify_snv(v, v_d):
     end_v = int( v.get("end",start_v + len(alt) ) )
 
     vrs_v = {
-                "type": "Allele",
+                "type": v_t,
                 "state": {
                     "type": "LiteralSequenceExpression",
                     "sequence": alt
