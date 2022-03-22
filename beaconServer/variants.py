@@ -35,7 +35,6 @@ def variants():
     return_filtering_terms_response(byc)
     run_result_sets_beacon(byc)
     export_datatable(byc)
-    check_alternative_variant_deliveries(byc)
     query_results_save_handovers(byc)
     check_switch_to_count_response(byc)
     check_switch_to_boolean_response(byc)

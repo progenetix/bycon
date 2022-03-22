@@ -117,7 +117,7 @@ def initialize_service(byc, service=False):
 
     for sp in ["skip", "limit"]:
         if sp in form["pagination"]:
-            if form["pagination"][sp] > 0:
+            if form["pagination"][sp] > -1:
                 byc["pagination"].update({sp: form["pagination"][sp]})
 
     byc["output"] = form.get("output", "")
@@ -166,13 +166,14 @@ def run_result_sets_beacon(byc):
         if r_set["results_count"] < 1:
             continue
 
+        results_pagination_range(len(r_s_res), byc)
+        check_alternative_variant_deliveries(byc)
+        r_s_res = paginate_results(r_s_res, byc)
         r_s_res = remap_variants(r_s_res, byc)
         r_s_res = remap_analyses(r_s_res, byc)
         r_s_res = remap_biosamples(r_s_res, byc)
         r_s_res = remap_runs(r_s_res, byc)
         r_s_res = remap_all(r_s_res)
-        results_pagination_range(len(r_s_res), byc)
-        r_s_res = paginate_results(r_s_res, byc)
 
         r_set.update({"paginated_results_count": len( r_s_res ) })
 
@@ -268,6 +269,10 @@ def results_pagination_range(count, byc):
         byc["pagination"]["skip"] * byc["pagination"]["limit"],
         byc["pagination"]["skip"] * byc["pagination"]["limit"] + byc["pagination"]["limit"],
     ]
+
+    if byc["pagination"]["skip"] == 0 and byc["pagination"]["limit"] == 0:
+        byc["pagination"].update({"range":[0,count]})
+        return byc
 
     r_l_i = count - 1
 
@@ -888,24 +893,25 @@ def check_callsets_matrix_delivery(byc):
         
 ################################################################################
 
-def print_pgx_column_header(ds_id, byc):
+def print_pgx_column_header(ds_id, ds_results, byc):
 
     if not "pgxseg" in byc["output"] and not "pgxmatrix" in byc["output"]:
         return
+
+    s_r_rs = byc["service_response"]["response"]["result_sets"][0]
+    b_p = byc["pagination"]
 
     mongo_client = MongoClient()
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
     cs_coll = mongo_client[ ds_id ][ "callsets" ]
 
-    ds_results = byc["dataset_results"][ds_id]
-
     open_text_streaming()
 
     for d in ["id", "assemblyId"]:
         print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
-    for m in ["variantCount", "biosampleCount"]:
-        if m in byc["service_response"]["response"]["result_sets"][0]["info"]["counts"]:
-            print("#meta=>{}={}".format(m, byc["service_response"]["response"]["result_sets"][0]["info"]["counts"][m]))
+    for k, n in s_r_rs["info"]["counts"].items():
+        print("#meta=>{}={}".format(k, n))
+    print("#meta=>pagination.skip={};pagination.limit={};pagination.range={},{}".format(b_p["skip"], b_p["skip"], b_p["range"][0] + 1, b_p["range"][1]))
             
     _print_filters_meta_line(byc)
 
@@ -939,17 +945,19 @@ def export_variants_download(ds_id, byc):
     data_client = MongoClient( )
     v_coll = data_client[ ds_id ][ "variants" ]
     ds_results = byc["dataset_results"][ds_id]
+ 
+    v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
+    v__ids = paginate_results(v__ids, byc)
 
     open_json_streaming(byc, "variants.json")
 
-    for v_id in ds_results["variants._id"]["target_values"][:-1]:
+    for v_id in v__ids[:-1]:
         v = v_coll.find_one( { "_id": v_id }, { "_id": 0 } )
         print(json.dumps(camelize(v), indent=None, sort_keys=False, default=str, separators=(',', ':')), end = ',')
-    v = v_coll.find_one( { "_id": ds_results["variants._id"]["target_values"][-1]}, { "_id": -1 }  )
+    v = v_coll.find_one( { "_id": v__ids[-1]}, { "_id": 0 }  )
     print(json.dumps(camelize(v), indent=None, sort_keys=False, default=str, separators=(',', ':')), end = '')
 
     close_json_streaming()
-
 
 ################################################################################
 
@@ -958,10 +966,12 @@ def export_pgxseg_download(ds_id, byc):
     data_client = MongoClient( )
     v_coll = data_client[ ds_id ][ "variants" ]
     ds_results = byc["dataset_results"][ds_id]
+    v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
+    v__ids = paginate_results(v__ids, byc)
 
-    print_pgx_column_header(ds_id, byc)
+    print_pgx_column_header(ds_id, ds_results, byc)
 
-    for v_id in ds_results["variants._id"]["target_values"]:
+    for v_id in v__ids:
         v = v_coll.find_one( { "_id": v_id} )
         print_variant_pgxseg(v, byc)
 

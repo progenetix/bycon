@@ -1,9 +1,6 @@
-import cgi, cgitb
+import cgi, cgitb, humps, json, re, sys
 from urllib.parse import urlparse, parse_qs, unquote
 from os import environ
-import json, sys
-import re
-import humps
 
 ################################################################################
 
@@ -41,6 +38,8 @@ def cgi_parse_query(byc):
     content_typ = environ.get('CONTENT_TYPE', '')
     r_m = environ.get('REQUEST_METHOD', '')
 
+    form = {}
+
     if "POST" in r_m:
         body = sys.stdin.read(int(content_len))
 
@@ -55,20 +54,22 @@ def cgi_parse_query(byc):
                 for p, v in jbod["query"].items():
                     if p == "requestParameters":
                         for rp, rv in v.items():
-                            byc["form_data"].update({rp: rv})
+                            form.update({rp: rv})
                     else:
-                        byc["form_data"].update({p: v})
+                        form.update({p: v})
 
             # TODO: define somewhere else with proper defaults
-            byc["form_data"].update({
+            form.update({
                 "requested_granularity": jbod.get("requestedGranularity", "record"),
                 "include_resultset_responses": jbod.get("includeResultsetResponses", "HIT"),
                 "filters": jbod.get("filters", [] )
             })
 
-            byc["form_data"].update({ "pagination": jbod.get("pagination", {}) })
-
-            byc.update({"query_meta": jbod.get("meta", {}) })
+            form.update({ "pagination": jbod.get("pagination", {}) })
+            byc.update({
+                "form_data": form,
+                "query_meta": jbod.get("meta", {})
+            })
 
         return byc
 
@@ -81,25 +82,28 @@ def cgi_parse_query(byc):
 
     for p in get:
         if p in byc["config"]["list_pars"]:
-            byc["form_data"].update({p: form_return_listvalue( get, p )})
+            form.update({p: form_return_listvalue( get, p )})
         else:
-            byc["form_data"].update({p: get.getvalue(p)})
+            form.update({p: get.getvalue(p)})
 
     #TODO: re-evaluate hack of empty filters which avoids dirty errors downstream
-    if not "filters" in byc["form_data"]:
-        byc["form_data"].update({"filters": []})
+    if not "filters" in form:
+        form.update({"filters": []})
 
-    byc["form_data"].update({
+    form.update({
         "requested_granularity": get.getvalue("requestedGranularity", "record"),
         "include_resultset_responses": get.getvalue("includeResultsetResponses", "HIT")
     })
 
-    byc["form_data"].update({
-        "pagination": {
-            "skip": int(get.getvalue("skip", 0)),
-            "limit": int(get.getvalue("limit", 0))
-        }
-    })
+    if not "pagination" in form:
+        form.update({ "pagination": { } })
+
+    for p in [ "skip", "limit" ]:
+        if p in form:
+            if re.match(r'^\d+$', form[p]):        
+                form["pagination"].update({ p: int(form[p]) })
+
+    byc.update({ "form_data": form })
     
     return byc
 
