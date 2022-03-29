@@ -141,7 +141,7 @@ io_params:
       type: string
 
 
-  variantInSample:
+  variant:
     id:
       db_key: id
       type: string
@@ -216,5 +216,5 @@ io_prefixes:
       type: string
       pre: DUO
 
-  variantInSample: {}
+  variant: {}
   

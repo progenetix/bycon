@@ -47,7 +47,7 @@ format. Here, the data is a dictionary/object with a single key (`genes`):
 
 ##### Request  Example
 
-* <https://progenetix.org/services/genespans?geneSymbol=CDKN2>
+* <https://progenetix.org/services/genespans?geneId=CDKN2>
 
 ##### Response Example
 
@@ -57,7 +57,7 @@ format. Here, the data is a dictionary/object with a single key (`genes`):
       "info": "The main geolocs payload can be accessed in `response.results`.\n",
       "received_request": {
         "assemblyId": "GRCh38",
-        "geneSymbol": "TP53"
+        "geneId": "TP53"
       },
       "response_type": "genespans",
       "returned_schemas": {

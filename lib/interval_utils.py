@@ -102,11 +102,16 @@ def generate_cytoband_intervals(byc):
 def interval_cnv_arrays(v_coll, query, byc):
 
     v_defs = byc["variant_definitions"]
+    efo_vrs = v_defs["efo_vrs_map"]
     c_l = byc["cytolimits"]
     intervals = byc["genomic_intervals"]
 
     cov_labs = { "DUP": 'dup', "DEL": 'del' }
     val_labs = { "DUP": 'max', "DEL": 'min' }
+
+    # vrs_cnv_map = {}
+    # for efo, maps in efo_vrs.items():
+    #     vrs_cnv_map.update({maps["relative_copy_class"]: maps["DUPDEL"]})
 
     int_no = len(intervals)
     proto = [0 for i in range(int_no)] 
@@ -150,13 +155,17 @@ def interval_cnv_arrays(v_coll, query, byc):
 
     for v in v_s.rewind():
 
-        if not "variant_type" in v:
-            continue
-        v_t = v["variant_type"]
-        if not v_t in cov_labs.keys():
+        if not "variant_state" in v:
             continue
 
-        cov_lab = cov_labs[ v_t ]
+        v_t_c = v["variant_state"].get("id", "__NA__")
+        if v_t_c not in efo_vrs.keys():
+            continue
+
+        dup_del = efo_vrs[ v_t_c ]["DUPDEL"]
+        if not dup_del in cov_labs.keys():
+            continue
+        cov_lab = cov_labs[dup_del]
 
         for i, intv in enumerate(intervals):
 
@@ -172,7 +181,7 @@ def interval_cnv_arrays(v_coll, query, byc):
                     if type(v["info"]["cnv_value"]) == int or type(v["info"]["cnv_value"]) == float:
                         values_map[ i ].append(v["info"]["cnv_value"])
                     else:
-                        values_map[ i ].append(v_defs["cnv_dummy_values"][ v_t ])
+                        values_map[ i ].append(v_defs["cnv_dummy_values"][ dup_del ])
                 except:
                     pass
 
@@ -292,10 +301,10 @@ def _has_overlap(interval, v):
     if not interval["reference_name"] == v["reference_name"]:
         return False
 
-    if not interval["end"] > v["start"]:
+    if not interval["end"] > v["location"]["interval"]["start"]["value"]:
         return False
 
-    if not interval["start"] < v["end"]:
+    if not interval["start"] < v["location"]["interval"]["end"]["value"]:
         return False
 
     return True

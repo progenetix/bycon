@@ -31,16 +31,8 @@ def callsets():
     run_beacon_init_stack(byc)
     return_filtering_terms_response(byc)
     run_result_sets_beacon(byc)
-    export_datatable(byc)
-    check_alternative_variant_deliveries(byc)
-
-    ############################################################################
-    # TODO: Fix for multiple datasets
-    check_callsets_matrix_delivery(byc)
-    ############################################################################
 
     query_results_save_handovers(byc)
-    check_switch_to_plot_response(byc)
     check_computed_interval_frequency_delivery(byc)
     check_switch_to_count_response(byc)
     check_switch_to_boolean_response(byc)

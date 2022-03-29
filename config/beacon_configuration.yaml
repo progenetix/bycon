@@ -1,6 +1,6 @@
 $schema: https://raw.githubusercontent.com/ga4gh-beacon/beacon-framework-v2/main/configuration/beaconConfigurationSchema.json
 maturityAttributes:
-  productionStatus: DEV
+  productionStatus: PROD
 securityAttributes:
   defaultGranularity: record
   securityLevels:

@@ -47,13 +47,13 @@ def genespans():
     gene_id = rest_path_value("genespans")
 
     if not "empty_value" in gene_id:
-        response_add_received_request_summary_parameter(byc, "geneSymbol", gene_id)
-    elif "geneSymbol" in byc[ "form_data" ]:
-        gene_id = byc[ "form_data" ]["geneSymbol"]
-        response_add_received_request_summary_parameter(byc, "gene_symbol", gene_id)
+        response_add_received_request_summary_parameter(byc, "geneId", gene_id)
+    elif "geneId" in byc[ "form_data" ]:
+        gene_id = byc[ "form_data" ]["geneId"]
+        response_add_received_request_summary_parameter(byc, "geneId", gene_id)
     else:
         # TODO: value check & response
-        response_add_error(byc, 422, "No geneSymbol value provided!" )
+        response_add_error(byc, 422, "No geneId value provided!" )
 
     cgi_break_on_errors(byc)
 

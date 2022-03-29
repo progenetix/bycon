@@ -263,7 +263,7 @@ If using `g_variants` or `variants_in_sample`, those will be treated as aliases.
   
 ##### Custom (yet)
 
-* <https://beacon.progenetix.org/?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&variantType=DUP&filterLogic=AND&geneSymbol=MYC&varMinLength=1000000&varMaxLength=3000000&filters=icdom-80463>
+* <https://beacon.progenetix.org/?datasetIds=progenetix&assemblyId=GRCh38&includeDatasetResponses=ALL&variantType=DUP&filterLogic=AND&geneId=MYC&variantMinLength=1000000&variantMaxLength=3000000&filters=icdom-80463>
 
 * `/get-datasetids/`
   - dataset retrieval

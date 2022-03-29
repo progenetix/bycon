@@ -12,12 +12,13 @@ def dataset_response_add_handovers(ds_id, byc):
     """podmd
     podmd"""
 
-    h_o_server = _handover_select_server(byc) 
     b_h_o = [ ]
-
+    if byc["include_handovers"] is not True:
+        return b_h_o
     if not ds_id in byc["dataset_definitions"]:
         return b_h_o
 
+    h_o_server = _handover_select_server(byc)    
     ds_h_o =  byc["dataset_definitions"][ ds_id ]["info"]["handoverTypes"]
     h_o_types = byc["handover_definitions"]["h->o_types"]
 
@@ -70,6 +71,8 @@ def dataset_response_add_handovers(ds_id, byc):
 def query_results_save_handovers(byc):
 
     if not "dataset_results" in byc:
+        return False
+    if byc["include_handovers"] is not True:
         return False
 
     for ds_id in byc["dataset_results"].keys():
@@ -139,8 +142,6 @@ def _handover_create_ext_url(h_o_server, h_o_defs, accessid, ucsc_pos):
 def _write_variants_bedfile(h_o, **byc):
 
     """podmd
-    #### `BeaconPlus::DataExporter::write_variants_bedfile`
-
     ##### Accepts
 
     * a Bycon `byc` object
@@ -170,6 +171,9 @@ def _write_variants_bedfile(h_o, **byc):
     accessid = h_o["id"]
     bed_file = path.join( *byc["config"][ "paths" ][ "web_temp_dir_abs" ], h_o["id"]+'.bed' )
 
+    v_defs = byc["variant_definitions"]
+    efo_vrs = v_defs["efo_vrs_map"]
+
     vs = { "DUP": [ ], "DEL": [ ], "LOH": [ ], "SNV": [ ]}
 
     data_client = MongoClient( )
@@ -178,13 +182,18 @@ def _write_variants_bedfile(h_o, **byc):
 
     for v in data_coll.find( { h_o["target_key"]: { '$in': h_o["target_values"] } }):
 
-        if "variant_type" in v:
+        if "variant_state" in v:
+            v_t_c = v["variant_state"].get("id", "__NA__")
+            if v_t_c not in efo_vrs.keys():
+                continue
+            dup_del = efo_vrs[ v_t_c ]["DUPDEL"]
+
             v.update({"size": v["end"] - v["start"] })
-            if v["variant_type"] == "DUP":
+            if dup_del == "DUP":
                 vs["DUP"].append(v)
-            elif  v["variant_type"] == "DEL":
+            elif  dup_del == "DEL":
                 vs["DEL"].append(v)
-            elif  v["variant_type"] == "LOH":
+            elif  dup_del == "LOH":
                 vs["LOH"].append(v)
         elif "reference_bases" in v:
             vs["SNV"].append(v)

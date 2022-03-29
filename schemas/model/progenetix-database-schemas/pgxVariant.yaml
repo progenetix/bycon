@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/pgxVariant/v2022-03-04
+$id: https://progenetix.org/services/schemas/pgxVariant/v2022-03-29
 title: Progenetix Variant
 type: object
 description: >-
@@ -16,25 +16,23 @@ properties:
     type: string
   biosampleId:
     type: string
-  variantType:
+  relativeCopyClass:
     type: string
-  variantState:
-    $ref: ../common/ontologyTerm.yaml#/properties
+    enum:
+      - copy neutral
+      - partial loss
+      - complete loss
+      - low-level gain
+      - high-level gain
+  state:
+    $ref: "#/definitions/SequenceState/properties"
   type:
     type: string
     enum:
       - "Allele"
       - "RelativeCopyNumber"
-  referenceBases:
-    type: string
-    pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'
-  alternateBases:
-    type: string
-    pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'
-  start:
-    type: integer
-  end:
-    type: integer
+  location:
+    $ref: "#/definitions/Location/properties"
   info:
     type: object
   updated:
@@ -42,5 +40,56 @@ properties:
     format: date-time
     examples:
       - "2020-09-10T17:44:10.170Z"
+
+# custom / legacy ###############################
+  variantState:
+    $ref: "../common/ontologyTerm.yaml#/properties"
+  referenceBases:
+    type: string
+    pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'
+# deprecated ####################################
+  variantType:
+    type: string
+  alternateBases:
+    type: string
+    pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'
+  start:
+    type: integer
+  end:
+    type: integer
+#################################################
+
+definitions:
+  Location:
+    type: object
+    properties:
+      interval:
+        $ref: "#/definitions/SequenceInterval/properties"
+      sequenceId:
+        type: string
+      type:
+        const: SequenceLocation
+  SequenceState:
+    type: object
+    properties:
+      const: LiteralSequenceExpression
+    sequence:
+      type: string
+  SequenceInterval:
+    type: object
+    properties:
+      type:
+        const: SequenceInterval
+      start:
+        $ref: "#/definitions/PointPosition/properties"
+      end:
+        $ref: "#/definitions/PointPosition/properties"
+  PointPosition:
+    type: object
+    properties:
+      type:
+        const: Number
+      value:
+        type: integer
 
 additionalProperties: true

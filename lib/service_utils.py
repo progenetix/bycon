@@ -11,8 +11,9 @@ pkg_path = path.join( bycon_lib_path, pardir )
 
 from beacon_response_remaps import *
 from cgi_parse import *
+from datatable_utils import check_datatable_delivery
 from handover_execution import handover_return_data
-from handover_generation import dataset_response_add_handovers, query_results_save_handovers
+from handover_generation import dataset_response_add_handovers, query_results_save_handovers, dataset_results_save_handovers
 from interval_utils import generate_genomic_intervals, interval_counts_from_callsets
 from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
 from query_generation import  initialize_beacon_queries, replace_queries_in_test_mode
@@ -43,6 +44,7 @@ def initialize_bycon():
         "output": "",
         "form_data": {},
         "query_meta": {},
+        "include_handovers": False,
         "debug_state": False,
         "empty_query_all_response": False,
         "empty_query_all_count": False,
@@ -128,6 +130,7 @@ def initialize_service(byc, service=False):
             byc["method"] = m
     
     byc.update({"test_mode": test_truthyness( form.get("testMode", "false") ) })
+    byc.update({"include_handovers": test_truthyness( form.get("include_handovers", "false") ) })
 
     # TODO: standardize the general defaults / entity defaults / form values merging
     #       through pre-parsing into identical structures and then use deepmerge etc.
@@ -144,40 +147,32 @@ def run_result_sets_beacon(byc):
 
     for i, r_set in enumerate(sr_r["result_sets"]):
 
-        # TODO: put this into function
-        r_set.update({"results_count": 0})
         ds_id = r_set["id"]
 
-        # TODO: beter definition of when to query
+        # TODO: better definition of when to query
         check_empty_query_all_response(byc)
         execute_bycon_queries( ds_id, byc )
-        r_s_res = retrieve_data(ds_id, byc)
+
+        # Special check-out here since this forces a single handover
+        check_cnvhistogram_plot_response(ds_id, byc)
+
         r_set.update({ "results_handovers": dataset_response_add_handovers(ds_id, byc) })
+        r_s_res = retrieve_data(ds_id, byc)
 
-        for c, c_d in byc["config"]["beacon_counts"].items():
-            if c_d["h->o_key"] in byc["dataset_results"][ds_id]:
-                r_c = byc["dataset_results"][ds_id][ c_d["h->o_key"] ]["target_count"]
-                r_set["info"]["counts"].update({ c: r_c })
-        if byc["empty_query_all_count"]:
-            r_set.update({"results_count": byc["empty_query_all_count"] })
-        elif isinstance(r_s_res, list):
-            r_set.update({"results_count": len( r_s_res ) })
-
+        r_set_update_counts(r_set, r_s_res, byc)
         if r_set["results_count"] < 1:
             continue
 
         results_pagination_range(len(r_s_res), byc)
-        check_alternative_variant_deliveries(byc)
         r_s_res = paginate_results(r_s_res, byc)
-        r_s_res = remap_variants(r_s_res, byc)
-        r_s_res = remap_analyses(r_s_res, byc)
-        r_s_res = remap_biosamples(r_s_res, byc)
-        r_s_res = remap_runs(r_s_res, byc)
-        r_s_res = remap_all(r_s_res)
+        check_alternative_single_set_deliveries(ds_id, r_s_res, byc)
+        r_s_res = reshape_resultset_results(r_s_res, byc)
 
-        r_set.update({"paginated_results_count": len( r_s_res ) })
-
-        r_set.update({ "exists": True, "results": r_s_res })
+        r_set.update({
+            "paginated_results_count": len( r_s_res ),
+            "exists": True,
+            "results": r_s_res
+        })
 
     ######## end of result sets loop ###########################################
 
@@ -189,6 +184,47 @@ def run_result_sets_beacon(byc):
         sr_rs.update({"exists": True })
 
     return byc
+
+################################################################################
+
+def r_set_update_counts(r_set, r_s_res, byc):
+
+    ds_id = r_set["id"]
+
+    r_set.update({"results_count": 0})
+
+    for c, c_d in byc["config"]["beacon_counts"].items():
+        if c_d["h->o_key"] in byc["dataset_results"][ds_id]:
+            r_c = byc["dataset_results"][ds_id][ c_d["h->o_key"] ]["target_count"]
+            r_set["info"]["counts"].update({ c: r_c })
+    if byc["empty_query_all_count"]:
+        r_set.update({"results_count": byc["empty_query_all_count"] })
+    elif isinstance(r_s_res, list):
+        r_set.update({"results_count": len( r_s_res ) })
+
+    return r_set
+
+################################################################################
+
+def check_alternative_single_set_deliveries(ds_id, r_s_res, byc):
+
+    check_datatable_delivery(r_s_res, byc)
+    check_alternative_variant_deliveries(ds_id, byc)
+    check_alternative_callset_deliveries(ds_id, byc)
+
+    return byc
+
+################################################################################
+
+def reshape_resultset_results(r_s_res, byc):
+
+    r_s_res = remap_variants(r_s_res, byc)
+    r_s_res = remap_analyses(r_s_res, byc)
+    r_s_res = remap_biosamples(r_s_res, byc)
+    r_s_res = remap_runs(r_s_res, byc)
+    r_s_res = remap_all(r_s_res)
+
+    return r_s_res
 
 ################################################################################
 
@@ -413,21 +449,25 @@ def create_empty_non_data_response(byc):
 
 ################################################################################
 
-def check_switch_to_plot_response(byc):
+def check_cnvhistogram_plot_response(ds_id, byc):
 
     if not "plot" in byc["output"]:
-        return
-    if not "result_sets" in byc["service_response"]["response"]:
+        return byc
+
+    if not "cnvhistogram" in byc["dataset_definitions"][ ds_id ]["info"]["handoverTypes"]:
         return
 
-    h_o_s = byc["service_response"]["response"]["result_sets"][0]["results_handovers"]
+    byc["include_handovers"] = True
+    byc["dataset_definitions"][ ds_id ]["info"]["handoverTypes"] = ["cnvhistogram"]
+    dataset_results_save_handovers(ds_id, byc)
+    r_s_ho = dataset_response_add_handovers(ds_id, byc)
 
-    for h_o in h_o_s:
+    for h_o in r_s_ho:
         if "cnvhistogram" in h_o["handoverType"]["id"]:
             cgi_print_rewrite_response(h_o["url"], "", "")
             exit()
 
-    return
+    return byc
 
 ################################################################################
 
@@ -658,21 +698,24 @@ def populate_service_response_counts(byc):
 
 ################################################################################
 
-def check_alternative_variant_deliveries(byc):
+def check_alternative_variant_deliveries(ds_id, byc):
 
     if not "variant" in byc["response_type"]:
         return byc
 
-    try:
-        first_ds_id = byc["service_response"]["response"]["result_sets"][0].get("id", "progenetix")
-    except:
-        first_ds_id = "progentix"
-        
     if "pgxseg" in byc["output"]:
-        export_pgxseg_download(first_ds_id, byc)
+        export_pgxseg_download(ds_id, byc)
 
     if "variants" in byc["method"]:
-        export_variants_download(first_ds_id, byc)
+        export_variants_download(ds_id, byc)
+
+    return byc
+
+################################################################################
+
+def check_alternative_callset_deliveries(ds_id, byc):
+
+    check_callsets_matrix_delivery(ds_id, byc)
 
     return byc
 
@@ -811,7 +854,7 @@ def check_computed_interval_frequency_delivery(byc):
 
 ################################################################################
 
-def check_callsets_matrix_delivery(byc):
+def check_callsets_matrix_delivery(ds_id, byc):
 
     if not "pgxmatrix" in byc["output"]:
         return byc
@@ -820,7 +863,6 @@ def check_callsets_matrix_delivery(byc):
     if "val" in byc["output"]:
         m_format = "values"
 
-    ds_id = byc[ "dataset_ids" ][ 0 ]
     ds_results = byc["dataset_results"][ds_id]
     p_r = byc["pagination"]
 

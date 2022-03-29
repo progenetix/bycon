@@ -65,7 +65,7 @@ def parse_variants(byc):
 def translate_reference_name(variant_pars, byc):
 
     if not "referenceName" in variant_pars:
-        return
+        return variant_pars
 
     r_n = variant_pars[ "referenceName" ]
 
@@ -75,10 +75,10 @@ def translate_reference_name(variant_pars, byc):
 
     for c, c_d in v_d_refsc.items():
         c_map.update({
-            c: c_d["chr"],
-            c_d["chr"]: c_d["chr"],
-            c_d["refseq_id"]: c_d["chr"],
-            c_d["genbank_id"]: c_d["chr"]
+            c: c_d["refseq_id"],
+            c_d["chr"]: c_d["refseq_id"],
+            c_d["refseq_id"]: c_d["refseq_id"],
+            c_d["genbank_id"]: c_d["refseq_id"]
         })
 
     if not r_n in c_map.keys():
@@ -156,14 +156,15 @@ def create_variantIdRequest_query( byc ):
 
     # query database for gene and use coordinates to create range query
     vp = byc["variant_pars"]
+    v_p_defs = byc["variant_definitions"]["parameters"]
 
     if "_id" in vp:
-        v_q = { "_id" : ObjectId( vp[ "_id" ] ) }
+        v_q = { v_p_defs["_id"]["db_key"] : ObjectId( vp[ "_id" ] ) }
     elif "id" in vp:
         v_q = { 
             "$or": [
-                { "_id" : ObjectId( vp[ "id" ] ) },
-                { "id" : vp[ "id" ] }
+                { v_p_defs["_id"]["db_key"] : ObjectId( vp[ "id" ] ) },
+                { v_p_defs["id"]["db_key"] : vp[ "id" ] }
             ]
         }
     else:
@@ -182,15 +183,16 @@ def create_geneVariantRequest_query( byc ):
 
     # query database for gene and use coordinates to create range query
     vp = byc["variant_pars"]
+    v_p_defs = byc["variant_definitions"]["parameters"]
 
-    query = { "gene_symbol" : vp[ "geneSymbol" ] }
+    query = { "gene_symbol" : vp[ "geneId" ] }
 
     results, error = mongo_result_list( "progenetix", "genespans", query, { '_id': False } )
 
     byc["variant_pars"].update( {
-        "referenceName": results[0]["reference_name"],
-        "start": [ results[0]["start"] ],
-        "end": [ results[0]["end"] ]
+        v_p_defs["referenceName"]["db_key"]: results[0]["reference_name"],
+        v_p_defs["start"]["db_key"]: [ results[0]["start"] ],
+        v_p_defs["end"]["db_key"]: [ results[0]["end"] ]
     } )
     byc.update( {"variant_request_type": "variantRangeRequest"} )
 
@@ -210,21 +212,21 @@ def create_variantAlleleRequest_query( byc ):
         return byc
 
     vp = byc["variant_pars"]
+    v_p_defs = byc["variant_definitions"]["parameters"]
 
     # TODO: Regexes for ref or alt with wildcard characters
 
     v_q_l = [
-        { "reference_name": vp[ "referenceName" ] },
-        { "start": int(vp[ "start" ][0]) }
+        { v_p_defs["referenceName"]["db_key"]: vp[ "referenceName" ] },
+        { v_p_defs["start"]["db_key"]: int(vp[ "start" ][0]) }
     ]
     for p in [ "referenceBases", "alternateBases" ]:
         if not vp[ p ] == "N":
-            p_n = p.replace("Bases", "_bases")
             if "N" in vp[ p ]:
                 rb = vp[ p ].replace("N", ".")
-                v_q_l.append( { p_n: { '$regex': rb } } )
+                v_q_l.append( { v_p_defs[p]["db_key"]: { '$regex': rb } } )
             else:
-                 v_q_l.append( { p_n: vp[ p ] } )
+                 v_q_l.append( { v_p_defs[p]["db_key"]: vp[ p ] } )
         
     v_q = { "$and": v_q_l }
 
@@ -240,14 +242,15 @@ def create_variantCNVrequest_query( byc ):
         return byc
 
     vp = byc["variant_pars"]
+    v_p_defs = byc["variant_definitions"]["parameters"]
 
     v_q = { "$and": [
-        { "reference_name": vp[ "referenceName" ] },
-        { "start": { "$lt": vp[ "start" ][-1] } },
-        { "end": { "$gte": vp[ "end" ][0] } },
-        { "start": { "$gte": vp[ "start" ][0] } },
-        { "end": { "$lt": vp[ "end" ][-1] } },
-        create_in_query_for_parameter("variantType", "variant_state.id", vp)
+        { v_p_defs["referenceName"]["db_key"]: vp[ "referenceName" ] },
+        { v_p_defs["start"]["db_key"]: { "$lt": vp[ "start" ][-1] } },
+        { v_p_defs["end"]["db_key"]: { "$gte": vp[ "end" ][0] } },
+        { v_p_defs["start"]["db_key"]: { "$gte": vp[ "start" ][0] } },
+        { v_p_defs["end"]["db_key"]: { "$lt": vp[ "end" ][-1] } },
+        create_in_query_for_parameter("variantType", v_p_defs["variantType"]["db_key"], vp)
     ]}
 
     expand_variant_query(v_q, byc)
@@ -262,26 +265,30 @@ def create_variantRangeRequest_query( byc ):
         return byc
     
     vp = byc["variant_pars"]
+    v_p_defs = byc["variant_definitions"]["parameters"]
 
     v_q_l = [
-        { "reference_name": vp[ "referenceName" ] },
-        { "start": { "$lt": int(vp[ "end" ][-1]) } },
-        { "end": { "$gt": int(vp[ "start" ][0]) } }
+        { v_p_defs["referenceName"]["db_key"]: vp[ "referenceName" ] },
+        { v_p_defs["start"]["db_key"]: { "$lt": int(vp[ "end" ][-1]) } },
+        { v_p_defs["end"]["db_key"]: { "$gt": int(vp[ "start" ][0]) } }
     ]
 
-    if "varMinLength" in vp:
-        v_q_l.append( { "info.var_length": { "$gte" : vp[ "varMinLength" ] } } )
-    if "varMaxLength" in vp:
-        v_q_l.append( { "info.var_length": { "$lte" : vp[ "varMaxLength" ] } } )
+    p_n = "variantMinLength"
+    if p_n in vp:
+        v_q_l.append( { v_p_defs[p_n]["db_key"]: { "$gte" : vp[p_n] } } )
+    p_n = "variantMaxLength"
+    if "variantMaxLength" in vp:
+        v_q_l.append( { v_p_defs[p_n]["db_key"]: { "$lte" : vp[p_n] } } )
 
-    if "variantType" in vp:
-        v_q_l.append( create_in_query_for_parameter("variantType", "variant_state.id", vp) )
+    p_n = "variantType"
+    if p_n in vp:
+        v_q_l.append( create_in_query_for_parameter(p_n, v_p_defs[p_n]["db_key"], vp) )
     elif "alternateBases" in vp:
         # the N wildcard stands for any length alt bases so can be ignored
         if vp[ "alternateBases" ] == "N":
-             v_q_l.append( { "alternate_bases": {'$regex': "." } } )
+             v_q_l.append( { v_p_defs["alternateBases"]["db_key"]: {'$regex': "." } } )
         else:
-            v_q_l.append( { "alternate_bases": vp[ "alternateBases" ] } )
+            v_q_l.append( { v_p_defs["alternateBases"]["db_key"]: vp[ "alternateBases" ] } )
 
     v_q = { "$and": v_q_l }
 

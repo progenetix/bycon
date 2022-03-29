@@ -18,8 +18,9 @@ from beaconServer import *
 ################################################################################
 
 """
-https://progenetix.test/beacon/variants/?filters=NCIT:C7712&output=pgxseg&debug=1
+http://progenetix.test/beacon/variants/?filters=NCIT:C7712&output=pgxseg&debug=1
 http://progenetix.test/cgi/bycon/beaconServer/variants.py?start=0,120000000&end=123000000,124500000&referenceName=8&variantType=DUP&filters=icdom-81703&debug=1
+http://progenetix.test/cgi/bycon/beaconServer/variants.py?variantIds=pgxvar-5c86664409d374f2dc4eeb93,pgxvar-5be1840772798347f0eda0d8
 """
 
 def main():
@@ -34,7 +35,6 @@ def variants():
     run_beacon_init_stack(byc)
     return_filtering_terms_response(byc)
     run_result_sets_beacon(byc)
-    export_datatable(byc)
     query_results_save_handovers(byc)
     check_switch_to_count_response(byc)
     check_switch_to_boolean_response(byc)

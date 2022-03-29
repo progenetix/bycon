@@ -7,34 +7,44 @@ cnv_dummy_values:
 
 amp_max_size: 5000000
 
+# relative_copy_class referes to VRS
 efo_vrs_map:
   EFO:0030064:
     label: regional base ploidy
-    vrs: copy neutral
+    relative_copy_class: "copy neutral"
+    DUPDEL: Null
   EFO:0030065:
     label: copy-neutral loss of heterozygosity
-    vrs: copy neutral
+    relative_copy_class: "copy neutral"
+    DUPDEL: LOH
   EFO:0030067:
     label: copy number loss
-    vrs: partial loss
+    relative_copy_class: "partial loss"
+    DUPDEL: DEL
   EFO:0030068:
     label: low-level copy number loss
-    vrs: partial loss
+    relative_copy_class: "partial loss"
+    DUPDEL: DEL
   EFO:0030069:
     label: complete genomic deletion
-    vrs: complete loss
+    relative_copy_class: "complete loss"
+    DUPDEL: DEL
   EFO:0030070:
     label: copy number gain
-    vrs: low-level gain
+    relative_copy_class: "low-level gain"
+    DUPDEL: DUP
   EFO:0030071:
     label: low-level copy number gain
-    vrs: low-level gain
+    relative_copy_class: "low-level gain"
+    DUPDEL: DUP
   EFO:0030072:
     label: high-level copy number gain
-    vrs: high-level gain
+    relative_copy_class: "high-level gain"
+    DUPDEL: DUP
   EFO:0030073:
     label: focal genome amplification
-    vrs: high-level gain
+    relative_copy_class: "high-level gain"
+    DUPDEL: DUP
 
 cnv_iscn_defs:
   DUP:
@@ -77,122 +87,122 @@ refseq_chromosomes: # GRCh38.p13
   chr1:
     chr: "1"
     genbank_id: "CM000663.2"
-    refseq_id: "NC_000001.11"
+    refseq_id: "refseq:NC_000001.11"
     length: 248956422
   chr2:
     chr: "2"
     genbank_id: "CM000664.2"
-    refseq_id: "NC_000002.12"
+    refseq_id: "refseq:NC_000002.12"
     length: 242193529
   chr3:
     chr: "3"
     genbank_id: "CM000665.2"
-    refseq_id: "NC_000003.12"
+    refseq_id: "refseq:NC_000003.12"
     length: 198295559
   chr4:
     chr: "4"
     genbank_id: "CM000666.2"
-    refseq_id: "NC_000004.12"
+    refseq_id: "refseq:NC_000004.12"
     length: 190214555
   chr5:
     chr: "5"
     genbank_id: "CM000667.2"
-    refseq_id: "NC_000005.10"
+    refseq_id: "refseq:NC_000005.10"
     length: 181538259
   chr6:
     chr: "6"
     genbank_id: "CM000668.2"
-    refseq_id: "NC_000006.12"
+    refseq_id: "refseq:NC_000006.12"
     length: 170805979
   chr7:
     chr: "7"
     genbank_id: "CM000669.2"
-    refseq_id: "NC_000007.14"
+    refseq_id: "refseq:NC_000007.14"
     length: 159345973
   chr8:
     chr: "8"
     genbank_id: "CM000670.2"
-    refseq_id: "NC_000008.11"
+    refseq_id: "refseq:NC_000008.11"
     length: 145138636
   chr9:
     chr: "9"
     genbank_id: "CM000671.2"
-    refseq_id: "NC_000009.12"
+    refseq_id: "refseq:NC_000009.12"
     length: 138394717
   chr10:
     chr: "10"
     genbank_id: "CM000672.2"
-    refseq_id: "NC_000010.11"
+    refseq_id: "refseq:NC_000010.11"
     length: 133797422
   chr11:
     chr: "11"
     genbank_id: "CM000673.2"
-    refseq_id: "NC_000011.10"
+    refseq_id: "refseq:NC_000011.10"
     length: 135086622
   chr12:
     chr: "12"
     genbank_id: "CM000674.2"
-    refseq_id: "NC_000012.12"
+    refseq_id: "refseq:NC_000012.12"
     length: 133275309
   chr13:
     chr: "13"
     genbank_id: "CM000675.2"
-    refseq_id: "NC_000013.11"
+    refseq_id: "refseq:NC_000013.11"
     length: 114364328
   chr14:
     chr: "14"
     genbank_id: "CM000676.2"
-    refseq_id: "NC_000014.9"
+    refseq_id: "refseq:NC_000014.9"
     length: 107043718
   chr15:
     chr: "15"
     genbank_id: "CM000677.2"
-    refseq_id: "NC_000015.10"
+    refseq_id: "refseq:NC_000015.10"
     length: 101991189
   chr16:
     chr: "16"
     genbank_id: "CM000678.2"
-    refseq_id: "NC_000016.10"
+    refseq_id: "refseq:NC_000016.10"
     length: 90338345
   chr17:
     chr: "17"
     genbank_id: "CM000679.2"
-    refseq_id: "NC_000017.11"
+    refseq_id: "refseq:NC_000017.11"
     length: 83257441
   chr18:
     chr: "18"
     genbank_id: "CM000680.2"
-    refseq_id: "NC_000018.10"
+    refseq_id: "refseq:NC_000018.10"
     length: 80373285
   chr19:
     chr: "19"
     genbank_id: "CM000681.2"
-    refseq_id: "NC_000019.10"
+    refseq_id: "refseq:NC_000019.10"
     length: 58617616
   chr20:
     chr: "20"
     genbank_id: "CM000682.2"
-    refseq_id: "NC_000020.11"
+    refseq_id: "refseq:NC_000020.11"
     length: 64444167
   chr21:
     chr: "21"
     genbank_id: "CM000683.2"
-    refseq_id: "NC_000021.9"
+    refseq_id: "refseq:NC_000021.9"
     length: 46709983
   chr22:
     chr: "22"
     genbank_id: "CM000684.2"
-    refseq_id: "NC_000022.11"
+    refseq_id: "refseq:NC_000022.11"
     length: 50818468
   chrX:
     chr: "X"
     genbank_id: "CM000685.2"
-    refseq_id: "NC_000023.11"
+    refseq_id: "refseq:NC_000023.11"
     length: 156040895
   chrY:
     chr: "Y"
     genbank_id: "CM000686.2"
-    refseq_id: "NC_000024.10"
+    refseq_id: "refseq:NC_000024.10"
     length: 57227415
 
 variant_types:
@@ -248,84 +258,96 @@ parameters:
 
   assemblyId:
     type: string
-    pattern: '^\w+?[\w\-\.]*?\w*?$' # for 2019-nCoV
+    pattern: '^\w+?[\w\-\.]*?\w*?$'
+    db_key: assembly_id
     default: GRCh38
 
   referenceName:
     type: string
-    pattern: '^\w+?[\w\-]*?\w*?$' # for 2019-nCoV
+    db_key: location.sequence_id
+    # db_key: reference_name
+    pattern: '^\w+.*?\w?$'
 
   mateName:
     type: string
-    pattern: '^([1-9]|1\d|2[0-4]|[XY]|MT)$'
+    db_key: location.sequence_id
+    # db_key: reference_name
+    pattern: '^\w+.*?\w?$'
 
   referenceBases:
     type: string
+    db_key: reference_bases
     pattern: '^[ACGTN]+$'
 
   alternateBases:
     type: string
+    db_key: state.sequence
     pattern: '^[ACGTN]+$'
 
   variantType:
     type: array
+    db_key: variant_state.id
     items:
       type: string
-      pattern: '^((?:EFO:\d+)|(?:DUP)|(?:DEL)|(?:BND)|(?:LOH)|(?:INS)|(?:INV)|(?:CNV)|(?:INDEL)|(?:SNP)|(?:SNV))$'
+      # pattern: '^((?:\w+\-?\w+ \w+)|(?:EFO:\d+)|(?:DUP)|(?:DEL)|(?:BND)|(?:LOH)|(?:INS)|(?:INV)|(?:CNV)|(?:INDEL)|(?:SNP)|(?:SNV))$'
+      pattern: '^\w+[\w \-\:]\w+?$'
 
   start:
     type: array
+    db_key: location.interval.start.value
     items:
       type: integer
       pattern: '^\d+?$'
 
   end:
     type: array
+    db_key: location.interval.end.value
     items:
       type: integer
       pattern: '^\d+?$'
+
+  variantMinLength:
+    type: integer
+    db_key: info.var_length
+    pattern: '^\d+?$'
+    description: >-
+      The minimal length, in bases, of a genomic variant. This parameter can be applied to e.g. CNV queries.
+
+  variantMaxLength:
+    type: integer
+    db_key: info.var_length
+    pattern: '^\d+?$'
+    description: >
+      The maximal length, in bases, of a genomic variant. This parameter can be applied to e.g. CNV queries.
+
+  geneId:
+    type: string
+    db_key: Null
+    pattern: '^\w+?(\w+?(\-\w+?)?)?$'
 
 # custom parameters
 
   _id:
     type: string
+    db_key: _id
     pattern: '^[a-fA-F\d]{24}$'
     description: >
       The internal object id, as string.
 
   id:
     type: string
+    db_key: id
     pattern: '^\w[\w\:\-\,]+?\w$'
     description: >
       A variant id, if existing in the database.
 
-  variantId:
-    type: string
-    pattern: '^\w[\w\:>\-\,]+?\w$'
-    description: >
-      A variant_internal_id, defining a genomically distinct variant through it's "digest".
-
-  varMinLength:
-    type: integer
-    pattern: '^\d+?$'
-    description: >-
-      The minimal length, in bases, of a genomic variant. This parameter can be applied to e.g. CNV queries.
-
-  varMaxLength:
-    type: integer
-    pattern: '^\d+?$'
-    description: >
-      The maximal length, in bases, of a genomic variant. This parameter can be applied to e.g. CNV queries.
-
-  geneSymbol:
-    type: string
-    pattern: '^\w+?(\w+?(\-\w+?)?)?$'
-
   cytoBands:
+    db_key: Null
     pattern: ^(?:chro?)?([12]?[\dXY])([pq](?:(?:ter)|(?:cen)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?\-?([pq](?:(?:cen)|(?:ter)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?$
     type: string
 
   chroBases:
+    db_key: Null
     pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
     type: string
 
@@ -337,13 +359,7 @@ request_types:
     one_of:
       - id
       - _id
-      - variantId
-
-  variantDigestRequest:
-    description: >
-      A query for a specific variant by its `id` or internal `_id`.
-    all_of:
-      - digest
+      - variantInternalId
 
   variantCNVrequest:
     description: >
@@ -378,7 +394,7 @@ request_types:
       - referenceBases
       - alternateBases
       - varMinlength
-      - varMaxLength
+      - variantMaxLength
     
   variantAlleleRequest: 
     description: >
@@ -414,13 +430,13 @@ request_types:
     description: >
       A variant overlapping with the genomic coordinates of a gene or other named sequence element.
     all_of:
-      - geneSymbol
+      - geneId
     optional:
       - variantType
       - referenceBases
       - alternateBases
       - varMinlength
-      - varMaxLength
+      - variantMaxLength
 
   cytobands2positions_request:
     all_of:

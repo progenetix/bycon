@@ -3,22 +3,27 @@ from cgi_parse import prjsonnice
 
 ################################################################################
 
-def export_datatable(byc):
+def check_datatable_delivery(results, byc):
 
     if not "table" in byc["output"]:
         return
     if not "datatable_mappings" in byc:
         return
-    if not byc["response_type"] in byc["datatable_mappings"]["io_params"]:
+
+    dt_m = byc["datatable_mappings"]
+    r_t = byc["response_type"]
+
+    if not byc["response_type"] in dt_m["io_params"]:
         return
+
+    io_params = dt_m["io_params"][ r_t ]
+    io_prefixes = dt_m["io_prefixes"][ r_t ]
 
     print('Content-Type: text/tsv')
     print('Content-Disposition: attachment; filename='+byc["response_type"]+'.tsv')
     print('status: 200')
     print()
 
-    io_params = byc["datatable_mappings"]["io_params"][ byc["response_type"] ]
-    io_prefixes = byc["datatable_mappings"]["io_prefixes"][ byc["response_type"] ]
 
     if "idtable" in byc["output"]:
         io_params = {"id": {"db_key":"id", "type": "string" } }
@@ -27,7 +32,7 @@ def export_datatable(byc):
     header = create_table_header(io_params, io_prefixes)
 
     print("\t".join( header ))    
-    for pgxdoc in byc["service_response"]["response"]["result_sets"][0]["results"]:
+    for pgxdoc in results:
         line = [ ]
         for p, k in io_params.items():
             v = get_nested_value(pgxdoc, k["db_key"])

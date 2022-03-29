@@ -62,6 +62,7 @@ def cgi_parse_query(byc):
             form.update({
                 "requested_granularity": jbod.get("requestedGranularity", "record"),
                 "include_resultset_responses": jbod.get("includeResultsetResponses", "HIT"),
+                "include_handovers": jbod.get("includeHandovers", False),
                 "filters": jbod.get("filters", [] )
             })
 
@@ -92,7 +93,8 @@ def cgi_parse_query(byc):
 
     form.update({
         "requested_granularity": get.getvalue("requestedGranularity", "record"),
-        "include_resultset_responses": get.getvalue("includeResultsetResponses", "HIT")
+        "include_resultset_responses": get.getvalue("includeResultsetResponses", "HIT"),
+        "include_handovers": get.getvalue("includeHandovers", False)
     })
 
     if not "pagination" in form:
@@ -358,13 +360,13 @@ def close_text_streaming():
 
 ################################################################################
 
-def prjsonnice(this):
-    print(json.dumps(this, indent=4, sort_keys=True, default=str)+"\n")
+def prjsoncam(this):
+    prjsonnice(humps.camelize(this))
 
 ################################################################################
 
-def prjsoncam(this):
-    print(json.dumps(humps.camelize(this), indent=4, sort_keys=True, default=str)+"\n")
+def prjsonnice(this):
+    print(json.dumps(this, indent=4, sort_keys=True, default=str)+"\n")
 
 ################################################################################
 

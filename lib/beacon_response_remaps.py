@@ -1,8 +1,16 @@
 import datetime, re
 
+
 ################################################################################
 
 def remap_variants(r_s_res, byc):
+
+    """
+    Since the Beacon default model works from the concept of a canonical genomic
+    variation and the bycon data model uses variant instances, the different
+    instances of a "canonical" variant have to be identified and grouped together
+    with individual instances indicated through their identifiers in `caseLevelData`.
+    """
 
     if not "variant" in byc["response_type"]:
         return r_s_res
@@ -23,28 +31,7 @@ def remap_variants(r_s_res, byc):
 
         d_vs = [v for v in r_s_res if v['variant_internal_id'] == d]
 
-        v_p = d_vs[0]
-
-        variation = vrsify_variant(v_p, v_d)
-        # TODO: This default variant_type assignment may break at some point...
-        v_t = v_p.get("variant_type", "SNV")
-
-        vrs_class = None
-        if "variant_state" in v_p:
-            vrs_class = efo_to_vrs_class(v_p["variant_state"].get("id", None), v_d)
-
-        v = {
-            "variant_internal_id": d,
-            "variant_type": v_t,
-            "variant_state": vrs_class,
-            "variation": variation,
-            "case_level_data": []
-        }
-
-        for v_v in ["reference_bases", "alternate_bases"]:
-            b = v_p.get(v_v, "")
-            if len(b) > 0:
-                v.update({ v_v: b })
+        v = { "variation": d_vs[0], "case_level_data": [] }
 
         for d_v in d_vs:
             v["case_level_data"].append(
@@ -55,6 +42,11 @@ def remap_variants(r_s_res, byc):
                 }
             )
 
+        # TODO: Keep legacy pars?
+        legacy_pars = ["_id", "id", "reference_name", "type", "biosample_id", "callset_id", "individual_id", "info", "variant_type", "variant_state", "reference_bases", "alternate_bases", "start", "end"]
+        for p in legacy_pars:
+            v["variation"].pop(p, None)
+
         variants.append(v)
 
     return variants
@@ -63,8 +55,17 @@ def remap_variants(r_s_res, byc):
 
 def vrsify_variant(v, v_d):
 
-    v_t = v.get("type", "Allele")
-    if "Allele" in v_t:
+    t = v.get("type", None)
+    v_t = v.get("variant_type", None)
+    a_b = v.get("alternate_bases", None)
+
+    if t is None:
+        if a_b is not None:
+            t = "Allele"
+        elif v_t in ["DUP", "AMP", "DEL", "HOMODEL"]:
+            t = "RelativeCopyNumber"
+
+    if "Allele" in t:
         return vrsify_snv(v, v_d)
     else:
         return vrsify_cnv(v, v_d)
@@ -85,20 +86,17 @@ def vrsify_cnv(v, v_d):
     vrs_v = {
                 "type": v_t,
                 "relative_copy_class": vrs_class,
-                "subject": {
-                    "type": "DerivedSequenceExpression",
-                    "location":{
-                        "sequence_id": ref_id,
-                        "type": "SequenceLocation",
-                        "interval": {
-                            "start": {
-                                "type": "Number",
-                                "value": start_v
-                            },
-                            "end": {
-                                "type": "Number",
-                                "value": end_v
-                            }
+                "location":{
+                    "sequence_id": ref_id,
+                    "type": "SequenceLocation",
+                    "interval": {
+                        "start": {
+                            "type": "Number",
+                            "value": start_v
+                        },
+                        "end": {
+                            "type": "Number",
+                            "value": end_v
                         }
                     }
                 }
@@ -117,9 +115,13 @@ def vrsify_snv(v, v_d):
     if alt is None:
         return {}
 
+    ref_l = int(len(v.get("reference_bases", "")))
+    alt_l = int(len(v.get("alternate_bases", "")))
+    l = alt_l - ref_l + 1
+
     ref_id = refseq_from_chro(v["reference_name"], v_d)
     start_v = int(v["start"])
-    end_v = int( v.get("end",start_v + len(alt) ) )
+    end_v = int( start_v + l )
 
     vrs_v = {
                 "type": v_t,
@@ -152,7 +154,7 @@ def efo_to_vrs_class(efo_id, v_d):
     
     efo_vrs = v_d["efo_vrs_map"]
     if efo_id in efo_vrs:
-        return efo_vrs[ efo_id ]["vrs"]
+        return efo_vrs[ efo_id ]["relative_copy_class"]
 
     return None
 
@@ -165,7 +167,7 @@ def refseq_from_chro(chro, v_d):
     if not chro in v_d["chro_refseq_ids"]:
         return chro
 
-    return "refseq:" + v_d["chro_refseq_ids"][ chro ]
+    return v_d["chro_refseq_ids"][ chro ]
 
 ################################################################################
 
