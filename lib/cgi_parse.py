@@ -246,7 +246,7 @@ def cgi_print_response(byc, status_code):
     if "handoversonly" in byc["output"]:
         try:        
             if "result_sets" in byc["service_response"]["response"]:
-                for rs_i, rs in enumerate(r["response"]["result_sets"]):
+                for rs_i, rs in enumerate(byc["service_response"]["response"]["result_sets"]):
                     byc["service_response"]["response"]["result_sets"][rs_i].update({"results":[]})
         except:
             pass
