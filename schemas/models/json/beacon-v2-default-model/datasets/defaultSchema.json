@@ -1,0 +1,69 @@
+{
+    "$comment": "version: ga4gh-beacon-dataset-v2.0.0",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "description": "A dataset available in the beacon",
+    "properties": {
+        "createDateTime": {
+            "$ref": "../common/commonDefinitions.json#/definitions/Timestamp",
+            "description": "The time the dataset was created (ISO 8601 format)",
+            "examples": [
+                "2017-01-17T20:33:40Z"
+            ]
+        },
+        "dataUseConditions": {
+            "$ref": "../common/dataUseConditions.json",
+            "description": "Data use conditions applying to this dataset."
+        },
+        "description": {
+            "description": "Description of the dataset",
+            "examples": [
+                "This dataset provides examples of the actual data in this Beacon instance."
+            ],
+            "type": "string"
+        },
+        "externalUrl": {
+            "description": "URL to an external system providing more dataset information (RFC 3986 format).",
+            "examples": [
+                "http://example.org/wiki/Main_Page"
+            ],
+            "type": "string"
+        },
+        "id": {
+            "description": "Unique identifier of the dataset",
+            "examples": [
+                "ds01010101"
+            ],
+            "type": "string"
+        },
+        "info": {
+            "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/definitions/Info"
+        },
+        "name": {
+            "description": "Name of the dataset",
+            "examples": [
+                "Dataset with synthetic data"
+            ],
+            "type": "string"
+        },
+        "updateDateTime": {
+            "$ref": "../common/commonDefinitions.json#/definitions/Timestamp",
+            "description": "The time the dataset was updated in (ISO 8601 format)",
+            "examples": [
+                "2017-01-17T20:33:40Z"
+            ]
+        },
+        "version": {
+            "description": "Version of the dataset",
+            "examples": [
+                "v1.1"
+            ],
+            "type": "string"
+        }
+    },
+    "required": [
+        "id",
+        "name"
+    ],
+    "type": "object"
+}
