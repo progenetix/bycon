@@ -15,6 +15,7 @@ from datatable_utils import check_datatable_delivery
 from handover_execution import handover_return_data
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, dataset_results_save_handovers
 from interval_utils import generate_genomic_intervals, interval_counts_from_callsets
+from parse_variants import translate_reference_ids
 from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
 from query_generation import  initialize_beacon_queries, replace_queries_in_test_mode
 from read_specs import read_bycon_configs_by_name,read_local_prefs
@@ -103,13 +104,6 @@ def initialize_service(byc, service=False):
         for d in conf["bycon_definition_files"]:
             read_bycon_configs_by_name( d, byc )
 
-    if "variant_definitions" in byc:
-        v_d_refsc = byc["variant_definitions"]["refseq_chromosomes"]
-        c_r = {}
-        for c, c_d in v_d_refsc.items():
-            c_r.update({ c_d["chr"]: c_d["refseq_id"] })
-        byc["variant_definitions"].update({"chro_refseq_ids": c_r })
-
     if "defaults" in conf:
         for d_k, d_v in conf["defaults"].items():
             byc.update( { d_k: d_v } )
@@ -128,6 +122,8 @@ def initialize_service(byc, service=False):
         m = form.get("method", "___none___")
         if m in conf["method_keys"].keys():
             byc["method"] = m
+
+    translate_reference_ids(byc)
     
     byc.update({"test_mode": test_truthyness( form.get("testMode", "false") ) })
     byc.update({"include_handovers": test_truthyness( form.get("include_handovers", "false") ) })
@@ -1037,6 +1033,8 @@ def interval_header(info_columns, byc):
 def print_variant_pgxseg(v, byc):
 
     drop_fields = ["_id", "info"]
+
+    v = de_vrsify_variant(v, byc)
 
     if not "variant_type" in v:
         return

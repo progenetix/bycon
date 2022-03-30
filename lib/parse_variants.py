@@ -9,6 +9,34 @@ from query_execution import mongo_result_list
 
 ################################################################################
 
+def translate_reference_ids(byc):
+
+    if not "variant_definitions" in byc:
+        return byc
+
+    v_d_refsc = byc["variant_definitions"]["refseq_chromosomes"]
+    c_r = {}
+    r_c = {}
+    r_a = {}
+    for c, c_d in v_d_refsc.items():
+        c_r.update({ c_d["chr"]: c_d["refseq_id"] })
+        r_c.update({ c_d["refseq_id"]: c_d["chr"] })
+        r_a.update({
+            c: c_d["refseq_id"],
+            c_d["chr"]: c_d["refseq_id"],
+            c_d["refseq_id"]: c_d["refseq_id"],
+            c_d["genbank_id"]: c_d["refseq_id"]
+        })
+    byc["variant_definitions"].update({
+        "chro_refseq_ids": c_r,
+        "refseq_chronames": r_c,
+        "refseq_aliases": r_a
+    })
+
+    return byc
+
+################################################################################
+
 def parse_variants(byc):
 
     variant_pars = { }
@@ -68,24 +96,14 @@ def translate_reference_name(variant_pars, byc):
         return variant_pars
 
     r_n = variant_pars[ "referenceName" ]
+    r_a = byc["variant_definitions"]["refseq_aliases"]
 
-    v_d_refsc = byc["variant_definitions"]["refseq_chromosomes"]
-
-    c_map = {}
-
-    for c, c_d in v_d_refsc.items():
-        c_map.update({
-            c: c_d["refseq_id"],
-            c_d["chr"]: c_d["refseq_id"],
-            c_d["refseq_id"]: c_d["refseq_id"],
-            c_d["genbank_id"]: c_d["refseq_id"]
-        })
-
-    if not r_n in c_map.keys():
+    if not r_n in r_a.keys():
         variant_pars.pop("referenceName")
         return variant_pars
 
-    variant_pars.update({"referenceName": c_map[r_n] })
+    variant_pars.update({"referenceName": r_a[r_n] })
+
     return variant_pars
 
 ################################################################################

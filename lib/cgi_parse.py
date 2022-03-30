@@ -188,7 +188,6 @@ def cgi_simplify_response(byc):
 
 def cgi_break_on_errors(byc):
 
-    r = byc["service_response"]
     e = byc["error_response"]
 
     # TODO: temp hack
@@ -228,22 +227,29 @@ def cgi_print_response(byc, status_code):
     # pre-formatted list-like items (i.e. lists only containing objects)
     # with simple key-value pairs)
     # TODO: universal text table converter
-    if "output" in byc:
-        if "text" in byc["output"]:
+    if "text" in byc["output"]:
 
-            cgi_simplify_response(byc)
+        cgi_simplify_response(byc)
 
-            if isinstance(byc["service_response"], dict):
-                byc.update({ "service_response": json.dumps(humps.camelize(byc["service_response"]["response"]), default=str) })
-            if isinstance(byc["service_response"], list):
-                l_d = [ ]
-                for dp in byc["service_response"]:
-                    v_l = [ ]
-                    for v in dp.values():
-                        v_l.append(str(v))
-                    l_d.append("\t".join(v_l))
-                byc.update({ "service_response": "\n".join(l_d) })
-            cgi_print_text_response(byc["service_response"], status_code)
+        if isinstance(byc["service_response"], dict):
+            byc["service_response"] = json.dumps(humps.camelize(byc["service_response"]["response"]), default=str)
+        if isinstance(byc["service_response"], list):
+            l_d = [ ]
+            for dp in byc["service_response"]:
+                v_l = [ ]
+                for v in dp.values():
+                    v_l.append(str(v))
+                l_d.append("\t".join(v_l))
+            byc["service_response"] = "\n".join(l_d)
+        cgi_print_text_response(byc["service_response"], status_code)
+
+    if "handoversonly" in byc["output"]:
+        try:        
+            if "result_sets" in byc["service_response"]["response"]:
+                for rs_i, rs in enumerate(r["response"]["result_sets"]):
+                    byc["service_response"]["response"]["result_sets"][rs_i].update({"results":[]})
+        except:
+            pass
 
     if "simple" in r_f:
         cgi_simplify_response(byc)

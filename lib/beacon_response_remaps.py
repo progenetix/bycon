@@ -1,6 +1,5 @@
 import datetime, re
 
-
 ################################################################################
 
 def remap_variants(r_s_res, byc):
@@ -11,7 +10,6 @@ def remap_variants(r_s_res, byc):
     instances of a "canonical" variant have to be identified and grouped together
     with individual instances indicated through their identifiers in `caseLevelData`.
     """
-
     if not "variant" in byc["response_type"]:
         return r_s_res
 
@@ -50,6 +48,34 @@ def remap_variants(r_s_res, byc):
         variants.append(v)
 
     return variants
+
+################################################################################
+
+def de_vrsify_variant(v, byc):
+
+    v_d = byc["variant_definitions"]
+
+    v_r =  {
+        "id": v["id"],
+        "variant_internal_id": v.get("variant_internal_id", None),
+        "callset_id": v.get("callset_id", None),
+        "biosample_id": v.get("biosample_id", None),
+        "reference_bases": v.get("reference_bases", None),
+        "alternate_bases": v.get("alternate_bases", None),
+        "reference_name": v_d["refseq_chronames"][ v["location"]["sequence_id"] ],
+        "start": v["location"]["interval"]["start"]["value"],
+        "end": v["location"]["interval"]["end"]["value"],
+        "info": v.get("info", {})
+    }
+
+    if "variant_state" in v:
+        efo = v["variant_state"].get("id", None)
+        try:
+            v_r.update({"variant_type": v_d["efo_vrs_map"][ efo ]["DUPDEL"] })
+        except:
+            pass
+
+    return v_r
 
 ################################################################################
 
