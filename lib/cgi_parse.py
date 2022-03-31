@@ -162,7 +162,7 @@ def form_return_listvalue( form_data, parameter ):
 
 ################################################################################
 
-def test_truthyness(this):
+def test_truthy(this):
 
     if str(this).lower() in ["1", "true", "y", "yes"]:
         return True

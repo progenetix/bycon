@@ -125,8 +125,8 @@ def initialize_service(byc, service=False):
 
     translate_reference_ids(byc)
     
-    byc.update({"test_mode": test_truthyness( form.get("testMode", "false") ) })
-    byc.update({"include_handovers": test_truthyness( form.get("include_handovers", "false") ) })
+    byc.update({"test_mode": test_truthy( form.get("testMode", "false") ) })
+    byc.update({"include_handovers": test_truthy( form.get("include_handovers", "false") ) })
 
     # TODO: standardize the general defaults / entity defaults / form values merging
     #       through pre-parsing into identical structures and then use deepmerge etc.
@@ -136,7 +136,7 @@ def initialize_service(byc, service=False):
 ################################################################################
 
 def run_result_sets_beacon(byc):
-
+    
     sr_r = byc["service_response"]["response"]
 
     ######## result sets loop ##################################################

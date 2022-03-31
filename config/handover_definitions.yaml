@@ -5,6 +5,9 @@ h->o_types:
     id: 'pgx:handover:cnvhistogram'
     label: "CNV Histogram"
     method: cnvhistogram
+    paginated_entities:
+      - biosample
+      - analysis
     description: "create a CNV histogram from matched callsets"
     h->o_key: 'callsets._id'
     script_path_web: '/cgi-bin/PGX/cgi/samplePlots.cgi'
@@ -13,6 +16,9 @@ h->o_types:
   biosamples:
     id: 'pgx:handover:biosamples'
     method: biosamples
+    paginated_entities:
+      - biosample
+      - analysis
     label: "Biosamples"
     description: "retrieve data of the biosamples matched by the query"
     h->o_key: 'biosamples._id'
@@ -22,6 +28,10 @@ h->o_types:
     id: 'pgx:handover:phenopackets'
     label: "Phenopackets"
     method: phenopackets
+    paginated_entities:
+      - biosample
+      - individual
+      - phenopacket
     description: "retrieve data of the phenopackets matched by the query"
     h->o_key: 'biosamples._id'
     script_path_web: '/services/phenopackets'
@@ -30,16 +40,20 @@ h->o_types:
     id: 'pgx:handover:individuals'
     label: "Individuals"
     method: individuals
+    paginated_entities:
+      - biosample
+      - individual
+      - phenopacket
     description: "retrieve data of the individuals matched by the query"
     h->o_key: 'individuals._id'
-    script_path_web: '/services/deliveries'
-    url_opts: "&responseFormat=simple"
-    output: cnvhistogram
+    script_path_web: '/beacon/individuals'
 
   variants:
     id: 'pgx:handover:variants'
     label: "Found Variants (.json)"
     method: variants
+    paginated_entities:
+      - variant
     description: "retrieve variants matched by the query"
     h->o_key: 'variants._id'
     script_path_web: '/beacon/variants'
@@ -47,6 +61,8 @@ h->o_types:
   variantsinterpretations:
     id: 'pgx:handover:variantsinterpretations'
     label: "Annotations and interpretations for found Variants (.json)"
+    paginated_entities:
+      - variant
     description: "retrieve the annotations - if existing - for the found variants"
     h->o_key: 'variant_annotations._id'
     script_path_web: '/beacon/variantInterpretations'
@@ -56,6 +72,8 @@ h->o_types:
     label: "Found Variants (.pgxseg)"
     method: variants
     output: pgxseg
+    paginated_entities:
+      - variant
     description: "retrieve variants matched by the query as .pgxseg download"
     h->o_key: 'variants._id'
     script_path_web: '/beacon/variants'
@@ -64,6 +82,8 @@ h->o_types:
     id: 'pgx:handover:callsetsvariants'
     label: "All Sample Variants (.json)"
     method: callsetsvariants
+    paginated_entities:
+      - variant
     description: "Download all variants of matched samples - potentially huge dataset..."
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/variants'
@@ -72,6 +92,8 @@ h->o_types:
     id: 'pgx:handover:callsetspgxseg'
     label: "All Sample Variants (.pgxseg)"
     method: callsetsvariants
+    paginated_entities:
+      - variant
     output: pgxseg
     description: "Download all variants of matched samples - potentially huge dataset..."
     h->o_key: 'biosamples._id'
@@ -81,6 +103,8 @@ h->o_types:
     id: 'pgx:handover:bedfile2ucsc'
     label: "Show Variants in UCSC"
     method: UCSClink
+    paginated_entities:
+      - variant
     description: "map variants matched by the query to the UCSC browser"
     h->o_key: 'variants._id'
     ext_url: 'http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg38'

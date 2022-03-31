@@ -4,6 +4,7 @@ from os import environ, pardir, path
 import sys
 
 from cgi_parse import *
+from beacon_response_remaps import de_vrsify_variant
 
 ################################################################################
 
@@ -24,9 +25,9 @@ def dataset_response_add_handovers(ds_id, byc):
 
     for h_o_t in h_o_types.keys():
 
-        # testing if this handover is active for the specified dataset
         h_o_defs = h_o_types[ h_o_t ]
 
+        # testing if this handover is active for the specified dataset
         if not h_o_t in ds_h_o:
             continue
 
@@ -54,13 +55,17 @@ def dataset_response_add_handovers(ds_id, byc):
                     ucsc_pos = _write_variants_bedfile(h_o, **byc)
                     h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, accessid, ucsc_pos ) } )
                 else:
-                    h_o_r.update( { "url": _handover_create_url(this_server, h_o_defs, accessid, url_opts) } )
+                    h_o_r.update( { "url": _handover_create_url(this_server, h_o_defs, accessid, url_opts, byc) } )
 
                 # TODO: needs a new schema to accommodate this not as HACK ...
                 # the phenopackets URL needs matched variants, which it wouldn't know about ...
                 if "phenopackets" in h_o_t:
                     if "variants._id" in byc["dataset_results"][ds_id].keys():
                         h_o_r["url"] += "&variantsaccessid="+byc["dataset_results"][ds_id][ "variants._id" ][ "id" ]
+
+                e_t = byc["response_entity"]["entity_type"]
+                if e_t in h_o_defs["paginated_entities"]:
+                    h_o_r["url"] += "&skip={}&limit={}".format(byc["pagination"]["skip"], byc["pagination"]["limit"])
 
                 b_h_o.append( h_o_r )
 
@@ -111,7 +116,8 @@ def _handover_select_server( byc ):
 
 ################################################################################
 
-def _handover_create_url(h_o_server, h_o_defs, accessid, url_opts):
+def _handover_create_url(h_o_server, h_o_defs, accessid, url_opts, byc):
+
 
     if "script_path_web" in h_o_defs:
         server = h_o_server
@@ -182,21 +188,21 @@ def _write_variants_bedfile(h_o, **byc):
 
     for v in data_coll.find( { h_o["target_key"]: { '$in': h_o["target_values"] } }):
 
-        if "variant_state" in v:
-            v_t_c = v["variant_state"].get("id", "__NA__")
-            if v_t_c not in efo_vrs.keys():
-                continue
-            dup_del = efo_vrs[ v_t_c ]["DUPDEL"]
 
-            v.update({"size": v["end"] - v["start"] })
-            if dup_del == "DUP":
-                vs["DUP"].append(v)
-            elif  dup_del == "DEL":
-                vs["DEL"].append(v)
-            elif  dup_del == "LOH":
-                vs["LOH"].append(v)
-        elif "reference_bases" in v:
-            vs["SNV"].append(v)
+        v_d = de_vrsify_variant(v, byc)
+
+        if "variant_type" in v_d:
+            v_d.update({"size": v_d["end"] - v_d["start"] })
+            if "DUP" in v_d["variant_type"]:
+                vs["DUP"].append(v_d)
+            elif "DEL" in v_d["variant_type"]:
+                vs["DEL"].append(v_d)
+            elif "LOH" in v_d["variant_type"]:
+                vs["LOH"].append(v_d)
+            else:
+                continue
+        elif "reference_bases" in v_d:
+            vs["SNV"].append(v_d)
 
     b_f = open( bed_file, 'w' )
 
