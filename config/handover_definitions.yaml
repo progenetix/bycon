@@ -8,8 +8,8 @@ h->o_types:
     paginated_entities:
       - biosample
       - analysis
-    description: "create a CNV histogram from matched callsets"
-    h->o_key: 'callsets._id'
+    description: "create a CNV histogram from matched biosamples"
+    h->o_key: 'biosamples.id'
     script_path_web: '/cgi-bin/PGX/cgi/samplePlots.cgi'
     output: cnvhistogram
 
@@ -21,7 +21,7 @@ h->o_types:
       - analysis
     label: "Biosamples"
     description: "retrieve data of the biosamples matched by the query"
-    h->o_key: 'biosamples._id'
+    h->o_key: 'biosamples.id'
     script_path_web: '/beacon/biosamples'
 
   phenopackets:
