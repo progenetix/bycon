@@ -187,11 +187,18 @@ def _update_queries_from_hoid( byc):
         ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
         h_o = ho_coll.find_one( { "id": accessid } )
 
+        
         # accessid overrides ... ?
         if h_o:
             t_k = h_o["target_key"]
             t_v = h_o["target_values"]
             c_n = h_o["target_collection"]
+
+            t_c = h_o["target_count"]
+
+            set_pagination_range(t_c, byc)
+            t_v = paginate_list(t_v, byc)
+
             t_db = h_o["source_db"]
             h_o_q = { t_k: { '$in': t_v } }
             if c_n in byc["queries"]:
@@ -344,6 +351,50 @@ def _update_queries_from_variants( byc ):
         return byc
 
     return byc
+
+################################################################################
+
+def set_pagination_range(d_count, byc):
+
+    r_range = [
+        byc["pagination"]["skip"] * byc["pagination"]["limit"],
+        byc["pagination"]["skip"] * byc["pagination"]["limit"] + byc["pagination"]["limit"],
+    ]
+
+    if byc["pagination"]["skip"] == 0 and byc["pagination"]["limit"] == 0:
+        byc["pagination"].update({"range":[0,d_count]})
+        return byc
+
+    r_l_i = d_count - 1
+
+    if r_range[0] > r_l_i:
+        r_range[0] = r_l_i
+    if r_range[-1] > d_count:
+        r_range[-1] = d_count
+
+    byc["pagination"].update({"range":r_range})
+
+    return byc
+
+################################################################################
+
+def paginate_list(this, byc):
+
+    if byc["pagination"]["limit"] < 1:
+        return this
+
+    r = byc["pagination"]["range"]
+
+    t_no = len(this)
+    r_min = r[0] + 1
+    r_max = r[-1]
+
+    if r_min > t_no:
+        return []
+    if r_max > t_no:
+        return this[r[0]:r_max]
+
+    return this[r[0]:r[-1]]
 
 ################################################################################
 ################################################################################

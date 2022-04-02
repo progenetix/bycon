@@ -17,7 +17,7 @@ from handover_generation import dataset_response_add_handovers, query_results_sa
 from interval_utils import generate_genomic_intervals, interval_counts_from_callsets
 from parse_variants import translate_reference_ids
 from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
-from query_generation import  initialize_beacon_queries, replace_queries_in_test_mode
+from query_generation import  initialize_beacon_queries, paginate_list, replace_queries_in_test_mode, set_pagination_range
 from read_specs import read_bycon_configs_by_name,read_local_prefs
 from schemas_parser import *
 from variant_responses import normalize_variant_values_for_export
@@ -159,8 +159,8 @@ def run_result_sets_beacon(byc):
         if r_set["results_count"] < 1:
             continue
 
-        results_pagination_range(len(r_s_res), byc)
-        r_s_res = paginate_results(r_s_res, byc)
+        set_pagination_range(len(r_s_res), byc)
+        r_s_res = paginate_list(r_s_res, byc)
         check_alternative_single_set_deliveries(ds_id, r_s_res, byc)
         r_s_res = reshape_resultset_results(r_s_res, byc)
 
@@ -292,43 +292,6 @@ def retrieve_variants(ds_id, byc):
         return r_s_res
 
     return False
-
-################################################################################
-
-def results_pagination_range(count, byc):
-
-    r_range = [
-        byc["pagination"]["skip"] * byc["pagination"]["limit"],
-        byc["pagination"]["skip"] * byc["pagination"]["limit"] + byc["pagination"]["limit"],
-    ]
-
-    if byc["pagination"]["skip"] == 0 and byc["pagination"]["limit"] == 0:
-        byc["pagination"].update({"range":[0,count]})
-        return byc
-
-    r_l_i = count - 1
-
-    if r_range[0] > r_l_i:
-        r_range[0] = r_l_i
-    if r_range[-1] > count:
-        r_range[-1] = count
-
-    byc["pagination"].update({"range":r_range})
-
-    return byc
-
-################################################################################
-
-def paginate_results(results, byc):
-
-    if byc["pagination"]["limit"] < 1:
-        return results
-
-    r = byc["pagination"]["range"]
-
-    results = results[r[0]:r[-1]]
-
-    return results
 
 ################################################################################
 
@@ -830,7 +793,7 @@ def check_computed_interval_frequency_delivery(byc):
     q_vals = cs_r["target_values"]
     r_no = len(q_vals)
     if r_no > p_r["limit"]:
-        q_vals = paginate_results(q_vals, byc)
+        q_vals = paginate_list(q_vals, byc)
         print('#meta=>"WARNING: Only analyses {} - {} (out of {}) used for calculations due to pagination skip and limit"'.format((p_r["range"][0] + 1), p_r["range"][-1], cs_r["target_count"]))
 
     h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
@@ -886,7 +849,7 @@ def check_callsets_matrix_delivery(ds_id, byc):
     q_vals = cs_r["target_values"]
     r_no = len(q_vals)
     if r_no > p_r["limit"]:
-        q_vals = paginate_results(q_vals, byc)
+        q_vals = paginate_list(q_vals, byc)
         print('#meta=>"WARNING: Only analyses {} - {} (from {}) will be included pagination skip and limit"'.format((p_r["range"][0] + 1), p_r["range"][-1], cs_r["target_count"]))
 
     bios_ids = set()
@@ -985,7 +948,7 @@ def export_variants_download(ds_id, byc):
     ds_results = byc["dataset_results"][ds_id]
  
     v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
-    v__ids = paginate_results(v__ids, byc)
+    v__ids = paginate_list(v__ids, byc)
 
     open_json_streaming(byc, "variants.json")
 
@@ -1005,7 +968,7 @@ def export_pgxseg_download(ds_id, byc):
     v_coll = data_client[ ds_id ][ "variants" ]
     ds_results = byc["dataset_results"][ds_id]
     v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
-    v__ids = paginate_results(v__ids, byc)
+    v__ids = paginate_list(v__ids, byc)
 
     print_pgx_column_header(ds_id, ds_results, byc)
 
