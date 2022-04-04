@@ -193,7 +193,6 @@ def _update_queries_from_hoid( byc):
             t_k = h_o["target_key"]
             t_v = h_o["target_values"]
             c_n = h_o["target_collection"]
-
             t_c = h_o["target_count"]
 
             set_pagination_range(t_c, byc)

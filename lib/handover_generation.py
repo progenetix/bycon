@@ -32,19 +32,25 @@ def dataset_response_add_handovers(ds_id, byc):
             continue
 
         for h_o_key, h_o in byc["dataset_results"][ds_id].items():
+
             if h_o["target_count"] < 1:
                 continue
+
             accessid = h_o["id"]
+            target_count =  h_o["target_count"]
+
             if h_o_key == h_o_types[ h_o_t ][ "h->o_key" ]:
                 this_server = h_o_server
                 if "remove_subdomain" in h_o_types[ h_o_t ]:
                     this_server = re.sub(r'\/\/\w+?\.(\w+?\.\w+?)$', r'//\1', this_server)
                 h_o_r = {
-                    "handoverType": {
+                    "handover_type": {
                         "id": h_o_defs[ "id" ],
                         "label": "{}".format(h_o_defs[ "label" ]),
                     },
                     "description": h_o_defs[ "description" ],
+                    "url": "",
+                    "pages": []
                 }
 
                 url_opts = ""
@@ -65,7 +71,21 @@ def dataset_response_add_handovers(ds_id, byc):
 
                 e_t = byc["response_entity"]["entity_type"]
                 if e_t in h_o_defs["paginated_entities"]:
+                    p_f = 0
+                    p_t = p_f + byc["pagination"]["limit"] + 1
+                    p_s = 0
+                    while p_f < target_count + 1:
+                        if target_count < p_t:
+                            p_t = target_count
+                        l = "{} - {}".format(p_f, p_t)
+                        u = h_o_r["url"] + "&skip={}&limit={}".format(p_s, byc["pagination"]["limit"])
+                        h_o_r["pages"].append( { "handover_type": {"id": h_o_defs[ "id" ], "label": l }, "url": u } )
+                        p_s += 1
+                        p_f += byc["pagination"]["limit"]
+                        p_t = p_f + byc["pagination"]["limit"] + 1
+
                     h_o_r["url"] += "&skip={}&limit={}".format(byc["pagination"]["skip"], byc["pagination"]["limit"])
+
 
                 b_h_o.append( h_o_r )
 

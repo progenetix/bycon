@@ -159,7 +159,10 @@ def run_result_sets_beacon(byc):
         if r_set["results_count"] < 1:
             continue
 
-        set_pagination_range(len(r_s_res), byc)
+        # TODO: This condition avoids the "range on range" if previously set for a handover
+        # query (by accessioinId)
+        if not "range" in byc["pagination"]:
+            set_pagination_range(len(r_s_res), byc)
         r_s_res = paginate_list(r_s_res, byc)
         check_alternative_single_set_deliveries(ds_id, r_s_res, byc)
         r_s_res = reshape_resultset_results(r_s_res, byc)
