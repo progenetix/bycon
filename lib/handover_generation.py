@@ -23,9 +23,7 @@ def dataset_response_add_handovers(ds_id, byc):
     ds_h_o =  byc["dataset_definitions"][ ds_id ]["info"]["handoverTypes"]
     h_o_types = byc["handover_definitions"]["h->o_types"]
 
-    for h_o_t in h_o_types.keys():
-
-        h_o_defs = h_o_types[ h_o_t ]
+    for h_o_t, h_o_defs in h_o_types.items():
 
         # testing if this handover is active for the specified dataset
         if not h_o_t in ds_h_o:
@@ -53,15 +51,11 @@ def dataset_response_add_handovers(ds_id, byc):
                     "pages": []
                 }
 
-                url_opts = ""
-                if "url_opts" in h_o_defs:
-                    url_opts = h_o_defs["url_opts"]
-
                 if "bedfile" in h_o_defs[ "id" ]:
                     ucsc_pos = _write_variants_bedfile(h_o, **byc)
                     h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, accessid, ucsc_pos ) } )
                 else:
-                    h_o_r.update( { "url": _handover_create_url(this_server, h_o_defs, accessid, url_opts, byc) } )
+                    h_o_r.update( { "url": _handover_create_url(this_server, h_o_defs, accessid, byc) } )
 
                 # TODO: needs a new schema to accommodate this not as HACK ...
                 # the phenopackets URL needs matched variants, which it wouldn't know about ...
@@ -72,17 +66,18 @@ def dataset_response_add_handovers(ds_id, byc):
                 e_t = byc["response_entity"]["entity_type"]
                 if e_t in h_o_defs["paginated_entities"]:
                     p_f = 0
-                    p_t = p_f + byc["pagination"]["limit"] + 1
+                    p_t = p_f + byc["pagination"]["limit"]
                     p_s = 0
                     while p_f < target_count + 1:
                         if target_count < p_t:
                             p_t = target_count
-                        l = "{} - {}".format(p_f, p_t)
-                        u = h_o_r["url"] + "&skip={}&limit={}".format(p_s, byc["pagination"]["limit"])
+                        l = "{}-{}".format(p_f + 1, p_t)
+                        # no re-pagination of the results retrieved from the paginated query
+                        u = h_o_r["url"] + "&paginateResults=false&skip={}&limit={}".format(p_s, byc["pagination"]["limit"])
                         h_o_r["pages"].append( { "handover_type": {"id": h_o_defs[ "id" ], "label": l }, "url": u } )
                         p_s += 1
                         p_f += byc["pagination"]["limit"]
-                        p_t = p_f + byc["pagination"]["limit"] + 1
+                        p_t = p_f + byc["pagination"]["limit"]
 
                     h_o_r["url"] += "&skip={}&limit={}".format(byc["pagination"]["skip"], byc["pagination"]["limit"])
 
@@ -136,7 +131,7 @@ def _handover_select_server( byc ):
 
 ################################################################################
 
-def _handover_create_url(h_o_server, h_o_defs, accessid, url_opts, byc):
+def _handover_create_url(h_o_server, h_o_defs, accessid, byc):
 
 
     if "script_path_web" in h_o_defs:
@@ -144,10 +139,10 @@ def _handover_create_url(h_o_server, h_o_defs, accessid, url_opts, byc):
         if "http" in h_o_defs["script_path_web"]:
             server = ""
         url = "{}{}?accessid={}".format(server, h_o_defs["script_path_web"], accessid)
-        for p in ["method", "output"]:
+        for p in ["method", "output", "requestedSchema"]:
             if p in h_o_defs:
                 url += "&{}={}".format(p, h_o_defs[p])
-        url += url_opts
+        url += h_o_defs.get("url_opts", "")
 
         return url
 

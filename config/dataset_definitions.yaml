@@ -18,12 +18,13 @@ progenetix:
       handoverTypes:
         - cnvhistogram
         - biosamples
-        - biosampleslist
+        - biosamplevariants
+        - biosamplepgxsegvariants
         # - phenopackets
         - individuals
         - variants
-        - callsetsvariants
-        - callsetspgxseg
+        # - callsetsvariants
+        # - callsetspgxseg
         - pgxseg
         - UCSClink
       variantCount: 7656759

@@ -163,7 +163,10 @@ def run_result_sets_beacon(byc):
         # query (by accessioinId)
         if not "range" in byc["pagination"]:
             set_pagination_range(len(r_s_res), byc)
-        r_s_res = paginate_list(r_s_res, byc)
+        
+        if test_truthy( byc["form_data"].get("paginateResults", True) ):
+            r_s_res = paginate_list(r_s_res, byc)
+
         check_alternative_single_set_deliveries(ds_id, r_s_res, byc)
         r_s_res = reshape_resultset_results(r_s_res, byc)
 
@@ -515,14 +518,16 @@ def response_update_type_from_request(byc, scope="beacon"):
     m_k = str(scope) + "_mappings"
 
     try:
-        b_mps = byc["m_k"]
+        b_mps = byc[m_k]["response_types"]
         if byc["query_meta"]["requested_schemas"][0]:
-            if "entityType" in byc["query_meta"]["requested_schemas"][0]:
-                e_t = byc["query_meta"]["requestedSchemas"][0]["entityType"]
-                for rd in b_mps["response_types"]:
+            r_s = byc["query_meta"]["requested_schemas"][0]
+            if "entityType" in r_s:
+                e_t = r_s["entityType"]
+                for r_d in b_mps:
                     if r_d["entity_type"] == e_t:
                         byc.update({"response_type":e_t})
-    except:
+                        byc["query_meta"].update({"requested_schemas": r_d["beacon_schema"]})
+    except Exception as e:
         pass
 
     return byc
@@ -852,7 +857,8 @@ def check_callsets_matrix_delivery(ds_id, byc):
     q_vals = cs_r["target_values"]
     r_no = len(q_vals)
     if r_no > p_r["limit"]:
-        q_vals = paginate_list(q_vals, byc)
+        if test_truthy( byc["form_data"].get("paginateResults", True) ):
+            q_vals = paginate_list(q_vals, byc)
         print('#meta=>"WARNING: Only analyses {} - {} (from {}) will be included pagination skip and limit"'.format((p_r["range"][0] + 1), p_r["range"][-1], cs_r["target_count"]))
 
     bios_ids = set()
@@ -951,7 +957,8 @@ def export_variants_download(ds_id, byc):
     ds_results = byc["dataset_results"][ds_id]
  
     v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
-    v__ids = paginate_list(v__ids, byc)
+    if test_truthy( byc["form_data"].get("paginateResults", True) ):
+        v__ids = paginate_list(v__ids, byc)
 
     open_json_streaming(byc, "variants.json")
 
@@ -971,7 +978,8 @@ def export_pgxseg_download(ds_id, byc):
     v_coll = data_client[ ds_id ][ "variants" ]
     ds_results = byc["dataset_results"][ds_id]
     v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
-    v__ids = paginate_list(v__ids, byc)
+    if test_truthy( byc["form_data"].get("paginateResults", True) ):
+        v__ids = paginate_list(v__ids, byc)
 
     print_pgx_column_header(ds_id, ds_results, byc)
 

@@ -8,6 +8,8 @@ id_queryscope_mappings:
 service_names:
 
   empty_value: info
+  info: info
+  service-info: info
   analyses: callsets
   callsets: callsets
   cohorts: cohorts
@@ -20,12 +22,11 @@ service_names:
   datasets: datasets
   biosamples: biosamples
   individuals: individuals
-  gVariants: variants
-  g_variants: variants
-  info: info
   map: map
   runs: runs
-  service-info: info
+  gVariants: variants
+  g_variants: variants
+  genomicVariations: variants
   variants_in_sample: variants
   variantsInSample: variants
   variants: variants

@@ -97,6 +97,17 @@ def cgi_parse_query(byc):
         "include_handovers": get.getvalue("includeHandovers", False)
     })
 
+    if "requestedSchema" in form:
+        try:
+            byc["query_meta"].update({
+                "requested_schemas": [ {"entityType": form["requestedSchema"] } ]
+            } )
+        except:
+            pass
+
+    # print(byc["query_meta"])
+    # exit()
+
     if not "pagination" in form:
         form.update({ "pagination": { } })
 

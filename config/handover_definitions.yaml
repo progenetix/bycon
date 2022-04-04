@@ -15,7 +15,7 @@ h->o_types:
 
   biosamples:
     id: 'pgx:handover:biosamples'
-    method: biosamples
+    requestedSchema: biosample
     paginated_entities:
       - biosample
       - analysis
@@ -24,22 +24,46 @@ h->o_types:
     h->o_key: 'biosamples.id'
     script_path_web: '/beacon/biosamples'
 
+  biosamplevariants:
+    id: 'pgx:handover:biosamplevariants'
+    requestedSchema: variant
+    paginated_entities:
+      - biosample
+      - analysis
+    label: "Biosample Variants"
+    description: "retrieve variants of the biosamples matched by the query"
+    h->o_key: 'biosamples.id'
+    script_path_web: '/beacon/genomicVariations'
+    url_opts: "&paginateResults=false"
+
+  biosamplepgxsegvariants:
+    id: 'pgx:handover:biosamplevariants:pgxseg'
+    requestedSchema: variant
+    output: pgxseg
+    paginated_entities:
+      - biosample
+      - analysis
+    label: "Biosample Variants (pgxseg)"
+    description: "retrieve variants of the biosamples matched by the query"
+    h->o_key: 'biosamples.id'
+    script_path_web: '/beacon/genomicVariations'
+
   phenopackets:
     id: 'pgx:handover:phenopackets'
     label: "Phenopackets"
-    method: phenopackets
+    requestedSchema: phenopacket
     paginated_entities:
       - biosample
       - individual
       - phenopacket
     description: "retrieve data of the phenopackets matched by the query"
     h->o_key: 'biosamples._id'
-    script_path_web: '/services/phenopackets'
+    script_path_web: '/services/individuals'
 
   individuals:
     id: 'pgx:handover:individuals'
     label: "Individuals"
-    method: individuals
+    requestedSchema: individual
     paginated_entities:
       - biosample
       - individual
@@ -51,12 +75,12 @@ h->o_types:
   variants:
     id: 'pgx:handover:variants'
     label: "Found Variants (.json)"
-    method: variants
+    requestedSchema: variant
     paginated_entities:
       - variant
     description: "retrieve variants matched by the query"
     h->o_key: 'variants._id'
-    script_path_web: '/beacon/variants'
+    script_path_web: '/beacon/genomicVariations'
 
   variantsinterpretations:
     id: 'pgx:handover:variantsinterpretations'
@@ -70,13 +94,13 @@ h->o_types:
   pgxseg:
     id: 'pgx:handover:pgxseg'
     label: "Found Variants (.pgxseg)"
-    method: variants
+    requestedSchema: variants
     output: pgxseg
     paginated_entities:
       - variant
     description: "retrieve variants matched by the query as .pgxseg download"
     h->o_key: 'variants._id'
-    script_path_web: '/beacon/variants'
+    script_path_web: '/beacon/genomicVariations'
   
   callsetsvariants:
     id: 'pgx:handover:callsetsvariants'
