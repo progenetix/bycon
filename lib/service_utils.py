@@ -428,7 +428,7 @@ def check_cnvhistogram_plot_response(ds_id, byc):
     r_s_ho = dataset_response_add_handovers(ds_id, byc)
 
     for h_o in r_s_ho:
-        if "cnvhistogram" in h_o["handoverType"]["id"]:
+        if "cnvhistogram" in h_o["handover_type"]["id"]:
             cgi_print_rewrite_response(h_o["url"], "", "")
             exit()
 

@@ -24,6 +24,18 @@ h->o_types:
     h->o_key: 'biosamples.id'
     script_path_web: '/beacon/biosamples'
 
+  biosamplestable:
+    id: 'pgx:handover:biosamplestable'
+    requestedSchema: biosample
+    output: datatable
+    paginated_entities:
+      - biosample
+      - analysis
+    label: "Biosamples Table"
+    description: "retrieve data of the biosamples matched by the query as tab-delimited table"
+    h->o_key: 'biosamples.id'
+    script_path_web: '/beacon/biosamples'
+
   biosamplevariants:
     id: 'pgx:handover:biosamplevariants'
     requestedSchema: variant
