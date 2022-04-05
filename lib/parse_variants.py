@@ -207,11 +207,15 @@ def create_geneVariantRequest_query( byc ):
 
     results, error = mongo_result_list( "progenetix", "genespans", query, { '_id': False } )
 
+    # Since this is a pre-processor to the range request
     byc["variant_pars"].update( {
-        v_p_defs["referenceName"]["db_key"]: results[0]["reference_name"],
-        v_p_defs["start"]["db_key"]: [ results[0]["start"] ],
-        v_p_defs["end"]["db_key"]: [ results[0]["end"] ]
+        "referenceName": results[0]["reference_name"],
+        "start": [ results[0]["start"] ],
+        "end": [ results[0]["end"] ]
     } )
+
+    translate_reference_name(byc["variant_pars"], byc)
+
     byc.update( {"variant_request_type": "variantRangeRequest"} )
 
     create_variantRangeRequest_query( byc )
