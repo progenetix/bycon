@@ -14,20 +14,20 @@ progenetix:
         - id: DUO:0000004
           label: no restriction
           version: 2021-11-11
+    handoverTypes:
+      - cnvhistogram
+      - biosamples
+      - biosamplestable
+      - biosamplevariants
+      - biosamplepgxsegvariants
+      # - phenopackets
+      - individuals
+      - variants
+      - callsetsvariants
+      - callsetspgxseg
+      # - pgxseg
+      - UCSClink
     info:
-      handoverTypes:
-        - cnvhistogram
-        - biosamples
-        - biosamplestable
-        - biosamplevariants
-        - biosamplepgxsegvariants
-        # - phenopackets
-        - individuals
-        - variants
-        # - callsetsvariants
-        # - callsetspgxseg
-        # - pgxseg
-        - UCSClink
       variantCount: 7656759
       callCount: 20988819
       sampleCount: 138663
@@ -47,14 +47,14 @@ cellosaurus:
         - id: DUO:0000004
           label: no restriction
           version: 2021-11-11
+    handoverTypes:
+      - biosamples
+      - individuals
+      - variants
+      - variantsinterpretations
+      - callsetsvariants
+      - UCSClink
     info:
-      handoverTypes:
-        - biosamples
-        - individuals
-        - variants
-        - variantsinterpretations
-        - callsetsvariants
-        - UCSClink
       variantCount: 1446
       callCount: 8702
       sampleCount: 6617
@@ -74,14 +74,14 @@ cellosaurus:
         - id: DUO:0000004
           label: no restriction
           version: 2021-11-11
+    handoverTypes:
+      - biosamples
+      - variants
+      - callsetsvariants
+      - callsetspgxseg
+      - pgxseg
+      - UCSClink
     info:
-      handoverTypes:
-        - biosamples
-        - variants
-        - callsetsvariants
-        - callsetspgxseg
-        - pgxseg
-        - UCSClink
       variantCount: 3945868
       callCount: 3945868
       sampleCount: 3200

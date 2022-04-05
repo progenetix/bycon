@@ -20,7 +20,7 @@ def dataset_response_add_handovers(ds_id, byc):
         return b_h_o
 
     h_o_server = _handover_select_server(byc)    
-    ds_h_o =  byc["dataset_definitions"][ ds_id ]["info"]["handoverTypes"]
+    ds_h_o =  byc["dataset_definitions"][ ds_id ]["handoverTypes"]
     h_o_types = byc["handover_definitions"]["h->o_types"]
 
     for h_o_t, h_o_defs in h_o_types.items():

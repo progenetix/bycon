@@ -150,7 +150,7 @@ def run_result_sets_beacon(byc):
         execute_bycon_queries( ds_id, byc )
 
         # Special check-out here since this forces a single handover
-        check_cnvhistogram_plot_response(ds_id, byc)
+        check_plot_responses(ds_id, byc)
 
         r_set.update({ "results_handovers": dataset_response_add_handovers(ds_id, byc) })
         r_s_res = retrieve_data(ds_id, byc)
@@ -414,16 +414,26 @@ def create_empty_non_data_response(byc):
 
 ################################################################################
 
-def check_cnvhistogram_plot_response(ds_id, byc):
+def check_plot_responses(ds_id, byc):
 
     if not "plot" in byc["output"]:
         return byc
 
-    if not "cnvhistogram" in byc["dataset_definitions"][ ds_id ]["info"]["handoverTypes"]:
+    check_cnvhistogram_plot_response(ds_id, byc)
+
+    return byc
+
+################################################################################
+
+def check_cnvhistogram_plot_response(ds_id, byc):
+
+    ds_h_o = byc["dataset_definitions"][ ds_id ]["handoverTypes"]
+
+    if "cnvhistogram" not in ds_h_o:
         return
 
     byc["include_handovers"] = True
-    byc["dataset_definitions"][ ds_id ]["info"]["handoverTypes"] = ["cnvhistogram"]
+    byc["dataset_definitions"][ ds_id ].update({"handoverTypes": ["cnvhistogram"] })
     dataset_results_save_handovers(ds_id, byc)
     r_s_ho = dataset_response_add_handovers(ds_id, byc)
 
