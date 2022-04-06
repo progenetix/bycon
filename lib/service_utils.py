@@ -974,9 +974,9 @@ def export_variants_download(ds_id, byc):
 
     for v_id in v__ids[:-1]:
         v = v_coll.find_one( { "_id": v_id }, { "_id": 0 } )
-        print(json.dumps(camelize(v), indent=None, sort_keys=False, default=str, separators=(',', ':')), end = ',')
+        print(decamelize_words(json.dumps(camelize(v), indent=None, sort_keys=False, default=str, separators=(',', ':')), end = ','))
     v = v_coll.find_one( { "_id": v__ids[-1]}, { "_id": 0 }  )
-    print(json.dumps(camelize(v), indent=None, sort_keys=False, default=str, separators=(',', ':')), end = '')
+    print(decamelize_words(json.dumps(camelize(v), indent=None, sort_keys=False, default=str, separators=(',', ':')), end = ''))
 
     close_json_streaming()
 

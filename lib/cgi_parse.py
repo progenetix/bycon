@@ -383,7 +383,17 @@ def prjsoncam(this):
 ################################################################################
 
 def prjsonnice(this):
-    print(json.dumps(this, indent=4, sort_keys=True, default=str)+"\n")
+    print(decamelize_words(json.dumps(this, indent=4, sort_keys=True, default=str))+"\n")
+
+################################################################################
+
+def decamelize_words(j_d):
+
+    de_cams = ["sequenceId", "relativeCopyClass", "speciesId" ]
+    for d in de_cams:
+        j_d = re.sub(r"\b{}\b".format(d), humps.decamelize(d), j_d)
+
+    return j_d
 
 ################################################################################
 
