@@ -109,6 +109,9 @@ response:
         individual:
           returned_entry_type: individual
           url: https://progenetix.org/beacon/individuals/{id}/individuals
+        phenopacket:
+          returned_entry_type: phenopacket
+          url: https://progenetix.org/beacon/individuals/{id}/phenopacket
     genomic_variation:
       openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/variants/
       filtering_terms_url: https://progenetix.org/beacon/variants/filteringTerms

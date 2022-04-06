@@ -17,6 +17,7 @@ paths:
         - $ref: '#/components/parameters/skip'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/includeResultsetResponses'
+        - $ref: '#/components/parameters/filters'
       description: Get a list of biosamples
       operationId: getBiosamples
       tags:

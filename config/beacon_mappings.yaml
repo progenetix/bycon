@@ -118,6 +118,14 @@ response_types:
     beacon_schema:
       entity_type: individual
       schema: https://progenetix.org/services/schemas/individual/
+    h->o_access_key: "individuals._id" 
+
+  - entity_type: phenopacket
+    collection: individuals
+    response_schema: beaconResultsetsResponse
+    beacon_schema:
+      entity_type: phenopacket
+      schema: https://progenetix.org/services/schemas/phenopacket/
     h->o_access_key: "individuals._id"
 
   - entity_type: biosample

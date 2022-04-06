@@ -1,5 +1,5 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/phenopacket/v2021-11-12
+"$id": https://progenetix.org/services/schemas/phenopacket/v2022-04-06
 title: Phenopacket
 meta:
   provenance:
@@ -7,9 +7,6 @@ meta:
       id: 'https://github.com/progenetix/bycon/'
     - description: "Phenopackets v2"
       id: "https://github.com/phenopackets/phenopacket-schema"
-  used_by:
-    - description: "Progenetix database schema (Beacon+ backend)"
-      id: 'https://github.com/progenetix/schemas/'
 description: >-
   The Phenopacket class is a bare-bones JSON-schema rewrite of the Phenopackets v2
   standard.
@@ -51,6 +48,6 @@ properties:
   #   items:
   #     $ref: HtsFile.yaml#/properties
   metaData:
-    type: object
+    ref: metaData.yaml#/properties
 
 

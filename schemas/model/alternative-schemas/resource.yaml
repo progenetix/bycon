@@ -1,0 +1,32 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/resource/v2022-04-06
+title: Resource
+meta:
+  provenance:
+    - description: "Phenopackets v2"
+      id: "https://phenopacket-schema.readthedocs.io/en/latest/resource.html"
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+description: >-
+  Resource used for referencing an object.
+type: object
+required:
+  - namespacePrefix
+  - id
+  - name
+  - url
+  - version
+  - iriPrefix
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  url:
+    type: string
+  namespacePrefix:
+    type: string
+  version:
+    type: string
+  iriPrefix:
+    type: string

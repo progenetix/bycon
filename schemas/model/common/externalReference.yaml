@@ -1,6 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://progenetix.org/services/schemas/externalReference/v2021-11-12
-title: ExternalReference
+title: External Reference
 description: Definition of an external reference class.
 type: object
 properties:

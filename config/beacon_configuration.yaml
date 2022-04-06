@@ -98,7 +98,7 @@ entryTypes:
       name: Default schema for an individual
       referenceToSchemaDefinition: https://progenetix.org/services/schemas/individual
       schemaVersion: v2.0.0
-    additionallySupportedSchemas: []
+    additionallySupportedSchemas: [ "phenopacket" ]
   biosample:
     id: biosample
     name: Biological Sample

@@ -14,9 +14,10 @@ paths:
     get:
       parameters:
         - $ref: '#/components/parameters/requestedSchema'
+        - $ref: '#/components/parameters/includeResultsetResponses'
         - $ref: '#/components/parameters/skip'
         - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/includeResultsetResponses'
+        - $ref: '#/components/parameters/filters'
       description: Get a list of individuals
       operationId: getIndividuals
       tags:
@@ -232,7 +233,7 @@ components:
       required: false
       schema:
         type: string
-      example: ga4gh-service-info-v1.0
+      example: biosample
     skip:
       name: skip
       in: query

@@ -1,4 +1,19 @@
 import datetime, re
+from pymongo import MongoClient
+
+################################################################################
+
+def reshape_resultset_results(ds_id, r_s_res, byc):
+
+    r_s_res = remap_variants(r_s_res, byc)
+    r_s_res = remap_analyses(r_s_res, byc)
+    r_s_res = remap_biosamples(r_s_res, byc)
+    r_s_res = remap_individuals(r_s_res, byc)
+    r_s_res = remap_phenopackets(ds_id, r_s_res, byc)
+    r_s_res = remap_runs(r_s_res, byc)
+    r_s_res = remap_all(r_s_res)
+
+    return r_s_res
 
 ################################################################################
 
@@ -199,11 +214,11 @@ def refseq_from_chro(chro, v_d):
 
 def remap_analyses(r_s_res, byc):
 
-    # TODO: REMOVE VERIFIER HACKS
     if not "analysis" in byc["response_type"]:
         return r_s_res
 
     for cs_i, cs_r in enumerate(r_s_res):
+        # TODO: REMOVE VERIFIER HACKS
         r_s_res[cs_i].update({"pipeline_name": "progenetix", "analysis_date": "1967-11-11" })
         try:
             r_s_res[cs_i].pop("cnv_statusmaps")
@@ -216,7 +231,6 @@ def remap_analyses(r_s_res, byc):
 
 def remap_runs(r_s_res, byc):
 
-    # TODO: REMOVE VERIFIER HACKS
     if not "run" in byc["response_type"]:
         return r_s_res
 
@@ -237,11 +251,12 @@ def remap_runs(r_s_res, byc):
 
 def remap_biosamples(r_s_res, byc):
 
-    # TODO: REMOVE VERIFIER HACKS
     if not "biosample" in byc["response_type"]:
         return r_s_res
 
     for bs_i, bs_r in enumerate(r_s_res):
+
+        # TODO: REMOVE VERIFIER HACKS
         r_s_res[bs_i].update({"sample_origin_type": { "id": "OBI:0001479", "label": "specimen from organism"} })
 
         for f in ["tumor_grade", "pathological_stage", "histological_diagnosis"]:
@@ -257,6 +272,102 @@ def remap_biosamples(r_s_res, byc):
                 pass
 
     return r_s_res
+
+
+################################################################################
+
+def remap_individuals(r_s_res, byc):
+
+    if not "individual" in byc["response_type"]:
+        return r_s_res
+
+
+
+    return r_s_res
+
+################################################################################
+
+def remap_phenopackets(ds_id, r_s_res, byc):
+
+    if not "phenopacket" in byc["response_type"]:
+        return r_s_res
+
+    mongo_client = MongoClient()
+    data_db = mongo_client[ds_id]
+    pxf_s = []
+
+    for ind_i, ind in enumerate(r_s_res):
+
+        pxf = phenopack_individual(ind, data_db, byc)
+
+        pxf_s.append(pxf)
+
+    return pxf_s
+
+################################################################################
+
+def phenopack_individual(ind, data_db, byc):
+
+    # TODO: key removal based on the ones not part of the respective PXF schemas
+
+    pxf_bios = []
+
+    pxf_resources = _phenopack_resources(byc)
+
+    bios_s = data_db["biosamples"].find({"individual_id":ind["id"]})
+
+    for bios in bios_s:
+        for k in ["info", "provenance", "_id"]:
+            bios.pop(k, None)
+        pxf_bios.append(bios)
+
+    del_keys = ["_id"]
+
+    for k in del_keys:
+        ind.pop(k, None)
+
+    pxf = {
+        "id": re.sub("pgxind", "pgxpxf", ind["id"]),
+        "subject": ind,
+        "biosamples": pxf_bios,
+        "metaData": {
+            "submitted_by": "@mbaudis",
+            "phenopacket_schema_version": "v2",
+            "resources": pxf_resources
+        }
+    }
+
+    return pxf
+
+################################################################################
+
+def _phenopack_resources(byc):
+
+    # TODO: make thsi general, at least for phenopacket response, and only scan used prefixes
+
+    f_d = byc["filter_definitions"]
+    rkeys = ["NCITgrade", "NCITstage", "NCITtnm", "NCIT", "PATOsex", "EFOfus" ]
+
+    pxf_rs = []
+
+    for r_k in rkeys:
+        if r_k not in f_d.keys():
+            continue
+
+        d = f_d[r_k]
+
+        pxf_r = {
+          "id": r_k,
+          "name": d.get("name", ""),
+          "url": d.get("url", ""),
+          "namespace_prefix": d.get("namespace_prefix", ""),
+          "version": "2022-04-01",
+          "iri_prefix": "http://purl.obolibrary.org/obo/{}_".format( d.get("namespace_prefix", "") )
+        }
+
+        pxf_rs.append(pxf_r)
+
+    return pxf_rs
 
 ################################################################################
 

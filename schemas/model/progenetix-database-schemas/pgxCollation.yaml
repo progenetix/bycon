@@ -37,7 +37,7 @@ properties:
       - NCITstage
       - NCITtnm
       - icdom
-  nameSpacePrefix:
+  namespacePrefix:
     type: string
     examples:
       - pgx

@@ -32,6 +32,7 @@ meta:
   info: >
     The main payload can be accessed in `response.resultSets`.
 response_types:
+  - phenopacket
   - biosample
   - individual
   - variant

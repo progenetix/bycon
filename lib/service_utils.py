@@ -168,7 +168,7 @@ def run_result_sets_beacon(byc):
             r_s_res = paginate_list(r_s_res, byc)
 
         check_alternative_single_set_deliveries(ds_id, r_s_res, byc)
-        r_s_res = reshape_resultset_results(r_s_res, byc)
+        r_s_res = reshape_resultset_results(ds_id, r_s_res, byc)
 
         r_set.update({
             "paginated_results_count": len( r_s_res ),
@@ -215,18 +215,6 @@ def check_alternative_single_set_deliveries(ds_id, r_s_res, byc):
     check_alternative_callset_deliveries(ds_id, byc)
 
     return byc
-
-################################################################################
-
-def reshape_resultset_results(r_s_res, byc):
-
-    r_s_res = remap_variants(r_s_res, byc)
-    r_s_res = remap_analyses(r_s_res, byc)
-    r_s_res = remap_biosamples(r_s_res, byc)
-    r_s_res = remap_runs(r_s_res, byc)
-    r_s_res = remap_all(r_s_res)
-
-    return r_s_res
 
 ################################################################################
 
@@ -767,10 +755,10 @@ def _create_resource_response(byc):
     for res in byc["filter_definitions"].values():
 
         r_o.update(
-            {res["name_space_prefix"]: {
-                "id": res.get("name_space_prefix", "").lower(),
+            {res["namespace_prefix"]: {
+                "id": res.get("namespace_prefix", "").lower(),
                 "name": res.get("name", ""),
-                "name_space_prefix": res.get("name_space_prefix", ""),
+                "name_space_prefix": res.get("namespace_prefix", ""),
                 "url": res.get("url", "")
             }
         })
