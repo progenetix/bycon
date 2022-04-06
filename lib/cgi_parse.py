@@ -32,6 +32,16 @@ def boolean_to_mongo_logic( logic="AND" ):
 
 ################################################################################
 
+def select_this_server( byc ):
+
+    s_uri = str(environ.get('SCRIPT_URI'))
+    if "https:" in s_uri:
+        return "https://"+str(environ.get('HTTP_HOST'))
+    else:
+        return "http://"+str(environ.get('HTTP_HOST'))
+
+################################################################################
+
 def cgi_parse_query(byc):
 
     content_len = environ.get('CONTENT_LENGTH', '0')

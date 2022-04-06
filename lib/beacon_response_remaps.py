@@ -1,5 +1,6 @@
 import datetime, re
 from pymongo import MongoClient
+from cgi_parse import *
 
 ################################################################################
 
@@ -273,15 +274,12 @@ def remap_biosamples(r_s_res, byc):
 
     return r_s_res
 
-
 ################################################################################
 
 def remap_individuals(r_s_res, byc):
 
     if not "individual" in byc["response_type"]:
         return r_s_res
-
-
 
     return r_s_res
 
@@ -313,10 +311,23 @@ def phenopack_individual(ind, data_db, byc):
     pxf_bios = []
 
     pxf_resources = _phenopack_resources(byc)
+    server = select_this_server( byc )
 
     bios_s = data_db["biosamples"].find({"individual_id":ind["id"]})
 
     for bios in bios_s:
+
+        bios.update({
+            "files": [
+                {
+                    "uri": "{}/beacon/biosamples/{}/variants/?output=pgxseg".format(server, bios["id"]),
+                    "file_attributes": {
+                        "genomeAssembly": "GRCh38",
+                        "fileFormat": "pgxseg"
+                    }
+                }
+            ]
+        })
         for k in ["info", "provenance", "_id"]:
             bios.pop(k, None)
         pxf_bios.append(bios)

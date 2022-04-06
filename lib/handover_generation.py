@@ -19,7 +19,7 @@ def dataset_response_add_handovers(ds_id, byc):
     if not ds_id in byc["dataset_definitions"]:
         return b_h_o
 
-    h_o_server = _handover_select_server(byc)    
+    h_o_server = select_this_server(byc)    
     ds_h_o =  byc["dataset_definitions"][ ds_id ]["handoverTypes"]
     h_o_types = byc["handover_definitions"]["h->o_types"]
 
@@ -81,7 +81,6 @@ def dataset_response_add_handovers(ds_id, byc):
 
                     h_o_r["url"] += "&skip={}&limit={}".format(byc["pagination"]["skip"], byc["pagination"]["limit"])
 
-
                 b_h_o.append( h_o_r )
 
     return b_h_o
@@ -121,18 +120,7 @@ def dataset_results_save_handovers(ds_id, byc):
 
 ################################################################################
 
-def _handover_select_server( byc ):
-
-    s_uri = str(environ.get('SCRIPT_URI'))
-    if "https:" in s_uri:
-        return "https://"+str(environ.get('HTTP_HOST'))
-    else:
-        return "http://"+str(environ.get('HTTP_HOST'))
-
-################################################################################
-
 def _handover_create_url(h_o_server, h_o_defs, accessid, byc):
-
 
     if "script_path_web" in h_o_defs:
         server = h_o_server
@@ -202,7 +190,6 @@ def _write_variants_bedfile(h_o, **byc):
     data_coll = data_db[ h_o["target_collection"] ]
 
     for v in data_coll.find( { h_o["target_key"]: { '$in': h_o["target_values"] } }):
-
 
         v_d = de_vrsify_variant(v, byc)
 
