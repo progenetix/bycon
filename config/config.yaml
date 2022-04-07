@@ -114,10 +114,12 @@ list_pars:
   - datasetIds
   - variantType
   - filters
+  - ids
   - biosampleIds
   - variantIds
   - individualIds
   - callsetIds
+  - analysisIds
   - collationTypes
 id_query_map:
   biosampleIds: biosamples

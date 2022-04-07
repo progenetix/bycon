@@ -162,6 +162,11 @@ def _update_queries_from_id_values(byc):
     id_f_v = byc["beacon_mappings"]["id_queryscope_mappings"]
     f_d = byc["form_data"]
 
+    this_id_k = byc["response_type"]+"Ids"
+    if "ids" in f_d:
+        if not this_id_k in f_d:
+            f_d.update({this_id_k: f_d["ids"]})
+
     for id_k, id_s in id_f_v.items():
         q = False
         if id_k in f_d:
