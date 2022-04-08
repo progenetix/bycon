@@ -1,0 +1,136 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/pgxCallset/v2022-03-07
+title: pgxCallset
+type: object
+properties:
+  id:
+    type: string
+    examples:
+      - pgxcs-kftvldsu
+  biosampleId:
+    type: string
+    examples:
+      - pgxbs-kftva59y
+  individualId:
+    type: string
+    examples:
+      - pgxbs-kftva59y
+  description:
+    type: string
+    examples:
+      - SNP6 array
+  platformModel:
+    description: Ontology value for experimental platform or methodology used. For
+      sequencing platforms the use of "OBI:0400103 - DNA sequencer" is suggested.
+    $ref: ../common/ontologyTerm.yaml#/properties
+    examples:
+      - id: geo:GPL3381
+        label: "Stanford Microarray Facility cDNA array [SHDV]"
+      - id: OBI:0002750
+        label: Oxford Nanopore MinION
+      - id: EFO:0010938
+        label: large-insert clone DNA microarray
+  experimentAccession:
+    description: Identifier for primary experimental data.
+    $ref: ../common/ontologyTerm.yaml#/properties
+    examples:
+      - id: geo:GSM93480
+  seriesAccession:
+    description: Identifier for primary experimental series.
+    $ref: ../common/ontologyTerm.yaml#/properties
+    examples:
+      - id: geo:GSE4079
+  provenance:
+    $ref: ../common/provenance.yaml#/properties
+  dataUseConditions:
+    $ref: ../common/ontologyTerm.yaml#/properties
+  cnvStatusmaps:
+    $ref: "#/definitions/Statusmaps/properties"
+  cnvStats:
+    $ref: "#/definitions/Cnvstatistics/properties"
+  cnvChroStats:
+    $ref: "#/definitions/Cnvstatistics/properties"
+  info:
+    type: object
+  updated:
+    type: string
+    format: date-time
+    examples:
+      - "2020-09-10T17:44:10.170Z"
+
+definitions:
+
+  Statusmaps:
+    properties:
+      interval_count:
+        description: number of genomic bins
+        type: integer
+      binning:
+        description: type of genomic bins
+        type: string
+        examples:
+          - 1Mb
+      dup:
+        description: >-
+          Array of fractional values for the gain coverage of the respective
+          genomic bins. The length of the array corresponds to the `interval_count`
+          value.
+        type: array
+        items: number
+      del:
+        description: >-
+          Array of fractional values for the loss coverage...
+        type: array
+        items: number
+      max:
+        description: >-
+          Array of the maximum values (usually log2) observed in the called bins
+        type: array
+        items: number
+      min:
+        description: >-
+          Array of the minimum values (usually log2) observed in the called bins
+        type: array
+        items: number
+
+  Chrofractions:
+    properties:
+      "1":
+        $ref: "#/definitions/Cnvstatistics/properties"
+      1p:
+        $ref: "#/definitions/Cnvstatistics/properties"
+      1q:
+        $ref: "#/definitions/Cnvstatistics/properties"
+      additionalProperties: true
+
+  Cnvstatistics:
+    properties:
+      cnvcoverage:
+        description: sum of genome bases called as CNV
+        type: integer
+      dupcoverage:
+        description: sum of genome bases called as gain CNV
+        type: integer
+      delcoverage:
+        description: sum of genome bases called as loss CNV
+        type: integer
+      cnvfraction:
+        description: genome fraction called as CNV
+        type: number
+        min: 0
+        max: 1
+      dupfraction:
+        description: genome fraction called as CNV
+        type: number
+        min: 0
+        max: 1
+      delfraction:
+        description: genome fraction called as CNV
+        type: number
+        min: 0
+        max: 1
+
+required:
+  - id
+  - biosampleId
+additionalProperties: true

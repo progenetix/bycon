@@ -1,0 +1,173 @@
+{
+    "$id": "https://progenetix.org/services/schemas/pgxCollation/v2022-03-08",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "definitions": {
+        "HierarchyPath": {
+            "description": "A path from the root of a hierarchy to - and including - a given term id.",
+            "properties": {
+                "depth": {
+                    "description": "The number of codes on the path upstream of the term.",
+                    "type": "integer"
+                },
+                "order": {
+                    "description": "The position in a rooted hierarchy, where each branch ends on a separate line.",
+                    "type": "integer"
+                },
+                "path": {
+                    "description": "All ordered terms of this path, starting from the root term and ending with, and including, the current term.",
+                    "examples": [
+                        [
+                            "NCIT:C3262",
+                            "NCIT:C7062",
+                            "NCIT:C9305",
+                            "NCIT:C7055",
+                            "NCIT:C3167"
+                        ]
+                    ],
+                    "type": "array"
+                }
+            }
+        }
+    },
+    "description": "A Collation summarizes information of all biosamples matching a given term (e.g. PMID or NCIT code), as well as the connected items if the code is part of a hierarchy (paths leading to the code, child terms).",
+    "meta": {
+        "contributors": [
+            {
+                "description": "Michael Baudis",
+                "id": "orcid:0000-0002-9903-4248"
+            }
+        ],
+        "provenance": [
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            }
+        ],
+        "sb_status": "community"
+    },
+    "properties": {
+        "childTerms": {
+            "description": "All downstream terms, from all paths of this term in a hierarchical system including itself.",
+            "examples": [
+                [
+                    "NCIT:C3168",
+                    "NCIT:C9142",
+                    "NCIT:C8644",
+                    "NCIT:C9143",
+                    "NCIT:C4967",
+                    "NCIT:C9140",
+                    "NCIT:C7953"
+                ],
+                [
+                    "PMID:22824167"
+                ]
+            ],
+            "type": "array"
+        },
+        "codeMatches": {
+            "description": "The number of biosamples in the collection with this code. This can be 0 if the entity is only represented through its child terms.\n",
+            "type": "integer"
+        },
+        "collationType": {
+            "description": "Key for the type of filter definition used to map the corresponding collation items (e.g. biosamples, callsets...). These only sometimes correspond directly to prefixes, when unanimous (PMID ...).",
+            "examples": [
+                "PMID",
+                "NCITstage",
+                "NCITtnm",
+                "icdom"
+            ],
+            "type": "string"
+        },
+        "count": {
+            "description": "The number of biosamples in the collection with this code or one of its child terms.\n",
+            "type": "integer"
+        },
+        "datasetId": {
+            "description": "The dataset the collation was generated from.",
+            "examples": [
+                "progenetix"
+            ],
+            "type": "string"
+        },
+        "dbKey": {
+            "description": "The key in the corresponding collection (scope), in dot annotation.",
+            "examples": [
+                "histological_diagnosis.id",
+                "sampled_tissue.id",
+                "sex.id"
+            ],
+            "type": "string"
+        },
+        "hierarchyPaths": {
+            "description": "All term paths leading to any instance of this code from the hierarchy root term.\n",
+            "items": {
+                "$ref": "#/definitions/HierarchyPath/properties"
+            },
+            "type": "array"
+        },
+        "id": {
+            "examples": [
+                "NCIT:C9272",
+                "NCIT:C3167",
+                "PMID:22824167"
+            ],
+            "type": "string"
+        },
+        "label": {
+            "examples": [
+                "Salivary Gland Carcinoma",
+                "Acute Lymphoblastic Leukemia",
+                "Beleut M, Zimmermann P et al. (2012): Integrative genome-wide expression profiling identifies three..."
+            ],
+            "type": "string"
+        },
+        "namespacePrefix": {
+            "examples": [
+                "pgx",
+                "PMID",
+                "NCIT",
+                "UBERON"
+            ],
+            "type": "string"
+        },
+        "parentTerms": {
+            "description": "All upstream terms, from all paths, of this term in a hierarchical system including itself.",
+            "examples": [
+                [
+                    "NCIT:C3262",
+                    "NCIT:C3263",
+                    "NCIT:C2910"
+                ],
+                [
+                    "PMID:22824167"
+                ]
+            ],
+            "type": "array"
+        },
+        "reference": {
+            "description": "A url to the code, in a local or remote location.",
+            "examples": [
+                "https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C2910"
+            ],
+            "type": "string"
+        },
+        "scope": {
+            "description": "The scope (i.e. the data collection) the collation items are retrieved from.",
+            "oneOf": [
+                "biosamples",
+                "callsets",
+                "individuals"
+            ],
+            "type": "string"
+        },
+        "updated": {
+            "examples": [
+                "2022-03-08T10:44:10.170Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+        }
+    },
+    "title": "pgxCollation"
+}

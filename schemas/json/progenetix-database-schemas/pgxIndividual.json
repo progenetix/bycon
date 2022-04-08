@@ -1,0 +1,89 @@
+{
+    "$id": "https://progenetix.org/services/schemas/pgxIndividual/v2022-03-07",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "description": "An pgxIndividual entry stores information about the individual (subject) from which biosamples were extracted (e.g. cancer samples, reference tissue), but where this information is shared to all the derived mobjects (e.g. genotypic sex ...).",
+    "properties": {
+        "ancestries": {
+            "items": {
+                "$ref": "../common/ancestry.json#/properties"
+            },
+            "type": "array"
+        },
+        "dataUseConditions": {
+            "$ref": "../common/ontologyTerm.json#/properties",
+            "examples": [
+                {
+                    "id": "DUO:0000004",
+                    "label": "no restriction"
+                }
+            ]
+        },
+        "description": {
+            "examples": [
+                "HapMap project contributor"
+            ],
+            "type": "string"
+        },
+        "diseases": {
+            "items": {
+                "$ref": "../common/disease.json#/properties"
+            },
+            "type": "array"
+        },
+        "ethnicity": {
+            "$ref": "../common/commonDefinitions.json#/definitions/Ethnicity"
+        },
+        "externalReferences": {
+            "examples": [
+                {
+                    "description": "HapMap individual",
+                    "id": "biosample:SAME122868"
+                },
+                {
+                    "id": "PMID:9950502"
+                },
+                {
+                    "description": "Prognostic analysis of mantle cell lymphoma genomes",
+                    "id": "geo:GSE13331"
+                }
+            ],
+            "items": {
+                "$ref": "../common/externalReference.json#/properties"
+            },
+            "type": "array"
+        },
+        "id": {
+            "description": "The resource-local identifier for this individual.",
+            "examples": [
+                "pgxind-kftx25eh"
+            ],
+            "type": "string"
+        },
+        "info": {
+            "description": "Additional structured data which may not be common across different resources.",
+            "type": "object"
+        },
+        "provenance": {
+            "$ref": "../common/provenance.json#/properties"
+        },
+        "sex": {
+            "$ref": "../common/commonDefinitions.json#/definitions/Sex"
+        },
+        "updated": {
+            "examples": [
+                "2020-09-10T17:44:10.170Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+        },
+        "vitalStatus": {
+            "$ref": "../common/vitalStatus.json#/properties"
+        }
+    },
+    "required": [
+        "id"
+    ],
+    "title": "pgxIndividual",
+    "type": "object"
+}

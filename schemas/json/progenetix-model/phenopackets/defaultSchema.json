@@ -1,0 +1,57 @@
+{
+    "$id": "https://progenetix.org/services/schemas/phenopacket/v2022-04-09",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "The Phenopacket class is a bare-bones JSON-schema rewrite of the Phenopackets v2 standard.",
+    "meta": {
+        "provenance": [
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            },
+            {
+                "description": "Phenopackets v2",
+                "id": "https://github.com/phenopackets/phenopacket-schema"
+            }
+        ]
+    },
+    "properties": {
+        "biosamples": {
+            "items": {
+                "$ref": "../biosamples/defaultSchema.json#/properties"
+            },
+            "type": "array"
+        },
+        "diseases": {
+            "items": {
+                "$ref": "../common/disease.json#/properties"
+            },
+            "type": "array"
+        },
+        "id": {
+            "description": "The resource-local identifier for this Phenopacket.",
+            "examples": [
+                "pgxpxf-kftx25eh"
+            ],
+            "type": "string"
+        },
+        "measurements": {
+            "items": {
+                "$ref": "../common/measurement.json#/properties"
+            },
+            "type": "array"
+        },
+        "metaData": {
+            "ref": "../common/metaData.json#/properties"
+        },
+        "phenotypicFeatures": {
+            "items": {
+                "$ref": "../common/phenotypicFeature.json#/properties"
+            },
+            "type": "array"
+        },
+        "subject": {
+            "$ref": "../individuals/defaultSchema.json#/properties"
+        }
+    },
+    "title": "Phenopacket"
+}

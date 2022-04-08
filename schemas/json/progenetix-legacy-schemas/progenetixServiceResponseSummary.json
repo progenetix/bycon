@@ -1,0 +1,43 @@
+{
+    "$id": "https://progenetix.org/services/schemas/progenetixServiceResponseSummary/v2021-06-24",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "The minimal response.\n",
+    "meta": {
+        "contributors": [
+            {
+                "description": "ELIXIR Beacon project team",
+                "id": "http://beacon-project.io"
+            },
+            {
+                "description": "Michael Baudis",
+                "id": "orcid:0000-0002-9903-4248"
+            }
+        ],
+        "provenance": [
+            {
+                "description": "Beacon v2",
+                "id": "https://github.com/ga4gh-beacon/specification-v2"
+            },
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            }
+        ],
+        "sb_status": "community",
+        "used_by": [
+            {
+                "description": "Progenetix database schema (Beacon+ backend)",
+                "id": "https://github.com/progenetix/schemas/"
+            }
+        ]
+    },
+    "properties": {
+        "exists": {
+            "type": "boolean"
+        },
+        "numTotalResults": {
+            "type": "integer"
+        }
+    },
+    "title": "progenetixServiceResponseSummary"
+}

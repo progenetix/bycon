@@ -9,6 +9,7 @@ defaults:
   pagination:
     skip: 0
     limit: 2000
+  include_resultset_responses: true
 bycon_definition_files:
   - beacon_info
   - beacon_mappings
@@ -25,7 +26,6 @@ meta:
       schema: https://progenetix.org/services/schemas/analysis/
   received_request_summary:
     requested_granularity: record
-    include_resultset_responses: HIT
     requested_schemas:
       - entity_type: analysis
         schema: https://progenetix.org/services/schemas/analysis/
@@ -37,7 +37,3 @@ response_types:
   - analysis
   - individual
   - genomicVariation
-include_resultset_responses:
-  - HIT
-  - ALL
-  - NONE

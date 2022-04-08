@@ -18,6 +18,7 @@ defaults:
   pagination:
     skip: 0
     limit: 2000
+  include_resultset_responses: true
 meta:
   returned_schemas:
     - entity_type: variant
@@ -38,7 +39,3 @@ response_types:
   - variant
   - individual
   - biosample
-include_resultset_responses:
-  - HIT
-  - ALL
-  - NONE

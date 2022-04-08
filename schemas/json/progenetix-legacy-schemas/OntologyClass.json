@@ -1,0 +1,57 @@
+{
+    "$id": "https://progenetix.org/services/schemas/OntologyClass/v2021-01-12",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "description": "The `OntologyClass` object is the main wrapper for identifiers, used for well-formed CURIE representations of ontology classes for biological or technical concepts and knowledge resources, as well as for \"private\" identifiers such as internal classifications. \n",
+    "meta": {
+        "contributors": [
+            {
+                "description": "GA4GH Metadata Task Team"
+            }
+        ],
+        "provenance": [
+            {
+                "description": "Developer branch of original GA4GH schema",
+                "id": "https://github.com/ga4gh-metadata/metadata-schemas/blob/master/schemas/shared.proto#L39"
+            },
+            {
+                "description": "Phenopackets",
+                "id": "https://github.com/phenopackets/phenopacket-schema/blob/master/docs/ontologyclass.rst"
+            },
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            }
+        ],
+        "sb_status": "community",
+        "used_by": [
+            {
+                "description": "Progenetix database schema (Beacon+ backend)",
+                "id": "https://github.com/progenetix/schemas/"
+            }
+        ]
+    },
+    "properties": {
+        "id": {
+            "description": "Identifier as string (CURIE highly recommended). \n",
+            "examples": [
+                "UBERON:0000002",
+                "PMID:9892199",
+                "icdom-85003"
+            ],
+            "type": "string"
+        },
+        "label": {
+            "examples": [
+                "neoplastic sample",
+                "Adenocarcinoma, NOS"
+            ],
+            "type": "string"
+        }
+    },
+    "required": [
+        "id"
+    ],
+    "title": "OntologyClass",
+    "type": "object"
+}

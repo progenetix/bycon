@@ -1,0 +1,149 @@
+{
+    "$id": "https://progenetix.org/services/schemas/Publication/v2021-10-13",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "definitions": {
+        "Contact": {
+            "properties": {
+                "affiliation": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Name of contact (e.g. corresponding author).",
+                    "examples": [
+                        "Rasd-Coduresa Diziet Embless Sma da' Marenhide",
+                        "Ion Tichy"
+                    ],
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "description": "A Publication represents basic information about a scientific article used in the Progenetix resource to indicate and annotate sources for genomic screening experiments.\n",
+    "meta": {
+        "contributors": [
+            {
+                "description": "Michael Baudis",
+                "id": "orcid:0000-0002-9903-4248"
+            }
+        ],
+        "provenance": [
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            }
+        ],
+        "sb_status": "community",
+        "used_by": [
+            {
+                "description": "Progenetix database schema (Beacon+ backend)",
+                "id": "https://github.com/progenetix/schemas/"
+            }
+        ]
+    },
+    "properties": {
+        "abstract": {
+            "type": "string"
+        },
+        "authors": {
+            "examples": [
+                "Weber RG, Bostrom J, Wolter M, Baudis M, Collins VP, Reifenberger G, Lichter P."
+            ],
+            "type": "string"
+        },
+        "contact": {
+            "$ref": "#/definitions/Contact/properties"
+        },
+        "counts": {
+            "$ref": "PublicationSampleCounts.json#/properties"
+        },
+        "id": {
+            "examples": [
+                "PMID:22824167"
+            ],
+            "type": "string"
+        },
+        "info": {
+            "type": "object"
+        },
+        "journal": {
+            "examples": [
+                "Proc. Natl. Acad. Sci. U.S.A. 94(26), 1997"
+            ],
+            "type": "string"
+        },
+        "label": {
+            "description": "An optional informative shortened concatenation of authors / pubYear / title, to be used for labels etc.\n",
+            "examples": [
+                "Peralta R, Baudis M, Vazquez G, Juarez S, Ortiz R, Decanini et al. (2010): Increased expression of cellular retinol-binding protein 1 in laryngeal squamous cell carcinoma."
+            ],
+            "type": "string"
+        },
+        "note": {
+            "type": "string"
+        },
+        "pmcid": {
+            "description": "Id of article in PMC, if there. TODO: into `external_references`?\n",
+            "type": "string"
+        },
+        "provenance": {
+            "$ref": "Provenance.json#/properties"
+        },
+        "pubYear": {
+            "examples": [
+                "2021"
+            ],
+            "type": "string"
+        },
+        "pubmedid": {
+            "examples": [
+                "22824167"
+            ],
+            "type": "string"
+        },
+        "sampleTypes": {
+            "description": "A list of ontology with counts objects, indicating the best approximation of the diagnoses or other features of the analyzed samples.\n",
+            "examples": [
+                [
+                    {
+                        "count": 221,
+                        "id": "NCIT:C96963",
+                        "label": "Digestive System Carcinoma"
+                    },
+                    {
+                        "count": 68,
+                        "id": "NCIT:C3406",
+                        "label": "Thoracic Neoplasm"
+                    }
+                ]
+            ],
+            "items": {
+                "$ref": "OntologyClass.json#/properties"
+            },
+            "type": "array"
+        },
+        "status": {
+            "description": "The status label is used to * disambiguate between Progenetix collection publications and \"excluded\" ones (i.e. not containing original genotyping data * add some information about reasons for the exclusion, e.g. for later access to currently out off scope articles\n",
+            "examples": [
+                "excluded [non-sensical study of invented disease]",
+                "excluded [pooled samples]",
+                "excluded [population study]",
+                "excluded [review]"
+            ],
+            "type": "string"
+        },
+        "title": {
+            "type": "string"
+        },
+        "updated": {
+            "examples": [
+                "2020-09-10T17:44:10.170Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+        }
+    },
+    "title": "Publication"
+}

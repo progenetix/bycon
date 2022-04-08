@@ -71,6 +71,8 @@ h->o_types:
     description: "retrieve data of the phenopackets matched by the query"
     h->o_key: 'biosamples._id'
     script_path_web: '/services/individuals'
+    url_opts: "&requestedSchema=phenopacket"
+
 
   individuals:
     id: 'pgx:handover:individuals'

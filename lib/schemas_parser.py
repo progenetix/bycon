@@ -27,33 +27,44 @@ def beacon_get_endpoint_base_paths(byc):
 
 ################################################################################
 
-def read_schema_file(schema_name, item, byc):
+def read_schema_file(schema_name, item, byc, ext="json"):
 
-    s_f_p = get_schema_file_path(schema_name, byc)
+    b_p_m = byc["beacon_mappings"]["default_schema_from_model"]
+
+    schema_name = b_p_m.get(schema_name, schema_name)
+    
+    s_f_p = get_schema_file_path(schema_name, byc, ext)
 
     # print(schema_name, s_f_p)
 
     if not s_f_p is False:
-
-        s_path = path.join( s_f_p, schema_name+".yaml#/"+item )
-        root_def = RefDict(s_path)
+        if len(item) > 1:
+            s_f_p = s_f_p+"#/"+item
+        root_def = RefDict(s_f_p)
         exclude_keys = [ "examples" ] #"format", 
         s = materialize(root_def, exclude_keys = exclude_keys)
         assert isinstance(s, dict)
         # print(s)
+        # exit()
         return s
 
     return False
 
 ################################################################################
 
-def get_schema_file_path(schema_name, byc):
+def get_schema_file_path(schema_name, byc, ext="json"):
 
     for s_p in byc["config"]["schema_paths"]:
 
         p = path.join( pkg_path, *s_p )
+
+        s_ds = [ d.name for d in scandir(p) if d.is_dir() ]
+        if schema_name in s_ds:
+            s_f_p = path.join( p, schema_name, "defaultSchema."+ext )
+            return s_f_p
+
         s_fs = [ f.name for f in scandir(p) if f.is_file() ]
-        s_fs = [ f for f in s_fs if f.endswith(".yaml") ]
+        s_fs = [ f for f in s_fs if f.endswith( ext ) ]
         s_fs = [ f for f in s_fs if not f.startswith("_") ]
 
         for s_f in s_fs:
@@ -62,7 +73,8 @@ def get_schema_file_path(schema_name, byc):
             # print(schema_name, f_name)
 
             if f_name == schema_name:
-                return p
+                s_f_p = path.join( p, s_f )
+                return s_f_p
 
     return False
 
@@ -108,10 +120,10 @@ def create_empty_instance(schema):
 
 ################################################################################
 
-def object_instance_from_schema_name(byc, schema_name, root_key="properties"):
+def object_instance_from_schema_name(byc, schema_name, root_key, ext="json"):
 
-    s_i = create_empty_instance( read_schema_file(schema_name, root_key, byc) )
-    return s_i
+    s_i = create_empty_instance( read_schema_file(schema_name, root_key, byc, ext) )
+    return humps.decamelize(s_i)
 
 ################################################################################
 

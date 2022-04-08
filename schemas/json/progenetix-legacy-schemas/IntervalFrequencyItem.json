@@ -1,0 +1,79 @@
+{
+    "$id": "https://progenetix.org/services/schemas/IntervalFrequencyItem/v2022-02-16",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "This schema represents frequency data for a single binned genome interval.\n",
+    "meta": {
+        "contributors": [
+            {
+                "description": "Michael Baudis",
+                "id": "orcid:0000-0002-9903-4248"
+            }
+        ],
+        "provenance": [
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            }
+        ],
+        "sb_status": "community",
+        "used_by": [
+            {
+                "description": "Progenetix database",
+                "id": "https://github.com/progenetix/"
+            }
+        ]
+    },
+    "properties": {
+        "end": {
+            "description": "end, 0-based",
+            "type": "integer"
+        },
+        "gainFrequency": {
+            "description": "percent of samples with a gain-type CNV",
+            "type": "number"
+        },
+        "gainMean": {
+            "type": "number"
+        },
+        "gainMedian": {
+            "description": "percent of samples with a gain-type CNV",
+            "type": "number"
+        },
+        "id": {
+            "examples": [
+                "1p:14000000-15000000",
+                "Yq:57000000-57227415"
+            ],
+            "type": "string"
+        },
+        "lossFrequency": {
+            "description": "percent of samples with a loss-type CNV",
+            "type": "number"
+        },
+        "lossMean": {
+            "description": "percent of samples with a loss-type CNV",
+            "type": "number"
+        },
+        "lossMedian": {
+            "description": "percent of samples with a loss-type CNV",
+            "type": "number"
+        },
+        "no": {
+            "description": "continuous count of the intervals, from 1pter -> Yqter (in humans)",
+            "type": "integer"
+        },
+        "referenceName": {
+            "description": "basically the chromosome",
+            "type": "string"
+        },
+        "size": {
+            "description": "base count (ennd - start)",
+            "type": "integer"
+        },
+        "start": {
+            "description": "start, 0-based",
+            "type": "integer"
+        }
+    },
+    "title": "IntervalFrequencyItem"
+}

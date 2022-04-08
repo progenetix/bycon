@@ -1,0 +1,27 @@
+{
+    "$comments": "From https://github.com/phenopackets/phenopacket-schema/blob/v2/docs/time-interval.rst",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "description": "Time interval with start and end defined as ISO8601 time stamps.",
+    "properties": {
+        "end": {
+            "$ref": "./commonDefinitions.json#/definitions/Timestamp",
+            "examples": [
+                "2022-03-10T15:25:07Z"
+            ]
+        },
+        "start": {
+            "$ref": "./commonDefinitions.json#/definitions/Timestamp",
+            "examples": [
+                "1999-08-05T17:21:00+01:00",
+                "2002-09-21T02:37:00-08:00"
+            ]
+        }
+    },
+    "required": [
+        "start",
+        "end"
+    ],
+    "title": "TimeInterval",
+    "type": "object"
+}

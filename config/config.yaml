@@ -27,34 +27,39 @@ paths:
 
 schema_paths:
   - - schemas
-  - - schemas
-    - model
-    - progenetix-legacy-schemas
-  - - schemas
-    - model
-    - progenetix-database-schemas
-  - - schemas
-    - model
-    - alternative-schemas
-  - - schemas
-    - model
-    - default-schemas
-  - - schemas
-    - model
+    - json
+    - progenetix-model
     - common
   - - schemas
+    - json
+    - progenetix-model
+  - - schemas
+    - json
+    - progenetix-legacy-schemas
+  - - schemas
+    - json
+    - progenetix-database-schemas
+  - - schemas
+    - json
+    - framework
+  - - schemas
+    - json
     - framework
     - common
   - - schemas
+    - json
     - framework
     - configuration
   - - schemas
+    - json
     - framework
     - requests
   - - schemas
+    - json
     - framework
     - responses
   - - schemas
+    - json
     - framework
     - responses
     - sections

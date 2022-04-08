@@ -145,8 +145,6 @@ def run_result_sets_beacon(byc):
 
         ds_id = r_set["id"]
 
-        # TODO: better definition of when to query
-        check_empty_query_all_response(byc)
         execute_bycon_queries( ds_id, byc )
 
         # Special check-out here since this forces a single handover
@@ -179,6 +177,7 @@ def run_result_sets_beacon(byc):
     ######## end of result sets loop ###########################################
 
     sr_rs = byc["service_response"]["response_summary"]
+    sr_rs.update({"num_total_results":0})
     for r_set in sr_r["result_sets"]:
         sr_rs["num_total_results"] += r_set["results_count"]
 
@@ -214,17 +213,6 @@ def check_alternative_single_set_deliveries(ds_id, r_s_res, byc):
     check_alternative_variant_deliveries(ds_id, byc)
     check_alternative_callset_deliveries(ds_id, byc)
 
-    return byc
-
-################################################################################
-
-def check_empty_query_all_response(byc):
-
-    if len(byc["queries"].keys()) > 0:
-        return byc
-
-    byc.update({ "empty_query_all_response": True })
-    byc["service_response"]["meta"]["received_request_summary"].update({"include_resultset_responses":"ALL"})
     return byc
 
 ################################################################################
@@ -330,17 +318,21 @@ def create_empty_beacon_response(byc):
 
     response_update_meta(r, byc)
 
+    # print(byc["this_config"]["defaults"]["include_resultset_responses"])
+    # print(byc["this_config"]["defaults"])
+    # exit()
+
     try:
-        if len(byc["this_config"]["defaults"]["include_resultset_responses"]) > 2:
-            r.update({"result_sets":[]})
+        r["response"].update({"result_sets":[]})
     except KeyError:
         pass
 
     if "beaconResultsetsResponse" in byc["response_entity"]["response_schema"]:
 
         # TODO: stringent definition on when this is being used
-        r_set = object_instance_from_schema_name(byc, "beaconResultSets", "definitions/resultSetInstance/properties")
-   
+        r_set = object_instance_from_schema_name(byc, "resultsetInstance", "properties")
+
+        # print(r_set)
         if "dataset_ids" in byc:
             for ds_id in byc[ "dataset_ids" ]:
                 ds_rset = r_set.copy()
@@ -437,8 +429,8 @@ def check_cnvhistogram_plot_response(ds_id, byc):
 def instantiate_response_and_error(byc):
 
     """The response relies on the pre-processing of input parameters (queries etc)."""
-    r = object_instance_from_schema_name(byc, byc["response_entity"]["response_schema"])
-    e = object_instance_from_schema_name(byc, "beaconErrorResponse")
+    r = object_instance_from_schema_name(byc, byc["response_entity"]["response_schema"], "properties")
+    e = object_instance_from_schema_name(byc, "beaconErrorResponse", "properties")
 
     return r, e
 
@@ -570,6 +562,7 @@ def response_set_entity(byc, scope="beacon"):
 
     try:
         for r_d in byc[m_k]["response_types"]:
+            # print(r_d["entity_type"], byc["response_type"])
             
             if r_d["entity_type"] == byc["response_type"]:
                 byc.update({"response_entity": r_d })

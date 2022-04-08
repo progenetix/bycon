@@ -1,0 +1,53 @@
+{
+    "$id": "https://progenetix.org/services/schemas/Provenance/v2021-11-05",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "The Provenance class is the wrapper object for schemas informing about technical, geographic or collection associated origin of a higher oreder object such as an Individual or Biosample.\n",
+    "meta": {
+        "contributors": [
+            {
+                "description": "Michael Baudis",
+                "id": "orcid:0000-0002-9903-4248"
+            }
+        ],
+        "provenance": [
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            }
+        ],
+        "sb_status": "community",
+        "used_by": [
+            {
+                "description": "Progenetix database schema (Beacon+ backend)",
+                "id": "https://github.com/progenetix/schemas/"
+            }
+        ]
+    },
+    "properties": {
+        "assay": {
+            "$ref": "OntologyClass.json#/properties",
+            "examples": [
+                {
+                    "id": "EFO:0002703",
+                    "label": "SNP array"
+                },
+                {
+                    "id": "EFO:0010938",
+                    "label": "large-insert clone DNA microarray"
+                },
+                {
+                    "id": "EFO:0010939",
+                    "label": "oligonucleotide DNA microarray"
+                },
+                {
+                    "id": "EFO:0010937",
+                    "label": "comparative genomic hybridization (CGH)"
+                }
+            ]
+        },
+        "geo_location": {
+            "$ref": "GeoLocation.json#/properties"
+        }
+    },
+    "title": "Provenance"
+}

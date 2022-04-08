@@ -307,6 +307,7 @@ def remap_phenopackets(ds_id, r_s_res, byc):
 def phenopack_individual(ind, data_db, byc):
 
     # TODO: key removal based on the ones not part of the respective PXF schemas
+    # or better on filling them in only for existing parameters
 
     pxf_bios = []
 
@@ -328,14 +329,18 @@ def phenopack_individual(ind, data_db, byc):
                 }
             ]
         })
-        for k in ["info", "provenance", "_id"]:
+        for k in ["info", "provenance", "_id", "followup_time", "followup_state", "cohorts", "icdo_morphology", "icdo_topography"]:
             bios.pop(k, None)
         pxf_bios.append(bios)
 
-    del_keys = ["_id"]
+    del_keys = ["_id", "provenance"]
 
     for k in del_keys:
         ind.pop(k, None)
+
+    for d_i, d in enumerate(ind["diseases"]):
+        for k in ["followup_state", "followup_time"]:
+            ind["diseases"][d_i].pop(k, None)
 
     pxf = {
         "id": re.sub("pgxind", "pgxpxf", ind["id"]),

@@ -1,0 +1,132 @@
+{
+    "$id": "https://progenetix.org/services/schemas/pgxVariant/v2022-03-29",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "definitions": {
+        "Location": {
+            "properties": {
+                "interval": {
+                    "$ref": "#/definitions/SequenceInterval/properties"
+                },
+                "sequenceId": {
+                    "type": "string"
+                },
+                "type": {
+                    "const": "SequenceLocation"
+                }
+            },
+            "type": "object"
+        },
+        "PointPosition": {
+            "properties": {
+                "type": {
+                    "const": "Number"
+                },
+                "value": {
+                    "type": "integer"
+                }
+            },
+            "type": "object"
+        },
+        "SequenceInterval": {
+            "properties": {
+                "end": {
+                    "$ref": "#/definitions/PointPosition/properties"
+                },
+                "start": {
+                    "$ref": "#/definitions/PointPosition/properties"
+                },
+                "type": {
+                    "const": "SequenceInterval"
+                }
+            },
+            "type": "object"
+        },
+        "SequenceState": {
+            "properties": {
+                "const": "LiteralSequenceExpression"
+            },
+            "sequence": {
+                "type": "string"
+            },
+            "type": "object"
+        }
+    },
+    "description": "Schema for a genomic variant in Progenetix collections.",
+    "properties": {
+        "alternateBases": {
+            "pattern": "^([ACGTUNRYSWKMBDHV\\-\\.]*)$",
+            "type": "string"
+        },
+        "biosampleId": {
+            "type": "string"
+        },
+        "callsetId": {
+            "type": "string"
+        },
+        "end": {
+            "type": "integer"
+        },
+        "id": {
+            "type": "string"
+        },
+        "individualId": {
+            "type": "string"
+        },
+        "info": {
+            "type": "object"
+        },
+        "location": {
+            "$ref": "#/definitions/Location/properties"
+        },
+        "referenceBases": {
+            "pattern": "^([ACGTUNRYSWKMBDHV\\-\\.]*)$",
+            "type": "string"
+        },
+        "relativeCopyClass": {
+            "enum": [
+                "copy neutral",
+                "partial loss",
+                "complete loss",
+                "low-level gain",
+                "high-level gain"
+            ],
+            "type": "string"
+        },
+        "start": {
+            "type": "integer"
+        },
+        "state": {
+            "$ref": "#/definitions/SequenceState/properties"
+        },
+        "type": {
+            "enum": [
+                "Allele",
+                "RelativeCopyNumber"
+            ],
+            "type": "string"
+        },
+        "updated": {
+            "examples": [
+                "2020-09-10T17:44:10.170Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+        },
+        "variantInternalId": {
+            "type": "string"
+        },
+        "variantState": {
+            "$ref": "../common/ontologyTerm.json#/properties"
+        },
+        "variantType": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "variantInternalId",
+        "variantType"
+    ],
+    "title": "Progenetix Variant",
+    "type": "object"
+}

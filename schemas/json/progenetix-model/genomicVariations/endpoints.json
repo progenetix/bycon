@@ -1,0 +1,458 @@
+{
+    "components": {
+        "parameters": {
+            "alternateBases": {
+                "in": "query",
+                "name": "alternateBases",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "aminoacidChange": {
+                "example": "V600E",
+                "in": "query",
+                "name": "aminoacidchange",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "assemblyId": {
+                "in": "query",
+                "name": "assemblyId",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "end": {
+                "in": "query",
+                "name": "end",
+                "schema": {
+                    "items": {
+                        "format": "int64",
+                        "minimum": 0,
+                        "type": "integer"
+                    },
+                    "maxItems": 2,
+                    "minItems": 0,
+                    "type": "array"
+                }
+            },
+            "entryId": {
+                "in": "path",
+                "name": "id",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "filters": {
+                "in": "query",
+                "name": "filters",
+                "schema": {
+                    "examples": [
+                        [
+                            "EFO:0009655"
+                        ],
+                        [
+                            "NCIT:C48725",
+                            "NCIT:C28080"
+                        ]
+                    ],
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "geneId": {
+                "example": "BRAF",
+                "in": "query",
+                "name": "geneid",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "genomicAlleleShortForm": {
+                "example": "NM_004006.2:c.4375C>T",
+                "in": "query",
+                "name": "allele",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "includeResultsetResponses": {
+                "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/definitions/IncludeResultsetResponses"
+            },
+            "limit": {
+                "in": "query",
+                "name": "limit",
+                "schema": {
+                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/definitions/Limit"
+                }
+            },
+            "referenceBases": {
+                "in": "query",
+                "name": "referenceBases",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "referenceName": {
+                "in": "query",
+                "name": "referenceName",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "requestedSchema": {
+                "description": "Schema to be used to format the `result` field in the response. The response will use Beacon format.",
+                "example": "ga4gh-service-info-v1.0",
+                "in": "query",
+                "name": "requestedSchema",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "skip": {
+                "in": "query",
+                "name": "skip",
+                "schema": {
+                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/definitions/Skip"
+                }
+            },
+            "start": {
+                "in": "query",
+                "name": "start",
+                "schema": {
+                    "items": {
+                        "format": "int64",
+                        "minimum": 0,
+                        "type": "integer"
+                    },
+                    "maxItems": 2,
+                    "minItems": 1,
+                    "type": "array"
+                }
+            },
+            "variantMaxLength": {
+                "in": "query",
+                "name": "variantMaxLength",
+                "schema": {
+                    "format": "int64",
+                    "minimum": 0,
+                    "type": "integer"
+                }
+            },
+            "variantMinLength": {
+                "in": "query",
+                "name": "variantMinLength",
+                "schema": {
+                    "format": "int64",
+                    "minimum": 0,
+                    "type": "integer"
+                }
+            }
+        },
+        "responses": {
+            "ResultsOKResponse": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconBooleanResponse.json"
+                                },
+                                {
+                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconCountResponse.json"
+                                },
+                                {
+                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconResultsetsResponse.json"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "description": "Successful operation."
+            }
+        }
+    },
+    "info": {
+        "contact": {
+            "email": "beacon@ga4gh.org"
+        },
+        "description": "TBD",
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "title": "GA4GH Beacon API Specification - Genomic Variations Endpoints",
+        "version": "2.0.0"
+    },
+    "openapi": "3.0.2",
+    "paths": {
+        "/g_variants": {
+            "get": {
+                "description": "Get a list of example entries",
+                "operationId": "getExampleEntries",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/requestedSchema"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skip"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/components/parameters/includeResultsetResponses"
+                    },
+                    {
+                        "$ref": "#/components/parameters/start"
+                    },
+                    {
+                        "$ref": "#/components/parameters/end"
+                    },
+                    {
+                        "$ref": "#/components/parameters/assemblyId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/referenceName"
+                    },
+                    {
+                        "$ref": "#/components/parameters/referenceBases"
+                    },
+                    {
+                        "$ref": "#/components/parameters/alternateBases"
+                    },
+                    {
+                        "$ref": "#/components/parameters/variantMinLength"
+                    },
+                    {
+                        "$ref": "#/components/parameters/variantMaxLength"
+                    },
+                    {
+                        "$ref": "#/components/parameters/genomicAlleleShortForm"
+                    },
+                    {
+                        "$ref": "#/components/parameters/geneId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/aminoacidChange"
+                    },
+                    {
+                        "$ref": "#/components/parameters/filters"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                    }
+                },
+                "tags": [
+                    "GET Endpoints"
+                ]
+            },
+            "post": {
+                "description": "Get a list of example entries",
+                "operationId": "postExampleEntriesRequest",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/requests/beaconRequestBody.json"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json",
+                        "description": "An unsuccessful operation"
+                    }
+                },
+                "tags": [
+                    "POST Endpoints"
+                ]
+            }
+        },
+        "/g_variants/{id}": {
+            "get": {
+                "description": "Get details about one genomic variation, identified by its (unique) 'id'",
+                "operationId": "getOneGenomicVariation",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json",
+                        "description": "An unsuccessful operation"
+                    }
+                },
+                "tags": [
+                    "GET Endpoints"
+                ]
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/entryId"
+                }
+            ],
+            "post": {
+                "description": "Get details about one genomic variation, identified by its (unique) 'id'",
+                "operationId": "postOneGenomicVariation",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/requests/beaconRequestBody.json"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json",
+                        "description": "An unsuccessful operation"
+                    }
+                },
+                "tags": [
+                    "POST Endpoints"
+                ]
+            }
+        },
+        "/g_variants/{id}/biosamples": {
+            "get": {
+                "description": "Get the biosamples list from one genomic variant, identified by its (unique) 'id'",
+                "operationId": "getOneGenomicVariantBiosamples",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/requestedSchema"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skip"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json",
+                        "description": "An unsuccessful operation"
+                    }
+                },
+                "tags": [
+                    "GET Endpoints"
+                ]
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/entryId"
+                }
+            ],
+            "post": {
+                "description": "Get the biosamples list from one genomic variant, identified by its (unique) 'id'",
+                "operationId": "postOneGenomicVariantBiosamples",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/requests/beaconRequestBody.json"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json",
+                        "description": "An unsuccessful operation"
+                    }
+                },
+                "tags": [
+                    "POST Endpoints"
+                ]
+            }
+        },
+        "/g_variants/{id}/individuals": {
+            "get": {
+                "description": "Get the individuals list from one genomic variant, identified by its (unique) 'id'",
+                "operationId": "getOneGenomicVariantIndividuals",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/requestedSchema"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skip"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json",
+                        "description": "An unsuccessful operation"
+                    }
+                },
+                "tags": [
+                    "GET Endpoints"
+                ]
+            },
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/entryId"
+                }
+            ],
+            "post": {
+                "description": "Get the biosamples list from one genomic variant, identified by its (unique) 'id'",
+                "operationId": "postOneGenomicVariantIndividuals",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/requests/beaconRequestBody.json"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json",
+                        "description": "An unsuccessful operation"
+                    }
+                },
+                "tags": [
+                    "POST Endpoints"
+                ]
+            }
+        }
+    },
+    "servers": []
+}

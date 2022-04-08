@@ -11,6 +11,7 @@ defaults:
   pagination:
     skip: 0
     limit: 2000
+  include_resultset_responses: true
 meta:
   beacon_id: org.progenetix
   returned_schemas:
@@ -22,7 +23,3 @@ meta:
       - entity_type: cohort
         schema: https://progenetix.org/services/schemas/cohort
   returned_granularity: record
-include_resultset_responses:
-  - HIT
-  - ALL
-  - NONE

@@ -44,7 +44,11 @@ def schemas():
     if not "empty_value" in schema_name:
 
         # print(schema_name)
-        s = read_schema_file(schema_name, "", byc)
+        j = rest_path_value(schema_name)
+        if "json" in j:
+            s = read_schema_file(schema_name, "", byc, "json")
+        else:
+            s = read_schema_file(schema_name, "", byc)
         # print(s)
 
         if not s is False:

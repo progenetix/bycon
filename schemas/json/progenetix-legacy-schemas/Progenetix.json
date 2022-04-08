@@ -1,0 +1,42 @@
+{
+    "$id": "https://progenetix.org/services/schemas/Progenetix/v2021-03-05",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "definitions": {
+        "biosample": {
+            "$ref": "biosample.json#/properties"
+        },
+        "callset": {
+            "$ref": "Callset.json#/properties"
+        },
+        "id": "#root",
+        "individual": {
+            "$ref": "individual.json#/properties"
+        },
+        "variant": {
+            "$ref": "variant.json#/properties"
+        }
+    },
+    "description": "This is the root schema for the Progenetix resource, corresponding to the principle elements of the core data schema.\n",
+    "meta": {
+        "contributors": [
+            {
+                "description": "Michael Baudis",
+                "id": "orcid:0000-0002-9903-4248"
+            }
+        ],
+        "provenance": [
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            }
+        ],
+        "sb_status": "community",
+        "used_by": [
+            {
+                "description": "Progenetix database schema (Beacon+ backend)",
+                "id": "https://github.com/progenetix/schemas/"
+            }
+        ]
+    },
+    "title": "Progenetix"
+}

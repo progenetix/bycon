@@ -1,0 +1,55 @@
+{
+    "$id": "https://progenetix.org/services/schemas/IntervalFrequencies/v2022-02-16",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "This schema represents genomic event frequencies for binned genome intervals.\n",
+    "meta": {
+        "contributors": [
+            {
+                "description": "Michael Baudis",
+                "id": "orcid:0000-0002-9903-4248"
+            }
+        ],
+        "provenance": [
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            }
+        ],
+        "sb_status": "community",
+        "used_by": [
+            {
+                "description": "Progenetix database",
+                "id": "https://github.com/progenetix/"
+            }
+        ]
+    },
+    "properties": {
+        "datasetId": {
+            "description": "The dataset this ferequency set was derived from.",
+            "examples": [
+                "progenetix"
+            ],
+            "type": "string"
+        },
+        "groupId": {
+            "description": "The idemntifier for this frequency set (typically a CURIE).",
+            "examples": [
+                "NCIT:C3730"
+            ],
+            "type": "string"
+        },
+        "intervalFrequencies": {
+            "description": "Array of frequency objects.\n",
+            "items": "IntervalFrequencyItem.json/#properties",
+            "type": "array"
+        },
+        "sourceCollection": {
+            "description": "The gatabase collection that was queried to gather the response items.\n",
+            "examples": [
+                "callsets"
+            ],
+            "type": "string"
+        }
+    },
+    "title": "IntervalFrequencies"
+}

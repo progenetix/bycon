@@ -1,0 +1,18 @@
+{
+    "$id": "https://progenetix.org/services/schemas/update/v2022-04-06",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "Update information used with a Phenopacket.",
+    "properties": {
+        "comment": {
+            "type": "string"
+        },
+        "timestamp": {
+            "$ref": "..common//commonDefinitions.json#/definitions/Timestamp"
+        },
+        "updatedBy": {
+            "type": "string"
+        }
+    },
+    "title": "Update",
+    "type": "object"
+}

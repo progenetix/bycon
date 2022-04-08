@@ -1,0 +1,183 @@
+{
+    "$id": "https://progenetix.org/services/schemas/pgxCallset/v2022-03-07",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "definitions": {
+        "Chrofractions": {
+            "properties": {
+                "1": {
+                    "$ref": "#/definitions/Cnvstatistics/properties"
+                },
+                "1p": {
+                    "$ref": "#/definitions/Cnvstatistics/properties"
+                },
+                "1q": {
+                    "$ref": "#/definitions/Cnvstatistics/properties"
+                },
+                "additionalProperties": true
+            }
+        },
+        "Cnvstatistics": {
+            "properties": {
+                "cnvcoverage": {
+                    "description": "sum of genome bases called as CNV",
+                    "type": "integer"
+                },
+                "cnvfraction": {
+                    "description": "genome fraction called as CNV",
+                    "max": 1,
+                    "min": 0,
+                    "type": "number"
+                },
+                "delcoverage": {
+                    "description": "sum of genome bases called as loss CNV",
+                    "type": "integer"
+                },
+                "delfraction": {
+                    "description": "genome fraction called as CNV",
+                    "max": 1,
+                    "min": 0,
+                    "type": "number"
+                },
+                "dupcoverage": {
+                    "description": "sum of genome bases called as gain CNV",
+                    "type": "integer"
+                },
+                "dupfraction": {
+                    "description": "genome fraction called as CNV",
+                    "max": 1,
+                    "min": 0,
+                    "type": "number"
+                }
+            }
+        },
+        "Statusmaps": {
+            "properties": {
+                "binning": {
+                    "description": "type of genomic bins",
+                    "examples": [
+                        "1Mb"
+                    ],
+                    "type": "string"
+                },
+                "del": {
+                    "description": "Array of fractional values for the loss coverage...",
+                    "items": "number",
+                    "type": "array"
+                },
+                "dup": {
+                    "description": "Array of fractional values for the gain coverage of the respective genomic bins. The length of the array corresponds to the `interval_count` value.",
+                    "items": "number",
+                    "type": "array"
+                },
+                "interval_count": {
+                    "description": "number of genomic bins",
+                    "type": "integer"
+                },
+                "max": {
+                    "description": "Array of the maximum values (usually log2) observed in the called bins",
+                    "items": "number",
+                    "type": "array"
+                },
+                "min": {
+                    "description": "Array of the minimum values (usually log2) observed in the called bins",
+                    "items": "number",
+                    "type": "array"
+                }
+            }
+        }
+    },
+    "properties": {
+        "biosampleId": {
+            "examples": [
+                "pgxbs-kftva59y"
+            ],
+            "type": "string"
+        },
+        "cnvChroStats": {
+            "$ref": "#/definitions/Cnvstatistics/properties"
+        },
+        "cnvStats": {
+            "$ref": "#/definitions/Cnvstatistics/properties"
+        },
+        "cnvStatusmaps": {
+            "$ref": "#/definitions/Statusmaps/properties"
+        },
+        "dataUseConditions": {
+            "$ref": "../common/ontologyTerm.json#/properties"
+        },
+        "description": {
+            "examples": [
+                "SNP6 array"
+            ],
+            "type": "string"
+        },
+        "experimentAccession": {
+            "$ref": "../common/ontologyTerm.json#/properties",
+            "description": "Identifier for primary experimental data.",
+            "examples": [
+                {
+                    "id": "geo:GSM93480"
+                }
+            ]
+        },
+        "id": {
+            "examples": [
+                "pgxcs-kftvldsu"
+            ],
+            "type": "string"
+        },
+        "individualId": {
+            "examples": [
+                "pgxbs-kftva59y"
+            ],
+            "type": "string"
+        },
+        "info": {
+            "type": "object"
+        },
+        "platformModel": {
+            "$ref": "../common/ontologyTerm.json#/properties",
+            "description": "Ontology value for experimental platform or methodology used. For sequencing platforms the use of \"OBI:0400103 - DNA sequencer\" is suggested.",
+            "examples": [
+                {
+                    "id": "geo:GPL3381",
+                    "label": "Stanford Microarray Facility cDNA array [SHDV]"
+                },
+                {
+                    "id": "OBI:0002750",
+                    "label": "Oxford Nanopore MinION"
+                },
+                {
+                    "id": "EFO:0010938",
+                    "label": "large-insert clone DNA microarray"
+                }
+            ]
+        },
+        "provenance": {
+            "$ref": "../common/provenance.json#/properties"
+        },
+        "seriesAccession": {
+            "$ref": "../common/ontologyTerm.json#/properties",
+            "description": "Identifier for primary experimental series.",
+            "examples": [
+                {
+                    "id": "geo:GSE4079"
+                }
+            ]
+        },
+        "updated": {
+            "examples": [
+                "2020-09-10T17:44:10.170Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+        }
+    },
+    "required": [
+        "id",
+        "biosampleId"
+    ],
+    "title": "pgxCallset",
+    "type": "object"
+}

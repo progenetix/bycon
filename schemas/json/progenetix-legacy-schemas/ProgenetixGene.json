@@ -1,0 +1,125 @@
+{
+    "$id": "https://progenetix.org/services/schemas/ProgenetixGene/v2021-03-05",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "description": "Genomic mapping position of the coding region of a gene.",
+    "meta": {
+        "contributors": [
+            {
+                "description": "Michael Baudis",
+                "id": "orcid:0000-0002-9903-4248"
+            }
+        ],
+        "provenance": [
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            },
+            {
+                "description": "NCBI gene report",
+                "id": "https://www.ncbi.nlm.nih.gov/datasets/docs/reference-docs/data-reports/gene/"
+            }
+        ],
+        "sb_status": "community"
+    },
+    "properties": {
+        "accessionVersion": {
+            "examples": [
+                "NC_000016.10",
+                "NW_003315972.2"
+            ],
+            "type": "string"
+        },
+        "end": {
+            "examples": [
+                7676593
+            ],
+            "type": "integer"
+        },
+        "ensemblGene_Ids": {
+            "examples": [
+                [
+                    "ENSG00000147889"
+                ]
+            ],
+            "items": "string",
+            "type": "array"
+        },
+        "geneId": {
+            "examples": [
+                "1029"
+            ],
+            "type": "string"
+        },
+        "geneLocusLength": {
+            "examples": [
+                27572
+            ],
+            "type": "integer"
+        },
+        "geneType": {
+            "examples": [
+                "PROTEIN_CODING"
+            ],
+            "type": "string"
+        },
+        "omimIds": {
+            "examples": [
+                [
+                    "600160"
+                ]
+            ],
+            "items": "string",
+            "type": "array"
+        },
+        "referenceName": {
+            "examples": [
+                "17",
+                "X"
+            ],
+            "type": "string"
+        },
+        "start": {
+            "examples": [
+                7669608
+            ],
+            "type": "integer"
+        },
+        "swissProtAccessions": {
+            "examples": [
+                [
+                    "P42771",
+                    "Q8N726"
+                ]
+            ],
+            "items": "string",
+            "type": "array"
+        },
+        "symbol": {
+            "examples": [
+                "TP53"
+            ],
+            "type": "string"
+        },
+        "synonyms": {
+            "examples": [
+                [
+                    "ARF",
+                    "MLM",
+                    "P14",
+                    "P16",
+                    "P19",
+                    "INK4"
+                ]
+            ],
+            "items": "string",
+            "type": "array"
+        }
+    },
+    "required": {
+        "all_of": [
+            "referenceName start end symbol"
+        ]
+    },
+    "title": "ProgenetixGene"
+}

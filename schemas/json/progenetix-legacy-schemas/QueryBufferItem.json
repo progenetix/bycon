@@ -1,0 +1,80 @@
+{
+    "$id": "https://progenetix.org/services/schemas/QueryBufferItem/v2020-12-08",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "This schema represents objects for the temporary storage of Progenetix / bycon\nquery results.\n",
+    "meta": {
+        "contributors": [
+            {
+                "description": "Michael Baudis",
+                "id": "orcid:0000-0002-9903-4248"
+            }
+        ],
+        "provenance": [
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            }
+        ],
+        "sb_status": "community",
+        "used_by": [
+            {
+                "description": "Progenetix database schema (Beacon+ backend)",
+                "id": "https://github.com/progenetix/schemas/"
+            }
+        ]
+    },
+    "properties": {
+        "id": {
+            "description": "The unique identifier of this query result object in string format, e.g.\nas a UUID v4.\n",
+            "examples": [
+                "37cff434-2c4d-11eb-827a-c21bd2cbdf2b"
+            ],
+            "type": "string"
+        },
+        "sourceCollection": {
+            "description": "The gatabase collection that was queried to gather the response items.\n",
+            "examples": [
+                "callsets"
+            ],
+            "type": "string"
+        },
+        "sourceDb": {
+            "description": "The name of the database the query belongs to.\n",
+            "examples": [
+                "progenetix"
+            ],
+            "type": "string"
+        },
+        "sourceKey": {
+            "description": "The key in the sourceCollection that provided the response values stored\nin this QueryBufferItem.\n",
+            "type": "string"
+        },
+        "targetCollection": {
+            "description": "The database collection that should be queried with the targetValues.\n",
+            "examples": [
+                "biosamples"
+            ],
+            "type": "string"
+        },
+        "targetCount": {
+            "type": "integer"
+        },
+        "targetKey": {
+            "description": "The key in the targetCollection that should be used for creating a query\nagainst, using the targetValues.\n",
+            "examples": [
+                "_id",
+                "id",
+                "biosample_id"
+            ],
+            "type": "string"
+        },
+        "targetValues": {
+            "description": "The identifiers (e.g. biosample_id values or _id ObjectId values) used to retrieve tha data through matching them to the targetKey in the targetCollection. NOTE - While the type here is given as string they may also be internal identifiers such as MongoDB ObjectId entries.",
+            "items": {
+                "type": "string"
+            },
+            "type": "array"
+        }
+    },
+    "title": "QueryBufferItem"
+}

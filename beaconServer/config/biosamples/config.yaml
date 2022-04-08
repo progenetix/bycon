@@ -9,6 +9,7 @@ defaults:
   pagination:
     skip: 0
     limit: 2000
+  include_resultset_responses: HIT
 bycon_definition_files:
   - beacon_info
   - beacon_endpoints
@@ -27,7 +28,3 @@ response_types:
   - genomicVariation
   - run
   - analysis
-include_resultset_responses:
-  - HIT
-  - ALL
-  - NONE

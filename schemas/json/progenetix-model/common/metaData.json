@@ -1,0 +1,36 @@
+{
+    "$id": "https://progenetix.org/services/schemas/metaData/v2022-04-06",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "Metadata to be used with a Phenopacket.",
+    "properties": {
+        "createdBy": {
+            "type": "string"
+        },
+        "externalReferences": {
+            "items": {
+                "$ref": "../common/externalReference.json#/properties"
+            },
+            "type": "array"
+        },
+        "phenopacketSchemaVersion": {
+            "type": "string"
+        },
+        "resources": {
+            "items": {
+                "$ref": "resource.json#/properties"
+            },
+            "type": "array"
+        },
+        "submittedBy": {
+            "type": "string"
+        },
+        "updates": {
+            "items": {
+                "$ref": "update.json#/properties"
+            },
+            "type": "array"
+        }
+    },
+    "title": "Metadata",
+    "type": "object"
+}

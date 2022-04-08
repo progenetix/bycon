@@ -1,0 +1,13 @@
+{
+    "$id": "https://progenetix.org/services/schemas/OntologyClassGroup/v2022-02-15",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+        "term_groups": {
+            "items": {
+                "$ref": "OntologyClass.json#/properties"
+            },
+            "type": "array"
+        }
+    },
+    "title": "OntologyClassGroup"
+}

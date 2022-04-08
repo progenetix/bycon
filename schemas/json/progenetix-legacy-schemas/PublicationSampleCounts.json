@@ -1,0 +1,57 @@
+{
+    "$id": "https://progenetix.org/services/schemas/PublicationSampleCounts/v2021-04-13",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "PublicationSampleCounts contains the count data for publication content, used for the Progenetix publications collection.\n",
+    "meta": {
+        "contributors": [
+            {
+                "description": "Michael Baudis",
+                "id": "orcid:0000-0002-9903-4248"
+            }
+        ],
+        "provenance": [
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            }
+        ],
+        "sb_status": "community",
+        "used_by": [
+            {
+                "description": "Progenetix database schema (Beacon+ backend)",
+                "id": "https://github.com/progenetix/schemas/"
+            }
+        ]
+    },
+    "properties": {
+        "acgh": {
+            "description": "The number of samples reported in this publication analyzed by any type of genomic hybridization array\n",
+            "type": "integer"
+        },
+        "ccgh": {
+            "description": "The number of samples reported in this publication analyzed by chromosomal Comparative Genomic Hybridization (CGH)\n",
+            "type": "integer"
+        },
+        "genomes": {
+            "description": "The number of samples reported in this publication analyzed. The number is at least the maximum of ccgh, acgh, wes, wgs.\n",
+            "type": "integer"
+        },
+        "ngs": {
+            "description": "The number of samples reported in this publication analyzed by any of WGS and/or WES. The number is at least the maximum of wes and wgs.\n",
+            "type": "integer"
+        },
+        "progenetix": {
+            "description": "The number of samples from this publication in the Progenetix biosamples collection\n",
+            "type": "integer"
+        },
+        "wes": {
+            "description": "The number of samples reported in this publication analyzed by whole exome sequencing (WES)\n",
+            "type": "integer"
+        },
+        "wgs": {
+            "description": "The number of samples reported in this publication analyzed by whole genome sequencing (WGS)\n",
+            "type": "integer"
+        }
+    },
+    "title": "Publication"
+}

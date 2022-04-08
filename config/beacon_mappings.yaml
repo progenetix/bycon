@@ -34,6 +34,18 @@ service_names:
   variant_interpretations: variantInterpretations
 
 #response_type_aliases:
+default_schema_from_model:
+  biosample: biosamples
+  variant: genomicVariations
+  g_variant: genomicVariations
+  individual: individuals
+  dataset: datasets
+  cohort: cohorts
+  run: runs
+  analysis: analyses
+  callset: analyses
+
+
 path_response_type_mappings:
 
   analyses: analysis

@@ -209,7 +209,7 @@ def cgi_simplify_response(byc):
 
 def cgi_break_on_errors(byc):
 
-    e = byc["error_response"]
+    e_c = byc["error_response"]["error"].get("error_code", 200)
 
     # TODO: temp hack
     for k in byc["service_response"].keys():
@@ -218,8 +218,8 @@ def cgi_break_on_errors(byc):
         if "all_of" in byc["service_response"][k]:
             byc["service_response"][k].pop("all_of")
 
-    if e["error"]["error_code"] > 200:
-        cgi_print_response( byc, e["error"]["error_code"] )
+    if e_c > 200:
+        cgi_print_response( byc, e_c )
 
 ################################################################################
 
@@ -305,7 +305,9 @@ def update_error_code_from_response_summary(byc):
 
 def switch_to_error_response(byc):
 
-    if byc["error_response"]["error"]["error_code"] > 200:
+    e_c = byc["error_response"]["error"].get("error_code", 200)
+
+    if e_c > 200:
         if "meta" in byc["service_response"]:
             byc["error_response"].update({ "meta": byc["service_response"]["meta"]})
         byc["service_response"] = byc["error_response"]

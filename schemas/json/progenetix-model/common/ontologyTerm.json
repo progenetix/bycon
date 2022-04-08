@@ -1,0 +1,29 @@
+{
+    "$id": "https://progenetix.org/services/schemas/ontologyTerm/v2021-11-12",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "description": "The `ontologyTerm` object is the main wrapper for identifiers, used for well-formed CURIE representations of ontology classes for biological or technical concepts and knowledge resources, as well as for \"private\" identifiers such as internal classifications. \n",
+    "properties": {
+        "id": {
+            "description": "Identifier as string (CURIE highly recommended). ",
+            "examples": [
+                "UBERON:0000002",
+                "PMID:9892199",
+                "icdom-85003"
+            ],
+            "type": "string"
+        },
+        "label": {
+            "examples": [
+                "neoplastic sample",
+                "Adenocarcinoma, NOS"
+            ],
+            "type": "string"
+        }
+    },
+    "required": [
+        "id"
+    ],
+    "title": "ontologyTerm",
+    "type": "object"
+}

@@ -1,0 +1,74 @@
+{
+    "$id": "https://progenetix.org/services/schemas/GeoJSONgeometry/v2021-04-14",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "The geographic point object uses the default units from the [DCMI point scheme](http://dublincore.org/documents/dcmi-point/) and avoids optional representation in non-standard units.\n",
+    "meta": {
+        "contributors": [
+            {
+                "description": "GA4GH Metadata Task Team"
+            },
+            {
+                "description": "Michael Baudis",
+                "id": "orcid:0000-0002-9903-4248"
+            },
+            {
+                "description": "Isuru Liyanage",
+                "id": "orcid:0000-0002-4839-5158"
+            },
+            {
+                "description": "Melanie Courtot",
+                "id": "orcid:0000-0002-9551-6370"
+            }
+        ],
+        "provenance": [
+            {
+                "description": "Developer branch of original GA4GH schema",
+                "id": "https://github.com/ga4gh-metadata/metadata-schemas/blob/master/schemas/shared.proto#L60"
+            },
+            {
+                "description": "IETF GeoJSON pecification",
+                "id": "https://tools.ietf.org/html/rfc7946"
+            },
+            {
+                "description": "Progenetix",
+                "id": "https://github.com/progenetix/schemas/"
+            }
+        ],
+        "sb_status": "proposed",
+        "used_by": [
+            {
+                "description": "Progenetix database schema (Beacon+ backend)",
+                "id": "https://github.com/progenetix/schemas/"
+            }
+        ]
+    },
+    "properties": {
+        "coordinates": {
+            "description": "An array of 2 (longitude, latitude) or 3 (longitude, latitude, altitude) values.\n",
+            "examples": [
+                [
+                    47.37,
+                    8.55
+                ],
+                [
+                    86.925026,
+                    27.98785,
+                    8848.86
+                ]
+            ],
+            "items": {
+                "format": "float",
+                "type": "number"
+            },
+            "maxItems": 3,
+            "minItems": 2,
+            "type": "array"
+        },
+        "type": {
+            "type": "string",
+            "value": "Point"
+        }
+    },
+    "title": "GeoJSON Geometry",
+    "type": "object"
+}
