@@ -4,14 +4,18 @@ bycon_definition_files:
   - cohort_definitions
   - dataset_definitions
   - filter_definitions
+  - variant_definitions
+  - interval_definitions
+  - handover_definitions
 defaults:
   response_type: cohort
   stats_number: 1
-  test_document_id: TCGAcancers
+  test_document_id: pgx:cohort-TCGAcancers
+  response_schema: beaconCollectionsResponse
   pagination:
     skip: 0
     limit: 2000
-  include_resultset_responses: true
+  include_resultset_responses: false
 meta:
   beacon_id: org.progenetix
   returned_schemas:

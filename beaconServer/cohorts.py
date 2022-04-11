@@ -1,9 +1,8 @@
 #!/usr/local/bin/python3
 
-import cgi, cgitb
-import re, json, yaml
+import cgi, cgitb, sys, os, datetime, re, json, yaml
 from os import environ, pardir, path
-import sys, os, datetime
+from pymongo import MongoClient
 
 # local
 dir_path = path.dirname(path.abspath(__file__))
@@ -37,33 +36,50 @@ def collections():
 def cohorts():
 
     initialize_service(byc)
+    run_beacon_init_stack(byc)
+    return_filtering_terms_response(byc)
 
-    select_dataset_ids(byc)
-    check_dataset_ids(byc)
-    _get_history_depth(byc)
+    _return_cohorts_response(byc)
 
-    create_empty_beacon_response(byc)
-
-    results = datasets_update_latest_stats(byc, "cohorts")
-
-    populate_service_response( byc, results )
-    byc["service_response"]["response"]["collections"] = byc["service_response"]["response"].pop("results")
+    run_result_sets_beacon(byc)
+    query_results_save_handovers(byc)
+    check_computed_interval_frequency_delivery(byc)
+    check_switch_to_count_response(byc)
+    check_switch_to_boolean_response(byc)
     cgi_print_response( byc, 200 )
+
 
 ################################################################################
 
-def _get_history_depth(byc):
+def _return_cohorts_response(byc):
 
-    if "statsNumber" in byc["form_data"]:
-        s_n = byc["form_data"]["statsNumber"]
-        try:
-            s_n = int(s_n)
-        except:
-            pass
-        if type(s_n) == int:
-            if s_n > 0:
-                byc.update({"stats_number": s_n})
-    return byc
+    if not "cohort" in byc["response_type"]:
+        return byc
+
+    mongo_client = MongoClient( )
+
+    collections =  []
+
+    if byc["test_mode"] is True:
+        byc["queries"].update({"cohorts": {"id": {"$regex": ":cohort"} } } )
+
+    try:
+        query = byc["queries"]["cohorts"]
+        
+        for ds_id in byc[ "dataset_ids" ]:
+            mongo_db = mongo_client[ ds_id ]        
+            mongo_coll = mongo_db[ "collations" ]
+
+            for subset in mongo_coll.find( query ):
+                collections.append(subset)
+                byc["service_response"]["response_summary"].update({"exists":True})
+    except:
+        pass
+
+    byc["service_response"]["response"].pop("result_sets", None)
+    byc["service_response"]["response"].update({"collections":collections})
+    byc["service_response"]["response_summary"].update({"num_total_results":len(collections)})
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

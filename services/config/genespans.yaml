@@ -1,5 +1,6 @@
 bycon_definition_files:
   - service_mappings
+  - beacon_mappings
 defaults:
   dataset_ids:
     - progenetix

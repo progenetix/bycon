@@ -38,6 +38,7 @@ def generate_queries(byc):
 
     _update_queries_from_path_id( byc )
     _update_queries_from_id_values( byc )
+    _update_queries_from_cohorts_query(byc)
     _update_queries_from_filters( byc )
     _update_queries_from_hoid( byc)
     _update_queries_from_variants( byc )
@@ -96,7 +97,7 @@ def replace_queries_in_test_mode(byc, ret_no=10):
 
 def _update_queries_from_path_id( byc ):
 
-    dummy_id_patterns = ["_id_", "__id__", "___id___", "_test_", "__test__", "___test___", r'{id}' ]
+    # dummy_id_patterns = ["_id_", "__id__", "___id___", "_test_", "__test__", "___test___", r'{id}' ]
 
     if not environ.get('REQUEST_URI'):
         return byc
@@ -125,9 +126,9 @@ def _update_queries_from_path_id( byc ):
     if p_id:
         if not "empty_value" in p_id:
             s_id = p_id
-            if s_id in dummy_id_patterns:
-                if "defaults" in byc["this_config"]:
-                    s_id = byc["this_config"]["defaults"].get("test_document_id", "")
+            # if s_id in dummy_id_patterns:
+            #     if "defaults" in byc["this_config"]:
+            #         s_id = byc["this_config"]["defaults"].get("test_document_id", "")
 
             byc.update({ "id_from_path": s_id })
 
@@ -138,6 +139,9 @@ def _update_queries_from_path_id( byc ):
             r_t = rest_path_value(p_id)
             if not "empty_value" in r_t:
                 byc.update({"response_type": _get_response_type_from_path(r_t, byc) })
+
+            # print(byc["queries"])
+            # print(byc["response_type"])
 
     return byc
 
@@ -156,6 +160,29 @@ def _get_response_type_from_path(path_element, byc):
     return path_element
 
 ################################################################################
+
+def _update_queries_from_cohorts_query(byc):
+
+    if not "cohorts" in byc["queries"]:
+        return byc
+
+    if "cohort" in byc["response_type"]:
+        return byc
+
+    c_q = byc["queries"]["cohorts"]
+
+    query = {}
+    if "id" in c_q:
+        query = {"cohorts.id": c_q["id"]}
+
+    byc["queries"].pop("cohorts", None)
+
+    update_query_for_scope( byc, query, "biosamples")
+
+    return byc
+
+################################################################################
+
 
 def _update_queries_from_id_values(byc):
 

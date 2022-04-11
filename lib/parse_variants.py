@@ -39,6 +39,9 @@ def translate_reference_ids(byc):
 
 def parse_variants(byc):
 
+    if not "variant_definitions" in byc:
+        return byc
+
     variant_pars = { }
     v_p_defs = byc["variant_definitions"]["parameters"]
     v_t_defs = byc["variant_definitions"]["variant_types"]
@@ -117,6 +120,9 @@ def get_variant_request_type(byc):
     This may be changed to using a pre-defined request type and using this as
     completeness check only.
     podmd"""
+
+    if not "variant_pars" in byc:
+        return byc
 
     variant_request_type = "no correct variant request"
 

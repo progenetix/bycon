@@ -1,6 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 maturityAttributes:
-  productionStatus: DEV
+  productionStatus: PROD
 securityAttributes:
   defaultGranularity: record
   securityLevels:
@@ -18,13 +18,19 @@ entryTypes:
       Beacon context, a datasets may consist of information generated in a specific
       study or project, or represent the main content of the Beacon resource.
     defaultSchema:
-      id: ga4gh-beacon-dataset-v2.0.0
+      id: dataset
       name: Default schema for datasets
-      referenceToSchemaDefinition: https://exampleBeacons.org/datasets/defaultSchema.json
+      referenceToSchemaDefinition: http://progenetix.org/services/schemas/dataset
       schemaVersion: v2.0.0
     aCollectionOf:
       - id: genomicVariant
         name: Genomic Variants
+      - id: biosample
+        name: Biosamples
+      - id: individual
+        name: Individuals
+      - id: analysis
+        name: Genomic Analyses
     additionalSupportedSchemas: []
   cohort:
     id: cohort
@@ -36,9 +42,9 @@ entryTypes:
     description: A group of individuals, identified by a common characteristic. [
       NCI ]
     defaultSchema:
-      id: ga4gh-beacon-cohort-v2.0.0
+      id: cohort
       name: Default schema for cohorts
-      referenceToSchemaDefinition: https://exampleBeacons.org/cohorts/defaultSchema.json
+      referenceToSchemaDefinition: http://progenetix.org/services/schemas/cohort
       schemaVersion: v2.0.0
     aCollectionOf:
       - id: individual
@@ -53,9 +59,9 @@ entryTypes:
     partOfSpecification: Beacon v2.0.0
     description: The location of a sequence.
     defaultSchema:
-      id: ga4gh-beacon-variant-v2.0.0
+      id: variant
       name: Default schema for a genomic variation
-      referenceToSchemaDefinition: https://exampleBeacons.org/genomicVariations/defaultSchema.json
+      referenceToSchemaDefinition: http://progenetix.org/services/schemas/variant
       schemaVersion: v2.0.0
     additionallySupportedSchemas: []
   individual:
@@ -68,10 +74,9 @@ entryTypes:
     description: A human being. It could be a Patient, a Tissue Donor, a Participant,
       a Human Study Subject, etc.
     defaultSchema:
-      id: ga4gh-beacon-individual-v2.0.0
+      id: individual
       name: Default schema for an individual
-      referenceToSchemaDefinition: https://exampleBeacons.org/individuals/defaultSchema.json
-      schemaVersion: v2.0.0
+      referenceToSchemaDefinition: http://progenetix.org/services/schemas/individual
     additionallySupportedSchemas: []
   biosample:
     id: biosample
@@ -87,14 +92,13 @@ entryTypes:
       not limited to cellular molecules, cells, tissues, organs, body fluids, embryos,
       and body excretory products. [ NCI ]
     defaultSchema:
-      id: ga4gh-beacon-biosample-v2.0.0
+      id: biosample
       name: Default schema for a biological sample
-      referenceToSchemaDefinition: https://exampleBeacons.org/biosamples/defaultSchema.json
-      schemaVersion: v2.0.0
+      referenceToSchemaDefinition: http://progenetix.org/services/schemas/biosample
     additionallySupportedSchemas: []
   run:
     id: run
-    name: Sequencing run
+    name: Experimental run
     ontologyTermForThisType:
       id: NCIT:C148088
       label: Sequencing run
@@ -102,22 +106,35 @@ entryTypes:
     description: The valid and completed operation of a high-throughput sequencing
       instrument for a single sequencing process. [ NCI ]
     defaultSchema:
-      id: ga4gh-beacon-run-v2.0.0
+      id: run
       name: Default schema for a sequencing run
-      referenceToSchemaDefinition: https://exampleBeacons.org/runs/defaultSchema.json
+      referenceToSchemaDefinition: http://progenetix.org/services/schemas/run
       schemaVersion: v2.0.0
     additionallySupportedSchemas: []
   analysis:
     id: analysis
-    name: Bioinformatics analysis
+    name: Bioinformatics analysis of a genomic experiment
     ontologyTermForThisType:
       id: edam:operation_2945
       label: Analysis
     partOfSpecification: Beacon v2.0.0
     description: Apply analytical methods to existing data of a specific type.
     defaultSchema:
-      id: ga4gh-beacon-analysis-v2.0.0
+      id: analysis
       name: Default schema for a bioinformatics analysis
-      referenceToSchemaDefinition: https://exampleBeacons.org/analyses/defaultSchema.json
+      referenceToSchemaDefinition: http://progenetix.org/services/schemas/analysis
       schemaVersion: v2.0.0
+    additionallySupportedSchemas: []
+  phenopacket:
+    id: phenopacket
+    name: Phenopacket
+    ontologyTermForThisType:
+      id: NCIT:C25190
+      label: Person
+    partOfSpecification: BeaconPlus
+    description: Information about a subject in phenopackets format
+    defaultSchema:
+      id: phenopacket
+      name: Default schema for an phenopacket
+      referenceToSchemaDefinition: http://progenetix.org/services/schemas/phenopacket
     additionallySupportedSchemas: []

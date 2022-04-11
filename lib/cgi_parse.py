@@ -84,11 +84,9 @@ def cgi_parse_query(byc):
 
         return byc
 
-    byc.update({"debug_state": set_debug_state()})
+    # else GET processing
 
-    # TODO: The structure, types of the request/form object need to go to a
-    # config and some deeper processing, for proper beacon request objects
-    # also, defaults etc.
+    byc.update({"debug_state": set_debug_state()})
     get = cgi.FieldStorage()
 
     for p in get:

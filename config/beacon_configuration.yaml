@@ -24,24 +24,24 @@ entryTypes:
       - id: genomicVariant
         name: Genomic Variants
     additionalSupportedSchemas: []
-  # cohort:
-  #   id: cohort
-  #   name: Cohort
-  #   ontologyTermForThisType:
-  #     id: NCIT:C61512
-  #     label: Cohort
-  #   partOfSpecification: Beacon v2.0.0
-  #   description: A group of individuals, identified by a common characteristic. [
-  #     NCI ]
-  #   defaultSchema:
-  #     id: ga4gh-beacon-cohort-v2.0.0
-  #     name: Default schema for cohorts
-  #     referenceToSchemaDefinition: ./cohorts/defaultSchema.json
-  #     schemaVersion: v2.0.0
-  #   aCollectionOf:
-  #     - id: individual
-  #       name: Individuals
-  #   additionalSupportedSchemas: []
+  cohort:
+    id: cohort
+    name: Cohort
+    ontologyTermForThisType:
+      id: NCIT:C61512
+      label: Cohort
+    partOfSpecification: Beacon v2.0.0
+    description: A group of individuals, identified by a common characteristic. [
+      NCI ]
+    defaultSchema:
+      id: ga4gh-beacon-cohort-v2.0.0
+      name: Default schema for cohorts
+      referenceToSchemaDefinition: ./cohorts/defaultSchema.json
+      schemaVersion: v2.0.0
+    aCollectionOf:
+      - id: individual
+        name: Individuals
+    additionalSupportedSchemas: []
   genomicVariant:
     id: genomicVariant
     name: Genomic Variants

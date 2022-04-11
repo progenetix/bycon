@@ -44,7 +44,7 @@ default_schema_from_model:
   run: runs
   analysis: analyses
   callset: analyses
-
+  phenopacket: phenopackets
 
 path_response_type_mappings:
 
@@ -117,7 +117,7 @@ response_types:
     h->o_access_key: Null
 
   - entity_type: cohort
-    collection: dbstats
+    collection: collations
     response_schema: beaconCollectionsResponse
     beacon_schema:
       entity_type: cohort

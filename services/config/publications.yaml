@@ -1,6 +1,7 @@
 bycon_definition_files:
   - geoloc_definitions
   - service_mappings
+  - beacon_mappings
 defaults:
   method: concise
   dataset_ids:

@@ -2,6 +2,7 @@ bycon_definition_files:
   - service_mappings
   - dataset_definitions
   - filter_definitions
+  - beacon_mappings
 defaults:
   dataset_ids:
     - progenetix

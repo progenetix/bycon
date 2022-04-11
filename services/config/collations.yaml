@@ -2,6 +2,7 @@ bycon_definition_files:
   - filter_definitions
   - dataset_definitions
   - service_mappings
+  - beacon_mappings
 collection_name: collations
 defaults:
   dataset_ids:

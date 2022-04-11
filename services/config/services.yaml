@@ -1,2 +1,3 @@
 bycon_definition_files:
   - service_mappings
+  - beacon_mappings
