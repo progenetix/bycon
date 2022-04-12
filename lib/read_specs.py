@@ -31,7 +31,7 @@ def read_bycon_configs_by_name(name, byc):
 
 def read_local_prefs(service, dir_path, byc):
 
-    these_pars = ["config", "endpoints", "request_parameters"]
+    these_pars = ["config", "endpoints", "request_parameters"] # "config"
 
     for t_p in these_pars:
         t_k = "this_"+t_p
@@ -55,18 +55,6 @@ def read_local_prefs(service, dir_path, byc):
                 byc.update({ t_k: load_yaml_empty_fallback(t_f_p) } )
 
     return byc   
-
-################################################################################
-
-def read_yaml_with_key_to_object(file_key, data_key, **paths):
-
-    o = load_yaml_empty_fallback( path.join( paths[ "module_root" ], *paths[ file_key ] ) )
-
-    if data_key in o:
-        return o[ data_key ]
-
-    # TODO: error capture & procedure
-    return o
 
 ################################################################################
 
@@ -143,4 +131,3 @@ def load_yaml_empty_fallback(yp):
         pass
 
     return y
-

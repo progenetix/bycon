@@ -97,8 +97,6 @@ def replace_queries_in_test_mode(byc, ret_no=10):
 
 def _update_queries_from_path_id( byc ):
 
-    # dummy_id_patterns = ["_id_", "__id__", "___id___", "_test_", "__test__", "___test___", r'{id}' ]
-
     if not environ.get('REQUEST_URI'):
         return byc
 
@@ -126,9 +124,6 @@ def _update_queries_from_path_id( byc ):
     if p_id:
         if not "empty_value" in p_id:
             s_id = p_id
-            # if s_id in dummy_id_patterns:
-            #     if "defaults" in byc["this_config"]:
-            #         s_id = byc["this_config"]["defaults"].get("test_document_id", "")
 
             byc.update({ "id_from_path": s_id })
 
@@ -148,7 +143,7 @@ def _update_queries_from_path_id( byc ):
 ################################################################################
 
 def _get_response_type_from_path(path_element, byc):
-
+    
     try:
         t = byc["beacon_mappings"]["path_response_type_mappings"][path_element]
         for r_d in byc["beacon_mappings"]["response_types"]:

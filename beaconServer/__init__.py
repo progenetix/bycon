@@ -28,4 +28,6 @@ from variant_responses import *
 byc = initialize_bycon()
 c_f = Path( path.join( pkg_path, "config", "config.yaml" ) )
 byc.update({"config": load_yaml_empty_fallback( c_f )})
+d_f = Path( path.join( pkg_path, "config", "beacon_defaults.yaml" ) )
+byc.update({"beacon_defaults": load_yaml_empty_fallback( d_f )})
 cgi_parse_query(byc)

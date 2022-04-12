@@ -10,8 +10,8 @@ service_names:
   empty_value: info
   info: info
   service-info: info
-  analyses: callsets
-  callsets: callsets
+  analyses: analyses
+  callsets: analyses
   cohorts: cohorts
   configuration: configuration
   entryTypes: entryTypes
@@ -24,12 +24,12 @@ service_names:
   individuals: individuals
   map: map
   runs: runs
-  gVariants: variants
-  g_variants: variants
-  genomicVariations: variants
-  variants_in_sample: variants
-  variantsInSample: variants
-  variants: variants
+  gVariants: g_variants
+  g_variants: g_variants
+  genomicVariations: g_variants
+  variants_in_sample: g_variants
+  variantsInSample: g_variants
+  variants: g_variants
   variantInterpretations: variantInterpretations
   variant_interpretations: variantInterpretations
 
@@ -38,6 +38,7 @@ default_schema_from_model:
   biosample: biosamples
   variant: genomicVariations
   g_variant: genomicVariations
+  genomicVariant: genomicVariations
   individual: individuals
   dataset: datasets
   cohort: cohorts
@@ -56,13 +57,14 @@ path_response_type_mappings:
   biosamples: biosample
   individuals: individual
   runs: run
-  gVariants: variant
-  g_variants: variant
-  variants: variant
-  variants_in_sample: variant
-  variantsInSample: variant
-  variantInterpretations: variant
-  variant_interpretations: variant
+  gVariants: genomicVariant
+  g_variants: genomicVariant
+  map: beaconMap
+  variants: genomicVariant
+  variants_in_sample: genomicVariant
+  variantsInSample: genomicVariant
+  variantInterpretations: genomicVariant
+  variant_interpretations: genomicVariant
   info: info
   filtering_terms: filteringTerm
 
@@ -164,11 +166,11 @@ response_types:
       schema: https://progenetix.org/services/schemas/run/
     h->o_access_key: "callsets._id"
 
-  - entity_type: variant
+  - entity_type: genomicVariant
     response_schema: beaconResultsetsResponse
     collection: variants
     beacon_schema:
-      entity_type: genomicVariation
-      schema: https://progenetix.org/services/schemas/genomicVariation/    
+      entity_type: genomicVariant
+      schema: https://progenetix.org/services/schemas/genomicVariant/    
     h->o_access_key: "variants._id"
 

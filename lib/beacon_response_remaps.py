@@ -9,6 +9,7 @@ def reshape_resultset_results(ds_id, r_s_res, byc):
     r_s_res = remap_variants(r_s_res, byc)
     r_s_res = remap_analyses(r_s_res, byc)
     r_s_res = remap_biosamples(r_s_res, byc)
+    r_s_res = remap_cohorts(r_s_res, byc)
     r_s_res = remap_individuals(r_s_res, byc)
     r_s_res = remap_phenopackets(ds_id, r_s_res, byc)
     r_s_res = remap_runs(r_s_res, byc)
@@ -221,12 +222,31 @@ def remap_analyses(r_s_res, byc):
     for cs_i, cs_r in enumerate(r_s_res):
         # TODO: REMOVE VERIFIER HACKS
         r_s_res[cs_i].update({"pipeline_name": "progenetix", "analysis_date": "1967-11-11" })
-        try:
-            r_s_res[cs_i].pop("cnv_statusmaps")
-        except:
-            pass
+        r_s_res[cs_i].pop("cnv_statusmaps", None)
 
     return r_s_res
+
+################################################################################
+
+def remap_cohorts(r_s_res, byc):
+
+    if not "cohort" in byc["response_type"]:
+        return r_s_res
+
+    cohorts = [ ]
+
+    # TODO: expand parameters by adding more pre-computed to collations (individual counts ...)
+
+    for cs_i, cs_r in enumerate(r_s_res):
+
+        cohorts.append({
+            "id": cs_r.get("id", cs_i),
+            "cohort_type": "beacon-defined",
+            "name": cs_r.get("label", ""),
+            "cohort_size": int(cs_r.get("count", 0))
+        })
+        
+    return cohorts
 
 ################################################################################
 

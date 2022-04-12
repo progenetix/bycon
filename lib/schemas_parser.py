@@ -3,6 +3,8 @@ from os import path, scandir, pardir
 from json_ref_dict import RefDict, materialize
 import humps
 
+from cgi_parse import prjsonnice
+
 # local
 lib_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( lib_path, pardir )
@@ -10,6 +12,8 @@ pkg_path = path.join( lib_path, pardir )
 ################################################################################
 
 def beacon_get_endpoint_base_paths(byc):
+
+    # print(byc["this_endpoints"])
 
     try:
         p_s = byc["this_endpoints"]["paths"].keys()
@@ -35,7 +39,8 @@ def read_schema_file(schema_name, item, byc, ext="json"):
     
     s_f_p = get_schema_file_path(schema_name, byc, ext)
 
-    # print(schema_name, s_f_p)
+    if byc["debug_mode"] is True:
+        print(schema_name, s_f_p)
 
     if not s_f_p is False:
         if len(item) > 1:
@@ -44,8 +49,6 @@ def read_schema_file(schema_name, item, byc, ext="json"):
         exclude_keys = [ "examples" ] #"format", 
         s = materialize(root_def, exclude_keys = exclude_keys)
         assert isinstance(s, dict)
-        # print(s)
-        # exit()
         return s
 
     return False
@@ -82,9 +85,8 @@ def get_schema_file_path(schema_name, byc, ext="json"):
 
 def instantiate_schema(schema, is_root=True):
 
-    if 'type' in schema.keys():
-
-        if is_root is not True:
+    if is_root is not True:
+        if 'type' in schema.keys():
 
             t = schema['type']
         
@@ -122,8 +124,9 @@ def create_empty_instance(schema):
 
 def object_instance_from_schema_name(byc, schema_name, root_key, ext="json"):
 
-    s_i = create_empty_instance( read_schema_file(schema_name, root_key, byc, ext) )
-    return humps.decamelize(s_i)
+    s_f = read_schema_file(schema_name, root_key, byc, ext)
+    s_i = create_empty_instance( s_f )
+    return s_i
 
 ################################################################################
 

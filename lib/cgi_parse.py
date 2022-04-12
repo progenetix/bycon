@@ -48,6 +48,8 @@ def cgi_parse_query(byc):
     content_typ = environ.get('CONTENT_TYPE', '')
     r_m = environ.get('REQUEST_METHOD', '')
 
+    defs = byc.get("beacon_defaults", {})
+
     form = {}
 
     if "POST" in r_m:
@@ -57,7 +59,7 @@ def cgi_parse_query(byc):
             jbod = json.loads(body)
             if "debug" in jbod:
                 if jbod["debug"] > 0:                 
-                    byc.update({"debug_state": set_debug_state(1)})
+                    byc.update({"debug_mode": set_debug_state(1)})
 
             # TODO: this hacks the v2b4 structure
             if "query" in jbod:
@@ -70,9 +72,9 @@ def cgi_parse_query(byc):
 
             # TODO: define somewhere else with proper defaults
             form.update({
-                "requested_granularity": jbod.get("requestedGranularity", "record"),
-                "include_resultset_responses": jbod.get("includeResultsetResponses", "HIT"),
-                "include_handovers": jbod.get("includeHandovers", False),
+                "requested_granularity": jbod.get("requestedGranularity", defs.get("requested_granularity", "record")),
+                "include_resultset_responses": jbod.get("includeResultsetResponses", defs.get("include_resultset_responses", "HIT")),
+                "include_handovers": jbod.get("includeHandovers", defs.get("include_handovers", False)),
                 "filters": jbod.get("filters", [] )
             })
 
@@ -86,7 +88,7 @@ def cgi_parse_query(byc):
 
     # else GET processing
 
-    byc.update({"debug_state": set_debug_state()})
+    byc.update({"debug_mode": set_debug_state()})
     get = cgi.FieldStorage()
 
     for p in get:
@@ -100,9 +102,9 @@ def cgi_parse_query(byc):
         form.update({"filters": []})
 
     form.update({
-        "requested_granularity": get.getvalue("requestedGranularity", "record"),
-        "include_resultset_responses": get.getvalue("includeResultsetResponses", "HIT"),
-        "include_handovers": get.getvalue("includeHandovers", False)
+        "requested_granularity": get.getvalue("requestedGranularity", defs.get("requested_granularity", "record")),
+        "include_resultset_responses": get.getvalue("includeResultsetResponses", defs.get("include_resultset_responses", "HIT")),
+        "include_handovers": get.getvalue("includeHandovers", defs.get("include_handovers", False))
     })
 
     if "requestedSchema" in form:
@@ -224,7 +226,7 @@ def cgi_break_on_errors(byc):
 def cgi_debug_message(byc, label, debug_object):
 
     try:
-        if byc["debug_state"]:
+        if byc["debug_mode"]:
             print("{}:\n\n{}\n\n".format(label, debug_object))
     except:
         pass

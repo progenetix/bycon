@@ -48,7 +48,6 @@ def cohorts():
     check_switch_to_boolean_response(byc)
     cgi_print_response( byc, 200 )
 
-
 ################################################################################
 
 def _return_cohorts_response(byc):
@@ -58,10 +57,10 @@ def _return_cohorts_response(byc):
 
     mongo_client = MongoClient( )
 
-    collections =  []
+    cohorts =  []
 
     if byc["test_mode"] is True:
-        byc["queries"].update({"cohorts": {"id": {"$regex": ":cohort"} } } )
+        byc["queries"].update( {"cohorts": { "collation_type": "pgxcohort" } } )
 
     try:
         query = byc["queries"]["cohorts"]
@@ -70,15 +69,17 @@ def _return_cohorts_response(byc):
             mongo_db = mongo_client[ ds_id ]        
             mongo_coll = mongo_db[ "collations" ]
 
-            for subset in mongo_coll.find( query ):
-                collections.append(subset)
+            for cohort in mongo_coll.find( query ):
+                cohorts.append(cohort)
                 byc["service_response"]["response_summary"].update({"exists":True})
     except:
         pass
 
+    cohorts = remap_cohorts(cohorts, byc)
+
     byc["service_response"]["response"].pop("result_sets", None)
-    byc["service_response"]["response"].update({"collections":collections})
-    byc["service_response"]["response_summary"].update({"num_total_results":len(collections)})
+    byc["service_response"]["response"].update({"collections": cohorts})
+    byc["service_response"]["response_summary"].update({"num_total_results":len(cohorts)})
     cgi_print_response( byc, 200 )
 
 ################################################################################

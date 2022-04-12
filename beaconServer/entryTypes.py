@@ -33,10 +33,15 @@ def entryTypes():
 def entry_types():
 
     initialize_service(byc)
-    # create_empty_service_response(byc)
+    r, e = instantiate_response_and_error(byc, "beaconEntryTypesResponse")
+    response_meta_set_info_defaults(r, byc)
 
-    create_empty_non_data_response(byc)
-    # prjsoncam(byc["service_response"])
+    e_f = path.join( pkg_path, "schemas", "src", "progenetix-model", "beaconConfiguration.yaml")
+    e_t_s = load_yaml_empty_fallback( e_f )
+
+    r["response"].update( {"entry_types": e_t_s["entryTypes"] } )
+
+    byc.update({"service_response": r, "error_response": e })
 
     cgi_print_response( byc, 200 )
 

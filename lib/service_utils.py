@@ -29,27 +29,20 @@ def initialize_bycon():
     byc =  {
         "service_name": "beacon",
         "service_id": "beacon",
-        "response_entity": {
-            "entity_type": "dataset",
-            "collection": "dbstats",
-            "response_schema": "progenetixServiceResponse",
-            "beacon_schema": {
-                "entity_type": "dataset",
-                "schema": "https://progenetix.org/services/schemas/dataset/"
-            },
-            "h->o_access_key": False
-        },
+        "response_entity": {},
         "beacon_info": {},
+        "beacon_base_paths": [],
         "pkg_path": pkg_path,
         "method": "",
         "output": "",
         "form_data": {},
         "query_meta": {},
         "include_handovers": False,
-        "debug_state": False,
+        "debug_mode": False,
         "empty_query_all_response": False,
         "empty_query_all_count": False,
-        "test_mode": False,    
+        "test_mode": False,  
+        "debug_mode": False,  
         "errors": [],
         "warnings": []
     }
@@ -98,14 +91,19 @@ def initialize_service(byc, service=False):
     read_local_prefs( service, sub_path, byc )
 
     conf = byc["this_config"]
+    defs = byc["beacon_defaults"]
     form = byc["form_data"]
 
-    if "bycon_definition_files" in conf:
-        for d in conf["bycon_definition_files"]:
+    if "bycon_definition_files" in defs:
+        for d in defs["bycon_definition_files"]:
             read_bycon_configs_by_name( d, byc )
 
-    if "defaults" in conf:
-        for d_k, d_v in conf["defaults"].items():
+    if "defaults" in defs:
+        for d_k, d_v in defs["defaults"].items():
+            byc.update( { d_k: d_v } )
+
+    if service in defs:
+        for d_k, d_v in defs[ service ].items():
             byc.update( { d_k: d_v } )
 
     if not "pagination" in byc:
@@ -118,6 +116,7 @@ def initialize_service(byc, service=False):
 
     byc["output"] = form.get("output", "")
 
+    # TODO: this is only used in some services ...
     if "method_keys" in conf:
         m = form.get("method", "___none___")
         if m in conf["method_keys"].keys():
@@ -314,13 +313,9 @@ def create_empty_beacon_response(byc):
     response_update_type_from_request(byc, "beacon")
     response_set_entity(byc, "beacon")
 
-    r, e = instantiate_response_and_error(byc)
+    r, e = instantiate_response_and_error(byc, byc["response_entity"]["response_schema"])
 
     response_update_meta(r, byc)
-
-    # print(byc["this_config"]["defaults"]["include_resultset_responses"])
-    # print(byc["this_config"]["defaults"])
-    # exit()
 
     try:
         r["response"].update({"result_sets":[]})
@@ -361,8 +356,7 @@ def create_empty_service_response(byc):
     response_update_type_from_request(byc, "service")
     response_set_entity(byc, "service")
 
-    r, e = instantiate_response_and_error(byc)
-
+    r, e = instantiate_response_and_error(byc, byc["response_entity"]["response_schema"])
     response_update_meta(r, byc)
 
     byc.update( {"service_response": r, "error_response": e })
@@ -381,7 +375,7 @@ def create_empty_non_data_response(byc):
     response_update_type_from_request(byc, "beacon")
     response_set_entity(byc)
 
-    r, e = instantiate_response_and_error(byc)
+    r, e = instantiate_response_and_error(byc, byc["response_entity"]["response_schema"])
 
     response_update_meta(r, byc)
 
@@ -426,10 +420,15 @@ def check_cnvhistogram_plot_response(ds_id, byc):
 
 ################################################################################
 
-def instantiate_response_and_error(byc):
+def instantiate_response_and_error(byc, schema):
 
     """The response relies on the pre-processing of input parameters (queries etc)."""
-    r = object_instance_from_schema_name(byc, byc["response_entity"]["response_schema"], "properties")
+    r = object_instance_from_schema_name(byc, schema, "properties")
+    m = object_instance_from_schema_name(byc, "beaconResponseMeta", "properties")
+    r.update({"meta": m })
+    if byc["debug_mode"] is True:
+        print(byc["response_entity"]["response_schema"])
+        prjsonnice(r)
     e = object_instance_from_schema_name(byc, "beaconErrorResponse", "properties")
 
     return r, e
@@ -481,6 +480,9 @@ def response_meta_set_info_defaults(r, byc):
 ################################################################################
 
 def response_meta_set_config_defaults(r, byc):
+
+    # TODO: should be in schemas
+
     if "meta" in byc["this_config"]:
         for k, v in byc["this_config"]["meta"].items():
             r["meta"].update( { k: v } )

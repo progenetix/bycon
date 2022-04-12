@@ -42,9 +42,9 @@ def endpoints():
     #     schema_name = "biosample"
 
     if "empty_value" in schema_name:
-        p = path.join( pkg_path, "beaconServer", "config", "endpoints.yaml")
+        p = path.join( pkg_path, "schemas", "src", "progenetix-model", "endpoints.yaml")
     else:
-        p = path.join( pkg_path, "beaconServer", "config", schema_name, "endpoints.yaml")
+        p = path.join( pkg_path, "schemas", "src", "progenetix-model", schema_name, "endpoints.yaml")
 
     root_def = RefDict(p)
     exclude_keys = [ "format", "examples" ]

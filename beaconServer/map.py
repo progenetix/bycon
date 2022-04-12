@@ -27,10 +27,14 @@ def main():
 def map():
 
     initialize_service(byc)
-    # create_empty_service_response(byc)
+    r, e = instantiate_response_and_error(byc, "beaconMapResponse")
+    response_meta_set_info_defaults(r, byc)
 
-    create_empty_non_data_response(byc)
-    # prjsoncam(byc["service_response"])
+    m_f = path.join( pkg_path, "schemas", "src", "progenetix-model", "beaconMap.yaml")
+    beaconMap = load_yaml_empty_fallback( m_f )
+
+    r.update( {"response": beaconMap } )
+    byc.update({"service_response": r, "error_response": e })
 
     cgi_print_response( byc, 200 )
 

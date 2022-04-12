@@ -27,7 +27,16 @@ def main():
 def configuration():
 
     initialize_service(byc)
-    create_empty_non_data_response(byc)
+    r, e = instantiate_response_and_error(byc, "beaconConfigurationResponse")
+    response_meta_set_info_defaults(r, byc)
+
+    c_f = path.join( pkg_path, "schemas", "src", "progenetix-model", "beaconConfiguration.yaml")
+    c = load_yaml_empty_fallback( c_f )
+
+    r.update( {"response": c } )
+
+    byc.update({"service_response": r, "error_response": e })
+
     cgi_print_response( byc, 200 )
 
 ################################################################################

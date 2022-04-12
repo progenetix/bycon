@@ -1,0 +1,78 @@
+defaults:
+  dataset_ids:
+    - progenetix
+  genome_binning: 1Mb
+  response_schema: beaconResultsetsResponse
+  include_resultset_responses: HIT
+  include_handovers: false
+  requested_granularity: record
+  returned_granularity: record
+  pagination:
+    skip: 0
+    limit: 2000
+  response_entity:
+    entity_type: dataset
+    collection: dbstats
+    response_schema: progenetixServiceResponse
+    beacon_schema:
+      entity_type: dataset
+      schema: https://progenetix.org/services/schemas/dataset/
+    h->o_access_key: False
+
+bycon_definition_files:
+  - beacon_info
+  - beacon_mappings
+  - dataset_definitions
+  - datatable_mappings
+  - filter_definitions
+  - geoloc_definitions
+  - handover_definitions
+  - interval_definitions
+  - remap_definitions
+  - service_mappings
+  - variant_definitions
+
+map:
+  response_type: beaconMap
+  response_schema: beaconMapResponse
+
+entry_types:
+  response_type: entryType
+  response_schema: beaconEntryTypesResponse
+
+analyses:
+  response_type: analysis
+  h->o_access_key: "callsets._id"
+
+biosamples:
+  response_type: biosample
+  h->o_access_key: "biosamples._id"
+
+cohorts:
+  response_type: cohort
+  response_schema: beaconCollectionsResponse
+  pagination:
+    skip: 0
+    limit: 10
+  include_resultset_responses: false
+
+datasets:
+  response_type: dataset
+  response_schema: beaconCollectionsResponse
+  pagination:
+    skip: 0
+    limit: 5
+  include_resultset_responses: false
+
+individuals:
+  response_type: individual
+  h->o_access_key: "individuals._id"
+
+runs:
+  response_type: run
+  h->o_access_key: "callsets._id"
+
+genomicVariations:
+  response_type: genomicVariant
+  h->o_access_key: "variants._id"
+

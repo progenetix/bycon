@@ -34,6 +34,7 @@ def beacon(path=""):
 
     rest_base_name = "beacon"
 
+    # TODO: service names from endpoints.yaml
     if path in byc["this_config"]["service_names"]:
         service_name = path
     else:
