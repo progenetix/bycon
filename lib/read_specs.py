@@ -104,22 +104,6 @@ def datasets_update_latest_stats(byc, collection_type="datasets"):
 
 ################################################################################
 
-def update_datasets_from_dbstats(byc):
-
-    ds_with_counts = datasets_update_latest_stats(byc)
-
-    if not "beacon_info" in byc:
-        byc["beacon_info"] = { }
-    byc["beacon_info"].update( { "datasets": ds_with_counts } )
-
-    if "service_info" in byc:
-        for par in byc[ "beacon_info" ]:
-            byc[ "service_info" ].update( { par: byc[ "beacon_info" ][ par ] } )
-
-    return byc
-
-################################################################################
-
 def load_yaml_empty_fallback(yp):
 
     y = { }

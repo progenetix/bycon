@@ -37,13 +37,13 @@ def services(service):
     uri = environ.get('REQUEST_URI')
     rest_base_name = "services"
 
-    if path in byc["service_mappings"]["service_names"]:
+    if path in byc["service_mappings"]["service_aliases"]:
         service_name = path
     else:
         service_name = rest_path_value(rest_base_name)
 
-    if service_name in byc["service_mappings"]["service_names"]:    
-        f = byc["service_mappings"]["service_names"][ service_name ]
+    if service_name in byc["service_mappings"]["service_aliases"]:    
+        f = byc["service_mappings"]["service_aliases"][ service_name ]
         
         # dynamic package/function loading
         try:

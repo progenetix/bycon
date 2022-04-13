@@ -35,13 +35,13 @@ def beacon(path=""):
     rest_base_name = "beacon"
 
     # TODO: service names from endpoints.yaml
-    if path in byc["this_config"]["service_names"]:
+    if path in byc["this_config"]["service_aliases"]:
         service_name = path
     else:
         service_name = rest_path_value(rest_base_name)
 
-    if service_name in byc["this_config"]["service_names"]:    
-        f = byc["this_config"]["service_names"][ service_name ]
+    if service_name in byc["this_config"]["service_aliases"]:    
+        f = byc["this_config"]["service_aliases"][ service_name ]
 
         # dynamic package/function loading
         try:

@@ -28,16 +28,27 @@ def main():
 def info():
 
     initialize_service(byc)
-    # parse_beacon_schema(byc)
-    select_dataset_ids(byc)
-    check_dataset_ids(byc)
-    create_empty_beacon_response(byc)
-    # byc["beacon_info"].update({"datasets": datasets_update_latest_stats(byc) })
+    r, e = instantiate_response_and_error(byc, "beaconInfoResponse")
+    response_meta_set_info_defaults(r, byc)
 
-    byc["service_response"].update({
-        "$schema": "https://progenetix.org/services/schemas/beaconInfoResponse.json",
-        "response": byc["beacon_info"],
-     })
+    schema = {
+        "entity_type": "info",
+        "schema": "http://progenetix.org/services/schemas/beaconInfoResults"
+    }
+
+    r["meta"].update( { "returned_schemas": [ schema ] } )
+    r["meta"].pop("received_request_summary", None)
+    r["meta"].pop("returned_granularity", None)
+
+    pgx_info = byc["beacon_defaults"].get("info", {})
+    info = object_instance_from_schema_name(byc, "beaconInfoResults", "properties", "json")
+
+    for k in info.keys():
+        if k in pgx_info:
+            info.update({k:pgx_info[k]})
+
+    r.update( {"response": info } )
+    byc.update({"service_response": r, "error_response": e })
 
     cgi_print_response( byc, 200 )
 

@@ -5,11 +5,11 @@ id_queryscope_mappings:
   analysisIds: callsets
   individualIds: individuals
 
-service_names:
-
+service_aliases:
   empty_value: info
   info: info
-  service-info: info
+  service_info: service_info
+  service-info: service_info
   analyses: analyses
   callsets: analyses
   cohorts: cohorts

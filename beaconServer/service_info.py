@@ -1,13 +1,9 @@
 #!/usr/local/bin/python3
-
-import cgi, cgitb
-import re, json, yaml
-from os import environ, pardir, path
-import sys, os, datetime
+import cgi, cgitb, sys
+from os import pardir, path
 
 # local
-# local
-dir_path = path.dirname( path.abspath(__file__) )
+dir_path = path.dirname(path.abspath(__file__))
 pkg_path = path.join( dir_path, pardir )
 sys.path.append( pkg_path )
 
@@ -15,7 +11,7 @@ from beaconServer import *
 
 """podmd
 
-* <https://beacon.progenetix.org/beacon/filteringTerms
+* <https://progenetix.org/beacon/service-info/>
 
 podmd"""
 
@@ -25,23 +21,22 @@ podmd"""
 
 def main():
 
-    filtering_terms()
+    service_info()
     
 ################################################################################
 
-def filteringTerms():
-    
-    filtering_terms()
-
-################################################################################
-
-def filtering_terms():
+def service_info():
 
     initialize_service(byc)
-    run_beacon_init_stack(byc)
-    return_filtering_terms_response(byc)
 
-################################################################################
+    pgx_info = byc["beacon_defaults"].get("info", {})
+    info = object_instance_from_schema_name(byc, "ga4gh-service-info-1-0-0-schema", "properties", "json")
+
+    for k in info.keys():
+        if k in pgx_info:
+            info.update({k:pgx_info[k]})
+    cgi_print_json_response( info, 200 )
+
 ################################################################################
 ################################################################################
 

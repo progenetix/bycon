@@ -1,4 +1,4 @@
-service_names:
+service_aliases:
   empty_value: info
   endpoints: endpoints
   collations: collations

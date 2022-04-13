@@ -1,7 +1,9 @@
 NCITgrade:
-  name: "National Cancer Institute Thesaurus"
+  id: ncit
+  name: NCI Thesaurus OBO Edition
+  iri_prefix: http://purl.obolibrary.org/obo/NCIT_
   namespace_prefix: NCIT
-  url: "https://ncit.nci.nih.gov/"
+  url: https://github.com/NCI-Thesaurus/thesaurus-obo-edition
   reference:
     root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
     replace:
@@ -17,9 +19,11 @@ NCITgrade:
     - 'NCIT:C28080'
 
 NCITstage:
-  name: "National Cancer Institute Thesaurus"
+  id: ncit
+  iri_prefix: http://purl.obolibrary.org/obo/NCIT_
+  name: NCI Thesaurus OBO Edition
   namespace_prefix: NCIT
-  url: "https://ncit.nci.nih.gov/"
+  url: https://github.com/NCI-Thesaurus/thesaurus-obo-edition
   reference:
     root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
     replace:
@@ -35,9 +39,11 @@ NCITstage:
     - NCIT:C27969
 
 NCITtnm:
-  name: "National Cancer Institute Thesaurus"
+  id: ncit
+  name: NCI Thesaurus OBO Edition
+  iri_prefix: http://purl.obolibrary.org/obo/NCIT_
   namespace_prefix: NCIT
-  url: "https://ncit.nci.nih.gov/"
+  url: https://github.com/NCI-Thesaurus/thesaurus-obo-edition
   reference:
     root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
     replace:
@@ -54,9 +60,11 @@ NCITtnm:
 
 # Bio-Metadata
 NCIT:
-  name: "National Cancer Institute Thesaurus"
+  id: ncit/neoplasm-core.owl
+  iri_prefix: http://purl.obolibrary.org/obo/NCIT_
+  name: NCIt Plus Neoplasm Core
   namespace_prefix: NCIT
-  url: "https://ncit.nci.nih.gov/"
+  url: http://purl.obolibrary.org/obo/ncit/neoplasm-core.owl
   reference:
     root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
     replace:
@@ -71,6 +79,8 @@ NCIT:
     - NCIT:C9325
 
 HP:
+  id: hp
+  iri_prefix: http://purl.obolibrary.org/obo/HP_
   name: "Human Phenotype Ontology"
   namespace_prefix: HP
   url: "https://hpo.jax.org/"
@@ -82,11 +92,13 @@ HP:
     - HP:0012209
 
 PATOsex:
+  id: pato
+  iri_prefix: http://purl.obolibrary.org/obo/PATO_
   description: >
-    PATO codes specific for genotypic sex...
+    Some PATO codes specific for genotypic sex...
   name: "Phenotypic Qualities Ontology"
   namespace_prefix: PATO
-  url: "http://obofoundry.org/ontology/pato.html"
+  url: https://github.com/pato-ontology/pato/
   db_key: 'sex.id'
   scope: individuals
   pattern: '^PATO(:002000[012])?$'
@@ -95,6 +107,8 @@ PATOsex:
     - PATO:0020000
 
 EFOcnvassessment:
+  id: efo
+  iri_prefix: http://www.ebi.ac.uk/efo/EFO_
   name: "Experimental Factor Ontology"
   namespace_prefix: EFO
   url: "http://www.ebi.ac.uk/efo/EFO_0030063"
@@ -106,6 +120,8 @@ EFOcnvassessment:
     - EFO:0030070
 
 EFOfus:
+  id: efo
+  iri_prefix: http://www.ebi.ac.uk/efo/EFO_
   name: "Experimental Factor Ontology"
   namespace_prefix: EFO
   url: "http://www.ebi.ac.uk/efo/EFO_0030038"
@@ -117,6 +133,8 @@ EFOfus:
     - EFO:0030039
 
 EFOmaterial:
+  id: efo
+  iri_prefix: http://www.ebi.ac.uk/efo/EFO_
   name: "Experimental Factor Ontology"
   namespace_prefix: EFO
   url: "https://www.ebi.ac.uk/efo/"
@@ -130,6 +148,7 @@ EFOmaterial:
     - EFO:0030035
 
 icdom:
+  id: pgx:icdom
   name: "ICD-O 3 Morphologies (Progenetix transcription)"
   namespace_prefix: pgx
   url: https://progenetix.org/
@@ -267,6 +286,7 @@ TCGAproject:
 
 UBERON:
   name: Uberon cross-species anatomical structures ontology
+  iri_prefix: http://www.ebi.ac.uk/efo/EFO_
   namespace_prefix: UBERON
   url: "http://uberon.org"
   reference:
@@ -318,7 +338,7 @@ cellosaurus:
 pgxcohort:
   name: "Progenetix cohorts"
   namespace_prefix: pgx
-  url: "https://arraymap.progenetix.org"
+  url: "https://progenetix.org"
   db_key: 'cohorts.id'
   scope: biosamples
   pattern: '^pgx:cohort-\w+?$'

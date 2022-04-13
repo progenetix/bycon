@@ -476,7 +476,7 @@ def response_meta_set_info_defaults(r, byc):
 
     for i_k in ["api_version", "beacon_id", "create_date_time", "update_date_time"]:
 #DEBUG        print(byc["beacon_info"].get(i_k, ""))
-        r["meta"].update({ i_k: byc["beacon_info"].get(i_k, "") })
+        r["meta"].update({ i_k: byc["beacon_defaults"]["info"].get(i_k, "") })
 
     return r
 
@@ -692,6 +692,8 @@ def return_filtering_terms_response( byc ):
     # TODO: correct response w/o need to fix
     byc["service_response"].update({"response": { "filteringTerms": [], "resources": []} })
 
+    f_r_d = {}
+
     f_db = byc["config"]["info_db"]
     f_coll = byc["config"]["collations_coll"]
 
@@ -705,7 +707,7 @@ def return_filtering_terms_response( byc ):
     f_s = '|'.join(ft_fs)
     f_re = re.compile(r'^'+f_s)
 
-    # r_s_l = {}
+    collation_types = set()
 
     for ds_id in byc[ "dataset_ids" ]:
 
@@ -724,46 +726,41 @@ def return_filtering_terms_response( byc ):
         t_f_t_s = [ ]
 
         for f in f_s:
+            collation_types.add(f.get("collation_type", None))
             f_t = { "count": f.get("count", 0)}
             for k in ["id", "type", "label"]:
-                f_t.update({k:f.get(k, 0)})
+                if k in f:
+                    f_t.update({k:f[k]})
             t_f_t_s.append(f_t)
-
-            # r_id = {
-
-
-            # }
-
-            # r_s_l.update({})
 
         f_t_s.extend(t_f_t_s)
 
     byc["service_response"]["response"].update({ "filteringTerms": f_t_s })
-    byc["service_response"]["response"].update({ "resources": _create_resource_response(byc) })
+    byc["service_response"]["response"].update({ "resources": create_filters_resource_response(collation_types, byc) })
 
     cgi_print_response( byc, 200 )
 
 ################################################################################
 
-def _create_resource_response(byc):
+def create_filters_resource_response(collation_types, byc):
 
     r_o = {}
     resources = []
 
-    for res in byc["filter_definitions"].values():
+    f_d_s = byc["filter_definitions"]
+    collation_types = list(collation_types)
+    res_schema = object_instance_from_schema_name(byc, "beaconFilteringTermsResults", "definitions/Resource/properties", "json")    
+    for c_t in collation_types:
+        f_d = f_d_s[c_t]
+        r = {}
+        for k in res_schema.keys():
+            if k in f_d:
+                r.update({k:f_d[k]})
 
-        r_o.update(
-            {res["namespace_prefix"]: {
-                "id": res.get("namespace_prefix", "").lower(),
-                "name": res.get("name", ""),
-                "name_space_prefix": res.get("namespace_prefix", ""),
-                "url": res.get("url", "")
-            }
-        })
+        r_o.update( {f_d["namespace_prefix"]: r })
 
     for k, v in r_o.items():
         resources.append(v)
-
     return resources
 
 ################################################################################
