@@ -25,7 +25,6 @@ progenetix:
       - variants
       - callsetsvariants
       - callsetspgxseg
-      # - pgxseg
       - UCSClink
     info:
       variantCount: 7656759
@@ -51,7 +50,6 @@ cellosaurus:
       - biosamples
       - individuals
       - variants
-      - variantsinterpretations
       - callsetsvariants
       - UCSClink
     info:

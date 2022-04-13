@@ -98,6 +98,9 @@ def initialize_service(byc, service=False):
         for d in defs["bycon_definition_files"]:
             read_bycon_configs_by_name( d, byc )
 
+    if "defaults" in conf:
+        for d_k, d_v in conf["defaults"].items():
+            byc.update( { d_k: d_v } )
     if "defaults" in defs:
         for d_k, d_v in defs["defaults"].items():
             byc.update( { d_k: d_v } )

@@ -96,15 +96,6 @@ h->o_types:
     h->o_key: 'variants._id'
     script_path_web: '/beacon/genomicVariations'
 
-  variantsinterpretations:
-    id: 'pgx:handover:variantsinterpretations'
-    label: "Annotations and interpretations for found Variants (.json)"
-    paginated_entities:
-      - variant
-    description: "retrieve the annotations - if existing - for the found variants"
-    h->o_key: 'variant_annotations._id'
-    script_path_web: '/beacon/variantInterpretations'
-
   pgxseg:
     id: 'pgx:handover:pgxseg'
     label: "Found Variants (.pgxseg)"

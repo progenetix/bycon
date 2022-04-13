@@ -37,6 +37,8 @@ def collections():
 def datasets():
 
     initialize_service(byc)
+    r, e = instantiate_response_and_error(byc, "beaconCollectionsResponse")
+    response_meta_set_info_defaults(r, byc)
     
     _get_history_depth(byc)
     dbstats = datasets_update_latest_stats(byc)
@@ -52,7 +54,9 @@ def datasets():
     else:
         create_empty_beacon_response(byc)
         populate_service_response( byc, dbstats )
+
         byc["service_response"]["response"]["collections"] = byc["service_response"]["response"].pop("results", None)
+        byc["service_response"]["response"].pop("result_sets", None)
         for i, d_s in enumerate(byc["service_response"]["response"]["collections"]):
             # TODO: remove verifier hack
             for t in ["createDateTime", "updateDateTime"]:
@@ -63,7 +67,6 @@ def datasets():
                 except:
                     pass
 
-    # byc["service_response"]["response"]["result_sets"] = byc["service_response"]["response"].pop("results")
     cgi_print_response( byc, 200 )
 
 ################################################################################

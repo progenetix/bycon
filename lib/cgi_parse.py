@@ -238,6 +238,8 @@ def cgi_print_response(byc, status_code):
     r_f = ""
     f_d = {}
 
+    delint_response(byc)
+
     if "form_data" in byc:
         f_d = byc["form_data"]
 
@@ -336,6 +338,20 @@ def check_switch_to_count_response(byc):
         if byc["service_response"]["meta"]["received_request_summary"]["requested_granularity"] == "count":
             byc["service_response"].pop("response", None)
             byc["service_response"]["meta"].update({"returned_granularity": "count"})
+    except:
+        pass
+
+    return byc
+
+################################################################################
+
+def delint_response(byc):
+
+    try:
+        if len(byc["service_response"]["beacon_handovers"]) < 1:
+            byc["service_response"].pop("beacon_handovers", None)
+        if len(byc["service_response"]["info"].keys()) < 1:
+            byc["service_response"].pop("info", None)
     except:
         pass
 
