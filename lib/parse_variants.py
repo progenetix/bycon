@@ -112,6 +112,7 @@ def translate_reference_name(variant_pars, byc):
 ################################################################################
 
 def get_variant_request_type(byc):
+
     """podmd
     This method guesses the type of variant request, based on the complete
     fulfillment of the required parameters (all of `all_of`, at least one of

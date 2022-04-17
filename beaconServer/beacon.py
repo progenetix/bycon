@@ -5,13 +5,11 @@ from os import path, pardir
 from importlib import import_module
 
 # local
-dir_path = path.dirname( path.abspath(__file__) )
-pkg_path = path.join( dir_path, pardir )
-bycon_lib_path = path.join( pkg_path, "lib" )
-sys.path.append( bycon_lib_path )
+pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir )
+sys.path.append( pkg_path )
 
-from read_specs import read_local_prefs
-from cgi_parse import rest_path_value, cgi_print_response, set_debug_state
+from beaconServer import *
+
 
 """
 """
@@ -26,22 +24,23 @@ def main():
     
 ################################################################################
 
-def beacon(path=""):
+def beacon():
 
     set_debug_state(debug=0)
-    byc = {}
-    read_local_prefs( "beacon_mappings", pkg_path, byc )
 
     rest_base_name = "beacon"
 
-    # TODO: service names from endpoints.yaml
-    if path in byc["this_config"]["service_aliases"]:
-        service_name = path
-    else:
-        service_name = rest_path_value(rest_base_name)
+    m_f = path.join( pkg_path, "config", "beacon_mappings.yaml")
+    b_m = load_yaml_empty_fallback( m_f )
 
-    if service_name in byc["this_config"]["service_aliases"]:    
-        f = byc["this_config"]["service_aliases"][ service_name ]
+    # TODO: service names from endpoints.yaml
+    service_name = rest_path_value(rest_base_name)
+
+    if service_name in b_m["service_aliases"]:    
+        f = b_m["service_aliases"][ service_name ]
+
+        if f in b_m["data_pipeline_entry_types"]:
+            beacon_data_pipeline(byc, f)
 
         # dynamic package/function loading
         try:

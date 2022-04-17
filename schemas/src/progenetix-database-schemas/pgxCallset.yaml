@@ -30,6 +30,17 @@ properties:
         label: Oxford Nanopore MinION
       - id: EFO:0010938
         label: large-insert clone DNA microarray
+  pipelineInfo:
+    description: >-
+      Public or local pipeline identifier with version, as well as link and notes.
+    $ref: ../common/externalReference.json
+    examples:
+      - id: Pipeline-panel-0001-v1
+        reference": https://doi.org/10.48511/workflowhub.workflow.111.1
+        note: Higly customized workflow. Please contact us at dev/null.
+      - id: aroma.affymetrix
+        reference: http://www.aroma-project.org
+        notes": The aroma.affymetrix package is an R package for analyzing small to extremely large Affymetrix data sets.
   experimentAccession:
     description: Identifier for primary experimental data.
     $ref: ../common/ontologyTerm.yaml#/properties

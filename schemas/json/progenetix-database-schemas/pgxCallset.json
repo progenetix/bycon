@@ -136,6 +136,22 @@
         "info": {
             "type": "object"
         },
+        "pipelineInfo": {
+            "$ref": "../common/externalReference.json",
+            "description": "Public or local pipeline identifier with version, as well as link and notes.",
+            "examples": [
+                {
+                    "id": "Pipeline-panel-0001-v1",
+                    "note": "Higly customized workflow. Please contact us at dev/null.",
+                    "reference\"": "https://doi.org/10.48511/workflowhub.workflow.111.1"
+                },
+                {
+                    "id": "aroma.affymetrix",
+                    "notes\"": "The aroma.affymetrix package is an R package for analyzing small to extremely large Affymetrix data sets.",
+                    "reference": "http://www.aroma-project.org"
+                }
+            ]
+        },
         "platformModel": {
             "$ref": "../common/ontologyTerm.json#/properties",
             "description": "Ontology value for experimental platform or methodology used. For sequencing platforms the use of \"OBI:0400103 - DNA sequencer\" is suggested.",

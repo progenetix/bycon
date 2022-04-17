@@ -219,10 +219,13 @@ def remap_analyses(r_s_res, byc):
     if not "analysis" in byc["response_type"]:
         return r_s_res
 
+    pop_keys = ["info", "provenance", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats"]
+
     for cs_i, cs_r in enumerate(r_s_res):
         # TODO: REMOVE VERIFIER HACKS
         r_s_res[cs_i].update({"pipeline_name": "progenetix", "analysis_date": "1967-11-11" })
-        r_s_res[cs_i].pop("cnv_statusmaps", None)
+        for k in pop_keys:
+            r_s_res[cs_i].pop(k, None)
 
     return r_s_res
 
@@ -353,7 +356,7 @@ def phenopack_individual(ind, data_db, byc):
             bios.pop(k, None)
         pxf_bios.append(bios)
 
-    del_keys = ["_id", "provenance"]
+    pop_keys = ["_id", "provenance"]
 
     for k in del_keys:
         ind.pop(k, None)

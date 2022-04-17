@@ -19,7 +19,7 @@
             "description": "Simplified version only using (ISO) age as option.",
             "properties": {
                 "age": {
-                    "$ref": "../common/age.json#/properties"
+                    "$ref": "../progenetix-model/common/age.json#/properties"
                 }
             }
         }
@@ -30,7 +30,7 @@
             "$ref": "#/definitions/AnalysisInfo/properties"
         },
         "biosampleStatus": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../progenetix-model/common/ontologyTerm.json#/properties",
             "description": "Ontology value from Experimental Factor Ontology (EFO) Material Entity term (BFO:0000040)."
         },
         "cohorts": {
@@ -42,12 +42,12 @@
                 }
             ],
             "items": {
-                "$ref": "../common/ontologyTerm.json#/properties"
+                "$ref": "../progenetix-model/common/ontologyTerm.json#/properties"
             },
             "type": "array"
         },
         "dataUseConditions": {
-            "$ref": "../common/ontologyTerm.json#/properties"
+            "$ref": "../progenetix-model/common/ontologyTerm.json#/properties"
         },
         "description": {
             "examples": [
@@ -63,12 +63,12 @@
                 }
             ],
             "items": {
-                "$ref": "../common/externalReference.json#/properties"
+                "$ref": "../progenetix-model/common/externalReference.json#/properties"
             },
             "type": "array"
         },
         "followupState": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../progenetix-model/common/ontologyTerm.json#/properties",
             "examples": [
                 {
                     "id": "pgx:FU0005",
@@ -83,7 +83,7 @@
             "type": "string"
         },
         "histologicalDiagnosis": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../progenetix-model/common/ontologyTerm.json#/properties",
             "examples": [
                 {
                     "id": "NCIT:C3778",
@@ -92,7 +92,7 @@
             ]
         },
         "icdoMorphology": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../progenetix-model/common/ontologyTerm.json#/properties",
             "description": "The ICD-O 3 morphology code of this biosample, in a \"pseudo-prefixed\" transformation (since no direct ICD-O 3 registry can be referenced).",
             "examples": [
                 {
@@ -102,7 +102,7 @@
             ]
         },
         "icdoTopography": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../progenetix-model/common/ontologyTerm.json#/properties",
             "description": "The ICD-O 3 topography code of this biosample, in a \"pseudo-prefixed\" transformation (since no direct ICD-O 3 registry can be referenced).",
             "examples": [
                 {
@@ -128,7 +128,7 @@
             "type": "object"
         },
         "pathologicalStage": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../progenetix-model/common/ontologyTerm.json#/properties",
             "description": "Pathological stage, as subclass of NCIT:C28108 - Disease Stage Qualifier.\n",
             "examples": [
                 {
@@ -156,22 +156,22 @@
                 ]
             ],
             "items": {
-                "$ref": "../common/ontologyTerm.json#/properties"
+                "$ref": "../progenetix-model/common/ontologyTerm.json#/properties"
             },
             "type": "array"
         },
         "provenance": {
-            "$ref": "../common/provenance.json#/properties"
+            "$ref": "../progenetix-model/common/provenance.json#/properties"
         },
         "sampledTissue": {
-            "$ref": "../common/ontologyTerm.json#/properties"
+            "$ref": "../progenetix-model/common/ontologyTerm.json#/properties"
         },
         "timeOfCollection": {
             "$ref": "#/definitions/TimeOfCollection/properties",
             "description": "The age of the individual at time of sample collection or alternative time element."
         },
         "tumorGrade": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../progenetix-model/common/ontologyTerm.json#/properties",
             "description": "Tumor grade as child term of NCIT:C28076 (Disease Grade Qualifier) or equivalent.\n",
             "examples": [
                 {
@@ -189,7 +189,7 @@
             ]
         },
         "tumorProgression": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../progenetix-model/common/ontologyTerm.json#/properties",
             "examples": [
                 {
                     "id": "NCIT:C3677",

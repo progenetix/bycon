@@ -51,18 +51,17 @@ def initialize_bycon():
 
 ################################################################################
 
-def run_beacon_init_stack(byc):
+def beacon_data_pipeline(byc, entry_type):
 
-    beacon_get_endpoint_base_paths(byc)
-    initialize_beacon_queries(byc)
-    print_parameters_response(byc)
-    generate_genomic_intervals(byc)
-    create_empty_beacon_response(byc)
-    replace_queries_in_test_mode(byc, 5)
-    response_collect_errors(byc)
-    cgi_break_on_errors(byc)
-
-    return byc
+    initialize_service(byc, entry_type)
+    run_beacon_init_stack(byc)
+    return_filtering_terms_response(byc)
+    run_result_sets_beacon(byc)
+    query_results_save_handovers(byc)
+    check_computed_interval_frequency_delivery(byc)
+    check_switch_to_count_response(byc)
+    check_switch_to_boolean_response(byc)
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 
@@ -132,6 +131,21 @@ def initialize_service(byc, service=False):
 
     # TODO: standardize the general defaults / entity defaults / form values merging
     #       through pre-parsing into identical structures and then use deepmerge etc.
+
+    return byc
+
+################################################################################
+
+def run_beacon_init_stack(byc):
+
+    beacon_get_endpoint_base_paths(byc)
+    initialize_beacon_queries(byc)
+    print_parameters_response(byc)
+    generate_genomic_intervals(byc)
+    create_empty_beacon_response(byc)
+    replace_queries_in_test_mode(byc, 5)
+    response_collect_errors(byc)
+    cgi_break_on_errors(byc)
 
     return byc
 

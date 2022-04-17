@@ -9,7 +9,7 @@ service_aliases:
   empty_value: info
   info: info
   service_info: service_info
-  service-info: service_info
+  "service-info": service_info
   analyses: analyses
   callsets: analyses
   cohorts: cohorts
@@ -27,11 +27,14 @@ service_aliases:
   gVariants: g_variants
   g_variants: g_variants
   genomicVariations: g_variants
-  variants_in_sample: g_variants
-  variantsInSample: g_variants
   variants: g_variants
-  variantInterpretations: variantInterpretations
-  variant_interpretations: variantInterpretations
+
+data_pipeline_entry_types:
+  - analyses
+  - biosamples
+  - individuals
+  - g_variants
+  - runs
 
 #response_type_aliases:
 default_schema_from_model:

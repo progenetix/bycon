@@ -73,7 +73,6 @@ h->o_types:
     script_path_web: '/services/individuals'
     url_opts: "&requestedSchema=phenopacket"
 
-
   individuals:
     id: 'pgx:handover:individuals'
     label: "Individuals"
