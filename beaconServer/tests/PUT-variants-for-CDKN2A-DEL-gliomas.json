@@ -14,7 +14,7 @@
             "datasets": {
                 "datasetIds": ["progenetix"]
             },
-            "assemblyid": "GRCh38",
+            "assemblyId": "GRCh38",
             "referenceName": "9",
             "start": [21500001, 21975098],
             "end": [21967753, 22500000], 

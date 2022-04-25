@@ -9,10 +9,6 @@ properties:
     type: string
   beaconId:
     type: string
-  warnings:
-    type: array
-    items:
-      type: string
   receivedRequestSummary:
     type: object
   returnedSchemas:

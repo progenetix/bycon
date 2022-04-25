@@ -216,11 +216,11 @@ def execute_bycon_queries(ds_id, byc):
     prevars["query"] = { "id": { "$in": prefetch[ "biosamples.id" ]["target_values"] } }
     prefetch.update( { prevars["pref_m"]: _prefetch_data(prevars) } )
 
-    # TODO: have this checked... somewhere else based on the response_type
-    if "response_type" in byc:
-        if "individual" in byc["response_type"] or "phenopacket" in byc["response_type"]:
+    # TODO: have this checked... somewhere else based on the response_entity_id
+    if "response_entity_id" in byc:
+        if "individual" in byc["response_entity_id"] or "phenopacket" in byc["response_entity_id"]:
             _prefetch_add_individuals(prevars, prefetch)
-        elif "variant" in byc["response_type"] and not "variants._id"  in prefetch:
+        elif "genomicVariant" in byc["response_entity_id"] and not "variants._id"  in prefetch:
             _prefetch_add_all_sample_variants(prevars, prefetch)
 
     if "variant_annotations" in data_collnames:

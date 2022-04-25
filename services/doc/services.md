@@ -59,7 +59,7 @@ format. Here, the data is a dictionary/object with a single key (`genes`):
         "assemblyId": "GRCh38",
         "geneId": "TP53"
       },
-      "response_type": "genespans",
+      "response_entity_id": "genespans",
       "returned_schemas": {
         "GeneSpan": "https://progenetix.org/services/schemas/GeneSpan/"
       },

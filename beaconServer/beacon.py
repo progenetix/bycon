@@ -10,7 +10,6 @@ sys.path.append( pkg_path )
 
 from beaconServer import *
 
-
 """
 """
 
@@ -27,18 +26,18 @@ def main():
 def beacon():
 
     set_debug_state(debug=0)
-
-    rest_base_name = "beacon"
+    byc.update({"request_path_root": "beacon"})
+    rest_path_elements(byc)
 
     m_f = path.join( pkg_path, "config", "beacon_mappings.yaml")
     b_m = load_yaml_empty_fallback( m_f )
 
-    # TODO: service names from endpoints.yaml
-    service_name = rest_path_value(rest_base_name)
+    r_p_id = byc.get("request_entity_path_id", "info")
 
-    if service_name in b_m["service_aliases"]:    
-        f = b_m["service_aliases"][ service_name ]
+    if r_p_id in b_m["service_aliases"]:
+        f = b_m["service_aliases"][ r_p_id ]
 
+        # the data pipeline will run & terminate; else other service
         if f in b_m["data_pipeline_entry_types"]:
             beacon_data_pipeline(byc, f)
 
@@ -56,18 +55,17 @@ def beacon():
 
             exit()
 
-    cgi_print_response( {
-        "service_response": {
-            "response" : {
-                "error" : {
-                    "error_code": 422,
-                    "error_message": "No correct service path provided. Please refer to the documentation at http://info.progenetix.org/tags/Beacon"
-                    },
-                }
+    byc.update({
+        "service_response": {},
+        "error_response": {
+            "error": {
+                "error_code": 422,
+                "error_message": "No correct service path provided. Please refer to the documentation at http://docs.progenetix.org"
             }
-        },
-        422
-    )
+        }
+    })
+
+    cgi_print_response(byc, 422)
     
 ################################################################################
 ################################################################################

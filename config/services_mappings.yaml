@@ -36,7 +36,8 @@ path_response_type_mappings:
 
 response_types:
 
-  - entity_type: ontologymap
+  ontologymap:
+    entity_type: ontologymap
     collection: Null
     response_schema: progenetixServiceResponse
     beacon_schema:
@@ -44,7 +45,8 @@ response_types:
       schema: https://progenetix.org/services/schemas/OntologyClassGroup/
     h->o_access_key: Null
 
-  - entity_type: collation
+  collation:
+    entity_type: collation
     collection: Null
     response_schema: progenetixServiceResponse
     beacon_schema:
@@ -52,7 +54,8 @@ response_types:
       schema: https://progenetix.org/services/schemas/pgxCollation/
     h->o_access_key: Null
 
-  - entity_type: gene
+  gene:
+    entity_type: gene
     collection: Null
     response_schema: progenetixServiceResponse
     beacon_schema:
@@ -60,7 +63,8 @@ response_types:
       schema: https://progenetix.org/services/schemas/ProgenetixGene/
     h->o_access_key: Null
 
-  - entity_type: interval_frequencies
+  interval_frequencies:
+    entity_type: interval_frequencies
     collection: Null
     response_schema: progenetixServiceResponse
     beacon_schema:

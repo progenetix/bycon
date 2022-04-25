@@ -256,35 +256,35 @@ variant_types:
 
 parameters:
 
-  assemblyId:
+  assembly_id:
     type: string
     pattern: '^\w+?[\w\-\.]*?\w*?$'
     db_key: assembly_id
     default: GRCh38
 
-  referenceName:
+  reference_name:
     type: string
     db_key: location.sequence_id
     # db_key: reference_name
     pattern: '^\w+.*?\w?$'
 
-  mateName:
+  mate_name:
     type: string
     db_key: location.sequence_id
     # db_key: reference_name
     pattern: '^\w+.*?\w?$'
 
-  referenceBases:
+  reference_bases:
     type: string
     db_key: reference_bases
     pattern: '^[ACGTN]+$'
 
-  alternateBases:
+  alternate_bases:
     type: string
     db_key: state.sequence
     pattern: '^[ACGTN]+$'
 
-  variantType:
+  variant_type:
     type: array
     db_key: variant_state.id
     items:
@@ -306,21 +306,21 @@ parameters:
       type: integer
       pattern: '^\d+?$'
 
-  variantMinLength:
+  variant_min_length:
     type: integer
     db_key: info.var_length
     pattern: '^\d+?$'
     description: >-
       The minimal length, in bases, of a genomic variant. This parameter can be applied to e.g. CNV queries.
 
-  variantMaxLength:
+  variant_max_length:
     type: integer
     db_key: info.var_length
     pattern: '^\d+?$'
     description: >
       The maximal length, in bases, of a genomic variant. This parameter can be applied to e.g. CNV queries.
 
-  geneId:
+  gene_id:
     type: string
     db_key: Null
     pattern: '^\w+?(\w+?(\-\w+?)?)?$'
@@ -341,12 +341,12 @@ parameters:
     description: >
       A variant id, if existing in the database.
 
-  cytoBands:
+  cyto_bands:
     db_key: Null
     pattern: ^(?:chro?)?([12]?[\dXY])([pq](?:(?:ter)|(?:cen)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?\-?([pq](?:(?:cen)|(?:ter)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?$
     type: string
 
-  chroBases:
+  chro_bases:
     db_key: Null
     pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
     type: string
@@ -359,7 +359,7 @@ request_types:
     one_of:
       - id
       - _id
-      - variantInternalId
+      - variant_internal_id
 
   variantCNVrequest:
     description: >
@@ -374,27 +374,27 @@ request_types:
       fuzzy matching of CNVs and similar variants of imprecise length and
       position.
     all_of:
-      - assemblyId
+      - assembly_id
       - start
       - end
-      - referenceName
-      - variantType
+      - reference_name
+      - variant_type
     
   variantRangeRequest:
     description: |
       The beaconRangeRequest queries variants falling between start and end.
       `start` and `end` parameters should be single values.
     all_of:
-      - assemblyId
+      - assembly_id
       - start
       - end
-      - referenceName
+      - reference_name
     optional:
-      - variantType
-      - referenceBases
-      - alternateBases
-      - varMinlength
-      - variantMaxLength
+      - variant_type
+      - reference_bases
+      - alternate_bases
+      - variant_min_length
+      - variant_max_length
     
   variantAlleleRequest: 
     description: >
@@ -402,11 +402,11 @@ request_types:
       specified genome position a query looks for a combination of reference and
       replacement base(s).
     all_of:
-      - assemblyId
+      - assembly_id
       - start
-      - referenceName
-      - referenceBases
-      - alternateBases
+      - reference_name
+      - reference_bases
+      - alternate_bases
 
 # custom
 
@@ -420,9 +420,9 @@ request_types:
       * `mateName` can be the same or different to `referenceName`
       * `mateName` is the higher numbered/named chromosome
     all_of:
-      - assemblyId
-      - referenceName
-      - mateName
+      - assembly_id
+      - reference_name
+      - mate_name
       - start
       - end
     
@@ -432,24 +432,24 @@ request_types:
     all_of:
       - geneId
     optional:
-      - variantType
-      - referenceBases
-      - alternateBases
-      - varMinlength
-      - variantMaxLength
+      - variant_type
+      - reference_bases
+      - alternate_bases
+      - variant_min_length
+      - variant_max_length
 
   cytobands2positions_request:
     all_of:
-      - assemblyId
-      - cytoBands
+      - assembly_id
+      - cyto_bands
   
   positions2cytobands_request:
     all_of:
-      - assemblyId
+      - assembly_id
       - start
       - end
-      - referenceName
-      - rangeTag
+      - reference_name
+      - range_tag
 
   ChromosomeLocation:
     all_of:

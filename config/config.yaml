@@ -127,14 +127,14 @@ list_pars:
   - analysisIds
   - collationTypes
 id_query_map:
-  biosampleIds: biosamples
-  variantIds: variants
-  individualIds: individuals
-  callsetIds: callsets
+  biosample_ids: biosamples
+  variant_ids: variants
+  individual_ids: individuals
+  callset_ids: callsets
 filter_flags:
   logic: '$and'
   precision: exact #'start'
-  includeDescendantTerms: True
+  include_descendant_terms: True
 
 plot_pars:
   dotalpha: 0.2

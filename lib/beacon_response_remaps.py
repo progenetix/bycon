@@ -27,7 +27,7 @@ def remap_variants(r_s_res, byc):
     instances of a "canonical" variant have to be identified and grouped together
     with individual instances indicated through their identifiers in `caseLevelData`.
     """
-    if not "variant" in byc["response_type"]:
+    if not "genomicVariant" in byc["response_entity_id"]:
         return r_s_res
 
     v_d = byc["variant_definitions"]
@@ -216,7 +216,7 @@ def refseq_from_chro(chro, v_d):
 
 def remap_analyses(r_s_res, byc):
 
-    if not "analysis" in byc["response_type"]:
+    if not "analysis" in byc["response_entity_id"]:
         return r_s_res
 
     pop_keys = ["info", "provenance", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats"]
@@ -233,7 +233,7 @@ def remap_analyses(r_s_res, byc):
 
 def remap_cohorts(r_s_res, byc):
 
-    if not "cohort" in byc["response_type"]:
+    if not "cohort" in byc["response_entity_id"]:
         return r_s_res
 
     cohorts = [ ]
@@ -243,9 +243,9 @@ def remap_cohorts(r_s_res, byc):
     for cs_i, cs_r in enumerate(r_s_res):
 
         cohorts.append({
-            "id": cs_r.get("id", cs_i),
+            "cohort_id": cs_r.get("id", cs_i),
             "cohort_type": "beacon-defined",
-            "name": cs_r.get("label", ""),
+            "cohort_name": cs_r.get("label", ""),
             "cohort_size": int(cs_r.get("count", 0))
         })
         
@@ -255,7 +255,7 @@ def remap_cohorts(r_s_res, byc):
 
 def remap_runs(r_s_res, byc):
 
-    if not "run" in byc["response_type"]:
+    if not "run" in byc["response_entity_id"]:
         return r_s_res
 
     runs = []
@@ -275,7 +275,7 @@ def remap_runs(r_s_res, byc):
 
 def remap_biosamples(r_s_res, byc):
 
-    if not "biosample" in byc["response_type"]:
+    if not "biosample" in byc["response_entity_id"]:
         return r_s_res
 
     for bs_i, bs_r in enumerate(r_s_res):
@@ -301,7 +301,7 @@ def remap_biosamples(r_s_res, byc):
 
 def remap_individuals(r_s_res, byc):
 
-    if not "individual" in byc["response_type"]:
+    if not "individual" in byc["response_entity_id"]:
         return r_s_res
 
     return r_s_res
@@ -310,7 +310,7 @@ def remap_individuals(r_s_res, byc):
 
 def remap_phenopackets(ds_id, r_s_res, byc):
 
-    if not "phenopacket" in byc["response_type"]:
+    if not "phenopacket" in byc["response_entity_id"]:
         return r_s_res
 
     mongo_client = MongoClient()
@@ -358,7 +358,7 @@ def phenopack_individual(ind, data_db, byc):
 
     pop_keys = ["_id", "provenance"]
 
-    for k in del_keys:
+    for k in pop_keys:
         ind.pop(k, None)
 
     for d_i, d in enumerate(ind["diseases"]):

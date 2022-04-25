@@ -43,7 +43,6 @@ def datasets():
     _get_history_depth(byc)
     dbstats = datasets_update_latest_stats(byc)
 
-    beacon_get_endpoint_base_paths(byc)
     initialize_beacon_queries(byc)
 
     if "beaconResultsetsResponse" in byc["response_entity"]["response_schema"]:

@@ -1,5 +1,5 @@
 bycon_definition_files:
-  - service_mappings
+  - services_mappings
   - dataset_definitions
   - filter_definitions
   - beacon_mappings
@@ -7,7 +7,7 @@ defaults:
   dataset_ids:
     - progenetix
   method: counts
-  response_type: dbstats
+  response_entity_id: dbstats
   stats_number: 1
 meta:
   returned_schemas:

@@ -1,29 +1,33 @@
 {
-    "$id": "https://progenetix.org/services/schemas/ontologyTerm/v2021-11-12",
+    "$id": "https://progenetix.org/services/schemas/ontologyTerm/v2022-04-19",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "additionalProperties": true,
-    "description": "The `ontologyTerm` object is the main wrapper for identifiers, used for well-formed CURIE representations of ontology classes for biological or technical concepts and knowledge resources, as well as for \"private\" identifiers such as internal classifications. \n",
+    "definitions": {
+        "CURIE": {
+            "description": "A CURIE identifier for an ontology term.",
+            "examples": [
+                "ga4gh:GA.01234abcde",
+                "DUO:0000004",
+                "orcid:0000-0003-3463-0775",
+                "PMID:15254584"
+            ],
+            "pattern": "^\\w[^:]+:.+$",
+            "type": "string"
+        }
+    },
+    "description": "Definition of an ontology term.",
     "properties": {
         "id": {
-            "description": "Identifier as string (CURIE highly recommended). ",
-            "examples": [
-                "UBERON:0000002",
-                "PMID:9892199",
-                "icdom-85003"
-            ],
-            "type": "string"
+            "$ref": "#/definitions/CURIE"
         },
         "label": {
-            "examples": [
-                "neoplastic sample",
-                "Adenocarcinoma, NOS"
-            ],
+            "description": "The text that describes the term. By default it could be the preferred text of the term, but is it acceptable to customize it for a clearer description and understanding of the term in an specific context.",
             "type": "string"
         }
     },
     "required": [
         "id"
     ],
-    "title": "ontologyTerm",
+    "title": "Ontology Term",
     "type": "object"
 }

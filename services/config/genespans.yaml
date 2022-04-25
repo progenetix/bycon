@@ -1,5 +1,5 @@
 bycon_definition_files:
-  - service_mappings
+  - services_mappings
   - beacon_mappings
 defaults:
   dataset_ids:
@@ -11,7 +11,7 @@ defaults:
     - synonyms
   db: progenetix
   coll: genes
-  response_type: gene
+  response_entity_id: gene
 meta:
   received_request_summary:
     requested_granularity: record

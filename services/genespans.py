@@ -29,15 +29,15 @@ def genespans():
     create_empty_service_response(byc)
 
     assembly_id = byc["assembly_id"]
-    if "assemblyId" in byc[ "form_data" ]:
-        aid = byc[ "form_data" ]["assemblyId"]
+    if "assembly_id" in byc[ "form_data" ]:
+        aid = byc[ "form_data" ]["assembly_id"]
         if aid in byc["this_config"]["assembly_ids"]:
             assembly_id = aid
         else:
             byc["service_response"]["meta"]["warnings"].append("{} is not supported; fallback {} is being used!".format(aid, assembly_id))
             
-    if "filterPrecision" in byc["form_data"]:
-        byc["query_precision"] = byc["form_data"]["filterPrecision"]
+    if "filter_precision" in byc["form_data"]:
+        byc["query_precision"] = byc["form_data"]["filter_precision"]
     else:
         byc["query_precision"] = "start"
 
@@ -48,8 +48,8 @@ def genespans():
 
     if not "empty_value" in gene_id:
         response_add_received_request_summary_parameter(byc, "geneId", gene_id)
-    elif "geneId" in byc[ "form_data" ]:
-        gene_id = byc[ "form_data" ]["geneId"]
+    elif "gene_id" in byc[ "form_data" ]:
+        gene_id = byc[ "form_data" ]["gene_id"]
         response_add_received_request_summary_parameter(byc, "geneId", gene_id)
     else:
         # TODO: value check & response

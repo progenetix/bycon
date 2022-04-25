@@ -39,6 +39,7 @@ def cohorts():
     run_beacon_init_stack(byc)
     return_filtering_terms_response(byc)
 
+
     _return_cohorts_response(byc)
 
     run_result_sets_beacon(byc)
@@ -52,12 +53,16 @@ def cohorts():
 
 def _return_cohorts_response(byc):
 
-    if not "cohort" in byc["response_type"]:
+    if not "cohort" in byc["response_entity_id"]:
         return byc
 
     mongo_client = MongoClient( )
 
     cohorts =  []
+
+    # TODO: verifier hack ...
+    if not "cohorts" in byc["queries"]:
+        byc.update({"test_mode": True})
 
     if byc["test_mode"] is True:
         byc["queries"].update( {"cohorts": { "collation_type": "pgxcohort" } } )

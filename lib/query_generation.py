@@ -97,62 +97,31 @@ def replace_queries_in_test_mode(byc, ret_no=10):
 
 def _update_queries_from_path_id( byc ):
 
-    if not environ.get('REQUEST_URI'):
+    b_mps = byc["beacon_mappings"]
+
+    if "service" in byc["request_path_root"]:
+        b_mps = byc["services_mappings"]
+
+    if not byc["request_entity_id"]:
         return byc
 
-    url_comps = urlparse( environ.get('REQUEST_URI') )
+    r_e_id = byc["request_entity_id"]
+    p_id_v = byc["request_entity_path_id_value"]
 
-    if "service_name" in byc:
-        pgx_base = byc["service_name"]
-
-    rb_t = rest_path_value("beacon")
-
-    if not rb_t == pgx_base:
-        if not rb_t in byc["beacon_base_paths"]:
-            return byc
-
-    byc.update({"response_type": _get_response_type_from_path(rb_t, byc) })
-
-    p_id = rest_path_value(rb_t)
-
-    # TODO: prototyping here ...
-    if p_id == "filteringTerms":
-        byc.update({"response_type": "filteringTerm" })
-        byc["form_data"].update({"scope": rb_t })
+    if not byc["request_entity_path_id_value"]:
         return byc
 
-    if p_id:
-        if not "empty_value" in p_id:
-            s_id = p_id
+    if not r_e_id in b_mps["response_types"]:
+        return byc
 
-            byc.update({ "id_from_path": s_id })
+    collname = b_mps["response_types"][r_e_id]["collection"]
 
-            byc["queries"].update(
-                { pgx_base: { "id": s_id } } )
+    if not collname:
+        return byc
 
-            # That's why the original path id was kept...
-            r_t = rest_path_value(p_id)
-            if not "empty_value" in r_t:
-                byc.update({"response_type": _get_response_type_from_path(r_t, byc) })
-
-            # print(byc["queries"])
-            # print(byc["response_type"])
+    byc["queries"].update( { collname: { "id": p_id_v } } )
 
     return byc
-
-################################################################################
-
-def _get_response_type_from_path(path_element, byc):
-    
-    try:
-        t = byc["beacon_mappings"]["path_response_type_mappings"][path_element]
-        for r_d in byc["beacon_mappings"]["response_types"]:
-            if r_d["entity_type"] == t:
-                path_element = r_d["entity_type"]
-    except:
-        pass
-
-    return path_element
 
 ################################################################################
 
@@ -161,7 +130,7 @@ def _update_queries_from_cohorts_query(byc):
     if not "cohorts" in byc["queries"]:
         return byc
 
-    if "cohort" in byc["response_type"]:
+    if "cohort" in byc["response_entity_id"]:
         return byc
 
     c_q = byc["queries"]["cohorts"]
@@ -184,7 +153,7 @@ def _update_queries_from_id_values(byc):
     id_f_v = byc["beacon_mappings"]["id_queryscope_mappings"]
     f_d = byc["form_data"]
 
-    this_id_k = byc["response_type"]+"Ids"
+    this_id_k = byc["response_entity_id"]+"Ids"
     if "ids" in f_d:
         if not this_id_k in f_d:
             f_d.update({this_id_k: f_d["ids"]})

@@ -11,26 +11,6 @@ pkg_path = path.join( lib_path, pardir )
 
 ################################################################################
 
-def beacon_get_endpoint_base_paths(byc):
-
-    # print(byc["this_endpoints"])
-
-    try:
-        p_s = byc["this_endpoints"]["paths"].keys()
-    except:
-        return byc
-
-    r_p_bs = set()
-    for p in p_s:
-        p = re.sub(r'^\/',"", p )
-        if len(p) > 1:
-            r_p_bs.add( re.split('/', p)[0] )
-    byc.update({"beacon_base_paths": list(r_p_bs) })
-
-    return byc
-
-################################################################################
-
 def read_schema_file(schema_name, item, byc, ext="json"):
 
     b_p_m = byc["beacon_mappings"]["default_schema_from_model"]

@@ -24,7 +24,7 @@ def parse_cytoband_file(byc):
         "ncbi34": "hg16"
     }
 
-    genome = byc["variant_pars"][ "assemblyId" ].lower()
+    genome = byc["variant_pars"][ "assembly_id" ].lower()
     genome = re.sub( r"(\w+?)([^\w]\w+?)", r"\1", genome)
 
     if genome in g_map.keys():
@@ -82,7 +82,7 @@ def parse_cytoband_file(byc):
 
 def bands_from_cytobands(chr_bands, byc):
 
-    cb_pat = re.compile( byc["variant_definitions"]["parameters"]["cytoBands"]["pattern"] )
+    cb_pat = re.compile( byc["variant_definitions"]["parameters"]["cyto_bands"]["pattern"] )
     error = ""
 
     end_re = re.compile(r"^([pq]\d.*?)\.?\d$")

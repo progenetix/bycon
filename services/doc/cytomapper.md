@@ -81,8 +81,6 @@ The `GenomicLocation` object is a wrapper around a VRS `SimpleInterval`.
   "parameters": {
     "assemblyId": "NCBI36.1",
     "cytoBands": "8q24.1"
-  },
-  "response_type": "cytomapper",
-  "warnings": []
+  }
 }
 ```

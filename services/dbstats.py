@@ -38,7 +38,7 @@ def dbstats():
     check_dataset_ids(byc)
 
     if "statsNumber" in byc["form_data"]:
-        s_n = byc["form_data"]["statsNumber"]
+        s_n = byc["form_data"]["stats_number"]
         try:
             s_n = int(s_n)
         except:

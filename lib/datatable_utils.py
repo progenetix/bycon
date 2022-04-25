@@ -11,16 +11,16 @@ def check_datatable_delivery(results, byc):
         return
 
     dt_m = byc["datatable_mappings"]
-    r_t = byc["response_type"]
+    r_t = byc["response_entity_id"]
 
-    if not byc["response_type"] in dt_m["io_params"]:
+    if not byc["response_entity_id"] in dt_m["io_params"]:
         return
 
     io_params = dt_m["io_params"][ r_t ]
     io_prefixes = dt_m["io_prefixes"][ r_t ]
 
     print('Content-Type: text/tsv')
-    print('Content-Disposition: attachment; filename='+byc["response_type"]+'.tsv')
+    print('Content-Disposition: attachment; filename='+byc["response_entity_id"]+'.tsv')
     print('status: 200')
     print()
 

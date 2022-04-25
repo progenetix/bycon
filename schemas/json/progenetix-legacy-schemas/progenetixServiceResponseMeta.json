@@ -21,12 +21,6 @@
                 "type": "object"
             },
             "type": "array"
-        },
-        "warnings": {
-            "items": {
-                "type": "string"
-            },
-            "type": "array"
         }
     },
     "title": "progenetixServiceResponseMeta"

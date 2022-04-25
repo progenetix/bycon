@@ -84,8 +84,8 @@ def interval_frequencies():
             if collation_f is None:
                 continue
 
-            if "withSamples" in byc["form_data"]: 
-                if int(byc["form_data"]["withSamples"]) > 0:
+            if "with_samples" in byc["form_data"]: 
+                if int(byc["form_data"]["with_samples"]) > 0:
                     if int(collation_c[ "code_matches" ]) < 1:
                         continue
 

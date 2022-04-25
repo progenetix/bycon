@@ -1,6 +1,6 @@
 bycon_definition_files:
   - geoloc_definitions
-  - service_mappings
+  - services_mappings
   - beacon_mappings
 defaults:
   dataset_ids:
@@ -9,7 +9,7 @@ defaults:
   geo_coll: geolocs
   request_type: city
 meta:
-  response_type: geolocs
+  response_entity_id: geolocs
   returned_schemas:
     - entity_type: genespan
       schema: https://progenetix.org/services/schemas/GeoLocation/

@@ -3,7 +3,7 @@ from pymongo import MongoClient
 from os import path, pardir
 from pathlib import Path
 from json_ref_dict import RefDict, materialize
-import humps
+from humps import camelize, decamelize
 
 ################################################################################
 
@@ -33,6 +33,9 @@ def read_local_prefs(service, dir_path, byc):
 
     these_pars = ["config", "endpoints", "request_parameters"] # "config"
 
+    # We use snake_case in the paths
+    service = decamelize(service)
+
     for t_p in these_pars:
         t_k = "this_"+t_p
         byc.update({t_k: {}})
@@ -49,7 +52,7 @@ def read_local_prefs(service, dir_path, byc):
     elif d.is_dir():
         for t_p in these_pars:
             t_k = "this_"+t_p
-            t_f_n = "{}.yaml".format(humps.camelize(t_p))
+            t_f_n = "{}.yaml".format(camelize(t_p))
             t_f_p = Path( path.join( d, t_f_n ) )
             if t_f_p.is_file():
                 byc.update({ t_k: load_yaml_empty_fallback(t_f_p) } )
@@ -95,7 +98,7 @@ def datasets_update_latest_stats(byc, collection_type="datasets"):
                     for c, c_d in byc["config"]["beacon_counts"].items():
                         if c_d["info_key"] in ds_vs["counts"]:
                             coll["info"].update({ c: ds_vs["counts"][ c_d["info_key"] ] })
-                if "filtering_terms" in byc["response_type"]:
+                if "filtering_terms" in byc["response_entity_id"]:
                     coll.update({ "filtering_terms": stat[ collection_type ][coll_id]["filtering_terms"] } )
 
         results.append(coll)

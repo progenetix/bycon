@@ -1,6 +1,7 @@
 import cgi, cgitb, humps, json, re, sys
 from urllib.parse import urlparse, parse_qs, unquote
 from os import environ
+from humps import decamelize
 
 ################################################################################
 
@@ -66,9 +67,11 @@ def cgi_parse_query(byc):
                 for p, v in jbod["query"].items():
                     if p == "requestParameters":
                         for rp, rv in v.items():
-                            form.update({rp: rv})
+                            rp_d = decamelize(rp)
+                            form.update({rp_d: rv})
                     else:
-                        form.update({p: v})
+                        p_d = decamelize(p)
+                        form.update({p_d: v})
 
             # TODO: define somewhere else with proper defaults
             form.update({
@@ -92,10 +95,11 @@ def cgi_parse_query(byc):
     get = cgi.FieldStorage()
 
     for p in get:
+        p_d = decamelize(p)
         if p in byc["config"]["list_pars"]:
-            form.update({p: form_return_listvalue( get, p )})
+            form.update({p_d: form_return_listvalue( get, p )})
         else:
-            form.update({p: get.getvalue(p)})
+            form.update({p_d: get.getvalue(p)})
 
     #TODO: re-evaluate hack of empty filters which avoids dirty errors downstream
     if not "filters" in form:
@@ -107,16 +111,13 @@ def cgi_parse_query(byc):
         "include_handovers": get.getvalue("includeHandovers", defs.get("include_handovers", False))
     })
 
-    if "requestedSchema" in form:
+    if "requested_schema" in form:
         try:
             byc["query_meta"].update({
-                "requested_schemas": [ {"entityType": form["requestedSchema"] } ]
+                "requested_schemas": [ {"entity_type": form["requested_schema"] } ]
             } )
         except:
             pass
-
-    # print(byc["query_meta"])
-    # exit()
 
     if not "pagination" in form:
         form.update({ "pagination": { } })
@@ -128,6 +129,39 @@ def cgi_parse_query(byc):
 
     byc.update({ "form_data": form })
     
+    return byc
+
+################################################################################
+
+def rest_path_elements(byc):
+
+    r_p_r = byc.get("request_path_root", "beacon")
+
+    if not environ.get('REQUEST_URI'):
+        return byc
+
+    url_comps = urlparse( environ.get('REQUEST_URI') )
+    url_p = url_comps.path
+    p_items = re.split('/', url_p)
+
+    if not r_p_r in p_items:
+        return byc
+    
+    for d_k in ["debug=1", "debug=true"]:
+        if d_k in p_items:
+            p_items.remove(d_k)
+
+    p_items = list(filter(None, p_items))
+
+    r_i = p_items.index(r_p_r)
+
+    for p_k in ["request_entity_path_id", "request_entity_path_id_value", "response_entity_path_id"]:
+
+        r_i += 1       
+        if r_i == len(p_items):
+            return byc
+        byc.update({p_k:p_items[r_i]})
+
     return byc
 
 ################################################################################
@@ -230,6 +264,23 @@ def cgi_debug_message(byc, label, debug_object):
             print("{}:\n\n{}\n\n".format(label, debug_object))
     except:
         pass
+
+################################################################################
+
+def switch_to_wrong_service_response(byc):
+
+    byc.update( {
+        "service_response": {
+            "response" : {
+                "error" : {
+                    "error_code": 422,
+                    "error_message": "No correct service path provided. Please refer to the documentation at http://info.progenetix.org/tags/Beacon"
+                    },
+                }
+            }
+        })
+
+    return byc
 
 ################################################################################
 

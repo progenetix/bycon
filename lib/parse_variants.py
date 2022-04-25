@@ -68,14 +68,14 @@ def parse_variants(byc):
         if "array" in v_p_defs[ p_k ]["type"]:
             v_l = set()
             for v in v_p:
-                if "variantType" in p_k:
+                if "variant_type" in p_k:
                     if v in v_t_defs.keys():
                         v_l.add( v )
                 elif re.compile( v_p_defs[ p_k ][ "items" ][ "pattern" ] ).match( str( v ) ):
                     if "integer" in v_p_defs[ p_k ][ "items" ][ "type" ]:
                         v = int( v )
                     v_l.add( v )
-            if "variantType" in p_k:
+            if "variant_type" in p_k:
                 v_t_l = set()
                 for v_t in list(v_l):
                     v_t_l.update(v_t_defs[v_t]["child_terms"])
@@ -95,17 +95,17 @@ def parse_variants(byc):
 
 def translate_reference_name(variant_pars, byc):
 
-    if not "referenceName" in variant_pars:
+    if not "reference_name" in variant_pars:
         return variant_pars
 
-    r_n = variant_pars[ "referenceName" ]
+    r_n = variant_pars[ "reference_name" ]
     r_a = byc["variant_definitions"]["refseq_aliases"]
 
     if not r_n in r_a.keys():
-        variant_pars.pop("referenceName")
+        variant_pars.pop("reference_name")
         return variant_pars
 
-    variant_pars.update({"referenceName": r_a[r_n] })
+    variant_pars.update({"reference_name": r_a[r_n] })
 
     return variant_pars
 
@@ -216,7 +216,7 @@ def create_geneVariantRequest_query( byc ):
 
     # Since this is a pre-processor to the range request
     byc["variant_pars"].update( {
-        "referenceName": results[0]["reference_name"],
+        "reference_name": results[0]["reference_name"],
         "start": [ results[0]["start"] ],
         "end": [ results[0]["end"] ]
     } )
@@ -246,10 +246,10 @@ def create_variantAlleleRequest_query( byc ):
     # TODO: Regexes for ref or alt with wildcard characters
 
     v_q_l = [
-        { v_p_defs["referenceName"]["db_key"]: vp[ "referenceName" ] },
+        { v_p_defs["reference_name"]["db_key"]: vp[ "reference_name" ] },
         { v_p_defs["start"]["db_key"]: int(vp[ "start" ][0]) }
     ]
-    for p in [ "referenceBases", "alternateBases" ]:
+    for p in [ "reference_bases", "alternate_bases" ]:
         if not vp[ p ] == "N":
             if "N" in vp[ p ]:
                 rb = vp[ p ].replace("N", ".")
@@ -274,12 +274,12 @@ def create_variantCNVrequest_query( byc ):
     v_p_defs = byc["variant_definitions"]["parameters"]
 
     v_q = { "$and": [
-        { v_p_defs["referenceName"]["db_key"]: vp[ "referenceName" ] },
+        { v_p_defs["reference_name"]["db_key"]: vp[ "reference_name" ] },
         { v_p_defs["start"]["db_key"]: { "$lt": vp[ "start" ][-1] } },
         { v_p_defs["end"]["db_key"]: { "$gte": vp[ "end" ][0] } },
         { v_p_defs["start"]["db_key"]: { "$gte": vp[ "start" ][0] } },
         { v_p_defs["end"]["db_key"]: { "$lt": vp[ "end" ][-1] } },
-        create_in_query_for_parameter("variantType", v_p_defs["variantType"]["db_key"], vp)
+        create_in_query_for_parameter("variant_type", v_p_defs["variant_type"]["db_key"], vp)
     ]}
 
     expand_variant_query(v_q, byc)
@@ -297,27 +297,27 @@ def create_variantRangeRequest_query( byc ):
     v_p_defs = byc["variant_definitions"]["parameters"]
 
     v_q_l = [
-        { v_p_defs["referenceName"]["db_key"]: vp[ "referenceName" ] },
+        { v_p_defs["reference_name"]["db_key"]: vp[ "reference_name" ] },
         { v_p_defs["start"]["db_key"]: { "$lt": int(vp[ "end" ][-1]) } },
         { v_p_defs["end"]["db_key"]: { "$gt": int(vp[ "start" ][0]) } }
     ]
 
-    p_n = "variantMinLength"
+    p_n = "variant_min_length"
     if p_n in vp:
         v_q_l.append( { v_p_defs[p_n]["db_key"]: { "$gte" : vp[p_n] } } )
-    p_n = "variantMaxLength"
-    if "variantMaxLength" in vp:
+    p_n = "variant_max_length"
+    if "variant_max_length" in vp:
         v_q_l.append( { v_p_defs[p_n]["db_key"]: { "$lte" : vp[p_n] } } )
 
-    p_n = "variantType"
+    p_n = "variant_type"
     if p_n in vp:
         v_q_l.append( create_in_query_for_parameter(p_n, v_p_defs[p_n]["db_key"], vp) )
-    elif "alternateBases" in vp:
+    elif "alternate_bases" in vp:
         # the N wildcard stands for any length alt bases so can be ignored
-        if vp[ "alternateBases" ] == "N":
-             v_q_l.append( { v_p_defs["alternateBases"]["db_key"]: {'$regex': "." } } )
+        if vp[ "alternate_bases" ] == "N":
+             v_q_l.append( { v_p_defs["alternate_bases"]["db_key"]: {'$regex': "." } } )
         else:
-            v_q_l.append( { v_p_defs["alternateBases"]["db_key"]: vp[ "alternateBases" ] } )
+            v_q_l.append( { v_p_defs["alternate_bases"]["db_key"]: vp[ "alternate_bases" ] } )
 
     v_q = { "$and": v_q_l }
 

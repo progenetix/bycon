@@ -7,13 +7,13 @@
             "description": "Criteria used for defining the cohort. It is assumed that all cohort participants will match or NOT match such criteria.",
             "properties": {
                 "ageRange": {
-                    "$ref": "../common/ageRange.json",
+                    "$ref": "../common/ageRange.json#/properties",
                     "description": "Individual age range in cohort inclusion criteria"
                 },
                 "diseaseConditions": {
                     "description": "Diseases in cohort inclusion criteria",
                     "items": {
-                        "$ref": "../common/disease.json"
+                        "$ref": "../common/disease.json#/properties"
                     },
                     "type": "array"
                 },
@@ -41,7 +41,7 @@
                 "phenotypicConditions": {
                     "description": "Phenotypic condition(s) in cohort inclusion criteria",
                     "items": {
-                        "$ref": "../common/phenotypicFeature.json"
+                        "$ref": "../common/phenotypicFeature.json#/properties"
                     },
                     "type": "array"
                 }
@@ -203,7 +203,7 @@
                 }
             ],
             "items": {
-                "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json"
+                "$ref": "../common/ontologyTerm.json#/properties"
             },
             "type": "array"
         }
@@ -214,7 +214,7 @@
             "$ref": "#/definitions/DataTypesArray"
         },
         "cohortDesign": {
-            "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json",
+            "$ref": "../common/ontologyTerm.json#/properties",
             "description": "Cohort type by its design. A plan specification comprised of protocols (which may specify how and what kinds of data will be gathered) that are executed as part of an investigation and is realized during a study design execution. Value from Ontologized MIABIS (OMIABIS) Study design ontology term tree (OBI:0500000).",
             "examples": [
                 {

@@ -27,24 +27,24 @@ from variant_responses import normalize_variant_values_for_export
 def initialize_bycon():
 
     byc =  {
-        "service_name": "beacon",
-        "service_id": "beacon",
+        "pkg_path": pkg_path,
+        "request_path_root": "beacon",
+        "request_entity_path_id": None,
+        "request_entity_path_id_value": None,
+        "response_entity_path_id": None,
+        "request_entity_id": None,
+        "response_entity_id": None,
         "response_entity": {},
         "beacon_info": {},
-        "beacon_base_paths": [],
-        "pkg_path": pkg_path,
         "method": "",
         "output": "",
         "form_data": {},
         "query_meta": {},
         "include_handovers": False,
-        "debug_mode": False,
-        "empty_query_all_response": False,
         "empty_query_all_count": False,
         "test_mode": False,  
         "debug_mode": False,  
-        "errors": [],
-        "warnings": []
+        "errors": []
     }
 
     return byc
@@ -71,7 +71,8 @@ def initialize_service(byc, service=False):
     correspond to the calling main function. However, an overwrite can be
     provided."""
 
-    # print(config)
+    defs = byc["beacon_defaults"]
+    form = byc["form_data"]
 
     frm = inspect.stack()[1]
     mod = inspect.getmodule(frm[0])
@@ -80,22 +81,13 @@ def initialize_service(byc, service=False):
     if service is False:
         service = frm.function
 
-    service = decamelize(service)
-
-    byc.update({
-        "service_name": path.splitext(path.basename(mod.__file__))[0],
-        "service": service
-    })
+    # TODO - streamline
+    s_a_s = byc["beacon_mappings"]["service_aliases"]
+    if service in s_a_s:
+        service = s_a_s[service]
 
     read_local_prefs( service, sub_path, byc )
-
     conf = byc["this_config"]
-    defs = byc["beacon_defaults"]
-    form = byc["form_data"]
-
-    if "bycon_definition_files" in defs:
-        for d in defs["bycon_definition_files"]:
-            read_bycon_configs_by_name( d, byc )
 
     if "defaults" in conf:
         for d_k, d_v in conf["defaults"].items():
@@ -106,15 +98,13 @@ def initialize_service(byc, service=False):
 
     if service in defs:
         for d_k, d_v in defs[ service ].items():
+            # print(d_k, d_v)
             byc.update( { d_k: d_v } )
+    # update response_entity_id from path
+    update_entity_ids_from_path(byc)
+    update_requested_schema_from_request(byc)
 
-    if not "pagination" in byc:
-        byc.update( { "pagination": {"skip": 0, "limit": 0 } } )
-
-    for sp in ["skip", "limit"]:
-        if sp in form["pagination"]:
-            if form["pagination"][sp] > -1:
-                byc["pagination"].update({sp: form["pagination"][sp]})
+    _set_pagination(byc)
 
     byc["output"] = form.get("output", "")
 
@@ -136,11 +126,63 @@ def initialize_service(byc, service=False):
 
 ################################################################################
 
+def  _set_pagination(byc):
+
+    form = byc["form_data"]
+
+    if not "pagination" in byc:
+        byc.update( { "pagination": {"skip": 0, "limit": 0 } } )
+
+    for sp in ["skip", "limit"]:
+        if sp in form["pagination"]:
+            if form["pagination"][sp] > -1:
+                byc["pagination"].update({sp: form["pagination"][sp]})
+
+    return byc
+
+################################################################################
+
+def update_entity_ids_from_path(byc):
+
+    if not byc["request_entity_path_id"]:
+        return byc
+
+    if not byc["response_entity_path_id"]:
+        byc.update({ "response_entity_path_id": byc["request_entity_path_id"] })
+
+    req_p_id = byc["request_entity_path_id"]
+    res_p_id = byc["response_entity_path_id"]
+
+    b_mps = byc["beacon_mappings"]
+    p_r_m = b_mps["path_response_type_mappings"]
+
+    byc.update({
+        "request_entity_id": p_r_m.get(req_p_id, byc["request_entity_path_id"]),
+        "response_entity_id": p_r_m.get(res_p_id, byc["response_entity_path_id"])
+    })
+
+    return byc
+
+################################################################################
+
+def update_requested_schema_from_request(byc):
+
+    b_mps = byc["beacon_mappings"]
+    form = byc["form_data"]
+
+    if not "requested_schema" in form:
+        return byc
+
+    byc.update({"response_entity_id": form.get("requested_schema", byc["response_entity_id"])})
+
+    return byc
+
+################################################################################
+
 def run_beacon_init_stack(byc):
 
-    beacon_get_endpoint_base_paths(byc)
     initialize_beacon_queries(byc)
-    print_parameters_response(byc)
+    # print_parameters_response(byc)
     generate_genomic_intervals(byc)
     create_empty_beacon_response(byc)
     replace_queries_in_test_mode(byc, 5)
@@ -238,8 +280,10 @@ def retrieve_data(ds_id, byc):
     r_c = byc["response_entity"]["collection"]
     r_k = r_c+"_id"
 
-    for r_d in byc["beacon_mappings"]["response_types"]:
-        if r_d["entity_type"] == byc["response_type"]:
+    for r_t, r_d in byc["beacon_mappings"]["response_types"].items():
+        # print(r_d["entity_type"], byc["response_entity_id"])
+
+        if r_d["entity_type"] == byc["response_entity_id"]:
             r_k = r_d["h->o_access_key"]
 
     if "variants" in r_c:
@@ -327,11 +371,8 @@ def response_meta_add_request_summary(r, byc):
 
 def create_empty_beacon_response(byc):
 
-    response_update_type_from_request(byc, "beacon")
-    response_set_entity(byc, "beacon")
-
+    response_set_entity(byc)
     r, e = instantiate_response_and_error(byc, byc["response_entity"]["response_schema"])
-
     response_update_meta(r, byc)
 
     try:
@@ -370,8 +411,8 @@ def create_empty_beacon_response(byc):
 
 def create_empty_service_response(byc):
 
-    response_update_type_from_request(byc, "service")
-    response_set_entity(byc, "service")
+    response_update_type_from_request(byc)
+    response_set_entity(byc)
 
     r, e = instantiate_response_and_error(byc, byc["response_entity"]["response_schema"])
     response_update_meta(r, byc)
@@ -389,7 +430,7 @@ def create_empty_service_response(byc):
 
 def create_empty_non_data_response(byc):
 
-    response_update_type_from_request(byc, "beacon")
+    response_update_type_from_request(byc)
     response_set_entity(byc)
 
     r, e = instantiate_response_and_error(byc, byc["response_entity"]["response_schema"])
@@ -464,25 +505,25 @@ def response_update_meta(r, byc):
 
 ################################################################################
 
-def print_parameters_response(byc):
+# def print_parameters_response(byc):
 
-    if not "queries" in byc:
-        return byc
+#     if not "queries" in byc:
+#         return byc
 
-    if not byc["service_id"] in byc["queries"].keys():
-        return byc
+#     if not byc["service_id"] in byc["queries"].keys():
+#         return byc
 
-    s_i_d = byc["service_id"]
+#     s_i_d = byc["service_id"]
 
-    try:
-        if "requestParameters" in byc["queries"][ s_i_d ]["id"]:
-            cgi_print_json_response(byc["this_request_parameters"])
-        elif "endpoints" in byc["queries"][ s_i_d ]["id"]:
-            cgi_print_json_response(byc["this_endpoints"])
-    except:
-        pass
+#     try:
+#         if "requestParameters" in byc["queries"][ s_i_d ]["id"]:
+#             cgi_print_json_response(byc["this_request_parameters"])
+#         elif "endpoints" in byc["queries"][ s_i_d ]["id"]:
+#             cgi_print_json_response(byc["this_endpoints"])
+#     except:
+#         pass
 
-    return byc
+#     return byc
 
 ################################################################################
 
@@ -522,9 +563,9 @@ def response_meta_set_entity_values(r, byc):
 
 ################################################################################
 
-def response_update_type_from_request(byc, scope="beacon"):
+def response_update_type_from_request(byc):
 
-    m_k = str(scope) + "_mappings"
+    m_k = byc["request_path_root"] + "_mappings"
 
     try:
         b_mps = byc[m_k]["response_types"]
@@ -534,7 +575,7 @@ def response_update_type_from_request(byc, scope="beacon"):
                 e_t = r_s["entityType"]
                 for r_d in b_mps:
                     if r_d["entity_type"] == e_t:
-                        byc.update({"response_type":e_t})
+                        byc.update({"response_entity_id":e_t})
                         byc["query_meta"].update({"requested_schemas": r_d["beacon_schema"]})
     except Exception as e:
         pass
@@ -575,19 +616,14 @@ def response_add_error(byc, code=200, message=""):
 
 ################################################################################
 
-def response_set_entity(byc, scope="beacon"):
+def response_set_entity(byc):
 
-    m_k = str(scope) + "_mappings"
+    m_k = byc["request_path_root"] + "_mappings"
 
-    try:
-        for r_d in byc[m_k]["response_types"]:
-            # print(r_d["entity_type"], byc["response_type"])
-            
-            if r_d["entity_type"] == byc["response_type"]:
-                byc.update({"response_entity": r_d })
-                return byc
-    except:
-        pass
+    b_rt_s = byc[m_k]["response_types"]
+
+    if byc["response_entity_id"] in b_rt_s.keys():
+        byc.update({"response_entity": b_rt_s[ byc["response_entity_id"] ] })
 
     return byc
 
@@ -677,7 +713,7 @@ def populate_service_response_counts(byc):
 
 def check_alternative_variant_deliveries(ds_id, byc):
 
-    if not "variant" in byc["response_type"]:
+    if not "genomicVariant" in byc["response_entity_id"]:
         return byc
 
     if "pgxseg" in byc["output"]:
@@ -700,7 +736,7 @@ def check_alternative_callset_deliveries(ds_id, byc):
 
 def return_filtering_terms_response( byc ):
 
-    if not "filteringTerm" in byc["response_type"]:
+    if not "filteringTerm" in byc["response_entity_id"]:
         return byc
 
     # TODO: correct response w/o need to fix

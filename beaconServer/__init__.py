@@ -29,5 +29,9 @@ byc = initialize_bycon()
 c_f = Path( path.join( pkg_path, "config", "config.yaml" ) )
 byc.update({"config": load_yaml_empty_fallback( c_f )})
 d_f = Path( path.join( pkg_path, "config", "beacon_defaults.yaml" ) )
-byc.update({"beacon_defaults": load_yaml_empty_fallback( d_f )})
+defs = load_yaml_empty_fallback( d_f )
+byc.update({"beacon_defaults": defs })
+if "bycon_definition_files" in defs:
+    for d in defs["bycon_definition_files"]:
+        read_bycon_configs_by_name( d, byc )
 cgi_parse_query(byc)

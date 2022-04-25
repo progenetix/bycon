@@ -1,23 +1,26 @@
-"$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/ontologyTerm/v2021-11-12
-title: ontologyTerm
-description: >
-  The `ontologyTerm` object is the main wrapper for identifiers, used for well-formed CURIE representations of ontology classes for biological or technical concepts and knowledge resources, as well as for "private" identifiers such as internal classifications. 
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/ontologyTerm/v2022-04-19
+title: Ontology Term
+description: Definition of an ontology term.
 type: object
 properties:
   id:
-    type: string
-    description: >-
-      Identifier as string (CURIE highly recommended). 
-    examples:
-      - UBERON:0000002
-      - PMID:9892199
-      - icdom-85003
+    $ref: '#/definitions/CURIE'
   label:
     type: string
+    description: The text that describes the term. By default it could be the preferred
+      text of the term, but is it acceptable to customize it for a clearer description
+      and understanding of the term in an specific context.
+definitions:
+  CURIE:
+    pattern: ^\w[^:]+:.+$
+    type: string
+    description: A CURIE identifier for an ontology term.
     examples:
-      - neoplastic sample
-      - Adenocarcinoma, NOS
+      - ga4gh:GA.01234abcde
+      - DUO:0000004
+      - orcid:0000-0003-3463-0775
+      - PMID:15254584
 required:
-    - id
+  - id
 additionalProperties: true

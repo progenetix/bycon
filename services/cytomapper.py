@@ -39,12 +39,12 @@ def cytomapper():
     create_empty_service_response(byc)
 
     cytoBands = [ ]
-    if "cytoBands" in byc["variant_pars"]:
-        cytoBands, chro, start, end, error = bands_from_cytobands(byc["variant_pars"]["cytoBands"], byc)
-        byc["service_response"]["meta"]["received_request_summary"].update({ "cytoBands": byc["variant_pars"]["cytoBands"] })
-    elif "chroBases" in byc["variant_pars"]:
+    if "cyto_bands" in byc["variant_pars"]:
+        cytoBands, chro, start, end, error = bands_from_cytobands(byc["variant_pars"]["cyto_bands"], byc)
+        byc["service_response"]["meta"]["received_request_summary"].update({ "cytoBands": byc["variant_pars"]["cyto_bands"] })
+    elif "chro_bases" in byc["variant_pars"]:
         cytoBands, chro, start, end = _bands_from_chrobases(byc)
-        byc["service_response"]["meta"]["received_request_summary"].update({ "chroBases": byc["variant_pars"]["chroBases"] })
+        byc["service_response"]["meta"]["received_request_summary"].update({ "chroBases": byc["variant_pars"]["chro_bases"] })
 
     cb_label = cytobands_label( cytoBands )
 
@@ -96,8 +96,8 @@ def cytomapper():
 
 def _bands_from_chrobases( byc ):
 
-    chr_bases = byc["variant_pars"]["chroBases"]
-    cb_pat = re.compile( byc["variant_definitions"]["parameters"]["chroBases"]["pattern"] )
+    chr_bases = byc["variant_pars"]["chro_bases"]
+    cb_pat = re.compile( byc["variant_definitions"]["parameters"]["chro_bases"]["pattern"] )
 
     chro, cb_start, cb_end = cb_pat.match(chr_bases).group(2,3,5)
     if cb_start:
