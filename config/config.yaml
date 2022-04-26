@@ -64,6 +64,20 @@ schema_paths:
     - responses
     - sections
 
+form_list_pars:
+  - start
+  - end
+  - datasetIds
+  - variantType
+  - filters
+  - ids
+  - biosampleIds
+  - variantIds
+  - individualIds
+  - callsetIds
+  - analysisIds
+  - collationTypes
+
 resource_urls:
   ncbi_geosoft: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?form=text&acc=
   ncbi_geoweb: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
@@ -79,14 +93,16 @@ dataset_ids:
 
 dataset_default: progenetix
 dataset_junk: progenetix_junk
-collections:
+
+queried_collections:
   - biosamples
   - callsets
   - individuals
   - variants
-  - variant_annotations
   - collations
+  - frequencymaps
   - publications
+
 info_db: progenetix
 collations_coll: collations
 frequencymaps_coll: frequencymaps
@@ -113,19 +129,6 @@ beacon_counts:
 handover_coll: querybuffer
 genespans_coll: genespans
 
-list_pars:
-  - start
-  - end
-  - datasetIds
-  - variantType
-  - filters
-  - ids
-  - biosampleIds
-  - variantIds
-  - individualIds
-  - callsetIds
-  - analysisIds
-  - collationTypes
 id_query_map:
   biosample_ids: biosamples
   variant_ids: variants

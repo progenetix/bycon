@@ -4,7 +4,7 @@ from os import environ, pardir, path
 import sys
 
 from cgi_parse import *
-from beacon_response_remaps import de_vrsify_variant
+from response_remaps import de_vrsify_variant
 
 ################################################################################
 
@@ -218,7 +218,7 @@ def _write_variants_bedfile(h_o, **byc):
                 vs[vt] = sorted(vs[vt], key=lambda k: k['size'], reverse=True)
             except:
                 pass
-            col_key = "color_var_"+vt.lower()+"_rgb"
+            col_key = "color_var_{}_rgb".format(vt.lower())
             b_f.write("track name={} visibility=squish description=\"{} variants matching the query\" color={}\n".format(vt, vt, byc["config"]["plot_pars"][col_key]) )
             b_f.write("#chrom\tchromStart\tchromEnd\tbiosampleId\n")
             for v in vs[vt]:

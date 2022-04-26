@@ -153,7 +153,8 @@ def _update_queries_from_id_values(byc):
     id_f_v = byc["beacon_mappings"]["id_queryscope_mappings"]
     f_d = byc["form_data"]
 
-    this_id_k = byc["response_entity_id"]+"Ids"
+    this_id_k = byc["response_entity_id"]+"_ids"
+
     if "ids" in f_d:
         if not this_id_k in f_d:
             f_d.update({this_id_k: f_d["ids"]})
@@ -261,7 +262,7 @@ def _update_queries_from_filters(byc):
         if f_scope is False:
             f_scope = f_info["scope"]
 
-        if f_scope not in byc[ "config" ][ "collections" ]:
+        if f_scope not in byc[ "config" ][ "queried_collections" ]:
             continue
 
         if f_scope not in f_lists.keys():

@@ -7,6 +7,18 @@ from humps import camelize, decamelize
 
 ################################################################################
 
+def read_bycon_definition_files(byc):
+
+    if not "bycon_definition_files" in byc["beacon_defaults"]:
+        return byc
+
+    for d in byc["beacon_defaults"]["bycon_definition_files"]:
+        read_bycon_configs_by_name( d, byc )
+
+    return byc
+
+################################################################################
+  
 def read_bycon_configs_by_name(name, byc):
 
     """podmd

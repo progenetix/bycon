@@ -7,7 +7,7 @@ bycon_path = path.join( beacon_server_script_path, pardir )
 bycon_lib_path = path.join( bycon_path, "lib" )
 sys.path.append( bycon_lib_path )
 
-from beacon_response_remaps import *
+from response_remaps import *
 from cgi_parse import *
 from datatable_utils import *
 from handover_execution import *
@@ -29,9 +29,6 @@ byc = initialize_bycon()
 c_f = Path( path.join( pkg_path, "config", "config.yaml" ) )
 byc.update({"config": load_yaml_empty_fallback( c_f )})
 d_f = Path( path.join( pkg_path, "config", "beacon_defaults.yaml" ) )
-defs = load_yaml_empty_fallback( d_f )
-byc.update({"beacon_defaults": defs })
-if "bycon_definition_files" in defs:
-    for d in defs["bycon_definition_files"]:
-        read_bycon_configs_by_name( d, byc )
+byc.update({"beacon_defaults": load_yaml_empty_fallback( d_f ) })
+read_bycon_definition_files(byc)
 cgi_parse_query(byc)

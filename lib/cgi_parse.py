@@ -96,7 +96,7 @@ def cgi_parse_query(byc):
 
     for p in get:
         p_d = decamelize(p)
-        if p in byc["config"]["list_pars"]:
+        if p in byc["config"]["form_list_pars"]:
             form.update({p_d: form_return_listvalue( get, p )})
         else:
             form.update({p_d: get.getvalue(p)})
