@@ -42,7 +42,7 @@ def interval_frequencies():
 
     select_dataset_ids(byc)
     parse_filters(byc)
-    parse_variants(byc)
+    parse_variant_parameters(byc)
 
     generate_genomic_intervals(byc)
 
@@ -114,82 +114,31 @@ def interval_frequencies():
 
     mongo_client.close( )
 
-    _export_pgxseg_frequencies(byc, results)
-    _export_pgxmatrix_frequencies(byc, results)
+    check_pgxseg_frequencies_export(byc, results)
+    check_pgxmatrix_frequencies_export(byc, results)
     populate_service_response( byc, results)
     cgi_print_response( byc, 200 )
 
 ################################################################################
-################################################################################
 
-def _export_pgxseg_frequencies(byc, results):
+def check_pgxseg_frequencies_export(byc, results):
 
     if not "pgxseg" in byc["output"]:
-        return
+        return byc
 
-    open_text_streaming("interval_frequencies.pgxseg")
-
-    print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
-    h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
-
-    # should get error checking if made callable
-
-    for f_set in results:
-        m_line = []
-        for k in ["group_id", "label", "dataset_id", "sample_count"]:
-            m_line.append(k+"="+str(f_set[k]))
-        print("#group=>"+';'.join(m_line))
-
-    print("group_id\t"+"\t".join(h_ks))
-
-    for f_set in results:
-        for intv in f_set["interval_frequencies"]:
-            v_line = [ ]
-            v_line.append(f_set[ "group_id" ])
-            for k in h_ks:
-                v_line.append(str(intv[k]))
-            print("\t".join(v_line))
-
-    close_text_streaming()
+    export_pgxseg_frequencies(byc, results)
 
 ################################################################################
-################################################################################
 
-def _export_pgxmatrix_frequencies(byc, results):
+def check_pgxmatrix_frequencies_export(byc, results):
 
     if not "pgxmatrix" in byc["output"]:
         return
 
-    open_text_streaming("interval_frequencies.pgxmatrix")
-
-    print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
-
-    # should get error checking if made callable
-    for f_set in results:
-        m_line = []
-        for k in ["group_id", "label", "dataset_id", "sample_count"]:
-            m_line.append(k+"="+str(f_set[k]))
-        print("#group=>"+';'.join(m_line))
-    # header
-
-    h_line = [ "group_id" ]
-    h_line = interval_header(h_line, byc)
-    print("\t".join(h_line))
-
-    for f_set in results:
-        f_line = [ f_set[ "group_id" ] ]
-        for intv in f_set["interval_frequencies"]:
-            f_line.append( str(intv["gain_frequency"]) )
-        for intv in f_set["interval_frequencies"]:
-            f_line.append( str(intv["loss_frequency"]) )
-
-        print("\t".join(f_line))
-
-    close_text_streaming()
+    export_pgxmatrix_frequencies(byc, results)
 
 ################################################################################
 ################################################################################
-
 
 if __name__ == '__main__':
     main()

@@ -9,24 +9,26 @@ from humps import camelize, decamelize
 bycon_lib_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( bycon_lib_path, pardir )
 
-from response_remaps import *
-from cgi_parse import *
-from datatable_utils import check_datatable_delivery
+from cgi_parsing import *
+from cytoband_utils import translate_reference_ids
+from data_retrieval import *
+from datatable_utils import export_datatable_download
+from export_file_generation import *
 from handover_execution import handover_return_data
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, dataset_results_save_handovers
 from interval_utils import generate_genomic_intervals, interval_counts_from_callsets
-from parse_variants import translate_reference_ids
 from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
 from query_generation import  initialize_beacon_queries, paginate_list, replace_queries_in_test_mode, set_pagination_range
 from read_specs import read_bycon_configs_by_name,read_local_prefs
-from schemas_parser import *
-from variant_responses import normalize_variant_values_for_export
+from response_remapping import *
+from schema_parsing import *
 
 ################################################################################
 
 def initialize_bycon():
 
     byc =  {
+        "args": None,
         "pkg_path": pkg_path,
         "request_path_root": "beacon",
         "request_entity_path_id": None,
@@ -119,7 +121,7 @@ def initialize_service(byc, service=False):
 
     translate_reference_ids(byc)
     
-    byc.update({"test_mode": test_truthy( form.get("test_mode", "false") ) })
+    byc.update({"test_mode": test_truthy( form.get("test_mode", False) ) })
     byc.update({"include_handovers": test_truthy( form.get("include_handovers", "false") ) })
 
     # TODO: standardize the general defaults / entity defaults / form values merging
@@ -291,68 +293,6 @@ def check_alternative_single_set_deliveries(ds_id, r_s_res, byc):
 
 ################################################################################
 
-def retrieve_data(ds_id, byc):
-
-    r_c = byc["response_entity"]["collection"]
-    r_k = r_c+"_id"
-
-    for r_t, r_d in byc["beacon_mappings"]["response_types"].items():
-        # print(r_d["entity_type"], byc["response_entity_id"])
-
-        if r_d["entity_type"] == byc["response_entity_id"]:
-            r_k = r_d["h->o_access_key"]
-
-    if "variants" in r_c:
-        r_s_res = retrieve_variants(ds_id, byc)
-        return r_s_res
-
-    mongo_client = MongoClient()
-    data_db = mongo_client[ ds_id ]
-    data_coll = mongo_client[ ds_id ][ r_c ]
-
-    ds_results = byc["dataset_results"][ds_id]
-
-    if r_k in ds_results:
-        r_s_res = []
-        for d in data_coll.find({"_id":{"$in": ds_results[ r_k ]["target_values"] }}):
-            r_s_res.append(d)
-
-        return r_s_res
-
-    return []
-
-################################################################################
-
-def retrieve_variants(ds_id, byc):
-
-    ds_results = byc["dataset_results"][ds_id]
-
-    if "all_variants_methods" in byc["this_config"]:
-        if byc["method"] in byc["this_config"]["all_variants_methods"]:
-            return False
-
-    mongo_client = MongoClient()
-    data_db = mongo_client[ ds_id ]
-    v_coll = mongo_client[ ds_id ][ "variants" ]
-
-    r_s_res = []
-
-    if "variants._id" in ds_results:
-        for v_id in ds_results["variants._id"]["target_values"]:
-            v = v_coll.find_one({"_id":v_id})
-            r_s_res.append(v)
-        return r_s_res
-    elif "variants.variant_internal_id" in ds_results:
-        for v_id in ds_results["variants.variant_internal_id"]["target_values"]:
-            vs = v_coll.find({"variant_internal_id":v_id})
-            for v in vs:
-                r_s_res.append(v)
-        return r_s_res
-
-    return False
-
-################################################################################
-
 def response_meta_add_request_summary(r, byc):
 
     if not "received_request_summary" in r["meta"]:
@@ -483,6 +423,17 @@ def check_cnvhistogram_plot_response(ds_id, byc):
             exit()
 
     return byc
+
+################################################################################
+
+def check_datatable_delivery(results, byc):
+
+    if not "table" in byc["output"]:
+        return byc
+    if not "datatable_mappings" in byc:
+        return byc
+
+    export_datatable_download(results, byc)
 
 ################################################################################
 
@@ -787,7 +738,7 @@ def check_computed_interval_frequency_delivery(byc):
 
     for d in ["id", "assemblyId"]:
         print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
-    _print_filters_meta_line(byc)
+    print_filters_meta_line(byc)
     print('#meta=>query="{}"'.format(json.dumps(byc["queries_at_execution"], indent=None, sort_keys=True, default=str)))
     print('#meta=>skip={};limit={}'.format(p_r["skip"], p_r["limit"]))
     print("#meta=>sample_no={}".format(cs_r["target_count"]))
@@ -820,207 +771,5 @@ def check_callsets_matrix_delivery(ds_id, byc):
     if not "pgxmatrix" in byc["output"]:
         return byc
 
-    m_format = "coverage"
-    if "val" in byc["output"]:
-        m_format = "values"
-
-    ds_results = byc["dataset_results"][ds_id]
-    p_r = byc["pagination"]
-
-    if not "callsets._id" in ds_results:
-        return byc
-
-    cs_r = ds_results["callsets._id"]
-
-    mongo_client = MongoClient()
-    bs_coll = mongo_client[ ds_id ][ "biosamples" ]
-    cs_coll = mongo_client[ ds_id ][ "callsets" ]
-
-    open_text_streaming("interval_callset_matrix.pgxmatrix")
-
-    for d in ["id", "assemblyId"]:
-        print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
-    _print_filters_meta_line(byc)
-    print("#meta=>data_format=interval_"+m_format)
-
-    info_columns = [ "analysis_id", "biosample_id", "group_id" ]
-    h_line = interval_header(info_columns, byc)
-    print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
-    print("#meta=>no_info_columns={};no_interval_columns={}".format(len(info_columns), len(h_line) - len(info_columns)))
-
-    q_vals = cs_r["target_values"]
-    r_no = len(q_vals)
-    if r_no > p_r["limit"]:
-        if test_truthy( byc["form_data"].get("paginateResults", True) ):
-            q_vals = paginate_list(q_vals, byc)
-        print('#meta=>"WARNING: Only analyses {} - {} (from {}) will be included pagination skip and limit"'.format((p_r["range"][0] + 1), p_r["range"][-1], cs_r["target_count"]))
-
-    bios_ids = set()
-    cs_ids = {}
-    cs_cursor = cs_coll.find({"_id": {"$in": q_vals } } )
-    for cs in cs_cursor:
-        bios = bs_coll.find_one( { "id": cs["biosample_id"] } )
-        bios_ids.add(bios["id"])
-        s_line = "#sample=>biosample_id={};analysis_id={}".format(bios["id"], cs["id"])
-        h_d = bios["histological_diagnosis"]
-        cs_ids.update({cs["id"]: h_d.get("id", "NA")})
-        s_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(s_line, h_d.get("id", "NA"), h_d.get("label", "NA"), h_d.get("id", "NA"), h_d.get("label", "NA"))
-        print(s_line)
-
-    print("#meta=>biosampleCount={};analysisCount={}".format(len(bios_ids), cs_r["target_count"]))
-    print("\t".join(h_line))
-
-    for cs_id, group_id in cs_ids.items():
-        cs = cs_coll.find_one({"id":cs_id})
-        if "values" in m_format:
-            print("\t".join(
-                [
-                    cs_id,
-                    cs.get("biosample_id", "NA"),
-                    group_id,
-                    *map(str, cs["cnv_statusmaps"]["max"]),
-                    *map(str, cs["cnv_statusmaps"]["min"])
-                ]
-            ))
-        else:
-            print("\t".join(
-                [
-                    cs_id,
-                    cs.get("biosample_id", "NA"),
-                    group_id,
-                    *map(str, cs["cnv_statusmaps"]["dup"]),
-                    *map(str, cs["cnv_statusmaps"]["del"])
-                ]
-            ))
-
-    close_text_streaming()
+    export_callsets_matrix(ds_id, byc)
         
-################################################################################
-
-def print_pgx_column_header(ds_id, ds_results, byc):
-
-    if not "pgxseg" in byc["output"] and not "pgxmatrix" in byc["output"]:
-        return
-
-    s_r_rs = byc["service_response"]["response"]["result_sets"][0]
-    b_p = byc["pagination"]
-
-    mongo_client = MongoClient()
-    bs_coll = mongo_client[ ds_id ][ "biosamples" ]
-    cs_coll = mongo_client[ ds_id ][ "callsets" ]
-
-    open_text_streaming()
-
-    for d in ["id", "assemblyId"]:
-        print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
-    for k, n in s_r_rs["info"]["counts"].items():
-        print("#meta=>{}={}".format(k, n))
-    print("#meta=>pagination.skip={};pagination.limit={};pagination.range={},{}".format(b_p["skip"], b_p["skip"], b_p["range"][0] + 1, b_p["range"][1]))
-            
-    _print_filters_meta_line(byc)
-
-    for bs_id in ds_results["biosamples.id"][ "target_values" ]:
-        bs = bs_coll.find_one( { "id": bs_id } )
-        h_line = "#sample=>biosample_id={}".format(bs_id)
-        h_d = bs["histological_diagnosis"]
-        h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, h_d.get("id", "NA"), h_d.get("label", "NA"), h_d.get("id", "NA"), h_d.get("label", "NA"))
-        print(h_line)
-
-    print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type", "reference_bases", "alternate_bases" ) )
-
-    return
-
-################################################################################
-
-def _print_filters_meta_line(byc):
-
-    if "filters" in byc["service_response"]["meta"]["received_request_summary"]:
-        f_vs = []
-        for f in byc["service_response"]["meta"]["received_request_summary"]["filters"]:
-            f_vs.append(f["id"])
-        print("#meta=>filters="+','.join(f_vs))
-
-    return
-
-################################################################################
-
-def export_variants_download(ds_id, byc):
-
-    data_client = MongoClient( )
-    v_coll = data_client[ ds_id ][ "variants" ]
-    ds_results = byc["dataset_results"][ds_id]
- 
-    v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
-    if test_truthy( byc["form_data"].get("paginateResults", True) ):
-        v__ids = paginate_list(v__ids, byc)
-
-    open_json_streaming(byc, "variants.json")
-
-    for v_id in v__ids[:-1]:
-        v = v_coll.find_one( { "_id": v_id }, { "_id": 0 } )
-        print(decamelize_words(json.dumps(camelize(v), indent=None, sort_keys=False, default=str, separators=(',', ':')), end = ','))
-    v = v_coll.find_one( { "_id": v__ids[-1]}, { "_id": 0 }  )
-    print(decamelize_words(json.dumps(camelize(v), indent=None, sort_keys=False, default=str, separators=(',', ':')), end = ''))
-
-    close_json_streaming()
-
-################################################################################
-
-def export_pgxseg_download(ds_id, byc):
-
-    data_client = MongoClient( )
-    v_coll = data_client[ ds_id ][ "variants" ]
-    ds_results = byc["dataset_results"][ds_id]
-    v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
-    if test_truthy( byc["form_data"].get("paginateResults", True) ):
-        v__ids = paginate_list(v__ids, byc)
-
-    print_pgx_column_header(ds_id, ds_results, byc)
-
-    for v_id in v__ids:
-        v = v_coll.find_one( { "_id": v_id} )
-        print_variant_pgxseg(v, byc)
-
-    close_text_streaming()
-
-################################################################################
-
-def interval_header(info_columns, byc):
-
-    int_line = info_columns.copy()
-
-    for iv in byc["genomic_intervals"]:
-        int_line.append("{}:{}-{}:DUP".format(iv["reference_name"], iv["start"], iv["end"]))
-    for iv in byc["genomic_intervals"]:
-        int_line.append("{}:{}-{}:DEL".format(iv["reference_name"], iv["start"], iv["end"]))
-
-    return int_line
-
-################################################################################
-
-def print_variant_pgxseg(v, byc):
-
-    drop_fields = ["_id", "info"]
-
-    v = de_vrsify_variant(v, byc)
-
-    if not "variant_type" in v:
-        return
-
-    v = normalize_variant_values_for_export(v, byc, drop_fields)
-
-    if not "log2" in v:
-        v["log2"] = "."
-    try:
-        v["start"] = int(v["start"])
-    except:
-        v["start"] = "."
-    try:
-        v["end"] = int(v["end"])
-    except:
-        v["end"] = "."
-    if not "reference_bases" in v:
-        v["reference_bases"] = "."
-    if not "alternate_bases" in v:
-        v["alternate_bases"] = "."
-    print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(v["biosample_id"], v["reference_name"], v["start"], v["end"], v["log2"], v["variant_type"], v["reference_bases"], v["alternate_bases"]) )

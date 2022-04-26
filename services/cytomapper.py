@@ -32,7 +32,7 @@ def cytomapper():
     local_path = path.dirname( path.abspath(__file__) )
     byc[ "config" ][ "paths" ][ "genomes" ] = path.join( local_path, "rsrc", "genomes" )
     
-    parse_variants(byc)
+    parse_variant_parameters(byc)
     generate_genomic_intervals(byc)
 
     # response prototype

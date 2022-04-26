@@ -3,9 +3,9 @@ import re, yaml
 from pymongo import MongoClient
 from bson.son import SON
 
-from cgi_parse import *
-from parse_variants import *
-from parse_filters import *
+from cgi_parsing import *
+from filter_parsing import *
+from variant_parsing import *
 
 ################################################################################
 
@@ -14,7 +14,7 @@ def initialize_beacon_queries(byc):
     get_filter_flags(byc)
     parse_filters(byc)
 
-    parse_variants(byc)
+    parse_variant_parameters(byc)
     get_variant_request_type(byc)
 
     generate_queries(byc)

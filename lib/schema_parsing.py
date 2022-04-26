@@ -3,7 +3,7 @@ from os import path, scandir, pardir
 from json_ref_dict import RefDict, materialize
 import humps
 
-from cgi_parse import prjsonnice
+from cgi_parsing import prjsonnice
 
 # local
 lib_path = path.dirname( path.abspath(__file__) )

@@ -59,9 +59,9 @@ bycon
   |    |    |- ... .md
   |    |
   |    |- lib
-  |    |    |- cgi_parse.py
+  |    |    |- cgi_parsing.py
   |    |    |- read_specs.py
-  |    |    |- parse_filters.py
+  |    |    |- filter_parsing.py
   |    |    |- query_generation.py
   |    |    |- query_execution.py
   |    |

@@ -3,8 +3,8 @@ from pymongo import MongoClient
 from os import environ, pardir, path
 import sys
 
-from cgi_parse import *
-from response_remaps import de_vrsify_variant
+from cgi_parsing import *
+from export_file_generation import de_vrsify_variant
 
 ################################################################################
 

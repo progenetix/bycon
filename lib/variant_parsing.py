@@ -1,43 +1,13 @@
-import cgi, cgitb
-import re, yaml
-import logging
-import sys
+import re
 from bson.objectid import ObjectId
 
-from cgi_parse import *
+from cgi_parsing import *
+from cytoband_utils import translate_reference_ids
 from query_execution import mongo_result_list
 
 ################################################################################
 
-def translate_reference_ids(byc):
-
-    if not "variant_definitions" in byc:
-        return byc
-
-    v_d_refsc = byc["variant_definitions"]["refseq_chromosomes"]
-    c_r = {}
-    r_c = {}
-    r_a = {}
-    for c, c_d in v_d_refsc.items():
-        c_r.update({ c_d["chr"]: c_d["refseq_id"] })
-        r_c.update({ c_d["refseq_id"]: c_d["chr"] })
-        r_a.update({
-            c: c_d["refseq_id"],
-            c_d["chr"]: c_d["refseq_id"],
-            c_d["refseq_id"]: c_d["refseq_id"],
-            c_d["genbank_id"]: c_d["refseq_id"]
-        })
-    byc["variant_definitions"].update({
-        "chro_refseq_ids": c_r,
-        "refseq_chronames": r_c,
-        "refseq_aliases": r_a
-    })
-
-    return byc
-
-################################################################################
-
-def parse_variants(byc):
+def parse_variant_parameters(byc):
 
     if not "variant_definitions" in byc:
         return byc
@@ -222,9 +192,7 @@ def create_geneVariantRequest_query( byc ):
     } )
 
     translate_reference_name(byc["variant_pars"], byc)
-
     byc.update( {"variant_request_type": "variantRangeRequest"} )
-
     create_variantRangeRequest_query( byc )
 
     return byc
@@ -338,7 +306,6 @@ def expand_variant_query(variant_query, byc):
 
 ################################################################################
 
-
 def create_and_or_query_for_list(logic, q_list):
 
     if not isinstance(q_list, list):
@@ -369,5 +336,22 @@ def create_in_query_for_parameter(par, qpar, q_pars):
 
     return { qpar: q_pars[ par ][0] }
 
+################################################################################
+
+def variant_create_digest(v):
+
+    t = "var"
+    if "variant_state" in v:
+        if "id" in v["variant_state"]:
+            t = v["variant_state"]["id"]
+            t = re.sub(":", "_", t)
+    elif "variant_type" in v:
+        t = v["variant_type"]
+
+    p = str(v["start"])
+    if "end" in v:
+        p = p+"-"+str(v["end"])
+
+    return ":".join( [v["reference_name"], p, t])
 
 ################################################################################

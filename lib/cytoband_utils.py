@@ -223,4 +223,88 @@ def cytobands_label( cytobands ):
 
 ################################################################################
 
+def translate_reference_ids(byc):
+
+    if not "variant_definitions" in byc:
+        return byc
+
+    v_d_refsc = byc["variant_definitions"]["refseq_chromosomes"]
+    c_r = {}
+    r_c = {}
+    r_a = {}
+    for c, c_d in v_d_refsc.items():
+        c_r.update({ c_d["chr"]: c_d["refseq_id"] })
+        r_c.update({ c_d["refseq_id"]: c_d["chr"] })
+        r_a.update({
+            c: c_d["refseq_id"],
+            c_d["chr"]: c_d["refseq_id"],
+            c_d["refseq_id"]: c_d["refseq_id"],
+            c_d["genbank_id"]: c_d["refseq_id"]
+        })
+    byc["variant_definitions"].update({
+        "chro_refseq_ids": c_r,
+        "refseq_chronames": r_c,
+        "refseq_aliases": r_a
+    })
+
+    return byc
+
+################################################################################
+
+def deparse_ISCN_to_variants(iscn, technique, byc):
+
+    iscn = "".join(iscn.split())
+    variants = []
+    vd = byc["variant_definitions"]
+    cb_pat = re.compile( vd["parameters"]["cytoBands"]["pattern"] )
+    errors = []
+
+    for cnv_t, cnv_defs in vd["cnv_iscn_defs"].items():
+
+        revish = cnv_defs["info"]["revish_label"]
+
+        iscn_re = re.compile(rf"^.*?{revish}\(([\w.,]+)\).*?$", re.IGNORECASE)
+
+        if iscn_re.match(iscn):
+
+            m = iscn_re.match(iscn).group(1)
+
+            for i_v in re.split(",", m):
+
+                if not cb_pat.match(i_v):
+                    continue
+
+                cytoBands, chro, start, end, error = bands_from_cytobands(i_v, byc)
+                if len(error) > 0:
+                    errors.append(error)
+                    continue
+
+                v_l = end - start
+                t = cnv_t
+                v = cnv_defs.copy()
+
+                cytostring = "{}({})".format(cnv_t, i_v)
+
+                if "AMP" in cnv_t and v_l > vd["amp_max_size"]:
+                    t = "HLDUP"
+                    v = vd["cnv_iscn_defs"][t].copy()
+               
+                v.update({
+                    "reference_name": chro,
+                    "start": start,
+                    "end": end,
+                    "type": "RelativeCopyNumber",
+                    "info": {
+                        "ISCN": cytostring,
+                        "var_length": v_l,
+                        "cnv_value": vd["cnv_dummy_values"][t],
+                        "provenance": technique+" ISCN conversion"
+                    }
+                })
+
+                variants.append(v)
+
+    return variants, " :: ".join(errors)
+
+################################################################################
 

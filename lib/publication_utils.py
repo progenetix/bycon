@@ -6,7 +6,7 @@ from os import path, pardir
 from humps import decamelize
 from isodate import date_isoformat
 
-from schemas_parser import *
+from schema_parsing import *
 
 ##############################################################################
 

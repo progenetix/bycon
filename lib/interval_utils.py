@@ -3,7 +3,7 @@ from progress.bar import Bar
 import numpy as np
 
 from cytoband_utils import *
-from cgi_parse import prjsoncam
+from cgi_parsing import prjsoncam
 
 ################################################################################
 ################################################################################

@@ -1,9 +1,11 @@
 import re
-from cgi_parse import prjsonnice
+from cgi_parsing import prjsonnice
 
 ################################################################################
 
-def check_datatable_delivery(results, byc):
+def export_datatable_download(results, byc):
+
+    # TODO: separate table generation from HTTP response
 
     if not "table" in byc["output"]:
         return
@@ -23,7 +25,6 @@ def check_datatable_delivery(results, byc):
     print('Content-Disposition: attachment; filename='+byc["response_entity_id"]+'.tsv')
     print('status: 200')
     print()
-
 
     if "idtable" in byc["output"]:
         io_params = {"id": {"db_key":"id", "type": "string" } }

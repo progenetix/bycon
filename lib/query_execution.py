@@ -5,7 +5,7 @@ from uuid import uuid4
 import datetime
 import sys
 
-from cgi_parse import cgi_debug_message
+from cgi_parsing import cgi_debug_message
 
 ################################################################################
 

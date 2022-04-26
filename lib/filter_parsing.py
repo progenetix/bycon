@@ -2,7 +2,7 @@ import cgi, cgitb
 import re, yaml
 from pymongo import MongoClient
 
-from cgi_parse import *
+from cgi_parsing import *
 
 ################################################################################
 
@@ -10,22 +10,13 @@ def parse_filters(byc):
 
     byc.update({"filters":[]})
 
-    if "form_data" in byc:
-        if "filters" in byc["form_data"]:
-            fs = byc["form_data"]["filters"]
-            fs = _check_filter_values(fs, byc)
-            if len(fs) > 0:
-                byc.update( { "filters": fs } )
-                return byc
-    
-    if "args" in byc:
-        if byc["args"].filters:
-            f = byc["args"].filters.split(',')
-            fs = _check_filter_values(f, byc)
-            if len(fs) > 0:
-                byc.update( { "filters": fs } )
-                return byc
-        
+    if "filters" in byc["form_data"]:
+        fs = byc["form_data"]["filters"]
+        fs = check_filter_values(fs, byc)
+        if len(fs) > 0:
+            byc.update( { "filters": fs } )
+            return byc
+            
     return byc
 
 ################################################################################
@@ -54,7 +45,7 @@ def get_filter_flags(byc):
 
 ################################################################################
 
-def _check_filter_values(filters, byc):
+def check_filter_values(filters, byc):
 
     f_defs = byc["filter_definitions"]
 
