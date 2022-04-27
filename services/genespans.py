@@ -71,6 +71,8 @@ def genespans():
     if e:
         response_add_error(byc, 422, e )
 
+    e_k_s = byc["this_config"]["method_keys"]["genespan"]
+
     cgi_break_on_errors(byc)
 
     if "method" in byc:
@@ -78,11 +80,17 @@ def genespans():
             for i, g in enumerate(results):
                 g_n = {}
                 for k in byc["this_config"]["method_keys"]["genespan"]:
-                    if not k in g:
-                        continue
-                    g_n.update({k:g[k]})
+                    g_n.update({k:g.get(k, "")})
                 results[i] = g_n
 
+    if "text" in byc["output"]:
+        open_text_streaming(byc["env"])
+        for g in results:
+            s_comps = []
+            for k in e_k_s:
+                s_comps.append(str(g.get(k, "")))
+            print("\t".join(s_comps))
+        exit()
 
     populate_service_response( byc, results)
     cgi_print_response( byc, 200 )

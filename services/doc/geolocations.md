@@ -6,9 +6,9 @@ inhabitants (\~22750 cities), through either:
 
 * matching of the (start-anchored) name
 * providing GeoJSON compatible parameters:
-  - `geolongitude`
-  - `geolatitude`
-  - `geodistance`
+  - `geoLongitude`
+  - `geoLatitude`
+  - `geoDistance`
     * optional, in meters; a default of 10'000m (10km) is provided
     * can be used for e.g. retrieving all places (or data from places if used
     with publication or sample searches) in an approximate region (e.g. for
@@ -19,7 +19,7 @@ inhabitants (\~22750 cities), through either:
 * <https://progenetix.org/services/geolocations?city=zurich>
 * <https://progenetix.org/services/geolocations?city=Heidelberg>
 * <https://progenetix.org/services/geolocations?city=New&responseFormat=simple>
-* <https://progenetix.org/services/geolocations?geolongitude=-0.13&geolatitude=51.51&geodistance=100000>
+* <https://progenetix.org/services/geolocations?geoLongitude=-0.13&geoLatitude=51.51&geoDistance=100000>
 
 
 

@@ -53,7 +53,12 @@ def cytomapper():
         cgi_break_on_errors(byc)
 
     size = int(  end - start )
-    chroBases = chro+":"+str(start)+"-"+str(end)
+    chroBases = "{}:{}-{}".format(chro, start, end)
+
+    if "text" in byc["output"]:
+        open_text_streaming(byc["env"])
+        print("{}\t{}".format(cb_label, chroBases))
+        exit()
 
     # TODO: response objects from schema
     
@@ -88,6 +93,7 @@ def cytomapper():
             }
         }
     ]
+
 
     populate_service_response( byc, results)
     cgi_print_response( byc, 200 )

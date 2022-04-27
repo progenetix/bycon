@@ -62,7 +62,7 @@ def services():
         pat = re.compile( rf"^.+\/{r_p_id}\/?(.*?)$" )
         if pat.match(uri):
             stuff = pat.match(uri).group(1)
-            cgi_print_rewrite_response(b_m["rewrites"][r_p_id], stuff)
+            print_uri_rewrite_response(b_m["rewrites"][r_p_id], stuff)
 
     byc.update({
         "service_response": {},

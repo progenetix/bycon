@@ -1,4 +1,4 @@
-from os import path, pardir
+from os import environ, path, pardir
 import inspect, json
 import random
 from pymongo import MongoClient
@@ -29,6 +29,7 @@ def initialize_bycon():
 
     byc =  {
         "args": None,
+        "env": "server",
         "pkg_path": pkg_path,
         "request_path_root": "beacon",
         "request_entity_path_id": None,
@@ -49,6 +50,9 @@ def initialize_bycon():
         "errors": []
     }
 
+    if not environ.get('HTTP_HOST'):
+        byc.update({"env": "local"})
+
     return byc
 
 ################################################################################
@@ -56,6 +60,7 @@ def initialize_bycon():
 def beacon_data_pipeline(byc, entry_type):
 
     initialize_service(byc, entry_type)
+
     run_beacon_init_stack(byc)
     return_filtering_terms_response(byc)
     run_result_sets_beacon(byc)
@@ -85,6 +90,7 @@ def initialize_service(byc, service=False):
 
     # TODO - streamline
     s_a_s = byc["beacon_mappings"]["service_aliases"]
+
     if service in s_a_s:
         service = s_a_s[service]
 
@@ -100,7 +106,6 @@ def initialize_service(byc, service=False):
 
     if service in defs:
         for d_k, d_v in defs[ service ].items():
-            # print(d_k, d_v)
             byc.update( { d_k: d_v } )
 
     # update response_entity_id from path
@@ -109,7 +114,7 @@ def initialize_service(byc, service=False):
     update_requested_schema_from_request(byc)
     set_response_entity(byc)
 
-    _set_pagination(byc)
+    set_pagination(byc)
 
     byc["output"] = form.get("output", "")
 
@@ -131,7 +136,7 @@ def initialize_service(byc, service=False):
 
 ################################################################################
 
-def  _set_pagination(byc):
+def  set_pagination(byc):
 
     form = byc["form_data"]
 
@@ -139,9 +144,10 @@ def  _set_pagination(byc):
         byc.update( { "pagination": {"skip": 0, "limit": 0 } } )
 
     for sp in ["skip", "limit"]:
-        if sp in form["pagination"]:
-            if form["pagination"][sp] > -1:
-                byc["pagination"].update({sp: form["pagination"][sp]})
+        if sp in form:
+            if re.match(r'^\d+$', str(form[sp])):
+                s_v = int(form[sp])
+                byc["pagination"].update({sp: s_v})
 
     return byc
 
@@ -165,6 +171,7 @@ def update_entity_ids_from_path(byc):
         "request_entity_id": p_r_m.get(req_p_id, byc["request_entity_path_id"]),
         "response_entity_id": p_r_m.get(res_p_id, byc["response_entity_path_id"])
     })
+
 
     return byc
 
@@ -419,7 +426,7 @@ def check_cnvhistogram_plot_response(ds_id, byc):
 
     for h_o in r_s_ho:
         if "cnvhistogram" in h_o["handover_type"]["id"]:
-            cgi_print_rewrite_response(h_o["url"], "", "")
+            print_uri_rewrite_response(h_o["url"], "", "")
             exit()
 
     return byc
@@ -734,7 +741,7 @@ def check_computed_interval_frequency_delivery(byc):
     mongo_client = MongoClient()
     cs_coll = mongo_client[ ds_id ][ "callsets" ]
 
-    open_text_streaming("interval_cnv_frequencies.pgxseg")
+    open_text_streaming(byc["env"], "interval_cnv_frequencies.pgxseg")
 
     for d in ["id", "assemblyId"]:
         print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))

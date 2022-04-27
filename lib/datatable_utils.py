@@ -21,10 +21,11 @@ def export_datatable_download(results, byc):
     io_params = dt_m["io_params"][ r_t ]
     io_prefixes = dt_m["io_prefixes"][ r_t ]
 
-    print('Content-Type: text/tsv')
-    print('Content-Disposition: attachment; filename='+byc["response_entity_id"]+'.tsv')
-    print('status: 200')
-    print()
+    if not "local" in byc["env"]:
+        print('Content-Type: text/tsv')
+        print('Content-Disposition: attachment; filename='+byc["response_entity_id"]+'.tsv')
+        print('status: 200')
+        print()
 
     if "idtable" in byc["output"]:
         io_params = {"id": {"db_key":"id", "type": "string" } }

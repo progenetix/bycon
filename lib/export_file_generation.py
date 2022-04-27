@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 from cgi_parsing import *
+from query_generation import  paginate_list
 
 ################################################################################
 
@@ -38,9 +39,8 @@ def print_pgx_column_header(ds_id, ds_results, byc):
 
     mongo_client = MongoClient()
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
-    cs_coll = mongo_client[ ds_id ][ "callsets" ]
 
-    open_text_streaming()
+    open_text_streaming(byc["env"])
 
     for d in ["id", "assemblyId"]:
         print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
@@ -52,8 +52,10 @@ def print_pgx_column_header(ds_id, ds_results, byc):
 
     for bs_id in ds_results["biosamples.id"][ "target_values" ]:
         bs = bs_coll.find_one( { "id": bs_id } )
+        if not bs:
+            continue
         h_line = "#sample=>biosample_id={}".format(bs_id)
-        h_d = bs["histological_diagnosis"]
+        h_d = bs.get("histological_diagnosis", {})
         h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, h_d.get("id", "NA"), h_d.get("label", "NA"), h_d.get("id", "NA"), h_d.get("label", "NA"))
         print(h_line)
 
@@ -216,7 +218,7 @@ def export_callsets_matrix(ds_id, byc):
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
     cs_coll = mongo_client[ ds_id ][ "callsets" ]
 
-    open_text_streaming("interval_callset_matrix.pgxmatrix")
+    open_text_streaming(byc["env"], "interval_callset_matrix.pgxmatrix")
 
     for d in ["id", "assemblyId"]:
         print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
@@ -282,7 +284,7 @@ def export_pgxseg_frequencies(byc, results):
     if not "pgxseg" in byc["output"]:
         return
 
-    open_text_streaming("interval_frequencies.pgxseg")
+    open_text_streaming(byc["env"], "interval_frequencies.pgxseg")
 
     print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
     h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
@@ -311,7 +313,7 @@ def export_pgxseg_frequencies(byc, results):
 
 def export_pgxmatrix_frequencies(byc, results):
 
-    open_text_streaming("interval_frequencies.pgxmatrix")
+    open_text_streaming(byc["env"], "interval_frequencies.pgxmatrix")
 
     print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
 

@@ -81,7 +81,12 @@ def cgi_parse_query(byc):
                 "filters": jbod.get("filters", [] )
             })
 
-            form.update({ "pagination": jbod.get("pagination", {}) })
+            # transferring pagination where existing to standard form values
+            pagination = jbod.get("pagination", {})
+            for p_k in ["skip", "limit"]:
+                if p_k in pagination:
+                    if re.match(r'^\d+$', pagination[p_k]):
+                        form.update({p_k: pagination[p_k]})
             byc.update({
                 "form_data": form,
                 "query_meta": jbod.get("meta", {})
@@ -118,14 +123,6 @@ def cgi_parse_query(byc):
             } )
         except:
             pass
-
-    if not "pagination" in form:
-        form.update({ "pagination": { } })
-
-    for p in [ "skip", "limit" ]:
-        if p in form:
-            if re.match(r'^\d+$', form[p]):        
-                form["pagination"].update({ p: int(form[p]) })
 
     byc.update({ "form_data": form })
     
@@ -315,7 +312,7 @@ def cgi_print_response(byc, status_code):
                     v_l.append(str(v))
                 l_d.append("\t".join(v_l))
             byc["service_response"] = "\n".join(l_d)
-        cgi_print_text_response(byc["service_response"], status_code)
+        print_text_response(byc["service_response"], byc["env"], status_code)
 
     if "handoversonly" in byc["output"]:
         try:        
@@ -331,7 +328,7 @@ def cgi_print_response(byc, status_code):
     response_clean_legacy(byc)
     update_error_code_from_response_summary(byc)
     switch_to_error_response(byc)
-    cgi_print_json_response(byc["service_response"])
+    print_json_response(byc["service_response"], byc["env"])
 
 ################################################################################
 
@@ -416,10 +413,12 @@ def open_json_streaming(byc, filename="data.json"):
 
     meta = byc["service_response"].get("meta", {})
 
-    print('Content-Type: application/json')
-    print('Content-Disposition: attachment; filename="{}"'.format(filename))
-    print('status: 200')
-    print()
+    if not "local" in byc["env"]:
+        print('Content-Type: application/json')
+        print('Content-Disposition: attachment; filename="{}"'.format(filename))
+        print('status: 200')
+        print()
+
     print('{"meta":', end = '')
     print(json.dumps(humps.camelize(meta), indent=None, sort_keys=True, default=str), end=",")
     print('"response":{', end='')
@@ -435,17 +434,19 @@ def open_json_streaming(byc, filename="data.json"):
 ################################################################################
 
 def close_json_streaming():
+
     print(']}}')
     exit()
 
 ################################################################################
 
-def open_text_streaming(filename="data.pgxseg"):
+def open_text_streaming(env="server", filename="data.pgxseg"):
 
-    print('Content-Type: text/plain')
-    print('Content-Disposition: attachment; filename="{}"'.format(filename))
-    print('status: 200')
-    print()
+    if not "local" in env:
+        print('Content-Type: text/plain')
+        print('Content-Disposition: attachment; filename="{}"'.format(filename))
+        print('status: 200')
+        print()
 
 ################################################################################
 
@@ -476,29 +477,33 @@ def decamelize_words(j_d):
 
 ################################################################################
 
-def cgi_print_json_response(this={}, status_code=200):
+def print_json_response(this={}, env="server", status_code=200):
 
-    print('Content-Type: application/json')
-    print('status:'+str(status_code))
-    print()
+    if not "local" in env:
+        print('Content-Type: application/json')
+        print('status:'+str(status_code))
+        print()
+    
     prjsoncam(this)
     print()
     exit()
 
 ################################################################################
 
-def cgi_print_text_response(this="", status_code=200):
+def print_text_response(this="", env="server", status_code=200):
 
-    print('Content-Type: text/plain')
-    print('status:'+str(status_code))
-    print()
+    if not "local" in env:
+        print('Content-Type: text/plain')
+        print('status:'+str(status_code))
+        print()
+    
     print(this)
     print()
     exit()
 
 ################################################################################
 
-def cgi_print_rewrite_response(uri_base="", uri_stuff="", output_par="empty_value"):
+def print_uri_rewrite_response(uri_base="", uri_stuff="", output_par="empty_value"):
 
     print("Status: 302")
     print("Location: {}{}".format(uri_base, uri_stuff))

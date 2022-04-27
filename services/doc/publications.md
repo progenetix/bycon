@@ -10,5 +10,5 @@ genome-wide screening experiments in cancer.
 * <https://progenetix.org/services/publications/?filters=PMID>
 * <http://progenetix.org/services/publications/?filters=PMID,genomes:&gt;200,arraymap:&gt;1>
 * <http://progenetix.org/services/publications/?filters=PMID:22824167&method=details>
-* <http://progenetix.org/services/publications/?geolongitude=8.55&geolatitude=47.37&geodistance=100000>
+* <http://progenetix.org/services/publications/?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
 

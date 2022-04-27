@@ -65,6 +65,7 @@ path_response_type_mappings:
   runs: run
   g_variants: genomicVariant
   genomicVariations: genomicVariant
+  variants: genomicVariant
   map: beaconMap
   info: info
   filtering_terms: filteringTerm

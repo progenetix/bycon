@@ -1,12 +1,12 @@
 geo_root: 'provenance.geo_location'
 parameters:
-  geolatitude:
+  geo_latitude:
     type: float
     pattern: '^\-?\d+?(\.\d+?)?$'
-  geolongitude:
+  geo_longitude:
     type: float
     pattern: '^\-?\d+?(\.\d+?)?$'
-  geodistance:
+  geo_distance:
     type: float
     pattern: '^\d+?(\.\d+?)?$'
     default: 10000
@@ -19,9 +19,9 @@ parameters:
 request_types:
   geoquery:
     all_of:
-      - geolatitude
-      - geolongitude
-      - geodistance
+      - geo_latitude
+      - geo_longitude
+      - geo_distance
   city:
     all_of:
       - city

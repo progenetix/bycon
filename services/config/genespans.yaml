@@ -26,7 +26,8 @@ assembly_ids:
   - GRCh38
 method_keys:
   genespan:
+    - symbol
+    - reference_name
     - start
     - end
-    - reference_name
-    - symbol
+    - accession_version

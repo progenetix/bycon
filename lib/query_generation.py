@@ -444,8 +444,6 @@ def geo_query( byc ):
     if "geoquery" in req_type:
         geo_q = return_geo_longlat_query(geo_root, geo_pars)
 
-
-
     return geo_q, geo_pars
 
 ################################################################################
@@ -479,13 +477,13 @@ def return_geo_longlat_query(geo_root, geo_pars):
                             [
                                 ('type', 'Point'),
                                 ('coordinates', [
-                                    geo_pars["geolongitude"],
-                                    geo_pars["geolatitude"]
+                                    geo_pars["geo_longitude"],
+                                    geo_pars["geo_latitude"]
                                 ])
                             ]
                         )
                     ),
-                    ('$maxDistance', geo_pars["geodistance"])
+                    ('$maxDistance', geo_pars["geo_distance"])
                 ]
             )
         }

@@ -35,7 +35,7 @@ def service_info():
     for k in info.keys():
         if k in pgx_info:
             info.update({k:pgx_info[k]})
-    cgi_print_json_response( info, 200 )
+    print_json_response( info, byc["env"], 200 )
 
 ################################################################################
 ################################################################################
