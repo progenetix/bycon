@@ -38,7 +38,6 @@ def initialize_bycon():
         "request_entity_id": None,
         "response_entity_id": None,
         "response_entity": {},
-        "beacon_info": {},
         "method": "",
         "output": "",
         "form_data": {},
@@ -100,9 +99,6 @@ def initialize_service(byc, service=False):
     if "defaults" in conf:
         for d_k, d_v in conf["defaults"].items():
             byc.update( { d_k: d_v } )
-    if "defaults" in defs:
-        for d_k, d_v in defs["defaults"].items():
-            byc.update( { d_k: d_v } )
 
     if service in defs:
         for d_k, d_v in defs[ service ].items():
@@ -114,15 +110,7 @@ def initialize_service(byc, service=False):
     update_requested_schema_from_request(byc)
     set_response_entity(byc)
 
-    set_pagination(byc)
-
-    byc["output"] = form.get("output", "")
-
-    # TODO: this is only used in some services ...
-    if "method_keys" in conf:
-        m = form.get("method", "___none___")
-        if m in conf["method_keys"].keys():
-            byc["method"] = m
+    set_io_params(byc)
 
     translate_reference_ids(byc)
     
@@ -136,7 +124,7 @@ def initialize_service(byc, service=False):
 
 ################################################################################
 
-def  set_pagination(byc):
+def  set_io_params(byc):
 
     form = byc["form_data"]
 
@@ -148,6 +136,14 @@ def  set_pagination(byc):
             if re.match(r'^\d+$', str(form[sp])):
                 s_v = int(form[sp])
                 byc["pagination"].update({sp: s_v})
+
+    byc.update({"output": form.get("output", byc["output"])})
+
+    # TODO: this is only used in some services ...
+    if "method_keys" in byc["this_config"]:
+        m = form.get("method", "___none___")
+        if m in byc["this_config"]["method_keys"].keys():
+            byc["method"] = m
 
     return byc
 
@@ -164,7 +160,8 @@ def update_entity_ids_from_path(byc):
     req_p_id = byc["request_entity_path_id"]
     res_p_id = byc["response_entity_path_id"]
 
-    b_mps = byc["beacon_mappings"]
+    m_k = byc["request_path_root"] + "_mappings"
+    b_mps = byc[m_k]
     p_r_m = b_mps["path_response_type_mappings"]
 
     byc.update({
@@ -179,7 +176,8 @@ def update_entity_ids_from_path(byc):
 
 def update_requested_schema_from_request(byc):
 
-    b_mps = byc["beacon_mappings"]
+    m_k = byc["request_path_root"] + "_mappings"
+    b_mps = byc[m_k]
     form = byc["form_data"]
     b_qm = byc["query_meta"]
 
@@ -195,7 +193,6 @@ def update_requested_schema_from_request(byc):
 def set_response_entity(byc):
 
     m_k = byc["request_path_root"] + "_mappings"
-
     b_rt_s = byc[m_k]["response_types"]
 
     if byc["response_entity_id"] in b_rt_s.keys():
@@ -310,7 +307,7 @@ def response_meta_add_request_summary(r, byc):
     r["meta"]["received_request_summary"].update({
         "filters": byc.get("filters", []), 
         "pagination": byc.get("pagination", {}),
-        "api_version": byc["beacon_info"].get("api_version", "v2")
+        "api_version": byc["beacon_defaults"]["info"].get("api_version", "v2")
     })
 
     for p in ["include_resultset_responses", "requested_granularity"]:
@@ -474,7 +471,6 @@ def response_update_meta(r, byc):
 def response_meta_set_info_defaults(r, byc):
 
     for i_k in ["api_version", "beacon_id", "create_date_time", "update_date_time"]:
-#DEBUG        print(byc["beacon_info"].get(i_k, ""))
         r["meta"].update({ i_k: byc["beacon_defaults"]["info"].get(i_k, "") })
 
     return r
@@ -528,10 +524,14 @@ def response_collect_errors(byc):
       
 ################################################################################
 
-def response_add_error(byc, code=200, message=""):
+def response_add_error(byc, code=200, message=False):
+
+    if message is False:
+        return byc
+    if len(str(message)) < 1:
+        return byc
 
     e = { "error_code": code, "error_message": message }
-
     byc["error_response"]["error"].update(e)
 
     return byc
@@ -589,7 +589,6 @@ def populate_service_header(byc, results):
         r_s.update({"num_total_results": r_no })
     if r_no > 0:
         r_s.update({"exists": True })
-        response_add_error(byc, 200)
 
     return byc
 

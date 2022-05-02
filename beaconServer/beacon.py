@@ -34,6 +34,12 @@ def beacon():
 
     r_p_id = byc.get("request_entity_path_id", "info")
 
+    if byc["args"]:
+        if "request_entity_path_id" in byc["args"]:
+            r_p_id = byc["args"].get("request_entity_path_id", "info")
+
+    byc.update({"env":"server"})
+
     if r_p_id in b_m["service_aliases"]:
         f = b_m["service_aliases"][ r_p_id ]
 

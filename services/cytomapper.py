@@ -28,9 +28,6 @@ def main():
 def cytomapper():
     
     initialize_service(byc)
-
-    local_path = path.dirname( path.abspath(__file__) )
-    byc[ "config" ][ "paths" ][ "genomes" ] = path.join( local_path, "rsrc", "genomes" )
     
     parse_variant_parameters(byc)
     generate_genomic_intervals(byc)
@@ -54,6 +51,8 @@ def cytomapper():
 
     size = int(  end - start )
     chroBases = "{}:{}-{}".format(chro, start, end)
+    r_a = byc["variant_definitions"]["refseq_aliases"]
+    sequence_id = r_a.get(chro, chro)
 
     if "text" in byc["output"]:
         open_text_streaming(byc["env"])
@@ -61,6 +60,8 @@ def cytomapper():
         exit()
 
     # TODO: response objects from schema
+    # r_s = byc["response_entity"]["beacon_schema"]["entity_type"]
+    # cb_i = object_instance_from_schema_name(byc, r_s, "properties")
     
     results = [
         {
@@ -71,7 +72,7 @@ def cytomapper():
                 "referenceName": chro,
                 "size": size,
             },        
-            "ChromosomeLocation": {
+            "chromosome_location": {
                 "type": "ChromosomeLocation",
                 "species_id": "taxonomy:9606",
                 "chr": chro,
@@ -81,19 +82,23 @@ def cytomapper():
                     "type": "CytobandInterval"
                 }
             },
-            "GenomicLocation": {
-                "type": "GenomicLocation",
-                "species_id": "taxonomy:9606",
-                "chr": chro,
+            "genomic_location": {
+                "type": "SequenceLocation",
+                "sequence_id": sequence_id,
                 "interval": {
-                    "start": start,
-                    "end": end,
-                    "type": "SimpleInterval"
+                    "start": {
+                        "type": "Number",
+                        "value": start
+                    },
+                    "end": {
+                        "type": "Number",
+                        "value": end
+                    },
+                    "type": "SequenceInterval"
                 }
             }
         }
     ]
-
 
     populate_service_response( byc, results)
     cgi_print_response( byc, 200 )

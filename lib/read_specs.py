@@ -9,10 +9,10 @@ from humps import camelize, decamelize
 
 def read_bycon_definition_files(byc):
 
-    if not "bycon_definition_files" in byc["beacon_defaults"]:
+    if not "bycon_definition_files" in byc["config"]:
         return byc
 
-    for d in byc["beacon_defaults"]["bycon_definition_files"]:
+    for d in byc["config"]["bycon_definition_files"]:
         read_bycon_configs_by_name( d, byc )
 
     return byc

@@ -18,9 +18,7 @@ def initialize_beacon_queries(byc):
     get_variant_request_type(byc)
 
     generate_queries(byc)
-
     select_dataset_ids(byc)
-    check_dataset_ids(byc)
 
     # TODO: HOT FIX
     if "runs" in byc["queries"].keys():

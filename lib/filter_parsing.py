@@ -67,85 +67,38 @@ def check_filter_values(filters, byc):
 
 def select_dataset_ids(byc):
 
-    # different var name & return if provided
+    p_id = rest_path_value("datasets")
+    if p_id:
+        ds_id = p_id
+        if ds_id in byc["dataset_definitions"].keys():
+            byc.update( { "dataset_ids": [ ds_id ] } )
+            return byc
+
+    # accessid overrides ... ?
+    if "accessid" in byc["form_data"]:
+        accessid = byc["form_data"]["accessid"]
+
+        ho_client = MongoClient()
+        ho_db = ho_client[ byc["config"]["info_db"] ]
+        ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
+        h_o = ho_coll.find_one( { "id": accessid } )
+        # TODO: catch error for mismatch
+        if h_o:
+            if "source_db" in h_o:
+                ds_id = h_o["source_db"]
+                if ds_id in byc["dataset_definitions"].keys():
+                    byc.update( { "dataset_ids": [ ds_id ] } )
+                    return byc            
 
     ds_ids = [ ]
-
-    p_id = rest_path_value("datasets")
-
-    if p_id:
-        if not "empty_value" in p_id:
-            for ds_id, ds in byc[ "dataset_definitions" ].items():
-                if p_id == ds_id:
-                    byc.update( { "dataset_ids": [ds_id] } )
-                    return byc
-
-    if "form_data" in byc:
-
-        # TODO: deparsing the different request object formats shouldn't ne 
-        # necessarily here...
-        if "datasets" in byc["form_data"]:
-            if "dataset_ids" in byc["form_data"]["datasets"]:
-                ds_ids = byc["form_data"]["datasets"]["dataset_ids"]
-        elif "dataset_ids" in byc["form_data"]:
-            ds_ids = byc["form_data"]["dataset_ids"]
-
-        # accessid overrides ... ?
-        if "accessid" in byc["form_data"]:
-            accessid = byc["form_data"]["accessid"]
-
-            ho_client = MongoClient()
-            ho_db = ho_client[ byc["config"]["info_db"] ]
-            ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
-            h_o = ho_coll.find_one( { "id": accessid } )
-            # TODO: catch error for mismatch
-            if h_o:
-                if "source_db" in h_o:
-                    ds_ids = [ h_o["source_db"] ]               
-
-    if len(ds_ids) > 0:
-        byc.update( { "dataset_ids": ds_ids } )
-        return byc
-
-    if "args" in byc:
-        try:
-            if byc["args"].alldatasets:
-                byc.update( { "dataset_ids": byc["config"][ "dataset_ids" ] } )
-                return byc
-        except AttributeError:
-            pass
-        try:
-            if byc["args"].datasetids:
-                ds_ids = byc["args"].datasetids.split(",")
-                if ds_ids[0] in byc["config"][ "dataset_ids" ]:
-                    byc.update( { "dataset_ids": ds_ids } )
-                    return byc
-        except AttributeError:
-            pass
+    form = byc["form_data"]
+    if "dataset_ids" in form:
+        for ds_id in form["dataset_ids"]:
+            if ds_id in byc["dataset_definitions"].keys():
+                ds_ids.append(ds_id)
+        if len(ds_ids) > 0:
+            byc.update( { "dataset_ids": ds_ids } )
     
     return byc
   
 ################################################################################
-
-def check_dataset_ids(byc):
-
-    dataset_ids = [ ]
-
-    if not "dataset_ids" in byc:
-        byc.update( { "dataset_ids": [ ] } )
-
-    if len(byc["dataset_ids"]) < 1:
-        if "dataset_default" in byc["config"]:
-            byc["dataset_ids"].append(byc["config"]["dataset_default"])
-
-    for ds in byc["dataset_ids"]:
-        if ds in byc["dataset_definitions"].keys():
-            dataset_ids.append(ds)
-
-    byc.update( { "dataset_ids": dataset_ids } )
-
-    return byc
-
-################################################################################
-
-

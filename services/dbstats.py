@@ -33,9 +33,7 @@ def main():
 def dbstats():
 
     initialize_service(byc)
-
     select_dataset_ids(byc)
-    check_dataset_ids(byc)
 
     if "statsNumber" in byc["form_data"]:
         s_n = byc["form_data"]["stats_number"]

@@ -1,0 +1,123 @@
+testMode:
+  flags:
+    - -t
+    - --testMode 
+  help: test setting, i.e. returning some random documents
+
+limit:
+  flags:
+    - -l
+    - --limit 
+  help: limit number of documents; a value of 0 sets to unlimited
+  default: 0
+
+output:
+  flags:
+    - --output
+  help: >-
+    special output format; command line processing uses some predefined text as
+    standard, but options are e.g. json or pgxseg
+  default: text
+
+datasetIds:
+  flags:
+    - -d
+    - --datasetIds
+  help: dataset ids
+  default: progenetix
+requestEntityPathId:
+  flags:
+    - --requestEntityPathId
+  help: required data entry point, equal to the first REST path element in Beacon
+  default: biosamples
+requestedSchema:
+  flags:
+    - --requestedSchema
+  help: requested schema, e.g. biosample
+
+# filters
+
+filters:
+  flags:
+    - --filters
+  help: prefixed filter values, comma concatenated
+
+filterPrecision:
+  flags:
+    - --filterPrecision
+  help: exact or start
+  default: exact
+
+# variants
+
+assemblyId:
+  flags:
+    - --assemblyId
+  help: assembly id
+referenceName:
+  flags:
+    - --referenceName
+  help: chromosome
+start:
+  flags:
+    - --start
+  help: genomic start position
+end:
+  flags:
+    - --end
+  help: genomic end position
+variantType:
+  flags:
+    - --variantType
+  help: variant type, e.g. DUP
+referenceBases:
+  flags:
+    - --referenceBases
+  help: reference bases
+alternateBases:
+  flags:
+    - --alternateBases
+  help: alternate bases
+variantMinLength:
+  flags:
+    - --variantMinLength
+  help: variantMinLength
+variantMaxLength:
+  flags:
+    - --variantMaxLength
+  help: variantMaxLength
+
+geneId:
+  flags:
+    - --geneId
+  help: gene id
+
+cytoBands:
+  flags:
+    - --cytoBands
+  help: cytobands, e.g. 8q21q24.1
+
+chroBases:
+  flags:
+    - --chroBases
+  help: only for the cytoband converter ... e.g. 8:0-120000000
+
+# geographic ...
+
+city:
+  flags:
+    - -c
+    - --city
+  help: only for the geolocations...
+geoLatitude:
+  flags:
+    - --geoLatitude
+  help: only for the geolocations...
+geoLongitude:
+  flags:
+    - --geoLongitude
+  help: only for the geolocations...
+geoDistance:
+  flags:
+    - --geoDistance
+  help: only for the geolocations...

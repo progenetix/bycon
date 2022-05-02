@@ -38,8 +38,7 @@ def publications():
 
     # data retrieval & response population
     query, e = _create_filters_query( byc )
-    if len(e) > 1:
-        response_add_error(byc, 422, e )
+    response_add_error(byc, 422, e )
 
     geo_q, geo_pars = geo_query( byc )
 

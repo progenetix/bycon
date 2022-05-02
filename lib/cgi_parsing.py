@@ -68,7 +68,11 @@ def cgi_parse_query(byc):
                     if p == "requestParameters":
                         for rp, rv in v.items():
                             rp_d = decamelize(rp)
-                            form.update({rp_d: rv})
+                            if "datasets" in rp:
+                                if "datasetIds" in rp["datasets"]:
+                                    form.update({rp_d: rp["datasets"]["datasetIds"]})
+                            else:
+                                form.update({rp_d: rv})
                     else:
                         p_d = decamelize(p)
                         form.update({p_d: v})
@@ -154,8 +158,8 @@ def rest_path_elements(byc):
 
     for p_k in ["request_entity_path_id", "request_entity_path_id_value", "response_entity_path_id"]:
 
-        r_i += 1       
-        if r_i == len(p_items):
+        r_i += 1
+        if r_i >= len(p_items):
             return byc
         byc.update({p_k:p_items[r_i]})
 
@@ -444,7 +448,8 @@ def open_text_streaming(env="server", filename="data.pgxseg"):
 
     if not "local" in env:
         print('Content-Type: text/plain')
-        print('Content-Disposition: attachment; filename="{}"'.format(filename))
+        if not "browser" in filename:
+            print('Content-Disposition: attachment; filename="{}"'.format(filename))
         print('status: 200')
         print()
 
@@ -469,7 +474,7 @@ def prjsonnice(this):
 
 def decamelize_words(j_d):
 
-    de_cams = ["sequenceId", "relativeCopyClass", "speciesId" ]
+    de_cams = ["sequenceId", "relativeCopyClass", "speciesId", "chromosomeLocation", "genomicLocation"]
     for d in de_cams:
         j_d = re.sub(r"\b{}\b".format(d), humps.decamelize(d), j_d)
 

@@ -30,8 +30,11 @@ from variant_parsing import *
 byc = initialize_bycon()
 c_f = Path( path.join( pkg_path, "config", "config.yaml" ) )
 byc.update({"config": load_yaml_empty_fallback( c_f )})
-d_f = Path( path.join( pkg_path, "config", "beacon_defaults.yaml" ) )
+d_f = Path( path.join( pkg_path, "config", "defaults.yaml" ) )
 byc.update({"beacon_defaults": load_yaml_empty_fallback( d_f ) })
+for d_k, d_v in byc["beacon_defaults"]["defaults"].items():
+    byc.update( { d_k: d_v } )
+
 read_bycon_definition_files(byc)
 cgi_parse_query(byc)
 get_bycon_args(byc)

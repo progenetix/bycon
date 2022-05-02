@@ -68,12 +68,10 @@ def genespans():
     response_add_received_request_summary_parameter(byc, "processed_query", query)
 
     results, e = mongo_result_list( byc["db"], byc["coll"], query, { '_id': False } )
-    if e:
-        response_add_error(byc, 422, e )
+    response_add_error(byc, 422, e )
+    cgi_break_on_errors(byc)
 
     e_k_s = byc["this_config"]["method_keys"]["genespan"]
-
-    cgi_break_on_errors(byc)
 
     if "method" in byc:
         if "genespan" in byc["method"]:

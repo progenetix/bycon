@@ -107,10 +107,10 @@ def _check_collation_type_query(byc):
                 c_t_i.append(i)
 
         if len(c_t_i) > 0:
-            if not "collationTypes" in byc["form_data"]:
-                byc["form_data"].update({"collationTypes":[]})
+            if not "collation_types" in byc["form_data"]:
+                byc["form_data"].update({"collation_types":[]})
             for c in c_t_i:
-                byc["form_data"]["collationTypes"].append(f_fs[c]["id"])
+                byc["form_data"]["collation_types"].append(f_fs[c]["id"])
 
         byc["filters"] = [f_fs[i] for i, e in enumerate(f_fs) if i not in c_t_i]
 
@@ -124,10 +124,10 @@ def _check_collation_type_query(byc):
         q_l.append(f_q)
 
     c_q = False
-    if "collationTypes" in byc["form_data"]:
-        fs = byc["form_data"]["collationTypes"]
+    if "collation_types" in byc["form_data"]:
+        fs = byc["form_data"]["collation_types"]
         if len(fs) > 0:
-            c_q = { "collation_type": {"$in": byc["form_data"]["collationTypes"] } }
+            c_q = { "collation_type": {"$in": byc["form_data"]["collation_types"] } }
     if c_q is not False:
         q_l.append(c_q)
 

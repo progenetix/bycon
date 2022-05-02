@@ -13,7 +13,7 @@ defaults:
   response_entity:
     entity_type: dataset
     collection: dbstats
-    response_schema: progenetixServiceResponse
+    response_schema: beaconCollectionsResponse
     beacon_schema:
       entity_type: dataset
       schema: https://progenetix.org/services/schemas/dataset/
@@ -29,6 +29,7 @@ bycon_definition_files:
   - handover_definitions
   - interval_definitions
   - remap_definitions
+  - services_defaults
   - services_mappings
   - variant_definitions
 

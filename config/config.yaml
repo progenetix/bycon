@@ -1,3 +1,16 @@
+bycon_definition_files:
+  - beacon_mappings
+  - dataset_definitions
+  - datatable_mappings
+  - filter_definitions
+  - geoloc_definitions
+  - handover_definitions
+  - interval_definitions
+  - remap_definitions
+  - services_defaults
+  - services_mappings
+  - variant_definitions
+
 web_server_domain: http://beacon.progenetix.org
 test_server_domain: http://beacon.progenetix.test
 web_handover_domain: http://progenetix.org
@@ -8,21 +21,11 @@ paths:
     - Library
     - WebServer
     - Documents
-
   web_temp_dir_abs:
     - /
     - Library
     - WebServer
     - Documents
-    - tmp
-
-  geosoft_file_root:
-    - byconeer
-    - imports
-    - ncbi-geo-soft-files
-
-  tmp_file_root:
-    - byconeer
     - tmp
 
 schema_paths:
@@ -35,7 +38,7 @@ schema_paths:
     - progenetix-model
   - - schemas
     - json
-    - progenetix-legacy-schemas
+    - progenetix-service-schemas
   - - schemas
     - json
     - progenetix-database-schemas
@@ -129,11 +132,6 @@ beacon_counts:
 handover_coll: querybuffer
 genespans_coll: genespans
 
-id_query_map:
-  biosample_ids: biosamples
-  variant_ids: variants
-  individual_ids: individuals
-  callset_ids: callsets
 filter_flags:
   logic: '$and'
   precision: exact #'start'

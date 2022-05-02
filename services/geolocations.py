@@ -47,13 +47,24 @@ def geolocations():
     cgi_break_on_errors(byc)
 
     results, e = mongo_result_list( byc["dataset_ids"][0], byc["geo_coll"], query, { '_id': False } )
-    if e:
-        response_add_error(byc, 422, e)
+    response_add_error(byc, 422, e)
+
+    if len(results) == 1:
+        if "geo_distance" in byc["form_data"]:
+            l_l = results[0]["geo_location"]["geometry"]["coordinates"]
+            geo_pars = {
+                "geo_longitude": l_l[0],
+                "geo_latitude": l_l[1],
+                "geo_distance": int(byc["form_data"]["geo_distance"])
+            }
+            query = return_geo_longlat_query(byc["geoloc_definitions"]["geo_root"], geo_pars)
+            results, e = mongo_result_list( byc["dataset_ids"][0], byc["geo_coll"], query, { '_id': False } )
+            response_add_error(byc, 422, e)
     
     cgi_break_on_errors(byc)
 
     if "text" in byc["output"]:
-        open_text_streaming(byc["env"])
+        open_text_streaming(byc["env"], "browser")
         for g in results:
             s_comps = []
             for k in ["city", "country", "continent"]:

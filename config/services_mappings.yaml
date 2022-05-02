@@ -32,7 +32,8 @@ path_response_type_mappings:
   ontologyMaps: ontologymap
   collations: collation
   genespans: gene
-  intervalFrequencies: 
+  intervalFrequencies: intervalFrequencies
+  cytomapper: cytobandMapping
 
 response_types:
 
@@ -71,3 +72,14 @@ response_types:
       entity_type: interval_frequencies
       schema: https://progenetix.org/services/schemas/IntervalFrequencies/
     h->o_access_key: Null
+
+  cytoband_mapping:
+    response_entity:
+      entity_type: cytobandMapping
+      collection: False
+      response_schema: progenetixServiceResponse
+      beacon_schema:
+        entity_type: cytobandMapping
+        schema: https://progenetix.org/services/schemas/cytobandMapping/
+      h->o_access_key: Null
+

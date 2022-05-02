@@ -30,7 +30,7 @@ def parse_cytoband_file(byc):
     if genome in g_map.keys():
         genome = g_map[ genome ]
 
-    cb_file = path.join( pkg_path, "services", "rsrc", "genomes", genome, "CytoBandIdeo.txt" )
+    cb_file = path.join( pkg_path, "rsrc", "genomes", genome, "CytoBandIdeo.txt" )
     
     cb_re = re.compile( byc["interval_definitions"][ "cytobands" ][ "pattern" ] )
 
