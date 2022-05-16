@@ -26,7 +26,7 @@ properties:
       Ontology value from Experimental Factor Ontology (EFO) Material Entity
       term (BFO:0000040). Classification of the sample in abnormal sample (EFO:0009655)
       or reference sample (EFO:0009654).
-    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+    $ref: ../common/ontologyTerm.yaml
     examples:
       - id: EFO:0009654
         label: reference sample
@@ -42,14 +42,14 @@ properties:
         label: recurrent tumor sample
   histologicalDiagnosis:
     description: Disease diagnosis that was inferred from the histological examination.
-    $ref: ../common/ontologyTerm.yaml#/properties
+    $ref: ../common/ontologyTerm.yaml
     examples:
       - id: NCIT:C3778
         label: Serous Cystadenocarcinoma
   pathologicalStage:
     description: Pathological stage, if applicable, preferably as subclass of NCIT:C28108
       - Disease Stage Qualifier. RECOMMENDED.
-    $ref: ../common/ontologyTerm.yaml#/properties
+    $ref: ../common/ontologyTerm.yaml
     examples:
       - id: NCIT:C27977
         label: Stage IIIA
@@ -60,7 +60,7 @@ properties:
       of NCIT:C48698 - Cancer TNM Finding Category (NCIT:C48698). RECOMMENDED.
     type: array
     items:
-    $ref: ../common/ontologyTerm.yaml#/properties
+    $ref: ../common/ontologyTerm.yaml
     examples:
       - id: NCIT:C48725
         label: T2a Stage Finding
@@ -71,7 +71,7 @@ properties:
   tumorGrade:
     description: >-
       Tumor grade as child term of NCIT:C28076 (Disease Grade Qualifier) or equivalent.
-    $ref: ../common/ontologyTerm.yaml#/properties
+    $ref: ../common/ontologyTerm.yaml
     examples:
       - id: NCIT:C28076
         label: grade 3
@@ -91,21 +91,21 @@ properties:
   icdoMorphology:
     description: >-
       The ICD-O 3 morphology code of this biosample, in a "pseudo-prefixed" transformation (since no direct ICD-O 3 registry can be referenced).
-    $ref: ../common/ontologyTerm.yaml#/properties
+    $ref: ../common/ontologyTerm.yaml
     examples:
       - id: icdom-94703
         label : Medulloblastoma, NOS
   icdoTopography:
     description: >-
       The ICD-O 3 topography code of this biosample, in a "pseudo-prefixed" transformation (since no direct ICD-O 3 registry can be referenced).
-    $ref: ../common/ontologyTerm.yaml#/properties
+    $ref: ../common/ontologyTerm.yaml
     examples:
       - id: icdot-C71.6
         label : cerebellum
   externalReferences:
     type: array
     items:
-      $ref: ../common/externalReference.yaml#/properties
+      $ref: ../common/externalReference.yaml
     examples:
       - id: PMID:9892199
   cohorts:
@@ -113,12 +113,12 @@ properties:
       Cohorts describe collections of samples or individuals which are part of a common epistemic group, e.g. have been used for a study or share a set of features.
     type: array
     items:
-      $ref: ../common/ontologyTerm.yaml#/properties
+      $ref: ../common/ontologyTerm.yaml
     examples:
       - id: pgxcohort-arraymap
         label: arrayMap collection
   provenance:
-    $ref: ../common/provenance.yaml#/properties
+    $ref: ../common/provenance.yaml
   timeOfCollection:
     description: >-
       The age of the individual at time of sample collection or alternative time
@@ -152,7 +152,7 @@ properties:
   #   description: Category of sample origin. Value from Ontology for Biomedical Investigations
   #     (OBI) material entity (BFO:0000040) ontology, e.g. 'specimen from organism'
   #     (OBI:0001479),'xenograft' (OBI:0100058), 'cell culture' (OBI:0001876)
-  #   $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+  #   $ref: ../common/ontologyTerm.yaml
   #   examples:
   #     - id: OBI:0001479
   #       label: specimen from organism
@@ -167,7 +167,7 @@ properties:
   #     (OBI) or Cell Line Ontology (CLO), e.g. 'cerebellar vermis' (UBERON:0004720),
   #     'HEK-293T cell' (BTO:0002181), 'nasopharyngeal swab specimen' (OBI:0002606),
   #     'cerebrospinal fluid specimen' (OBI:0002502).
-  #   $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+  #   $ref: ../common/ontologyTerm.yaml
   #   examples:
   #     - id: UBERON:0000474
   #       label: female reproductive system
@@ -179,7 +179,7 @@ properties:
   #   description: Ontology value from NCIT Intervention or Procedure ontology term
   #     (NCIT:C25218) describing the procedure for sample obtention, e.g. NCIT:C15189
   #     (biopsy).
-  #   $ref: ../common/procedure.json
+  #   $ref: ../common/procedure.yaml
   #   examples:
   #     - code:
   #         id: NCIT:C15189
@@ -191,27 +191,27 @@ properties:
   #   description: List of phenotypic abnormalities of the sample. RECOMMENDED.
   #   type: array
   #   items:
-  #     $ref: ../common/phenotypicFeature.json
+  #     $ref: ../common/phenotypicFeature.yaml
   # measurements:
   #   description: List of measurements of the sample.
   #   type: array
   #   items:
-  #     $ref: ../common/measurement.json
+  #     $ref: ../common/measurement.yaml
   # sampleProcessing:
   #   description: Status of how the specimen was processed,e.g. a child term of EFO:0009091.
-  #   $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+  #   $ref: ../common/ontologyTerm.yaml
   #   examples:
   #     - id: EFO:0009129
   #       label: mechanical dissociation
   # sampleStorage:
   #   description: Status of how the specimen was stored.
-  #   $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+  #   $ref: ../common/ontologyTerm.yaml
   #   example: {}
   tumorProgression:
     description: Tumor progression category indicating primary, metastatic or recurrent
       progression. Ontology value from Neoplasm by Special Category ontology (NCIT:C7062),
       e.g. NCIT:C84509 (Primary Malignant Neoplasm).
-    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+    $ref: ../common/ontologyTerm.yaml
     examples:
       - id: NCIT:C84509
         label: Primary Malignant Neoplasm
@@ -221,9 +221,9 @@ properties:
     description: Clinically relevant biomarkers. RECOMMENDED.
     type: array
     items:
-      $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+      $ref: ../common/ontologyTerm.yaml
   info:
-    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/definitions/Info
+    $ref: ../../framework/common/beaconCommonComponents.yaml#/definitions/Info
 required:
   - id
 additionalProperties: true

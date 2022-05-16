@@ -177,7 +177,6 @@ def remap_phenopackets(ds_id, r_s_res, byc):
     for ind_i, ind in enumerate(r_s_res):
 
         pxf = phenopack_individual(ind, data_db, byc)
-
         pxf_s.append(pxf)
 
     return pxf_s
@@ -211,12 +210,17 @@ def phenopack_individual(ind, data_db, byc):
         })
         for k in ["info", "provenance", "_id", "followup_time", "followup_state", "cohorts", "icdo_morphology", "icdo_topography"]:
             bios.pop(k, None)
+
+        clean_empty_fields(bios)
+
         pxf_bios.append(bios)
 
-    pop_keys = ["_id", "provenance"]
+    pop_keys = ["_id", "provenance", "external_references", "description", "info"]
 
     for k in pop_keys:
         ind.pop(k, None)
+
+    individual_remap_pgx_diseases(ind)
 
     for d_i, d in enumerate(ind["diseases"]):
         for k in ["followup_state", "followup_time"]:
@@ -237,12 +241,49 @@ def phenopack_individual(ind, data_db, byc):
 
 ################################################################################
 
+def clean_empty_fields(this_object):
+
+    if not isinstance(this_object, dict):
+        return this_object
+
+    for k in list(this_object.keys()):
+        if isinstance(this_object[k], dict):
+            if not this_object[k]:
+                this_object.pop(k, None)
+        elif isinstance(this_object[k], list):
+            if len(this_object[k]) < 1:
+                this_object.pop(k, None)
+
+    return this_object
+
+################################################################################
+
+def individual_remap_pgx_diseases(ind):
+
+    #TODO: This should be more general, i.e. what is mapped/how, deleted...
+
+    diseases = []
+
+    for k in ["index_disease", "auxiliary_disease"]:
+        try:
+            if len(ind[k]["disease_code"]["id"]) > 1:
+                diseases.append(ind[k])
+        except:
+            pass
+        ind.pop(k, None)
+
+    ind.update({"diseases": diseases})
+    return ind
+
+################################################################################
+
 def _phenopack_resources(byc):
 
-    # TODO: make thsi general, at least for phenopacket response, and only scan used prefixes
+    # TODO: make this general, at least for phenopacket response, and only scan used prefixes
 
     f_d = byc["filter_definitions"]
-    rkeys = ["NCITgrade", "NCITstage", "NCITtnm", "NCIT", "PATOsex", "EFOfus" ]
+    # rkeys = ["NCITgrade", "NCITstage", "NCITtnm", "NCIT", "PATOsex", "EFOfus" ]
+    rkeys = ["NCIT", "PATOsex", "EFOfus", "UBERON" ]
 
     pxf_rs = []
 
@@ -271,11 +312,10 @@ def remap_all(r_s_res):
 
     for br_i, br_r in enumerate(r_s_res):
         r_s_res[br_i].pop("_id", None)
-        r_s_res[br_i].pop("description", None)
+        # r_s_res[br_i].pop("description", None)
+        clean_empty_fields(r_s_res[br_i])
 
     return r_s_res
-
-
 
 ################################################################################
 

@@ -18,7 +18,7 @@ do
 done
 
 rsync -rv --exclude=".git*" $BEACONMODELPATH $BYCONSCHEMAS/src/beacon-v2-default-model/
-rsync -rv --exclude=".git*" $BEACONFRAMEWORKPATH $BYCONSCHEMAS/src/framework/
+# rsync -rv --exclude=".git*" $BEACONFRAMEWORKPATH $BYCONSCHEMAS/src/framework/
 # 
 # $BASEDIR/beaconYamler.py -i $BEACONMODELPATH -t json -x yaml -o $UNITYPATH/models/src/$BEACONMODELNAME
 # $BASEDIR/beaconYamler.py -i $BEACONFRAMEWORKPATH -t json -x yaml -o $UNITYPATH/framework/src

@@ -9,6 +9,7 @@ from humps import camelize, decamelize
 bycon_lib_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( bycon_lib_path, pardir )
 
+from args_parsing import *
 from cgi_parsing import *
 from cytoband_utils import translate_reference_ids
 from data_retrieval import *
@@ -31,6 +32,7 @@ def initialize_bycon():
         "args": None,
         "env": "server",
         "pkg_path": pkg_path,
+        "bycon_lib_path": bycon_lib_path,
         "request_path_root": "beacon",
         "request_entity_path_id": None,
         "request_entity_path_id_value": None,
@@ -38,13 +40,17 @@ def initialize_bycon():
         "request_entity_id": None,
         "response_entity_id": None,
         "response_entity": {},
+        "service_config": {},
+        "filters": [],
         "method": "",
         "output": "",
         "form_data": {},
         "query_meta": {},
+        "script_args": [],
         "include_handovers": False,
         "empty_query_all_count": False,
-        "test_mode": False,  
+        "test_mode": False,
+        "check_args": True,
         "debug_mode": False,  
         "errors": []
     }
@@ -94,7 +100,10 @@ def initialize_service(byc, service=False):
         service = s_a_s[service]
 
     read_local_prefs( service, sub_path, byc )
-    conf = byc["this_config"]
+    get_bycon_args(byc)
+    args_update_form(byc)
+
+    conf = byc["service_config"]
 
     if "defaults" in conf:
         for d_k, d_v in conf["defaults"].items():
@@ -111,11 +120,8 @@ def initialize_service(byc, service=False):
     set_response_entity(byc)
 
     set_io_params(byc)
-
     translate_reference_ids(byc)
-    
-    byc.update({"test_mode": test_truthy( form.get("test_mode", False) ) })
-    byc.update({"include_handovers": test_truthy( form.get("include_handovers", "false") ) })
+    set_special_modes(byc)
 
     # TODO: standardize the general defaults / entity defaults / form values merging
     #       through pre-parsing into identical structures and then use deepmerge etc.
@@ -124,7 +130,21 @@ def initialize_service(byc, service=False):
 
 ################################################################################
 
-def  set_io_params(byc):
+def set_special_modes(byc):
+
+    form = byc["form_data"]
+    for m in ["test_mode", "debug_mode", "include_handovers"]:
+        byc.update({m: test_truthy( form.get(m, False) ) })
+
+    t_m_k = form.get("test_mode_count", "___none___")
+    if re.match(r'^\d+$', str(t_m_k)):
+        byc.update({"test_mode_count": int(t_m_k) })
+
+    return byc
+
+################################################################################
+
+def set_io_params(byc):
 
     form = byc["form_data"]
 
@@ -140,9 +160,9 @@ def  set_io_params(byc):
     byc.update({"output": form.get("output", byc["output"])})
 
     # TODO: this is only used in some services ...
-    if "method_keys" in byc["this_config"]:
+    if "method_keys" in byc["service_config"]:
         m = form.get("method", "___none___")
-        if m in byc["this_config"]["method_keys"].keys():
+        if m in byc["service_config"]["method_keys"].keys():
             byc["method"] = m
 
     return byc
@@ -205,9 +225,10 @@ def set_response_entity(byc):
 def run_beacon_init_stack(byc):
 
     initialize_beacon_queries(byc)
+
     generate_genomic_intervals(byc)
     create_empty_beacon_response(byc)
-    replace_queries_in_test_mode(byc, 5)
+    replace_queries_in_test_mode(byc)
     response_collect_errors(byc)
     cgi_break_on_errors(byc)
 
@@ -242,7 +263,7 @@ def run_result_sets_beacon(byc):
         if not "range" in byc["pagination"]:
             set_pagination_range(len(r_s_res), byc)
         
-        if test_truthy( byc["form_data"].get("paginateResults", True) ):
+        if test_truthy( byc["form_data"].get("paginate_results", True) ):
             r_s_res = paginate_list(r_s_res, byc)
 
         check_alternative_single_set_deliveries(ds_id, r_s_res, byc)
@@ -256,7 +277,7 @@ def run_result_sets_beacon(byc):
 
     ######## end of result sets loop ###########################################
 
-    sr_rs = byc["service_response"]["response_summary"]
+    sr_rs = byc["service_response"].get("response_summary", {})
     sr_rs.update({"num_total_results":0})
     for r_set in sr_r["result_sets"]:
         sr_rs["num_total_results"] += r_set["results_count"]
@@ -317,12 +338,13 @@ def response_meta_add_request_summary(r, byc):
                 r["meta"].update({"returned_granularity": form.get(p)})
 
     try:
-        for rrs_k, rrs_v in byc["this_config"]["meta"]["received_request_summary"].items():
+        for rrs_k, rrs_v in byc["service_config"]["meta"]["received_request_summary"].items():
             r["meta"]["received_request_summary"].update( {rrs_k: rrs_v })
     except:
         pass
 
-    # TODO: This is a private extension so far.
+    # TODO: This is a private extension so far; it may be replaced w/ saved query
+    # from accession (not yet existing).
     r["meta"]["received_request_summary"].update({ "processed_query": byc.get("queries", {}) })
 
     return r
@@ -389,7 +411,7 @@ def create_empty_non_data_response(byc):
     r, e = instantiate_response_and_error(byc, byc["response_entity"]["response_schema"])
     response_update_meta(r, byc)
 
-    for r_k, r_v in byc["this_config"]["response"].items():
+    for r_k, r_v in byc["service_config"]["response"].items():
         r["response"].update({r_k: r_v})
 
     byc.update( {"service_response": r, "error_response": e })
@@ -480,8 +502,8 @@ def response_meta_set_info_defaults(r, byc):
 def response_meta_set_config_defaults(r, byc):
 
     # TODO: should be in schemas
-    if "meta" in byc["this_config"]:
-        for k, v in byc["this_config"]["meta"].items():
+    if "meta" in byc["service_config"]:
+        for k, v in byc["service_config"]["meta"].items():
             r["meta"].update( { k: v } )
 
     return r
@@ -543,7 +565,7 @@ def collations_set_delivery_keys(byc):
     # the method keys can be overriden with "deliveryKeys"
 
     method = byc.get("method", False)
-    conf = byc["this_config"]
+    conf = byc["service_config"]
 
     d_k = form_return_listvalue( byc["form_data"], "deliveryKeys" )
 
@@ -553,6 +575,7 @@ def collations_set_delivery_keys(byc):
     if method is False:
         return d_k
 
+    # here the empty list is returned, leading to all
     if "details" in method:
         return d_k
 

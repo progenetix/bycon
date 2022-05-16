@@ -31,7 +31,7 @@ def genespans():
     assembly_id = byc["assembly_id"]
     if "assembly_id" in byc[ "form_data" ]:
         aid = byc[ "form_data" ]["assembly_id"]
-        if aid in byc["this_config"]["assembly_ids"]:
+        if aid in byc["service_config"]["assembly_ids"]:
             assembly_id = aid
         else:
             byc["service_response"]["meta"]["warnings"].append("{} is not supported; fallback {} is being used!".format(aid, assembly_id))
@@ -41,7 +41,7 @@ def genespans():
     else:
         byc["query_precision"] = "start"
 
-    for mk, mv in byc["this_config"]["meta"].items():
+    for mk, mv in byc["service_config"]["meta"].items():
         byc["service_response"]["meta"].update({mk: mv})
 
     gene_id = rest_path_value("genespans")
@@ -65,19 +65,19 @@ def genespans():
         else:
             q_list.append( { q_f: re.compile( r'^'+gene_id+'$', re.IGNORECASE ) } )
     query = create_and_or_query_for_list('$or', q_list)
-    response_add_received_request_summary_parameter(byc, "processed_query", query)
+    # response_add_received_request_summary_parameter(byc, "processed_query", query)
 
     results, e = mongo_result_list( byc["db"], byc["coll"], query, { '_id': False } )
     response_add_error(byc, 422, e )
     cgi_break_on_errors(byc)
 
-    e_k_s = byc["this_config"]["method_keys"]["genespan"]
+    e_k_s = byc["service_config"]["method_keys"]["genespan"]
 
     if "method" in byc:
         if "genespan" in byc["method"]:
             for i, g in enumerate(results):
                 g_n = {}
-                for k in byc["this_config"]["method_keys"]["genespan"]:
+                for k in byc["service_config"]["method_keys"]["genespan"]:
                     g_n.update({k:g.get(k, "")})
                 results[i] = g_n
 

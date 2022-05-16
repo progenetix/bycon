@@ -18,6 +18,6 @@ properties:
     type: string
     value: "Feature"
   geometry:
-    $ref: geoJSONgeometry.yaml#/properties
+    $ref: geoJSONgeometry.yaml
   properties:
-    $ref: geoLabels.yaml#/properties
+    $ref: geoLabels.yaml

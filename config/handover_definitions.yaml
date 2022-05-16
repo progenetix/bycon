@@ -38,7 +38,7 @@ h->o_types:
 
   biosamplevariants:
     id: 'pgx:handover:biosamplevariants'
-    requestedSchema: variant
+    requestedSchema: genomicVariant
     paginated_entities:
       - biosample
       - analysis
@@ -50,7 +50,7 @@ h->o_types:
 
   biosamplepgxsegvariants:
     id: 'pgx:handover:biosamplevariants:pgxseg'
-    requestedSchema: variant
+    requestedSchema: genomicVariant
     output: pgxseg
     paginated_entities:
       - biosample
@@ -70,8 +70,7 @@ h->o_types:
       - phenopacket
     description: "retrieve data of the phenopackets matched by the query"
     h->o_key: 'biosamples._id'
-    script_path_web: '/services/individuals'
-    url_opts: "&requestedSchema=phenopacket"
+    script_path_web: '/beacon/individuals'
 
   individuals:
     id: 'pgx:handover:individuals'
@@ -98,7 +97,7 @@ h->o_types:
   pgxseg:
     id: 'pgx:handover:pgxseg'
     label: "Found Variants (.pgxseg)"
-    requestedSchema: variants
+    requestedSchema: genomicVariant
     output: pgxseg
     paginated_entities:
       - variant
@@ -109,6 +108,7 @@ h->o_types:
   callsetsvariants:
     id: 'pgx:handover:callsetsvariants'
     label: "All Sample Variants (.json)"
+    requestedSchema: genomicVariant
     method: callsetsvariants
     paginated_entities:
       - variant
@@ -119,6 +119,7 @@ h->o_types:
   callsetspgxseg:
     id: 'pgx:handover:callsetspgxseg'
     label: "All Sample Variants (.pgxseg)"
+    requestedSchema: genomicVariant
     method: callsetsvariants
     paginated_entities:
       - variant
@@ -208,20 +209,4 @@ h->o_methods:
     source_key: callset_id
     target_collection: callsets
     target_key: id
-  variants.variantannotation_id->variant_annotations.id:
-    source_collection: variants
-    source_key: variantannotation_id
-    target_collection: variant_annotations
-    target_key: id
-
-  variant_annotations.id->variant_annotations._id:
-    source_collection: variant_annotations
-    source_key: id
-    target_collection: variant_annotations
-    target_key: _id
-
-  variant_annotations._id:
-    source_collection: variant_annotations
-    source_key: _id
-    target_collection: variant_annotations
-    target_key: _id
+ 

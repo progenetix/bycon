@@ -19,7 +19,7 @@ properties:
       (which may specify how and what kinds of data will be gathered) that are executed
       as part of an investigation and is realized during a study design execution.
       Value from Ontologized MIABIS (OMIABIS) Study design ontology term tree (OBI:0500000).
-    $ref: ../common/ontologyTerm.yaml#/properties
+    $ref: ../common/ontologyTerm.yaml
     examples:
       - id: OMIABIS:0001017
         label: case control study design
@@ -185,21 +185,21 @@ definitions:
         description: Diseases in cohort inclusion criteria
         type: array
         items:
-          $ref: ../common/disease.yaml#/properties
+          $ref: ../common/disease.yaml
       phenotypicConditions:
         description: Phenotypic condition(s) in cohort inclusion criteria
         type: array
         items:
-          $ref: ../common/phenotypicFeature.yaml#/properties
+          $ref: ../common/phenotypicFeature.yaml
       ageRange:
         description: Individual age range in cohort inclusion criteria
-        $ref: ../common/ageRange.yaml#/properties
+        $ref: ../common/ageRange.yaml
   DataTypesArray:
     description: Type of information. Preferably values from Genomics Cohorts Knowledge
       Ontology (GeCKO) or others when GeCKO is not applicable.
     type: array
     items:
-      $ref: ../common/ontologyTerm.yaml#/properties
+      $ref: ../common/ontologyTerm.yaml
     examples:
       - id: OGMS:0000015
         label: clinical history

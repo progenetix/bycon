@@ -12,14 +12,14 @@ properties:
   externalReferences:
     type: array
     items:
-      $ref: ../common/externalReference.yaml#/properties
+      $ref: ../common/externalReference.yaml
   phenopacketSchemaVersion:
     type: string
   resources:
     type: array
     items:
-      $ref: resource.yaml#/properties
+      $ref: resource.yaml
   updates:
     type: array
     items:
-      $ref: update.yaml#/properties
+      $ref: update.yaml

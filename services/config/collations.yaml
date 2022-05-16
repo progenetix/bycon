@@ -1,23 +1,7 @@
-bycon_definition_files:
-  - filter_definitions
-  - dataset_definitions
-  - services_mappings
-  - beacon_mappings
 collection_name: collations
 defaults:
-  dataset_ids:
-    - progenetix
   method: counts
-  filters:
-    - NCIT
-    - icdom
-    - icdot
-    - cellosaurus
   response_entity_id: collation
-
-meta:
-  info: >
-    The main collations payload can be accessed in `response.results`.
 integer_keys:
   - count
   - code_matches
@@ -57,8 +41,6 @@ method_keys:
     - collation_type
     - type
     - reference
-  codes:
-    - id
-    - label
   ids:
     - id
+    - label

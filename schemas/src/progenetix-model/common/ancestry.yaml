@@ -13,7 +13,7 @@ required:
   - ancestry
 properties:
   ancestry:
-    $ref: ontologyTerm.yaml#/properties
+    $ref: ontologyTerm.yaml
   description:
     type: string
   confidenceScore:

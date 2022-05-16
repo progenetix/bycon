@@ -1,10 +1,4 @@
-bycon_definition_files:
-  - services_mappings
-  - beacon_mappings
 defaults:
-  dataset_ids:
-    - progenetix
-  assembly_id: GRCh38
   query_fields:
     - symbol
     - ensembl_gene_ids

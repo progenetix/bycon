@@ -19,8 +19,6 @@ from publication_utils import *
 from query_execution import *
 from query_generation import *
 from read_specs import *
-from remap_utils import *
-from repository_utils import *
 from response_remapping import *
 from schema_parsing import *
 from service_utils import *
@@ -37,5 +35,3 @@ for d_k, d_v in byc["beacon_defaults"]["defaults"].items():
 
 read_bycon_definition_files(byc)
 cgi_parse_query(byc)
-get_bycon_args(byc)
-args_update_form(byc)

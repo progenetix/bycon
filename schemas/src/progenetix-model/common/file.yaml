@@ -1,0 +1,30 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/file/v2022-05-04
+title: File
+description: Information about a file referenced from a Phenopacket.
+type: object
+properties:
+  uri:
+    description: >-
+      A valid URI in local or global context.
+    type: string
+  individualToFileIdentifiers:
+    description: >-
+      The mapping between the Individual.id or Biosample.id to any identifier in the file.
+    type: array
+    items:
+      type: object
+  fileAttributes:
+    description: >-
+      Additional attributes describuing the file, as `key: value` pairs.
+    type: array
+    items:
+      type: object
+examples:
+  - uri: http://progenetix.test/beacon/biosamples/pgxbs-kftviebk/variants/?output=pgxseg
+    fileAttributes:
+      fileFormat: pgxseg
+      genomeAssembly: GRCh38
+required:
+  - uri
+additionalProperties: true

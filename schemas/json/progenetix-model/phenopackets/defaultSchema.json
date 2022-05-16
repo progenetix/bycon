@@ -17,13 +17,19 @@
     "properties": {
         "biosamples": {
             "items": {
-                "$ref": "../biosamples/defaultSchema.json#/properties"
+                "$ref": "../biosamples/defaultSchema.json"
             },
             "type": "array"
         },
         "diseases": {
             "items": {
-                "$ref": "../common/disease.json#/properties"
+                "$ref": "../common/disease.json"
+            },
+            "type": "array"
+        },
+        "files": {
+            "items": {
+                "$ref": "../common/file.json"
             },
             "type": "array"
         },
@@ -36,21 +42,21 @@
         },
         "measurements": {
             "items": {
-                "$ref": "../common/measurement.json#/properties"
+                "$ref": "../common/measurement.json"
             },
             "type": "array"
         },
         "metaData": {
-            "ref": "../common/metaData.json#/properties"
+            "ref": "../common/metaData.json"
         },
         "phenotypicFeatures": {
             "items": {
-                "$ref": "../common/phenotypicFeature.json#/properties"
+                "$ref": "../common/phenotypicFeature.json"
             },
             "type": "array"
         },
         "subject": {
-            "$ref": "../individuals/defaultSchema.json#/properties"
+            "$ref": "../individuals/defaultSchema.json"
         }
     },
     "title": "Phenopacket"

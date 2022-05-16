@@ -4,6 +4,22 @@ testMode:
     - --testMode 
   help: test setting, i.e. returning some random documents
 
+testModeCount:
+  flags:
+    - --testModeCount
+  help: setting the number of documents reurned in test mode
+  default: 5
+
+debugMode:
+  flags:
+    - --debugMode 
+  help: debug setting
+
+filterPrecision:
+  flags:
+    - --filterPrecision
+  help: "`either` start or `exact` (`exact being internal default`) for matching filter values"
+
 limit:
   flags:
     - -l
@@ -19,17 +35,78 @@ output:
     standard, but options are e.g. json or pgxseg
   default: text
 
+parse:
+  flags:
+    - -p
+    - --parse 
+  help: input value to be parsed
+
+mode:
+  flags:
+    - -m
+    - --mode
+  help: mode, e.g. file type
+
+key:
+  flags:
+    - -k
+    - --key 
+  help: some key or word
+
+update:
+  flags:
+    - -u
+    - --update
+  help: update existing records
+
+# file I/O
+
+inputfile:
+  flags:
+    - -i
+    - --inputfile
+  help: a custom file to specify input data, usually tab-delimited with special header
+
+outfile:
+  flags:
+    - -o
+    - --outfile
+  help: output file where supported (cmd line)
+
+randno:
+  flags:
+    - -r
+    - --randno
+  help: random number to limit processing, where supported
+  default: 0
+
+source:
+  flags:
+    - -s
+    - --source
+  help: some source label, e.g. `callsets`
+
+query:
+  flags:
+    - -q
+    - --query
+  help: complete query string, e.g. `{"biosamples":{"external_references.id":"geo:GSE7428"}}`
+
+# standard Beacon query parameters 
+
 datasetIds:
   flags:
     - -d
     - --datasetIds
   help: dataset ids
   default: progenetix
+
 requestEntityPathId:
   flags:
     - --requestEntityPathId
   help: required data entry point, equal to the first REST path element in Beacon
   default: biosamples
+
 requestedSchema:
   flags:
     - --requestedSchema
@@ -109,15 +186,25 @@ city:
     - -c
     - --city
   help: only for the geolocations...
+
 geoLatitude:
   flags:
     - --geoLatitude
   help: only for the geolocations...
+
 geoLongitude:
   flags:
     - --geoLongitude
   help: only for the geolocations...
+
 geoDistance:
   flags:
     - --geoDistance
   help: only for the geolocations...
+
+# special ...
+
+geneId:
+  flags:
+    - --collationtypes
+  help: selected collation types, e.g. "EFO"

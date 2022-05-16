@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/individual/v2021-11-12
+$id: https://progenetix.org/services/schemas/individual/v2022-05-04
 title: Individual
 type: object
 
@@ -19,34 +19,44 @@ properties:
     $ref: ../common/commonDefinitions.yaml#/definitions/Ethnicity
   geographicOrigin:
     $ref: ../common/commonDefinitions.yaml#/definitions/GeographicLocation
-  diseases:
+  indexDisease:
+    description: >-
+      This is the main (cancer) disease analyzed by the associated biosample(s).
+    $ref: ../common/disease.yaml
+  auxiliaryDiseases:
+    description: >-
+      These are additional diseases, e.g. germline syndromes ("Li-Fraumeni" ...).
     type: array
     items:
-      $ref: ../common/disease.yaml#/properties
+      $ref: ../common/disease.yaml
+    examples:
+      - disease_code:
+          id: NCIT:C3476
+          label: Li-Fraumeni Syndrome
   pedigrees:
     type: array
     items:
-      $ref: ../common/pedigree.yaml#/properties
+      $ref: ../common/pedigree.yaml
   phenotypicFeatures:
     type: array
     items:
-      $ref: ../common/phenotypicFeature.yaml#/properties
+      $ref: ../common/phenotypicFeature.yaml
   treatments:
     type: array
     items:
-      $ref: ../common/treatment.yaml#/properties
+      $ref: ../common/treatment.yaml
   interventionsOrProcedures:
     type: array
     items:
-      $ref: ../common/procedure.yaml#/properties
+      $ref: ../common/procedure.yaml
   measures:
     type: array
     items:
-      $ref: ../common/measurement.yaml#/properties
+      $ref: ../common/measurement.yaml
   exposures:
     type: array
     items:
-      $ref: ../common/exposure.yaml#/properties
+      $ref: ../common/exposure.yaml
   info:
     description: >-
       Additional structured data which may not be common across different Beacon
@@ -86,7 +96,7 @@ properties:
   externalReferences:
     type: array
     items:
-      $ref: ../common/externalReference.yaml#/properties
+      $ref: ../common/externalReference.yaml
     examples:
       - id: biosample:SAME122868
         description: HapMap individual
@@ -95,18 +105,18 @@ properties:
         description: Prognostic analysis of mantle cell lymphoma genomes
 
   vitalStatus:
-    $ref: ../common/vitalStatus.yaml#/properties
+    $ref: ../common/vitalStatus.yaml
 
   provenance:
-    $ref: ../common/provenance.yaml#/properties
+    $ref: ../common/provenance.yaml
 
   ancestries:
     type: array
     items:
-      $ref: ../common/ancestry.yaml#/properties
+      $ref: ../common/ancestry.yaml
 
   dataUseConditions:
-    $ref: ../common/ontologyTerm.yaml#/properties
+    $ref: ../common/ontologyTerm.yaml
     examples:
       - id: DUO:0000004
         label: no restriction

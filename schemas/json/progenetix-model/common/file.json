@@ -1,0 +1,40 @@
+{
+    "$id": "https://progenetix.org/services/schemas/file/v2022-05-04",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "description": "Information about a file referenced from a Phenopacket.",
+    "examples": [
+        {
+            "fileAttributes": {
+                "fileFormat": "pgxseg",
+                "genomeAssembly": "GRCh38"
+            },
+            "uri": "http://progenetix.test/beacon/biosamples/pgxbs-kftviebk/variants/?output=pgxseg"
+        }
+    ],
+    "properties": {
+        "fileAttributes": {
+            "description": "Additional attributes describuing the file, as `key: value` pairs.",
+            "items": {
+                "type": "object"
+            },
+            "type": "array"
+        },
+        "individualToFileIdentifiers": {
+            "description": "The mapping between the Individual.id or Biosample.id to any identifier in the file.",
+            "items": {
+                "type": "object"
+            },
+            "type": "array"
+        },
+        "uri": {
+            "description": "A valid URI in local or global context.",
+            "type": "string"
+        }
+    },
+    "required": [
+        "uri"
+    ],
+    "title": "File",
+    "type": "object"
+}

@@ -7,7 +7,7 @@ properties:
   assayCode:
     description: >-
       Class that describes the assay used to produce the measurement
-    $ref: ontologyTerm.yaml#/properties
+    $ref: ontologyTerm.yaml
     example:
       id: LOINC:26515-7
       label: Platelets [#/volume] in Blood
@@ -15,7 +15,7 @@ properties:
     description: The result of the measurement
     oneOf:
       - $ref: value.yaml#/oneOf
-      - $ref: complexValue.yaml#/properties
+      - $ref: complexValue.yaml
   observationMoment:
     description: >-
       Moment in time at which measurement was performed. Recommended.
@@ -30,7 +30,7 @@ properties:
   procedure:
     description: >-
       Clinical procedure performed to acquire the sample used for the measurement.
-    $ref: procedure.yaml#/properties
+    $ref: procedure.yaml
     example:
       code:
         id: NCIT:C5189

@@ -8,7 +8,7 @@
         },
         "externalReferences": {
             "items": {
-                "$ref": "../common/externalReference.json#/properties"
+                "$ref": "../common/externalReference.json"
             },
             "type": "array"
         },
@@ -17,7 +17,7 @@
         },
         "resources": {
             "items": {
-                "$ref": "resource.json#/properties"
+                "$ref": "resource.json"
             },
             "type": "array"
         },
@@ -26,7 +26,7 @@
         },
         "updates": {
             "items": {
-                "$ref": "update.json#/properties"
+                "$ref": "update.json"
             },
             "type": "array"
         }

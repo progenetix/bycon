@@ -379,9 +379,12 @@ request_types:
       - end
       - reference_name
       - variant_type
-    
+    optional:
+      - variant_min_length
+      - variant_max_length
+
   variantRangeRequest:
-    description: |
+    description: >-
       The beaconRangeRequest queries variants falling between start and end.
       `start` and `end` parameters should be single values.
     all_of:

@@ -43,14 +43,8 @@ def read_bycon_configs_by_name(name, byc):
 
 def read_local_prefs(service, dir_path, byc):
 
-    these_pars = ["config", "endpoints", "request_parameters"] # "config"
-
     # We use snake_case in the paths
     service = decamelize(service)
-
-    for t_p in these_pars:
-        t_k = "this_"+t_p
-        byc.update({t_k: {}})
 
     d = Path( path.join( dir_path, "config", service ) )
 
@@ -58,16 +52,13 @@ def read_local_prefs(service, dir_path, byc):
     f = Path( path.join( dir_path, "config", service+".yaml" ) )
 
     if f.is_file():
-        byc.update({"this_config": load_yaml_empty_fallback( f ) })
+        byc.update({"service_config": load_yaml_empty_fallback( f ) })
         return byc
 
     elif d.is_dir():
-        for t_p in these_pars:
-            t_k = "this_"+t_p
-            t_f_n = "{}.yaml".format(camelize(t_p))
-            t_f_p = Path( path.join( d, t_f_n ) )
-            if t_f_p.is_file():
-                byc.update({ t_k: load_yaml_empty_fallback(t_f_p) } )
+        t_f_p = Path( path.join( d, "config.yaml" ) )
+        if t_f_p.is_file():
+            byc.update({ "service_config": load_yaml_empty_fallback(t_f_p) } )
 
     return byc   
 

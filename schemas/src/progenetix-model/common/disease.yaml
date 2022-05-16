@@ -9,7 +9,7 @@ properties:
     description: 'Disease identifier. Value from disease ontologies such as HPO, OMIM,
       Orphanet, MONDO, e.g. lactose intolerance (HP:0004789, ICD10CM:E73). Provenance:
       GA4GH Phenopackets v2 `Disease.term`'
-    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+    $ref: ./ontologyTerm.yaml
     examples:
       - id: HP:0004789
         label: lactose intolerance
@@ -18,7 +18,7 @@ properties:
       - id: OMIM:164400
         label: Spinocerebellar ataxia 1
   ageOfOnset:
-    $ref: ./timeElement.json
+    $ref: ./timeElement.yaml
     examples:
       - ageGroup:
           id: NCIT:C49685
@@ -35,7 +35,7 @@ properties:
   stage:
     description: 'Ontology term from Ontology for General Medical Science (OGMS),
       e.g. acute onset (OGMS:0000119). Provenance: GA4GH Phenopackets v2 `Disease.disease_stage`'
-    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+    $ref: ./ontologyTerm.yaml
     examples:
       - id: OGMS:0000119
         label: acute onset
@@ -44,7 +44,7 @@ properties:
       - id: OGMS:0000106
         label: remission
   severity:
-    $ref: ./commonDefinitions.json#/definitions/SeverityLevel
+    $ref: ./commonDefinitions.yaml#/definitions/SeverityLevel
     examples:
       - id: HP:0012828
         label: Severe

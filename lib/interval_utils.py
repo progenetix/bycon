@@ -1,4 +1,4 @@
-import statistics
+import re, statistics
 from progress.bar import Bar
 import numpy as np
 
@@ -9,28 +9,34 @@ from cgi_parsing import prjsoncam
 ################################################################################
 ################################################################################
 
-def generate_genomic_intervals(byc, genome_binning="1Mb"):
+def generate_genomic_intervals(byc):
 
     if not "cytobands" in byc:
         parse_cytoband_file(byc)
 
     generate_cytoband_intervals(byc)
 
+    binning = byc.get("genome_binning", "default")
+
     # cytobands ################################################################
     
-    if genome_binning == "cytobands":
+    if binning == "cytobands":
         byc.update({"genomic_intervals": byc["cytoband_intervals"].copy() })
         return byc
 
     # otherwise intervals ######################################################
 
-    if not "genome_binning" in byc:
-        genome_binning = "default"
-
     c_l = byc["cytolimits"]
     i_d = byc["interval_definitions"]
 
-    int_b = i_d["genome_binning"][genome_binning]
+    int_b = i_d["genome_binning"]["default"]
+    bin_re = re.compile(r"^(\d(\.?\d)?)Mb", re.IGNORECASE)
+
+    if binning in i_d["genome_binning"].keys():
+        int_b = i_d["genome_binning"][binning]
+    elif bin_re.match(binning):
+        int_b = float(bin_re.match(binning).group(1)) * 1000000
+    
     e_p = i_d["terminal_intervals_soft_expansion"]
 
     intervals = []
@@ -101,10 +107,13 @@ def generate_cytoband_intervals(byc):
 
 def interval_cnv_arrays(v_coll, query, byc):
 
-    v_defs = byc["variant_definitions"]
-    efo_vrs = v_defs["efo_vrs_map"]
+    v_d = byc["variant_definitions"]
+    efo_vrs = v_d["efo_vrs_map"]
     c_l = byc["cytolimits"]
     intervals = byc["genomic_intervals"]
+
+    # print(intervals[0])
+    # exit()
 
     cov_labs = { "DUP": 'dup', "DEL": 'del' }
     val_labs = { "DUP": 'max', "DEL": 'min' }
@@ -167,12 +176,15 @@ def interval_cnv_arrays(v_coll, query, byc):
             continue
         cov_lab = cov_labs[dup_del]
 
+        if not "reference_name" in v:
+            v.update({"reference_name":v_d["refseq_chronames"][ v["location"]["sequence_id"] ]})
+
         for i, intv in enumerate(intervals):
 
             if _has_overlap(intv, v):
 
-                ov_end = min(intv["end"], v["end"])
-                ov_start = max(intv["start"], v["start"])
+                ov_end = min(intv["end"], v["location"]["interval"]["end"]["value"])
+                ov_start = max(intv["start"], v["location"]["interval"]["start"]["value"])
                 ov = ov_end - ov_start
                 maps[ cov_lab ][i] += ov
 
@@ -181,7 +193,7 @@ def interval_cnv_arrays(v_coll, query, byc):
                     if type(v["info"]["cnv_value"]) == int or type(v["info"]["cnv_value"]) == float:
                         values_map[ i ].append(v["info"]["cnv_value"])
                     else:
-                        values_map[ i ].append(v_defs["cnv_dummy_values"][ dup_del ])
+                        values_map[ i ].append(v_d["cnv_dummy_values"][ dup_del ])
                 except:
                     pass
 

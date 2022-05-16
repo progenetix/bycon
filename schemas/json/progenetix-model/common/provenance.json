@@ -19,7 +19,7 @@
     },
     "properties": {
         "geo_location": {
-            "$ref": "geoLocation.json#/properties"
+            "$ref": "geoLocation.json"
         }
     },
     "title": "Provenance"

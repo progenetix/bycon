@@ -38,8 +38,8 @@ def retrieve_variants(ds_id, byc):
 
     ds_results = byc["dataset_results"][ds_id]
 
-    if "all_variants_methods" in byc["this_config"]:
-        if byc["method"] in byc["this_config"]["all_variants_methods"]:
+    if "all_variants_methods" in byc["service_config"]:
+        if byc["method"] in byc["service_config"]["all_variants_methods"]:
             return False
 
     mongo_client = MongoClient()

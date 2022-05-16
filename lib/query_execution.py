@@ -67,6 +67,7 @@ def execute_bycon_queries(ds_id, byc):
     ho_collname = byc["config"][ "handover_coll" ]
     ho_coll = ho_db[ ho_collname ]
 
+
     for collname in byc[ "queries" ].keys():
         if collname in byc[ "config" ][ "queried_collections" ]:
             exe_queries[ collname ] = byc[ "queries" ][ collname ]

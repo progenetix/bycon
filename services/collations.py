@@ -36,49 +36,49 @@ def collations():
     # data retrieval & response population
     d_k = collations_set_delivery_keys(byc)
 
-    c = byc["this_config"]["collection_name"]
+    c = byc["service_config"]["collection_name"]
 
     ##################################
 
+    # this is all just a bit complex since a multi-dataset response is taken care of...
     s_s = { }
 
     mongo_client = MongoClient( )
     for ds_id in byc[ "dataset_ids" ]:
         mongo_db = mongo_client[ ds_id ]        
         mongo_coll = mongo_db[ c ]
-        for subset in mongo_coll.find( byc["queries"] ):
+        for collation in mongo_coll.find( byc["queries"], { "_id": 0 } ):
 
             if "codematches" in byc["method"]:
-                if not "code_matches" in subset:
-                    continue
-                if int(subset[ "code_matches" ]) < 1:
+                if int(collation.get("code_matches", 0)) < 1:
                     continue
 
-            i_d = subset["id"]
+            i_d = collation["id"]
             if not i_d in s_s:
                 s_s[ i_d ] = { }
+
             if len(d_k) < 1:
-                d_k = list(subset.keys())
-                if "_id" in d_k:
-                    d_k.remove("_id")
+                d_k = list(collation.keys())
+            else:
+                d_k = [ v for v in d_k if v in list(collation.keys()) ]
+
             for k in d_k:
-                if k in subset.keys():
-                    if k in byc["this_config"]["integer_keys"]:
-                        if k in s_s[ i_d ]:
-                            s_s[ i_d ][ k ] += int(subset[ k ])
-                        else:
-                            s_s[ i_d ][ k ] = int(subset[ k ])
-                    elif k == "hierarchy_paths":
-                        h_p = []
-                        for p in subset[ k ]:
-                            if "order" in p:
-                               p.update({"order": int(p["order"]) })
-                            h_p.append(p)
-                        s_s[ i_d ][ k ] = h_p
+                if k in byc["service_config"]["integer_keys"]:
+                    # for the multi-ds_id integration
+                    if k in s_s[ i_d ]:
+                        s_s[ i_d ][ k ] += int(collation[ k ])
                     else:
-                        s_s[ i_d ][ k ] = subset[ k ]
+                        s_s[ i_d ][ k ] = int(collation[ k ])
+                elif k == "hierarchy_paths":
+                    h_p = []
+                    for p in collation[ "hierarchy_paths" ]:
+                        p.update({"order": int(p["order"]) })
+                        h_p.append(p)
+                    s_s[ i_d ][ k ] = h_p
                 else:
-                    continue
+                    s_s[ i_d ][ k ] = collation[ k ]
+            else:
+                continue
 
     mongo_client.close( )
 

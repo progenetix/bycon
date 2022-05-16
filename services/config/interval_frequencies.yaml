@@ -1,15 +1,7 @@
-bycon_definition_files:
-  - filter_definitions
-  - variant_definitions
-  - dataset_definitions
-  - interval_definitions
-  - services_mappings
 defaults:
-  dataset_ids:
-    - progenetix
   method: frequencies
-  genome_binning: 1Mb
   response_entity_id: interval_frequencies
+  frequencymaps_coll: frequencymaps
 meta:
   info: >
     The main collations payload can be accessed in `response.results`.

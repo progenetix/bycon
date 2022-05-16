@@ -49,7 +49,7 @@ definitions:
       - location
     properties:
       location:
-        $ref: https://raw.githubusercontent.com/ga4gh/vrs/main/schema/vrs.json#/definitions/Location
+        $ref: https://raw.githubusercontent.com/ga4gh/vrs/1.2/schema/vrs.json#/definitions/Location
       variantType:
         description: The `variantType` declares the nature of the variation in relation
           to a reference. In a response, it is used to describe the variation. In
@@ -116,7 +116,7 @@ definitions:
           (e.g. dbSNP, ClinVar, ClinGen, COSMIC), as `externalReferences` with CURIE(s).
         type: array
         items:
-          $ref: ../common/externalReference.json
+          $ref: ../common/externalReference.yaml
         examples:
           -   - id: dbSNP:rs587780345
                 reference: https://www.ncbi.nlm.nih.gov/snp/rs587780345
@@ -179,7 +179,7 @@ definitions:
           Stop gained, Missense variant, Coding sequence variant.
         type: array
         items:
-          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+          $ref: ../common/ontologyTerm.yaml
         examples:
           - id: ENSGLOSSARY:0000143
             label: Stop gained
@@ -202,7 +202,7 @@ definitions:
         description: 'Ontology term that describes the class of genomic feature affected
           by the variant. Values from Ensembl Glossary (ENSGLOSSARY ontology) are
           recommended, e.g. protein coding gene, non-coding RNA, long non-coding RNA. '
-        $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+        $ref: ../common/ontologyTerm.yaml
         examples:
           - id: ENSGLOSSARY:0000158
             label: 5 prime UTR variant
@@ -211,7 +211,7 @@ definitions:
           to the `featureClass`. Preferably in CURIE format. If the value is a gene
           id or name, it points to the gene related to the `featureClass`, e.g. `the
           5 prime UTR upstream of TP53`
-        $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+        $ref: ../common/ontologyTerm.yaml
         examples:
           - id: HGNC:11998
             label: TP53
@@ -230,7 +230,7 @@ definitions:
       category:
         description: 'Ontology term for the type of disease, condition, phenotypic
           measurement, etc. '
-        $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+        $ref: ../common/ontologyTerm.yaml
         examples:
           - id: MONDO:0000001
             label: disease or disorder
@@ -238,7 +238,7 @@ definitions:
             label: phenotypic abnormality
       effect:
         description: 'Ontology term for the phenotypic or clinical effect. '
-        $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+        $ref: ../common/ontologyTerm.yaml
         examples:
           - id: MONDO:0003582
             label: hereditary breast ovarian cancer syndrome
@@ -259,7 +259,7 @@ definitions:
       evidenceType:
         description: 'Ontology term for the type of evidence supporting variant-disease
           association from the Evidence & Conclusion Ontology (ECO). '
-        $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+        $ref: ../common/ontologyTerm.yaml
         examples:
           - id: ECO:0000361
             label: inferential evidence
@@ -353,7 +353,7 @@ definitions:
       zygosity:
         description: Ontology term for zygosity in which variant is present in the
           sample from the Zygosity Ontology (GENO:0000391) , e.g `heterozygous` (GENO:0000135)
-        $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+        $ref: ../common/ontologyTerm.yaml
         examples:
           - id: GENO:0000135
             label: heterozygous
@@ -367,7 +367,7 @@ definitions:
           variant`, `maternal variant`, `paternal variant`, `de novo variant`, `pedigree
           specific variant`, `population specific variant`. Corresponds to Variant
           Inheritance in FHIR.
-        $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json
+        $ref: ../common/ontologyTerm.yaml
         examples:
           - id: SO:0001777
             label: somatic variant

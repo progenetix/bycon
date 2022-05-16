@@ -43,7 +43,7 @@ def ids():
     output = rest_path_value(id_in)
 
     if id_in:
-        for f_p in byc["this_config"]["format_patterns"]:
+        for f_p in byc["service_config"]["format_patterns"]:
             pat = re.compile( f_p["pattern"] )
             if pat.match(id_in):
                 lid = id_in  

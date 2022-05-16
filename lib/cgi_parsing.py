@@ -26,9 +26,8 @@ def set_debug_state(debug=0):
 
 def boolean_to_mongo_logic( logic="AND" ):
 
-    if "OR" in logic:
+    if "OR" in logic.upper():
         return '$or'
-    
     return '$and'
 
 ################################################################################
@@ -108,7 +107,12 @@ def cgi_parse_query(byc):
         if p in byc["config"]["form_list_pars"]:
             form.update({p_d: form_return_listvalue( get, p )})
         else:
-            form.update({p_d: get.getvalue(p)})
+            v = get.getvalue(p)
+            # making sure double entries are forced to single
+            if type(v) is list:
+                form.update({p_d: v[0]})
+            else:
+                form.update({p_d: v})
 
     #TODO: re-evaluate hack of empty filters which avoids dirty errors downstream
     if not "filters" in form:

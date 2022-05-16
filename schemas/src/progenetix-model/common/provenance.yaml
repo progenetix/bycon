@@ -13,11 +13,11 @@ description: >
   The Provenance class is the wrapper object for schemas informing about technical, geographic or collection associated origin of a higher oreder object such as an Individual or Biosample.
 properties:
   geo_location:
-    $ref: geoLocation.yaml#/properties
+    $ref: geoLocation.yaml
 
 
   # assay:
-  #   $ref: ontologyTerm.yaml#/properties
+  #   $ref: ontologyTerm.yaml
   #   examples:
   #     - id: EFO:0002703
   #       label: SNP array

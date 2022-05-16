@@ -18,36 +18,36 @@ properties:
     examples:
       - pgxpxf-kftx25eh
   subject:
-    $ref: ../individuals/defaultSchema.yaml#/properties
+    $ref: ../individuals/defaultSchema.yaml
   phenotypicFeatures:
     type: array
     items:
-      $ref: ../common/phenotypicFeature.yaml#/properties
+      $ref: ../common/phenotypicFeature.yaml
   measurements:
     type: array
     items:
-      $ref: ../common/measurement.yaml#/properties
+      $ref: ../common/measurement.yaml
   biosamples:
     type: array
     items:
-      $ref: ../biosamples/defaultSchema.yaml#/properties
+      $ref: ../biosamples/defaultSchema.yaml
   # interpretations:
   #   type: array
   #   items:
-  #     $ref: Interpretation.yaml#/properties
+  #     $ref: Interpretation.yaml
   diseases:
     type: array
     items:
-      $ref: ../common/disease.yaml#/properties
+      $ref: ../common/disease.yaml
   # medicalActions:
   #   type: array
   #   items:
-  #     $ref: MedicalAction.yaml#/properties
-  # htsFiles:
-  #   type: array
-  #   items:
-  #     $ref: HtsFile.yaml#/properties
+  #     $ref: MedicalAction.yaml
+  files:
+    type: array
+    items:
+      $ref: ../common/file.yaml
   metaData:
-    ref: ../common/metaData.yaml#/properties
+    ref: ../common/metaData.yaml
 
 

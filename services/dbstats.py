@@ -57,8 +57,7 @@ def dbstats():
                 if not ds_id in byc[ "dataset_ids" ]:
                     continue
             dbs = { "dataset_id": ds_id }
-            for k in ['counts', 'updated']:
-                dbs.update({k:ds_vs[k]})
+            dbs.update({"counts":ds_vs["counts"]})
             results.append( dbs )
 
     populate_service_response( byc, results )

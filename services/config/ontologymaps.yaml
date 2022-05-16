@@ -1,11 +1,7 @@
-bycon_definition_files:
-  - filter_definitions
-  - services_mappings
 defaults:
-  dataset_ids:
-    - progenetix
   query_field: "code_group.id"
   response_entity_id: ontologymap
+  ontologymaps_coll: ontologymaps
 meta:
   returned_schemas:
     - entity_type: ontologyclassgroup

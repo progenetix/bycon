@@ -28,6 +28,10 @@ paths:
     - Documents
     - tmp
 
+arg_defs_path:
+  - config
+  - command_line_args.yaml
+
 schema_paths:
   - - schemas
     - json
@@ -94,7 +98,6 @@ dataset_ids:
   - cellosaurus
   - 1000genomesDRAGEN
 
-dataset_default: progenetix
 dataset_junk: progenetix_junk
 
 queried_collections:

@@ -90,7 +90,19 @@ def import_datatable_dict_line(byc, parent, fieldnames, line, primary_scope="bio
 
     pref_array_values = {}
     for f_n in fieldnames:
-        v = line[f_n]
+        v = line[f_n].strip()
+
+        if "#"in f_n:
+            continue
+
+        if f_n not in list(io_params.keys()) + list(io_prefixes.keys()):
+            continue
+
+        if len(v) < 1:
+            continue
+
+        if "__delete__" in v.lower():
+            v = ""
 
         if "___" in f_n:
             par, key, pre = re.match(r"^(\w+)__(\w+)___(\w+)$", f_n).group(1,2,3)
@@ -157,7 +169,7 @@ def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
         return parent
 
     if "number" in parameter_type:
-        v = 1*v
+        v = 1*v 
 
     ps = dotted_key.split('.')
 

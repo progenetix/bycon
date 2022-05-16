@@ -78,13 +78,32 @@ NCIT:
     - NCIT:C27676
     - NCIT:C9325
 
+NCITauxiliary:
+  id: ncit
+  iri_prefix: http://purl.obolibrary.org/obo/NCIT_
+  name: NCIt Diseases
+  namespace_prefix: NCIT
+  url: https://github.com/NCI-Thesaurus/thesaurus-obo-edition
+  reference:
+    root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
+    replace:
+      - "NCIT:"
+      - ""
+  db_key: 'auxiliary_disease.disease_code.id'
+  scope: individuals
+  pattern: '^NCIT(:C\d+?)?$'
+  collationed: True
+  examples:
+    - NCIT:C27676
+    - NCIT:C9325
+
 HP:
   id: hp
   iri_prefix: http://purl.obolibrary.org/obo/HP_
   name: "Human Phenotype Ontology"
   namespace_prefix: HP
   url: "https://hpo.jax.org/"
-  db_key: 'biocharacteristics.id'
+  db_key: 'phenotypic_features.feature_type.id'
   scope: individuals
   pattern: '^HP(:\d+?)?$'
   collationed: True
@@ -341,7 +360,7 @@ pgxcohort:
   url: "https://progenetix.org"
   db_key: 'cohorts.id'
   scope: biosamples
-  pattern: '^pgx:cohort-\w+?$'
+  pattern: '^pgx:cohort(-\w+)?'
   collationed: True
   examples:
     - 'pgx:cohort-arraymap'

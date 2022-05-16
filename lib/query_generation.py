@@ -60,7 +60,7 @@ def _purge_empty_queries( byc ):
 
 ################################################################################
 
-def replace_queries_in_test_mode(byc, ret_no=10):
+def replace_queries_in_test_mode(byc):
 
     if byc["test_mode"] is not True:
         return byc
@@ -69,6 +69,8 @@ def replace_queries_in_test_mode(byc, ret_no=10):
         collname = byc["response_entity"]["collection"]
     except:
         return byc
+
+    ret_no = int(byc.get('test_mode_count', 5))
 
     ds_id = byc["dataset_ids"][0]
     mongo_client = MongoClient()
@@ -232,7 +234,9 @@ def _update_queries_from_filters(byc):
 
     for f in filters:
 
+
         f_val = f["id"]
+        print(f_val)
         f_desc = f.get("includeDescendantTerms", f_desc)
         f_scope = f.get("scope", False)
 

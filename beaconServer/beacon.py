@@ -33,12 +33,13 @@ def beacon():
     b_m = load_yaml_empty_fallback( m_f )
 
     r_p_id = byc.get("request_entity_path_id", "info")
+    
+    get_bycon_args(byc)
+    args_update_form(byc)
 
     if byc["args"]:
-        if "request_entity_path_id" in byc["args"]:
-            r_p_id = byc["args"].get("request_entity_path_id", "info")
-
-    byc.update({"env":"server"})
+        if byc["args"].requestEntityPathId is not None:
+            r_p_id = byc["args"].requestEntityPathId
 
     if r_p_id in b_m["service_aliases"]:
         f = b_m["service_aliases"][ r_p_id ]

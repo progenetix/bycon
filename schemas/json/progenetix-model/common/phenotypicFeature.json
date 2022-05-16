@@ -4,7 +4,7 @@
     "description": "Used to describe a phenotype that characterizes the subject or biosample.",
     "properties": {
         "evidence": {
-            "$ref": "evidence.json#/properties",
+            "$ref": "evidence.json",
             "description": "The evidence for an assertion of the observation of a type. RECOMMENDED."
         },
         "excluded": {
@@ -13,7 +13,7 @@
             "type": "boolean"
         },
         "featureType": {
-            "$ref": "ontologyTerm.json#/properties",
+            "$ref": "ontologyTerm.json",
             "description": "Term denoting the phenotypic feature. Preferably a value from Human Phenotype Ontology (HPO).",
             "examples": [
                 {
@@ -43,7 +43,7 @@
                 }
             ],
             "items": {
-                "$ref": "ontologyTerm.json#/properties"
+                "$ref": "ontologyTerm.json"
             },
             "type": "array"
         },

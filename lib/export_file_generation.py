@@ -14,7 +14,7 @@ def export_variants_download(ds_id, byc):
     ds_results = byc["dataset_results"][ds_id]
  
     v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
-    if test_truthy( byc["form_data"].get("paginateResults", True) ):
+    if test_truthy( byc["form_data"].get("paginate_results", True) ):
         v__ids = paginate_list(v__ids, byc)
 
     open_json_streaming(byc, "variants.json")
@@ -96,7 +96,7 @@ def export_pgxseg_download(ds_id, byc):
     v_coll = data_client[ ds_id ][ "variants" ]
     ds_results = byc["dataset_results"][ds_id]
     v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
-    if test_truthy( byc["form_data"].get("paginateResults", True) ):
+    if test_truthy( byc["form_data"].get("paginate_results", True) ):
         v__ids = paginate_list(v__ids, byc)
 
     print_pgx_column_header(ds_id, ds_results, byc)
@@ -233,7 +233,7 @@ def export_callsets_matrix(ds_id, byc):
     q_vals = cs_r["target_values"]
     r_no = len(q_vals)
     if r_no > p_r["limit"]:
-        if test_truthy( byc["form_data"].get("paginateResults", True) ):
+        if test_truthy( byc["form_data"].get("paginate_results", True) ):
             q_vals = paginate_list(q_vals, byc)
         print('#meta=>"WARNING: Only analyses {} - {} (from {}) will be included pagination skip and limit"'.format((p_r["range"][0] + 1), p_r["range"][-1], cs_r["target_count"]))
 

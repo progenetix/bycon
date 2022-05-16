@@ -8,7 +8,7 @@ properties:
     description: >-
       Clinical procedure performed. Recommended values from Medical Action
       Ontology (MAXO) `Medical action` term tree (MAXO:0000001)
-    $ref: ontologyTerm.yaml#/properties
+    $ref: ontologyTerm.yaml
     examples:
       - id: MAXO:0001175
         label: liver transplantation
@@ -20,7 +20,7 @@ properties:
     description: >-
       Specific body site where the procedure was performed. Recommended
       valuee from Uber-anatomy ontology (UBERON)
-    $ref: ontologyTerm.yaml#/properties
+    $ref: ontologyTerm.yaml
     examples:
       - id: UBERON:0003403
         label: Skin of forearm

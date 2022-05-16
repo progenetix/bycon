@@ -215,7 +215,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/ga4gh-service-info-1-0-0-schema.json"
+                                    "$ref": "./responses/ga4gh-service-info-1-0-0-schema.json"
                                 }
                             }
                         },

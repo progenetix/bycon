@@ -3,19 +3,43 @@ from humps import decamelize
 
 ################################################################################
 
-def get_bycon_args(byc):
+def get_bycon_args(byc, argdeffile=None):
+
+	if byc.get("check_args", False) is False:
+		return byc
+
+	# Serves as "we've been here before" marker - before the env check.
+	byc.update({"check_args": False})
 
 	if not "local" in byc["env"]:
 		return byc
 
-	a_p = os.path.join( byc["pkg_path"], "config", "command_line_args.yaml" )
-	with open( a_p ) as a_h:
-		byc_cmd_args = yaml.load( a_h , Loader=yaml.FullLoader)
+	if argdeffile is None:
+		argdeffile =  os.path.join( byc["pkg_path"], *byc["config"]["arg_defs_path"] )
+
+	with open( argdeffile ) as a_h:
+		argdefs = yaml.load( a_h , Loader=yaml.FullLoader)
+
+	if byc["script_args"]:
+		a_k_s = list(argdefs.keys())
+		for a_d_k in a_k_s:
+			if a_d_k not in byc["script_args"]:
+				argdefs.pop(a_d_k, None)
+	
+	create_args_parser(byc, **argdefs)
+
+	return byc
+
+################################################################################
+
+def create_args_parser(byc, **argdefs):
+
+	if not "local" in byc["env"]:
+		return byc
 
 	parser = argparse.ArgumentParser()
-	for d_k, defs in byc_cmd_args.items():
+	for d_k, defs in argdefs.items():
 		parser.add_argument(*defs.pop("flags"), **defs)
-
 	byc.update({ "args": parser.parse_args() })
 
 	return byc

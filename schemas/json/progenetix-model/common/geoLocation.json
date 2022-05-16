@@ -12,10 +12,10 @@
     },
     "properties": {
         "geometry": {
-            "$ref": "geoJSONgeometry.json#/properties"
+            "$ref": "geoJSONgeometry.json"
         },
         "properties": {
-            "$ref": "geoLabels.json#/properties"
+            "$ref": "geoLabels.json"
         },
         "type": {
             "type": "string",

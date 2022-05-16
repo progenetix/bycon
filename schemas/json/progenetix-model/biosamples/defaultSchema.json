@@ -5,7 +5,7 @@
     "description": "A Biosample refers to a unit of biological material from which the substrate molecules (e.g. genomic DNA, RNA, proteins) for molecular analyses (e.g. sequencing, array hybridisation, mass-spectrometry) are extracted. Examples would be a tissue biopsy, a single cell from a culture for single cell genome sequencing or a protein fraction from a gradient centrifugation. Several instances (e.g. technical replicates) or types of experiments (e.g. genomic array as well as RNA-seq experiments) may refer to the same Biosample.",
     "properties": {
         "biosampleStatus": {
-            "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json",
+            "$ref": "../common/ontologyTerm.json",
             "description": "Ontology value from Experimental Factor Ontology (EFO) Material Entity term (BFO:0000040). Classification of the sample in abnormal sample (EFO:0009655) or reference sample (EFO:0009654).",
             "examples": [
                 {
@@ -43,7 +43,7 @@
                 }
             ],
             "items": {
-                "$ref": "../common/ontologyTerm.json#/properties"
+                "$ref": "../common/ontologyTerm.json"
             },
             "type": "array"
         },
@@ -58,7 +58,7 @@
         "diagnosticMarkers": {
             "description": "Clinically relevant biomarkers. RECOMMENDED.",
             "items": {
-                "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json"
+                "$ref": "../common/ontologyTerm.json"
             },
             "type": "array"
         },
@@ -69,12 +69,12 @@
                 }
             ],
             "items": {
-                "$ref": "../common/externalReference.json#/properties"
+                "$ref": "../common/externalReference.json"
             },
             "type": "array"
         },
         "histologicalDiagnosis": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../common/ontologyTerm.json",
             "description": "Disease diagnosis that was inferred from the histological examination.",
             "examples": [
                 {
@@ -84,7 +84,7 @@
             ]
         },
         "icdoMorphology": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../common/ontologyTerm.json",
             "description": "The ICD-O 3 morphology code of this biosample, in a \"pseudo-prefixed\" transformation (since no direct ICD-O 3 registry can be referenced).",
             "examples": [
                 {
@@ -94,7 +94,7 @@
             ]
         },
         "icdoTopography": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../common/ontologyTerm.json",
             "description": "The ICD-O 3 topography code of this biosample, in a \"pseudo-prefixed\" transformation (since no direct ICD-O 3 registry can be referenced).",
             "examples": [
                 {
@@ -118,10 +118,10 @@
             "type": "string"
         },
         "info": {
-            "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/definitions/Info"
+            "$ref": "../../framework/common/beaconCommonComponents.json#/definitions/Info"
         },
         "pathologicalStage": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../common/ontologyTerm.json",
             "description": "Pathological stage, if applicable, preferably as subclass of NCIT:C28108 - Disease Stage Qualifier. RECOMMENDED.",
             "examples": [
                 {
@@ -135,7 +135,7 @@
             ]
         },
         "pathologicalTnmFinding": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../common/ontologyTerm.json",
             "description": "Pathological TNM findings, if applicable, preferably as subclass of NCIT:C48698 - Cancer TNM Finding Category (NCIT:C48698). RECOMMENDED.",
             "examples": [
                 {
@@ -155,14 +155,14 @@
             "type": "array"
         },
         "provenance": {
-            "$ref": "../common/provenance.json#/properties"
+            "$ref": "../common/provenance.json"
         },
         "timeOfCollection": {
             "$ref": "../common/timeElement.json#/oneOf",
             "description": "The age of the individual at time of sample collection or alternative time element."
         },
         "tumorGrade": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../common/ontologyTerm.json",
             "description": "Tumor grade as child term of NCIT:C28076 (Disease Grade Qualifier) or equivalent.",
             "examples": [
                 {
@@ -180,7 +180,7 @@
             ]
         },
         "tumorProgression": {
-            "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/ontologyTerm.json",
+            "$ref": "../common/ontologyTerm.json",
             "description": "Tumor progression category indicating primary, metastatic or recurrent progression. Ontology value from Neoplasm by Special Category ontology (NCIT:C7062), e.g. NCIT:C84509 (Primary Malignant Neoplasm).",
             "examples": [
                 {

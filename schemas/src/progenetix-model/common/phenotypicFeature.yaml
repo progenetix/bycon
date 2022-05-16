@@ -8,7 +8,7 @@ properties:
     description: >-
       Term denoting the phenotypic feature. Preferably a value from Human
       Phenotype Ontology (HPO).
-    $ref: ontologyTerm.yaml#/properties
+    $ref: ontologyTerm.yaml
     examples:
       - id: HP:0000002
         label: Abnormality of body height
@@ -36,7 +36,7 @@ properties:
       source: HPO:probinson
     type: array
     items:
-      $ref: ontologyTerm.yaml#/properties
+      $ref: ontologyTerm.yaml
     examples:
       - id: HP:0032500
         label: Exacerbated by tobacco use
@@ -50,7 +50,7 @@ properties:
     $ref: timeElement.yaml#/oneOf
   evidence:
     description: The evidence for an assertion of the observation of a type. RECOMMENDED.
-    $ref: evidence.yaml#/properties
+    $ref: evidence.yaml
   severityLevel:
     $ref: commonDefinitions.yaml#/definitions/SeverityLevel
   notes:
