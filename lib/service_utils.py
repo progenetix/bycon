@@ -366,7 +366,6 @@ def create_empty_beacon_response(byc):
         # TODO: stringent definition on when this is being used
         r_set = object_instance_from_schema_name(byc, "resultsetInstance", "properties")
 
-        # print(r_set)
         if "dataset_ids" in byc:
             for ds_id in byc[ "dataset_ids" ]:
                 ds_rset = r_set.copy()

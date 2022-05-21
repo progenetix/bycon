@@ -51,9 +51,11 @@ def dataset_response_add_handovers(ds_id, byc):
                     "pages": []
                 }
 
+                # print(h_o_key)
+
                 if "bedfile" in h_o_defs[ "id" ]:
-                    ucsc_pos = _write_variants_bedfile(h_o, **byc)
-                    h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, accessid, ucsc_pos ) } )
+                    bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, 0, 0, byc)
+                    h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos ) } )
                 else:
                     h_o_r.update( { "url": _handover_create_url(this_server, h_o_defs, accessid, byc) } )
 
@@ -64,16 +66,25 @@ def dataset_response_add_handovers(ds_id, byc):
                         h_o_r["url"] += "&variantsaccessid="+byc["dataset_results"][ds_id][ "variants._id" ][ "id" ]
 
                 e_t = byc["response_entity"]["entity_type"]
+
                 if e_t in h_o_defs["paginated_entities"]:
+
                     p_f = 0
                     p_t = p_f + byc["pagination"]["limit"]
                     p_s = 0
+
                     while p_f < target_count + 1:
                         if target_count < p_t:
                             p_t = target_count
                         l = "{}-{}".format(p_f + 1, p_t)
                         # no re-pagination of the results retrieved from the paginated query
-                        u = h_o_r["url"] + "&paginateResults=false&skip={}&limit={}".format(p_s, byc["pagination"]["limit"])
+                        # TODO: the bedfile part is wrong, since it paginates by the number of variants which
+                        # may be incorrect if biosamples ... wer called. have to change...
+                        if "bedfile" in h_o_defs[ "id" ]:
+                            bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, p_f, p_t, byc)
+                            u =  _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos )
+                        else:
+                            u = h_o_r["url"] + "&paginateResults=false&skip={}&limit={}".format(p_s, byc["pagination"]["limit"])
                         h_o_r["pages"].append( { "handover_type": {"id": h_o_defs[ "id" ], "label": l }, "url": u } )
                         p_s += 1
                         p_f += byc["pagination"]["limit"]
@@ -138,17 +149,17 @@ def _handover_create_url(h_o_server, h_o_defs, accessid, byc):
 
 ################################################################################
 
-def _handover_create_ext_url(h_o_server, h_o_defs, accessid, ucsc_pos):
+def _handover_create_ext_url(h_o_server, h_o_defs, bed_file_name, ucsc_pos):
 
     if "ext_url" in h_o_defs:
         if "bedfile" in h_o_defs["id"]:
-            return("{}&position={}&hgt.customText={}/tmp/{}.bed".format(h_o_defs["ext_url"], ucsc_pos, h_o_server, accessid))
+            return("{}&position={}&hgt.customText={}/tmp/{}".format(h_o_defs["ext_url"], ucsc_pos, h_o_server, bed_file_name))
 
     return False
 
 ################################################################################
 
-def _write_variants_bedfile(h_o, **byc):
+def _write_variants_bedfile(h_o, p_f, p_t, byc):
 
     """podmd
     ##### Accepts
@@ -170,7 +181,10 @@ def _write_variants_bedfile(h_o, **byc):
     * evaluate to use "bedDetails" format
 
     podmd"""
- 
+
+    v_ret = 0
+    v_max = 1000
+
     if len( h_o["target_values"] ) < 1:
         return()
     if not h_o["target_collection"] == "variants":
@@ -178,7 +192,14 @@ def _write_variants_bedfile(h_o, **byc):
        
     ds_id = h_o["source_db"]
     accessid = h_o["id"]
-    bed_file = path.join( *byc["config"][ "paths" ][ "web_temp_dir_abs" ], h_o["id"]+'.bed' )
+    l = ""
+    if p_t > 0:
+        l = "_{}-{}".format(p_f + 1, p_t)
+    else:
+        p_t = v_max # only for the non-paginated ...
+
+    bed_file_name = accessid + l + '.bed'
+    bed_file = path.join( *byc["config"][ "paths" ][ "web_temp_dir_abs" ], bed_file_name )
 
     v_defs = byc["variant_definitions"]
     efo_vrs = v_defs["efo_vrs_map"]
@@ -189,8 +210,16 @@ def _write_variants_bedfile(h_o, **byc):
     data_db = data_client[ ds_id ]
     data_coll = data_db[ h_o["target_collection"] ]
 
-    for v in data_coll.find( { h_o["target_key"]: { '$in': h_o["target_values"] } }):
+    for v in data_coll.find( { h_o["target_key"]: { '$in': h_o["target_values"] } }).limit(p_t):
 
+        v_ret += 1
+
+        if p_t > 0:
+            if v_ret > p_t:
+                continue
+            if v_ret <= p_f:
+                continue
+        
         v_d = de_vrsify_variant(v, byc)
 
         if "variant_type" in v_d:
@@ -219,7 +248,7 @@ def _write_variants_bedfile(h_o, **byc):
             except:
                 pass
             col_key = "color_var_{}_rgb".format(vt.lower())
-            b_f.write("track name={} visibility=squish description=\"{} variants matching the query\" color={}\n".format(vt, vt, byc["config"]["plot_pars"][col_key]) )
+            b_f.write("track name={} visibility=squish description=\"{} variants matching the query with {} overall returned\" color={}\n".format(vt, vt, v_ret, byc["config"]["plot_pars"][col_key]) )
             b_f.write("#chrom\tchromStart\tchromEnd\tbiosampleId\n")
             for v in vs[vt]:
                 ucsc_chr = "chr"+v["reference_name"]
@@ -234,5 +263,5 @@ def _write_variants_bedfile(h_o, **byc):
     ucsc_range = sorted(pos)
     ucsc_pos = "{}:{}-{}".format(ucsc_chr, ucsc_range[0], ucsc_range[-1])
 
-    return ucsc_pos
+    return [bed_file_name, ucsc_pos]
 

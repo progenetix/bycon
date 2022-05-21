@@ -72,12 +72,12 @@ def publication_update_label(publication):
 def get_ncit_tumor_types(n_p, pub):
 
     try:
-        if not "::" in pub["#sample_types"]:
+        if not "::" in pub["SAMPLE_TYPES"]:
             return n_p
     except KeyError:
         return n_p
 
-    s_t_s = pub["#sample_types"].split(';')
+    s_t_s = pub["SAMPLE_TYPES"].split(';')
 
     s_t_l = []
 
