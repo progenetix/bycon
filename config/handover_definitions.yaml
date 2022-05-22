@@ -130,9 +130,8 @@ h->o_types:
 
   UCSClink:    
     id: 'pgx:handover:bedfile2ucsc'
-    label: "Show Variants in UCSC"
+    label: "Show Found Variants in the UCSC browser"
     requestedSchema: genomicVariant
-    method: UCSClink
     paginated_entities:
       - genomicVariant
     description: "map variants matched by the query to the UCSC browser"
