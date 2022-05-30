@@ -13,3 +13,4 @@ http://progenetix.test/beacon/biosamples?filters=NCIT:C3697&output=table&debug=1
 
 http://progenetix.test/beacon/biosamples?referenceName=9&start=10000000,12000000&end=12500000,15000000&variantType=DEL&filters=pgx:icdom-81703&debug=1
 
+http://progenetix.test/beacon/biosamples/onekgbs-HG00142/g_variants

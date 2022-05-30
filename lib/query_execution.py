@@ -67,17 +67,26 @@ def execute_bycon_queries(ds_id, byc):
     ho_collname = byc["config"][ "handover_coll" ]
     ho_coll = ho_db[ ho_collname ]
 
-
     for collname in byc[ "queries" ].keys():
         if collname in byc[ "config" ][ "queried_collections" ]:
             exe_queries[ collname ] = byc[ "queries" ][ collname ]
 
     byc.update({"queries_at_execution": exe_queries})
 
+    if byc["original_queries"] is None:
+        byc.update({"original_queries": exe_queries})
+
+    # print(byc["original_queries"])
+
     # collection of results
     prefetch = { }
-
-    prevars = { "ds_id": ds_id, "data_db": data_db, "h_o_defs": h_o_defs, "pref_m": "", "query": { } }
+    prevars = { 
+        "ds_id": ds_id,
+        "data_db": data_db,
+        "h_o_defs": h_o_defs,
+        "original_queries": byc["original_queries"],
+        "pref_m": "", "query": { }
+    }
 
     ############################################################################
 
@@ -267,7 +276,8 @@ def _prefetch_data(prevars):
             "id": str(uuid4()),
             "source_db": prevars["ds_id"],
             "target_values": dist,
-            "target_count": len(dist)
+            "target_count": len(dist),
+            "original_queries": prevars.get("original_queries", None)
         }
     )
 
@@ -276,6 +286,10 @@ def _prefetch_data(prevars):
 ################################################################################
 
 def _prefetch_vars_from_biosample_loop( prevars ):
+
+    # TODO: This still allows unlimited variants, e.g. all from thousands
+    # of samples and will let the server time out if too many...
+    # A new paradigm is needed which includes the pagination at this step.
 
     pref_m = prevars["pref_m"]
     data_db = prevars["data_db"]
@@ -292,7 +306,8 @@ def _prefetch_vars_from_biosample_loop( prevars ):
         {
             "id": str(uuid4()),
             "source_db": prevars["ds_id"],
-            "target_count": len(h_o["target_values"])
+            "target_count": len(h_o["target_values"]),
+            "original_queries": prevars.get("original_queries", None)
         }
     )
 

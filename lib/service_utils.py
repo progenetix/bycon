@@ -46,6 +46,7 @@ def initialize_bycon():
         "output": "",
         "form_data": {},
         "query_meta": {},
+        "original_queries": None,
         "script_args": [],
         "include_handovers": False,
         "empty_query_all_count": False,
@@ -69,6 +70,7 @@ def beacon_data_pipeline(byc, entry_type):
     run_beacon_init_stack(byc)
     return_filtering_terms_response(byc)
     run_result_sets_beacon(byc)
+    update_meta_queries(byc)
     query_results_save_handovers(byc)
     check_computed_interval_frequency_delivery(byc)
     check_switch_to_count_response(byc)
@@ -323,9 +325,11 @@ def response_meta_add_request_summary(r, byc):
     if not "received_request_summary" in r["meta"]:
         return r
 
+    r_rcvd_rs = r["meta"]["received_request_summary"]
+
     form = byc["form_data"]
 
-    r["meta"]["received_request_summary"].update({
+    r_rcvd_rs.update({
         "filters": byc.get("filters", []), 
         "pagination": byc.get("pagination", {}),
         "api_version": byc["beacon_defaults"]["info"].get("api_version", "v2")
@@ -333,23 +337,35 @@ def response_meta_add_request_summary(r, byc):
 
     for p in ["include_resultset_responses", "requested_granularity"]:
         if p in form:
-            r["meta"]["received_request_summary"].update({p:form.get(p)})
+            r_rcvd_rs.update({p:form.get(p)})
             if "requested_granularity" in p:
                 r["meta"].update({"returned_granularity": form.get(p)})
 
     try:
         for rrs_k, rrs_v in byc["service_config"]["meta"]["received_request_summary"].items():
-            r["meta"]["received_request_summary"].update( {rrs_k: rrs_v })
+            r_rcvd_rs.update( {rrs_k: rrs_v })
     except:
         pass
 
     # TODO: This is a private extension so far; it may be replaced w/ saved query
     # from accession (not yet existing).
-    r["meta"]["received_request_summary"].update({ "processed_query": byc.get("queries", {}) })
+    r_rcvd_rs.update({ "processed_query": byc.get("original_queries", {}) })
 
     return r
 
 ################################################################################
+
+def update_meta_queries(byc):
+
+    try:
+        byc["service_response"]["meta"]["received_request_summary"].update({ "processed_query": byc.get("original_queries", {}) })
+    except:
+        pass
+
+    return byc
+
+################################################################################
+
 
 def create_empty_beacon_response(byc):
 
@@ -501,9 +517,9 @@ def response_meta_set_info_defaults(r, byc):
 def response_meta_set_config_defaults(r, byc):
 
     # TODO: should be in schemas
-    if "meta" in byc["service_config"]:
-        for k, v in byc["service_config"]["meta"].items():
-            r["meta"].update( { k: v } )
+    m = byc["service_config"].get("meta", {})
+    for k, v in m.items():
+        r["meta"].update( { k: v } )
 
     return r
 

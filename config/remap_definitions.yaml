@@ -12,7 +12,6 @@ ontology_remaps:
         label: "dead (follow-up status)"
         pattern: "^dea(?:d|th)$"
 
-
   pathological_tnm_findings:
     search_fields:
       - info.tumor_tnm_text

@@ -87,7 +87,7 @@ h->o_types:
   variants:
     id: 'pgx:handover:variants'
     label: "Found Variants (.json)"
-    requestedSchema: variant
+    requestedSchema: genomicVariant
     paginated_entities:
       - genomicVariant
     description: "retrieve variants matched by the query"

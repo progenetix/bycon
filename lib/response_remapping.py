@@ -27,7 +27,8 @@ def remap_variants(r_s_res, byc):
     instances of a "canonical" variant have to be identified and grouped together
     with individual instances indicated through their identifiers in `caseLevelData`.
     """
-    if not "genomicVariant" in byc["response_entity_id"]:
+
+    if not "variant" in byc["response_entity_id"].lower():
         return r_s_res
 
     v_d = byc["variant_definitions"]
@@ -44,9 +45,14 @@ def remap_variants(r_s_res, byc):
 
     for d in variant_ids:
 
-        d_vs = [v for v in r_s_res if v['variant_internal_id'] == d]
+        d_vs = [var for var in r_s_res if var.get('variant_internal_id', "___none___") == d]
 
-        v = { "variation": d_vs[0], "case_level_data": [] }
+        v = { 
+            "variant_internal_id": d,
+            "variation": d_vs[0], "case_level_data": []
+        }
+
+        v["variation"].pop("variant_internal_id", None)
 
         for d_v in d_vs:
             v["case_level_data"].append(
@@ -189,6 +195,8 @@ def phenopack_individual(ind, data_db, byc):
     # or better on filling them in only for existing parameters
 
     pxf_bios = []
+    ind_pop_keys = ["_id", "provenance", "external_references", "description", "info"]
+    bios_pop_keys = ["info", "provenance", "_id", "followup_time", "followup_state", "cohorts", "icdo_morphology", "icdo_topography"]
 
     pxf_resources = _phenopack_resources(byc)
     server = select_this_server( byc )
@@ -208,16 +216,14 @@ def phenopack_individual(ind, data_db, byc):
                 }
             ]
         })
-        for k in ["info", "provenance", "_id", "followup_time", "followup_state", "cohorts", "icdo_morphology", "icdo_topography"]:
+        for k in bios_pop_keys:
             bios.pop(k, None)
 
         clean_empty_fields(bios)
 
         pxf_bios.append(bios)
 
-    pop_keys = ["_id", "provenance", "external_references", "description", "info"]
-
-    for k in pop_keys:
+    for k in ind_pop_keys:
         ind.pop(k, None)
 
     individual_remap_pgx_diseases(ind)

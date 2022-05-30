@@ -38,9 +38,9 @@ def generate_queries(byc):
     _update_queries_from_id_values( byc )
     _update_queries_from_cohorts_query(byc)
     _update_queries_from_filters( byc )
-    _update_queries_from_hoid( byc)
     _update_queries_from_variants( byc )
     _update_queries_from_geoquery( byc )
+    _update_queries_from_hoid( byc)
     _purge_empty_queries( byc )
 
     return byc
@@ -87,7 +87,6 @@ def replace_queries_in_test_mode(byc):
         _ids.append(r["_id"])
 
     byc["queries"] = { collname: { "_id": {"$in": _ids } } }
-    # byc["queries"].update( { collname: { "_id": {"$in": _ids } } } )
 
     byc.update( { "empty_query_all_count": data_coll.estimated_document_count() } )
 
@@ -147,7 +146,6 @@ def _update_queries_from_cohorts_query(byc):
 
 ################################################################################
 
-
 def _update_queries_from_id_values(byc):
 
     id_f_v = byc["beacon_mappings"]["id_queryscope_mappings"]
@@ -183,7 +181,6 @@ def _update_queries_from_hoid( byc):
         ho_db = ho_client[ byc["config"]["info_db"] ]
         ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
         h_o = ho_coll.find_one( { "id": accessid } )
-
         
         # accessid overrides ... ?
         if h_o:
@@ -191,6 +188,8 @@ def _update_queries_from_hoid( byc):
             t_v = h_o["target_values"]
             c_n = h_o["target_collection"]
             t_c = h_o["target_count"]
+
+            byc.update({"original_queries": h_o.get("original_queries", None)})
 
             set_pagination_range(t_c, byc)
             t_v = paginate_list(t_v, byc)

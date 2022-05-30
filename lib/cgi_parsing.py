@@ -7,7 +7,7 @@ from humps import decamelize
 
 def set_debug_state(debug=0):
 
-    if debug > 0:
+    if test_truthy(debug):
         cgitb.enable()
         print('Content-Type: text')
         print()
@@ -135,6 +135,15 @@ def cgi_parse_query(byc):
     byc.update({ "form_data": form })
     
     return byc
+
+################################################################################
+
+# def _form_from_POST(jbod, byc):
+
+    
+
+
+
 
 ################################################################################
 

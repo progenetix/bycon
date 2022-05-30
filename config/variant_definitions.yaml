@@ -365,7 +365,7 @@ request_types:
     description: >
       This specific request allows for the bracketed search of genomic variants
       with start and end coordinates and a variant type. in contrast to a
-      beaconRangeRequest, the start and end positions of the matched variants 
+      beaconRangeRequest, the start and end positions of the matched variants
       have to fall into the (1 base or longer) intervals for start and end,
       respectively (while for the range request variants falling between start
       and end are being matched).
@@ -398,8 +398,8 @@ request_types:
       - alternate_bases
       - variant_min_length
       - variant_max_length
-    
-  variantAlleleRequest: 
+
+  variantAlleleRequest:
     description: >
       This type corresponds to the original BeaconAlleleRequest, in which at a
       specified genome position a query looks for a combination of reference and
@@ -428,7 +428,7 @@ request_types:
       - mate_name
       - start
       - end
-    
+
   geneVariantRequest:
     description: >
       A variant overlapping with the genomic coordinates of a gene or other named sequence element.
@@ -445,7 +445,7 @@ request_types:
     all_of:
       - assembly_id
       - cyto_bands
-  
+
   positions2cytobands_request:
     all_of:
       - assembly_id
@@ -461,8 +461,3 @@ request_types:
       - chr
       - start
       - end
-
-
-
-
-
