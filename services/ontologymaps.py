@@ -77,6 +77,22 @@ def ontologymaps():
 
     results =  [ { "term_groups": c_g, "unique_terms": u_c } ]
 
+# --requestedSchema
+
+    if "termGroups" in byc["response_entity_id"]:
+        t_g_s = []
+        for tg in c_g:
+            t_l = []
+            for t in tg:
+                t_l.append(str(t.get("id", "")))
+                t_l.append(str(t.get("label", "")))
+            t_g_s.append("\t".join(t_l))
+
+        if "text" in byc["output"]:
+            print_text_response("\n".join(t_g_s))
+
+        results = c_g
+
     populate_service_response( byc, results)
     # byc["service_response"]["info"]["count"] = len(results[0]["term_groups"])
     cgi_print_response( byc, 200 )
