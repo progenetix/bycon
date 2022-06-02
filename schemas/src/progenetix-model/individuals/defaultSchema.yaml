@@ -15,15 +15,20 @@ properties:
       - pgxind-kftx25eh
   sex:
     $ref: ../common/commonDefinitions.yaml#/definitions/Sex
-  ethnicity:
-    $ref: ../common/commonDefinitions.yaml#/definitions/Ethnicity
+  ethnicities:
+    $note: forward-looking in Beacon+ as an array
+    type: array
+    items:
+      $ref: ../common/commonDefinitions.yaml#/definitions/Ethnicity
   geographicOrigin:
     $ref: ../common/commonDefinitions.yaml#/definitions/GeographicLocation
   indexDisease:
+    $note: special for Beacon+ instead of diseases
     description: >-
       This is the main (cancer) disease analyzed by the associated biosample(s).
     $ref: ../common/disease.yaml
   auxiliaryDiseases:
+    $note: special for Beacon+ instead of diseases
     description: >-
       These are additional diseases, e.g. germline syndromes ("Li-Fraumeni" ...).
     type: array

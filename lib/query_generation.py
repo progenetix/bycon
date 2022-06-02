@@ -457,7 +457,7 @@ def return_geo_city_query(geo_root, geo_pars):
         citypar = "properties.city"
 
     geo_q = { citypar: re.compile( r'^'+geo_pars["city"], re.IGNORECASE ) }
-
+    
     return geo_q
 
 ################################################################################
