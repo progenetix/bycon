@@ -136,7 +136,6 @@ def import_datatable_dict_line(byc, parent, fieldnames, line, primary_scope="bio
         for pre, p_v in pre_item.items():
             parent[l_k].append(p_v)
 
-
     return parent
 
 ################################################################################
