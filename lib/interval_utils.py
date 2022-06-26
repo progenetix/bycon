@@ -162,6 +162,8 @@ def interval_cnv_arrays(v_coll, query, byc):
     # the min and max values of each interval
     values_map = [  [ ] for i in range(int_no) ]
 
+    digests = []
+
     for v in v_s.rewind():
 
         if not "variant_state" in v:
@@ -178,6 +180,16 @@ def interval_cnv_arrays(v_coll, query, byc):
 
         if not "reference_name" in v:
             v.update({"reference_name":v_d["refseq_chronames"][ v["location"]["sequence_id"] ]})
+
+        v_i_id = v.get("variant_internal_id", None)
+        v_cs_id = v.get("callset_id", None)
+
+        if v_i_id in digests:
+            print("¡¡¡ {} already counted for {} => deleting {}".format(v_i_id, v_cs_id, v["_id"]))
+            v_coll.delete_one({"_id": v["_id"]})
+
+        else:
+            digests.append(v_i_id)
 
         for i, intv in enumerate(intervals):
 

@@ -82,6 +82,8 @@ def get_ncit_tumor_types(n_p, pub):
     s_t_l = []
 
     for s_t in s_t_s:
+
+        # print(s_t)
       
         c, l, n = s_t.split('::')
 
