@@ -1,20 +1,23 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/geoJSONgeometry/v2021-11-12
-title: GeoJSON Geometry
+"$id": https://progenetix.org/services/schemas/GeoJSONgeometry/v2022-06-28
+title: GeoJSONgeometry
 meta:
   used_by:
     - description: "Progenetix database schema (Beacon+ backend)"
       id: 'https://github.com/progenetix/schemas/'
-description: >
-  The geographic point object uses the default units from the [DCMI point scheme](http://dublincore.org/documents/dcmi-point/) and avoids optional representation in non-standard units.
+description: >-
+  The geographic point object uses the default units from the
+  [DCMI point scheme](http://dublincore.org/documents/dcmi-point/)and avoids
+  optional representation in non-standard units.
 type: object
 properties:
   type:
     type: string
     value: "Point"
   coordinates:
-    description: >
-      An array of 2 (longitude, latitude) or 3 (longitude, latitude, altitude) values.
+    description: >-
+      An array of 2 (longitude, latitude) or 3 (longitude, latitude, altitude)
+      ordered values.
     type: array
     items:
       type: number

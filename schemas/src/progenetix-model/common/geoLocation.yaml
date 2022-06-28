@@ -1,16 +1,20 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/geoLocation/v2021-04-14
+"$id": https://progenetix.org/services/schemas/GeoLocation/v2022-06-28
 title: GeoLocation
 meta:
   used_by:
     - description: "Progenetix database schema (Beacon+ backend)"
-      id: 'https://github.com/progenetix/schemas/'
-description: >
-  A GeoLocation object represents a geographic location formatted as a *GeoJSON feature*. The format is compatible with RFC 7946, while currently limiting its scope to features of type "Point". Also, the schema defines some optional parameters compatible with the GeoJSON feature *properties* wrapper object.
+      id: 'https://github.com/progenetix/bycon/'
+description: >-
+  A GeoLocation object represents a geographic location formatted as a
+  *GeoJSON feature*. The format is compatible with RFC 7946, while currently
+  limiting its scope to features of type "Point". Also, the schema defines some
+  optional parameters compatible with the GeoJSON feature *properties* wrapper
+  object.
   Examples could be:  
   * an address, e.g. of a lab performing an analysis
-  * provenance of an individual, obfuscated to a larger order 
-  administrative entity (Suffolk, U.K.)
+  * provenance of an individual, obfuscated to a larger order administrative
+  entity (Suffolk, U.K.)
   * a lat/long/alt position where an environmental sample was collected  
 type: object
 properties:
@@ -18,6 +22,6 @@ properties:
     type: string
     value: "Feature"
   geometry:
-    $ref: geoJSONgeometry.yaml
+    $ref: GeoJSONgeometry.yaml
   properties:
-    $ref: geoLabels.yaml
+    $ref: GeoLabels.yaml

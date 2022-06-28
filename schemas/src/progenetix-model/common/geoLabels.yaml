@@ -1,6 +1,6 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/geoLabels/v2021-04-14
-title: Geo Labels
+"$id": https://progenetix.org/services/schemas/GeoLabels/v2022-06-28
+title: GeoLabels
 meta:
   provenance:
     - description: "IETF GeoJSON pecification"
@@ -9,7 +9,7 @@ meta:
       id: 'https://github.com/progenetix/bycon/'
   used_by:
     - description: "Progenetix database schema (Beacon+ backend)"
-      id: 'https://github.com/progenetix/bycon/schemas/src/progenetix-model/'
+      id: 'https://github.com/progenetix/bycon/tree/main/schemas/src/progenetix-model/'
   sb_status: proposed
 description: >-
   The `geoLabels` object represent an instance of the GeoJSON `properties`
