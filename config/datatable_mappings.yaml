@@ -72,9 +72,6 @@ io_params:
     geoprov_label:
       db_key: provenance.geo_location.properties.label
       type: string
-    geoprov_precision:
-      db_key: provenance.geo_location.properties.precision
-      type: string
     geoprov_city:
       db_key: provenance.geo_location.properties.city
       type: string
@@ -150,12 +147,8 @@ io_params:
     auxiliary_disease_notes:
       db_key: auxiliary_disease.notes
       type: string
-
     geoprov_label:
       db_key: provenance.geo_location.properties.label
-      type: string
-    geoprov_precision:
-      db_key: provenance.geo_location.properties.precision
       type: string
     geoprov_city:
       db_key: provenance.geo_location.properties.city

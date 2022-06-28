@@ -9,10 +9,13 @@ meta:
       id: 'https://github.com/progenetix/bycon/'
   used_by:
     - description: "Progenetix database schema (Beacon+ backend)"
-      id: 'https://github.com/progenetix/schemas/'
+      id: 'https://github.com/progenetix/bycon/schemas/src/progenetix-model/'
   sb_status: proposed
 description: >-
-  geoLabels represent an instance of the GeoJSON `properties` object. The parameters provide additional information for the interpretation of the location parameters, and also serve for optional "sanity checks" off the corresponding latitude, longitude (, altitude).
+  The `geoLabels` object represent an instance of the GeoJSON `properties`
+  object. The parameters provide additional information for the interpretation
+  of the location parameters, and also serve for optional "sanity checks" off
+  the corresponding latitude, longitude (, altitude).
 type: object
 properties:
   label:
@@ -24,12 +27,14 @@ properties:
       - 'Str Marasesti 5, 300077 Timisoara, Romania'
   city:
     type: string
-    description: >
-      The optional name of the city the point location maps to. While this is a commonly used the point location, it should be considered secondary to the location values in interpreting the geographic location.
+    description: >-
+      The optional name of the city the point location maps to. It should be considered
+      secondary to the location values in interpreting the geographic location.
   country:
     type: string
-    description: >
-      The optional name of the country the location maps to, for sanity checks and procedural convenience (see notes for "city").
+    description: >-
+      The optional name of the country the location maps to, for sanity checks
+      and procedural convenience (see notes for "city").
     examples:
       - Switzerland
   ISO3166alpha3:
@@ -40,7 +45,9 @@ properties:
   latitude:
     type: number
     format: float
-    description: 'signed decimal degrees (North, relative to Equator)'
+    description: >-
+      Latitude in signed decimal degrees (North, relative to Equator). This is an
+      optional named re-write of the primary `geometry` parameter.
     examples:
       - 47.37
   longitude:

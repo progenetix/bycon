@@ -2,7 +2,6 @@ import re
 from bson.objectid import ObjectId
 
 from cgi_parsing import *
-from cytoband_utils import translate_reference_ids
 from query_execution import mongo_result_list
 
 ################################################################################
