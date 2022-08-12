@@ -1,0 +1,26 @@
+{
+    "$id": "https://progenetix.org/services/schemas/provenance/v2021-11-12",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "The Provenance class is the wrapper object for schemas informing about technical, geographic or collection associated origin of a higher oreder object such as an Individual or Biosample.\n",
+    "meta": {
+        "provenance": [
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            }
+        ],
+        "sb_status": "community",
+        "used_by": [
+            {
+                "description": "Progenetix database schema (Beacon+ backend)",
+                "id": "https://github.com/progenetix/schemas/"
+            }
+        ]
+    },
+    "properties": {
+        "geo_location": {
+            "$ref": "GeoLocation.json"
+        }
+    },
+    "title": "Provenance"
+}

@@ -233,6 +233,29 @@ variant_types:
     variant_state: EFO:0030073
     child_terms:
       - EFO:0030073
+  CNV:
+    variant_state: EFO:0030066
+    child_terms:
+    child_terms:
+      - EFO:0030066
+      - EFO:0030067
+      - EFO:0030068
+      - EFO:0030069
+      - EFO:0030070
+      - EFO:0030071
+      - EFO:0030072
+      - EFO:0030073      
+  EFO:0030066:
+    variant_state: EFO:0030066
+    child_terms:
+      - EFO:0030066
+      - EFO:0030067
+      - EFO:0030068
+      - EFO:0030069
+      - EFO:0030070
+      - EFO:0030071
+      - EFO:0030072
+      - EFO:0030073      
   DEL:
     variant_state: EFO:0030067
     child_terms:
@@ -285,12 +308,11 @@ parameters:
     pattern: '^[ACGTN]+$'
 
   variant_type:
-    type: array
     db_key: variant_state.id
     items:
-      type: string
-      # pattern: '^((?:\w+\-?\w+ \w+)|(?:EFO:\d+)|(?:DUP)|(?:DEL)|(?:BND)|(?:LOH)|(?:INS)|(?:INV)|(?:CNV)|(?:INDEL)|(?:SNP)|(?:SNV))$'
-      pattern: '^\w+[\w \-\:]\w+?$'
+    type: string
+    # pattern: '^((?:\w+\-?\w+ \w+)|(?:EFO:\d+)|(?:DUP)|(?:DEL)|(?:BND)|(?:LOH)|(?:INS)|(?:INV)|(?:CNV)|(?:INDEL)|(?:SNP)|(?:SNV))$'
+    pattern: '^\w+[\w \-\:]\w+?$'
 
   start:
     type: array

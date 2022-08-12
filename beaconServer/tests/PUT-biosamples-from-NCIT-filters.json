@@ -27,6 +27,6 @@
         { "id": "NCIT:C7712", "scope": "biosamples", "includeDescendantTerms": false }
     ],
     "includeResultsetResponses": "HIT",
-    "requestedGranularity": "count",
+    "requestedGranularity": "record",
     "debug": 0
 }

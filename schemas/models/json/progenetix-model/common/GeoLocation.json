@@ -1,0 +1,115 @@
+{
+    "$id": "https://progenetix.org/services/schemas/GeoLocation/v2022-06-28",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "definitions": {
+        "GeoJSONgeometry": {
+            "description": "The geographic point object uses the default units from the [DCMI point scheme](http://dublincore.org/documents/dcmi-point/)and avoids optional representation in non-standard units.",
+            "properties": {
+                "coordinates": {
+                    "description": "An array of 2 (longitude, latitude) or 3 (longitude, latitude, altitude) ordered values.",
+                    "examples": [
+                        [
+                            47.37,
+                            8.55
+                        ],
+                        [
+                            86.925026,
+                            27.98785,
+                            8848.86
+                        ]
+                    ],
+                    "items": {
+                        "format": "float",
+                        "type": "number"
+                    },
+                    "maxItems": 3,
+                    "minItems": 2,
+                    "type": "array"
+                },
+                "type": {
+                    "type": "string",
+                    "value": "Point"
+                }
+            },
+            "type": "object"
+        },
+        "GeoLabels": {
+            "description": "The `geoLabels` object represent an instance of the GeoJSON `properties` object. The parameters provide additional information for the interpretation of the location parameters, and also serve for optional \"sanity checks\" off the corresponding latitude, longitude (, altitude). type: object",
+            "properties": {
+                "ISO3166alpha3": {
+                    "examples": [
+                        "USA",
+                        "CHE"
+                    ],
+                    "type": "string"
+                },
+                "city": {
+                    "description": "The optional name of the city the point location maps to. It should be considered secondary to the location values in interpreting the geographic location.",
+                    "type": "string"
+                },
+                "country": {
+                    "description": "The optional name of the country the location maps to, for sanity checks and procedural convenience (see notes for `city`).",
+                    "examples": [
+                        "Switzerland"
+                    ],
+                    "type": "string"
+                },
+                "label": {
+                    "examples": [
+                        "Heidelberg, Germany",
+                        "Gainesville, United States of America",
+                        "Zurich, Switzerland",
+                        "Str Marasesti 5, 300077 Timisoara, Romania"
+                    ],
+                    "type": "string"
+                },
+                "latitude": {
+                    "description": "Latitude in signed decimal degrees (North, relative to Equator). This is an optional, named re-write of the primary `geometry` parameter.",
+                    "examples": [
+                        47.37
+                    ],
+                    "format": "float",
+                    "type": "number"
+                },
+                "longitude": {
+                    "description": "Longitude signed decimal degrees (East, relative to IERS Reference Meridian). This is an optional, named re-write of the primary `geometry` parameter.",
+                    "examples": [
+                        8.55
+                    ],
+                    "format": "float",
+                    "type": "number"
+                },
+                "precision": {
+                    "description": "Used together with coordinate annotation, precision represents an optional label describing the precision that can be inferred from the coordinates. For a precision level of `city`, coordinates would have to be interpreted as representing any possible location within the city's administrative boundaries, not necessarily at the exact position of the point coordinates. The `precision` parameter can be used to indicate an obfuscation of the coordinates, e.g. for privacy protection.",
+                    "examples": [
+                        "city"
+                    ],
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "description": "\nA GeoLocation object represents a geographic location formatted as a *GeoJSON feature*. The format is compatible with RFC 7946, while currently limiting its scope to features of type `Point`. Also, the schema defines some optional parameters compatible with the GeoJSON feature *properties* wrapper object. Examples could be:   * an address, e.g. of a lab performing an analysis * provenance of an individual, obfuscated to a larger order administrative entity (Suffolk, U.K.) * a lat/long/alt position where an environmental sample was collected\n**Provenance**: [IETF GeoJSON specification](https://tools.ietf.org/html/rfc7946)",
+    "meta": {
+        "used_by": [
+            {
+                "description": "Progenetix database schema (Beacon+ backend)",
+                "id": "https://github.com/progenetix/bycon/"
+            }
+        ]
+    },
+    "properties": {
+        "geometry": {
+            "$ref": "#/definitions/GeoJSONgeometry"
+        },
+        "properties": {
+            "$ref": "#/definitions/GeoLabels"
+        },
+        "type": {
+            "type": "string",
+            "value": "Feature"
+        }
+    },
+    "title": "GeoLocation",
+    "type": "object"
+}

@@ -43,6 +43,8 @@ def generate_queries(byc):
     _update_queries_from_hoid( byc)
     _purge_empty_queries( byc )
 
+    # prjsoncam(byc["queries"])
+
     return byc
 
 ################################################################################
@@ -233,9 +235,7 @@ def _update_queries_from_filters(byc):
 
     for f in filters:
 
-
         f_val = f["id"]
-        print(f_val)
         f_desc = f.get("includeDescendantTerms", f_desc)
         f_scope = f.get("scope", False)
 
@@ -254,7 +254,6 @@ def _update_queries_from_filters(byc):
                             "child_terms": [f["id"]]
                         }
                         f_desc = False
-
         if f_info is None:
             continue
 

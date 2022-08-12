@@ -15,7 +15,6 @@ from cytoband_utils import translate_reference_ids
 from data_retrieval import *
 from datatable_utils import export_datatable_download
 from export_file_generation import *
-from handover_execution import handover_return_data
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, dataset_results_save_handovers
 from interval_utils import generate_genomic_intervals, interval_counts_from_callsets
 from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
@@ -27,6 +26,8 @@ from schema_parsing import *
 ################################################################################
 
 def initialize_bycon():
+
+    # TODO: Define this in a schema?
 
     byc =  {
         "args": None,
@@ -380,7 +381,7 @@ def create_empty_beacon_response(byc):
     if "beaconResultsetsResponse" in byc["response_entity"]["response_schema"]:
 
         # TODO: stringent definition on when this is being used
-        r_set = object_instance_from_schema_name(byc, "resultsetInstance", "properties")
+        r_set = object_instance_from_schema_name(byc, "beaconResultsets", "definitions/ResultsetInstance/properties")
 
         if "dataset_ids" in byc:
             for ds_id in byc[ "dataset_ids" ]:

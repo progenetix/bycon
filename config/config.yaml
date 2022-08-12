@@ -11,79 +11,72 @@ bycon_definition_files:
   - services_mappings
   - variant_definitions
 
-web_server_domain: http://beacon.progenetix.org
-test_server_domain: http://beacon.progenetix.test
-web_handover_domain: http://progenetix.org
-test_handover_domain: http://progenetix.test
 paths:
-  web_server_root_abs:
-    - /
-    - Library
-    - WebServer
-    - Documents
   web_temp_dir_abs:
     - /
     - Library
     - WebServer
     - Documents
+    - Sites
+    - progenetix
     - tmp
 
 arg_defs_path:
   - config
   - command_line_args.yaml
 
-schema_paths:
-  - - schemas
-    - json
-    - progenetix-model
-    - common
-  - - schemas
-    - json
-    - progenetix-model
-  - - schemas
-    - json
-    - progenetix-service-schemas
-  - - schemas
-    - json
-    - progenetix-database-schemas
-  - - schemas
-    - json
-    - framework
-  - - schemas
-    - json
-    - framework
-    - common
-  - - schemas
-    - json
-    - framework
-    - configuration
-  - - schemas
-    - json
-    - framework
-    - requests
-  - - schemas
-    - json
-    - framework
-    - responses
-  - - schemas
-    - json
-    - framework
-    - responses
-    - sections
+schemas_root:
+  - schemas
+
+schemas_paths:
+  description: >-
+    path elements as list, from `schemas_root`
+  items:
+    - - models
+      - json
+      - progenetix-model
+    - - models
+      - json
+      - progenetix-model
+      - common
+    - - models
+      - json
+      - progenetix-service-schemas
+    - - models
+      - json
+      - progenetix-database-schemas
+    - - framework
+      - json
+      - common
+    - - framework
+      - json
+      - configuration
+    - - framework
+      - json
+      - requests
+    - - framework
+      - json
+      - responses
+    - - framework
+      - json
+      - responses
+      - sections
 
 form_list_pars:
-  - start
-  - end
-  - datasetIds
-  - variantType
-  - filters
-  - ids
-  - biosampleIds
-  - variantIds
-  - individualIds
-  - callsetIds
-  - analysisIds
-  - collationTypes
+  description: >-
+    form parameters which are processed as list
+  items:
+    - start
+    - end
+    - datasetIds
+    - filters
+    - ids
+    - biosampleIds
+    - variantIds
+    - individualIds
+    - callsetIds
+    - analysisIds
+    - collationTypes
 
 resource_urls:
   ncbi_geosoft: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?form=text&acc=
@@ -95,10 +88,8 @@ resource_urls:
 # is defined separately
 dataset_ids:
   - progenetix
-  - cellosaurus
-  - 1000genomesDRAGEN
-
-dataset_junk: progenetix_junk
+  # - cellosaurus
+  # - 1000genomesDRAGEN
 
 queried_collections:
   - biosamples

@@ -167,7 +167,7 @@ EFOmaterial:
     - EFO:0030035
 
 icdom:
-  id: pgx:icdom
+  id: pgx_icdom
   name: "ICD-O 3 Morphologies (Progenetix transcription)"
   namespace_prefix: pgx
   url: https://progenetix.org/
@@ -182,6 +182,7 @@ icdom:
     - pgx:icdom-94403
 
 icdot:
+  id: pgx_icdot
   name: "ICD-O 3 Topographies (Progenetix transcription)"
   namespace_prefix: pgx
   url: "https://progenetix.org/"
@@ -199,6 +200,7 @@ icdot:
 # Procedural Metadata
 
 PMID:
+  id: pubmed
   name: "NCBI PubMed"
   namespace_prefix: PMID
   url: "https://www.ncbi.nlm.nih.gov/pubmed/"
@@ -216,6 +218,7 @@ PMID:
     - PMID:9405679
 
 GEOseries:
+  id: geo_gse
   namespace_prefix: geo
   name: Gene Expression Omnibus
   url: "https://www.ncbi.nlm.nih.gov/geo/"
@@ -234,6 +237,7 @@ GEOseries:
     - geo:GSE19331
 
 GenomePlatforms:
+  id: geo_gpl
   namespace_prefix: geo
   name: Genomic Analysis Platforms
   url: "https://www.ncbi.nlm.nih.gov/geo/"
@@ -253,6 +257,7 @@ GenomePlatforms:
     - EFO:0010938
 
 GEOexperiment:
+  id: geo_gsm
   namespace_prefix: geo
   url: "https://www.ncbi.nlm.nih.gov/geo/"
   name: Gene Expression Omnibus
@@ -269,6 +274,7 @@ GEOexperiment:
     - geo:GSM253289
 
 arrayexpress:
+  id: arrayexpress
   name: "EBI ArrayExpress"
   namespace_prefix: arrayexpress
   url: "https://www.ebi.ac.uk/arrayexpress/"
@@ -285,6 +291,7 @@ arrayexpress:
     - arrayexpress:E-MEXP-1008
 
 TCGAproject:
+  id: tcga
   name: "The Cancer Genome Atlas"
   namespace_prefix: pgx
   url: "http://cancergenome.nih.gov"
@@ -304,8 +311,9 @@ TCGAproject:
     - pgx:TCGA-GBM
 
 UBERON:
+  id: uberon
   name: Uberon cross-species anatomical structures ontology
-  iri_prefix: http://www.ebi.ac.uk/efo/EFO_
+  iri_prefix: http://purl.obolibrary.org/obo/UBERON_
   namespace_prefix: UBERON
   url: "http://uberon.org"
   reference:
@@ -322,7 +330,9 @@ UBERON:
     - UBERON:0001869
 
 cbioportal:
+  id: cbioportal
   name: "cBioPortal"
+  iri_prefix: https://www.cbioportal.org/study/summary?id=
   namespace_prefix: cbioportal
   url: "https://www.cbioportal.org"
   reference:
@@ -338,7 +348,9 @@ cbioportal:
     - 'cbioportal:msk_impact_2017'
 
 cellosaurus:
+  id: cellosaurus
   name: "Cellosaurus - a knowledge resource on cell lines"
+  iri_prefix: https://web.expasy.org/cellosaurus/
   namespace_prefix: cellosaurus
   url: "https://web.expasy.org/cellosaurus/"
   reference:
@@ -348,14 +360,16 @@ cellosaurus:
       - ""
   db_key: 'external_references.id'
   scope: biosamples
-  pattern: '^cellosaurus:CVCL_\w+?$'
+  pattern: '^cellosaurus:CVCL_\w*?$'
   collationed: True
   examples:
     - 'cellosaurus:CVCL_1650'
     - 'cellosaurus:CVCL_0006'
 
 pgxcohort:
+  id: pgx_cohorts
   name: "Progenetix cohorts"
+  iri_prefix: https://progenetix.org/ids/
   namespace_prefix: pgx
   url: "https://progenetix.org"
   db_key: 'cohorts.id'

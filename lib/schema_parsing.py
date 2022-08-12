@@ -26,8 +26,9 @@ def read_schema_file(schema_name, item, byc, ext="json"):
         if len(item) > 1:
             s_f_p = s_f_p+"#/"+item
         root_def = RefDict(s_f_p)
-        exclude_keys = [ "examples" ] #"format", 
-        s = materialize(root_def, exclude_keys = exclude_keys)
+        
+        exclude_keys = [ "examples" ] #"format",
+        s = materialize(root_def, exclude_keys=exclude_keys)
         assert isinstance(s, dict)
         return s
 
@@ -37,9 +38,11 @@ def read_schema_file(schema_name, item, byc, ext="json"):
 
 def get_schema_file_path(schema_name, byc, ext="json"):
 
-    for s_p in byc["config"]["schema_paths"]:
+    config = byc["config"]
 
-        p = path.join( pkg_path, *s_p )
+    for s_p in config["schemas_paths"]["items"]:
+
+        p = path.join( pkg_path, *config["schemas_root"], *s_p )
 
         s_ds = [ d.name for d in scandir(p) if d.is_dir() ]
         if schema_name in s_ds:
@@ -109,35 +112,3 @@ def object_instance_from_schema_name(byc, schema_name, root_key, ext="json"):
     return s_i
 
 ################################################################################
-
-def convert_case_for_keys(schema_dict, convert_function):
-
-    old_keys = list(schema_dict)
-
-    for key in old_keys:
-        new_key = convert_function(key)
-
-        if type(schema_dict[key]) == dict:
-            schema_dict[key] = convert_case_for_keys(schema_dict[key], convert_function)
-
-        schema_dict[new_key] = schema_dict.pop(key)
-
-    return schema_dict
-
-################################################################################
-
-def camel_to_snake(name):
-
-    return humps.decamelize(name)
-
-################################################################################
-
-def snake_to_camel(name):
-
-    return humps.camelize(name)
-
-################################################################################
-
-def camel_to_pascal(name):
-
-    return name.capitalize( snake_to_camel(name) )

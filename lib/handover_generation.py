@@ -20,13 +20,14 @@ def dataset_response_add_handovers(ds_id, byc):
         return b_h_o
 
     h_o_server = select_this_server(byc)    
-    ds_h_o =  byc["dataset_definitions"][ ds_id ]["handoverTypes"]
+    ds_h_o = byc["dataset_definitions"][ ds_id ]["handoverTypes"]
     h_o_types = byc["handover_definitions"]["h->o_types"]
 
     for h_o_t, h_o_defs in h_o_types.items():
 
         # testing if this handover is active for the specified dataset
         if not h_o_t in ds_h_o:
+            # print("!!! NOT => "+h_o_t)
             continue
 
         for h_o_key, h_o in byc["dataset_results"][ds_id].items():
@@ -93,6 +94,8 @@ def dataset_response_add_handovers(ds_id, byc):
                     h_o_r["url"] += "&skip={}&limit={}".format(byc["pagination"]["skip"], byc["pagination"]["limit"])
 
                 b_h_o.append( h_o_r )
+
+        print
 
     return b_h_o
 
@@ -182,6 +185,8 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
 
     podmd"""
 
+    config = byc["config"]
+
     v_ret = 0
     v_max = 1000
 
@@ -199,7 +204,7 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
         p_t = v_max # only for the non-paginated ...
 
     bed_file_name = accessid + l + '.bed'
-    bed_file = path.join( *byc["config"][ "paths" ][ "web_temp_dir_abs" ], bed_file_name )
+    bed_file = path.join( *config[ "paths" ][ "web_temp_dir_abs" ], bed_file_name )
 
     v_defs = byc["variant_definitions"]
     efo_vrs = v_defs["efo_vrs_map"]
@@ -248,7 +253,7 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
             except:
                 pass
             col_key = "color_var_{}_rgb".format(vt.lower())
-            b_f.write("track name={} visibility=squish description=\"{} variants matching the query with {} overall returned\" color={}\n".format(vt, vt, v_ret, byc["config"]["plot_pars"][col_key]) )
+            b_f.write("track name={} visibility=squish description=\"{} variants matching the query with {} overall returned\" color={}\n".format(vt, vt, v_ret, config["plot_pars"][col_key]) )
             b_f.write("#chrom\tchromStart\tchromEnd\tbiosampleId\n")
             for v in vs[vt]:
                 ucsc_chr = "chr"+v["reference_name"]

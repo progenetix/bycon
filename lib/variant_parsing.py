@@ -34,21 +34,16 @@ def parse_variant_parameters(byc):
         if not p_k in v_p_defs.keys():
             continue
         v_p = variant_pars[ p_k ]
-        if "array" in v_p_defs[ p_k ]["type"]:
+        if "variant_type" in p_k:
+            if v_p in v_t_defs:
+                v_p_c[ p_k ] = { "$in": v_t_defs[v_p]["child_terms"] }
+        elif "array" in v_p_defs[ p_k ]["type"]:
             v_l = set()
             for v in v_p:
-                if "variant_type" in p_k:
-                    if v in v_t_defs.keys():
-                        v_l.add( v )
-                elif re.compile( v_p_defs[ p_k ][ "items" ][ "pattern" ] ).match( str( v ) ):
+                if re.compile( v_p_defs[ p_k ][ "items" ][ "pattern" ] ).match( str( v ) ):
                     if "integer" in v_p_defs[ p_k ][ "items" ][ "type" ]:
                         v = int( v )
                     v_l.add( v )
-            if "variant_type" in p_k:
-                v_t_l = set()
-                for v_t in list(v_l):
-                    v_t_l.update(v_t_defs[v_t]["child_terms"])
-                v_l = v_t_l
             v_p_c[ p_k ] = sorted( list(v_l) )
         else:
             if re.compile( v_p_defs[ p_k ][ "pattern" ] ).match( str( v_p ) ):
@@ -57,6 +52,7 @@ def parse_variant_parameters(byc):
                 v_p_c[ p_k ] = v_p
 
     byc.update( { "variant_pars": v_p_c } )
+
 
     return byc
 
