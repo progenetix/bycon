@@ -13,7 +13,8 @@ def parse_variant_parameters(byc):
 
     variant_pars = { }
     v_p_defs = byc["variant_definitions"]["parameters"]
-    v_t_defs = byc["variant_definitions"]["variant_types"]
+    v_t_als = byc["variant_definitions"]["variant_state_aliases"]
+    v_t_defs = byc["variant_definitions"]["variant_states"]
 
     for p_k in v_p_defs.keys():
         v_default = None
@@ -35,8 +36,9 @@ def parse_variant_parameters(byc):
             continue
         v_p = variant_pars[ p_k ]
         if "variant_type" in p_k:
-            if v_p in v_t_defs:
-                v_p_c[ p_k ] = { "$in": v_t_defs[v_p]["child_terms"] }
+            if v_p in v_t_als:
+                v_t_k = v_t_als[v_p]
+                v_p_c[ p_k ] = { "$in": v_t_defs[v_t_k]["child_terms"] }
         elif "array" in v_p_defs[ p_k ]["type"]:
             v_l = set()
             for v in v_p:

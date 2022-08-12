@@ -205,75 +205,55 @@ refseq_chromosomes: # GRCh38.p13
     refseq_id: "refseq:NC_000024.10"
     length: 57227415
 
-variant_types:
-  DUP:
-    variant_state: EFO:0030070
+variant_state_aliases:
+  CNV: EFO:0030066
+  EFO:0030066: EFO:0030066
+  DUP: EFO:0030070
+  EFO:0030070: EFO:0030070
+  EFO:0030071: EFO:0030071
+  EFO:0030072: EFO:0030072
+  EFO:0030073: EFO:0030073
+  DEL: EFO:0030067
+  EFO:0030067: EFO:0030067
+  EFO:0030068: EFO:0030068
+  EFO:0030069: EFO:0030069
+
+variant_states:
+  EFO:0030066:
     child_terms:
+      - EFO:0030066
+      - EFO:0030067
+      - EFO:0030068
+      - EFO:0030069
       - EFO:0030070
       - EFO:0030071
       - EFO:0030072
-      - EFO:0030073
+      - EFO:0030073      
   EFO:0030070:
-    variant_state: EFO:0030070
     child_terms:
       - EFO:0030070
       - EFO:0030071
       - EFO:0030072
       - EFO:0030073
   EFO:0030071:
-    variant_state: EFO:0030071
     child_terms:
       - EFO:0030071
   EFO:0030072:
-    variant_state: EFO:0030072
     child_terms:
       - EFO:0030072
       - EFO:0030073
   EFO:0030073:
-    variant_state: EFO:0030073
     child_terms:
       - EFO:0030073
-  CNV:
-    variant_state: EFO:0030066
-    child_terms:
-    child_terms:
-      - EFO:0030066
-      - EFO:0030067
-      - EFO:0030068
-      - EFO:0030069
-      - EFO:0030070
-      - EFO:0030071
-      - EFO:0030072
-      - EFO:0030073      
-  EFO:0030066:
-    variant_state: EFO:0030066
-    child_terms:
-      - EFO:0030066
-      - EFO:0030067
-      - EFO:0030068
-      - EFO:0030069
-      - EFO:0030070
-      - EFO:0030071
-      - EFO:0030072
-      - EFO:0030073      
-  DEL:
-    variant_state: EFO:0030067
-    child_terms:
-      - EFO:0030067
-      - EFO:0030068
-      - EFO:0030069
   EFO:0030067:
-    variant_state: EFO:0030067
     child_terms:
       - EFO:0030067
       - EFO:0030068
       - EFO:0030069
   EFO:0030068:
-    variant_state: EFO:0030068
     child_terms:
       - EFO:0030068
   EFO:0030069:
-    variant_state: EFO:0030069
     child_terms:
       - EFO:0030069
 
