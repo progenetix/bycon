@@ -16,6 +16,7 @@ from beaconServer import *
 """podmd
 * <https://progenetix.org/services/geolocations?city=zurich>
 * <https://progenetix.org/services/geolocations?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
+* <https://progenetix.org/services/geolocations?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000&output=map>
 podmd"""
 
 ################################################################################
@@ -48,6 +49,8 @@ def geolocations():
 
     results, e = mongo_result_list( byc["dataset_ids"][0], byc["geo_coll"], query, { '_id': False } )
     response_add_error(byc, 422, e)
+
+    print_map_from_geolocations(byc, results)
 
     if len(results) == 1:
         if "geo_distance" in byc["form_data"]:

@@ -7,6 +7,7 @@ service_aliases:
   deliveries: deliveries
   genespans: genespans
   genes: genespans
+  geolocs: geolocations
   geolocations: geolocations
   ids: ids
   interval_frequencies: intervalFrequencies
