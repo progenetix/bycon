@@ -38,17 +38,77 @@ def geolocations():
     
     create_empty_service_response(byc)
 
-    query, geo_pars = geo_query( byc )
-    for g_k, g_v in geo_pars.items():
-        response_add_received_request_summary_parameter(byc, g_k, g_v)
+    results = []
 
-    if len(query.keys()) < 1:
-        response_add_error(byc, 422, "No query generated - missing or malformed parameters" )
-    
-    cgi_break_on_errors(byc)
+    if "file" in byc["form_data"]:
+        if "http" in byc["form_data"]["file"]:
+            lf = re.split("\n", requests.get(byc["form_data"]["file"]).text)
+            lf.pop(0)
 
-    results, e = mongo_result_list( byc["dataset_ids"][0], byc["geo_coll"], query, { '_id': False } )
-    response_add_error(byc, 422, e)
+            markers = {}
+            for line in lf:
+
+                line += "\t\t\t"
+                l_l = line.split("\t")
+                if len(l_l) < 6:
+                    continue
+                group_label, group_lat, group_lon, item_size, item_label, item_link, markerType, *_ = l_l[:7]
+
+                if not re.match(r'^\-?\d+?(?:\.\d+?)?$', group_lat):
+                    continue
+                if not re.match(r'^\-?\d+?(?:\.\d+?)?$', group_lon):
+                    continue
+                if not re.match(r'^\d+?(?:\.\d+?)?$', item_size):
+                    item_size = 1
+
+                m_k = "{}::{}::{}".format(group_label, group_lat, group_lon)
+                if markerType not in ["circle", "marker"]:
+                    markerType = "circle"
+
+                # TODO: load schema for this
+                if not m_k in markers.keys():
+                    markers[m_k] = {
+                        "geo_location": {
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [ float(group_lon), float(group_lat) ]
+                            },
+                            "properties": {
+                                "city": None,
+                                "country": None,
+                                "label": group_label,
+                                "marker_type": markerType,
+                                "marker_count": 0,
+                                "items": []
+                            }
+                        }
+                    }
+
+                g_l_p = markers[m_k]["geo_location"]["properties"]
+                g_l_p["marker_count"] += float(item_size)
+
+                if len(item_label) > 0:
+                    if "http" in item_link:
+                        item_label = "<a href='{}'>{}</a>".format(item_link, item_label)
+                    g_l_p["items"].append(item_label)
+
+            for m_k, m_v in markers.items():
+                results.append(m_v)
+
+    else:
+
+        query, geo_pars = geo_query( byc )
+        for g_k, g_v in geo_pars.items():
+            response_add_received_request_summary_parameter(byc, g_k, g_v)
+
+        if len(query.keys()) < 1:
+            response_add_error(byc, 422, "No query generated - missing or malformed parameters" )
+        
+        cgi_break_on_errors(byc)
+
+        results, e = mongo_result_list( byc["dataset_ids"][0], byc["geo_coll"], query, { '_id': False } )
+        response_add_error(byc, 422, e)
 
     print_map_from_geolocations(byc, results)
 

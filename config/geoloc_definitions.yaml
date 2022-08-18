@@ -48,12 +48,13 @@ map_params:
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
   extra_JS: ""
   marker_type: 'circle'
-  marker_scale: 2
+  marker_scale: 200
+  marker_max_r: 5000
   latitude: 10.0
   longitude: 35.0
   zoom: 2
   zoom_min: 2
-  zoom_max: 10
+  zoom_max: 12
   head: >-
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />

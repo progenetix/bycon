@@ -1,55 +1,17 @@
+import math
+
 def print_map_from_geolocations(byc, results):
 
     if not "map" in byc["output"]:
         return
 
+    m_p = byc["geoloc_definitions"].get("map_params", {})
+    m_max_count = marker_max_from_geo_locations(results)
+    
     leaf_markers = []
 
-    m_p = byc["geoloc_definitions"].get("map_params", {})
-    radius = 1000
-    count = 1
-
-    for g_l in results:
-
-        p = g_l["geo_location"]["properties"]
-        g = g_l["geo_location"]["geometry"]
-        i = g_l["geo_location"].get("info", {})
-
-        label = i.get("label", None)
-        if label is None:
-            label = p.get("city", "NA")
-            country = p.get("country", None)
-            if country is not None:
-                label += ", "+country
-            label += "<hr/>latitude: {}<br/>longitude: {}".format(g["coordinates"][1], g["coordinates"][0])
-
-        marker = p.get("marker", "marker")
-
-        map_marker = """
-L.{}([{}, {}], {{
-    color: '{}',
-    stroke: true,
-    weight: {},
-    fillColor: '{}',
-    fillOpacity: {},
-    radius: {},
-    count: {}
-}}).bindPopup("{}").addTo(map)
-        """.format(
-            marker,
-            g["coordinates"][1],
-            g["coordinates"][0],
-            m_p["bubble_stroke_color"],
-            m_p["bubble_stroke_weight"],
-            m_p["bubble_fill_color"],
-            m_p["bubble_opacity"],
-            radius,
-            count,
-            label
-        )
-
-        leaf_markers.append(map_marker)
-
+    for geoloc in results:
+        leaf_markers.append( map_marker_from_geo_location(byc, geoloc, m_p, m_max_count) )
 
     geoMap = """
 {}
@@ -95,3 +57,70 @@ L.{}([{}, {}], {{
 </html>""".format(geoMap))
 
     exit()
+
+################################################################################
+
+def marker_max_from_geo_locations(geolocs):
+
+    m_max_count = 1
+    for g_l in geolocs:
+        c = float( g_l["geo_location"]["properties"].get("marker_count", 1) )
+        if c > m_max_count:
+            m_max_count = c
+
+    return m_max_count
+
+################################################################################
+
+def map_marker_from_geo_location(byc, geoloc, m_p, m_max_count):
+
+    p = geoloc["geo_location"]["properties"]
+    g = geoloc["geo_location"]["geometry"]
+
+    marker = p.get("marker_type", "circle")
+    if m_max_count == 1:
+        marker = "marker"
+
+    m_max_r = m_p.get("marker_max_r", "1000")
+    m_f = int(m_max_r / math.sqrt(4 * m_max_count / math.pi))
+
+    label = p.get("label", None)
+    if label is None:
+        label = p.get("city", "NA")
+        country = p.get("country", None)
+        if country is not None:
+            label = "{}, {}".format(label, country)
+        label += "<hr/>latitude: {}<br/>longitude: {}".format(g["coordinates"][1], g["coordinates"][0])
+    else:
+        items = p.get("items", [])
+        if len(items) > 0:
+            label = "{}<hr/>{}".format(label, "<br/>".join(items))
+
+
+    count = float(p.get("marker_count", 1))
+    size = count * m_f
+
+    map_marker = """
+L.{}([{}, {}], {{
+    color: '{}',
+    stroke: true,
+    weight: {},
+    fillColor: '{}',
+    fillOpacity: {},
+    radius: {},
+    count: {}
+}}).bindPopup("{}").addTo(map)
+    """.format(
+        marker,
+        g["coordinates"][1],
+        g["coordinates"][0],
+        m_p["bubble_stroke_color"],
+        m_p["bubble_stroke_weight"],
+        m_p["bubble_fill_color"],
+        m_p["bubble_opacity"],
+        size,
+        count,
+        label
+    )
+
+    return map_marker
