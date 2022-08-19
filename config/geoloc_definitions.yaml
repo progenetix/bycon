@@ -46,10 +46,10 @@ map_params:
   bubble_opacity: 0.4
   tiles_source: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
-  extra_JS: ""
+  # extra_JS: ""
   marker_type: 'circle'
-  marker_scale: 200
-  marker_max_r: 5000
+  marker_scale: 2
+  marker_max_r: 4000
   latitude: 30
   longitude: 9
   zoom: 2

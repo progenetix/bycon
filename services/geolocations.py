@@ -17,6 +17,7 @@ from beaconServer import *
 * <https://progenetix.org/services/geolocations?city=zurich>
 * <https://progenetix.org/services/geolocations?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
 * <https://progenetix.org/services/geolocations?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000&output=map>
+* <http://progenetix.org/services/geolocations?bubble_stroke_weight=0&marker_scale=5&canvas_w_px=1000&file=https://raw.githubusercontent.com/progenetix/pgxMaps/main/rsrc/locationtest.tsv&debug=&output=map&help=true>
 podmd"""
 
 ################################################################################

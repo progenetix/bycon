@@ -1,4 +1,5 @@
 import math, re, requests
+from cgi_parsing import *
 
 ################################################################################
 
@@ -75,7 +76,7 @@ def print_map_from_geolocations(byc, geolocs):
     if not "map" in byc["output"]:
         return
 
-    m_p = byc["geoloc_definitions"].get("map_params", {})
+    m_p = update_map_params_from_form(byc)
     m_max_count = marker_max_from_geo_locations(geolocs)
     
     leaf_markers = []
@@ -105,7 +106,6 @@ def print_map_from_geolocations(byc, geolocs):
   L.tileLayer('{}', {{
       minZoom: {},
       maxZoom: {},
-      {}
       attribution: '{}'
   }}).addTo(map);
 
@@ -124,9 +124,25 @@ def print_map_from_geolocations(byc, geolocs):
         m_p.get("tiles_source"),
         m_p.get("zoom_min"),
         m_p.get("zoom_max"),
-        m_p.get("extra_JS"),
         m_p.get("attribution")
     )
+
+
+    if test_truthy(byc["form_data"]["help"]):
+        t = """
+<h4>Map Configuration</h4>
+<p>The following parameters may be modified by providing alternative values in
+the URL, e.g. "&canvas_w_px=1024".</p>
+<table>
+"""
+        t += "<tr><th>Map Parameter</th><th>Value</th></tr>\n"
+        for m_p_k, m_p_v in m_p.items():
+            if not '<' in str(m_p_v):
+                t += "<tr><td>{}</td><td>{}</td></tr>\n".format(m_p_k, m_p_v)
+        t += "\n</table>"
+        geoMap += t
+    # except:
+    #     pass
 
     print("""
 <html>
@@ -134,6 +150,19 @@ def print_map_from_geolocations(byc, geolocs):
 </html>""".format(geoMap))
 
     exit()
+
+################################################################################
+
+def update_map_params_from_form(byc):
+
+    m_p = byc["geoloc_definitions"].get("map_params", {})
+
+    for m_p_k, m_p_v in m_p.items():
+
+        if m_p_k in byc["form_data"]:
+            m_p.update({m_p_k: byc["form_data"].get(m_p_k, m_p_v)})
+
+    return m_p
 
 ################################################################################
 
@@ -175,7 +204,7 @@ def map_marker_from_geo_location(byc, geoloc, m_p, m_max_count):
 
 
     count = float(p.get("marker_count", 1))
-    size = count * m_f
+    size = count * m_f * float(m_p.get("marker_scale", 2))
 
     map_marker = """
 L.{}([{}, {}], {{
