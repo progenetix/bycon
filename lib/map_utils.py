@@ -1,16 +1,86 @@
-import math
+import math, re, requests
 
-def print_map_from_geolocations(byc, results):
+################################################################################
+
+def read_geomarker_table_web(byc):
+
+    geolocs = []
+
+    if not "http" in byc["form_data"]["file"]:
+        return geolocs
+
+    lf = re.split("\n", requests.get(byc["form_data"]["file"]).text)
+
+    markers = {}
+
+    for line in lf:
+
+        if line.startswith('#'):
+            continue
+
+        line += "\t\t\t\t"
+        l_l = line.split("\t")
+        if len(l_l) < 6:
+            continue
+        group_label, group_lat, group_lon, item_size, item_label, item_link, markerType, *_ = l_l[:7]
+
+        if not re.match(r'^\-?\d+?(?:\.\d+?)?$', group_lat):
+            continue
+        if not re.match(r'^\-?\d+?(?:\.\d+?)?$', group_lon):
+            continue
+        if not re.match(r'^\d+?(?:\.\d+?)?$', item_size):
+            item_size = 1
+
+        m_k = "{}::{}::{}".format(group_label, group_lat, group_lon)
+        if markerType not in ["circle", "marker"]:
+            markerType = "circle"
+
+        # TODO: load schema for this
+        if not m_k in markers.keys():
+            markers[m_k] = {
+                "geo_location": {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [ float(group_lon), float(group_lat) ]
+                    },
+                    "properties": {
+                        "city": None,
+                        "country": None,
+                        "label": group_label,
+                        "marker_type": markerType,
+                        "marker_count": 0,
+                        "items": []
+                    }
+                }
+            }
+
+        g_l_p = markers[m_k]["geo_location"]["properties"]
+        g_l_p["marker_count"] += float(item_size)
+
+        if len(item_label) > 0:
+            if "http" in item_link:
+                item_label = "<a href='{}'>{}</a>".format(item_link, item_label)
+            g_l_p["items"].append(item_label)
+
+    for m_k, m_v in markers.items():
+        geolocs.append(m_v)
+
+    return geolocs
+
+################################################################################
+
+def print_map_from_geolocations(byc, geolocs):
 
     if not "map" in byc["output"]:
         return
 
     m_p = byc["geoloc_definitions"].get("map_params", {})
-    m_max_count = marker_max_from_geo_locations(results)
+    m_max_count = marker_max_from_geo_locations(geolocs)
     
     leaf_markers = []
 
-    for geoloc in results:
+    for geoloc in geolocs:
         leaf_markers.append( map_marker_from_geo_location(byc, geoloc, m_p, m_max_count) )
 
     geoMap = """
@@ -23,7 +93,13 @@ def print_map_from_geolocations(byc, results):
       integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
       crossorigin=""></script>
 <script>
+  var markers = [
+{}
+  ];
+  var markersGroup = L.featureGroup(markers);
+
   // Create the map.
+
   var map = L.map('map-canvas', {{ renderer: L.svg() }} ).setView([{}, {}], {});
 
   L.tileLayer('{}', {{
@@ -33,13 +109,15 @@ def print_map_from_geolocations(byc, results):
       attribution: '{}'
   }}).addTo(map);
 
-{}
+  map.addLayer(markersGroup);
+  map.fitBounds(markersGroup.getBounds().pad(0.05));
 
 </script>
     """.format(
         m_p.get("head"),
         m_p.get("canvas_w_px"),
         m_p.get("canvas_h_px"),
+        ",\n".join(leaf_markers),
         m_p.get("latitude"),
         m_p.get("longitude"),
         m_p.get("zoom"),
@@ -47,8 +125,7 @@ def print_map_from_geolocations(byc, results):
         m_p.get("zoom_min"),
         m_p.get("zoom_max"),
         m_p.get("extra_JS"),
-        m_p.get("attribution"),
-        ";\n".join(leaf_markers)
+        m_p.get("attribution")
     )
 
     print("""
@@ -109,7 +186,7 @@ L.{}([{}, {}], {{
     fillOpacity: {},
     radius: {},
     count: {}
-}}).bindPopup("{}").addTo(map)
+}}).bindPopup("{}")
     """.format(
         marker,
         g["coordinates"][1],

@@ -507,7 +507,7 @@ def prjsonnice(this):
 
 def decamelize_words(j_d):
 
-    de_cams = ["sequenceId", "relativeCopyClass", "speciesId", "chromosomeLocation", "genomicLocation"]
+    de_cams = ["gVariants", "sequenceId", "relativeCopyClass", "speciesId", "chromosomeLocation", "genomicLocation"]
     for d in de_cams:
         j_d = re.sub(r"\b{}\b".format(d), humps.decamelize(d), j_d)
 

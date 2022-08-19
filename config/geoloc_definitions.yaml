@@ -50,8 +50,8 @@ map_params:
   marker_type: 'circle'
   marker_scale: 200
   marker_max_r: 5000
-  latitude: 10.0
-  longitude: 35.0
+  latitude: 30
+  longitude: 9
   zoom: 2
   zoom_min: 2
   zoom_max: 12

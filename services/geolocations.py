@@ -38,63 +38,9 @@ def geolocations():
     
     create_empty_service_response(byc)
 
-    results = []
-
+    # TODO: move the map table reading to a sane place 
     if "file" in byc["form_data"]:
-        if "http" in byc["form_data"]["file"]:
-            lf = re.split("\n", requests.get(byc["form_data"]["file"]).text)
-            lf.pop(0)
-
-            markers = {}
-            for line in lf:
-
-                line += "\t\t\t"
-                l_l = line.split("\t")
-                if len(l_l) < 6:
-                    continue
-                group_label, group_lat, group_lon, item_size, item_label, item_link, markerType, *_ = l_l[:7]
-
-                if not re.match(r'^\-?\d+?(?:\.\d+?)?$', group_lat):
-                    continue
-                if not re.match(r'^\-?\d+?(?:\.\d+?)?$', group_lon):
-                    continue
-                if not re.match(r'^\d+?(?:\.\d+?)?$', item_size):
-                    item_size = 1
-
-                m_k = "{}::{}::{}".format(group_label, group_lat, group_lon)
-                if markerType not in ["circle", "marker"]:
-                    markerType = "circle"
-
-                # TODO: load schema for this
-                if not m_k in markers.keys():
-                    markers[m_k] = {
-                        "geo_location": {
-                            "type": "Feature",
-                            "geometry": {
-                                "type": "Point",
-                                "coordinates": [ float(group_lon), float(group_lat) ]
-                            },
-                            "properties": {
-                                "city": None,
-                                "country": None,
-                                "label": group_label,
-                                "marker_type": markerType,
-                                "marker_count": 0,
-                                "items": []
-                            }
-                        }
-                    }
-
-                g_l_p = markers[m_k]["geo_location"]["properties"]
-                g_l_p["marker_count"] += float(item_size)
-
-                if len(item_label) > 0:
-                    if "http" in item_link:
-                        item_label = "<a href='{}'>{}</a>".format(item_link, item_label)
-                    g_l_p["items"].append(item_label)
-
-            for m_k, m_v in markers.items():
-                results.append(m_v)
+        results = read_geomarker_table_web(byc)
 
     else:
 
