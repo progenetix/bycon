@@ -19,7 +19,7 @@ properties:
   time_of_death:
     $ref: timeElement.yaml#/oneOf
   cause_of_death:
-    $ref: ../common/ontologyTerm.yaml
+    $ref: ./ontologyTerm.yaml
   survival_time_in_days:
     description:
       The survival or followup (if ALIVE) time after primary diagnosis. In

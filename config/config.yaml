@@ -28,6 +28,12 @@ arg_defs_path:
 schemas_root:
   - schemas
 
+default_model_path:
+  - schemas
+  - models
+  - json
+  - progenetix-model
+
 schemas_paths:
   description: >-
     path elements as list, from `schemas_root`
@@ -35,10 +41,10 @@ schemas_paths:
     - - models
       - json
       - progenetix-model
-    - - models
-      - json
-      - progenetix-model
-      - common
+    # - - models
+    #   - json
+    #   - progenetix-model
+    #   - common
     - - models
       - json
       - progenetix-service-schemas

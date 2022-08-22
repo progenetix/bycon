@@ -17,7 +17,7 @@ properties:
 
 
   # assay:
-  #   $ref: ../common/ontologyTerm.yaml
+  #   $ref: ./ontologyTerm.yaml
   #   examples:
   #     - id: EFO:0002703
   #       label: SNP array

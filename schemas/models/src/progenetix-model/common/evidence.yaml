@@ -5,7 +5,7 @@ type: object
 properties:
   evidenceCode:
     description: An ontology class that represents the evidence type
-    $ref: ../common/ontologyTerm.yaml
+    $ref: ./ontologyTerm.yaml
     example:
       id: ECO:0006017
       label: author statement from published clinical study used in manual assertion

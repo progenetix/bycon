@@ -11,4 +11,4 @@ oneOf:
   - $ref: ./gestationalAge.yaml
   - $ref: ./commonDefinitions.yaml#/definitions/Timestamp
   - $ref: ./timeInterval.yaml
-  - $ref: ../common/ontologyTerm.yaml
+  - $ref: ./ontologyTerm.yaml

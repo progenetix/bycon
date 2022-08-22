@@ -17,7 +17,7 @@
             "type": "string"
         },
         "exposureCode": {
-            "$ref": "../common/ontologyTerm.json",
+            "$ref": "./ontologyTerm.json",
             "description": "Exposure ID. Value from Environment Exposure Ontology.",
             "examples": [
                 {

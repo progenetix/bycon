@@ -7,7 +7,7 @@
             "$ref": "timeElement.json#/oneOf"
         },
         "bodySite": {
-            "$ref": "../common/ontologyTerm.json",
+            "$ref": "./ontologyTerm.json",
             "description": "Specific body site where the procedure was performed. Recommended valuee from Uber-anatomy ontology (UBERON)",
             "examples": [
                 {
@@ -27,7 +27,7 @@
             "type": "string"
         },
         "procedureCode": {
-            "$ref": "../common/ontologyTerm.json",
+            "$ref": "./ontologyTerm.json",
             "description": "Clinical procedure performed. Recommended values from Medical Action Ontology (MAXO) `Medical action` term tree (MAXO:0000001)",
             "examples": [
                 {

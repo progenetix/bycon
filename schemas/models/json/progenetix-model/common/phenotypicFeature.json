@@ -13,7 +13,7 @@
             "type": "boolean"
         },
         "featureType": {
-            "$ref": "../common/ontologyTerm.json",
+            "$ref": "./ontologyTerm.json",
             "description": "Term denoting the phenotypic feature. Preferably a value from Human Phenotype Ontology (HPO).",
             "examples": [
                 {
@@ -43,7 +43,7 @@
                 }
             ],
             "items": {
-                "$ref": "../common/ontologyTerm.json"
+                "$ref": "./ontologyTerm.json"
             },
             "type": "array"
         },
@@ -61,7 +61,7 @@
             "description": "Age or time at which the feature resolved or abated."
         },
         "severity": {
-            "$ref": "../common/ontologyTerm.json",
+            "$ref": "./ontologyTerm.json",
             "examples": [
                 {
                     "id": "HP:0012828",

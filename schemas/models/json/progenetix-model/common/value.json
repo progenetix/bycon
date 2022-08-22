@@ -6,7 +6,7 @@
             "$ref": "./quantity.json"
         },
         {
-            "$ref": "../common/ontologyTerm.json"
+            "$ref": "./ontologyTerm.json"
         }
     ],
     "title": "Value",

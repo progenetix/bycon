@@ -26,11 +26,10 @@ def main():
 
 def map():
 
-    initialize_service(byc)
     r, e = instantiate_response_and_error(byc, "beaconMapResponse")
     response_meta_set_info_defaults(r, byc)
 
-    m_f = path.join( pkg_path, "schemas", "src", "progenetix-model", "beaconMap.yaml")
+    m_f = path.join( pkg_path, *byc["config"]["default_model_path"], "beaconMap.json")
     beaconMap = load_yaml_empty_fallback( m_f )
 
     r.update( {"response": beaconMap } )

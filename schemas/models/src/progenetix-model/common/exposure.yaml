@@ -6,7 +6,7 @@ type: object
 properties:
   exposureCode:
     description: Exposure ID. Value from Environment Exposure Ontology.
-    $ref: ../common/ontologyTerm.yaml
+    $ref: ./ontologyTerm.yaml
     examples:
       - id: CHEBI:46661
         label: asbestos

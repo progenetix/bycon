@@ -7,7 +7,7 @@ properties:
   assayCode:
     description: >-
       Class that describes the assay used to produce the measurement
-    $ref: ../common/ontologyTerm.yaml
+    $ref: ./ontologyTerm.yaml
     example:
       id: LOINC:26515-7
       label: Platelets [#/volume] in Blood
