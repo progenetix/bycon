@@ -8,6 +8,14 @@ properties:
   g_variant:
     type: object
     properties:
+      variantInternalId:
+        description: >-
+          An id value used for all variant instances of the same composition.
+          In Progenetix this is used to aggregate all the instances of
+          "caseLevelData" variants.
+        type: string
+        pattern: '^\w[\w\:\-\,]+?\w$'
+
       assemblyId:
         $ref: ./requestParametersComponents.yaml#/definitions/Assembly
       referenceName:
@@ -110,14 +118,14 @@ properties:
         examples:
           - BRAF
           - SCN5A
-      aminoacidChange:
-        description: Aminoacid alteration of interest. Format 1 letter
-        type: string
-        examples:
-          - V600E
-          - M734V
-      genomicAlleleShortForm:
-        description: HGVSId descriptor
-        type: string
-        examples:
-          - NM_004006.2:c.4375C>T
+      # aminoacidChange:
+      #   description: Aminoacid alteration of interest. Format 1 letter
+      #   type: string
+      #   examples:
+      #     - V600E
+      #     - M734V
+      # genomicAlleleShortForm:
+      #   description: HGVSId descriptor
+      #   type: string
+      #   examples:
+      #     - NM_004006.2:c.4375C>T

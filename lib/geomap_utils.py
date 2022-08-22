@@ -32,7 +32,7 @@ def read_geomarker_table_web(byc):
         if not re.match(r'^\d+?(?:\.\d+?)?$', item_size):
             item_size = 1
 
-        m_k = "{}::{}::{}".format(group_label, group_lat, group_lon)
+        m_k = "LatLon::{}::{}".format(group_label, group_lat, group_lon)
         if markerType not in ["circle", "marker"]:
             markerType = "circle"
 
@@ -128,7 +128,7 @@ def print_map_from_geolocations(byc, geolocs):
     )
 
 
-    if test_truthy(byc["form_data"]["help"]):
+    if test_truthy(byc["form_data"].get("help", False)):
         t = """
 <h4>Map Configuration</h4>
 <p>The following parameters may be modified by providing alternative values in

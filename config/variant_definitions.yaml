@@ -329,12 +329,21 @@ parameters:
 
 # custom parameters
 
-  _id:
+  # _id:
+  #   type: string
+  #   db_key: _id
+  #   pattern: '^[a-fA-F\d]{24}$'
+  #   description: >
+  #     The internal object id, as string.
+
+  variant_internal_id:
     type: string
-    db_key: _id
-    pattern: '^[a-fA-F\d]{24}$'
+    db_key: variant_internal_id
+    pattern: '^\w[\w\:\-\,]+?\w$'
     description: >
-      The internal object id, as string.
+      An id value used for all variant instances of the same composition.
+      In Progenetix this is used to aggregate all the instances of
+      "caseLevelData" variants.
 
   id:
     type: string

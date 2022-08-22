@@ -14,7 +14,7 @@ from datatable_utils import *
 from handover_generation import *
 from interval_utils import *
 from filter_parsing import *
-from map_utils import *
+from geomap_utils import *
 from publication_utils import *
 from query_execution import *
 from query_generation import *

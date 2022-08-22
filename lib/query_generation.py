@@ -411,8 +411,17 @@ def geo_query( byc ):
     req_type = ""
     for rt in g_p_rts:
         g_p = { }
-        g_q_k = g_p_rts[ rt ]["all_of"]
-        for g_k in g_q_k:
+        min_p_no = 1
+        mat_p_no = 0
+        if "all_of" in g_p_rts[ rt ]:
+            g_q_k = g_p_rts[ rt ]["all_of"]
+            min_p_no = len(g_q_k)
+        elif "one_of" in g_p_rts[ rt ]:
+            g_q_k = g_p_rts[ rt ]["one_of"]
+        else:
+            continue
+
+        for g_k in g_p_defs.keys():
             g_default = None
             if "default" in g_p_defs[ g_k ]:
                 g_default = g_p_defs[ g_k ][ "default" ]
@@ -429,7 +438,10 @@ def geo_query( byc ):
             else:
                 g_p[ g_k ] = g_v
 
-        if len( g_p ) < len( g_q_k ):
+            if g_k in g_q_k:
+                mat_p_no +=1
+
+        if mat_p_no < min_p_no:
             continue
 
         req_type = rt

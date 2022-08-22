@@ -7,14 +7,6 @@
                 "alternateBases": {
                     "$ref": "./requestParametersComponents.json#/definitions/AlternateBases"
                 },
-                "aminoacidChange": {
-                    "description": "Aminoacid alteration of interest. Format 1 letter",
-                    "examples": [
-                        "V600E",
-                        "M734V"
-                    ],
-                    "type": "string"
-                },
                 "assemblyId": {
                     "$ref": "./requestParametersComponents.json#/definitions/Assembly"
                 },
@@ -37,13 +29,6 @@
                     ],
                     "type": "string"
                 },
-                "genomicAlleleShortForm": {
-                    "description": "HGVSId descriptor",
-                    "examples": [
-                        "NM_004006.2:c.4375C>T"
-                    ],
-                    "type": "string"
-                },
                 "mateName": {
                     "$ref": "./requestParametersComponents.json#/definitions/RefSeqId"
                 },
@@ -63,6 +48,11 @@
                     "maxItems": 2,
                     "minItems": 1,
                     "type": "array"
+                },
+                "variantInternalId": {
+                    "description": "An id value used for all variant instances of the same composition. In Progenetix this is used to aggregate all the instances of \"caseLevelData\" variants.",
+                    "pattern": "^\\w[\\w\\:\\-\\,]+?\\w$",
+                    "type": "string"
                 },
                 "variantMaxLength": {
                     "description": "* Maximum length in bases of a genomic variant. * This is an optional parameter without prescribed use. While a length is\n  commonly available for structural variants such as copy number variations,\n  it is recommended that length based queries should also be supported for\n  variants with indicated referenceBases and alternateBases, to enable\n  length-specific wildcard queries.",
