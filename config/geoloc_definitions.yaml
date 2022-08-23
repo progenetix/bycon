@@ -57,7 +57,6 @@ map_params:
   tiles_source: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
   # extra_JS: ""
-  marker_type: 'circle'
   init_latitude: 30
   init_longitude: 9
   zoom: 2
@@ -69,6 +68,7 @@ plot_params:
 
   map_w_px: 800
   map_h_px: 512
+  marker_type: 'circle'
   bubble_stroke_color: '#dd6633'
   bubble_stroke_weight: 1
   bubble_fill_color: '#cc9966'

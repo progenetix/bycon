@@ -95,6 +95,16 @@ def print_map_from_geolocations(byc, geolocs):
       integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
       crossorigin=""></script>
 <script>
+  var circleOptions = {{
+    color: '{}',
+    stroke: true,
+    weight: {},
+    fillColor: '{}',
+    fillOpacity: {},
+    radius: 1000,
+    count: 1
+  }};
+
   var markers = [
 {}
   ];
@@ -118,6 +128,10 @@ def print_map_from_geolocations(byc, geolocs):
         m_p.get("head"),
         p_p.get("map_w_px"),
         p_p.get("map_h_px"),
+        p_p["bubble_stroke_color"],
+        p_p["bubble_stroke_weight"],
+        p_p["bubble_fill_color"],
+        p_p["bubble_opacity"],
         ",\n".join(leaf_markers),
         m_p.get("init_latitude"),
         m_p.get("init_longitude"),
@@ -181,9 +195,9 @@ def map_marker_from_geo_location(byc, geoloc, p_p, m_max_count):
     p = geoloc["geo_location"]["properties"]
     g = geoloc["geo_location"]["geometry"]
 
-    marker = p.get("marker_type", "circle")
-    if m_max_count == 1:
-        marker = "marker"
+    marker = p_p.get("marker_type", "circle")
+    # if m_max_count == 1:
+    #     marker = "marker"
 
     m_max_r = p_p.get("marker_max_r", 1000)
     m_f = int(int(m_max_r) / math.sqrt(4 * m_max_count / math.pi))
@@ -206,22 +220,13 @@ def map_marker_from_geo_location(byc, geoloc, p_p, m_max_count):
 
     map_marker = """
 L.{}([{}, {}], {{
-    color: '{}',
-    stroke: true,
-    weight: {},
-    fillColor: '{}',
-    fillOpacity: {},
-    radius: {},
-    count: {}
+    ...circleOptions,
+    ...{{radius: {}, count: {}}}
 }}).bindPopup("{}")
     """.format(
         marker,
         g["coordinates"][1],
         g["coordinates"][0],
-        p_p["bubble_stroke_color"],
-        p_p["bubble_stroke_weight"],
-        p_p["bubble_fill_color"],
-        p_p["bubble_opacity"],
         size,
         count,
         label
