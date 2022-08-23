@@ -421,12 +421,19 @@ def geo_query( byc ):
         else:
             continue
 
+        all_p = g_p_rts[ rt ].get("any_of", []) + g_q_k
+ 
         for g_k in g_p_defs.keys():
+
+            if g_k not in all_p:
+                continue
+
             g_default = None
             if "default" in g_p_defs[ g_k ]:
                 g_default = g_p_defs[ g_k ][ "default" ]
-            if g_k in byc["form_data"]:
-                g_v = byc["form_data"][g_k]
+            # TODO: ISO lower hack ...
+            if g_k.lower() in byc["form_data"]:
+                g_v = byc["form_data"][g_k.lower()]
             else:
                 g_v = g_default
             if g_v is None:
@@ -454,7 +461,20 @@ def geo_query( byc ):
         geo_q = { "id": re.compile( geo_pars["id"], re.IGNORECASE ) }
 
     if "geoquery" in req_type:
-        geo_q = return_geo_longlat_query(geo_root, geo_pars)
+        geoq_l = [ return_geo_longlat_query(geo_root, geo_pars) ]
+        for g_k in g_p_rts["geoquery"]["any_of"]:
+            if g_k in geo_pars.keys():
+                g_v = geo_pars[g_k]
+                if len(geo_root) > 0:
+                    geopar = ".".join( [geo_root, "properties", g_k] )
+                else:
+                    geopar = ".".join(["properties", g_k])
+                geoq_l.append({ geopar: re.compile( r'^'+str(g_v), re.IGNORECASE ) })
+
+        if len(geoq_l) > 1:
+            geo_q = {"$and": geoq_l }
+        else:
+            geo_q = geoq_l[0]
 
     return geo_q, geo_pars
 
@@ -462,14 +482,21 @@ def geo_query( byc ):
 
 def return_geo_city_query(geo_root, geo_pars):
 
-    if len(geo_root) > 0:
-        citypar = ".".join( (geo_root, "properties", "city") )
-    else:
-        citypar = "properties.city"
+    geoq_l = []
 
-    geo_q = { citypar: re.compile( r'^'+geo_pars["city"], re.IGNORECASE ) }
-    
-    return geo_q
+    for g_k, g_v in geo_pars.items():
+
+        if len(geo_root) > 0:
+            geopar = ".".join( [geo_root, "properties", g_k] )
+        else:
+            geopar = ".".join(["properties", g_k])
+
+        geoq_l.append( { geopar: re.compile( r'^'+str(g_v), re.IGNORECASE ) } )
+
+    if len(geoq_l) > 1:
+        return {"$and": geoq_l }
+    else:
+        return geoq_l[0]
 
 ################################################################################
 
@@ -500,6 +527,8 @@ def return_geo_longlat_query(geo_root, geo_pars):
             )
         }
     }
+
+
 
     return geo_q
 

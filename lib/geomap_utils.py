@@ -32,7 +32,7 @@ def read_geomarker_table_web(byc):
         if not re.match(r'^\d+?(?:\.\d+?)?$', item_size):
             item_size = 1
 
-        m_k = "LatLon::{}::{}".format(group_label, group_lat, group_lon)
+        m_k = "{}::LatLon::{}::{}".format(group_label, group_lat, group_lon)
         if markerType not in ["circle", "marker"]:
             markerType = "circle"
 
@@ -76,13 +76,14 @@ def print_map_from_geolocations(byc, geolocs):
     if not "map" in byc["output"]:
         return
 
-    m_p = update_map_params_from_form(byc)
+    m_p = byc["geoloc_definitions"].get("map_params", {})
+    p_p = update_plot_params_from_form(byc)
     m_max_count = marker_max_from_geo_locations(geolocs)
     
     leaf_markers = []
 
     for geoloc in geolocs:
-        leaf_markers.append( map_marker_from_geo_location(byc, geoloc, m_p, m_max_count) )
+        leaf_markers.append( map_marker_from_geo_location(byc, geoloc, p_p, m_max_count) )
 
     geoMap = """
 {}
@@ -115,18 +116,17 @@ def print_map_from_geolocations(byc, geolocs):
 </script>
     """.format(
         m_p.get("head"),
-        m_p.get("canvas_w_px"),
-        m_p.get("canvas_h_px"),
+        p_p.get("map_w_px"),
+        p_p.get("map_h_px"),
         ",\n".join(leaf_markers),
-        m_p.get("latitude"),
-        m_p.get("longitude"),
+        m_p.get("init_latitude"),
+        m_p.get("init_longitude"),
         m_p.get("zoom"),
         m_p.get("tiles_source"),
-        m_p.get("zoom_min"),
-        m_p.get("zoom_max"),
+        p_p.get("zoom_min"),
+        p_p.get("zoom_max"),
         m_p.get("attribution")
     )
-
 
     if test_truthy(byc["form_data"].get("help", False)):
         t = """
@@ -136,13 +136,11 @@ the URL, e.g. "&canvas_w_px=1024".</p>
 <table>
 """
         t += "<tr><th>Map Parameter</th><th>Value</th></tr>\n"
-        for m_p_k, m_p_v in m_p.items():
-            if not '<' in str(m_p_v):
-                t += "<tr><td>{}</td><td>{}</td></tr>\n".format(m_p_k, m_p_v)
+        for p_p_k, p_p_v in p_p.items():
+            if not '<' in str(p_p_v):
+                t += "<tr><td>{}</td><td>{}</td></tr>\n".format(p_p_k, p_p_v)
         t += "\n</table>"
         geoMap += t
-    # except:
-    #     pass
 
     print("""
 <html>
@@ -153,16 +151,16 @@ the URL, e.g. "&canvas_w_px=1024".</p>
 
 ################################################################################
 
-def update_map_params_from_form(byc):
+def update_plot_params_from_form(byc):
 
-    m_p = byc["geoloc_definitions"].get("map_params", {})
+    p_p = byc["geoloc_definitions"].get("plot_params", {})
 
-    for m_p_k, m_p_v in m_p.items():
+    for p_p_k, p_p_v in p_p.items():
 
-        if m_p_k in byc["form_data"]:
-            m_p.update({m_p_k: byc["form_data"].get(m_p_k, m_p_v)})
+        if p_p_k in byc["form_data"]:
+            p_p.update({p_p_k: byc["form_data"].get(p_p_k, p_p_v)})
 
-    return m_p
+    return p_p
 
 ################################################################################
 
@@ -178,7 +176,7 @@ def marker_max_from_geo_locations(geolocs):
 
 ################################################################################
 
-def map_marker_from_geo_location(byc, geoloc, m_p, m_max_count):
+def map_marker_from_geo_location(byc, geoloc, p_p, m_max_count):
 
     p = geoloc["geo_location"]["properties"]
     g = geoloc["geo_location"]["geometry"]
@@ -187,8 +185,8 @@ def map_marker_from_geo_location(byc, geoloc, m_p, m_max_count):
     if m_max_count == 1:
         marker = "marker"
 
-    m_max_r = m_p.get("marker_max_r", "1000")
-    m_f = int(m_max_r / math.sqrt(4 * m_max_count / math.pi))
+    m_max_r = p_p.get("marker_max_r", 1000)
+    m_f = int(int(m_max_r) / math.sqrt(4 * m_max_count / math.pi))
 
     label = p.get("label", None)
     if label is None:
@@ -204,7 +202,7 @@ def map_marker_from_geo_location(byc, geoloc, m_p, m_max_count):
 
 
     count = float(p.get("marker_count", 1))
-    size = count * m_f * float(m_p.get("marker_scale", 2))
+    size = count * m_f * float(p_p.get("marker_scale", 2))
 
     map_marker = """
 L.{}([{}, {}], {{
@@ -220,10 +218,10 @@ L.{}([{}, {}], {{
         marker,
         g["coordinates"][1],
         g["coordinates"][0],
-        m_p["bubble_stroke_color"],
-        m_p["bubble_stroke_weight"],
-        m_p["bubble_fill_color"],
-        m_p["bubble_opacity"],
+        p_p["bubble_stroke_color"],
+        p_p["bubble_stroke_weight"],
+        p_p["bubble_fill_color"],
+        p_p["bubble_opacity"],
         size,
         count,
         label

@@ -13,7 +13,7 @@ parameters:
     default: 10000
   city:
     type: string
-    pattern: '^\w.{1,126}\w$'
+    pattern: '^\w.{0,126}\w$'
   country:
     type: string
     pattern: '^\w.{1,126}\w$'
@@ -46,11 +46,6 @@ request_types:
       - ISO3166alpha3
       - ISO3166alpha2
       - country
-  country:
-    one_of:
-      - ISO3166alpha3
-      - ISO3166alpha2
-      - country
   id:
     all_of:
       - id
@@ -59,24 +54,28 @@ map_params:
 
   plottype: map
   plotid: map
-  canvas_w_px: 800
-  canvas_h_px: 512
-  bubble_stroke_color: '#dd6633'
-  bubble_stroke_weight: 1
-  bubble_fill_color: '#cc9966'
-  bubble_opacity: 0.4
   tiles_source: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
   # extra_JS: ""
   marker_type: 'circle'
-  marker_scale: 2
-  marker_max_r: 4000
-  latitude: 30
-  longitude: 9
+  init_latitude: 30
+  init_longitude: 9
   zoom: 2
-  zoom_min: 2
-  zoom_max: 12
   head: >-
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
+
+plot_params:
+
+  map_w_px: 800
+  map_h_px: 512
+  bubble_stroke_color: '#dd6633'
+  bubble_stroke_weight: 1
+  bubble_fill_color: '#cc9966'
+  bubble_opacity: 0.4
+  marker_scale: 2
+  marker_max_r: 4000
+  zoom_min: 2
+  zoom_max: 12
+
 
