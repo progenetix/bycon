@@ -431,7 +431,8 @@ def geo_query( byc ):
             g_default = None
             if "default" in g_p_defs[ g_k ]:
                 g_default = g_p_defs[ g_k ][ "default" ]
-            # TODO: ISO lower hack ...
+
+            # TODO: This is an ISO lower hack ...
             if g_k.lower() in byc["form_data"]:
                 g_v = byc["form_data"][g_k.lower()]
             else:
