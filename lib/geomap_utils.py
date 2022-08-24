@@ -61,7 +61,7 @@ def read_geomarker_table_web(byc):
 
         if len(item_label) > 0:
             if "http" in item_link:
-                item_label = "<a href='{}'>{}</a>".format(item_link, item_label)
+                item_label = "<a href='{}' target='_blank'>{}</a>".format(item_link, item_label)
             g_l_p["items"].append(item_label)
 
     for m_k, m_v in markers.items():
@@ -81,14 +81,14 @@ def print_map_from_geolocations(byc, geolocs):
     m_max_count = marker_max_from_geo_locations(geolocs)
     
     leaf_markers = []
-
     for geoloc in geolocs:
         leaf_markers.append( map_marker_from_geo_location(byc, geoloc, p_p, m_max_count) )
+    markersJS = create_marker_layer(leaf_markers)
 
     geoMap = """
-{}
 <!-- map needs to exist before we load leaflet -->
-<div id="map-canvas" style="width: {}px; height: {}px;"></div>
+{}
+<div id="{}" style="width: {}px; height: {}px;"></div>
 
 <!-- Make sure you put this AFTER Leaflet's CSS -->
 <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
@@ -105,14 +105,9 @@ def print_map_from_geolocations(byc, geolocs):
     count: 1
   }};
 
-  var markers = [
-{}
-  ];
-  var markersGroup = L.featureGroup(markers);
-
   // Create the map.
 
-  var map = L.map('map-canvas', {{ renderer: L.svg() }} ).setView([{}, {}], {});
+  var map = L.map('{}', {{ renderer: L.svg() }} ).setView([{}, {}], {});
 
   L.tileLayer('{}', {{
       minZoom: {},
@@ -120,26 +115,27 @@ def print_map_from_geolocations(byc, geolocs):
       attribution: '{}'
   }}).addTo(map);
 
-  map.addLayer(markersGroup);
-  map.fitBounds(markersGroup.getBounds().pad(0.05));
+{}
 
 </script>
     """.format(
         m_p.get("head"),
+        m_p.get("id"),
         p_p.get("map_w_px"),
         p_p.get("map_h_px"),
         p_p["bubble_stroke_color"],
         p_p["bubble_stroke_weight"],
         p_p["bubble_fill_color"],
         p_p["bubble_opacity"],
-        ",\n".join(leaf_markers),
+        m_p.get("id"),
         m_p.get("init_latitude"),
         m_p.get("init_longitude"),
         m_p.get("zoom"),
         m_p.get("tiles_source"),
         p_p.get("zoom_min"),
         p_p.get("zoom_max"),
-        m_p.get("attribution")
+        m_p.get("attribution"),
+        markersJS
     )
 
     if test_truthy(byc["form_data"].get("help", False)):
@@ -162,6 +158,24 @@ the URL, e.g. "&canvas_w_px=1024".</p>
 </html>""".format(geoMap))
 
     exit()
+
+################################################################################
+
+def create_marker_layer(leaf_markers):
+
+    markersJS = ""
+
+    if len(leaf_markers) > 0:
+        markersJS = """
+  var markers = [
+{}
+  ];
+  var markersGroup = L.featureGroup(markers);
+  map.addLayer(markersGroup);
+  map.fitBounds(markersGroup.getBounds().pad(0.05));
+""".format(",\n".join(leaf_markers))
+
+    return markersJS
 
 ################################################################################
 
