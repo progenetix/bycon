@@ -120,14 +120,14 @@ def print_map_from_geolocations(byc, geolocs):
 </script>
     """.format(
         m_p.get("head"),
-        m_p.get("id"),
+        m_p.get("plotid"),
         p_p.get("map_w_px"),
         p_p.get("map_h_px"),
         p_p["bubble_stroke_color"],
         p_p["bubble_stroke_weight"],
         p_p["bubble_fill_color"],
         p_p["bubble_opacity"],
-        m_p.get("id"),
+        m_p.get("plotid"),
         m_p.get("init_latitude"),
         m_p.get("init_longitude"),
         m_p.get("zoom"),
