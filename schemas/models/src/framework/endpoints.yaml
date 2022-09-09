@@ -1,0 +1,151 @@
+openapi: 3.0.2
+servers: []
+info:
+  version: 2.0.0
+  title: GA4GH Beacon API Specification
+  description: A Beacon is a web service for genetic data sharing that can be queried
+    for  information about variants, individuals, biosamples, and other entities.
+  contact:
+    email: beacon@ga4gh.org
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /:
+    parameters:
+      - $ref: '#/components/parameters/requestedSchema'
+    get:
+      description: Get information about the beacon
+      operationId: getBeaconRoot
+      tags:
+        - Informational endpoints
+      responses:
+        '200':
+          $ref: '#/components/responses/infoOKResponse'
+        default:
+          description: An unsuccessful operation.
+          $ref: ./responses/beaconErrorResponse.json
+  /info:
+    parameters:
+      - $ref: '#/components/parameters/requestedSchema'
+    get:
+      description: Get information about the beacon
+      operationId: getBeaconInfoRoot
+      tags:
+        - Informational endpoints
+      responses:
+        '200':
+          $ref: '#/components/responses/infoOKResponse'
+        default:
+          description: An unsuccessful operation.
+          $ref: ./responses/beaconErrorResponse.json
+  /service-info:
+    get:
+      description: Get information about the beacon using GA4GH ServiceInfo format
+      operationId: getBeaconServiceInfo
+      tags:
+        - Informational endpoints
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: ./responses/ga4gh-service-info-1-0-0-schema.json
+  /configuration:
+    get:
+      description: TBD
+      operationId: getBeaconConfiguration
+      tags:
+        - Configuration
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                description: Response of a request for information about a Beacon
+                $ref: ./responses/beaconConfigurationResponse.json
+        default:
+          description: An unsuccessful operation.
+          $ref: ./responses/beaconErrorResponse.json
+  /map:
+    get:
+      description: TBD
+      operationId: getBeaconMap
+      tags:
+        - Configuration
+      parameters: []
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                description: Response of a request for information about a Beacon
+                $ref: ./responses/beaconMapResponse.json
+        default:
+          description: An unsuccessful operation.
+          $ref: ./responses/beaconErrorResponse.json
+  /entry_types:
+    get:
+      description: TBD
+      operationId: getEntryTypes
+      tags:
+        - Configuration
+      parameters: []
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                description: Response of a request for information about a Beacon
+                $ref: ./responses/beaconEntryTypesResponse.json
+        default:
+          description: An unsuccessful operation.
+          $ref: ./responses/beaconErrorResponse.json
+  /filtering_terms:
+    parameters:
+      - $ref: '#/components/parameters/skip'
+      - $ref: '#/components/parameters/limit'
+    get:
+      description: Get the list of filtering terms handled by this beacon
+      operationId: getFilteringTerms
+      tags:
+        - Informational endpoints
+      responses:
+        '200':
+          $ref: ./responses/beaconFilteringTermsResponse.json
+        default:
+          description: An unsuccessful operation.
+          $ref: ./responses/beaconErrorResponse.json
+components:
+  responses:
+    infoOKResponse:
+      description: Successful operation.
+      content:
+        application/json:
+          schema:
+            description: Response of a request for information about a Beacon.
+            $ref: ./responses/beaconInfoResponse.json
+  parameters:
+    requestedSchema:
+      name: requestedSchema
+      description: Schema to be used to format the `result` field in the resposne.
+        The response will use Beacon format.
+      in: query
+      required: false
+      schema:
+        type: string
+      example: ga4gh-service-info-v1.0
+    skip:
+      name: skip
+      in: query
+      schema:
+        $ref: ./common/beaconCommonComponents.json#/definitions/Skip
+    limit:
+      name: limit
+      in: query
+      schema:
+        $ref: ./common/beaconCommonComponents.json#/definitions/Limit

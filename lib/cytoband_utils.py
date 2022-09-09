@@ -182,7 +182,6 @@ def bands_from_cytobands(chr_bands, byc):
     cb_to = end_bands[-1]["i"] + 1
 
     matched = byc["cytobands"][cb_from:cb_to]
-    chroband = cytobands_label(matched)
  
     return matched, chro, int( matched[0]["start"] ), int( matched[-1]["end"]), error
 
@@ -215,7 +214,8 @@ def cytobands_label( cytobands ):
 
     if len(cytobands) > 0:
 
-        cb_label = cytobands[0]["chro"]+cytobands[0]["cytoband"]
+        # cb_label = cytobands[0]["chro"]+cytobands[0]["cytoband"]
+        cb_label = cytobands[0]["cytoband"]
         if len( cytobands ) > 1:
             cb_label = cb_label+cytobands[-1]["cytoband"]
 
@@ -305,6 +305,49 @@ def deparse_ISCN_to_variants(iscn, technique, byc):
                 variants.append(v)
 
     return variants, " :: ".join(errors)
+
+################################################################################
+
+def cytobands_label_from_positions(byc, chro, start, end):
+
+    cytobands, chro, start, end = cytobands_list_from_positions(byc, chro, start, end)
+    cbl = cytobands_label( cytobands )
+
+    return cbl
+
+################################################################################
+
+def bands_from_chrobases(byc):
+
+    chr_bases = byc["variant_pars"]["chro_bases"]
+    cb_pat = re.compile( byc["variant_definitions"]["parameters"]["chro_bases"]["pattern"] )
+    chro, cb_start, cb_end = cb_pat.match(chr_bases).group(2,3,5)
+
+    cytobands_list_from_positions(byc, chro, cb_start, cb_end)
+
+################################################################################
+
+def cytobands_list_from_positions(byc, chro, start=None, end=None):
+
+    if start:
+        start = int(start)
+        if not end:
+            end = start + 1
+        end = int(end)
+
+    cytobands = list(filter(lambda d: d[ "chro" ] == chro, byc["cytobands"]))
+    if start == None:
+        start = 0
+    if end == None:
+        end = int( cytoBands[-1]["end"] )
+
+    if isinstance(start, int):
+        cytobands = list(filter(lambda d: int(d[ "end" ]) > start, cytobands))
+
+    if isinstance(end, int):
+        cytobands = list(filter(lambda d: int(d[ "start" ]) < end, cytobands))
+
+    return cytobands, chro, start, end
 
 ################################################################################
 

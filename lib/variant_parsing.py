@@ -82,8 +82,7 @@ def get_variant_request_type(byc):
 
     """podmd
     This method guesses the type of variant request, based on the complete
-    fulfillment of the required parameters (all of `all_of`, at least one of
-    `one_of`).
+    fulfillment of the required parameters (all of `all_of`, one if `one_of`).
     In case of multiple types the one with most matched parameters is prefered.
     This may be changed to using a pre-defined request type and using this as
     completeness check only.

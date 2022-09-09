@@ -409,6 +409,7 @@ def geo_query( byc ):
     geo_root = byc["geoloc_definitions"]["geo_root"]
 
     req_type = ""
+    # TODO: Make this modular & fix the one_of interpretation to really only 1
     for rt in g_p_rts:
         g_p = { }
         min_p_no = 1
@@ -478,6 +479,17 @@ def geo_query( byc ):
             geo_q = geoq_l[0]
 
     return geo_q, geo_pars
+
+################################################################################
+
+# def check_one_of(opt, props, pars):
+
+#     if not "one_of" in opt:
+#         return
+
+#     check = False
+
+#     return check
 
 ################################################################################
 
