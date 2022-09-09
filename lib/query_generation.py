@@ -43,6 +43,8 @@ def generate_queries(byc):
     _update_queries_from_hoid( byc)
     _purge_empty_queries( byc )
 
+    # prjsoncam(byc["queries"])
+
     return byc
 
 ################################################################################
@@ -233,9 +235,7 @@ def _update_queries_from_filters(byc):
 
     for f in filters:
 
-
         f_val = f["id"]
-        print(f_val)
         f_desc = f.get("includeDescendantTerms", f_desc)
         f_scope = f.get("scope", False)
 
@@ -254,7 +254,6 @@ def _update_queries_from_filters(byc):
                             "child_terms": [f["id"]]
                         }
                         f_desc = False
-
         if f_info is None:
             continue
 
@@ -410,15 +409,33 @@ def geo_query( byc ):
     geo_root = byc["geoloc_definitions"]["geo_root"]
 
     req_type = ""
+    # TODO: Make this modular & fix the one_of interpretation to really only 1
     for rt in g_p_rts:
         g_p = { }
-        g_q_k = g_p_rts[ rt ]["all_of"]
-        for g_k in g_q_k:
+        min_p_no = 1
+        mat_p_no = 0
+        if "all_of" in g_p_rts[ rt ]:
+            g_q_k = g_p_rts[ rt ]["all_of"]
+            min_p_no = len(g_q_k)
+        elif "one_of" in g_p_rts[ rt ]:
+            g_q_k = g_p_rts[ rt ]["one_of"]
+        else:
+            continue
+
+        all_p = g_p_rts[ rt ].get("any_of", []) + g_q_k
+ 
+        for g_k in g_p_defs.keys():
+
+            if g_k not in all_p:
+                continue
+
             g_default = None
             if "default" in g_p_defs[ g_k ]:
                 g_default = g_p_defs[ g_k ][ "default" ]
-            if g_k in byc["form_data"]:
-                g_v = byc["form_data"][g_k]
+
+            # TODO: This is an ISO lower hack ...
+            if g_k.lower() in byc["form_data"]:
+                g_v = byc["form_data"][g_k.lower()]
             else:
                 g_v = g_default
             if g_v is None:
@@ -430,7 +447,10 @@ def geo_query( byc ):
             else:
                 g_p[ g_k ] = g_v
 
-        if len( g_p ) < len( g_q_k ):
+            if g_k in g_q_k:
+                mat_p_no +=1
+
+        if mat_p_no < min_p_no:
             continue
 
         req_type = rt
@@ -443,22 +463,53 @@ def geo_query( byc ):
         geo_q = { "id": re.compile( geo_pars["id"], re.IGNORECASE ) }
 
     if "geoquery" in req_type:
-        geo_q = return_geo_longlat_query(geo_root, geo_pars)
+        geoq_l = [ return_geo_longlat_query(geo_root, geo_pars) ]
+        for g_k in g_p_rts["geoquery"]["any_of"]:
+            if g_k in geo_pars.keys():
+                g_v = geo_pars[g_k]
+                if len(geo_root) > 0:
+                    geopar = ".".join( [geo_root, "properties", g_k] )
+                else:
+                    geopar = ".".join(["properties", g_k])
+                geoq_l.append({ geopar: re.compile( r'^'+str(g_v), re.IGNORECASE ) })
+
+        if len(geoq_l) > 1:
+            geo_q = {"$and": geoq_l }
+        else:
+            geo_q = geoq_l[0]
 
     return geo_q, geo_pars
 
 ################################################################################
 
+# def check_one_of(opt, props, pars):
+
+#     if not "one_of" in opt:
+#         return
+
+#     check = False
+
+#     return check
+
+################################################################################
+
 def return_geo_city_query(geo_root, geo_pars):
 
-    if len(geo_root) > 0:
-        citypar = ".".join( (geo_root, "properties", "city") )
-    else:
-        citypar = "properties.city"
+    geoq_l = []
 
-    geo_q = { citypar: re.compile( r'^'+geo_pars["city"], re.IGNORECASE ) }
-    
-    return geo_q
+    for g_k, g_v in geo_pars.items():
+
+        if len(geo_root) > 0:
+            geopar = ".".join( [geo_root, "properties", g_k] )
+        else:
+            geopar = ".".join(["properties", g_k])
+
+        geoq_l.append( { geopar: re.compile( r'^'+str(g_v), re.IGNORECASE ) } )
+
+    if len(geoq_l) > 1:
+        return {"$and": geoq_l }
+    else:
+        return geoq_l[0]
 
 ################################################################################
 
@@ -489,6 +540,8 @@ def return_geo_longlat_query(geo_root, geo_pars):
             )
         }
     }
+
+
 
     return geo_q
 

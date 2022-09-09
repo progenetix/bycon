@@ -40,7 +40,7 @@ def cytomapper():
         cytoBands, chro, start, end, error = bands_from_cytobands(byc["variant_pars"]["cyto_bands"], byc)
         byc["service_response"]["meta"]["received_request_summary"].update({ "cytoBands": byc["variant_pars"]["cyto_bands"] })
     elif "chro_bases" in byc["variant_pars"]:
-        cytoBands, chro, start, end = _bands_from_chrobases(byc)
+        cytoBands, chro, start, end = bands_from_chrobases(byc)
         byc["service_response"]["meta"]["received_request_summary"].update({ "chroBases": byc["variant_pars"]["chro_bases"] })
 
     cb_label = cytobands_label( cytoBands )
@@ -102,35 +102,6 @@ def cytomapper():
 
     populate_service_response( byc, results)
     cgi_print_response( byc, 200 )
-
-################################################################################
-
-def _bands_from_chrobases( byc ):
-
-    chr_bases = byc["variant_pars"]["chro_bases"]
-    cb_pat = re.compile( byc["variant_definitions"]["parameters"]["chro_bases"]["pattern"] )
-
-    chro, cb_start, cb_end = cb_pat.match(chr_bases).group(2,3,5)
-    if cb_start:
-        cb_start = int(cb_start)
-        if not cb_end:
-            cb_end = cb_start + 1
-        cb_end = int(cb_end)
-
-    cytobands = list(filter(lambda d: d[ "chro" ] == chro, byc["cytobands"]))
-    if cb_start == None:
-        cb_start = 0
-    if cb_end == None:
-        cb_end = int( cytoBands[-1]["end"] )
-
-    if isinstance(cb_start, int):
-        cytobands = list(filter(lambda d: int(d[ "end" ]) > cb_start, cytobands))
-
-    if isinstance(cb_end, int):
-        cytobands = list(filter(lambda d: int(d[ "start" ]) < cb_end, cytobands))
-
-    return cytobands, chro, cb_start, cb_end
-
 
 ################################################################################
 ################################################################################

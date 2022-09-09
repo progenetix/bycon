@@ -1,0 +1,36 @@
+{
+    "$id": "https://progenetix.org/services/schemas/ancestry/v2021-11-12",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "meta": {
+        "provenance": [
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            }
+        ],
+        "used_by": [
+            {
+                "description": "Progenetix database schema (Beacon+ backend)",
+                "id": "https://github.com/progenetix/schemas/"
+            }
+        ]
+    },
+    "properties": {
+        "ancestry": {
+            "$ref": "./ontologyTerm.json"
+        },
+        "confidenceScore": {
+            "format": "float",
+            "type": "number"
+        },
+        "description": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "ancestry"
+    ],
+    "title": "Ancestry",
+    "type": "object"
+}

@@ -1,4 +1,5 @@
 geo_root: 'provenance.geo_location'
+
 parameters:
   geo_latitude:
     type: float
@@ -12,19 +13,68 @@ parameters:
     default: 10000
   city:
     type: string
+    pattern: '^\w.{0,126}\w$'
+  country:
+    type: string
     pattern: '^\w.{1,126}\w$'
   id:
     type: string
     pattern: '^\w+?(\:\:\w+?)?$'
+  ISO3166alpha2:
+    type: string
+    pattern: '^\w\w$'
+  ISO3166alpha3:
+    type: string
+    pattern: '^\w\w\w$'
+
 request_types:
+
+# TODO: combinations, e.g. w/ ISO3166alpha3
   geoquery:
     all_of:
       - geo_latitude
       - geo_longitude
       - geo_distance
+    any_of:
+      - ISO3166alpha3
+      - ISO3166alpha2
+      - country
   city:
     all_of:
       - city
+    any_of:
+      - ISO3166alpha3
+      - ISO3166alpha2
+      - country
   id:
     all_of:
       - id
+
+map_params:
+
+  plotid: map-canvas
+  tiles_source: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+  # extra_JS: ""
+  init_latitude: 30
+  init_longitude: 9
+  zoom: 2
+  head: >-
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
+
+plot_params:
+
+  map_w_px: 800
+  map_h_px: 512
+  marker_type: 'circle'
+  bubble_stroke_color: '#dd6633'
+  bubble_stroke_weight: 1
+  bubble_fill_color: '#cc9966'
+  bubble_opacity: 0.4
+  marker_scale: 2
+  marker_max_r: 1000
+  zoom_min: 2
+  zoom_max: 14
+
+

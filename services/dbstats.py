@@ -35,6 +35,7 @@ def dbstats():
     initialize_service(byc)
     select_dataset_ids(byc)
 
+
     if "statsNumber" in byc["form_data"]:
         s_n = byc["form_data"]["stats_number"]
         try:
@@ -46,6 +47,7 @@ def dbstats():
                 byc["stats_number"] = s_n
 
     create_empty_service_response(byc)
+    # exit()
 
     ds_stats = dbstats_return_latest(byc)
 

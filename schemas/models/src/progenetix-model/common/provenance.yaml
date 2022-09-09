@@ -1,0 +1,29 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/provenance/v2021-11-12
+title: Provenance
+meta:
+  provenance:
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+  used_by:
+    - description: "Progenetix database schema (Beacon+ backend)"
+      id: 'https://github.com/progenetix/schemas/'
+  sb_status: community
+description: >
+  The Provenance class is the wrapper object for schemas informing about technical, geographic or collection associated origin of a higher oreder object such as an Individual or Biosample.
+properties:
+  geo_location:
+    $ref: GeoLocation.yaml
+
+
+  # assay:
+  #   $ref: ./ontologyTerm.yaml
+  #   examples:
+  #     - id: EFO:0002703
+  #       label: SNP array
+  #     - id: EFO:0010938
+  #       label: large-insert clone DNA microarray
+  #     - id: EFO:0010939
+  #       label: oligonucleotide DNA microarray
+  #     - id: EFO:0010937
+  #       label: comparative genomic hybridization (CGH)

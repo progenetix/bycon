@@ -65,11 +65,13 @@ def generate_genomic_intervals(byc):
             if end >= p_max:
                 arm = "q"
             size = end - start
+
             intervals.append( {
                     "no": i,
                     "id": "{}{}:{}-{}".format(chro, arm, start, end),
                     "reference_name": chro,
                     "arm": arm,
+                    "cytobands": cytobands_label_from_positions(byc, chro, start, end),
                     "start": start,
                     "end": end,
                     "size": size
@@ -94,6 +96,7 @@ def generate_cytoband_intervals(byc):
                 "no": int(cb["i"]),
                 "id": "{}:{}-{}".format(cb["chro"], cb["start"], cb["end"]),
                 "reference_name": cb["chro"],
+                "cytobands": cb["cytoband"],
                 "start": int(cb["start"]),
                 "end": int(cb["end"]),
                 "size": int(cb["end"]) - int(cb[ "start"])
@@ -112,18 +115,10 @@ def interval_cnv_arrays(v_coll, query, byc):
     c_l = byc["cytolimits"]
     intervals = byc["genomic_intervals"]
 
-    # print(intervals[0])
-    # exit()
-
     cov_labs = { "DUP": 'dup', "DEL": 'del' }
     val_labs = { "DUP": 'max', "DEL": 'min' }
 
-    # vrs_cnv_map = {}
-    # for efo, maps in efo_vrs.items():
-    #     vrs_cnv_map.update({maps["relative_copy_class"]: maps["DUPDEL"]})
-
     int_no = len(intervals)
-    proto = [0 for i in range(int_no)] 
 
     maps = {
         "interval_count": int_no,
@@ -131,9 +126,9 @@ def interval_cnv_arrays(v_coll, query, byc):
     }
 
     for cov_lab in cov_labs.values():
-        maps.update({cov_lab: proto.copy()})
+        maps.update({cov_lab: [0 for i in range(int_no)] })
     for val_lab in val_labs.values():
-        maps.update({val_lab: proto.copy()})
+        maps.update({val_lab: [0 for i in range(int_no)] })
 
     cnv_stats = {
         "cnvcoverage": 0,

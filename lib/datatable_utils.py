@@ -37,17 +37,19 @@ def export_datatable_download(results, byc):
     for pgxdoc in results:
         line = [ ]
         for p, k in io_params.items():
+            t = k.get("type", "string")
             v = get_nested_value(pgxdoc, k["db_key"])
             if isinstance(v, list):
                 line.append("::".join(v))
             else:
-                if "integer" in k["type"]:
+                if "integer" in t:
                     v = int(v)
                 line.append(str(v))
 
         for par, d in io_prefixes.items():
 
-            if "string" in d["type"]:
+            t = k.get("type", "string")
+            if "string" in t:
                 if par in pgxdoc:
                     try:
                         line.append(str(pgxdoc[par]["id"]))
@@ -60,7 +62,7 @@ def export_datatable_download(results, byc):
                 else:
                     line.append("")
                     line.append("")
-            elif "array" in d["type"]:
+            elif "array" in t:
                 for pre in d["pres"]:
                     status = False
                     for o in pgxdoc[par]:
@@ -88,6 +90,8 @@ def import_datatable_dict_line(byc, parent, fieldnames, line, primary_scope="bio
     io_params = byc["datatable_mappings"]["io_params"][primary_scope]
     io_prefixes = byc["datatable_mappings"]["io_prefixes"][primary_scope]
 
+    ios = list(io_params.keys()) + list(io_prefixes.keys())
+
     pref_array_values = {}
     for f_n in fieldnames:
         v = line[f_n].strip()
@@ -95,8 +99,12 @@ def import_datatable_dict_line(byc, parent, fieldnames, line, primary_scope="bio
         if "#"in f_n:
             continue
 
-        if f_n not in list(io_params.keys()) + list(io_prefixes.keys()):
+        if f_n not in ios:
             continue
+
+        if len(v) < 1:
+            if f_n in io_params.keys():
+                v = io_params[f_n].get("default", "")
 
         if len(v) < 1:
             continue
@@ -126,9 +134,9 @@ def import_datatable_dict_line(byc, parent, fieldnames, line, primary_scope="bio
 
         if par in io_params.keys():
             db_key = io_params[par]["db_key"]
-            parameter_type = io_params[par]["type"]
+            parameter_type = io_params[par].get("type", "string")
 
-            assign_nested_value(parent, db_key, v, parameter_type="string")
+            assign_nested_value(parent, db_key, v, parameter_type)
 
     for l_k, pre_item in pref_array_values.items():
         if not l_k in parent:
@@ -174,7 +182,7 @@ def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
 
     if len(ps) == 1:
         if "array" in parameter_type:
-            parent.update({ps[0]: [ v ]})
+            parent.update({ps[0]: v.split(',')})
         else:
             parent.update({ps[0]: v })
         return parent
@@ -183,7 +191,7 @@ def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
         parent.update({ps[0]: {}})
     if len(ps) == 2:
         if "array" in parameter_type:
-            parent[ ps[0] ].update({ps[1]: [ v ]})
+            parent[ ps[0] ].update({ps[1]: v.split(',')})
         else:
             parent[ ps[0] ].update({ps[1]: v })
         return parent
@@ -192,7 +200,7 @@ def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
         parent[ ps[0] ].update({ps[1]: {}})
     if len(ps) == 3:
         if "array" in parameter_type:
-            parent[ ps[0] ][ ps[1] ].update({ps[2]: [ v ]})
+            parent[ ps[0] ][ ps[1] ].update({ps[2]: v.split(',')})
         else:
             parent[ ps[0] ][ ps[1] ].update({ps[2]: v })
         return parent
@@ -202,7 +210,7 @@ def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
         parent[ ps[0] ][ ps[1] ].update({ps[2]: {}})
     if len(ps) == 4:
         if "array" in parameter_type:
-            parent[ ps[0] ][ ps[1] ][ ps[2] ].update({ps[3]: [ v ]})
+            parent[ ps[0] ][ ps[1] ][ ps[2] ].update({ps[3]: v.split(',')})
         else:
             parent[ ps[0] ][ ps[1] ][ ps[2] ].update({ps[3]: v })
         return parent

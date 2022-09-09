@@ -16,6 +16,9 @@ from beaconServer import *
 """podmd
 * <https://progenetix.org/services/geolocations?city=zurich>
 * <https://progenetix.org/services/geolocations?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
+* <https://progenetix.org/services/geolocations?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000&output=map>
+* <http://progenetix.org/services/geolocations?bubble_stroke_weight=0&marker_scale=5&canvas_w_px=1000&file=https://raw.githubusercontent.com/progenetix/pgxMaps/main/rsrc/locationtest.tsv&debug=&output=map&help=true>
+* <http://progenetix.org/cgi/bycon/services/geolocations.py?city=New&ISO3166alpha2=UK&output=map&markerType=marker>
 podmd"""
 
 ################################################################################
@@ -37,17 +40,25 @@ def geolocations():
     
     create_empty_service_response(byc)
 
-    query, geo_pars = geo_query( byc )
-    for g_k, g_v in geo_pars.items():
-        response_add_received_request_summary_parameter(byc, g_k, g_v)
+    # TODO: move the map table reading to a sane place 
+    if "file" in byc["form_data"]:
+        results = read_geomarker_table_web(byc)
 
-    if len(query.keys()) < 1:
-        response_add_error(byc, 422, "No query generated - missing or malformed parameters" )
-    
-    cgi_break_on_errors(byc)
+    else:
 
-    results, e = mongo_result_list( byc["dataset_ids"][0], byc["geo_coll"], query, { '_id': False } )
-    response_add_error(byc, 422, e)
+        query, geo_pars = geo_query( byc )
+        for g_k, g_v in geo_pars.items():
+            response_add_received_request_summary_parameter(byc, g_k, g_v)
+
+        if len(query.keys()) < 1:
+            response_add_error(byc, 422, "No query generated - missing or malformed parameters" )
+        
+        cgi_break_on_errors(byc)
+
+        results, e = mongo_result_list( byc["dataset_ids"][0], byc["geo_coll"], query, { '_id': False } )
+        response_add_error(byc, 422, e)
+
+    print_map_from_geolocations(byc, results)
 
     if len(results) == 1:
         if "geo_distance" in byc["form_data"]:

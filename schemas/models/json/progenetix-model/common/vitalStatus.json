@@ -1,0 +1,38 @@
+{
+    "$id": "https://progenetix.org/services/schemas/vitalStatus/v2021-12-02",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "This element can be used to report whether the individual is living or dead at the timepoint when the phenopacket was created (or if the status is unknown). Source: Phenopackets v2, with modifications",
+    "properties": {
+        "cause_of_death": {
+            "$ref": "./ontologyTerm.json"
+        },
+        "followup_time": {
+            "description": "The followup after the diagnosis of the primary disease, as ISO 8601 duration. This is the primary value which is also represented - if existing - through the `survival_time_in_days` attribute (for compatibility with Phenopackets v2).",
+            "examples": [
+                "P11Y2M",
+                "P33D"
+            ],
+            "type": "string"
+        },
+        "status": {
+            "enum": [
+                "UNKNOWN_STATUS",
+                "ALIVE",
+                "DECEASED"
+            ],
+            "type": "string"
+        },
+        "survival_time_in_days": {
+            "description": "The survival or followup (if ALIVE) time after primary diagnosis. In the Progenetix Beacon this is a duplicate representation of the `followup_time` ISO 8601 value.",
+            "type": "integer"
+        },
+        "time_of_death": {
+            "$ref": "timeElement.json#/oneOf"
+        }
+    },
+    "required": [
+        "status"
+    ],
+    "title": "VitalStatus",
+    "type": "object"
+}

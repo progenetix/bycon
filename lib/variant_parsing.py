@@ -13,7 +13,8 @@ def parse_variant_parameters(byc):
 
     variant_pars = { }
     v_p_defs = byc["variant_definitions"]["parameters"]
-    v_t_defs = byc["variant_definitions"]["variant_types"]
+    v_t_als = byc["variant_definitions"]["variant_state_aliases"]
+    v_t_defs = byc["variant_definitions"]["variant_states"]
 
     for p_k in v_p_defs.keys():
         v_default = None
@@ -34,21 +35,17 @@ def parse_variant_parameters(byc):
         if not p_k in v_p_defs.keys():
             continue
         v_p = variant_pars[ p_k ]
-        if "array" in v_p_defs[ p_k ]["type"]:
+        if "variant_type" in p_k:
+            if v_p in v_t_als:
+                v_t_k = v_t_als[v_p]
+                v_p_c[ p_k ] = { "$in": v_t_defs[v_t_k]["child_terms"] }
+        elif "array" in v_p_defs[ p_k ]["type"]:
             v_l = set()
             for v in v_p:
-                if "variant_type" in p_k:
-                    if v in v_t_defs.keys():
-                        v_l.add( v )
-                elif re.compile( v_p_defs[ p_k ][ "items" ][ "pattern" ] ).match( str( v ) ):
+                if re.compile( v_p_defs[ p_k ][ "items" ][ "pattern" ] ).match( str( v ) ):
                     if "integer" in v_p_defs[ p_k ][ "items" ][ "type" ]:
                         v = int( v )
                     v_l.add( v )
-            if "variant_type" in p_k:
-                v_t_l = set()
-                for v_t in list(v_l):
-                    v_t_l.update(v_t_defs[v_t]["child_terms"])
-                v_l = v_t_l
             v_p_c[ p_k ] = sorted( list(v_l) )
         else:
             if re.compile( v_p_defs[ p_k ][ "pattern" ] ).match( str( v_p ) ):
@@ -57,6 +54,7 @@ def parse_variant_parameters(byc):
                 v_p_c[ p_k ] = v_p
 
     byc.update( { "variant_pars": v_p_c } )
+
 
     return byc
 
@@ -84,8 +82,7 @@ def get_variant_request_type(byc):
 
     """podmd
     This method guesses the type of variant request, based on the complete
-    fulfillment of the required parameters (all of `all_of`, at least one of
-    `one_of`).
+    fulfillment of the required parameters (all of `all_of`, one if `one_of`).
     In case of multiple types the one with most matched parameters is prefered.
     This may be changed to using a pre-defined request type and using this as
     completeness check only.

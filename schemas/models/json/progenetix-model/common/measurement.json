@@ -1,0 +1,64 @@
+{
+    "$id": "https://progenetix.org/services/schemas/measurement/v2021-11-12",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "description": "Definition of a measurement class.",
+    "properties": {
+        "assayCode": {
+            "$ref": "./ontologyTerm.json",
+            "description": "Class that describes the assay used to produce the measurement",
+            "example": {
+                "id": "LOINC:26515-7",
+                "label": "Platelets [#/volume] in Blood"
+            }
+        },
+        "date": {
+            "description": "Date of measurement.",
+            "format": "date-time",
+            "type": "string"
+        },
+        "measurementValue": {
+            "description": "The result of the measurement",
+            "oneOf": [
+                {
+                    "$ref": "value.json#/oneOf"
+                },
+                {
+                    "$ref": "complexValue.json"
+                }
+            ]
+        },
+        "notes": {
+            "description": "Unstructured text to describe this measurement.",
+            "example": "Some free text",
+            "type": "string"
+        },
+        "observationMoment": {
+            "$ref": "timeElement.json#/oneOf",
+            "description": "Moment in time at which measurement was performed. Recommended.",
+            "examples": [
+                {
+                    "age": {
+                        "iso8601duration": "P53Y8M"
+                    }
+                }
+            ]
+        },
+        "procedure": {
+            "$ref": "procedure.json",
+            "description": "Clinical procedure performed to acquire the sample used for the measurement.",
+            "example": {
+                "code": {
+                    "id": "NCIT:C5189",
+                    "label": "Radical Cystoprostatectomy"
+                }
+            }
+        }
+    },
+    "required": [
+        "assayCode",
+        "measurementValue"
+    ],
+    "title": "Measurement",
+    "type": "object"
+}

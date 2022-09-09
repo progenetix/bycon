@@ -35,7 +35,18 @@ def boolean_to_mongo_logic( logic="AND" ):
 def select_this_server( byc ):
 
     s_uri = str(environ.get('SCRIPT_URI'))
-    if "https:" in s_uri:
+    # print(s_uri)
+
+    if "progenetix.test" in s_uri:
+        if "https:" in s_uri:
+            return "https://progenetix.test"
+        else:
+            return "http://progenetix.test" 
+
+    # TODO: ERROR hack for https/http mix, CORS...
+    # ... since cloudflare provides https mapping
+    # if "https:" in s_uri:
+    if "http:" in s_uri:
         return "https://"+str(environ.get('HTTP_HOST'))
     else:
         return "http://"+str(environ.get('HTTP_HOST'))
@@ -43,68 +54,86 @@ def select_this_server( byc ):
 ################################################################################
 
 def cgi_parse_query(byc):
+    
+    r_m = environ.get('REQUEST_METHOD', '')
+    if "POST" in r_m:
+        cgi_parse_POST(byc)
+    else:
+        cgi_parse_GET(byc)
+
+################################################################################
+
+def cgi_parse_POST(byc):
 
     content_len = environ.get('CONTENT_LENGTH', '0')
     content_typ = environ.get('CONTENT_TYPE', '')
-    r_m = environ.get('REQUEST_METHOD', '')
 
     defs = byc.get("beacon_defaults", {})
-
     form = {}
 
-    if "POST" in r_m:
-        body = sys.stdin.read(int(content_len))
+    body = sys.stdin.read(int(content_len))
+    # TODO: catch error & return for non-json posts
+    if "json" in content_typ:
+        jbod = json.loads(body)
+        if "debug" in jbod:
+            if jbod["debug"] > 0:                 
+                byc.update({"debug_mode": set_debug_state(1)})
 
-        if "json" in content_typ:
-            jbod = json.loads(body)
-            if "debug" in jbod:
-                if jbod["debug"] > 0:                 
-                    byc.update({"debug_mode": set_debug_state(1)})
+        # TODO: this hacks the v2 structure; ideally should use requestParameters schemas
+        if "query" in jbod:
+            for p, v in jbod["query"].items():
+                if p == "requestParameters":
+                    for rp, rv in v.items():
+                        rp_d = decamelize(rp)
+                        if "datasets" in rp:
+                            if "datasetIds" in rv:
+                                form.update({"dataset_ids": rv["datasetIds"]})
+                        elif "g_variant" in rp:
+                            for vp, vv in v[rp].items():
+                                vp_d = decamelize(vp)
+                                form.update({vp_d: vv})
+                        else:
+                            form.update({rp_d: rv})
+                else:
+                    p_d = decamelize(p)
+                    form.update({p_d: v})
 
-            # TODO: this hacks the v2b4 structure
-            if "query" in jbod:
-                for p, v in jbod["query"].items():
-                    if p == "requestParameters":
-                        for rp, rv in v.items():
-                            rp_d = decamelize(rp)
-                            if "datasets" in rp:
-                                if "datasetIds" in rp["datasets"]:
-                                    form.update({rp_d: rp["datasets"]["datasetIds"]})
-                            else:
-                                form.update({rp_d: rv})
-                    else:
-                        p_d = decamelize(p)
-                        form.update({p_d: v})
+        # TODO: define somewhere else with proper defaults
+        form.update({
+            "requested_granularity": jbod.get("requestedGranularity", defs.get("requested_granularity", "record")),
+            "include_resultset_responses": jbod.get("includeResultsetResponses", defs.get("include_resultset_responses", "HIT")),
+            "include_handovers": jbod.get("includeHandovers", defs.get("include_handovers", False)),
+            "filters": jbod.get("filters", [] )
+        })
+        # print(form)
+        # exit()
 
-            # TODO: define somewhere else with proper defaults
-            form.update({
-                "requested_granularity": jbod.get("requestedGranularity", defs.get("requested_granularity", "record")),
-                "include_resultset_responses": jbod.get("includeResultsetResponses", defs.get("include_resultset_responses", "HIT")),
-                "include_handovers": jbod.get("includeHandovers", defs.get("include_handovers", False)),
-                "filters": jbod.get("filters", [] )
-            })
+        # transferring pagination where existing to standard form values
+        pagination = jbod.get("pagination", {})
+        for p_k in ["skip", "limit"]:
+            if p_k in pagination:
+                if re.match(r'^\d+$', str(pagination[p_k])):
+                    form.update({p_k: pagination[p_k]})
+        byc.update({
+            "form_data": form,
+            "query_meta": jbod.get("meta", {})
+        })
 
-            # transferring pagination where existing to standard form values
-            pagination = jbod.get("pagination", {})
-            for p_k in ["skip", "limit"]:
-                if p_k in pagination:
-                    if re.match(r'^\d+$', pagination[p_k]):
-                        form.update({p_k: pagination[p_k]})
-            byc.update({
-                "form_data": form,
-                "query_meta": jbod.get("meta", {})
-            })
+    return byc
 
-        return byc
+################################################################################
 
-    # else GET processing
+def cgi_parse_GET(byc):
+
+    defs = byc.get("beacon_defaults", {})
+    form = {}
 
     byc.update({"debug_mode": set_debug_state()})
     get = cgi.FieldStorage()
 
     for p in get:
         p_d = decamelize(p)
-        if p in byc["config"]["form_list_pars"]:
+        if p in byc["config"]["form_list_pars"]["items"]:
             form.update({p_d: form_return_listvalue( get, p )})
         else:
             v = get.getvalue(p)
@@ -135,15 +164,6 @@ def cgi_parse_query(byc):
     byc.update({ "form_data": form })
     
     return byc
-
-################################################################################
-
-# def _form_from_POST(jbod, byc):
-
-    
-
-
-
 
 ################################################################################
 
@@ -487,7 +507,7 @@ def prjsonnice(this):
 
 def decamelize_words(j_d):
 
-    de_cams = ["sequenceId", "relativeCopyClass", "speciesId", "chromosomeLocation", "genomicLocation"]
+    de_cams = ["gVariants", "sequenceId", "relativeCopyClass", "speciesId", "chromosomeLocation", "genomicLocation"]
     for d in de_cams:
         j_d = re.sub(r"\b{}\b".format(d), humps.decamelize(d), j_d)
 

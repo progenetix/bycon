@@ -57,9 +57,12 @@ io_params:
     death:
       db_key: info.death
       type: string
-    followup_months:
-      db_key: info.followup_months
-      type: string
+    followup_state_id:
+      db_key: followup_state.id
+      default: 'EFO:0030039'
+    followup_state_label:
+      db_key: followup_state.label
+      default: no followup status
     followup_time:
       db_key: followup_time
       type: string
@@ -68,9 +71,6 @@ io_params:
       type: string
     recurrence_time:
       db_key: info.recurrence_time
-      type: string
-    geoprov_label:
-      db_key: provenance.geo_location.properties.label
       type: string
     geoprov_city:
       db_key: provenance.geo_location.properties.city
@@ -107,6 +107,12 @@ io_params:
       type: string
     platform_id:
       db_key: analysis_info.platform_id
+      type: string
+    cell_line_id:
+      db_key: cell_line.id
+      type: string
+    cell_line_label:
+      db_key: cell_line.label
       type: string
 
   individual:
@@ -147,9 +153,6 @@ io_params:
     auxiliary_disease_notes:
       db_key: auxiliary_disease.notes
       type: string
-    geoprov_label:
-      db_key: provenance.geo_location.properties.label
-      type: string
     geoprov_city:
       db_key: provenance.geo_location.properties.city
       type: string
@@ -165,9 +168,15 @@ io_params:
     geoprov_long:
       db_key: provenance.geo_location.properties.longitude
       type: float
+    cell_line_donation_id:
+      db_key: info.cell_line_donation.id
+      type: string
+    cell_line_donation_label:
+      db_key: info.cell_line_donation.label
+      type: string
 
   analysis:
-    id:
+    analysis_id:
       db_key: id
       type: string
     biosample_id:
@@ -193,7 +202,7 @@ io_params:
       type: string
 
   variant:
-    id:
+    variant_id:
       db_key: id
       type: string
     variant_internal_id:

@@ -57,7 +57,7 @@ def args_update_form(byc):
 		if arg_vars[p] is None:
 			continue
 		p_d = decamelize(p)
-		if p in byc["config"]["form_list_pars"]:
+		if p in byc["config"]["form_list_pars"]["items"]:
 			byc["form_data"].update({p_d: arg_vars[p].split(',') })
 		else:
 			byc["form_data"].update({p_d: arg_vars[p]})

@@ -39,7 +39,6 @@ def cohorts():
     run_beacon_init_stack(byc)
     return_filtering_terms_response(byc)
 
-
     _return_cohorts_response(byc)
 
     run_result_sets_beacon(byc)

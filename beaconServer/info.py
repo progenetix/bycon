@@ -27,7 +27,6 @@ def main():
 
 def info():
 
-    initialize_service(byc)
     r, e = instantiate_response_and_error(byc, "beaconInfoResponse")
     response_meta_set_info_defaults(r, byc)
 

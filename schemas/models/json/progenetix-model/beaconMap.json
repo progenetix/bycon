@@ -1,0 +1,164 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "endpointSets": {
+        "analysis": {
+            "endpoints": {
+                "genomicVariant": {
+                    "returnedEntryType": "genomicVariant",
+                    "url": "https://progenetix.org/beacon/analyses/{id}/g_variants"
+                }
+            },
+            "entryType": "analysis",
+            "filteringTermsUrl": "https://progenetix.org/beacon/filtering_terms",
+            "openAPIEndpointsDefinition": "https://progenetix.org/services/endpoints/analyses",
+            "rootUrl": "https://progenetix.org/beacon/analyses",
+            "singleEntryUrl": "https://progenetix.org/beacon/analyses/{id}"
+        },
+        "biosample": {
+            "endpoints": {
+                "analysis": {
+                    "returnedEntryType": "analysis",
+                    "url": "https://progenetix.org/beacon/biosamples/{id}/analyses"
+                },
+                "genomicVariant": {
+                    "returnedEntryType": "genomicVariant",
+                    "url": "https://progenetix.org/beacon/biosamples/{id}/g_variants"
+                },
+                "run": {
+                    "returnedEntryType": "run",
+                    "url": "https://progenetix.org/beacon/biosamples/{id}/runs"
+                }
+            },
+            "entryType": "biosample",
+            "filteringTermsUrl": "https://progenetix.org/beacon/filtering_terms",
+            "openAPIEndpointsDefinition": "https://progenetix.org/services/endpoints/biosamples",
+            "rootUrl": "https://progenetix.org/beacon/biosamples",
+            "singleEntryUrl": "https://progenetix.org/beacon/biosamples/{id}"
+        },
+        "cohort": {
+            "endpoints": {
+                "analyses": {
+                    "returnedEntryType": "analysis",
+                    "url": "https://progenetix.org/beacon/cohorts/{id}/analyses"
+                },
+                "biosample": {
+                    "returnedEntryType": "biosample",
+                    "url": "https://progenetix.org/beacon/cohorts/{id}/biosamples"
+                },
+                "genomicVariant": {
+                    "returnedEntryType": "genomicVariant",
+                    "url": "https://progenetix.org/beacon/cohorts/{id}/g_variants"
+                },
+                "individual": {
+                    "returnedEntryType": "individual",
+                    "url": "https://progenetix.org/beacon/cohorts/{id}/individuals"
+                },
+                "runs": {
+                    "returnedEntryType": "run",
+                    "url": "https://progenetix.org/beacon/cohorts/{id}/runs"
+                }
+            },
+            "entryType": "cohort",
+            "filteringTermsUrl": "https://progenetix.org/beacon/filtering_terms",
+            "openAPIEndpointsDefinition": "https://progenetix.org/services/endpoints/cohorts",
+            "rootUrl": "https://progenetix.org/beacon/cohorts",
+            "singleEntryUrl": "https://progenetix.org/beacon/cohorts/{id}"
+        },
+        "dataset": {
+            "endpoints": {
+                "analyses": {
+                    "returnedEntryType": "analysis",
+                    "url": "https://progenetix.org/beacon/datasets/{id}/analyses"
+                },
+                "biosample": {
+                    "returnedEntryType": "biosample",
+                    "url": "https://progenetix.org/beacon/datasets/{id}/biosamples"
+                },
+                "genomicVariant": {
+                    "returnedEntryType": "genomicVariant",
+                    "url": "https://progenetix.org/beacon/datasets/{id}/g_variants"
+                },
+                "individual": {
+                    "returnedEntryType": "individual",
+                    "url": "https://progenetix.org/beacon/datasets/{id}/individuals"
+                },
+                "runs": {
+                    "returnedEntryType": "run",
+                    "url": "https://progenetix.org/beacon/datasets/{id}/runs"
+                }
+            },
+            "entryType": "dataset",
+            "filteringTermsUrl": "https://progenetix.org/beacon/filtering_terms",
+            "openAPIEndpointsDefinition": "https://progenetix.org/services/endpoints/datasets",
+            "rootUrl": "https://progenetix.org/beacon/datasets",
+            "singleEntryUrl": "https://progenetix.org/beacon/datasets/{id}"
+        },
+        "genomicVariant": {
+            "endpoints": {
+                "analyses": {
+                    "returnedEntryType": "analysis",
+                    "url": "https://progenetix.org/beacon/g_variants/{id}/analyses"
+                },
+                "biosample": {
+                    "returnedEntryType": "biosample",
+                    "url": "https://progenetix.org/beacon/g_variants/{id}/biosamples"
+                },
+                "individual": {
+                    "returnedEntryType": "individual",
+                    "url": "https://progenetix.org/beacon/g_variants/{id}/individuals"
+                },
+                "runs": {
+                    "returnedEntryType": "run",
+                    "url": "https://progenetix.org/beacon/g_variants/{id}/runs"
+                }
+            },
+            "entryType": "genomicVariant",
+            "filteringTermsUrl": "https://progenetix.org/beacon/filtering_terms",
+            "openAPIEndpointsDefinition": "https://progenetix.org/services/endpoints/genomicVariations",
+            "rootUrl": "https://progenetix.org/beacon/g_variants",
+            "singleEntryUrl": "https://progenetix.org/beacon/g_variants/{id}"
+        },
+        "individual": {
+            "endpoints": {
+                "analyses": {
+                    "returnedEntryType": "analysis",
+                    "url": "https://progenetix.org/beacon/individuals/{id}/analyses"
+                },
+                "biosample": {
+                    "returnedEntryType": "biosample",
+                    "url": "https://progenetix.org/beacon/individuals/{id}/biosamples"
+                },
+                "genomicVariant": {
+                    "returnedEntryType": "genomicVariant",
+                    "url": "https://progenetix.org/beacon/individuals/{id}/g_variants"
+                },
+                "runs": {
+                    "returnedEntryType": "run",
+                    "url": "https://progenetix.org/beacon/individuals/{id}/runs"
+                }
+            },
+            "entryType": "individual",
+            "filteringTermsUrl": "https://progenetix.org/beacon/filtering_terms",
+            "openAPIEndpointsDefinition": "https://progenetix.org/services/endpoints/individuals",
+            "rootUrl": "https://progenetix.org/beacon/individuals",
+            "singleEntryUrl": "https://progenetix.org/beacon/individuals/{id}"
+        },
+        "run": {
+            "endpoints": {
+                "analysis": {
+                    "returnedEntryType": "analysis",
+                    "url": "https://progenetix.org/beacon/runs/{id}/analyses"
+                },
+                "genomicVariant": {
+                    "returnedEntryType": "genomicVariant",
+                    "url": "https://progenetix.org/beacon/runs/{id}/g_variants"
+                }
+            },
+            "entryType": "run",
+            "filteringTermsUrl": "https://progenetix.org/beacon/filtering_terms",
+            "openAPIEndpointsDefinition": "https://progenetix.org/services/endpoints/runs",
+            "rootUrl": "https://progenetix.org/beacon/runs",
+            "singleEntryUrl": "https://progenetix.org/beacon/runs/{id}"
+        }
+    }
+}

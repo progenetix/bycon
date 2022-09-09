@@ -1,0 +1,172 @@
+{
+    "$id": "https://progenetix.org/services/schemas/individual/v2022-05-04",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "properties": {
+        "ancestries": {
+            "items": {
+                "$ref": "../common/ancestry.json"
+            },
+            "type": "array"
+        },
+        "auxiliaryDiseases": {
+            "$note": "special for Beacon+ instead of diseases",
+            "description": "These are additional diseases, e.g. germline syndromes (\"Li-Fraumeni\" ...).",
+            "examples": [
+                {
+                    "disease_code": {
+                        "id": "NCIT:C3476",
+                        "label": "Li-Fraumeni Syndrome"
+                    }
+                }
+            ],
+            "items": {
+                "$ref": "../common/disease.json"
+            },
+            "type": "array"
+        },
+        "dataUseConditions": {
+            "$ref": "../../framework/common/ontologyTerm.json",
+            "examples": [
+                {
+                    "id": "DUO:0000004",
+                    "label": "no restriction"
+                }
+            ]
+        },
+        "dateOfBirth": {
+            "examples": [
+                "1967-11-11",
+                "2002-09-21"
+            ],
+            "format": "date-time",
+            "type": "string"
+        },
+        "description": {
+            "examples": [
+                "HapMap project contributor"
+            ],
+            "type": "string"
+        },
+        "ethnicities": {
+            "$note": "forward-looking in Beacon+ as an array",
+            "items": {
+                "$ref": "../common/commonDefinitions.json#/definitions/Ethnicity"
+            },
+            "type": "array"
+        },
+        "exposures": {
+            "items": {
+                "$ref": "../common/exposure.json"
+            },
+            "type": "array"
+        },
+        "externalReferences": {
+            "examples": [
+                {
+                    "description": "HapMap individual",
+                    "id": "biosample:SAME122868"
+                },
+                {
+                    "id": "PMID:9950502"
+                },
+                {
+                    "description": "Prognostic analysis of mantle cell lymphoma genomes",
+                    "id": "geo:GSE13331"
+                }
+            ],
+            "items": {
+                "$ref": "../common/externalReference.json"
+            },
+            "type": "array"
+        },
+        "geographicOrigin": {
+            "$ref": "../common/commonDefinitions.json#/definitions/GeographicLocation"
+        },
+        "id": {
+            "description": "The resource-local identifier for this individual.",
+            "examples": [
+                "pgxind-kftx25eh"
+            ],
+            "type": "string"
+        },
+        "indexDisease": {
+            "$note": "special for Beacon+ instead of diseases",
+            "$ref": "../common/disease.json",
+            "description": "This is the main (cancer) disease analyzed by the associated biosample(s)."
+        },
+        "info": {
+            "description": "Additional structured data which may not be common across different Beacon instances.",
+            "type": "object"
+        },
+        "interventionsOrProcedures": {
+            "items": {
+                "$ref": "../common/procedure.json"
+            },
+            "type": "array"
+        },
+        "karyotypicSex": {
+            "description": "Chromosomal sex of an individual as being used by Phenopackets. Following the definition there",
+            "enum": [
+                "UNKNOWN_KARYOTYPE",
+                "XX",
+                "XY",
+                "XO",
+                "XXY",
+                "XXX",
+                "XXYY",
+                "XXXY",
+                "XXXX",
+                "XYY",
+                "OTHER_KARYOTYPE"
+            ],
+            "type": "string"
+        },
+        "measures": {
+            "items": {
+                "$ref": "../common/measurement.json"
+            },
+            "type": "array"
+        },
+        "pedigrees": {
+            "items": {
+                "$ref": "../common/pedigree.json"
+            },
+            "type": "array"
+        },
+        "phenotypicFeatures": {
+            "items": {
+                "$ref": "../common/phenotypicFeature.json"
+            },
+            "type": "array"
+        },
+        "provenance": {
+            "$ref": "../common/provenance.json"
+        },
+        "sex": {
+            "$ref": "../common/commonDefinitions.json#/definitions/Sex"
+        },
+        "treatments": {
+            "items": {
+                "$ref": "../common/treatment.json"
+            },
+            "type": "array"
+        },
+        "updated": {
+            "examples": [
+                "2020-09-10T17:44:10.170Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+        },
+        "vitalStatus": {
+            "$ref": "../common/vitalStatus.json"
+        }
+    },
+    "required": [
+        "id",
+        "sex"
+    ],
+    "title": "Individual",
+    "type": "object"
+}

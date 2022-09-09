@@ -2,7 +2,7 @@
 
 http://progenetix.org/beacon/variants/?referenceName=NC_000017.11&start=7577120&referenceBases=G&alternateBases=A&debug=1
 
-https://progenetix.org/beacon/variants/?filters=NCIT:C7712&output=pgxseg&debug=1
+https://progenetix.org/beacon/g_variants/?filters=NCIT:C7712&output=pgxseg&debug=1
 
 https://progenetix.org/beacon/callsets/?referenceName=17&variantType=DEL&start=5000000&start=7676592&end=7669607&end=10000000&filters=cellosaurus&output=pgxmatrix&debug=1
 

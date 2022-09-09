@@ -1,0 +1,22 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/ancestry/v2021-11-12
+title: Ancestry
+meta:
+  provenance:
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+  used_by:
+    - description: "Progenetix database schema (Beacon+ backend)"
+      id: 'https://github.com/progenetix/schemas/'
+type: object
+required:
+  - ancestry
+properties:
+  ancestry:
+    $ref: ./ontologyTerm.yaml
+  description:
+    type: string
+  confidenceScore:
+    type: number
+    format: float
+additionalProperties: false

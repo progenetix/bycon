@@ -14,11 +14,13 @@
             "datasets": {
                 "datasetIds": ["progenetix"]
             },
-            "assemblyId": "GRCh38",
-            "referenceName": "9",
-            "start": [21500001, 21975098],
-            "end": [21967753, 22500000], 
-            "variantType": "DEL"
+            "g_variant": {
+                "assemblyId": "GRCh38",
+                "referenceName": "9",
+                "start": [21500001, 21975098],
+                "end": [21967753, 22500000], 
+                "variantType": "DEL"
+            }
         }
     },
     "pagination": {
@@ -28,5 +30,5 @@
     "filters": [
         { "id": "NCIT:C3058" }
     ],
-    "debug": 1
+    "debug": 0
 }
