@@ -39,7 +39,7 @@ io_params:
     sampled_tissue_id:
       db_key: sampled_tissue.id
       type: string
-    sampled_tissue_id:
+    sampled_tissue_label:
       db_key: sampled_tissue.label
       type: string
     tnm:
@@ -54,9 +54,6 @@ io_params:
     age_iso:
       db_key: time_of_collection.age.iso8601duration
       type: string
-    death:
-      db_key: info.death
-      type: string
     followup_state_id:
       db_key: followup_state.id
       default: 'EFO:0030039'
@@ -66,12 +63,12 @@ io_params:
     followup_time:
       db_key: followup_time
       type: string
-    recurrence:
-      db_key: info.recurrence
-      type: string
-    recurrence_time:
-      db_key: info.recurrence_time
-      type: string
+    # recurrence:
+    #   db_key: info.recurrence
+    #   type: string
+    # recurrence_time:
+    #   db_key: info.recurrence_time
+    #   type: string
     geoprov_city:
       db_key: provenance.geo_location.properties.city
       type: string
@@ -143,6 +140,18 @@ io_params:
       type: string
     index_disease_notes:
       db_key: index_disease.notes
+      type: string
+    index_disease_followup_time:
+      db_key: index_disease.followup_time
+      type: string
+    index_disease_followup_state_id:
+      db_key: index_disease.followup_state.id
+      type: string
+    index_disease_followup_state_label:
+      db_key: index_disease.followup_state.label
+      type: string
+    index_disease_followup_time:
+      db_key: index_disease.followup_time
       type: string
     auxiliary_disease_id:
       db_key: auxiliary_disease.disease_code.id

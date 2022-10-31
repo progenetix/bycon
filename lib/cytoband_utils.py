@@ -1,8 +1,9 @@
-import csv
-import re
+import csv, datetime, re, time, base36
 from os import path, pardir
 
 # local
+from variant_parsing import variant_create_digest
+
 bycon_lib_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( bycon_lib_path, pardir )
 
@@ -251,12 +252,33 @@ def translate_reference_ids(byc):
 
 ################################################################################
 
-def deparse_ISCN_to_variants(iscn, technique, byc):
+def variants_from_revish(bs_id, cs_id, technique, iscn, byc):
+
+    v_s, v_e = deparse_ISCN_to_variants(iscn, byc)
+    variants = []
+
+    for v in v_s:
+
+        v.update({
+            "id": generate_id("pgxvar"),
+            "variant_internal_id": variant_create_digest(v, byc),
+            "biosample_id": bs_id,
+            "callset_id": cs_id,
+            "updated": datetime.datetime.now().isoformat()
+        })
+
+        variants.append(v)
+
+    return variants, v_e
+
+################################################################################
+
+def deparse_ISCN_to_variants(iscn, byc):
 
     iscn = "".join(iscn.split())
     variants = []
     vd = byc["variant_definitions"]
-    cb_pat = re.compile( vd["parameters"]["cytoBands"]["pattern"] )
+    cb_pat = re.compile( vd["parameters"]["cyto_bands"]["pattern"] )
     errors = []
 
     for cnv_t, cnv_defs in vd["cnv_iscn_defs"].items():
@@ -283,22 +305,34 @@ def deparse_ISCN_to_variants(iscn, technique, byc):
                 t = cnv_t
                 v = cnv_defs.copy()
 
-                cytostring = "{}({})".format(cnv_t, i_v)
+                cytostring = "{}({})".format(cnv_t, i_v).lower()
 
                 if "AMP" in cnv_t and v_l > vd["amp_max_size"]:
                     t = "HLDUP"
                     v = vd["cnv_iscn_defs"][t].copy()
+
+                v_s = {}
                
                 v.update({
-                    "reference_name": chro,
-                    "start": start,
-                    "end": end,
                     "type": "RelativeCopyNumber",
+                    "location": {
+                        "sequence_id": vd["refseq_aliases"][chro],
+                        "type": 'SequenceLocation',
+                        "interval": {
+                            "start": {
+                                "type": 'Number',
+                                "value": start
+                            },
+                            "end": {
+                                "type": 'Number',
+                                "value": end
+                            }
+                        }
+                    },
                     "info": {
                         "ISCN": cytostring,
                         "var_length": v_l,
-                        "cnv_value": vd["cnv_dummy_values"][t],
-                        "provenance": technique+" ISCN conversion"
+                        "cnv_value": vd["cnv_dummy_values"][t]
                     }
                 })
 
@@ -350,4 +384,9 @@ def cytobands_list_from_positions(byc, chro, start=None, end=None):
     return cytobands, chro, start, end
 
 ################################################################################
+
+def generate_id(prefix):
+
+    time.sleep(.001)
+    return '{}-{}'.format(prefix, base36.dumps(int(time.time() * 1000))) ## for time in ms
 

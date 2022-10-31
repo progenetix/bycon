@@ -29,7 +29,7 @@ def export_variants_download(ds_id, byc):
 
 ################################################################################
 
-def print_pgx_column_header(ds_id, ds_results, byc):
+def stream_pgx_meta_header(ds_id, ds_results, byc):
 
     if not "pgxseg" in byc["output"] and not "pgxmatrix" in byc["output"]:
         return
@@ -58,8 +58,6 @@ def print_pgx_column_header(ds_id, ds_results, byc):
         h_d = bs.get("histological_diagnosis", {})
         h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, h_d.get("id", "NA"), h_d.get("label", "NA"), h_d.get("id", "NA"), h_d.get("label", "NA"))
         print(h_line)
-
-    print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type", "reference_bases", "alternate_bases" ) )
 
     return
 
@@ -99,7 +97,8 @@ def export_pgxseg_download(ds_id, byc):
     if test_truthy( byc["form_data"].get("paginate_results", True) ):
         v__ids = paginate_list(v__ids, byc)
 
-    print_pgx_column_header(ds_id, ds_results, byc)
+    stream_pgx_meta_header(ds_id, ds_results, byc)
+    print_pgxseg_header_line()
 
     for v_id in v__ids:
         v = v_coll.find_one( { "_id": v_id} )
@@ -110,6 +109,24 @@ def export_pgxseg_download(ds_id, byc):
 ################################################################################
 
 def print_variant_pgxseg(v, byc):
+
+    print( pgxseg_variant_line(v, byc) )
+
+################################################################################
+
+def print_pgxseg_header_line():
+
+    print( pgxseg_header_line() )
+
+################################################################################
+
+def pgxseg_header_line():
+
+    return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type", "reference_bases", "alternate_bases" )
+
+################################################################################
+
+def pgxseg_variant_line(v, byc):
 
     drop_fields = ["_id", "info"]
 
@@ -135,8 +152,7 @@ def print_variant_pgxseg(v, byc):
     if not "alternate_bases" in v:
         v["alternate_bases"] = "."
 
-    print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(v["biosample_id"], v["reference_name"], v["start"], v["end"], v["log2"], v["variant_type"], v["reference_bases"], v["alternate_bases"]) )
-
+    return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(v["biosample_id"], v["reference_name"], v["start"], v["end"], v["log2"], v["variant_type"], v["reference_bases"], v["alternate_bases"])
 
 ################################################################################
 

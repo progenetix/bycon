@@ -141,6 +141,8 @@ def remap_biosamples(r_s_res, byc):
     if not "biosample" in byc["response_entity_id"]:
         return r_s_res
 
+    bs_pop_keys = ["_id", "followup_state", "followup_time"] # "info"
+
     for bs_i, bs_r in enumerate(r_s_res):
 
         # TODO: REMOVE VERIFIER HACKS
@@ -157,6 +159,9 @@ def remap_biosamples(r_s_res, byc):
                         r_s_res[bs_i].pop(f)
             except:
                 pass
+
+        for k in bs_pop_keys:
+            r_s_res[bs_i].pop(k)
 
     return r_s_res
 
@@ -196,7 +201,7 @@ def phenopack_individual(ind, data_db, byc):
 
     pxf_bios = []
     ind_pop_keys = ["_id", "provenance", "external_references", "description", "info"]
-    bios_pop_keys = ["info", "provenance", "_id", "followup_time", "followup_state", "cohorts", "icdo_morphology", "icdo_topography"]
+    bs_pop_keys = ["info", "provenance", "_id", "followup_time", "followup_state", "cohorts", "icdo_morphology", "icdo_topography"]
 
     pxf_resources = _phenopack_resources(byc)
     server = select_this_server( byc )
@@ -216,7 +221,7 @@ def phenopack_individual(ind, data_db, byc):
                 }
             ]
         })
-        for k in bios_pop_keys:
+        for k in bs_pop_keys:
             bios.pop(k, None)
 
         clean_empty_fields(bios)
@@ -347,8 +352,8 @@ def normalize_variant_values_for_export(v, byc, drop_fields=None):
     if v["log2"] == False:
         drop_fields.append("log2")
 
-    v["start"] = int(v["start"])
-    v["end"] = int(v["end"])
+    for i_k in ["start", "end"]:
+        v.update({ i_k: int( v[i_k] ) })
 
     for d_f in drop_fields:   
         v.pop(d_f, None)

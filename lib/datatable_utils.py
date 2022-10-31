@@ -1,5 +1,46 @@
-import re
+import csv, re, requests
 from cgi_parsing import prjsonnice
+
+################################################################################
+
+def read_tsv_to_dictlist(filepath, max_count=0):
+
+    dictlist = []
+
+    with open(filepath, newline='') as csvfile:
+    
+        data = csv.DictReader(filter(lambda row: row[0]!='#', csvfile), delimiter="\t", quotechar='"')
+        fieldnames = list(data.fieldnames)
+
+        for l in data:
+            dictlist.append(dict(l))
+
+    if max_count > 0:
+        if max_count < len(dictlist):
+            dictlist = randomSamples(dictlist, k=max_count)
+
+    return dictlist, fieldnames
+
+################################################################################
+
+def read_www_tsv_to_dictlist(www, max_count=0):
+
+    dictlist = []
+
+    with requests.Session() as s:
+        download = s.get(www)
+        decoded_content = download.content.decode('utf-8')    
+        data = csv.DictReader(filter(lambda row: row[0]!='#', decoded_content.splitlines()), delimiter="\t", quotechar='"')
+        fieldnames = list(data.fieldnames)
+
+        for l in data:
+            dictlist.append(dict(l))
+
+    if max_count > 0:
+        if max_count < len(dictlist):
+            dictlist = randomSamples(dictlist, k=max_count)
+
+    return dictlist, fieldnames
 
 ################################################################################
 
@@ -23,7 +64,8 @@ def export_datatable_download(results, byc):
 
     if not "local" in byc["env"]:
         print('Content-Type: text/tsv')
-        print('Content-Disposition: attachment; filename='+byc["response_entity_id"]+'.tsv')
+        if byc["download_mode"] is True:
+            print('Content-Disposition: attachment; filename='+byc["response_entity_id"]+'.tsv')
         print('status: 200')
         print()
 
@@ -85,7 +127,7 @@ def export_datatable_download(results, byc):
 
 ################################################################################
 
-def import_datatable_dict_line(byc, parent, fieldnames, line, primary_scope="biosample"):
+def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="biosample"):
 
     io_params = byc["datatable_mappings"]["io_params"][primary_scope]
     io_prefixes = byc["datatable_mappings"]["io_prefixes"][primary_scope]
@@ -93,14 +135,16 @@ def import_datatable_dict_line(byc, parent, fieldnames, line, primary_scope="bio
     ios = list(io_params.keys()) + list(io_prefixes.keys())
 
     pref_array_values = {}
+
     for f_n in fieldnames:
-        v = line[f_n].strip()
 
         if "#"in f_n:
             continue
 
         if f_n not in ios:
             continue
+
+        v = lineobj[f_n].strip()
 
         if len(v) < 1:
             if f_n in io_params.keys():

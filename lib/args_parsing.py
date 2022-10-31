@@ -3,7 +3,7 @@ from humps import decamelize
 
 ################################################################################
 
-def get_bycon_args(byc, argdeffile=None):
+def get_bycon_args(byc):
 
 	if byc.get("check_args", False) is False:
 		return byc
@@ -14,31 +14,25 @@ def get_bycon_args(byc, argdeffile=None):
 	if not "local" in byc["env"]:
 		return byc
 
-	if argdeffile is None:
-		argdeffile =  os.path.join( byc["pkg_path"], *byc["config"]["arg_defs_path"] )
-
-	with open( argdeffile ) as a_h:
-		argdefs = yaml.load( a_h , Loader=yaml.FullLoader)
-
 	if byc["script_args"]:
-		a_k_s = list(argdefs.keys())
+		a_k_s = list(byc["argument_definitions"].keys())
 		for a_d_k in a_k_s:
 			if a_d_k not in byc["script_args"]:
-				argdefs.pop(a_d_k, None)
+				byc["argument_definitions"].pop(a_d_k, None)
 	
-	create_args_parser(byc, **argdefs)
+	create_args_parser(byc)
 
 	return byc
 
 ################################################################################
 
-def create_args_parser(byc, **argdefs):
+def create_args_parser(byc):
 
 	if not "local" in byc["env"]:
 		return byc
 
 	parser = argparse.ArgumentParser()
-	for d_k, defs in argdefs.items():
+	for d_k, defs in byc["argument_definitions"].items():
 		parser.add_argument(*defs.pop("flags"), **defs)
 	byc.update({ "args": parser.parse_args() })
 

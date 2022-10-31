@@ -25,37 +25,20 @@ from schema_parsing import *
 
 ################################################################################
 
-def initialize_bycon():
+def initialize_bycon(config):
 
-    # TODO: Define this in a schema?
+    b_r_p = config.get("byc_root_pars", {})
 
     byc =  {
-        "args": None,
-        "env": "server",
         "pkg_path": pkg_path,
-        "bycon_lib_path": bycon_lib_path,
-        "request_path_root": "beacon",
-        "request_entity_path_id": None,
-        "request_entity_path_id_value": None,
-        "response_entity_path_id": None,
-        "request_entity_id": None,
-        "response_entity_id": None,
-        "response_entity": {},
-        "service_config": {},
-        "filters": [],
-        "method": "",
-        "output": "",
-        "form_data": {},
-        "query_meta": {},
-        "original_queries": None,
-        "script_args": [],
-        "include_handovers": False,
-        "empty_query_all_count": False,
-        "test_mode": False,
-        "check_args": True,
-        "debug_mode": False,  
-        "errors": []
+        "bycon_lib_path": bycon_lib_path
     }
+
+    for k, v in b_r_p.items():
+        byc.update({k:v})
+
+    config.pop("byc_root_pars", None)
+    byc.update({"config":config})
 
     if not environ.get('HTTP_HOST'):
         byc.update({"env": "local"})
@@ -136,8 +119,9 @@ def initialize_service(byc, service=False):
 def set_special_modes(byc):
 
     form = byc["form_data"]
-    for m in ["test_mode", "debug_mode", "include_handovers"]:
-        byc.update({m: test_truthy( form.get(m, False) ) })
+    for m in ["test_mode", "debug_mode", "download_mode", "include_handovers"]:
+        if m in form:
+            byc.update({m: test_truthy( form.get(m, False) ) })
 
     t_m_k = form.get("test_mode_count", "___none___")
     if re.match(r'^\d+$', str(t_m_k)):

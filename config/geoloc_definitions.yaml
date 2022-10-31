@@ -29,7 +29,6 @@ parameters:
 
 request_types:
 
-# TODO: combinations, e.g. w/ ISO3166alpha3
   geoquery:
     all_of:
       - geo_latitude
@@ -46,6 +45,9 @@ request_types:
       - ISO3166alpha3
       - ISO3166alpha2
       - country
+  ISO3166alpha2:
+    all_of:
+      - ISO3166alpha2
   id:
     all_of:
       - id

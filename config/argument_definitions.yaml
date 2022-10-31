@@ -35,6 +35,14 @@ output:
     standard, but options are e.g. json or pgxseg
   default: text
 
+group_by:
+  flags:
+    - -g
+    - --group_by
+  help: >-
+    group parameter e.g. for subset splitting
+  default: text
+
 parse:
   flags:
     - -p
@@ -67,10 +75,10 @@ inputfile:
     - --inputfile
   help: a custom file to specify input data, usually tab-delimited with special header
 
-outfile:
+outputfile:
   flags:
     - -o
-    - --outfile
+    - --outputfile
   help: output file where supported (cmd line)
 
 randno:

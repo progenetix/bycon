@@ -71,9 +71,10 @@ def cgi_parse_POST(byc):
     defs = byc.get("beacon_defaults", {})
     form = {}
 
-    body = sys.stdin.read(int(content_len))
+    
     # TODO: catch error & return for non-json posts
     if "json" in content_typ:
+        body = sys.stdin.read(int(content_len))
         jbod = json.loads(body)
         if "debug" in jbod:
             if jbod["debug"] > 0:                 
@@ -262,14 +263,13 @@ def test_truthy(this):
 
 def cgi_simplify_response(byc):
 
-    r = byc["service_response"]
+    r = byc["service_response"].get("response", "ERROR: No response element in error_response")
 
     if "result_sets" in r:
-        if "results" in r["result_sets"][0]:
-            byc.update({ "service_response": r["result_sets"][0]["results"] })
-    elif "response" in r:
-        if "results" in r["response"]:
-            byc.update({ "service_response": r["response"]["results"] })
+        r_s = r["result_sets"][0]
+        byc.update({ "service_response": r_s.get("results", [])})
+    else:
+        byc.update({ "service_response": r })
 
     return byc
 
@@ -334,22 +334,27 @@ def cgi_print_response(byc, status_code):
     # This is a simple "de-jsonify", intended to be used for already
     # pre-formatted list-like items (i.e. lists only containing objects)
     # with simple key-value pairs)
-    # TODO: universal text table converter
+    # TODO: universal text table converter ... partially implemented
+
     if "text" in byc["output"]:
 
         cgi_simplify_response(byc)
 
         if isinstance(byc["service_response"], dict):
-            byc["service_response"] = json.dumps(humps.camelize(byc["service_response"]["response"]), default=str)
-        if isinstance(byc["service_response"], list):
+            resp = json.dumps(humps.camelize(byc["service_response"]["response"]), default=str)
+        else:
+            resp = byc["service_response"]
+        if isinstance(resp, list):
             l_d = [ ]
-            for dp in byc["service_response"]:
+            for dp in resp:
                 v_l = [ ]
                 for v in dp.values():
+                    print(v)
                     v_l.append(str(v))
                 l_d.append("\t".join(v_l))
-            byc["service_response"] = "\n".join(l_d)
-        print_text_response(byc["service_response"], byc["env"], status_code)
+            resp = "\n".join(l_d)
+
+        print_text_response(resp, byc["env"], status_code)
 
     if "handoversonly" in byc["output"]:
         try:        

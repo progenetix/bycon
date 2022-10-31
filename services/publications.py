@@ -50,7 +50,6 @@ def publications():
         else:
             query = { '$and': [ geo_q, query ] }
 
-
     if len(query.keys()) < 1:
         response_add_error(byc, 422, "No query could be constructed from the parameters provided." )
 
@@ -99,10 +98,49 @@ def publications():
  
     results = sorted(p_l, key=itemgetter('sortid'), reverse = True)
 
+    check_map_response(byc, results)
+
     populate_service_response( byc, results)
     cgi_print_response( byc, 200 )
 
 ################################################################################
+################################################################################
+
+def check_map_response(byc, results):
+
+    if not "map" in byc["output"]:
+        return
+
+    u_locs = {}
+
+    for p in results:
+        if not "provenance" in p:
+            pass
+        if not "counts" in p:
+            pass
+
+        geoloc = p["provenance"].get("geo_location", None)
+        if geoloc is None:
+            pass
+
+        l_k = "{}::{}".format(geoloc["geometry"]["coordinates"][1], geoloc["geometry"]["coordinates"][0])
+
+        if not l_k in u_locs.keys():
+            u_locs.update({l_k:{"geo_location": geoloc}})
+            u_locs[l_k]["geo_location"]["properties"].update({"items":[]})
+
+        m_c = p["counts"].get("genomes", 0)
+        m_s = u_locs[l_k]["geo_location"]["properties"].get("marker_count", 0) + m_c
+        # print(m_c, m_s)
+
+        i = "<a href='/publication/?id={}'>{}</a> ({})".format(p["id"], p["id"], m_c)
+        u_locs[l_k]["geo_location"]["properties"].update({"marker_count":m_s})
+        u_locs[l_k]["geo_location"]["properties"]["items"].append(i)
+
+    geolocs =  u_locs.values()
+
+    print_map_from_geolocations(byc, geolocs)
+
 ################################################################################
 
 def _create_filters_query( byc ):

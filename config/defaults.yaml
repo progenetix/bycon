@@ -2,6 +2,7 @@ defaults:
 
   dataset_ids:
     - progenetix
+    - cellz
   request_path_root: beacon
   request_entity_path_id: info
   assembly_id: GRCh38
@@ -162,7 +163,7 @@ genomicVariations:
     collection: variants
     beacon_schema:
       entity_type: genomicVariant
-      schema: https://progenetix.org/services/schemas/genomicVariant/    
+      schema: https://progenetix.org/services/schemas/genomicVariant/
     h->o_access_key: "variants._id"
 
 ################################################################################
@@ -177,7 +178,7 @@ individuals:
     beacon_schema:
       entity_type: individual
       schema: https://progenetix.org/services/schemas/individual/
-    h->o_access_key: "individuals._id" 
+    h->o_access_key: "individuals._id"
 
 ################################################################################
 
@@ -192,7 +193,7 @@ runs:
       entity_type: run
       schema: https://progenetix.org/services/schemas/run/
     h->o_access_key: "callsets._id"
-    
+
 ################################################################################
 # service defaults #############################################################
 ################################################################################
@@ -206,6 +207,5 @@ cytomapper:
     collection: Null
     beacon_schema:
       entity_type: cytobandMapping
-      schema: https://progenetix.org/services/schemas/cytobandMapping/    
+      schema: https://progenetix.org/services/schemas/cytobandMapping/
     h->o_access_key: Null
-

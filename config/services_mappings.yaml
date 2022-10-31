@@ -16,11 +16,12 @@ service_aliases:
   ontologyMaps: ontologymaps
   publications: publications
   schemas: schemas
+  uploader: uploader
 
 rewrites:
   collationPlots: '/cgi/PGX/cgi/collationPlots.cgi'
   samplePlots: '/cgi/PGX/cgi/samplePlots.cgi'
-  uploader: '/cgi/PGX/cgi/uploader.cgi'
+  # uploader: '/cgi/PGX/cgi/uploader.cgi'
   biosamples: '/beacon/biosamples/'
   variants: '/beacon/variants/'
   individuals: '/beacon/individuals/'

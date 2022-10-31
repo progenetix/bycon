@@ -84,3 +84,24 @@ cellosaurus:
       callCount: 3945868
       sampleCount: 3200
 
+cellz:
+    id: cellz
+    name: cellz
+    identifier: 'org.progenetix::cellz'
+    description: "annotated cellosaurus cell line variants"
+    createDateTime: 2020-06-01
+    updateDateTime: 2020-12-15
+    version: 2020-12-15
+    externalUrl: "https://progenetix.org/cellz/"
+    assemblyId: GRCh38
+    dataUseConditions:
+      duoDataUse:
+        - id: DUO:0000004
+          label: no restriction
+          version: 2021-11-11
+    handoverTypes:
+      - biosamples
+      - individuals
+      - variants
+      - callsets
+      - UCSClink

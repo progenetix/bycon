@@ -1,5 +1,6 @@
-import math, re, requests
+import math, re
 from cgi_parsing import *
+from datatable_utils import read_www_tsv_to_dictlist
 
 ################################################################################
 
@@ -7,34 +8,35 @@ def read_geomarker_table_web(byc):
 
     geolocs = []
 
-    if not "http" in byc["form_data"]["file"]:
+    f_a = byc["form_data"].get("file", "")
+
+    if not "http" in f_a:
         return geolocs
 
-    lf = re.split("\n", requests.get(byc["form_data"]["file"]).text)
+    lf, fieldnames = read_www_tsv_to_dictlist(f_a)
 
     markers = {}
 
     for line in lf:
+        
+        group_lon = line.get("group_lon", "")       # could use 0 here for Null Island...
+        group_lat = line.get("group_lat", "")       # could use 0 here for Null Island...
+        group_label = line.get("group_label", "")
+        item_size = line.get("item_size", "")
+        item_label = line.get("item_label", "")
+        item_link = line.get("item_link", "")
+        marker_type = line.get("marker_type", "circle")
 
-        if line.startswith('#'):
+        if not re.match(r'^\-?\d+?(?:\.\d+?)?$', str(group_lat) ):
             continue
-
-        line += "\t\t\t\t"
-        l_l = line.split("\t")
-        if len(l_l) < 6:
+        if not re.match(r'^\-?\d+?(?:\.\d+?)?$', str(group_lon) ):
             continue
-        group_label, group_lat, group_lon, item_size, item_label, item_link, markerType, *_ = l_l[:7]
-
-        if not re.match(r'^\-?\d+?(?:\.\d+?)?$', group_lat):
-            continue
-        if not re.match(r'^\-?\d+?(?:\.\d+?)?$', group_lon):
-            continue
-        if not re.match(r'^\d+?(?:\.\d+?)?$', item_size):
+        if not re.match(r'^\d+?(?:\.\d+?)?$', str(item_size) ):
             item_size = 1
 
-        m_k = "{}::LatLon::{}::{}".format(group_label, group_lat, group_lon)
-        if markerType not in ["circle", "marker"]:
-            markerType = "circle"
+        m_k = "{}::LatLon::{}::{}".format(line["group_label"], line["group_lat"], line["group_lon"])
+        if marker_type not in ["circle", "marker"]:
+            marker_type = "circle"
 
         # TODO: load schema for this
         if not m_k in markers.keys():
@@ -49,7 +51,7 @@ def read_geomarker_table_web(byc):
                         "city": None,
                         "country": None,
                         "label": group_label,
-                        "marker_type": markerType,
+                        "marker_type": marker_type,
                         "marker_count": 0,
                         "items": []
                     }
@@ -80,6 +82,7 @@ def print_map_from_geolocations(byc, geolocs):
     p_p = update_plot_params_from_form(byc)
     m_max_count = marker_max_from_geo_locations(geolocs)
     
+    # print(m_max_count)
     leaf_markers = []
     for geoloc in geolocs:
         leaf_markers.append( map_marker_from_geo_location(byc, geoloc, p_p, m_max_count) )
@@ -222,11 +225,14 @@ def map_marker_from_geo_location(byc, geoloc, p_p, m_max_count):
         country = p.get("country", None)
         if country is not None:
             label = "{}, {}".format(label, country)
-        label += "<hr/>latitude: {}<br/>longitude: {}".format(g["coordinates"][1], g["coordinates"][0])
+
+    items = p.get("items", [])
+    items = [x for x in items if x is not None]
+    # print(items)
+    if len(items) > 0:
+        label += "<hr/>{}".format("<br/>".join(items))
     else:
-        items = p.get("items", [])
-        if len(items) > 0:
-            label = "{}<hr/>{}".format(label, "<br/>".join(items))
+        label += "<hr/>latitude: {}, longitude: {}".format(g["coordinates"][1], g["coordinates"][0])
 
 
     count = float(p.get("marker_count", 1))
@@ -236,7 +242,7 @@ def map_marker_from_geo_location(byc, geoloc, p_p, m_max_count):
 L.{}([{}, {}], {{
     ...circleOptions,
     ...{{radius: {}, count: {}}}
-}}).bindPopup("{}")
+}}).bindPopup("{}", {{maxHeight: 200}})
     """.format(
         marker,
         g["coordinates"][1],

@@ -108,6 +108,7 @@ def get_variant_request_type(byc):
     vrt_matches = [ ]
 
     for vrt in brts_k:
+
         matched_par_no = 0
         needed_par_no = 0
         if "one_of" in brts[vrt]:
@@ -176,18 +177,19 @@ def create_geneVariantRequest_query( byc ):
     vp = byc["variant_pars"]
     v_p_defs = byc["variant_definitions"]["parameters"]
 
-    query = { "gene_symbol" : vp[ "geneId" ] }
 
-    results, error = mongo_result_list( "progenetix", "genespans", query, { '_id': False } )
+    query = { "symbol" : vp[ "gene_id" ] }
+
+    results, error = mongo_result_list( "progenetix", "genes", query, { '_id': False } )
 
     # Since this is a pre-processor to the range request
     byc["variant_pars"].update( {
-        "reference_name": results[0]["reference_name"],
+        "reference_name": "refseq:{}".format(results[0]["accession_version"]),
         "start": [ results[0]["start"] ],
         "end": [ results[0]["end"] ]
     } )
 
-    translate_reference_name(byc["variant_pars"], byc)
+    # translate_reference_name(byc["variant_pars"], byc)
     byc.update( {"variant_request_type": "variantRangeRequest"} )
     create_variantRangeRequest_query( byc )
 
@@ -334,20 +336,27 @@ def create_in_query_for_parameter(par, qpar, q_pars):
 
 ################################################################################
 
-def variant_create_digest(v):
+def variant_create_digest(v, byc):
 
-    t = "var"
-    if "variant_state" in v:
-        if "id" in v["variant_state"]:
-            t = v["variant_state"]["id"]
-            t = re.sub(":", "_", t)
-    elif "variant_type" in v:
-        t = v["variant_type"]
+    v_d = byc["variant_definitions"]
 
-    p = str(v["start"])
-    if "end" in v:
-        p = p+"-"+str(v["end"])
+    t = v["variant_state"]["id"]
+    t = re.sub(":", "_", t)
 
-    return ":".join( [v["reference_name"], p, t])
+    v_i = v["location"]["interval"]
+    p = "{}-{}".format(v_i["start"]["value"], v_i["end"]["value"])
+
+    chro = chroname_from_refseqid(v["location"]["sequence_id"], byc)
+
+    return ":".join( [chro, p, t])
+
+################################################################################
+
+def chroname_from_refseqid(refseqid, byc):
+
+    chr_re = re.compile(r'^refseq:NC_0+([^0]\d?)\.\d\d?$')
+    chro = chr_re.match(refseqid).group(1)
+
+    return chro
 
 ################################################################################

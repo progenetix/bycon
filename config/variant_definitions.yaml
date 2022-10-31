@@ -444,7 +444,7 @@ request_types:
     description: >
       A variant overlapping with the genomic coordinates of a gene or other named sequence element.
     all_of:
-      - geneId
+      - gene_id
     optional:
       - variant_type
       - reference_bases

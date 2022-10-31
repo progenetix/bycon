@@ -25,9 +25,9 @@ from service_utils import *
 from export_file_generation import *
 from variant_parsing import *
 
-byc = initialize_bycon()
 c_f = Path( path.join( pkg_path, "config", "config.yaml" ) )
-byc.update({"config": load_yaml_empty_fallback( c_f )})
+config = load_yaml_empty_fallback( c_f )
+byc = initialize_bycon(config)
 d_f = Path( path.join( pkg_path, "config", "defaults.yaml" ) )
 byc.update({"beacon_defaults": load_yaml_empty_fallback( d_f ) })
 for d_k, d_v in byc["beacon_defaults"]["defaults"].items():

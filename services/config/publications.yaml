@@ -3,7 +3,8 @@ defaults:
   dataset_ids:
     - progenetix
   filters:
-    - PMID
+    - id: PMID
+    - id: 'genomes:>0'
   filter_definitions:
     pgxuse:
       db_key: 'progenetix_use'
@@ -95,5 +96,6 @@ method_keys:
     - authors
     - title
     - status
+    - provenance
   details: []
 

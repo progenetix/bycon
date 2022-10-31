@@ -254,6 +254,7 @@ def _update_queries_from_filters(byc):
                             "child_terms": [f["id"]]
                         }
                         f_desc = False
+
         if f_info is None:
             continue
 
@@ -267,6 +268,7 @@ def _update_queries_from_filters(byc):
 
         if f_scope not in f_lists.keys():
             f_lists.update({f_scope:{}})
+
         if f_field not in f_lists[f_scope].keys():
             f_lists[f_scope].update({f_field:[]})
 
@@ -434,6 +436,7 @@ def geo_query( byc ):
                 g_default = g_p_defs[ g_k ][ "default" ]
 
             # TODO: This is an ISO lower hack ...
+
             if g_k.lower() in byc["form_data"]:
                 g_v = byc["form_data"][g_k.lower()]
             else:
@@ -461,6 +464,10 @@ def geo_query( byc ):
 
     if "id" in req_type:
         geo_q = { "id": re.compile( geo_pars["id"], re.IGNORECASE ) }
+
+    if "ISO3166alpha2" in req_type:
+        geo_q = { "provenance.geo_location.properties.ISO3166alpha2": byc["form_data"]["iso3166alpha2"].upper() }
+    # print(geo_q)
 
     if "geoquery" in req_type:
         geoq_l = [ return_geo_longlat_query(geo_root, geo_pars) ]
