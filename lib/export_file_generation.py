@@ -4,6 +4,7 @@ from bson.objectid import ObjectId
 
 from cgi_parsing import *
 from query_generation import  paginate_list
+from datatable_utils import get_nested_value
 
 ################################################################################
 
@@ -50,18 +51,81 @@ def stream_pgx_meta_header(ds_id, ds_results, byc):
             
     print_filters_meta_line(byc)
 
+    # http://progenetix.org/beacon/variants/?filters=NCIT:C6393&debug=1&output=pgxseg
+
     for bs_id in ds_results["biosamples.id"][ "target_values" ]:
         bs = bs_coll.find_one( { "id": bs_id } )
         if not bs:
             continue
-        h_line = "#sample=>biosample_id={}".format(bs_id)
-        h_d = bs.get("histological_diagnosis", {})
-        h_line = '{};group_id={};group_label={};NCIT::id={};NCIT::label={}'.format(h_line, h_d.get("id", "NA"), h_d.get("label", "NA"), h_d.get("id", "NA"), h_d.get("label", "NA"))
+        h_line = pgxseg_biosample_meta_line(byc, bs, group_id_key="histological_diagnosis_id")
         print(h_line)
 
     return
 
 ################################################################################
+
+def pgxseg_biosample_meta_line(byc, biosample, group_id_key="histological_diagnosis_id"):
+
+    dt_m = byc["datatable_mappings"]
+    io_params = dt_m["io_params"][ "biosample" ]
+    io_prefixes = dt_m["io_prefixes"][ "biosample" ]
+
+    g_id_k = group_id_key
+    g_lab_k = re.sub("_id", "_label", g_id_k)
+
+    line = [ "#sample=>id={}".format(biosample.get("id", "¡¡¡NONE!!!")) ]
+
+    for p, k in io_params.items():
+
+        in_pgxseg = k.get("pgxseg", False)
+        if in_pgxseg is False:
+            continue
+
+        t = k.get("type", "string")
+        v = get_nested_value(biosample, k["db_key"])
+        h_v = ""
+        if isinstance(v, list):
+            h_v = "::".join(v)
+        else:
+            h_v = str(v)
+
+        if g_id_k == p:
+            line.append("group_id={}".format(v))
+        if g_lab_k == p:
+            line.append("group_label={}".format(v))
+
+        if len(h_v) > 0:
+            line.append("{}={}".format(p, h_v))
+
+    for p, k in io_prefixes.items():
+        in_pgxseg = k.get("pgxseg", False)
+        if in_pgxseg is False:
+            continue
+        pres = k.get("pres", [])
+        if len(pres) < 1:
+            continue
+
+        l_v = get_nested_value(biosample, k["db_key"])
+        if not isinstance(l_v, list):
+            continue
+        for o in l_v:
+            o_id = o.get("id", "")
+            o_l = o.get("label", "")
+
+            if len(o_id) < 1:
+                continue
+
+            for pre in pres:
+                if o_id.startswith(pre):
+                    line.append("{}_id___{}={}".format(p, pre, o_id))
+                    if len(o_l) > 0:
+                        line.append("{}_label___{}={}".format(p, pre, o_l))
+
+    h_line = ";".join(line)
+
+    return h_line
+
+################################################################################    
 
 def interval_header(info_columns, byc):
 
@@ -122,7 +186,7 @@ def print_pgxseg_header_line():
 
 def pgxseg_header_line():
 
-    return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type", "reference_bases", "alternate_bases" )
+    return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format("biosample_id", "reference_name", "start", "end", "log2", "variant_type", "reference_bases", "alternate_bases" )
 
 ################################################################################
 

@@ -165,14 +165,6 @@ def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="
                 pref_array_values[par].update({pre:{}})
             pref_array_values[par][pre].update({key:v})
             continue
-
-        if "__" in f_n:
-            par, key = re.match(r"^(\w+)__(\w+)$", f_n).group(1,2)
-            if par in io_prefixes.keys():
-                if not par in parent:
-                    parent.update({par:{}})
-                parent[par].update({key:v})
-            continue
         
         par = f_n
 
@@ -204,11 +196,8 @@ def create_table_header(io_params, io_prefixes):
     for par, d in io_prefixes.items():
         if "pres" in d:
             for pre in d["pres"]:
-                header_labs.append( par+"__id"+"___"+pre )
-                header_labs.append( par+"__label"+"___"+pre )
-        else:
-            header_labs.append( par+"__id" )
-            header_labs.append( par+"__label" )
+                header_labs.append( par+"_id"+"___"+pre )
+                header_labs.append( par+"_label"+"___"+pre )
 
     return header_labs
 

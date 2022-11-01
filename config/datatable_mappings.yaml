@@ -3,6 +3,7 @@ io_params:
     biosample_id:
       db_key: id
       type: string
+      pgxseg: True
     individual_id:
       db_key: individual_id
       type: string
@@ -21,54 +22,75 @@ io_params:
     histological_diagnosis_id:
       db_key: histological_diagnosis.id
       type: string
+      pgxseg: True
     histological_diagnosis_label:
       db_key: histological_diagnosis.label
       type: string
+      pgxseg: True
     icdo_morphology_id:
       db_key: icdo_morphology.id
       type: string
+      pgxseg: True
     icdo_morphology_label:
       db_key: icdo_morphology.label
       type: string
+      pgxseg: True
     icdo_topography_id:
       db_key: icdo_topography.id
       type: string
+      pgxseg: True
     icdo_topography_label:
       db_key: icdo_topography.label
       type: string
+      pgxseg: True
     sampled_tissue_id:
       db_key: sampled_tissue.id
       type: string
+      pgxseg: True
     sampled_tissue_label:
       db_key: sampled_tissue.label
       type: string
+      pgxseg: True
     tnm:
       db_key: info.tumor_tnm_text
       type: string
+      pgxseg: True
     stage:
       db_key: info.tumor_stage_text
       type: string
+      pgxseg: True
     grade:
       db_key: info.tumor_grade_text
       type: string
+      pgxseg: True
     age_iso:
       db_key: time_of_collection.age.iso8601duration
       type: string
+      pgxseg: True
     followup_state_id:
       db_key: followup_state.id
       default: 'EFO:0030039'
+      pgxseg: True
     followup_state_label:
       db_key: followup_state.label
-      default: no followup status
+      default: 'no followup status'
+      pgxseg: True
     followup_time:
       db_key: followup_time
       type: string
+      pgxseg: True
     # recurrence:
     #   db_key: info.recurrence
     #   type: string
     # recurrence_time:
     #   db_key: info.recurrence_time
     #   type: string
+    data_use_conditions_id:
+      db_key: data_use_conditions.id
+      type: string
+    data_use_conditions_label:
+      db_key: data_use_conditions.label
+      type: string
     geoprov_city:
       db_key: provenance.geo_location.properties.city
       type: string
@@ -99,32 +121,40 @@ io_params:
     experiment_id:
       db_key: analysis_info.experiment_id
       type: string
+      pgxseg: True
     series_id:
       db_key: analysis_info.series_id
       type: string
+      pgxseg: True
     platform_id:
       db_key: analysis_info.platform_id
       type: string
+      pgxseg: True
     cell_line_id:
       db_key: cell_line.id
       type: string
+      pgxseg: True
     cell_line_label:
       db_key: cell_line.label
       type: string
+      pgxseg: True
 
   individual:
     individual_id:
       db_key: id
       type: string
+      pgxseg: True
     legacy_ids:
       db_key: info.legacy_ids
       type: array
     sex_id:
       db_key: sex.id
       type: string
+      pgxseg: True
     sex_label:
       db_key: sex.label
       type: string
+      pgxseg: True
     data_use_conditions_id:
       db_key: data_use_conditions.id
       type: string
@@ -135,24 +165,26 @@ io_params:
     histological_diagnosis_id:
       db_key: index_disease.disease_code.id
       type: string
+      pgxseg: True
     histological_diagnosis_label:
       db_key: index_disease.disease_code.label
       type: string
+      pgxseg: True
     index_disease_notes:
       db_key: index_disease.notes
       type: string
     index_disease_followup_time:
       db_key: index_disease.followup_time
       type: string
+      pgxseg: True
     index_disease_followup_state_id:
       db_key: index_disease.followup_state.id
       type: string
+      pgxseg: True
     index_disease_followup_state_label:
       db_key: index_disease.followup_state.label
       type: string
-    index_disease_followup_time:
-      db_key: index_disease.followup_time
-      type: string
+      pgxseg: True
     auxiliary_disease_id:
       db_key: auxiliary_disease.disease_code.id
       type: string
@@ -180,9 +212,11 @@ io_params:
     cell_line_donation_id:
       db_key: info.cell_line_donation.id
       type: string
+      pgxseg: True
     cell_line_donation_label:
       db_key: info.cell_line_donation.label
       type: string
+      pgxseg: True
 
   analysis:
     analysis_id:
@@ -217,23 +251,34 @@ io_params:
     variant_internal_id:
       db_key: variant_internal_id
       type: string
-    reference_name:
-      db_key: reference_name
+    sequence_id:
+      db_key: location.sequence_id
       type: string
     start:
-      db_key: start
+      db_key: location.interval.start.value
       type: integer
+    start_type:
+      db_key: location.interval.start.type
+      type: string
+      default: 'Number'
     end:
-      db_key: end
+      db_key: location.interval.end
       type: integer
-    variant_type:
-      db_key: variant_type
+    end_type:
+      db_key: location.interval.end.type
+      type: string
+      default: 'Number'
+    variant_state_id:
+      db_key: variant_state.id
+      type: string
+    variant_state_label:
+      db_key: variant_state.label
       type: string
     reference_bases:
       db_key: reference_bases
       type: string
     alternate_bases:
-      db_key: alternate_bases
+      db_key: state.sequence
       type: string
 
 io_prefixes:
@@ -241,27 +286,14 @@ io_prefixes:
   biosample:
     external_references:
       type: array
+      db_key: external_references
+      pgxseg: True
       pres:
         - PMID
-        - geo:GSM
-        - geo:GSE
-        - geo:GPL
-        - cellosaurus
         - arrayexpress
         - cbioportal
-    followup_state:
-      type: string
-      pre: EFO
-    data_use_conditions:
-      type: string
-      pre: DUO
 
   individual: {}
-
-  analysis:
-    data_use_conditions:
-      type: string
-      pre: DUO
-
+  analysis: {}
   variant: {}
   
