@@ -57,7 +57,7 @@ def stream_pgx_meta_header(ds_id, ds_results, byc):
         bs = bs_coll.find_one( { "id": bs_id } )
         if not bs:
             continue
-        h_line = pgxseg_biosample_meta_line(byc, bs, group_id_key="histological_diagnosis_id")
+        h_line = pgxseg_biosample_meta_line(byc, bs, "histological_diagnosis_id")
         print(h_line)
 
     return
@@ -361,10 +361,10 @@ def export_callsets_matrix(ds_id, byc):
 
 def export_pgxseg_frequencies(byc, results):
 
-    if not "pgxseg" in byc["output"]:
+    if not "pgxseg" in byc["output"] and not "pgxfreq" in byc["output"]:
         return
 
-    open_text_streaming(byc["env"], "interval_frequencies.pgxseg")
+    open_text_streaming(byc["env"], "interval_frequencies.pgxfreq")
 
     print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
     h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]

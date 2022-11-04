@@ -123,7 +123,7 @@ def interval_frequencies():
 
 def check_pgxseg_frequencies_export(byc, results):
 
-    if not "pgxseg" in byc["output"]:
+    if not "pgxseg" in byc["output"] and not "pgxfreq" in byc["output"]:
         return byc
 
     export_pgxseg_frequencies(byc, results)

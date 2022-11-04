@@ -31,58 +31,58 @@ progenetix:
       callCount: 20988819
       sampleCount: 138663
 
-cellosaurus:
-    id: cellosaurus
-    name: cellosaurus
-    identifier: 'org.progenetix::cellosaurus'
-    description: "annotated cellosaurus cell line variants"
-    createDateTime: 2020-06-01
-    updateDateTime: 2020-12-15
-    version: 2020-12-15
-    externalUrl: "https://progenetix.org/cellosaurus/"
-    assemblyId: GRCh38
-    dataUseConditions:
-      duoDataUse:
-        - id: DUO:0000004
-          label: no restriction
-          version: 2021-11-11
-    handoverTypes:
-      - biosamples
-      - individuals
-      - variants
-      - callsetsvariants
-      - UCSClink
-    info:
-      variantCount: 1446
-      callCount: 8702
-      sampleCount: 6617
+# cellosaurus:
+#     id: cellosaurus
+#     name: cellosaurus
+#     identifier: 'org.progenetix::cellosaurus'
+#     description: "annotated cellosaurus cell line variants"
+#     createDateTime: 2020-06-01
+#     updateDateTime: 2020-12-15
+#     version: 2020-12-15
+#     externalUrl: "https://progenetix.org/cellosaurus/"
+#     assemblyId: GRCh38
+#     dataUseConditions:
+#       duoDataUse:
+#         - id: DUO:0000004
+#           label: no restriction
+#           version: 2021-11-11
+#     handoverTypes:
+#       - biosamples
+#       - individuals
+#       - variants
+#       - callsetsvariants
+#       - UCSClink
+#     info:
+#       variantCount: 1446
+#       callCount: 8702
+#       sampleCount: 6617
 
-1000genomesDRAGEN:
-    id: 1000genomesDRAGEN
-    name: 1000genomesDRAGEN
-    identifier: 'org.progenetix::1000genomesDRAGEN'
-    description: "1000 genomes DRAGEN analysis CNV dataset"
-    createDateTime: 2021-01-29
-    updateDateTime: 2021-03-01
-    version: 2021-03-01
-    externalUrl: "https://progenetix.org/1000-genomes-cnv/"
-    assemblyId: GRCh38
-    dataUseConditions:
-      duoDataUse:
-        - id: DUO:0000004
-          label: no restriction
-          version: 2021-11-11
-    handoverTypes:
-      - biosamples
-      - variants
-      - callsetsvariants
-      - callsetspgxseg
-      - pgxseg
-      - UCSClink
-    info:
-      variantCount: 3945868
-      callCount: 3945868
-      sampleCount: 3200
+# 1000genomesDRAGEN:
+#     id: 1000genomesDRAGEN
+#     name: 1000genomesDRAGEN
+#     identifier: 'org.progenetix::1000genomesDRAGEN'
+#     description: "1000 genomes DRAGEN analysis CNV dataset"
+#     createDateTime: 2021-01-29
+#     updateDateTime: 2021-03-01
+#     version: 2021-03-01
+#     externalUrl: "https://progenetix.org/1000-genomes-cnv/"
+#     assemblyId: GRCh38
+#     dataUseConditions:
+#       duoDataUse:
+#         - id: DUO:0000004
+#           label: no restriction
+#           version: 2021-11-11
+#     handoverTypes:
+#       - biosamples
+#       - variants
+#       - callsetsvariants
+#       - callsetspgxseg
+#       - pgxseg
+#       - UCSClink
+#     info:
+#       variantCount: 3945868
+#       callCount: 3945868
+#       sampleCount: 3200
 
 cellz:
     id: cellz

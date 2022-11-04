@@ -17,13 +17,7 @@ def parse_cytoband_file(byc):
  
     podmd"""
     # TODO: catch error for missing genome edition
-    g_map = {
-        "grch38": "grch38",
-        "grch37": "hg19",
-        "ncbi36": "hg18",
-        "ncbi35": "hg17",
-        "ncbi34": "hg16"
-    }
+    g_map = byc["interval_definitions"].get("genome_path_ids", {})
 
     genome = byc["variant_pars"][ "assembly_id" ].lower()
     genome = re.sub( r"(\w+?)([^\w]\w+?)", r"\1", genome)
@@ -31,10 +25,8 @@ def parse_cytoband_file(byc):
     if genome in g_map.keys():
         genome = g_map[ genome ]
 
-    cb_file = path.join( pkg_path, "rsrc", "genomes", genome, "CytoBandIdeo.txt" )
-    
+    cb_file = path.join( pkg_path, "rsrc", "genomes", genome, "cytoBandIdeo.txt" )   
     cb_re = re.compile( byc["interval_definitions"][ "cytobands" ][ "pattern" ] )
-
     cb_keys = [ "chro", "start", "end", "cytoband", "staining" ]
 
     cytobands = [ ]

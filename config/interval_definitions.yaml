@@ -6,11 +6,18 @@ genome_binning:
   100kb: 100000
   10kb: 10000
   cytobands: 4000000    # fallback to numeric value
-
+genome_path_ids:        # the keys are stemmed & lower cased programmatically
+  grch38: grch38
+  grch37: hg19
+  ncbi36: hg18
+  ncbi35: hg17
+  ncbi34: hg16
+  mm8: mm8
+  mm9: mm9
+  msarhar1: mSarHar1.11
+  zf7: zf7
 terminal_intervals_soft_expansion: 100000
-
 interval_min_fraction: 0.001
-
 chromosomes:            # defined in order & as strings
   - "1"
   - "2"
