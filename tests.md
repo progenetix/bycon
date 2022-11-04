@@ -2,7 +2,7 @@
 
 ## Beacon
 
-### Examples
+### Standard Beacon Paths
 
 #### Base `/`
 
@@ -74,5 +74,18 @@
 
 
 ## Services
+
+### Beacon Support
+
+### Beyond Beacon Services
+
+#### `/geolocations/`
+
+##### Map Projections of Query results
+
+* [/services/geolocations?city=Heidelberg&output=map&marker_type=marker](http://progenetix.org/services/geolocations?city=Heidelberg&output=map&marker_type=marker)
+
+
+
 
 

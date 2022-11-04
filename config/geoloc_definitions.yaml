@@ -78,5 +78,6 @@ plot_params:
   marker_max_r: 1000
   zoom_min: 2
   zoom_max: 14
+  zoom: Null
 
 
