@@ -52,8 +52,6 @@ def dataset_response_add_handovers(ds_id, byc):
                     "pages": []
                 }
 
-                # print(h_o_key)
-
                 if "bedfile" in h_o_defs[ "id" ]:
                     bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, 0, 0, byc)
                     h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos ) } )
@@ -80,7 +78,7 @@ def dataset_response_add_handovers(ds_id, byc):
                         l = "{}-{}".format(p_f + 1, p_t)
                         # no re-pagination of the results retrieved from the paginated query
                         # TODO: the bedfile part is wrong, since it paginates by the number of variants which
-                        # may be incorrect if biosamples ... wer called. have to change...
+                        # may be incorrect if biosamples ... were called. have to change...
                         if "bedfile" in h_o_defs[ "id" ]:
                             bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, p_f, p_t, byc)
                             u =  _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos )

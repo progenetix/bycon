@@ -12,4 +12,3 @@ requests
 pyaml
 pymongo
 urllib
-

@@ -43,8 +43,6 @@ def generate_queries(byc):
     _update_queries_from_hoid( byc)
     _purge_empty_queries( byc )
 
-    # prjsoncam(byc["queries"])
-
     return byc
 
 ################################################################################
@@ -333,8 +331,6 @@ def _update_queries_from_variants( byc ):
         if not "variants" in byc["queries"]:
             return byc
 
-    # v_q_method = "create_"+byc["variant_request_type"]+"_query"
-
     if "variantIdRequest" in byc["variant_request_type"]:
         create_variantIdRequest_query( byc )
     elif "variantCNVrequest" in byc["variant_request_type"]:
@@ -486,17 +482,6 @@ def geo_query( byc ):
             geo_q = geoq_l[0]
 
     return geo_q, geo_pars
-
-################################################################################
-
-# def check_one_of(opt, props, pars):
-
-#     if not "one_of" in opt:
-#         return
-
-#     check = False
-
-#     return check
 
 ################################################################################
 

@@ -26,6 +26,7 @@ def read_geomarker_table_web(byc):
         item_label = line.get("item_label", "")
         item_link = line.get("item_link", "")
         marker_type = line.get("marker_type", "circle")
+        marker_icon = line.get("marker_icon", "")
 
         if not re.match(r'^\-?\d+?(?:\.\d+?)?$', str(group_lat) ):
             continue
@@ -35,8 +36,6 @@ def read_geomarker_table_web(byc):
             item_size = 1
 
         m_k = "{}::LatLon::{}::{}".format(line["group_label"], line["group_lat"], line["group_lon"])
-        if marker_type not in ["circle", "marker"]:
-            marker_type = "circle"
 
         # TODO: load schema for this
         if not m_k in markers.keys():
@@ -52,6 +51,7 @@ def read_geomarker_table_web(byc):
                         "country": None,
                         "label": group_label,
                         "marker_type": marker_type,
+                        "marker_icon": marker_icon,
                         "marker_count": 0,
                         "items": []
                     }
@@ -216,6 +216,8 @@ def map_marker_from_geo_location(byc, geoloc, p_p, m_max_count):
     # if m_max_count == 1:
     #     marker = "marker"
 
+
+
     m_max_r = p_p.get("marker_max_r", 1000)
     m_f = int(int(m_max_r) / math.sqrt(4 * m_max_count / math.pi))
 
@@ -234,11 +236,16 @@ def map_marker_from_geo_location(byc, geoloc, p_p, m_max_count):
     else:
         label += "<hr/>latitude: {}, longitude: {}".format(g["coordinates"][1], g["coordinates"][0])
 
-
     count = float(p.get("marker_count", 1))
     size = count * m_f * float(p_p.get("marker_scale", 2))
 
-    map_marker = """
+    marker_icon = p.get("marker_icon", "")
+
+    if ".png" in marker_icon or ".jpg" in marker_icon:
+        marker = "marker"
+
+    if "circle" in marker:
+        map_marker = """
 L.{}([{}, {}], {{
     ...circleOptions,
     ...{{radius: {}, count: {}}}
@@ -248,6 +255,19 @@ L.{}([{}, {}], {{
         g["coordinates"][1],
         g["coordinates"][0],
         size,
+        count,
+        label
+    )
+
+    else:
+        map_marker = """
+L.{}([{}, {}], {{
+    ...{{count: {}}}
+}}).bindPopup("{}", {{maxHeight: 200}})
+    """.format(
+        marker,
+        g["coordinates"][1],
+        g["coordinates"][0],
         count,
         label
     )

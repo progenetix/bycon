@@ -20,6 +20,7 @@ progenetix:
       - biosamplestable
       - biosamplevariants
       - biosamplepgxsegvariants
+      - annotatedvariants
       - phenopackets
       - individuals
       - variants

@@ -5,7 +5,7 @@ from uuid import uuid4
 import datetime
 import sys
 
-from cgi_parsing import cgi_debug_message
+from cgi_parsing import cgi_debug_message, test_truthy
 
 ################################################################################
 
@@ -66,6 +66,15 @@ def execute_bycon_queries(ds_id, byc):
     ho_db = ho_client[ byc["config"]["info_db"] ]
     ho_collname = byc["config"][ "handover_coll" ]
     ho_coll = ho_db[ ho_collname ]
+
+    if test_truthy( byc["form_data"].get("annotated_only", False) ):
+        if "variants" in byc["queries"]:
+            byc["queries"].update({"variants": { "$and": [ byc["queries"]["variants"], {"info.annotation_derived":True} ] } } )
+        else:
+            byc["queries"].update( {"variants": {"info.annotation_derived":True} } )
+
+    # print(byc[ "queries" ])
+    # exit()
 
     for collname in byc[ "queries" ].keys():
         if collname in byc[ "config" ][ "queried_collections" ]:

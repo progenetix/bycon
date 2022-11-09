@@ -152,16 +152,16 @@ def remap_biosamples(r_s_res, byc):
             try:
                 if f in r_s_res[bs_i]:
                     if not r_s_res[bs_i][f]:
-                        r_s_res[bs_i].pop(f)
+                        r_s_res[bs_i].pop(f, None)
                     elif not r_s_res[bs_i][f]["id"]:
-                        r_s_res[bs_i].pop(f)
+                        r_s_res[bs_i].pop(f, None)
                     elif len(r_s_res[bs_i][f]["id"]) < 4:
-                        r_s_res[bs_i].pop(f)
+                        r_s_res[bs_i].pop(f, None)
             except:
                 pass
 
         for k in bs_pop_keys:
-            r_s_res[bs_i].pop(k)
+            r_s_res[bs_i].pop(k, None)
 
     return r_s_res
 
