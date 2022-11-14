@@ -3,10 +3,19 @@ io_params:
     biosample_id:
       db_key: id
       type: string
-      pgxseg: True
+      compact: True
+    group_id:
+      db_key: info.group.id
+      type: string
+      compact: True
+    group_label:
+      db_key: info.group.label
+      type: string
+      compact: True
     individual_id:
       db_key: individual_id
       type: string
+      compact: True
     callset_ids:
       db_key: info.callset_ids
       type: array
@@ -22,63 +31,71 @@ io_params:
     histological_diagnosis_id:
       db_key: histological_diagnosis.id
       type: string
-      pgxseg: True
+      compact: True
     histological_diagnosis_label:
       db_key: histological_diagnosis.label
       type: string
-      pgxseg: True
+      compact: True
     icdo_morphology_id:
       db_key: icdo_morphology.id
       type: string
-      pgxseg: True
+      compact: True
     icdo_morphology_label:
       db_key: icdo_morphology.label
       type: string
-      pgxseg: True
+      compact: True
     icdo_topography_id:
       db_key: icdo_topography.id
       type: string
-      pgxseg: True
+      compact: True
     icdo_topography_label:
       db_key: icdo_topography.label
       type: string
-      pgxseg: True
+      compact: True
     sampled_tissue_id:
       db_key: sampled_tissue.id
       type: string
-      pgxseg: True
+      compact: True
     sampled_tissue_label:
       db_key: sampled_tissue.label
       type: string
-      pgxseg: True
+      compact: True
     tnm:
       db_key: info.tumor_tnm_text
       type: string
-      pgxseg: True
+      compact: True
     stage:
       db_key: info.tumor_stage_text
       type: string
-      pgxseg: True
+      compact: True
     grade:
       db_key: info.tumor_grade_text
       type: string
-      pgxseg: True
+      compact: True
     age_iso:
       db_key: time_of_collection.age.iso8601duration
       type: string
-      pgxseg: True
+      compact: True
+    sex_id:
+      db_key: info.sex.id
+      type: string
+      compact: True
+    sex_label:
+      db_key: info.sex.label
+      type: string
+      compact: True
     followup_state_id:
       db_key: followup_state.id
       default: 'EFO:0030039'
-      pgxseg: True
+      compact: True
     followup_state_label:
       db_key: followup_state.label
       default: 'no followup status'
-      pgxseg: True
+      compact: True
     followup_time:
       db_key: followup_time
       type: string
-      pgxseg: True
+      compact: True
     # recurrence:
     #   db_key: info.recurrence
     #   type: string
@@ -121,40 +138,40 @@ io_params:
     experiment_id:
       db_key: analysis_info.experiment_id
       type: string
-      pgxseg: True
+      compact: True
     series_id:
       db_key: analysis_info.series_id
       type: string
-      pgxseg: True
+      compact: True
     platform_id:
       db_key: analysis_info.platform_id
       type: string
-      pgxseg: True
+      compact: True
     cell_line_id:
       db_key: cell_line.id
       type: string
-      pgxseg: True
+      compact: True
     cell_line_label:
       db_key: cell_line.label
       type: string
-      pgxseg: True
+      compact: True
 
   individual:
     individual_id:
       db_key: id
       type: string
-      pgxseg: True
+      compact: True
     legacy_ids:
       db_key: info.legacy_ids
       type: array
     sex_id:
       db_key: sex.id
       type: string
-      pgxseg: True
+      compact: True
     sex_label:
       db_key: sex.label
       type: string
-      pgxseg: True
+      compact: True
     data_use_conditions_id:
       db_key: data_use_conditions.id
       type: string
@@ -165,26 +182,26 @@ io_params:
     histological_diagnosis_id:
       db_key: index_disease.disease_code.id
       type: string
-      pgxseg: True
+      compact: True
     histological_diagnosis_label:
       db_key: index_disease.disease_code.label
       type: string
-      pgxseg: True
+      compact: True
     index_disease_notes:
       db_key: index_disease.notes
       type: string
     index_disease_followup_time:
       db_key: index_disease.followup_time
       type: string
-      pgxseg: True
+      compact: True
     index_disease_followup_state_id:
       db_key: index_disease.followup_state.id
       type: string
-      pgxseg: True
+      compact: True
     index_disease_followup_state_label:
       db_key: index_disease.followup_state.label
       type: string
-      pgxseg: True
+      compact: True
     auxiliary_disease_id:
       db_key: auxiliary_disease.disease_code.id
       type: string
@@ -212,19 +229,21 @@ io_params:
     cell_line_donation_id:
       db_key: info.cell_line_donation.id
       type: string
-      pgxseg: True
+      compact: True
     cell_line_donation_label:
       db_key: info.cell_line_donation.label
       type: string
-      pgxseg: True
+      compact: True
 
   analysis:
     analysis_id:
       db_key: id
       type: string
+      compact: True
     biosample_id:
       db_key: biosample_id
       type: string
+      compact: True
     individual_id:
       db_key: individual_id
       type: string
@@ -234,12 +253,15 @@ io_params:
     experiment_id:
       db_key: analysis_info.experiment_id
       type: string
+      compact: True
     series_id:
       db_key: analysis_info.series_id
       type: string
+      compact: True
     platform_id:
       db_key: analysis_info.platform_id
       type: string
+      compact: True
     data_provenance:
       db_key: info.data_provenance
       type: string
@@ -248,38 +270,39 @@ io_params:
     variant_id:
       db_key: id
       type: string
+      compact: True
     variant_internal_id:
       db_key: variant_internal_id
       type: string
+      compact: True
     sequence_id:
       db_key: location.sequence_id
       type: string
+      compact: True
     start:
       db_key: location.interval.start.value
       type: integer
-    start_type:
-      db_key: location.interval.start.type
-      type: string
-      default: 'Number'
+      compact: True
     end:
       db_key: location.interval.end
       type: integer
-    end_type:
-      db_key: location.interval.end.type
-      type: string
-      default: 'Number'
+      compact: True
     variant_state_id:
       db_key: variant_state.id
       type: string
+      compact: True
     variant_state_label:
       db_key: variant_state.label
       type: string
+      compact: True
     reference_bases:
       db_key: reference_bases
       type: string
+      compact: True
     alternate_bases:
       db_key: state.sequence
       type: string
+      compact: True
 
 io_prefixes:
 
@@ -287,11 +310,14 @@ io_prefixes:
     external_references:
       type: array
       db_key: external_references
-      pgxseg: True
+      compact: True
       pres:
-        - PMID
-        - arrayexpress
-        - cbioportal
+        PMID:
+          compact: True
+        arrayexpress:
+          compact: False
+        cbioportal:
+          compact: False
 
   individual: {}
   analysis: {}

@@ -195,7 +195,7 @@ def create_table_header(io_params, io_prefixes):
         header_labs.append( par )
     for par, d in io_prefixes.items():
         if "pres" in d:
-            for pre in d["pres"]:
+            for pre in d["pres"].keys():
                 header_labs.append( par+"_id"+"___"+pre )
                 header_labs.append( par+"_label"+"___"+pre )
 
