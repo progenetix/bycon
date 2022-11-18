@@ -3,6 +3,7 @@ io_params:
     biosample_id:
       db_key: id
       type: string
+      indexed: True
       compact: True
     group_id:
       db_key: info.group.id
@@ -15,6 +16,7 @@ io_params:
     individual_id:
       db_key: individual_id
       type: string
+      indexed: True
       compact: True
     callset_ids:
       db_key: info.callset_ids
@@ -31,6 +33,7 @@ io_params:
     histological_diagnosis_id:
       db_key: histological_diagnosis.id
       type: string
+      indexed: True
       compact: True
     histological_diagnosis_label:
       db_key: histological_diagnosis.label
@@ -39,6 +42,7 @@ io_params:
     icdo_morphology_id:
       db_key: icdo_morphology.id
       type: string
+      indexed: True
       compact: True
     icdo_morphology_label:
       db_key: icdo_morphology.label
@@ -47,6 +51,7 @@ io_params:
     icdo_topography_id:
       db_key: icdo_topography.id
       type: string
+      indexed: True
       compact: True
     icdo_topography_label:
       db_key: icdo_topography.label
@@ -55,6 +60,7 @@ io_params:
     sampled_tissue_id:
       db_key: sampled_tissue.id
       type: string
+      indexed: True
       compact: True
     sampled_tissue_label:
       db_key: sampled_tissue.label
@@ -75,10 +81,12 @@ io_params:
     age_iso:
       db_key: time_of_collection.age.iso8601duration
       type: string
+      indexed: True
       compact: True
     sex_id:
       db_key: info.sex.id
       type: string
+      indexed: True
       compact: True
     sex_label:
       db_key: info.sex.label
@@ -87,6 +95,7 @@ io_params:
     followup_state_id:
       db_key: followup_state.id
       default: 'EFO:0030039'
+      indexed: True
       compact: True
     followup_state_label:
       db_key: followup_state.label
@@ -95,6 +104,7 @@ io_params:
     followup_time:
       db_key: followup_time
       type: string
+      indexed: True
       compact: True
     # recurrence:
     #   db_key: info.recurrence
@@ -111,12 +121,15 @@ io_params:
     geoprov_city:
       db_key: provenance.geo_location.properties.city
       type: string
+      indexed: True
     geoprov_country:
       db_key: provenance.geo_location.properties.country
       type: string
+      indexed: True
     geoprov_iso_alpha3:
       db_key: provenance.geo_location.properties.ISO3166alpha3
       type: string
+      indexed: True
     geoprov_lat:
       db_key: provenance.geo_location.properties.latitude
       type: number
@@ -138,18 +151,22 @@ io_params:
     experiment_id:
       db_key: analysis_info.experiment_id
       type: string
+      indexed: True
       compact: True
     series_id:
       db_key: analysis_info.series_id
       type: string
+      indexed: True
       compact: True
     platform_id:
       db_key: analysis_info.platform_id
       type: string
+      indexed: True
       compact: True
     cell_line_id:
       db_key: cell_line.id
       type: string
+      indexed: True
       compact: True
     cell_line_label:
       db_key: cell_line.label
@@ -160,6 +177,7 @@ io_params:
     individual_id:
       db_key: id
       type: string
+      indexed: True
       compact: True
     legacy_ids:
       db_key: info.legacy_ids
@@ -167,6 +185,7 @@ io_params:
     sex_id:
       db_key: sex.id
       type: string
+      indexed: True
       compact: True
     sex_label:
       db_key: sex.label
@@ -182,6 +201,7 @@ io_params:
     histological_diagnosis_id:
       db_key: index_disease.disease_code.id
       type: string
+      indexed: True
       compact: True
     histological_diagnosis_label:
       db_key: index_disease.disease_code.label
@@ -193,10 +213,12 @@ io_params:
     index_disease_followup_time:
       db_key: index_disease.followup_time
       type: string
+      indexed: True
       compact: True
     index_disease_followup_state_id:
       db_key: index_disease.followup_state.id
       type: string
+      indexed: True
       compact: True
     index_disease_followup_state_label:
       db_key: index_disease.followup_state.label
@@ -204,6 +226,7 @@ io_params:
       compact: True
     auxiliary_disease_id:
       db_key: auxiliary_disease.disease_code.id
+      indexed: True
       type: string
     auxiliary_disease_label:
       db_key: auxiliary_disease.disease_code.label
@@ -213,12 +236,15 @@ io_params:
       type: string
     geoprov_city:
       db_key: provenance.geo_location.properties.city
+      indexed: True
       type: string
     geoprov_country:
       db_key: provenance.geo_location.properties.country
+      indexed: True
       type: string
     geoprov_iso_alpha3:
       db_key: provenance.geo_location.properties.ISO3166alpha3
+      indexed: True
       type: string
     geoprov_lat:
       db_key: provenance.geo_location.properties.latitude
@@ -239,28 +265,37 @@ io_params:
     analysis_id:
       db_key: id
       type: string
+      indexed: True
       compact: True
     biosample_id:
       db_key: biosample_id
       type: string
+      indexed: True
       compact: True
     individual_id:
       db_key: individual_id
       type: string
+      indexed: True
     legacy_ids:
       db_key: info.legacy_ids
       type: array
+    variant_class:
+      db_key: variant_class
+      indexed: True
     experiment_id:
       db_key: analysis_info.experiment_id
       type: string
+      indexed: True
       compact: True
     series_id:
       db_key: analysis_info.series_id
       type: string
+      indexed: True
       compact: True
     platform_id:
       db_key: analysis_info.platform_id
       type: string
+      indexed: True
       compact: True
     data_provenance:
       db_key: info.data_provenance
@@ -270,26 +305,32 @@ io_params:
     variant_id:
       db_key: id
       type: string
+      indexed: True
       compact: True
     variant_internal_id:
       db_key: variant_internal_id
       type: string
+      indexed: True
       compact: True
     sequence_id:
       db_key: location.sequence_id
       type: string
+      indexed: True
       compact: True
     start:
       db_key: location.interval.start.value
       type: integer
+      indexed: True
       compact: True
     end:
       db_key: location.interval.end
       type: integer
+      indexed: True
       compact: True
     variant_state_id:
       db_key: variant_state.id
       type: string
+      indexed: True
       compact: True
     variant_state_label:
       db_key: variant_state.label
@@ -298,10 +339,12 @@ io_params:
     reference_bases:
       db_key: reference_bases
       type: string
+      indexed: True
       compact: True
     alternate_bases:
       db_key: state.sequence
       type: string
+      indexed: True
       compact: True
 
 io_prefixes:
@@ -310,6 +353,7 @@ io_prefixes:
     external_references:
       type: array
       db_key: external_references
+      indexed: True
       compact: True
       pres:
         PMID:

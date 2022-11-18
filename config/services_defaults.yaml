@@ -77,6 +77,9 @@ info:
   create_date_time: 2015-11-13T00:00:00
   update_date_time: 2022-04-12T08:45:00
 
+aggregator:
+  requested_granularity: boolean
+
 map:
   response_entity_id: beaconMap
   response_schema: beaconMapResponse

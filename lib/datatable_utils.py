@@ -1,4 +1,5 @@
 import csv, re, requests
+from random import sample as randomSamples
 from cgi_parsing import prjsonnice
 
 ################################################################################

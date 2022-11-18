@@ -75,7 +75,7 @@ properties:
             the `startMin` => `startMax` interval, or fusion of the sequence to distant
             partner
           Either `alternateBases` or `variantType` is required, with the exception
-          of range queries (single\ `start` and `end` parameters).
+          of range queries (single `start` and `end` parameters).
         type: string
       variantMinLength:
         description: >-

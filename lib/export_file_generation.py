@@ -77,7 +77,7 @@ def pgxseg_biosample_meta_line(byc, biosample, group_id_key="histological_diagno
 
     for p, k in io_params.items():
 
-        in_pgxseg = k.get("pgxseg", False)
+        in_pgxseg = k.get("compact", False)
         if in_pgxseg is False:
             continue
 
@@ -98,7 +98,7 @@ def pgxseg_biosample_meta_line(byc, biosample, group_id_key="histological_diagno
             line.append("{}={}".format(p, h_v))
 
     for p, k in io_prefixes.items():
-        in_pgxseg = k.get("pgxseg", False)
+        in_pgxseg = k.get("compact", False)
         if in_pgxseg is False:
             continue
         pres = k.get("pres", [])

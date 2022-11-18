@@ -212,7 +212,6 @@ def set_response_entity(byc):
 def run_beacon_init_stack(byc):
 
     initialize_beacon_queries(byc)
-
     generate_genomic_intervals(byc)
     create_empty_beacon_response(byc)
     replace_queries_in_test_mode(byc)
@@ -350,7 +349,6 @@ def update_meta_queries(byc):
     return byc
 
 ################################################################################
-
 
 def create_empty_beacon_response(byc):
 
@@ -781,7 +779,7 @@ def check_computed_interval_frequency_delivery(byc):
     h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
     print("group_id\t"+"\t".join(h_ks))
 
-    cs_cursor = cs_coll.find({"_id": {"$in": q_vals } } )
+    cs_cursor = cs_coll.find({"_id": {"$in": q_vals }, "variant_class": { "$ne": "SNV" } } )
 
     intervals = interval_counts_from_callsets(cs_cursor, byc)
     for intv in intervals:

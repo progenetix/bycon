@@ -76,6 +76,13 @@ info:
 
 ################################################################################
 
+aggregator:
+  request_entity_path_id: genomicVariations
+  response_entity_id: genomicVariant
+  response_schema: beaconBooleanResponse
+
+################################################################################
+
 map:
   request_entity_path_id: map
   response_entity_id: beaconMap

@@ -25,7 +25,7 @@ rewrites:
   biosamples: '/beacon/biosamples/'
   variants: '/beacon/variants/'
   individuals: '/beacon/individuals/'
-  phenopackets: '/beacon/individuals/'
+  phenopackets: '/beacon/phenopackets/'
 
 #response_type_aliases:
 path_response_type_mappings:

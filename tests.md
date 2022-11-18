@@ -54,6 +54,10 @@
 ##### `/variants/` + query
 
 * [/variants/?assemblyId=GRCh38&referenceName=17&variantType=DEL&filterLogic=AND&start=7500000&start=7676592&end=7669607&end=7800000](http://progenetix.org/beacon/variants/?assemblyId=GRCh38&referenceName=17&variantType=DEL&filterLogic=AND&start=7500000&start=7676592&end=7669607&end=7800000)
+* [/variants/?assemblyId=GRCh38&referenceName=17&variantType=DEL&filterLogic=AND&start=7500000&start=7676592&end=7669607&end=7800000&requestedGranularity=boolean](http://progenetix.org/beacon/variants/?assemblyId=GRCh38&referenceName=17&variantType=DEL&filterLogic=AND&start=7500000&start=7676592&end=7669607&end=7800000&requestedGranularity=boolean)
+    - same w/ Boolean response
+* [/variants/?requestedGranularity=boolean&referenceBases=G&alternateBases=A&referenceName=refseq:NC_000017.11&start=7577120](http://progenetix.org/beacon/variants/?requestedGranularity=boolean&referenceBases=G&alternateBases=A&referenceName=refseq:NC_000017.11&start=7577120)
+
 
 ##### `/variants/{id}/` or `/g_variants/{id}/`
 

@@ -1,7 +1,7 @@
 import cgi, cgitb, humps, json, re, sys
 from urllib.parse import urlparse, parse_qs, unquote
 from os import environ
-from humps import decamelize
+from humps import camelize, decamelize
 
 ################################################################################
 
@@ -71,7 +71,6 @@ def cgi_parse_POST(byc):
     defs = byc.get("beacon_defaults", {})
     form = {}
 
-    
     # TODO: catch error & return for non-json posts
     if "json" in content_typ:
         body = sys.stdin.read(int(content_len))
@@ -341,7 +340,7 @@ def cgi_print_response(byc, status_code):
         cgi_simplify_response(byc)
 
         if isinstance(byc["service_response"], dict):
-            resp = json.dumps(humps.camelize(byc["service_response"]["response"]), default=str)
+            resp = json.dumps(camelize(byc["service_response"]["response"]), default=str)
         else:
             resp = byc["service_response"]
         if isinstance(resp, list):
@@ -462,7 +461,7 @@ def open_json_streaming(byc, filename="data.json"):
         print()
 
     print('{"meta":', end = '')
-    print(json.dumps(humps.camelize(meta), indent=None, sort_keys=True, default=str), end=",")
+    print(json.dumps(camelize(meta), indent=None, sort_keys=True, default=str), end=",")
     print('"response":{', end='')
     for r_k, r_v in byc["service_response"].items():
         if "results" in r_k:
@@ -470,7 +469,7 @@ def open_json_streaming(byc, filename="data.json"):
         if "meta" in r_k:
             continue
         print('"'+r_k+'":', end='')
-        print(json.dumps(humps.camelize(r_v), indent=None, sort_keys=True, default=str), end=",")
+        print(json.dumps(camelize(r_v), indent=None, sort_keys=True, default=str), end=",")
     print('"results":[', end="")
 
 ################################################################################
@@ -501,7 +500,7 @@ def close_text_streaming():
 ################################################################################
 
 def prjsoncam(this):
-    prjsonnice(humps.camelize(this))
+    prjsonnice(camelize(this))
 
 ################################################################################
 
@@ -514,7 +513,7 @@ def decamelize_words(j_d):
 
     de_cams = ["gVariants", "sequenceId", "relativeCopyClass", "speciesId", "chromosomeLocation", "genomicLocation"]
     for d in de_cams:
-        j_d = re.sub(r"\b{}\b".format(d), humps.decamelize(d), j_d)
+        j_d = re.sub(r"\b{}\b".format(d), decamelize(d), j_d)
 
     return j_d
 

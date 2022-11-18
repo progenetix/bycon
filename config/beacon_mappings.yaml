@@ -30,6 +30,9 @@ service_aliases:
   g_variants: genomicVariations
   genomicVariations: genomicVariations
   variants: genomicVariations
+  aggregator: aggregator
+  beaconAggregator: aggregator
+  beacon_aggregator: aggregator
 
 data_pipeline_entry_types:
   - analyses
@@ -56,6 +59,7 @@ default_schema_from_model:
 
 path_response_type_mappings:
 
+  aggregator: aggregator
   analyses: analysis
   cohorts: cohort
   datasets: dataset

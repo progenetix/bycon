@@ -111,6 +111,7 @@ form_list_pars:
     - callsetIds
     - analysisIds
     - collationTypes
+    - selectedBeacons
 
 resource_urls:
   ncbi_geosoft: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?form=text&acc=
