@@ -76,10 +76,20 @@
   - this example retrieves all biosamples having an annotation for the Cellosaurus _CVCL_0004_
   identifier (K562)
 
+### Beacon Support & Beacon+
+
+##### `/biosamples/{id}/phenopackets/`
+
+
+##### `/individuals/{id}/phenopackets/`
+
+* [/individuals/pgxind-kftx25hb/phenopackets/](http://progenetix.org/beacon/individuals/pgxind-kftx3fpk/phenopackets/)
+
+#### `/aggregator/`
+
+* [http://progenetix.org/beacon/aggregator/?referenceName=refseq:NC_000007.14&start=140753335&alternateBases=A&assemblyId=GRCh38&responseEntityId=genomicVariant](http://progenetix.org/beacon/aggregator/?referenceName=refseq:NC_000007.14&start=140753335&alternateBases=A&assemblyId=GRCh38&responseEntityId=genomicVariant)
 
 ## Services
-
-### Beacon Support
 
 ### Beyond Beacon Services
 
