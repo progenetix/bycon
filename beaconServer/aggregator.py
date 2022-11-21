@@ -121,7 +121,7 @@ def _set_default_values(pvs, ext_defs, byc):
 
 def _remap_parameters_values(pvs, ext_defs, byc):
 
-    v_rs_chros = byc["variant_definitions"]["refseq_chronames"]
+    v_rs_chros = byc["variant_definitions"]["chro_aliases"]
     v_p_defs = byc["variant_definitions"]["parameters"]
     form_p = deepcopy(byc["variant_pars"])
 
@@ -131,14 +131,18 @@ def _remap_parameters_values(pvs, ext_defs, byc):
         val = form_p[v_p_k]
         if v_p_k in ext_defs["parameter_map"].keys():
             v_p_v = ext_defs["parameter_map"][v_p_k]
+
             if "replace" in v_p_v:
                 val = re.sub(v_p_v["replace"][0], v_p_v["replace"][1], val)
-            if "start" in v_p_k or "end" in v_p_k:
+            if "reference_name" in v_p_k:
+                if "chro" in v_p_v.get("reference_style", ""):
+                    if val in v_rs_chros:
+                        val = v_rs_chros[val]
+
+            elif "start" in v_p_k or "end" in v_p_k:
                 val[0] += int(v_p_v.get("shift", 0))
             if "array" in v_p_defs[v_p_k].get("type", "string"):
                 val = ",".join(map(str, val))
-            if "refseq:" in val:
-                val = v_rs_chros[ val ]
 
             pvs.update({v_p_v["remap"]: val})
 

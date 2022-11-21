@@ -34,6 +34,7 @@ beacon_params:
           shift: 1
         reference_name:
           remap: chrom
+          reference_style: chro
         dataset_ids:
           remap: dataset
           value: cosmic
@@ -64,6 +65,9 @@ beacon_params:
         assembly_id:
           remap: assemblyId
           value: GRCh38
+        reference_name:
+          remap: referenceName
+          reference_style: chro
       response_map:
         response_summary:
           remap: response
