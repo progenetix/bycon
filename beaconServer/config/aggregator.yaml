@@ -1,62 +1,72 @@
+description: >-
+  This is the parameter file for bycon's `aggregator` app, used to prototype
+  federated Beacon queries through translating / sending / retrieving / converting
+  Beacon queries in v2 format to the format of the respective Beacon instances.
+
 selected_beacons:
   - cosmic
   - progenetix
   - bipmed
+
 request_timeout: 30
+
 beacon_params:
-  cosmic:
-    id: "COSMIC Beacon"
-    base_url: https://cancer.sanger.ac.uk/api/ga4gh/beacon?format=json&
-    api_version: 0.3
-    parameter_map:
-      include_dataset_responses:
-        remap: includeDatasetResponses
-        default: HIT
-      assembly_id:
-        remap: ref
-        replace:
-          - GRCh
-          - ""
-      alternate_bases:
-        remap: allele
-      start:
-        remap: pos
-        shift: 1
-      reference_name:
-        remap: chrom
-      dataset_ids:
-        remap: dataset
-        default: cosmic
-    response_map:
-      response_summary:
-        remap: response
+  description: >-
+    TBD
 
-  progenetix:
-    id: "org.progenetix.beacon"
-    base_url: http://progenetix.org/beacon/g_variants/?
-    api_version: 2.0
-    camelize: True
-    parameter_map:
-      assembly_id:
-        remap: assemblyId
-        default: GRCh38
-    response_map: {}
+  parameters:
+    cosmic:
+      id: "COSMIC Beacon"
+      base_url: https://cancer.sanger.ac.uk/api/ga4gh/beacon?format=json&
+      ui_url: https://cancer.sanger.ac.uk/cosmic/beacon
+      api_version: 0.3
+      parameter_map:
+        include_dataset_responses:
+          remap: includeDatasetResponses
+          value: HIT
+        assembly_id:
+          remap: ref
+          value: "38"
+        alternate_bases:
+          remap: allele
+        start:
+          remap: pos
+          shift: 1
+        reference_name:
+          remap: chrom
+        dataset_ids:
+          remap: dataset
+          value: cosmic
+      response_map:
+        response_summary:
+          remap: response
 
-  bipmed:
-    id: "BIPMed"
-    base_url: https://bcbcloud.fcm.unicamp.br/beacons/bipmed/query?
-    api_version: 1.0
-    camelize: True
-    parameter_map:
-      include_dataset_responses:
-        remap: includeDatasetResponses
-        default: HIT
-      assembly_id:
-        remap: assemblyId
-        default: GRCh38
-    response_map:
-      response_summary:
-        remap: response
+    progenetix:
+      id: "org.progenetix.beacon"
+      base_url: http://progenetix.org/beacon/g_variants/?
+      api_version: 2.0
+      camelize: True
+      parameter_map:
+        assembly_id:
+          remap: assemblyId
+          value: GRCh38
+      response_map: {}
+
+    bipmed:
+      id: "BIPMed"
+      base_url: https://bcbcloud.fcm.unicamp.br/beacons/bipmed/query?
+      api_version: 1.0
+      camelize: True
+      parameter_map:
+        include_dataset_responses:
+          remap: includeDatasetResponses
+          value: HIT
+        assembly_id:
+          remap: assemblyId
+          value: GRCh38
+      response_map:
+        response_summary:
+          remap: response
 
 
 
