@@ -346,6 +346,10 @@ io_params:
       type: string
       indexed: True
       compact: True
+    annotation_derived:
+      db_key: info.annotation_derived
+      type: boolean
+      indexed: True
 
 io_prefixes:
 
