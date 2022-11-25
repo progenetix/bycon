@@ -225,6 +225,7 @@ def translate_reference_ids(byc):
     c_r = {}
     r_c = {}
     r_a = {}
+    c_a = {}
     for c, c_d in v_d_refsc.items():
         c_r.update({ c_d["chr"]: c_d["refseq_id"] })
         r_c.update({ c_d["refseq_id"]: c_d["chr"] })
@@ -233,11 +234,18 @@ def translate_reference_ids(byc):
             c_d["chr"]: c_d["refseq_id"],
             c_d["refseq_id"]: c_d["refseq_id"],
             c_d["genbank_id"]: c_d["refseq_id"]
+        }),
+        c_a.update({
+            c: c_d["chr"],
+            c_d["chr"]: c_d["chr"],
+            c_d["refseq_id"]: c_d["chr"],
+            c_d["genbank_id"]: c_d["chr"]
         })
     byc["variant_definitions"].update({
         "chro_refseq_ids": c_r,
         "refseq_chronames": r_c,
-        "refseq_aliases": r_a
+        "refseq_aliases": r_a,
+        "chro_aliases": c_a
     })
 
     return byc
