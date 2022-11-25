@@ -1,7 +1,6 @@
 #!/usr/local/bin/python3
 
-import re, json, sys, datetime, argparse
-import urllib.parse
+import re, json, sys, datetime, argparse, urllib.parse
 from os import path, environ, pardir
 from copy import deepcopy
 from liftover import get_lifter

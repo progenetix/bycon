@@ -16,6 +16,29 @@ beacon_params:
     TBD
 
   parameters:
+
+    progenetixTest:
+      id: "test.progenetix.beacon"
+      base_url: http://progenetix.test/beacon/g_variants/?
+      api_version: 2.0
+      camelize: True
+      parameter_map:
+        assembly_id:
+          remap: assemblyId
+          value: GRCh38
+      response_map: {}
+
+    progenetix:
+      id: "org.progenetix.beacon"
+      base_url: http://progenetix.org/beacon/g_variants/?
+      api_version: 2.0
+      camelize: True
+      parameter_map:
+        assembly_id:
+          remap: assemblyId
+          value: GRCh38
+      response_map: {}
+
     cosmic:
       id: "COSMIC Beacon"
       base_url: https://cancer.sanger.ac.uk/api/ga4gh/beacon?format=json&
@@ -42,28 +65,6 @@ beacon_params:
       response_map:
         response_summary:
           remap: response
-
-    progenetix:
-      id: "org.progenetix.beacon"
-      base_url: http://progenetix.org/beacon/g_variants/?
-      api_version: 2.0
-      camelize: True
-      parameter_map:
-        assembly_id:
-          remap: assemblyId
-          value: GRCh38
-      response_map: {}
-
-    progenetixTest:
-      id: "test.progenetix.beacon"
-      base_url: http://progenetix.test/beacon/g_variants/?
-      api_version: 2.0
-      camelize: True
-      parameter_map:
-        assembly_id:
-          remap: assemblyId
-          value: GRCh38
-      response_map: {}
 
     bipmed:
       id: "BIPMed"
