@@ -107,6 +107,7 @@ beacon_params:
       logo_url: https://rest.ensembl.org/static/img/e-ensembl.png
       api_version: 1.0
       camelize: True
+      pos_min_max_remaps: True
       parameter_map:
         include_dataset_responses:
           remap: includeDatasetResponses
@@ -117,9 +118,12 @@ beacon_params:
         reference_name:
           remap: referenceName
           reference_style: chro
-        # content-type:
-        #   remap: content-type
-        #   value: "application/json"
+        reference_bases:
+          remap: referenceBases
+          default: "N"
+        variant_type:
+          remap: variantType
+          variant_style: VCF
       response_map:
         response_summary:
           remap: _root_
@@ -129,17 +133,3 @@ beacon_params:
       api_version: "v2.0.0"
       base_url: https://beacons.bsc.es/beacon/v2.0.0
       
-# {
-#   "query": {
-#     "ref": "GRCh38",
-#     "allele": "A",
-#     "dataset": "cosmic",
-#     "chrom": "7",
-#     "pos": "140753336"
-#   },
-#   "version": "96",
-#   "beacon_id": "COSMIC Beacon",
-#   "response": {
-#     "exists": "true"
-#   }
-# }

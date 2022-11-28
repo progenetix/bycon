@@ -218,6 +218,20 @@ variant_state_aliases:
   EFO:0030068: EFO:0030068
   EFO:0030069: EFO:0030069
 
+variant_state_VCF_aliases:
+  DUP: DUP
+  DEL: DEL
+  CNV: CNV
+  EFO:0030066: CNV
+  EFO:0030070: DUP
+  EFO:0030071: DUP
+  EFO:0030072: DUP
+  EFO:0030073: DUP
+  EFO:0030067: DEL
+  EFO:0030068: DEL
+  EFO:0030069: DEL
+ 
+
 variant_states:
   EFO:0030066:
     child_terms:
