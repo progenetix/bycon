@@ -106,6 +106,7 @@ def aggregator():
         _set_default_values(pvs, ext_defs, byc)
         _remap_parameters_values(pvs, ext_defs, byc)
         _add_parameter_values(pvs, ext_defs, byc)
+        _remap_min_max_positions(pvs, ext_defs, byc)
         _set_fixed_values(pvs, ext_defs, byc)
 
         url = "{}{}".format(ext_defs["base_url"], urllib.parse.urlencode(pvs))
@@ -136,6 +137,7 @@ def _set_default_values(pvs, ext_defs, byc):
 def _remap_parameters_values(pvs, ext_defs, byc):
 
     v_rs_chros = byc["variant_definitions"]["chro_aliases"]
+    v_states = byc["variant_definitions"]["variant_state_VCF_aliases"]
     v_p_defs = byc["variant_definitions"]["parameters"]
     form_p = deepcopy(byc["form_data"])
 
@@ -150,10 +152,16 @@ def _remap_parameters_values(pvs, ext_defs, byc):
 
             if "replace" in v_p_v:
                 val = re.sub(v_p_v["replace"][0], v_p_v["replace"][1], val)
+
             if "reference_name" in v_p_k:
                 if "chro" in v_p_v.get("reference_style", ""):
                     if val in v_rs_chros:
                         val = v_rs_chros[val]
+
+            if "variant_type" in v_p_k:
+                if "VCF" in v_p_v.get("variant_style", "VCF"):
+                    if val in v_states:
+                        val = v_states[val]
 
             elif "start" in v_p_k or "end" in v_p_k:
                 val[0] = int(val[0]) + int(v_p_v.get("shift", 0))
@@ -180,7 +188,8 @@ def _lift_positions(target_assembly, val):
 
 def _add_parameter_values(pvs, ext_defs, byc):
 
-    # form_p = deepcopy(byc["variant_pars"])
+    # adding the parameters which stay as is
+
     form_p = deepcopy(byc["form_data"])
     v_p_defs = byc["variant_definitions"]["parameters"]
     
@@ -196,6 +205,30 @@ def _add_parameter_values(pvs, ext_defs, byc):
             v_p_k = camelize(v_p_k)
         
         pvs.update({v_p_k: val})
+
+    return pvs
+
+################################################################################
+
+def _remap_min_max_positions(pvs, ext_defs, byc):
+
+    form_p = deepcopy(byc["form_data"])
+
+    if ext_defs.get("pos_min_max_remaps", False) is not True:
+        return pvs
+
+    if len(form_p["start"]) is not 2 or len(form_p["end"]) is not 2:
+        return pvs
+
+    pvs.update({
+        "startMin": form_p["start"][0],
+        "startMax": form_p["start"][1],
+        "endMin": form_p["end"][0],
+        "endMax": form_p["end"][1]
+    })
+
+    pvs.pop("start", None)
+    pvs.pop("end", None)
 
     return pvs
 
@@ -239,7 +272,7 @@ def _format_response(r, url, ext_defs, byc):
                 "welcome_url": ext_defs.get("welcome_url", None),
                 "logo_url": ext_defs.get("logo_url", None)
             },
-            "error": r.get("error", None)
+            "error": str(r.get("error", None)) # str to avoid re-interpretation of code
         }
 
     return r
