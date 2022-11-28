@@ -127,3 +127,9 @@ beacon_params:
       response_map:
         response_summary:
           remap: _root_
+
+    bsc:
+      id: "es.elixir.bsc.beacon"
+      api_version: "v2.0.0"
+      base_url: https://beacons.bsc.es/beacon/v2.0.0
+      
