@@ -2,6 +2,9 @@ description: >-
   This is the parameter file for bycon's `aggregator` app, used to prototype
   federated Beacon queries through translating / sending / retrieving / converting
   Beacon queries in v2 format to the format of the respective Beacon instances.
+  Please be aware that `bycon` uses `snake_cased` keys for its internal parameters;
+  _i.e._ a URL parameter `assemblyId` will be accessible as `byc["form_data"]["assembly_id"]`
+  to the internal methods.
 
 selected_beacons:
   - cosmic
@@ -11,7 +14,7 @@ selected_beacons:
   - bipmed
   - bsc
 
-request_timeout: 30
+request_timeout: 45
 
 beacon_params:
 

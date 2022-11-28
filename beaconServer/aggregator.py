@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 
-import re, json, sys, datetime, argparse, urllib.parse
+import re, json, sys, datetime, argparse, urllib.parse, time
 from os import path, environ, pardir
 from copy import deepcopy
 from liftover import get_lifter
@@ -110,10 +110,12 @@ def aggregator():
         _set_fixed_values(pvs, ext_defs, byc)
 
         url = "{}{}".format(ext_defs["base_url"], urllib.parse.urlencode(pvs))
-
+        resp_start = time.time()
         r = _retrieve_beacon_response(url)
+        resp_end = time.time()
         # prjsoncam(r)
         r_f = _format_response(r, url, ext_defs, byc)
+        r_f["info"].update({"response_time": "{}ms".format(round((resp_end - resp_start) * 1000, 0)) })
         byc["service_response"]["response"]["response_sets"].append(r_f)
 
     for r in byc["service_response"]["response"]["response_sets"]:
@@ -127,6 +129,8 @@ def aggregator():
 
 def _set_default_values(pvs, ext_defs, byc):
 
+    # adding the parameters with defaults defined in the mappings
+
     for v_p_k, v_p_v in ext_defs["parameter_map"].items():
         if "default" in v_p_v:
             pvs.update({v_p_v["remap"]: v_p_v["default"]})
@@ -135,6 +139,8 @@ def _set_default_values(pvs, ext_defs, byc):
 ################################################################################
 
 def _remap_parameters_values(pvs, ext_defs, byc):
+
+    # adding the parameters defined in the mappings
 
     v_rs_chros = byc["variant_definitions"]["chro_aliases"]
     v_states = byc["variant_definitions"]["variant_state_VCF_aliases"]
@@ -188,7 +194,7 @@ def _lift_positions(target_assembly, val):
 
 def _add_parameter_values(pvs, ext_defs, byc):
 
-    # adding the parameters which stay as is
+    # adding the parameters which stay _as is_
 
     form_p = deepcopy(byc["form_data"])
     v_p_defs = byc["variant_definitions"]["parameters"]
@@ -211,6 +217,9 @@ def _add_parameter_values(pvs, ext_defs, byc):
 ################################################################################
 
 def _remap_min_max_positions(pvs, ext_defs, byc):
+
+    # special mapping of start | end values for bracket queries to the `startMin`
+    # format used in v0.4 / v1 
 
     form_p = deepcopy(byc["form_data"])
 
@@ -277,6 +286,7 @@ def _format_response(r, url, ext_defs, byc):
 
     return r
 
+################################################################################
 ################################################################################
 ################################################################################
 
