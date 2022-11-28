@@ -9,6 +9,7 @@ selected_beacons:
   # - progenetixTest
   - ensembl
   - bipmed
+  - bsc
 
 request_timeout: 30
 
@@ -131,5 +132,17 @@ beacon_params:
     bsc:
       id: "es.elixir.bsc.beacon"
       api_version: "v2.0.0"
-      base_url: https://beacons.bsc.es/beacon/v2.0.0
-      
+      base_url: https://beacons.bsc.es/beacon/v2.0.0/g_variants/?
+      logo_url: https://temu.bsc.es/assets/images/BSC-blue-small.png
+      camelize: True
+      parameter_map:
+        assembly_id:
+          remap: assemblyId
+          value: GRCh38
+        reference_name:
+          remap: chrom
+          reference_style: chro
+        variant_type:
+          remap: variantType
+          variant_style: VCF
+      response_map: {}
