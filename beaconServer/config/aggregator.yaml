@@ -6,19 +6,56 @@ description: >-
 selected_beacons:
   - cosmic
   - progenetix
+  # - progenetixTest
+  - ensembl
   - bipmed
 
 request_timeout: 30
 
 beacon_params:
-  description: >-
-    TBD
 
-  parameters:
+  defaults:
+    api_version: 2.0
+    assembly_id: GRCh38
+
+  description: >-
+    Beacon instances contain the definitions for query parameters and 
+    responses which have to be remapped. In the case of clean GRCh38 v2
+    Beacons these map in principle can be empty.
+
+  instances:
+
+    progenetixTest:
+      id: "test.progenetix.beacon"
+      base_url: http://progenetix.test/beacon/g_variants/?
+      logo_url: http://progenetix.org/img/progenetix-logo-black.png
+      welcome_url: http://progenetix.test/beaconAggregator/
+      api_version: 2.0
+      camelize: True
+      parameter_map:
+        assembly_id:
+          remap: assemblyId
+          value: GRCh38
+      response_map: {}
+
+    progenetix:
+      id: "org.progenetix.beacon"
+      base_url: https://progenetix.org/beacon/g_variants/?
+      logo_url: https://progenetix.org/img/progenetix-logo-black.png
+      welcome_url: https://progenetix.org/beaconAggregator/
+      api_version: 2.0
+      camelize: True
+      parameter_map:
+        assembly_id:
+          remap: assemblyId
+          value: GRCh38
+      response_map: {}
+
     cosmic:
       id: "COSMIC Beacon"
       base_url: https://cancer.sanger.ac.uk/api/ga4gh/beacon?format=json&
-      ui_url: https://cancer.sanger.ac.uk/cosmic/beacon
+      logo_url: https://cancer.sanger.ac.uk/images/banners/cosmic_banner_328x68.png
+      welcome_url: https://cancer.sanger.ac.uk/cosmic/beacon
       api_version: 0.3
       parameter_map:
         include_dataset_responses:
@@ -42,20 +79,11 @@ beacon_params:
         response_summary:
           remap: response
 
-    progenetix:
-      id: "org.progenetix.beacon"
-      base_url: http://progenetix.org/beacon/g_variants/?
-      api_version: 2.0
-      camelize: True
-      parameter_map:
-        assembly_id:
-          remap: assemblyId
-          value: GRCh38
-      response_map: {}
-
     bipmed:
       id: "BIPMed"
       base_url: https://bcbcloud.fcm.unicamp.br/beacons/bipmed/query?
+      welcome_url: https://bipmed.org/pages/beacon.html
+      logo_url: https://bipmed.org/assets/images/logo.png
       api_version: 1.0
       camelize: True
       parameter_map:
@@ -72,8 +100,29 @@ beacon_params:
         response_summary:
           remap: response
 
-
-
+    ensembl:
+      id: "Ensembl"
+      base_url: https://rest.ensembl.org/ga4gh/beacon/query?
+      welcome_url: https://rest.ensembl.org/documentation/info/beacon_query_get
+      logo_url: https://rest.ensembl.org/static/img/e-ensembl.png
+      api_version: 1.0
+      camelize: True
+      parameter_map:
+        include_dataset_responses:
+          remap: includeDatasetResponses
+          value: HIT
+        assembly_id:
+          remap: assemblyId
+          value: GRCh38
+        reference_name:
+          remap: referenceName
+          reference_style: chro
+        # content-type:
+        #   remap: content-type
+        #   value: "application/json"
+      response_map:
+        response_summary:
+          remap: _root_
 
 
 # {

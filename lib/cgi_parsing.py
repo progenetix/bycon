@@ -335,6 +335,10 @@ def cgi_print_response(byc, status_code):
     # with simple key-value pairs)
     # TODO: universal text table converter ... partially implemented
 
+    # print(byc["output"])
+    # print(byc["service_response"]["response"])
+
+
     if "text" in byc["output"]:
 
         cgi_simplify_response(byc)
