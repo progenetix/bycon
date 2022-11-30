@@ -91,32 +91,39 @@ def aggregator():
     for b in byc["service_config"]["selected_beacons"]:
 
         ext_defs = b_p[b]
-        pvs = {}
 
-        """
-        Values (for the respective parameter names) are processed step-wise:
-        1. defaults are read in
-        2. form values w/ remap infor are processed
-        3. the non-remapped p=v are added
-        4. fixed `value` parameters are (over-)written
-        TODO: should we be explicit in parsing selected parameters,
-        i.e. evaluating all (relevant) v2 ones?
-        """
+        for ds_id in ext_defs.get("dataset_ids", [""]):
 
-        _set_default_values(pvs, ext_defs, byc)
-        _remap_parameters_values(pvs, ext_defs, byc)
-        _add_parameter_values(pvs, ext_defs, byc)
-        _remap_min_max_positions(pvs, ext_defs, byc)
-        _set_fixed_values(pvs, ext_defs, byc)
+            byc["form_data"].update({"dataset_ids": [ds_id]})
 
-        url = "{}{}".format(ext_defs["base_url"], urllib.parse.urlencode(pvs))
-        resp_start = time.time()
-        r = _retrieve_beacon_response(url)
-        resp_end = time.time()
-        # prjsoncam(r)
-        r_f = _format_response(r, url, ext_defs, byc)
-        r_f["info"].update({"response_time": "{}ms".format(round((resp_end - resp_start) * 1000, 0)) })
-        byc["service_response"]["response"]["response_sets"].append(r_f)
+            pvs = {}
+
+            """
+            Values (for the respective parameter names) are processed step-wise:
+            1. defaults are read in
+            2. form values w/ remap infor are processed
+            3. the non-remapped p=v are added
+            4. fixed `value` parameters are (over-)written
+            TODO: should we be explicit in parsing selected parameters,
+            i.e. evaluating all (relevant) v2 ones?
+            """
+
+            _set_dataset_id(pvs, ext_defs, ds_id)
+            _set_default_values(pvs, ext_defs, byc)
+            _remap_parameters_values(pvs, ext_defs, byc)
+            _add_parameter_values(pvs, ext_defs, byc)
+            _remap_min_max_positions(pvs, ext_defs, byc)
+            _set_fixed_values(pvs, ext_defs, byc)
+
+            url = "{}{}".format(ext_defs["base_url"], urllib.parse.urlencode(pvs))
+ 
+            resp_start = time.time()
+            r = _retrieve_beacon_response(url)
+            resp_end = time.time()
+            # prjsoncam(r)
+            r_f = _format_response(r, url, ext_defs, ds_id, byc)
+            r_f["info"].update({"response_time": "{}ms".format(round((resp_end - resp_start) * 1000, 0)) })
+            byc["service_response"]["response"]["response_sets"].append(r_f)
 
     for r in byc["service_response"]["response"]["response_sets"]:
         if r["exists"] is True:
@@ -124,6 +131,25 @@ def aggregator():
             continue
 
     cgi_print_response( byc, 200 )
+
+################################################################################
+
+def _set_dataset_id(pvs, ext_defs, ds_id):
+
+    if len(ds_id) < 1:
+
+        return pvs
+
+    if "dataset_ids" in ext_defs["parameter_map"]:
+        pvs.update({ ext_defs["parameter_map"]["dataset_ids"].get("remap", "dataset_ids"): ds_id})
+        return pvs
+
+    if ext_defs.get("camelize", True) is True: 
+        pvs.update({ camelize("dataset_ids"): ds_id})
+    else:
+        pvs.update({ "dataset_ids": ds_id})
+
+    return pvs
 
 ################################################################################
 
@@ -141,15 +167,24 @@ def _set_default_values(pvs, ext_defs, byc):
 def _remap_parameters_values(pvs, ext_defs, byc):
 
     # adding the parameters defined in the mappings
+    # TODO: de-convolute; maybe by explicitely having a remap method for each
+    #       re-mappable parameter instead of this loop & specials mix
 
     v_rs_chros = byc["variant_definitions"]["chro_aliases"]
     v_states = byc["variant_definitions"]["variant_state_VCF_aliases"]
     v_p_defs = byc["variant_definitions"]["parameters"]
+    service_defaults = byc["service_config"]["beacon_params"].get("defaults", {})
+
     form_p = deepcopy(byc["form_data"])
 
-    target_assembly = ext_defs["parameter_map"].get("assembly_id", "GRCh38")
+    target_assembly = service_defaults.get("assembly_id", "GRCh38")
+    if "assembly_id" in ext_defs["parameter_map"]:
+        target_assembly = ext_defs["parameter_map"]["assembly_id"].get("value", "GRCh38")
+
+    chro = v_rs_chros.get( form_p.get("reference_name", "NA"), "NA") 
 
     for v_p_k in v_p_defs.keys():
+
         if not v_p_k in form_p.keys():
             continue
         val = form_p[v_p_k]
@@ -161,8 +196,12 @@ def _remap_parameters_values(pvs, ext_defs, byc):
 
             if "reference_name" in v_p_k:
                 if "chro" in v_p_v.get("reference_style", ""):
-                    if val in v_rs_chros:
-                        val = v_rs_chros[val]
+                    val = chro
+
+            if "variant_type" in v_p_k:
+                if "VCF" in v_p_v.get("variant_style", "VCF"):
+                    if val in v_states:
+                        val = v_states[val]
 
             if "variant_type" in v_p_k:
                 if "VCF" in v_p_v.get("variant_style", "VCF"):
@@ -173,7 +212,7 @@ def _remap_parameters_values(pvs, ext_defs, byc):
                 val[0] = int(val[0]) + int(v_p_v.get("shift", 0))
                 
                 if not "38" in target_assembly:
-                    _lift_positions(target_assembly, val)
+                    val = _lift_positions(target_assembly, chro, val)
 
             if "array" in v_p_defs[v_p_k].get("type", "string"):
                 val = ",".join(map(str, val))
@@ -184,9 +223,21 @@ def _remap_parameters_values(pvs, ext_defs, byc):
 
 ################################################################################
 
-def _lift_positions(target_assembly, val):
+def _lift_positions(target_assembly, chro, val):
 
     # TODO: liftover
+    if "38" in target_assembly:
+        return val
+
+    lifted = []
+
+    if "19" in target_assembly or "37" in target_assembly:
+
+        converter = get_lifter('hg38', 'hg19')
+        for v in val:
+            lifted.append(converter[chro][int(v)][0][1])
+
+        return lifted
 
     return val
 
@@ -261,7 +312,7 @@ def _retrieve_beacon_response(url):
 
 ################################################################################
 
-def _format_response(r, url, ext_defs, byc):
+def _format_response(r, url, ext_defs, ds_id, byc):
 
     summary_k = "responseSummary"
     if "response_summary" in ext_defs["response_map"].keys():
@@ -274,15 +325,13 @@ def _format_response(r, url, ext_defs, byc):
 
     r = {
             "id": ext_defs["id"],
+            "dataset_id": ds_id,
             "api_version": ext_defs.get("api_version", None),
             "exists": test_truthy(b_resp.get("exists", False)),
-            "info": {
-                "query_url": urllib.parse.unquote(url),
-                "welcome_url": ext_defs.get("welcome_url", None),
-                "logo_url": ext_defs.get("logo_url", None)
-            },
+            "info": deepcopy(ext_defs.get("info", {})),
             "error": str(r.get("error", None)) # str to avoid re-interpretation of code
         }
+    r["info"].update({"query_url": urllib.parse.unquote(url)})
 
     return r
 
