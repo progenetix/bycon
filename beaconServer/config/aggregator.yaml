@@ -15,7 +15,7 @@ selected_beacons:
   - bipmed
   - bsc
 
-request_timeout: 30
+request_timeout: 45
 
 beacon_params:
 
@@ -174,8 +174,6 @@ beacon_params:
         reference_name:
           remap: chrom
           reference_style: chro
-        start:
-          remap: start
         variant_type:
           remap: variantType
           variant_style: VCF

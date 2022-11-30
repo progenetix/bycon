@@ -202,6 +202,11 @@ def _remap_parameters_values(pvs, ext_defs, byc):
                     if val in v_states:
                         val = v_states[val]
 
+            if "variant_type" in v_p_k:
+                if "VCF" in v_p_v.get("variant_style", "VCF"):
+                    if val in v_states:
+                        val = v_states[val]
+
             elif "start" in v_p_k or "end" in v_p_k:
                 val[0] = int(val[0]) + int(v_p_v.get("shift", 0))
                 
