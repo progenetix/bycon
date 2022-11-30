@@ -116,7 +116,6 @@ def aggregator():
             _set_fixed_values(pvs, ext_defs, byc)
 
             url = "{}{}".format(ext_defs["base_url"], urllib.parse.urlencode(pvs))
- 
             resp_start = time.time()
             r = _retrieve_beacon_response(url)
             resp_end = time.time()
