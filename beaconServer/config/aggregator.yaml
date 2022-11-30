@@ -2,13 +2,18 @@ description: >-
   This is the parameter file for bycon's `aggregator` app, used to prototype
   federated Beacon queries through translating / sending / retrieving / converting
   Beacon queries in v2 format to the format of the respective Beacon instances.
+  Please be aware that `bycon` uses `snake_cased` keys for its internal parameters;
+  _i.e._ a URL parameter `assemblyId` will be accessible as `byc["form_data"]["assembly_id"]`
+  to the internal methods.
 
 selected_beacons:
-  - cosmic
-  - progenetix
   # - progenetixTest
+  - cosmic
+  - NBDC
+  - progenetix
   - ensembl
   - bipmed
+  - bsc
 
 request_timeout: 30
 
@@ -21,16 +26,25 @@ beacon_params:
   description: >-
     Beacon instances contain the definitions for query parameters and 
     responses which have to be remapped. In the case of clean GRCh38 v2
-    Beacons these map in principle can be empty.
+    Beacons this map in principle can be empty `{}`.
+
+    TODO:
+
+    * multiple datasets per instance
+    * either define all allow parameters w/ their remapping or do not remap at all
 
   instances:
 
     progenetixTest:
       id: "test.progenetix.beacon"
+      api_version: v2.0.0
       base_url: http://progenetix.test/beacon/g_variants/?
-      logo_url: http://progenetix.org/img/progenetix-logo-black.png
-      welcome_url: http://progenetix.test/beaconAggregator/
-      api_version: 2.0
+      dataset_ids:
+        - progenetix
+      info: 
+        name: "Progenetix Cancer Genome Beacon (local test)"
+        logo_url: http://progenetix.org/img/progenetix-logo-black.png
+        welcome_url: http://progenetix.test/beaconAggregator/
       camelize: True
       parameter_map:
         assembly_id:
@@ -40,10 +54,14 @@ beacon_params:
 
     progenetix:
       id: "org.progenetix.beacon"
+      api_version: v2.0.0
       base_url: https://progenetix.org/beacon/g_variants/?
-      logo_url: https://progenetix.org/img/progenetix-logo-black.png
-      welcome_url: https://progenetix.org/beaconAggregator/
-      api_version: 2.0
+      dataset_ids:
+        - progenetix
+      info: 
+        name: "Progenetix Cancer Genome Beacon"
+        logo_url: https://progenetix.org/img/progenetix-logo-black.png
+        welcome_url: https://progenetix.org/beaconAggregator/
       camelize: True
       parameter_map:
         assembly_id:
@@ -52,11 +70,15 @@ beacon_params:
       response_map: {}
 
     cosmic:
-      id: "COSMIC Beacon"
-      base_url: https://cancer.sanger.ac.uk/api/ga4gh/beacon?format=json&
-      logo_url: https://cancer.sanger.ac.uk/images/banners/cosmic_banner_328x68.png
-      welcome_url: https://cancer.sanger.ac.uk/cosmic/beacon
+      id: "sanger.cosmic.beacon"
       api_version: 0.3
+      base_url: https://cancer.sanger.ac.uk/api/ga4gh/beacon?format=json&
+      dataset_ids:
+        - cosmic
+      info: 
+        name: "COSMIC Beacon"
+        logo_url: https://cancer.sanger.ac.uk/images/banners/cosmic_banner_328x68.png
+        welcome_url: https://cancer.sanger.ac.uk/cosmic/beacon
       parameter_map:
         include_dataset_responses:
           remap: includeDatasetResponses
@@ -74,17 +96,19 @@ beacon_params:
           reference_style: chro
         dataset_ids:
           remap: dataset
-          value: cosmic
       response_map:
         response_summary:
           remap: response
 
     bipmed:
       id: "BIPMed"
-      base_url: https://bcbcloud.fcm.unicamp.br/beacons/bipmed/query?
-      welcome_url: https://bipmed.org/pages/beacon.html
-      logo_url: https://bipmed.org/assets/images/logo.png
       api_version: 1.0
+      base_url: https://bcbcloud.fcm.unicamp.br/beacons/bipmed/query?
+      dataset_ids:
+        - ""
+      info:
+        welcome_url: https://bipmed.org/pages/beacon.html
+        logo_url: https://bipmed.org/assets/images/logo.png
       camelize: True
       parameter_map:
         include_dataset_responses:
@@ -102,11 +126,18 @@ beacon_params:
 
     ensembl:
       id: "Ensembl"
-      base_url: https://rest.ensembl.org/ga4gh/beacon/query?
-      welcome_url: https://rest.ensembl.org/documentation/info/beacon_query_get
-      logo_url: https://rest.ensembl.org/static/img/e-ensembl.png
       api_version: 1.0
+      base_url: https://rest.ensembl.org/ga4gh/beacon/query?
+      dataset_ids:
+        - 1kg_3
+        - ph_variants
+        - all_chips
+        - gnomAD
+      info: 
+        welcome_url: https://rest.ensembl.org/documentation/info/beacon_query_get
+        logo_url: https://rest.ensembl.org/static/img/e-ensembl.png
       camelize: True
+      pos_min_max_remaps: True
       parameter_map:
         include_dataset_responses:
           remap: includeDatasetResponses
@@ -117,25 +148,69 @@ beacon_params:
         reference_name:
           remap: referenceName
           reference_style: chro
-        # content-type:
-        #   remap: content-type
-        #   value: "application/json"
+        reference_bases:
+          remap: referenceBases
+          default: "N"
+        variant_type:
+          remap: variantType
+          variant_style: VCF
       response_map:
         response_summary:
           remap: _root_
 
+    bsc:
+      id: "es.elixir.bsc.beacon"
+      api_version: "v2.0.0"
+      dataset_ids:
+        - ""
+      base_url: https://beacons.bsc.es/beacon/v2.0.0/g_variants/?
+      info: 
+        logo_url: https://temu.bsc.es/assets/images/BSC-blue-small.png
+      camelize: True
+      parameter_map:
+        assembly_id:
+          remap: assemblyId
+          value: GRCh38
+        reference_name:
+          remap: chrom
+          reference_style: chro
+        start:
+          remap: start
+        variant_type:
+          remap: variantType
+          variant_style: VCF
+      response_map: {}
 
-# {
-#   "query": {
-#     "ref": "GRCh38",
-#     "allele": "A",
-#     "dataset": "cosmic",
-#     "chrom": "7",
-#     "pos": "140753336"
-#   },
-#   "version": "96",
-#   "beacon_id": "COSMIC Beacon",
-#   "response": {
-#     "exists": "true"
-#   }
-# }
+    NBDC:
+      id: "nbdc-humandbs"
+      api_version: 0.2
+      base_url: https://humandbs.biosciencedbc.jp/beacon/api/query?
+      dataset_ids:
+        - hum0013.v1.freq.v1
+        - hum0014.v3.T2DM.1.v1
+        - hum0015_v1_freq_v1
+        - hum0029.v1.freq.v1
+      info: 
+        name: "NBDC Human Database Beacon"
+        logo_url: https://humandbs.biosciencedbc.jp/beacon/templates/images/nbdc_logo.png
+        organization: "Japan Science and Technology Agency (JST)-National Bioscience Database Center (NBDC)"
+        welcome_url: http://humandbs.biosciencedbc.jp
+      parameter_map:
+        include_dataset_responses:
+          remap: includeDatasetResponses
+          value: HIT
+        assembly_id:
+          remap: ref
+          value: "GRCh37"
+        start:
+          remap: position
+          shift: 1
+        reference_name:
+          remap: chromosome
+          reference_style: chro
+        dataset_ids:
+          remap: dataset
+      response_map:
+        response_summary:
+          remap: response
+
