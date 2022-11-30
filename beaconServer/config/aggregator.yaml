@@ -7,7 +7,7 @@ description: >-
   to the internal methods.
 
 selected_beacons:
-  # - progenetixTest
+  - progenetixTest
   - cosmic
   - NBDC
   - progenetix
@@ -202,10 +202,11 @@ beacon_params:
           value: "GRCh37"
         start:
           remap: position
-          shift: 1
         reference_name:
           remap: chromosome
           reference_style: chro
+        alternate_bases:
+          remap: allele
         dataset_ids:
           remap: dataset
       response_map:

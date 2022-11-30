@@ -140,7 +140,7 @@ def _set_dataset_id(pvs, ext_defs, ds_id):
         return pvs
 
     if "dataset_ids" in ext_defs["parameter_map"]:
-        pvs.update({ ext_defs["parameter_map"].get("remap", "dataset_ids"): ds_id})
+        pvs.update({ ext_defs["parameter_map"]["dataset_ids"].get("remap", "dataset_ids"): ds_id})
         return pvs
 
     if ext_defs.get("camelize", True) is True: 
@@ -327,7 +327,7 @@ def _format_response(r, url, ext_defs, ds_id, byc):
             "dataset_id": ds_id,
             "api_version": ext_defs.get("api_version", None),
             "exists": test_truthy(b_resp.get("exists", False)),
-            "info": ext_defs.get("info", {}),
+            "info": deepcopy(ext_defs.get("info", {})),
             "error": str(r.get("error", None)) # str to avoid re-interpretation of code
         }
     r["info"].update({"query_url": urllib.parse.unquote(url)})
