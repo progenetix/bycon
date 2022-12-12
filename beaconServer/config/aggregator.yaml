@@ -15,6 +15,16 @@ selected_beacons:
   - bipmed
   - bsc
 
+liftover_options:
+  supported_sources:
+    GRCh38: hg38
+    hg38: hg38
+    "38": hg38
+  supported_targets:
+    "19": hg19
+    hg19: hg19
+    GRCh37: hg19
+
 request_timeout: 45
 
 beacon_params:
