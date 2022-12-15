@@ -18,7 +18,8 @@ def jprint(obj):
 
 def retrieve_epmc_publications(pmid):
 
-    informations = { "pmid" : "" } # dirty, to avoind another test
+    pub_info = {}
+    e = False
 
     pmid = re.sub(" ", "", pmid)
     
@@ -29,13 +30,15 @@ def retrieve_epmc_publications(pmid):
     }
 
     response = requests.get("https://www.ebi.ac.uk/europepmc/webservices/rest/search", params = parameters)
-
     if response.status_code == 200:
         results = response.json()["resultList"]["result"]
         if len(results) > 0:
-            informations = results[0]
+            pub_info = results[0]
+
+    if pub_info.get("pmid", "___none___") != pmid:
+        e = f"¡¡¡ Skipping {pmid}: PMID of the retrieved entry doesn't match (possibly EPMC delay?)"
             
-    return informations if (informations["pmid"] == pmid) else print(f"Warning: PMID of the retrieved publication doesn't match with the query (PMID:{pmid})")
+    return pub_info, e
     
 ##############################################################################
 
