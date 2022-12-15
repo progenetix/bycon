@@ -224,21 +224,29 @@ def _remap_parameters_values(pvs, ext_defs, byc):
 
 def _lift_positions(target_assembly, chro, val):
 
-    # TODO: liftover
-    if "38" in target_assembly:
+    l_o_o = byc["service_config"]["liftover_options"]
+    s_a = byc["service_config"]["beacon_params"]["defaults"]["assembly_id"]
+
+    # TODO: error, conversion feedback ...
+    if target_assembly in l_o_o["supported_sources"].keys():
         return val
+
+    if not target_assembly in l_o_o["supported_targets"].keys():
+        return val
+
+    # could be hardcoded; will error out if wrong config
+    # a bit of a preparation for swapping input assemblies
+    s_l_o_k = l_o_o["supported_sources"][s_a]
 
     lifted = []
 
-    if "19" in target_assembly or "37" in target_assembly:
+    t_l_o_k = l_o_o["supported_targets"]["target_assembly"]
 
-        converter = get_lifter('hg38', 'hg19')
-        for v in val:
-            lifted.append(converter[chro][int(v)][0][1])
+    converter = get_lifter(s_l_o_k, t_l_o_k)
+    for v in val:
+        lifted.append(converter[chro][int(v)][0][1])
 
-        return lifted
-
-    return val
+    return lifted
 
 ################################################################################
 
@@ -274,6 +282,9 @@ def _remap_min_max_positions(pvs, ext_defs, byc):
     form_p = deepcopy(byc["form_data"])
 
     if ext_defs.get("pos_min_max_remaps", False) is not True:
+        return pvs
+
+    if not "start" in form_p or not "end" in form_p:
         return pvs
 
     if len(form_p["start"]) is not 2 or len(form_p["end"]) is not 2:

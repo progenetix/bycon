@@ -145,7 +145,7 @@ def print_map_from_geolocations(byc, geolocs):
         t = """
 <h4>Map Configuration</h4>
 <p>The following parameters may be modified by providing alternative values in
-the URL, e.g. "&canvas_w_px=1024".</p>
+the URL, e.g. "&map_w_px=1024".</p>
 <table>
 """
         t += "<tr><th>Map Parameter</th><th>Value</th></tr>\n"
@@ -185,6 +185,8 @@ def create_marker_layer(leaf_markers):
 def update_plot_params_from_form(byc):
 
     p_p = byc["geoloc_definitions"].get("plot_params", {})
+
+    p_p.update({"file": byc["form_data"].get("file", "")})
 
     for p_p_k, p_p_v in p_p.items():
 

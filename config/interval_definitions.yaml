@@ -1,8 +1,14 @@
 genome_binning:
   default: 1000000
   1Mb: 1000000
+  2Mb: 2000000
   3Mb: 3000000
+  4Mb: 4000000
   5Mb: 5000000
+  7Mb: 7000000
+  10Mb: 10000000
+  15Mb: 15000000
+  20Mb: 20000000
   100kb: 100000
   10kb: 10000
   cytobands: 4000000    # fallback to numeric value
