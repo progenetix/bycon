@@ -7,6 +7,7 @@ bycon_path = path.join( beacon_server_script_path, pardir )
 bycon_lib_path = path.join( bycon_path, "lib" )
 sys.path.append( bycon_lib_path )
 
+from aggregator_utils import *
 from args_parsing import *
 from cgi_parsing import *
 from data_retrieval import *

@@ -33,6 +33,9 @@ service_aliases:
   aggregator: aggregator
   beaconAggregator: aggregator
   beacon_aggregator: aggregator
+  retriever: retriever
+  beaconRetriever: retriever
+  beacon_retriever: retriever
 
 data_pipeline_entry_types:
   - analyses
