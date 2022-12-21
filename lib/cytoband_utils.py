@@ -227,18 +227,21 @@ def translate_reference_ids(byc):
     r_a = {}
     c_a = {}
     for c, c_d in v_d_refsc.items():
+        refseq_stripped = re.sub("refseq:", "", c_d["refseq_id"])
         c_r.update({ c_d["chr"]: c_d["refseq_id"] })
         r_c.update({ c_d["refseq_id"]: c_d["chr"] })
         r_a.update({
             c: c_d["refseq_id"],
             c_d["chr"]: c_d["refseq_id"],
             c_d["refseq_id"]: c_d["refseq_id"],
+            refseq_stripped: c_d["refseq_id"],
             c_d["genbank_id"]: c_d["refseq_id"]
         }),
         c_a.update({
             c: c_d["chr"],
             c_d["chr"]: c_d["chr"],
             c_d["refseq_id"]: c_d["chr"],
+            refseq_stripped: c_d["chr"],
             c_d["genbank_id"]: c_d["chr"]
         })
     byc["variant_definitions"].update({
@@ -357,7 +360,7 @@ def bands_from_chrobases(byc):
     cb_pat = re.compile( byc["variant_definitions"]["parameters"]["chro_bases"]["pattern"] )
     chro, cb_start, cb_end = cb_pat.match(chr_bases).group(2,3,5)
 
-    cytobands_list_from_positions(byc, chro, cb_start, cb_end)
+    return cytobands_list_from_positions(byc, chro, cb_start, cb_end)
 
 ################################################################################
 
@@ -380,6 +383,8 @@ def cytobands_list_from_positions(byc, chro, start=None, end=None):
 
     if isinstance(end, int):
         cytobands = list(filter(lambda d: int(d[ "start" ]) < end, cytobands))
+    else:
+        print(end)
 
     return cytobands, chro, start, end
 

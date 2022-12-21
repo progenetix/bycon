@@ -108,6 +108,10 @@ external, web hosted file).
 * [progenetix.org/services/geolocations?map_w_px=600&map_h_px=480&marker_type=marker&file=https://raw.githubusercontent.com/compbiozurich/compbiozurich.github.io/main/collab/people.tab&output=map&help=true](http://progenetix.org/services/geolocations?map_w_px=600&map_h_px=480&marker_type=marker&file=https://raw.githubusercontent.com/compbiozurich/compbiozurich.github.io/main/collab/people.tab&output=map&help=true)
 
 
+#### `/genespans/`
 
+##### Exact gene match
+
+* [/services/genespans/TP53](http://progenetix.org/services/genespans/TP53)
 
 

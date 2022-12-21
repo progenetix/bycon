@@ -26,7 +26,11 @@ def main():
 def genespans():
 
     initialize_service(byc)        
+    parse_variant_parameters(byc)
+    generate_genomic_intervals(byc)
     create_empty_service_response(byc)
+
+    v_rs_chros = byc["variant_definitions"]["chro_aliases"]
 
     assembly_id = byc["assembly_id"]
     if "assembly_id" in byc[ "form_data" ]:
@@ -48,6 +52,7 @@ def genespans():
 
     if not "empty_value" in gene_id:
         response_add_received_request_summary_parameter(byc, "geneId", gene_id)
+        byc.update({"query_precision": "exact"})
     elif "gene_id" in byc[ "form_data" ]:
         gene_id = byc[ "form_data" ]["gene_id"]
         response_add_received_request_summary_parameter(byc, "geneId", gene_id)
@@ -70,6 +75,17 @@ def genespans():
     results, e = mongo_result_list( byc["db"], byc["coll"], query, { '_id': False } )
     response_add_error(byc, 422, e )
     cgi_break_on_errors(byc)
+
+    for i, g in enumerate(results):
+        g_n = deepcopy(g)
+        chro = v_rs_chros.get( g_n.get("accession_version", "NA"), "NA")
+
+        results[i] = g_n
+        byc["variant_pars"].update({"chro_bases": "{}:{}-{}".format(chro, g_n.get("start"), g_n.get("end"))})
+        cytoBands, chro, start, end = bands_from_chrobases(byc)
+        cb_label = cytobands_label( cytoBands )
+        g_n.update({"cytobands": "{}{}".format(chro, cb_label)})
+        results[i] = g_n
 
     e_k_s = byc["service_config"]["method_keys"]["genespan"]
 
