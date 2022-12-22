@@ -30,6 +30,8 @@ def genespans():
     generate_genomic_intervals(byc)
     create_empty_service_response(byc)
 
+    v_rs_chros = byc["variant_definitions"]["chro_aliases"]
+
     assembly_id = byc["assembly_id"]
     if "assembly_id" in byc[ "form_data" ]:
         aid = byc[ "form_data" ]["assembly_id"]
