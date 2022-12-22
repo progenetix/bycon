@@ -1,5 +1,5 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/ProgenetixGene/v2021-03-05
+"$id": https://progenetix.org/services/schemas/ProgenetixGene/v2022-12-21
 title: ProgenetixGene
 meta:
   contributors:
@@ -46,6 +46,10 @@ properties:
     type: integer
     examples:
       - 7676593
+  cytobands:
+    type: string
+    examples:
+      - 17p13.1
   geneLocusLength:
     type: integer
     examples:

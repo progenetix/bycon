@@ -26,6 +26,8 @@ def main():
 def genespans():
 
     initialize_service(byc)        
+    parse_variant_parameters(byc)
+    generate_genomic_intervals(byc)
     create_empty_service_response(byc)
 
     assembly_id = byc["assembly_id"]
@@ -48,6 +50,7 @@ def genespans():
 
     if not "empty_value" in gene_id:
         response_add_received_request_summary_parameter(byc, "geneId", gene_id)
+        byc.update({"query_precision": "exact"})
     elif "gene_id" in byc[ "form_data" ]:
         gene_id = byc[ "form_data" ]["gene_id"]
         response_add_received_request_summary_parameter(byc, "geneId", gene_id)
@@ -71,6 +74,9 @@ def genespans():
     response_add_error(byc, 422, e )
     cgi_break_on_errors(byc)
 
+    for gene in results:
+        _gene_add_cytobands(gene, byc)
+
     e_k_s = byc["service_config"]["method_keys"]["genespan"]
 
     if "method" in byc:
@@ -93,6 +99,31 @@ def genespans():
     populate_service_response( byc, results)
     cgi_print_response( byc, 200 )
 
+################################################################################
+
+def _gene_add_cytobands(gene, byc):
+
+    v_rs_chros = byc["variant_definitions"]["chro_aliases"]
+    gene.update({"cytobands": None})
+
+    acc = gene.get("accession_version", "NA")
+    if acc not in v_rs_chros:
+        return gene
+
+    start = gene.get("start", None)
+    end = gene.get("end", None)
+    if start is None or end is None:
+        return gene
+
+    chro = v_rs_chros.get( acc, "")
+    chro_bases = "{}:{}-{}".format(chro, gene.get("start", ""), gene.get("end", ""))
+    cytoBands, chro, start, end = bands_from_chrobases(chro_bases, byc)
+    cb_label = cytobands_label( cytoBands )
+    gene.update({"cytobands": "{}{}".format(chro, cb_label)})
+
+    return gene
+
+################################################################################
 ################################################################################
 ################################################################################
 

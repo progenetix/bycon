@@ -53,8 +53,8 @@
 
 ##### `/variants/` + query
 
-* [/variants/?assemblyId=GRCh38&referenceName=17&variantType=DEL&filterLogic=AND&start=7500000&start=7676592&end=7669607&end=7800000](http://progenetix.org/beacon/variants/?assemblyId=GRCh38&referenceName=17&variantType=DEL&filterLogic=AND&start=7500000&start=7676592&end=7669607&end=7800000)
-* [/variants/?assemblyId=GRCh38&referenceName=17&variantType=DEL&filterLogic=AND&start=7500000&start=7676592&end=7669607&end=7800000&requestedGranularity=boolean](http://progenetix.org/beacon/variants/?assemblyId=GRCh38&referenceName=17&variantType=DEL&filterLogic=AND&start=7500000&start=7676592&end=7669607&end=7800000&requestedGranularity=boolean)
+* [/variants/?assemblyId=GRCh38&referenceName=17&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000](http://progenetix.org/beacon/variants/?assemblyId=GRCh38&referenceName=17&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000)
+* [/variants/?assemblyId=GRCh38&referenceName=17&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000&requestedGranularity=boolean](http://progenetix.org/beacon/variants/?assemblyId=GRCh38&referenceName=17&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000&requestedGranularity=boolean)
     - same w/ Boolean response
 * [/variants/?requestedGranularity=boolean&referenceBases=G&alternateBases=A&referenceName=refseq:NC_000017.11&start=7577120](http://progenetix.org/beacon/variants/?requestedGranularity=boolean&referenceBases=G&alternateBases=A&referenceName=refseq:NC_000017.11&start=7577120)
 
@@ -108,6 +108,10 @@ external, web hosted file).
 * [progenetix.org/services/geolocations?map_w_px=600&map_h_px=480&marker_type=marker&file=https://raw.githubusercontent.com/compbiozurich/compbiozurich.github.io/main/collab/people.tab&output=map&help=true](http://progenetix.org/services/geolocations?map_w_px=600&map_h_px=480&marker_type=marker&file=https://raw.githubusercontent.com/compbiozurich/compbiozurich.github.io/main/collab/people.tab&output=map&help=true)
 
 
+#### `/genespans/`
 
+##### Exact gene match
+
+* [/services/genespans/TP53](http://progenetix.org/services/genespans/TP53)
 
 
