@@ -1,5 +1,5 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/phenopacket/v2022-04-09
+"$id": https://progenetix.org/services/schemas/phenopacket/v2023-01-10
 title: Phenopacket
 meta:
   provenance:
@@ -19,6 +19,14 @@ properties:
       - pgxpxf-kftx25eh
   subject:
     $ref: ../individuals/defaultSchema.yaml
+  biosamples:
+    type: array
+    items:
+      $ref: ../biosamples/defaultSchema.yaml
+  diseases:
+    type: array
+    items:
+      $ref: ../common/disease.yaml
   phenotypicFeatures:
     type: array
     items:
@@ -27,27 +35,19 @@ properties:
     type: array
     items:
       $ref: ../common/measurement.yaml
-  biosamples:
-    type: array
-    items:
-      $ref: ../biosamples/defaultSchema.yaml
-  # interpretations:
-  #   type: array
-  #   items:
-  #     $ref: Interpretation.yaml
-  diseases:
-    type: array
-    items:
-      $ref: ../common/disease.yaml
-  # medicalActions:
-  #   type: array
-  #   items:
-  #     $ref: MedicalAction.yaml
   files:
     type: array
     items:
       $ref: ../common/file.yaml
   metaData:
     ref: ../common/metaData.yaml
+  # interpretations:
+  #   type: array
+  #   items:
+  #     $ref: Interpretation.yaml
+  # medicalActions:
+  #   type: array
+  #   items:
+  #     $ref: MedicalAction.yaml
 
 

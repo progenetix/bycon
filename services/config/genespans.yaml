@@ -25,3 +25,4 @@ method_keys:
     - start
     - end
     - accession_version
+    - cytobands

@@ -331,10 +331,6 @@ def response_meta_add_request_summary(r, byc):
     except:
         pass
 
-    # TODO: This is a private extension so far; it may be replaced w/ saved query
-    # from accession (not yet existing).
-    r_rcvd_rs.update({ "processed_query": byc.get("original_queries", {}) })
-
     return r
 
 ################################################################################
@@ -342,7 +338,9 @@ def response_meta_add_request_summary(r, byc):
 def update_meta_queries(byc):
 
     try:
-        byc["service_response"]["meta"]["received_request_summary"].update({ "processed_query": byc.get("original_queries", {}) })
+        if not "info" in byc["meta"]:
+            byc["meta"].update({"info":{}})
+        byc["service_response"]["meta"]["info"].update({ "processed_query": byc.get("original_queries", {}) })
     except:
         pass
 
@@ -484,13 +482,18 @@ def response_update_meta(r, byc):
     response_meta_set_config_defaults(r, byc)
     response_meta_set_entity_values(r, byc)
     response_meta_add_request_summary(r, byc)
-    r["meta"].update({"test_mode": byc["test_mode"]})
+    if byc["test_mode"] is True:
+        r["meta"].update({"test_mode": byc["test_mode"]})
+    else:
+        r["meta"].pop("test_mode", None)
 
 ################################################################################
 
 def response_meta_set_info_defaults(r, byc):
 
-    for i_k in ["api_version", "beacon_id", "create_date_time", "update_date_time"]:
+    # , "create_date_time", "update_date_time"
+
+    for i_k in ["api_version", "beacon_id"]:
         r["meta"].update({ i_k: byc["beacon_defaults"]["info"].get(i_k, "") })
 
     return r
@@ -523,6 +526,10 @@ def response_meta_set_entity_values(r, byc):
 ################################################################################
 
 def response_add_received_request_summary_parameter(byc, name, value):
+
+    # TODO: proper request parameters
+    if "variant_pars" in name:
+        name = "request_parameters"
 
     if not "received_request_summary" in byc["service_response"]["meta"]:
         return byc

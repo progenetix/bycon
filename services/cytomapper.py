@@ -40,7 +40,7 @@ def cytomapper():
         cytoBands, chro, start, end, error = bands_from_cytobands(byc["variant_pars"]["cyto_bands"], byc)
         byc["service_response"]["meta"]["received_request_summary"].update({ "cytoBands": byc["variant_pars"]["cyto_bands"] })
     elif "chro_bases" in byc["variant_pars"]:
-        cytoBands, chro, start, end = bands_from_chrobases(byc)
+        cytoBands, chro, start, end = bands_from_chrobases(byc["variant_pars"]["chro_bases"], byc)
         byc["service_response"]["meta"]["received_request_summary"].update({ "chroBases": byc["variant_pars"]["chro_bases"] })
 
     cb_label = cytobands_label( cytoBands )

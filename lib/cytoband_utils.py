@@ -354,11 +354,10 @@ def cytobands_label_from_positions(byc, chro, start, end):
 
 ################################################################################
 
-def bands_from_chrobases(byc):
+def bands_from_chrobases(chro_bases, byc):
 
-    chr_bases = byc["variant_pars"]["chro_bases"]
     cb_pat = re.compile( byc["variant_definitions"]["parameters"]["chro_bases"]["pattern"] )
-    chro, cb_start, cb_end = cb_pat.match(chr_bases).group(2,3,5)
+    chro, cb_start, cb_end = cb_pat.match(chro_bases).group(2,3,5)
 
     return cytobands_list_from_positions(byc, chro, cb_start, cb_end)
 

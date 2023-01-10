@@ -1,5 +1,5 @@
 {
-    "$id": "https://progenetix.org/services/schemas/phenopacket/v2022-04-09",
+    "$id": "https://progenetix.org/services/schemas/phenopacket/v2023-01-10",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "description": "The Phenopacket class is a bare-bones JSON-schema rewrite of the Phenopackets v2 standard.",
     "meta": {
