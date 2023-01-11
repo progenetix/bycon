@@ -22,8 +22,22 @@ genome_path_ids:        # the keys are stemmed & lower cased programmatically
   mm9: mm9
   msarhar1: mSarHar1.11
   zf7: zf7
-terminal_intervals_soft_expansion: 100000
-interval_min_fraction: 0.001
+terminal_intervals_soft_expansion_fraction:
+  description: >-
+    This parameter is used for the generation of chromosome-dependend bins. The
+    current method creates equally sized bins (e.g. 1Mb) from centromere -> telomere,
+    both for p & q arms. This usually results in the last (p, q) interval being
+    <1MB. For some chromosomes this interval may be _very_ small; if the last
+    interval is smaller than this value the previous interval will be expanded 
+    (e.g. 1050000) and becomes last.
+  value: 0.1
+interval_min_fraction:
+  description: >-
+    This value can be used to exclude intervals with a very low CNV overlap (e.g.
+    when denoising or to limit edge counts). It is e.g. used for frequency
+    calculations; a default of 0.001 results in <1kb not being counted for 1Mb
+    bins.
+  value: 0.001
 chromosomes:            # defined in order & as strings
   - "1"
   - "2"
