@@ -34,7 +34,11 @@ def schemas():
     initialize_service(byc)
     create_empty_service_response(byc)
 
-    schema_name = rest_path_value("schemas")
+    if "id" in byc["form_data"]:
+        schema_name = byc["form_data"].get("id", "empty_value")
+    else:
+        schema_name = rest_path_value("schemas")
+
     comps = schema_name.split('.')
     schema_name = comps.pop(0)
 
@@ -57,7 +61,7 @@ def schemas():
             print(json.dumps(camelize(s), indent=4, sort_keys=True, default=str)+"\n")
             exit()
     
-    response_add_error(byc, 422, "No correct schema name provided!")
+    response_add_error(byc, 422, "No correct schema id provided!")
     cgi_print_response( byc, 422 )
 
 ################################################################################

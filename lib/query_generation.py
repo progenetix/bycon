@@ -420,6 +420,8 @@ def geo_query( byc ):
         else:
             continue
 
+        # print(rt)
+        # print(byc["form_data"]["filters"])
         all_p = g_p_rts[ rt ].get("any_of", []) + g_q_k
  
         for g_k in g_p_defs.keys():
@@ -454,16 +456,20 @@ def geo_query( byc ):
 
         req_type = rt
         geo_pars = g_p
+    
 
     if "city" in req_type:
         geo_q = return_geo_city_query(geo_root, geo_pars)
+        return geo_q, geo_pars
 
     if "id" in req_type:
         geo_q = { "id": re.compile( geo_pars["id"], re.IGNORECASE ) }
+        return geo_q, geo_pars
 
     if "ISO3166alpha2" in req_type:
         geo_q = { "provenance.geo_location.properties.ISO3166alpha2": byc["form_data"]["iso3166alpha2"].upper() }
     # print(geo_q)
+        return geo_q, geo_pars
 
     if "geoquery" in req_type:
         geoq_l = [ return_geo_longlat_query(geo_root, geo_pars) ]

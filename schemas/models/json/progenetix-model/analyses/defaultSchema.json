@@ -10,7 +10,7 @@
             "type": "string"
         },
         "dataUseConditions": {
-            "$ref": "../../framework/common/ontologyTerm.json"
+            "$ref": "../common/dataUseConditions.json"
         },
         "description": {
             "examples": [

@@ -1,5 +1,5 @@
 {
-    "$id": "https://progenetix.org/services/schemas/individual/v2022-05-04",
+    "$id": "https://progenetix.org/services/schemas/individual/v2023-01-10",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "additionalProperties": true,
     "properties": {
@@ -26,20 +26,14 @@
             "type": "array"
         },
         "dataUseConditions": {
-            "$ref": "../../framework/common/ontologyTerm.json",
-            "examples": [
-                {
-                    "id": "DUO:0000004",
-                    "label": "no restriction"
-                }
-            ]
+            "$ref": "../common/dataUseConditions.json"
         },
         "dateOfBirth": {
             "examples": [
                 "1967-11-11",
                 "2002-09-21"
             ],
-            "format": "date-time",
+            "format": "date",
             "type": "string"
         },
         "description": {
@@ -106,7 +100,7 @@
             "type": "array"
         },
         "karyotypicSex": {
-            "description": "Chromosomal sex of an individual as being used by Phenopackets. Following the definition there",
+            "description": "Chromosomal sex of an individual as being used by Phenopackets. Following the definition there.",
             "enum": [
                 "UNKNOWN_KARYOTYPE",
                 "XX",

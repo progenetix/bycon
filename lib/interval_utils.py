@@ -37,7 +37,8 @@ def generate_genomic_intervals(byc):
     elif bin_re.match(binning):
         int_b = float(bin_re.match(binning).group(1)) * 1000000
     
-    e_p = i_d["terminal_intervals_soft_expansion"]
+    e_p_f = i_d["terminal_intervals_soft_expansion_fraction"].get("value", 0.1)
+    e_p = int_b * e_p_f
 
     intervals = []
     i = 1
@@ -268,7 +269,7 @@ def interval_counts_from_callsets(callsets, byc):
     objects with added per-interval quantitative data.
     """
 
-    min_f = byc["interval_definitions"]["interval_min_fraction"]
+    min_f = byc["interval_definitions"]["interval_min_fraction"].get("value", 0.001)
     int_fs = byc["genomic_intervals"].copy()
     int_no = len(int_fs)
 

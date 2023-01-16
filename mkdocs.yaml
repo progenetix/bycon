@@ -1,0 +1,47 @@
+site_name: bycon Documentation
+
+###############################################################################
+
+nav:
+  - Documentation Home: index.md
+  - Bugs & To Do: bugs-todo.md
+  - API Tests: tests.md
+  - Progenetix Site: http://progenetix.org
+  - Baudisgroup: http://info.baudisgroup.org
+
+###############################################################################
+
+markdown_extensions:
+  - toc:
+      toc_depth: 2-3
+      permalink: true
+  - admonition
+  - attr_list
+  - footnotes
+  - md_in_html
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.saneheaders
+  - pymdownx.superfences
+  - pymdownx.magiclink:
+      hide_protocol: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - tables
+  - mdx_gh_links:
+      user: ga4gh-beacon
+      repo: beacon-v2-unity-testing
+  - pymdownx.emoji
+
+theme:
+  # name: readthedocs
+  name: material
+  palette:
+    primary: deep orange
+  features:
+    - content.tabs.link

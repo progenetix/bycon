@@ -47,7 +47,7 @@ properties:
   provenance:
     "$ref": ../common/provenance.yaml
   dataUseConditions:
-    "$ref": ../../framework/common/ontologyTerm.yaml
+    $ref: ../common/dataUseConditions.json
   info:
     type: object
   updated:

@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/individual/v2022-05-04
+$id: https://progenetix.org/services/schemas/individual/v2023-01-10
 title: Individual
 type: object
 
@@ -76,7 +76,8 @@ properties:
 
   karyotypicSex:
     description: >-
-      Chromosomal sex of an individual as being used by Phenopackets. Following the definition there
+      Chromosomal sex of an individual as being used by Phenopackets. Following
+      the definition there.
     type: string
     enum:
       - UNKNOWN_KARYOTYPE
@@ -93,7 +94,7 @@ properties:
 
   dateOfBirth:
     type: string
-    format: date-time
+    format: date
     examples:
       - 1967-11-11
       - 2002-09-21
@@ -121,10 +122,8 @@ properties:
       $ref: ../common/ancestry.yaml
 
   dataUseConditions:
-    $ref: ../../framework/common/ontologyTerm.json
-    examples:
-      - id: DUO:0000004
-        label: no restriction
+    $ref: ../common/dataUseConditions.json
+
   updated:
     type: string
     format: date-time
