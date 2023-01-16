@@ -4,3 +4,4 @@ rsrc/remnants
 *~lock*
 *.ods#
 *__pycache__*
+site
