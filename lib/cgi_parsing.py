@@ -37,11 +37,19 @@ def select_this_server( byc ):
     s_uri = str(environ.get('SCRIPT_URI'))
     # print(s_uri)
 
+    # TODO
+
     if "progenetix.test" in s_uri:
         if "https:" in s_uri:
             return "https://progenetix.test"
         else:
             return "http://progenetix.test" 
+    elif "cancercelllines.test" in s_uri:
+        if "https:" in s_uri:
+            return "https://cancercelllines.test"
+        else:
+            return "http://cancercelllines.test" 
+
 
     # TODO: ERROR hack for https/http mix, CORS...
     # ... since cloudflare provides https mapping
