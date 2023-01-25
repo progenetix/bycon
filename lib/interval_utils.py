@@ -29,11 +29,11 @@ def generate_genomic_intervals(byc):
     c_l = byc["cytolimits"]
     i_d = byc["interval_definitions"]
 
-    int_b = i_d["genome_binning"]["default"]
-    bin_re = re.compile(r"^(\d(\.?\d)?)Mb", re.IGNORECASE)
+    int_b = i_d["genome_bin_sizes"]["values"]["default"]
+    bin_re = re.compile(r"^(\d+(\.\d+)?)Mb", re.IGNORECASE)
 
-    if binning in i_d["genome_binning"].keys():
-        int_b = i_d["genome_binning"][binning]
+    if binning in i_d["genome_bin_sizes"]["values"].keys():
+        int_b = i_d["genome_bin_sizes"]["values"][binning]
     elif bin_re.match(binning):
         int_b = float(bin_re.match(binning).group(1)) * 1000000
     

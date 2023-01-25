@@ -6,6 +6,10 @@ from humps import camelize
 
 from cgi_parsing import test_truthy
 
+"""
+http://progenetix.test/cgi/bycon/beaconServer/aggregator.py?requestedGranularity=boolean&limit=1000&skip=0&datasetIds=progenetix&assemblyId=GRCh38&referenceName=refseq%3ANC_000009.12&variantType=EFO%3A0030067&filterLogic=AND&includeDescendantTerms=True&start=21000000&start=21975098&end=21967753&end=23000000&filters=NCIT%3AC3058
+"""
+
 ################################################################################
 
 def set_dataset_id(pvs, ext_defs, ds_id):
@@ -86,7 +90,7 @@ def remap_parameters_values(pvs, ext_defs, byc):
                 val[0] = int(val[0]) + int(v_p_v.get("shift", 0))
                 
                 if not "38" in target_assembly:
-                    val = _lift_positions(target_assembly, chro, val)
+                    val = lift_positions(target_assembly, chro, val, byc)
 
             if "array" in v_p_defs[v_p_k].get("type", "string"):
                 val = ",".join(map(str, val))
@@ -97,7 +101,7 @@ def remap_parameters_values(pvs, ext_defs, byc):
 
 ################################################################################
 
-def lift_positions(target_assembly, chro, val):
+def lift_positions(target_assembly, chro, val, byc):
 
     l_o_o = byc["service_config"]["liftover_options"]
     s_a = byc["service_config"]["beacon_params"]["defaults"]["assembly_id"]
@@ -115,7 +119,7 @@ def lift_positions(target_assembly, chro, val):
 
     lifted = []
 
-    t_l_o_k = l_o_o["supported_targets"]["target_assembly"]
+    t_l_o_k = l_o_o["supported_targets"][target_assembly]
 
     converter = get_lifter(s_l_o_k, t_l_o_k)
     for v in val:
