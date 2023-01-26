@@ -2,7 +2,7 @@ genome_bin_sizes:
   description: >-
     * keyword defined base sizes of genomic binning intervals for CNV satus and
       frequency maps
-    * only ...Mb is supported as a unit
+    * only ...Mb, kb or b are supported as unit (or no unit => b)
   values:
     default: 1000000
     1Mb: 1000000
@@ -14,8 +14,8 @@ genome_bin_sizes:
     10Mb: 10000000
     15Mb: 15000000
     20Mb: 20000000
-    0.1Mb: 100000
-    0.01Mb: 10000
+    100kb: 100000
+    10kb: 10000
 
 genome_path_ids:
   description: >-

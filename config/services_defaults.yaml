@@ -19,20 +19,6 @@ defaults:
       schema: https://progenetix.org/services/schemas/dataset/
     h->o_access_key: False
 
-bycon_definition_files:
-  - beacon_defaults
-  - beacon_mappings
-  - dataset_definitions
-  - datatable_mappings
-  - filter_definitions
-  - geoloc_definitions
-  - handover_definitions
-  - interval_definitions
-  - remap_definitions
-  - services_defaults
-  - services_mappings
-  - variant_definitions
-
 info:
   beacon_id: org.progenetix.beacon
   name: Progenetix Cancer Genomics Beacon+
