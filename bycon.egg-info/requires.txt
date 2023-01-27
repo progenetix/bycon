@@ -1,5 +1,4 @@
 base36
-humps
 isodate
 json_ref_dict
 liftover

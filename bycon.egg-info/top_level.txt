@@ -1,2 +1,3 @@
 beaconServer
+lib
 services

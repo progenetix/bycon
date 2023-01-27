@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: bycon
-Version: 1.0.0
+Version: 1.0.2
 Summary: A Python-based environment for the Beacon v2 genomics API
 Home-page: https://github.com/progenetix/bycon
 Author: Michael Baudis
@@ -8,10 +8,13 @@ Author-email: contact@progenetix.org
 Project-URL: Bug Reports, https://github.com/progenetix/bycon/issues
 Project-URL: Source, https://github.com/progenetix/bycon/
 Keywords: genomics,Beacon
-Classifier: Development Status :: 2 - Beta
 Classifier: Intended Audience :: Developers
-Classifier: Topic :: Software Development :: Genomics Tools
-Classifier: License :: Creative Commons :: CC0
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Classifier: License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication
+Classifier: Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator
+Classifier: Topic :: Scientific/Engineering :: Medical Science Apps.
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
