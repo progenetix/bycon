@@ -1,3 +1,0 @@
-beaconServer
-lib
-services
