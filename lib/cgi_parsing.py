@@ -1,4 +1,4 @@
-import cgi, cgitb, humps, json, re, sys
+import cgi, cgitb, json, re, sys
 from urllib.parse import urlparse, parse_qs, unquote
 from os import environ
 from humps import camelize, decamelize
@@ -49,7 +49,6 @@ def select_this_server( byc ):
             return "https://cancercelllines.test"
         else:
             return "http://cancercelllines.test" 
-
 
     # TODO: ERROR hack for https/http mix, CORS...
     # ... since cloudflare provides https mapping
@@ -538,7 +537,7 @@ def print_json_response(this={}, env="server", status_code=200):
     print()
     exit()
 
-################################################################################
+######################################logi  ##########################################
 
 def print_text_response(this="", env="server", status_code=200):
 

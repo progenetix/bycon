@@ -1,4 +1,8 @@
 site_name: bycon Documentation
+site_description: 'Documentation for the bycon GA4GH Beacon framework'
+site_author: Michael Baudis
+repo_name: bycon
+repo_url: https://github.com/progenetix/bycon
 
 ###############################################################################
 
@@ -43,5 +47,25 @@ theme:
   name: material
   palette:
     primary: deep orange
+  favicon: img/site-logo-topright.png
+  logo: img/site-logo-topright.png
   features:
     - content.tabs.link
+    - search.highlight
+    - search.share
+
+plugins:
+    - search
+    - macros
+    - mermaid2
+
+extra:
+  excerpt_separator: <!--more-->
+  blog_list_length: 100
+  social:
+    - icon: fontawesome/brands/twitter 
+      link: https://twitter.com/progenetix
+    - icon: fontawesome/brands/github 
+      link: https://github.com/progenetix
+extra_css:
+  - css/extra.css

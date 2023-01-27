@@ -4,6 +4,10 @@
 
 The `bycon` project - at least at its current stage - is a mix of _Progenetix_ (i.e. GA4GH object model derived, _MongoDB_ implemented) - data management, and the implementation of middleware & server for the Beacon API.
 
+!!! info "Bycon Code"
+
+    The `bycon` code is maintained in the [`progenetix/bycon` repository](http://github.com/progenetix/bycon/). Utility scripts & functions reside in the [`byconeer`](http://github.com/progenetix/byconeer/) and [`byconaut`](http://github.com/progenetix/byconaut/) repositories but are so far not documented & may contain deprecated or "internal use" code.
+
 More information about the current status of the package can be found in the inline
 documentation which is also [presented in an accessible format](https://info.progenetix.org/tags/Beacon.html) on the _Progenetix_ website.
 

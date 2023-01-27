@@ -3,7 +3,6 @@ import json, re, datetime
 import csv
 from pymongo import MongoClient
 from os import path, pardir
-from humps import decamelize
 from isodate import date_isoformat
 
 from schema_parsing import *

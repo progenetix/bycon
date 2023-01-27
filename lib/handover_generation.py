@@ -202,7 +202,7 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
         p_t = v_max # only for the non-paginated ...
 
     bed_file_name = accessid + l + '.bed'
-    bed_file = path.join( *config[ "paths" ][ "web_temp_dir_abs" ], bed_file_name )
+    bed_file = path.join( *config[ "web_temp_dir" ], bed_file_name )
 
     v_defs = byc["variant_definitions"]
     efo_vrs = v_defs["efo_vrs_map"]

@@ -1,4 +1,29 @@
+# Local file system configuration ##############################################
+
+system_user: root
+
+system_group: staff
+
+bycon_install_dir:
+  - /
+  - Library
+  - WebServer
+  - cgi-bin
+  - bycon
+
+web_temp_dir:
+  - /
+  - Library
+  - WebServer
+  - Documents
+  - Sites
+  - progenetix
+  - tmp
+
+################################################################################
+
 byc_root_pars:
+
   args: ~
   env: "server"
   request_path_root: "beacon"
@@ -23,30 +48,6 @@ byc_root_pars:
   debug_mode: False
   download_mode: False
   errors: []
-
-bycon_definition_files:
-  - argument_definitions
-  - beacon_mappings
-  - dataset_definitions
-  - datatable_mappings
-  - filter_definitions
-  - geoloc_definitions
-  - handover_definitions
-  - interval_definitions
-  - remap_definitions
-  - services_defaults
-  - services_mappings
-  - variant_definitions
-
-paths:
-  web_temp_dir_abs:
-    - /
-    - Library
-    - WebServer
-    - Documents
-    - Sites
-    - progenetix
-    - tmp
 
 schemas_root:
   - schemas

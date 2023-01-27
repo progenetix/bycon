@@ -1,6 +1,6 @@
 import re, yaml, json
 from pymongo import MongoClient
-from os import path, pardir
+from os import path, pardir, scandir
 from pathlib import Path
 from json_ref_dict import RefDict, materialize
 from humps import camelize, decamelize
@@ -10,7 +10,14 @@ from humps import camelize, decamelize
 def read_bycon_definition_files(byc):
 
     if not "bycon_definition_files" in byc["config"]:
-        return byc
+
+        config_d = path.join( byc["pkg_path"], "config" )
+
+        b_d_fs = [ f.name for f in scandir(config_d) if f.is_file() ]
+        b_d_fs = [ f for f in b_d_fs if f.endswith("yaml") ]
+        b_d_fs = [ Path(f).stem for f in b_d_fs if not f.startswith("config.yaml") ]
+
+        byc["config"].update({"bycon_definition_files": b_d_fs})
 
     for d in byc["config"]["bycon_definition_files"]:
         read_bycon_configs_by_name( d, byc )

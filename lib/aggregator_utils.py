@@ -3,7 +3,6 @@ from os import path, environ, pardir
 from copy import deepcopy
 from liftover import get_lifter
 from humps import camelize
-
 from cgi_parsing import test_truthy
 
 """
@@ -166,7 +165,7 @@ def remap_min_max_positions(pvs, ext_defs, byc):
     if not "start" in form_p or not "end" in form_p:
         return pvs
 
-    if len(form_p["start"]) is not 2 or len(form_p["end"]) is not 2:
+    if len(form_p["start"]) != 2 or len(form_p["end"]) != 2:
         return pvs
 
     pvs.update({

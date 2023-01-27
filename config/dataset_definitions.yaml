@@ -1,11 +1,12 @@
 ---
 progenetix:
+
     id: progenetix
     name: progenetix
     identifier: 'org.progenetix::progenetix'
     description: "Progenetix cancer genome profiles"
     createDateTime: 2001-01-01
-    updateDateTime: 2021-03-01
+    updateDateTime: 2023-01-26
     version: 2021-11-11
     externalUrl: "https://progenetix.org/about/"
     assemblyId: GRCh38
@@ -101,8 +102,15 @@ cellz:
           label: no restriction
           version: 2021-11-11
     handoverTypes:
+      - cnvhistogram
       - biosamples
+      - biosamplestable
+      - biosamplevariants
+      - biosamplepgxsegvariants
+      - annotatedvariants
+      - phenopackets
       - individuals
       - variants
-      - callsets
+      - callsetsvariants
+      - callsetspgxseg
       - UCSClink

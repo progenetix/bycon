@@ -17,7 +17,7 @@ def parse_cytoband_file(byc):
  
     podmd"""
     # TODO: catch error for missing genome edition
-    g_map = byc["interval_definitions"].get("genome_path_ids", {})
+    g_map = byc["interval_definitions"]["genome_path_ids"].get("values", {})
 
     genome = byc["variant_pars"][ "assembly_id" ].lower()
     genome = re.sub( r"(\w+?)([^\w]\w+?)", r"\1", genome)

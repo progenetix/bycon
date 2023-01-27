@@ -3,7 +3,6 @@ import inspect, json
 import random
 from pymongo import MongoClient
 from bson import json_util
-from humps import camelize, decamelize
 
 # local
 bycon_lib_path = path.dirname( path.abspath(__file__) )

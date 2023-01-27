@@ -1,7 +1,7 @@
 import re, json, yaml
 from os import path, scandir, pardir
 from json_ref_dict import RefDict, materialize
-import humps
+from humps import decamelize
 
 from cgi_parsing import prjsonnice
 
@@ -100,7 +100,7 @@ def instantiate_schema(schema, is_root=True):
 def create_empty_instance(schema):
 
     s_i = instantiate_schema(schema, True)
-    s_i = humps.decamelize(s_i)
+    s_i = decamelize(s_i)
     return s_i
 
 ################################################################################
