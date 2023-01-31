@@ -1,0 +1,30 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Cellline Info
+description: >-
+  Definition of cellline information
+type: object
+properties:
+  id:
+    description: The cellosaurus identifier or another id as CURIE.
+    type: string
+    example: cellosaurus:CVCL_0004
+  label:
+    description: The common name of the cellline
+    type: string
+    example:
+      - Namalwa
+      - HL60
+  reference:
+    description: A url.
+    type: string
+    example: https://www.cellosaurus.org/CVCL_IS01
+  synonyms:
+    description: >-
+      other names & identifiers for the cellline
+    type: array
+    items: string
+  notes:
+    description: An optional text descriptor.
+    type: string
+    example: Derived from HeLa
+additionalProperties: false

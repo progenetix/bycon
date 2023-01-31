@@ -104,10 +104,11 @@ def execute_bycon_queries(ds_id, byc):
     ############################################################################
 
     if "variant_annotations" in exe_queries:
+
         prevars["pref_m"] = "variant_annotations._id"
         prevars["query"] = exe_queries[ "variant_annotations" ]
         prefetch.update( { prevars["pref_m"]: _prefetch_data(prevars) } )
-        byc.update( { "dataset_results": { ds_id: prefetch } } )
+        byc["dataset_results"].update( { ds_id: prefetch } )
 
         return byc
 
@@ -224,7 +225,7 @@ def execute_bycon_queries(ds_id, byc):
             "target_count": 0
             })
 
-        byc.update( { "dataset_results": { ds_id: prefetch } } )
+        byc["dataset_results"].update( { ds_id: prefetch } )
         return byc
 
     prevars["pref_m"] = "callsets._id"
@@ -251,7 +252,7 @@ def execute_bycon_queries(ds_id, byc):
     data_client.close( )
     ho_client.close( )
 
-    byc.update( { "dataset_results": { ds_id: prefetch } } )
+    byc["dataset_results"].update( { ds_id: prefetch } )
 
     return byc
 

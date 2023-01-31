@@ -32,6 +32,8 @@ properties:
       $ref: ../progenetix-model/common/externalReference.yaml#/properties
     examples:
       - id: PMID:9892199
+  celllineInfo:
+      $ref: ../progenetix-model/common/celllineInfo.yaml#/properties
   cohorts:
     description: >
       Cohorts describe collections of samples or individuals which are part of a common epistemic group, e.g. have been used for a study or share a set of features.

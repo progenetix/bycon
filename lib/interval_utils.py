@@ -323,7 +323,7 @@ def interval_counts_from_callsets(callsets, byc):
                 t+"_mean": means[i]
             } )
 
-    return int_fs
+    return int_fs, cs_no
 
 ################################################################################
 

@@ -93,8 +93,6 @@ def dataset_response_add_handovers(ds_id, byc):
 
                 b_h_o.append( h_o_r )
 
-        print
-
     return b_h_o
 
 ################################################################################
@@ -122,6 +120,7 @@ def dataset_results_save_handovers(ds_id, byc):
     for h_o_k in byc["dataset_results"][ds_id].keys():
         h_o = byc["dataset_results"][ds_id][ h_o_k ]
         h_o_size = sys.getsizeof(h_o["target_values"])
+
         # print("Storage size for {}: {}Mb".format(h_o_k, h_o_size / 1000000))
         if h_o_size < 15000000:
             ho_coll.update_one( { "id": h_o["id"] }, { '$set': h_o }, upsert=True )

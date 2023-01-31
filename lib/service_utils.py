@@ -222,8 +222,10 @@ def run_beacon_init_stack(byc):
 ################################################################################
 
 def run_result_sets_beacon(byc):
-    
+
     sr_r = byc["service_response"]["response"]
+
+    byc.update({"dataset_results":{}})
 
     ######## result sets loop ##################################################
 
@@ -254,7 +256,7 @@ def run_result_sets_beacon(byc):
         check_alternative_single_set_deliveries(ds_id, r_s_res, byc)
         r_s_res = reshape_resultset_results(ds_id, r_s_res, byc)
 
-        r_set.update({
+        sr_r["result_sets"][i].update({
             "paginated_results_count": len( r_s_res ),
             "exists": True,
             "results": r_s_res
@@ -787,7 +789,7 @@ def check_computed_interval_frequency_delivery(byc):
 
     cs_cursor = cs_coll.find({"_id": {"$in": q_vals }, "variant_class": { "$ne": "SNV" } } )
 
-    intervals = interval_counts_from_callsets(cs_cursor, byc)
+    intervals, cnv_cs_count = interval_counts_from_callsets(cs_cursor, byc)
     for intv in intervals:
         v_line = [ ]
         v_line.append("query_result")
