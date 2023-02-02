@@ -5,6 +5,7 @@ defaults:
 integer_keys:
   - count
   - code_matches
+  - cnv_analyses
 method_keys:
   details: []
   child_terms:
@@ -13,6 +14,7 @@ method_keys:
     - count
     - child_terms
     - code_matches
+    - cnv_analyses
     - collation_type
     - type
     - reference
@@ -21,6 +23,7 @@ method_keys:
     - label
     - count
     - code_matches
+    - cnv_analyses
     - child_terms
     - hierarchy_paths
     - collation_type
@@ -31,6 +34,7 @@ method_keys:
     - label
     - count
     - code_matches
+    - cnv_analyses
     - collation_type
     - type
     - reference
@@ -38,6 +42,7 @@ method_keys:
     - id
     - label
     - code_matches
+    - cnv_analyses
     - collation_type
     - type
     - reference

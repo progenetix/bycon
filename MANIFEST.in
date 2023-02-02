@@ -1,5 +1,3 @@
-graft config
-graft lib
-graft rsrc
-graft schemas
-include *.py
+recursive-include bycon/config
+recursive-include bycon/rsrc
+recursive-include bycon/schemas

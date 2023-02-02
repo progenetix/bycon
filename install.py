@@ -3,7 +3,8 @@
 import sys, yaml
 from os import path, system
 
-pkg_path = path.dirname( path.abspath(__file__) )
+dir_path = path.dirname( path.abspath(__file__) )
+pkg_path = path.join( dir_path, "bycon" )
 sys.path.append( pkg_path )
 
 """
@@ -55,14 +56,6 @@ def install():
         "__pycache__",
         ".DS_*",
         ".git*",
-        "/build",
-        "/bycon.egg-info",
-        "/dist",
-        "/docs",
-        "/install.py",
-        "/mkdocs.yaml",
-        "/requirements*",
-        "/setup*"
     ]
 
     e_s = '--exclude="{}"'.format('" --exclude="'.join(excludes))
@@ -72,7 +65,7 @@ def install():
     system('sudo chmod 775 {}/beaconServer/*.py'.format(b_i_d_p))
     system('sudo chmod 775 {}/services/*.py'.format(b_i_d_p))
     system('sudo chmod -R 1777 {}'.format(w_t_d_p))
-    print("Updated bycon files in {}".format(b_i_d_p))
+    print("Updated bycon files from\n{}\nto\n{}".format(pkg_path, b_i_d_p))
 
     exit()
 
