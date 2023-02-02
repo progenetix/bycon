@@ -5,11 +5,10 @@ from os import environ, pardir, path
 from pymongo import MongoClient
 
 # local
-dir_path = path.dirname(path.abspath(__file__))
-pkg_path = path.join( dir_path, pardir )
+pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
 sys.path.append( pkg_path )
 
-from beaconServer import *
+from bycon import *
 
 """podmd
 

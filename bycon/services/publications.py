@@ -7,11 +7,9 @@ import sys, datetime, argparse
 from pymongo import MongoClient
 from operator import itemgetter
 
-# local
-dir_path = path.dirname( path.abspath(__file__) )
-pkg_path = path.join( dir_path, pardir )
+pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
 sys.path.append( pkg_path )
-from beaconServer import *
+from bycon import *
 
 """podmd
 

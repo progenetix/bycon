@@ -5,10 +5,9 @@ from os import path, pardir
 from importlib import import_module
 
 # local
-pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir )
+pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
 sys.path.append( pkg_path )
-
-from beaconServer import *
+from bycon import *
 
 """
 """

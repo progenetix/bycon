@@ -6,10 +6,9 @@ from os import path, pardir
 import sys
 from pymongo import MongoClient
 
-# local
-dir_path = path.dirname( path.abspath(__file__) )
-pkg_path = path.join( dir_path, pardir )
+pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
 sys.path.append( pkg_path )
+from bycon import *
 
 from beaconServer import *
 

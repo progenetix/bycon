@@ -4,14 +4,9 @@ from os import path, pardir, environ
 import sys, re, cgitb
 from importlib import import_module
 
-# local
-services_path = path.dirname( path.abspath(__file__) )
-pkg_path = path.join( services_path, pardir )
+pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
 sys.path.append( pkg_path )
-
-# services that have been moved need to be imported
-
-from beaconServer import *
+from bycon import *
 
 """
 The `services` application deparses a request URI and calls the respective
