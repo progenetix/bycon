@@ -6,6 +6,56 @@ from cytoband_utils import *
 from cgi_parsing import prjsoncam
 
 ################################################################################
+
+"""
+The methods here address genomic binning, the assignment of sample-specific
+bin values (e.g. CNV overlap, maximum/minimum observed value in the bin...) as
+well as the calculation of bin statistics.
+
+The methods rely on the existence of cytoband files which contain information
+about the individual chromosomes (size, centromer position as indicated by
+the transition from p- to q-arm). The bins then dcan be generated directly
+corresponding to the listed cytobands or (the default) by producing equally
+sized bins (default 1Mb). The most distal bin of each arm then can be of a
+different size.
+
+Bin sizes are selected based on the provided key for a corresponding definition
+in `interval_definitions.genome_bin_sizes` (e.g. 1Mb => 1000000).
+
+### Interval Object Schema
+
+```
+no:
+  description: counter, from 1pter -> Yqter (or whatever chromosomes are provided)
+  type: integer
+id:
+  description: the id/label of the interval, from concatenating chromosome and base range
+  type: string
+reference_name:
+  description: the chromosome as provided in the cytoband file
+  type: string
+  examples:
+    - 7
+    - Y
+arm:
+  type: string
+  examples:
+    - p
+    - q
+cytobands:
+  type: string
+  examples:
+    - 1p12.1
+start:
+  description: the 0/interbase start of the interval
+  type: integer
+end:
+  description: the 0/interbase end of the interval
+  type: integer
+```
+"""
+
+################################################################################
 ################################################################################
 ################################################################################
 
@@ -32,21 +82,9 @@ def generate_genomic_intervals(byc):
     int_b = i_d["genome_bin_sizes"]["values"]["default"]
     bin_re = re.compile(r"^(\d+(\.\d+)?)(([kM])?b)?", re.IGNORECASE)
 
-    if binning in i_d["genome_bin_sizes"]["values"].keys():
-        int_b = i_d["genome_bin_sizes"]["values"][binning]
-    elif bin_re.match(binning):
-        bf = 1
-
-        try:
-            bf_k = bin_re.match(binning).group(4).lower()
-            if "m" in bf_k:
-                bf = 1000000
-            elif "k" in bf_k:
-                bf = 1000
-        except:
-            pass
-
-        int_b = float(bin_re.match(binning).group(1)) * bf
+    assert binning in i_d["genome_bin_sizes"]["values"].keys(), '¡¡ Binning value "{}"" not in list !!'.format(binning)
+    
+    int_b = i_d["genome_bin_sizes"]["values"][binning]        
     
     e_p_f = i_d["terminal_intervals_soft_expansion_fraction"].get("value", 0.1)
     e_p = int_b * e_p_f
@@ -105,14 +143,14 @@ def generate_cytoband_intervals(byc):
 
     for cb in byc["cytobands"]:
         intervals.append( {
-                "no": int(cb["i"]),
-                "id": "{}:{}-{}".format(cb["chro"], cb["start"], cb["end"]),
-                "reference_name": cb["chro"],
-                "cytobands": cb["cytoband"],
-                "start": int(cb["start"]),
-                "end": int(cb["end"]),
-                "size": int(cb["end"]) - int(cb[ "start"])
-            })
+            "no": int(cb["i"]),
+            "id": "{}:{}-{}".format(cb["chro"], cb["start"], cb["end"]),
+            "reference_name": cb["chro"],
+            "cytobands": cb["cytoband"],
+            "start": int(cb["start"]),
+            "end": int(cb["end"]),
+            "size": int(cb["end"]) - int(cb[ "start"])
+        })
 
     byc.update({ "cytoband_intervals": intervals })
 
@@ -121,6 +159,14 @@ def generate_cytoband_intervals(byc):
 ################################################################################
 
 def interval_cnv_arrays(v_coll, query, byc):
+
+    """
+    The method generates sample-specific CNV maps using the currently defined
+    interval bins. The output (`cnv_statusmaps`) provides annotated intervals
+    for overlap fractions (`cnv_statusmaps.dup`, `cnv_statusmaps.del`) as well
+    as the minimum and maximum values observed in those intervals
+    (`cnv_statusmaps.max`, `cnv_statusmaps.min`).
+    """
 
     v_d = byc["variant_definitions"]
     efo_vrs = v_d["efo_vrs_map"]

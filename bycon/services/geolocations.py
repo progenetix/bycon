@@ -10,8 +10,6 @@ pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
 sys.path.append( pkg_path )
 from bycon import *
 
-from beaconServer import *
-
 """podmd
 * <https://progenetix.org/services/geolocations?city=zurich>
 * <https://progenetix.org/services/geolocations?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>

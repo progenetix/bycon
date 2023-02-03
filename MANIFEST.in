@@ -1,3 +1,3 @@
-recursive-include bycon/config
-recursive-include bycon/rsrc
-recursive-include bycon/schemas
+recursive-include bycon/config *.*
+recursive-include bycon/rsrc *.*
+recursive-include bycon/schemas *.*
