@@ -12,7 +12,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="bycon",
-    version="1.0.9",
+    version="1.0.11",
     description="A Python-based environment for the Beacon v2 genomics API",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -39,6 +39,7 @@ setup(
     packages=find_packages(where="."),  # Required
     setup_requires=['setuptools_scm'],
     include_package_data=True,
+    package_data={'bycon': ['**/*.yaml', '**/*.txt', '**/*.json']},
     python_requires=">=3.7, <4",
     # This field lists other packages that your project depends on to run.
     # Any package you put here will be installed by pip when your project is
