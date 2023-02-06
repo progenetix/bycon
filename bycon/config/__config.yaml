@@ -1,122 +1,130 @@
+# Local file system configuration ##############################################
+
 web_temp_dir:
-- /
-- Library
-- WebServer
-- Documents
-- Sites
-- progenetix
-- tmp
+  - /
+  - Library
+  - WebServer
+  - Documents
+  - Sites
+  - progenetix
+  - tmp
+
+################################################################################
 
 byc_root_pars:
 
-  args:
-  env: server
-  request_path_root: beacon
-  request_entity_path_id:
-  request_entity_path_id_value:
-  response_entity_path_id:
-  request_entity_id:
-  response_entity_id:
+  args: ~
+  env: "server"
+  request_path_root: "beacon"
+  request_entity_path_id: ~
+  request_entity_path_id_value: ~
+  response_entity_path_id: ~
+  request_entity_id: ~
+  response_entity_id: ~
   response_entity: {}
   service_config: {}
   filters: []
-  method: ''
-  output: ''
+  method: ""
+  output: ""
   form_data: {}
   query_meta: {}
-  original_queries:
+  original_queries: ~
   script_args: []
-  include_handovers: false
-  empty_query_all_count: false
-  test_mode: false
-  check_args: true
-  debug_mode: false
-  download_mode: false
+  include_handovers: False
+  empty_query_all_count: False
+  test_mode: False
+  check_args: True
+  debug_mode: False
+  download_mode: False
   errors: []
+
 schemas_root:
-- schemas
+  - schemas
 
 framework_path:
-- schemas
-- framework
-- json
+  - schemas
+  - framework
+  - json
 
 default_model_path:
-- schemas
-- models
-- json
-- progenetix-model
+  - schemas
+  - models
+  - json
+  - progenetix-model
 
 schemas_paths:
   description: >-
     path elements as list from `schemas_root`
   items:
-  - - models
-    - json
-    - progenetix-model
-  - - models
-    - json
-    - progenetix-model
-    - common
-  - - models
-    - json
-    - progenetix-service-schemas
-  - - models
-    - json
-    - progenetix-database-schemas
-  - - framework
-    - json
-    - common
-  - - framework
-    - json
-    - configuration
-  - - framework
-    - json
-    - requests
-  - - framework
-    - json
-    - responses
-  - - framework
-    - json
-    - responses
-    - sections
+    - - models
+      - json
+      - progenetix-model
+    - - models
+      - json
+      - progenetix-model
+      - common
+    - - models
+      - json
+      - progenetix-service-schemas
+    - - models
+      - json
+      - progenetix-database-schemas
+    - - framework
+      - json
+      - common
+    - - framework
+      - json
+      - configuration
+    - - framework
+      - json
+      - requests
+    - - framework
+      - json
+      - responses
+    - - framework
+      - json
+      - responses
+      - sections
 
 form_list_pars:
   description: >-
     form parameters which are processed as list
   items:
-  - start
-  - end
-  - datasetIds
-  - filters
-  - ids
-  - biosampleIds
-  - variantIds
-  - individualIds
-  - callsetIds
-  - analysisIds
-  - collationTypes
-  - selectedBeacons
+    - start
+    - end
+    - datasetIds
+    - filters
+    - ids
+    - biosampleIds
+    - variantIds
+    - individualIds
+    - callsetIds
+    - analysisIds
+    - collationTypes
+    - selectedBeacons
 
 resource_urls:
   ncbi_geosoft: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?form=text&acc=
   ncbi_geoweb: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
   europepmc_pmid: https://europepmc.org/article/MED/
   cellosaurus_web: https://web.expasy.org/cellosaurus/
+
+# dataset_ids here are used for db management; the information used by Beacon
+# is defined separately
 dataset_ids:
-- progenetix
-- cellz
+  - progenetix
+  - cellz
   # - cellosaurus
   # - 1000genomesDRAGEN
 
 queried_collections:
-- biosamples
-- callsets
-- individuals
-- variants
-- collations
-- frequencymaps
-- publications
+  - biosamples
+  - callsets
+  - individuals
+  - variants
+  - collations
+  - frequencymaps
+  - publications
 
 info_db: progenetix
 collations_coll: collations
@@ -143,10 +151,12 @@ beacon_counts:
     h->o_key: variants._id
 handover_coll: querybuffer
 genespans_coll: genespans
+
 filter_flags:
-  logic: $and
-  precision: exact
-  include_descendant_terms: true
+  logic: '$and'
+  precision: exact #'start'
+  include_descendant_terms: True
+
 plot_pars:
   dotalpha: 0.2
   color_var_snv_hex: '#EE00DD'

@@ -1,0 +1,22 @@
+# Local file system configuration ##############################################
+
+system_user: root
+
+system_group: staff
+
+bycon_install_dir:
+  - /
+  - Library
+  - WebServer
+  - cgi-bin
+  - bycon
+
+web_temp_dir:
+  - /
+  - Library
+  - WebServer
+  - Documents
+  - Sites
+  - progenetix
+  - tmp
+
