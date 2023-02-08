@@ -54,7 +54,7 @@ def dataset_response_add_handovers(ds_id, byc):
 
                 if "bedfile" in h_o_defs[ "id" ]:
                     bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, 0, 0, byc)
-                    h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos ) } )
+                    h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos, byc ) } )
                 else:
                     h_o_r.update( { "url": _handover_create_url(this_server, h_o_defs, accessid, byc) } )
 
@@ -81,7 +81,7 @@ def dataset_response_add_handovers(ds_id, byc):
                         # may be incorrect if biosamples ... were called. have to change...
                         if "bedfile" in h_o_defs[ "id" ]:
                             bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, p_f, p_t, byc)
-                            u =  _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos )
+                            u =  _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos, byc )
                         else:
                             u = h_o_r["url"] + "&paginateResults=false&skip={}&limit={}".format(p_s, byc["pagination"]["limit"])
                         h_o_r["pages"].append( { "handover_type": {"id": h_o_defs[ "id" ], "label": l }, "url": u } )
@@ -149,11 +149,11 @@ def _handover_create_url(h_o_server, h_o_defs, accessid, byc):
 
 ################################################################################
 
-def _handover_create_ext_url(h_o_server, h_o_defs, bed_file_name, ucsc_pos):
+def _handover_create_ext_url(h_o_server, h_o_defs, bed_file_name, ucsc_pos, byc):
 
     if "ext_url" in h_o_defs:
         if "bedfile" in h_o_defs["id"]:
-            return("{}&position={}&hgt.customText={}/tmp/{}".format(h_o_defs["ext_url"], ucsc_pos, h_o_server, bed_file_name))
+            return("{}&position={}&hgt.customText={}{}/{}".format(h_o_defs["ext_url"], ucsc_pos, h_o_server, byc["config"].get("server_tmp_dir_web", "/tmp"), bed_file_name))
 
     return False
 
@@ -201,7 +201,7 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
         p_t = v_max # only for the non-paginated ...
 
     bed_file_name = accessid + l + '.bed'
-    bed_file = path.join( *config[ "web_temp_dir" ], bed_file_name )
+    bed_file = path.join( *config[ "server_tmp_dir_loc" ], bed_file_name )
 
     v_defs = byc["variant_definitions"]
     efo_vrs = v_defs["efo_vrs_map"]

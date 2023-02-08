@@ -59,3 +59,28 @@ def args_update_form(byc):
 	return byc
 
 ################################################################################
+
+def genome_binning_from_args(byc):
+
+    if byc["args"].key:
+        byc.update({"genome_binning": byc["args"].key})
+
+    return byc
+
+################################################################################
+
+def filters_from_args(byc):
+
+    if not "args" in byc:
+        return
+
+    if not "filters" in byc:
+        byc.update({"filters":[]})
+
+    if byc["args"].filters:
+        for f in re.split(",", byc["args"].filters):
+            byc["filters"].append({"id":f})
+ 
+    return byc
+
+################################################################################

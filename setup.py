@@ -12,7 +12,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="bycon",
-    version="1.0.12",
+    version="1.0.16",
     description="A Python-based environment for the Beacon v2 genomics API",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -36,27 +36,12 @@ setup(
     ],
     keywords="genomics, Beacon",
     package_dir={'':"."},
-    packages=find_packages(where="."),  # Required
+    packages=find_packages(where="."),
     setup_requires=['setuptools_scm'],
     include_package_data=True,
     package_data={'bycon': ['**/*.yaml', '**/*.txt', '**/*.json']},
     python_requires=">=3.7, <4",
-    # This field lists other packages that your project depends on to run.
-    # Any package you put here will be installed by pip when your project is
-    # installed, so they must be valid existing projects.
-    #
-    # For an analysis of "install_requires" vs pip's requirements files see:
-    # https://packaging.python.org/discussions/install-requires-vs-requirements/
-    install_requires=["base36", "isodate", "json_ref_dict", "liftover", "numpy", "progress", "pyhumps", "pymongo", "PyYAML", "ruamel.base"],  # Optional
-    # Entry points. The following would provide a command called `sample` which
-    # executes the function `main` from this package when invoked:
-    # entry_points={  # Optional
-    #     "console_scripts": [
-    #         "sample=sample:main",
-    #     ],
-    # },
-    # List additional URLs that are relevant to your project as a dict.
-    #
+    install_requires=["base36", "isodate", "Cython", "json_ref_dict", "liftover", "numpy", "progress", "pyhumps", "pymongo", "PyYAML", "ruamel.base"],  # Optional
     project_urls={  # Optional
         "Bug Reports": "https://github.com/progenetix/bycon/issues",
         "Source": "https://github.com/progenetix/bycon/",

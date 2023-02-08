@@ -1,7 +1,6 @@
 # Local file system configuration ##############################################
 
 system_user: root
-
 system_group: staff
 
 bycon_install_dir:
@@ -11,12 +10,19 @@ bycon_install_dir:
   - cgi-bin
   - bycon
 
-web_temp_dir:
-  - /
-  - Library
-  - WebServer
-  - Documents
-  - Sites
-  - progenetix
-  - tmp
+bycon_server_elements:
+  - beaconServer
+  - services
+  - __init__.py
+
+bycon_instance_pars:
+
+  server_tmp_dir_loc:
+    - /
+    - Library
+    - WebServer
+    - Documents
+    - tmp
+
+  server_tmp_dir_web: /tmp
 

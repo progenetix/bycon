@@ -1,8 +1,6 @@
 defaults:
-
   dataset_ids:
     - progenetix
-    # - cellz
   request_path_root: beacon
   request_entity_path_id: info
   assembly_id: GRCh38
