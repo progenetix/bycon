@@ -72,9 +72,6 @@ def initialize_service(byc, service=False):
     form = byc["form_data"]
 
     frm = inspect.stack()[1]
-    mod = inspect.getmodule(frm[0])
-    sub_path = path.dirname( path.abspath(mod.__file__) )
-
     if service is False:
         service = frm.function
 
@@ -84,7 +81,11 @@ def initialize_service(byc, service=False):
     if service in s_a_s:
         service = s_a_s[service]
 
-    read_local_prefs( service, sub_path, byc )
+    mod = inspect.getmodule(frm[0])
+    if mod is not None:
+        sub_path = path.dirname( path.abspath(mod.__file__) )
+        read_local_prefs( service, sub_path, byc )
+
     get_bycon_args(byc)
     args_update_form(byc)
 
