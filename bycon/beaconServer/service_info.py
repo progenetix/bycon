@@ -26,7 +26,8 @@ def service_info():
 
     initialize_service(byc)
 
-    pgx_info = byc["beacon_defaults"].get("info", {})
+    b_e_d = byc["beacon_defaults"].get("entity_defaults", {})
+    pgx_info = b_e_d.get("info", {})
     info = object_instance_from_schema_name(byc, "ga4gh-service-info-1-0-0-schema", "properties", "json")
 
     for k in info.keys():

@@ -1,6 +1,6 @@
 from os import environ, path, pardir
-import inspect, json
-import random
+import inspect, json, random
+from pathlib import Path
 from pymongo import MongoClient
 from bson import json_util
 
@@ -69,6 +69,7 @@ def initialize_service(byc, service=False):
     provided."""
 
     defs = byc["beacon_defaults"]
+    b_e_d = defs.get("entity_defaults", {})    
     form = byc["form_data"]
 
     frm = inspect.stack()[1]
@@ -86,6 +87,12 @@ def initialize_service(byc, service=False):
         sub_path = path.dirname( path.abspath(mod.__file__) )
         read_local_prefs( service, sub_path, byc )
 
+        site_specific_file = Path( path.join( sub_path, "config", "site_specific.yaml" ) )
+        if site_specific_file.is_file():
+            s_s_c = load_yaml_empty_fallback( site_specific_file )
+            for s_k, s_v in s_s_c:
+                byc["config"].update({s_k: s_v})
+
     get_bycon_args(byc)
     args_update_form(byc)
 
@@ -95,8 +102,8 @@ def initialize_service(byc, service=False):
         for d_k, d_v in conf["defaults"].items():
             byc.update( { d_k: d_v } )
 
-    if service in defs:
-        for d_k, d_v in defs[ service ].items():
+    if service in b_e_d:
+        for d_k, d_v in b_e_d[ service ].items():
             byc.update( { d_k: d_v } )
 
     # update response_entity_id from path
@@ -312,13 +319,14 @@ def response_meta_add_request_summary(r, byc):
         return r
 
     r_rcvd_rs = r["meta"]["received_request_summary"]
+    b_e_d = byc["beacon_defaults"].get("entity_defaults", {})
 
     form = byc["form_data"]
 
     r_rcvd_rs.update({
         "filters": byc.get("filters", []), 
         "pagination": byc.get("pagination", {}),
-        "api_version": byc["beacon_defaults"]["info"].get("api_version", "v2")
+        "api_version": b_e_d["info"].get("api_version", "v2")
     })
 
     for p in ["include_resultset_responses", "requested_granularity"]:
@@ -493,10 +501,10 @@ def response_update_meta(r, byc):
 
 def response_meta_set_info_defaults(r, byc):
 
-    # , "create_date_time", "update_date_time"
+    b_e_d = byc["beacon_defaults"].get("entity_defaults", {})
 
     for i_k in ["api_version", "beacon_id"]:
-        r["meta"].update({ i_k: byc["beacon_defaults"]["info"].get(i_k, "") })
+        r["meta"].update({ i_k: b_e_d["info"].get(i_k, "") })
 
     return r
 
