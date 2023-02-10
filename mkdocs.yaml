@@ -7,9 +7,10 @@ repo_url: https://github.com/progenetix/bycon
 ###############################################################################
 
 nav:
-  - Documentation Home: index.md
-  - Changes & To Do: changes-todo.md
-  - API Tests: tests.md
+  - Documentation Home: index
+  - Installation: installation
+  - Changes & To Do: changes-todo
+  - API Tests: tests
   - Progenetix Site: http://progenetix.org
   - Baudisgroup: http://info.baudisgroup.org
 

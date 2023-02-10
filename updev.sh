@@ -4,7 +4,6 @@
 pip3 uninstall bycon
 rm -rf ./dist
 python3 -m build --sdist .
-python3 -m build --wheel .
 BY=(./dist/*tar.gz)
 pip install $BY
 ./install.py
