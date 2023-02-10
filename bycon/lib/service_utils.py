@@ -68,7 +68,7 @@ def initialize_service(byc, service=False):
     correspond to the calling main function. However, an overwrite can be
     provided."""
 
-    defs = byc["beacon_defaults"]
+    defs = byc.get("beacon_defaults",, {})
     b_e_d = defs.get("entity_defaults", {})    
     form = byc["form_data"]
 
@@ -319,7 +319,8 @@ def response_meta_add_request_summary(r, byc):
         return r
 
     r_rcvd_rs = r["meta"]["received_request_summary"]
-    b_e_d = byc["beacon_defaults"].get("entity_defaults", {})
+    defs = byc.get("beacon_defaults", {})
+    b_e_d = defs.get("entity_defaults", {})
 
     form = byc["form_data"]
 
@@ -501,7 +502,8 @@ def response_update_meta(r, byc):
 
 def response_meta_set_info_defaults(r, byc):
 
-    b_e_d = byc["beacon_defaults"].get("entity_defaults", {})
+    defs = byc.get("beacon_defaults", {})
+    b_e_d = defs.get("entity_defaults", {})
 
     for i_k in ["api_version", "beacon_id"]:
         r["meta"].update({ i_k: b_e_d["info"].get(i_k, "") })

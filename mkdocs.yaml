@@ -8,7 +8,7 @@ repo_url: https://github.com/progenetix/bycon
 
 nav:
   - Documentation Home: index.md
-  - Bugs & To Do: bugs-todo.md
+  - Changes & To Do: changes-todo.md
   - API Tests: tests.md
   - Progenetix Site: http://progenetix.org
   - Baudisgroup: http://info.baudisgroup.org
