@@ -122,7 +122,6 @@ queried_collections:
 info_db: progenetix
 collations_coll: collations
 frequencymaps_coll: frequencymaps
-collations_source: biosamples
 ontologymaps_coll: ontologymaps
 beacon_info_coll: beaconinfo
 beacon_counts:

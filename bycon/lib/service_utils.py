@@ -68,7 +68,7 @@ def initialize_service(byc, service=False):
     correspond to the calling main function. However, an overwrite can be
     provided."""
 
-    defs = byc.get("beacon_defaults",, {})
+    defs = byc.get("beacon_defaults", {})
     b_e_d = defs.get("entity_defaults", {})    
     form = byc["form_data"]
 
@@ -77,7 +77,7 @@ def initialize_service(byc, service=False):
         service = frm.function
 
     # TODO - streamline
-    s_a_s = byc["beacon_mappings"]["service_aliases"]
+    s_a_s = byc["beacon_mappings"].get("service_aliases", {})
 
     if service in s_a_s:
         service = s_a_s[service]

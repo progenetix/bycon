@@ -73,6 +73,9 @@ def read_local_prefs(service, dir_path, byc):
 
 def dbstats_return_latest(byc):
 
+    # TODO: This is too hacky & should be moved to an external function
+    # which updates the database_definitions / beacon_info yamls...
+
     limit = 1
     if "stats_number" in byc:
         if byc["stats_number"] > 1:
@@ -80,8 +83,8 @@ def dbstats_return_latest(byc):
 
     db = byc[ "config" ][ "info_db" ]
     coll = byc[ "config" ][ "beacon_info_coll" ]
-
     stats = MongoClient( )[ db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( limit )
+
     return stats
 
 ################################################################################

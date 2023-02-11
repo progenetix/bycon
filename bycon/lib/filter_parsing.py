@@ -65,38 +65,86 @@ def check_filter_values(filters, byc):
 
 def select_dataset_ids(byc):
 
-    p_id = rest_path_value("datasets")
-    if p_id:
-        ds_id = p_id
-        if ds_id in byc["dataset_definitions"].keys():
-            byc.update( { "dataset_ids": [ ds_id ] } )
-            return byc
+    if not "dataset_ids" in byc.keys():
+        byc.update( { "dataset_ids": [ ] } )
 
-    # accessid overrides ... ?
-    if "accessid" in byc["form_data"]:
-        accessid = byc["form_data"]["accessid"]
+    if ds_id_from_rest_path_value(byc) is not False:
+        return byc            
 
-        ho_client = MongoClient()
-        ho_db = ho_client[ byc["config"]["info_db"] ]
-        ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
-        h_o = ho_coll.find_one( { "id": accessid } )
-        # TODO: catch error for mismatch
-        if h_o:
-            if "source_db" in h_o:
-                ds_id = h_o["source_db"]
-                if ds_id in byc["dataset_definitions"].keys():
-                    byc.update( { "dataset_ids": [ ds_id ] } )
-                    return byc            
+    if ds_id_from_accessid(byc) is not False:
+        return byc            
 
-    ds_ids = [ ]
-    form = byc["form_data"]
-    if "dataset_ids" in form:
-        for ds_id in form["dataset_ids"]:
-            if ds_id in byc["dataset_definitions"].keys():
-                ds_ids.append(ds_id)
-        if len(ds_ids) > 0:
-            byc.update( { "dataset_ids": ds_ids } )
+    if ds_id_from_form(byc) is not False:
+        return byc            
     
     return byc
-  
+
+################################################################################
+
+def ds_id_from_rest_path_value(byc):
+
+    ds_id = rest_path_value("datasets")
+    if ds_id is "empty_value":
+        return False
+
+    if ds_id not in byc["dataset_definitions"].keys():
+        return False
+
+    byc.update( { "dataset_ids": [ ds_id ] } )
+    return byc
+
+################################################################################
+
+def ds_id_from_accessid(byc):
+
+    # TODO: This is very verbose. In principle there should be an earlier
+    # test of existence...
+
+    accessid = byc["form_data"].get("accessid", None)
+    if "accessid" is None:
+        return False
+
+    info_db = byc["config"].get("info_db", None)
+    if "info_db" is None:
+        return False
+
+    ho_collname = byc["config"].get("handover_coll", None)
+    if "ho_collname" is None:
+        return False
+
+    ho_client = MongoClient()
+    h_o = ho_client[ info_db ][ ho_collname ].find_one( { "id": accessid } )
+    if not h_o:
+        return False
+
+    ds_id = h_o.get("source_db", None)
+    if "ds_id" is None:
+        return False
+
+    if ds_id not in byc["dataset_definitions"].keys():
+        return False
+
+    byc.update( { "dataset_ids": [ ds_id ] } )
+    return byc
+
+################################################################################
+
+def ds_id_from_form(byc):
+
+    f_ds_ids = byc["form_data"].get("dataset_ids", None)
+    if f_ds_ids is None:
+        return False
+
+    ds_ids = [ ]
+    for ds_id in f_ds_ids:
+        if ds_id in byc["dataset_definitions"].keys():
+            ds_ids.append(ds_id)
+
+    if len(ds_ids) < 1:
+        return False
+
+    byc.update( { "dataset_ids": ds_ids } )
+    
+    return byc
+
 ################################################################################

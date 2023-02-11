@@ -6,7 +6,7 @@ title: Installation
 
 The `bycon` project contains libraries (`/lib`), global configuration files
 (`/config`), resource files (`/rsrc`) and data scheams (`/schemas`). All these
-are distribted as part of the `bycon` package.
+are distributed as part of the `bycon` package.
 
 !!! warning "Highly Experimental"
     
@@ -45,7 +45,7 @@ current code base (e.g. containing your modifications) and then runs the install
 script for the distribution of the server scripts. The following utility code
 is provided with the `updev.sh` script (may change over time...):
 
-```
+```bash
 pip3 uninstall bycon
 rm -rf ./dist
 python3 -m build --sdist .
