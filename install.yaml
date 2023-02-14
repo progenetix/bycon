@@ -10,6 +10,19 @@ bycon_install_dir:
   - cgi-bin
   - bycon
 
+utility_dirs:
+  - - /
+    - Users
+    - __USERNAME__
+    - switchdrive
+    - baudisgroup
+    - dbtools
+    - byconeer
+  - - /
+    - Users
+    - __USERNAME__
+    - Desktop
+
 bycon_instance_pars:
 
   server_tmp_dir_loc:

@@ -46,6 +46,7 @@ def services():
                 defaults = byc["beacon_defaults"].get("defaults", {})
                 for d_k, d_v in defaults.items():
                     byc.update( { d_k: d_v } )
+            read_bycon_definition_files(conf_dir, byc)
 
     byc.update({"request_path_root": "services"})
     rest_path_elements(byc)

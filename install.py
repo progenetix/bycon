@@ -2,8 +2,8 @@
 
 # version: 2023-02-13
 
-import sys, ruamel.yaml
-from os import path, system
+import sys, re, ruamel.yaml
+from os import getlogin, path, system
 
 # from ruamel.yaml.main import round_trip_load, round_trip_dump
 # from ruamel.yaml.comments. import CommentedMap
@@ -91,6 +91,13 @@ def install():
     system('sudo rsync -avh --delete {}/{}/ {}/{}/'.format(pkg_path, "beaconServer", b_i_d_p, "beaconServer"))
     system('sudo rsync -avh --delete {}/{}/ {}/{}/{}/'.format(dir_path, "local", b_i_d_p, "services", "local"))
     system('sudo rsync -avh --delete {}/{}/ {}/{}/{}/'.format(dir_path, "local", b_i_d_p, "beaconServer", "local"))
+    for u_d in install["utility_dirs"]:
+        u_p = path.join( *u_d )
+        u_p = re.sub("__USERNAME__", getlogin(), u_p)
+        if path.isdir(u_p):
+            system('rsync -avh --delete {}/{}/ {}/{}/'.format(dir_path, "local", u_p, "local"))
+        else:
+            print("¡¡¡ Directory {} from install.yaml/#utility_dirs does not exist !!!".format(u_p))
     system('sudo cp {}/{} {}/{}'.format(pkg_path, "__init__.py", b_i_d_p, "__init__.py"))
     system('sudo chown -R {}:{} {}'.format(install["system_user"], install["system_group"], b_i_d_p))
     system('sudo chmod 775 {}/beaconServer/*.py'.format(b_i_d_p))

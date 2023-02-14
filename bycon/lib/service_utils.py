@@ -83,7 +83,6 @@ def initialize_bycon_service(byc, service=False):
         service = s_a_s[service]
 
     mod = inspect.getmodule(frm[0])
-    print(mod)
     if mod is not None:
         """
         Here we allow the addition of additional configuration files, necessary
@@ -303,6 +302,7 @@ def run_result_sets_beacon(byc):
 def r_set_update_counts(r_set, r_s_res, byc):
 
     ds_id = r_set["id"]
+
 
     r_set.update({"results_count": 0})
 
