@@ -64,7 +64,7 @@ def remap_variants(r_s_res, byc):
             )
 
         # TODO: Keep legacy pars?
-        legacy_pars = ["_id", "id", "reference_name", "type", "biosample_id", "callset_id", "individual_id", "info", "variant_type", "variant_state", "reference_bases", "alternate_bases", "start", "end"]
+        legacy_pars = ["_id", "id", "reference_name", "type", "biosample_id", "callset_id", "individual_id", "variant_type", "variant_state", "reference_bases", "alternate_bases", "start", "end"]
         for p in legacy_pars:
             v["variation"].pop(p, None)
 
