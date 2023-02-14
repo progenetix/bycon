@@ -7,26 +7,27 @@ from humps import camelize, decamelize
 
 ################################################################################
 
-def read_bycon_definition_files(byc):
+def read_bycon_definition_files(conf_dir, byc):
 
-    if not "bycon_definition_files" in byc["config"]:
+    b_d_fs = byc["config"].get("bycon_definition_files", [])
 
-        config_d = path.join( byc["pkg_path"], "config" )
+    if not path.isdir(conf_dir):
+        return byc
 
-        b_d_fs = [ f.name for f in scandir(config_d) if f.is_file() ]
+    if len(b_d_fs) < 1:
+
+        b_d_fs = [ f.name for f in scandir(conf_dir) if f.is_file() ]
         b_d_fs = [ f for f in b_d_fs if f.endswith("yaml") ]
         b_d_fs = [ Path(f).stem for f in b_d_fs if not f.startswith("config.yaml") ]
 
-        byc["config"].update({"bycon_definition_files": b_d_fs})
-
-    for d in byc["config"]["bycon_definition_files"]:
-        read_bycon_configs_by_name( d, byc )
+    for d in b_d_fs:
+        read_bycon_configs_by_name( d, conf_dir, byc )
 
     return byc
 
 ################################################################################
   
-def read_bycon_configs_by_name(name, byc):
+def read_bycon_configs_by_name(name, conf_dir, byc):
 
     """podmd
     Reading the config from the same wrapper dir:
@@ -37,7 +38,7 @@ def read_bycon_configs_by_name(name, byc):
     podmd"""
 
     o = {}
-    ofp = path.join( byc["pkg_path"], "config", name+".yaml" )
+    ofp = path.join( conf_dir, name+".yaml" )
 
     with open( ofp ) as od:
         o = yaml.load( od , Loader=yaml.FullLoader)

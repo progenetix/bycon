@@ -66,7 +66,7 @@ def beaconAggregator():
 
 def aggregator():
 
-    initialize_service(byc)
+    initialize_bycon_service(byc)
     parse_filters(byc)
     parse_variant_parameters(byc)
     generate_genomic_intervals(byc)

@@ -38,7 +38,10 @@ def parse_variant_parameters(byc):
         if "variant_type" in p_k:
             if v_p in v_t_als:
                 v_t_k = v_t_als[v_p]
-                v_p_c[ p_k ] = { "$in": v_t_defs[v_t_k]["child_terms"] }
+                if "LiteralSequenceExpression" in v_t_k:
+                    v_p_c[ p_k ] = None
+                else:
+                    v_p_c[ p_k ] = { "$in": v_t_defs[v_t_k]["child_terms"] }
         elif "array" in v_p_defs[ p_k ]["type"]:
             v_l = set()
             for v in v_p:
@@ -54,7 +57,6 @@ def parse_variant_parameters(byc):
                 v_p_c[ p_k ] = v_p
 
     byc.update( { "variant_pars": v_p_c } )
-
 
     return byc
 
@@ -99,7 +101,7 @@ def get_variant_request_type(byc):
     brts = byc["variant_definitions"]["request_types"]
     brts_k = brts.keys()
     
-    # HACK: setting to range request if start and end with one value
+    # DODO HACK: setting to range request if start and end with one value
     if "start" in v_pars and "end" in v_pars:
         if len(v_pars[ "start" ]) == 1:
             if len(v_pars[ "end" ]) == 1:
@@ -136,6 +138,32 @@ def get_variant_request_type(byc):
         variant_request_type = vrt_matches[0]["type"]
 
     byc.update( { "variant_request_type": variant_request_type } )
+
+    return byc
+
+################################################################################
+
+def create_variantTypeRequest_query( byc ):
+
+    if byc["variant_request_type"] != "variantTypeRequest":
+        return byc
+
+    vp = byc["variant_pars"]
+    v_p_defs = byc["variant_definitions"]["parameters"]
+
+    v_q_l = [
+        { v_p_defs["variant_type"]["db_key"]: vp[ "variant_type" ] }
+    ]
+
+    if "reference_name" in vp:
+        v_q_l.append( { v_p_defs["reference_name"]["db_key"]: vp[ "reference_name" ] })
+
+    if len(v_q_l) == 1:
+        v_q = v_q_l[0]
+    else:     
+        v_q = { "$and": v_q_l }
+
+    expand_variant_query(v_q, byc)
 
     return byc
 

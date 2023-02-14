@@ -22,7 +22,7 @@ def main():
 
 def genespans():
 
-    initialize_service(byc)        
+    initialize_bycon_service(byc)        
     parse_variant_parameters(byc)
     generate_genomic_intervals(byc)
     create_empty_service_response(byc)

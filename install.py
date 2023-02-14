@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# version: 2023-02-08
+# version: 2023-02-13
 
 import sys, ruamel.yaml
 from os import path, system
@@ -71,8 +71,8 @@ def install():
     # this block modifies the main config file, so that the `server_tmp_dir_loc`
     # etc. are in line with the install
 
-    c_f = path.join( pkg_path, "config", "config.yaml" )
-    c_f_bck = path.join( pkg_path, "config", "config.yaml.bck" )
+    c_f = path.join( pkg_path, "config.yaml" )
+    c_f_bck = path.join( pkg_path, "config.yaml.bck" )
     try:
         with open( c_f ) as y_c:
             config = yaml.load( y_c )
@@ -87,11 +87,11 @@ def install():
     with open(c_f, 'w') as out_f:
         yaml.dump(config, out_f)
 
-    # / config modification
-
-    for s_e in install.get("bycon_server_elements", []):
-        print('sudo cp -a {}/{} {}/{}'.format(pkg_path, s_e, b_i_d_p, s_e))
-        system('sudo cp -a {}/{} {}/{}'.format(pkg_path, s_e, b_i_d_p, s_e))
+    system('sudo rsync -avh --delete {}/{}/ {}/{}/'.format(pkg_path, "services", b_i_d_p, "services"))
+    system('sudo rsync -avh --delete {}/{}/ {}/{}/'.format(pkg_path, "beaconServer", b_i_d_p, "beaconServer"))
+    system('sudo rsync -avh --delete {}/{}/ {}/{}/{}/'.format(dir_path, "local", b_i_d_p, "services", "local"))
+    system('sudo rsync -avh --delete {}/{}/ {}/{}/{}/'.format(dir_path, "local", b_i_d_p, "beaconServer", "local"))
+    system('sudo cp {}/{} {}/{}'.format(pkg_path, "__init__.py", b_i_d_p, "__init__.py"))
     system('sudo chown -R {}:{} {}'.format(install["system_user"], install["system_group"], b_i_d_p))
     system('sudo chmod 775 {}/beaconServer/*.py'.format(b_i_d_p))
     system('sudo chmod 775 {}/services/*.py'.format(b_i_d_p))

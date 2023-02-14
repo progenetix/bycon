@@ -69,7 +69,7 @@ def select_dataset_ids(byc):
         byc.update( { "dataset_ids": [ ] } )
 
     if ds_id_from_rest_path_value(byc) is not False:
-        return byc            
+        return byc
 
     if ds_id_from_accessid(byc) is not False:
         return byc            

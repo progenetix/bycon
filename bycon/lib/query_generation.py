@@ -20,6 +20,9 @@ def initialize_beacon_queries(byc):
     generate_queries(byc)
     select_dataset_ids(byc)
 
+    if len(byc["dataset_ids"]) < 1:
+        print_text_response("No existing dataset_id - please check dataset_definitions")
+
     # TODO: HOT FIX
     if "runs" in byc["queries"].keys():
         if not "callsets" in byc["queries"].keys():
@@ -331,7 +334,9 @@ def _update_queries_from_variants( byc ):
         if not "variants" in byc["queries"]:
             return byc
 
-    if "variantIdRequest" in byc["variant_request_type"]:
+    if "variantTypeRequest" in byc["variant_request_type"]:
+        create_variantTypeRequest_query( byc )
+    elif "variantIdRequest" in byc["variant_request_type"]:
         create_variantIdRequest_query( byc )
     elif "variantCNVrequest" in byc["variant_request_type"]:
         create_variantCNVrequest_query( byc )

@@ -29,7 +29,7 @@ def main():
 
 def dbstats():
 
-    initialize_service(byc)
+    initialize_bycon_service(byc)
     select_dataset_ids(byc)
 
 

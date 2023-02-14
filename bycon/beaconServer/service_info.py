@@ -24,7 +24,7 @@ def main():
 
 def service_info():
 
-    initialize_service(byc)
+    initialize_bycon_service(byc)
 
     defs = byc.get("beacon_defaults", {})
     b_e_d = defs.get("entity_defaults", {})

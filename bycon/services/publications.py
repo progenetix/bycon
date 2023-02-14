@@ -27,7 +27,7 @@ def main():
 
 def publications():
 
-    initialize_service(byc)
+    initialize_bycon_service(byc)
 
     get_filter_flags(byc)
     parse_filters(byc)

@@ -19,6 +19,8 @@ byc_root_pars:
   request_entity_id: genomicVariant
   response_entity_id: genomicVariant
   response_entity: {}
+  service_response: {}
+  error_response: {}
   service_config: {}
   filters: []
   method: ''
@@ -49,7 +51,7 @@ default_model_path:
   - json
   - progenetix-model
 
-schemas_paths:
+schema_paths:
   description: >-
     path elements as list from `schemas_root`
   items:

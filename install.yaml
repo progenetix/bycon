@@ -10,11 +10,6 @@ bycon_install_dir:
   - cgi-bin
   - bycon
 
-bycon_server_elements:
-  - beaconServer
-  - services
-  - __init__.py
-
 bycon_instance_pars:
 
   server_tmp_dir_loc:

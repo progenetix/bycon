@@ -206,6 +206,8 @@ refseq_chromosomes: # GRCh38.p13
     length: 57227415
 
 variant_state_aliases:
+  SNV: LiteralSequenceExpression
+  LiteralSequenceExpression: LiteralSequenceExpression
   CNV: EFO:0030066
   EFO:0030066: EFO:0030066
   DUP: EFO:0030070
@@ -219,6 +221,7 @@ variant_state_aliases:
   EFO:0030069: EFO:0030069
 
 variant_state_VCF_aliases:
+  LiteralSequenceExpression: SNV
   DUP: DUP
   DEL: DEL
   CNV: CNV
@@ -231,8 +234,10 @@ variant_state_VCF_aliases:
   EFO:0030068: DEL
   EFO:0030069: DEL
  
-
 variant_states:
+  LiteralSequenceExpression:
+    child_terms:
+      - null
   EFO:0030066:
     child_terms:
       - EFO:0030066
@@ -282,13 +287,11 @@ parameters:
   reference_name:
     type: string
     db_key: location.sequence_id
-    # db_key: reference_name
     pattern: '^\w+.*?\w?$'
 
   mate_name:
     type: string
     db_key: location.sequence_id
-    # db_key: reference_name
     pattern: '^\w+.*?\w?$'
 
   reference_bases:
@@ -377,6 +380,14 @@ parameters:
     type: string
 
 request_types:
+
+  variantTypeRequest:
+    description: >
+      A query for SNV variants; not a Beacon standard.
+    all_of:
+      - variant_type
+    optional:
+      - reference_name
 
   variantIdRequest:
     description: >

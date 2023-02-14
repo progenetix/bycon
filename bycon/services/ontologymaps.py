@@ -26,7 +26,7 @@ def main():
 
 def ontologymaps():
 
-    initialize_service(byc)
+    initialize_bycon_service(byc)
 
     parse_filters(byc)
     get_filter_flags(byc)

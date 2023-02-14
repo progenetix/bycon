@@ -1,0 +1,217 @@
+defaults:
+  dataset_ids:
+    - progenetix
+  request_path_root: beacon
+  request_entity_path_id: info
+  assembly_id: GRCh38
+  response_schema: beaconResultsetsResponse
+  include_resultset_responses: HIT
+  include_handovers: false
+  test_mode: false
+  test_mode_count: 5
+  requested_granularity: record
+  returned_granularity: record
+  pagination:
+    skip: 0
+    limit: 2000
+  response_entity:
+    entity_type: dataset
+    collection: dbstats
+    response_schema: beaconCollectionsResponse
+    beacon_schema:
+      entity_type: dataset
+      schema: https://progenetix.org/services/schemas/dataset/
+    h->o_access_key: False
+
+################################################################################
+# beacon entity defaults #######################################################
+################################################################################
+
+entity_defaults:
+
+  info:
+    beacon_id: org.progenetix
+    name: Progenetix Cancer Genomics Beacon+
+    api_version: v2.1.0-beaconplus
+    version: v2.1.0-beaconplus
+    id: org.progenetix.beacon
+    environment: prod
+    description: >-
+      Beacon+ provides a forward looking implementation of the Beacon v2 API, with
+      focus on structural genome variants and metadata based on the cancer and reference
+      genome profiling data in the Progenetix oncogenomic data resource (https://progenetix.org).
+    type:
+      group: org.ga4gh
+      artifact: Beacon v2
+      version: v2.1.0-beaconplus
+    documentation_url: http://docs.progenetix.org
+    service_url: http://progenetix.org/beacon/
+    welcome_url: https://progenetix.org/biosamples/
+    alternative_url: https://progenetix.org
+    contact_url: mailto:contact@progenetix.org
+    created_at: 2015-11-13T00:00:00
+    updated_at: 2023-01-16T12:45:00
+    organization:
+      id: org.baudisgroup.info
+      name: Theoretical Cytogenetics and Oncogenomics group at UZH and SIB
+      description: >
+        The *Theoretical Cytogenetics and Oncogenomics* group at the University of
+        Zurich (UZH) and the Swiss Institute of Bioinformatics (SIB) performs research
+        in cancer genomics and provides bioinformatics tools and cancer genome data
+        resources to the scientific community.
+      address: >-
+        Department of Molecular Life Sciences
+        University of Zurich
+        Winterthurerstrasse 190
+        CH-8057 Zurich
+        Switzerland
+      welcome_url: https://progenetix.org/biosamples/
+      contact_url: mailto:contact@progenetix.org
+      logoUrl: https://progenetix.org/img/progenetix-logo.png
+      info:
+        update_date_time: 2023-01-16T12:45:00
+    create_date_time: 2015-11-13T00:00:00
+    update_date_time: 2023-01-16T12:45:00
+
+################################################################################
+
+  aggregator:
+    request_entity_path_id: genomicVariations
+    response_entity_id: genomicVariant
+    response_schema: beaconBooleanResponse
+
+################################################################################
+
+  map:
+    request_entity_path_id: map
+    response_entity_id: beaconMap
+    response_schema: beaconMapResponse
+
+################################################################################
+
+  entry_types:
+    request_entity_path_id: entryTypes
+    response_entity_id: entryType
+    response_schema: beaconEntryTypesResponse
+
+  filtering_terms:
+    request_entity_path_id: filteringTerms
+    response_entity_id: filteringTerm
+    response_schema: beaconFilteringTermsResponse
+
+################################################################################
+
+  analyses:
+    request_entity_path_id: analyses
+    response_entity_id: analysis
+    h->o_access_key: "callsets._id"
+    response_entity:
+      entity_type: analysis
+      collection: callsets
+      response_schema: beaconResultsetsResponse
+      beacon_schema:
+        entity_type: analysis
+        schema: https://progenetix.org/services/schemas/analysis/
+      h->o_access_key: "callsets._id"
+
+################################################################################
+
+  biosamples:
+    request_entity_path_id: biosamples
+    response_entity_id: biosample
+    response_entity:
+      entity_type: biosample
+      collection: biosamples
+      response_schema: beaconResultsetsResponse
+      beacon_schema:
+        entity_type: biosample
+        schema: https://progenetix.org/services/schemas/biosample/
+      h->o_access_key: "biosamples._id"
+
+################################################################################
+
+  cohorts:
+    request_entity_path_id: cohorts
+    response_entity_id: cohort
+    response_schema: beaconCollectionsResponse
+    response_entity:
+      entity_type: cohort
+      collection: collations
+      response_schema: beaconCollectionsResponse
+      beacon_schema:
+        entity_type: cohort
+        schema: https://progenetix.org/services/schemas/cohort/
+      h->o_access_key: Null
+    pagination:
+      skip: 0
+      limit: 10
+    include_resultset_responses: false
+
+  ################################################################################
+
+  datasets:
+    request_entity_path_id: datasets
+    response_entity_id: dataset
+    response_schema: beaconCollectionsResponse
+    pagination:
+      skip: 0
+      limit: 5
+    include_resultset_responses: false
+
+  ################################################################################
+
+  genomicVariations:
+    request_entity_path_id: genomicVariations
+    response_entity_id: genomicVariant
+    response_entity:
+      entity_type: genomicVariant
+      response_schema: beaconResultsetsResponse
+      collection: variants
+      beacon_schema:
+        entity_type: genomicVariant
+        schema: https://progenetix.org/services/schemas/genomicVariant/
+      h->o_access_key: "variants._id"
+
+  ################################################################################
+
+  individuals:
+    request_entity_path_id: individuals
+    response_entity_id: individual
+    response_entity:
+      entity_type: individual
+      collection: individuals
+      response_schema: beaconResultsetsResponse
+      beacon_schema:
+        entity_type: individual
+        schema: https://progenetix.org/services/schemas/individual/
+      h->o_access_key: "individuals._id"
+
+  ################################################################################
+
+  runs:
+    request_entity_path_id: runs
+    response_entity_id: run
+    response_entity:
+      entity_type: run
+      collection: callsets
+      response_schema: beaconResultsetsResponse
+      beacon_schema:
+        entity_type: run
+        schema: https://progenetix.org/services/schemas/run/
+      h->o_access_key: "callsets._id"
+
+  ################################################################################
+  # service defaults #############################################################
+  ################################################################################
+
+  cytomapper:
+    request_path_root: services
+    response_entity_id: cytobandMapping
+    response_entity:
+      entity_type: cytobandMapping
+      response_schema: beaconResultsetsResponse
+      collection: Null
+      beacon_schema:
+        entity_type: cytobandMapping
+        schema: https://progenetix.org/services/schemas/cytobandMapping/
+      h->o_access_key: Null

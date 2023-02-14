@@ -28,7 +28,7 @@ def main():
 
 def schemas():
 
-    initialize_service(byc)
+    initialize_bycon_service(byc)
     create_empty_service_response(byc)
 
     if "id" in byc["form_data"]:

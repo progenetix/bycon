@@ -40,7 +40,7 @@ def get_schema_file_path(schema_name, byc, ext="json"):
 
     config = byc["config"]
 
-    for s_p in config["schemas_paths"]["items"]:
+    for s_p in config["schema_paths"]["items"]:
 
         p = path.join( pkg_path, *config["schemas_root"], *s_p )
 

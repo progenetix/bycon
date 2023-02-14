@@ -18,7 +18,7 @@ from handover_generation import dataset_response_add_handovers, query_results_sa
 from interval_utils import generate_genomic_intervals, interval_counts_from_callsets
 from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
 from query_generation import  initialize_beacon_queries, paginate_list, replace_queries_in_test_mode, set_pagination_range
-from read_specs import read_bycon_configs_by_name,read_local_prefs
+from read_specs import load_yaml_empty_fallback, read_bycon_configs_by_name, read_bycon_definition_files, read_local_prefs
 from response_remapping import *
 from schema_parsing import *
 
@@ -48,7 +48,7 @@ def initialize_bycon(config):
 
 def beacon_data_pipeline(byc, entry_type):
 
-    initialize_service(byc, entry_type)
+    initialize_bycon_service(byc, entry_type)
 
     run_beacon_init_stack(byc)
     return_filtering_terms_response(byc)
@@ -62,7 +62,7 @@ def beacon_data_pipeline(byc, entry_type):
 
 ################################################################################
 
-def initialize_service(byc, service=False):
+def initialize_bycon_service(byc, service=False):
 
     """For consistency, the name of the local configuration file should usually
     correspond to the calling main function. However, an overwrite can be
@@ -83,15 +83,31 @@ def initialize_service(byc, service=False):
         service = s_a_s[service]
 
     mod = inspect.getmodule(frm[0])
+    print(mod)
     if mod is not None:
+        """
+        Here we allow the addition of additional configuration files, necessary
+        for options beyond basic library use. Files are read in as
+        1. from a `config` directory in the parent directory of the executed script
+            * this e.g. overwrites the config options
+        2. from a config directory inside the script directory
+            * this is usually used to provide script-specific parameters (`service_defaults`...)
+        """
         sub_path = path.dirname( path.abspath(mod.__file__) )
-        read_local_prefs( service, sub_path, byc )
+        conf_dir = path.join( sub_path, "local" )
+        if path.isdir(conf_dir):
+            c_f = Path( path.join( conf_dir, "config.yaml" ) )
+            if path.isfile(c_f):
+                byc.update({"config": load_yaml_empty_fallback( c_f ) })
+            d_f = Path( path.join( conf_dir, "beacon_defaults.yaml" ) )
+            if path.isfile(d_f):
+                byc.update({"beacon_defaults": load_yaml_empty_fallback( d_f ) })
+                defaults = byc["beacon_defaults"].get("defaults", {})
+                for d_k, d_v in defaults.items():
+                    byc.update( { d_k: d_v } )
+            read_bycon_definition_files(conf_dir, byc)
 
-        site_specific_file = Path( path.join( sub_path, "config", "site_specific.yaml" ) )
-        if site_specific_file.is_file():
-            s_s_c = load_yaml_empty_fallback( site_specific_file )
-            for s_k, s_v in s_s_c:
-                byc["config"].update({s_k: s_v})
+        read_local_prefs( service, sub_path, byc )
 
     get_bycon_args(byc)
     args_update_form(byc)
@@ -361,7 +377,11 @@ def update_meta_queries(byc):
 
 def create_empty_beacon_response(byc):
 
-    r, e = instantiate_response_and_error(byc, byc["response_entity"]["response_schema"])
+    r_s = byc["response_entity"].get("response_schema", None)
+    if r_s is None:
+        return byc
+
+    r, e = instantiate_response_and_error(byc, r_s)
     response_update_meta(r, byc)
 
     try:
@@ -369,7 +389,7 @@ def create_empty_beacon_response(byc):
     except KeyError:
         pass
 
-    if "beaconResultsetsResponse" in byc["response_entity"]["response_schema"]:
+    if "beaconResultsetsResponse" in r_s:
 
         # TODO: stringent definition on when this is being used
         r_set = object_instance_from_schema_name(byc, "beaconResultsets", "definitions/ResultsetInstance/properties")
@@ -571,7 +591,7 @@ def response_add_error(byc, code=200, message=False):
         return byc
 
     e = { "error_code": code, "error_message": message }
-    byc["error_response"]["error"].update(e)
+    byc["error_response"].update({"error": e})
 
     return byc
 

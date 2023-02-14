@@ -28,7 +28,7 @@ def main():
 
 def retriever():
 
-    initialize_service(byc, "aggregator")
+    initialize_bycon_service(byc, "aggregator")
     parse_filters(byc)
     parse_variant_parameters(byc)
     generate_genomic_intervals(byc)

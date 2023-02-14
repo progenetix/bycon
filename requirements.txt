@@ -7,4 +7,4 @@ progress==1.6
 pyhumps==3.8.0
 pymongo==4.2.0
 PyYAML==6.0
-ruamel.base==1.0.0
+ruamel.yaml==1.0.0

@@ -24,7 +24,7 @@ def main():
 
 def cytomapper():
     
-    initialize_service(byc)
+    initialize_bycon_service(byc)
     
     parse_variant_parameters(byc)
     generate_genomic_intervals(byc)

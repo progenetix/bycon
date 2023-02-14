@@ -1,0 +1,63 @@
+---
+progenetix:
+
+    id: progenetix
+    name: progenetix
+    identifier: 'org.progenetix::progenetix'
+    description: "Progenetix cancer genome profiles"
+    createDateTime: 2001-01-01
+    updateDateTime: 2023-01-26
+    version: 2021-11-11
+    externalUrl: "https://progenetix.org/about/"
+    assemblyId: GRCh38
+    dataUseConditions:
+      duoDataUse:
+        - id: DUO:0000004
+          label: no restriction
+          version: 2021-11-11
+    handoverTypes:
+      - cnvhistogram
+      - biosamples
+      - biosamplestable
+      - biosamplevariants
+      - biosamplepgxsegvariants
+      - annotatedvariants
+      - phenopackets
+      - individuals
+      - variants
+      - callsetsvariants
+      - callsetspgxseg
+      - UCSClink
+    info:
+      variantCount: 7656759
+      callCount: 20988819
+      sampleCount: 138663
+      
+cellz:
+    id: cellz
+    name: cellz
+    identifier: 'org.cancercelllines'
+    description: "annotated cellosaurus cell line variants"
+    createDateTime: 2020-06-01
+    updateDateTime: 2023-01-27
+    version: 2023-01-27
+    externalUrl: "https://cancercelllines.org"
+    assemblyId: GRCh38
+    dataUseConditions:
+      duoDataUse:
+        - id: DUO:0000004
+          label: no restriction
+          version: 2021-11-11
+    handoverTypes:
+      - cnvhistogram
+      - biosamples
+      - biosamplestable
+      - biosamplevariants
+      - biosamplepgxsegvariants
+      - annotatedvariants
+      - phenopackets
+      - individuals
+      - variants
+      - callsetsvariants
+      - callsetspgxseg
+      - UCSClink

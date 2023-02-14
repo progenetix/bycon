@@ -27,12 +27,28 @@ def main():
 def services():
 
     set_debug_state(debug=0)
-    byc.update({"request_path_root": "services"})
-    rest_path_elements(byc)
 
     m_f = path.join( pkg_path, "config", "services_mappings.yaml")
     b_m = load_yaml_empty_fallback( m_f )
 
+    frm = inspect.stack()[1]
+    mod = inspect.getmodule(frm[0])
+    if mod is not None:
+        sub_path = path.dirname( path.abspath(mod.__file__) )
+        conf_dir = path.join( sub_path, "local" )
+        if path.isdir(conf_dir):
+            m_f = path.join( conf_dir, "services_mappings.yaml")
+            if path.isfile(m_f):
+                b_m = load_yaml_empty_fallback( m_f )
+            d_f = Path( path.join( conf_dir, "beacon_defaults.yaml" ) )
+            if path.isfile(d_f):
+                byc.update({"beacon_defaults": load_yaml_empty_fallback( d_f ) })
+                defaults = byc["beacon_defaults"].get("defaults", {})
+                for d_k, d_v in defaults.items():
+                    byc.update( { d_k: d_v } )
+
+    byc.update({"request_path_root": "services"})
+    rest_path_elements(byc)
     r_p_id = byc.get("request_entity_path_id", "__empty_value__")
 
     if r_p_id in b_m["service_aliases"]:    

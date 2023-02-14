@@ -34,7 +34,7 @@ def collections():
 
 def datasets():
 
-    initialize_service(byc)
+    initialize_bycon_service(byc)
     r, e = instantiate_response_and_error(byc, "beaconCollectionsResponse")
     response_meta_set_info_defaults(r, byc)
     

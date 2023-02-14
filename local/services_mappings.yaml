@@ -1,0 +1,87 @@
+service_aliases:
+  empty_value: info
+  endpoints: endpoints
+  collations: collations
+  cytomapper: cytomapper
+  dbstats: dbstats
+  deliveries: deliveries
+  genespans: genespans
+  genes: genespans
+  geolocs: geolocations
+  geolocations: geolocations
+  ids: ids
+  interval_frequencies: intervalFrequencies
+  intervalFrequencies: intervalFrequencies
+  ontologymaps: ontologymaps
+  ontologyMaps: ontologymaps
+  publications: publications
+  schemas: schemas
+  uploader: uploader
+
+rewrites:
+  collationPlots: '/cgi/PGX/cgi/collationPlots.cgi'
+  samplePlots: '/cgi/PGX/cgi/samplePlots.cgi'
+  # uploader: '/cgi/PGX/cgi/uploader.cgi'
+  biosamples: '/beacon/biosamples/'
+  variants: '/beacon/variants/'
+  individuals: '/beacon/individuals/'
+  phenopackets: '/beacon/phenopackets/'
+
+#response_type_aliases:
+path_response_type_mappings:
+
+  ontologymaps: ontologymap
+  ontologyMaps: ontologymap
+  collations: collation
+  genespans: gene
+  intervalFrequencies: intervalFrequencies
+  cytomapper: cytobandMapping
+
+response_types:
+
+  ontologymap:
+    entity_type: ontologymap
+    collection: Null
+    response_schema: progenetixServiceResponse
+    beacon_schema:
+      entity_type: ontologymap
+      schema: https://progenetix.org/services/schemas/OntologyClassGroup/
+    h->o_access_key: Null
+
+  collation:
+    entity_type: collation
+    collection: Null
+    response_schema: progenetixServiceResponse
+    beacon_schema:
+      entity_type: collation
+      schema: https://progenetix.org/services/schemas/pgxCollation/
+    h->o_access_key: Null
+
+  gene:
+    entity_type: gene
+    collection: Null
+    response_schema: progenetixServiceResponse
+    beacon_schema:
+      entity_type: gene
+      schema: https://progenetix.org/services/schemas/ProgenetixGene/
+    h->o_access_key: Null
+
+  interval_frequencies:
+    entity_type: interval_frequencies
+    collection: Null
+    response_schema: progenetixServiceResponse
+    beacon_schema:
+      entity_type: interval_frequencies
+      schema: https://progenetix.org/services/schemas/IntervalFrequencies/
+    h->o_access_key: Null
+
+  cytoband_mapping:
+    response_entity:
+      entity_type: cytobandMapping
+      collection: False
+      response_schema: progenetixServiceResponse
+      beacon_schema:
+        entity_type: cytobandMapping
+        schema: https://progenetix.org/services/schemas/cytobandMapping/
+      h->o_access_key: Null
+

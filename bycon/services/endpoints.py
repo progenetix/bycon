@@ -28,7 +28,7 @@ def main():
 
 def endpoints():
 
-    initialize_service(byc)
+    initialize_bycon_service(byc)
     # create_empty_service_response(byc)
 
     schema_name = rest_path_value("endpoints")
