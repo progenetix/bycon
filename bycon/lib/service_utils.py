@@ -17,7 +17,7 @@ from export_file_generation import *
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, dataset_results_save_handovers
 from interval_utils import generate_genomic_intervals, interval_counts_from_callsets
 from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
-from query_generation import  initialize_beacon_queries, paginate_list, replace_queries_in_test_mode, set_pagination_range
+from query_generation import  generate_queries, initialize_beacon_queries, paginate_list, replace_queries_in_test_mode, set_pagination_range
 from read_specs import load_yaml_empty_fallback, read_bycon_configs_by_name, read_bycon_definition_files, read_local_prefs
 from response_remapping import *
 from schema_parsing import *
@@ -68,6 +68,7 @@ def initialize_bycon_service(byc, service=False):
     correspond to the calling main function. However, an overwrite can be
     provided."""
 
+
     defs = byc.get("beacon_defaults", {})
     b_e_d = defs.get("entity_defaults", {})    
     form = byc["form_data"]
@@ -81,6 +82,8 @@ def initialize_bycon_service(byc, service=False):
 
     if service in s_a_s:
         service = s_a_s[service]
+
+    service = decamelize(service)
 
     mod = inspect.getmodule(frm[0])
     if mod is not None:
@@ -198,7 +201,6 @@ def update_entity_ids_from_path(byc):
         "response_entity_id": p_r_m.get(res_p_id, byc["response_entity_path_id"])
     })
 
-
     return byc
 
 ################################################################################
@@ -255,24 +257,17 @@ def run_result_sets_beacon(byc):
     for i, r_set in enumerate(sr_r["result_sets"]):
 
         ds_id = r_set["id"]
+        generate_queries(byc, ds_id)
 
-        execute_bycon_queries( ds_id, byc )
+        r_set, r_s_res = populate_result_set(r_set, byc)
 
-        # Special check-out here since this forces a single handover
-        check_plot_responses(ds_id, byc)
-
-        r_set.update({ "results_handovers": dataset_response_add_handovers(ds_id, byc) })
-        r_s_res = retrieve_data(ds_id, byc)
-
-        r_set_update_counts(r_set, r_s_res, byc)
         if r_set["results_count"] < 1:
             continue
 
-        # TODO: This condition avoids the "range on range" if previously set for a handover
-        # query (by accessioinId)
+        # TODO: This condition avoids the "range on range" if previously set for
+        # a handover query (by accessioinId)
         if not "range" in byc["pagination"]:
-            set_pagination_range(len(r_s_res), byc)
-        
+            set_pagination_range(len(r_s_res), byc)        
         if test_truthy( byc["form_data"].get("paginate_results", True) ):
             r_s_res = paginate_list(r_s_res, byc)
 
@@ -299,17 +294,40 @@ def run_result_sets_beacon(byc):
 
 ################################################################################
 
+def populate_result_set(r_set, byc):
+
+    ds_id = r_set["id"]
+    execute_bycon_queries( ds_id, byc )
+
+    # Special check-out here since this forces a single handover
+    check_plot_responses(ds_id, byc)
+
+    r_set.update({ "results_handovers": dataset_response_add_handovers(ds_id, byc) })
+    r_s_res = retrieve_data(ds_id, byc)
+
+    r_set_update_counts(r_set, r_s_res, byc)
+
+    return r_set, r_s_res
+
+################################################################################
+
 def r_set_update_counts(r_set, r_s_res, byc):
 
     ds_id = r_set["id"]
-
+    ds_res = byc["dataset_results"][ds_id]
 
     r_set.update({"results_count": 0})
 
     for c, c_d in byc["config"]["beacon_counts"].items():
-        if c_d["h->o_key"] in byc["dataset_results"][ds_id]:
-            r_c = byc["dataset_results"][ds_id][ c_d["h->o_key"] ]["target_count"]
-            r_set["info"]["counts"].update({ c: r_c })
+        h_o_k = c_d.get("h->o_key", None)
+        if h_o_k is None:
+            continue
+        if h_o_k not in ds_res:
+            continue
+        r_c = ds_res[ h_o_k ]["target_count"]
+        s_c = len(list(set(ds_res[ h_o_k ]["target_values"])))
+        r_set["info"]["counts"].update({ c: r_c })
+
     if byc["empty_query_all_count"]:
         r_set.update({"results_count": byc["empty_query_all_count"] })
     elif isinstance(r_s_res, list):

@@ -11,40 +11,41 @@ from variant_parsing import *
 
 def initialize_beacon_queries(byc):
 
+    byc.update({"queries": { }})
+
     get_filter_flags(byc)
     parse_filters(byc)
 
     parse_variant_parameters(byc)
     get_variant_request_type(byc)
 
-    generate_queries(byc)
+    # generate_queries(byc)
     select_dataset_ids(byc)
 
     if len(byc["dataset_ids"]) < 1:
         print_text_response("No existing dataset_id - please check dataset_definitions")
 
-    # TODO: HOT FIX
-    if "runs" in byc["queries"].keys():
-        if not "callsets" in byc["queries"].keys():
-            byc["queries"]["callsets"] = byc["queries"].pop("runs")
-
     return byc
 
 ################################################################################
 
-def generate_queries(byc):
+def generate_queries(byc, ds_id="progenetix"):
 
-    if not "queries" in byc:
-        byc.update({"queries": { }})
+    byc.update({"queries": { }})
 
     _update_queries_from_path_id( byc )
     _update_queries_from_id_values( byc )
     _update_queries_from_cohorts_query(byc)
-    _update_queries_from_filters( byc )
+    _update_queries_from_filters( byc, ds_id )
     _update_queries_from_variants( byc )
     _update_queries_from_geoquery( byc )
     _update_queries_from_hoid( byc)
     _purge_empty_queries( byc )
+
+    # TODO: HOT FIX
+    if "runs" in byc["queries"].keys():
+        if not "callsets" in byc["queries"].keys():
+            byc["queries"]["callsets"] = byc["queries"].pop("runs")
 
     return byc
 
@@ -208,7 +209,7 @@ def _update_queries_from_hoid( byc):
 
 ################################################################################
 
-def _update_queries_from_filters(byc):
+def _update_queries_from_filters(byc, ds_id="progenetix"):
 
     """The new version assumes that dataset_id, scope (collection) and field are
     stored in the collation entries. Only filters with exact match to an entry
@@ -220,6 +221,9 @@ def _update_queries_from_filters(byc):
     query object for hierarchical (`child_terms`) query expansion
     * the bycon API allows to pass a `filterLogic` parameter with either `AND`
     (default value) or `OR`
+
+    CAVE:   Filters are assumed to be id values in thje collation collection
+            OR have a "collationed" flag in the filter_definitions set to False
     """
 
     f_defs = byc["filter_definitions"]
@@ -230,7 +234,7 @@ def _update_queries_from_filters(byc):
     # precision = byc[ "filter_flags" ][ "precision" ]
 
     mongo_client = MongoClient()
-    coll_coll = mongo_client[ byc["config"]["info_db"] ][ byc["config"]["collations_coll"] ]
+    coll_coll = mongo_client[ ds_id ][ byc["config"]["collations_coll"] ]
 
     filters = byc.get("filters", [])
 
@@ -241,7 +245,7 @@ def _update_queries_from_filters(byc):
         f_scope = f.get("scope", False)
 
         f_info = coll_coll.find_one({"id": f["id"]})
- 
+
         if f_info is None:
 
             for f_d in f_defs.values():

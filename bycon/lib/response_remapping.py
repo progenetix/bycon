@@ -71,6 +71,23 @@ def remap_variants(r_s_res, byc):
         variants.append(v)
 
     return variants
+
+################################################################################
+
+def remap_variants_to_VCF_line(r_s_res, byc):
+
+    """
+    TODO: Since VCF works from the concept of a canonical genomic variation and the
+    bycon data model uses variant instances, the different instances of a
+    "canonical" variant have to be identified and grouped together for the
+    same variant line. This requires to parse over all identified biosamples
+    for each individual variant ...
+    """
+
+    vcf_line = ""
+
+
+    return vcf_line
     
 ################################################################################
 
