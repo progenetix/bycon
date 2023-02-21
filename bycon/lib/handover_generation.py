@@ -223,6 +223,8 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
                 continue
         
         v_d = de_vrsify_variant(v, byc)
+        if v_d is False:
+            continue
 
         if "variant_type" in v_d:
             v_d.update({"size": v_d["end"] - v_d["start"] })
@@ -250,7 +252,10 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
             except:
                 pass
             col_key = "color_var_{}_rgb".format(vt.lower())
-            b_f.write("track name={} visibility=squish description=\"{} variants matching the query with {} overall returned\" color={}\n".format(vt, vt, v_ret, config["plot_pars"][col_key]) )
+            col_rgb = config["plot_pars"].get(col_key, [])
+            if len(col_rgb) != 3:
+                col_rgb = [128, 128, 128]
+            b_f.write("track name={} visibility=squish description=\"{} variants matching the query with {} overall returned\" color={},{},{}\n".format(vt, vt, v_ret, col_rgb[0], col_rgb[1], col_rgb[2] ) )
             b_f.write("#chrom\tchromStart\tchromEnd\tbiosampleId\n")
             for v in vs[vt]:
                 ucsc_chr = "chr"+v["reference_name"]

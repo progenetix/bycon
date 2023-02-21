@@ -88,6 +88,7 @@ def get_variant_request_type(byc):
     In case of multiple types the one with most matched parameters is prefered.
     This may be changed to using a pre-defined request type and using this as
     completeness check only.
+    TODO: Verify by schema ...
     podmd"""
 
     if not "variant_pars" in byc:
@@ -146,6 +147,16 @@ def get_variant_request_type(byc):
 def create_variantTypeRequest_query( byc ):
 
     if byc["variant_request_type"] != "variantTypeRequest":
+        return byc
+
+    """
+    A query just for a variant type w/o any additional parameter has to be blocked
+    due to size concerns.
+    Queries with additional parameters (start ...) will be handled through other
+    query types.
+    """
+
+    if len(byc.get("filters", [])) < 1:
         return byc
 
     vp = byc["variant_pars"]

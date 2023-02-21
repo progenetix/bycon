@@ -267,8 +267,8 @@ def _prefetch_data(prevars):
     the `data_db` with the provided query, and stores the distinct values of the
     `source_key` as `target_values`.
 
-    The results may reference across collections. A typica example here would be
-    to retrieve `biosaample_id` values from the `variants` collection to point
+    The results may reference across collections. A typical example here would be
+    to retrieve `biosample_id` values from the `variants` collection to point
     to `id` values in the `biosamples` collection.
 
     These "handover" objects can then be stored and used to retrieve values of
@@ -279,6 +279,10 @@ def _prefetch_data(prevars):
     pref_m = prevars["pref_m"]
     data_db = prevars["data_db"]
     h_o_defs = prevars["h_o_defs"][pref_m]
+
+    # print(h_o_defs["source_collection"])
+    # print(h_o_defs["source_key"])
+    # print(prevars["query"])
 
     dist = data_db[ h_o_defs["source_collection"] ].distinct( h_o_defs["source_key"], prevars["query"] )
 

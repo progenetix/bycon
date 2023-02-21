@@ -195,6 +195,8 @@ def pgxseg_variant_line(v, byc):
     drop_fields = ["_id", "info"]
 
     v = de_vrsify_variant(v, byc)
+    if v is False:
+        return
 
     if not "variant_type" in v:
         return
@@ -224,6 +226,10 @@ def de_vrsify_variant(v, byc):
 
     v_d = byc["variant_definitions"]
 
+    r_n = v["location"].get("sequence_id", None)
+    if r_n is None:
+        return False
+
     v_r =  {
         "id": v["id"],
         "variant_internal_id": v.get("variant_internal_id", None),
@@ -231,7 +237,7 @@ def de_vrsify_variant(v, byc):
         "biosample_id": v.get("biosample_id", None),
         "reference_bases": v.get("reference_bases", None),
         "alternate_bases": v.get("alternate_bases", None),
-        "reference_name": v_d["refseq_chronames"][ v["location"]["sequence_id"] ],
+        "reference_name": v_d["refseq_chronames"][ r_n ],
         "start": v["location"]["interval"]["start"]["value"],
         "end": v["location"]["interval"]["end"]["value"],
         "info": v.get("info", {})
