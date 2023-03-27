@@ -5,6 +5,7 @@ from bson.objectid import ObjectId
 from cgi_parsing import *
 from query_generation import  paginate_list
 from datatable_utils import get_nested_value
+from response_remapping import de_vrsify_variant, normalize_variant_values_for_export
 
 ################################################################################
 
@@ -196,7 +197,7 @@ def pgxseg_variant_line(v, byc):
 
     v = de_vrsify_variant(v, byc)
     if v is False:
-        return
+        return v
 
     if not "variant_type" in v:
         return
@@ -219,70 +220,6 @@ def pgxseg_variant_line(v, byc):
         v["alternate_bases"] = "."
 
     return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(v["biosample_id"], v["reference_name"], v["start"], v["end"], v["log2"], v["variant_type"], v["reference_bases"], v["alternate_bases"])
-
-################################################################################
-
-def de_vrsify_variant(v, byc):
-
-    v_d = byc["variant_definitions"]
-
-    r_n = v["location"].get("sequence_id", None)
-    if r_n is None:
-        return False
-
-    v_r =  {
-        "id": v["id"],
-        "variant_internal_id": v.get("variant_internal_id", None),
-        "callset_id": v.get("callset_id", None),
-        "biosample_id": v.get("biosample_id", None),
-        "reference_bases": v.get("reference_bases", None),
-        "alternate_bases": v.get("alternate_bases", None),
-        "reference_name": v_d["refseq_chronames"][ r_n ],
-        "start": v["location"]["interval"]["start"]["value"],
-        "end": v["location"]["interval"]["end"]["value"],
-        "info": v.get("info", {})
-    }
-
-    if "variant_state" in v:
-        efo = v["variant_state"].get("id", None)
-        try:
-            v_r.update({"variant_type": v_d["efo_vrs_map"][ efo ]["DUPDEL"] })
-        except:
-            pass
-
-    return v_r
-
-################################################################################
-
-def normalize_variant_values_for_export(v, byc, drop_fields=None):
-
-    drop_fields = [] if drop_fields is None else drop_fields
-
-    v_defs = byc["variant_definitions"]
-
-    v["log2"] = False
-    if "info" in v:
-        if "cnv_value" in v["info"]:
-            if isinstance(v["info"]["cnv_value"],float):
-                v["log2"] = round(v["info"]["cnv_value"], 3)
-        if not "info" in drop_fields:
-            drop_fields.append("info")
-
-    if v["log2"] == False:
-        if "variant_type" in v:
-            if v["variant_type"] in v_defs["cnv_dummy_values"].keys():
-                v["log2"] = v_defs["cnv_dummy_values"][ v["variant_type"] ]
-
-    if v["log2"] == False:
-        drop_fields.append("log2")
-
-    v["start"] = int(v["start"])
-    v["end"] = int(v["end"])
-
-    for d_f in drop_fields:   
-        v.pop(d_f, None)
-
-    return v
 
 ################################################################################
 

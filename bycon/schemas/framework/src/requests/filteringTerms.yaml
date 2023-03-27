@@ -47,6 +47,14 @@ definitions:
         type: string
         description: The entry type to which the filter applies
         example: biosamples
+      excluded:
+        description: >-
+          Flag to indicate whether the phenotype was observed or not.
+          The default is `false`.
+          Provenance: Phenopackets, e.g. in PhenotypivcFeature
+          Status: BeaconPlus
+        type: boolean
+        default: false
   AlphanumericFilter:
     description: Filter results based on operators and values applied to alphanumeric
       fields.

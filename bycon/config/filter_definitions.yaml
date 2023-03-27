@@ -350,11 +350,11 @@ cbioportal:
 cellosaurus:
   id: cellosaurus
   name: "Cellosaurus - a knowledge resource on cell lines"
-  iri_prefix: https://web.expasy.org/cellosaurus/
+  iri_prefix: https://www.cellosaurus.org/
   namespace_prefix: cellosaurus
-  url: "https://web.expasy.org/cellosaurus/"
+  url: "https://www.cellosaurus.org/"
   reference:
-    root: https://web.expasy.org/cellosaurus/
+    root: https://www.cellosaurus.org/
     replace:
       - "cellosaurus:"
       - ""

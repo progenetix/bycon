@@ -77,6 +77,11 @@
         "OntologyFilter": {
             "description": "Filter results to include records that contain a specific ontology term.",
             "properties": {
+                "excluded": {
+                    "default": false,
+                    "description": "Flag to indicate whether the phenotype was observed or not. The default is `false`. Provenance: Phenopackets, e.g. in PhenotypivcFeature Status: BeaconPlus",
+                    "type": "boolean"
+                },
                 "id": {
                     "description": "Term ID to be queried, using CURIE syntax where possible.",
                     "example": "HP:0002664",

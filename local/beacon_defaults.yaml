@@ -34,7 +34,7 @@ entity_defaults:
     name: Progenetix Cancer Genomics Beacon+
     api_version: v2.1.0-beaconplus
     version: v2.1.0-beaconplus
-    id: org.progenetix.beacon
+    id: org.progenetix
     environment: prod
     description: >-
       Beacon+ provides a forward looking implementation of the Beacon v2 API, with
@@ -50,7 +50,7 @@ entity_defaults:
     alternative_url: https://progenetix.org
     contact_url: mailto:contact@progenetix.org
     created_at: 2015-11-13T00:00:00
-    updated_at: 2023-01-16T12:45:00
+    updated_at: 2023-02-16T12:45:00
     organization:
       id: org.baudisgroup.info
       name: Theoretical Cytogenetics and Oncogenomics group at UZH and SIB

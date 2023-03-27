@@ -29,7 +29,7 @@ def publications():
 
     initialize_bycon_service(byc)
 
-    get_filter_flags(byc)
+    get_global_filter_flags(byc)
     parse_filters(byc)
 
     create_empty_service_response(byc)

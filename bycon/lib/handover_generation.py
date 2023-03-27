@@ -20,14 +20,13 @@ def dataset_response_add_handovers(ds_id, byc):
         return b_h_o
 
     h_o_server = select_this_server(byc)    
-    ds_h_o = byc["dataset_definitions"][ ds_id ]["handoverTypes"]
     h_o_types = byc["handover_definitions"]["h->o_types"]
+    ds_h_o = byc["dataset_definitions"][ ds_id ].get("handoverTypes", h_o_types.keys())
 
     for h_o_t, h_o_defs in h_o_types.items():
 
-        # testing if this handover is active for the specified dataset
+        # testing if this handover is active for the specified dataset      
         if not h_o_t in ds_h_o:
-            # print("!!! NOT => "+h_o_t)
             continue
 
         for h_o_key, h_o in byc["dataset_results"][ds_id].items():
@@ -202,9 +201,6 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
 
     bed_file_name = accessid + l + '.bed'
     bed_file = path.join( *config[ "server_tmp_dir_loc" ], bed_file_name )
-
-    v_defs = byc["variant_definitions"]
-    efo_vrs = v_defs["efo_vrs_map"]
 
     vs = { "DUP": [ ], "DEL": [ ], "LOH": [ ], "SNV": [ ]}
 

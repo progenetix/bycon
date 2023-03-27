@@ -34,7 +34,7 @@ def uploader():
     response = {
         "error": {},
         "rel_path": "{}/{}".format(byc["config"].get("server_tmp_dir_web", "/tmp"), accessid),
-        "loc_path": path.join( *config[ "paths" ][ "server_tmp_dir_loc" ], accessid ),
+        "loc_path": path.join( *byc["config"][ "server_tmp_dir_loc" ], accessid ),
         "accessid": accessid,
         "plot_link": '/services/samplePlots/?accessid='+accessid,
         "host": "http://"+str(environ.get('HTTP_HOST'))

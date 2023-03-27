@@ -17,7 +17,7 @@ from export_file_generation import *
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, dataset_results_save_handovers
 from interval_utils import generate_genomic_intervals, interval_counts_from_callsets
 from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
-from query_generation import  generate_queries, initialize_beacon_queries, paginate_list, replace_queries_in_test_mode, set_pagination_range
+from query_generation import  generate_queries, initialize_beacon_queries, paginate_list, set_pagination_range
 from read_specs import load_yaml_empty_fallback, read_bycon_configs_by_name, read_bycon_definition_files, read_local_prefs
 from response_remapping import *
 from schema_parsing import *
@@ -238,7 +238,6 @@ def run_beacon_init_stack(byc):
     initialize_beacon_queries(byc)
     generate_genomic_intervals(byc)
     create_empty_beacon_response(byc)
-    replace_queries_in_test_mode(byc)
     response_collect_errors(byc)
     cgi_break_on_errors(byc)
 
@@ -478,7 +477,8 @@ def check_plot_responses(ds_id, byc):
 
 def check_cnvhistogram_plot_response(ds_id, byc):
 
-    ds_h_o = byc["dataset_definitions"][ ds_id ]["handoverTypes"]
+    h_o_types = byc["handover_definitions"]["h->o_types"]
+    ds_h_o = byc["dataset_definitions"][ ds_id ].get("handoverTypes", h_o_types.keys())
 
     if "cnvhistogram" not in ds_h_o:
         return
@@ -531,10 +531,7 @@ def response_update_meta(r, byc):
     response_meta_set_config_defaults(r, byc)
     response_meta_set_entity_values(r, byc)
     response_meta_add_request_summary(r, byc)
-    if byc["test_mode"] is True:
-        r["meta"].update({"test_mode": byc["test_mode"]})
-    else:
-        r["meta"].pop("test_mode", None)
+    r["meta"].update({"test_mode": byc.get("test_mode", False)})
 
 ################################################################################
 
@@ -646,9 +643,26 @@ def collations_set_delivery_keys(byc):
 
 def populate_service_response( byc, results):
 
+    byc["service_response"].update({
+        "response_summary": {
+            "exists": False,
+            "num_total_results": 0
+        }
+    })
+
     populate_service_header(byc, results)
     populate_service_response_counts(byc)
+
+    if len(results) > 0:
+        byc["service_response"]["response_summary"].update({
+            "exists": True,
+            "num_total_results": len(results)
+        })
+
     byc["service_response"]["response"].update({"results": results })
+
+    check_switch_to_count_response(byc)
+    check_switch_to_boolean_response(byc)
 
     return byc
 

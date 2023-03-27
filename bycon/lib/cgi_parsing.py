@@ -417,7 +417,7 @@ def switch_to_error_response(byc):
 def check_switch_to_boolean_response(byc):
 
     try:
-        if byc["service_response"]["meta"]["received_request_summary"]["requested_granularity"] == "boolean":
+        if "boolean" in byc["service_response"]["meta"]["received_request_summary"].get("requested_granularity", "record"):
             byc["service_response"].pop("response", None)
             byc["service_response"]["response_summary"].pop("num_total_results", None)
             byc["service_response"]["meta"].update({"returned_granularity": "boolean"})
@@ -431,7 +431,7 @@ def check_switch_to_boolean_response(byc):
 def check_switch_to_count_response(byc):
 
     try:
-        if byc["service_response"]["meta"]["received_request_summary"]["requested_granularity"] == "count":
+        if "count" in byc["service_response"]["meta"]["received_request_summary"].get("requested_granularity", "record"):
             byc["service_response"].pop("response", None)
             byc["service_response"]["meta"].update({"returned_granularity": "count"})
     except:

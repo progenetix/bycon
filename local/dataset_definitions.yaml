@@ -2,13 +2,13 @@
 progenetix:
 
     id: progenetix
-    name: progenetix
-    identifier: 'org.progenetix::progenetix'
+    name: Progenetix
+    identifier: 'org.progenetix'
     description: "Progenetix cancer genome profiles"
     createDateTime: 2001-01-01
-    updateDateTime: 2023-01-26
+    updateDateTime: 2023-02-23
     version: 2021-11-11
-    externalUrl: "https://progenetix.org/about/"
+    externalUrl: "https://progenetix.org/"
     assemblyId: GRCh38
     dataUseConditions:
       duoDataUse:
@@ -35,7 +35,7 @@ progenetix:
       
 cellz:
     id: cellz
-    name: cellz
+    name: Cancer Cell Lines
     identifier: 'org.cancercelllines'
     description: "annotated cellosaurus cell line variants"
     createDateTime: 2020-06-01

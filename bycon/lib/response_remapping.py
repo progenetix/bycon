@@ -6,6 +6,7 @@ from cgi_parsing import *
 
 def reshape_resultset_results(ds_id, r_s_res, byc):
 
+    r_s_res = remap_variants_to_VCF(r_s_res, byc)
     r_s_res = remap_variants(r_s_res, byc)
     r_s_res = remap_analyses(r_s_res, byc)
     r_s_res = remap_biosamples(r_s_res, byc)
@@ -30,6 +31,8 @@ def remap_variants(r_s_res, byc):
 
     if not "variant" in byc["response_entity_id"].lower():
         return r_s_res
+    if "vcf" in byc["output"].lower():
+        return r_s_res
 
     v_d = byc["variant_definitions"]
 
@@ -45,7 +48,7 @@ def remap_variants(r_s_res, byc):
 
     for d in variant_ids:
 
-        d_vs = [var for var in r_s_res if var.get('variant_internal_id', "___none___") == d]
+        d_vs = [var for var in r_s_res if var.get('variant_internal_id', "__none__") == d]
 
         v = { 
             "variant_internal_id": d,
@@ -57,9 +60,9 @@ def remap_variants(r_s_res, byc):
         for d_v in d_vs:
             v["case_level_data"].append(
                 {   
-                    "id": d_v["id"],
-                    "biosample_id": d_v["biosample_id"],
-                    "analysis_id": d_v["callset_id"]
+                    "id": d_v.get("id", "__none__"),
+                    "biosample_id": d_v.get("biosample_id", "__none__"),
+                    "analysis_id": d_v.get("callset_id", "__none__")
                 }
             )
 
@@ -74,21 +77,147 @@ def remap_variants(r_s_res, byc):
 
 ################################################################################
 
-def remap_variants_to_VCF_line(r_s_res, byc):
+def remap_variants_to_VCF(r_s_res, byc):
 
     """
-    TODO: Since VCF works from the concept of a canonical genomic variation and the
-    bycon data model uses variant instances, the different instances of a
-    "canonical" variant have to be identified and grouped together for the
-    same variant line. This requires to parse over all identified biosamples
-    for each individual variant ...
     """
 
-    vcf_line = ""
+    if not "variant" in byc["response_entity_id"].lower():
+        return r_s_res
+    if not "vcf" in byc["output"].lower():
+        return r_s_res
 
+    open_text_streaming(byc["env"], "variants.vcf")
+    print(
+"""##fileformat=VCFv4.4
+##ALT=<ID=DUP,Description="Duplication">
+##ALT=<ID=DEL,Description="Deletion">
+##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the longest variant described in this record">
+##INFO=<ID=SVLEN,Number=A,Type=Integer,Description="Length of structural variant">
+##INFO=<ID=CN,Number=A,Type=Float,Description="Copy number of CNV/breakpoint">
+##INFO=<ID=SVCLAIM,Number=A,Type=String,Description="Claim made by the structural variant call. Valid values are D, J, DJ for abundance, adjacency and both respectively">
+##INFO=<ID=IMPRECISE,Number=0,Type=Flag,Description="Imprecise structural variation">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">"""
+        )
 
-    return vcf_line
+    v_d = byc["variant_definitions"]
+    v_o = {
+        "#CHROM": ".",
+        "POS": ".",
+        "ID": ".",
+        "REF": ".",
+        "ALT": ".",
+        "QUAL": ".",
+        "FILTER": "PASS",
+        "FORMAT": "",
+        "INFO": ""
+    }
+
+    variant_ids = []
+    for v in r_s_res:
+        variant_ids.append(v.get("variant_internal_id", "__none__"))
+
+    biosample_ids = []
+    for v in r_s_res:
+        biosample_ids.append(v.get("biosample_id", "__none__"))
+
+    variant_ids = list(set(variant_ids))
+    biosample_ids = list(set(biosample_ids))
+
+    for bsid in biosample_ids:
+        v_o.update({bsid:"."})
+
+    variants = []
+    # variants.append("   ".join(v_o.keys()))
+    print("   ".join(v_o.keys()))
+
+    for d in variant_ids:
+
+        d_vs = [var for var in r_s_res if var.get('variant_internal_id', "__none__") == d]
+
+        vcf_v = vcf_variant(d_vs[0], v_o.copy(), byc)
+
+        for bsid in biosample_ids:
+            vcf_v.update({bsid: "." })
+
+        for d_v in d_vs:
+            b_i = d_v.get("biosample_id", "__none__")
+            vcf_v.update({b_i: "0/1" })
+
+        r_l = map(str, list(vcf_v.values()))
+        # variants.append("   ".join(r_l))
+        print("   ".join(r_l))
+
+    exit()
+    return variants
     
+################################################################################
+
+def vcf_variant(v, vcf_v, byc):
+
+    v_d = byc["variant_definitions"]
+
+    v = de_vrsify_variant(v, byc)
+    if v is False:
+        return v
+
+    vcf_v.update({
+        "#CHROM": v.get("reference_name", "."),
+        "POS": v.get("start", 0) + 1,
+        "ID": ".",
+        "REF": v.get("reference_bases", "."),
+        "ALT": v.get("alternate_bases", "."),
+        "QUAL": ".",
+        "FILTER": "PASS",
+        "FORMAT": "GT",
+        "INFO": ""
+    })
+
+    if "variant_type" in v:
+        vcf_v.update({"ALT": "<{}>".format(v["variant_type"]) })
+        v_l = v["end"] - v["start"]
+        vcf_v.update({"INFO": "IMPRECISE;SVCLAIM=D;END={};SVLEN={}".format(v["end"], v_l) })
+
+
+    return vcf_v
+
+################################################################################
+
+def de_vrsify_variant(v, byc):
+
+    v_d = byc["variant_definitions"]
+
+    r_n = v["location"].get("sequence_id")
+    if r_n is None:
+        return False
+
+    v_r =  {
+        "id": v["id"],
+        "variant_internal_id": v.get("variant_intvernal_id"),
+        "callset_id": v.get("callset_id"),
+        "biosample_id": v.get("biosample_id"),
+        "reference_bases": v.get("reference_bases", "."),
+        "alternate_bases": v.get("alternate_bases", "."),
+        "reference_name": v_d["refseq_chronames"][ r_n ],
+        "start": v["location"]["interval"]["start"]["value"],
+        "end": v["location"]["interval"]["end"]["value"],
+        "info": v.get("info", {})
+    }
+
+    if "variant_state" in v:
+        efo = v["variant_state"].get("id")
+        try:
+            v_r.update({"variant_type": v_d["efo_vrs_map"][ efo ]["DUPDEL"] })
+        except:
+            pass
+    elif "state" in v:
+        t = v["state"].get("type", "__none__")
+        s = v["state"].get("sequence", "")
+        if "LiteralSequenceExpression" in t:
+            v_r.update({"alternate_bases": s })
+
+    return v_r
+
 ################################################################################
 
 def remap_analyses(r_s_res, byc):
@@ -230,10 +359,10 @@ def phenopack_individual(ind, data_db, byc):
         bios.update({
             "files": [
                 {
-                    "uri": "{}/beacon/biosamples/{}/variants/?output=pgxseg".format(server, bios["id"]),
+                    "uri": "{}/beacon/biosamples/{}/variants/?output=vcf".format(server, bios["id"]),
                     "file_attributes": {
                         "genomeAssembly": "GRCh38",
-                        "fileFormat": "pgxseg"
+                        "fileFormat": "VCF"
                     }
                 }
             ]
@@ -339,8 +468,9 @@ def _phenopack_resources(byc):
 def remap_all(r_s_res):
 
     for br_i, br_r in enumerate(r_s_res):
+        if type(br_r) is not "dict":
+            continue
         r_s_res[br_i].pop("_id", None)
-        # r_s_res[br_i].pop("description", None)
         clean_empty_fields(r_s_res[br_i])
 
     return r_s_res

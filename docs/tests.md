@@ -89,6 +89,14 @@
 
 * [http://progenetix.org/beacon/aggregator/?referenceName=refseq:NC_000007.14&start=140753335&alternateBases=A&assemblyId=GRCh38&responseEntityId=genomicVariant](http://progenetix.org/beacon/aggregator/?referenceName=refseq:NC_000007.14&start=140753335&alternateBases=A&assemblyId=GRCh38&responseEntityId=genomicVariant)
 
+## Query examples
+
+### Filter use
+
+#### Region query with positive and excluded filter
+
+* [/beacon/biosamples/?requestedGranularity=count&datasetIds=progenetix&referenceName=refseq:NC_000009.12&variantType=EFO:0030067&filterLogic=AND&start=21500000&start=21975098&end=21967753&end=22500000&filters=!PATO:0020002,NCIT:C3058](http://progenetix.org/beacon/biosamples/?requestedGranularity=count&datasetIds=progenetix&referenceName=refseq:NC_000009.12&variantType=EFO:0030067&filterLogic=AND&start=21500000&start=21975098&end=21967753&end=22500000&filters=!PATO:0020002,NCIT:C3058)
+
 ## Services
 
 ### Beyond Beacon Services

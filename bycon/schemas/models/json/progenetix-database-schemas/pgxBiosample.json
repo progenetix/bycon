@@ -33,6 +33,9 @@
             "$ref": "../progenetix-model/common/ontologyTerm.json#/properties",
             "description": "Ontology value from Experimental Factor Ontology (EFO) Material Entity term (BFO:0000040)."
         },
+        "celllineInfo": {
+            "$ref": "../progenetix-model/common/celllineInfo.json#/properties"
+        },
         "cohorts": {
             "description": "Cohorts describe collections of samples or individuals which are part of a common epistemic group, e.g. have been used for a study or share a set of features.\n",
             "examples": [

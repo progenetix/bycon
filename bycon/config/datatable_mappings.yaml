@@ -312,6 +312,21 @@ io_params:
       type: string
       indexed: True
       compact: True
+    callset_id:
+      db_key: callset_id
+      type: string
+      indexed: True
+      compact: True
+    biosample_id:
+      db_key: biosample_id
+      type: string
+      indexed: True
+      compact: True
+    individual_id:
+      db_key: individual_id
+      type: string
+      indexed: True
+      compact: True
     sequence_id:
       db_key: location.sequence_id
       type: string
@@ -323,7 +338,7 @@ io_params:
       indexed: True
       compact: True
     end:
-      db_key: location.interval.end
+      db_key: location.interval.end.value
       type: integer
       indexed: True
       compact: True

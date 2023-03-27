@@ -13,7 +13,7 @@ def initialize_beacon_queries(byc):
 
     byc.update({"queries": { }})
 
-    get_filter_flags(byc)
+    get_global_filter_flags(byc)
     parse_filters(byc)
 
     parse_variant_parameters(byc)
@@ -40,6 +40,7 @@ def generate_queries(byc, ds_id="progenetix"):
     _update_queries_from_variants( byc )
     _update_queries_from_geoquery( byc )
     _update_queries_from_hoid( byc)
+    _replace_queries_in_test_mode( byc)
     _purge_empty_queries( byc )
 
     # TODO: HOT FIX
@@ -64,7 +65,7 @@ def _purge_empty_queries( byc ):
 
 ################################################################################
 
-def replace_queries_in_test_mode(byc):
+def _replace_queries_in_test_mode(byc):
 
     if byc["test_mode"] is not True:
         return byc
@@ -86,13 +87,15 @@ def replace_queries_in_test_mode(byc):
 
     data_coll = mongo_client[ ds_id ][ collname ]
     rs = list( data_coll.aggregate([{"$sample": {"size":ret_no}}]) )
+
     _ids = []
     for r in rs:
         _ids.append(r["_id"])
 
-    byc["queries"] = { collname: { "_id": {"$in": _ids } } }
-
-    byc.update( { "empty_query_all_count": data_coll.estimated_document_count() } )
+    byc.update( {
+        "queries": { collname: { "_id": {"$in": _ids } } },
+        "empty_query_all_count": data_coll.estimated_document_count()
+    } )
 
     return byc
 
@@ -241,27 +244,35 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
     for f in filters:
 
         f_val = f["id"]
+        f_neg = f.get("excluded", False)
+        if re.compile( r'^!' ).match( f_val ):
+            f_neg = True
+            f_val = re.sub(r'^!', '', f_val)
+
         f_desc = f.get("includeDescendantTerms", f_desc)
         f_scope = f.get("scope", False)
 
-        f_info = coll_coll.find_one({"id": f["id"]})
+        f_info = coll_coll.find_one({"id": f_val})
 
         if f_info is None:
 
             for f_d in f_defs.values():
                 f_re = re.compile(f_d["pattern"])
-                if f_re.match(f["id"]):
+                if f_re.match(f_val):
                     if f_d["collationed"] is False:
                         f_info = {
-                            "id": f["id"],
+                            "id": f_val,
                             "scope": f_d["scope"],
                             "db_key": f_d["db_key"],
-                            "child_terms": [f["id"]]
+                            "child_terms": [ f_val ]
                         }
                         f_desc = False
 
         if f_info is None:
             continue
+
+        if f_neg is True:
+            f_info.update({"is_negated": True})
 
         f_field = f_info.get("db_key", "id")
 
@@ -278,18 +289,24 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
             f_lists[f_scope].update({f_field:[]})
 
         if f_desc is True:
-            f_lists[f_scope][f_field].extend(f_info["child_terms"])
+            if f_neg is True:
+                f_lists[f_scope][f_field].append({'$nin': f_info["child_terms"]})
+            else:
+                f_lists[f_scope][f_field].extend(f_info["child_terms"])
         else:
-            f_lists[f_scope][f_field].append(f_info["id"])
+            if f_neg is True:
+                f_lists[f_scope][f_field].append({'$nin': [f_info["id"]]})            
+            else:
+                f_lists[f_scope][f_field].append(f_info["id"])
 
     # creating the queries & combining w/ possible existing ones
     for f_scope in f_lists.keys():
         f_s_l = []
-        for f_field, f_queries in f_lists[f_scope].items():
-            if len(f_queries) == 1:
-                f_s_l.append({ f_field: f_queries[0] })
+        for f_field, f_query_vals in f_lists[f_scope].items():
+            if len(f_query_vals) == 1:
+                f_s_l.append({ f_field: f_query_vals[0] })
             else:
-                f_s_l.append({ f_field: {"$in": f_queries } })
+                f_s_l.append({ f_field: {"$in": f_query_vals } })
 
         if f_scope in byc["queries"]:
             f_s_l.append(byc["queries"][f_scope])
@@ -464,8 +481,7 @@ def geo_query( byc ):
             continue
 
         req_type = rt
-        geo_pars = g_p
-    
+        geo_pars = g_p   
 
     if "city" in req_type:
         geo_q = return_geo_city_query(geo_root, geo_pars)
@@ -477,7 +493,6 @@ def geo_query( byc ):
 
     if "ISO3166alpha2" in req_type:
         geo_q = { "provenance.geo_location.properties.ISO3166alpha2": byc["form_data"]["iso3166alpha2"].upper() }
-    # print(geo_q)
         return geo_q, geo_pars
 
     if "geoquery" in req_type:

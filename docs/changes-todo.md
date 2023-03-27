@@ -2,7 +2,21 @@
 title: Changes & To Do
 ---
 
-## Changes 
+## Changes
+
+### 2023-03-27 (v1.0.24)
+
+* added `output=vcf` option for variant export & made it default for the 
+`phenopackets` entity
+    - VCF export is basic & hasn't been tested for round trip compatibility
+* added filter exclusion flag:
+    - for POST a Boolean `"excluded": true`
+    - for GET prefixing a term by an exclamation mark (e.g. `!PATO:0020002`)
+    - this is a **BeaconPlus** feature - see [issue #63](https://github.com/ga4gh-beacon/beacon-v2/issues/63) in `beacon-v2` 
+
+### 2023-03-02 (v1.0.22)
+
+* v1.0.22 fixes the `testMode=True` call
 
 ### 2023-02-05
 
@@ -15,7 +29,7 @@ title: Changes & To Do
 
 ## Bugs & TODO
 
-* [ ] disentangle general configurations, resources (which stay with the package)
+* [x] disentangle general configurations, resources (which stay with the package)
   and instance-specific ones and load them from their appropriate locations
     - `beaconServer` and `services` scripts need to (over-) load from configs
       within their directories

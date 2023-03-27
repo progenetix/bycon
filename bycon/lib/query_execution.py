@@ -75,8 +75,6 @@ def execute_bycon_queries(ds_id, byc):
         else:
             byc["queries"].update( {"variants": {"info.annotation_derived":True} } )
 
-    # print(byc[ "queries" ])
-    # exit()
 
     for collname in byc[ "queries" ].keys():
         if collname in byc[ "config" ][ "queried_collections" ]:
@@ -86,8 +84,6 @@ def execute_bycon_queries(ds_id, byc):
 
     if byc["original_queries"] is None:
         byc.update({"original_queries": exe_queries})
-
-    # print(byc["original_queries"])
 
     # collection of results
     prefetch = { }
@@ -192,8 +188,6 @@ def execute_bycon_queries(ds_id, byc):
             prevars["pref_m"] = "variants.variant_internal_id"
             prevars["query"] = { "_id": { "$in": prefetch[ "variants._id" ]["target_values"] } }
             prefetch.update( { prevars["pref_m"]: _prefetch_data(prevars) } )
-
-            # print(prefetch["variants.variant_internal_id"]["target_values"])
 
 
     ############################################################################

@@ -19,7 +19,7 @@ def parse_filters(byc):
 
 ################################################################################
 
-def get_filter_flags(byc):
+def get_global_filter_flags(byc):
 
     ff = {
         "logic": byc[ "config" ][ "filter_flags" ][ "logic" ],
@@ -45,6 +45,16 @@ def get_filter_flags(byc):
 
 def check_filter_values(filters, byc):
 
+    """
+    The functtion checks the filter values for a match to any of the filter
+    definitions. The optional `!` flag (no match) is not considered during
+    evaluation ("deflagged"). This filter check is complementary to the evaluation
+    during the filter query generation which anyway checks for existence of the
+    filtering term during term expansion, in the `collations` collection.
+    However, this function is needed in queries *not* making use of the standard
+    filter processing (e.g. during the generation of new entries).
+    """
+
     f_defs = byc["filter_definitions"]
 
     checked = [ ]
@@ -53,11 +63,13 @@ def check_filter_values(filters, byc):
             f = {"id":f}
         if not "id" in f:
             continue
-        pre = re.split('-|:', f["id"])[0]
+        deflagged = re.sub(r'^!', '', f["id"])
+        # pre = re.split('-|:', f["id"])[0]
         for f_t, f_d in f_defs.items():
-            if re.compile( f_d["pattern"] ).match( f["id"] ):       
+            if re.compile( f_d["pattern"] ).match( deflagged ):       
                 if f not in checked:
                     checked.append( f )
+                    continue
 
     return checked
   

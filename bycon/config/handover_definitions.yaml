@@ -10,7 +10,7 @@ h->o_types:
       - analysis
     description: "create a CNV histogram from matched biosamples"
     h->o_key: 'biosamples.id'
-    script_path_web: '/cgi-bin/PGX/cgi/samplePlots.cgi'
+    script_path_web: '/services/samplePlots'
     output: cnvhistogram
 
   biosamples:
@@ -118,6 +118,17 @@ h->o_types:
     h->o_key: 'variants._id'
     script_path_web: '/beacon/genomicVariations'
   
+  vcf:
+    id: 'pgx:handover:vcf'
+    label: "Found Variants (.vcf)"
+    requestedSchema: genomicVariant
+    output: vcf
+    paginated_entities:
+      - genomicVariant
+    description: "retrieve variants matched by the query as .vcf download"
+    h->o_key: 'variants._id'
+    script_path_web: '/beacon/genomicVariations'
+  
   callsetsvariants:
     id: 'pgx:handover:callsetsvariants'
     label: "All Sample Variants (.json)"
@@ -137,6 +148,18 @@ h->o_types:
     paginated_entities:
       - genomicVariant
     output: pgxseg
+    description: "Download all variants of matched samples - potentially huge dataset..."
+    h->o_key: 'biosamples._id'
+    script_path_web: '/beacon/variants'
+
+  callsetsvcf:
+    id: 'pgx:handover:callsetsvcf'
+    label: "All Sample Variants (.vcf)"
+    requestedSchema: genomicVariant
+    method: callsetsvariants
+    paginated_entities:
+      - genomicVariant
+    output: vcf
     description: "Download all variants of matched samples - potentially huge dataset..."
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/variants'
