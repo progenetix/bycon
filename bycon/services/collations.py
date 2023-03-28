@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 
-import cgi, cgitb
-import re, json, yaml
+import re
 from os import path, environ, pardir
-import sys, datetime, argparse
+import sys
 from pymongo import MongoClient
 
-pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
-sys.path.append( pkg_path )
 from bycon import *
 
 ################################################################################

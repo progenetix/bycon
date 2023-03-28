@@ -68,7 +68,6 @@ def initialize_bycon_service(byc, service=False):
     correspond to the calling main function. However, an overwrite can be
     provided."""
 
-
     defs = byc.get("beacon_defaults", {})
     b_e_d = defs.get("entity_defaults", {})    
     form = byc["form_data"]
@@ -96,6 +95,7 @@ def initialize_bycon_service(byc, service=False):
             * this is usually used to provide script-specific parameters (`service_defaults`...)
         """
         sub_path = path.dirname( path.abspath(mod.__file__) )
+
         conf_dir = path.join( sub_path, "local" )
         if path.isdir(conf_dir):
             c_f = Path( path.join( conf_dir, "config.yaml" ) )

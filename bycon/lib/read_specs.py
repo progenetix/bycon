@@ -49,15 +49,15 @@ def read_bycon_configs_by_name(name, conf_dir, byc):
 
 ################################################################################
 
-def read_local_prefs(service, dir_path, byc):
+def read_local_prefs(service, pkg_path, byc):
 
     # We use snake_case in the paths
     service = decamelize(service)
 
-    d = Path( path.join( dir_path, "config", service ) )
+    d = Path( path.join( pkg_path, "config", service ) )
 
     # old style named config
-    f = Path( path.join( dir_path, "config", service+".yaml" ) )
+    f = Path( path.join( pkg_path, "config", service+".yaml" ) )
 
     if f.is_file():
         byc.update({"service_config": load_yaml_empty_fallback( f ) })

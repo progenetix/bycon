@@ -1,4 +1,6 @@
-# Tests
+---
+title: Tests
+---
 
 ## Beacon
 

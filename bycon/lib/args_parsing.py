@@ -1,4 +1,4 @@
-import argparse, os, yaml
+import argparse, os, re, yaml
 from humps import decamelize
 
 ################################################################################
@@ -84,3 +84,41 @@ def filters_from_args(byc):
     return byc
 
 ################################################################################
+
+def set_collation_types(byc):
+
+    if byc["args"].collationtypes:
+        s_p = {}
+        for p in re.split(",", byc["args"].collationtypes):
+            if p in byc["filter_definitions"].keys():
+                s_p.update({p:byc["filter_definitions"][p]})
+        if len(s_p.keys()) < 1:
+            print("No existing collation type was provided with -c ...")
+            exit()
+
+        byc.update({"filter_definitions":s_p})
+
+    return byc
+
+################################################################################
+
+def set_processing_modes(byc):
+
+    byc.update({"update_mode": False})
+
+    try:
+        if byc["test_mode"] is True:
+            byc.update({"update_mode": False})
+            print( "¡¡¡ TEST MODE - no db update !!!")
+            return byc
+    except:
+        pass
+
+    try:
+        if byc["args"].update:
+            byc.update({"update_mode": True})
+            print( "¡¡¡ UPDATE MODE - may overwrite entries !!!")
+    except:
+        pass
+        
+    return byc

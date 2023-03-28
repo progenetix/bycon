@@ -86,9 +86,12 @@ def select_dataset_ids(byc):
     if ds_id_from_accessid(byc) is not False:
         return byc            
 
-    if ds_id_from_form(byc) is not False:
+    if ds_ids_from_form(byc) is not False:
         return byc            
     
+    if ds_ids_from_args(byc) is not False:
+        return byc            
+
     return byc
 
 ################################################################################
@@ -141,7 +144,7 @@ def ds_id_from_accessid(byc):
 
 ################################################################################
 
-def ds_id_from_form(byc):
+def ds_ids_from_form(byc):
 
     f_ds_ids = byc["form_data"].get("dataset_ids", None)
     if f_ds_ids is None:
@@ -160,3 +163,12 @@ def ds_id_from_form(byc):
     return byc
 
 ################################################################################
+
+def ds_ids_from_args(byc):
+
+    if byc["args"].datasetIds:
+        ds_ids = re.split(",", byc["args"].datasetIds)
+        byc.update( { "dataset_ids": ds_ids } )
+        return byc
+
+    return byc
