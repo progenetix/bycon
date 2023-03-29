@@ -4,9 +4,6 @@ import cgi, cgitb, sys, os, datetime, re, json, yaml
 from os import environ, pardir, path
 from pymongo import MongoClient
 
-# local
-pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
-sys.path.append( pkg_path )
 from bycon import *
 
 """podmd

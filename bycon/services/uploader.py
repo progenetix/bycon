@@ -7,8 +7,6 @@ import csv
 import sys
 from uuid import uuid4
 
-pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
-sys.path.append( pkg_path )
 from bycon import *
 
 ################################################################################

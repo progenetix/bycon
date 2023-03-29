@@ -5,8 +5,6 @@ from os import path, environ, pardir
 from copy import deepcopy
 from liftover import get_lifter
 
-pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
-sys.path.append( pkg_path )
 from bycon import *
 
 """podmd

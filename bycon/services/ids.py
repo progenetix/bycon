@@ -6,11 +6,10 @@ from os import environ, path, pardir
 import sys
 
 # local
-pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
-sys.path.append( pkg_path )
 from bycon import *
 
 dir_path = path.dirname( path.abspath(__file__) )
+pkg_path = path.join( dir_path, pardir, pardir )
 
 """podmd
 The `ids` service forwards compatible, prefixed ids (see `config/ids.yaml`) to specific

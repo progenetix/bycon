@@ -7,8 +7,6 @@ import sys, datetime, argparse
 from pymongo import MongoClient
 from operator import itemgetter
 
-pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
-sys.path.append( pkg_path )
 from bycon import *
 
 """podmd

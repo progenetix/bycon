@@ -2,8 +2,6 @@
 import cgi, cgitb, sys
 from os import pardir, path
 
-pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
-sys.path.append( pkg_path )
 from bycon import *
 
 """podmd

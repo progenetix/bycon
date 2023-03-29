@@ -6,8 +6,6 @@ from os import path, pardir
 import sys
 from pymongo import MongoClient
 
-pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
-sys.path.append( pkg_path )
 from bycon import *
 
 ################################################################################

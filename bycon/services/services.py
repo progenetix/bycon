@@ -4,9 +4,8 @@ from os import path, pardir, environ
 import sys, re, cgitb
 from importlib import import_module
 
-pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
-sys.path.append( pkg_path )
 from bycon import *
+pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
 
 """
 The `services` application deparses a request URI and calls the respective

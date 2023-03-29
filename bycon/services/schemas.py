@@ -6,8 +6,6 @@ from os import environ, pardir, path, scandir
 import sys, datetime
 from humps import camelize
 
-pkg_path = path.join( path.dirname( path.abspath(__file__) ), pardir, pardir )
-sys.path.append( pkg_path )
 from bycon import *
 
 """podmd
