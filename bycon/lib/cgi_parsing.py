@@ -347,15 +347,23 @@ def cgi_print_response(byc, status_code):
         cgi_simplify_response(byc)
 
         if isinstance(byc["service_response"], dict):
-            resp = json.dumps(camelize(byc["service_response"]["response"]), default=str)
+            # TODO: Find where this results/response ambiguity comes from
+            if "response" in byc["service_response"]:
+                resp = byc["service_response"]["response"]
+            elif "results" in byc["service_response"]:
+                resp = byc["service_response"]["results"]
+            else:
+                resp = [ "response is empty at `cgi_print_response`"]
         else:
             resp = byc["service_response"]
-        if isinstance(resp, list):
+        if not isinstance(resp, list):
+            resp = json.dumps(camelize(resp), default=str)
+        else:
             l_d = [ ]
             for dp in resp:
                 v_l = [ ]
                 for v in dp.values():
-                    print(v)
+                    # print(v)
                     v_l.append(str(v))
                 l_d.append("\t".join(v_l))
             resp = "\n".join(l_d)

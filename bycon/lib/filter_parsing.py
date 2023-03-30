@@ -166,6 +166,9 @@ def ds_ids_from_form(byc):
 
 def ds_ids_from_args(byc):
 
+    if not "args" in byc or byc["args"] is None:
+        return byc
+
     if byc["args"].datasetIds:
         ds_ids = re.split(",", byc["args"].datasetIds)
         byc.update( { "dataset_ids": ds_ids } )

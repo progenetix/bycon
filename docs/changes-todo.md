@@ -4,6 +4,14 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-03-30 (v1.0.25)
+
+Bug fix release:
+
+* fixed `output=text` errors
+* some argument parsing bugs that crept in with last release
+* library re-shuffling w/ respect  to `byconaut`
+
 ### 2023-03-27 (v1.0.24)
 
 * added `output=vcf` option for variant export & made it default for the 
