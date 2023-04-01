@@ -12,3 +12,7 @@ distribution) though this is (early 2023) in a process of "disentanglement".
 ## More Documentation
 
 Documentation has been moved to [`bycon.progenetix.org`](http://bycon.progenetix.org)
+
+### Installation
+
+The installation is documented [`on the website`](http://bycon.progenetix.org/installation/) (and in the page's Markdown [source here](./docs/installation.md)).
