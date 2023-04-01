@@ -225,8 +225,12 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
     * the bycon API allows to pass a `filterLogic` parameter with either `AND`
     (default value) or `OR`
 
-    CAVE:   Filters are assumed to be id values in thje collation collection
-            OR have a "collationed" flag in the filter_definitions set to False
+    CAVE: Filters are assumed to be id values in thje collation collection
+    OR have a `collationed` flag in the filter_definitions set to `false`.
+
+    TODO: The `excluded` query option currently will **not** positively match
+    entries with an `excluded` flag (this is a specific Phenopackets construct
+    for e.g. defining patients which have one phenotype _but not_ another one).
     """
 
     f_defs = byc["filter_definitions"]

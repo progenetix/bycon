@@ -207,7 +207,7 @@ def de_vrsify_variant(v, byc):
     if "variant_state" in v:
         efo = v["variant_state"].get("id")
         try:
-            v_r.update({"variant_type": v_d["efo_vrs_map"][ efo ]["DUPDEL"] })
+            v_r.update({"variant_type": v_d["efo_dupdel_map"][ efo ]["DUPDEL"] })
         except:
             pass
     elif "state" in v:

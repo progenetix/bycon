@@ -126,6 +126,7 @@ def initialize_bycon_service(byc, service=False):
 
     # update response_entity_id from path
     update_entity_ids_from_path(byc)
+
     # update response_entity_id from form
     update_requested_schema_from_request(byc)
     set_response_entity(byc)

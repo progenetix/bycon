@@ -1,3 +1,5 @@
+# idealized values for transforming text based (ISCN style) CNV calls
+# into dummy log2 values
 cnv_dummy_values:
   DUP: 0.58
   DEL: -1
@@ -5,45 +7,39 @@ cnv_dummy_values:
   AMP: 2
   HOMODEL: -2
 
+# empirical upper threshold for focal event sizes...
 amp_max_size: 5000000
 
-# relative_copy_class referes to VRS
-efo_vrs_map:
+efo_dupdel_map:
   EFO:0030064:
     label: regional base ploidy
-    relative_copy_class: "copy neutral"
     DUPDEL: Null
   EFO:0030065:
     label: copy-neutral loss of heterozygosity
-    relative_copy_class: "copy neutral"
     DUPDEL: LOH
   EFO:0030067:
     label: copy number loss
-    relative_copy_class: "partial loss"
     DUPDEL: DEL
   EFO:0030068:
     label: low-level copy number loss
-    relative_copy_class: "partial loss"
+    DUPDEL: DEL
+  EFO:0020073:
+    label: high-level copy number loss
     DUPDEL: DEL
   EFO:0030069:
     label: complete genomic deletion
-    relative_copy_class: "complete loss"
     DUPDEL: DEL
   EFO:0030070:
     label: copy number gain
-    relative_copy_class: "low-level gain"
     DUPDEL: DUP
   EFO:0030071:
     label: low-level copy number gain
-    relative_copy_class: "low-level gain"
     DUPDEL: DUP
   EFO:0030072:
     label: high-level copy number gain
-    relative_copy_class: "high-level gain"
     DUPDEL: DUP
   EFO:0030073:
     label: focal genome amplification
-    relative_copy_class: "high-level gain"
     DUPDEL: DUP
 
 cnv_iscn_defs:
@@ -218,6 +214,7 @@ variant_state_aliases:
   DEL: EFO:0030067
   EFO:0030067: EFO:0030067
   EFO:0030068: EFO:0030068
+  EFO:0020073: EFO:0020073
   EFO:0030069: EFO:0030069
 
 variant_state_VCF_aliases:
@@ -232,8 +229,13 @@ variant_state_VCF_aliases:
   EFO:0030073: DUP
   EFO:0030067: DEL
   EFO:0030068: DEL
+  EFO:0020073: DEL
   EFO:0030069: DEL
- 
+
+# `variant_states` provides query expansion for variant types. It defines
+# for any given value which child terms should be matched, too.
+# Note: For other ontologies such expansions are usually defined in the
+# pre-processing pacage (`byconaut`) and then stored in the generated collations.
 variant_states:
   LiteralSequenceExpression:
     child_terms:
@@ -243,6 +245,7 @@ variant_states:
       - EFO:0030066
       - EFO:0030067
       - EFO:0030068
+      - EFO:0020073
       - EFO:0030069
       - EFO:0030070
       - EFO:0030071
@@ -268,10 +271,15 @@ variant_states:
     child_terms:
       - EFO:0030067
       - EFO:0030068
+      - EFO:0020073
       - EFO:0030069
   EFO:0030068:
     child_terms:
       - EFO:0030068
+  EFO:0020073:
+    child_terms:
+      - EFO:0020073
+      - EFO:0030069
   EFO:0030069:
     child_terms:
       - EFO:0030069
@@ -379,6 +387,9 @@ parameters:
     pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
     type: string
 
+# As long as there are no variant query schemas to define valid Beacon
+# variant parameter combinations the `request_types` here provide sets
+# of combinations valid at least for `bycon` Progenetix etc. data.
 request_types:
 
   variantTypeRequest:

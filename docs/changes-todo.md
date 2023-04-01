@@ -4,6 +4,12 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-03-31 (v1.0.26)
+
+* removal of VRS classes since VRS is about to switch to EFO
+* added `EFO:0020073: high-level copy number loss` from the upcoming EFO release
+* adding `examplez` dataset definition
+
 ### 2023-03-30 (v1.0.25)
 
 Bug fix release:

@@ -169,7 +169,7 @@ def interval_cnv_arrays(v_coll, query, byc):
     """
 
     v_d = byc["variant_definitions"]
-    efo_vrs = v_d["efo_vrs_map"]
+    efo_vrs = v_d["efo_dupdel_map"]
     c_l = byc["cytolimits"]
     intervals = byc["genomic_intervals"]
 
