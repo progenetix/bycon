@@ -20,6 +20,7 @@ def parse_cytoband_file(byc):
     g_map = byc["interval_definitions"]["genome_path_ids"].get("values", {})
 
     genome = byc["variant_pars"][ "assembly_id" ].lower()
+    # TODO / BUG: next breaks e.g. "mSarHar1.11"
     genome = re.sub( r"(\w+?)([^\w]\w+?)", r"\1", genome)
 
     if genome in g_map.keys():
@@ -203,14 +204,20 @@ def arm_base_range(chro, arm, cytobands):
 
 def cytobands_label( cytobands ):
 
+    """
+    Receives: (potentially filtered) list of cytoband objects
+    Returns: the concatenated first and last cytoband label
+    Examples:
+      - p12.2q22.2
+      - q13.1
+    """
+
     cb_label = ""
 
     if len(cytobands) > 0:
-
-        # cb_label = cytobands[0]["chro"]+cytobands[0]["cytoband"]
-        cb_label = cytobands[0]["cytoband"]
+        cb_label = cytobands[0].get("cytoband", "")
         if len( cytobands ) > 1:
-            cb_label = cb_label+cytobands[-1]["cytoband"]
+            cb_label = cb_label+cytobands[-1].get("cytoband", "")
 
     return cb_label
 
@@ -218,14 +225,44 @@ def cytobands_label( cytobands ):
 
 def translate_reference_ids(byc):
 
+    """
+    Input: "refseq_chromosomes" object:
+    Example:
+    ```
+      chr3:
+        chr: "3"
+        genbank_id: "CM000665.2"
+        refseq_id: "refseq:NC_000003.12"
+        length: 198295559
+    ```
+    Return: added objects in byc["variant_definitions"]
+      - "chro_refseq_ids" - refseq id for each chromosome
+          - "15": "refseq:NC_000015.10"
+      - "refseq_chronames": chromosome for each refseq id
+          - "refseq:NC_000015.10": "15"
+      - "refseq_aliases": all alternative names for a refseq id are keys
+          - "15": "refseq:NC_000015.10"
+          - "chr15": "refseq:NC_000015.10"
+          - "refseq:NC_000015.10": "refseq:NC_000015.10"
+          - "NC_000015.10": "refseq:NC_000015.10"
+          - "CM000677.2": "refseq:NC_000015.10"
+        "chro_aliases": all aliases for a stripped chromosome name
+          - "15": "15"
+          - "chr15": "15"
+          - "refseq:NC_000015.10": "15"
+          - "NC_000015.10": "15"
+          - "CM000677.2": "15"
+    """
+
     if not "variant_definitions" in byc:
         return byc
 
     v_d_refsc = byc["variant_definitions"]["refseq_chromosomes"]
-    c_r = {}
-    r_c = {}
+    c_r = {}    # keys are the bare chromosome names e.g. "15"
+    r_c = {}    # 
     r_a = {}
     c_a = {}
+
     for c, c_d in v_d_refsc.items():
         refseq_stripped = re.sub("refseq:", "", c_d["refseq_id"])
         c_r.update({ c_d["chr"]: c_d["refseq_id"] })
@@ -244,6 +281,7 @@ def translate_reference_ids(byc):
             refseq_stripped: c_d["chr"],
             c_d["genbank_id"]: c_d["chr"]
         })
+
     byc["variant_definitions"].update({
         "chro_refseq_ids": c_r,
         "refseq_chronames": r_c,
@@ -295,7 +333,7 @@ def deparse_ISCN_to_variants(iscn, byc):
             m = iscn_re.match(iscn).group(1)
 
             for i_v in re.split(",", m):
-
+                
                 if not cb_pat.match(i_v):
                     continue
 
