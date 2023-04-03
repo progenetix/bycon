@@ -4,6 +4,10 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-03-31 (v1.0.27)
+
+* FIX: `ids` service (and therefore identifiers.org resolver) was broken due to custom & degraded config path
+
 ### 2023-03-31 (v1.0.26)
 
 * removal of VRS classes since VRS is about to switch to EFO

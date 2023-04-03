@@ -9,7 +9,6 @@ import sys
 from bycon import *
 
 dir_path = path.dirname( path.abspath(__file__) )
-pkg_path = path.join( dir_path, pardir, pardir )
 
 """podmd
 The `ids` service forwards compatible, prefixed ids (see `config/ids.yaml`) to specific
@@ -35,14 +34,15 @@ def main():
 def ids():
 
     set_debug_state(debug=0)
-
-    read_local_prefs( "ids", pkg_path, byc )
+    read_local_prefs( "ids", dir_path, byc )
 
     id_in = rest_path_value("ids")
     output = rest_path_value(id_in)
 
+    f_p_s = byc["service_config"].get("format_patterns", {})
+
     if id_in:
-        for f_p in byc["service_config"]["format_patterns"]:
+        for f_p in f_p_s:
             pat = re.compile( f_p["pattern"] )
             if pat.match(id_in):
                 lid = id_in  
