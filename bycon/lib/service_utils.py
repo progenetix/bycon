@@ -236,9 +236,9 @@ def set_response_entity(byc):
 
 def run_beacon_init_stack(byc):
 
+    create_empty_beacon_response(byc)
     initialize_beacon_queries(byc)
     generate_genomic_intervals(byc)
-    create_empty_beacon_response(byc)
     response_collect_errors(byc)
     cgi_break_on_errors(byc)
 
@@ -608,6 +608,27 @@ def response_add_error(byc, code=200, message=False):
 
     e = { "error_code": code, "error_message": message }
     byc["error_response"].update({"error": e})
+
+    return byc
+
+################################################################################
+
+def response_add_warnings(byc, message=False):
+
+    if message is False:
+        return byc
+    if len(str(message)) < 1:
+        return byc
+
+    if not "service_response" in byc:
+        return byc
+
+    if not "info" in byc["service_response"]:
+        byc["service_response"].update({"info": {}})
+    if not "warnings" in byc["service_response"]:
+        byc["service_response"]["info"].update({"warnings": []})
+
+    byc["service_response"]["info"]["warnings"].append(message)
 
     return byc
 

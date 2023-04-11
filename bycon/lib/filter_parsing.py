@@ -48,11 +48,9 @@ def check_filter_values(filters, byc):
     """
     The functtion checks the filter values for a match to any of the filter
     definitions. The optional `!` flag (no match) is not considered during
-    evaluation ("deflagged"). This filter check is complementary to the evaluation
-    during the filter query generation which anyway checks for existence of the
-    filtering term during term expansion, in the `collations` collection.
-    However, this function is needed in queries *not* making use of the standard
-    filter processing (e.g. during the generation of new entries).
+    evaluation ("deflagged").
+    This filter check is complementary to the evaluation during the filter query
+    generation and provides a warning if the filter pattern doesn't exist.
     """
 
     f_defs = byc["filter_definitions"]
@@ -63,13 +61,20 @@ def check_filter_values(filters, byc):
             f = {"id":f}
         if not "id" in f:
             continue
+
+        if f not in checked:
+            checked.append( f )
+
         deflagged = re.sub(r'^!', '', f["id"])
-        # pre = re.split('-|:', f["id"])[0]
+        matched = False
         for f_t, f_d in f_defs.items():
-            if re.compile( f_d["pattern"] ).match( deflagged ):       
-                if f not in checked:
-                    checked.append( f )
-                    continue
+            if re.compile( f_d["pattern"] ).match( deflagged ):
+                matched = True
+                continue
+
+        if matched is False:
+            warning = "The filter `{}` does not match any defined filter pattern.".format(f["id"])
+            response_add_filter_warnings(byc, warning)
 
     return checked
   
@@ -175,3 +180,26 @@ def ds_ids_from_args(byc):
         return byc
 
     return byc
+
+
+################################################################################
+
+def response_add_filter_warnings(byc, message=False):
+
+    if message is False:
+        return byc
+    if len(str(message)) < 1:
+        return byc
+
+    if not "service_response" in byc:
+        return byc
+
+    if not "info" in byc["service_response"]:
+        byc["service_response"].update({"info": {}})
+    if not "warnings" in byc["service_response"]:
+        byc["service_response"]["info"].update({"warnings": []})
+
+    byc["service_response"]["info"]["warnings"].append(message)
+
+    return byc
+

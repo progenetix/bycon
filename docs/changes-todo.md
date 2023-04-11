@@ -4,6 +4,14 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-04-11 (v1.0.28)
+
+* fixed the filter processing where "correctly looking but not existing" filter
+  patterns were pruned from the query instead of being kept & leading to a mismatch
+* added 2 types of warnings for such cases:
+    - undefined filter pattern
+    - correct pattern but value not in database
+
 ### 2023-03-31 (v1.0.27)
 
 * FIX: `ids` service (and therefore identifiers.org resolver) was broken due to custom & degraded config path
@@ -47,6 +55,11 @@ Bug fix release:
 
 ## Bugs & TODO
 
+* [x] fix filter queries for correct no-match:
+    - query type indicates that the filter is "collationed"
+    - query_generation looks for term in collations to perform term expansion
+    - BUG: if term is not found -> currently term is not added to final query
+      object -> query is only based on other parameters
 * [x] disentangle general configurations, resources (which stay with the package)
   and instance-specific ones and load them from their appropriate locations
     - `beaconServer` and `services` scripts need to (over-) load from configs

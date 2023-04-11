@@ -263,18 +263,25 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
             for f_d in f_defs.values():
                 f_re = re.compile(f_d["pattern"])
                 if f_re.match(f_val):
-                    if f_d["collationed"] is False:
-                        f_info = {
-                            "id": f_val,
-                            "scope": f_d["scope"],
-                            "db_key": f_d["db_key"],
-                            "child_terms": [ f_val ]
-                        }
-                        f_desc = False
+                    f_info = {
+                        "id": f_val,
+                        "scope": f_d["scope"],
+                        "db_key": f_d["db_key"],
+                        "child_terms": [ f_val ]
+                    }
+                    f_desc = False
+                    if f_d["collationed"] is True:
+                        warning = "The filter `{}` matches a `{}` filter pattern but the value is not in collations.".format(f_val, f_d["scope"])
+                        response_add_filter_warnings(byc, warning)
 
         if f_info is None:
-            continue
-
+            f_info = {
+                "id": f_val,
+                "scope": "biosamples",
+                "db_key": "___undefined___",
+                "child_terms": [ f_val ]
+            }
+           
         if f_neg is True:
             f_info.update({"is_negated": True})
 
@@ -570,4 +577,6 @@ def return_geo_longlat_query(geo_root, geo_pars):
 
 
     return geo_q
+
+################################################################################
 
