@@ -4,6 +4,11 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-04-12 (v1.0.29)
+
+* fixed broken dataset selection (bug introduced w/ v1.0.28)
+* moved dataset parsing to separate library `lib/dataset_parsing.py`
+
 ### 2023-04-11 (v1.0.28)
 
 * fixed the filter processing where "correctly looking but not existing" filter

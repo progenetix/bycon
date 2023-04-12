@@ -260,6 +260,7 @@ variant_states:
     child_terms:
       - EFO:0030069
 
+# TODO: use definitions directly from model -> genomicVariations -> requestParameters
 parameters:
 
   assembly_id:

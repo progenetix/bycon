@@ -12,6 +12,7 @@ from args_parsing import *
 from cgi_parsing import *
 from cytoband_utils import translate_reference_ids
 from data_retrieval import *
+from dataset_parsing import select_dataset_ids
 from datatable_utils import export_datatable_download
 from export_file_generation import *
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, dataset_results_save_handovers
@@ -235,6 +236,10 @@ def set_response_entity(byc):
 ################################################################################
 
 def run_beacon_init_stack(byc):
+
+    select_dataset_ids(byc)
+    if len(byc["dataset_ids"]) < 1:
+        print_text_response("No existing dataset_id - please check dataset_definitions")
 
     create_empty_beacon_response(byc)
     initialize_beacon_queries(byc)

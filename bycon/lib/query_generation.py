@@ -20,10 +20,6 @@ def initialize_beacon_queries(byc):
     get_variant_request_type(byc)
 
     # generate_queries(byc)
-    select_dataset_ids(byc)
-
-    if len(byc["dataset_ids"]) < 1:
-        print_text_response("No existing dataset_id - please check dataset_definitions")
 
     return byc
 
