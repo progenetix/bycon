@@ -247,10 +247,9 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
                 vs[vt] = sorted(vs[vt], key=lambda k: k['size'], reverse=True)
             except:
                 pass
-            col_key = "color_var_{}_rgb".format(vt.lower())
-            col_rgb = config["plot_pars"].get(col_key, [])
-            if len(col_rgb) != 3:
-                col_rgb = [128, 128, 128]
+            col_key = "plot_{}_color".format(vt.lower())
+            col_hex = byc["plot_defaults"].get(col_key, [])
+            col_rgb = hex_2_rgb(col_hex)
             b_f.write("track name={} visibility=squish description=\"{} variants matching the query with {} overall returned\" color={},{},{}\n".format(vt, vt, v_ret, col_rgb[0], col_rgb[1], col_rgb[2] ) )
             b_f.write("#chrom\tchromStart\tchromEnd\tbiosampleId\n")
             for v in vs[vt]:

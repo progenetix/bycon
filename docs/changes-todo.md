@@ -4,6 +4,16 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-04-14 (v1.0.30)
+
+* added `plot_utils.py` and `plot_defaults.yaml`; now there is a first method
+  for plotting histograms
+    - so far limited to CNV histograms of many or few whole chromosomes from
+      pre-computed frequencymaps
+    - no separate sevice so far; can be invoked from the `intervalFrequencies`
+      service with added `&output=histoplots` pragma
+    - so far no marker addition etc.
+
 ### 2023-04-12 (v1.0.29)
 
 * fixed broken dataset selection (bug introduced w/ v1.0.28)

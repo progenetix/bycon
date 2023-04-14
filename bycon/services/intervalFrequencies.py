@@ -109,6 +109,8 @@ def interval_frequencies():
 
     mongo_client.close( )
 
+    histoplot_svg_generator(byc, results)
+
     check_pgxseg_frequencies_export(byc, results)
     check_pgxmatrix_frequencies_export(byc, results)
     populate_service_response( byc, results)

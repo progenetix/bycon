@@ -32,6 +32,15 @@ def boolean_to_mongo_logic( logic="AND" ):
 
 ################################################################################
 
+def hex_2_rgb( hexcolor ):
+
+    rgb = [127, 127, 127]
+
+
+    return rgb
+
+################################################################################
+
 def select_this_server( byc ):
 
     s_uri = str(environ.get('SCRIPT_URI'))

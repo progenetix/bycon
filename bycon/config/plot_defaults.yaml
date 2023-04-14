@@ -1,0 +1,106 @@
+parameters:
+
+  plot_id:
+    default: genomeplot
+
+  plot_title:
+    default: ""
+
+  plot_dup_color:
+    default: "#FFC633"
+
+  plot_amp_color:
+    default: "#FF6600"
+
+  plot_del_color:
+    default: "#33A0FF"
+
+  plot_homodel_color:
+    default: "#0033CC"
+
+  plot_chros:
+    type: array
+    default: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"]
+
+  plot_width:
+    description: width of the plot image, in px
+    type: integer
+    default: 1024
+
+  plot_area_height:
+    description: >-
+      * height of the plot area
+    type: integer
+    default: 100
+
+  plot_axis_y_max:
+    type: integer
+    default: 100
+
+  plot_margins:
+    type: integer
+    default: 25
+
+  plot_labelcol_width:
+    type: integer
+    default: 0
+
+  plot_axislab_y_width:
+    type: integer
+    default: 25
+
+  plot_treecol_width:
+    type: integer
+    default: 0
+
+  plot_chro_height:
+    type: integer
+    default: 14
+
+  plot_region_gap_width:
+    type: integer
+    default: 3
+
+  plot_canvas_color:
+    description: color of the document background
+    default: "#ffffff"
+
+  plot_area_color:
+    description: color of the plot background
+    default: "#eef6ff"
+
+  plot_grid_color:
+    description: color of grid lines
+    default: "#c0e3ee"
+
+  plot_font_color:
+    default: "#000000"
+
+  plot_font_size:
+    description: font size, in px
+    type: integer
+    default: 10
+
+  plot_title_font_size:
+    description: title font size, in px
+    type: integer
+    default: 16
+
+  plot_label_y_font_size:
+    type: integer
+    default: 8
+
+  plot_footer_font_size:
+    type: integer
+    default: 10
+
+  plot_centerline_stroke:
+    type: integer
+    default: 1
+
+legacy_parameters:
+  plot_dup_color: color_var_dup_hex
+  plot_del_color: color_var_del_hex
+  plot_width: size_plotimage_w_px
+  plot_chros: chr2plot
+
