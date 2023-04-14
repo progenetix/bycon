@@ -38,11 +38,8 @@ def interval_frequencies():
     select_dataset_ids(byc)
     parse_filters(byc)
     parse_variant_parameters(byc)
-
     generate_genomic_intervals(byc)
-
-    create_empty_service_response(byc)    
-
+    create_empty_service_response(byc)
     cgi_break_on_errors(byc)
 
     id_rest = rest_path_value("intervalFrequencies")
