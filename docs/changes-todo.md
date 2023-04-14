@@ -13,6 +13,7 @@ title: Changes & To Do
     - no separate sevice so far; can be invoked from the `intervalFrequencies`
       service with added `&output=histoplots` pragma
     - so far no marker addition etc.
+    - <http://progenetix.org/services/intervalFrequencies/?filters=pgx:icdom-85003,pgx:icdom-87003,pgx:icdom-81403&chr2plot=7,8,9,13,17&plot_title=CNV+Comparison&output=histoplot&size_plotimage_w_px=800&plot_chro_height=18>
 
 ### 2023-04-12 (v1.0.29)
 
