@@ -4,6 +4,13 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-04-14 (v1.0.32)
+
+* basic implementation of plot labels for the collation frequency plots,  using
+  the `plot_region_labels` parameter
+* switch of the cancercelllines.org UI to use this plotter instead of the Perl
+  based PGX one (only for the pre-computed collations)
+
 ### 2023-04-14 (v1.0.30)
 
 * added `plot_utils.py` and `plot_defaults.yaml`; now there is a first method

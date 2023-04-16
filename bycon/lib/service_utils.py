@@ -844,7 +844,7 @@ def create_filters_resource_response(collation_types, byc):
 
 def check_computed_interval_frequency_delivery(byc):
 
-    if not "frequencies" in byc["output"]:
+    if not "frequencies" in byc["output"] and not "histoplot" in byc["output"]:
         return byc
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
@@ -880,6 +880,20 @@ def check_computed_interval_frequency_delivery(byc):
     cs_cursor = cs_coll.find({"_id": {"$in": q_vals }, "variant_class": { "$ne": "SNV" } } )
 
     intervals, cnv_cs_count = interval_counts_from_callsets(cs_cursor, byc)
+
+    # TODO: move to function
+    if "histoplot" in byc["output"]:
+
+        i_set = {
+            "dataset_id": ds_id,
+            "group_id": ds_id,
+            "label": "Search Results",
+            "sample_count": cnv_cs_count,
+            "interval_frequencies": intervals
+        }
+
+        histoplot_svg_generator(byc, [i_set])
+
     for intv in intervals:
         v_line = [ ]
         v_line.append("query_result")

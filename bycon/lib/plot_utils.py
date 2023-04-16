@@ -255,7 +255,7 @@ def _plot_add_cytobands(plv, byc):
                 by += 0.1 * plv["plot_chro_height"]
                 bh -= 0.2 * plv["plot_chro_height"]
 
-            plv["pls"].append(f'<rect x="{X}" y="{by}" width="{l_px}" height="{bh}" style="fill: url(#{plv["plot_id"]}{c}); " />')
+            plv["pls"].append(f'<rect x="{round(X, 1)}" y="{round(by, 1)}" width="{round(l_px, 1)}" height="{round(bh, 1)}" style="fill: url(#{plv["plot_id"]}{c}); " />')
 
             X += l_px
 
@@ -264,78 +264,6 @@ def _plot_add_cytobands(plv, byc):
     #-------------------------- / chromosomes ---------------------------------#
 
     plv["Y"] += plv["plot_chro_height"]
-    plv["Y"] += plv["plot_region_gap_width"]
-
-    return plv
-
-################################################################################
-
-def _plot_add_histodata(plv, results, byc):
-
-    plv.update( {"plot_first_histo_y0": plv["Y"] })
-
-    for f_set in results:
-        _plot_add_one_histogram(plv, f_set, byc)
-
-    return plv
-
-################################################################################
-
-def _plot_add_one_histogram(plv, f_set, byc):
-
-    _plot_add_histogram_canvas(plv, f_set, byc)
-
-    i_f = f_set.get("interval_frequencies", [])
-
-    X = plv["plot_area_x0"]
-    h_y_0 = plv["Y"] + plv["plot_area_height"] * 0.5
-
-    #------------------------- histogram data ---------------------------------#
-
-    # TODO: in contrast to the Perl version here we don't correct for interval
-    #       sets which _do not_ correspond to the full chromosome coordinates
-
-    for chro in plv["plot_chros"]:
-
-        c_l = byc["cytolimits"][str(chro)]
-        chr_w = c_l["size"] * plv["plot_b2pf"]
-
-        c_i_f = list(filter(lambda d: d[ "reference_name" ] == chro, i_f.copy()))
-
-        for GL in ["gain_frequency", "loss_frequency"]:
-
-            if "gain_frequency" in GL:
-                h_f = -1
-                p_c = plv["plot_dup_color"]
-            else:
-                h_f = 1
-                p_c = plv["plot_del_color"]
-
-            p = f'<polygon points="\n{ round(X, 1) } { round(h_y_0, 1) }'
-
-            i_x_0 = X
-            for i_v in c_i_f:
-                s = i_x_0 + i_v.get("start", 0) * plv["plot_b2pf"]
-                e = i_x_0 + i_v.get("end", 0) * plv["plot_b2pf"]
-                h = i_v.get(GL, 0) * plv["plot_y2pf"]
-                h_p = h_y_0 + h * h_f
-
-                p += f'\n{ round(s, 1) } {round(h_p, 1)}'
-
-            p += f'\n{ round((X + chr_w), 1) } { round(h_y_0, 1) }"' 
-            p += f'\nfill="{p_c}" stroke-width="0px" />'
-
-            plv["pls"].append(p)
-
-            i_x_0 += i_v.get("start", 0) * plv["plot_b2pf"]
-
-        X += chr_w
-        X += plv["plot_region_gap_width"]
-
-    #------------------------ / histogram data --------------------------------#
-
-    plv["Y"] += plv["plot_area_height"]
-    plv.update( {"plot_last_histo_ye": plv["Y"] })
     plv["Y"] += plv["plot_region_gap_width"]
 
     return plv
@@ -387,6 +315,97 @@ def _plot_add_histogram_canvas(plv, f_set, byc):
             plv["pls"].append(f'<text x="{x_y_l}" y="{y_l_y}" class="label-y">{y_m}%</text>')
 
     #------------------------- / grid lines -----------------------------------#
+
+    return plv
+
+################################################################################
+
+def _plot_add_histodata(plv, results, byc):
+
+    plv.update( {"plot_first_histo_y0": plv["Y"] })
+
+    for f_set in results:
+        _plot_add_one_histogram(plv, f_set, byc)
+
+    return plv
+
+################################################################################
+
+def _plot_add_one_histogram(plv, f_set, byc):
+
+    _plot_add_histogram_canvas(plv, f_set, byc)
+
+    i_f = f_set.get("interval_frequencies", [])
+
+    X = plv["plot_area_x0"]
+    h_y_0 = plv["Y"] + plv["plot_area_height"] * 0.5
+
+    #------------------------- histogram data ---------------------------------#
+
+    # TODO: in contrast to the Perl version here we don't correct for interval
+    #       sets which _do not_ correspond to the full chromosome coordinates
+
+    for chro in plv["plot_chros"]:
+
+        c_l = byc["cytolimits"][str(chro)]
+        chr_w = c_l["size"] * plv["plot_b2pf"]
+
+        c_i_f = list(filter(lambda d: d[ "reference_name" ] == chro, i_f.copy()))
+        c_i_no = len(c_i_f)
+
+        for GL in ["gain_frequency", "loss_frequency"]:
+
+            if "gain_frequency" in GL:
+                h_f = -1
+                p_c = plv["plot_dup_color"]
+            else:
+                h_f = 1
+                p_c = plv["plot_del_color"]
+
+            p = f'<polygon points="\n{ round(X, 1) } { round(h_y_0, 1) }'
+
+            i_x_0 = X
+            prev = -1
+            for c_i_i, i_v in enumerate(c_i_f, start=1):
+
+                s = i_x_0 + i_v.get("start", 0) * plv["plot_b2pf"]
+                e = i_x_0 + i_v.get("end", 0) * plv["plot_b2pf"]
+                v = i_v.get(GL, 0)
+                h = v * plv["plot_y2pf"]
+                h_p = h_y_0 + h * h_f
+
+                point = f'\n{ round(s, 1) } {round(h_p, 1)}'
+
+
+                # This construct avoids adding intermediary points w/ the same
+                # value as the one before and after 
+                if c_i_no > c_i_i:
+                    future = c_i_f[c_i_i].get(GL, 0)
+                    # print(f"??? {prev}, {v}, {future}")
+                    if prev != v or future != v:
+                        p += point
+                #     else:
+                #         print(f"{prev}, {v}, {future}")
+                else:
+                    p += point
+
+                prev = v
+
+            p += f'\n{ round((X + chr_w), 1) } { round(h_y_0, 1) }"' 
+            p += f'\nfill="{p_c}" stroke-width="0px" />'
+
+            plv["pls"].append(p)
+
+            i_x_0 += i_v.get("start", 0) * plv["plot_b2pf"]
+
+        X += chr_w
+        X += plv["plot_region_gap_width"]
+
+    #------------------------ / histogram data --------------------------------#
+
+    plv["Y"] += plv["plot_area_height"]
+    plv.update( {"plot_last_histo_ye": plv["Y"] })
+    plv["Y"] += plv["plot_region_gap_width"]
 
     return plv
 
@@ -452,8 +471,8 @@ def _plot_add_labels(plv, byc):
             X += chr_w
             X += plv["plot_region_gap_width"]
         
-        if marker_status is True:
-            plv["Y"] += plv["plot_footer_font_size"]
+    if marker_status is True:
+        plv["Y"] += plv["plot_footer_font_size"]
 
     return plv
 
