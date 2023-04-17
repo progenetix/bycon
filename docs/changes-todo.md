@@ -4,6 +4,14 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-04-17 (v1.0.33)
+
+* refinement of `histoplot` options; now as the standard for standard Beacon
+  results by using the `&output=histoplot` pragma
+    - [/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot](http://progenetix.org/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot)
+* change of `cnvhistogram` handover (`id: 'pgx:handover:cnvhistogram'`) to use
+  the plotting option instead of a redirect to the Perl `PGX` version
+
 ### 2023-04-14 (v1.0.32)
 
 * basic implementation of plot labels for the collation frequency plots,  using

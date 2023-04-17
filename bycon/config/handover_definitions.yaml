@@ -10,8 +10,11 @@ h->o_types:
       - analysis
     description: "create a CNV histogram from matched biosamples"
     h->o_key: 'biosamples.id'
-    script_path_web: '/services/samplePlots'
-    output: cnvhistogram
+    script_path_web: '/beacon/biosamples'
+#    script_path_web: '/services/samplePlots'
+    output: histoplot
+#    output: cnvhistogram
+
 
   biosamples:
     id: 'pgx:handover:biosamples'

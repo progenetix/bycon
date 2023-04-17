@@ -17,6 +17,7 @@ from datatable_utils import export_datatable_download
 from export_file_generation import *
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, dataset_results_save_handovers
 from interval_utils import generate_genomic_intervals, interval_counts_from_callsets
+from plot_utils import histoplot_svg_generator
 from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
 from query_generation import  generate_queries, initialize_beacon_queries, paginate_list, set_pagination_range
 from read_specs import load_yaml_empty_fallback, read_bycon_configs_by_name, read_bycon_definition_files, read_local_prefs
@@ -56,10 +57,27 @@ def beacon_data_pipeline(byc, entry_type):
     run_result_sets_beacon(byc)
     update_meta_queries(byc)
     query_results_save_handovers(byc)
+    check_computed_histoplot_delivery(byc)
     check_computed_interval_frequency_delivery(byc)
     check_switch_to_count_response(byc)
     check_switch_to_boolean_response(byc)
     cgi_print_response( byc, 200 )
+
+################################################################################
+
+def run_beacon_init_stack(byc):
+
+    select_dataset_ids(byc)
+    if len(byc["dataset_ids"]) < 1:
+        print_text_response("No existing dataset_id - please check dataset_definitions")
+
+    create_empty_beacon_response(byc)
+    initialize_beacon_queries(byc)
+    generate_genomic_intervals(byc)
+    response_collect_errors(byc)
+    cgi_break_on_errors(byc)
+
+    return byc
 
 ################################################################################
 
@@ -235,22 +253,6 @@ def set_response_entity(byc):
 
 ################################################################################
 
-def run_beacon_init_stack(byc):
-
-    select_dataset_ids(byc)
-    if len(byc["dataset_ids"]) < 1:
-        print_text_response("No existing dataset_id - please check dataset_definitions")
-
-    create_empty_beacon_response(byc)
-    initialize_beacon_queries(byc)
-    generate_genomic_intervals(byc)
-    response_collect_errors(byc)
-    cgi_break_on_errors(byc)
-
-    return byc
-
-################################################################################
-
 def run_result_sets_beacon(byc):
 
     sr_r = byc["service_response"]["response"]
@@ -304,8 +306,8 @@ def populate_result_set(r_set, byc):
     ds_id = r_set["id"]
     execute_bycon_queries( ds_id, byc )
 
-    # Special check-out here since this forces a single handover
-    check_plot_responses(ds_id, byc)
+    # # Special check-out here since this forces a single handover
+    # check_plot_responses(ds_id, byc)
 
     r_set.update({ "results_handovers": dataset_response_add_handovers(ds_id, byc) })
     r_s_res = retrieve_data(ds_id, byc)
@@ -842,9 +844,54 @@ def create_filters_resource_response(collation_types, byc):
 
 ################################################################################
 
+def check_computed_histoplot_delivery(byc):
+
+    if byc["output"] not in ["histoplot", "cnvhistogram"]:
+        return byc
+
+    p_r = byc["pagination"]
+    interval_sets = []
+
+    for ds_id in byc["dataset_results"].keys():
+
+        ds_results = byc["dataset_results"][ds_id]
+
+        if not "callsets._id" in ds_results:
+            continue
+
+        cs_r = ds_results["callsets._id"]
+
+        mongo_client = MongoClient()
+        cs_coll = mongo_client[ ds_id ][ "callsets" ]
+        q_vals = cs_r["target_values"]
+        r_no = len(q_vals)
+        if r_no > p_r["limit"]:
+            q_vals = paginate_list(q_vals, byc)
+
+        cs_cursor = cs_coll.find({"_id": {"$in": q_vals }, "variant_class": { "$ne": "SNV" } } )
+        intervals, cnv_cs_count = interval_counts_from_callsets(cs_cursor, byc)
+        # print(f"{intervals[88]}")
+
+        i_set = {
+            "dataset_id": ds_id,
+            "group_id": ds_id,
+            "label": "Search Results",
+            "sample_count": cnv_cs_count,
+            "interval_frequencies": []
+        }
+
+        for intv_i, intv in enumerate(intervals):
+            i_set["interval_frequencies"].append(intv.copy())
+
+        interval_sets.append(i_set)
+
+    histoplot_svg_generator(byc, interval_sets)
+
+################################################################################
+
 def check_computed_interval_frequency_delivery(byc):
 
-    if not "frequencies" in byc["output"] and not "histoplot" in byc["output"]:
+    if not "frequencies" in byc["output"]:
         return byc
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
@@ -880,19 +927,6 @@ def check_computed_interval_frequency_delivery(byc):
     cs_cursor = cs_coll.find({"_id": {"$in": q_vals }, "variant_class": { "$ne": "SNV" } } )
 
     intervals, cnv_cs_count = interval_counts_from_callsets(cs_cursor, byc)
-
-    # TODO: move to function
-    if "histoplot" in byc["output"]:
-
-        i_set = {
-            "dataset_id": ds_id,
-            "group_id": ds_id,
-            "label": "Search Results",
-            "sample_count": cnv_cs_count,
-            "interval_frequencies": intervals
-        }
-
-        histoplot_svg_generator(byc, [i_set])
 
     for intv in intervals:
         v_line = [ ]

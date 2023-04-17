@@ -369,6 +369,9 @@ def interval_counts_from_callsets(callsets, byc):
                 t+"_mean": means[i]
             } )
 
+    if type(callsets).__name__ == "Cursor":
+        callsets.close()
+
     return int_fs, cs_no
 
 ################################################################################

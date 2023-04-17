@@ -2,7 +2,7 @@
 title: Tests
 ---
 
-## Beacon
+## Beacon - root `/beacon/`
 
 ### Standard Beacon Paths
 
@@ -78,11 +78,15 @@ title: Tests
   - this example retrieves all biosamples having an annotation for the Cellosaurus _CVCL_0004_
   identifier (K562)
 
+### Output options `&output=...`
+
+#### `&output=histoplot`
+
+* [/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot](http://progenetix.org/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot)
+
 ### Beacon Support & Beacon+
 
 ##### `/biosamples/{id}/phenopackets/`
-
-
 ##### `/individuals/{id}/phenopackets/`
 
 * [/individuals/pgxind-kftx25hb/phenopackets/](http://progenetix.org/beacon/individuals/pgxind-kftx3fpk/phenopackets/)
@@ -99,7 +103,7 @@ title: Tests
 
 * [/beacon/biosamples/?requestedGranularity=count&datasetIds=progenetix&referenceName=refseq:NC_000009.12&variantType=EFO:0030067&filterLogic=AND&start=21500000&start=21975098&end=21967753&end=22500000&filters=!PATO:0020002,NCIT:C3058](http://progenetix.org/beacon/biosamples/?requestedGranularity=count&datasetIds=progenetix&referenceName=refseq:NC_000009.12&variantType=EFO:0030067&filterLogic=AND&start=21500000&start=21975098&end=21967753&end=22500000&filters=!PATO:0020002,NCIT:C3058)
 
-## Services
+## Services - root `/services/`
 
 ### Beyond Beacon Services
 

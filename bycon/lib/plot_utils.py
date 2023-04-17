@@ -284,12 +284,22 @@ def _plot_add_histogram_canvas(plv, f_set, byc):
 
     #-------------------------- left labels -----------------------------------#
 
-    lab_x_e = plv["plot_margins"] + plv["plot_labelcol_width"]
-    lab_y = h_y_0 + plv["plot_labelcol_font_size"] / 2
-
     if plv["histogram_number"] > 1:
-        label = _format_resultset_title(f_set)
-        plv["pls"].append(f'<text x="{lab_x_e}" y="{h_y_0}" class="title-left">{label}</text>')
+
+        lab_x_e = plv["plot_margins"] + plv["plot_labelcol_width"]
+        
+        g_id = f_set.get("group_id", "NA")
+        g_lab = f_set.get("label", "")
+        g_no = f_set.get("sample_count", 0)
+
+        if len(g_lab) > 0:
+            lab_y = h_y_0 - plv["plot_labelcol_font_size"] * 0.2
+            plv["pls"].append(f'<text x="{lab_x_e}" y="{lab_y}" class="title-left">{g_lab}</text>')
+            lab_y = h_y_0 + plv["plot_labelcol_font_size"] * 1.2
+            plv["pls"].append(f'<text x="{lab_x_e}" y="{lab_y}" class="title-left">{g_id} ({g_no} samples)</text>')
+        else:
+            lab_y = h_y_0 - plv["plot_labelcol_font_size"] * 0.5
+            plv["pls"].append(f'<text x="{lab_x_e}" y="{lab_y}" class="title-left">{g_id} ({g_no} samples)</text>')
 
     #--------------------- plot area background -------------------------------#
 
