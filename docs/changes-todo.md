@@ -8,7 +8,8 @@ title: Changes & To Do
 
 * new `geneSymbols` parameter for plot labeling allows to add gene labels to
   the position of a given gene on a plot
-    - [http://progenetix.org/services/intervalFrequencies/?geneSymbols=TP53,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot](/services/intervalFrequencies/?geneSymbols=TP53,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot)
+    - [http://progenetix.org/services/intervalFrequencies/?geneSymbols=MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot](/services/intervalFrequencies/?geneSymbols=MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot)
+    - TODO: still needs a "no-overlap" shifting method for closely spaced labels (as in the Perl version...)
 
 ### 2023-04-17 (v1.0.33)
 

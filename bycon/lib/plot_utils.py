@@ -445,11 +445,8 @@ def _plot_add_markers(plv, byc):
 
     b2pf = plv["plot_b2pf"]
 
-    plv["styles"].append(
-        f'.marker {{text-anchor: middle; fill: { plv["plot_marker_font_color"] }; font-size: {plv["plot_marker_font_size"]}px;}}'
-    )
-
     marker_status = False
+    marker_y_0 = round(plv["plot_first_histo_y0"] - 1, 1)
 
     for l in labs:
 
@@ -473,10 +470,17 @@ def _plot_add_markers(plv, byc):
         if len(l_i) > 0:
             m = str(l_i.pop(0))
 
+
+        prev_chro = plv["plot_chros"][0]
+        prev_end = plv["plot_area_x0"]
+
         for chro in plv["plot_chros"]:
 
             c_l = byc["cytolimits"][str(chro)]
             chr_w = c_l["size"] * plv["plot_b2pf"]
+            marker_y_e = round(plv["plot_last_histo_ye"] + 1, 1)
+            marker_h = round(marker_y_e - marker_y_0)
+            label_y = round(marker_y_e + plv["plot_marker_font_size"] + 1, 1)
 
             if str(l_c) == str(chro):
 
@@ -486,22 +490,21 @@ def _plot_add_markers(plv, byc):
                 if m_w < 1:
                     m_w = 1
                 m_c = round((m_s + m_e) / 2, 1)
-                m_y_0 = plv["plot_first_histo_y0"] - 1
-                m_y_e = plv["plot_last_histo_ye"] + 1
-                l_y = plv["plot_last_histo_ye"] + plv["plot_footer_font_size"]
-                m_h = round(m_y_e - m_y_0, 1)
 
-                # print(f'<rect x="{m_s}" y="{m_y_0}" width="{m_w}" height="{m_h}" style="fill: #66ddff; opacity: 0.4; " />')
+                plv["pls"].append(f'<rect x="{ round(m_s, 1)}" y="{ marker_y_0 }" width="{ round(m_w, 1) }" height="{ marker_h }" class="marker" style="opacity: 0.4; " />')
 
-                plv["pls"].append(f'<rect x="{ round(m_s, 1)}" y="{ round(m_y_0, 1)}" width="{ round(m_w, 1) }" height="{ round(m_h, 1) }" class="marker" style="opacity: 0.4; " />')
-                plv["pls"].append(f'<text x="{m_c}" y="{l_y}" class="marker">{m}</text>')
+                m_l_2 = len(m) * 0.3 * plv["plot_marker_font_size"]
+                plv["pls"].append(f'<text x="{m_c}" y="{label_y}" class="marker">{m}</text>')
                 marker_status = True
 
             X += chr_w
             X += plv["plot_region_gap_width"]
         
     if marker_status is True:
-        plv["Y"] += plv["plot_footer_font_size"]
+        plv["Y"] += plv["plot_marker_font_size"]
+        plv["styles"].append(
+            f'.marker {{text-anchor: middle; fill: { plv["plot_marker_font_color"] }; font-size: {plv["plot_marker_font_size"]}px;}}'
+        )
 
     return plv
 
