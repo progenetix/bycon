@@ -13,7 +13,6 @@ def initialize_beacon_queries(byc):
 
     byc.update({"queries": { }})
 
-    get_global_filter_flags(byc)
     parse_filters(byc)
 
     parse_variant_parameters(byc)

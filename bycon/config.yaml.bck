@@ -122,6 +122,8 @@ collations_coll: collations
 frequencymaps_coll: frequencymaps
 ontologymaps_coll: ontologymaps
 beacon_info_coll: beaconinfo
+handover_coll: querybuffer
+genes_coll: genes
 beacon_counts:
   individual_count:
     collection: individuals
@@ -139,8 +141,6 @@ beacon_counts:
     collection: variants
     info_key: variants
     h->o_key: variants._id
-handover_coll: querybuffer
-genespans_coll: genespans
 
 filter_flags:
   logic: $and

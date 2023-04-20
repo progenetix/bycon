@@ -6,12 +6,16 @@ from cgi_parsing import *
 
 def parse_filters(byc):
 
-    if "filters" in byc["form_data"]:
-        fs = byc["form_data"]["filters"]
-        fs = check_filter_values(fs, byc)
-        if len(fs) > 0:
-            byc.update( { "filters": fs } )
-            return byc
+    get_global_filter_flags(byc)
+
+    if not "filters" in byc["form_data"]:
+        return byc
+
+    fs = byc["form_data"]["filters"]
+    fs = check_filter_values(fs, byc)
+    if len(fs) > 0:
+        byc.update( { "filters": fs } )
+        return byc
             
     return byc
 

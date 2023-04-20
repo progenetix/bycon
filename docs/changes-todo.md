@@ -4,6 +4,12 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-04-20 (v1.0.34)
+
+* new `geneSymbols` parameter for plot labeling allows to add gene labels to
+  the position of a given gene on a plot
+    - [http://progenetix.org/services/intervalFrequencies/?geneSymbols=TP53,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot](/services/intervalFrequencies/?geneSymbols=TP53,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot)
+
 ### 2023-04-17 (v1.0.33)
 
 * refinement of `histoplot` options; now as the standard for standard Beacon

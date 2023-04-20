@@ -554,14 +554,35 @@ def print_json_response(this={}, env="server", status_code=200):
     print()
     exit()
 
-######################################logi  ##########################################
+################################################################################
+
+def print_svg_response(this="", env="server", status_code=200):
+
+    if "server" in env:
+        print('Content-Type: image/svg+xml')
+        print('status:'+str(status_code))
+        print()
+
+    elif "file" in env:
+        # this opion can be used to reroute the response to a file
+        return this
+        
+    print(this)
+    print()
+    exit()
+
+################################################################################
 
 def print_text_response(this="", env="server", status_code=200):
 
-    if not "local" in env:
+    if "server" in env:
         print('Content-Type: text/plain')
         print('status:'+str(status_code))
         print()
+
+    elif "file" in env:
+        # this opion can be used to reroute the response to a file
+        return this
     
     print(this)
     print()

@@ -1,6 +1,8 @@
 import re
 import datetime
 from urllib.parse import unquote
+from cgi_parsing import print_svg_response
+from cytoband_utils import retrieve_gene_id_coordinates
 
 ################################################################################
 
@@ -14,15 +16,21 @@ def histoplot_svg_generator(byc, results):
     _plot_add_title(plv, byc)
     _plot_add_cytobands(plv, byc)
     _plot_add_histodata(plv, results, byc)
-    _plot_add_labels(plv, byc)
+    _plot_add_markers(plv, byc)
     _plot_add_footer(plv, results, byc)
 
     plv["Y"] += plv["plot_margins"]
 
     #--------------------------------------------------------------------------#
 
-    svg = """
-<svg
+    svg = _create_svg(plv)
+    print_svg_response(svg, byc["env"])
+
+################################################################################
+
+def _create_svg(plv):
+
+    svg = """<svg
 xmlns="http://www.w3.org/2000/svg"
 xmlns:xlink="http://www.w3.org/1999/xlink"
 version="1.1"
@@ -31,12 +39,7 @@ width="{}px"
 height="{}px"
 style="margin: auto; font-family: Helvetica, sans-serif;">
 <style type="text/css"><![CDATA[
-    .title-left {{text-anchor: end; fill: {}; font-size: {}px;}}
-    .label-y {{text-anchor: end; fill: {}; font-size: {}px;}}
-    .footer-r {{text-anchor: end; fill: {}; font-size: {}px;}}
-    .footer-l {{text-anchor: start; fill: {}; font-size: {}px;}}
-    .marker {{text-anchor: middle; fill: {}; font-size: {}px;}}
-    .cen {{stroke-width: {}px; stroke: {}; opacity: 0.8 ; }}
+{}
 ]]></style>
 <rect x="0" y="0" width="{}" height="{}" style="fill: {}" />
 {}
@@ -44,28 +47,14 @@ style="margin: auto; font-family: Helvetica, sans-serif;">
         plv["plot_id"],
         plv["plot_width"],
         plv["Y"],
-        plv["plot_font_color"],
-        plv["plot_font_size"],
-        plv["plot_label_y_font_color"],
-        plv["plot_label_y_font_size"],
-        plv["plot_footer_font_color"],
-        plv["plot_footer_font_size"],
-        plv["plot_footer_font_color"],
-        plv["plot_footer_font_size"],
-        plv["plot_marker_font_color"],
-        plv["plot_marker_font_size"],
-        plv["plot_centerline_stroke"],
-        plv["plot_grid_color"],
+        "\n  ".join(plv["styles"]),
         plv["plot_width"],
         plv["Y"],
         plv["plot_canvas_color"],
         "\n".join(plv["pls"])
     )
 
-    # print("Content-type: text\n\n")
-    print("Content-type: image/svg+xml\n\n")
-    print(svg)
-    exit()
+    return svg
 
 ################################################################################
 
@@ -114,6 +103,7 @@ def _initialize_plot_values(byc, results):
 
     plv.update({
         "plot_title": title,
+        "styles": [],
         "Y": plv["plot_margins"],
         "plot_area_width": paw,
         "plot_area_x0": pax,
@@ -270,66 +260,6 @@ def _plot_add_cytobands(plv, byc):
 
 ################################################################################
 
-def _plot_add_histogram_canvas(plv, f_set, byc):
-
-    x_a_0 = plv["plot_area_x0"]
-    x_c_e = plv["plot_area_xe"]
-
-    h_y_0 = plv["Y"] + plv["plot_area_height"] * 0.5
-    x_y_l = x_a_0 - plv["plot_region_gap_width"]
-
-    p_a_w = plv["plot_area_width"]
-    p_a_h = plv["plot_area_height"]
-    p_a_c = plv["plot_area_color"]
-
-    #-------------------------- left labels -----------------------------------#
-
-    if plv["histogram_number"] > 1:
-
-        lab_x_e = plv["plot_margins"] + plv["plot_labelcol_width"]
-        
-        g_id = f_set.get("group_id", "NA")
-        g_lab = f_set.get("label", "")
-        g_no = f_set.get("sample_count", 0)
-
-        if len(g_lab) > 0:
-            lab_y = h_y_0 - plv["plot_labelcol_font_size"] * 0.2
-            plv["pls"].append(f'<text x="{lab_x_e}" y="{lab_y}" class="title-left">{g_lab}</text>')
-            lab_y = h_y_0 + plv["plot_labelcol_font_size"] * 1.2
-            plv["pls"].append(f'<text x="{lab_x_e}" y="{lab_y}" class="title-left">{g_id} ({g_no} samples)</text>')
-        else:
-            lab_y = h_y_0 - plv["plot_labelcol_font_size"] * 0.5
-            plv["pls"].append(f'<text x="{lab_x_e}" y="{lab_y}" class="title-left">{g_id} ({g_no} samples)</text>')
-
-    #--------------------- plot area background -------------------------------#
-
-    plv["pls"].append(f'<rect x="{x_a_0}" y="{plv["Y"]}" width="{p_a_w}" height="{p_a_h}" style="fill: {p_a_c}; fill-opacity: 0.8; " />')
-
-    #-------------------------- center line -----------------------------------#
-
-    plv["pls"].append(f'<line x1="{x_a_0}"  y1="{h_y_0}"  x2="{x_c_e}"  y2="{h_y_0}" class="cen" />')
-
-    #--------------------------- grid lines -----------------------------------#
-
-    for y_m in plv["plot_histogram_frequency_labels"]:
-
-        if y_m > plv["plot_axis_y_max"]:
-            continue
-
-        for f in [1, -1]:
-
-            y_v = h_y_0 + f * y_m * plv["plot_y2pf"]
-            y_l_y = y_v + plv["plot_label_y_font_size"] / 2
-
-            plv["pls"].append(f'<line x1="{x_a_0}" y1="{y_v}" x2="{x_c_e}" y2="{y_v}" class="cen" />')
-            plv["pls"].append(f'<text x="{x_y_l}" y="{y_l_y}" class="label-y">{y_m}%</text>')
-
-    #------------------------- / grid lines -----------------------------------#
-
-    return plv
-
-################################################################################
-
 def _plot_add_histodata(plv, results, byc):
 
     plv.update( {"plot_first_histo_y0": plv["Y"] })
@@ -343,7 +273,7 @@ def _plot_add_histodata(plv, results, byc):
 
 def _plot_add_one_histogram(plv, f_set, byc):
 
-    _plot_add_histogram_canvas(plv, f_set, byc)
+    _plot_add_one_histogram_canvas(plv, f_set, byc)
 
     i_f = f_set.get("interval_frequencies", [])
 
@@ -386,16 +316,12 @@ def _plot_add_one_histogram(plv, f_set, byc):
 
                 point = f'\n{ round(s, 1) } {round(h_p, 1)}'
 
-
                 # This construct avoids adding intermediary points w/ the same
                 # value as the one before and after 
                 if c_i_no > c_i_i:
                     future = c_i_f[c_i_i].get(GL, 0)
-                    # print(f"??? {prev}, {v}, {future}")
                     if prev != v or future != v:
                         p += point
-                #     else:
-                #         print(f"{prev}, {v}, {future}")
                 else:
                     p += point
 
@@ -421,14 +347,107 @@ def _plot_add_one_histogram(plv, f_set, byc):
 
 ################################################################################
 
-def _plot_add_labels(plv, byc):
+def _plot_add_one_histogram_canvas(plv, f_set, byc):
+
+    x_a_0 = plv["plot_area_x0"]
+    p_a_w = plv["plot_area_width"]
+    p_a_h = plv["plot_area_height"]
+    p_a_c = plv["plot_area_color"]
+
+    #-------------------------- left labels -----------------------------------#
+    _plot_add_left_labels(plv, f_set, byc)
+
+    #--------------------- plot area background -------------------------------#
+    plv["pls"].append(f'<rect x="{x_a_0}" y="{plv["Y"]}" width="{p_a_w}" height="{p_a_h}" style="fill: {p_a_c}; fill-opacity: 0.8; " />')
+
+    #--------------------------- grid lines -----------------------------------#
+    _plot_area_add_grid(plv, byc)
+
+    return plv
+
+################################################################################
+
+def _plot_add_left_labels(plv, f_set, byc):
+
+    if plv["histogram_number"] < 2:
+        return plv
+
+    lab_x_e = plv["plot_margins"] + plv["plot_labelcol_width"]
+    h_y_0 = plv["Y"] + plv["plot_area_height"] * 0.5
+
+    plv["styles"].append(
+        f'.title-left {{text-anchor: end; fill: { plv["plot_font_color"] }; font-size: { plv["plot_font_size"] }px;}}'
+    )
+    
+    g_id = f_set.get("group_id", "NA")
+    g_lab = f_set.get("label", "")
+    g_no = f_set.get("sample_count", 0)
+
+    # The condition splits the label data on 2 lines if a text label pre-exists
+    if len(g_lab) > 0:
+        lab_y = h_y_0 - plv["plot_labelcol_font_size"] * 0.2
+        plv["pls"].append(f'<text x="{lab_x_e}" y="{lab_y}" class="title-left">{g_lab}</text>')
+        lab_y = h_y_0 + plv["plot_labelcol_font_size"] * 1.2
+        plv["pls"].append(f'<text x="{lab_x_e}" y="{lab_y}" class="title-left">{g_id} ({g_no} samples)</text>')
+    else:
+        lab_y = h_y_0 - plv["plot_labelcol_font_size"] * 0.5
+        plv["pls"].append(f'<text x="{lab_x_e}" y="{lab_y}" class="title-left">{g_id} ({g_no} samples)</text>')
+
+    return plv
+
+################################################################################
+
+def _plot_area_add_grid(plv, byc):
+
+    x_a_0 = plv["plot_area_x0"]
+    x_c_e = plv["plot_area_xe"]
+
+    h_y_0 = plv["Y"] + plv["plot_area_height"] * 0.5
+    x_y_l = x_a_0 - plv["plot_region_gap_width"]
+
+    plv["styles"].append(
+        f'.label-y {{text-anchor: end; fill: { plv["plot_label_y_font_color"] }; font-size: {plv["plot_label_y_font_size"]}px;}}'
+    )   
+    plv["styles"].append(
+        f'.gridline {{stroke-width: {plv["plot_grid_stroke"]}px; stroke: {plv["plot_grid_color"]}; opacity: {plv["plot_grid_opacity"]} ; }}',
+    )   
+
+    #-------------------------- center line -----------------------------------#
+
+    plv["pls"].append(f'<line x1="{x_a_0}"  y1="{h_y_0}"  x2="{x_c_e}"  y2="{h_y_0}" class="gridline" />')
+
+    #--------------------------- grid lines -----------------------------------#
+
+    for y_m in plv["plot_histogram_frequency_labels"]:
+
+        if y_m > plv["plot_axis_y_max"]:
+            continue
+
+        for f in [1, -1]:
+
+            y_v = h_y_0 + f * y_m * plv["plot_y2pf"]
+            y_l_y = y_v + plv["plot_label_y_font_size"] / 2
+
+            plv["pls"].append(f'<line x1="{x_a_0}" y1="{y_v}" x2="{x_c_e}" y2="{y_v}" class="gridline" />')
+            plv["pls"].append(f'<text x="{x_y_l}" y="{y_l_y}" class="label-y">{y_m}%</text>')
+
+    return plv
+
+################################################################################
+
+def _plot_add_markers(plv, byc):
 
     labs = plv.get("plot_region_labels", [])
+    _add_labs_from_gene_symbols(labs, byc)
 
     if len(labs) < 1:
         return plv
 
     b2pf = plv["plot_b2pf"]
+
+    plv["styles"].append(
+        f'.marker {{text-anchor: middle; fill: { plv["plot_marker_font_color"] }; font-size: {plv["plot_marker_font_size"]}px;}}'
+    )
 
     marker_status = False
 
@@ -460,9 +479,9 @@ def _plot_add_labels(plv, byc):
             chr_w = c_l["size"] * plv["plot_b2pf"]
 
             if str(l_c) == str(chro):
+
                 m_s = X + s * b2pf
                 m_e = X + e * b2pf
-                # print(f"{s} => {e}")
                 m_w = (e - s) * b2pf
                 if m_w < 1:
                     m_w = 1
@@ -488,12 +507,45 @@ def _plot_add_labels(plv, byc):
 
 ################################################################################
 
+def _add_labs_from_gene_symbols(labs, byc):
+
+    if not "gene_symbols" in byc[ "form_data" ]:
+        return labs
+
+    g_s_s = re.split(",", byc[ "form_data" ].get("gene_symbols", ""))
+    g_l = []
+
+    for q_g in g_s_s:
+        genes, e = retrieve_gene_id_coordinates(q_g, byc)
+        g_l += genes
+
+    for f_g in g_l:
+        g_c = {
+            "c": f_g.get("reference_name", False),
+            "s": f_g.get("start", False),
+            "e": f_g.get("end", False),
+            "symbol": f_g.get("symbol", False),
+        }
+
+        if not False in g_c.values():
+            labs.append(f'{g_c["c"]}:{g_c["s"]}-{g_c["e"]}:{g_c["symbol"]}')
+
+    return labs
+
+################################################################################
 
 def _plot_add_footer(plv, results, byc):
 
     today = datetime.date.today()
     x_a_0 = plv["plot_area_x0"]
     x_c_e = x_a_0 + plv["plot_area_width"]
+
+    plv["styles"].append(
+        f'.footer-r {{text-anchor: end; fill: { plv["plot_footer_font_color"] }; font-size: {plv["plot_footer_font_size"]}px;}}'
+    )   
+    plv["styles"].append(
+        f'.footer-l {{text-anchor: start; fill: { plv["plot_footer_font_color"] }; font-size: {plv["plot_footer_font_size"]}px;}}'
+    )   
 
     plv["Y"] += plv["plot_footer_font_size"]
     plv["pls"].append(f'<text x="{x_c_e}" y="{plv["Y"]}" class="footer-r">&#169; CC-BY 2001 - {today.year} progenetix.org</text>')

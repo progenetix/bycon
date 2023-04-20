@@ -23,6 +23,7 @@ def genespans():
     initialize_bycon_service(byc)        
     parse_variant_parameters(byc)
     generate_genomic_intervals(byc)
+    get_global_filter_flags(byc)
     create_empty_service_response(byc)
 
     v_rs_chros = byc["variant_definitions"]["chro_aliases"]
@@ -35,39 +36,24 @@ def genespans():
         else:
             byc["service_response"]["meta"]["warnings"].append("{} is not supported; fallback {} is being used!".format(aid, assembly_id))
             
-    if "filter_precision" in byc["form_data"]:
-        byc["query_precision"] = byc["form_data"]["filter_precision"]
-    else:
-        byc["query_precision"] = "start"
-
+    if not "filter_precision" in byc["form_data"]:
+        byc["filter_flags"]["filter_precision"] = "start"
     for mk, mv in byc["service_config"]["meta"].items():
         byc["service_response"]["meta"].update({mk: mv})
 
     gene_id = rest_path_value("genespans")
 
     if not "empty_value" in gene_id:
-        response_add_received_request_summary_parameter(byc, "geneId", gene_id)
-        byc.update({"query_precision": "exact"})
+        byc["filter_flags"].update({"filter_precision": "exact"})
     elif "gene_id" in byc[ "form_data" ]:
         gene_id = byc[ "form_data" ]["gene_id"]
-        response_add_received_request_summary_parameter(byc, "geneId", gene_id)
     else:
-        # TODO: value check & response
         response_add_error(byc, 422, "No geneId value provided!" )
-
     cgi_break_on_errors(byc)
 
-    # data retrieval & response population
-    q_list = [ ]
-    for q_f in byc["query_fields"]:
-        if "start" in byc["query_precision"]:
-            q_list.append( { q_f: re.compile( r'^'+gene_id, re.IGNORECASE ) } )
-        else:
-            q_list.append( { q_f: re.compile( r'^'+gene_id+'$', re.IGNORECASE ) } )
-    query = create_and_or_query_for_list('$or', q_list)
-    # response_add_received_request_summary_parameter(byc, "processed_query", query)
+    response_add_received_request_summary_parameter(byc, "geneId", gene_id)
 
-    results, e = mongo_result_list( byc["db"], byc["coll"], query, { '_id': False } )
+    results, e = retrieve_gene_id_coordinates(gene_id, byc)
     response_add_error(byc, 422, e )
     cgi_break_on_errors(byc)
 
@@ -81,7 +67,7 @@ def genespans():
             for i, g in enumerate(results):
                 g_n = {}
                 for k in byc["service_config"]["method_keys"]["genespan"]:
-                    g_n.update({k:g.get(k, "")})
+                    g_n.update({k: g.get(k, "")})
                 results[i] = g_n
 
     if "text" in byc["output"]:

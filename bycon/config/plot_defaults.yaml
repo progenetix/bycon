@@ -73,9 +73,17 @@ parameters:
     description: color of the plot background
     default: "#eef6ff"
 
+  plot_grid_stroke:
+    type: integer
+    default: 1
+
   plot_grid_color:
     description: color of grid lines
     default: "#c0e3ee"
+
+  plot_grid_opacity:
+    type: float
+    default: 0.8
 
   plot_font_color:
     default: "#000000"
@@ -115,10 +123,6 @@ parameters:
 
   plot_footer_font_color:
     default: "#999999"
-
-  plot_centerline_stroke:
-    type: integer
-    default: 1
 
   plot_histogram_frequency_labels:
     type: array

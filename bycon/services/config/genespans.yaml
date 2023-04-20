@@ -3,8 +3,6 @@ defaults:
     - symbol
     - ensembl_gene_ids
     - synonyms
-  db: progenetix
-  coll: genes
   response_entity_id: gene
 meta:
   received_request_summary:

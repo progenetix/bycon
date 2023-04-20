@@ -2,7 +2,9 @@ import csv, datetime, re, time, base36
 from os import path, pardir
 
 # local
+from query_execution import mongo_result_list
 from variant_parsing import variant_create_digest
+from helpers import generate_id
 
 bycon_lib_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( bycon_lib_path, pardir )
@@ -259,9 +261,9 @@ def translate_reference_ids(byc):
 
     v_d_refsc = byc["variant_definitions"]["refseq_chromosomes"]
     c_r = {}    # keys are the bare chromosome names e.g. "15"
-    r_c = {}    # 
-    r_a = {}
-    c_a = {}
+    r_c = {}    # keys are the refseq_id
+    r_a = {}    # keys are all options, values the refseq_id
+    c_a = {}    # keys are all options, values the chromosome
 
     for c, c_d in v_d_refsc.items():
         refseq_stripped = re.sub("refseq:", "", c_d["refseq_id"])
@@ -298,6 +300,8 @@ def variants_from_revish(bs_id, cs_id, technique, iscn, byc):
     v_s, v_e = deparse_ISCN_to_variants(iscn, byc)
     variants = []
 
+    # the id here is a placeholder since we now use a stringified version of the
+    # MongoDB ObjectId w/ `pgxvar-` prepend
     for v in v_s:
 
         v.update({
@@ -427,8 +431,23 @@ def cytobands_list_from_positions(byc, chro, start=None, end=None):
 
 ################################################################################
 
-def generate_id(prefix):
+def retrieve_gene_id_coordinates(gene_id, byc):
 
-    time.sleep(.001)
-    return '{}-{}'.format(prefix, base36.dumps(int(time.time() * 1000))) ## for time in ms
+    db = byc["config"]["info_db"]
+    coll = byc["config"]["genes_coll"]
+    q_f_s = byc.get("query_fields", ["symbol", "ensembl_gene_ids", "synonyms"])
 
+    greed = "$"
+    if "start" in byc["filter_flags"].get("precision", "exact"):
+        greed = ""
+
+    q_re = re.compile( r'^'+gene_id+greed, re.IGNORECASE )
+    q_list = []
+
+    for q_f in q_f_s:
+        q_list.append({q_f: q_re })
+
+    query = { "$or": q_list }
+    results, e = mongo_result_list( db, coll, query, { '_id': False } )
+
+    return results, e
