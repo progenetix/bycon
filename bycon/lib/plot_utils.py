@@ -4,6 +4,9 @@ from urllib.parse import unquote
 from cgi_parsing import print_svg_response
 from cytoband_utils import retrieve_gene_id_coordinates
 
+# http://progenetix.org/cgi/bycon/services/intervalFrequencies.py?chr2plot=8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot
+# http://progenetix.org/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot&plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6
+
 ################################################################################
 
 def histoplot_svg_generator(byc, results):
@@ -111,7 +114,8 @@ def _initialize_plot_values(byc, results):
         "plot_area_xc": pax + paw / 2,
         "plot_y2pf": pyf,
         "plot_genome_size": chr_b_s,
-        "plot_b2pf": b2pf
+        "plot_b2pf": b2pf,
+        "plot_labels": {}
     })
 
     return plv
@@ -264,10 +268,26 @@ def _plot_add_histodata(plv, results, byc):
 
     plv.update( {"plot_first_histo_y0": plv["Y"] })
 
+    results = _plot_order_frequencysets(plv, results, byc)
+
     for f_set in results:
         _plot_add_one_histogram(plv, f_set, byc)
 
     return plv
+
+################################################################################
+
+def _plot_order_frequencysets(plv, results, byc):
+
+    # existing index
+    reorder = range(len(results))
+
+    # new order
+    # reorder ... some clustering etc function
+
+    results[:] = [results[i] for i in reorder]
+
+    return results
 
 ################################################################################
 
@@ -358,6 +378,7 @@ def _plot_add_one_histogram_canvas(plv, f_set, byc):
     _plot_add_left_labels(plv, f_set, byc)
 
     #--------------------- plot area background -------------------------------#
+    
     plv["pls"].append(f'<rect x="{x_a_0}" y="{plv["Y"]}" width="{p_a_w}" height="{p_a_h}" style="fill: {p_a_c}; fill-opacity: 0.8; " />')
 
     #--------------------------- grid lines -----------------------------------#
@@ -437,71 +458,83 @@ def _plot_area_add_grid(plv, byc):
 
 def _plot_add_markers(plv, byc):
 
-    labs = plv.get("plot_region_labels", [])
-    _add_labs_from_gene_symbols(labs, byc)
+    _add_labs_from_plot_region_labels(plv, byc)
+    _add_labs_from_gene_symbols(plv, byc)
 
-    if len(labs) < 1:
+    labs = plv["plot_labels"]
+
+    if not labs:
         return plv
 
     b2pf = plv["plot_b2pf"]
 
-    marker_status = False
+    max_lane = 0
     marker_y_0 = round(plv["plot_first_histo_y0"] - 1, 1)
+    marker_y_e = round(plv["plot_last_histo_ye"] + 1, 1)
 
-    for l in labs:
+    X = plv["plot_area_x0"]
 
-        X = plv["plot_area_x0"]
-        m = "marker"
+    m_p_e = [ (X - 30) ]
+    for chro in plv["plot_chros"]:
 
-        l_i = re.split(":", l)
-        if len(l_i) < 2:
-            continue
-        l_c = l_i.pop(0)
-        s_e_i = l_i.pop(0)
-        s_e = re.split("-", s_e_i)
-        s = s_e.pop(0)
-        # TODO: check r'^\d+?$'
-        s = int(s)
-        if len(s_e) < 1:
-            e = s+1
-        else:
-            e = s_e.pop(0)
-        e = int(e)
-        if len(l_i) > 0:
-            m = str(l_i.pop(0))
+        c_l = byc["cytolimits"][str(chro)]
+        chr_w = c_l["size"] * plv["plot_b2pf"]
 
+        for m_k, m_v in labs.items():
 
-        prev_chro = plv["plot_chros"][0]
-        prev_end = plv["plot_area_x0"]
+            c = str(m_v.get("chro", "__na__"))
 
-        for chro in plv["plot_chros"]:
+            if str(chro) != c:
+                continue
 
-            c_l = byc["cytolimits"][str(chro)]
-            chr_w = c_l["size"] * plv["plot_b2pf"]
-            marker_y_e = round(plv["plot_last_histo_ye"] + 1, 1)
-            marker_h = round(marker_y_e - marker_y_0)
-            label_y = round(marker_y_e + plv["plot_marker_font_size"] + 1, 1)
+            s = int(m_v.get("start", 0))
+            e = int(m_v.get("end", 0))
+            l = m_v.get("label", "")
 
-            if str(l_c) == str(chro):
+            m_s = X + s * b2pf
+            m_e = X + e * b2pf
+            m_w = m_e - m_s
+            if m_w < 0.5 and m_w > 0:
+                m_w = 0.5
+            else:
+                m_w = round(m_w, 1)
+            m_c = round((m_s + m_e) / 2, 1)
+            m_l_l = len(l) * 0.5 * plv["plot_marker_font_size"]
+            m_l_s = m_c - 0.5 * m_l_l
+            m_l_e = m_c + 0.5 * m_l_l
 
-                m_s = X + s * b2pf
-                m_e = X + e * b2pf
-                m_w = (e - s) * b2pf
-                if m_w < 1:
-                    m_w = 1
-                m_c = round((m_s + m_e) / 2, 1)
+            found_space = False
+            l_i = 0
 
-                plv["pls"].append(f'<rect x="{ round(m_s, 1)}" y="{ marker_y_0 }" width="{ round(m_w, 1) }" height="{ marker_h }" class="marker" style="opacity: 0.4; " />')
+            for p_e in m_p_e:
+                if m_l_s > p_e:
+                    found_space = True
+                    m_p_e[l_i] = m_l_e
+                    break
+                l_i += 1
 
-                m_l_2 = len(m) * 0.3 * plv["plot_marker_font_size"]
-                plv["pls"].append(f'<text x="{m_c}" y="{label_y}" class="marker">{m}</text>')
-                marker_status = True
+            if found_space is False:
+                m_p_e.append(m_l_e)
 
-            X += chr_w
-            X += plv["plot_region_gap_width"]
-        
-    if marker_status is True:
-        plv["Y"] += plv["plot_marker_font_size"]
+            if len(m_p_e) > max_lane:
+                max_lane = len(m_p_e)
+
+            m_y_e = marker_y_e + l_i * (plv["plot_marker_font_size"] + 1)
+            m_h = round(m_y_e - marker_y_0, 1)
+            l_y_p = marker_y_e + (l_i + 1) * (plv["plot_marker_font_size"] + 1)
+
+            plv["pls"].append(f'<rect x="{ round(m_s, 1)}" y="{ marker_y_0 }" width="{ round(m_w, 1) }" height="{ m_h }" class="marker" style="opacity: 0.4; " />')
+            plv["pls"].append(f'<text x="{ m_c }" y="{ l_y_p }" class="marker">{l}</text>')
+            marker_status = True
+
+        X += chr_w
+        X += plv["plot_region_gap_width"]
+
+    #--------------------- end chromosome loop --------------------------------#
+    
+    if max_lane > 0:
+        plv["Y"] += max_lane * (plv["plot_marker_font_size"] + 1)
+        plv["Y"] += plv["plot_region_gap_width"]
         plv["styles"].append(
             f'.marker {{text-anchor: middle; fill: { plv["plot_marker_font_color"] }; font-size: {plv["plot_marker_font_size"]}px;}}'
         )
@@ -510,12 +543,44 @@ def _plot_add_markers(plv, byc):
 
 ################################################################################
 
-def _add_labs_from_gene_symbols(labs, byc):
+def _add_labs_from_plot_region_labels(plv, byc):
 
-    if not "gene_symbols" in byc[ "form_data" ]:
-        return labs
+    r_l_s = plv.get("plot_region_labels", [])
+    if len(r_l_s) < 1:
+        return plv
 
-    g_s_s = re.split(",", byc[ "form_data" ].get("gene_symbols", ""))
+    for l in r_l_s:
+
+        l_i = re.split(":", l)
+        if len(l_i) < 2:
+            continue
+        c = l_i.pop(0)
+        s_e_i = l_i.pop(0)
+        s_e = re.split("-", s_e_i)
+        s = s_e.pop(0)
+        # TODO: check r'^\d+?$'
+        if len(s_e) < 1:
+            e = str(int(s)+1)
+        else:
+            e = s_e.pop(0)
+        if len(l_i) > 0:
+            label = str(l_i.pop(0))
+        else:
+            label = ""
+
+        m = _make_marker_object(c, s, e, label)
+        plv["plot_labels"].update(m)
+
+    return plv
+
+################################################################################
+
+def _add_labs_from_gene_symbols(plv, byc):
+
+    g_s_s = plv.get("plot_gene_symbols", [])
+    if len(g_s_s) < 1:
+        return plv
+
     g_l = []
 
     for q_g in g_s_s:
@@ -523,17 +588,41 @@ def _add_labs_from_gene_symbols(labs, byc):
         g_l += genes
 
     for f_g in g_l:
-        g_c = {
-            "c": f_g.get("reference_name", False),
-            "s": f_g.get("start", False),
-            "e": f_g.get("end", False),
-            "symbol": f_g.get("symbol", False),
+
+        m = _make_marker_object(
+            f_g.get("reference_name", False),
+            f_g.get("start", False),
+            f_g.get("end", False),
+            f_g.get("symbol", False)
+        )
+
+        if m is not False:
+            plv["plot_labels"].update(m)
+
+    return plv
+
+################################################################################
+
+def _make_marker_object(chromosome, start, end, label=""):
+
+    m = False
+
+    # Checks here or upstream?
+    if False in [chromosome, start, end, label]:
+        return m
+
+    m_k = f'{chromosome}:{start}-{end}:{label}'
+
+    m = {
+        m_k: {
+            "chro": chromosome,
+            "start": start,
+            "end": end,
+            "label": label
         }
+    }
 
-        if not False in g_c.values():
-            labs.append(f'{g_c["c"]}:{g_c["s"]}-{g_c["e"]}:{g_c["symbol"]}')
-
-    return labs
+    return m
 
 ################################################################################
 

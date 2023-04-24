@@ -4,6 +4,12 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-04-20 (v1.0.35)
+
+* more plot_utils goodness - staggered labels
+    - [/services/intervalFrequencies/?chr2plot=2,8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot](http://progenetix.org/services/intervalFrequencies/?chr2plot=2,8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot)
+    - [/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot&plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6](http://progenetix.org/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot&plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6)
+
 ### 2023-04-20 (v1.0.34)
 
 * new `geneSymbols` parameter for plot labeling allows to add gene labels to

@@ -26,6 +26,10 @@ parameters:
     type: array
     default: []
 
+  plot_gene_symbols:
+    type: array
+    default: []
+
   plot_width:
     description: width of the plot image, in px
     type: integer
@@ -135,4 +139,5 @@ legacy_parameters:
   plot_width: size_plotimage_w_px
   plot_chros: chr2plot
   plot_region_labels: labels
+  plot_gene_symbols: gene_symbols
 
