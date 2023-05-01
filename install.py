@@ -12,6 +12,8 @@ dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, "bycon" )
 sys.path.append( pkg_path )
 
+from bycon import *
+
 """
 The install script copies the relevant bycon files to the webserver directory
 specified in the `config/config.yaml` file and sets the file permissions
@@ -35,6 +37,9 @@ def main():
 ################################################################################
 
 def install():
+
+    # print(byc["plot_defaults"])
+    # exit()
 
     yaml = ruamel.yaml.YAML()
     yaml.indent(mapping=2, sequence=4, offset=2)

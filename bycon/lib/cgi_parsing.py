@@ -556,7 +556,10 @@ def print_json_response(this={}, env="server", status_code=200):
 
 ################################################################################
 
-def print_svg_response(this="", env="server", status_code=200):
+def print_svg_response(this, env="server", status_code=200):
+
+    if not this:
+        return
 
     if "server" in env:
         print('Content-Type: image/svg+xml')

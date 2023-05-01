@@ -128,7 +128,6 @@ def remap_variants_to_VCF(r_s_res, byc):
         v_o.update({bsid:"."})
 
     variants = []
-    # variants.append("   ".join(v_o.keys()))
     print("   ".join(v_o.keys()))
 
     for d in variant_ids:
@@ -198,7 +197,7 @@ def de_vrsify_variant(v, byc):
         "biosample_id": v.get("biosample_id"),
         "reference_bases": v.get("reference_bases", "."),
         "alternate_bases": v.get("alternate_bases", "."),
-        "reference_name": v_d["refseq_chronames"][ r_n ],
+        "reference_name": v_d["refseq_chronames"].get(r_n, False),
         "start": v["location"]["interval"]["start"]["value"],
         "end": v["location"]["interval"]["end"]["value"],
         "info": v.get("info", {})

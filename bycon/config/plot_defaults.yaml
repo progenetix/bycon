@@ -6,6 +6,31 @@ parameters:
   plot_title:
     default: ""
 
+  plot_cluster_results:
+    type: boolean
+    default: true
+
+  plot_filter_empty_samples:
+    type: boolean
+    default: false
+
+  plot_samples_cluster_type:
+    default: intcoverage
+    oneOf:
+      - chrostats
+      - intcoverage
+
+  plot_cluster_metric:
+    default: ward
+    oneOf:
+      - average
+      - centroid
+      - complete
+      - median
+      - single
+      - ward
+      - weighted
+
   plot_dup_color:
     default: "#FFC633"
 
@@ -41,6 +66,12 @@ parameters:
     type: integer
     default: 100
 
+  plot_samplestrip_height:
+    description: >-
+      * height of a single sample strip
+    type: integer
+    default: 12
+
   plot_axis_y_max:
     type: integer
     default: 100
@@ -57,9 +88,18 @@ parameters:
     type: integer
     default: 30
 
-  plot_treecol_width:
+  plot_dendrogram_width:
     type: integer
-    default: 0
+    default: 50
+
+  plot_dendrogram_color:
+    description: color of the cluster tree stroke
+    default: "#333333"
+
+  plot_dendrogram_stroke:
+    type: number
+    description: thickness tree stroke
+    default: 0.5
 
   plot_chro_height:
     type: integer
@@ -125,6 +165,14 @@ parameters:
     type: integer
     default: 10
 
+  plot_marker_label_padding:
+    type: integer
+    default: 4
+
+  plot_marker_lane_padding:
+    type: integer
+    default: 2
+
   plot_footer_font_color:
     default: "#999999"
 
@@ -140,4 +188,31 @@ legacy_parameters:
   plot_chros: chr2plot
   plot_region_labels: labels
   plot_gene_symbols: gene_symbols
+
+cytoband_shades:
+
+  gpos100:
+    color_1: "rgb(39,39,39)"
+    color_2: "rgb(0,0,0)"
+  gpos75:
+    color_1: "rgb(87,87,87)"
+    color_2: "rgb(39,39,39)"
+  gpos50:
+    color_1: "rgb(196,196,196)"
+    color_2: "rgb(111,111,111)"
+  gpos25:
+    color_1: "rgb(223,223,223)"
+    color_2: "rgb(196,196,196)"
+  gneg:
+    color_1: "white"
+    color_2: "rgb(223,223,223)"
+  gvar:
+    color_1: "rgb(196,196,196)"
+    color_2: "rgb(111,111,111)"
+  stalk:
+    color_1: "rgb(39,39,39)"
+    color_2: "rgb(0,0,0)"
+  acen:
+    color_1: "rgb(163,55,247)"
+    color_2: "rgb(138,43,226)"
 

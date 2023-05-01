@@ -29,7 +29,7 @@ def select_dataset_ids(byc):
 def ds_id_from_rest_path_value(byc):
 
     ds_id = rest_path_value("datasets")
-    if ds_id is "empty_value":
+    if ds_id == "empty_value":
         return False
 
     if ds_id not in byc["dataset_definitions"].keys():
@@ -45,16 +45,16 @@ def ds_id_from_accessid(byc):
     # TODO: This is very verbose. In principle there should be an earlier
     # test of existence...
 
-    accessid = byc["form_data"].get("accessid", None)
-    if "accessid" is None:
+    accessid = byc["form_data"].get("accessid", False)
+    if "accessid" is False:
         return False
 
-    info_db = byc["config"].get("info_db", None)
-    if "info_db" is None:
+    info_db = byc["config"].get("info_db", False)
+    if "info_db" is False:
         return False
 
-    ho_collname = byc["config"].get("handover_coll", None)
-    if "ho_collname" is None:
+    ho_collname = byc["config"].get("handover_coll", False)
+    if "ho_collname" is False:
         return False
 
     ho_client = MongoClient()
@@ -62,8 +62,8 @@ def ds_id_from_accessid(byc):
     if not h_o:
         return False
 
-    ds_id = h_o.get("source_db", None)
-    if "ds_id" is None:
+    ds_id = h_o.get("source_db", False)
+    if "ds_id" is False:
         return False
 
     if ds_id not in byc["dataset_definitions"].keys():
@@ -76,8 +76,8 @@ def ds_id_from_accessid(byc):
 
 def ds_ids_from_form(byc):
 
-    f_ds_ids = byc["form_data"].get("dataset_ids", None)
-    if f_ds_ids is None:
+    f_ds_ids = byc["form_data"].get("dataset_ids", False)
+    if f_ds_ids is False:
         return False
 
     ds_ids = [ ]

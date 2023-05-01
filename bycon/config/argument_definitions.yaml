@@ -35,10 +35,10 @@ output:
     standard, but options are e.g. json or pgxseg
   default: text
 
-group_by:
+groupBy:
   flags:
     - -g
-    - --group_by
+    - --groupBy
   help: >-
     group parameter e.g. for subset splitting
   default: text

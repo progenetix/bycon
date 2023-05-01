@@ -17,7 +17,7 @@ from datatable_utils import export_datatable_download
 from export_file_generation import *
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, dataset_results_save_handovers
 from interval_utils import generate_genomic_intervals, interval_counts_from_callsets
-from plot_utils import histoplot_svg_generator
+from plot_utils import histoplot_svg_generator, samplesplot_svg_generator
 from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
 from query_generation import  generate_queries, initialize_beacon_queries, paginate_list, set_pagination_range
 from read_specs import load_yaml_empty_fallback, read_bycon_configs_by_name, read_bycon_definition_files, read_local_prefs
@@ -57,6 +57,7 @@ def beacon_data_pipeline(byc, entry_type):
     run_result_sets_beacon(byc)
     update_meta_queries(byc)
     query_results_save_handovers(byc)
+    check_callset_plot_delivery(byc)
     check_computed_histoplot_delivery(byc)
     check_computed_interval_frequency_delivery(byc)
     check_switch_to_count_response(byc)
@@ -844,6 +845,85 @@ def create_filters_resource_response(collation_types, byc):
 
 ################################################################################
 
+def check_callset_plot_delivery(byc):
+
+    if not "samplesplot" in byc["output"]:
+        return byc
+
+    results = []
+    p_r = byc["pagination"]
+
+    for ds_id in byc["dataset_results"].keys():
+
+        ds_results = byc["dataset_results"][ds_id]
+        if not "callsets._id" in ds_results:
+            continue
+
+        v_d = byc["variant_definitions"]
+        mongo_client = MongoClient()
+        cs_coll = mongo_client[ ds_id ][ "callsets" ]
+        var_coll = mongo_client[ ds_id ][ "variants" ]
+
+        cs_r = ds_results["callsets._id"]
+
+        q_vals = cs_r["target_values"]
+        r_no = len(q_vals)
+        if r_no > p_r["limit"]:
+            q_vals = paginate_list(q_vals, byc)
+
+        for cs in cs_coll.find({"_id": {"$in": q_vals } } ):
+
+            cs_id = cs.get("id", "NA")
+
+            cnv_chro_stats = cs.get("cnv_chro_stats", False)
+            cnv_statusmaps = cs.get("cnv_statusmaps", False)
+
+            if cnv_chro_stats is False or cnv_statusmaps is False:
+                continue
+
+            p_o = {
+                "dataset_id": ds_id,
+                "callset_id": cs_id,
+                "biosample_id": cs.get("biosample_id", "NA"),
+                "cnv_chro_stats": cs.get("cnv_chro_stats", {}),
+                "cnv_statusmaps": cs.get("cnv_statusmaps", {}),
+                "variants": []
+            }
+
+            v_q = {"callset_id": cs_id}
+
+            for v in var_coll.find(v_q):
+
+                loc = v.get("location")
+                if loc is None:
+                    continue
+                r_n = v["location"].get("sequence_id")
+                if r_n is None:
+                    continue
+                if not "interval" in loc:
+                    continue
+                if not "variant_state" in v:
+                    continue
+                efo = v["variant_state"].get("id", False)
+                if efo is False:
+                    continue
+
+                v_r =  {
+                    "reference_name": v_d["refseq_chronames"].get(r_n, False),
+                    "start": loc["interval"]["start"].get("value", False),
+                    "end": loc["interval"]["end"].get("value", False),
+                    "variant_type": v_d["efo_dupdel_map"][ efo ]["DUPDEL"]
+                }
+
+                p_o["variants"].append(v_r)
+
+            results.append(p_o)
+
+    svg = samplesplot_svg_generator(byc,results)
+    print_svg_response(svg, byc["env"])
+
+################################################################################
+
 def check_computed_histoplot_delivery(byc):
 
     if byc["output"] not in ["histoplot", "cnvhistogram"]:
@@ -870,7 +950,6 @@ def check_computed_histoplot_delivery(byc):
 
         cs_cursor = cs_coll.find({"_id": {"$in": q_vals }, "variant_class": { "$ne": "SNV" } } )
         intervals, cnv_cs_count = interval_counts_from_callsets(cs_cursor, byc)
-        # print(f"{intervals[88]}")
 
         i_set = {
             "dataset_id": ds_id,
@@ -885,7 +964,8 @@ def check_computed_histoplot_delivery(byc):
 
         interval_sets.append(i_set)
 
-    histoplot_svg_generator(byc, interval_sets)
+    svg = histoplot_svg_generator(byc, interval_sets)
+    print_svg_response(svg, byc["env"])
 
 ################################################################################
 

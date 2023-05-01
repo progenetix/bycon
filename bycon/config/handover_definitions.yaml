@@ -15,7 +15,6 @@ h->o_types:
     output: histoplot
 #    output: cnvhistogram
 
-
   biosamples:
     id: 'pgx:handover:biosamples'
     requestedSchema: biosample

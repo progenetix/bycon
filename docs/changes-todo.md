@@ -4,7 +4,33 @@ title: Changes & To Do
 
 ## Changes
 
-### 2023-04-20 (v1.0.35)
+### 2023-04-27 (v1.0.37)
+
+* more plotting: now histograms and samples - if >3 - get a dendrogram to indicate
+  the clustering results
+    - clustering can be suppressed by `&plotClusterResults=false`
+
+#### TODO
+
+* [ ] add method to subset samples for multi-histogram generation
+* [ ] option for summary histogram over? under? samplesplot
+* [ ] script for auto-generation of parameter documentation
+
+### 2023-04-27 (v1.0.36)
+
+* plotting & clustering of samples
+    - [/beacon/analyses/?filters=pgx:icdom-95003&plot_labelcol_width=0&plot_filter_empty_samples=y&plotGeneSymbols=MYCN&plot_samplestrip_height=1&output=samplesplot&limit=500](http://progenetix.org/beacon/analyses/?filters=pgx:icdom-95003&plot_labelcol_width=0&plot_filter_empty_samples=y&plotGeneSymbols=MYCN&plot_samplestrip_height=1&output=samplesplot&limit=500)
+
+### 2023-04-27 (v1.0.35)
+
+* new `custer_utils.py` library for cluster matrix generation and clustering
+    - uses [`scipy.cluster`](https://docs.scipy.org/doc/scipy/reference/cluster.html)
+    - first test implementation for frequency maps; auto-clusters if >2 using the
+      concatenated gain and loss frequencies per standard binning
+    - [x] tree plotting
+* plot gene label refinement
+
+### 2023-04-25 (v1.0.35)
 
 * more plot_utils goodness - staggered labels
     - [/services/intervalFrequencies/?chr2plot=2,8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot](http://progenetix.org/services/intervalFrequencies/?chr2plot=2,8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot)
