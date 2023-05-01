@@ -10,6 +10,6 @@ Plot parameters can be given both in `snake_case` and in the corresponding
 
 ### Parameter definitions
 
-``` title="Plot parameters"
+``` yaml title="Plot parameters"
 --8<-- "./bycon/config/plot_defaults.yaml"
 ```
