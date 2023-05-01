@@ -11,6 +11,7 @@ nav:
   - Installation: installation
   - Changes & To Do: changes-todo
   - API Tests: tests
+  - Plotting: plotting
   - Code notes: code-notes
   - Progenetix Site: http://progenetix.org
   - Baudisgroup: http://info.baudisgroup.org
@@ -31,6 +32,7 @@ markdown_extensions:
   - pymdownx.mark
   - pymdownx.tilde
   - pymdownx.saneheaders
+  - pymdownx.snippets
   - pymdownx.superfences
   - pymdownx.magiclink:
       hide_protocol: true

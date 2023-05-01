@@ -10,12 +10,6 @@ title: Changes & To Do
   the clustering results
     - clustering can be suppressed by `&plotClusterResults=false`
 
-#### TODO
-
-* [ ] add method to subset samples for multi-histogram generation
-* [ ] option for summary histogram over? under? samplesplot
-* [ ] script for auto-generation of parameter documentation
-
 ### 2023-04-27 (v1.0.36)
 
 * plotting & clustering of samples
@@ -125,6 +119,9 @@ Bug fix release:
 
 ## Bugs & TODO
 
+* [ ] add method to subset samples for multi-histogram generation
+* [ ] option for summary histogram over? under? samplesplot
+* [ ] script for auto-generation of parameter documentation
 * [x] fix filter queries for correct no-match:
     - query type indicates that the filter is "collationed"
     - query_generation looks for term in collations to perform term expansion
