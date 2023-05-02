@@ -6,10 +6,9 @@ The `bycon` project - at least at its current stage - is a mix of _Progenetix_ (
 
 !!! info "Bycon Code"
 
-    The `bycon` code is maintained in the [`progenetix/bycon` repository](http://github.com/progenetix/bycon/). Utility scripts & functions reside in the [`byconeer`](http://github.com/progenetix/byconeer/) and [`byconaut`](http://github.com/progenetix/byconaut/) repositories but are so far not documented & may contain deprecated or "internal use" code.
+    The `bycon` code is maintained in the [`progenetix/bycon` repository](http://github.com/progenetix/bycon/). Utility scripts & functions reside in the [`byconaut`](http://github.com/progenetix/byconaut/) and (this one is really "scripty") [`byconeer`](http://github.com/progenetix/byconeer/) repositories but are so far not (well) documented & may contain deprecated or "internal use" code.
 
-More information about the current status of the package can be found in the inline
-documentation which is also [presented in an accessible format](https://info.progenetix.org/tags/Beacon.html) on the _Progenetix_ website.
+More information about the original use _Progenetix_ case can be found [on the project's documentation site](https://docs.progenetix.org/).
 
 ### `bycon` Directory Structure
 
@@ -48,8 +47,6 @@ individual endpoints
     - mapping input table(s)
     - external schema dumps
     - ...
-
-
 
 
 #### Overview
