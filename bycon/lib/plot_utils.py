@@ -629,7 +629,7 @@ def _plot_area_add_grid(plv, byc):
 
     #--------------------------- grid lines -----------------------------------#
 
-    for y_m in plv["plot_histogram_frequency_labels"]:
+    for y_m in plv["plot_histogram_label_y_values"]:
 
         if y_m > plv["plot_axis_y_max"]:
             continue
@@ -843,7 +843,8 @@ def _plot_add_footer(plv, results, byc):
     plv["Y"] += plv["plot_footer_font_size"]
     plv["pls"].append(f'<text x="{x_c_e}" y="{plv["Y"]}" class="footer-r">&#169; CC-BY 2001 - {today.year} progenetix.org</text>')
 
-    plv["pls"].append(f'<text x="{x_a_0}" y="{plv["Y"]}" class="footer-l">{ len(results) } analyses</text>')
+    if len(results) > 1:
+        plv["pls"].append(f'<text x="{x_a_0}" y="{plv["Y"]}" class="footer-l">{ len(results) } analyses</text>')
 
     return plv
 
@@ -851,18 +852,19 @@ def _plot_add_footer(plv, results, byc):
 
 def _plot_add_cytoband_svg_gradients(plv):
 
+    c_defs = ""
+
     for cs_k, cs_c in plv["cytoband_shades"].items():
 
         p_id = plv.get("plot_id", "")
-        p_col_1 = cs_c.get("color_1", "rgb(111,111,111)")
-        p_col_2 = cs_c.get("color_2", "rgb(111,111,111)")
-        plv["pls"].insert(0,
-"""
-<linearGradient id="{}{}" x1="0%" x2="0%" y1="0%" y2="80%" spreadMethod="reflect">
-    <stop offset="0%" stop-color="{}" />
-    <stop offset="100%" stop-color="{}" />
-</linearGradient>""".format(p_id, cs_k, p_col_1, p_col_2)
-    )
+        c_defs += f'\n<linearGradient id="{p_id}{cs_k}" x1="0%" x2="0%" y1="0%" y2="80%" spreadMethod="reflect">'
+
+        for k, v in cs_c.items():
+            c_defs += f'\n  <stop offset="{k}" stop-color="{v}" />'
+
+        c_defs += f'\n</linearGradient>'
+
+    plv["pls"].insert(0, c_defs)
 
     return plv
 

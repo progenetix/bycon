@@ -1,20 +1,35 @@
 parameters:
 
+  # Plot parameters can be modified in the URL's query string.
+  # The bycon package accepts both snake_case and camelCase versions.
+
   plot_id:
     default: genomeplot
 
   plot_title:
+    description: title above the plot
     default: ""
 
-  plot_cluster_results:
-    type: boolean
-    default: true
+  # data manipulation (filtering, clustering ...) -----------------------------#
 
   plot_filter_empty_samples:
+    description: >-
+      by setting to `true` samples w/o data can be removed e.g. from sample
+      plots
     type: boolean
     default: false
 
+  plot_cluster_results:
+    description: by setting to false clustering can be suppressed
+    type: boolean
+    default: true
+
   plot_samples_cluster_type:
+    description: >-
+      selection of which measurees are used to generate the clustering matrix
+      * `intcoverage` uses the 2x3k (gain, loss) 1MB intervals
+      * `chrostats` only uses the CNV coverage per chromosomal arm (separately
+        for gains and losses)
     default: intcoverage
     oneOf:
       - chrostats
@@ -45,30 +60,25 @@ parameters:
 
   plot_chros:
     type: array
-    default: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"]
-
-  plot_region_labels:
-    type: array
-    default: []
-
-  plot_gene_symbols:
-    type: array
-    default: []
+    default: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22"]
 
   plot_width:
-    description: width of the plot image, in px
+    description: >-
+      * width of the plot image, in px
+      * the plot area width is determined through
+        - plot_width - 2*plot_margins - plot_labelcol_width - plot_axislab_y_width - plot_dendrogram_width
     type: integer
     default: 1024
 
   plot_area_height:
     description: >-
-      * height of the plot area
+      height of the plot area (applies only to histogram plots)
     type: integer
     default: 100
 
   plot_samplestrip_height:
     description: >-
-      * height of a single sample strip
+      height of a single sample strip
     type: integer
     default: 12
 
@@ -77,18 +87,27 @@ parameters:
     default: 100
 
   plot_margins:
+    description: outer plot margins, in px
     type: integer
     default: 25
 
   plot_labelcol_width:
+    description: >-
+      * width of the space for left text labels (e.g. sample ids, collation
+        labels)
+      * defaults to 0 when only one item
     type: integer
     default: 250
 
   plot_axislab_y_width:
+    description: width of the space for histogram percentage markers
     type: integer
     default: 30
 
   plot_dendrogram_width:
+    description: >-
+      * width of the cluster tree
+      * defaults to 0 when no clustering is being performed
     type: integer
     default: 50
 
@@ -98,7 +117,7 @@ parameters:
 
   plot_dendrogram_stroke:
     type: number
-    description: thickness tree stroke
+    description: thickness of the cluster tree stroke
     default: 0.5
 
   plot_chro_height:
@@ -147,18 +166,42 @@ parameters:
     type: integer
     default: 12
 
+  # Y-labels (e.g. histogram percentages)  ------------------------------------#
+
   plot_label_y_font_size:
+    description: font size for Y-axis labels (percents ...)
     type: integer
     default: 8
 
   plot_label_y_font_color:
+    description: font color for Y-axis labels (percents ...)
     default: "#666666"
 
-  plot_footer_font_size:
-    type: integer
-    default: 10
+  plot_histogram_label_y_values:
+    type: array
+    items: integer
+    default: [25, 50, 75]
+
+  # markers -------------------------------------------------------------------#
+
+  plot_region_labels:
+    description: >-
+      * placeholder for markers / labels in the
+      * format is `8:120000000-124000000:Region+of+Interest`
+      * comma-concatenation for multiple values
+      * label is optional
+    type: array
+    default: []
+
+  plot_gene_symbols:
+    description: >-
+      * label a gene's position by its symbol (CDKN2A, MYC, ERBB2...)
+      * comma-concatenation for multiple values
+    type: array
+    default: []
 
   plot_marker_font_color:
+    description: font color for gene and region markers
     default: "#dd3333"
 
   plot_marker_font_size:
@@ -166,6 +209,7 @@ parameters:
     default: 10
 
   plot_marker_label_padding:
+    description: text padding of markers versus background/box
     type: integer
     default: 4
 
@@ -173,15 +217,21 @@ parameters:
     type: integer
     default: 2
 
+  # footer --------------------------------------------------------------------#
+
+  plot_footer_font_size:
+    type: integer
+    default: 10
+
   plot_footer_font_color:
     default: "#999999"
 
-  plot_histogram_frequency_labels:
-    type: array
-    items: integer
-    default: [25, 50, 75]
+#------------------------------------------------------------------------------#
 
 legacy_parameters:
+
+  # These remap parameters from the PGX legacy method to current names.
+
   plot_dup_color: color_var_dup_hex
   plot_del_color: color_var_del_hex
   plot_width: size_plotimage_w_px
@@ -189,30 +239,35 @@ legacy_parameters:
   plot_region_labels: labels
   plot_gene_symbols: gene_symbols
 
+#------------------------------------------------------------------------------#
+
 cytoband_shades:
 
+  # Hand-crafted values to map cytoband color information to svg 
+  # `linearGradient` objects.
+
   gpos100:
-    color_1: "rgb(39,39,39)"
-    color_2: "rgb(0,0,0)"
+    0%: "rgb(39,39,39)"
+    100%: "rgb(0,0,0)"
   gpos75:
-    color_1: "rgb(87,87,87)"
-    color_2: "rgb(39,39,39)"
+    0%: "rgb(87,87,87)"
+    100%: "rgb(39,39,39)"
   gpos50:
-    color_1: "rgb(196,196,196)"
-    color_2: "rgb(111,111,111)"
+    0%: "rgb(196,196,196)"
+    100%: "rgb(111,111,111)"
   gpos25:
-    color_1: "rgb(223,223,223)"
-    color_2: "rgb(196,196,196)"
+    0%: "rgb(223,223,223)"
+    100%: "rgb(196,196,196)"
   gneg:
-    color_1: "white"
-    color_2: "rgb(223,223,223)"
+    0%: "white"
+    100%: "rgb(223,223,223)"
   gvar:
-    color_1: "rgb(196,196,196)"
-    color_2: "rgb(111,111,111)"
+    0%: "rgb(196,196,196)"
+    100%: "rgb(111,111,111)"
   stalk:
-    color_1: "rgb(39,39,39)"
-    color_2: "rgb(0,0,0)"
+    0%: "rgb(39,39,39)"
+    100%: "rgb(0,0,0)"
   acen:
-    color_1: "rgb(163,55,247)"
-    color_2: "rgb(138,43,226)"
+    0%: "rgb(163,55,247)"
+    100%: "rgb(138,43,226)"
 
