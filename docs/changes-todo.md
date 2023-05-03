@@ -4,7 +4,17 @@ title: Changes & To Do
 
 ## Changes
 
-### 2023-04-27 (v1.0.37)
+### 2023-05-03 (v1.0.38)
+
+* added method to subset samples for multi-histogram generation using the `fSet`
+  parameter for matching of `filter_definitions` classes
+    - [/beacon/biosamples/?fSets=icdot&filters=pgx:icdom-95003&plotGeneSymbols=MYCN&output=histoplot&limit=100](http://progenetix.org/beacon/biosamples/?fSets=icdot&filters=pgx:icdom-95003&plotGeneSymbols=MYCN&output=histoplot&limit=100)
+* removal of deprecated `cgitb` use & replacing it w/ a simple _Exception_/traceback
+  wrapper
+* expansion of the [plotting documentation](http://bycon.progenetix.org/plotting/)
+* move of the plot arguments parsing to `cgi_parsing.py`
+
+### 2023-05-01 (v1.0.37)
 
 * more plotting: now histograms and samples - if >3 - get a dendrogram to indicate
   the clustering results
@@ -119,7 +129,7 @@ Bug fix release:
 
 ## Bugs & TODO
 
-* [ ] add method to subset samples for multi-histogram generation
+* [x] add method to subset samples for multi-histogram generation
 * [ ] option for summary histogram over? under? samplesplot
 * [ ] script for auto-generation of parameter documentation
 * [x] fix filter queries for correct no-match:

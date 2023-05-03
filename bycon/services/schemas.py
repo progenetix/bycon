@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import cgi, cgitb
+import cgi
 import re, json, yaml
 from os import environ, pardir, path, scandir
 import sys, datetime
@@ -20,7 +20,10 @@ podmd"""
 
 def main():
 
-    schemas()
+    try:
+        schemas()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
     
 ################################################################################
 

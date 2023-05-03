@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import cgi, cgitb, sys
+import cgi, sys
 from os import pardir, path
 
 from bycon import *
@@ -16,7 +16,10 @@ podmd"""
 
 def main():
 
-    service_info()
+    try:
+        service_info()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
     
 ################################################################################
 

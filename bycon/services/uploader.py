@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import cgi, cgitb
+import cgi
 import re
 from os import environ, path, pardir
 import csv
@@ -15,7 +15,10 @@ from bycon import *
 
 def main():
 
-    uploader()
+    try:
+        uploader()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
 
 ################################################################################
 ################################################################################
@@ -23,9 +26,6 @@ def main():
 
 def uploader():
 
-    # print('Content-Type: text/plain\r\n\r\n', end='')
-
-    cgitb.enable()
     accessid = str(uuid4())
     form = cgi.FieldStorage()
 

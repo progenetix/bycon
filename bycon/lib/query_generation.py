@@ -1,4 +1,4 @@
-import cgi, cgitb
+import cgi
 import re, yaml
 from pymongo import MongoClient
 from bson.son import SON

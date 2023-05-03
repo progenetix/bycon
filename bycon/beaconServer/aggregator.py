@@ -55,12 +55,19 @@ TODO:
 
 def main():
 
-    aggregator()
-   
+    try:
+        aggregator()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
+
 ################################################################################
 
 def beaconAggregator():
-    aggregator()
+    
+    try:
+        aggregator()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
 
 ################################################################################
 

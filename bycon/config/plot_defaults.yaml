@@ -116,8 +116,8 @@ parameters:
     default: "#333333"
 
   plot_dendrogram_stroke:
-    type: number
     description: thickness of the cluster tree stroke
+    type: number
     default: 0.5
 
   plot_chro_height:
@@ -135,6 +135,11 @@ parameters:
   plot_area_color:
     description: color of the plot background
     default: "#eef6ff"
+
+  plot_area_opacity:
+    description: opacity of the plot background
+    type: number
+    default: 0.8
 
   plot_grid_stroke:
     type: integer

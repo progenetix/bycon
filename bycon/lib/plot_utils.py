@@ -1,7 +1,7 @@
 import re
 import datetime
 from urllib.parse import unquote
-from cgi_parsing import print_svg_response, test_truthy
+from cgi_parsing import get_plot_parameters, print_svg_response, test_truthy
 from cytoband_utils import retrieve_gene_id_coordinates
 from clustering_utils import cluster_frequencies, cluster_samples
 
@@ -80,7 +80,7 @@ def _initialize_plot_values(byc, results):
     else:
         plv.update({ "plot_dendrogram_width": 0 })
 
-    _plot_get_form_parameters(plv, byc)
+    get_plot_parameters(plv, byc)
 
     pax = plv["plot_margins"] + plv["plot_labelcol_width"] + plv["plot_axislab_y_width"]
 
@@ -109,7 +109,7 @@ def _initialize_plot_values(byc, results):
 
     plv.update({
         "plot_title": title,
-        "styles": [],
+        "styles": [ f'.plot-area {{fill: { plv.get("plot_area_color", "#66ddff") }; fill-opacity: { plv.get("plot_area_opacity", 0.8) };}}' ],
         "Y": plv["plot_margins"],
         "plot_area_width": paw,
         "plot_area_x0": pax,
@@ -136,40 +136,6 @@ def _format_resultset_title(f_set):
         title = g_id
 
     return title
-
-################################################################################
-
-def _plot_get_form_parameters(plv, byc):
-
-    p_d_p = byc["plot_defaults"]["parameters"]
-    p_d_l = byc["plot_defaults"]["legacy_parameters"]
-    form = byc["form_data"]
-
-    for p_k, p_d in p_d_p.items():
-        p_d_t = p_d.get("type", "string")
-        if p_k in form:
-            plv.update({ p_k: form[p_k]})
-        l_p = p_d_l.get(p_k, False)
-        if l_p is not False:
-            if l_p in byc["form_data"]:
-                plv.update({ p_k: form[l_p]})
-
-        if "int" in p_d_t:
-            plv.update({ p_k: int(plv[p_k])})
-        elif "number" in p_d_t:
-            plv.update({ p_k: float(plv[p_k])})
-        elif "bool" in p_d_t:
-            plv.update({ p_k: test_truthy(plv[p_k])})
-        elif "array" in p_d_t:
-            if isinstance(plv[p_k], str):
-                plv.update({ p_k: unquote(plv[p_k]) })
-                plv.update({ p_k: re.split(",", plv[p_k])})
-            if "int" in p_d.get("items", "string"):
-                plv.update({ p_k: list(map(int, plv[p_k])) })
-            elif "number" in p_d_t:
-                plv.update({ p_k: list(float(int, plv[p_k])) })
-
-    return plv
 
 ################################################################################
 
@@ -283,6 +249,8 @@ def _plot_add_histodata(plv, results, byc):
     for f_set in results:
         _plot_add_one_histogram(plv, f_set, byc)
 
+    plv["plot_last_histo_ye"] = plv["Y"]
+
     #----------------------- plot cluster tree --------------------------------#
 
     p_s_c = plv.get("plot_dendrogram_color", '#ee0000')
@@ -384,47 +352,52 @@ def _plot_add_samplestrips(plv, results, byc):
 
     #----------------------- plot cluster tree --------------------------------#
 
-    p_s_c = plv.get("plot_dendrogram_color", '#ee0000')
-    p_s_w = plv.get("plot_dendrogram_stroke", 1)
-
-    d = plv.get("dendrogram", False)
-
-    if d is not False:
-
-        d_x_s = d.get("dcoord", []) 
-        d_y_s = d.get("icoord", []) 
-
-        t_y_0 = plv["plot_first_area_y0"]
-        t_x_0 = plv["plot_area_x0"] + plv["plot_area_width"]
-        t_y_f = plv["plot_samplestrip_height"] * 0.1
-
-        x_max = plv["plot_dendrogram_width"]
-        for i, node in enumerate(d_x_s):
-            for j, x in enumerate(node):
-                if x > x_max:
-                    x_max = x
-
-        t_x_f = plv["plot_dendrogram_width"] / x_max
-
-        for i, node in enumerate(d_x_s):
-
-            n = f'<polyline points="'
-
-            for j, x in enumerate(node):
-                n += f' { round(t_x_0 + x * t_x_f, 1) },{round(t_y_0 + d_y_s[i][j] * t_y_f, 1)}'
-
-            n += f'" fill="none" stroke="{p_s_c}" stroke-width="{p_s_w}px" />'
-
-            plv["pls"].append(n)
+    _plot_add_cluster_tree(plv, s, byc)
 
     #--------------------- plot area background -------------------------------#
 
     x_a_0 = plv["plot_area_x0"]
     p_a_w = plv["plot_area_width"]
     p_a_h = plv["Y"] - plv["plot_first_area_y0"]
-    p_a_c = plv["plot_area_color"]
-    plv["pls"][ plv["plot_strip_bg_i"] ] = f'<rect x="{x_a_0}" y="{plv["plot_first_area_y0"]}" width="{p_a_w}" height="{p_a_h}" style="fill: {p_a_c}; fill-opacity: 0.8; " />'
+    
+    plv["pls"][ plv["plot_strip_bg_i"] ] = f'<rect x="{x_a_0}" y="{plv["plot_first_area_y0"]}" width="{p_a_w}" height="{p_a_h}" class="plot-area" />'
     plv["Y"] += plv["plot_region_gap_width"]
+
+    return plv
+
+################################################################################
+
+def _plot_add_cluster_tree(plv, s, byc):
+
+    d = plv.get("dendrogram", False)
+
+    if d is False:
+        return plv
+
+    p_s_c = plv.get("plot_dendrogram_color", '#ee0000')
+    p_s_w = plv.get("plot_dendrogram_stroke", 1)
+    
+    d_x_s = d.get("dcoord", []) 
+    d_y_s = d.get("icoord", []) 
+
+    t_y_0 = plv["plot_first_area_y0"]
+    t_x_0 = plv["plot_area_x0"] + plv["plot_area_width"]
+    t_y_f = plv["plot_samplestrip_height"] * 0.1
+
+    # finding the largest x-value of the dendrogram for scaling
+    x_max = plv["plot_dendrogram_width"]
+    for i, node in enumerate(d_x_s):
+        for j, x in enumerate(node):
+            if x > x_max:
+                x_max = x
+    t_x_f = plv["plot_dendrogram_width"] / x_max
+
+    for i, node in enumerate(d_x_s):
+
+        n_coords = []
+        for j, x in enumerate(node):
+            n_coords.append( f'{ round(t_x_0 + x * t_x_f, 1) },{round(t_y_0 + d_y_s[i][j] * t_y_f, 1)}' )
+        plv["pls"].append( f'<polyline points="{ " ".join(n_coords) }" fill="none" stroke="{p_s_c}" stroke-width="{p_s_w}px" />' )
 
     return plv
 
@@ -555,7 +528,6 @@ def _plot_add_one_histogram_canvas(plv, f_set, byc):
     x_a_0 = plv["plot_area_x0"]
     p_a_w = plv["plot_area_width"]
     p_a_h = plv["plot_area_height"]
-    p_a_c = plv["plot_area_color"]
 
     #-------------------------- left labels -----------------------------------#
     
@@ -563,9 +535,10 @@ def _plot_add_one_histogram_canvas(plv, f_set, byc):
 
     #--------------------- plot area background -------------------------------#
     
-    plv["pls"].append(f'<rect x="{x_a_0}" y="{plv["Y"]}" width="{p_a_w}" height="{p_a_h}" style="fill: {p_a_c}; fill-opacity: 0.8; " />')
+    plv["pls"].append(f'<rect x="{x_a_0}" y="{plv["Y"]}" width="{p_a_w}" height="{p_a_h}" class="plot-area" />')
 
     #--------------------------- grid lines -----------------------------------#
+
     _plot_area_add_grid(plv, byc)
 
     return plv

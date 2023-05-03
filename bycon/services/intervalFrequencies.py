@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import cgi, cgitb
+import cgi
 import re, json, yaml
 from os import path, environ, pardir
 import sys, datetime, argparse
@@ -22,12 +22,19 @@ podmd"""
 
 def main():
 
-    interval_frequencies()
+    try:
+        interval_frequencies()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
 
 ################################################################################
 
 def intervalFrequencies():
-    interval_frequencies()
+    
+    try:
+        interval_frequencies()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
    
 ################################################################################
 

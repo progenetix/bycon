@@ -1,4 +1,4 @@
-import cgi, cgitb, json, re, sys
+import cgi, json, re, sys
 from urllib.parse import urlparse, parse_qs, unquote
 from os import environ
 from humps import camelize, decamelize
@@ -8,14 +8,12 @@ from humps import camelize, decamelize
 def set_debug_state(debug=0):
 
     if test_truthy(debug):
-        cgitb.enable()
         print('Content-Type: text')
         print()
         return True
 
     elif environ.get('REQUEST_URI'):
         if "debug=1" in environ.get('REQUEST_URI'):
-            cgitb.enable()
             print('Content-Type: text')
             print()
             return True
@@ -29,15 +27,6 @@ def boolean_to_mongo_logic( logic="AND" ):
     if "OR" in logic.upper():
         return '$or'
     return '$and'
-
-################################################################################
-
-def hex_2_rgb( hexcolor ):
-
-    rgb = [127, 127, 127]
-
-
-    return rgb
 
 ################################################################################
 
@@ -273,6 +262,47 @@ def test_truthy(this):
         return True    
 
     return False
+
+################################################################################
+
+def get_plot_parameters(plv, byc):
+
+    """
+    This is curently handled separately, due to the separate definition of many
+    plot-specific parameters. Over time it migh be folded into the general parameter
+    processing since there are some duplications (re-checking of list values...)
+    but especially since this seems a cleaner approach...
+    """
+
+    p_d_p = byc["plot_defaults"]["parameters"]
+    p_d_l = byc["plot_defaults"]["legacy_parameters"]
+    form = byc["form_data"]
+
+    for p_k, p_d in p_d_p.items():
+        p_d_t = p_d.get("type", "string")
+        if p_k in form:
+            plv.update({ p_k: form[p_k]})
+        l_p = p_d_l.get(p_k, False)
+        if l_p is not False:
+            if l_p in byc["form_data"]:
+                plv.update({ p_k: form[l_p]})
+
+        if "int" in p_d_t:
+            plv.update({ p_k: int(plv[p_k])})
+        elif "number" in p_d_t:
+            plv.update({ p_k: float(plv[p_k])})
+        elif "bool" in p_d_t:
+            plv.update({ p_k: test_truthy(plv[p_k])})
+        elif "array" in p_d_t:
+            if isinstance(plv[p_k], str):
+                plv.update({ p_k: unquote(plv[p_k]) })
+                plv.update({ p_k: re.split(",", plv[p_k])})
+            if "int" in p_d.get("items", "string"):
+                plv.update({ p_k: list(map(int, plv[p_k])) })
+            elif "number" in p_d_t:
+                plv.update({ p_k: list(float(int, plv[p_k])) })
+
+    return plv
 
 ################################################################################
 

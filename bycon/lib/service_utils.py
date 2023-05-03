@@ -817,6 +817,9 @@ def return_filtering_terms_response( byc ):
 
     byc["service_response"]["response"].update({ "filteringTerms": f_t_s })
     byc["service_response"]["response"].update({ "resources": create_filters_resource_response(collation_types, byc) })
+    byc["service_response"]["response_summary"].update({"num_total_results":len(f_t_s)})
+    if len(f_t_s) > 0:
+        byc["service_response"]["response_summary"].update({"exists":True})
 
     cgi_print_response( byc, 200 )
 
@@ -926,8 +929,10 @@ def check_callset_plot_delivery(byc):
 
 def check_computed_histoplot_delivery(byc):
 
-    if byc["output"] not in ["histoplot", "cnvhistogram"]:
+    if not "histo" in byc.get("output", "___none___"):
         return byc
+
+    f_d = byc.get("filter_definitions", {})
 
     p_r = byc["pagination"]
     interval_sets = []
@@ -939,33 +944,80 @@ def check_computed_histoplot_delivery(byc):
         if not "callsets._id" in ds_results:
             continue
 
-        cs_r = ds_results["callsets._id"]
-
         mongo_client = MongoClient()
+        bios_coll = mongo_client[ ds_id ][ "biosamples" ]
         cs_coll = mongo_client[ ds_id ][ "callsets" ]
-        q_vals = cs_r["target_values"]
-        r_no = len(q_vals)
-        if r_no > p_r["limit"]:
-            q_vals = paginate_list(q_vals, byc)
 
-        cs_cursor = cs_coll.find({"_id": {"$in": q_vals }, "variant_class": { "$ne": "SNV" } } )
-        intervals, cnv_cs_count = interval_counts_from_callsets(cs_cursor, byc)
+        f_s_dists = []
+        f_s_k = ""
+        f_s_t = byc["form_data"].get("f_sets", "___none___")
 
-        i_set = {
-            "dataset_id": ds_id,
-            "group_id": ds_id,
-            "label": "Search Results",
-            "sample_count": cnv_cs_count,
-            "interval_frequencies": []
-        }
+        if f_s_t in f_d.keys():
 
-        for intv_i, intv in enumerate(intervals):
-            i_set["interval_frequencies"].append(intv.copy())
+            if not "biosamples._id" in ds_results:
+                continue
 
-        interval_sets.append(i_set)
+            bios_q_v = ds_results["biosamples._id"].get("target_values", [])
+            if len(bios_q_v) < 1:
+                continue
+
+            f_s_k = f_d[ f_s_t ].get("db_key", "___none___")
+            f_s_q = {"_id": {"$in": bios_q_v }}
+            f_s_dists = bios_coll.distinct(f_s_k, f_s_q)
+
+            for f_s_id in f_s_dists:
+
+                bios_id_q = {"$and": [
+                    {f_s_k: f_s_id},
+                    {"_id": {"$in": bios_q_v }}
+                ]}
+
+                bios_ids = bios_coll.distinct("id", bios_id_q)
+                cs__ids = cs_coll.distinct("_id", {"biosample_id": {"$in": bios_ids}})
+                r_no = len(cs__ids)
+                if r_no > p_r["limit"]:
+                    cs__ids = paginate_list(cs__ids, byc)
+
+                label = f"Search Results (subset {f_s_id})"
+
+                iset = callsets_create_iset(ds_id, label, cs__ids, byc)
+                interval_sets.append(iset)
+
+        else:
+            cs_r = ds_results["callsets._id"]
+            cs__ids = cs_r["target_values"]
+            r_no = len(cs__ids)
+            if r_no > p_r["limit"]:
+                cs__ids = paginate_list(cs__ids, byc)
+
+            iset = callsets_create_iset(ds_id, "Search Results", cs__ids, byc)
+            interval_sets.append(iset)
 
     svg = histoplot_svg_generator(byc, interval_sets)
     print_svg_response(svg, byc["env"])
+
+################################################################################
+
+def callsets_create_iset(ds_id, label, cs__ids, byc):
+
+    mongo_client = MongoClient()
+    cs_coll = mongo_client[ ds_id ][ "callsets" ]
+
+    cs_cursor = cs_coll.find({"_id": {"$in": cs__ids }, "variant_class": { "$ne": "SNV" } } )
+    intervals, cnv_cs_count = interval_counts_from_callsets(cs_cursor, byc)
+
+    iset = {
+        "dataset_id": ds_id,
+        "group_id": ds_id,
+        "label": label,
+        "sample_count": cnv_cs_count,
+        "interval_frequencies": []
+    }
+
+    for intv_i, intv in enumerate(intervals):
+        iset["interval_frequencies"].append(intv.copy())
+
+    return iset
 
 ################################################################################
 

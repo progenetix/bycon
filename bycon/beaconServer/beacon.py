@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys, re, cgitb
+import sys, re
 from os import path, pardir
 from importlib import import_module
 
@@ -15,8 +15,11 @@ from bycon import *
 
 def main():
 
-    beacon()
-    
+    try:
+        beacon()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
+
 ################################################################################
 
 def beacon():

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import cgi, cgitb
+import cgi
 import re, json, yaml
 from os import environ, pardir, path
 import sys, os, datetime
@@ -21,7 +21,10 @@ podmd"""
 
 def main():
 
-    dbstats()
+    try:
+        dbstats()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
     
 ################################################################################
 

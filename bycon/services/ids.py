@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import cgi, cgitb
+import cgi
 import re, json
 from os import environ, path, pardir
 import sys
@@ -27,7 +27,10 @@ podmd"""
 
 def main():
 
-    ids()
+    try:
+        ids()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
     
 ################################################################################
 

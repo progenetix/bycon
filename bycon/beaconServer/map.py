@@ -15,7 +15,10 @@ podmd"""
 
 def main():
 
-    map()
+    try:
+        map()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
     
 ################################################################################
 

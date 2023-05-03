@@ -15,13 +15,21 @@ podmd"""
 
 def main():
 
-    entry_types()
+    try:
+        entry_types()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
     
 ################################################################################
 
 def entryTypes():
     
-    entry_types()
+    try:
+        entry_types()
+    except Exception:
+        print('Content-Type: text')
+        print()
+        print(traceback.format_exc())
 
 ################################################################################
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import cgi, cgitb
+import cgi
 import re, json
 from os import path, pardir
 import sys
@@ -18,7 +18,10 @@ podmd"""
 
 def main():
 
-    ontologymaps()
+    try:
+        ontologymaps()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
     
 ################################################################################
 

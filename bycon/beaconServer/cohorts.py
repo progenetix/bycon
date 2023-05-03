@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import cgi, cgitb, sys, os, datetime, re, json, yaml
+import cgi, sys, os, datetime, re, json, yaml
 from os import environ, pardir, path
 from pymongo import MongoClient
 
@@ -18,13 +18,19 @@ podmd"""
 
 def main():
 
-    cohorts()
+    try:
+        cohorts()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
 
 ################################################################################
 
 def collections():
 
-    cohorts()
+    try:
+        cohorts()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
     
 ################################################################################
 

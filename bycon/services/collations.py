@@ -13,7 +13,10 @@ from bycon import *
 
 def main():
 
-    collations()
+    try:
+        collations()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
     
 ################################################################################
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from os import path, pardir, environ
-import sys, re, cgitb
+import sys, re
 from importlib import import_module
 
 from bycon import *
@@ -19,7 +19,10 @@ rewrite in the server configuration for creation of canonical URLs.
 
 def main():
 
-    services()
+    try:
+        services()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
     
 ################################################################################
 

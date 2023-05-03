@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import cgi, cgitb
+import cgi
 import re, yaml
 from os import path, pardir
 import csv
@@ -14,7 +14,10 @@ from bycon import *
 
 def main():
 
-    cytomapper()
+    try:
+        cytomapper()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)
 
 ################################################################################
 ################################################################################

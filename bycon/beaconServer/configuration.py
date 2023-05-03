@@ -11,7 +11,10 @@ from bycon import *
 
 def main():
 
-    configuration()
+    try:
+        configuration()
+    except Exception:
+        print_text_response(traceback.format_exc(), byc["env"], 302)    
     
 ################################################################################
 
