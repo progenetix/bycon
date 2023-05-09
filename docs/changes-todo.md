@@ -4,7 +4,7 @@ title: Changes & To Do
 
 ## Changes
 
-### 2023-05-09 (v1.0.39)
+### 2023-05-09 (v1.0.40)
 
 * new `services/samplesPlotter` entry point
     - currently specific for file uploads (handling of DB calls see below)
