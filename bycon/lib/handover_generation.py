@@ -8,6 +8,26 @@ from export_file_generation import de_vrsify_variant
 
 ################################################################################
 
+def _handover_add_stringified_plot_parameters(h_o_t, byc):
+
+    if not "plot" in h_o_t:
+        return ""
+
+    p_p = get_plot_parameters({}, byc)
+    p_p_l = []
+    for ppk, ppv in p_p.items():
+        if type(ppv) is list:
+            p_p_l.append( f'{ppk}={ ",".join(map(str, (ppv))) }' )
+            continue
+        p_p_l.append( f'{ppk}={ppv}' )
+
+    if len(p_p_l) < 1:
+        return ""
+
+    return f'&{"&".join(p_p_l)}'
+
+################################################################################
+
 def dataset_response_add_handovers(ds_id, byc):
 
     """podmd
@@ -44,7 +64,7 @@ def dataset_response_add_handovers(ds_id, byc):
                 h_o_r = {
                     "handover_type": {
                         "id": h_o_defs[ "id" ],
-                        "label": "{}".format(h_o_defs[ "label" ]),
+                        "label": f'{ h_o_defs.get("label", "generic handover") }',
                     },
                     "description": h_o_defs[ "description" ],
                     "url": "",
@@ -55,7 +75,7 @@ def dataset_response_add_handovers(ds_id, byc):
                     bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, 0, 0, byc)
                     h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos, byc ) } )
                 else:
-                    h_o_r.update( { "url": _handover_create_url(this_server, h_o_defs, accessid, byc) } )
+                    h_o_r.update( { "url": handover_create_url(this_server, h_o_defs, accessid, byc) } )
 
                 # TODO: needs a new schema to accommodate this not as HACK ...
                 # the phenopackets URL needs matched variants, which it wouldn't know about ...
@@ -131,7 +151,7 @@ def dataset_results_save_handovers(ds_id, byc):
 
 ################################################################################
 
-def _handover_create_url(h_o_server, h_o_defs, accessid, byc):
+def handover_create_url(h_o_server, h_o_defs, accessid, byc):
 
     if "script_path_web" in h_o_defs:
         server = h_o_server
@@ -142,6 +162,7 @@ def _handover_create_url(h_o_server, h_o_defs, accessid, byc):
             if p in h_o_defs:
                 url += "&{}={}".format(p, h_o_defs[p])
         url += h_o_defs.get("url_opts", "")
+        url += _handover_add_stringified_plot_parameters(h_o_defs.get("output", ""), byc)
 
         return url
 

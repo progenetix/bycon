@@ -26,15 +26,15 @@ def main():
 
 def uploader():
 
-    accessid = str(uuid4())
+    file_id = str(uuid4())
     form = cgi.FieldStorage()
 
     response = {
         "error": {},
-        "rel_path": "{}/{}".format(byc["config"].get("server_tmp_dir_web", "/tmp"), accessid),
-        "loc_path": path.join( *byc["config"][ "server_tmp_dir_loc" ], accessid ),
-        "accessid": accessid,
-        "plot_link": '/services/samplePlots/?accessid='+accessid,
+        "rel_path": "{}/{}".format(byc["config"].get("server_tmp_dir_web", "/tmp"), file_id),
+        "loc_path": path.join( *byc["config"][ "server_tmp_dir_loc" ], file_id ),
+        "file_id": file_id,
+        "plot_link": '/services/samplePlots/?fileId='+file_id,
         "host": "http://"+str(environ.get('HTTP_HOST'))
     }
 

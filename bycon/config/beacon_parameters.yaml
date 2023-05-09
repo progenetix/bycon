@@ -1,0 +1,89 @@
+parameters:
+
+  # Beacon parameters
+
+  requested_granularity:
+    description: the response granularity of the beacon
+    default: record
+
+  requested_schema:
+    description: the response schema
+    default: ""
+
+  include_resultset_responses:
+    default: HIT
+
+  test_mode:
+    type: boolean
+    default: false
+
+  filters:
+    type: array
+    items: string
+    default: []
+
+  dataset_ids:
+    type: array
+    items: string
+    default:
+      - progenetix
+
+  # Beacon variant parameters are in `variant_definitions.yaml`
+
+  # Progenetix parameters
+
+  include_handovers:
+    type: boolean
+    default: false
+
+  only_handovers:
+    type: boolean
+    default: false
+
+  output:
+    default: ""
+
+  debug_mode:
+    type: boolean
+    default: false
+
+  ids:
+    type: array
+    items: string
+    default: []
+
+  biosample_ids:
+    type: array
+    items: string
+    default: []
+
+  analysis_ids:
+    type: array
+    items: string
+    default: []
+
+  callset_ids:
+    type: array
+    items: string
+    default: []
+
+  individual_ids:
+    type: array
+    items: string
+    default: []
+
+  variant_ids:
+    type: array
+    items: string
+    default: []
+
+  collation_types:
+    type: array
+    items: string
+    default: []
+  
+  selected_beacons:
+    type: array
+    items: string
+    default: []
+

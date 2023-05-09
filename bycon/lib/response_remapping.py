@@ -1,6 +1,7 @@
 import datetime, re
 from pymongo import MongoClient
 from cgi_parsing import *
+from interval_utils import interval_counts_from_callsets
 
 ################################################################################
 
@@ -152,6 +153,37 @@ def remap_variants_to_VCF(r_s_res, byc):
     
 ################################################################################
 
+def vrsify_variant(variant, byc):
+
+    # TODO: Still prototyping; also need to accomodate VRS 1.3
+
+    v_d = byc["variant_definitions"]
+    v_t_als = v_d["variant_state_aliases"]
+    r_a = v_d["refseq_aliases"]
+    efo_vrs = v_d["efo_dupdel_map"]
+
+    v_type = variant.get("variant_type", False)
+    if v_type is False:
+        return variant
+
+    if v_type not in v_t_als:
+        return variant
+    variant.update({
+        "variant_state":{
+            "id": v_t_als[v_type],
+            "label": efo_vrs[ v_t_als[v_type] ].get("label", "")
+    }})
+
+    sequence_id = r_a.get( variant.get("reference_name", "___none___" ), False)
+    if sequence_id is False:
+        return variant
+
+    variant["location"].update({"sequence_id":sequence_id})
+
+    return variant
+
+################################################################################
+
 def vcf_variant(v, vcf_v, byc):
 
     v_d = byc["variant_definitions"]
@@ -191,7 +223,7 @@ def de_vrsify_variant(v, byc):
         return False
 
     v_r =  {
-        "id": v["id"],
+        "id": v.get("id"),
         "variant_internal_id": v.get("variant_intvernal_id"),
         "callset_id": v.get("callset_id"),
         "biosample_id": v.get("biosample_id"),
@@ -467,7 +499,7 @@ def _phenopack_resources(byc):
 def remap_all(r_s_res):
 
     for br_i, br_r in enumerate(r_s_res):
-        if type(br_r) is not "dict":
+        if type(br_r) is not dict:
             continue
         r_s_res[br_i].pop("_id", None)
         clean_empty_fields(r_s_res[br_i])
@@ -505,5 +537,47 @@ def normalize_variant_values_for_export(v, byc, drop_fields=None):
         v.pop(d_f, None)
 
     return v
+
+################################################################################
+
+def callset__ids_create_iset(ds_id, label, cs__ids, byc):
+
+    mongo_client = MongoClient()
+    cs_coll = mongo_client[ ds_id ][ "callsets" ]
+
+    cs_cursor = cs_coll.find({"_id": {"$in": cs__ids }, "variant_class": { "$ne": "SNV" } } )
+    intervals, cnv_cs_count = interval_counts_from_callsets(cs_cursor, byc)
+
+    iset = {
+        "dataset_id": ds_id,
+        "group_id": ds_id,
+        "label": label,
+        "sample_count": cnv_cs_count,
+        "interval_frequencies": []
+    }
+
+    for intv_i, intv in enumerate(intervals):
+        iset["interval_frequencies"].append(intv.copy())
+
+    return iset
+
+################################################################################
+
+def callsets_create_iset(ds_id, label, callsets, byc):
+
+    intervals, cnv_cs_count = interval_counts_from_callsets(callsets, byc)
+
+    iset = {
+        "dataset_id": ds_id,
+        "group_id": ds_id,
+        "label": label,
+        "sample_count": cnv_cs_count,
+        "interval_frequencies": []
+    }
+
+    for intv_i, intv in enumerate(intervals):
+        iset["interval_frequencies"].append(intv.copy())
+
+    return iset
 
 

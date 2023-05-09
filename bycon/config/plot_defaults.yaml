@@ -1,3 +1,18 @@
+legacy_parameters:
+
+  # These remap parameters from the PGX legacy method to current names.
+  # Please don't use   ╮(╯▽╰)╭ 
+
+  plot_dup_color: color_var_dup_hex
+  plot_del_color: color_var_del_hex
+  plot_width: size_plotimage_w_px
+  plot_chros: chr2plot
+  plot_region_labels: labels
+  plot_gene_symbols: gene_symbols
+  plot_group_by: group_by
+
+#------------------------------------------------------------------------------#
+
 parameters:
 
   # Plot parameters can be modified in the URL's query string.
@@ -8,6 +23,10 @@ parameters:
 
   plot_title:
     description: title above the plot
+    default: ""
+
+  plot_group_by:
+    description: group samples in histograms by a filter type (NCIT, PMID...)
     default: ""
 
   # data manipulation (filtering, clustering ...) -----------------------------#
@@ -97,7 +116,7 @@ parameters:
         labels)
       * defaults to 0 when only one item
     type: integer
-    default: 250
+    default: 220
 
   plot_axislab_y_width:
     description: width of the space for histogram percentage markers
@@ -205,6 +224,16 @@ parameters:
     type: array
     default: []
 
+  plot_cytoregion_labels:
+    description: >-
+      * label a cytoband's position (8q24, 1p12p11, 17q...)
+      * comma-concatenation for multiple values
+    type: array
+    default: []
+
+  plot_cytoregion_color:
+    default: "#ffe3ee"
+
   plot_marker_font_color:
     description: font color for gene and region markers
     default: "#dd3333"
@@ -230,19 +259,6 @@ parameters:
 
   plot_footer_font_color:
     default: "#999999"
-
-#------------------------------------------------------------------------------#
-
-legacy_parameters:
-
-  # These remap parameters from the PGX legacy method to current names.
-
-  plot_dup_color: color_var_dup_hex
-  plot_del_color: color_var_del_hex
-  plot_width: size_plotimage_w_px
-  plot_chros: chr2plot
-  plot_region_labels: labels
-  plot_gene_symbols: gene_symbols
 
 #------------------------------------------------------------------------------#
 

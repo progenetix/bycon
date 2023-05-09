@@ -1,6 +1,6 @@
 import math, re
 from cgi_parsing import *
-from datatable_utils import read_www_tsv_to_dictlist
+from file_utils import read_www_tsv_to_dictlist
 
 ################################################################################
 

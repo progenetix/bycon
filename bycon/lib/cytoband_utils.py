@@ -4,7 +4,7 @@ from os import path, pardir
 # local
 from query_execution import mongo_result_list
 from variant_parsing import variant_create_digest
-from helpers import generate_id
+from bycon_helpers import generate_id
 
 bycon_lib_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( bycon_lib_path, pardir )
@@ -22,6 +22,7 @@ def parse_cytoband_file(byc):
     g_map = byc["interval_definitions"]["genome_path_ids"].get("values", {})
 
     genome = byc["variant_pars"][ "assembly_id" ].lower()
+
     # TODO / BUG: next breaks e.g. "mSarHar1.11"
     genome = re.sub( r"(\w+?)([^\w]\w+?)", r"\1", genome)
 
@@ -42,6 +43,8 @@ def parse_cytoband_file(byc):
     with open(cb_file) as cb_f:                                                                                          
         for c_band in csv.DictReader(filter(lambda row: row[0]!='#', cb_f), fieldnames=cb_keys, delimiter='\t'):
             c_bands.append(c_band)
+
+    #--------------------------------------------------------------------------#
 
     # !!! making sure the chromosomes are sorted !!!
     for chro in byc["interval_definitions"][ "chromosomes" ]:
@@ -65,7 +68,8 @@ def parse_cytoband_file(byc):
         })
         genome_size += int(chrobands[-1]["end"])
 
-    
+    #--------------------------------------------------------------------------#
+
     byc.update( {
         "cytobands": cytobands,
         "cytolimits": cytolimits,

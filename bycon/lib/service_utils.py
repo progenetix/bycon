@@ -478,27 +478,27 @@ def check_plot_responses(ds_id, byc):
     if not "plot" in byc["output"]:
         return byc
 
-    check_cnvhistogram_plot_response(ds_id, byc)
+    check_histoplot_plot_response(ds_id, byc)
 
     return byc
 
 ################################################################################
 
-def check_cnvhistogram_plot_response(ds_id, byc):
+def check_histoplot_plot_response(ds_id, byc):
 
     h_o_types = byc["handover_definitions"]["h->o_types"]
     ds_h_o = byc["dataset_definitions"][ ds_id ].get("handoverTypes", h_o_types.keys())
 
-    if "cnvhistogram" not in ds_h_o:
+    if "histoplot" not in ds_h_o:
         return
 
     byc["include_handovers"] = True
-    byc["dataset_definitions"][ ds_id ].update({"handoverTypes": ["cnvhistogram"] })
+    byc["dataset_definitions"][ ds_id ].update({"handoverTypes": ["histoplot"] })
     dataset_results_save_handovers(ds_id, byc)
     r_s_ho = dataset_response_add_handovers(ds_id, byc)
 
     for h_o in r_s_ho:
-        if "cnvhistogram" in h_o["handover_type"]["id"]:
+        if "histoplot" in h_o["handover_type"]["id"]:
             print_uri_rewrite_response(h_o["url"], "", "")
             exit()
 
@@ -868,6 +868,8 @@ def check_callset_plot_delivery(byc):
         var_coll = mongo_client[ ds_id ][ "variants" ]
 
         cs_r = ds_results["callsets._id"]
+        if len(cs_r) < 1:
+            continue 
 
         q_vals = cs_r["target_values"]
         r_no = len(q_vals)
@@ -950,7 +952,7 @@ def check_computed_histoplot_delivery(byc):
 
         f_s_dists = []
         f_s_k = ""
-        f_s_t = byc["form_data"].get("f_sets", "___none___")
+        f_s_t = byc["form_data"].get("plot_group_by", "___none___")
 
         if f_s_t in f_d.keys():
 
@@ -962,8 +964,12 @@ def check_computed_histoplot_delivery(byc):
                 continue
 
             f_s_k = f_d[ f_s_t ].get("db_key", "___none___")
+            f_s_p = f_d[ f_s_t ].get("pattern", False)
             f_s_q = {"_id": {"$in": bios_q_v }}
             f_s_dists = bios_coll.distinct(f_s_k, f_s_q)
+            if f_s_p is not False:
+                r = re.compile(f_s_p)
+                f_s_dists = list(filter(lambda d: r.match(d), f_s_dists))
 
             for f_s_id in f_s_dists:
 
@@ -980,7 +986,7 @@ def check_computed_histoplot_delivery(byc):
 
                 label = f"Search Results (subset {f_s_id})"
 
-                iset = callsets_create_iset(ds_id, label, cs__ids, byc)
+                iset = callset__ids_create_iset(ds_id, label, cs__ids, byc)
                 interval_sets.append(iset)
 
         else:
@@ -990,34 +996,11 @@ def check_computed_histoplot_delivery(byc):
             if r_no > p_r["limit"]:
                 cs__ids = paginate_list(cs__ids, byc)
 
-            iset = callsets_create_iset(ds_id, "Search Results", cs__ids, byc)
+            iset = callset__ids_create_iset(ds_id, "Search Results", cs__ids, byc)
             interval_sets.append(iset)
 
     svg = histoplot_svg_generator(byc, interval_sets)
     print_svg_response(svg, byc["env"])
-
-################################################################################
-
-def callsets_create_iset(ds_id, label, cs__ids, byc):
-
-    mongo_client = MongoClient()
-    cs_coll = mongo_client[ ds_id ][ "callsets" ]
-
-    cs_cursor = cs_coll.find({"_id": {"$in": cs__ids }, "variant_class": { "$ne": "SNV" } } )
-    intervals, cnv_cs_count = interval_counts_from_callsets(cs_cursor, byc)
-
-    iset = {
-        "dataset_id": ds_id,
-        "group_id": ds_id,
-        "label": label,
-        "sample_count": cnv_cs_count,
-        "interval_frequencies": []
-    }
-
-    for intv_i, intv in enumerate(intervals):
-        iset["interval_frequencies"].append(intv.copy())
-
-    return iset
 
 ################################################################################
 

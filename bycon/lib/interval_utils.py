@@ -158,7 +158,9 @@ def generate_cytoband_intervals(byc):
 
 ################################################################################
 
-def interval_cnv_arrays(v_coll, query, byc):
+def interval_cnv_arrays(cs_vars, byc):
+
+    # TODO: make this a class to split out the stats etc.
 
     """
     The method generates sample-specific CNV maps using the currently defined
@@ -205,8 +207,10 @@ def interval_cnv_arrays(v_coll, query, byc):
             c_a = chro+arm
             chro_stats.update({c_a: cnv_stats.copy()})
 
-    v_s = v_coll.find( query )
-    v_no = len(list(v_s))
+    # cs_vars = v_coll.find( query )
+    if type(cs_vars).__name__ == "Cursor":
+        cs_vars.rewind()
+    v_no = len(list(cs_vars))
 
     if v_no < 1:
         return maps, cnv_stats, chro_stats
@@ -217,8 +221,10 @@ def interval_cnv_arrays(v_coll, query, byc):
 
     digests = []
 
-    for v in v_s.rewind():
+    if type(cs_vars).__name__ == "Cursor":
+        cs_vars.rewind()
 
+    for v in cs_vars:
         if not "variant_state" in v:
             continue
 
@@ -238,9 +244,9 @@ def interval_cnv_arrays(v_coll, query, byc):
         v_cs_id = v.get("callset_id", None)
 
         if v_i_id in digests:
-            print("¡¡¡ {} already counted for {} => deleting {}".format(v_i_id, v_cs_id, v["_id"]))
-            v_coll.delete_one({"_id": v["_id"]})
-
+            if "local" in byc["env"]:
+                print("¡¡¡ {} already counted for {}".format(v_i_id, v_cs_id)) #  => deleting {}  , v["_id"]
+                # v_coll.delete_one({"_id": v["_id"]})
         else:
             digests.append(v_i_id)
 

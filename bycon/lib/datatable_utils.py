@@ -4,47 +4,6 @@ from cgi_parsing import prjsonnice
 
 ################################################################################
 
-def read_tsv_to_dictlist(filepath, max_count=0):
-
-    dictlist = []
-
-    with open(filepath, newline='') as csvfile:
-    
-        data = csv.DictReader(filter(lambda row: row[0]!='#', csvfile), delimiter="\t", quotechar='"')
-        fieldnames = list(data.fieldnames)
-
-        for l in data:
-            dictlist.append(dict(l))
-
-    if max_count > 0:
-        if max_count < len(dictlist):
-            dictlist = randomSamples(dictlist, k=max_count)
-
-    return dictlist, fieldnames
-
-################################################################################
-
-def read_www_tsv_to_dictlist(www, max_count=0):
-
-    dictlist = []
-
-    with requests.Session() as s:
-        download = s.get(www)
-        decoded_content = download.content.decode('utf-8')    
-        data = csv.DictReader(filter(lambda row: row[0]!='#', decoded_content.splitlines()), delimiter="\t", quotechar='"')
-        fieldnames = list(data.fieldnames)
-
-        for l in data:
-            dictlist.append(dict(l))
-
-    if max_count > 0:
-        if max_count < len(dictlist):
-            dictlist = randomSamples(dictlist, k=max_count)
-
-    return dictlist, fieldnames
-
-################################################################################
-
 def export_datatable_download(results, byc):
 
     # TODO: separate table generation from HTTP response
@@ -130,8 +89,10 @@ def export_datatable_download(results, byc):
 
 def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="biosample"):
 
-    io_params = byc["datatable_mappings"]["io_params"][primary_scope]
-    io_prefixes = byc["datatable_mappings"]["io_prefixes"][primary_scope]
+    dtm = byc["datatable_mappings"]
+
+    io_params = dtm["io_params"].get(primary_scope, {})
+    io_prefixes = dtm["io_prefixes"].get(primary_scope, {})
 
     ios = list(io_params.keys()) + list(io_prefixes.keys())
 
@@ -209,8 +170,10 @@ def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
     if v is None:
         return parent
 
-    if "number" in parameter_type:
-        v = 1*v 
+    if "num" in parameter_type:
+        v = float(v)
+    elif "integer" in parameter_type:
+        v = int(v)
 
     ps = dotted_key.split('.')
 

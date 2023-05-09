@@ -15,6 +15,7 @@ service_aliases:
   ontologymaps: ontologymaps
   ontologyMaps: ontologymaps
   publications: publications
+  samplesPlotter: samplesPlotter
   schemas: schemas
   uploader: uploader
 

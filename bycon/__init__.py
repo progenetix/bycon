@@ -12,6 +12,7 @@ try:
 
     from aggregator_utils import *
     from args_parsing import *
+    from bycon_helpers import *
     from cgi_parsing import *
     from clustering_utils import *
     from data_retrieval import *
@@ -19,9 +20,9 @@ try:
     from datatable_utils import *
     from handover_generation import *
     from interval_utils import *
+    from file_utils import *
     from filter_parsing import *
     from geomap_utils import *
-    from helpers import *
     from plot_utils import *
     from publication_utils import *
     from query_execution import *
@@ -47,4 +48,7 @@ try:
     cgi_parse_query(byc)
     
 except Exception:
-    print_text_response(traceback.format_exc(), byc["env"], 302)
+    env = "server"
+    if not environ.get('HTTP_HOST'):
+       env = "local"
+    print_text_response(traceback.format_exc(), env, 302)

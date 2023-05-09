@@ -366,6 +366,19 @@ io_params:
       type: boolean
       indexed: True
 
+    # pgxseg
+
+    log2:
+      db_key: info.cnv_value
+      type: number
+    reference_name:
+      db_key: reference_name
+      type: string
+    variant_type:
+      db_key: variant_type
+      type: string
+
+
 io_prefixes:
 
   biosample:

@@ -4,11 +4,19 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-05-09 (v1.0.39)
+
+* new `services/samplesPlotter` entry point
+    - currently specific for file uploads (handling of DB calls see below)
+* completed the integration of the new `bycon`  plotting 
+* new `plotCytoregionLabels` plot labeling parameter
+    - [/beacon/biosamples/?plotGroupBy=icdot&filters=pgx:icdom-95003&plotCytoregionLabels=8q,9p11p12&plotGeneSymbols=MYCN&output=histoplot&limit=500](http://progenetix.org/beacon/biosamples/?plotGroupBy=icdot&filters=pgx:icdom-95003&plotCytoregionLabels=8q,9p11p12&plotGeneSymbols=MYCN&output=histoplot&limit=500)
+
 ### 2023-05-03 (v1.0.38)
 
-* added method to subset samples for multi-histogram generation using the `fSet`
+* added method to subset samples for multi-histogram generation using the `groupBy`
   parameter for matching of `filter_definitions` classes
-    - [/beacon/biosamples/?fSets=icdot&filters=pgx:icdom-95003&plotGeneSymbols=MYCN&output=histoplot&limit=100](http://progenetix.org/beacon/biosamples/?fSets=icdot&filters=pgx:icdom-95003&plotGeneSymbols=MYCN&output=histoplot&limit=100)
+    - [/beacon/biosamples/?groupBy=icdot&filters=pgx:icdom-95003&plotGeneSymbols=MYCN&output=histoplot&limit=100](http://progenetix.org/beacon/biosamples/?groupBy=icdot&filters=pgx:icdom-95003&plotGeneSymbols=MYCN&output=histoplot&limit=100)
 * removal of deprecated `cgitb` use & replacing it w/ a simple _Exception_/traceback
   wrapper
 * expansion of the [plotting documentation](http://bycon.progenetix.org/plotting/)
@@ -52,7 +60,7 @@ title: Changes & To Do
 * refinement of `histoplot` options; now as the standard for standard Beacon
   results by using the `&output=histoplot` pragma
     - [/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot](http://progenetix.org/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot)
-* change of `cnvhistogram` handover (`id: 'pgx:handover:cnvhistogram'`) to use
+* change of `histoplot` handover (`id: 'pgx:handover:histoplot'`) to use
   the plotting option instead of a redirect to the Perl `PGX` version
 
 ### 2023-04-14 (v1.0.32)
@@ -131,7 +139,7 @@ Bug fix release:
 
 * [x] add method to subset samples for multi-histogram generation
 * [ ] option for summary histogram over? under? samplesplot
-* [ ] script for auto-generation of parameter documentation
+* [x] script for auto-generation of parameter documentation
 * [x] fix filter queries for correct no-match:
     - query type indicates that the filter is "collationed"
     - query_generation looks for term in collations to perform term expansion

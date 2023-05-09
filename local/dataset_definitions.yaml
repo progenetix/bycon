@@ -16,7 +16,7 @@ progenetix:
         label: no restriction
         version: 2021-11-11
   # handoverTypes:
-  #   - cnvhistogram
+  #   - histoplot
   #   - biosamples
   #   - biosamplestable
   #   - biosamplevariants
@@ -65,7 +65,7 @@ examplez:
           label: no restriction
           version: 2021-11-11
   # handoverTypes:
-  #   - cnvhistogram
+  #   - histoplot
   #   - biosamples
   #   - biosamplestable
   #   - biosamplevariants

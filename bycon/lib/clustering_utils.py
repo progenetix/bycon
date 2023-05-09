@@ -4,11 +4,11 @@ from cgi_parsing import prjsonnice
 
 ################################################################################
 
-def cluster_frequencies(plv, if_list, byc):
+def cluster_frequencies(plv, byc):
 
     m = plv.get("plot_cluster_metric", "complete")
 
-    matrix = matrix_from_interval_frequencies(if_list, byc)
+    matrix = matrix_from_interval_frequencies(plv, byc)
     linkage = hierarchy.linkage(matrix, method=m)
     dendrogram = hierarchy.dendrogram(linkage, no_plot=True, orientation="right")
     
@@ -16,11 +16,11 @@ def cluster_frequencies(plv, if_list, byc):
 
 ################################################################################
 
-def matrix_from_interval_frequencies(if_list, byc):
+def matrix_from_interval_frequencies(plv, byc):
 
     matrix = []
 
-    for f_set in if_list:
+    for f_set in plv["results"]:
 
         i_f = f_set.get("interval_frequencies", [])
         if_line = []
@@ -36,13 +36,13 @@ def matrix_from_interval_frequencies(if_list, byc):
 
 ################################################################################
 
-def cluster_samples(plv, sample_list, byc):
+def cluster_samples(plv, byc):
 
     m = plv.get("plot_cluster_metric", "complete")
 
     matrix = []
 
-    for s in sample_list:
+    for s in plv["results"]:
         s_line = []
 
         if "intcoverage" in plv.get("plot_samples_cluster_type", ""):

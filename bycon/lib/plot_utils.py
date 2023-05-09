@@ -2,8 +2,9 @@ import re
 import datetime
 from urllib.parse import unquote
 from cgi_parsing import get_plot_parameters, print_svg_response, test_truthy
-from cytoband_utils import retrieve_gene_id_coordinates
+from cytoband_utils import bands_from_cytobands, retrieve_gene_id_coordinates
 from clustering_utils import cluster_frequencies, cluster_samples
+from response_remapping import de_vrsify_variant, callsets_create_iset
 
 # http://progenetix.org/cgi/bycon/services/intervalFrequencies.py?chr2plot=8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot
 # http://progenetix.org/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot&plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6
@@ -17,12 +18,15 @@ def histoplot_svg_generator(byc, results):
         return svg
 
     plv = _initialize_plot_values(byc, results)
+    if _plot_respond_empty_results(plv, byc) is not False:
+        svg = _create_svg(plv)
+        return svg
 
     _plot_add_title(plv, byc)
     _plot_add_cytobands(plv, byc)
-    _plot_add_histodata(plv, results, byc)
+    _plot_add_histodata(plv, byc)
     _plot_add_markers(plv, byc)
-    _plot_add_footer(plv, results, byc)
+    _plot_add_footer(plv, byc)
 
     plv["Y"] += plv["plot_margins"]
 
@@ -42,12 +46,17 @@ def samplesplot_svg_generator(byc, results):
     plv = _initialize_plot_values(byc, results)
 
     if test_truthy(plv.get("plot_filter_empty_samples", False)):
-        results = [s for s in results if len(s['variants']) > 0]
+        results = [s for s in results if len(s['variants']) > 0] 
+
+    if _plot_respond_empty_results(plv, byc) is not False:
+        svg = _create_svg(plv)
+        return svg
+
     _plot_add_title(plv, byc)
     _plot_add_cytobands(plv, byc)
-    _plot_add_samplestrips(plv, results, byc)
+    _plot_add_samplestrips(plv, byc)
     _plot_add_markers(plv, byc)
-    _plot_add_footer(plv, results, byc)
+    _plot_add_footer(plv, byc)
 
     plv["Y"] += plv["plot_margins"]
 
@@ -70,7 +79,10 @@ def _initialize_plot_values(byc, results):
     }
 
     for p_k, p_d in p_d_p.items():
-        plv.update({ p_k: p_d.get("default", "") })
+        if "default" in p_d:
+            plv.update({ p_k: p_d["default"] })
+        else:
+            plv.update({ p_k: "" })
 
     if plv["results_number"] < 2:
         plv.update({ "plot_labelcol_width": 0 })
@@ -108,6 +120,7 @@ def _initialize_plot_values(byc, results):
             title = _format_resultset_title(results[0])
 
     plv.update({
+        "results": results,
         "plot_title": title,
         "styles": [ f'.plot-area {{fill: { plv.get("plot_area_color", "#66ddff") }; fill-opacity: { plv.get("plot_area_opacity", 0.8) };}}' ],
         "Y": plv["plot_margins"],
@@ -121,6 +134,23 @@ def _initialize_plot_values(byc, results):
         "plot_labels": {},
         "dendrogram": False
     })
+
+    return plv
+
+################################################################################
+
+def _plot_respond_empty_results(plv, byc):
+    
+    if len(plv["results"]) > 0:
+        return False
+
+    plv.update({
+            "plot_title_font_size": plv["plot_font_size"],
+            "plot_title": "No matching CNV data"
+    })
+
+    _plot_add_title(plv, byc)
+    _plot_add_footer(plv, byc)
 
     return plv
 
@@ -191,6 +221,7 @@ def _plot_add_cytobands(plv, byc):
     #---------------------------- chromosomes ---------------------------------#
 
     X = plv["plot_area_x0"]
+    plv.update({"plot_chromosomes_y0": plv["Y"]})
 
     for chro in plv["plot_chros"]:
 
@@ -240,119 +271,86 @@ def _plot_add_cytobands(plv, byc):
 
 ################################################################################
 
-def _plot_add_histodata(plv, results, byc):
+def _plot_add_histodata(plv, byc):
 
     plv.update( {"plot_first_area_y0": plv["Y"] })
 
-    results = _plot_order_histograms(plv, results, byc)
+    _plot_order_histograms(plv, byc)
 
-    for f_set in results:
+    for f_set in plv["results"]:
         _plot_add_one_histogram(plv, f_set, byc)
 
     plv["plot_last_histo_ye"] = plv["Y"]
 
     #----------------------- plot cluster tree --------------------------------#
 
-    p_s_c = plv.get("plot_dendrogram_color", '#ee0000')
-    p_s_w = plv.get("plot_dendrogram_stroke", 1)
-
-    d = plv.get("dendrogram", False)
-
-    if d is not False:
-
-        d_x_s = d.get("dcoord", []) 
-        d_y_s = d.get("icoord", []) 
-
-        t_y_0 = plv["plot_first_area_y0"]
-        t_x_0 = plv["plot_area_x0"] + plv["plot_area_width"]
-        t_y_f = plv["plot_area_height"] * 0.1
-
-        x_max = plv["plot_dendrogram_width"]
-        for i, node in enumerate(d_x_s):
-            for j, x in enumerate(node):
-                if x > x_max:
-                    x_max = x
-
-        t_x_f = plv["plot_dendrogram_width"] / x_max
-
-        for i, node in enumerate(d_x_s):
-
-            n = f'<polyline points="'
-
-            for j, x in enumerate(node):
-                y = d_y_s[i][j] * t_y_f - plv["plot_region_gap_width"]
-
-                for h, f_set in enumerate(results):
-                    h_y_e = h * (plv["plot_area_height"] + plv["plot_region_gap_width"])
-                    if y > h_y_e:
-                        y += plv["plot_region_gap_width"]
-
-                n += f' { round(t_x_0 + x * t_x_f, 1) },{round(t_y_0 + y, 1)}'
-
-            n += f'" fill="none" stroke="{p_s_c}" stroke-width="{p_s_w}px" />'
-
-            plv["pls"].append(n)
+    plv.update({"cluster_head_gap": plv["plot_region_gap_width"]})
+    _plot_add_cluster_tree(plv, plv["plot_area_height"], byc)
 
     return plv
 
 ################################################################################
 
-def _plot_order_histograms(plv, results, byc):
+def _plot_order_histograms(plv, byc):
 
-    if plv.get("plot_cluster_results", True) is True and len(results) > 2:
-        dendrogram = cluster_frequencies(plv, results, byc)
+    if plv.get("plot_cluster_results", True) is True and len(plv["results"]) > 2:
+        dendrogram = cluster_frequencies(plv, byc)
         new_order = dendrogram.get("leaves", [])
-        if len(new_order) == len(results):
-            results[:] = [ results[i] for i in dendrogram.get("leaves", []) ]
+        if len(new_order) == len(plv["results"]):
+            plv["results"][:] = [ plv["results"][i] for i in dendrogram.get("leaves", []) ]
             plv.update({"dendrogram": dendrogram})
 
-    return results
+    return plv
 
 ###############################################################################
 
-def _plot_order_samples(plv, results, byc):
+def _plot_order_samples(plv, byc):
 
-    if plv.get("plot_cluster_results", True) is True and len(results) > 2:
-        dendrogram = cluster_samples(plv, results, byc)
+    if plv.get("plot_cluster_results", True) is True and len(plv["results"]) > 2:
+        dendrogram = cluster_samples(plv, byc)
         new_order = dendrogram.get("leaves", [])
-        if len(new_order) == len(results):
-            results[:] = [ results[i] for i in dendrogram.get("leaves", []) ]
+        if len(new_order) == len(plv["results"]):
+            plv["results"][:] = [ plv["results"][i] for i in dendrogram.get("leaves", []) ]
             plv.update({"dendrogram": dendrogram})
 
-    return results, plv
+    return plv
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-def _plot_add_samplestrips(plv, results, byc):
+def _plot_add_samplestrips(plv, byc):
 
     plv.update( {"plot_first_area_y0": plv["Y"] })
     plv["pls"].append("")
     plv.update( {"plot_strip_bg_i": len(plv["pls"]) - 1 })
 
-    lab_x_e = plv["plot_area_x0"] - plv["plot_region_gap_width"]
-    lab_f_s = plv["plot_samplestrip_height"] - 2
+    lab_x_e = plv["plot_area_x0"] - plv["plot_region_gap_width"] * 2
+    lab_f_s = round(plv["plot_samplestrip_height"] * 0.65, 1)
 
-    if len(results) > 0:
+    if len(plv["results"]) > 0:
 
-        results, plv = _plot_order_samples(plv, results, byc)
+        _plot_order_samples(plv, byc)
 
         plv["styles"].append(
             f'.title-left {{text-anchor: end; fill: { plv["plot_font_color"] }; font-size: { lab_f_s }px;}}'
         )
 
-        for s in results:
+        for s in plv["results"]:
             _plot_add_one_samplestrip(plv, s, byc)
             if lab_f_s > 5:
-                g_lab = f'{s.get("biosample_id", "NA")} ({s.get("callset_id", "NA")})'
-                plv["pls"].append(f'<text x="{lab_x_e}" y="{ plv["Y"] - 1 }" class="title-left">{g_lab}</text>')
+                cs_id = s.get("callset_id", "")
+                if len(cs_id) > 0:
+                    cs_id = f' ({cs_id})'
+                g_lab = f'{s.get("biosample_id", "")}{cs_id}'
+                plv["pls"].append(f'<text x="{lab_x_e}" y="{ plv["Y"] - round(plv["plot_samplestrip_height"] * 0.2, 1) }" class="title-left">{g_lab}</text>')
 
     plv["plot_last_histo_ye"] = plv["Y"]
 
     #----------------------- plot cluster tree --------------------------------#
 
-    _plot_add_cluster_tree(plv, s, byc)
+    plv.update({"cluster_head_gap": 0})
+    _plot_add_cluster_tree(plv, plv["plot_samplestrip_height"], byc)
 
     #--------------------- plot area background -------------------------------#
 
@@ -367,7 +365,7 @@ def _plot_add_samplestrips(plv, results, byc):
 
 ################################################################################
 
-def _plot_add_cluster_tree(plv, s, byc):
+def _plot_add_cluster_tree(plv, itemHeight, byc):
 
     d = plv.get("dendrogram", False)
 
@@ -376,16 +374,17 @@ def _plot_add_cluster_tree(plv, s, byc):
 
     p_s_c = plv.get("plot_dendrogram_color", '#ee0000')
     p_s_w = plv.get("plot_dendrogram_stroke", 1)
-    
+
     d_x_s = d.get("dcoord", []) 
     d_y_s = d.get("icoord", []) 
 
     t_y_0 = plv["plot_first_area_y0"]
     t_x_0 = plv["plot_area_x0"] + plv["plot_area_width"]
-    t_y_f = plv["plot_samplestrip_height"] * 0.1
+    t_y_f = itemHeight * 0.1
 
     # finding the largest x-value of the dendrogram for scaling
     x_max = plv["plot_dendrogram_width"]
+
     for i, node in enumerate(d_x_s):
         for j, x in enumerate(node):
             if x > x_max:
@@ -394,10 +393,21 @@ def _plot_add_cluster_tree(plv, s, byc):
 
     for i, node in enumerate(d_x_s):
 
-        n_coords = []
+        n = f'<polyline points="'
+
         for j, x in enumerate(node):
-            n_coords.append( f'{ round(t_x_0 + x * t_x_f, 1) },{round(t_y_0 + d_y_s[i][j] * t_y_f, 1)}' )
-        plv["pls"].append( f'<polyline points="{ " ".join(n_coords) }" fill="none" stroke="{p_s_c}" stroke-width="{p_s_w}px" />' )
+            y = d_y_s[i][j] * t_y_f - plv["cluster_head_gap"]
+
+            for h, f_set in enumerate(plv["results"]):
+                h_y_e = h * (itemHeight + plv["cluster_head_gap"])
+                if y > h_y_e:
+                    y += plv["cluster_head_gap"]
+
+            n += f' { round(t_x_0 + x * t_x_f, 1) },{round(t_y_0 + y, 1)}'
+
+        n += f'" fill="none" stroke="{p_s_c}" stroke-width="{p_s_w}px" />'
+
+        plv["pls"].append(n)
 
     return plv
 
@@ -430,7 +440,6 @@ def _plot_add_one_samplestrip(plv, s, byc):
             if l_v < 0.5:
                 l_v = 0.5
             v_x = round(X + s_v * plv["plot_b2pf"], 1)
-
             t = p_v.get("variant_type", "NA")
             c = cnv_c.get(t, "rgb(111,111,111)")
 
@@ -554,7 +563,7 @@ def _histoplot_add_left_labels(plv, f_set, byc):
     h_y_0 = plv["Y"] + plv["plot_area_height"] * 0.5
 
     plv["styles"].append(
-        f'.title-left {{text-anchor: end; fill: { plv["plot_font_color"] }; font-size: { plv["plot_font_size"] }px;}}'
+        f'.title-left {{text-anchor: end; fill: { plv["plot_font_color"] }; font-size: { plv["plot_labelcol_font_size"] }px;}}'
     )
     
     g_id = f_set.get("group_id", "NA")
@@ -564,9 +573,9 @@ def _histoplot_add_left_labels(plv, f_set, byc):
 
     # The condition splits the label data on 2 lines if a text label pre-exists
     if len(byc["dataset_ids"]) > 1 and g_ds_id is not False:
-        count_lab = f' ({g_ds_id}, {g_no} samples)'
+        count_lab = f' ({g_ds_id}, {g_no} { "samples" if g_no > 1 else "sample" })'
     else:
-        count_lab = f' ({g_no} samples)'
+        count_lab = f' ({g_no} {"samples" if g_no > 1 else "sample"} )'
 
     if len(g_lab) > 0:
         lab_y = h_y_0 - plv["plot_labelcol_font_size"] * 0.2
@@ -627,6 +636,7 @@ def _plot_add_markers(plv, byc):
 
     _add_labs_from_plot_region_labels(plv, byc)
     _add_labs_from_gene_symbols(plv, byc)
+    _add_labs_from_cytobands(plv, byc)
 
     labs = plv["plot_labels"]
 
@@ -662,7 +672,7 @@ def _plot_add_markers(plv, byc):
 
             s = int(m_v.get("start", 0))
             e = int(m_v.get("end", 0))
-            l = m_v.get("label", "")
+            l = m_v.get("label", "")       
 
             m_s = X + s * b2pf
             m_e = X + e * b2pf
@@ -699,7 +709,6 @@ def _plot_add_markers(plv, byc):
             plv["pls"].append(f'<rect x="{ round(m_s, 1) }" y="{ marker_y_0 }" width="{ round(m_w, 1) }" height="{ m_h }" class="marker" style="opacity: 0.4; " />')
             plv["pls"].append(f'<rect x="{ round(m_l_s, 1) }" y="{ m_y_e }" width="{ round(m_l_w, 1) }" height="{ p_m_l_h }" class="marker" style="opacity: 0.1; " />')            
             plv["pls"].append(f'<text x="{ m_c }" y="{ l_y_p }" class="marker">{l}</text>')
-            marker_status = True
 
         X += chr_w
         X += plv["plot_region_gap_width"]
@@ -767,7 +776,8 @@ def _add_labs_from_gene_symbols(plv, byc):
             f_g.get("reference_name", False),
             f_g.get("start", False),
             f_g.get("end", False),
-            f_g.get("symbol", False)
+            plv.get("plot_marker_font_color", "#ccccff"),
+            f_g.get("symbol", False)          
         )
 
         if m is not False:
@@ -777,7 +787,35 @@ def _add_labs_from_gene_symbols(plv, byc):
 
 ################################################################################
 
-def _make_marker_object(chromosome, start, end, label=""):
+def _add_labs_from_cytobands(plv, byc):
+
+    g_s_s = plv.get("plot_cytoregion_labels", [])
+    if len(g_s_s) < 1:
+        return plv
+
+    g_l = []
+
+    for q_g in g_s_s:
+        cytoBands, chro, start, end, error = bands_from_cytobands(q_g, byc)
+        if len( cytoBands ) < 1:
+            continue
+
+        m = _make_marker_object(
+            chro,
+            start,
+            end,
+            plv.get("plot_cytoregion_color", "#ccccff"),
+            q_g
+        )
+
+        if m is not False:
+            plv["plot_labels"].update(m)
+
+    return plv
+
+################################################################################
+
+def _make_marker_object(chromosome, start, end, color, label=""):
 
     m = False
 
@@ -792,7 +830,8 @@ def _make_marker_object(chromosome, start, end, label=""):
             "chro": chromosome,
             "start": start,
             "end": end,
-            "label": label
+            "label": label,
+            "color": color
         }
     }
 
@@ -800,7 +839,7 @@ def _make_marker_object(chromosome, start, end, label=""):
 
 ################################################################################
 
-def _plot_add_footer(plv, results, byc):
+def _plot_add_footer(plv, byc):
 
     today = datetime.date.today()
     x_a_0 = plv["plot_area_x0"]
@@ -816,8 +855,8 @@ def _plot_add_footer(plv, results, byc):
     plv["Y"] += plv["plot_footer_font_size"]
     plv["pls"].append(f'<text x="{x_c_e}" y="{plv["Y"]}" class="footer-r">&#169; CC-BY 2001 - {today.year} progenetix.org</text>')
 
-    if len(results) > 1:
-        plv["pls"].append(f'<text x="{x_a_0}" y="{plv["Y"]}" class="footer-l">{ len(results) } analyses</text>')
+    if len(plv["results"]) > 1:
+        plv["pls"].append(f'<text x="{x_a_0}" y="{plv["Y"]}" class="footer-l">{ len(plv["results"]) } analyses</text>')
 
     return plv
 
@@ -870,3 +909,35 @@ style="margin: auto; font-family: Helvetica, sans-serif;">
     )
 
     return svg
+
+################################################################################
+################################################################################
+################################################################################
+
+def bycon_bundle_create_callsets_plot_list(bycon_bundle, byc):
+
+    c_p_l = []
+    for p_o in bycon_bundle["callsets"]:
+        cs_id = p_o.get("id")
+        p_o.update({
+            "ds_id": bycon_bundle.get("ds_id", ""),
+            "variants":[]
+        })
+
+        for v in bycon_bundle["variants"]:
+            if v.get("callset_id", "") == cs_id:
+                v = de_vrsify_variant(v, byc)
+                p_o["variants"].append(v)
+
+        c_p_l.append(p_o)
+        
+    return c_p_l
+
+################################################################################
+
+def bycon_bundle_create_intervalfrequencies_object(bycon_bundle, byc):
+
+    i_p_o = callsets_create_iset("import", "", bycon_bundle["callsets"], byc)
+
+    return i_p_o
+

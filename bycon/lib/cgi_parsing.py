@@ -73,7 +73,7 @@ def cgi_parse_POST(byc):
     content_len = environ.get('CONTENT_LENGTH', '0')
     content_typ = environ.get('CONTENT_TYPE', '')
 
-    defs = byc.get("beacon_defaults", {})
+    b_defs = byc.get("beacon_defaults", {})
     form = {}
 
     # TODO: catch error & return for non-json posts
@@ -105,9 +105,9 @@ def cgi_parse_POST(byc):
 
         # TODO: define somewhere else with proper defaults
         form.update({
-            "requested_granularity": jbod.get("requestedGranularity", defs.get("requested_granularity", "record")),
-            "include_resultset_responses": jbod.get("includeResultsetResponses", defs.get("include_resultset_responses", "HIT")),
-            "include_handovers": jbod.get("includeHandovers", defs.get("include_handovers", False)),
+            "requested_granularity": jbod.get("requestedGranularity", b_defs.get("requested_granularity", "record")),
+            "include_resultset_responses": jbod.get("includeResultsetResponses", b_defs.get("include_resultset_responses", "HIT")),
+            "include_handovers": jbod.get("includeHandovers", b_defs.get("include_handovers", False)),
             "filters": jbod.get("filters", [] )
         })
         # print(form)
@@ -124,13 +124,19 @@ def cgi_parse_POST(byc):
             "query_meta": jbod.get("meta", {})
         })
 
+
     return byc
 
 ################################################################################
 
 def cgi_parse_GET(byc):
 
-    defs = byc.get("beacon_defaults", {})
+    b_defs = byc.get("beacon_parameters", {})
+    p_defs = byc.get("plot_defaults", {})
+    v_defs = byc.get("variant_definitions", {})
+
+    f_defs = { **b_defs.get("parameters", {}), **p_defs.get("parameters", {}), **v_defs.get("parameters", {}) }
+
     form = {}
 
     byc.update({"debug_mode": set_debug_state()})
@@ -138,8 +144,28 @@ def cgi_parse_GET(byc):
 
     for p in get:
         p_d = decamelize(p)
-        if p in byc["config"]["form_list_pars"]["items"]:
-            form.update({p_d: form_return_listvalue( get, p )})
+        if p_d in f_defs:
+            p_d_t = f_defs[p_d].get("type", "string")
+            if "array" in p_d_t:
+                v = form_return_listvalue( get, p )
+                p_i_t = f_defs[p_d].get("items", "string")
+                if "int" in p_i_t:
+                    form.update({ p_d: list(map(int, v)) })
+                elif "number" in p_i_t:
+                    form.update({ p_d: list(map(float, v)) })
+                else:
+                    form.update({ p_d: v })
+            else:
+                v = get.getvalue(p)
+                if "bool" in p_d_t:
+                    form.update({ p_d: test_truthy( get.getvalue(p) )})
+                elif "int" in p_d_t:
+                    form.update({ p_d: int( v )})
+                elif "number" in p_d_t:
+                    form.update({ p_d: float( v )})
+                else:
+                    form.update({ p_d: v })
+        # TODO still fallback .. 
         else:
             v = get.getvalue(p)
             # making sure double entries are forced to single
@@ -153,9 +179,9 @@ def cgi_parse_GET(byc):
         form.update({"filters": []})
 
     form.update({
-        "requested_granularity": get.getvalue("requestedGranularity", defs.get("requested_granularity", "record")),
-        "include_resultset_responses": get.getvalue("includeResultsetResponses", defs.get("include_resultset_responses", "HIT")),
-        "include_handovers": get.getvalue("includeHandovers", defs.get("include_handovers", False))
+        "requested_granularity": get.getvalue("requestedGranularity", b_defs.get("requested_granularity", "record")),
+        "include_resultset_responses": get.getvalue("includeResultsetResponses", b_defs.get("include_resultset_responses", "HIT")),
+        "include_handovers": get.getvalue("includeHandovers", b_defs.get("include_handovers", False))
     })
 
     if "requested_schema" in form:
@@ -279,7 +305,7 @@ def get_plot_parameters(plv, byc):
     form = byc["form_data"]
 
     for p_k, p_d in p_d_p.items():
-        p_d_t = p_d.get("type", "string")
+
         if p_k in form:
             plv.update({ p_k: form[p_k]})
         l_p = p_d_l.get(p_k, False)
@@ -287,20 +313,32 @@ def get_plot_parameters(plv, byc):
             if l_p in byc["form_data"]:
                 plv.update({ p_k: form[l_p]})
 
+        if p_k not in plv:
+            continue
+
+        p_d_t = p_d.get("type", "string")
+
         if "int" in p_d_t:
             plv.update({ p_k: int(plv[p_k])})
         elif "number" in p_d_t:
             plv.update({ p_k: float(plv[p_k])})
+        elif "string" in p_d_t:
+            plv.update({ p_k: str(plv[p_k])})
         elif "bool" in p_d_t:
             plv.update({ p_k: test_truthy(plv[p_k])})
         elif "array" in p_d_t:
+            p_i_t = p_d_p[p_k].get("items", "string")
+
             if isinstance(plv[p_k], str):
                 plv.update({ p_k: unquote(plv[p_k]) })
                 plv.update({ p_k: re.split(",", plv[p_k])})
-            if "int" in p_d.get("items", "string"):
+
+            if "int" in p_i_t:
                 plv.update({ p_k: list(map(int, plv[p_k])) })
-            elif "number" in p_d_t:
-                plv.update({ p_k: list(float(int, plv[p_k])) })
+            elif "number" in p_i_t:
+                plv.update({ p_k: list(map(float, plv[p_k])) })
+            elif "string" in p_i_t:
+                plv.update({ p_k: list(map(str, plv[p_k])) })
 
     return plv
 
@@ -409,7 +447,7 @@ def cgi_print_response(byc, status_code):
 
         print_text_response(resp, byc["env"], status_code)
 
-    if "handoversonly" in byc["output"]:
+    if test_truthy(byc["form_data"].get("only_handovers", False)):
         try:        
             if "result_sets" in byc["service_response"]["response"]:
                 for rs_i, rs in enumerate(byc["service_response"]["response"]["result_sets"]):

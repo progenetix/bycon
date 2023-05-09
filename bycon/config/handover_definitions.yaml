@@ -1,19 +1,27 @@
 ---
 h->o_types:
 
-  cnvhistogram:
-    id: 'pgx:handover:cnvhistogram'
+  histoplot:
+    id: 'pgx:handover:histoplot'
     label: "CNV Histogram"
-    method: cnvhistogram
     paginated_entities:
       - biosample
       - analysis
     description: "create a CNV histogram from matched biosamples"
     h->o_key: 'biosamples.id'
     script_path_web: '/beacon/biosamples'
-#    script_path_web: '/services/samplePlots'
     output: histoplot
-#    output: cnvhistogram
+
+  samplesplot:
+    id: 'pgx:handover:samplesplot'
+    label: "Clustered sample CNV tracks"
+    paginated_entities:
+      - biosample
+      - analysis
+    description: "create CNV plots from matched biosamples"
+    h->o_key: 'biosamples.id'
+    script_path_web: '/beacon/biosamples'
+    output: samplesplot
 
   biosamples:
     id: 'pgx:handover:biosamples'
