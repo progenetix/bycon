@@ -17,7 +17,7 @@ from datatable_utils import export_datatable_download
 from export_file_generation import *
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, dataset_results_save_handovers
 from interval_utils import generate_genomic_intervals, interval_counts_from_callsets
-from plot_utils import histoplot_svg_generator, samplesplot_svg_generator
+from plot_utils import ByconPlot
 from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
 from query_generation import  generate_queries, initialize_beacon_queries, paginate_list, set_pagination_range
 from read_specs import load_yaml_empty_fallback, read_bycon_configs_by_name, read_bycon_definition_files, read_local_prefs
@@ -924,8 +924,8 @@ def check_callset_plot_delivery(byc):
 
             results.append(p_o)
 
-    svg = samplesplot_svg_generator(byc,results)
-    print_svg_response(svg, byc["env"])
+    plot_data_bundle = { "callsets_variant_bundles": results }
+    ByconPlot(byc, plot_data_bundle).svgResponse()
 
 ################################################################################
 
@@ -999,8 +999,8 @@ def check_computed_histoplot_delivery(byc):
             iset = callset__ids_create_iset(ds_id, "Search Results", cs__ids, byc)
             interval_sets.append(iset)
 
-    svg = histoplot_svg_generator(byc, interval_sets)
-    print_svg_response(svg, byc["env"])
+    plot_data_bundle = { "interval_frequencies_sets": interval_sets }
+    ByconPlot(byc, plot_data_bundle).svgResponse()
 
 ################################################################################
 

@@ -57,6 +57,24 @@ io_params:
       db_key: icdo_topography.label
       type: string
       compact: True
+    pathological_stage_id:
+      db_key: pathological_stage.id
+      type: string
+      indexed: True
+      compact: True
+    pathological_stage_label:
+      db_key: pathological_stage.label
+      type: string
+      compact: True
+    biosample_status_id:
+      db_key: biosample_status.id
+      type: string
+      indexed: True
+      compact: True
+    biosample_status_label:
+      db_key: biosample_status.label
+      type: string
+      compact: True
     sampled_tissue_id:
       db_key: sampled_tissue.id
       type: string
@@ -79,7 +97,7 @@ io_params:
       type: string
       compact: True
     age_iso:
-      db_key: time_of_collection.age.iso8601duration
+      db_key: time_of_collection.age
       type: string
       indexed: True
       compact: True

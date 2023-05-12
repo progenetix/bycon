@@ -1,3 +1,9 @@
+plot_types:
+  histoplot:
+    data_key: interval_frequencies_sets
+  samplesplot:
+    data_key: callsets_variant_bundles
+
 legacy_parameters:
 
   # These remap parameters from the PGX legacy method to current names.

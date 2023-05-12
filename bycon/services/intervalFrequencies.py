@@ -113,8 +113,8 @@ def interval_frequencies():
 
     mongo_client.close( )
 
-    svg = histoplot_svg_generator(byc, results)
-    print_svg_response(svg, byc["env"])
+    plot_data_bundle = { "interval_frequencies_sets": results }
+    ByconPlot(byc, plot_data_bundle).svgResponse()
 
     check_pgxseg_frequencies_export(byc, results)
     check_pgxmatrix_frequencies_export(byc, results)

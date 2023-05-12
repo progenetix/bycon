@@ -40,7 +40,6 @@ def samples_plotter():
     parse_variant_parameters(byc)
     generate_genomic_intervals(byc)
 
-
     byc["response_entity"].update({"response_schema": "beaconResultsetsResponse"})
     create_empty_beacon_response(byc)
 
@@ -55,38 +54,7 @@ def samples_plotter():
         response_add_error(byc, 422, "No value was provided for collation `fileId`.")
     cgi_break_on_errors(byc)
 
-    if not "plot" in byc.get("output", "handovers"):
-
-        res_h_o = []
-        h_o_types = byc["handover_definitions"]["h->o_types"]
-        h_o_server = select_this_server(byc)
-
-        for h_o_t in ["histoplot", "samplesplot"]:
-            h_o_defs = h_o_types.get(h_o_t, {})
-            h_o_defs.update({"script_path_web":"/services/samplesPlotter"})
-            h_o_r = {
-                "handover_type": {
-                    "id": h_o_defs[ "id" ],
-                    "label": f'{ h_o_defs.get("label", "generic handover") }'
-                },
-                "description": h_o_defs[ "description" ],
-                "url": handover_create_url(h_o_server, h_o_defs, byc[ "file_id" ], byc),
-                "pages": []
-            }
-            h_o_r.update({"url": re.sub("accessid", "fileId", h_o_r["url"])})
-            res_h_o.append(h_o_r)
-
-        r_set = {
-            "exists": True,
-            "resultsHandovers": res_h_o
-        }
-
-        byc["service_response"].update({
-            "response_summary":{"exists":True},
-            "response": {"result_sets": [r_set]}
-        })
-
-        cgi_print_response( byc, 200 )
+   _create_file_handover_response(byc):
 
     # TODO: maybe move to defaults file...
     if not "plot" in byc.get("output", "histoplot"):
@@ -99,15 +67,56 @@ def samples_plotter():
     cgi_break_on_errors(byc)
 
     bycon_bundle = pgxseg_return_bycon_bundle(inputfile, byc)
-    cs_plot_data = bycon_bundle_create_callsets_plot_list(bycon_bundle, byc)
-    interval_frequency_object = bycon_bundle_create_intervalfrequencies_object(bycon_bundle, byc)
 
-    svg = samplesplot_svg_generator(byc, cs_plot_data)
-    print_svg_response(svg, byc["env"])
+    plot_data_bundle = {
+        "interval_frequencies_sets": [],
+        "callsets_variant_bundles": []
+    }
 
-    svg = histoplot_svg_generator(byc, [interval_frequency_object])
-    print_svg_response(svg, byc["env"])
+    # The following avoids to process both data options...
+    if "sample" in byc["output"]:
+        plot_data_bundle["interval_frequencies_sets"] = cs_plot_data
+    elif "histo" in byc["output"]:
+        plot_data_bundle["callsets_variant_bundles"] = [ bycon_bundle_create_intervalfrequencies_object(bycon_bundle, byc) ]
 
+    ByconPlot(byc, plot_data).svgResponse()
+
+################################################################################
+
+def _create_file_handover_response(byc):
+
+    if "plot" in byc.get("output", "handovers"):
+        return byc
+
+    h_o_types = byc["handover_definitions"]["h->o_types"]
+    h_o_server = select_this_server(byc)
+    res_h_o = []
+
+    for h_o_t in ["histoplot", "samplesplot"]:
+        h_o_defs = h_o_types.get(h_o_t, {})
+        h_o_defs.update({"script_path_web":"/services/samplesPlotter"})
+        h_o_r = {
+            "handover_type": {
+                "id": h_o_defs[ "id" ],
+                "label": f'{ h_o_defs.get("label", "generic handover") }'
+            },
+            "description": h_o_defs[ "description" ],
+            "url": handover_create_url(h_o_server, h_o_defs, byc[ "file_id" ], byc),
+            "pages": []
+        }
+        h_o_r.update({"url": re.sub("accessid", "fileId", h_o_r["url"])})
+        res_h_o.append(h_o_r)
+
+    r_set = { "exists": True, "resultsHandovers": res_h_o }
+
+    byc["service_response"].update({
+        "response_summary":{"exists":True},
+        "response": {"result_sets": [r_set]}
+    })
+
+    cgi_print_response( byc, 200 )
+
+################################################################################
 ################################################################################
 ################################################################################
 
