@@ -13,6 +13,7 @@ try:
     from aggregator_utils import *
     from args_parsing import *
     from bycon_helpers import *
+    from bycon_plot import *
     from cgi_parsing import *
     from clustering_utils import *
     from data_retrieval import *
@@ -23,7 +24,6 @@ try:
     from file_utils import *
     from filter_parsing import *
     from geomap_utils import *
-    from plot_utils import *
     from publication_utils import *
     from query_execution import *
     from query_generation import *

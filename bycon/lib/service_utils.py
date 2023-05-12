@@ -17,7 +17,7 @@ from datatable_utils import export_datatable_download
 from export_file_generation import *
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, dataset_results_save_handovers
 from interval_utils import generate_genomic_intervals, interval_counts_from_callsets
-from plot_utils import ByconPlot
+from bycon_plot import ByconPlot
 from query_execution import execute_bycon_queries, process_empty_request, mongo_result_list
 from query_generation import  generate_queries, initialize_beacon_queries, paginate_list, set_pagination_range
 from read_specs import load_yaml_empty_fallback, read_bycon_configs_by_name, read_bycon_definition_files, read_local_prefs
@@ -1060,4 +1060,35 @@ def check_callsets_matrix_delivery(ds_id, byc):
         return byc
 
     export_callsets_matrix(ds_id, byc)
+
+################################################################################
+
+def bycon_bundle_create_callsets_plot_list(bycon_bundle, byc):
+
+    c_p_l = []
+    for p_o in bycon_bundle["callsets"]:
+        cs_id = p_o.get("id")
+        p_o.update({
+            "ds_id": bycon_bundle.get("ds_id", ""),
+            "variants":[]
+        })
+
+        for v in bycon_bundle["variants"]:
+            if v.get("callset_id", "") == cs_id:
+                v = de_vrsify_variant(v, byc)
+                p_o["variants"].append(v)
+
+        c_p_l.append(p_o)
         
+    return c_p_l
+
+################################################################################
+
+def bycon_bundle_create_intervalfrequencies_object(bycon_bundle, byc):
+
+    i_p_o = callsets_create_iset("import", "", bycon_bundle["callsets"], byc)
+
+    return i_p_o
+
+################################################################################
+       

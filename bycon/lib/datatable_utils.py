@@ -15,14 +15,13 @@ def export_datatable_download(results, byc):
 
     dt_m = byc["datatable_mappings"]
     r_t = byc["response_entity_id"]
+    io_params = dt_m["entities"][ r_t ]["parameters"]
 
-    if not byc["response_entity_id"] in dt_m["io_params"]:
+    if not byc["response_entity_id"] in dt_m["entities"]:
         return
 
-    io_params = dt_m["io_params"][ r_t ]
-    io_prefixes = dt_m["io_prefixes"][ r_t ]
-
     if not "local" in byc["env"]:
+ 
         print('Content-Type: text/tsv')
         if byc["download_mode"] is True:
             print('Content-Disposition: attachment; filename='+byc["response_entity_id"]+'.tsv')
@@ -31,56 +30,44 @@ def export_datatable_download(results, byc):
 
     if "idtable" in byc["output"]:
         io_params = {"id": {"db_key":"id", "type": "string" } }
-        io_prefixes = {}
 
-    header = create_table_header(io_params, io_prefixes)
+    header = create_table_header(io_params)
 
-    print("\t".join( header ))    
+    print("\t".join( header ))
+
     for pgxdoc in results:
+
         line = [ ]
-        for p, k in io_params.items():
-            t = k.get("type", "string")
-            v = get_nested_value(pgxdoc, k["db_key"])
-            if isinstance(v, list):
-                line.append("::".join(v))
-            else:
-                if "integer" in t:
-                    v = int(v)
-                line.append(str(v))
 
-        for par, d in io_prefixes.items():
+        for par, par_defs in io_params.items():
 
-            t = k.get("type", "string")
-            if "string" in t:
-                if par in pgxdoc:
-                    try:
-                        line.append(str(pgxdoc[par]["id"]))
-                    except:
-                        line.append("")
-                    try:
-                        line.append(str(pgxdoc[par]["label"]))
-                    except:
-                        line.append("")
+            parameter_type = par_defs.get("type", "string")
+            pres = par_defs.get("prefix_split", {})
+
+            if len(pres.keys()) < 1:
+                db_key = par_defs.get("db_key", "___undefined___")
+                v = get_nested_value(pgxdoc, db_key)
+                if isinstance(v, list):
+                    line.append("::".join(map(str, (v))))
                 else:
-                    line.append("")
-                    line.append("")
-            elif "array" in t:
-                for pre in d["pres"]:
-                    status = False
-                    for o in pgxdoc[par]:
-                        if pre in o["id"]:
-                            try:
-                                line.append(str(o["id"]))
-                                status = True
-                            except:
-                                continue
-                            try:
-                                line.append(str(o["label"]))
-                            except:
-                                line.append("")
-                    if status is False:
-                        line.append("")
-                        line.append("")
+                    line.append(str(v))
+            else:
+
+                par_vals = pgxdoc.get(par, [])
+
+                # TODO: this is based on the same order of prefixes as in the
+                # header generation, w/o checking; should be keyed ...
+                for pre in pres.keys():
+                    p_id = ""
+                    p_label = ""
+                    for v in par_vals:
+                        if v.get("id", "___none___").startswith(pre):
+                            p_id = v.get("id")
+                            p_label = v.get("label", "")
+                            continue
+                    line.append(p_id)
+                    line.append(p_label)
+
         print("\t".join( line ))
 
     exit()
@@ -91,20 +78,20 @@ def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="
 
     dtm = byc["datatable_mappings"]
 
-    io_params = dtm["io_params"].get(primary_scope, {})
-    io_prefixes = dtm["io_prefixes"].get(primary_scope, {})
-
-    ios = list(io_params.keys()) + list(io_prefixes.keys())
-
-    pref_array_values = {}
+    io_params = dt_m["entities"][ primary_scope ]["parameters"]
+    def_params = create_table_header(io_params)
 
     for f_n in fieldnames:
 
         if "#"in f_n:
             continue
 
-        if f_n not in ios:
+        if f_n not in def_params:
             continue
+
+        # this is for the split-by-prefix columns
+        unprefed = re.sub(r'___.*?$', '', f_n)
+        par_defs = io_params.get(unprefed, {})
 
         v = lineobj[f_n].strip()
 
@@ -115,8 +102,17 @@ def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="
         if len(v) < 1:
             continue
 
+        # this makes only sense for updating existing data; if there would be
+        # no value, the parameter would just be excluded from the update object
+        # if there was an empy value
         if "__delete__" in v.lower():
             v = ""
+
+        parameter_type = par_defs.get("type", "string")
+        if "num" in parameter_type:
+            v = float(v)
+        elif "integer" in parameter_type:
+            v = int(v)
 
         if "___" in f_n:
             par, key, pre = re.match(r"^(\w+)__(\w+)___(\w+)$", f_n).group(1,2,3)
@@ -132,7 +128,6 @@ def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="
 
         if par in io_params.keys():
             db_key = io_params[par]["db_key"]
-            parameter_type = io_params[par].get("type", "string")
 
             assign_nested_value(parent, db_key, v, parameter_type)
 
@@ -146,20 +141,24 @@ def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="
 
 ################################################################################
 
-def create_table_header(io_params, io_prefixes):
+def create_table_header(io_params):
 
     """podmd
     podmd"""
 
     header_labs = [ ]
 
-    for par in io_params.keys():
-        header_labs.append( par )
-    for par, d in io_prefixes.items():
-        if "pres" in d:
-            for pre in d["pres"].keys():
-                header_labs.append( par+"_id"+"___"+pre )
-                header_labs.append( par+"_label"+"___"+pre )
+    for par, par_defs in io_params.items():
+
+        pres = par_defs.get("prefix_split", {})
+
+        if len(pres.keys()) < 1:
+            header_labs.append( par )
+            continue
+
+        for pre in pres.keys():
+            header_labs.append( par+"_id"+"___"+pre )
+            header_labs.append( par+"_label"+"___"+pre )
 
     return header_labs
 

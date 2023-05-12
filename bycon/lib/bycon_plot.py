@@ -1,6 +1,4 @@
-import re
-import datetime
-from urllib.parse import unquote
+import re, datetime
 from cgi_parsing import get_plot_parameters, print_svg_response, test_truthy
 from cytoband_utils import bands_from_cytobands, retrieve_gene_id_coordinates
 from clustering_utils import cluster_frequencies, cluster_samples
@@ -26,6 +24,7 @@ class ByconPlot:
         self.env = byc.get("env", "server")
         self.byc = byc
         self.plot_data_bundle = plot_data_bundle
+        self.svg = None
 
     #--------------------------------------------------------------------------#
     #----------------------------- public -------------------------------------#
@@ -173,7 +172,7 @@ class ByconPlot:
                 "plot_title": "No matching CNV data"
         })
 
-        __plot_add_title(self)
+        self.__plot_add_title()
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
@@ -925,31 +924,4 @@ style="margin: auto; font-family: Helvetica, sans-serif;">
 ################################################################################
 ################################################################################
 ################################################################################
-
-def bycon_bundle_create_callsets_plot_list(bycon_bundle, byc):
-
-    c_p_l = []
-    for p_o in bycon_bundle["callsets"]:
-        cs_id = p_o.get("id")
-        p_o.update({
-            "ds_id": bycon_bundle.get("ds_id", ""),
-            "variants":[]
-        })
-
-        for v in bycon_bundle["variants"]:
-            if v.get("callset_id", "") == cs_id:
-                v = de_vrsify_variant(v, byc)
-                p_o["variants"].append(v)
-
-        c_p_l.append(p_o)
-        
-    return c_p_l
-
-################################################################################
-
-def bycon_bundle_create_intervalfrequencies_object(bycon_bundle, byc):
-
-    i_p_o = callsets_create_iset("import", "", bycon_bundle["callsets"], byc)
-
-    return i_p_o
 

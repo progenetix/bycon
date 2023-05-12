@@ -7,6 +7,7 @@ title: Changes & To Do
 ### 2023-05-12 (v1.0.41)
 
 * complete refactoring of plot code as `ByconPlot` class
+* renamed library `bycon_plot.py`
 
 ### 2023-05-09 (v1.0.40)
 

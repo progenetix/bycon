@@ -68,59 +68,53 @@ def stream_pgx_meta_header(ds_id, ds_results, byc):
 def pgxseg_biosample_meta_line(byc, biosample, group_id_key="histological_diagnosis_id"):
 
     dt_m = byc["datatable_mappings"]
-    io_params = dt_m["io_params"][ "biosample" ]
-    io_prefixes = dt_m["io_prefixes"][ "biosample" ]
+    io_params = dt_m["entities"][ "biosample" ]["parameters"]
 
     g_id_k = group_id_key
     g_lab_k = re.sub("_id", "_label", g_id_k)
 
     line = [ "#sample=>id={}".format(biosample.get("id", "¡¡¡NONE!!!")) ]
 
-    for p, k in io_params.items():
+    for par, par_defs in io_params.items():
 
-        in_pgxseg = k.get("compact", False)
+        in_pgxseg = par_defs.get("compact", False)
         if in_pgxseg is False:
             continue
 
-        t = k.get("type", "string")
-        v = get_nested_value(biosample, k["db_key"])
-        h_v = ""
-        if isinstance(v, list):
-            h_v = "::".join(v)
+        parameter_type = par_defs.get("type", "string")
+        pres = par_defs.get("prefix_split", {})
+
+        if len(pres.keys()) < 1:
+            db_key = par_defs.get("db_key", "___undefined___")
+            v = get_nested_value(biosample, db_key)
+            h_v = ""
+            if isinstance(v, list):
+                h_v = "::".join(map(str, (v)))
+            else:
+                h_v = str(v)
+
+            if len(h_v) > 0:
+                if g_id_k == par:
+                    line.append("group_id={}".format(h_v))
+                if g_lab_k == par:
+                    line.append("group_label={}".format(h_v))
+                line.append("{}={}".format(par, h_v))
         else:
-            h_v = str(v)
 
-        if g_id_k == p:
-            line.append("group_id={}".format(v))
-        if g_lab_k == p:
-            line.append("group_label={}".format(v))
-
-        if len(h_v) > 0:
-            line.append("{}={}".format(p, h_v))
-
-    for p, k in io_prefixes.items():
-        in_pgxseg = k.get("compact", False)
-        if in_pgxseg is False:
-            continue
-        pres = k.get("pres", [])
-        if len(pres) < 1:
-            continue
-
-        l_v = get_nested_value(biosample, k["db_key"])
-        if not isinstance(l_v, list):
-            continue
-        for o in l_v:
-            o_id = o.get("id", "")
-            o_l = o.get("label", "")
-
-            if len(o_id) < 1:
+            par_vals = biosample.get(par, [])
+            if not isinstance(par_vals, list):
                 continue
-
-            for pre in pres:
-                if o_id.startswith(pre):
-                    line.append("{}_id___{}={}".format(p, pre, o_id))
-                    if len(o_l) > 0:
-                        line.append("{}_label___{}={}".format(p, pre, o_l))
+            for pre, pre_defs in pres.items():
+                in_pgxseg = pre_defs.get("compact", False)
+                if in_pgxseg is False:
+                    continue
+                for v in par_vals:
+                    if v.get("id", "___none___").startswith(pre):
+                        line.append("{}_id___{}={}".format(par, pre, v.get("id")))
+                        l = v.get("label", "")
+                        if len(l) > 0:
+                            line.append("{}_label___{}={}".format(par, pre, v.get("id")))
+                        continue
 
     h_line = ";".join(line)
 

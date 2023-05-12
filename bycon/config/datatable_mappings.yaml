@@ -1,419 +1,384 @@
-io_params:
+description: >-
+
+  These definitions determine the mappings of individual parameters between
+
+  * data objects (e.g. MongoDB documents)
+  * columnar representations (e.g. tab-delimited `.pgxtab` files)
+  * `parameter=value` descriptors in `.pgxseg` headers
+
+  The individual parameters are defined separately for each context ("entities").
+  Reading the same datatable into a dictionary/object will e.g. lead to the
+  `biosample_id` values being mapped to `id` if read in a `biosample` context
+  but to `biosample_id` if read under a `variant` context.
+
+  #### Conventions
+
+  * the default `type` is string (not indicated); options are `integer`,
+    `number`, `array` and `boolean`
+  * the same is true for `items` in arrays
+  * if a `prefix_split` exists values from the array will be assigned to separate
+    columns according to the prefix; _i.e._ a prefix of `PMID` under `external_references`
+    by convention will lead to the creation of `external_references_id__PMID` and
+    `external_references_label__PMID`
+  * `indexed` indicates if the according `db_key` should be indexed by the DB
+  * `compact` indicates if the parameter should be included in limited data
+    representations
+
+entities:
+
+#------------------------------------------------------------------------------#
+
   biosample:
-    biosample_id:
-      db_key: id
-      type: string
-      indexed: True
-      compact: True
-    group_id:
-      db_key: info.group.id
-      type: string
-      compact: True
-    group_label:
-      db_key: info.group.label
-      type: string
-      compact: True
-    individual_id:
-      db_key: individual_id
-      type: string
-      indexed: True
-      compact: True
-    callset_ids:
-      db_key: info.callset_ids
-      type: array
-    pgx_legacy_sample_id:
-      db_key: pgx_legacy_sample_id
-      type: string
-    legacy_ids:
-      db_key: info.legacy_ids
-      type: array
-    description:
-      db_key: description
-      type: string
-    histological_diagnosis_id:
-      db_key: histological_diagnosis.id
-      type: string
-      indexed: True
-      compact: True
-    histological_diagnosis_label:
-      db_key: histological_diagnosis.label
-      type: string
-      compact: True
-    icdo_morphology_id:
-      db_key: icdo_morphology.id
-      type: string
-      indexed: True
-      compact: True
-    icdo_morphology_label:
-      db_key: icdo_morphology.label
-      type: string
-      compact: True
-    icdo_topography_id:
-      db_key: icdo_topography.id
-      type: string
-      indexed: True
-      compact: True
-    icdo_topography_label:
-      db_key: icdo_topography.label
-      type: string
-      compact: True
-    pathological_stage_id:
-      db_key: pathological_stage.id
-      type: string
-      indexed: True
-      compact: True
-    pathological_stage_label:
-      db_key: pathological_stage.label
-      type: string
-      compact: True
-    biosample_status_id:
-      db_key: biosample_status.id
-      type: string
-      indexed: True
-      compact: True
-    biosample_status_label:
-      db_key: biosample_status.label
-      type: string
-      compact: True
-    sampled_tissue_id:
-      db_key: sampled_tissue.id
-      type: string
-      indexed: True
-      compact: True
-    sampled_tissue_label:
-      db_key: sampled_tissue.label
-      type: string
-      compact: True
-    tnm:
-      db_key: info.tumor_tnm_text
-      type: string
-      compact: True
-    stage:
-      db_key: info.tumor_stage_text
-      type: string
-      compact: True
-    grade:
-      db_key: info.tumor_grade_text
-      type: string
-      compact: True
-    age_iso:
-      db_key: time_of_collection.age
-      type: string
-      indexed: True
-      compact: True
-    sex_id:
-      db_key: info.sex.id
-      type: string
-      indexed: True
-      compact: True
-    sex_label:
-      db_key: info.sex.label
-      type: string
-      compact: True
-    followup_state_id:
-      db_key: followup_state.id
-      default: 'EFO:0030039'
-      indexed: True
-      compact: True
-    followup_state_label:
-      db_key: followup_state.label
-      default: 'no followup status'
-      compact: True
-    followup_time:
-      db_key: followup_time
-      type: string
-      indexed: True
-      compact: True
-    # recurrence:
-    #   db_key: info.recurrence
-    #   type: string
-    # recurrence_time:
-    #   db_key: info.recurrence_time
-    #   type: string
-    data_use_conditions_id:
-      db_key: data_use_conditions.id
-      type: string
-    data_use_conditions_label:
-      db_key: data_use_conditions.label
-      type: string
-    geoprov_city:
-      db_key: provenance.geo_location.properties.city
-      type: string
-      indexed: True
-    geoprov_country:
-      db_key: provenance.geo_location.properties.country
-      type: string
-      indexed: True
-    geoprov_iso_alpha3:
-      db_key: provenance.geo_location.properties.ISO3166alpha3
-      type: string
-      indexed: True
-    geoprov_lat:
-      db_key: provenance.geo_location.properties.latitude
-      type: number
-    geoprov_long:
-      db_key: provenance.geo_location.properties.longitude
-      type: number
-    cnv_fraction:
-      db_key: info.cnvstatistics.cnvfraction
-      type: number
-    cnv_del_fraction:
-      db_key: info.cnvstatistics.delfraction
-      type: number
-    cnv_dup_fraction:
-      db_key: info.cnvstatistics.dupfraction
-      type: number
-    cell_line:
-      db_key: info.cell_line
-      type: string
-    experiment_id:
-      db_key: analysis_info.experiment_id
-      type: string
-      indexed: True
-      compact: True
-    series_id:
-      db_key: analysis_info.series_id
-      type: string
-      indexed: True
-      compact: True
-    platform_id:
-      db_key: analysis_info.platform_id
-      type: string
-      indexed: True
-      compact: True
-    cell_line_id:
-      db_key: cell_line.id
-      type: string
-      indexed: True
-      compact: True
-    cell_line_label:
-      db_key: cell_line.label
-      type: string
-      compact: True
+
+    parameters:
+
+      biosample_id:
+        db_key: id
+        indexed: True
+        compact: True
+      group_id:
+        db_key: info.group.id
+        compact: True
+      group_label:
+        db_key: info.group.label
+        compact: True
+      individual_id:
+        db_key: individual_id
+        indexed: True
+        compact: True
+      callset_ids:
+        db_key: info.callset_ids
+        type: array
+      external_references:
+        type: array
+        db_key: external_references
+        indexed: True
+        compact: True
+        prefix_split:
+          PMID:
+            compact: True
+          arrayexpress:
+            compact: False
+          cbioportal:
+            compact: False
+          cellosaurus:
+            compact: True
+      pgx_legacy_sample_id:
+        db_key: pgx_legacy_sample_id
+      legacy_ids:
+        db_key: info.legacy_ids
+        type: array
+      description:
+        db_key: description
+      histological_diagnosis_id:
+        db_key: histological_diagnosis.id
+        indexed: True
+        compact: True
+      histological_diagnosis_label:
+        db_key: histological_diagnosis.label
+        compact: True
+      icdo_morphology_id:
+        db_key: icdo_morphology.id
+        indexed: True
+        compact: True
+      icdo_morphology_label:
+        db_key: icdo_morphology.label
+        compact: True
+      icdo_topography_id:
+        db_key: icdo_topography.id
+        indexed: True
+        compact: True
+      icdo_topography_label:
+        db_key: icdo_topography.label
+        compact: True
+      pathological_stage_id:
+        db_key: pathological_stage.id
+        indexed: True
+        compact: True
+      pathological_stage_label:
+        db_key: pathological_stage.label
+        compact: True
+      biosample_status_id:
+        db_key: biosample_status.id
+        indexed: True
+        compact: True
+      biosample_status_label:
+        db_key: biosample_status.label
+        compact: True
+      sampled_tissue_id:
+        db_key: sampled_tissue.id
+        indexed: True
+        compact: True
+      sampled_tissue_label:
+        db_key: sampled_tissue.label
+        compact: True
+      tnm:
+        db_key: info.tumor_tnm_text
+        compact: True
+      stage:
+        db_key: info.tumor_stage_text
+        compact: True
+      grade:
+        db_key: info.tumor_grade_text
+        compact: True
+      age_iso:
+        db_key: time_of_collection.age
+        indexed: True
+        compact: True
+      sex_id:
+        db_key: info.sex.id
+        indexed: True
+        compact: True
+      sex_label:
+        db_key: info.sex.label
+        compact: True
+      followup_state_id:
+        db_key: followup_state.id
+        default: 'EFO:0030039'
+        indexed: True
+        compact: True
+      followup_state_label:
+        db_key: followup_state.label
+        default: 'no followup status'
+        compact: True
+      followup_time:
+        db_key: followup_time
+        indexed: True
+        compact: True
+      # recurrence:
+      #   db_key: info.recurrence
+      #   type: string
+      # recurrence_time:
+      #   db_key: info.recurrence_time
+      #   type: string
+      data_use_conditions_id:
+        db_key: data_use_conditions.id
+      data_use_conditions_label:
+        db_key: data_use_conditions.label
+      geoprov_city:
+        db_key: provenance.geo_location.properties.city
+        indexed: True
+      geoprov_country:
+        db_key: provenance.geo_location.properties.country
+        indexed: True
+      geoprov_iso_alpha3:
+        db_key: provenance.geo_location.properties.ISO3166alpha3
+        indexed: True
+      geoprov_lat:
+        db_key: provenance.geo_location.properties.latitude
+        type: number
+      geoprov_long:
+        db_key: provenance.geo_location.properties.longitude
+        type: number
+      cnv_fraction:
+        db_key: info.cnvstatistics.cnvfraction
+        type: number
+      cnv_del_fraction:
+        db_key: info.cnvstatistics.delfraction
+        type: number
+      cnv_dup_fraction:
+        db_key: info.cnvstatistics.dupfraction
+        type: number
+      cell_line:
+        db_key: info.cell_line
+      experiment_id:
+        db_key: analysis_info.experiment_id
+        indexed: True
+        compact: True
+      series_id:
+        db_key: analysis_info.series_id
+        indexed: True
+        compact: True
+      platform_id:
+        db_key: analysis_info.platform_id
+        indexed: True
+        compact: True
+      cell_line_id:
+        db_key: cell_line.id
+        indexed: True
+        compact: True
+      cell_line_label:
+        db_key: cell_line.label
+        compact: True
+
+#------------------------------------------------------------------------------#
 
   individual:
-    individual_id:
-      db_key: id
-      type: string
-      indexed: True
-      compact: True
-    legacy_ids:
-      db_key: info.legacy_ids
-      type: array
-    sex_id:
-      db_key: sex.id
-      type: string
-      indexed: True
-      compact: True
-    sex_label:
-      db_key: sex.label
-      type: string
-      compact: True
-    data_use_conditions_id:
-      db_key: data_use_conditions.id
-      type: string
-    data_use_conditions_label:
-      db_key: data_use_conditions.label
-      type: string
-    # same as in biosample but different field
-    histological_diagnosis_id:
-      db_key: index_disease.disease_code.id
-      type: string
-      indexed: True
-      compact: True
-    histological_diagnosis_label:
-      db_key: index_disease.disease_code.label
-      type: string
-      compact: True
-    index_disease_notes:
-      db_key: index_disease.notes
-      type: string
-    index_disease_followup_time:
-      db_key: index_disease.followup_time
-      type: string
-      indexed: True
-      compact: True
-    index_disease_followup_state_id:
-      db_key: index_disease.followup_state.id
-      type: string
-      indexed: True
-      compact: True
-    index_disease_followup_state_label:
-      db_key: index_disease.followup_state.label
-      type: string
-      compact: True
-    auxiliary_disease_id:
-      db_key: auxiliary_disease.disease_code.id
-      indexed: True
-      type: string
-    auxiliary_disease_label:
-      db_key: auxiliary_disease.disease_code.label
-      type: string
-    auxiliary_disease_notes:
-      db_key: auxiliary_disease.notes
-      type: string
-    geoprov_city:
-      db_key: provenance.geo_location.properties.city
-      indexed: True
-      type: string
-    geoprov_country:
-      db_key: provenance.geo_location.properties.country
-      indexed: True
-      type: string
-    geoprov_iso_alpha3:
-      db_key: provenance.geo_location.properties.ISO3166alpha3
-      indexed: True
-      type: string
-    geoprov_lat:
-      db_key: provenance.geo_location.properties.latitude
-      type: float
-    geoprov_long:
-      db_key: provenance.geo_location.properties.longitude
-      type: float
-    cell_line_donation_id:
-      db_key: info.cell_line_donation.id
-      type: string
-      compact: True
-    cell_line_donation_label:
-      db_key: info.cell_line_donation.label
-      type: string
-      compact: True
+
+    parameters:
+
+      individual_id:
+        db_key: id
+        indexed: True
+        compact: True
+      legacy_ids:
+        db_key: info.legacy_ids
+        type: array
+      sex_id:
+        db_key: sex.id
+        indexed: True
+        compact: True
+      sex_label:
+        db_key: sex.label
+        compact: True
+      data_use_conditions_id:
+        db_key: data_use_conditions.id
+      data_use_conditions_label:
+        db_key: data_use_conditions.label
+      # same as in biosample but different field
+      histological_diagnosis_id:
+        db_key: index_disease.disease_code.id
+        indexed: True
+        compact: True
+      histological_diagnosis_label:
+        db_key: index_disease.disease_code.label
+        compact: True
+      index_disease_notes:
+        db_key: index_disease.notes
+      index_disease_followup_time:
+        db_key: index_disease.followup_time
+        indexed: True
+        compact: True
+      index_disease_followup_state_id:
+        db_key: index_disease.followup_state.id
+        indexed: True
+        compact: True
+      index_disease_followup_state_label:
+        db_key: index_disease.followup_state.label
+        compact: True
+      auxiliary_disease_id:
+        db_key: auxiliary_disease.disease_code.id
+        indexed: True
+      auxiliary_disease_label:
+        db_key: auxiliary_disease.disease_code.label
+      auxiliary_disease_notes:
+        db_key: auxiliary_disease.notes
+      geoprov_city:
+        db_key: provenance.geo_location.properties.city
+        indexed: True
+      geoprov_country:
+        db_key: provenance.geo_location.properties.country
+        indexed: True
+      geoprov_iso_alpha3:
+        db_key: provenance.geo_location.properties.ISO3166alpha3
+        indexed: True
+      geoprov_lat:
+        db_key: provenance.geo_location.properties.latitude
+        type: float
+      geoprov_long:
+        db_key: provenance.geo_location.properties.longitude
+        type: float
+      cell_line_donation_id:
+        db_key: info.cell_line_donation.id
+        compact: True
+      cell_line_donation_label:
+        db_key: info.cell_line_donation.label
+        compact: True
+
+#------------------------------------------------------------------------------#
 
   analysis:
-    analysis_id:
-      db_key: id
-      type: string
-      indexed: True
-      compact: True
-    biosample_id:
-      db_key: biosample_id
-      type: string
-      indexed: True
-      compact: True
-    individual_id:
-      db_key: individual_id
-      type: string
-      indexed: True
-    legacy_ids:
-      db_key: info.legacy_ids
-      type: array
-    variant_class:
-      db_key: variant_class
-      indexed: True
-    experiment_id:
-      db_key: analysis_info.experiment_id
-      type: string
-      indexed: True
-      compact: True
-    series_id:
-      db_key: analysis_info.series_id
-      type: string
-      indexed: True
-      compact: True
-    platform_id:
-      db_key: analysis_info.platform_id
-      type: string
-      indexed: True
-      compact: True
-    data_provenance:
-      db_key: info.data_provenance
-      type: string
+
+    parameters:
+
+      analysis_id:
+        db_key: id
+        indexed: True
+        compact: True
+      biosample_id:
+        db_key: biosample_id
+        indexed: True
+        compact: True
+      individual_id:
+        db_key: individual_id
+        indexed: True
+      legacy_ids:
+        db_key: info.legacy_ids
+        type: array
+      variant_class:
+        db_key: variant_class
+        indexed: True
+      experiment_id:
+        db_key: analysis_info.experiment_id
+        indexed: True
+        compact: True
+      series_id:
+        db_key: analysis_info.series_id
+        indexed: True
+        compact: True
+      platform_id:
+        db_key: analysis_info.platform_id
+        indexed: True
+        compact: True
+      data_provenance:
+        db_key: info.data_provenance
+
+#------------------------------------------------------------------------------#
 
   variant:
-    variant_id:
-      db_key: id
-      type: string
-      indexed: True
-      compact: True
-    variant_internal_id:
-      db_key: variant_internal_id
-      type: string
-      indexed: True
-      compact: True
-    callset_id:
-      db_key: callset_id
-      type: string
-      indexed: True
-      compact: True
-    biosample_id:
-      db_key: biosample_id
-      type: string
-      indexed: True
-      compact: True
-    individual_id:
-      db_key: individual_id
-      type: string
-      indexed: True
-      compact: True
-    sequence_id:
-      db_key: location.sequence_id
-      type: string
-      indexed: True
-      compact: True
-    start:
-      db_key: location.interval.start.value
-      type: integer
-      indexed: True
-      compact: True
-    end:
-      db_key: location.interval.end.value
-      type: integer
-      indexed: True
-      compact: True
-    variant_state_id:
-      db_key: variant_state.id
-      type: string
-      indexed: True
-      compact: True
-    variant_state_label:
-      db_key: variant_state.label
-      type: string
-      compact: True
-    reference_bases:
-      db_key: reference_bases
-      type: string
-      indexed: True
-      compact: True
-    alternate_bases:
-      db_key: state.sequence
-      type: string
-      indexed: True
-      compact: True
-    annotation_derived:
-      db_key: info.annotation_derived
-      type: boolean
-      indexed: True
 
-    # pgxseg
+    parameters:
 
-    log2:
-      db_key: info.cnv_value
-      type: number
-    reference_name:
-      db_key: reference_name
-      type: string
-    variant_type:
-      db_key: variant_type
-      type: string
+      variant_id:
+        db_key: id
+        indexed: True
+        compact: True
+      variant_internal_id:
+        db_key: variant_internal_id
+        indexed: True
+        compact: True
+      callset_id:
+        db_key: callset_id
+        indexed: True
+        compact: True
+      biosample_id:
+        db_key: biosample_id
+        indexed: True
+        compact: True
+      individual_id:
+        db_key: individual_id
+        indexed: True
+        compact: True
+      sequence_id:
+        db_key: location.sequence_id
+        indexed: True
+        compact: True
+      start:
+        db_key: location.interval.start.value
+        type: integer
+        indexed: True
+        compact: True
+      end:
+        db_key: location.interval.end.value
+        type: integer
+        indexed: True
+        compact: True
+      variant_state_id:
+        db_key: variant_state.id
+        indexed: True
+        compact: True
+      variant_state_label:
+        db_key: variant_state.label
+        compact: True
+      reference_bases:
+        db_key: reference_bases
+        indexed: True
+        compact: True
+      alternate_bases:
+        db_key: state.sequence
+        indexed: True
+        compact: True
+      annotation_derived:
+        db_key: info.annotation_derived
+        type: boolean
+        indexed: True
 
+      # special pgxseg columns
 
-io_prefixes:
-
-  biosample:
-    external_references:
-      type: array
-      db_key: external_references
-      indexed: True
-      compact: True
-      pres:
-        PMID:
-          compact: True
-        arrayexpress:
-          compact: False
-        cbioportal:
-          compact: False
-
-  individual: {}
-  analysis: {}
-  variant: {}
-  
+      log2:
+        db_key: info.cnv_value
+        type: number
+      reference_name:
+        db_key: reference_name
+      variant_type:
+        db_key: variant_type
