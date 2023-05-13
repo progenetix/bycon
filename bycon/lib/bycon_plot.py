@@ -1,4 +1,4 @@
-import re, datetime
+import re, datetime, typing
 from cgi_parsing import get_plot_parameters, print_svg_response, test_truthy
 from cytoband_utils import bands_from_cytobands, retrieve_gene_id_coordinates
 from clustering_utils import cluster_frequencies, cluster_samples
@@ -14,12 +14,13 @@ from response_remapping import de_vrsify_variant, callsets_create_iset
 class ByconPlot:
 
     """
-    ### The bycon plot class
+    # The bycon plot class
 
-    Slowly getting objectified ...
+
+
     """
 
-    def __init__(self, byc, plot_data_bundle):
+    def __init__(self, byc: dict, plot_data_bundle: dict):
 
         self.env = byc.get("env", "server")
         self.byc = byc
