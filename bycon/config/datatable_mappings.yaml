@@ -54,6 +54,10 @@ entities:
         db_key: external_references
         indexed: True
         compact: True
+        examples:
+          - external_references_id___cellosaurus
+            external_references_label___cellosaurus
+          - external_references_id___PMID
         prefix_split:
           PMID:
             compact: True

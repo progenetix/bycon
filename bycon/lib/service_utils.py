@@ -924,7 +924,7 @@ def check_callset_plot_delivery(byc):
 
             results.append(p_o)
 
-    plot_data_bundle = { "callsets_variant_bundles": results }
+    plot_data_bundle = { "callsets_variants_bundles": results }
     ByconPlot(byc, plot_data_bundle).svgResponse()
 
 ################################################################################
@@ -999,7 +999,7 @@ def check_computed_histoplot_delivery(byc):
             iset = callset__ids_create_iset(ds_id, "Search Results", cs__ids, byc)
             interval_sets.append(iset)
 
-    plot_data_bundle = { "interval_frequencies_sets": interval_sets }
+    plot_data_bundle = { "interval_frequencies_bundles": interval_sets }
     ByconPlot(byc, plot_data_bundle).svgResponse()
 
 ################################################################################
@@ -1061,26 +1061,26 @@ def check_callsets_matrix_delivery(ds_id, byc):
 
     export_callsets_matrix(ds_id, byc)
 
-################################################################################
+# ################################################################################
 
-def bycon_bundle_create_callsets_plot_list(bycon_bundle, byc):
+# def bycon_bundle_create_callsets_plot_list(bycon_bundle, byc):
 
-    c_p_l = []
-    for p_o in bycon_bundle["callsets"]:
-        cs_id = p_o.get("id")
-        p_o.update({
-            "ds_id": bycon_bundle.get("ds_id", ""),
-            "variants":[]
-        })
+#     c_p_l = []
+#     for p_o in bycon_bundle["callsets"]:
+#         cs_id = p_o.get("id")
+#         p_o.update({
+#             "ds_id": bycon_bundle.get("ds_id", ""),
+#             "variants":[]
+#         })
 
-        for v in bycon_bundle["variants"]:
-            if v.get("callset_id", "") == cs_id:
-                v = de_vrsify_variant(v, byc)
-                p_o["variants"].append(v)
+#         for v in bycon_bundle["variants"]:
+#             if v.get("callset_id", "") == cs_id:
+#                 v = de_vrsify_variant(v, byc)
+#                 p_o["variants"].append(v)
 
-        c_p_l.append(p_o)
+#         c_p_l.append(p_o)
         
-    return c_p_l
+#     return c_p_l
 
 ################################################################################
 

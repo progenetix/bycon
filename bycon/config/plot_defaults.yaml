@@ -1,8 +1,8 @@
 plot_types:
   histoplot:
-    data_key: interval_frequencies_sets
+    data_key: interval_frequencies_bundles
   samplesplot:
-    data_key: callsets_variant_bundles
+    data_key: callsets_variants_bundles
 
 legacy_parameters:
 

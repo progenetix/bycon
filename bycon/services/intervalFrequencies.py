@@ -113,7 +113,7 @@ def interval_frequencies():
 
     mongo_client.close( )
 
-    plot_data_bundle = { "interval_frequencies_sets": results }
+    plot_data_bundle = { "interval_frequencies_bundles": results }
     ByconPlot(byc, plot_data_bundle).svgResponse()
 
     check_pgxseg_frequencies_export(byc, results)

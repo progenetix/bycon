@@ -1,10 +1,10 @@
-import csv, datetime, re, requests
+import csv, datetime, re, requests, typing
 from random import sample as randomSamples
 from pathlib import Path
 
 from datatable_utils import import_datatable_dict_line
 from interval_utils import interval_cnv_arrays
-from response_remapping import vrsify_variant
+from response_remapping import callsets_create_iset, de_vrsify_variant, vrsify_variant
 from variant_parsing import variant_create_digest
 
 ################################################################################
@@ -21,9 +21,8 @@ def read_tsv_to_dictlist(filepath, max_count=0):
         for l in data:
             dictlist.append(dict(l))
 
-    if max_count > 0:
-        if max_count < len(dictlist):
-            dictlist = randomSamples(dictlist, k=max_count)
+    if 0 < max_count < len(dictlist):
+        dictlist = randomSamples(dictlist, k=max_count)
 
     return dictlist, fieldnames
 
@@ -42,169 +41,271 @@ def read_www_tsv_to_dictlist(www, max_count=0):
         for l in data:
             dictlist.append(dict(l))
 
-    if max_count > 0:
-        if max_count < len(dictlist):
-            dictlist = randomSamples(dictlist, k=max_count)
+    if 0 < max_count < len(dictlist):
+        dictlist = randomSamples(dictlist, k=max_count)
 
     return dictlist, fieldnames
 
 ################################################################################
 
-def read_pgxseg_file_header(filepath):
 
-    h_lines = []
 
-    with open(filepath) as f:
-        for line in f:
-            line = line.strip()
-            if line.startswith("#"):
-                h_lines.append(line)
-
-    return h_lines
 
 ################################################################################
 
-def pgxseg_return_bycon_bundle(filepath, byc):
+class ByconBundler:
 
-    # TODO: bundle as a schema
-    bycon_bundle = {
-        "variants": [],
-        "callsets": [],
-        "biosamples": [],
-        "individuals": [],
-        "ds_id": "File",
-        "info": {
-            "errors": []
+    """
+    # The `ByconBundler` class
+
+    This class bundles documents from the main entities which have a complete
+    intersection - e.g. for a set of variants their callsets, biosamples and
+    individuals. The bundling does _not_ have to be complete; e.g. bundles may
+    be based on only some matched variants (not all variants of the referenced
+    callsets); and bundles may have empty lists for some entities.
+    """
+
+    def __init__(self, byc, filepath=None):
+
+        self.byc = byc
+        self.errors = []
+        self.pgxseg = {}
+        self.callsetVariantsBundles = []
+        self.intervalFrequenciesBundles = []
+
+        self.bundle = {
+            "variants": [],
+            "callsets": [],
+            "biosamples": [],
+            "individuals": [],
+            "ds_id": None,
+            "info": {
+                "errors": []
+            }
         }
-    }
 
-    try:
-        Path(filepath).resolve()
-        exist = True
-    except (OSError, RuntimeError):
-        bycon_bundle["info"]["errors"].append(f"The file {filepath} does not exist.")
-        return bycon_bundle
-
-    # TODO: "ds_id" from file name
-
-    pgxseg_variants, fieldnames = read_tsv_to_dictlist(filepath)
-    if not "biosample_id" in fieldnames:
-        bycon_bundle["info"]["errors"].append("¡¡¡ The `biosample_id` parameter is required for variant assignment !!!")
-        return bycon_bundle
-
-    #---------------------------- header parsing-------------------------------#
-
-    pgxseg_head = read_pgxseg_file_header(filepath)
-    pgx_keyed_bundle = pgxseg_deparse_sample_header(byc, pgxseg_head)
+        self.keyedBundle = {
+            "variants_by_callset_id": {},
+            "callsets_by_id": {},
+            "individuals_by_id": {},
+            "biosamples_by_id": {},
+            "ds_id": None,
+            "info": {
+                "errors": []
+            }
+        }
 
     #--------------------------------------------------------------------------#
-    
-    inds_ided = pgx_keyed_bundle.get("individuals_by_id", {})
-    bios_ided = pgx_keyed_bundle.get("biosamples_by_id", {})
-    cs_ided = pgx_keyed_bundle.get("callsets_by_id", {})
-    vars_ided = pgx_keyed_bundle.get("variants_by_id", {})
+    #----------------------------- public -------------------------------------#
+    #--------------------------------------------------------------------------#
 
-    for c, v in enumerate(pgxseg_variants):
-        bs_id = v.get("biosample_id", False)
-        if bs_id is False:
-            bycon_bundle["info"]["errors"].append("¡¡¡ The `biosample_id` parameter is required for variant assignment !!!")
-            return bycon_bundle
+    def readPgxseg(self, filepath):
 
-        # If the biosample exists in metadata all the other items will exist by id
-        if not bs_id in bios_ided:
-            cs_id = re.sub(r'^(pgxbs-)?', "pgxcs-", bs_id)
-            ind_id = re.sub(r'^(pgxbs-)?', "pgxind-", bs_id)
-            cs_ided.update( {cs_id: {"id": cs_id, "biosample_id": bs_id, "individual_id": ind_id } } )
-            vars_ided.update( {cs_id: [] } )
-            bios_ided.update( {bs_id: {"id": bs_id, "individual_id": ind_id } } )
-            inds_ided.update( {ind_id: {"id": ind_id } } )
-        else:
-            for cs_i, cs_v in cs_ided.items():
-                if cs_v.get("biosample_id", "___nothing___") == bs_id:
-                    cs_id = cs_i
-                    continue
-        
-        bios = bios_ided.get(bs_id)
-        cs = cs_ided.get(cs_id)
-        ind_id = bios.get("individual_id", "___nothing___")
-        ind = inds_ided.get(ind_id)
+        self.filepath = filepath
 
-        update_v = {
-            "individual_id": ind_id,
-            "biosample_id": bs_id,
-            "callset_id": cs_id,
-        }
+        h_lines = []
+        d_lines = []
 
-        update_v = import_datatable_dict_line(byc, update_v, fieldnames, v, "variant")
-        vrsify_variant(update_v, byc)
-        update_v.update({
-            "variant_internal_id": variant_create_digest(update_v, byc),
-            "updated": datetime.datetime.now().isoformat()
+        with open(self.filepath) as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith("#"):
+                    h_lines.append(line)
+
+        d_lines, fieldnames = read_tsv_to_dictlist(self.filepath, max_count=0)
+
+        self.pgxseg.update({
+            "header": h_lines,
+            "data": d_lines,
+            "fieldnames": fieldnames
         })
 
-        vars_ided[cs_id].append(update_v)
+        return
 
-    for cs_id, cs_vars in vars_ided.items():
-        maps, cs_cnv_stats, cs_chro_stats = interval_cnv_arrays(cs_vars, byc)
-        # prjsonnice(cs_chro_stats)
-       
-        cs_ided[cs_id].update({"cnv_statusmaps": maps})
-        cs_ided[cs_id].update({"cnv_stats": cs_cnv_stats})
-        cs_ided[cs_id].update({"cnv_chro_stats": cs_chro_stats})
-        cs_ided[cs_id].update({ "updated": datetime.datetime.now().isoformat() })
+    #--------------------------------------------------------------------------#
 
-    bycon_bundle["biosamples"] = list(bios_ided.values())
-    bycon_bundle["individuals"] = list(inds_ided.values())
-    bycon_bundle["callsets"] = list(cs_ided.values())
-    bycon_bundle["variants"] = [elem for sublist in (vars_ided.values()) for elem in sublist]
+    def pgxseg2keyedBundle(self, filepath):
 
-    return bycon_bundle
+        self.readPgxseg(filepath)
 
-################################################################################    
+        if not "biosample_id" in self.pgxseg.get("fieldnames", []):
+            self.errors.append("¡¡¡ The `biosample_id` parameter is required for variant assignment !!!")
+            return
 
-def pgxseg_deparse_sample_header(byc, header_lines):
+        self.__deparse_pgxseg_samples_header()
+        self.__pgxseg_keyed_bundle_add_variants()
 
-    if type(header_lines) is not list:
-        return False
+        return self.keyedBundle
 
-    pgx_keyed_bundle = {
-        "variants_by_id": {},
-        "callsets_by_id": {},
-        "individuals_by_id": {},
-        "biosamples_by_id": {},
-        "info": {}
-    }
+    #--------------------------------------------------------------------------#
 
-    for l in header_lines:
-        if not l.startswith("#sample=>"):
-            continue       
-        l = re.sub("#sample=>", "", l)
-        bios_d = {}
-        for p_v in l.split(";"):
-            k, v = p_v.split("=")
-            v = re.sub(r'^[\'\"]', '', v)
-            v = re.sub(r'[\'\"]$', '', v)
-            # print(f'{k} => {v}')
-            bios_d.update({k:v})
-        fieldnames = list(bios_d.keys())
-        bs_id = bios_d.get("biosample_id")
-        if bs_id is None:
-            continue
+    def pgxseg2bundle(self, filepath):
 
-        bios = {"id": bs_id} 
-        bios = import_datatable_dict_line(byc, bios, fieldnames, bios_d, "biosample")
-        cs_id = bios.get("callset_id", re.sub("pgxbs", "pgxcs", bs_id) )
-        ind_id = bios.get("individual_id", re.sub("pgxbs", "pgxind", bs_id) )
-        ind = {"id": ind_id} 
-        cs = {"id": cs_id, "biosample_id": bs_id, "individual_id": ind_id} 
+        self.pgxseg2keyedBundle(filepath)
+        self.__flatten_keyed_bundle()
 
-        bios.update({"individual_id": ind_id})
+        return self.bundle
 
-        pgx_keyed_bundle["callsets_by_id"].update({ cs_id: import_datatable_dict_line(byc, cs, fieldnames, bios_d, "callset") })
-        pgx_keyed_bundle["individuals_by_id"].update({ ind_id: import_datatable_dict_line(byc, ind, fieldnames, bios_d, "individual") })
-        pgx_keyed_bundle["biosamples_by_id"].update({ bs_id: bios })
-        pgx_keyed_bundle["variants_by_id"].update({ cs_id: [] })
+    #--------------------------------------------------------------------------#
 
-    return pgx_keyed_bundle
+    def callsetsVariantsBundles(self):
+
+        # TODO: This is similar to a keyed bundle component ...
+
+        bb = self.bundle
+
+        c_p_l = []
+        for p_o in bb.get("callsets", []):
+            cs_id = p_o.get("id")
+            p_o.update({
+                "ds_id": bb.get("ds_id", ""),
+                "variants":[]
+            })
+
+            for v in bb["variants"]:
+                if v.get("callset_id", "") == cs_id:
+                    v = de_vrsify_variant(v, self.byc)
+                    p_o["variants"].append(v)
+
+            c_p_l.append(p_o)
+            
+        self.callsetVariantsBundles = c_p_l
+
+        return self.callsetVariantsBundles
+
+    #--------------------------------------------------------------------------#
+
+    def callsetsFrequenciesBundles(self):
+            
+        self.intervalFrequenciesBundles.append( callsets_create_iset("import", "", self.bundle["callsets"], self.byc) )
+
+        return self.intervalFrequenciesBundles
+
+    #--------------------------------------------------------------------------#
+    #----------------------------- private ------------------------------------#
+    #--------------------------------------------------------------------------#
+
+    def __deparse_pgxseg_samples_header(self):
+
+        b_k_b = self.keyedBundle
+        h_l = self.pgxseg.get("header", [])
+
+        for l in h_l:
+            if not l.startswith("#sample=>"):
+                continue       
+            l = re.sub("#sample=>", "", l)
+            bios_d = {}
+            for p_v in l.split(";"):
+                k, v = p_v.split("=")
+                v = re.sub(r'^[\'\"]', '', v)
+                v = re.sub(r'[\'\"]$', '', v)
+                bios_d.update({k:v})
+            fieldnames = list(bios_d.keys())
+            bs_id = bios_d.get("biosample_id")
+            if bs_id is None:
+                continue
+
+            bios = {"id": bs_id} 
+            bios = import_datatable_dict_line(self.byc, bios, fieldnames, bios_d, "biosample")
+            cs_id = bios.get("callset_id", re.sub("pgxbs", "pgxcs", bs_id) )
+            ind_id = bios.get("individual_id", re.sub("pgxbs", "pgxind", bs_id) )
+            ind = {"id": ind_id} 
+            cs = {"id": cs_id, "biosample_id": bs_id, "individual_id": ind_id} 
+
+            bios.update({"individual_id": ind_id})
+
+            b_k_b["callsets_by_id"].update({ cs_id: import_datatable_dict_line(self.byc, cs, fieldnames, bios_d, "analysis") })
+            b_k_b["individuals_by_id"].update({ ind_id: import_datatable_dict_line(self.byc, ind, fieldnames, bios_d, "individual") })
+            b_k_b["biosamples_by_id"].update({ bs_id: bios })
+            b_k_b["variants_by_callset_id"].update({ cs_id: [] })
+
+        self.keyedBundle = b_k_b
+
+        return
+
+    #--------------------------------------------------------------------------#
+
+    def __pgxseg_keyed_bundle_add_variants(self):
+
+        fieldnames = self.pgxseg.get("fieldnames", [])
+        varlines = self.pgxseg.get("data", [])
+
+        b_k_b = self.keyedBundle
+
+        inds_ided = b_k_b.get("individuals_by_id", {})
+        bios_ided = b_k_b.get("biosamples_by_id", {})
+        cs_ided = b_k_b.get("callsets_by_id", {})
+        vars_ided = b_k_b.get("variants_by_callset_id", {})
+
+        for c, v in enumerate(varlines):
+            bs_id = v.get("biosample_id", False)
+
+            # If the biosample exists in metadata all the other items will exist by id
+            if not bs_id in bios_ided:
+                cs_id = re.sub(r'^(pgxbs-)?', "pgxcs-", bs_id)
+                ind_id = re.sub(r'^(pgxbs-)?', "pgxind-", bs_id)
+                cs_ided.update( {cs_id: {"id": cs_id, "biosample_id": bs_id, "individual_id": ind_id } } )
+                vars_ided.update( {cs_id: [] } )
+                bios_ided.update( {bs_id: {"id": bs_id, "individual_id": ind_id } } )
+                inds_ided.update( {ind_id: {"id": ind_id } } )
+            else:
+                for cs_i, cs_v in cs_ided.items():
+                    if cs_v.get("biosample_id", "___nothing___") == bs_id:
+                        cs_id = cs_i
+                        continue
+            
+            bios = bios_ided.get(bs_id)
+            cs = cs_ided.get(cs_id)
+            ind_id = bios.get("individual_id", "___nothing___")
+            ind = inds_ided.get(ind_id)
+
+            update_v = {
+                "individual_id": ind_id,
+                "biosample_id": bs_id,
+                "callset_id": cs_id,
+            }
+
+            update_v = import_datatable_dict_line(self.byc, update_v, fieldnames, v, "variant")
+            vrsify_variant(update_v, self.byc)
+            update_v.update({
+                "variant_internal_id": variant_create_digest(update_v, self.byc),
+                "updated": datetime.datetime.now().isoformat()
+            })
+
+            vars_ided[cs_id].append(update_v)
+
+        for cs_id, cs_vars in vars_ided.items():
+            maps, cs_cnv_stats, cs_chro_stats = interval_cnv_arrays(cs_vars, self.byc)           
+            cs_ided[cs_id].update({"cnv_statusmaps": maps})
+            cs_ided[cs_id].update({"cnv_stats": cs_cnv_stats})
+            cs_ided[cs_id].update({"cnv_chro_stats": cs_chro_stats})
+            cs_ided[cs_id].update({ "updated": datetime.datetime.now().isoformat() })
+
+        self.keyedBundle.update({
+            "individuals_by_id": inds_ided,
+            "biosamples_by_id": bios_ided,
+            "callsets_by_id": cs_ided,
+            "variants_by_callset_id": vars_ided
+        })
+
+        return
+
+    #--------------------------------------------------------------------------#
+
+    def __flatten_keyed_bundle(self):
+
+        b_k_b = self.keyedBundle
+
+        bios_k = b_k_b.get("biosamples_by_id", {})
+        ind_k = b_k_b.get("individuals_by_id", {})
+        cs_k = b_k_b.get("callsets_by_id", {})
+        v_cs_k = b_k_b.get("variants_by_callset_id", {})
+
+        self.bundle.update({
+            "biosamples": list( bios_k.values() ),
+            "individuals": list( ind_k.values() ),
+            "callsets": list( cs_k.values() ),
+            "variants": [elem for sublist in ( v_cs_k.values() ) for elem in sublist]
+        })
 
 ################################################################################

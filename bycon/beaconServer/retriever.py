@@ -8,6 +8,14 @@ from liftover import get_lifter
 from bycon import *
 
 """podmd
+# `retriever`
+
+**UNDER DEVELOPMENT OR NOT**
+
+The bycon retriever is intended as a support function for beacon aggregators with
+heterogeneous members. It should (at some point) re-map Beacon v2 query parameters
+to the format of the indicated beacon, according to the remapping information
+(parameter names, genome assembly liftover) from a confiuration file.
 
 #### Tests
 
