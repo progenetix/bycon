@@ -825,6 +825,7 @@ class ByconPlot:
     def __add_labs_from_cytobands(self):
 
         g_s_s = self.plv.get("plot_cytoregion_labels", [])
+
         if len(g_s_s) < 1:
             return
 
@@ -832,6 +833,7 @@ class ByconPlot:
 
         for q_g in g_s_s:
             cytoBands, chro, start, end, error = bands_from_cytobands(q_g, self.byc)
+
             if len( cytoBands ) < 1:
                 continue
 
@@ -843,7 +845,7 @@ class ByconPlot:
                 q_g
             )
 
-            if m is not False:
+            if m is not None:
                 self.plv["plot_labels"].update(m)
 
     #--------------------------------------------------------------------------#
@@ -851,10 +853,11 @@ class ByconPlot:
 
     def __make_marker_object(self, chromosome, start, end, color, label=""):
 
-        m = False
+        m = None
 
         # Checks here or upstream?
-        if False in [chromosome, start, end, label]:
+        # Cave: `any` ... `is False` to avoid `True` for `0` with `False in`
+        if  any(x is False for x in [chromosome, start, end, label]):
             return m
 
         m_k = f'{chromosome}:{start}-{end}:{label}'
@@ -868,7 +871,7 @@ class ByconPlot:
                 "color": color
             }
         }
-
+        
         return m
 
     #--------------------------------------------------------------------------#
