@@ -1,4 +1,4 @@
-import re, datetime
+import re, datetime, typing
 from cgi_parsing import get_plot_parameters, print_svg_response, test_truthy
 from cytoband_utils import bands_from_cytobands, retrieve_gene_id_coordinates
 from clustering_utils import cluster_frequencies, cluster_samples
@@ -14,12 +14,18 @@ from response_remapping import de_vrsify_variant, callsets_create_iset
 class ByconPlot:
 
     """
-    ### The bycon plot class
+    # The `ByconPlot` class
 
-    Slowly getting objectified ...
+    ## Input
+
+    A plot data bundle containing lists of callset object bundles (_i.e._ the
+    callsets with all their individual variants added) and/or interval frequencies
+    set bundles (_i.e._ list of one or more binned CNV frequencies in object
+    wrappers with some information about the set).
+
     """
 
-    def __init__(self, byc, plot_data_bundle):
+    def __init__(self, byc: dict, plot_data_bundle: dict):
 
         self.env = byc.get("env", "server")
         self.byc = byc
@@ -53,7 +59,7 @@ class ByconPlot:
         p_t_s = self.byc["plot_defaults"].get("plot_types", {})
         p_t = self.byc.get("output", "___none___")
         if p_t not in p_t_s.keys():
-            return None
+            return
 
         self.__initialize_plot_values()
 

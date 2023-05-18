@@ -76,10 +76,12 @@ def export_datatable_download(results, byc):
 
 def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="biosample"):
 
-    dtm = byc["datatable_mappings"]
+    dt_m = byc["datatable_mappings"]
 
     io_params = dt_m["entities"][ primary_scope ]["parameters"]
     def_params = create_table_header(io_params)
+
+    pref_array_values = {}
 
     for f_n in fieldnames:
 
@@ -90,8 +92,8 @@ def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="
             continue
 
         # this is for the split-by-prefix columns
-        unprefed = re.sub(r'___.*?$', '', f_n)
-        par_defs = io_params.get(unprefed, {})
+        par = re.sub(r'___.*?$', '', f_n)
+        par_defs = io_params.get(par, {})
 
         v = lineobj[f_n].strip()
 
@@ -114,18 +116,16 @@ def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="
         elif "integer" in parameter_type:
             v = int(v)
 
-        if "___" in f_n:
-            par, key, pre = re.match(r"^(\w+)__(\w+)___(\w+)$", f_n).group(1,2,3)
+        if re.match(r"^(\w+[a-zA-Z0-9])_(id|label)___(\w+)$", f_n):
+            p, key, pre = re.match(r"^(\w+)_(id|label)___(\w+)$", f_n).group(1,2,3)
             # TODO: this is a bit complicated - label and id per prefix ...
-            if not par in pref_array_values.keys():
-                pref_array_values.update({par:{pre:{}}})
-            if not pre in pref_array_values[par].keys():
-                pref_array_values[par].update({pre:{}})
-            pref_array_values[par][pre].update({key:v})
+            if not p in pref_array_values.keys():
+                pref_array_values.update({p:{pre:{}}})
+            if not pre in pref_array_values[p].keys():
+                pref_array_values[p].update({pre:{}})
+            pref_array_values[p][pre].update({key:v})
             continue
         
-        par = f_n
-
         if par in io_params.keys():
             db_key = io_params[par]["db_key"]
 

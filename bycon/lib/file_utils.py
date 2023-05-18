@@ -1,4 +1,4 @@
-import csv, datetime, re, requests
+import csv, datetime, re, requests, typing
 from random import sample as randomSamples
 from pathlib import Path
 
@@ -64,19 +64,111 @@ def read_pgxseg_file_header(filepath):
 
 ################################################################################
 
+class ByconBundler:
+
+    """
+    # The `ByconBundler` class
+
+    This class bundles documents from the main entities which have a complete
+    intersection - e.g. for a set of variants their callsets, biosamples and
+    individuals. The bundling does _not_ have to be complete; e.g. bundles may
+    be based on only some matched variants (not all variants of the referenced
+    callsets); and bundles may have empty lists for some entities.
+    """
+
+    def __init__(self, byc, **kwargs):
+
+        self.byc = byc
+        self.filepath = kwargs.get("filepath")
+        self.bundle = {
+            "variants": [],
+            "callsets": [],
+            "biosamples": [],
+            "individuals": [],
+            "ds_id": None,
+            "info": {
+                "errors": []
+            }
+        }
+
+        self.keyedBundle = {
+            "variants_by_callset_id": {},
+            "callsets_by_id": {},
+            "individuals_by_id": {},
+            "biosamples_by_id": {},
+            "ds_id": None,
+            "info": {
+                "errors": []
+            }
+        }
+
+    #--------------------------------------------------------------------------#
+    #----------------------------- public -------------------------------------#
+    #--------------------------------------------------------------------------#
+
+    def emptyBundle(self):
+        return self.bundle
+
+    #--------------------------------------------------------------------------#
+
+    def emptyKeyedBundle(self):
+        return self.keyedBundle
+
+    #--------------------------------------------------------------------------#
+
+    def flattenedBundle(self, b_k_b={}):
+        self.__flatten_keyed_bundle(b_k_b)
+        return self.bundle
+
+    #--------------------------------------------------------------------------#
+
+    def readPgxseg(self, filename):
+
+        self.pgxseg = {}
+
+        return self.pgxseg
+
+    #--------------------------------------------------------------------------#
+
+    def pgxseg2bundle(self, filename):
+
+        self.readPgxseg(filename)
+
+        return self.pgxseg
+
+    #--------------------------------------------------------------------------#
+    #----------------------------- private ------------------------------------#
+    #--------------------------------------------------------------------------#
+
+    def __pgxseg_2_bundle(self):
+
+        # TBD
+
+        return
+
+    #--------------------------------------------------------------------------#
+
+
+    def __flatten_keyed_bundle(self, b_k_b):
+
+        bios_k = b_k_b.get("biosamples_by_id", {})
+        ind_k = b_k_b.get("individuals_by_id", {})
+        cs_k = b_k_b.get("callsets_by_id", {})
+        v_cs_k = b_k_b.get("variants_by_callset_id", {})
+
+        self.bundle.update({
+            "biosamples": list( bios_k.values() ),
+            "individuals": list( ind_k.values() ),
+            "callsets": list( cs_k.values() ),
+            "variants": [elem for sublist in ( v_cs_k.values() ) for elem in sublist]
+        })
+
+################################################################################
+
 def pgxseg_return_bycon_bundle(filepath, byc):
 
     # TODO: bundle as a schema
-    bycon_bundle = {
-        "variants": [],
-        "callsets": [],
-        "biosamples": [],
-        "individuals": [],
-        "ds_id": "File",
-        "info": {
-            "errors": []
-        }
-    }
+    bycon_bundle = ByconBundler(byc).emptyBundle()
 
     try:
         Path(filepath).resolve()
@@ -95,14 +187,14 @@ def pgxseg_return_bycon_bundle(filepath, byc):
     #---------------------------- header parsing-------------------------------#
 
     pgxseg_head = read_pgxseg_file_header(filepath)
-    pgx_keyed_bundle = pgxseg_deparse_sample_header(byc, pgxseg_head)
+    b_k_b = pgxseg_deparse_sample_header(byc, pgxseg_head)
 
     #--------------------------------------------------------------------------#
     
-    inds_ided = pgx_keyed_bundle.get("individuals_by_id", {})
-    bios_ided = pgx_keyed_bundle.get("biosamples_by_id", {})
-    cs_ided = pgx_keyed_bundle.get("callsets_by_id", {})
-    vars_ided = pgx_keyed_bundle.get("variants_by_id", {})
+    inds_ided = b_k_b.get("individuals_by_id", {})
+    bios_ided = b_k_b.get("biosamples_by_id", {})
+    cs_ided = b_k_b.get("callsets_by_id", {})
+    vars_ided = b_k_b.get("variants_by_callset_id", {})
 
     for c, v in enumerate(pgxseg_variants):
         bs_id = v.get("biosample_id", False)
@@ -153,10 +245,17 @@ def pgxseg_return_bycon_bundle(filepath, byc):
         cs_ided[cs_id].update({"cnv_chro_stats": cs_chro_stats})
         cs_ided[cs_id].update({ "updated": datetime.datetime.now().isoformat() })
 
-    bycon_bundle["biosamples"] = list(bios_ided.values())
-    bycon_bundle["individuals"] = list(inds_ided.values())
-    bycon_bundle["callsets"] = list(cs_ided.values())
-    bycon_bundle["variants"] = [elem for sublist in (vars_ided.values()) for elem in sublist]
+    b_k_b.update({
+        "individuals_by_id": inds_ided,
+        "biosamples_by_id": bios_ided,
+        "callsets_by_id": cs_ided,
+        "variants_by_callset_id": vars_ided
+    })
+
+    flattened_bundle = ByconBundler(byc).flattenedBundle(b_k_b)
+
+    for k, v in flattened_bundle.items():
+        bycon_bundle.update({ k: v })
 
     return bycon_bundle
 
@@ -167,13 +266,7 @@ def pgxseg_deparse_sample_header(byc, header_lines):
     if type(header_lines) is not list:
         return False
 
-    pgx_keyed_bundle = {
-        "variants_by_id": {},
-        "callsets_by_id": {},
-        "individuals_by_id": {},
-        "biosamples_by_id": {},
-        "info": {}
-    }
+    b_k_b = ByconBundler(byc).emptyKeyedBundle()
 
     for l in header_lines:
         if not l.startswith("#sample=>"):
@@ -200,11 +293,11 @@ def pgxseg_deparse_sample_header(byc, header_lines):
 
         bios.update({"individual_id": ind_id})
 
-        pgx_keyed_bundle["callsets_by_id"].update({ cs_id: import_datatable_dict_line(byc, cs, fieldnames, bios_d, "callset") })
-        pgx_keyed_bundle["individuals_by_id"].update({ ind_id: import_datatable_dict_line(byc, ind, fieldnames, bios_d, "individual") })
-        pgx_keyed_bundle["biosamples_by_id"].update({ bs_id: bios })
-        pgx_keyed_bundle["variants_by_id"].update({ cs_id: [] })
+        b_k_b["callsets_by_id"].update({ cs_id: import_datatable_dict_line(byc, cs, fieldnames, bios_d, "analysis") })
+        b_k_b["individuals_by_id"].update({ ind_id: import_datatable_dict_line(byc, ind, fieldnames, bios_d, "individual") })
+        b_k_b["biosamples_by_id"].update({ bs_id: bios })
+        b_k_b["variants_by_callset_id"].update({ cs_id: [] })
 
-    return pgx_keyed_bundle
+    return b_k_b
 
 ################################################################################
