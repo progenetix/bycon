@@ -54,7 +54,7 @@ def samples_plotter():
         response_add_error(byc, 422, "No value was provided for collation `fileId`.")
     cgi_break_on_errors(byc)
 
-   _create_file_handover_response(byc):
+    _create_file_handover_response(byc)
 
     # TODO: maybe move to defaults file...
     if not "plot" in byc.get("output", "histoplot"):
@@ -66,20 +66,14 @@ def samples_plotter():
         response_add_error(byc, 422, f"The file path {inputfile} does not exist.")  
     cgi_break_on_errors(byc)
 
-    bycon_bundle = pgxseg_return_bycon_bundle(inputfile, byc)
-
+    pb = ByconBundler(byc)
+    pb.pgxseg2bundle(inputfile)
     plot_data_bundle = {
-        "interval_frequencies_sets": [],
-        "callsets_variant_bundles": []
+        "interval_frequencies_bundles": pb.callsetsFrequenciesBundles(),
+        "callsets_variants_bundles": pb.callsetsVariantsBundles()
     }
 
-    # The following avoids to process both data options...
-    if "sample" in byc["output"]:
-        plot_data_bundle["interval_frequencies_sets"] = cs_plot_data
-    elif "histo" in byc["output"]:
-        plot_data_bundle["callsets_variant_bundles"] = [ bycon_bundle_create_intervalfrequencies_object(bycon_bundle, byc) ]
-
-    ByconPlot(byc, plot_data).svgResponse()
+    ByconPlot(byc, plot_data_bundle).svgResponse()
 
 ################################################################################
 
