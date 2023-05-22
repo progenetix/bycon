@@ -85,23 +85,6 @@ schema_paths:
         - responses
         - sections
 
-form_list_pars:
-  description: >-
-    form parameters which are processed as list
-  items:
-    - start
-    - end
-    - datasetIds
-    - filters
-    - ids
-    - biosampleIds
-    - variantIds
-    - individualIds
-    - callsetIds
-    - analysisIds
-    - collationTypes
-    - selectedBeacons
-
 resource_urls:
   ncbi_geosoft: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?form=text&acc=
   ncbi_geoweb: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=

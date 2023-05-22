@@ -6,44 +6,52 @@ from humps import decamelize
 def get_bycon_args(byc):
 
 	if byc.get("check_args", False) is False:
-		return byc
+		return
 
 	# Serves as "we've been here before" marker - before the env check.
 	byc.update({"check_args": False})
 
 	if not "local" in byc["env"]:
-		return byc
+		return
 
 	if byc["script_args"]:
-		a_k_s = list(byc["argument_definitions"].keys())
-		for a_d_k in a_k_s:
+		for d_d in byc["argument_definitions"]["parameters"]:
+			a_d_k = list(d_d["argDef"].keys())[0]
 			if a_d_k not in byc["script_args"]:
 				byc["argument_definitions"].pop(a_d_k, None)
 	
 	create_args_parser(byc)
-
-	return byc
 
 ################################################################################
 
 def create_args_parser(byc):
 
 	if not "local" in byc["env"]:
-		return byc
+		return
+
+	arg_defs = byc["argument_definitions"]["parameters"]
 
 	parser = argparse.ArgumentParser()
-	for d_k, defs in byc["argument_definitions"].items():
+	for d_d in arg_defs:
+		a_d_k = list(d_d["argDef"].keys())[0]
+		defs = d_d["argDef"][a_d_k]
 		parser.add_argument(*defs.pop("flags"), **defs)
 	byc.update({ "args": parser.parse_args() })
-
-	return byc
 
 ################################################################################
 
 def args_update_form(byc):
 
 	if not "local" in byc["env"]:
-		return byc
+		return
+
+	arg_defs = byc["argument_definitions"]["parameters"]
+	list_pars = ()
+	for d_d in arg_defs:
+		a_d_k = list(d_d["argDef"].keys())[0]
+		defs = d_d["argDef"][a_d_k]
+		if "array" in defs.get("type", "string"):
+			list_pars.append(a_d_k)
 
 	arg_vars = vars(byc["args"])
 
@@ -51,12 +59,10 @@ def args_update_form(byc):
 		if arg_vars[p] is None:
 			continue
 		p_d = decamelize(p)
-		if p in byc["config"]["form_list_pars"]["items"]:
+		if p in list_pars:
 			byc["form_data"].update({p_d: arg_vars[p].split(',') })
 		else:
 			byc["form_data"].update({p_d: arg_vars[p]})
-
-	return byc
 
 ################################################################################
 
@@ -64,8 +70,6 @@ def genome_binning_from_args(byc):
 
     if byc["args"].key:
         byc.update({"genome_binning": byc["args"].key})
-
-    return byc
 
 ################################################################################
 
@@ -81,8 +85,6 @@ def filters_from_args(byc):
         for f in re.split(",", byc["args"].filters):
             byc["filters"].append({"id":f})
  
-    return byc
-
 ################################################################################
 
 def set_collation_types(byc):
@@ -98,8 +100,6 @@ def set_collation_types(byc):
 
         byc.update({"filter_definitions":s_p})
 
-    return byc
-
 ################################################################################
 
 def set_processing_modes(byc):
@@ -110,7 +110,7 @@ def set_processing_modes(byc):
         if byc["test_mode"] is True:
             byc.update({"update_mode": False})
             print( "¡¡¡ TEST MODE - no db update !!!")
-            return byc
+            return
     except:
         pass
 
@@ -120,5 +120,3 @@ def set_processing_modes(byc):
             print( "¡¡¡ UPDATE MODE - may overwrite entries !!!")
     except:
         pass
-        
-    return byc

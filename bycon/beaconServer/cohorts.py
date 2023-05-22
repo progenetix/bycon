@@ -54,7 +54,7 @@ def cohorts():
 def _return_cohorts_response(byc):
 
     if not "cohort" in byc["response_entity_id"]:
-        return byc
+        return
 
     mongo_client = MongoClient( )
 

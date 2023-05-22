@@ -11,32 +11,25 @@ def select_dataset_ids(byc):
         byc.update( { "dataset_ids": [ ] } )
 
     if ds_id_from_rest_path_value(byc) is not False:
-        return byc
-
+        return
     if ds_id_from_accessid(byc) is not False:
-        return byc            
-
+        return         
     if ds_ids_from_form(byc) is not False:
-        return byc            
-    
+        return              
     if ds_ids_from_args(byc) is not False:
-        return byc            
-
-    return byc
+        return         
 
 ################################################################################
 
 def ds_id_from_rest_path_value(byc):
 
     ds_id = rest_path_value("datasets")
-    if ds_id == "empty_value":
-        return False
 
     if ds_id not in byc["dataset_definitions"].keys():
         return False
 
     byc.update( { "dataset_ids": [ ds_id ] } )
-    return byc
+    return True
 
 ################################################################################
 
@@ -46,15 +39,10 @@ def ds_id_from_accessid(byc):
     # test of existence...
 
     accessid = byc["form_data"].get("accessid", False)
-    if "accessid" is False:
-        return False
-
     info_db = byc["config"].get("info_db", False)
-    if "info_db" is False:
-        return False
-
     ho_collname = byc["config"].get("handover_coll", False)
-    if "ho_collname" is False:
+
+    if  any(x is False for x in [accessid, info_db, ho_collname]):
         return False
 
     ho_client = MongoClient()
@@ -70,7 +58,7 @@ def ds_id_from_accessid(byc):
         return False
 
     byc.update( { "dataset_ids": [ ds_id ] } )
-    return byc
+    return True
 
 ################################################################################
 
@@ -88,20 +76,19 @@ def ds_ids_from_form(byc):
     if len(ds_ids) < 1:
         return False
 
-    byc.update( { "dataset_ids": ds_ids } )
-    
-    return byc
+    byc.update( { "dataset_ids": ds_ids } ) 
+    return True
 
 ################################################################################
 
 def ds_ids_from_args(byc):
 
     if not "args" in byc or byc["args"] is None:
-        return byc
+        return False
 
     if byc["args"].datasetIds:
         ds_ids = re.split(",", byc["args"].datasetIds)
         byc.update( { "dataset_ids": ds_ids } )
-        return byc
+        return True
 
-    return byc
+    return False

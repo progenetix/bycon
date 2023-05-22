@@ -20,8 +20,6 @@ def initialize_beacon_queries(byc):
 
     # generate_queries(byc)
 
-    return byc
-
 ################################################################################
 
 def generate_queries(byc, ds_id="progenetix"):
@@ -43,8 +41,6 @@ def generate_queries(byc, ds_id="progenetix"):
         if not "callsets" in byc["queries"].keys():
             byc["queries"]["callsets"] = byc["queries"].pop("runs")
 
-    return byc
-
 ################################################################################
 
 def _purge_empty_queries( byc ):
@@ -56,19 +52,17 @@ def _purge_empty_queries( byc ):
     for e_k in empties:
         byc["queries"].pop(k, None)
 
-    return byc
-
 ################################################################################
 
 def _replace_queries_in_test_mode(byc):
 
     if byc["test_mode"] is not True:
-        return byc
+        return
 
     try:
         collname = byc["response_entity"]["collection"]
     except:
-        return byc
+        return
 
     ret_no = int(byc.get('test_mode_count', 5))
 
@@ -78,7 +72,7 @@ def _replace_queries_in_test_mode(byc):
     data_collnames = data_db.list_collection_names()
 
     if not collname in data_collnames:
-        return byc
+        return
 
     data_coll = mongo_client[ ds_id ][ collname ]
     rs = list( data_coll.aggregate([{"$sample": {"size":ret_no}}]) )
@@ -92,8 +86,6 @@ def _replace_queries_in_test_mode(byc):
         "empty_query_all_count": data_coll.estimated_document_count()
     } )
 
-    return byc
-
 ################################################################################
 
 def _update_queries_from_path_id( byc ):
@@ -104,35 +96,33 @@ def _update_queries_from_path_id( byc ):
         b_mps = byc["services_mappings"]
 
     if not byc["request_entity_id"]:
-        return byc
+        return
 
     r_e_id = byc["request_entity_id"]
     p_id_v = byc["request_entity_path_id_value"]
 
     if not byc["request_entity_path_id_value"]:
-        return byc
+        return
 
     if not r_e_id in b_mps["response_types"]:
-        return byc
+        return
 
     collname = b_mps["response_types"][r_e_id]["collection"]
 
     if not collname:
-        return byc
+        return
 
     byc["queries"].update( { collname: { "id": p_id_v } } )
-
-    return byc
 
 ################################################################################
 
 def _update_queries_from_cohorts_query(byc):
 
     if not "cohorts" in byc["queries"]:
-        return byc
+        return
 
     if "cohort" in byc["response_entity_id"]:
-        return byc
+        return
 
     c_q = byc["queries"]["cohorts"]
 
@@ -143,8 +133,6 @@ def _update_queries_from_cohorts_query(byc):
     byc["queries"].pop("cohorts", None)
 
     update_query_for_scope( byc, query, "biosamples")
-
-    return byc
 
 ################################################################################
 
@@ -169,8 +157,6 @@ def _update_queries_from_id_values(byc):
                 q = {"id":id_v[0]}
         if q is not False:
             update_query_for_scope( byc, q, id_s, "AND")
-
-    return byc
 
 ################################################################################
 
@@ -202,8 +188,6 @@ def _update_queries_from_hoid( byc):
                 byc["queries"].update( { c_n: { '$and': [ h_o_q, byc["queries"][ c_n ] ] } } )
             else:
                 byc["queries"].update( { c_n: h_o_q } )
-
-    return byc
 
 ################################################################################
 
@@ -322,8 +306,6 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
         elif len(f_s_l) > 1:
             byc["queries"].update({ f_scope: { logic: f_s_l } })
 
-    return byc
-
 ################################################################################
 
 def update_query_for_scope( byc, query, scope, bool_mode="AND"):
@@ -335,8 +317,6 @@ def update_query_for_scope( byc, query, scope, bool_mode="AND"):
     else:
         byc["queries"][scope] = { logic: [ byc["queries"][scope], query ] }
 
-    return byc
-
 ################################################################################
 
 def _update_queries_from_geoquery( byc ):
@@ -344,22 +324,20 @@ def _update_queries_from_geoquery( byc ):
     geo_q, geo_pars = geo_query( byc )
 
     if not geo_q:
-        return byc
+        return
 
     update_query_for_scope( byc, geo_q, "biosamples", bool_mode="AND")
-
-    return byc
 
 ################################################################################
 
 def _update_queries_from_variants( byc ):
 
     if not "variant_request_type" in byc:
-        return byc
+        return
 
     if not byc["variant_request_type"] in byc["variant_definitions"]["request_types"].keys():
         if not "variants" in byc["queries"]:
-            return byc
+            return
 
     if "variantTypeRequest" in byc["variant_request_type"]:
         create_variantTypeRequest_query( byc )
@@ -373,10 +351,6 @@ def _update_queries_from_variants( byc ):
         create_variantRangeRequest_query( byc )
     elif "geneVariantRequest" in byc["variant_request_type"]:
         create_geneVariantRequest_query( byc )
-    else:
-        return byc
-
-    return byc
 
 ################################################################################
 
@@ -389,7 +363,7 @@ def set_pagination_range(d_count, byc):
 
     if byc["pagination"]["skip"] == 0 and byc["pagination"]["limit"] == 0:
         byc["pagination"].update({"range":[0,d_count]})
-        return byc
+        return
 
     r_l_i = d_count - 1
 
@@ -399,8 +373,6 @@ def set_pagination_range(d_count, byc):
         r_range[-1] = d_count
 
     byc["pagination"].update({"range":r_range})
-
-    return byc
 
 ################################################################################
 
@@ -568,8 +540,6 @@ def return_geo_longlat_query(geo_root, geo_pars):
             )
         }
     }
-
-
 
     return geo_q
 

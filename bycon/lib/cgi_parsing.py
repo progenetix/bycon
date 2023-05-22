@@ -124,9 +124,6 @@ def cgi_parse_POST(byc):
             "query_meta": jbod.get("meta", {})
         })
 
-
-    return byc
-
 ################################################################################
 
 def cgi_parse_GET(byc):
@@ -145,27 +142,8 @@ def cgi_parse_GET(byc):
     for p in get:
         p_d = decamelize(p)
         if p_d in f_defs:
-            p_d_t = f_defs[p_d].get("type", "string")
-            if "array" in p_d_t:
-                v = form_return_listvalue( get, p )
-                p_i_t = f_defs[p_d].get("items", "string")
-                if "int" in p_i_t:
-                    form.update({ p_d: list(map(int, v)) })
-                elif "number" in p_i_t:
-                    form.update({ p_d: list(map(float, v)) })
-                else:
-                    form.update({ p_d: v })
-            else:
-                v = get.getvalue(p)
-                if "bool" in p_d_t:
-                    form.update({ p_d: test_truthy( get.getvalue(p) )})
-                elif "int" in p_d_t:
-                    form.update({ p_d: int( v )})
-                elif "number" in p_d_t:
-                    form.update({ p_d: float( v )})
-                else:
-                    form.update({ p_d: v })
-        # TODO still fallback .. 
+            form.update({ p_d: refactor_value_from_defined_type(p, get, f_defs[p_d]) })
+         # TODO still fallback .. 
         else:
             v = get.getvalue(p)
             # making sure double entries are forced to single
@@ -193,8 +171,6 @@ def cgi_parse_GET(byc):
             pass
 
     byc.update({ "form_data": form })
-    
-    return byc
 
 ################################################################################
 
@@ -203,14 +179,14 @@ def rest_path_elements(byc):
     r_p_r = byc.get("request_path_root", "beacon")
 
     if not environ.get('REQUEST_URI'):
-        return byc
+        return
 
     url_comps = urlparse( environ.get('REQUEST_URI') )
     url_p = url_comps.path
     p_items = re.split('/', url_p)
 
     if not r_p_r in p_items:
-        return byc
+        return
     
     for d_k in ["debug=1", "debug=true"]:
         if d_k in p_items:
@@ -223,11 +199,11 @@ def rest_path_elements(byc):
     for p_k in ["request_entity_path_id", "request_entity_path_id_value", "response_entity_path_id"]:
 
         r_i += 1
-        if r_i >= len(p_items):
-            return byc
-        byc.update({p_k:p_items[r_i]})
 
-    return byc
+        if r_i >= len(p_items):
+            return
+
+        byc.update({p_k:p_items[r_i]})
 
 ################################################################################
 
@@ -264,6 +240,36 @@ def rest_path_value(key=""):
 
 ################################################################################
 
+def refactor_value_from_defined_type(parameter, form_data, definition):
+
+    p_d_t = definition.get("type", "string")
+
+    if "array" in p_d_t:
+        values = form_return_listvalue( form_data, parameter )
+
+        p_i_t = definition.get("items", "string")
+
+        if "int" in p_i_t:
+            return list(map(int, values))
+        elif "number" in p_i_t:
+            return list(map(float, values))
+        else:
+            return list(map(str, values))
+
+    else:
+        value = form_data.getvalue(parameter)
+
+        if "int" in p_d_t:
+            return int(value)
+        elif "number" in p_d_t:
+            return float(value)
+        elif "bool" in p_d_t:
+            return test_truthy(value)
+        else:
+            return str(value)
+
+################################################################################
+
 def form_return_listvalue( form_data, parameter ):
 
     l_v = [ ]
@@ -294,10 +300,8 @@ def test_truthy(this):
 def get_plot_parameters(plv, byc):
 
     """
-    This is curently handled separately, due to the separate definition of many
-    plot-specific parameters. Over time it migh be folded into the general parameter
-    processing since there are some duplications (re-checking of list values...)
-    but especially since this seems a cleaner approach...
+    The new version here assumes that the values in byc["form_data"] already have
+    been processed into the correct type.
     """
 
     p_d_p = byc["plot_defaults"]["parameters"]
@@ -313,33 +317,6 @@ def get_plot_parameters(plv, byc):
             if l_p in byc["form_data"]:
                 plv.update({ p_k: form[l_p]})
 
-        if p_k not in plv:
-            continue
-
-        p_d_t = p_d.get("type", "string")
-
-        if "int" in p_d_t:
-            plv.update({ p_k: int(plv[p_k])})
-        elif "number" in p_d_t:
-            plv.update({ p_k: float(plv[p_k])})
-        elif "string" in p_d_t:
-            plv.update({ p_k: str(plv[p_k])})
-        elif "bool" in p_d_t:
-            plv.update({ p_k: test_truthy(plv[p_k])})
-        elif "array" in p_d_t:
-            p_i_t = p_d_p[p_k].get("items", "string")
-
-            if isinstance(plv[p_k], str):
-                plv.update({ p_k: unquote(plv[p_k]) })
-                plv.update({ p_k: re.split(",", plv[p_k])})
-
-            if "int" in p_i_t:
-                plv.update({ p_k: list(map(int, plv[p_k])) })
-            elif "number" in p_i_t:
-                plv.update({ p_k: list(map(float, plv[p_k])) })
-            elif "string" in p_i_t:
-                plv.update({ p_k: list(map(str, plv[p_k])) })
-
     return plv
 
 ################################################################################
@@ -353,8 +330,6 @@ def cgi_simplify_response(byc):
         byc.update({ "service_response": r_s.get("results", [])})
     else:
         byc.update({ "service_response": r })
-
-    return byc
 
 ################################################################################
 
@@ -396,8 +371,6 @@ def switch_to_wrong_service_response(byc):
                 }
             }
         })
-
-    return byc
 
 ################################################################################
 
@@ -472,17 +445,15 @@ def response_clean_legacy(byc):
     for k in legacy:
         byc["service_response"].pop(k, None)
 
-    return byc
-
 ################################################################################
 
 def update_error_code_from_response_summary(byc):
 
     if not "response_summary" in byc["service_response"]:
-        return byc
+        return
 
     if not "exists" in byc["service_response"]["response_summary"]:
-        return byc
+        return
 
 ################################################################################
 
@@ -494,8 +465,6 @@ def switch_to_error_response(byc):
         if "meta" in byc["service_response"]:
             byc["error_response"].update({ "meta": byc["service_response"]["meta"]})
         byc["service_response"] = byc["error_response"]
-
-    return byc
 
 ################################################################################
 
@@ -509,8 +478,6 @@ def check_switch_to_boolean_response(byc):
     except:
         pass
 
-    return byc
-
 ################################################################################
 
 def check_switch_to_count_response(byc):
@@ -521,8 +488,6 @@ def check_switch_to_count_response(byc):
             byc["service_response"]["meta"].update({"returned_granularity": "count"})
     except:
         pass
-
-    return byc
 
 ################################################################################
 
@@ -535,8 +500,6 @@ def delint_response(byc):
             byc["service_response"].pop("info", None)
     except:
         pass
-
-    return byc
 
 ################################################################################
 ################################################################################

@@ -9,15 +9,12 @@ def parse_filters(byc):
     get_global_filter_flags(byc)
 
     if not "filters" in byc["form_data"]:
-        return byc
+        return
 
     fs = byc["form_data"]["filters"]
     fs = check_filter_values(fs, byc)
     if len(fs) > 0:
         byc.update( { "filters": fs } )
-        return byc
-            
-    return byc
 
 ################################################################################
 
@@ -40,8 +37,6 @@ def get_global_filter_flags(byc):
                 ff["descendants"] = False
 
     byc.update( { "filter_flags": ff } )
-
-    return byc
 
 ################################################################################
 
@@ -85,12 +80,13 @@ def check_filter_values(filters, byc):
 def response_add_filter_warnings(byc, message=False):
 
     if message is False:
-        return byc
+        return
+
     if len(str(message)) < 1:
-        return byc
+        return
 
     if not "service_response" in byc:
-        return byc
+        return
 
     if not "info" in byc["service_response"]:
         byc["service_response"].update({"info": {}})
@@ -98,6 +94,3 @@ def response_add_filter_warnings(byc, message=False):
         byc["service_response"]["info"].update({"warnings": []})
 
     byc["service_response"]["info"]["warnings"].append(message)
-
-    return byc
-

@@ -9,7 +9,7 @@ from query_execution import mongo_result_list
 def parse_variant_parameters(byc):
 
     if not "variant_definitions" in byc:
-        return byc
+        return
 
     variant_pars = { }
     v_p_defs = byc["variant_definitions"]["parameters"]
@@ -58,8 +58,6 @@ def parse_variant_parameters(byc):
 
     byc.update( { "variant_pars": v_p_c } )
 
-    return byc
-
 ################################################################################
 
 def translate_reference_name(variant_pars, byc):
@@ -92,7 +90,7 @@ def get_variant_request_type(byc):
     podmd"""
 
     if not "variant_pars" in byc:
-        return byc
+        return
 
     variant_request_type = "no correct variant request"
 
@@ -140,14 +138,12 @@ def get_variant_request_type(byc):
 
     byc.update( { "variant_request_type": variant_request_type } )
 
-    return byc
-
 ################################################################################
 
 def create_variantTypeRequest_query( byc ):
 
     if byc["variant_request_type"] != "variantTypeRequest":
-        return byc
+        return
 
     """
     A query just for a variant type w/o any additional parameter has to be blocked
@@ -157,7 +153,7 @@ def create_variantTypeRequest_query( byc ):
     """
 
     if len(byc.get("filters", [])) < 1:
-        return byc
+        return
 
     vp = byc["variant_pars"]
     v_p_defs = byc["variant_definitions"]["parameters"]
@@ -176,14 +172,12 @@ def create_variantTypeRequest_query( byc ):
 
     expand_variant_query(v_q, byc)
 
-    return byc
-
 ################################################################################
 
 def create_variantIdRequest_query( byc ):
 
     if byc["variant_request_type"] != "variantIdRequest":
-        return byc
+        return
 
     # query database for gene and use coordinates to create range query
     vp = byc["variant_pars"]
@@ -199,18 +193,16 @@ def create_variantIdRequest_query( byc ):
             ]
         }
     else:
-        return byc
+        return
 
     expand_variant_query(v_q, byc)
-
-    return byc
 
 ################################################################################
 
 def create_geneVariantRequest_query( byc ):
 
     if byc["variant_request_type"] != "geneVariantRequest":
-        return byc
+        return
 
     # query database for gene and use coordinates to create range query
     vp = byc["variant_pars"]
@@ -232,8 +224,6 @@ def create_geneVariantRequest_query( byc ):
     byc.update( {"variant_request_type": "variantRangeRequest"} )
     create_variantRangeRequest_query( byc )
 
-    return byc
-
 ################################################################################
 
 def create_variantAlleleRequest_query( byc ):
@@ -243,7 +233,7 @@ def create_variantAlleleRequest_query( byc ):
     podmd"""
 
     if byc["variant_request_type"] != "variantAlleleRequest":
-        return byc
+        return
 
     vp = byc["variant_pars"]
     v_p_defs = byc["variant_definitions"]["parameters"]
@@ -266,14 +256,12 @@ def create_variantAlleleRequest_query( byc ):
 
     expand_variant_query(v_q, byc)
 
-    return byc
-
 ################################################################################
 
 def create_variantCNVrequest_query( byc ):
 
     if not byc["variant_request_type"] in [ "variantCNVrequest" ]:
-        return byc
+        return
 
     vp = byc["variant_pars"]
     v_p_defs = byc["variant_definitions"]["parameters"]
@@ -289,14 +277,12 @@ def create_variantCNVrequest_query( byc ):
 
     expand_variant_query(v_q, byc)
 
-    return byc
-
 ################################################################################
 
 def create_variantRangeRequest_query( byc ):
 
     if not byc["variant_request_type"] in [ "variantRangeRequest" ]:
-        return byc
+        return
     
     vp = byc["variant_pars"]
     v_p_defs = byc["variant_definitions"]["parameters"]
@@ -328,8 +314,6 @@ def create_variantRangeRequest_query( byc ):
 
     expand_variant_query(v_q, byc)
 
-    return byc
-
 ################################################################################
 
 def expand_variant_query(variant_query, byc):
@@ -338,8 +322,6 @@ def expand_variant_query(variant_query, byc):
         byc["queries"].update({"variants": { "$and": [ byc["queries"]["variants"], variant_query ] } } )
     else:
         byc["queries"].update( {"variants": variant_query } )
-
-    return byc
 
 ################################################################################
 

@@ -80,7 +80,7 @@ def samples_plotter():
 def _create_file_handover_response(byc):
 
     if "plot" in byc.get("output", "handovers"):
-        return byc
+        return
 
     h_o_types = byc["handover_definitions"]["h->o_types"]
     h_o_server = select_this_server(byc)

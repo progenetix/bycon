@@ -3,7 +3,7 @@ from random import sample as randomSamples
 from pathlib import Path
 
 from datatable_utils import import_datatable_dict_line
-from interval_utils import interval_cnv_arrays
+from interval_utils import interval_cnv_arrays, interval_counts_from_callsets
 from response_remapping import callsets_create_iset, de_vrsify_variant, vrsify_variant
 from variant_parsing import variant_create_digest
 
@@ -47,10 +47,7 @@ def read_www_tsv_to_dictlist(www, max_count=0):
     return dictlist, fieldnames
 
 ################################################################################
-
-
-
-
+################################################################################
 ################################################################################
 
 class ByconBundler:
@@ -99,7 +96,7 @@ class ByconBundler:
     #----------------------------- public -------------------------------------#
     #--------------------------------------------------------------------------#
 
-    def readPgxseg(self, filepath):
+    def readPgxFile(self, filepath):
 
         self.filepath = filepath
 
@@ -120,13 +117,11 @@ class ByconBundler:
             "fieldnames": fieldnames
         })
 
-        return
-
     #--------------------------------------------------------------------------#
 
     def pgxseg2keyedBundle(self, filepath):
 
-        self.readPgxseg(filepath)
+        self.readPgxFile(filepath)
 
         if not "biosample_id" in self.pgxseg.get("fieldnames", []):
             self.errors.append("¡¡¡ The `biosample_id` parameter is required for variant assignment !!!")
@@ -177,7 +172,7 @@ class ByconBundler:
 
     def callsetsFrequenciesBundles(self):
             
-        self.intervalFrequenciesBundles.append( callsets_create_iset("import", "", self.bundle["callsets"], self.byc) )
+        self.intervalFrequenciesBundles.append( self.__callsetBundleCreateIset("import") )
 
         return self.intervalFrequenciesBundles
 
@@ -220,8 +215,6 @@ class ByconBundler:
             b_k_b["variants_by_callset_id"].update({ cs_id: [] })
 
         self.keyedBundle = b_k_b
-
-        return
 
     #--------------------------------------------------------------------------#
 
@@ -288,8 +281,6 @@ class ByconBundler:
             "variants_by_callset_id": vars_ided
         })
 
-        return
-
     #--------------------------------------------------------------------------#
 
     def __flatten_keyed_bundle(self):
@@ -307,5 +298,25 @@ class ByconBundler:
             "callsets": list( cs_k.values() ),
             "variants": [elem for sublist in ( v_cs_k.values() ) for elem in sublist]
         })
+
+    #--------------------------------------------------------------------------#
+
+    def __callsetBundleCreateIset(self, label=""):
+
+        intervals, cnv_cs_count = interval_counts_from_callsets(self.bundle["callsets"], self.byc)
+
+        ds_id = self.bundle.get("ds_id", "")
+        iset = {
+            "dataset_id": ds_id,
+            "group_id": ds_id,
+            "label": label,
+            "sample_count": cnv_cs_count,
+            "interval_frequencies": []
+        }
+
+        for intv_i, intv in enumerate(intervals):
+            iset["interval_frequencies"].append(intv.copy())
+
+        return iset
 
 ################################################################################

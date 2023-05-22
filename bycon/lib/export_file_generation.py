@@ -227,7 +227,7 @@ def export_callsets_matrix(ds_id, byc):
     p_r = byc["pagination"]
 
     if not "callsets._id" in ds_results:
-        return byc
+        return
 
     cs_r = ds_results["callsets._id"]
 

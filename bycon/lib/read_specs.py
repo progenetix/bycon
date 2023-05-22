@@ -12,7 +12,7 @@ def read_bycon_definition_files(conf_dir, byc):
     b_d_fs = byc["config"].get("bycon_definition_files", [])
 
     if not path.isdir(conf_dir):
-        return byc
+        return
 
     if len(b_d_fs) < 1:
 
@@ -22,8 +22,6 @@ def read_bycon_definition_files(conf_dir, byc):
 
     for d in b_d_fs:
         read_bycon_configs_by_name( d, conf_dir, byc )
-
-    return byc
 
 ################################################################################
   
@@ -45,8 +43,6 @@ def read_bycon_configs_by_name(name, conf_dir, byc):
 
     byc.update({ name: o })
 
-    return byc
-
 ################################################################################
 
 def read_local_prefs(service, pkg_path, byc):
@@ -61,14 +57,10 @@ def read_local_prefs(service, pkg_path, byc):
 
     if f.is_file():
         byc.update({"service_config": load_yaml_empty_fallback( f ) })
-        return byc
-
     elif d.is_dir():
         t_f_p = Path( path.join( d, "config.yaml" ) )
         if t_f_p.is_file():
             byc.update({ "service_config": load_yaml_empty_fallback(t_f_p) } )
-
-    return byc   
 
 ################################################################################
 

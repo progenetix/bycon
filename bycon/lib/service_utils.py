@@ -78,8 +78,6 @@ def run_beacon_init_stack(byc):
     response_collect_errors(byc)
     cgi_break_on_errors(byc)
 
-    return byc
-
 ################################################################################
 
 def initialize_bycon_service(byc, service=False):
@@ -158,8 +156,6 @@ def initialize_bycon_service(byc, service=False):
     # TODO: standardize the general defaults / entity defaults / form values merging
     #       through pre-parsing into identical structures and then use deepmerge etc.
 
-    return byc
-
 ################################################################################
 
 def set_special_modes(byc):
@@ -172,8 +168,6 @@ def set_special_modes(byc):
     t_m_k = form.get("test_mode_count", "___none___")
     if re.match(r'^\d+$', str(t_m_k)):
         byc.update({"test_mode_count": int(t_m_k) })
-
-    return byc
 
 ################################################################################
 
@@ -198,14 +192,12 @@ def set_io_params(byc):
         if m in byc["service_config"]["method_keys"].keys():
             byc["method"] = m
 
-    return byc
-
 ################################################################################
 
 def update_entity_ids_from_path(byc):
 
     if not byc["request_entity_path_id"]:
-        return byc
+        return
 
     if not byc["response_entity_path_id"]:
         byc.update({ "response_entity_path_id": byc["request_entity_path_id"] })
@@ -222,8 +214,6 @@ def update_entity_ids_from_path(byc):
         "response_entity_id": p_r_m.get(res_p_id, byc["response_entity_path_id"])
     })
 
-    return byc
-
 ################################################################################
 
 def update_requested_schema_from_request(byc):
@@ -238,8 +228,6 @@ def update_requested_schema_from_request(byc):
     elif "requested_schemas" in b_qm:
         byc.update({"response_entity_id": b_qm["requested_schemas"][0].get("entity_type", byc["response_entity_id"])})
 
-    return byc
-
 ################################################################################
 
 def set_response_entity(byc):
@@ -249,8 +237,6 @@ def set_response_entity(byc):
 
     if byc["response_entity_id"] in b_rt_s.keys():
         byc.update({"response_entity": b_rt_s[ byc["response_entity_id"] ] })
-
-    return byc
 
 ################################################################################
 
@@ -297,8 +283,6 @@ def run_result_sets_beacon(byc):
 
     if sr_rs["num_total_results"] > 0:
         sr_rs.update({"exists": True })
-
-    return byc
 
 ################################################################################
 
@@ -351,7 +335,7 @@ def check_alternative_single_set_deliveries(ds_id, r_s_res, byc):
     check_alternative_variant_deliveries(ds_id, byc)
     check_alternative_callset_deliveries(ds_id, byc)
 
-    return byc
+    return
 
 ################################################################################
 
@@ -397,15 +381,13 @@ def update_meta_queries(byc):
     except:
         pass
 
-    return byc
-
 ################################################################################
 
 def create_empty_beacon_response(byc):
 
     r_s = byc["response_entity"].get("response_schema", None)
     if r_s is None:
-        return byc
+        return
 
     r, e = instantiate_response_and_error(byc, r_s)
     response_update_meta(r, byc)
@@ -439,8 +421,6 @@ def create_empty_beacon_response(byc):
         if p in byc:
             response_add_received_request_summary_parameter(byc, p, byc[ p ])
 
-    return byc
-
 ################################################################################
 
 def create_empty_service_response(byc):
@@ -455,8 +435,6 @@ def create_empty_service_response(byc):
         if p in byc:
             response_add_received_request_summary_parameter(byc, p, byc[ p ])
 
-    return byc
-
 ###############################################################################
 
 def create_empty_non_data_response(byc):
@@ -469,18 +447,14 @@ def create_empty_non_data_response(byc):
 
     byc.update( {"service_response": r, "error_response": e })
 
-    return byc
-
 ################################################################################
 
 def check_plot_responses(ds_id, byc):
 
     if not "plot" in byc["output"]:
-        return byc
+        return
 
     check_histoplot_plot_response(ds_id, byc)
-
-    return byc
 
 ################################################################################
 
@@ -502,16 +476,14 @@ def check_histoplot_plot_response(ds_id, byc):
             print_uri_rewrite_response(h_o["url"], "", "")
             exit()
 
-    return byc
-
 ################################################################################
 
 def check_datatable_delivery(results, byc):
 
     if not "table" in byc["output"]:
-        return byc
+        return
     if not "datatable_mappings" in byc:
-        return byc
+        return
 
     export_datatable_download(results, byc)
 
@@ -588,12 +560,10 @@ def response_add_received_request_summary_parameter(byc, name, value):
         name = "request_parameters"
 
     if not "received_request_summary" in byc["service_response"]["meta"]:
-        return byc
+        return
 
     if value:
         byc["service_response"]["meta"]["received_request_summary"].update( { name: value } )
-
-    return byc
 
 ################################################################################
 
@@ -610,26 +580,24 @@ def response_collect_errors(byc):
 def response_add_error(byc, code=200, message=False):
 
     if message is False:
-        return byc
+        return
     if len(str(message)) < 1:
-        return byc
+        return
 
     e = { "error_code": code, "error_message": message }
     byc["error_response"].update({"error": e})
-
-    return byc
 
 ################################################################################
 
 def response_add_warnings(byc, message=False):
 
     if message is False:
-        return byc
+        return
     if len(str(message)) < 1:
-        return byc
+        return
 
     if not "service_response" in byc:
-        return byc
+        return
 
     if not "info" in byc["service_response"]:
         byc["service_response"].update({"info": {}})
@@ -637,8 +605,6 @@ def response_add_warnings(byc, message=False):
         byc["service_response"]["info"].update({"warnings": []})
 
     byc["service_response"]["info"]["warnings"].append(message)
-
-    return byc
 
 ################################################################################
 
@@ -694,8 +660,6 @@ def populate_service_response( byc, results):
     check_switch_to_count_response(byc)
     check_switch_to_boolean_response(byc)
 
-    return byc
-
 ################################################################################
 
 def populate_service_header(byc, results):
@@ -703,7 +667,8 @@ def populate_service_header(byc, results):
     try:
         r_s = byc["service_response"]["response_summary"]
     except:
-        return byc
+        return
+
     r_no = 0
 
     if isinstance(results, list):
@@ -712,21 +677,19 @@ def populate_service_header(byc, results):
     if r_no > 0:
         r_s.update({"exists": True })
 
-    return byc
-
 ################################################################################
 
 def populate_service_response_counts(byc):
 
     if not "dataset_results" in byc:
-        return byc
+        return
     if not "dataset_ids" in byc:
-        return byc
+        return
 
     ds_id = byc["dataset_ids"][0]
 
     if not ds_id in byc["dataset_results"]:
-        return byc
+        return
 
     counts = { }
 
@@ -737,14 +700,12 @@ def populate_service_response_counts(byc):
 
     byc["service_response"]["info"].update({ "counts": counts })
 
-    return byc
-
 ################################################################################
 
 def check_alternative_variant_deliveries(ds_id, byc):
 
     if not "genomicVariant" in byc["response_entity_id"]:
-        return byc
+        return
 
     if "pgxseg" in byc["output"]:
         export_pgxseg_download(ds_id, byc)
@@ -752,22 +713,18 @@ def check_alternative_variant_deliveries(ds_id, byc):
     if "variants" in byc["method"]:
         export_variants_download(ds_id, byc)
 
-    return byc
-
 ################################################################################
 
 def check_alternative_callset_deliveries(ds_id, byc):
 
     check_callsets_matrix_delivery(ds_id, byc)
 
-    return byc
-
 ################################################################################
 
 def return_filtering_terms_response( byc ):
 
     if not "filteringTerm" in byc["response_entity_id"]:
-        return byc
+        return
 
     # TODO: correct response w/o need to fix
     byc["service_response"].update({"response": { "filteringTerms": [], "resources": []} })
@@ -851,7 +808,7 @@ def create_filters_resource_response(collation_types, byc):
 def check_callset_plot_delivery(byc):
 
     if not "samplesplot" in byc["output"]:
-        return byc
+        return
 
     results = []
     p_r = byc["pagination"]
@@ -932,7 +889,7 @@ def check_callset_plot_delivery(byc):
 def check_computed_histoplot_delivery(byc):
 
     if not "histo" in byc.get("output", "___none___"):
-        return byc
+        return
 
     f_d = byc.get("filter_definitions", {})
 
@@ -1007,14 +964,14 @@ def check_computed_histoplot_delivery(byc):
 def check_computed_interval_frequency_delivery(byc):
 
     if not "frequencies" in byc["output"]:
-        return byc
+        return
 
     ds_id = byc[ "dataset_ids" ][ 0 ]
     ds_results = byc["dataset_results"][ds_id]
     p_r = byc["pagination"]
 
     if not "callsets._id" in ds_results:
-        return byc
+        return
 
     cs_r = ds_results["callsets._id"]
 
@@ -1057,38 +1014,15 @@ def check_computed_interval_frequency_delivery(byc):
 def check_callsets_matrix_delivery(ds_id, byc):
 
     if not "pgxmatrix" in byc["output"]:
-        return byc
+        return
 
     export_callsets_matrix(ds_id, byc)
-
-# ################################################################################
-
-# def bycon_bundle_create_callsets_plot_list(bycon_bundle, byc):
-
-#     c_p_l = []
-#     for p_o in bycon_bundle["callsets"]:
-#         cs_id = p_o.get("id")
-#         p_o.update({
-#             "ds_id": bycon_bundle.get("ds_id", ""),
-#             "variants":[]
-#         })
-
-#         for v in bycon_bundle["variants"]:
-#             if v.get("callset_id", "") == cs_id:
-#                 v = de_vrsify_variant(v, byc)
-#                 p_o["variants"].append(v)
-
-#         c_p_l.append(p_o)
-        
-#     return c_p_l
 
 ################################################################################
 
 def bycon_bundle_create_intervalfrequencies_object(bycon_bundle, byc):
 
-    i_p_o = callsets_create_iset("import", "", bycon_bundle["callsets"], byc)
-
-    return i_p_o
+    return callsets_create_iset("import", "", bycon_bundle["callsets"], byc)
 
 ################################################################################
        

@@ -4,6 +4,13 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-05-22 (v1.0.44)
+
+* code clean-up
+  - removal of unnecessary "return" staements
+  - re-structuring of `argument_definitions.yaml` in preparation for common
+    parsing of input values
+
 ### 2023-05-17 (v1.0.43)
 
 * rewrite of `.pgxseg` processing into `ByconBundler` class

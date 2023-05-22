@@ -72,7 +72,7 @@ def generate_genomic_intervals(byc):
     
     if binning == "cytobands":
         byc.update({"genomic_intervals": byc["cytoband_intervals"].copy() })
-        return byc
+        return
 
     # otherwise intervals ######################################################
 
@@ -133,8 +133,6 @@ def generate_genomic_intervals(byc):
 
     byc.update({ "genomic_intervals": intervals })
 
-    return byc
-
 ################################################################################
 
 def generate_cytoband_intervals(byc):
@@ -153,8 +151,6 @@ def generate_cytoband_intervals(byc):
         })
 
     byc.update({ "cytoband_intervals": intervals })
-
-    return byc
 
 ################################################################################
 

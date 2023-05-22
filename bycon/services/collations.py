@@ -93,7 +93,7 @@ def _check_collation_type_query(byc):
     if "id" in byc["form_data"]:
         if re.match(r'^\w[^:]+?:\w.+?$', byc["form_data"]["id"]):
             byc.update({"queries": {"id": byc["form_data"]["id"] } } )
-            return byc
+            return
 
     if "filters" in byc:
         # TODO: This hack fixes the translation of filters for collation types
@@ -132,8 +132,6 @@ def _check_collation_type_query(byc):
         byc.update({"queries": q_l[0]})
     elif len(q_l) > 1:
         byc.update({"queries": {"$and": q_l } } )
-
-    return byc
 
 ################################################################################
 ################################################################################

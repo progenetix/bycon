@@ -35,7 +35,7 @@ entity_defaults:
     name: Progenetix Cancer Genomics Beacon+
     api_version: v2.1.0-beaconplus
     version: v2.1.0-beaconplus
-    id: org.progenetix
+    id: org.progenetix.beacon
     environment: prod
     description: >-
       Beacon+ provides a forward looking implementation of the Beacon v2 API, with
@@ -43,7 +43,7 @@ entity_defaults:
       genome profiling data in the Progenetix oncogenomic data resource (https://progenetix.org).
     type:
       group: org.ga4gh
-      artifact: Beacon v2
+      artifact: beacon
       version: v2.1.0-beaconplus
     documentation_url: http://docs.progenetix.org
     service_url: http://progenetix.org/beacon/

@@ -1,6 +1,6 @@
 # __init__.py
-import sys, inspect, glob
-from os import pardir, path
+import sys
+from os import environ, path
 from pathlib import Path
 import traceback
 
@@ -48,7 +48,12 @@ try:
     cgi_parse_query(byc)
     
 except Exception:
-    env = "server"
-    if not environ.get('HTTP_HOST'):
-       env = "local"
-    print_text_response(traceback.format_exc(), env, 302)
+
+    if environ.get('HTTP_HOST'):
+        print('Content-Type: text/plain')
+        print('status: 302')
+        print()
+    
+    print(traceback.format_exc())
+    print()
+    exit()

@@ -108,7 +108,7 @@ def execute_bycon_queries(ds_id, byc):
         prefetch.update( { prevars["pref_m"]: _prefetch_data(prevars) } )
         byc["dataset_results"].update( { ds_id: prefetch } )
 
-        return byc
+        return
 
     ############################################################################
 
@@ -222,7 +222,7 @@ def execute_bycon_queries(ds_id, byc):
             })
 
         byc["dataset_results"].update( { ds_id: prefetch } )
-        return byc
+        return
 
     prevars["pref_m"] = "callsets._id"
     prevars["query"] = { "biosample_id": { "$in": prefetch[ "biosamples.id" ]["target_values"] } }
@@ -250,7 +250,7 @@ def execute_bycon_queries(ds_id, byc):
 
     byc["dataset_results"].update( { ds_id: prefetch } )
 
-    return byc
+    return
 
 ################################################################################
 

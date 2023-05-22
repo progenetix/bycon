@@ -76,8 +76,6 @@ def parse_cytoband_file(byc):
         "genome_size": genome_size
     } )
 
-    return byc
-
 ################################################################################
 
 def bands_from_cytobands(chr_bands, byc):
@@ -261,7 +259,7 @@ def translate_reference_ids(byc):
     """
 
     if not "variant_definitions" in byc:
-        return byc
+        return
 
     v_d_refsc = byc["variant_definitions"]["refseq_chromosomes"]
     c_r = {}    # keys are the bare chromosome names e.g. "15"
@@ -294,8 +292,6 @@ def translate_reference_ids(byc):
         "refseq_aliases": r_a,
         "chro_aliases": c_a
     })
-
-    return byc
 
 ################################################################################
 
