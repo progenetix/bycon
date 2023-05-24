@@ -78,8 +78,10 @@ def instantiate_schema(schema):
             return [instantiate_schema(schema['items'])]
         elif "default" in schema:
             return schema["default"]
+
     return None
-        
+  
+
 ################################################################################
 
 def create_empty_instance(schema):
