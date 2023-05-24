@@ -66,40 +66,25 @@ def get_schema_file_path(schema_name, byc, ext="json"):
 
 ################################################################################
 
-def instantiate_schema(schema, is_root=True):
+def instantiate_schema(schema):
 
-    if is_root is not True:
-        if 'type' in schema.keys():
-
-            t = schema['type']
-        
-            if t == 'array' or t == 'list':
-                schema = []
-            elif t == 'object':
-                schema = { }
-            elif t == 'integer':
-                schema = int()
-            elif t == 'number':
-                schema = float()
-            elif t == 'boolean':
-                schema = False
-            else:
-                schema = ""
-               
-            return schema
-      
-    else:
-        for k, val in schema.items():
-            if isinstance(val, dict):
-                schema.update({ k: instantiate_schema(val, False) })
-                
-    return schema
+    if 'type' in schema:
+        if schema['type'] == 'object' and 'properties' in schema:
+            empty_dict = {}
+            for prop, prop_schema in schema['properties'].items():
+                empty_dict[prop] = instantiate_schema(prop_schema)
+            return empty_dict
+        elif schema['type'] == 'array' and 'items' in schema:
+            return [instantiate_schema(schema['items'])]
+        elif "default" in schema:
+            return schema["default"]
+    return None
         
 ################################################################################
 
 def create_empty_instance(schema):
 
-    s_i = instantiate_schema(schema, True)
+    s_i = instantiate_schema(schema)
     s_i = decamelize(s_i)
     return s_i
 

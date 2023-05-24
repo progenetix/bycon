@@ -6,12 +6,12 @@
     "properties": {
         "ancestries": {
             "items": {
-                "$ref": "../common/ancestry.json#/properties"
+                "$ref": "../common/ancestry.json"
             },
             "type": "array"
         },
         "dataUseConditions": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../common/ontologyTerm.json",
             "examples": [
                 {
                     "id": "DUO:0000004",
@@ -27,7 +27,7 @@
         },
         "diseases": {
             "items": {
-                "$ref": "../common/disease.json#/properties"
+                "$ref": "../common/disease.json"
             },
             "type": "array"
         },
@@ -49,7 +49,7 @@
                 }
             ],
             "items": {
-                "$ref": "../common/externalReference.json#/properties"
+                "$ref": "../common/externalReference.json"
             },
             "type": "array"
         },
@@ -65,7 +65,7 @@
             "type": "object"
         },
         "provenance": {
-            "$ref": "../common/provenance.json#/properties"
+            "$ref": "../common/provenance.json"
         },
         "sex": {
             "$ref": "../common/commonDefinitions.json#/definitions/Sex"
@@ -78,7 +78,7 @@
             "type": "string"
         },
         "vitalStatus": {
-            "$ref": "../common/vitalStatus.json#/properties"
+            "$ref": "../common/vitalStatus.json"
         }
     },
     "required": [

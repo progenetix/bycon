@@ -29,17 +29,17 @@ properties:
   externalReferences:
     type: array
     items:
-      $ref: ../progenetix-model/common/externalReference.yaml#/properties
+      $ref: ../progenetix-model/common/externalReference.yaml
     examples:
       - id: PMID:9892199
   celllineInfo:
-      $ref: ../progenetix-model/common/celllineInfo.yaml#/properties
+      $ref: ../progenetix-model/common/celllineInfo.yaml
   cohorts:
     description: >
       Cohorts describe collections of samples or individuals which are part of a common epistemic group, e.g. have been used for a study or share a set of features.
     type: array
     items:
-      $ref: ../progenetix-model/common/ontologyTerm.yaml#/properties
+      $ref: ../progenetix-model/common/ontologyTerm.yaml
     examples:
       - id: pgxcohort-arraymap
         label: arrayMap collection
@@ -47,38 +47,38 @@ properties:
     description: >-
       The age of the individual at time of sample collection or alternative time
       element.
-    $ref: "#/definitions/TimeOfCollection/properties"
+    $ref: "#/definitions/TimeOfCollection"
   provenance:
-    $ref: ../progenetix-model/common/provenance.yaml#/properties
+    $ref: ../progenetix-model/common/provenance.yaml
   dataUseConditions:
-    $ref: ../progenetix-model/common/ontologyTerm.yaml#/properties
+    $ref: ../progenetix-model/common/ontologyTerm.yaml
   sampledTissue:
-    $ref: ../progenetix-model/common/ontologyTerm.yaml#/properties
+    $ref: ../progenetix-model/common/ontologyTerm.yaml
   histologicalDiagnosis:
-    $ref: ../progenetix-model/common/ontologyTerm.yaml#/properties
+    $ref: ../progenetix-model/common/ontologyTerm.yaml
     examples:
       - id: NCIT:C3778
         label : Serous Cystadenocarcinoma
   icdoMorphology:
     description: >-
       The ICD-O 3 morphology code of this biosample, in a "pseudo-prefixed" transformation (since no direct ICD-O 3 registry can be referenced).
-    $ref: ../progenetix-model/common/ontologyTerm.yaml#/properties
+    $ref: ../progenetix-model/common/ontologyTerm.yaml
     examples:
       - id: icdom-94703
         label : Medulloblastoma, NOS
   icdoTopography:
     description: >-
       The ICD-O 3 topography code of this biosample, in a "pseudo-prefixed" transformation (since no direct ICD-O 3 registry can be referenced).
-    $ref: ../progenetix-model/common/ontologyTerm.yaml#/properties
+    $ref: ../progenetix-model/common/ontologyTerm.yaml
     examples:
       - id: icdot-C71.6
         label : cerebellum
   biosampleStatus:
     description: >-
       Ontology value from Experimental Factor Ontology (EFO) Material Entity term (BFO:0000040).
-    $ref: ../progenetix-model/common/ontologyTerm.yaml#/properties
+    $ref: ../progenetix-model/common/ontologyTerm.yaml
   tumorProgression:
-    $ref: ../progenetix-model/common/ontologyTerm.yaml#/properties
+    $ref: ../progenetix-model/common/ontologyTerm.yaml
     examples:
       - id: NCIT:C3677
         label: Benign Neoplasm
@@ -93,7 +93,7 @@ properties:
   tumorGrade:
     description: >
       Tumor grade as child term of NCIT:C28076 (Disease Grade Qualifier) or equivalent.
-    $ref: ../progenetix-model/common/ontologyTerm.yaml#/properties
+    $ref: ../progenetix-model/common/ontologyTerm.yaml
     examples:
       - id: NCIT:C28076
         label: grade 3
@@ -104,7 +104,7 @@ properties:
   pathologicalStage:
     description: >
       Pathological stage, as subclass of NCIT:C28108 - Disease Stage Qualifier.
-    $ref: ../progenetix-model/common/ontologyTerm.yaml#/properties
+    $ref: ../progenetix-model/common/ontologyTerm.yaml
     examples:
       - id: NCIT:C27977
         label: Stage IIIA
@@ -115,14 +115,14 @@ properties:
       A child class of NCIT:C48698 Cancer TNM Finding Category
     type: array
     items:
-      $ref: ../progenetix-model/common/ontologyTerm.yaml#/properties
+      $ref: ../progenetix-model/common/ontologyTerm.yaml
     examples:
       - - id: NCIT:C48700
           label: M1 Stage Finding
         - id: NCIT:C48720
           label: T1 Stage Finding
   followupState:
-    $ref: ../progenetix-model/common/ontologyTerm.yaml#/properties
+    $ref: ../progenetix-model/common/ontologyTerm.yaml
     examples:
       - id: pgx:FU0005
         label : death from disease
@@ -131,7 +131,7 @@ properties:
     examples:
       - P23M
   analysisInfo:
-    $ref: "#/definitions/AnalysisInfo/properties"
+    $ref: "#/definitions/AnalysisInfo"
   updated:
     type: string
     format: date-time
@@ -157,5 +157,5 @@ definitions:
       Simplified version only using (ISO) age as option.
     properties:
       age:
-        $ref: ../progenetix-model/common/age.yaml#/properties
+        $ref: ../progenetix-model/common/age.yaml
 

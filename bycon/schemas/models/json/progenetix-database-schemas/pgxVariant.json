@@ -1,12 +1,12 @@
 {
-    "$id": "https://progenetix.org/services/schemas/pgxVariant/v2022-03-29",
+    "$id": "https://progenetix.org/services/schemas/pgxVariant/v2023-05-24",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "additionalProperties": true,
     "definitions": {
         "Location": {
             "properties": {
                 "interval": {
-                    "$ref": "#/definitions/SequenceInterval/properties"
+                    "$ref": "#/definitions/SequenceInterval"
                 },
                 "sequenceId": {
                     "type": "string"
@@ -31,10 +31,10 @@
         "SequenceInterval": {
             "properties": {
                 "end": {
-                    "$ref": "#/definitions/PointPosition/properties"
+                    "$ref": "#/definitions/PointPosition"
                 },
                 "start": {
-                    "$ref": "#/definitions/PointPosition/properties"
+                    "$ref": "#/definitions/PointPosition"
                 },
                 "type": {
                     "const": "SequenceInterval"
@@ -77,7 +77,7 @@
             "type": "object"
         },
         "location": {
-            "$ref": "#/definitions/Location/properties"
+            "$ref": "#/definitions/Location"
         },
         "referenceBases": {
             "pattern": "^([ACGTUNRYSWKMBDHV\\-\\.]*)$",
@@ -97,7 +97,7 @@
             "type": "integer"
         },
         "state": {
-            "$ref": "#/definitions/SequenceState/properties"
+            "$ref": "#/definitions/SequenceState"
         },
         "type": {
             "enum": [
@@ -117,7 +117,7 @@
             "type": "string"
         },
         "variantState": {
-            "$ref": "../common/ontologyTerm.json#/properties"
+            "$ref": "../progenetix-model/common/ontologyTerm.json"
         },
         "variantType": {
             "type": "string"

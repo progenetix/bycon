@@ -22,7 +22,7 @@ properties:
   platformModel:
     description: Ontology value for experimental platform or methodology used. For
       sequencing platforms the use of "OBI:0400103 - DNA sequencer" is suggested.
-    $ref: ../common/ontologyTerm.yaml#/properties
+    $ref: ../common/ontologyTerm.yaml
     examples:
       - id: geo:GPL3381
         label: "Stanford Microarray Facility cDNA array [SHDV]"
@@ -43,24 +43,24 @@ properties:
         notes": The aroma.affymetrix package is an R package for analyzing small to extremely large Affymetrix data sets.
   experimentAccession:
     description: Identifier for primary experimental data.
-    $ref: ../common/ontologyTerm.yaml#/properties
+    $ref: ../common/ontologyTerm.yaml
     examples:
       - id: geo:GSM93480
   seriesAccession:
     description: Identifier for primary experimental series.
-    $ref: ../common/ontologyTerm.yaml#/properties
+    $ref: ../common/ontologyTerm.yaml
     examples:
       - id: geo:GSE4079
   provenance:
-    $ref: ../common/provenance.yaml#/properties
+    $ref: ../common/provenance.yaml
   dataUseConditions:
-    $ref: ../common/ontologyTerm.yaml#/properties
+    $ref: ../common/ontologyTerm.yaml
   cnvStatusmaps:
-    $ref: "#/definitions/Statusmaps/properties"
+    $ref: "#/definitions/Statusmaps"
   cnvStats:
-    $ref: "#/definitions/Cnvstatistics/properties"
+    $ref: "#/definitions/Cnvstatistics"
   cnvChroStats:
-    $ref: "#/definitions/Cnvstatistics/properties"
+    $ref: "#/definitions/Cnvstatistics"
   info:
     type: object
   updated:
@@ -107,11 +107,11 @@ definitions:
   Chrofractions:
     properties:
       "1":
-        $ref: "#/definitions/Cnvstatistics/properties"
+        $ref: "#/definitions/Cnvstatistics"
       1p:
-        $ref: "#/definitions/Cnvstatistics/properties"
+        $ref: "#/definitions/Cnvstatistics"
       1q:
-        $ref: "#/definitions/Cnvstatistics/properties"
+        $ref: "#/definitions/Cnvstatistics"
       additionalProperties: true
 
   Cnvstatistics:

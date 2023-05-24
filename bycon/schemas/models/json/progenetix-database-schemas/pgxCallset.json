@@ -6,13 +6,13 @@
         "Chrofractions": {
             "properties": {
                 "1": {
-                    "$ref": "#/definitions/Cnvstatistics/properties"
+                    "$ref": "#/definitions/Cnvstatistics"
                 },
                 "1p": {
-                    "$ref": "#/definitions/Cnvstatistics/properties"
+                    "$ref": "#/definitions/Cnvstatistics"
                 },
                 "1q": {
-                    "$ref": "#/definitions/Cnvstatistics/properties"
+                    "$ref": "#/definitions/Cnvstatistics"
                 },
                 "additionalProperties": true
             }
@@ -95,16 +95,16 @@
             "type": "string"
         },
         "cnvChroStats": {
-            "$ref": "#/definitions/Cnvstatistics/properties"
+            "$ref": "#/definitions/Cnvstatistics"
         },
         "cnvStats": {
-            "$ref": "#/definitions/Cnvstatistics/properties"
+            "$ref": "#/definitions/Cnvstatistics"
         },
         "cnvStatusmaps": {
-            "$ref": "#/definitions/Statusmaps/properties"
+            "$ref": "#/definitions/Statusmaps"
         },
         "dataUseConditions": {
-            "$ref": "../common/ontologyTerm.json#/properties"
+            "$ref": "../common/ontologyTerm.json"
         },
         "description": {
             "examples": [
@@ -113,7 +113,7 @@
             "type": "string"
         },
         "experimentAccession": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../common/ontologyTerm.json",
             "description": "Identifier for primary experimental data.",
             "examples": [
                 {
@@ -153,7 +153,7 @@
             ]
         },
         "platformModel": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../common/ontologyTerm.json",
             "description": "Ontology value for experimental platform or methodology used. For sequencing platforms the use of \"OBI:0400103 - DNA sequencer\" is suggested.",
             "examples": [
                 {
@@ -171,10 +171,10 @@
             ]
         },
         "provenance": {
-            "$ref": "../common/provenance.json#/properties"
+            "$ref": "../common/provenance.json"
         },
         "seriesAccession": {
-            "$ref": "../common/ontologyTerm.json#/properties",
+            "$ref": "../common/ontologyTerm.json",
             "description": "Identifier for primary experimental series.",
             "examples": [
                 {

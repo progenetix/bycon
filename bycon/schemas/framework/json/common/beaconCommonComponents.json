@@ -15,6 +15,7 @@
             "description": "Beacon-specific error.",
             "properties": {
                 "errorCode": {
+                    "default": 200,
                     "description": "Entry not found",
                     "examples": [
                         "404"

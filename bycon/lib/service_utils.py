@@ -387,7 +387,6 @@ def create_empty_beacon_response(byc):
         return
 
     r, e = instantiate_response_and_error(byc, r_s)
-    response_update_meta(r, byc)
 
     try:
         r["response"].update({"result_sets": []})
@@ -397,7 +396,7 @@ def create_empty_beacon_response(byc):
     if "beaconResultsetsResponse" in r_s:
 
         # TODO: stringent definition on when this is being used
-        r_set = object_instance_from_schema_name(byc, "beaconResultsets", "definitions/ResultsetInstance/properties")
+        r_set = object_instance_from_schema_name(byc, "beaconResultsets", "definitions/ResultsetInstance")
 
         if "dataset_ids" in byc:
             for ds_id in byc["dataset_ids"]:
@@ -423,7 +422,6 @@ def create_empty_beacon_response(byc):
 
 def create_empty_service_response(byc):
     r, e = instantiate_response_and_error(byc, byc["response_entity"]["response_schema"])
-    response_update_meta(r, byc)
 
     byc.update({"service_response": r, "error_response": e})
 
@@ -489,13 +487,16 @@ def check_datatable_delivery(results, byc):
 
 def instantiate_response_and_error(byc, schema):
     """The response relies on the pre-processing of input parameters (queries etc)."""
-    r = object_instance_from_schema_name(byc, schema, "properties")
-    m = object_instance_from_schema_name(byc, "beaconResponseMeta", "properties")
+    r = object_instance_from_schema_name(byc, schema, "")
+    m = object_instance_from_schema_name(byc, "beaconResponseMeta", "")
     r.update({"meta": m})
-    if byc["debug_mode"] is True:
-        print(byc["response_entity"]["response_schema"])
-        prjsonnice(r)
-    e = object_instance_from_schema_name(byc, "beaconErrorResponse", "properties")
+    e = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
+    response_update_meta(r, byc)
+    error_response_set_defaults(e)
+    # if byc["debug_mode"] is True:
+    #     print(byc["response_entity"]["response_schema"])
+    #     prjsonnice(r)
+    #     prjsonnice(e)
 
     return r, e
 
@@ -514,14 +515,24 @@ def response_update_meta(r, byc):
 
 ################################################################################
 
+def error_response_set_defaults(e):
+
+    e.update({
+        "error" : {
+            "error_code": 200,
+            "error_message": ""
+        }
+    })
+
+
+################################################################################
+
 def response_meta_set_info_defaults(r, byc):
     defs = byc.get("beacon_defaults", {})
     b_e_d = defs.get("entity_defaults", {})
 
     for i_k in ["api_version", "beacon_id"]:
         r["meta"].update({i_k: b_e_d["info"].get(i_k, "")})
-
-    return r
 
 
 ################################################################################
@@ -531,8 +542,6 @@ def response_meta_set_config_defaults(r, byc):
     m = byc["service_config"].get("meta", {})
     for k, v in m.items():
         r["meta"].update({k: v})
-
-    return r
 
 
 ################################################################################
@@ -545,8 +554,6 @@ def response_meta_set_entity_values(r, byc):
         r["meta"].update({"returned_schemas": [byc["response_entity"]["beacon_schema"]]})
     except:
         pass
-
-    return r
 
 
 ################################################################################
@@ -786,7 +793,7 @@ def create_filters_resource_response(collation_types, byc):
 
     f_d_s = byc["filter_definitions"]
     collation_types = list(collation_types)
-    res_schema = object_instance_from_schema_name(byc, "beaconFilteringTermsResults", "definitions/Resource/properties",
+    res_schema = object_instance_from_schema_name(byc, "beaconFilteringTermsResults", "definitions/Resource",
                                                   "json")
     for c_t in collation_types:
         f_d = f_d_s[c_t]

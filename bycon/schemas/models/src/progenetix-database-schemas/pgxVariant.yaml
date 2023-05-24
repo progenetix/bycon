@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/pgxVariant/v2022-03-29
+$id: https://progenetix.org/services/schemas/pgxVariant/v2023-05-24
 title: Progenetix Variant
 type: object
 description: >-
@@ -27,14 +27,14 @@ properties:
       - low-level gain
       - high-level gain
   state:
-    $ref: "#/definitions/SequenceState/properties"
+    $ref: "#/definitions/SequenceState"
   type:
     type: string
     enum:
       - "Allele"
       - "RelativeCopyNumber"
   location:
-    $ref: "#/definitions/Location/properties"
+    $ref: "#/definitions/Location"
   info:
     type: object
   updated:
@@ -45,7 +45,7 @@ properties:
 
 # custom / legacy ###############################
   variantState:
-    $ref: "../common/ontologyTerm.yaml#/properties"
+    $ref: "../progenetix-model/common/ontologyTerm.yaml"
   referenceBases:
     type: string
     pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'
@@ -59,6 +59,7 @@ properties:
     type: integer
   end:
     type: integer
+
 #################################################
 
 definitions:
@@ -66,7 +67,7 @@ definitions:
     type: object
     properties:
       interval:
-        $ref: "#/definitions/SequenceInterval/properties"
+        $ref: "#/definitions/SequenceInterval"
       sequenceId:
         type: string
       type:
@@ -83,9 +84,9 @@ definitions:
       type:
         const: SequenceInterval
       start:
-        $ref: "#/definitions/PointPosition/properties"
+        $ref: "#/definitions/PointPosition"
       end:
-        $ref: "#/definitions/PointPosition/properties"
+        $ref: "#/definitions/PointPosition"
   PointPosition:
     type: object
     properties:

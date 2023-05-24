@@ -22,7 +22,7 @@ properties:
   diseases:
     type: array
     items:
-      $ref: ../common/disease.yaml#/properties
+      $ref: ../common/disease.yaml
   info:
     description: >-
       Additional structured data which may not be common across different resources.
@@ -36,7 +36,7 @@ properties:
   externalReferences:
     type: array
     items:
-      $ref: ../common/externalReference.yaml#/properties
+      $ref: ../common/externalReference.yaml
     examples:
       - id: biosample:SAME122868
         description: HapMap individual
@@ -44,15 +44,15 @@ properties:
       - id: geo:GSE13331
         description: Prognostic analysis of mantle cell lymphoma genomes
   vitalStatus:
-    $ref: ../common/vitalStatus.yaml#/properties
+    $ref: ../common/vitalStatus.yaml
   provenance:
-    $ref: ../common/provenance.yaml#/properties
+    $ref: ../common/provenance.yaml
   ancestries:
     type: array
     items:
-      $ref: ../common/ancestry.yaml#/properties
+      $ref: ../common/ancestry.yaml
   dataUseConditions:
-    $ref: ../common/ontologyTerm.yaml#/properties
+    $ref: ../common/ontologyTerm.yaml
     examples:
       - id: DUO:0000004
         label: no restriction

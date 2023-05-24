@@ -352,15 +352,18 @@ def cgi_simplify_response(byc):
 
 def cgi_break_on_errors(byc):
     e_c = byc["error_response"]["error"].get("error_code", 200)
+    # if byc.get("debug_mode", False) is True:
+    #     prjsonnice(byc["error_response"])
 
     # TODO: temp hack
     for k in byc["service_response"].keys():
-        if "any_of" in byc["service_response"][k]:
-            byc["service_response"][k].pop("any_of")
-        if "all_of" in byc["service_response"][k]:
-            byc["service_response"][k].pop("all_of")
+        if isinstance(byc["service_response"][k], dict):
+            if "any_of" in byc["service_response"][k]:
+                byc["service_response"][k].pop("any_of")
+            if "all_of" in byc["service_response"][k]:
+                byc["service_response"][k].pop("all_of")
 
-    if e_c > 200:
+    if int(e_c) > 200:
         cgi_print_response(byc, e_c)
 
 

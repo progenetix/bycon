@@ -33,6 +33,7 @@ definitions:
       errorCode:
         type: integer
         format: int32
+        default: 200
         examples:
           - '404'
         description: Entry not found
