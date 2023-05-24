@@ -1,5 +1,5 @@
 service_aliases:
-  empty_value: info
+  /: info
   endpoints: endpoints
   collations: collations
   cytomapper: cytomapper

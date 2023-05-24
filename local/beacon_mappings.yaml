@@ -9,7 +9,7 @@ id_queryscope_mappings:
 
 service_aliases:
 
-  empty_value: info
+  "/": info
   info: info
   service_info: service_info
   "service-info": service_info

@@ -35,12 +35,12 @@ try:
     from variant_parsing import *
 
     c_f = Path( path.join( pkg_path, "config.yaml" ) )
-    config = load_yaml_empty_fallback( c_f )
+    config: object = load_yaml_empty_fallback( c_f )
     conf_dir = path.join( pkg_path, "config")
-    byc = initialize_bycon(config)
+    byc: object = initialize_bycon(config)
     d_f = Path( path.join( conf_dir, "beacon_defaults.yaml" ) )
     byc.update({"beacon_defaults": load_yaml_empty_fallback( d_f ) })
-    defaults = byc["beacon_defaults"].get("defaults", {})
+    defaults: object = byc["beacon_defaults"].get("defaults", {})
     for d_k, d_v in defaults.items():
         byc.update( { d_k: d_v } )
 

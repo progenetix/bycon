@@ -1,8 +1,8 @@
-import re
-from bson.objectid import ObjectId
+import bson.objectid
 
 from cgi_parsing import *
 from query_execution import mongo_result_list
+
 
 ################################################################################
 
@@ -184,11 +184,11 @@ def create_variantIdRequest_query( byc ):
     v_p_defs = byc["variant_definitions"]["parameters"]
 
     if "_id" in vp:
-        v_q = { v_p_defs["_id"]["db_key"] : ObjectId( vp[ "_id" ] ) }
+        v_q = {v_p_defs["_id"]["db_key"] : bson.objectid.ObjectId(vp["_id"])}
     elif "id" in vp:
         v_q = { 
             "$or": [
-                { v_p_defs["_id"]["db_key"] : ObjectId( vp[ "id" ] ) },
+                {v_p_defs["_id"]["db_key"] : bson.objectid.ObjectId(vp["id"])},
                 { v_p_defs["id"]["db_key"] : vp[ "id" ] }
             ]
         }

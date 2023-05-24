@@ -57,7 +57,7 @@ def ids():
                     else:
                         lid = pim+lid
 
-                print_uri_rewrite_response(link, lid, output)
+                print_uri_rewrite_response(link, lid)
 
     print('Content-Type: text')
     print('status:422')

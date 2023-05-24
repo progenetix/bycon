@@ -18,10 +18,6 @@ utility_dirs:
     - baudisgroup
     - dbtools
     - byconeer
-  - - /
-    - Users
-    - __USERNAME__
-    - Desktop
 
 bycon_instance_pars:
 

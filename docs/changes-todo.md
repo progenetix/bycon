@@ -14,7 +14,7 @@ title: Changes & To Do
 ### 2023-05-17 (v1.0.43)
 
 * rewrite of `.pgxseg` processing into `ByconBundler` class
-    - includes `callsetsVariantsBundles` and `callsetsFrequenciesBundles` for plot object generation
+    - includes `callsets_variants_bundles` and `callsets_frequencies_bundles` for plot object generation
 * plot labels fix for labels starting at the `0` base
 
 ### 2023-05-12 (v1.0.41)

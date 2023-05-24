@@ -33,19 +33,19 @@ def schemas():
     create_empty_service_response(byc)
 
     if "id" in byc["form_data"]:
-        schema_name = byc["form_data"].get("id", "empty_value")
+        schema_name = byc["form_data"].get("id", None)
     else:
         schema_name = rest_path_value("schemas")
 
-    comps = schema_name.split('.')
-    schema_name = comps.pop(0)
+    if schema_name is not None:
 
-    # if "empty_value" in schema_name:
-    #     schema_name = "biosample"
-
-    if not "empty_value" in schema_name:
+        comps = schema_name.split('.')
+        schema_name = comps.pop(0)
 
         j = rest_path_value(schema_name)
+        if j is None:
+            return
+
         if "json" in j:
             s = read_schema_file(schema_name, "", byc, "json")
         else:

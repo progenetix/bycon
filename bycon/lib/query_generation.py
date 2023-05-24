@@ -1,61 +1,55 @@
-import cgi
-import re, yaml
-from pymongo import MongoClient
-from bson.son import SON
+import pymongo
+from bson import SON
 
-from cgi_parsing import *
 from filter_parsing import *
 from variant_parsing import *
+
 
 ################################################################################
 
 def initialize_beacon_queries(byc):
-
-    byc.update({"queries": { }})
+    byc.update({"queries": {}})
 
     parse_filters(byc)
-
     parse_variant_parameters(byc)
     get_variant_request_type(byc)
 
-    # generate_queries(byc)
 
 ################################################################################
 
 def generate_queries(byc, ds_id="progenetix"):
+    byc.update({"queries": {}})
 
-    byc.update({"queries": { }})
-
-    _update_queries_from_path_id( byc )
-    _update_queries_from_id_values( byc )
+    _update_queries_from_path_id(byc)
+    _update_queries_from_id_values(byc)
     _update_queries_from_cohorts_query(byc)
-    _update_queries_from_filters( byc, ds_id )
-    _update_queries_from_variants( byc )
-    _update_queries_from_geoquery( byc )
-    _update_queries_from_hoid( byc)
-    _replace_queries_in_test_mode( byc)
-    _purge_empty_queries( byc )
+    _update_queries_from_filters(byc, ds_id)
+    _update_queries_from_variants(byc)
+    _update_queries_from_geoquery(byc)
+    _update_queries_from_hoid(byc)
+    _replace_queries_in_test_mode(byc)
+    _purge_empty_queries(byc)
 
     # TODO: HOT FIX
     if "runs" in byc["queries"].keys():
-        if not "callsets" in byc["queries"].keys():
+        if "callsets" not in byc["queries"].keys():
             byc["queries"]["callsets"] = byc["queries"].pop("runs")
+
 
 ################################################################################
 
-def _purge_empty_queries( byc ):
-
-    empties = [ ]
+def _purge_empty_queries(byc):
+    empties = []
     for k, v in byc["queries"].items():
         if not v:
-            empties.append( k )
+            empties.append(k)
     for e_k in empties:
-        byc["queries"].pop(k, None)
+        byc["queries"].pop(e_k, None)
+
 
 ################################################################################
 
 def _replace_queries_in_test_mode(byc):
-
     if byc["test_mode"] is not True:
         return
 
@@ -67,29 +61,29 @@ def _replace_queries_in_test_mode(byc):
     ret_no = int(byc.get('test_mode_count', 5))
 
     ds_id = byc["dataset_ids"][0]
-    mongo_client = MongoClient()
-    data_db = mongo_client[ ds_id ]
+    mongo_client = pymongo.MongoClient()
+    data_db = mongo_client[ds_id]
     data_collnames = data_db.list_collection_names()
 
-    if not collname in data_collnames:
+    if collname not in data_collnames:
         return
 
-    data_coll = mongo_client[ ds_id ][ collname ]
-    rs = list( data_coll.aggregate([{"$sample": {"size":ret_no}}]) )
+    data_coll = mongo_client[ds_id][collname]
+    rs = list(data_coll.aggregate([{"$sample": {"size": ret_no}}]))
 
     _ids = []
     for r in rs:
         _ids.append(r["_id"])
 
-    byc.update( {
-        "queries": { collname: { "_id": {"$in": _ids } } },
+    byc.update({
+        "queries": {collname: {"_id": {"$in": _ids}}},
         "empty_query_all_count": data_coll.estimated_document_count()
-    } )
+    })
+
 
 ################################################################################
 
-def _update_queries_from_path_id( byc ):
-
+def _update_queries_from_path_id(byc):
     b_mps = byc["beacon_mappings"]
 
     if "service" in byc["request_path_root"]:
@@ -104,7 +98,7 @@ def _update_queries_from_path_id( byc ):
     if not byc["request_entity_path_id_value"]:
         return
 
-    if not r_e_id in b_mps["response_types"]:
+    if r_e_id not in b_mps["response_types"]:
         return
 
     collname = b_mps["response_types"][r_e_id]["collection"]
@@ -112,13 +106,13 @@ def _update_queries_from_path_id( byc ):
     if not collname:
         return
 
-    byc["queries"].update( { collname: { "id": p_id_v } } )
+    byc["queries"].update({collname: {"id": p_id_v}})
+
 
 ################################################################################
 
 def _update_queries_from_cohorts_query(byc):
-
-    if not "cohorts" in byc["queries"]:
+    if "cohorts" not in byc["queries"]:
         return
 
     if "cohort" in byc["response_entity_id"]:
@@ -132,19 +126,19 @@ def _update_queries_from_cohorts_query(byc):
 
     byc["queries"].pop("cohorts", None)
 
-    update_query_for_scope( byc, query, "biosamples")
+    update_query_for_scope(byc, query, "biosamples")
+
 
 ################################################################################
 
 def _update_queries_from_id_values(byc):
-
     id_f_v = byc["beacon_mappings"]["id_queryscope_mappings"]
     f_d = byc["form_data"]
 
-    this_id_k = byc["response_entity_id"]+"_ids"
+    this_id_k = byc["response_entity_id"] + "_ids"
 
     if "ids" in f_d:
-        if not this_id_k in f_d:
+        if this_id_k not in f_d:
             f_d.update({this_id_k: f_d["ids"]})
 
     for id_k, id_s in id_f_v.items():
@@ -152,24 +146,24 @@ def _update_queries_from_id_values(byc):
         if id_k in f_d:
             id_v = f_d[id_k]
             if len(id_v) > 1:
-                q = {"id":{"$in":id_v}}
+                q = {"id": {"$in": id_v}}
             elif len(id_v) == 1:
-                q = {"id":id_v[0]}
+                q = {"id": id_v[0]}
         if q is not False:
-            update_query_for_scope( byc, q, id_s, "AND")
+            update_query_for_scope(byc, q, id_s, "AND")
+
 
 ################################################################################
 
-def _update_queries_from_hoid( byc):
-
+def _update_queries_from_hoid(byc):
     if "accessid" in byc["form_data"]:
 
         accessid = byc["form_data"]["accessid"]
-        ho_client = MongoClient()
-        ho_db = ho_client[ byc["config"]["info_db"] ]
-        ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
-        h_o = ho_coll.find_one( { "id": accessid } )
-        
+        ho_client = pymongo.MongoClient()
+        ho_db = ho_client[byc["config"]["info_db"]]
+        ho_coll = ho_db[byc["config"]["handover_coll"]]
+        h_o = ho_coll.find_one({"id": accessid})
+
         # accessid overrides ... ?
         if h_o:
             t_k = h_o["target_key"]
@@ -183,16 +177,16 @@ def _update_queries_from_hoid( byc):
             t_v = paginate_list(t_v, byc)
 
             t_db = h_o["source_db"]
-            h_o_q = { t_k: { '$in': t_v } }
+            h_o_q = {t_k: {'$in': t_v}}
             if c_n in byc["queries"]:
-                byc["queries"].update( { c_n: { '$and': [ h_o_q, byc["queries"][ c_n ] ] } } )
+                byc["queries"].update({c_n: {'$and': [h_o_q, byc["queries"][c_n]]}})
             else:
-                byc["queries"].update( { c_n: h_o_q } )
+                byc["queries"].update({c_n: h_o_q})
+
 
 ################################################################################
 
 def _update_queries_from_filters(byc, ds_id="progenetix"):
-
     """The new version assumes that dataset_id, scope (collection) and field are
     stored in the collation entries. Only filters with exact match to an entry
     in the lookup "collations" collection will be evaluated.
@@ -204,7 +198,7 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
     * the bycon API allows to pass a `filterLogic` parameter with either `AND`
     (default value) or `OR`
 
-    CAVE: Filters are assumed to be id values in thje collation collection
+    CAVE: Filters are assumed to be id values in the collation collection
     OR have a `collationed` flag in the filter_definitions set to `false`.
 
     TODO: The `excluded` query option currently will **not** positively match
@@ -215,12 +209,12 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
     f_defs = byc["filter_definitions"]
     f_lists = {}
 
-    logic = byc[ "filter_flags" ][ "logic" ]
-    f_desc = byc[ "filter_flags" ][ "descendants" ]
+    logic = byc["filter_flags"]["logic"]
+    f_desc = byc["filter_flags"]["descendants"]
     # precision = byc[ "filter_flags" ][ "precision" ]
 
-    mongo_client = MongoClient()
-    coll_coll = mongo_client[ ds_id ][ byc["config"]["collations_coll"] ]
+    mongo_client = pymongo.MongoClient()
+    coll_coll = mongo_client[ds_id][byc["config"]["collations_coll"]]
 
     filters = byc.get("filters", [])
 
@@ -228,7 +222,7 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
 
         f_val = f["id"]
         f_neg = f.get("excluded", False)
-        if re.compile( r'^!' ).match( f_val ):
+        if re.compile(r'^!').match(f_val):
             f_neg = True
             f_val = re.sub(r'^!', '', f_val)
 
@@ -246,11 +240,12 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
                         "id": f_val,
                         "scope": f_d["scope"],
                         "db_key": f_d["db_key"],
-                        "child_terms": [ f_val ]
+                        "child_terms": [f_val]
                     }
                     f_desc = False
                     if f_d["collationed"] is True:
-                        warning = "The filter `{}` matches a `{}` filter pattern but the value is not in collations.".format(f_val, f_d["scope"])
+                        warning = "The filter `{}` matches a `{}` filter pattern but the value is not in collations.".format(
+                            f_val, f_d["scope"])
                         response_add_filter_warnings(byc, warning)
 
         if f_info is None:
@@ -258,9 +253,9 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
                 "id": f_val,
                 "scope": "biosamples",
                 "db_key": "___undefined___",
-                "child_terms": [ f_val ]
+                "child_terms": [f_val]
             }
-           
+
         if f_neg is True:
             f_info.update({"is_negated": True})
 
@@ -269,14 +264,14 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
         if f_scope is False:
             f_scope = f_info["scope"]
 
-        if f_scope not in byc[ "config" ][ "queried_collections" ]:
+        if f_scope not in byc["config"]["queried_collections"]:
             continue
 
         if f_scope not in f_lists.keys():
-            f_lists.update({f_scope:{}})
+            f_lists.update({f_scope: {}})
 
         if f_field not in f_lists[f_scope].keys():
-            f_lists[f_scope].update({f_field:[]})
+            f_lists[f_scope].update({f_field: []})
 
         if f_desc is True:
             if f_neg is True:
@@ -285,7 +280,7 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
                 f_lists[f_scope][f_field].extend(f_info["child_terms"])
         else:
             if f_neg is True:
-                f_lists[f_scope][f_field].append({'$nin': [f_info["id"]]})            
+                f_lists[f_scope][f_field].append({'$nin': [f_info["id"]]})
             else:
                 f_lists[f_scope][f_field].append(f_info["id"])
 
@@ -294,75 +289,75 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
         f_s_l = []
         for f_field, f_query_vals in f_lists[f_scope].items():
             if len(f_query_vals) == 1:
-                f_s_l.append({ f_field: f_query_vals[0] })
+                f_s_l.append({f_field: f_query_vals[0]})
             else:
-                f_s_l.append({ f_field: {"$in": f_query_vals } })
+                f_s_l.append({f_field: {"$in": f_query_vals}})
 
         if f_scope in byc["queries"]:
             f_s_l.append(byc["queries"][f_scope])
 
         if len(f_s_l) == 1:
-            byc["queries"].update({ f_scope: f_s_l[0] })
+            byc["queries"].update({f_scope: f_s_l[0]})
         elif len(f_s_l) > 1:
-            byc["queries"].update({ f_scope: { logic: f_s_l } })
+            byc["queries"].update({f_scope: {logic: f_s_l}})
+
 
 ################################################################################
 
-def update_query_for_scope( byc, query, scope, bool_mode="AND"):
-
+def update_query_for_scope(byc, query, scope, bool_mode="AND"):
     logic = boolean_to_mongo_logic(bool_mode)
 
-    if not scope in byc["queries"]:
+    if scope not in byc["queries"]:
         byc["queries"][scope] = query
     else:
-        byc["queries"][scope] = { logic: [ byc["queries"][scope], query ] }
+        byc["queries"][scope] = {logic: [byc["queries"][scope], query]}
+
 
 ################################################################################
 
-def _update_queries_from_geoquery( byc ):
-
-    geo_q, geo_pars = geo_query( byc )
+def _update_queries_from_geoquery(byc):
+    geo_q, geo_pars = geo_query(byc)
 
     if not geo_q:
         return
 
-    update_query_for_scope( byc, geo_q, "biosamples", bool_mode="AND")
+    update_query_for_scope(byc, geo_q, "biosamples", bool_mode="AND")
+
 
 ################################################################################
 
-def _update_queries_from_variants( byc ):
-
-    if not "variant_request_type" in byc:
+def _update_queries_from_variants(byc):
+    if "variant_request_type" not in byc:
         return
 
-    if not byc["variant_request_type"] in byc["variant_definitions"]["request_types"].keys():
-        if not "variants" in byc["queries"]:
+    if byc["variant_request_type"] not in byc["variant_definitions"]["request_types"].keys():
+        if "variants" not in byc["queries"]:
             return
 
     if "variantTypeRequest" in byc["variant_request_type"]:
-        create_variantTypeRequest_query( byc )
+        create_variantTypeRequest_query(byc)
     elif "variantIdRequest" in byc["variant_request_type"]:
-        create_variantIdRequest_query( byc )
+        create_variantIdRequest_query(byc)
     elif "variantCNVrequest" in byc["variant_request_type"]:
-        create_variantCNVrequest_query( byc )
+        create_variantCNVrequest_query(byc)
     elif "variantAlleleRequest" in byc["variant_request_type"]:
-        create_variantAlleleRequest_query( byc )
+        create_variantAlleleRequest_query(byc)
     elif "variantRangeRequest" in byc["variant_request_type"]:
-        create_variantRangeRequest_query( byc )
+        create_variantRangeRequest_query(byc)
     elif "geneVariantRequest" in byc["variant_request_type"]:
-        create_geneVariantRequest_query( byc )
+        create_geneVariantRequest_query(byc)
+
 
 ################################################################################
 
 def set_pagination_range(d_count, byc):
-
     r_range = [
         byc["pagination"]["skip"] * byc["pagination"]["limit"],
         byc["pagination"]["skip"] * byc["pagination"]["limit"] + byc["pagination"]["limit"],
     ]
 
     if byc["pagination"]["skip"] == 0 and byc["pagination"]["limit"] == 0:
-        byc["pagination"].update({"range":[0,d_count]})
+        byc["pagination"].update({"range": [0, d_count]})
         return
 
     r_l_i = d_count - 1
@@ -372,12 +367,12 @@ def set_pagination_range(d_count, byc):
     if r_range[-1] > d_count:
         r_range[-1] = d_count
 
-    byc["pagination"].update({"range":r_range})
+    byc["pagination"].update({"range": r_range})
+
 
 ################################################################################
 
 def paginate_list(this, byc):
-
     if byc["pagination"]["limit"] < 1:
         return this
 
@@ -394,16 +389,16 @@ def paginate_list(this, byc):
 
     return this[r[0]:r[-1]]
 
+
 ################################################################################
 ################################################################################
 ################################################################################
 
-def geo_query( byc ):
+def geo_query(byc):
+    geo_q = {}
+    geo_pars = {}
 
-    geo_q = { }
-    geo_pars = { }
-
-    if not "geoloc_definitions" in byc:
+    if "geoloc_definitions" not in byc:
         return geo_q, geo_pars
 
     g_p_defs = byc["geoloc_definitions"]["parameters"]
@@ -413,29 +408,29 @@ def geo_query( byc ):
     req_type = ""
     # TODO: Make this modular & fix the one_of interpretation to really only 1
     for rt in g_p_rts:
-        g_p = { }
+        g_p = {}
         min_p_no = 1
         mat_p_no = 0
-        if "all_of" in g_p_rts[ rt ]:
-            g_q_k = g_p_rts[ rt ]["all_of"]
+        if "all_of" in g_p_rts[rt]:
+            g_q_k = g_p_rts[rt]["all_of"]
             min_p_no = len(g_q_k)
-        elif "one_of" in g_p_rts[ rt ]:
-            g_q_k = g_p_rts[ rt ]["one_of"]
+        elif "one_of" in g_p_rts[rt]:
+            g_q_k = g_p_rts[rt]["one_of"]
         else:
             continue
 
         # print(rt)
         # print(byc["form_data"]["filters"])
-        all_p = g_p_rts[ rt ].get("any_of", []) + g_q_k
- 
+        all_p = g_p_rts[rt].get("any_of", []) + g_q_k
+
         for g_k in g_p_defs.keys():
 
             if g_k not in all_p:
                 continue
 
             g_default = None
-            if "default" in g_p_defs[ g_k ]:
-                g_default = g_p_defs[ g_k ][ "default" ]
+            if "default" in g_p_defs[g_k]:
+                g_default = g_p_defs[g_k]["default"]
 
             # TODO: This is an ISO lower hack ...
 
@@ -445,78 +440,78 @@ def geo_query( byc ):
                 g_v = g_default
             if g_v is None:
                 continue
-            if not re.compile( g_p_defs[ g_k ][ "pattern" ] ).match( str( g_v ) ):
+            if not re.compile(g_p_defs[g_k]["pattern"]).match(str(g_v)):
                 continue
-            if "float" in g_p_defs[ g_k ][ "type" ]:
-                g_p[ g_k ] = float(g_v)
+            if "float" in g_p_defs[g_k]["type"]:
+                g_p[g_k] = float(g_v)
             else:
-                g_p[ g_k ] = g_v
+                g_p[g_k] = g_v
 
             if g_k in g_q_k:
-                mat_p_no +=1
+                mat_p_no += 1
 
         if mat_p_no < min_p_no:
             continue
 
         req_type = rt
-        geo_pars = g_p   
+        geo_pars = g_p
 
     if "city" in req_type:
         geo_q = return_geo_city_query(geo_root, geo_pars)
         return geo_q, geo_pars
 
     if "id" in req_type:
-        geo_q = { "id": re.compile( geo_pars["id"], re.IGNORECASE ) }
+        geo_q = {"id": re.compile(geo_pars["id"], re.IGNORECASE)}
         return geo_q, geo_pars
 
     if "ISO3166alpha2" in req_type:
-        geo_q = { "provenance.geo_location.properties.ISO3166alpha2": byc["form_data"]["iso3166alpha2"].upper() }
+        geo_q = {"provenance.geo_location.properties.ISO3166alpha2": byc["form_data"]["iso3166alpha2"].upper()}
         return geo_q, geo_pars
 
     if "geoquery" in req_type:
-        geoq_l = [ return_geo_longlat_query(geo_root, geo_pars) ]
+        geoq_l = [return_geo_longlat_query(geo_root, geo_pars)]
         for g_k in g_p_rts["geoquery"]["any_of"]:
             if g_k in geo_pars.keys():
                 g_v = geo_pars[g_k]
                 if len(geo_root) > 0:
-                    geopar = ".".join( [geo_root, "properties", g_k] )
+                    geopar = ".".join([geo_root, "properties", g_k])
                 else:
                     geopar = ".".join(["properties", g_k])
-                geoq_l.append({ geopar: re.compile( r'^'+str(g_v), re.IGNORECASE ) })
+                geoq_l.append({geopar: re.compile(r'^' + str(g_v), re.IGNORECASE)})
 
         if len(geoq_l) > 1:
-            geo_q = {"$and": geoq_l }
+            geo_q = {"$and": geoq_l}
         else:
             geo_q = geoq_l[0]
 
     return geo_q, geo_pars
 
+
 ################################################################################
 
 def return_geo_city_query(geo_root, geo_pars):
-
     geoq_l = []
 
     for g_k, g_v in geo_pars.items():
 
         if len(geo_root) > 0:
-            geopar = ".".join( [geo_root, "properties", g_k] )
+            geopar = ".".join([geo_root, "properties", g_k])
         else:
             geopar = ".".join(["properties", g_k])
 
-        geoq_l.append( { geopar: re.compile( r'^'+str(g_v), re.IGNORECASE ) } )
+        geoq_l.append({geopar: re.compile(r'^' + str(g_v), re.IGNORECASE)})
 
     if len(geoq_l) > 1:
-        return {"$and": geoq_l }
+        return {"$and": geoq_l}
     else:
         return geoq_l[0]
+
 
 ################################################################################
 
 def return_geo_longlat_query(geo_root, geo_pars):
-
     if len(geo_root) > 0:
-        geojsonpar = ".".join( (geo_root, "geometry") )
+        geojsonpar = ".".join((geo_root, "geometry"))
     else:
         geojsonpar = "geo_location.geometry"
 
@@ -544,4 +539,3 @@ def return_geo_longlat_query(geo_root, geo_pars):
     return geo_q
 
 ################################################################################
-

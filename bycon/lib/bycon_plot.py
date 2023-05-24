@@ -1,8 +1,10 @@
-import re, datetime, typing
+import datetime
+import re
+
 from cgi_parsing import get_plot_parameters, print_svg_response, test_truthy
-from cytoband_utils import bands_from_cytobands, retrieve_gene_id_coordinates
 from clustering_utils import cluster_frequencies, cluster_samples
-from response_remapping import de_vrsify_variant, callsets_create_iset
+from cytoband_utils import bands_from_cytobands, retrieve_gene_id_coordinates
+
 
 # http://progenetix.org/cgi/bycon/services/intervalFrequencies.py?chr2plot=8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot
 # http://progenetix.org/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot&plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6
@@ -12,7 +14,6 @@ from response_remapping import de_vrsify_variant, callsets_create_iset
 ################################################################################
 
 class ByconPlot:
-
     """
     # The `ByconPlot` class
 
@@ -32,27 +33,27 @@ class ByconPlot:
         self.plot_data_bundle = plot_data_bundle
         self.svg = None
 
-    #--------------------------------------------------------------------------#
-    #----------------------------- public -------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # ----------------------------- public -------------------------------------#
+    # --------------------------------------------------------------------------#
 
-    def getSvg(self):
+    def get_svg(self) -> str:
         self.__plot_pipeline()
         return self.svg
 
     def svg2file(self, filename):
         self.__plot_pipeline()
         svg_fh = open(filename, "w")
-        svg_fh.write( self.svg )
+        svg_fh.write(self.svg)
         svg_fh.close()
 
-    def svgResponse(self):
+    def svg_response(self):
         self.__plot_pipeline()
         print_svg_response(self.svg, self.env)
 
-    #--------------------------------------------------------------------------#
-    #----------------------------- private ------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # ----------------------------- private ------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_pipeline(self):
 
@@ -64,18 +65,17 @@ class ByconPlot:
         self.__initialize_plot_values()
 
         if self.__plot_respond_empty_results() is False:
-
             self.__plot_add_title()
             self.__plot_add_cytobands()
             self.__plot_add_samplestrips()
             self.__plot_add_histodata()
             self.__plot_add_markers()
-            
+
         self.__plot_add_footer()
 
         self.svg = self.__create_svg()
 
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __initialize_plot_values(self):
 
@@ -94,17 +94,17 @@ class ByconPlot:
 
         for p_k, p_d in p_d_p.items():
             if "default" in p_d:
-                self.plv.update({ p_k: p_d["default"] })
+                self.plv.update({p_k: p_d["default"]})
             else:
-                self.plv.update({ p_k: "" })
+                self.plv.update({p_k: ""})
 
         if self.plv["results_number"] < 2:
-            self.plv.update({ "plot_labelcol_width": 0 })
+            self.plv.update({"plot_labelcol_width": 0})
 
         if self.plv["results_number"] > 2:
-            self.plv.update({ "plot_cluster_results": True })
+            self.plv.update({"plot_cluster_results": True})
         else:
-            self.plv.update({ "plot_dendrogram_width": 0 })
+            self.plv.update({"plot_dendrogram_width": 0})
 
         get_plot_parameters(self.plv, self.byc)
 
@@ -126,7 +126,7 @@ class ByconPlot:
         gaps = len(self.plv["plot_chros"]) - 1
         gap_sw = gaps * self.plv["plot_region_gap_width"]
         genome_width = paw - gap_sw
-        b2pf = genome_width / chr_b_s # TODO: only exists if using stack
+        b2pf = genome_width / chr_b_s  # TODO: only exists if using stack
 
         title = self.plv.get("plot_title", "")
         if len(title) < 3:
@@ -136,7 +136,8 @@ class ByconPlot:
         self.plv.update({
             "plot_title": title,
             "cytoband_shades": self.byc["plot_defaults"].get("cytoband_shades", {}),
-            "styles": [ f'.plot-area {{fill: { self.plv.get("plot_area_color", "#66ddff") }; fill-opacity: { self.plv.get("plot_area_opacity", 0.8) };}}' ],
+            "styles": [
+                f'.plot-area {{fill: {self.plv.get("plot_area_color", "#66ddff")}; fill-opacity: {self.plv.get("plot_area_opacity", 0.8)};}}'],
             "Y": self.plv["plot_margins"],
             "plot_area_width": paw,
             "plot_area_x0": pax,
@@ -150,54 +151,58 @@ class ByconPlot:
             "pls": []
         })
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __filter_empty_results(self):
 
         self.plv.update({"results_number": len(self.plv["results"])})
 
-        if not "sample" in self.plv["plot_type"]:
+        if "sample" not in self.plv["plot_type"]:
             return
 
         if test_truthy(self.plv.get("plot_filter_empty_samples", False)):
-            self.plv.update({"results": [s for s in plv["results"] if len(s['variants']) > 0]})
+            self.plv.update({"results": [s for s in self.plv["results"] if len(s['variants']) > 0]})
 
         self.plv.update({"results_number": len(self.plv["results"])})
-    
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_respond_empty_results(self):
-        
+
         if len(self.plv["results"]) > 0:
             return False
 
         self.plv.update({
-                "plot_title_font_size": self.plv["plot_font_size"],
-                "plot_title": "No matching CNV data"
+            "plot_title_font_size": self.plv["plot_font_size"],
+            "plot_title": "No matching CNV data"
         })
 
         self.__plot_add_title()
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __format_resultset_title(self):
 
+        title = ""
+
         f_set = self.plv["results"][0]
 
-        g_id = f_set.get("group_id", "NA")
-        g_lab = f_set.get("label", "")
-        if len(g_lab) > 1:
-            title = "{} ({})".format(g_lab, g_id)
-        else:
+        g_id = f_set.get("group_id")
+        g_lab = f_set.get("label")
+        if g_lab is not None:
+            title = f"{g_lab}"
+            if g_id is not None:
+                title += f" ({g_id})"
+        elif g_id is not None:
             title = g_id
 
         return title
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_add_title(self):
 
@@ -207,7 +212,7 @@ class ByconPlot:
         self.plv["Y"] += self.plv["plot_title_font_size"]
 
         self.plv["pls"].append(
-    '<text x="{}" y="{}" style="text-anchor: middle; font-size: {}px">{}</text>'.format(
+            '<text x="{}" y="{}" style="text-anchor: middle; font-size: {}px">{}</text>'.format(
                 self.plv["plot_area_xc"],
                 self.plv["Y"],
                 self.plv["plot_title_font_size"],
@@ -217,8 +222,8 @@ class ByconPlot:
 
         self.plv["Y"] += self.plv["plot_title_font_size"]
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_add_cytobands(self):
 
@@ -227,28 +232,28 @@ class ByconPlot:
 
         self.__plot_add_cytoband_svg_gradients()
 
-        #------------------------- chromosome labels --------------------------#
+        # ------------------------- chromosome labels --------------------------#
 
-        X = self.plv["plot_area_x0"]
+        x = self.plv["plot_area_x0"]
         self.plv["Y"] += self.plv["plot_title_font_size"]
 
         for chro in self.plv["plot_chros"]:
-
             c_l = self.byc["cytolimits"][str(chro)]
 
             chr_w = c_l["size"] * self.plv["plot_b2pf"]
-            chr_c = X + chr_w / 2
+            chr_c = x + chr_w / 2
 
-            self.plv["pls"].append(f'<text x="{chr_c}" y="{self.plv["Y"]}" style="text-anchor: middle; font-size: {self.plv["plot_font_size"]}px">{chro}</text>')
+            self.plv["pls"].append(
+                f'<text x="{chr_c}" y="{self.plv["Y"]}" style="text-anchor: middle; font-size: {self.plv["plot_font_size"]}px">{chro}</text>')
 
-            X += chr_w
-            X += self.plv["plot_region_gap_width"]
+            x += chr_w
+            x += self.plv["plot_region_gap_width"]
 
         self.plv["Y"] += self.plv["plot_region_gap_width"]
 
-        #---------------------------- chromosomes -----------------------------#
+        # ---------------------------- chromosomes -----------------------------#
 
-        X = self.plv["plot_area_x0"]
+        x = self.plv["plot_area_x0"]
         self.plv.update({"plot_chromosomes_y0": self.plv["Y"]})
 
         for chro in self.plv["plot_chros"]:
@@ -256,7 +261,7 @@ class ByconPlot:
             c_l = self.byc["cytolimits"][str(chro)]
             chr_w = c_l["size"] * self.plv["plot_b2pf"]
 
-            chr_cb_s = list(filter(lambda d: d[ "chro" ] == chro, self.byc["cytobands"].copy()))
+            chr_cb_s = list(filter(lambda d: d["chro"] == chro, self.byc["cytobands"].copy()))
 
             last = len(chr_cb_s) - 1
             this_n = 0
@@ -268,8 +273,8 @@ class ByconPlot:
                 s_b = cb["start"]
                 e_b = cb["end"]
                 c = cb["staining"]
-                l = int(e_b) - int(s_b)
-                l_px = l * self.plv["plot_b2pf"]
+                cb_l = int(e_b) - int(s_b)
+                l_px = cb_l * self.plv["plot_b2pf"]
 
                 by = self.plv["Y"]
                 bh = self.plv["plot_chro_height"]
@@ -284,19 +289,20 @@ class ByconPlot:
                     by += 0.1 * self.plv["plot_chro_height"]
                     bh -= 0.2 * self.plv["plot_chro_height"]
 
-                self.plv["pls"].append(f'<rect x="{round(X, 1)}" y="{round(by, 1)}" width="{round(l_px, 1)}" height="{round(bh, 1)}" style="fill: url(#{self.plv["plot_id"]}{c}); " />')
+                self.plv["pls"].append(
+                    f'<rect x="{round(x, 1)}" y="{round(by, 1)}" width="{round(l_px, 1)}" height="{round(bh, 1)}" style="fill: url(#{self.plv["plot_id"]}{c}); " />')
 
-                X += l_px
+                x += l_px
 
-            X += self.plv["plot_region_gap_width"]
+            x += self.plv["plot_region_gap_width"]
 
-        #-------------------------- / chromosomes -----------------------------#
+        # -------------------------- / chromosomes -----------------------------#
 
         self.plv["Y"] += self.plv["plot_chro_height"]
         self.plv["Y"] += self.plv["plot_region_gap_width"]
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_add_cytoband_svg_gradients(self):
 
@@ -314,17 +320,17 @@ class ByconPlot:
 
         self.plv["pls"].insert(0, c_defs)
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_add_samplestrips(self):
 
         if not "sample" in self.plv["plot_type"]:
             return
 
-        self.plv.update( {"plot_first_area_y0": self.plv["Y"] })
+        self.plv.update({"plot_first_area_y0": self.plv["Y"]})
         self.plv["pls"].append("")
-        self.plv.update( {"plot_strip_bg_i": len(self.plv["pls"]) - 1 })
+        self.plv.update({"plot_strip_bg_i": len(self.plv["pls"]) - 1})
 
         lab_x_e = self.plv["plot_area_x0"] - self.plv["plot_region_gap_width"] * 2
         lab_f_s = round(self.plv["plot_samplestrip_height"] * 0.65, 1)
@@ -334,7 +340,7 @@ class ByconPlot:
             self.__plot_order_samples()
 
             self.plv["styles"].append(
-                f'.title-left {{text-anchor: end; fill: { self.plv["plot_font_color"] }; font-size: { lab_f_s }px;}}'
+                f'.title-left {{text-anchor: end; fill: {self.plv["plot_font_color"]}; font-size: {lab_f_s}px;}}'
             )
 
             for s in self.plv["results"]:
@@ -344,26 +350,28 @@ class ByconPlot:
                     if len(cs_id) > 0:
                         cs_id = f' ({cs_id})'
                     g_lab = f'{s.get("biosample_id", "")}{cs_id}'
-                    self.plv["pls"].append(f'<text x="{lab_x_e}" y="{ self.plv["Y"] - round(self.plv["plot_samplestrip_height"] * 0.2, 1) }" class="title-left">{g_lab}</text>')
+                    self.plv["pls"].append(
+                        f'<text x="{lab_x_e}" y="{self.plv["Y"] - round(self.plv["plot_samplestrip_height"] * 0.2, 1)}" class="title-left">{g_lab}</text>')
 
         self.plv["plot_last_histo_ye"] = self.plv["Y"]
 
-        #----------------------- plot cluster tree --------------------------------#
+        # ----------------------- plot cluster tree --------------------------------#
 
         self.plv.update({"cluster_head_gap": 0})
         self.__plot_add_cluster_tree()
 
-        #--------------------- plot area background -------------------------------#
+        # --------------------- plot area background -------------------------------#
 
         x_a_0 = self.plv["plot_area_x0"]
         p_a_w = self.plv["plot_area_width"]
         p_a_h = self.plv["Y"] - self.plv["plot_first_area_y0"]
-        
-        self.plv["pls"][ self.plv["plot_strip_bg_i"] ] = f'<rect x="{x_a_0}" y="{self.plv["plot_first_area_y0"]}" width="{p_a_w}" height="{p_a_h}" class="plot-area" />'
+
+        self.plv["pls"][self.plv[
+            "plot_strip_bg_i"]] = f'<rect x="{x_a_0}" y="{self.plv["plot_first_area_y0"]}" width="{p_a_w}" height="{p_a_h}" class="plot-area" />'
         self.plv["Y"] += self.plv["plot_region_gap_width"]
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_order_samples(self):
 
@@ -371,22 +379,22 @@ class ByconPlot:
             dendrogram = cluster_samples(self.plv, self.byc)
             new_order = dendrogram.get("leaves", [])
             if len(new_order) == len(self.plv["results"]):
-                self.plv["results"][:] = [ self.plv["results"][i] for i in dendrogram.get("leaves", []) ]
+                self.plv["results"][:] = [self.plv["results"][i] for i in dendrogram.get("leaves", [])]
                 self.plv.update({"dendrogram": dendrogram})
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_add_one_samplestrip(self, s):
 
         v_s = s.get("variants", [])
 
-        X = self.plv["plot_area_x0"]
-        H = self.plv["plot_samplestrip_height"]
+        x = self.plv["plot_area_x0"]
+        h = self.plv["plot_samplestrip_height"]
 
         cnv_c = {
-          "DUP": self.plv["plot_dup_color"],
-          "DEL": self.plv["plot_del_color"]
+            "DUP": self.plv["plot_dup_color"],
+            "DEL": self.plv["plot_del_color"]
         }
 
         for chro in self.plv["plot_chros"]:
@@ -394,28 +402,28 @@ class ByconPlot:
             c_l = self.byc["cytolimits"][str(chro)]
             chr_w = c_l["size"] * self.plv["plot_b2pf"]
 
-            c_v_s = list(filter(lambda d: d[ "reference_name" ] == chro, v_s.copy()))
-            c_v_no = len(c_v_s)
+            c_v_s = list(filter(lambda d: d["reference_name"] == chro, v_s.copy()))
 
             for p_v in c_v_s:
                 s_v = int(p_v.get("start", 0))
                 e_v = int(p_v.get("end", s_v))
-                l_v = round((e_v - s_v)  * self.plv["plot_b2pf"], 1)
+                l_v = round((e_v - s_v) * self.plv["plot_b2pf"], 1)
                 if l_v < 0.5:
                     l_v = 0.5
-                v_x = round(X + s_v * self.plv["plot_b2pf"], 1)
+                v_x = round(x + s_v * self.plv["plot_b2pf"], 1)
                 t = p_v.get("variant_type", "NA")
                 c = cnv_c.get(t, "rgb(111,111,111)")
 
-                self.plv["pls"].append(f'<rect x="{v_x}" y="{self.plv["Y"]}" width="{l_v}" height="{H}" style="fill: {c} " />')
+                self.plv["pls"].append(
+                    f'<rect x="{v_x}" y="{self.plv["Y"]}" width="{l_v}" height="{h}" style="fill: {c} " />')
 
-            X += chr_w
-            X += self.plv["plot_region_gap_width"]
+            x += chr_w
+            x += self.plv["plot_region_gap_width"]
 
-        self.plv["Y"] += H
+        self.plv["Y"] += h
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_add_cluster_tree(self):
 
@@ -429,8 +437,8 @@ class ByconPlot:
         p_s_c = self.plv.get("plot_dendrogram_color", '#ee0000')
         p_s_w = self.plv.get("plot_dendrogram_stroke", 1)
 
-        d_x_s = d.get("dcoord", []) 
-        d_y_s = d.get("icoord", []) 
+        d_x_s = d.get("dcoord", [])
+        d_y_s = d.get("icoord", [])
 
         t_y_0 = self.plv["plot_first_area_y0"]
         t_x_0 = self.plv["plot_area_x0"] + self.plv["plot_area_width"]
@@ -457,21 +465,21 @@ class ByconPlot:
                     if y > h_y_e:
                         y += self.plv["cluster_head_gap"]
 
-                n += f' { round(t_x_0 + x * t_x_f, 1) },{round(t_y_0 + y, 1)}'
+                n += f' {round(t_x_0 + x * t_x_f, 1)},{round(t_y_0 + y, 1)}'
 
             n += f'" fill="none" stroke="{p_s_c}" stroke-width="{p_s_w}px" />'
 
             self.plv["pls"].append(n)
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_add_histodata(self):
 
-        if not "histo" in self.plv["plot_type"]:
+        if "histo" not in self.plv["plot_type"]:
             return
 
-        self.plv.update( {"plot_first_area_y0": self.plv["Y"] })
+        self.plv.update({"plot_first_area_y0": self.plv["Y"]})
 
         self.__plot_order_histograms()
 
@@ -480,13 +488,13 @@ class ByconPlot:
 
         self.plv["plot_last_histo_ye"] = self.plv["Y"]
 
-        #----------------------- plot cluster tree ----------------------------#
+        # ----------------------- plot cluster tree ----------------------------#
 
         self.plv.update({"cluster_head_gap": self.plv["plot_region_gap_width"]})
         self.__plot_add_cluster_tree()
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_order_histograms(self):
 
@@ -494,11 +502,11 @@ class ByconPlot:
             dendrogram = cluster_frequencies(self.plv, self.byc)
             new_order = dendrogram.get("leaves", [])
             if len(new_order) == len(self.plv["results"]):
-                self.plv["results"][:] = [ self.plv["results"][i] for i in dendrogram.get("leaves", []) ]
+                self.plv["results"][:] = [self.plv["results"][i] for i in dendrogram.get("leaves", [])]
                 self.plv.update({"dendrogram": dendrogram})
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_add_one_histogram(self, f_set):
 
@@ -509,23 +517,23 @@ class ByconPlot:
         X = self.plv["plot_area_x0"]
         h_y_0 = self.plv["Y"] + self.plv["plot_area_height"] * 0.5
 
-        #------------------------- histogram data -----------------------------#
+        # ------------------------- histogram data -----------------------------#
 
         # TODO: in contrast to the Perl version here we don't correct for interval
         #       sets which _do not_ correspond to the full chromosome coordinates
 
         cnv_c = {
-          "gain_frequency": self.plv["plot_dup_color"],
-          "loss_frequency": self.plv["plot_del_color"]
+            "gain_frequency": self.plv["plot_dup_color"],
+            "loss_frequency": self.plv["plot_del_color"]
         }
-        cnv_f = { "gain_frequency": -1, "loss_frequency": 1 }
+        cnv_f = {"gain_frequency": -1, "loss_frequency": 1}
 
         for chro in self.plv["plot_chros"]:
 
             c_l = self.byc["cytolimits"][str(chro)]
             chr_w = c_l["size"] * self.plv["plot_b2pf"]
 
-            c_i_f = list(filter(lambda d: d[ "reference_name" ] == chro, i_f.copy()))
+            c_i_f = list(filter(lambda d: d["reference_name"] == chro, i_f.copy()))
             c_i_no = len(c_i_f)
 
             for GL in ["gain_frequency", "loss_frequency"]:
@@ -533,7 +541,7 @@ class ByconPlot:
                 p_c = cnv_c[GL]
                 h_f = cnv_f[GL]
 
-                p = f'<polygon points="{ round(X, 1) },{ round(h_y_0, 1) }'
+                p = f'<polygon points="{round(X, 1)},{round(h_y_0, 1)}'
 
                 i_x_0 = X
                 prev = -1
@@ -545,7 +553,7 @@ class ByconPlot:
                     h = v * self.plv["plot_y2pf"]
                     h_p = h_y_0 + h * h_f
 
-                    point = f' { round(s, 1) },{round(h_p, 1)}'
+                    point = f' {round(s, 1)},{round(h_p, 1)}'
 
                     # This construct avoids adding intermediary points w/ the same
                     # value as the one before and after 
@@ -558,20 +566,20 @@ class ByconPlot:
 
                     prev = v
 
-                p += f' { round((X + chr_w), 1) },{ round(h_y_0, 1) }" fill="{p_c}" stroke-width="0px" />'
+                p += f' {round((X + chr_w), 1)},{round(h_y_0, 1)}" fill="{p_c}" stroke-width="0px" />'
                 self.plv["pls"].append(p)
 
             X += chr_w
             X += self.plv["plot_region_gap_width"]
 
-        #------------------------ / histogram data ----------------------------#
+        # ------------------------ / histogram data ----------------------------#
 
         self.plv["Y"] += self.plv["plot_area_height"]
-        self.plv.update( {"plot_last_histo_ye": self.plv["Y"] })
+        self.plv.update({"plot_last_histo_ye": self.plv["Y"]})
         self.plv["Y"] += self.plv["plot_region_gap_width"]
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_add_one_histogram_canvas(self, f_set):
 
@@ -579,20 +587,21 @@ class ByconPlot:
         p_a_w = self.plv["plot_area_width"]
         p_a_h = self.plv["plot_area_height"]
 
-        #-------------------------- left labels -------------------------------#
-        
+        # -------------------------- left labels -------------------------------#
+
         self.__histoplot_add_left_label(f_set)
 
-        #--------------------- plot area background ---------------------------#
-        
-        self.plv["pls"].append(f'<rect x="{x_a_0}" y="{self.plv["Y"]}" width="{p_a_w}" height="{p_a_h}" class="plot-area" />')
+        # --------------------- plot area background ---------------------------#
 
-        #--------------------------- grid lines -------------------------------#
+        self.plv["pls"].append(
+            f'<rect x="{x_a_0}" y="{self.plv["Y"]}" width="{p_a_w}" height="{p_a_h}" class="plot-area" />')
+
+        # --------------------------- grid lines -------------------------------#
 
         self.__plot_area_add_grid()
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __histoplot_add_left_label(self, f_set):
 
@@ -603,9 +612,9 @@ class ByconPlot:
         h_y_0 = self.plv["Y"] + self.plv["plot_area_height"] * 0.5
 
         self.plv["styles"].append(
-            f'.title-left {{text-anchor: end; fill: { self.plv["plot_font_color"] }; font-size: { self.plv["plot_labelcol_font_size"] }px;}}'
+            f'.title-left {{text-anchor: end; fill: {self.plv["plot_font_color"]}; font-size: {self.plv["plot_labelcol_font_size"]}px;}}'
         )
-        
+
         g_id = f_set.get("group_id", "NA")
         g_ds_id = f_set.get("dataset_id", False)
         g_lab = f_set.get("label", "")
@@ -613,7 +622,7 @@ class ByconPlot:
 
         # The condition splits the label data on 2 lines if a text label pre-exists
         if len(self.byc["dataset_ids"]) > 1 and g_ds_id is not False:
-            count_lab = f' ({g_ds_id}, {g_no} { "samples" if g_no > 1 else "sample" })'
+            count_lab = f' ({g_ds_id}, {g_no} {"samples" if g_no > 1 else "sample"})'
         else:
             count_lab = f' ({g_no} {"samples" if g_no > 1 else "sample"} )'
 
@@ -626,8 +635,8 @@ class ByconPlot:
             lab_y = h_y_0 - self.plv["plot_labelcol_font_size"] * 0.5
             self.plv["pls"].append(f'<text x="{lab_x_e}" y="{lab_y}" class="title-left">{g_id}{count_lab}</text>')
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_area_add_grid(self):
 
@@ -638,17 +647,18 @@ class ByconPlot:
         x_y_l = x_a_0 - self.plv["plot_region_gap_width"]
 
         self.plv["styles"].append(
-            f'.label-y {{text-anchor: end; fill: { self.plv["plot_label_y_font_color"] }; font-size: {self.plv["plot_label_y_font_size"]}px;}}'
-        )   
+            f'.label-y {{text-anchor: end; fill: {self.plv["plot_label_y_font_color"]}; font-size: {self.plv["plot_label_y_font_size"]}px;}}'
+        )
         self.plv["styles"].append(
             f'.gridline {{stroke-width: {self.plv["plot_grid_stroke"]}px; stroke: {self.plv["plot_grid_color"]}; opacity: {self.plv["plot_grid_opacity"]} ; }}',
-        )   
+        )
 
-        #-------------------------- center line -----------------------------------#
+        # -------------------------- center line -----------------------------------#
 
-        self.plv["pls"].append(f'<line x1="{x_a_0 - self.plv["plot_region_gap_width"]}"  y1="{h_y_0}"  x2="{x_c_e}"  y2="{h_y_0}" class="gridline" />')
+        self.plv["pls"].append(
+            f'<line x1="{x_a_0 - self.plv["plot_region_gap_width"]}"  y1="{h_y_0}"  x2="{x_c_e}"  y2="{h_y_0}" class="gridline" />')
 
-        #--------------------------- grid lines -----------------------------------#
+        # --------------------------- grid lines -----------------------------------#
 
         for y_m in self.plv["plot_histogram_label_y_values"]:
 
@@ -667,8 +677,8 @@ class ByconPlot:
 
                 self.plv["pls"].append(f'<text x="{x_y_l}" y="{y_l_y}" class="label-y">{y_m}%</text>')
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_add_markers(self):
 
@@ -676,10 +686,10 @@ class ByconPlot:
         self.__add_labs_from_gene_symbols()
         self.__add_labs_from_cytobands()
 
-        labs = self.plv["plot_labels"]
+        labs = self.plv.get("plot_labels", [])
 
-        if not labs:
-            return self.plv
+        if len(labs) < 1:
+            return
 
         b2pf = self.plv["plot_b2pf"]
 
@@ -693,12 +703,12 @@ class ByconPlot:
         marker_y_0 = round(self.plv["plot_first_area_y0"], 1)
         marker_y_e = round(self.plv["plot_last_histo_ye"] + p_m_lane_p, 1)
 
-        X = self.plv["plot_area_x0"]
+        x = self.plv["plot_area_x0"]
 
-        m_p_e = [ (X - 30) ]
+        m_p_e = [(x - 30)]
         for chro in self.plv["plot_chros"]:
 
-            c_l = self.byc["cytolimits"][str(chro)]
+            c_l = self.byc["cytolimits"][chro]
             chr_w = c_l["size"] * self.plv["plot_b2pf"]
 
             for m_k, m_v in labs.items():
@@ -710,17 +720,17 @@ class ByconPlot:
 
                 s = int(m_v.get("start", 0))
                 e = int(m_v.get("end", 0))
-                l = m_v.get("label", "")       
+                label = m_v.get("label", "")
 
-                m_s = X + s * b2pf
-                m_e = X + e * b2pf
+                m_s = x + s * b2pf
+                m_e = x + e * b2pf
                 m_w = m_e - m_s
-                if m_w < 1 and m_w > 0:
+                if 1 > m_w > 0:
                     m_w = 1
                 else:
                     m_w = round(m_w, 1)
                 m_c = round((m_s + m_e) / 2, 1)
-                m_l_w = len(l) * 0.75 * p_m_f_s
+                m_l_w = len(label) * 0.75 * p_m_f_s
                 m_l_s = m_c - 0.5 * m_l_w
                 m_l_e = m_c + 0.5 * m_l_w
 
@@ -740,28 +750,30 @@ class ByconPlot:
                 if len(m_p_e) > max_lane:
                     max_lane = len(m_p_e)
 
-                m_y_e = marker_y_e + l_i * p_m_lane_h 
+                m_y_e = marker_y_e + l_i * p_m_lane_h
                 m_h = round(m_y_e - marker_y_0, 1)
                 l_y_p = marker_y_e + l_i * p_m_lane_h + p_m_lane_h - p_m_l_p - p_m_lane_p - 1
 
-                self.plv["pls"].append(f'<rect x="{ round(m_s, 1) }" y="{ marker_y_0 }" width="{ round(m_w, 1) }" height="{ m_h }" class="marker" style="opacity: 0.4; " />')
-                self.plv["pls"].append(f'<rect x="{ round(m_l_s, 1) }" y="{ m_y_e }" width="{ round(m_l_w, 1) }" height="{ p_m_l_h }" class="marker" style="opacity: 0.1; " />')            
-                self.plv["pls"].append(f'<text x="{ m_c }" y="{ l_y_p }" class="marker">{l}</text>')
+                self.plv["pls"].append(
+                    f'<rect x="{round(m_s, 1)}" y="{marker_y_0}" width="{round(m_w, 1)}" height="{m_h}" class="marker" style="opacity: 0.4; " />')
+                self.plv["pls"].append(
+                    f'<rect x="{round(m_l_s, 1)}" y="{m_y_e}" width="{round(m_l_w, 1)}" height="{p_m_l_h}" class="marker" style="opacity: 0.1; " />')
+                self.plv["pls"].append(f'<text x="{m_c}" y="{l_y_p}" class="marker">{label}</text>')
 
-            X += chr_w
-            X += self.plv["plot_region_gap_width"]
+            x += chr_w
+            x += self.plv["plot_region_gap_width"]
 
-        #--------------------- end chromosome loop --------------------------------#
-        
+        # --------------------- end chromosome loop --------------------------------#
+
         if max_lane > 0:
             self.plv["Y"] += max_lane * p_m_lane_h
             self.plv["Y"] += self.plv["plot_region_gap_width"]
             self.plv["styles"].append(
-                f'.marker {{text-anchor: middle; fill: { self.plv["plot_marker_font_color"] }; font-size: { p_m_f_s }px;}}'
+                f'.marker {{text-anchor: middle; fill: {self.plv["plot_marker_font_color"]}; font-size: {p_m_f_s}px;}}'
             )
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __add_labs_from_plot_region_labels(self):
 
@@ -769,9 +781,9 @@ class ByconPlot:
         if len(r_l_s) < 1:
             return
 
-        for l in r_l_s:
+        for label in r_l_s:
 
-            l_i = re.split(":", l)
+            l_i = re.split(":", label)
             if len(l_i) < 2:
                 continue
             c = l_i.pop(0)
@@ -780,7 +792,7 @@ class ByconPlot:
             s = s_e.pop(0)
             # TODO: check r'^\d+?$'
             if len(s_e) < 1:
-                e = str(int(s)+1)
+                e = str(int(s) + 1)
             else:
                 e = s_e.pop(0)
             if len(l_i) > 0:
@@ -791,8 +803,8 @@ class ByconPlot:
             m = self.__make_marker_object(c, s, e, label)
             self.plv["plot_labels"].update(m)
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __add_labs_from_gene_symbols(self):
 
@@ -813,14 +825,14 @@ class ByconPlot:
                 f_g.get("start", False),
                 f_g.get("end", False),
                 self.plv.get("plot_marker_font_color", "#ccccff"),
-                f_g.get("symbol", False)          
+                f_g.get("symbol", False)
             )
 
             if m is not False:
                 self.plv["plot_labels"].update(m)
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __add_labs_from_cytobands(self):
 
@@ -834,7 +846,7 @@ class ByconPlot:
         for q_g in g_s_s:
             cytoBands, chro, start, end, error = bands_from_cytobands(q_g, self.byc)
 
-            if len( cytoBands ) < 1:
+            if len(cytoBands) < 1:
                 continue
 
             m = self.__make_marker_object(
@@ -848,8 +860,8 @@ class ByconPlot:
             if m is not None:
                 self.plv["plot_labels"].update(m)
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __make_marker_object(self, chromosome, start, end, color, label=""):
 
@@ -857,7 +869,7 @@ class ByconPlot:
 
         # Checks here or upstream?
         # Cave: `any` ... `is False` to avoid `True` for `0` with `False in`
-        if  any(x is False for x in [chromosome, start, end, label]):
+        if any(x is False for x in [chromosome, start, end, label]):
             return m
 
         m_k = f'{chromosome}:{start}-{end}:{label}'
@@ -871,11 +883,11 @@ class ByconPlot:
                 "color": color
             }
         }
-        
+
         return m
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __plot_add_footer(self):
 
@@ -884,22 +896,24 @@ class ByconPlot:
         x_c_e = x_a_0 + self.plv["plot_area_width"]
 
         self.plv["styles"].append(
-            f'.footer-r {{text-anchor: end; fill: { self.plv["plot_footer_font_color"] }; font-size: {self.plv["plot_footer_font_size"]}px;}}'
-        )   
+            f'.footer-r {{text-anchor: end; fill: {self.plv["plot_footer_font_color"]}; font-size: {self.plv["plot_footer_font_size"]}px;}}'
+        )
         self.plv["styles"].append(
-            f'.footer-l {{text-anchor: start; fill: { self.plv["plot_footer_font_color"] }; font-size: {self.plv["plot_footer_font_size"]}px;}}'
-        )   
+            f'.footer-l {{text-anchor: start; fill: {self.plv["plot_footer_font_color"]}; font-size: {self.plv["plot_footer_font_size"]}px;}}'
+        )
 
         self.plv["Y"] += self.plv["plot_footer_font_size"]
-        self.plv["pls"].append(f'<text x="{x_c_e}" y="{self.plv["Y"]}" class="footer-r">&#169; CC-BY 2001 - {today.year} progenetix.org</text>')
+        self.plv["pls"].append(
+            f'<text x="{x_c_e}" y="{self.plv["Y"]}" class="footer-r">&#169; CC-BY 2001 - {today.year} progenetix.org</text>')
 
         if len(self.plv["results"]) > 1:
-            self.plv["pls"].append(f'<text x="{x_a_0}" y="{self.plv["Y"]}" class="footer-l">{ len(self.plv["results"]) } analyses</text>')
+            self.plv["pls"].append(
+                f'<text x="{x_a_0}" y="{self.plv["Y"]}" class="footer-l">{len(self.plv["results"])} analyses</text>')
 
         self.plv["Y"] += self.plv["plot_margins"]
 
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __create_svg(self):
 
@@ -929,8 +943,6 @@ style="margin: auto; font-family: Helvetica, sans-serif;">
 
         return svg
 
-
 ################################################################################
 ################################################################################
 ################################################################################
-

@@ -46,7 +46,7 @@ def genespans():
 
     gene_id = rest_path_value("genespans")
 
-    if not "empty_value" in gene_id:
+    if gene_id is not None:
         byc["filter_flags"].update({"filter_precision": "exact"})
     elif "gene_id" in byc[ "form_data" ]:
         gene_id = byc[ "form_data" ]["gene_id"]

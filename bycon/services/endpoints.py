@@ -33,15 +33,12 @@ def endpoints():
     # create_empty_service_response(byc)
 
     schema_name = rest_path_value("endpoints")
-    comps = schema_name.split('.')
-    schema_name = comps.pop(0)
 
-    # if "empty_value" in schema_name:
-    #     schema_name = "biosample"
-
-    if "empty_value" in schema_name:
+    if schema_name is None:
         p = path.join( pkg_path, "schemas", "models", "json", "progenetix-model", "endpoints.json")
     else:
+        comps = schema_name.split('.')
+        schema_name = comps.pop(0)
         p = path.join( pkg_path, "schemas", "models", "json", "progenetix-model", schema_name, "endpoints.json")
 
     root_def = RefDict(p)

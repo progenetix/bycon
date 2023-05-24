@@ -51,7 +51,7 @@ def interval_frequencies():
 
     id_rest = rest_path_value("intervalFrequencies")
 
-    if not "empty_value" in id_rest:
+    if id_rest is not None:
         byc[ "filters" ] = [ {"id": id_rest } ]
     elif "id" in byc["form_data"]:
         byc[ "filters" ] = [ {"id": byc["form_data"]["id"]} ]
@@ -114,7 +114,7 @@ def interval_frequencies():
     mongo_client.close( )
 
     plot_data_bundle = { "interval_frequencies_bundles": results }
-    ByconPlot(byc, plot_data_bundle).svgResponse()
+    ByconPlot(byc, plot_data_bundle).svg_response()
 
     check_pgxseg_frequencies_export(byc, results)
     check_pgxmatrix_frequencies_export(byc, results)

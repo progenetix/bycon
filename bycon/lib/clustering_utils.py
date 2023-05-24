@@ -1,6 +1,4 @@
-from scipy.cluster import hierarchy
-
-from cgi_parsing import prjsonnice
+import scipy.cluster
 
 ################################################################################
 
@@ -9,8 +7,8 @@ def cluster_frequencies(plv, byc):
     m = plv.get("plot_cluster_metric", "complete")
 
     matrix = matrix_from_interval_frequencies(plv, byc)
-    linkage = hierarchy.linkage(matrix, method=m)
-    dendrogram = hierarchy.dendrogram(linkage, no_plot=True, orientation="right")
+    linkage = scipy.cluster.hierarchy.linkage(matrix, method=m)
+    dendrogram = scipy.cluster.hierarchy.dendrogram(linkage, no_plot=True, orientation="right")
     
     return dendrogram
 
@@ -63,13 +61,8 @@ def cluster_samples(plv, byc):
 
         matrix.append(s_line)
 
-    linkage = hierarchy.linkage(matrix, method=m)
-    reorder = hierarchy.leaves_list(linkage)
-    dendrogram = hierarchy.dendrogram(linkage, no_plot=True, orientation="right")
-
-    # if byc["debug_mode"] is True:
-    #     print(reorder)
-    #     print(linkage)
-    #     prjsonnice(dend)
+    linkage = scipy.cluster.hierarchy.linkage(matrix, method=m)
+    reorder = scipy.cluster.hierarchy.leaves_list(linkage)
+    dendrogram = scipy.cluster.hierarchy.dendrogram(linkage, no_plot=True, orientation="right")
 
     return dendrogram

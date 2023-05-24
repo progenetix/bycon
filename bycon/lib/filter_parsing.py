@@ -1,6 +1,6 @@
 import re
 
-from cgi_parsing import *
+from cgi_parsing import boolean_to_mongo_logic
 
 ################################################################################
 

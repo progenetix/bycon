@@ -45,7 +45,7 @@ def samples_plotter():
 
     id_rest = rest_path_value("samplesPlotter")
 
-    if not "empty_value" in id_rest:
+    if id_rest is not None:
         byc[ "file_id" ] = id_rest
     elif "file_id" in byc["form_data"]:
         byc[ "file_id" ] = byc["form_data"]["file_id"]
@@ -67,13 +67,13 @@ def samples_plotter():
     cgi_break_on_errors(byc)
 
     pb = ByconBundler(byc)
-    pb.pgxseg2bundle(inputfile)
+    pb.pgxseg_to_bundle(inputfile)
     plot_data_bundle = {
-        "interval_frequencies_bundles": pb.callsetsFrequenciesBundles(),
-        "callsets_variants_bundles": pb.callsetsVariantsBundles()
+        "interval_frequencies_bundles": pb.callsets_frequencies_bundles(),
+        "callsets_variants_bundles": pb.callsets_variants_bundles()
     }
 
-    ByconPlot(byc, plot_data_bundle).svgResponse()
+    ByconPlot(byc, plot_data_bundle).svg_response()
 
 ################################################################################
 

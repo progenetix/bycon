@@ -1,11 +1,14 @@
-import csv, datetime, re, requests, typing
-from random import sample as randomSamples
-from pathlib import Path
+import csv
+import datetime
+import re
+import requests
+from random import sample as random_samples
 
 from datatable_utils import import_datatable_dict_line
 from interval_utils import interval_cnv_arrays, interval_counts_from_callsets
-from response_remapping import callsets_create_iset, de_vrsify_variant, vrsify_variant
+from response_remapping import de_vrsify_variant, vrsify_variant
 from variant_parsing import variant_create_digest
+
 
 ################################################################################
 
@@ -22,7 +25,7 @@ def read_tsv_to_dictlist(filepath, max_count=0):
             dictlist.append(dict(l))
 
     if 0 < max_count < len(dictlist):
-        dictlist = randomSamples(dictlist, k=max_count)
+        dictlist = random_samples(dictlist, k=max_count)
 
     return dictlist, fieldnames
 
@@ -42,7 +45,7 @@ def read_www_tsv_to_dictlist(www, max_count=0):
             dictlist.append(dict(l))
 
     if 0 < max_count < len(dictlist):
-        dictlist = randomSamples(dictlist, k=max_count)
+        dictlist = random_samples(dictlist, k=max_count)
 
     return dictlist, fieldnames
 
@@ -66,6 +69,7 @@ class ByconBundler:
 
         self.byc = byc
         self.errors = []
+        self.filepath = None
         self.pgxseg = {}
         self.callsetVariantsBundles = []
         self.intervalFrequenciesBundles = []
@@ -96,12 +100,11 @@ class ByconBundler:
     #----------------------------- public -------------------------------------#
     #--------------------------------------------------------------------------#
 
-    def readPgxFile(self, filepath):
+    def read_pgx_file(self, filepath):
 
         self.filepath = filepath
 
         h_lines = []
-        d_lines = []
 
         with open(self.filepath) as f:
             for line in f:
@@ -119,9 +122,9 @@ class ByconBundler:
 
     #--------------------------------------------------------------------------#
 
-    def pgxseg2keyedBundle(self, filepath):
+    def pgxseg_to_keyed_bundle(self, filepath):
 
-        self.readPgxFile(filepath)
+        self.read_pgx_file(filepath)
 
         if not "biosample_id" in self.pgxseg.get("fieldnames", []):
             self.errors.append("¡¡¡ The `biosample_id` parameter is required for variant assignment !!!")
@@ -134,16 +137,16 @@ class ByconBundler:
 
     #--------------------------------------------------------------------------#
 
-    def pgxseg2bundle(self, filepath):
+    def pgxseg_to_bundle(self, filepath):
 
-        self.pgxseg2keyedBundle(filepath)
+        self.pgxseg_to_keyed_bundle(filepath)
         self.__flatten_keyed_bundle()
 
         return self.bundle
 
     #--------------------------------------------------------------------------#
 
-    def callsetsVariantsBundles(self):
+    def callsets_variants_bundles(self):
 
         # TODO: This is similar to a keyed bundle component ...
 
@@ -170,9 +173,9 @@ class ByconBundler:
 
     #--------------------------------------------------------------------------#
 
-    def callsetsFrequenciesBundles(self):
+    def callsets_frequencies_bundles(self):
             
-        self.intervalFrequenciesBundles.append( self.__callsetBundleCreateIset("import") )
+        self.intervalFrequenciesBundles.append(self.__callsetBundleCreateIset("import"))
 
         return self.intervalFrequenciesBundles
 
@@ -272,7 +275,7 @@ class ByconBundler:
             cs_ided[cs_id].update({"cnv_statusmaps": maps})
             cs_ided[cs_id].update({"cnv_stats": cs_cnv_stats})
             cs_ided[cs_id].update({"cnv_chro_stats": cs_chro_stats})
-            cs_ided[cs_id].update({ "updated": datetime.datetime.now().isoformat() })
+            cs_ided[cs_id].update({"updated": datetime.datetime.now().isoformat()})
 
         self.keyedBundle.update({
             "individuals_by_id": inds_ided,
