@@ -347,13 +347,17 @@ entities:
         db_key: location.sequence_id
         indexed: True
         compact: True
+      reference_name:
+        db_key: location.chromosome
+        indexed: True
+        compact: True
       start:
-        db_key: location.interval.start.value
+        db_key: location.start
         type: integer
         indexed: True
         compact: True
       end:
-        db_key: location.interval.end.value
+        db_key: location.end
         type: integer
         indexed: True
         compact: True
@@ -365,11 +369,11 @@ entities:
         db_key: variant_state.label
         compact: True
       reference_bases:
-        db_key: reference_bases
+        db_key: reference_sequence
         indexed: True
         compact: True
       alternate_bases:
-        db_key: state.sequence
+        db_key: sequence
         indexed: True
         compact: True
       annotation_derived:
@@ -382,7 +386,5 @@ entities:
       log2:
         db_key: info.cnv_value
         type: number
-      reference_name:
-        db_key: reference_name
       variant_type:
         db_key: variant_type

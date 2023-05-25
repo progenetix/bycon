@@ -41,6 +41,9 @@ efo_dupdel_map:
   EFO:0030073:
     label: focal genome amplification
     DUPDEL: DUP
+  SO:0001060:
+    label: sequence_variant
+    DUPDEL: Null
 
 cnv_iscn_defs:
   DUP:
@@ -176,10 +179,15 @@ refseq_chromosomes: # GRCh38.p13
     chr: "Y"
     genbank_id: "CM000686.2"
     refseq_id: "refseq:NC_000024.10"
+  MT:
+    chr: "MT"
+    genbank_id: "J01415.2"
+    refseq_id: "refseq:NC_012920.1"
 
 variant_state_aliases:
-  SNV: LiteralSequenceExpression
-  LiteralSequenceExpression: LiteralSequenceExpression
+  SNV: SO:0001060
+  LiteralSequenceExpression: SO:0001060
+  SO:0001060: SO:0001060
   CNV: EFO:0030066
   EFO:0030066: EFO:0030066
   DUP: EFO:0030070
@@ -195,6 +203,7 @@ variant_state_aliases:
 
 variant_state_VCF_aliases:
   LiteralSequenceExpression: SNV
+  SO:0001060: SNV
   DUP: DUP
   DEL: DEL
   CNV: CNV
@@ -213,9 +222,9 @@ variant_state_VCF_aliases:
 # Note: For other ontologies such expansions are usually defined in the
 # pre-processing pacage (`byconaut`) and then stored in the generated collations.
 variant_states:
-  LiteralSequenceExpression:
+  SO:0001060:
     child_terms:
-      - null
+      - SO:0001060
   EFO:0030066:
     child_terms:
       - EFO:0030066
@@ -293,19 +302,18 @@ parameters:
     db_key: variant_state.id
     items:
     type: string
-    # pattern: '^((?:\w+\-?\w+ \w+)|(?:EFO:\d+)|(?:DUP)|(?:DEL)|(?:BND)|(?:LOH)|(?:INS)|(?:INV)|(?:CNV)|(?:INDEL)|(?:SNP)|(?:SNV))$'
     pattern: '^\w+[\w \-\:]\w+?$'
 
   start:
     type: array
-    db_key: location.interval.start.value
+    db_key: location.start
     items:
       type: integer
       pattern: '^\d+?$'
 
   end:
     type: array
-    db_key: location.interval.end.value
+    db_key: location.end
     items:
       type: integer
       pattern: '^\d+?$'

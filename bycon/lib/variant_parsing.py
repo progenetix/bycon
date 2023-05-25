@@ -364,12 +364,8 @@ def variant_create_digest(v, byc):
     t = v["variant_state"]["id"]
     t = re.sub(":", "_", t)
 
-    v_i = v["location"]["interval"]
-    p = "{}-{}".format(v_i["start"]["value"], v_i["end"]["value"])
-
-    chro = chroname_from_refseqid(v["location"]["sequence_id"], byc)
-
-    return ":".join( [chro, p, t])
+    v_i = v["location"]
+    return f'{v_i["chromosome"]}:{v_i["start"]}-{v_i["end"]}:{t}'
 
 ################################################################################
 

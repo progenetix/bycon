@@ -242,8 +242,8 @@ def interval_cnv_arrays(cs_vars, byc):
 
             if _has_overlap(intv, v):
 
-                ov_end = min(intv["end"], v["location"]["interval"]["end"]["value"])
-                ov_start = max(intv["start"], v["location"]["interval"]["start"]["value"])
+                ov_end = min(intv["end"], v["location"]["end"])
+                ov_start = max(intv["start"], v["location"]["start"])
                 ov = ov_end - ov_start
                 maps[cov_lab][i] += ov
 
@@ -376,10 +376,10 @@ def _has_overlap(interval, v):
     if not interval["reference_name"] == v["reference_name"]:
         return False
 
-    if not interval["end"] > v["location"]["interval"]["start"]["value"]:
+    if not interval["end"] > v["location"]["start"]:
         return False
 
-    if not interval["start"] < v["location"]["interval"]["end"]["value"]:
+    if not interval["start"] < v["location"]["end"]:
         return False
 
     return True

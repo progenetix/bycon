@@ -876,9 +876,9 @@ def check_callset_plot_delivery(byc):
                     continue
 
                 v_r = {
-                    "reference_name": v_d["refseq_chronames"].get(r_n, False),
-                    "start": loc["interval"]["start"].get("value", False),
-                    "end": loc["interval"]["end"].get("value", False),
+                    "reference_name": loc.get("chromosome", False),
+                    "start": loc.get("start", False),
+                    "end": loc.get("end", False),
                     "variant_type": v_d["efo_dupdel_map"][efo]["DUPDEL"]
                 }
 

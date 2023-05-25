@@ -76,6 +76,8 @@ def instantiate_schema(schema):
             return empty_dict
         elif schema['type'] == 'array' and 'items' in schema:
             return [instantiate_schema(schema['items'])]
+        elif "const" in schema:
+            return schema.get("const", "")
         elif "default" in schema:
             return schema["default"]
 

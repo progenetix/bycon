@@ -1,71 +1,34 @@
 {
-    "$id": "https://progenetix.org/services/schemas/pgxVariant/v2023-05-24",
+    "$id": "https://progenetix.org/services/schemas/pgx23Variant/v2023-05-25",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "additionalProperties": true,
     "definitions": {
         "Location": {
             "properties": {
-                "interval": {
-                    "$ref": "#/definitions/SequenceInterval"
+                "chromosome": {
+                    "description": "the chromosome in its bare form `7`, `X`",
+                    "type": "string"
+                },
+                "end": {
+                    "type": "integer"
                 },
                 "sequenceId": {
                     "type": "string"
                 },
-                "type": {
-                    "const": "SequenceLocation"
-                }
-            },
-            "type": "object"
-        },
-        "PointPosition": {
-            "properties": {
-                "type": {
-                    "const": "Number"
-                },
-                "value": {
+                "start": {
                     "type": "integer"
                 }
-            },
-            "type": "object"
-        },
-        "SequenceInterval": {
-            "properties": {
-                "end": {
-                    "$ref": "#/definitions/PointPosition"
-                },
-                "start": {
-                    "$ref": "#/definitions/PointPosition"
-                },
-                "type": {
-                    "const": "SequenceInterval"
-                }
-            },
-            "type": "object"
-        },
-        "SequenceState": {
-            "properties": {
-                "const": "LiteralSequenceExpression"
-            },
-            "sequence": {
-                "type": "string"
             },
             "type": "object"
         }
     },
     "description": "Schema for a genomic variant in Progenetix collections.",
     "properties": {
-        "alternateBases": {
-            "pattern": "^([ACGTUNRYSWKMBDHV\\-\\.]*)$",
-            "type": "string"
-        },
         "biosampleId": {
             "type": "string"
         },
         "callsetId": {
             "type": "string"
-        },
-        "end": {
-            "type": "integer"
         },
         "id": {
             "type": "string"
@@ -79,31 +42,12 @@
         "location": {
             "$ref": "#/definitions/Location"
         },
-        "referenceBases": {
+        "referenceSequence": {
             "pattern": "^([ACGTUNRYSWKMBDHV\\-\\.]*)$",
             "type": "string"
         },
-        "relativeCopyClass": {
-            "enum": [
-                "copy neutral",
-                "partial loss",
-                "complete loss",
-                "low-level gain",
-                "high-level gain"
-            ],
-            "type": "string"
-        },
-        "start": {
-            "type": "integer"
-        },
-        "state": {
-            "$ref": "#/definitions/SequenceState"
-        },
-        "type": {
-            "enum": [
-                "Allele",
-                "RelativeCopyNumber"
-            ],
+        "sequence": {
+            "pattern": "^([ACGTUNRYSWKMBDHV\\-\\.]*)$",
             "type": "string"
         },
         "updated": {
@@ -117,16 +61,26 @@
             "type": "string"
         },
         "variantState": {
-            "$ref": "../progenetix-model/common/ontologyTerm.json"
-        },
-        "variantType": {
-            "type": "string"
+            "$ref": "../progenetix-model/common/ontologyTerm.json",
+            "description": "The parameter is used to define the type of variant, with current use cases either being delineated as `SO:0001060: sequence_variant` or as one of the children of `EFO:0030063 genomic copy number assessment`",
+            "examples": [
+                {
+                    "id": "SO:0001060",
+                    "label": "sequence_variant"
+                },
+                {
+                    "id": "EFO:0030067",
+                    "label": "copy number loss"
+                }
+            ]
         }
     },
     "required": [
+        "biosampleId",
         "variantInternalId",
-        "variantType"
+        "variantState",
+        "location"
     ],
-    "title": "Progenetix Variant",
+    "title": "Progenetix Database Variant",
     "type": "object"
 }

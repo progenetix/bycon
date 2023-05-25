@@ -230,8 +230,8 @@ def de_vrsify_variant(v, byc):
         "reference_bases": v.get("reference_bases", "."),
         "alternate_bases": v.get("alternate_bases", "."),
         "reference_name": v_d["refseq_chronames"].get(r_n, False),
-        "start": v["location"]["interval"]["start"]["value"],
-        "end": v["location"]["interval"]["end"]["value"],
+        "start": v["location"]["start"],
+        "end": v["location"]["end"],
         "info": v.get("info", {})
     }
 

@@ -1,5 +1,7 @@
 import csv, re, requests
+# from attrdictionary import AttrDict
 from random import sample as randomSamples
+
 from cgi_parsing import prjsonnice
 
 ################################################################################
@@ -129,6 +131,7 @@ def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="
         if par in io_params.keys():
             db_key = io_params[par]["db_key"]
 
+            # assign_nested_attribute(parent, db_key, v)
             assign_nested_value(parent, db_key, v, parameter_type)
 
     for l_k, pre_item in pref_array_values.items():
@@ -161,6 +164,26 @@ def create_table_header(io_params):
             header_labs.append( par+"_label"+"___"+pre )
 
     return header_labs
+
+################################################################################
+
+# def assign_nested_attribute(parent, dotted_key, v):
+
+#     n_p = AttrDict(parent)
+#     keys = dotted_key.split('.')
+#     for key in keys[:-1]:
+#         n_p = getattr(n_p, key)
+#     setattr(n_p, keys[-1], v)
+
+#     return dict(parent)
+
+# ################################################################################
+
+# def get_nested_value(obj, dot_string):
+#     keys = dot_string.split('.')
+#     for key in keys:
+#         obj = getattr(obj, key)
+#     return obj
 
 ################################################################################
 

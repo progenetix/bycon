@@ -1,12 +1,14 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/pgxVariant/v2023-05-24
-title: Progenetix Variant
+$id: https://progenetix.org/services/schemas/pgx23Variant/v2023-05-25
+title: Progenetix Database Variant
 type: object
 description: >-
   Schema for a genomic variant in Progenetix collections.
 required:
+  - biosampleId
   - variantInternalId
-  - variantType
+  - variantState
+  - location
 properties:
   id:
     type: string
@@ -18,23 +20,25 @@ properties:
     type: string
   individualId:
     type: string
-  relativeCopyClass:
-    type: string
-    enum:
-      - copy neutral
-      - partial loss
-      - complete loss
-      - low-level gain
-      - high-level gain
-  state:
-    $ref: "#/definitions/SequenceState"
-  type:
-    type: string
-    enum:
-      - "Allele"
-      - "RelativeCopyNumber"
   location:
     $ref: "#/definitions/Location"
+  variantState:
+    description: >-
+      The parameter is used to define the type of variant, with current
+      use cases either being delineated as `SO:0001060: sequence_variant`
+      or as one of the children of `EFO:0030063 genomic copy number assessment`
+    $ref: "../progenetix-model/common/ontologyTerm.yaml"
+    examples:
+      - id: SO:0001060
+        label: sequence_variant
+      - id: EFO:0030067
+        label: copy number loss
+  sequence:
+    type: string
+    pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'
+  referenceSequence:
+    type: string
+    pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'
   info:
     type: object
   updated:
@@ -43,56 +47,19 @@ properties:
     examples:
       - "2020-09-10T17:44:10.170Z"
 
-# custom / legacy ###############################
-  variantState:
-    $ref: "../progenetix-model/common/ontologyTerm.yaml"
-  referenceBases:
-    type: string
-    pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'
-# deprecated ####################################
-  variantType:
-    type: string
-  alternateBases:
-    type: string
-    pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'
-  start:
-    type: integer
-  end:
-    type: integer
-
-#################################################
-
 definitions:
   Location:
     type: object
     properties:
-      interval:
-        $ref: "#/definitions/SequenceInterval"
       sequenceId:
         type: string
-      type:
-        const: SequenceLocation
-  SequenceState:
-    type: object
-    properties:
-      const: LiteralSequenceExpression
-    sequence:
-      type: string
-  SequenceInterval:
-    type: object
-    properties:
-      type:
-        const: SequenceInterval
+      chromosome:
+        description: >-
+          the chromosome in its bare form `7`, `X`
+        type: string
       start:
-        $ref: "#/definitions/PointPosition"
+        type: integer
       end:
-        $ref: "#/definitions/PointPosition"
-  PointPosition:
-    type: object
-    properties:
-      type:
-        const: Number
-      value:
         type: integer
 
 additionalProperties: true

@@ -359,20 +359,11 @@ def deparse_ISCN_to_variants(iscn, byc):
                 v_s = {}
                
                 v.update({
-                    "type": "RelativeCopyNumber",
                     "location": {
                         "sequence_id": vd["refseq_aliases"][chro],
-                        "type": 'SequenceLocation',
-                        "interval": {
-                            "start": {
-                                "type": 'Number',
-                                "value": start
-                            },
-                            "end": {
-                                "type": 'Number',
-                                "value": end
-                            }
-                        }
+                        "chromosome": chro,
+                        "start": start,
+                        "end": end
                     },
                     "info": {
                         "ISCN": cytostring,

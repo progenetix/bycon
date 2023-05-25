@@ -4,6 +4,13 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-05-25 (v1.0.46)
+
+* changed the internal schema for genomic variants
+    - simplification, e.g. using everywhere `variantState` and flattening
+      of the `location` object
+    - adding `MT` chromosome support (though not necessarily for searches etc.)
+
 ### 2023-05-24 (v1.0.45)
 
 * `instantiate_schema` has been rewritten; this lead to a number of code adjustments
