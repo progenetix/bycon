@@ -173,6 +173,8 @@ def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
         v = float(v)
     elif "integer" in parameter_type:
         v = int(v)
+    else:
+        v = str(v)
 
     ps = dotted_key.split('.')
 
@@ -183,8 +185,9 @@ def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
             parent.update({ps[0]: v })
         return parent
 
-    if not ps[0] in parent:
+    if ps[0] not in parent or parent[ ps[0] ] is None:
         parent.update({ps[0]: {}})
+
     if len(ps) == 2:
         if "array" in parameter_type:
             parent[ ps[0] ].update({ps[1]: v.split(',')})
@@ -192,7 +195,7 @@ def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
             parent[ ps[0] ].update({ps[1]: v })
         return parent
 
-    if not ps[1] in parent[ ps[0] ]:
+    if  ps[1] not in parent[ ps[0] ] or parent[ ps[0] ][ ps[1] ] is None:
         parent[ ps[0] ].update({ps[1]: {}})
     if len(ps) == 3:
         if "array" in parameter_type:
@@ -201,8 +204,7 @@ def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
             parent[ ps[0] ][ ps[1] ].update({ps[2]: v })
         return parent
 
-
-    if not ps[2] in parent[ ps[0] ][ ps[1] ]:
+    if  ps[2] not in parent[ ps[0] ][ ps[1] ] or parent[ ps[0] ][ ps[1] ][ ps[2] ] is None:
         parent[ ps[0] ][ ps[1] ].update({ps[2]: {}})
     if len(ps) == 4:
         if "array" in parameter_type:

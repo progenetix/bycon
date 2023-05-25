@@ -4,6 +4,12 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-05-24 (v1.0.45)
+
+* `instantiate_schema` has been rewritten; this lead to a number of code adjustments
+  (e.g. usually starting w/ the schemas themselves, _not_ w/ `properties` when
+  instantiating) and bug fixes (mostly capturing errors from default "none" values)
+
 ### 2023-05-22 (v1.0.44)
 
 * code clean-up
