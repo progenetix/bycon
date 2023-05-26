@@ -1,4 +1,5 @@
 import numpy as np
+from copy import deepcopy
 
 from cytoband_utils import *
 
@@ -68,7 +69,7 @@ def generate_genomic_intervals(byc):
     # cytobands ################################################################
 
     if binning == "cytobands":
-        byc.update({"genomic_intervals": byc["cytoband_intervals"].copy()})
+        byc.update({"genomic_intervals": deepcopy(byc["cytoband_intervals"])})
         return
 
     # otherwise intervals ######################################################
@@ -191,10 +192,10 @@ def interval_cnv_arrays(cs_vars, byc):
     chro_stats = {}
 
     for chro in c_l.keys():
-        chro_stats.update({chro: cnv_stats.copy()})
+        chro_stats.update({chro: deepcopy(cnv_stats)})
         for arm in ['p', 'q']:
             c_a = chro + arm
-            chro_stats.update({c_a: cnv_stats.copy()})
+            chro_stats.update({c_a: deepcopy(cnv_stats)})
 
     # cs_vars = v_coll.find( query )
     if type(cs_vars).__name__ == "Cursor":
@@ -322,7 +323,7 @@ def interval_counts_from_callsets(callsets, byc):
     """
 
     min_f = byc["interval_definitions"]["interval_min_fraction"].get("value", 0.001)
-    int_fs = byc["genomic_intervals"].copy()
+    int_fs = deepcopy(byc["genomic_intervals"])
     int_no = len(int_fs)
 
     # callsets can be either a list or a MongoDB Cursor (which has to be re-set)
