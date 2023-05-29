@@ -39,10 +39,7 @@ def remap_variants(r_s_res, byc):
 
     variant_ids = []
     for v in r_s_res:
-        try:
-            variant_ids.append(v["variant_internal_id"])
-        except:
-            pass
+        variant_ids.append(v["variant_internal_id"])
     variant_ids = list(set(variant_ids))
 
     variants = []
@@ -69,7 +66,7 @@ def remap_variants(r_s_res, byc):
 
         # TODO: Keep legacy pars?
         legacy_pars = ["_id", "id", "reference_name", "type", "biosample_id", "callset_id", "individual_id",
-                       "variant_type", "variant_state", "reference_bases", "alternate_bases", "start", "end"]
+                       "variant_type", "reference_bases", "alternate_bases", "start", "end"]
         for p in legacy_pars:
             v["variation"].pop(p, None)
 
@@ -224,28 +221,19 @@ def de_vrsify_variant(v, byc):
 
     v_r = {
         "id": v.get("id"),
-        "variant_internal_id": v.get("variant_intvernal_id"),
+        "variant_internal_id": v.get("variant_internal_id"),
         "callset_id": v.get("callset_id"),
         "biosample_id": v.get("biosample_id"),
-        "reference_bases": v.get("reference_bases", "."),
-        "alternate_bases": v.get("alternate_bases", "."),
-        "reference_name": v_d["refseq_chronames"].get(r_n, False),
+        "reference_bases": v.get("reference_sequence", "."),
+        "alternate_bases": v.get("sequence", "."),
+        "reference_name": v["variant_state"].get("chromosome", "."),
         "start": v["location"]["start"],
         "end": v["location"]["end"],
         "info": v.get("info", {})
     }
 
-    if "variant_state" in v:
-        efo = v["variant_state"].get("id")
-        try:
-            v_r.update({"variant_type": v_d["efo_dupdel_map"][efo]["DUPDEL"]})
-        except:
-            pass
-    elif "state" in v:
-        t = v["state"].get("type", "__none__")
-        s = v["state"].get("sequence", "")
-        if "LiteralSequenceExpression" in t:
-            v_r.update({"alternate_bases": s})
+    efo = v["variant_state"].get("id")
+    v_r.update({"variant_type": v_d["efo_dupdel_map"][efo]["DUPDEL"]})
 
     return v_r
 

@@ -386,5 +386,5 @@ entities:
       log2:
         db_key: info.cnv_value
         type: number
-      variant_type:
-        db_key: variant_type
+      # variant_type:
+      #   db_key: variant_type

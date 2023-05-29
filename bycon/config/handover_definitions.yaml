@@ -2,7 +2,7 @@
 h->o_types:
 
   histoplot:
-    id: 'pgx:handover:histoplot'
+    id: 'pgx:HO.histoplot'
     label: "CNV Histogram"
     paginated_entities:
       - biosample
@@ -13,7 +13,7 @@ h->o_types:
     output: histoplot
 
   samplesplot:
-    id: 'pgx:handover:samplesplot'
+    id: 'pgx:HO.samplesplot'
     label: "Clustered sample CNV tracks"
     paginated_entities:
       - biosample
@@ -24,7 +24,7 @@ h->o_types:
     output: samplesplot
 
   biosamples:
-    id: 'pgx:handover:biosamples'
+    id: 'pgx:HO.biosamples'
     requestedSchema: biosample
     paginated_entities:
       - biosample
@@ -35,7 +35,7 @@ h->o_types:
     script_path_web: '/beacon/biosamples'
 
   biosamplestable:
-    id: 'pgx:handover:biosamplestable'
+    id: 'pgx:HO.biosamplestable'
     requestedSchema: biosample
     output: datatable
     paginated_entities:
@@ -47,7 +47,7 @@ h->o_types:
     script_path_web: '/beacon/biosamples'
 
   biosamplevariants:
-    id: 'pgx:handover:biosamplevariants'
+    id: 'pgx:HO.biosamplevariants'
     requestedSchema: genomicVariant
     paginated_entities:
       - biosample
@@ -59,12 +59,12 @@ h->o_types:
     url_opts: "&paginateResults=false"
 
   annotatedvariants:
-    id: 'pgx:handover:annotatedvariants'
+    id: 'pgx:HO.annotatedvariants'
     requestedSchema: genomicVariant
     paginated_entities:
       - biosample
       - analysis
-    label: "Biosample Variants"
+    label: "Annotated Variants"
     description: "retrieve annotated variants of the biosamples matched by the query"
     h->o_key: 'biosamples.id'
     script_path_web: '/beacon/genomicVariations'
@@ -72,7 +72,7 @@ h->o_types:
     exclude_empty: True
 
   biosamplepgxsegvariants:
-    id: 'pgx:handover:biosamplevariants:pgxseg'
+    id: 'pgx:HO.biosamples-pgxseg'
     requestedSchema: genomicVariant
     output: pgxseg
     paginated_entities:
@@ -84,7 +84,7 @@ h->o_types:
     script_path_web: '/beacon/genomicVariations'
 
   phenopackets:
-    id: 'pgx:handover:phenopackets'
+    id: 'pgx:HO.phenopackets'
     label: "Phenopackets"
     requestedSchema: phenopacket
     paginated_entities:
@@ -96,7 +96,7 @@ h->o_types:
     script_path_web: '/beacon/individuals'
 
   individuals:
-    id: 'pgx:handover:individuals'
+    id: 'pgx:HO.individuals'
     label: "Individuals"
     requestedSchema: individual
     paginated_entities:
@@ -108,7 +108,7 @@ h->o_types:
     script_path_web: '/beacon/individuals'
 
   variants:
-    id: 'pgx:handover:variants'
+    id: 'pgx:HO.variants'
     label: "Found Variants (.json)"
     requestedSchema: genomicVariant
     paginated_entities:
@@ -118,7 +118,7 @@ h->o_types:
     script_path_web: '/beacon/genomicVariations'
 
   pgxseg:
-    id: 'pgx:handover:pgxseg'
+    id: 'pgx:HO.pgxseg'
     label: "Found Variants (.pgxseg)"
     requestedSchema: genomicVariant
     output: pgxseg
@@ -129,7 +129,7 @@ h->o_types:
     script_path_web: '/beacon/genomicVariations'
   
   vcf:
-    id: 'pgx:handover:vcf'
+    id: 'pgx:HO.vcf'
     label: "Found Variants (.vcf)"
     requestedSchema: genomicVariant
     output: vcf
@@ -140,7 +140,7 @@ h->o_types:
     script_path_web: '/beacon/genomicVariations'
   
   callsetsvariants:
-    id: 'pgx:handover:callsetsvariants'
+    id: 'pgx:HO.callsetsvariants'
     label: "All Sample Variants (.json)"
     requestedSchema: genomicVariant
     method: callsetsvariants
@@ -151,7 +151,7 @@ h->o_types:
     script_path_web: '/beacon/variants'
 
   callsetspgxseg:
-    id: 'pgx:handover:callsetspgxseg'
+    id: 'pgx:HO.callsets-pgxseg'
     label: "All Sample Variants (.pgxseg)"
     requestedSchema: genomicVariant
     method: callsetsvariants
@@ -163,7 +163,7 @@ h->o_types:
     script_path_web: '/beacon/variants'
 
   callsetsvcf:
-    id: 'pgx:handover:callsetsvcf'
+    id: 'pgx:HO.callsetsvcf'
     label: "All Sample Variants (.vcf)"
     requestedSchema: genomicVariant
     method: callsetsvariants
@@ -175,7 +175,7 @@ h->o_types:
     script_path_web: '/beacon/variants'
 
   UCSClink:    
-    id: 'pgx:handover:bedfile2ucsc'
+    id: 'pgx:HO.bedfile2ucsc'
     label: "Show Found Variants in the UCSC browser"
     requestedSchema: genomicVariant
     paginated_entities:

@@ -25,12 +25,12 @@ properties:
   variantState:
     description: >-
       The parameter is used to define the type of variant, with current
-      use cases either being delineated as `SO:0001060: sequence_variant`
+      use cases either being delineated as `SO:0001059: sequence_alteration`
       or as one of the children of `EFO:0030063 genomic copy number assessment`
     $ref: "../progenetix-model/common/ontologyTerm.yaml"
     examples:
-      - id: SO:0001060
-        label: sequence_variant
+      - id: SO:0001059
+        label: sequence_alteration
       - id: EFO:0030067
         label: copy number loss
   sequence:

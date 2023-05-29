@@ -4,6 +4,11 @@ title: Changes & To Do
 
 ## Changes
 
+### 2023-05-25 (v1.0.47)
+
+* changed handover id format from `pgx:handover:biosamples` to CURIE-compatible
+  `pgx:HO.biosamples` etc. style (see Beacon [#83](https://github.com/ga4gh-beacon/beacon-v2/issues/83))
+
 ### 2023-05-25 (v1.0.46)
 
 * changed the internal schema for genomic variants

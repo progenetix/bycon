@@ -33,9 +33,9 @@ class ByconPlot:
         self.plot_data_bundle = plot_data_bundle
         self.svg = None
 
-    # --------------------------------------------------------------------------#
-    # ----------------------------- public -------------------------------------#
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def get_svg(self) -> str:
         self.__plot_pipeline()
@@ -51,9 +51,9 @@ class ByconPlot:
         self.__plot_pipeline()
         print_svg_response(self.svg, self.env)
 
-    # --------------------------------------------------------------------------#
-    # ----------------------------- private ------------------------------------#
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+    # ----------------------------- private -----------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __plot_pipeline(self):
 
@@ -69,13 +69,14 @@ class ByconPlot:
             self.__plot_add_cytobands()
             self.__plot_add_samplestrips()
             self.__plot_add_histodata()
+            self.__plot_add_cluster_tree()
             self.__plot_add_markers()
 
         self.__plot_add_footer()
 
         self.svg = self.__create_svg()
 
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __initialize_plot_values(self):
 
@@ -358,7 +359,7 @@ class ByconPlot:
         # ----------------------- plot cluster tree --------------------------------#
 
         self.plv.update({"cluster_head_gap": 0})
-        self.__plot_add_cluster_tree()
+        self.plv.update({"plot_clusteritem_height": self.plv["plot_samplestrip_height"]})
 
         # --------------------- plot area background -------------------------------#
 
@@ -427,7 +428,7 @@ class ByconPlot:
 
     def __plot_add_cluster_tree(self):
 
-        itemHeight = self.plv["plot_samplestrip_height"]
+        itemHeight = self.plv["plot_clusteritem_height"]
 
         d = self.plv.get("dendrogram", False)
 
@@ -491,7 +492,7 @@ class ByconPlot:
         # ----------------------- plot cluster tree ----------------------------#
 
         self.plv.update({"cluster_head_gap": self.plv["plot_region_gap_width"]})
-        self.__plot_add_cluster_tree()
+        self.plv.update({"plot_clusteritem_height": self.plv["plot_area_height"]})
 
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#

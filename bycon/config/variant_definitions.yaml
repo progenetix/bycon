@@ -41,8 +41,8 @@ efo_dupdel_map:
   EFO:0030073:
     label: focal genome amplification
     DUPDEL: DUP
-  SO:0001060:
-    label: sequence_variant
+  SO:0001059:
+    label: sequence_alteration
     DUPDEL: Null
 
 cnv_iscn_defs:
@@ -185,9 +185,9 @@ refseq_chromosomes: # GRCh38.p13
     refseq_id: "refseq:NC_012920.1"
 
 variant_state_aliases:
-  SNV: SO:0001060
-  LiteralSequenceExpression: SO:0001060
-  SO:0001060: SO:0001060
+  SNV: SO:0001059
+  LiteralSequenceExpression: SO:0001059
+  SO:0001059: SO:0001059
   CNV: EFO:0030066
   EFO:0030066: EFO:0030066
   DUP: EFO:0030070
@@ -203,7 +203,7 @@ variant_state_aliases:
 
 variant_state_VCF_aliases:
   LiteralSequenceExpression: SNV
-  SO:0001060: SNV
+  SO:0001059: SNV
   DUP: DUP
   DEL: DEL
   CNV: CNV
@@ -222,9 +222,9 @@ variant_state_VCF_aliases:
 # Note: For other ontologies such expansions are usually defined in the
 # pre-processing pacage (`byconaut`) and then stored in the generated collations.
 variant_states:
-  SO:0001060:
+  SO:0001059:
     child_terms:
-      - SO:0001060
+      - SO:0001059
   EFO:0030066:
     child_terms:
       - EFO:0030066
