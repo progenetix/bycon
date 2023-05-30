@@ -113,15 +113,17 @@ def remap_variants_to_VCF(r_s_res, byc):
         "INFO": ""
     }
 
-    variant_ids = []
-    for v in r_s_res:
-        variant_ids.append(v.get("variant_internal_id", "__none__"))
+    variant_ids = ()
+
+    sorted_vars = list(sorted(r_s_res, key=lambda x: (f'{x["location"]["chromosome"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x["location"]['start'])))
+
+    for v in sorted_vars:
+        variant_ids += (v.get("variant_internal_id", "__none__"), )
 
     biosample_ids = []
-    for v in r_s_res:
+    for v in sorted_vars:
         biosample_ids.append(v.get("biosample_id", "__none__"))
 
-    variant_ids = list(set(variant_ids))
     biosample_ids = list(set(biosample_ids))
 
     for bsid in biosample_ids:
@@ -132,7 +134,7 @@ def remap_variants_to_VCF(r_s_res, byc):
 
     for d in variant_ids:
 
-        d_vs = [var for var in r_s_res if var.get('variant_internal_id', "__none__") == d]
+        d_vs = [var for var in sorted_vars if var.get('variant_internal_id', "__none__") == d]
 
         vcf_v = vcf_variant(d_vs[0], v_o.copy(), byc)
 
