@@ -186,26 +186,28 @@ def vrsify_variant(variant, byc):
 def vcf_variant(v, vcf_v, byc):
     v_d = byc["variant_definitions"]
 
-    v = de_vrsify_variant(v, byc)
-    if v is False:
-        return v
-
     vcf_v.update({
-        "#CHROM": v.get("reference_name", "."),
-        "POS": v.get("start", 0) + 1,
+        "#CHROM": v["location"].get("chromosome", "."),
+        "POS": v["location"].get("start", 0) + 1,
         "ID": ".",
-        "REF": v.get("reference_bases", "."),
-        "ALT": v.get("alternate_bases", "."),
+        "REF": v.get("reference_sequence", "."),
+        "ALT": v.get("sequence", "."),
         "QUAL": ".",
         "FILTER": "PASS",
         "FORMAT": "GT",
         "INFO": ""
     })
 
-    if "variant_type" in v:
-        vcf_v.update({"ALT": "<{}>".format(v["variant_type"])})
-        v_l = v["end"] - v["start"]
-        vcf_v.update({"INFO": "IMPRECISE;SVCLAIM=D;END={};SVLEN={}".format(v["end"], v_l)})
+    v_l = v["variant_state"].get("label", "copy number alteration")
+    v_s =  v["variant_state"].get("id", "EFO:0030064")
+
+    if "copy" in v_l:
+        start = v["location"].get("start", 0)
+        end = v["location"].get("end", 0)
+        v_s_l = v_d["efo_dupdel_map"][v_s].get("DUPDEL", vcf_v["ALT"])
+        vcf_v.update({"ALT": f'<{v_s_l}>'})
+        v_l =  end - start
+        vcf_v.update({"INFO": f'IMPRECISE;SVCLAIM=D;END={end};SVLEN={v_l}'})
 
     return vcf_v
 
