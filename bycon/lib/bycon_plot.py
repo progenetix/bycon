@@ -1,5 +1,7 @@
 import datetime
 import re
+import base64
+from PIL import Image
 
 from cgi_parsing import get_plot_parameters, print_svg_response, test_truthy
 from clustering_utils import cluster_frequencies, cluster_samples
@@ -52,6 +54,26 @@ class ByconPlot:
         print_svg_response(self.svg, self.env)
 
     # -------------------------------------------------------------------------#
+    # ----------------------------- testing -----------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __plot_add_bmp(self):
+
+        width, height = 200, 200
+        image = Image.new('RGB', (width, height), color='red')
+        # pixels = image.load()
+        image_data = image.tobytes()
+        base64_data = base64.b64encode(image_data).decode('utf-8')
+
+    # <image
+    #   x="'.$area_x0.'"
+    #   y="'.$pgx->{Y}.'"
+    #   width="'.$areaW.'"
+    #   height="'.$pgx->{parameters}->{size_plotarea_h_px}.'"
+    #   xlink:href="data:image/png;base64,'.encode_base64($probeArea->png).'"
+    # />';
+
+    # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 
@@ -69,6 +91,7 @@ class ByconPlot:
             self.__plot_add_cytobands()
             self.__plot_add_samplestrips()
             self.__plot_add_histodata()
+            self.__plot_add_bmp()
             self.__plot_add_cluster_tree()
             self.__plot_add_markers()
 

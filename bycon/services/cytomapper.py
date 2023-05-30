@@ -59,7 +59,7 @@ def cytomapper():
 
     # TODO: response objects from schema
     # r_s = byc["response_entity"]["beacon_schema"]["entity_type"]
-    # cb_i = object_instance_from_schema_name(byc, r_s, "properties")
+    # cb_i = object_instance_from_schema_name(byc, r_s, "")
     
     results = [
         {

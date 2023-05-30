@@ -25,6 +25,7 @@ def main():
 
 def info():
 
+    initialize_bycon_service(byc)
     r, e = instantiate_response_and_error(byc, "beaconInfoResponse")
     response_meta_set_info_defaults(r, byc)
 
@@ -40,7 +41,7 @@ def info():
     r["meta"].pop("returned_granularity", None)
 
     pgx_info = b_e_d.get("info", {})
-    info = object_instance_from_schema_name(byc, "beaconInfoResults", "properties", "json")
+    info = object_instance_from_schema_name(byc, "beaconInfoResults", "")
 
     for k in info.keys():
         if k in pgx_info:

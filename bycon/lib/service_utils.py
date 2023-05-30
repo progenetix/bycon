@@ -516,7 +516,6 @@ def response_update_meta(r, byc):
 ################################################################################
 
 def error_response_set_defaults(e):
-
     e.update({
         "error" : {
             "error_code": 200,
