@@ -4,7 +4,14 @@ title: Changes & To Do
 
 ## Changes
 
-### 2023-05-25 (v1.0.47)
+###  2023-05-31 (v1.0.48)
+
+* addresses VCF export bugs [#14](https://github.com/progenetix/bycon/issues/14),
+  [#15](https://github.com/progenetix/bycon/issues/15) and
+  [#16](https://github.com/progenetix/bycon/issues/16) (thanks [David](https://github.com/d-salgado)!)
+* fixes some `null` value complaints from the Beacon verifier (thanks [Dmitry](https://github.com/redmitry)!)
+
+### 2023-05-26 (v1.0.47)
 
 * changed handover id format from `pgx:handover:biosamples` to CURIE-compatible
   `pgx:HO.biosamples` etc. style (see Beacon [#83](https://github.com/ga4gh-beacon/beacon-v2/issues/83))
