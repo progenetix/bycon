@@ -42,16 +42,8 @@ def schemas():
         comps = schema_name.split('.')
         schema_name = comps.pop(0)
 
-        j = rest_path_value(schema_name)
-        if j is None:
-            return
-
-        if "json" in j:
-            s = read_schema_file(schema_name, "", byc, "json")
-        else:
-            s = read_schema_file(schema_name, "", byc)
-
-        if not s is False:
+        s = read_schema_file(schema_name, "", byc)
+        if s is not False:
 
             print('Content-Type: application/json')
             print('status:200')

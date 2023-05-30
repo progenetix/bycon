@@ -109,8 +109,8 @@ def dataset_response_add_handovers(ds_id, byc):
                         p_t = p_f + byc["pagination"]["limit"]
 
                     h_o_r["url"] += "&skip={}&limit={}".format(byc["pagination"]["skip"], byc["pagination"]["limit"])
-
-                b_h_o.append( h_o_r )
+                if "url" in h_o_r:
+                    b_h_o.append( h_o_r )
 
     return b_h_o
 

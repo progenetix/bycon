@@ -22,7 +22,7 @@ def read_schema_file(schema_name, item, byc, ext="json"):
     if byc["debug_mode"] is True:
         print(schema_name, s_f_p)
 
-    if not s_f_p is False:
+    if s_f_p is not False:
         if len(item) > 1:
             s_f_p = s_f_p+"#/"+item
         root_def = RefDict(s_f_p)

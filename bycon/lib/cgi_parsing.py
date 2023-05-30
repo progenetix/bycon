@@ -452,6 +452,7 @@ def cgi_print_response(byc, status_code):
 
     update_error_code_from_response_summary(byc)
     switch_to_error_response(byc)
+
     print_json_response(byc["service_response"], byc["env"])
 
 
@@ -504,14 +505,36 @@ def check_switch_to_count_response(byc):
 ################################################################################
 
 def delint_response(byc):
+
+    b_s_r = byc["service_response"]
+
+    byc.update({"service_response": response_delete_none_values(b_s_r)})
+
     try:
-        if len(byc["service_response"]["beacon_handovers"]) < 1:
+        b_h_r = b_s_r.get("beacon_handovers", [])
+        if len(b_h_r) < 1:
             byc["service_response"].pop("beacon_handovers", None)
-        if len(byc["service_response"]["info"].keys()) < 1:
-            byc["service_response"].pop("info", None)
+        if not "url" in b_h_r[0]:
+            byc["service_response"].pop("beacon_handovers", None)
     except:
         pass
 
+################################################################################
+
+def response_delete_none_values(response):
+    """Delete None values recursively from all of the dictionaries"""
+
+    for key, value in list(response.items()):
+        if isinstance(value, dict):
+            response_delete_none_values(value)
+        elif value is None:
+            del response[key]
+        elif isinstance(value, list):
+            for v_i in value:
+                if isinstance(v_i, dict):
+                    response_delete_none_values(v_i)
+
+    return response
 
 ################################################################################
 ################################################################################

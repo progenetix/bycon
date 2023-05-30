@@ -83,6 +83,8 @@ def bands_from_cytobands(chr_bands, byc):
     cb_pat = re.compile( byc["variant_definitions"]["parameters"]["cyto_bands"]["pattern"] )
     error = ""
 
+    # chr_bands = re.sub(r'', $1, chr_bands)
+
     end_re = re.compile(r"^([pq]\d.*?)\.?\d$")
     arm_re = re.compile(r"^([pq]).*?$")
     p_re = re.compile(r"^p.*?$")
