@@ -89,6 +89,7 @@ def remap_variants_to_VCF(r_s_res, byc):
     open_text_streaming(byc["env"], "variants.vcf")
     print(
         """##fileformat=VCFv4.4
+##reference=GRCh38
 ##ALT=<ID=DUP,Description="Duplication">
 ##ALT=<ID=DEL,Description="Deletion">
 ##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the longest variant described in this record">
