@@ -4,6 +4,14 @@ title: Changes & To Do
 
 ## Changes
 
+###  2023-05-31 (v1.0.49)
+
+* added `days_from_iso8601duration` method
+* added in individuals `index_disease.onset.age_days` field
+    - populated using the new method w/ a byconaut "housekeeping" script
+* added a first `alphanumeric` filter type & parsing
+* this enables now an age filter query, e.g. `filters=age:<=P35Y2D`
+
 ###  2023-05-31 (v1.0.48)
 
 * addresses VCF export bugs [#14](https://github.com/progenetix/bycon/issues/14),

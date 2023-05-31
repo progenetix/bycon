@@ -58,7 +58,6 @@ def check_filter_values(filters, byc):
             f = {"id":f}
         if not "id" in f:
             continue
-
         if f not in checked:
             checked.append( f )
 
@@ -66,6 +65,7 @@ def check_filter_values(filters, byc):
         matched = False
         for f_t, f_d in f_defs.items():
             if re.compile( f_d["pattern"] ).match( deflagged ):
+                # print(f'{f_d["pattern"]} => ? {deflagged}')
                 matched = True
                 continue
 
@@ -89,8 +89,8 @@ def response_add_filter_warnings(byc, message=False):
         return
 
     if not "info" in byc["service_response"]:
-        byc["service_response"].update({"info": {}})
-    if not "warnings" in byc["service_response"]:
+        byc["service_response"].update({"info": {"warnings":[]}})
+    if not "warnings" in byc["service_response"]["info"]:
         byc["service_response"]["info"].update({"warnings": []})
 
     byc["service_response"]["info"]["warnings"].append(message)

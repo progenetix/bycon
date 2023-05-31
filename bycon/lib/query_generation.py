@@ -1,6 +1,7 @@
 import pymongo
 from bson import SON
 
+from bycon_helpers import days_from_iso8601duration 
 from filter_parsing import *
 from variant_parsing import *
 
@@ -240,18 +241,21 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
                         "id": f_val,
                         "scope": f_d["scope"],
                         "db_key": f_d["db_key"],
+                        "type": f_d.get("type", "ontology"),
+                        "format": f_d.get("format", "___none___"),
                         "child_terms": [f_val]
                     }
                     f_desc = False
                     if f_d["collationed"] is True:
                         warning = "The filter `{}` matches a `{}` filter pattern but the value is not in collations.".format(
                             f_val, f_d["scope"])
-                        response_add_filter_warnings(byc, warning)
+                        response_add_filter_warnings(byc, warning)                        
 
         if f_info is None:
             f_info = {
                 "id": f_val,
                 "scope": "biosamples",
+                "type": "___undefined___",
                 "db_key": "___undefined___",
                 "child_terms": [f_val]
             }
@@ -273,7 +277,17 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
         if f_field not in f_lists[f_scope].keys():
             f_lists[f_scope].update({f_field: []})
 
-        if f_desc is True:
+        # TODO: move somewhere; this is just for the age prototype
+        if "alphanumeric" in f_info.get("type", "ontology"):
+
+            f_class, comp, val = re.match(r'^(\w+):([<>=]+?)(\w[\w\.]+?)$', f_info["id"]).group(1,2,3)
+
+            if "iso8601duration" in f_info.get("format", "___none___"):
+                val = days_from_iso8601duration(val)
+
+            f_lists[f_scope][f_field].append( __mongo_comparator_query(comp, val) )
+
+        elif f_desc is True:
             if f_neg is True:
                 f_lists[f_scope][f_field].append({'$nin': f_info["child_terms"]})
             else:
@@ -325,6 +339,23 @@ def _update_queries_from_geoquery(byc):
 
 
 ################################################################################
+
+def __mongo_comparator_query(comparator, value):
+
+    mongo_comps = {
+        ">": '$gt',
+        ">=": '$gte',
+        "<": '$lt',
+        "<=": '$lte',
+        "=": '$eq'
+    }
+
+    c = mongo_comps.get(comparator, '$eq')
+
+    return { c: value }
+
+################################################################################
+
 
 def _update_queries_from_variants(byc):
     if "variant_request_type" not in byc:

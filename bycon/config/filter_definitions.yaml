@@ -1,3 +1,16 @@
+age:
+  id: age
+  type: alphanumeric
+  format: iso8601duration
+  name: Age at diagnosis
+  scope: individuals
+  db_key: index_disease.onset.age_days
+  # pattern: '^age:[<=>]*+?P\d[\dYMdTmh].+?$'
+  pattern: '^age:.+?$'
+  collationed: False
+  examples:
+    - 'age:<=P18Y'
+
 NCITgrade:
   id: ncit
   name: NCI Thesaurus OBO Edition
