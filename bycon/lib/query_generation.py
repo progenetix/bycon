@@ -219,6 +219,8 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
 
     filters = byc.get("filters", [])
 
+    f_infos = {}
+
     for f in filters:
 
         f_val = f["id"]
@@ -271,11 +273,16 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
         if f_scope not in byc["config"]["queried_collections"]:
             continue
 
+
         if f_scope not in f_lists.keys():
             f_lists.update({f_scope: {}})
+        if f_scope not in f_infos.keys():
+            f_infos.update({f_scope: {}})
 
         if f_field not in f_lists[f_scope].keys():
             f_lists[f_scope].update({f_field: []})
+        if f_field not in f_infos[f_scope].keys():
+            f_infos[f_scope].update({f_field: f_info})
 
         # TODO: move somewhere; this is just for the age prototype
         if "alphanumeric" in f_info.get("type", "ontology"):
@@ -305,7 +312,13 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
             if len(f_query_vals) == 1:
                 f_s_l.append({f_field: f_query_vals[0]})
             else:
-                f_s_l.append({f_field: {"$in": f_query_vals}})
+                if "alphanumeric" in f_infos[f_scope][f_field].get("type", "ontology"):
+                    q_l = []
+                    for a_q_v in f_query_vals:\
+                        q_l.append({f_field:a_q_v})
+                    f_s_l.append({"$and": q_l })
+                else:
+                    f_s_l.append({f_field: {"$in": f_query_vals}})
 
         if f_scope in byc["queries"]:
             f_s_l.append(byc["queries"][f_scope])

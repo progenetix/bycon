@@ -17,9 +17,8 @@ def days_from_iso8601duration(iso8601duration):
     potentially lossy since it does not include time parsing."""
 
     # TODO: check format
-
-    found = re.match(r'^P\d+?[YMD](\d+?[M])?(\d+?[D])?', iso8601duration)
-    if not found:
+    is_isodate_duration = re.match(r'^P\d+?[YMD](\d+?[M])?(\d+?[D])?', iso8601duration)
+    if not is_isodate_duration:
         return False
 
     duration = parse_duration(iso8601duration)

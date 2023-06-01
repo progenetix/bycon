@@ -1,11 +1,10 @@
 age:
-  id: age
+  id: NCIT_C156420
   type: alphanumeric
   format: iso8601duration
   name: Age at diagnosis
   scope: individuals
   db_key: index_disease.onset.age_days
-  # pattern: '^age:[<=>]*+?P\d[\dYMdTmh].+?$'
   pattern: '^age:.+?$'
   collationed: False
   examples:

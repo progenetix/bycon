@@ -23,6 +23,9 @@ description: >-
   * `indexed` indicates if the according `db_key` should be indexed by the DB
   * `compact` indicates if the parameter should be included in limited data
     representations
+  * `computed` indicates that the value of the field will be assigned through
+    some update function (e.g. the variant's `id` value from the stringified
+    database ObjectId upon insertion ore `age_days` from the `age_iso` value)
 
 entities:
 
@@ -225,6 +228,15 @@ entities:
       sex_label:
         db_key: sex.label
         compact: True
+      age_iso:
+        db_key: index_disease.onset.age
+        indexed: True
+        compact: True
+      age_days:
+        db_key: index_disease.onset.age_days
+        indexed: True
+        compact: False
+        computed: True
       data_use_conditions_id:
         db_key: data_use_conditions.id
       data_use_conditions_label:
@@ -327,10 +339,12 @@ entities:
         db_key: id
         indexed: True
         compact: True
+        computed: True
       variant_internal_id:
         db_key: variant_internal_id
         indexed: True
         compact: True
+        computed: True
       callset_id:
         db_key: callset_id
         indexed: True
