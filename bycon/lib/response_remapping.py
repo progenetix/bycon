@@ -187,30 +187,30 @@ def vrsify_variant(variant, byc):
 ################################################################################
 
 def vcf_variant(v, vcf_v, byc):
-    v_d = byc["variant_definitions"]
+    v = de_vrsify_variant(v, byc)
+    if v is False:
+        return v
 
     vcf_v.update({
-        "#CHROM": v["location"].get("chromosome", "."),
-        "POS": v["location"].get("start", 0) + 1,
+        "#CHROM": v["reference_name"],
+        "POS": v["start"],
         "ID": ".",
-        "REF": v.get("reference_sequence", "."),
-        "ALT": v.get("sequence", "."),
+        "REF": v["reference_bases"],
+        "ALT": v["alternate_bases"],
         "QUAL": ".",
         "FILTER": "PASS",
         "FORMAT": "GT",
         "INFO": ""
     })
 
-    v_l = v["variant_state"].get("label", "copy number alteration")
-    v_s =  v["variant_state"].get("id", "EFO:0030064")
+    v_l = v["variant_label"]
+    v_s =  v["variant_type"]
 
+    # TODO: not very general...
     if "copy" in v_l:
-        start = v["location"].get("start", 0)
-        end = v["location"].get("end", 0)
-        v_s_l = v_d["efo_dupdel_map"][v_s].get("DUPDEL", vcf_v["ALT"])
-        vcf_v.update({"ALT": f'<{v_s_l}>'})
-        v_l =  end - start
-        vcf_v.update({"INFO": f'IMPRECISE;SVCLAIM=D;END={end};SVLEN={v_l}'})
+        vcf_v.update({"ALT": f'<{v["variant_type"]}>'})
+        v_l =  v["end"] - v["start"]
+        vcf_v.update({"INFO": f'IMPRECISE;SVCLAIM=D;END={v["end"]};SVLEN={v_l}'})
 
     return vcf_v
 
@@ -231,10 +231,12 @@ def de_vrsify_variant(v, byc):
         "biosample_id": v.get("biosample_id"),
         "reference_bases": v.get("reference_sequence", "."),
         "alternate_bases": v.get("sequence", "."),
-        "reference_name": v["variant_state"].get("chromosome", "."),
+        "reference_name": v["location"].get("chromosome", "."),
+        "sequence_id": r_n,
         "start": v["location"]["start"],
         "end": v["location"]["end"],
-        "info": v.get("info", {})
+        "info": v.get("info", {}),
+        "variant_label": v["variant_state"].get("label", "")
     }
 
     efo = v["variant_state"].get("id")
