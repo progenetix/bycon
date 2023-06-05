@@ -53,5 +53,6 @@
             "type": "integer"
         }
     },
-    "title": "Publication"
+    "title": "PublicationSampleCounts",
+    "type": "object"
 }

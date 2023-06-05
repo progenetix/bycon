@@ -18,7 +18,8 @@
                     ],
                     "type": "string"
                 }
-            }
+            },
+            "type": "object"
         }
     },
     "description": "A Publication represents basic information about a scientific article used in the Progenetix resource to indicate and annotate sources for genomic screening experiments.\n",
@@ -145,5 +146,6 @@
             "type": "string"
         }
     },
-    "title": "Publication"
+    "title": "Publication",
+    "type": "object"
 }

@@ -88,9 +88,9 @@ def response_add_filter_warnings(byc, message=False):
     if not "service_response" in byc:
         return
 
-    if not "info" in byc["service_response"]:
+    if not "info" in byc["service_response"] or byc["service_response"]["info"] is None:
         byc["service_response"].update({"info": {"warnings":[]}})
-    if not "warnings" in byc["service_response"]["info"]:
+    if not "warnings" in byc["service_response"]["info"] or byc["service_response"]["info"]["warnings"] is None:
         byc["service_response"]["info"].update({"warnings": []})
 
     byc["service_response"]["info"]["warnings"].append(message)

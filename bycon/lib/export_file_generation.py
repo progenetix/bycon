@@ -28,6 +28,7 @@ def export_variants_download(ds_id, byc):
 
     close_json_streaming()
 
+
 ################################################################################
 
 def stream_pgx_meta_header(ds_id, ds_results, byc):
@@ -51,8 +52,6 @@ def stream_pgx_meta_header(ds_id, ds_results, byc):
             
     print_filters_meta_line(byc)
 
-    # http://progenetix.org/beacon/variants/?filters=NCIT:C6393&debug=1&output=pgxseg
-
     for bs_id in ds_results["biosamples.id"][ "target_values" ]:
         bs = bs_coll.find_one( { "id": bs_id } )
         if not bs:
@@ -61,6 +60,7 @@ def stream_pgx_meta_header(ds_id, ds_results, byc):
         print(h_line)
 
     return
+
 
 ################################################################################
 
@@ -121,7 +121,7 @@ def pgxseg_biosample_meta_line(byc, biosample, group_id_key="histological_diagno
 
 ################################################################################    
 
-def interval_header(info_columns, byc):
+def __pgxmatrix_interval_header(info_columns, byc):
 
     int_line = info_columns.copy()
 
@@ -131,6 +131,7 @@ def interval_header(info_columns, byc):
         int_line.append("{}:{}-{}:DEL".format(iv["reference_name"], iv["start"], iv["end"]))
 
     return int_line
+
 
 ################################################################################
 
@@ -222,7 +223,7 @@ def export_callsets_matrix(ds_id, byc):
     print("#meta=>data_format=interval_"+m_format)
 
     info_columns = [ "analysis_id", "biosample_id", "group_id" ]
-    h_line = interval_header(info_columns, byc)
+    h_line = __pgxmatrix_interval_header(info_columns, byc)
     print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
     print("#meta=>no_info_columns={};no_interval_columns={}".format(len(info_columns), len(h_line) - len(info_columns)))
 
@@ -322,7 +323,7 @@ def export_pgxmatrix_frequencies(byc, results):
     # header
 
     h_line = [ "group_id" ]
-    h_line = interval_header(h_line, byc)
+    h_line = __pgxmatrix_interval_header(h_line, byc)
     print("\t".join(h_line))
 
     for f_set in results:

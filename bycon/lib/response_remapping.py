@@ -169,6 +169,7 @@ def vrsify_variant(variant, byc):
 
     if v_type not in v_t_als:
         return variant
+
     variant.update({
         "variant_state": {
             "id": v_t_als[v_type],

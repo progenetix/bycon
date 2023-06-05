@@ -1,6 +1,7 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
 "$id": https://progenetix.org/services/schemas/PublicationSampleCounts/v2021-04-13
-title: Publication
+title: PublicationSampleCounts
+type: object
 
 meta:
   contributors:

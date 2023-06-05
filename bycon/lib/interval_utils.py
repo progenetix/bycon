@@ -228,7 +228,7 @@ def interval_cnv_arrays(cs_vars, byc):
         cov_lab = cov_labs[dup_del]
 
         if "reference_name" not in v:
-            v.update({"reference_name": v_d["refseq_chronames"][v["location"]["sequence_id"]]})
+            v.update({"reference_name": v["location"]["chromosome"]})
 
         v_i_id = v.get("variant_internal_id", None)
         v_cs_id = v.get("callset_id", None)

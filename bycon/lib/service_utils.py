@@ -860,26 +860,9 @@ def check_callset_plot_delivery(byc):
 
             for v in var_coll.find(v_q):
 
-                loc = v.get("location")
-                if loc is None:
-                    continue
-                r_n = v["location"].get("sequence_id")
-                if r_n is None:
-                    continue
-                if not "interval" in loc:
-                    continue
-                if not "variant_state" in v:
-                    continue
-                efo = v["variant_state"].get("id", False)
-                if efo is False:
-                    continue
-
-                v_r = {
-                    "reference_name": loc.get("chromosome", False),
-                    "start": loc.get("start", False),
-                    "end": loc.get("end", False),
-                    "variant_type": v_d["efo_dupdel_map"][efo]["DUPDEL"]
-                }
+                v_r = de_vrsify_variant(v, byc)
+                if v is False:
+                    return v
 
                 p_o["variants"].append(v_r)
 

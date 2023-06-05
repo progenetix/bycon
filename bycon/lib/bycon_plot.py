@@ -3,13 +3,14 @@ import re
 import base64
 from PIL import Image
 
-from cgi_parsing import get_plot_parameters, print_svg_response, test_truthy
+from cgi_parsing import get_plot_parameters, print_svg_response, prjsonnice, test_truthy
 from clustering_utils import cluster_frequencies, cluster_samples
 from cytoband_utils import bands_from_cytobands, retrieve_gene_id_coordinates
 
 
 # http://progenetix.org/cgi/bycon/services/intervalFrequencies.py?chr2plot=8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot
-# http://progenetix.org/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot&plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6
+# http://progenetix.org/beacon/biosamples/?datasetIds=progenetix&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot&plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6
+# http://progenetix.org/beacon/biosamples/?datasetIds=progenetix&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=samplesplot&plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6
 
 ################################################################################
 ################################################################################
@@ -59,19 +60,23 @@ class ByconPlot:
 
     def __plot_add_bmp(self):
 
+        if not "test" in self.plv["plot_type"]:
+            return
+
         width, height = 200, 200
         image = Image.new('RGB', (width, height), color='red')
         # pixels = image.load()
         image_data = image.tobytes()
         base64_data = base64.b64encode(image_data).decode('utf-8')
 
-    # <image
-    #   x="'.$area_x0.'"
-    #   y="'.$pgx->{Y}.'"
-    #   width="'.$areaW.'"
-    #   height="'.$pgx->{parameters}->{size_plotarea_h_px}.'"
-    #   xlink:href="data:image/png;base64,'.encode_base64($probeArea->png).'"
-    # />';
+        self.plv["pls"].append("""
+<image
+  x="100"
+  y="100"
+  width="{}"
+  height="{}"
+  xlink:href="data:image/png;base64,{}"
+/>""".format(width, height, base64_data))
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
@@ -275,7 +280,7 @@ class ByconPlot:
 
         self.plv["Y"] += self.plv["plot_region_gap_width"]
 
-        # ---------------------------- chromosomes -----------------------------#
+        # ---------------------------- chromosomes ----------------------------#
 
         x = self.plv["plot_area_x0"]
         self.plv.update({"plot_chromosomes_y0": self.plv["Y"]})

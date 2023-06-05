@@ -7,7 +7,7 @@ repo_url: https://github.com/progenetix/bycon
 ###############################################################################
 
 nav:
-  - Documentation Home: index
+  - Documentation Home: /
   - Installation: installation
   - Changes & To Do: changes-todo
   - API Tests: tests

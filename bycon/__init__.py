@@ -24,7 +24,6 @@ try:
     from file_utils import *
     from filter_parsing import *
     from geomap_utils import *
-    from publication_utils import *
     from query_execution import *
     from query_generation import *
     from read_specs import *

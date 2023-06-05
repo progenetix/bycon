@@ -3,6 +3,10 @@ plot_types:
     data_key: interval_frequencies_bundles
   samplesplot:
     data_key: callsets_variants_bundles
+  histoplot_test:
+    data_key: interval_frequencies_bundles
+  samplesplot_test:
+    data_key: callsets_variants_bundles
 
 legacy_parameters:
 

@@ -1,6 +1,7 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
 "$id": https://progenetix.org/services/schemas/Publication/v2021-10-13
 title: Publication
+type: object
 
 meta:
   contributors:
@@ -117,6 +118,7 @@ properties:
 
 definitions:
   Contact:
+    type: object
     properties:
       name:
         description: >-

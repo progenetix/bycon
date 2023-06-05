@@ -83,6 +83,18 @@ h->o_types:
     h->o_key: 'biosamples.id'
     script_path_web: '/beacon/genomicVariations'
 
+  biosamplevcfvariants:
+    id: 'pgx:HO.biosamples-vcf'
+    requestedSchema: genomicVariant
+    output: vcf
+    paginated_entities:
+      - biosample
+      - analysis
+    label: "Biosample Variants (vcf)"
+    description: "retrieve variants of the biosamples matched by the query"
+    h->o_key: 'biosamples.id'
+    script_path_web: '/beacon/genomicVariations'
+
   phenopackets:
     id: 'pgx:HO.phenopackets'
     label: "Phenopackets"
@@ -162,8 +174,8 @@ h->o_types:
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/variants'
 
-  callsetsvcf:
-    id: 'pgx:HO.callsetsvcf'
+  callsets-vcf:
+    id: 'pgx:HO.callsets-vcf'
     label: "All Sample Variants (.vcf)"
     requestedSchema: genomicVariant
     method: callsetsvariants

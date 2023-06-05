@@ -1,8 +1,16 @@
----
-title: Changes & To Do
----
+# Changes & To Do
 
 ## Changes
+
+###  2023-06-05 (v1.0.51)
+
+* fixed pgxse file reader (broken reference_name ... parsing after recent chromosome fix)
+* removed some publication libraries/schemas only used in byconaut
+
+###  2023-06-02 (v1.0.50)
+
+* fixed missing chromosomes in `.pgxseg` exports
+* age search now with 2 values possible (e.g. to set a range)
 
 ###  2023-05-31 (v1.0.49)
 
