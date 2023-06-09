@@ -3,10 +3,8 @@ plot_types:
     data_key: interval_frequencies_bundles
   samplesplot:
     data_key: callsets_variants_bundles
-  histoplot_test:
-    data_key: interval_frequencies_bundles
-  samplesplot_test:
-    data_key: callsets_variants_bundles
+  arrayplot:
+    data_key: sampleprobes
 
 legacy_parameters:
 
@@ -105,9 +103,16 @@ parameters:
     type: integer
     default: 100
 
+
   plot_samplestrip_height:
     description: >-
       height of a single sample strip
+    type: integer
+    default: 12
+
+  plot_clusteritem_height:
+    description: >-
+      height of the items to be clustered; set sample height as default
     type: integer
     default: 12
 

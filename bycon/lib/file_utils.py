@@ -2,6 +2,7 @@ import csv
 import datetime
 import re
 import requests
+from copy import deepcopy
 from random import sample as random_samples
 
 from datatable_utils import import_datatable_dict_line
@@ -120,6 +121,58 @@ class ByconBundler:
             "data": d_lines,
             "fieldnames": fieldnames
         })
+
+    #--------------------------------------------------------------------------#
+
+    def read_probedata_file(self, filepath):
+
+        self.filepath = filepath
+        self.probedata = []
+
+        p_lines, fieldnames = read_tsv_to_dictlist(self.filepath, max_count=0)
+
+        p_o = {
+            "probe_id": False,
+            "reference_name": False,
+            "start": False,
+            "value": False
+        }
+
+        p_f_d = {
+            "probe_id": {"type": "string"},
+            "reference_name": {"type": "string"},
+            "start": {"type": "integer"},
+            "value": {"type": "number"}
+        }
+
+        for k in ["id", "ID", "probe_id"]:
+            if k in fieldnames:
+                p_f_d["probe_id"].update({"key": k })
+                continue
+        for k in ["chro", "reference_name", "chromosome"]:
+            if k in fieldnames:
+                p_f_d["reference_name"].update({"key": k})
+                continue
+        for k in ["pos", "start", "position"]:
+            if k in fieldnames:
+                p_f_d["start"].update({"key": k})
+                continue
+        for k in ["val", "value", "VALUE", "log2", "log"]:
+            if k in fieldnames:
+                p_f_d["value"].update({"key": k})
+                continue
+
+        for l in p_lines:
+            p = deepcopy(p_o)
+            for pk, pv in p_f_d.items():
+                p.update({ pk: l.get(pv["key"]) })
+                if "int" in pv["type"]:
+                    p.update({ pk: int(p[pk]) })
+                elif "num" in pv["type"]:
+                    p.update({ pk: float(p[pk]) })
+            self.probedata.append(p)
+
+        return self.probedata
 
     #--------------------------------------------------------------------------#
 

@@ -4,6 +4,7 @@ from os import environ, pardir, path
 import sys
 
 from cgi_parsing import *
+from bycon_helpers import hex_2_rgb
 from export_file_generation import de_vrsify_variant
 
 ################################################################################
@@ -271,7 +272,7 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
                 pass
             col_key = "plot_{}_color".format(vt.lower())
             col_hex = byc["plot_defaults"].get(col_key, "#666666")
-            col_rgb = _hex_2_rgb(col_hex)
+            col_rgb = hex_2_rgb(col_hex)
             b_f.write("track name={} visibility=squish description=\"{} variants matching the query with {} overall returned\" color={},{},{}\n".format(vt, vt, v_ret, col_rgb[0], col_rgb[1], col_rgb[2] ) )
             b_f.write("#chrom\tchromStart\tchromEnd\tbiosampleId\n")
             for v in vs[vt]:
@@ -290,14 +291,4 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
     return [bed_file_name, ucsc_pos]
 
 ################################################################################
-
-def _hex_2_rgb( hexcolor ):
-
-    rgb = [127, 127, 127]
-
-    h = hexcolor.lstrip('#')
-
-    rgb = tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
-
-    return rgb
 

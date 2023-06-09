@@ -38,3 +38,15 @@ def days_from_iso8601duration(iso8601duration):
 
     return days
 
+
+################################################################################
+
+def hex_2_rgb( hexcolor ):
+
+    rgb = [127, 127, 127]
+    h = hexcolor.lstrip('#')
+    rgb = tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
+
+    return rgb
+
+

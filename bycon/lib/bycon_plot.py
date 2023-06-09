@@ -1,12 +1,12 @@
 import datetime
+import io
 import re
 import base64
-from PIL import Image
+from PIL import Image, ImageDraw
 
 from cgi_parsing import get_plot_parameters, print_svg_response, prjsonnice, test_truthy
 from clustering_utils import cluster_frequencies, cluster_samples
 from cytoband_utils import bands_from_cytobands, retrieve_gene_id_coordinates
-
 
 # http://progenetix.org/cgi/bycon/services/intervalFrequencies.py?chr2plot=8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot
 # http://progenetix.org/beacon/biosamples/?datasetIds=progenetix&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot&plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6
@@ -59,24 +59,93 @@ class ByconPlot:
     # -------------------------------------------------------------------------#
 
     def __plot_add_bmp(self):
+        """
+        Prototyping bitmap drawing for probe plots etc.
+        Invoked w/ &output=arrayplot
+        https://pillow.readthedocs.io/en/stable/reference/ImageDraw.html
+        """
 
-        if not "test" in self.plv["plot_type"]:
+        if not "arrayplot" in self.plv["plot_type"]:
             return
 
-        width, height = 200, 200
-        image = Image.new('RGB', (width, height), color='red')
-        # pixels = image.load()
-        image_data = image.tobytes()
-        base64_data = base64.b64encode(image_data).decode('utf-8')
+        self.plv.update({"plot_first_area_y0": self.plv["Y"]})
+        c = self.plv["plot_area_color"]
+
+        image = Image.new('RGB', (self.plv["plot_area_width"], self.plv["plot_area_height"]), color=c)
+        draw = ImageDraw.Draw(image)
+
+        # ------------------------- histogram data -----------------------------#
+
+        # probes = [{
+        #     "reference_name": "17",
+        #     "start": 30000000,
+        #     "log2": 2.5
+        # }]
+
+        probes = self.plv["results"]
+        X = 0
+        h_y_0 = self.plv["plot_area_height"] * 0.5
+
+        for chro in self.plv["plot_chros"]:
+
+            c_p = list(filter(lambda d: d["reference_name"] == chro, probes.copy()))
+            c_l = self.byc["cytolimits"][str(chro)]
+            chr_w = c_l["size"] * self.plv["plot_b2pf"]
+
+            i_x_0 = X
+
+            for i_v in c_p:
+
+                s = i_x_0 + i_v.get("start", 0) * self.plv["plot_b2pf"]
+                v = i_v.get("value", 0)
+                h = v * 20
+                h_p = h_y_0 - h
+
+                # draw.point((round(s, 2),round(h_p, 2)), (0,0,0))
+                x1 = s-1
+                x2 = s+1
+                y1 = h_p - 1
+                y2 = h_p + 1
+                draw.ellipse([(x1,y1),(x2,y2)], fill="#0000cc")
+
+            X += chr_w
+            X += self.plv["plot_region_gap_width"]
+
+        # ------------------------ / histogram data ----------------------------#
+
+        # draw.point((50,50), (50,255,0))
+        # draw.line((0, 0) + image.size, fill=128)
+        # draw.line((0, image.size[1], image.size[0], 0), fill=(50,255,0))
+        # draw.rectangle([0, 0, 28, image.size[1]], fill="rgb(255,20,66)")
+        # draw.ellipse([(80,20),(130,50)], fill="#ccccff", outline="red")
+
+        in_mem_file = io.BytesIO()
+        image.save(in_mem_file, format = "PNG")
+        in_mem_file.seek(0)
+        img_bytes = in_mem_file.read()
+        base64_encoded_result_bytes = base64.b64encode(img_bytes)
+        base64_encoded_result_str = base64_encoded_result_bytes.decode('ascii')
 
         self.plv["pls"].append("""
 <image
-  x="100"
-  y="100"
+  x="{}"
+  y="{}"
   width="{}"
   height="{}"
   xlink:href="data:image/png;base64,{}"
-/>""".format(width, height, base64_data))
+/>""".format(
+    self.plv["plot_area_x0"],
+    self.plv["plot_first_area_y0"],
+    self.plv["plot_area_width"],
+    self.plv["plot_area_height"],
+    base64_encoded_result_str
+))
+
+        self.plv["Y"] += self.plv["plot_area_height"]
+        self.plv.update({"plot_last_area_ye": self.plv["Y"]})
+        self.plv["Y"] += self.plv["plot_region_gap_width"]
+
+        return
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
@@ -382,7 +451,7 @@ class ByconPlot:
                     self.plv["pls"].append(
                         f'<text x="{lab_x_e}" y="{self.plv["Y"] - round(self.plv["plot_samplestrip_height"] * 0.2, 1)}" class="title-left">{g_lab}</text>')
 
-        self.plv["plot_last_histo_ye"] = self.plv["Y"]
+        self.plv["plot_last_area_ye"] = self.plv["Y"]
 
         # ----------------------- plot cluster tree --------------------------------#
 
@@ -515,7 +584,7 @@ class ByconPlot:
         for f_set in self.plv["results"]:
             self.__plot_add_one_histogram(f_set)
 
-        self.plv["plot_last_histo_ye"] = self.plv["Y"]
+        self.plv["plot_last_area_ye"] = self.plv["Y"]
 
         # ----------------------- plot cluster tree ----------------------------#
 
@@ -604,7 +673,7 @@ class ByconPlot:
         # ------------------------ / histogram data ----------------------------#
 
         self.plv["Y"] += self.plv["plot_area_height"]
-        self.plv.update({"plot_last_histo_ye": self.plv["Y"]})
+        self.plv.update({"plot_last_area_ye": self.plv["Y"]})
         self.plv["Y"] += self.plv["plot_region_gap_width"]
 
     # --------------------------------------------------------------------------#
@@ -730,7 +799,7 @@ class ByconPlot:
 
         max_lane = 0
         marker_y_0 = round(self.plv["plot_first_area_y0"], 1)
-        marker_y_e = round(self.plv["plot_last_histo_ye"] + p_m_lane_p, 1)
+        marker_y_e = round(self.plv["plot_last_area_ye"] + p_m_lane_p, 1)
 
         x = self.plv["plot_area_x0"]
 
