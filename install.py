@@ -87,7 +87,7 @@ def install():
         exit()
 
     for c_p_k, c_p_v in install["bycon_instance_pars"].items():
-        config.update({ c_p_k:c_p_v})
+        config.update({ c_p_k: c_p_v})
     
     with open(c_f, 'w') as out_f:
         yaml.dump(config, out_f)

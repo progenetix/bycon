@@ -58,33 +58,59 @@ class ByconPlot:
     # ----------------------------- testing -----------------------------------#
     # -------------------------------------------------------------------------#
 
-    def __plot_add_bmp(self):
+    def __plot_add_probesplot(self):
         """
         Prototyping bitmap drawing for probe plots etc.
         Invoked w/ &output=arrayplot
         https://pillow.readthedocs.io/en/stable/reference/ImageDraw.html
+        
+        #### Draw examples
+
+        * draw.point((50,50), (50,255,0))
+        * draw.line((0, 0) + image.size, fill=128)
+        * draw.line((0, image.size[1], image.size[0], 0), fill=(50,255,0))
+        * draw.rectangle([0, 0, 28, image.size[1]], fill="rgb(255,20,66)")
+        * draw.ellipse([(80,20),(130,50)], fill="#ccccff", outline="red")
+        
+        #### Input:
+        ```
+        probes = [
+            {
+                "reference_name": "17",
+                "start": 13663925,
+                "value": 2.5
+            },
+            {...}
+        ]
+        ```
         """
 
         if not "arrayplot" in self.plv["plot_type"]:
             return
 
-        self.plv.update({"plot_first_area_y0": self.plv["Y"]})
-        c = self.plv["plot_area_color"]
+        p_t_s = self.byc["plot_defaults"]["plot_types"]
+        d_k = p_t_s["arrayplot"].get("data_key")
 
-        image = Image.new('RGB', (self.plv["plot_area_width"], self.plv["plot_area_height"]), color=c)
+        probebundles = self.plot_data_bundle.get(d_k, [{"id":"___undefined___"}])
+        probes = probebundles[0].get("probes", [])
+
+        self.plv.update({
+            "plot_first_area_y0": self.plv["Y"],
+            "plot_label_y_unit": ""
+        })
+
+        image = Image.new(
+                    'RGBA',
+                    (self.plv["plot_area_width"], self.plv["plot_area_height"]),
+                    color=self.plv["plot_area_color"]
+                )
         draw = ImageDraw.Draw(image)
 
-        # ------------------------- histogram data -----------------------------#
-
-        # probes = [{
-        #     "reference_name": "17",
-        #     "start": 30000000,
-        #     "log2": 2.5
-        # }]
-
-        probes = self.plv["results"]
         X = 0
         h_y_0 = self.plv["plot_area_height"] * 0.5
+        p_y_f = h_y_0 / 2 * self.plv["plot_probe_y_factor"]
+
+        self.plv.update({"plot_label_y_values": []})
 
         for chro in self.plv["plot_chros"]:
 
@@ -98,26 +124,24 @@ class ByconPlot:
 
                 s = i_x_0 + i_v.get("start", 0) * self.plv["plot_b2pf"]
                 v = i_v.get("value", 0)
-                h = v * 20
+                h = v * p_y_f 
+                if h > h_y_0:
+                    h = h_y_0
+                if h < -h_y_0:
+                    h = -h_y_0
                 h_p = h_y_0 - h
 
                 # draw.point((round(s, 2),round(h_p, 2)), (0,0,0))
-                x1 = s-1
-                x2 = s+1
-                y1 = h_p - 1
-                y2 = h_p + 1
-                draw.ellipse([(x1,y1),(x2,y2)], fill="#0000cc")
+                x1 = s-0.5
+                x2 = s+0.5
+                y1 = h_p - 0.5
+                y2 = h_p + 0.5
+                draw.ellipse([(x1,y1),(x2,y2)], fill=(0,0,88,222))
 
             X += chr_w
             X += self.plv["plot_region_gap_width"]
 
         # ------------------------ / histogram data ----------------------------#
-
-        # draw.point((50,50), (50,255,0))
-        # draw.line((0, 0) + image.size, fill=128)
-        # draw.line((0, image.size[1], image.size[0], 0), fill=(50,255,0))
-        # draw.rectangle([0, 0, 28, image.size[1]], fill="rgb(255,20,66)")
-        # draw.ellipse([(80,20),(130,50)], fill="#ccccff", outline="red")
 
         in_mem_file = io.BytesIO()
         image.save(in_mem_file, format = "PNG")
@@ -134,12 +158,14 @@ class ByconPlot:
   height="{}"
   xlink:href="data:image/png;base64,{}"
 />""".format(
-    self.plv["plot_area_x0"],
-    self.plv["plot_first_area_y0"],
-    self.plv["plot_area_width"],
-    self.plv["plot_area_height"],
-    base64_encoded_result_str
-))
+            self.plv["plot_area_x0"],
+            self.plv["plot_first_area_y0"],
+            self.plv["plot_area_width"],
+            self.plv["plot_area_height"],
+            base64_encoded_result_str
+        ))
+
+        self.__plot_area_add_grid()
 
         self.plv["Y"] += self.plv["plot_area_height"]
         self.plv.update({"plot_last_area_ye": self.plv["Y"]})
@@ -165,7 +191,7 @@ class ByconPlot:
             self.__plot_add_cytobands()
             self.__plot_add_samplestrips()
             self.__plot_add_histodata()
-            self.__plot_add_bmp()
+            self.__plot_add_probesplot()
             self.__plot_add_cluster_tree()
             self.__plot_add_markers()
 
@@ -183,12 +209,14 @@ class ByconPlot:
 
         d_k = p_t_s[p_t].get("data_key")
 
+        # TODO: get rid of the "results"?
         self.plv = {
             "plot_type": p_t,
-            "results": self.plot_data_bundle.get(d_k, [])
+            "results": self.plot_data_bundle.get(d_k, []),
+            "results_number": len(self.plot_data_bundle.get(d_k, []))
         }
 
-        self.__filter_empty_results()
+        self.__filter_empty_callsets_results()
 
         for p_k, p_d in p_d_p.items():
             if "default" in p_d:
@@ -252,24 +280,29 @@ class ByconPlot:
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#
 
-    def __filter_empty_results(self):
+    def __filter_empty_callsets_results(self):
 
-        self.plv.update({"results_number": len(self.plv["results"])})
 
-        if "sample" not in self.plv["plot_type"]:
+        if not "samplesplot" in self.plv["plot_type"]:
             return
 
-        if test_truthy(self.plv.get("plot_filter_empty_samples", False)):
-            self.plv.update({"results": [s for s in self.plv["results"] if len(s['variants']) > 0]})
+        p_t_s = self.byc["plot_defaults"]["plot_types"]
+        d_k = p_t_s["samplesplot"].get("data_key")
 
-        self.plv.update({"results_number": len(self.plv["results"])})
+        if test_truthy(self.plv.get("plot_filter_empty_samples", False)):
+            self.plot_data_bundle.update({d_k: [s for s in self.plot_data_bundle[d_k] if len(s['variants']) > 0]})
+
+        self.plv.update({
+            "results": self.plot_data_bundle[d_k],
+            "results_number": len(self.plot_data_bundle[d_k])
+        })
 
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#
 
     def __plot_respond_empty_results(self):
 
-        if len(self.plv["results"]) > 0:
+        if self.plv["results_number"] > 0:
             return False
 
         self.plv.update({
@@ -744,6 +777,8 @@ class ByconPlot:
         h_y_0 = self.plv["Y"] + self.plv["plot_area_height"] * 0.5
         x_y_l = x_a_0 - self.plv["plot_region_gap_width"]
 
+        u = self.plv["plot_label_y_unit"]
+
         self.plv["styles"].append(
             f'.label-y {{text-anchor: end; fill: {self.plv["plot_label_y_font_color"]}; font-size: {self.plv["plot_label_y_font_size"]}px;}}'
         )
@@ -758,7 +793,7 @@ class ByconPlot:
 
         # --------------------------- grid lines -----------------------------------#
 
-        for y_m in self.plv["plot_histogram_label_y_values"]:
+        for y_m in self.plv["plot_label_y_values"]:
 
             if y_m > self.plv["plot_axis_y_max"]:
                 continue
@@ -773,7 +808,7 @@ class ByconPlot:
                 if self.plv["plot_axislab_y_width"] < 1:
                     continue
 
-                self.plv["pls"].append(f'<text x="{x_y_l}" y="{y_l_y}" class="label-y">{y_m}%</text>')
+                self.plv["pls"].append(f'<text x="{x_y_l}" y="{y_l_y}" class="label-y">{y_m}{u}</text>')
 
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#
@@ -1004,9 +1039,9 @@ class ByconPlot:
         self.plv["pls"].append(
             f'<text x="{x_c_e}" y="{self.plv["Y"]}" class="footer-r">&#169; CC-BY 2001 - {today.year} progenetix.org</text>')
 
-        if len(self.plv["results"]) > 1:
+        if self.plv.get("results_number", 0) > 1:
             self.plv["pls"].append(
-                f'<text x="{x_a_0}" y="{self.plv["Y"]}" class="footer-l">{len(self.plv["results"])} analyses</text>')
+                f'<text x="{x_a_0}" y="{self.plv["Y"]}" class="footer-l">{self.plv["results_number"]} analyses</text>')
 
         self.plv["Y"] += self.plv["plot_margins"]
 

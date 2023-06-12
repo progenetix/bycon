@@ -1,198 +1,221 @@
 ---
+
+# TODO: The handover specification in Beacon uses the `handoverType.id`
+#       parameter to inform about the handover's format.
+#       However, several handovers might have the same _format_ (e.g. VCF)
+#       but a different content. Maybe using `contentId` or `contentHint`?
+
 h->o_types:
 
   histoplot:
-    id: 'pgx:HO.histoplot'
-    label: "CNV Histogram"
+    handoverType:
+      id: 'pgx:HO.histoplot'
+      label: "CNV Histogram"
+    note: "create a CNV histogram from matched biosamples"
     paginated_entities:
       - biosample
       - analysis
-    description: "create a CNV histogram from matched biosamples"
     h->o_key: 'biosamples.id'
     script_path_web: '/beacon/biosamples'
     output: histoplot
 
   samplesplot:
-    id: 'pgx:HO.samplesplot'
-    label: "Clustered sample CNV tracks"
+    handoverType:
+      id: 'pgx:HO.samplesplot'
+      label: "Clustered sample CNV tracks"
+    note: "create CNV plots from matched biosamples"
     paginated_entities:
       - biosample
       - analysis
-    description: "create CNV plots from matched biosamples"
     h->o_key: 'biosamples.id'
     script_path_web: '/beacon/biosamples'
     output: samplesplot
 
   biosamples:
-    id: 'pgx:HO.biosamples'
+    handoverType:
+      id: 'pgx:HO.biosamples'
+      label: "Biosamples"
+    note: "retrieve data of the biosamples matched by the query"
     requestedSchema: biosample
     paginated_entities:
       - biosample
       - analysis
-    label: "Biosamples"
-    description: "retrieve data of the biosamples matched by the query"
     h->o_key: 'biosamples.id'
     script_path_web: '/beacon/biosamples'
 
   biosamplestable:
-    id: 'pgx:HO.biosamplestable'
+    handoverType:
+      id: 'pgx:HO.biosamplestable'
+      label: "Biosamples Table"
+    note: "retrieve data of the biosamples matched by the query as tab-delimited table"
     requestedSchema: biosample
     output: datatable
     paginated_entities:
       - biosample
       - analysis
-    label: "Biosamples Table"
-    description: "retrieve data of the biosamples matched by the query as tab-delimited table"
     h->o_key: 'biosamples.id'
     script_path_web: '/beacon/biosamples'
 
   biosamplevariants:
-    id: 'pgx:HO.biosamplevariants'
+    handoverType:
+      id: 'pgx:HO.biosamplevariants'
+      label: "Biosample Variants"
+    note: "retrieve variants of the biosamples matched by the query"
     requestedSchema: genomicVariant
     paginated_entities:
       - biosample
       - analysis
-    label: "Biosample Variants"
-    description: "retrieve variants of the biosamples matched by the query"
     h->o_key: 'biosamples.id'
     script_path_web: '/beacon/genomicVariations'
     url_opts: "&paginateResults=false"
 
   annotatedvariants:
-    id: 'pgx:HO.annotatedvariants'
+    handoverType:
+      id: 'pgx:HO.annotatedvariants'
+      label: "Annotated Variants"
+    note: "retrieve annotated variants of the biosamples matched by the query"
     requestedSchema: genomicVariant
     paginated_entities:
       - biosample
       - analysis
-    label: "Annotated Variants"
-    description: "retrieve annotated variants of the biosamples matched by the query"
     h->o_key: 'biosamples.id'
     script_path_web: '/beacon/genomicVariations'
     url_opts: "&annotatedOnly=True&paginateResults=false"
     exclude_empty: True
 
   biosamplepgxsegvariants:
-    id: 'pgx:HO.biosamples-pgxseg'
+    handoverType:
+      id: 'pgx:HO.biosamples-pgxseg'
+      label: "Biosample Variants (pgxseg)"
+    note: "retrieve variants of the biosamples matched by the query"
     requestedSchema: genomicVariant
     output: pgxseg
     paginated_entities:
       - biosample
       - analysis
-    label: "Biosample Variants (pgxseg)"
-    description: "retrieve variants of the biosamples matched by the query"
     h->o_key: 'biosamples.id'
     script_path_web: '/beacon/genomicVariations'
 
   biosamplevcfvariants:
-    id: 'pgx:HO.biosamples-vcf'
+    handoverType:
+      id: 'EDAM:3016'
+      label: "VCF"
+    note: "retrieve variants of the biosamples matched by the query"
     requestedSchema: genomicVariant
     output: vcf
     paginated_entities:
       - biosample
       - analysis
-    label: "Biosample Variants (vcf)"
-    description: "retrieve variants of the biosamples matched by the query"
     h->o_key: 'biosamples.id'
     script_path_web: '/beacon/genomicVariations'
 
   phenopackets:
-    id: 'pgx:HO.phenopackets'
-    label: "Phenopackets"
+    handoverType:
+      id: 'pgx:HO.phenopackets'
+      label: "Phenopackets"
+    note: "retrieve data of the phenopackets matched by the query"
     requestedSchema: phenopacket
     paginated_entities:
       - biosample
       - individual
       - phenopacket
-    description: "retrieve data of the phenopackets matched by the query"
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/individuals'
 
   individuals:
-    id: 'pgx:HO.individuals'
-    label: "Individuals"
+    handoverType:
+      id: 'pgx:HO.individuals'
+      label: "Individuals"
+    note: "retrieve data of the individuals matched by the query"
     requestedSchema: individual
     paginated_entities:
       - biosample
       - individual
       - phenopacket
-    description: "retrieve data of the individuals matched by the query"
     h->o_key: 'individuals._id'
     script_path_web: '/beacon/individuals'
 
   variants:
-    id: 'pgx:HO.variants'
-    label: "Found Variants (.json)"
+    handoverType:
+      id: 'pgx:HO.variants'
+      label: "Found Variants (.json)"
+    note: "retrieve variants matched by the query"
     requestedSchema: genomicVariant
     paginated_entities:
       - genomicVariant
-    description: "retrieve variants matched by the query"
     h->o_key: 'variants._id'
     script_path_web: '/beacon/genomicVariations'
 
   pgxseg:
-    id: 'pgx:HO.pgxseg'
-    label: "Found Variants (.pgxseg)"
+    handoverType:
+      id: 'pgx:HO.pgxseg'
+      label: "Found Variants (.pgxseg)"
+    note: "retrieve variants matched by the query as .pgxseg download"
     requestedSchema: genomicVariant
     output: pgxseg
     paginated_entities:
       - genomicVariant
-    description: "retrieve variants matched by the query as .pgxseg download"
     h->o_key: 'variants._id'
     script_path_web: '/beacon/genomicVariations'
   
   vcf:
-    id: 'pgx:HO.vcf'
-    label: "Found Variants (.vcf)"
+    handoverType:
+      id: 'EDAM:3016'
+      label: "VCF"
+    note: "retrieve variants matched by the query as .vcf download"
     requestedSchema: genomicVariant
     output: vcf
     paginated_entities:
       - genomicVariant
-    description: "retrieve variants matched by the query as .vcf download"
     h->o_key: 'variants._id'
     script_path_web: '/beacon/genomicVariations'
   
   callsetsvariants:
-    id: 'pgx:HO.callsetsvariants'
-    label: "All Sample Variants (.json)"
+    handoverType:
+      id: 'pgx:HO.callsetsvariants'
+      label: "All Sample Variants (.json)"
+    note: "Download all variants of matched samples - potentially huge dataset..."
     requestedSchema: genomicVariant
     method: callsetsvariants
     paginated_entities:
       - genomicVariant
-    description: "Download all variants of matched samples - potentially huge dataset..."
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/variants'
 
   callsetspgxseg:
-    id: 'pgx:HO.callsets-pgxseg'
-    label: "All Sample Variants (.pgxseg)"
+    handoverType:
+      id: 'pgx:HO.callsets-pgxseg'
+      label: "All Sample Variants (.pgxseg)"
     requestedSchema: genomicVariant
+    note: "Download all variants of matched samples - potentially huge dataset..."
     method: callsetsvariants
     paginated_entities:
       - genomicVariant
     output: pgxseg
-    description: "Download all variants of matched samples - potentially huge dataset..."
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/variants'
 
   callsets-vcf:
-    id: 'pgx:HO.callsets-vcf'
-    label: "All Sample Variants (.vcf)"
+    handoverType:
+      id: 'EDAM:3016'
+      label: "VCF"
+    note: "Download all variants of matched samples - potentially huge dataset..."
     requestedSchema: genomicVariant
     method: callsetsvariants
     paginated_entities:
       - genomicVariant
     output: vcf
-    description: "Download all variants of matched samples - potentially huge dataset..."
     h->o_key: 'biosamples._id'
     script_path_web: '/beacon/variants'
 
   UCSClink:    
-    id: 'pgx:HO.bedfile2ucsc'
-    label: "Show Found Variants in the UCSC browser"
+    handoverType:
+      id: 'pgx:HO.bedfile2ucsc'
+      label: "Show Found Variants in the UCSC browser"
+    note: "map variants matched by the query to the UCSC browser"
     requestedSchema: genomicVariant
     paginated_entities:
       - genomicVariant
-    description: "map variants matched by the query to the UCSC browser"
     h->o_key: 'variants._id'
     ext_url: 'http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg38'
     remove_subdomain: True

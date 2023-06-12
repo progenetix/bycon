@@ -31,11 +31,11 @@ if not indicated.
     - a combination of 2 histograms
 * [/services/intervalFrequencies/?filters=NCIT:C35562,NCIT:C3709&datasetIds=progenetix,cellz&output=histoplot](http://progenetix.org/services/intervalFrequencies/?filters=NCIT:C35562,NCIT:C3709&datasetIds=progenetix,cellz&output=histoplot)
     - a combination of 2 histograms
-* [/services/intervalFrequencies/?filters=pgx:icdom-85003,pgx:icdom-81703,pgx:icdom-87003,pgx:icdom-87203,pgx:icdom-94003,pgx:icdom-95003,pgx:icdom-81403&plot_title=CNV+Comparison&plot_area_height=50&plot_axis_y_max=80&plot_histogram_label_y_values=50&output=histoplot](http://progenetix.org/services/intervalFrequencies/?filters=pgx:icdom-85003,pgx:icdom-81703,pgx:icdom-87003,pgx:icdom-87203,pgx:icdom-94003,pgx:icdom-95003,pgx:icdom-81403&plot_title=CNV+Comparison&plot_area_height=50&plot_axis_y_max=80&plot_histogram_label_y_values=50&output=histoplot)
+* [/services/intervalFrequencies/?filters=pgx:icdom-85003,pgx:icdom-81703,pgx:icdom-87003,pgx:icdom-87203,pgx:icdom-94003,pgx:icdom-95003,pgx:icdom-81403&plot_title=CNV+Comparison&plot_area_height=50&plot_axis_y_max=80&plot_label_y_values=50&output=histoplot](http://progenetix.org/services/intervalFrequencies/?filters=pgx:icdom-85003,pgx:icdom-81703,pgx:icdom-87003,pgx:icdom-87203,pgx:icdom-94003,pgx:icdom-95003,pgx:icdom-81403&plot_title=CNV+Comparison&plot_area_height=50&plot_axis_y_max=80&plot_label_y_values=50&output=histoplot)
     - a collations based example showing the use of some extra parameters such as
         * `plot_title`
         * `plot_area_height`
-        * `plot_axis_y_max` & `plot_histogram_label_y_values`
+        * `plot_axis_y_max` & `plot_label_y_values`
 * [/beacon/biosamples/?filters=pgx:icdom-95003&plotGeneSymbols=MYCN&output=histoplot&limit=1000](http://progenetix.org/beacon/biosamples/?filters=pgx:icdom-95003&plotGeneSymbols=MYCN&output=histoplot&limit=1000)
     - this example gets samples for ICD-O Morphology 95003/3 (a.k.a. `pgx:icdom-95003`)
     - limits the output to the first 1000 samples (`limit=1000`)

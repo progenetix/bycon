@@ -21,6 +21,13 @@ properties:
     type: string
     examples:
       - pgxind-kftx5ruq
+  notes:
+    description: >-
+      Any relevant info about the biosample that does not fit into any
+      other field in the schema.
+    type: string
+    examples:
+      - Some free text
   biosampleStatus:
     description: >-
       Ontology value from Experimental Factor Ontology (EFO) Material Entity
@@ -79,15 +86,31 @@ properties:
         label: Grade 3a
       - id: NCIT:C62397
         label: WHO Central Nervous System Grade IV
-
-
-# in Progenetix but not in Beacon
-  description:
-    description: Semi structured / compact information about the biosample
+  collectionMoment:
+    description: Individual's or cell cullture age at the time of sample collection
+      in the ISO8601 duration format `P[n]Y[n]M[n]DT[n]H[n]M[n]S`.
     type: string
     examples:
-      - breast carcinoma
-      - adenocarcinoma [cell line HeLa]
+      - P32Y6M1D
+      - P7D
+  sampleOriginDetail:
+    description: >-
+      Tissue from which the sample was taken or sample origin matching
+      the category set in 'sampleOriginType'. Value from Uber-anatomy ontology (UBERON)
+      or BRENDA tissue / enzyme source (BTO), Ontology for Biomedical Investigations
+      (OBI) or Cell Line Ontology (CLO), e.g. 'cerebellar vermis' (UBERON:0004720),
+      'HEK-293T cell' (BTO:0002181), 'nasopharyngeal swab specimen' (OBI:0002606),
+      'cerebrospinal fluid specimen' (OBI:0002502).
+    $ref: ../common/ontologyTerm.yaml
+    examples:
+      - id: UBERON:0000474
+        label: female reproductive system
+      - id: BTO:0002181
+        label: HEK-293T cell
+      - id: OBI:0002606
+        label: nasopharyngeal swab specimen
+
+# in Progenetix but not in Beacon
   icdoMorphology:
     description: >-
       The ICD-O 3 morphology code of this biosample, in a "pseudo-prefixed" transformation (since no direct ICD-O 3 registry can be referenced).
@@ -119,21 +142,9 @@ properties:
         label: arrayMap collection
   provenance:
     $ref: ../common/provenance.yaml
-  timeOfCollection:
-    description: >-
-      The age of the individual at time of sample collection or alternative time
-      element.
-    $ref: ../common/timeElement.yaml#/oneOf
 
 
 # not used in Progenetix
-  # notes:
-  #   description: >-
-  #     Any relevant info about the biosample that does not fit into any
-  #     other field in the schema.
-  #   type: string
-  #   examples:
-  #     - Some free text
 
   # collectionDate:
   #   description: Date of biosample collection in ISO8601 format.
@@ -141,13 +152,6 @@ properties:
   #   format: date
   #   examples:
   #     - '2021-04-23'
-  # collectionMoment:
-  #   description: Individual's or cell cullture age at the time of sample collection
-  #     in the ISO8601 duration format `P[n]Y[n]M[n]DT[n]H[n]M[n]S`.
-  #   type: string
-  #   examples:
-  #     - P32Y6M1D
-  #     - P7D
   # sampleOriginType:
   #   description: Category of sample origin. Value from Ontology for Biomedical Investigations
   #     (OBI) material entity (BFO:0000040) ontology, e.g. 'specimen from organism'
@@ -160,21 +164,6 @@ properties:
   #       label: cell culture
   #     - id: OBI:0100058
   #       label: xenograft
-  # sampleOriginDetail:
-  #   description: Tissue from which the sample was taken or sample origin matching
-  #     the category set in 'sampleOriginType'. Value from Uber-anatomy ontology (UBERON)
-  #     or BRENDA tissue / enzyme source (BTO), Ontology for Biomedical Investigations
-  #     (OBI) or Cell Line Ontology (CLO), e.g. 'cerebellar vermis' (UBERON:0004720),
-  #     'HEK-293T cell' (BTO:0002181), 'nasopharyngeal swab specimen' (OBI:0002606),
-  #     'cerebrospinal fluid specimen' (OBI:0002502).
-  #   $ref: ../common/ontologyTerm.yaml
-  #   examples:
-  #     - id: UBERON:0000474
-  #       label: female reproductive system
-  #     - id: BTO:0002181
-  #       label: HEK-293T cell
-  #     - id: OBI:0002606
-  #       label: nasopharyngeal swab specimen
   # obtentionProcedure:
   #   description: Ontology value from NCIT Intervention or Procedure ontology term
   #     (NCIT:C25218) describing the procedure for sample obtention, e.g. NCIT:C15189
@@ -207,21 +196,22 @@ properties:
   #   description: Status of how the specimen was stored.
   #   $ref: ../common/ontologyTerm.yaml
   #   example: {}
-  tumorProgression:
-    description: Tumor progression category indicating primary, metastatic or recurrent
-      progression. Ontology value from Neoplasm by Special Category ontology (NCIT:C7062),
-      e.g. NCIT:C84509 (Primary Malignant Neoplasm).
-    $ref: ../common/ontologyTerm.yaml
-    examples:
-      - id: NCIT:C84509
-        label: Primary Malignant Neoplasm
-      - id: NCIT:C4813
-        label: Recurrent Malignant Neoplasm
-  diagnosticMarkers:
-    description: Clinically relevant biomarkers. RECOMMENDED.
-    type: array
-    items:
-      $ref: ../common/ontologyTerm.yaml
+  # tumorProgression:
+  #   description: Tumor progression category indicating primary, metastatic or recurrent
+  #     progression. Ontology value from Neoplasm by Special Category ontology (NCIT:C7062),
+  #     e.g. NCIT:C84509 (Primary Malignant Neoplasm).
+  #   $ref: ../common/ontologyTerm.yaml
+  #   examples:
+  #     - id: NCIT:C84509
+  #       label: Primary Malignant Neoplasm
+  #     - id: NCIT:C4813
+  #       label: Recurrent Malignant Neoplasm
+  # diagnosticMarkers:
+  #   description: >-
+  #     Clinically relevant biomarkers. RECOMMENDED.
+  #   type: array
+  #   items:
+  #     $ref: ../common/ontologyTerm.yaml
   info:
     $ref: ../common/commonDefinitions.yaml#/definitions/Info
 required:

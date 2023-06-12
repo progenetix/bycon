@@ -2,9 +2,23 @@
 
 ## Changes
 
+###  2023-06-12 (v1.0.52)
+
+* modified `handover_definitions` to follow the specification:
+  - `handoverType` now as in spec, also using public identifier where possible
+    (so far `"id": "EDAM:3016", "label": "VCF"` for all VCF h->0)
+  - since now different handovers can have the same `handoverType.id` this required
+    the addition of an `info.contentId` value for the frontend to disambiguate
+* starting the work on the `arrayplot` (?) plot type, including a new method
+  for getting probe file paths (not yet activated)
+* several field changes in biosamples, to align w/ main Beacon v2 default schema:
+  - `sampledTissue` => `sampleOriginDetail`
+  - `description` => `notes`
+  - `timeOfCollection.age` => `collectionMoment`
+
 ###  2023-06-05 (v1.0.51)
 
-* fixed pgxse file reader (broken reference_name ... parsing after recent chromosome fix)
+* fixed pgxseg file reader (broken reference_name ... parsing after recent chromosome fix)
 * removed some publication libraries/schemas only used in byconaut
 
 ###  2023-06-02 (v1.0.50)

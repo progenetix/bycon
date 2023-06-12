@@ -14,14 +14,6 @@
                     "type": "string"
                 }
             }
-        },
-        "TimeOfCollection": {
-            "description": "Simplified version only using (ISO) age as option.",
-            "properties": {
-                "age": {
-                    "$ref": "../progenetix-model/common/age.json"
-                }
-            }
         }
     },
     "description": "A Biosample refers to a unit of biological material from which the substrate molecules (e.g. genomic DNA, RNA, proteins) for molecular analyses (e.g. sequencing, array hybridisation, mass-spectrometry) are extracted. Examples would be a tissue biopsy, a single cell from a culture for single cell genome sequencing or a protein fraction from a gradient centrifugation. Several instances (e.g. technical replicates) or types of experiments (e.g. genomic array as well as RNA-seq experiments) may refer to the same Biosample.",
@@ -48,6 +40,14 @@
                 "$ref": "../progenetix-model/common/ontologyTerm.json"
             },
             "type": "array"
+        },
+        "collectionMoment": {
+            "description": "Individual's or cell cullture age at the time of sample collection in the ISO8601 duration format `P[n]Y[n]M[n]DT[n]H[n]M[n]S`.",
+            "examples": [
+                "P32Y6M1D",
+                "P7D"
+            ],
+            "type": "string"
         },
         "dataUseConditions": {
             "$ref": "../progenetix-model/common/ontologyTerm.json"
@@ -168,10 +168,6 @@
         },
         "sampledTissue": {
             "$ref": "../progenetix-model/common/ontologyTerm.json"
-        },
-        "timeOfCollection": {
-            "$ref": "#/definitions/TimeOfCollection",
-            "description": "The age of the individual at time of sample collection or alternative time element."
         },
         "tumorGrade": {
             "$ref": "../progenetix-model/common/ontologyTerm.json",

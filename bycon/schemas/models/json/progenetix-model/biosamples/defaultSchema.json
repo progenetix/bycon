@@ -47,20 +47,13 @@
             },
             "type": "array"
         },
-        "description": {
-            "description": "Semi structured / compact information about the biosample",
+        "collectionMoment": {
+            "description": "Individual's or cell cullture age at the time of sample collection in the ISO8601 duration format `P[n]Y[n]M[n]DT[n]H[n]M[n]S`.",
             "examples": [
-                "breast carcinoma",
-                "adenocarcinoma [cell line HeLa]"
+                "P32Y6M1D",
+                "P7D"
             ],
             "type": "string"
-        },
-        "diagnosticMarkers": {
-            "description": "Clinically relevant biomarkers. RECOMMENDED.",
-            "items": {
-                "$ref": "../common/ontologyTerm.json"
-            },
-            "type": "array"
         },
         "externalReferences": {
             "examples": [
@@ -120,6 +113,13 @@
         "info": {
             "$ref": "../common/commonDefinitions.json#/definitions/Info"
         },
+        "notes": {
+            "description": "Any relevant info about the biosample that does not fit into any other field in the schema.",
+            "examples": [
+                "Some free text"
+            ],
+            "type": "string"
+        },
         "pathologicalStage": {
             "$ref": "../common/ontologyTerm.json",
             "description": "Pathological stage, if applicable, preferably as subclass of NCIT:C28108 - Disease Stage Qualifier. RECOMMENDED.",
@@ -157,9 +157,23 @@
         "provenance": {
             "$ref": "../common/provenance.json"
         },
-        "timeOfCollection": {
-            "$ref": "../common/timeElement.json#/oneOf",
-            "description": "The age of the individual at time of sample collection or alternative time element."
+        "sampleOriginDetail": {
+            "$ref": "../common/ontologyTerm.json",
+            "description": "Tissue from which the sample was taken or sample origin matching the category set in 'sampleOriginType'. Value from Uber-anatomy ontology (UBERON) or BRENDA tissue / enzyme source (BTO), Ontology for Biomedical Investigations (OBI) or Cell Line Ontology (CLO), e.g. 'cerebellar vermis' (UBERON:0004720), 'HEK-293T cell' (BTO:0002181), 'nasopharyngeal swab specimen' (OBI:0002606), 'cerebrospinal fluid specimen' (OBI:0002502).",
+            "examples": [
+                {
+                    "id": "UBERON:0000474",
+                    "label": "female reproductive system"
+                },
+                {
+                    "id": "BTO:0002181",
+                    "label": "HEK-293T cell"
+                },
+                {
+                    "id": "OBI:0002606",
+                    "label": "nasopharyngeal swab specimen"
+                }
+            ]
         },
         "tumorGrade": {
             "$ref": "../common/ontologyTerm.json",
@@ -176,20 +190,6 @@
                 {
                     "id": "NCIT:C62397",
                     "label": "WHO Central Nervous System Grade IV"
-                }
-            ]
-        },
-        "tumorProgression": {
-            "$ref": "../common/ontologyTerm.json",
-            "description": "Tumor progression category indicating primary, metastatic or recurrent progression. Ontology value from Neoplasm by Special Category ontology (NCIT:C7062), e.g. NCIT:C84509 (Primary Malignant Neoplasm).",
-            "examples": [
-                {
-                    "id": "NCIT:C84509",
-                    "label": "Primary Malignant Neoplasm"
-                },
-                {
-                    "id": "NCIT:C4813",
-                    "label": "Recurrent Malignant Neoplasm"
                 }
             ]
         }

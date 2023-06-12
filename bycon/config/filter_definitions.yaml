@@ -334,7 +334,7 @@ UBERON:
       - ":"
       - "_"
   scope: biosamples
-  db_key: 'sampled_tissue.id'
+  db_key: 'sample_origin_detail.id'
   pattern: '^UBERON(:\d+?)?$'
   collationed: True
   examples:

@@ -68,7 +68,7 @@ properties:
     type: string
     examples:
       - histological_diagnosis.id
-      - sampled_tissue.id
+      - sample_origin_detail.id
       - sex.id
   childTerms:
     type: array

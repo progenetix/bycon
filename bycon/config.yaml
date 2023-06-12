@@ -7,6 +7,17 @@ server_tmp_dir_loc:
 
 server_tmp_dir_web: /tmp
 
+server_array_dir_loc:
+  - /
+  - Library
+  - WebServer
+  - Documents
+  - Sites
+  - arraymap
+  - grch38
+
+callset_probefile_name: probes,cn.tsv
+
 byc_root_pars:
 
   args:
@@ -129,3 +140,12 @@ filter_flags:
   logic: $and
   precision: exact
   include_descendant_terms: true
+server_callsets_dir_loc:
+  - /
+  - Library
+  - WebServer
+  - Documents
+  - Sites
+  - arraymap
+  - grch38
+

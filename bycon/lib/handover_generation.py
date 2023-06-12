@@ -63,16 +63,14 @@ def dataset_response_add_handovers(ds_id, byc):
                 if "remove_subdomain" in h_o_types[ h_o_t ]:
                     this_server = re.sub(r'\/\/\w+?\.(\w+?\.\w+?)$', r'//\1', this_server)
                 h_o_r = {
-                    "handover_type": {
-                        "id": h_o_defs[ "id" ],
-                        "label": f'{ h_o_defs.get("label", "generic handover") }',
-                    },
-                    "description": h_o_defs[ "description" ],
+                    "handover_type": h_o_defs.get("handoverType", {}),
+                    "info": { "content_id": h_o_t},
+                    "note": h_o_defs[ "note" ],
                     "url": "",
                     "pages": []
                 }
 
-                if "bedfile" in h_o_defs[ "id" ]:
+                if "UCSClink" in h_o_t:
                     bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, 0, 0, byc)
                     h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos, byc ) } )
                 else:
@@ -99,12 +97,12 @@ def dataset_response_add_handovers(ds_id, byc):
                         # no re-pagination of the results retrieved from the paginated query
                         # TODO: the bedfile part is wrong, since it paginates by the number of variants which
                         # may be incorrect if biosamples ... were called. have to change...
-                        if "bedfile" in h_o_defs[ "id" ]:
+                        if "bedfile" in h_o_t:
                             bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, p_f, p_t, byc)
                             u =  _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos, byc )
                         else:
                             u = h_o_r["url"] + "&paginateResults=false&skip={}&limit={}".format(p_s, byc["pagination"]["limit"])
-                        h_o_r["pages"].append( { "handover_type": {"id": h_o_defs[ "id" ], "label": l }, "url": u } )
+                        h_o_r["pages"].append( { "handover_type": {"id": h_o_defs["handoverType"][ "id" ], "label": l }, "url": u } )
                         p_s += 1
                         p_f += byc["pagination"]["limit"]
                         p_t = p_f + byc["pagination"]["limit"]
@@ -174,7 +172,7 @@ def handover_create_url(h_o_server, h_o_defs, accessid, byc):
 def _handover_create_ext_url(h_o_server, h_o_defs, bed_file_name, ucsc_pos, byc):
 
     if "ext_url" in h_o_defs:
-        if "bedfile" in h_o_defs["id"]:
+        if "bedfile" in h_o_defs["handoverType"]["id"]:
             return("{}&position={}&hgt.customText={}{}/{}".format(h_o_defs["ext_url"], ucsc_pos, h_o_server, byc["config"].get("server_tmp_dir_web", "/tmp"), bed_file_name))
 
     return False

@@ -2,6 +2,8 @@ import csv
 import datetime
 import re
 import requests
+from pathlib import Path
+from os import path
 from copy import deepcopy
 from random import sample as random_samples
 
@@ -50,6 +52,31 @@ def read_www_tsv_to_dictlist(www, max_count=0):
         dictlist = random_samples(dictlist, k=max_count)
 
     return dictlist, fieldnames
+
+################################################################################
+
+def callset_guess_probefile_path(callset, byc):
+
+    d = Path( path.join( *byc["config"]["server_callsets_dir_loc"]))
+    n = byc["config"].get("callset_probefile_name", "___none___")
+    if not d.is_dir():
+        return False
+
+    if not "series_accession" in callset:
+        return False
+    if not "experiment_accession" in callset:
+        return False
+
+    s_id = callset["series_accession"].get("id", "___none___")
+    e_id = callset["experiment_accession"].get("id", "___none___")
+
+    p_f = Path( path.join( d, s_id, e_id, n ) )
+
+    if not d.is_file():
+        return False
+
+    return p_f
+
 
 ################################################################################
 ################################################################################

@@ -8,6 +8,7 @@ from data_retrieval import *
 from dataset_parsing import select_dataset_ids
 from datatable_utils import export_datatable_download
 from export_file_generation import *
+from file_utils import callset_guess_probefile_path
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, \
     dataset_results_save_handovers
 from interval_utils import generate_genomic_intervals
@@ -853,6 +854,7 @@ def check_callset_plot_delivery(byc):
                 "biosample_id": cs.get("biosample_id", "NA"),
                 "cnv_chro_stats": cs.get("cnv_chro_stats", {}),
                 "cnv_statusmaps": cs.get("cnv_statusmaps", {}),
+                "probefile": callset_guess_probefile_path(cs, byc),
                 "variants": []
             }
 

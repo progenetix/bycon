@@ -75,8 +75,8 @@ entities:
       legacy_ids:
         db_key: info.legacy_ids
         type: array
-      description:
-        db_key: description
+      notes:
+        db_key: notes
       histological_diagnosis_id:
         db_key: histological_diagnosis.id
         indexed: True
@@ -113,11 +113,11 @@ entities:
         db_key: biosample_status.label
         compact: True
       sampled_tissue_id:
-        db_key: sampled_tissue.id
+        db_key: sample_origin_detail.id
         indexed: True
         compact: True
       sampled_tissue_label:
-        db_key: sampled_tissue.label
+        db_key: sample_origin_detail.label
         compact: True
       tnm:
         db_key: info.tumor_tnm_text
@@ -129,7 +129,7 @@ entities:
         db_key: info.tumor_grade_text
         compact: True
       age_iso:
-        db_key: time_of_collection.age
+        db_key: collection_moment
         indexed: True
         compact: True
       sex_id:

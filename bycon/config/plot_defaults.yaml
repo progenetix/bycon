@@ -4,7 +4,7 @@ plot_types:
   samplesplot:
     data_key: callsets_variants_bundles
   arrayplot:
-    data_key: sampleprobes
+    data_key: callsets_probes_bundles
 
 legacy_parameters:
 
@@ -103,7 +103,6 @@ parameters:
     type: integer
     default: 100
 
-
   plot_samplestrip_height:
     description: >-
       height of a single sample strip
@@ -124,6 +123,11 @@ parameters:
     description: outer plot margins, in px
     type: integer
     default: 25
+
+  plot_probe_y_factor:
+    description: relative y-scaling of the probes in array-/probeplots
+    type: integer
+    default: 1
 
   plot_labelcol_width:
     description: >-
@@ -216,10 +220,14 @@ parameters:
     description: font color for Y-axis labels (percents ...)
     default: "#666666"
 
-  plot_histogram_label_y_values:
+  plot_label_y_values:
     type: array
     items: integer
     default: [25, 50, 75]
+
+  plot_label_y_unit:
+    type: string
+    default: "%"
 
   # markers -------------------------------------------------------------------#
 

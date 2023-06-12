@@ -94,7 +94,7 @@
             "description": "The key in the corresponding collection (scope), in dot annotation.",
             "examples": [
                 "histological_diagnosis.id",
-                "sampled_tissue.id",
+                "sample_origin_detail.id",
                 "sex.id"
             ],
             "type": "string"
