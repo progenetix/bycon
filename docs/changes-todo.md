@@ -2,6 +2,13 @@
 
 ## Changes
 
+## 2023-06-13 (v1.0.53)
+
+* now probe plotting as implemented with auto-path detection based on callset
+  values
+  - `analysis_info: { experiment_id: 'geo:GSM498847', series_id: 'geo:GSE19949' }` leads to `{server_callsets_dir_loc}/GSE19949/GSM498847/{callset_probefile_name}`
+  - example: [progenetix.org/beacon/biosamples/pgxbs-kftvkafc/?output=samplesplot&plot_chros=3,5,6,14](https://progenetix.org/beacon/biosamples/pgxbs-kftvkafc/?datasetIds=progenetix&output=samplesplot&plot_chros=3,5,6,14)
+
 ###  2023-06-12 (v1.0.52)
 
 * modified `handover_definitions` to follow the specification:

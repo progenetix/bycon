@@ -8,7 +8,7 @@ from data_retrieval import *
 from dataset_parsing import select_dataset_ids
 from datatable_utils import export_datatable_download
 from export_file_generation import *
-from file_utils import callset_guess_probefile_path
+from file_utils import ByconBundler, callset_guess_probefile_path
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, \
     dataset_results_save_handovers
 from interval_utils import generate_genomic_intervals
@@ -857,6 +857,9 @@ def check_callset_plot_delivery(byc):
                 "probefile": callset_guess_probefile_path(cs, byc),
                 "variants": []
             }
+
+            if r_no == 1 and p_o["probefile"] is not False:
+                p_o.update({"cn_probes": ByconBundler(byc).read_probedata_file(p_o["probefile"]) })
 
             v_q = {"callset_id": cs_id}
 

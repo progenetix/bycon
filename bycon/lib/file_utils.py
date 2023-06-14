@@ -7,6 +7,7 @@ from os import path
 from copy import deepcopy
 from random import sample as random_samples
 
+from cgi_parsing import prjsonnice
 from datatable_utils import import_datatable_dict_line
 from interval_utils import interval_cnv_arrays, interval_counts_from_callsets
 from response_remapping import de_vrsify_variant, vrsify_variant
@@ -59,20 +60,20 @@ def callset_guess_probefile_path(callset, byc):
 
     d = Path( path.join( *byc["config"]["server_callsets_dir_loc"]))
     n = byc["config"].get("callset_probefile_name", "___none___")
+
     if not d.is_dir():
         return False
 
-    if not "series_accession" in callset:
-        return False
-    if not "experiment_accession" in callset:
+    if not "analysis_info" in callset:
         return False
 
-    s_id = callset["series_accession"].get("id", "___none___")
-    e_id = callset["experiment_accession"].get("id", "___none___")
+    # TODO: not only geo
+    s_id = callset["analysis_info"].get("series_id", "___none___").replace("geo:", "")
+    e_id = callset["analysis_info"].get("experiment_id", "___none___").replace("geo:", "")
 
     p_f = Path( path.join( d, s_id, e_id, n ) )
 
-    if not d.is_file():
+    if not p_f.is_file():
         return False
 
     return p_f
@@ -166,10 +167,10 @@ class ByconBundler:
         }
 
         p_f_d = {
-            "probe_id": {"type": "string"},
-            "reference_name": {"type": "string"},
-            "start": {"type": "integer"},
-            "value": {"type": "number"}
+            "probe_id": {"type": "string", "key": fieldnames[0]},
+            "reference_name": {"type": "string", "key": fieldnames[1]},
+            "start": {"type": "integer", "key": fieldnames[2]},
+            "value": {"type": "number", "key": fieldnames[3]}
         }
 
         for k in ["id", "ID", "probe_id"]:
@@ -192,7 +193,8 @@ class ByconBundler:
         for l in p_lines:
             p = deepcopy(p_o)
             for pk, pv in p_f_d.items():
-                p.update({ pk: l.get(pv["key"]) })
+                l_k = pv["key"]
+                p.update({ pk: l.get(l_k) })
                 if "int" in pv["type"]:
                     p.update({ pk: int(p[pk]) })
                 elif "num" in pv["type"]:

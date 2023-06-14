@@ -3,8 +3,6 @@ plot_types:
     data_key: interval_frequencies_bundles
   samplesplot:
     data_key: callsets_variants_bundles
-  arrayplot:
-    data_key: callsets_probes_bundles
 
 legacy_parameters:
 
@@ -124,11 +122,6 @@ parameters:
     type: integer
     default: 25
 
-  plot_probe_y_factor:
-    description: relative y-scaling of the probes in array-/probeplots
-    type: integer
-    default: 1
-
   plot_labelcol_width:
     description: >-
       * width of the space for left text labels (e.g. sample ids, collation
@@ -228,6 +221,26 @@ parameters:
   plot_label_y_unit:
     type: string
     default: "%"
+
+  # probeplot -----------------------------------------------------------------#
+
+  plot_probe_y_factor:
+    description: relative y-scaling of the probes in array-/probeplots
+    type: integer
+    default: 1
+
+  plot_probe_label_y_values:
+    type: array
+    items: number
+    default: [1,2,3,4,5]
+
+  plot_probedot_size:
+    type: integer
+    default: 1
+
+  plot_probedot_opacity:
+    type: integer
+    default: 222
 
   # markers -------------------------------------------------------------------#
 

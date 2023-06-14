@@ -85,19 +85,38 @@ class ByconPlot:
         ```
         """
 
-        if not "arrayplot" in self.plv["plot_type"]:
+        if not "samplesplot" in self.plv["plot_type"]:
             return
 
         p_t_s = self.byc["plot_defaults"]["plot_types"]
-        d_k = p_t_s["arrayplot"].get("data_key")
+        d_k = p_t_s["samplesplot"].get("data_key")
 
         probebundles = self.plot_data_bundle.get(d_k, [{"id":"___undefined___"}])
-        probes = probebundles[0].get("probes", [])
+        if len(probebundles) != 1:
+            return
+        if not "cn_probes" in probebundles[0]:
+            return
 
+        probes = probebundles[0].get("cn_probes", [])
+        # self.plv["plot_area_height"] * 0.5 / self.plv["plot_axis_y_max"]
         self.plv.update({
+            "plot_axis_y_max": 3,
+            "plot_y2pf": self.plv["plot_area_height"] * 0.5 / 3 * self.plv["plot_probe_y_factor"],
             "plot_first_area_y0": self.plv["Y"],
-            "plot_label_y_unit": ""
+            "plot_label_y_unit": "",
+            "plot_label_y_values": self.plv["plot_probe_label_y_values"]
         })
+
+        X = 0
+        h_y_0 = self.plv["plot_area_height"] * 0.5
+        p_y_f = self.plv["plot_y2pf"]
+        p_half = self.plv["plot_probedot_size"] * 0.5
+        p_dense = self.plv["plot_probedot_opacity"]
+
+        if len(probes) > 500000:
+            p_half *= 0.5
+            p_dense = p_dense * 0.8
+        p_dense = int(round(p_dense, 0))
 
         image = Image.new(
                     'RGBA',
@@ -105,12 +124,6 @@ class ByconPlot:
                     color=self.plv["plot_area_color"]
                 )
         draw = ImageDraw.Draw(image)
-
-        X = 0
-        h_y_0 = self.plv["plot_area_height"] * 0.5
-        p_y_f = h_y_0 / 2 * self.plv["plot_probe_y_factor"]
-
-        self.plv.update({"plot_label_y_values": []})
 
         for chro in self.plv["plot_chros"]:
 
@@ -131,12 +144,12 @@ class ByconPlot:
                     h = -h_y_0
                 h_p = h_y_0 - h
 
-                # draw.point((round(s, 2),round(h_p, 2)), (0,0,0))
-                x1 = s-0.5
-                x2 = s+0.5
-                y1 = h_p - 0.5
-                y2 = h_p + 0.5
-                draw.ellipse([(x1,y1),(x2,y2)], fill=(0,0,88,222))
+                # x1 = s-p_half
+                # x2 = s+p_half
+                # y1 = h_p - p_half
+                # y2 = h_p + p_half
+                # draw.ellipse([(x1,y1),(x2,y2)], fill=(0,0,63,p_dense))
+                draw.point((round(s, 2),round(h_p, 2)), (0,0,63,p_dense))
 
             X += chr_w
             X += self.plv["plot_region_gap_width"]
@@ -159,7 +172,7 @@ class ByconPlot:
   xlink:href="data:image/png;base64,{}"
 />""".format(
             self.plv["plot_area_x0"],
-            self.plv["plot_first_area_y0"],
+            self.plv["Y"],
             self.plv["plot_area_width"],
             self.plv["plot_area_height"],
             base64_encoded_result_str
@@ -170,8 +183,6 @@ class ByconPlot:
         self.plv["Y"] += self.plv["plot_area_height"]
         self.plv.update({"plot_last_area_ye": self.plv["Y"]})
         self.plv["Y"] += self.plv["plot_region_gap_width"]
-
-        return
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
@@ -202,7 +213,6 @@ class ByconPlot:
     # -------------------------------------------------------------------------#
 
     def __initialize_plot_values(self):
-
         p_d_p = self.byc["plot_defaults"]["parameters"]
         p_t_s = self.byc["plot_defaults"]["plot_types"]
         p_t = self.byc["output"]
@@ -281,8 +291,6 @@ class ByconPlot:
     # --------------------------------------------------------------------------#
 
     def __filter_empty_callsets_results(self):
-
-
         if not "samplesplot" in self.plv["plot_type"]:
             return
 
@@ -301,7 +309,6 @@ class ByconPlot:
     # --------------------------------------------------------------------------#
 
     def __plot_respond_empty_results(self):
-
         if self.plv["results_number"] > 0:
             return False
 
@@ -470,13 +477,14 @@ class ByconPlot:
 
             self.__plot_order_samples()
 
-            self.plv["styles"].append(
-                f'.title-left {{text-anchor: end; fill: {self.plv["plot_font_color"]}; font-size: {lab_f_s}px;}}'
-            )
+            if len(self.plv["results"]) > 1:
+                self.plv["styles"].append(
+                    f'.title-left {{text-anchor: end; fill: {self.plv["plot_font_color"]}; font-size: {lab_f_s}px;}}'
+                )
 
             for s in self.plv["results"]:
                 self.__plot_add_one_samplestrip(s)
-                if lab_f_s > 5:
+                if lab_f_s > 5 and len(self.plv["results"]) > 1:
                     cs_id = s.get("callset_id", "")
                     if len(cs_id) > 0:
                         cs_id = f' ({cs_id})'
@@ -778,7 +786,7 @@ class ByconPlot:
         x_y_l = x_a_0 - self.plv["plot_region_gap_width"]
 
         u = self.plv["plot_label_y_unit"]
-
+ 
         self.plv["styles"].append(
             f'.label-y {{text-anchor: end; fill: {self.plv["plot_label_y_font_color"]}; font-size: {self.plv["plot_label_y_font_size"]}px;}}'
         )
@@ -795,10 +803,14 @@ class ByconPlot:
 
         for y_m in self.plv["plot_label_y_values"]:
 
-            if y_m > self.plv["plot_axis_y_max"]:
+            if y_m >= self.plv["plot_axis_y_max"]:
                 continue
 
             for f in [1, -1]:
+                if u == "" and f == 1:
+                    neg = "-"
+                else:
+                    neg = ""
 
                 y_v = h_y_0 + f * y_m * self.plv["plot_y2pf"]
                 y_l_y = y_v + self.plv["plot_label_y_font_size"] / 2
@@ -808,7 +820,7 @@ class ByconPlot:
                 if self.plv["plot_axislab_y_width"] < 1:
                     continue
 
-                self.plv["pls"].append(f'<text x="{x_y_l}" y="{y_l_y}" class="label-y">{y_m}{u}</text>')
+                self.plv["pls"].append(f'<text x="{x_y_l}" y="{y_l_y}" class="label-y">{neg}{y_m}{u}</text>')
 
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#

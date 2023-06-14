@@ -323,9 +323,11 @@ entities:
         indexed: True
         compact: True
       platform_id:
-        db_key: analysis_info.platform_id
+        db_key: platform_model.id
         indexed: True
         compact: True
+      platform_label:
+        db_key: platform_model.label
       data_provenance:
         db_key: info.data_provenance
 

@@ -313,7 +313,7 @@ TCGAproject:
       - "pgx:"
       - ""
   scope: biosamples
-  pattern: '^(?:pgx:)?TCGA-[\w\-]{2,8}?$'
+  pattern: '^(?:pgx:)?TCGA\.[\w\-]{2,8}?$'
   db_key: 'external_references.id'
   collationed: True
   examples:

@@ -38,9 +38,6 @@ def main():
 
 def install():
 
-    # print(byc["plot_defaults"])
-    # exit()
-
     yaml = ruamel.yaml.YAML()
     yaml.indent(mapping=2, sequence=4, offset=2)
 
