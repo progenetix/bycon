@@ -37,23 +37,29 @@ entities:
 
       biosample_id:
         db_key: id
+        beacon_key: biosamples.id
         indexed: True
         compact: True
       group_id:
         db_key: info.group.id
+        beacon_key: False
         compact: True
       group_label:
         db_key: info.group.label
+        beacon_key: False
         compact: True
       individual_id:
         db_key: individual_id
+        beacon_key: biosamples.individualId
         indexed: True
         compact: True
       callset_ids:
         db_key: info.callset_ids
+        beacon_key: False
         type: array
       external_references:
         type: array
+        beacon_key: biosamples.externalReferences
         db_key: external_references
         indexed: True
         compact: True
@@ -70,19 +76,24 @@ entities:
             compact: False
           cellosaurus:
             compact: True
-      pgx_legacy_sample_id:
-        db_key: pgx_legacy_sample_id
+      # pgx_legacy_sample_id:
+      #   db_key: pgx_legacy_sample_id
+      #   beacon_key: False
       legacy_ids:
         db_key: info.legacy_ids
+        beacon_key: False
         type: array
       notes:
         db_key: notes
+        beacon_key: biosamples.notes
       histological_diagnosis_id:
         db_key: histological_diagnosis.id
+        beacon_key: biosamples.histologicalDiagnosis.id
         indexed: True
         compact: True
       histological_diagnosis_label:
         db_key: histological_diagnosis.label
+        beacon_key: biosamples.histologicalDiagnosis.label
         compact: True
       icdo_morphology_id:
         db_key: icdo_morphology.id

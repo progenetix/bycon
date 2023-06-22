@@ -95,12 +95,14 @@ class ByconBundler:
     callsets); and bundles may have empty lists for some entities.
     """
 
-    def __init__(self, byc, filepath=None):
+    def __init__(self, byc):
 
         self.byc = byc
         self.errors = []
         self.filepath = None
-        self.pgxseg = {}
+        self.header = []
+        self.data = []
+        self.fieldnames = []
         self.callsetVariantsBundles = []
         self.intervalFrequenciesBundles = []
 
@@ -144,11 +146,12 @@ class ByconBundler:
 
         d_lines, fieldnames = read_tsv_to_dictlist(self.filepath, max_count=0)
 
-        self.pgxseg.update({
-            "header": h_lines,
-            "data": d_lines,
-            "fieldnames": fieldnames
-        })
+        self.header = h_lines
+        self.data = d_lines
+        self.fieldnames = fieldnames
+
+        return self
+        
 
     #--------------------------------------------------------------------------#
 
@@ -173,23 +176,6 @@ class ByconBundler:
             "value": {"type": "number", "key": fieldnames[3]}
         }
 
-        for k in ["id", "ID", "probe_id"]:
-            if k in fieldnames:
-                p_f_d["probe_id"].update({"key": k })
-                continue
-        for k in ["chro", "reference_name", "chromosome"]:
-            if k in fieldnames:
-                p_f_d["reference_name"].update({"key": k})
-                continue
-        for k in ["pos", "start", "position"]:
-            if k in fieldnames:
-                p_f_d["start"].update({"key": k})
-                continue
-        for k in ["val", "value", "VALUE", "log2", "log"]:
-            if k in fieldnames:
-                p_f_d["value"].update({"key": k})
-                continue
-
         for l in p_lines:
             p = deepcopy(p_o)
             for pk, pv in p_f_d.items():
@@ -209,12 +195,13 @@ class ByconBundler:
 
         self.read_pgx_file(filepath)
 
-        if not "biosample_id" in self.pgxseg.get("fieldnames", []):
+
+        if not "biosample_id" in self.fieldnames:
             self.errors.append("¡¡¡ The `biosample_id` parameter is required for variant assignment !!!")
             return
 
         self.__deparse_pgxseg_samples_header()
-        self.__pgxseg_keyed_bundle_add_variants()
+        self.__keyed_bundle_add_variants()
 
         return self.keyedBundle
 
@@ -269,7 +256,7 @@ class ByconBundler:
     def __deparse_pgxseg_samples_header(self):
 
         b_k_b = self.keyedBundle
-        h_l = self.pgxseg.get("header", [])
+        h_l = self.header
 
         for l in h_l:
             if not l.startswith("#sample=>"):
@@ -304,10 +291,10 @@ class ByconBundler:
 
     #--------------------------------------------------------------------------#
 
-    def __pgxseg_keyed_bundle_add_variants(self):
+    def __keyed_bundle_add_variants(self):
 
-        fieldnames = self.pgxseg.get("fieldnames", [])
-        varlines = self.pgxseg.get("data", [])
+        fieldnames = self.fieldnames
+        varlines = self.data
 
         b_k_b = self.keyedBundle
 

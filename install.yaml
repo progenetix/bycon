@@ -10,15 +10,6 @@ bycon_install_dir:
   - cgi-bin
   - bycon
 
-utility_dirs:
-  - - /
-    - Users
-    - __USERNAME__
-    - switchdrive
-    - baudisgroup
-    - dbtools
-    - byconeer
-
 bycon_instance_pars:
 
   server_tmp_dir_loc:
@@ -30,6 +21,7 @@ bycon_instance_pars:
 
   server_tmp_dir_web: /tmp
 
+  # array plotting resources 
   server_callsets_dir_loc:
     - /
     - Library
@@ -38,5 +30,4 @@ bycon_instance_pars:
     - Sites
     - arraymap
     - grch38
-
   callset_probefile_name: probes,cn.tsv

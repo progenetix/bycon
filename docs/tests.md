@@ -34,7 +34,7 @@ title: Tests
 
 ##### `/biosamples/{id}/analyses/`
 
-* [/biosamples/pgxbs-kftva5c9/analyses/](http://progenetix.org/beacon/biosamples/pgxbs-kftva5c9/variants/)
+* [/biosamples/pgxbs-kftva5c9/analyses/](http://progenetix.org/beacon/biosamples/pgxbs-kftva5c9/analyses/)
 
 #### Base `/individuals`
 
@@ -45,7 +45,7 @@ title: Tests
 
 ##### `/individuals/{id}/`
 
-* [/biosamples/pgxind-kftx25hb/](http://progenetix.org/beacon/biosamples/pgxind-kftx25hb/)
+* [/individuals/pgxind-kftx25hb/](http://progenetix.org/beacon/individuals/pgxind-kftx25hb/)
 
 ##### `/individuals/{id}/variants/`
 
@@ -56,29 +56,29 @@ title: Tests
 ##### `/variants/` + query
 
 * [/variants/?referenceName=refseq:NC_000017.11&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000](http://progenetix.org/beacon/variants/?referenceName=refseq:NC_000017.11&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000)
-* [/variants/?referenceName=refseq:NC_000017.11&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000&requestedGranularity=boolean](http://progenetix.org/beacon/variants/?referenceName=refseq:NC_000017.11&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000&requestedGranularity=boolean)
+* [/variants/?referenceName=refseq:NC_000017.11&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000&requestedGranularity=count](https://progenetix.org/beacon/variants/?referenceName=refseq:NC_000017.11&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000&requestedGranularity=count)
     - same w/ Boolean response
 * [/variants/?requestedGranularity=boolean&referenceBases=G&alternateBases=A&referenceName=refseq:NC_000017.11&start=7577120](http://progenetix.org/beacon/variants/?requestedGranularity=boolean&referenceBases=G&alternateBases=A&referenceName=refseq:NC_000017.11&start=7577120)
 
 
 ##### `/variants/{id}/` or `/g_variants/{id}/`
 
-* [/variants/5f5a35586b8c1d6d377b77f6/](http://progenetix.org/beacon/variants/5f5a35586b8c1d6d377b77f6/)
-* [/g_variants/5f5a35586b8c1d6d377b77f6/](http://progenetix.org/beacon/g_variants/5f5a35586b8c1d6d377b77f6/)
+* [/variants/pgxvar-5f5a35586b8c1d6d377b77f6/](http://progenetix.org/beacon/variants/pgxvar-5f5a35586b8c1d6d377b77f6/)
+* [/g_variants/pgxvar-5f5a35586b8c1d6d377b77f6/](http://progenetix.org/beacon/g_variants/pgxvar-5f5a35586b8c1d6d377b77f6/)
 
 ##### `/variants/{id}/biosamples/`
 
-* [/variants/5f5a35586b8c1d6d377b77f6/biosamples/](http://progenetix.org/beacon/variants/5f5a35586b8c1d6d377b77f6/biosamples/)
+* [/variants/pgxvar-5f5a35586b8c1d6d377b77f6/biosamples/](http://progenetix.org/beacon/variants/pgxvar-5f5a35586b8c1d6d377b77f6/biosamples/)
 
 #### Base `/analyses` (or `/callsets`)
 
 ##### `/analyses/` + query
 
 * [/analyses/?filters=cellosaurus:CVCL_0004](http://progenetix.org/beacon/analyses/?filters=cellosaurus:CVCL_0004)
-  - this example retrieves all biosamples having an annotation for the Cellosaurus _CVCL_0004_
+  - this example retrieves all analyses having an annotation for the Cellosaurus _CVCL_0004_
   identifier (K562)
 
-### Output options `&output=...`
+### Non-standard output options `&output=...`
 
 #### `&output=histoplot`
 
@@ -102,30 +102,5 @@ title: Tests
 #### Region query with positive and excluded filter
 
 * [/beacon/biosamples/?requestedGranularity=count&datasetIds=progenetix&referenceName=refseq:NC_000009.12&variantType=EFO:0030067&filterLogic=AND&start=21500000&start=21975098&end=21967753&end=22500000&filters=!PATO:0020002,NCIT:C3058](http://progenetix.org/beacon/biosamples/?requestedGranularity=count&datasetIds=progenetix&referenceName=refseq:NC_000009.12&variantType=EFO:0030067&filterLogic=AND&start=21500000&start=21975098&end=21967753&end=22500000&filters=!PATO:0020002,NCIT:C3058)
-
-## Services - root `/services/`
-
-### Beyond Beacon Services
-
-#### `/geolocations/`
-
-##### Map Projections of Query results
-
-The option `output=map` activates a Leaflet-based map projection of 
-the geomapping data (either from search results or provided as an
-external, web hosted file).
-
-* [/services/geolocations?city=Heidelberg&output=map&marker_type=marker](http://progenetix.org/services/geolocations?city=Heidelberg&output=map&marker_type=marker)
-
-##### Map with markers from a hosted file
-
-* [progenetix.org/services/geolocations?map_w_px=600&map_h_px=480&marker_type=marker&file=https://raw.githubusercontent.com/compbiozurich/compbiozurich.github.io/main/collab/people.tab&output=map&help=true](http://progenetix.org/services/geolocations?map_w_px=600&map_h_px=480&marker_type=marker&file=https://raw.githubusercontent.com/compbiozurich/compbiozurich.github.io/main/collab/people.tab&output=map&help=true)
-
-
-#### `/genespans/`
-
-##### Exact gene match
-
-* [/services/genespans/TP53](http://progenetix.org/services/genespans/TP53)
 
 

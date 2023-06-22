@@ -100,8 +100,8 @@ class ByconPlot:
         probes = probebundles[0].get("cn_probes", [])
         # self.plv["plot_area_height"] * 0.5 / self.plv["plot_axis_y_max"]
         self.plv.update({
-            "plot_axis_y_max": 3,
-            "plot_y2pf": self.plv["plot_area_height"] * 0.5 / 3 * self.plv["plot_probe_y_factor"],
+            "plot_axis_y_max": 4,
+            "plot_y2pf": self.plv["plot_area_height"] * 0.5 / 4 * self.plv["plot_probe_y_factor"],
             "plot_first_area_y0": self.plv["Y"],
             "plot_label_y_unit": "",
             "plot_label_y_values": self.plv["plot_probe_label_y_values"]
@@ -115,7 +115,7 @@ class ByconPlot:
 
         if len(probes) > 500000:
             p_half *= 0.5
-            p_dense = p_dense * 0.8
+            p_dense = p_dense * 0.7
         p_dense = int(round(p_dense, 0))
 
         image = Image.new(
@@ -134,7 +134,6 @@ class ByconPlot:
             i_x_0 = X
 
             for i_v in c_p:
-
                 s = i_x_0 + i_v.get("start", 0) * self.plv["plot_b2pf"]
                 v = i_v.get("value", 0)
                 h = v * p_y_f 
@@ -144,15 +143,16 @@ class ByconPlot:
                     h = -h_y_0
                 h_p = h_y_0 - h
 
-                # x1 = s-p_half
-                # x2 = s+p_half
-                # y1 = h_p - p_half
-                # y2 = h_p + p_half
-                # draw.ellipse([(x1,y1),(x2,y2)], fill=(0,0,63,p_dense))
+                # draw.ellipse(
+                #     [
+                #         (s-p_half, h_p - p_half),
+                #         (s+p_half, h_p + p_half)
+                #     ],
+                #     fill=(0,0,63,p_dense)
+                # )
                 draw.point((round(s, 2),round(h_p, 2)), (0,0,63,p_dense))
 
-            X += chr_w
-            X += self.plv["plot_region_gap_width"]
+            X += chr_w + self.plv["plot_region_gap_width"]
 
         # ------------------------ / histogram data ----------------------------#
 

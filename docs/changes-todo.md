@@ -4,6 +4,16 @@
 
 ### Recent
 
+#### 2023-06-21 (v1.0.55)
+
+* removed the `/services` part from the bycon package - it is now maintained
+  in [`byconaut`](https://github.com/progenetix/byconaut/) with the local location being defined in `install.yaml`
+* fixed some [tests](http://bycon.progenetix.org/tests/)
+
+#### 2023-06-21 (v1.0.54)
+
+* adding `normalize_pgx_variant`
+
 #### 2023-06-13 (v1.0.53)
 
 * now probe plotting as implemented with auto-path detection based on callset
@@ -222,6 +232,7 @@ Bug fix release:
 
 ## Bugs & TODO
 
+* [ ] split installation method into separate parts for `beaconServer` and `services` (the latter then in `byconaut`)
 * [x] add method to subset samples for multi-histogram generation
 * [ ] option for summary histogram over? under? samplesplot
 * [x] script for auto-generation of parameter documentation

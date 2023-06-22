@@ -375,3 +375,59 @@ def chroname_from_refseqid(refseqid, byc):
     return chro
 
 ################################################################################
+
+def normalize_pgx_variant(variant, byc, counter=1):
+    v_d = byc["variant_definitions"]
+    errors = []
+
+    var_id = variant.get("id", counter)
+
+    seq_id = variant["location"].get("sequence_id")
+    chromosome = variant["location"].get("chromosome")
+    start = variant["location"].get("start")
+    end = variant["location"].get("end")
+    if not seq_id:
+        if chromosome:
+            variant["location"].update({"sequence_id": v_d["refseq_aliases"].get(str(chromosome))})
+    if not chromosome:
+        if seq_id:
+            variant["location"].update({"chromosome": v_d["chro_aliases"].get(str(seq_id))})
+    if not isinstance(end, int):
+        try:
+            ref = variant.get("reference_sequence")
+            alt = variant.get("sequence")
+            v_l = len(ref) - len(alt)
+            end_pos = start + abs(v_l) + 1
+            # TODO: VRS would do a left-clipping -> start shift ...
+            variant["location"].update({"end": end_pos})
+        except:
+            pass
+
+    # TODO: Some fixes ...
+    if "-" in variant.get("sequence", "."):
+        variant["sequence"] = re.sub("-", "", variant["sequence"])
+    if "-" in variant.get("reference_sequence", "."):
+        variant["sequence"] = re.sub("-", "", variant["reference_sequence"])
+
+    var_state_id = variant["variant_state"].get("id")
+    variant_type = variant.get("variant_type")
+    if not var_state_id:
+        if variant_type:
+            variant.update({"variant_state": v_d["variant_type_ontologies"][variant_type].get("variant_state")})
+
+    try:
+        variant["variant_state"].update({"label": v_d["ontology_variant_types"][var_state_id].get("label")})
+    except:
+        pass
+
+
+    for v_l_k in [ "sequence_id", "chromosome", "start", "end" ]:
+        if not variant["location"].get(v_l_k):
+            errors.append(f'¡¡¡ Parameter `location.{v_l_k}` undefined in variant {var_id} !!!')
+    for v_s_k in [ "id", "label" ]:
+        if not variant["variant_state"].get(v_s_k):
+            errors.append(f'¡¡¡ Parameter `variant_state.{v_s_k}` undefined in variant {var_id} !!!')
+
+    return variant, errors
+
+################################################################################

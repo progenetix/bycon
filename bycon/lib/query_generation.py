@@ -88,7 +88,7 @@ def _update_queries_from_path_id(byc):
     b_mps = byc["beacon_mappings"]
 
     if "service" in byc["request_path_root"]:
-        b_mps = byc["services_mappings"]
+        b_mps = byc.get("services_mappings", byc["beacon_mappings"])
 
     if not byc["request_entity_id"]:
         return

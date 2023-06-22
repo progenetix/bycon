@@ -328,7 +328,7 @@ def deparse_ISCN_to_variants(iscn, byc):
     cb_pat = re.compile( vd["parameters"]["cyto_bands"]["pattern"] )
     errors = []
 
-    for cnv_t, cnv_defs in vd["cnv_iscn_defs"].items():
+    for cnv_t, cnv_defs in vd["variant_type_ontologies"].items():
 
         revish = cnv_defs["info"]["revish_label"]
 
@@ -356,7 +356,7 @@ def deparse_ISCN_to_variants(iscn, byc):
 
                 if "AMP" in cnv_t and v_l > vd["amp_max_size"]:
                     t = "HLDUP"
-                    v = vd["cnv_iscn_defs"][t].copy()
+                    v = vd["variant_type_ontologies"][t].copy()
 
                 v_s = {}
                

@@ -17,3 +17,5 @@ http://progenetix.org/beacon/biosamples/onekgbs-HG00142/g_variants
 
 http://progenetix.org/beacon/biosamples/pgxbs-kftvhyvb/phenopackets
 
+http://progenetix.org/beacon/biosamples/pgxbs-kftvkafc/?datasetIds=progenetix&output=samplesplot&plot_chros=3,5,6,14&debug=
+

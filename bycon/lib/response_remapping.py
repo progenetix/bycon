@@ -161,7 +161,7 @@ def vrsify_variant(variant, byc):
     v_d = byc["variant_definitions"]
     v_t_als = v_d["variant_state_aliases"]
     r_a = v_d["refseq_aliases"]
-    efo_vrs = v_d["efo_dupdel_map"]
+    efo_vrs = v_d["ontology_variant_types"]
 
     v_type = variant.get("variant_type", False)
     if v_type is False:
@@ -241,7 +241,7 @@ def de_vrsify_variant(v, byc):
     }
 
     efo = v["variant_state"].get("id")
-    v_r.update({"variant_type": v_d["efo_dupdel_map"][efo]["DUPDEL"]})
+    v_r.update({"variant_type": v_d["ontology_variant_types"][efo]["DUPDEL"]})
 
     return v_r
 
