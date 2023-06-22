@@ -111,7 +111,7 @@ queried_collections:
   - frequencymaps
   - publications
 
-info_db: progenetix
+services_db: progenetix
 collations_coll: collations
 frequencymaps_coll: frequencymaps
 ontologymaps_coll: ontologymaps
@@ -148,4 +148,3 @@ server_callsets_dir_loc:
   - Sites
   - arraymap
   - grch38
-

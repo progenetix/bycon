@@ -1,6 +1,4 @@
----
-title: Installation
----
+# Installation
 
 ## Project Structure
 
@@ -10,20 +8,23 @@ are distributed as part of the `bycon` package.
 
 !!! warning "Highly Experimental"
     
-    At this time the `bycon` configuration files are _very_ specific for
+    At this time the `bycon` configuration files are specific for
     the Progenetix use case. While in principle one can use the current code base
-    to create a complete Beacon v2 setup this requires quite a bit of customization.
+    to create a complete Beacon v2 setup this requires some customization, e.g.
+    through editing the `/local/....yaml` configuration files as well as the 
+    `/install.yaml` data.
 
 Additionally to the library and associated files a complete `bycon`-base Beacon
 server setup requires the installation of various endpoint apps contained in
 `/beaconServer`. Progenetix also makes use of many server apps (e.g. for retrieving
 supporting data such as collation statistics or genomic parameters) which are
-contained n `/services`.
+now contained in the [`byconaut`](http://github.com/progenetix/byconaut/) project as `/services`.
 
 ###  `bycon` library install
 
 In February 2023 `bycon` has been mad available as a Pypi package with standard
-installation through `pip install bycon`.
+installation through `pip install bycon`. However, this installation will lack
+the server components and is by itself only suitable for library utilization.
 
 ### Beacon server installation
 
@@ -50,9 +51,13 @@ pip3 uninstall bycon
 rm -rf ./dist
 python3 -m build --sdist .
 BY=(./dist/*tar.gz)
-pip3 install $BY
+pip install $BY
 ./install.py
+../byconaut/install.py
 ```
+
+The last step in the batch assumes that one has the `byconaut` project in a local
+sister directory.
 
 !!! note "Script dependencies"
     

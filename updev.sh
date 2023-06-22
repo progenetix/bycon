@@ -7,3 +7,4 @@ python3 -m build --sdist .
 BY=(./dist/*tar.gz)
 pip install $BY
 ./install.py
+../byconaut/install.py

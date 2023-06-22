@@ -161,7 +161,7 @@ def _update_queries_from_hoid(byc):
 
         accessid = byc["form_data"]["accessid"]
         ho_client = pymongo.MongoClient()
-        ho_db = ho_client[byc["config"]["info_db"]]
+        ho_db = ho_client[byc["config"]["services_db"]]
         ho_coll = ho_db[byc["config"]["handover_coll"]]
         h_o = ho_coll.find_one({"id": accessid})
 
