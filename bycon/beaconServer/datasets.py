@@ -48,11 +48,13 @@ def datasets():
 
     if "beaconResultsetsResponse" in byc["response_entity"]["response_schema"]:
         create_empty_beacon_response(byc)
+        response_add_received_request_summary_parameters(byc)
         byc["queries"].pop("datasets", None)
         run_result_sets_beacon(byc)
         query_results_save_handovers(byc)
     else:
         create_empty_beacon_response(byc)
+        response_add_received_request_summary_parameters(byc)
         populate_service_response( byc, dbstats )
 
         byc["service_response"]["response"]["collections"] = byc["service_response"]["response"].pop("results", None)

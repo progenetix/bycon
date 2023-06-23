@@ -4,7 +4,10 @@
 
 ### Recent
 
-* `info_db` => `services_db`
+#### 2023-06-21 (v1.0.56)
+
+* `info_db` => `services_db` parameter renaming
+* fix of missing interpolation of query parameters into the response metadata
 
 #### 2023-06-21 (v1.0.55): Removal of `/services`
 

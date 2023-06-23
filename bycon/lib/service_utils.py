@@ -72,6 +72,7 @@ def run_beacon_init_stack(byc):
 
     create_empty_beacon_response(byc)
     initialize_beacon_queries(byc)
+    response_add_received_request_summary_parameters(byc)
     generate_genomic_intervals(byc)
     response_collect_errors(byc)
     cgi_break_on_errors(byc)
@@ -413,23 +414,12 @@ def create_empty_beacon_response(byc):
 
     byc.update({"service_response": r, "error_response": e})
 
-    # saving the parameters to the response
-    for p in ["method", "dataset_ids", "filters", "variant_pars"]:
-        if p in byc:
-            response_add_received_request_summary_parameter(byc, p, byc[p])
-
 
 ################################################################################
 
 def create_empty_service_response(byc):
     r, e = instantiate_response_and_error(byc, byc["response_entity"]["response_schema"])
-
     byc.update({"service_response": r, "error_response": e})
-
-    # saving the parameters to the response
-    for p in ["method", "dataset_ids", "filters", "variant_pars"]:
-        if p in byc:
-            response_add_received_request_summary_parameter(byc, p, byc[p])
 
 
 ###############################################################################
@@ -494,10 +484,6 @@ def instantiate_response_and_error(byc, schema):
     e = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
     response_update_meta(r, byc)
     error_response_set_defaults(e)
-    # if byc["debug_mode"] is True:
-    #     print(byc["response_entity"]["response_schema"])
-    #     prjsonnice(r)
-    #     prjsonnice(e)
 
     return r, e
 
@@ -558,15 +544,16 @@ def response_meta_set_entity_values(r, byc):
 
 ################################################################################
 
-def response_add_received_request_summary_parameter(byc, name, value):
-    # TODO: proper request parameters
-    if "variant_pars" in name:
-        name = "request_parameters"
-
+def response_add_received_request_summary_parameters(byc):
     if not "received_request_summary" in byc["service_response"]["meta"]:
         return
 
-    if value:
+    for name in ["method", "dataset_ids", "filters", "variant_pars"]:
+        value = byc.get(name, False)
+        if value is False:
+            continue
+        if "variant_pars" in name:
+            name = "request_parameters"
         byc["service_response"]["meta"]["received_request_summary"].update({name: value})
 
 

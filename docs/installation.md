@@ -30,6 +30,19 @@ the server components and is by itself only suitable for library utilization.
 
 ### Requirements
 
+An installation of a Beacon environment may involve following repositories:
+
+* [`bycon`](https://github.com/progenetix/bycon/)
+  - the core Beacon code for libraries and server API
+* [`byconaut`](https://github.com/progenetix/byconaut/)
+  - additional server functionality
+  - utility scripts
+  - example data
+* [`progenetix-web`](https://github.com/progenetix/progenetix-web/)
+  - the web front-end (React based)
+  - represents the current Progenetix website w/ all its parts; can be used to 
+    develop a trimmed-down version for specific use cases...
+
 The project's Beacon deployment had been devbeloped with some prerequisites:
 
 * a MongoDB database instance
