@@ -103,9 +103,6 @@
         "cnvStatusmaps": {
             "$ref": "#/definitions/Statusmaps"
         },
-        "dataUseConditions": {
-            "$ref": "../common/ontologyTerm.json"
-        },
         "description": {
             "examples": [
                 "SNP6 array"

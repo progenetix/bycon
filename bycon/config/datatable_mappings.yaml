@@ -169,10 +169,6 @@ entities:
       # recurrence_time:
       #   db_key: info.recurrence_time
       #   type: string
-      data_use_conditions_id:
-        db_key: data_use_conditions.id
-      data_use_conditions_label:
-        db_key: data_use_conditions.label
       geoprov_city:
         db_key: provenance.geo_location.properties.city
         indexed: True

@@ -113,7 +113,8 @@ def initialize_bycon_service(byc, service=False):
         """
         sub_path = path.dirname(path.abspath(mod.__file__))
 
-        conf_dir = path.join(sub_path, "local")
+
+        conf_dir = path.join(sub_path, pardir, "local")
         if path.isdir(conf_dir):
             c_f = Path(path.join(conf_dir, "config.yaml"))
             if path.isfile(c_f):
@@ -162,7 +163,8 @@ def set_special_modes(byc):
     form = byc["form_data"]
     for m in ["test_mode", "debug_mode", "download_mode", "include_handovers"]:
         if m in form:
-            byc.update({m: test_truthy(form.get(m, False))})
+            v = test_truthy(form.get(m, False))
+            byc.update({m: v})
 
     t_m_k = form.get("test_mode_count", "___none___")
     if re.match(r'^\d+$', str(t_m_k)):
@@ -545,10 +547,10 @@ def response_meta_set_entity_values(r, byc):
 ################################################################################
 
 def response_add_received_request_summary_parameters(byc):
-    if not "received_request_summary" in byc["service_response"]["meta"]:
+    if not "received_request_summary" in byc["service_response"].get("meta", {}):
         return
 
-    for name in ["method", "dataset_ids", "filters", "variant_pars"]:
+    for name in ["method", "dataset_ids", "filters", "variant_pars", "test_mode"]:
         value = byc.get(name, False)
         if value is False:
             continue

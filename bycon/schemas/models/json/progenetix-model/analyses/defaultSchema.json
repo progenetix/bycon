@@ -9,9 +9,6 @@
             ],
             "type": "string"
         },
-        "dataUseConditions": {
-            "$ref": "../common/dataUseConditions.json"
-        },
         "description": {
             "examples": [
                 "SNP6 array"
