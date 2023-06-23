@@ -39,14 +39,14 @@ def ds_id_from_accessid(byc):
     # test of existence...
 
     accessid = byc["form_data"].get("accessid", False)
-    info_db = byc["config"].get("info_db", False)
+    services_db = byc["config"].get("services_db", False)
     ho_collname = byc["config"].get("handover_coll", False)
 
-    if any(x is False for x in [accessid, info_db, ho_collname]):
+    if any(x is False for x in [accessid, services_db, ho_collname]):
         return False
 
     ho_client = pymongo.MongoClient()
-    h_o = ho_client[info_db][ho_collname].find_one({"id": accessid})
+    h_o = ho_client[services_db][ho_collname].find_one({"id": accessid})
     if not h_o:
         return False
 

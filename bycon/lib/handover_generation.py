@@ -132,7 +132,7 @@ def query_results_save_handovers(byc):
 def dataset_results_save_handovers(ds_id, byc):
 
     ho_client = MongoClient()
-    ho_db = ho_client[ byc["config"]["info_db"] ]
+    ho_db = ho_client[ byc["config"]["services_db"] ]
     ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
 
     for h_o_k in byc["dataset_results"][ds_id].keys():

@@ -4,7 +4,9 @@
 
 ### Recent
 
-#### 2023-06-21 (v1.0.55)
+* `info_db` => `services_db`
+
+#### 2023-06-21 (v1.0.55): Removal of `/services`
 
 * removed the `/services` part from the bycon package - it is now maintained
   in [`byconaut`](https://github.com/progenetix/byconaut/) with the local location being defined in `install.yaml`

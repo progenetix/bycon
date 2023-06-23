@@ -17,14 +17,6 @@ More information about the original use _Progenetix_ case can be found [on the p
 * web applications for data access
 * Python modules for Beacon query and response functions in `lib`
 
-#### `services`
-
-The _bycon_ environment - together with the [Progenetix](http://progenetix.org)
-resource - provide a growing numer of data services in (cancer) genomics and
-disease ontologies. _bycon_'s services are tools to enable the APIs.
-
-* web applications and libraries extending the `bycon` environment
-
 #### `config`
 
 * top-level, general configurations
@@ -54,47 +46,60 @@ individual endpoints
 ```
 bycon
   |
-  |- config
-  |    |- beacon_mappings.yaml
-  |    |- config.yaml
-  |    |- dataset_definitions.yaml
-  |    |- filter_definitions.yaml
-  |    |- ..._definitions.yaml
+  |- bycon
+  |   |
+  |   |- beaconServer
+  |   |   |
+  |   |   |- beacon.py
+  |   |   |- datasets.py
+  |   |   |- configuration.py
+  |   |   |- entryTypes.py
+  |   |   |- filteringTerms.py
+  |   |   `- ... .py
+  |   |
+  |   |- config
+  |   |   |
+  |   |   |- beacon_mappings.yaml
+  |   |   |- config.yaml
+  |   |   |- dataset_definitions.yaml
+  |   |   |- filter_definitions.yaml
+  |   |   `- ..._definitions.yaml
+  |   |
+  |   |- lib
+  |   |   |
+  |   |   |- cgi_parsing.py
+  |   |   |- read_specs.py
+  |   |   |- filter_parsing.py
+  |   |   |- query_generation.py
+  |   |   |- query_execution.py
+  |   |    `- ...
+  |   |
+  |   |- rsrc
+  |   |   `- ...
+  |   |
+  |   |- schemas
+  |   |   `- ...
+  |   |
+  |   `- config.yaml
   |
   |- docs
   |    `- ... documentation website source files ...
   |
-  |- beaconServer
-  |    |- datasets.py
-  |    |- biosamples.py
-  |    |- filteringTerms.py
-  |    |- variants.py
-  |    |- ... .py
-  |    |
-  |    |    |- config
-  |    |    |- schemas
-  |    |    |   |- beacon.yaml
-  |    |    |   |- ... .yaml
-  |    |    |
-  |    |    |- biosamples.yaml
-  |    |    |- ... .yaml
-  |    |
-  |    |- doc
-  |    |    |- bycon.md
-  |    |    |- handovers.md
-  |    |    |- ... .md
-  |    |
-  |    |- lib
-  |    |    |- cgi_parsing.py
-  |    |    |- read_specs.py
-  |    |    |- filter_parsing.py
-  |    |    |- query_generation.py
-  |    |    |- query_execution.py
-  |    |
-  |    |- rsrc
-  |         |- ...
+  |- local
+  |   |
+  |   |- beacon_defaults.yaml
+  |   |- beacon_mappings.yaml
+  |   `- dataset_definitions.yaml
   |
-  |- services
-  |    |- config
+  |- install.py
+  |- install.yaml
+  `- `requirements.txt` and other Python packaging files
 ...
 ```
+
+## External `services`
+
+The _bycon_ environment - together with the [Progenetix](http://progenetix.org)
+resource - provide a growing numer of data services in (cancer) genomics and
+disease ontologies. Since `bycon` 1.0.55 (2023-06-22) `/services` resides in the
+[`byconaut`](http://github.com/progenetix/byconaut/) repository.

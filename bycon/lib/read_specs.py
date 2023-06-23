@@ -74,7 +74,7 @@ def dbstats_return_latest(byc):
         if byc["stats_number"] > 1:
             limit = byc["stats_number"]
 
-    db = byc[ "config" ][ "info_db" ]
+    db = byc[ "config" ][ "services_db" ]
     coll = byc[ "config" ][ "beacon_info_coll" ]
     stats = MongoClient( )[ db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( limit )
 

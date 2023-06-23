@@ -11,7 +11,9 @@ distribution) though this is (early 2023) in a process of "disentanglement".
 
 ## More Documentation
 
-Documentation has been moved to [`bycon.progenetix.org`](http://bycon.progenetix.org)
+Documentation has been moved to [`bycon.progenetix.org`](http://bycon.progenetix.org).
+W/ the rapid code development it is recommended to keep following the [Changes](http://bycon.progenetix.org/changes-todo/)
+page.
 
 ### Installation
 

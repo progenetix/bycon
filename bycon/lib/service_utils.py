@@ -735,7 +735,7 @@ def return_filtering_terms_response(byc):
 
     f_r_d = {}
 
-    f_db = byc["config"]["info_db"]
+    f_db = byc["config"]["services_db"]
     f_coll = byc["config"]["collations_coll"]
 
     f_t_s = []
