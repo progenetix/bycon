@@ -29,7 +29,7 @@ def parse_cytoband_file(byc):
     if genome in g_map.keys():
         genome = g_map[ genome ]
 
-    cb_file = path.join( pkg_path, "rsrc", "genomes", genome, "cytoBandIdeo.txt" )   
+    cb_file = path.join( pkg_path, "rsrc", "genomes", genome, "cytoBandIdeo.txt" ) 
     cb_re = re.compile( byc["interval_definitions"][ "cytobands" ][ "pattern" ] )
     cb_keys = [ "chro", "start", "end", "cytoband", "staining" ]
 
@@ -392,6 +392,8 @@ def cytobands_label_from_positions(byc, chro, start, end):
 def bands_from_chrobases(chro_bases, byc):
 
     cb_pat = re.compile( byc["variant_definitions"]["parameters"]["chro_bases"]["pattern"] )
+    if not cb_pat.match(chro_bases):
+        return [], "NA", 0, 0
     chro, cb_start, cb_end = cb_pat.match(chro_bases).group(2,3,5)
 
     return cytobands_list_from_positions(byc, chro, cb_start, cb_end)
@@ -426,7 +428,7 @@ def cytobands_list_from_positions(byc, chro, start=None, end=None):
 
 def retrieve_gene_id_coordinates(gene_id, byc):
 
-    db = byc["config"]["info_db"]
+    db = byc["config"]["services_db"]
     coll = byc["config"]["genes_coll"]
     q_f_s = byc.get("query_fields", ["symbol", "ensembl_gene_ids", "synonyms"])
 

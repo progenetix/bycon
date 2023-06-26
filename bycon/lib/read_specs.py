@@ -35,6 +35,8 @@ def read_bycon_configs_by_name(name, conf_dir, byc):
       |- config - __name__.yaml
     podmd"""
 
+    # print(name)
+
     o = {}
     ofp = path.join( conf_dir, name+".yaml" )
 

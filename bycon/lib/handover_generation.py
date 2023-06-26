@@ -1,5 +1,6 @@
 import re, yaml
 from pymongo import MongoClient
+from pathlib import Path
 from os import environ, pardir, path
 import sys
 
@@ -171,9 +172,13 @@ def handover_create_url(h_o_server, h_o_defs, accessid, byc):
 
 def _handover_create_ext_url(h_o_server, h_o_defs, bed_file_name, ucsc_pos, byc):
 
+    local_paths = byc.get("local_paths")
+    if not local_paths:
+        return False
+
     if "ext_url" in h_o_defs:
         if "bedfile" in h_o_defs["handoverType"]["id"]:
-            return("{}&position={}&hgt.customText={}{}/{}".format(h_o_defs["ext_url"], ucsc_pos, h_o_server, byc["config"].get("server_tmp_dir_web", "/tmp"), bed_file_name))
+            return("{}&position={}&hgt.customText={}{}/{}".format(h_o_defs["ext_url"], ucsc_pos, h_o_server, local_paths.get("server_tmp_dir_web", "/tmp"), bed_file_name))
 
     return False
 
@@ -202,7 +207,12 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
 
     podmd"""
 
-    config = byc["config"]
+    local_paths = byc.get("local_paths")
+    if not local_paths:
+        return False
+    tmp_path = Path( path.join( *local_paths[ "server_tmp_dir_loc" ]) )
+    if not tmp_path.is_dir():
+        return False
 
     v_ret = 0
     v_max = 1000
@@ -220,8 +230,8 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
     else:
         p_t = v_max # only for the non-paginated ...
 
-    bed_file_name = accessid + l + '.bed'
-    bed_file = path.join( *config[ "server_tmp_dir_loc" ], bed_file_name )
+    bed_file_name = f'{accessid}{l}.bed'
+    bed_file = Path( path.join( tmp_path, bed_file_name ) )
 
     vs = { "DUP": [ ], "DEL": [ ], "LOH": [ ], "SNV": [ ]}
 
@@ -257,7 +267,6 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
             vs["SNV"].append(v_d)
 
     b_f = open( bed_file, 'w' )
-
     pos = set()
 
     ucsc_chr = ""

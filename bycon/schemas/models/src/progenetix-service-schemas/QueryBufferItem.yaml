@@ -1,6 +1,7 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
 "$id": https://progenetix.org/services/schemas/QueryBufferItem/v2020-12-08
 title: QueryBufferItem
+type: object
 meta:
   contributors:
     - description: "Michael Baudis"

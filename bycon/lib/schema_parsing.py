@@ -19,8 +19,8 @@ def read_schema_file(schema_name, item, byc, ext="json"):
     
     s_f_p = get_schema_file_path(schema_name, byc, ext)
 
-    if byc["debug_mode"] is True:
-        print(schema_name, s_f_p)
+    # if byc["debug_mode"] is True:
+    #     print(schema_name, s_f_p)
 
     if s_f_p is not False:
         if len(item) > 1:
@@ -67,7 +67,6 @@ def get_schema_file_path(schema_name, byc, ext="json"):
 ################################################################################
 
 def instantiate_schema(schema):
-
     if 'type' in schema:
         if schema['type'] == 'object' and 'properties' in schema:
             empty_dict = {}
@@ -87,7 +86,6 @@ def instantiate_schema(schema):
 ################################################################################
 
 def create_empty_instance(schema):
-
     s_i = instantiate_schema(schema)
     s_i = decamelize(s_i)
     return s_i
@@ -95,9 +93,9 @@ def create_empty_instance(schema):
 ################################################################################
 
 def object_instance_from_schema_name(byc, schema_name, root_key, ext="json"):
-
     s_f = read_schema_file(schema_name, root_key, byc, ext)
     s_i = create_empty_instance( s_f )
+
     return s_i
 
 ################################################################################

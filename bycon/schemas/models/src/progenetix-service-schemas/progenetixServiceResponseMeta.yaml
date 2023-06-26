@@ -1,6 +1,7 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://progenetix.org/services/schemas/progenetixServiceResponseMeta/v2021-11-11
 title: progenetixServiceResponseMeta
+type: object
 meta:
 description: >-
   The metadata (e.g. query, environment) of the service request and response.

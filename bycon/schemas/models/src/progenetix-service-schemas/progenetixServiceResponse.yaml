@@ -1,6 +1,7 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
 "$id": https://progenetix.org/services/schemas/progenetixServiceResponse/v2021-03-07
 title: progenetixServiceResponse
+type: object
 meta:
   contributors:
     - description: "ELIXIR Beacon project team"

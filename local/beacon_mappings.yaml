@@ -30,12 +30,12 @@ service_aliases:
   g_variants: genomicVariations
   genomicVariations: genomicVariations
   variants: genomicVariations
-  aggregator: aggregator
-  beaconAggregator: aggregator
-  beacon_aggregator: aggregator
-  retriever: retriever
-  beaconRetriever: retriever
-  beacon_retriever: retriever
+
+rewrites:
+  aggregator: '/services/aggregator/'
+  beaconAggregator: '/services/aggregator/'
+  retriever: '/services/retriever/'
+  beaconRetriever: '/services/retriever/'
 
 data_pipeline_entry_types:
   - analyses

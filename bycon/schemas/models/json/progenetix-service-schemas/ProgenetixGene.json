@@ -127,5 +127,6 @@
             "referenceName start end symbol"
         ]
     },
-    "title": "ProgenetixGene"
+    "title": "ProgenetixGene",
+    "type": "object"
 }

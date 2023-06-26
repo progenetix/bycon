@@ -1,6 +1,7 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
 "$id": https://progenetix.org/services/schemas/GeoLocation/v2021-04-14
 title: GeoLocation
+type: object
 meta:
   contributors:
     - description: "GA4GH Metadata Task Team"
@@ -28,7 +29,6 @@ description: >
   * provenance of an individual, obfuscated to a larger order 
   administrative entity (Suffolk, U.K.)
   * a lat/long/alt position where an environmental sample was collected  
-type: object
 properties:
   type:
     type: string

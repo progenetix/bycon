@@ -76,13 +76,6 @@ entity_defaults:
 
 ################################################################################
 
-  aggregator:
-    request_entity_path_id: genomicVariations
-    response_entity_id: genomicVariant
-    response_schema: beaconBooleanResponse
-
-################################################################################
-
   map:
     request_entity_path_id: map
     response_entity_id: beaconMap
@@ -95,6 +88,8 @@ entity_defaults:
     response_entity_id: entryType
     response_schema: beaconEntryTypesResponse
 
+################################################################################
+
   filtering_terms:
     request_entity_path_id: filteringTerms
     response_entity_id: filteringTerm
@@ -105,7 +100,6 @@ entity_defaults:
   analyses:
     request_entity_path_id: analyses
     response_entity_id: analysis
-    h->o_access_key: "callsets._id"
     response_entity:
       entity_type: analysis
       collection: callsets
@@ -113,7 +107,6 @@ entity_defaults:
       beacon_schema:
         entity_type: analysis
         schema: https://progenetix.org/services/schemas/analysis/
-      h->o_access_key: "callsets._id"
 
 ################################################################################
 
@@ -127,7 +120,6 @@ entity_defaults:
       beacon_schema:
         entity_type: biosample
         schema: https://progenetix.org/services/schemas/biosample/
-      h->o_access_key: "biosamples._id"
 
 ################################################################################
 
@@ -148,7 +140,7 @@ entity_defaults:
       limit: 10
     include_resultset_responses: false
 
-  ################################################################################
+  ##############################################################################
 
   datasets:
     request_entity_path_id: datasets
@@ -159,21 +151,13 @@ entity_defaults:
       limit: 5
     include_resultset_responses: false
 
-  ################################################################################
+  ##############################################################################
 
   genomicVariations:
     request_entity_path_id: genomicVariations
     response_entity_id: genomicVariant
-    response_entity:
-      entity_type: genomicVariant
-      response_schema: beaconResultsetsResponse
-      collection: variants
-      beacon_schema:
-        entity_type: genomicVariant
-        schema: https://progenetix.org/services/schemas/genomicVariant/
-      h->o_access_key: "variants._id"
 
-  ################################################################################
+  ##############################################################################
 
   individuals:
     request_entity_path_id: individuals
@@ -185,25 +169,23 @@ entity_defaults:
       beacon_schema:
         entity_type: individual
         schema: https://progenetix.org/services/schemas/individual/
-      h->o_access_key: "individuals._id"
 
-  ################################################################################
+  ##############################################################################
 
   runs:
     request_entity_path_id: runs
     response_entity_id: run
-    response_entity:
-      entity_type: run
-      collection: callsets
-      response_schema: beaconResultsetsResponse
-      beacon_schema:
-        entity_type: run
-        schema: https://progenetix.org/services/schemas/run/
-      h->o_access_key: "callsets._id"
 
-  ################################################################################
-  # service defaults #############################################################
-  ################################################################################
+  ##############################################################################
+  # TODO: move service defaults ################################################
+  ##############################################################################
+
+  aggregator:
+    request_entity_path_id: genomicVariations
+    response_entity_id: genomicVariant
+    response_schema: beaconBooleanResponse
+
+  ##############################################################################
 
   cytomapper:
     request_path_root: services

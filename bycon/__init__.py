@@ -7,6 +7,9 @@ import traceback
 pkg_path = path.dirname( path.abspath(__file__) )
 bycon_lib_path = path.join( pkg_path, "lib" )
 sys.path.append( bycon_lib_path )
+# print('Content-Type: text/plain')
+# print()
+
 
 try:
 

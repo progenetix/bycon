@@ -49,5 +49,6 @@
             "$ref": "GeoLocation.json#/properties"
         }
     },
-    "title": "Provenance"
+    "title": "Provenance",
+    "type": "object"
 }

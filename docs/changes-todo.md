@@ -4,6 +4,10 @@
 
 ### Recent
 
+#### 2023-06-21 (v1.0.57)
+
+* more disentangling of configuration between `byconaut/services` and `/bycon`
+
 #### 2023-06-21 (v1.0.56)
 
 * `info_db` => `services_db` parameter renaming

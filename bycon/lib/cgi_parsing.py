@@ -206,7 +206,7 @@ def rest_path_elements(byc):
     if not r_p_r in p_items:
         return
 
-    for d_k in ["debug=1", "debug=true"]:
+    for d_k in ["debug=1", "&debug=1", "debug=true"]:
         if d_k in p_items:
             p_items.remove(d_k)
 

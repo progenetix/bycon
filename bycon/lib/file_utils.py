@@ -58,16 +58,23 @@ def read_www_tsv_to_dictlist(www, max_count=0):
 
 def callset_guess_probefile_path(callset, byc):
 
+    local_paths = byc.get("local_paths")
+    if not local_paths:
+        return False
+
+    if not "server_callsets_dir_loc" in local_paths:
+        return False
+
+    if not "analysis_info" in callset:
+        return False
+
     d = Path( path.join( *byc["config"]["server_callsets_dir_loc"]))
     n = byc["config"].get("callset_probefile_name", "___none___")
 
     if not d.is_dir():
         return False
 
-    if not "analysis_info" in callset:
-        return False
-
-    # TODO: not only geo
+    # TODO: not only geo cleaning?
     s_id = callset["analysis_info"].get("series_id", "___none___").replace("geo:", "")
     e_id = callset["analysis_info"].get("experiment_id", "___none___").replace("geo:", "")
 

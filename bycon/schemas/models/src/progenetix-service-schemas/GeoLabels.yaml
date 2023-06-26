@@ -1,6 +1,7 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
 "$id": https://progenetix.org/services/schemas/GeoLabels/v2021-04-14
 title: GeoLabels
+type: object
 meta:
   provenance:
     - description: "IETF GeoJSON pecification"
@@ -13,7 +14,6 @@ meta:
   sb_status: proposed
 description: >
   GeoLabels represent an instance of the GeoJSON `properties` object. The parameters provide additional information for the interpretation of the location parameters, and also serve for optional "sanity checks" off the corresponding latitude, longitude (, altitude).
-type: object
 properties:
   label:
     type: string

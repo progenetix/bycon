@@ -10,15 +10,6 @@
             },
             "type": "array"
         },
-        "dataUseConditions": {
-            "$ref": "../common/ontologyTerm.json",
-            "examples": [
-                {
-                    "id": "DUO:0000004",
-                    "label": "no restriction"
-                }
-            ]
-        },
         "description": {
             "examples": [
                 "HapMap project contributor"

@@ -25,9 +25,6 @@
             },
             "type": "array"
         },
-        "dataUseConditions": {
-            "$ref": "../common/dataUseConditions.json"
-        },
         "dateOfBirth": {
             "examples": [
                 "1967-11-11",

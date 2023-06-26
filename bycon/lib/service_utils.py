@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 
 from args_parsing import *
+from cgi_parsing import prjsonnice
 from cytoband_utils import translate_reference_ids
 from data_retrieval import *
 from dataset_parsing import select_dataset_ids
@@ -85,21 +86,21 @@ def initialize_bycon_service(byc, service=False):
     correspond to the calling main function. However, an overwrite can be
     provided."""
 
-    defs = byc.get("beacon_defaults", {})
-    b_e_d = defs.get("entity_defaults", {})
     form = byc["form_data"]
 
+    service = byc.get("request_entity_path_id", False)
     frm = inspect.stack()[1]
     if service is False:
         service = frm.function
 
-    # TODO - streamline
+    # TODO - streamline, also for services etc.
     s_a_s = byc["beacon_mappings"].get("service_aliases", {})
 
     if service in s_a_s:
         service = s_a_s[service]
 
     service = decamelize(service)
+    scope = "beacon"
 
     mod = inspect.getmodule(frm[0])
     if mod is not None:
@@ -112,30 +113,39 @@ def initialize_bycon_service(byc, service=False):
             * this is usually used to provide script-specific parameters (`service_defaults`...)
         """
         sub_path = path.dirname(path.abspath(mod.__file__))
+        if "services" in sub_path:
+            scope = "services"
 
-        conf_dir = path.join(sub_path, "local")
-        if path.isdir(conf_dir):
-            c_f = Path(path.join(conf_dir, "config.yaml"))
-            if path.isfile(c_f):
-                byc.update({"config": load_yaml_empty_fallback(c_f)})
-            d_f = Path(path.join(conf_dir, "beacon_defaults.yaml"))
-            if path.isfile(d_f):
-                byc.update({"beacon_defaults": load_yaml_empty_fallback(d_f)})
-                defaults = byc["beacon_defaults"].get("defaults", {})
-                for d_k, d_v in defaults.items():
-                    byc.update({d_k: d_v})
+        for loc_conf in ["config", "local"]:
+            conf_dir = path.join(sub_path, loc_conf)
+
+            if not path.isdir(conf_dir):
+                continue
+
             read_bycon_definition_files(conf_dir, byc)
 
+            # TODO: separate services_defaults ?
+            defaults = byc["beacon_defaults"].get("defaults", {})
+            for d_k, d_v in defaults.items():
+                byc.update({d_k: d_v})
+
+        byc.update({
+            "request_path_root": scope,
+            "request_entity_path_id": service
+        })
         read_local_prefs(service, sub_path, byc)
 
     get_bycon_args(byc)
     args_update_form(byc)
 
     conf = byc["service_config"]
-
     if "defaults" in conf:
         for d_k, d_v in conf["defaults"].items():
             byc.update({d_k: d_v})
+
+    d_k = f'{scope}_defaults'
+    defs = byc.get(d_k, {})
+    b_e_d = defs.get("entity_defaults", {})
 
     if service in b_e_d:
         for d_k, d_v in b_e_d[service].items():
@@ -162,7 +172,8 @@ def set_special_modes(byc):
     form = byc["form_data"]
     for m in ["test_mode", "debug_mode", "download_mode", "include_handovers"]:
         if m in form:
-            byc.update({m: test_truthy(form.get(m, False))})
+            v = test_truthy(form.get(m, False))
+            byc.update({m: v})
 
     t_m_k = form.get("test_mode_count", "___none___")
     if re.match(r'^\d+$', str(t_m_k)):
@@ -231,11 +242,15 @@ def update_requested_schema_from_request(byc):
 ################################################################################
 
 def set_response_entity(byc):
-    m_k = byc["request_path_root"] + "_mappings"
-    b_rt_s = byc[m_k]["response_types"]
+    r_p_r = byc.get("request_path_root", "beacon")
+    s_k = f'{r_p_r}_entry_types'
+    b_rt_s = byc.get(s_k, {})
+    r_e_id = byc.get("response_entity_id", "___none___")
 
-    if byc["response_entity_id"] in b_rt_s.keys():
-        byc.update({"response_entity": b_rt_s[byc["response_entity_id"]]})
+    if r_e_id not in b_rt_s.keys():
+        return
+
+    byc.update({"response_entity": b_rt_s.get(r_e_id)})
 
 
 ################################################################################
@@ -492,7 +507,12 @@ def instantiate_response_and_error(byc, schema):
 
 def response_update_meta(r, byc):
     if "response_summary" in r:
-        r["response_summary"].update({"exists": False})
+        r_s = r.get("response_summary")
+        if r_s is None:
+            r_s = {"exists": False}
+        else:
+            r_s.update({"exists": False})
+        r.update({"response_summary": r_s})
     response_meta_set_info_defaults(r, byc)
     response_meta_set_config_defaults(r, byc)
     response_meta_set_entity_values(r, byc)
@@ -518,7 +538,8 @@ def response_meta_set_info_defaults(r, byc):
     b_e_d = defs.get("entity_defaults", {})
 
     for i_k in ["api_version", "beacon_id"]:
-        r["meta"].update({i_k: b_e_d["info"].get(i_k, "")})
+        if "meta" in r:
+            r["meta"].update({i_k: b_e_d["info"].get(i_k, "")})
 
 
 ################################################################################
@@ -545,16 +566,24 @@ def response_meta_set_entity_values(r, byc):
 ################################################################################
 
 def response_add_received_request_summary_parameters(byc):
-    if not "received_request_summary" in byc["service_response"]["meta"]:
+    if not "received_request_summary" in byc["service_response"].get("meta", {}):
         return
 
-    for name in ["method", "dataset_ids", "filters", "variant_pars"]:
+    for name in ["method", "dataset_ids", "filters", "variant_pars", "test_mode"]:
         value = byc.get(name, False)
         if value is False:
             continue
         if "variant_pars" in name:
             name = "request_parameters"
         byc["service_response"]["meta"]["received_request_summary"].update({name: value})
+
+################################################################################
+
+def received_request_summary_add_custom_parameter(byc, parameter, value):
+    if not "received_request_summary" in byc["service_response"].get("meta", {}):
+        return
+
+    byc["service_response"]["meta"]["received_request_summary"].update({parameter: value})
 
 
 ################################################################################
@@ -646,7 +675,10 @@ def populate_service_response(byc, results):
             "num_total_results": len(results)
         })
 
-    byc["service_response"]["response"].update({"results": results})
+    if byc["service_response"]["response"] is None:
+        byc["service_response"].update({"response": {"results":results}})
+    else:
+        byc["service_response"]["response"].update({"results": results})
 
     check_switch_to_count_response(byc)
     check_switch_to_boolean_response(byc)

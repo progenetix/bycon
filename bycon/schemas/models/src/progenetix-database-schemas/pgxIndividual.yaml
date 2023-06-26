@@ -51,11 +51,6 @@ properties:
     type: array
     items:
       $ref: ../common/ancestry.yaml
-  dataUseConditions:
-    $ref: ../common/ontologyTerm.yaml
-    examples:
-      - id: DUO:0000004
-        label: no restriction
   updated:
     type: string
     format: date-time

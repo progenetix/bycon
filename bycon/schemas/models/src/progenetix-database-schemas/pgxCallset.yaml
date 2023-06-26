@@ -53,8 +53,6 @@ properties:
       - id: geo:GSE4079
   provenance:
     $ref: ../common/provenance.yaml
-  dataUseConditions:
-    $ref: ../common/ontologyTerm.yaml
   cnvStatusmaps:
     $ref: "#/definitions/Statusmaps"
   cnvStats:

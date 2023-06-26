@@ -42,5 +42,6 @@
             "$ref": "progenetixServiceResponseSummary.json#/properties"
         }
     },
-    "title": "progenetixServiceResponse"
+    "title": "progenetixServiceResponse",
+    "type": "object"
 }

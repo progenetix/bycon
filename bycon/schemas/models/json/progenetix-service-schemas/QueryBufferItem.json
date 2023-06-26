@@ -76,5 +76,6 @@
             "type": "array"
         }
     },
-    "title": "QueryBufferItem"
+    "title": "QueryBufferItem",
+    "type": "object"
 }

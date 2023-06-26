@@ -39,5 +39,6 @@
             "type": "integer"
         }
     },
-    "title": "progenetixServiceResponseSummary"
+    "title": "progenetixServiceResponseSummary",
+    "type": "object"
 }

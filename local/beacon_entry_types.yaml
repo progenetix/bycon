@@ -1,0 +1,117 @@
+info:
+  entity_type: info
+  collection: Null
+  response_schema: beaconInfoResponse
+  beacon_schema:
+    entity_type: configuration
+    schema: https://progenetix.org/services/schemas/beaconInfoResults/
+  h->o_access_key: Null
+
+configuration:
+  entity_type: configuration
+  collection: Null
+  response_schema: beaconConfigurationResponse
+  beacon_schema:
+    entity_type: configuration
+    schema: https://progenetix.org/services/schemas/beaconConfigurationSchema/
+  h->o_access_key: Null
+
+entryTypes:
+  entity_type: entryTypes
+  collection: Null
+  response_schema: beaconEntryTypesResponse
+  beacon_schema:
+    entity_type: entryType
+    schema: https://progenetix.org/services/schemas/entryTypesSchema/
+  h->o_access_key: Null
+
+map:
+  entity_type: map
+  collection: Null
+  response_schema: beaconMapResponse
+  beacon_schema:
+    entity_type: map
+    schema: https://progenetix.org/services/schemas/beaconMapSchema/
+  h->o_access_key: Null
+
+filteringTerm:
+  entity_type: filteringTerm
+  collection: Null
+  response_schema: beaconFilteringTermsResponse
+  beacon_schema:
+    entity_type: filteringTerm
+    schema: https://progenetix.org/services/schemas/filteringTermsSchema/
+  h->o_access_key: Null
+
+dataset:
+  entity_type: dataset
+  collection: dbstats
+  response_schema: beaconCollectionsResponse
+  beacon_schema:
+    entity_type: dataset
+    schema: https://progenetix.org/services/schemas/dataset/
+  h->o_access_key: Null
+
+cohort:
+  entity_type: cohort
+  collection: collations
+  response_schema: beaconCollectionsResponse
+  beacon_schema:
+    entity_type: cohort
+    schema: https://progenetix.org/services/schemas/cohort/
+  h->o_access_key: Null
+
+individual:
+  entity_type: individual
+  collection: individuals
+  response_schema: beaconResultsetsResponse
+  beacon_schema:
+    entity_type: individual
+    schema: https://progenetix.org/services/schemas/individual/
+  h->o_access_key: "individuals._id" 
+
+phenopacket:
+  entity_type: phenopacket
+  collection: individuals
+  response_schema: beaconResultsetsResponse
+  beacon_schema:
+    entity_type: phenopacket
+    schema: https://progenetix.org/services/schemas/phenopacket/
+  h->o_access_key: "individuals._id"
+
+biosample:
+  entity_type: biosample
+  collection: biosamples
+  response_schema: beaconResultsetsResponse
+  beacon_schema:
+    entity_type: biosample
+    schema: https://progenetix.org/services/schemas/biosample/
+  h->o_access_key: "biosamples._id"
+
+analysis:
+  entity_type: analysis
+  collection: callsets  
+  response_schema: beaconResultsetsResponse
+  beacon_schema:
+    entity_type: analysis
+    schema: https://progenetix.org/services/schemas/analysis/
+  h->o_access_key: "callsets._id"
+
+run:
+  entity_type: run
+  collection: callsets
+  response_schema: beaconResultsetsResponse
+  beacon_schema:
+    entity_type: run
+    schema: https://progenetix.org/services/schemas/run/
+  h->o_access_key: "callsets._id"
+
+genomicVariant:
+  entity_type: genomicVariant
+  response_schema: beaconResultsetsResponse
+  collection: variants
+  beacon_schema:
+    entity_type: genomicVariant
+    schema: https://progenetix.org/services/schemas/genomicVariant/    
+  h->o_access_key: "variants._id"
+

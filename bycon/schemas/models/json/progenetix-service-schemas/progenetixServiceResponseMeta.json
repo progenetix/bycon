@@ -23,5 +23,6 @@
             "type": "array"
         }
     },
-    "title": "progenetixServiceResponseMeta"
+    "title": "progenetixServiceResponseMeta",
+    "type": "object"
 }

@@ -75,5 +75,6 @@
             "type": "integer"
         }
     },
-    "title": "IntervalFrequencyItem"
+    "title": "IntervalFrequencyItem",
+    "type": "object"
 }
