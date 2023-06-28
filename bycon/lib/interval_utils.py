@@ -1,7 +1,7 @@
 import numpy as np
 from copy import deepcopy
 
-from cytoband_utils import *
+from genome_utils import *
 
 ################################################################################
 
@@ -58,11 +58,17 @@ end:
 ################################################################################
 ################################################################################
 
-def generate_genomic_intervals(byc):
-    if not "cytobands" in byc:
-        parse_cytoband_file(byc)
+def generate_genomic_mappings(byc):
 
-    generate_cytoband_intervals(byc)
+    parse_refseq_file(byc)
+    translate_reference_ids(byc)
+    parse_cytoband_file(byc)
+    __generate_cytoband_intervals(byc)
+    __generate_genomic_intervals(byc)
+
+################################################################################
+
+def __generate_genomic_intervals(byc):
 
     binning = byc.get("genome_binning", "default")
 
@@ -130,7 +136,7 @@ def generate_genomic_intervals(byc):
 
 ################################################################################
 
-def generate_cytoband_intervals(byc):
+def __generate_cytoband_intervals(byc):
     intervals = []
 
     for cb in byc["cytobands"]:
@@ -160,8 +166,8 @@ def interval_cnv_arrays(cs_vars, byc):
     (`cnv_statusmaps.max`, `cnv_statusmaps.min`).
     """
 
-    v_d = byc["variant_definitions"]
-    efo_vrs = v_d["ontology_variant_types"]
+    v_d = byc["variant_parameters"]
+    v_t_defs = byc["variant_type_definitions"]
     c_l = byc["cytolimits"]
     intervals = byc["genomic_intervals"]
 
@@ -219,12 +225,14 @@ def interval_cnv_arrays(cs_vars, byc):
             continue
 
         v_t_c = v["variant_state"].get("id", "__NA__")
-        if v_t_c not in efo_vrs.keys():
+        if v_t_c not in v_t_defs.keys():
             continue
 
-        dup_del = efo_vrs[v_t_c]["DUPDEL"]
-        if dup_del not in cov_labs.keys():
+        dup_del = v_t_defs[v_t_c].get("DUPDEL")
+        # skipping non-CNV vars
+        if dup_del is None:
             continue
+
         cov_lab = cov_labs[dup_del]
 
         if "reference_name" not in v:
@@ -253,7 +261,7 @@ def interval_cnv_arrays(cs_vars, byc):
                     if type(v["info"]["cnv_value"]) == int or type(v["info"]["cnv_value"]) == float:
                         values_map[i].append(v["info"]["cnv_value"])
                     else:
-                        values_map[i].append(v_d["cnv_dummy_values"][dup_del])
+                        values_map[i].append(v_t_defs[v_t_c].get("cnv_dummy_value"))
                 except:
                     pass
 

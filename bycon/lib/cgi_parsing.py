@@ -136,7 +136,7 @@ def cgi_parse_POST(byc):
 def cgi_parse_GET(byc):
     b_defs = byc.get("beacon_parameters", {})
     p_defs = byc.get("plot_defaults", {})
-    v_defs = byc.get("variant_definitions", {})
+    v_defs = byc.get("variant_parameters", {})
 
     f_defs = {**b_defs.get("parameters", {}), **p_defs.get("parameters", {}), **v_defs.get("parameters", {})}
 
@@ -219,7 +219,7 @@ def rest_path_elements(byc):
         r_i += 1
         if r_i >= len(p_items):
             return
-
+        # print(f'{p_k}: {unquote(p_items[r_i])}')
         byc.update({p_k: unquote(p_items[r_i])})
 
 

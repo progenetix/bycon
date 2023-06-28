@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw
 
 from cgi_parsing import get_plot_parameters, print_svg_response, prjsonnice, test_truthy
 from clustering_utils import cluster_frequencies, cluster_samples
-from cytoband_utils import bands_from_cytobands, retrieve_gene_id_coordinates
+from genome_utils import bands_from_cytobands, retrieve_gene_id_coordinates
 
 # http://progenetix.org/cgi/bycon/services/intervalFrequencies.py?chr2plot=8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot
 # http://progenetix.org/beacon/biosamples/?datasetIds=progenetix&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot&plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6

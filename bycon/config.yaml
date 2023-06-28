@@ -28,6 +28,10 @@ byc_root_pars:
   download_mode: false
   errors: []
 
+genomes_path:
+  - rsrc
+  - genomes
+
 schemas_root:
   - schemas
 

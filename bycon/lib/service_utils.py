@@ -4,7 +4,7 @@ from pathlib import Path
 
 from args_parsing import *
 from cgi_parsing import prjsonnice
-from cytoband_utils import translate_reference_ids
+from genome_utils import translate_reference_ids
 from data_retrieval import *
 from dataset_parsing import select_dataset_ids
 from datatable_utils import export_datatable_download
@@ -12,7 +12,7 @@ from export_file_generation import *
 from file_utils import ByconBundler, callset_guess_probefile_path
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, \
     dataset_results_save_handovers
-from interval_utils import generate_genomic_intervals
+from interval_utils import generate_genomic_mappings
 from bycon_plot import ByconPlot
 from query_execution import execute_bycon_queries, mongo_result_list
 from query_generation import generate_queries, initialize_beacon_queries, paginate_list, set_pagination_range
@@ -74,7 +74,7 @@ def run_beacon_init_stack(byc):
     create_empty_beacon_response(byc)
     initialize_beacon_queries(byc)
     response_add_received_request_summary_parameters(byc)
-    generate_genomic_intervals(byc)
+    generate_genomic_mappings(byc)
     response_collect_errors(byc)
     cgi_break_on_errors(byc)
 
@@ -88,7 +88,8 @@ def initialize_bycon_service(byc, service=False):
 
     form = byc["form_data"]
 
-    service = byc.get("request_entity_path_id", False)
+    if service is False:
+        service = byc.get("request_entity_path_id", False)
     frm = inspect.stack()[1]
     if service is False:
         service = frm.function
@@ -99,7 +100,7 @@ def initialize_bycon_service(byc, service=False):
     if service in s_a_s:
         service = s_a_s[service]
 
-    service = decamelize(service)
+    # service = decamelize(service)
     scope = "beacon"
 
     mod = inspect.getmodule(frm[0])
@@ -159,7 +160,9 @@ def initialize_bycon_service(byc, service=False):
     set_response_entity(byc)
 
     set_io_params(byc)
-    translate_reference_ids(byc)
+    # CAVE: At this time the genome is just taken from the default so has to 
+    # be run again after form value parsing ...
+    generate_genomic_mappings(byc)
     set_special_modes(byc)
 
     # TODO: standardize the general defaults / entity defaults / form values merging
@@ -769,6 +772,8 @@ def return_filtering_terms_response(byc):
 
     collation_types = set()
 
+    scopes = ["biosamples", "individuals", "analyses", "genomicVariations"]
+
     for ds_id in byc["dataset_ids"]:
 
         query = {"dataset_id": ds_id}
@@ -791,6 +796,7 @@ def return_filtering_terms_response(byc):
             for k in ["id", "type", "label"]:
                 if k in f:
                     f_t.update({k: f[k]})
+            f_t.update({"scopes": scopes})
             t_f_t_s.append(f_t)
 
         f_t_s.extend(t_f_t_s)
@@ -843,7 +849,7 @@ def check_callset_plot_delivery(byc):
         if not "callsets._id" in ds_results:
             continue
 
-        v_d = byc["variant_definitions"]
+        v_d = byc["variant_parameters"]
         mongo_client = MongoClient()
         cs_coll = mongo_client[ds_id]["callsets"]
         var_coll = mongo_client[ds_id]["variants"]

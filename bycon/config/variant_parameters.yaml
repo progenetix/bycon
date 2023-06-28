@@ -1,0 +1,222 @@
+################################################################################
+#
+# TODO: use definitions directly from model -> genomicVariations -> requestParameters
+#
+################################################################################
+
+parameters:
+
+  assembly_id:
+    type: string
+    pattern: '^\w+?[\w\-\.]*?\w*?$'
+    db_key: assembly_id
+    default: GRCh38
+
+  reference_name:
+    type: string
+    db_key: location.sequence_id
+    pattern: '^\w+.*?\w?$'
+
+  mate_name:
+    type: string
+    db_key: location.sequence_id
+    pattern: '^\w+.*?\w?$'
+
+  reference_bases:
+    type: string
+    db_key: reference_bases
+    pattern: '^[ACGTN]+$'
+
+  alternate_bases:
+    type: string
+    db_key: state.sequence
+    pattern: '^[ACGTN]+$'
+
+  variant_type:
+    db_key: variant_state.id
+    items:
+    type: string
+    pattern: '^\w+[\w \-\:]\w+?$'
+
+  start:
+    type: array
+    db_key: location.start
+    items:
+      type: integer
+      pattern: '^\d+?$'
+
+  end:
+    type: array
+    db_key: location.end
+    items:
+      type: integer
+      pattern: '^\d+?$'
+
+  variant_min_length:
+    type: integer
+    db_key: info.var_length
+    pattern: '^\d+?$'
+    description: >-
+      The minimal length, in bases, of a genomic variant. This parameter can be applied to e.g. CNV queries.
+
+  variant_max_length:
+    type: integer
+    db_key: info.var_length
+    pattern: '^\d+?$'
+    description: >
+      The maximal length, in bases, of a genomic variant. This parameter can be applied to e.g. CNV queries.
+
+  gene_id:
+    type: string
+    db_key: Null
+    pattern: '^\w+?(\w+?(\-\w+?)?)?$'
+
+# custom parameters
+
+  variant_internal_id:
+    type: string
+    db_key: variant_internal_id
+    pattern: '^\w[\w\:\-\,]+?\w$'
+    description: >
+      An id value used for all variant instances of the same composition.
+      In Progenetix this is used to aggregate all the instances of
+      "caseLevelData" variants.
+
+  id:
+    type: string
+    db_key: id
+    pattern: '^\w[\w\:\-\,]+?\w$'
+    description: >
+      A variant id, if existing in the database.
+
+  cyto_bands:
+    db_key: Null
+    pattern: ^(?:chro?)?([12]?[\dXY])([pq](?:(?:ter)|(?:cen)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?\-?([pq](?:(?:cen)|(?:ter)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?$
+    type: string
+
+  chro_bases:
+    db_key: Null
+    pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
+    type: string
+
+# As long as there are no variant query schemas to define valid Beacon
+# variant parameter combinations the `request_types` here provide sets
+# of combinations valid at least for `bycon` Progenetix etc. data.
+request_types:
+
+  variantTypeRequest:
+    description: >
+      A query for SNV variants; not a Beacon standard.
+    all_of:
+      - variant_type
+    optional:
+      - reference_name
+
+  variantIdRequest:
+    description: >
+      A query for a specific variant by its `id` or internal `_id`.
+    one_of:
+      - id
+      - _id
+      - variant_internal_id
+
+  variantCNVrequest:
+    description: >
+      This specific request allows for the bracketed search of genomic variants
+      with start and end coordinates and a variant type. in contrast to a
+      beaconRangeRequest, the start and end positions of the matched variants
+      have to fall into the (1 base or longer) intervals for start and end,
+      respectively (while for the range request variants falling between start
+      and end are being matched).
+      `start` and `end` parameters are lists of 1 or 2 integers. The most common
+      use here would be a use of 2 integers both for start and end, to allow
+      fuzzy matching of CNVs and similar variants of imprecise length and
+      position.
+    all_of:
+      - assembly_id
+      - start
+      - end
+      - reference_name
+      - variant_type
+    optional:
+      - variant_min_length
+      - variant_max_length
+
+  variantRangeRequest:
+    description: >-
+      The beaconRangeRequest queries variants falling between start and end.
+      `start` and `end` parameters should be single values.
+    all_of:
+      - assembly_id
+      - start
+      - end
+      - reference_name
+    optional:
+      - variant_type
+      - reference_bases
+      - alternate_bases
+      - variant_min_length
+      - variant_max_length
+
+  variantAlleleRequest:
+    description: >
+      This type corresponds to the original BeaconAlleleRequest, in which at a
+      specified genome position a query looks for a combination of reference and
+      replacement base(s).
+    all_of:
+      - assembly_id
+      - start
+      - reference_name
+      - reference_bases
+      - alternate_bases
+
+# custom
+
+  variantFusionRequest:
+    description: |
+      This request is similar to the CNV request in using possibly fuzzy
+      intervals for start and end of structural variants. However, here the
+      "end" position refers to the fusion partner on the same or different
+      chromosome as specified through "mateName".
+      Conventions:
+      * `mateName` can be the same or different to `referenceName`
+      * `mateName` is the higher numbered/named chromosome
+    all_of:
+      - assembly_id
+      - reference_name
+      - mate_name
+      - start
+      - end
+
+  geneVariantRequest:
+    description: >
+      A variant overlapping with the genomic coordinates of a gene or other named sequence element.
+    all_of:
+      - gene_id
+    optional:
+      - variant_type
+      - reference_bases
+      - alternate_bases
+      - variant_min_length
+      - variant_max_length
+
+  cytobands2positions_request:
+    all_of:
+      - assembly_id
+      - cyto_bands
+
+  positions2cytobands_request:
+    all_of:
+      - assembly_id
+      - start
+      - end
+      - reference_name
+      - range_tag
+
+  ChromosomeLocation:
+    all_of:
+      - type
+      - species
+      - chr
+      - start
+      - end

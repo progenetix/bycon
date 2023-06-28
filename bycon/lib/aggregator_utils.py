@@ -5,8 +5,10 @@ from liftover import get_lifter
 from humps import camelize
 from cgi_parsing import test_truthy
 
+from variant_parsing import variant_vcf_type_from_variant_par
+
 """
-http://progenetix.test/cgi/bycon/beaconServer/aggregator.py?requestedGranularity=boolean&limit=1000&skip=0&datasetIds=progenetix&assemblyId=GRCh38&referenceName=refseq%3ANC_000009.12&variantType=EFO%3A0030067&filterLogic=AND&includeDescendantTerms=True&start=21000000&start=21975098&end=21967753&end=23000000&filters=NCIT%3AC3058
+http://progenetix.test/cgi/bycon/services/aggregator.py?requestedGranularity=boolean&limit=1000&skip=0&datasetIds=progenetix&assemblyId=GRCh38&referenceName=refseq%3ANC_000009.12&variantType=EFO%3A0030067&filterLogic=AND&includeDescendantTerms=True&start=21000000&start=21975098&end=21967753&end=23000000&filters=NCIT%3AC3058
 """
 
 ################################################################################
@@ -47,9 +49,9 @@ def remap_parameters_values(pvs, ext_defs, byc):
     # TODO: de-convolute; maybe by explicitely having a remap method for each
     #       re-mappable parameter instead of this loop & specials mix
 
-    v_rs_chros = byc["variant_definitions"]["chro_aliases"]
-    v_states = byc["variant_definitions"]["variant_state_VCF_aliases"]
-    v_p_defs = byc["variant_definitions"]["parameters"]
+    g_a = byc.get("genome_aliases", {})
+    c_a = g_a.get("chro_aliases", {})
+    v_p_defs = byc["variant_parameters"]["parameters"]
     service_defaults = byc["service_config"]["beacon_params"].get("defaults", {})
 
     form_p = deepcopy(byc["form_data"])
@@ -58,7 +60,7 @@ def remap_parameters_values(pvs, ext_defs, byc):
     if "assembly_id" in ext_defs["parameter_map"]:
         target_assembly = ext_defs["parameter_map"]["assembly_id"].get("value", "GRCh38")
 
-    chro = v_rs_chros.get( form_p.get("reference_name", "NA"), "NA") 
+    chro = c_a.get( form_p.get("reference_name", "NA"), "NA") 
 
     for v_p_k in v_p_defs.keys():
 
@@ -77,13 +79,9 @@ def remap_parameters_values(pvs, ext_defs, byc):
 
             if "variant_type" in v_p_k:
                 if "VCF" in v_p_v.get("variant_style", "VCF"):
-                    if val in v_states:
-                        val = v_states[val]
-
-            if "variant_type" in v_p_k:
-                if "VCF" in v_p_v.get("variant_style", "VCF"):
-                    if val in v_states:
-                        val = v_states[val]
+                    vcf = variant_vcf_type_from_variant_par(val, byc)
+                    if vcf is not False:
+                        val = vcf
 
             elif "start" in v_p_k or "end" in v_p_k:
                 val[0] = int(val[0]) + int(v_p_v.get("shift", 0))
@@ -133,7 +131,7 @@ def add_parameter_values(pvs, ext_defs, byc):
     # adding the parameters which stay _as is_
 
     form_p = deepcopy(byc["form_data"])
-    v_p_defs = byc["variant_definitions"]["parameters"]
+    v_p_defs = byc["variant_parameters"]["parameters"]
     
     for v_p_k in v_p_defs.keys():
         if not v_p_k in form_p.keys():

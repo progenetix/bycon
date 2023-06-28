@@ -38,7 +38,6 @@ def cohorts():
 
     initialize_bycon_service(byc)
     run_beacon_init_stack(byc)
-    return_filtering_terms_response(byc)
 
     _return_cohorts_response(byc)
 
@@ -59,28 +58,28 @@ def _return_cohorts_response(byc):
     mongo_client = MongoClient( )
 
     cohorts =  []
-
-    # TODO: verifier hack ...
-    if not "cohorts" in byc["queries"]:
-        byc.update({"test_mode": True})
-
-    if byc["test_mode"] is True:
+    c_id = byc.get("request_entity_path_id_value")
+ 
+    if c_id is not None:
+        byc["queries"].update( {"cohorts": { "id": c_id } } )
+    else:
         byc["queries"].update( {"cohorts": { "collation_type": "pgxcohort" } } )
 
-    try:
-        query = byc["queries"]["cohorts"]
-        
-        for ds_id in byc[ "dataset_ids" ]:
-            mongo_db = mongo_client[ ds_id ]        
-            mongo_coll = mongo_db[ "collations" ]
+    query = byc["queries"].get("cohorts", {})
+    
+    for ds_id in byc[ "dataset_ids" ]:
+        mongo_db = mongo_client[ ds_id ]        
+        mongo_coll = mongo_db[ "collations" ]
 
-            for cohort in mongo_coll.find( query ):
-                cohorts.append(cohort)
-                byc["service_response"]["response_summary"].update({"exists":True})
-    except:
-        pass
+        for cohort in mongo_coll.find( query ):
+            cohorts.append(cohort)
+            byc["service_response"]["response_summary"].update({"exists":True})
 
     cohorts = remap_cohorts(cohorts, byc)
+
+    if byc["test_mode"] is True:
+        ret_no = int(byc.get('test_mode_count', 5))
+        cohorts = cohorts[:ret_no]
 
     byc["service_response"]["response"].pop("result_sets", None)
     byc["service_response"]["response"].update({"collections": cohorts})

@@ -28,7 +28,7 @@ parameters:
     default:
       - progenetix
 
-  # Beacon variant parameters are in `variant_definitions.yaml`
+  # Beacon variant parameters are in `variant_parameters.yaml`
 
   # Progenetix parameters
 

@@ -374,7 +374,7 @@ def _update_queries_from_variants(byc):
     if "variant_request_type" not in byc:
         return
 
-    if byc["variant_request_type"] not in byc["variant_definitions"]["request_types"].keys():
+    if byc["variant_request_type"] not in byc["variant_parameters"]["request_types"].keys():
         if "variants" not in byc["queries"]:
             return
 

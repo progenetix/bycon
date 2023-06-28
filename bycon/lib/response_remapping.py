@@ -3,7 +3,8 @@ from pymongo import MongoClient
 from cgi_parsing import *
 from interval_utils import interval_counts_from_callsets
 
-
+################################################################################
+################################################################################
 ################################################################################
 
 def reshape_resultset_results(ds_id, r_s_res, byc):
@@ -35,7 +36,7 @@ def remap_variants(r_s_res, byc):
     if "vcf" in byc["output"].lower():
         return r_s_res
 
-    v_d = byc["variant_definitions"]
+    v_d = byc["variant_parameters"]
 
     variant_ids = []
     for v in r_s_res:
@@ -100,7 +101,7 @@ def remap_variants_to_VCF(r_s_res, byc):
 ##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">"""
     )
 
-    v_d = byc["variant_definitions"]
+    v_d = byc["variant_parameters"]
     v_o = {
         "#CHROM": ".",
         "POS": ".",
@@ -158,25 +159,26 @@ def remap_variants_to_VCF(r_s_res, byc):
 def vrsify_variant(variant, byc):
     # TODO: Still prototyping; also need to accomodate VRS 1.3
 
-    v_d = byc["variant_definitions"]
-    v_t_als = v_d["variant_state_aliases"]
-    r_a = v_d["refseq_aliases"]
-    efo_vrs = v_d["ontology_variant_types"]
+    v_d = byc["variant_parameters"]
+    g_a = byc.get("genome_aliases", {})
+    r_a = g_a.get("refseq_aliases", {})
 
     v_type = variant.get("variant_type", False)
     if v_type is False:
         return variant
 
-    if v_type not in v_t_als:
+    v_s = variant_state_from_variant_par(v_type, byc)
+    if v_s is False:
         return variant
 
-    variant.update({
-        "variant_state": {
-            "id": v_t_als[v_type],
-            "label": efo_vrs[v_t_als[v_type]].get("label", "")
-        }})
+    variant.update({ "variant_state": v_s })
 
-    sequence_id = r_a.get(variant.get("reference_name", "___none___"), False)
+    if not "sequence_id" in variant["location"]:
+        chro = variant["location"].get("chromosome", False)
+        if chro:
+            sequence_id = r_a.get(chro, False)
+        else:
+            sequence_id = r_a.get(variant.get("reference_name", "___none___"), False)
     if sequence_id is False:
         return variant
 
@@ -219,7 +221,8 @@ def vcf_variant(v, vcf_v, byc):
 ################################################################################
 
 def de_vrsify_variant(v, byc):
-    v_d = byc["variant_definitions"]
+    v_d = byc["variant_parameters"]
+    v_t_defs = byc.get("variant_type_definitions")
 
     r_n = v["location"].get("sequence_id")
     if r_n is None:
@@ -237,11 +240,15 @@ def de_vrsify_variant(v, byc):
         "start": v["location"]["start"],
         "end": v["location"]["end"],
         "info": v.get("info", {}),
-        "variant_label": v["variant_state"].get("label", "")
+        "variant_label": v["variant_state"].get("label", ""),
+        "variant_state": v["variant_state"].get("id", "")
     }
 
-    efo = v["variant_state"].get("id")
-    v_r.update({"variant_type": v_d["ontology_variant_types"][efo]["DUPDEL"]})
+    efo = v["variant_state"].get("id", "___none___")
+    if efo in v_t_defs:
+        vcf_type = v_t_defs[efo].get("VCF")
+        if vcf_type is not None:
+            v_r.update({"variant_type": v_t_defs[efo]["VCF"]})
 
     return v_r
 
@@ -501,38 +508,6 @@ def remap_all(r_s_res):
         clean_empty_fields(r_s_res[br_i])
 
     return r_s_res
-
-
-################################################################################
-
-def normalize_variant_values_for_export(v, byc, drop_fields=None):
-    drop_fields = [] if drop_fields is None else drop_fields
-
-    v_defs = byc["variant_definitions"]
-
-    v["log2"] = False
-    if "info" in v:
-        if "cnv_value" in v["info"]:
-            if isinstance(v["info"]["cnv_value"], float):
-                v["log2"] = round(v["info"]["cnv_value"], 3)
-        if not "info" in drop_fields:
-            drop_fields.append("info")
-
-    if v["log2"] == False:
-        if "variant_type" in v:
-            if v["variant_type"] in v_defs["cnv_dummy_values"].keys():
-                v["log2"] = v_defs["cnv_dummy_values"][v["variant_type"]]
-
-    if v["log2"] == False:
-        drop_fields.append("log2")
-
-    for i_k in ["start", "end"]:
-        v.update({i_k: int(v[i_k])})
-
-    for d_f in drop_fields:
-        v.pop(d_f, None)
-
-    return v
 
 
 ################################################################################

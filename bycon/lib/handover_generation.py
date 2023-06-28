@@ -249,22 +249,22 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
             if v_ret <= p_f:
                 continue
         
+        # TODO: Just make this from the standard variant format
         v_d = de_vrsify_variant(v, byc)
         if v_d is False:
             continue
 
-        if "variant_type" in v_d:
-            v_d.update({"size": v_d["end"] - v_d["start"] })
-            if "DUP" in v_d["variant_type"]:
-                vs["DUP"].append(v_d)
-            elif "DEL" in v_d["variant_type"]:
-                vs["DEL"].append(v_d)
-            elif "LOH" in v_d["variant_type"]:
-                vs["LOH"].append(v_d)
-            else:
-                continue
-        elif "reference_bases" in v_d:
+        v_d.update({"size": v_d["end"] - v_d["start"] })
+        if "DUP" in v_d["variant_type"]:
+            vs["DUP"].append(v_d)
+        elif "DEL" in v_d["variant_type"]:
+            vs["DEL"].append(v_d)
+        elif "LOH" in v_d["variant_type"]:
+            vs["LOH"].append(v_d)
+        elif "SNV" in v_d["variant_type"]:
             vs["SNV"].append(v_d)
+        else:
+            continue
 
     b_f = open( bed_file, 'w' )
     pos = set()

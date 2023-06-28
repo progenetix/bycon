@@ -1,3 +1,7 @@
+genome_default: GRCh38
+
+cnv_amp_max_size: 5000000
+
 genome_bin_sizes:
   description: >-
     * keyword defined base sizes of genomic binning intervals for CNV satus and

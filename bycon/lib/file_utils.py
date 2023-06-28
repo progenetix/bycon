@@ -199,9 +199,7 @@ class ByconBundler:
     #--------------------------------------------------------------------------#
 
     def pgxseg_to_keyed_bundle(self, filepath):
-
         self.read_pgx_file(filepath)
-
 
         if not "biosample_id" in self.fieldnames:
             self.errors.append("¡¡¡ The `biosample_id` parameter is required for variant assignment !!!")

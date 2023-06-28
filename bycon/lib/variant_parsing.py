@@ -3,18 +3,15 @@ import bson.objectid
 from cgi_parsing import *
 from query_execution import mongo_result_list
 
-
 ################################################################################
 
 def parse_variant_parameters(byc):
 
-    if not "variant_definitions" in byc:
-        return
+    v_d = byc["variant_parameters"]
+    v_p_defs = v_d["parameters"]
+    v_t_defs = byc["variant_type_definitions"]
 
     variant_pars = { }
-    v_p_defs = byc["variant_definitions"]["parameters"]
-    v_t_als = byc["variant_definitions"]["variant_state_aliases"]
-    v_t_defs = byc["variant_definitions"]["variant_states"]
 
     for p_k in v_p_defs.keys():
         v_default = None
@@ -36,12 +33,12 @@ def parse_variant_parameters(byc):
             continue
         v_p = variant_pars[ p_k ]
         if "variant_type" in p_k:
-            if v_p in v_t_als:
-                v_t_k = v_t_als[v_p]
-                if "LiteralSequenceExpression" in v_t_k:
-                    v_p_c[ p_k ] = None
-                else:
-                    v_p_c[ p_k ] = { "$in": v_t_defs[v_t_k]["child_terms"] }
+            v_s = variant_state_from_variant_par(v_p, byc)
+            if v_s is False:
+                v_p_c[ p_k ] = None
+            else:
+                v_s_id = v_s["id"]  # on purpose here leading to error if ill defined
+                v_p_c[ p_k ] = { "$in": v_t_defs[v_s_id]["child_terms"] }
         elif "array" in v_p_defs[ p_k ]["type"]:
             v_l = set()
             for v in v_p:
@@ -60,13 +57,54 @@ def parse_variant_parameters(byc):
 
 ################################################################################
 
+def variant_state_from_variant_par(variant_type, byc):
+    v_d = byc["variant_parameters"]
+    v_t_defs = byc["variant_type_definitions"]
+
+    for k, d in v_t_defs.items():
+        for p, v in d.items():
+            if v is None:
+                continue
+            if type(v) is list:
+                continue
+            if "variant_state" in p:
+                v = v.get("id", "___none___")
+            if variant_type.lower() == v.lower():
+                return d["variant_state"]
+
+    return False
+
+
+################################################################################
+
+def variant_vcf_type_from_variant_par(variant_type, byc):
+    v_d = byc["variant_parameters"]
+    v_t_defs = byc["variant_type_definitions"]
+
+    for k, d in v_t_defs.items():
+        for p, v in d.items():
+            if v is None:
+                continue
+            if type(v) is list:
+                continue
+            if "variant_state" in p:
+                v = v.get("id", "___none___")
+            if variant_type.lower() == v.lower():
+                return d.get("VCF")
+
+    return False
+
+
+################################################################################
+
 def translate_reference_name(variant_pars, byc):
 
     if not "reference_name" in variant_pars:
         return variant_pars
 
     r_n = variant_pars[ "reference_name" ]
-    r_a = byc["variant_definitions"]["refseq_aliases"]
+    g_a = byc.get("genome_aliases", {})
+    r_a = g_a.get("refseq_aliases", {})
 
     if not r_n in r_a.keys():
         variant_pars.pop("reference_name")
@@ -75,6 +113,7 @@ def translate_reference_name(variant_pars, byc):
     variant_pars.update({"reference_name": r_a[r_n] })
 
     return variant_pars
+
 
 ################################################################################
 
@@ -95,9 +134,9 @@ def get_variant_request_type(byc):
     variant_request_type = "no correct variant request"
 
     v_pars = byc["variant_pars"]
-    v_p_defs = byc["variant_definitions"]["parameters"]
+    v_p_defs = byc["variant_parameters"]["parameters"]
 
-    brts = byc["variant_definitions"]["request_types"]
+    brts = byc["variant_parameters"]["request_types"]
     brts_k = brts.keys()
     
     # DODO HACK: setting to range request if start and end with one value
@@ -156,7 +195,7 @@ def create_variantTypeRequest_query( byc ):
         return
 
     vp = byc["variant_pars"]
-    v_p_defs = byc["variant_definitions"]["parameters"]
+    v_p_defs = byc["variant_parameters"]["parameters"]
 
     v_q_l = [
         { v_p_defs["variant_type"]["db_key"]: vp[ "variant_type" ] }
@@ -181,7 +220,7 @@ def create_variantIdRequest_query( byc ):
 
     # query database for gene and use coordinates to create range query
     vp = byc["variant_pars"]
-    v_p_defs = byc["variant_definitions"]["parameters"]
+    v_p_defs = byc["variant_parameters"]["parameters"]
 
     if "_id" in vp:
         v_q = {v_p_defs["_id"]["db_key"] : bson.objectid.ObjectId(vp["_id"])}
@@ -206,7 +245,7 @@ def create_geneVariantRequest_query( byc ):
 
     # query database for gene and use coordinates to create range query
     vp = byc["variant_pars"]
-    v_p_defs = byc["variant_definitions"]["parameters"]
+    v_p_defs = byc["variant_parameters"]["parameters"]
 
 
     query = { "symbol" : vp[ "gene_id" ] }
@@ -236,7 +275,7 @@ def create_variantAlleleRequest_query( byc ):
         return
 
     vp = byc["variant_pars"]
-    v_p_defs = byc["variant_definitions"]["parameters"]
+    v_p_defs = byc["variant_parameters"]["parameters"]
 
     # TODO: Regexes for ref or alt with wildcard characters
 
@@ -264,7 +303,7 @@ def create_variantCNVrequest_query( byc ):
         return
 
     vp = byc["variant_pars"]
-    v_p_defs = byc["variant_definitions"]["parameters"]
+    v_p_defs = byc["variant_parameters"]["parameters"]
 
     v_q = { "$and": [
         { v_p_defs["reference_name"]["db_key"]: vp[ "reference_name" ] },
@@ -285,7 +324,7 @@ def create_variantRangeRequest_query( byc ):
         return
     
     vp = byc["variant_pars"]
-    v_p_defs = byc["variant_definitions"]["parameters"]
+    v_p_defs = byc["variant_parameters"]["parameters"]
 
     v_q_l = [
         { v_p_defs["reference_name"]["db_key"]: vp[ "reference_name" ] },
@@ -377,7 +416,10 @@ def chroname_from_refseqid(refseqid, byc):
 ################################################################################
 
 def normalize_pgx_variant(variant, byc, counter=1):
-    v_d = byc["variant_definitions"]
+    g_a = byc.get("genome_aliases", {})
+    r_a = g_a.get("refseq_aliases", {})
+    c_a = g_a.get("chro_aliases", {})
+    v_t_defs = byc["variant_type_definitions"]
     errors = []
 
     var_id = variant.get("id", counter)
@@ -388,10 +430,10 @@ def normalize_pgx_variant(variant, byc, counter=1):
     end = variant["location"].get("end")
     if not seq_id:
         if chromosome:
-            variant["location"].update({"sequence_id": v_d["refseq_aliases"].get(str(chromosome))})
+            variant["location"].update({"sequence_id": r_a.get(str(chromosome))})
     if not chromosome:
         if seq_id:
-            variant["location"].update({"chromosome": v_d["chro_aliases"].get(str(seq_id))})
+            variant["location"].update({"chromosome": c_a.get(str(seq_id))})
     if not isinstance(end, int):
         try:
             ref = variant.get("reference_sequence")
@@ -413,10 +455,10 @@ def normalize_pgx_variant(variant, byc, counter=1):
     variant_type = variant.get("variant_type")
     if not var_state_id:
         if variant_type:
-            variant.update({"variant_state": v_d["variant_type_ontologies"][variant_type].get("variant_state")})
+            variant.update({ "variant_state": variant_state_from_variant_par(variant_type, byc) })
 
     try:
-        variant["variant_state"].update({"label": v_d["ontology_variant_types"][var_state_id].get("label")})
+        variant["variant_state"].update({"label": v_t_defs[var_state_id].get("label")})
     except:
         pass
 

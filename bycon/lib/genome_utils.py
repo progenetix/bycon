@@ -1,4 +1,4 @@
-import csv, datetime, re, time, base36
+import csv, datetime, re, time, base36, yaml
 from os import path, pardir
 
 # local
@@ -13,23 +13,45 @@ pkg_path = path.join( bycon_lib_path, pardir )
 ################################################################################
 ################################################################################
 
-def parse_cytoband_file(byc):
+def __get_genome_rsrc_path(byc, filename):
 
-    """podmd
- 
-    podmd"""
     # TODO: catch error for missing genome edition
+    # TODO: adjust resource file use for local configuration
     g_map = byc["interval_definitions"]["genome_path_ids"].get("values", {})
+    genome = byc["interval_definitions"]["genome_default"]
+    if "variant_pars" in byc:
+        p_g = byc["variant_pars"].get("assembly_id")
+        if p_g is not None:
+            genome = p_g
 
-    genome = byc["variant_pars"][ "assembly_id" ].lower()
+    genome = genome.lower()
 
-    # TODO / BUG: next breaks e.g. "mSarHar1.11"
+    # TODO / BUG: next breaks e.g. "mSarHar1.11" -> therefore mapping...
     genome = re.sub( r"(\w+?)([^\w]\w+?)", r"\1", genome)
-
     if genome in g_map.keys():
         genome = g_map[ genome ]
 
-    cb_file = path.join( pkg_path, "rsrc", "genomes", genome, "cytoBandIdeo.txt" ) 
+    return path.join( pkg_path, *byc["config"]["genomes_path"], genome, filename ) 
+
+
+################################################################################
+
+def parse_refseq_file(byc):
+    refseq_file = __get_genome_rsrc_path(byc, "refseq_chromosomes.yaml") 
+    with open( refseq_file ) as f:
+        r_c = yaml.load( f , Loader=yaml.FullLoader)
+
+    byc.update({ "refseq_chromosomes": r_c })
+
+
+################################################################################
+
+def parse_cytoband_file(byc):
+    """podmd
+ 
+    podmd"""
+ 
+    cb_file = __get_genome_rsrc_path(byc, "cytoBandIdeo.txt") 
     cb_re = re.compile( byc["interval_definitions"][ "cytobands" ][ "pattern" ] )
     cb_keys = [ "chro", "start", "end", "cytoband", "staining" ]
 
@@ -80,7 +102,7 @@ def parse_cytoband_file(byc):
 
 def bands_from_cytobands(chr_bands, byc):
 
-    cb_pat = re.compile( byc["variant_definitions"]["parameters"]["cyto_bands"]["pattern"] )
+    cb_pat = re.compile( byc["variant_parameters"]["parameters"]["cyto_bands"]["pattern"] )
     error = ""
 
     # chr_bands = re.sub(r'', $1, chr_bands)
@@ -241,7 +263,7 @@ def translate_reference_ids(byc):
         refseq_id: "refseq:NC_000003.12"
         length: 198295559
     ```
-    Return: added objects in byc["variant_definitions"]
+    Return: added objects in byc["variant_parameters"]
       - "chro_refseq_ids" - refseq id for each chromosome
           - "15": "refseq:NC_000015.10"
       - "refseq_chronames": chromosome for each refseq id
@@ -260,10 +282,10 @@ def translate_reference_ids(byc):
           - "CM000677.2": "15"
     """
 
-    if not "variant_definitions" in byc:
+    v_d_refsc = byc.get("refseq_chromosomes")
+    if v_d_refsc is None:
         return
 
-    v_d_refsc = byc["variant_definitions"]["refseq_chromosomes"]
     c_r = {}    # keys are the bare chromosome names e.g. "15"
     r_c = {}    # keys are the refseq_id
     r_a = {}    # keys are all options, values the refseq_id
@@ -288,11 +310,13 @@ def translate_reference_ids(byc):
             c_d["genbank_id"]: c_d["chr"]
         })
 
-    byc["variant_definitions"].update({
-        "chro_refseq_ids": c_r,
-        "refseq_chronames": r_c,
-        "refseq_aliases": r_a,
-        "chro_aliases": c_a
+    byc.update({
+        "genome_aliases": {
+            "chro_refseq_ids": c_r,
+            "refseq_chronames": r_c,
+            "refseq_aliases": r_a,
+            "chro_aliases": c_a
+        }
     })
 
 ################################################################################
@@ -322,15 +346,21 @@ def variants_from_revish(bs_id, cs_id, technique, iscn, byc):
 
 def deparse_ISCN_to_variants(iscn, byc):
 
+    v_d = byc["variant_parameters"]
+    g_a = byc.get("genome_aliases", {})
+    i_d = byc["interval_definitions"]
+    v_t_defs = byc.get("variant_type_definitions")
+
     iscn = "".join(iscn.split())
     variants = []
-    vd = byc["variant_definitions"]
-    cb_pat = re.compile( vd["parameters"]["cyto_bands"]["pattern"] )
+    cb_pat = re.compile( v_d["parameters"]["cyto_bands"]["pattern"] )
     errors = []
 
-    for cnv_t, cnv_defs in vd["variant_type_ontologies"].items():
+    for cnv_t, cnv_defs in v_t_defs.items():
 
-        revish = cnv_defs["info"]["revish_label"]
+        revish = cnv_defs.get("revish_label")
+        if not revish:
+            continue
 
         iscn_re = re.compile(rf"^.*?{revish}\(([\w.,]+)\).*?$", re.IGNORECASE)
 
@@ -349,20 +379,19 @@ def deparse_ISCN_to_variants(iscn, byc):
                     continue
 
                 v_l = end - start
-                t = cnv_t
-                v = cnv_defs.copy()
+                t = cnv_defs.get("DUPDEL", "CNV")
 
                 cytostring = "{}({})".format(cnv_t, i_v).lower()
 
-                if "AMP" in cnv_t and v_l > vd["amp_max_size"]:
-                    t = "HLDUP"
-                    v = vd["variant_type_ontologies"][t].copy()
+                if "amp" in revish and v_l > i_d.get("cnv_amp_max_size", 3000000):
+                    revish = "hldup"
 
                 v_s = {}
                
-                v.update({
+                v = ({
+                    "variant_state": cnv_defs.get("variant_state"),
                     "location": {
-                        "sequence_id": vd["refseq_aliases"][chro],
+                        "sequence_id": g_a["refseq_aliases"].get(chro),
                         "chromosome": chro,
                         "start": start,
                         "end": end
@@ -370,7 +399,8 @@ def deparse_ISCN_to_variants(iscn, byc):
                     "info": {
                         "ISCN": cytostring,
                         "var_length": v_l,
-                        "cnv_value": vd["cnv_dummy_values"][t]
+                        "cnv_value": cnv_defs.get("cnv_dummy_value"),
+                        "note": "from text annotation; CNV dummy value"
                     }
                 })
 
@@ -391,7 +421,7 @@ def cytobands_label_from_positions(byc, chro, start, end):
 
 def bands_from_chrobases(chro_bases, byc):
 
-    cb_pat = re.compile( byc["variant_definitions"]["parameters"]["chro_bases"]["pattern"] )
+    cb_pat = re.compile( byc["variant_parameters"]["parameters"]["chro_bases"]["pattern"] )
     if not cb_pat.match(chro_bases):
         return [], "NA", 0, 0
     chro, cb_start, cb_end = cb_pat.match(chro_bases).group(2,3,5)

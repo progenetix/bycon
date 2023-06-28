@@ -1,0 +1,178 @@
+################################################################################
+#
+# `variant_type_definitions` provides:
+# 
+# * `variant_state` - the VRS variant state / type object (`id` as CURIe, `label`)
+# * query expansion for variant types using `child_terms`
+# * `DUPDEL` - basic CNV directionality type
+# * `VCF` - VCF variant type (symbolic allele)
+# * `cnv_dummy_value` - a log2 value for an (idealized) tumor/normal experiment
+#   resulting in the given CNV type (e.g. to assign a numeric value to ISCN data)
+# * `child_terms` - query expansion for any given value (_i.e._ additional terms
+#   representing sub-entities)
+#     - Note: For other ontologies such expansions are usually defined in the
+#       pre-processing package (`byconaut`) and then stored in the generated
+#       collations.
+#
+################################################################################
+
+EFO:0030064:
+  variant_state:
+    id: EFO:0030064
+    label: regional base ploidy
+  label: regional base ploidy
+  revish_label: Null
+  DUPDEL: Null
+  VCF: Null
+  cnv_dummy_value: Null
+  child_terms:
+    - EFO:0030064
+
+EFO:0030065:
+  variant_state:
+    id: EFO:0030065
+    label: copy-neutral loss of heterozygosity
+  label: copy-neutral loss of heterozygosity
+  revish_label: Null
+  DUPDEL: Null
+  VCF: ""
+  cnv_dummy_value: Null
+  child_terms:
+    - EFO:0030065
+
+EFO:0030066:
+  variant_state:
+    id: EFO:0030066
+    label: copy number variation
+  label: copy number variation
+  revish_label: Null
+  DUPDEL: Null
+  VCF: CNV
+  cnv_dummy_value: Null
+  child_terms:
+    - EFO:0030066
+    - EFO:0030067
+    - EFO:0030068
+    - EFO:0020073
+    - EFO:0030069
+    - EFO:0030070
+    - EFO:0030071
+    - EFO:0030072
+    - EFO:0030073      
+
+EFO:0030067:
+  variant_state:
+    id: EFO:0030067
+    label: copy number loss
+  label: copy number loss
+  revish_label: dim
+  DUPDEL: DEL
+  VCF: DEL
+  cnv_dummy_value: -1
+  child_terms:
+    - EFO:0030067
+    - EFO:0030068
+    - EFO:0020073
+    - EFO:0030069
+
+EFO:0030068:
+  variant_state:
+    id: EFO:0030068
+    label: low-level copy number loss
+  label: low-level copy number loss
+  revish_label: dim
+  DUPDEL: DEL
+  VCF: DEL
+  cnv_dummy_value: -1
+  child_terms:
+    - EFO:0030068
+
+EFO:0020073:
+  variant_state:
+    id: EFO:0020073
+    label: high-level copy number loss
+  label: high-level copy number loss
+  revish_label: Null
+  DUPDEL: DEL
+  VCF: DEL
+  cnv_dummy_value: -1.75
+  child_terms:
+    - EFO:0020073
+    - EFO:0030069
+
+EFO:0030069:
+  variant_state:
+    id: EFO:0030069
+    label: complete genomic deletion
+  label: complete genomic deletion
+  revish_label: homodel
+  DUPDEL: DEL
+  VCF: DEL
+  cnv_dummy_value: -2
+  child_terms:
+    - EFO:0030069
+
+EFO:0030070:
+  variant_state:
+    id: EFO:0030070
+    label: copy number gain
+  label: copy number gain
+  revish_label: enh
+  DUPDEL: DUP
+  VCF: DUP
+  cnv_dummy_value: 0.58
+  child_terms:
+    - EFO:0030070
+    - EFO:0030071
+    - EFO:0030072
+    - EFO:0030073
+
+EFO:0030071:
+  variant_state:
+    id: EFO:0030071
+    label: low-level copy number gain
+  label: low-level copy number gain
+  revish_label: enh
+  DUPDEL: DUP
+  VCF: DUP
+  cnv_dummy_value: 0.58
+  child_terms:
+    - EFO:0030071
+
+EFO:0030072:
+  variant_state:
+    id: EFO:0030072
+    label: high-level copy number gain
+  label: high-level copy number gain
+  revish_label: hldup
+  DUPDEL: DUP
+  VCF: DUP
+  cnv_dummy_value: 2
+  child_terms:
+    - EFO:0030072
+    - EFO:0030073
+
+EFO:0030073:
+  variant_state:
+    id: EFO:0030073
+    label: focal genome amplification
+  label: focal genome amplification
+  revish_label: amp
+  DUPDEL: DUP
+  VCF: DUP
+  cnv_dummy_value: 2
+  child_terms:
+    - EFO:0030073
+
+SO:0001059:
+  variant_state:
+    id: SO:0001059
+    label: sequence_alteration
+  label: sequence_alteration
+  revish_label: Null
+  DUPDEL: Null
+  VCF: SNV
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0001059
+

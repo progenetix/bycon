@@ -4,7 +4,22 @@
 
 ### Recent
 
-#### 2023-06-21 (v1.0.57)
+#### 2023-06-28 (v1.0.58)
+
+* extensive renaming/-shuffling, e.g.:
+    - `refseq_chromosomes` now in `rsrc/genomes/grch38` (only grch38 so far but this
+      is all we currently use...)
+        * also `parse_refseq_file` and `__get_genome_rsrc_path` functions
+    - `variant_parameters` and `variant_type_definitions` config files from
+      `variant_definitions` (separating the query config from the type mappings)
+    - `cytoband_utils` => `genome_utils`
+    - `generate_genomic_mappings` wrapper for cutoband and interval functions
+* fix for file uploader issues
+    - [ ] TODO: documentation on website & lazy loading (e.g. interpolating
+      `sample` to `biosample_id`; maybe just use column order ...)
+
+
+#### 2023-06-26 (v1.0.57)
 
 * more disentangling of configuration between `byconaut/services` and `/bycon`
 

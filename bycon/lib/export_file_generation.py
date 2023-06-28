@@ -3,7 +3,7 @@ import pymongo
 from cgi_parsing import *
 from datatable_utils import get_nested_value
 from query_generation import paginate_list
-from response_remapping import de_vrsify_variant, normalize_variant_values_for_export
+from response_remapping import de_vrsify_variant
 
 
 ################################################################################

@@ -49,7 +49,7 @@ def beacon():
     byc.update({"request_path_root": "beacon"})
     rest_path_elements(byc)
     r_p_id = byc.get("request_entity_path_id", "info")
-    
+
     get_bycon_args(byc)
     args_update_form(byc)
 
