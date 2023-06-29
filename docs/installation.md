@@ -33,25 +33,70 @@ the server components and is by itself only suitable for library utilization.
 An installation of a Beacon environment may involve following repositories:
 
 * [`bycon`](https://github.com/progenetix/bycon/)
-  - the core Beacon code for libraries and server API
+    - the core Beacon code for libraries and server API
 * [`byconaut`](https://github.com/progenetix/byconaut/)
-  - additional server functionality
-  - utility scripts
-  - example data
+    - additional server functionality
+    - utility scripts
+    - example data
 * [`progenetix-web`](https://github.com/progenetix/progenetix-web/)
-  - the web front-end (React based)
-  - represents the current Progenetix website w/ all its parts; can be used to 
+    - the web front-end (React based)
+    - represents the current Progenetix website w/ all its parts; can be used to 
     develop a trimmed-down version for specific use cases...
 
-The project's Beacon deployment had been devbeloped with some prerequisites:
+The project's Beacon deployment had been developed with some prerequisites:
 
-* a MongoDB database instance
-* a "classic" webserver (tested on Apache) with
-    - a directory for executables (e.g. .../cgi-bin/) for hosting the
+#### MongoDB database instance
+
+
+#### Webserver Setup (Apache)
+
+We use a "classical" webserver setup with Apache but probably other options would
+be fine...
+
+Some configuration:
+
+- a directory for executables (e.g. .../cgi-bin/) 
+    * this has to be set as the default executable (CGI) directory
+    * our Mac OS use: `/Library/WebServer/cgi-bin/`
+```
+# Configure the global CGI-BIN
+
+ScriptAlias  /cgi      /Library/WebServer/cgi-bin
+ScriptAlias  /cgi-bin  /Library/WebServer/cgi-bin
+
+<Directory "/Library/WebServer/cgi-bin">
+    AllowOverride None
+    Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+    SetHandler cgi-script
+    Require all granted
+</Directory>
+```
+    * we also use a `/bycon` wrapper directory inside the CGI dir (for hosting the
       `beaconServer` and optionally `services` directories with their `....py`
-      scripts
-    - a server-writable temporary directory
+      scripts)
+    * we use a rewrite directive to the main beacon (& optional services) apps which
+      handle then path deparsing and calling of individual apps:
+```
+# Allow (some) CGI-BIN scripts to be called with a short alias.
 
+RewriteEngine On
+
+RewriteRule     "^/?services/(.*)"     /cgi-bin/bycon/services/services.py/$1      [PT]
+RewriteRule     "^/?beacon/(.*)"     /cgi-bin/bycon/beaconServer/beacon.py/$1      [PT]
+```
+- a server-writable temporary directory
+    * our use: `/Library/WebServer/Documents/tmp/`
+```
+# Configure the global tmp
+
+Alias  /tmp      /Library/WebServer/Documents/tmp
+
+<Directory /Library/WebServer/Documents/tmp>
+    Options Indexes FollowSymlinks
+    AllowOverride All
+    Require all granted
+</Directory>
+```
 ### Installation Procedure
 
 The project root contains an `install.py` script to distribute the server scripts
@@ -63,9 +108,32 @@ into the webserver root. Necessary parameters have to be adjusted in the accompa
     Many of the parameters in `bycon` are pre-defined in `bycon/config/....yaml`
     files which are installed into the `bycon` package in your Python `site-packages`
     tree. These configurations can be overwritten by providing modified copies
-    in `your_script_directory/local/`. 
+    in `your_script_directory/local/`.
 
-## Local complete stack installation 
+#### Some configurations
+
+##### `local/local_paths.yaml`
+
+Here at minimum the paths for the webserver `tmp` has to be defined (path elements
+as list items):
+
+```
+erver_tmp_dir_loc:
+  - /
+  - Library
+  - WebServer
+  - Documents
+  - tmp
+
+server_tmp_dir_web: /tmp
+```
+
+##### `local/beacon_defaults.yaml`
+
+Please modify the data here, especially the defaults and the `eentity_defaults`
+for the `info` entry type.
+
+## Local stack installation 
 
 The local developer mode installation removes the system `bycon`, compiles the
 current code base (e.g. containing your modifications) and then runs the installer
@@ -91,5 +159,8 @@ sister directory.
     (e.g. for dataset definitions) in a `local` directory in the path of your
     calling scripts or CGIs.
 
+## Loading data
 
+We provide some data loading documentation and example data inside the
+[`byconaut`](https://github.com/progenetix/byconaut/) package. This is evolving...
 

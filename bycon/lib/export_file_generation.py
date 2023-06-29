@@ -191,7 +191,7 @@ def pgxseg_variant_line(v, byc):
     if v is False:
         return v
 
-    v["log2"] = v["info"].get("log2", ".")
+    v["log2"] = v["info"].get("cnv_value", ".")
 
     return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(v["biosample_id"], v["reference_name"], v["start"], v["end"], v["log2"], v["variant_type"], v["reference_bases"], v["alternate_bases"])
 

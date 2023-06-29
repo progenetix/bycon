@@ -1,3 +1,7 @@
+################################################################################
+# Beacon defaults - please adjust!
+################################################################################
+
 defaults:
 
   dataset_ids:
@@ -14,7 +18,7 @@ defaults:
   returned_granularity: record
   pagination:
     skip: 0
-    limit: 2000
+    limit: 1000
   response_entity:
     entity_type: dataset
     collection: dbstats
@@ -25,7 +29,9 @@ defaults:
     h->o_access_key: False
 
 ################################################################################
-# beacon entity defaults #######################################################
+# Beacon entry type defaults - please adjust esp. info and schema paths...
+# TODO: Some of the entry type configuration duplicates data from the Beacon
+# framework or from beacon_entry_types and might be disentanled further on ...
 ################################################################################
 
 entity_defaults:
@@ -175,26 +181,3 @@ entity_defaults:
   runs:
     request_entity_path_id: runs
     response_entity_id: run
-
-  ##############################################################################
-  # TODO: move service defaults ################################################
-  ##############################################################################
-
-  aggregator:
-    request_entity_path_id: genomicVariations
-    response_entity_id: genomicVariant
-    response_schema: beaconBooleanResponse
-
-  ##############################################################################
-
-  cytomapper:
-    request_path_root: services
-    response_entity_id: cytobandMapping
-    response_entity:
-      entity_type: cytobandMapping
-      response_schema: beaconResultsetsResponse
-      collection: Null
-      beacon_schema:
-        entity_type: cytobandMapping
-        schema: https://progenetix.org/services/schemas/cytobandMapping/
-      h->o_access_key: Null
