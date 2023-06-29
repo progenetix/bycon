@@ -175,4 +175,55 @@ SO:0001059:
   cnv_dummy_value: Null
   child_terms:
     - SO:0001059
+    - SO:0001483
+    - SO:0002007
+    - SO:0000159
+    - SO:0000667
 
+SO:0001483:
+  variant_state:
+    id: SO:0001483
+    label: SNP
+  label: SNP
+  revish_label: Null
+  DUPDEL: Null
+  VCF: SNV
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0001483
+
+SO:0002007:
+  variant_state:
+    id: SO:0002007
+    label: MNV
+  label: MNV
+  revish_label: Null
+  DUPDEL: Null
+  VCF: SNV
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0002007
+
+SO:0000159:
+  variant_state:
+    id: SO:0000159
+    label: DEL
+  label: DEL
+  revish_label: Null
+  DUPDEL: Null
+  VCF: SNV
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0000159
+
+SO:0000667:
+  variant_state:
+    id: SO:0000667
+    label: INS
+  label: INS
+  revish_label: Null
+  DUPDEL: Null
+  VCF: SNV
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0000667
