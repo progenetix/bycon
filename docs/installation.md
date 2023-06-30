@@ -164,3 +164,22 @@ sister directory.
 We provide some data loading documentation and example data inside the
 [`byconaut`](https://github.com/progenetix/byconaut/) package. This is evolving...
 
+## Testing
+
+The following tests are based on the existence of the `examplez` database.
+
+### Command line test
+
+Those tests can be run either from the local `bycon/bycon/beaconServer/` directory
+or from the corresponding one in the web cgi directory, if installed.
+
+```
+./beacon.py --output json -d examplez --testMode true
+./beacon.py --output json -d examplez --testMode true --requestEntityPathId g_variants
+./beacon.py --output json -d examplez --testMode true --requestEntityPathId biosamples
+./beacon.py --output json -d examplez --testMode true --requestEntityPathId individuals
+./beacon.py --output json -d examplez --filters "UBERON:0000310"
+./beacon.py --output json -d examplez --filters "pgx:TCGA-BRCA"
+```
+
+

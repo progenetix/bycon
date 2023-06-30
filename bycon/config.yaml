@@ -80,6 +80,12 @@ schema_paths:
         - responses
         - sections
 
+
+filter_flags:
+  logic: $and
+  precision: exact
+  include_descendant_terms: true
+
 resource_urls:
   ncbi_geosoft: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?form=text&acc=
   ncbi_geoweb: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
@@ -120,15 +126,4 @@ beacon_counts:
     info_key: variants
     h->o_key: variants._id
 
-filter_flags:
-  logic: $and
-  precision: exact
-  include_descendant_terms: true
-server_callsets_dir_loc:
-  - /
-  - Library
-  - WebServer
-  - Documents
-  - Sites
-  - arraymap
-  - grch38
+

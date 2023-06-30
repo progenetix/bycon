@@ -4,6 +4,16 @@
 
 ### Recent
 
+#### 2023-06-30 (v1.0.59)
+
+* fixed new bug in variant parameter parsing
+* fixed wrong parsing of command line list arguments (e.g. `--filters`)
+* `install.py` now adds the `/local` configurations to the `/bycon/beaconServer/local/`
+  directory
+    - execution of command line beacon has access to them (not only apps in the server)
+    - files are removed by `/updev.sh` before packaghe build
+* added some command line examples to [`installation.md`](/installation/)
+
 #### 2023-06-28 (v1.0.58)
 
 * extensive renaming/-shuffling, e.g.:

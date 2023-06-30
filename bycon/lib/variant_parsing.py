@@ -69,6 +69,8 @@ def variant_state_from_variant_par(variant_type, byc):
                 continue
             if "variant_state" in p:
                 v = v.get("id", "___none___")
+            if type(v) is not str:
+                continue
             if variant_type.lower() == v.lower():
                 return d["variant_state"]
 
@@ -89,6 +91,8 @@ def variant_vcf_type_from_variant_par(variant_type, byc):
                 continue
             if "variant_state" in p:
                 v = v.get("id", "___none___")
+            if type(v) is not str:
+                continue
             if variant_type.lower() == v.lower():
                 return d.get("VCF")
 
