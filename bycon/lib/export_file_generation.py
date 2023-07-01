@@ -1,4 +1,5 @@
 import pymongo
+from os import environ
 
 from cgi_parsing import *
 from datatable_utils import get_nested_value
@@ -10,7 +11,7 @@ from response_remapping import de_vrsify_variant
 
 def export_variants_download(ds_id, byc):
 
-    data_client = pymongo.MongoClient()
+    data_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     v_coll = data_client[ ds_id ][ "variants" ]
     ds_results = byc["dataset_results"][ds_id]
  
@@ -39,7 +40,7 @@ def stream_pgx_meta_header(ds_id, ds_results, byc):
     s_r_rs = byc["service_response"]["response"]["result_sets"][0]
     b_p = byc["pagination"]
 
-    mongo_client = pymongo.MongoClient()
+    mongo_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
 
     open_text_streaming(byc["env"])
@@ -149,7 +150,7 @@ def print_filters_meta_line(byc):
 
 def export_pgxseg_download(ds_id, byc):
 
-    data_client = pymongo.MongoClient()
+    data_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     v_coll = data_client[ ds_id ][ "variants" ]
     ds_results = byc["dataset_results"][ds_id]
     v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
@@ -211,7 +212,7 @@ def export_callsets_matrix(ds_id, byc):
 
     cs_r = ds_results["callsets._id"]
 
-    mongo_client = pymongo.MongoClient()
+    mongo_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
     cs_coll = mongo_client[ ds_id ][ "callsets" ]
 

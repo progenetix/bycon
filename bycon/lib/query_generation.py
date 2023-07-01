@@ -1,4 +1,5 @@
 import pymongo
+from os import environ
 from bson import SON
 
 from bycon_helpers import days_from_iso8601duration 
@@ -62,7 +63,7 @@ def _replace_queries_in_test_mode(byc):
     ret_no = int(byc.get('test_mode_count', 5))
 
     ds_id = byc["dataset_ids"][0]
-    mongo_client = pymongo.MongoClient()
+    mongo_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     data_db = mongo_client[ds_id]
     data_collnames = data_db.list_collection_names()
 
@@ -160,7 +161,7 @@ def _update_queries_from_hoid(byc):
     if "accessid" in byc["form_data"]:
 
         accessid = byc["form_data"]["accessid"]
-        ho_client = pymongo.MongoClient()
+        ho_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
         ho_db = ho_client[byc["config"]["services_db"]]
         ho_coll = ho_db[byc["config"]["handover_coll"]]
         h_o = ho_coll.find_one({"id": accessid})
@@ -214,7 +215,7 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
     f_desc = byc["filter_flags"]["descendants"]
     # precision = byc[ "filter_flags" ][ "precision" ]
 
-    mongo_client = pymongo.MongoClient()
+    mongo_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     coll_coll = mongo_client[ds_id][byc["config"]["collations_coll"]]
 
     filters = byc.get("filters", [])
