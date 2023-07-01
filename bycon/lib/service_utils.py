@@ -326,8 +326,9 @@ def r_set_update_counts(r_set, r_s_res, byc):
     ds_res = byc["dataset_results"][ds_id]
 
     r_set.update({"results_count": 0})
+    counted = byc["config"].get("beacon_count_items", {})
 
-    for c, c_d in byc["config"]["beacon_counts"].items():
+    for c, c_d in counted.items():
         h_o_k = c_d.get("h->o_key", None)
         if h_o_k is None:
             continue
@@ -363,7 +364,7 @@ def response_meta_add_request_summary(r, byc):
 
     r_rcvd_rs = r["meta"]["received_request_summary"]
     defs = byc.get("beacon_defaults", {})
-    b_e_d = defs.get("entity_defaults", {})
+    b_e_d = defs.get("entity_defaults", {"info":{}})
 
     form = byc["form_data"]
 
@@ -538,10 +539,11 @@ def error_response_set_defaults(e):
 
 def response_meta_set_info_defaults(r, byc):
     defs = byc.get("beacon_defaults", {})
-    b_e_d = defs.get("entity_defaults", {})
+    b_e_d = defs.get("entity_defaults", {"info":{}})
 
+    # TODO: command line hack ...
     for i_k in ["api_version", "beacon_id"]:
-        if "meta" in r:
+        if "meta" in r and "info" in b_e_d:
             r["meta"].update({i_k: b_e_d["info"].get(i_k, "")})
 
 
@@ -718,11 +720,14 @@ def populate_service_response_counts(byc):
         return
 
     counts = {}
+    counted = byc["config"].get("beacon_count_items", {})
 
-    for c, c_d in byc["config"]["beacon_counts"].items():
-
-        if c_d["h->o_key"] in byc["dataset_results"][ds_id]:
-            counts[c] = byc["dataset_results"][ds_id][c_d["h->o_key"]]["target_count"]
+    for c, c_d in counted.items():
+        h_o_k = c_d.get("h->o_key")
+        if not h_o_k:
+            continue
+        if h_o_k in byc["dataset_results"][ds_id]:
+            counts[c] = byc["dataset_results"][ds_id][h_o_k]["target_count"]
 
     byc["service_response"]["info"].update({"counts": counts})
 

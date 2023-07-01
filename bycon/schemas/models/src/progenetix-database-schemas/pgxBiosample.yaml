@@ -53,7 +53,7 @@ properties:
       - P7D
   provenance:
     $ref: ../progenetix-model/common/provenance.yaml
-  sampledTissue:
+  sampleOriginDetail:
     $ref: ../progenetix-model/common/ontologyTerm.yaml
   histologicalDiagnosis:
     $ref: ../progenetix-model/common/ontologyTerm.yaml

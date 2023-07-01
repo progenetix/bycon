@@ -51,8 +51,7 @@ def args_update_form(byc):
     list_pars = []
     for d_d in arg_defs:
         a_d_k = list(d_d["argDef"].keys())[0]
-        defs = d_d["argDef"][a_d_k]
-        if "array" in defs.get("type", "string"):
+        if "array" in d_d.get("type", "string"):
             list_pars.append(a_d_k)
 
     arg_vars = vars(byc["args"])

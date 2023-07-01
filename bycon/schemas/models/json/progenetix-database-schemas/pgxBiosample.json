@@ -163,7 +163,7 @@
         "provenance": {
             "$ref": "../progenetix-model/common/provenance.json"
         },
-        "sampledTissue": {
+        "sampleOriginDetail": {
             "$ref": "../progenetix-model/common/ontologyTerm.json"
         },
         "tumorGrade": {

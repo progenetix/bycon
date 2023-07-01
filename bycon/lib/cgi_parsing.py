@@ -422,10 +422,10 @@ def cgi_print_response(byc, status_code):
             elif "results" in byc["service_response"]:
                 resp = byc["service_response"]["results"]
             else:
-                resp = ["response is empty at `cgi_print_response`"]
+                resp = byc["service_response"]
         else:
             resp = byc["service_response"]
-        if not isinstance(resp, list):
+        if isinstance(resp, dict):
             resp = json.dumps(camelize(resp), default=str)
         else:
             l_d = []

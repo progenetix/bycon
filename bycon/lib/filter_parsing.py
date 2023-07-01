@@ -7,14 +7,8 @@ from cgi_parsing import boolean_to_mongo_logic
 def parse_filters(byc):
 
     get_global_filter_flags(byc)
+    byc.update( { "filters": check_filter_values(byc) } )
 
-    if not "filters" in byc["form_data"]:
-        return
-
-    fs = byc["form_data"]["filters"]
-    fs = check_filter_values(fs, byc)
-    if len(fs) > 0:
-        byc.update( { "filters": fs } )
 
 ################################################################################
 
@@ -40,7 +34,7 @@ def get_global_filter_flags(byc):
 
 ################################################################################
 
-def check_filter_values(filters, byc):
+def check_filter_values(byc):
 
     """
     The functtion checks the filter values for a match to any of the filter
@@ -50,16 +44,18 @@ def check_filter_values(filters, byc):
     generation and provides a warning if the filter pattern doesn't exist.
     """
 
+    checked = [ ]
+    filters = byc["form_data"].get("filters")
+    if not filters:
+        return checked
+
     f_defs = byc["filter_definitions"]
 
-    checked = [ ]
     for f in filters:
         if not isinstance(f, dict):
             f = {"id":f}
         if not "id" in f:
             continue
-        if f not in checked:
-            checked.append( f )
 
         deflagged = re.sub(r'^!', '', f["id"])
         matched = False
@@ -72,6 +68,9 @@ def check_filter_values(filters, byc):
         if matched is False:
             warning = "The filter `{}` does not match any defined filter pattern.".format(f["id"])
             response_add_filter_warnings(byc, warning)
+
+        if f not in checked:
+            checked.append( f )
 
     return checked
 

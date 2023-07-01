@@ -87,8 +87,8 @@ def install_beacon_server():
     # with open(c_f, 'w') as out_f:
     #     yaml.dump(config, out_f)
 
+    system(f'sudo rsync -avh --delete {dir_path}/local/ {pkg_path}/beaconServer/local/')
     system(f'sudo rsync -avh --delete {pkg_path}/beaconServer/ {b_i_d_p}/beaconServer/')
-    system(f'sudo rsync -avh --delete {dir_path}/local/ {b_i_d_p}/beaconServer/local/')
 
     system(f'sudo cp {pkg_path}/__init__.py {b_i_d_p}/__init__.py')
     system(f'sudo chown -R {s_u}:{s_g} {b_i_d_p}')

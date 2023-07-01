@@ -93,6 +93,8 @@ def datasets_update_latest_stats(byc, collection_type="datasets"):
 
     stat = dbstats_return_latest(byc)[0]
 
+    counted = byc["config"].get("beacon_count_items", {})
+
     for coll_id, coll in byc[ def_k ].items():
         if q_k in byc:
             if len(byc[ q_k ]) > 0:
@@ -103,11 +105,12 @@ def datasets_update_latest_stats(byc, collection_type="datasets"):
             if coll_id in stat[ collection_type ].keys():
                 ds_vs = stat[ collection_type ][coll_id]
                 if "counts" in ds_vs:
-                    for c, c_d in byc["config"]["beacon_counts"].items():
-                        if c_d["info_key"] in ds_vs["counts"]:
-                            coll["info"].update({ c: ds_vs["counts"][ c_d["info_key"] ] })
+                    for c, c_d in counted.items():
+                        i_k = c_d.get("info_key", "___none___")
+                        if i_k in ds_vs["counts"]:
+                            coll["info"].update({ c: ds_vs["counts"][ i_k ] })
                 if "filtering_terms" in byc["response_entity_id"]:
-                    coll.update({ "filtering_terms": stat[ collection_type ][coll_id]["filtering_terms"] } )
+                    coll.update({ "filtering_terms": stat[ collection_type ][coll_id].get("filtering_terms", []) } )
 
         results.append(coll)
 
