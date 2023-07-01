@@ -2,6 +2,7 @@ import datetime, re
 from pymongo import MongoClient
 from cgi_parsing import *
 from interval_utils import interval_counts_from_callsets
+from os import environ
 
 ################################################################################
 ################################################################################
@@ -361,7 +362,7 @@ def remap_phenopackets(ds_id, r_s_res, byc):
     if not "phenopacket" in byc["response_entity_id"]:
         return r_s_res
 
-    mongo_client = MongoClient()
+    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     data_db = mongo_client[ds_id]
     pxf_s = []
 
@@ -513,7 +514,7 @@ def remap_all(r_s_res):
 ################################################################################
 
 def callset__ids_create_iset(ds_id, label, cs__ids, byc):
-    mongo_client = MongoClient()
+    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     cs_coll = mongo_client[ds_id]["callsets"]
 
     cs_cursor = cs_coll.find({"_id": {"$in": cs__ids}, "variant_class": {"$ne": "SNV"}})

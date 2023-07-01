@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from os import environ
 
 ################################################################################
 
@@ -17,7 +18,7 @@ def retrieve_data(ds_id, byc):
         r_s_res = retrieve_variants(ds_id, byc)
         return r_s_res
 
-    mongo_client = MongoClient()
+    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     data_db = mongo_client[ ds_id ]
     data_coll = mongo_client[ ds_id ][ r_c ]
 
@@ -42,7 +43,7 @@ def retrieve_variants(ds_id, byc):
         if byc["method"] in byc["service_config"]["all_variants_methods"]:
             return False
 
-    mongo_client = MongoClient()
+    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     data_db = mongo_client[ ds_id ]
     v_coll = mongo_client[ ds_id ][ "variants" ]
 

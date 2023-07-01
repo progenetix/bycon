@@ -1,5 +1,6 @@
 import pymongo
 import re
+from os import environ
 
 from bycon.lib.cgi_parsing import rest_path_value
 
@@ -45,7 +46,7 @@ def ds_id_from_accessid(byc):
     if any(x is False for x in [accessid, services_db, ho_collname]):
         return False
 
-    ho_client = pymongo.MongoClient()
+    ho_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     h_o = ho_client[services_db][ho_collname].find_one({"id": accessid})
     if not h_o:
         return False

@@ -132,7 +132,7 @@ def query_results_save_handovers(byc):
 
 def dataset_results_save_handovers(ds_id, byc):
 
-    ho_client = MongoClient()
+    ho_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     ho_db = ho_client[ byc["config"]["services_db"] ]
     ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
 
@@ -235,7 +235,7 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
 
     vs = { "DUP": [ ], "DEL": [ ], "LOH": [ ], "SNV": [ ]}
 
-    data_client = MongoClient( )
+    data_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     data_db = data_client[ ds_id ]
     data_coll = data_db[ h_o["target_collection"] ]
 

@@ -55,7 +55,7 @@ def _return_cohorts_response(byc):
     if not "cohort" in byc["response_entity_id"]:
         return
 
-    mongo_client = MongoClient( )
+    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
 
     cohorts =  []
     c_id = byc.get("request_entity_path_id_value")

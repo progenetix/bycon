@@ -1,6 +1,6 @@
 from uuid import uuid4
 from pymongo import MongoClient
-
+from os import environ
 from cgi_parsing import cgi_debug_message, test_truthy
 
 
@@ -10,7 +10,7 @@ def mongo_result_list(db_name, coll_name, query, fields):
     results = []
     error = False
 
-    mongo_client = MongoClient()
+    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
 
     try:
         results = list(mongo_client[db_name][coll_name].find(query, fields))
@@ -38,7 +38,7 @@ def execute_bycon_queries(ds_id, byc):
     if "dataset_results" not in byc.keys():
         byc.update({"dataset_results": {}})
 
-    data_client = MongoClient()
+    data_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     data_db = data_client[ds_id]
     data_collnames = data_db.list_collection_names()
 
