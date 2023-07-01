@@ -146,7 +146,7 @@ Here at minimum the paths for the webserver `tmp` has to be defined (path elemen
 as list items):
 
 ```
-erver_tmp_dir_loc:
+server_tmp_dir_loc:
   - /
   - Library
   - WebServer
@@ -202,9 +202,12 @@ Those tests can be run either from the local `bycon/bycon/beaconServer/` directo
 or from the corresponding one in the web cgi directory, if installed.
 
 ```
+./info.py
+./beacon.py --output json -d examplez
 ./beacon.py --output json -d examplez --testMode true
-./beacon.py --output json -d examplez --testMode true --requestEntityPathId g_variants
 ./beacon.py --output json -d examplez --testMode true --requestEntityPathId biosamples
+./beacon.py --output json -d examplez --testMode true --requestEntityPathId biosamples --testModeCount 1
+./beacon.py --output json -d examplez --testMode true --requestEntityPathId g_variants
 ./beacon.py --output json -d examplez --testMode true --requestEntityPathId individuals
 ./beacon.py --output json -d examplez --filters "UBERON:0000310"
 ./beacon.py --output json -d examplez --filters "pgx:TCGA-BRCA"

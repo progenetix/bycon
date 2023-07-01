@@ -9,4 +9,3 @@ build
 bycon.egg-info
 dist
 bycon/beaconServer/local/*
-
