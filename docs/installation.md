@@ -47,6 +47,34 @@ The project's Beacon deployment had been developed with some prerequisites:
 
 #### MongoDB database instance
 
+The MongoDB host server can be set with the environmental variable `BYCON_MONGO_HOST`.
+It otherwise defaults to `localhost`.
+
+##### MongoDB installation
+
+We use a [Homebrew](https://brew.sh) based installation, as detailed on the
+[MongoDB website](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/).
+On OS X this boils down to (assuming [Homebrew](https://brew.sh) has been installed):
+
+```sh
+brew tap mongodb/brew
+brew install mongodb-community
+```
+
+Then this shoul dbe started as a service & (probably) needs a restart of the computer
+(in case another or version was running etc.).
+
+```sh
+brew services start mongodb-community
+```
+
+The update works similarly:
+
+```sh
+brew tap mongodb/brew
+brew upgrade mongodb-community
+brew services restart mongodb/brew/mongodb-community
+```
 
 #### Webserver Setup (Apache)
 
