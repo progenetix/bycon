@@ -855,7 +855,7 @@ def check_callset_plot_delivery(byc):
             continue
 
         v_d = byc["variant_parameters"]
-        mongo_client = MongoClient()
+        mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
         cs_coll = mongo_client[ds_id]["callsets"]
         var_coll = mongo_client[ds_id]["variants"]
 
@@ -925,7 +925,7 @@ def check_computed_histoplot_delivery(byc):
         if not "callsets._id" in ds_results:
             continue
 
-        mongo_client = MongoClient()
+        mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
         bios_coll = mongo_client[ds_id]["biosamples"]
         cs_coll = mongo_client[ds_id]["callsets"]
 
@@ -997,7 +997,7 @@ def check_computed_interval_frequency_delivery(byc):
 
     cs_r = ds_results["callsets._id"]
 
-    mongo_client = MongoClient()
+    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     cs_coll = mongo_client[ds_id]["callsets"]
 
     open_text_streaming(byc["env"], "interval_cnv_frequencies.pgxseg")

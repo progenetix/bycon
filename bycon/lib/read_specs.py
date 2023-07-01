@@ -1,6 +1,6 @@
 import re, yaml, json
 from pymongo import MongoClient
-from os import path, pardir, scandir
+from os import path, pardir, scandir, environ
 from pathlib import Path
 from json_ref_dict import RefDict, materialize
 from humps import camelize, decamelize
@@ -78,7 +78,7 @@ def dbstats_return_latest(byc):
 
     db = byc[ "config" ][ "services_db" ]
     coll = byc[ "config" ][ "beacon_info_coll" ]
-    stats = MongoClient( )[ db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( limit )
+    stats = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))[ db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( limit )
 
     return stats
 

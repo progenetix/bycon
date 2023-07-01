@@ -8,13 +8,4 @@ site
 build
 bycon.egg-info
 dist
-bycon.egg-info/PKG-INFO
-bycon.egg-info/requires.txt
-bycon.egg-info/SOURCES.txt
-bycon.egg-info/top_level.txt
-dist/bycon-1.0.0-py3-none-any.whl
-bycon/beaconServer/local/beacon_defaults.yaml
-bycon/beaconServer/local/beacon_entry_types.yaml
-bycon/beaconServer/local/beacon_mappings.yaml
-bycon/beaconServer/local/dataset_definitions.yaml
-bycon/beaconServer/local/local_paths.yaml
+bycon/beaconServer/local/*
