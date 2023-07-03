@@ -14,7 +14,9 @@ from bycon import *
 """
 The install script copies the relevant bycon files to the webserver directory
 specified in the `config/config.yaml` file and sets the file permissions
-accordingly. It requires admin permissions (sudo).
+accordingly. By default, it requires admin permissions (sudo). If you want to run
+it without sudo, invoke it with `--no-sudo`. The current use will need to be able
+to write into the target directories. 
 
 Versions after 2023-02-07 _only_ copy the script directories and package __init__.py
 to the server path; additionally a bycon package install is needed with
@@ -25,15 +27,19 @@ to the server path; additionally a bycon package install is needed with
 ################################################################################
 ################################################################################
 
-def main():
+def main(no_sudo):
 
-    install_beacon_server()
+    install_beacon_server(no_sudo)
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-def install_beacon_server():
+def install_beacon_server(no_sudo):
+    if no_sudo:
+        sudo_cmd = ""
+    else:
+        sudo_cmd = "sudo"
 
     yaml = ruamel.yaml.YAML()
     yaml.indent(mapping=2, sequence=4, offset=2)
@@ -87,13 +93,13 @@ def install_beacon_server():
     # with open(c_f, 'w') as out_f:
     #     yaml.dump(config, out_f)
 
-    system(f'sudo rsync -avh --delete {dir_path}/local/ {pkg_path}/beaconServer/local/')
-    system(f'sudo rsync -avh --delete {pkg_path}/beaconServer/ {b_i_d_p}/beaconServer/')
+    system(f'{sudo_cmd} rsync -avh --delete {dir_path}/local/ {pkg_path}/beaconServer/local/')
+    system(f'{sudo_cmd} rsync -avh --delete {pkg_path}/beaconServer/ {b_i_d_p}/beaconServer/')
 
-    system(f'sudo cp {pkg_path}/__init__.py {b_i_d_p}/__init__.py')
-    system(f'sudo chown -R {s_u}:{s_g} {b_i_d_p}')
-    system(f'sudo chmod 775 {b_i_d_p}/beaconServer/*.py')
-    # system(f'sudo chmod -R 1777 {w_t_d_p}')
+    system(f'{sudo_cmd} cp {pkg_path}/__init__.py {b_i_d_p}/__init__.py')
+    system(f'{sudo_cmd} chown -R {s_u}:{s_g} {b_i_d_p}')
+    system(f'{sudo_cmd} chmod 775 {b_i_d_p}/beaconServer/*.py')
+    # system(f'{sudo_cmd} chmod -R 1777 {w_t_d_p}')
     
     # print(f'Updated the `server_tmp_dir_loc` in {c_f} to\n{w_t_d_p}')
     print(f'Updated bycon files from\n{pkg_path}\nto\n{b_i_d_p}')
@@ -103,4 +109,9 @@ def install_beacon_server():
 ################################################################################
 
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) > 1 and sys.argv[1] == "--no-sudo":
+        no_sudo = True
+    else:
+        no_sudo = False
+
+    main(no_sudo)
