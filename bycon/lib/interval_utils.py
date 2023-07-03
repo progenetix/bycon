@@ -53,18 +53,18 @@ end:
 ```
 """
 
-
 ################################################################################
 ################################################################################
 ################################################################################
 
 def generate_genomic_mappings(byc):
-
     parse_refseq_file(byc)
     translate_reference_ids(byc)
     parse_cytoband_file(byc)
     __generate_cytoband_intervals(byc)
     __generate_genomic_intervals(byc)
+    byc.update({"genomic_interval_count": len(byc["genomic_intervals"])})
+
 
 ################################################################################
 
@@ -156,8 +156,6 @@ def __generate_cytoband_intervals(byc):
 ################################################################################
 
 def interval_cnv_arrays(cs_vars, byc):
-    # TODO: make this a class to split out the stats etc.
-
     """
     The method generates sample-specific CNV maps using the currently defined
     interval bins. The output (`cnv_statusmaps`) provides annotated intervals
@@ -165,6 +163,8 @@ def interval_cnv_arrays(cs_vars, byc):
     as the minimum and maximum values observed in those intervals
     (`cnv_statusmaps.max`, `cnv_statusmaps.min`).
     """
+
+    # TODO: make this a class to split out the stats etc.
 
     v_d = byc["variant_parameters"]
     v_t_defs = byc["variant_type_definitions"]
@@ -392,5 +392,6 @@ def _has_overlap(interval, v):
         return False
 
     return True
+
 
 ################################################################################

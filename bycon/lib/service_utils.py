@@ -134,7 +134,8 @@ def initialize_bycon_service(byc, service=False):
             "request_path_root": scope,
             "request_entity_path_id": service
         })
-        read_local_prefs(service, sub_path, byc)
+    
+    read_local_prefs(service, sub_path, byc)
 
     get_bycon_args(byc)
     args_update_form(byc)

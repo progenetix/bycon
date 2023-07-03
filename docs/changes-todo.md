@@ -4,6 +4,11 @@
 
 ### Recent
 
+#### 2023-07-01 (v1.0.60)
+
+* adding `BYCON_MONGO_HOST` environment variable to enable other MongoDB host than
+  `localhost` (which remains fallback/default) - thanks @fliem for [#17](https://github.com/progenetix/bycon/pull/17)
+
 #### 2023-06-30 (v1.0.59)
 
 * fixed new bug in variant parameter parsing
