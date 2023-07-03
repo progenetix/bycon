@@ -88,10 +88,10 @@ def initialize_bycon_service(byc, service=False):
 
     form = byc["form_data"]
 
-    if service is False:
+    if not service:
         service = byc.get("request_entity_path_id", False)
     frm = inspect.stack()[1]
-    if service is False:
+    if not service:
         service = frm.function
 
     # TODO - streamline, also for services etc.
@@ -99,8 +99,8 @@ def initialize_bycon_service(byc, service=False):
 
     if service in s_a_s:
         service = s_a_s[service]
-
-    # service = decamelize(service)
+    
+    service = decamelize(service)
     scope = "beacon"
 
     mod = inspect.getmodule(frm[0])
@@ -108,34 +108,32 @@ def initialize_bycon_service(byc, service=False):
         """
         Here we allow the addition of additional configuration files, necessary
         for options beyond basic library use. Files are read in as
-        1. from a `config` directory in the parent directory of the executed script
-            * this e.g. overwrites the config options
-        2. from a config directory inside the script directory
-            * this is usually used to provide script-specific parameters (`service_defaults`...)
+        1. from a `local` directory inside the script directory
+            * this is the location of configuration file w/ content differing on
+              the beaconServer instance
+            * these files are inserted during installation (see the documentation)
+        2. from a `config` directory inside the script directory
+            * script specific configurations are stored there under the name of
+              script, e.g. `frequencymaps_creator.yaml` - typically only
+              used in services and utility scripts, not beaconServer
+            * this is usually used to provide script-specific parameters
+              (`service_defaults`...)
         """
         sub_path = path.dirname(path.abspath(mod.__file__))
-        if "services" in sub_path:
+        if "services" in sub_path or "byconaut" in sub_path:
             scope = "services"
-
-        for loc_conf in ["config", "local"]:
-            conf_dir = path.join(sub_path, loc_conf)
-
-            if not path.isdir(conf_dir):
-                continue
-
-            read_bycon_definition_files(conf_dir, byc)
-
-            # TODO: separate services_defaults ?
-            defaults = byc["beacon_defaults"].get("defaults", {})
-            for d_k, d_v in defaults.items():
-                byc.update({d_k: d_v})
-
         byc.update({
             "request_path_root": scope,
             "request_entity_path_id": service
         })
+
+        loc_dir = path.join(sub_path, "local")
+        read_bycon_definition_files(loc_dir, byc)
+        defaults = byc["beacon_defaults"].get("defaults", {})
+        for d_k, d_v in defaults.items():
+            byc.update({d_k: d_v})
     
-    read_local_prefs(service, sub_path, byc)
+        read_local_prefs(service, sub_path, byc)
 
     get_bycon_args(byc)
     args_update_form(byc)
