@@ -86,45 +86,65 @@ Some configuration:
 - a directory for executables (e.g. .../cgi-bin/) 
     * this has to be set as the default executable (CGI) directory
     * our Mac OS use: `/Library/WebServer/cgi-bin/`
-```
-# Configure the global CGI-BIN
-
-ScriptAlias  /cgi      /Library/WebServer/cgi-bin
-ScriptAlias  /cgi-bin  /Library/WebServer/cgi-bin
-
-<Directory "/Library/WebServer/cgi-bin">
-    AllowOverride None
-    Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-    SetHandler cgi-script
-    Require all granted
-</Directory>
-```
     * we also use a `/bycon` wrapper directory inside the CGI dir (for hosting the
       `beaconServer` and optionally `services` directories with their `....py`
       scripts)
     * we use a rewrite directive to the main beacon (& optional services) apps which
       handle then path deparsing and calling of individual apps:
-```
-# Allow (some) CGI-BIN scripts to be called with a short alias.
-
-RewriteEngine On
-
-RewriteRule     "^/?services/(.*)"     /cgi-bin/bycon/services/services.py/$1      [PT]
-RewriteRule     "^/?beacon/(.*)"     /cgi-bin/bycon/beaconServer/beacon.py/$1      [PT]
-```
 - a server-writable temporary directory
-    * our use: `/Library/WebServer/Documents/tmp/`
-```
-# Configure the global tmp
+    * our use: `/Library/WebServer/Documents/tmp/` 
 
-Alias  /tmp      /Library/WebServer/Documents/tmp
+??? info "Example `httpd.conf` configuration settings"
 
-<Directory /Library/WebServer/Documents/tmp>
-    Options Indexes FollowSymlinks
-    AllowOverride All
-    Require all granted
-</Directory>
-```
+    These are some example configuration settings. Please search for the corresponding
+    settings in your server configuration and adjust acordingly.
+
+    ```
+    # Set the document root - here using our example, YMMV
+
+    DocumentRoot    /Library/WebServer/Documents
+    ```
+
+
+    ```
+    # Enable script execution
+
+    LoadModule cgi_module /usr/libexec/apache2/mod_cgi.so
+
+    # Configure the global CGI-BIN
+
+    ScriptAlias  /cgi      /Library/WebServer/cgi-bin
+    ScriptAlias  /cgi-bin  /Library/WebServer/cgi-bin
+
+    <Directory "/Library/WebServer/cgi-bin">
+        AllowOverride None
+        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        SetHandler cgi-script
+        Require all granted
+    </Directory>
+    ```
+    ```
+    # Allow (some) CGI-BIN scripts to be called with a short alias.
+
+    RewriteEngine On
+
+    RewriteRule     "^/?services/(.*)"     /cgi-bin/bycon/services/services.py/$1      [PT]
+    RewriteRule     "^/?beacon/(.*)"     /cgi-bin/bycon/beaconServer/beacon.py/$1      [PT]
+    ```
+
+    ```
+    # Configure the global tmp
+
+    Alias  /tmp      /Library/WebServer/Documents/tmp
+
+    <Directory /Library/WebServer/Documents/tmp>
+        Options Indexes FollowSymlinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+    ```
+
+
 ### Installation Procedure
 
 The project root contains an `install.py` script to distribute the server scripts
@@ -177,6 +197,8 @@ pip install $BY
 ./install.py
 ../byconaut/install.py
 ```
+
+There is also a `--noo-sudo` modification option: `./install.py --no-sudo`
 
 The last step in the batch assumes that one has the `byconaut` project in a local
 sister directory.

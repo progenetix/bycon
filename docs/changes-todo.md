@@ -4,6 +4,13 @@
 
 ### Recent
 
+#### 2023-07-04 (v1.0.61)
+
+* adding `BYCON_MONGO_HOST` environment variable to enable other MongoDB host than
+  `localhost` (which remains fallback/default) - thanks @fliem for [#17](https://github.com/progenetix/bycon/pull/17)
+* added `--noo-sudo` to install.py - thanks @fliem for [#19](https://github.com/progenetix/bycon/pull/19)
+* more tweaking of configuration reading
+
 #### 2023-06-30 (v1.0.59)
 
 * fixed new bug in variant parameter parsing

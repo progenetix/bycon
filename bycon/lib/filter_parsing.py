@@ -37,7 +37,7 @@ def get_global_filter_flags(byc):
 def check_filter_values(byc):
 
     """
-    The functtion checks the filter values for a match to any of the filter
+    The function checks the filter values for a match to any of the filter
     definitions. The optional `!` flag (no match) is not considered during
     evaluation ("deflagged").
     This filter check is complementary to the evaluation during the filter query
@@ -64,6 +64,7 @@ def check_filter_values(byc):
                 # print(f'{f_d["pattern"]} => ? {deflagged}')
                 matched = True
                 continue
+
 
         if matched is False:
             warning = "The filter `{}` does not match any defined filter pattern.".format(f["id"])
