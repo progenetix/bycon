@@ -87,6 +87,7 @@ def initialize_bycon_service(byc, service=False):
     provided."""
 
     form = byc["form_data"]
+    scope = "beacon"
 
     if not service:
         service = byc.get("request_entity_path_id", False)
@@ -99,8 +100,6 @@ def initialize_bycon_service(byc, service=False):
 
     if service in s_a_s:
         service = s_a_s[service]
-
-    scope = "beacon"
 
     mod = inspect.getmodule(frm[0])
     if mod is not None:
