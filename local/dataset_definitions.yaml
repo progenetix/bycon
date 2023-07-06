@@ -15,19 +15,6 @@ progenetix:
       - id: DUO:0000004
         label: no restriction
         version: 2021-11-11
-  # handoverTypes:
-  #   - histoplot
-  #   - biosamples
-  #   - biosamplestable
-  #   - biosamplevariants
-  #   - biosamplepgxsegvariants
-  #   - annotatedvariants
-  #   - phenopackets
-  #   - individuals
-  #   - variants
-  #   - callsetsvariants
-  #   - callsetspgxseg
-  #   - UCSClink
   info:
     variantCount: 7656759
     callCount: 20988819
@@ -55,25 +42,12 @@ examplez:
     identifier: 'org.progenetix.examplez'
     description: "selected examples for database test installation"
     createDateTime: 2023-04-01
-    updateDateTime: 2023-04-01
-    version: 2023-04-01
+    updateDateTime: 2023-07-04
+    version: 2023-07-04
     externalUrl: "https://bycon.progenetix.org"
     assemblyId: GRCh38
     dataUseConditions:
       duoDataUse:
         - id: DUO:0000004
           label: no restriction
-          version: 2021-11-11
-  # handoverTypes:
-  #   - histoplot
-  #   - biosamples
-  #   - biosamplestable
-  #   - biosamplevariants
-  #   - biosamplepgxsegvariants
-  #   - annotatedvariants
-  #   - phenopackets
-  #   - individuals
-  #   - variants
-  #   - callsetsvariants
-  #   - callsetspgxseg
-  #   - UCSClink
+          version: 2023-07-04

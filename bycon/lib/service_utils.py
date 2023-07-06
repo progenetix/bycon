@@ -3,21 +3,24 @@ import os
 from pathlib import Path
 
 from args_parsing import *
+from bycon_plot import ByconPlot
+from bycon_helpers import paginate_list, set_pagination_range
 from cgi_parsing import prjsonnice
-from genome_utils import translate_reference_ids
 from data_retrieval import *
 from dataset_parsing import select_dataset_ids
 from datatable_utils import export_datatable_download
 from export_file_generation import *
 from file_utils import ByconBundler, callset_guess_probefile_path
+from filter_parsing import parse_filters
+from genome_utils import translate_reference_ids
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, \
     dataset_results_save_handovers
 from interval_utils import generate_genomic_mappings
-from bycon_plot import ByconPlot
 from query_execution import execute_bycon_queries, mongo_result_list
-from query_generation import generate_queries, initialize_beacon_queries, paginate_list, set_pagination_range
+from query_generation import generate_dataset_queries
 from read_specs import load_yaml_empty_fallback, read_bycon_definition_files, read_local_prefs
 from response_remapping import *
+from variant_parsing import parse_variants
 from schema_parsing import *
 
 ################################################################################
@@ -72,7 +75,8 @@ def run_beacon_init_stack(byc):
         print_text_response("No existing dataset_id - please check dataset_definitions")
 
     create_empty_beacon_response(byc)
-    initialize_beacon_queries(byc)
+    parse_filters(byc)
+    parse_variants(byc)
     response_add_received_request_summary_parameters(byc)
     generate_genomic_mappings(byc)
     response_collect_errors(byc)
@@ -102,6 +106,7 @@ def initialize_bycon_service(byc, service=False):
         service = s_a_s[service]
 
     mod = inspect.getmodule(frm[0])
+
     if mod is not None:
         """
         Here we allow the addition of additional configuration files, necessary
@@ -144,8 +149,9 @@ def initialize_bycon_service(byc, service=False):
     defs = byc.get(d_k, {})
     b_e_d = defs.get("entity_defaults", {})
 
-    if service in b_e_d:
-        for d_k, d_v in b_e_d[service].items():
+    snaked_service = decamelize(service)
+    if snaked_service in b_e_d:
+        for d_k, d_v in b_e_d[snaked_service].items():
             byc.update({d_k: d_v})
 
     # update response_entity_id from path
@@ -264,7 +270,7 @@ def run_result_sets_beacon(byc):
     for i, r_set in enumerate(sr_r["result_sets"]):
 
         ds_id = r_set["id"]
-        generate_queries(byc, ds_id)
+        generate_dataset_queries(byc, ds_id)
 
         r_set, r_s_res = populate_result_set(r_set, byc)
 

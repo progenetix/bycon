@@ -1,36 +1,25 @@
 import pymongo
-from os import environ
 from bson import SON
 
-from bycon_helpers import days_from_iso8601duration 
+from bycon_helpers import days_from_iso8601duration, paginate_list, set_pagination_range
 from filter_parsing import *
 from variant_parsing import *
 
 
 ################################################################################
 
-def initialize_beacon_queries(byc):
+def generate_dataset_queries(byc, ds_id):
+
     byc.update({"queries": {}})
-
-    parse_filters(byc)
-    parse_variant_parameters(byc)
-    get_variant_request_type(byc)
-
-
-################################################################################
-
-def generate_queries(byc, ds_id="progenetix"):
-    byc.update({"queries": {}})
-
-    _update_queries_from_path_id(byc)
-    _update_queries_from_id_values(byc)
-    _update_queries_from_cohorts_query(byc)
-    _update_queries_from_filters(byc, ds_id)
-    _update_queries_from_variants(byc)
-    _update_queries_from_geoquery(byc)
-    _update_queries_from_hoid(byc)
-    _replace_queries_in_test_mode(byc)
-    _purge_empty_queries(byc)
+    __update_queries_from_path_id(byc)
+    __update_queries_from_id_values(byc)
+    __update_queries_from_cohorts_query(byc)
+    __update_queries_from_variants(byc)
+    __update_queries_from_geoquery(byc)
+    __update_queries_from_hoid(byc)
+    __update_queries_from_filters(byc, ds_id)
+    __replace_queries_in_test_mode(byc)
+    __purge_empty_queries(byc)
 
     # TODO: HOT FIX
     if "runs" in byc["queries"].keys():
@@ -40,7 +29,7 @@ def generate_queries(byc, ds_id="progenetix"):
 
 ################################################################################
 
-def _purge_empty_queries(byc):
+def __purge_empty_queries(byc):
     empties = []
     for k, v in byc["queries"].items():
         if not v:
@@ -51,13 +40,13 @@ def _purge_empty_queries(byc):
 
 ################################################################################
 
-def _replace_queries_in_test_mode(byc):
+def __replace_queries_in_test_mode(byc):
     if byc["test_mode"] is not True:
         return
 
     try:
         collname = byc["response_entity"]["collection"]
-    except:
+    except Exception:
         return
 
     ret_no = int(byc.get('test_mode_count', 5))
@@ -85,7 +74,7 @@ def _replace_queries_in_test_mode(byc):
 
 ################################################################################
 
-def _update_queries_from_path_id(byc):
+def __update_queries_from_path_id(byc):
     b_mps = byc["beacon_mappings"]
 
     if "service" in byc["request_path_root"]:
@@ -113,7 +102,7 @@ def _update_queries_from_path_id(byc):
 
 ################################################################################
 
-def _update_queries_from_cohorts_query(byc):
+def __update_queries_from_cohorts_query(byc):
     if "cohorts" not in byc["queries"]:
         return
 
@@ -128,12 +117,12 @@ def _update_queries_from_cohorts_query(byc):
 
     byc["queries"].pop("cohorts", None)
 
-    update_query_for_scope(byc, query, "biosamples")
+    __update_query_for_scope(byc, query, "biosamples")
 
 
 ################################################################################
 
-def _update_queries_from_id_values(byc):
+def __update_queries_from_id_values(byc):
     id_f_v = byc["beacon_mappings"]["id_queryscope_mappings"]
     f_d = byc["form_data"]
 
@@ -152,12 +141,12 @@ def _update_queries_from_id_values(byc):
             elif len(id_v) == 1:
                 q = {"id": id_v[0]}
         if q is not False:
-            update_query_for_scope(byc, q, id_s, "AND")
+            __update_query_for_scope(byc, q, id_s, "AND")
 
 
 ################################################################################
 
-def _update_queries_from_hoid(byc):
+def __update_queries_from_hoid(byc):
     if "accessid" in byc["form_data"]:
 
         accessid = byc["form_data"]["accessid"]
@@ -177,8 +166,6 @@ def _update_queries_from_hoid(byc):
 
             set_pagination_range(t_c, byc)
             t_v = paginate_list(t_v, byc)
-
-            t_db = h_o["source_db"]
             h_o_q = {t_k: {'$in': t_v}}
             if c_n in byc["queries"]:
                 byc["queries"].update({c_n: {'$and': [h_o_q, byc["queries"][c_n]]}})
@@ -188,17 +175,19 @@ def _update_queries_from_hoid(byc):
 
 ################################################################################
 
-def _update_queries_from_filters(byc, ds_id="progenetix"):
+def __update_queries_from_filters(byc, ds_id="progenetix"):
     """The new version assumes that dataset_id, scope (collection) and field are
     stored in the collation entries. Only filters with exact match to an entry
     in the lookup "collations" collection will be evaluated.
     While the Beacon v2 protocol assumes a logical `AND` between filters, bycon
     has a slightly differing approach:
     * filters against the same field (in the same collection) are treated as
-    logical `OR` since this seems logical; and also allows the use of the same
-    query object for hierarchical (`child_terms`) query expansion
-    * the bycon API allows to pass a `filterLogic` parameter with either `AND`
-    (default value) or `OR`
+    logical `OR` since this seems, well, logical (since otherwise the query would
+    fail or result in incomplete matches in the case of terms from the same term
+    tree); and also allows the use of the same query object for hierarchical
+    (`child_terms`) query expansion
+    * the `bycon` API allows to pass a `filterLogic` parameter with either a
+    global `AND` (default value) or `OR`
 
     CAVE: Filters are assumed to be id values in the collation collection
     OR have a `collationed` flag in the filter_definitions set to `false`.
@@ -250,9 +239,8 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
                     }
                     f_desc = False
                     if f_d["collationed"] is True:
-                        warning = "The filter `{}` matches a `{}` filter pattern but the value is not in collations.".format(
-                            f_val, f_d["scope"])
-                        response_add_filter_warnings(byc, warning)                        
+                        ftw = f'Filter `{f_val}` matches a `{f_d["scope"]}` pattern but is not in the list of existing `filtering_terms` for {ds_id}'
+                        response_add_filter_warnings(byc, ftw)                        
 
         if f_info is None:
             f_info = {
@@ -271,9 +259,9 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
         if f_scope is False:
             f_scope = f_info["scope"]
 
-        if f_scope not in byc["config"]["queried_collections"]:
-            continue
-
+        if f_scope not in byc["config"].get("queried_collections", []):
+            fsw = f'The scope `{f_scope}` for filter `{f_val}` is not in the queried models'
+            response_add_filter_warnings(byc, fsw)
 
         if f_scope not in f_lists.keys():
             f_lists.update({f_scope: {}})
@@ -287,13 +275,10 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
 
         # TODO: move somewhere; this is just for the age prototype
         if "alphanumeric" in f_info.get("type", "ontology"):
-
-            f_class, comp, val = re.match(r'^(\w+):([<>=]+?)(\w[\w\.]+?)$', f_info["id"]).group(1,2,3)
-
+            f_class, comp, val = re.match(r'^(\w+):([<>=]+?)(\w[\w.]+?)$', f_info["id"]).group(1, 2, 3)
             if "iso8601duration" in f_info.get("format", "___none___"):
                 val = days_from_iso8601duration(val)
-
-            f_lists[f_scope][f_field].append( __mongo_comparator_query(comp, val) )
+            f_lists[f_scope][f_field].append(__mongo_comparator_query(comp, val))
 
         elif f_desc is True:
             if f_neg is True:
@@ -315,9 +300,9 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
             else:
                 if "alphanumeric" in f_infos[f_scope][f_field].get("type", "ontology"):
                     q_l = []
-                    for a_q_v in f_query_vals:\
-                        q_l.append({f_field:a_q_v})
-                    f_s_l.append({"$and": q_l })
+                    for a_q_v in f_query_vals:
+                        q_l.append({f_field: a_q_v})
+                    f_s_l.append({"$and": q_l})
                 else:
                     f_s_l.append({f_field: {"$in": f_query_vals}})
 
@@ -332,7 +317,7 @@ def _update_queries_from_filters(byc, ds_id="progenetix"):
 
 ################################################################################
 
-def update_query_for_scope(byc, query, scope, bool_mode="AND"):
+def __update_query_for_scope(byc, query, scope, bool_mode="AND"):
     logic = boolean_to_mongo_logic(bool_mode)
 
     if scope not in byc["queries"]:
@@ -343,13 +328,13 @@ def update_query_for_scope(byc, query, scope, bool_mode="AND"):
 
 ################################################################################
 
-def _update_queries_from_geoquery(byc):
+def __update_queries_from_geoquery(byc):
     geo_q, geo_pars = geo_query(byc)
 
     if not geo_q:
         return
 
-    update_query_for_scope(byc, geo_q, "biosamples", bool_mode="AND")
+    __update_query_for_scope(byc, geo_q, "biosamples", bool_mode="AND")
 
 
 ################################################################################
@@ -366,12 +351,12 @@ def __mongo_comparator_query(comparator, value):
 
     c = mongo_comps.get(comparator, '$eq')
 
-    return { c: value }
+    return {c: value}
 
 ################################################################################
 
 
-def _update_queries_from_variants(byc):
+def __update_queries_from_variants(byc):
     if "variant_request_type" not in byc:
         return
 
@@ -391,48 +376,6 @@ def _update_queries_from_variants(byc):
         create_variantRangeRequest_query(byc)
     elif "geneVariantRequest" in byc["variant_request_type"]:
         create_geneVariantRequest_query(byc)
-
-
-################################################################################
-
-def set_pagination_range(d_count, byc):
-    r_range = [
-        byc["pagination"]["skip"] * byc["pagination"]["limit"],
-        byc["pagination"]["skip"] * byc["pagination"]["limit"] + byc["pagination"]["limit"],
-    ]
-
-    if byc["pagination"]["skip"] == 0 and byc["pagination"]["limit"] == 0:
-        byc["pagination"].update({"range": [0, d_count]})
-        return
-
-    r_l_i = d_count - 1
-
-    if r_range[0] > r_l_i:
-        r_range[0] = r_l_i
-    if r_range[-1] > d_count:
-        r_range[-1] = d_count
-
-    byc["pagination"].update({"range": r_range})
-
-
-################################################################################
-
-def paginate_list(this, byc):
-    if byc["pagination"]["limit"] < 1:
-        return this
-
-    r = byc["pagination"]["range"]
-
-    t_no = len(this)
-    r_min = r[0] + 1
-    r_max = r[-1]
-
-    if r_min > t_no:
-        return []
-    if r_max > t_no:
-        return this[r[0]:r_max]
-
-    return this[r[0]:r[-1]]
 
 
 ################################################################################

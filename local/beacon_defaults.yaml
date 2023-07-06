@@ -31,8 +31,10 @@ defaults:
 ################################################################################
 # Beacon entry type defaults - please adjust esp. info and schema paths...
 # TODO: Some of the entry type configuration duplicates data from the Beacon
-# framework or from beacon_entry_types and might be disentanled further on ...
+# framework or from beacon_entry_types and might be disentangled further on ...
 ################################################################################
+
+#  => snake_casing
 
 entity_defaults:
 
@@ -159,7 +161,7 @@ entity_defaults:
 
   ##############################################################################
 
-  genomicVariations:
+  genomic_variations:
     request_entity_path_id: genomicVariations
     response_entity_id: genomicVariant
 

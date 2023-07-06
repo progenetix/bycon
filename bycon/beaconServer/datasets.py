@@ -41,10 +41,11 @@ def datasets():
     r, e = instantiate_response_and_error(byc, "beaconCollectionsResponse")
     response_meta_set_info_defaults(r, byc)
     
-    _get_history_depth(byc)
+    __get_history_depth(byc)
     dbstats = datasets_update_latest_stats(byc)
 
-    initialize_beacon_queries(byc)
+    parse_filters(byc)
+    parse_variants(byc)
 
     if "beaconResultsetsResponse" in byc["response_entity"]["response_schema"]:
         create_empty_beacon_response(byc)
@@ -73,7 +74,7 @@ def datasets():
 
 ################################################################################
 
-def _get_history_depth(byc):
+def __get_history_depth(byc):
 
     if "statsNumber" in byc["form_data"]:
         s_n = byc["form_data"]["statsNumber"]

@@ -17,6 +17,7 @@ byc_root_pars:
   method: ''
   output: ''
   form_data: {}
+  queries: {}
   query_meta: {}
   original_queries:
   script_args: []

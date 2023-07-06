@@ -79,7 +79,7 @@ def execute_bycon_queries(ds_id, byc):
         pref_k = "variant_annotations._id"
         prevars["pref_m"] = pref_k
         prevars["query"] = exe_queries.get("variant_annotations", {})
-        prefetch.update({ pref_k: _prefetch_data(prevars)})
+        prefetch.update({pref_k: _prefetch_data(prevars)})
         byc["dataset_results"].update({ds_id: prefetch})
 
         return
@@ -108,7 +108,7 @@ def execute_bycon_queries(ds_id, byc):
 
         pref_k = "biosamples.id"
         prevars["pref_m"] = pref_k
-        prevars["query"] = {"individual_id": {'$in': pref_vs }}
+        prevars["query"] = {"individual_id": {'$in': pref_vs}}
         biosids_from_indq = _prefetch_data(prevars)
 
         if "biosamples.id" in prefetch:
@@ -319,7 +319,6 @@ def _prefetch_add_all_sample_variants(prevars, prefetch):
     prevars["pref_m"] = "variants._id"
     prevars["query"] = {"biosample_id": {"$in": prefetch["biosamples.id"]["target_values"]}}
     prefetch.update({prevars["pref_m"]: _prefetch_vars_from_biosample_loop(prevars)})
-    # print("Storage size for {} entries in {}: {}".format(prefetch[prevars["pref_m"]]["target_count"], prevars["pref_m"], sys.getsizeof(prefetch[prevars["pref_m"]]["target_values"]) / 1000000))
 
     return prefetch
 

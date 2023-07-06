@@ -6,8 +6,8 @@ import sys, re, ruamel.yaml
 from os import getlogin, path, system
 
 dir_path = path.dirname( path.abspath(__file__) )
-pkg_path = path.join( dir_path, "bycon" )
-sys.path.append( pkg_path )
+# pkg_path = path.join( dir_path, "bycon" )
+# #sys.path.append( pkg_path )
 
 from bycon import *
 
@@ -61,48 +61,24 @@ def install_beacon_server(no_sudo):
 
     s_u = install["system_user"]
     s_g = install["system_group"]
-
-    # for p in ["server_tmp_dir_loc", "server_tmp_dir_web"]:
-    #     p_v = install["bycon_instance_pars"].get(p, None)
-    #     if p_v is None:
-    #         print("¡¡¡ No `bycon_instance_pars.{}` value defined in {} !!!".format(p, i_f))
-    #         exit()
-
     b_i_d_p = path.join( *install["bycon_install_dir"] )
 
-    # for s_p in [b_i_d_p, w_t_d_p]:
-    #     if not path.isdir(s_p):
-    #         print("¡¡¡ {} does not exist - please check & create !!!".format(s_p))
-    #         exit()
+    l_conf_source = path.join(dir_path, "local", "")
+    server_source = path.join(dir_path, "bycon", "beaconServer", "")
+    l_conf_target = path.join(server_source, "local", "")
+    server_target = path.join(b_i_d_p, "beaconServer", "")
 
-    # # this block modifies the main config file, so that the `server_tmp_dir_loc`
-    # # etc. are in line with the install
-    # c_f = path.join( pkg_path, "config.yaml" )
-    # c_f_bck = path.join( pkg_path, "config.yaml.bck" )
-    # try:
-    #     with open( c_f ) as y_c:
-    #         config = yaml.load( y_c )
-    #     system('cp {} {}'.format(c_f, c_f_bck))
-    # except Exception as e:
-    #     print(e)
-    #     exit()
+    system(f'{sudo_cmd} rsync -avh --delete {l_conf_source} {l_conf_target}')
+    print(f'==> Copied configuration files from {l_conf_source} to {l_conf_target}')
+    system(f'{sudo_cmd} rsync -avh --delete {server_source} {server_target}')
+    print(f'==> Copied server files from {server_source} to {server_target}')
 
-    # for c_p_k, c_p_v in install["bycon_instance_pars"].items():
-    #     config.update({ c_p_k: c_p_v})
-    
-    # with open(c_f, 'w') as out_f:
-    #     yaml.dump(config, out_f)
-
-    system(f'{sudo_cmd} rsync -avh --delete {dir_path}/local/ {pkg_path}/beaconServer/local/')
-    system(f'{sudo_cmd} rsync -avh --delete {pkg_path}/beaconServer/ {b_i_d_p}/beaconServer/')
-
-    system(f'{sudo_cmd} cp {pkg_path}/__init__.py {b_i_d_p}/__init__.py')
+    system(f'{sudo_cmd} cp {path.join(dir_path, "bycon", "__init__.py")} {path.join(b_i_d_p, "__init__.py")}')
     system(f'{sudo_cmd} chown -R {s_u}:{s_g} {b_i_d_p}')
-    system(f'{sudo_cmd} chmod 775 {b_i_d_p}/beaconServer/*.py')
-    # system(f'{sudo_cmd} chmod -R 1777 {w_t_d_p}')
-    
-    # print(f'Updated the `server_tmp_dir_loc` in {c_f} to\n{w_t_d_p}')
-    print(f'Updated bycon files from\n{pkg_path}\nto\n{b_i_d_p}')
+    system(f'{sudo_cmd} chmod 775 {server_target}*.py')
+    print(f'{sudo_cmd} chmod 775 {server_target}*.py')
+
+    print(f'Updated bycon files from\n{path.join(dir_path, "bycon")}\nto\n{b_i_d_p}')
 
 ################################################################################
 ################################################################################

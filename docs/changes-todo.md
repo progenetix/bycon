@@ -4,6 +4,24 @@
 
 ### Recent
 
+#### 2023-07-06 (v1.0.64)
+
+* fixing camelCase / snake_case errors for `filteringTerms` & `genomicVariations`
+  entry types (I hope; those came up in 1.0.62 after streamlining config parsing...)
+
+#### 2023-07-06 (v1.0.63)
+
+* cleaning up the install.py script
+* fix in byconaut for local preferences when executing from local repo (where
+  this lead to an empty stats database -> beacon errors...)
+
+#### 2023-07-05 (v1.0.62)
+
+* bug fix sample plots
+* internal function re-organization (`initialize_bycon_queries` deprecated & replaced
+  by `parse_filters` & `parse_variants`)
+* also addition to the ENV config in byconaut
+
 #### 2023-07-04 (v1.0.61)
 
 * adding `BYCON_MONGO_HOST` environment variable to enable other MongoDB host than

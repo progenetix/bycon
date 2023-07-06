@@ -65,7 +65,6 @@ def check_filter_values(byc):
                 matched = True
                 continue
 
-
         if matched is False:
             warning = "The filter `{}` does not match any defined filter pattern.".format(f["id"])
             response_add_filter_warnings(byc, warning)
@@ -74,6 +73,7 @@ def check_filter_values(byc):
             checked.append( f )
 
     return checked
+
 
 ################################################################################
 

@@ -797,7 +797,7 @@ class ByconPlot:
         # -------------------------- center line -----------------------------------#
 
         self.plv["pls"].append(
-            f'<line x1="{x_a_0 - self.plv["plot_region_gap_width"]}"  y1="{h_y_0}"  x2="{x_c_e}"  y2="{h_y_0}" class="gridline" />')
+            f'<line x1="{x_a_0 - self.plv["plot_region_gap_width"] - self.plv["plot_axislab_y_width"]}"  y1="{h_y_0}"  x2="{x_c_e}"  y2="{h_y_0}" class="gridline" />')
 
         # --------------------------- grid lines -----------------------------------#
 
