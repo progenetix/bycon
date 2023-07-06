@@ -166,7 +166,6 @@ def interval_cnv_arrays(cs_vars, byc):
 
     # TODO: make this a class to split out the stats etc.
 
-    v_d = byc["variant_parameters"]
     v_t_defs = byc["variant_type_definitions"]
     c_l = byc["cytolimits"]
     intervals = byc["genomic_intervals"]
@@ -262,7 +261,7 @@ def interval_cnv_arrays(cs_vars, byc):
                         values_map[i].append(v["info"]["cnv_value"])
                     else:
                         values_map[i].append(v_t_defs[v_t_c].get("cnv_dummy_value"))
-                except:
+                except Exception:
                     pass
 
     # statistics

@@ -72,15 +72,14 @@ def dbstats_return_latest(byc):
     # which updates the database_definitions / beacon_info yamls...
 
     limit = 1
-    if "stats_number" in byc:
-        if byc["stats_number"] > 1:
-            limit = byc["stats_number"]
+    # if "stats_number" in byc:
+    #     if byc["stats_number"] > 1:
+    #         limit = byc["stats_number"]
 
     db = byc[ "config" ][ "services_db" ]
     coll = byc[ "config" ][ "beacon_info_coll" ]
     stats = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))[ db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( limit )
-
-    return stats
+    return list(stats)
 
 ################################################################################
 

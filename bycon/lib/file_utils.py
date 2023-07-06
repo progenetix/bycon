@@ -68,7 +68,7 @@ def callset_guess_probefile_path(callset, byc):
     if not "analysis_info" in callset:
         return False
 
-    d = Path( path.join( *byc["config"]["server_callsets_dir_loc"]))
+    d = Path( path.join( *byc["local_paths"]["server_callsets_dir_loc"]))
     n = byc["config"].get("callset_probefile_name", "___none___")
 
     if not d.is_dir():

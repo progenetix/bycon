@@ -5,8 +5,14 @@ from query_execution import mongo_result_list
 
 ################################################################################
 
-def parse_variant_parameters(byc):
+def parse_variants(byc):
+    __parse_variant_parameters(byc)
+    __get_variant_request_type(byc)
 
+
+################################################################################
+
+def __parse_variant_parameters(byc):
     v_d = byc["variant_parameters"]
     v_p_defs = v_d["parameters"]
     v_t_defs = byc["variant_type_definitions"]
@@ -54,6 +60,70 @@ def parse_variant_parameters(byc):
                 v_p_c[ p_k ] = v_p
 
     byc.update( { "variant_pars": v_p_c } )
+
+
+################################################################################
+
+def __get_variant_request_type(byc):
+
+    """podmd
+    This method guesses the type of variant request, based on the complete
+    fulfillment of the required parameters (all of `all_of`, one if `one_of`).
+    In case of multiple types the one with most matched parameters is prefered.
+    This may be changed to using a pre-defined request type and using this as
+    completeness check only.
+    TODO: Verify by schema ...
+    podmd"""
+
+    if not "variant_pars" in byc:
+        return
+
+    variant_request_type = "no correct variant request"
+
+    v_pars = byc["variant_pars"]
+    v_p_defs = byc["variant_parameters"]["parameters"]
+
+    brts = byc["variant_parameters"]["request_types"]
+    brts_k = brts.keys()
+    
+    # DODO HACK: setting to range request if start and end with one value
+    if "start" in v_pars and "end" in v_pars:
+        if len(v_pars[ "start" ]) == 1:
+            if len(v_pars[ "end" ]) == 1:
+                brts_k = [ "variantRangeRequest" ]
+
+    vrt_matches = [ ]
+
+    for vrt in brts_k:
+
+        matched_par_no = 0
+        needed_par_no = 0
+        if "one_of" in brts[vrt]:
+            needed_par_no = 1
+            for one_of in brts[vrt][ "one_of" ]:
+                if one_of in v_pars:
+                    matched_par_no = 1
+                    continue
+        
+        if "all_of" in brts[vrt]:
+            needed_par_no += len( brts[vrt][ "all_of" ] )
+
+            for required in brts[vrt][ "all_of" ]:
+                if required in v_pars:
+                    matched_par_no += 1
+        
+        # print("{} {} of {}".format(vrt, matched_par_no, needed_par_no))
+
+        if matched_par_no >= needed_par_no:
+            vrt_matches.append( { "type": vrt, "par_no": matched_par_no } )
+
+
+    if len(vrt_matches) > 0:
+        vrt_matches = sorted(vrt_matches, key=lambda k: k['par_no'], reverse=True)
+        variant_request_type = vrt_matches[0]["type"]
+
+    byc.update( { "variant_request_type": variant_request_type } )
+
 
 ################################################################################
 
@@ -119,67 +189,6 @@ def translate_reference_name(variant_pars, byc):
     return variant_pars
 
 
-################################################################################
-
-def get_variant_request_type(byc):
-
-    """podmd
-    This method guesses the type of variant request, based on the complete
-    fulfillment of the required parameters (all of `all_of`, one if `one_of`).
-    In case of multiple types the one with most matched parameters is prefered.
-    This may be changed to using a pre-defined request type and using this as
-    completeness check only.
-    TODO: Verify by schema ...
-    podmd"""
-
-    if not "variant_pars" in byc:
-        return
-
-    variant_request_type = "no correct variant request"
-
-    v_pars = byc["variant_pars"]
-    v_p_defs = byc["variant_parameters"]["parameters"]
-
-    brts = byc["variant_parameters"]["request_types"]
-    brts_k = brts.keys()
-    
-    # DODO HACK: setting to range request if start and end with one value
-    if "start" in v_pars and "end" in v_pars:
-        if len(v_pars[ "start" ]) == 1:
-            if len(v_pars[ "end" ]) == 1:
-                brts_k = [ "variantRangeRequest" ]
-
-    vrt_matches = [ ]
-
-    for vrt in brts_k:
-
-        matched_par_no = 0
-        needed_par_no = 0
-        if "one_of" in brts[vrt]:
-            needed_par_no = 1
-            for one_of in brts[vrt][ "one_of" ]:
-                if one_of in v_pars:
-                    matched_par_no = 1
-                    continue
-        
-        if "all_of" in brts[vrt]:
-            needed_par_no += len( brts[vrt][ "all_of" ] )
-
-            for required in brts[vrt][ "all_of" ]:
-                if required in v_pars:
-                    matched_par_no += 1
-        
-        # print("{} {} of {}".format(vrt, matched_par_no, needed_par_no))
-
-        if matched_par_no >= needed_par_no:
-            vrt_matches.append( { "type": vrt, "par_no": matched_par_no } )
-
-
-    if len(vrt_matches) > 0:
-        vrt_matches = sorted(vrt_matches, key=lambda k: k['par_no'], reverse=True)
-        variant_request_type = vrt_matches[0]["type"]
-
-    byc.update( { "variant_request_type": variant_request_type } )
 
 ################################################################################
 

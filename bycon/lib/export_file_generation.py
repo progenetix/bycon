@@ -3,7 +3,7 @@ from os import environ
 
 from cgi_parsing import *
 from datatable_utils import get_nested_value
-from query_generation import paginate_list
+from bycon_helpers import paginate_list
 from response_remapping import de_vrsify_variant
 
 

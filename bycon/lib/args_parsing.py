@@ -13,7 +13,7 @@ def get_bycon_args(byc):
     # Serves as "we've been here before" marker - before the env check.
     byc.update({"check_args": False})
 
-    if not "local" in byc["env"]:
+    if "local" not in byc["env"]:
         return
 
     if byc["script_args"]:
