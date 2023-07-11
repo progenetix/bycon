@@ -4,6 +4,15 @@
 
 ### Recent
 
+#### 2023-07-11 (v1.0.65)
+
+* streamlining of schema file parsing
+    - the schema file root is now hard coded to `path.join( pkg_path, "schemas" )`
+    - schemas are identified by their **unique** name (`beaconMap.json`)
+      or patent dir / default combination (`.../biosamples/defaultSchema.json`)
+    - ... which means those have to be unique
+    - this removes all the schema path definitions from `config.yaml`
+
 #### 2023-07-06 (v1.0.64)
 
 * fixing camelCase / snake_case errors for `filteringTerms` & `genomicVariations`

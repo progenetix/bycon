@@ -1,7 +1,9 @@
 import re, json, yaml
-from os import path, scandir, pardir
+
 from json_ref_dict import RefDict, materialize
 from humps import decamelize
+from os import path, scandir, pardir
+from pathlib import Path
 
 from cgi_parsing import prjsonnice
 
@@ -17,10 +19,10 @@ def read_schema_file(schema_name, item, byc, ext="json"):
 
     schema_name = b_p_m.get(schema_name, schema_name)
     
-    s_f_p = get_schema_file_path(schema_name, byc, ext)
+    s_f_p = get_schema_file_path(schema_name, ext)
 
-    # if byc["debug_mode"] is True:
-    #     print(schema_name, s_f_p)
+    if byc["debug_mode"] is True:
+        print(schema_name, s_f_p)
 
     if s_f_p is not False:
         if len(item) > 1:
@@ -36,33 +38,25 @@ def read_schema_file(schema_name, item, byc, ext="json"):
 
 ################################################################################
 
-def get_schema_file_path(schema_name, byc, ext="json"):
+def get_schema_file_path(schema_name, ext="json"):
 
-    config = byc["config"]
+    e_l = f'.{ext}'
+    d_n = f'defaultSchema.{ext}'
+    s_n = f'{schema_name}.{ext}'
 
-    for s_p in config["schema_paths"]["items"]:
+    p = Path(path.join( pkg_path, "schemas" ))
+    s_p_s = [ f for f in p.rglob("*") if f.is_file() ]
+    s_p_s = [ f for f in s_p_s if f.suffix == e_l ]
 
-        p = path.join( pkg_path, *config["schemas_root"], *s_p )
-
-        s_ds = [ d.name for d in scandir(p) if d.is_dir() ]
-        if schema_name in s_ds:
-            s_f_p = path.join( p, schema_name, "defaultSchema."+ext )
-            return s_f_p
-
-        s_fs = [ f.name for f in scandir(p) if f.is_file() ]
-        s_fs = [ f for f in s_fs if f.endswith( ext ) ]
-        s_fs = [ f for f in s_fs if not f.startswith("_") ]
-
-        for s_f in s_fs:
-
-            f_name = path.splitext( s_f )[0]
-            # print(schema_name, f_name)
-
-            if f_name == schema_name:
-                s_f_p = path.join( p, s_f )
-                return s_f_p
+    for f_p in s_p_s:
+        if f_p.parent.name == schema_name:
+            if f_p.name == d_n:
+                return f'{f_p.resolve()}'
+        elif f_p.name == s_n:
+            return f'{f_p.resolve()}'
 
     return False
+
 
 ################################################################################
 
