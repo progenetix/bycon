@@ -760,12 +760,12 @@ def return_filtering_terms_response(byc):
         return
 
     # TODO: correct response w/o need to fix
+    # TODO: dataset specificity etc.
     byc["service_response"].update({"response": {"filteringTerms": [], "resources": []}})
 
     f_r_d = {}
 
-    f_db = byc["config"]["services_db"]
-    f_coll = byc["config"]["collations_coll"]
+    f_coll = byc["config"]["filtering_terms_coll"]
 
     f_t_s = []
     ft_fs = []
@@ -783,7 +783,7 @@ def return_filtering_terms_response(byc):
 
     for ds_id in byc["dataset_ids"]:
 
-        query = {"dataset_id": ds_id}
+        query = {}
 
         try:
             if len(byc["form_data"]["scope"]) > 4:
@@ -793,7 +793,7 @@ def return_filtering_terms_response(byc):
 
         fields = {"_id": 0}
 
-        f_s, e = mongo_result_list(f_db, f_coll, query, fields)
+        f_s, e = mongo_result_list(ds_id, f_coll, query, fields)
 
         t_f_t_s = []
 

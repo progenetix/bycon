@@ -151,7 +151,7 @@ def __update_queries_from_hoid(byc):
 
         accessid = byc["form_data"]["accessid"]
         ho_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-        ho_db = ho_client[byc["config"]["services_db"]]
+        ho_db = ho_client[byc["config"]["housekeeping_db"]]
         ho_coll = ho_db[byc["config"]["handover_coll"]]
         h_o = ho_coll.find_one({"id": accessid})
 
@@ -205,7 +205,7 @@ def __update_queries_from_filters(byc, ds_id="progenetix"):
     # precision = byc[ "filter_flags" ][ "precision" ]
 
     mongo_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-    coll_coll = mongo_client[ds_id][byc["config"]["collations_coll"]]
+    coll_coll = mongo_client[ds_id]["collations"]
 
     filters = byc.get("filters", [])
 

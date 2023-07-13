@@ -10,7 +10,6 @@ sys.path.append( bycon_lib_path )
 # print('Content-Type: text/plain')
 # print()
 
-
 try:
 
     from aggregator_utils import *

@@ -1,5 +1,6 @@
 import csv, datetime, re, time, base36, yaml
-from os import path, pardir
+from os import environ, path, pardir
+from pymongo import MongoClient
 
 # local
 from query_execution import mongo_result_list
@@ -458,8 +459,17 @@ def cytobands_list_from_positions(byc, chro, start=None, end=None):
 
 def retrieve_gene_id_coordinates(gene_id, byc):
 
-    db = byc["config"]["services_db"]
-    coll = byc["config"]["genes_coll"]
+    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
+    db_names = list(mongo_client.list_database_names())
+
+    services_db = byc["config"].get("services_db", "___none___")
+    if services_db not in db_names:
+        return [], f"services db `{services_db}` does not exist"
+
+    genes_coll = byc["config"].get("genes_coll")
+    if not genes_coll:
+        return [], "no `genes_coll` parameter in `config.yaml`"
+
     q_f_s = byc.get("query_fields", ["symbol", "ensembl_gene_ids", "synonyms"])
 
     greed = "$"
@@ -473,6 +483,6 @@ def retrieve_gene_id_coordinates(gene_id, byc):
         q_list.append({q_f: q_re })
 
     query = { "$or": q_list }
-    results, e = mongo_result_list( db, coll, query, { '_id': False } )
+    results, e = mongo_result_list( services_db, genes_coll, query, { '_id': False } )
 
     return results, e

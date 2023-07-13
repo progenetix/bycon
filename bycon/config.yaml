@@ -44,6 +44,7 @@ resource_urls:
   europepmc_pmid: https://europepmc.org/article/MED/
   cellosaurus_web: https://web.expasy.org/cellosaurus/
 
+# collections per database
 queried_collections:
   - biosamples
   - callsets
@@ -51,15 +52,21 @@ queried_collections:
   - variants
   - collations
   - frequencymaps
-  - publications
+  # - publications
 
-services_db: progenetix
-collations_coll: collations
-frequencymaps_coll: frequencymaps
-ontologymaps_coll: ontologymaps
+filtering_terms_coll: collations
+
+# special database, auto-generated ######
+housekeeping_db: _byconHousekeepingDB
 beacon_info_coll: beaconinfo
 handover_coll: querybuffer
+#########################################
+
+# special support database ##############
+services_db: _byconServicesDB
 genes_coll: genes
+
+# statistics fields for beaconinfo ######
 beacon_counts:
   individual_count:
     collection: individuals
