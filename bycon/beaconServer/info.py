@@ -41,13 +41,13 @@ def info():
     r["meta"].pop("returned_granularity", None)
 
     pgx_info = b_e_d.get("info", {})
-    info = object_instance_from_schema_name(byc, "beaconInfoResults", "")
+    beacon_info = object_instance_from_schema_name(byc, "beaconInfoResults", "")
 
-    for k in info.keys():
+    for k in beacon_info.keys():
         if k in pgx_info:
-            info.update({k:pgx_info[k]})
+            beacon_info.update({k:pgx_info[k]})
 
-    r.update( {"response": info } )
+    r.update( {"response": beacon_info } )
     byc.update({"service_response": r, "error_response": e })
 
     cgi_print_response( byc, 200 )

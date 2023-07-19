@@ -27,7 +27,7 @@ def map():
     r, e = instantiate_response_and_error(byc, "beaconMapResponse")
     response_meta_set_info_defaults(r, byc)
 
-    m_f = get_schema_file_path("beaconMap")
+    m_f = get_schema_file_path(byc, "beaconMap")
     beaconMap = load_yaml_empty_fallback( m_f )
 
     r.update( {"response": beaconMap } )

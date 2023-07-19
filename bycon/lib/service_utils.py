@@ -1,5 +1,5 @@
 import inspect
-import os
+from os import environ, path, pardir
 from pathlib import Path
 
 from args_parsing import *
@@ -12,16 +12,15 @@ from datatable_utils import export_datatable_download
 from export_file_generation import *
 from file_utils import ByconBundler, callset_guess_probefile_path
 from filter_parsing import parse_filters
-from genome_utils import translate_reference_ids
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, \
     dataset_results_save_handovers
 from interval_utils import generate_genomic_mappings
 from query_execution import execute_bycon_queries, mongo_result_list
 from query_generation import generate_dataset_queries
-from read_specs import load_yaml_empty_fallback, read_bycon_definition_files, read_local_prefs
+from read_specs import read_bycon_definition_files, read_local_prefs
 from response_remapping import *
 from variant_parsing import parse_variants
-from schema_parsing import *
+from schema_parsing import object_instance_from_schema_name
 
 ################################################################################
 
@@ -29,8 +28,8 @@ def initialize_bycon(config):
 
     b_r_p = config.get("byc_root_pars", {})
 
-    bycon_lib_path = os.path.dirname(os.path.abspath(__file__))
-    pkg_path = os.path.join(bycon_lib_path, os.pardir)
+    bycon_lib_path = path.dirname(path.abspath(__file__))
+    pkg_path = path.join(bycon_lib_path, pardir)
 
     byc = {
         "pkg_path": pkg_path,
@@ -760,12 +759,12 @@ def return_filtering_terms_response(byc):
         return
 
     # TODO: correct response w/o need to fix
+    # TODO: dataset specificity etc.
     byc["service_response"].update({"response": {"filteringTerms": [], "resources": []}})
 
     f_r_d = {}
 
-    f_db = byc["config"]["services_db"]
-    f_coll = byc["config"]["collations_coll"]
+    f_coll = byc["config"]["filtering_terms_coll"]
 
     f_t_s = []
     ft_fs = []
@@ -783,7 +782,7 @@ def return_filtering_terms_response(byc):
 
     for ds_id in byc["dataset_ids"]:
 
-        query = {"dataset_id": ds_id}
+        query = {}
 
         try:
             if len(byc["form_data"]["scope"]) > 4:
@@ -793,7 +792,7 @@ def return_filtering_terms_response(byc):
 
         fields = {"_id": 0}
 
-        f_s, e = mongo_result_list(f_db, f_coll, query, fields)
+        f_s, e = mongo_result_list(ds_id, f_coll, query, fields)
 
         t_f_t_s = []
 
@@ -974,8 +973,15 @@ def check_computed_histoplot_delivery(byc):
             cs_r = ds_results["callsets._id"]
             cs__ids = cs_r["target_values"]
             r_no = len(cs__ids)
+            # filter for CNV cs before evaluating number
             if r_no > p_r["limit"]:
-                cs__ids = paginate_list(cs__ids, byc)
+                cs_cnv_ids = []
+                for _id in cs__ids:
+                    cs = cs_coll.find_one({"_id":_id})
+                    if "cnv_statusmaps" in cs:
+                        cs_cnv_ids.append(_id)
+                cs__ids = cs_cnv_ids
+            cs__ids = paginate_list(cs__ids, byc)
 
             iset = callset__ids_create_iset(ds_id, "Search Results", cs__ids, byc)
             interval_sets.append(iset)
@@ -1022,7 +1028,7 @@ def check_computed_interval_frequency_delivery(byc):
     h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
     print("group_id\t" + "\t".join(h_ks))
 
-    cs_cursor = cs_coll.find({"_id": {"$in": q_vals}, "variant_class": {"$ne": "SNV"}})
+    cs_cursor = cs_coll.find({"_id": {"$in": q_vals}, "cnv_statusmaps": {"$exists":True}})
 
     intervals, cnv_cs_count = interval_counts_from_callsets(cs_cursor, byc)
 

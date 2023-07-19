@@ -13,13 +13,13 @@ pkg_path = path.join( lib_path, pardir )
 
 ################################################################################
 
-def read_schema_file(schema_name, item, byc, ext="json"):
+def read_schema_file(byc, schema_name, item, ext="json"):
 
     b_p_m = byc["beacon_mappings"]["default_schema_from_model"]
 
     schema_name = b_p_m.get(schema_name, schema_name)
     
-    s_f_p = get_schema_file_path(schema_name, ext)
+    s_f_p = get_schema_file_path(byc, schema_name, ext)
 
     if byc["debug_mode"] is True:
         print(schema_name, s_f_p)
@@ -38,13 +38,13 @@ def read_schema_file(schema_name, item, byc, ext="json"):
 
 ################################################################################
 
-def get_schema_file_path(schema_name, ext="json"):
+def get_schema_file_path(byc, schema_name, ext="json"):
 
     e_l = f'.{ext}'
     d_n = f'defaultSchema.{ext}'
     s_n = f'{schema_name}.{ext}'
 
-    p = Path(path.join( pkg_path, "schemas" ))
+    p = Path(path.join( pkg_path, *byc["config"]["schemas_path"] ))
     s_p_s = [ f for f in p.rglob("*") if f.is_file() ]
     s_p_s = [ f for f in s_p_s if f.suffix == e_l ]
 
@@ -87,7 +87,7 @@ def create_empty_instance(schema):
 ################################################################################
 
 def object_instance_from_schema_name(byc, schema_name, root_key, ext="json"):
-    s_f = read_schema_file(schema_name, root_key, byc, ext)
+    s_f = read_schema_file(byc, schema_name, root_key, ext)
     s_i = create_empty_instance( s_f )
 
     return s_i

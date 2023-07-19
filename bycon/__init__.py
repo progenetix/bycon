@@ -10,7 +10,6 @@ sys.path.append( bycon_lib_path )
 # print('Content-Type: text/plain')
 # print()
 
-
 try:
 
     from aggregator_utils import *
@@ -34,6 +33,7 @@ try:
     from schema_parsing import *
     from service_utils import *
     from export_file_generation import *
+    from variant_mapping import *
     from variant_parsing import *
 
     c_f = Path( path.join( pkg_path, "config.yaml" ) )

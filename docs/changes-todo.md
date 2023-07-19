@@ -4,6 +4,21 @@
 
 ### Recent
 
+#### 2023-07-19 (v1.0.67)
+
+* fix `.pgxseg` file loader bug (thanks Huan Zhang!)
+* starting `variant_mapping.py` for a consolidated `ByconVariant` class
+
+#### 2023-07-13 (v1.0.66)
+
+* modified `return_filtering_terms_response` to parse over the collations from
+  different datasets
+    - [ ] check & streamline
+* modified `retrieve_gene_id_coordinates` (some error catching)
+* introduced `housekeeping_db: _byconHousekeepingDB` for `querybuffer` and `beaconinfo`
+    - accordingly changed `byconaut`, e.g. housekeeping -> `beacon_info_coll` 
+* changed `services_db: _byconServicesDB` for `genes`
+
 #### 2023-07-11 (v1.0.65)
 
 * streamlining of schema file parsing
@@ -300,7 +315,12 @@ Bug fix release:
 
 ## Bugs & TODO
 
-* [ ] split installation method into separate parts for `beaconServer` and `services` (the latter then in `byconaut`)
+* [x] move the "services" collection to a generic `_byconServicesDB`
+    - [x] no problem for `querybuffer` and `beaconinfo` which can be generated _ad hoc_
+    - [x] other affected collections would be `genes` and `geolocs` which need to be moved => `_`
+    - [x] special Progenetix project collections would have to be considered
+      separately (e.g. w/ hard-coded `progenetix` db?): `publications` and `ontologymaps` => hard coded to `progenetix`
+* [x] split installation method into separate parts for `beaconServer` and `services` (the latter then in `byconaut`)
 * [x] add method to subset samples for multi-histogram generation
 * [ ] option for summary histogram over? under? samplesplot
 * [x] script for auto-generation of parameter documentation

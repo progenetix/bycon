@@ -86,7 +86,8 @@ def pgxseg_biosample_meta_line(byc, biosample, group_id_key="histological_diagno
 
         if len(pres.keys()) < 1:
             db_key = par_defs.get("db_key", "___undefined___")
-            v = get_nested_value(biosample, db_key)
+            p_type =par_defs.get("type", "string")
+            v = get_nested_value(biosample, db_key, p_type)
             h_v = ""
             if isinstance(v, list):
                 h_v = "::".join(map(str, (v)))

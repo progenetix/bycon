@@ -244,7 +244,7 @@ def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
 
 ################################################################################
 
-def get_nested_value(parent, dotted_key):
+def get_nested_value(parent, dotted_key, parameter_type="string"):
 
     ps = dotted_key.split('.')
 

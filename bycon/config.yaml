@@ -33,6 +33,9 @@ genomes_path:
   - rsrc
   - genomes
 
+schemas_path:
+  - schemas
+
 filter_flags:
   logic: $and
   precision: exact
@@ -44,6 +47,7 @@ resource_urls:
   europepmc_pmid: https://europepmc.org/article/MED/
   cellosaurus_web: https://web.expasy.org/cellosaurus/
 
+# collections per database
 queried_collections:
   - biosamples
   - callsets
@@ -51,31 +55,17 @@ queried_collections:
   - variants
   - collations
   - frequencymaps
-  - publications
+  # - publications
 
-services_db: progenetix
-collations_coll: collations
-frequencymaps_coll: frequencymaps
-ontologymaps_coll: ontologymaps
+filtering_terms_coll: collations
+
+# special database, auto-generated ######
+housekeeping_db: _byconHousekeepingDB
 beacon_info_coll: beaconinfo
 handover_coll: querybuffer
-genes_coll: genes
-beacon_counts:
-  individual_count:
-    collection: individuals
-    info_key: individuals
-    h->o_key: individuals._id
-  sample_count:
-    collection: biosamples
-    info_key: biosamples
-    h->o_key: biosamples._id
-  variant_count:
-    collection: variants
-    info_key: variants_distinct
-    h->o_key: variants.variant_internal_id
-  call_count:
-    collection: variants
-    info_key: variants
-    h->o_key: variants._id
+#########################################
 
+# special support database ##############
+services_db: _byconServicesDB
+genes_coll: genes
 

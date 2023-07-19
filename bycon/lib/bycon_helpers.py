@@ -90,5 +90,3 @@ def paginate_list(this, byc):
 
     return this[r[0]:r[-1]]
 
-
-

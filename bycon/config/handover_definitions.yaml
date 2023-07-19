@@ -69,19 +69,19 @@ h->o_types:
     script_path_web: '/beacon/genomicVariations'
     url_opts: "&paginateResults=false"
 
-  annotatedvariants:
-    handoverType:
-      id: 'pgx:HO.annotatedvariants'
-      label: "Annotated Variants"
-    note: "retrieve annotated variants of the biosamples matched by the query"
-    requestedSchema: genomicVariant
-    paginated_entities:
-      - biosample
-      - analysis
-    h->o_key: 'biosamples.id'
-    script_path_web: '/beacon/genomicVariations'
-    url_opts: "&annotatedOnly=True&paginateResults=false"
-    exclude_empty: True
+  # annotatedvariants:
+  #   handoverType:
+  #     id: 'pgx:HO.annotatedvariants'
+  #     label: "Annotated Variants"
+  #   note: "retrieve annotated variants of the biosamples matched by the query"
+  #   requestedSchema: genomicVariant
+  #   paginated_entities:
+  #     - biosample
+  #     - analysis
+  #   h->o_key: 'biosamples.id'
+  #   script_path_web: '/beacon/genomicVariations'
+  #   url_opts: "&annotatedOnly=True&paginateResults=false"
+  #   exclude_empty: True
 
   biosamplepgxsegvariants:
     handoverType:

@@ -55,7 +55,7 @@ class ByconPlot:
         print_svg_response(self.svg, self.env)
 
     # -------------------------------------------------------------------------#
-    # ----------------------------- testing -----------------------------------#
+    # --------------------------- probesplot ----------------------------------#
     # -------------------------------------------------------------------------#
 
     def __plot_add_probesplot(self):
@@ -98,7 +98,6 @@ class ByconPlot:
             return
 
         probes = probebundles[0].get("cn_probes", [])
-        # self.plv["plot_area_height"] * 0.5 / self.plv["plot_axis_y_max"]
         self.plv.update({
             "plot_axis_y_max": 4,
             "plot_y2pf": self.plv["plot_area_height"] * 0.5 / 4 * self.plv["plot_probe_y_factor"],

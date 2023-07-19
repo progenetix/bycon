@@ -38,7 +38,7 @@ def entry_types():
     r, e = instantiate_response_and_error(byc, "beaconEntryTypesResponse")
     response_meta_set_info_defaults(r, byc)
 
-    e_f = get_schema_file_path("beaconConfiguration")
+    e_f = get_schema_file_path(byc, "beaconConfiguration")
     e_t_s = load_yaml_empty_fallback( e_f )
 
     r["response"].update( {"entry_types": e_t_s["entryTypes"] } )

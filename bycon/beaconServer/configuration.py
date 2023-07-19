@@ -24,7 +24,7 @@ def configuration():
     r, e = instantiate_response_and_error(byc, "beaconConfigurationResponse")
     response_meta_set_info_defaults(r, byc)
 
-    c_f = get_schema_file_path("beaconConfiguration")
+    c_f = get_schema_file_path(byc, "beaconConfiguration")
     c = load_yaml_empty_fallback( c_f )
 
     r.update( {"response": c } )
