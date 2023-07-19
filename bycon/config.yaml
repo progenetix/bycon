@@ -63,9 +63,7 @@ filtering_terms_coll: collations
 housekeeping_db: _byconHousekeepingDB
 beacon_info_coll: beaconinfo
 handover_coll: querybuffer
-#########################################
 
 # special support database ##############
 services_db: _byconServicesDB
 genes_coll: genes
-

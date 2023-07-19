@@ -9,7 +9,7 @@
 * fix `.pgxseg` file loader bug (thanks Huan Zhang!)
 * starting `variant_mapping.py` for a consolidated `ByconVariant` class
 
-#### 2023-07-13 (v1.0.66)
+#### 2023-07-13 (v1.0.66) 
 
 * modified `return_filtering_terms_response` to parse over the collations from
   different datasets
