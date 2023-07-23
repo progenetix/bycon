@@ -4,8 +4,7 @@ from os import environ
 from cgi_parsing import *
 from datatable_utils import get_nested_value
 from bycon_helpers import paginate_list
-from response_remapping import de_vrsify_variant
-
+from variant_mapping import ByconVariant
 
 ################################################################################
 
@@ -189,13 +188,23 @@ def pgxseg_header_line():
 
 def pgxseg_variant_line(v, byc):
 
-    v = de_vrsify_variant(v, byc)
-    if v is False:
-        return v
+    bv = ByconVariant(byc, v)
+    pv = bv.byconVariant()
 
-    v["log2"] = v["info"].get("cnv_value", ".")
+    info = pv.get("info", {})
 
-    return "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(v["biosample_id"], v["reference_name"], v["start"], v["end"], v["log2"], v["variant_type"], v["reference_bases"], v["alternate_bases"])
+    v_l = (
+        pv.get("biosample_id"),
+        pv["reference_name"],
+        pv["start"],
+        pv["end"],
+        info.get("cnv_value", "."),
+        pv["variant_type"],
+        pv["reference_bases"],
+        pv["alternate_bases"]
+    )
+
+    return "\t".join([str(x) for x in v_l])
 
 ################################################################################
 

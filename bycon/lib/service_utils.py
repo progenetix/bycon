@@ -19,6 +19,7 @@ from query_execution import execute_bycon_queries, mongo_result_list
 from query_generation import generate_dataset_queries
 from read_specs import read_bycon_definition_files, read_local_prefs
 from response_remapping import *
+from variant_mapping import ByconVariant
 from variant_parsing import parse_variants
 from schema_parsing import object_instance_from_schema_name
 
@@ -895,12 +896,10 @@ def check_callset_plot_delivery(byc):
             v_q = {"callset_id": cs_id}
 
             for v in var_coll.find(v_q):
+                bv = ByconVariant(byc, v)
+                pv = bv.byconVariant()
 
-                v_r = de_vrsify_variant(v, byc)
-                if v is False:
-                    return v
-
-                p_o["variants"].append(v_r)
+                p_o["variants"].append(pv)
 
             results.append(p_o)
 

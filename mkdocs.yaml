@@ -9,7 +9,8 @@ repo_url: https://github.com/progenetix/bycon
 nav:
   - Documentation Home: /
   - Installation: installation
-  - Changes & To Do: changes-todo
+  - Recent Changes: changes
+  - Upcoming & To Do: future
   - API Tests: tests
   - Plotting: plotting
   - Code notes: code-notes

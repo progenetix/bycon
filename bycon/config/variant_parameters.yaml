@@ -24,12 +24,12 @@ parameters:
 
   reference_bases:
     type: string
-    db_key: reference_bases
+    db_key: reference_sequence
     pattern: '^[ACGTN]+$'
 
   alternate_bases:
     type: string
-    db_key: state.sequence
+    db_key: sequence
     pattern: '^[ACGTN]+$'
 
   variant_type:

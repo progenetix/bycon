@@ -402,6 +402,7 @@ entities:
       annotation_derived:
         db_key: info.annotation_derived
         type: boolean
+        default: False
         indexed: True
 
       # special pgxseg columns

@@ -99,6 +99,10 @@ def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="
 
         v = lineobj[f_n].strip()
 
+        # if byc["debug_mode"] is True:
+        #     if "analysis" in primary_scope:
+        #         print(f'{f_n}: {v}')
+
         if len(v) < 1:
             if f_n in io_params.keys():
                 v = io_params[f_n].get("default", "")
@@ -128,11 +132,16 @@ def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="
             pref_array_values[p][pre].update({key:v})
             continue
         
-        if par in io_params.keys():
-            db_key = io_params[par]["db_key"]
+        p_d = io_params.get(f_n)
+        if not p_d:
+            continue
 
-            # assign_nested_attribute(parent, db_key, v)
-            assign_nested_value(parent, db_key, v, parameter_type)
+        dotted_key = p_d.get("db_key")
+        if not dotted_key:
+            continue
+
+        # assign_nested_attribute(parent, db_key, v)
+        assign_nested_value(parent, dotted_key, v, p_d)
 
     for l_k, pre_item in pref_array_values.items():
         if not l_k in parent:
@@ -187,15 +196,25 @@ def create_table_header(io_params):
 
 ################################################################################
 
-def assign_nested_value(parent, dotted_key, v, parameter_type="string"):
+def assign_nested_value(parent, dotted_key, v, parameter_definitions={}):
+
+
+    parameter_type = parameter_definitions.get("type", "string")
+    parameter_default = parameter_definitions.get("default")
+
+    if v is None:
+        if parameter_default:
+            v = parameter_default
 
     if v is None:
         return parent
 
     if "num" in parameter_type:
-        v = float(v)
+        if str(v).strip().lstrip('-').replace('.','',1).isdigit():
+            v = float(v)
     elif "integer" in parameter_type:
-        v = int(v)
+        if str(v).strip().isdigit():
+            v = int(v)
     else:
         v = str(v)
 

@@ -2,6 +2,7 @@ import datetime, re
 from pymongo import MongoClient
 from cgi_parsing import *
 from interval_utils import interval_counts_from_callsets
+from variant_mapping import ByconVariant
 from variant_parsing import variant_state_from_variant_par
 from os import environ
 
@@ -51,6 +52,11 @@ def remap_variants(r_s_res, byc):
 
         d_vs = [var for var in r_s_res if var.get('variant_internal_id', "__none__") == d]
 
+        # bvo = ByconVariant(byc, d_vs[0])
+        # prjsonnice(bvo.byconVariant())
+        # prjsonnice(bvo.vcfVariant())
+        # prjsonnice(bvo.pgxVariant())
+
         v = {
             "variant_internal_id": d,
             "variation": d_vs[0], "case_level_data": []
@@ -89,6 +95,7 @@ def remap_variants_to_VCF(r_s_res, byc):
     if not "vcf" in byc["output"].lower():
         return r_s_res
 
+    # TODO: VCF schema in some config file...
     open_text_streaming(byc["env"], "variants.vcf")
     print(
         """##fileformat=VCFv4.4
@@ -133,13 +140,21 @@ def remap_variants_to_VCF(r_s_res, byc):
         v_o.update({bsid: "."})
 
     variants = []
-    print("   ".join(v_o.keys()))
+    print("\t".join(v_o.keys()))
 
     for d in variant_ids:
 
         d_vs = [var for var in sorted_vars if var.get('variant_internal_id', "__none__") == d]
 
-        vcf_v = vcf_variant(d_vs[0], v_o.copy(), byc)
+        bvo = ByconVariant(byc, d_vs[0])
+        vcf_v = bvo.vcfVariant()
+        
+        ###### DEBUG ################
+        if byc["debug_mode"] is True:
+            prjsonnice(bvo.byconVariant())
+            prjsonnice(bvo.pgxVariant())
+            prjsonnice(vcf_v)
+        ##### / DEBUG ###############
 
         for bsid in biosample_ids:
             vcf_v.update({bsid: "."})
@@ -149,110 +164,10 @@ def remap_variants_to_VCF(r_s_res, byc):
             vcf_v.update({b_i: "0/1"})
 
         r_l = map(str, list(vcf_v.values()))
-        # variants.append("   ".join(r_l))
-        print("   ".join(r_l))
+        print("\t".join(r_l))
 
     exit()
     return variants
-
-
-################################################################################
-
-def vrsify_variant(variant, byc):
-    # TODO: Still prototyping; also need to accomodate VRS 1.3
-
-    v_d = byc["variant_parameters"]
-    g_a = byc.get("genome_aliases", {})
-    r_a = g_a.get("refseq_aliases", {})
-
-    v_type = variant.get("variant_type", False)
-    if v_type is False:
-        return variant
-
-    v_s = variant_state_from_variant_par(v_type, byc)
-    if v_s is False:
-        return variant
-
-    variant.update({ "variant_state": v_s })
-
-    if not "sequence_id" in variant["location"]:
-        chro = variant["location"].get("chromosome", False)
-        if chro:
-            sequence_id = r_a.get(chro, False)
-        else:
-            sequence_id = r_a.get(variant.get("reference_name", "___none___"), False)
-    if sequence_id is False:
-        return variant
-
-    variant["location"].update({"sequence_id": sequence_id})
-
-    return variant
-
-
-################################################################################
-
-def vcf_variant(v, vcf_v, byc):
-    v = de_vrsify_variant(v, byc)
-    if v is False:
-        return v
-
-    vcf_v.update({
-        "#CHROM": v["reference_name"],
-        "POS": v["start"],
-        "ID": ".",
-        "REF": v["reference_bases"],
-        "ALT": v["alternate_bases"],
-        "QUAL": ".",
-        "FILTER": "PASS",
-        "FORMAT": "GT",
-        "INFO": ""
-    })
-
-    v_l = v["variant_label"]
-    v_s =  v["variant_type"]
-
-    # TODO: not very general...
-    if "copy" in v_l:
-        vcf_v.update({"ALT": f'<{v["variant_type"]}>'})
-        v_l =  v["end"] - v["start"]
-        vcf_v.update({"INFO": f'IMPRECISE;SVCLAIM=D;END={v["end"]};SVLEN={v_l}'})
-
-    return vcf_v
-
-
-################################################################################
-
-def de_vrsify_variant(v, byc):
-    v_d = byc["variant_parameters"]
-    v_t_defs = byc.get("variant_type_definitions")
-
-    r_n = v["location"].get("sequence_id")
-    if r_n is None:
-        return False
-
-    v_r = {
-        "id": v.get("id"),
-        "variant_internal_id": v.get("variant_internal_id"),
-        "callset_id": v.get("callset_id"),
-        "biosample_id": v.get("biosample_id"),
-        "reference_bases": v.get("reference_sequence", "."),
-        "alternate_bases": v.get("sequence", "."),
-        "reference_name": v["location"].get("chromosome", "."),
-        "sequence_id": r_n,
-        "start": v["location"]["start"],
-        "end": v["location"]["end"],
-        "info": v.get("info", {}),
-        "variant_label": v["variant_state"].get("label", ""),
-        "variant_state": v["variant_state"].get("id", "")
-    }
-
-    efo = v["variant_state"].get("id", "___none___")
-    if efo in v_t_defs:
-        vcf_type = v_t_defs[efo].get("VCF")
-        if vcf_type is not None:
-            v_r.update({"variant_type": v_t_defs[efo]["VCF"]})
-
-    return v_r
 
 
 ################################################################################

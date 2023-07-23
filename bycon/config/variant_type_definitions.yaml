@@ -20,10 +20,13 @@ EFO:0030064:
   variant_state:
     id: EFO:0030064
     label: regional base ploidy
-  label: regional base ploidy
   revish_label: Null
   DUPDEL: Null
+  dupdel_state_id: Null
+  snv_state_id: Null
+  variant_type: Null
   VCF: Null
+  VCF_symbolic_allele: Null
   cnv_dummy_value: Null
   child_terms:
     - EFO:0030064
@@ -32,10 +35,13 @@ EFO:0030065:
   variant_state:
     id: EFO:0030065
     label: copy-neutral loss of heterozygosity
-  label: copy-neutral loss of heterozygosity
   revish_label: Null
   DUPDEL: Null
-  VCF: ""
+  dupdel_state_id: Null
+  snv_state_id: LOH
+  variant_type: LOH
+  VCF: Null
+  VCF_symbolic_allele: Null
   cnv_dummy_value: Null
   child_terms:
     - EFO:0030065
@@ -44,10 +50,13 @@ EFO:0030066:
   variant_state:
     id: EFO:0030066
     label: copy number variation
-  label: copy number variation
   revish_label: Null
   DUPDEL: Null
+  dupdel_state_id: Null
+  snv_state_id: CNV
+  variant_type: CNV
   VCF: CNV
+  VCF_symbolic_allele: <CNV>
   cnv_dummy_value: Null
   child_terms:
     - EFO:0030066
@@ -64,10 +73,13 @@ EFO:0030067:
   variant_state:
     id: EFO:0030067
     label: copy number loss
-  label: copy number loss
   revish_label: dim
   DUPDEL: DEL
+  dupdel_state_id: EFO:0030067
+  snv_state_id: Null
+  variant_type: DEL
   VCF: DEL
+  VCF_symbolic_allele: <DEL>
   cnv_dummy_value: -1
   child_terms:
     - EFO:0030067
@@ -79,10 +91,13 @@ EFO:0030068:
   variant_state:
     id: EFO:0030068
     label: low-level copy number loss
-  label: low-level copy number loss
   revish_label: dim
   DUPDEL: DEL
+  dupdel_state_id: EFO:0030067
+  snv_state_id: Null
+  variant_type: DEL
   VCF: DEL
+  VCF_symbolic_allele: <DEL>
   cnv_dummy_value: -1
   child_terms:
     - EFO:0030068
@@ -91,10 +106,13 @@ EFO:0020073:
   variant_state:
     id: EFO:0020073
     label: high-level copy number loss
-  label: high-level copy number loss
   revish_label: Null
   DUPDEL: DEL
+  dupdel_state_id: EFO:0030067
+  snv_state_id: Null
+  variant_type: DEL
   VCF: DEL
+  VCF_symbolic_allele: <DEL>
   cnv_dummy_value: -1.75
   child_terms:
     - EFO:0020073
@@ -104,10 +122,13 @@ EFO:0030069:
   variant_state:
     id: EFO:0030069
     label: complete genomic deletion
-  label: complete genomic deletion
   revish_label: homodel
   DUPDEL: DEL
+  dupdel_state_id: EFO:0030067
+  snv_state_id: Null
+  variant_type: DEL
   VCF: DEL
+  VCF_symbolic_allele: <DEL>
   cnv_dummy_value: -2
   child_terms:
     - EFO:0030069
@@ -116,10 +137,13 @@ EFO:0030070:
   variant_state:
     id: EFO:0030070
     label: copy number gain
-  label: copy number gain
   revish_label: enh
   DUPDEL: DUP
+  dupdel_state_id: EFO:0030070
+  snv_state_id: Null
+  variant_type: DUP
   VCF: DUP
+  VCF_symbolic_allele: <DUP>
   cnv_dummy_value: 0.58
   child_terms:
     - EFO:0030070
@@ -131,10 +155,13 @@ EFO:0030071:
   variant_state:
     id: EFO:0030071
     label: low-level copy number gain
-  label: low-level copy number gain
   revish_label: enh
   DUPDEL: DUP
+  dupdel_state_id: EFO:0030070
+  snv_state_id: Null
+  variant_type: DUP
   VCF: DUP
+  VCF_symbolic_allele: <DUP>
   cnv_dummy_value: 0.58
   child_terms:
     - EFO:0030071
@@ -143,10 +170,13 @@ EFO:0030072:
   variant_state:
     id: EFO:0030072
     label: high-level copy number gain
-  label: high-level copy number gain
   revish_label: hldup
   DUPDEL: DUP
+  dupdel_state_id: EFO:0030070
+  snv_state_id: Null
+  variant_type: DUP
   VCF: DUP
+  VCF_symbolic_allele: <DUP>
   cnv_dummy_value: 2
   child_terms:
     - EFO:0030072
@@ -156,10 +186,13 @@ EFO:0030073:
   variant_state:
     id: EFO:0030073
     label: focal genome amplification
-  label: focal genome amplification
   revish_label: amp
   DUPDEL: DUP
+  dupdel_state_id: EFO:0030070
+  snv_state_id: Null
+  variant_type: DUP
   VCF: DUP
+  VCF_symbolic_allele: <DUP>
   cnv_dummy_value: 2
   child_terms:
     - EFO:0030073
@@ -168,26 +201,31 @@ SO:0001059:
   variant_state:
     id: SO:0001059
     label: sequence_alteration
-  label: sequence_alteration
   revish_label: Null
   DUPDEL: Null
+  dupdel_state_id: Null
+  snv_state_id: SO:0001059
+  variant_type: SNV
   VCF: SNV
+  VCF_symbolic_allele: Null
   cnv_dummy_value: Null
   child_terms:
     - SO:0001059
     - SO:0001483
     - SO:0002007
-    - SO:0000159
     - SO:0000667
 
 SO:0001483:
   variant_state:
     id: SO:0001483
     label: SNP
-  label: SNP
   revish_label: Null
   DUPDEL: Null
+  dupdel_state_id: Null
+  snv_state_id: SO:0001059
+  variant_type: SNV
   VCF: SNV
+  VCF_symbolic_allele: Null
   cnv_dummy_value: Null
   child_terms:
     - SO:0001483
@@ -196,34 +234,28 @@ SO:0002007:
   variant_state:
     id: SO:0002007
     label: MNV
-  label: MNV
   revish_label: Null
   DUPDEL: Null
+  dupdel_state_id: Null
+  snv_state_id: SO:0001059
+  variant_type: MNV
   VCF: SNV
+  VCF_symbolic_allele: Null
   cnv_dummy_value: Null
   child_terms:
     - SO:0002007
-
-SO:0000159:
-  variant_state:
-    id: SO:0000159
-    label: DEL
-  label: DEL
-  revish_label: Null
-  DUPDEL: Null
-  VCF: SNV
-  cnv_dummy_value: Null
-  child_terms:
-    - SO:0000159
 
 SO:0000667:
   variant_state:
     id: SO:0000667
     label: INS
-  label: INS
   revish_label: Null
   DUPDEL: Null
+  dupdel_state_id: Null
+  snv_state_id: SO:0001059
+  variant_type: INS
   VCF: SNV
+  VCF_symbolic_allele: Null
   cnv_dummy_value: Null
   child_terms:
     - SO:0000667

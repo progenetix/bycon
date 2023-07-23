@@ -545,11 +545,11 @@ class ByconPlot:
             for p_v in c_v_s:
                 s_v = int(p_v.get("start", 0))
                 e_v = int(p_v.get("end", s_v))
-                l_v = round((e_v - s_v) * self.plv["plot_b2pf"], 1)
+                l_v = round(int(p_v.get("variant_length", 1)) * self.plv["plot_b2pf"], 1)
                 if l_v < 0.5:
                     l_v = 0.5
                 v_x = round(x + s_v * self.plv["plot_b2pf"], 1)
-                t = p_v.get("variant_type", "NA")
+                t = p_v.get("variant_dupdel", "NA")
                 c = cnv_c.get(t, "rgb(111,111,111)")
 
                 self.plv["pls"].append(

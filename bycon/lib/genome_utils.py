@@ -333,7 +333,7 @@ def variants_from_revish(bs_id, cs_id, technique, iscn, byc):
 
         v.update({
             "id": generate_id("pgxvar"),
-            "variant_internal_id": variant_create_digest(v, byc),
+            # "variant_internal_id": variant_create_digest(v, byc),
             "biosample_id": bs_id,
             "callset_id": cs_id,
             "updated": datetime.datetime.now().isoformat()

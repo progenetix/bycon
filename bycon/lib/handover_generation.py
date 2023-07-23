@@ -6,7 +6,7 @@ import sys
 
 from cgi_parsing import *
 from bycon_helpers import hex_2_rgb
-from export_file_generation import de_vrsify_variant
+from variant_mapping import ByconVariant
 
 ################################################################################
 
@@ -250,19 +250,17 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
                 continue
         
         # TODO: Just make this from the standard variant format
-        v_d = de_vrsify_variant(v, byc)
-        if v_d is False:
-            continue
+        bv = ByconVariant(byc, v)
+        pv = bv.byconVariant()
 
-        v_d.update({"size": v_d["end"] - v_d["start"] })
-        if "DUP" in v_d["variant_type"]:
-            vs["DUP"].append(v_d)
-        elif "DEL" in v_d["variant_type"]:
-            vs["DEL"].append(v_d)
-        elif "LOH" in v_d["variant_type"]:
-            vs["LOH"].append(v_d)
-        elif "SNV" in v_d["variant_type"]:
-            vs["SNV"].append(v_d)
+        if "DUP" in pv["variant_type"]:
+            vs["DUP"].append(pv)
+        elif "DEL" in pv["variant_type"]:
+            vs["DEL"].append(pv)
+        elif "LOH" in pv["variant_type"]:
+            vs["LOH"].append(pv)
+        elif "SNV" in pv["variant_type"]:
+            vs["SNV"].append(pv)
         else:
             continue
 
@@ -274,7 +272,7 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
     for vt in vs.keys():
         if len( vs[vt] ) > 0:
             try:
-                vs[vt] = sorted(vs[vt], key=lambda k: k['size'], reverse=True)
+                vs[vt] = sorted(vs[vt], key=lambda k: k['variant_length'], reverse=True)
             except:
                 pass
             col_key = "plot_{}_color".format(vt.lower())

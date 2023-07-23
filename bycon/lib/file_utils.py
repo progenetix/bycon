@@ -10,8 +10,8 @@ from random import sample as random_samples
 from cgi_parsing import prjsonnice
 from datatable_utils import import_datatable_dict_line
 from interval_utils import interval_cnv_arrays, interval_counts_from_callsets
-from response_remapping import de_vrsify_variant, vrsify_variant
 from variant_parsing import variant_create_digest
+from variant_mapping import ByconVariant
 
 
 ################################################################################
@@ -27,6 +27,7 @@ def read_tsv_to_dictlist(filepath, max_count=0):
 
         for l in data:
             dictlist.append(dict(l))
+            # prjsonnice(dict(l))
 
     if 0 < max_count < len(dictlist):
         dictlist = random_samples(dictlist, k=max_count)
@@ -219,6 +220,7 @@ class ByconBundler:
 
         return self.bundle
 
+
     #--------------------------------------------------------------------------#
 
     def callsets_variants_bundles(self):
@@ -237,8 +239,9 @@ class ByconBundler:
 
             for v in bb["variants"]:
                 if v.get("callset_id", "") == cs_id:
-                    v = de_vrsify_variant(v, self.byc)
-                    p_o["variants"].append(v)
+                    bv = ByconVariant(self.byc, v)
+                    p_o["variants"].append(bv.byconVariant())
+                    # print(bv.byconVariant())
 
             c_p_l.append(p_o)
             
@@ -253,6 +256,7 @@ class ByconBundler:
         self.intervalFrequenciesBundles.append(self.__callsetBundleCreateIset("import"))
 
         return self.intervalFrequenciesBundles
+
 
     #--------------------------------------------------------------------------#
     #----------------------------- private ------------------------------------#
@@ -287,12 +291,15 @@ class ByconBundler:
 
             bios.update({"individual_id": ind_id})
 
-            b_k_b["callsets_by_id"].update({ cs_id: import_datatable_dict_line(self.byc, cs, fieldnames, bios_d, "analysis") })
-            b_k_b["individuals_by_id"].update({ ind_id: import_datatable_dict_line(self.byc, ind, fieldnames, bios_d, "individual") })
+            # b_k_b["callsets_by_id"].update({ cs_id: import_datatable_dict_line(self.byc, cs, fieldnames, bios_d, "analysis") })
+            # b_k_b["individuals_by_id"].update({ ind_id: import_datatable_dict_line(self.byc, ind, fieldnames, bios_d, "individual") })
+            b_k_b["callsets_by_id"].update({ cs_id: cs })
+            b_k_b["individuals_by_id"].update({ ind_id: ind })
             b_k_b["biosamples_by_id"].update({ bs_id: bios })
             b_k_b["variants_by_callset_id"].update({ cs_id: [] })
 
         self.keyedBundle = b_k_b
+
 
     #--------------------------------------------------------------------------#
 
@@ -306,10 +313,12 @@ class ByconBundler:
         inds_ided = b_k_b.get("individuals_by_id", {})
         bios_ided = b_k_b.get("biosamples_by_id", {})
         cs_ided = b_k_b.get("callsets_by_id", {})
+
         vars_ided = b_k_b.get("variants_by_callset_id", {})
 
-        for c, v in enumerate(varlines):
-            bs_id = v.get("biosample_id", False)
+        for v in varlines:
+
+            bs_id = v.get("biosample_id", "___none___")
 
             # If the biosample exists in metadata all the other items will exist by id
             if not bs_id in bios_ided:
@@ -337,9 +346,9 @@ class ByconBundler:
             }
 
             update_v = import_datatable_dict_line(self.byc, update_v, fieldnames, v, "variant")
-            vrsify_variant(update_v, self.byc)
+            bv = ByconVariant(self.byc, update_v, "bycon")
+            update_v = bv.pgxVariant()
             update_v.update({
-                "variant_internal_id": variant_create_digest(update_v, self.byc),
                 "updated": datetime.datetime.now().isoformat()
             })
 

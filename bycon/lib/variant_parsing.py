@@ -411,6 +411,8 @@ def create_in_query_for_parameter(par, qpar, q_pars):
 
 def variant_create_digest(v, byc):
 
+    # TODO: remove / part of ByconVariant
+
     t = v["variant_state"]["id"]
     t = re.sub(":", "_", t)
 

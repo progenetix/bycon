@@ -1,8 +1,23 @@
 # Changes & To Do
 
-## Changes
+## Notes about Previous Development
+
+==TBD==
+
+## Changes Tracker
 
 ### Recent
+
+#### 2023-07-23 (v1.0.68)
+
+* first production version of `ByconVariant` class and consecutive retirement of
+  `...vrsify` functions
+* new defaults in `variant_type_definitions` per EFO type:
+    - `dupdel_state_id`
+    - `snv_state_id`
+    - `VCF_symbolic_allele`
+* fixed wrong parameter mapping of `alternate_bases` (introduced ... when?)
+* docs: split changes & to dos...
 
 #### 2023-07-19 (v1.0.67)
 
@@ -312,27 +327,3 @@ Bug fix release:
 #### 2023-01-15
 
 - [x] create bycon documentation subdomain & configure Github pages for it  
-
-## Bugs & TODO
-
-* [x] move the "services" collection to a generic `_byconServicesDB`
-    - [x] no problem for `querybuffer` and `beaconinfo` which can be generated _ad hoc_
-    - [x] other affected collections would be `genes` and `geolocs` which need to be moved => `_`
-    - [x] special Progenetix project collections would have to be considered
-      separately (e.g. w/ hard-coded `progenetix` db?): `publications` and `ontologymaps` => hard coded to `progenetix`
-* [x] split installation method into separate parts for `beaconServer` and `services` (the latter then in `byconaut`)
-* [x] add method to subset samples for multi-histogram generation
-* [ ] option for summary histogram over? under? samplesplot
-* [x] script for auto-generation of parameter documentation
-* [x] fix filter queries for correct no-match:
-    - query type indicates that the filter is "collationed"
-    - query_generation looks for term in collations to perform term expansion
-    - BUG: if term is not found -> currently term is not added to final query
-      object -> query is only based on other parameters
-* [x] disentangle general configurations, resources (which stay with the package)
-  and instance-specific ones and load them from their appropriate locations
-    - `beaconServer` and `services` scripts need to (over-) load from configs
-      within their directories
-    - this is in principle already possible, just need disentanglement etc.
-* [ ] Data: fix publication data for consequent inclusion of `ISO3166alpha2` codes
-* [ ] fix publications.py default filters "PMID" and "genomes:>0"
