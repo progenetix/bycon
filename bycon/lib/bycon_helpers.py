@@ -74,10 +74,12 @@ def set_pagination_range(d_count, byc):
 ################################################################################
 
 def paginate_list(this, byc):
-    if byc["pagination"]["limit"] < 1:
+    if not "pagination" in byc:
+        return this
+    if byc["pagination"].get("limit", 0) < 1:
         return this
 
-    r = byc["pagination"]["range"]
+    r = byc["pagination"].get("range", (1, len(this)))
 
     t_no = len(this)
     r_min = r[0] + 1

@@ -39,10 +39,6 @@ def retrieve_variants(ds_id, byc):
 
     ds_results = byc["dataset_results"][ds_id]
 
-    if "all_variants_methods" in byc["service_config"]:
-        if byc["method"] in byc["service_config"]["all_variants_methods"]:
-            return False
-
     mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     data_db = mongo_client[ ds_id ]
     v_coll = mongo_client[ ds_id ][ "variants" ]

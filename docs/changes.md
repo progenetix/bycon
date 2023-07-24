@@ -8,6 +8,11 @@
 
 ### Recent
 
+#### 2023-07-24 (v1.0.70)
+
+* refactored the VCF export into `exportfile_generation`
+* minor pagination code cleanup
+
 #### 2023-07-24 (v1.0.69)
 
 * fixed datatable & pgxseg download error (introduced w. 1.0.68)

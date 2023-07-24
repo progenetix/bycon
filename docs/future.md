@@ -6,6 +6,9 @@ These plans will be revealed ... in the future.
 
 ## Bugs & TODO
 
+* [ ] clean & reduce handovers, e.g. do not provide handovers for sample variants
+  (all variants for a sample can be downloaded through the REST path & sample id
+  as `/biosamples/{id}/g_variants`, w/ optional `&output=pgxseg` etc.)
 * [ ] consistant test suite as set of URLs & script for running over them / checkin
   the responses (e.g. `testMode` but also w/ queries...)
 * [ ] flattening of the Progenetix database models w/ mapping methods for

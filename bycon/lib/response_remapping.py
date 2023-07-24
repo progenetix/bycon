@@ -11,7 +11,6 @@ from os import environ
 ################################################################################
 
 def reshape_resultset_results(ds_id, r_s_res, byc):
-    r_s_res = remap_variants_to_VCF(r_s_res, byc)
     r_s_res = remap_variants(r_s_res, byc)
     r_s_res = remap_analyses(r_s_res, byc)
     r_s_res = remap_biosamples(r_s_res, byc)
@@ -36,7 +35,7 @@ def remap_variants(r_s_res, byc):
 
     if not "genomicVariant" in byc["response_entity_id"]:
         return r_s_res
-    if "vcf" in byc["output"].lower():
+    if "vcf" in byc["output"].lower() or "pgxseg" in byc["output"].lower():
         return r_s_res
 
     v_d = byc["variant_parameters"]
@@ -51,11 +50,6 @@ def remap_variants(r_s_res, byc):
     for d in variant_ids:
 
         d_vs = [var for var in r_s_res if var.get('variant_internal_id', "__none__") == d]
-
-        # bvo = ByconVariant(byc, d_vs[0])
-        # prjsonnice(bvo.byconVariant())
-        # prjsonnice(bvo.vcfVariant())
-        # prjsonnice(bvo.pgxVariant())
 
         v = {
             "variant_internal_id": d,
@@ -81,92 +75,6 @@ def remap_variants(r_s_res, byc):
 
         variants.append(v)
 
-    return variants
-
-
-################################################################################
-
-def remap_variants_to_VCF(r_s_res, byc):
-    """
-    """
-
-    if not "genomicVariant" in byc["response_entity_id"]:
-        return r_s_res
-    if not "vcf" in byc["output"].lower():
-        return r_s_res
-
-    # TODO: VCF schema in some config file...
-    open_text_streaming(byc["env"], "variants.vcf")
-    print(
-        """##fileformat=VCFv4.4
-##reference=GRCh38
-##ALT=<ID=DUP,Description="Duplication">
-##ALT=<ID=DEL,Description="Deletion">
-##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the longest variant described in this record">
-##INFO=<ID=SVLEN,Number=A,Type=Integer,Description="Length of structural variant">
-##INFO=<ID=CN,Number=A,Type=Float,Description="Copy number of CNV/breakpoint">
-##INFO=<ID=SVCLAIM,Number=A,Type=String,Description="Claim made by the structural variant call. Valid values are D, J, DJ for abundance, adjacency and both respectively">
-##INFO=<ID=IMPRECISE,Number=0,Type=Flag,Description="Imprecise structural variation">
-##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">"""
-    )
-
-    v_d = byc["variant_parameters"]
-    v_o = {
-        "#CHROM": ".",
-        "POS": ".",
-        "ID": ".",
-        "REF": ".",
-        "ALT": ".",
-        "QUAL": ".",
-        "FILTER": "PASS",
-        "FORMAT": "",
-        "INFO": ""
-    }
-
-    variant_ids = ()
-
-    sorted_vars = list(sorted(r_s_res, key=lambda x: (f'{x["location"]["chromosome"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x["location"]['start'])))
-
-    for v in sorted_vars:
-        variant_ids += (v.get("variant_internal_id", "__none__"), )
-
-    biosample_ids = []
-    for v in sorted_vars:
-        biosample_ids.append(v.get("biosample_id", "__none__"))
-
-    biosample_ids = list(set(biosample_ids))
-
-    for bsid in biosample_ids:
-        v_o.update({bsid: "."})
-
-    variants = []
-    print("\t".join(v_o.keys()))
-
-    for d in variant_ids:
-
-        d_vs = [var for var in sorted_vars if var.get('variant_internal_id', "__none__") == d]
-
-        bvo = ByconVariant(byc, d_vs[0])
-        vcf_v = bvo.vcfVariant()
-        
-        ###### DEBUG ################
-        if byc["debug_mode"] is True:
-            prjsonnice(bvo.byconVariant())
-            prjsonnice(bvo.pgxVariant())
-            prjsonnice(vcf_v)
-        ##### / DEBUG ###############
-
-        for bsid in biosample_ids:
-            vcf_v.update({bsid: "."})
-
-        for d_v in d_vs:
-            b_i = d_v.get("biosample_id", "__none__")
-            vcf_v.update({b_i: "0/1"})
-
-        r_l = map(str, list(vcf_v.values()))
-        print("\t".join(r_l))
-
-    exit()
     return variants
 
 

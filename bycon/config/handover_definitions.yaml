@@ -2,8 +2,9 @@
 
 # TODO: The handover specification in Beacon uses the `handoverType.id`
 #       parameter to inform about the handover's format.
-#       However, several handovers might have the same _format_ (e.g. VCF)
-#       but a different content. Maybe using `contentId` or `contentHint`?
+#       However, since several handovers might have the same _format_ (e.g. VCF)
+#       but a different content the front end interprets now the `contentId`
+#       from the h->o (the key served as `info.contentId`).
 
 h->o_types:
 

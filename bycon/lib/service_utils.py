@@ -743,11 +743,9 @@ def check_alternative_variant_deliveries(ds_id, byc):
     if not "genomicVariant" in byc["response_entity_id"]:
         return
 
-    if "pgxseg" in byc["output"]:
-        export_pgxseg_download(ds_id, byc)
-
-    if "variants" in byc["method"]:
-        export_variants_download(ds_id, byc)
+    export_pgxseg_download(ds_id, byc)
+    export_vcf_download(ds_id, byc)
+    export_variants_download(ds_id, byc)
 
 
 ################################################################################

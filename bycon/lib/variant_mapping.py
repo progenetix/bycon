@@ -95,10 +95,8 @@ class ByconVariant:
              v_v.update({"REF": "."})
 
         v_s_id = b_v.get("variant_state_id", "___none___")
-        # print(v_s_id) # DEBUG
         if v_s_id in vt_defs.keys():
             s_a = vt_defs[v_s_id].get("VCF_symbolic_allele")
-            # print(f'{v_s_id} - {s_a} - {v_v["ALT"]}')
             if s_a and len(v_v["ALT"]) < 1:
                 v_v.update({"ALT": s_a})
 
@@ -154,8 +152,8 @@ class ByconVariant:
         v.pop("variant_state", None)
         v.pop("location", None)
 
-        if self.byc["debug_mode"] is True:
-            prjsonnice(v)
+        # if self.byc["debug_mode"] is True:
+        #     prjsonnice(v)
 
         return
 

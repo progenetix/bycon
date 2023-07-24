@@ -10,6 +10,9 @@ from variant_mapping import ByconVariant
 
 def export_variants_download(ds_id, byc):
 
+    if not "variants" in byc.get("output", "___none___"):
+        return
+
     data_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     v_coll = data_client[ ds_id ][ "variants" ]
     ds_results = byc["dataset_results"][ds_id]
@@ -149,6 +152,9 @@ def print_filters_meta_line(byc):
 ################################################################################
 
 def export_pgxseg_download(ds_id, byc):
+
+    if not "pgxseg" in byc.get("output", "___none___"):
+        return
 
     data_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     v_coll = data_client[ ds_id ][ "variants" ]
@@ -351,4 +357,103 @@ def export_pgxmatrix_frequencies(byc, results):
         print("\t".join(f_line))
 
     close_text_streaming()
+
+################################################################################
+
+def export_vcf_download(ds_id, byc):
+
+    """
+    """
+
+    if not "vcf" in byc["output"].lower():
+        return
+
+    # TODO: VCF schema in some config file...
+    open_text_streaming(byc["env"], "variants.vcf")
+    print(
+        """##fileformat=VCFv4.4
+##reference=GRCh38
+##ALT=<ID=DUP,Description="Duplication">
+##ALT=<ID=DEL,Description="Deletion">
+##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the longest variant described in this record">
+##INFO=<ID=SVLEN,Number=A,Type=Integer,Description="Length of structural variant">
+##INFO=<ID=CN,Number=A,Type=Float,Description="Copy number of CNV/breakpoint">
+##INFO=<ID=SVCLAIM,Number=A,Type=String,Description="Claim made by the structural variant call. Valid values are D, J, DJ for abundance, adjacency and both respectively">
+##INFO=<ID=IMPRECISE,Number=0,Type=Flag,Description="Imprecise structural variation">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">"""
+    )
+
+    v_d = byc["variant_parameters"]
+    v_o = {
+        "#CHROM": ".",
+        "POS": ".",
+        "ID": ".",
+        "REF": ".",
+        "ALT": ".",
+        "QUAL": ".",
+        "FILTER": "PASS",
+        "FORMAT": "",
+        "INFO": ""
+    }
+
+
+    data_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
+    v_coll = data_client[ ds_id ][ "variants" ]
+    ds_results = byc["dataset_results"][ds_id]
+ 
+    v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
+    if test_truthy( byc["form_data"].get("paginate_results", True) ):
+        v__ids = paginate_list(v__ids, byc)
+
+    variant_ids = ()
+
+    v_instances = []
+    for v_id in v__ids:
+        v = v_coll.find_one( { "_id": v_id }, { "_id": 0 } )
+        bvo = ByconVariant(byc, v)
+        v_instances.append(bvo.byconVariant())
+
+    # print(v_instances)
+
+    v_instances = list(sorted(v_instances, key=lambda x: (f'{x["reference_name"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x['start'])))
+
+    for v in v_instances:
+        variant_ids += (v.get("variant_internal_id", "__none__"), )
+
+    biosample_ids = []
+    for v in v_instances:
+        biosample_ids.append(v.get("biosample_id", "__none__"))
+
+    biosample_ids = list(set(biosample_ids))
+
+    for bsid in biosample_ids:
+        v_o.update({bsid: "."})
+
+    print("\t".join(v_o.keys()))
+
+    for d in variant_ids:
+
+        d_vs = [var for var in v_instances if var.get('variant_internal_id', "__none__") == d]
+
+        bvo = ByconVariant(byc, d_vs[0])
+        vcf_v = bvo.vcfVariant()
+        
+        ###### DEBUG ################
+        # if byc["debug_mode"] is True:
+        #     prjsonnice(bvo.byconVariant())
+        #     prjsonnice(bvo.pgxVariant())
+        #     prjsonnice(vcf_v)
+        ##### / DEBUG ###############
+
+        for bsid in biosample_ids:
+            vcf_v.update({bsid: "."})
+
+        for d_v in d_vs:
+            b_i = d_v.get("biosample_id", "__none__")
+            vcf_v.update({b_i: "0/1"})
+
+        r_l = map(str, list(vcf_v.values()))
+        print("\t".join(r_l))
+
+    exit()
 
