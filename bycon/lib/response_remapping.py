@@ -34,7 +34,7 @@ def remap_variants(r_s_res, byc):
     with individual instances indicated through their identifiers in `caseLevelData`.
     """
 
-    if not "variant" in byc["response_entity_id"].lower():
+    if not "genomicVariant" in byc["response_entity_id"]:
         return r_s_res
     if "vcf" in byc["output"].lower():
         return r_s_res
@@ -90,7 +90,7 @@ def remap_variants_to_VCF(r_s_res, byc):
     """
     """
 
-    if not "variant" in byc["response_entity_id"].lower():
+    if not "genomicVariant" in byc["response_entity_id"]:
         return r_s_res
     if not "vcf" in byc["output"].lower():
         return r_s_res

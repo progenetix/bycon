@@ -345,7 +345,7 @@ class ByconBundler:
                 "callset_id": cs_id,
             }
 
-            update_v = import_datatable_dict_line(self.byc, update_v, fieldnames, v, "variant")
+            update_v = import_datatable_dict_line(self.byc, update_v, fieldnames, v, "genomicVariant")
             bv = ByconVariant(self.byc, update_v, "bycon")
             update_v = bv.pgxVariant()
             update_v.update({

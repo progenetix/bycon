@@ -9,7 +9,7 @@ description: >-
   The individual parameters are defined separately for each context ("entities").
   Reading the same datatable into a dictionary/object will e.g. lead to the
   `biosample_id` values being mapped to `id` if read in a `biosample` context
-  but to `biosample_id` if read under a `variant` context.
+  but to `biosample_id` if read under a `genomicVariant` context.
 
   #### Conventions
 
@@ -340,7 +340,7 @@ entities:
 
 #------------------------------------------------------------------------------#
 
-  variant:
+  genomicVariant:
 
     parameters:
 

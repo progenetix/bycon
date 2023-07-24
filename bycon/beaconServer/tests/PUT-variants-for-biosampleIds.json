@@ -5,7 +5,7 @@
         "requestedSchemas": [
             {
                 "entityType": "genomicVariation",
-                "schema:": "https://progenetix.org/services/schemas/variant/"
+                "schema:": "https://progenetix.org/services/schemas/genomicVariant/"
             }
         ]
     },

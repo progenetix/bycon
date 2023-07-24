@@ -34,7 +34,7 @@ class ByconVariant:
         self.pgxseg_variant = {}
 
         d_m = byc["datatable_mappings"].get("entities", {})
-        d_m_v = d_m.get("variant", {})
+        d_m_v = d_m.get("genomicVariant", {})
         self.variant_mappings = d_m_v.get("parameters", {})
 
         self.__create_canonical_variant()
@@ -145,6 +145,7 @@ class ByconVariant:
         self.__byc_variant_normalize_type()
         self.__byc_variant_normalize_chromosome()
         self.__byc_variant_normalize_positions()
+        self.__byc_variant_normalize_sequences()
         self.__byc_variant_add_digest()
 
         if not "info" in v:
@@ -225,7 +226,9 @@ class ByconVariant:
             if "location" in v:
                 chro = v["location"].get("chromosome", "___none___")
 
-        if s_id in refs_ids and chro not in chro_ids:
+        if s_id in refs_ids and chro in chro_ids:
+            pass
+        elif s_id in refs_ids and chro not in chro_ids:
             c_a_s = g_aliases.get("chro_aliases", {})
             chro = c_a_s.get(s_id, "___none___")
         elif chro in chro_ids and s_id not in refs_ids:
@@ -237,6 +240,23 @@ class ByconVariant:
         v.update({
             "reference_name": chro,
             "sequence_id": s_id
+        })
+
+        self.byc_variant.update(v)
+        return
+
+
+    # -------------------------------------------------------------------------#
+
+    def __byc_variant_normalize_sequences(self):
+        v = self.byc_variant
+
+        seq = v.get("sequence", v.get("alternate_bases"))
+        r_seq = v.get("reference_sequence", v.get("reference__bases"))
+        # TODO: check, normalize, default...
+        v.update({
+            "sequence": seq,
+            "reference_sequence": r_seq        
         })
 
         self.byc_variant.update(v)
@@ -266,11 +286,13 @@ class ByconVariant:
 
     def __byc_variant_add_digest(self):
         v = self.byc_variant
+
+        seq_re = '^[ACGTN]*$'
        
         v_lab = v.get("variant_type")
         seq = v.get("sequence", "")
         rseq = v.get("reference_sequence", "")
-        if re.match(f'\w', seq) or re.match(f'\w', rseq):
+        if re.match(f'{seq_re}', str(seq)) or re.match(f'{seq_re}', str(rseq)):
             v_lab = f'{seq}>{rseq}'
         v.update({"variant_internal_id": f'{v["reference_name"]}:{v["start"]}-{v["end"]}:{v_lab}'})
 

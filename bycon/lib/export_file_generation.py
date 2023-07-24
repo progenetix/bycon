@@ -193,15 +193,19 @@ def pgxseg_variant_line(v, byc):
 
     info = pv.get("info", {})
 
+    for p in ("sequence", "reference_sequence"):
+        if not pv[p]:
+            pv.update({p: "."})
+
     v_l = (
         pv.get("biosample_id"),
         pv["reference_name"],
         pv["start"],
         pv["end"],
         info.get("cnv_value", "."),
-        pv["variant_type"],
-        pv["reference_bases"],
-        pv["alternate_bases"]
+        pv.get("variant_type", "."),
+        pv.get("reference_sequence"),
+        pv.get("sequence")
     )
 
     return "\t".join([str(x) for x in v_l])

@@ -59,9 +59,9 @@ entryTypes:
     partOfSpecification: Beacon v2.0.0
     description: The location of a sequence.
     defaultSchema:
-      id: variant
+      id: genomicVariant
       name: Default schema for a genomic variation
-      referenceToSchemaDefinition: http://progenetix.org/services/schemas/variant
+      referenceToSchemaDefinition: http://progenetix.org/services/schemas/genomicVariant
       schemaVersion: v2.0.0
     additionallySupportedSchemas: []
   individual:

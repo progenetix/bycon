@@ -8,6 +8,13 @@
 
 ### Recent
 
+#### 2023-07-24 (v1.0.69)
+
+* fixed datatable & pgxseg download error (introduced w. 1.0.68)
+    - thanks to @ClmtHua in [#20](https://github.com/progenetix/bycon/issues/20)
+* internal change of more consistant use of `genomicVariant` for variant entity,
+  schema
+
 #### 2023-07-23 (v1.0.68)
 
 * first production version of `ByconVariant` class and consecutive retirement of

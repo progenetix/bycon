@@ -406,10 +406,13 @@ def update_meta_queries(byc):
 
 def create_empty_beacon_response(byc):
     r_s = byc["response_entity"].get("response_schema", None)
+    # prjsonnice(byc["response_entity"])
+    # print(r_s)
     if r_s is None:
         return
 
     r, e = instantiate_response_and_error(byc, r_s)
+    # prjsonnice(r_s)
 
     try:
         r["response"].update({"result_sets": []})
