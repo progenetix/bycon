@@ -25,6 +25,7 @@ EFO:0030064:
   dupdel_state_id: Null
   snv_state_id: Null
   variant_type: Null
+  VRS_type: Null
   VCF: Null
   VCF_symbolic_allele: Null
   cnv_dummy_value: Null
@@ -40,6 +41,7 @@ EFO:0030065:
   dupdel_state_id: Null
   snv_state_id: LOH
   variant_type: LOH
+  VRS_type: Null
   VCF: Null
   VCF_symbolic_allele: Null
   cnv_dummy_value: Null
@@ -55,6 +57,7 @@ EFO:0030066:
   dupdel_state_id: Null
   snv_state_id: CNV
   variant_type: CNV
+  VRS_type: CopyNumberChange
   VCF: CNV
   VCF_symbolic_allele: <CNV>
   cnv_dummy_value: Null
@@ -78,6 +81,7 @@ EFO:0030067:
   dupdel_state_id: EFO:0030067
   snv_state_id: Null
   variant_type: DEL
+  VRS_type: CopyNumberChange
   VCF: DEL
   VCF_symbolic_allele: <DEL>
   cnv_dummy_value: -1
@@ -96,6 +100,7 @@ EFO:0030068:
   dupdel_state_id: EFO:0030067
   snv_state_id: Null
   variant_type: DEL
+  VRS_type: CopyNumberChange
   VCF: DEL
   VCF_symbolic_allele: <DEL>
   cnv_dummy_value: -1
@@ -111,6 +116,7 @@ EFO:0020073:
   dupdel_state_id: EFO:0030067
   snv_state_id: Null
   variant_type: DEL
+  VRS_type: CopyNumberChange
   VCF: DEL
   VCF_symbolic_allele: <DEL>
   cnv_dummy_value: -1.75
@@ -127,6 +133,7 @@ EFO:0030069:
   dupdel_state_id: EFO:0030067
   snv_state_id: Null
   variant_type: DEL
+  VRS_type: CopyNumberChange
   VCF: DEL
   VCF_symbolic_allele: <DEL>
   cnv_dummy_value: -2
@@ -142,6 +149,7 @@ EFO:0030070:
   dupdel_state_id: EFO:0030070
   snv_state_id: Null
   variant_type: DUP
+  VRS_type: CopyNumberChange
   VCF: DUP
   VCF_symbolic_allele: <DUP>
   cnv_dummy_value: 0.58
@@ -160,6 +168,7 @@ EFO:0030071:
   dupdel_state_id: EFO:0030070
   snv_state_id: Null
   variant_type: DUP
+  VRS_type: CopyNumberChange
   VCF: DUP
   VCF_symbolic_allele: <DUP>
   cnv_dummy_value: 0.58
@@ -175,6 +184,7 @@ EFO:0030072:
   dupdel_state_id: EFO:0030070
   snv_state_id: Null
   variant_type: DUP
+  VRS_type: CopyNumberChange
   VCF: DUP
   VCF_symbolic_allele: <DUP>
   cnv_dummy_value: 2
@@ -191,6 +201,7 @@ EFO:0030073:
   dupdel_state_id: EFO:0030070
   snv_state_id: Null
   variant_type: DUP
+  VRS_type: CopyNumberChange
   VCF: DUP
   VCF_symbolic_allele: <DUP>
   cnv_dummy_value: 2
@@ -206,6 +217,7 @@ SO:0001059:
   dupdel_state_id: Null
   snv_state_id: SO:0001059
   variant_type: SNV
+  VRS_type: Allele
   VCF: SNV
   VCF_symbolic_allele: Null
   cnv_dummy_value: Null
@@ -224,6 +236,7 @@ SO:0001483:
   dupdel_state_id: Null
   snv_state_id: SO:0001059
   variant_type: SNV
+  VRS_type: Allele
   VCF: SNV
   VCF_symbolic_allele: Null
   cnv_dummy_value: Null
@@ -239,6 +252,7 @@ SO:0002007:
   dupdel_state_id: Null
   snv_state_id: SO:0001059
   variant_type: MNV
+  VRS_type: Allele
   VCF: SNV
   VCF_symbolic_allele: Null
   cnv_dummy_value: Null
@@ -254,6 +268,7 @@ SO:0000667:
   dupdel_state_id: Null
   snv_state_id: SO:0001059
   variant_type: INS
+  VRS_type: Allele
   VCF: SNV
   VCF_symbolic_allele: Null
   cnv_dummy_value: Null

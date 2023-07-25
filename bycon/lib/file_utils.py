@@ -236,12 +236,9 @@ class ByconBundler:
                 "ds_id": bb.get("ds_id", ""),
                 "variants":[]
             })
-
             for v in bb["variants"]:
                 if v.get("callset_id", "") == cs_id:
-                    bv = ByconVariant(self.byc, v)
-                    p_o["variants"].append(bv.byconVariant())
-                    # print(bv.byconVariant())
+                    p_o["variants"].append(ByconVariant(self.byc).byconVariant(v))
 
             c_p_l.append(p_o)
             
@@ -346,8 +343,7 @@ class ByconBundler:
             }
 
             update_v = import_datatable_dict_line(self.byc, update_v, fieldnames, v, "genomicVariant")
-            bv = ByconVariant(self.byc, update_v, "bycon")
-            update_v = bv.pgxVariant()
+            update_v = ByconVariant(self.byc).pgxVariant(update_v)
             update_v.update({
                 "updated": datetime.datetime.now().isoformat()
             })

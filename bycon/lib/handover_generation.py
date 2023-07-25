@@ -250,8 +250,7 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
                 continue
         
         # TODO: Just make this from the standard variant format
-        bv = ByconVariant(byc, v)
-        pv = bv.byconVariant()
+        pv = ByconVariant(byc).byconVariant(v)
 
         if "DUP" in pv["variant_type"]:
             vs["DUP"].append(pv)

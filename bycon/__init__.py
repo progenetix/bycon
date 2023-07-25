@@ -7,8 +7,6 @@ import traceback
 pkg_path = path.dirname( path.abspath(__file__) )
 bycon_lib_path = path.join( pkg_path, "lib" )
 sys.path.append( bycon_lib_path )
-# print('Content-Type: text/plain')
-# print()
 
 try:
 
@@ -25,7 +23,6 @@ try:
     from interval_utils import *
     from file_utils import *
     from filter_parsing import *
-    from geomap_utils import *
     from query_execution import *
     from query_generation import *
     from read_specs import *

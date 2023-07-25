@@ -8,6 +8,21 @@
 
 ### Recent
 
+#### 2023-07-25 (v1.0.71)
+
+* finished the `ByconVariant` `vrsVariant` method and implemented this as the format
+  for the Beacon variant response
+* added sorting to `.pgxseg` files
+* added compact `VRSallele` and `VRScopyNumberChange` schemas & using them in
+  `ByconVariant(byc).vrsVariant(v)`
+
+##### `byconaut`
+
+* moved `geomap_utils` to `byconaut/services/lib`
+* improved index generation for `2dsphere` indexes
+* moved `geolocs` to `_byconServicesDB` and adjusted code accordingly
+* fixed `frequencyMapsGenerator` for the new database
+
 #### 2023-07-24 (v1.0.70)
 
 * refactored the VCF export into `exportfile_generation`
@@ -144,6 +159,11 @@
   - `sampledTissue` => `sampleOriginDetail`
   - `description` => `notes`
   - `timeOfCollection.age` => `collectionMoment`
+
+### 2023-06-06 (byconaut)
+
+* moved MongoDB index generation to `housekeeping.py`
+* started to organize actions in `housekeeping.py` w/ user prompts
 
 #### 2023-06-05 (v1.0.51)
 

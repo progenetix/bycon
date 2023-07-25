@@ -1,0 +1,147 @@
+{
+    "$id": "https://progenetix.org/services/schemas/VRSallele/v2023-07-25",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "definitions": {
+        "CURIE": {
+            "description": "A [W3C Compact URI](https://www.w3.org/TR/curie/) formatted string. A CURIE string has the structure ``prefix``:``reference``, as defined by the W3C syntax.",
+            "example": "ensembl:ENSG00000139618",
+            "pattern": "^\\w[^:]*:.+$",
+            "type": "string"
+        },
+        "LiteralSequenceExpression": {
+            "additionalProperties": false,
+            "description": "An explicit expression of a Sequence.",
+            "properties": {
+                "sequence": {
+                    "description": "A character string of Residues that represents a biological sequence using the conventional sequence order for nucleic acid sequences.",
+                    "pattern": "^[A-Z*\\-]*$",
+                    "type": "string"
+                },
+                "type": {
+                    "const": "LiteralSequenceExpression",
+                    "default": "LiteralSequenceExpression",
+                    "description": "MUST be \"LiteralSequenceExpression\"",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "sequence",
+                "type"
+            ],
+            "type": "object"
+        },
+        "Number": {
+            "additionalProperties": false,
+            "description": "A simple integer value as a VRS class.",
+            "properties": {
+                "type": {
+                    "const": "Number",
+                    "default": "Number",
+                    "description": "MUST be \"Number\"",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "The value represented by Number",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "type",
+                "value"
+            ],
+            "type": "object"
+        },
+        "SequenceInterval": {
+            "additionalProperties": false,
+            "description": "A SequenceInterval represents a span on a Sequence. Positions are always represented by contiguous spans using interbase coordinates or coordinate ranges.",
+            "properties": {
+                "end": {
+                    "$ref": "#/definitions/Number",
+                    "description": "The end coordinate or range of the interval. The minimum value of this coordinate or range is 0. MUST represent a coordinate greater than the value of `start`."
+                },
+                "start": {
+                    "$ref": "#/definitions/Number",
+                    "description": "The start coordinate or range of the interval. The minimum value of this coordinate or range is 0. MUST represent a coordinate less than the value of `end`."
+                },
+                "type": {
+                    "const": "SequenceInterval",
+                    "default": "SequenceInterval",
+                    "description": "MUST be \"SequenceInterval\"",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "end",
+                "start",
+                "type"
+            ],
+            "type": "object"
+        },
+        "SequenceLocation": {
+            "description": "A Location defined by an interval on a referenced Sequence.",
+            "properties": {
+                "_id": {
+                    "$ref": "#/definitions/CURIE",
+                    "description": "Location Id. MUST be unique within document."
+                },
+                "interval": {
+                    "$ref": "#/definitions/SequenceInterval",
+                    "description": "Reference sequence region defined by a SequenceInterval."
+                },
+                "sequence_id": {
+                    "$ref": "#/definitions/CURIE",
+                    "description": "A VRS Computed Identifier for the reference Sequence."
+                },
+                "type": {
+                    "const": "SequenceLocation",
+                    "default": "SequenceLocation",
+                    "description": "MUST be \"SequenceLocation\"",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "description": "Simplified VRS allele for use in `bycon`.",
+    "meta": {
+        "contributors": [
+            {
+                "description": "Michael Baudis",
+                "id": "orcid:0000-0002-9903-4248"
+            }
+        ],
+        "provenance": [
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            },
+            {
+                "description": "VRS 1.3 specification",
+                "id": "https://raw.githubusercontent.com/ga4gh/vrs/main/schema/vrs.json"
+            }
+        ]
+    },
+    "properties": {
+        "location": {
+            "$ref": "#/definitions/SequenceLocation"
+        },
+        "state": {
+            "$ref": "#/definitions/LiteralSequenceExpression"
+        },
+        "type": {
+            "const": "Allele",
+            "default": "Allele",
+            "description": "MUST be \"Allele\"",
+            "type": "string"
+        }
+    },
+    "required": {
+        "all_of": [
+            "type",
+            "state",
+            "location"
+        ]
+    },
+    "title": "VRS Allele",
+    "type": "object"
+}

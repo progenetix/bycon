@@ -897,10 +897,7 @@ def check_callset_plot_delivery(byc):
             v_q = {"callset_id": cs_id}
 
             for v in var_coll.find(v_q):
-                bv = ByconVariant(byc, v)
-                pv = bv.byconVariant()
-
-                p_o["variants"].append(pv)
+                p_o["variants"].append(ByconVariant(byc).byconVariant(v))
 
             results.append(p_o)
 

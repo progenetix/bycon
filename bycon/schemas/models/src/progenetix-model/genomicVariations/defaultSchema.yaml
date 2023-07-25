@@ -9,11 +9,12 @@ required:
 properties:
   variation:
     oneOf:
-      - $ref: https://raw.githubusercontent.com/ga4gh/vrs/1.2/schema/vrs.json#/definitions/MolecularVariation
-      - $ref: https://raw.githubusercontent.com/ga4gh/vrs/1.2/schema/vrs.json#/definitions/SystemicVariation
+      - $ref: https://raw.githubusercontent.com/ga4gh/vrs/1.3/schema/vrs.json#/definitions/MolecularVariation
+      - $ref: https://raw.githubusercontent.com/ga4gh/vrs/1.3/schema/vrs.json#/definitions/SystemicVariation
       - $ref: '#/definitions/LegacyVariation'
   variantInternalId:
-    description: Reference to the **internal** variant ID. This represents the primary
+    description: >-
+      Reference to the **internal** variant ID. This represents the primary
       key/identifier of that variant **inside** a given Beacon instance. Different
       Beacon instances may use identical id values, referring to unrelated variants.
       Public identifiers such as the GA4GH Variant Representation Id (VRSid) MUST

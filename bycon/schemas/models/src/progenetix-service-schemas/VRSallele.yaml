@@ -1,0 +1,122 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/VRSallele/v2023-07-25
+title: VRS Allele
+type: object
+meta:
+  contributors:
+    - description: "Michael Baudis"
+      id: "orcid:0000-0002-9903-4248"
+  provenance:
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+    - description: VRS 1.3 specification
+      id: 'https://raw.githubusercontent.com/ga4gh/vrs/main/schema/vrs.yaml'
+description: >-
+  Simplified VRS allele for use in `bycon`.
+required:
+  all_of:
+    - type
+    - state
+    - location
+properties:
+  type:
+    type: string
+    const: Allele
+    default: Allele
+    description: MUST be "Allele"
+  location:
+    $ref: '#/definitions/SequenceLocation'
+  state:
+    $ref: '#/definitions/LiteralSequenceExpression'
+definitions:
+  CURIE:
+    description: >-
+      A [W3C Compact URI](https://www.w3.org/TR/curie/) formatted string.
+      A CURIE string has the structure ``prefix``:``reference``, as defined by the
+      W3C syntax.
+    type: string
+    pattern: ^\w[^:]*:.+$
+    example: ensembl:ENSG00000139618
+  LiteralSequenceExpression:
+    description: An explicit expression of a Sequence.
+    type: object
+    properties:
+      type:
+        type: string
+        const: LiteralSequenceExpression
+        default: LiteralSequenceExpression
+        description: MUST be "LiteralSequenceExpression"
+      sequence:
+        description: >-
+          A character string of Residues that represents a biological sequence
+          using the conventional sequence order for nucleic acid sequences.
+        type: string
+        pattern: ^[A-Z*\-]*$
+    required:
+      - sequence
+      - type
+    additionalProperties: false
+  Number:
+    description: >-
+      A simple integer value as a VRS class.
+    type: object
+    properties:
+      type:
+        type: string
+        const: Number
+        default: Number
+        description: MUST be "Number"
+      value:
+        type: integer
+        description: The value represented by Number
+    required:
+    - type
+    - value
+    additionalProperties: false
+  SequenceLocation:
+    description: A Location defined by an interval on a referenced Sequence.
+    type: object
+    properties:
+      _id:
+        $ref: '#/definitions/CURIE'
+        description: Location Id. MUST be unique within document.
+      type:
+        type: string
+        const: SequenceLocation
+        default: SequenceLocation
+        description: MUST be "SequenceLocation"
+      sequence_id:
+        $ref: '#/definitions/CURIE'
+        description: A VRS Computed Identifier for the reference Sequence.
+      interval:
+        $ref: '#/definitions/SequenceInterval'
+        description: Reference sequence region defined by a SequenceInterval.
+  SequenceInterval:
+    description: >-
+      A SequenceInterval represents a span on a Sequence. Positions are
+      always represented by contiguous spans using interbase coordinates or
+      coordinate ranges.
+    type: object
+    properties:
+      type:
+        type: string
+        const: SequenceInterval
+        default: SequenceInterval
+        description: MUST be "SequenceInterval"
+      start:
+        $ref: '#/definitions/Number'
+        description: >-
+          The start coordinate or range of the interval. The minimum value
+          of this coordinate or range is 0. MUST represent a coordinate less
+          than the value of `end`.
+      end:
+        $ref: '#/definitions/Number'
+        description: >-
+          The end coordinate or range of the interval. The minimum value
+          of this coordinate or range is 0. MUST represent a coordinate greater
+          than the value of `start`.
+    required:
+    - end
+    - start
+    - type
+    additionalProperties: false

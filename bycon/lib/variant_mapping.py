@@ -1,8 +1,10 @@
 import re
 from copy import deepcopy
+from pydeepmerge import deep_merge
 
 from cgi_parsing import prjsonnice
 from datatable_utils import assign_nested_value, get_nested_value
+from schema_parsing import object_instance_from_schema_name
 
 ################################################################################
 ################################################################################
@@ -10,7 +12,7 @@ from datatable_utils import assign_nested_value, get_nested_value
 
 class ByconVariant:
 
-    def __init__(self, byc, variant, flavour="progenetix"):
+    def __init__(self, byc, variant={}):
         """
         # Class `ByconVariant`
 
@@ -25,9 +27,7 @@ class ByconVariant:
         """
 
         self.byc = byc
-        self.var_input = variant
-        self.var_flavour = flavour
-        self.byc_variant = deepcopy(variant)
+        self.byc_variant = {}
         self.pgx_variant = {}
         self.vrs_variant = {}
         self.vcf_variant = {}
@@ -37,21 +37,31 @@ class ByconVariant:
         d_m_v = d_m.get("genomicVariant", {})
         self.variant_mappings = d_m_v.get("parameters", {})
 
-        self.__create_canonical_variant()
+        self.vrs_allele = object_instance_from_schema_name(byc, "VRSallele", "")
+        self.vrs_cnv = object_instance_from_schema_name(byc, "VRScopyNumberChange", "")
 
+        if variant:
+            self.byc_variant = deepcopy(variant)
+            self.__create_canonical_variant()
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def byconVariant(self):
+    def byconVariant(self, variant={}):
+        if variant:
+            self.byc_variant = deepcopy(variant)
+            self.__create_canonical_variant()
         return self.byc_variant
 
 
     # -------------------------------------------------------------------------#
 
-    def pgxVariant(self):
+    def pgxVariant(self, variant={}):
 
+        if variant:
+            self.byc_variant = deepcopy(variant)
+            self.__create_canonical_variant()
         b_v = self.byc_variant
         p_v = {} # to do: pgx cb variant instance
         for p_k, p_d in self.variant_mappings.items():
@@ -67,13 +77,16 @@ class ByconVariant:
 
     # -------------------------------------------------------------------------#
 
-    def vcfVariant(self):
+    def vcfVariant(self, variant={}):
         """
         Mapping of the relevant variant parameters into an object with
 
         * standard VCF column headers such as as `#CHROM` as keys
         * an `INFO` key + string for CNVs
         """
+        if variant:
+            self.byc_variant = deepcopy(variant)
+            self.__create_canonical_variant()
 
         vt_defs = self.byc.get("variant_type_definitions", {})
         b_v = self.byc_variant
@@ -108,25 +121,99 @@ class ByconVariant:
         self.vcf_variant.update(v_v) 
         return self.vcf_variant
 
+
     # -------------------------------------------------------------------------#
 
-    def vrsVariant(self):
+    def vrsVariant(self, variant={}):
         """
         Mapping of the relevant variant parameters into a VRS object
         ... TODO ...
         """
 
+        if variant:
+            self.byc_variant = deepcopy(variant)
+            self.__create_canonical_variant()
+
         vt_defs = self.byc.get("variant_type_definitions", {})
-        b_v = self.byc_variant
+        v = self.byc_variant
 
+        state_id = v.get("variant_state_id", "___none___")
+        state_defs = vt_defs.get(state_id, {})
+        vrs_type = state_defs.get("VRS_type", "___none___")
+
+        if "Allele" in vrs_type:
+            vrs_v = self.__vrs_allele()
+        else:
+            vrs_v = self.__vrs_cnv()
+
+        # TODO: since the vrs_variant has been created as a new object we now
+        #       add the annotation fields back (should epties be omitted?)
+        for v_s in ("biosample_id", "callset_id", "id", "variant_internal_id"):
+            vrs_v.update({v_s: v.get(v_s)})
+        vrs_v.update({"variant_alternative_ids": v.get("variant_alternative_ids", [])})
+        for v_o in ("identifiers", "info", "molecular_attributes", "variant_level_data"):
+            vrs_v.update({v_o: v.get(v_o, {})})
+
+        self.vrs_variant.update(vrs_v)
+        return self.vrs_variant
+
+    # -------------------------------------------------------------------------#
+
+    def __vrs_allele(self):
+        """
+        A variant with a specified sequence as a subtype of VRS `MolecularVariation`.
+        This remapping just covers the formats supported in the `bycon` environment
+        but does not try to accommodate all use cases.
+        """
+
+        vt_defs = self.byc.get("variant_type_definitions", {})
+        v = self.byc_variant
+
+        vrs_a = deepcopy(self.vrs_allele)
         vrs_v = {
-
-
-
+            "state": {
+                "sequence": v.get("sequence")
+            },
+            "location": {
+                "sequence_id": v.get("sequence_id"),
+                "interval": {
+                    "start": {"value": v.get("start")},
+                    "end": {"value": v.get("end")}
+                }
+            }
         }
 
-        self.vrs_variant.update(vrs_v) 
-        return self.vrs_variant
+        vrs_v = deep_merge(vrs_a, vrs_v)
+
+        return vrs_v
+
+
+    # -------------------------------------------------------------------------#
+
+    def __vrs_cnv(self):
+        """
+        A variant with a specified sequence as a subtype of VRS `SystemicVariation`.
+        This remapping just covers the formats supported in the `bycon` environment
+        but does not try to accommodate all use cases.
+        """
+
+        vt_defs = self.byc.get("variant_type_definitions", {})
+        v = self.byc_variant
+
+        vrs_c = deepcopy(self.vrs_cnv)
+        vrs_v = {
+            "copy_change": v.get("variant_state_id", "___none___").lower(),
+            "subject": {
+                "sequence_id": v.get("sequence_id"),
+                "interval": {
+                    "start": {"value": v.get("start")},
+                    "end": {"value": v.get("end")}
+                }
+            }
+        }
+        vrs_v = deep_merge(vrs_c, vrs_v)
+
+        return vrs_v
 
 
     # -------------------------------------------------------------------------#
@@ -297,28 +384,3 @@ class ByconVariant:
         self.byc_variant.update(v)
         return
 
-
-    # -------------------------------------------------------------------------#
-
-    def __byc_variant_from_progenetix(self):
-
-        p_v = self.var_input
-
-        b_v = {}
-        for p_k, p_d in self.variant_mappings.items():
-            dotted_key = p_d.get("db_key")
-            parameter_type = p_d.get("type", "string")
-            if not dotted_key:
-                continue
-            v = get_nested_value(p_v, dotted_key, parameter_type)
-            b_v.update({p_k: v})
-
-        info = p_v.get("info", {})
-        if "info" in b_v.keys():
-            for i_k, i_v in info:
-                b_v["info"].update({i_k: i_v})
-
-        self.byc_variant.update(b_v)
-        return
-
-    

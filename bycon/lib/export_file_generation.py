@@ -166,17 +166,22 @@ def export_pgxseg_download(ds_id, byc):
     stream_pgx_meta_header(ds_id, ds_results, byc)
     print_pgxseg_header_line()
 
+    v_instances = []
     for v_id in v__ids:
-        v = v_coll.find_one( { "_id": v_id} )
-        print_variant_pgxseg(v, byc)
+        v_s = v_coll.find_one( { "_id": v_id }, { "_id": 0 } )
+        v_instances.append(ByconVariant(byc).byconVariant(v_s))
+
+    v_instances = list(sorted(v_instances, key=lambda x: (f'{x["reference_name"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x['start'])))
+    for v in v_instances:
+        print_variant_pgxseg(v)
 
     close_text_streaming()
 
 ################################################################################
 
-def print_variant_pgxseg(v, byc):
+def print_variant_pgxseg(v_pgxseg):
 
-    print( pgxseg_variant_line(v, byc) )
+    print( pgxseg_variant_line(v_pgxseg) )
 
 ################################################################################
 
@@ -192,26 +197,23 @@ def pgxseg_header_line():
 
 ################################################################################
 
-def pgxseg_variant_line(v, byc):
+def pgxseg_variant_line(v_pgxseg):
 
-    bv = ByconVariant(byc, v)
-    pv = bv.byconVariant()
-
-    info = pv.get("info", {})
+    info = v_pgxseg.get("info", {})
 
     for p in ("sequence", "reference_sequence"):
-        if not pv[p]:
-            pv.update({p: "."})
+        if not v_pgxseg[p]:
+            v_pgxseg.update({p: "."})
 
     v_l = (
-        pv.get("biosample_id"),
-        pv["reference_name"],
-        pv["start"],
-        pv["end"],
-        info.get("cnv_value", "."),
-        pv.get("variant_type", "."),
-        pv.get("reference_sequence"),
-        pv.get("sequence")
+        v_pgxseg.get("biosample_id"),
+        v_pgxseg["reference_name"],
+        v_pgxseg["start"],
+        v_pgxseg["end"],
+        v_pgxseg.get("cnv_value", "."),
+        v_pgxseg.get("variant_type", "."),
+        v_pgxseg.get("reference_sequence"),
+        v_pgxseg.get("sequence")
     )
 
     return "\t".join([str(x) for x in v_l])
@@ -410,10 +412,7 @@ def export_vcf_download(ds_id, byc):
     v_instances = []
     for v_id in v__ids:
         v = v_coll.find_one( { "_id": v_id }, { "_id": 0 } )
-        bvo = ByconVariant(byc, v)
-        v_instances.append(bvo.byconVariant())
-
-    # print(v_instances)
+        v_instances.append(ByconVariant(byc).byconVariant(v))
 
     v_instances = list(sorted(v_instances, key=lambda x: (f'{x["reference_name"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x['start'])))
 
@@ -431,12 +430,11 @@ def export_vcf_download(ds_id, byc):
 
     print("\t".join(v_o.keys()))
 
+    bv = ByconVariant(byc)
     for d in variant_ids:
 
         d_vs = [var for var in v_instances if var.get('variant_internal_id', "__none__") == d]
-
-        bvo = ByconVariant(byc, d_vs[0])
-        vcf_v = bvo.vcfVariant()
+        vcf_v = bv.vcfVariant(d_vs[0])
         
         ###### DEBUG ################
         # if byc["debug_mode"] is True:

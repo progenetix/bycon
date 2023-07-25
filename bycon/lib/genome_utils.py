@@ -3,9 +3,9 @@ from os import environ, path, pardir
 from pymongo import MongoClient
 
 # local
-from query_execution import mongo_result_list
-from variant_parsing import variant_create_digest
 from bycon_helpers import generate_id
+from query_execution import mongo_result_list
+from variant_mapping import ByconVariant
 
 bycon_lib_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( bycon_lib_path, pardir )
@@ -333,13 +333,12 @@ def variants_from_revish(bs_id, cs_id, technique, iscn, byc):
 
         v.update({
             "id": generate_id("pgxvar"),
-            # "variant_internal_id": variant_create_digest(v, byc),
             "biosample_id": bs_id,
             "callset_id": cs_id,
             "updated": datetime.datetime.now().isoformat()
         })
 
-        variants.append(v)
+        variants.append(ByconVariant(byc).byconVariant(v))
 
     return variants, v_e
 

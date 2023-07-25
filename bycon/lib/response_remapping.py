@@ -45,7 +45,7 @@ def remap_variants(r_s_res, byc):
         variant_ids.append(v["variant_internal_id"])
     variant_ids = list(set(variant_ids))
 
-    variants = []
+    variants = []    
 
     for d in variant_ids:
 
@@ -53,7 +53,7 @@ def remap_variants(r_s_res, byc):
 
         v = {
             "variant_internal_id": d,
-            "variation": d_vs[0], "case_level_data": []
+            "variation": ByconVariant(byc).vrsVariant(d_vs[0]), "case_level_data": []
         }
 
         v["variation"].pop("variant_internal_id", None)
