@@ -553,12 +553,13 @@
             "$ref": "#/definitions/VariantLevelData"
         },
         "variation": {
+            "description": "The schema to describe the genomic variation.\n#### Source\n\n * https://raw.githubusercontent.com/ga4gh/vrs/1.3/schema/vrs.json#/definitions/MolecularVariation\n * https://raw.githubusercontent.com/ga4gh/vrs/1.3/schema/vrs.json#/definitions/SystemicVariation",
             "oneOf": [
                 {
-                    "$ref": "https://raw.githubusercontent.com/ga4gh/vrs/1.3/schema/vrs.json#/definitions/MolecularVariation"
+                    "$ref": "../common/VRSallele.json"
                 },
                 {
-                    "$ref": "https://raw.githubusercontent.com/ga4gh/vrs/1.3/schema/vrs.json#/definitions/SystemicVariation"
+                    "$ref": "../common/VRScopyNumberChange.json"
                 },
                 {
                     "$ref": "#/definitions/LegacyVariation"

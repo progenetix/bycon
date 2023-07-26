@@ -89,34 +89,36 @@ class ByconVariant:
             self.__create_canonical_variant()
 
         vt_defs = self.byc.get("variant_type_definitions", {})
-        b_v = self.byc_variant
+        v = self.byc_variant
 
         # TODO: VCF schema in some config file...
         v_v = {
-            "#CHROM": b_v.get("reference_name", "."),
-            "POS": int(b_v.get("start", 0)) + 1,
+            "#CHROM": v.get("reference_name", "."),
+            "POS": int(v.get("start", 0)) + 1,
             "ID": ".",
-            "REF": b_v.get("reference_bases", "."),
-            "ALT": b_v.get("alternate_bases", ""),
+            "REF": v.get("reference_sequence"),
+            "ALT": v.get("sequence", ""),
             "QUAL": ".",
             "FILTER": "PASS",
             "FORMAT": "GT",
             "INFO": ""
         }
 
-        if len(v_v["REF"]) < 1:
+        if not v_v["REF"]:
              v_v.update({"REF": "."})
+        if not v_v["ALT"]:
+             v_v.update({"ALT": ""})
 
-        v_s_id = b_v.get("variant_state_id", "___none___")
+        v_s_id = v.get("variant_state_id", "___none___")
         if v_s_id in vt_defs.keys():
             s_a = vt_defs[v_s_id].get("VCF_symbolic_allele")
             if s_a and len(v_v["ALT"]) < 1:
                 v_v.update({"ALT": s_a})
 
-        v_l = b_v.get("variant_length", 1)
+        v_l = v.get("variant_length", 1)
         if type(v_l) is int:
             if v_l >= 50:
-                v_v.update({"INFO": f'IMPRECISE;SVCLAIM=D;END={b_v.get("end")};SVLEN={v_l}'})
+                v_v.update({"INFO": f'IMPRECISE;SVCLAIM=D;END={v.get("end")};SVLEN={v_l}'})
 
         self.vcf_variant.update(v_v) 
         return self.vcf_variant
@@ -129,7 +131,6 @@ class ByconVariant:
         Mapping of the relevant variant parameters into a VRS object
         ... TODO ...
         """
-
         if variant:
             self.byc_variant = deepcopy(variant)
             self.__create_canonical_variant()
@@ -147,7 +148,7 @@ class ByconVariant:
             vrs_v = self.__vrs_cnv()
 
         # TODO: since the vrs_variant has been created as a new object we now
-        #       add the annotation fields back (should epties be omitted?)
+        #       add the annotation fields back (should empties be omitted?)
         for v_s in ("biosample_id", "callset_id", "id", "variant_internal_id"):
             vrs_v.update({v_s: v.get(v_s)})
         vrs_v.update({"variant_alternative_ids": v.get("variant_alternative_ids", [])})

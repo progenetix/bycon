@@ -45,72 +45,76 @@ def dataset_response_add_handovers(ds_id, byc):
     h_o_types = byc["handover_definitions"]["h->o_types"]
     ds_h_o = byc["dataset_definitions"][ ds_id ].get("handoverTypes", h_o_types.keys())
 
+    ds_res_k = list(byc["dataset_results"][ds_id].keys())
+
     for h_o_t, h_o_defs in h_o_types.items():
 
-        # testing if this handover is active for the specified dataset      
-        if not h_o_t in ds_h_o:
+        h_o_k = h_o_types[ h_o_t ].get("h->o_key", "___none___")
+        h_o = byc["dataset_results"][ds_id].get(h_o_k)
+        if not h_o:
             continue
 
-        for h_o_key, h_o in byc["dataset_results"][ds_id].items():
+        # testing if this handover is active for the specified dataset      
+        if h_o_t not in ds_h_o:
+            continue
 
-            if h_o["target_count"] < 1:
-                continue
+        target_count =  h_o.get("target_count", 0)
+        if target_count < 1:
+            continue
 
-            accessid = h_o["id"]
-            target_count =  h_o["target_count"]
+        accessid = h_o["id"]
+        this_server = h_o_server
+        if "remove_subdomain" in h_o_types[ h_o_t ]:
+            this_server = re.sub(r'\/\/\w+?\.(\w+?\.\w+?)$', r'//\1', this_server)
+        h_o_r = {
+            "handover_type": h_o_defs.get("handoverType", {}),
+            "info": { "content_id": h_o_t},
+            "note": h_o_defs[ "note" ],
+            "url": ""
+        }
 
-            if h_o_key == h_o_types[ h_o_t ][ "h->o_key" ]:
-                this_server = h_o_server
-                if "remove_subdomain" in h_o_types[ h_o_t ]:
-                    this_server = re.sub(r'\/\/\w+?\.(\w+?\.\w+?)$', r'//\1', this_server)
-                h_o_r = {
-                    "handover_type": h_o_defs.get("handoverType", {}),
-                    "info": { "content_id": h_o_t},
-                    "note": h_o_defs[ "note" ],
-                    "url": "",
-                    "pages": []
-                }
+        if "UCSClink" in h_o_t:
+            bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, 0, 0, byc)
+            h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos, byc ) } )
+        else:
+            h_o_r.update( { "url": handover_create_url(this_server, h_o_defs, accessid, byc) } )
 
-                if "UCSClink" in h_o_t:
-                    bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, 0, 0, byc)
-                    h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos, byc ) } )
+        # TODO: needs a new schema to accommodate this not as HACK ...
+        # the phenopackets URL needs matched variants, which it wouldn't know about ...
+        if "phenopackets" in h_o_t:
+            if "variants._id" in byc["dataset_results"][ds_id].keys():
+                h_o_r["url"] += "&variantsaccessid="+byc["dataset_results"][ds_id][ "variants._id" ][ "id" ]
+
+        e_t = byc["response_entity"]["entity_type"]
+        p_e = h_o_defs.get("paginated_entities", [])
+
+        if e_t in p_e or "all" in p_e:
+
+            h_o_r.update({"pages":[]})
+            p_f = 0
+            p_t = p_f + byc["pagination"]["limit"]
+            p_s = 0
+
+            while p_f < target_count + 1:
+                if target_count < p_t:
+                    p_t = target_count
+                l = "{}-{}".format(p_f + 1, p_t)
+                # no re-pagination of the results retrieved from the paginated query
+                # TODO: the bedfile part is wrong, since it paginates by the number of variants which
+                # may be incorrect if biosamples ... were called. have to change...
+                if "bedfile" in h_o_t:
+                    bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, p_f, p_t, byc)
+                    u =  _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos, byc )
                 else:
-                    h_o_r.update( { "url": handover_create_url(this_server, h_o_defs, accessid, byc) } )
+                    u = h_o_r["url"] + "&paginateResults=false&skip={}&limit={}".format(p_s, byc["pagination"]["limit"])
+                h_o_r["pages"].append( { "handover_type": {"id": h_o_defs["handoverType"][ "id" ], "label": l }, "url": u } )
+                p_s += 1
+                p_f += byc["pagination"]["limit"]
+                p_t = p_f + byc["pagination"]["limit"]
 
-                # TODO: needs a new schema to accommodate this not as HACK ...
-                # the phenopackets URL needs matched variants, which it wouldn't know about ...
-                if "phenopackets" in h_o_t:
-                    if "variants._id" in byc["dataset_results"][ds_id].keys():
-                        h_o_r["url"] += "&variantsaccessid="+byc["dataset_results"][ds_id][ "variants._id" ][ "id" ]
-
-                e_t = byc["response_entity"]["entity_type"]
-
-                if e_t in h_o_defs["paginated_entities"]:
-
-                    p_f = 0
-                    p_t = p_f + byc["pagination"]["limit"]
-                    p_s = 0
-
-                    while p_f < target_count + 1:
-                        if target_count < p_t:
-                            p_t = target_count
-                        l = "{}-{}".format(p_f + 1, p_t)
-                        # no re-pagination of the results retrieved from the paginated query
-                        # TODO: the bedfile part is wrong, since it paginates by the number of variants which
-                        # may be incorrect if biosamples ... were called. have to change...
-                        if "bedfile" in h_o_t:
-                            bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, p_f, p_t, byc)
-                            u =  _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos, byc )
-                        else:
-                            u = h_o_r["url"] + "&paginateResults=false&skip={}&limit={}".format(p_s, byc["pagination"]["limit"])
-                        h_o_r["pages"].append( { "handover_type": {"id": h_o_defs["handoverType"][ "id" ], "label": l }, "url": u } )
-                        p_s += 1
-                        p_f += byc["pagination"]["limit"]
-                        p_t = p_f + byc["pagination"]["limit"]
-
-                    h_o_r["url"] += "&skip={}&limit={}".format(byc["pagination"]["skip"], byc["pagination"]["limit"])
-                if "url" in h_o_r:
-                    b_h_o.append( h_o_r )
+            h_o_r["url"] += "&skip={}&limit={}".format(byc["pagination"]["skip"], byc["pagination"]["limit"])
+        if "url" in h_o_r:
+            b_h_o.append( h_o_r )
 
     return b_h_o
 

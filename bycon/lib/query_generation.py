@@ -98,6 +98,22 @@ def __update_queries_from_path_id(byc):
         return
 
     byc["queries"].update({collname: {"id": p_id_v}})
+    __id_query_add_variant_query(byc, r_e_id, p_id_v)
+
+
+################################################################################
+
+def __id_query_add_variant_query(byc, entity, entity_id):
+
+    if entity not in ("biosample", "individual", "callset", "analysis", "run"):
+        return
+
+    v_q_id = f'{entity}_id'
+    v_q_id = re.sub("analysis", "callset", v_q_id)
+    v_q_id = re.sub("run", "callset", v_q_id)
+    query = {v_q_id: entity_id}
+
+    __update_query_for_scope(byc, query, "variants")
 
 
 ################################################################################
@@ -124,24 +140,26 @@ def __update_queries_from_cohorts_query(byc):
 
 def __update_queries_from_id_values(byc):
     id_f_v = byc["beacon_mappings"]["id_queryscope_mappings"]
-    f_d = byc["form_data"]
+    form = byc["form_data"]
 
-    this_id_k = byc["response_entity_id"] + "_ids"
+    r_e_id = byc.get("request_entity_id")
+    this_id_k = r_e_id + "_ids"
 
-    if "ids" in f_d:
-        if this_id_k not in f_d:
-            f_d.update({this_id_k: f_d["ids"]})
+    if "ids" in form and this_id_k not in form:
+        form.update({this_id_k: form["ids"]})
 
-    for id_k, id_s in id_f_v.items():
-        q = False
-        if id_k in f_d:
-            id_v = f_d[id_k]
-            if len(id_v) > 1:
-                q = {"id": {"$in": id_v}}
-            elif len(id_v) == 1:
-                q = {"id": id_v[0]}
-        if q is not False:
-            __update_query_for_scope(byc, q, id_s, "AND")
+    id_v_s = form.get(this_id_k, [])
+    q = False
+    if len(id_v_s) < 1:
+        return
+    elif len(id_v_s) == 1:
+        q = {"id": id_v_s[0]}
+        __id_query_add_variant_query(byc, r_e_id, id_v_s[0])
+    elif len(id_v_s) > 1:
+        q = {"id": {"$in": id_v_s}}
+
+    if q is not False:
+        __update_query_for_scope(byc, q, r_e_id)
 
 
 ################################################################################
@@ -321,9 +339,9 @@ def __update_query_for_scope(byc, query, scope, bool_mode="AND"):
     logic = boolean_to_mongo_logic(bool_mode)
 
     if scope not in byc["queries"]:
-        byc["queries"][scope] = query
+        byc["queries"].update({scope: query})
     else:
-        byc["queries"][scope] = {logic: [byc["queries"][scope], query]}
+        byc["queries"].update({scope: {logic: [byc["queries"][scope], query]}})
 
 
 ################################################################################

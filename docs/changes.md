@@ -8,6 +8,18 @@
 
 ### Recent
 
+#### 2023-07-26 (v1.0.72)
+
+* cleaning of handovers
+    - no "all variants from matched biosamples" ... anymore due to performance
+      problems
+    - now variant storage and handovers only for matched variants - _i.e._ if
+      there was a variant query - _or_ if a sample, individual ... had been requested
+      by path id
+* CNV VCF fix
+* some general handover creation cosmetics
+* VRS schema components moved
+
 #### 2023-07-25 (v1.0.71)
 
 * finished the `ByconVariant` `vrsVariant` method and implemented this as the format
