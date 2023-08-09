@@ -10,7 +10,6 @@ from random import sample as random_samples
 from cgi_parsing import prjsonnice
 from datatable_utils import import_datatable_dict_line
 from interval_utils import interval_cnv_arrays, interval_counts_from_callsets
-from variant_parsing import variant_create_digest
 from variant_mapping import ByconVariant
 
 

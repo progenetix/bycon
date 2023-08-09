@@ -2,11 +2,27 @@
 
 ## Future Plans
 
-These plans will be revealed ... in the future.
+The `bycon` package had been implemented specifically to a) drive and test run features
+during Beacon protocol development, while b) serving the Progenetix use case.
+This led to some overall complexity - keep Progenetix running w/ existing features
+while testing `bycon` and also implement the whole Beacon code base while not
+necessarily making use of all.
+
+With a feature-rich but overly complex `bycon` package fulfilling those requirements
+ongoing work startin in Spring 2023 mainly targets:
+
+* disentanglement of non-Beacon code and Progenetix specific configuration from
+  the package
+* simplification of configuration and processing pipelines to the emerging practices
+  of a "matured" Beacon v2 protocol
 
 ## Bugs & TODO
 
-* [ ] clean & reduce handovers, e.g. do not provide handovers for sample variants
+* [ ] create a new `beaconDataPipeline.py` app which runs all requests against the
+  "data" entry types (_i.e._ `g_variants`, `biosamples`, `individuals`, `analyses`,
+  `runs`) and simplify `beacon.py` to a pure remapper(?)
+* [ ] add non-CNV variants to standard plots
+* [x] clean & reduce handovers, e.g. do not provide handovers for sample variants
   (all variants for a sample can be downloaded through the REST path & sample id
   as `/biosamples/{id}/g_variants`, w/ optional `&output=pgxseg` etc.)
 * [ ] consistant test suite as set of URLs & script for running over them / checkin

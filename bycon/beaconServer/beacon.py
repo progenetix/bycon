@@ -46,24 +46,40 @@ def beacon():
                     byc.update( { d_k: d_v } )
             read_bycon_definition_files(conf_dir, byc)
 
+    s_a = b_m.get("service_aliases", {})
+    r_w = b_m.get("rewrites", {})
+
+    """
+    The type of execution depends on the requested entity defined in `beacon_mappings`
+    which can either be one of the Beacon entities (also recognizing aliases)
+    in `beacon_mappings.service_aliases` or targets of a rewrite from
+    `beacon_mappings.rewrites`.
+    The entity is determined from different potential inputs and overwritten
+    by the next one in the oreder, if existing:
+
+    1. from the path (element after "beacon", e.g. `biosamples` from
+       `/beacon/biosamples/...`)
+    2. from a form value, e.g. `?requestEntityPathId=biosamples`
+    3. from a command line argument, e.g. `--requestEntityPathId biosamples`
+
+    Fallback is `/info`.
+    """
     byc.update({"request_path_root": "beacon"})
     rest_path_elements(byc)
-    r_p_id = byc.get("request_entity_path_id", "info")
-
     get_bycon_args(byc)
     args_update_form(byc)
+    e_p_id = byc["form_data"].get("request_entity_path_id", "___none___")
+    if e_p_id in s_a or e_p_id in r_w:
+        byc.update({"request_entity_path_id": e_p_id})
 
-    if byc["args"]:
-        if byc["args"].requestEntityPathId is not None:
-            r_p_id = byc["args"].requestEntityPathId
+    r_p_id = byc.get("request_entity_path_id", "info")
 
-    if r_p_id in b_m["service_aliases"]:
-        f = b_m["service_aliases"][ r_p_id ]
-
-        # the data pipeline will run & terminate; else other service
-        if f in b_m["data_pipeline_entry_types"]:
-            beacon_data_pipeline(byc, f)
-
+    f = s_a.get(r_p_id)
+    if not f:
+        pass
+    elif f in b_m["data_pipeline_entry_types"]:
+        beacon_data_pipeline(byc, f)
+    elif f:
         # dynamic package/function loading
         try:
             mod = import_module(f)
@@ -77,6 +93,13 @@ def beacon():
             print('Service {} WTF error: {}'.format(f, e))
 
             exit()
+
+    if r_p_id in r_w:
+        uri = environ.get('REQUEST_URI')
+        pat = re.compile( rf"^.+\/{r_p_id}\/?(.*?)$" )
+        if pat.match(uri):
+            stuff = pat.match(uri).group(1)
+            print_uri_rewrite_response(r_w[r_p_id], stuff)
 
     byc.update({
         "service_response": {},

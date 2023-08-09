@@ -70,7 +70,10 @@ def generate_genomic_mappings(byc):
 
 def __generate_genomic_intervals(byc):
 
-    binning = byc.get("genome_binning", "default")
+    i_d = byc["interval_definitions"]
+    g_b_s = i_d["genome_bin_sizes"].get("values", {})
+    binning = byc["form_data"].get("genome_binning", i_d["genome_binning"])
+    i_d.update({"genome_binning": binning})
 
     # cytobands ################################################################
 
@@ -81,7 +84,6 @@ def __generate_genomic_intervals(byc):
     # otherwise intervals ######################################################
 
     c_l = byc["cytolimits"]
-    i_d = byc["interval_definitions"]
 
     assert binning in i_d["genome_bin_sizes"]["values"].keys(), f'¡¡ Binning value "{binning}" not in list !!'
 
@@ -166,6 +168,8 @@ def interval_cnv_arrays(cs_vars, byc):
 
     # TODO: make this a class to split out the stats etc.
 
+    g_b = byc["interval_definitions"].get("genome_binning", "")
+
     v_t_defs = byc["variant_type_definitions"]
     c_l = byc["cytolimits"]
     intervals = byc["genomic_intervals"]
@@ -177,7 +181,7 @@ def interval_cnv_arrays(cs_vars, byc):
 
     maps = {
         "interval_count": int_no,
-        "binning": byc["genome_binning"]
+        "binning": g_b
     }
 
     for cov_lab in cov_labs.values():

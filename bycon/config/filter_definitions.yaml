@@ -4,6 +4,7 @@ age:
   format: iso8601duration
   name: Age at diagnosis
   scope: individuals
+  entity: individual
   db_key: index_disease.onset.age_days
   pattern: '^age:.+?$'
   collationed: False
@@ -24,6 +25,7 @@ NCITgrade:
   db_key: 'tumor_grade.id'
   description: Disease Grade codes
   scope: biosamples
+  entity: biosample
   pattern: '^NCIT(:C\d+?)?$'
   collationed: True
   examples:
@@ -44,6 +46,7 @@ NCITstage:
   db_key: 'pathological_stage.id'
   description: Disease Stage codes
   scope: biosamples
+  entity: biosample
   pattern: '^NCIT(:C\d+?)?$'
   collationed: True
   examples:
@@ -64,6 +67,7 @@ NCITtnm:
   db_key: 'pathological_tnm_findings.id'
   description: NCIT TNM codes
   scope: biosamples
+  entity: biosample
   pattern: '^NCIT(:C\d+?)?$'
   collationed: True
   examples:
@@ -84,6 +88,7 @@ NCIT:
       - ""
   db_key: 'histological_diagnosis.id'
   scope: biosamples
+  entity: biosample
   pattern: '^NCIT(:C\d+?)?$'
   collationed: True
   examples:
@@ -103,6 +108,7 @@ NCITauxiliary:
       - ""
   db_key: 'auxiliary_disease.disease_code.id'
   scope: individuals
+  entity: individual
   pattern: '^NCIT(:C\d+?)?$'
   collationed: True
   examples:
@@ -117,6 +123,7 @@ HP:
   url: "https://hpo.jax.org/"
   db_key: 'phenotypic_features.feature_type.id'
   scope: individuals
+  entity: individual
   pattern: '^HP(:\d+?)?$'
   collationed: True
   examples:
@@ -132,6 +139,7 @@ PATOsex:
   url: https://github.com/pato-ontology/pato/
   db_key: 'sex.id'
   scope: individuals
+  entity: individual
   pattern: '^PATO(:002000[012])?$'
   collationed: True
   examples:
@@ -158,6 +166,7 @@ EFOfus:
   url: "http://www.ebi.ac.uk/efo/EFO_0030038"
   db_key: 'followup_state.id'
   scope: biosamples
+  entity: biosample
   pattern: '^EFO(:\d+?)?$'
   collationed: True
   examples:
@@ -171,6 +180,7 @@ EFOmaterial:
   url: "https://www.ebi.ac.uk/efo/"
   db_key: 'biosample_status.id'
   scope: biosamples
+  entity: biosample
   pattern: '^(?:EFO)|(?:OBI):\d+?$'
   collationed: True
   collation_include_normals: true
@@ -187,6 +197,7 @@ icdom:
     root: https://progenetix.org/services/ids/
   db_key: 'icdo_morphology.id'
   scope: biosamples
+  entity: biosample
   pattern: '^(?:pgx:)?icdom-\d{1,5}(-\d{1,5})?$'
   collationed: True
   examples:
@@ -202,6 +213,7 @@ icdot:
     root: https://progenetix.org/services/ids/
   db_key: 'icdo_topography.id'
   scope: biosamples
+  entity: biosample
   pattern: '^(?:pgx:)?icdot-C\d\d?(\.\d)?$'
   collationed: True
   examples:
@@ -223,6 +235,7 @@ PMID:
       - ""
   db_key: 'external_references.id'
   scope: biosamples
+  entity: biosample
   pattern: '^PMID(:\d+?)?$'
   collationed: True
   examples:
@@ -241,6 +254,7 @@ GEOseries:
       - ""
   pattern: '^(?:geo:)?GSE\d+?$'
   scope: biosamples
+  entity: biosample
   db_key: 'external_references.id'
   is_series: True
   series_pattern: '^(?:geo:)?GSM\d+?$'
@@ -260,6 +274,7 @@ GenomePlatforms:
       - ""
   pattern: '^(?:EFO:)|(?:(?:geo:)?GPL)|(?:(?:arrayexpress:)?)[\w\-]+?$'
   scope: callsets
+  entity: analysis
   db_key: 'platform_model.id'
   collationed: True
   examples:
@@ -280,6 +295,7 @@ GEOexperiment:
       - ""
   pattern: '^(?:geo:)?GSM\d+?$'
   scope: biosamples
+  entity: biosample
   db_key: 'external_references.id'
   collationed: False
   examples:
@@ -297,6 +313,7 @@ arrayexpress:
       - ""
   db_key: 'external_references.id'
   scope: biosamples
+  entity: biosample
   pattern: '^arrayexpress:[AEP]-\w{4}-\d+$'
   collationed: True
   examples:
@@ -313,6 +330,7 @@ TCGAproject:
       - "pgx:"
       - ""
   scope: biosamples
+  entity: biosample
   pattern: '^(?:pgx:)?TCGA\.[\w\-]{2,8}?$'
   db_key: 'external_references.id'
   collationed: True
@@ -334,6 +352,7 @@ UBERON:
       - ":"
       - "_"
   scope: biosamples
+  entity: biosample
   db_key: 'sample_origin_detail.id'
   pattern: '^UBERON(:\d+?)?$'
   collationed: True
@@ -353,6 +372,7 @@ cbioportal:
       - "cbioportal:"
       - ""
   scope: biosamples
+  entity: biosample
   db_key: 'external_references.id'
   pattern: '^cbioportal:\w+?$'
   collationed: True
@@ -372,6 +392,7 @@ cellosaurus:
       - ""
   db_key: 'external_references.id'
   scope: biosamples
+  entity: biosample
   pattern: '^cellosaurus:CVCL_\w*?$'
   collationed: True
   examples:
@@ -386,6 +407,7 @@ pgxcohort:
   url: "https://progenetix.org"
   db_key: 'cohorts.id'
   scope: biosamples
+  entity: biosample
   pattern: '^pgx:cohort(-\w+)?'
   collationed: True
   examples:

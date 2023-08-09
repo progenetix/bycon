@@ -3,7 +3,6 @@ from pymongo import MongoClient
 from cgi_parsing import *
 from interval_utils import interval_counts_from_callsets
 from variant_mapping import ByconVariant
-from variant_parsing import variant_state_from_variant_par
 from os import environ
 
 ################################################################################

@@ -44,6 +44,10 @@ def create_args_parser(byc):
 ################################################################################
 
 def args_update_form(byc):
+    """
+    This function adds comand line arguments to the `byc["form_data"]` input
+    parameter collection (in "local" context).
+    """
     if not "local" in byc["env"]:
         return
 
@@ -64,13 +68,6 @@ def args_update_form(byc):
             byc["form_data"].update({p_d: arg_vars[p].split(',')})
         else:
             byc["form_data"].update({p_d: arg_vars[p]})
-
-
-################################################################################
-
-def genome_binning_from_args(byc):
-    if byc["args"].key:
-        byc.update({"genome_binning": byc["args"].key})
 
 
 ################################################################################

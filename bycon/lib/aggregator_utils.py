@@ -3,9 +3,8 @@ from os import path, environ, pardir
 from copy import deepcopy
 from liftover import get_lifter
 from humps import camelize
-from cgi_parsing import test_truthy
 
-from variant_parsing import variant_vcf_type_from_variant_par
+from cgi_parsing import test_truthy
 
 """
 http://progenetix.test/cgi/bycon/services/aggregator.py?requestedGranularity=boolean&limit=1000&skip=0&datasetIds=progenetix&assemblyId=GRCh38&referenceName=refseq%3ANC_000009.12&variantType=EFO%3A0030067&filterLogic=AND&includeDescendantTerms=True&start=21000000&start=21975098&end=21967753&end=23000000&filters=NCIT%3AC3058
@@ -79,7 +78,7 @@ def remap_parameters_values(pvs, ext_defs, byc):
 
             if "variant_type" in v_p_k:
                 if "VCF" in v_p_v.get("variant_style", "VCF"):
-                    vcf = variant_vcf_type_from_variant_par(val, byc)
+                    vcf = __variant_vcf_type_from_variant_par(val, byc)
                     if vcf is not False:
                         val = vcf
 
@@ -87,7 +86,7 @@ def remap_parameters_values(pvs, ext_defs, byc):
                 val[0] = int(val[0]) + int(v_p_v.get("shift", 0))
                 
                 if not "38" in target_assembly:
-                    val = lift_positions(target_assembly, chro, val, byc)
+                    val = __lift_positions(target_assembly, chro, val, byc)
 
             if "array" in v_p_defs[v_p_k].get("type", "string"):
                 val = ",".join(map(str, val))
@@ -98,7 +97,7 @@ def remap_parameters_values(pvs, ext_defs, byc):
 
 ################################################################################
 
-def lift_positions(target_assembly, chro, val, byc):
+def __lift_positions(target_assembly, chro, val, byc):
 
     l_o_o = byc["service_config"]["liftover_options"]
     s_a = byc["service_config"]["beacon_params"]["defaults"]["assembly_id"]
@@ -147,6 +146,28 @@ def add_parameter_values(pvs, ext_defs, byc):
         pvs.update({v_p_k: val})
 
     return pvs
+
+################################################################################
+
+def __variant_vcf_type_from_variant_par(variant_type, byc):
+    v_d = byc["variant_parameters"]
+    v_t_defs = byc["variant_type_definitions"]
+
+    for k, d in v_t_defs.items():
+        for p, v in d.items():
+            if v is None:
+                continue
+            if type(v) is list:
+                continue
+            if "variant_state" in p:
+                v = v.get("id", "___none___")
+            if type(v) is not str:
+                continue
+            if variant_type.lower() == v.lower():
+                return d.get("VCF")
+
+    return False
+
 
 ################################################################################
 

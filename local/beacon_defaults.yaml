@@ -4,7 +4,7 @@
 
 defaults:
 
-  dataset_ids:
+  dataset_ids:                                  # required w/ existing database
     - progenetix
   request_path_root: beacon
   request_entity_path_id: info
@@ -164,6 +164,13 @@ entity_defaults:
   genomic_variations:
     request_entity_path_id: genomicVariations
     response_entity_id: genomicVariant
+    response_entity:
+      entity_type: genomicVariant
+      collection: variants
+      response_schema: beaconResultsetsResponse
+      beacon_schema:
+        entity_type: genomicVariant
+        schema: https://progenetix.org/services/schemas/genomicVariant/
 
   ##############################################################################
 

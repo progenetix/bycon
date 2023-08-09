@@ -2,7 +2,6 @@ byc_root_pars:
 
   args:
   env: server
-  genome_binning: 1Mb
   request_path_root: beacon
   request_entity_path_id:
   request_entity_path_id_value:

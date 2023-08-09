@@ -3,8 +3,7 @@ from os import environ, path, pardir
 from pymongo import MongoClient
 
 # local
-from bycon_helpers import generate_id
-from query_execution import mongo_result_list
+from bycon_helpers import generate_id, mongo_result_list
 from variant_mapping import ByconVariant
 
 bycon_lib_path = path.dirname( path.abspath(__file__) )
@@ -20,8 +19,8 @@ def __get_genome_rsrc_path(byc, filename):
     # TODO: adjust resource file use for local configuration
     g_map = byc["interval_definitions"]["genome_path_ids"].get("values", {})
     genome = byc["interval_definitions"]["genome_default"]
-    if "variant_pars" in byc:
-        p_g = byc["variant_pars"].get("assembly_id")
+    if "varguments" in byc:
+        p_g = byc["varguments"].get("assembly_id")
         if p_g is not None:
             genome = p_g
 

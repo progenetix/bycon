@@ -30,7 +30,6 @@ class ByconPlot:
     """
 
     def __init__(self, byc: dict, plot_data_bundle: dict):
-
         self.env = byc.get("env", "server")
         self.byc = byc
         self.plot_data_bundle = plot_data_bundle
@@ -311,10 +310,15 @@ class ByconPlot:
         if self.plv["results_number"] > 0:
             return False
 
+        if self.plv["force_empty_plot"] is True:
+            self.plv.update({"results": [{"variants":[]}]})
+            return False
+
         self.plv.update({
             "plot_title_font_size": self.plv["plot_font_size"],
             "plot_title": "No matching CNV data"
         })
+
 
         self.__plot_add_title()
 
@@ -939,12 +943,16 @@ class ByconPlot:
                 e = str(int(s) + 1)
             else:
                 e = s_e.pop(0)
+
             if len(l_i) > 0:
                 label = str(l_i.pop(0))
             else:
                 label = ""
 
-            m = self.__make_marker_object(c, s, e, label)
+            l_c = self.plv.get("plot_regionlabel_color", "#ddceff")
+
+            m = self.__make_marker_object(c, s, e, l_c, label)
+
             self.plv["plot_labels"].update(m)
 
     # --------------------------------------------------------------------------#

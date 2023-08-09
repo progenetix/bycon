@@ -1,11 +1,11 @@
-id_queryscope_mappings:
+id_entity_mappings:
 
-  biosample_ids: biosamples
-  variant_ids: variants
-  callset_ids: callsets
-  analysis_ids: callsets
-  individual_ids: individuals
-  genomicVariant_ids: genomicVariations
+  biosample_ids: biosample
+  variant_ids: genomicVariant
+  callset_ids: analysis
+  analysis_ids: analysis
+  individual_ids: individual
+  genomic_variant_ids: genomicVariant
 
 service_aliases:
 

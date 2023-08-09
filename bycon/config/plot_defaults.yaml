@@ -44,6 +44,13 @@ parameters:
     type: boolean
     default: false
 
+  force_empty_plot:
+    description: >-
+      by setting to `true` a plot strip will be forced even if there are no CNV
+      samples
+    type: boolean
+    default: false
+
   plot_cluster_results:
     description: by setting to false clustering can be suppressed
     type: boolean
@@ -252,6 +259,9 @@ parameters:
       * label is optional
     type: array
     default: []
+
+  plot_regionlabel_color:
+    default: "#ddceff"
 
   plot_gene_symbols:
     description: >-

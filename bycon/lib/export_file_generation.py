@@ -222,6 +222,9 @@ def pgxseg_variant_line(v_pgxseg):
 
 def export_callsets_matrix(ds_id, byc):
 
+    g_b = byc["interval_definitions"].get("genome_binning", "")
+    i_no = len(byc["genomic_intervals"])
+
     m_format = "coverage"
     if "val" in byc["output"]:
         m_format = "values"
@@ -241,14 +244,18 @@ def export_callsets_matrix(ds_id, byc):
     open_text_streaming(byc["env"], "interval_callset_matrix.pgxmatrix")
 
     for d in ["id", "assemblyId"]:
-        print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
+        d_v = byc["dataset_definitions"][ds_id].get(d)
+        if d_v:
+            print(f'#meta=>{d}={d_v}')
     print_filters_meta_line(byc)
-    print("#meta=>data_format=interval_"+m_format)
+    print(f'#meta=>data_format=interval_{m_format}')
 
     info_columns = [ "analysis_id", "biosample_id", "group_id" ]
     h_line = __pgxmatrix_interval_header(info_columns, byc)
-    print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
-    print("#meta=>no_info_columns={};no_interval_columns={}".format(len(info_columns), len(h_line) - len(info_columns)))
+    info_col_no = len(info_columns)
+    int_col_no = len(h_line) - len(info_columns)
+    print(f'#meta=>genome_binning={g_b};interval_number={i_no}')
+    print(f'#meta=>no_info_columns={info_col_no};no_interval_columns={int_col_no}')
 
     q_vals = cs_r["target_values"]
     r_no = len(q_vals)
@@ -304,9 +311,12 @@ def export_pgxseg_frequencies(byc, results):
     if not "pgxseg" in byc["output"] and not "pgxfreq" in byc["output"]:
         return
 
+    g_b = byc["interval_definitions"].get("genome_binning", "")
+    i_no = len(byc["genomic_intervals"])
+
     open_text_streaming(byc["env"], "interval_frequencies.pgxfreq")
 
-    print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
+    print(f'#meta=>genome_binning={g_b};interval_number={i_no}')
     h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
 
     # should get error checking if made callable
@@ -333,9 +343,12 @@ def export_pgxseg_frequencies(byc, results):
 
 def export_pgxmatrix_frequencies(byc, results):
 
+    g_b = byc["interval_definitions"].get("genome_binning", "")
+    i_no = len(byc["genomic_intervals"])
+
     open_text_streaming(byc["env"], "interval_frequencies.pgxmatrix")
 
-    print("#meta=>genome_binning={};interval_number={}".format(byc["genome_binning"], len(byc["genomic_intervals"])) )
+    print(f'#meta=>genome_binning={g_b};interval_number={i_no}')
 
     # should get error checking if made callable
     for f_set in results:

@@ -61,11 +61,9 @@ def _return_cohorts_response(byc):
     c_id = byc.get("request_entity_path_id_value")
  
     if c_id is not None:
-        byc["queries"].update( {"cohorts": { "id": c_id } } )
+        query = { "id": c_id }
     else:
-        byc["queries"].update( {"cohorts": { "collation_type": "pgxcohort" } } )
-
-    query = byc["queries"].get("cohorts", {})
+        query = { "collation_type": "pgxcohort" }
     
     for ds_id in byc[ "dataset_ids" ]:
         mongo_db = mongo_client[ ds_id ]        

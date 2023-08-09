@@ -4,7 +4,7 @@ from pathlib import Path
 
 from args_parsing import *
 from bycon_plot import ByconPlot
-from bycon_helpers import paginate_list, set_pagination_range
+from bycon_helpers import paginate_list, set_pagination_range, mongo_result_list
 from cgi_parsing import prjsonnice
 from data_retrieval import *
 from dataset_parsing import select_dataset_ids
@@ -15,9 +15,8 @@ from filter_parsing import parse_filters
 from handover_generation import dataset_response_add_handovers, query_results_save_handovers, \
     dataset_results_save_handovers
 from interval_utils import generate_genomic_mappings
-from query_execution import execute_bycon_queries, mongo_result_list
-from query_generation import generate_dataset_queries
-from read_specs import read_bycon_definition_files, read_local_prefs
+from query_execution import execute_bycon_queries
+from read_specs import read_bycon_definition_files, read_service_prefs
 from response_remapping import *
 from variant_mapping import ByconVariant
 from variant_parsing import parse_variants
@@ -79,7 +78,7 @@ def run_beacon_init_stack(byc):
     parse_variants(byc)
     response_add_received_request_summary_parameters(byc)
     generate_genomic_mappings(byc)
-    response_collect_errors(byc)
+
     cgi_break_on_errors(byc)
 
 
@@ -122,21 +121,24 @@ def initialize_bycon_service(byc, service=False):
             * this is usually used to provide script-specific parameters
               (`service_defaults`...)
         """
-        sub_path = path.dirname(path.abspath(mod.__file__))
-        if "services" in sub_path or "byconaut" in sub_path:
+        service_path = path.dirname(path.abspath(mod.__file__))
+        if "services" in service_path or "byconaut" in service_path:
             scope = "services"
         byc.update({
             "request_path_root": scope,
             "request_entity_path_id": service
         })
 
-        loc_dir = path.join(sub_path, "local")
-        read_bycon_definition_files(loc_dir, byc)
+        l_pref_dir = path.join(service_path, "local")
+        read_bycon_definition_files(l_pref_dir, byc)
         defaults = byc["beacon_defaults"].get("defaults", {})
         for d_k, d_v in defaults.items():
             byc.update({d_k: d_v})
-    
-        read_local_prefs(service, sub_path, byc)
+
+        # this will generate byc["service_config"] if a file with the service
+        # name exists
+        s_pref_dir = path.join(service_path, "config")
+        read_service_prefs(service, s_pref_dir, byc)
 
     get_bycon_args(byc)
     args_update_form(byc)
@@ -270,7 +272,6 @@ def run_result_sets_beacon(byc):
     for i, r_set in enumerate(sr_r["result_sets"]):
 
         ds_id = r_set["id"]
-        generate_dataset_queries(byc, ds_id)
 
         r_set, r_s_res = populate_result_set(r_set, byc)
 
@@ -387,6 +388,13 @@ def response_meta_add_request_summary(r, byc):
             r_rcvd_rs.update({rrs_k: rrs_v})
     except:
         pass
+
+    if "queries_at_execution" in byc:
+        if "info" in r["meta"]:
+            r["meta"]["info"].update({"queries_at_execution": byc["queries_at_execution"]})
+        else:
+            r["meta"].update({"info": {"queries_at_execution": byc["queries_at_execution"]}})
+
 
     return r
 
@@ -579,11 +587,11 @@ def response_add_received_request_summary_parameters(byc):
     if not "received_request_summary" in byc["service_response"].get("meta", {}):
         return
 
-    for name in ["method", "dataset_ids", "filters", "variant_pars", "test_mode"]:
+    for name in ["method", "dataset_ids", "filters", "varguments", "test_mode"]:
         value = byc.get(name, False)
         if value is False:
             continue
-        if "variant_pars" in name:
+        if "varguments" in name:
             name = "request_parameters"
         byc["service_response"]["meta"]["received_request_summary"].update({name: value})
 
@@ -594,16 +602,6 @@ def received_request_summary_add_custom_parameter(byc, parameter, value):
         return
 
     byc["service_response"]["meta"]["received_request_summary"].update({parameter: value})
-
-
-################################################################################
-
-def response_collect_errors(byc):
-    # TODO: flexible list of errors
-    if not byc["queries"].keys():
-        response_add_error(byc, 200, "No (correct) query parameters were provided.")
-    if len(byc["dataset_ids"]) > 1:
-        response_add_error(byc, 200, "More than 1 `datasetIds` value was provided.")
 
 
 ################################################################################

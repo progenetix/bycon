@@ -178,7 +178,7 @@ server_tmp_dir_web: /tmp
 
 ##### `local/beacon_defaults.yaml`
 
-Please modify the data here, especially the defaults and the `eentity_defaults`
+Please modify the data here, especially the defaults and the `entity_defaults`
 for the `info` entry type.
 
 ## Local stack installation 

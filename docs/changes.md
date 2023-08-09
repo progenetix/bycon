@@ -8,6 +8,29 @@
 
 ### Recent
 
+#### 2023-08-09 (v1.1.0)
+
+* fixed gene position queries (had hardcoded `progenetix` database ...)
+* general overhaul of query generation
+    - `class ByconQuery`
+    - called directly in `query_execution`
+    - removed some variant query types (e.g. "type only")
+    - better handling of `id` type queries (including the retrieval of the associated
+      variants)
+    - move to collection of query objects per entity instead of collection (is
+      mostly a logical change for general use of entities instead of the database
+      impolementation as target - that is resolved at the query execution)
+    - TODO: probably will move from the dynamic variant query type detection
+      to a stacked "test one after the other with hard-coded parameter checks"
+      just for sanity reasons - but right now see above
+    - TODO: variant requests and request type detection still not part of class
+    - TODO: geo queries into class ...
+* there is now a `force_empty_plot` (forceEmptyPlot) parameter so that sample
+  queries w/o any CNV (e.g. from cancercelllines.org samples) generate an empty
+  strip, to add non-CNV as labels
+* fixed error in `interval_utils` (renamed config key...)
+* fixed associated `byconaut` errors
+
 #### 2023-07-26 (v1.0.72)
 
 * cleaning of handovers

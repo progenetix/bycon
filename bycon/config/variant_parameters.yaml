@@ -104,24 +104,8 @@ parameters:
 # of combinations valid at least for `bycon` Progenetix etc. data.
 request_types:
 
-  variantTypeRequest:
-    description: >
-      A query for SNV variants; not a Beacon standard.
-    all_of:
-      - variant_type
-    optional:
-      - reference_name
-
-  variantIdRequest:
-    description: >
-      A query for a specific variant by its `id` or internal `_id`.
-    one_of:
-      - id
-      - _id
-      - variant_internal_id
-
-  variantCNVrequest:
-    description: >
+  variantBracketRequest:
+    description: >-
       This specific request allows for the bracketed search of genomic variants
       with start and end coordinates and a variant type. in contrast to a
       beaconRangeRequest, the start and end positions of the matched variants
@@ -159,7 +143,7 @@ request_types:
       - variant_max_length
 
   variantAlleleRequest:
-    description: >
+    description: >-
       This type corresponds to the original BeaconAlleleRequest, in which at a
       specified genome position a query looks for a combination of reference and
       replacement base(s).
@@ -170,10 +154,21 @@ request_types:
       - reference_bases
       - alternate_bases
 
-# custom
+  geneVariantRequest:
+    description: >-
+      A variant overlapping with the genomic coordinates of a gene or other named
+      sequence element.
+    all_of:
+      - gene_id
+    optional:
+      - variant_type
+      - reference_bases
+      - alternate_bases
+      - variant_min_length
+      - variant_max_length
 
   variantFusionRequest:
-    description: |
+    description: >-
       This request is similar to the CNV request in using possibly fuzzy
       intervals for start and end of structural variants. However, here the
       "end" position refers to the fusion partner on the same or different
@@ -185,38 +180,5 @@ request_types:
       - assembly_id
       - reference_name
       - mate_name
-      - start
-      - end
-
-  geneVariantRequest:
-    description: >
-      A variant overlapping with the genomic coordinates of a gene or other named sequence element.
-    all_of:
-      - gene_id
-    optional:
-      - variant_type
-      - reference_bases
-      - alternate_bases
-      - variant_min_length
-      - variant_max_length
-
-  cytobands2positions_request:
-    all_of:
-      - assembly_id
-      - cyto_bands
-
-  positions2cytobands_request:
-    all_of:
-      - assembly_id
-      - start
-      - end
-      - reference_name
-      - range_tag
-
-  ChromosomeLocation:
-    all_of:
-      - type
-      - species
-      - chr
       - start
       - end

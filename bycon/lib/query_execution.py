@@ -2,24 +2,7 @@ from uuid import uuid4
 from pymongo import MongoClient
 from os import environ
 from cgi_parsing import cgi_debug_message, prjsonnice, test_truthy
-
-
-################################################################################
-
-def mongo_result_list(db_name, coll_name, query, fields):
-    results = []
-    error = False
-
-    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-
-    try:
-        results = list(mongo_client[db_name][coll_name].find(query, fields))
-    except Exception as e:
-        error = e
-
-    mongo_client.close()
-
-    return results, error
+from query_generation import ByconQuery
 
 
 ################################################################################
@@ -42,19 +25,17 @@ def execute_bycon_queries(ds_id, byc):
     data_db = data_client[ds_id]
     data_collnames = data_db.list_collection_names()
 
-    if test_truthy(byc["form_data"].get("annotated_only", False)):
-        if "variants" in byc["queries"]:
-            byc["queries"].update(
-                {"variants": {"$and": [byc["queries"]["variants"], {"info.annotation_derived": True}]}})
-        else:
-            byc["queries"].update({"variants": {"info.annotation_derived": True}})
-
-    for collname in byc["queries"].keys():
+    BQ = ByconQuery(byc).recordsQuery()
+    q_e_s = BQ.get("entities", {})
+    v_i_q = BQ.get("variant_id_query")
+    for q_e, q_o in q_e_s.items():
+        collname = q_o.get("collection", "___none___")
         if collname in byc["config"]["queried_collections"]:
-            exe_queries[collname] = byc["queries"][collname]
+            q = q_o.get("query")
+            if q:
+                exe_queries.update({collname: q})
 
     byc.update({"queries_at_execution": exe_queries})
-
     if byc["original_queries"] is None:
         byc.update({"original_queries": exe_queries})
 
@@ -104,6 +85,7 @@ def execute_bycon_queries(ds_id, byc):
     if individuals_query:
         pref_k = "individuals.id"
         prevars["pref_m"] = pref_k
+        prevars["query"] = individuals_query
         prefetch.update({pref_k: _prefetch_data(prevars)})
 
         pref_vs = prefetch["individuals.id"]["target_values"]
@@ -169,6 +151,16 @@ def execute_bycon_queries(ds_id, byc):
         prevars["pref_m"] = "variants.variant_internal_id"
         prevars["query"] = {"_id": {"$in": prefetch["variants._id"]["target_values"]}}
         prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
+
+    elif v_i_q:
+        prevars["pref_m"] = "variants._id"
+        prevars["query"] = v_i_q
+        prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
+        
+        prevars["pref_m"] = "variants.variant_internal_id"
+        prevars["query"] = {"_id": {"$in": prefetch["variants._id"]["target_values"]}}
+        prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
+
 
     ############################################################################
     """podmd
@@ -327,15 +319,3 @@ def _prefetch_add_all_sample_variants(prevars, prefetch):
 
 
 ################################################################################
-
-# def _prefetch_add_variant_annotations(prevars, prefetch):
-#     prevars["pref_m"] = "variants.variantannotation_id->variant_annotations.id"
-#     prevars["query"] = {"_id": {"$in": prefetch["variants._id"]["target_values"]}}
-#     prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
-
-#     prevars["pref_m"] = "variant_annotations._id"
-#     prevars["query"] = {
-#         "id": {"$in": prefetch["variants.variantannotation_id->variant_annotations.id"]["target_values"]}}
-#     prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
-
-#     return prefetch

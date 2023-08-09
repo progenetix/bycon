@@ -9,7 +9,7 @@ from humps import camelize, decamelize
 
 def read_bycon_definition_files(conf_dir, byc):
 
-    b_d_fs = byc["config"].get("bycon_definition_files", [])
+    b_d_fs =[]
 
     if not path.isdir(conf_dir):
         return
@@ -47,22 +47,14 @@ def read_bycon_configs_by_name(name, conf_dir, byc):
 
 ################################################################################
 
-def read_local_prefs(service, pkg_path, byc):
+def read_service_prefs(service, service_pref_path, byc):
 
-    # We use snake_case in the paths
+    # snake_case paths; e.g. `intervalFrequencies` => `interval_frequencies.yaml`
     service = decamelize(service)
 
-    d = Path( path.join( pkg_path, "config", service ) )
-
-    # old style named config
-    f = Path( path.join( pkg_path, "config", service+".yaml" ) )
-
+    f = Path( path.join( service_pref_path, service+".yaml" ) )
     if f.is_file():
         byc.update({"service_config": load_yaml_empty_fallback( f ) })
-    elif d.is_dir():
-        t_f_p = Path( path.join( d, "config.yaml" ) )
-        if t_f_p.is_file():
-            byc.update({ "service_config": load_yaml_empty_fallback(t_f_p) } )
 
 ################################################################################
 
