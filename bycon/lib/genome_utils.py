@@ -455,7 +455,7 @@ def cytobands_list_from_positions(byc, chro, start=None, end=None):
 
 ################################################################################
 
-def retrieve_gene_id_coordinates(gene_id, byc):
+def retrieve_gene_id_coordinates(gene_id, precision, byc):
 
     mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     db_names = list(mongo_client.list_database_names())
@@ -471,7 +471,7 @@ def retrieve_gene_id_coordinates(gene_id, byc):
     q_f_s = byc.get("query_fields", ["symbol", "ensembl_gene_ids", "synonyms"])
 
     greed = "$"
-    if "start" in byc["filter_flags"].get("precision", "exact"):
+    if precision == "start":
         greed = ""
 
     q_re = re.compile( r'^'+gene_id+greed, re.IGNORECASE )

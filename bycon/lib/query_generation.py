@@ -25,8 +25,18 @@ class ByconQuery():
             query: { __query__ }
             collection: __collection__
         ...
-    expand: True/False      # Flag to terminate collection of further
-                            # query items, e.g. after creating an id query
+
+    expand: True/False                          | Flag to terminate collection
+                                                | of further query items, e.g.
+                                                | after creating an id query
+
+    variant_id_query: { __variant_id_query__ }  | special query added to queries
+                                                | by id values, e.g.
+                                                | * `/biosamples/{id}
+                                                | * `?biosampleIds={id1,id2,...}
+                                                | ... to retrieve all variants for
+                                                | the matched samples, individuals
+                                                | etc.
     ```
     """
 
@@ -95,12 +105,6 @@ class ByconQuery():
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def queries(self):
-        return self.queries
-
-
     # -------------------------------------------------------------------------#
 
     def recordsQuery(self):

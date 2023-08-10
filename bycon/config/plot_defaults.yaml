@@ -1,6 +1,8 @@
 plot_types:
   histoplot:
     data_key: interval_frequencies_bundles
+  histoheatplot:
+    data_key: interval_frequencies_bundles
   samplesplot:
     data_key: callsets_variants_bundles
 
@@ -12,7 +14,6 @@ legacy_parameters:
   plot_dup_color: color_var_dup_hex
   plot_del_color: color_var_del_hex
   plot_width: size_plotimage_w_px
-  plot_chros: chr2plot
   plot_region_labels: labels
   plot_gene_symbols: gene_symbols
   plot_group_by: group_by
@@ -23,6 +24,8 @@ parameters:
 
   # Plot parameters can be modified in the URL's query string.
   # The bycon package accepts both snake_case and camelCase versions.
+  # TODO:
+  # * `#` character needs to be escaped in URL (`%23`) => fix for ommitting it...
 
   plot_id:
     default: genomeplot
@@ -150,7 +153,8 @@ parameters:
     default: 50
 
   plot_dendrogram_color:
-    description: color of the cluster tree stroke
+    description: >-
+      color of the cluster tree stroke
     default: "#333333"
 
   plot_dendrogram_stroke:
@@ -173,6 +177,11 @@ parameters:
   plot_area_color:
     description: color of the plot background
     default: "#eef6ff"
+
+  plot_heat_intensity:
+    description: factor for frequency heatmap value brightness
+    type: number
+    default: 1
 
   plot_area_opacity:
     description: opacity of the plot background

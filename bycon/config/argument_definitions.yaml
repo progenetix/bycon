@@ -118,6 +118,14 @@ parameters:
         help: random number to limit processing, where supported
         default: 0
 
+  - type: integer
+    argDef:
+      minNumber:
+        flags:
+          - --minNumber
+        help: minimal number, e.g. for collations, where supported
+        default: 0
+
   - type: string
     argDef:
       source:
@@ -302,5 +310,12 @@ parameters:
     argDef:
       collationTypes:
         flags:
-          - --collationtypes
+          - --collationTypes
         help: selected collation types, e.g. "EFO"
+
+  - type: integer
+    argDef:
+      withSamples:
+        flags:
+          - --withSamples
+        help: only for the collations; number of code_matches...

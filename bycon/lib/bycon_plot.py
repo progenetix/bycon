@@ -2,13 +2,13 @@ import datetime
 import io
 import re
 import base64
-from PIL import Image, ImageDraw
+from PIL import Image, ImageColor, ImageDraw
 
 from cgi_parsing import get_plot_parameters, print_svg_response, prjsonnice, test_truthy
 from clustering_utils import cluster_frequencies, cluster_samples
 from genome_utils import bands_from_cytobands, retrieve_gene_id_coordinates
 
-# http://progenetix.org/cgi/bycon/services/intervalFrequencies.py?chr2plot=8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot
+# http://progenetix.org/cgi/bycon/services/intervalFrequencies.py?plotChros=8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot
 # http://progenetix.org/beacon/biosamples/?datasetIds=progenetix&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot&plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6
 # http://progenetix.org/beacon/biosamples/?datasetIds=progenetix&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=samplesplot&plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6
 
@@ -267,11 +267,17 @@ class ByconPlot:
             if self.plv["results_number"] == 1:
                 title = self.__format_resultset_title()
 
+        lab_f_s = round(self.plv["plot_samplestrip_height"] * 0.65, 1)
+        if lab_f_s < self.plv["plot_labelcol_font_size"]:
+            self.plv.update({"plot_labelcol_font_size": lab_f_s})
+
         self.plv.update({
             "plot_title": title,
             "cytoband_shades": self.byc["plot_defaults"].get("cytoband_shades", {}),
             "styles": [
-                f'.plot-area {{fill: {self.plv.get("plot_area_color", "#66ddff")}; fill-opacity: {self.plv.get("plot_area_opacity", 0.8)};}}'],
+                f'.plot-area {{fill: {self.plv.get("plot_area_color", "#66ddff")}; fill-opacity: {self.plv.get("plot_area_opacity", 0.8)};}}',
+                f'.title-left {{text-anchor: end; fill: {self.plv["plot_font_color"]}; font-size: {self.plv["plot_labelcol_font_size"]}px;}}'
+            ],
             "Y": self.plv["plot_margins"],
             "plot_area_width": paw,
             "plot_area_x0": pax,
@@ -473,27 +479,17 @@ class ByconPlot:
         self.plv["pls"].append("")
         self.plv.update({"plot_strip_bg_i": len(self.plv["pls"]) - 1})
 
-        lab_x_e = self.plv["plot_area_x0"] - self.plv["plot_region_gap_width"] * 2
-        lab_f_s = round(self.plv["plot_samplestrip_height"] * 0.65, 1)
-
         if len(self.plv["results"]) > 0:
 
             self.__plot_order_samples()
-
-            if len(self.plv["results"]) > 1:
-                self.plv["styles"].append(
-                    f'.title-left {{text-anchor: end; fill: {self.plv["plot_font_color"]}; font-size: {lab_f_s}px;}}'
-                )
-
             for s in self.plv["results"]:
                 self.__plot_add_one_samplestrip(s)
-                if lab_f_s > 5 and len(self.plv["results"]) > 1:
+                if self.plv["plot_labelcol_font_size"] > 5 and len(self.plv["results"]) > 1:
                     cs_id = s.get("callset_id", "")
                     if len(cs_id) > 0:
                         cs_id = f' ({cs_id})'
                     g_lab = f'{s.get("biosample_id", "")}{cs_id}'
-                    self.plv["pls"].append(
-                        f'<text x="{lab_x_e}" y="{self.plv["Y"] - round(self.plv["plot_samplestrip_height"] * 0.2, 1)}" class="title-left">{g_lab}</text>')
+                    self.__samplestrip_add_left_label(g_lab)
 
         self.plv["plot_last_area_ye"] = self.plv["Y"]
 
@@ -511,6 +507,15 @@ class ByconPlot:
         self.plv["pls"][self.plv[
             "plot_strip_bg_i"]] = f'<rect x="{x_a_0}" y="{self.plv["plot_first_area_y0"]}" width="{p_a_w}" height="{p_a_h}" class="plot-area" />'
         self.plv["Y"] += self.plv["plot_region_gap_width"]
+
+    # --------------------------------------------------------------------------#
+
+    def __samplestrip_add_left_label(self, label):
+
+        lab_x_e = self.plv["plot_area_x0"] - self.plv["plot_region_gap_width"] * 2
+        self.plv["pls"].append(
+            f'<text x="{lab_x_e}" y="{self.plv["Y"] - round(self.plv["plot_samplestrip_height"] * 0.2, 1)}" class="title-left">{label}</text>'
+        )
 
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#
@@ -548,16 +553,15 @@ class ByconPlot:
 
             for p_v in c_v_s:
                 s_v = int(p_v.get("start", 0))
-                e_v = int(p_v.get("end", s_v))
-                l_v = round(int(p_v.get("variant_length", 1)) * self.plv["plot_b2pf"], 1)
-                if l_v < 0.5:
-                    l_v = 0.5
-                v_x = round(x + s_v * self.plv["plot_b2pf"], 1)
+                l = round(int(p_v.get("variant_length", 1)) * self.plv["plot_b2pf"], 1)
+                if l < 0.5:
+                    l = 0.5
+                s = round(x + s_v * self.plv["plot_b2pf"], 1)
                 t = p_v.get("variant_dupdel", "NA")
                 c = cnv_c.get(t, "rgb(111,111,111)")
 
                 self.plv["pls"].append(
-                    f'<rect x="{v_x}" y="{self.plv["Y"]}" width="{l_v}" height="{h}" style="fill: {c} " />')
+                    f'<rect x="{s}" y="{self.plv["Y"]}" width="{l}" height="{h}" style="fill: {c} " />')
 
             x += chr_w
             x += self.plv["plot_region_gap_width"]
@@ -624,16 +628,19 @@ class ByconPlot:
         self.plv.update({"plot_first_area_y0": self.plv["Y"]})
 
         self.__plot_order_histograms()
-
-        for f_set in self.plv["results"]:
-            self.__plot_add_one_histogram(f_set)
+        if "heat" in self.plv["plot_type"]:
+            self.plv.update({"cluster_head_gap": 0})
+            self.plv.update({"plot_clusteritem_height": self.plv["plot_samplestrip_height"]})
+            for f_set in self.plv["results"]:
+                self.__plot_add_one_heatstrip(f_set)
+        else:
+            self.plv.update({"cluster_head_gap": self.plv["plot_region_gap_width"]})
+            self.plv.update({"plot_clusteritem_height": self.plv["plot_area_height"]})
+            for f_set in self.plv["results"]:
+                self.__plot_add_one_histogram(f_set)
 
         self.plv["plot_last_area_ye"] = self.plv["Y"]
 
-        # ----------------------- plot cluster tree ----------------------------#
-
-        self.plv.update({"cluster_head_gap": self.plv["plot_region_gap_width"]})
-        self.plv.update({"plot_clusteritem_height": self.plv["plot_area_height"]})
 
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#
@@ -646,6 +653,7 @@ class ByconPlot:
             if len(new_order) == len(self.plv["results"]):
                 self.plv["results"][:] = [self.plv["results"][i] for i in dendrogram.get("leaves", [])]
                 self.plv.update({"dendrogram": dendrogram})
+
 
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#
@@ -720,8 +728,119 @@ class ByconPlot:
         self.plv.update({"plot_last_area_ye": self.plv["Y"]})
         self.plv["Y"] += self.plv["plot_region_gap_width"]
 
+
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#
+
+    def __plot_add_one_heatstrip(self, f_set):
+
+        i_f = f_set.get("interval_frequencies", [])
+
+        x = self.plv["plot_area_x0"]
+        h = self.plv["plot_samplestrip_height"]
+
+        # ------------------------- frequency data ----------------------------#
+
+        # TODO: in contrast to the Perl version here we don't correct for interval
+        #       sets which _do not_ correspond to the full chromosome coordinates
+        #
+        # First, for each chromosome all intervals are assessed and the corresponding
+        # parameters & color are collected. In a second pass a "lookahead" call checks
+        # the color of the upcoming interval and only plots if this is different.
+
+        g_c = self.plv["plot_dup_color"]
+        l_c = self.plv["plot_del_color"]
+
+        for chro in self.plv["plot_chros"]:
+
+            c_l = self.byc["cytolimits"][str(chro)]
+            chr_w = c_l["size"] * self.plv["plot_b2pf"]
+
+            c_i_f = list(filter(lambda d: d["reference_name"] == chro, i_f.copy()))
+            c_i_c = []
+            for i_v in c_i_f:
+                g_f = i_v.get("gain_frequency", 0)
+                l_f = i_v.get("loss_frequency", 0)
+                c = self.__mix_frequencies_2_rgb(g_f, l_f, 50)
+                c_i_c.append({
+                    "start": int(i_v.get("start", 0)),
+                    "end": int(i_v.get("end", 0)),
+                    "fill": c
+                })
+
+            s_s = c_i_c[0].get("start")
+            # iterating over all but the last entry; c_i_i is index for next entry 
+            for c_i_i, p_v in enumerate(c_i_c[:-1], start=1):
+                s_e = p_v.get("end")
+                f_c = c_i_c[c_i_i].get("fill")
+                c = p_v.get("fill")
+                if f_c != c:
+                    s = round(x + s_s * self.plv["plot_b2pf"], 1)
+                    l = round((s_e - s_s) * self.plv["plot_b2pf"], 1)
+                    if l < 0.5:
+                        l = 0.5
+                    self.plv["pls"].append(
+                        f'<rect x="{s}" y="{self.plv["Y"]}" width="{l}" height="{h}" style="fill: {c} " />'
+                    )
+                    # plot start is reset to the next interval start
+                    s_s = c_i_c[c_i_i].get("start")
+
+            # last interval
+            s = round(x + s_s * self.plv["plot_b2pf"], 1)
+            l = round((c_i_c[-1].get("end") - s_s) * self.plv["plot_b2pf"], 1)
+            self.plv["pls"].append(
+                f'<rect x="{s}" y="{self.plv["Y"]}" width="{l}" height="{h}" style="fill: {c_i_c[-1].get("fill")} " />'
+            )
+
+            x += chr_w
+            x += self.plv["plot_region_gap_width"]
+
+        # ------------------------ / histoheat data ---------------------------#
+
+        self.plv["Y"] += h
+
+        g_id = f_set.get("group_id", "NA")
+        g_lab = f_set.get("label", g_id)
+        g_ds_id = f_set.get("dataset_id", False)
+        g_no = f_set.get("sample_count", 0)
+
+        # The condition splits the label data on 2 lines if a text label pre-exists
+        if len(self.byc["dataset_ids"]) > 1 and g_ds_id is not False:
+            g_lab = f'{g_id} ({g_ds_id}, {g_no} {"samples" if g_no > 1 else "sample"})'
+        else:
+            g_lab = f'{g_id} ({g_no} {"samples" if g_no > 1 else "sample"} )'
+
+        self.__samplestrip_add_left_label(g_lab)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __mix_frequencies_2_rgb(self, gain_f, loss_f, max_f=80):
+
+        rgb = [127, 127, 127]
+
+        h_i = self.plv.get("plot_heat_intensity", 1)
+        if h_i < 0.1:
+            h_i = 0.1
+
+        f_f = max_f / self.plv.get("plot_heat_intensity", 1)
+
+        dup_rgb = list(ImageColor.getcolor(self.plv["plot_dup_color"], "RGB"))
+        del_rgb = list(ImageColor.getcolor(self.plv["plot_del_color"], "RGB"))
+
+        for i in (0,1,2):
+            dup_rgb[i] = int(dup_rgb[i] * gain_f / f_f)
+            del_rgb[i] = int(del_rgb[i] * loss_f / f_f)
+            rgb[i] = dup_rgb[i] + del_rgb[i]
+            if rgb[i] > 255:
+                rgb[i] = 255
+            rgb[i] = str(rgb[i])
+
+        return f'rgb({",".join(rgb)})'
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __plot_add_one_histogram_canvas(self, f_set):
 
@@ -729,16 +848,16 @@ class ByconPlot:
         p_a_w = self.plv["plot_area_width"]
         p_a_h = self.plv["plot_area_height"]
 
-        # -------------------------- left labels -------------------------------#
+        # -------------------------- left labels ------------------------------#
 
         self.__histoplot_add_left_label(f_set)
 
-        # --------------------- plot area background ---------------------------#
+        # --------------------- plot area background --------------------------#
 
         self.plv["pls"].append(
             f'<rect x="{x_a_0}" y="{self.plv["Y"]}" width="{p_a_w}" height="{p_a_h}" class="plot-area" />')
 
-        # --------------------------- grid lines -------------------------------#
+        # --------------------------- grid lines ------------------------------#
 
         self.__plot_area_add_grid()
 
@@ -820,7 +939,7 @@ class ByconPlot:
 
                 self.plv["pls"].append(f'<line x1="{x_a_0}" y1="{y_v}" x2="{x_c_e}" y2="{y_v}" class="gridline" />')
 
-                if self.plv["plot_axislab_y_width"] < 1:
+                if self.plv["plot_axislab_y_width"] < 10:
                     continue
 
                 self.plv["pls"].append(f'<text x="{x_y_l}" y="{y_l_y}" class="label-y">{neg}{y_m}{u}</text>')
@@ -967,8 +1086,9 @@ class ByconPlot:
         g_l = []
 
         for q_g in g_s_s:
-            genes, e = retrieve_gene_id_coordinates(q_g, self.byc)
-            g_l += genes
+            genes, e = retrieve_gene_id_coordinates(q_g, "exact", self.byc)
+            if len(genes) > 0:
+                g_l += genes
 
         for f_g in g_l:
 
@@ -980,7 +1100,7 @@ class ByconPlot:
                 f_g.get("symbol", False)
             )
 
-            if m is not False:
+            if m:
                 self.plv["plot_labels"].update(m)
 
     # --------------------------------------------------------------------------#

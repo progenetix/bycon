@@ -8,6 +8,14 @@
 
 ### Recent
 
+#### 2023-08-10 (v.1.1.1)
+
+* services: new frequency plot type `histoheatplot`:
+    - also some new related parameters, e.g. `plotHeatIntensity`
+    - [/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C,!NCIT:C3247,!NCIT:C3510&filterPrecision=start&withSamples=500&collationTypes=NCIT&output=histoheatplot&plotAreaHeight=20&plotRegionGapWidth=&plotChros=3,17&plotHeatIntensity=1.5&plotGeneSymbols=TP53,BCL6&plotDendrogramStroke=2](http://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C,!NCIT:C3247,!NCIT:C3510&filterPrecision=start&withSamples=500&collationTypes=NCIT&output=histoheatplot&plotAreaHeight=20&plotRegionGapWidth=&plotChros=3,17&plotHeatIntensity=1.5&plotGeneSymbols=TP53,BCL6&plotDendrogramStroke=2)
+* `intervalFrequencies` now supports start-anchored greedy term matches as well
+  as exclusion of individual terms through `!` prefix (as for normal filter searches)
+
 #### 2023-08-09 (v1.1.0)
 
 * fixed gene position queries (had hardcoded `progenetix` database ...)
@@ -305,7 +313,7 @@
 #### 2023-04-25 (v1.0.35)
 
 * more plot_utils goodness - staggered labels
-    - [/services/intervalFrequencies/?chr2plot=2,8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot](http://progenetix.org/services/intervalFrequencies/?chr2plot=2,8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot)
+    - [/services/intervalFrequencies/?plotChros=2,8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot](http://progenetix.org/services/intervalFrequencies/?plotChros=2,8,9,17&labels=8:120000000-123000000:Some+Interesting+Region&plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&filters=pgx:icdom-85003&output=histoplot)
     - [/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot&plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6](http://progenetix.org/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&output=histoplot&plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6)
 
 #### 2023-04-20 (v1.0.34)
@@ -339,7 +347,7 @@
     - no separate sevice so far; can be invoked from the `intervalFrequencies`
       service with added `&output=histoplots` pragma
     - so far no marker addition etc.
-    - <http://progenetix.org/services/intervalFrequencies/?filters=pgx:icdom-85003,pgx:icdom-87003,pgx:icdom-81403&chr2plot=7,8,9,13,17&plot_title=CNV+Comparison&output=histoplot&size_plotimage_w_px=800&plot_chro_height=18>
+    - <http://progenetix.org/services/intervalFrequencies/?filters=pgx:icdom-85003,pgx:icdom-87003,pgx:icdom-81403&plotChros=7,8,9,13,17&plot_title=CNV+Comparison&output=histoplot&size_plotimage_w_px=800&plot_chro_height=18>
 
 #### 2023-04-12 (v1.0.29)
 
