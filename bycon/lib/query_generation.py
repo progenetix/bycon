@@ -618,7 +618,7 @@ class ByconQuery():
         elif logic in q_e[entity]["query"]:
             q_e[entity]["query"][logic].append(query)
         else:
-            q_e.update({entity:{"query":{logic: [queries[entity], query]}}})
+            q_e[entity].update({"query": {logic: [q_e[entity]["query"], query]}})
 
         self.queries.update({"entities": q_e})
 

@@ -105,7 +105,7 @@ class ByconPlot:
             "plot_label_y_values": self.plv["plot_probe_label_y_values"]
         })
 
-        X = 0
+        x = 0
         h_y_0 = self.plv["plot_area_height"] * 0.5
         p_y_f = self.plv["plot_y2pf"]
         p_half = self.plv["plot_probedot_size"] * 0.5
@@ -129,10 +129,8 @@ class ByconPlot:
             c_l = self.byc["cytolimits"][str(chro)]
             chr_w = c_l["size"] * self.plv["plot_b2pf"]
 
-            i_x_0 = X
-
             for i_v in c_p:
-                s = i_x_0 + i_v.get("start", 0) * self.plv["plot_b2pf"]
+                s = x + i_v.get("start", 0) * self.plv["plot_b2pf"]
                 v = i_v.get("value", 0)
                 h = v * p_y_f 
                 if h > h_y_0:
@@ -150,7 +148,7 @@ class ByconPlot:
                 # )
                 draw.point((round(s, 2),round(h_p, 2)), (0,0,63,p_dense))
 
-            X += chr_w + self.plv["plot_region_gap_width"]
+            x += chr_w + self.plv["plot_region_gap_width"]
 
         # ------------------------ / histogram data ----------------------------#
 
@@ -193,7 +191,7 @@ class ByconPlot:
         if p_t not in p_t_s.keys():
             return
 
-        self.__initialize_plot_values()
+        self.__initialize_plot_values(p_t)
 
         if self.__plot_respond_empty_results() is False:
             self.__plot_add_title()
@@ -210,18 +208,18 @@ class ByconPlot:
 
     # -------------------------------------------------------------------------#
 
-    def __initialize_plot_values(self):
+    def __initialize_plot_values(self, plot_type):
         p_d_p = self.byc["plot_defaults"]["parameters"]
         p_t_s = self.byc["plot_defaults"]["plot_types"]
-        p_t = self.byc["output"]
 
-        d_k = p_t_s[p_t].get("data_key")
+        d_k = p_t_s[plot_type].get("data_key")
 
         # TODO: get rid of the "results"?
         self.plv = {
-            "plot_type": p_t,
+            "plot_type": plot_type,
             "results": self.plot_data_bundle.get(d_k, []),
-            "results_number": len(self.plot_data_bundle.get(d_k, []))
+            "results_number": len(self.plot_data_bundle.get(d_k, [])),
+            "data_type": p_t_s[plot_type].get("data_type", "analyses")
         }
 
         self.__filter_empty_callsets_results()
@@ -632,7 +630,7 @@ class ByconPlot:
             self.plv.update({"cluster_head_gap": 0})
             self.plv.update({"plot_clusteritem_height": self.plv["plot_samplestrip_height"]})
             for f_set in self.plv["results"]:
-                self.__plot_add_one_heatstrip(f_set)
+                self.__plot_draw_one_heatstrip(f_set)
         else:
             self.plv.update({"cluster_head_gap": self.plv["plot_region_gap_width"]})
             self.plv.update({"plot_clusteritem_height": self.plv["plot_area_height"]})
@@ -664,7 +662,7 @@ class ByconPlot:
 
         i_f = f_set.get("interval_frequencies", [])
 
-        X = self.plv["plot_area_x0"]
+        x = self.plv["plot_area_x0"]
         h_y_0 = self.plv["Y"] + self.plv["plot_area_height"] * 0.5
 
         # ------------------------- histogram data -----------------------------#
@@ -691,9 +689,9 @@ class ByconPlot:
                 p_c = cnv_c[GL]
                 h_f = cnv_f[GL]
 
-                p = f'<polygon points="{round(X, 1)},{round(h_y_0, 1)}'
+                p = f'<polygon points="{round(x, 1)},{round(h_y_0, 1)}'
 
-                i_x_0 = X
+                i_x_0 = x
                 prev = -1
                 for c_i_i, i_v in enumerate(c_i_f, start=1):
 
@@ -716,11 +714,11 @@ class ByconPlot:
 
                     prev = v
 
-                p += f' {round((X + chr_w), 1)},{round(h_y_0, 1)}" fill="{p_c}" stroke-width="0px" />'
+                p += f' {round((x + chr_w), 1)},{round(h_y_0, 1)}" fill="{p_c}" stroke-width="0px" />'
                 self.plv["pls"].append(p)
 
-            X += chr_w
-            X += self.plv["plot_region_gap_width"]
+            x += chr_w
+            x += self.plv["plot_region_gap_width"]
 
         # ------------------------ / histogram data ----------------------------#
 
@@ -732,21 +730,21 @@ class ByconPlot:
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#
 
-    def __plot_add_one_heatstrip(self, f_set):
+    def __plot_draw_one_heatstrip(self, f_set):
 
         i_f = f_set.get("interval_frequencies", [])
 
-        x = self.plv["plot_area_x0"]
+        x = 0
         h = self.plv["plot_samplestrip_height"]
 
-        # ------------------------- frequency data ----------------------------#
+        image = Image.new(
+                    'RGBA',
+                    (self.plv["plot_area_width"], h),
+                    color=self.plv["plot_area_color"]
+                )
+        draw = ImageDraw.Draw(image)
 
-        # TODO: in contrast to the Perl version here we don't correct for interval
-        #       sets which _do not_ correspond to the full chromosome coordinates
-        #
-        # First, for each chromosome all intervals are assessed and the corresponding
-        # parameters & color are collected. In a second pass a "lookahead" call checks
-        # the color of the upcoming interval and only plots if this is different.
+        # ------------------------- frequency data ----------------------------#
 
         g_c = self.plv["plot_dup_color"]
         l_c = self.plv["plot_del_color"]
@@ -776,26 +774,45 @@ class ByconPlot:
                 c = p_v.get("fill")
                 if f_c != c:
                     s = round(x + s_s * self.plv["plot_b2pf"], 1)
-                    l = round((s_e - s_s) * self.plv["plot_b2pf"], 1)
-                    if l < 0.5:
-                        l = 0.5
-                    self.plv["pls"].append(
-                        f'<rect x="{s}" y="{self.plv["Y"]}" width="{l}" height="{h}" style="fill: {c} " />'
-                    )
+                    e = round(x + s_e * self.plv["plot_b2pf"], 1)
+                    draw.rectangle([s, 0, e, h], fill=c)
+
                     # plot start is reset to the next interval start
                     s_s = c_i_c[c_i_i].get("start")
 
             # last interval
             s = round(x + s_s * self.plv["plot_b2pf"], 1)
-            l = round((c_i_c[-1].get("end") - s_s) * self.plv["plot_b2pf"], 1)
-            self.plv["pls"].append(
-                f'<rect x="{s}" y="{self.plv["Y"]}" width="{l}" height="{h}" style="fill: {c_i_c[-1].get("fill")} " />'
-            )
+            e = round(x + c_i_c[-1].get("end") * self.plv["plot_b2pf"], 1)
+            c = c_i_c[-1].get("fill")
+            draw.rectangle([s, 0, e, h], fill=c)
 
             x += chr_w
             x += self.plv["plot_region_gap_width"]
 
         # ------------------------ / histoheat data ---------------------------#
+
+        in_mem_file = io.BytesIO()
+        image.save(in_mem_file, format = "PNG")
+        in_mem_file.seek(0)
+        img_bytes = in_mem_file.read()
+        base64_encoded_result_bytes = base64.b64encode(img_bytes)
+        base64_encoded_result_str = base64_encoded_result_bytes.decode('ascii')
+
+        self.plv["pls"].append("""
+<image
+  x="{}"
+  y="{}"
+  width="{}"
+  height="{}"
+  xlink:href="data:image/png;base64,{}"
+/>""".format(
+            self.plv["plot_area_x0"],
+            self.plv["Y"],
+            self.plv["plot_area_width"],
+            h,
+            base64_encoded_result_str
+        ))
+
 
         self.plv["Y"] += h
 
@@ -1180,7 +1197,7 @@ class ByconPlot:
 
         if self.plv.get("results_number", 0) > 1:
             self.plv["pls"].append(
-                f'<text x="{x_a_0}" y="{self.plv["Y"]}" class="footer-l">{self.plv["results_number"]} analyses</text>')
+                f'<text x="{x_a_0}" y="{self.plv["Y"]}" class="footer-l">{self.plv["results_number"]} {self.plv["data_type"]}</text>')
 
         self.plv["Y"] += self.plv["plot_margins"]
 

@@ -8,6 +8,13 @@
 
 ### Recent
 
+#### 2023-08-11 (v.1.1.2 -> 1.1.3)
+
+* move the new `histoheatplot` method code to use ImageDraw instead of SVG raw
+  for the heat strips (_i.e._ base64 encoded individual PNG strips)
+    - e.g. reduces size of 9.3MB example to 188kB
+* 1.1.3 fixes a combination query bug
+
 #### 2023-08-10 (v.1.1.1)
 
 * services: new frequency plot type `histoheatplot`:

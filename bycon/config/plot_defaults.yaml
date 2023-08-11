@@ -1,10 +1,13 @@
 plot_types:
   histoplot:
     data_key: interval_frequencies_bundles
+    data_type: "collations"
   histoheatplot:
     data_key: interval_frequencies_bundles
+    data_type: "collations"
   samplesplot:
     data_key: callsets_variants_bundles
+    data_type: "samples"
 
 legacy_parameters:
 
