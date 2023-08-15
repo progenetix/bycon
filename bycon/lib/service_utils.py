@@ -598,11 +598,10 @@ def response_add_received_request_summary_parameters(byc):
 ################################################################################
 
 def received_request_summary_add_custom_parameter(byc, parameter, value):
-    if not "received_request_summary" in byc["service_response"].get("meta", {}):
-        return
-
-    byc["service_response"]["meta"]["received_request_summary"].update({parameter: value})
-
+    try:
+        byc["service_response"]["meta"]["received_request_summary"]["request_parameters"].update({parameter: value})
+    except:
+        pass
 
 ################################################################################
 

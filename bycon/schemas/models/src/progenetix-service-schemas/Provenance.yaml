@@ -28,4 +28,4 @@ properties:
       - id: EFO:0010937
         label: comparative genomic hybridization (CGH)
   geo_location:
-    $ref: GeoLocation.yaml#/properties
+    $ref: ../progenetix-model/common/GeoLocation.yaml#/properties

@@ -66,3 +66,4 @@ handover_coll: querybuffer
 # special support database ##############
 services_db: _byconServicesDB
 genes_coll: genes
+geolocs_coll: geolocs

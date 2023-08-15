@@ -139,6 +139,9 @@ def mongo_result_list(db_name, coll_name, query, fields):
     error = False
 
     mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
+    db_names = list(mongo_client.list_database_names())
+    if db_name not in db_names:
+        return results, f"{db_name} db `{db_name}` does not exist"
 
     try:
         results = list(mongo_client[db_name][coll_name].find(query, fields))
