@@ -15,6 +15,16 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ### Recent
 
+#### 2023-08-16 (v.1.1.4)
+
+* some changes to defaults & mappings parsing
+    - merging content of "beacon_defaults" & "service_defaults" (if existing) files
+      during init into "beacon_defaults"
+    - same for "beacon_mappings" & "service_mappings"
+    - **new requirement**: `deepmerge` (removed `pydeepmerge)`)
+* some reshuffling/fixes of entry type defaults
+* refined `GeoLocation` schema - now in model...common and referenced there
+
 #### 2023-08-11 (v.1.1.2 -> 1.1.3)
 
 * move the new `histoheatplot` method code to use ImageDraw instead of SVG raw

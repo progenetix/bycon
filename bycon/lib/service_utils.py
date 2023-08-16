@@ -5,10 +5,11 @@ from pathlib import Path
 from args_parsing import *
 from bycon_plot import ByconPlot
 from bycon_helpers import paginate_list, set_pagination_range, mongo_result_list
-from cgi_parsing import prjsonnice
+from cgi_parsing import prjsonnice, prdbug
 from data_retrieval import *
 from dataset_parsing import select_dataset_ids
 from datatable_utils import export_datatable_download
+from deepmerge import always_merger
 from export_file_generation import *
 from file_utils import ByconBundler, callset_guess_probefile_path
 from filter_parsing import parse_filters
@@ -59,6 +60,7 @@ def beacon_data_pipeline(byc, entry_type):
     update_meta_queries(byc)
     query_results_save_handovers(byc)
     check_callset_plot_delivery(byc)
+    check_biosamples_map_delivery(byc)
     check_computed_histoplot_delivery(byc)
     check_computed_interval_frequency_delivery(byc)
     check_switch_to_count_response(byc)
@@ -130,7 +132,14 @@ def initialize_bycon_service(byc, service=False):
         })
 
         l_pref_dir = path.join(service_path, "local")
+
         read_bycon_definition_files(l_pref_dir, byc)
+        b_m = byc.get("beacon_mappings", {})
+        s_m = byc.get("services_mappings", {})
+        byc.update({"beacon_mappings": always_merger.merge(s_m, b_m)})
+        b_s = byc.get("beacon_defaults", {})
+        s_s = byc.get("services_defaults", {})
+        byc.update({"beacon_defaults": always_merger.merge(s_s, b_s)})
         defaults = byc["beacon_defaults"].get("defaults", {})
         for d_k, d_v in defaults.items():
             byc.update({d_k: d_v})
@@ -147,13 +156,14 @@ def initialize_bycon_service(byc, service=False):
         for d_k, d_v in byc["service_config"]["defaults"].items():
             byc.update({d_k: d_v})
 
-    d_k = f'{scope}_defaults'
-    defs = byc.get(d_k, {})
+    defs = byc.get("beacon_defaults", {})
     b_e_d = defs.get("entity_defaults", {})
 
-    snaked_service = decamelize(service)
-    if snaked_service in b_e_d:
-        for d_k, d_v in b_e_d[snaked_service].items():
+    p_e_m = byc["beacon_mappings"].get("path_entry_type_mappings", {})
+    entry_type = p_e_m.get(service, "___none___")
+
+    if entry_type in b_e_d:
+        for d_k, d_v in b_e_d[entry_type].items():
             byc.update({d_k: d_v})
 
     # update response_entity_id from path
@@ -222,9 +232,7 @@ def update_entity_ids_from_path(byc):
     req_p_id = byc["request_entity_path_id"]
     res_p_id = byc["response_entity_path_id"]
 
-    m_k = byc["request_path_root"] + "_mappings"
-    b_mps = byc[m_k]
-    p_r_m = b_mps["path_response_type_mappings"]
+    p_r_m = byc["beacon_mappings"].get("path_entry_type_mappings", {})
 
     byc.update({
         "request_entity_id": p_r_m.get(req_p_id, byc["request_entity_path_id"]),
@@ -235,8 +243,7 @@ def update_entity_ids_from_path(byc):
 ################################################################################
 
 def update_requested_schema_from_request(byc):
-    m_k = byc["request_path_root"] + "_mappings"
-    b_mps = byc[m_k]
+    b_mps = byc["beacon_mappings"]
     form = byc["form_data"]
     b_qm = byc["query_meta"]
 
@@ -249,15 +256,13 @@ def update_requested_schema_from_request(byc):
 ################################################################################
 
 def set_response_entity(byc):
-    r_p_r = byc.get("request_path_root", "beacon")
-    s_k = f'{r_p_r}_entry_types'
-    b_rt_s = byc.get(s_k, {})
+    b_rt_s = byc["beacon_defaults"].get("entity_defaults", {})
     r_e_id = byc.get("response_entity_id", "___none___")
 
     if r_e_id not in b_rt_s.keys():
         return
 
-    byc.update({"response_entity": b_rt_s.get(r_e_id)})
+    byc.update({"response_entity": b_rt_s[r_e_id].get("response_entity")})
 
 
 ################################################################################
@@ -367,6 +372,13 @@ def response_meta_add_request_summary(r, byc):
 
     r_rcvd_rs = r["meta"]["received_request_summary"]
     defs = byc.get("beacon_defaults", {})
+
+    api_v = "v2"
+    try:
+        api_v = defs["entity_defaults"]["info"].get("api_version", "v2")
+    except:
+        pass
+
     b_e_d = defs.get("entity_defaults", {"info":{}})
 
     form = byc["form_data"]
@@ -374,7 +386,7 @@ def response_meta_add_request_summary(r, byc):
     r_rcvd_rs.update({
         "filters": byc.get("filters", []),
         "pagination": byc.get("pagination", {}),
-        "api_version": b_e_d["info"].get("api_version", "v2")
+        "api_version": api_v
     })
 
     for p in ["include_resultset_responses", "requested_granularity"]:
@@ -414,9 +426,8 @@ def update_meta_queries(byc):
 
 def create_empty_beacon_response(byc):
     r_s = byc["response_entity"].get("response_schema", None)
-    # prjsonnice(byc["response_entity"])
-    # print(r_s)
-    if r_s is None:
+    # prdbug(byc, f'{byc["response_entity"]} - {r_s}')
+    if not r_s:
         return
 
     r, e = instantiate_response_and_error(byc, r_s)
@@ -838,6 +849,16 @@ def create_filters_resource_response(collation_types, byc):
         resources.append(v)
     return resources
 
+
+################################################################################
+
+def check_biosamples_map_delivery(byc):
+    """
+    TODO
+    """
+
+
+    return
 
 ################################################################################
 

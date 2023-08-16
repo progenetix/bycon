@@ -49,7 +49,7 @@ markdown_extensions:
   - tables
   - mdx_gh_links:
       user: ga4gh-beacon
-      repo: beacon-v2-unity-testing
+      repo: beacon-v2
   - pymdownx.emoji
 
 theme:
@@ -73,8 +73,6 @@ extra:
   excerpt_separator: <!--more-->
   blog_list_length: 100
   social:
-    - icon: fontawesome/brands/twitter 
-      link: https://twitter.com/progenetix
     - icon: fontawesome/brands/github 
       link: https://github.com/progenetix
 extra_css:
