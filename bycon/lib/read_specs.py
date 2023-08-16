@@ -117,6 +117,6 @@ def load_yaml_empty_fallback(yp):
         with open( yp ) as yd:
             y = yaml.load( yd , Loader=yaml.FullLoader)
     except:
-        pass
+        return y
 
     return y

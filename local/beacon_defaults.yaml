@@ -7,7 +7,7 @@ defaults:
   dataset_ids:                                  # required w/ existing database
     - progenetix
   request_path_root: beacon
-  request_entity_path_id: info
+  # request_entity_path_id: info
   assembly_id: GRCh38
   response_schema: beaconResultsetsResponse
   include_resultset_responses: HIT
@@ -31,7 +31,7 @@ defaults:
 ################################################################################
 # Beacon entry type defaults - please adjust esp. info and schema paths...
 # TODO: Some of the entry type configuration duplicates data from the Beacon
-# framework or from beacon_entry_types and might be disentangled further on ...
+# framework and might be disentangled further on ...
 ################################################################################
 
 #  => snake_casing
@@ -91,21 +91,21 @@ entity_defaults:
 
 ################################################################################
 
-  entry_types:
+  entryType:
     request_entity_path_id: entryTypes
     response_entity_id: entryType
     response_schema: beaconEntryTypesResponse
 
 ################################################################################
 
-  filtering_terms:
+  filteringTerm:
     request_entity_path_id: filteringTerms
     response_entity_id: filteringTerm
     response_schema: beaconFilteringTermsResponse
 
 ################################################################################
 
-  analyses:
+  analysis:
     request_entity_path_id: analyses
     response_entity_id: analysis
     response_entity:
@@ -118,7 +118,7 @@ entity_defaults:
 
 ################################################################################
 
-  biosamples:
+  biosample:
     request_entity_path_id: biosamples
     response_entity_id: biosample
     response_entity:
@@ -131,7 +131,7 @@ entity_defaults:
 
 ################################################################################
 
-  cohorts:
+  cohort:
     request_entity_path_id: cohorts
     response_entity_id: cohort
     response_schema: beaconCollectionsResponse
@@ -150,7 +150,7 @@ entity_defaults:
 
   ##############################################################################
 
-  datasets:
+  dataset:
     request_entity_path_id: datasets
     response_entity_id: dataset
     response_schema: beaconCollectionsResponse
@@ -161,7 +161,7 @@ entity_defaults:
 
   ##############################################################################
 
-  genomic_variations:
+  genomicVariant:
     request_entity_path_id: genomicVariations
     response_entity_id: genomicVariant
     response_entity:
@@ -174,7 +174,7 @@ entity_defaults:
 
   ##############################################################################
 
-  individuals:
+  individual:
     request_entity_path_id: individuals
     response_entity_id: individual
     response_entity:
@@ -187,6 +187,19 @@ entity_defaults:
 
   ##############################################################################
 
-  runs:
+  phenopacket:
+    request_entity_path_id: phenopackets
+    response_entity_id: phenopacket
+    response_entity:
+      entity_type: phenopacket
+      collection: individuals
+      response_schema: beaconResultsetsResponse
+      beacon_schema:
+        entity_type: phenopacket
+        schema: https://progenetix.org/services/schemas/phenopacket/
+
+  ##############################################################################
+
+  run:
     request_entity_path_id: runs
     response_entity_id: run

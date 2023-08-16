@@ -1,3 +1,13 @@
+# some path elements are rewrites
+
+rewrites:
+  aggregator: '/services/aggregator/'
+  beaconAggregator: '/services/aggregator/'
+  retriever: '/services/retriever/'
+  beaconRetriever: '/services/retriever/'
+
+# custom way to request multiple items by id ###################################
+
 id_entity_mappings:
 
   biosample_ids: biosample
@@ -6,6 +16,8 @@ id_entity_mappings:
   analysis_ids: analysis
   individual_ids: individual
   genomic_variant_ids: genomicVariant
+
+# map path id flavours to canonical entry_type_path_id #########################
 
 service_aliases:
 
@@ -31,11 +43,26 @@ service_aliases:
   genomicVariations: genomicVariations
   variants: genomicVariations
 
-rewrites:
-  aggregator: '/services/aggregator/'
-  beaconAggregator: '/services/aggregator/'
-  retriever: '/services/retriever/'
-  beaconRetriever: '/services/retriever/'
+################################################################################
+
+path_entry_type_mappings:
+
+  analyses: analysis
+  cohorts: cohort
+  datasets: dataset
+  biosamples: biosample
+  individuals: individual
+  phenopackets: phenopacket
+  runs: run
+  g_variants: genomicVariant
+  genomicVariations: genomicVariant
+  variants: genomicVariant
+  map: beaconMap
+  info: info
+  filtering_terms: filteringTerm
+  entryTypes: entryType
+  
+################################################################################
 
 data_pipeline_entry_types:
   - analyses
@@ -45,7 +72,8 @@ data_pipeline_entry_types:
   - runs
   - phenopackets
 
-#response_type_aliases:
+################################################################################
+
 default_schema_from_model:
 
   biosample: biosamples
@@ -60,22 +88,10 @@ default_schema_from_model:
   callset: analyses
   phenopacket: phenopackets
 
-path_response_type_mappings:
 
-  aggregator: aggregator
-  analyses: analysis
-  cohorts: cohort
-  datasets: dataset
-  biosamples: biosample
-  individuals: individual
-  phenopackets: phenopacket
-  runs: run
-  g_variants: genomicVariant
-  genomicVariations: genomicVariant
-  variants: genomicVariant
-  map: beaconMap
-  info: info
-  filtering_terms: filteringTerm
+################################################################################
+################################################################################
+################################################################################
 
 response_types:
 
