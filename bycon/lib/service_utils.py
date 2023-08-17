@@ -272,7 +272,6 @@ def set_response_entity(byc):
     byc.update({"response_entity": r_e})
 
 
-
 ################################################################################
 
 def run_result_sets_beacon(byc):

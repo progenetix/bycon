@@ -15,6 +15,10 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ### Recent
 
+#### 2023-08-16 (v.1.1.6)
+
+* bugfix release for service items
+
 #### 2023-08-16 (v.1.1.4 => v1.1.5)
 
 * some changes to defaults & mappings parsing
