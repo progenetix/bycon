@@ -211,8 +211,12 @@ def rest_path_elements(byc):
             p_items.remove(d_k)
 
     p_items = list(filter(None, p_items))
-
     r_i = p_items.index(r_p_r)
+
+    if len(p_items) == r_i + 1:
+        byc.update({"request_entity_path_id": "info"})
+        return
+
 
     for p_k in ["request_entity_path_id", "request_entity_path_id_value", "response_entity_path_id"]:
 
@@ -351,7 +355,10 @@ def cgi_simplify_response(byc):
 ################################################################################
 
 def cgi_break_on_errors(byc):
-    e_c = byc["error_response"]["error"].get("error_code", 200)
+    if not "error_response" in byc:
+        return
+    e = byc["error_response"].get("error", {})
+    e_c = e.get("error_code", 200)
     # if byc.get("debug_mode", False) is True:
     #     prjsonnice(byc["error_response"])
 
@@ -592,6 +599,12 @@ def close_text_streaming():
     print()
     exit()
 
+
+################################################################################
+
+def prdbug(byc, this):
+    if byc.get("debug_mode", False) is True:
+        prjsonnice(this)
 
 ################################################################################
 

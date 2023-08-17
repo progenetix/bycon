@@ -1,6 +1,6 @@
 import re
 from copy import deepcopy
-from pydeepmerge import deep_merge
+from deepmerge import always_merger
 
 from cgi_parsing import prjsonnice
 from datatable_utils import assign_nested_value, get_nested_value
@@ -184,7 +184,7 @@ class ByconVariant:
             }
         }
 
-        vrs_v = deep_merge(vrs_a, vrs_v)
+        vrs_v = always_merger.merge(vrs_a, vrs_v)
 
         return vrs_v
 
@@ -212,7 +212,7 @@ class ByconVariant:
                 }
             }
         }
-        vrs_v = deep_merge(vrs_c, vrs_v)
+        vrs_v = always_merger.merge(vrs_c, vrs_v)
 
         return vrs_v
 

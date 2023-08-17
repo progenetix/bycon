@@ -4,7 +4,7 @@ from os import environ
 from pymongo import MongoClient
 
 from bycon_helpers import days_from_iso8601duration, paginate_list, set_pagination_range, return_pagination_range, return_paginated_list
-from cgi_parsing import prjsonnice
+from cgi_parsing import prjsonnice, prdbug
 from genome_utils import retrieve_gene_id_coordinates
 
 ################################################################################
@@ -58,11 +58,7 @@ class ByconQuery():
         self.response_entity = byc.get("response_entity_id", False)
         self.path_id_value = byc.get("request_entity_path_id_value", False)
 
-
         self.mappings = byc.get("beacon_mappings", {})
-        # TODO: the mapping switch should happen somewhere in init stage
-        if "services" in byc["request_path_root"]:
-            self.mappings = byc.get("services_mappings", byc["beacon_mappings"])
 
         self.variant_request_type = byc.get("variant_request_type", "___none___")
         self.variant_parameters = byc.get("variant_parameters", {})
@@ -287,7 +283,8 @@ class ByconQuery():
 
     ################################################################################
 
-    def __gene_id_coordinates(self, gene_id):
+    def __gene_id_coordinates(self, gene_id, single=True):
+        # TODO: move to separate function/class
 
         e = None
 
@@ -306,7 +303,11 @@ class ByconQuery():
             q_list.append({q_f: q_re })
 
         query = { "$or": q_list }
-        gene_data = mongo_client[self.services_db][self.genes_coll].find_one(query, { '_id': False } )
+
+        if single is True:
+            gene_data = mongo_client[self.services_db][self.genes_coll].find_one(query, { '_id': False } )
+        else:
+            gene_data = list(mongo_client[self.services_db][self.genes_coll].find(query, { '_id': False } ))
 
         return gene_data, e
 
@@ -429,8 +430,7 @@ class ByconQuery():
         f_infos = {}
 
         for f in self.filters:
-            # if self.byc["debug_mode"] is True:
-            #     print(f)
+            # prdbug(byc, f'{f}')
             f_val = f["id"]
             f_neg = f.get("excluded", False)
             if re.compile(r'^!').match(f_val):

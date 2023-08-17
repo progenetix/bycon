@@ -21,9 +21,6 @@ def read_schema_file(byc, schema_name, item, ext="json"):
     
     s_f_p = get_schema_file_path(byc, schema_name, ext)
 
-    # if byc["debug_mode"] is True:
-    #     print(schema_name, s_f_p)
-
     if s_f_p is not False:
         if len(item) > 1:
             s_f_p = s_f_p+"#/"+item

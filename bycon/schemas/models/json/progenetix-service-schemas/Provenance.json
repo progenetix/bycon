@@ -46,7 +46,7 @@
             ]
         },
         "geo_location": {
-            "$ref": "GeoLocation.json#/properties"
+            "$ref": "../progenetix-model/common/GeoLocation.json#/properties"
         }
     },
     "title": "Provenance",

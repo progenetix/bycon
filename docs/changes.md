@@ -2,11 +2,29 @@
 
 ## Notes about Previous Development
 
-==TBD==
+The `bycon` package was started during the development of the [**Beacon v2**](https://docs.genomebeacons.org)
+specification with the aims to a) test and demonstrate features of the emerging
+specification in a real-world use case while b) serving the needs of the [Progenetix](https://progenetix.org)
+oncogenomic resource. Many of the recent changes are aimed at disentangling
+the code base from this specific use case.
+
+An earlier version of the Progenetix && Beacon "BeaconPlus" stack had been provided
+through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
 ### Recent
+
+#### 2023-08-16 (v.1.1.4 => v1.1.5)
+
+* some changes to defaults & mappings parsing
+    - merging content of "beacon_defaults" & "service_defaults" (if existing) files
+      during init into "beacon_defaults"
+    - same for "beacon_mappings" & "service_mappings"
+    - **new requirement**: `deepmerge` (removed `pydeepmerge)`)
+* some reshuffling/fixes of entry type defaults
+* refined `GeoLocation` schema - now in model...common and referenced there
+* v1.1.5 was a bugfix immediately after the update ...
 
 #### 2023-08-11 (v.1.1.2 -> 1.1.3)
 

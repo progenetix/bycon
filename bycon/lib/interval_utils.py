@@ -120,10 +120,10 @@ def __generate_genomic_intervals(byc):
 
             intervals.append({
                 "no": i,
-                "id": "{}{}:{}-{}".format(chro, arm, start, end),
+                "id": f'{chro}{arm}:{start}-{end}',
                 "reference_name": chro,
                 "arm": arm,
-                "cytobands": cytobands_label_from_positions(byc, chro, start, end),
+                "cytobands": f'{chro}{cytobands_label_from_positions(byc, chro, start, end)}',
                 "start": start,
                 "end": end,
                 "size": size
