@@ -178,12 +178,10 @@ entities:
       geoprov_iso_alpha3:
         db_key: provenance.geo_location.properties.ISO3166alpha3
         indexed: True
-      geoprov_lat:
-        db_key: provenance.geo_location.properties.latitude
-        type: number
-      geoprov_long:
-        db_key: provenance.geo_location.properties.longitude
-        type: number
+      geoprov_long_lat:
+        db_key: provenance.geo_location.geometry.coordinates
+        type: array
+        items: number
       cnv_fraction:
         db_key: info.cnvstatistics.cnvfraction
         type: number
@@ -285,12 +283,10 @@ entities:
       geoprov_iso_alpha3:
         db_key: provenance.geo_location.properties.ISO3166alpha3
         indexed: True
-      geoprov_lat:
-        db_key: provenance.geo_location.properties.latitude
-        type: float
-      geoprov_long:
-        db_key: provenance.geo_location.properties.longitude
-        type: float
+      geoprov_long_lat:
+        db_key: provenance.geo_location.geometry.coordinates
+        type: array
+        items: number
       cell_line_donation_id:
         db_key: info.cell_line_donation.id
         compact: True

@@ -29,8 +29,6 @@ def info():
     r, e = instantiate_response_and_error(byc, "beaconInfoResponse")
     response_meta_set_info_defaults(r, byc)
 
-    b_e_d = byc["beacon_defaults"].get("entity_defaults", {})
-
     schema = {
         "entity_type": "info",
         "schema": "http://progenetix.org/services/schemas/beaconInfoResults"
@@ -40,7 +38,9 @@ def info():
     r["meta"].pop("received_request_summary", None)
     r["meta"].pop("returned_granularity", None)
 
-    pgx_info = b_e_d.get("info", {})
+    b_e_d = byc["beacon_defaults"].get("entity_defaults", {})
+    info = b_e_d.get("info", {})
+    pgx_info = info.get("content", {})
     beacon_info = object_instance_from_schema_name(byc, "beaconInfoResults", "")
 
     for k in beacon_info.keys():

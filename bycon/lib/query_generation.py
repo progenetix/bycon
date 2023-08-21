@@ -58,6 +58,7 @@ class ByconQuery():
         self.response_entity = byc.get("response_entity_id", False)
         self.path_id_value = byc.get("request_entity_path_id_value", False)
 
+        self.defaults = byc.get("beacon_defaults", {})
         self.mappings = byc.get("beacon_mappings", {})
 
         self.variant_request_type = byc.get("variant_request_type", "___none___")
@@ -79,7 +80,7 @@ class ByconQuery():
         self.skip = pagination.get("skip", 0)
 
 
-        self.response_types = self.mappings.get("response_types")
+        self.response_types = self.defaults.get("entity_defaults")
 
         self.queries = {
             "expand": True,
@@ -196,6 +197,7 @@ class ByconQuery():
         ret_no = self.test_mode_count
         r_t_s = self.response_types
         r_e = self.response_entity
+        prdbug(self.byc, r_e)
         if not r_e:
             return
         r_c = r_t_s[r_e].get("collection")
@@ -230,7 +232,7 @@ class ByconQuery():
             return
 
         r_e = "genomicVariant"
-        r_t_s = self.mappings.get("response_types")
+        r_t_s = self.response_types
         r_c = r_t_s[r_e].get("collection")
 
         # TODO: these are old plug-ins ...
@@ -244,6 +246,8 @@ class ByconQuery():
         if "geneVariantRequest" in  self.variant_request_type:
             self.__create_geneVariantRequest_query()
 
+        if "variantTypeRequest" in self.variant_request_type and len(self.filters) > 0:
+            q = self.__create_variantTypeRequest_query()
         if "variantBracketRequest" in self.variant_request_type:
             q = self.__create_variantBracketRequest_query()
         elif "variantRangeRequest" in self.variant_request_type:
@@ -310,6 +314,19 @@ class ByconQuery():
             gene_data = list(mongo_client[self.services_db][self.genes_coll].find(query, { '_id': False } ))
 
         return gene_data, e
+
+
+    #--------------------------------------------------------------------------#
+
+    def __create_variantTypeRequest_query(self):    
+        v_p_defs = self.variant_parameters.get("parameters")
+        vp = self.varguments
+        if not "variant_type" in vp:
+            return
+
+        v_q = self.__create_in_query_for_parameter("variant_type", v_p_defs["variant_type"]["db_key"], vp)
+
+        return v_q
 
 
     #--------------------------------------------------------------------------#

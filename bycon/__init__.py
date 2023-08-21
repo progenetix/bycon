@@ -37,13 +37,12 @@ try:
     config: object = load_yaml_empty_fallback( c_f )
     conf_dir = path.join( pkg_path, "config")
     byc: object = initialize_bycon(config)
-    b_d_f = Path( path.join( conf_dir, "beacon_defaults.yaml" ) )
-    byc.update({"beacon_defaults": load_yaml_empty_fallback( b_d_f ) })
-    defaults: object = byc["beacon_defaults"].get("defaults", {})
+    read_service_definition_files(conf_dir, byc)
+    b_d = byc.get("beacon_defaults", {})
+    defaults: object = b_d.get("defaults", {})
     for d_k, d_v in defaults.items():
         byc.update( { d_k: d_v } )
 
-    read_bycon_definition_files(conf_dir, byc)
     cgi_parse_query(byc)
     
 except Exception:

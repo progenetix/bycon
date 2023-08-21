@@ -104,6 +104,15 @@ parameters:
 # of combinations valid at least for `bycon` Progenetix etc. data.
 request_types:
 
+  variantTypeRequest:
+    description: >-
+      This dangerous query only uses a variant type, e.g. to limit an "all variants"
+      retrieval to SNVs or CNVs.
+      TODO: Add some private parameter to make this work on ly for special
+      circumstances... May be used w/ a combination of filter length >0 check.
+    all_of:
+      - variant_type
+
   variantBracketRequest:
     description: >-
       This specific request allows for the bracketed search of genomic variants

@@ -15,6 +15,19 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ### Recent
 
+#### 2023-08-21 (v.1.1.7)
+
+This update continues with the disentangling of "package inherent" defaults and
+definitions and "local" ones. Partcullarly:
+
+* standard Beacon entity definitions arte now part of the package configuration,
+  _i.e._ `bycon/config/beacon_defaults.yaml` has now the entities, and additional
+  entities are then provided from `bycon/local/beacon_defaults.yaml` (which is copied
+  from the project root `/local/beacon_defaults.yaml`) during `updev.sh`)
+    - examples are the Progenetix specific data in the `info` entity or the non-standard
+      `phenopackets` entry type
+* similar for `dataset_definitions` ...
+
 #### 2023-08-16 (v.1.1.6)
 
 * bugfix release for service items

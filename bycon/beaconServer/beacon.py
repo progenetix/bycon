@@ -6,6 +6,7 @@ from os import path, pardir
 from importlib import import_module
 
 from bycon import *
+pkg_path = path.dirname( path.abspath(__file__) )
 
 """
 """
@@ -27,36 +28,20 @@ def beacon():
 
     set_debug_state(debug=0)
 
-    b_m_f = path.join(pkg_path, "config", "beacon_mappings.yaml")
-    b_m = load_yaml_empty_fallback(b_m_f)
-    s_m_f = path.join(pkg_path, "config", "services_mappings.yaml")
-    s_m = load_yaml_empty_fallback(s_m_f)
-    b_m = always_merger.merge(s_m, b_m)
-    byc.update({"beacon_mappings": b_m})
+    loc_dir = path.join( pkg_path, "local" )
+    conf_dir = path.join( pkg_path, "config" )
 
-    frm = inspect.stack()[1]
-    mod = inspect.getmodule(frm[0])
-    if mod is not None:
-        sub_path = path.dirname( path.abspath(mod.__file__) )
-        conf_dir = path.join( sub_path, "local" )
-        if path.isdir(conf_dir):
-            b_m_f = path.join(conf_dir, "beacon_mappings.yaml")
-            b_m = load_yaml_empty_fallback(b_m_f)
-            s_m_f = path.join(conf_dir, "services_mappings.yaml")
-            s_m = load_yaml_empty_fallback(s_m_f)
-            b_m = always_merger.merge(s_m, b_m)
-            d_f = Path( path.join( conf_dir, "beacon_defaults.yaml" ) )
+    # updates `beacon_defaults`, `beacon_mappings`, `dataset_definitions` and `local_paths`
+    update_rootpars_from_local(loc_dir, byc)
+    read_service_definition_files(conf_dir, byc)
 
-            if path.isfile(d_f):
-                byc.update({"beacon_defaults": load_yaml_empty_fallback( d_f ) })
-                defaults = byc["beacon_defaults"].get("defaults", {})
-                for d_k, d_v in defaults.items():
-                    byc.update( { d_k: d_v } )
-            read_bycon_definition_files(conf_dir, byc)
-            byc.update({"beacon_mappings": always_merger.merge(byc["beacon_mappings"], b_m)})
+    defaults = byc["beacon_defaults"].get("defaults", {})
+    for d_k, d_v in defaults.items():
+        byc.update( { d_k: d_v } )
 
     s_a_s = byc["beacon_mappings"].get("service_aliases", {})
     r_w = byc["beacon_mappings"].get("rewrites", {})
+    d_p_s = byc["beacon_mappings"].get("data_pipeline_entry_types", [])
 
     """
     The type of execution depends on the requested entity defined in `beacon_mappings`
@@ -74,9 +59,11 @@ def beacon():
     Fallback is `/info`.
     """
     byc.update({"request_path_root": "beacon"})
+
     rest_path_elements(byc)
     get_bycon_args(byc)
     args_update_form(byc)
+
     e_p_id = byc["form_data"].get("request_entity_path_id", "___none___")
     if e_p_id in s_a_s or e_p_id in r_w:
         byc.update({"request_entity_path_id": e_p_id})
@@ -94,7 +81,7 @@ def beacon():
     f = s_a_s.get(r_p_id)
     if not f:
         pass
-    elif f in b_m["data_pipeline_entry_types"]:
+    elif f in d_p_s:
         beacon_data_pipeline(byc, f)
     elif f:
         # dynamic package/function loading; e.g. `filteringTerms` loads

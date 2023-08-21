@@ -44,13 +44,10 @@ def check_filter_values(byc):
     generation and provides a warning if the filter pattern doesn't exist.
     """
 
-    checked = [ ]
-    filters = byc["form_data"].get("filters")
-    if not filters:
-        return checked
-
     f_defs = byc["filter_definitions"]
+    filters = byc["form_data"].get("filters", [])
 
+    checked = [ ]
     for f in filters:
         if not isinstance(f, dict):
             f = {"id":f}

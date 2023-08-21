@@ -137,6 +137,7 @@ def cgi_parse_GET(byc):
     b_defs = byc.get("beacon_parameters", {})
     p_defs = byc.get("plot_defaults", {})
     v_defs = byc.get("variant_parameters", {})
+    l_defs = byc.get("local_parameters", {})
 
     f_defs = {**b_defs.get("parameters", {}), **p_defs.get("parameters", {}), **v_defs.get("parameters", {})}
 
@@ -217,13 +218,10 @@ def rest_path_elements(byc):
         byc.update({"request_entity_path_id": "info"})
         return
 
-
     for p_k in ["request_entity_path_id", "request_entity_path_id_value", "response_entity_path_id"]:
-
         r_i += 1
         if r_i >= len(p_items):
             return
-        # print(f'{p_k}: {unquote(p_items[r_i])}')
         byc.update({p_k: unquote(p_items[r_i])})
 
 
@@ -526,6 +524,7 @@ def delint_response(byc):
     except:
         pass
 
+
 ################################################################################
 
 def response_delete_none_values(response):
@@ -543,8 +542,7 @@ def response_delete_none_values(response):
 
     return response
 
-################################################################################
-################################################################################
+
 ################################################################################
 
 def open_json_streaming(byc, filename="data.json"):
@@ -605,6 +603,7 @@ def close_text_streaming():
 def prdbug(byc, this):
     if byc.get("debug_mode", False) is True:
         prjsonnice(this)
+
 
 ################################################################################
 

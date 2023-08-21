@@ -8,8 +8,7 @@ from bycon.lib.cgi_parsing import rest_path_value
 ################################################################################
 
 def select_dataset_ids(byc):
-    if "dataset_ids" not in byc.keys():
-        byc.update({"dataset_ids": []})
+    byc.update({"dataset_ids": []})
 
     if ds_id_from_rest_path_value(byc) is not False:
         return
@@ -19,9 +18,22 @@ def select_dataset_ids(byc):
         return
     if ds_ids_from_args(byc) is not False:
         return
+    if ds_id_from_default(byc) is not False:
+        return
 
-    ################################################################################
 
+################################################################################
+
+def ds_id_from_default(byc):
+    ds_id = byc.get("default_dataset_id", "___undefined___")
+
+    if ds_id not in byc["dataset_definitions"].keys():
+        return False
+
+    byc.update({"dataset_ids": [ ds_id ]})
+    return True
+
+################################################################################
 
 def ds_id_from_rest_path_value(byc):
     ds_id = rest_path_value("datasets")

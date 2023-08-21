@@ -15,10 +15,6 @@ progenetix:
       - id: DUO:0000004
         label: no restriction
         version: 2021-11-11
-  info:
-    variantCount: 7656759
-    callCount: 20988819
-    sampleCount: 138663
     
 cellz:
   id: cellz
@@ -35,19 +31,3 @@ cellz:
       - id: DUO:0000004
         label: no restriction
         version: 2021-11-11
-
-examplez:
-    id: examplez
-    name: Progenetix examples
-    identifier: 'org.progenetix.examplez'
-    description: "selected examples for database test installation"
-    createDateTime: 2023-04-01
-    updateDateTime: 2023-07-04
-    version: 2023-07-04
-    externalUrl: "https://bycon.progenetix.org"
-    assemblyId: GRCh38
-    dataUseConditions:
-      duoDataUse:
-        - id: DUO:0000004
-          label: no restriction
-          version: 2023-07-04

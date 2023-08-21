@@ -13,14 +13,8 @@ def get_bycon_args(byc):
     # Serves as "we've been here before" marker - before the env check.
     byc.update({"check_args": False})
 
-    if "local" not in byc["env"]:
-        return
-
-    if byc["script_args"]:
-        for d_d in byc["argument_definitions"]["parameters"]:
-            a_d_k = list(d_d["argDef"].keys())[0]
-            if a_d_k not in byc["script_args"]:
-                byc["argument_definitions"].pop(a_d_k, None)
+    if not "local" in byc.get("env", "server"):
+        return byc
 
     create_args_parser(byc)
 
@@ -48,7 +42,7 @@ def args_update_form(byc):
     This function adds comand line arguments to the `byc["form_data"]` input
     parameter collection (in "local" context).
     """
-    if not "local" in byc["env"]:
+    if not "local" in byc.get("env", "server"):
         return
 
     arg_defs = byc["argument_definitions"]["parameters"]

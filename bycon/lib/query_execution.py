@@ -1,7 +1,7 @@
 from uuid import uuid4
 from pymongo import MongoClient
 from os import environ
-from cgi_parsing import cgi_debug_message, prjsonnice, test_truthy
+from cgi_parsing import cgi_debug_message, prdbug, prjsonnice, test_truthy
 from query_generation import ByconQuery
 
 
@@ -30,13 +30,12 @@ def execute_bycon_queries(ds_id, byc):
     v_i_q = BQ.get("variant_id_query")
     for q_e, q_o in q_e_s.items():
         collname = q_o.get("collection", "___none___")
-        if collname in byc["config"]["queried_collections"]:
-            q = q_o.get("query")
-            if q:
-                exe_queries.update({collname: q})
+        q = q_o.get("query")
+        if q:
+            exe_queries.update({collname: q})
 
     byc.update({"queries_at_execution": exe_queries})
-    if byc["original_queries"] is None:
+    if not byc.get("original_queries"):
         byc.update({"original_queries": exe_queries})
 
     # collection of results
@@ -45,7 +44,7 @@ def execute_bycon_queries(ds_id, byc):
         "ds_id": ds_id,
         "data_db": data_db,
         "h_o_defs": h_o_defs,
-        "original_queries": byc["original_queries"],
+        "original_queries": byc.get("original_queries", {}),
         "pref_m": "", "query": {}
     }
 
@@ -117,6 +116,9 @@ def execute_bycon_queries(ds_id, byc):
             prefetch["biosamples.id"] = prefetch["callsets.biosample_id->biosamples.id"]
 
     variants_query = exe_queries.get("variants", False)
+    if not variants_query and "genomicVariant" in byc.get("response_entity_id", "___none___"):
+        variants_query = {"biosample_id": {'$in': prefetch["biosamples.id"].get("target_values", [])}}
+
     if variants_query:
 
         """podmd

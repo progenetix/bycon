@@ -1,13 +1,14 @@
 import re, yaml, json
-from pymongo import MongoClient
+from deepmerge import always_merger
+from humps import camelize, decamelize
+from json_ref_dict import RefDict, materialize
 from os import path, pardir, scandir, environ
 from pathlib import Path
-from json_ref_dict import RefDict, materialize
-from humps import camelize, decamelize
+from pymongo import MongoClient
 
 ################################################################################
 
-def read_bycon_definition_files(conf_dir, byc):
+def read_service_definition_files(conf_dir, byc):
 
     b_d_fs =[]
 
@@ -35,8 +36,6 @@ def read_bycon_configs_by_name(name, conf_dir, byc):
       |- config - __name__.yaml
     podmd"""
 
-    # print(name)
-
     o = {}
     ofp = path.join( conf_dir, name+".yaml" )
 
@@ -55,6 +54,28 @@ def read_service_prefs(service, service_pref_path, byc):
     f = Path( path.join( service_pref_path, service+".yaml" ) )
     if f.is_file():
         byc.update({"service_config": load_yaml_empty_fallback( f ) })
+
+################################################################################
+
+def update_rootpars_from_local(loc_dir, byc):
+
+    for par_type in ("mappings", "defaults"):
+
+        b_p = f'beacon_{par_type}'
+        s_p = f'services_{par_type}'
+
+        b_f = path.join(loc_dir, f'{b_p}.yaml')
+        b = load_yaml_empty_fallback(b_f)
+        s_f = path.join(loc_dir, f'{s_p}.yaml')
+        s = load_yaml_empty_fallback(s_f)
+        b = always_merger.merge(s, b)
+        byc.update({b_p: always_merger.merge(byc.get(b_p, {}), b)})
+
+    for p in ("dataset_definitions", "local_paths", "local_parameters"):
+        f = path.join(loc_dir, f'{p}.yaml')
+        d = load_yaml_empty_fallback(f)
+        byc.update({p: always_merger.merge(byc.get(p, {}), d)})
+
 
 ################################################################################
 
