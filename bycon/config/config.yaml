@@ -1,7 +1,6 @@
 byc_root_pars:
 
   args:
-  env: server
   request_path_root: beacon
   request_entity_path_id:
   request_entity_path_id_value: false

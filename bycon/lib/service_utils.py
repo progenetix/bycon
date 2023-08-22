@@ -25,28 +25,42 @@ from schema_parsing import object_instance_from_schema_name
 
 ################################################################################
 
-def initialize_bycon(config):
-
-    b_r_p = config.get("byc_root_pars", {})
+def initialize_bycon():
 
     bycon_lib_path = path.dirname(path.abspath(__file__))
     pkg_path = path.join(bycon_lib_path, pardir)
-
     byc = {
         "pkg_path": pkg_path,
-        "bycon_lib_path": bycon_lib_path
+        "bycon_lib_path": bycon_lib_path,
+        "env": "server"
     }
 
+    if not environ.get('HTTP_HOST'):
+        byc.update({"env": "local"})
+
+    return byc
+
+
+################################################################################
+
+def set_byc_config_pars(byc):
+    config = byc.get("config", {})
+    b_r_p = config.get("byc_root_pars", {})
     for k, v in b_r_p.items():
         byc.update({k: v})
 
     config.pop("byc_root_pars", None)
     byc.update({"config": config})
 
-    if not environ.get('HTTP_HOST'):
-        byc.update({"env": "local"})
 
-    return byc
+################################################################################
+
+def set_beacon_defaults(byc):
+
+    b_d = byc.get("beacon_defaults", {})
+    defaults: object = b_d.get("defaults", {})
+    for d_k, d_v in defaults.items():
+        byc.update( { d_k: d_v } )
 
 
 ################################################################################
@@ -102,7 +116,7 @@ def initialize_bycon_service(byc, service=False):
         service = frm.function
 
     # TODO - streamline, also for services etc.
-    s_a_s = byc["beacon_mappings"].get("service_aliases", {})
+    s_a_s = byc["beacon_defaults"].get("service_aliases", {})
 
     if service in s_a_s:
         service = s_a_s[service]
@@ -134,7 +148,8 @@ def initialize_bycon_service(byc, service=False):
 
         loc_dir = path.join( pkg_path, "local" )
         conf_dir = path.join( pkg_path, "config" )
-        # updates `beacon_defaults`, `beacon_mappings`, `dataset_definitions` and `local_paths`
+        
+        # updates `beacon_defaults`, `dataset_definitions` and `local_paths`
         update_rootpars_from_local(loc_dir, byc)
 
         defaults = byc["beacon_defaults"].get("defaults", {})
@@ -155,7 +170,7 @@ def initialize_bycon_service(byc, service=False):
     defs = byc.get("beacon_defaults", {})
     b_e_d = defs.get("entity_defaults", {})
 
-    p_e_m = byc["beacon_mappings"].get("path_entry_type_mappings", {})
+    p_e_m = byc["beacon_defaults"].get("path_entry_type_mappings", {})
     entry_type = p_e_m.get(service, "___none___")
 
     # prdbug(byc, entry_type)
@@ -232,11 +247,11 @@ def update_entity_ids_from_path(byc):
     req_p_id = byc["request_entity_path_id"]
     res_p_id = byc["response_entity_path_id"]
 
-    p_r_m = byc["beacon_mappings"].get("path_entry_type_mappings", {})
+    p_e_m = byc["beacon_defaults"].get("path_entry_type_mappings", {})
 
     byc.update({
-        "request_entity_id": p_r_m.get(req_p_id, byc["request_entity_path_id"]),
-        "response_entity_id": p_r_m.get(res_p_id, byc["response_entity_path_id"])
+        "request_entity_id": p_e_m.get(req_p_id, byc["request_entity_path_id"]),
+        "response_entity_id": p_e_m.get(res_p_id, byc["response_entity_path_id"])
     })
 
 

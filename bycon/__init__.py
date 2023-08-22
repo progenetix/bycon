@@ -33,16 +33,10 @@ try:
     from variant_mapping import *
     from variant_parsing import *
 
-    c_f = Path( path.join( pkg_path, "config.yaml" ) )
-    config: object = load_yaml_empty_fallback( c_f )
-    conf_dir = path.join( pkg_path, "config")
-    byc: object = initialize_bycon(config)
-    read_service_definition_files(conf_dir, byc)
-    b_d = byc.get("beacon_defaults", {})
-    defaults: object = b_d.get("defaults", {})
-    for d_k, d_v in defaults.items():
-        byc.update( { d_k: d_v } )
-
+    byc: object = initialize_bycon()
+    read_service_definition_files(byc)
+    set_byc_config_pars(byc)
+    set_beacon_defaults(byc)
     cgi_parse_query(byc)
     
 except Exception:

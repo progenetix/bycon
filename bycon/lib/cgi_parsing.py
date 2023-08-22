@@ -222,7 +222,9 @@ def rest_path_elements(byc):
         r_i += 1
         if r_i >= len(p_items):
             return
-        byc.update({p_k: unquote(p_items[r_i])})
+        p_v = unquote(p_items[r_i])
+        prdbug(byc, f'...path parsing: {p_k}: {p_v}')
+        byc.update({p_k: p_v})
 
 
 ################################################################################
