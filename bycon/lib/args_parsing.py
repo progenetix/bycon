@@ -81,15 +81,15 @@ def filters_from_args(byc):
 ################################################################################
 
 def set_collation_types(byc):
-    if byc["args"].collationtypes:
+    
+    if byc["args"].collationTypes:
         s_p = {}
-        for p in re.split(",", byc["args"].collationtypes):
+        for p in re.split(",", byc["args"].collationTypes):
             if p in byc["filter_definitions"].keys():
                 s_p.update({p: byc["filter_definitions"][p]})
         if len(s_p.keys()) < 1:
             print("No existing collation type was provided with -c ...")
             exit()
-
         byc.update({"filter_definitions": s_p})
 
 
@@ -112,3 +112,5 @@ def set_processing_modes(byc):
             print("¡¡¡ UPDATE MODE - may overwrite entries !!!")
     except:
         pass
+
+################################################################################

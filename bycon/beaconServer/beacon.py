@@ -29,25 +29,19 @@ def beacon():
     set_debug_state(debug=0)
 
     loc_dir = path.join( pkg_path, "local" )
-    conf_dir = path.join( pkg_path, "config" )
-
-    # updates `beacon_defaults`, `beacon_mappings`, `dataset_definitions` and `local_paths`
+    # updates `beacon_defaults`, `dataset_definitions` and `local_paths`
     update_rootpars_from_local(loc_dir, byc)
-    read_service_definition_files(conf_dir, byc)
+    set_beacon_defaults(byc)
 
-    defaults = byc["beacon_defaults"].get("defaults", {})
-    for d_k, d_v in defaults.items():
-        byc.update( { d_k: d_v } )
-
-    s_a_s = byc["beacon_mappings"].get("service_aliases", {})
-    r_w = byc["beacon_mappings"].get("rewrites", {})
-    d_p_s = byc["beacon_mappings"].get("data_pipeline_entry_types", [])
+    s_a_s = byc["beacon_defaults"].get("service_aliases", {})
+    r_w = byc["beacon_defaults"].get("rewrites", {})
+    d_p_s = byc["beacon_defaults"].get("data_pipeline_path_ids", [])
 
     """
-    The type of execution depends on the requested entity defined in `beacon_mappings`
+    The type of execution depends on the requested entity defined in `beacon_defaults`
     which can either be one of the Beacon entities (also recognizing aliases)
-    in `beacon_mappings.service_aliases` or targets of a rewrite from
-    `beacon_mappings.rewrites`.
+    in `beacon_defaults.service_aliases` or targets of a rewrite from
+    `beacon_defaults.rewrites`.
     The entity is determined from different potential inputs and overwritten
     by the next one in the oreder, if existing:
 

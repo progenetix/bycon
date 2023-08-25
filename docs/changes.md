@@ -13,7 +13,31 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
-### Recent
+### 2023-08-22 (v.1.2.0)
+
+* fix of `filterLogic` parameter for forced global `$or`
+* more reshuffling of defaults and config parameters
+    - merged `beacon_mappings` intop `beacon_defaults`
+    - moved `config.yaml` to `bycon/config/`
+    - splitting of the `beacon_defaults` parameters into standard parameters, e.g.
+      for the main entry types, into the `beacon_defaults.yaml` file in
+      `bycon/config/`, and custom parameters (e.g. Progenetix' `phenopackets` entry
+      type definition or some aliases) into the `/local/` location
+* streamlining of `__init__.py` and `read_specs.py` w/ respect to those changes
+* concurrent `byconaut` update
+
+#### 2023-08-21 (v.1.1.7)
+
+This update continues with the disentangling of "package inherent" defaults and
+definitions and "local" ones. Partcullarly:
+
+* standard Beacon entity definitions arte now part of the package configuration,
+  _i.e._ `bycon/config/beacon_defaults.yaml` has now the entities, and additional
+  entities are then provided from `bycon/local/beacon_defaults.yaml` (which is copied
+  from the project root `/local/beacon_defaults.yaml`) during `updev.sh`)
+    - examples are the Progenetix specific data in the `info` entity or the non-standard
+      `phenopackets` entry type
+* similar for `dataset_definitions` ...
 
 #### 2023-08-21 (v.1.1.7)
 
@@ -37,7 +61,6 @@ definitions and "local" ones. Partcullarly:
 * some changes to defaults & mappings parsing
     - merging content of "beacon_defaults" & "service_defaults" (if existing) files
       during init into "beacon_defaults"
-    - same for "beacon_mappings" & "service_mappings"
     - **new requirement**: `deepmerge` (removed `pydeepmerge)`)
 * some reshuffling/fixes of entry type defaults
 * refined `GeoLocation` schema - now in model...common and referenced there

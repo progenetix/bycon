@@ -59,7 +59,6 @@ class ByconQuery():
         self.path_id_value = byc.get("request_entity_path_id_value", False)
 
         self.defaults = byc.get("beacon_defaults", {})
-        self.mappings = byc.get("beacon_mappings", {})
 
         self.variant_request_type = byc.get("variant_request_type", "___none___")
         self.variant_parameters = byc.get("variant_parameters", {})
@@ -67,6 +66,7 @@ class ByconQuery():
 
         self.filter_definitions = byc.get("filter_definitions", {})
         ff = byc.get("filter_flags", {})
+
         self.filter_descendants = ff.get("descendants", True)
         self.filter_logic = ff.get("logic", '$and')
 
@@ -97,7 +97,6 @@ class ByconQuery():
         self.__query_from_variant_pars()
         self.__query_from_filters()
         self.__query_from_geoquery()
-
 
 
     # -------------------------------------------------------------------------#
@@ -139,7 +138,7 @@ class ByconQuery():
         if self.queries.get("expand") is False:
             return
 
-        id_f_v = self.mappings.get("id_entity_mappings", {})
+        id_f_v = self.defaults.get("id_entity_mappings", {})
         id_k_s = set(id_f_v.keys())
         f_k_s = set(self.arguments.keys())
         r_e_id = self.requested_entity
@@ -624,8 +623,9 @@ class ByconQuery():
 
     # -------------------------------------------------------------------------#
 
-    def __update_queries_for_entity(self, query, entity, logic='$and'):
+    def __update_queries_for_entity(self, query, entity):
 
+        logic = self.filter_logic
         r_t_s = self.response_types
         r_c = r_t_s[entity].get("collection")
         q_e = self.queries.get("entities")

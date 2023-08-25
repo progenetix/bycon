@@ -15,9 +15,10 @@ pkg_path = path.join( lib_path, pardir )
 
 def read_schema_file(byc, schema_name, item, ext="json"):
 
-    b_p_m = byc["beacon_mappings"]["default_schema_from_model"]
-
-    schema_name = b_p_m.get(schema_name, schema_name)
+    defs = byc.get("beacon_defaults", {})
+    b_e_d = defs.get("entity_defaults", {})
+    if schema_name in b_e_d:
+        schema_name = b_p_m[schema_name].get("request_entity_path_id", schema_name)
     
     s_f_p = get_schema_file_path(byc, schema_name, ext)
 

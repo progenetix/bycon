@@ -6,9 +6,14 @@ from os import path, pardir, scandir, environ
 from pathlib import Path
 from pymongo import MongoClient
 
+from cgi_parsing import prdbug
+
 ################################################################################
 
-def read_service_definition_files(conf_dir, byc):
+def read_service_definition_files(byc):
+
+    pkg_path = byc.get("pkg_path", "___none___")
+    conf_dir = path.join( pkg_path, "config")
 
     b_d_fs =[]
 
@@ -19,7 +24,7 @@ def read_service_definition_files(conf_dir, byc):
 
         b_d_fs = [ f.name for f in scandir(conf_dir) if f.is_file() ]
         b_d_fs = [ f for f in b_d_fs if f.endswith("yaml") ]
-        b_d_fs = [ Path(f).stem for f in b_d_fs if not f.startswith("config.yaml") ]
+        b_d_fs = [ Path(f).stem for f in b_d_fs ]
 
     for d in b_d_fs:
         read_bycon_configs_by_name( d, conf_dir, byc )
@@ -59,17 +64,16 @@ def read_service_prefs(service, service_pref_path, byc):
 
 def update_rootpars_from_local(loc_dir, byc):
 
-    for par_type in ("mappings", "defaults"):
+    b_p = 'beacon_defaults'
+    s_p = 'services_defaults'
+    # prdbug(byc, f'... parsing {loc_dir} for {b_p}')
 
-        b_p = f'beacon_{par_type}'
-        s_p = f'services_{par_type}'
-
-        b_f = path.join(loc_dir, f'{b_p}.yaml')
-        b = load_yaml_empty_fallback(b_f)
-        s_f = path.join(loc_dir, f'{s_p}.yaml')
-        s = load_yaml_empty_fallback(s_f)
-        b = always_merger.merge(s, b)
-        byc.update({b_p: always_merger.merge(byc.get(b_p, {}), b)})
+    b_f = path.join(loc_dir, f'{b_p}.yaml')
+    b = load_yaml_empty_fallback(b_f)
+    s_f = path.join(loc_dir, f'{s_p}.yaml')
+    s = load_yaml_empty_fallback(s_f)
+    b = always_merger.merge(s, b)
+    byc.update({b_p: always_merger.merge(byc.get(b_p, {}), b)})
 
     for p in ("dataset_definitions", "local_paths", "local_parameters"):
         f = path.join(loc_dir, f'{p}.yaml')
@@ -138,6 +142,6 @@ def load_yaml_empty_fallback(yp):
         with open( yp ) as yd:
             y = yaml.load( yd , Loader=yaml.FullLoader)
     except:
-        return y
+        pass
 
     return y

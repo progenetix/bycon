@@ -6,6 +6,32 @@ defaults:
   default_dataset_id: progenetix
 
 ################################################################################
+# mappings and aliases #########################################################
+################################################################################
+
+# map path id flavours to canonical entry_type_path_id #########################
+# the aliases here are for non-standard speling or additional entry types
+
+service_aliases:
+  service_info: service_info
+  callsets: analyses
+  entryTypes: entryTypes
+  filteringTerms: filteringTerms
+  phenopackets: phenopackets
+  genomicVariations: genomicVariations
+  variants: genomicVariations
+
+################################################################################
+
+path_entry_type_mappings:
+  phenopackets: phenopacket
+
+################################################################################
+
+data_pipeline_path_ids:
+  - phenopackets
+
+################################################################################
 # Beacon entry type defaults - please adjust esp. info and schema paths...
 # TODO: Some of the entry type configuration duplicates data from the Beacon
 # framework and might be disentangled further on ...

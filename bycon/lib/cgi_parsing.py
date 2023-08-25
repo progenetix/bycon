@@ -43,25 +43,27 @@ def boolean_to_mongo_logic(logic: str = "AND") -> str:
 def select_this_server(byc: dict) -> str:
     s_uri = str(environ.get('SCRIPT_URI'))
 
-    # TODO
-    if "progenetix.test" in s_uri:
-        if "https:" in s_uri:
-            return "https://progenetix.test"
-        else:
-            return "http://progenetix.test"
-    elif "cancercelllines.test" in s_uri:
-        if "https:" in s_uri:
-            return "https://cancercelllines.test"
-        else:
-            return "http://cancercelllines.test"
+    local_paths = byc.get("local_paths", {})
+    test_sites = local_paths.get("test_domains", [])
+    https = "https:"
+    http = "http:"
 
-            # TODO: ERROR hack for https/http mix, CORS...
+    for site in test_sites:
+        if site in s_uri:
+            if https in s_uri:
+                return f'{https}//{site}'
+            else:
+                return f'{http}//{site}'
+
+    # TODO: ERROR hack for https/http mix, CORS...
     # ... since cloudflare provides https mapping
-    # if "https:" in s_uri:
-    if "http:" in s_uri:
-        return "https://" + str(environ.get('HTTP_HOST'))
-    else:
-        return "http://" + str(environ.get('HTTP_HOST'))
+
+    return f'{https}//{environ.get("HTTP_HOST")}'
+
+    # if https in s_uri:
+    #     return f'{https}//{environ.get("HTTP_HOST")}'
+    # else:
+    #     return f'{http}//{environ.get("HTTP_HOST")}'
 
 
 ################################################################################
@@ -222,7 +224,9 @@ def rest_path_elements(byc):
         r_i += 1
         if r_i >= len(p_items):
             return
-        byc.update({p_k: unquote(p_items[r_i])})
+        p_v = unquote(p_items[r_i])
+        prdbug(byc, f'...path parsing: {p_k}: {p_v}')
+        byc.update({p_k: p_v})
 
 
 ################################################################################

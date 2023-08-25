@@ -17,7 +17,60 @@ defaults:
     beacon_schema:
       entity_type: info
       schema: https://progenetix.org/services/schemas/beaconInfoResults/
-  
+
+################################################################################
+# mappings and aliases #########################################################
+################################################################################
+
+# custom way to request multiple items by id ###################################
+id_entity_mappings:
+  biosample_ids: biosample
+  variant_ids: genomicVariant
+  callset_ids: analysis
+  analysis_ids: analysis
+  individual_ids: individual
+  genomic_variant_ids: genomicVariant
+
+# aliases for the entry type path ids ##########################################
+service_aliases:
+  "/": info
+  info: info
+  "service-info": info
+  configuration: configuration
+  map: map
+  entry_types: entryTypes
+  filtering_terms: filteringTerms
+  datasets: datasets
+  cohorts: cohorts
+  individuals: individuals
+  biosamples: biosamples
+  analyses: analyses
+  runs: runs
+  g_variants: genomicVariations
+  genomic_variations: genomicVariations
+
+# entry type id for the given path #############################################
+path_entry_type_mappings:
+  analyses: analysis
+  cohorts: cohort
+  datasets: dataset
+  biosamples: biosample
+  individuals: individual
+  runs: run
+  genomicVariations: genomicVariant
+  map: beaconMap
+  info: info
+  filteringTerms: filteringTerm
+  entryTypes: entryType
+
+# entry types for the standard query stack #####################################
+data_pipeline_path_ids:
+  - analyses
+  - biosamples
+  - individuals
+  - genomicVariations
+  - runs
+
 ################################################################################
 # beacon entity defaults #######################################################
 ################################################################################
@@ -26,6 +79,8 @@ entity_defaults:
 
   info:
     entity_type: info
+    request_entity_path_id: info
+    response_entity_id: info
     collection: Null
     response_schema: beaconInfoResponse
     beacon_schema:
@@ -138,18 +193,6 @@ entity_defaults:
       schema: https://progenetix.org/services/schemas/individual/
     h->o_access_key: individuals._id
 
-  ##############################################################################
-
-  phenopacket:
-    entity_type: phenopacket
-    request_entity_path_id: phenopackets
-    response_entity_id: phenopacket
-    collection: individuals
-    response_schema: beaconResultsetsResponse
-    beacon_schema:
-      entity_type: phenopacket
-      schema: https://progenetix.org/services/schemas/phenopacket/
-    h->o_access_key: individuals._id
 
   ##############################################################################
 

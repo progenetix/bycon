@@ -77,10 +77,8 @@ bycon
   |   |- rsrc
   |   |   `- ...
   |   |
-  |   |- schemas
-  |   |   `- ...
-  |   |
-  |   `- config.yaml
+  |   `- schemas
+  |       `- ...
   |
   |- docs
   |    `- ... documentation website source files ...
@@ -88,8 +86,8 @@ bycon
   |- local
   |   |
   |   |- beacon_defaults.yaml
-  |   |- beacon_mappings.yaml
-  |   `- dataset_definitions.yaml
+  |   |- dataset_definitions.yaml
+  |   `- local_paths.yaml
   |
   |- install.py
   |- install.yaml

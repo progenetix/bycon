@@ -175,7 +175,6 @@ class ByconPlot:
         ))
 
         self.__plot_area_add_grid()
-
         self.plv["Y"] += self.plv["plot_area_height"]
         self.plv.update({"plot_last_area_ye": self.plv["Y"]})
         self.plv["Y"] += self.plv["plot_region_gap_width"]

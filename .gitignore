@@ -9,3 +9,10 @@ build
 bycon.egg-info
 dist
 bycon/beaconServer/local/*
+.idea/bycon.iml
+.idea/misc.xml
+.idea/vcs.xml
+.idea/bycon.iml
+.idea/bycon.iml
+.idea/misc.xml
+.idea/vcs.xml
