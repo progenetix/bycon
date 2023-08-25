@@ -1,7 +1,7 @@
 from uuid import uuid4
 from pymongo import MongoClient
 from os import environ
-from cgi_parsing import cgi_debug_message, prdbug, prjsonnice, test_truthy
+from cgi_parsing import prdbug, prjsonnice, test_truthy
 from query_generation import ByconQuery
 
 
@@ -50,7 +50,7 @@ def execute_bycon_queries(ds_id, byc):
 
     ############################################################################
 
-    cgi_debug_message(byc, "queries at execution", exe_queries)
+    prdbug(byc, ("queries at execution", exe_queries))
 
     ############################################################################
 

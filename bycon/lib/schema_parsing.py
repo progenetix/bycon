@@ -5,7 +5,7 @@ from humps import decamelize
 from os import path, scandir, pardir
 from pathlib import Path
 
-from cgi_parsing import prjsonnice
+from cgi_parsing import prjsonnice, prdbug
 
 # local
 lib_path = path.dirname( path.abspath(__file__) )
@@ -18,9 +18,10 @@ def read_schema_file(byc, schema_name, item, ext="json"):
     defs = byc.get("beacon_defaults", {})
     b_e_d = defs.get("entity_defaults", {})
     if schema_name in b_e_d:
-        schema_name = b_p_m[schema_name].get("request_entity_path_id", schema_name)
+        schema_name = b_e_d[schema_name].get("request_entity_path_id", schema_name)
     
     s_f_p = get_schema_file_path(byc, schema_name, ext)
+    # prdbug(byc, f'==> schema file: {s_f_p}')
 
     if s_f_p is not False:
         if len(item) > 1:
@@ -43,6 +44,7 @@ def get_schema_file_path(byc, schema_name, ext="json"):
     s_n = f'{schema_name}.{ext}'
 
     p = Path(path.join( pkg_path, *byc["config"]["schemas_path"] ))
+    # prdbug(byc, f'==> schema files root: {p}')
     s_p_s = [ f for f in p.rglob("*") if f.is_file() ]
     s_p_s = [ f for f in s_p_s if f.suffix == e_l ]
 
@@ -89,5 +91,6 @@ def object_instance_from_schema_name(byc, schema_name, root_key, ext="json"):
     s_i = create_empty_instance( s_f )
 
     return s_i
+
 
 ################################################################################

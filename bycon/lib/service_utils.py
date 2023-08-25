@@ -1,15 +1,15 @@
 import inspect
+from deepmerge import always_merger
 from os import environ, path, pardir
 from pathlib import Path
 
 from args_parsing import *
 from bycon_plot import ByconPlot
-from bycon_helpers import paginate_list, set_pagination_range, mongo_result_list
+from bycon_helpers import paginate_list, set_pagination_range, mongo_result_list, mongo_test_mode_query
 from cgi_parsing import prjsonnice, prdbug
 from data_retrieval import *
 from dataset_parsing import select_dataset_ids
 from datatable_utils import export_datatable_download
-from deepmerge import always_merger
 from export_file_generation import *
 from file_utils import ByconBundler, callset_guess_probefile_path
 from filter_parsing import parse_filters
@@ -69,7 +69,7 @@ def beacon_data_pipeline(byc, entry_type):
     initialize_bycon_service(byc, entry_type)
 
     run_beacon_init_stack(byc)
-    return_filtering_terms_response(byc)
+    # return_filtering_terms_response(byc)
     run_result_sets_beacon(byc)
     update_meta_queries(byc)
     query_results_save_handovers(byc)
@@ -426,12 +426,13 @@ def response_meta_add_request_summary(r, byc):
 ################################################################################
 
 def update_meta_queries(byc):
-    try:
-        if not "info" in byc["meta"]:
-            byc["meta"].update({"info": {}})
-        byc["service_response"]["meta"]["info"].update({"processed_query": byc.get("original_queries", {})})
-    except:
-        pass
+    o_q_s = byc.get("original_queries")
+    if not o_q_s:
+        return
+
+    o_q_o = {"processed_query": o_q_s}
+    i = always_merger.merge( byc["service_response"]["meta"].get("info", {}), o_q_o)
+    byc["service_response"]["meta"].update({"info": i})
 
 
 ################################################################################
@@ -477,7 +478,7 @@ def create_empty_service_response(byc):
     byc.update({"service_response": r, "error_response": e})
 
 
-###############################################################################
+################################################################################
 
 def create_empty_non_data_response(byc):
     r, e = instantiate_response_and_error(byc, byc["response_entity"]["response_schema"])
@@ -533,10 +534,10 @@ def check_datatable_delivery(results, byc):
 
 def instantiate_response_and_error(byc, schema):
     """The response relies on the pre-processing of input parameters (queries etc)."""
+    # prdbug(byc, ["==> schema", schema])
     r = object_instance_from_schema_name(byc, schema, "")
-    m = object_instance_from_schema_name(byc, "beaconResponseMeta", "")
-    r.update({"meta": m})
     e = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
+    # prdbug(byc, ["==> response", r])
     response_update_meta(r, byc)
     error_response_set_defaults(e)
 
@@ -575,16 +576,19 @@ def error_response_set_defaults(e):
 
 def response_meta_set_info_defaults(r, byc):
     defs = byc.get("beacon_defaults", {})
-    b_e_d = {}
-    try:
-        b_e_d = defs["entity_defaults"]["info"].get("content", {})
-    except:
-        pass
+    b_e_d = defs["entity_defaults"]["info"].get("content", {})
+
+    t_m = {}
 
     # TODO: command line hack ...
     for i_k in ["api_version", "beacon_id"]:
+        v = b_e_d.get(i_k)
+        if v:
+            t_m.update({i_k:v})
         if "meta" in r and "info" in b_e_d:
             r["meta"].update({i_k: b_e_d["info"].get(i_k, "")})
+
+    r.update({"meta": always_merger.merge(r.get("meta"), t_m)})
 
 
 ################################################################################
@@ -622,6 +626,7 @@ def response_add_received_request_summary_parameters(byc):
             name = "request_parameters"
         byc["service_response"]["meta"]["received_request_summary"].update({name: value})
 
+
 ################################################################################
 
 def received_request_summary_add_custom_parameter(byc, parameter, value):
@@ -629,6 +634,7 @@ def received_request_summary_add_custom_parameter(byc, parameter, value):
         byc["service_response"]["meta"]["received_request_summary"]["request_parameters"].update({parameter: value})
     except:
         pass
+
 
 ################################################################################
 
@@ -784,14 +790,8 @@ def return_filtering_terms_response(byc):
     if not "filteringTerm" in byc["response_entity_id"]:
         return
 
-    # TODO: correct response w/o need to fix
-    # TODO: dataset specificity etc.
-    byc["service_response"].update({"response": {"filteringTerms": [], "resources": []}})
-
     f_r_d = {}
-
     f_coll = byc["config"]["filtering_terms_coll"]
-
     f_t_s = []
     ft_fs = []
 
@@ -802,26 +802,35 @@ def return_filtering_terms_response(byc):
     f_s = '|'.join(ft_fs)
     f_re = re.compile(r'^' + f_s)
 
-    collation_types = set()
-
+    # TODO: This should be derived from some entity definitions
     scopes = ["biosamples", "individuals", "analyses", "genomicVariations"]
+    collation_types = set()
+    query = {}
+    q_list = []
+
+    q_scope = byc["form_data"].get("scope", "___none___")
+    if q_scope in scopes:
+        q_list.append({"scope": byc["form_data"]["scope"]})
+
+    q_types = byc["form_data"].get("collation_types", [])
+    if len(q_types) > 0:
+        q_list.append({"collation_type": {"$in": q_types }})
+
+    if len(q_list) == 1:
+        query = q_list[0]
+    elif len(q_list) > 1:
+        query = {"$and": q_list}
+
+    if byc.get("test_mode", False) is True:
+        query, error = mongo_test_mode_query(byc["dataset_ids"][0], f_coll, byc.get("test_mode_count", 5))
+
+    # prdbug(byc, query)
+    # prdbug(byc, byc["dataset_ids"])
 
     for ds_id in byc["dataset_ids"]:
-
-        query = {}
-
-        try:
-            if len(byc["form_data"]["scope"]) > 4:
-                query.update({"scope": byc["form_data"]["scope"]})
-        except:
-            pass
-
         fields = {"_id": 0}
-
         f_s, e = mongo_result_list(ds_id, f_coll, query, fields)
-
         t_f_t_s = []
-
         for f in f_s:
             collation_types.add(f.get("collation_type", None))
             f_t = {"count": f.get("count", 0)}
@@ -830,7 +839,6 @@ def return_filtering_terms_response(byc):
                     f_t.update({k: f[k]})
             f_t.update({"scopes": scopes})
             t_f_t_s.append(f_t)
-
         f_t_s.extend(t_f_t_s)
 
     byc["service_response"]["response"].update({"filteringTerms": f_t_s})

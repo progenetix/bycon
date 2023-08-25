@@ -31,7 +31,7 @@ def filteringTerms():
 ################################################################################
 
 def filtering_terms():
-    initialize_bycon_service(byc, "filtering_terms")
+    initialize_bycon_service(byc, "filteringTerms")
     run_beacon_init_stack(byc)
     return_filtering_terms_response(byc)
 

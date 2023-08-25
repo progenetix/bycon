@@ -85,7 +85,7 @@ def dataset_response_add_handovers(ds_id, byc):
             if "variants._id" in byc["dataset_results"][ds_id].keys():
                 h_o_r["url"] += "&variantsaccessid="+byc["dataset_results"][ds_id][ "variants._id" ][ "id" ]
 
-        e_t = byc["response_entity"]["entity_type"]
+        e_t = byc["response_entity"].get("response_entity_id", "___none___")
         p_e = h_o_defs.get("paginated_entities", [])
 
         if e_t in p_e or "all" in p_e:

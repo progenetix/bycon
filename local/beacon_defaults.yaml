@@ -43,7 +43,7 @@ data_pipeline_path_ids:
 
 # ################################################################################
 #   filteringTerm:
-#     entity_type: filteringTerm
+#     is_entry_type: False
 #     request_entity_path_id: filteringTerms
 #     response_entity_id: filteringTerm
 #     collection: collations
@@ -54,7 +54,7 @@ data_pipeline_path_ids:
 #     h->o_access_key: Null
 # ################################################################################
 #   biosample:
-#     entity_type: biosample
+#     is_entry_type: True
 #     request_entity_path_id: biosamples
 #     response_entity_id: biosample
 #     collection: biosamples  
@@ -68,7 +68,7 @@ data_pipeline_path_ids:
 entity_defaults:
 
   info:
-    entity_type: info
+    is_entry_type: False
     collection: Null
     response_schema: beaconInfoResponse
     beacon_schema:
@@ -123,7 +123,7 @@ entity_defaults:
   ##############################################################################
 
   phenopacket:
-    entity_type: phenopacket
+    is_entry_type: True
     request_entity_path_id: phenopackets
     response_entity_id: phenopacket
     collection: individuals

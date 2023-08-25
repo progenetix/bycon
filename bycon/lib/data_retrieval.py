@@ -15,7 +15,7 @@ def retrieve_data(ds_id, byc):
         if not r_t_k:
             continue
 
-        if r_d["entity_type"] == byc["response_entity_id"]:
+        if r_d["response_entity_id"] == byc["response_entity_id"]:
             r_k = r_d["h->o_access_key"]
 
     if "variants" in r_c:

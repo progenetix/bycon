@@ -24,4 +24,4 @@ test_domains:
   - progenetix.test
   - cancercelllines.test
   - beaconplus.test
-  - beaconplus.progenetix
+  - beaconplus.progenetix.test

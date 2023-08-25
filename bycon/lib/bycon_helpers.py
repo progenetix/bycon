@@ -152,3 +152,25 @@ def mongo_result_list(db_name, coll_name, query, fields):
 
     return results, error
 
+################################################################################
+
+def mongo_test_mode_query(db_name, coll_name, test_mode_count=5):
+    query = {}
+    error = False
+    ids = []
+
+    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
+    db_names = list(mongo_client.list_database_names())
+    if db_name not in db_names:
+        return results, f"{db_name} db `{db_name}` does not exist"
+    try:
+        rs = list(mongo_client[db_name][coll_name].aggregate([{"$sample": {"size": test_mode_count}}]))
+        ids = list(s["_id"] for s in rs)
+    except Exception as e:
+        error = e
+
+    mongo_client.close()
+    query = {"_id": {"$in": ids}}
+
+    return query, error
+

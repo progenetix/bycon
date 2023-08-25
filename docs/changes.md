@@ -13,6 +13,14 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2023-08-25 (v.1.2.1)
+
+* clean-up of info response m(all entryType schemas shown now)
+* modification of entity_defaults format
+* use of `beaconCollectionsResponse` for services & deprecation of `ProgenetixServiceResponse`
+* `mongo_test_mode_query` (needs to be propagated more...)
+* `beaconplus` domains support
+
 ### 2023-08-22 (v.1.2.0)
 
 * fix of `filterLogic` parameter for forced global `$or`
