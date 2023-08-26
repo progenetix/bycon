@@ -1,5 +1,5 @@
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/cytobandMapping/v2022-04-29
+"$id": https://progenetix.org/services/schemas/CytobandMapping/v2023-08-26
 title: Cytoband Mapping
 type: object
 description: >-
@@ -8,8 +8,7 @@ description: >-
   * the corresponding start and end base positions
 properties:
   chromosomeLocation:
-    $ref: https://raw.githubusercontent.com/ga4gh/vrs/1.2/schema/vrs.json#/definitions/ChromosomeLocation"
+    $ref: "https://raw.githubusercontent.com/ga4gh/vrs/1.2/schema/vrs.json#/definitions/ChromosomeLocation"
   sequenceLocation:
-    $ref: https://raw.githubusercontent.com/ga4gh/vrs/1.2/schema/vrs.json#/definitions/SequenceLocation
-  info:
-    type: object
+    $ref: "https://raw.githubusercontent.com/ga4gh/vrs/1.2/schema/vrs.json#/definitions/SequenceLocation"
+additionalProperties: true
