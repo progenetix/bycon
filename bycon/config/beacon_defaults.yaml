@@ -47,7 +47,6 @@ service_path_aliases:
   analyses: analyses
   runs: runs
   g_variants: genomicVariations
-  genomic_variations: genomicVariations
 
 # entry type id for the given path #############################################
 path_entry_type_mappings:

@@ -13,6 +13,10 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2023-08-30 (v.1.2.1)
+
+* some defaults cleaning (e.g. removal of non-standard paths from built in `beacon_defaults`)
+
 ### 2023-08-25 (v.1.2.1)
 
 * clean-up of info response m(all entryType schemas shown now)

@@ -17,6 +17,7 @@ service_path_aliases:
   filteringTerms: filteringTerms
   phenopackets: phenopackets
   variants: genomicVariations
+  genomicVariations: genomicVariations
 
 ################################################################################
 # here you can map additional path values to the corresponding (additional)

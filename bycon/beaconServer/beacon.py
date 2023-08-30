@@ -61,7 +61,6 @@ def beacon():
     e_p_id = byc["form_data"].get("request_entity_path_id", "___none___")
     if e_p_id in s_a_s or e_p_id in r_w:
         byc.update({"request_entity_path_id": e_p_id})
-
     r_p_id = byc.get("request_entity_path_id", "info")
 
     # check for rewrites
