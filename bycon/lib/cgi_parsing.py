@@ -41,27 +41,36 @@ def boolean_to_mongo_logic(logic: str = "AND") -> str:
 ################################################################################
 
 def select_this_server(byc: dict) -> str:
+    """
+    Cloudflare based encryption may lead to "http" based server addresses in the
+    URI, but then the browser ... will complain if the handover URLs won't use
+    encryption. OTOH for local testing one may need to stick w/ http if no pseudo-
+    https scenario had been implemented. Therefore handover addresses etc. will
+    always use https _unless_ the request comes from a host listed a test instance.
+    """
+
     s_uri = str(environ.get('SCRIPT_URI'))
+    local_paths = byc.get("local_paths", {})
+    test_sites = local_paths.get("test_domains", [])
+    https = "https://"
+    http = "http://"
 
-    # TODO
-    if "progenetix.test" in s_uri:
-        if "https:" in s_uri:
-            return "https://progenetix.test"
-        else:
-            return "http://progenetix.test"
-    elif "cancercelllines.test" in s_uri:
-        if "https:" in s_uri:
-            return "https://cancercelllines.test"
-        else:
-            return "http://cancercelllines.test"
+    s = f'{https}{environ.get("HTTP_HOST")}'
+    # prdbug(byc, f'===> setting server from {s_uri}')
 
-            # TODO: ERROR hack for https/http mix, CORS...
-    # ... since cloudflare provides https mapping
-    # if "https:" in s_uri:
-    if "http:" in s_uri:
-        return "https://" + str(environ.get('HTTP_HOST'))
-    else:
-        return "http://" + str(environ.get('HTTP_HOST'))
+    for site in test_sites:
+        if site in s_uri:
+            if https in s_uri:
+                s = f'{https}{site}'
+            else:
+                s = f'{http}{site}'
+
+    # TODO: ERROR hack for https/http mix, CORS...
+    # ... since cloudflare provides https mapping using this as fallback
+
+    # prdbug(byc, f'... using {s} <===')
+
+    return s
 
 
 ################################################################################
@@ -376,16 +385,6 @@ def cgi_break_on_errors(byc):
 
 ################################################################################
 
-def cgi_debug_message(byc, label, debug_object):
-    try:
-        if byc["debug_mode"]:
-            print("{}:\n\n{}\n\n".format(label, debug_object))
-    except:
-        pass
-
-
-################################################################################
-
 def switch_to_wrong_service_response(byc):
     byc.update({
         "service_response": {
@@ -459,7 +458,6 @@ def cgi_print_response(byc, status_code):
 
     update_error_code_from_response_summary(byc)
     switch_to_error_response(byc)
-
     print_json_response(byc["service_response"], byc["env"])
 
 

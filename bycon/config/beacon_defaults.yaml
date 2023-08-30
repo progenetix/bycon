@@ -32,10 +32,10 @@ id_entity_mappings:
   genomic_variant_ids: genomicVariant
 
 # aliases for the entry type path ids ##########################################
-service_aliases:
+service_path_aliases:
   "/": info
   info: info
-  "service-info": service_info
+  "service-info": info
   configuration: configuration
   map: map
   entry_types: entryTypes
@@ -57,11 +57,10 @@ path_entry_type_mappings:
   biosamples: biosample
   individuals: individual
   runs: run
-  g_variants: genomicVariant
   genomicVariations: genomicVariant
   map: beaconMap
   info: info
-  filtering_terms: filteringTerm
+  filteringTerms: filteringTerm
   entryTypes: entryType
 
 # entry types for the standard query stack #####################################
@@ -77,9 +76,8 @@ data_pipeline_path_ids:
 ################################################################################
 
 entity_defaults:
-
   info:
-    entity_type: info
+    is_entry_type: False
     request_entity_path_id: info
     response_entity_id: info
     collection: Null
@@ -92,8 +90,8 @@ entity_defaults:
 
 ################################################################################
 
-  map:
-    entity_type: map
+  beaconMap:
+    is_entry_type: False
     request_entity_path_id: map
     response_entity_id: beaconMap
     collection: Null
@@ -106,7 +104,7 @@ entity_defaults:
 ################################################################################
 
   configuration:
-    entity_type: configuration
+    is_entry_type: False
     request_entity_path_id: configuration
     response_entity_id: configuration
     collection: Null
@@ -119,7 +117,7 @@ entity_defaults:
 ################################################################################
 
   entryType:
-    entity_type: entryType
+    is_entry_type: False
     request_entity_path_id: entryTypes
     response_entity_id: entryType
     collection: Null
@@ -132,7 +130,7 @@ entity_defaults:
 ################################################################################
 
   filteringTerm:
-    entity_type: filteringTerm
+    is_entry_type: False
     request_entity_path_id: filteringTerms
     response_entity_id: filteringTerm
     collection: collations
@@ -145,7 +143,7 @@ entity_defaults:
 ################################################################################
 
   analysis:
-    entity_type: analysis
+    is_entry_type: True
     request_entity_path_id: analyses
     response_entity_id: analysis
     collection: callsets  
@@ -158,7 +156,7 @@ entity_defaults:
 ################################################################################
 
   biosample:
-    entity_type: biosample
+    is_entry_type: True
     request_entity_path_id: biosamples
     response_entity_id: biosample
     collection: biosamples  
@@ -171,7 +169,7 @@ entity_defaults:
   ##############################################################################
 
   genomicVariant:
-    entity_type: genomicVariant
+    is_entry_type: True
     request_entity_path_id: genomicVariations
     response_entity_id: genomicVariant
     collection: variants
@@ -184,7 +182,7 @@ entity_defaults:
   ##############################################################################
 
   individual:
-    entity_type: individual
+    is_entry_type: True
     request_entity_path_id: individuals
     response_entity_id: individual
     collection: individuals
@@ -198,7 +196,7 @@ entity_defaults:
   ##############################################################################
 
   run:
-    entity_type: run
+    is_entry_type: True
     request_entity_path_id: runs
     response_entity_id: run
     collection: callsets  
@@ -211,7 +209,7 @@ entity_defaults:
 ################################################################################
 
   cohort:
-    entity_type: cohort
+    is_entry_type: True
     request_entity_path_id: cohorts
     response_entity_id: cohort
     collection: Null
@@ -227,7 +225,7 @@ entity_defaults:
   ##############################################################################
 
   dataset:
-    entity_type: dataset
+    is_entry_type: True
     request_entity_path_id: datasets
     response_entity_id: dataset
     collection: Null

@@ -33,14 +33,14 @@ def beacon():
     update_rootpars_from_local(loc_dir, byc)
     set_beacon_defaults(byc)
 
-    s_a_s = byc["beacon_defaults"].get("service_aliases", {})
+    s_a_s = byc["beacon_defaults"].get("service_path_aliases", {})
     r_w = byc["beacon_defaults"].get("rewrites", {})
     d_p_s = byc["beacon_defaults"].get("data_pipeline_path_ids", [])
 
     """
     The type of execution depends on the requested entity defined in `beacon_defaults`
     which can either be one of the Beacon entities (also recognizing aliases)
-    in `beacon_defaults.service_aliases` or targets of a rewrite from
+    in `beacon_defaults.service_path_aliases` or targets of a rewrite from
     `beacon_defaults.rewrites`.
     The entity is determined from different potential inputs and overwritten
     by the next one in the oreder, if existing:

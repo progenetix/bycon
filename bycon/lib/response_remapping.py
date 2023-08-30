@@ -213,7 +213,6 @@ def phenopack_individual(ind, data_db, byc):
     bios_s = data_db["biosamples"].find({"individual_id": ind["id"]})
 
     for bios in bios_s:
-
         bios.update({
             "files": [
                 {
@@ -227,9 +226,7 @@ def phenopack_individual(ind, data_db, byc):
         })
         for k in bs_pop_keys:
             bios.pop(k, None)
-
         clean_empty_fields(bios)
-
         pxf_bios.append(bios)
 
     for k in ind_pop_keys:

@@ -1,5 +1,5 @@
 ################################################################################
-# Beacon defaults - please adjust!
+# Beacon defaults. Values reflect the developers' environment:Please adjust!
 ################################################################################
 
 defaults:
@@ -12,20 +12,24 @@ defaults:
 # map path id flavours to canonical entry_type_path_id #########################
 # the aliases here are for non-standard speling or additional entry types
 
-service_aliases:
-  service_info: service_info
+service_path_aliases:
   callsets: analyses
-  entryTypes: entryTypes
   filteringTerms: filteringTerms
   phenopackets: phenopackets
-  genomicVariations: genomicVariations
   variants: genomicVariations
 
+################################################################################
+# here you can map additional path values to the corresponding (additional)
+# entry type
 ################################################################################
 
 path_entry_type_mappings:
   phenopackets: phenopacket
 
+################################################################################
+# her you can add additional path ids to the data query aggregation pipeline
+# that usually mapps/reduces queries against biosamples, genomicVariations,
+#individuals ...
 ################################################################################
 
 data_pipeline_path_ids:
@@ -43,7 +47,7 @@ data_pipeline_path_ids:
 
 # ################################################################################
 #   filteringTerm:
-#     entity_type: filteringTerm
+#     is_entry_type: False
 #     request_entity_path_id: filteringTerms
 #     response_entity_id: filteringTerm
 #     collection: collations
@@ -54,7 +58,7 @@ data_pipeline_path_ids:
 #     h->o_access_key: Null
 # ################################################################################
 #   biosample:
-#     entity_type: biosample
+#     is_entry_type: True
 #     request_entity_path_id: biosamples
 #     response_entity_id: biosample
 #     collection: biosamples  
@@ -68,7 +72,7 @@ data_pipeline_path_ids:
 entity_defaults:
 
   info:
-    entity_type: info
+    is_entry_type: False
     collection: Null
     response_schema: beaconInfoResponse
     beacon_schema:
@@ -123,7 +127,7 @@ entity_defaults:
   ##############################################################################
 
   phenopacket:
-    entity_type: phenopacket
+    is_entry_type: True
     request_entity_path_id: phenopackets
     response_entity_id: phenopacket
     collection: individuals

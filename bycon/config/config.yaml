@@ -8,7 +8,7 @@ byc_root_pars:
   request_entity_id: genomicVariant
   response_entity_id: genomicVariant
   response_entity:
-    entity_type: genomicVariant
+    is_entry_type: True
     collection: variants
     response_schema: beaconResultsetsResponse
     beacon_schema:

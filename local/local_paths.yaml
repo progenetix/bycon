@@ -19,3 +19,9 @@ server_callsets_dir_loc:
   - grch38
   
 callset_probefile_name: probes,cn.tsv
+
+test_domains:
+  - progenetix.test
+  - cancercelllines.test
+  - beaconplus.test
+  - beaconplus.progenetix.test

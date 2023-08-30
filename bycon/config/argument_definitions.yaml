@@ -52,6 +52,15 @@ parameters:
 
   - type: string
     argDef:
+      output:
+        flags:
+          - --method
+        help: >-
+          special method
+        default: text
+
+  - type: string
+    argDef:
       groupBy:
         flags:
           - -g

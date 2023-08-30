@@ -1,11 +1,11 @@
-import re, json, yaml
+import re, json
 
 from json_ref_dict import RefDict, materialize
 from humps import decamelize
 from os import path, scandir, pardir
 from pathlib import Path
 
-from cgi_parsing import prjsonnice
+from cgi_parsing import prjsonnice, prdbug
 
 # local
 lib_path = path.dirname( path.abspath(__file__) )
@@ -15,12 +15,18 @@ pkg_path = path.join( lib_path, pardir )
 
 def read_schema_file(byc, schema_name, item, ext="json"):
 
+    # some lookup for the `request_entity_path_id` value in the case of "true"
+    # entry types where schemas are defined in a directory with the path id
     defs = byc.get("beacon_defaults", {})
     b_e_d = defs.get("entity_defaults", {})
     if schema_name in b_e_d:
-        schema_name = b_p_m[schema_name].get("request_entity_path_id", schema_name)
-    
-    s_f_p = get_schema_file_path(byc, schema_name, ext)
+        r_p_id = b_e_d[schema_name].get("request_entity_path_id")
+        if isinstance(r_p_id, str):
+            schema_name = r_p_id
+
+    s_f_p = get_default_schema_file_path(byc, schema_name, "defaultSchema", ext)
+    if s_f_p is False:  # in case the name had been used as request_entity_path_id
+        s_f_p = get_schema_file_path(byc, schema_name, ext)
 
     if s_f_p is not False:
         if len(item) > 1:
@@ -34,24 +40,35 @@ def read_schema_file(byc, schema_name, item, ext="json"):
 
     return False
 
+
 ################################################################################
 
 def get_schema_file_path(byc, schema_name, ext="json"):
 
-    e_l = f'.{ext}'
-    d_n = f'defaultSchema.{ext}'
-    s_n = f'{schema_name}.{ext}'
+    f_n = f'{schema_name}.{ext}'
 
     p = Path(path.join( pkg_path, *byc["config"]["schemas_path"] ))
     s_p_s = [ f for f in p.rglob("*") if f.is_file() ]
-    s_p_s = [ f for f in s_p_s if f.suffix == e_l ]
+    s_p_s = [ f for f in s_p_s if f.name == f_n ]
+    if len(s_p_s) == 1:
+        return f'{s_p_s[0].resolve()}'
 
-    for f_p in s_p_s:
-        if f_p.parent.name == schema_name:
-            if f_p.name == d_n:
-                return f'{f_p.resolve()}'
-        elif f_p.name == s_n:
-            return f'{f_p.resolve()}'
+    return False
+
+
+################################################################################
+
+def get_default_schema_file_path(byc, schema_path_id, file_name, ext="json"):
+
+    f_n = f'{file_name}.{ext}'
+
+    p = Path(path.join( pkg_path, *byc["config"]["schemas_path"] ))
+    # prdbug(byc, f'==> schema files root: {p}')
+    s_p_s = [ f for f in p.rglob("*") if f.is_file() ]
+    s_p_s = [ f for f in s_p_s if f.name == f_n ]
+    s_p_s = [ f for f in s_p_s if f.parent.name == schema_path_id ]
+    if len(s_p_s) == 1:
+        return f'{s_p_s[0].resolve()}'
 
     return False
 
@@ -89,5 +106,6 @@ def object_instance_from_schema_name(byc, schema_name, root_key, ext="json"):
     s_i = create_empty_instance( s_f )
 
     return s_i
+
 
 ################################################################################

@@ -43,6 +43,7 @@ class ByconVariant:
         if variant:
             self.byc_variant = deepcopy(variant)
             self.__create_canonical_variant()
+            return self.byc_variant
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -60,6 +61,7 @@ class ByconVariant:
     def pgxVariant(self, variant={}):
 
         if variant:
+            self.byc_variant.update({})
             self.byc_variant = deepcopy(variant)
             self.__create_canonical_variant()
         b_v = self.byc_variant
@@ -358,6 +360,9 @@ class ByconVariant:
                 "start": v["location"].get("start"),
                 "end": v["location"].get("end")
             })
+
+        if not v.get("end"):
+            v.update({"end": int(v.get("start")) + len(v.get("sequence", ""))})
 
         try:
             v.update({"variant_length": v.get("end") - v.get("start")})
