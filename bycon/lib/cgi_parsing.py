@@ -620,7 +620,8 @@ def prjsonnice(this):
 ################################################################################
 
 def decamelize_words(j_d):
-    de_cams = ["gVariants", "sequenceId", "relativeCopyClass", "speciesId", "chromosomeLocation", "genomicLocation"]
+    # TODO: move words to config
+    de_cams = ["gVariants", "gVariant", "sequenceId", "relativeCopyClass", "speciesId", "chromosomeLocation", "genomicLocation"]
     for d in de_cams:
         j_d = re.sub(r"\b{}\b".format(d), decamelize(d), j_d)
 

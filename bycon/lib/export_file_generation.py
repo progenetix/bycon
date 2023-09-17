@@ -141,11 +141,14 @@ def __pgxmatrix_interval_header(info_columns, byc):
 
 def print_filters_meta_line(byc):
 
-    if "filters" in byc["service_response"]["meta"]["received_request_summary"]:
-        f_vs = []
-        for f in byc["service_response"]["meta"]["received_request_summary"]["filters"]:
-            f_vs.append(f["id"])
-        print("#meta=>filters="+','.join(f_vs))
+    filters = byc.get("filters", [])
+    if len(filters) < 1:
+        return
+
+    f_vs = []
+    for f in filters:
+        f_vs.append(f.get("id", ""))
+    print("#meta=>filters="+','.join(f_vs))
 
     return
 

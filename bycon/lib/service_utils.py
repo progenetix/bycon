@@ -385,13 +385,8 @@ def response_meta_add_request_summary(r, byc):
     r_rcvd_rs = r["meta"]["received_request_summary"]
     defs = byc.get("beacon_defaults", {})
 
-    api_v = "v2"
-    try:
-        api_v = defs["entity_defaults"]["info"].get("api_version", "v2")
-    except:
-        pass
-
     b_e_d = defs.get("entity_defaults", {"info":{}})
+    api_v = b_e_d.get("api_version", "v2")
 
     form = byc["form_data"]
 
@@ -418,7 +413,6 @@ def response_meta_add_request_summary(r, byc):
             r["meta"]["info"].update({"queries_at_execution": byc["queries_at_execution"]})
         else:
             r["meta"].update({"info": {"queries_at_execution": byc["queries_at_execution"]}})
-
 
     return r
 
@@ -618,13 +612,24 @@ def response_add_received_request_summary_parameters(byc):
     if not "received_request_summary" in byc["service_response"].get("meta", {}):
         return
 
-    for name in ["method", "dataset_ids", "filters", "varguments", "test_mode"]:
-        value = byc.get(name, False)
-        if value is False:
+    for name in ["dataset_ids", "test_mode"]:
+        value = byc.get(name)
+        if not value:
             continue
-        if "varguments" in name:
-            name = "request_parameters"
         byc["service_response"]["meta"]["received_request_summary"].update({name: value})
+
+    vargs = byc.get("varguments")
+    if vargs:
+        byc["service_response"]["meta"]["received_request_summary"].update({"request_parameters":{"g_variant":vargs}})
+
+    fs = byc.get("filters", [])
+    fs_p = []
+    if len(fs) > 0:
+        for f in fs:
+            fs_p.append(f.get("id"))
+        byc["service_response"]["meta"]["received_request_summary"].update({"filters":fs_p})
+    else:
+        byc["service_response"]["meta"]["received_request_summary"].pop("filters", None)
 
 
 ################################################################################
@@ -634,7 +639,6 @@ def received_request_summary_add_custom_parameter(byc, parameter, value):
     if parameter and value:
         r_p.append({parameter: value})
         byc["service_response"]["meta"]["received_request_summary"].update({"request_parameters":r_p})
-
 
 
 ################################################################################
