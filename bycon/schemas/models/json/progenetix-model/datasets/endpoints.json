@@ -1,6 +1,23 @@
 {
     "components": {
         "parameters": {
+            "datasetIds": {
+                "in": "query",
+                "name": "datasetIds",
+                "schema": {
+                    "examples": [
+                        [
+                            "progenetix",
+                            "examplez"
+                        ],
+                        "cellz"
+                    ],
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
             "entryId": {
                 "in": "path",
                 "name": "id",
@@ -14,7 +31,9 @@
                 "name": "filters",
                 "schema": {
                     "examples": [
-                        "DUO:0000007"
+                        [
+                            "DUO:0000007"
+                        ]
                     ],
                     "items": {
                         "type": "string"
@@ -117,6 +136,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/components/parameters/datasetIds"
                     },
                     {
                         "$ref": "#/components/parameters/filters"

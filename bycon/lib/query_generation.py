@@ -3,7 +3,7 @@ from bson import SON
 from os import environ
 from pymongo import MongoClient
 
-from bycon_helpers import days_from_iso8601duration, paginate_list, set_pagination_range, return_pagination_range, return_paginated_list
+from bycon_helpers import days_from_iso8601duration, return_paginated_list
 from cgi_parsing import prjsonnice, prdbug
 from genome_utils import retrieve_gene_id_coordinates
 
@@ -75,7 +75,7 @@ class ByconQuery():
         self.services_db = byc["config"].get("services_db", "___none___")
         self.genes_coll = byc["config"].get("genes_coll", "___none___")
 
-        pagination = byc.get("pagination", {})
+        pagination = byc.get("pagination", {"skip": 0, "limit": 0})
         self.limit = pagination.get("limit", 0)
         self.skip = pagination.get("skip", 0)
 
@@ -188,6 +188,7 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __queries_for_test_mode(self):
+
         if self.queries.get("expand") is False:
             return
         if self.test_mode is False:
@@ -610,10 +611,7 @@ class ByconQuery():
         t_e = h_o["target_entity"]
         t_c = h_o["target_count"]
 
-        # byc.update({"original_queries": h_o.get("original_queries", None)})
-
-        p_range = return_pagination_range(t_c, self.skip, self.limit)
-        t_v = return_paginated_list(t_v, self.limit, p_range)
+        t_v = return_paginated_list(t_v, self.skip, self.limit)
         if len(t_v) < 1:
             return
         h_o_q = {t_k: {'$in': t_v}}

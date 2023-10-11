@@ -1,6 +1,6 @@
 import re
 
-from cgi_parsing import boolean_to_mongo_logic, prdbug
+from cgi_parsing import prdbug
 
 ################################################################################
 
@@ -31,6 +31,15 @@ def get_global_filter_flags(byc):
                 ff["descendants"] = False
 
     byc.update( { "filter_flags": ff } )
+
+
+################################################################################
+
+def boolean_to_mongo_logic(logic: str = "AND") -> str:
+    if "OR" in logic.upper():
+        return '$or'
+    return '$and'
+
 
 ################################################################################
 

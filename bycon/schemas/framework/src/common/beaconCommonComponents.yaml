@@ -179,6 +179,7 @@ definitions:
     description: Indicator of whether any record was observed in any of the collections
       queried. This should be non-null.
     type: boolean
+    default: false
     examples:
       - true
   NumTotalResults:
@@ -186,6 +187,7 @@ definitions:
       batch, but the total obtained by the query.
     type: integer
     minimum: 0
+    default: 0
     examples:
       - 123
   Info:
@@ -239,10 +241,9 @@ definitions:
   HandoverType:
     description: >-
       Handover type, as an Ontology_term object with CURIE syntax for the `id` value.
-      Use `CUSTOM` for the `id` when no ontology is available.
     $ref: ./ontologyTerm.yaml
     examples:
       - id: EFO:0004157
         label: BAM format
-      - id: CUSTOM
+      - id: pgx:pgxseg
         label: download genomic variants in .pgxseg file format

@@ -1,45 +1,18 @@
 import inspect
+import re
 from deepmerge import always_merger
-from os import environ, path, pardir
-from pathlib import Path
+from os import environ, path
 
 from args_parsing import *
-from bycon_plot import ByconPlot
-from bycon_helpers import paginate_list, set_pagination_range, mongo_result_list, mongo_test_mode_query
-from cgi_parsing import prjsonnice, prdbug
-from data_retrieval import *
+from bycon_helpers import return_paginated_list
+from cgi_parsing import prdbug
 from dataset_parsing import select_dataset_ids
-from datatable_utils import export_datatable_download
 from export_file_generation import *
-from file_utils import ByconBundler, callset_guess_probefile_path
 from filter_parsing import parse_filters
-from handover_generation import dataset_response_add_handovers, query_results_save_handovers, \
-    dataset_results_save_handovers
 from interval_utils import generate_genomic_mappings
-from query_execution import execute_bycon_queries
-from read_specs import read_service_definition_files, read_service_prefs, update_rootpars_from_local
+from read_specs import read_service_prefs, update_rootpars_from_local
 from response_remapping import *
-from variant_mapping import ByconVariant
 from variant_parsing import parse_variants
-from schema_parsing import object_instance_from_schema_name
-
-################################################################################
-
-def initialize_bycon():
-
-    bycon_lib_path = path.dirname(path.abspath(__file__))
-    pkg_path = path.join(bycon_lib_path, pardir)
-    byc = {
-        "pkg_path": pkg_path,
-        "bycon_lib_path": bycon_lib_path,
-        "env": "server"
-    }
-
-    if not environ.get('HTTP_HOST'):
-        byc.update({"env": "local"})
-
-    return byc
-
 
 ################################################################################
 
@@ -65,37 +38,14 @@ def set_beacon_defaults(byc):
 
 ################################################################################
 
-def beacon_data_pipeline(byc, entry_type):
-    initialize_bycon_service(byc, entry_type)
-
-    run_beacon_init_stack(byc)
-    # return_filtering_terms_response(byc)
-    run_result_sets_beacon(byc)
-    update_meta_queries(byc)
-    query_results_save_handovers(byc)
-    check_computed_histoplot_delivery(byc)
-    check_sample_plot_delivery(byc)
-    # check_biosamples_map_delivery(byc)
-    check_computed_interval_frequency_delivery(byc)
-    check_switch_to_count_response(byc)
-    check_switch_to_boolean_response(byc)
-    cgi_print_response(byc, 200)
-
-
-################################################################################
-
 def run_beacon_init_stack(byc):
     select_dataset_ids(byc)
-    # move the next to later, and deliver as Beacon error?
-    if len(byc["dataset_ids"]) < 1:
-        print_text_response("No existing dataset_id - please check dataset_definitions")
-    create_empty_beacon_response(byc)
-    create_empty_result_sets(byc)
+    # # move the next to later, and deliver as Beacon error?
+    # if len(byc["dataset_ids"]) < 1:
+    #     print_text_response("No existing dataset_id - please check dataset_definitions")
     parse_filters(byc)
     parse_variants(byc)
-    response_add_received_request_summary_parameters(byc)
     generate_genomic_mappings(byc)
-
     cgi_break_on_errors(byc)
 
 
@@ -187,6 +137,7 @@ def initialize_bycon_service(byc, service=False):
     # update response_entity_id from form
     update_requested_schema_from_request(byc)
     set_response_entity(byc)
+    set_response_schema(byc)
 
     set_io_params(byc)
     # CAVE: At this time the genome is just taken from the default so has to 
@@ -206,6 +157,9 @@ def set_special_modes(byc):
         if m in form:
             v = test_truthy(form.get(m, False))
             byc.update({m: v})
+
+    if byc.get("test_mode", False) is True:
+        byc.update({"include_handovers": True})
 
     t_m_k = form.get("test_mode_count", "___none___")
     if re.match(r'^\d+$', str(t_m_k)):
@@ -248,11 +202,16 @@ def update_entity_ids_from_path(byc):
     req_p_id = byc["request_entity_path_id"]
     res_p_id = byc["response_entity_path_id"]
 
+    # TODO: in contrast to req_p_id, res_p_id hasn't been anti-aliased
+    s_a_s = byc["beacon_defaults"].get("service_path_aliases", {})
+    if res_p_id in s_a_s:
+        res_p_id = s_a_s[res_p_id]
+
     p_e_m = byc["beacon_defaults"].get("path_entry_type_mappings", {})
 
     byc.update({
-        "request_entity_id": p_e_m.get(req_p_id, byc["request_entity_path_id"]),
-        "response_entity_id": p_e_m.get(res_p_id, byc["response_entity_path_id"])
+        "request_entity_id": p_e_m.get(req_p_id, req_p_id),
+        "response_entity_id": p_e_m.get(res_p_id, res_p_id)
     })
 
 
@@ -283,97 +242,9 @@ def set_response_entity(byc):
 
 ################################################################################
 
-def run_result_sets_beacon(byc):
-    sr_r = byc["service_response"]["response"]
-
-    byc.update({"dataset_results": {}})
-
-    ######## result sets loop ##################################################
-
-    for i, r_set in enumerate(sr_r["result_sets"]):
-
-        ds_id = r_set["id"]
-
-        r_set, r_s_res = populate_result_set(r_set, byc)
-
-        if r_set["results_count"] < 1:
-            continue
-
-        # TODO: This condition avoids the "range on range" if previously set for
-        # a handover query (by accessioinId)
-        if not "range" in byc["pagination"]:
-            set_pagination_range(len(r_s_res), byc)
-        if test_truthy(byc["form_data"].get("paginate_results", True)):
-            r_s_res = paginate_list(r_s_res, byc)
-
-        check_alternative_single_set_deliveries(ds_id, r_s_res, byc)
-        r_s_res = reshape_resultset_results(ds_id, r_s_res, byc)
-
-        sr_r["result_sets"][i].update({
-            "paginated_results_count": len(r_s_res),
-            "exists": True,
-            "results": r_s_res
-        })
-
-    ######## end of result sets loop ###########################################
-
-    sr_rs = byc["service_response"].get("response_summary", {})
-    sr_rs.update({"num_total_results": 0})
-    for r_set in sr_r["result_sets"]:
-        sr_rs["num_total_results"] += r_set["results_count"]
-
-    if sr_rs["num_total_results"] > 0:
-        sr_rs.update({"exists": True})
-
-
-################################################################################
-
-def populate_result_set(r_set, byc):
-    ds_id = r_set["id"]
-    prdbug(byc, ds_id)
-    execute_bycon_queries(ds_id, byc)
-
-    r_set.update({"results_handovers": dataset_response_add_handovers(ds_id, byc)})
-    r_s_res = retrieve_data(ds_id, byc)
-
-    r_set_update_counts(r_set, r_s_res, byc)
-
-    return r_set, r_s_res
-
-
-################################################################################
-
-def r_set_update_counts(r_set, r_s_res, byc):
-    ds_id = r_set["id"]
-    ds_res = byc["dataset_results"][ds_id]
-
-    r_set.update({"results_count": 0})
-    counted = byc["config"].get("beacon_count_items", {})
-
-    for c, c_d in counted.items():
-        h_o_k = c_d.get("h->o_key", None)
-        if h_o_k is None:
-            continue
-        if h_o_k not in ds_res:
-            continue
-        r_c = ds_res[h_o_k]["target_count"]
-        s_c = len(list(set(ds_res[h_o_k]["target_values"])))
-        r_set["info"]["counts"].update({c: r_c})
-
-    if isinstance(r_s_res, list):
-        r_set.update({"results_count": len(r_s_res)})
-
-    return r_set
-
-
-################################################################################
-
-def check_alternative_single_set_deliveries(ds_id, r_s_res, byc):
-    check_datatable_delivery(r_s_res, byc)
-    check_alternative_variant_deliveries(ds_id, byc)
-    check_alternative_callset_deliveries(ds_id, byc)
-
-    return
+def set_response_schema(byc):
+    r_s = byc["response_entity"].get("response_schema", "beaconInfoResponse")
+    byc.update({"response_schema": r_s})
 
 
 ################################################################################
@@ -384,7 +255,6 @@ def response_meta_add_request_summary(r, byc):
 
     r_rcvd_rs = r["meta"]["received_request_summary"]
     defs = byc.get("beacon_defaults", {})
-
     b_e_d = defs.get("entity_defaults", {"info":{}})
     api_v = b_e_d.get("api_version", "v2")
 
@@ -397,7 +267,7 @@ def response_meta_add_request_summary(r, byc):
     })
 
     for p in ["include_resultset_responses", "requested_granularity"]:
-        if p in form:
+        if p in form and p in r_rcvd_rs:
             r_rcvd_rs.update({p: form.get(p)})
             if "requested_granularity" in p:
                 r["meta"].update({"returned_granularity": form.get(p)})
@@ -415,155 +285,6 @@ def response_meta_add_request_summary(r, byc):
             r["meta"].update({"info": {"queries_at_execution": byc["queries_at_execution"]}})
 
     return r
-
-
-################################################################################
-
-def update_meta_queries(byc):
-    o_q_s = byc.get("original_queries")
-    if not o_q_s:
-        return
-
-    o_q_o = {"processed_query": o_q_s}
-    i = always_merger.merge( byc["service_response"]["meta"].get("info", {}), o_q_o)
-    byc["service_response"]["meta"].update({"info": i})
-
-
-################################################################################
-
-def create_empty_beacon_response(byc):
-    r_s = byc["response_entity"].get("response_schema", None)
-    prdbug(byc, f'{byc["response_entity"]} - {r_s}')
-    if not r_s:
-        return
-
-    r, e = instantiate_response_and_error(byc, r_s)
-    byc.update({"service_response": r, "error_response": e})
-
-
-################################################################################
-
-def create_empty_result_sets(byc):
-    r_s = byc["response_entity"].get("response_schema", None)
-    if not "beaconResultsetsResponse" in r_s:
-        return
-
-    r_set = object_instance_from_schema_name(byc, "beaconResultsets", "definitions/ResultsetInstance")
-    r_sets = []
-    for ds_id in byc.get("dataset_ids", []):
-        ds_rset = r_set.copy()
-        ds_rset.update({
-            "id": ds_id,
-            "set_type": "dataset",
-            "results_count": 0,
-            "exists": False,
-            "info": {"counts": {}}
-        })
-        r_sets.append(ds_rset)
-
-    byc["service_response"]["response"].update({"result_sets": r_sets})
-
-
-################################################################################
-
-def create_empty_service_response(byc):
-    r_s = byc["response_entity"].get("response_schema", None)
-    r, e = instantiate_response_and_error(byc, byc["response_entity"]["response_schema"])
-    byc.update({"service_response": r, "error_response": e})
-
-
-################################################################################
-
-def create_empty_non_data_response(byc):
-    r, e = instantiate_response_and_error(byc, byc["response_entity"]["response_schema"])
-    response_update_meta(r, byc)
-
-    for r_k, r_v in byc["service_config"]["response"].items():
-        r["response"].update({r_k: r_v})
-
-    byc.update({"service_response": r, "error_response": e})
-
-
-################################################################################
-
-def check_plot_responses(ds_id, byc):
-    if not "plot" in byc["output"]:
-        return
-
-    check_histoplot_plot_response(ds_id, byc)
-
-
-################################################################################
-
-def check_histoplot_plot_response(ds_id, byc):
-    h_o_types = byc["handover_definitions"]["h->o_types"]
-    ds_h_o = byc["dataset_definitions"][ds_id].get("handoverTypes", h_o_types.keys())
-
-    if "histoplot" not in ds_h_o:
-        return
-
-    byc["include_handovers"] = True
-    byc["dataset_definitions"][ds_id].update({"handoverTypes": ["histoplot"]})
-    dataset_results_save_handovers(ds_id, byc)
-    r_s_ho = dataset_response_add_handovers(ds_id, byc)
-
-    for h_o in r_s_ho:
-        if "histoplot" in h_o["handover_type"]["id"]:
-            print_uri_rewrite_response(h_o["url"], "")
-            exit()
-
-
-################################################################################
-
-def check_datatable_delivery(results, byc):
-    if not "table" in byc["output"]:
-        return
-    if not "datatable_mappings" in byc:
-        return
-
-    export_datatable_download(results, byc)
-
-
-################################################################################
-
-def instantiate_response_and_error(byc, schema):
-    """The response relies on the pre-processing of input parameters (queries etc)."""
-    # prdbug(byc, ["==> schema", schema])
-    r = object_instance_from_schema_name(byc, schema, "")
-    e = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
-    # prdbug(byc, ["==> response", r])
-    response_update_meta(r, byc)
-    error_response_set_defaults(e)
-
-    return r, e
-
-
-################################################################################
-
-def response_update_meta(r, byc):
-    if "response_summary" in r:
-        r_s = r.get("response_summary")
-        if r_s is None:
-            r_s = {"exists": False}
-        else:
-            r_s.update({"exists": False})
-        r.update({"response_summary": r_s})
-    response_meta_set_info_defaults(r, byc)
-    response_meta_set_config_defaults(r, byc)
-    response_meta_set_entity_values(r, byc)
-    response_meta_add_request_summary(r, byc)
-    r["meta"].update({"test_mode": byc.get("test_mode", False)})
-
-
-################################################################################
-
-def error_response_set_defaults(e):
-    e.update({
-        "error" : {
-            "error_code": 200,
-            "error_message": ""
-        }
-    })
 
 
 ################################################################################
@@ -587,62 +308,6 @@ def response_meta_set_info_defaults(r, byc):
 
 ################################################################################
 
-def response_meta_set_config_defaults(r, byc):
-    # TODO: should be in schemas
-    m = byc["service_config"].get("meta", {})
-    for k, v in m.items():
-        r["meta"].update({k: v})
-
-
-################################################################################
-
-def response_meta_set_entity_values(r, byc):
-    try:
-        r["meta"]["received_request_summary"].update({
-            "requested_schemas": [byc["response_entity"]["beacon_schema"]]
-        })
-        r["meta"].update({"returned_schemas": [byc["response_entity"]["beacon_schema"]]})
-    except:
-        pass
-
-
-################################################################################
-
-def response_add_received_request_summary_parameters(byc):
-    if not "received_request_summary" in byc["service_response"].get("meta", {}):
-        return
-
-    for name in ["dataset_ids", "test_mode"]:
-        value = byc.get(name)
-        if not value:
-            continue
-        byc["service_response"]["meta"]["received_request_summary"].update({name: value})
-
-    vargs = byc.get("varguments")
-    if vargs:
-        byc["service_response"]["meta"]["received_request_summary"].update({"request_parameters":{"g_variant":vargs}})
-
-    fs = byc.get("filters", [])
-    fs_p = []
-    if len(fs) > 0:
-        for f in fs:
-            fs_p.append(f.get("id"))
-        byc["service_response"]["meta"]["received_request_summary"].update({"filters":fs_p})
-    else:
-        byc["service_response"]["meta"]["received_request_summary"].pop("filters", None)
-
-
-################################################################################
-
-def received_request_summary_add_custom_parameter(byc, parameter, value):
-    r_p = byc["service_response"]["meta"]["received_request_summary"].get("request_parameters", [])
-    if parameter and value:
-        r_p.append({parameter: value})
-        byc["service_response"]["meta"]["received_request_summary"].update({"request_parameters":r_p})
-
-
-################################################################################
-
 def response_add_error(byc, code=200, message=False):
     if message is False:
         return
@@ -653,389 +318,46 @@ def response_add_error(byc, code=200, message=False):
     byc["error_response"].update({"error": e})
 
 
+# ################################################################################
+
+# def response_add_warnings(byc, message=False):
+#     if message is False:
+#         return
+#     if len(str(message)) < 1:
+#         return
+
+#     if not "service_response" in byc:
+#         return
+
+#     if not "info" in byc["service_response"]:
+#         byc["service_response"].update({"info": {}})
+#     if not "warnings" in byc["service_response"]:
+#         byc["service_response"]["info"].update({"warnings": []})
+
+#     byc["service_response"]["info"]["warnings"].append(message)
+
+
 ################################################################################
 
-def response_add_warnings(byc, message=False):
-    if message is False:
-        return
-    if len(str(message)) < 1:
-        return
-
-    if not "service_response" in byc:
-        return
-
-    if not "info" in byc["service_response"]:
-        byc["service_response"].update({"info": {}})
-    if not "warnings" in byc["service_response"]:
-        byc["service_response"]["info"].update({"warnings": []})
-
-    byc["service_response"]["info"]["warnings"].append(message)
-
-
-################################################################################
-
-def collations_set_delivery_keys(byc):
+def set_selected_delivery_keys(method, method_keys, form_data):
     # the method keys can be overriden with "deliveryKeys"
 
-    method = byc.get("method", False)
-    conf = byc["service_config"]
+    d_k = []
 
-    d_k = form_return_listvalue(byc["form_data"], "deliveryKeys")
+    if "delivery_keys" in form_data:
+        d_k = re.split(",", form_data.get("delivery_keys", []))
+        if len(d_k) > 0:
+            return d_k
 
-    if len(d_k) > 0:
+    if not method:
         return d_k
 
-    if method is False:
+    if not method_keys:
         return d_k
 
-    # here the empty list is returned, leading to all
-    if "details" in method:
-        return d_k
-
-    if not "method_keys" in conf:
-        return d_k
-
-    if method in conf["method_keys"]:
-        d_k = conf["method_keys"][method]
+    d_k = method_keys.get(method, [])
 
     return d_k
-
-
-################################################################################
-
-def populate_service_response(byc, results):
-    byc["service_response"].update({
-        "response_summary": {
-            "exists": False,
-            "num_total_results": 0
-        }
-    })
-
-    populate_service_header(byc, results)
-    populate_service_response_counts(byc)
-
-    if len(results) > 0:
-        byc["service_response"]["response_summary"].update({
-            "exists": True,
-            "num_total_results": len(results)
-        })
-
-    if byc["service_response"]["response"] is None:
-        byc["service_response"].update({"response": {"results":results}})
-    else:
-        byc["service_response"]["response"].update({"results": results})
-
-    check_switch_to_count_response(byc)
-    check_switch_to_boolean_response(byc)
-
-
-################################################################################
-
-def populate_service_header(byc, results):
-    try:
-        r_s = byc["service_response"]["response_summary"]
-    except:
-        return
-
-    r_no = 0
-
-    if isinstance(results, list):
-        r_no = len(results)
-        r_s.update({"num_total_results": r_no})
-    if r_no > 0:
-        r_s.update({"exists": True})
-
-
-################################################################################
-
-def populate_service_response_counts(byc):
-    if not "dataset_results" in byc:
-        return
-    if not "dataset_ids" in byc:
-        return
-
-    ds_id = byc["dataset_ids"][0]
-
-    if not ds_id in byc["dataset_results"]:
-        return
-
-    counts = {}
-    counted = byc["config"].get("beacon_count_items", {})
-
-    for c, c_d in counted.items():
-        h_o_k = c_d.get("h->o_key")
-        if not h_o_k:
-            continue
-        if h_o_k in byc["dataset_results"][ds_id]:
-            counts[c] = byc["dataset_results"][ds_id][h_o_k]["target_count"]
-
-    byc["service_response"]["info"].update({"counts": counts})
-
-
-################################################################################
-
-def check_alternative_variant_deliveries(ds_id, byc):
-    if not "genomicVariant" in byc["response_entity_id"]:
-        return
-
-    export_pgxseg_download(ds_id, byc)
-    export_vcf_download(ds_id, byc)
-    export_variants_download(ds_id, byc)
-
-
-################################################################################
-
-def check_alternative_callset_deliveries(ds_id, byc):
-    check_callsets_matrix_delivery(ds_id, byc)
-
-
-################################################################################
-
-def return_filtering_terms_response(byc):
-    if not "filteringTerm" in byc["response_entity_id"]:
-        return
-
-    f_r_d = {}
-    f_coll = byc["config"]["filtering_terms_coll"]
-    f_t_s = []
-    ft_fs = []
-
-    if "filters" in byc:
-        if len(byc["filters"]) > 0:
-            for f in byc["filters"]:
-                ft_fs.append('(' + f["id"] + ')')
-    f_s = '|'.join(ft_fs)
-    f_re = re.compile(r'^' + f_s)
-
-    # TODO: This should be derived from some entity definitions
-    scopes = ["biosamples", "individuals", "analyses", "genomicVariations"]
-    collation_types = set()
-    query = {}
-    q_list = []
-
-    q_scope = byc["form_data"].get("scope", "___none___")
-    if q_scope in scopes:
-        q_list.append({"scope": byc["form_data"]["scope"]})
-
-    q_types = byc["form_data"].get("collation_types", [])
-    if len(q_types) > 0:
-        q_list.append({"collation_type": {"$in": q_types }})
-
-    if len(q_list) == 1:
-        query = q_list[0]
-    elif len(q_list) > 1:
-        query = {"$and": q_list}
-
-    if byc.get("test_mode", False) is True:
-        query, error = mongo_test_mode_query(byc["dataset_ids"][0], f_coll, byc.get("test_mode_count", 5))
-
-    # prdbug(byc, query)
-    # prdbug(byc, byc["dataset_ids"])
-
-    for ds_id in byc["dataset_ids"]:
-        fields = {"_id": 0}
-        f_s, e = mongo_result_list(ds_id, f_coll, query, fields)
-        t_f_t_s = []
-        for f in f_s:
-            collation_types.add(f.get("collation_type", None))
-            f_t = {"count": f.get("count", 0)}
-            for k in ["id", "type", "label"]:
-                if k in f:
-                    f_t.update({k: f[k]})
-            f_t.update({"scopes": scopes})
-            t_f_t_s.append(f_t)
-        f_t_s.extend(t_f_t_s)
-
-    byc["service_response"]["response"].update({"filteringTerms": f_t_s})
-    byc["service_response"]["response"].update({"resources": create_filters_resource_response(collation_types, byc)})
-
-    cgi_print_response(byc, 200)
-
-
-################################################################################
-
-def create_filters_resource_response(collation_types, byc):
-    r_o = {}
-    resources = []
-
-    f_d_s = byc["filter_definitions"]
-    collation_types = list(collation_types)
-    res_schema = object_instance_from_schema_name(byc, "beaconFilteringTermsResults", "definitions/Resource",
-                                                  "json")
-    for c_t in collation_types:
-        f_d = f_d_s[c_t]
-        r = {}
-        for k in res_schema.keys():
-            if k in f_d:
-                r.update({k: f_d[k]})
-
-        r_o.update({f_d["namespace_prefix"]: r})
-
-    for k, v in r_o.items():
-        resources.append(v)
-    return resources
-
-
-################################################################################
-
-def check_biosamples_map_delivery(byc):
-    """
-    TODO
-    """
-
-
-    return
-
-################################################################################
-
-def check_sample_plot_delivery(byc):
-    if not "samplesplot" in byc.get("output", "___none___"):
-        return
-
-    results = []
-    p_r = byc["pagination"]
-
-    # prdbug(byc, byc.get("dataset_results", {}).keys())
-
-    for ds_id in byc.get("dataset_results", {}).keys():
-
-        ds_results = byc["dataset_results"][ds_id]
-
-        if not "callsets._id" in ds_results:
-            continue
-
-        mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-        cs_coll = mongo_client[ds_id]["callsets"]
-        var_coll = mongo_client[ds_id]["variants"]
-
-        cs_r = ds_results["callsets._id"]
-        cs__ids = cs_r["target_values"]
-        r_no = len(cs__ids)
-        if r_no < 1:
-            continue
-
-        q_vals = cs_r["target_values"]
-        r_no = len(q_vals)
-        if r_no > p_r["limit"]:
-            q_vals = paginate_list(q_vals, byc)
-
-        # prdbug(byc, q_vals)
-
-
-        for cs__id in cs__ids:
-            cs = cs_coll.find_one({"_id": cs__id })
-            cs_id = cs.get("id", "NA")
-
-            cnv_chro_stats = cs.get("cnv_chro_stats", False)
-            cnv_statusmaps = cs.get("cnv_statusmaps", False)
-
-            if cnv_chro_stats is False or cnv_statusmaps is False:
-                continue
-
-            p_o = {
-                "dataset_id": ds_id,
-                "callset_id": cs_id,
-                "biosample_id": cs.get("biosample_id", "NA"),
-                "cnv_chro_stats": cs.get("cnv_chro_stats", {}),
-                "cnv_statusmaps": cs.get("cnv_statusmaps", {}),
-                "probefile": callset_guess_probefile_path(cs, byc),
-                "variants": []
-            }
-
-            if r_no == 1 and p_o["probefile"] is not False:
-                p_o.update({"cn_probes": ByconBundler(byc).read_probedata_file(p_o["probefile"]) })
-
-            v_q = {"callset_id": cs_id}
-
-            for v in var_coll.find(v_q):
-                p_o["variants"].append(ByconVariant(byc).byconVariant(v))
-
-            results.append(p_o)
-
-    plot_data_bundle = {"callsets_variants_bundles": results}
-    ByconPlot(byc, plot_data_bundle).svg_response()
-
-
-################################################################################
-
-def check_computed_histoplot_delivery(byc):
-    if not "histo" in byc.get("output", "___none___"):
-        return
-
-    f_d = byc.get("filter_definitions", {})
-
-    p_r = byc["pagination"]
-    interval_sets = []
-
-    for ds_id in byc["dataset_results"].keys():
-
-        ds_results = byc["dataset_results"][ds_id]
-
-        if not "callsets._id" in ds_results:
-            continue
-
-        mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-        bios_coll = mongo_client[ds_id]["biosamples"]
-        cs_coll = mongo_client[ds_id]["callsets"]
-
-        f_s_dists = []
-        f_s_k = ""
-        f_s_t = byc["form_data"].get("plot_group_by", "___none___")
-
-        if f_s_t in f_d.keys():
-
-            if not "biosamples._id" in ds_results:
-                continue
-
-            bios_q_v = ds_results["biosamples._id"].get("target_values", [])
-            if len(bios_q_v) < 1:
-                continue
-
-            f_s_k = f_d[f_s_t].get("db_key", "___none___")
-            f_s_p = f_d[f_s_t].get("pattern", False)
-            f_s_q = {"_id": {"$in": bios_q_v}}
-            f_s_dists = bios_coll.distinct(f_s_k, f_s_q)
-            if f_s_p is not False:
-                r = re.compile(f_s_p)
-                f_s_dists = list(filter(lambda d: r.match(d), f_s_dists))
-
-            for f_s_id in f_s_dists:
-
-                bios_id_q = {"$and": [
-                    {f_s_k: f_s_id},
-                    {"_id": {"$in": bios_q_v}}
-                ]}
-
-                bios_ids = bios_coll.distinct("id", bios_id_q)
-                cs__ids = cs_coll.distinct("_id", {"biosample_id": {"$in": bios_ids}})
-                r_no = len(cs__ids)
-                if r_no > p_r["limit"]:
-                    cs__ids = paginate_list(cs__ids, byc)
-
-                label = f"Search Results (subset {f_s_id})"
-
-                iset = callset__ids_create_iset(ds_id, label, cs__ids, byc)
-                interval_sets.append(iset)
-
-        else:
-            cs_r = ds_results["callsets._id"]
-            cs__ids = cs_r["target_values"]
-            r_no = len(cs__ids)
-            # filter for CNV cs before evaluating number
-            if r_no > p_r["limit"]:
-                cs_cnv_ids = []
-                for _id in cs__ids:
-                    cs = cs_coll.find_one({"_id":_id})
-                    if "cnv_statusmaps" in cs:
-                        cs_cnv_ids.append(_id)
-                cs__ids = cs_cnv_ids
-            cs__ids = paginate_list(cs__ids, byc)
-
-            iset = callset__ids_create_iset(ds_id, "Search Results", cs__ids, byc)
-            interval_sets.append(iset)
-
-    plot_data_bundle = {"interval_frequencies_bundles": interval_sets}
-    ByconPlot(byc, plot_data_bundle).svg_response()
 
 
 ################################################################################
@@ -1068,10 +390,8 @@ def check_computed_interval_frequency_delivery(byc):
     q_vals = cs_r["target_values"]
     r_no = len(q_vals)
     if r_no > p_r["limit"]:
-        q_vals = paginate_list(q_vals, byc)
-        print(
-            '#meta=>"WARNING: Only analyses {} - {} (out of {}) used for calculations due to pagination skip and limit"'.format(
-                (p_r["range"][0] + 1), p_r["range"][-1], cs_r["target_count"]))
+        q_vals = return_paginated_list(q_vals, byc.get("skip", 0), byc.get("limit", 0))
+        print(f'#meta=>"WARNING: Only {len(q_vals)} analyses (out of {r_no}) used for calculations due to pagination skip and limit"')
 
     h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
     print("group_id\t" + "\t".join(h_ks))
@@ -1088,15 +408,6 @@ def check_computed_interval_frequency_delivery(byc):
         print("\t".join(v_line))
 
     close_text_streaming()
-
-
-################################################################################
-
-def check_callsets_matrix_delivery(ds_id, byc):
-    if not "pgxmatrix" in byc["output"]:
-        return
-
-    export_callsets_matrix(ds_id, byc)
 
 
 ################################################################################

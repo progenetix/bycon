@@ -2,7 +2,7 @@
 
 http://progenetix.test/beacon/biosamples/?datasetIds=progenetix&referenceName=refseq:NC_000009.12&variantType=EFO:0030067&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058
 
-http://progenetix.org/beacon/variants/?referenceName=NC_000017.11&start=7577120&referenceBases=G&alternateBases=A&debug=1
+http://progenetix.org/beacon/genomicVariations/?referenceName=NC_000017.11&start=7577120&referenceBases=G&alternateBases=A&debug=1
 
 https://progenetix.org/beacon/g_variants/?filters=NCIT:C7712&output=pgxseg&debug=1
 

@@ -33,7 +33,7 @@ class ByconVariant:
         self.vcf_variant = {}
         self.pgxseg_variant = {}
 
-        d_m = byc["datatable_mappings"].get("entities", {})
+        d_m = byc["datatable_mappings"].get("definitions", {})
         d_m_v = d_m.get("genomicVariant", {})
         self.variant_mappings = d_m_v.get("parameters", {})
 

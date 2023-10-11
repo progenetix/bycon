@@ -4,7 +4,9 @@ parameters:
   # Beacon parameters
 
   requested_granularity:
-    description: the response granularity of the beacon
+    description: >-
+      The response granularity of the beacon; for "secure" Beacons the default
+      should be overridden in local definitions (e.g. as "boolean")
     default: record
 
   requested_schema:
@@ -28,6 +30,10 @@ parameters:
     items: string
     default:
       - progenetix
+
+  cohort_ids:
+    type: array
+    items: string
 
   # Beacon variant parameters are in `variant_parameters.yaml`
 

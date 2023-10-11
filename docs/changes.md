@@ -13,7 +13,7 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
-### 2023-08-30 (v.1.2.1)
+### 2023-08-30 (v.1.2.2)
 
 * some defaults cleaning (e.g. removal of non-standard paths from built in `beacon_defaults`)
 

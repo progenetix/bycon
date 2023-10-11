@@ -4,7 +4,8 @@ from bycon import *
 
 """podmd
 
-* <https://beacon.progenetix.org/beacon/filteringTerms
+* <https://progenetix.org/beacon/filteringTerms>
+* <https://cancercelllines.org/beacon/filteringTerms?collationTypes=cellosaurus>
 
 podmd"""
 
@@ -33,8 +34,15 @@ def filteringTerms():
 def filtering_terms():
     initialize_bycon_service(byc, "filteringTerms")
     run_beacon_init_stack(byc)
-    return_filtering_terms_response(byc)
 
+    r = BeaconDataResponse(byc)
+
+    byc.update({
+        "service_response": r.filteringTermsResponse(),
+        "error_response": r.errorResponse()
+    })
+
+    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

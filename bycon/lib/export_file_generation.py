@@ -3,44 +3,15 @@ from os import environ
 
 from cgi_parsing import *
 from datatable_utils import get_nested_value
-from bycon_helpers import paginate_list
+from bycon_helpers import return_paginated_list
 from variant_mapping import ByconVariant
-
-################################################################################
-
-def export_variants_download(ds_id, byc):
-
-    if not "variants" in byc.get("output", "___none___"):
-        return
-
-    data_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-    v_coll = data_client[ ds_id ][ "variants" ]
-    ds_results = byc["dataset_results"][ds_id]
- 
-    v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
-    if test_truthy( byc["form_data"].get("paginate_results", True) ):
-        v__ids = paginate_list(v__ids, byc)
-
-    open_json_streaming(byc, "variants.json")
-
-    for v_id in v__ids[:-1]:
-        v = v_coll.find_one( { "_id": v_id }, { "_id": 0 } )
-        print(decamelize_words(json.dumps(camelize(v), indent=None, sort_keys=False, default=str, separators=(',', ':')), end = ','))
-    v = v_coll.find_one( { "_id": v__ids[-1]}, { "_id": 0 }  )
-    print(decamelize_words(json.dumps(camelize(v), indent=None, sort_keys=False, default=str, separators=(',', ':')), end = ''))
-
-    close_json_streaming()
 
 
 ################################################################################
 
 def stream_pgx_meta_header(ds_id, ds_results, byc):
 
-    if not "pgxseg" in byc["output"] and not "pgxmatrix" in byc["output"]:
-        return
-
-    s_r_rs = byc["service_response"]["response"]["result_sets"][0]
-    b_p = byc["pagination"]
+    b_p = byc.get("pagination")
 
     mongo_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
@@ -49,9 +20,9 @@ def stream_pgx_meta_header(ds_id, ds_results, byc):
 
     for d in ["id", "assemblyId"]:
         print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
-    for k, n in s_r_rs["info"]["counts"].items():
-        print("#meta=>{}={}".format(k, n))
-    print("#meta=>pagination.skip={};pagination.limit={};pagination.range={},{}".format(b_p["skip"], b_p["skip"], b_p["range"][0] + 1, b_p["range"][1]))
+    # for k, n in s_r_rs["info"]["counts"].items():
+    #     print("#meta=>{}={}".format(k, n))
+    print(f'#meta=>pagination.skip={b_p["skip"]};pagination.limit={b_p["limit"]}')
             
     print_filters_meta_line(byc)
 
@@ -70,7 +41,7 @@ def stream_pgx_meta_header(ds_id, ds_results, byc):
 def pgxseg_biosample_meta_line(byc, biosample, group_id_key="histological_diagnosis_id"):
 
     dt_m = byc["datatable_mappings"]
-    io_params = dt_m["entities"][ "biosample" ]["parameters"]
+    io_params = dt_m["definitions"][ "biosample" ]["parameters"]
 
     g_id_k = group_id_key
     g_lab_k = re.sub("_id", "_label", g_id_k)
@@ -154,17 +125,18 @@ def print_filters_meta_line(byc):
 
 ################################################################################
 
-def export_pgxseg_download(ds_id, byc):
-
-    if not "pgxseg" in byc.get("output", "___none___"):
-        return
+def export_pgxseg_download(datasets_results, ds_id, byc):
 
     data_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     v_coll = data_client[ ds_id ][ "variants" ]
-    ds_results = byc["dataset_results"][ds_id]
-    v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
+    ds_results = datasets_results.get(ds_id, {})
+    # prdbug(byc, ds_results)
+    if not "variants._id" in ds_results:
+        # TODO: error message here
+        return
+    v__ids = ds_results["variants._id"].get("target_values", [])
     if test_truthy( byc["form_data"].get("paginate_results", True) ):
-        v__ids = paginate_list(v__ids, byc)
+        v__ids = return_paginated_list(v__ids, byc.get("skip", 0), byc.get("limit", 0))
 
     stream_pgx_meta_header(ds_id, ds_results, byc)
     print_pgxseg_header_line()
@@ -202,18 +174,21 @@ def pgxseg_header_line():
 
 def pgxseg_variant_line(v_pgxseg):
 
-    info = v_pgxseg.get("info", {})
-
     for p in ("sequence", "reference_sequence"):
         if not v_pgxseg[p]:
             v_pgxseg.update({p: "."})
+
+    log_v = "."
+    if "info" in v_pgxseg:
+        if v_pgxseg["info"]:
+            log_v = v_pgxseg["info"].get("cnv_value", ".")
 
     v_l = (
         v_pgxseg.get("biosample_id"),
         v_pgxseg["reference_name"],
         v_pgxseg["start"],
         v_pgxseg["end"],
-        v_pgxseg.get("cnv_value", "."),
+        log_v,
         v_pgxseg.get("variant_type", "."),
         v_pgxseg.get("reference_sequence"),
         v_pgxseg.get("sequence")
@@ -223,7 +198,7 @@ def pgxseg_variant_line(v_pgxseg):
 
 ################################################################################
 
-def export_callsets_matrix(ds_id, byc):
+def export_callsets_matrix(datasets_results, ds_id, byc):
 
     g_b = byc["interval_definitions"].get("genome_binning", "")
     i_no = len(byc["genomic_intervals"])
@@ -232,7 +207,7 @@ def export_callsets_matrix(ds_id, byc):
     if "val" in byc["output"]:
         m_format = "values"
 
-    ds_results = byc["dataset_results"][ds_id]
+    ds_results = datasets_results[ds_id]
     p_r = byc["pagination"]
 
     if not "callsets._id" in ds_results:
@@ -262,10 +237,12 @@ def export_callsets_matrix(ds_id, byc):
 
     q_vals = cs_r["target_values"]
     r_no = len(q_vals)
+    skip = byc["pagination"].get("skip", 0)
+    limit = byc["pagination"].get("limit", 0)
     if r_no > p_r["limit"]:
         if test_truthy( byc["form_data"].get("paginate_results", True) ):
-            q_vals = paginate_list(q_vals, byc)
-        print('#meta=>"WARNING: Only analyses {} - {} (from {}) will be included pagination skip and limit"'.format((p_r["range"][0] + 1), p_r["range"][-1], cs_r["target_count"]))
+            q_vals = return_paginated_list(q_vals, skip, limit)
+        print(f'#meta=>"WARNING: Only {len(q_vals)} analyses will be included due to pagination skip {skip} and limit {limit}."')
 
     bios_ids = set()
     cs_ids = {}
@@ -378,13 +355,10 @@ def export_pgxmatrix_frequencies(byc, results):
 
 ################################################################################
 
-def export_vcf_download(ds_id, byc):
+def export_vcf_download(datasets_results, ds_id, byc):
 
     """
     """
-
-    if not "vcf" in byc["output"].lower():
-        return
 
     # TODO: VCF schema in some config file...
     open_text_streaming(byc["env"], "variants.vcf")
@@ -414,16 +388,17 @@ def export_vcf_download(ds_id, byc):
         "INFO": ""
     }
 
-
     data_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     v_coll = data_client[ ds_id ][ "variants" ]
-    ds_results = byc["dataset_results"][ds_id]
- 
-    v__ids = byc["dataset_results"][ds_id]["variants._id"].get("target_values", [])
+    ds_results = datasets_results.get(ds_id, {})
+    # prdbug(byc, ds_results)
+    if not "variants._id" in ds_results:
+        # TODO: error message here
+        return
+    v__ids = ds_results["variants._id"].get("target_values", [])
     if test_truthy( byc["form_data"].get("paginate_results", True) ):
-        v__ids = paginate_list(v__ids, byc)
+        v__ids = return_paginated_list(v__ids, byc.get("skip", 0), byc.get("limit", 0))
 
-    variant_ids = ()
 
     v_instances = []
     for v_id in v__ids:
@@ -432,13 +407,16 @@ def export_vcf_download(ds_id, byc):
 
     v_instances = list(sorted(v_instances, key=lambda x: (f'{x["reference_name"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x['start'])))
 
+    variant_ids = []
     for v in v_instances:
         variant_ids += (v.get("variant_internal_id", "__none__"), )
+    # no duplicates here since each has its line
+    variant_ids = list(set(variant_ids))
 
     biosample_ids = []
     for v in v_instances:
         biosample_ids.append(v.get("biosample_id", "__none__"))
-
+    # no duplicates here since each has its column
     biosample_ids = list(set(biosample_ids))
 
     for bsid in biosample_ids:
@@ -449,16 +427,11 @@ def export_vcf_download(ds_id, byc):
     bv = ByconVariant(byc)
     for d in variant_ids:
 
+        prdbug(byc, d)
+
         d_vs = [var for var in v_instances if var.get('variant_internal_id', "__none__") == d]
         vcf_v = bv.vcfVariant(d_vs[0])
         
-        ###### DEBUG ################
-        # if byc["debug_mode"] is True:
-        #     prjsonnice(bvo.byconVariant())
-        #     prjsonnice(bvo.pgxVariant())
-        #     prjsonnice(vcf_v)
-        ##### / DEBUG ###############
-
         for bsid in biosample_ids:
             vcf_v.update({bsid: "."})
 

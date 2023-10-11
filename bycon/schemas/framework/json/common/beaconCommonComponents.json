@@ -41,6 +41,7 @@
             "type": "string"
         },
         "Exists": {
+            "default": false,
             "description": "Indicator of whether any record was observed in any of the collections queried. This should be non-null.",
             "examples": [
                 true
@@ -95,14 +96,14 @@
         },
         "HandoverType": {
             "$ref": "./ontologyTerm.json",
-            "description": "Handover type, as an Ontology_term object with CURIE syntax for the `id` value. Use `CUSTOM` for the `id` when no ontology is available.",
+            "description": "Handover type, as an Ontology_term object with CURIE syntax for the `id` value.",
             "examples": [
                 {
                     "id": "EFO:0004157",
                     "label": "BAM format"
                 },
                 {
-                    "id": "CUSTOM",
+                    "id": "pgx:pgxseg",
                     "label": "download genomic variants in .pgxseg file format"
                 }
             ]
@@ -156,6 +157,7 @@
             "type": "boolean"
         },
         "NumTotalResults": {
+            "default": 0,
             "description": "Total number of results. NOT the number of results returned in this batch, but the total obtained by the query.",
             "examples": [
                 123

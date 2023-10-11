@@ -32,14 +32,6 @@ def set_debug_state(debug: int = 0) -> bool:
 
 ################################################################################
 
-def boolean_to_mongo_logic(logic: str = "AND") -> str:
-    if "OR" in logic.upper():
-        return '$or'
-    return '$and'
-
-
-################################################################################
-
 def select_this_server(byc: dict) -> str:
     """
     Cloudflare based encryption may lead to "http" based server addresses in the
@@ -351,51 +343,14 @@ def get_plot_parameters(plv, byc):
 
 ################################################################################
 
-def cgi_simplify_response(byc):
-    r = byc["service_response"].get("response", "ERROR: No response element in error_response")
-
-    if "result_sets" in r:
-        r_s = r["result_sets"][0]
-        byc.update({"service_response": r_s.get("results", [])})
-    else:
-        byc.update({"service_response": r})
-
-
-################################################################################
-
 def cgi_break_on_errors(byc):
     if not "error_response" in byc:
         return
     e = byc["error_response"].get("error", {})
     e_c = e.get("error_code", 200)
-    # if byc.get("debug_mode", False) is True:
-    #     prjsonnice(byc["error_response"])
-
-    # TODO: temp hack
-    for k in byc["service_response"].keys():
-        if isinstance(byc["service_response"][k], dict):
-            if "any_of" in byc["service_response"][k]:
-                byc["service_response"][k].pop("any_of")
-            if "all_of" in byc["service_response"][k]:
-                byc["service_response"][k].pop("all_of")
 
     if int(e_c) > 200:
-        cgi_print_response(byc, e_c)
-
-
-################################################################################
-
-def switch_to_wrong_service_response(byc):
-    byc.update({
-        "service_response": {
-            "response": {
-                "error": {
-                    "error_code": 422,
-                    "error_message": "No correct service path provided. Please refer to the documentation at http://info.progenetix.org/tags/Beacon"
-                },
-            }
-        }
-    })
+        cgi_print_response(byc, e)
 
 
 ################################################################################
@@ -419,7 +374,12 @@ def cgi_print_response(byc, status_code):
 
     if "text" in byc["output"]:
 
-        cgi_simplify_response(byc)
+        r = byc["service_response"].get("response", "ERROR: No response element in error_response")
+        if "result_sets" in r:
+            r_s = r["result_sets"][0]
+            byc.update({"service_response": r_s.get("results", [])})
+        else:
+            byc.update({"service_response": r})
 
         if isinstance(byc["service_response"], dict):
             # TODO: Find where this results/response ambiguity comes from
@@ -453,9 +413,6 @@ def cgi_print_response(byc, status_code):
         except:
             pass
 
-    if "simple" in r_f:
-        cgi_simplify_response(byc)
-
     update_error_code_from_response_summary(byc)
     switch_to_error_response(byc)
     print_json_response(byc["service_response"], byc["env"])
@@ -476,35 +433,12 @@ def update_error_code_from_response_summary(byc):
 def switch_to_error_response(byc):
     e_c = byc["error_response"]["error"].get("error_code", 200)
 
-    if e_c > 200:
-        if "meta" in byc["service_response"]:
-            byc["error_response"].update({"meta": byc["service_response"]["meta"]})
-        byc["service_response"] = byc["error_response"]
+    if e_c == 200:
+        return
 
-
-################################################################################
-
-def check_switch_to_boolean_response(byc):
-    try:
-        if "boolean" in byc["service_response"]["meta"]["received_request_summary"].get("requested_granularity",
-                                                                                        "record"):
-            byc["service_response"].pop("response", None)
-            byc["service_response"]["response_summary"].pop("num_total_results", None)
-            byc["service_response"]["meta"].update({"returned_granularity": "boolean"})
-    except:
-        pass
-
-
-################################################################################
-
-def check_switch_to_count_response(byc):
-    try:
-        if "count" in byc["service_response"]["meta"]["received_request_summary"].get("requested_granularity",
-                                                                                      "record"):
-            byc["service_response"].pop("response", None)
-            byc["service_response"]["meta"].update({"returned_granularity": "count"})
-    except:
-        pass
+    if "meta" in byc["service_response"]:
+        byc["error_response"].update({"meta": byc["service_response"]["meta"]})
+    byc["service_response"] = byc["error_response"]
 
 
 ################################################################################

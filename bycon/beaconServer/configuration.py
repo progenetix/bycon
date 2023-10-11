@@ -21,7 +21,8 @@ def main():
 def configuration():
 
     initialize_bycon_service(byc)
-    r, e = instantiate_response_and_error(byc, "beaconConfigurationResponse")
+    r = object_instance_from_schema_name(byc, "beaconConfigurationResponse", "")
+    e = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
     response_meta_set_info_defaults(r, byc)
 
     c_f = get_schema_file_path(byc, "beaconConfiguration")

@@ -30,6 +30,7 @@ id_entity_mappings:
   analysis_ids: analysis
   individual_ids: individual
   genomic_variant_ids: genomicVariant
+  cohort_ids: cohort
 
 # aliases for the entry type path ids ##########################################
 service_path_aliases:
@@ -211,7 +212,7 @@ entity_defaults:
     is_entry_type: True
     request_entity_path_id: cohorts
     response_entity_id: cohort
-    collection: Null
+    collection: collations
     response_schema: beaconCollectionsResponse
     beacon_schema:
       entity_type: cohort
@@ -234,6 +235,6 @@ entity_defaults:
       schema: https://progenetix.org/services/schemas/dataset/
     pagination:
       skip: 0
-      limit: 3
+      limit: 10
     include_resultset_responses: false
 

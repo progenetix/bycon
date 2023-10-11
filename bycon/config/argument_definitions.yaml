@@ -151,6 +151,13 @@ parameters:
           - --query
         help: complete query string, e.g. `{"biosamples":{"external_references.id":"geo:GSE7428"}}`
 
+  - type: array
+    argDef:
+      deliveryKeys:
+        flags:
+          - --deliveryKeys
+        help: delivery keys
+
       # standard Beacon query parameters 
   - type: array
     argDef:

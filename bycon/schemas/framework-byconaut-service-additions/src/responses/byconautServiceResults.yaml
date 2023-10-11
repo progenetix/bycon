@@ -1,0 +1,20 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+description: Simple results object for byconaut services
+type: object
+properties:
+  results:
+    type: array
+    items:
+      $ref: '#/definitions/ResultItem'
+definitions:
+  ResultItem:
+    type: object
+    properties:
+      id:
+        description: A (potentially ephemeral) identifier of the element.
+        type: string
+        examples:
+          - N704216
+          - NCIT:C3262
+    additionalProperties: true
+additionalProperties: true

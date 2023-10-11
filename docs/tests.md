@@ -31,7 +31,7 @@ We here show examples using the Progenetix instance with its `/beacon/` root pat
 
 #### `/biosamples/{id}/variants/`
 
-* [/biosamples/pgxbs-kftva5c9/variants/](http://progenetix.org/beacon/biosamples/pgxbs-kftva5c9/variants/)
+* [/biosamples/pgxbs-kftva5c9/genomicVariations/](http://progenetix.org/beacon/biosamples/pgxbs-kftva5c9/genomicVariations/)
 
 #### `/biosamples/{id}/analyses/`
 
@@ -50,26 +50,26 @@ We here show examples using the Progenetix instance with its `/beacon/` root pat
 
 #### `/individuals/{id}/variants/`
 
-* [/individuals/pgxind-kftx25hb/variants/](http://progenetix.org/beacon/individuals/pgxind-kftx25hb/variants/)
+* [/individuals/pgxind-kftx25hb/genomicVariations/](http://progenetix.org/beacon/individuals/pgxind-kftx25hb/genomicVariations/)
 
 ### Base `/variants`
 
 #### `/variants/` + query
 
-* [/variants/?referenceName=refseq:NC_000017.11&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000](http://progenetix.org/beacon/variants/?referenceName=refseq:NC_000017.11&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000)
-* [/variants/?referenceName=refseq:NC_000017.11&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000&requestedGranularity=count](https://progenetix.org/beacon/variants/?referenceName=refseq:NC_000017.11&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000&requestedGranularity=count)
+* [/variants/?referenceName=refseq:NC_000017.11&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000](http://progenetix.org/beacon/genomicVariations/?referenceName=refseq:NC_000017.11&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000)
+* [/variants/?referenceName=refseq:NC_000017.11&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000&requestedGranularity=count](https://progenetix.org/beacon/genomicVariations/?referenceName=refseq:NC_000017.11&variantType=DEL&start=7500000&start=7676592&end=7669607&end=7800000&requestedGranularity=count)
     - same w/ Boolean response
-* [/variants/?requestedGranularity=boolean&referenceBases=G&alternateBases=A&referenceName=refseq:NC_000017.11&start=7577120](http://progenetix.org/beacon/variants/?requestedGranularity=boolean&referenceBases=G&alternateBases=A&referenceName=refseq:NC_000017.11&start=7577120)
+* [/variants/?requestedGranularity=boolean&referenceBases=G&alternateBases=A&referenceName=refseq:NC_000017.11&start=7577120](http://progenetix.org/beacon/genomicVariations/?requestedGranularity=boolean&referenceBases=G&alternateBases=A&referenceName=refseq:NC_000017.11&start=7577120)
 
 
 #### `/variants/{id}/` or `/g_variants/{id}/`
 
-* [/variants/pgxvar-5f5a35586b8c1d6d377b77f6/](http://progenetix.org/beacon/variants/pgxvar-5f5a35586b8c1d6d377b77f6/)
+* [/variants/pgxvar-5f5a35586b8c1d6d377b77f6/](http://progenetix.org/beacon/genomicVariations/pgxvar-5f5a35586b8c1d6d377b77f6/)
 * [/g_variants/pgxvar-5f5a35586b8c1d6d377b77f6/](http://progenetix.org/beacon/g_variants/pgxvar-5f5a35586b8c1d6d377b77f6/)
 
 #### `/variants/{id}/biosamples/`
 
-* [/variants/pgxvar-5f5a35586b8c1d6d377b77f6/biosamples/](http://progenetix.org/beacon/variants/pgxvar-5f5a35586b8c1d6d377b77f6/biosamples/)
+* [/variants/pgxvar-5f5a35586b8c1d6d377b77f6/biosamples/](http://progenetix.org/beacon/genomicVariations/pgxvar-5f5a35586b8c1d6d377b77f6/biosamples/)
 
 ### Base `/analyses` (or `/callsets`)
 

@@ -75,7 +75,15 @@ def beacon():
     if not f:
         pass
     elif f in d_p_s:
-        beacon_data_pipeline(byc, f)
+        initialize_bycon_service(byc, f)
+        run_beacon_init_stack(byc)
+        r = BeaconDataResponse(byc)
+        byc.update({
+            "service_response": r.resultsetResponse(),
+            "error_response": r.errorResponse()
+        })
+        cgi_print_response(byc, 200)
+
     elif f:
         # dynamic package/function loading; e.g. `filteringTerms` loads
         # `filteringTerms` from `filteringTerm.py` which is an alias to

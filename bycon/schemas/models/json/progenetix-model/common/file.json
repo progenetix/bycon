@@ -9,7 +9,7 @@
                 "fileFormat": "pgxseg",
                 "genomeAssembly": "GRCh38"
             },
-            "uri": "http://progenetix.test/beacon/biosamples/pgxbs-kftviebk/variants/?output=pgxseg"
+            "uri": "http://progenetix.test/beacon/biosamples/pgxbs-kftviebk/genomicVariations/?output=pgxseg"
         }
     ],
     "properties": {

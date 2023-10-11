@@ -7,7 +7,7 @@ from query_generation import ByconQuery
 
 ################################################################################
 
-def execute_bycon_queries(ds_id, byc):
+def execute_bycon_queries(ds_id, BQ, byc):
     """podmd
     
     Pre-configured queries are performed in an aggregation pipeline against
@@ -25,7 +25,6 @@ def execute_bycon_queries(ds_id, byc):
     data_db = data_client[ds_id]
     data_collnames = data_db.list_collection_names()
 
-    BQ = ByconQuery(byc).recordsQuery()
     q_e_s = BQ.get("entities", {})
     v_i_q = BQ.get("variant_id_query")
     for q_e, q_o in q_e_s.items():
@@ -51,19 +50,6 @@ def execute_bycon_queries(ds_id, byc):
     ############################################################################
 
     prdbug(byc, ("queries at execution", exe_queries))
-
-    ############################################################################
-
-    # TODO: This might be a remnant ...
-    if "variant_annotations" in exe_queries.keys():
-
-        pref_k = "variant_annotations._id"
-        prevars["pref_m"] = pref_k
-        prevars["query"] = exe_queries.get("variant_annotations", {})
-        prefetch.update({pref_k: _prefetch_data(prevars)})
-        byc["dataset_results"].update({ds_id: prefetch})
-
-        return
 
     ############################################################################
 
@@ -209,13 +195,6 @@ def execute_bycon_queries(ds_id, byc):
     if "response_entity_id" in byc:
         if "individual" in byc["response_entity_id"] or "phenopacket" in byc["response_entity_id"]:
             _prefetch_add_individuals(prevars, prefetch)
-        # TODO: this removes the forced "get all variants"
-        # elif "genomicVariant" in byc["response_entity_id"] and "variants._id" not in prefetch:
-        #     _prefetch_add_all_sample_variants(prevars, prefetch)
-
-    # if "variant_annotations" in data_collnames:
-    #     if "variants._id" in prefetch:
-    #         _prefetch_add_variant_annotations(prevars, prefetch)
 
     ############################################################################
 
@@ -223,7 +202,7 @@ def execute_bycon_queries(ds_id, byc):
 
     byc["dataset_results"].update({ds_id: prefetch})
 
-    return
+    return prefetch
 
 
 ################################################################################
@@ -246,10 +225,6 @@ def _prefetch_data(prevars):
     pref_m = prevars["pref_m"]
     data_db = prevars["data_db"]
     h_o_defs = prevars["h_o_defs"][pref_m]
-
-    # print(h_o_defs["source_collection"])
-    # print(h_o_defs["source_key"])
-    # print(prevars["query"])
 
     dist = data_db[h_o_defs["source_collection"]].distinct(h_o_defs["source_key"], prevars["query"])
 
@@ -306,16 +281,6 @@ def _prefetch_add_individuals(prevars, prefetch):
     prevars["pref_m"] = "individuals._id"
     prevars["query"] = {"id": {"$in": prefetch["individuals.id"]["target_values"]}}
     prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
-
-    return prefetch
-
-
-################################################################################
-
-def _prefetch_add_all_sample_variants(prevars, prefetch):
-    prevars["pref_m"] = "variants._id"
-    prevars["query"] = {"biosample_id": {"$in": prefetch["biosamples.id"]["target_values"]}}
-    prefetch.update({prevars["pref_m"]: _prefetch_vars_from_biosample_loop(prevars)})
 
     return prefetch
 

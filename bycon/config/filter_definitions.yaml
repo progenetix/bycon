@@ -1,18 +1,19 @@
 age:
   id: NCIT_C156420
-  type: alphanumeric
+  ft_type: alphanumeric
   format: iso8601duration
   name: Age at diagnosis
   scope: individuals
   entity: individual
   db_key: index_disease.onset.age_days
-  pattern: '^age:.+?$'
+  pattern: '^ageAtDiagnosis:.+?$'
   collationed: False
   examples:
-    - 'age:<=P18Y'
+    - 'ageAtDiagnosis:<=P18Y'
 
 NCITgrade:
   id: ncit
+  ft_type: ontologyTerm
   name: NCI Thesaurus OBO Edition
   iri_prefix: http://purl.obolibrary.org/obo/NCIT_
   namespace_prefix: NCIT
@@ -34,6 +35,7 @@ NCITgrade:
 
 NCITstage:
   id: ncit
+  ft_type: ontologyTerm
   iri_prefix: http://purl.obolibrary.org/obo/NCIT_
   name: NCI Thesaurus OBO Edition
   namespace_prefix: NCIT
@@ -55,6 +57,7 @@ NCITstage:
 
 NCITtnm:
   id: ncit
+  ft_type: ontologyTerm
   name: NCI Thesaurus OBO Edition
   iri_prefix: http://purl.obolibrary.org/obo/NCIT_
   namespace_prefix: NCIT
@@ -77,6 +80,7 @@ NCITtnm:
 # Bio-Metadata
 NCIT:
   id: ncit/neoplasm-core.owl
+  ft_type: ontologyTerm
   iri_prefix: http://purl.obolibrary.org/obo/NCIT_
   name: NCIt Plus Neoplasm Core
   namespace_prefix: NCIT
@@ -97,6 +101,7 @@ NCIT:
 
 NCITauxiliary:
   id: ncit
+  ft_type: ontologyTerm
   iri_prefix: http://purl.obolibrary.org/obo/NCIT_
   name: NCIt Diseases
   namespace_prefix: NCIT
@@ -117,6 +122,7 @@ NCITauxiliary:
 
 HP:
   id: hp
+  ft_type: ontologyTerm
   iri_prefix: http://purl.obolibrary.org/obo/HP_
   name: "Human Phenotype Ontology"
   namespace_prefix: HP
@@ -131,6 +137,7 @@ HP:
 
 PATOsex:
   id: pato
+  ft_type: ontologyTerm
   iri_prefix: http://purl.obolibrary.org/obo/PATO_
   description: >
     Some PATO codes specific for genotypic sex...
@@ -147,6 +154,7 @@ PATOsex:
 
 EFOcnvassessment:
   id: efo
+  ft_type: ontologyTerm
   iri_prefix: http://www.ebi.ac.uk/efo/EFO_
   name: "Experimental Factor Ontology"
   namespace_prefix: EFO
@@ -160,6 +168,7 @@ EFOcnvassessment:
 
 EFOfus:
   id: efo
+  ft_type: ontologyTerm
   iri_prefix: http://www.ebi.ac.uk/efo/EFO_
   name: "Experimental Factor Ontology"
   namespace_prefix: EFO
@@ -174,6 +183,7 @@ EFOfus:
 
 EFOmaterial:
   id: efo
+  ft_type: ontologyTerm
   iri_prefix: http://www.ebi.ac.uk/efo/EFO_
   name: "Experimental Factor Ontology"
   namespace_prefix: EFO
@@ -190,6 +200,7 @@ EFOmaterial:
 
 icdom:
   id: pgx_icdom
+  ft_type: ontologyTerm
   name: "ICD-O 3 Morphologies (Progenetix transcription)"
   namespace_prefix: pgx
   url: https://progenetix.org/
@@ -206,6 +217,7 @@ icdom:
 
 icdot:
   id: pgx_icdot
+  ft_type: ontologyTerm
   name: "ICD-O 3 Topographies (Progenetix transcription)"
   namespace_prefix: pgx
   url: "https://progenetix.org/"
@@ -225,6 +237,7 @@ icdot:
 
 PMID:
   id: pubmed
+  ft_type: ontologyTerm
   name: "NCBI PubMed"
   namespace_prefix: PMID
   url: "https://www.ncbi.nlm.nih.gov/pubmed/"
@@ -303,6 +316,7 @@ GEOexperiment:
 
 arrayexpress:
   id: arrayexpress
+  ft_type: ontologyTerm
   name: "EBI ArrayExpress"
   namespace_prefix: arrayexpress
   url: "https://www.ebi.ac.uk/arrayexpress/"
@@ -321,6 +335,7 @@ arrayexpress:
 
 TCGAproject:
   id: tcga
+  ft_type: ontologyTerm
   name: "The Cancer Genome Atlas"
   namespace_prefix: pgx
   url: "http://cancergenome.nih.gov"
@@ -342,6 +357,7 @@ TCGAproject:
 
 UBERON:
   id: uberon
+  ft_type: ontologyTerm
   name: Uberon cross-species anatomical structures ontology
   iri_prefix: http://purl.obolibrary.org/obo/UBERON_
   namespace_prefix: UBERON
@@ -362,6 +378,7 @@ UBERON:
 
 cbioportal:
   id: cbioportal
+  ft_type: ontologyTerm
   name: "cBioPortal"
   iri_prefix: https://www.cbioportal.org/study/summary?id=
   namespace_prefix: cbioportal
@@ -381,6 +398,7 @@ cbioportal:
 
 cellosaurus:
   id: cellosaurus
+  ft_type: ontologyTerm
   name: "Cellosaurus - a knowledge resource on cell lines"
   iri_prefix: https://www.cellosaurus.org/
   namespace_prefix: cellosaurus
@@ -401,6 +419,7 @@ cellosaurus:
 
 pgxcohort:
   id: pgx_cohorts
+  ft_type: custom
   name: "Progenetix cohorts"
   iri_prefix: https://progenetix.org/ids/
   namespace_prefix: pgx

@@ -29,6 +29,7 @@ def read_service_definition_files(byc):
     for d in b_d_fs:
         read_bycon_configs_by_name( d, conf_dir, byc )
 
+
 ################################################################################
   
 def read_bycon_configs_by_name(name, conf_dir, byc):
@@ -87,16 +88,10 @@ def dbstats_return_latest(byc):
 
     # TODO: This is too hacky & should be moved to an external function
     # which updates the database_definitions / beacon_info yamls...
-
-    limit = 1
-    # if "stats_number" in byc:
-    #     if byc["stats_number"] > 1:
-    #         limit = byc["stats_number"]
-
     info_db = byc[ "config" ][ "housekeeping_db" ]
     coll = byc[ "config" ][ "beacon_info_coll" ]
-    stats = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))[ info_db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( limit )
-    return list(stats)
+    stats = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))[ info_db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
+    return list(stats)[0]
 
 ################################################################################
 
@@ -107,7 +102,7 @@ def datasets_update_latest_stats(byc, collection_type="datasets"):
     def_k = re.sub(r's$', "_definitions", collection_type)
     q_k = re.sub(r's$', "_ids", collection_type)
 
-    stat = dbstats_return_latest(byc)[0]
+    stat = dbstats_return_latest(byc)
 
     counted = byc["config"].get("beacon_count_items", {})
 

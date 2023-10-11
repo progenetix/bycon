@@ -1,0 +1,128 @@
+{
+    "$id": "https://progenetix.org/services/schemas/Collation/v2023-10-04",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "definitions": {
+        "PathItem": {
+            "properties": {
+                "depth": {
+                    "type": "integer"
+                },
+                "order": {
+                    "type": "integer"
+                },
+                "path": {
+                    "items": "string",
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "description": "A Collation represents information about aggregated occurrences of entities (e.g. all biosamples with a given diagnostic code).\n",
+    "properties": {
+        "child_terms": {
+            "examples": [
+                [
+                    "PMID:10471496"
+                ]
+            ],
+            "items": "string",
+            "type": "array"
+        },
+        "cnv_analyses": {
+            "type": "integer"
+        },
+        "code": {
+            "examples": [
+                "PMID:10471496"
+            ],
+            "type": "string"
+        },
+        "code_matches": {
+            "type": "integer"
+        },
+        "collation_type": {
+            "examples": [
+                "PMID"
+            ],
+            "type": "string"
+        },
+        "count": {
+            "type": "integer"
+        },
+        "dataset_id": {
+            "examples": [
+                "cellz"
+            ],
+            "type": "string"
+        },
+        "db_key": {
+            "examples": [
+                "external_references.id"
+            ],
+            "type": "string"
+        },
+        "hierarchy_paths": {
+            "items": {
+                "$ref": "#/definitions/PathItem"
+            },
+            "type": "array"
+        },
+        "id": {
+            "examples": [
+                "PMID:22824167"
+            ],
+            "type": "string"
+        },
+        "label": {
+            "description": "An informative short text label.\n",
+            "examples": [
+                "Peralta R, Baudis M, Vazquez G, Juarez S, Ortiz R, Decanini et al. (2010): Increased expression of cellular retinol-binding protein 1 in laryngeal squamous cell carcinoma.",
+                "carcinoma, NOS"
+            ],
+            "type": "string"
+        },
+        "namespace_prefix": {
+            "examples": [
+                "PMID"
+            ],
+            "type": "string"
+        },
+        "parent_terms": {
+            "examples": [
+                [
+                    "PMID:10471496"
+                ]
+            ],
+            "items": "string",
+            "type": "array"
+        },
+        "reference": {
+            "examples": [
+                "https://europepmc.org/article/MED/10471496"
+            ],
+            "type": "string"
+        },
+        "scope": {
+            "examples": [
+                "biosamples"
+            ],
+            "type": "string"
+        },
+        "type": {
+            "examples": [
+                "NCBI PubMed"
+            ],
+            "type": "string"
+        },
+        "updated": {
+            "examples": [
+                "2023-07-03T11:50:00.047225"
+            ],
+            "type": "string"
+        }
+    },
+    "title": "Collation",
+    "type": "object"
+}

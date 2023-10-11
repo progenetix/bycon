@@ -51,86 +51,30 @@ def hex_2_rgb( hexcolor ):
 
     return rgb
 
-################################################################################
-
-def return_pagination_range(d_count, skip, limit):
-    r_range = [
-        skip * limit,
-        skip * limit + limit,
-    ]
-
-    if skip == 0 and limit == 0:
-        return [0, d_count]
-
-    r_l_i = d_count - 1
-
-    if r_range[0] > r_l_i:
-        r_range[0] = r_l_i
-    if r_range[-1] > d_count:
-        r_range[-1] = d_count
-
-    return r_range
 
 ################################################################################
 
-def return_paginated_list(this, limit, p_range):
+def return_paginated_list(this, skip, limit):
     if limit < 1:
         return this
 
+    p_range = [
+        skip * limit,
+        skip * limit + limit,
+    ]
     t_no = len(this)
-    r_min = p_range[0] + 1
-    r_max = p_range[-1]
+    r_l_i = t_no - 1
 
-    if r_min > t_no:
+    if p_range[0] > r_l_i:
+        p_range[0] = r_l_i
+    if p_range[-1] > t_no:
+        p_range[-1] = t_no
+
+    if p_range[0] > t_no:
         return []
-    if r_max > t_no:
-        return this[p_range[0]:r_max]
 
     return this[p_range[0]:p_range[-1]]
 
-################################################################################
-
-
-def set_pagination_range(d_count, byc):
-    r_range = [
-        byc["pagination"]["skip"] * byc["pagination"]["limit"],
-        byc["pagination"]["skip"] * byc["pagination"]["limit"] + byc["pagination"]["limit"],
-    ]
-
-    if byc["pagination"]["skip"] == 0 and byc["pagination"]["limit"] == 0:
-        byc["pagination"].update({"range": [0, d_count]})
-        return
-
-    r_l_i = d_count - 1
-
-    if r_range[0] > r_l_i:
-        r_range[0] = r_l_i
-    if r_range[-1] > d_count:
-        r_range[-1] = d_count
-
-    byc["pagination"].update({"range": r_range})
-
-
-################################################################################
-
-def paginate_list(this, byc):
-    if not "pagination" in byc:
-        return this
-    if byc["pagination"].get("limit", 0) < 1:
-        return this
-
-    r = byc["pagination"].get("range", (1, len(this)))
-
-    t_no = len(this)
-    r_min = r[0] + 1
-    r_max = r[-1]
-
-    if r_min > t_no:
-        return []
-    if r_max > t_no:
-        return this[r[0]:r_max]
-
-    return this[r[0]:r[-1]]
 
 ################################################################################
 
@@ -152,9 +96,11 @@ def mongo_result_list(db_name, coll_name, query, fields):
 
     return results, error
 
+
 ################################################################################
 
 def mongo_test_mode_query(db_name, coll_name, test_mode_count=5):
+    
     query = {}
     error = False
     ids = []

@@ -1,0 +1,30 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "definitions": {
+        "ResultItem": {
+            "additionalProperties": true,
+            "properties": {
+                "id": {
+                    "description": "A (potentially ephemeral) identifier of the element.",
+                    "examples": [
+                        "N704216",
+                        "NCIT:C3262"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "description": "Simple results object for byconaut services",
+    "properties": {
+        "results": {
+            "items": {
+                "$ref": "#/definitions/ResultItem"
+            },
+            "type": "array"
+        }
+    },
+    "type": "object"
+}

@@ -1,0 +1,29 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "description": "Byconaut service responses provide lists of items and a summary.",
+    "properties": {
+        "info": {
+            "$ref": "../../../framework/json/common/beaconCommonComponents.json#/definitions/Info",
+            "description": "Additional details that could be of interest. Provided to clearly enclose any attribute that is not part of the Beacon specification."
+        },
+        "meta": {
+            "$ref": "../../../framework/json/responses/sections/beaconResponseMeta.json",
+            "description": "Information about the response that could be relevant for the Beacon client in order to interpret the results."
+        },
+        "response": {
+            "$ref": "./byconautServiceResults.json",
+            "description": "Response for queries that recovers any result.",
+            "type": "object"
+        },
+        "responseSummary": {
+            "$ref": "../../../framework/json/responses/sections/beaconSummaryResponseSection.json",
+            "description": "Response summary, including Boolean and optionally results count."
+        }
+    },
+    "required": [
+        "meta",
+        "responseSummary"
+    ],
+    "type": "object"
+}

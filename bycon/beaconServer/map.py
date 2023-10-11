@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-from os import path, pardir
-import sys
-
 from bycon import *
 
 """podmd
@@ -24,7 +21,8 @@ def main():
 
 def map():
 
-    r, e = instantiate_response_and_error(byc, "beaconMapResponse")
+    r = object_instance_from_schema_name(byc, "beaconMapResponse", "")
+    e = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
     response_meta_set_info_defaults(r, byc)
 
     m_f = get_schema_file_path(byc, "beaconMap")

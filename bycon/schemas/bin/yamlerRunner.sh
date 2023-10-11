@@ -15,3 +15,5 @@ echo "==> converting $BYCONSCHEMAS/models/src"
 $BASEDIR/beaconYamler.py -i $BYCONSCHEMAS/models/src -t yaml -x json -o $BYCONSCHEMAS/models/json
 echo "==> converting $BYCONSCHEMAS/framework/src"
 $BASEDIR/beaconYamler.py -i $BYCONSCHEMAS/framework/src -t yaml -x json -o $BYCONSCHEMAS/framework/json
+echo "==> converting $BYCONSCHEMAS/framework-byconaut-service-additions/src"
+$BASEDIR/beaconYamler.py -i $BYCONSCHEMAS/framework-byconaut-service-additions/src -t yaml -x json -o $BYCONSCHEMAS/framework-byconaut-service-additions/json

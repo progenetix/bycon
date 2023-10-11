@@ -2,7 +2,7 @@ import csv, re, requests
 # from attrdictionary import AttrDict
 from random import sample as randomSamples
 
-from cgi_parsing import prjsonnice
+from cgi_parsing import prdbug, prjsonnice
 
 ################################################################################
 
@@ -16,11 +16,12 @@ def export_datatable_download(results, byc):
         return
 
     dt_m = byc["datatable_mappings"]
-    r_t = byc["response_entity_id"]
-    io_params = dt_m["entities"][ r_t ]["parameters"]
+    r_t = byc.get("response_entity_id", "___none___")
 
-    if not byc["response_entity_id"] in dt_m["entities"]:
+    if not r_t in dt_m["definitions"]:
         return
+
+    io_params = dt_m["definitions"][ r_t ]["parameters"]
 
     if not "local" in byc["env"]:
  
@@ -38,6 +39,8 @@ def export_datatable_download(results, byc):
     print("\t".join( header ))
 
     for pgxdoc in results:
+
+        # prdbug(byc, pgxdoc.keys())
 
         line = [ ]
 
@@ -80,7 +83,10 @@ def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="
 
     dt_m = byc["datatable_mappings"]
 
-    io_params = dt_m["entities"][ primary_scope ]["parameters"]
+    if not primary_scope in dt_m["definitions"]:
+        return
+
+    io_params = dt_m["definitions"][ primary_scope ]["parameters"]
     def_params = create_table_header(io_params)
 
     pref_array_values = {}
@@ -98,10 +104,6 @@ def import_datatable_dict_line(byc, parent, fieldnames, lineobj, primary_scope="
         par_defs = io_params.get(par, {})
 
         v = lineobj[f_n].strip()
-
-        # if byc["debug_mode"] is True:
-        #     if "analysis" in primary_scope:
-        #         print(f'{f_n}: {v}')
 
         if len(v) < 1:
             if f_n in io_params.keys():

@@ -12,11 +12,11 @@ try:
 
     from aggregator_utils import *
     from args_parsing import *
+    from beacon_response_generation import *
     from bycon_helpers import *
     from bycon_plot import *
     from cgi_parsing import *
     from clustering_utils import *
-    from data_retrieval import *
     from dataset_parsing import *
     from datatable_utils import *
     from handover_generation import *
@@ -28,12 +28,20 @@ try:
     from read_specs import *
     from response_remapping import *
     from schema_parsing import *
+    from service_response_generation import *
     from service_utils import *
     from export_file_generation import *
     from variant_mapping import *
     from variant_parsing import *
 
-    byc: object = initialize_bycon()
+    byc: object = {
+        "pkg_path": pkg_path,
+        "bycon_lib_path": bycon_lib_path,
+        "env": "server"
+    }
+    if not environ.get('HTTP_HOST'):
+        byc.update({"env": "local"})
+
     read_service_definition_files(byc)
     set_byc_config_pars(byc)
     set_beacon_defaults(byc)

@@ -245,6 +245,7 @@ class ByconBundler:
 
         return self.callsetVariantsBundles
 
+
     #--------------------------------------------------------------------------#
 
     def callsets_frequencies_bundles(self):
