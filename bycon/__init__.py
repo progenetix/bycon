@@ -28,7 +28,6 @@ try:
     from read_specs import *
     from response_remapping import *
     from schema_parsing import *
-    from service_response_generation import *
     from service_utils import *
     from export_file_generation import *
     from variant_mapping import *

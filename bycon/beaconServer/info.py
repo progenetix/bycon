@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-import cgi, sys
-from os import pardir, path
 
 from bycon import *
 

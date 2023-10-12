@@ -26,11 +26,11 @@ parameters:
     type: string
     pattern: '^\w+?(\:\:\w+?)?$'
     db_key: id
-  ISO3166alpha3:
+  iso3166alpha3:
     type: string
     pattern: '^\w\w\w$'
     db_key: provenance.geo_location.properties.ISO3166alpha3
-  ISO3166alpha2:
+  iso3166alpha2:
     type: string
     pattern: '^\w\w\w$'
     db_key: provenance.geo_location.properties.ISO3166alpha2
@@ -43,22 +43,22 @@ request_types:
       - geo_longitude
       - geo_distance
     any_of:
-      - ISO3166alpha3
-      - ISO3166alpha2
+      - iso3166alpha3
+      - iso3166alpha2
       - country
   city:
     all_of:
       - city
     any_of:
-      - ISO3166alpha3
-      - ISO3166alpha2
+      - iso3166alpha3
+      - iso3166alpha2
       - country
   ISO3166alpha3:
     all_of:
-      - ISO3166alpha3
+      - iso3166alpha3
   ISO3166alpha2:
     all_of:
-      - ISO3166alpha2
+      - iso3166alpha2
   id:
     all_of:
       - id

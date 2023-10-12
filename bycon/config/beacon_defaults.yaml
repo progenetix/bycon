@@ -39,8 +39,10 @@ service_path_aliases:
   "service-info": info
   configuration: configuration
   map: map
-  entry_types: entryTypes
-  filtering_terms: filteringTerms
+  entryTypes: entry_types
+  entry_types: entry_types
+  filteringTerms: filtering_terms
+  filtering_terms: filtering_terms
   datasets: datasets
   cohorts: cohorts
   individuals: individuals
@@ -60,7 +62,9 @@ path_entry_type_mappings:
   genomicVariations: genomicVariant
   map: beaconMap
   info: info
+  filtering_terms: filteringTerm
   filteringTerms: filteringTerm
+  entry_types: entryType
   entryTypes: entryType
 
 # entry types for the standard query stack #####################################
@@ -131,7 +135,7 @@ entity_defaults:
 
   filteringTerm:
     is_entry_type: False
-    request_entity_path_id: filteringTerms
+    request_entity_path_id: filtering_terms
     response_entity_id: filteringTerm
     collection: collations
     response_schema: beaconFilteringTermsResponse

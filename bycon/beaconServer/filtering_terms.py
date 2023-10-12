@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
-from os import path, pardir
-import sys
-
 from bycon import *
 
 """podmd
+
+* <https://progenetix.org/beacon/filtering_terms>
+* <https://cancercelllines.org/beacon/filtering_terms?collationTypes=cellosaurus>
 
 podmd"""
 
@@ -16,37 +16,26 @@ podmd"""
 def main():
 
     try:
-        entry_types()
+        filtering_terms()
     except Exception:
         print_text_response(traceback.format_exc(), byc["env"], 302)
-    
+
+ 
 ################################################################################
 
-def entryTypes():
-    
-    try:
-        entry_types()
-    except Exception:
-        print('Content-Type: text')
-        print()
-        print(traceback.format_exc())
+def filtering_terms():
+    initialize_bycon_service(byc, "filtering_terms")
+    run_beacon_init_stack(byc)
 
-################################################################################
+    r = BeaconDataResponse(byc)
 
-def entry_types():
-
-    r = object_instance_from_schema_name(byc, "beaconEntryTypesResponse", "")
-    e = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
-    response_meta_set_info_defaults(r, byc)
-
-    e_f = get_schema_file_path(byc, "beaconConfiguration")
-    e_t_s = load_yaml_empty_fallback( e_f )
-
-    r["response"].update( {"entry_types": e_t_s["entryTypes"] } )
-
-    byc.update({"service_response": r, "error_response": e })
+    byc.update({
+        "service_response": r.filteringTermsResponse(),
+        "error_response": r.errorResponse()
+    })
 
     cgi_print_response( byc, 200 )
+
 
 ################################################################################
 ################################################################################

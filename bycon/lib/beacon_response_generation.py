@@ -77,7 +77,7 @@ class BeaconDataResponse:
             return
 
         fts, ress = ByconFilteringTerms(self.byc).populatedFilteringTerms()
-        self.data_response["response"].update({"filteringTerms": fts})
+        self.data_response["response"].update({"filtering_terms": fts})
         self.data_response["response"].update({"resources": ress})
         # self.__filtering_terms_response_update_summaries()
         return self.data_response

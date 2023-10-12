@@ -13,6 +13,24 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2023-10-12 (v.1.3.0)
+
+This is an extensive internal code update which
+
+* moves service response generation to byconaut (implemented as `ByconautServiceResponse`
+class w/ its methods)
+* removes many of the methods from `service_utils` since they have been implemented
+in the beacon or services response classes and (mostly) limits the library to
+general/initialization methods (still more to clean...)
+* fixes some inconsistencies (e.g. snake vs. camel cases in paths where sometimes
+non-standard versions were documented - now using the Beacon v2 defaults such as
+`beacon/filtering_terms/` instead of `beacon/filteringTerms/`)
+* similar for geo queries (e.g. `geoLatitude` as query parameter instead of `geolatitude`)
+ though this is "BeaconPlus" anyway
+
+**CAVE**: These changes also affect the front-ends (`progenetix-web`, `beaconplus-web` etc.)
+which need to be recompiled from the latest versions
+
 ### 2023-08-30 (v.1.2.2)
 
 * some defaults cleaning (e.g. removal of non-standard paths from built in `beacon_defaults`)

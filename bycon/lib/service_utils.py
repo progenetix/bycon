@@ -123,9 +123,6 @@ def initialize_bycon_service(byc, service=False):
     p_e_m = byc["beacon_defaults"].get("path_entry_type_mappings", {})
     entry_type = p_e_m.get(service, "___none___")
 
-    # prdbug(byc, entry_type)
-    # prdbug(byc, list(b_e_d.keys()))
-
     if entry_type in b_e_d:
         for d_k, d_v in b_e_d[entry_type].items():
             # prdbug(byc, {d_k: d_v})

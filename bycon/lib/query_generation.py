@@ -665,8 +665,6 @@ class ByconQuery():
 # TODO: GeoQuery class
 
 def geo_query(byc):
-    geo_q = {}
-    geo_pars = {}
 
     if "geoloc_definitions" not in byc:
         return geo_q, geo_pars
@@ -675,7 +673,20 @@ def geo_query(byc):
     g_p_rts = byc["geoloc_definitions"]["request_types"]
     geo_root = byc["geoloc_definitions"]["geo_root"]
 
+    geo_form_pars = {}
+    for g_f_p in g_p_defs.keys():
+        f_v = byc["form_data"].get(g_f_p)
+        if f_v:
+            geo_form_pars.update({g_f_p: f_v})
+
+    geo_q = {}
+    geo_pars = {}
+
+    if len(geo_form_pars.keys()) < 1:
+        return geo_q, geo_pars
+
     req_type = ""
+
     # TODO: Make this modular & fix the one_of interpretation to really only 1
     for rt in g_p_rts:
         g_p = {}
@@ -689,8 +700,6 @@ def geo_query(byc):
         else:
             continue
 
-        # print(rt)
-        # print(byc["form_data"]["filters"])
         all_p = g_p_rts[rt].get("any_of", []) + g_q_k
 
         for g_k in g_p_defs.keys():
@@ -698,20 +707,19 @@ def geo_query(byc):
             if g_k not in all_p:
                 continue
 
-            g_default = None
-            if "default" in g_p_defs[g_k]:
-                g_default = g_p_defs[g_k]["default"]
-
+            g_default = g_p_defs[g_k].get("default")
             # TODO: This is an ISO lower hack ...
 
-            if g_k.lower() in byc["form_data"]:
-                g_v = byc["form_data"][g_k.lower()]
-            else:
+            if g_k in geo_form_pars.keys():
+                g_v = geo_form_pars[g_k]
+            elif g_default:
                 g_v = g_default
-            if g_v is None:
+            else:
                 continue
+
             if not re.compile(g_p_defs[g_k]["pattern"]).match(str(g_v)):
                 continue
+
             if "float" in g_p_defs[g_k]["type"]:
                 g_p[g_k] = float(g_v)
             else:
@@ -743,10 +751,7 @@ def geo_query(byc):
         for g_k in g_p_rts["geoquery"]["any_of"]:
             if g_k in geo_pars.keys():
                 g_v = geo_pars[g_k]
-                if len(geo_root) > 0:
-                    geopar = ".".join([geo_root, "properties", g_k])
-                else:
-                    geopar = ".".join(["properties", g_k])
+                geopar = ".".join([geo_root, "properties", g_k])
                 geoq_l.append({geopar: re.compile(r'^' + str(g_v), re.IGNORECASE)})
 
         if len(geoq_l) > 1:
@@ -763,7 +768,6 @@ def return_geo_city_query(geo_root, geo_pars):
     geoq_l = []
 
     for g_k, g_v in geo_pars.items():
-
         if len(geo_root) > 0:
             geopar = ".".join([geo_root, "properties", g_k])
         else:

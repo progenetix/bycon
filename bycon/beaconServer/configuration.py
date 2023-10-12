@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-from os import path, pardir
-import sys
-
 from bycon import *
 
 ################################################################################

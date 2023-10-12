@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 
-import cgi, sys, os, datetime, re, json, yaml
-from os import environ, pardir, path
-from pymongo import MongoClient
-
 from bycon import *
 
 """podmd

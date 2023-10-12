@@ -85,9 +85,8 @@ def beacon():
         cgi_print_response(byc, 200)
 
     elif f:
-        # dynamic package/function loading; e.g. `filteringTerms` loads
-        # `filteringTerms` from `filteringTerm.py` which is an alias to
-        # the `filtering_terms` function there...
+        # dynamic package/function loading; e.g. `filtering_terms` loads
+        # `filtering_terms` from `filtering_terms.py`...
         try:
             mod = import_module(f)
             serv = getattr(mod, f)
