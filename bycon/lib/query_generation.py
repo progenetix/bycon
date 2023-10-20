@@ -132,6 +132,7 @@ class ByconQuery():
         self.__id_query_add_variant_query(r_e, [p_id_v])
         self.queries.update({"expand": False})
 
+
     # -------------------------------------------------------------------------#
 
     def __update_queries_from_id_values(self):
@@ -248,7 +249,12 @@ class ByconQuery():
 
         if "variantTypeRequest" in self.variant_request_type and len(self.filters) > 0:
             q = self.__create_variantTypeRequest_query()
-        if "variantBracketRequest" in self.variant_request_type:
+
+        if "aminoacidChangeRequest" in self.variant_request_type:
+           q = self.__create_aminoacidChangeRequest_query()
+        elif "genomicAlleleShortFormRequest" in self.variant_request_type:
+           q = self.__create_genomicAlleleShortFormRequest_query()
+        elif "variantBracketRequest" in self.variant_request_type:
             q = self.__create_variantBracketRequest_query()
         elif "variantRangeRequest" in self.variant_request_type:
             q = self.__create_variantRangeRequest_query()
@@ -318,6 +324,30 @@ class ByconQuery():
 
     #--------------------------------------------------------------------------#
 
+    def __create_aminoacidChangeRequest_query(self):    
+        v_p_defs = self.variant_parameters.get("parameters")
+        vp = self.varguments
+        if not "aminoacid_change" in vp:
+            return
+
+        v_q = { v_p_defs["aminoacid_change"]["db_key"]: vp.get("aminoacid_change", "___none___")}
+
+        return v_q
+
+    #--------------------------------------------------------------------------#
+
+    def __create_genomicAlleleShortFormRequest_query(self):    
+        v_p_defs = self.variant_parameters.get("parameters")
+        vp = self.varguments
+        if not "genomic_allele_short_form" in vp:
+            return
+
+        v_q = { v_p_defs["genomic_allele_short_form"]["db_key"]: vp.get("genomic_allele_short_form", "___none___")}
+
+        return v_q
+
+    #--------------------------------------------------------------------------#
+
     def __create_variantTypeRequest_query(self):    
         v_p_defs = self.variant_parameters.get("parameters")
         vp = self.varguments
@@ -336,7 +366,7 @@ class ByconQuery():
         v_p_defs = self.variant_parameters.get("parameters")
 
         v_q_l = [
-            { v_p_defs["reference_name"]["db_key"]: vp[ "reference_name" ] },
+            { v_p_defs["reference_name"]["db_key"]: vp.get("reference_name", "___none___")},
             { v_p_defs["start"]["db_key"]: { "$lt": int(vp[ "end" ][-1]) } },
             { v_p_defs["end"]["db_key"]: { "$gt": int(vp[ "start" ][0]) } }
         ]

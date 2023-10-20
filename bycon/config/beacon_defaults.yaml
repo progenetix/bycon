@@ -55,6 +55,7 @@ service_path_aliases:
 path_entry_type_mappings:
   analyses: analysis
   cohorts: cohort
+  configuration: configuration
   datasets: dataset
   biosamples: biosample
   individuals: individual

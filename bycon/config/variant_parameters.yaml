@@ -34,7 +34,6 @@ parameters:
 
   variant_type:
     db_key: variant_state.id
-    items:
     type: string
     pattern: '^\w+[\w \-\:]\w+?$'
 
@@ -71,6 +70,26 @@ parameters:
     db_key: Null
     pattern: '^\w+?(\w+?(\-\w+?)?)?$'
 
+  aminoacid_change:
+    description: >-
+      Aminoacid alteration in 1 letter format
+    type: string
+    pattern: '^\w+?$'
+    db_key: molecular_attributes.aminoacid_changes 
+    examples:
+      - V600E
+      - M734V
+      - G244A
+
+  genomic_allele_short_form:
+    description: >-
+      Genomic HGVSId descriptor.
+    type: string
+    db_key: identifiers.genomicHGVS_id
+    pattern: '^\w+.*\w$'
+    examples:
+      - NC_000017.11:g.7674232C>G
+
 # custom parameters
 
   variant_internal_id:
@@ -103,6 +122,14 @@ parameters:
 # variant parameter combinations the `request_types` here provide sets
 # of combinations valid at least for `bycon` Progenetix etc. data.
 request_types:
+
+  aminoacidChangeRequest:
+    all_of:
+      - aminoacid_change
+
+  genomicAlleleShortFormRequest:
+    all_of:
+      - genomic_allele_short_form
 
   variantTypeRequest:
     description: >-

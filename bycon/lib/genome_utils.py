@@ -63,7 +63,7 @@ def parse_cytoband_file(byc):
 
     c_bands = [ ]
     with open(cb_file) as cb_f:                                                                                          
-        for c_band in csv.DictReader(filter(lambda row: row[0]!='#', cb_f), fieldnames=cb_keys, delimiter='\t'):
+        for c_band in csv.DictReader(filter(lambda row: row.startswith('#') is False, cb_f), fieldnames=cb_keys, delimiter='\t'):
             c_bands.append(c_band)
 
     #--------------------------------------------------------------------------#

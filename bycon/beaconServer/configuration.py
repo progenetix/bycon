@@ -17,17 +17,15 @@ def main():
 
 def configuration():
 
-    initialize_bycon_service(byc)
-    r = object_instance_from_schema_name(byc, "beaconConfigurationResponse", "")
-    e = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
-    response_meta_set_info_defaults(r, byc)
-
+    initialize_bycon_service(byc, "configuration")
+    r = BeaconInfoResponse(byc)
     c_f = get_schema_file_path(byc, "beaconConfiguration")
     c = load_yaml_empty_fallback( c_f )
 
-    r.update( {"response": c } )
-
-    byc.update({"service_response": r, "error_response": e })
+    byc.update({
+        "service_response": r.populatedInfoResponse(c),
+        "error_response": r.errorResponse()
+    })
 
     cgi_print_response( byc, 200 )
 

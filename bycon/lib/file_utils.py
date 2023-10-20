@@ -21,7 +21,7 @@ def read_tsv_to_dictlist(filepath, max_count=0):
 
     with open(filepath, newline='') as csvfile:
     
-        data = csv.DictReader(filter(lambda row: row[0]!='#', csvfile), delimiter="\t", quotechar='"')
+        data = csv.DictReader(filter(lambda row: row.startswith('#') is False, csvfile), delimiter="\t", quotechar='"')
         fieldnames = list(data.fieldnames)
 
         for l in data:
@@ -42,8 +42,10 @@ def read_www_tsv_to_dictlist(www, max_count=0):
 
     with requests.Session() as s:
         download = s.get(www)
-        decoded_content = download.content.decode('utf-8')    
-        data = csv.DictReader(filter(lambda row: row[0]!='#', decoded_content.splitlines()), delimiter="\t", quotechar='"')
+        decoded_content = download.content.decode('utf-8')
+        lines = list(decoded_content.splitlines())
+
+        data = csv.DictReader(filter(lambda row: row.startswith('#') is False, lines), delimiter="\t", quotechar='"') # , quotechar='"'
         fieldnames = list(data.fieldnames)
 
         for l in data:

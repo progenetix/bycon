@@ -77,12 +77,13 @@ def beacon():
     elif f in d_p_s:
         initialize_bycon_service(byc, f)
         run_beacon_init_stack(byc)
-        r = BeaconDataResponse(byc)
-        byc.update({
-            "service_response": r.resultsetResponse(),
-            "error_response": r.errorResponse()
-        })
-        cgi_print_response(byc, 200)
+        r = BeaconDataResponse(byc).resultsetResponse()
+        print_json_response(r, byc["env"])
+        # byc.update({
+        #     "service_response": r.resultsetResponse(),
+        #     "error_response": r.errorResponse()
+        # })
+        # cgi_print_response(byc, 200)
 
     elif f:
         # dynamic package/function loading; e.g. `filtering_terms` loads
@@ -100,6 +101,7 @@ def beacon():
 
             exit()
 
+    # TODO: replace with proper error response object
     byc.update({
         "service_response": {},
         "error_response": {

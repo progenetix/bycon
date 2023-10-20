@@ -95,6 +95,11 @@ def __get_variant_request_type(byc):
             brts_k = [ "variantRangeRequest" ]
         elif len(v_pars[ "start" ]) == 2 and len(v_pars[ "end" ]) == 2:
             brts_k = [ "variantBracketRequest" ]
+    elif "aminoacid_change" in v_pars:
+        brts_k = [ "aminoacidChangeRequest" ]
+    elif "genomic_allele_short_form" in v_pars:
+        brts_k = [ "genomicAlleleShortFormRequest" ]
+        
 
     vrt_matches = [ ]
     for vrt in brts_k:

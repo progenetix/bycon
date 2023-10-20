@@ -25,7 +25,7 @@ def main():
 
 def cohorts():
 
-    initialize_bycon_service(byc)
+    initialize_bycon_service(byc, "cohorts")
     run_beacon_init_stack(byc)
     r = BeaconDataResponse(byc)
     byc.update({

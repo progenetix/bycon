@@ -21,15 +21,15 @@ def main():
 
 def map():
 
-    r = object_instance_from_schema_name(byc, "beaconMapResponse", "")
-    e = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
-    response_meta_set_info_defaults(r, byc)
-
+    initialize_bycon_service(byc, "map")
+    r = BeaconInfoResponse(byc)
     m_f = get_schema_file_path(byc, "beaconMap")
     beaconMap = load_yaml_empty_fallback( m_f )
 
-    r.update( {"response": beaconMap } )
-    byc.update({"service_response": r, "error_response": e })
+    byc.update({
+        "service_response": r.populatedInfoResponse(beaconMap),
+        "error_response": r.errorResponse()
+    })
 
     cgi_print_response( byc, 200 )
 

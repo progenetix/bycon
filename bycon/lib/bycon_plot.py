@@ -1,10 +1,8 @@
-import datetime
-import io
-import re
-import base64
+import base64, io, re
+from datetime import datetime, date
 from PIL import Image, ImageColor, ImageDraw
 
-from cgi_parsing import get_plot_parameters, print_svg_response, prjsonnice, test_truthy
+from cgi_parsing import get_plot_parameters, print_svg_response, prjsonnice, test_truthy, prdbug
 from clustering_utils import cluster_frequencies, cluster_samples
 from genome_utils import bands_from_cytobands, retrieve_gene_id_coordinates
 
@@ -30,10 +28,11 @@ class ByconPlot:
     """
 
     def __init__(self, byc: dict, plot_data_bundle: dict):
-        self.env = byc.get("env", "server")
         self.byc = byc
+        self.env = byc.get("env", "server")
         self.plot_data_bundle = plot_data_bundle
         self.svg = None
+        self.plot_time_init = datetime.now()
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -43,141 +42,22 @@ class ByconPlot:
         self.__plot_pipeline()
         return self.svg
 
+
+    # -------------------------------------------------------------------------#
+
     def svg2file(self, filename):
         self.__plot_pipeline()
         svg_fh = open(filename, "w")
         svg_fh.write(self.svg)
         svg_fh.close()
 
+
+    # -------------------------------------------------------------------------#
+
     def svg_response(self):
         self.__plot_pipeline()
         print_svg_response(self.svg, self.env)
 
-    # -------------------------------------------------------------------------#
-    # --------------------------- probesplot ----------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def __plot_add_probesplot(self):
-        """
-        Prototyping bitmap drawing for probe plots etc.
-        Invoked w/ &output=arrayplot
-        https://pillow.readthedocs.io/en/stable/reference/ImageDraw.html
-        
-        #### Draw examples
-
-        * draw.point((50,50), (50,255,0))
-        * draw.line((0, 0) + image.size, fill=128)
-        * draw.line((0, image.size[1], image.size[0], 0), fill=(50,255,0))
-        * draw.rectangle([0, 0, 28, image.size[1]], fill="rgb(255,20,66)")
-        * draw.ellipse([(80,20),(130,50)], fill="#ccccff", outline="red")
-        
-        #### Input:
-        ```
-        probes = [
-            {
-                "reference_name": "17",
-                "start": 13663925,
-                "value": 2.5
-            },
-            {...}
-        ]
-        ```
-        """
-
-        if not "samplesplot" in self.plv["plot_type"]:
-            return
-
-        p_t_s = self.byc["plot_defaults"]["plot_types"]
-        d_k = p_t_s["samplesplot"].get("data_key")
-
-        probebundles = self.plot_data_bundle.get(d_k, [{"id":"___undefined___"}])
-        if len(probebundles) != 1:
-            return
-        if not "cn_probes" in probebundles[0]:
-            return
-
-        probes = probebundles[0].get("cn_probes", [])
-        self.plv.update({
-            "plot_axis_y_max": 4,
-            "plot_y2pf": self.plv["plot_area_height"] * 0.5 / 4 * self.plv["plot_probe_y_factor"],
-            "plot_first_area_y0": self.plv["Y"],
-            "plot_label_y_unit": "",
-            "plot_label_y_values": self.plv["plot_probe_label_y_values"]
-        })
-
-        x = 0
-        h_y_0 = self.plv["plot_area_height"] * 0.5
-        p_y_f = self.plv["plot_y2pf"]
-        p_half = self.plv["plot_probedot_size"] * 0.5
-        p_dense = self.plv["plot_probedot_opacity"]
-
-        if len(probes) > 500000:
-            p_half *= 0.5
-            p_dense = p_dense * 0.7
-        p_dense = int(round(p_dense, 0))
-
-        image = Image.new(
-                    'RGBA',
-                    (self.plv["plot_area_width"], self.plv["plot_area_height"]),
-                    color=self.plv["plot_area_color"]
-                )
-        draw = ImageDraw.Draw(image)
-
-        for chro in self.plv["plot_chros"]:
-
-            c_p = list(filter(lambda d: d["reference_name"] == chro, probes.copy()))
-            c_l = self.byc["cytolimits"][str(chro)]
-            chr_w = c_l["size"] * self.plv["plot_b2pf"]
-
-            for i_v in c_p:
-                s = x + i_v.get("start", 0) * self.plv["plot_b2pf"]
-                v = i_v.get("value", 0)
-                h = v * p_y_f 
-                if h > h_y_0:
-                    h = h_y_0
-                if h < -h_y_0:
-                    h = -h_y_0
-                h_p = h_y_0 - h
-
-                # draw.ellipse(
-                #     [
-                #         (s-p_half, h_p - p_half),
-                #         (s+p_half, h_p + p_half)
-                #     ],
-                #     fill=(0,0,63,p_dense)
-                # )
-                draw.point((round(s, 2),round(h_p, 2)), (0,0,63,p_dense))
-
-            x += chr_w + self.plv["plot_region_gap_width"]
-
-        # ------------------------ / histogram data ----------------------------#
-
-        in_mem_file = io.BytesIO()
-        image.save(in_mem_file, format = "PNG")
-        in_mem_file.seek(0)
-        img_bytes = in_mem_file.read()
-        base64_encoded_result_bytes = base64.b64encode(img_bytes)
-        base64_encoded_result_str = base64_encoded_result_bytes.decode('ascii')
-
-        self.plv["pls"].append("""
-<image
-  x="{}"
-  y="{}"
-  width="{}"
-  height="{}"
-  xlink:href="data:image/png;base64,{}"
-/>""".format(
-            self.plv["plot_area_x0"],
-            self.plv["Y"],
-            self.plv["plot_area_width"],
-            self.plv["plot_area_height"],
-            base64_encoded_result_str
-        ))
-
-        self.__plot_area_add_grid()
-        self.plv["Y"] += self.plv["plot_area_height"]
-        self.plv.update({"plot_last_area_ye": self.plv["Y"]})
-        self.plv["Y"] += self.plv["plot_region_gap_width"]
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
@@ -185,8 +65,11 @@ class ByconPlot:
 
     def __plot_pipeline(self):
 
+        self.plot_pipeline_start = datetime.now()
+
         p_t_s = self.byc["plot_defaults"].get("plot_types", {})
         p_t = self.byc.get("output", "___none___")
+
         if p_t not in p_t_s.keys():
             return
 
@@ -204,6 +87,9 @@ class ByconPlot:
         self.__plot_add_footer()
 
         self.svg = self.__create_svg()
+        self.plot_pipeline_end = datetime.now()
+        self.plot_pipeline_duration = self.plot_pipeline_end - self.plot_pipeline_start
+        prdbug(self.byc, f'... plot pipeline duration for {p_t} was {self.plot_pipeline_duration.total_seconds()} seconds')
 
     # -------------------------------------------------------------------------#
 
@@ -288,6 +174,7 @@ class ByconPlot:
             "pls": []
         })
 
+
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#
 
@@ -306,10 +193,12 @@ class ByconPlot:
             "results_number": len(self.plot_data_bundle[d_k])
         })
 
+
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#
 
     def __plot_respond_empty_results(self):
+
         if self.plv["results_number"] > 0:
             return False
 
@@ -960,6 +849,132 @@ class ByconPlot:
 
                 self.plv["pls"].append(f'<text x="{x_y_l}" y="{y_l_y}" class="label-y">{neg}{y_m}{u}</text>')
 
+    # -------------------------------------------------------------------------#
+    # --------------------------- probesplot ----------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __plot_add_probesplot(self):
+        """
+        Prototyping bitmap drawing for probe plots etc.
+        Invoked w/ &output=arrayplot
+        https://pillow.readthedocs.io/en/stable/reference/ImageDraw.html
+        
+        #### Draw examples
+
+        * draw.point((50,50), (50,255,0))
+        * draw.line((0, 0) + image.size, fill=128)
+        * draw.line((0, image.size[1], image.size[0], 0), fill=(50,255,0))
+        * draw.rectangle([0, 0, 28, image.size[1]], fill="rgb(255,20,66)")
+        * draw.ellipse([(80,20),(130,50)], fill="#ccccff", outline="red")
+        
+        #### Input:
+        ```
+        probes = [
+            {
+                "reference_name": "17",
+                "start": 13663925,
+                "value": 2.5
+            },
+            {...}
+        ]
+        ```
+        """
+
+        if not "samplesplot" in self.plv["plot_type"]:
+            return
+
+        p_t_s = self.byc["plot_defaults"]["plot_types"]
+        d_k = p_t_s["samplesplot"].get("data_key")
+
+        probebundles = self.plot_data_bundle.get(d_k, [{"id":"___undefined___"}])
+        if len(probebundles) != 1:
+            return
+        if not "cn_probes" in probebundles[0]:
+            return
+
+        probes = probebundles[0].get("cn_probes", [])
+        self.plv.update({
+            "plot_axis_y_max": 4,
+            "plot_y2pf": self.plv["plot_area_height"] * 0.5 / 4 * self.plv["plot_probe_y_factor"],
+            "plot_first_area_y0": self.plv["Y"],
+            "plot_label_y_unit": "",
+            "plot_label_y_values": self.plv["plot_probe_label_y_values"]
+        })
+
+        x = 0
+        h_y_0 = self.plv["plot_area_height"] * 0.5
+        p_y_f = self.plv["plot_y2pf"]
+        p_half = self.plv["plot_probedot_size"] * 0.5
+        p_dense = self.plv["plot_probedot_opacity"]
+
+        if len(probes) > 500000:
+            p_half *= 0.5
+            p_dense = p_dense * 0.7
+        p_dense = int(round(p_dense, 0))
+
+        image = Image.new(
+                    'RGBA',
+                    (self.plv["plot_area_width"], self.plv["plot_area_height"]),
+                    color=self.plv["plot_area_color"]
+                )
+        draw = ImageDraw.Draw(image)
+
+        for chro in self.plv["plot_chros"]:
+
+            c_p = list(filter(lambda d: d["reference_name"] == chro, probes.copy()))
+            c_l = self.byc["cytolimits"][str(chro)]
+            chr_w = c_l["size"] * self.plv["plot_b2pf"]
+
+            for i_v in c_p:
+                s = x + i_v.get("start", 0) * self.plv["plot_b2pf"]
+                v = i_v.get("value", 0)
+                h = v * p_y_f 
+                if h > h_y_0:
+                    h = h_y_0
+                if h < -h_y_0:
+                    h = -h_y_0
+                h_p = h_y_0 - h
+
+                # draw.ellipse(
+                #     [
+                #         (s-p_half, h_p - p_half),
+                #         (s+p_half, h_p + p_half)
+                #     ],
+                #     fill=(0,0,63,p_dense)
+                # )
+                draw.point((round(s, 2),round(h_p, 2)), (0,0,63,p_dense))
+
+            x += chr_w + self.plv["plot_region_gap_width"]
+
+        # ------------------------ / histogram data ----------------------------#
+
+        in_mem_file = io.BytesIO()
+        image.save(in_mem_file, format = "PNG")
+        in_mem_file.seek(0)
+        img_bytes = in_mem_file.read()
+        base64_encoded_result_bytes = base64.b64encode(img_bytes)
+        base64_encoded_result_str = base64_encoded_result_bytes.decode('ascii')
+
+        self.plv["pls"].append("""
+<image
+  x="{}"
+  y="{}"
+  width="{}"
+  height="{}"
+  xlink:href="data:image/png;base64,{}"
+/>""".format(
+            self.plv["plot_area_x0"],
+            self.plv["Y"],
+            self.plv["plot_area_width"],
+            self.plv["plot_area_height"],
+            base64_encoded_result_str
+        ))
+
+        self.__plot_area_add_grid()
+        self.plv["Y"] += self.plv["plot_area_height"]
+        self.plv.update({"plot_last_area_ye": self.plv["Y"]})
+        self.plv["Y"] += self.plv["plot_region_gap_width"]
+
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#
 
@@ -1179,7 +1194,7 @@ class ByconPlot:
 
     def __plot_add_footer(self):
 
-        today = datetime.date.today()
+        today = date.today()
         x_a_0 = self.plv["plot_area_x0"]
         x_c_e = x_a_0 + self.plv["plot_area_width"]
 

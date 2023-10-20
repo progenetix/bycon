@@ -118,14 +118,16 @@ properties:
         examples:
           - BRAF
           - SCN5A
-      # aminoacidChange:
-      #   description: Aminoacid alteration of interest. Format 1 letter
-      #   type: string
-      #   examples:
-      #     - V600E
-      #     - M734V
-      # genomicAlleleShortForm:
-      #   description: HGVSId descriptor
-      #   type: string
-      #   examples:
-      #     - NM_004006.2:c.4375C>T
+      aminoacidChange:
+        description: >-
+          Aminoacid alteration in 1 letter format
+        type: string
+        examples:
+          - V600E
+          - M734V
+      genomicAlleleShortForm:
+        description: >-
+          Genomic HGVSId descriptor.
+        type: string
+        examples:
+          - NM_004006.2:c.4375C>T

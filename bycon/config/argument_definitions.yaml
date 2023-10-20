@@ -52,7 +52,7 @@ parameters:
 
   - type: string
     argDef:
-      output:
+      method:
         flags:
           - --method
         help: >-
@@ -321,7 +321,7 @@ parameters:
           - --geoDistance
         help: only for the geolocations...
 
-      # special ...
+  # special ...
   - type: array
     argDef:
       collationTypes:
@@ -335,3 +335,21 @@ parameters:
         flags:
           - --withSamples
         help: only for the collations; number of code_matches...
+
+  # plot
+  - type: string
+    argDef:
+      plotTitle:
+        flags:
+          - --plotTitle
+        help: >-
+          command line plot special; could also be achieved through
+          "--plotPars "title=This is a nice plot"
+
+  - type: string
+    argDef:
+      plotPars:
+        flags:
+          - --plotPars
+        help: like in the query string
+

@@ -13,6 +13,17 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2023-10-20 (v.1.3.1)
+
+This version provides another step in moving "non-standard" Beacon responses tp
+the `byconeer` project. 
+
+* creatiing a `.../services/sampleplots/` entry point which will be used to handle
+  the sample (strips/clustered; histoplots from search results ...) web plotting
+  instead of adding the `output=histoplot` etyc. option to standard Beacon queries
+* some class (`ByconResultSets`) restructuring to allow plot outputs (this will be
+  changed further, probably moving the whole plot ... classes and methods to `byconeer`)
+
 ### 2023-10-12 (v.1.3.0)
 
 This is an extensive internal code update which

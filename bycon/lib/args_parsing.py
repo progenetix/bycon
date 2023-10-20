@@ -46,6 +46,8 @@ def args_update_form(byc):
         return
 
     arg_defs = byc["argument_definitions"]["parameters"]
+    p_d_p = byc["plot_defaults"]["parameters"]
+
     list_pars = []
     for d_d in arg_defs:
         a_d_k = list(d_d["argDef"].keys())[0]
@@ -56,6 +58,20 @@ def args_update_form(byc):
 
     for p in arg_vars.keys():
         if arg_vars[p] is None:
+            continue
+        if "plotPars" in p:
+            for ppv in arg_vars[p].split('&'):
+                pp, pv = ppv.split('=')
+                if not pv:
+                    continue
+                if pp not in p_d_p:
+                    continue
+                p_v_t = p_d_p[pp].get("type", "string")
+                if "array" in p_v_t:
+                    byc["form_data"].update({pp: pv.split(',')})
+                else:
+                    byc["form_data"].update({pp: pv})
+
             continue
         p_d = decamelize(p)
         if p in list_pars:

@@ -12,7 +12,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="bycon",
-    version="1.3.0",
+    version="1.3.1",
     description="A Python-based environment for the Beacon v2 genomics API",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -28,7 +28,6 @@ setup(
         "Topic :: Scientific/Engineering :: Medical Science Apps.",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",

@@ -144,6 +144,8 @@ def remap_runs(r_s_res, byc):
 def remap_biosamples(r_s_res, byc):
     if not "biosample" in byc["response_entity_id"]:
         return r_s_res
+    if not r_s_res:
+        return None
 
     bs_pop_keys = ["_id", "followup_state", "followup_time"]  # "info"
 
@@ -322,6 +324,8 @@ def _phenopack_resources(byc):
 ################################################################################
 
 def remap_all(r_s_res):
+    if not r_s_res:
+        return None
     for br_i, br_r in enumerate(r_s_res):
         if type(br_r) is not dict:
             continue

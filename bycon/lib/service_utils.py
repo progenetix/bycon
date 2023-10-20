@@ -11,7 +11,7 @@ from export_file_generation import *
 from filter_parsing import parse_filters
 from interval_utils import generate_genomic_mappings
 from read_specs import read_service_prefs, update_rootpars_from_local
-from response_remapping import *
+from response_remapping import callsets_create_iset
 from variant_parsing import parse_variants
 
 ################################################################################
@@ -46,8 +46,6 @@ def run_beacon_init_stack(byc):
     parse_filters(byc)
     parse_variants(byc)
     generate_genomic_mappings(byc)
-    cgi_break_on_errors(byc)
-
 
 ################################################################################
 
@@ -242,119 +240,6 @@ def set_response_entity(byc):
 def set_response_schema(byc):
     r_s = byc["response_entity"].get("response_schema", "beaconInfoResponse")
     byc.update({"response_schema": r_s})
-
-
-################################################################################
-
-def response_meta_add_request_summary(r, byc):
-    if not "received_request_summary" in r["meta"]:
-        return r
-
-    r_rcvd_rs = r["meta"]["received_request_summary"]
-    defs = byc.get("beacon_defaults", {})
-    b_e_d = defs.get("entity_defaults", {"info":{}})
-    api_v = b_e_d.get("api_version", "v2")
-
-    form = byc["form_data"]
-
-    r_rcvd_rs.update({
-        "filters": byc.get("filters", []),
-        "pagination": byc.get("pagination", {}),
-        "api_version": api_v
-    })
-
-    for p in ["include_resultset_responses", "requested_granularity"]:
-        if p in form and p in r_rcvd_rs:
-            r_rcvd_rs.update({p: form.get(p)})
-            if "requested_granularity" in p:
-                r["meta"].update({"returned_granularity": form.get(p)})
-
-    try:
-        for rrs_k, rrs_v in byc["service_config"]["meta"]["received_request_summary"].items():
-            r_rcvd_rs.update({rrs_k: rrs_v})
-    except:
-        pass
-
-    if "queries_at_execution" in byc:
-        if "info" in r["meta"]:
-            r["meta"]["info"].update({"queries_at_execution": byc["queries_at_execution"]})
-        else:
-            r["meta"].update({"info": {"queries_at_execution": byc["queries_at_execution"]}})
-
-    return r
-
-
-################################################################################
-
-def response_meta_set_info_defaults(r, byc):
-    defs = byc.get("beacon_defaults", {})
-    b_e_d = defs["entity_defaults"]["info"].get("content", {})
-
-    t_m = {}
-
-    # TODO: command line hack ...
-    for i_k in ["api_version", "beacon_id"]:
-        v = b_e_d.get(i_k)
-        if v:
-            t_m.update({i_k:v})
-        if "meta" in r and "info" in b_e_d:
-            r["meta"].update({i_k: b_e_d["info"].get(i_k, "")})
-
-    r.update({"meta": always_merger.merge(r.get("meta"), t_m)})
-
-
-################################################################################
-
-def response_add_error(byc, code=200, message=False):
-    if message is False:
-        return
-    if len(str(message)) < 1:
-        return
-
-    e = {"error_code": code, "error_message": message}
-    byc["error_response"].update({"error": e})
-
-
-# ################################################################################
-
-# def response_add_warnings(byc, message=False):
-#     if message is False:
-#         return
-#     if len(str(message)) < 1:
-#         return
-
-#     if not "service_response" in byc:
-#         return
-
-#     if not "info" in byc["service_response"]:
-#         byc["service_response"].update({"info": {}})
-#     if not "warnings" in byc["service_response"]:
-#         byc["service_response"]["info"].update({"warnings": []})
-
-#     byc["service_response"]["info"]["warnings"].append(message)
-
-
-################################################################################
-
-def set_selected_delivery_keys(method, method_keys, form_data):
-    # the method keys can be overriden with "deliveryKeys"
-
-    d_k = []
-
-    if "delivery_keys" in form_data:
-        d_k = re.split(",", form_data.get("delivery_keys", []))
-        if len(d_k) > 0:
-            return d_k
-
-    if not method:
-        return d_k
-
-    if not method_keys:
-        return d_k
-
-    d_k = method_keys.get(method, [])
-
-    return d_k
 
 
 ################################################################################

@@ -243,7 +243,7 @@ def rest_path_value(key=""):
     """
 
     if not environ.get('REQUEST_URI'):
-        return
+        return False
 
     url_comps = urlparse(environ.get('REQUEST_URI'))
     p_items = re.split('/', url_comps.path)
@@ -255,9 +255,9 @@ def rest_path_value(key=""):
             if unquote(p) in [key, f'{key}.py', unquote(key)]:
                 return unquote(p_items[i])
         elif p == key:
-            return
+            return False
 
-    return
+    return False
 
 
 ################################################################################
@@ -330,7 +330,6 @@ def get_plot_parameters(plv, byc):
     form = byc["form_data"]
 
     for p_k, p_d in p_d_p.items():
-
         if p_k in form:
             plv.update({p_k: form[p_k]})
         l_p = p_d_l.get(p_k, False)
@@ -346,11 +345,11 @@ def get_plot_parameters(plv, byc):
 def cgi_break_on_errors(byc):
     if not "error_response" in byc:
         return
-    e = byc["error_response"].get("error", {})
+    e = byc["error_response"].get("error", {"error_code": 200})
     e_c = e.get("error_code", 200)
 
     if int(e_c) > 200:
-        cgi_print_response(byc, e)
+        cgi_print_response(byc, byc["error_response"])
 
 
 ################################################################################
