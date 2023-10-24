@@ -17,8 +17,8 @@ h->o_types:
       - biosample
       - analysis
     h->o_key: 'biosamples.id'
-    script_path_web: '/beacon/biosamples'
-    output: histoplot
+    script_path_web: '/services/sampleplots'
+    plotType: histoplot
 
   samplesplot:
     handoverType:
@@ -29,8 +29,8 @@ h->o_types:
       - biosample
       - analysis
     h->o_key: 'biosamples.id'
-    script_path_web: '/beacon/biosamples'
-    output: samplesplot
+    script_path_web: '/services/sampleplots'
+    plotType: samplesplot
 
   biosamples:
     handoverType:

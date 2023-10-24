@@ -1,9 +1,8 @@
-import csv
-import datetime
-import re
-import requests
+import csv, datetime, re, requests
+
 from pathlib import Path
-from os import path
+from os import environ, path
+from pymongo import MongoClient
 from copy import deepcopy
 from random import sample as random_samples
 
@@ -11,6 +10,7 @@ from cgi_parsing import prjsonnice
 from datatable_utils import import_datatable_dict_line
 from interval_utils import interval_cnv_arrays, interval_counts_from_callsets
 from variant_mapping import ByconVariant
+from bycon_helpers import return_paginated_list
 
 
 ################################################################################
@@ -109,11 +109,15 @@ class ByconBundler:
         self.byc = byc
         self.errors = []
         self.filepath = None
+        self.datasets_results = None
         self.header = []
         self.data = []
         self.fieldnames = []
         self.callsetVariantsBundles = []
         self.intervalFrequenciesBundles = []
+        pagination = byc.get("pagination", {"skip": 0, "limit": 0})
+        self.limit = pagination.get("limit", 0)
+        self.skip = pagination.get("skip", 0)
 
         self.bundle = {
             "variants": [],
@@ -208,7 +212,7 @@ class ByconBundler:
             return
 
         self.__deparse_pgxseg_samples_header()
-        self.__keyed_bundle_add_variants()
+        self.__keyed_bundle_add_variants_from_lines()
 
         return self.keyedBundle
 
@@ -250,10 +254,28 @@ class ByconBundler:
 
     #--------------------------------------------------------------------------#
 
+    def resultsets_callset_bundles(self, datasets_results={}):
+        self.datasets_results = datasets_results
+        self.__callsets_bundle_from_result_set()
+        self.__callsets_add_database_variants()
+        return { "callsets_variants_bundles": self.callsetVariantsBundles }
+
+
+    #--------------------------------------------------------------------------#
+
+    def resultsets_frequencies_bundles(self, datasets_results=[]):
+        self.datasets_results = datasets_results
+        self.__callsets_bundle_from_result_set()
+        self.intervalFrequenciesBundles.append(self.__callsetBundleCreateIset())
+        return {"interval_frequencies_bundles": self.intervalFrequenciesBundles}
+
+
+    #--------------------------------------------------------------------------#
+
+
     def callsets_frequencies_bundles(self):
             
-        self.intervalFrequenciesBundles.append(self.__callsetBundleCreateIset("import"))
-
+        self.intervalFrequenciesBundles.append(self.__callsetBundleCreateIset())
         return self.intervalFrequenciesBundles
 
 
@@ -302,7 +324,73 @@ class ByconBundler:
 
     #--------------------------------------------------------------------------#
 
-    def __keyed_bundle_add_variants(self):
+    def __callsets_bundle_from_result_set(self):
+
+        for ds_id, ds_res in self.datasets_results.items():
+            if not "callsets._id" in ds_res:
+                continue
+
+            mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
+            cs_coll = mongo_client[ds_id]["callsets"]
+            cs_r = ds_res["callsets._id"]
+            cs__ids = cs_r["target_values"]
+            r_no = len(cs__ids)
+            if r_no < 1:
+                continue
+            cs__ids = return_paginated_list(cs__ids, self.skip, self.limit)
+
+            for cs__id in cs__ids:
+                cs = cs_coll.find_one({"_id": cs__id })
+                cs_id = cs.get("id", "NA")
+
+                cnv_chro_stats = cs.get("cnv_chro_stats", False)
+                cnv_statusmaps = cs.get("cnv_statusmaps", False)
+
+                if cnv_chro_stats is False or cnv_statusmaps is False:
+                    continue
+
+                p_o = {
+                    "dataset_id": ds_id,
+                    "callset_id": cs_id,
+                    "biosample_id": cs.get("biosample_id", "NA"),
+                    "cnv_chro_stats": cs.get("cnv_chro_stats"),
+                    "cnv_statusmaps": cs.get("cnv_statusmaps"),
+                    "probefile": callset_guess_probefile_path(cs, self.byc),
+                    "variants": []
+                }
+
+                # TODO: add optional probe read in
+
+                self.bundle["callsets"].append(p_o)
+
+        return
+
+    #--------------------------------------------------------------------------#
+
+    def __callsets_add_database_variants(self):
+
+
+        bb = self.bundle
+        c_p_l = []
+
+        mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
+        for p_o in bb.get("callsets", []):
+            ds_id = p_o.get("dataset_id", "___none___")
+            var_coll = mongo_client[ds_id]["variants"]
+            cs_id = p_o.get("callset_id", "___none___")
+            v_q = {"callset_id": cs_id}
+            for v in var_coll.find(v_q):
+               p_o["variants"].append(ByconVariant(self.byc).byconVariant(v))
+
+            c_p_l.append(p_o)
+
+        self.callsetVariantsBundles = c_p_l
+        return
+
+
+    #--------------------------------------------------------------------------#
+
+    def __keyed_bundle_add_variants_from_lines(self):
 
         fieldnames = self.fieldnames
         varlines = self.data

@@ -13,6 +13,16 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2023-10-20 (v.1.3.2)
+
+This version removes the complete `bycon_plot` code (_i.e._ moves it to `byconaut`).
+It still needs the further disentangling of the other alternative response options
+(`.pgxseg`, `.pgxmatrix` ...) from the resultsets generation; this soon will follow
+blueprint of the plot code removal.
+
+**CAVE** Now all plotting options have been shifted to the `/services/collationplots`
+and `/services/sampleplots` entry points.
+
 ### 2023-10-20 (v.1.3.1)
 
 This version provides another step in moving "non-standard" Beacon responses tp
@@ -21,6 +31,7 @@ the `byconeer` project.
 * creatiing a `.../services/sampleplots/` entry point which will be used to handle
   the sample (strips/clustered; histoplots from search results ...) web plotting
   instead of adding the `output=histoplot` etyc. option to standard Beacon queries
+    - plot types can now be specified through `plotType=samplesplot` etc.
 * some class (`ByconResultSets`) restructuring to allow plot outputs (this will be
   changed further, probably moving the whole plot ... classes and methods to `byconeer`)
 

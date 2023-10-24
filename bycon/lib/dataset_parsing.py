@@ -37,6 +37,8 @@ def ds_id_from_default(byc):
 
 def ds_id_from_rest_path_value(byc):
     ds_id = rest_path_value("datasets")
+    if ds_id is None:
+        return False
 
     if ds_id not in byc["dataset_definitions"].keys():
         return False

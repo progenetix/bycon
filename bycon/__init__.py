@@ -14,7 +14,6 @@ try:
     from args_parsing import *
     from beacon_response_generation import *
     from bycon_helpers import *
-    from bycon_plot import *
     from cgi_parsing import *
     from clustering_utils import *
     from dataset_parsing import *

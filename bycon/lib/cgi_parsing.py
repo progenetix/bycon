@@ -243,7 +243,7 @@ def rest_path_value(key=""):
     """
 
     if not environ.get('REQUEST_URI'):
-        return False
+        return None
 
     url_comps = urlparse(environ.get('REQUEST_URI'))
     p_items = re.split('/', url_comps.path)
@@ -255,9 +255,9 @@ def rest_path_value(key=""):
             if unquote(p) in [key, f'{key}.py', unquote(key)]:
                 return unquote(p_items[i])
         elif p == key:
-            return False
+            return None
 
-    return False
+    return None
 
 
 ################################################################################

@@ -10,11 +10,7 @@ from variant_mapping import ByconVariant
 
 ################################################################################
 
-def _handover_add_stringified_plot_parameters(h_o_t, byc):
-
-    if not "plot" in h_o_t:
-        return ""
-
+def _handover_add_stringified_plot_parameters(byc):
     p_p = get_plot_parameters({}, byc)
     p_p_l = []
     for ppk, ppv in p_p.items():
@@ -162,11 +158,13 @@ def handover_create_url(h_o_server, h_o_defs, accessid, byc):
         if "http" in h_o_defs["script_path_web"]:
             server = ""
         url = "{}{}?accessid={}".format(server, h_o_defs["script_path_web"], accessid)
-        for p in ["method", "output", "requestedSchema"]:
+        for p in ["method", "output", "plotType", "requestedSchema"]:
             if p in h_o_defs:
                 url += "&{}={}".format(p, h_o_defs[p])
         url += h_o_defs.get("url_opts", "")
-        url += _handover_add_stringified_plot_parameters(h_o_defs.get("output", ""), byc)
+        p_t = h_o_defs.get("plotType")
+        if p_t:
+            url += _handover_add_stringified_plot_parameters(byc)
 
         return url
 

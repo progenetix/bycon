@@ -2,7 +2,6 @@ from datetime import datetime
 from deepmerge import always_merger
 from os import environ
 
-from bycon_plot import ByconPlot
 from bycon_helpers import mongo_result_list, mongo_test_mode_query, return_paginated_list
 from cgi_parsing import prdbug
 from datatable_utils import export_datatable_download
@@ -595,8 +594,8 @@ class ByconResultSets:
         self.__retrieve_variants_data()
         # tables before reshaping ...
         self.__check_datasets_data_table_export()
-        self.__check_datasets_results_histoplot_delivery()
-        self.__check_datasets_results_samplesplot_delivery()
+        # self.__check_datasets_results_histoplot_delivery()
+        # self.__check_datasets_results_samplesplot_delivery()
         self.__check_biosamples_map_delivery()
         # finally populating the standard Beacon response
         self.__populate_result_sets()
@@ -616,41 +615,6 @@ class ByconResultSets:
 
     def datasetsResults(self):
         return self.datasets_results
-
-
-    # -------------------------------------------------------------------------#
-
-    def samplesPlot(self):
-        self.output = "samplesplot"
-        self.__datasets_results_samplesplot_generation()
-        return self.svg
-
-
-   # -------------------------------------------------------------------------#
-
-    def samplesPlotWeb(self):
-        self.output = "samplesplot"
-        self.__datasets_results_samplesplot_generation()
-        print_svg_response(self.svg, self.env)
-
-
-    # -------------------------------------------------------------------------#
-
-    def histoPlot(self):
-        self.output = "histoplot"
-        self.__datasets_results_histoplot_generation()
-        return self.svg
-
-   # -------------------------------------------------------------------------#
-
-    def plotSVGtoWeb(self, plot_type="histoplot"):
-        self.output = plot_type
-        self.svg = '<svg>___empty___</svg>'
-        prdbug(self.byc, self.output)
-        self.__datasets_results_histoplot_generation()
-        self.__datasets_results_samplesplot_generation()
-        print_svg_response(self.svg, self.env)
-
 
 
     # -------------------------------------------------------------------------#
@@ -754,137 +718,6 @@ class ByconResultSets:
             return
         self.__datasets_results_histoplot_generation()
         print_svg_response(self.svg, self.env)
-
-
-    # -------------------------------------------------------------------------#
-
-    def __datasets_results_samplesplot_generation(self):
-        prdbug(self.byc, self.output)
-        if not "samplesplot" in self.output:
-            return
-        results = []
-
-        for ds_id, ds_res in self.datasets_results.items():
-            if not "callsets._id" in ds_res:
-                continue
-
-            mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-            cs_coll = mongo_client[ds_id]["callsets"]
-            var_coll = mongo_client[ds_id]["variants"]
-
-            cs_r = ds_res["callsets._id"]
-            cs__ids = cs_r["target_values"]
-            r_no = len(cs__ids)
-            if r_no < 1:
-                continue
-            cs__ids = return_paginated_list(cs__ids, self.skip, self.limit)
-
-            for cs__id in cs__ids:
-                cs = cs_coll.find_one({"_id": cs__id })
-                cs_id = cs.get("id", "NA")
-
-                cnv_chro_stats = cs.get("cnv_chro_stats", False)
-                cnv_statusmaps = cs.get("cnv_statusmaps", False)
-
-                if cnv_chro_stats is False or cnv_statusmaps is False:
-                    continue
-
-                p_o = {
-                    "dataset_id": ds_id,
-                    "callset_id": cs_id,
-                    "biosample_id": cs.get("biosample_id", "NA"),
-                    "cnv_chro_stats": cs.get("cnv_chro_stats", {}),
-                    "cnv_statusmaps": cs.get("cnv_statusmaps", {}),
-                    "probefile": callset_guess_probefile_path(cs, self.byc),
-                    "variants": []
-                }
-                if r_no == 1 and p_o["probefile"] is not False:
-                    p_o.update({"cn_probes": ByconBundler(self.byc).read_probedata_file(p_o["probefile"]) })
-
-                v_q = {"callset_id": cs_id}
-
-                for v in var_coll.find(v_q):
-                    p_o["variants"].append(ByconVariant(self.byc).byconVariant(v))
-
-                results.append(p_o)
-
-        plot_data_bundle = {"callsets_variants_bundles": results}
-        self.svg = ByconPlot(self.byc, plot_data_bundle).get_svg()
-
-
-    # -------------------------------------------------------------------------#
-
-    def __datasets_results_histoplot_generation(self):
-        if not "histoplot" in self.output:
-            return
-        f_d = self.filter_definitions
-        f_s_t = self.form_data.get("plot_group_by", "___none___")
-
-        interval_sets = []
-
-        for ds_id, ds_res in self.datasets_results.items():
-            if not "callsets._id" in ds_res:
-                continue
-            mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-            bios_coll = mongo_client[ds_id]["biosamples"]
-            cs_coll = mongo_client[ds_id]["callsets"]
-
-            f_s_dists = []
-            f_s_k = ""
-
-            if f_s_t in f_d.keys():
-                if not "biosamples._id" in ds_res:
-                    continue
-                bios_q_v = ds_res["biosamples._id"].get("target_values", [])
-                if len(bios_q_v) < 1:
-                    continue
-
-                f_s_k = f_d[f_s_t].get("db_key", "___none___")
-                f_s_p = f_d[f_s_t].get("pattern", False)
-                f_s_q = {"_id": {"$in": bios_q_v}}
-                f_s_dists = bios_coll.distinct(f_s_k, f_s_q)
-                if f_s_p is not False:
-                    r = re.compile(f_s_p)
-                    f_s_dists = list(filter(lambda d: r.match(d), f_s_dists))
-
-                for f_s_id in f_s_dists:
-
-                    bios_id_q = {"$and": [
-                        {f_s_k: f_s_id},
-                        {"_id": {"$in": bios_q_v}}
-                    ]}
-
-                    bios_ids = bios_coll.distinct("id", bios_id_q)
-                    cs__ids = cs_coll.distinct("_id", {"biosample_id": {"$in": bios_ids}})
-                    r_no = len(cs__ids)
-                    if r_no > self.limit:
-                        cs__ids = return_paginated_list(cs__ids, self.skip, self.limit)
-
-                    label = f"Search Results (subset {f_s_id})"
-
-                    iset = callset__ids_create_iset(ds_id, label, cs__ids, self.byc)
-                    interval_sets.append(iset)
-
-            else:
-                cs_r = ds_res["callsets._id"]
-                cs__ids = cs_r["target_values"]
-                r_no = len(cs__ids)
-                # filter for CNV cs before evaluating number
-                if r_no > self.limit:
-                    cs_cnv_ids = []
-                    for _id in cs__ids:
-                        cs = cs_coll.find_one({"_id":_id})
-                        if "cnv_statusmaps" in cs:
-                            cs_cnv_ids.append(_id)
-                    cs__ids = cs_cnv_ids
-                cs__ids = return_paginated_list(cs__ids, self.skip, self.limit)
-
-                iset = callset__ids_create_iset(ds_id, "Search Results", cs__ids, self.byc)
-                interval_sets.append(iset)
-
-        plot_data_bundle = {"interval_frequencies_bundles": interval_sets}
-
-        self.svg = ByconPlot(self.byc, plot_data_bundle).get_svg()
 
 
     # -------------------------------------------------------------------------#
