@@ -55,7 +55,7 @@ h->o_types:
       - biosample
       - analysis
     h->o_key: 'biosamples.id'
-    script_path_web: '/beacon/biosamples'
+    script_path_web: '/services/sampletable'
 
   phenopackets:
     handoverType:
@@ -104,7 +104,7 @@ h->o_types:
     paginated_entities:
       - all
     h->o_key: 'variants._id'
-    script_path_web: '/beacon/genomicVariations'
+    script_path_web: '/services/pgxsegvariants'
   
   vcf:
     handoverType:
@@ -116,7 +116,7 @@ h->o_types:
     paginated_entities:
       - all
     h->o_key: 'variants._id'
-    script_path_web: '/beacon/genomicVariations'
+    script_path_web: '/services/vcfvariants'
   
   UCSClink:    
     handoverType:

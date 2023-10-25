@@ -465,6 +465,15 @@ definitions:
         db_key: info.annotation_derived
         default: False
         indexed: True
+      aminoacid_changes:
+        type: array
+        items: string
+        db_key: molecular_attributes.aminoacid_changes
+        indexed: True
+      genomic_hgvs_id:
+        type: string
+        db_key: identifiers.genomicHGVS_id
+        indexed: True
 
       # special pgxseg columns
 

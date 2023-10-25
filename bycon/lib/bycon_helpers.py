@@ -120,3 +120,108 @@ def mongo_test_mode_query(db_name, coll_name, test_mode_count=5):
 
     return query, error
 
+################################################################################
+
+def assign_nested_value(parent, dotted_key, v, parameter_definitions={}):
+
+    parameter_type = parameter_definitions.get("type", "string")
+    parameter_default = parameter_definitions.get("default")
+
+    if v is None:
+        if parameter_default:
+            v = parameter_default
+
+    if v is None:
+        return parent
+
+    if "num" in parameter_type:
+        if str(v).strip().lstrip('-').replace('.','',1).isdigit():
+            v = float(v)
+    elif "integer" in parameter_type:
+        if str(v).strip().isdigit():
+            v = int(v)
+    else:
+        v = str(v)
+
+    ps = dotted_key.split('.')
+
+    if len(ps) == 1:
+        if "array" in parameter_type:
+            parent.update({ps[0]: v.split(',')})
+        else:
+            parent.update({ps[0]: v })
+        return parent
+
+    if ps[0] not in parent or parent[ ps[0] ] is None:
+        parent.update({ps[0]: {}})
+
+    if len(ps) == 2:
+        if "array" in parameter_type:
+            parent[ ps[0] ].update({ps[1]: v.split(',')})
+        else:
+            parent[ ps[0] ].update({ps[1]: v })
+        return parent
+
+    if  ps[1] not in parent[ ps[0] ] or parent[ ps[0] ][ ps[1] ] is None:
+        parent[ ps[0] ].update({ps[1]: {}})
+    if len(ps) == 3:
+        if "array" in parameter_type:
+            parent[ ps[0] ][ ps[1] ].update({ps[2]: v.split(',')})
+        else:
+            parent[ ps[0] ][ ps[1] ].update({ps[2]: v })
+        return parent
+
+    if  ps[2] not in parent[ ps[0] ][ ps[1] ] or parent[ ps[0] ][ ps[1] ][ ps[2] ] is None:
+        parent[ ps[0] ][ ps[1] ].update({ps[2]: {}})
+    if len(ps) == 4:
+        if "array" in parameter_type:
+            parent[ ps[0] ][ ps[1] ][ ps[2] ].update({ps[3]: v.split(',')})
+        else:
+            parent[ ps[0] ][ ps[1] ][ ps[2] ].update({ps[3]: v })
+        return parent
+    
+    if len(ps) > 4:
+        print("¡¡¡ Parameter key "+dotted_key+" nested too deeply (>4) !!!")
+        return '_too_deep_'
+
+    return parent
+
+################################################################################
+
+def get_nested_value(parent, dotted_key, parameter_type="string"):
+
+    ps = dotted_key.split('.')
+
+    v = ""
+
+    if len(ps) == 1:
+        try:
+            v = parent[ ps[0] ]
+        except:
+            v = ""
+    elif len(ps) == 2:
+        try:
+            v = parent[ ps[0] ][ ps[1] ]
+        except:
+            v = ""
+    elif len(ps) == 3:
+        try:
+            v = parent[ ps[0] ][ ps[1] ][ ps[2] ]
+        except:
+            v = ""
+    elif len(ps) == 4:
+        try:
+            v = parent[ ps[0] ][ ps[1] ][ ps[2] ][ ps[3] ]
+        except:
+            v = ""
+    elif len(ps) == 5:
+        try:
+            v = parent[ ps[0] ][ ps[1] ][ ps[2] ][ ps[3] ][ ps[4] ]
+        except:
+            v = ""
+    elif len(ps) > 5:
+        print("¡¡¡ Parameter key "+dotted_key+" nested too deeply (>5) !!!")
+        return '_too_deep_'
+
+    return v
+

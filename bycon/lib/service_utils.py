@@ -5,9 +5,9 @@ from os import environ, path
 
 from args_parsing import *
 from bycon_helpers import return_paginated_list
-from cgi_parsing import prdbug
+from cgi_parsing import prdbug, test_truthy
 from dataset_parsing import select_dataset_ids
-from export_file_generation import *
+# from export_file_generation import *
 from filter_parsing import parse_filters
 from interval_utils import generate_genomic_mappings
 from read_specs import read_service_prefs, update_rootpars_from_local
@@ -242,60 +242,3 @@ def set_response_schema(byc):
     byc.update({"response_schema": r_s})
 
 
-################################################################################
-
-def check_computed_interval_frequency_delivery(byc):
-    if not "frequencies" in byc["output"]:
-        return
-
-    ds_id = byc["dataset_ids"][0]
-    ds_results = byc["dataset_results"][ds_id]
-    p_r = byc["pagination"]
-
-    if not "callsets._id" in ds_results:
-        return
-
-    cs_r = ds_results["callsets._id"]
-
-    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-    cs_coll = mongo_client[ds_id]["callsets"]
-
-    open_text_streaming(byc["env"], "interval_cnv_frequencies.pgxseg")
-
-    for d in ["id", "assemblyId"]:
-        print("#meta=>{}={}".format(d, byc["dataset_definitions"][ds_id][d]))
-    print_filters_meta_line(byc)
-    print('#meta=>query="{}"'.format(json.dumps(byc["queries_at_execution"], indent=None, sort_keys=True, default=str)))
-    print('#meta=>skip={};limit={}'.format(p_r["skip"], p_r["limit"]))
-    print("#meta=>sample_no={}".format(cs_r["target_count"]))
-
-    q_vals = cs_r["target_values"]
-    r_no = len(q_vals)
-    if r_no > p_r["limit"]:
-        q_vals = return_paginated_list(q_vals, byc.get("skip", 0), byc.get("limit", 0))
-        print(f'#meta=>"WARNING: Only {len(q_vals)} analyses (out of {r_no}) used for calculations due to pagination skip and limit"')
-
-    h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
-    print("group_id\t" + "\t".join(h_ks))
-
-    cs_cursor = cs_coll.find({"_id": {"$in": q_vals}, "cnv_statusmaps": {"$exists":True}})
-
-    intervals, cnv_cs_count = interval_counts_from_callsets(cs_cursor, byc)
-
-    for intv in intervals:
-        v_line = []
-        v_line.append("query_result")
-        for k in h_ks:
-            v_line.append(str(intv[k]))
-        print("\t".join(v_line))
-
-    close_text_streaming()
-
-
-################################################################################
-
-def bycon_bundle_create_intervalfrequencies_object(bycon_bundle, byc):
-    return callsets_create_iset("import", "", bycon_bundle["callsets"], byc)
-
-
-################################################################################

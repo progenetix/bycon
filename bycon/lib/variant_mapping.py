@@ -3,7 +3,7 @@ from copy import deepcopy
 from deepmerge import always_merger
 
 from cgi_parsing import prjsonnice
-from datatable_utils import assign_nested_value, get_nested_value
+from bycon_helpers import assign_nested_value, get_nested_value
 from schema_parsing import object_instance_from_schema_name
 
 ################################################################################

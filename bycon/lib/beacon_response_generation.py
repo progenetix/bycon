@@ -4,9 +4,7 @@ from os import environ
 
 from bycon_helpers import mongo_result_list, mongo_test_mode_query, return_paginated_list
 from cgi_parsing import prdbug
-from datatable_utils import export_datatable_download
-from export_file_generation import *
-from file_utils import ByconBundler, callset_guess_probefile_path
+# from export_file_generation import *
 from handover_generation import dataset_response_add_handovers
 from query_execution import execute_bycon_queries
 from query_generation import ByconQuery
@@ -584,23 +582,9 @@ class ByconResultSets:
 
     def populatedResultSets(self):
 
-        # some methods for non-standard responses (i.e. beyond Beacon ...)
-        # first the methods which use data streaming, i.e. do not retrieve the data first
-        self.__check_datasets_0_results_pgxseg_export()
-        self.__check_datasets_0_results_vcf_export()
-        self.__check_result_sets_matrix_export()
-        # retrieving the data if not exited above
         self.__retrieve_datasets_data()
         self.__retrieve_variants_data()
-        # tables before reshaping ...
-        self.__check_datasets_data_table_export()
-        # self.__check_datasets_results_histoplot_delivery()
-        # self.__check_datasets_results_samplesplot_delivery()
-        self.__check_biosamples_map_delivery()
-        # finally populating the standard Beacon response
         self.__populate_result_sets()
-        # if still here (i.e. non of the above was successful) now saving
-        # this could be separate ...
         self.__result_sets_save_handovers()
 
         return self.result_sets, self.record_queries
@@ -608,6 +592,8 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def datasetsData(self):
+        self.__retrieve_datasets_data()
+        self.__retrieve_variants_data()
         return self.datasets_data
 
 
@@ -636,88 +622,6 @@ class ByconResultSets:
         self.handover_key = r_k
 
         return
-
-
-    # -------------------------------------------------------------------------#
-
-    def __check_datasets_data_table_export(self):
-        if not "table" in self.output:
-            return
-
-        collated_results = []
-        for ds_id, data in self.datasets_data.items():
-            collated_results += data
-
-        export_datatable_download(collated_results, self.byc)
-
-
-    # -------------------------------------------------------------------------#
- 
-    def __check_datasets_0_results_pgxseg_export(self):
-        """
-
-        """
-        if not "pgxseg" in self.output:
-            return
-
-        ds_id = list(self.datasets_results.keys())[0]
-        export_pgxseg_download(self.datasets_results, ds_id, self.byc)
-        return
-
-
-    # -------------------------------------------------------------------------#
- 
-    def __check_datasets_0_results_vcf_export(self):
-        """
-
-        """
-        if not "vcf" in self.output:
-            return
-
-        ds_id = list(self.datasets_results.keys())[0]
-        export_vcf_download(self.datasets_results, ds_id, self.byc)
-
-        return
-
-
-    # -------------------------------------------------------------------------#
-
-    def __check_result_sets_matrix_export(self):
-        if not "pgxmatrix" in self.output:
-            return
-
-        ds_id = list(self.datasets_results.keys())[0]
-        export_callsets_matrix(self.datasets_results, ds_id, self.byc)
-        return
-
-
-    # -------------------------------------------------------------------------#
-
-    def __check_biosamples_map_delivery(self):
-        """
-        TBD
-        """
-
-
-        return
-
-
-    # -------------------------------------------------------------------------#
-
-    def __check_datasets_results_samplesplot_delivery(self):
-        if not "samplesplot" in self.output:
-            return
-        self.__datasets_results_samplesplot_generation()
-        print_svg_response(self.svg, self.env)
-
-
-    # -------------------------------------------------------------------------#
-
-    def __check_datasets_results_histoplot_delivery(self):
-        if not "histo" in self.output:
-            return
-        self.__datasets_results_histoplot_generation()
-        print_svg_response(self.svg, self.env)
 
 
     # -------------------------------------------------------------------------#

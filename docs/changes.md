@@ -13,6 +13,38 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2023-10-25 (v.1.3.3)
+
+Most of the "special outputs" code has been moved to byconaut -> services.
+For legacy reasons (e.g. use by pgxRpi) the webserver configuration needed some
+rewrites ... They only apply for the Progenetix use case and are not needed if
+sticking to the Beacon formats or if following the use of the new apps like
+`services/vcfvariants`). Our (temporary) mappings are:
+
+```
+RewriteEngine On
+
+# The following rules are for backward compatibilitty with pgxRpi before Oct 2023
+
+RewriteCond %{QUERY_STRING} ^(.*?output=\w*?table.*?)$
+RewriteRule "^/beacon/biosamples.*?$" /cgi-bin/bycon/services/sampletable.py?%1&responseEntityId=biosample [PT]
+
+RewriteCond %{QUERY_STRING} ^(.*?output=\w*?table.*?)$
+RewriteRule "^/beacon/individuals.*?$" /cgi-bin/bycon/services/sampletable.py?%1&responseEntityId=individual [PT]
+
+RewriteCond %{QUERY_STRING} ^(.*?output=\w*?table.*?)$
+RewriteRule "^/beacon/individuals.*?$" /cgi-bin/bycon/services/sampletable.py?%1&responseEntityId=individual [PT]
+
+RewriteCond %{QUERY_STRING} ^(.*?output=\w*?matrix.*?)$
+RewriteRule "^/beacon/analyses.*?$" /cgi-bin/bycon/services/samplematrix.py?%1&responseEntityId=analysis [PT]
+
+RewriteCond %{QUERY_STRING} ^(.*?output=vcf.*?)$
+RewriteRule "^/beacon/biosamples/([^/]+?)/g_variants.*?$" /cgi-bin/bycon/services/vcfvariants.py?%1&biosampleIds=$1 [PT]
+
+RewriteCond %{QUERY_STRING} ^(.*?output=pgxseg.*?)$
+RewriteRule "^/beacon/biosamples/([^/]+?)/g_variants.*?$" /cgi-bin/bycon/services/pgxsegvariants.py?%1&biosampleIds=$1 [PT]
+```
+
 ### 2023-10-20 (v.1.3.2)
 
 This version removes the complete `bycon_plot` code (_i.e._ moves it to `byconaut`).

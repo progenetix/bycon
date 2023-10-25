@@ -85,7 +85,7 @@ def remap_analyses(r_s_res, byc):
 
     pop_keys = ["info", "provenance", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats"]
 
-    if "stats" in byc["output"]:
+    if "cnvstats" in byc["output"]:
         pop_keys = ["info", "provenance", "cnv_statusmaps"]
 
     for cs_i, cs_r in enumerate(r_s_res):
