@@ -1,4 +1,4 @@
-import re, yaml, json
+import inspect, json, re, yaml
 from deepmerge import always_merger
 from humps import camelize, decamelize
 from json_ref_dict import RefDict, materialize
@@ -65,6 +65,13 @@ def read_service_prefs(service, service_pref_path, byc):
 
 def update_rootpars_from_local(loc_dir, byc):
 
+    # avoiding re-parsing of directories, e.g. during init stage
+    p_c_p = byc.get("parsed_config_paths", [])
+    if loc_dir in p_c_p:
+        return
+
+    p_c_p.append(loc_dir)
+
     b_p = 'beacon_defaults'
     s_p = 'services_defaults'
     # prdbug(byc, f'... parsing {loc_dir} for {b_p}')
@@ -76,10 +83,13 @@ def update_rootpars_from_local(loc_dir, byc):
     b = always_merger.merge(s, b)
     byc.update({b_p: always_merger.merge(byc.get(b_p, {}), b)})
 
-    for p in ("dataset_definitions", "local_paths", "local_parameters"):
+    # TODO: better way to define which files are parsed from local
+    for p in ("dataset_definitions", "local_paths", "local_parameters", "datatable_mappings", "plot_defaults"):
         f = path.join(loc_dir, f'{p}.yaml')
         d = load_yaml_empty_fallback(f)
         byc.update({p: always_merger.merge(byc.get(p, {}), d)})
+
+    return
 
 
 ################################################################################
@@ -127,6 +137,7 @@ def datasets_update_latest_stats(byc, collection_type="datasets"):
 
     return results
 
+
 ################################################################################
 
 def load_yaml_empty_fallback(yp):
@@ -140,3 +151,4 @@ def load_yaml_empty_fallback(yp):
         pass
 
     return y
+

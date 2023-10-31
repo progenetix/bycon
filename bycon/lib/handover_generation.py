@@ -10,19 +10,19 @@ from variant_mapping import ByconVariant
 
 ################################################################################
 
-def _handover_add_stringified_plot_parameters(byc):
-    p_p = get_plot_parameters({}, byc)
-    p_p_l = []
-    for ppk, ppv in p_p.items():
-        if type(ppv) is list:
-            p_p_l.append( f'{ppk}={ ",".join(map(str, (ppv))) }' )
-            continue
-        p_p_l.append( f'{ppk}={ppv}' )
+# def _handover_add_stringified_plot_parameters(byc):
+#     p_p = get_plot_parameters({}, byc)
+#     p_p_l = []
+#     for ppk, ppv in p_p.items():
+#         if type(ppv) is list:
+#             p_p_l.append( f'{ppk}={ ",".join(map(str, (ppv))) }' )
+#             continue
+#         p_p_l.append( f'{ppk}={ppv}' )
 
-    if len(p_p_l) < 1:
-        return ""
+#     if len(p_p_l) < 1:
+#         return ""
 
-    return f'&{"&".join(p_p_l)}'
+#     return f'&{"&".join(p_p_l)}'
 
 ################################################################################
 
@@ -162,9 +162,9 @@ def handover_create_url(h_o_server, h_o_defs, accessid, byc):
             if p in h_o_defs:
                 url += "&{}={}".format(p, h_o_defs[p])
         url += h_o_defs.get("url_opts", "")
-        p_t = h_o_defs.get("plotType")
-        if p_t:
-            url += _handover_add_stringified_plot_parameters(byc)
+        # p_t = h_o_defs.get("plotType")
+        # if p_t:
+        #     url += _handover_add_stringified_plot_parameters(byc)
 
         return url
 
@@ -270,6 +270,13 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
 
     ucsc_chr = ""
 
+    colors = {
+        "plot_dup_color": "#FFC633",
+        "plot_amp_color": "#FF6600",
+        "plot_del_color": "#33A0FF",
+        "plot_homodel_color": "#0033CC"
+    }
+
     for vt in vs.keys():
         if len( vs[vt] ) > 0:
             try:
@@ -277,8 +284,9 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
             except:
                 pass
             col_key = "plot_{}_color".format(vt.lower())
-            col_hex = byc["plot_defaults"].get(col_key, "#666666")
+            col_hex = colors.get(col_key, "#666666")
             col_rgb = hex_2_rgb(col_hex)
+            # col_rgb = [127, 127, 127]
             b_f.write("track name={} visibility=squish description=\"{} variants matching the query with {} overall returned\" color={},{},{}\n".format(vt, vt, v_ret, col_rgb[0], col_rgb[1], col_rgb[2] ) )
             b_f.write("#chrom\tchromStart\tchromEnd\tbiosampleId\n")
             for v in vs[vt]:

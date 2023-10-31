@@ -15,11 +15,9 @@ try:
     from beacon_response_generation import *
     from bycon_helpers import *
     from cgi_parsing import *
-    from clustering_utils import *
     from dataset_parsing import *
     from handover_generation import *
-    from interval_utils import *
-    from filter_parsing import *
+    from parse_filters_request import *
     from query_execution import *
     from query_generation import *
     from read_specs import *
@@ -28,11 +26,12 @@ try:
     from service_utils import *
     # from export_file_generation import *
     from variant_mapping import *
-    from variant_parsing import *
+    from parse_variant_request import *
 
     byc: object = {
         "pkg_path": pkg_path,
         "bycon_lib_path": bycon_lib_path,
+        "parsed_config_paths": [],
         "env": "server"
     }
     if not environ.get('HTTP_HOST'):

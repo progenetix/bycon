@@ -4,7 +4,7 @@ from os import environ
 from pymongo import MongoClient
 
 from bycon_helpers import days_from_iso8601duration, return_paginated_list
-from cgi_parsing import prjsonnice, prdbug
+from cgi_parsing import prdbug
 from genome_utils import retrieve_gene_id_coordinates
 
 ################################################################################

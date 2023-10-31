@@ -136,11 +136,10 @@ def cgi_parse_POST(byc):
 
 def cgi_parse_GET(byc):
     b_defs = byc.get("beacon_parameters", {})
-    p_defs = byc.get("plot_defaults", {})
     v_defs = byc.get("variant_parameters", {})
     l_defs = byc.get("local_parameters", {})
 
-    f_defs = {**b_defs.get("parameters", {}), **p_defs.get("parameters", {}), **v_defs.get("parameters", {})}
+    f_defs = {**b_defs.get("parameters", {}), **v_defs.get("parameters", {}), **l_defs.get("parameters", {})}
 
     form = {}
 
@@ -315,29 +314,6 @@ def test_truthy(this):
         return True
 
     return False
-
-
-################################################################################
-
-def get_plot_parameters(plv, byc):
-    """
-    The new version here assumes that the values in byc["form_data"] already have
-    been processed into the correct type.
-    """
-
-    p_d_p = byc["plot_defaults"]["parameters"]
-    p_d_l = byc["plot_defaults"]["legacy_parameters"]
-    form = byc["form_data"]
-
-    for p_k, p_d in p_d_p.items():
-        if p_k in form:
-            plv.update({p_k: form[p_k]})
-        l_p = p_d_l.get(p_k, False)
-        if l_p is not False:
-            if l_p in byc["form_data"]:
-                plv.update({p_k: form[l_p]})
-
-    return plv
 
 
 ################################################################################

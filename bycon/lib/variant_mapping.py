@@ -340,7 +340,7 @@ class ByconVariant:
         v = self.byc_variant
 
         seq = v.get("sequence", v.get("alternate_bases"))
-        r_seq = v.get("reference_sequence", v.get("reference__bases"))
+        r_seq = v.get("reference_sequence", v.get("reference_bases"))
         # TODO: check, normalize, default...
         v.update({
             "sequence": seq,

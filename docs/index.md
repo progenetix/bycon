@@ -69,7 +69,7 @@ bycon
   |   |   |
   |   |   |- cgi_parsing.py
   |   |   |- read_specs.py
-  |   |   |- filter_parsing.py
+  |   |   |- parse_filters_request.py
   |   |   |- query_generation.py
   |   |   |- query_execution.py
   |   |    `- ...

@@ -1,7 +1,6 @@
 import datetime, re
 from pymongo import MongoClient
 from cgi_parsing import *
-from interval_utils import interval_counts_from_callsets
 from variant_mapping import ByconVariant
 from os import environ
 
@@ -334,44 +333,3 @@ def remap_all(r_s_res):
 
     return r_s_res
 
-
-################################################################################
-
-def callset__ids_create_iset(ds_id, label, cs__ids, byc):
-    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-    cs_coll = mongo_client[ds_id]["callsets"]
-
-    cs_cursor = cs_coll.find({"_id": {"$in": cs__ids}, "variant_class": {"$ne": "SNV"}})
-    intervals, cnv_cs_count = interval_counts_from_callsets(cs_cursor, byc)
-
-    iset = {
-        "dataset_id": ds_id,
-        "group_id": ds_id,
-        "label": label,
-        "sample_count": cnv_cs_count,
-        "interval_frequencies": []
-    }
-
-    for intv_i, intv in enumerate(intervals):
-        iset["interval_frequencies"].append(intv.copy())
-
-    return iset
-
-
-################################################################################
-
-def callsets_create_iset(ds_id, label, callsets, byc):
-    intervals, cnv_cs_count = interval_counts_from_callsets(callsets, byc)
-
-    iset = {
-        "dataset_id": ds_id,
-        "group_id": ds_id,
-        "label": label,
-        "sample_count": cnv_cs_count,
-        "interval_frequencies": []
-    }
-
-    for intv_i, intv in enumerate(intervals):
-        iset["interval_frequencies"].append(intv.copy())
-
-    return iset

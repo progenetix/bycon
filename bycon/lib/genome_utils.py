@@ -13,6 +13,14 @@ pkg_path = path.join( bycon_lib_path, pardir )
 ################################################################################
 ################################################################################
 
+def generate_genomic_mappings(byc):
+    parse_refseq_file(byc)
+    translate_reference_ids(byc)
+    parse_cytoband_file(byc)
+
+
+################################################################################
+
 def __get_genome_rsrc_path(byc, filename):
 
     # TODO: catch error for missing genome edition
@@ -104,8 +112,6 @@ def bands_from_cytobands(chr_bands, byc):
 
     cb_pat = re.compile( byc["variant_parameters"]["parameters"]["cyto_bands"]["pattern"] )
     error = ""
-
-    # chr_bands = re.sub(r'', $1, chr_bands)
 
     end_re = re.compile(r"^([pq]\d.*?)\.?\d$")
     arm_re = re.compile(r"^([pq]).*?$")
