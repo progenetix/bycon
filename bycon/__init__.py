@@ -16,6 +16,7 @@ try:
     from bycon_helpers import *
     from cgi_parsing import *
     from dataset_parsing import *
+    from genome_utils import *
     from handover_generation import *
     from parse_filters_request import *
     from query_execution import *
@@ -24,7 +25,6 @@ try:
     from response_remapping import *
     from schema_parsing import *
     from service_utils import *
-    # from export_file_generation import *
     from variant_mapping import *
     from parse_variant_request import *
 
@@ -40,7 +40,7 @@ try:
     read_service_definition_files(byc)
     set_byc_config_pars(byc)
     set_beacon_defaults(byc)
-    cgi_parse_query(byc)
+    parse_query(byc)
     
 except Exception:
 

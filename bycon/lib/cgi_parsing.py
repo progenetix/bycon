@@ -3,6 +3,15 @@ from urllib.parse import urlparse, parse_qs, unquote
 from os import environ
 from humps import camelize, decamelize
 
+################################################################################
+
+def parse_query(byc):
+    r_m = environ.get('REQUEST_METHOD', '')
+    if "POST" in r_m:
+        parse_POST(byc)
+    else:
+        parse_GET(byc)
+
 
 ################################################################################
 
@@ -67,17 +76,7 @@ def select_this_server(byc: dict) -> str:
 
 ################################################################################
 
-def cgi_parse_query(byc):
-    r_m = environ.get('REQUEST_METHOD', '')
-    if "POST" in r_m:
-        cgi_parse_POST(byc)
-    else:
-        cgi_parse_GET(byc)
-
-
-################################################################################
-
-def cgi_parse_POST(byc):
+def parse_POST(byc):
     content_len = environ.get('CONTENT_LENGTH', '0')
     content_typ = environ.get('CONTENT_TYPE', '')
 
@@ -134,7 +133,7 @@ def cgi_parse_POST(byc):
 
 ################################################################################
 
-def cgi_parse_GET(byc):
+def parse_GET(byc):
     b_defs = byc.get("beacon_parameters", {})
     v_defs = byc.get("variant_parameters", {})
     l_defs = byc.get("local_parameters", {})
@@ -153,6 +152,8 @@ def cgi_parse_GET(byc):
         # TODO still fallback ..
         else:
             v = get.getvalue(p)
+            if "undefined" in v:
+                continue
             # making sure double entries are forced to single
             if type(v) is list:
                 form.update({p_d: v[0]})
@@ -454,61 +455,6 @@ def response_delete_none_values(response):
 
 ################################################################################
 
-def open_json_streaming(byc, filename="data.json"):
-    meta = byc["service_response"].get("meta", {})
-
-    if not "local" in byc["env"]:
-        print_json_download_header(filename)
-
-    print('{"meta":', end='')
-    print(json.dumps(camelize(meta), indent=None, sort_keys=True, default=str), end=",")
-    print('"response":{', end='')
-    for r_k, r_v in byc["service_response"].items():
-        if "results" in r_k:
-            continue
-        if "meta" in r_k:
-            continue
-        print('"' + r_k + '":', end='')
-        print(json.dumps(camelize(r_v), indent=None, sort_keys=True, default=str), end=",")
-    print('"results":[', end="")
-
-
-################################################################################
-
-def print_json_download_header(filename):
-    print('Content-Type: application/json')
-    print(f'Content-Disposition: attachment; filename="{filename}"')
-    print('status: 200')
-    print()
-
-
-################################################################################
-
-def close_json_streaming():
-    print(']}}')
-    exit()
-
-
-################################################################################
-
-def open_text_streaming(env="server", filename="data.pgxseg"):
-    if not "local" in env:
-        print('Content-Type: text/plain')
-        if not "browser" in filename:
-            print('Content-Disposition: attachment; filename="{}"'.format(filename))
-        print('status: 200')
-        print()
-
-
-################################################################################
-
-def close_text_streaming():
-    print()
-    exit()
-
-
-################################################################################
-
 def prdbug(byc, this):
     if byc.get("debug_mode", False) is True:
         prjsonnice(this)
@@ -546,26 +492,6 @@ def print_json_response(this={}, env="server", status_code=200):
         print()
 
     prjsoncam(this)
-    print()
-    exit()
-
-
-################################################################################
-
-def print_svg_response(this, env="server", status_code=200):
-    if not this:
-        return
-
-    if "server" in env:
-        print('Content-Type: image/svg+xml')
-        print('status:' + str(status_code))
-        print()
-
-    elif "file" in env:
-        # this opion can be used to reroute the response to a file
-        return this
-
-    print(this)
     print()
     exit()
 

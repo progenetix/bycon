@@ -10,22 +10,6 @@ from variant_mapping import ByconVariant
 
 ################################################################################
 
-# def _handover_add_stringified_plot_parameters(byc):
-#     p_p = get_plot_parameters({}, byc)
-#     p_p_l = []
-#     for ppk, ppv in p_p.items():
-#         if type(ppv) is list:
-#             p_p_l.append( f'{ppk}={ ",".join(map(str, (ppv))) }' )
-#             continue
-#         p_p_l.append( f'{ppk}={ppv}' )
-
-#     if len(p_p_l) < 1:
-#         return ""
-
-#     return f'&{"&".join(p_p_l)}'
-
-################################################################################
-
 def dataset_response_add_handovers(ds_id, byc):
 
     """podmd

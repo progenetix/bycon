@@ -421,6 +421,10 @@ class ByconFilteringTerms:
                 f_t.update({"type": f.get("ft_type", "ontologyTerm")})
                 if "ontologyTerm" in f_t["type"]:
                     f_t.update({"type": f.get("name", "ontologyTerm")})
+                ft_k = f.get("db_key")
+                ft_s = f.get("scope")
+                if ft_k and ft_s:
+                    f_t.update({"target": f'{ft_s}.{ft_k}'})
 
                 # TODO: this is not required & also not as defined (singular `scope`)
                 # f_t.update({"scopes": scopes})

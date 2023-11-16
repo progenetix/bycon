@@ -68,7 +68,7 @@ h->o_types:
       - individual
       - phenopacket
     h->o_key: 'biosamples._id'
-    script_path_web: '/beacon/individuals'
+    script_path_web: '/beacon/phenopackets'
 
   individuals:
     handoverType:
@@ -92,7 +92,7 @@ h->o_types:
     paginated_entities:
       - all
     h->o_key: 'variants._id'
-    script_path_web: '/beacon/genomicVariations'
+    script_path_web: '/beacon/g_variants'
 
   pgxseg:
     handoverType:

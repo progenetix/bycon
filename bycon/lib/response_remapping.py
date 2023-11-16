@@ -67,9 +67,14 @@ def remap_variants(r_s_res, byc):
 
         # TODO: Keep legacy pars?
         legacy_pars = ["_id", "id", "reference_name", "type", "biosample_id", "callset_id", "individual_id",
-                       "variant_type", "reference_bases", "alternate_bases", "start", "end"]
+                       "variant_type", "reference_bases", "alternate_bases", "start", "end", "required", "info"]
         for p in legacy_pars:
             v["variation"].pop(p, None)
+
+        for k in ("molecular_attributes", "variant_level_data"):
+            k_v = v["variation"].get(k, {})
+            if not k_v:
+                 v["variation"].pop(k, None)
 
         variants.append(v)
 
@@ -211,13 +216,13 @@ def phenopack_individual(ind, data_db, byc):
     pxf_resources = _phenopack_resources(byc)
     server = select_this_server(byc)
 
-    bios_s = data_db["biosamples"].find({"individual_id": ind["id"]})
+    bios_s = data_db["biosamples"].find({"individual_id": ind.get("id", "___none___")})
 
     for bios in bios_s:
         bios.update({
             "files": [
                 {
-                    "uri": "{}/beacon/biosamples/{}/variants/?output=vcf".format(server, bios["id"]),
+                    "uri": f'{server}/services/vcfvariants/{bios.get("id", "___none___")}',
                     "file_attributes": {
                         "genomeAssembly": "GRCh38",
                         "fileFormat": "VCF"

@@ -82,7 +82,7 @@ NCIT:
   id: ncit/neoplasm-core.owl
   ft_type: ontologyTerm
   iri_prefix: http://purl.obolibrary.org/obo/NCIT_
-  name: NCIt Plus Neoplasm Core
+  name: NCI Thesaurus OBO Edition
   namespace_prefix: NCIT
   url: http://purl.obolibrary.org/obo/ncit/neoplasm-core.owl
   reference:
@@ -201,7 +201,7 @@ EFOmaterial:
 icdom:
   id: pgx_icdom
   ft_type: ontologyTerm
-  name: "ICD-O 3 Morphologies (Progenetix transcription)"
+  name: "ICD-O 3 Morphologies (Progenetix)"
   namespace_prefix: pgx
   url: https://progenetix.org/
   reference:
@@ -218,7 +218,7 @@ icdom:
 icdot:
   id: pgx_icdot
   ft_type: ontologyTerm
-  name: "ICD-O 3 Topographies (Progenetix transcription)"
+  name: "ICD-O 3 Topographies (Progenetix)"
   namespace_prefix: pgx
   url: "https://progenetix.org/"
   reference:
@@ -238,7 +238,7 @@ icdot:
 PMID:
   id: pubmed
   ft_type: ontologyTerm
-  name: "NCBI PubMed"
+  name: NCBI PubMed
   namespace_prefix: PMID
   url: "https://www.ncbi.nlm.nih.gov/pubmed/"
   reference:
@@ -257,8 +257,9 @@ PMID:
 
 GEOseries:
   id: geo_gse
+  ft_type: ontologyTerm
   namespace_prefix: geo
-  name: Gene Expression Omnibus
+  name: NCBI GEO Series
   url: "https://www.ncbi.nlm.nih.gov/geo/"
   reference:
     root: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
@@ -266,9 +267,9 @@ GEOseries:
       - "geo:"
       - ""
   pattern: '^(?:geo:)?GSE\d+?$'
-  scope: biosamples
-  entity: biosample
-  db_key: 'external_references.id'
+  scope: callsets
+  entity: analysis
+  db_key: 'analysis_info.series_id'
   is_series: True
   series_pattern: '^(?:geo:)?GSM\d+?$'
   collationed: True
@@ -277,6 +278,7 @@ GEOseries:
 
 GenomePlatforms:
   id: geo_gpl
+  ft_type: ontologyTerm
   namespace_prefix: geo
   name: Genomic Analysis Platforms
   url: "https://www.ncbi.nlm.nih.gov/geo/"
@@ -298,17 +300,18 @@ GenomePlatforms:
 
 GEOexperiment:
   id: geo_gsm
+  ft_type: ontologyTerm
   namespace_prefix: geo
   url: "https://www.ncbi.nlm.nih.gov/geo/"
-  name: Gene Expression Omnibus
+  name: NCBI GEO Experiment
   reference:
     root: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
     replace:
       - "geo:"
       - ""
   pattern: '^(?:geo:)?GSM\d+?$'
-  scope: biosamples
-  entity: biosample
+  scope: callsets
+  entity: analysis
   db_key: 'external_references.id'
   collationed: False
   examples:
@@ -399,7 +402,7 @@ cbioportal:
 cellosaurus:
   id: cellosaurus
   ft_type: ontologyTerm
-  name: "Cellosaurus - a knowledge resource on cell lines"
+  name: "Cellosaurus cell line resource"
   iri_prefix: https://www.cellosaurus.org/
   namespace_prefix: cellosaurus
   url: "https://www.cellosaurus.org/"

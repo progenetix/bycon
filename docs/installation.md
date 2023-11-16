@@ -8,8 +8,7 @@ are distributed as part of the `bycon` package.
 
 !!! warning "Highly Experimental"
     
-    At this time the `bycon` configuration files are rather specific for
-    the Progenetix use case. While in principle one can use the current code base
+    While in principle one can use the current code base
     to create a complete Beacon v2 setup this requires some customization, e.g.
     through editing the `/local/....yaml` configuration files as well as the 
     `/install.yaml` data.
@@ -38,10 +37,9 @@ An installation of a Beacon environment may involve following repositories:
     - additional server functionality
     - utility scripts
     - example data
-* [`progenetix-web`](https://github.com/progenetix/progenetix-web/)
+* [`beaconplus-web`](https://github.com/progenetix/beaconplus-web/)
     - the web front-end (React based)
-    - represents the current Progenetix website w/ all its parts; can be used to 
-    develop a trimmed-down version for specific use cases...
+    - represents an advanced Beacon query interface
 
 The project's Beacon deployment had been developed with some prerequisites:
 

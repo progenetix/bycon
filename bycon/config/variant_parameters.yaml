@@ -126,6 +126,8 @@ request_types:
   aminoacidChangeRequest:
     all_of:
       - aminoacid_change
+    optional:
+      - gene_id
 
   genomicAlleleShortFormRequest:
     all_of:

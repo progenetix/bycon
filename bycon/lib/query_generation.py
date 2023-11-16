@@ -79,7 +79,6 @@ class ByconQuery():
         self.limit = pagination.get("limit", 0)
         self.skip = pagination.get("skip", 0)
 
-
         self.response_types = self.defaults.get("entity_defaults")
 
         self.queries = {
@@ -89,7 +88,6 @@ class ByconQuery():
         }
 
         self.warnings = []
-
         self.__queries_for_test_mode()
         self.__query_from_path_id()
         self.__update_queries_from_id_values()
