@@ -7,6 +7,14 @@
                 "alternateBases": {
                     "$ref": "./requestParametersComponents.json#/definitions/AlternateBases"
                 },
+                "aminoacidChange": {
+                    "description": "Aminoacid alteration in 1 letter format",
+                    "examples": [
+                        "V600E",
+                        "M734V"
+                    ],
+                    "type": "string"
+                },
                 "assemblyId": {
                     "$ref": "./requestParametersComponents.json#/definitions/Assembly"
                 },
@@ -26,6 +34,13 @@
                     "examples": [
                         "BRAF",
                         "SCN5A"
+                    ],
+                    "type": "string"
+                },
+                "genomicAlleleShortForm": {
+                    "description": "Genomic HGVSId descriptor.",
+                    "examples": [
+                        "NM_004006.2:c.4375C>T"
                     ],
                     "type": "string"
                 },

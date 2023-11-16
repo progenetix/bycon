@@ -1,4 +1,5 @@
 {
+    "$id": "https://progenetix.org/services/schemas/byconautServiceResponse/v2023-10-04",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "additionalProperties": true,
     "description": "Byconaut service responses provide lists of items and a summary.",

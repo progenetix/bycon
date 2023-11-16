@@ -13,6 +13,14 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2023-10-31 (v.1.3.5)
+
+* more removal of non-standard components into `byconaut`, e.g. for file generation
+  such as `.pgxseg`
+* adding experimental `target` field to items in `filtering_terms` response
+* adding `aminoacidChange` and `genomicAlleleShortForm` to request parameters
+  (this was a bug fix - they were already activated but not in the `.json` version)
+
 ### 2023-10-31 (v.1.3.4)
 
 This update is mostly addressing the further removal of methods specific for
