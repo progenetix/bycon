@@ -70,6 +70,7 @@ class BeaconDataResponse:
         self.service_config = self.byc.get("service_config", {})
         self.response_schema = byc["response_schema"]
         self.requested_granularity = self.form_data.get("requested_granularity", "record")
+        self.include_handovers = self.form_data.get("include_handovers", False)
         self.beacon_schema = self.byc["response_entity"].get("beacon_schema", "___none___")
         self.record_queries = {}
         self.data_response = object_instance_from_schema_name(byc, self.response_schema, "")
@@ -94,7 +95,13 @@ class BeaconDataResponse:
         self.data_response["response"].update({"result_sets": self.result_sets})
         self.__resultset_response_update_summaries()
         if not "record" in self.requested_granularity:
-            self.data_response.pop("response", None)
+            # TODO /CUSTOM: This non-standard modification removes the results
+            # but keeps the resultSets nstructure (handovers ...)
+            if self.include_handovers is True:
+                for rs in self.data_response["response"]["result_sets"]:
+                    rs.pop("results", None)
+            else:
+                self.data_response.pop("response", None)
         if "boolean" in self.requested_granularity:
             self.data_response["response_summary"].pop("num_total_results", None)
 
@@ -585,13 +592,13 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def populatedResultSets(self):
-
         self.__retrieve_datasets_data()
         self.__retrieve_variants_data()
         self.__populate_result_sets()
         self.__result_sets_save_handovers()
 
         return self.result_sets, self.record_queries
+
 
     # -------------------------------------------------------------------------#
 

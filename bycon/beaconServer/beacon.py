@@ -79,12 +79,6 @@ def beacon():
         run_beacon_init_stack(byc)
         r = BeaconDataResponse(byc).resultsetResponse()
         print_json_response(r, byc["env"])
-        # byc.update({
-        #     "service_response": r.resultsetResponse(),
-        #     "error_response": r.errorResponse()
-        # })
-        # cgi_print_response(byc, 200)
-
     elif f:
         # dynamic package/function loading; e.g. `filtering_terms` loads
         # `filtering_terms` from `filtering_terms.py`...

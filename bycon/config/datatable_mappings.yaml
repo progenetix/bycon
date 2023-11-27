@@ -450,12 +450,12 @@ definitions:
         type: string
         db_key: variant_state.label
         compact: True
-      reference_bases:
+      reference_sequence:
         type: string
         db_key: reference_sequence
         indexed: True
         compact: True
-      alternate_bases:
+      sequence:
         type: string
         db_key: sequence
         indexed: True

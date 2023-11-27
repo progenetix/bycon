@@ -43,12 +43,13 @@ def read_bycon_configs_by_name(name, conf_dir, byc):
     podmd"""
 
     o = {}
-    ofp = path.join( conf_dir, name+".yaml" )
+    ofp = path.join( conf_dir, f'{name}.yaml' )
 
     with open( ofp ) as od:
         o = yaml.load( od , Loader=yaml.FullLoader)
 
     byc.update({ name: o })
+
 
 ################################################################################
 
@@ -60,6 +61,7 @@ def read_service_prefs(service, service_pref_path, byc):
     f = Path( path.join( service_pref_path, service+".yaml" ) )
     if f.is_file():
         byc.update({"service_config": load_yaml_empty_fallback( f ) })
+
 
 ################################################################################
 
@@ -103,6 +105,7 @@ def dbstats_return_latest(byc):
     stats = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))[ info_db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
     return list(stats)[0]
 
+
 ################################################################################
 
 def datasets_update_latest_stats(byc, collection_type="datasets"):
@@ -143,12 +146,10 @@ def datasets_update_latest_stats(byc, collection_type="datasets"):
 def load_yaml_empty_fallback(yp):
 
     y = { }
-
     try:
         with open( yp ) as yd:
             y = yaml.load( yd , Loader=yaml.FullLoader)
     except:
         pass
-
     return y
 

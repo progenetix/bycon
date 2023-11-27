@@ -7,7 +7,6 @@ from args_parsing import *
 from bycon_helpers import return_paginated_list
 from cgi_parsing import prdbug, test_truthy
 from dataset_parsing import select_dataset_ids
-# from export_file_generation import *
 from parse_filters_request import parse_filters
 from genome_utils import generate_genomic_mappings
 from read_specs import read_service_prefs, update_rootpars_from_local
@@ -28,7 +27,6 @@ def set_byc_config_pars(byc):
 ################################################################################
 
 def set_beacon_defaults(byc):
-
     b_d = byc.get("beacon_defaults", {})
     defaults: object = b_d.get("defaults", {})
     for d_k, d_v in defaults.items():
@@ -45,6 +43,7 @@ def run_beacon_init_stack(byc):
     parse_filters(byc)
     parse_variants(byc)
     generate_genomic_mappings(byc)
+
 
 ################################################################################
 

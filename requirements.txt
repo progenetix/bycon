@@ -8,6 +8,5 @@ Pillow==10.0.0
 pyhumps==3.8.0
 pymongo==4.3.3
 PyYAML==6.0.1
-ruamel.base==1.0.0
 scipy==1.11.1
 setuptools==65.4.1

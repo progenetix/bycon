@@ -164,12 +164,12 @@ def parse_GET(byc):
     if not "filters" in form:
         form.update({"filters": []})
 
-    form.update({
-        "requested_granularity": get.getvalue("requestedGranularity", b_defs.get("requested_granularity", "record")),
-        "include_resultset_responses": get.getvalue("includeResultsetResponses",
-                                                    b_defs.get("include_resultset_responses", "HIT")),
-        "include_handovers": get.getvalue("includeHandovers", b_defs.get("include_handovers", False))
-    })
+    # form.update({
+    #     "requested_granularity": get.getvalue("requestedGranularity", b_defs.get("requested_granularity", "record")),
+    #     "include_resultset_responses": get.getvalue("includeResultsetResponses",
+    #                                                 b_defs.get("include_resultset_responses", "HIT")),
+    #     "include_handovers": get.getvalue("includeHandovers", b_defs.get("include_handovers", False))
+    # })
 
     if "requested_schema" in form:
         try:

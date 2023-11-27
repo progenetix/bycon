@@ -1,9 +1,8 @@
-import pymongo
 import re
+from pymongo import MongoClient
 from os import environ
 
 from bycon.lib.cgi_parsing import rest_path_value
-
 
 ################################################################################
 
@@ -21,17 +20,6 @@ def select_dataset_ids(byc):
     if ds_id_from_default(byc) is not False:
         return
 
-
-################################################################################
-
-def ds_id_from_default(byc):
-    ds_id = byc.get("default_dataset_id", "___undefined___")
-
-    if ds_id not in byc["dataset_definitions"].keys():
-        return False
-
-    byc.update({"dataset_ids": [ ds_id ]})
-    return True
 
 ################################################################################
 
@@ -60,7 +48,7 @@ def ds_id_from_accessid(byc):
     if any(x is False for x in [accessid, ho_db, ho_collname]):
         return False
 
-    ho_client = pymongo.MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
+    ho_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     h_o = ho_client[ho_db][ho_collname].find_one({"id": accessid})
     if not h_o:
         return False
@@ -107,3 +95,17 @@ def ds_ids_from_args(byc):
         return True
 
     return False
+
+
+################################################################################
+
+def ds_id_from_default(byc):
+    ds_id = byc.get("default_dataset_id", "___undefined___")
+
+    if ds_id not in byc["dataset_definitions"].keys():
+        return False
+
+    byc.update({"dataset_ids": [ ds_id ]})
+    return True
+
+

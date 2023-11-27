@@ -57,13 +57,15 @@ def remap_variants(r_s_res, byc):
         v["variation"].pop("variant_internal_id", None)
 
         for d_v in d_vs:
-            v["case_level_data"].append(
-                {
-                    "id": d_v.get("id", "__none__"),
-                    "biosample_id": d_v.get("biosample_id", "__none__"),
-                    "analysis_id": d_v.get("callset_id", "__none__")
-                }
-            )
+            c_l_v = {}
+            for c_k in ("id", "biosample_id", "info"):
+                c_v = d_v.get(c_k)
+                if c_v:
+                    c_l_v.update({c_k: c_v})
+            a_id = d_v.get("callset_id")
+            if a_id:
+                c_l_v.update({"analysis_id": a_id})
+            v["case_level_data"].append(c_l_v)
 
         # TODO: Keep legacy pars?
         legacy_pars = ["_id", "id", "reference_name", "type", "biosample_id", "callset_id", "individual_id",
@@ -71,10 +73,14 @@ def remap_variants(r_s_res, byc):
         for p in legacy_pars:
             v["variation"].pop(p, None)
 
-        for k in ("molecular_attributes", "variant_level_data"):
-            k_v = v["variation"].get(k, {})
+        for k in ("molecular_attributes", "variant_level_data", "identifiers"):
+            k_v = v["variation"].get(k)
             if not k_v:
                  v["variation"].pop(k, None)
+        for k in ("variant_alternative_ids"):
+            k_v = v["variation"].get(k, [])
+            if len(k_v) == 0:
+                v["variation"].pop(k, None)
 
         variants.append(v)
 

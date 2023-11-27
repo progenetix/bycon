@@ -13,7 +13,25 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
-### 2023-10-31 (v.1.3.5)
+### ... (v1.3.7)
+
+* added 
+
+### 2023-11-20 (v.1.3.6)
+
+* modified `BeaconDataResponse` to keep the `resultSetsResponse` structure while
+  remobving the `results` from each set, to allow resuult set specific handover 
+  delivery (labeled as __CUSTOM__)
+* moved all cytoband library code into `byconaut` (__FUTURE__ considerations for
+  this in case Beacon supports cytobands ...)
+* `byconaut` plots now directly use the database saamples format for plotting variants,
+  w/o going through the canonical variant creation (this incurred a **huge** penalty)
+* reminder that `byconaut` plots use the `plotType` parameter instead of `output`
+* `byconaut` now has a color code mapping for the different (EFO, DUP/DEL ...) variant
+  types; this allows to assign custom `plot_dup_color` etc. parameters while keeping
+  the available variant types (`variant_state.id`) separated (see `byconaut -> local.plot_defaults`)
+
+### 2023-11-17 (v.1.3.5)
 
 * more removal of non-standard components into `byconaut`, e.g. for file generation
   such as `.pgxseg`

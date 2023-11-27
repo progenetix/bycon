@@ -1,4 +1,4 @@
-import re, yaml
+import re
 from pymongo import MongoClient
 from pathlib import Path
 from os import environ, pardir, path

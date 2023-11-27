@@ -99,6 +99,7 @@ def create_empty_instance(schema):
     s_i = decamelize(s_i)
     return s_i
 
+
 ################################################################################
 
 def object_instance_from_schema_name(byc, schema_name, root_key, ext="json"):

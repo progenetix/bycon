@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-import sys, re, json
+import sys, re, json, yaml
 import pathlib
 import argparse
-from ruamel.yaml import YAML
 from os import path as path
 from os import scandir as scandir
 from os import remove as deleteFile
@@ -11,10 +10,8 @@ from collections import OrderedDict
 
 here_path = path.dirname( path.abspath(__file__) )
 this_script = re.sub(".py", ".yaml", path.basename( __file__ ) )
-yaml = YAML()
-yaml.indent(mapping=2, sequence=4, offset=2)
 with open(path.join( here_path, "config", this_script), 'r') as c_f:
-    config = yaml.load( c_f )
+    config = yaml.load( c_f , Loader=yaml.FullLoader, sort_keys=False)
 
 """podmd
 The script converts files in directories between yaml <-> json
@@ -128,7 +125,7 @@ def _yaml2yaml(f_n, in_path, out_path, config):
 
     _par_replace(s, config)
     with open(out_file, 'w') as out_f:
-        yaml.dump(s, out_f)
+        yaml.dump(s, out_f, sort_keys=False)
 
 ################################################################################
 
@@ -149,7 +146,7 @@ def _json2yaml(f_n, in_path, out_path, config):
 
     _par_replace(s, config)
     with open(out_file, 'w') as out_f:
-        yaml.dump(s, out_f)
+        yaml.dump(s, out_f, sort_keys=False)
 
 ################################################################################
 
@@ -169,7 +166,7 @@ def _json2json(f_n, in_path, out_path, config):
 
     _par_replace(s, config)
     with open(out_file, 'w') as out_f:
-        yaml.dump(s, out_f)
+        yaml.dump(s, out_f, sort_keys=False)
 
 ################################################################################
 
