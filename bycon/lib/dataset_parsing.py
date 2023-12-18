@@ -42,8 +42,8 @@ def ds_id_from_accessid(byc):
     # test of existence...
 
     accessid = byc["form_data"].get("accessid", False)
-    ho_db = byc["config"].get("housekeeping_db", False)
-    ho_collname = byc["config"].get("handover_coll", False)
+    ho_db = byc.get("housekeeping_db", False)
+    ho_collname = byc.get("handover_coll", False)
 
     if any(x is False for x in [accessid, ho_db, ho_collname]):
         return False
@@ -89,12 +89,13 @@ def ds_ids_from_args(byc):
     if "args" not in byc or byc["args"] is None:
         return False
 
-    if byc["args"].datasetIds:
-        ds_ids = re.split(",", byc["args"].datasetIds)
-        byc.update({"dataset_ids": ds_ids})
-        return True
+    dsid_s = byc["args"].get("datasetIds")
+    if not dsid_s:
+        return False
 
-    return False
+    ds_ids = re.split(",", dsid_s)
+    byc.update({"dataset_ids": ds_ids})
+    return True
 
 
 ################################################################################

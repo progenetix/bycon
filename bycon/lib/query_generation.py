@@ -49,6 +49,7 @@ class ByconQuery():
 
         self.arguments = byc.get("form_data")
         self.filters = byc.get("filters", [])
+        self.filtering_terms_coll = byc.get("filtering_terms_coll", "___none___")
         self.mongohost = environ.get("BYCON_MONGO_HOST", "localhost")
 
         self.test_mode = byc.get("test_mode", False)
@@ -70,10 +71,10 @@ class ByconQuery():
         self.filter_descendants = ff.get("descendants", True)
         self.filter_logic = ff.get("logic", '$and')
 
-        self.housekeeping_db = byc["config"].get("housekeeping_db", "___none___")
-        self.handover_coll = byc["config"].get("handover_coll", "___none___")
-        self.services_db = byc["config"].get("services_db", "___none___")
-        self.genes_coll = byc["config"].get("genes_coll", "___none___")
+        self.housekeeping_db = byc.get("housekeeping_db", "___none___")
+        self.handover_coll = byc.get("handover_coll", "___none___")
+        self.services_db = byc.get("services_db", "___none___")
+        self.genes_coll = byc.get("genes_coll", "___none___")
 
         pagination = byc.get("pagination", {"skip": 0, "limit": 0})
         self.limit = pagination.get("limit", 0)
@@ -465,7 +466,7 @@ class ByconQuery():
             return
 
         data_db = MongoClient(host=self.mongohost)[self.ds_id]
-        coll_coll = data_db["collations"]
+        coll_coll = data_db[ self.filtering_terms_coll ]
         self.collation_ids = coll_coll.distinct("id", {})
 
         # if self.byc["debug_mode"] is True:

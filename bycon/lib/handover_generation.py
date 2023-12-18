@@ -117,8 +117,8 @@ def query_results_save_handovers(byc):
 def dataset_results_save_handovers(ds_id, byc):
 
     ho_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-    ho_db = ho_client[ byc["config"]["housekeeping_db"] ]
-    ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
+    ho_db = ho_client[ byc["housekeeping_db"] ]
+    ho_coll = ho_db[ byc[ "handover_coll" ] ]
 
     for h_o_k in byc["dataset_results"][ds_id].keys():
         

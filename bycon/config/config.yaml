@@ -1,36 +1,42 @@
-byc_root_pars:
+args: {}
+debug_mode: false
+empty_query_all_count: false
+error_response: {}
+errors: []
+filters: []
+form_data: {}
+granularity_levels:
+  none: 0
+  boolean: 1
+  count: 2
+  record: 3
+pagination:
+  skip: 0
+  limit: 0
+include_handovers: false
+method: ''
+output: ''
+queries: {}
+query_meta: {}
+request_path_root: beacon
+request_entity_path_id:
+request_entity_path_id_value: false
+response_entity_path_id:
+request_entity_id: genomicVariant
+response_entity_id: genomicVariant
+response_entity:
+  is_entry_type: True
+  collection: variants
+  response_schema: beaconResultsetsResponse
+  beacon_schema:
+    entity_type: genomicVariant
+    schema: https://progenetix.org/services/schemas/genomicVariant/
+service_response: {}
+service_config: {}
+test_mode: false
+test_mode_count: 5
 
-  args:
-  request_path_root: beacon
-  request_entity_path_id:
-  request_entity_path_id_value: false
-  response_entity_path_id:
-  request_entity_id: genomicVariant
-  response_entity_id: genomicVariant
-  response_entity:
-    is_entry_type: True
-    collection: variants
-    response_schema: beaconResultsetsResponse
-    beacon_schema:
-      entity_type: genomicVariant
-      schema: https://progenetix.org/services/schemas/genomicVariant/
-  service_response: {}
-  error_response: {}
-  service_config: {}
-  filters: []
-  method: ''
-  output: ''
-  form_data: {}
-  queries: {}
-  query_meta: {}
-  include_handovers: false
-  empty_query_all_count: false
-  test_mode: false
-  test_mode_count: 5
-  check_args: true
-  debug_mode: false
-  download_mode: false
-  errors: []
+filtering_terms_coll: collations
 
 genomes_path:
   - rsrc
@@ -44,17 +50,9 @@ filter_flags:
   precision: exact
   include_descendant_terms: true
 
-resource_urls:
-  ncbi_geosoft: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?form=text&acc=
-  ncbi_geoweb: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
-  europepmc_pmid: https://europepmc.org/article/MED/
-  cellosaurus_web: https://web.expasy.org/cellosaurus/
-
 ################################################################################
 # MongoDB configs
 ################################################################################
-
-filtering_terms_coll: collations
 
 # special database, auto-generated ######
 housekeeping_db: _byconHousekeepingDB

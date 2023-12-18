@@ -65,11 +65,13 @@ class BeaconDataResponse:
         self.byc = byc
         self.test_mode = byc.get("test_mode", False)
         self.beacon_defaults = byc.get("beacon_defaults", {})
+        self.authorized_granularities = byc.get("authorized_granularities", {})
+        self.user_name = byc.get("user_name", "anonymous")
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
         self.form_data = byc.get("form_data", {})
         self.service_config = self.byc.get("service_config", {})
         self.response_schema = byc["response_schema"]
-        self.requested_granularity = self.form_data.get("requested_granularity", "record")
+        self.returned_granularity = self.form_data.get("returned_granularity", "record")
         self.include_handovers = self.form_data.get("include_handovers", False)
         self.beacon_schema = self.byc["response_entity"].get("beacon_schema", "___none___")
         self.record_queries = {}
@@ -86,6 +88,7 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def resultsetResponse(self):
+        prdbug(self.byc, f'... resultsetResponse start, schema {self.response_schema}')
         if not "beaconResultsetsResponse" in self.response_schema:
             return
 
@@ -94,16 +97,7 @@ class BeaconDataResponse:
 
         self.data_response["response"].update({"result_sets": self.result_sets})
         self.__resultset_response_update_summaries()
-        if not "record" in self.requested_granularity:
-            # TODO /CUSTOM: This non-standard modification removes the results
-            # but keeps the resultSets nstructure (handovers ...)
-            if self.include_handovers is True:
-                for rs in self.data_response["response"]["result_sets"]:
-                    rs.pop("results", None)
-            else:
-                self.data_response.pop("response", None)
-        if "boolean" in self.requested_granularity:
-            self.data_response["response_summary"].pop("num_total_results", None)
+        self.__resultSetResponse_force_granularities()
 
         b_h_o = self.data_response.get("beacon_handovers", [])
         if len(b_h_o) < 1:
@@ -118,6 +112,7 @@ class BeaconDataResponse:
         self.__meta_add_received_request_summary_parameters()
         self.__meta_add_parameters()
         self.__meta_clean_parameters()
+        self.__response_clean_parameters()
         self.result_sets_end = datetime.datetime.now()
         self.result_sets_duration = self.result_sets_end - self.result_sets_start
         prdbug(self.byc, f'... data response duration was {self.result_sets_duration.total_seconds()} seconds')
@@ -140,6 +135,7 @@ class BeaconDataResponse:
         self.__meta_add_received_request_summary_parameters()
         self.__meta_add_parameters()
         self.__meta_clean_parameters()
+        self.__response_clean_parameters()
         return self.data_response
 
 
@@ -157,6 +153,7 @@ class BeaconDataResponse:
         self.__meta_add_received_request_summary_parameters()
         self.__meta_add_parameters()
         self.__meta_clean_parameters()
+        self.__response_clean_parameters()
         return self.data_response
 
 
@@ -193,6 +190,30 @@ class BeaconDataResponse:
 
     # -------------------------------------------------------------------------#
 
+    def __resultSetResponse_force_granularities(self):
+        prdbug(self.byc, f'authorized_granularities: {self.authorized_granularities}')
+        for rs in self.data_response["response"]["result_sets"]:
+            rs_granularity = self.authorized_granularities.get(rs["id"], "boolean")
+            prdbug(self.byc, f'rs_granularity ({rs["id"]}): {rs_granularity}')
+            if not "record" in rs_granularity:
+                # TODO /CUSTOM: This non-standard modification removes the results
+                # but keeps the resultSets structure (handovers ...)
+                rs.pop("results", None)
+            if "boolean" in rs_granularity:
+                rs.pop("results_count", None)
+        if "boolean" in self.returned_granularity:
+            self.data_response["response_summary"].pop("num_total_results", None)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __response_clean_parameters(self):
+        r_m = self.data_response.get("response", {})
+        r_m.pop("$schema", None)
+
+
+    # -------------------------------------------------------------------------#
+
     def __meta_clean_parameters(self):
         r_m = self.data_response.get("meta", {})
 
@@ -221,8 +242,8 @@ class BeaconDataResponse:
         form = self.form_data
         # TODO: this is hacky; need a separate setting of the returned granularity
         # since the server may decide so...
-        if self.requested_granularity and "returned_granularity" in r_m:
-            r_m.update({"returned_granularity": form.get("requested_granularity")})
+        # if self.requested_granularity and "returned_granularity" in r_m:
+        #     r_m.update({"returned_granularity": form.get("requested_granularity")})
 
         service_meta = self.service_config.get("meta", {})
         for rrs_k, rrs_v in service_meta.items():
@@ -246,7 +267,7 @@ class BeaconDataResponse:
             "requested_schemas": [self.beacon_schema]
         })
 
-        for name in ["dataset_ids", "test_mode"]:
+        for name in ["dataset_ids", "test_mode", "pagination"]:
             value = self.byc.get(name)
             if not value:
                 continue
@@ -442,6 +463,7 @@ class ByconFilteringTerms:
 
         return
 
+
     # -------------------------------------------------------------------------#
 
     def __return_filter_resources(self):
@@ -596,7 +618,6 @@ class ByconResultSets:
         self.__retrieve_variants_data()
         self.__populate_result_sets()
         self.__result_sets_save_handovers()
-
         return self.result_sets, self.record_queries
 
 
@@ -640,8 +661,8 @@ class ByconResultSets:
     def __result_sets_save_handovers(self):
 
         ho_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-        ho_db = ho_client[ self.byc["config"]["housekeeping_db"] ]
-        ho_coll = ho_db[ self.byc["config"][ "handover_coll" ] ]
+        ho_db = ho_client[ self.byc["housekeeping_db"] ]
+        ho_coll = ho_db[ self.byc["handover_coll"] ]
 
         for ds_id, d_s in self.datasets_results.items():
             if not d_s:

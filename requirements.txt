@@ -1,12 +1,10 @@
 base36==0.1.1
 deepmerge==1.1.0
+humps==0.2.2
 isodate==0.6.1
 json_ref_dict==0.7.1
 liftover==1.1.16
-numpy==1.24.1
-Pillow==10.0.0
 pyhumps==3.8.0
 pymongo==4.3.3
 PyYAML==6.0.1
-scipy==1.11.1
-setuptools==65.4.1
+setuptools==68.2.2

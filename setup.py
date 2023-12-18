@@ -12,7 +12,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="bycon",
-    version="1.3.6",
+    version="1.3.7",
     description="A Python-based environment for the Beacon v2 genomics API",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -44,5 +44,6 @@ setup(
     project_urls={  # Optional
         "Bug Reports": "https://github.com/progenetix/bycon/issues",
         "Source": "https://github.com/progenetix/bycon/",
+        "Helpers": "https://github.com/progenetix/byconaut/",
     },
 )

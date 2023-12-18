@@ -16,12 +16,8 @@ from parse_variant_request import parse_variants
 
 def set_byc_config_pars(byc):
     config = byc.get("config", {})
-    b_r_p = config.get("byc_root_pars", {})
-    for k, v in b_r_p.items():
+    for k, v in config.items():
         byc.update({k: v})
-
-    config.pop("byc_root_pars", None)
-    byc.update({"config": config})
 
 
 ################################################################################
@@ -37,6 +33,10 @@ def set_beacon_defaults(byc):
 
 def run_beacon_init_stack(byc):
     select_dataset_ids(byc)
+    set_user_name(byc)
+    set_returned_granularities(byc)
+    # prdbug(byc,f'returned_granularity: {byc["returned_granularity"]}')
+
     # # move the next to later, and deliver as Beacon error?
     # if len(byc["dataset_ids"]) < 1:
     #     print_text_response("No existing dataset_id - please check dataset_definitions")
@@ -56,11 +56,10 @@ def initialize_bycon_service(byc, service=False):
     scope = "beacon"
 
     if not service:
-        service = byc.get("request_entity_path_id", False)
+        service = byc.get("request_entity_path_id")
     frm = inspect.stack()[1]
     if not service:
         service = frm.function
-
     # TODO - streamline, also for services etc.
     s_a_s = byc["beacon_defaults"].get("service_path_aliases", {})
 
@@ -87,24 +86,25 @@ def initialize_bycon_service(byc, service=False):
         pkg_path = path.dirname(path.abspath(mod.__file__))
         if "services" in pkg_path or "byconaut" in pkg_path:
             scope = "services"
-        byc.update({
-            "request_path_root": scope,
-            "request_entity_path_id": service
-        })
 
         loc_dir = path.join( pkg_path, "local" )
         conf_dir = path.join( pkg_path, "config" )
         
         # updates `beacon_defaults`, `dataset_definitions` and `local_paths`
         update_rootpars_from_local(loc_dir, byc)
-
         defaults = byc["beacon_defaults"].get("defaults", {})
         for d_k, d_v in defaults.items():
             byc.update({d_k: d_v})
 
+        byc.update({
+            "request_path_root": scope,
+            "request_entity_path_id": service
+        })
+
         # this will generate byc["service_config"] if a file with the service
         # name exists
         read_service_prefs(service, conf_dir, byc)
+    # prdbug(byc, f'initialize_bycon_service - request_entity_path_id: {byc.get("request_entity_path_id")}, service {service}')
 
     get_bycon_args(byc)
     args_update_form(byc)
@@ -126,6 +126,7 @@ def initialize_bycon_service(byc, service=False):
 
     # update response_entity_id from path
     update_entity_ids_from_path(byc)
+    # prdbug(byc, f'initialize_bycon_service - response_entity_id: {byc.get("response_entity_id")}, service {service}')
 
     # update response_entity_id from form
     update_requested_schema_from_request(byc)
@@ -162,13 +163,11 @@ def set_special_modes(byc):
 ################################################################################
 
 def set_io_params(byc):
-    form = byc["form_data"]
-
-    if not "pagination" in byc:
-        byc.update({"pagination": {"skip": 0, "limit": 0}})
+    form = byc.get("form_data", {})
 
     for sp in ["skip", "limit"]:
         if sp in form:
+            prdbug(byc, f'{sp}: {form[sp]}')
             if re.match(r'^\d+$', str(form[sp])):
                 s_v = int(form[sp])
                 byc["pagination"].update({sp: s_v})
@@ -180,20 +179,19 @@ def set_io_params(byc):
     if "method_keys" in byc["service_config"]:
         m = form.get("method", "___none___")
         if m in byc["service_config"]["method_keys"].keys():
-            byc["method"] = m
+            byc.update({"method": m})
 
 
 ################################################################################
 
 def update_entity_ids_from_path(byc):
-    if not byc["request_entity_path_id"]:
+    req_p_id = byc.get("request_entity_path_id")
+
+    if not req_p_id:
         return
-
-    if not byc["response_entity_path_id"]:
-        byc.update({"response_entity_path_id": byc["request_entity_path_id"]})
-
-    req_p_id = byc["request_entity_path_id"]
-    res_p_id = byc["response_entity_path_id"]
+    res_p_id = byc.get("response_entity_path_id")
+    if not res_p_id:
+        res_p_id = req_p_id
 
     # TODO: in contrast to req_p_id, res_p_id hasn't been anti-aliased
     s_a_s = byc["beacon_defaults"].get("service_path_aliases", {})
@@ -202,9 +200,10 @@ def update_entity_ids_from_path(byc):
 
     p_e_m = byc["beacon_defaults"].get("path_entry_type_mappings", {})
 
+    # TODO: this gets the correct entity_id w/ entity_path_id fallback
     byc.update({
         "request_entity_id": p_e_m.get(req_p_id, req_p_id),
-        "response_entity_id": p_e_m.get(res_p_id, res_p_id)
+        "response_entity_id": p_e_m.get(res_p_id, req_p_id)
     })
 
 
@@ -224,6 +223,7 @@ def update_requested_schema_from_request(byc):
 ################################################################################
 
 def set_response_entity(byc):
+    prdbug(byc, f'response_entity_id: {byc.get("response_entity_id")}')
     b_rt_s = byc["beacon_defaults"].get("entity_defaults", {})
     r_e_id = byc.get("response_entity_id", "___none___")
     r_e = b_rt_s.get(r_e_id)
@@ -236,7 +236,61 @@ def set_response_entity(byc):
 ################################################################################
 
 def set_response_schema(byc):
+    prdbug(byc, byc["response_entity"])
     r_s = byc["response_entity"].get("response_schema", "beaconInfoResponse")
     byc.update({"response_schema": r_s})
+
+
+################################################################################
+
+def set_user_name(byc):
+    byc.update({"user_name": "anonymous"})
+    # local user has full permissions
+    if "local" in byc["env"]:
+        byc.update({"user_name": "local"})
+        return
+
+    # TODO: user_name will be provided in header
+    un = byc["form_data"].get("user", "anonymous")
+    if un in byc.get("authorizations", {}):
+        byc.update({"user_name": un})
+
+
+################################################################################
+
+def set_returned_granularities(byc):
+
+    un = byc.get("user_name", "anonymous")
+    rg = byc["form_data"].get("requested_granularity", "record")
+    granularity_levels = byc.get("granularity_levels", {})
+    auth = byc.get("authorizations", {})
+
+    g_l_s = [0]
+    r_g_l = granularity_levels.get(rg, 0)
+
+    if not "authorized_granularities" in byc:
+        byc.update({"authorized_granularities": {}})
+
+    # prdbug(byc,f'user_name: {un}')
+    # prdbug(byc,f'authorizations: {auth}')
+    for d in byc["dataset_ids"]:
+        byc["authorized_granularities"].update({d: rg})
+        ugs = auth.get(un, {})
+        if d in ugs:
+            g_l_l = ugs[d]
+        elif "default" in ugs:
+            g_l_l = ugs["default"]
+        d_g_l = granularity_levels.get(g_l_l, 0)
+        if d_g_l <= r_g_l:
+            byc["authorized_granularities"].update({d: g_l_l})
+        g_l_s.append(d_g_l)
+
+    m_g_l = max(g_l_s)
+
+    if m_g_l < r_g_l:
+        prdbug(byc, "Warning: Requested granularity exceeds user authorization - using a maximum of %s" % byc["returned_granularity"])
+        byc.update({"returned_granularity": list(granularity_levels.keys())[m_g_l]})
+    else:
+        byc.update({"returned_granularity": list(granularity_levels.keys())[r_g_l]})
 
 

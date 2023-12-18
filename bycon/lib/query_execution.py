@@ -16,6 +16,7 @@ def execute_bycon_queries(ds_id, BQ, byc):
     podmd"""
 
     h_o_defs = byc["handover_definitions"]["h->o_methods"]
+    r_e_id = str(byc.get("response_entity_id", "___none___"))
 
     exe_queries = {}
     if "dataset_results" not in byc.keys():
@@ -101,9 +102,12 @@ def execute_bycon_queries(ds_id, BQ, byc):
         else:
             prefetch["biosamples.id"] = prefetch["callsets.biosample_id->biosamples.id"]
 
-    variants_query = exe_queries.get("variants", False)
-    if not variants_query and "genomicVariant" in byc.get("response_entity_id", "___none___"):
-        variants_query = {"biosample_id": {'$in': prefetch["biosamples.id"].get("target_values", [])}}
+    variants_query = exe_queries.get("variants")
+    if not variants_query:
+        if "genomicVariant" in r_e_id:
+            variants_query = {"biosample_id": {'$in': prefetch["biosamples.id"].get("target_values", [])}}
+
+    prdbug(byc, ("variants_query", variants_query))
 
     if variants_query:
 
@@ -192,9 +196,8 @@ def execute_bycon_queries(ds_id, BQ, byc):
     prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
 
     # TODO: have this checked... somewhere else based on the response_entity_id
-    if "response_entity_id" in byc:
-        if "individual" in byc["response_entity_id"] or "phenopacket" in byc["response_entity_id"]:
-            _prefetch_add_individuals(prevars, prefetch)
+    if "individual" in r_e_id or "phenopacket" in r_e_id:
+        _prefetch_add_individuals(prevars, prefetch)
 
     ############################################################################
 

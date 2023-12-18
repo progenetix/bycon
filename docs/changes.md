@@ -13,9 +13,20 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
-### ... (v1.3.7)
+### 2023-12-18 (v1.3.7)
 
-* added 
+* added handling for user specific granularity permissions
+    - so far `user_name` is just taken from a form parameter and then stored
+      as `byc` root parameter (through `set_user_name`)
+    - local processing (`env`) sets this to `local` (and has a default `record`)
+      granularity
+    - dataset specific, user specific maximum granularities can be set in
+      `authorizations.yaml` which can be extended / overwritten from settings in
+      `local/authorizations.yaml` (similar to `beacon_defaults.yaml` etc.)
+    - future updates are planned to handle proper interpretation of `user_name`
+      and proof of authorization...
+* configuration: the basic parameters from `config.yaml` are now stored as `byc`
+  root parameters and not kept in a mix of root & `config`
 
 ### 2023-11-20 (v.1.3.6)
 

@@ -3,11 +3,10 @@ import re
 
 from humps import decamelize
 
-
 ################################################################################
 
 def get_bycon_args(byc):
-    if byc.get("check_args", False) is False:
+    if byc.get("check_args", True) is False:
         return
 
     # Serves as "we've been here before" marker - before the env check.
@@ -65,6 +64,7 @@ def args_update_form(byc):
         else:
             byc["form_data"].update({p_d: arg_vars[p]})
 
+
 ################################################################################
 
 def filters_from_args(byc):
@@ -99,19 +99,19 @@ def set_collation_types(byc):
 def set_processing_modes(byc):
     byc.update({"update_mode": False})
 
-    try:
-        if byc["test_mode"] is True:
-            byc.update({"update_mode": False})
-            print("¡¡¡ TEST MODE - no db update !!!")
-            return
-    except:
-        pass
+    tm = byc.get("test_mode", False)
+    env = byc.get("env", "server")
 
-    try:
-        if byc["args"].update:
-            byc.update({"update_mode": True})
-            print("¡¡¡ UPDATE MODE - may overwrite entries !!!")
-    except:
-        pass
+    if not "local" in env:
+        return
 
-################################################################################
+    if byc["test_mode"] is True:
+        print("¡¡¡ TEST MODE - no db update !!!")
+        return
+
+    if byc["args"].update:
+        byc.update({"update_mode": True})
+        print("¡¡¡ UPDATE MODE - may overwrite entries !!!")
+
+
+

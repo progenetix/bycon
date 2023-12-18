@@ -63,6 +63,8 @@ def beacon():
         byc.update({"request_entity_path_id": e_p_id})
     r_p_id = byc.get("request_entity_path_id", "info")
 
+    prdbug(byc, f'beacon.py - request_entity_path_id: {r_p_id}')
+
     # check for rewrites
     if r_p_id in r_w:
         uri = environ.get('REQUEST_URI')

@@ -39,7 +39,7 @@ def set_genome_rsrc_path(byc):
     if genome in g_map.keys():
         genome = g_map[ genome ]
 
-    byc.update({"genome_rsrc_path": path.join( pkg_path, *byc["config"]["genomes_path"], genome ) })
+    byc.update({"genome_rsrc_path": path.join( pkg_path, *byc["genomes_path"], genome ) })
 
 
 ################################################################################
@@ -130,11 +130,11 @@ def retrieve_gene_id_coordinates(gene_id, precision, byc):
     mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     db_names = list(mongo_client.list_database_names())
 
-    services_db = byc["config"].get("services_db", "___none___")
+    services_db = byc.get("services_db", "___none___")
     if services_db not in db_names:
         return [], f"services db `{services_db}` does not exist"
 
-    genes_coll = byc["config"].get("genes_coll")
+    genes_coll = byc.get("genes_coll")
     if not genes_coll:
         return [], "no `genes_coll` parameter in `config.yaml`"
 
