@@ -76,7 +76,6 @@ def update_rootpars_from_local(loc_dir, byc):
 
     b_p = 'beacon_defaults'
     s_p = 'services_defaults'
-    # prdbug(byc, f'... parsing {loc_dir} for {b_p}')
 
     b_f = path.join(loc_dir, f'{b_p}.yaml')
     b = load_yaml_empty_fallback(b_f)

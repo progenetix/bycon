@@ -45,11 +45,6 @@ genomes_path:
 schemas_path:
   - schemas
 
-filter_flags:
-  logic: $and
-  precision: exact
-  include_descendant_terms: true
-
 ################################################################################
 # MongoDB configs
 ################################################################################

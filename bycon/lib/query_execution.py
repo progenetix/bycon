@@ -50,7 +50,8 @@ def execute_bycon_queries(ds_id, BQ, byc):
 
     ############################################################################
 
-    prdbug(byc, ("queries at execution", exe_queries))
+    dbm = f'queries at execution: {exe_queries}'
+    prdbug(dbm, byc.get("debug_mode"))
 
     ############################################################################
 
@@ -106,8 +107,6 @@ def execute_bycon_queries(ds_id, BQ, byc):
     if not variants_query:
         if "genomicVariant" in r_e_id:
             variants_query = {"biosample_id": {'$in': prefetch["biosamples.id"].get("target_values", [])}}
-
-    prdbug(byc, ("variants_query", variants_query))
 
     if variants_query:
 

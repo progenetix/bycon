@@ -6,6 +6,15 @@ from humps import camelize, decamelize
 ################################################################################
 
 def parse_query(byc):
+
+    a_defs = byc.get("argument_definitions", {})
+    form = byc.get("form_data", {})
+
+    for a, d in a_defs.items():
+        if "default" in d:
+            form.update({a: d["default"]})
+    byc.update({"form_data": form})
+
     r_m = environ.get('REQUEST_METHOD', '')
     if "POST" in r_m:
         parse_POST(byc)
@@ -57,8 +66,6 @@ def select_this_server(byc: dict) -> str:
     http = "http://"
 
     s = f'{https}{environ.get("HTTP_HOST")}'
-    # prdbug(byc, f'===> setting server from {s_uri}')
-
     for site in test_sites:
         if site in s_uri:
             if https in s_uri:
@@ -68,8 +75,6 @@ def select_this_server(byc: dict) -> str:
 
     # TODO: ERROR hack for https/http mix, CORS...
     # ... since cloudflare provides https mapping using this as fallback
-
-    # prdbug(byc, f'... using {s} <===')
 
     return s
 
@@ -81,43 +86,36 @@ def parse_POST(byc):
     content_typ = environ.get('CONTENT_TYPE', '')
 
     b_defs = byc.get("beacon_defaults", {})
-    form = {}
+    a_defs = byc.get("argument_definitions", {})
+    form = byc.get("form_data", {})
 
     # TODO: catch error & return for non-json posts
     if "json" in content_typ:
         body = sys.stdin.read(int(content_len))
         jbod = json.loads(body)
-        if "debug" in jbod:
-            if jbod["debug"] > 0:
-                byc.update({"debug_mode": set_debug_state(1)})
-
-        # TODO: this hacks the v2 structure; ideally should use requestParameters schemas
-        if "query" in jbod:
-            for p, v in jbod["query"].items():
-                if p == "requestParameters":
-                    for rp, rv in v.items():
-                        rp_d = decamelize(rp)
-                        if "datasets" in rp:
-                            if "datasetIds" in rv:
-                                form.update({"dataset_ids": rv["datasetIds"]})
-                        elif "g_variant" in rp:
-                            for vp, vv in v[rp].items():
-                                vp_d = decamelize(vp)
-                                form.update({vp_d: vv})
-                        else:
-                            form.update({rp_d: rv})
-                else:
-                    p_d = decamelize(p)
-                    form.update({p_d: v})
-
-        # TODO: define somewhere else with proper defaults
-        form.update({
-            "requested_granularity": jbod.get("requestedGranularity", b_defs.get("requested_granularity", "record")),
-            "include_resultset_responses": jbod.get("includeResultsetResponses",
-                                                    b_defs.get("include_resultset_responses", "HIT")),
-            "include_handovers": jbod.get("includeHandovers", b_defs.get("include_handovers", False)),
-            "filters": jbod.get("filters", [])
-        })
+        for j_p in jbod:
+            j_p_d = decamelize(j_p)
+            if "debug" in j_p:
+                byc.update({"debug_mode": set_debug_state(jbod.get(j_p))})
+            # TODO: this hacks the v2 structure; ideally should use requestParameters schemas
+            elif "query" in j_p:
+                for p, v in jbod["query"].items():
+                    if p == "requestParameters":
+                        for rp, rv in v.items():
+                            rp_d = decamelize(rp)
+                            if "datasets" in rp:
+                                if "datasetIds" in rv:
+                                    form.update({"dataset_ids": rv["datasetIds"]})
+                            elif "g_variant" in rp:
+                                for vp, vv in v[rp].items():
+                                    vp_d = decamelize(vp)
+                                    if vp_d in a_defs:
+                                        form.update({vp_d: vv})
+                            elif rp_d in a_defs:
+                                form.update({rp_d: rv})
+            else:
+                if j_p_d in a_defs:
+                    form.update({j_p_d: jbod.get(j_p)})
 
         # transferring pagination where existing to standard form values
         pagination = jbod.get("pagination", {})
@@ -130,53 +128,31 @@ def parse_POST(byc):
             "query_meta": jbod.get("meta", {})
         })
 
+
 ################################################################################
 
 def parse_GET(byc):
-    b_defs = byc.get("beacon_parameters", {})
-    v_defs = byc.get("variant_parameters", {})
-    l_defs = byc.get("local_parameters", {})
-
-    f_defs = {**b_defs.get("parameters", {}), **v_defs.get("parameters", {}), **l_defs.get("parameters", {})}
-
-    form = {}
-
+    form = byc.get("form_data", {})
+    a_defs = byc.get("argument_definitions", {})
     byc.update({"debug_mode": set_debug_state()})
-    get = cgi.FieldStorage()
+    get_params = cgi.FieldStorage()
 
-    for p in get:
+    for p in get_params:
         p_d = decamelize(p)
-        if p_d in f_defs:
-            form.update({p_d: refactor_value_from_defined_type(p, get, f_defs[p_d])})
-        # TODO still fallback ..
+        if p_d in a_defs:
+            form.update({p_d: refactor_value_from_defined_type(p, get_params, a_defs[p_d])})
         else:
-            v = get.getvalue(p)
-            if "undefined" in v:
-                continue
-            # making sure double entries are forced to single
-            if type(v) is list:
-                form.update({p_d: v[0]})
-            else:
-                form.update({p_d: v})
-
-    # TODO: re-evaluate hack of empty filters which avoids dirty errors downstream
-    if not "filters" in form:
-        form.update({"filters": []})
-
-    # form.update({
-    #     "requested_granularity": get.getvalue("requestedGranularity", b_defs.get("requested_granularity", "record")),
-    #     "include_resultset_responses": get.getvalue("includeResultsetResponses",
-    #                                                 b_defs.get("include_resultset_responses", "HIT")),
-    #     "include_handovers": get.getvalue("includeHandovers", b_defs.get("include_handovers", False))
-    # })
-
-    if "requested_schema" in form:
-        try:
-            byc["query_meta"].update({
-                "requested_schemas": [{"entity_type": form["requested_schema"]}]
-            })
-        except:
-            pass
+            prdbug(f'!!! Unmatched parameter {p_d}: {get_params.getvalue(p)}', byc.get("debug_mode"))
+        # TODO still fallback ..
+        # else:
+        #     v = get_params.getvalue(p)
+        #     if "undefined" in v:
+        #         continue
+        #     # making sure double entries are forced to single
+        #     if type(v) is list:
+        #         form.update({p_d: v[0]})
+        #     else:
+        #         form.update({p_d: v})
 
     byc.update({"form_data": form})
 
@@ -207,7 +183,7 @@ def rest_path_elements(byc):
     if not r_p_r in p_items:
         return
 
-    for d_k in ["debug=1", "&debug=1", "debug=true"]:
+    for d_k in ["&debug=1", "debug=1", "debug=true"]:
         if d_k in p_items:
             p_items.remove(d_k)
 
@@ -223,7 +199,6 @@ def rest_path_elements(byc):
         if r_i >= len(p_items):
             return
         p_v = unquote(p_items[r_i])
-        prdbug(byc, f'...path parsing: {p_k}: {p_v}')
         byc.update({p_k: p_v})
 
 
@@ -278,6 +253,7 @@ def refactor_value_from_defined_type(parameter, form_data, definition):
 
     else:
         value = form_data.getvalue(parameter)
+        prdbug(f'...refactor_value_from_defined_type: {parameter} {value}')
 
         if "int" in p_d_t:
             return int(value)
@@ -454,8 +430,8 @@ def response_delete_none_values(response):
 
 ################################################################################
 
-def prdbug(byc, this):
-    if byc.get("debug_mode", False) is True:
+def prdbug(this, debug_mode=False):
+    if debug_mode is True:
         prjsonnice(this)
 
 

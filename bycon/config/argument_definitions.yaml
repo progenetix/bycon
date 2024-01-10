@@ -1,355 +1,509 @@
-description: >-
+# The file defines the command line arguments accepted by the bycon package.
+# While the `argDef` parameters contain the standard structure for the `argparse`
+# module, they are wrapped in an additional object structure for package-specific
+# information. Due to the `argparse` object structure it is assumed that the
+# `argDef` object only contains a single key (_i.e._ the parameter name).
 
-  The file defines the command line arguments accepted by the bycon package.
-  While the `argDef` parameters contain the standard structure for the `argparse`
-  module, they are wrapped in an additional object structure for package-specific
-  information. Due to the `argparse` object structure it is assumed that the
-  `argDef` object only contains a single key (_i.e._ the parameter name).
+################################################################################
+# standard Beacon parameters 
+################################################################################
 
-parameters:
+# TODO: temporary for auth testing
 
-  - type: string
-    argDef:
-      testMode:
-        flags:
-          - -t
-          - --testMode 
-        help: test setting, i.e. returning some random documents
+user_name:
+  type: string
+  pattern: '^\w+$'
+  cmdFlags:
+    - --userName 
+  description: faking a user name
 
-  - type: integer
-    argDef:
-      testModeCount:
-        flags:
-          - --testModeCount
-        help: setting the number of documents reurned in test mode
-        default: 5
+# procedural
 
-  - type: string
-    argDef:
-      debugMode:
-        flags:
-          - --debugMode 
-        help: debug setting
+test_mode:
+  type: string
+  cmdFlags:
+    - -t
+    - --testMode 
+  description: test setting, i.e. returning some random documents
 
-  - type: integer
-    argDef:
-      limit:
-        flags:
-          - -l
-          - --limit 
-        help: limit number of documents; a value of 0 sets to unlimited
-        default: 0
+limit:
+  type: integer
+  cmdFlags:
+    - -l
+    - --limit 
+  description: limit number of documents; a value of 0 sets to unlimited
+  default: 0
 
-  - type: string
-    argDef:
-      output:
-        flags:
-          - --output
-        help: >-
-          special output format; command line processing uses some predefined text as
-          standard, but options are e.g. json or pgxseg
-        default: text
+requested_granularity:
+  type: string
+  pattern: '^\w+$'
+  description: >-
+    The response granularity of the beacon; for "secure" Beacons the default
+    should be overridden in local definitions (e.g. as "boolean")
+  default: record
+  cmdFlags:
+    - --requestedGranularity
+  description: The requested granularity of the beacon
 
-  - type: string
-    argDef:
-      method:
-        flags:
-          - --method
-        help: >-
-          special method
-        default: text
+request_entity_path_id:
+  type: string
+  cmdFlags:
+    - --requestEntityPathId
+  description: required data entry point, equal to the first REST path element in Beacon
+  default: biosamples
 
-  - type: string
-    argDef:
-      groupBy:
-        flags:
-          - -g
-          - --groupBy
-        help: >-
-          group parameter e.g. for subset splitting
-        default: text
+requested_schema:
+  type: string
+  cmdFlags:
+    - --requestedSchema
+  description: requested schema, e.g. biosample
 
-  - type: string
-    argDef:
-      parse:
-        flags:
-          - -p
-          - --parse 
-        help: input value to be parsed
+include_resultset_responses:
+  type: string
+  default: HIT
+  cmdFlags:
+    - --includeResultsetResponses
+  description: requested schema, e.g. biosample
 
-  - type: string
-    argDef:
-      mode:
-        flags:
-          - -m
-          - --mode
-        help: mode, e.g. file type
+# query / data selection
 
-  - type: string
-    argDef:
-      key:
-        flags:
-          - -k
-          - --key 
-        help: some key or word
+dataset_ids:
+  type: array
+  items: string
+  cmdFlags:
+    - -d
+    - --datasetIds
+  description: dataset ids
 
-  - type: string
-    argDef:
-      update:
-        flags:
-          - -u
-          - --update
-        help: update existing records
+filters:
+  type: array
+  items: string
+  default: []
+  cmdFlags:
+    - --filters
+  description: prefixed filter values, comma concatenated
 
-      # file I/O
-  - type: string
-    argDef:
-      inputfile:
-        flags:
-          - -i
-          - --inputfile
-        help: a custom file to specify input data, usually tab-delimited with special header
+filter_precision:
+  type: string
+  cmdFlags:
+    - --filterPrecision
+  description: "`either` start or `exact` (`exact being internal default`) for matching filter values"
 
-  - type: string
-    argDef:
-      outputfile:
-        flags:
-          - -o
-          - --outputfile
-        help: output file where supported (cmd line)
+# ------------------------------------------------------------------------------
+# variant parameters
+# ------------------------------------------------------------------------------
 
-  - type: integer
-    argDef:
-      randno:
-        flags:
-          - -r
-          - --randno
-        help: random number to limit processing, where supported
-        default: 0
+assembly_id:
+  type: string
+  pattern: '^\w+?[\w\-\.]*?\w*?$'
+  db_key: assembly_id
+  default: GRCh38
+  cmdFlags:
+    - --assemblyId
+  description: assembly id
 
-  - type: integer
-    argDef:
-      minNumber:
-        flags:
-          - --minNumber
-        help: minimal number, e.g. for collations, where supported
-        default: 0
+reference_name:
+  type: string
+  db_key: location.sequence_id
+  pattern: '^\w+.*?\w?$'
+  cmdFlags:
+    - --referenceName
+  description: chromosome
 
-  - type: string
-    argDef:
-      source:
-        flags:
-          - -s
-          - --source
-        help: some source label, e.g. `callsets`
+mate_name:
+  type: string
+  db_key: location.sequence_id
+  pattern: '^\w+.*?\w?$'
+  cmdFlags:
+    - --mateName
+  description: chromosome
 
-  - type: string
-    argDef:
-      query:
-        flags:
-          - -q
-          - --query
-        help: complete query string, e.g. `{"biosamples":{"external_references.id":"geo:GSE7428"}}`
+reference_bases:
+  type: string
+  db_key: reference_sequence
+  pattern: '^[ACGTN]+$'
+  cmdFlags:
+    - --referenceBases
+  description: reference bases
 
-  - type: array
-    argDef:
-      deliveryKeys:
-        flags:
-          - --deliveryKeys
-        help: delivery keys
+alternate_bases:
+  type: string
+  db_key: sequence
+  pattern: '^[ACGTN]+$'
+  cmdFlags:
+    - --alternateBases
+  description: alternate bases
 
-      # standard Beacon query parameters 
-  - type: array
-    argDef:
-      datasetIds:
-        flags:
-          - -d
-          - --datasetIds
-        help: dataset ids
-        default: progenetix
+variant_type:
+  type: string
+  db_key: variant_state.id
+  pattern: '^\w+[\w \-\:]\w+?$'
+  cmdFlags:
+    - --variantType
+  description: variant type, e.g. DUP
 
-  - type: string
-    argDef:
-      requestEntityPathId:
-        flags:
-          - --requestEntityPathId
-        help: required data entry point, equal to the first REST path element in Beacon
-        default: biosamples
+start:
+  type: array
+  db_key: location.start
+  items:
+    type: integer
+    pattern: '^\d+?$'
+  cmdFlags:
+    - --start
+  description: genomic start position
 
-  - type: string
-    argDef:
-      requestedSchema:
-        flags:
-          - --requestedSchema
-        help: requested schema, e.g. biosample
+end:
+  type: array
+  db_key: location.end
+  items:
+    type: integer
+    pattern: '^\d+?$'
+  cmdFlags:
+    - --end
+  description: genomic end position
 
-  # filters
-  - type: array
-    argDef:
-      filters:
-        flags:
-          - --filters
-        help: prefixed filter values, comma concatenated
+variant_min_length:
+  type: integer
+  db_key: info.var_length
+  pattern: '^\d+?$'
+  cmdFlags:
+    - --variantMinLength
+  description: 'variantMinLength: The minimal variant length in bases for e.g. CNV queries.'
 
-  - type: string
-    argDef:
-      filterPrecision:
-        flags:
-          - --filterPrecision
-        help: "`either` start or `exact` (`exact being internal default`) for matching filter values"
+variant_max_length:
+  type: integer
+  db_key: info.var_length
+  pattern: '^\d+?$'
+  cmdFlags:
+    - --variantMaxLength
+  description: 'variantMaxLength: The maximum variant length in bases for e.g. CNV queries.'
 
-  # genome
-  - type: string
-    argDef:
-      genomeBinning:
-        flags:
-          - --genomeBinning
-        help: "one of the predefined genome binning keys - default 1Mb"
+gene_id:
+  type: string
+  db_key: Null
+  pattern: '^\w+?(\w+?(\-\w+?)?)?$'
+  cmdFlags:
+    - --geneId
+  description: gene id
 
-  # variants
-  - type: string
-    argDef:
-      assemblyId:
-        flags:
-          - --assemblyId
-        help: assembly id
+aminoacid_change:
+  type: string
+  db_key: molecular_attributes.aminoacid_changes 
+  pattern: '^\w+?$'
+  examples:
+    - V600E
+    - M734V
+    - G244A
+  cmdFlags:
+    - --aminoacidChange
+  description: 'Aminoacid alteration in 1 letter format'
 
-  - type: string
-    argDef:
-      referenceName:
-        flags:
-          - --referenceName
-        help: chromosome
+genomic_allele_short_form:
+  type: string
+  db_key: identifiers.genomicHGVS_id 
+  pattern: '^\w+.*\w$'
+  examples:
+    - NC_000017.11:g.7674232C>G
+  cmdFlags:
+    - --genomicAlleleShortForm
+  description: 'Genomic HGVSId descriptor'
 
-  - type: integer
-    argDef:
-      start:
-        flags:
-          - --start
-        help: genomic start position
+# ------------------------------------------------------------------------------
+# variant parameters - non-standard
+# ------------------------------------------------------------------------------
 
-  - type: integer
-    argDef:
-      end:
-        flags:
-          - --end
-        help: genomic end position
+variant_internal_id:
+  type: string
+  db_key: variant_internal_id 
+  pattern: '^\w[\w\:\-\,]+?\w$'
+  examples:
+    - '11:52900000-134452384:EFO_0030067'
+  cmdFlags:
+    - --variantInternalId
+  description: 'An id value used for all variant instances of the same composition; a kind of `digest`'
 
-  - type: string
-    argDef:
-      variantType:
-        flags:
-          - --variantType
-        help: variant type, e.g. DUP
+################################################################################
+# non-standard parameters
+################################################################################
 
-  - type: string
-    argDef:
-      referenceBases:
-        flags:
-          - --referenceBases
-        help: reference bases
+accessid:
+  type: string
+  db_key: id 
+  pattern: '^\w[\w\-]+?\w$'
+  examples:
+    - 'b59857bc-0c4a-4ac8-804b-6596c6566494'
+  cmdFlags:
+    - --accessid
+  description: 'An accessid; this parameter only makes sense for retrieving handovers etc.'
 
-  - type: string
-    argDef:
-      alternateBases:
-        flags:
-          - --alternateBases
-        help: alternate bases
+id:
+  type: string
+  db_key: id 
+  pattern: '^\w[\w\:\-\,]+?\w$'
+  examples:
+    - 'pgxvar-5bab576a727983b2e00b8d32'
+    - 'pgxind-kftx25eh'
+  cmdFlags:
+    - --id
+  description: 'An id; this parameter only makes sense for specific REST entry types'
 
-  - type: integer
-    argDef:
-      variantMinLength:
-        flags:
-          - --variantMinLength
-        help: variantMinLength
+ids:
+  type: array
+  items: string
+  cmdFlags:
+    - --ids
+  description: 'One or more ids; this parameter only makes sense for specific REST entry types'
 
-  - type: integer
-    argDef:
-      variantMaxLength:
-        flags:
-          - --variantMaxLength
-        help: variantMaxLength
+biosample_ids:
+  type: array
+  items: string
+  cmdFlags:
+    - --biosampleIds
+  description: biosample ids
 
-  - type: string
-    argDef:
-      geneId:
-        flags:
-          - --geneId
-        help: gene id
+analysis_ids:
+  type: array
+  items: string
+  cmdFlags:
+    - --analysisIds
+  description: callset / analysis ids
 
-  - type: string
-    argDef:
-      cytoBands:
-        flags:
-          - --cytoBands
-        help: cytobands, e.g. 8q21q24.1
+callset_ids:
+  type: array
+  items: string
+  cmdFlags:
+    - --callsetIds
+  description: callset / analysis ids
 
-  - type: string
-    argDef:
-      chroBases:
-        flags:
-          - --chroBases
-        help: only for the cytoband converter ... e.g. 8:0-120000000
+individual_ids:
+  type: array
+  items: string
+  cmdFlags:
+    - --individualIds
+  description: subject ids
 
-      # geographic ...
-  - type: string
-    argDef:
-      city:
-        flags:
-          - -c
-          - --city
-        help: only for the geolocations...
+variant_ids:
+  type: array
+  items: string
+  cmdFlags:
+    - --variantIds
+  description: variant ids
 
-  - type: number
-    argDef:
-      geoLatitude:
-        flags:
-          - --geoLatitude
-        help: only for the geolocations...
+# ------------------------------------------------------------------------------
+# technical / procedural - non-standard
+# ------------------------------------------------------------------------------
 
-  - type: number
-    argDef:
-      geoLongitude:
-        flags:
-          - --geoLongitude
-        help: only for the geolocations...
+debug_mode:
+  type: boolean
+  default: false
+  cmdFlags:
+    - --debugMode 
+  description: debug setting
 
-  - type: integer
-    argDef:
-      geoDistance:
-        flags:
-          - --geoDistance
-        help: only for the geolocations...
+test_mode_count:
+  type: integer
+  cmdFlags:
+    - --testModeCount
+  description: setting the number of documents reurned in test mode
+  default: 5
 
-  # special ...
-  - type: array
-    argDef:
-      collationTypes:
-        flags:
-          - --collationTypes
-        help: selected collation types, e.g. "EFO"
+output:
+  type: string
+  cmdFlags:
+    - --output
+  description: >-
+        special output format; command line processing uses some predefined text as
+        standard, but options are e.g. json or pgxseg
 
-  - type: integer
-    argDef:
-      withSamples:
-        flags:
-          - --withSamples
-        help: only for the collations; number of code_matches...
+include_handovers:
+  type: boolean
+  default: false
+  cmdFlags:
+    - --includeHandovers
+  description: only used for web requests & testing 
 
-  # plot
-  - type: string
-    argDef:
-      plotTitle:
-        flags:
-          - --plotTitle
-        help: >-
-          command line plot special; could also be achieved through
-          "--plotPars "title=This is a nice plot"
+only_handovers:
+  type: boolean
+  default: false
+  cmdFlags:
+    - --onlyHandovers
+  description: only used for web requests & testing 
 
-  - type: string
-    argDef:
-      plotPars:
-        flags:
-          - --plotPars
-        help: like in the query string
+method:
+  type: string
+  cmdFlags:
+    - --method
+  description: >-
+        special method
+
+group_by:
+  type: string
+  cmdFlags:
+    - -g
+    - --groupBy
+  description: >-
+        group parameter e.g. for subset splitting
+  default: text
+
+parse:
+  type: string
+  cmdFlags:
+    - -p
+    - --parse 
+  description: input value to be parsed
+
+mode:
+  type: string
+  cmdFlags:
+    - -m
+    - --mode
+  description: mode, e.g. file type
+
+key:
+  type: string
+  cmdFlags:
+    - -k
+    - --key 
+  description: some key or word
+
+update:
+  type: string
+  cmdFlags:
+    - -u
+    - --update
+  description: update existing records
+
+# file I/O
+inputfile:
+  type: string
+  cmdFlags:
+    - -i
+    - --inputfile
+  description: a custom file to specify input data, usually tab-delimited with special header
+
+outputfile:
+  type: string
+  cmdFlags:
+    - -o
+    - --outputfile
+  description: output file where supported (cmd line)
+
+randno:
+  type: integer
+  cmdFlags:
+    - -r
+    - --randno
+  description: random number to limit processing, where supported
+  default: 0
+
+min_number:
+  type: integer
+  cmdFlags:
+    - --minNumber
+  description: minimal number, e.g. for collations, where supported
+  default: 0
+
+source:
+  type: string
+  cmdFlags:
+    - -s
+    - --source
+  description: some source label, e.g. `callsets`
+
+query:
+  type: string
+  cmdFlags:
+    - -q
+    - --query
+  description: complete query string, e.g. `{"biosamples":{"external_references.id":"geo:GSE7428"}}`
+
+delivery_keys:
+  type: array
+  items: string
+  cmdFlags:
+    - --deliveryKeys
+  description: delivery keys
+
+collation_types:
+  type: array
+  items: string
+  cmdFlags:
+    - --collationTypes
+  description: selected collation types, e.g. "EFO"
+
+with_samples:
+  type: integer
+  cmdFlags:
+    - --withSamples
+  description: only for the collations; number of code_matches...
+
+selected_beacons:
+  type: array
+  items: string
+
+# ------------------------------------------------------------------------------
+# genomic parameters
+# ------------------------------------------------------------------------------
+
+genome_binning:
+  type: string
+  cmdFlags:
+    - --genomeBinning
+  description: "one of the predefined genome binning keys - default 1Mb"
+
+cyto_bands:
+  type: string
+  db_key: Null
+  pattern: ^(?:chro?)?([12]?[\dXY])([pq](?:(?:ter)|(?:cen)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?\-?([pq](?:(?:cen)|(?:ter)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?$
+  cmdFlags:
+    - --cytoBands
+  description: cytobands, e.g. 8q21q24.1
+
+chro_bases:
+  type: string
+  db_key: Null
+  pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
+  cmdFlags:
+    - --chroBases
+  description: only for the cytoband converter ... e.g. 8:0-120000000
+
+
+################################################################################
+# geographic ...
+################################################################################
+
+city:
+  type: string
+  cmdFlags:
+    - -c
+    - --city
+  description: only for the geolocations...
+
+geo_latitude:
+  type: number
+  cmdFlags:
+    - --geoLatitude
+  description: only for the geolocations...
+
+geo_longitude:
+  type: number
+  cmdFlags:
+    - --geoLongitude
+  description: only for the geolocations...
+
+geo_distance:
+  type: integer
+  cmdFlags:
+    - --geoDistance
+  description: only for the geolocations...
+
+################################################################################
+# plot ... 
+################################################################################
+
+plot_pars:
+  type: string
+  cmdFlags:
+    - --plotPars
+  description: plot parameters in form `par=value` concatenated by `::`
 

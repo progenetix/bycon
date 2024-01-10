@@ -66,7 +66,7 @@ def translate_reference_ids(byc):
         refseq_id: "refseq:NC_000003.12"
         length: 198295559
     ```
-    Return: added objects in byc["variant_parameters"]
+    Return: added objects in byc["variant_request_definitions"]
       - "chro_refseq_ids" - refseq id for each chromosome
           - "15": "refseq:NC_000015.10"
       - "refseq_chronames": chromosome for each refseq id

@@ -4,119 +4,20 @@
 #
 ################################################################################
 
-parameters:
-
-  assembly_id:
-    type: string
-    pattern: '^\w+?[\w\-\.]*?\w*?$'
-    db_key: assembly_id
-    default: GRCh38
-
-  reference_name:
-    type: string
-    db_key: location.sequence_id
-    pattern: '^\w+.*?\w?$'
-
-  mate_name:
-    type: string
-    db_key: location.sequence_id
-    pattern: '^\w+.*?\w?$'
-
-  reference_bases:
-    type: string
-    db_key: reference_sequence
-    pattern: '^[ACGTN]+$'
-
-  alternate_bases:
-    type: string
-    db_key: sequence
-    pattern: '^[ACGTN]+$'
-
-  variant_type:
-    db_key: variant_state.id
-    type: string
-    pattern: '^\w+[\w \-\:]\w+?$'
-
-  start:
-    type: array
-    db_key: location.start
-    items:
-      type: integer
-      pattern: '^\d+?$'
-
-  end:
-    type: array
-    db_key: location.end
-    items:
-      type: integer
-      pattern: '^\d+?$'
-
-  variant_min_length:
-    type: integer
-    db_key: info.var_length
-    pattern: '^\d+?$'
-    description: >-
-      The minimal length, in bases, of a genomic variant. This parameter can be applied to e.g. CNV queries.
-
-  variant_max_length:
-    type: integer
-    db_key: info.var_length
-    pattern: '^\d+?$'
-    description: >
-      The maximal length, in bases, of a genomic variant. This parameter can be applied to e.g. CNV queries.
-
-  gene_id:
-    type: string
-    db_key: Null
-    pattern: '^\w+?(\w+?(\-\w+?)?)?$'
-
-  aminoacid_change:
-    description: >-
-      Aminoacid alteration in 1 letter format
-    type: string
-    pattern: '^\w+?$'
-    db_key: molecular_attributes.aminoacid_changes 
-    examples:
-      - V600E
-      - M734V
-      - G244A
-
-  genomic_allele_short_form:
-    description: >-
-      Genomic HGVSId descriptor.
-    type: string
-    db_key: identifiers.genomicHGVS_id
-    pattern: '^\w+.*\w$'
-    examples:
-      - NC_000017.11:g.7674232C>G
-
-# custom parameters
-
-  variant_internal_id:
-    type: string
-    db_key: variant_internal_id
-    pattern: '^\w[\w\:\-\,]+?\w$'
-    description: >
-      An id value used for all variant instances of the same composition.
-      In Progenetix this is used to aggregate all the instances of
-      "caseLevelData" variants.
-
-  id:
-    type: string
-    db_key: id
-    pattern: '^\w[\w\:\-\,]+?\w$'
-    description: >
-      A variant id, if existing in the database.
-
-  cyto_bands:
-    db_key: Null
-    pattern: ^(?:chro?)?([12]?[\dXY])([pq](?:(?:ter)|(?:cen)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?\-?([pq](?:(?:cen)|(?:ter)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?$
-    type: string
-
-  chro_bases:
-    db_key: Null
-    pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
-    type: string
+variant_pars:
+  - assembly_id
+  - reference_name
+  - mate_name
+  - reference_bases
+  - alternate_bases
+  - variant_type
+  - start
+  - end
+  - variant_min_length
+  - variant_max_length
+  - gene_id
+  - aminoacid_change
+  - genomic_allele_short_form
 
 # As long as there are no variant query schemas to define valid Beacon
 # variant parameter combinations the `request_types` here provide sets

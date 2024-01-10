@@ -36,8 +36,6 @@ def remap_variants(r_s_res, byc):
     if "vcf" in byc["output"].lower() or "pgxseg" in byc["output"].lower():
         return r_s_res
 
-    v_d = byc["variant_parameters"]
-
     variant_ids = []
     for v in r_s_res:
         variant_ids.append(v["variant_internal_id"])

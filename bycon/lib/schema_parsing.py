@@ -63,7 +63,6 @@ def get_default_schema_file_path(byc, schema_path_id, file_name, ext="json"):
     f_n = f'{file_name}.{ext}'
 
     p = Path(path.join( pkg_path, *byc["schemas_path"] ))
-    # prdbug(byc, f'==> schema files root: {p}')
     s_p_s = [ f for f in p.rglob("*") if f.is_file() ]
     s_p_s = [ f for f in s_p_s if f.name == f_n ]
     s_p_s = [ f for f in s_p_s if f.parent.name == schema_path_id ]

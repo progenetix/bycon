@@ -10,8 +10,8 @@ sys.path.append( bycon_lib_path )
 
 try:
 
-    from aggregator_utils import *
     from args_parsing import *
+    from beacon_auth import *
     from beacon_response_generation import *
     from bycon_helpers import *
     from cgi_parsing import *

@@ -4,6 +4,7 @@ from deepmerge import always_merger
 from os import environ, path
 
 from args_parsing import *
+from beacon_auth import *
 from bycon_helpers import return_paginated_list
 from cgi_parsing import prdbug, test_truthy
 from dataset_parsing import select_dataset_ids
@@ -34,12 +35,7 @@ def set_beacon_defaults(byc):
 def run_beacon_init_stack(byc):
     select_dataset_ids(byc)
     set_user_name(byc)
-    set_returned_granularities(byc)
-    # prdbug(byc,f'returned_granularity: {byc["returned_granularity"]}')
-
-    # # move the next to later, and deliver as Beacon error?
-    # if len(byc["dataset_ids"]) < 1:
-    #     print_text_response("No existing dataset_id - please check dataset_definitions")
+    set_returned_granularities(byc)    
     parse_filters(byc)
     parse_variants(byc)
     generate_genomic_mappings(byc)
@@ -104,7 +100,6 @@ def initialize_bycon_service(byc, service=False):
         # this will generate byc["service_config"] if a file with the service
         # name exists
         read_service_prefs(service, conf_dir, byc)
-    # prdbug(byc, f'initialize_bycon_service - request_entity_path_id: {byc.get("request_entity_path_id")}, service {service}')
 
     get_bycon_args(byc)
     args_update_form(byc)
@@ -121,12 +116,10 @@ def initialize_bycon_service(byc, service=False):
 
     if entry_type in b_e_d:
         for d_k, d_v in b_e_d[entry_type].items():
-            # prdbug(byc, {d_k: d_v})
             byc.update({d_k: d_v})
 
     # update response_entity_id from path
     update_entity_ids_from_path(byc)
-    # prdbug(byc, f'initialize_bycon_service - response_entity_id: {byc.get("response_entity_id")}, service {service}')
 
     # update response_entity_id from form
     update_requested_schema_from_request(byc)
@@ -167,7 +160,6 @@ def set_io_params(byc):
 
     for sp in ["skip", "limit"]:
         if sp in form:
-            prdbug(byc, f'{sp}: {form[sp]}')
             if re.match(r'^\d+$', str(form[sp])):
                 s_v = int(form[sp])
                 byc["pagination"].update({sp: s_v})
@@ -223,7 +215,9 @@ def update_requested_schema_from_request(byc):
 ################################################################################
 
 def set_response_entity(byc):
-    prdbug(byc, f'response_entity_id: {byc.get("response_entity_id")}')
+    dbm = f'response_entity_id: {byc.get("response_entity_id")}'
+    prdbug(dbm, byc.get("debug_mode"))
+    
     b_rt_s = byc["beacon_defaults"].get("entity_defaults", {})
     r_e_id = byc.get("response_entity_id", "___none___")
     r_e = b_rt_s.get(r_e_id)
@@ -236,61 +230,8 @@ def set_response_entity(byc):
 ################################################################################
 
 def set_response_schema(byc):
-    prdbug(byc, byc["response_entity"])
-    r_s = byc["response_entity"].get("response_schema", "beaconInfoResponse")
+    r_e = byc.get("response_entity", {})
+    r_s = r_e.get("response_schema", "beaconInfoResponse")
     byc.update({"response_schema": r_s})
-
-
-################################################################################
-
-def set_user_name(byc):
-    byc.update({"user_name": "anonymous"})
-    # local user has full permissions
-    if "local" in byc["env"]:
-        byc.update({"user_name": "local"})
-        return
-
-    # TODO: user_name will be provided in header
-    un = byc["form_data"].get("user", "anonymous")
-    if un in byc.get("authorizations", {}):
-        byc.update({"user_name": un})
-
-
-################################################################################
-
-def set_returned_granularities(byc):
-
-    un = byc.get("user_name", "anonymous")
-    rg = byc["form_data"].get("requested_granularity", "record")
-    granularity_levels = byc.get("granularity_levels", {})
-    auth = byc.get("authorizations", {})
-
-    g_l_s = [0]
-    r_g_l = granularity_levels.get(rg, 0)
-
-    if not "authorized_granularities" in byc:
-        byc.update({"authorized_granularities": {}})
-
-    # prdbug(byc,f'user_name: {un}')
-    # prdbug(byc,f'authorizations: {auth}')
-    for d in byc["dataset_ids"]:
-        byc["authorized_granularities"].update({d: rg})
-        ugs = auth.get(un, {})
-        if d in ugs:
-            g_l_l = ugs[d]
-        elif "default" in ugs:
-            g_l_l = ugs["default"]
-        d_g_l = granularity_levels.get(g_l_l, 0)
-        if d_g_l <= r_g_l:
-            byc["authorized_granularities"].update({d: g_l_l})
-        g_l_s.append(d_g_l)
-
-    m_g_l = max(g_l_s)
-
-    if m_g_l < r_g_l:
-        prdbug(byc, "Warning: Requested granularity exceeds user authorization - using a maximum of %s" % byc["returned_granularity"])
-        byc.update({"returned_granularity": list(granularity_levels.keys())[m_g_l]})
-    else:
-        byc.update({"returned_granularity": list(granularity_levels.keys())[r_g_l]})
 
 

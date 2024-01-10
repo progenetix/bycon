@@ -23,12 +23,12 @@ class BeaconInfoResponse:
     """
 
     def __init__(self, byc: dict):
-        self.byc = byc
+        self.debug_mode = byc.get("debug_mode", False)
         self.beacon_defaults = byc.get("beacon_defaults", {})
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
         self.service_config = byc.get("service_config", {})
         self.response_schema = byc.get("response_schema", "beaconInfoResponse")
-        self.beacon_schema = self.byc["response_entity"].get("beacon_schema", "___none___")
+        self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
         self.data_response = object_instance_from_schema_name(byc, self.response_schema, "")
         self.error_response = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
         info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
@@ -64,16 +64,17 @@ class BeaconDataResponse:
     def __init__(self, byc: dict):
         self.byc = byc
         self.test_mode = byc.get("test_mode", False)
+        self.debug_mode = byc.get("debug_mode", False)
         self.beacon_defaults = byc.get("beacon_defaults", {})
         self.authorized_granularities = byc.get("authorized_granularities", {})
         self.user_name = byc.get("user_name", "anonymous")
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
         self.form_data = byc.get("form_data", {})
-        self.service_config = self.byc.get("service_config", {})
+        self.service_config = byc.get("service_config", {})
         self.response_schema = byc["response_schema"]
         self.returned_granularity = self.form_data.get("returned_granularity", "record")
         self.include_handovers = self.form_data.get("include_handovers", False)
-        self.beacon_schema = self.byc["response_entity"].get("beacon_schema", "___none___")
+        self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
         self.record_queries = {}
         self.data_response = object_instance_from_schema_name(byc, self.response_schema, "")
         self.error_response = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
@@ -88,7 +89,8 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def resultsetResponse(self):
-        prdbug(self.byc, f'... resultsetResponse start, schema {self.response_schema}')
+        dbm = f'... resultsetResponse start, schema {self.response_schema}'
+        prdbug(dbm, self.debug_mode)
         if not "beaconResultsetsResponse" in self.response_schema:
             return
 
@@ -115,7 +117,9 @@ class BeaconDataResponse:
         self.__response_clean_parameters()
         self.result_sets_end = datetime.datetime.now()
         self.result_sets_duration = self.result_sets_end - self.result_sets_start
-        prdbug(self.byc, f'... data response duration was {self.result_sets_duration.total_seconds()} seconds')
+
+        dbm = f'... data response duration was {self.result_sets_duration.total_seconds()} seconds'
+        prdbug(dbm, self.debug_mode)
 
         return self.data_response
 
@@ -194,7 +198,10 @@ class BeaconDataResponse:
         prdbug(self.byc, f'authorized_granularities: {self.authorized_granularities}')
         for rs in self.data_response["response"]["result_sets"]:
             rs_granularity = self.authorized_granularities.get(rs["id"], "boolean")
-            prdbug(self.byc, f'rs_granularity ({rs["id"]}): {rs_granularity}')
+            
+            dbm = f'rs_granularity ({rs["id"]}): {rs_granularity}'
+            prdbug(dbm, self.debug_mode)
+
             if not "record" in rs_granularity:
                 # TODO /CUSTOM: This non-standard modification removes the results
                 # but keeps the resultSets structure (handovers ...)
@@ -253,6 +260,7 @@ class BeaconDataResponse:
             r_m.update({"warnings": self.warnings})
 
         return
+
 
     # -------------------------------------------------------------------------#
 
@@ -368,6 +376,7 @@ class ByconFilteringTerms:
 
     def __init__(self, byc: dict):
         self.byc = byc
+        self.debug_mode = byc.get("debug_mode", False)
         self.test_mode = byc.get("test_mode", False)
         self.env = byc.get("env", "server")
         self.test_mode_count = byc.get("test_mode_count", 5)
@@ -498,6 +507,7 @@ class ByconCollections:
         self.byc = byc
         self.dataset_ids = byc.get("dataset_ids", [])
         self.env = byc.get("env", "server")
+        self.debug_mode = byc.get("debug_mode", False)
         self.test_mode = byc.get("test_mode", False)
         self.test_mode_count = byc.get("test_mode_count", 5)
         self.beacon_defaults = byc.get("beacon_defaults", {})
@@ -586,6 +596,7 @@ class ByconResultSets:
 
     def __init__(self, byc: dict):
         self.byc = byc
+        self.debug_mode = byc.get("debug_mode", False)
         self.beacon_defaults = byc.get("beacon_defaults", {})
         self.env = byc.get("env", "server")
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
@@ -672,7 +683,10 @@ class ByconResultSets:
                 if not "target_values" in h_o:
                     continue
                 h_o_size = sys.getsizeof(h_o["target_values"])
-                prdbug(self.byc, f'Storage size for {ds_id}.{h_o_k}: {h_o_size / 1000000}Mb')
+                
+                dbm = f'Storage size for {ds_id}.{h_o_k}: {h_o_size / 1000000}Mb'
+                prdbug(dbm, self.debug_mode)
+
                 if h_o_size < 15000000:
                     ho_coll.update_one( { "id": h_o["id"] }, { '$set': h_o }, upsert=True )
 
@@ -711,9 +725,10 @@ class ByconResultSets:
             ds_id = r_set["id"]
             ds_res = execute_bycon_queries(ds_id, self.record_queries, self.byc)
             self.datasets_results.update({ds_id: ds_res})
-            # prdbug(self.byc, ds_res)
         ds_r_duration = datetime.datetime.now() - ds_r_start
-        prdbug(self.byc, f'... datasets results querying needed {ds_r_duration.total_seconds()} seconds')
+        
+        dbm = f'... datasets results querying needed {ds_r_duration.total_seconds()} seconds'
+        prdbug(dbm, self.debug_mode)
 
         return
 
@@ -750,7 +765,9 @@ class ByconResultSets:
 
             self.datasets_data.update({ds_id: r_s_res})
         ds_d_duration = datetime.datetime.now() - ds_d_start
-        prdbug(self.byc, f'... datasets data retrieval needed {ds_d_duration.total_seconds()} seconds')
+        
+        dbm = f'... datasets data retrieval needed {ds_d_duration.total_seconds()} seconds'
+        prdbug(dbm, self.debug_mode)
 
         return
 
@@ -783,7 +800,9 @@ class ByconResultSets:
                 self.datasets_data.update({ds_id: r_s_res})
 
         ds_v_duration = datetime.datetime.now() - ds_v_start
-        prdbug(self.byc, f'... variants retrieval needed {ds_v_duration.total_seconds()} seconds')
+
+        dbm = f'... variants retrieval needed {ds_v_duration.total_seconds()} seconds'
+        prdbug(dbm, self.debug_mode)
 
         return
 

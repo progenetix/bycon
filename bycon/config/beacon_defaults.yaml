@@ -8,6 +8,7 @@ defaults:
   include_handovers: false
   requested_granularity: record
   returned_granularity: record
+  user_name: anonymous
   pagination:
     skip: 0
     limit: 200
@@ -17,6 +18,10 @@ defaults:
     beacon_schema:
       entity_type: info
       schema: https://progenetix.org/services/schemas/beaconInfoResults/
+  filter_flags:
+    logic: $and
+    precision: exact
+    include_descendant_terms: true
 
 ################################################################################
 # mappings and aliases #########################################################

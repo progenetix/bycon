@@ -1,3 +1,4 @@
+# This file (re-)defines the dataset specific authorizations
 anonymous:
   default: record
 mbaudis:

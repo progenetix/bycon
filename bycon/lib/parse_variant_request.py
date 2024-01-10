@@ -12,30 +12,21 @@ def parse_variants(byc):
 ################################################################################
 
 def __parse_variant_parameters(byc):
-    v_d = byc["variant_parameters"]
-    v_p_defs = v_d["parameters"]
+    form = byc.get("form_data", {})
+    v_p_s = byc["variant_request_definitions"].get("variant_pars", [])
+    a_defs = byc.get("argument_definitions", {})
     v_t_defs = byc["variant_type_definitions"]
 
-    variant_pars = { }
-
-    for p_k in v_p_defs.keys():
-        v_default = None
-        if "default" in v_p_defs[ p_k ]:
-            v_default = v_p_defs[ p_k ][ "default" ]
-        variant_pars[ p_k ] = v_default
-        if p_k in byc["form_data"]:
-            variant_pars[ p_k ] = byc["form_data"][p_k]
-
-        if variant_pars[ p_k ] is None:
-            variant_pars.pop(p_k)
+    variant_pars = {}
+    for v_p, v_v in form.items():
+        if v_p in v_p_s:
+            variant_pars.update({ v_p: v_v })
 
     # value checks
     v_p_c = { }
     __translate_reference_name(variant_pars, byc)
 
-    for p_k in variant_pars.keys():
-        if not p_k in v_p_defs.keys():
-            continue
+    for p_k, v_p in variant_pars.items():
         v_p = variant_pars[ p_k ]
         if "variant_type" in p_k:
             v_s = __variant_state_from_variant_par(v_p, byc)
@@ -44,17 +35,17 @@ def __parse_variant_parameters(byc):
             else:
                 v_s_id = v_s["id"]  # on purpose here leading to error if ill defined
                 v_p_c[ p_k ] = { "$in": v_t_defs[v_s_id]["child_terms"] }
-        elif "array" in v_p_defs[ p_k ]["type"]:
+        elif "array" in a_defs[ p_k ]["type"]:
             v_l = set()
             for v in v_p:
-                if re.compile( v_p_defs[ p_k ][ "items" ][ "pattern" ] ).match( str( v ) ):
-                    if "integer" in v_p_defs[ p_k ][ "items" ][ "type" ]:
+                if re.compile( a_defs[ p_k ][ "items" ][ "pattern" ] ).match( str( v ) ):
+                    if "integer" in a_defs[ p_k ][ "items" ][ "type" ]:
                         v = int( v )
                     v_l.add( v )
             v_p_c[ p_k ] = sorted( list(v_l) )
         else:
-            if re.compile( v_p_defs[ p_k ][ "pattern" ] ).match( str( v_p ) ):
-                if "integer" in v_p_defs[ p_k ][ "type" ]:
+            if re.compile( a_defs[ p_k ][ "pattern" ] ).match( str( v_p ) ):
+                if "integer" in a_defs[ p_k ][ "type" ]:
                     v_p = int( v_p )
                 v_p_c[ p_k ] = v_p
 
@@ -83,9 +74,7 @@ def __get_variant_request_type(byc):
     variant_request_type = "no correct variant request"
 
     v_pars = byc["varguments"]
-    v_p_defs = byc["variant_parameters"]["parameters"]
-
-    brts = byc["variant_parameters"]["request_types"]
+    brts = byc["variant_request_definitions"]["request_types"]
     brts_k = brts.keys()
     
     # Already hard-coding some types here - if conditions are met only
@@ -133,9 +122,7 @@ def __get_variant_request_type(byc):
 ################################################################################
 
 def __variant_state_from_variant_par(variant_type, byc):
-    v_d = byc["variant_parameters"]
     v_t_defs = byc["variant_type_definitions"]
-
     for k, d in v_t_defs.items():
         for p, v in d.items():
             if v is None:

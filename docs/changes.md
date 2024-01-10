@@ -13,6 +13,19 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2024-01-09 (v1.3.8)
+
+* argument parameter redesign
+    - definition of all parameters/arguments (web & local) in `argument_definitions.yaml`
+    - parameters not defined there will not be processed anymore (however, there are some
+      placeholders like e.g. `mode` or `key` which are not utilized by standard methods
+      and can be co-opted for custom inputs)
+    - plot parameters are provided as a single string to `plotPars`, with individual
+      parameter pairs concatenated by `::`
+        * in GET: `plotPars=plot_chros=8,9,17::labels=8:120000000-123000000:Some+Interesting+Region::plot_gene_symbols=MYCN,TP53,MTAP,CDKN2A,MYC,ERBB2::plot_width=800`
+        * in CMD: `--plotPars "plot_chros=8,9,17::labels=8:120000000-123000000:Some Interesting Region::plot_gene_symbols=MYCN,TP53,MTAP,CDKN2A,MYC,ERBB2::plot_width=800"`
+* modification of the `prdbug` helper
+
 ### 2023-12-18 (v1.3.7)
 
 * added handling for user specific granularity permissions
@@ -345,7 +358,7 @@ definitions and "local" ones. Partcullarly:
     - `refseq_chromosomes` now in `rsrc/genomes/grch38` (only grch38 so far but this
       is all we currently use...)
         * also `parse_refseq_file` and `__get_genome_rsrc_path` functions
-    - `variant_parameters` and `variant_type_definitions` config files from
+    - `variant_request_definitions` and `variant_type_definitions` config files from
       `variant_definitions` (separating the query config from the type mappings)
     - `cytoband_utils` => `genome_utils`
     - `generate_genomic_mappings` wrapper for cytoband and interval functions
