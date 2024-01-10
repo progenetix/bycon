@@ -13,6 +13,12 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2024-01-10 (v1.3.9)
+
+Bugfix release. Some default values provided in `argument_definitions.yaml`
+file were overriding pre-processed values, leading to e.g. to an
+endless loop in the handover generation.
+
 ### 2024-01-09 (v1.3.8)
 
 * argument parameter redesign

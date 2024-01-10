@@ -57,8 +57,10 @@ def beacon():
     rest_path_elements(byc)
     get_bycon_args(byc)
     args_update_form(byc)
+    prdbug(f'beacon.py - request_entity_path_id: {byc.get("request_entity_path_id")}', byc.get("debug_mode"))
 
     e_p_id = byc["form_data"].get("request_entity_path_id", "___none___")
+    prdbug(f'beacon.py - form e_p_id: {e_p_id}', byc.get("debug_mode"))
     if e_p_id in s_a_s or e_p_id in r_w:
         byc.update({"request_entity_path_id": e_p_id})
     r_p_id = byc.get("request_entity_path_id", "info")

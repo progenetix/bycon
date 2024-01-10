@@ -32,7 +32,6 @@ limit:
     - -l
     - --limit 
   description: limit number of documents; a value of 0 sets to unlimited
-  default: 0
 
 requested_granularity:
   type: string
@@ -40,7 +39,6 @@ requested_granularity:
   description: >-
     The response granularity of the beacon; for "secure" Beacons the default
     should be overridden in local definitions (e.g. as "boolean")
-  default: record
   cmdFlags:
     - --requestedGranularity
   description: The requested granularity of the beacon
@@ -50,7 +48,6 @@ request_entity_path_id:
   cmdFlags:
     - --requestEntityPathId
   description: required data entry point, equal to the first REST path element in Beacon
-  default: biosamples
 
 requested_schema:
   type: string
@@ -60,7 +57,6 @@ requested_schema:
 
 include_resultset_responses:
   type: string
-  default: HIT
   cmdFlags:
     - --includeResultsetResponses
   description: requested schema, e.g. biosample
@@ -78,7 +74,6 @@ dataset_ids:
 filters:
   type: array
   items: string
-  default: []
   cmdFlags:
     - --filters
   description: prefixed filter values, comma concatenated
@@ -97,7 +92,6 @@ assembly_id:
   type: string
   pattern: '^\w+?[\w\-\.]*?\w*?$'
   db_key: assembly_id
-  default: GRCh38
   cmdFlags:
     - --assemblyId
   description: assembly id
@@ -295,7 +289,6 @@ variant_ids:
 
 debug_mode:
   type: boolean
-  default: false
   cmdFlags:
     - --debugMode 
   description: debug setting

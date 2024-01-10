@@ -101,6 +101,7 @@ class BeaconDataResponse:
         self.__resultset_response_update_summaries()
         self.__resultSetResponse_force_granularities()
 
+
         b_h_o = self.data_response.get("beacon_handovers", [])
         if len(b_h_o) < 1:
             self.data_response.pop("beacon_handovers", None)
@@ -724,12 +725,11 @@ class ByconResultSets:
         for i, r_set in enumerate(self.result_sets):
             ds_id = r_set["id"]
             ds_res = execute_bycon_queries(ds_id, self.record_queries, self.byc)
-            self.datasets_results.update({ds_id: ds_res})
+            self.datasets_results.update({ds_id: ds_res})            
         ds_r_duration = datetime.datetime.now() - ds_r_start
         
         dbm = f'... datasets results querying needed {ds_r_duration.total_seconds()} seconds'
         prdbug(dbm, self.debug_mode)
-
         return
 
 
@@ -741,6 +741,7 @@ class ByconResultSets:
 
         ds_d_start = datetime.datetime.now()
         for ds_id, ds_results in self.datasets_results.items():
+
 
             if not ds_results:
                 continue

@@ -27,12 +27,15 @@ def dataset_response_add_handovers(ds_id, byc):
 
     ds_res_k = list(byc["dataset_results"][ds_id].keys())
 
+    prdbug(f'... pre handover {ds_res_k}', byc.get("debug_mode"))
+
     for h_o_t, h_o_defs in h_o_types.items():
 
         h_o_k = h_o_types[ h_o_t ].get("h->o_key", "___none___")
         h_o = byc["dataset_results"][ds_id].get(h_o_k)
         if not h_o:
             continue
+        prdbug(f'... checking handover {h_o_t}', byc.get("debug_mode"))
 
         # testing if this handover is active for the specified dataset      
         if h_o_t not in ds_h_o:
@@ -97,6 +100,7 @@ def dataset_response_add_handovers(ds_id, byc):
             b_h_o.append( h_o_r )
 
     return b_h_o
+
 
 ################################################################################
 

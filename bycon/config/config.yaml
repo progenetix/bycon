@@ -12,7 +12,7 @@ granularity_levels:
   record: 3
 pagination:
   skip: 0
-  limit: 0
+  limit: 250
 include_handovers: false
 method: ''
 output: ''
