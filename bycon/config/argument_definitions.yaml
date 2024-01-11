@@ -500,3 +500,8 @@ plot_pars:
     - --plotPars
   description: plot parameters in form `par=value` concatenated by `::`
 
+plot_type:
+  type: string
+  cmdFlags:
+    - --plotType
+  description: plot type (histoplot, samplesplot, arrayplot - more?)

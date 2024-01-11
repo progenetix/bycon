@@ -13,6 +13,10 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### (v.1.4.0)
+
+* fix of `plot_type` parameter as separate one (used in byconaut)
+
 ### 2024-01-10 (v1.3.9)
 
 Bugfix release. Some default values provided in `argument_definitions.yaml`
