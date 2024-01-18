@@ -43,12 +43,13 @@ def read_bycon_configs_by_name(name, conf_dir, byc):
     podmd"""
 
     o = {}
-    ofp = path.join( conf_dir, name+".yaml" )
+    ofp = path.join( conf_dir, f'{name}.yaml' )
 
     with open( ofp ) as od:
         o = yaml.load( od , Loader=yaml.FullLoader)
 
     byc.update({ name: o })
+
 
 ################################################################################
 
@@ -60,6 +61,7 @@ def read_service_prefs(service, service_pref_path, byc):
     f = Path( path.join( service_pref_path, service+".yaml" ) )
     if f.is_file():
         byc.update({"service_config": load_yaml_empty_fallback( f ) })
+
 
 ################################################################################
 
@@ -74,7 +76,6 @@ def update_rootpars_from_local(loc_dir, byc):
 
     b_p = 'beacon_defaults'
     s_p = 'services_defaults'
-    # prdbug(byc, f'... parsing {loc_dir} for {b_p}')
 
     b_f = path.join(loc_dir, f'{b_p}.yaml')
     b = load_yaml_empty_fallback(b_f)
@@ -84,7 +85,7 @@ def update_rootpars_from_local(loc_dir, byc):
     byc.update({b_p: always_merger.merge(byc.get(b_p, {}), b)})
 
     # TODO: better way to define which files are parsed from local
-    for p in ("dataset_definitions", "local_paths", "local_parameters", "datatable_mappings", "plot_defaults"):
+    for p in ("authorizations", "dataset_definitions", "local_paths", "local_parameters", "datatable_mappings", "plot_defaults"):
         f = path.join(loc_dir, f'{p}.yaml')
         d = load_yaml_empty_fallback(f)
         byc.update({p: always_merger.merge(byc.get(p, {}), d)})
@@ -98,10 +99,11 @@ def dbstats_return_latest(byc):
 
     # TODO: This is too hacky & should be moved to an external function
     # which updates the database_definitions / beacon_info yamls...
-    info_db = byc[ "config" ][ "housekeeping_db" ]
-    coll = byc[ "config" ][ "beacon_info_coll" ]
+    info_db = byc["housekeeping_db"]
+    coll = byc["beacon_info_coll"]
     stats = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))[ info_db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
     return list(stats)[0]
+
 
 ################################################################################
 
@@ -114,8 +116,6 @@ def datasets_update_latest_stats(byc, collection_type="datasets"):
 
     stat = dbstats_return_latest(byc)
 
-    counted = byc["config"].get("beacon_count_items", {})
-
     for coll_id, coll in byc[ def_k ].items():
         if q_k in byc:
             if len(byc[ q_k ]) > 0:
@@ -125,11 +125,6 @@ def datasets_update_latest_stats(byc, collection_type="datasets"):
         if collection_type in stat:
             if coll_id in stat[ collection_type ].keys():
                 ds_vs = stat[ collection_type ][coll_id]
-                if "counts" in ds_vs:
-                    for c, c_d in counted.items():
-                        i_k = c_d.get("info_key", "___none___")
-                        if i_k in ds_vs["counts"]:
-                            coll["info"].update({ c: ds_vs["counts"][ i_k ] })
                 if "filtering_terms" in byc["response_entity_id"]:
                     coll.update({ "filtering_terms": stat[ collection_type ][coll_id].get("filtering_terms", []) } )
 
@@ -143,12 +138,10 @@ def datasets_update_latest_stats(byc, collection_type="datasets"):
 def load_yaml_empty_fallback(yp):
 
     y = { }
-
     try:
         with open( yp ) as yd:
             y = yaml.load( yd , Loader=yaml.FullLoader)
     except:
         pass
-
     return y
 

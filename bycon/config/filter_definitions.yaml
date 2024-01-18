@@ -312,7 +312,7 @@ GEOexperiment:
   pattern: '^(?:geo:)?GSM\d+?$'
   scope: callsets
   entity: analysis
-  db_key: 'external_references.id'
+  db_key: 'analysis_info.experiment_id'
   collationed: False
   examples:
     - geo:GSM253289
@@ -328,9 +328,9 @@ arrayexpress:
     replace:
       - "arrayexpress:"
       - ""
-  db_key: 'external_references.id'
-  scope: biosamples
-  entity: biosample
+  db_key: 'analysis_info.experiment_id'
+  scope: callsets
+  entity: analysis
   pattern: '^arrayexpress:[AEP]-\w{4}-\d+$'
   collationed: True
   examples:

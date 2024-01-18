@@ -1,0 +1,4 @@
+anonymous:
+  default: boolean
+local:
+  default: record

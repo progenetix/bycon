@@ -36,8 +36,6 @@ def remap_variants(r_s_res, byc):
     if "vcf" in byc["output"].lower() or "pgxseg" in byc["output"].lower():
         return r_s_res
 
-    v_d = byc["variant_parameters"]
-
     variant_ids = []
     for v in r_s_res:
         variant_ids.append(v["variant_internal_id"])
@@ -57,13 +55,15 @@ def remap_variants(r_s_res, byc):
         v["variation"].pop("variant_internal_id", None)
 
         for d_v in d_vs:
-            v["case_level_data"].append(
-                {
-                    "id": d_v.get("id", "__none__"),
-                    "biosample_id": d_v.get("biosample_id", "__none__"),
-                    "analysis_id": d_v.get("callset_id", "__none__")
-                }
-            )
+            c_l_v = {}
+            for c_k in ("id", "biosample_id", "info"):
+                c_v = d_v.get(c_k)
+                if c_v:
+                    c_l_v.update({c_k: c_v})
+            a_id = d_v.get("callset_id")
+            if a_id:
+                c_l_v.update({"analysis_id": a_id})
+            v["case_level_data"].append(c_l_v)
 
         # TODO: Keep legacy pars?
         legacy_pars = ["_id", "id", "reference_name", "type", "biosample_id", "callset_id", "individual_id",
@@ -71,10 +71,14 @@ def remap_variants(r_s_res, byc):
         for p in legacy_pars:
             v["variation"].pop(p, None)
 
-        for k in ("molecular_attributes", "variant_level_data"):
-            k_v = v["variation"].get(k, {})
+        for k in ("molecular_attributes", "variant_level_data", "identifiers"):
+            k_v = v["variation"].get(k)
             if not k_v:
                  v["variation"].pop(k, None)
+        for k in ("variant_alternative_ids"):
+            k_v = v["variation"].get(k, [])
+            if len(k_v) == 0:
+                v["variation"].pop(k, None)
 
         variants.append(v)
 
@@ -154,10 +158,8 @@ def remap_biosamples(r_s_res, byc):
     bs_pop_keys = ["_id", "followup_state", "followup_time"]  # "info"
 
     for bs_i, bs_r in enumerate(r_s_res):
-
         # TODO: REMOVE VERIFIER HACKS
         r_s_res[bs_i].update({"sample_origin_type": {"id": "OBI:0001479", "label": "specimen from organism"}})
-
         for f in ["tumor_grade", "pathological_stage", "histological_diagnosis"]:
             try:
                 if f in r_s_res[bs_i]:
@@ -169,10 +171,8 @@ def remap_biosamples(r_s_res, byc):
                         r_s_res[bs_i].pop(f, None)
             except:
                 pass
-
         for k in bs_pop_keys:
             r_s_res[bs_i].pop(k, None)
-
     return r_s_res
 
 

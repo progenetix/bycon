@@ -42,17 +42,21 @@ class ByconQuery():
 
     def __init__(self, byc: dict, dataset_id=False):
         self.byc = byc              # TODO: remove after finish ...
+        self.debug_mode = byc.get("debug_mode", False)
+        self.test_mode = byc.get("test_mode", False)
+        self.test_mode_count = int(byc.get('test_mode_count', 5))
+
         if dataset_id is False:
             self.ds_id = byc.get("dataset_ids", False)[0]
         else:
             self.ds_id = dataset_id
 
-        self.arguments = byc.get("form_data")
+        self.arguments = byc.get("form_data", {})
+        self.argument_definitions = byc.get("argument_definitions", {})
         self.filters = byc.get("filters", [])
+        self.filtering_terms_coll = byc.get("filtering_terms_coll", "___none___")
         self.mongohost = environ.get("BYCON_MONGO_HOST", "localhost")
 
-        self.test_mode = byc.get("test_mode", False)
-        self.test_mode_count = int(byc.get('test_mode_count', 5))
 
         self.requested_entity = byc.get("request_entity_id", False)
         self.response_entity = byc.get("response_entity_id", False)
@@ -61,7 +65,7 @@ class ByconQuery():
         self.defaults = byc.get("beacon_defaults", {})
 
         self.variant_request_type = byc.get("variant_request_type", "___none___")
-        self.variant_parameters = byc.get("variant_parameters", {})
+        self.variant_request_definitions = byc.get("variant_request_definitions", {})
         self.varguments = byc.get("varguments", {})
 
         self.filter_definitions = byc.get("filter_definitions", {})
@@ -70,10 +74,10 @@ class ByconQuery():
         self.filter_descendants = ff.get("descendants", True)
         self.filter_logic = ff.get("logic", '$and')
 
-        self.housekeeping_db = byc["config"].get("housekeeping_db", "___none___")
-        self.handover_coll = byc["config"].get("handover_coll", "___none___")
-        self.services_db = byc["config"].get("services_db", "___none___")
-        self.genes_coll = byc["config"].get("genes_coll", "___none___")
+        self.housekeeping_db = byc.get("housekeeping_db", "___none___")
+        self.handover_coll = byc.get("handover_coll", "___none___")
+        self.services_db = byc.get("services_db", "___none___")
+        self.genes_coll = byc.get("genes_coll", "___none___")
 
         pagination = byc.get("pagination", {"skip": 0, "limit": 0})
         self.limit = pagination.get("limit", 0)
@@ -227,7 +231,7 @@ class ByconQuery():
             return
         if not self.variant_request_type:
             return
-        if self.variant_request_type not in self.variant_parameters.get("request_types", {}).keys():
+        if self.variant_request_type not in self.variant_request_definitions.get("request_types", {}).keys():
             return
 
         r_e = "genomicVariant"
@@ -271,7 +275,6 @@ class ByconQuery():
     def __create_geneVariantRequest_query(self):
         # query database for gene and use coordinates to create range query
         vp = self.varguments
-        v_p_defs = self.variant_parameters.get("parameters")
 
         gene_data, e = self.__gene_id_coordinates(vp["gene_id"])
 
@@ -323,11 +326,11 @@ class ByconQuery():
     #--------------------------------------------------------------------------#
 
     def __create_aminoacidChangeRequest_query(self):    
-        v_p_defs = self.variant_parameters.get("parameters")
         vp = self.varguments
         if not "aminoacid_change" in vp:
             return
 
+        v_p_defs = self.argument_definitions
         v_q = { v_p_defs["aminoacid_change"]["db_key"]: vp.get("aminoacid_change", "___none___")}
 
         return v_q
@@ -335,11 +338,11 @@ class ByconQuery():
     #--------------------------------------------------------------------------#
 
     def __create_genomicAlleleShortFormRequest_query(self):    
-        v_p_defs = self.variant_parameters.get("parameters")
         vp = self.varguments
         if not "genomic_allele_short_form" in vp:
             return
 
+        v_p_defs = self.argument_definitions
         v_q = { v_p_defs["genomic_allele_short_form"]["db_key"]: vp.get("genomic_allele_short_form", "___none___")}
 
         return v_q
@@ -347,7 +350,7 @@ class ByconQuery():
     #--------------------------------------------------------------------------#
 
     def __create_variantTypeRequest_query(self):    
-        v_p_defs = self.variant_parameters.get("parameters")
+        v_p_defs = self.argument_definitions
         vp = self.varguments
         if not "variant_type" in vp:
             return
@@ -361,7 +364,7 @@ class ByconQuery():
 
     def __create_variantRangeRequest_query(self):    
         vp = self.varguments
-        v_p_defs = self.variant_parameters.get("parameters")
+        v_p_defs = self.argument_definitions
 
         v_q_l = [
             { v_p_defs["reference_name"]["db_key"]: vp.get("reference_name", "___none___")},
@@ -395,7 +398,7 @@ class ByconQuery():
 
     def __create_variantBracketRequest_query(self):
         vp = self.varguments
-        v_p_defs = self.variant_parameters.get("parameters")
+        v_p_defs = self.argument_definitions
 
         v_q = { "$and": [
             { v_p_defs["reference_name"]["db_key"]: vp["reference_name"] },
@@ -416,7 +419,7 @@ class ByconQuery():
      
         podmd"""
         vp = self.varguments
-        v_p_defs = self.variant_parameters.get("parameters")
+        v_p_defs = self.argument_definitions
         # TODO: Regexes for ref or alt with wildcard characters
 
         v_q_l = [
@@ -465,7 +468,7 @@ class ByconQuery():
             return
 
         data_db = MongoClient(host=self.mongohost)[self.ds_id]
-        coll_coll = data_db["collations"]
+        coll_coll = data_db[ self.filtering_terms_coll ]
         self.collation_ids = coll_coll.distinct("id", {})
 
         # if self.byc["debug_mode"] is True:
@@ -475,7 +478,6 @@ class ByconQuery():
         f_infos = {}
 
         for f in self.filters:
-            # prdbug(byc, f'{f}')
             f_val = f["id"]
             f_neg = f.get("excluded", False)
             if re.compile(r'^!').match(f_val):

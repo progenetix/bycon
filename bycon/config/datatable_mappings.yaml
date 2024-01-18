@@ -40,16 +40,6 @@ definitions:
         beacon_key: biosamples.id
         indexed: True
         compact: True
-      group_id:
-        type: string
-        db_key: info.group.id
-        beacon_key: False
-        compact: True
-      group_label:
-        type: string
-        db_key: info.group.label
-        beacon_key: False
-        compact: True
       individual_id:
         type: string
         db_key: individual_id
@@ -61,6 +51,16 @@ definitions:
         db_key: info.callset_ids
         beacon_key: False
         type: array
+      group_id:
+        type: string
+        db_key: info.group.id
+        beacon_key: False
+        compact: True
+      group_label:
+        type: string
+        db_key: info.group.label
+        beacon_key: False
+        compact: True
       external_references:
         type: array
         beacon_key: biosamples.externalReferences
@@ -389,6 +389,8 @@ definitions:
         db_key: platform_model.label
       data_provenance:
         db_key: info.data_provenance
+      calling_pipeline:
+        db_key: info.calling_pipeline
 
 #------------------------------------------------------------------------------#
 
@@ -450,12 +452,12 @@ definitions:
         type: string
         db_key: variant_state.label
         compact: True
-      reference_bases:
+      reference_sequence:
         type: string
         db_key: reference_sequence
         indexed: True
         compact: True
-      alternate_bases:
+      sequence:
         type: string
         db_key: sequence
         indexed: True
@@ -483,3 +485,4 @@ definitions:
       variant_type:
         type: string
         db_key: variant_type
+        computed: True

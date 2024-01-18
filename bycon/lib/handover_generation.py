@@ -1,4 +1,4 @@
-import re, yaml
+import re
 from pymongo import MongoClient
 from pathlib import Path
 from os import environ, pardir, path
@@ -27,12 +27,15 @@ def dataset_response_add_handovers(ds_id, byc):
 
     ds_res_k = list(byc["dataset_results"][ds_id].keys())
 
+    prdbug(f'... pre handover {ds_res_k}', byc.get("debug_mode"))
+
     for h_o_t, h_o_defs in h_o_types.items():
 
         h_o_k = h_o_types[ h_o_t ].get("h->o_key", "___none___")
         h_o = byc["dataset_results"][ds_id].get(h_o_k)
         if not h_o:
             continue
+        prdbug(f'... checking handover {h_o_t}', byc.get("debug_mode"))
 
         # testing if this handover is active for the specified dataset      
         if h_o_t not in ds_h_o:
@@ -98,27 +101,14 @@ def dataset_response_add_handovers(ds_id, byc):
 
     return b_h_o
 
-################################################################################
-
-def query_results_save_handovers(byc):
-
-    if not "dataset_results" in byc:
-        return False
-    if byc["include_handovers"] is not True:
-        return False
-
-    for ds_id in byc["dataset_results"].keys():
-        dataset_results_save_handovers(ds_id, byc)
-
-    return True
 
 ################################################################################
 
 def dataset_results_save_handovers(ds_id, byc):
 
     ho_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-    ho_db = ho_client[ byc["config"]["housekeeping_db"] ]
-    ho_coll = ho_db[ byc["config"][ "handover_coll" ] ]
+    ho_db = ho_client[ byc["housekeeping_db"] ]
+    ho_coll = ho_db[ byc[ "handover_coll" ] ]
 
     for h_o_k in byc["dataset_results"][ds_id].keys():
         
@@ -132,6 +122,7 @@ def dataset_results_save_handovers(ds_id, byc):
     ho_client.close()
 
     return True
+
 
 ################################################################################
 
@@ -154,6 +145,7 @@ def handover_create_url(h_o_server, h_o_defs, accessid, byc):
 
     return ""
 
+
 ################################################################################
 
 def _handover_create_ext_url(h_o_server, h_o_defs, bed_file_name, ucsc_pos, byc):
@@ -167,6 +159,7 @@ def _handover_create_ext_url(h_o_server, h_o_defs, bed_file_name, ucsc_pos, byc)
             return("{}&position={}&hgt.customText={}{}/{}".format(h_o_defs["ext_url"], ucsc_pos, h_o_server, local_paths.get("server_tmp_dir_web", "/tmp"), bed_file_name))
 
     return False
+
 
 ################################################################################
 

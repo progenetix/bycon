@@ -13,7 +13,66 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
-### 2023-10-31 (v.1.3.5)
+### 2024-01-18 (v.1.4.0)
+
+* fix of `plotType` parameter as separate one (used in byconaut)
+* fix of wrong parameter mapping for `geo:GSM....` filters
+    - filter definition still pointed to `external_references.id` instead of
+      `analysis_info.experiment_id`
+* `byconaut`: move to general use of `byc["form_data"]` for arguments (_i.e._
+  requiring the command line arguments to have been parsed into this object)
+* fixed the `byconaut` `cytomapper` service by adding `cyto_bands` and `chro_bases`
+  to the list of `variant_pars`
+
+### 2024-01-10 (v1.3.9)
+
+Bugfix release. Some default values provided in `argument_definitions.yaml`
+file were overriding pre-processed values, leading to e.g. to an
+endless loop in the handover generation.
+
+### 2024-01-09 (v1.3.8)
+
+* argument parameter redesign
+    - definition of all parameters/arguments (web & local) in `argument_definitions.yaml`
+    - parameters not defined there will not be processed anymore (however, there are some
+      placeholders like e.g. `mode` or `key` which are not utilized by standard methods
+      and can be co-opted for custom inputs)
+    - plot parameters are provided as a single string to `plotPars`, with individual
+      parameter pairs concatenated by `::`
+        * in GET: `plotPars=plot_chros=8,9,17::labels=8:120000000-123000000:Some+Interesting+Region::plot_gene_symbols=MYCN,TP53,MTAP,CDKN2A,MYC,ERBB2::plot_width=800`
+        * in CMD: `--plotPars "plot_chros=8,9,17::labels=8:120000000-123000000:Some Interesting Region::plot_gene_symbols=MYCN,TP53,MTAP,CDKN2A,MYC,ERBB2::plot_width=800"`
+* modification of the `prdbug` helper
+
+### 2023-12-18 (v1.3.7)
+
+* added handling for user specific granularity permissions
+    - so far `user_name` is just taken from a form parameter and then stored
+      as `byc` root parameter (through `set_user_name`)
+    - local processing (`env`) sets this to `local` (and has a default `record`)
+      granularity
+    - dataset specific, user specific maximum granularities can be set in
+      `authorizations.yaml` which can be extended / overwritten from settings in
+      `local/authorizations.yaml` (similar to `beacon_defaults.yaml` etc.)
+    - future updates are planned to handle proper interpretation of `user_name`
+      and proof of authorization...
+* configuration: the basic parameters from `config.yaml` are now stored as `byc`
+  root parameters and not kept in a mix of root & `config`
+
+### 2023-11-20 (v.1.3.6)
+
+* modified `BeaconDataResponse` to keep the `resultSetsResponse` structure while
+  remobving the `results` from each set, to allow resuult set specific handover 
+  delivery (labeled as __CUSTOM__)
+* moved all cytoband library code into `byconaut` (__FUTURE__ considerations for
+  this in case Beacon supports cytobands ...)
+* `byconaut` plots now directly use the database saamples format for plotting variants,
+  w/o going through the canonical variant creation (this incurred a **huge** penalty)
+* reminder that `byconaut` plots use the `plotType` parameter instead of `output`
+* `byconaut` now has a color code mapping for the different (EFO, DUP/DEL ...) variant
+  types; this allows to assign custom `plot_dup_color` etc. parameters while keeping
+  the available variant types (`variant_state.id`) separated (see `byconaut -> local.plot_defaults`)
+
+### 2023-11-17 (v.1.3.5)
 
 * more removal of non-standard components into `byconaut`, e.g. for file generation
   such as `.pgxseg`
@@ -316,7 +375,7 @@ definitions and "local" ones. Partcullarly:
     - `refseq_chromosomes` now in `rsrc/genomes/grch38` (only grch38 so far but this
       is all we currently use...)
         * also `parse_refseq_file` and `__get_genome_rsrc_path` functions
-    - `variant_parameters` and `variant_type_definitions` config files from
+    - `variant_request_definitions` and `variant_type_definitions` config files from
       `variant_definitions` (separating the query config from the type mappings)
     - `cytoband_utils` => `genome_utils`
     - `generate_genomic_mappings` wrapper for cytoband and interval functions

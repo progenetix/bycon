@@ -15,9 +15,9 @@ def parse_filters(byc):
 def get_global_filter_flags(byc):
 
     ff = {
-        "logic": byc[ "config" ][ "filter_flags" ][ "logic" ],
-        "precision": byc[ "config" ][ "filter_flags" ][ "precision" ],
-        "descendants": byc[ "config" ][ "filter_flags" ][ "include_descendant_terms" ]
+        "logic": byc["filter_flags"]["logic"],
+        "precision": byc["filter_flags"]["precision"],
+        "descendants": byc["filter_flags"]["include_descendant_terms"]
     }
 
     if "form_data" in byc:

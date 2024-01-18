@@ -57,11 +57,15 @@ def beacon():
     rest_path_elements(byc)
     get_bycon_args(byc)
     args_update_form(byc)
+    prdbug(f'beacon.py - request_entity_path_id: {byc.get("request_entity_path_id")}', byc.get("debug_mode"))
 
     e_p_id = byc["form_data"].get("request_entity_path_id", "___none___")
+    prdbug(f'beacon.py - form e_p_id: {e_p_id}', byc.get("debug_mode"))
     if e_p_id in s_a_s or e_p_id in r_w:
         byc.update({"request_entity_path_id": e_p_id})
     r_p_id = byc.get("request_entity_path_id", "info")
+
+    prdbug(f'beacon.py - request_entity_path_id: {r_p_id}', byc.get("debug_mode"))
 
     # check for rewrites
     if r_p_id in r_w:
@@ -79,12 +83,6 @@ def beacon():
         run_beacon_init_stack(byc)
         r = BeaconDataResponse(byc).resultsetResponse()
         print_json_response(r, byc["env"])
-        # byc.update({
-        #     "service_response": r.resultsetResponse(),
-        #     "error_response": r.errorResponse()
-        # })
-        # cgi_print_response(byc, 200)
-
     elif f:
         # dynamic package/function loading; e.g. `filtering_terms` loads
         # `filtering_terms` from `filtering_terms.py`...

@@ -2,7 +2,7 @@ import re
 from copy import deepcopy
 from deepmerge import always_merger
 
-from cgi_parsing import prjsonnice
+from cgi_parsing import prdbug
 from bycon_helpers import assign_nested_value, get_nested_value
 from schema_parsing import object_instance_from_schema_name
 
@@ -40,30 +40,26 @@ class ByconVariant:
         self.vrs_allele = object_instance_from_schema_name(byc, "VRSallele", "")
         self.vrs_cnv = object_instance_from_schema_name(byc, "VRScopyNumberChange", "")
 
-        if variant:
-            self.byc_variant = deepcopy(variant)
-            self.__create_canonical_variant()
-            return self.byc_variant
+        # if variant:
+        #     self.byc_variant = deepcopy(variant)
+        #     self.__create_canonical_variant()
+        #     return self.byc_variant
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
     def byconVariant(self, variant={}):
-        if variant:
-            self.byc_variant = deepcopy(variant)
-            self.__create_canonical_variant()
+        self.byc_variant = variant
+        self.__create_canonical_variant()
         return self.byc_variant
 
 
     # -------------------------------------------------------------------------#
 
     def pgxVariant(self, variant={}):
-
-        if variant:
-            self.byc_variant.update({})
-            self.byc_variant = deepcopy(variant)
-            self.__create_canonical_variant()
+        self.byc_variant = variant
+        self.__create_canonical_variant()
         b_v = self.byc_variant
         p_v = {} # to do: pgx cb variant instance
         for p_k, p_d in self.variant_mappings.items():
@@ -86,9 +82,8 @@ class ByconVariant:
         * standard VCF column headers such as as `#CHROM` as keys
         * an `INFO` key + string for CNVs
         """
-        if variant:
-            self.byc_variant = deepcopy(variant)
-            self.__create_canonical_variant()
+        self.byc_variant = variant
+        self.__create_canonical_variant()
 
         vt_defs = self.byc.get("variant_type_definitions", {})
         v = self.byc_variant
@@ -133,9 +128,8 @@ class ByconVariant:
         Mapping of the relevant variant parameters into a VRS object
         ... TODO ...
         """
-        if variant:
-            self.byc_variant = deepcopy(variant)
-            self.__create_canonical_variant()
+        self.byc_variant = variant
+        self.__create_canonical_variant()
 
         vt_defs = self.byc.get("variant_type_definitions", {})
         v = self.byc_variant
@@ -212,7 +206,8 @@ class ByconVariant:
                     "start": {"value": v.get("start")},
                     "end": {"value": v.get("end")}
                 }
-            }
+            },
+            "type": "CopyNumberChange"
         }
         vrs_v = always_merger.merge(vrs_c, vrs_v)
 
@@ -241,9 +236,6 @@ class ByconVariant:
 
         v.pop("variant_state", None)
         v.pop("location", None)
-
-        # if self.byc["debug_mode"] is True:
-        #     prjsonnice(v)
 
         return
 
@@ -340,7 +332,7 @@ class ByconVariant:
         v = self.byc_variant
 
         seq = v.get("sequence", v.get("alternate_bases"))
-        r_seq = v.get("reference_sequence", v.get("reference_bases"))
+        r_seq = v.get("reference_sequence", "")
         # TODO: check, normalize, default...
         v.update({
             "sequence": seq,
@@ -378,14 +370,17 @@ class ByconVariant:
     def __byc_variant_add_digest(self):
         v = self.byc_variant
 
-        seq_re = '^[ACGTN]*$'
+        seq_re = '^[ACGTN]+$'
        
-        v_lab = v.get("variant_type")
+        v_lab = v.get("variant_state_id", "___NA___").replace(":", "_")
+        v_seqid = v.get("sequence_id", "___NA___").replace("refseq:", "")
         seq = v.get("sequence", "")
         rseq = v.get("reference_sequence", "")
+
         if re.match(f'{seq_re}', str(seq)) or re.match(f'{seq_re}', str(rseq)):
             v_lab = f'{seq}>{rseq}'
-        v.update({"variant_internal_id": f'{v["reference_name"]}:{v["start"]}-{v["end"]}:{v_lab}'})
+            # prdbug(self.byc, f'variant sequence > reference sequence: {v_lab}')
+        v.update({"variant_internal_id": f'{v_seqid}:{v["start"]}-{v["end"]}:{v_lab}'})
 
         self.byc_variant.update(v)
         return

@@ -23,12 +23,12 @@ class BeaconInfoResponse:
     """
 
     def __init__(self, byc: dict):
-        self.byc = byc
+        self.debug_mode = byc.get("debug_mode", False)
         self.beacon_defaults = byc.get("beacon_defaults", {})
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
         self.service_config = byc.get("service_config", {})
         self.response_schema = byc.get("response_schema", "beaconInfoResponse")
-        self.beacon_schema = self.byc["response_entity"].get("beacon_schema", "___none___")
+        self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
         self.data_response = object_instance_from_schema_name(byc, self.response_schema, "")
         self.error_response = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
         info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
@@ -64,13 +64,17 @@ class BeaconDataResponse:
     def __init__(self, byc: dict):
         self.byc = byc
         self.test_mode = byc.get("test_mode", False)
+        self.debug_mode = byc.get("debug_mode", False)
         self.beacon_defaults = byc.get("beacon_defaults", {})
+        self.authorized_granularities = byc.get("authorized_granularities", {})
+        self.user_name = byc.get("user_name", "anonymous")
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
         self.form_data = byc.get("form_data", {})
-        self.service_config = self.byc.get("service_config", {})
+        self.service_config = byc.get("service_config", {})
         self.response_schema = byc["response_schema"]
-        self.requested_granularity = self.form_data.get("requested_granularity", "record")
-        self.beacon_schema = self.byc["response_entity"].get("beacon_schema", "___none___")
+        self.returned_granularity = self.form_data.get("returned_granularity", "record")
+        self.include_handovers = self.form_data.get("include_handovers", False)
+        self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
         self.record_queries = {}
         self.data_response = object_instance_from_schema_name(byc, self.response_schema, "")
         self.error_response = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
@@ -85,6 +89,8 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def resultsetResponse(self):
+        dbm = f'... resultsetResponse start, schema {self.response_schema}'
+        prdbug(dbm, self.debug_mode)
         if not "beaconResultsetsResponse" in self.response_schema:
             return
 
@@ -93,10 +99,8 @@ class BeaconDataResponse:
 
         self.data_response["response"].update({"result_sets": self.result_sets})
         self.__resultset_response_update_summaries()
-        if not "record" in self.requested_granularity:
-            self.data_response.pop("response", None)
-        if "boolean" in self.requested_granularity:
-            self.data_response["response_summary"].pop("num_total_results", None)
+        self.__resultSetResponse_force_granularities()
+
 
         b_h_o = self.data_response.get("beacon_handovers", [])
         if len(b_h_o) < 1:
@@ -111,9 +115,12 @@ class BeaconDataResponse:
         self.__meta_add_received_request_summary_parameters()
         self.__meta_add_parameters()
         self.__meta_clean_parameters()
+        self.__response_clean_parameters()
         self.result_sets_end = datetime.datetime.now()
         self.result_sets_duration = self.result_sets_end - self.result_sets_start
-        prdbug(self.byc, f'... data response duration was {self.result_sets_duration.total_seconds()} seconds')
+
+        dbm = f'... data response duration was {self.result_sets_duration.total_seconds()} seconds'
+        prdbug(dbm, self.debug_mode)
 
         return self.data_response
 
@@ -133,6 +140,7 @@ class BeaconDataResponse:
         self.__meta_add_received_request_summary_parameters()
         self.__meta_add_parameters()
         self.__meta_clean_parameters()
+        self.__response_clean_parameters()
         return self.data_response
 
 
@@ -150,6 +158,7 @@ class BeaconDataResponse:
         self.__meta_add_received_request_summary_parameters()
         self.__meta_add_parameters()
         self.__meta_clean_parameters()
+        self.__response_clean_parameters()
         return self.data_response
 
 
@@ -186,6 +195,33 @@ class BeaconDataResponse:
 
     # -------------------------------------------------------------------------#
 
+    def __resultSetResponse_force_granularities(self):
+        prdbug(self.byc, f'authorized_granularities: {self.authorized_granularities}')
+        for rs in self.data_response["response"]["result_sets"]:
+            rs_granularity = self.authorized_granularities.get(rs["id"], "boolean")
+            
+            dbm = f'rs_granularity ({rs["id"]}): {rs_granularity}'
+            prdbug(dbm, self.debug_mode)
+
+            if not "record" in rs_granularity:
+                # TODO /CUSTOM: This non-standard modification removes the results
+                # but keeps the resultSets structure (handovers ...)
+                rs.pop("results", None)
+            if "boolean" in rs_granularity:
+                rs.pop("results_count", None)
+        if "boolean" in self.returned_granularity:
+            self.data_response["response_summary"].pop("num_total_results", None)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __response_clean_parameters(self):
+        r_m = self.data_response.get("response", {})
+        r_m.pop("$schema", None)
+
+
+    # -------------------------------------------------------------------------#
+
     def __meta_clean_parameters(self):
         r_m = self.data_response.get("meta", {})
 
@@ -214,8 +250,8 @@ class BeaconDataResponse:
         form = self.form_data
         # TODO: this is hacky; need a separate setting of the returned granularity
         # since the server may decide so...
-        if self.requested_granularity and "returned_granularity" in r_m:
-            r_m.update({"returned_granularity": form.get("requested_granularity")})
+        # if self.requested_granularity and "returned_granularity" in r_m:
+        #     r_m.update({"returned_granularity": form.get("requested_granularity")})
 
         service_meta = self.service_config.get("meta", {})
         for rrs_k, rrs_v in service_meta.items():
@@ -225,6 +261,7 @@ class BeaconDataResponse:
             r_m.update({"warnings": self.warnings})
 
         return
+
 
     # -------------------------------------------------------------------------#
 
@@ -239,7 +276,7 @@ class BeaconDataResponse:
             "requested_schemas": [self.beacon_schema]
         })
 
-        for name in ["dataset_ids", "test_mode"]:
+        for name in ["dataset_ids", "test_mode", "pagination"]:
             value = self.byc.get(name)
             if not value:
                 continue
@@ -340,6 +377,7 @@ class ByconFilteringTerms:
 
     def __init__(self, byc: dict):
         self.byc = byc
+        self.debug_mode = byc.get("debug_mode", False)
         self.test_mode = byc.get("test_mode", False)
         self.env = byc.get("env", "server")
         self.test_mode_count = byc.get("test_mode_count", 5)
@@ -435,6 +473,7 @@ class ByconFilteringTerms:
 
         return
 
+
     # -------------------------------------------------------------------------#
 
     def __return_filter_resources(self):
@@ -469,6 +508,7 @@ class ByconCollections:
         self.byc = byc
         self.dataset_ids = byc.get("dataset_ids", [])
         self.env = byc.get("env", "server")
+        self.debug_mode = byc.get("debug_mode", False)
         self.test_mode = byc.get("test_mode", False)
         self.test_mode_count = byc.get("test_mode_count", 5)
         self.beacon_defaults = byc.get("beacon_defaults", {})
@@ -557,6 +597,7 @@ class ByconResultSets:
 
     def __init__(self, byc: dict):
         self.byc = byc
+        self.debug_mode = byc.get("debug_mode", False)
         self.beacon_defaults = byc.get("beacon_defaults", {})
         self.env = byc.get("env", "server")
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
@@ -585,13 +626,12 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def populatedResultSets(self):
-
         self.__retrieve_datasets_data()
         self.__retrieve_variants_data()
         self.__populate_result_sets()
         self.__result_sets_save_handovers()
-
         return self.result_sets, self.record_queries
+
 
     # -------------------------------------------------------------------------#
 
@@ -633,8 +673,8 @@ class ByconResultSets:
     def __result_sets_save_handovers(self):
 
         ho_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-        ho_db = ho_client[ self.byc["config"]["housekeeping_db"] ]
-        ho_coll = ho_db[ self.byc["config"][ "handover_coll" ] ]
+        ho_db = ho_client[ self.byc["housekeeping_db"] ]
+        ho_coll = ho_db[ self.byc["handover_coll"] ]
 
         for ds_id, d_s in self.datasets_results.items():
             if not d_s:
@@ -644,7 +684,10 @@ class ByconResultSets:
                 if not "target_values" in h_o:
                     continue
                 h_o_size = sys.getsizeof(h_o["target_values"])
-                prdbug(self.byc, f'Storage size for {ds_id}.{h_o_k}: {h_o_size / 1000000}Mb')
+                
+                dbm = f'Storage size for {ds_id}.{h_o_k}: {h_o_size / 1000000}Mb'
+                prdbug(dbm, self.debug_mode)
+
                 if h_o_size < 15000000:
                     ho_coll.update_one( { "id": h_o["id"] }, { '$set': h_o }, upsert=True )
 
@@ -682,11 +725,11 @@ class ByconResultSets:
         for i, r_set in enumerate(self.result_sets):
             ds_id = r_set["id"]
             ds_res = execute_bycon_queries(ds_id, self.record_queries, self.byc)
-            self.datasets_results.update({ds_id: ds_res})
-            # prdbug(self.byc, ds_res)
+            self.datasets_results.update({ds_id: ds_res})            
         ds_r_duration = datetime.datetime.now() - ds_r_start
-        prdbug(self.byc, f'... datasets results querying needed {ds_r_duration.total_seconds()} seconds')
-
+        
+        dbm = f'... datasets results querying needed {ds_r_duration.total_seconds()} seconds'
+        prdbug(dbm, self.debug_mode)
         return
 
 
@@ -698,10 +741,8 @@ class ByconResultSets:
 
         ds_d_start = datetime.datetime.now()
         for ds_id, ds_results in self.datasets_results.items():
-
             if not ds_results:
                 continue
-
             if self.handover_key not in ds_results.keys():
                 continue
 
@@ -722,7 +763,9 @@ class ByconResultSets:
 
             self.datasets_data.update({ds_id: r_s_res})
         ds_d_duration = datetime.datetime.now() - ds_d_start
-        prdbug(self.byc, f'... datasets data retrieval needed {ds_d_duration.total_seconds()} seconds')
+        
+        dbm = f'... datasets data retrieval needed {ds_d_duration.total_seconds()} seconds'
+        prdbug(dbm, self.debug_mode)
 
         return
 
@@ -747,15 +790,17 @@ class ByconResultSets:
                     v = v_coll.find_one({"_id":v_id})
                     r_s_res.append(v)
                 self.datasets_data.update({ds_id: r_s_res})
-            elif "variants.variant_internal_id" in ds_results:
-                for v_id in ds_results["variants.variant_internal_id"]["target_values"]:
-                    vs = v_coll.find({"variant_internal_id":v_id})
-                    for v in vs:
-                        r_s_res.append(v)
-                self.datasets_data.update({ds_id: r_s_res})
+            # elif "variants.variant_internal_id" in ds_results:
+            #     for v_id in ds_results["variants.variant_internal_id"]["target_values"]:
+            #         vs = v_coll.find({"variant_internal_id":v_id})
+            #         for v in vs:
+            #             r_s_res.append(v)
+            #     self.datasets_data.update({ds_id: r_s_res})
 
         ds_v_duration = datetime.datetime.now() - ds_v_start
-        prdbug(self.byc, f'... variants retrieval needed {ds_v_duration.total_seconds()} seconds')
+
+        dbm = f'... variants retrieval needed {ds_v_duration.total_seconds()} seconds'
+        prdbug(dbm, self.debug_mode)
 
         return
 
@@ -763,30 +808,35 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __populate_result_sets(self):
-
         for i, r_set in enumerate(self.result_sets):
             ds_id = r_set["id"]
             ds_res = self.datasets_results.get(ds_id)
             if not ds_res:
                 continue
             r_set.update({"results_handovers": dataset_response_add_handovers(ds_id, self.byc)})
+            q_c = ds_res.get("target_count", 0)
             r_s_res = self.datasets_data.get(ds_id, [])
             r_s_res = reshape_resultset_results(ds_id, r_s_res, self.byc)
             info = {"counts": {}}
+            rs_c = len(r_s_res) if type(r_s_res) is list else 0
             for h_o_k, h_o in ds_res.items():
                 if not "target_count" in h_o:
                     continue
-                entity = h_o_k.split('.')[0]
-                info["counts"].update({entity: h_o["target_count"]})
-            rs_c = len(r_s_res) if type(r_s_res) is list else 0
+                collection = h_o_k.split('.')[0]
+                info["counts"].update({collection: h_o["target_count"]})
+                entity = h_o.get("target_entity", "___none___")
+                if entity == self.response_entity_id:
+                    rs_c = h_o["target_count"]
             self.result_sets[i].update({
                 "info": info,
+                "response_entity_id" : self.response_entity_id,
                 "results_count": rs_c,
                 "exists": True if rs_c > 0 else False,
                 "results": r_s_res
             })
 
         return
+
 
 ################################################################################
 # common response functions ####################################################

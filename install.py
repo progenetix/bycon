@@ -2,7 +2,7 @@
 
 # version: 2023-06-22
 
-import sys, re, ruamel.yaml
+import sys, re, yaml
 from os import getlogin, path, system
 
 dir_path = path.dirname( path.abspath(__file__) )
@@ -41,13 +41,10 @@ def install_beacon_server(no_sudo):
     else:
         sudo_cmd = "sudo"
 
-    yaml = ruamel.yaml.YAML()
-    yaml.indent(mapping=2, sequence=4, offset=2)
-
     i_f = path.join( dir_path, "install.yaml" )
     try:
         with open( i_f ) as y_c:
-            install = yaml.load( y_c )
+            install = yaml.load( y_c , Loader=yaml.FullLoader)
     except Exception as e:
         print(e)
         exit()

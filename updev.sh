@@ -6,7 +6,7 @@ rm -rf ./dist
 rm ./bycon/beaconServer/local/*.*
 python3 -m build --sdist .
 BY=(./dist/*tar.gz)
-pip install $BY
+pip3 install $BY
 # pipreqs --force .
 # python3 -m build --wheel && twine upload dist/*
 ./install.py

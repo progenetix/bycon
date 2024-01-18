@@ -194,12 +194,12 @@ h->o_methods:
     target_collection: variants
     target_entity: genomicVariant
     target_key: _id
-  variants.variant_internal_id:
-    source_collection: variants
-    source_key: variant_internal_id
-    target_collection: variants
-    target_entity: genomicVariant
-    target_key: variant_internal_id
+  # variants.variant_internal_id:
+  #   source_collection: variants
+  #   source_key: variant_internal_id
+  #   target_collection: variants
+  #   target_entity: genomicVariant
+  #   target_key: variant_internal_id
   variants.biosample_id->biosamples.id:
     source_collection: variants
     source_key: biosample_id
