@@ -379,7 +379,6 @@ class ByconVariant:
 
         if re.match(f'{seq_re}', str(seq)) or re.match(f'{seq_re}', str(rseq)):
             v_lab = f'{seq}>{rseq}'
-            # prdbug(self.byc, f'variant sequence > reference sequence: {v_lab}')
         v.update({"variant_internal_id": f'{v_seqid}:{v["start"]}-{v["end"]}:{v_lab}'})
 
         self.byc_variant.update(v)
