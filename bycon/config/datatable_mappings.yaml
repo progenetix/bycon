@@ -403,7 +403,6 @@ definitions:
         db_key: platform_model.label
       data_provenance:
         db_key: info.data_provenance
-        type: array
       calling_pipeline:
         db_key: info.calling_pipeline
 
