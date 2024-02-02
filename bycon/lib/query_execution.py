@@ -1,7 +1,7 @@
 from uuid import uuid4
 from pymongo import MongoClient
 from os import environ
-from cgi_parsing import prdbug, prjsonnice, test_truthy
+from bycon_helpers import prdbug, prjsonnice, test_truthy
 from query_generation import ByconQuery
 
 
@@ -53,6 +53,9 @@ def execute_bycon_queries(ds_id, BQ, byc):
     dbm = f'queries at execution: {exe_queries}'
     prdbug(dbm, byc.get("debug_mode"))
 
+    if not exe_queries.keys():
+        return prefetch
+
     ############################################################################
 
     """podmd
@@ -88,25 +91,25 @@ def execute_bycon_queries(ds_id, BQ, byc):
         else:
             prefetch["biosamples.id"] = biosids_from_indq
 
-    callsets_query = exe_queries.get("callsets", False)
+    callsets_query = exe_queries.get("analyses", False)
     if callsets_query:
         
-        # since callsets contain biosample_id no double calling is required
-        prevars["pref_m"] = "callsets.biosample_id->biosamples.id"
+        # since analyses contain biosample_id no double calling is required
+        prevars["pref_m"] = "analyses.biosample_id->biosamples.id"
         prevars["query"] = callsets_query
         prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
 
         if "biosamples.id" in prefetch:
-            bsids = list(set(prefetch["callsets.biosample_id->biosamples.id"]["target_values"]) & set(
+            bsids = list(set(prefetch["analyses.biosample_id->biosamples.id"]["target_values"]) & set(
                 prefetch["biosamples.id"]["target_values"]))
             prefetch["biosamples.id"].update({"target_values": bsids, "target_count": len(bsids)})
         else:
-            prefetch["biosamples.id"] = prefetch["callsets.biosample_id->biosamples.id"]
+            prefetch["biosamples.id"] = prefetch["analyses.biosample_id->biosamples.id"]
 
     variants_query = exe_queries.get("variants")
     if not variants_query:
-        if "genomicVariant" in r_e_id:
-            variants_query = {"biosample_id": {'$in': prefetch["biosamples.id"].get("target_values", [])}}
+        if "genomicVariant" in r_e_id and "biosamples.id" in prefetch.keys():
+            variants_query = {"biosample_id": {'$in': prefetch["biosamples.id"].get("target_values", ["___none___"])}}
 
     if variants_query:
 
@@ -116,7 +119,7 @@ def execute_bycon_queries(ds_id, BQ, byc):
         1. If a `variants` query exists (i.e. has been defined in `exe_queries`), in a first pass
         all `biosample_id` values are retrieved.
         2. If already a `"biosamples.id"` result exists (e.g. from a biosample query), the lists
-        of callset `id` values from the different queries are intersected. Otherwise, the callsets
+        of callset `id` values from the different queries are intersected. Otherwise, the analyses
         from the variants query are the final ones.
         3. Since so far not all matching variants have been retrieved (only the biosamples which
         contain them), they are now fetched using the original query or a combination of the
@@ -139,18 +142,18 @@ def execute_bycon_queries(ds_id, BQ, byc):
         prevars["query"] = variants_query
         prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
 
-        prevars["pref_m"] = "variants.variant_internal_id"
-        prevars["query"] = {"_id": {"$in": prefetch["variants._id"]["target_values"]}}
-        prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
+        # prevars["pref_m"] = "variants.variant_internal_id"
+        # prevars["query"] = {"_id": {"$in": prefetch["variants._id"]["target_values"]}}
+        # prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
 
     elif v_i_q:
         prevars["pref_m"] = "variants._id"
         prevars["query"] = v_i_q
         prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
         
-        prevars["pref_m"] = "variants.variant_internal_id"
-        prevars["query"] = {"_id": {"$in": prefetch["variants._id"]["target_values"]}}
-        prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
+        # prevars["pref_m"] = "variants.variant_internal_id"
+        # prevars["query"] = {"_id": {"$in": prefetch["variants._id"]["target_values"]}}
+        # prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
 
 
     ############################################################################
@@ -186,7 +189,7 @@ def execute_bycon_queries(ds_id, BQ, byc):
         byc["dataset_results"].update({ds_id: prefetch})
         return
 
-    prevars["pref_m"] = "callsets._id"
+    prevars["pref_m"] = "analyses._id"
     prevars["query"] = {"biosample_id": {"$in": prefetch["biosamples.id"]["target_values"]}}
     prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
 
@@ -203,6 +206,11 @@ def execute_bycon_queries(ds_id, BQ, byc):
     data_client.close()
 
     byc["dataset_results"].update({ds_id: prefetch})
+
+    try:
+        prdbug(f'{ds_id} biosample count after queries: {prefetch["biosamples._id"]["target_count"]}', byc.get("debug_mode"))
+    except:
+        pass
 
     return prefetch
 

@@ -1,12 +1,13 @@
 import cgi, json, re, sys
+from humps import camelize, decamelize
 from urllib.parse import urlparse, parse_qs, unquote
 from os import environ
-from humps import camelize, decamelize
+
+from bycon_helpers import prdbug, test_truthy
 
 ################################################################################
 
 def parse_query(byc):
-
     a_defs = byc.get("argument_definitions", {})
     form = byc.get("form_data", {})
 
@@ -38,8 +39,8 @@ def set_debug_state(debug: int = 0) -> bool:
         return True
 
     r_uri = environ.get('REQUEST_URI', "___none___")
-    if re.match(r'^.*?[?&/]debug=(\w+?)\b.*?$', r_uri):
-        d = re.match(r'^.*?[?&/]debug=(\w+?)\b.*?$', r_uri).group(1)
+    if re.match(r'^.*?[?&/]debug(Mode)?=(\w+?)\b.*?$', r_uri):
+        d = re.match(r'^.*?[?&/]debug(Mode)?=(\w+?)\b.*?$', r_uri).group(2)
         if test_truthy(d):
             print('Content-Type: text')
             print()
@@ -143,16 +144,6 @@ def parse_GET(byc):
             form.update({p_d: refactor_value_from_defined_type(p, get_params, a_defs[p_d])})
         else:
             prdbug(f'!!! Unmatched parameter {p_d}: {get_params.getvalue(p)}', byc.get("debug_mode"))
-        # TODO still fallback ..
-        # else:
-        #     v = get_params.getvalue(p)
-        #     if "undefined" in v:
-        #         continue
-        #     # making sure double entries are forced to single
-        #     if type(v) is list:
-        #         form.update({p_d: v[0]})
-        #     else:
-        #         form.update({p_d: v})
 
     byc.update({"form_data": form})
 
@@ -285,213 +276,3 @@ def form_return_listvalue(form_data, parameter):
 
 ################################################################################
 
-def test_truthy(this):
-    if str(this).lower() in ["1", "true", "y", "yes"]:
-        return True
-
-    return False
-
-
-################################################################################
-
-def cgi_break_on_errors(byc):
-    if not "error_response" in byc:
-        return
-    e = byc["error_response"].get("error", {"error_code": 200})
-    e_c = e.get("error_code", 200)
-
-    if int(e_c) > 200:
-        cgi_print_response(byc, byc["error_response"])
-
-
-################################################################################
-
-def cgi_print_response(byc, status_code):
-    r_f = ""
-    f_d = {}
-
-    delint_response(byc)
-
-    if "form_data" in byc:
-        f_d = byc["form_data"]
-
-    if "responseFormat" in f_d:
-        r_f = f_d["responseFormat"]
-
-    # This is a simple "de-jsonify", intended to be used for already
-    # pre-formatted list-like items (i.e. lists only containing objects)
-    # with simple key-value pairs)
-    # TODO: universal text table converter ... partially implemented
-
-    if "text" in byc["output"]:
-
-        r = byc["service_response"].get("response", "ERROR: No response element in error_response")
-        if "result_sets" in r:
-            r_s = r["result_sets"][0]
-            byc.update({"service_response": r_s.get("results", [])})
-        else:
-            byc.update({"service_response": r})
-
-        if isinstance(byc["service_response"], dict):
-            # TODO: Find where this results/response ambiguity comes from
-            if "response" in byc["service_response"]:
-                resp = byc["service_response"]["response"]
-            elif "results" in byc["service_response"]:
-                resp = byc["service_response"]["results"]
-            else:
-                resp = byc["service_response"]
-        else:
-            resp = byc["service_response"]
-        if isinstance(resp, dict):
-            resp = json.dumps(camelize(resp), default=str)
-        else:
-            l_d = []
-            for dp in resp:
-                v_l = []
-                for v in dp.values():
-                    # print(v)
-                    v_l.append(str(v))
-                l_d.append("\t".join(v_l))
-            resp = "\n".join(l_d)
-
-        print_text_response(resp, byc["env"], status_code)
-
-    if test_truthy(byc["form_data"].get("only_handovers", False)):
-        try:
-            if "result_sets" in byc["service_response"]["response"]:
-                for rs_i, rs in enumerate(byc["service_response"]["response"]["result_sets"]):
-                    byc["service_response"]["response"]["result_sets"][rs_i].update({"results": []})
-        except:
-            pass
-
-    update_error_code_from_response_summary(byc)
-    switch_to_error_response(byc)
-    print_json_response(byc["service_response"], byc["env"])
-
-
-################################################################################
-
-def update_error_code_from_response_summary(byc):
-    if not "response_summary" in byc["service_response"]:
-        return
-
-    if not "exists" in byc["service_response"]["response_summary"]:
-        return
-
-
-################################################################################
-
-def switch_to_error_response(byc):
-    e_c = byc["error_response"]["error"].get("error_code", 200)
-
-    if e_c == 200:
-        return
-
-    if "meta" in byc["service_response"]:
-        byc["error_response"].update({"meta": byc["service_response"]["meta"]})
-    byc["service_response"] = byc["error_response"]
-
-
-################################################################################
-
-def delint_response(byc):
-
-    b_s_r = byc["service_response"]
-
-    byc.update({"service_response": response_delete_none_values(b_s_r)})
-
-    try:
-        b_h_r = b_s_r.get("beacon_handovers", [])
-        if len(b_h_r) < 1:
-            byc["service_response"].pop("beacon_handovers", None)
-        if not "url" in b_h_r[0]:
-            byc["service_response"].pop("beacon_handovers", None)
-    except:
-        pass
-
-
-################################################################################
-
-def response_delete_none_values(response):
-    """Delete None values recursively from all of the dictionaries"""
-
-    for key, value in list(response.items()):
-        if isinstance(value, dict):
-            response_delete_none_values(value)
-        elif value is None:
-            del response[key]
-        elif isinstance(value, list):
-            for v_i in value:
-                if isinstance(v_i, dict):
-                    response_delete_none_values(v_i)
-
-    return response
-
-
-################################################################################
-
-def prdbug(this, debug_mode=False):
-    if debug_mode is True:
-        prjsonnice(this)
-
-
-################################################################################
-
-def prjsoncam(this):
-    prjsonnice(camelize(this))
-
-
-################################################################################
-
-def prjsonnice(this):
-    print(decamelize_words(json.dumps(this, indent=4, sort_keys=True, default=str)) + "\n")
-
-
-################################################################################
-
-def decamelize_words(j_d):
-    # TODO: move words to config
-    de_cams = ["gVariants", "gVariant", "sequenceId", "relativeCopyClass", "speciesId", "chromosomeLocation", "genomicLocation"]
-    for d in de_cams:
-        j_d = re.sub(r"\b{}\b".format(d), decamelize(d), j_d)
-
-    return j_d
-
-
-################################################################################
-
-def print_json_response(this={}, env="server", status_code=200):
-    if not "local" in env:
-        print('Content-Type: application/json')
-        print('status:' + str(status_code))
-        print()
-
-    prjsoncam(this)
-    print()
-    exit()
-
-
-################################################################################
-
-def print_text_response(this="", env="server", status_code=200):
-    if "server" in env:
-        print('Content-Type: text/plain')
-        print('status:' + str(status_code))
-        print()
-
-    elif "file" in env:
-        # this opion can be used to reroute the response to a file
-        return this
-
-    print(this)
-    print()
-    exit()
-
-
-################################################################################
-
-def print_uri_rewrite_response(uri_base="", uri_stuff=""):
-    print("Status: 302")
-    print("Location: {}{}".format(uri_base, uri_stuff))
-    print()
-    exit()

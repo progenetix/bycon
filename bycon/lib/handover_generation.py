@@ -4,8 +4,8 @@ from pathlib import Path
 from os import environ, pardir, path
 import sys
 
-from cgi_parsing import *
-from bycon_helpers import hex_2_rgb
+from cgi_parsing import select_this_server
+from bycon_helpers import hex_2_rgb, prdbug
 from variant_mapping import ByconVariant
 
 ################################################################################
@@ -104,20 +104,6 @@ def dataset_response_add_handovers(ds_id, byc):
 
 ################################################################################
 
-def query_results_save_handovers(byc):
-
-    if not "dataset_results" in byc:
-        return False
-    if byc["include_handovers"] is not True:
-        return False
-
-    for ds_id in byc["dataset_results"].keys():
-        dataset_results_save_handovers(ds_id, byc)
-
-    return True
-
-################################################################################
-
 def dataset_results_save_handovers(ds_id, byc):
 
     ho_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
@@ -136,6 +122,7 @@ def dataset_results_save_handovers(ds_id, byc):
     ho_client.close()
 
     return True
+
 
 ################################################################################
 
@@ -158,6 +145,7 @@ def handover_create_url(h_o_server, h_o_defs, accessid, byc):
 
     return ""
 
+
 ################################################################################
 
 def _handover_create_ext_url(h_o_server, h_o_defs, bed_file_name, ucsc_pos, byc):
@@ -171,6 +159,7 @@ def _handover_create_ext_url(h_o_server, h_o_defs, bed_file_name, ucsc_pos, byc)
             return("{}&position={}&hgt.customText={}{}/{}".format(h_o_defs["ext_url"], ucsc_pos, h_o_server, local_paths.get("server_tmp_dir_web", "/tmp"), bed_file_name))
 
     return False
+
 
 ################################################################################
 

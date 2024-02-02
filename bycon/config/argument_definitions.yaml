@@ -374,6 +374,12 @@ inputfile:
     - --inputfile
   description: a custom file to specify input data, usually tab-delimited with special header
 
+outputdir:
+  type: string
+  cmdFlags:
+    - --outputdir
+  description: output directory where supported (cmd line)
+
 outputfile:
   type: string
   cmdFlags:
@@ -401,7 +407,7 @@ source:
   cmdFlags:
     - -s
     - --source
-  description: some source label, e.g. `callsets`
+  description: some source label, e.g. `analyses`
 
 query:
   type: string
@@ -489,6 +495,13 @@ geo_distance:
   cmdFlags:
     - --geoDistance
   description: only for the geolocations...
+
+marker_type:
+  type: string
+  cmdFlags:
+    - --markerType
+  description: marker type, only for the geolocations...
+ 
 
 ################################################################################
 # plot ... 

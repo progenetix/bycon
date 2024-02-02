@@ -156,12 +156,12 @@ entity_defaults:
     is_entry_type: True
     request_entity_path_id: analyses
     response_entity_id: analysis
-    collection: callsets  
+    collection: analyses  
     response_schema: beaconResultsetsResponse
     beacon_schema:
       entity_type: analysis
       schema: https://progenetix.org/services/schemas/analysis/
-    h->o_access_key: callsets._id
+    h->o_access_key: analyses._id
 
 ################################################################################
 
@@ -209,12 +209,12 @@ entity_defaults:
     is_entry_type: True
     request_entity_path_id: runs
     response_entity_id: run
-    collection: callsets  
+    collection: analyses  
     response_schema: beaconResultsetsResponse
     beacon_schema:
       entity_type: run
       schema: https://progenetix.org/services/schemas/run/
-    h->o_access_key: callsets._id
+    h->o_access_key: analyses._id
 
 ################################################################################
 

@@ -1,6 +1,6 @@
 import re
 
-from cgi_parsing import prdbug
+from bycon_helpers import prdbug
 
 ################################################################################
 

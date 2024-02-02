@@ -1,10 +1,10 @@
+import json, sys
 from datetime import datetime
 from deepmerge import always_merger
+from humps import camelize, decamelize
 from os import environ
 
-from bycon_helpers import mongo_result_list, mongo_test_mode_query, return_paginated_list
-from cgi_parsing import prdbug
-# from export_file_generation import *
+from bycon_helpers import *
 from handover_generation import dataset_response_add_handovers
 from query_execution import execute_bycon_queries
 from query_generation import ByconQuery
@@ -723,7 +723,7 @@ class ByconResultSets:
 
         ds_r_start = datetime.datetime.now()
         for i, r_set in enumerate(self.result_sets):
-            ds_id = r_set["id"]
+            ds_id = r_set.get("id", "___none___")
             ds_res = execute_bycon_queries(ds_id, self.record_queries, self.byc)
             self.datasets_results.update({ds_id: ds_res})            
         ds_r_duration = datetime.datetime.now() - ds_r_start
@@ -741,11 +741,8 @@ class ByconResultSets:
 
         ds_d_start = datetime.datetime.now()
         for ds_id, ds_results in self.datasets_results.items():
-
-
             if not ds_results:
                 continue
-
             if self.handover_key not in ds_results.keys():
                 continue
 
@@ -793,12 +790,12 @@ class ByconResultSets:
                     v = v_coll.find_one({"_id":v_id})
                     r_s_res.append(v)
                 self.datasets_data.update({ds_id: r_s_res})
-            elif "variants.variant_internal_id" in ds_results:
-                for v_id in ds_results["variants.variant_internal_id"]["target_values"]:
-                    vs = v_coll.find({"variant_internal_id":v_id})
-                    for v in vs:
-                        r_s_res.append(v)
-                self.datasets_data.update({ds_id: r_s_res})
+            # elif "variants.variant_internal_id" in ds_results:
+            #     for v_id in ds_results["variants.variant_internal_id"]["target_values"]:
+            #         vs = v_coll.find({"variant_internal_id":v_id})
+            #         for v in vs:
+            #             r_s_res.append(v)
+            #     self.datasets_data.update({ds_id: r_s_res})
 
         ds_v_duration = datetime.datetime.now() - ds_v_start
 
@@ -811,24 +808,28 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __populate_result_sets(self):
-
         for i, r_set in enumerate(self.result_sets):
             ds_id = r_set["id"]
             ds_res = self.datasets_results.get(ds_id)
             if not ds_res:
                 continue
             r_set.update({"results_handovers": dataset_response_add_handovers(ds_id, self.byc)})
+            q_c = ds_res.get("target_count", 0)
             r_s_res = self.datasets_data.get(ds_id, [])
             r_s_res = reshape_resultset_results(ds_id, r_s_res, self.byc)
             info = {"counts": {}}
+            rs_c = len(r_s_res) if type(r_s_res) is list else 0
             for h_o_k, h_o in ds_res.items():
                 if not "target_count" in h_o:
                     continue
-                entity = h_o_k.split('.')[0]
-                info["counts"].update({entity: h_o["target_count"]})
-            rs_c = len(r_s_res) if type(r_s_res) is list else 0
+                collection = h_o_k.split('.')[0]
+                info["counts"].update({collection: h_o["target_count"]})
+                entity = h_o.get("target_entity", "___none___")
+                if entity == self.response_entity_id:
+                    rs_c = h_o["target_count"]
             self.result_sets[i].update({
                 "info": info,
+                "response_entity_id" : self.response_entity_id,
                 "results_count": rs_c,
                 "exists": True if rs_c > 0 else False,
                 "results": r_s_res
@@ -836,22 +837,179 @@ class ByconResultSets:
 
         return
 
+
 ################################################################################
 # common response functions ####################################################
 ################################################################################
 
-# def response_add_warnings(byc, message=False):
-#     if message is False:
-#         return
-#     if len(str(message)) < 1:
-#         return
+def cgi_break_on_errors(byc):
+    if not "error_response" in byc:
+        return
+    e = byc["error_response"].get("error", {"error_code": 200})
+    e_c = e.get("error_code", 200)
 
-#     if not "service_response" in byc:
-#         return
+    if int(e_c) > 200:
+        cgi_print_response(byc, byc["error_response"])
 
-#     if not "info" in byc["service_response"]:
-#         byc["service_response"].update({"info": {}})
-#     if not "warnings" in byc["service_response"]:
-#         byc["service_response"]["info"].update({"warnings": []})
 
-#     byc["service_response"]["info"]["warnings"].append(message)
+################################################################################
+
+def cgi_print_response(byc, status_code):
+    r_f = ""
+    f_d = {}
+
+    delint_response(byc)
+
+    if "form_data" in byc:
+        f_d = byc["form_data"]
+
+    if "responseFormat" in f_d:
+        r_f = f_d["responseFormat"]
+
+    # This is a simple "de-jsonify", intended to be used for already
+    # pre-formatted list-like items (i.e. lists only containing objects)
+    # with simple key-value pairs)
+    # TODO: universal text table converter ... partially implemented
+
+    if "text" in byc["output"]:
+
+        r = byc["service_response"].get("response", "ERROR: No response element in error_response")
+        if "result_sets" in r:
+            r_s = r["result_sets"][0]
+            byc.update({"service_response": r_s.get("results", [])})
+        else:
+            byc.update({"service_response": r})
+
+        if isinstance(byc["service_response"], dict):
+            # TODO: Find where this results/response ambiguity comes from
+            if "response" in byc["service_response"]:
+                resp = byc["service_response"]["response"]
+            elif "results" in byc["service_response"]:
+                resp = byc["service_response"]["results"]
+            else:
+                resp = byc["service_response"]
+        else:
+            resp = byc["service_response"]
+        if isinstance(resp, dict):
+            resp = json.dumps(camelize(resp), default=str)
+        else:
+            l_d = []
+            for dp in resp:
+                v_l = []
+                for v in dp.values():
+                    # print(v)
+                    v_l.append(str(v))
+                l_d.append("\t".join(v_l))
+            resp = "\n".join(l_d)
+
+        print_text_response(resp, byc["env"], status_code)
+
+    if test_truthy(byc["form_data"].get("only_handovers", False)):
+        try:
+            if "result_sets" in byc["service_response"]["response"]:
+                for rs_i, rs in enumerate(byc["service_response"]["response"]["result_sets"]):
+                    byc["service_response"]["response"]["result_sets"][rs_i].update({"results": []})
+        except:
+            pass
+
+    update_error_code_from_response_summary(byc)
+    switch_to_error_response(byc)
+    print_json_response(byc["service_response"], byc["env"])
+
+
+################################################################################
+
+def update_error_code_from_response_summary(byc):
+    if not "response_summary" in byc["service_response"]:
+        return
+
+    if not "exists" in byc["service_response"]["response_summary"]:
+        return
+
+
+################################################################################
+
+def switch_to_error_response(byc):
+    e_c = byc["error_response"]["error"].get("error_code", 200)
+
+    if e_c == 200:
+        return
+
+    if "meta" in byc["service_response"]:
+        byc["error_response"].update({"meta": byc["service_response"]["meta"]})
+    byc["service_response"] = byc["error_response"]
+
+
+################################################################################
+
+def delint_response(byc):
+
+    b_s_r = byc["service_response"]
+
+    byc.update({"service_response": response_delete_none_values(b_s_r)})
+
+    try:
+        b_h_r = b_s_r.get("beacon_handovers", [])
+        if len(b_h_r) < 1:
+            byc["service_response"].pop("beacon_handovers", None)
+        if not "url" in b_h_r[0]:
+            byc["service_response"].pop("beacon_handovers", None)
+    except:
+        pass
+
+
+################################################################################
+
+def response_delete_none_values(response):
+    """Delete None values recursively from all of the dictionaries"""
+
+    for key, value in list(response.items()):
+        if isinstance(value, dict):
+            response_delete_none_values(value)
+        elif value is None:
+            del response[key]
+        elif isinstance(value, list):
+            for v_i in value:
+                if isinstance(v_i, dict):
+                    response_delete_none_values(v_i)
+
+    return response
+
+
+################################################################################
+
+def print_json_response(this={}, env="server", status_code=200):
+    if not "local" in env:
+        print('Content-Type: application/json')
+        print('status:' + str(status_code))
+        print()
+
+    prjsoncam(this)
+    print()
+    exit()
+
+
+################################################################################
+
+def print_text_response(this="", env="server", status_code=200):
+    if "server" in env:
+        print('Content-Type: text/plain')
+        print('status:' + str(status_code))
+        print()
+
+    elif "file" in env:
+        # this opion can be used to reroute the response to a file
+        return this
+
+    print(this)
+    print()
+    exit()
+
+
+################################################################################
+
+def print_uri_rewrite_response(uri_base="", uri_stuff=""):
+    print("Status: 302")
+    print("Location: {}{}".format(uri_base, uri_stuff))
+    print()
+    exit()

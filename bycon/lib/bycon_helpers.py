@@ -1,7 +1,6 @@
-import base36
-import time
-import re
+import base36, json, re, time
 from isodate import parse_duration
+from humps import camelize, decamelize
 from os import environ
 from pymongo import MongoClient
 
@@ -224,4 +223,44 @@ def get_nested_value(parent, dotted_key, parameter_type="string"):
         return '_too_deep_'
 
     return v
+
+################################################################################
+
+def test_truthy(this):
+    if str(this).lower() in ["1", "true", "y", "yes"]:
+        return True
+
+    return False
+
+
+################################################################################
+
+def decamelize_words(j_d):
+    # TODO: move words to config
+    de_cams = ["gVariants", "gVariant", "sequenceId", "relativeCopyClass", "speciesId", "chromosomeLocation", "genomicLocation"]
+    for d in de_cams:
+        j_d = re.sub(r"\b{}\b".format(d), decamelize(d), j_d)
+
+    return j_d
+
+
+################################################################################
+
+def prdbug(this, debug_mode=False):
+    if debug_mode is True:
+        prjsonnice(this)
+
+
+################################################################################
+
+def prjsonnice(this):
+    print(decamelize_words(json.dumps(this, indent=4, sort_keys=True, default=str)) + "\n")
+
+
+################################################################################
+
+def prjsoncam(this):
+    prjsonnice(camelize(this))
+
+
 

@@ -2,7 +2,8 @@ import re
 from pymongo import MongoClient
 from os import environ
 
-from bycon.lib.cgi_parsing import rest_path_value
+from bycon_helpers import prdbug
+from cgi_parsing import rest_path_value
 
 ################################################################################
 
@@ -14,8 +15,6 @@ def select_dataset_ids(byc):
     if ds_id_from_accessid(byc) is not False:
         return
     if ds_ids_from_form(byc) is not False:
-        return
-    if ds_ids_from_args(byc) is not False:
         return
     if ds_id_from_default(byc) is not False:
         return
@@ -79,21 +78,6 @@ def ds_ids_from_form(byc):
     if len(ds_ids) < 1:
         return False
 
-    byc.update({"dataset_ids": ds_ids})
-    return True
-
-
-################################################################################
-
-def ds_ids_from_args(byc):
-    if "args" not in byc or byc["args"] is None:
-        return False
-
-    dsid_s = byc["args"].get("datasetIds")
-    if not dsid_s:
-        return False
-
-    ds_ids = re.split(",", dsid_s)
     byc.update({"dataset_ids": ds_ids})
     return True
 

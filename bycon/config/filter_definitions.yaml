@@ -267,7 +267,7 @@ GEOseries:
       - "geo:"
       - ""
   pattern: '^(?:geo:)?GSE\d+?$'
-  scope: callsets
+  scope: analyses
   entity: analysis
   db_key: 'analysis_info.series_id'
   is_series: True
@@ -288,7 +288,7 @@ GenomePlatforms:
       - "geo:"
       - ""
   pattern: '^(?:EFO:)|(?:(?:geo:)?GPL)|(?:(?:arrayexpress:)?)[\w\-]+?$'
-  scope: callsets
+  scope: analyses
   entity: analysis
   db_key: 'platform_model.id'
   collationed: True
@@ -310,9 +310,9 @@ GEOexperiment:
       - "geo:"
       - ""
   pattern: '^(?:geo:)?GSM\d+?$'
-  scope: callsets
+  scope: analyses
   entity: analysis
-  db_key: 'external_references.id'
+  db_key: 'analysis_info.experiment_id'
   collationed: False
   examples:
     - geo:GSM253289
@@ -328,9 +328,9 @@ arrayexpress:
     replace:
       - "arrayexpress:"
       - ""
-  db_key: 'external_references.id'
-  scope: biosamples
-  entity: biosample
+  db_key: 'analysis_info.experiment_id'
+  scope: analyses
+  entity: analysis
   pattern: '^arrayexpress:[AEP]-\w{4}-\d+$'
   collationed: True
   examples:

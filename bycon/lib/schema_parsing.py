@@ -5,7 +5,7 @@ from humps import decamelize
 from os import path, scandir, pardir
 from pathlib import Path
 
-from cgi_parsing import prjsonnice, prdbug
+from bycon_helpers import prjsonnice, prdbug
 
 # local
 lib_path = path.dirname( path.abspath(__file__) )

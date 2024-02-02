@@ -29,7 +29,7 @@ properties:
   collationType:
     description: >-
       Key for the type of filter definition used to map the corresponding collation
-      items (e.g. biosamples, callsets...). These only sometimes correspond
+      items (e.g. biosamples, analyses...). These only sometimes correspond
       directly to prefixes, when unanimous (PMID ...).
     type: string
     examples:
@@ -60,7 +60,7 @@ properties:
     type: string
     oneOf:
       - biosamples
-      - callsets
+      - analyses
       - individuals
   dbKey:
     description: >-

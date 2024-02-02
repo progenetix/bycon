@@ -18,6 +18,8 @@ variant_pars:
   - gene_id
   - aminoacid_change
   - genomic_allele_short_form
+  - cyto_bands  # custom yet
+  - chro_bases  # custom yet
 
 # As long as there are no variant query schemas to define valid Beacon
 # variant parameter combinations the `request_types` here provide sets

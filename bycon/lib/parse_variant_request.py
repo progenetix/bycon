@@ -1,6 +1,7 @@
 import bson.objectid
 
 from cgi_parsing import *
+from genome_utils import ChroNames
 
 ################################################################################
 
@@ -146,15 +147,14 @@ def __translate_reference_name(variant_pars, byc):
     if not "reference_name" in variant_pars:
         return variant_pars
 
-    r_n = variant_pars[ "reference_name" ]
-    g_a = byc.get("genome_aliases", {})
-    r_a = g_a.get("refseq_aliases", {})
+    chro_names = ChroNames(byc)
+    r_n = variant_pars.get("reference_name")
 
-    if not r_n in r_a.keys():
+    if not r_n in chro_names.allRefseqs():
         variant_pars.pop("reference_name")
         return variant_pars
 
-    variant_pars.update({"reference_name": r_a[r_n] })
+    variant_pars.update({"reference_name": chro_names.refseq(r_n) })
 
     return variant_pars
 

@@ -22,7 +22,7 @@
         "limit": 10
     },   
     "filters": [
-        { "id": "NCIT:C102872", "scope": "callsets", "includeDescendantTerms": false }
+        { "id": "NCIT:C102872", "scope": "analyses", "includeDescendantTerms": false }
     ],
     "includeResultsetResponses": "HIT",
     "requestedGranularity": "count",

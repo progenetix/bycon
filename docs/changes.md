@@ -13,9 +13,32 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
-### (v.1.4.0)
+### 2024-02-02 (v.1.4.1)
 
-* fix of `plot_type` parameter as separate one (used in byconaut)
+* new `ChroNames` class for accessing chromosome and refseq ID mappings (still utilising
+  `byc["refseq_chromosomes"]` as input, read during init from `rsrc/.../refseq_chromosomes.yaml`)
+* `byconaut`: Added a new `plotType=histosparklines` plotting option. It basically modifies
+  `plot_defaults` parameters for minimal histoplots (no border, no background, small
+  and narrow), e.g. for use in mouse-overs or in tables
+    - one can still override those parameters, e.g. with `&plotPars=plotDendrogramWidth=50::plotAreaHeight=32`
+![](https://progenetix.org/services/collationplots?filters=pgx:icdom-85003,pgx:icdom-81703,pgx:icdom-80703,pgx:icdom-87003&plotType=histosparklines)
+![](https://progenetix.org/services/collationplots?filters=pgx:icdom-85003,pgx:icdom-81703,pgx:icdom-80703,pgx:icdom-87003&plotType=histosparklines&plotPars=plotDendrogramWidth=50::plotAreaHeight=32::plotAreaOpacity=0.5)
+* `byconaut`: added option to use sequence id values for plotPars.plot_chros, e.g. `plotPars=plot_width=980::plotChros=NC_000023.11`
+* fix: a `g_variants` endpoint w/o any parameter led to a query error
+* removal of some `byconaut` code remnants
+* some internal reshuffling; e.g. move of export/print helpers to from `cgi_parsing`
+  to `beacon_response_generation` and `bycon_helpers`
+
+### 2024-01-18 (v.1.4.0)
+
+* fix of `plotType` parameter as separate one (used in byconaut)
+* fix of wrong parameter mapping for `geo:GSM....` filters
+    - filter definition still pointed to `external_references.id` instead of
+      `analysis_info.experiment_id`
+* `byconaut`: move to general use of `byc["form_data"]` for arguments (_i.e._
+  requiring the command line arguments to have been parsed into this object)
+* fixed the `byconaut` `cytomapper` service by adding `cyto_bands` and `chro_bases`
+  to the list of `variant_pars`
 
 ### 2024-01-10 (v1.3.9)
 
@@ -371,7 +394,7 @@ definitions and "local" ones. Partcullarly:
     - `variant_request_definitions` and `variant_type_definitions` config files from
       `variant_definitions` (separating the query config from the type mappings)
     - `cytoband_utils` => `genome_utils`
-    - `generate_genomic_mappings` wrapper for cytoband and interval functions
+    - `set_genome_rsrc_path` wrapper for cytoband and interval functions
 * fix for file uploader issues
     - [ ] TODO: documentation on website & lazy loading (e.g. interpolating
       `sample` to `biosample_id`; maybe just use column order ...)
@@ -400,7 +423,7 @@ definitions and "local" ones. Partcullarly:
 
 * now probe plotting as implemented with auto-path detection based on callset
   values
-  - `analysis_info: { experiment_id: 'geo:GSM498847', series_id: 'geo:GSE19949' }` leads to `{server_callsets_dir_loc}/GSE19949/GSM498847/{callset_probefile_name}`
+  - `analysis_info: { experiment_id: 'geo:GSM498847', series_id: 'geo:GSE19949' }` leads to `{server_callsets_dir_loc}/GSE19949/GSM498847/{probefile_name}`
   - example: [progenetix.org/beacon/biosamples/pgxbs-kftvkafc/?output=samplesplot&plot_chros=3,5,6,14](https://progenetix.org/beacon/biosamples/pgxbs-kftvkafc/?datasetIds=progenetix&output=samplesplot&plot_chros=3,5,6,14)
 
 #### 2023-06-12 (v1.0.52)

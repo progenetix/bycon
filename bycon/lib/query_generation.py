@@ -3,9 +3,8 @@ from bson import SON
 from os import environ
 from pymongo import MongoClient
 
-from bycon_helpers import days_from_iso8601duration, return_paginated_list
-from cgi_parsing import prdbug
-from genome_utils import retrieve_gene_id_coordinates
+from bycon_helpers import days_from_iso8601duration, prdbug, return_paginated_list
+from genome_utils import GeneInfo
 
 ################################################################################
 
@@ -14,7 +13,7 @@ class ByconQuery():
     Bycon queries are collected as an object with per data collection query objects,
     ready to be run against the respective entity databases.
     The definition against per-collection in contrast to per-entity is due to the
-    incongruency of collection use, e.g. the utilization of the "callsets" collection
+    incongruency of collection use, e.g. the utilization of the "analyses" collection
     for both "analysis" and "run" entities.
 
     Query object:
@@ -55,8 +54,12 @@ class ByconQuery():
         self.argument_definitions = byc.get("argument_definitions", {})
         self.filters = byc.get("filters", [])
         self.filtering_terms_coll = byc.get("filtering_terms_coll", "___none___")
-        self.mongohost = environ.get("BYCON_MONGO_HOST", "localhost")
 
+        self.dbpars = {
+            "mongohost": byc.get("mongohost", "localhost"),
+            "services_db": byc.get("services_db", "___none___"),
+            "genes_coll": byc.get("genes_coll", "___none___")
+        }
 
         self.requested_entity = byc.get("request_entity_id", False)
         self.response_entity = byc.get("response_entity_id", False)
@@ -207,7 +210,7 @@ class ByconQuery():
         if not r_c:
             return
 
-        data_db = MongoClient(host=self.mongohost)[self.ds_id]
+        data_db = MongoClient(host=self.dbpars["mongohost"])[self.ds_id]
         data_collnames = data_db.list_collection_names()
 
         if r_c not in data_collnames:
@@ -276,51 +279,22 @@ class ByconQuery():
         # query database for gene and use coordinates to create range query
         vp = self.varguments
 
-        gene_data, e = self.__gene_id_coordinates(vp["gene_id"])
+        gene_data, e = GeneInfo(self.dbpars).returnGene(vp["gene_id"])
 
         # TODO: error report/warning
         if not gene_data:
             return
 
+        gene = gene_data[0]
+
         # Since this is a pre-processor to the range request
         self.varguments.update( {
-            "reference_name": "refseq:{}".format(gene_data["accession_version"]),
-            "start": [ gene_data["start"] ],
-            "end": [ gene_data["end"] ]
+            "reference_name": "refseq:{}".format(gene["accession_version"]),
+            "start": [ gene["start"] ],
+            "end": [ gene["end"] ]
         } )
 
         self.variant_request_type = "variantRangeRequest"
-
-
-    ################################################################################
-
-    def __gene_id_coordinates(self, gene_id, single=True):
-        # TODO: move to separate function/class
-
-        e = None
-
-        mongo_client = MongoClient(host=self.mongohost)
-        db_names = list(mongo_client.list_database_names())
-        if self.services_db not in db_names:
-            return {}, f"services db `{services_db}` does not exist"
-        if "___none___" in self.genes_coll:
-            return {}, "no `genes_coll` parameter in `config.yaml`"
-
-        q_f_s = ["symbol", "ensembl_gene_ids", "synonyms"]
-
-        q_re = re.compile( r'^'+gene_id+'$', re.IGNORECASE )
-        q_list = []
-        for q_f in q_f_s:
-            q_list.append({q_f: q_re })
-
-        query = { "$or": q_list }
-
-        if single is True:
-            gene_data = mongo_client[self.services_db][self.genes_coll].find_one(query, { '_id': False } )
-        else:
-            gene_data = list(mongo_client[self.services_db][self.genes_coll].find(query, { '_id': False } ))
-
-        return gene_data, e
 
 
     #--------------------------------------------------------------------------#
@@ -467,7 +441,7 @@ class ByconQuery():
         if len(self.filters) < 1:
             return
 
-        data_db = MongoClient(host=self.mongohost)[self.ds_id]
+        data_db = MongoClient(host=self.dbpars["mongohost"])[self.ds_id]
         coll_coll = data_db[ self.filtering_terms_coll ]
         self.collation_ids = coll_coll.distinct("id", {})
 
@@ -626,7 +600,7 @@ class ByconQuery():
         if not accessid:
             return
 
-        ho_client = MongoClient(host=self.mongohost)
+        ho_client = MongoClient(host=self.dbpars["mongohost"])
         ho_db = ho_client[self.housekeeping_db]
         ho_coll = ho_db[self.handover_coll]
         h_o = ho_coll.find_one({"id": accessid})

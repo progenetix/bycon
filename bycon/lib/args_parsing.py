@@ -1,8 +1,8 @@
 import argparse
 import re
-
-from cgi_parsing import prdbug
 from humps import camelize, decamelize
+
+from bycon_helpers import prdbug
 
 ################################################################################
 
@@ -12,9 +12,6 @@ def get_bycon_args(byc):
 
     # Serves as "we've been here before" marker - before the env check.
     byc.update({"check_args": False})
-
-    if not "local" in byc.get("env", "server"):
-        return byc
 
     create_args_parser(byc)
 
@@ -72,55 +69,4 @@ def args_update_form(byc):
         else:
             byc["form_data"].update({p_d: arg_vars[p]})
         prdbug(f'{p}: {byc["form_data"][p_d]}', byc.get("debug_mode"))
-
-
-################################################################################
-
-def filters_from_args(byc):
-    if not "args" in byc:
-        return
-
-    if not "filters" in byc:
-        byc.update({"filters": []})
-
-    if byc["args"].filters:
-        for f in re.split(",", byc["args"].filters):
-            byc["filters"].append({"id": f})
-
-
-################################################################################
-
-def set_collation_types(byc):
-    
-    if byc["args"].collationTypes:
-        s_p = {}
-        for p in re.split(",", byc["args"].collationTypes):
-            if p in byc["filter_definitions"].keys():
-                s_p.update({p: byc["filter_definitions"][p]})
-        if len(s_p.keys()) < 1:
-            print("No existing collation type was provided with `--collationTypes` ...")
-            exit()
-        byc.update({"filter_definitions": s_p})
-
-
-################################################################################
-
-def set_processing_modes(byc):
-    byc.update({"update_mode": False})
-
-    tm = byc.get("test_mode", False)
-    env = byc.get("env", "server")
-
-    if not "local" in env:
-        return
-
-    if byc["test_mode"] is True:
-        print("¡¡¡ TEST MODE - no db update !!!")
-        return
-
-    if byc["args"].update:
-        byc.update({"update_mode": True})
-        print("¡¡¡ UPDATE MODE - may overwrite entries !!!")
-
-
 

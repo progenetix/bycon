@@ -5,6 +5,7 @@ from deepmerge import always_merger
 from cgi_parsing import prdbug
 from bycon_helpers import assign_nested_value, get_nested_value
 from schema_parsing import object_instance_from_schema_name
+from genome_utils import ChroNames
 
 ################################################################################
 ################################################################################
@@ -33,6 +34,10 @@ class ByconVariant:
         self.vcf_variant = {}
         self.pgxseg_variant = {}
 
+        self.debug_mode = byc.get("debug_mode", False)
+        self.ChroNames = ChroNames(byc)
+
+        self.variant_types = byc.get("variant_type_definitions", {})
         d_m = byc["datatable_mappings"].get("definitions", {})
         d_m_v = d_m.get("genomicVariant", {})
         self.variant_mappings = d_m_v.get("parameters", {})
@@ -40,10 +45,6 @@ class ByconVariant:
         self.vrs_allele = object_instance_from_schema_name(byc, "VRSallele", "")
         self.vrs_cnv = object_instance_from_schema_name(byc, "VRScopyNumberChange", "")
 
-        # if variant:
-        #     self.byc_variant = deepcopy(variant)
-        #     self.__create_canonical_variant()
-        #     return self.byc_variant
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -85,7 +86,7 @@ class ByconVariant:
         self.byc_variant = variant
         self.__create_canonical_variant()
 
-        vt_defs = self.byc.get("variant_type_definitions", {})
+        vt_defs = self.variant_types
         v = self.byc_variant
 
         # TODO: VCF schema in some config file...
@@ -131,7 +132,7 @@ class ByconVariant:
         self.byc_variant = variant
         self.__create_canonical_variant()
 
-        vt_defs = self.byc.get("variant_type_definitions", {})
+        vt_defs = self.variant_types
         v = self.byc_variant
 
         state_id = v.get("variant_state_id", "___none___")
@@ -163,7 +164,7 @@ class ByconVariant:
         but does not try to accommodate all use cases.
         """
 
-        vt_defs = self.byc.get("variant_type_definitions", {})
+        vt_defs = self.variant_types
         v = self.byc_variant
 
         vrs_a = deepcopy(self.vrs_allele)
@@ -194,7 +195,7 @@ class ByconVariant:
         but does not try to accommodate all use cases.
         """
 
-        vt_defs = self.byc.get("variant_type_definitions", {})
+        vt_defs = self.variant_types
         v = self.byc_variant
 
         vrs_c = deepcopy(self.vrs_cnv)
@@ -219,9 +220,6 @@ class ByconVariant:
     # -------------------------------------------------------------------------#
 
     def __create_canonical_variant(self):
-        vt_defs = self.byc.get("variant_type_definitions", {})
-        g_aliases = self.byc.get("genome_aliases", {})
-
         v = self.byc_variant
         v.update({"errors": []})
 
@@ -243,7 +241,7 @@ class ByconVariant:
     # -------------------------------------------------------------------------#
 
     def __byc_variant_normalize_type(self):
-        vt_defs = self.byc.get("variant_type_definitions", {})
+        vt_defs = self.variant_types
         v = self.byc_variant
 
         state_id = v.get("variant_state_id", "___none___")
@@ -286,11 +284,10 @@ class ByconVariant:
     # -------------------------------------------------------------------------#
 
     def __byc_variant_normalize_chromosome(self):
-        g_aliases = self.byc.get("genome_aliases", {})
         v = self.byc_variant
 
-        refs_ids = g_aliases.get("refseq_chronames", {}).keys()
-        chro_ids = g_aliases.get("chro_refseq_ids", {}).keys()
+        refs_ids = self.ChroNames.allRefseqs()
+        chro_ids = self.ChroNames.allChros()
 
         s_id = v.get("sequence_id", "___none___")
         chro = v.get("reference_name", "___none___")
@@ -309,11 +306,9 @@ class ByconVariant:
         if s_id in refs_ids and chro in chro_ids:
             pass
         elif s_id in refs_ids and chro not in chro_ids:
-            c_a_s = g_aliases.get("chro_aliases", {})
-            chro = c_a_s.get(s_id, "___none___")
+            chro = self.ChroNames.chro(s_id)
         elif chro in chro_ids and s_id not in refs_ids:
-            r_a_s = g_aliases.get("refseq_aliases", {})
-            s_id = r_a_s.get(chro, "___none___")
+            s_id = self.ChroNames.refseq(chro)
         else:
             v["errors"].append(f'no sequence_id / chromosome could be assigned')
 
@@ -370,15 +365,16 @@ class ByconVariant:
     def __byc_variant_add_digest(self):
         v = self.byc_variant
 
-        seq_re = '^[ACGTN]*$'
+        seq_re = '^[ACGTN]+$'
        
-        v_lab = v.get("variant_type")
+        v_lab = v.get("variant_state_id", "___NA___").replace(":", "_")
+        v_seqid = v.get("sequence_id", "___NA___").replace("refseq:", "")
         seq = v.get("sequence", "")
         rseq = v.get("reference_sequence", "")
+
         if re.match(f'{seq_re}', str(seq)) or re.match(f'{seq_re}', str(rseq)):
-            v_lab = f'{seq}>{rseq}'
-            # prdbug(self.byc, f'variant sequence > reference sequence: {v_lab}')
-        v.update({"variant_internal_id": f'{v["reference_name"]}:{v["start"]}-{v["end"]}:{v_lab}'})
+            v_lab = f'{rseq}>{seq}'
+        v.update({"variant_internal_id": f'{v_seqid}:{v["start"]}-{v["end"]}:{v_lab}'})
 
         self.byc_variant.update(v)
         return

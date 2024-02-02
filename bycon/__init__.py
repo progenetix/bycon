@@ -32,7 +32,8 @@ try:
         "pkg_path": pkg_path,
         "bycon_lib_path": bycon_lib_path,
         "parsed_config_paths": [],
-        "env": "server"
+        "env": "server",
+        "mongohost": environ.get("BYCON_MONGO_HOST", "localhost")
     }
     if not environ.get('HTTP_HOST'):
         byc.update({"env": "local"})

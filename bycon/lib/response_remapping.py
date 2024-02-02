@@ -1,6 +1,8 @@
 import datetime, re
 from pymongo import MongoClient
-from cgi_parsing import *
+
+from bycon_helpers import prdbug
+from cgi_parsing import select_this_server
 from variant_mapping import ByconVariant
 from os import environ
 
@@ -158,10 +160,8 @@ def remap_biosamples(r_s_res, byc):
     bs_pop_keys = ["_id", "followup_state", "followup_time"]  # "info"
 
     for bs_i, bs_r in enumerate(r_s_res):
-
         # TODO: REMOVE VERIFIER HACKS
         r_s_res[bs_i].update({"sample_origin_type": {"id": "OBI:0001479", "label": "specimen from organism"}})
-
         for f in ["tumor_grade", "pathological_stage", "histological_diagnosis"]:
             try:
                 if f in r_s_res[bs_i]:
@@ -173,10 +173,8 @@ def remap_biosamples(r_s_res, byc):
                         r_s_res[bs_i].pop(f, None)
             except:
                 pass
-
         for k in bs_pop_keys:
             r_s_res[bs_i].pop(k, None)
-
     return r_s_res
 
 

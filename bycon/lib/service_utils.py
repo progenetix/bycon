@@ -5,11 +5,10 @@ from os import environ, path
 
 from args_parsing import *
 from beacon_auth import *
-from bycon_helpers import return_paginated_list
-from cgi_parsing import prdbug, test_truthy
+from bycon_helpers import return_paginated_list, prdbug, test_truthy
 from dataset_parsing import select_dataset_ids
 from parse_filters_request import parse_filters
-from genome_utils import generate_genomic_mappings
+from genome_utils import set_genome_rsrc_path
 from read_specs import read_service_prefs, update_rootpars_from_local
 from parse_variant_request import parse_variants
 
@@ -38,7 +37,7 @@ def run_beacon_init_stack(byc):
     set_returned_granularities(byc)    
     parse_filters(byc)
     parse_variants(byc)
-    generate_genomic_mappings(byc)
+    set_genome_rsrc_path(byc)
 
 
 ################################################################################
@@ -129,7 +128,7 @@ def initialize_bycon_service(byc, service=False):
     set_io_params(byc)
     # CAVE: At this time the genome is just taken from the default so has to 
     # be run again after form value parsing ...
-    generate_genomic_mappings(byc)
+    set_genome_rsrc_path(byc)
     set_special_modes(byc)
 
     # TODO: standardize the general defaults / entity defaults / form values merging

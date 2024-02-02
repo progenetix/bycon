@@ -40,14 +40,9 @@ definitions:
         beacon_key: biosamples.id
         indexed: True
         compact: True
-      group_id:
+      biosample_label:
         type: string
-        db_key: info.group.id
-        beacon_key: False
-        compact: True
-      group_label:
-        type: string
-        db_key: info.group.label
+        db_key: label
         beacon_key: False
         compact: True
       individual_id:
@@ -61,6 +56,16 @@ definitions:
         db_key: info.callset_ids
         beacon_key: False
         type: array
+      group_id:
+        type: string
+        db_key: info.group.id
+        beacon_key: False
+        compact: True
+      group_label:
+        type: string
+        db_key: info.group.label
+        beacon_key: False
+        compact: True
       external_references:
         type: array
         beacon_key: biosamples.externalReferences
@@ -80,9 +85,18 @@ definitions:
             compact: False
           cellosaurus:
             compact: True
-      # pgx_legacy_sample_id:
-      #   db_key: pgx_legacy_sample_id
-      #   beacon_key: False
+      cohort_ids:
+        type: array
+        beacon_key: False
+        db_key: cohort_ids
+        indexed: True
+        compact: True
+        examples:
+          - pgx:cohort-2021progenetix
+          - pgx:cohort-DIPG
+          - pgx:cohort-TCGA
+          - pgx:cohort-TCGAcancers
+          - pgx:cohort-arraymap
       legacy_ids:
         type: array
         items: string
@@ -389,6 +403,9 @@ definitions:
         db_key: platform_model.label
       data_provenance:
         db_key: info.data_provenance
+        type: array
+      calling_pipeline:
+        db_key: info.calling_pipeline
 
 #------------------------------------------------------------------------------#
 
@@ -483,3 +500,4 @@ definitions:
       variant_type:
         type: string
         db_key: variant_type
+        computed: True

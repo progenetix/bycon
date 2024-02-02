@@ -46,7 +46,7 @@
         "sourceCollection": {
             "description": "The gatabase collection that was queried to gather the response items.\n",
             "examples": [
-                "callsets"
+                "analyses"
             ],
             "type": "string"
         }
