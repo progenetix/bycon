@@ -15,6 +15,38 @@ from schema_parsing import object_instance_from_schema_name
 
 ################################################################################
 
+class BeaconErrorResponse:
+    """
+    This response class is used for all the info / map / configuration responses
+    which have the same type of `meta`.
+    The responses are then provided by the dedicated methods
+    """
+
+    def __init__(self, byc: dict):
+        self.debug_mode = byc.get("debug_mode", False)
+        self.beacon_defaults = byc.get("beacon_defaults", {})
+        self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
+        self.service_config = byc.get("service_config", {})
+        self.response_schema = byc.get("response_schema", "beaconInfoResponse")
+        self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
+        self.error_response = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
+        info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
+        r_m = self.error_response["meta"]
+        for p in ["api_version", "beacon_id"]:
+            if p in info.keys():
+                r_m.update({p: info.get(p, "___none___")})
+
+    
+    # -------------------------------------------------------------------------#
+
+    def error(self, error_message="", error_code=422):
+        self.error_response["error"].update({"error_code": error_code, "error_message": error_message})
+        return self.error_response
+
+
+
+################################################################################
+
 class BeaconInfoResponse:
     """
     This response class is used for all the info / map / configuration responses
@@ -51,10 +83,17 @@ class BeaconInfoResponse:
         return self.data_response
 
 
-    # -------------------------------------------------------------------------#
+    # ------------------------------- private ---------------------------------#
 
-    def errorResponse(self):
-        return self.error_response
+    def __meta_add_parameters(self, response):
+        info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
+        r_m = response["meta"]
+        for p in ["api_version", "beacon_id"]:
+            if p in info.keys():
+                r_m.update({p: info.get(p, "___none___")})
+        if "returned_schemas" in r_m:
+            r_m.update({"returned_schemas":[self.beacon_schema]})
+
 
 
 ################################################################################
@@ -380,6 +419,7 @@ class ByconFilteringTerms:
         self.debug_mode = byc.get("debug_mode", False)
         self.test_mode = byc.get("test_mode", False)
         self.env = byc.get("env", "server")
+        self.db_config = byc.get("db_config", {})
         self.test_mode_count = byc.get("test_mode_count", 5)
         self.dataset_ids = byc.get("dataset_ids", [])
         self.beacon_defaults = byc.get("beacon_defaults", {})
@@ -444,11 +484,11 @@ class ByconFilteringTerms:
             query = {"$and": q_list}
 
         if self.test_mode is True:
-            query, error = mongo_test_mode_query(self.dataset_ids[0], f_coll, self.test_mode_count)
+            query, error = mongo_test_mode_query(self.db_config, self.dataset_ids[0], f_coll, self.test_mode_count)
 
         for ds_id in self.dataset_ids:
             fields = {"_id": 0}
-            f_s, e = mongo_result_list(ds_id, f_coll, query, fields)
+            f_s, e = mongo_result_list(self.db_config, ds_id, f_coll, query, fields)
             t_f_t_s = []
             for f in f_s:
                 self.filter_collation_types.add(f.get("collation_type", None))
@@ -600,6 +640,7 @@ class ByconResultSets:
         self.debug_mode = byc.get("debug_mode", False)
         self.beacon_defaults = byc.get("beacon_defaults", {})
         self.env = byc.get("env", "server")
+        self.db_config = byc.get("db_config", {})
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
         self.datasets_results = dict()  # the object with matched ids per dataset, per h_o
         self.datasets_data = dict()     # the object with data of requested entity per dataset
@@ -671,10 +712,13 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __result_sets_save_handovers(self):
+        mdb_c = self.db_config
+        db_host = mdb_c.get("host", "localhost")
+        ho_dbname = mdb_c.get("housekeeping_db", "___none___")
+        ho_collname = mdb_c.get("handover_coll", "___none___")
 
-        ho_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-        ho_db = ho_client[ self.byc["housekeeping_db"] ]
-        ho_coll = ho_db[ self.byc["handover_coll"] ]
+        ho_client = MongoClient(host=db_host)
+        ho_coll = ho_client[ho_dbname].ho_db[ho_collname]
 
         for ds_id, d_s in self.datasets_results.items():
             if not d_s:
@@ -790,12 +834,6 @@ class ByconResultSets:
                     v = v_coll.find_one({"_id":v_id})
                     r_s_res.append(v)
                 self.datasets_data.update({ds_id: r_s_res})
-            # elif "variants.variant_internal_id" in ds_results:
-            #     for v_id in ds_results["variants.variant_internal_id"]["target_values"]:
-            #         vs = v_coll.find({"variant_internal_id":v_id})
-            #         for v in vs:
-            #             r_s_res.append(v)
-            #     self.datasets_data.update({ds_id: r_s_res})
 
         ds_v_duration = datetime.datetime.now() - ds_v_start
 
@@ -842,138 +880,20 @@ class ByconResultSets:
 # common response functions ####################################################
 ################################################################################
 
-def cgi_break_on_errors(byc):
-    if not "error_response" in byc:
-        return
-    e = byc["error_response"].get("error", {"error_code": 200})
-    e_c = e.get("error_code", 200)
+# def response_delete_none_values(response):
+#     """Delete None values recursively from all of the dictionaries"""
 
-    if int(e_c) > 200:
-        cgi_print_response(byc, byc["error_response"])
+#     for key, value in list(response.items()):
+#         if isinstance(value, dict):
+#             response_delete_none_values(value)
+#         elif value is None:
+#             del response[key]
+#         elif isinstance(value, list):
+#             for v_i in value:
+#                 if isinstance(v_i, dict):
+#                     response_delete_none_values(v_i)
 
-
-################################################################################
-
-def cgi_print_response(byc, status_code):
-    r_f = ""
-    f_d = {}
-
-    delint_response(byc)
-
-    if "form_data" in byc:
-        f_d = byc["form_data"]
-
-    if "responseFormat" in f_d:
-        r_f = f_d["responseFormat"]
-
-    # This is a simple "de-jsonify", intended to be used for already
-    # pre-formatted list-like items (i.e. lists only containing objects)
-    # with simple key-value pairs)
-    # TODO: universal text table converter ... partially implemented
-
-    if "text" in byc["output"]:
-
-        r = byc["service_response"].get("response", "ERROR: No response element in error_response")
-        if "result_sets" in r:
-            r_s = r["result_sets"][0]
-            byc.update({"service_response": r_s.get("results", [])})
-        else:
-            byc.update({"service_response": r})
-
-        if isinstance(byc["service_response"], dict):
-            # TODO: Find where this results/response ambiguity comes from
-            if "response" in byc["service_response"]:
-                resp = byc["service_response"]["response"]
-            elif "results" in byc["service_response"]:
-                resp = byc["service_response"]["results"]
-            else:
-                resp = byc["service_response"]
-        else:
-            resp = byc["service_response"]
-        if isinstance(resp, dict):
-            resp = json.dumps(camelize(resp), default=str)
-        else:
-            l_d = []
-            for dp in resp:
-                v_l = []
-                for v in dp.values():
-                    # print(v)
-                    v_l.append(str(v))
-                l_d.append("\t".join(v_l))
-            resp = "\n".join(l_d)
-
-        print_text_response(resp, byc["env"], status_code)
-
-    if test_truthy(byc["form_data"].get("only_handovers", False)):
-        try:
-            if "result_sets" in byc["service_response"]["response"]:
-                for rs_i, rs in enumerate(byc["service_response"]["response"]["result_sets"]):
-                    byc["service_response"]["response"]["result_sets"][rs_i].update({"results": []})
-        except:
-            pass
-
-    update_error_code_from_response_summary(byc)
-    switch_to_error_response(byc)
-    print_json_response(byc["service_response"], byc["env"])
-
-
-################################################################################
-
-def update_error_code_from_response_summary(byc):
-    if not "response_summary" in byc["service_response"]:
-        return
-
-    if not "exists" in byc["service_response"]["response_summary"]:
-        return
-
-
-################################################################################
-
-def switch_to_error_response(byc):
-    e_c = byc["error_response"]["error"].get("error_code", 200)
-
-    if e_c == 200:
-        return
-
-    if "meta" in byc["service_response"]:
-        byc["error_response"].update({"meta": byc["service_response"]["meta"]})
-    byc["service_response"] = byc["error_response"]
-
-
-################################################################################
-
-def delint_response(byc):
-
-    b_s_r = byc["service_response"]
-
-    byc.update({"service_response": response_delete_none_values(b_s_r)})
-
-    try:
-        b_h_r = b_s_r.get("beacon_handovers", [])
-        if len(b_h_r) < 1:
-            byc["service_response"].pop("beacon_handovers", None)
-        if not "url" in b_h_r[0]:
-            byc["service_response"].pop("beacon_handovers", None)
-    except:
-        pass
-
-
-################################################################################
-
-def response_delete_none_values(response):
-    """Delete None values recursively from all of the dictionaries"""
-
-    for key, value in list(response.items()):
-        if isinstance(value, dict):
-            response_delete_none_values(value)
-        elif value is None:
-            del response[key]
-        elif isinstance(value, list):
-            for v_i in value:
-                if isinstance(v_i, dict):
-                    response_delete_none_values(v_i)
-
-    return response
+#     return response
 
 
 ################################################################################
@@ -984,7 +904,7 @@ def print_json_response(this={}, env="server", status_code=200):
         print('status:' + str(status_code))
         print()
 
-    prjsoncam(this)
+    prjsoncam(this) # !!! There are some "do not camelize" exceptions downstream
     print()
     exit()
 

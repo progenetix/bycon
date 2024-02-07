@@ -1,10 +1,8 @@
-args: {}
 debug_mode: false
 empty_query_all_count: false
 error_response: {}
 errors: []
 filters: []
-form_data: {}
 granularity_levels:
   none: 0
   boolean: 1
@@ -14,7 +12,7 @@ pagination:
   skip: 0
   limit: 250
 include_handovers: false
-method: ''
+# method: ''
 output: ''
 queries: {}
 query_meta: {}
@@ -33,10 +31,6 @@ response_entity:
     schema: https://progenetix.org/services/schemas/genomicVariant/
 service_response: {}
 service_config: {}
-test_mode: false
-test_mode_count: 5
-
-filtering_terms_coll: collations
 
 genomes_path:
   - rsrc
@@ -49,12 +43,14 @@ schemas_path:
 # MongoDB configs
 ################################################################################
 
-# special database, auto-generated ######
-housekeeping_db: _byconHousekeepingDB
-beacon_info_coll: beaconinfo
-handover_coll: querybuffer
+db_config:
+  host: localhost
+  # special database, auto-generated ######
+  housekeeping_db: _byconHousekeepingDB
+  beacon_info_coll: beaconinfo
+  handover_coll: querybuffer
 
-# special support database ##############
-services_db: _byconServicesDB
-genes_coll: genes
-geolocs_coll: geolocs
+  # special support database ##############
+  services_db: _byconServicesDB
+  genes_coll: genes
+  geolocs_coll: geolocs

@@ -3,7 +3,7 @@ from humps import camelize, decamelize
 from urllib.parse import urlparse, parse_qs, unquote
 from os import environ
 
-from bycon_helpers import prdbug, test_truthy
+from bycon_helpers import prdbug, set_debug_state, test_truthy
 
 ################################################################################
 
@@ -25,63 +25,6 @@ def parse_query(byc):
 
 ################################################################################
 
-def set_debug_state(debug: int = 0) -> bool:
-    """
-    Function to provide a text response header for debugging purposes, i.e. to 
-    print out the error or test parameters to a browser session.
-    The common way would be to add either a `/debug=1/` part to a REST path or
-    to provide a `...&debug=1` query parameter.
-    """
-
-    if test_truthy(debug):
-        print('Content-Type: text')
-        print()
-        return True
-
-    r_uri = environ.get('REQUEST_URI', "___none___")
-    if re.match(r'^.*?[?&/]debug(Mode)?=(\w+?)\b.*?$', r_uri):
-        d = re.match(r'^.*?[?&/]debug(Mode)?=(\w+?)\b.*?$', r_uri).group(2)
-        if test_truthy(d):
-            print('Content-Type: text')
-            print()
-            return True
-
-    return False
-
-
-################################################################################
-
-def select_this_server(byc: dict) -> str:
-    """
-    Cloudflare based encryption may lead to "http" based server addresses in the
-    URI, but then the browser ... will complain if the handover URLs won't use
-    encryption. OTOH for local testing one may need to stick w/ http if no pseudo-
-    https scenario had been implemented. Therefore handover addresses etc. will
-    always use https _unless_ the request comes from a host listed a test instance.
-    """
-
-    s_uri = str(environ.get('SCRIPT_URI'))
-    local_paths = byc.get("local_paths", {})
-    test_sites = local_paths.get("test_domains", [])
-    https = "https://"
-    http = "http://"
-
-    s = f'{https}{environ.get("HTTP_HOST")}'
-    for site in test_sites:
-        if site in s_uri:
-            if https in s_uri:
-                s = f'{https}{site}'
-            else:
-                s = f'{http}{site}'
-
-    # TODO: ERROR hack for https/http mix, CORS...
-    # ... since cloudflare provides https mapping using this as fallback
-
-    return s
-
-
-################################################################################
-
 def parse_POST(byc):
     content_len = environ.get('CONTENT_LENGTH', '0')
     content_typ = environ.get('CONTENT_TYPE', '')
@@ -94,14 +37,19 @@ def parse_POST(byc):
     if "json" in content_typ:
         body = sys.stdin.read(int(content_len))
         jbod = json.loads(body)
+        d_m = jbod.get("debugMode", False)
+        byc.update({"debug_mode": set_debug_state(jbod.get("debugMode"))})
+
         for j_p in jbod:
             j_p_d = decamelize(j_p)
-            if "debug" in j_p:
-                byc.update({"debug_mode": set_debug_state(jbod.get(j_p))})
+            if "debugMode" in j_p:
+                continue
             # TODO: this hacks the v2 structure; ideally should use requestParameters schemas
-            elif "query" in j_p:
+            if "query" in j_p:
                 for p, v in jbod["query"].items():
-                    if p == "requestParameters":
+                    if p == "filters":
+                        form.update({p: v})
+                    elif p == "requestParameters":
                         for rp, rv in v.items():
                             rp_d = decamelize(rp)
                             if "datasets" in rp:
@@ -109,6 +57,7 @@ def parse_POST(byc):
                                     form.update({"dataset_ids": rv["datasetIds"]})
                             elif "g_variant" in rp:
                                 for vp, vv in v[rp].items():
+                                    # prdbug(f'{vp}: {vv}', byc.get("debug_mode"))
                                     vp_d = decamelize(vp)
                                     if vp_d in a_defs:
                                         form.update({vp_d: vv})

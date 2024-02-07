@@ -1,47 +1,36 @@
 {
-    "$id": "https://progenetix.org/services/schemas/analysis/v2021-11-01",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "additionalProperties": true,
+    "$id": "https://progenetix.org/services/schemas/analysis/v2021-11-01",
+    "title": "analysis",
+    "type": "object",
     "properties": {
-        "biosampleId": {
-            "examples": [
-                "pgxbs-kftva59y"
-            ],
-            "type": "string"
-        },
-        "description": {
-            "examples": [
-                "SNP6 array"
-            ],
-            "type": "string"
-        },
-        "experimentAccession": {
-            "$ref": "../common/ontologyTerm.json",
-            "description": "Identifier for primary experimental data. Provenance: progenetix.org",
-            "examples": [
-                {
-                    "id": "geo:GSM93480"
-                }
-            ]
-        },
         "id": {
+            "type": "string",
             "examples": [
                 "pgxcs-kftvldsu"
-            ],
-            "type": "string"
+            ]
         },
-        "individualId": {
+        "biosampleId": {
+            "type": "string",
             "examples": [
                 "pgxbs-kftva59y"
-            ],
-            "type": "string"
+            ]
         },
-        "info": {
-            "type": "object"
+        "individualId": {
+            "type": "string",
+            "examples": [
+                "pgxbs-kftva59y"
+            ]
+        },
+        "description": {
+            "type": "string",
+            "examples": [
+                "SNP6 array"
+            ]
         },
         "platformModel": {
-            "$ref": "../common/ontologyTerm.json",
             "description": "Ontology value for experimental platform or methodology used. For sequencing platforms the use of \"OBI:0400103 - DNA sequencer\" is suggested.",
+            "$ref": "../common/ontologyTerm.json",
             "examples": [
                 {
                     "id": "geo:GPL3381",
@@ -57,30 +46,41 @@
                 }
             ]
         },
-        "provenance": {
-            "$ref": "../common/provenance.json"
+        "experimentAccession": {
+            "description": "Identifier for primary experimental data. Provenance: progenetix.org",
+            "$ref": "../common/ontologyTerm.json",
+            "examples": [
+                {
+                    "id": "geo:GSM93480"
+                }
+            ]
         },
         "seriesAccession": {
-            "$ref": "../common/ontologyTerm.json",
             "description": "Identifier for primary experimental series. Provenance: progenetix.org",
+            "$ref": "../common/ontologyTerm.json",
             "examples": [
                 {
                     "id": "geo:GSE4079"
                 }
             ]
         },
+        "provenance": {
+            "$ref": "../common/provenance.json"
+        },
+        "info": {
+            "type": "object"
+        },
         "updated": {
+            "type": "string",
+            "format": "date-time",
             "examples": [
                 "2020-09-10T17:44:10.170Z"
-            ],
-            "format": "date-time",
-            "type": "string"
+            ]
         }
     },
     "required": [
         "id",
         "biosampleId"
     ],
-    "title": "analysis",
-    "type": "object"
+    "additionalProperties": true
 }

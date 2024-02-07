@@ -1,19 +1,45 @@
-import argparse
-import re
+import argparse, re
+
 from humps import camelize, decamelize
 
 from bycon_helpers import prdbug
 
 ################################################################################
 
-def get_bycon_args(byc):
+def args_update_form(byc):
+    """
+    This function adds comand line arguments to the `byc["form_data"]` input
+    parameter collection (in "local" context).
+    """
+    # Serves as "we've been here before" marker - before the env check.
     if byc.get("check_args", True) is False:
         return
-
-    # Serves as "we've been here before" marker - before the env check.
     byc.update({"check_args": False})
 
     create_args_parser(byc)
+
+    if not "local" in byc.get("env", "server"):
+        return
+
+    a_defs = byc["argument_definitions"]
+    list_pars = []
+    for a_n, a_d in a_defs.items():
+        if "cmdFlags" in a_d:
+            a_d_k = camelize(a_n)
+            if "array" in a_d.get("type", "string"):
+                list_pars.append(a_d_k)
+
+    arg_vars = vars(byc["args"])
+
+    for p in arg_vars.keys():
+        if arg_vars[p] is None:
+            continue
+        p_d = decamelize(p)
+        if p in list_pars:
+            byc["form_data"].update({p_d: arg_vars[p].split(',')})
+        else:
+            byc["form_data"].update({p_d: arg_vars[p]})
+        prdbug(f'{p}: {byc["form_data"][p_d]}', byc.get("debug_mode"))
 
 
 ################################################################################
@@ -37,36 +63,4 @@ def create_args_parser(byc):
 
     byc.update({"args": parser.parse_args()})
 
-
-################################################################################
-
-def args_update_form(byc):
-    """
-    This function adds comand line arguments to the `byc["form_data"]` input
-    parameter collection (in "local" context).
-    """
-    if not "args" in byc:
-        return
-    if not "local" in byc.get("env", "server"):
-        return
-
-    a_defs = byc["argument_definitions"]
-    list_pars = []
-    for a_n, a_d in a_defs.items():
-        if "cmdFlags" in a_d:
-            a_d_k = camelize(a_n)
-            if "array" in a_d.get("type", "string"):
-                list_pars.append(a_d_k)
-
-    arg_vars = vars(byc["args"])
-
-    for p in arg_vars.keys():
-        if arg_vars[p] is None:
-            continue
-        p_d = decamelize(p)
-        if p in list_pars:
-            byc["form_data"].update({p_d: arg_vars[p].split(',')})
-        else:
-            byc["form_data"].update({p_d: arg_vars[p]})
-        prdbug(f'{p}: {byc["form_data"][p_d]}', byc.get("debug_mode"))
 

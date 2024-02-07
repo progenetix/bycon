@@ -1,24 +1,12 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "additionalProperties": true,
+    "title": "Exposure",
     "description": "Exposures (lifestyle, behavioural exposures) occurred to individual,defined by exposure ID, date and age of onset, dose, and duration.",
+    "type": "object",
     "properties": {
-        "ageAtExposure": {
-            "$ref": "../common/age.json"
-        },
-        "date": {
-            "description": "Date of the exposure in ISO8601 format.",
-            "format": "date",
-            "type": "string"
-        },
-        "duration": {
-            "description": "Exposure duration in ISO8601 format",
-            "example": "P32Y6M1D",
-            "type": "string"
-        },
         "exposureCode": {
-            "$ref": "./ontologyTerm.json",
             "description": "Exposure ID. Value from Environment Exposure Ontology.",
+            "$ref": "./ontologyTerm.json",
             "examples": [
                 {
                     "id": "CHEBI:46661",
@@ -30,13 +18,26 @@
                 }
             ]
         },
-        "unit": {
-            "$ref": "../common/commonDefinitions.json#/definitions/Unit",
-            "description": "Unit of the exposure. Recommended from NCIT Unit of Category ontology term (NCIT:C42568) descendants."
-        },
         "value": {
             "description": "Quantification of the exposure.",
             "type": "number"
+        },
+        "unit": {
+            "description": "Unit of the exposure. Recommended from NCIT Unit of Category ontology term (NCIT:C42568) descendants.",
+            "$ref": "../common/commonDefinitions.json#/definitions/Unit"
+        },
+        "duration": {
+            "description": "Exposure duration in ISO8601 format",
+            "type": "string",
+            "example": "P32Y6M1D"
+        },
+        "date": {
+            "description": "Date of the exposure in ISO8601 format.",
+            "type": "string",
+            "format": "date"
+        },
+        "ageAtExposure": {
+            "$ref": "../common/age.json"
         }
     },
     "required": [
@@ -45,6 +46,5 @@
         "unit",
         "duration"
     ],
-    "title": "Exposure",
-    "type": "object"
+    "additionalProperties": true
 }

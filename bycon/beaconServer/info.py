@@ -34,10 +34,7 @@ def info():
         if k in pgx_info:
             beacon_info.update({k:pgx_info[k]})
 
-    byc.update({
-        "service_response": r.populatedInfoResponse(beacon_info),
-        "error_response": r.errorResponse()
-    })
+    response = r.populatedInfoResponse(beacon_info)
 
     # TODO: All the schemas really only here?
     beacon_schemas = []
@@ -46,9 +43,9 @@ def info():
         if e_d.get("is_entry_type", True) is True:
             beacon_schemas.append(b_s)
 
-    byc["service_response"]["meta"].update( { "returned_schemas": beacon_schemas } )
+    response.update( { "returned_schemas": beacon_schemas } )
+    print_json_response(response, byc["env"])
 
-    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

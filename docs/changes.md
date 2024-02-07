@@ -13,6 +13,20 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2024-02-07 (v.1.4.2)
+
+* more consolidation of argument/cgi parsing libraries
+* filter flag parameters now properly defined in `argument_definitions.yaml`
+* use of a common `db_config` object for database configuration parameters
+* piecemeal move of placeholder parameters from `config.yaml` (either
+  through removal & fallbacks in methods, or through definition in
+  `argument_definitions`)
+* working on error responses...
+* removed generic pre-processing methods for error & general responses
+* fixed a bug which allowed non-matching filters to pass
+* fixed examples in `tests`
+* fixed `POST` processing (wrong `filters` nesting as in examples ...)
+
 ### 2024-02-02 (v.1.4.1)
 
 * new `ChroNames` class for accessing chromosome and refseq ID mappings (still utilising

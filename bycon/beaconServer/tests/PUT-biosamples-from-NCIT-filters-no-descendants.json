@@ -15,16 +15,16 @@
                 "datasetIds": ["progenetix"]
             }
         },
+        "filters": [
+            { "id": "NCIT:C102872", "scope": "analyses", "includeDescendantTerms": false }
+        ],
         "filterLogic": "OR"
     },
     "pagination": {
         "skip": 0,
         "limit": 10
     },   
-    "filters": [
-        { "id": "NCIT:C102872", "scope": "analyses", "includeDescendantTerms": false }
-    ],
     "includeResultsetResponses": "HIT",
     "requestedGranularity": "count",
-    "debug": 0
+    "debugMode": 0
 }

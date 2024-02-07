@@ -1,82 +1,8 @@
 {
-    "$id": "https://progenetix.org/services/schemas/VRScopyNumberChange/v2023-07-25",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "definitions": {
-        "CURIE": {
-            "description": "A [W3C Compact URI](https://www.w3.org/TR/curie/) formatted string. A CURIE string has the structure ``prefix``:``reference``, as defined by the W3C syntax.",
-            "example": "ensembl:ENSG00000139618",
-            "pattern": "^\\w[^:]*:.+$",
-            "type": "string"
-        },
-        "Number": {
-            "additionalProperties": false,
-            "description": "A simple integer value as a VRS class.",
-            "properties": {
-                "type": {
-                    "const": "Number",
-                    "default": "Number",
-                    "description": "MUST be \"Number\"",
-                    "type": "string"
-                },
-                "value": {
-                    "description": "The value represented by Number",
-                    "type": "integer"
-                }
-            },
-            "required": [
-                "type",
-                "value"
-            ],
-            "type": "object"
-        },
-        "SequenceInterval": {
-            "additionalProperties": false,
-            "description": "A SequenceInterval represents a span on a Sequence. Positions are always represented by contiguous spans using interbase coordinates or coordinate ranges.",
-            "properties": {
-                "end": {
-                    "$ref": "#/definitions/Number",
-                    "description": "The end coordinate or range of the interval. The minimum value of this coordinate or range is 0. MUST represent a coordinate greater than the value of `start`."
-                },
-                "start": {
-                    "$ref": "#/definitions/Number",
-                    "description": "The start coordinate or range of the interval. The minimum value of this coordinate or range is 0. MUST represent a coordinate less than the value of `end`."
-                },
-                "type": {
-                    "const": "SequenceInterval",
-                    "default": "SequenceInterval",
-                    "description": "MUST be \"SequenceInterval\"",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "end",
-                "start",
-                "type"
-            ],
-            "type": "object"
-        },
-        "SequenceLocation": {
-            "description": "A Location defined by an interval on a referenced Sequence.",
-            "properties": {
-                "interval": {
-                    "$ref": "#/definitions/SequenceInterval",
-                    "description": "Reference sequence region defined by a SequenceInterval."
-                },
-                "sequence_id": {
-                    "$ref": "#/definitions/CURIE",
-                    "description": "A VRS Computed Identifier for the reference Sequence."
-                },
-                "type": {
-                    "const": "SequenceLocation",
-                    "default": "SequenceLocation",
-                    "description": "MUST be \"SequenceLocation\"",
-                    "type": "string"
-                }
-            },
-            "type": "object"
-        }
-    },
-    "description": "Simplified VRS CNV schema for use in `bycon`.",
+    "$id": "https://progenetix.org/services/schemas/VRScopyNumberChange/v2023-07-25",
+    "title": "VRS Copy Number Change",
+    "type": "object",
     "meta": {
         "contributors": [
             {
@@ -95,26 +21,7 @@
             }
         ]
     },
-    "properties": {
-        "copy_change": {
-            "description": "MUST be one of \"efo:0030069\" (complete genomic loss), \"efo:0020073\" (high-level loss),  \"efo:0030068\" (low-level loss), \"efo:0030067\" (loss), \"efo:0030064\" (regional base ploidy),  \"efo:0030070\" (gain), \"efo:0030071\" (low-level gain), \"efo:0030072\" (high-level gain).",
-            "type": "string"
-        },
-        "required": [
-            "copy_change",
-            "subject",
-            "variantType"
-        ],
-        "subject": {
-            "$ref": "#/definitions/SequenceLocation"
-        },
-        "type": {
-            "const": "CopyNumberChange",
-            "default": "CopyNumberChange",
-            "description": "MUST be \"CopyNumberChange\"",
-            "type": "string"
-        }
-    },
+    "description": "Simplified VRS CNV schema for use in `bycon`.",
     "required": {
         "all_of": [
             "type",
@@ -122,6 +29,99 @@
             "location"
         ]
     },
-    "title": "VRS Copy Number Change",
-    "type": "object"
+    "properties": {
+        "type": {
+            "type": "string",
+            "const": "CopyNumberChange",
+            "default": "CopyNumberChange",
+            "description": "MUST be \"CopyNumberChange\""
+        },
+        "copy_change": {
+            "type": "string",
+            "description": "MUST be one of \"efo:0030069\" (complete genomic loss), \"efo:0020073\" (high-level loss),  \"efo:0030068\" (low-level loss), \"efo:0030067\" (loss), \"efo:0030064\" (regional base ploidy),  \"efo:0030070\" (gain), \"efo:0030071\" (low-level gain), \"efo:0030072\" (high-level gain)."
+        },
+        "subject": {
+            "$ref": "#/definitions/SequenceLocation"
+        },
+        "required": [
+            "copy_change",
+            "subject",
+            "variantType"
+        ]
+    },
+    "definitions": {
+        "CURIE": {
+            "description": "A [W3C Compact URI](https://www.w3.org/TR/curie/) formatted string. A CURIE string has the structure ``prefix``:``reference``, as defined by the W3C syntax.",
+            "type": "string",
+            "pattern": "^\\w[^:]*:.+$",
+            "example": "ensembl:ENSG00000139618"
+        },
+        "Number": {
+            "description": "A simple integer value as a VRS class.",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "Number",
+                    "default": "Number",
+                    "description": "MUST be \"Number\""
+                },
+                "value": {
+                    "type": "integer",
+                    "description": "The value represented by Number"
+                }
+            },
+            "required": [
+                "type",
+                "value"
+            ],
+            "additionalProperties": false
+        },
+        "SequenceLocation": {
+            "description": "A Location defined by an interval on a referenced Sequence.",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "SequenceLocation",
+                    "default": "SequenceLocation",
+                    "description": "MUST be \"SequenceLocation\""
+                },
+                "sequence_id": {
+                    "$ref": "#/definitions/CURIE",
+                    "description": "A VRS Computed Identifier for the reference Sequence."
+                },
+                "interval": {
+                    "$ref": "#/definitions/SequenceInterval",
+                    "description": "Reference sequence region defined by a SequenceInterval."
+                }
+            }
+        },
+        "SequenceInterval": {
+            "description": "A SequenceInterval represents a span on a Sequence. Positions are always represented by contiguous spans using interbase coordinates or coordinate ranges.",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "SequenceInterval",
+                    "default": "SequenceInterval",
+                    "description": "MUST be \"SequenceInterval\""
+                },
+                "start": {
+                    "$ref": "#/definitions/Number",
+                    "description": "The start coordinate or range of the interval. The minimum value of this coordinate or range is 0. MUST represent a coordinate less than the value of `end`."
+                },
+                "end": {
+                    "$ref": "#/definitions/Number",
+                    "description": "The end coordinate or range of the interval. The minimum value of this coordinate or range is 0. MUST represent a coordinate greater than the value of `start`."
+                }
+            },
+            "required": [
+                "end",
+                "start",
+                "type"
+            ],
+            "additionalProperties": false
+        }
+    }
 }

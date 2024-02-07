@@ -1,25 +1,25 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "additionalProperties": true,
+    "title": "Quantity",
     "description": "Definition of a quantity class. Provenance: GA4GH Phenopackets v2 `Quantity`",
+    "type": "object",
     "properties": {
-        "referenceRange": {
-            "$ref": "./referenceRange.json",
-            "description": "The normal range for the value",
-            "example": {}
-        },
         "unit": {
             "$ref": "./commonDefinitions.json#/definitions/Unit"
         },
         "value": {
             "description": "The value of the quantity in the units",
             "type": "number"
+        },
+        "referenceRange": {
+            "description": "The normal range for the value",
+            "$ref": "./referenceRange.json",
+            "example": {}
         }
     },
     "required": [
         "unit",
         "value"
     ],
-    "title": "Quantity",
-    "type": "object"
+    "additionalProperties": true
 }

@@ -29,11 +29,12 @@ try:
     from parse_variant_request import *
 
     byc: object = {
+        "args": {},
+        "form_data": {},
         "pkg_path": pkg_path,
         "bycon_lib_path": bycon_lib_path,
         "parsed_config_paths": [],
-        "env": "server",
-        "mongohost": environ.get("BYCON_MONGO_HOST", "localhost")
+        "env": "server"
     }
     if not environ.get('HTTP_HOST'):
         byc.update({"env": "local"})

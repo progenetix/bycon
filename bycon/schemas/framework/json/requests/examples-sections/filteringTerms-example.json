@@ -4,14 +4,14 @@
         {
             "id": "HP:0002664",
             "includeDescendantTerms": true,
-            "scope": "biosamples",
-            "similarity": "exact"
+            "similarity": "exact",
+            "scope": "biosamples"
         },
         {
             "id": "age",
             "operator": ">=",
-            "scope": "individuals",
-            "value": "P70Y"
+            "value": "P70Y",
+            "scope": "individuals"
         },
         {
             "id": "demographic.ethnicity:asian",

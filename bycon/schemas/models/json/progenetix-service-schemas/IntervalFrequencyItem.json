@@ -1,7 +1,8 @@
 {
-    "$id": "https://progenetix.org/services/schemas/IntervalFrequencyItem/v2022-02-16",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "description": "This schema represents frequency data for a single binned genome interval.\n",
+    "$id": "https://progenetix.org/services/schemas/IntervalFrequencyItem/v2022-02-16",
+    "title": "IntervalFrequencyItem",
+    "type": "object",
     "meta": {
         "contributors": [
             {
@@ -15,50 +16,24 @@
                 "id": "https://github.com/progenetix/bycon/"
             }
         ],
-        "sb_status": "community",
         "used_by": [
             {
                 "description": "Progenetix database",
                 "id": "https://github.com/progenetix/"
             }
-        ]
+        ],
+        "sb_status": "community"
     },
+    "description": "This schema represents frequency data for a single binned genome interval.\n",
     "properties": {
-        "end": {
-            "description": "end, 0-based",
-            "type": "integer"
-        },
-        "gainFrequency": {
-            "description": "percent of samples with a gain-type CNV",
-            "type": "number"
-        },
-        "gainMean": {
-            "type": "number"
-        },
-        "gainMedian": {
-            "description": "percent of samples with a gain-type CNV",
-            "type": "number"
-        },
         "id": {
+            "type": "string",
             "examples": [
                 "1p:14000000-15000000",
                 "Yq:57000000-57227415"
-            ],
-            "type": "string"
+            ]
         },
-        "lossFrequency": {
-            "description": "percent of samples with a loss-type CNV",
-            "type": "number"
-        },
-        "lossMean": {
-            "description": "percent of samples with a loss-type CNV",
-            "type": "number"
-        },
-        "lossMedian": {
-            "description": "percent of samples with a loss-type CNV",
-            "type": "number"
-        },
-        "no": {
+        "false": {
             "description": "continuous count of the intervals, from 1pter -> Yqter (in humans)",
             "type": "integer"
         },
@@ -66,15 +41,40 @@
             "description": "basically the chromosome",
             "type": "string"
         },
+        "start": {
+            "description": "start, 0-based",
+            "type": "integer"
+        },
+        "end": {
+            "description": "end, 0-based",
+            "type": "integer"
+        },
         "size": {
             "description": "base count (ennd - start)",
             "type": "integer"
         },
-        "start": {
-            "description": "start, 0-based",
-            "type": "integer"
+        "gainFrequency": {
+            "description": "percent of samples with a gain-type CNV",
+            "type": "number"
+        },
+        "lossFrequency": {
+            "description": "percent of samples with a loss-type CNV",
+            "type": "number"
+        },
+        "gainMean": {
+            "type": "number"
+        },
+        "lossMean": {
+            "description": "percent of samples with a loss-type CNV",
+            "type": "number"
+        },
+        "gainMedian": {
+            "description": "percent of samples with a gain-type CNV",
+            "type": "number"
+        },
+        "lossMedian": {
+            "description": "percent of samples with a loss-type CNV",
+            "type": "number"
         }
-    },
-    "title": "IntervalFrequencyItem",
-    "type": "object"
+    }
 }

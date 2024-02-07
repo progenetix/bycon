@@ -28,12 +28,12 @@ def service_info():
     defs = byc.get("beacon_defaults", {})
     b_e_d = defs.get("entity_defaults", {})
     pgx_info = b_e_d.get("info", {})
+    c = pgx_info.get("content", {})
     info = object_instance_from_schema_name(byc, "ga4gh-service-info-1-0-0-schema", "")
-
     for k in info.keys():
-        if k in pgx_info:
-            info.update({k:pgx_info[k]})
-    print_json_response( info, byc["env"], 200 )
+        if k in c:
+            info.update({k:c[k]})
+    print_json_response(info, byc["env"])
 
 ################################################################################
 ################################################################################

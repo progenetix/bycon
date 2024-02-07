@@ -266,7 +266,7 @@ GEOseries:
     replace:
       - "geo:"
       - ""
-  pattern: '^(?:geo:)?GSE\d+?$'
+  pattern: '^geo:GSE\d+?$'
   scope: analyses
   entity: analysis
   db_key: 'analysis_info.series_id'
@@ -287,7 +287,7 @@ GenomePlatforms:
     replace:
       - "geo:"
       - ""
-  pattern: '^(?:EFO:)|(?:(?:geo:)?GPL)|(?:(?:arrayexpress:)?)[\w\-]+?$'
+  pattern: '^(?:EFO:)|(?:geo:GPL)|(?:arrayexpress:E)[\w\-]+?$'
   scope: analyses
   entity: analysis
   db_key: 'platform_model.id'

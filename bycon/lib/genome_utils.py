@@ -143,8 +143,8 @@ class ChroNames:
 ################################################################################
 
 class GeneInfo:
-    def __init__(self, dbpars):
-        self.dbpars = dbpars
+    def __init__(self, db_config):
+        self.db_config = db_config
         self.error = None
         self.gene_data = []
 
@@ -167,10 +167,13 @@ class GeneInfo:
     # -------------------------------------------------------------------------#
 
     def __gene_id_data(self, gene_id, single=True):
-        mongo_client = MongoClient(host=self.dbpars.get("mongohost","localhost"))
+        mdb_c = self.db_config
+        db_host = mdb_c.get("host", "localhost")
+        s_db = mdb_c.get("services_db", "___none___")
+        g_coll = mdb_c.get("genes_coll", "___none___")
+
+        mongo_client = MongoClient(host=db_host)
         db_names = list(mongo_client.list_database_names())
-        s_db = self.dbpars.get("services_db", "___none___")
-        g_coll = self.dbpars.get("genes_coll", "___none___")
         if s_db not in db_names:
             self.error = f"services db `{s_db}` does not exist"
             return

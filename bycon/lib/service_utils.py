@@ -18,6 +18,7 @@ def set_byc_config_pars(byc):
     config = byc.get("config", {})
     for k, v in config.items():
         byc.update({k: v})
+    byc["db_config"].update({"host": environ.get("BYCON_MONGO_HOST", "localhost")})
 
 
 ################################################################################
@@ -100,7 +101,6 @@ def initialize_bycon_service(byc, service=False):
         # name exists
         read_service_prefs(service, conf_dir, byc)
 
-    get_bycon_args(byc)
     args_update_form(byc)
 
     if "defaults" in byc.get("service_config", {}):
@@ -163,14 +163,14 @@ def set_io_params(byc):
                 s_v = int(form[sp])
                 byc["pagination"].update({sp: s_v})
 
-    byc.update({"output": form.get("output", byc["output"])})
-    byc.update({"method": form.get("method", byc["method"])})
+    # byc.update({"output": form.get("output", "___none___")})
+    # byc.update({"method": form.get("method", "___none___")})
 
-    # TODO: this is only used in some services ...
-    if "method_keys" in byc["service_config"]:
-        m = form.get("method", "___none___")
-        if m in byc["service_config"]["method_keys"].keys():
-            byc.update({"method": m})
+    # # TODO: this is only used in some services ...
+    # if "method_keys" in byc["service_config"]:
+    #     m = form.get("method", "___none___")
+    #     if m in byc["service_config"]["method_keys"].keys():
+    #         byc.update({"method": m})
 
 
 ################################################################################

@@ -1,7 +1,7 @@
 {
-    "$id": "https://progenetix.org/services/schemas/phenopacket/v2023-01-10",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "description": "The Phenopacket class is a bare-bones JSON-schema rewrite of the Phenopackets v2 standard.",
+    "$id": "https://progenetix.org/services/schemas/phenopacket/v2023-01-10",
+    "title": "Phenopacket",
     "meta": {
         "provenance": [
             {
@@ -14,50 +14,50 @@
             }
         ]
     },
+    "description": "The Phenopacket class is a bare-bones JSON-schema rewrite of the Phenopackets v2 standard.",
     "properties": {
-        "biosamples": {
-            "items": {
-                "$ref": "../biosamples/defaultSchema.json"
-            },
-            "type": "array"
-        },
-        "diseases": {
-            "items": {
-                "$ref": "../common/disease.json"
-            },
-            "type": "array"
-        },
-        "files": {
-            "items": {
-                "$ref": "../common/file.json"
-            },
-            "type": "array"
-        },
         "id": {
+            "type": "string",
             "description": "The resource-local identifier for this Phenopacket.",
             "examples": [
                 "pgxpxf-kftx25eh"
-            ],
-            "type": "string"
-        },
-        "measurements": {
-            "items": {
-                "$ref": "../common/measurement.json"
-            },
-            "type": "array"
-        },
-        "metaData": {
-            "ref": "../common/metaData.json"
-        },
-        "phenotypicFeatures": {
-            "items": {
-                "$ref": "../common/phenotypicFeature.json"
-            },
-            "type": "array"
+            ]
         },
         "subject": {
             "$ref": "../individuals/defaultSchema.json"
+        },
+        "biosamples": {
+            "type": "array",
+            "items": {
+                "$ref": "../biosamples/defaultSchema.json"
+            }
+        },
+        "diseases": {
+            "type": "array",
+            "items": {
+                "$ref": "../common/disease.json"
+            }
+        },
+        "phenotypicFeatures": {
+            "type": "array",
+            "items": {
+                "$ref": "../common/phenotypicFeature.json"
+            }
+        },
+        "measurements": {
+            "type": "array",
+            "items": {
+                "$ref": "../common/measurement.json"
+            }
+        },
+        "files": {
+            "type": "array",
+            "items": {
+                "$ref": "../common/file.json"
+            }
+        },
+        "metaData": {
+            "ref": "../common/metaData.json"
         }
-    },
-    "title": "Phenopacket"
+    }
 }

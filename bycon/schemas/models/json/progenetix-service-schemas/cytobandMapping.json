@@ -1,7 +1,8 @@
 {
-    "$id": "https://progenetix.org/services/schemas/CytobandMapping/v2023-08-26",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "additionalProperties": true,
+    "$id": "https://progenetix.org/services/schemas/CytobandMapping/v2023-08-26",
+    "title": "Cytoband Mapping",
+    "type": "object",
     "description": "The cytoband mapping provides information about a genomic range for: * the cytogenetic bands involved, from pter to qter direction * the corresponding start and end base positions",
     "properties": {
         "chromosomeLocation": {
@@ -11,6 +12,5 @@
             "$ref": "https://raw.githubusercontent.com/ga4gh/vrs/1.2/schema/vrs.json#/definitions/SequenceLocation"
         }
     },
-    "title": "Cytoband Mapping",
-    "type": "object"
+    "additionalProperties": true
 }

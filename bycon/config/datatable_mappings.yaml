@@ -45,6 +45,17 @@ definitions:
         db_key: label
         beacon_key: False
         compact: True
+      biosample_legacy_id:
+        description: >-
+          The legacy identifier for the biosample, which is an identifier
+          used during import, e.g. the id used in the donor publication or study.
+          It is *not* considered unique in the database but just used during
+          import the stage when generating the unique `id` values.
+        type: string
+        db_key: info.import_legacy_id
+        beacon_key: False
+        indexed: False
+        compact: False
       individual_id:
         type: string
         db_key: individual_id
@@ -273,6 +284,17 @@ definitions:
         db_key: id
         indexed: True
         compact: True
+      individual_legacy_id:
+        description: >-
+          The legacy identifier for the individual, which is an identifier
+          used during import, e.g. the id used in the donor publication or study.
+          It is *not* considered unique in the database but just used during
+          import the stage when generating the unique `id` values.
+        type: string
+        db_key: info.import_legacy_id
+        beacon_key: False
+        indexed: False
+        compact: False
       legacy_ids:
         type: array
         items: string
@@ -381,6 +403,15 @@ definitions:
       individual_id:
         db_key: individual_id
         indexed: True
+      analysis_legacy_id:
+        description: >-
+          The legacy identifier for the experiment, which is an identifier
+          used during import, e.g. the id used in the donor publication or study.
+        type: string
+        db_key: info.import_legacy_id
+        beacon_key: False
+        indexed: False
+        compact: False
       legacy_ids:
         db_key: info.legacy_ids
         type: array

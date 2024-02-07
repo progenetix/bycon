@@ -11,7 +11,7 @@ from collections import OrderedDict
 here_path = path.dirname( path.abspath(__file__) )
 this_script = re.sub(".py", ".yaml", path.basename( __file__ ) )
 with open(path.join( here_path, "config", this_script), 'r') as c_f:
-    config = yaml.load( c_f , Loader=yaml.FullLoader, sort_keys=False)
+    config = yaml.load(c_f, Loader=yaml.FullLoader)
 
 """podmd
 The script converts files in directories between yaml <-> json
@@ -95,7 +95,7 @@ def _yaml2json(f_n, in_path, out_path, config):
     i_d = _file_read_and_clean(in_file, config)
 
     try:
-        s = yaml.load( i_d )
+        s = yaml.load(i_d, Loader=yaml.FullLoader )
     except Exception as e:
         print("\n¡¡¡¡¡ ###########################\n{}".format(in_file))
         print(e)
@@ -104,7 +104,7 @@ def _yaml2json(f_n, in_path, out_path, config):
 
     _par_replace(s, config)
     with open(out_file, 'w') as out_f:
-        out_f.write(json.dumps(OrderedDict(s), indent=4, sort_keys=True, default=str))
+        out_f.write(json.dumps(s, indent=4, sort_keys=False, default=str))
 
 ################################################################################
 
@@ -118,14 +118,14 @@ def _yaml2yaml(f_n, in_path, out_path, config):
     i_d = _file_read_and_clean(in_file, config)
 
     try:
-        s = yaml.load( i_d )
+        s = yaml.load(i_d, Loader=yaml.FullLoader)
     except Exception as e:
         _file_conversion_error(e, in_file)
         return
 
     _par_replace(s, config)
     with open(out_file, 'w') as out_f:
-        yaml.dump(s, out_f, sort_keys=False)
+        yaml.dump(s, out_f)
 
 ################################################################################
 
@@ -139,14 +139,14 @@ def _json2yaml(f_n, in_path, out_path, config):
     i_d = _file_read_and_clean(in_file, config)
 
     try:
-        s = json.loads(i_d)
+        s = json.loads(i_d, Loader=yaml.FullLoader)
     except Exception as e:
         _file_conversion_error(e, in_file)
         return
 
     _par_replace(s, config)
     with open(out_file, 'w') as out_f:
-        yaml.dump(s, out_f, sort_keys=False)
+        yaml.dump(s, out_f)
 
 ################################################################################
 
@@ -159,14 +159,14 @@ def _json2json(f_n, in_path, out_path, config):
     _file_conversion_message(config, in_file, out_file)
     i_d = _file_read_and_clean(in_file, config)
     try:
-        s = json.loads(i_d)
+        s = json.loads(i_d, Loader=yaml.FullLoader)
     except Exception as e:
         _file_conversion_error(e, in_file)
         return
 
     _par_replace(s, config)
     with open(out_file, 'w') as out_f:
-        yaml.dump(s, out_f, sort_keys=False)
+        yaml.dump(s, out_f)
 
 ################################################################################
 

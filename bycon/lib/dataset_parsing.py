@@ -41,14 +41,17 @@ def ds_id_from_accessid(byc):
     # test of existence...
 
     accessid = byc["form_data"].get("accessid", False)
-    ho_db = byc.get("housekeeping_db", False)
-    ho_collname = byc.get("handover_coll", False)
 
-    if any(x is False for x in [accessid, ho_db, ho_collname]):
+    mdb_c = byc.get("db_config", {})
+    db_host = mdb_c.get("host", "localhost")
+    ho_dbname = mdb_c.get("housekeeping_db", False)
+    ho_collname = mdb_c.get("handover_coll", False)
+
+    if any(x is False for x in [accessid, ho_dbname, ho_collname]):
         return False
 
-    ho_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-    h_o = ho_client[ho_db][ho_collname].find_one({"id": accessid})
+    ho_client = MongoClient(host=db_host)
+    h_o = ho_client[ho_dbname][ho_collname].find_one({"id": accessid})
     if not h_o:
         return False
 

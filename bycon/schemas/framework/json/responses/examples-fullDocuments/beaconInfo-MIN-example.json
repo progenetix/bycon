@@ -1,8 +1,8 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "meta": {
-        "apiVersion": "string",
         "beaconId": "string",
+        "apiVersion": "string",
         "returnedSchemas": [
             {
                 "entityType": "info",
@@ -11,10 +11,10 @@
         ]
     },
     "response": {
-        "apiVersion": "v0.3",
-        "environment": "dev",
         "id": "org.ga4gh.beacon",
         "name": "string",
+        "apiVersion": "v0.3",
+        "environment": "dev",
         "organization": {
             "id": "string",
             "name": "string"

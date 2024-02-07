@@ -49,7 +49,7 @@ def __parse_variant_parameters(byc):
                 if "integer" in a_defs[ p_k ][ "type" ]:
                     v_p = int( v_p )
                 v_p_c[ p_k ] = v_p
-
+    
     byc.update( { "varguments": v_p_c } )
 
 

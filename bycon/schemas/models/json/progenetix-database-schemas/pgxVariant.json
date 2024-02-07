@@ -1,68 +1,37 @@
 {
-    "$id": "https://progenetix.org/services/schemas/pgx23Variant/v2023-05-25",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "additionalProperties": true,
-    "definitions": {
-        "Location": {
-            "properties": {
-                "chromosome": {
-                    "description": "the chromosome in its bare form `7`, `X`",
-                    "type": "string"
-                },
-                "end": {
-                    "type": "integer"
-                },
-                "sequenceId": {
-                    "type": "string"
-                },
-                "start": {
-                    "type": "integer"
-                }
-            },
-            "type": "object"
-        }
-    },
+    "$id": "https://progenetix.org/services/schemas/pgx23Variant/v2023-05-25",
+    "title": "Progenetix Database Variant",
+    "type": "object",
     "description": "Schema for a genomic variant in Progenetix collections.",
+    "required": [
+        "biosampleId",
+        "variantInternalId",
+        "variantState",
+        "location"
+    ],
     "properties": {
-        "biosampleId": {
-            "type": "string"
-        },
-        "callsetId": {
-            "type": "string"
-        },
         "id": {
-            "type": "string"
-        },
-        "individualId": {
-            "type": "string"
-        },
-        "info": {
-            "type": "object"
-        },
-        "location": {
-            "$ref": "#/definitions/Location"
-        },
-        "referenceSequence": {
-            "pattern": "^([ACGTUNRYSWKMBDHV\\-\\.]*)$",
-            "type": "string"
-        },
-        "sequence": {
-            "pattern": "^([ACGTUNRYSWKMBDHV\\-\\.]*)$",
-            "type": "string"
-        },
-        "updated": {
-            "examples": [
-                "2020-09-10T17:44:10.170Z"
-            ],
-            "format": "date-time",
             "type": "string"
         },
         "variantInternalId": {
             "type": "string"
         },
+        "callsetId": {
+            "type": "string"
+        },
+        "biosampleId": {
+            "type": "string"
+        },
+        "individualId": {
+            "type": "string"
+        },
+        "location": {
+            "$ref": "#/definitions/Location"
+        },
         "variantState": {
-            "$ref": "../progenetix-model/common/ontologyTerm.json",
             "description": "The parameter is used to define the type of variant, with current use cases either being delineated as `SO:0001059: sequence_alteration` or as one of the children of `EFO:0030063 genomic copy number assessment`",
+            "$ref": "../progenetix-model/common/ontologyTerm.json",
             "examples": [
                 {
                     "id": "SO:0001059",
@@ -73,14 +42,45 @@
                     "label": "copy number loss"
                 }
             ]
+        },
+        "sequence": {
+            "type": "string",
+            "pattern": "^([ACGTUNRYSWKMBDHV\\-\\.]*)$"
+        },
+        "referenceSequence": {
+            "type": "string",
+            "pattern": "^([ACGTUNRYSWKMBDHV\\-\\.]*)$"
+        },
+        "info": {
+            "type": "object"
+        },
+        "updated": {
+            "type": "string",
+            "format": "date-time",
+            "examples": [
+                "2020-09-10T17:44:10.170Z"
+            ]
         }
     },
-    "required": [
-        "biosampleId",
-        "variantInternalId",
-        "variantState",
-        "location"
-    ],
-    "title": "Progenetix Database Variant",
-    "type": "object"
+    "definitions": {
+        "Location": {
+            "type": "object",
+            "properties": {
+                "sequenceId": {
+                    "type": "string"
+                },
+                "chromosome": {
+                    "description": "the chromosome in its bare form `7`, `X`",
+                    "type": "string"
+                },
+                "start": {
+                    "type": "integer"
+                },
+                "end": {
+                    "type": "integer"
+                }
+            }
+        }
+    },
+    "additionalProperties": true
 }

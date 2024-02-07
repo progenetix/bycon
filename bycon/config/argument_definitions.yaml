@@ -25,6 +25,7 @@ test_mode:
     - -t
     - --testMode 
   description: test setting, i.e. returning some random documents
+  default: false
 
 limit:
   type: integer
@@ -83,6 +84,21 @@ filter_precision:
   cmdFlags:
     - --filterPrecision
   description: "`either` start or `exact` (`exact being internal default`) for matching filter values"
+  default: exact
+
+filter_logic:
+  type: string
+  cmdFlags:
+    - --filterLogic
+  description: either OR or AND (translated to the MongoDB $and etc.)
+  default: AND
+
+include_descendant_terms:
+  type: boolean
+  cmdFlags:
+    - --includeDescendantTerms
+  description: global treatment of descendant terms
+  default: true
 
 # ------------------------------------------------------------------------------
 # variant parameters
@@ -95,6 +111,7 @@ assembly_id:
   cmdFlags:
     - --assemblyId
   description: assembly id
+  default: GRCh38
 
 reference_name:
   type: string
@@ -327,7 +344,8 @@ method:
   cmdFlags:
     - --method
   description: >-
-        special method
+    special method
+  default: null
 
 group_by:
   type: string
@@ -335,7 +353,7 @@ group_by:
     - -g
     - --groupBy
   description: >-
-        group parameter e.g. for subset splitting
+    group parameter e.g. for subset splitting
   default: text
 
 parse:

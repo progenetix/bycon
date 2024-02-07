@@ -1,11 +1,10 @@
 import re
 
-from bycon_helpers import prdbug
+from bycon_helpers import prdbug, test_truthy
 
 ################################################################################
 
 def parse_filters(byc):
-
     get_global_filter_flags(byc)
     byc.update( { "filters": check_filter_values(byc) } )
 
@@ -13,23 +12,12 @@ def parse_filters(byc):
 ################################################################################
 
 def get_global_filter_flags(byc):
-
+    form = byc.get("form_data", {})
     ff = {
-        "logic": byc["filter_flags"]["logic"],
-        "precision": byc["filter_flags"]["precision"],
-        "descendants": byc["filter_flags"]["include_descendant_terms"]
+        "logic": boolean_to_mongo_logic(form.get("filter_logic")),
+        "precision": form.get("filter_precision"),
+        "descendants": form.get("include_descendant_terms")
     }
-
-    if "form_data" in byc:
-        if "filter_logic" in byc[ "form_data" ]:
-            ff["logic"] = boolean_to_mongo_logic( byc["form_data"]['filter_logic'] )
-        if "filter_precision" in byc[ "form_data" ]:
-            ff["precision"] = byc["form_data"]['filter_precision']
-        if "include_descendant_terms" in byc[ "form_data" ]:
-            i_d_t = str(byc[ "form_data" ].get("include_descendant_terms", 1)).lower()
-            if i_d_t in ["0", "-1", "no", "false"]:
-                ff["descendants"] = False
-
     byc.update( { "filter_flags": ff } )
 
 
@@ -44,7 +32,6 @@ def boolean_to_mongo_logic(logic: str = "AND") -> str:
 ################################################################################
 
 def check_filter_values(byc):
-
     """
     The function checks the filter values for a match to any of the filter
     definitions. The optional `!` flag (no match) is not considered during

@@ -4,8 +4,7 @@ from pathlib import Path
 from os import environ, pardir, path
 import sys
 
-from cgi_parsing import select_this_server
-from bycon_helpers import hex_2_rgb, prdbug
+from bycon_helpers import hex_2_rgb, prdbug, select_this_server
 from variant_mapping import ByconVariant
 
 ################################################################################
@@ -106,9 +105,13 @@ def dataset_response_add_handovers(ds_id, byc):
 
 def dataset_results_save_handovers(ds_id, byc):
 
-    ho_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-    ho_db = ho_client[ byc["housekeeping_db"] ]
-    ho_coll = ho_db[ byc[ "handover_coll" ] ]
+    mdb_c = byc.get("db_config", {})
+    db_host = mdb_c.get("host", "localhost")
+    ho_dbname = mdb_c.get("housekeeping_db", False)
+    ho_collname = mdb_c.get("handover_coll", False)
+
+    ho_client = MongoClient(host=db_host)
+    ho_coll = ho_client[ho_dbname][ho_collname]
 
     for h_o_k in byc["dataset_results"][ds_id].keys():
         
@@ -127,7 +130,6 @@ def dataset_results_save_handovers(ds_id, byc):
 ################################################################################
 
 def handover_create_url(h_o_server, h_o_defs, accessid, byc):
-
     if "script_path_web" in h_o_defs:
         server = h_o_server
         if "http" in h_o_defs["script_path_web"]:
@@ -137,27 +139,19 @@ def handover_create_url(h_o_server, h_o_defs, accessid, byc):
             if p in h_o_defs:
                 url += "&{}={}".format(p, h_o_defs[p])
         url += h_o_defs.get("url_opts", "")
-        # p_t = h_o_defs.get("plotType")
-        # if p_t:
-        #     url += _handover_add_stringified_plot_parameters(byc)
-
         return url
-
     return ""
 
 
 ################################################################################
 
 def _handover_create_ext_url(h_o_server, h_o_defs, bed_file_name, ucsc_pos, byc):
-
     local_paths = byc.get("local_paths")
     if not local_paths:
         return False
-
     if "ext_url" in h_o_defs:
         if "bedfile" in h_o_defs["handoverType"]["id"]:
             return("{}&position={}&hgt.customText={}{}/{}".format(h_o_defs["ext_url"], ucsc_pos, h_o_server, local_paths.get("server_tmp_dir_web", "/tmp"), bed_file_name))
-
     return False
 
 

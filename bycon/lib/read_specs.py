@@ -96,12 +96,14 @@ def update_rootpars_from_local(loc_dir, byc):
 ################################################################################
 
 def dbstats_return_latest(byc):
+    mdb_c = byc.get("db_config", {})
+    db_host = mdb_c.get("host", "localhost")
 
     # TODO: This is too hacky & should be moved to an external function
     # which updates the database_definitions / beacon_info yamls...
-    info_db = byc["housekeeping_db"]
-    coll = byc["beacon_info_coll"]
-    stats = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))[ info_db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
+    info_db = mdb_c.get("housekeeping_db")
+    coll = mdb_c.get("beacon_info_coll")
+    stats = MongoClient(host=db_host)[ info_db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
     return list(stats)[0]
 
 

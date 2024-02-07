@@ -1,8 +1,7 @@
 import datetime, re
 from pymongo import MongoClient
 
-from bycon_helpers import prdbug
-from cgi_parsing import select_this_server
+from bycon_helpers import prdbug, select_this_server
 from variant_mapping import ByconVariant
 from os import environ
 
@@ -46,16 +45,11 @@ def remap_variants(r_s_res, byc):
     variants = []
 
     for d in variant_ids:
-
         d_vs = [var for var in r_s_res if var.get('variant_internal_id', "__none__") == d]
-
         v = {
             "variant_internal_id": d,
             "variation": ByconVariant(byc).vrsVariant(d_vs[0]), "case_level_data": []
         }
-
-        v["variation"].pop("variant_internal_id", None)
-
         for d_v in d_vs:
             c_l_v = {}
             for c_k in ("id", "biosample_id", "info"):
@@ -68,7 +62,7 @@ def remap_variants(r_s_res, byc):
             v["case_level_data"].append(c_l_v)
 
         # TODO: Keep legacy pars?
-        legacy_pars = ["_id", "id", "reference_name", "type", "biosample_id", "callset_id", "individual_id",
+        legacy_pars = ["_id", "id", "variant_internal_id", "reference_name", "type", "biosample_id", "callset_id", "individual_id",
                        "variant_type", "reference_bases", "alternate_bases", "start", "end", "required", "info"]
         for p in legacy_pars:
             v["variation"].pop(p, None)
