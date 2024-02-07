@@ -1,17 +1,45 @@
 {
-    "$id": "https://progenetix.org/services/schemas/individual/v2023-01-10",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "additionalProperties": true,
+    "$id": "https://progenetix.org/services/schemas/individual/v2023-01-10",
+    "title": "Individual",
+    "type": "object",
+    "required": [
+        "id",
+        "sex"
+    ],
     "properties": {
-        "ancestries": {
+        "id": {
+            "type": "string",
+            "description": "The resource-local identifier for this individual.",
+            "examples": [
+                "pgxind-kftx25eh"
+            ]
+        },
+        "sex": {
+            "$ref": "../common/commonDefinitions.json#/definitions/Sex"
+        },
+        "ethnicities": {
+            "$note": "forward-looking in Beacon+ as an array",
+            "type": "array",
             "items": {
-                "$ref": "../common/ancestry.json"
-            },
-            "type": "array"
+                "$ref": "../common/commonDefinitions.json#/definitions/Ethnicity"
+            }
+        },
+        "geographicOrigin": {
+            "$ref": "../common/commonDefinitions.json#/definitions/GeographicLocation"
+        },
+        "indexDisease": {
+            "$note": "special for Beacon+ instead of diseases",
+            "description": "This is the main (cancer) disease analyzed by the associated biosample(s).",
+            "$ref": "../common/disease.json"
         },
         "auxiliaryDiseases": {
             "$note": "special for Beacon+ instead of diseases",
             "description": "These are additional diseases, e.g. germline syndromes (\"Li-Fraumeni\" ...).",
+            "type": "array",
+            "items": {
+                "$ref": "../common/disease.json"
+            },
             "examples": [
                 {
                     "disease_code": {
@@ -19,85 +47,57 @@
                         "label": "Li-Fraumeni Syndrome"
                     }
                 }
-            ],
+            ]
+        },
+        "pedigrees": {
+            "type": "array",
             "items": {
-                "$ref": "../common/disease.json"
-            },
-            "type": "array"
+                "$ref": "../common/pedigree.json"
+            }
         },
-        "dateOfBirth": {
-            "examples": [
-                "1967-11-11",
-                "2002-09-21"
-            ],
-            "format": "date",
-            "type": "string"
-        },
-        "description": {
-            "examples": [
-                "HapMap project contributor"
-            ],
-            "type": "string"
-        },
-        "ethnicities": {
-            "$note": "forward-looking in Beacon+ as an array",
+        "phenotypicFeatures": {
+            "type": "array",
             "items": {
-                "$ref": "../common/commonDefinitions.json#/definitions/Ethnicity"
-            },
-            "type": "array"
+                "$ref": "../common/phenotypicFeature.json"
+            }
+        },
+        "treatments": {
+            "type": "array",
+            "items": {
+                "$ref": "../common/treatment.json"
+            }
+        },
+        "interventionsOrProcedures": {
+            "type": "array",
+            "items": {
+                "$ref": "../common/procedure.json"
+            }
+        },
+        "measures": {
+            "type": "array",
+            "items": {
+                "$ref": "../common/measurement.json"
+            }
         },
         "exposures": {
+            "type": "array",
             "items": {
                 "$ref": "../common/exposure.json"
-            },
-            "type": "array"
-        },
-        "externalReferences": {
-            "examples": [
-                {
-                    "description": "HapMap individual",
-                    "id": "biosample:SAME122868"
-                },
-                {
-                    "id": "PMID:9950502"
-                },
-                {
-                    "description": "Prognostic analysis of mantle cell lymphoma genomes",
-                    "id": "geo:GSE13331"
-                }
-            ],
-            "items": {
-                "$ref": "../common/externalReference.json"
-            },
-            "type": "array"
-        },
-        "geographicOrigin": {
-            "$ref": "../common/commonDefinitions.json#/definitions/GeographicLocation"
-        },
-        "id": {
-            "description": "The resource-local identifier for this individual.",
-            "examples": [
-                "pgxind-kftx25eh"
-            ],
-            "type": "string"
-        },
-        "indexDisease": {
-            "$note": "special for Beacon+ instead of diseases",
-            "$ref": "../common/disease.json",
-            "description": "This is the main (cancer) disease analyzed by the associated biosample(s)."
+            }
         },
         "info": {
             "description": "Additional structured data which may not be common across different Beacon instances.",
             "type": "object"
         },
-        "interventionsOrProcedures": {
-            "items": {
-                "$ref": "../common/procedure.json"
-            },
-            "type": "array"
+        "description": {
+            "type": "string",
+            "examples": [
+                "HapMap project contributor"
+            ]
         },
         "karyotypicSex": {
             "description": "Chromosomal sex of an individual as being used by Phenopackets. Following the definition there.",
+            "type": "string",
             "enum": [
                 "UNKNOWN_KARYOTYPE",
                 "XX",
@@ -110,54 +110,54 @@
                 "XXXX",
                 "XYY",
                 "OTHER_KARYOTYPE"
-            ],
-            "type": "string"
+            ]
         },
-        "measures": {
-            "items": {
-                "$ref": "../common/measurement.json"
-            },
-            "type": "array"
+        "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "examples": [
+                "1967-11-11",
+                "2002-09-21"
+            ]
         },
-        "pedigrees": {
+        "externalReferences": {
+            "type": "array",
             "items": {
-                "$ref": "../common/pedigree.json"
+                "$ref": "../common/externalReference.json"
             },
-            "type": "array"
+            "examples": [
+                {
+                    "id": "biosample:SAME122868",
+                    "description": "HapMap individual"
+                },
+                {
+                    "id": "PMID:9950502"
+                },
+                {
+                    "id": "geo:GSE13331",
+                    "description": "Prognostic analysis of mantle cell lymphoma genomes"
+                }
+            ]
         },
-        "phenotypicFeatures": {
-            "items": {
-                "$ref": "../common/phenotypicFeature.json"
-            },
-            "type": "array"
+        "vitalStatus": {
+            "$ref": "../common/vitalStatus.json"
         },
         "provenance": {
             "$ref": "../common/provenance.json"
         },
-        "sex": {
-            "$ref": "../common/commonDefinitions.json#/definitions/Sex"
-        },
-        "treatments": {
+        "ancestries": {
+            "type": "array",
             "items": {
-                "$ref": "../common/treatment.json"
-            },
-            "type": "array"
+                "$ref": "../common/ancestry.json"
+            }
         },
         "updated": {
+            "type": "string",
+            "format": "date-time",
             "examples": [
                 "2020-09-10T17:44:10.170Z"
-            ],
-            "format": "date-time",
-            "type": "string"
-        },
-        "vitalStatus": {
-            "$ref": "../common/vitalStatus.json"
+            ]
         }
     },
-    "required": [
-        "id",
-        "sex"
-    ],
-    "title": "Individual",
-    "type": "object"
+    "additionalProperties": true
 }

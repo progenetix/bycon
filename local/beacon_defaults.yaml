@@ -13,7 +13,7 @@ defaults:
 # the aliases here are for non-standard speling or additional entry types
 
 service_path_aliases:
-  callsets: analyses
+  analyses: analyses
   filteringTerms: filteringTerms
   phenopackets: phenopackets
   variants: genomicVariations

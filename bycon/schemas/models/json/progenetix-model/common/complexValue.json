@@ -1,11 +1,31 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Complex Value",
+    "description": "Definition of a complex value class. Provenance: GA4GH Phenopackets v2 `TypedQuantity`",
+    "type": "object",
+    "properties": {
+        "typedQuantities": {
+            "description": "List of quantities required to fully describe the complex value",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/TypedQuantity"
+            }
+        }
+    },
     "definitions": {
         "TypedQuantity": {
             "properties": {
+                "quantityType": {
+                    "description": "OntologyClass to describe the type of the measurement. Renamed compared to GA4GH Phenopackets v2 `ComplexValue.TypedQuantity.type`",
+                    "$ref": "./ontologyTerm.json",
+                    "example": {
+                        "id": "NCIT:C25298",
+                        "label": "Systolic Blood Pressure"
+                    }
+                },
                 "quantity": {
-                    "$ref": "./quantity.json",
                     "description": "Quantity denoting the outcome of the measurement",
+                    "$ref": "./quantity.json",
                     "example": {
                         "quentity": {
                             "unit": {
@@ -14,14 +34,6 @@
                             }
                         }
                     }
-                },
-                "quantityType": {
-                    "$ref": "./ontologyTerm.json",
-                    "description": "OntologyClass to describe the type of the measurement. Renamed compared to GA4GH Phenopackets v2 `ComplexValue.TypedQuantity.type`",
-                    "example": {
-                        "id": "NCIT:C25298",
-                        "label": "Systolic Blood Pressure"
-                    }
                 }
             },
             "required": [
@@ -29,17 +41,5 @@
                 "quantity"
             ]
         }
-    },
-    "description": "Definition of a complex value class. Provenance: GA4GH Phenopackets v2 `TypedQuantity`",
-    "properties": {
-        "typedQuantities": {
-            "description": "List of quantities required to fully describe the complex value",
-            "items": {
-                "$ref": "#/definitions/TypedQuantity"
-            },
-            "type": "array"
-        }
-    },
-    "title": "Complex Value",
-    "type": "object"
+    }
 }

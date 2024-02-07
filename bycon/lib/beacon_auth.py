@@ -1,4 +1,4 @@
-from cgi_parsing import prdbug
+from bycon_helpers import prdbug
 
 """
 This experimental authorization setup so far so far tests a method to define

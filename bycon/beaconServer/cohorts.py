@@ -24,16 +24,11 @@ def main():
 ################################################################################
 
 def cohorts():
-
     initialize_bycon_service(byc, "cohorts")
     run_beacon_init_stack(byc)
-    r = BeaconDataResponse(byc)
-    byc.update({
-        "service_response": r.collectionsResponse(),
-        "error_response": r.errorResponse()
-    })
+    r = BeaconDataResponse(byc).collectionsResponse()
+    print_json_response(r, byc["env"])
 
-    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

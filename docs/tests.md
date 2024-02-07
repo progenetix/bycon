@@ -71,7 +71,7 @@ We here show examples using the Progenetix instance with its `/beacon/` root pat
 
 * [/variants/pgxvar-5f5a35586b8c1d6d377b77f6/biosamples/](http://progenetix.org/beacon/genomicVariations/pgxvar-5f5a35586b8c1d6d377b77f6/biosamples/)
 
-### Base `/analyses` (or `/callsets`)
+### Base `/analyses` (or `/analyses`)
 
 #### `/analyses/` + query
 

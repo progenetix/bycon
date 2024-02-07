@@ -1,10 +1,10 @@
+import json, sys
 from datetime import datetime
 from deepmerge import always_merger
+from humps import camelize, decamelize
 from os import environ
 
-from bycon_helpers import mongo_result_list, mongo_test_mode_query, return_paginated_list
-from cgi_parsing import prdbug
-# from export_file_generation import *
+from bycon_helpers import *
 from handover_generation import dataset_response_add_handovers
 from query_execution import execute_bycon_queries
 from query_generation import ByconQuery
@@ -12,6 +12,38 @@ from read_specs import datasets_update_latest_stats
 from response_remapping import *
 from variant_mapping import ByconVariant
 from schema_parsing import object_instance_from_schema_name
+
+################################################################################
+
+class BeaconErrorResponse:
+    """
+    This response class is used for all the info / map / configuration responses
+    which have the same type of `meta`.
+    The responses are then provided by the dedicated methods
+    """
+
+    def __init__(self, byc: dict):
+        self.debug_mode = byc.get("debug_mode", False)
+        self.beacon_defaults = byc.get("beacon_defaults", {})
+        self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
+        self.service_config = byc.get("service_config", {})
+        self.response_schema = byc.get("response_schema", "beaconInfoResponse")
+        self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
+        self.error_response = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
+        info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
+        r_m = self.error_response["meta"]
+        for p in ["api_version", "beacon_id"]:
+            if p in info.keys():
+                r_m.update({p: info.get(p, "___none___")})
+
+    
+    # -------------------------------------------------------------------------#
+
+    def error(self, error_message="", error_code=422):
+        self.error_response["error"].update({"error_code": error_code, "error_message": error_message})
+        return self.error_response
+
+
 
 ################################################################################
 
@@ -51,10 +83,17 @@ class BeaconInfoResponse:
         return self.data_response
 
 
-    # -------------------------------------------------------------------------#
+    # ------------------------------- private ---------------------------------#
 
-    def errorResponse(self):
-        return self.error_response
+    def __meta_add_parameters(self, response):
+        info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
+        r_m = response["meta"]
+        for p in ["api_version", "beacon_id"]:
+            if p in info.keys():
+                r_m.update({p: info.get(p, "___none___")})
+        if "returned_schemas" in r_m:
+            r_m.update({"returned_schemas":[self.beacon_schema]})
+
 
 
 ################################################################################
@@ -380,6 +419,7 @@ class ByconFilteringTerms:
         self.debug_mode = byc.get("debug_mode", False)
         self.test_mode = byc.get("test_mode", False)
         self.env = byc.get("env", "server")
+        self.db_config = byc.get("db_config", {})
         self.test_mode_count = byc.get("test_mode_count", 5)
         self.dataset_ids = byc.get("dataset_ids", [])
         self.beacon_defaults = byc.get("beacon_defaults", {})
@@ -444,11 +484,11 @@ class ByconFilteringTerms:
             query = {"$and": q_list}
 
         if self.test_mode is True:
-            query, error = mongo_test_mode_query(self.dataset_ids[0], f_coll, self.test_mode_count)
+            query, error = mongo_test_mode_query(self.db_config, self.dataset_ids[0], f_coll, self.test_mode_count)
 
         for ds_id in self.dataset_ids:
             fields = {"_id": 0}
-            f_s, e = mongo_result_list(ds_id, f_coll, query, fields)
+            f_s, e = mongo_result_list(self.db_config, ds_id, f_coll, query, fields)
             t_f_t_s = []
             for f in f_s:
                 self.filter_collation_types.add(f.get("collation_type", None))
@@ -600,6 +640,7 @@ class ByconResultSets:
         self.debug_mode = byc.get("debug_mode", False)
         self.beacon_defaults = byc.get("beacon_defaults", {})
         self.env = byc.get("env", "server")
+        self.db_config = byc.get("db_config", {})
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
         self.datasets_results = dict()  # the object with matched ids per dataset, per h_o
         self.datasets_data = dict()     # the object with data of requested entity per dataset
@@ -671,10 +712,13 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __result_sets_save_handovers(self):
+        mdb_c = self.db_config
+        db_host = mdb_c.get("host", "localhost")
+        ho_dbname = mdb_c.get("housekeeping_db", "___none___")
+        ho_collname = mdb_c.get("handover_coll", "___none___")
 
-        ho_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-        ho_db = ho_client[ self.byc["housekeeping_db"] ]
-        ho_coll = ho_db[ self.byc["handover_coll"] ]
+        ho_client = MongoClient(host=db_host)
+        ho_coll = ho_client[ho_dbname].ho_db[ho_collname]
 
         for ds_id, d_s in self.datasets_results.items():
             if not d_s:
@@ -723,7 +767,7 @@ class ByconResultSets:
 
         ds_r_start = datetime.datetime.now()
         for i, r_set in enumerate(self.result_sets):
-            ds_id = r_set["id"]
+            ds_id = r_set.get("id", "___none___")
             ds_res = execute_bycon_queries(ds_id, self.record_queries, self.byc)
             self.datasets_results.update({ds_id: ds_res})            
         ds_r_duration = datetime.datetime.now() - ds_r_start
@@ -790,12 +834,6 @@ class ByconResultSets:
                     v = v_coll.find_one({"_id":v_id})
                     r_s_res.append(v)
                 self.datasets_data.update({ds_id: r_s_res})
-            # elif "variants.variant_internal_id" in ds_results:
-            #     for v_id in ds_results["variants.variant_internal_id"]["target_values"]:
-            #         vs = v_coll.find({"variant_internal_id":v_id})
-            #         for v in vs:
-            #             r_s_res.append(v)
-            #     self.datasets_data.update({ds_id: r_s_res})
 
         ds_v_duration = datetime.datetime.now() - ds_v_start
 
@@ -842,18 +880,56 @@ class ByconResultSets:
 # common response functions ####################################################
 ################################################################################
 
-# def response_add_warnings(byc, message=False):
-#     if message is False:
-#         return
-#     if len(str(message)) < 1:
-#         return
+# def response_delete_none_values(response):
+#     """Delete None values recursively from all of the dictionaries"""
 
-#     if not "service_response" in byc:
-#         return
+#     for key, value in list(response.items()):
+#         if isinstance(value, dict):
+#             response_delete_none_values(value)
+#         elif value is None:
+#             del response[key]
+#         elif isinstance(value, list):
+#             for v_i in value:
+#                 if isinstance(v_i, dict):
+#                     response_delete_none_values(v_i)
 
-#     if not "info" in byc["service_response"]:
-#         byc["service_response"].update({"info": {}})
-#     if not "warnings" in byc["service_response"]:
-#         byc["service_response"]["info"].update({"warnings": []})
+#     return response
 
-#     byc["service_response"]["info"]["warnings"].append(message)
+
+################################################################################
+
+def print_json_response(this={}, env="server", status_code=200):
+    if not "local" in env:
+        print('Content-Type: application/json')
+        print('status:' + str(status_code))
+        print()
+
+    prjsoncam(this) # !!! There are some "do not camelize" exceptions downstream
+    print()
+    exit()
+
+
+################################################################################
+
+def print_text_response(this="", env="server", status_code=200):
+    if "server" in env:
+        print('Content-Type: text/plain')
+        print('status:' + str(status_code))
+        print()
+
+    elif "file" in env:
+        # this opion can be used to reroute the response to a file
+        return this
+
+    print(this)
+    print()
+    exit()
+
+
+################################################################################
+
+def print_uri_rewrite_response(uri_base="", uri_stuff=""):
+    print("Status: 302")
+    print("Location: {}{}".format(uri_base, uri_stuff))
+    print()
+    exit()

@@ -1,7 +1,7 @@
 {
-    "$id": "https://progenetix.org/services/schemas/resource/v2022-04-06",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "description": "Resource used for referencing an object.",
+    "$id": "https://progenetix.org/services/schemas/resource/v2022-04-06",
+    "title": "Resource",
     "meta": {
         "provenance": [
             {
@@ -14,26 +14,8 @@
             }
         ]
     },
-    "properties": {
-        "id": {
-            "type": "string"
-        },
-        "iriPrefix": {
-            "type": "string"
-        },
-        "name": {
-            "type": "string"
-        },
-        "namespacePrefix": {
-            "type": "string"
-        },
-        "url": {
-            "type": "string"
-        },
-        "version": {
-            "type": "string"
-        }
-    },
+    "description": "Resource used for referencing an object.",
+    "type": "object",
     "required": [
         "namespacePrefix",
         "id",
@@ -42,6 +24,24 @@
         "version",
         "iriPrefix"
     ],
-    "title": "Resource",
-    "type": "object"
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "url": {
+            "type": "string"
+        },
+        "namespacePrefix": {
+            "type": "string"
+        },
+        "version": {
+            "type": "string"
+        },
+        "iriPrefix": {
+            "type": "string"
+        }
+    }
 }

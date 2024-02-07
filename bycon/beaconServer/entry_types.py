@@ -26,13 +26,7 @@ def entry_types():
     r = BeaconInfoResponse(byc)
     e_f = get_schema_file_path(byc, "beaconConfiguration")
     e_t_s = load_yaml_empty_fallback( e_f )
-
-    byc.update({
-        "service_response": r.populatedInfoResponse({"entry_types": e_t_s["entryTypes"] }),
-        "error_response": r.errorResponse()
-    })
-
-    cgi_print_response( byc, 200 )
+    print_json_response(r.populatedInfoResponse({"entry_types": e_t_s["entryTypes"] }), byc["env"])
 
 
 ################################################################################

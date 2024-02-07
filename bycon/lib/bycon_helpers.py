@@ -1,9 +1,66 @@
-import base36
-import time
-import re
+import base36, json, re, time
+
 from isodate import parse_duration
+from humps import camelize, decamelize
 from os import environ
 from pymongo import MongoClient
+
+################################################################################
+
+def set_debug_state(debug=False) -> bool:
+    """
+    Function to provide a text response header for debugging purposes, i.e. to 
+    print out the error or test parameters to a browser session.
+    The common way would be to add either a `/debug=1/` part to a REST path or
+    to provide a `...&debug=1` query parameter.
+    """
+
+    if test_truthy(debug):
+        print('Content-Type: text')
+        print()
+        return True
+
+    r_uri = environ.get('REQUEST_URI', "___none___")
+    if re.match(r'^.*?[?&/]debugMode?=(\w+?)\b.*?$', r_uri):
+        d = re.match(r'^.*?[?&/]debugMode?=(\w+?)\b.*?$', r_uri).group(1)
+        if test_truthy(d):
+            print('Content-Type: text')
+            print()
+            return True
+
+    return False
+
+
+################################################################################
+
+def select_this_server(byc: dict) -> str:
+    """
+    Cloudflare based encryption may lead to "http" based server addresses in the
+    URI, but then the browser ... will complain if the handover URLs won't use
+    encryption. OTOH for local testing one may need to stick w/ http if no pseudo-
+    https scenario had been implemented. Therefore handover addresses etc. will
+    always use https _unless_ the request comes from a host listed a test instance.
+    """
+
+    s_uri = str(environ.get('SCRIPT_URI'))
+    local_paths = byc.get("local_paths", {})
+    test_sites = local_paths.get("test_domains", [])
+    https = "https://"
+    http = "http://"
+
+    s = f'{https}{environ.get("HTTP_HOST")}'
+    for site in test_sites:
+        if site in s_uri:
+            if https in s_uri:
+                s = f'{https}{site}'
+            else:
+                s = f'{http}{site}'
+
+    # TODO: ERROR hack for https/http mix, CORS...
+    # ... since cloudflare provides https mapping using this as fallback
+
+    return s
+
 
 ################################################################################
 
@@ -78,11 +135,12 @@ def return_paginated_list(this, skip, limit):
 
 ################################################################################
 
-def mongo_result_list(db_name, coll_name, query, fields):
+def mongo_result_list(db_config, db_name, coll_name, query, fields):
     results = []
-    error = False
+    error = None
 
-    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
+    db_host = db_config.get("host", "localhost")
+    mongo_client = MongoClient(host=db_host)
     db_names = list(mongo_client.list_database_names())
     if db_name not in db_names:
         return results, f"{db_name} db `{db_name}` does not exist"
@@ -99,13 +157,14 @@ def mongo_result_list(db_name, coll_name, query, fields):
 
 ################################################################################
 
-def mongo_test_mode_query(db_name, coll_name, test_mode_count=5):
+def mongo_test_mode_query(db_config, db_name, coll_name, test_mode_count=5):
     
     query = {}
     error = False
     ids = []
 
-    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
+    db_host = db_config.get("host", "localhost")
+    mongo_client = MongoClient(host=db_host)
     db_names = list(mongo_client.list_database_names())
     if db_name not in db_names:
         return results, f"{db_name} db `{db_name}` does not exist"
@@ -224,4 +283,42 @@ def get_nested_value(parent, dotted_key, parameter_type="string"):
         return '_too_deep_'
 
     return v
+
+################################################################################
+
+def test_truthy(this):
+    if str(this).lower() in ["1", "true", "y", "yes"]:
+        return True
+    return False
+
+
+################################################################################
+
+def decamelize_words(j_d):
+    # TODO: move words to config
+    de_cams = ["gVariants", "gVariant", "sequenceId", "relativeCopyClass", "speciesId", "chromosomeLocation", "genomicLocation"]
+    for d in de_cams:
+        j_d = re.sub(r"\b{}\b".format(d), decamelize(d), j_d)
+    return j_d
+
+
+################################################################################
+
+def prdbug(this, debug_mode=False):
+    if debug_mode is True:
+        prjsonnice(this)
+
+
+################################################################################
+
+def prjsonnice(this):
+    print(decamelize_words(json.dumps(this, indent=4, sort_keys=True, default=str)) + "\n")
+
+
+################################################################################
+
+def prjsoncam(this):
+    prjsonnice(camelize(this))
+
+
 

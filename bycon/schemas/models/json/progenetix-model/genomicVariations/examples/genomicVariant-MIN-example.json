@@ -2,22 +2,22 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "variantInternalId": "GRCh37-1-55505652-G-A",
     "variation": {
+        "variantType": "SNP",
         "alternateBases": "A",
         "location": {
+            "type": "SequenceLocation",
             "interval": {
-                "end": {
-                    "type": "Number",
-                    "value": 5505653
-                },
+                "type": "SequenceInterval",
                 "start": {
                     "type": "Number",
                     "value": 5505652
                 },
-                "type": "SequenceInterval"
+                "end": {
+                    "type": "Number",
+                    "value": 5505653
+                }
             },
-            "sequence_id": "refseq:NC_000001.10",
-            "type": "SequenceLocation"
-        },
-        "variantType": "SNP"
+            "sequence_id": "refseq:NC_000001.10"
+        }
     }
 }

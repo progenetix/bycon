@@ -25,16 +25,10 @@ def main():
 ################################################################################
 
 def datasets():
-
-    initialize_bycon_service(byc)
+    initialize_bycon_service(byc, "datasets")
     run_beacon_init_stack(byc)
     r = BeaconDataResponse(byc)
-    byc.update({
-        "service_response": r.collectionsResponse(),
-        "error_response": r.errorResponse()
-    })
-
-    cgi_print_response( byc, 200 )
+    print_json_response(r.collectionsResponse(), byc["env"])
 
 
 ################################################################################

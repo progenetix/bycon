@@ -1,10 +1,14 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "additionalProperties": false,
+    "title": "Schema for validating Beacon Common Components examples",
+    "type": "object",
     "properties": {
         "$schema": {
-            "description": "Added here to allow the example to comply with the 'additionalProperties:true' restriction.",
-            "type": "string"
+            "type": "string",
+            "description": "Added here to allow the example to comply with the 'additionalProperties:true' restriction."
+        },
+        "beaconId": {
+            "$ref": "../beaconCommonComponents.json#/definitions/BeaconId"
         },
         "apiVersion": {
             "$ref": "../beaconCommonComponents.json#/definitions/ApiVersion"
@@ -12,14 +16,29 @@
         "beaconError": {
             "$ref": "../beaconCommonComponents.json#/definitions/BeaconError"
         },
-        "beaconId": {
-            "$ref": "../beaconCommonComponents.json#/definitions/BeaconId"
+        "listOfSchemas": {
+            "$ref": "../beaconCommonComponents.json#/definitions/ListOfSchemas"
+        },
+        "schemasPerEntity": {
+            "$ref": "../beaconCommonComponents.json#/definitions/SchemasPerEntity"
+        },
+        "pagination": {
+            "$ref": "../beaconCommonComponents.json#/definitions/Pagination"
+        },
+        "includeResultsetResponses": {
+            "$ref": "../beaconCommonComponents.json#/definitions/IncludeResultsetResponses"
+        },
+        "filters": {
+            "$ref": "../beaconCommonComponents.json#/definitions/Filters"
         },
         "exists": {
             "$ref": "../beaconCommonComponents.json#/definitions/Exists"
         },
-        "filters": {
-            "$ref": "../beaconCommonComponents.json#/definitions/Filters"
+        "numTotalResults": {
+            "$ref": "../beaconCommonComponents.json#/definitions/NumTotalResults"
+        },
+        "info": {
+            "$ref": "../beaconCommonComponents.json#/definitions/Info"
         },
         "handover": {
             "$ref": "../beaconCommonComponents.json#/definitions/Handover"
@@ -27,28 +46,9 @@
         "handoverType": {
             "$ref": "../beaconCommonComponents.json#/definitions/HandoverType"
         },
-        "includeResultsetResponses": {
-            "$ref": "../beaconCommonComponents.json#/definitions/IncludeResultsetResponses"
-        },
-        "info": {
-            "$ref": "../beaconCommonComponents.json#/definitions/Info"
-        },
         "listOfHandovers": {
             "$ref": "../beaconCommonComponents.json#/definitions/ListOfHandovers"
-        },
-        "listOfSchemas": {
-            "$ref": "../beaconCommonComponents.json#/definitions/ListOfSchemas"
-        },
-        "numTotalResults": {
-            "$ref": "../beaconCommonComponents.json#/definitions/NumTotalResults"
-        },
-        "pagination": {
-            "$ref": "../beaconCommonComponents.json#/definitions/Pagination"
-        },
-        "schemasPerEntity": {
-            "$ref": "../beaconCommonComponents.json#/definitions/SchemasPerEntity"
         }
     },
-    "title": "Schema for validating Beacon Common Components examples",
-    "type": "object"
+    "additionalProperties": false
 }

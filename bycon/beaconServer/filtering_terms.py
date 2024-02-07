@@ -26,15 +26,8 @@ def main():
 def filtering_terms():
     initialize_bycon_service(byc, "filtering_terms")
     run_beacon_init_stack(byc)
-
     r = BeaconDataResponse(byc)
-
-    byc.update({
-        "service_response": r.filteringTermsResponse(),
-        "error_response": r.errorResponse()
-    })
-
-    cgi_print_response( byc, 200 )
+    print_json_response(r.filteringTermsResponse(), byc["env"])
 
 
 ################################################################################

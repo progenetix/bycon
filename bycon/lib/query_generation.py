@@ -3,9 +3,8 @@ from bson import SON
 from os import environ
 from pymongo import MongoClient
 
-from bycon_helpers import days_from_iso8601duration, return_paginated_list
-from cgi_parsing import prdbug
-from genome_utils import retrieve_gene_id_coordinates
+from bycon_helpers import days_from_iso8601duration, prdbug, return_paginated_list
+from genome_utils import GeneInfo
 
 ################################################################################
 
@@ -14,7 +13,7 @@ class ByconQuery():
     Bycon queries are collected as an object with per data collection query objects,
     ready to be run against the respective entity databases.
     The definition against per-collection in contrast to per-entity is due to the
-    incongruency of collection use, e.g. the utilization of the "callsets" collection
+    incongruency of collection use, e.g. the utilization of the "analyses" collection
     for both "analysis" and "run" entities.
 
     Query object:
@@ -45,6 +44,11 @@ class ByconQuery():
         self.debug_mode = byc.get("debug_mode", False)
         self.test_mode = byc.get("test_mode", False)
         self.test_mode_count = int(byc.get('test_mode_count', 5))
+        self.defaults = byc.get("beacon_defaults", {})
+        self.response_types = self.defaults.get("entity_defaults", {})
+
+        f_t_d = self.response_types.get("filteringTerm", {})
+        self.filtering_terms_coll = f_t_d.get("collection", "___none___")
 
         if dataset_id is False:
             self.ds_id = byc.get("dataset_ids", False)[0]
@@ -54,36 +58,27 @@ class ByconQuery():
         self.arguments = byc.get("form_data", {})
         self.argument_definitions = byc.get("argument_definitions", {})
         self.filters = byc.get("filters", [])
-        self.filtering_terms_coll = byc.get("filtering_terms_coll", "___none___")
-        self.mongohost = environ.get("BYCON_MONGO_HOST", "localhost")
-
 
         self.requested_entity = byc.get("request_entity_id", False)
         self.response_entity = byc.get("response_entity_id", False)
         self.path_id_value = byc.get("request_entity_path_id_value", False)
-
-        self.defaults = byc.get("beacon_defaults", {})
 
         self.variant_request_type = byc.get("variant_request_type", "___none___")
         self.variant_request_definitions = byc.get("variant_request_definitions", {})
         self.varguments = byc.get("varguments", {})
 
         self.filter_definitions = byc.get("filter_definitions", {})
-        ff = byc.get("filter_flags", {})
 
+        ff = byc.get("filter_flags", {})
         self.filter_descendants = ff.get("descendants", True)
         self.filter_logic = ff.get("logic", '$and')
 
-        self.housekeeping_db = byc.get("housekeeping_db", "___none___")
-        self.handover_coll = byc.get("handover_coll", "___none___")
-        self.services_db = byc.get("services_db", "___none___")
-        self.genes_coll = byc.get("genes_coll", "___none___")
+        self.db_config = byc.get("db_config", {})
 
         pagination = byc.get("pagination", {"skip": 0, "limit": 0})
         self.limit = pagination.get("limit", 0)
         self.skip = pagination.get("skip", 0)
 
-        self.response_types = self.defaults.get("entity_defaults")
 
         self.queries = {
             "expand": True,
@@ -207,7 +202,11 @@ class ByconQuery():
         if not r_c:
             return
 
-        data_db = MongoClient(host=self.mongohost)[self.ds_id]
+        mdb_c = self.db_config
+        db_host = mdb_c.get("host", "localhost")
+
+
+        data_db = MongoClient(host=db_host)[self.ds_id]
         data_collnames = data_db.list_collection_names()
 
         if r_c not in data_collnames:
@@ -276,51 +275,22 @@ class ByconQuery():
         # query database for gene and use coordinates to create range query
         vp = self.varguments
 
-        gene_data, e = self.__gene_id_coordinates(vp["gene_id"])
+        gene_data, e = GeneInfo(self.db_config).returnGene(vp["gene_id"])
 
         # TODO: error report/warning
         if not gene_data:
             return
 
+        gene = gene_data[0]
+
         # Since this is a pre-processor to the range request
         self.varguments.update( {
-            "reference_name": "refseq:{}".format(gene_data["accession_version"]),
-            "start": [ gene_data["start"] ],
-            "end": [ gene_data["end"] ]
+            "reference_name": "refseq:{}".format(gene["accession_version"]),
+            "start": [ gene["start"] ],
+            "end": [ gene["end"] ]
         } )
 
         self.variant_request_type = "variantRangeRequest"
-
-
-    ################################################################################
-
-    def __gene_id_coordinates(self, gene_id, single=True):
-        # TODO: move to separate function/class
-
-        e = None
-
-        mongo_client = MongoClient(host=self.mongohost)
-        db_names = list(mongo_client.list_database_names())
-        if self.services_db not in db_names:
-            return {}, f"services db `{services_db}` does not exist"
-        if "___none___" in self.genes_coll:
-            return {}, "no `genes_coll` parameter in `config.yaml`"
-
-        q_f_s = ["symbol", "ensembl_gene_ids", "synonyms"]
-
-        q_re = re.compile( r'^'+gene_id+'$', re.IGNORECASE )
-        q_list = []
-        for q_f in q_f_s:
-            q_list.append({q_f: q_re })
-
-        query = { "$or": q_list }
-
-        if single is True:
-            gene_data = mongo_client[self.services_db][self.genes_coll].find_one(query, { '_id': False } )
-        else:
-            gene_data = list(mongo_client[self.services_db][self.genes_coll].find(query, { '_id': False } ))
-
-        return gene_data, e
 
 
     #--------------------------------------------------------------------------#
@@ -467,7 +437,10 @@ class ByconQuery():
         if len(self.filters) < 1:
             return
 
-        data_db = MongoClient(host=self.mongohost)[self.ds_id]
+        mdb_c = self.db_config
+        db_host = mdb_c.get("host", "localhost")
+
+        data_db = MongoClient(host=db_host)[self.ds_id]
         coll_coll = data_db[ self.filtering_terms_coll ]
         self.collation_ids = coll_coll.distinct("id", {})
 
@@ -489,6 +462,7 @@ class ByconQuery():
             f_info = self.__query_from_collationed_filter(coll_coll, f_val)
             if f_info is False:
                 f_info = self.__query_from_filter_definitions(f_val)
+
             if f_info is False:
                 continue
 
@@ -527,7 +501,6 @@ class ByconQuery():
                     f_lists[f_entity][f_field].append(f_info["id"])
 
         # now processing the filter lists into the queries
-
         for f_entity in f_lists.keys():
             f_s_l = []
             for f_field, f_query_vals in f_lists[f_entity].items():
@@ -598,7 +571,7 @@ class ByconQuery():
                 #     response_add_filter_warnings(self.byc, ftw)
                 return f_info
 
-        return f_info
+        return False
 
 
     # -------------------------------------------------------------------------#
@@ -626,9 +599,13 @@ class ByconQuery():
         if not accessid:
             return
 
-        ho_client = MongoClient(host=self.mongohost)
-        ho_db = ho_client[self.housekeeping_db]
-        ho_coll = ho_db[self.handover_coll]
+        mdb_c = self.db_config
+        db_host = mdb_c.get("host", "localhost")
+        ho_dbname = mdb_c.get("housekeeping_db", "___none___")
+        ho_collname = mdb_c.get("handover_coll", "___none___")
+
+        ho_client = MongoClient(host=db_host)
+        ho_coll = ho_client[ho_dbname].ho_db[ho_collname]
         h_o = ho_coll.find_one({"id": accessid})
 
         # accessid overrides ... ?
@@ -652,7 +629,6 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __update_queries_for_entity(self, query, entity):
-
         logic = self.filter_logic
         r_t_s = self.response_types
         r_c = r_t_s[entity].get("collection")

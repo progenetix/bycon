@@ -1,62 +1,44 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "frequencyInPopulations": [
-        {
-            "frequencies": [
-                {
-                    "alleleFrequency": 2.939e-05,
-                    "population": "European (non-Finish)"
+    "variantInternalId": "var123",
+    "variation": {
+        "variantType": "SNP",
+        "referenceBases": "G",
+        "alternateBases": "A",
+        "location": {
+            "type": "SequenceLocation",
+            "interval": {
+                "type": "SequenceInterval",
+                "start": {
+                    "type": "Number",
+                    "value": 55039979
                 },
-                {
-                    "alleleFrequency": 0,
-                    "population": "Other"
+                "end": {
+                    "type": "Number",
+                    "value": 55039980
                 }
-            ],
-            "source": "gnomaD Genomes",
-            "sourceReference": "https://gnomad.broadinstitute.org/",
-            "version": "v3.1.1"
-        },
-        {
-            "frequencies": [
-                {
-                    "alleleFrequency": 9e-05,
-                    "population": "Total"
-                },
-                {
-                    "alleleFrequency": 6e-05,
-                    "population": "European"
-                },
-                {
-                    "alleleFrequency": 0,
-                    "population": "African"
-                }
-            ],
-            "source": "ALFA",
-            "sourceReference": "https://www.ncbi.nlm.nih.gov/snp/docs/gsr/alfa/",
-            "version": "20201027095038"
+            },
+            "sequence_id": "refseq:NC_000001.11"
         }
-    ],
+    },
     "identifiers": {
-        "clinVarIds": [
-            "434136",
-            "VCV000440707.6"
-        ],
-        "genomicHGVSId": "NC_000001.11:g.55039979G>A",
-        "proteinHGVSIds": [
-            "NP_777596.2:p.Glu48Lys"
-        ],
-        "transcriptHGVSIds": [
-            "NM_174936.4:c.142G>A"
-        ],
         "variantAlternativeIds": [
             "dbSNP:rs3975092470",
             "ClinGen: CA340482854"
+        ],
+        "genomicHGVSId": "NC_000001.11:g.55039979G>A",
+        "transcriptHGVSIds": [
+            "NM_174936.4:c.142G>A"
+        ],
+        "proteinHGVSIds": [
+            "NP_777596.2:p.Glu48Lys"
+        ],
+        "clinVarIds": [
+            "434136",
+            "VCV000440707.6"
         ]
     },
     "molecularAttributes": {
-        "aminoacidChanges": [
-            "E48K"
-        ],
         "geneIds": [
             "PCSK9",
             "LRG_275"
@@ -66,55 +48,73 @@
                 "id": "ENSGLOSSARY:0000150",
                 "label": "Missense variant"
             }
+        ],
+        "aminoacidChanges": [
+            "E48K"
         ]
     },
-    "variantInternalId": "var123",
     "variantLevelData": {
         "clinicalInterpretations": [
             {
+                "conditionId": "famchol1",
                 "category": {
                     "id": "MONDO:0000001",
                     "label": "disease or disorder"
                 },
-                "clinicalRelevance": "pathogenic",
-                "conditionId": "famchol1",
                 "effect": {
                     "id": "MONDO:0007750",
                     "label": "Familial hypercholesterolemia 1"
-                }
+                },
+                "clinicalRelevance": "pathogenic"
             },
             {
+                "conditionId": "famchol3",
                 "category": {
                     "id": "MONDO:0000001",
                     "label": "disease or disorder"
                 },
-                "clinicalRelevance": "uncertain significance",
-                "conditionId": "famchol3",
                 "effect": {
                     "id": "MONDO:0011369",
                     "label": "hypercholesterolemia, autosomal dominant, 3"
-                }
+                },
+                "clinicalRelevance": "uncertain significance"
             }
         ]
     },
-    "variation": {
-        "alternateBases": "A",
-        "location": {
-            "interval": {
-                "end": {
-                    "type": "Number",
-                    "value": 55039980
+    "frequencyInPopulations": [
+        {
+            "source": "gnomaD Genomes",
+            "sourceReference": "https://gnomad.broadinstitute.org/",
+            "version": "v3.1.1",
+            "frequencies": [
+                {
+                    "population": "European (non-Finish)",
+                    "alleleFrequency": 2.939e-05
                 },
-                "start": {
-                    "type": "Number",
-                    "value": 55039979
-                },
-                "type": "SequenceInterval"
-            },
-            "sequence_id": "refseq:NC_000001.11",
-            "type": "SequenceLocation"
+                {
+                    "population": "Other",
+                    "alleleFrequency": 0
+                }
+            ]
         },
-        "referenceBases": "G",
-        "variantType": "SNP"
-    }
+        {
+            "source": "ALFA",
+            "sourceReference": "https://www.ncbi.nlm.nih.gov/snp/docs/gsr/alfa/",
+            "version": "20201027095038",
+            "frequencies": [
+                {
+                    "population": "Total",
+                    "alleleFrequency": "9e-05"
+                },
+                {
+                    "population": "European",
+                    "alleleFrequency": "6e-05"
+                },
+                {
+                    "population": "African",
+                    "alleleFrequency": 0
+                }
+            ]
+        }
+    ]
 }

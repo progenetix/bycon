@@ -156,20 +156,20 @@ h->o_methods:
     target_entity: individual
     target_key: id
 
-  callsets._id:
-    source_collection: callsets
+  analyses._id:
+    source_collection: analyses
     source_key: _id
-    target_collection: callsets
+    target_collection: analyses
     target_entity: analysis
     target_key: _id
-  callsets.id:
-    source_collection: callsets
+  analyses.id:
+    source_collection: analyses
     source_key: id
-    target_collection: callsets
+    target_collection: analyses
     target_entity: analysis
     target_key: id
-  callsets.biosample_id->biosamples.id:
-    source_collection: callsets
+  analyses.biosample_id->biosamples.id:
+    source_collection: analyses
     source_key: biosample_id
     target_collection: biosamples
     target_entity: biosample
@@ -206,10 +206,10 @@ h->o_methods:
     target_collection: biosamples
     target_entity: biosample
     target_key: id
-  variants.callset_id->callsets.id:
+  variants.callset_id->analyses.id:
     source_collection: variants
     source_key: callset_id
-    target_collection: callsets
+    target_collection: analyses
     target_entity: analysis
     target_key: id
  

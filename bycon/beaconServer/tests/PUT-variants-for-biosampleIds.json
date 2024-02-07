@@ -19,8 +19,8 @@
                 "pgxbs-kftvhaqa",
                 "pgxbs-kftvj1nt"
             ]
-        }
+        },
+        "filters": [ ]
     },
-    "filters": [ ],
-    "debug": 0
+    "debugMode": 0
 }

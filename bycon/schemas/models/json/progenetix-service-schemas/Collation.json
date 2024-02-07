@@ -1,128 +1,128 @@
 {
-    "$id": "https://progenetix.org/services/schemas/Collation/v2023-10-04",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "additionalProperties": true,
-    "definitions": {
-        "PathItem": {
-            "properties": {
-                "depth": {
-                    "type": "integer"
-                },
-                "order": {
-                    "type": "integer"
-                },
-                "path": {
-                    "items": "string",
-                    "type": "array"
-                }
-            },
-            "type": "object"
-        }
-    },
+    "$id": "https://progenetix.org/services/schemas/Collation/v2023-10-04",
+    "title": "Collation",
+    "type": "object",
     "description": "A Collation represents information about aggregated occurrences of entities (e.g. all biosamples with a given diagnostic code).\n",
     "properties": {
-        "child_terms": {
+        "id": {
+            "type": "string",
+            "examples": [
+                "PMID:22824167"
+            ]
+        },
+        "label": {
+            "description": "An informative short text label.\n",
+            "type": "string",
+            "examples": [
+                "Peralta R, Baudis M, Vazquez G, Juarez S, Ortiz R, Decanini et al. (2010): Increased expression of cellular retinol-binding protein 1 in laryngeal squamous cell carcinoma.",
+                "carcinoma, NOS"
+            ]
+        },
+        "type": {
+            "type": "string",
+            "examples": [
+                "NCBI PubMed"
+            ]
+        },
+        "collation_type": {
+            "type": "string",
+            "examples": [
+                "PMID"
+            ]
+        },
+        "namespace_prefix": {
+            "type": "string",
+            "examples": [
+                "PMID"
+            ]
+        },
+        "scope": {
+            "type": "string",
+            "examples": [
+                "biosamples"
+            ]
+        },
+        "db_key": {
+            "type": "string",
+            "examples": [
+                "external_references.id"
+            ]
+        },
+        "hierarchy_paths": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/PathItem"
+            }
+        },
+        "parent_terms": {
+            "type": "array",
+            "items": "string",
             "examples": [
                 [
                     "PMID:10471496"
                 ]
-            ],
-            "items": "string",
-            "type": "array"
+            ]
         },
-        "cnv_analyses": {
-            "type": "integer"
+        "child_terms": {
+            "type": "array",
+            "items": "string",
+            "examples": [
+                [
+                    "PMID:10471496"
+                ]
+            ]
+        },
+        "reference": {
+            "type": "string",
+            "examples": [
+                "https://europepmc.org/article/MED/10471496"
+            ]
         },
         "code": {
+            "type": "string",
             "examples": [
                 "PMID:10471496"
-            ],
-            "type": "string"
+            ]
         },
-        "code_matches": {
-            "type": "integer"
-        },
-        "collation_type": {
+        "dataset_id": {
+            "type": "string",
             "examples": [
-                "PMID"
-            ],
-            "type": "string"
+                "cellz"
+            ]
+        },
+        "updated": {
+            "type": "string",
+            "examples": [
+                "2023-07-03T11:50:00.047225"
+            ]
         },
         "count": {
             "type": "integer"
         },
-        "dataset_id": {
-            "examples": [
-                "cellz"
-            ],
-            "type": "string"
+        "cnv_analyses": {
+            "type": "integer"
         },
-        "db_key": {
-            "examples": [
-                "external_references.id"
-            ],
-            "type": "string"
-        },
-        "hierarchy_paths": {
-            "items": {
-                "$ref": "#/definitions/PathItem"
-            },
-            "type": "array"
-        },
-        "id": {
-            "examples": [
-                "PMID:22824167"
-            ],
-            "type": "string"
-        },
-        "label": {
-            "description": "An informative short text label.\n",
-            "examples": [
-                "Peralta R, Baudis M, Vazquez G, Juarez S, Ortiz R, Decanini et al. (2010): Increased expression of cellular retinol-binding protein 1 in laryngeal squamous cell carcinoma.",
-                "carcinoma, NOS"
-            ],
-            "type": "string"
-        },
-        "namespace_prefix": {
-            "examples": [
-                "PMID"
-            ],
-            "type": "string"
-        },
-        "parent_terms": {
-            "examples": [
-                [
-                    "PMID:10471496"
-                ]
-            ],
-            "items": "string",
-            "type": "array"
-        },
-        "reference": {
-            "examples": [
-                "https://europepmc.org/article/MED/10471496"
-            ],
-            "type": "string"
-        },
-        "scope": {
-            "examples": [
-                "biosamples"
-            ],
-            "type": "string"
-        },
-        "type": {
-            "examples": [
-                "NCBI PubMed"
-            ],
-            "type": "string"
-        },
-        "updated": {
-            "examples": [
-                "2023-07-03T11:50:00.047225"
-            ],
-            "type": "string"
+        "code_matches": {
+            "type": "integer"
         }
     },
-    "title": "Collation",
-    "type": "object"
+    "definitions": {
+        "PathItem": {
+            "type": "object",
+            "properties": {
+                "order": {
+                    "type": "integer"
+                },
+                "depth": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "array",
+                    "items": "string"
+                }
+            }
+        }
+    },
+    "additionalProperties": true
 }

@@ -33,7 +33,7 @@ properties:
     description: |
       The gatabase collection that was queried to gather the response items.
     examples:
-      - callsets
+      - analyses
   intervalFrequencies:
       type: array
       description: >

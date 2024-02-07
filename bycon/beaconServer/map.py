@@ -25,13 +25,8 @@ def map():
     r = BeaconInfoResponse(byc)
     m_f = get_schema_file_path(byc, "beaconMap")
     beaconMap = load_yaml_empty_fallback( m_f )
+    print_json_response(r.populatedInfoResponse(beaconMap), byc["env"])
 
-    byc.update({
-        "service_response": r.populatedInfoResponse(beaconMap),
-        "error_response": r.errorResponse()
-    })
-
-    cgi_print_response( byc, 200 )
 
 ################################################################################
 ################################################################################

@@ -1,20 +1,20 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "additionalProperties": true,
+    "type": "object",
     "description": "Response including a list of Entry types definitions.",
     "properties": {
         "meta": {
-            "$ref": "./sections/beaconInformationalResponseMeta.json",
-            "description": "Information about the response that could be relevant for the Beacon client in order to interpret the results."
+            "description": "Information about the response that could be relevant for the Beacon client in order to interpret the results.",
+            "$ref": "./sections/beaconInformationalResponseMeta.json"
         },
         "response": {
-            "$ref": "../configuration/entryTypesSchema.json",
-            "description": "Returning the Beacon Entry Types."
+            "description": "Returning the Beacon Entry Types.",
+            "$ref": "../configuration/entryTypesSchema.json"
         }
     },
     "required": [
         "meta",
         "response"
     ],
-    "type": "object"
+    "additionalProperties": true
 }

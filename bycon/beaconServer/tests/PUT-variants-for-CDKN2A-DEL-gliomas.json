@@ -21,14 +21,14 @@
                 "end": [21967753, 22500000], 
                 "variantType": "DEL"
             }
-        }
+        },
+        "filters": [
+            { "id": "NCIT:C3058" }
+        ],
     },
     "pagination": {
         "skip": 0,
         "limit": 5
     },   
-    "filters": [
-        { "id": "NCIT:C3058" }
-    ],
-    "debug": 0
+    "debugMode": 0
 }

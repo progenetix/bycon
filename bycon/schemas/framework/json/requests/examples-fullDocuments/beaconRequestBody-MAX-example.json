@@ -10,17 +10,6 @@
         ]
     },
     "query": {
-        "filters": [
-            {
-                "id": "EFO:0001212",
-                "scope": "biosamples"
-            }
-        ],
-        "includeResultsetResponses": "HIT",
-        "pagination": {
-            "limit": 10,
-            "skip": 0
-        },
         "requestParameters": {
             "datasets": {
                 "datasetIds": [
@@ -29,7 +18,18 @@
                 ]
             }
         },
-        "requestedGranularity": "boolean",
-        "testMode": false
+        "filters": [
+            {
+                "id": "EFO:0001212",
+                "scope": "biosamples"
+            }
+        ],
+        "includeResultsetResponses": "HIT",
+        "pagination": {
+            "skip": 0,
+            "limit": 10
+        },
+        "testMode": false,
+        "requestedGranularity": "boolean"
     }
 }

@@ -1,30 +1,31 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "additionalProperties": true,
+    "title": "ReferenceRange",
     "description": "Definition of a range class.",
+    "type": "object",
     "properties": {
-        "high": {
-            "description": "Upper range end of normal",
-            "examples": [
-                135
-            ],
-            "type": "number"
-        },
-        "low": {
-            "description": "Lower range end of normal",
-            "examples": [
-                85
-            ],
-            "type": "number"
-        },
         "unit": {
-            "$ref": "./commonDefinitions.json#/definitions/Unit",
             "description": "The kind of unit.",
+            "$ref": "./commonDefinitions.json#/definitions/Unit",
             "examples": [
                 {
                     "id": "NCIT:C49670",
                     "label": "Millimeter of Mercury"
                 }
+            ]
+        },
+        "low": {
+            "description": "Lower range end of normal",
+            "type": "number",
+            "examples": [
+                85
+            ]
+        },
+        "high": {
+            "description": "Upper range end of normal",
+            "type": "number",
+            "examples": [
+                135
             ]
         }
     },
@@ -33,6 +34,5 @@
         "low",
         "high"
     ],
-    "title": "ReferenceRange",
-    "type": "object"
+    "additionalProperties": true
 }

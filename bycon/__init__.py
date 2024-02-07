@@ -29,6 +29,8 @@ try:
     from parse_variant_request import *
 
     byc: object = {
+        "args": {},
+        "form_data": {},
         "pkg_path": pkg_path,
         "bycon_lib_path": bycon_lib_path,
         "parsed_config_paths": [],

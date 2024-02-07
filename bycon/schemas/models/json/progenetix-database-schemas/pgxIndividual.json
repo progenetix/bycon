@@ -1,80 +1,80 @@
 {
-    "$id": "https://progenetix.org/services/schemas/pgxIndividual/v2022-03-07",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "additionalProperties": true,
+    "$id": "https://progenetix.org/services/schemas/pgxIndividual/v2022-03-07",
+    "title": "pgxIndividual",
+    "type": "object",
     "description": "An pgxIndividual entry stores information about the individual (subject) from which biosamples were extracted (e.g. cancer samples, reference tissue), but where this information is shared to all the derived mobjects (e.g. genotypic sex ...).",
+    "required": [
+        "id"
+    ],
     "properties": {
-        "ancestries": {
-            "items": {
-                "$ref": "../common/ancestry.json"
-            },
-            "type": "array"
-        },
-        "description": {
+        "id": {
+            "type": "string",
+            "description": "The resource-local identifier for this individual.",
             "examples": [
-                "HapMap project contributor"
-            ],
-            "type": "string"
+                "pgxind-kftx25eh"
+            ]
         },
-        "diseases": {
-            "items": {
-                "$ref": "../common/disease.json"
-            },
-            "type": "array"
+        "sex": {
+            "$ref": "../common/commonDefinitions.json#/definitions/Sex"
         },
         "ethnicity": {
             "$ref": "../common/commonDefinitions.json#/definitions/Ethnicity"
         },
-        "externalReferences": {
-            "examples": [
-                {
-                    "description": "HapMap individual",
-                    "id": "biosample:SAME122868"
-                },
-                {
-                    "id": "PMID:9950502"
-                },
-                {
-                    "description": "Prognostic analysis of mantle cell lymphoma genomes",
-                    "id": "geo:GSE13331"
-                }
-            ],
+        "diseases": {
+            "type": "array",
             "items": {
-                "$ref": "../common/externalReference.json"
-            },
-            "type": "array"
-        },
-        "id": {
-            "description": "The resource-local identifier for this individual.",
-            "examples": [
-                "pgxind-kftx25eh"
-            ],
-            "type": "string"
+                "$ref": "../common/disease.json"
+            }
         },
         "info": {
             "description": "Additional structured data which may not be common across different resources.",
             "type": "object"
         },
-        "provenance": {
-            "$ref": "../common/provenance.json"
-        },
-        "sex": {
-            "$ref": "../common/commonDefinitions.json#/definitions/Sex"
-        },
-        "updated": {
+        "description": {
+            "type": "string",
             "examples": [
-                "2020-09-10T17:44:10.170Z"
-            ],
-            "format": "date-time",
-            "type": "string"
+                "HapMap project contributor"
+            ]
+        },
+        "externalReferences": {
+            "type": "array",
+            "items": {
+                "$ref": "../common/externalReference.json"
+            },
+            "examples": [
+                {
+                    "id": "biosample:SAME122868",
+                    "description": "HapMap individual"
+                },
+                {
+                    "id": "PMID:9950502"
+                },
+                {
+                    "id": "geo:GSE13331",
+                    "description": "Prognostic analysis of mantle cell lymphoma genomes"
+                }
+            ]
         },
         "vitalStatus": {
             "$ref": "../common/vitalStatus.json"
+        },
+        "provenance": {
+            "$ref": "../common/provenance.json"
+        },
+        "ancestries": {
+            "type": "array",
+            "items": {
+                "$ref": "../common/ancestry.json"
+            }
+        },
+        "updated": {
+            "type": "string",
+            "format": "date-time",
+            "examples": [
+                "2020-09-10T17:44:10.170Z"
+            ]
         }
     },
-    "required": [
-        "id"
-    ],
-    "title": "pgxIndividual",
-    "type": "object"
+    "additionalProperties": true
 }

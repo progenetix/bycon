@@ -14,16 +14,19 @@
             "datasets": {
                 "datasetIds": ["progenetix"]
             },
-            "referenceName": "NC_000017.11",
-            "start": [7577120],
-            "referenceBases": "G",
-            "alternateBases": "A"
-        }
+            "g_variant": {
+                "referenceName": "refseq:NC_000017.11",
+                "start": [7577120],
+                "referenceBases": "G",
+                "alternateBases": "A"
+            }
+        },
+        "filters": []
     },
     "requestedGranularity": "record",
     "pagination": {
         "skip": 0,
         "limit": 5
     },
-    "filters": []
+    "debugMode": true
 }
