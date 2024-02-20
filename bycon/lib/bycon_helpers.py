@@ -17,6 +17,7 @@ def set_debug_state(debug=False) -> bool:
     """
     if BYC["DEBUG_MODE"] is True:
         return True
+
     if test_truthy(debug):
         BYC.update({"DEBUG_MODE": True})
         if not "local" in ENV:
