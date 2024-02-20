@@ -1,15 +1,11 @@
-import re, json
+import humps, re, json
 
 from json_ref_dict import RefDict, materialize
-from humps import decamelize
 from os import path, scandir, pardir
 from pathlib import Path
 
 from bycon_helpers import prjsonnice, prdbug
-
-# local
-lib_path = path.dirname( path.abspath(__file__) )
-pkg_path = path.join( lib_path, pardir )
+from config import PKG_PATH
 
 ################################################################################
 
@@ -47,7 +43,7 @@ def get_schema_file_path(byc, schema_name, ext="json"):
 
     f_n = f'{schema_name}.{ext}'
 
-    p = Path(path.join( pkg_path, *byc["schemas_path"] ))
+    p = Path(path.join( PKG_PATH, "schemas" ))
     s_p_s = [ f for f in p.rglob("*") if f.is_file() ]
     s_p_s = [ f for f in s_p_s if f.name == f_n ]
     if len(s_p_s) == 1:
@@ -62,7 +58,7 @@ def get_default_schema_file_path(byc, schema_path_id, file_name, ext="json"):
 
     f_n = f'{file_name}.{ext}'
 
-    p = Path(path.join( pkg_path, *byc["schemas_path"] ))
+    p = Path(path.join( PKG_PATH, "schemas" ))
     s_p_s = [ f for f in p.rglob("*") if f.is_file() ]
     s_p_s = [ f for f in s_p_s if f.name == f_n ]
     s_p_s = [ f for f in s_p_s if f.parent.name == schema_path_id ]
@@ -95,7 +91,7 @@ def instantiate_schema(schema):
 
 def create_empty_instance(schema):
     s_i = instantiate_schema(schema)
-    s_i = decamelize(s_i)
+    s_i = humps.decamelize(s_i)
     return s_i
 
 

@@ -5,7 +5,6 @@ defaults:
   assembly_id: GRCh38
   response_schema: beaconInfoResponse
   include_resultset_responses: HIT
-  include_handovers: false
   requested_granularity: record
   returned_granularity: record
   user_name: anonymous

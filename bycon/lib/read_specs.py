@@ -1,39 +1,16 @@
 import inspect, json, re, yaml
 from deepmerge import always_merger
-from humps import camelize, decamelize
 from json_ref_dict import RefDict, materialize
 from os import path, pardir, scandir, environ
 from pathlib import Path
 from pymongo import MongoClient
 
 from cgi_parsing import prdbug
+from config import *
 
 ################################################################################
 
 def read_service_definition_files(byc):
-
-    pkg_path = byc.get("pkg_path", "___none___")
-    conf_dir = path.join( pkg_path, "config")
-
-    b_d_fs =[]
-
-    if not path.isdir(conf_dir):
-        return
-
-    if len(b_d_fs) < 1:
-
-        b_d_fs = [ f.name for f in scandir(conf_dir) if f.is_file() ]
-        b_d_fs = [ f for f in b_d_fs if f.endswith("yaml") ]
-        b_d_fs = [ Path(f).stem for f in b_d_fs ]
-
-    for d in b_d_fs:
-        read_bycon_configs_by_name( d, conf_dir, byc )
-
-
-################################################################################
-  
-def read_bycon_configs_by_name(name, conf_dir, byc):
-
     """podmd
     Reading the config from the same wrapper dir:
     module
@@ -41,36 +18,32 @@ def read_bycon_configs_by_name(name, conf_dir, byc):
       |- lib - read_specs.py
       |- config - __name__.yaml
     podmd"""
+    conf_dir = path.join( PKG_PATH, "definitions")
 
-    o = {}
-    ofp = path.join( conf_dir, f'{name}.yaml' )
+    if not path.isdir(conf_dir):
+        return
 
-    with open( ofp ) as od:
-        o = yaml.load( od , Loader=yaml.FullLoader)
+    b_d_fs = [ f.name for f in scandir(conf_dir) if f.is_file() ]
+    b_d_fs = [ f for f in b_d_fs if f.endswith("yaml") ]
+    b_d_fs = [ Path(f).stem for f in b_d_fs ]
 
-    byc.update({ name: o })
-
-
-################################################################################
-
-def read_service_prefs(service, service_pref_path, byc):
-
-    # snake_case paths; e.g. `intervalFrequencies` => `interval_frequencies.yaml`
-    service = decamelize(service)
-
-    f = Path( path.join( service_pref_path, service+".yaml" ) )
-    if f.is_file():
-        byc.update({"service_config": load_yaml_empty_fallback( f ) })
+    for d in b_d_fs:
+        o = {}
+        ofp = path.join( conf_dir, f'{d}.yaml' )
+        with open( ofp ) as od:
+            o = yaml.load( od , Loader=yaml.FullLoader)
+        byc.update({d: o})
 
 
 ################################################################################
 
 def update_rootpars_from_local(loc_dir, byc):
-
     # avoiding re-parsing of directories, e.g. during init stage
     p_c_p = byc.get("parsed_config_paths", [])
     if loc_dir in p_c_p:
         return
+
+    prdbug(f'...loc_dir => {loc_dir}')
 
     p_c_p.append(loc_dir)
 
@@ -79,6 +52,7 @@ def update_rootpars_from_local(loc_dir, byc):
 
     b_f = path.join(loc_dir, f'{b_p}.yaml')
     b = load_yaml_empty_fallback(b_f)
+    prdbug(f'...loc beacon_defaults => {b_f}')
     s_f = path.join(loc_dir, f'{s_p}.yaml')
     s = load_yaml_empty_fallback(s_f)
     b = always_merger.merge(s, b)
@@ -88,6 +62,7 @@ def update_rootpars_from_local(loc_dir, byc):
     for p in ("authorizations", "dataset_definitions", "local_paths", "local_parameters", "datatable_mappings", "plot_defaults"):
         f = path.join(loc_dir, f'{p}.yaml')
         d = load_yaml_empty_fallback(f)
+        prdbug(f'...loc_dir file => {p}')
         byc.update({p: always_merger.merge(byc.get(p, {}), d)})
 
     return
@@ -96,26 +71,18 @@ def update_rootpars_from_local(loc_dir, byc):
 ################################################################################
 
 def dbstats_return_latest(byc):
-    mdb_c = byc.get("db_config", {})
-    db_host = mdb_c.get("host", "localhost")
-
     # TODO: This is too hacky & should be moved to an external function
     # which updates the database_definitions / beacon_info yamls...
-    info_db = mdb_c.get("housekeeping_db")
-    coll = mdb_c.get("beacon_info_coll")
-    stats = MongoClient(host=db_host)[ info_db ][ coll ].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
+    stats = MongoClient(host=DB_MONGOHOST)[HOUSEKEEPING_DB][HOUSEKEEPING_INFO_COLL].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
     return list(stats)[0]
 
 
 ################################################################################
 
 def datasets_update_latest_stats(byc, collection_type="datasets"):
-
     results = [ ]
-
     def_k = re.sub(r's$', "_definitions", collection_type)
     q_k = re.sub(r's$', "_ids", collection_type)
-
     stat = dbstats_return_latest(byc)
 
     for coll_id, coll in byc[ def_k ].items():
@@ -138,7 +105,6 @@ def datasets_update_latest_stats(byc, collection_type="datasets"):
 ################################################################################
 
 def load_yaml_empty_fallback(yp):
-
     y = { }
     try:
         with open( yp ) as yd:

@@ -1,14 +1,16 @@
 # __init__.py
-import sys
+import sys, traceback
 from os import environ, path
 from pathlib import Path
-import traceback
 
 pkg_path = path.dirname( path.abspath(__file__) )
 bycon_lib_path = path.join( pkg_path, "lib" )
+sys.path.append( pkg_path )
 sys.path.append( bycon_lib_path )
 
 try:
+
+    from config import *
 
     from args_parsing import *
     from beacon_auth import *
@@ -31,19 +33,16 @@ try:
     byc: object = {
         "args": {},
         "form_data": {},
-        "pkg_path": pkg_path,
         "bycon_lib_path": bycon_lib_path,
-        "parsed_config_paths": [],
-        "env": "server"
+        "parsed_config_paths": []
     }
-    if not environ.get('HTTP_HOST'):
-        byc.update({"env": "local"})
 
     read_service_definition_files(byc)
-    set_byc_config_pars(byc)
+    # updates `beacon_defaults`, `dataset_definitions` and `local_paths`
+    update_rootpars_from_local(LOC_PATH, byc)
     set_beacon_defaults(byc)
-    parse_query(byc)
-    
+    parse_arguments(byc)
+
 except Exception:
 
     if environ.get('HTTP_HOST'):

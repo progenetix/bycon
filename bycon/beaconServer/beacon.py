@@ -6,7 +6,6 @@ from os import path, pardir
 from importlib import import_module
 
 from bycon import *
-pkg_path = path.dirname( path.abspath(__file__) )
 
 """
 """
@@ -20,22 +19,19 @@ def main():
     try:
         beacon()
     except Exception:
-        print_text_response(traceback.format_exc(), byc["env"], 302)
+        print_text_response(traceback.format_exc(), 302)
 
 ################################################################################
 
 def beacon():
-
-    set_debug_state(debug=0)
-
-    loc_dir = path.join( pkg_path, "local" )
     # updates `beacon_defaults`, `dataset_definitions` and `local_paths`
-    update_rootpars_from_local(loc_dir, byc)
-    set_beacon_defaults(byc)
+    # update_rootpars_from_local(LOC_PATH, byc)
+    # set_beacon_defaults(byc)
 
-    s_a_s = byc["beacon_defaults"].get("service_path_aliases", {})
-    r_w = byc["beacon_defaults"].get("rewrites", {})
-    d_p_s = byc["beacon_defaults"].get("data_pipeline_path_ids", [])
+    defs = byc.get("beacon_defaults", {})
+    s_a_s = defs.get("service_path_aliases", {})
+    r_w = defs.get("rewrites", {})
+    d_p_s = defs.get("data_pipeline_path_ids", [])
 
     """
     The type of execution depends on the requested entity defined in `beacon_defaults`
@@ -53,18 +49,17 @@ def beacon():
     Fallback is `/info`.
     """
     byc.update({"request_path_root": "beacon"})
-
     rest_path_elements(byc)
-    args_update_form(byc)
-    prdbug(f'beacon.py - request_entity_path_id: {byc.get("request_entity_path_id")}', byc.get("debug_mode"))
+    # args_update_form(byc)
+    prdbug(f'beacon.py - request_entity_path_id: {byc.get("request_entity_path_id")}')
 
     e_p_id = byc["form_data"].get("request_entity_path_id", "___none___")
-    prdbug(f'beacon.py - form e_p_id: {e_p_id}', byc.get("debug_mode"))
+    prdbug(f'beacon.py - form e_p_id: {e_p_id}')
     if e_p_id in s_a_s or e_p_id in r_w:
         byc.update({"request_entity_path_id": e_p_id})
     r_p_id = byc.get("request_entity_path_id", "info")
 
-    prdbug(f'beacon.py - request_entity_path_id: {r_p_id}', byc.get("debug_mode"))
+    prdbug(f'beacon.py - request_entity_path_id: {r_p_id}')
 
     # check for rewrites
     if r_p_id in r_w:
@@ -81,7 +76,7 @@ def beacon():
         initialize_bycon_service(byc, f)
         run_beacon_init_stack(byc)
         r = BeaconDataResponse(byc).resultsetResponse()
-        print_json_response(r, byc["env"])
+        print_json_response(r)
     elif f:
         # dynamic package/function loading; e.g. `filtering_terms` loads
         # `filtering_terms` from `filtering_terms.py`...
@@ -98,9 +93,8 @@ def beacon():
 
             exit()
 
-    e_m = "No correct service path provided. Please refer to the documentation at http://docs.progenetix.org"
-    e_r = BeaconErrorResponse(byc).error(e_m, 422)
-    print_json_response(e_r, byc["env"])
+    BYC["ERRORS"].append("No correct service path provided. Please refer to the documentation at http://docs.progenetix.org")
+    BeaconErrorResponse(byc).response(422)
 
 
 ################################################################################

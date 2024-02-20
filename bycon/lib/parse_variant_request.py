@@ -56,7 +56,6 @@ def __parse_variant_parameters(byc):
 ################################################################################
 
 def __get_variant_request_type(byc):
-
     """podmd
     This method guesses the type of variant request, based on the complete
     fulfillment of the required parameters (all of `all_of`, one if `one_of`).
@@ -89,6 +88,8 @@ def __get_variant_request_type(byc):
         brts_k = [ "aminoacidChangeRequest" ]
     elif "genomic_allele_short_form" in v_pars:
         brts_k = [ "genomicAlleleShortFormRequest" ]
+    elif "gene_id" in v_pars:
+        brts_k = [ "geneVariantRequest" ]
         
 
     vrt_matches = [ ]

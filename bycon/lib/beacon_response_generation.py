@@ -1,8 +1,9 @@
 import json, sys
 from datetime import datetime
 from deepmerge import always_merger
-from humps import camelize, decamelize
 from os import environ
+
+from config import *
 
 from bycon_helpers import *
 from handover_generation import dataset_response_add_handovers
@@ -12,6 +13,7 @@ from read_specs import datasets_update_latest_stats
 from response_remapping import *
 from variant_mapping import ByconVariant
 from schema_parsing import object_instance_from_schema_name
+from service_utils import set_special_modes
 
 ################################################################################
 
@@ -21,12 +23,9 @@ class BeaconErrorResponse:
     which have the same type of `meta`.
     The responses are then provided by the dedicated methods
     """
-
     def __init__(self, byc: dict):
-        self.debug_mode = byc.get("debug_mode", False)
         self.beacon_defaults = byc.get("beacon_defaults", {})
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
-        self.service_config = byc.get("service_config", {})
         self.response_schema = byc.get("response_schema", "beaconInfoResponse")
         self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
         self.error_response = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
@@ -39,10 +38,15 @@ class BeaconErrorResponse:
     
     # -------------------------------------------------------------------------#
 
-    def error(self, error_message="", error_code=422):
-        self.error_response["error"].update({"error_code": error_code, "error_message": error_message})
+    def error(self, error_code=422):
+        self.error_response["error"].update({"error_code": error_code, "error_message": ", ".join(BYC["ERRORS"])})
         return self.error_response
 
+    # -------------------------------------------------------------------------#
+
+    def response(self, error_code=422):
+        self.error_response["error"].update({"error_code": error_code, "error_message": ", ".join(BYC["ERRORS"])})
+        print_json_response(self.error_response)
 
 
 ################################################################################
@@ -53,16 +57,12 @@ class BeaconInfoResponse:
     which have the same type of `meta`.
     The responses are then provided by the dedicated methods
     """
-
     def __init__(self, byc: dict):
-        self.debug_mode = byc.get("debug_mode", False)
         self.beacon_defaults = byc.get("beacon_defaults", {})
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
-        self.service_config = byc.get("service_config", {})
         self.response_schema = byc.get("response_schema", "beaconInfoResponse")
         self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
         self.data_response = object_instance_from_schema_name(byc, self.response_schema, "")
-        self.error_response = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
         info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
         r_m = self.data_response["meta"]
         for p in ["api_version", "beacon_id"]:
@@ -70,6 +70,17 @@ class BeaconInfoResponse:
                 r_m.update({p: info.get(p, "___none___")})
         if "returned_schemas" in r_m:
             r_m.update({"returned_schemas":[self.beacon_schema]})
+
+        for p in ("info"):
+            p_v = r_m.get(p)
+            if not p_v:
+                r_m.pop(p, None)
+
+        r_e = self.data_response["response"]
+        for p in ("info"):
+            p_v = r_e.get(p)
+            if not p_v:
+                r_e.pop(p, None)
 
         return
     
@@ -79,45 +90,35 @@ class BeaconInfoResponse:
     # -------------------------------------------------------------------------#
 
     def populatedInfoResponse(self, response={}):
+        r_k_s = []
+        for p in response.keys():
+            if "NoneType" in str(type(response[p])):
+                r_k_s.append(p)
+        for p in r_k_s:
+            response.pop(p, None)
         self.data_response.update({"response":response})
         return self.data_response
 
-
-    # ------------------------------- private ---------------------------------#
-
-    def __meta_add_parameters(self, response):
-        info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
-        r_m = response["meta"]
-        for p in ["api_version", "beacon_id"]:
-            if p in info.keys():
-                r_m.update({p: info.get(p, "___none___")})
-        if "returned_schemas" in r_m:
-            r_m.update({"returned_schemas":[self.beacon_schema]})
 
 
 
 ################################################################################
 
 class BeaconDataResponse:
-
     def __init__(self, byc: dict):
         self.byc = byc
-        self.test_mode = byc.get("test_mode", False)
-        self.debug_mode = byc.get("debug_mode", False)
         self.beacon_defaults = byc.get("beacon_defaults", {})
+        self.dataset_ids = byc.get("dataset_ids", [])
         self.authorized_granularities = byc.get("authorized_granularities", {})
         self.user_name = byc.get("user_name", "anonymous")
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
         self.form_data = byc.get("form_data", {})
-        self.service_config = byc.get("service_config", {})
         self.response_schema = byc["response_schema"]
-        self.returned_granularity = self.form_data.get("returned_granularity", "record")
+        self.returned_granularity = self.form_data.get("requested_granularity", "record")
         self.include_handovers = self.form_data.get("include_handovers", False)
         self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
         self.record_queries = {}
         self.data_response = object_instance_from_schema_name(byc, self.response_schema, "")
-        self.error_response = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
-        self.warnings =[]
         self.data_time_init = datetime.datetime.now()
 
         return
@@ -129,7 +130,7 @@ class BeaconDataResponse:
 
     def resultsetResponse(self):
         dbm = f'... resultsetResponse start, schema {self.response_schema}'
-        prdbug(dbm, self.debug_mode)
+        prdbug(dbm)
         if not "beaconResultsetsResponse" in self.response_schema:
             return
 
@@ -140,7 +141,6 @@ class BeaconDataResponse:
         self.__resultset_response_update_summaries()
         self.__resultSetResponse_force_granularities()
 
-
         b_h_o = self.data_response.get("beacon_handovers", [])
         if len(b_h_o) < 1:
             self.data_response.pop("beacon_handovers", None)
@@ -150,16 +150,16 @@ class BeaconDataResponse:
         if not self.data_response.get("info"):
             self.data_response.pop("info", None)
 
-        self.__check_switch_to_error_response()
         self.__meta_add_received_request_summary_parameters()
         self.__meta_add_parameters()
         self.__meta_clean_parameters()
         self.__response_clean_parameters()
+        self.__check_switch_to_error_response()
         self.result_sets_end = datetime.datetime.now()
         self.result_sets_duration = self.result_sets_end - self.result_sets_start
 
         dbm = f'... data response duration was {self.result_sets_duration.total_seconds()} seconds'
-        prdbug(dbm, self.debug_mode)
+        prdbug(dbm)
 
         return self.data_response
 
@@ -173,13 +173,12 @@ class BeaconDataResponse:
         colls, queries = ByconCollections(self.byc).populatedCollections()
         self.data_response["response"].update({"collections": colls})
         self.record_queries.update({"entities": queries})
-
         self.__collections_response_update_summaries()
-        self.__check_switch_to_error_response()
         self.__meta_add_received_request_summary_parameters()
         self.__meta_add_parameters()
         self.__meta_clean_parameters()
         self.__response_clean_parameters()
+        self.__check_switch_to_error_response()
         return self.data_response
 
 
@@ -193,21 +192,12 @@ class BeaconDataResponse:
         self.data_response["response"].update({"filtering_terms": fts})
         self.data_response["response"].update({"resources": ress})
         self.record_queries.update({"entities": {"filtering_terms": query}})
-        self.__check_switch_to_error_response()
         self.__meta_add_received_request_summary_parameters()
         self.__meta_add_parameters()
         self.__meta_clean_parameters()
         self.__response_clean_parameters()
+        self.__check_switch_to_error_response()
         return self.data_response
-
-
-    # -------------------------------------------------------------------------#
-
-    def errorResponse(self, error=None):
-        if type(error) is dict:
-            self.error_response.update({"error": error})
-
-        return self.error_response
 
 
     # -------------------------------------------------------------------------#
@@ -215,33 +205,21 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def __check_switch_to_error_response(self):
-        error = None
-
         r_q_e = self.record_queries.get("entities", {})
         if not r_q_e:
-            error = {
-                "error_code": 422,
-                 "error_message": "no valid query"
-            }
-
-        if error:
-            self.error_response.update({
-                "meta": self.data_response.get("meta", {}),
-                "error": error
-            })
-            self.data_response = self.error_response
+            BYC["ERRORS"].append("no valid query")
+            self.data_response.update({"error": {"error_code": 422, "error_message": ", ".join(BYC["ERRORS"])}})
+            self.data_response.pop("response", None)
+            self.data_response.pop("response_summary", None)
+            # BeaconErrorResponse(self.byc).response(422)
 
 
     # -------------------------------------------------------------------------#
 
     def __resultSetResponse_force_granularities(self):
-        prdbug(self.byc, f'authorized_granularities: {self.authorized_granularities}')
+        prdbug(f'authorized_granularities: {self.authorized_granularities}')
         for rs in self.data_response["response"]["result_sets"]:
             rs_granularity = self.authorized_granularities.get(rs["id"], "boolean")
-            
-            dbm = f'rs_granularity ({rs["id"]}): {rs_granularity}'
-            prdbug(dbm, self.debug_mode)
-
             if not "record" in rs_granularity:
                 # TODO /CUSTOM: This non-standard modification removes the results
                 # but keeps the resultSets structure (handovers ...)
@@ -250,6 +228,7 @@ class BeaconDataResponse:
                 rs.pop("results_count", None)
         if "boolean" in self.returned_granularity:
             self.data_response["response_summary"].pop("num_total_results", None)
+            self.data_response.pop("response", None)
 
 
     # -------------------------------------------------------------------------#
@@ -271,13 +250,11 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def __meta_add_parameters(self):
-
         r_m = self.data_response.get("meta", {})
-
         r_m.update({"info": always_merger.merge(r_m.get("info", {}), {"original_queries": self.record_queries})})
 
-        if "test_mode" in r_m:
-            r_m.update({"test_mode":self.test_mode})
+        if BYC["TEST_MODE"] is True:
+            r_m.update({"test_mode": BYC["TEST_MODE"]})
         if "returned_schemas" in r_m:
             r_m.update({"returned_schemas":[self.beacon_schema]})
 
@@ -285,20 +262,8 @@ class BeaconDataResponse:
         for p in ["api_version", "beacon_id"]:
             if p in info.keys():
                 r_m.update({p: info.get(p, "___none___")})
-
-        form = self.form_data
-        # TODO: this is hacky; need a separate setting of the returned granularity
-        # since the server may decide so...
-        # if self.requested_granularity and "returned_granularity" in r_m:
-        #     r_m.update({"returned_granularity": form.get("requested_granularity")})
-
-        service_meta = self.service_config.get("meta", {})
-        for rrs_k, rrs_v in service_meta.items():
-            r_m.update({rrs_k: rrs_v})
-
-        if len(self.warnings) > 0:
-            r_m.update({"warnings": self.warnings})
-
+        if len(BYC["WARNINGS"]) > 0:
+            r_m.update({"warnings": BYC["WARNINGS"]})
         return
 
 
@@ -310,19 +275,17 @@ class BeaconDataResponse:
             return
 
         r_r_s = r_m["received_request_summary"]
-
         r_r_s.update({
             "requested_schemas": [self.beacon_schema]
         })
+        if BYC["TEST_MODE"] is True:
+            r_r_s.update({"test_mode": BYC["TEST_MODE"]})
 
-        for name in ["dataset_ids", "test_mode", "pagination"]:
-            value = self.byc.get(name)
-            if not value:
-                continue
-            r_r_s.update({name: value})
+        r_r_s.update({"pagination": {"skip": self.form_data.get("skip"), "limit": self.form_data.get("limit")}})
+        r_r_s.update({"dataset_ids": self.dataset_ids})
 
         vargs = self.byc.get("varguments", [])
-        # TODO: a bit hacky; len == 1 woulld be the default assemblyId ...
+        # TODO: a bit hacky; len == 1 would be the default assemblyId ...
         if len(vargs) > 1:
             r_r_s.update({"request_parameters":{"g_variant":vargs}})
 
@@ -331,9 +294,7 @@ class BeaconDataResponse:
         if len(fs) > 0:
             for f in fs:
                 fs_p.append(f.get("id"))
-            r_r_s.update({"filters":fs_p})
-        else:
-            r_r_s.pop("filters", None)
+        r_r_s.update({"filters":fs_p})
 
         form = self.form_data
         for p in ["include_resultset_responses", "requested_granularity"]:
@@ -345,9 +306,8 @@ class BeaconDataResponse:
                 r_r_s.update({"request_parameters": always_merger.merge( r_r_s.get("request_parameters", {}), { "cohort_ids": form.get(q) })})
 
         info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
-        for p in ["api_version"]:
-            if p in info.keys():
-                r_r_s.update({p: info.get(p, "___none___")})
+        for p in ["api_version", "beacon_id"]:
+            r_r_s.update({p: info.get(p, "___none___")})
 
         return
 
@@ -413,21 +373,14 @@ class BeaconDataResponse:
 ################################################################################
 
 class ByconFilteringTerms:
-
     def __init__(self, byc: dict):
         self.byc = byc
-        self.debug_mode = byc.get("debug_mode", False)
-        self.test_mode = byc.get("test_mode", False)
-        self.env = byc.get("env", "server")
-        self.db_config = byc.get("db_config", {})
-        self.test_mode_count = byc.get("test_mode_count", 5)
         self.dataset_ids = byc.get("dataset_ids", [])
         self.beacon_defaults = byc.get("beacon_defaults", {})
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
         self.filter_definitions = byc.get("filter_definitions", {})
         self.form_data = byc.get("form_data", {})
         self.filters = byc.get("filters", [])
-        self.output = byc.get("output", "___none___")
         self.response_entity_id = byc.get("response_entity_id", "filteringTerm")
         self.data_collection = byc["response_entity"].get("collection", "collations")
         self.path_id_value = byc.get("request_entity_path_id_value", False)
@@ -483,12 +436,13 @@ class ByconFilteringTerms:
         elif len(q_list) > 1:
             query = {"$and": q_list}
 
-        if self.test_mode is True:
-            query, error = mongo_test_mode_query(self.db_config, self.dataset_ids[0], f_coll, self.test_mode_count)
+        if BYC["TEST_MODE"] is True:
+            t_m_c = self.form_data.get("test_mode_count", 5)
+            query = mongo_test_mode_query(self.dataset_ids[0], f_coll, t_m_c)
 
         for ds_id in self.dataset_ids:
             fields = {"_id": 0}
-            f_s, e = mongo_result_list(self.db_config, ds_id, f_coll, query, fields)
+            f_s = mongo_result_list(ds_id, f_coll, query, fields)
             t_f_t_s = []
             for f in f_s:
                 self.filter_collation_types.add(f.get("collation_type", None))
@@ -503,6 +457,10 @@ class ByconFilteringTerms:
                 ft_s = f.get("scope")
                 if ft_k and ft_s:
                     f_t.update({"target": f'{ft_s}.{ft_k}'})
+
+                lab = f_t.get("label")
+                if lab is None:
+                    f_t.pop("label", None)
 
                 # TODO: this is not required & also not as defined (singular `scope`)
                 # f_t.update({"scopes": scopes})
@@ -524,14 +482,14 @@ class ByconFilteringTerms:
         res_schema = object_instance_from_schema_name(self.byc, "beaconFilteringTermsResults", "definitions/Resource",
                                                       "json")
         for c_t in collation_types:
+            if c_t not in f_d_s:
+                continue
             f_d = f_d_s[c_t]
             r = {}
             for k in res_schema.keys():
                 if k in f_d:
                     r.update({k: f_d[k]})
-
             r_o.update({f_d["namespace_prefix"]: r})
-
         for k, v in r_o.items():
             self.filter_resources.append(v)
 
@@ -547,21 +505,15 @@ class ByconCollections:
     def __init__(self, byc: dict):
         self.byc = byc
         self.dataset_ids = byc.get("dataset_ids", [])
-        self.env = byc.get("env", "server")
-        self.debug_mode = byc.get("debug_mode", False)
-        self.test_mode = byc.get("test_mode", False)
-        self.test_mode_count = byc.get("test_mode_count", 5)
         self.beacon_defaults = byc.get("beacon_defaults", {})
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
         self.filter_definitions = byc.get("filter_definitions", {})
         self.form_data = byc.get("form_data", {})
-        self.output = byc.get("output", "___none___")
         self.response_entity_id = byc.get("response_entity_id", "dataset")
         self.data_collection = byc["response_entity"].get("collection", "collations")
         self.path_id_value = byc.get("request_entity_path_id_value", False)
         self.collections = []
         self.collections_queries = {}
-
         return
 
 
@@ -604,7 +556,6 @@ class ByconCollections:
             return
 
         # TODO: reshape cohorts according to schema
-
         cohorts =  []
         query = { "collation_type": "pgxcohort" }
         limit = 0
@@ -615,10 +566,10 @@ class ByconCollections:
         elif self.path_id_value is not False:
             query = { "id": self.path_id_value }
 
-        if self.test_mode is True:
-            limit = self.test_mode_count
+        if BYC["TEST_MODE"] is True:
+            limit = self.form_data.get("test_mode_count", 5)
 
-        mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
+        mongo_client = MongoClient(host=DB_MONGOHOST)
         for ds_id in self.dataset_ids:
             mongo_db = mongo_client[ ds_id ]        
             mongo_coll = mongo_db[ "collations" ]
@@ -634,26 +585,19 @@ class ByconCollections:
 ################################################################################
 
 class ByconResultSets:
-
     def __init__(self, byc: dict):
         self.byc = byc
-        self.debug_mode = byc.get("debug_mode", False)
         self.beacon_defaults = byc.get("beacon_defaults", {})
-        self.env = byc.get("env", "server")
-        self.db_config = byc.get("db_config", {})
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
         self.datasets_results = dict()  # the object with matched ids per dataset, per h_o
         self.datasets_data = dict()     # the object with data of requested entity per dataset
         self.result_sets = list()       # data rewrapped into the resultSets list
         self.filter_definitions = byc.get("filter_definitions", {})
         self.form_data = byc.get("form_data", {})
-        self.output = byc.get("output", "___none___")
         self.data_collection = byc["response_entity"].get("collection", "biosamples")
         self.response_entity_id = byc.get("response_entity_id", "biosample")
-
-        pagination = byc.get("pagination", {"skip": 0, "limit": 0})
-        self.limit = pagination.get("limit", 0)
-        self.skip = pagination.get("skip", 0)
+        self.limit = self.form_data.get("limit")
+        self.skip = self.form_data.get("skip")
 
         self.record_queries = ByconQuery(byc).recordsQuery()
 
@@ -695,31 +639,22 @@ class ByconResultSets:
     def __get_handover_access_key(self):
         r_c = self.data_collection
         # fallback
-        r_k = r_c+"_id"
-
+        r_k = r_c+"._id"
         for r_t, r_d in self.entity_defaults.items():
             r_t_k = r_d.get("h->o_access_key")
             if not r_t_k:
                 continue
             if r_d.get("response_entity_id", "___none___") == self.response_entity_id:
                 r_k = r_d.get("h->o_access_key", r_k)
-
         self.handover_key = r_k
-
         return
 
 
     # -------------------------------------------------------------------------#
 
     def __result_sets_save_handovers(self):
-        mdb_c = self.db_config
-        db_host = mdb_c.get("host", "localhost")
-        ho_dbname = mdb_c.get("housekeeping_db", "___none___")
-        ho_collname = mdb_c.get("handover_coll", "___none___")
-
-        ho_client = MongoClient(host=db_host)
-        ho_coll = ho_client[ho_dbname].ho_db[ho_collname]
-
+        ho_client = MongoClient(host=DB_MONGOHOST)
+        ho_coll = ho_client[HOUSEKEEPING_DB].ho_db[HOUSEKEEPING_HO_COLL]
         for ds_id, d_s in self.datasets_results.items():
             if not d_s:
                 continue
@@ -727,17 +662,12 @@ class ByconResultSets:
             for h_o_k, h_o in d_s.items():
                 if not "target_values" in h_o:
                     continue
-                h_o_size = sys.getsizeof(h_o["target_values"])
-                
+                h_o_size = sys.getsizeof(h_o["target_values"])        
                 dbm = f'Storage size for {ds_id}.{h_o_k}: {h_o_size / 1000000}Mb'
-                prdbug(dbm, self.debug_mode)
-
+                prdbug(dbm)
                 if h_o_size < 15000000:
                     ho_coll.update_one( { "id": h_o["id"] }, { '$set': h_o }, upsert=True )
-
         ho_client.close()
-
-        return
 
 
     # -------------------------------------------------------------------------#
@@ -755,9 +685,7 @@ class ByconResultSets:
                 # "info": {"counts": {}}
             })
             r_sets.append(ds_rset)
-
         self.result_sets = r_sets
-
         return
 
 
@@ -773,7 +701,7 @@ class ByconResultSets:
         ds_r_duration = datetime.datetime.now() - ds_r_start
         
         dbm = f'... datasets results querying needed {ds_r_duration.total_seconds()} seconds'
-        prdbug(dbm, self.debug_mode)
+        prdbug(dbm)
         return
 
 
@@ -789,7 +717,6 @@ class ByconResultSets:
                 continue
             if self.handover_key not in ds_results.keys():
                 continue
-
             res = ds_results.get(self.handover_key, {})
             q_k = res.get("target_key", "_id")
             q_db = res.get("source_db", "___none___")
@@ -797,19 +724,19 @@ class ByconResultSets:
             q_v_s = res.get("target_values", [])
             q_v_s = return_paginated_list(q_v_s, self.skip, self.limit)
 
-            mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
+            mongo_client = MongoClient(host=DB_MONGOHOST)
             data_coll = mongo_client[ q_db ][ q_coll ]
 
             r_s_res = []
             for q_v in q_v_s:
                 o = data_coll.find_one({q_k: q_v })
                 r_s_res.append(o)
-
             self.datasets_data.update({ds_id: r_s_res})
+
         ds_d_duration = datetime.datetime.now() - ds_d_start
         
         dbm = f'... datasets data retrieval needed {ds_d_duration.total_seconds()} seconds'
-        prdbug(dbm, self.debug_mode)
+        prdbug(dbm)
 
         return
 
@@ -823,7 +750,7 @@ class ByconResultSets:
         ds_v_start = datetime.datetime.now()
         for ds_id, ds_results in self.datasets_results.items():
 
-            mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
+            mongo_client = MongoClient(host=DB_MONGOHOST)
             data_db = mongo_client[ ds_id ]
             v_coll = mongo_client[ ds_id ][ "variants" ]
 
@@ -838,7 +765,7 @@ class ByconResultSets:
         ds_v_duration = datetime.datetime.now() - ds_v_start
 
         dbm = f'... variants retrieval needed {ds_v_duration.total_seconds()} seconds'
-        prdbug(dbm, self.debug_mode)
+        prdbug(dbm)
 
         return
 
@@ -898,8 +825,8 @@ class ByconResultSets:
 
 ################################################################################
 
-def print_json_response(this={}, env="server", status_code=200):
-    if not "local" in env:
+def print_json_response(this={}, status_code=200):
+    if not "local" in ENV:
         print('Content-Type: application/json')
         print('status:' + str(status_code))
         print()
@@ -911,15 +838,11 @@ def print_json_response(this={}, env="server", status_code=200):
 
 ################################################################################
 
-def print_text_response(this="", env="server", status_code=200):
-    if "server" in env:
+def print_text_response(this="", status_code=200):
+    if "server" in ENV:
         print('Content-Type: text/plain')
         print('status:' + str(status_code))
         print()
-
-    elif "file" in env:
-        # this opion can be used to reroute the response to a file
-        return this
 
     print(this)
     print()

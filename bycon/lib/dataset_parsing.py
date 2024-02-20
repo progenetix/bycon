@@ -4,6 +4,7 @@ from os import environ
 
 from bycon_helpers import prdbug
 from cgi_parsing import rest_path_value
+from config import *
 
 ################################################################################
 
@@ -41,17 +42,11 @@ def ds_id_from_accessid(byc):
     # test of existence...
 
     accessid = byc["form_data"].get("accessid", False)
-
-    mdb_c = byc.get("db_config", {})
-    db_host = mdb_c.get("host", "localhost")
-    ho_dbname = mdb_c.get("housekeeping_db", False)
-    ho_collname = mdb_c.get("handover_coll", False)
-
-    if any(x is False for x in [accessid, ho_dbname, ho_collname]):
+    if any(x is False for x in [accessid]):
         return False
 
-    ho_client = MongoClient(host=db_host)
-    h_o = ho_client[ho_dbname][ho_collname].find_one({"id": accessid})
+    ho_client = MongoClient(host=DB_MONGOHOST)
+    h_o = ho_client[HOUSEKEEPING_DB][HOUSEKEEPING_HO_COLL].find_one({"id": accessid})
     if not h_o:
         return False
 

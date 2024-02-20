@@ -13,6 +13,29 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2024-02-20 (v.1.5.0)
+
+* refactoring global configs into `bycon/config.py` to slowly get rid of some of
+  the `byc` -> ... imports  (e.g. global DB parameters, collecting warnings...)
+* removal of `service_config` parameter & generator code from `bycon`, nof handled
+  explicitely in the different byconaut services
+* fixed `geneVariantRequest` to be selected as type when a `geneId` parameter is
+  provided
+* fixed handovers for non-default datasets by adding the `datasetIds` parameter
+  to the handover
+    - bug was based on older design retrieving the dataset id directly from the
+      handover in the temp storage ...
+* moved (partially so far) `external_references` to `references` in biosamples
+    - reference objects are now standard `id`, `label` term objects
+    - `references` is an object, i.e. the items are keyed `{"pubmed": {"id": "PMID:1234567", ...`
+    - regeneration of the reference structure from Beacon/Phenopackets is done at export time
+* `byconaut` with new `/services/samplemap/` endpoint for plotting geolocations
+  of sample data after standard Beacon query
+* `filter_definitions`
+    - fix for arrayexpress series processing (now `AEseries`)
+    - changed `collatiionType` `PMID` => `pubmed`
+* fixed `uploader` fail due to missing import
+
 ### 2024-02-07 (v.1.4.2)
 
 * more consolidation of argument/cgi parsing libraries
@@ -26,6 +49,10 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 * fixed a bug which allowed non-matching filters to pass
 * fixed examples in `tests`
 * fixed `POST` processing (wrong `filters` nesting as in examples ...)
+* fixed the OpenAPI "endpoints" info for the entry types
+    - The `openAPIEndpointsDefinition` parameter in http://progenetix.org/beacon/map/
+      should now point to working definitions per entity, e.g.
+      https://progenetix.org/services/endpoints/biosamples
 
 ### 2024-02-02 (v.1.4.1)
 

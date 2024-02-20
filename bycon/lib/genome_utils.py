@@ -3,41 +3,20 @@ from os import environ, path, pardir
 from pymongo import MongoClient
 
 # local
-from bycon_helpers import generate_id, mongo_result_list, prdbug
-
-bycon_lib_path = path.dirname( path.abspath(__file__) )
-pkg_path = path.join( bycon_lib_path, pardir )
+from bycon_helpers import prdbug
+from config import *
 
 ################################################################################
 ################################################################################
-################################################################################
-
-def set_genome_rsrc_path(byc):
-
-    # TODO: catch error for missing genome edition
-    # TODO: adjust resource file use for local configuration
-    g_map = byc["interval_definitions"]["genome_path_ids"].get("values", {})
-    genome = byc["interval_definitions"]["genome_default"]
-    if "varguments" in byc:
-        genome = byc["varguments"].get("assembly_id", genome)
-    genome = genome.lower()
-
-    # TODO / BUG: next breaks e.g. "mSarHar1.11" -> therefore mapping...
-    genome = re.sub( r"(\w+?)([^\w]\w+?)", r"\1", genome)
-    if genome in g_map.keys():
-        genome = g_map[ genome ]
-
-    byc.update({"genome_rsrc_path": path.join( pkg_path, *byc["genomes_path"], genome ) })
-
-
 ################################################################################
 
 class ChroNames:
     def __init__(self, byc):
-        self.refseq_file = path.join( byc["genome_rsrc_path"], "refseq_chromosomes.yaml") 
+        self.form = byc.get("form_data", {})
         self.refseq_chromosomes = {}
         self.chro_aliases = {}
         self.refseq_aliases = {}
+        self.__set_genome_rsrc_path()
         self.__parse_refseq_file()
         self.__chro_id_data()
 
@@ -81,7 +60,23 @@ class ChroNames:
 
 
     # -------------------------------------------------------------------------#
+
+    def genomePath(self):
+        return self.genome_rsrc_path
+
+
+    # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __set_genome_rsrc_path(self):
+        # TODO: catch error for missing genome edition
+        genome = self.form.get("assembly_id", "GRCh38").lower()
+        g_rsrc_p = path.join( PKG_PATH, "rsrc", "genomes", genome )
+        self.genome_rsrc_path = g_rsrc_p
+        self.refseq_file = path.join( g_rsrc_p, "refseq_chromosomes.yaml") 
+
+
     # -------------------------------------------------------------------------#
 
     def __parse_refseq_file(self):
@@ -92,7 +87,6 @@ class ChroNames:
     # -------------------------------------------------------------------------#
 
     def __chro_id_data(self):
-
         """
         Input: "refseq_chromosomes" object:
         Example:
@@ -143,10 +137,9 @@ class ChroNames:
 ################################################################################
 
 class GeneInfo:
-    def __init__(self, db_config):
-        self.db_config = db_config
-        self.error = None
+    def __init__(self):
         self.gene_data = []
+
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -154,31 +147,25 @@ class GeneInfo:
 
     def returnGene(self, gene_id="___none___"):
         self.__gene_id_data(gene_id, single=True)
-        return self.gene_data, self.error
+        return self.gene_data
+
 
     # -------------------------------------------------------------------------#
 
     def returnGenelist(self, gene_id="___none___"):
         self.__gene_id_data(gene_id, single=False)
-        return self.gene_data, self.error
+        return self.gene_data
+
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 
     def __gene_id_data(self, gene_id, single=True):
-        mdb_c = self.db_config
-        db_host = mdb_c.get("host", "localhost")
-        s_db = mdb_c.get("services_db", "___none___")
-        g_coll = mdb_c.get("genes_coll", "___none___")
-
-        mongo_client = MongoClient(host=db_host)
+        mongo_client = MongoClient(host=DB_MONGOHOST)
         db_names = list(mongo_client.list_database_names())
-        if s_db not in db_names:
-            self.error = f"services db `{s_db}` does not exist"
-            return
-        if "___none___" in g_coll:
-            self.error = "no `genes_coll` parameter in `config.yaml`"
+        if SERVICES_DB not in db_names:
+            BYC["ERRORS"].append(f"services db `{SERVICES_DB}` does not exist")
             return
 
         q_f_s = ["symbol", "ensembl_gene_ids", "synonyms"]
@@ -191,13 +178,15 @@ class GeneInfo:
             q_list.append({q_f: q_re })
         query = { "$or": q_list }
 
+        g_coll = mongo_client[SERVICES_DB][GENES_COLL]
+
         if single is True:
-            gene = mongo_client[s_db][g_coll].find_one(query, { '_id': False } )
+            gene = g_coll.find_one(query, { '_id': False } )
             if gene:
-                self.gene_data = [ mongo_client[s_db][g_coll].find_one(query, { '_id': False } ) ]
+                self.gene_data = [ g_coll.find_one(query, { '_id': False } ) ]
         else:
-            gene_list = list(mongo_client[s_db][g_coll].find(query, { '_id': False } ))
+            gene_list = list(g_coll.find(query, { '_id': False } ))
             if len(gene_list) > 0:
-                self.gene_data = list(mongo_client[s_db][g_coll].find(query, { '_id': False } ))
+                self.gene_data = list(g_coll.find(query, { '_id': False } ))
 
 

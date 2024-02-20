@@ -13,18 +13,15 @@ podmd"""
 ################################################################################
 
 def main():
-
     try:
         service_info()
     except Exception:
-        print_text_response(traceback.format_exc(), byc["env"], 302)
+        print_text_response(traceback.format_exc(), 302)
     
 ################################################################################
 
 def service_info():
-
-    initialize_bycon_service(byc)
-
+    initialize_bycon_service(byc, "service_info")
     defs = byc.get("beacon_defaults", {})
     b_e_d = defs.get("entity_defaults", {})
     pgx_info = b_e_d.get("info", {})
@@ -33,7 +30,7 @@ def service_info():
     for k in info.keys():
         if k in c:
             info.update({k:c[k]})
-    print_json_response(info, byc["env"])
+    print_json_response(info)
 
 ################################################################################
 ################################################################################

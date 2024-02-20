@@ -18,7 +18,7 @@ def main():
     try:
         filtering_terms()
     except Exception:
-        print_text_response(traceback.format_exc(), byc["env"], 302)
+        print_text_response(traceback.format_exc(), 302)
 
  
 ################################################################################
@@ -27,7 +27,7 @@ def filtering_terms():
     initialize_bycon_service(byc, "filtering_terms")
     run_beacon_init_stack(byc)
     r = BeaconDataResponse(byc)
-    print_json_response(r.filteringTermsResponse(), byc["env"])
+    print_json_response(r.filteringTermsResponse())
 
 
 ################################################################################

@@ -1,4 +1,5 @@
 from bycon_helpers import prdbug
+from config import *
 
 """
 This experimental authorization setup so far so far tests a method to define
@@ -14,7 +15,7 @@ def set_user_name(byc):
     will be assumed - but can be overwritten later, e.g. for testing purposes.
     """
     # local user has full permissions
-    if "local" in byc["env"]:
+    if "local" in ENV:
         byc.update({"user_name": "local"})
         return
 
@@ -27,16 +28,14 @@ def set_user_name(byc):
 ################################################################################
 
 def set_returned_granularities(byc):
-
     form = byc.get("form_data", {})
     rg = form.get("requested_granularity", "record")
     un = byc.get("user_name", "anonymous")
-    granularity_levels = byc.get("granularity_levels", {})
     auth = byc.get("authorizations", {})
     ds_ids = byc.get("dataset_ids", [])
 
     g_l_s = [0]
-    r_g_l = granularity_levels.get(rg, 0)
+    r_g_l = GRANULARITY_LEVELS.get(rg, 0)
 
     if not "authorized_granularities" in byc:
         byc.update({"authorized_granularities": {}})
@@ -48,7 +47,7 @@ def set_returned_granularities(byc):
             g_l_l = ugs[ds_id]
         elif "default" in ugs:
             g_l_l = ugs["default"]
-        d_g_l = granularity_levels.get(g_l_l, 0)
+        d_g_l = GRANULARITY_LEVELS.get(g_l_l, 0)
         if d_g_l <= r_g_l:
             byc["authorized_granularities"].update({ds_id: g_l_l})
         g_l_s.append(d_g_l)
@@ -56,7 +55,7 @@ def set_returned_granularities(byc):
     m_g_l = max(g_l_s)
 
     if m_g_l < r_g_l:
-        prdbug("Warning: Requested granularity exceeds user authorization - using a maximum of %s" % byc["returned_granularity"], byc.get("debug_mode"))
-        byc.update({"returned_granularity": list(granularity_levels.keys())[m_g_l]})
+        prdbug("Warning: Requested granularity exceeds user authorization - using a maximum of %s" % byc["returned_granularity"])
+        byc.update({"returned_granularity": list(GRANULARITY_LEVELS.keys())[m_g_l]})
     else:
-        byc.update({"returned_granularity": list(granularity_levels.keys())[r_g_l]})
+        byc.update({"returned_granularity": list(GRANULARITY_LEVELS.keys())[r_g_l]})

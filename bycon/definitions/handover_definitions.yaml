@@ -57,6 +57,19 @@ h->o_types:
     h->o_key: 'biosamples.id'
     script_path_web: '/services/sampletable'
 
+  biosamplesmap:
+    handoverType:
+      id: 'pgx:HO.biosamplesmap'
+      label: "Biosamples Map"
+    note: "geographic map of the biosamples matched by the query"
+    requestedSchema: biosample
+    output: map
+    paginated_entities:
+      - biosample
+      - analysis
+    h->o_key: 'biosamples.id'
+    script_path_web: '/services/samplemap'
+
   phenopackets:
     handoverType:
       id: 'pgx:HO.phenopackets'

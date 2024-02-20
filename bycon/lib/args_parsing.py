@@ -1,8 +1,7 @@
-import argparse, re
+import argparse, humps, re
 
-from humps import camelize, decamelize
-
-from bycon_helpers import prdbug
+from bycon_helpers import prdbug, set_debug_state
+from config import *
 
 ################################################################################
 
@@ -16,39 +15,30 @@ def args_update_form(byc):
         return
     byc.update({"check_args": False})
 
-    create_args_parser(byc)
-
-    if not "local" in byc.get("env", "server"):
-        return
-
     a_defs = byc["argument_definitions"]
+    cmd_args = create_args_parser(a_defs)
     list_pars = []
     for a_n, a_d in a_defs.items():
         if "cmdFlags" in a_d:
-            a_d_k = camelize(a_n)
+            a_d_k = humps.camelize(a_n)
             if "array" in a_d.get("type", "string"):
                 list_pars.append(a_d_k)
-
-    arg_vars = vars(byc["args"])
-
+    arg_vars = vars(cmd_args)
     for p in arg_vars.keys():
-        if arg_vars[p] is None:
+        if not arg_vars[p]:
             continue
-        p_d = decamelize(p)
+        p_d = humps.decamelize(p)
         if p in list_pars:
             byc["form_data"].update({p_d: arg_vars[p].split(',')})
         else:
             byc["form_data"].update({p_d: arg_vars[p]})
-        prdbug(f'{p}: {byc["form_data"][p_d]}', byc.get("debug_mode"))
+
+    BYC.update({"DEBUG_MODE": set_debug_state(byc["form_data"].get("debug_mode", False)) })
 
 
 ################################################################################
 
-def create_args_parser(byc):
-    if not "local" in byc.get("env", "server"):
-        return
-
-    a_defs = byc.get("argument_definitions")
+def create_args_parser(a_defs):
     parser = argparse.ArgumentParser()
     for a_n, a_d in a_defs.items():
         if "cmdFlags" in a_d:
@@ -60,7 +50,7 @@ def create_args_parser(byc):
             if default:
                 argDef.update({"default": default})
             parser.add_argument(*argDef.pop("flags"), **argDef)
-
-    byc.update({"args": parser.parse_args()})
+    cmd_args = parser.parse_args()
+    return cmd_args
 
 

@@ -19,7 +19,7 @@ def main():
     try:
         cohorts()
     except Exception:
-        print_text_response(traceback.format_exc(), byc["env"], 302)
+        print_text_response(traceback.format_exc(), 302)
     
 ################################################################################
 
@@ -27,7 +27,7 @@ def cohorts():
     initialize_bycon_service(byc, "cohorts")
     run_beacon_init_stack(byc)
     r = BeaconDataResponse(byc).collectionsResponse()
-    print_json_response(r, byc["env"])
+    print_json_response(r)
 
 
 ################################################################################

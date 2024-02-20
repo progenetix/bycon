@@ -1,6 +1,8 @@
 from uuid import uuid4
 from pymongo import MongoClient
 from os import environ
+
+from config import *
 from bycon_helpers import prdbug, prjsonnice, test_truthy
 from query_generation import ByconQuery
 
@@ -14,7 +16,6 @@ def execute_bycon_queries(ds_id, BQ, byc):
     the standard "Progenetix"-type MongoDB collections.
         
     podmd"""
-
     h_o_defs = byc["handover_definitions"]["h->o_methods"]
     r_e_id = str(byc.get("response_entity_id", "___none___"))
 
@@ -51,7 +52,7 @@ def execute_bycon_queries(ds_id, BQ, byc):
     ############################################################################
 
     dbm = f'queries at execution: {exe_queries}'
-    prdbug(dbm, byc.get("debug_mode"))
+    prdbug(dbm)
 
     if not exe_queries.keys():
         return prefetch
@@ -208,7 +209,7 @@ def execute_bycon_queries(ds_id, BQ, byc):
     byc["dataset_results"].update({ds_id: prefetch})
 
     try:
-        prdbug(f'{ds_id} biosample count after queries: {prefetch["biosamples._id"]["target_count"]}', byc.get("debug_mode"))
+        prdbug(f'{ds_id} biosample count after queries: {prefetch["biosamples._id"]["target_count"]}')
     except:
         pass
 

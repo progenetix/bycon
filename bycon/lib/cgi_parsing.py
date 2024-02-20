@@ -1,26 +1,29 @@
-import cgi, json, re, sys
-from humps import camelize, decamelize
+import cgi, humps, json, re, sys
 from urllib.parse import urlparse, parse_qs, unquote
 from os import environ
 
+from args_parsing import args_update_form
 from bycon_helpers import prdbug, set_debug_state, test_truthy
+from config import *
 
 ################################################################################
 
-def parse_query(byc):
+def parse_arguments(byc):
     a_defs = byc.get("argument_definitions", {})
     form = byc.get("form_data", {})
-
     for a, d in a_defs.items():
         if "default" in d:
             form.update({a: d["default"]})
     byc.update({"form_data": form})
-
-    r_m = environ.get('REQUEST_METHOD', '')
-    if "POST" in r_m:
-        parse_POST(byc)
+    if "local" in ENV:
+        args_update_form(byc)
     else:
-        parse_GET(byc)
+        r_m = environ.get('REQUEST_METHOD', '')
+        if "POST" in r_m:
+            parse_POST(byc)
+        else:
+            parse_GET(byc)
+
 
 
 ################################################################################
@@ -38,10 +41,10 @@ def parse_POST(byc):
         body = sys.stdin.read(int(content_len))
         jbod = json.loads(body)
         d_m = jbod.get("debugMode", False)
-        byc.update({"debug_mode": set_debug_state(jbod.get("debugMode"))})
+        BYC.update({"DEBUG_MODE": set_debug_state(d_m) })
 
         for j_p in jbod:
-            j_p_d = decamelize(j_p)
+            j_p_d = humps.decamelize(j_p)
             if "debugMode" in j_p:
                 continue
             # TODO: this hacks the v2 structure; ideally should use requestParameters schemas
@@ -51,14 +54,13 @@ def parse_POST(byc):
                         form.update({p: v})
                     elif p == "requestParameters":
                         for rp, rv in v.items():
-                            rp_d = decamelize(rp)
+                            rp_d = humps.decamelize(rp)
                             if "datasets" in rp:
                                 if "datasetIds" in rv:
                                     form.update({"dataset_ids": rv["datasetIds"]})
                             elif "g_variant" in rp:
                                 for vp, vv in v[rp].items():
-                                    # prdbug(f'{vp}: {vv}', byc.get("debug_mode"))
-                                    vp_d = decamelize(vp)
+                                    vp_d = humps.decamelize(vp)
                                     if vp_d in a_defs:
                                         form.update({vp_d: vv})
                             elif rp_d in a_defs:
@@ -84,17 +86,15 @@ def parse_POST(byc):
 def parse_GET(byc):
     form = byc.get("form_data", {})
     a_defs = byc.get("argument_definitions", {})
-    byc.update({"debug_mode": set_debug_state()})
     get_params = cgi.FieldStorage()
-
     for p in get_params:
-        p_d = decamelize(p)
+        p_d = humps.decamelize(p)
         if p_d in a_defs:
             form.update({p_d: refactor_value_from_defined_type(p, get_params, a_defs[p_d])})
         else:
-            prdbug(f'!!! Unmatched parameter {p_d}: {get_params.getvalue(p)}', byc.get("debug_mode"))
-
+            prdbug(f'!!! Unmatched parameter {p_d}: {get_params.getvalue(p)}')
     byc.update({"form_data": form})
+    BYC.update({"DEBUG_MODE": set_debug_state(byc["form_data"].get("debug_mode", False)) })
 
 
 ################################################################################

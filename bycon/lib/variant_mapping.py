@@ -34,7 +34,6 @@ class ByconVariant:
         self.vcf_variant = {}
         self.pgxseg_variant = {}
 
-        self.debug_mode = byc.get("debug_mode", False)
         self.ChroNames = ChroNames(byc)
 
         self.variant_types = byc.get("variant_type_definitions", {})

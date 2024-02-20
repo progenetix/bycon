@@ -77,6 +77,39 @@ definitions:
         db_key: info.group.label
         beacon_key: False
         compact: True
+      pubmed_id:
+        type: string
+        db_key: references.pubmed.id
+        indexed: True
+        beacon_key: False
+        compact: True
+      pubmed_label:
+        type: string
+        db_key: references.pubmed.label
+        beacon_key: False
+        compact: True
+      cellosaurus_id:
+        type: string
+        db_key: references.cellosaurus.id
+        indexed: True
+        beacon_key: False
+        compact: True
+      cellosaurus_label:
+        type: string
+        db_key: references.cellosaurus.label
+        beacon_key: False
+        compact: True
+      cbioportal_id:
+        type: string
+        db_key: references.cbioportal.id
+        indexed: True
+        beacon_key: False
+        compact: True
+      cbioportal_label:
+        type: string
+        db_key: references.cbioportal.label
+        beacon_key: False
+        compact: True
       external_references:
         type: array
         beacon_key: biosamples.externalReferences
@@ -86,16 +119,9 @@ definitions:
         examples:
           - external_references_id___cellosaurus
             external_references_label___cellosaurus
-          - external_references_id___PMID
         prefix_split:
-          PMID:
-            compact: True
           arrayexpress:
             compact: False
-          cbioportal:
-            compact: False
-          cellosaurus:
-            compact: True
       cohort_ids:
         type: array
         beacon_key: False

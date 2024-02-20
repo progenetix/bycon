@@ -1,9 +1,10 @@
-import base36, json, re, time
+import base36, humps, json, re, time
 
 from isodate import parse_duration
-from humps import camelize, decamelize
 from os import environ
 from pymongo import MongoClient
+
+from config import *
 
 ################################################################################
 
@@ -14,21 +15,24 @@ def set_debug_state(debug=False) -> bool:
     The common way would be to add either a `/debug=1/` part to a REST path or
     to provide a `...&debug=1` query parameter.
     """
-
-    if test_truthy(debug):
-        print('Content-Type: text')
-        print()
+    if BYC["DEBUG_MODE"] is True:
         return True
-
-    r_uri = environ.get('REQUEST_URI', "___none___")
-    if re.match(r'^.*?[?&/]debugMode?=(\w+?)\b.*?$', r_uri):
-        d = re.match(r'^.*?[?&/]debugMode?=(\w+?)\b.*?$', r_uri).group(2)
-        if test_truthy(d):
+    if test_truthy(debug):
+        BYC.update({"DEBUG_MODE": True})
+        if not "local" in ENV:
             print('Content-Type: text')
             print()
-            return True
+        return True
 
-    return False
+    if not "local" in ENV:
+        r_uri = environ.get('REQUEST_URI', "___none___")
+        if re.match(r'^.*?[?&/]debugMode?=(\w+?)\b.*?$', r_uri):
+            d = re.match(r'^.*?[?&/]debugMode?=(\w+?)\b.*?$', r_uri).group(1)
+            if test_truthy(d):
+                print('Content-Type: text')
+                print()
+                BYC.update({"DEBUG_MODE": True})
+                return True
 
 
 ################################################################################
@@ -135,49 +139,45 @@ def return_paginated_list(this, skip, limit):
 
 ################################################################################
 
-def mongo_result_list(db_config, db_name, coll_name, query, fields):
+def mongo_result_list(db_name, coll_name, query, fields):
     results = []
-    error = None
 
-    db_host = db_config.get("host", "localhost")
-    mongo_client = MongoClient(host=db_host)
+    mongo_client = MongoClient(host=DB_MONGOHOST)
     db_names = list(mongo_client.list_database_names())
     if db_name not in db_names:
-        return results, f"{db_name} db `{db_name}` does not exist"
-
+        BYC["ERRORS"].append(f"db `{db_name}` does not exist")
+        return results
     try:
         results = list(mongo_client[db_name][coll_name].find(query, fields))
     except Exception as e:
-        error = e
-
+        BYC["ERRORS"].append(e)
     mongo_client.close()
 
-    return results, error
+    return results
 
 
 ################################################################################
 
-def mongo_test_mode_query(db_config, db_name, coll_name, test_mode_count=5):
-    
+def mongo_test_mode_query(db_name, coll_name, test_mode_count=5):
     query = {}
     error = False
     ids = []
 
-    db_host = db_config.get("host", "localhost")
-    mongo_client = MongoClient(host=db_host)
+    mongo_client = MongoClient(host=DB_MONGOHOST)
     db_names = list(mongo_client.list_database_names())
     if db_name not in db_names:
+        BYC["ERRORS"].append(f"db `{db_name}` does not exist")
         return results, f"{db_name} db `{db_name}` does not exist"
     try:
         rs = list(mongo_client[db_name][coll_name].aggregate([{"$sample": {"size": test_mode_count}}]))
         ids = list(s["_id"] for s in rs)
     except Exception as e:
-        error = e
+        BYC["ERRORS"].append(e)
 
     mongo_client.close()
     query = {"_id": {"$in": ids}}
 
-    return query, error
+    return query
 
 ################################################################################
 
@@ -298,14 +298,14 @@ def decamelize_words(j_d):
     # TODO: move words to config
     de_cams = ["gVariants", "gVariant", "sequenceId", "relativeCopyClass", "speciesId", "chromosomeLocation", "genomicLocation"]
     for d in de_cams:
-        j_d = re.sub(r"\b{}\b".format(d), decamelize(d), j_d)
+        j_d = re.sub(r"\b{}\b".format(d), humps.decamelize(d), j_d)
     return j_d
 
 
 ################################################################################
 
-def prdbug(this, debug_mode=False):
-    if debug_mode is True:
+def prdbug(this):
+    if BYC["DEBUG_MODE"] is True:
         prjsonnice(this)
 
 
@@ -318,7 +318,7 @@ def prjsonnice(this):
 ################################################################################
 
 def prjsoncam(this):
-    prjsonnice(camelize(this))
+    prjsonnice(humps.camelize(this))
 
 
 

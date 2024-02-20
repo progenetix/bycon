@@ -1,14 +1,10 @@
 genome_default: GRCh38
-
-cnv_amp_max_size: 5000000
-
+cnv_amp_max_size: 3000000
 genome_bin_default: 1Mb
-genome_binning: 1Mb # can be updated dynamically
-
 genome_bin_sizes:
   description: >-
     * keyword defined base sizes of genomic binning intervals for CNV satus and
-      frequency maps
+      frequency maps (parameter --genomeBinning)
     * only ...Mb, kb or b are supported as unit (or no unit => b)
   values:
     default: 1000000
@@ -31,18 +27,17 @@ genome_path_ids:
   description: >-
     * supported genome editions (with existing cytoband files)
     * the keys are stemmed & lower cased programmatically during matching
-    * CAVE: support for non-GRCh38 might be degraded since the Progenetix
-      use case currently is focussed on this edition
+    * CAVE: support for non-GRCh38 currently degraded
   values:
     grch38: grch38
-    grch37: hg19
-    ncbi36: hg18
-    ncbi35: hg17
-    ncbi34: hg16
-    mm8: mm8
-    mm9: mm9
-    msarhar1: mSarHar1.11
-    zf7: zf7
+    # grch37: hg19
+    # ncbi36: hg18
+    # ncbi35: hg17
+    # ncbi34: hg16
+    # mm8: mm8
+    # mm9: mm9
+    # msarhar1: mSarHar1.11
+    # zf7: zf7
 
 terminal_intervals_soft_expansion_fraction:
   description: >-

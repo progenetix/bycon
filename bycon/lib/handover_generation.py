@@ -5,6 +5,7 @@ from os import environ, pardir, path
 import sys
 
 from bycon_helpers import hex_2_rgb, prdbug, select_this_server
+from config import *
 from variant_mapping import ByconVariant
 
 ################################################################################
@@ -13,20 +14,21 @@ def dataset_response_add_handovers(ds_id, byc):
 
     """podmd
     podmd"""
-
+    form = byc.get("form_data", {})
     b_h_o = [ ]
-    if byc["include_handovers"] is not True:
+    if form["include_handovers"] is not True:
         return b_h_o
     if not ds_id in byc["dataset_definitions"]:
         return b_h_o
 
+    skip = form.get("skip")
+    limit = form.get("limit")
     h_o_server = select_this_server(byc)    
     h_o_types = byc["handover_definitions"]["h->o_types"]
-    ds_h_o = byc["dataset_definitions"][ ds_id ].get("handoverTypes", h_o_types.keys())
-
+    ds_h_o = byc["dataset_definitions"][ds_id].get("handoverTypes", h_o_types.keys())
     ds_res_k = list(byc["dataset_results"][ds_id].keys())
 
-    prdbug(f'... pre handover {ds_res_k}', byc.get("debug_mode"))
+    prdbug(f'... pre handover {ds_res_k}')
 
     for h_o_t, h_o_defs in h_o_types.items():
 
@@ -34,7 +36,7 @@ def dataset_response_add_handovers(ds_id, byc):
         h_o = byc["dataset_results"][ds_id].get(h_o_k)
         if not h_o:
             continue
-        prdbug(f'... checking handover {h_o_t}', byc.get("debug_mode"))
+        prdbug(f'... checking handover {h_o_t}')
 
         # testing if this handover is active for the specified dataset      
         if h_o_t not in ds_h_o:
@@ -59,13 +61,13 @@ def dataset_response_add_handovers(ds_id, byc):
             bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, 0, 0, byc)
             h_o_r.update( { "url": _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos, byc ) } )
         else:
-            h_o_r.update( { "url": handover_create_url(this_server, h_o_defs, accessid, byc) } )
+            h_o_r.update( { "url": handover_create_url(this_server, h_o_defs, ds_id, accessid) } )
 
         # TODO: needs a new schema to accommodate this not as HACK ...
         # the phenopackets URL needs matched variants, which it wouldn't know about ...
         if "phenopackets" in h_o_t:
             if "variants._id" in byc["dataset_results"][ds_id].keys():
-                h_o_r["url"] += "&variantsaccessid="+byc["dataset_results"][ds_id][ "variants._id" ][ "id" ]
+                h_o_r["url"] += f'&variantsaccessid={byc["dataset_results"][ds_id]["variants._id"]["id"]}'
 
         e_t = byc["response_entity"].get("response_entity_id", "___none___")
         p_e = h_o_defs.get("paginated_entities", [])
@@ -74,7 +76,7 @@ def dataset_response_add_handovers(ds_id, byc):
 
             h_o_r.update({"pages":[]})
             p_f = 0
-            p_t = p_f + byc["pagination"]["limit"]
+            p_t = p_f + limit
             p_s = 0
 
             while p_f < target_count + 1:
@@ -88,13 +90,13 @@ def dataset_response_add_handovers(ds_id, byc):
                     bed_file_name, ucsc_pos = _write_variants_bedfile(h_o, p_f, p_t, byc)
                     u =  _handover_create_ext_url(this_server, h_o_defs, bed_file_name, ucsc_pos, byc )
                 else:
-                    u = h_o_r["url"] + "&paginateResults=false&skip={}&limit={}".format(p_s, byc["pagination"]["limit"])
+                    u = f'{h_o_r["url"]}&paginateResults=false&skip={p_s}&limit={limit}'
                 h_o_r["pages"].append( { "handover_type": {"id": h_o_defs["handoverType"][ "id" ], "label": l }, "url": u } )
                 p_s += 1
-                p_f += byc["pagination"]["limit"]
-                p_t = p_f + byc["pagination"]["limit"]
+                p_f += limit
+                p_t = p_f + limit
 
-            h_o_r["url"] += "&skip={}&limit={}".format(byc["pagination"]["skip"], byc["pagination"]["limit"])
+            h_o_r["url"] += f'&skip={skip}&limit={limit}'
         if "url" in h_o_r:
             b_h_o.append( h_o_r )
 
@@ -104,24 +106,15 @@ def dataset_response_add_handovers(ds_id, byc):
 ################################################################################
 
 def dataset_results_save_handovers(ds_id, byc):
-
-    mdb_c = byc.get("db_config", {})
-    db_host = mdb_c.get("host", "localhost")
-    ho_dbname = mdb_c.get("housekeeping_db", False)
-    ho_collname = mdb_c.get("handover_coll", False)
-
-    ho_client = MongoClient(host=db_host)
-    ho_coll = ho_client[ho_dbname][ho_collname]
+    ho_client = MongoClient(host=DB_MONGOHOST)
+    ho_coll = ho_client[HOUSEKEEPING_DB][HOUSEKEEPING_HO_COLL]
 
     for h_o_k in byc["dataset_results"][ds_id].keys():
-        
         h_o = byc["dataset_results"][ds_id][ h_o_k ]
         h_o_size = sys.getsizeof(h_o["target_values"])
-
         # print("Storage size for {}: {}Mb".format(h_o_k, h_o_size / 1000000))
         if h_o_size < 15000000:
             ho_coll.update_one( { "id": h_o["id"] }, { '$set': h_o }, upsert=True )
-
     ho_client.close()
 
     return True
@@ -129,12 +122,12 @@ def dataset_results_save_handovers(ds_id, byc):
 
 ################################################################################
 
-def handover_create_url(h_o_server, h_o_defs, accessid, byc):
+def handover_create_url(h_o_server, h_o_defs, ds_id, accessid):
     if "script_path_web" in h_o_defs:
         server = h_o_server
         if "http" in h_o_defs["script_path_web"]:
             server = ""
-        url = "{}{}?accessid={}".format(server, h_o_defs["script_path_web"], accessid)
+        url = f'{server}{h_o_defs["script_path_web"]}?datasetIds={ds_id}&accessid={accessid}'
         for p in ["method", "output", "plotType", "requestedSchema"]:
             if p in h_o_defs:
                 url += "&{}={}".format(p, h_o_defs[p])

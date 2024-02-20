@@ -2,6 +2,7 @@ import datetime, re
 from pymongo import MongoClient
 
 from bycon_helpers import prdbug, select_this_server
+from config import *
 from variant_mapping import ByconVariant
 from os import environ
 
@@ -34,7 +35,11 @@ def remap_variants(r_s_res, byc):
 
     if not "genomicVariant" in byc["response_entity_id"]:
         return r_s_res
-    if "vcf" in byc["output"].lower() or "pgxseg" in byc["output"].lower():
+
+    # TODO: still used???
+    special_output = byc.get("output", "___none___").lower()
+
+    if "vcf" in special_output or "pgxseg" in special_output:
         return r_s_res
 
     variant_ids = []
@@ -89,7 +94,7 @@ def remap_analyses(r_s_res, byc):
 
     pop_keys = ["info", "provenance", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats"]
 
-    if "cnvstats" in byc["output"]:
+    if "cnvstats" in byc.get("output", "___none___").lower():
         pop_keys = ["info", "provenance", "cnv_statusmaps"]
 
     for cs_i, cs_r in enumerate(r_s_res):
@@ -151,11 +156,16 @@ def remap_biosamples(r_s_res, byc):
     if not r_s_res:
         return None
 
-    bs_pop_keys = ["_id", "followup_state", "followup_time"]  # "info"
-
+    bs_pop_keys = ["_id", "followup_state", "followup_time", "references"]  # "info"
     for bs_i, bs_r in enumerate(r_s_res):
         # TODO: REMOVE VERIFIER HACKS
-        r_s_res[bs_i].update({"sample_origin_type": {"id": "OBI:0001479", "label": "specimen from organism"}})
+        e_r = []
+        for r_k, r_v in bs_r.get("references", {}).items():
+            e_r.append(__reference_object_from_ontology_term(r_k, r_v, byc))
+        r_s_res[bs_i].update({
+            "sample_origin_type": {"id": "OBI:0001479", "label": "specimen from organism"},
+            "external_references": e_r
+        })
         for f in ["tumor_grade", "pathological_stage", "histological_diagnosis"]:
             try:
                 if f in r_s_res[bs_i]:
@@ -174,6 +184,25 @@ def remap_biosamples(r_s_res, byc):
 
 ################################################################################
 
+def __reference_object_from_ontology_term(filter_type, ontology_term, byc):
+    if "label" in ontology_term:
+        ontology_term.update({"description": ontology_term.get("label")})
+        ontology_term.pop("label", None)
+
+    f_t_d = byc["filter_definitions"].get(filter_type, {})
+    r_d = f_t_d.get("reference")
+    if not r_d:
+        return ontology_term
+    r_r = r_d.get("replace", [])
+    if len(r_r) == 2:
+        o_id = ontology_term.get("id", "___none___").replace(r_r[0], r_r[1])
+
+    ontology_term.update({"reference": f'{r_d.get("root")}{o_id}'})
+    return ontology_term
+
+
+################################################################################
+
 def remap_individuals(r_s_res, byc):
     if not "individual" in byc["response_entity_id"]:
         return r_s_res
@@ -187,7 +216,7 @@ def remap_phenopackets(ds_id, r_s_res, byc):
     if not "phenopacket" in byc["response_entity_id"]:
         return r_s_res
 
-    mongo_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
+    mongo_client = MongoClient(host=DB_MONGOHOST)
     data_db = mongo_client[ds_id]
     pxf_s = []
 
@@ -215,7 +244,11 @@ def phenopack_individual(ind, data_db, byc):
     bios_s = data_db["biosamples"].find({"individual_id": ind.get("id", "___none___")})
 
     for bios in bios_s:
+        e_r = []
+        for r_k, r_v in bios.get("references", {}).items():
+            e_r.append(__reference_object_from_ontology_term(r_k, r_v, byc))
         bios.update({
+            "external_references" : e_r,
             "files": [
                 {
                     "uri": f'{server}/services/vcfvariants/{bios.get("id", "___none___")}',

@@ -19,7 +19,7 @@ def main():
     try:
         datasets()
     except Exception:
-        print_text_response(traceback.format_exc(), byc["env"], 302)
+        print_text_response(traceback.format_exc(), 302)
 
 
 ################################################################################
@@ -28,7 +28,7 @@ def datasets():
     initialize_bycon_service(byc, "datasets")
     run_beacon_init_stack(byc)
     r = BeaconDataResponse(byc)
-    print_json_response(r.collectionsResponse(), byc["env"])
+    print_json_response(r.collectionsResponse())
 
 
 ################################################################################

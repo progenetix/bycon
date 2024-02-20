@@ -11,6 +11,19 @@ age:
   examples:
     - 'ageAtDiagnosis:<=P18Y'
 
+genomes:
+  id: genomes
+  ft_type: alphanumeric
+  format: integer
+  name: genome count
+  scope: publications
+  entity: publication
+  db_key: counts.genomes
+  pattern: '^\d+$'
+  collationed: False
+  examples:
+    - 'genomes:>0'
+
 NCITgrade:
   id: ncit
   ft_type: ontologyTerm
@@ -234,8 +247,7 @@ icdot:
     - pgx:icdot-C5
 
 # Procedural Metadata
-
-PMID:
+pubmed:
   id: pubmed
   ft_type: ontologyTerm
   name: NCBI PubMed
@@ -246,7 +258,7 @@ PMID:
     replace:
       - "PMID:"
       - ""
-  db_key: 'external_references.id'
+  db_key: 'references.pubmed.id'
   scope: biosamples
   entity: biosample
   pattern: '^PMID(:\d+?)?$'
@@ -270,8 +282,6 @@ GEOseries:
   scope: analyses
   entity: analysis
   db_key: 'analysis_info.series_id'
-  is_series: True
-  series_pattern: '^(?:geo:)?GSM\d+?$'
   collationed: True
   examples:
     - geo:GSE19331
@@ -317,8 +327,25 @@ GEOexperiment:
   examples:
     - geo:GSM253289
 
-arrayexpress:
-  id: arrayexpress
+AEseries:
+  id: AEseries
+  ft_type: ontologyTerm
+  namespace_prefix: arrayexpress
+  name: EBI ArrayExpress Series
+  url: https://www.ebi.ac.uk/arrayexpress/
+  reference:
+    root: https://www.ebi.ac.uk/arrayexpress/series/
+    replace:
+      - "arrayexpress:"
+      - ""
+  pattern: '^arrayexpress:E[\-\w]+$'
+  scope: analyses
+  entity: analysis
+  db_key: 'analysis_info.series_id'
+  collationed: True
+
+AEexperiment:
+  id: AEexperiment
   ft_type: ontologyTerm
   name: "EBI ArrayExpress"
   namespace_prefix: arrayexpress
@@ -331,13 +358,13 @@ arrayexpress:
   db_key: 'analysis_info.experiment_id'
   scope: analyses
   entity: analysis
-  pattern: '^arrayexpress:[AEP]-\w{4}-\d+$'
-  collationed: True
+  pattern: '^arrayexpress:[AEP]-\w{4}-[\-\w]+$'
+  collationed: False
   examples:
-    - arrayexpress:E-MEXP-1008
+    - arrayexpress:E-MEXP-1008-SAMPLE_1
 
 TCGAproject:
-  id: tcga
+  id: tcgaproject
   ft_type: ontologyTerm
   name: "The Cancer Genome Atlas"
   namespace_prefix: pgx
@@ -349,14 +376,13 @@ TCGAproject:
       - ""
   scope: biosamples
   entity: biosample
-  pattern: '^(?:pgx:)?TCGA\.[\w\-]{2,8}?$'
+  pattern: '^(?:pgx:)?TCGA\.\w{2,4}?$'
   db_key: 'external_references.id'
   collationed: True
   examples:
-    - pgx:TCGA-samples
-    - pgx:TCGA-DLBC
-    - pgx:TCGA-ESCA
-    - pgx:TCGA-GBM
+    - pgx:TCGA.DLBC
+    - pgx:TCGA.ESCA
+    - pgx:TCGA.GBM
 
 UBERON:
   id: uberon
@@ -393,7 +419,7 @@ cbioportal:
       - ""
   scope: biosamples
   entity: biosample
-  db_key: 'external_references.id'
+  db_key: 'references.cbioportal.id'
   pattern: '^cbioportal:\w+?$'
   collationed: True
   examples:
@@ -411,7 +437,7 @@ cellosaurus:
     replace:
       - "cellosaurus:"
       - ""
-  db_key: 'external_references.id'
+  db_key: 'references.cellosaurus.id'
   scope: biosamples
   entity: biosample
   pattern: '^cellosaurus:CVCL_\w*?$'

@@ -4,6 +4,7 @@ from os import environ
 from pymongo import MongoClient
 
 from bycon_helpers import days_from_iso8601duration, prdbug, return_paginated_list
+from config import *
 from genome_utils import GeneInfo
 
 ################################################################################
@@ -40,10 +41,6 @@ class ByconQuery():
     """
 
     def __init__(self, byc: dict, dataset_id=False):
-        self.byc = byc              # TODO: remove after finish ...
-        self.debug_mode = byc.get("debug_mode", False)
-        self.test_mode = byc.get("test_mode", False)
-        self.test_mode_count = int(byc.get('test_mode_count', 5))
         self.defaults = byc.get("beacon_defaults", {})
         self.response_types = self.defaults.get("entity_defaults", {})
 
@@ -55,7 +52,7 @@ class ByconQuery():
         else:
             self.ds_id = dataset_id
 
-        self.arguments = byc.get("form_data", {})
+        self.form_data = byc.get("form_data", {})
         self.argument_definitions = byc.get("argument_definitions", {})
         self.filters = byc.get("filters", [])
 
@@ -68,17 +65,10 @@ class ByconQuery():
         self.varguments = byc.get("varguments", {})
 
         self.filter_definitions = byc.get("filter_definitions", {})
+        self.geoloc_definitions = byc.get("geoloc_definitions", {})
 
-        ff = byc.get("filter_flags", {})
-        self.filter_descendants = ff.get("descendants", True)
-        self.filter_logic = ff.get("logic", '$and')
-
-        self.db_config = byc.get("db_config", {})
-
-        pagination = byc.get("pagination", {"skip": 0, "limit": 0})
-        self.limit = pagination.get("limit", 0)
-        self.skip = pagination.get("skip", 0)
-
+        self.limit = self.form_data.get("limit")
+        self.skip = self.form_data.get("skip")
 
         self.queries = {
             "expand": True,
@@ -86,7 +76,6 @@ class ByconQuery():
             "entities": {}
         }
 
-        self.warnings = []
         self.__queries_for_test_mode()
         self.__query_from_path_id()
         self.__update_queries_from_id_values()
@@ -138,14 +127,14 @@ class ByconQuery():
 
         id_f_v = self.defaults.get("id_entity_mappings", {})
         id_k_s = set(id_f_v.keys())
-        f_k_s = set(self.arguments.keys())
+        f_k_s = set(self.form_data.keys())
         r_e_id = self.requested_entity
 
         for this_id_k in list(id_k_s & f_k_s):
 
             entity = id_f_v[this_id_k]
             v_q_par = re.sub("_ids", "_id", this_id_k)
-            id_v_s = self.arguments.get(this_id_k, [])
+            id_v_s = self.form_data.get(this_id_k, [])
 
             q = False
             if len(id_v_s) < 1:
@@ -186,27 +175,21 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __queries_for_test_mode(self):
-
+        if BYC["TEST_MODE"] is False:
+            return
         if self.queries.get("expand") is False:
             return
-        if self.test_mode is False:
-            return
 
-        ret_no = self.test_mode_count
+        ret_no = self.form_data.get("test_mode_count", 5)
         r_t_s = self.response_types
         r_e = self.response_entity
-        prdbug(self.byc, r_e)
         if not r_e:
             return
         r_c = r_t_s[r_e].get("collection")
         if not r_c:
             return
 
-        mdb_c = self.db_config
-        db_host = mdb_c.get("host", "localhost")
-
-
-        data_db = MongoClient(host=db_host)[self.ds_id]
+        data_db = MongoClient(host=DB_MONGOHOST)[self.ds_id]
         data_collnames = data_db.list_collection_names()
 
         if r_c not in data_collnames:
@@ -237,10 +220,7 @@ class ByconQuery():
         r_t_s = self.response_types
         r_c = r_t_s[r_e].get("collection")
 
-        # TODO: these are old plug-ins ...
-        # these have to be recreated in the package (w/ mods)
-        # f_n = f'_ByconQuery__create_{self.variant_request_type}_query'
-        # q = globals()[f_n](self.byc)
+        prdbug(f'... Gene Id: {self.varguments.get("gene_id")} => {self.variant_request_type}')
 
         q = False
 
@@ -275,7 +255,7 @@ class ByconQuery():
         # query database for gene and use coordinates to create range query
         vp = self.varguments
 
-        gene_data, e = GeneInfo(self.db_config).returnGene(vp["gene_id"])
+        gene_data = GeneInfo().returnGene(vp["gene_id"])
 
         # TODO: error report/warning
         if not gene_data:
@@ -437,15 +417,9 @@ class ByconQuery():
         if len(self.filters) < 1:
             return
 
-        mdb_c = self.db_config
-        db_host = mdb_c.get("host", "localhost")
-
-        data_db = MongoClient(host=db_host)[self.ds_id]
+        data_db = MongoClient(host=DB_MONGOHOST)[self.ds_id]
         coll_coll = data_db[ self.filtering_terms_coll ]
         self.collation_ids = coll_coll.distinct("id", {})
-
-        # if self.byc["debug_mode"] is True:
-        #     print(len(self.collation_ids))
 
         f_lists = {}
         f_infos = {}
@@ -457,7 +431,7 @@ class ByconQuery():
                 f_neg = True
                 f_val = re.sub(r'^!', '', f_val)
             f_val = re.sub(r'^!', '', f_val)
-            f_desc = f.get("includeDescendantTerms", self.filter_descendants)
+            f_desc = f.get("includeDescendantTerms", self.form_data.get("include_descendant_terms"))
 
             f_info = self.__query_from_collationed_filter(coll_coll, f_val)
             if f_info is False:
@@ -566,9 +540,6 @@ class ByconQuery():
                     "format": f_d.get("format", "___none___"),
                     "child_terms": [f_val]
                 }
-                # if f_d.get("collationed", False) is True:
-                #     ftw = f'Filter `{f_val}` matches a `{f_d["scope"]}` pattern but is not in the list of existing `filtering_terms` for {ds_id}'
-                #     response_add_filter_warnings(self.byc, ftw)
                 return f_info
 
         return False
@@ -577,11 +548,9 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __query_from_geoquery(self, entity="biosample"):
-        geo_q, geo_pars = geo_query(self.byc)
-
+        geo_q, geo_pars = geo_query(self.geoloc_definitions, self.form_data)
         if not geo_q:
             return
-
         self.__update_queries_for_entity(geo_q, entity)
 
 
@@ -595,17 +564,12 @@ class ByconQuery():
         These query values can be combined with additional parameters.
         """
 
-        accessid = self.arguments.get("accessid")
+        accessid = self.form_data.get("accessid")
         if not accessid:
             return
 
-        mdb_c = self.db_config
-        db_host = mdb_c.get("host", "localhost")
-        ho_dbname = mdb_c.get("housekeeping_db", "___none___")
-        ho_collname = mdb_c.get("handover_coll", "___none___")
-
-        ho_client = MongoClient(host=db_host)
-        ho_coll = ho_client[ho_dbname].ho_db[ho_collname]
+        ho_client = MongoClient(host=DB_MONGOHOST)
+        ho_coll = ho_client[HOUSEKEEPING_DB].ho_db[HOUSEKEEPING_HO_COLL]
         h_o = ho_coll.find_one({"id": accessid})
 
         # accessid overrides ... ?
@@ -622,14 +586,13 @@ class ByconQuery():
         if len(t_v) < 1:
             return
         h_o_q = {t_k: {'$in': t_v}}
-
         self.__update_queries_for_entity(h_o_q, t_e)
 
 
     # -------------------------------------------------------------------------#
 
     def __update_queries_for_entity(self, query, entity):
-        logic = self.filter_logic
+        logic = self.__boolean_to_mongo_logic(self.form_data.get("filter_logic"))
         r_t_s = self.response_types
         r_c = r_t_s[entity].get("collection")
         q_e = self.queries.get("entities")
@@ -640,8 +603,15 @@ class ByconQuery():
             q_e[entity]["query"][logic].append(query)
         else:
             q_e[entity].update({"query": {logic: [q_e[entity]["query"], query]}})
-
         self.queries.update({"entities": q_e})
+
+
+    # -------------------------------------------------------------------------#
+
+    def __boolean_to_mongo_logic(self, logic: str = "AND") -> str:
+        if "OR" in logic.upper():
+            return '$or'
+        return '$and'
 
 
     # -------------------------------------------------------------------------#
@@ -670,23 +640,20 @@ class ByconQuery():
 
 # TODO: GeoQuery class
 
-def geo_query(byc):
+def geo_query(geoloc_definitions, form):
 
-    if "geoloc_definitions" not in byc:
-        return geo_q, geo_pars
+    geo_q = None
+    geo_pars = None
 
-    g_p_defs = byc["geoloc_definitions"]["parameters"]
-    g_p_rts = byc["geoloc_definitions"]["request_types"]
-    geo_root = byc["geoloc_definitions"]["geo_root"]
+    g_p_defs = geoloc_definitions["parameters"]
+    g_p_rts = geoloc_definitions["request_types"]
+    geo_root = geoloc_definitions["geo_root"]
 
     geo_form_pars = {}
     for g_f_p in g_p_defs.keys():
-        f_v = byc["form_data"].get(g_f_p)
+        f_v = form.get(g_f_p)
         if f_v:
             geo_form_pars.update({g_f_p: f_v})
-
-    geo_q = {}
-    geo_pars = {}
 
     if len(geo_form_pars.keys()) < 1:
         return geo_q, geo_pars
@@ -749,7 +716,7 @@ def geo_query(byc):
         return geo_q, geo_pars
 
     if "ISO3166alpha2" in req_type:
-        geo_q = {"provenance.geo_location.properties.ISO3166alpha2": byc["form_data"]["iso3166alpha2"].upper()}
+        geo_q = {"provenance.geo_location.properties.ISO3166alpha2": form["iso3166alpha2"].upper()}
         return geo_q, geo_pars
 
     if "geoquery" in req_type:

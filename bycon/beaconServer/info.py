@@ -17,16 +17,17 @@ def main():
     try:
         info()
     except Exception:
-        print_text_response(traceback.format_exc(), byc["env"], 302)
+        print_text_response(traceback.format_exc(), 302)
     
 ################################################################################
 
 def info():
 
-    initialize_bycon_service(byc)
+    initialize_bycon_service(byc, "info")
     r = BeaconInfoResponse(byc)
 
-    b_e_d = byc["beacon_defaults"].get("entity_defaults", {})
+    defs = byc.get("beacon_defaults", {})
+    b_e_d = defs.get("entity_defaults", {})
     info = b_e_d.get("info", {})
     pgx_info = info.get("content", {})
     beacon_info = object_instance_from_schema_name(byc, "beaconInfoResults", "")
@@ -44,7 +45,7 @@ def info():
             beacon_schemas.append(b_s)
 
     response.update( { "returned_schemas": beacon_schemas } )
-    print_json_response(response, byc["env"])
+    print_json_response(response)
 
 
 ################################################################################
