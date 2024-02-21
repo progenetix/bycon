@@ -327,6 +327,12 @@ debug_mode:
     - --debugMode 
   description: debug setting
 
+show_help:
+  type: boolean
+  cmdFlags:
+    - --showHelp 
+  description: specific help display
+
 test_mode_count:
   type: integer
   cmdFlags:

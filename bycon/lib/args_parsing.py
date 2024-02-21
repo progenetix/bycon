@@ -7,7 +7,7 @@ from config import *
 
 def args_update_form(byc):
     """
-    This function adds comand line arguments to the `byc["form_data"]` input
+    This function adds comand line arguments to the `BYC_PARS` input
     parameter collection (in "local" context).
     """
     # Serves as "we've been here before" marker - before the env check.
@@ -29,11 +29,11 @@ def args_update_form(byc):
             continue
         p_d = humps.decamelize(p)
         if p in list_pars:
-            byc["form_data"].update({p_d: arg_vars[p].split(',')})
+            BYC_PARS.update({p_d: arg_vars[p].split(',')})
         else:
-            byc["form_data"].update({p_d: arg_vars[p]})
+            BYC_PARS.update({p_d: arg_vars[p]})
 
-    BYC.update({"DEBUG_MODE": set_debug_state(byc["form_data"].get("debug_mode", False)) })
+    BYC.update({"DEBUG_MODE": set_debug_state(BYC_PARS.get("debug_mode", False)) })
 
 
 ################################################################################

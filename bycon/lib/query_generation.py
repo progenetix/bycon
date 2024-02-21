@@ -52,7 +52,6 @@ class ByconQuery():
         else:
             self.ds_id = dataset_id
 
-        self.form_data = byc.get("form_data", {})
         self.argument_definitions = byc.get("argument_definitions", {})
         self.filters = byc.get("filters", [])
 
@@ -67,8 +66,8 @@ class ByconQuery():
         self.filter_definitions = byc.get("filter_definitions", {})
         self.geoloc_definitions = byc.get("geoloc_definitions", {})
 
-        self.limit = self.form_data.get("limit")
-        self.skip = self.form_data.get("skip")
+        self.limit = BYC_PARS.get("limit")
+        self.skip = BYC_PARS.get("skip")
 
         self.queries = {
             "expand": True,
@@ -127,14 +126,13 @@ class ByconQuery():
 
         id_f_v = self.defaults.get("id_entity_mappings", {})
         id_k_s = set(id_f_v.keys())
-        f_k_s = set(self.form_data.keys())
+        f_k_s = set(BYC_PARS.keys())
         r_e_id = self.requested_entity
 
         for this_id_k in list(id_k_s & f_k_s):
-
             entity = id_f_v[this_id_k]
             v_q_par = re.sub("_ids", "_id", this_id_k)
-            id_v_s = self.form_data.get(this_id_k, [])
+            id_v_s = BYC_PARS.get(this_id_k, [])
 
             q = False
             if len(id_v_s) < 1:
@@ -180,7 +178,7 @@ class ByconQuery():
         if self.queries.get("expand") is False:
             return
 
-        ret_no = self.form_data.get("test_mode_count", 5)
+        ret_no = BYC_PARS.get("test_mode_count", 5)
         r_t_s = self.response_types
         r_e = self.response_entity
         if not r_e:
@@ -425,7 +423,7 @@ class ByconQuery():
                 f_neg = True
                 f_val = re.sub(r'^!', '', f_val)
             f_val = re.sub(r'^!', '', f_val)
-            f_desc = f.get("includeDescendantTerms", self.form_data.get("include_descendant_terms"))
+            f_desc = f.get("includeDescendantTerms", BYC_PARS.get("include_descendant_terms"))
 
             f_info = self.__query_from_collationed_filter(coll_coll, f_val)
             if f_info is False:
@@ -542,7 +540,7 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __query_from_geoquery(self, entity="biosample"):
-        geo_q, geo_pars = geo_query(self.geoloc_definitions, self.form_data)
+        geo_q, geo_pars = geo_query(self.geoloc_definitions)
         if not geo_q:
             return
         self.__update_queries_for_entity(geo_q, entity)
@@ -557,9 +555,7 @@ class ByconQuery():
         of a previous query.
         These query values can be combined with additional parameters.
         """
-
-        accessid = self.form_data.get("accessid")
-        if not accessid:
+        if not (accessid := BYC_PARS.get("accessid")):
             return
 
         ho_client = MongoClient(host=DB_MONGOHOST)
@@ -586,7 +582,7 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __update_queries_for_entity(self, query, entity):
-        logic = self.__boolean_to_mongo_logic(self.form_data.get("filter_logic"))
+        logic = self.__boolean_to_mongo_logic(BYC_PARS.get("filter_logic"))
         r_t_s = self.response_types
         r_c = r_t_s[entity].get("collection")
         q_e = self.queries.get("entities")
@@ -611,7 +607,6 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __mongo_comparator_query(self, comparator, value):
-
         mongo_comps = {
             ">": '$gt',
             ">=": '$gte',
@@ -619,9 +614,7 @@ class ByconQuery():
             "<=": '$lte',
             "=": '$eq'
         }
-
         c = mongo_comps.get(comparator, '$eq')
-
         return {c: value}
 
 
@@ -634,26 +627,20 @@ class ByconQuery():
 
 # TODO: GeoQuery class
 
-def geo_query(geoloc_definitions, form):
-
+def geo_query(geoloc_definitions):
     geo_q = None
     geo_pars = None
-
     g_p_defs = geoloc_definitions["parameters"]
     g_p_rts = geoloc_definitions["request_types"]
     geo_root = geoloc_definitions["geo_root"]
-
     geo_form_pars = {}
     for g_f_p in g_p_defs.keys():
-        f_v = form.get(g_f_p)
+        f_v = BYC_PARS.get(g_f_p)
         if f_v:
             geo_form_pars.update({g_f_p: f_v})
-
     if len(geo_form_pars.keys()) < 1:
         return geo_q, geo_pars
-
     req_type = ""
-
     # TODO: Make this modular & fix the one_of interpretation to really only 1
     for rt in g_p_rts:
         g_p = {}
@@ -668,30 +655,23 @@ def geo_query(geoloc_definitions, form):
             continue
 
         all_p = g_p_rts[rt].get("any_of", []) + g_q_k
-
         for g_k in g_p_defs.keys():
-
             if g_k not in all_p:
                 continue
-
             g_default = g_p_defs[g_k].get("default")
             # TODO: This is an ISO lower hack ...
-
             if g_k in geo_form_pars.keys():
                 g_v = geo_form_pars[g_k]
             elif g_default:
                 g_v = g_default
             else:
                 continue
-
             if not re.compile(g_p_defs[g_k]["pattern"]).match(str(g_v)):
                 continue
-
             if "float" in g_p_defs[g_k]["type"]:
                 g_p[g_k] = float(g_v)
             else:
                 g_p[g_k] = g_v
-
             if g_k in g_q_k:
                 mat_p_no += 1
 
@@ -708,11 +688,9 @@ def geo_query(geoloc_definitions, form):
     if "id" in req_type:
         geo_q = {"id": re.compile(geo_pars["id"], re.IGNORECASE)}
         return geo_q, geo_pars
-
     if "ISO3166alpha2" in req_type:
-        geo_q = {"provenance.geo_location.properties.ISO3166alpha2": form["iso3166alpha2"].upper()}
+        geo_q = {"provenance.geo_location.properties.ISO3166alpha2": BYC_PARS["iso3166alpha2"].upper()}
         return geo_q, geo_pars
-
     if "geoquery" in req_type:
         geoq_l = [return_geo_longlat_query(geo_root, geo_pars)]
         for g_k in g_p_rts["geoquery"]["any_of"]:
@@ -725,7 +703,6 @@ def geo_query(geoloc_definitions, form):
             geo_q = {"$and": geoq_l}
         else:
             geo_q = geoq_l[0]
-
     return geo_q, geo_pars
 
 

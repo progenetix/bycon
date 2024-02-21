@@ -32,7 +32,7 @@ try:
 
     byc: object = {
         "args": {},
-        "form_data": {},
+        # "form_data": {},
         "bycon_lib_path": bycon_lib_path,
         "parsed_config_paths": []
     }

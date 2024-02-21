@@ -112,10 +112,9 @@ class BeaconDataResponse:
         self.authorized_granularities = byc.get("authorized_granularities", {})
         self.user_name = byc.get("user_name", "anonymous")
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
-        self.form_data = byc.get("form_data", {})
         self.response_schema = byc["response_schema"]
-        self.returned_granularity = self.form_data.get("requested_granularity", "record")
-        self.include_handovers = self.form_data.get("include_handovers", False)
+        self.returned_granularity = BYC_PARS.get("requested_granularity", "record")
+        self.include_handovers = BYC_PARS.get("include_handovers", False)
         self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
         self.record_queries = {}
         self.data_response = object_instance_from_schema_name(byc, self.response_schema, "")
@@ -281,7 +280,7 @@ class BeaconDataResponse:
         if BYC["TEST_MODE"] is True:
             r_r_s.update({"test_mode": BYC["TEST_MODE"]})
 
-        r_r_s.update({"pagination": {"skip": self.form_data.get("skip"), "limit": self.form_data.get("limit")}})
+        r_r_s.update({"pagination": {"skip": BYC_PARS.get("skip"), "limit": BYC_PARS.get("limit")}})
         r_r_s.update({"dataset_ids": self.dataset_ids})
 
         vargs = self.byc.get("varguments", [])
@@ -296,14 +295,13 @@ class BeaconDataResponse:
                 fs_p.append(f.get("id"))
         r_r_s.update({"filters":fs_p})
 
-        form = self.form_data
         for p in ["include_resultset_responses", "requested_granularity"]:
-            if p in form and p in r_r_s:
-                r_r_s.update({p: form.get(p)})
+            if p in BYC_PARS and p in r_r_s:
+                r_r_s.update({p: BYC_PARS.get(p)})
 
         for q in ["cohort_ids"]:
-            if q in form:
-                r_r_s.update({"request_parameters": always_merger.merge( r_r_s.get("request_parameters", {}), { "cohort_ids": form.get(q) })})
+            if q in BYC_PARS:
+                r_r_s.update({"request_parameters": always_merger.merge( r_r_s.get("request_parameters", {}), { "cohort_ids": BYC_PARS.get(q) })})
 
         info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
         for p in ["api_version", "beacon_id"]:
@@ -379,7 +377,6 @@ class ByconFilteringTerms:
         self.beacon_defaults = byc.get("beacon_defaults", {})
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
         self.filter_definitions = byc.get("filter_definitions", {})
-        self.form_data = byc.get("form_data", {})
         self.filters = byc.get("filters", [])
         self.response_entity_id = byc.get("response_entity_id", "filteringTerm")
         self.data_collection = byc["response_entity"].get("collection", "collations")
@@ -423,11 +420,11 @@ class ByconFilteringTerms:
         query = {}
         q_list = []
 
-        q_scope = self.form_data.get("scope", "___none___")
+        q_scope = BYC_PARS.get("scope", "___none___")
         if q_scope in scopes:
             q_list.append({"scope": q_scope})
 
-        q_types = self.form_data.get("collation_types", [])
+        q_types = BYC_PARS.get("collation_types", [])
         if len(q_types) > 0:
             q_list.append({"collation_type": {"$in": q_types }})
 
@@ -437,7 +434,7 @@ class ByconFilteringTerms:
             query = {"$and": q_list}
 
         if BYC["TEST_MODE"] is True:
-            t_m_c = self.form_data.get("test_mode_count", 5)
+            t_m_c = BYC_PARS.get("test_mode_count", 5)
             query = mongo_test_mode_query(self.dataset_ids[0], f_coll, t_m_c)
 
         for ds_id in self.dataset_ids:
@@ -508,7 +505,6 @@ class ByconCollections:
         self.beacon_defaults = byc.get("beacon_defaults", {})
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
         self.filter_definitions = byc.get("filter_definitions", {})
-        self.form_data = byc.get("form_data", {})
         self.response_entity_id = byc.get("response_entity_id", "dataset")
         self.data_collection = byc["response_entity"].get("collection", "collations")
         self.path_id_value = byc.get("request_entity_path_id_value", False)
@@ -559,7 +555,7 @@ class ByconCollections:
         cohorts =  []
         query = { "collation_type": "pgxcohort" }
         limit = 0
-        c_q = self.form_data.get("cohort_ids", [])
+        c_q = BYC_PARS.get("cohort_ids", [])
 
         if len(c_q) > 0:
             query = { "id": {"$in": c_q} }
@@ -567,7 +563,7 @@ class ByconCollections:
             query = { "id": self.path_id_value }
 
         if BYC["TEST_MODE"] is True:
-            limit = self.form_data.get("test_mode_count", 5)
+            limit = BYC_PARS.get("test_mode_count", 5)
 
         mongo_client = MongoClient(host=DB_MONGOHOST)
         for ds_id in self.dataset_ids:
@@ -593,11 +589,10 @@ class ByconResultSets:
         self.datasets_data = dict()     # the object with data of requested entity per dataset
         self.result_sets = list()       # data rewrapped into the resultSets list
         self.filter_definitions = byc.get("filter_definitions", {})
-        self.form_data = byc.get("form_data", {})
         self.data_collection = byc["response_entity"].get("collection", "biosamples")
         self.response_entity_id = byc.get("response_entity_id", "biosample")
-        self.limit = self.form_data.get("limit")
-        self.skip = self.form_data.get("skip")
+        self.limit = BYC_PARS.get("limit")
+        self.skip = BYC_PARS.get("skip")
 
         self.record_queries = ByconQuery(byc).recordsQuery()
 

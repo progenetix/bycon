@@ -12,7 +12,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="bycon",
-    version="1.5.0",
+    version="1.5.1",
     description="A Python-based environment for the Beacon v2 genomics API",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -31,6 +31,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3 :: Only"
     ],
     keywords="genomics, Beacon",
@@ -39,7 +40,7 @@ setup(
     setup_requires=['setuptools_scm'],
     include_package_data=True,
     package_data={'bycon': ['**/*.yaml', '**/*.txt', '**/*.json']},
-    python_requires=">=3.7, <4",
+    python_requires=">=3.9, <4",
     install_requires=["base36", "isodate", "Cython", "json_ref_dict", "liftover", "numpy", "progress", "pyhumps", "pymongo", "PyYAML"],  # Optional
     project_urls={  # Optional
         "Bug Reports": "https://github.com/progenetix/bycon/issues",

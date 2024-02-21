@@ -5,7 +5,7 @@ from os import path, scandir, pardir
 from pathlib import Path
 
 from bycon_helpers import prjsonnice, prdbug
-from config import PKG_PATH
+from config import *
 
 ################################################################################
 

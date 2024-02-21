@@ -41,7 +41,7 @@ def ds_id_from_accessid(byc):
     # TODO: This is very verbose. In principle there should be an earlier
     # test of existence...
 
-    accessid = byc["form_data"].get("accessid", False)
+    accessid = BYC_PARS.get("accessid", False)
     if any(x is False for x in [accessid]):
         return False
 
@@ -64,7 +64,7 @@ def ds_id_from_accessid(byc):
 ################################################################################
 
 def ds_ids_from_form(byc):
-    f_ds_ids = byc["form_data"].get("dataset_ids", False)
+    f_ds_ids = BYC_PARS.get("dataset_ids", False)
     if f_ds_ids is False:
         return False
 

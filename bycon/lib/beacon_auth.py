@@ -18,9 +18,7 @@ def set_user_name(byc):
     if "local" in ENV:
         byc.update({"user_name": "local"})
         return
-
-    form = byc.get("form_data", {})
-    un = form.get("user", "anonymous")
+    un = BYC_PARS.get("user", "anonymous")
     if un in byc.get("authorizations", {}):
         byc.update({"user_name": un})
 
@@ -28,8 +26,7 @@ def set_user_name(byc):
 ################################################################################
 
 def set_returned_granularities(byc):
-    form = byc.get("form_data", {})
-    rg = form.get("requested_granularity", "record")
+    rg = BYC_PARS.get("requested_granularity", "record")
     un = byc.get("user_name", "anonymous")
     auth = byc.get("authorizations", {})
     ds_ids = byc.get("dataset_ids", [])
@@ -39,7 +36,6 @@ def set_returned_granularities(byc):
 
     if not "authorized_granularities" in byc:
         byc.update({"authorized_granularities": {}})
-
     for ds_id in byc["dataset_ids"]:
         byc["authorized_granularities"].update({ds_id: rg})
         ugs = auth.get(un, {})

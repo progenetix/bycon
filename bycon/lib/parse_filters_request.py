@@ -1,7 +1,7 @@
 import re
 
 from bycon_helpers import prdbug, test_truthy
-from config import BYC
+from config import *
 
 ################################################################################
 
@@ -14,7 +14,7 @@ def parse_filters(byc):
     generation and provides a warning if the filter pattern doesn't exist.
     """
     f_defs = byc["filter_definitions"]
-    filters = byc["form_data"].get("filters", [])
+    filters = BYC_PARS.get("filters", [])
     checked = [ ]
     for f in filters:
         if not isinstance(f, dict):

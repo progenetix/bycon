@@ -1,6 +1,7 @@
 import bson.objectid
 
 from cgi_parsing import *
+from config import *
 from genome_utils import ChroNames
 
 ################################################################################
@@ -13,13 +14,12 @@ def parse_variants(byc):
 ################################################################################
 
 def __parse_variant_parameters(byc):
-    form = byc.get("form_data", {})
     v_p_s = byc["variant_request_definitions"].get("variant_pars", [])
     a_defs = byc.get("argument_definitions", {})
     v_t_defs = byc["variant_type_definitions"]
 
     variant_pars = {}
-    for v_p, v_v in form.items():
+    for v_p, v_v in BYC_PARS.items():
         if v_p in v_p_s:
             variant_pars.update({ v_p: v_v })
 
@@ -91,7 +91,6 @@ def __get_variant_request_type(byc):
     elif "gene_id" in v_pars:
         brts_k = [ "geneVariantRequest" ]
         
-
     vrt_matches = [ ]
     for vrt in brts_k:
         matched_par_no = 0
@@ -102,17 +101,13 @@ def __get_variant_request_type(byc):
                 if one_of in v_pars:
                     matched_par_no = 1
                     continue
-        
         if "all_of" in brts[vrt]:
             needed_par_no += len( brts[vrt][ "all_of" ] )
-
             for required in brts[vrt][ "all_of" ]:
                 if required in v_pars:
                     matched_par_no += 1
-        
         if matched_par_no >= needed_par_no:
             vrt_matches.append( { "type": vrt, "par_no": matched_par_no } )
-
 
     if len(vrt_matches) > 0:
         vrt_matches = sorted(vrt_matches, key=lambda k: k['par_no'], reverse=True)
@@ -144,17 +139,13 @@ def __variant_state_from_variant_par(variant_type, byc):
 ################################################################################
 
 def __translate_reference_name(variant_pars, byc):
-
     if not "reference_name" in variant_pars:
         return variant_pars
-
-    chro_names = ChroNames(byc)
+    chro_names = ChroNames()
     r_n = variant_pars.get("reference_name")
-
     if not r_n in chro_names.allRefseqs():
         variant_pars.pop("reference_name")
         return variant_pars
-
     variant_pars.update({"reference_name": chro_names.refseq(r_n) })
 
     return variant_pars

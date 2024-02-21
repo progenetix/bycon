@@ -11,8 +11,7 @@ from config import *
 ################################################################################
 
 class ChroNames:
-    def __init__(self, byc):
-        self.form = byc.get("form_data", {})
+    def __init__(self):
         self.refseq_chromosomes = {}
         self.chro_aliases = {}
         self.refseq_aliases = {}
@@ -71,7 +70,7 @@ class ChroNames:
 
     def __set_genome_rsrc_path(self):
         # TODO: catch error for missing genome edition
-        genome = self.form.get("assembly_id", "GRCh38").lower()
+        genome = BYC_PARS.get("assembly_id", "GRCh38").lower()
         g_rsrc_p = path.join( PKG_PATH, "rsrc", "genomes", genome )
         self.genome_rsrc_path = g_rsrc_p
         self.refseq_file = path.join( g_rsrc_p, "refseq_chromosomes.yaml") 
@@ -80,7 +79,7 @@ class ChroNames:
     # -------------------------------------------------------------------------#
 
     def __parse_refseq_file(self):
-        with open( self.refseq_file ) as f:
+        with open(self.refseq_file) as f:
             self.refseq_chromosomes = yaml.load( f , Loader=yaml.FullLoader)
 
 

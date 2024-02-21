@@ -17,9 +17,15 @@ LIB_PATH = path.join( pkg_path, "lib")
 __caller_path = path.dirname(path.abspath((inspect.stack()[1])[1]))
 LOC_PATH = path.join(__caller_path, "local")
 
+#------------------------------------------------------------------------------#
 # Database settings
-# TODO: wrap them into object to make them mutable for local changes
+#------------------------------------------------------------------------------#
+
 DB_MONGOHOST = environ.get("BYCON_MONGO_HOST", "localhost")
+
+# TODO: wrap them into object to make them mutable for local changes
+# or through environment variables like the host
+
 HOUSEKEEPING_DB = "_byconHousekeepingDB"
 HOUSEKEEPING_INFO_COLL = "beaconinfo"
 HOUSEKEEPING_HO_COLL = "querybuffer"
@@ -29,8 +35,8 @@ GENES_COLL = "genes"
 GEOLOCS_COLL = "geolocs"
 
 #------------------------------------------------------------------------------#
-
 # not really to be modified...
+#------------------------------------------------------------------------------#
 
 GRANULARITY_LEVELS = {
   "none": 0,
@@ -40,8 +46,8 @@ GRANULARITY_LEVELS = {
 }
 
 ################################################################################
-
-# to be modified during execution
+# to be modified during execution ##############################################
+################################################################################
 
 BYC = {
   "DEBUG_MODE": False,
@@ -49,6 +55,12 @@ BYC = {
   "ERRORS": [],
   "WARNINGS": []
 }
+
+# collection object for cmd arguments and web parameters (depending on the ENV)
+# all possible parameters rare defined in `argument_definitions.yaml`, partially
+# provifding default values
+
+BYC_PARS = {}
 
 ################################################################################
 

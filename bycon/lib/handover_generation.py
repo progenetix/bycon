@@ -11,18 +11,15 @@ from variant_mapping import ByconVariant
 ################################################################################
 
 def dataset_response_add_handovers(ds_id, byc):
-
     """podmd
     podmd"""
-    form = byc.get("form_data", {})
     b_h_o = [ ]
-    if form["include_handovers"] is not True:
+    if BYC_PARS.get("include_handovers", True) is not True:
         return b_h_o
     if not ds_id in byc["dataset_definitions"]:
         return b_h_o
-
-    skip = form.get("skip")
-    limit = form.get("limit")
+    skip = BYC_PARS.get("skip")
+    limit = BYC_PARS.get("limit")
     h_o_server = select_this_server(byc)    
     h_o_types = byc["handover_definitions"]["h->o_types"]
     ds_h_o = byc["dataset_definitions"][ds_id].get("handoverTypes", h_o_types.keys())
@@ -41,7 +38,6 @@ def dataset_response_add_handovers(ds_id, byc):
         # testing if this handover is active for the specified dataset      
         if h_o_t not in ds_h_o:
             continue
-
         target_count =  h_o.get("target_count", 0)
         if target_count < 1:
             continue
@@ -108,7 +104,6 @@ def dataset_response_add_handovers(ds_id, byc):
 def dataset_results_save_handovers(ds_id, byc):
     ho_client = MongoClient(host=DB_MONGOHOST)
     ho_coll = ho_client[HOUSEKEEPING_DB][HOUSEKEEPING_HO_COLL]
-
     for h_o_k in byc["dataset_results"][ds_id].keys():
         h_o = byc["dataset_results"][ds_id][ h_o_k ]
         h_o_size = sys.getsizeof(h_o["target_values"])
@@ -231,16 +226,13 @@ def _write_variants_bedfile(h_o, p_f, p_t, byc):
 
     b_f = open( bed_file, 'w' )
     pos = set()
-
     ucsc_chr = ""
-
     colors = {
         "plot_dup_color": "#FFC633",
         "plot_amp_color": "#FF6600",
         "plot_del_color": "#33A0FF",
         "plot_homodel_color": "#0033CC"
     }
-
     for vt in vs.keys():
         if len( vs[vt] ) > 0:
             try:

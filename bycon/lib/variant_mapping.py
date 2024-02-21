@@ -3,6 +3,7 @@ from copy import deepcopy
 from deepmerge import always_merger
 
 from cgi_parsing import prdbug
+from config import *
 from bycon_helpers import assign_nested_value, get_nested_value
 from schema_parsing import object_instance_from_schema_name
 from genome_utils import ChroNames
@@ -34,7 +35,7 @@ class ByconVariant:
         self.vcf_variant = {}
         self.pgxseg_variant = {}
 
-        self.ChroNames = ChroNames(byc)
+        self.ChroNames = ChroNames()
 
         self.variant_types = byc.get("variant_type_definitions", {})
         d_m = byc["datatable_mappings"].get("definitions", {})

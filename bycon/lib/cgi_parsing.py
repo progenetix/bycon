@@ -10,11 +10,9 @@ from config import *
 
 def parse_arguments(byc):
     a_defs = byc.get("argument_definitions", {})
-    form = byc.get("form_data", {})
     for a, d in a_defs.items():
         if "default" in d:
-            form.update({a: d["default"]})
-    byc.update({"form_data": form})
+            BYC_PARS.update({a: d["default"]})
     if "local" in ENV:
         args_update_form(byc)
     else:
@@ -25,7 +23,6 @@ def parse_arguments(byc):
             parse_GET(byc)
 
 
-
 ################################################################################
 
 def parse_POST(byc):
@@ -34,7 +31,6 @@ def parse_POST(byc):
 
     b_defs = byc.get("beacon_defaults", {})
     a_defs = byc.get("argument_definitions", {})
-    form = byc.get("form_data", {})
 
     # TODO: catch error & return for non-json posts
     if "json" in content_typ:
@@ -51,32 +47,31 @@ def parse_POST(byc):
             if "query" in j_p:
                 for p, v in jbod["query"].items():
                     if p == "filters":
-                        form.update({p: v})
+                        BYC_PARS.update({p: v})
                     elif p == "requestParameters":
                         for rp, rv in v.items():
                             rp_d = humps.decamelize(rp)
                             if "datasets" in rp:
                                 if "datasetIds" in rv:
-                                    form.update({"dataset_ids": rv["datasetIds"]})
+                                    BYC_PARS.update({"dataset_ids": rv["datasetIds"]})
                             elif "g_variant" in rp:
                                 for vp, vv in v[rp].items():
                                     vp_d = humps.decamelize(vp)
                                     if vp_d in a_defs:
-                                        form.update({vp_d: vv})
+                                        BYC_PARS.update({vp_d: vv})
                             elif rp_d in a_defs:
-                                form.update({rp_d: rv})
+                                BYC_PARS.update({rp_d: rv})
             else:
                 if j_p_d in a_defs:
-                    form.update({j_p_d: jbod.get(j_p)})
+                    BYC_PARS.update({j_p_d: jbod.get(j_p)})
 
         # transferring pagination where existing to standard form values
         pagination = jbod.get("pagination", {})
         for p_k in ["skip", "limit"]:
             if p_k in pagination:
                 if re.match(r'^\d+$', str(pagination[p_k])):
-                    form.update({p_k: pagination[p_k]})
+                    BYC_PARS.update({p_k: pagination[p_k]})
         byc.update({
-            "form_data": form,
             "query_meta": jbod.get("meta", {})
         })
 
@@ -84,17 +79,15 @@ def parse_POST(byc):
 ################################################################################
 
 def parse_GET(byc):
-    form = byc.get("form_data", {})
     a_defs = byc.get("argument_definitions", {})
-    get_params = cgi.FieldStorage()
-    for p in get_params:
+    form_data = cgi.FieldStorage()
+    for p in form_data:
         p_d = humps.decamelize(p)
         if p_d in a_defs:
-            form.update({p_d: refactor_value_from_defined_type(p, get_params, a_defs[p_d])})
+            BYC_PARS.update({p_d: refactor_value_from_defined_type(p, form_data, a_defs[p_d])})
         else:
-            prdbug(f'!!! Unmatched parameter {p_d}: {get_params.getvalue(p)}')
-    byc.update({"form_data": form})
-    BYC.update({"DEBUG_MODE": set_debug_state(byc["form_data"].get("debug_mode", False)) })
+            prdbug(f'!!! Unmatched parameter {p_d}: {form_data.getvalue(p)}')
+    BYC.update({"DEBUG_MODE": set_debug_state(BYC_PARS.get("debug_mode", False)) })
 
 
 ################################################################################
@@ -172,7 +165,6 @@ def rest_path_value(key=""):
 
 def refactor_value_from_defined_type(parameter, form_data, definition):
     p_d_t = definition.get("type", "string")
-
     if "array" in p_d_t:
         values = form_return_listvalue(form_data, parameter)
 
@@ -184,7 +176,6 @@ def refactor_value_from_defined_type(parameter, form_data, definition):
             return list(map(float, values))
         else:
             return list(map(str, values))
-
     else:
         value = form_data.getvalue(parameter)
         prdbug(f'...refactor_value_from_defined_type: {parameter} {value}')

@@ -79,12 +79,10 @@ def initialize_bycon_service(byc, service="info"):
 ################################################################################
 
 def set_special_modes(byc):
-    form = byc.get("form_data", {})
-    if "test_mode" in form:
-        BYC.update({"TEST_MODE": test_truthy(form["test_mode"])})
-
+    if "test_mode" in BYC_PARS:
+        BYC.update({"TEST_MODE": test_truthy(BYC_PARS["test_mode"])})
     if BYC.get("TEST_MODE", False) is True:
-        form.update({"include_handovers": True})
+        BYC_PARS.update({"include_handovers": True})
 
 
 ################################################################################
@@ -115,13 +113,12 @@ def update_entity_ids_from_path(byc):
 ################################################################################
 
 def update_requested_schema_from_request(byc):
-    form = byc["form_data"]
     # query_meta may come from the meta in a POST
     b_qm = byc.get("query_meta", {})
 
     # TODO: check if correct schema in request
-    if "requested_schema" in form:
-        byc.update({"response_entity_id": form.get("requested_schema", byc["response_entity_id"])})
+    if "requested_schema" in BYC_PARS:
+        byc.update({"response_entity_id": BYC_PARS.get("requested_schema", byc["response_entity_id"])})
     elif "requested_schemas" in b_qm:
         byc.update({"response_entity_id": b_qm["requested_schemas"][0].get("entity_type", byc["response_entity_id"])})
 

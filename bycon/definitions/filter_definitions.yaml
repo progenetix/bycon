@@ -462,6 +462,3 @@ pgxcohort:
     - 'pgx:cohort-arraymap'
     - 'pgx:cohort-TCGA'
 
-
-
-
