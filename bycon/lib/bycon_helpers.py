@@ -12,8 +12,7 @@ def set_debug_state(debug=False) -> bool:
     """
     Function to provide a text response header for debugging purposes, i.e. to 
     print out the error or test parameters to a browser session.
-    The common way would be to add either a `/debug=1/` part to a REST path or
-    to provide a `...&debug=1` query parameter.
+    The common way would be to add either a `?debugMode=true` query parameter.
     """
     if BYC["DEBUG_MODE"] is True:
         return True

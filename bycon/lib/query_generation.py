@@ -254,22 +254,18 @@ class ByconQuery():
     def __create_geneVariantRequest_query(self):
         # query database for gene and use coordinates to create range query
         vp = self.varguments
-
         gene_data = GeneInfo().returnGene(vp["gene_id"])
-
         # TODO: error report/warning
         if not gene_data:
             return
-
         gene = gene_data[0]
 
         # Since this is a pre-processor to the range request
         self.varguments.update( {
-            "reference_name": "refseq:{}".format(gene["accession_version"]),
-            "start": [ gene["start"] ],
-            "end": [ gene["end"] ]
+            "reference_name": f'refseq:{gene.get("accession_version", "___none___")}',
+            "start": [ gene.get("start", 0) ],
+            "end": [ gene.get("end", 1) ]
         } )
-
         self.variant_request_type = "variantRangeRequest"
 
 
@@ -279,7 +275,6 @@ class ByconQuery():
         vp = self.varguments
         if not "aminoacid_change" in vp:
             return
-
         v_p_defs = self.argument_definitions
         v_q = { v_p_defs["aminoacid_change"]["db_key"]: vp.get("aminoacid_change", "___none___")}
 
@@ -304,7 +299,6 @@ class ByconQuery():
         vp = self.varguments
         if not "variant_type" in vp:
             return
-
         v_q = self.__create_in_query_for_parameter("variant_type", v_p_defs["variant_type"]["db_key"], vp)
 
         return v_q

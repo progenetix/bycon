@@ -162,6 +162,7 @@ def remap_biosamples(r_s_res, byc):
         e_r = []
         for r_k, r_v in bs_r.get("references", {}).items():
             e_r.append(__reference_object_from_ontology_term(r_k, r_v, byc))
+
         r_s_res[bs_i].update({
             "sample_origin_type": {"id": "OBI:0001479", "label": "specimen from organism"},
             "external_references": e_r
@@ -186,9 +187,8 @@ def remap_biosamples(r_s_res, byc):
 
 def __reference_object_from_ontology_term(filter_type, ontology_term, byc):
     if "label" in ontology_term:
-        ontology_term.update({"description": ontology_term.get("label")})
+        ontology_term.update({"description": ontology_term.get("label", "")})
         ontology_term.pop("label", None)
-
     f_t_d = byc["filter_definitions"].get(filter_type, {})
     r_d = f_t_d.get("reference")
     if not r_d:
@@ -196,7 +196,6 @@ def __reference_object_from_ontology_term(filter_type, ontology_term, byc):
     r_r = r_d.get("replace", [])
     if len(r_r) == 2:
         o_id = ontology_term.get("id", "___none___").replace(r_r[0], r_r[1])
-
     ontology_term.update({"reference": f'{r_d.get("root")}{o_id}'})
     return ontology_term
 
@@ -290,10 +289,13 @@ def phenopack_individual(ind, data_db, byc):
 ################################################################################
 
 def clean_empty_fields(this_object):
+    protected = ["external_references"]
     if not isinstance(this_object, dict):
         return this_object
 
     for k in list(this_object.keys()):
+        if k in protected:
+            continue
         if isinstance(this_object[k], dict):
             if not this_object[k]:
                 this_object.pop(k, None)

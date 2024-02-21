@@ -517,7 +517,7 @@ definitions:
       variant_state_id:
         type: string
         db_key: variant_state.id
-        indexed: True
+        indexed: True      # might not beneeded if first in a compound index
         compact: True
       variant_state_label:
         type: string

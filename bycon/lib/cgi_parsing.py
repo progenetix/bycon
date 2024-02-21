@@ -110,22 +110,16 @@ def rest_path_elements(byc):
         |             |                 |               |
     required      required          optional        optional
     """
-
-    r_p_r = byc.get("request_path_root", "beacon")
-
     if not environ.get('REQUEST_URI'):
         return
 
+    r_p_r = byc.get("request_path_root", "beacon")
     url_comps = urlparse(environ.get('REQUEST_URI'))
     url_p = url_comps.path
     p_items = re.split('/', url_p)
 
     if not r_p_r in p_items:
         return
-
-    for d_k in ["&debug=1", "debug=1", "debug=true"]:
-        if d_k in p_items:
-            p_items.remove(d_k)
 
     p_items = list(filter(None, p_items))
     r_i = p_items.index(r_p_r)
