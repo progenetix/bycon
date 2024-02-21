@@ -13,15 +13,12 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
-### 2024-02-21 (v.1.5.2)
+### 2024-02-21 (v.1.5.1)
 
 * `BYC_PARS` now as a global parameter, not passed around in methods (formerly
   `byc["form_data"]`)
 * byconaut: fix of parsing of plot variables (which can be shown through
   `&showHelp=true`)
-
-### 2024-02-21 (v.1.5.1)
-
 * hot fix: added "protected" status for `external_references` in general empty
   field clean-up since the object is required by the front-end (even if empty list)
 
