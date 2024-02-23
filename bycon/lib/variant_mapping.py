@@ -13,12 +13,12 @@ from genome_utils import ChroNames
 ################################################################################
 
 class ByconVariant:
-
+    
     def __init__(self, byc, variant={}):
         """
         # Class `ByconVariant`
 
-        The class provides methods for the conversion ofgenomic variant objects
+        The class provides methods for the conversion of genomic variant objects
         with slight variations in their input parameters to a "canonical" intermediary
         `byc_variant` type, and from there then map per function to other formats
         (such as the Progenetix database format, VCF or VRS).
@@ -27,8 +27,6 @@ class ByconVariant:
         Progenetix platform and does not cover some use cases outside of Progenetix
         and Beacon "common use" scenarios (as of Beacon v2 / 2023).
         """
-
-        self.byc = byc
         self.byc_variant = {}
         self.pgx_variant = {}
         self.vrs_variant = {}
@@ -36,12 +34,14 @@ class ByconVariant:
         self.pgxseg_variant = {}
 
         self.ChroNames = ChroNames()
-
         self.variant_types = byc.get("variant_type_definitions", {})
+
+        # datatable mappings contain the "name to place in object" definitions
+        # these are in essence identical to the `db_key` mappings in
+        # `argument_definitions` but logically different (query vs. defiition; `default`...)
         d_m = byc["datatable_mappings"].get("definitions", {})
         d_m_v = d_m.get("genomicVariant", {})
         self.variant_mappings = d_m_v.get("parameters", {})
-
         self.vrs_allele = object_instance_from_schema_name(byc, "VRSallele", "")
         self.vrs_cnv = object_instance_from_schema_name(byc, "VRScopyNumberChange", "")
 
@@ -154,6 +154,7 @@ class ByconVariant:
 
         self.vrs_variant.update(vrs_v)
         return self.vrs_variant
+
 
     # -------------------------------------------------------------------------#
 

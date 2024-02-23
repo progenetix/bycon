@@ -11,38 +11,46 @@ the maximum response payload
 
 def set_user_name(byc):
     """
-    The default user is `anonymous`. If the environment is local the `local` user
-    will be assumed - but can be overwritten later, e.g. for testing purposes.
+    The default user is `anonymous`. Their access granularity is defined in 
+    `config.py` => `AUTH_DEFAULTS`.
+    If the environment is local the `local` user will be assumed - but can be
+    overwritten later, e.g. for testing purposes.
     """
     # local user has full permissions
     if "local" in ENV:
-        byc.update({"user_name": "local"})
-        return
-    un = BYC_PARS.get("user", "anonymous")
-    if un in byc.get("authorizations", {}):
-        byc.update({"user_name": un})
+        BYC.update({"USER": "local"})
+    elif (un := BYC_PARS.get("user_name", "anonymous")) in byc.get("authorizations", {}):
+        BYC.update({"USER": un})
 
 
 ################################################################################
 
 def set_returned_granularities(byc):
     rg = BYC_PARS.get("requested_granularity", "record")
-    un = byc.get("user_name", "anonymous")
     auth = byc.get("authorizations", {})
     ds_ids = byc.get("dataset_ids", [])
+
+    for ak, av in auth.items():
+        AUTHORIZATIONS.update({ak: av})
 
     g_l_s = [0]
     r_g_l = GRANULARITY_LEVELS.get(rg, 0)
 
     if not "authorized_granularities" in byc:
         byc.update({"authorized_granularities": {}})
-    for ds_id in byc["dataset_ids"]:
+
+    for ds_id in ds_ids:
         byc["authorized_granularities"].update({ds_id: rg})
-        ugs = auth.get(un, {})
+        
+        # the user is checked against predefined authorizations
+        if not (ugs := auth.get(BYC["USER"])):
+            continue
+        prdbug(f'USER {BYC["USER"]} - authorizations {ugs}')
+
+        g_l_l = ugs.get("default", "___none___")
         if ds_id in ugs:
             g_l_l = ugs[ds_id]
-        elif "default" in ugs:
-            g_l_l = ugs["default"]
+
         d_g_l = GRANULARITY_LEVELS.get(g_l_l, 0)
         if d_g_l <= r_g_l:
             byc["authorized_granularities"].update({ds_id: g_l_l})
@@ -50,8 +58,10 @@ def set_returned_granularities(byc):
 
     m_g_l = max(g_l_s)
 
+    prdbug(f'Granularity levels: {g_l_s} - max: {m_g_l} - requested: {r_g_l}')
+
     if m_g_l < r_g_l:
-        prdbug("Warning: Requested granularity exceeds user authorization - using a maximum of %s" % byc["returned_granularity"])
+        prdbug(f'Warning: Requested granularity exceeds user authorization - using a maximum of {byc["returned_granularity"]}')
         byc.update({"returned_granularity": list(GRANULARITY_LEVELS.keys())[m_g_l]})
     else:
         byc.update({"returned_granularity": list(GRANULARITY_LEVELS.keys())[r_g_l]})

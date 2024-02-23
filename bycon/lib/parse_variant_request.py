@@ -14,7 +14,7 @@ def parse_variants(byc):
 ################################################################################
 
 def __parse_variant_parameters(byc):
-    v_p_s = byc["variant_request_definitions"].get("variant_pars", [])
+    v_p_s = byc["variant_request_definitions"].get("request_pars", [])
     a_defs = byc.get("argument_definitions", {})
     v_t_defs = byc["variant_type_definitions"]
 

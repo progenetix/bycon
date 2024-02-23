@@ -91,10 +91,8 @@ def remap_variants(r_s_res, byc):
 def remap_analyses(r_s_res, byc):
     if not "analysis" in byc["response_entity_id"]:
         return r_s_res
-
     pop_keys = ["info", "provenance", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats"]
-
-    if "cnvstats" in byc.get("output", "___none___").lower():
+    if "cnvstats" in BYC_PARS.get("output", "___none___").lower():
         pop_keys = ["info", "provenance", "cnv_statusmaps"]
 
     for cs_i, cs_r in enumerate(r_s_res):
@@ -102,7 +100,6 @@ def remap_analyses(r_s_res, byc):
         r_s_res[cs_i].update({"pipeline_name": "progenetix", "analysis_date": "1967-11-11"})
         for k in pop_keys:
             r_s_res[cs_i].pop(k, None)
-
     return r_s_res
 
 

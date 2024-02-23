@@ -49,11 +49,17 @@ GRANULARITY_LEVELS = {
 # to be modified during execution ##############################################
 ################################################################################
 
+AUTHORIZATIONS = {
+  "anonymous": {"default": "boolean"},
+  "local": {"default": "record"}
+}
+
 BYC = {
   "DEBUG_MODE": False,
   "TEST_MODE": False,
   "ERRORS": [],
-  "WARNINGS": []
+  "WARNINGS": [],
+  "USER": "anonymous"
 }
 
 # collection object for cmd arguments and web parameters (depending on the ENV)

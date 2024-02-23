@@ -182,14 +182,11 @@ def mongo_test_mode_query(db_name, coll_name, test_mode_count=5):
 ################################################################################
 
 def assign_nested_value(parent, dotted_key, v, parameter_definitions={}):
-
     parameter_type = parameter_definitions.get("type", "string")
     parameter_default = parameter_definitions.get("default")
-
     if v is None:
         if parameter_default:
             v = parameter_default
-
     if v is None:
         return parent
 

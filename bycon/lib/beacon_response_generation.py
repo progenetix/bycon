@@ -113,7 +113,7 @@ class BeaconDataResponse:
         self.user_name = byc.get("user_name", "anonymous")
         self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
         self.response_schema = byc["response_schema"]
-        self.returned_granularity = BYC_PARS.get("requested_granularity", "record")
+        self.returned_granularity = byc.get("returned_granularity", "boolean")
         self.include_handovers = BYC_PARS.get("include_handovers", False)
         self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
         self.record_queries = {}
@@ -138,7 +138,7 @@ class BeaconDataResponse:
 
         self.data_response["response"].update({"result_sets": self.result_sets})
         self.__resultset_response_update_summaries()
-        self.__resultSetResponse_force_granularities()
+        self.__resultSetResponse_force_autorized_granularities()
 
         b_h_o = self.data_response.get("beacon_handovers", [])
         if len(b_h_o) < 1:
@@ -215,7 +215,7 @@ class BeaconDataResponse:
 
     # -------------------------------------------------------------------------#
 
-    def __resultSetResponse_force_granularities(self):
+    def __resultSetResponse_force_autorized_granularities(self):
         prdbug(f'authorized_granularities: {self.authorized_granularities}')
         for rs in self.data_response["response"]["result_sets"]:
             rs_granularity = self.authorized_granularities.get(rs["id"], "boolean")
