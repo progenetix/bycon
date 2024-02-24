@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://progenetix.org/services/schemas/pgxCallset/v2022-03-07",
+    "$id": "https://progenetix.org/services/schemas/pgxCallset/v2024-02-24",
     "title": "pgxCallset",
     "type": "object",
     "properties": {
@@ -26,6 +26,20 @@
             "type": "string",
             "examples": [
                 "SNP6 array"
+            ]
+        },
+        "analysisOperation": {
+            "description": "Basic type of (genomic) analysis from the EDAM ontology. In Progenetix and related resources this is used to disamiguate between sequence analyses (SNV etc. calling) and CNV profiling experiments.",
+            "$ref": "../common/ontologyTerm.json",
+            "examples": [
+                {
+                    "id": "EDAM:operation_3961",
+                    "label": "Copy number variation detection"
+                },
+                {
+                    "id": "EDAM:operation_3227",
+                    "label": "Variant Calling"
+                }
             ]
         },
         "platformModel": {

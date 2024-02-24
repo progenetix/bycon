@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/pgxCallset/v2022-03-07
+$id: https://progenetix.org/services/schemas/pgxCallset/v2024-02-24
 title: pgxCallset
 type: object
 properties:
