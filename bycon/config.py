@@ -34,25 +34,9 @@ SERVICES_DB = "_byconServicesDB"
 GENES_COLL = "genes"
 GEOLOCS_COLL = "geolocs"
 
-#------------------------------------------------------------------------------#
-# not really to be modified...
-#------------------------------------------------------------------------------#
-
-GRANULARITY_LEVELS = {
-  "none": 0,
-  "boolean": 1,
-  "count": 2,
-  "record": 3
-}
-
 ################################################################################
 # to be modified during execution ##############################################
 ################################################################################
-
-AUTHORIZATIONS = {
-  "anonymous": {"default": "boolean"},
-  "local": {"default": "record"}
-}
 
 BYC = {
   "DEBUG_MODE": False,
@@ -67,6 +51,30 @@ BYC = {
 # provifding default values
 
 BYC_PARS = {}
+
+# default authorization levels; a local `authorizations.yaml` file can add to 
+# these / override the values
+# additionally to the default local `dataset_id` values can be added (as in 
+# "examplez" here)
+
+AUTHORIZATIONS = {
+  "anonymous": {
+    "default": "boolean",
+    "examplez": "record"
+  },
+  "local": {"default": "record"}
+}
+
+#------------------------------------------------------------------------------#
+# not really to be modified...
+#------------------------------------------------------------------------------#
+
+GRANULARITY_LEVELS = {
+  "none": 0,
+  "boolean": 1,
+  "count": 2,
+  "record": 3
+}
 
 ################################################################################
 

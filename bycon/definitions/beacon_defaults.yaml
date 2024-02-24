@@ -4,8 +4,6 @@ defaults:
   request_entity_path_id: info
   response_schema: beaconInfoResponse
   include_resultset_responses: HIT
-  requested_granularity: record
-  returned_granularity: record
   response_entity:
     entity_type: info
     response_schema: beaconInfoResponse
