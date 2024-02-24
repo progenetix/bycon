@@ -11,6 +11,28 @@ age:
   examples:
     - 'ageAtDiagnosis:<=P18Y'
 
+EDAMoperation:
+  id: EDAMoperation
+  ft_type: ontologyTerm
+  iri_prefix: http://purl.obolibrary.org/obo/EDAM_
+  name: EDAM ontology
+  namespace_prefix: EDAM
+  url: https://github.com/edamontology/edam-browser
+  reference:
+    root: 'https://edamontology.github.io/edam-browser/#'
+    replace:
+      - "EDAM:"
+      - ""
+  db_key: 'analysis_operation.id'
+  description: Genomic analysis type
+  scope: analyses
+  entity: analysis
+  pattern: '^EDAM:operation_\d+?$'
+  collationed: True
+  examples:
+    - operation_3961  # Copy number variation detection
+    - operation_3227  # Variant Calling
+
 genomes:
   id: genomes
   ft_type: alphanumeric

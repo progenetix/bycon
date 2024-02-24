@@ -19,6 +19,18 @@ properties:
     type: string
     examples:
       - SNP6 array
+  analysisOperation:
+    description: >-
+      Basic type of (genomic) analysis from the EDAM ontology. In Progenetix and
+      related resources this is used to disamiguate between sequence analyses
+      (SNV etc. calling) and CNV profiling experiments.
+    $ref: ../common/ontologyTerm.yaml
+    examples:
+      - id: EDAM:operation_3961
+        label: "Copy number variation detection"
+      - id: EDAM:operation_3227
+        label: "Variant Calling"
+
   platformModel:
     description: Ontology value for experimental platform or methodology used. For
       sequencing platforms the use of "OBI:0400103 - DNA sequencer" is suggested.

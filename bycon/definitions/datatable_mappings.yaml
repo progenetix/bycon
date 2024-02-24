@@ -441,9 +441,15 @@ definitions:
       legacy_ids:
         db_key: info.legacy_ids
         type: array
-      variant_class:
-        db_key: variant_class
+      analysis_operation_id:
+        db_key: analysis_operation.id
         indexed: True
+      analysis_operation_label:
+        db_key: analysis_operation.label
+        indexed: False
+      # variant_class:
+      #   db_key: variant_class
+      #   indexed: True
       experiment_id:
         db_key: analysis_info.experiment_id
         indexed: True
