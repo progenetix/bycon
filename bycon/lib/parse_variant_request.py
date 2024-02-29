@@ -25,7 +25,8 @@ def __parse_variant_parameters(byc):
 
     # value checks
     v_p_c = { }
-    __translate_reference_name(variant_pars, byc)
+    variant_pars = __translate_reference_name(variant_pars, byc)
+    prdbug(variant_pars)
 
     for p_k, v_p in variant_pars.items():
         v_p = variant_pars[ p_k ]
@@ -143,7 +144,7 @@ def __translate_reference_name(variant_pars, byc):
         return variant_pars
     chro_names = ChroNames()
     r_n = variant_pars.get("reference_name")
-    if not r_n in chro_names.allRefseqs():
+    if not r_n in chro_names.refseqAliases():
         variant_pars.pop("reference_name")
         return variant_pars
     variant_pars.update({"reference_name": chro_names.refseq(r_n) })

@@ -130,18 +130,18 @@ h->o_types:
       - all
     h->o_key: 'variants._id'
     script_path_web: '/services/vcfvariants'
-  
-  UCSClink:    
+
+  UCSClink:
     handoverType:
       id: 'pgx:HO.bedfile2ucsc'
       label: "Show Found Variants in the UCSC browser"
     note: "map variants matched by the query to the UCSC browser"
     requestedSchema: genomicVariant
+    output: ucscbrowser
     paginated_entities:
-      - genomicVariant
+      - all
     h->o_key: 'variants._id'
-    ext_url: 'http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg38'
-    remove_subdomain: True
+    script_path_web: '/services/variantsbedfile'
 
 # handover methods describe the source and target collections for stored
 # document identifiers (so far _id, id or variant_internal_id). The source parameters are

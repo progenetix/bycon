@@ -6,8 +6,6 @@ import sys, re, yaml
 from os import getlogin, path, system
 
 dir_path = path.dirname( path.abspath(__file__) )
-# pkg_path = path.join( dir_path, "bycon" )
-# #sys.path.append( pkg_path )
 
 from bycon import *
 

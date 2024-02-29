@@ -42,6 +42,7 @@ class BeaconErrorResponse:
         self.error_response["error"].update({"error_code": error_code, "error_message": ", ".join(BYC["ERRORS"])})
         return self.error_response
 
+
     # -------------------------------------------------------------------------#
 
     def response(self, error_code=422):
@@ -70,12 +71,10 @@ class BeaconInfoResponse:
                 r_m.update({p: info.get(p, "___none___")})
         if "returned_schemas" in r_m:
             r_m.update({"returned_schemas":[self.beacon_schema]})
-
         for p in ("info"):
             p_v = r_m.get(p)
             if not p_v:
                 r_m.pop(p, None)
-
         r_e = self.data_response["response"]
         for p in ("info"):
             p_v = r_e.get(p)
@@ -98,8 +97,6 @@ class BeaconInfoResponse:
             response.pop(p, None)
         self.data_response.update({"response":response})
         return self.data_response
-
-
 
 
 ################################################################################
@@ -129,7 +126,6 @@ class BeaconDataResponse:
 
     def resultsetResponse(self):
         dbm = f'... resultsetResponse start, schema {self.response_schema}'
-        prdbug(dbm)
         if not "beaconResultsetsResponse" in self.response_schema:
             return
 
@@ -595,7 +591,6 @@ class ByconResultSets:
         self.skip = BYC_PARS.get("skip")
 
         self.record_queries = ByconQuery(byc).recordsQuery()
-
         self.__create_empty_result_sets()
         self.__get_handover_access_key()
         self.__retrieve_datasets_results()
@@ -687,7 +682,6 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __retrieve_datasets_results(self):
-
         ds_r_start = datetime.datetime.now()
         for i, r_set in enumerate(self.result_sets):
             ds_id = r_set.get("id", "___none___")
@@ -717,6 +711,7 @@ class ByconResultSets:
             q_db = res.get("source_db", "___none___")
             q_coll = res.get("target_collection", "___none___")
             q_v_s = res.get("target_values", [])
+
             q_v_s = return_paginated_list(q_v_s, self.skip, self.limit)
 
             mongo_client = MongoClient(host=DB_MONGOHOST)
@@ -731,7 +726,6 @@ class ByconResultSets:
         ds_d_duration = datetime.datetime.now() - ds_d_start
         
         dbm = f'... datasets data retrieval needed {ds_d_duration.total_seconds()} seconds'
-        prdbug(dbm)
 
         return
 

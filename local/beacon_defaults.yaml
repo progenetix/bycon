@@ -13,7 +13,6 @@ defaults:
 # the aliases here are for non-standard speling or additional entry types
 
 service_path_aliases:
-  analyses: analyses
   filteringTerms: filteringTerms
   phenopackets: phenopackets
   variants: genomicVariations
@@ -42,36 +41,7 @@ data_pipeline_path_ids:
 # framework and might be disentangled further on ...
 ################################################################################
 
-#  => snake_casing
-
-# standard examples
-
-# ################################################################################
-#   filteringTerm:
-#     is_entry_type: False
-#     request_entity_path_id: filteringTerms
-#     response_entity_id: filteringTerm
-#     collection: collations
-#     response_schema: beaconFilteringTermsResponse
-#     beacon_schema:
-#       entity_type: filteringTerm
-#       schema: https://progenetix.org/services/schemas/filteringTermsSchema/
-#     h->o_access_key: Null
-# ################################################################################
-#   biosample:
-#     is_entry_type: True
-#     request_entity_path_id: biosamples
-#     response_entity_id: biosample
-#     collection: biosamples  
-#     response_schema: beaconResultsetsResponse
-#     beacon_schema:
-#       entity_type: biosample
-#       schema: https://progenetix.org/services/schemas/biosample/
-#     h->o_access_key: biosamples._id
-# ################################################################################
-
 entity_defaults:
-
   info:
     is_entry_type: False
     collection: Null

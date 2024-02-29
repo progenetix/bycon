@@ -167,9 +167,7 @@ def refactor_value_from_defined_type(parameter, form_data, definition):
     p_d_t = definition.get("type", "string")
     if "array" in p_d_t:
         values = form_return_listvalue(form_data, parameter)
-
         p_i_t = definition.get("items", "string")
-
         if "int" in p_i_t:
             return list(map(int, values))
         elif "number" in p_i_t:
@@ -179,7 +177,6 @@ def refactor_value_from_defined_type(parameter, form_data, definition):
     else:
         value = form_data.getvalue(parameter)
         prdbug(f'...refactor_value_from_defined_type: {parameter} {value}')
-
         if "int" in p_d_t:
             return int(value)
         elif "number" in p_d_t:
@@ -204,7 +201,6 @@ def form_return_listvalue(form_data, parameter):
             if len(v) > 0:
                 l_v = ','.join(v)
                 l_v = l_v.split(',')
-
     return l_v
 
 

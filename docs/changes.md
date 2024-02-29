@@ -13,7 +13,38 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
-### 2024-02-21 (v.1.5.1)
+### 2024-02-28 (v1.5.3)
+
+* bug fix: broken server address in handovers
+* `byconaut` - refactoring of `frequencymapsCreator.py` to use the standard collation
+  bundle generation instead of custom queries 
+* `byconaut` - change of collation retrieval to work now with `collationTypes`
+  parameter
+    - this allows to e.g. get all clustered CNV plots for a classification tree:
+        * `/services/collationplots/?collationTypes=NCIT&minNumber=200`
+* bug fix: `id` specific query for collations was broken (delivered all)
+* bug fix: mapping of basic chromosome ids (`9`) to refseqs was broken
+* `byconaut` - new method "variantsbedfile"
+    - takes over for the previous bedfile/UCSC variants handover generation (removed
+      from `handover_generation`)
+    - defaults to bedfile download from variant query
+    - `output=ucsclink` creates the UCSC link with added bedfile payload
+
+### 2024-02-24 (v1.5.2)
+
+* new `instance_overrides.yaml` config document in `local`
+    - this allows to override Beacon instance parameters based on
+      the URL the service is running under, enabling multiple Beacon
+      instances per server
+* new `analysis_operation` in `analyses` (_i.e._ "pgxAnalysis" in Progenetix
+  database model) allows now the filtering of analyses based on the type of
+  genomic profiling performed with its (so far) values:
+    - `"analysis_operation.id":"EDAM:operation_3961",
+      "analysis_operation.label":"Copy number variation detection"`
+    - `"analysis_operation.id":"EDAM:operation_3227",
+      "analysis_operation.label":"Variant Calling"`
+
+### 2024-02-21 (v1.5.1)
 
 * `BYC_PARS` now as a global parameter, not passed around in methods (formerly
   `byc["form_data"]`)
@@ -22,7 +53,7 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 * hot fix: added "protected" status for `external_references` in general empty
   field clean-up since the object is required by the front-end (even if empty list)
 
-### 2024-02-20 (v.1.5.0)
+### 2024-02-20 (v1.5.0)
 
 * refactoring global configs into `bycon/config.py` to slowly get rid of some of
   the `byc` -> ... imports  (e.g. global DB parameters, collecting warnings...)
@@ -45,7 +76,7 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
     - changed `collatiionType` `PMID` => `pubmed`
 * fixed `uploader` fail due to missing import
 
-### 2024-02-07 (v.1.4.2)
+### 2024-02-07 (v1.4.2)
 
 * more consolidation of argument/cgi parsing libraries
 * filter flag parameters now properly defined in `argument_definitions.yaml`
@@ -63,7 +94,7 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
       should now point to working definitions per entity, e.g.
       https://progenetix.org/services/endpoints/biosamples
 
-### 2024-02-02 (v.1.4.1)
+### 2024-02-02 (v1.4.1)
 
 * new `ChroNames` class for accessing chromosome and refseq ID mappings (still utilising
   `byc["refseq_chromosomes"]` as input, read during init from `rsrc/.../refseq_chromosomes.yaml`)
@@ -79,7 +110,7 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 * some internal reshuffling; e.g. move of export/print helpers to from `cgi_parsing`
   to `beacon_response_generation` and `bycon_helpers`
 
-### 2024-01-18 (v.1.4.0)
+### 2024-01-18 (v1.4.0)
 
 * fix of `plotType` parameter as separate one (used in byconaut)
 * fix of wrong parameter mapping for `geo:GSM....` filters
@@ -124,7 +155,7 @@ endless loop in the handover generation.
 * configuration: the basic parameters from `config.yaml` are now stored as `byc`
   root parameters and not kept in a mix of root & `config`
 
-### 2023-11-20 (v.1.3.6)
+### 2023-11-20 (v1.3.6)
 
 * modified `BeaconDataResponse` to keep the `resultSetsResponse` structure while
   remobving the `results` from each set, to allow resuult set specific handover 
@@ -138,7 +169,7 @@ endless loop in the handover generation.
   types; this allows to assign custom `plot_dup_color` etc. parameters while keeping
   the available variant types (`variant_state.id`) separated (see `byconaut -> local.plot_defaults`)
 
-### 2023-11-17 (v.1.3.5)
+### 2023-11-17 (v1.3.5)
 
 * more removal of non-standard components into `byconaut`, e.g. for file generation
   such as `.pgxseg`
@@ -146,12 +177,12 @@ endless loop in the handover generation.
 * adding `aminoacidChange` and `genomicAlleleShortForm` to request parameters
   (this was a bug fix - they were already activated but not in the `.json` version)
 
-### 2023-10-31 (v.1.3.4)
+### 2023-10-31 (v1.3.4)
 
 This update is mostly addressing the further removal of methods specific for
 "beyond Beacon" functionality (e.g. variant binning and calculations for CNVs, plotting ...).
 
-### 2023-10-25 (v.1.3.3)
+### 2023-10-25 (v1.3.3)
 
 Most of the "special outputs" code has been moved to byconaut -> services.
 For legacy reasons (e.g. use by pgxRpi) the webserver configuration needed some
@@ -183,7 +214,7 @@ RewriteCond %{QUERY_STRING} ^(.*?output=pgxseg.*?)$
 RewriteRule "^/beacon/biosamples/([^/]+?)/g_variants.*?$" /cgi-bin/bycon/services/pgxsegvariants.py?%1&biosampleIds=$1 [PT]
 ```
 
-### 2023-10-20 (v.1.3.2)
+### 2023-10-20 (v1.3.2)
 
 This version removes the complete `bycon_plot` code (_i.e._ moves it to `byconaut`).
 It still needs the further disentangling of the other alternative response options
@@ -193,7 +224,7 @@ blueprint of the plot code removal.
 **CAVE** Now all plotting options have been shifted to the `/services/collationplots`
 and `/services/sampleplots` entry points.
 
-### 2023-10-20 (v.1.3.1)
+### 2023-10-20 (v1.3.1)
 
 This version provides another step in moving "non-standard" Beacon responses tp
 the `byconeer` project. 
@@ -205,7 +236,7 @@ the `byconeer` project.
 * some class (`ByconResultSets`) restructuring to allow plot outputs (this will be
   changed further, probably moving the whole plot ... classes and methods to `byconeer`)
 
-### 2023-10-12 (v.1.3.0)
+### 2023-10-12 (v1.3.0)
 
 This is an extensive internal code update which
 
@@ -223,11 +254,11 @@ non-standard versions were documented - now using the Beacon v2 defaults such as
 **CAVE**: These changes also affect the front-ends (`progenetix-web`, `beaconplus-web` etc.)
 which need to be recompiled from the latest versions
 
-### 2023-08-30 (v.1.2.2)
+### 2023-08-30 (v1.2.2)
 
 * some defaults cleaning (e.g. removal of non-standard paths from built in `beacon_defaults`)
 
-### 2023-08-25 (v.1.2.1)
+### 2023-08-25 (v1.2.1)
 
 * clean-up of info response m(all entryType schemas shown now)
 * modification of entity_defaults format
@@ -235,7 +266,7 @@ which need to be recompiled from the latest versions
 * `mongo_test_mode_query` (needs to be propagated more...)
 * `beaconplus` domains support
 
-### 2023-08-22 (v.1.2.0)
+### 2023-08-22 (v1.2.0)
 
 * fix of `filterLogic` parameter for forced global `$or`
 * more reshuffling of defaults and config parameters
@@ -248,7 +279,7 @@ which need to be recompiled from the latest versions
 * streamlining of `__init__.py` and `read_specs.py` w/ respect to those changes
 * concurrent `byconaut` update
 
-#### 2023-08-21 (v.1.1.7)
+#### 2023-08-21 (v1.1.7)
 
 This update continues with the disentangling of "package inherent" defaults and
 definitions and "local" ones. Partcullarly:
@@ -261,7 +292,7 @@ definitions and "local" ones. Partcullarly:
       `phenopackets` entry type
 * similar for `dataset_definitions` ...
 
-#### 2023-08-21 (v.1.1.7)
+#### 2023-08-21 (v1.1.7)
 
 This update continues with the disentangling of "package inherent" defaults and
 definitions and "local" ones. Partcullarly:
@@ -274,11 +305,11 @@ definitions and "local" ones. Partcullarly:
       `phenopackets` entry type
 * similar for `dataset_definitions` ...
 
-#### 2023-08-16 (v.1.1.6)
+#### 2023-08-16 (v1.1.6)
 
 * bugfix release for service items
 
-#### 2023-08-16 (v.1.1.4 => v1.1.5)
+#### 2023-08-16 (v1.1.4 => v1.1.5)
 
 * some changes to defaults & mappings parsing
     - merging content of "beacon_defaults" & "service_defaults" (if existing) files
@@ -288,14 +319,14 @@ definitions and "local" ones. Partcullarly:
 * refined `GeoLocation` schema - now in model...common and referenced there
 * v1.1.5 was a bugfix immediately after the update ...
 
-#### 2023-08-11 (v.1.1.2 -> 1.1.3)
+#### 2023-08-11 (v1.1.2 -> 1.1.3)
 
 * move the new `histoheatplot` method code to use ImageDraw instead of SVG raw
   for the heat strips (_i.e._ base64 encoded individual PNG strips)
     - e.g. reduces size of 9.3MB example to 188kB
 * 1.1.3 fixes a combination query bug
 
-#### 2023-08-10 (v.1.1.1)
+#### 2023-08-10 (v1.1.1)
 
 * services: new frequency plot type `histoheatplot`:
     - also some new related parameters, e.g. `plotHeatIntensity`

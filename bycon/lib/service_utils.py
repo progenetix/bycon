@@ -81,7 +81,7 @@ def initialize_bycon_service(byc, service="info"):
 def set_special_modes(byc):
     if "test_mode" in BYC_PARS:
         BYC.update({"TEST_MODE": test_truthy(BYC_PARS["test_mode"])})
-    if BYC.get("TEST_MODE", False) is True:
+    if BYC.get("TEST_MODE") is True:
         BYC_PARS.update({"include_handovers": True})
 
 

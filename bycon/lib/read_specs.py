@@ -16,13 +16,11 @@ def read_service_definition_files(byc):
     module
       |
       |- lib - read_specs.py
-      |- config - __name__.yaml
+      |- definitions - __name__.yaml
     podmd"""
     conf_dir = path.join( PKG_PATH, "definitions")
-
     if not path.isdir(conf_dir):
         return
-
     b_d_fs = [ f.name for f in scandir(conf_dir) if f.is_file() ]
     b_d_fs = [ f for f in b_d_fs if f.endswith("yaml") ]
     b_d_fs = [ Path(f).stem for f in b_d_fs ]
@@ -43,8 +41,6 @@ def update_rootpars_from_local(loc_dir, byc):
     if loc_dir in p_c_p:
         return
 
-    prdbug(f'...loc_dir => {loc_dir}')
-
     p_c_p.append(loc_dir)
 
     b_p = 'beacon_defaults'
@@ -52,11 +48,27 @@ def update_rootpars_from_local(loc_dir, byc):
 
     b_f = path.join(loc_dir, f'{b_p}.yaml')
     b = load_yaml_empty_fallback(b_f)
-    prdbug(f'...loc beacon_defaults => {b_f}')
     s_f = path.join(loc_dir, f'{s_p}.yaml')
     s = load_yaml_empty_fallback(s_f)
     b = always_merger.merge(s, b)
     byc.update({b_p: always_merger.merge(byc.get(b_p, {}), b)})
+
+    # overwriting installation-wide defaults with instance-specific ones
+    # _i.e._ matching the current domain (to allow presentation of different
+    # Beacon instances from the same server)
+    if ENV != "local":
+        instance = "___none___"
+        host = environ.get("HTTP_HOST")
+        i_ovr_f = path.join(loc_dir, "instance_overrides.yaml")
+        i_ovr = load_yaml_empty_fallback(i_ovr_f)
+        for i_k, i_v in i_ovr.items():
+            doms = i_v.get("domains", [])
+            if host in doms:
+                instance = i_k
+                break
+        if instance in i_ovr:
+            i_o_bdfs = i_ovr[instance].get("beacon_defaults", {})
+            byc.update({b_p: always_merger.merge(byc.get(b_p, {}), i_o_bdfs)})
 
     # TODO: better way to define which files are parsed from local
     for p in ("authorizations", "dataset_definitions", "local_paths", "local_parameters", "datatable_mappings", "plot_defaults"):
@@ -105,11 +117,13 @@ def datasets_update_latest_stats(byc, collection_type="datasets"):
 ################################################################################
 
 def load_yaml_empty_fallback(yp):
-    y = { }
+    y = {}
     try:
+        # print(yp)
         with open( yp ) as yd:
             y = yaml.load( yd , Loader=yaml.FullLoader)
-    except:
+    except Exception as e:
+        # print(e)
         pass
     return y
 

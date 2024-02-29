@@ -45,10 +45,8 @@ def select_this_server(byc: dict) -> str:
     https scenario had been implemented. Therefore handover addresses etc. will
     always use https _unless_ the request comes from a host listed a test instance.
     """
-
     s_uri = str(environ.get('SCRIPT_URI'))
-    local_paths = byc.get("local_paths", {})
-    test_sites = local_paths.get("test_domains", [])
+    test_sites = byc["beacon_defaults"].get("test_domains", [])
     https = "https://"
     http = "http://"
 
@@ -105,7 +103,6 @@ def days_from_iso8601duration(iso8601duration):
 ################################################################################
 
 def hex_2_rgb( hexcolor ):
-
     rgb = [127, 127, 127]
     h = hexcolor.lstrip('#')
     rgb = tuple(int(h[i:i+2], 16) for i in (0, 2, 4))

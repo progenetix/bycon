@@ -56,7 +56,7 @@ class ByconQuery():
         self.filters = byc.get("filters", [])
 
         self.requested_entity = byc.get("request_entity_id", False)
-        self.response_entity = byc.get("response_entity_id", False)
+        self.response_entity = byc.get("response_entity_id", "___none___")
         self.path_id_value = byc.get("request_entity_path_id_value", False)
 
         self.variant_request_type = byc.get("variant_request_type", "___none___")
@@ -71,7 +71,6 @@ class ByconQuery():
 
         self.queries = {
             "expand": True,
-            "variant_id_query": None,
             "entities": {}
         }
 
@@ -180,11 +179,9 @@ class ByconQuery():
 
         ret_no = BYC_PARS.get("test_mode_count", 5)
         r_t_s = self.response_types
-        r_e = self.response_entity
-        if not r_e:
+        if (r_e := self.response_entity) not in r_t_s.keys():
             return
-        r_c = r_t_s[r_e].get("collection")
-        if not r_c:
+        if not (r_c := r_t_s[r_e].get("collection")):
             return
 
         data_db = MongoClient(host=DB_MONGOHOST)[self.ds_id]
@@ -454,7 +451,6 @@ class ByconQuery():
                 if "iso8601duration" in f_info.get("format", "___none___"):
                     val = days_from_iso8601duration(val)
                 f_lists[f_entity][f_field].append(self.__mongo_comparator_query(comp, val))
-
             elif f_desc is True:
                 if f_neg is True:
                     f_lists[f_entity][f_field].append({'$nin': f_info["child_terms"]})
@@ -488,9 +484,7 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __query_from_collationed_filter(self, coll_coll, f_val):
-
         f_d_s = self.filter_definitions
-
         if f_val not in self.collation_ids:
             return False
 
@@ -510,7 +504,6 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __query_from_filter_definitions(self, f_val):
-
         f_defs = self.filter_definitions
         f_info = {
             "id": f_val,
