@@ -31,8 +31,6 @@ try:
     from parse_variant_request import *
 
     byc: object = {
-        "args": {},
-        "bycon_lib_path": bycon_lib_path,
         "parsed_config_paths": []
     }
 
@@ -43,8 +41,7 @@ try:
     parse_arguments(byc)
 
 except Exception:
-
-    if environ.get('HTTP_HOST'):
+    if not "local" in ENV:
         print('Content-Type: text/plain')
         print('status: 302')
         print()

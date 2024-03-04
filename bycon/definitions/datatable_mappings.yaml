@@ -275,30 +275,6 @@ definitions:
       cell_line:
         type: string
         db_key: info.cell_line
-      experiment_id:
-        type: string
-        db_key: analysis_info.experiment_id
-        indexed: True
-        compact: True
-      series_id:
-        type: string
-        db_key: analysis_info.series_id
-        indexed: True
-        compact: True
-      platform_id:
-        type: string
-        db_key: analysis_info.platform_id
-        indexed: True
-        compact: True
-      cell_line_id:
-        type: string
-        db_key: cell_line.id
-        indexed: True
-        compact: True
-      cell_line_label:
-        type: string
-        db_key: cell_line.label
-        compact: True
 
 #------------------------------------------------------------------------------#
 
@@ -447,9 +423,6 @@ definitions:
       analysis_operation_label:
         db_key: analysis_operation.label
         indexed: False
-      # variant_class:
-      #   db_key: variant_class
-      #   indexed: True
       experiment_id:
         db_key: analysis_info.experiment_id
         indexed: True
@@ -555,11 +528,6 @@ definitions:
         indexed: True
 
       # special pgxseg columns
-
       log2:
         db_key: info.cnv_value
         type: number
-      variant_type:
-        type: string
-        db_key: variant_type
-        computed: True

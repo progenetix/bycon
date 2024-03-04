@@ -37,6 +37,35 @@ def set_debug_state(debug=False) -> bool:
 
 ################################################################################
 
+def refactor_value_from_defined_type(parameter, values, definition):
+    p_d_t = definition.get("type", "string")
+    values = list(x for x in values if x is not None)
+    values = list(x for x in values if x != "None")
+    if "array" in p_d_t:
+        p_i_t = definition.get("items", "string")
+        if "int" in p_i_t:
+            return list(map(int, values))
+        elif "number" in p_i_t:
+            return list(map(float, values))
+        else:
+            return list(map(str, values))
+    elif len(values) == 1:
+        value = values[0]
+        if "int" in p_d_t:
+            return int(value)
+        elif "number" in p_d_t:
+            return float(value)
+        elif "bool" in p_d_t:
+            return test_truthy(value)
+        else:
+            return str(value)
+    else:
+        BYC["WARNINGS"].append(f"!!! Multiple values for {parameter} in request")
+        return '::'.join(values)
+
+
+################################################################################
+
 def select_this_server(byc: dict) -> str:
     """
     Cloudflare based encryption may lead to "http" based server addresses in the
@@ -46,11 +75,11 @@ def select_this_server(byc: dict) -> str:
     always use https _unless_ the request comes from a host listed a test instance.
     """
     s_uri = str(environ.get('SCRIPT_URI'))
-    test_sites = byc["beacon_defaults"].get("test_domains", [])
+    test_sites = BYC["beacon_defaults"].get("test_domains", [])
     https = "https://"
     http = "http://"
 
-    s = f'{https}{environ.get("HTTP_HOST")}'
+    s = f'{https}{ENV}'
     for site in test_sites:
         if site in s_uri:
             if https in s_uri:

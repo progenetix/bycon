@@ -9,20 +9,18 @@ from config import *
 
 ################################################################################
 
-def read_schema_file(byc, schema_name, item, ext="json"):
-
+def read_schema_file(schema_name, item, ext="json"):
     # some lookup for the `request_entity_path_id` value in the case of "true"
     # entry types where schemas are defined in a directory with the path id
-    defs = byc.get("beacon_defaults", {})
-    b_e_d = defs.get("entity_defaults", {})
+    b_e_d = BYC["beacon_defaults"].get("entity_defaults", {})
     if schema_name in b_e_d:
         r_p_id = b_e_d[schema_name].get("request_entity_path_id")
         if isinstance(r_p_id, str):
             schema_name = r_p_id
 
-    s_f_p = get_default_schema_file_path(byc, schema_name, "defaultSchema", ext)
+    s_f_p = get_default_schema_file_path(schema_name, "defaultSchema", ext)
     if s_f_p is False:  # in case the name had been used as request_entity_path_id
-        s_f_p = get_schema_file_path(byc, schema_name, ext)
+        s_f_p = get_schema_file_path(schema_name, ext)
 
     if s_f_p is not False:
         if len(item) > 1:
@@ -39,10 +37,8 @@ def read_schema_file(byc, schema_name, item, ext="json"):
 
 ################################################################################
 
-def get_schema_file_path(byc, schema_name, ext="json"):
-
+def get_schema_file_path(schema_name, ext="json"):
     f_n = f'{schema_name}.{ext}'
-
     p = Path(path.join( PKG_PATH, "schemas" ))
     s_p_s = [ f for f in p.rglob("*") if f.is_file() ]
     s_p_s = [ f for f in s_p_s if f.name == f_n ]
@@ -54,10 +50,8 @@ def get_schema_file_path(byc, schema_name, ext="json"):
 
 ################################################################################
 
-def get_default_schema_file_path(byc, schema_path_id, file_name, ext="json"):
-
+def get_default_schema_file_path(schema_path_id, file_name, ext="json"):
     f_n = f'{file_name}.{ext}'
-
     p = Path(path.join( PKG_PATH, "schemas" ))
     s_p_s = [ f for f in p.rglob("*") if f.is_file() ]
     s_p_s = [ f for f in s_p_s if f.name == f_n ]
@@ -97,9 +91,9 @@ def create_empty_instance(schema):
 
 ################################################################################
 
-def object_instance_from_schema_name(byc, schema_name, root_key, ext="json"):
-    s_f = read_schema_file(byc, schema_name, root_key, ext)
-    s_i = create_empty_instance( s_f )
+def object_instance_from_schema_name(schema_name, root_key, ext="json"):
+    s_f = read_schema_file(schema_name, root_key, ext)
+    s_i = create_empty_instance(s_f)
 
     return s_i
 

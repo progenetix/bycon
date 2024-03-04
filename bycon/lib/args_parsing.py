@@ -1,6 +1,6 @@
 import argparse, humps, re
 
-from bycon_helpers import prdbug, set_debug_state, test_truthy
+from bycon_helpers import prdbug, refactor_value_from_defined_type, set_debug_state, test_truthy
 from config import *
 
 ################################################################################
@@ -24,25 +24,8 @@ def args_update_form(byc):
         p_d = humps.decamelize(p)
         if not (a_d := a_defs.get(p_d)):
             continue
-        p_d_t = a_d.get("type", "string")
-        if "array" in p_d_t:
-            values = v.split(',')
-            p_i_t = a_defs[p_d].get("items", "string")
-            if "int" in p_i_t:
-                BYC_PARS.update({p_d: list(map(int, values))})
-            elif "number" in p_i_t:
-                BYC_PARS.update({p_d: list(map(float, values))})
-            else:
-                BYC_PARS.update({p_d: list(map(str, values))})
-        else:
-            if "int" in p_d_t:
-                BYC_PARS.update({p_d: int(v)})
-            elif "number" in p_d_t:
-                BYC_PARS.update({p_d: float(v)})
-            elif "bool" in p_d_t:
-                BYC_PARS.update({p_d: test_truthy(v)})
-            else:
-                BYC_PARS.update({p_d: str(v)})
+        values = str(v).split(',')
+        BYC_PARS.update({p_d: refactor_value_from_defined_type(p, values, a_defs[p_d])})
 
     BYC.update({"DEBUG_MODE": set_debug_state(BYC_PARS.get("debug_mode", False)) })
 

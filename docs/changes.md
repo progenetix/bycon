@@ -13,22 +13,23 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
-### 2024-02-28 (v1.5.3)
+### 2024-03-04 (v1.6.0)
 
-* bug fix: broken server address in handovers
+* simplification of internal parameter processing
+* `bycon` / `byconaut` - new method "variantsbedfile"
+    - takes over for the previous bedfile/UCSC variants handover generation (removed
+      from `handover_generation`)
+    - defaults to bedfile download from variant query
+    - `output=ucsclink` creates the UCSC link with added bedfile payload
 * `byconaut` - refactoring of `frequencymapsCreator.py` to use the standard collation
   bundle generation instead of custom queries 
 * `byconaut` - change of collation retrieval to work now with `collationTypes`
   parameter
     - this allows to e.g. get all clustered CNV plots for a classification tree:
         * `/services/collationplots/?collationTypes=NCIT&minNumber=200`
+* bug fix: broken server address in handovers
 * bug fix: `id` specific query for collations was broken (delivered all)
 * bug fix: mapping of basic chromosome ids (`9`) to refseqs was broken
-* `byconaut` - new method "variantsbedfile"
-    - takes over for the previous bedfile/UCSC variants handover generation (removed
-      from `handover_generation`)
-    - defaults to bedfile download from variant query
-    - `output=ucsclink` creates the UCSC link with added bedfile payload
 
 ### 2024-02-24 (v1.5.2)
 

@@ -16,7 +16,7 @@ def execute_bycon_queries(ds_id, BQ, byc):
     the standard "Progenetix"-type MongoDB collections.
         
     podmd"""
-    h_o_defs = byc["handover_definitions"]["h->o_methods"]
+    h_o_methods = byc["handover_definitions"]["h->o_methods"]
     r_e_id = str(byc.get("response_entity_id", "___none___"))
 
     exe_queries = {}
@@ -44,9 +44,10 @@ def execute_bycon_queries(ds_id, BQ, byc):
     prevars = {
         "ds_id": ds_id,
         "data_db": data_db,
-        "h_o_defs": h_o_defs,
         "original_queries": byc.get("original_queries", {}),
-        "pref_m": "", "query": {}
+        "pref_m": "",
+        "h_o_def": {},
+        "query": {}
     }
 
     ############################################################################
@@ -68,22 +69,31 @@ def execute_bycon_queries(ds_id, BQ, byc):
     biosamples_query = exe_queries.get("biosamples", False)
     if biosamples_query:
         pref_k = "biosamples.id"
-        prevars["pref_m"] = pref_k
-        prevars["query"] = biosamples_query
+        prevars.update({
+            "pref_m": pref_k,
+            "query": biosamples_query,
+            "h_o_def": h_o_methods.get(pref_k)
+        })
         prefetch.update({pref_k: _prefetch_data(prevars)})
 
     individuals_query = exe_queries.get("individuals", False)
     if individuals_query:
         pref_k = "individuals.id"
-        prevars["pref_m"] = pref_k
-        prevars["query"] = individuals_query
+        prevars.update({
+            "pref_m": pref_k,
+            "query": individuals_query,
+            "h_o_def": h_o_methods.get(pref_k)
+        })
         prefetch.update({pref_k: _prefetch_data(prevars)})
 
         pref_vs = prefetch["individuals.id"]["target_values"]
 
         pref_k = "biosamples.id"
-        prevars["pref_m"] = pref_k
-        prevars["query"] = {"individual_id": {'$in': pref_vs}}
+        prevars.update({
+            "pref_m": pref_k,
+            "query": {"individual_id": {'$in': pref_vs}},
+            "h_o_def": h_o_methods.get(pref_k)
+        })
         biosids_from_indq = _prefetch_data(prevars)
 
         if "biosamples.id" in prefetch:
@@ -93,19 +103,22 @@ def execute_bycon_queries(ds_id, BQ, byc):
             prefetch["biosamples.id"] = biosids_from_indq
 
     callsets_query = exe_queries.get("analyses", False)
-    if callsets_query:
-        
+    if callsets_query:     
         # since analyses contain biosample_id no double calling is required
-        prevars["pref_m"] = "analyses.biosample_id->biosamples.id"
-        prevars["query"] = callsets_query
-        prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
+        pref_k = "analyses.biosample_id->biosamples.id"
+        prevars.update({
+            "pref_m": pref_k,
+            "query": callsets_query,
+            "h_o_def": h_o_methods.get(pref_k)
+        })
+        prefetch.update({pref_k: _prefetch_data(prevars)})
 
-        if "biosamples.id" in prefetch:
-            bsids = list(set(prefetch["analyses.biosample_id->biosamples.id"]["target_values"]) & set(
+        if "biosamples.id" in prefetch.keys():
+            bsids = list(set(prefetch[pref_k]["target_values"]) & set(
                 prefetch["biosamples.id"]["target_values"]))
             prefetch["biosamples.id"].update({"target_values": bsids, "target_count": len(bsids)})
         else:
-            prefetch["biosamples.id"] = prefetch["analyses.biosample_id->biosamples.id"]
+            prefetch["biosamples.id"] = prefetch[pref_k]
 
     variants_query = exe_queries.get("variants")
     if not variants_query:
@@ -113,7 +126,6 @@ def execute_bycon_queries(ds_id, BQ, byc):
             variants_query = {"biosample_id": {'$in': prefetch["biosamples.id"].get("target_values", ["___none___"])}}
 
     if variants_query:
-
         """podmd
         ### `variants` Query and Aggregation
 
@@ -127,30 +139,42 @@ def execute_bycon_queries(ds_id, BQ, byc):
         original query and the matching biosamples from the intersect.
         podmd"""
 
-        prevars["pref_m"] = "variants.biosample_id->biosamples.id"
-        prevars["query"] = variants_query
-        prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
+        pref_k = "variants.biosample_id->biosamples.id"
+        prevars.update({
+            "pref_m": pref_k,
+            "query": variants_query,
+            "h_o_def": h_o_methods.get(pref_k)
+        })
+        prefetch.update({pref_k: _prefetch_data(prevars)})
 
         if "biosamples.id" in prefetch.keys():
             bsids = list(set(prefetch["biosamples.id"]["target_values"]) & set(
-                prefetch["variants.biosample_id->biosamples.id"]["target_values"]))
+                prefetch[pref_k]["target_values"]))
             prefetch["biosamples.id"].update({"target_values": bsids, "target_count": len(bsids)})
             variants_query = {"$and": [variants_query, {"biosample_id": {"$in": bsids}}]}
         else:
-            prefetch["biosamples.id"] = prefetch["variants.biosample_id->biosamples.id"]
+            prefetch["biosamples.id"] = prefetch[pref_k]
 
-        prevars["pref_m"] = "variants._id"
-        prevars["query"] = variants_query
-        prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
+        pref_k = "variants._id"
+        prevars.update({
+            "pref_m": pref_k,
+            "query": variants_query,
+            "h_o_def": h_o_methods.get(pref_k)
+        })
+        prefetch.update({pref_k: _prefetch_data(prevars)})
 
         # prevars["pref_m"] = "variants.variant_internal_id"
         # prevars["query"] = {"_id": {"$in": prefetch["variants._id"]["target_values"]}}
         # prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
 
     elif v_i_q:
-        prevars["pref_m"] = "variants._id"
-        prevars["query"] = v_i_q
-        prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
+        pref_k = "variants._id"
+        prevars.update({
+            "pref_m": pref_k,
+            "query": v_i_q,
+            "h_o_def": h_o_methods.get(pref_k)
+        })
+        prefetch.update({pref_k: _prefetch_data(prevars)})
         
         # prevars["pref_m"] = "variants.variant_internal_id"
         # prevars["query"] = {"_id": {"$in": prefetch["variants._id"]["target_values"]}}
@@ -166,7 +190,7 @@ def execute_bycon_queries(ds_id, BQ, byc):
 
     For variants the `_id` values only exist if a variants query had been performed.
     In that case no separate recall has to be performed since a biosample intersection
-    had been performed already (to limit the a priori variant response).
+    had been performed already (to limit the _a priori_ variant response).
 
     If no variant query was performed _but_ the response asks for variants => all
     callset variants will be returned.
@@ -179,24 +203,39 @@ def execute_bycon_queries(ds_id, BQ, byc):
     podmd"""
 
     if "biosamples.id" not in prefetch:
-        prefetch.update({"biosamples.id": {**prevars["h_o_defs"]["biosamples.id"]}})
-        prefetch["biosamples.id"].update({
-            "id": str(uuid4()),
-            "source_db": ds_id,
-            "target_values": [],
-            "target_count": 0
+        pref_k = "biosamples.id"
+        prevars.update({
+            "pref_m": pref_k,
+            "query": {"id": "___undefined___"},
+            "h_o_def": h_o_methods.get(pref_k)
         })
+        prefetch.update({pref_k: _prefetch_data(prevars)})
+        # prefetch.update({"biosamples.id": {**h_o_methods.get("biosamples.id")}})
+        # prefetch["biosamples.id"].update({
+        #     "id": str(uuid4()),
+        #     "source_db": ds_id,
+        #     "target_values": [],
+        #     "target_count": 0
+        # })
 
         byc["dataset_results"].update({ds_id: prefetch})
         return
 
-    prevars["pref_m"] = "analyses._id"
-    prevars["query"] = {"biosample_id": {"$in": prefetch["biosamples.id"]["target_values"]}}
-    prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
+    pref_k = "analyses._id"
+    prevars.update({
+        "pref_m": pref_k,
+        "query": {"biosample_id": {"$in": prefetch["biosamples.id"]["target_values"]}},
+        "h_o_def": h_o_methods.get(pref_k)
+    })
+    prefetch.update({pref_k: _prefetch_data(prevars)})
 
-    prevars["pref_m"] = "biosamples._id"
-    prevars["query"] = {"id": {"$in": prefetch["biosamples.id"]["target_values"]}}
-    prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
+    pref_k = "biosamples._id"
+    prevars.update({
+        "pref_m": pref_k,
+        "query": {"id": {"$in": prefetch["biosamples.id"]["target_values"]}},
+        "h_o_def": h_o_methods.get(pref_k)
+    })
+    prefetch.update({pref_k: _prefetch_data(prevars)})
 
     # TODO: have this checked... somewhere else based on the response_entity_id
     if "individual" in r_e_id or "phenopacket" in r_e_id:
@@ -205,7 +244,6 @@ def execute_bycon_queries(ds_id, BQ, byc):
     ############################################################################
 
     data_client.close()
-
     byc["dataset_results"].update({ds_id: prefetch})
 
     try:
@@ -235,21 +273,19 @@ def _prefetch_data(prevars):
 
     pref_m = prevars["pref_m"]
     data_db = prevars["data_db"]
-    h_o_defs = prevars["h_o_defs"][pref_m]
-
-    dist = data_db[h_o_defs["source_collection"]].distinct(h_o_defs["source_key"], prevars["query"])
-
-    h_o = {**h_o_defs}
+    h_o_def = prevars["h_o_def"]
+    dist = data_db[h_o_def["source_collection"]].distinct(h_o_def["source_key"], prevars["query"])
+    h_o = {**h_o_def}
+    t_v_s = dist if dist else []
     h_o.update(
         {
             "id": str(uuid4()),
             "source_db": prevars["ds_id"],
-            "target_values": dist,
-            "target_count": len(dist),
+            "target_values": t_v_s,
+            "target_count": len(t_v_s),
             "original_queries": prevars.get("original_queries", None)
         }
     )
-
     return h_o
 
 
@@ -285,13 +321,21 @@ def _prefetch_vars_from_biosample_loop(prevars):
 ################################################################################
 
 def _prefetch_add_individuals(prevars, prefetch):
-    prevars["pref_m"] = "biosamples.individual_id->individuals.id"
-    prevars["query"] = {"_id": {"$in": prefetch["biosamples._id"]["target_values"]}}
-    prefetch.update({"individuals.id": _prefetch_data(prevars)})
+    pref_k = "biosamples.individual_id->individuals.id"
+    prevars.update({
+        "pref_m": pref_k,
+        "query": {"_id": {"$in": prefetch["biosamples._id"]["target_values"]}},
+        "h_o_def": h_o_methods.get(pref_k)
+    })
+    prefetch.update({pref_k: _prefetch_data(prevars)})
 
-    prevars["pref_m"] = "individuals._id"
-    prevars["query"] = {"id": {"$in": prefetch["individuals.id"]["target_values"]}}
-    prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
+    pref_k = "individuals._id"
+    prevars.update({
+        "pref_m": pref_k,
+        "query": {"id": {"$in": prefetch["biosamples.individual_id->individuals.id"]["target_values"]}},
+        "h_o_def": h_o_methods.get(pref_k)
+    })
+    prefetch.update({pref_k: _prefetch_data(prevars)})
 
     return prefetch
 

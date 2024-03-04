@@ -22,7 +22,6 @@ def set_user_name(byc):
     elif (un := BYC_PARS.get("user_name", "anonymous")) in byc.get("authorizations", {}):
         BYC.update({"USER": un})
 
-
 ################################################################################
 
 def set_returned_granularities(byc):
@@ -47,14 +46,12 @@ def set_returned_granularities(byc):
     if not "authorized_granularities" in byc:
         byc.update({"authorized_granularities": {}})
 
-    
     for ds_id in ds_ids:
         byc["authorized_granularities"].update({ds_id: rg})
         
         # the user is checked against predefined authorizations
-        if not (ugs := auth.get(BYC["USER"])):
+        if not (ugs := AUTHORIZATIONS.get(BYC["USER"])):
             continue
-        prdbug(f'USER {BYC["USER"]} - authorizations {ugs}')
 
         g_l_l = ugs.get("default", "___none___")
         if ds_id in ugs:
@@ -64,10 +61,7 @@ def set_returned_granularities(byc):
         if d_g_l <= r_g_l:
             byc["authorized_granularities"].update({ds_id: g_l_l})
         g_l_s.append(d_g_l)
-
     m_g_l = max(g_l_s)
-
-    prdbug(f'Granularity levels: {g_l_s} - max: {m_g_l} - requested: {r_g_l}')
 
     if m_g_l < r_g_l:
         prdbug(f'Warning: Requested granularity exceeds user authorization - using a maximum of {m_g_l}')

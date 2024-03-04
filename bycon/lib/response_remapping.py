@@ -72,13 +72,12 @@ def remap_variants(r_s_res, byc):
         for p in legacy_pars:
             v["variation"].pop(p, None)
 
-        for k in ("molecular_attributes", "variant_level_data", "identifiers"):
+        for k in ["molecular_attributes", "variant_level_data", "identifiers"]:
             k_v = v["variation"].get(k)
             if not k_v:
                  v["variation"].pop(k, None)
-        for k in ("variant_alternative_ids"):
-            k_v = v["variation"].get(k, [])
-            if len(k_v) == 0:
+        for k in ["variant_alternative_ids"]:
+            if len(v["variation"].get(k, [])) < 1:
                 v["variation"].pop(k, None)
 
         variants.append(v)

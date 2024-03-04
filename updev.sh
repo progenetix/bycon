@@ -9,6 +9,6 @@ BY=(./dist/*tar.gz)
 pip3 install $BY
 # pipreqs --force .
 # python3 -m build --wheel && twine upload dist/*
-# git tag v1.5.1  & git push --tags
+# git tag v1.6.0  & git push --tags
 ./install.py
 ../byconaut/install.py

@@ -20,7 +20,7 @@ user_name:
 # procedural
 
 test_mode:
-  type: string
+  type: boolean
   cmdFlags:
     - -t
     - --testMode 
@@ -286,6 +286,7 @@ ids:
 biosample_ids:
   type: array
   items: string
+  byc_entity: biosample
   cmdFlags:
     - --biosampleIds
   description: biosample ids
@@ -293,20 +294,15 @@ biosample_ids:
 analysis_ids:
   type: array
   items: string
+  byc_entity: analysis
   cmdFlags:
     - --analysisIds
-  description: callset / analysis ids
-
-callset_ids:
-  type: array
-  items: string
-  cmdFlags:
-    - --callsetIds
   description: callset / analysis ids
 
 individual_ids:
   type: array
   items: string
+  byc_entity: individual
   cmdFlags:
     - --individualIds
   description: subject ids
@@ -314,6 +310,7 @@ individual_ids:
 variant_ids:
   type: array
   items: string
+  byc_entity: genomicVariant
   cmdFlags:
     - --variantIds
   description: variant ids

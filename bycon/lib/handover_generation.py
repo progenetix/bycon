@@ -20,7 +20,7 @@ def dataset_response_add_handovers(ds_id, byc):
         return b_h_o
     skip = BYC_PARS.get("skip")
     limit = BYC_PARS.get("limit")
-    h_o_server = select_this_server(byc)    
+    h_o_server = select_this_server(byc)
     h_o_types = byc["handover_definitions"]["h->o_types"]
     ds_h_o = byc["dataset_definitions"][ds_id].get("handoverTypes", h_o_types.keys())
     ds_res_k = list(byc["dataset_results"][ds_id].keys())
@@ -67,7 +67,7 @@ def dataset_response_add_handovers(ds_id, byc):
                 if target_count < p_t:
                     p_t = target_count
                 l = f"{p_f + 1}-{p_t}"
-                u = f'{h_o_r["url"]}&paginateResults=false&skip={p_s}&limit={limit}'
+                u = __handover_create_url(h_o_server, h_o_defs, ds_id, accessid, p_s, limit)
                 h_o_r["pages"].append( { "handover_type": {"id": h_o_defs["handoverType"][ "id" ], "label": l }, "url": u } )
                 p_s += 1
                 p_f += limit
@@ -81,17 +81,16 @@ def dataset_response_add_handovers(ds_id, byc):
 
 ################################################################################
 
-def __handover_create_url(h_o_server, h_o_defs, ds_id, accessid):
-    if "script_path_web" in h_o_defs:
-        server = h_o_server
-        if "http" in h_o_defs["script_path_web"]:
-            server = ""
-        url = f'{server}{h_o_defs["script_path_web"]}?datasetIds={ds_id}&accessid={accessid}'
-        for p in ["method", "output", "plotType", "requestedSchema"]:
-            if p in h_o_defs:
-                url += "&{}={}".format(p, h_o_defs[p])
-        url += h_o_defs.get("url_opts", "")
-        return url
-    return ""
+def __handover_create_url(h_o_server, h_o_defs, ds_id, accessid, skip=BYC_PARS.get("skip"), limit=BYC_PARS.get("limit")):
+    if not (addr := h_o_defs.get("script_path_web")):
+        return ""
+    server = "" if "http" in addr else h_o_server
+    url = f'{server}{addr}?datasetIds={ds_id}&accessid={accessid}&skip={skip}&limit={limit}'
+    for p in ["method", "output", "plotType", "requestedSchema"]:
+        if not (v := h_o_defs.get(p)):
+            continue
+        url += f"&{p}={v}"
+    url += h_o_defs.get("url_opts", "")
+    return url
 
 

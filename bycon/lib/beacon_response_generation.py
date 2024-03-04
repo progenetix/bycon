@@ -24,11 +24,10 @@ class BeaconErrorResponse:
     The responses are then provided by the dedicated methods
     """
     def __init__(self, byc: dict):
-        self.beacon_defaults = byc.get("beacon_defaults", {})
-        self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
+        self.entity_defaults = BYC["beacon_defaults"].get("entity_defaults", {"info":{}})
         self.response_schema = byc.get("response_schema", "beaconInfoResponse")
         self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
-        self.error_response = object_instance_from_schema_name(byc, "beaconErrorResponse", "")
+        self.error_response = object_instance_from_schema_name("beaconErrorResponse", "")
         info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
         r_m = self.error_response["meta"]
         for p in ["api_version", "beacon_id"]:
@@ -59,11 +58,10 @@ class BeaconInfoResponse:
     The responses are then provided by the dedicated methods
     """
     def __init__(self, byc: dict):
-        self.beacon_defaults = byc.get("beacon_defaults", {})
-        self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
+        self.entity_defaults = BYC["beacon_defaults"].get("entity_defaults", {"info":{}})
         self.response_schema = byc.get("response_schema", "beaconInfoResponse")
         self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
-        self.data_response = object_instance_from_schema_name(byc, self.response_schema, "")
+        self.data_response = object_instance_from_schema_name(self.response_schema, "")
         info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
         r_m = self.data_response["meta"]
         for p in ["api_version", "beacon_id"]:
@@ -104,17 +102,16 @@ class BeaconInfoResponse:
 class BeaconDataResponse:
     def __init__(self, byc: dict):
         self.byc = byc
-        self.beacon_defaults = byc.get("beacon_defaults", {})
         self.dataset_ids = byc.get("dataset_ids", [])
         self.authorized_granularities = byc.get("authorized_granularities", {})
         self.user_name = byc.get("user_name", "anonymous")
-        self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
+        self.entity_defaults = BYC["beacon_defaults"].get("entity_defaults", {"info":{}})
         self.response_schema = byc["response_schema"]
         self.returned_granularity = byc.get("returned_granularity", "boolean")
         self.include_handovers = BYC_PARS.get("include_handovers", False)
         self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
         self.record_queries = {}
-        self.data_response = object_instance_from_schema_name(byc, self.response_schema, "")
+        self.data_response = object_instance_from_schema_name(self.response_schema, "")
         self.data_time_init = datetime.datetime.now()
 
         return
@@ -126,6 +123,7 @@ class BeaconDataResponse:
 
     def resultsetResponse(self):
         dbm = f'... resultsetResponse start, schema {self.response_schema}'
+        prdbug(dbm)
         if not "beaconResultsetsResponse" in self.response_schema:
             return
 
@@ -370,8 +368,7 @@ class ByconFilteringTerms:
     def __init__(self, byc: dict):
         self.byc = byc
         self.dataset_ids = byc.get("dataset_ids", [])
-        self.beacon_defaults = byc.get("beacon_defaults", {})
-        self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
+        self.entity_defaults = BYC["beacon_defaults"].get("entity_defaults", {"info":{}})
         self.filter_definitions = byc.get("filter_definitions", {})
         self.filters = byc.get("filters", [])
         self.response_entity_id = byc.get("response_entity_id", "filteringTerm")
@@ -469,10 +466,9 @@ class ByconFilteringTerms:
 
     def __return_filter_resources(self):
         r_o = {}
-
         f_d_s = self.filter_definitions
         collation_types = list(self.filter_collation_types)
-        res_schema = object_instance_from_schema_name(self.byc, "beaconFilteringTermsResults", "definitions/Resource",
+        res_schema = object_instance_from_schema_name("beaconFilteringTermsResults", "definitions/Resource",
                                                       "json")
         for c_t in collation_types:
             if c_t not in f_d_s:
@@ -498,8 +494,7 @@ class ByconCollections:
     def __init__(self, byc: dict):
         self.byc = byc
         self.dataset_ids = byc.get("dataset_ids", [])
-        self.beacon_defaults = byc.get("beacon_defaults", {})
-        self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
+        self.entity_defaults = BYC["beacon_defaults"].get("entity_defaults", {"info":{}})
         self.filter_definitions = byc.get("filter_definitions", {})
         self.response_entity_id = byc.get("response_entity_id", "dataset")
         self.data_collection = byc["response_entity"].get("collection", "collations")
@@ -579,8 +574,7 @@ class ByconCollections:
 class ByconResultSets:
     def __init__(self, byc: dict):
         self.byc = byc
-        self.beacon_defaults = byc.get("beacon_defaults", {})
-        self.entity_defaults = self.beacon_defaults.get("entity_defaults", {"info":{}})
+        self.entity_defaults = BYC["beacon_defaults"].get("entity_defaults", {"info":{}})
         self.datasets_results = dict()  # the object with matched ids per dataset, per h_o
         self.datasets_data = dict()     # the object with data of requested entity per dataset
         self.result_sets = list()       # data rewrapped into the resultSets list
@@ -627,16 +621,8 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __get_handover_access_key(self):
-        r_c = self.data_collection
-        # fallback
-        r_k = r_c+"._id"
-        for r_t, r_d in self.entity_defaults.items():
-            r_t_k = r_d.get("h->o_access_key")
-            if not r_t_k:
-                continue
-            if r_d.get("response_entity_id", "___none___") == self.response_entity_id:
-                r_k = r_d.get("h->o_access_key", r_k)
-        self.handover_key = r_k
+        e_d_s = self.entity_defaults.get(self.response_entity_id, {})
+        self.handover_key = e_d_s.get("h->o_access_key", "___none___")
         return
 
 
@@ -663,7 +649,7 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __create_empty_result_sets(self):
-        r_set = object_instance_from_schema_name(self.byc, "beaconResultsets", "definitions/ResultsetInstance")
+        r_set = object_instance_from_schema_name("beaconResultsets", "definitions/ResultsetInstance")
         r_sets = []
         for ds_id in self.byc.get("dataset_ids", []):
             ds_rset = r_set.copy()
@@ -700,18 +686,19 @@ class ByconResultSets:
         if "variants" in self.data_collection:
             return
 
+        e_d_s = self.entity_defaults.get(self.response_entity_id, {})
+
         ds_d_start = datetime.datetime.now()
         for ds_id, ds_results in self.datasets_results.items():
             if not ds_results:
                 continue
-            if self.handover_key not in ds_results.keys():
+            if (h_o_k := e_d_s.get("h->o_access_key", "___none___")) not in ds_results.keys():
                 continue
-            res = ds_results.get(self.handover_key, {})
+            res = ds_results.get(h_o_k, {})
             q_k = res.get("target_key", "_id")
             q_db = res.get("source_db", "___none___")
             q_coll = res.get("target_collection", "___none___")
             q_v_s = res.get("target_values", [])
-
             q_v_s = return_paginated_list(q_v_s, self.skip, self.limit)
 
             mongo_client = MongoClient(host=DB_MONGOHOST)

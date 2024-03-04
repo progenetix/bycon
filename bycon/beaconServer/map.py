@@ -11,7 +11,6 @@ podmd"""
 ################################################################################
 
 def main():
-
     try:
         map()
     except Exception:
@@ -20,10 +19,9 @@ def main():
 ################################################################################
 
 def map():
-
     initialize_bycon_service(byc, "map")
     r = BeaconInfoResponse(byc)
-    m_f = get_schema_file_path(byc, "beaconMap")
+    m_f = get_schema_file_path("beaconMap")
     beaconMap = load_yaml_empty_fallback( m_f )
     print_json_response(r.populatedInfoResponse(beaconMap))
 

@@ -15,16 +15,6 @@ defaults:
 # mappings and aliases #########################################################
 ################################################################################
 
-# custom way to request multiple items by id ###################################
-id_entity_mappings:
-  biosample_ids: biosample
-  variant_ids: genomicVariant
-  callset_ids: analysis
-  analysis_ids: analysis
-  individual_ids: individual
-  genomic_variant_ids: genomicVariant
-  cohort_ids: cohort
-
 # aliases for the entry type path ids ##########################################
 service_path_aliases:
   "/": info
@@ -32,9 +22,7 @@ service_path_aliases:
   "service-info": info
   configuration: configuration
   map: map
-  entryTypes: entry_types
   entry_types: entry_types
-  filteringTerms: filtering_terms
   filtering_terms: filtering_terms
   datasets: datasets
   cohorts: cohorts
@@ -61,7 +49,7 @@ path_entry_type_mappings:
   entry_types: entryType
   entryTypes: entryType
 
-# entry types for the standard query stack #####################################
+# entry types for the standard query stack / entity aggregation ################
 data_pipeline_path_ids:
   - analyses
   - biosamples

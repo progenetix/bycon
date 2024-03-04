@@ -18,7 +18,7 @@ def read_service_definition_files(byc):
       |- lib - read_specs.py
       |- definitions - __name__.yaml
     podmd"""
-    conf_dir = path.join( PKG_PATH, "definitions")
+    conf_dir = path.join(PKG_PATH, "definitions")
     if not path.isdir(conf_dir):
         return
     b_d_fs = [ f.name for f in scandir(conf_dir) if f.is_file() ]
@@ -30,7 +30,10 @@ def read_service_definition_files(byc):
         ofp = path.join( conf_dir, f'{d}.yaml' )
         with open( ofp ) as od:
             o = yaml.load( od , Loader=yaml.FullLoader)
-        byc.update({d: o})
+        if d in BYC.keys():
+            BYC.update({d: o})
+        else:
+            byc.update({d: o})
 
 
 ################################################################################
@@ -51,7 +54,7 @@ def update_rootpars_from_local(loc_dir, byc):
     s_f = path.join(loc_dir, f'{s_p}.yaml')
     s = load_yaml_empty_fallback(s_f)
     b = always_merger.merge(s, b)
-    byc.update({b_p: always_merger.merge(byc.get(b_p, {}), b)})
+    BYC.update({b_p: always_merger.merge(BYC.get(b_p, {}), b)})
 
     # overwriting installation-wide defaults with instance-specific ones
     # _i.e._ matching the current domain (to allow presentation of different
@@ -68,14 +71,17 @@ def update_rootpars_from_local(loc_dir, byc):
                 break
         if instance in i_ovr:
             i_o_bdfs = i_ovr[instance].get("beacon_defaults", {})
-            byc.update({b_p: always_merger.merge(byc.get(b_p, {}), i_o_bdfs)})
+            BYC.update({b_p: always_merger.merge(BYC.get(b_p, {}), i_o_bdfs)})
 
     # TODO: better way to define which files are parsed from local
     for p in ("authorizations", "dataset_definitions", "local_paths", "local_parameters", "datatable_mappings", "plot_defaults"):
         f = path.join(loc_dir, f'{p}.yaml')
         d = load_yaml_empty_fallback(f)
         prdbug(f'...loc_dir file => {p}')
-        byc.update({p: always_merger.merge(byc.get(p, {}), d)})
+        if p in BYC.keys():
+            BYC.update({p: always_merger.merge(BYC.get(p, {}), d)})
+        else:
+            byc.update({p: always_merger.merge(byc.get(p, {}), d)})
 
     return
 

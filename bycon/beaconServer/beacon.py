@@ -28,7 +28,7 @@ def beacon():
     # update_rootpars_from_local(LOC_PATH, byc)
     # set_beacon_defaults(byc)
 
-    defs = byc.get("beacon_defaults", {})
+    defs = BYC["beacon_defaults"]
     s_a_s = defs.get("service_path_aliases", {})
     r_w = defs.get("rewrites", {})
     d_p_s = defs.get("data_pipeline_path_ids", [])

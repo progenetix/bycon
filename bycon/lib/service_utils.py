@@ -16,8 +16,7 @@ from parse_variant_request import parse_variants
 ################################################################################
 
 def set_beacon_defaults(byc):
-    b_d = byc.get("beacon_defaults", {})
-    defaults: object = b_d.get("defaults", {})
+    defaults: object = BYC["beacon_defaults"].get("defaults", {})
     for d_k, d_v in defaults.items():
         byc.update( { d_k: d_v } )
 
@@ -37,7 +36,7 @@ def run_beacon_init_stack(byc):
 
 def initialize_bycon_service(byc, service="info"):
     # TODO - streamline, also for services etc.
-    defs = byc.get("beacon_defaults", {})
+    defs = BYC["beacon_defaults"]
     b_e_d = defs.get("entity_defaults", {})
     s_a_s = defs.get("service_path_aliases", {})
     if service in s_a_s:
@@ -89,9 +88,8 @@ def set_special_modes(byc):
 
 def update_entity_ids_from_path(byc):
     req_p_id = byc.get("request_entity_path_id")
-    defs = byc.get("beacon_defaults", {})
-    s_a_s = defs.get("service_path_aliases", {})
-    p_e_m = defs.get("path_entry_type_mappings", {})
+    s_a_s = BYC["beacon_defaults"].get("service_path_aliases", {})
+    p_e_m = BYC["beacon_defaults"].get("path_entry_type_mappings", {})
 
     if not req_p_id:
         return
@@ -127,8 +125,7 @@ def update_requested_schema_from_request(byc):
 
 def set_response_entity(byc):
     prdbug(f'response_entity_id: {byc.get("response_entity_id")}')
-    
-    b_rt_s = byc["beacon_defaults"].get("entity_defaults", {})
+    b_rt_s = BYC["beacon_defaults"].get("entity_defaults", {})
     r_e_id = byc.get("response_entity_id", "___none___")
     r_e = b_rt_s.get(r_e_id)
     if not r_e:

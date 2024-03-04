@@ -13,10 +13,12 @@ defaults:
 # the aliases here are for non-standard speling or additional entry types
 
 service_path_aliases:
-  filteringTerms: filteringTerms
-  phenopackets: phenopackets
-  variants: genomicVariations
-  genomicVariations: genomicVariations
+  filteringTerms: filtering_terms       # just for speling variations
+  entryTypes: entry_types               # just for speling variations
+  variants: genomicVariations           # just for speling variations
+  genomicVariations: genomicVariations  # just for speling variations
+  phenopackets: phenopackets            # Beacon+ specific example
+
 
 ################################################################################
 # here you can map additional path values to the corresponding (additional)
@@ -24,16 +26,16 @@ service_path_aliases:
 ################################################################################
 
 path_entry_type_mappings:
-  phenopackets: phenopacket
+  phenopackets: phenopacket             # Beacon+ specific example
 
 ################################################################################
 # her you can add additional path ids to the data query aggregation pipeline
 # that usually mapps/reduces queries against biosamples, genomicVariations,
-#individuals ...
+# individuals ...
 ################################################################################
 
 data_pipeline_path_ids:
-  - phenopackets
+  - phenopackets                        # Beacon+ specific example
 
 ################################################################################
 # Beacon entry type defaults - please adjust esp. info and schema paths...

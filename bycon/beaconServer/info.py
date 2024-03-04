@@ -22,15 +22,14 @@ def main():
 ################################################################################
 
 def info():
-
     initialize_bycon_service(byc, "info")
     r = BeaconInfoResponse(byc)
 
-    defs = byc.get("beacon_defaults", {})
+    defs = BYC["beacon_defaults"]
     b_e_d = defs.get("entity_defaults", {})
     info = b_e_d.get("info", {})
     pgx_info = info.get("content", {})
-    beacon_info = object_instance_from_schema_name(byc, "beaconInfoResults", "")
+    beacon_info = object_instance_from_schema_name("beaconInfoResults", "")
     for k in beacon_info.keys():
         if k in pgx_info:
             beacon_info.update({k:pgx_info[k]})

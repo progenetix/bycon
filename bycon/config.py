@@ -43,7 +43,9 @@ BYC = {
   "TEST_MODE": False,
   "ERRORS": [],
   "WARNINGS": [],
-  "USER": "anonymous"
+  "USER": "anonymous",
+  "beacon_defaults": {},
+  "datatable_mappings": {}
 }
 
 # collection object for cmd arguments and web parameters (depending on the ENV)

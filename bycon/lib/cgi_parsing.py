@@ -3,7 +3,7 @@ from urllib.parse import urlparse, parse_qs, unquote
 from os import environ
 
 from args_parsing import args_update_form
-from bycon_helpers import prdbug, set_debug_state, test_truthy
+from bycon_helpers import prdbug, refactor_value_from_defined_type, set_debug_state, test_truthy
 from config import *
 
 ################################################################################
@@ -29,7 +29,7 @@ def parse_POST(byc):
     content_len = environ.get('CONTENT_LENGTH', '0')
     content_typ = environ.get('CONTENT_TYPE', '')
 
-    b_defs = byc.get("beacon_defaults", {})
+    b_defs = BYC["beacon_defaults"]
     a_defs = byc.get("argument_definitions", {})
 
     # TODO: catch error & return for non-json posts
@@ -83,9 +83,13 @@ def parse_GET(byc):
     form_data = cgi.FieldStorage()
     for p in form_data:
         p_d = humps.decamelize(p)
+        # CAVE: Only predefined parameters are accepted!
         if p_d in a_defs:
-            BYC_PARS.update({p_d: refactor_value_from_defined_type(p, form_data, a_defs[p_d])})
+            values = form_return_listvalue(form_data, p)
+            BYC_PARS.update({p_d: refactor_value_from_defined_type(p, values, a_defs[p_d])})
         else:
+            w_m = '!!! Unmatched parameter {p_d}: {form_data.getvalue(p)}'
+            BYC["WARNINGS"].append(w_m)
             prdbug(f'!!! Unmatched parameter {p_d}: {form_data.getvalue(p)}')
     BYC.update({"DEBUG_MODE": set_debug_state(BYC_PARS.get("debug_mode", False)) })
 
@@ -142,10 +146,8 @@ def rest_path_value(key=""):
     * `/services/intervalFrequencies/NCIT:C3072/` => "intervalFrequencies" -> "NCIT:C3072"
 
     """
-
     if not environ.get('REQUEST_URI'):
         return None
-
     url_comps = urlparse(environ.get('REQUEST_URI'))
     p_items = re.split('/', url_comps.path)
     p_items = [x for x in p_items if len(x) > 1]
@@ -157,34 +159,7 @@ def rest_path_value(key=""):
                 return unquote(p_items[i])
         elif p == key:
             return None
-
     return None
-
-
-################################################################################
-
-def refactor_value_from_defined_type(parameter, form_data, definition):
-    p_d_t = definition.get("type", "string")
-    if "array" in p_d_t:
-        values = form_return_listvalue(form_data, parameter)
-        p_i_t = definition.get("items", "string")
-        if "int" in p_i_t:
-            return list(map(int, values))
-        elif "number" in p_i_t:
-            return list(map(float, values))
-        else:
-            return list(map(str, values))
-    else:
-        value = form_data.getvalue(parameter)
-        prdbug(f'...refactor_value_from_defined_type: {parameter} {value}')
-        if "int" in p_d_t:
-            return int(value)
-        elif "number" in p_d_t:
-            return float(value)
-        elif "bool" in p_d_t:
-            return test_truthy(value)
-        else:
-            return str(value)
 
 
 ################################################################################

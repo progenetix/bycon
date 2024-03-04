@@ -41,17 +41,13 @@ class ByconQuery():
     """
 
     def __init__(self, byc: dict, dataset_id=False):
-        self.defaults = byc.get("beacon_defaults", {})
-        self.response_types = self.defaults.get("entity_defaults", {})
-
+        self.response_types = BYC["beacon_defaults"].get("entity_defaults", {})
         f_t_d = self.response_types.get("filteringTerm", {})
         self.filtering_terms_coll = f_t_d.get("collection", "___none___")
-
         if dataset_id is False:
             self.ds_id = byc.get("dataset_ids", False)[0]
         else:
             self.ds_id = dataset_id
-
         self.argument_definitions = byc.get("argument_definitions", {})
         self.filters = byc.get("filters", [])
 
@@ -122,17 +118,12 @@ class ByconQuery():
     def __update_queries_from_id_values(self):
         if self.queries.get("expand") is False:
             return
-
-        id_f_v = self.defaults.get("id_entity_mappings", {})
-        id_k_s = set(id_f_v.keys())
-        f_k_s = set(BYC_PARS.keys())
-        r_e_id = self.requested_entity
-
-        for this_id_k in list(id_k_s & f_k_s):
-            entity = id_f_v[this_id_k]
-            v_q_par = re.sub("_ids", "_id", this_id_k)
-            id_v_s = BYC_PARS.get(this_id_k, [])
-
+        argdefs = self.argument_definitions
+        for p_k, id_v_s in BYC_PARS.items():
+            if not p_k.endswith("_ids"):
+                continue
+            if not (entity := argdefs[p_k].get("byc_entity")):
+                continue
             q = False
             if len(id_v_s) < 1:
                 continue

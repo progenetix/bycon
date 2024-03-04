@@ -13,7 +13,7 @@ from genome_utils import ChroNames
 ################################################################################
 
 class ByconVariant:
-    
+
     def __init__(self, byc, variant={}):
         """
         # Class `ByconVariant`
@@ -36,14 +36,19 @@ class ByconVariant:
         self.ChroNames = ChroNames()
         self.variant_types = byc.get("variant_type_definitions", {})
 
+        t_states = {}
+        for v_t, v_d in self.variant_types.items():
+            t_states.update({v_d["variant_type"]: v_d["variant_type_id"]})
+        self.variant_types_map = t_states
+
         # datatable mappings contain the "name to place in object" definitions
         # these are in essence identical to the `db_key` mappings in
         # `argument_definitions` but logically different (query vs. defiition; `default`...)
-        d_m = byc["datatable_mappings"].get("definitions", {})
+        d_m = BYC["datatable_mappings"].get("definitions", {})
         d_m_v = d_m.get("genomicVariant", {})
         self.variant_mappings = d_m_v.get("parameters", {})
-        self.vrs_allele = object_instance_from_schema_name(byc, "VRSallele", "")
-        self.vrs_cnv = object_instance_from_schema_name(byc, "VRScopyNumberChange", "")
+        self.vrs_allele = object_instance_from_schema_name("VRSallele", "")
+        self.vrs_cnv = object_instance_from_schema_name("VRScopyNumberChange", "")
 
 
     # -------------------------------------------------------------------------#
@@ -91,10 +96,10 @@ class ByconVariant:
 
         # TODO: VCF schema in some config file...
         v_v = {
-            "#CHROM": v.get("reference_name", "."),
-            "POS": int(v.get("start", 0)) + 1,
+            "#CHROM": v["location"].get("chromosome", "."),
+            "POS": int(v["location"].get("start", 0)) + 1,
             "ID": ".",
-            "REF": v.get("reference_sequence"),
+            "REF": v.get("reference_sequence", "."),
             "ALT": v.get("sequence", ""),
             "QUAL": ".",
             "FILTER": "PASS",
@@ -102,13 +107,7 @@ class ByconVariant:
             "INFO": ""
         }
 
-        if not v_v["REF"]:
-             v_v.update({"REF": "."})
-        if not v_v["ALT"]:
-             v_v.update({"ALT": ""})
-
-        v_s_id = v.get("variant_state_id", "___none___")
-        if v_s_id in vt_defs.keys():
+        if (v_s_id := v["variant_state"].get("id", "___none___")) in vt_defs.keys():
             s_a = vt_defs[v_s_id].get("VCF_symbolic_allele")
             if s_a and len(v_v["ALT"]) < 1:
                 v_v.update({"ALT": s_a})
@@ -124,18 +123,18 @@ class ByconVariant:
 
     # -------------------------------------------------------------------------#
 
-    def vrsVariant(self, variant={}):
+    def vrsVariant(self, variant):
         """
         Mapping of the relevant variant parameters into a VRS object
         ... TODO ...
         """
         self.byc_variant = variant
+        # prdbug(self.byc_variant)
         self.__create_canonical_variant()
+        # prdbug(self.byc_variant)
 
         vt_defs = self.variant_types
-        v = self.byc_variant
-
-        state_id = v.get("variant_state_id", "___none___")
+        state_id = self.byc_variant["variant_state"].get("id", "___none___")
         state_defs = vt_defs.get(state_id, {})
         vrs_type = state_defs.get("VRS_type", "___none___")
 
@@ -147,10 +146,10 @@ class ByconVariant:
         # TODO: since the vrs_variant has been created as a new object we now
         #       add the annotation fields back (should empties be omitted?)
         for v_s in ("biosample_id", "callset_id", "id", "variant_internal_id"):
-            vrs_v.update({v_s: v.get(v_s)})
-        vrs_v.update({"variant_alternative_ids": v.get("variant_alternative_ids", [])})
+            vrs_v.update({v_s: self.byc_variant.get(v_s)})
+        vrs_v.update({"variant_alternative_ids": self.byc_variant.get("variant_alternative_ids", [])})
         for v_o in ("identifiers", "info", "molecular_attributes", "variant_level_data"):
-            vrs_v.update({v_o: v.get(v_o, {})})
+            vrs_v.update({v_o: self.byc_variant.get(v_o, {})})
 
         self.vrs_variant.update(vrs_v)
         return self.vrs_variant
@@ -164,24 +163,21 @@ class ByconVariant:
         This remapping just covers the formats supported in the `bycon` environment
         but does not try to accommodate all use cases.
         """
-
         vt_defs = self.variant_types
         v = self.byc_variant
-
         vrs_a = deepcopy(self.vrs_allele)
         vrs_v = {
             "state": {
                 "sequence": v.get("sequence")
             },
             "location": {
-                "sequence_id": v.get("sequence_id"),
+                "sequence_id": v["location"].get("sequence_id"),
                 "interval": {
-                    "start": {"value": v.get("start")},
-                    "end": {"value": v.get("end")}
+                    "start": {"value": v["location"].get("start")},
+                    "end": {"value": v["location"].get("end")}
                 }
             }
         }
-
         vrs_v = always_merger.merge(vrs_a, vrs_v)
 
         return vrs_v
@@ -201,12 +197,12 @@ class ByconVariant:
 
         vrs_c = deepcopy(self.vrs_cnv)
         vrs_v = {
-            "copy_change": v.get("variant_state_id", "___none___").lower(),
+            "copy_change": v["variant_state"].get("id", "___none___").lower(),
             "subject": {
-                "sequence_id": v.get("sequence_id"),
+                "sequence_id": v["location"].get("sequence_id"),
                 "interval": {
-                    "start": {"value": v.get("start")},
-                    "end": {"value": v.get("end")}
+                    "start": {"value": v["location"].get("start")},
+                    "end": {"value": v["location"].get("end")}
                 }
             },
             "type": "CopyNumberChange"
@@ -233,9 +229,6 @@ class ByconVariant:
         if not "info" in v:
             v.update({"info": {}})
 
-        v.pop("variant_state", None)
-        v.pop("location", None)
-
         return
 
 
@@ -245,32 +238,17 @@ class ByconVariant:
         vt_defs = self.variant_types
         v = self.byc_variant
 
-        state_id = v.get("variant_state_id", "___none___")
+        v_state = v.get("variant_state", {})
+        state_id = v_state.get("id", "___none___")
         variant_type = v.get("variant_type", "___none___")
-        if state_id not in vt_defs.keys():
-            if "variant_state" in v:
-                state_id = v["variant_state"].get("id", "___none___")
 
         if state_id not in vt_defs.keys():   
-            if variant_type:
-                for vt, vt_d in vt_defs.items():
-                    dupdel = vt_d.get("DUPDEL", "___NA___")
-                    tvt = vt_d.get("variant_type", "___NA___")
-                    if dupdel == variant_type:
-                        state_id = vt_d.get("dupdel_state_id")
-                        if state_id in vt_defs.keys():
-                            continue
-                    elif tvt == variant_type:
-                        state_id = vt_d.get("snv_state_id")
-                        if state_id in vt_defs.keys():
-                            continue
+            state_id = self.variant_types_map.get(variant_type, "___none___")
 
         if state_id in vt_defs.keys():
             state_defs = vt_defs[state_id]
-
             v.update({
-                "variant_state_id": state_id,
-                "variant_state_label": state_defs["variant_state"].get("label"),
+                "variant_state": state_defs["variant_state"],
                 "variant_dupdel": state_defs.get("DUPDEL"),
                 "variant_type": state_defs.get("variant_type"),
                 "VCF_symbolic_allele": state_defs.get("VCF_symbolic_allele")
@@ -290,33 +268,21 @@ class ByconVariant:
         refs_ids = self.ChroNames.allRefseqs()
         chro_ids = self.ChroNames.allChros()
 
-        s_id = v.get("sequence_id", "___none___")
-        chro = v.get("reference_name", "___none___")
+        s_id = v["location"].get("sequence_id", "___none___")
+        chro = v["location"].get("chromosome", "___none___")
         if s_id in refs_ids and chro in chro_ids:
             return
-
-        # alternativ input parameters
-        if s_id not in refs_ids:
-            if "location" in v:
-                s_id = v["location"].get("sequence_id", "___none___")
-
-        if chro not in chro_ids:
-            if "location" in v:
-                chro = v["location"].get("chromosome", "___none___")
 
         if s_id in refs_ids and chro in chro_ids:
             pass
         elif s_id in refs_ids and chro not in chro_ids:
             chro = self.ChroNames.chro(s_id)
+            v["location"].update({"chromosome": chro})
         elif chro in chro_ids and s_id not in refs_ids:
             s_id = self.ChroNames.refseq(chro)
+            v["location"].update({"sequence_id": s_id})
         else:
             v["errors"].append(f'no sequence_id / chromosome could be assigned')
-
-        v.update({
-            "reference_name": chro,
-            "sequence_id": s_id
-        })
 
         self.byc_variant.update(v)
         return
@@ -326,7 +292,6 @@ class ByconVariant:
 
     def __byc_variant_normalize_sequences(self):
         v = self.byc_variant
-
         seq = v.get("sequence", v.get("alternate_bases"))
         r_seq = v.get("reference_sequence", "")
         # TODO: check, normalize, default...
@@ -343,17 +308,11 @@ class ByconVariant:
 
     def __byc_variant_normalize_positions(self):
         v = self.byc_variant
-        if not "start" in v and "location" in v:
-            v.update({
-                "start": v["location"].get("start"),
-                "end": v["location"].get("end")
-            })
-
-        if not v.get("end"):
-            v.update({"end": int(v.get("start")) + len(v.get("sequence", ""))})
+        if not v["location"].get("end"):
+            v["location"].update({"end": int(v["location"].get("start")) + len(v.get("sequence", ""))})
 
         try:
-            v.update({"variant_length": v.get("end") - v.get("start")})
+            v.update({"variant_length": v["location"].get("end") - v["location"].get("start")})
         except Exception as e:
             v["errors"].append(e)
 
@@ -365,17 +324,15 @@ class ByconVariant:
 
     def __byc_variant_add_digest(self):
         v = self.byc_variant
-
-        seq_re = '^[ACGTN]+$'
-       
-        v_lab = v.get("variant_state_id", "___NA___").replace(":", "_")
-        v_seqid = v.get("sequence_id", "___NA___").replace("refseq:", "")
+        seq_re = '^[ACGTN]+$'  
+        v_lab = v["variant_state"].get("id", "___NA___").replace(":", "_")
+        v_seqid = v["location"].get("chromosome", "___NA___")
         seq = v.get("sequence", "")
         rseq = v.get("reference_sequence", "")
 
         if re.match(f'{seq_re}', str(seq)) or re.match(f'{seq_re}', str(rseq)):
             v_lab = f'{rseq}>{seq}'
-        v.update({"variant_internal_id": f'{v_seqid}:{v["start"]}-{v["end"]}:{v_lab}'})
+        v.update({"variant_internal_id": f'{v_seqid}:{v["location"]["start"]}-{v["location"]["end"]}:{v_lab}'})
 
         self.byc_variant.update(v)
         return
