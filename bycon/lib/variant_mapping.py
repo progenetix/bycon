@@ -107,6 +107,9 @@ class ByconVariant:
             "INFO": ""
         }
 
+        if not v_v["ALT"]:
+            v_v.update({"ALT": ""})
+
         if (v_s_id := v["variant_state"].get("id", "___none___")) in vt_defs.keys():
             s_a = vt_defs[v_s_id].get("VCF_symbolic_allele")
             if s_a and len(v_v["ALT"]) < 1:

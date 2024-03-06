@@ -13,6 +13,18 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2024-03-06 (v1.6.1)
+
+* bug fix: individuals & phenopackets endpoints were broken in 1.6.0 due to missed
+  clean up in query code
+* bug fix `byconaut`: vcf & pgsxseg exports were broken in 1.6.0 due to incomplete
+  clean-up of internal variant mapping
+* bug fix `byconaut`: `/geolocations` queries were broken due to needed setting of
+  authorization / granularity, which was handled by `run_beacon_init_stack` which
+  however wasn't used by this service
+* global change: removal of `run_beacon_init_stack` and inclusion of its
+  function calls in the ubiquitous `initialize_bycon_service`
+
 ### 2024-03-04 (v1.6.0)
 
 * simplification of internal parameter processing

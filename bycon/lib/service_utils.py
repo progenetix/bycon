@@ -19,18 +19,7 @@ def set_beacon_defaults(byc):
     defaults: object = BYC["beacon_defaults"].get("defaults", {})
     for d_k, d_v in defaults.items():
         byc.update( { d_k: d_v } )
-
-
-################################################################################
-
-def run_beacon_init_stack(byc):
-    set_special_modes(byc)
-    select_dataset_ids(byc)
-    set_user_name(byc)
-    set_returned_granularities(byc)    
-    parse_filters(byc)
-    parse_variants(byc)
-
+  
 
 ################################################################################
 
@@ -73,6 +62,12 @@ def initialize_bycon_service(byc, service="info"):
     update_requested_schema_from_request(byc)
     set_response_entity(byc)
     set_response_schema(byc)
+    set_special_modes(byc)
+    select_dataset_ids(byc)
+    set_user_name(byc)
+    set_returned_granularities(byc)    
+    parse_filters(byc)
+    parse_variants(byc)
 
 
 ################################################################################

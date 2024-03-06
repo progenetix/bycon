@@ -239,7 +239,21 @@ def execute_bycon_queries(ds_id, BQ, byc):
 
     # TODO: have this checked... somewhere else based on the response_entity_id
     if "individual" in r_e_id or "phenopacket" in r_e_id:
-        _prefetch_add_individuals(prevars, prefetch)
+        pref_k = "biosamples.individual_id->individuals.id"
+        prevars.update({
+            "pref_m": pref_k,
+            "query": {"_id": {"$in": prefetch["biosamples._id"]["target_values"]}},
+            "h_o_def": h_o_methods.get(pref_k)
+        })
+        prefetch.update({pref_k: _prefetch_data(prevars)})
+
+        pref_k = "individuals._id"
+        prevars.update({
+            "pref_m": pref_k,
+            "query": {"id": {"$in": prefetch["biosamples.individual_id->individuals.id"]["target_values"]}},
+            "h_o_def": h_o_methods.get(pref_k)
+        })
+        prefetch.update({pref_k: _prefetch_data(prevars)})
 
     ############################################################################
 
@@ -287,57 +301,6 @@ def _prefetch_data(prevars):
         }
     )
     return h_o
-
-
-################################################################################
-
-def _prefetch_vars_from_biosample_loop(prevars):
-    # TODO: This still allows unlimited variants, e.g. all from thousands
-    # of samples and will let the server time out if too many...
-    # A new paradigm is needed which includes the pagination at this step.
-
-    pref_m = prevars["pref_m"]
-    data_db = prevars["data_db"]
-    h_o_defs = prevars["h_o_defs"][pref_m]
-
-    h_o = {**h_o_defs, "target_values": []}
-
-    for bs_id in prevars["query"]["biosample_id"]["$in"]:
-        for v in data_db["variants"].find({"biosample_id": bs_id}):
-            h_o["target_values"].append(v["_id"])
-
-    h_o.update(
-        {
-            "id": str(uuid4()),
-            "source_db": prevars["ds_id"],
-            "target_count": len(h_o["target_values"]),
-            "original_queries": prevars.get("original_queries", None)
-        }
-    )
-
-    return h_o
-
-
-################################################################################
-
-def _prefetch_add_individuals(prevars, prefetch):
-    pref_k = "biosamples.individual_id->individuals.id"
-    prevars.update({
-        "pref_m": pref_k,
-        "query": {"_id": {"$in": prefetch["biosamples._id"]["target_values"]}},
-        "h_o_def": h_o_methods.get(pref_k)
-    })
-    prefetch.update({pref_k: _prefetch_data(prevars)})
-
-    pref_k = "individuals._id"
-    prevars.update({
-        "pref_m": pref_k,
-        "query": {"id": {"$in": prefetch["biosamples.individual_id->individuals.id"]["target_values"]}},
-        "h_o_def": h_o_methods.get(pref_k)
-    })
-    prefetch.update({pref_k: _prefetch_data(prevars)})
-
-    return prefetch
 
 
 ################################################################################

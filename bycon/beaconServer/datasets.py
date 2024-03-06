@@ -26,7 +26,6 @@ def main():
 
 def datasets():
     initialize_bycon_service(byc, "datasets")
-    run_beacon_init_stack(byc)
     r = BeaconDataResponse(byc)
     print_json_response(r.collectionsResponse())
 

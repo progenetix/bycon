@@ -364,6 +364,12 @@ definitions:
       auxiliary_disease_notes:
         type: string
         db_key: auxiliary_disease.notes
+      geoprov_id:
+        type: string
+        db_key: provenance.geo_location.properties.id
+        indexed: True
+        examples:
+          - "zurich::switzerland"
       geoprov_city:
         type: string
         db_key: provenance.geo_location.properties.city

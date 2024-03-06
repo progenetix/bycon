@@ -25,7 +25,6 @@ def main():
 
 def cohorts():
     initialize_bycon_service(byc, "cohorts")
-    run_beacon_init_stack(byc)
     r = BeaconDataResponse(byc).collectionsResponse()
     print_json_response(r)
 

@@ -74,7 +74,6 @@ def beacon():
         pass
     elif f in d_p_s:
         initialize_bycon_service(byc, f)
-        run_beacon_init_stack(byc)
         r = BeaconDataResponse(byc).resultsetResponse()
         print_json_response(r)
     elif f:
