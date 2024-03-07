@@ -397,17 +397,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconBooleanResponse.json"
-                                },
-                                {
-                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconCountResponse.json"
-                                },
-                                {
-                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconResultsetsResponse.json"
-                                }
-                            ]
+                            "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconCollectionsResponse.json"
                         }
                     }
                 }
@@ -417,17 +407,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconBooleanResponse.json"
-                                },
-                                {
-                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconCountResponse.json"
-                                },
-                                {
-                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconCollectionsResponse.json"
-                                }
-                            ]
+                            "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconCollectionsResponse.json"
                         }
                     }
                 }

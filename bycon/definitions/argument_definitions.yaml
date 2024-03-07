@@ -69,7 +69,9 @@ include_resultset_responses:
   type: string
   cmdFlags:
     - --includeResultsetResponses
-  description: requested schema, e.g. biosample
+  description: >-
+    * include resultset responses, e.g. HIT, MISS
+    * kind of a holdover from Beacon pre-v1
 
 # query / data selection
 
@@ -120,7 +122,7 @@ assembly_id:
   cmdFlags:
     - --assemblyId
   description: assembly id
-  default: GRCh38
+  # default: GRCh38
 
 reference_name:
   type: string

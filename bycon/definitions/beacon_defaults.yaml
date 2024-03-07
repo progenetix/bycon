@@ -71,7 +71,6 @@ entity_defaults:
     beacon_schema:
       entity_type: configuration
       schema: https://progenetix.org/services/schemas/beaconInfoResults/
-    h->o_access_key: Null
     content: {}
 
 ################################################################################
@@ -85,7 +84,6 @@ entity_defaults:
     beacon_schema:
       entity_type: map
       schema: https://progenetix.org/services/schemas/beaconMapSchema/
-    h->o_access_key: Null
 
 ################################################################################
 
@@ -98,7 +96,6 @@ entity_defaults:
     beacon_schema:
       entity_type: configuration
       schema: https://progenetix.org/services/schemas/beaconConfigurationSchema/
-    h->o_access_key: Null
 
 ################################################################################
 
@@ -111,7 +108,6 @@ entity_defaults:
     beacon_schema:
       entity_type: entryType
       schema: https://progenetix.org/services/schemas/entryTypesSchema/
-    h->o_access_key: Null
 
 ################################################################################
 
@@ -124,7 +120,6 @@ entity_defaults:
     beacon_schema:
       entity_type: filteringTerm
       schema: https://progenetix.org/services/schemas/filteringTermsSchema/
-    h->o_access_key: Null
 
 ################################################################################
 
@@ -206,7 +201,6 @@ entity_defaults:
     pagination:
       skip: 0
       limit: 10
-    include_resultset_responses: false
 
   ##############################################################################
 
@@ -222,5 +216,4 @@ entity_defaults:
     pagination:
       skip: 0
       limit: 10
-    include_resultset_responses: false
 

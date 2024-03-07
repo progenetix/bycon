@@ -40,7 +40,9 @@ def set_debug_state(debug=False) -> bool:
 def refactor_value_from_defined_type(parameter, values, definition):
     p_d_t = definition.get("type", "string")
     values = list(x for x in values if x is not None)
-    values = list(x for x in values if x != "None")
+    values = list(x for x in values if x.lower() not in ["none", "null"])
+    if len(values) == 0:
+        return None
     if "array" in p_d_t:
         p_i_t = definition.get("items", "string")
         if "int" in p_i_t:

@@ -149,7 +149,8 @@ class ByconVariant:
         # TODO: since the vrs_variant has been created as a new object we now
         #       add the annotation fields back (should empties be omitted?)
         for v_s in ("biosample_id", "callset_id", "id", "variant_internal_id"):
-            vrs_v.update({v_s: self.byc_variant.get(v_s)})
+            if (v_v := self.byc_variant.get(v_s)):
+                vrs_v.update({v_s: v_v})
         vrs_v.update({"variant_alternative_ids": self.byc_variant.get("variant_alternative_ids", [])})
         for v_o in ("identifiers", "info", "molecular_attributes", "variant_level_data"):
             vrs_v.update({v_o: self.byc_variant.get(v_o, {})})
@@ -222,7 +223,6 @@ class ByconVariant:
     def __create_canonical_variant(self):
         v = self.byc_variant
         v.update({"errors": []})
-
         self.__byc_variant_normalize_type()
         self.__byc_variant_normalize_chromosome()
         self.__byc_variant_normalize_positions()

@@ -164,14 +164,16 @@ class BeaconDataResponse:
             return
 
         colls, queries = ByconCollections(self.byc).populatedCollections()
+        colls = self.__collections_response_remap_cohorts(colls)
         self.data_response["response"].update({"collections": colls})
         self.record_queries.update({"entities": queries})
         self.__collections_response_update_summaries()
         self.__meta_add_received_request_summary_parameters()
         self.__meta_add_parameters()
         self.__meta_clean_parameters()
-        self.__response_clean_parameters()
         self.__check_switch_to_error_response()
+        # self.__response_clean_parameters()
+        self.data_response.get("meta", {}).get("received_request_summary", {}).pop("include_resultset_responses", None)
         return self.data_response
 
 
@@ -226,6 +228,31 @@ class BeaconDataResponse:
 
     # -------------------------------------------------------------------------#
 
+    def __collections_response_remap_cohorts(self, colls=[]):
+        if not "cohort" in self.byc.get("response_entity_id", "___none___"):
+            return colls
+        pop_keys = ["_id", "child_terms", "code_matches", "count", "dataset_id", "db_key", "namespace_prefix", "ft_type", "collation_type", "hierarchy_paths", "parent_terms", "scope"]
+        for c in colls:
+            c_k = f'{c.get("scope", "")}.{c.get("db_key", "")}'
+            c.update({
+                "id": c.get("id", "___none___"),
+                "cohort_type": "beacon-defined",
+                "cohort_size": c.get("count"),
+                "name": c.get("label", ""),
+                # "inclusion_criteria": {
+                #     "description": c.get("description", "NA"),
+                #     c_k: c.get("id"),
+                #     "dataset_id": c.get("dataset_id")
+                # }
+            })
+            for k in pop_keys:
+                c.pop(k, None)
+
+        return colls
+
+
+    # -------------------------------------------------------------------------#
+
     def __response_clean_parameters(self):
         r_m = self.data_response.get("response", {})
         r_m.pop("$schema", None)
@@ -235,9 +262,8 @@ class BeaconDataResponse:
 
     def __meta_clean_parameters(self):
         r_m = self.data_response.get("meta", {})
-
-        if "beaconCollectionsResponse" in self.response_schema:
-            r_m.get("received_request_summary", {}).pop("include_resultset_responses", None)
+        # TBD?!
+            
 
 
     # -------------------------------------------------------------------------#

@@ -13,6 +13,18 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2024-03-07 (v1.6.2)
+
+* adding a `__collections_response_remap_cohorts(self, colls=[])` function
+  to reformat the collections response for cohorts from the collations format
+    - TODO: define cohorts as separate entities which are read in during collations
+      generation, with their additional parameters etc.
+* fixed the openAPI endpoints for collation responses (datasets & cohorts); are
+  [incorrect in current Beacon spec.](https://github.com/ga4gh-beacon/beacon-v2/issues/116)
+* bug fix `byconaut`: matrix export was broken since 1.6.1
+* exception capture for wrong form values: string values of "None", "none", "Null",
+  "null" from GET requests are now converted to logical `None` (i.e. removed)
+
 ### 2024-03-06 (v1.6.1)
 
 * bug fix: individuals & phenopackets endpoints were broken in 1.6.0 due to missed

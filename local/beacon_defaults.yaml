@@ -51,7 +51,6 @@ entity_defaults:
     beacon_schema:
       entity_type: configuration
       schema: https://progenetix.org/services/schemas/beaconInfoResults/
-    h->o_access_key: Null
     # TODO: move `content` to `local` file.
     content:
       beacon_id: org.progenetix
