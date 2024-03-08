@@ -157,7 +157,8 @@ def remap_biosamples(r_s_res, byc):
         # TODO: REMOVE VERIFIER HACKS
         e_r = []
         for r_k, r_v in bs_r.get("references", {}).items():
-            e_r.append(__reference_object_from_ontology_term(r_k, r_v, byc))
+            if (r_i := __reference_object_from_ontology_term(r_k, r_v, byc)):
+                e_r.append(r_i)
 
         r_s_res[bs_i].update({
             "sample_origin_type": {"id": "OBI:0001479", "label": "specimen from organism"},

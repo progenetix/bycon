@@ -35,6 +35,22 @@ def read_service_definition_files(byc):
         else:
             byc.update({d: o})
 
+################################################################################
+
+def set_entity_mappings():
+    b_e_d = BYC.get("entity_defaults", {})
+    p_e_m = BYC.get("path_entry_type_mappings", {})
+    e_p_m = BYC.get("entry_type_path_mappings", {})
+    d_p_e = BYC.get("data_pipeline_entities", [])
+    for e, e_d in b_e_d.items():
+        if (p := e_d.get("request_entity_path_id")):
+            p_e_m.update({ p: e })
+            e_p_m.update({ e: p })
+        for a in e_d.get("request_entity_path_aliases", []):
+            p_e_m.update({ a: e })
+        if "beaconResultsetsResponse" in e_d.get("response_schema", ""):
+            d_p_e.append(e)
+
 
 ################################################################################
 
@@ -45,25 +61,24 @@ def update_rootpars_from_local(loc_dir, byc):
         return
 
     p_c_p.append(loc_dir)
-
-    b_p = 'beacon_defaults'
-    s_p = 'services_defaults'
-
-    b_f = path.join(loc_dir, f'{b_p}.yaml')
-    b = load_yaml_empty_fallback(b_f)
-    s_f = path.join(loc_dir, f'{s_p}.yaml')
+    s_f = path.join(loc_dir, 'services_entity_defaults.yaml')
     s = load_yaml_empty_fallback(s_f)
-    b = always_merger.merge(s, b)
-    BYC.update({b_p: always_merger.merge(BYC.get(b_p, {}), b)})
+    BYC.update({"entity_defaults": always_merger.merge(BYC.get("entity_defaults", {}), s)})
 
     # overwriting installation-wide defaults with instance-specific ones
     # _i.e._ matching the current domain (to allow presentation of different
     # Beacon instances from the same server)
-    if ENV != "local":
+    i_ovr_f = path.join(loc_dir, "instance_overrides.yaml")
+    i_ovr = load_yaml_empty_fallback(i_ovr_f)
+
+    if "local" in i_ovr:
+        i_o_bdfs = i_ovr["local"].get("beacon_defaults", {})
+        i_o_edfs = i_ovr["local"].get("entity_defaults", {})
+        BYC.update({"beacon_defaults": always_merger.merge(BYC.get("beacon_defaults", {}), i_o_bdfs)})
+        BYC.update({"entity_defaults": always_merger.merge(BYC.get("entity_defaults", {}), i_o_edfs)})
+    if not "local" in ENV:
         instance = "___none___"
-        host = environ.get("HTTP_HOST")
-        i_ovr_f = path.join(loc_dir, "instance_overrides.yaml")
-        i_ovr = load_yaml_empty_fallback(i_ovr_f)
+        host = environ.get("HTTP_HOST", "local")
         for i_k, i_v in i_ovr.items():
             doms = i_v.get("domains", [])
             if host in doms:
@@ -71,7 +86,9 @@ def update_rootpars_from_local(loc_dir, byc):
                 break
         if instance in i_ovr:
             i_o_bdfs = i_ovr[instance].get("beacon_defaults", {})
-            BYC.update({b_p: always_merger.merge(BYC.get(b_p, {}), i_o_bdfs)})
+            i_o_edfs = i_ovr[instance].get("entity_defaults", {})
+            BYC.update({"beacon_defaults": always_merger.merge(BYC.get("beacon_defaults", {}), i_o_bdfs)})
+            BYC.update({"entity_defaults": always_merger.merge(BYC.get("entity_defaults", {}), i_o_edfs)})
 
     # TODO: better way to define which files are parsed from local
     for p in ("authorizations", "dataset_definitions", "local_paths", "local_parameters", "datatable_mappings", "plot_defaults"):

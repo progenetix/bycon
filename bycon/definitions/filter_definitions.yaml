@@ -398,13 +398,13 @@ TCGAproject:
       - ""
   scope: biosamples
   entity: biosample
-  pattern: '^(?:pgx:)?TCGA\.\w{2,4}?$'
-  db_key: 'external_references.id'
+  pattern: '^(?:pgx:)?TCGA\-\w{2,4}?$'
+  db_key: 'references.tcgaproject.id'
   collationed: True
   examples:
-    - pgx:TCGA.DLBC
-    - pgx:TCGA.ESCA
-    - pgx:TCGA.GBM
+    - pgx:TCGA-DLBC
+    - pgx:TCGA-ESCA
+    - pgx:TCGA-GBM
 
 UBERON:
   id: uberon

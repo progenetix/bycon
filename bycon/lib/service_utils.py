@@ -24,12 +24,13 @@ def set_beacon_defaults(byc):
 ################################################################################
 
 def initialize_bycon_service(byc, service="info"):
-    # TODO - streamline, also for services etc.
-    defs = BYC["beacon_defaults"]
-    b_e_d = defs.get("entity_defaults", {})
-    s_a_s = defs.get("service_path_aliases", {})
-    if service in s_a_s:
-        service = s_a_s[service]
+    b_e_d = BYC.get("entity_defaults", {})
+    p_e_m = BYC.get("path_entry_type_mappings", {})
+    e_p_m = BYC.get("entry_type_path_mappings", {})
+    if service in p_e_m.keys():
+        e = p_e_m.get(service)
+        service = e_p_m.get(e)
+    entry_type = p_e_m.get(service, "___none___")
 
     """
     Here we allow the addition of additional configuration files, necessary
@@ -48,9 +49,6 @@ def initialize_bycon_service(byc, service="info"):
         "request_path_root": scope,
         "request_entity_path_id": service
     })
-
-    p_e_m = defs.get("path_entry_type_mappings", {})
-    entry_type = p_e_m.get(service, "___none___")
 
     if entry_type in b_e_d:
         for d_k, d_v in b_e_d[entry_type].items():
@@ -82,21 +80,13 @@ def set_special_modes(byc):
 ################################################################################
 
 def update_entity_ids_from_path(byc):
-    req_p_id = byc.get("request_entity_path_id")
-    s_a_s = BYC["beacon_defaults"].get("service_path_aliases", {})
-    p_e_m = BYC["beacon_defaults"].get("path_entry_type_mappings", {})
-
-    if not req_p_id:
+    if not (req_p_id := byc.get("request_entity_path_id")):
         return
-    res_p_id = byc.get("response_entity_path_id")
-    if not res_p_id:
+    if not (res_p_id := byc.get("response_entity_path_id")):
         res_p_id = req_p_id
 
-    # TODO: in contrast to req_p_id, res_p_id hasn't been anti-aliased
-    if res_p_id in s_a_s:
-        res_p_id = s_a_s[res_p_id]
-
     # TODO: this gets the correct entity_id w/ entity_path_id fallback
+    p_e_m = BYC.get("path_entry_type_mappings", {})
     byc.update({
         "request_entity_id": p_e_m.get(req_p_id, req_p_id),
         "response_entity_id": p_e_m.get(res_p_id, req_p_id)
@@ -120,13 +110,11 @@ def update_requested_schema_from_request(byc):
 
 def set_response_entity(byc):
     prdbug(f'response_entity_id: {byc.get("response_entity_id")}')
-    b_rt_s = BYC["beacon_defaults"].get("entity_defaults", {})
+    byc.update({"response_entity": {}})
+    b_rt_s = BYC.get("entity_defaults", {})
     r_e_id = byc.get("response_entity_id", "___none___")
-    r_e = b_rt_s.get(r_e_id)
-    if not r_e:
-        return
-
-    byc.update({"response_entity": r_e})
+    if (r_e := b_rt_s.get(r_e_id)):
+        byc.update({"response_entity": r_e})
 
 
 ################################################################################

@@ -35,8 +35,9 @@ try:
     }
 
     read_service_definition_files(byc)
-    # updates `beacon_defaults`, `dataset_definitions` and `local_paths`
+    # updates `entity_defaults`, `dataset_definitions` and `local_paths`
     update_rootpars_from_local(LOC_PATH, byc)
+    set_entity_mappings()
     set_beacon_defaults(byc)
     parse_arguments(byc)
 

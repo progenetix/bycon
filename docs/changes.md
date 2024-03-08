@@ -13,6 +13,16 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2024-03-07 (v1.6.3)
+
+* configuration changes:
+    - `beacon_defaults` file changed to `entity_defaults` since only entities
+      defined in it
+    - paths are now defined within the entity definitions, no separate aliases etc.
+    - local overrides for the Beacon entity defaults now in `local/instance_overrides.yaml`
+    - for byconaut a separate `services_entity_defaults` file provides the additional
+      services (e.g. `sampleplots` ... pseudo-entities)
+
 ### 2024-03-07 (v1.6.2)
 
 * adding a `__collections_response_remap_cohorts(self, colls=[])` function

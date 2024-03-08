@@ -1,0 +1,151 @@
+info:
+  request_entity_path_id: info
+  request_entity_path_aliases:
+    - "/"
+    - "service-info"
+  response_entity_id: info
+  collection: Null
+  response_schema: beaconInfoResponse
+  beacon_schema:
+    entity_type: configuration
+    schema: https://progenetix.org/services/schemas/beaconInfoResults/
+  content: {}
+
+################################################################################
+
+beaconMap:
+  request_entity_path_id: map
+  response_entity_id: beaconMap
+  collection: Null
+  response_schema: beaconMapResponse
+  beacon_schema:
+    entity_type: map
+    schema: https://progenetix.org/services/schemas/beaconMapSchema/
+
+################################################################################
+
+configuration:
+  request_entity_path_id: configuration
+  response_entity_id: configuration
+  collection: Null
+  response_schema: beaconConfigurationResponse
+  beacon_schema:
+    entity_type: configuration
+    schema: https://progenetix.org/services/schemas/beaconConfigurationSchema/
+
+################################################################################
+
+entryType:
+  request_entity_path_id: entryTypes
+  response_entity_id: entryType
+  collection: Null
+  response_schema: beaconEntryTypesResponse
+  beacon_schema:
+    entity_type: entryType
+    schema: https://progenetix.org/services/schemas/entryTypesSchema/
+
+################################################################################
+
+filteringTerm:
+  request_entity_path_id: filtering_terms
+  response_entity_id: filteringTerm
+  collection: collations
+  response_schema: beaconFilteringTermsResponse
+  beacon_schema:
+    entity_type: filteringTerm
+    schema: https://progenetix.org/services/schemas/filteringTermsSchema/
+
+################################################################################
+
+analysis:
+  request_entity_path_id: analyses
+  response_entity_id: analysis
+  collection: analyses  
+  response_schema: beaconResultsetsResponse
+  beacon_schema:
+    entity_type: analysis
+    schema: https://progenetix.org/services/schemas/analysis/
+  h->o_access_key: analyses._id
+
+################################################################################
+
+biosample:
+  request_entity_path_id: biosamples
+  request_entity_path_aliases:
+    - samples
+  response_entity_id: biosample
+  collection: biosamples  
+  response_schema: beaconResultsetsResponse
+  beacon_schema:
+    entity_type: biosample
+    schema: https://progenetix.org/services/schemas/biosample/
+  h->o_access_key: biosamples._id
+
+##############################################################################
+
+genomicVariant:
+  request_entity_path_id: genomicVariations
+  request_entity_path_aliases:
+    - g_variants
+    - variants
+  response_entity_id: genomicVariant
+  collection: variants
+  response_schema: beaconResultsetsResponse
+  beacon_schema:
+    entity_type: genomicVariant
+    schema: https://progenetix.org/services/schemas/genomicVariant/
+  h->o_access_key: variants._id
+
+##############################################################################
+
+individual:
+  request_entity_path_id: individuals
+  response_entity_id: individual
+  collection: individuals
+  response_schema: beaconResultsetsResponse
+  beacon_schema:
+    entity_type: individual
+    schema: https://progenetix.org/services/schemas/individual/
+  h->o_access_key: individuals._id
+
+
+##############################################################################
+
+run:
+  request_entity_path_id: runs
+  response_entity_id: run
+  collection: analyses  
+  response_schema: beaconResultsetsResponse
+  beacon_schema:
+    entity_type: run
+    schema: https://progenetix.org/services/schemas/run/
+  h->o_access_key: analyses._id
+
+################################################################################
+
+cohort:
+  request_entity_path_id: cohorts
+  response_entity_id: cohort
+  collection: collations
+  response_schema: beaconCollectionsResponse
+  beacon_schema:
+    entity_type: cohort
+    schema: https://progenetix.org/services/schemas/cohort/
+  pagination:
+    skip: 0
+    limit: 10
+
+##############################################################################
+
+dataset:
+  request_entity_path_id: datasets
+  response_entity_id: dataset
+  collection: Null
+  response_schema: beaconCollectionsResponse
+  beacon_schema:
+    entity_type: dataset
+    schema: https://progenetix.org/services/schemas/dataset/
+  pagination:
+    skip: 0
+    limit: 10
+

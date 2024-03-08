@@ -57,7 +57,8 @@ request_entity_path_id:
   type: string
   cmdFlags:
     - --requestEntityPathId
-  description: required data entry point, equal to the first REST path element in Beacon
+  description: >-
+    data entry point, equal to the first REST path element in Beacon
 
 requested_schema:
   type: string
@@ -455,12 +456,12 @@ source:
     - --source
   description: some source label, e.g. `analyses`
 
-query:
-  type: string
-  cmdFlags:
-    - -q
-    - --query
-  description: complete query string, e.g. `{"biosamples":{"external_references.id":"geo:GSE7428"}}`
+# query:
+#   type: string
+#   cmdFlags:
+#     - -q
+#     - --query
+#   description: complete query string, e.g. `{"biosamples":{"external_references.id":"geo:GSE7428"}}`
 
 delivery_keys:
   type: array

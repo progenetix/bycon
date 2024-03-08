@@ -24,22 +24,12 @@ def main():
 ################################################################################
 
 def beacon():
-    # updates `beacon_defaults`, `dataset_definitions` and `local_paths`
-    # update_rootpars_from_local(LOC_PATH, byc)
-    # set_beacon_defaults(byc)
-
-    defs = BYC["beacon_defaults"]
-    s_a_s = defs.get("service_path_aliases", {})
-    r_w = defs.get("rewrites", {})
-    d_p_s = defs.get("data_pipeline_path_ids", [])
-
     """
-    The type of execution depends on the requested entity defined in `beacon_defaults`
-    which can either be one of the Beacon entities (also recognizing aliases)
-    in `beacon_defaults.service_path_aliases` or targets of a rewrite from
-    `beacon_defaults.rewrites`.
+    The type of execution depends on the requested entity defined in the 
+    `path_entry_type_mappings` generated from `request_entity_path_id` (or aliases)
+    in `entity_defaults`.
     The entity is determined from different potential inputs and overwritten
-    by the next one in the oreder, if existing:
+    by the next one in the order, if existing:
 
     1. from the path (element after "beacon", e.g. `biosamples` from
        `/beacon/biosamples/...`)
@@ -48,31 +38,25 @@ def beacon():
 
     Fallback is `/info`.
     """
+    
+    p_e_m = BYC.get("path_entry_type_mappings", {})
+    e_p_m = BYC.get("entry_type_path_mappings", {})
+    d_p_e = BYC.get("data_pipeline_entities", [])
     byc.update({"request_path_root": "beacon"})
     rest_path_elements(byc)
-    # args_update_form(byc)
-    prdbug(f'beacon.py - request_entity_path_id: {byc.get("request_entity_path_id")}')
 
     e_p_id = BYC_PARS.get("request_entity_path_id", "___none___")
-    prdbug(f'beacon.py - form e_p_id: {e_p_id}')
-    if e_p_id in s_a_s or e_p_id in r_w:
+    if e_p_id in p_e_m:
         byc.update({"request_entity_path_id": e_p_id})
     r_p_id = byc.get("request_entity_path_id", "info")
-
     prdbug(f'beacon.py - request_entity_path_id: {r_p_id}')
 
-    # check for rewrites
-    if r_p_id in r_w:
-        uri = environ.get('REQUEST_URI')
-        pat = re.compile( rf"^.+\/{r_p_id}\/?(.*?)$" )
-        if pat.match(uri):
-            stuff = pat.match(uri).group(1)
-            print_uri_rewrite_response(r_w[r_p_id], stuff)
+    e = p_e_m.get(r_p_id)
+    f = e_p_m.get(e)
 
-    f = s_a_s.get(r_p_id)
     if not f:
         pass
-    elif f in d_p_s:
+    elif e in d_p_e:
         initialize_bycon_service(byc, f)
         r = BeaconDataResponse(byc).resultsetResponse()
         print_json_response(r)

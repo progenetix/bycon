@@ -9,7 +9,7 @@ The following is a list of arguments and parameters used in the `bycon` package 
 faking a user name    
 
 ### `test_mode` 
-**type:** string    
+**type:** boolean    
 **cmdFlags:** `-t,--testMode`    
 **description:**
 test setting, i.e. returning some random documents    
@@ -41,7 +41,7 @@ The requested granularity of the beacon
 **type:** string    
 **cmdFlags:** `--requestEntityPathId`    
 **description:**
-required data entry point, equal to the first REST path element in Beacon    
+data entry point, equal to the first REST path element in Beacon    
 
 ### `requested_schema` 
 **type:** string    
@@ -53,7 +53,9 @@ requested schema, e.g. biosample
 **type:** string    
 **cmdFlags:** `--includeResultsetResponses`    
 **description:**
-requested schema, e.g. biosample    
+    
+* include resultset responses, e.g. HIT, MISS     
+* kind of a holdover from Beacon pre-v1    
 
 ### `dataset_ids` 
 **type:** array    
@@ -97,7 +99,6 @@ global treatment of descendant terms
 **cmdFlags:** `--assemblyId`    
 **description:**
 assembly id    
-**default:** `GRCh38`    
 
 ### `reference_name` 
 **type:** string    
@@ -246,6 +247,7 @@ One or more ids; this parameter only makes sense for specific REST entry types
 ### `biosample_ids` 
 **type:** array    
 **items:** string    
+**byc_entity:** biosample    
 **cmdFlags:** `--biosampleIds`    
 **description:**
 biosample ids    
@@ -253,20 +255,15 @@ biosample ids
 ### `analysis_ids` 
 **type:** array    
 **items:** string    
+**byc_entity:** analysis    
 **cmdFlags:** `--analysisIds`    
-**description:**
-callset / analysis ids    
-
-### `callset_ids` 
-**type:** array    
-**items:** string    
-**cmdFlags:** `--callsetIds`    
 **description:**
 callset / analysis ids    
 
 ### `individual_ids` 
 **type:** array    
 **items:** string    
+**byc_entity:** individual    
 **cmdFlags:** `--individualIds`    
 **description:**
 subject ids    
@@ -274,6 +271,7 @@ subject ids
 ### `variant_ids` 
 **type:** array    
 **items:** string    
+**byc_entity:** genomicVariant    
 **cmdFlags:** `--variantIds`    
 **description:**
 variant ids    
@@ -397,12 +395,6 @@ minimal number, e.g. for collations, where supported
 **cmdFlags:** `-s,--source`    
 **description:**
 some source label, e.g. `analyses`    
-
-### `query` 
-**type:** string    
-**cmdFlags:** `-q,--query`    
-**description:**
-complete query string, e.g. `{"biosamples":{"external_references.id":"geo:GSE7428"}}`    
 
 ### `delivery_keys` 
 **type:** array    

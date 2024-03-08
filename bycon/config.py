@@ -44,7 +44,16 @@ BYC = {
   "ERRORS": [],
   "WARNINGS": [],
   "USER": "anonymous",
-  "beacon_defaults": {},
+  "beacon_defaults": {
+    "defaults": {
+      "default_dataset_id": "examplez",
+      "test_domains": ["localhost"]
+    },
+  },
+  "entity_defaults": {"info":{}},
+  "path_entry_type_mappings": {},
+  "entry_type_path_mappings": {},
+  "data_pipeline_entities": [],
   "datatable_mappings": {}
 }
 

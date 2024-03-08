@@ -25,8 +25,7 @@ def info():
     initialize_bycon_service(byc, "info")
     r = BeaconInfoResponse(byc)
 
-    defs = BYC["beacon_defaults"]
-    b_e_d = defs.get("entity_defaults", {})
+    b_e_d = BYC.get("entity_defaults", {})
     info = b_e_d.get("info", {})
     pgx_info = info.get("content", {})
     beacon_info = object_instance_from_schema_name("beaconInfoResults", "")
@@ -38,9 +37,11 @@ def info():
 
     # TODO: All the schemas really only here?
     beacon_schemas = []
+    entry_type_responses = ["beaconCollectionsResponse", "beaconResultsetsResponse"]
     for e_t, e_d in b_e_d.items():
         b_s = e_d.get("beacon_schema", {})
-        if e_d.get("is_entry_type", True) is True:
+        r_s = e_d.get("response_schema", "___none___")
+        if r_s in entry_type_responses:
             beacon_schemas.append(b_s)
 
     response.update( { "returned_schemas": beacon_schemas } )

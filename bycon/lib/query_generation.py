@@ -41,7 +41,7 @@ class ByconQuery():
     """
 
     def __init__(self, byc: dict, dataset_id=False):
-        self.response_types = BYC["beacon_defaults"].get("entity_defaults", {})
+        self.response_types = BYC.get("entity_defaults", {})
         f_t_d = self.response_types.get("filteringTerm", {})
         self.filtering_terms_coll = f_t_d.get("collection", "___none___")
         if dataset_id is False:

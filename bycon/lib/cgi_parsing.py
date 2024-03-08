@@ -29,7 +29,6 @@ def parse_POST(byc):
     content_len = environ.get('CONTENT_LENGTH', '0')
     content_typ = environ.get('CONTENT_TYPE', '')
 
-    b_defs = BYC["beacon_defaults"]
     a_defs = byc.get("argument_definitions", {})
 
     # TODO: catch error & return for non-json posts
@@ -86,10 +85,11 @@ def parse_GET(byc):
         # CAVE: Only predefined parameters are accepted!
         if p_d in a_defs:
             values = form_return_listvalue(form_data, p)
-            if (v := refactor_value_from_defined_type(p, values, a_defs[p_d])):
+            v = refactor_value_from_defined_type(p, values, a_defs[p_d])
+            if v is not False:
                 BYC_PARS.update({p_d: v})
         else:
-            w_m = '!!! Unmatched parameter {p_d}: {form_data.getvalue(p)}'
+            w_m = f'!!! Unmatched parameter {p_d}: {form_data.getvalue(p)}'
             BYC["WARNINGS"].append(w_m)
             prdbug(f'!!! Unmatched parameter {p_d}: {form_data.getvalue(p)}')
     BYC.update({"DEBUG_MODE": set_debug_state(BYC_PARS.get("debug_mode", False)) })
