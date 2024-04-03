@@ -65,6 +65,27 @@ EFO:0030066:
     - EFO:0030072
     - EFO:0030073      
 
+SO:0001743:
+  description: >-
+    This is an alternative to `EFO:0030067`. The SO definitions for CNVs are
+    slightly misleading (type of `sequence_length_alteration`) and do not
+    include the more specific child terms from EFO or VRS. 
+  variant_state:
+    id: SO:0001743
+    label: copy_number_loss
+  DUPDEL: DEL
+  variant_type_id: SO:0001743
+  variant_type: DEL
+  VRS_type: CopyNumberChange
+  VCF_symbolic_allele: <DEL>
+  cnv_dummy_value: -1
+  child_terms:
+    - EFO:0030067
+    - SO:0001743
+    - EFO:0030068
+    - EFO:0020073
+    - EFO:0030069
+
 EFO:0030067:
   variant_state:
     id: EFO:0030067
@@ -77,6 +98,7 @@ EFO:0030067:
   cnv_dummy_value: -1
   child_terms:
     - EFO:0030067
+    - SO:0001743
     - EFO:0030068
     - EFO:0020073
     - EFO:0030069
@@ -133,6 +155,28 @@ EFO:0030070:
   cnv_dummy_value: 0.58
   child_terms:
     - EFO:0030070
+    - SO:0001742
+    - EFO:0030071
+    - EFO:0030072
+    - EFO:0030073
+
+SO:0001742:
+  description: >-
+    This is an alternative to `EFO:0030070`. The SO definitions for CNVs are
+    slightly misleading (type of `sequence_length_alteration`) and do not
+    include the more specific child terms from EFO or VRS. 
+  variant_state:
+    id: SO:0001742
+    label: copy_number_gain
+  DUPDEL: DUP
+  variant_type_id: SO:0001742
+  variant_type: DUP
+  VRS_type: CopyNumberChange
+  VCF_symbolic_allele: <DUP>
+  cnv_dummy_value: 0.58
+  child_terms:
+    - EFO:0030070
+    - SO:0001742
     - EFO:0030071
     - EFO:0030072
     - EFO:0030073
@@ -192,6 +236,7 @@ SO:0001059:
     - SO:0001483
     - SO:0002007
     - SO:0000667
+    - SO:0001743
 
 SO:0001483:
   variant_state:
@@ -231,3 +276,16 @@ SO:0000667:
   cnv_dummy_value: Null
   child_terms:
     - SO:0000667
+
+SO:0001413:
+  variant_state:
+    id: SO:0001413
+    label: translocation breakpoint
+  DUPDEL: Null
+  variant_type_id: SO:0001413
+  variant_type: BND
+  VRS_type: Null
+  VCF_symbolic_allele: <BND>
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0001413

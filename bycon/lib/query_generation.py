@@ -5,7 +5,8 @@ from pymongo import MongoClient
 
 from bycon_helpers import days_from_iso8601duration, prdbug, return_paginated_list
 from config import *
-from genome_utils import GeneInfo
+from cytoband_parsing import bands_from_cytobands
+from genome_utils import ChroNames, GeneInfo, VariantTypes
 
 ################################################################################
 
@@ -49,6 +50,8 @@ class ByconQuery():
         else:
             self.ds_id = dataset_id
         self.argument_definitions = byc.get("argument_definitions", {})
+        self.cytoband_definitions = byc.get("cytobands", [])
+        self.ChroNames = ChroNames()
         self.filters = byc.get("filters", [])
 
         self.requested_entity = byc.get("request_entity_id", False)
@@ -57,6 +60,7 @@ class ByconQuery():
 
         self.variant_request_type = byc.get("variant_request_type", "___none___")
         self.variant_request_definitions = byc.get("variant_request_definitions", {})
+        self.VariantTypes = VariantTypes(byc.get("variant_type_definitions", {}))
         self.varguments = byc.get("varguments", {})
 
         self.filter_definitions = byc.get("filter_definitions", {})
@@ -206,21 +210,21 @@ class ByconQuery():
         r_t_s = self.response_types
         r_c = r_t_s[r_e].get("collection")
 
-        prdbug(f'... Gene Id: {self.varguments.get("gene_id")} => {self.variant_request_type}')
-
         q = False
 
-        # The `geneVariantRequest` will generate a `variantRangeRequest`
+        # if "variantTypeRequest" in self.variant_request_type and len(self.filters) > 0:
+        #     q = self.__create_variantTypeRequest_query()
+
         if "geneVariantRequest" in  self.variant_request_type:
-            self.__create_geneVariantRequest_query()
-
-        if "variantTypeRequest" in self.variant_request_type and len(self.filters) > 0:
-            q = self.__create_variantTypeRequest_query()
-
-        if "aminoacidChangeRequest" in self.variant_request_type:
-           q = self.__create_aminoacidChangeRequest_query()
+            q = self.__create_geneVariantRequest_query()
+        elif "cytoBandRequest" in  self.variant_request_type:
+            q = self.__create_cytoBandRequest_query()
+        elif "variantQueryDigestsRequest" in  self.variant_request_type:
+            q = self.__create_variantQueryDigestsRequest_query()
+        elif "aminoacidChangeRequest" in self.variant_request_type:
+            q = self.__create_aminoacidChangeRequest_query()
         elif "genomicAlleleShortFormRequest" in self.variant_request_type:
-           q = self.__create_genomicAlleleShortFormRequest_query()
+            q = self.__create_genomicAlleleShortFormRequest_query()
         elif "variantBracketRequest" in self.variant_request_type:
             q = self.__create_variantBracketRequest_query()
         elif "variantRangeRequest" in self.variant_request_type:
@@ -233,6 +237,7 @@ class ByconQuery():
             return
 
         self.queries["entities"].update({r_e: {"query": q, "collection": r_c}})
+        prdbug(self.queries)
 
 
     #--------------------------------------------------------------------------#
@@ -240,19 +245,117 @@ class ByconQuery():
     def __create_geneVariantRequest_query(self):
         # query database for gene and use coordinates to create range query
         vp = self.varguments
-        gene_data = GeneInfo().returnGene(vp["gene_id"])
-        # TODO: error report/warning
-        if not gene_data:
-            return
-        gene = gene_data[0]
+        q = []
+        for g in vp["gene_id"]:
+            gene_data = GeneInfo().returnGene(g)
+            # TODO: error report/warning
+            if not gene_data:
+                continue
+            gene = gene_data[0]
+            # Since this is a pre-processor to the range request
+            self.varguments.update( {
+                "reference_name": f'refseq:{gene.get("accession_version", "___none___")}',
+                "start": [ gene.get("start", 0) ],
+                "end": [ gene.get("end", 1) ]
+            } )
+            self.variant_request_type = "variantRangeRequest"
+            q_t = self.__create_variantRangeRequest_query()
+            q.append(q_t)
 
-        # Since this is a pre-processor to the range request
+        return q
+
+    #--------------------------------------------------------------------------#
+
+    def __create_variantQueryDigestsRequest_query(self):
+        # query database for gene and use coordinates to create range query
+        # http://progenetix.test/beacon/biosamples/?datasetIds=progenetix&filters=NCIT:C3058&variantQueryDigests=9:21000001-21975098--21967753-24000000:DEL,8:120000000-125000000--121000000-126000000:DUP&debugMode=
+        # http://progenetix.test/services/sampleplots/?datasetIds=progenetix&filters=NCIT:C3058&variantQueryDigests=8:1-23000000--26000000-120000000:DUP,9:21000001-21975098--21967753-24000000:DEL&debugMode=
+        vp = self.varguments
+        a_d = self.argument_definitions
+        vqd_pat = re.compile(a_d["variant_query_digests"]["items"]["pattern"])
+
+        vd_s = vp.get("variant_query_digests", [])
+        q = []
+        for qd in vd_s:
+            if not vqd_pat.match(qd):
+                prdbug(f'!!! no match {qd}')
+                continue
+            chro, start, end, change = vqd_pat.match(qd).group(1, 2, 3, 4)
+            self.varguments.update( {
+                "reference_name": self.ChroNames.refseq(chro),
+                "start": list(map(int, re.split('-', start))),
+                "end": list(map(int, re.split('-', end)))
+            } )
+            # TODO: This overrides potentially a global variant_type; so right now
+            # one has to leave the type out and use a global (or none), or provide
+            # a type w/ each digest
+            if change:
+                self.varguments.update( {
+                    "variant_type": { "$in": self.VariantTypes.variantStateChildren(change) }
+                } )
+
+            if len(self.varguments.get("start", [])) == 2:
+                if len(self.varguments.get("end", [])) == 2:
+                    self.variant_request_type = "variantBracketRequest"
+                    q_t = self.__create_variantBracketRequest_query()
+                    q.append(q_t)
+            elif len(self.varguments.get("start", [])) == 1:
+                if len(self.varguments.get("end", [])) == 1:
+                    self.variant_request_type = "variantRangeRequest"
+                    q_t = self.__create_variantRangeRequest_query()
+                    q.append(q_t)
+
+        return q
+
+
+    #--------------------------------------------------------------------------#
+
+    def __create_cytoBandRequest_query(self):
+        # query database for cytoband(s) and use coordinates to create range query
+        vp = self.varguments
+        a_d = self.argument_definitions
+        c_b_d = self.cytoband_definitions
+
+        cb_s = vp.get("cyto_bands", [])
+        cbs1, chro1, start1, end1, error1 = bands_from_cytobands(cb_s[0], c_b_d, a_d)
+        s_id1 = self.ChroNames.refseq(chro1)
         self.varguments.update( {
-            "reference_name": f'refseq:{gene.get("accession_version", "___none___")}',
-            "start": [ gene.get("start", 0) ],
-            "end": [ gene.get("end", 1) ]
+            "reference_name": s_id1,
+            "start": [ start1 ],
+            "end": [ end1 ]
         } )
-        self.variant_request_type = "variantRangeRequest"
+        if len(cb_s) == 1:           
+            self.variant_request_type = "variantRangeRequest"
+            q = self.__create_variantRangeRequest_query()
+            return q
+
+        elif len(cb_s) > 1:
+            cbs2, chro2, start2, end2, error2 = bands_from_cytobands(cb_s[1], c_b_d, a_d)
+            s_id2 = self.ChroNames.refseq(chro2)
+
+            # TODO: here is a prototype for a variant query list, used for co-occurring
+            # variants in the same biosample
+            if s_id1 != s_id2:
+                v_q_l = []
+                q1 = self.__create_variantRangeRequest_query()
+                v_q_l.append(q1)
+                self.varguments.update( {
+                    "reference_name": s_id2,
+                    "start": [ start2 ],
+                    "end": [ end2 ]
+                } )
+                q2 = self.__create_variantRangeRequest_query()
+                v_q_l.append(q2)
+                self.variant_request_type = "variantsMultimatchRequest"
+                return v_q_l
+
+            self.varguments.update( {
+                "start": [ start1, start2 ],
+                "end": [ end1, end2 ]
+            } )
+            self.variant_request_type = "variantBracketRequest"
+            q = self.__create_variantBracketRequest_query()
+            return q
 
 
     #--------------------------------------------------------------------------#
@@ -332,10 +435,10 @@ class ByconQuery():
 
         v_q = { "$and": [
             { v_p_defs["reference_name"]["db_key"]: vp["reference_name"] },
-            { v_p_defs["start"]["db_key"]: { "$lt": vp["start"][-1] } },
-            { v_p_defs["end"]["db_key"]: { "$gte": vp["end"][0] } },
-            { v_p_defs["start"]["db_key"]: { "$gte": vp["start"][0] } },
-            { v_p_defs["end"]["db_key"]: { "$lt": vp["end"][-1] } },
+            { v_p_defs["start"]["db_key"]: { "$lt": sorted(vp["start"])[-1] } },
+            { v_p_defs["end"]["db_key"]: { "$gte": sorted(vp["end"])[0] } },
+            { v_p_defs["start"]["db_key"]: { "$gte": sorted(vp["start"])[0] } },
+            { v_p_defs["end"]["db_key"]: { "$lt": sorted(vp["end"])[-1] } },
             self.__create_in_query_for_parameter("variant_type", v_p_defs["variant_type"]["db_key"], vp)
         ]}
 

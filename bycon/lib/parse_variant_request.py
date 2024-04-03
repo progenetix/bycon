@@ -26,7 +26,6 @@ def __parse_variant_parameters(byc):
     # value checks
     v_p_c = { }
     variant_pars = __translate_reference_name(variant_pars, byc)
-    prdbug(variant_pars)
 
     for p_k, v_p in variant_pars.items():
         v_p = variant_pars[ p_k ]
@@ -91,6 +90,10 @@ def __get_variant_request_type(byc):
         brts_k = [ "genomicAlleleShortFormRequest" ]
     elif "gene_id" in v_pars:
         brts_k = [ "geneVariantRequest" ]
+    elif "cyto_bands" in  v_pars:
+        brts_k = [ "cytoBandRequest" ]
+    elif "variant_query_digests" in  v_pars:
+        brts_k = [ "variantQueryDigestsRequest" ]
         
     vrt_matches = [ ]
     for vrt in brts_k:

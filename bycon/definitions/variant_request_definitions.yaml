@@ -18,11 +18,25 @@ request_pars:
   - gene_id
   - aminoacid_change
   - genomic_allele_short_form
+  - cyto_bands
+  - variant_query_digests
 
 # As long as there are no variant query schemas to define valid Beacon
 # variant parameter combinations the `request_types` here provide sets
 # of combinations valid at least for `bycon` Progenetix etc. data.
 request_types:
+
+  variantQueryDigestsRequest:
+    all_of:
+      - variant_query_digests
+
+  cytoBandRequest:
+    all_of:
+      - cyto_bands
+    optional:
+      - variant_type
+      - variant_min_length
+      - variant_max_length
 
   aminoacidChangeRequest:
     all_of:
@@ -34,14 +48,14 @@ request_types:
     all_of:
       - genomic_allele_short_form
 
-  variantTypeRequest:
-    description: >-
-      This dangerous query only uses a variant type, e.g. to limit an "all variants"
-      retrieval to SNVs or CNVs.
-      TODO: Add some private parameter to make this work on ly for special
-      circumstances... May be used w/ a combination of filter length >0 check.
-    all_of:
-      - variant_type
+  # variantTypeRequest:
+  #   description: >-
+  #     This dangerous query only uses a variant type, e.g. to limit an "all variants"
+  #     retrieval to SNVs or CNVs.
+  #     TODO: Add some private parameter to make this work only for special
+  #     circumstances... May be used w/ a combination of filter length > 0 check.
+  #   all_of:
+  #     - variant_type
 
   variantBracketRequest:
     description: >-
@@ -60,8 +74,8 @@ request_types:
       - start
       - end
       - reference_name
-      - variant_type
     optional:
+      - variant_type
       - variant_min_length
       - variant_max_length
 

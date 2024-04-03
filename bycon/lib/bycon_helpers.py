@@ -63,7 +63,8 @@ def refactor_value_from_defined_type(parameter, values, definition):
             return str(value)
     else:
         BYC["WARNINGS"].append(f"!!! Multiple values for {parameter} in request")
-        return '::'.join(values)
+        # re-joining ...
+        return ','.join(values)
 
 
 ################################################################################

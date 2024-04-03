@@ -13,6 +13,46 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2023-04-03 (v1.6.5)
+
+#### Multi-variant matches first pass
+
+We now implement an experimental version of multi-variant matching, to retrieve
+samples which show co-occurrence of 2 or more variants. This so far is limited to
+a few parameters:
+
+* NEW: `variantQueryDigests` in the form of `9:9000001-21975098--21967753-24000000:DEL`
+    - several of those can be comma-concatenated
+    - probably not final name or format
+    - only bracket matches & ranges working (but will change ...)
+    - different variant types can be used
+* `geneId` has been morphed to a list parameter (though keeping the standard name)
+    - usual comma-concatenation etc.
+    - here only a global `variantType` can be provided
+* future versions to implement mixed matches etc. (e.g. sequence variant & CNV)
+
+#### Other ...
+
+* fixed paginated handovers missing the `info.content_id` parameter which is used
+  by the progenetix-web etc. front ends
+* changed the `cytoBands` argument to `type: array`, to allow definition of multiple
+  cytogenetic regions, e.g. to indicate fusions or bracket requests
+    - this might be a temporary solution for testing purposes and e.g. replaced
+      by a future parsing of simple statements like `t(8;14)(q24;q32)`
+* moved some cytoband functionality to the main `bycon` package, from `byconaut`,
+  to allow processing of cytoband requests in the main Beacon service
+* `byconaut` was restructured for exacutables, with `housekeepers` and `importers`
+  directories
+
+### 2024-03-25 (v1.6.4)
+
+* added `scopes` to `beacon/filtering_terms/`
+    - see <https://github.com/ga4gh-beacon/beacon-v2/pull/118>
+* fixed bug where the default splitting of input parameters by comma led to over-splitting
+  of the "embedded list" values in `plotPars` (e.g. using `plotPars=plotGeneSymbols=MYC,T,TP53`
+  would lead to `plotPars=plotGeneSymbols=MYC::T::TP53` ... and later errors)
+    - now "non-list" strings w/ internal `,` are just re-joined & a warning is created
+
 ### 2024-03-07 (v1.6.3)
 
 * configuration changes:

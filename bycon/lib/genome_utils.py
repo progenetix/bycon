@@ -135,6 +135,62 @@ class ChroNames:
 
 ################################################################################
 
+class VariantTypes:
+    def __init__(self, variant_type_definitions):
+        self.vtds = variant_type_definitions
+        self.variant_state = None
+        self.child_terms = set()
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def variantState(self, variant_type="___none___"):
+        self.__variant_state_from_variant_type(variant_type)
+        return self.variant_state
+
+
+    # -------------------------------------------------------------------------#
+
+    def variantStateId(self, variant_type="___none___"):
+        self.__variant_state_from_variant_type(variant_type)
+        return self.variant_state.get("id", "___none___")
+
+
+    # -------------------------------------------------------------------------#
+
+    def variantStateChildren(self, variant_type="___none___"):
+        self.child_terms = set()
+        self.__variant_state_from_variant_type(variant_type)
+        return list(self.child_terms)
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- private -----------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __variant_state_from_variant_type(self, variant_type):
+        v_t_defs = self.vtds
+        for k, d in v_t_defs.items():
+            for p, v in d.items():
+                if v is None:
+                    continue
+                if type(v) is list:
+                    continue
+                if "variant_state" in p:
+                    v = v.get("id", "___none___")
+                if type(v) is not str:
+                    continue
+                if variant_type.lower() == v.lower():
+                    self.variant_state = d.get("variant_state", "___none___")
+                    self.child_terms.update(d.get("child_terms", []))
+
+
+
+
+################################################################################
+
 class GeneInfo:
     def __init__(self):
         self.gene_data = []

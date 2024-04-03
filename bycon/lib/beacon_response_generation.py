@@ -431,7 +431,9 @@ class ByconFilteringTerms:
 
         # TODO: This should be derived from some entity definitions
         # TODO: whole query generation in separate function ...
-        scopes = ["biosamples", "individuals", "analyses", "genomicVariations"]
+        # now added globally to filters since Q aggregation and 
+        # https://github.com/ga4gh-beacon/beacon-v2/pull/118
+        scopes = BYC.get("data_pipeline_entities", [])
         query = {}
         q_list = []
 
@@ -469,6 +471,8 @@ class ByconFilteringTerms:
                 ft_s = f.get("scope")
                 if ft_k and ft_s:
                     f_t.update({"target": f'{ft_s}.{ft_k}'})
+
+                f_t.update({"scopes": scopes})
 
                 lab = f_t.get("label")
                 if lab is None:
@@ -753,7 +757,9 @@ class ByconResultSets:
             r_s_res = []
 
             if "variants._id" in ds_results:
-                for v_id in ds_results["variants._id"]["target_values"]:
+                q_v_s = ds_results["variants._id"]["target_values"]
+                q_v_s = return_paginated_list(q_v_s, self.skip, self.limit)
+                for v_id in q_v_s:
                     v = v_coll.find_one({"_id":v_id})
                     r_s_res.append(v)
                 self.datasets_data.update({ds_id: r_s_res})

@@ -110,6 +110,17 @@ definitions:
         db_key: references.cbioportal.label
         beacon_key: False
         compact: True
+      tcgaproject_id:
+        type: string
+        db_key: references.tcgaproject.id
+        indexed: True
+        beacon_key: False
+        compact: True
+      tcgaproject_label:
+        type: string
+        db_key: references.tcgaproject.label
+        beacon_key: False
+        compact: True
       external_references:
         type: array
         beacon_key: biosamples.externalReferences

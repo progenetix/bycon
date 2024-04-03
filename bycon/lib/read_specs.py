@@ -6,6 +6,7 @@ from pathlib import Path
 from pymongo import MongoClient
 
 from cgi_parsing import prdbug
+from cytoband_parsing import parse_cytoband_file
 from config import *
 
 ################################################################################
@@ -34,6 +35,8 @@ def read_service_definition_files(byc):
             BYC.update({d: o})
         else:
             byc.update({d: o})
+
+    parse_cytoband_file(byc)
 
 ################################################################################
 

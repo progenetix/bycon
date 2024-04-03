@@ -68,7 +68,11 @@ def dataset_response_add_handovers(ds_id, byc):
                     p_t = target_count
                 l = f"{p_f + 1}-{p_t}"
                 u = __handover_create_url(h_o_server, h_o_defs, ds_id, accessid, p_s, limit)
-                h_o_r["pages"].append( { "handover_type": {"id": h_o_defs["handoverType"][ "id" ], "label": l }, "url": u } )
+                h_o_r["pages"].append( {
+                    "handover_type": {"id": h_o_defs["handoverType"][ "id" ],"label": l }, 
+                    "info": { "content_id": h_o_t},
+                    "url": u
+                } )
                 p_s += 1
                 p_f += limit
                 p_t = p_f + limit

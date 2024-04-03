@@ -16,6 +16,12 @@ def execute_bycon_queries(ds_id, BQ, byc):
     the standard "Progenetix"-type MongoDB collections.
         
     podmd"""
+
+    # TODO: a new type, where we use query aggregation for multiple
+    # variants observed in the same biosample to get aggregated; _i.e._ 
+    # different from a AND query for variants which would require the variant
+    # to fulfill both conditions
+
     h_o_methods = byc["handover_definitions"]["h->o_methods"]
     r_e_id = str(byc.get("response_entity_id", "___none___"))
 
@@ -52,8 +58,8 @@ def execute_bycon_queries(ds_id, BQ, byc):
 
     ############################################################################
 
-    dbm = f'queries at execution: {exe_queries}'
-    prdbug(dbm)
+    prdbug(f'queries at execution:')
+    prdbug(exe_queries)
 
     if not exe_queries.keys():
         return prefetch
@@ -139,10 +145,15 @@ def execute_bycon_queries(ds_id, BQ, byc):
         original query and the matching biosamples from the intersect.
         podmd"""
 
+        if type(variants_query) is not list:
+            variants_query = [variants_query]
+
+        v_q_l = variants_query.copy()
+
         pref_k = "variants.biosample_id->biosamples.id"
         prevars.update({
             "pref_m": pref_k,
-            "query": variants_query,
+            "query": v_q_l.pop(0),
             "h_o_def": h_o_methods.get(pref_k)
         })
         prefetch.update({pref_k: _prefetch_data(prevars)})
@@ -151,14 +162,45 @@ def execute_bycon_queries(ds_id, BQ, byc):
             bsids = list(set(prefetch["biosamples.id"]["target_values"]) & set(
                 prefetch[pref_k]["target_values"]))
             prefetch["biosamples.id"].update({"target_values": bsids, "target_count": len(bsids)})
-            variants_query = {"$and": [variants_query, {"biosample_id": {"$in": bsids}}]}
+            # variants_query = [{"$and": [variants_query[0], {"biosample_id": {"$in": bsids}}]}]
         else:
             prefetch["biosamples.id"] = prefetch[pref_k]
 
+        # if there are more than 1 variant query, intersect the biosample_ids from
+        # the previous queries (_i.e._ all variants have to occurr in the same biosample)
+        if len(v_q_l) > 0:
+            for v_q in v_q_l:
+                v_bsids = prefetch["biosamples.id"]["target_values"]
+                prdbug(f'before {prefetch["biosamples.id"]["target_count"]}')
+                if (len(v_bsids) == 0):
+                    break
+                v_q = {"$and": [v_q, {"biosample_id": {"$in": v_bsids}}]}
+                prevars.update({
+                    "pref_m": pref_k,
+                    "query": v_q,
+                    "h_o_def": h_o_methods.get(pref_k)
+                })
+                prefetch.update({pref_k: _prefetch_data(prevars)})
+                prefetch["biosamples.id"] = prefetch[pref_k]
+                prdbug(f'after {prefetch["biosamples.id"]["target_count"]}')
+
+        # collect variants from the multi match
+        # here we can use the $or query since the requirement (all variant results
+        # have to intersect for the same biosamples) has been met
         pref_k = "variants._id"
+        if len(variants_query) > 1:
+            v_v_q = {"$or": variants_query}
+        else:
+            v_v_q = variants_query[0]
+        if len(prefetch["biosamples.id"]["target_values"]) > 0:
+            v_v_q = {"$and": [v_v_q, {"biosample_id": {"$in": prefetch["biosamples.id"]["target_values"]}}]}
+        else:
+            # fallback for 0 match results
+            v_v_q = {"$and": [v_v_q, {"biosample_id": {"$in": ["___undefined___"]}}]}
+
         prevars.update({
             "pref_m": pref_k,
-            "query": variants_query,
+            "query": v_v_q,
             "h_o_def": h_o_methods.get(pref_k)
         })
         prefetch.update({pref_k: _prefetch_data(prevars)})
@@ -288,6 +330,8 @@ def _prefetch_data(prevars):
     pref_m = prevars["pref_m"]
     data_db = prevars["data_db"]
     h_o_def = prevars["h_o_def"]
+    # prdbug(pref_m)
+    # prdbug(prevars["query"])
     dist = data_db[h_o_def["source_collection"]].distinct(h_o_def["source_key"], prevars["query"])
     h_o = {**h_o_def}
     t_v_s = dist if dist else []

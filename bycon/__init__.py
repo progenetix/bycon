@@ -17,6 +17,7 @@ try:
     from beacon_response_generation import *
     from bycon_helpers import *
     from cgi_parsing import *
+    from cytoband_parsing import *
     from dataset_parsing import *
     from genome_utils import *
     from handover_generation import *

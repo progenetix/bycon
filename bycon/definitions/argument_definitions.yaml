@@ -78,7 +78,8 @@ include_resultset_responses:
 
 dataset_ids:
   type: array
-  items: string
+  items:
+    type: string
   cmdFlags:
     - -d
     - --datasetIds
@@ -86,7 +87,8 @@ dataset_ids:
 
 filters:
   type: array
-  items: string
+  items:
+    type: string
   cmdFlags:
     - --filters
   description: prefixed filter values, comma concatenated
@@ -202,9 +204,11 @@ variant_max_length:
   description: 'variantMaxLength: The maximum variant length in bases for e.g. CNV queries.'
 
 gene_id:
-  type: string
+  type: array
+  items:
+    type: string
+    pattern: '^\w+?(\w+?(\-\w+?)?)?$'
   db_key: Null
-  pattern: '^\w+?(\w+?(\-\w+?)?)?$'
   cmdFlags:
     - --geneId
   description: gene id
@@ -234,6 +238,18 @@ genomic_allele_short_form:
 # ------------------------------------------------------------------------------
 # variant parameters - non-standard
 # ------------------------------------------------------------------------------
+
+variant_query_digests:
+  type: array
+  db_key: Null
+  items:
+    type: string
+    pattern: '^(?:chro?)?([12]?[\dXY]):(\d+?(?:-\d+?)?)(?:--(\d+?(?:-\d+?)?))?(?::([\w\:\>]+?))?$'
+  cmdFlags:
+    - --variantQueryDigests
+  examples:
+    - "9:9000001-21975098--21967753-24000000:DEL"
+  description: 'Variant query digest-style short form'
 
 variant_internal_id:
   type: string
@@ -281,14 +297,18 @@ id:
 
 ids:
   type: array
-  items: string
+  items:
+    type: string
+    pattern: '^\w[\w:-]+\w$'
   cmdFlags:
     - --ids
   description: 'One or more ids; this parameter only makes sense for specific REST entry types'
 
 biosample_ids:
   type: array
-  items: string
+  items:
+    type: string
+    pattern: '^\w[\w:-]+\w$'
   byc_entity: biosample
   cmdFlags:
     - --biosampleIds
@@ -296,7 +316,9 @@ biosample_ids:
 
 analysis_ids:
   type: array
-  items: string
+  items:
+    type: string
+    pattern: '^\w[\w:-]+\w$'
   byc_entity: analysis
   cmdFlags:
     - --analysisIds
@@ -304,7 +326,9 @@ analysis_ids:
 
 individual_ids:
   type: array
-  items: string
+  items:
+    type: string
+    pattern: '^\w[\w:-]+\w$'
   byc_entity: individual
   cmdFlags:
     - --individualIds
@@ -312,7 +336,9 @@ individual_ids:
 
 variant_ids:
   type: array
-  items: string
+  items:
+    type: string
+    pattern: '^\w[\w:-]+\w$'
   byc_entity: genomicVariant
   cmdFlags:
     - --variantIds
@@ -465,14 +491,16 @@ source:
 
 delivery_keys:
   type: array
-  items: string
+  items:
+    type: string
   cmdFlags:
     - --deliveryKeys
   description: delivery keys
 
 collation_types:
   type: array
-  items: string
+  items:
+    type: string
   cmdFlags:
     - --collationTypes
   description: selected collation types, e.g. "EFO"
@@ -485,7 +513,8 @@ with_samples:
 
 selected_beacons:
   type: array
-  items: string
+  items:
+    type: string
 
 # ------------------------------------------------------------------------------
 # genomic parameters
@@ -499,17 +528,21 @@ genome_binning:
   description: "one of the predefined genome binning keys - default 1Mb"
 
 cyto_bands:
-  type: string
+  type: array
   db_key: Null
-  pattern: ^(?:chro?)?([12]?[\dXY])([pq](?:(?:ter)|(?:cen)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?\-?([pq](?:(?:cen)|(?:ter)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?$
+  items:
+    type: string
+    pattern: ^(?:chro?)?([12]?[\dXY])([pq](?:(?:ter)|(?:cen)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?\-?([pq](?:(?:cen)|(?:ter)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?$
   cmdFlags:
     - --cytoBands
   description: cytobands, e.g. 8q21q24.1
 
 chro_bases:
-  type: string
+  type: array
+  items:
+    type: string
+    pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
   db_key: Null
-  pattern: ^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$
   cmdFlags:
     - --chroBases
   description: only for the cytoband converter ... e.g. 8:0-120000000
