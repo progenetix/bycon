@@ -13,6 +13,48 @@ through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
 ## Changes Tracker
 
+### 2023-04-16 (v1.7.0)
+
+This version provides a larger update to th emulti-variant query concept. We now
+provide:
+
+* a proper version for using combined `variantQueryDigests`:
+    - [/beacon/datasets/progenetix/biosamples?filters=NCIT:C3058&variantQueryDigests=9:21500001-21975098--21967753-24000000:DEL,17:6000000-7687480--7668422-8000000:DEL](http://progenetix.test/beacon/datasets/progenetix/biosamples?filters=NCIT:C3058&variant_query_digests=9:21500001-21975098--21967753-24000000:DEL,17:6000000-7687480--7668422-8000000:DEL)
+      will e.g. process 2 bracket requests (for small CDKN2A and TP53 deletions)
+      and intersect the samples having both these changes; the same call works,
+      obviously, also for services: [/services/sampleplots?datasetIds=progenetix&filters=NCIT:C3058&variant_query_digests=9:21500001-21975098--21967753-24000000:DEL,17:6000000-7687480--7668422-8000000:DEL](http://progenetix.test/services/sampleplots?datasetIds=progenetix&filters=NCIT:C3058&variant_query_digests=9:21500001-21975098--21967753-24000000:DEL,17:6000000-7687480--7668422-8000000:DEL)
+* a new (probably to be renamed `variantMultiPars` parameter which only works for
+  POST requests; _i.e._ each list entry has to be a proper variant query
+  ```
+    "query": {
+        "requestParameters": {
+            "variantMultiPars": [
+                {
+                    "assemblyId": "GRCh38",
+                    "referenceName": "refseq:NC_000009.12",
+                    "start": [21500001, 21975098],
+                    "end": [21967753, 22500000], 
+                    "variantType": "DEL"
+                },
+                {
+                    "assemblyId": "GRCh38",
+                    "referenceName": "refseq:NC_000017.11",
+                    "start": [6000000, 7687480],
+                    "end": [7668422, 8000000], 
+                    "variantType": "DEL"
+                }
+            ]
+        },
+        "filters": [{"id": "NCIT:C3058"}]
+    }
+  ```
+
+  Also `bycon` now supports the default `/beacon/datasets/{id}/g_variants` etc. access
+  pattern for single dataset data retrieval (the use of the `datasetIds` parameter is
+  still not fully standard supported though it had been documented in the framework
+   ... see [Github issue #123](https://github.com/ga4gh-beacon/beacon-v2/issues/123#issuecomment-2059711886)).
+
+
 ### 2023-04-03 (v1.6.5)
 
 #### Multi-variant matches first pass
