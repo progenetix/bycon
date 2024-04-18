@@ -14,7 +14,7 @@ from genome_utils import ChroNames
 
 class ByconVariant:
 
-    def __init__(self, byc, variant={}):
+    def __init__(self, variant={}):
         """
         # Class `ByconVariant`
 
@@ -34,7 +34,7 @@ class ByconVariant:
         self.pgxseg_variant = {}
 
         self.ChroNames = ChroNames()
-        self.variant_types = byc.get("variant_type_definitions", {})
+        self.variant_types = BYC.get("variant_type_definitions", {})
 
         t_states = {}
         for v_t, v_d in self.variant_types.items():
@@ -49,6 +49,7 @@ class ByconVariant:
         self.variant_mappings = d_m_v.get("parameters", {})
         self.vrs_allele = object_instance_from_schema_name("VRSallele", "")
         self.vrs_cnv = object_instance_from_schema_name("VRScopyNumberChange", "")
+        self.pgx_variant = object_instance_from_schema_name("pgxVariant", "")
 
 
     # -------------------------------------------------------------------------#
@@ -66,16 +67,11 @@ class ByconVariant:
     def pgxVariant(self, variant={}):
         self.byc_variant = variant
         self.__create_canonical_variant()
-        b_v = self.byc_variant
-        p_v = {} # to do: pgx cb variant instance
-        for p_k, p_d in self.variant_mappings.items():
-            dotted_key = p_d.get("db_key")
-            i_v = b_v.get(p_k)
-            if not dotted_key:
-                continue
-            assign_nested_value(p_v, dotted_key, i_v, p_d)
+        var_keys = self.pgx_variant.keys()
+        for p_k, p_d in self.byc_variant.items():
+            if p_k in var_keys:
+                self.pgx_variant.update({p_k: p_d})
 
-        self.pgx_variant.update(p_v) 
         return self.pgx_variant
 
 
@@ -228,9 +224,23 @@ class ByconVariant:
         self.__byc_variant_normalize_positions()
         self.__byc_variant_normalize_sequences()
         self.__byc_variant_add_digest()
-
         if not "info" in v:
             v.update({"info": {}})
+        self.__byc_variant_add_length()
+
+        return
+
+    # -------------------------------------------------------------------------#
+
+    def __byc_variant_add_length(self):
+        v = self.byc_variant
+        loc = v.get("location", {})
+        s = loc.get("start")
+        e = loc.get("end")
+        if not s or not e:
+            e_c += 1
+            return
+        v["info"].update({"var_length": e - s})
 
         return
 
@@ -286,7 +296,6 @@ class ByconVariant:
             v["location"].update({"sequence_id": s_id})
         else:
             v["errors"].append(f'no sequence_id / chromosome could be assigned')
-
         self.byc_variant.update(v)
         return
 

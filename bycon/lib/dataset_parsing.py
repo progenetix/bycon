@@ -14,6 +14,8 @@ def select_dataset_ids(byc):
         return
     if ds_id_from_accessid(byc) is not False:
         return
+    if ds_id_from_record_id(byc) is not False:
+        return
     if ds_ids_from_form(byc) is not False:
         return
     if ds_id_from_default(byc) is not False:
@@ -23,15 +25,36 @@ def select_dataset_ids(byc):
 ################################################################################
 
 def ds_id_from_rest_path_value(byc):
-    ds_id = rest_path_value("datasets")
-    if ds_id is None:
+    ds_p_id = rest_path_value("datasets")
+    if not ds_p_id:
         return False
 
-    if ds_id not in byc["dataset_definitions"].keys():
+    ds_ids = []
+    for ds_id in ds_p_id.split(","):
+        if ds_id in byc["dataset_definitions"].keys():
+            ds_ids.append(ds_id)
+
+    if len(ds_ids) < 1:
         return False
 
-    byc.update({"dataset_ids": [ds_id]})
+    byc.update({"dataset_ids": ds_ids})
     return True
+
+
+################################################################################
+
+def ds_id_from_record_id(byc):
+    """
+    For data retrieval associated with a single record by its path id siuch as
+    `biosamples/{id}` the default Beacon model does not provide any way to provide
+    the associated dataset id with the request. The assumption is that any record
+    id is unique across all datasets.
+    This function is a placeholder for a solution:
+    * retrieve the dataset id from the record id, e.g. by having a specific prefix
+      or pattern in the record id, associated for a specific dataset (a bit of a fudge...)
+    * access a lookup database for the id -> datasetId matches
+    """
+    return False
 
 
 ################################################################################

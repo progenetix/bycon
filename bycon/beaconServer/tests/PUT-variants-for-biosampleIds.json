@@ -1,5 +1,5 @@
 {
-    "$schema":"beaconRequestBody.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "meta": {
         "apiVersion": "2.0",
         "requestedSchemas": [
@@ -20,7 +20,8 @@
                 "pgxbs-kftvj1nt"
             ]
         },
-        "filters": [ ]
+        "filters": []
     },
+    "requestedGranularity": "count",
     "debugMode": 0
 }

@@ -22,7 +22,7 @@
             "defaultSchema": {
                 "id": "dataset",
                 "name": "Default schema for datasets",
-                "referenceToSchemaDefinition": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/models/json/beacon-v2-default-model/datasets/defaultSchema.json",
+                "referenceToSchemaDefinition": "http://progenetix.org/services/schemas/dataset",
                 "schemaVersion": "v2.0.0"
             },
             "aCollectionOf": [

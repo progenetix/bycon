@@ -10,7 +10,6 @@ from bycon_helpers import return_paginated_list, prdbug, set_debug_state, test_t
 from dataset_parsing import select_dataset_ids
 from parse_filters_request import parse_filters
 from read_specs import update_rootpars_from_local
-from parse_variant_request import parse_variants
 
 
 ################################################################################
@@ -46,16 +45,18 @@ def initialize_bycon_service(byc, service="info"):
         scope = "beacon"
     
     byc.update({
-        "request_path_root": scope,
-        "request_entity_path_id": service
+        "request_path_root": scope
     })
-
     if entry_type in b_e_d:
         for d_k, d_v in b_e_d[entry_type].items():
+            # avoiding the overwriting of e.g. request pat or id if different response
+            if "request" in d_k:
+                continue
             byc.update({d_k: d_v})
 
     # update response_entity_id from path
     update_entity_ids_from_path(byc)
+
     # update response_entity_id from form
     update_requested_schema_from_request(byc)
     set_response_entity(byc)
@@ -65,7 +66,6 @@ def initialize_bycon_service(byc, service="info"):
     set_user_name(byc)
     set_returned_granularities(byc)    
     parse_filters(byc)
-    parse_variants(byc)
 
 
 ################################################################################
@@ -109,7 +109,6 @@ def update_requested_schema_from_request(byc):
 ################################################################################
 
 def set_response_entity(byc):
-    prdbug(f'response_entity_id: {byc.get("response_entity_id")}')
     byc.update({"response_entity": {}})
     b_rt_s = BYC.get("entity_defaults", {})
     r_e_id = byc.get("response_entity_id", "___none___")

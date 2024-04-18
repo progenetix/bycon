@@ -29,7 +29,6 @@ try:
     from schema_parsing import *
     from service_utils import *
     from variant_mapping import *
-    from parse_variant_request import *
 
     byc: object = {
         "parsed_config_paths": []

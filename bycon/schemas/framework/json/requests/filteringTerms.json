@@ -30,7 +30,9 @@
                 "id": {
                     "type": "string",
                     "description": "Term ID to be queried, using CURIE syntax where possible.",
-                    "example": "HP:0002664"
+                    "examples": [
+                        "HP:0002664"
+                    ]
                 },
                 "includeDescendantTerms": {
                     "type": "boolean",
@@ -48,13 +50,29 @@
                     "default": "exact",
                     "description": "Allow the Beacon to return results which do not match the filter exactly, but do match to a certain degree of similarity. The Beacon defines the semantic similarity model implemented and how to apply the thresholds of 'high', 'medium' and 'low' similarity."
                 },
-                "scope": {
-                    "type": "string",
-                    "description": "The entry type to which the filter applies",
-                    "example": "biosamples"
+                "scopes": {
+                    "description": "Entry types affected by this filter.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        [
+                            "biosamples",
+                            "analyses",
+                            "individuals",
+                            "genomicVariations"
+                        ],
+                        [
+                            "biosamples"
+                        ],
+                        [
+                            "individuals",
+                            "biosamples"
+                        ]
+                    ]
                 },
                 "excluded": {
-                    "description": "Flag to indicate whether the phenotype was observed or not. The default is `false`. Provenance: Phenopackets, e.g. in PhenotypivcFeature Status: BeaconPlus",
+                    "description": "Flag to indicate whether the phenotype was observed or not. The default is `false`. Provenance: Phenopackets, e.g. in PhenotypivcFeature WARN: This is a _BeaconPlus_ parameter **not yet** yet Beacon v2.",
                     "type": "boolean",
                     "default": false
                 }
@@ -85,18 +103,18 @@
                         "<="
                     ],
                     "description": "Defines how the value relates to the field `id`.",
-                    "default": "=",
-                    "example": ">"
+                    "default": "="
                 },
                 "value": {
                     "type": "string",
                     "description": "Alphanumeric search term to be used within the query which can contain wildcard characters (%) to denote any number of unknown characters.  Values can be assocatied with units if applicable.",
                     "example": "P70Y"
                 },
-                "scope": {
-                    "type": "string",
-                    "description": "The entry type to which the filter applies",
-                    "example": "biosamples"
+                "scopes": {
+                    "description": "The entry types affected by this filter. ",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -110,12 +128,15 @@
                 "id": {
                     "type": "string",
                     "description": "Custom filter terms should contain a unique identifier.",
-                    "example": "demographic.ethnicity:asian"
+                    "examples": [
+                        "demographic.ethnicity:asian"
+                    ]
                 },
-                "scope": {
-                    "type": "string",
-                    "description": "The entry type to which the filter applies",
-                    "example": "biosamples"
+                "scopes": {
+                    "description": "The entry types affected by this filter. ",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         }

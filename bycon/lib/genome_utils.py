@@ -136,11 +136,10 @@ class ChroNames:
 ################################################################################
 
 class VariantTypes:
-    def __init__(self, variant_type_definitions):
-        self.vtds = variant_type_definitions
+    def __init__(self):
+        self.vtds = BYC.get("variant_type_definitions", {})
         self.variant_state = None
         self.child_terms = set()
-
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -171,8 +170,7 @@ class VariantTypes:
     # -------------------------------------------------------------------------#
 
     def __variant_state_from_variant_type(self, variant_type):
-        v_t_defs = self.vtds
-        for k, d in v_t_defs.items():
+        for k, d in self.vtds.items():
             for p, v in d.items():
                 if v is None:
                     continue
@@ -185,8 +183,6 @@ class VariantTypes:
                 if variant_type.lower() == v.lower():
                     self.variant_state = d.get("variant_state", "___none___")
                     self.child_terms.update(d.get("child_terms", []))
-
-
 
 
 ################################################################################

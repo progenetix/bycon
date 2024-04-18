@@ -50,18 +50,29 @@ BYC = {
       "test_domains": ["localhost"]
     },
   },
-  "entity_defaults": {"info":{}},
-  "path_entry_type_mappings": {},
-  "entry_type_path_mappings": {},
+  "argument_definitions": {},
   "data_pipeline_entities": [],
-  "datatable_mappings": {}
+  "datatable_mappings": {},
+  "entity_defaults": {"info":{}},
+  "entry_type_path_mappings": {},
+  "interval_definitions": {},
+  "path_entry_type_mappings": {},
+  "variant_request_definitions": {},
+  "variant_type_definitions": {},
+
+  "cytobands": [],
+  "cytolimits": {},
+  "genome_size": 0
+
 }
 
 # collection object for cmd arguments and web parameters (depending on the ENV)
 # all possible parameters rare defined in `argument_definitions.yaml`, partially
 # provifding default values
-
 BYC_PARS = {}
+
+# an object to make global, pre-processed variant parameters accessible
+BYC_VARGS = {}
 
 # default authorization levels; a local `authorizations.yaml` file can add to 
 # these / override the values

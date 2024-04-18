@@ -2,6 +2,7 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://progenetix.org/services/schemas/analysis/v2021-11-01",
     "title": "analysis",
+    "description": "The `analysis` object represents a information about the data generation (e.g. experimental platform) and data analysis steps leading to (a set of) genomic variation call(s). This is in contrast to the Beacon v2 default model which has a separate `run` schema.",
     "type": "object",
     "properties": {
         "id": {
@@ -25,7 +26,7 @@
         "description": {
             "type": "string",
             "examples": [
-                "SNP6 array"
+                "CNV analysis from SNP6 array"
             ]
         },
         "platformModel": {

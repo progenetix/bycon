@@ -23,14 +23,16 @@ definitions:
         description: ''
         type: string
       openAPIEndpointsDefinition:
-        description: Reference to the file that includes the OpenAPI definition of
+        description: >-
+          Reference to the file that includes the OpenAPI definition of
           the endpoints implemented in this Beacon instance. The referenced file MUST
           BE a valid OpenAPI definition file, as it is expected that the Beacon clients
           (e.g. a Beacon Network) should be able to parse it to discover additional
           details on the supported verbs, parameters, etc.
         type: string
       rootUrl:
-        description: The base url for this entry type. Returns a list of entries.
+        description: >-
+          The base url for this entry type. Returns a list of entries.
           It is added here for convenience of the Beacon clients, so they don't need
           to parse the OpenAPI endpoints definition to get that base endpoint. Also,
           in very simple Beacons, that endpoint could be the only one implemented,
@@ -39,7 +41,8 @@ definitions:
         type: string
         format: uri
       singleEntryUrl:
-        description: Optional, but recommended. Returns only one instance of this
+        description: >-
+          Optional, but recommended. Returns only one instance of this
           entry, identified by an `id`. It is added here for convenience of the Beacon
           clients, so they don't need to parse the OpenAPI endpoints definition to
           get that base endpoint. Also, in very simple Beacons, that endpoint could
@@ -57,7 +60,8 @@ definitions:
         type: string
         format: uri
       endpoints:
-        description: Optional. A list describing additional endpoints implemented
+        description: >-
+          Optional. A list describing additional endpoints implemented
           by this Beacon instance for that entry type. Additional details on the endpoint
           parameters, supported HTTP verbs, etc. could be obtained by parsing the
           OpenAPI definition referenced in the `openAPIEndpointsDefinition` attribute.

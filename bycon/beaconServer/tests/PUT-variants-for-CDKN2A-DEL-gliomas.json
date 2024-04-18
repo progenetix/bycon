@@ -11,9 +11,7 @@
     },
     "query": {
         "requestParameters": {
-            "datasets": {
-                "datasetIds": ["progenetix"]
-            },
+            "datasets": {"datasetIds": ["progenetix"]},
             "g_variant": {
                 "assemblyId": "GRCh38",
                 "referenceName": "9",
@@ -22,13 +20,8 @@
                 "variantType": "DEL"
             }
         },
-        "filters": [
-            { "id": "NCIT:C3058" }
-        ],
+        "filters": [{"id": "NCIT:C3058"}]
     },
-    "pagination": {
-        "skip": 0,
-        "limit": 5
-    },   
+    "pagination": {"skip": 0, "limit": 5},   
     "debugMode": 0
 }

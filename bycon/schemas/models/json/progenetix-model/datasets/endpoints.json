@@ -53,7 +53,7 @@
                         "$ref": "#/components/responses/CollectionsResponse"
                     },
                     "default": {
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
                     }
                 }
             },
@@ -67,7 +67,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/requests/beaconRequestBody.json"
+                                "$ref": "https://progenetix.org/services/schemas/beaconRequestBody"
                             }
                         }
                     },
@@ -79,7 +79,7 @@
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
                     }
                 }
             }
@@ -103,11 +103,11 @@
                 ],
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/ResultsOKResponse"
+                        "$ref": "#/components/responses/CollectionsResponse"
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
                     }
                 }
             },
@@ -121,7 +121,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/requests/beaconRequestBody.json"
+                                "$ref": "https://progenetix.org/services/schemas/beaconRequestBody"
                             }
                         }
                     },
@@ -129,11 +129,11 @@
                 },
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/ResultsOKResponse"
+                        "$ref": "#/components/responses/CollectionsResponse"
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
                     }
                 }
             }
@@ -167,7 +167,7 @@
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
                     }
                 }
             },
@@ -181,7 +181,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/requests/beaconRequestBody.json"
+                                "$ref": "https://progenetix.org/services/schemas/beaconRequestBody"
                             }
                         }
                     },
@@ -193,7 +193,67 @@
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            }
+        },
+        "/datasets/{id}/analyses": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/entryId"
+                }
+            ],
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/requestedSchema"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skip"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "description": "Get the biosamples list from one dataset, identified by its (unique) 'id'",
+                "operationId": "getOneDatasetAnalyses",
+                "tags": [
+                    "GET Endpoints"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            },
+            "post": {
+                "description": "Get the analyses list from one dataset, identified by its (unique) `id`",
+                "operationId": "postOneDatasetAnalyses",
+                "tags": [
+                    "POST Endpoints"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "https://progenetix.org/services/schemas/beaconRequestBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
                     }
                 }
             }
@@ -216,7 +276,7 @@
                         "$ref": "#/components/parameters/limit"
                     }
                 ],
-                "description": "Get the biosamples list from one dataset, identified by its (unique) 'id'",
+                "description": "Get the biosamples list from one dataset, identified by its (unique) `id`",
                 "operationId": "getOneDatasetBiosamples",
                 "tags": [
                     "GET Endpoints"
@@ -227,7 +287,7 @@
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
                     }
                 }
             },
@@ -241,7 +301,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/requests/beaconRequestBody.json"
+                                "$ref": "https://progenetix.org/services/schemas/beaconRequestBody"
                             }
                         }
                     },
@@ -253,7 +313,7 @@
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
                     }
                 }
             }
@@ -276,7 +336,7 @@
                         "$ref": "#/components/parameters/limit"
                     }
                 ],
-                "description": "Get the individuals list from one dataset, identified by its (unique) 'id'",
+                "description": "Get the individuals list from one dataset, identified by its (unique) `id`",
                 "operationId": "getOneDatasetIndividuals",
                 "tags": [
                     "GET Endpoints"
@@ -287,7 +347,7 @@
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
                     }
                 }
             },
@@ -301,7 +361,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/requests/beaconRequestBody.json"
+                                "$ref": "https://progenetix.org/services/schemas/beaconRequestBody"
                             }
                         }
                     },
@@ -313,7 +373,7 @@
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
                     }
                 }
             }
@@ -344,14 +404,14 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconFilteringTermsResponse.json"
+                                    "$ref": "https://progenetix.org/services/schemas/beaconFilteringTermsResponse/"
                                 }
                             }
                         }
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
                     }
                 }
             },
@@ -365,7 +425,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/requests/beaconRequestBody.json"
+                                "$ref": "https://progenetix.org/services/schemas/beaconRequestBody"
                             }
                         }
                     },
@@ -377,14 +437,14 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconFilteringTermsResponse.json"
+                                    "$ref": "https://progenetix.org/services/schemas/beaconFilteringTermsResponse"
                                 }
                             }
                         }
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
                     }
                 }
             }
@@ -397,7 +457,17 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconCollectionsResponse.json"
+                            "oneOf": [
+                                {
+                                    "$ref": "https://progenetix.org/services/schemas/beaconBooleanResponse"
+                                },
+                                {
+                                    "$ref": "https://progenetix.org/services/schemas/beaconCountResponse"
+                                },
+                                {
+                                    "$ref": "https://progenetix.org/services/schemas/beaconResultsetsResponse"
+                                }
+                            ]
                         }
                     }
                 }
@@ -407,7 +477,17 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconCollectionsResponse.json"
+                            "oneOf": [
+                                {
+                                    "$ref": "https://progenetix.org/services/schemas/beaconBooleanResponse"
+                                },
+                                {
+                                    "$ref": "https://progenetix.org/services/schemas/beaconCountResponse"
+                                },
+                                {
+                                    "$ref": "https://progenetix.org/services/schemas/beaconCollectionsResponse"
+                                }
+                            ]
                         }
                     }
                 }

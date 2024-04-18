@@ -60,6 +60,13 @@ request_entity_path_id:
   description: >-
     data entry point, equal to the first REST path element in Beacon
 
+response_entity_path_id:
+  type: string
+  cmdFlags:
+    - --responseEntityPathId
+  description: >-
+    optional data delivery entry point, for {id} paths
+
 requested_schema:
   type: string
   cmdFlags:
@@ -249,7 +256,16 @@ variant_query_digests:
     - --variantQueryDigests
   examples:
     - "9:9000001-21975098--21967753-24000000:DEL"
-  description: 'Variant query digest-style short form'
+  description: EXPERIMENTAL Variant query digest-style short form
+
+variant_multi_pars:
+  type: array
+  db_key: Null
+  items:
+    type: object
+  cmdFlags:
+    - --variantMultiPars
+  description: EXPERIMENTAL List of multiple variant queries, for POST
 
 variant_internal_id:
   type: string

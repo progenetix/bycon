@@ -15,6 +15,14 @@ request_pars:
   - end
   - variant_min_length
   - variant_max_length
+  # - gene_id
+  # - aminoacid_change
+  # - genomic_allele_short_form
+  # - cyto_bands
+  # - variant_query_digests
+
+# BeaconPlus
+multi_request_pars:
   - gene_id
   - aminoacid_change
   - genomic_allele_short_form
@@ -70,7 +78,7 @@ request_types:
       fuzzy matching of CNVs and similar variants of imprecise length and
       position.
     all_of:
-      - assembly_id
+      # - assembly_id
       - start
       - end
       - reference_name
@@ -84,7 +92,7 @@ request_types:
       The beaconRangeRequest queries variants falling between start and end.
       `start` and `end` parameters should be single values.
     all_of:
-      - assembly_id
+      # - assembly_id
       - start
       - end
       - reference_name
@@ -101,7 +109,7 @@ request_types:
       specified genome position a query looks for a combination of reference and
       replacement base(s).
     all_of:
-      - assembly_id
+      # - assembly_id
       - start
       - reference_name
       - reference_bases
@@ -130,7 +138,7 @@ request_types:
       * `mateName` can be the same or different to `referenceName`
       * `mateName` is the higher numbered/named chromosome
     all_of:
-      - assembly_id
+      # - assembly_id
       - reference_name
       - mate_name
       - start

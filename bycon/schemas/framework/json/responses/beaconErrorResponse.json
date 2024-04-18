@@ -4,11 +4,9 @@
     "description": "An unsuccessful operation.",
     "properties": {
         "meta": {
-            "description": "Information about the response that could be relevant for the Beacon client in order to interpret the results.",
             "$ref": "./sections/beaconResponseMeta.json"
         },
         "error": {
-            "description": "Returning an error.",
             "$ref": "../common/beaconCommonComponents.json#/definitions/BeaconError"
         }
     },

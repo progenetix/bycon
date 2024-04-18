@@ -13,14 +13,15 @@ entryTypes:
       id: NCIT:C47824
       label: Data set
     partOfSpecification: Beacon v2.0.0
-    description: A Dataset is a collection of related sets of information, e.g. genomic
+    description: >-
+      A Dataset is a collection of related sets of information, e.g. genomic
       variations together with associated procedural and biological metadata. In a
       Beacon context, a datasets may consist of information generated in a specific
       study or project, or represent the main content of the Beacon resource.
     defaultSchema:
       id: dataset
       name: Default schema for datasets
-      referenceToSchemaDefinition: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/models/json/beacon-v2-default-model/datasets/defaultSchema.json
+      referenceToSchemaDefinition: http://progenetix.org/services/schemas/dataset
       schemaVersion: v2.0.0
     aCollectionOf:
       - id: genomicVariant

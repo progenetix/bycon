@@ -20,3 +20,4 @@ http://progenetix.org/beacon/biosamples/pgxbs-kftvhyvb/phenopackets
 
 http://progenetix.org/services/sampleplots/pgxbs-kftvkafc/?datasetIds=progenetix&plotType=samplesplot&plot_chros=3,5,6,14
 
+http://progenetix.test/beacon/datasets/progenetix/biosamples?filters=NCIT:C3058&variant_query_digests=9:21500001-21975098--21967753-24000000:DEL,17:6000000-7687480--7668422-8000000:DEL

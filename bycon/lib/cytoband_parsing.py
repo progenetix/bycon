@@ -1,6 +1,7 @@
 import csv, re
 from os import path
 
+from config import BYC
 from bycon_helpers import generate_id
 from genome_utils import ChroNames
 from variant_mapping import ByconVariant
@@ -9,7 +10,7 @@ from variant_mapping import ByconVariant
 ################################################################################
 ################################################################################
 
-def parse_cytoband_file(byc):
+def parse_cytoband_file():
     """podmd
  
     podmd"""
@@ -28,7 +29,7 @@ def parse_cytoband_file(byc):
     #--------------------------------------------------------------------------#
 
     # !!! making sure the chromosomes are sorted !!!
-    for chro in byc["interval_definitions"]["chromosomes"]:
+    for chro in BYC["interval_definitions"]["chromosomes"]:
         chro = str(chro)
         c_m = f'chr{chro}'
         chrobands = [ ]
@@ -52,7 +53,7 @@ def parse_cytoband_file(byc):
 
     #--------------------------------------------------------------------------#
 
-    byc.update( {
+    BYC.update( {
         "cytobands": cytobands,
         "cytolimits": cytolimits,
         "genome_size": genome_size
@@ -61,7 +62,9 @@ def parse_cytoband_file(byc):
 
 ################################################################################
 
-def bands_from_cytobands(chr_bands, cytoband_defs, argdefs):
+def bands_from_cytobands(chr_bands):
+    argdefs = BYC.get("argument_definitions", {})
+    cytoband_defs = BYC.get("cytobands", [])
     cb_pat = re.compile( argdefs["cyto_bands"]["items"]["pattern"] )
     error = ""
     end_re = re.compile(r"^([pq]\d.*?)\.?\d$")
@@ -183,7 +186,7 @@ def arm_base_range(chro, arm, cytobands):
 
 ################################################################################
 
-def cytobands_label( cytobands ):
+def cytobands_label(cytobands):
     """
     Receives: (potentially filtered) list of cytoband objects
     Returns: the concatenated first and last cytoband label
@@ -204,34 +207,34 @@ def cytobands_label( cytobands ):
 
 ################################################################################
 
-def cytobands_label_from_positions(byc, chro, start, end):
-    cytobands, chro, start, end = cytobands_list_from_positions(byc, chro, start, end)
-    cbl = cytobands_label( cytobands )
+def cytobands_label_from_positions(chro, start, end):
+    cytobands, chro, start, end = cytobands_list_from_positions(chro, start, end)
+    cbl = cytobands_label(cytobands)
 
     return cbl
 
 
 ################################################################################
 
-def bands_from_chrobases(chro_bases, byc):
-    cb_pat = re.compile( byc["argument_definitions"]["chro_bases"]["items"]["pattern"] )
+def bands_from_chrobases(chro_bases):
+    cb_pat = re.compile( BYC["argument_definitions"]["chro_bases"]["items"]["pattern"] )
     if not cb_pat.match(chro_bases):
         return [], "NA", 0, 0
     chro, cb_start, cb_end = cb_pat.match(chro_bases).group(2,3,5)
 
-    return cytobands_list_from_positions(byc, chro, cb_start, cb_end)
+    return cytobands_list_from_positions(chro, cb_start, cb_end)
 
 
 ################################################################################
 
-def cytobands_list_from_positions(byc, chro, start=None, end=None):
+def cytobands_list_from_positions(chro, start=None, end=None):
     if start:
         start = int(start)
         if not end:
             end = start + 1
         end = int(end)
 
-    cytobands = list(filter(lambda d: d[ "chro" ] == chro, byc["cytobands"]))
+    cytobands = list(filter(lambda d: d[ "chro" ] == chro, BYC.get("cytobands", [])))
     if start == None:
         start = 0
     if end == None:

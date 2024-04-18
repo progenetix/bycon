@@ -15,7 +15,7 @@ def args_update_form(byc):
         return
     byc.update({"check_args": False})
 
-    a_defs = byc["argument_definitions"]
+    a_defs = BYC.get("argument_definitions", {})
     cmd_args = create_args_parser(a_defs)
     arg_vars = vars(cmd_args)
     for p in arg_vars.keys():

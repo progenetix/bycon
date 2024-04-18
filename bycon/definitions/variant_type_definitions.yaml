@@ -236,7 +236,7 @@ SO:0001059:
     - SO:0001483
     - SO:0002007
     - SO:0000667
-    - SO:0001743
+    - SO:0000159
 
 SO:0001483:
   variant_state:
@@ -276,6 +276,19 @@ SO:0000667:
   cnv_dummy_value: Null
   child_terms:
     - SO:0000667
+
+SO:0000159:
+  variant_state:
+    id: SO:0000159
+    label: deletion
+  DUPDEL: Null
+  variant_type_id: SO:0000159
+  variant_type: DEL
+  VRS_type: Allele
+  VCF_symbolic_allele: Null
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0000159
 
 SO:0001413:
   variant_state:

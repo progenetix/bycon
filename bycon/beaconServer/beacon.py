@@ -48,10 +48,14 @@ def beacon():
     e_p_id = BYC_PARS.get("request_entity_path_id", "___none___")
     if e_p_id in p_e_m:
         byc.update({"request_entity_path_id": e_p_id})
-    r_p_id = byc.get("request_entity_path_id", "info")
-    prdbug(f'beacon.py - request_entity_path_id: {r_p_id}')
+    rq_p_id = byc.get("request_entity_path_id", "info")
+    update_entity_ids_from_path(byc)
+    rp_p_id = byc.get("response_entity_path_id", rq_p_id)
+    prdbug(f'beacon.py - request_entity_path_id: {rq_p_id}')
+    prdbug(f'beacon.py - response_entity_path_id: {rp_p_id}')
 
-    e = p_e_m.get(r_p_id)
+    # e = p_e_m.get(rq_p_id)
+    e = p_e_m.get(rp_p_id)
     f = e_p_m.get(e)
 
     if not f:

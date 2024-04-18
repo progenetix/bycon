@@ -17,10 +17,7 @@ def execute_bycon_queries(ds_id, BQ, byc):
         
     podmd"""
 
-    # TODO: a new type, where we use query aggregation for multiple
-    # variants observed in the same biosample to get aggregated; _i.e._ 
-    # different from a AND query for variants which would require the variant
-    # to fulfill both conditions
+    # TODO: this should become a class w/ a method for each query type
 
     h_o_methods = byc["handover_definitions"]["h->o_methods"]
     r_e_id = str(byc.get("response_entity_id", "___none___"))
@@ -158,6 +155,9 @@ def execute_bycon_queries(ds_id, BQ, byc):
         })
         prefetch.update({pref_k: _prefetch_data(prevars)})
 
+        prdbug(f'prefetch ... variants query: {prevars["query"]}')
+        prdbug(f'prefetch ... variants: {prefetch[pref_k]["target_count"]}')
+
         if "biosamples.id" in prefetch.keys():
             bsids = list(set(prefetch["biosamples.id"]["target_values"]) & set(
                 prefetch[pref_k]["target_values"]))
@@ -244,7 +244,7 @@ def execute_bycon_queries(ds_id, BQ, byc):
     potentially lead to huge responses here...
     podmd"""
 
-    if "biosamples.id" not in prefetch:
+    if not "biosamples.id" in prefetch:
         pref_k = "biosamples.id"
         prevars.update({
             "pref_m": pref_k,
@@ -252,14 +252,6 @@ def execute_bycon_queries(ds_id, BQ, byc):
             "h_o_def": h_o_methods.get(pref_k)
         })
         prefetch.update({pref_k: _prefetch_data(prevars)})
-        # prefetch.update({"biosamples.id": {**h_o_methods.get("biosamples.id")}})
-        # prefetch["biosamples.id"].update({
-        #     "id": str(uuid4()),
-        #     "source_db": ds_id,
-        #     "target_values": [],
-        #     "target_count": 0
-        # })
-
         byc["dataset_results"].update({ds_id: prefetch})
         return
 

@@ -41,30 +41,34 @@ def refactor_value_from_defined_type(parameter, values, definition):
     p_d_t = definition.get("type", "string")
     values = list(x for x in values if x is not None)
     values = list(x for x in values if x.lower() not in ["none", "null"])
+    # prdbug(f'...refactor_value_from_defined_type {parameter} ({p_d_t}): {values}')
+
     if len(values) == 0:
         return False
+
     if "array" in p_d_t:
-        p_i_t = definition.get("items", "string")
+        p_i_i = definition.get("items", {})
+        p_i_t = p_i_i.get("type", "string")
+        # prdbug(f'... => array items type is {p_i_t}')
         if "int" in p_i_t:
             return list(map(int, values))
-        elif "number" in p_i_t:
+        if "number" in p_i_t:
             return list(map(float, values))
-        else:
-            return list(map(str, values))
-    elif len(values) == 1:
+        return list(map(str, values))
+    
+    if len(values) == 1:
         value = values[0]
         if "int" in p_d_t:
             return int(value)
-        elif "number" in p_d_t:
+        if "number" in p_d_t:
             return float(value)
-        elif "bool" in p_d_t:
+        if "bool" in p_d_t:
             return test_truthy(value)
-        else:
-            return str(value)
-    else:
-        BYC["WARNINGS"].append(f"!!! Multiple values for {parameter} in request")
-        # re-joining ...
-        return ','.join(values)
+        return str(value)
+
+    BYC["WARNINGS"].append(f"!!! Multiple values for {parameter} in request")
+    # re-joining ...
+    return ','.join(values)
 
 
 ################################################################################

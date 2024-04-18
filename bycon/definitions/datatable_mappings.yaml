@@ -543,6 +543,11 @@ definitions:
         type: string
         db_key: identifiers.genomicHGVS_id
         indexed: True
+      var_length:
+        type: integer
+        db_key: info.var_length
+        indexed: true
+        computed: True
 
       # special pgxseg columns
       log2:

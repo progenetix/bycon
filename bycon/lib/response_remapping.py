@@ -53,7 +53,7 @@ def remap_variants(r_s_res, byc):
         d_vs = [var for var in r_s_res if var.get('variant_internal_id', "__none__") == d]
         v = {
             "variant_internal_id": d,
-            "variation": ByconVariant(byc).vrsVariant(d_vs[0]), "case_level_data": []
+            "variation": ByconVariant().vrsVariant(d_vs[0]), "case_level_data": []
         }
         for d_v in d_vs:
             c_l_v = {}

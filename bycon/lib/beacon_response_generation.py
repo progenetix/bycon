@@ -17,6 +17,43 @@ from service_utils import set_special_modes
 
 ################################################################################
 
+
+class BeaconResponseMeta:
+    def __init__(self):
+        self.response_meta = object_instance_from_schema_name("beaconResponseMeta", "")
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def populatedMeta(self):
+        self.__meta_add_parameters()
+        return self.response_meta
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- private ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __meta_add_parameters(self):
+        r_m = self.response_meta
+        if BYC["TEST_MODE"] is True:
+            r_m.update({"test_mode": BYC["TEST_MODE"]})
+
+        info = BYC["entity_defaults"]["info"].get("content", {"api_version": "___none___"})
+        for p in ["api_version", "beacon_id"]:
+            if p in info.keys():
+                r_m.update({p: info.get(p, "___none___")})
+
+        # TODO: If keeping this - update after query etc.
+        if len(BYC["WARNINGS"]) > 0:
+            r_m.update({"warnings": BYC["WARNINGS"]})
+        for p in ("info"):
+            if not (p_v := r_m.get(p)):
+                r_m.pop(p, None)
+
+
+################################################################################
+
 class BeaconErrorResponse:
     """
     This response class is used for all the info / map / configuration responses
@@ -24,27 +61,27 @@ class BeaconErrorResponse:
     The responses are then provided by the dedicated methods
     """
     def __init__(self, byc: dict):
-        self.response_schema = byc.get("response_schema", "beaconInfoResponse")
-        self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
         self.error_response = object_instance_from_schema_name("beaconErrorResponse", "")
-        info = BYC["entity_defaults"]["info"].get("content", {"api_version": "___none___"})
-        r_m = self.error_response["meta"]
-        for p in ["api_version", "beacon_id"]:
-            if p in info.keys():
-                r_m.update({p: info.get(p, "___none___")})
+        self.meta = BeaconResponseMeta().populatedMeta()
 
     
     # -------------------------------------------------------------------------#
 
     def error(self, error_code=422):
-        self.error_response["error"].update({"error_code": error_code, "error_message": ", ".join(BYC["ERRORS"])})
+        self.error_response.update({
+            "error": {"error_code": error_code, "error_message": ", ".join(BYC["ERRORS"])},
+            "meta": self.meta
+        })
         return self.error_response
 
 
     # -------------------------------------------------------------------------#
 
     def response(self, error_code=422):
-        self.error_response["error"].update({"error_code": error_code, "error_message": ", ".join(BYC["ERRORS"])})
+        self.error_response.update({
+            "error": {"error_code": error_code, "error_message": ", ".join(BYC["ERRORS"])},
+            "meta": self.meta
+        })
         print_json_response(self.error_response)
 
 
@@ -57,25 +94,9 @@ class BeaconInfoResponse:
     The responses are then provided by the dedicated methods
     """
     def __init__(self, byc: dict):
-        self.response_schema = byc.get("response_schema", "beaconInfoResponse")
         self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
-        self.data_response = object_instance_from_schema_name(self.response_schema, "")
-        info = BYC["entity_defaults"]["info"].get("content", {"api_version": "___none___"})
-        r_m = self.data_response["meta"]
-        for p in ["api_version", "beacon_id"]:
-            if p in info.keys():
-                r_m.update({p: info.get(p, "___none___")})
-        if "returned_schemas" in r_m:
-            r_m.update({"returned_schemas":[self.beacon_schema]})
-        for p in ("info"):
-            p_v = r_m.get(p)
-            if not p_v:
-                r_m.pop(p, None)
-        r_e = self.data_response["response"]
-        for p in ("info"):
-            p_v = r_e.get(p)
-            if not p_v:
-                r_e.pop(p, None)
+        self.data_response = object_instance_from_schema_name("beaconInfoResponse", "")
+        self.data_response.update({"meta": BeaconResponseMeta().populatedMeta() })
 
         return
     
@@ -109,6 +130,9 @@ class BeaconDataResponse:
         self.beacon_schema = byc["response_entity"].get("beacon_schema", "___none___")
         self.record_queries = {}
         self.data_response = object_instance_from_schema_name(self.response_schema, "")
+        self.data_response.update({"meta": BeaconResponseMeta().populatedMeta() })
+        for m in ["beacon_handovers", "info"]:
+            self.data_response.pop(m, None)
         self.data_time_init = datetime.datetime.now()
 
         return
@@ -131,17 +155,10 @@ class BeaconDataResponse:
         self.__resultset_response_update_summaries()
         self.__resultSetResponse_force_autorized_granularities()
 
-        b_h_o = self.data_response.get("beacon_handovers", [])
-        if len(b_h_o) < 1:
-            self.data_response.pop("beacon_handovers", None)
-        if not b_h_o[0].get("id", None):
-            self.data_response.pop("beacon_handovers", None)
-
         if not self.data_response.get("info"):
             self.data_response.pop("info", None)
 
         self.__meta_add_received_request_summary_parameters()
-        self.__meta_add_parameters()
         self.__meta_clean_parameters()
         self.__response_clean_parameters()
         self.__check_switch_to_error_response()
@@ -166,7 +183,6 @@ class BeaconDataResponse:
         self.record_queries.update({"entities": queries})
         self.__collections_response_update_summaries()
         self.__meta_add_received_request_summary_parameters()
-        self.__meta_add_parameters()
         self.__meta_clean_parameters()
         self.__check_switch_to_error_response()
         # self.__response_clean_parameters()
@@ -185,7 +201,6 @@ class BeaconDataResponse:
         self.data_response["response"].update({"resources": ress})
         self.record_queries.update({"entities": {"filtering_terms": query}})
         self.__meta_add_received_request_summary_parameters()
-        self.__meta_add_parameters()
         self.__meta_clean_parameters()
         self.__response_clean_parameters()
         self.__check_switch_to_error_response()
@@ -260,7 +275,6 @@ class BeaconDataResponse:
     def __meta_clean_parameters(self):
         r_m = self.data_response.get("meta", {})
         # TBD?!
-            
 
 
     # -------------------------------------------------------------------------#
@@ -268,18 +282,8 @@ class BeaconDataResponse:
     def __meta_add_parameters(self):
         r_m = self.data_response.get("meta", {})
         r_m.update({"info": always_merger.merge(r_m.get("info", {}), {"original_queries": self.record_queries})})
-
-        if BYC["TEST_MODE"] is True:
-            r_m.update({"test_mode": BYC["TEST_MODE"]})
         if "returned_schemas" in r_m:
             r_m.update({"returned_schemas":[self.beacon_schema]})
-
-        info = BYC["entity_defaults"]["info"].get("content", {"api_version": "___none___"})
-        for p in ["api_version", "beacon_id"]:
-            if p in info.keys():
-                r_m.update({p: info.get(p, "___none___")})
-        if len(BYC["WARNINGS"]) > 0:
-            r_m.update({"warnings": BYC["WARNINGS"]})
         return
 
 
@@ -287,6 +291,10 @@ class BeaconDataResponse:
 
     def __meta_add_received_request_summary_parameters(self):
         r_m = self.data_response.get("meta", {})
+        r_m.update({"info": always_merger.merge(r_m.get("info", {}), {"original_queries": self.record_queries})})
+        if "returned_schemas" in r_m:
+            r_m.update({"returned_schemas":[self.beacon_schema]})
+
         if not "received_request_summary" in r_m:
             return
 
@@ -300,10 +308,10 @@ class BeaconDataResponse:
         r_r_s.update({"pagination": {"skip": BYC_PARS.get("skip"), "limit": BYC_PARS.get("limit")}})
         r_r_s.update({"dataset_ids": self.dataset_ids})
 
-        vargs = self.byc.get("varguments", [])
+        vargs = BYC_VARGS
         # TODO: a bit hacky; len == 1 would be the default assemblyId ...
-        if len(vargs) > 1:
-            r_r_s.update({"request_parameters":{"g_variant":vargs}})
+        if len(BYC_VARGS.keys()) > 0:
+            r_r_s.update({"request_parameters":{"g_variant":BYC_VARGS}})
 
         fs = self.byc.get("filters", [])
         fs_p = []
@@ -395,7 +403,7 @@ class ByconFilteringTerms:
         self.filters = byc.get("filters", [])
         self.response_entity_id = byc.get("response_entity_id", "filteringTerm")
         self.data_collection = byc["response_entity"].get("collection", "collations")
-        self.path_id_value = byc.get("request_entity_path_id_value", False)
+        self.path_id_value = byc.get("request_entity_path_id_value", [])
         self.filter_collation_types = set()
         self.filtering_terms = []
         self.filter_resources = []
@@ -523,7 +531,7 @@ class ByconCollections:
         self.filter_definitions = byc.get("filter_definitions", {})
         self.response_entity_id = byc.get("response_entity_id", "dataset")
         self.data_collection = byc["response_entity"].get("collection", "collations")
-        self.path_id_value = byc.get("request_entity_path_id_value", False)
+        self.path_id_value = byc.get("request_entity_path_id_value", [])
         self.collections = []
         self.collections_queries = {}
         return
@@ -572,11 +580,12 @@ class ByconCollections:
         query = { "collation_type": "pgxcohort" }
         limit = 0
         c_q = BYC_PARS.get("cohort_ids", [])
+        if len[c_q] < 1:
+            if len(self.path_id_value) > 0:
+                c_q = self.path_id_value
 
         if len(c_q) > 0:
             query = { "id": {"$in": c_q} }
-        elif self.path_id_value is not False:
-            query = { "id": self.path_id_value }
 
         if BYC["TEST_MODE"] is True:
             limit = BYC_PARS.get("test_mode_count", 5)

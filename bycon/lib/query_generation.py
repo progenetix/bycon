@@ -1,4 +1,4 @@
-import inspect, pymongo, re, sys
+import humps, inspect, pymongo, re, sys
 from bson import SON
 from os import environ
 from pymongo import MongoClient
@@ -49,19 +49,20 @@ class ByconQuery():
             self.ds_id = byc.get("dataset_ids", False)[0]
         else:
             self.ds_id = dataset_id
-        self.argument_definitions = byc.get("argument_definitions", {})
+        self.argument_definitions = BYC.get("argument_definitions", {})
         self.cytoband_definitions = byc.get("cytobands", [])
         self.ChroNames = ChroNames()
         self.filters = byc.get("filters", [])
 
         self.requested_entity = byc.get("request_entity_id", False)
         self.response_entity = byc.get("response_entity_id", "___none___")
-        self.path_id_value = byc.get("request_entity_path_id_value", False)
+        self.path_id_value = byc.get("request_entity_path_id_value", [])
 
+        # TODO: call the variant type definition from inside this class since
+        # e.g. multivars ... need this for each instance
         self.variant_request_type = byc.get("variant_request_type", "___none___")
-        self.variant_request_definitions = byc.get("variant_request_definitions", {})
-        self.VariantTypes = VariantTypes(byc.get("variant_type_definitions", {}))
-        self.varguments = byc.get("varguments", {})
+        self.variant_request_definitions = BYC.get("variant_request_definitions", {})
+        self.variant_type_definitions = BYC.get("variant_type_definitions", {})
 
         self.filter_definitions = byc.get("filter_definitions", {})
         self.geoloc_definitions = byc.get("geoloc_definitions", {})
@@ -98,8 +99,7 @@ class ByconQuery():
     def __query_from_path_id(self):
         if self.queries.get("expand") is False:
             return
-        p_id_v = self.path_id_value
-        if not p_id_v:
+        if len(p_id_v := self.path_id_value) < 1:
             return
 
         r_t_s = self.response_types
@@ -110,10 +110,11 @@ class ByconQuery():
         if not r_c:
             return
 
-        q = {"id": p_id_v}
+        q = {"id": {"$in":p_id_v}}
 
         self.queries["entities"].update({r_e: {"query":q, "collection": r_c}})
-        self.__id_query_add_variant_query(r_e, [p_id_v])
+        if len(p_id_v) == 1:
+            self.__id_query_add_variant_query(r_e, p_id_v)
         self.queries.update({"expand": False})
 
 
@@ -146,8 +147,8 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __id_query_add_variant_query(self, entity, entity_ids):
-
-        if entity not in ("biosample", "individual", "analysis", "run"):
+        # NOTE: _all_ variants cannot be retrieved for collections
+        if entity not in BYC.get("data_pipeline_entities", []):
             return
 
         v_q_id = f'{entity}_id'
@@ -201,167 +202,332 @@ class ByconQuery():
     def __query_from_variant_pars(self):
         if self.queries.get("expand") is False:
             return
-        if not self.variant_request_type:
-            return
-        if self.variant_request_type not in self.variant_request_definitions.get("request_types", {}).keys():
-            return
+        self.variant_multi_pars = BYC_PARS.get("variant_multi_pars", [])
 
         r_e = "genomicVariant"
         r_t_s = self.response_types
         r_c = r_t_s[r_e].get("collection")
 
-        q = False
-
-        # if "variantTypeRequest" in self.variant_request_type and len(self.filters) > 0:
-        #     q = self.__create_variantTypeRequest_query()
-
-        if "geneVariantRequest" in  self.variant_request_type:
-            q = self.__create_geneVariantRequest_query()
-        elif "cytoBandRequest" in  self.variant_request_type:
-            q = self.__create_cytoBandRequest_query()
-        elif "variantQueryDigestsRequest" in  self.variant_request_type:
-            q = self.__create_variantQueryDigestsRequest_query()
-        elif "aminoacidChangeRequest" in self.variant_request_type:
-            q = self.__create_aminoacidChangeRequest_query()
-        elif "genomicAlleleShortFormRequest" in self.variant_request_type:
-            q = self.__create_genomicAlleleShortFormRequest_query()
-        elif "variantBracketRequest" in self.variant_request_type:
-            q = self.__create_variantBracketRequest_query()
-        elif "variantRangeRequest" in self.variant_request_type:
-            q = self.__create_variantRangeRequest_query()
-        elif "variantAlleleRequest" in self.variant_request_type:
-            q = self.__create_variantAlleleRequest_query()
-
-
-        if q is False:
+        # TODO: new preprocessing which should result in a list of variant queries
+        self.__preprocess_variant_pars()        
+        if not (v_queries := self.__loop_multivars()):
             return
 
-        self.queries["entities"].update({r_e: {"query": q, "collection": r_c}})
-        prdbug(self.queries)
+        self.queries["entities"].update({r_e: {"query": v_queries, "collection": r_c}})
 
 
-    #--------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
-    def __create_geneVariantRequest_query(self):
-        # query database for gene and use coordinates to create range query
-        vp = self.varguments
-        q = []
-        for g in vp["gene_id"]:
-            gene_data = GeneInfo().returnGene(g)
-            # TODO: error report/warning
-            if not gene_data:
+    def __preprocess_variant_pars(self):
+        self.variant_multi_pars = BYC_PARS.get("variant_multi_pars", [])
+        v_p_s = self.variant_request_definitions.get("request_pars", [])
+        v_mp_s = self.variant_request_definitions.get("multi_request_pars", [])
+        s_q_p_0 = {}
+        for v_p, v_v in BYC_PARS.items():
+            if v_p in v_p_s:
+                s_q_p_0.update({ v_p: v_v })
+                BYC_VARGS.update({ v_p: v_v })
+                prdbug(f'...__preprocess_variant_pars: {v_p} {v_v}')
+
+        if s_q_p_0:
+            self.variant_multi_pars.append(s_q_p_0)
+
+        for v_mp in v_mp_s:
+            if len(v_mp_vs := BYC_PARS.get(v_mp, [])) > 0:
+                for v in v_mp_vs:
+                    self.variant_multi_pars.append({v_mp: v})
+
+        for v_p_i, v_p_s in enumerate(self.variant_multi_pars):
+            self.variant_multi_pars[v_p_i] = self.__parse_variant_parameters(v_p_s)
+
+        # prdbug(self.variant_multi_pars)
+        # exit()
+
+    # -------------------------------------------------------------------------#
+
+
+    def __parse_variant_parameters(self, variant_pars):
+        v_p_s = self.variant_request_definitions.get("request_pars", [])
+        a_defs = self.argument_definitions
+        v_t_defs = self.variant_type_definitions
+
+        # value checks
+        v_p_c = { }
+
+        for p_k, v_p in variant_pars.items():
+            v_p = variant_pars[ p_k ]
+            v_p_k = humps.decamelize(p_k)
+            if "variant_type" in v_p_k:
+                v_s_c = VariantTypes().variantStateChildren(v_p)
+                v_p_c[ v_p_k ] = { "$in": v_s_c }
+            elif "reference_name" in v_p_k:
+                v_p_c[ v_p_k ] = self.ChroNames.refseq(v_p)
+            else:
+                v_p_c[ v_p_k ] = v_p
+
+        return v_p_c
+
+
+    # -------------------------------------------------------------------------#
+
+    def __loop_multivars(self):
+
+        queries = []
+
+        for v_pars in self.variant_multi_pars:
+            if not (variant_request_type := self.__get_variant_request_type(v_pars)):
                 continue
-            gene = gene_data[0]
-            # Since this is a pre-processor to the range request
-            self.varguments.update( {
-                "reference_name": f'refseq:{gene.get("accession_version", "___none___")}',
-                "start": [ gene.get("start", 0) ],
-                "end": [ gene.get("end", 1) ]
-            } )
-            self.variant_request_type = "variantRangeRequest"
-            q_t = self.__create_variantRangeRequest_query()
-            q.append(q_t)
 
-        return q
+            # a bit verbose for now...
+            if "geneVariantRequest" in  variant_request_type:
+                if (q := self.__create_geneVariantRequest_query(v_pars)):
+                    queries.append(q)
+                    continue
+            if "cytoBandRequest" in  variant_request_type:
+                if (q := self.__create_cytoBandRequest_query(v_pars)):
+                    queries.append(q)
+                    continue
+            if "variantQueryDigestsRequest" in variant_request_type:
+                if (q := self.__create_variantQueryDigestsRequest_query(v_pars)):
+                    queries.append(q)
+                    continue
+            if "aminoacidChangeRequest" in variant_request_type:
+                if (q := self.aminoacidChangeRequest(v_pars)):
+                    queries.append(q)
+                    continue
+            if "genomicAlleleShortFormRequest" in variant_request_type:
+                if (q := self.__create_genomicAlleleShortFormRequest_query(v_pars)):
+                    queries.append(q)
+                    continue
+            if "variantBracketRequest" in variant_request_type:
+                 if (q := self.__create_variantBracketRequest_query(v_pars)):
+                    queries.append(q)
+                    continue
+            if "variantRangeRequest" in variant_request_type:
+                 if (q := self.__create_variantRangeRequest_query(v_pars)):
+                    queries.append(q)
+                    continue
+            if "variantAlleleRequest" in variant_request_type:
+                if (q := self.__create_variantAlleleRequest_query(v_pars)):
+                    queries.append(q)
+                    continue
+
+        return queries
+
+
+    ################################################################################
+
+    def __get_variant_request_type(self, v_pars):
+        """podmd
+        This method guesses the type of variant request, based on the complete
+        fulfillment of the required parameters (all of `all_of`, one if `one_of`).
+        In case of multiple types the one with most matched parameters is prefered.
+        This may be changed to using a pre-defined request type and using this as
+        completeness check only.
+        TODO: Verify by schema ...
+        TODO: This is all a bit too complex; probbaly better to just do it as a
+              stack of dedicated tests and including a "defined to fail" query
+              which is only removed after a successfull type match.
+        podmd"""
+
+        variant_request_type = None
+
+        brts = self.variant_request_definitions.get("request_types", {})
+        brts_k = brts.keys()
+        prdbug(f'...brts_k: {brts_k}')
+        
+        # Already hard-coding some types here - if conditions are met only
+        # the respective types will be evaluated since only this key is used
+        if "start" in v_pars and "end" in v_pars:
+            if len(v_pars[ "start" ]) == 1 and len(v_pars[ "end" ]) == 1:
+                brts_k = [ "variantRangeRequest" ]
+            elif len(v_pars[ "start" ]) == 2 and len(v_pars[ "end" ]) == 2:
+                brts_k = [ "variantBracketRequest" ]
+        elif "aminoacid_change" in v_pars:
+            brts_k = [ "aminoacidChangeRequest" ]
+        elif "genomic_allele_short_form" in v_pars:
+            brts_k = [ "genomicAlleleShortFormRequest" ]
+        elif "gene_id" in v_pars:
+            brts_k = [ "geneVariantRequest" ]
+        elif "cyto_bands" in  v_pars:
+            brts_k = [ "cytoBandRequest" ]
+        elif "variant_query_digests" in  v_pars:
+            brts_k = [ "variantQueryDigestsRequest" ]
+            
+        vrt_matches = [ ]
+        for vrt in brts_k:
+            matched_par_no = 0
+            needed_par_no = 0
+            if "one_of" in brts[vrt]:
+                needed_par_no = 1
+                for one_of in brts[vrt][ "one_of" ]:
+                    if one_of in v_pars:
+                        matched_par_no = 1
+                        continue
+            if "all_of" in brts[vrt]:
+                needed_par_no += len( brts[vrt][ "all_of" ] )
+                for required in brts[vrt][ "all_of" ]:
+                    if required in v_pars:
+                        matched_par_no += 1
+            if matched_par_no >= needed_par_no:
+                vrt_matches.append( { "type": vrt, "par_no": matched_par_no } )
+            prdbug(f'...{vrt}: {matched_par_no} of {needed_par_no}')
+
+        if len(vrt_matches) > 0:
+            vrt_matches = sorted(vrt_matches, key=lambda k: k['par_no'], reverse=True)
+            variant_request_type = vrt_matches[0]["type"]
+
+        return variant_request_type
+
 
     #--------------------------------------------------------------------------#
 
-    def __create_variantQueryDigestsRequest_query(self):
+    def __create_geneVariantRequest_query(self, v_pars):
+        # query database for gene and use coordinates to create range query
+        gene_id = v_pars.get("gene_id", "___none___")
+        prdbug(f'...geneVariantRequest gene_id: {gene_id}')
+        gene_data = GeneInfo().returnGene(gene_id)
+        prdbug(f'...geneVariantRequest gene_data: {gene_data}')
+        # TODO: error report/warning
+        if not gene_data:
+            return False
+        gene = gene_data[0]
+        # Since this is a pre-processor to the range request
+        v_pars = {
+            "reference_name": f'refseq:{gene.get("accession_version", "___none___")}',
+            "start": [ gene.get("start", 0) ],
+            "end": [ gene.get("end", 1) ]
+        }
+        # TODO: global variant parameters by definition file
+        g_p_s = ["variant_type", "variant_min_length", "variant_max_length"]
+        for g_p in g_p_s:
+            if g_p in BYC_VARGS:
+                v_pars.update( { g_p: BYC_VARGS[g_p] } )
+        q_t = self.__create_variantRangeRequest_query(v_pars)
+        prdbug(f'...geneVariantRequest query result: {q_t}')
+
+        return q_t
+
+    #--------------------------------------------------------------------------#
+
+    def __create_variantQueryDigestsRequest_query(self, v_pars):
         # query database for gene and use coordinates to create range query
         # http://progenetix.test/beacon/biosamples/?datasetIds=progenetix&filters=NCIT:C3058&variantQueryDigests=9:21000001-21975098--21967753-24000000:DEL,8:120000000-125000000--121000000-126000000:DUP&debugMode=
         # http://progenetix.test/services/sampleplots/?datasetIds=progenetix&filters=NCIT:C3058&variantQueryDigests=8:1-23000000--26000000-120000000:DUP,9:21000001-21975098--21967753-24000000:DEL&debugMode=
-        vp = self.varguments
         a_d = self.argument_definitions
         vqd_pat = re.compile(a_d["variant_query_digests"]["items"]["pattern"])
 
-        vd_s = vp.get("variant_query_digests", [])
-        q = []
-        for qd in vd_s:
-            if not vqd_pat.match(qd):
-                prdbug(f'!!! no match {qd}')
-                continue
-            chro, start, end, change = vqd_pat.match(qd).group(1, 2, 3, 4)
-            self.varguments.update( {
-                "reference_name": self.ChroNames.refseq(chro),
-                "start": list(map(int, re.split('-', start))),
-                "end": list(map(int, re.split('-', end)))
+        vd_s = v_pars.get("variant_query_digests", "___none___")
+        if not vqd_pat.match(vd_s):
+            prdbug(f'!!! no match {vd_s}')
+            return False
+        chro, start, end, change = vqd_pat.match(vd_s).group(1, 2, 3, 4)
+        v_pars.update( {
+            "reference_name": self.ChroNames.refseq(chro),
+            "start": list(map(int, re.split('-', start))) 
+        } )
+        if end:
+            v_pars.update( {
+                "end": list(map(int, re.split('-', end))) 
             } )
-            # TODO: This overrides potentially a global variant_type; so right now
-            # one has to leave the type out and use a global (or none), or provide
-            # a type w/ each digest
-            if change:
-                self.varguments.update( {
-                    "variant_type": { "$in": self.VariantTypes.variantStateChildren(change) }
+        else:
+            v_pars.pop("end", None)
+
+        v_pars.pop("variant_query_digests", None)
+
+        # TODO: This overrides potentially a global variant_type; so right now
+        # one has to leave the type out and use a global (or none), or provide
+        # a type w/ each digest
+        if change:
+            if ">" in change:
+                ref, alt = change.split(">")
+                v_pars.update( {
+                    "reference_bases": ref,
+                    "alternate_bases": alt
+                } )
+                self.variant_request_type = "variantAlleleRequest"
+                q_t = self.__create_variantAlleleRequest_query(v_pars)
+                return False
+            else:
+                v_pars.update( {
+                    "variant_type": { "$in": VariantTypes().variantStateChildren(change) }
                 } )
 
-            if len(self.varguments.get("start", [])) == 2:
-                if len(self.varguments.get("end", [])) == 2:
-                    self.variant_request_type = "variantBracketRequest"
-                    q_t = self.__create_variantBracketRequest_query()
-                    q.append(q_t)
-            elif len(self.varguments.get("start", [])) == 1:
-                if len(self.varguments.get("end", [])) == 1:
-                    self.variant_request_type = "variantRangeRequest"
-                    q_t = self.__create_variantRangeRequest_query()
-                    q.append(q_t)
-
-        return q
+        if len(v_pars.get("start", [])) == 2:
+            if len(v_pars.get("end", [])) == 2:
+                self.variant_request_type = "variantBracketRequest"
+                prdbug(f'...variantQueryDigestsRequest for variantBracketRequest: {v_pars}')
+                return self.__create_variantBracketRequest_query(v_pars)
+                prdbug(f'...variantQueryDigestsRequest -> variantBracketRequest: {q}')
+        elif len(v_pars.get("start", [])) == 1:
+            if len(v_pars.get("end", [])) == 1:
+                self.variant_request_type = "variantRangeRequest"
+                return self.__create_variantRangeRequest_query(v_pars)
+        else:
+            prdbug(f'!!! variantQueryDigestsRequest: {v_pars}')
+            return False
+        # TODO: Allele query...
 
 
     #--------------------------------------------------------------------------#
 
-    def __create_cytoBandRequest_query(self):
+    def __create_cytoBandRequest_query(self, v_pars):
         # query database for cytoband(s) and use coordinates to create range query
-        vp = self.varguments
-        a_d = self.argument_definitions
+        vp = v_pars
         c_b_d = self.cytoband_definitions
 
         cb_s = vp.get("cyto_bands", [])
-        cbs1, chro1, start1, end1, error1 = bands_from_cytobands(cb_s[0], c_b_d, a_d)
+        cbs1, chro1, start1, end1, error1 = bands_from_cytobands(cb_s[0])
         s_id1 = self.ChroNames.refseq(chro1)
-        self.varguments.update( {
+        v_pars.update( {
             "reference_name": s_id1,
             "start": [ start1 ],
             "end": [ end1 ]
         } )
+        # TODO: other global parameters (langth etc.)
+        # TODO: global variant parameters by definition file
+        g_p_s = ["variant_type", "variant_min_length", "variant_max_length"]
+        for g_p in g_p_s:
+            if g_p in BYC_VARGS:
+                v_pars.update( { g_p: BYC_VARGS[g_p] } )
         if len(cb_s) == 1:           
             self.variant_request_type = "variantRangeRequest"
-            q = self.__create_variantRangeRequest_query()
+            q = self.__create_variantRangeRequest_query(v_pars)
             return q
 
         elif len(cb_s) > 1:
-            cbs2, chro2, start2, end2, error2 = bands_from_cytobands(cb_s[1], c_b_d, a_d)
+            cbs2, chro2, start2, end2, error2 = bands_from_cytobands(cb_s[1])
             s_id2 = self.ChroNames.refseq(chro2)
 
             # TODO: here is a prototype for a variant query list, used for co-occurring
             # variants in the same biosample
             if s_id1 != s_id2:
                 v_q_l = []
-                q1 = self.__create_variantRangeRequest_query()
+                q1 = self.__create_variantRangeRequest_query(v_pars)
                 v_q_l.append(q1)
-                self.varguments.update( {
+                v_pars.update( {
                     "reference_name": s_id2,
                     "start": [ start2 ],
                     "end": [ end2 ]
                 } )
-                q2 = self.__create_variantRangeRequest_query()
+                q2 = self.__create_variantRangeRequest_query(v_pars)
                 v_q_l.append(q2)
                 self.variant_request_type = "variantsMultimatchRequest"
                 return v_q_l
 
-            self.varguments.update( {
+            v_pars.update( {
                 "start": [ start1, start2 ],
                 "end": [ end1, end2 ]
             } )
             self.variant_request_type = "variantBracketRequest"
-            q = self.__create_variantBracketRequest_query()
+            q = self.__create_variantBracketRequest_query(v_pars)
             return q
 
 
     #--------------------------------------------------------------------------#
 
-    def __create_aminoacidChangeRequest_query(self):    
-        vp = self.varguments
+    def __create_aminoacidChangeRequest_query(self, v_pars):    
+        vp = v_pars
         if not "aminoacid_change" in vp:
             return
         v_p_defs = self.argument_definitions
@@ -371,8 +537,8 @@ class ByconQuery():
 
     #--------------------------------------------------------------------------#
 
-    def __create_genomicAlleleShortFormRequest_query(self):    
-        vp = self.varguments
+    def __create_genomicAlleleShortFormRequest_query(self, v_pars):    
+        vp = v_pars
         if not "genomic_allele_short_form" in vp:
             return
 
@@ -383,9 +549,9 @@ class ByconQuery():
 
     #--------------------------------------------------------------------------#
 
-    def __create_variantTypeRequest_query(self):    
+    def __create_variantTypeRequest_query(self, v_pars):    
         v_p_defs = self.argument_definitions
-        vp = self.varguments
+        vp = v_pars
         if not "variant_type" in vp:
             return
         v_q = self.__create_in_query_for_parameter("variant_type", v_p_defs["variant_type"]["db_key"], vp)
@@ -395,79 +561,82 @@ class ByconQuery():
 
     #--------------------------------------------------------------------------#
 
-    def __create_variantRangeRequest_query(self):    
-        vp = self.varguments
+    def __create_variantRangeRequest_query(self, v_pars):    
+        vp = v_pars
         v_p_defs = self.argument_definitions
 
-        v_q_l = [
-            { v_p_defs["reference_name"]["db_key"]: vp.get("reference_name", "___none___")},
-            { v_p_defs["start"]["db_key"]: { "$lt": int(vp[ "end" ][-1]) } },
-            { v_p_defs["end"]["db_key"]: { "$gt": int(vp[ "start" ][0]) } }
-        ]
+        v_q = {
+            v_p_defs["reference_name"]["db_key"]: vp.get("reference_name", "___none___"),
+            v_p_defs["start"]["db_key"]: { "$lt": int(vp[ "end" ][-1]) },
+            v_p_defs["end"]["db_key"]: { "$gt": int(vp[ "start" ][0]) }
+        }
 
         p_n = "variant_min_length"
         if p_n in vp:
-            v_q_l.append( { v_p_defs[p_n]["db_key"]: { "$gte" : vp[p_n] } } )
+            v_q.update( { v_p_defs[p_n]["db_key"]: { "$gte" : vp[p_n] } } )
         p_n = "variant_max_length"
         if "variant_max_length" in vp:
-            v_q_l.append( { v_p_defs[p_n]["db_key"]: { "$lte" : vp[p_n] } } )
+            v_q.update( { v_p_defs[p_n]["db_key"]: { "$lte" : vp[p_n] } } )
 
         p_n = "variant_type"
         if p_n in vp:
-            v_q_l.append( self.__create_in_query_for_parameter(p_n, v_p_defs[p_n]["db_key"], vp) )
-        elif "alternate_bases" in vp:
+            v_q.update( self.__create_in_query_for_parameter(p_n, v_p_defs[p_n]["db_key"], vp) )
+        if "alternate_bases" in vp:
             # the N wildcard stands for any length alt bases so can be ignored
             if vp[ "alternate_bases" ] == "N":
-                 v_q_l.append( { v_p_defs["alternate_bases"]["db_key"]: {'$regex': "." } } )
+                 v_q.update( { v_p_defs["alternate_bases"]["db_key"]: {'$regex': "." } } )
             else:
-                v_q_l.append( { v_p_defs["alternate_bases"]["db_key"]: vp[ "alternate_bases" ] } )
-
-        v_q = { "$and": v_q_l }
+                v_q.update( { v_p_defs["alternate_bases"]["db_key"]: vp[ "alternate_bases" ] } )
 
         return v_q
 
 
     #--------------------------------------------------------------------------#
 
-    def __create_variantBracketRequest_query(self):
-        vp = self.varguments
+    def __create_variantBracketRequest_query(self, v_pars):
+        vp = v_pars
+        prdbug(f'...__create_variantBracketRequest_query parameters: {vp}')
         v_p_defs = self.argument_definitions
 
-        v_q = { "$and": [
-            { v_p_defs["reference_name"]["db_key"]: vp["reference_name"] },
-            { v_p_defs["start"]["db_key"]: { "$lt": sorted(vp["start"])[-1] } },
-            { v_p_defs["end"]["db_key"]: { "$gte": sorted(vp["end"])[0] } },
-            { v_p_defs["start"]["db_key"]: { "$gte": sorted(vp["start"])[0] } },
-            { v_p_defs["end"]["db_key"]: { "$lt": sorted(vp["end"])[-1] } },
-            self.__create_in_query_for_parameter("variant_type", v_p_defs["variant_type"]["db_key"], vp)
-        ]}
+        v_q = {
+            v_p_defs["reference_name"]["db_key"]: vp["reference_name"],
+            v_p_defs["start"]["db_key"]: { "$gte": sorted(vp["start"])[0], "$lt": sorted(vp["start"])[-1] },
+            v_p_defs["end"]["db_key"]: { "$gte": sorted(vp["end"])[0], "$lt": sorted(vp["end"])[-1] },
+            # v_p_defs["start"]["db_key"]: { "$gte": sorted(vp["start"])[0] },
+            # v_p_defs["end"]["db_key"]: { "$lt": sorted(vp["end"])[-1] }
+        }
+
+        if (v_t := self.__create_in_query_for_parameter("variant_type", v_p_defs["variant_type"]["db_key"], vp)):
+            v_q.update(v_t)
 
         return v_q
 
 
     #--------------------------------------------------------------------------#
 
-    def __create_variantAlleleRequest_query(self):
+    def __create_variantAlleleRequest_query(self, v_pars):
         """podmd
      
         podmd"""
-        vp = self.varguments
+        vp = v_pars
         v_p_defs = self.argument_definitions
         # TODO: Regexes for ref or alt with wildcard characters
-
-        v_q_l = [
-            { v_p_defs["reference_name"]["db_key"]: vp["reference_name"] },
-            { v_p_defs["start"]["db_key"]: int(vp["start"][0]) }
-        ]
+        # TODO: figure out VCF vs. VRS normalization
+        v_q = {
+            v_p_defs["reference_name"]["db_key"]: vp["reference_name"],
+            v_p_defs["start"]["db_key"]: int(vp["start"][0])
+        }
         for p in [ "reference_bases", "alternate_bases" ]:
-            if not vp[ p ] == "N":
-                if "N" in vp[ p ]:
-                    rb = vp[ p ].replace("N", ".")
-                    v_q_l.append( { v_p_defs[p]["db_key"]: { '$regex': rb } } )
-                else:
-                     v_q_l.append( { v_p_defs[p]["db_key"]: vp[ p ] } )
+            qv = vp.get(p)
+            if not qv:
+                continue
+            if "N" in vp[ p ]:
+                qv = qv.replace("N", ".")
+                v_q.update( { v_p_defs[p]["db_key"]: { '$regex': qv } } )
+            else:
+                v_q.update( { v_p_defs[p]["db_key"]: qv } )
             
-        v_q = { "$and": v_q_l }
+        # v_q = { "$and": v_q_l }
 
         return v_q
 
@@ -638,7 +807,7 @@ class ByconQuery():
     def __query_from_hoid(self):
         """
         This non-standard (_i.e._ not Beacon spec'd) type of query generation retrieves
-        the query paramters and values from a handover object, _i.e._ the stored results
+        the query parameters and values from a handover object, _i.e._ the stored results
         of a previous query.
         These query values can be combined with additional parameters.
         """

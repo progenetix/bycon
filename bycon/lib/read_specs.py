@@ -36,7 +36,7 @@ def read_service_definition_files(byc):
         else:
             byc.update({d: o})
 
-    parse_cytoband_file(byc)
+    parse_cytoband_file()
 
 ################################################################################
 

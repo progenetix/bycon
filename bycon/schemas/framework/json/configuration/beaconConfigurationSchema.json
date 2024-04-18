@@ -12,7 +12,7 @@
             "type": "object",
             "properties": {
                 "productionStatus": {
-                    "description": "`DEV`= 'Service potentially unstable, not real data', which availability and data should not be used in production setups. `TEST`= 'Service stable, not real data'. 'PROD'= 'Service stable, actual data'.",
+                    "description": "* `DEV`: Service potentially unstable, no real, availability\n  and data should not be used in production setups.\n* `TEST`: Service stable, no real data. * `PROD`: Service stable, actual data.",
                     "type": "string",
                     "enum": [
                         "DEV",

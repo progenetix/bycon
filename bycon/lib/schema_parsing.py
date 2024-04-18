@@ -12,6 +12,7 @@ from config import *
 def read_schema_file(schema_name, item, ext="json"):
     # some lookup for the `request_entity_path_id` value in the case of "true"
     # entry types where schemas are defined in a directory with the path id
+
     b_e_d = BYC.get("entity_defaults", {})
     if schema_name in b_e_d:
         r_p_id = b_e_d[schema_name].get("request_entity_path_id")

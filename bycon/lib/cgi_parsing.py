@@ -9,7 +9,7 @@ from config import *
 ################################################################################
 
 def parse_arguments(byc):
-    a_defs = byc.get("argument_definitions", {})
+    a_defs = BYC.get("argument_definitions", {})
     for a, d in a_defs.items():
         if "default" in d:
             BYC_PARS.update({a: d["default"]})
@@ -29,7 +29,7 @@ def parse_POST(byc):
     content_len = environ.get('CONTENT_LENGTH', '0')
     content_typ = environ.get('CONTENT_TYPE', '')
 
-    a_defs = byc.get("argument_definitions", {})
+    a_defs = BYC.get("argument_definitions", {})
 
     # TODO: catch error & return for non-json posts
     if "json" in content_typ:
@@ -78,8 +78,9 @@ def parse_POST(byc):
 ################################################################################
 
 def parse_GET(byc):
-    a_defs = byc.get("argument_definitions", {})
+    a_defs = BYC.get("argument_definitions", {})
     form_data = cgi.FieldStorage()
+    # BYC.update({"DEBUG_MODE": set_debug_state(True) })
     for p in form_data:
         p_d = humps.decamelize(p)
         # CAVE: Only predefined parameters are accepted!
@@ -129,9 +130,13 @@ def rest_path_elements(byc):
     for p_k in ["request_entity_path_id", "request_entity_path_id_value", "response_entity_path_id"]:
         r_i += 1
         if r_i >= len(p_items):
-            return
+            break
         p_v = unquote(p_items[r_i])
         byc.update({p_k: p_v})
+
+    if (rpidv := byc.get("request_entity_path_id_value")):
+        byc.update({"request_entity_path_id_value": rpidv.split(",") })
+    return
 
 
 ################################################################################
