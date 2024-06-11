@@ -11,11 +11,66 @@ the code base from this specific use case.
 An earlier version of the Progenetix && Beacon "BeaconPlus" stack had been provided
 through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
 
+## Known Bugs
+
+* pagination for download file handovers has some hiccups
+
 ## Changes Tracker
+
+While changes are documented for individual point versions we actually do not
+push releases out for all of them; they serve more as internal development
+milestones.
+
+### 2023-06-11 (v.1.8.3)
+
+* restructuring of the whole entity / path ... interpolation - now 
+  `set_entities()` and `initialize_bycon_service()` are part of `bycon`
+  `__init__.py`
+* now evaluates the `includeResultsetResponses` parameters (deault: `ALL`)
+  due to a request to provide only `HIT` resonses in a network context
+  although the definition & handling is a bit ambiguous (e.g. forcing `MISS`
+  responses with matching datasets will result in a `false` response w/ 0 count...?)
+    - `__acknowledge_HIT` removes all `exists: false` resultsets
+    - `__acknowledge_MISS` removes all `exists: true` resultsets
+
+
+### 2023-06-06 (v.1.8.2)
+
+* removed server side pagination; this should be implemented by clients based
+  on the numbers from the response summary
+* FIX: pagination did not work correctly when requesting
+  pavges > 1 using a handover id (due to a "double pagination" at query and response preparation times)
+
+### 2023-05-27 (v.1.8.1)
+
+* re-organized the `local` config location
+* fixed the correct entity use for non-standard (services...) in test mode
+* changed behaviour: results are now shuffled before storing which leads to different
+  result page contents for the same query when applying pagination (_i.e._ not always
+  the same first 100 etc. samples are returned)
+* more fixes for geographic map output after recent code rewrite
+
+### 2023-05-05 (v1.8.0)
+
+With this update the `byc` collection object has been abandoned & removed. Parameters
+and definitions are now predefined in the global parameters in `/bycon/config.py`
+and (similar to before) populated from external definition files or (for `BYC_PARS` etc.)
+from processed commansd line, URL or POST parameters. These changes have been propagated
+through both `bycon` and `byconaut`.
+
+### 2023-05-03 (v1.7.2)
+
+This update moves most definitions and pre-processed parameters from the `byc`
+object to the global `BYC` object and eliminates (much of) the "passing `byc` around"
+necessity. Still needs some additional cleanups.
+
+### 2023-04-25 (v1.7.1)
+
+* bug fix (typo in new `info.var_length` calculation)
 
 ### 2023-04-16 (v1.7.0)
 
-This version provides a larger update to th emulti-variant query concept. We now
+This version provides a larger update to the multi-variant query concept. We now
 provide:
 
 * a proper version for using combined `variantQueryDigests`:
@@ -492,7 +547,7 @@ definitions and "local" ones. Partcullarly:
   for the Beacon variant response
 * added sorting to `.pgxseg` files
 * added compact `VRSallele` and `VRScopyNumberChange` schemas & using them in
-  `ByconVariant(byc).vrsVariant(v)`
+  `ByconVariant().vrsVariant(v)`
 
 ##### `byconaut`
 
@@ -729,6 +784,7 @@ definitions and "local" ones. Partcullarly:
     - clustering can be suppressed by `&plotClusterResults=false`
 
 --------------------------------------------------------------------------------
+
 ### 2023 01-04
 
 #### 2023-04-27 (v1.0.36)
