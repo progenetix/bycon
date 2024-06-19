@@ -22,7 +22,6 @@ EFO:0030064:
   variant_state:
     id: EFO:0030064
     label: regional base ploidy
-  DUPDEL: Null
   variant_type_id: Null
   variant_type: Null
   VRS_type: Null
@@ -35,7 +34,6 @@ EFO:0030065:
   variant_state:
     id: EFO:0030065
     label: copy-neutral loss of heterozygosity
-  DUPDEL: Null
   variant_type_id: EFO:0030065
   variant_type: LOH
   VRS_type: Null
@@ -48,7 +46,6 @@ EFO:0030066:
   variant_state:
     id: EFO:0030066
     label: copy number variation
-  DUPDEL: Null
   variant_type_id: EFO:0030066
   variant_type: CNV
   VRS_type: CopyNumberChange
@@ -123,6 +120,7 @@ EFO:0020073:
   DUPDEL: DEL
   variant_type_id: EFO:0030067
   variant_type: DEL
+  HLDUPDEL: HLDEL
   VRS_type: CopyNumberChange
   VCF_symbolic_allele: <DEL>
   cnv_dummy_value: -1.75
@@ -135,6 +133,7 @@ EFO:0030069:
     id: EFO:0030069
     label: complete genomic deletion
   DUPDEL: DEL
+  HLDUPDEL: HLDEL
   variant_type_id: EFO:0030067
   variant_type: DEL
   VRS_type: CopyNumberChange
@@ -199,6 +198,7 @@ EFO:0030072:
     id: EFO:0030072
     label: high-level copy number gain
   DUPDEL: DUP
+  HLDUPDEL: HLDUP
   variant_type_id: EFO:0030070
   variant_type: DUP
   VRS_type: CopyNumberChange
@@ -213,6 +213,7 @@ EFO:0030073:
     id: EFO:0030073
     label: focal genome amplification
   DUPDEL: DUP
+  HLDUPDEL: HLDUP
   variant_type_id: EFO:0030070
   variant_type: DUP
   VRS_type: CopyNumberChange
@@ -225,7 +226,6 @@ SO:0001059:
   variant_state:
     id: SO:0001059
     label: sequence_alteration
-  DUPDEL: Null
   variant_type_id: SO:0001059
   variant_type: SNV
   VRS_type: Allele
@@ -242,7 +242,6 @@ SO:0001483:
   variant_state:
     id: SO:0001483
     label: SNP
-  DUPDEL: Null
   variant_type_id: SO:0001059
   variant_type: SNV
   VRS_type: Allele
@@ -255,7 +254,6 @@ SO:0002007:
   variant_state:
     id: SO:0002007
     label: MNV
-  DUPDEL: Null
   variant_type_id: SO:0002007
   variant_type: MNV
   VRS_type: Allele
@@ -268,7 +266,6 @@ SO:0000667:
   variant_state:
     id: SO:0000667
     label: INS
-  DUPDEL: Null
   variant_type_id: SO:0000667
   variant_type: INS
   VRS_type: Allele
@@ -281,7 +278,6 @@ SO:0000159:
   variant_state:
     id: SO:0000159
     label: deletion
-  DUPDEL: Null
   variant_type_id: SO:0000159
   variant_type: DEL
   VRS_type: Allele
@@ -294,7 +290,6 @@ SO:0001413:
   variant_state:
     id: SO:0001413
     label: translocation breakpoint
-  DUPDEL: Null
   variant_type_id: SO:0001413
   variant_type: BND
   VRS_type: Null

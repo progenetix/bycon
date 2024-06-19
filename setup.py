@@ -3,7 +3,6 @@ See:
 https://packaging.python.org/guides/distributing-packages-using-setuptools/
 https://github.com/pypa/sampleproject
 """
-
 from setuptools import setup, find_packages
 import pathlib
 
@@ -12,7 +11,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="bycon",
-    version="1.7.0",
+    version="1.8.4",
     description="A Python-based environment for the Beacon v2 genomics API",
     long_description=long_description,
     long_description_content_type="text/markdown",

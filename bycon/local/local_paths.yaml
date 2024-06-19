@@ -1,0 +1,21 @@
+server_tmp_dir_loc:
+  - /
+  - Library
+  - WebServer
+  - Documents
+  - tmp
+
+server_tmp_dir_web: /tmp
+
+# optional array plotting resources 
+
+server_callsets_dir_loc:
+  - /
+  - Library
+  - WebServer
+  - Documents
+  - Sites
+  - arraymap
+  - grch38
+  
+probefile_name: probes,cn.tsv

@@ -3,29 +3,31 @@ from urllib.parse import urlparse, parse_qs, unquote
 from os import environ
 
 from args_parsing import args_update_form
-from bycon_helpers import prdbug, refactor_value_from_defined_type, set_debug_state, test_truthy
+from bycon_helpers import prdbug, prdbughead, refactor_value_from_defined_type, set_debug_state, test_truthy
 from config import *
 
 ################################################################################
 
-def parse_arguments(byc):
+def parse_arguments():
     a_defs = BYC.get("argument_definitions", {})
     for a, d in a_defs.items():
         if "default" in d:
             BYC_PARS.update({a: d["default"]})
     if "local" in ENV:
-        args_update_form(byc)
+        if "local" in d:
+            BYC_PARS.update({a: d["local"]})
+        args_update_form()
     else:
         r_m = environ.get('REQUEST_METHOD', '')
         if "POST" in r_m:
-            parse_POST(byc)
+            parse_POST()
         else:
-            parse_GET(byc)
+            parse_GET()
 
 
 ################################################################################
 
-def parse_POST(byc):
+def parse_POST():
     content_len = environ.get('CONTENT_LENGTH', '0')
     content_typ = environ.get('CONTENT_TYPE', '')
 
@@ -70,14 +72,14 @@ def parse_POST(byc):
             if p_k in pagination:
                 if re.match(r'^\d+$', str(pagination[p_k])):
                     BYC_PARS.update({p_k: pagination[p_k]})
-        byc.update({
+        BYC.update({
             "query_meta": jbod.get("meta", {})
         })
 
 
 ################################################################################
 
-def parse_GET(byc):
+def parse_GET():
     a_defs = BYC.get("argument_definitions", {})
     form_data = cgi.FieldStorage()
     # BYC.update({"DEBUG_MODE": set_debug_state(True) })
@@ -87,7 +89,7 @@ def parse_GET(byc):
         if p_d in a_defs:
             values = form_return_listvalue(form_data, p)
             v = refactor_value_from_defined_type(p, values, a_defs[p_d])
-            if v is not False:
+            if v is not None:
                 BYC_PARS.update({p_d: v})
         else:
             w_m = f'!!! Unmatched parameter {p_d}: {form_data.getvalue(p)}'
@@ -98,7 +100,7 @@ def parse_GET(byc):
 
 ################################################################################
 
-def rest_path_elements(byc):
+def rest_path_elements():
     """
     The function deparses a Beacon REST path into its components and assigns
     those to the respective variables. The assumes structure is:
@@ -112,30 +114,31 @@ def rest_path_elements(byc):
     if not environ.get('REQUEST_URI'):
         return
 
-    r_p_r = byc.get("request_path_root", "beacon")
     url_comps = urlparse(environ.get('REQUEST_URI'))
     url_p = url_comps.path
     p_items = re.split('/', url_p)
 
-    if not r_p_r in p_items:
+    if not REQUEST_PATH_ROOT in p_items:
         return
 
     p_items = list(filter(None, p_items))
-    r_i = p_items.index(r_p_r)
+    r_i = p_items.index(REQUEST_PATH_ROOT)
 
     if len(p_items) == r_i + 1:
-        byc.update({"request_entity_path_id": "info"})
+        BYC.update({"request_entity_path_id": "info"})
         return
+    # prdbughead(f'rest_path_elements: {p_items}')
 
     for p_k in ["request_entity_path_id", "request_entity_path_id_value", "response_entity_path_id"]:
         r_i += 1
         if r_i >= len(p_items):
             break
         p_v = unquote(p_items[r_i])
-        byc.update({p_k: p_v})
+        prdbug(f'... rest_path_elements: {p_k} - {p_v}')
+        BYC.update({p_k: p_v})
 
-    if (rpidv := byc.get("request_entity_path_id_value")):
-        byc.update({"request_entity_path_id_value": rpidv.split(",") })
+    if (rpidv := BYC.get("request_entity_path_id_value")):
+        BYC.update({"request_entity_path_id_value": rpidv.split(",") })
     return
 
 

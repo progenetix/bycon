@@ -5,16 +5,11 @@ from config import *
 
 ################################################################################
 
-def args_update_form(byc):
+def args_update_form():
     """
     This function adds comand line arguments to the `BYC_PARS` input
     parameter collection (in "local" context).
     """
-    # Serves as "we've been here before" marker - before the env check.
-    if byc.get("check_args", True) is False:
-        return
-    byc.update({"check_args": False})
-
     a_defs = BYC.get("argument_definitions", {})
     cmd_args = create_args_parser(a_defs)
     arg_vars = vars(cmd_args)
@@ -25,7 +20,9 @@ def args_update_form(byc):
         if not (a_d := a_defs.get(p_d)):
             continue
         values = str(v).split(',')
-        BYC_PARS.update({p_d: refactor_value_from_defined_type(p, values, a_defs[p_d])})
+        p_v = refactor_value_from_defined_type(p, values, a_defs[p_d])
+        if p_v is not None:
+            BYC_PARS.update({p_d: p_v})
 
     BYC.update({"DEBUG_MODE": set_debug_state(BYC_PARS.get("debug_mode", False)) })
 

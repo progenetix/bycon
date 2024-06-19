@@ -1,0 +1,34 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "meta": {
+        "apiVersion": "2.0",
+        "requestedSchemas": [
+            {
+                "entityType": "genomicVariation",
+                "schema:": "https://progenetix.org/services/schemas/genomicVariant/"
+            }
+        ]
+    },
+    "query": {
+        "requestParameters": {
+            "variantMultiPars": [
+                {
+                    "referenceName": "refseq:NC_000017.11",
+                    "start": [7673802],
+                    "referenceBases": "G",
+                    "alternateBases": "A"
+                },
+                {
+                    "referenceName": "refseq:NC_000017.11",
+                    "start": [6000000, 7687480],
+                    "end": [7668422, 8000000],
+                    "variantType": "DEL"
+                }
+            ]
+        },
+        "filters": []
+    },
+    "requestedGranularity": "record",
+    "pagination": {"skip": 0, "limit": 5},   
+    "debugMode": true
+}

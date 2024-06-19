@@ -21,12 +21,11 @@ def main():
     except Exception:
         print_text_response(traceback.format_exc(), 302)
 
-
 ################################################################################
 
 def datasets():
-    initialize_bycon_service(byc, "datasets")
-    r = BeaconDataResponse(byc)
+    # initialize_bycon_service()
+    r = BeaconDataResponse()
     print_json_response(r.collectionsResponse())
 
 

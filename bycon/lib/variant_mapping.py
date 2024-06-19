@@ -111,7 +111,7 @@ class ByconVariant:
             if s_a and len(v_v["ALT"]) < 1:
                 v_v.update({"ALT": s_a})
 
-        v_l = v.get("variant_length", 1)
+        v_l = v["info"].get("var_length", "___none___")
         if type(v_l) is int:
             if v_l >= 50:
                 v_v.update({"INFO": f'IMPRECISE;SVCLAIM=D;END={v.get("end")};SVLEN={v_l}'})
@@ -144,7 +144,7 @@ class ByconVariant:
 
         # TODO: since the vrs_variant has been created as a new object we now
         #       add the annotation fields back (should empties be omitted?)
-        for v_s in ("biosample_id", "callset_id", "id", "variant_internal_id"):
+        for v_s in ("biosample_id", "analysis_id", "id", "variant_internal_id"):
             if (v_v := self.byc_variant.get(v_s)):
                 vrs_v.update({v_s: v_v})
         vrs_v.update({"variant_alternative_ids": self.byc_variant.get("variant_alternative_ids", [])})
@@ -237,11 +237,10 @@ class ByconVariant:
         loc = v.get("location", {})
         s = loc.get("start")
         e = loc.get("end")
-        if not s or not e:
-            e_c += 1
+        if type(s) is not int or type(e) is not int:
+            prdbug(v)
             return
         v["info"].update({"var_length": e - s})
-
         return
 
 
@@ -320,14 +319,9 @@ class ByconVariant:
 
     def __byc_variant_normalize_positions(self):
         v = self.byc_variant
+        # TODO: rethink length calculation (e.g. indel...)
         if not v["location"].get("end"):
             v["location"].update({"end": int(v["location"].get("start")) + len(v.get("sequence", ""))})
-
-        try:
-            v.update({"variant_length": v["location"].get("end") - v["location"].get("start")})
-        except Exception as e:
-            v["errors"].append(e)
-
         self.byc_variant.update(v)
         return
 

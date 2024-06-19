@@ -37,13 +37,13 @@ definitions:
       biosample_id:
         type: string
         db_key: id
-        beacon_key: biosamples.id
+        beacon_model_path: biosamples.id
         indexed: True
         compact: True
       biosample_label:
         type: string
         db_key: label
-        beacon_key: False
+        beacon_model_path: False
         compact: True
       biosample_legacy_id:
         description: >-
@@ -53,77 +53,77 @@ definitions:
           import the stage when generating the unique `id` values.
         type: string
         db_key: info.import_legacy_id
-        beacon_key: False
+        beacon_model_path: False
         indexed: False
         compact: False
       individual_id:
         type: string
         db_key: individual_id
-        beacon_key: biosamples.individualId
+        beacon_model_path: biosamples.individualId
         indexed: True
         compact: True
       callset_ids:
         type: string
         db_key: info.callset_ids
-        beacon_key: False
+        beacon_model_path: False
         type: array
       group_id:
         type: string
         db_key: info.group.id
-        beacon_key: False
+        beacon_model_path: False
         compact: True
       group_label:
         type: string
         db_key: info.group.label
-        beacon_key: False
+        beacon_model_path: False
         compact: True
       pubmed_id:
         type: string
         db_key: references.pubmed.id
         indexed: True
-        beacon_key: False
+        beacon_model_path: False
         compact: True
       pubmed_label:
         type: string
         db_key: references.pubmed.label
-        beacon_key: False
+        beacon_model_path: False
         compact: True
       cellosaurus_id:
         type: string
         db_key: references.cellosaurus.id
         indexed: True
-        beacon_key: False
+        beacon_model_path: False
         compact: True
       cellosaurus_label:
         type: string
         db_key: references.cellosaurus.label
-        beacon_key: False
+        beacon_model_path: False
         compact: True
       cbioportal_id:
         type: string
         db_key: references.cbioportal.id
         indexed: True
-        beacon_key: False
+        beacon_model_path: False
         compact: True
       cbioportal_label:
         type: string
         db_key: references.cbioportal.label
-        beacon_key: False
+        beacon_model_path: False
         compact: True
       tcgaproject_id:
         type: string
         db_key: references.tcgaproject.id
         indexed: True
-        beacon_key: False
+        beacon_model_path: False
         compact: True
       tcgaproject_label:
         type: string
         db_key: references.tcgaproject.label
-        beacon_key: False
+        beacon_model_path: False
         compact: True
       external_references:
         type: array
-        beacon_key: biosamples.externalReferences
+        beacon_model_path: biosamples.externalReferences
         db_key: external_references
         indexed: True
         compact: True
@@ -135,7 +135,7 @@ definitions:
             compact: False
       cohort_ids:
         type: array
-        beacon_key: False
+        beacon_model_path: False
         db_key: cohort_ids
         indexed: True
         compact: True
@@ -149,21 +149,21 @@ definitions:
         type: array
         items: string
         db_key: info.legacy_ids
-        beacon_key: False
+        beacon_model_path: False
       notes:
         type: string
         db_key: notes
-        beacon_key: biosamples.notes
+        beacon_model_path: biosamples.notes
       histological_diagnosis_id:
         type: string
         db_key: histological_diagnosis.id
-        beacon_key: biosamples.histologicalDiagnosis.id
+        beacon_model_path: biosamples.histologicalDiagnosis.id
         indexed: True
         compact: True
       histological_diagnosis_label:
         type: string
         db_key: histological_diagnosis.label
-        beacon_key: biosamples.histologicalDiagnosis.label
+        beacon_model_path: biosamples.histologicalDiagnosis.label
         compact: True
       icdo_morphology_id:
         type: string
@@ -227,31 +227,31 @@ definitions:
         db_key: collection_moment
         indexed: True
         compact: True
-      sex_id:
-        type: string
-        db_key: info.sex.id
-        indexed: True
-        compact: True
-      sex_label:
-        type: string
-        db_key: info.sex.label
-        compact: True
-      followup_state_id:
-        type: string
-        db_key: followup_state.id
-        default: 'EFO:0030039'
-        indexed: True
-        compact: True
-      followup_state_label:
-        type: string
-        db_key: followup_state.label
-        default: 'no followup status'
-        compact: True
-      followup_time:
-        type: string
-        db_key: followup_time
-        indexed: True
-        compact: True
+      # sex_id:
+      #   type: string
+      #   db_key: info.sex.id
+      #   indexed: True
+      #   compact: True
+      # sex_label:
+      #   type: string
+      #   db_key: info.sex.label
+      #   compact: True
+      # followup_state_id:
+      #   type: string
+      #   db_key: followup_state.id
+      #   default: 'EFO:0030039'
+      #   indexed: True
+      #   compact: True
+      # followup_state_label:
+      #   type: string
+      #   db_key: followup_state.label
+      #   default: 'no followup status'
+      #   compact: True
+      # followup_time:
+      #   type: string
+      #   db_key: followup_time
+      #   indexed: True
+      #   compact: True
       # recurrence:
       #   db_key: info.recurrence
       #   type: string
@@ -305,7 +305,7 @@ definitions:
           import the stage when generating the unique `id` values.
         type: string
         db_key: info.import_legacy_id
-        beacon_key: False
+        beacon_model_path: False
         indexed: False
         compact: False
       legacy_ids:
@@ -428,7 +428,7 @@ definitions:
           used during import, e.g. the id used in the donor publication or study.
         type: string
         db_key: info.import_legacy_id
-        beacon_key: False
+        beacon_model_path: False
         indexed: False
         compact: False
       legacy_ids:
@@ -475,9 +475,9 @@ definitions:
         indexed: True
         compact: True
         computed: True
-      callset_id:
+      analysis_id:
         type: string
-        db_key: callset_id
+        db_key: analysis_id
         indexed: True
         compact: True
       biosample_id:

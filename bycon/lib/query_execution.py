@@ -1,3 +1,5 @@
+import random
+
 from uuid import uuid4
 from pymongo import MongoClient
 from os import environ
@@ -9,7 +11,7 @@ from query_generation import ByconQuery
 
 ################################################################################
 
-def execute_bycon_queries(ds_id, BQ, byc):
+def execute_bycon_queries(ds_id, BQ):
     """podmd
     
     Pre-configured queries are performed in an aggregation pipeline against
@@ -19,12 +21,10 @@ def execute_bycon_queries(ds_id, BQ, byc):
 
     # TODO: this should become a class w/ a method for each query type
 
-    h_o_methods = byc["handover_definitions"]["h->o_methods"]
-    r_e_id = str(byc.get("response_entity_id", "___none___"))
+    h_o_methods = BYC["handover_definitions"]["h->o_methods"]
+    r_e_id = str(BYC.get("response_entity_id", "___none___"))
 
     exe_queries = {}
-    if "dataset_results" not in byc.keys():
-        byc.update({"dataset_results": {}})
 
     data_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
     data_db = data_client[ds_id]
@@ -38,16 +38,12 @@ def execute_bycon_queries(ds_id, BQ, byc):
         if q:
             exe_queries.update({collname: q})
 
-    byc.update({"queries_at_execution": exe_queries})
-    if not byc.get("original_queries"):
-        byc.update({"original_queries": exe_queries})
-
     # collection of results
     prefetch = {}
     prevars = {
         "ds_id": ds_id,
         "data_db": data_db,
-        "original_queries": byc.get("original_queries", {}),
+        "original_queries": exe_queries,
         "pref_m": "",
         "h_o_def": {},
         "query": {}
@@ -252,7 +248,6 @@ def execute_bycon_queries(ds_id, BQ, byc):
             "h_o_def": h_o_methods.get(pref_k)
         })
         prefetch.update({pref_k: _prefetch_data(prevars)})
-        byc["dataset_results"].update({ds_id: prefetch})
         return
 
     pref_k = "analyses._id"
@@ -292,7 +287,10 @@ def execute_bycon_queries(ds_id, BQ, byc):
     ############################################################################
 
     data_client.close()
-    byc["dataset_results"].update({ds_id: prefetch})
+
+    # only doing this here for the final data after aggregation
+    for p_k_s in prefetch.keys():
+        random.shuffle(prefetch[p_k_s]["target_values"])
 
     try:
         prdbug(f'{ds_id} biosample count after queries: {prefetch["biosamples._id"]["target_count"]}')

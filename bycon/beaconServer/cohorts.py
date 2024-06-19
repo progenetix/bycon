@@ -24,9 +24,9 @@ def main():
 ################################################################################
 
 def cohorts():
-    initialize_bycon_service(byc, "cohorts")
-    r = BeaconDataResponse(byc).collectionsResponse()
-    print_json_response(r)
+    # initialize_bycon_service()
+    r = BeaconDataResponse()
+    print_json_response(r.collectionsResponse())
 
 
 ################################################################################

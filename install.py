@@ -3,7 +3,7 @@
 # version: 2023-06-22
 
 import sys, re, yaml
-from os import getlogin, path, system
+from os import getlogin, makedirs, path, system
 
 dir_path = path.dirname( path.abspath(__file__) )
 
@@ -49,7 +49,7 @@ def install_beacon_server(no_sudo):
 
     # WARNING: This assumes that the values are sensible...
     for p in ["system_user", "system_group", "bycon_install_dir"]:
-        p_v = install.get(p, None)
+        p_v = install.get(p)
         if p_v is None:
             print("¡¡¡ No `{}` value defined in {} !!!".format(p, i_f))
             exit()
@@ -60,11 +60,14 @@ def install_beacon_server(no_sudo):
 
     l_conf_source = path.join(dir_path, "local", "")
     server_source = path.join(dir_path, "bycon", "beaconServer", "")
-    l_conf_target = path.join(server_source, "local", "")
+    l_conf_target = path.join(dir_path, "bycon", "local", "")
+    l_server_target = path.join(b_i_d_p, "local", "")
     server_target = path.join(b_i_d_p, "beaconServer", "")
 
     system(f'{sudo_cmd} rsync -avh --delete {l_conf_source} {l_conf_target}')
-    print(f'==> Copied configuration files from {l_conf_source} to {l_conf_target}')
+    print(f'==> Copied local configuration files from {l_conf_source} to {l_conf_target}')
+    system(f'{sudo_cmd} rsync -avh --delete {l_conf_source} {l_server_target}')
+    print(f'==> Copied server configuration files from {l_conf_source} to {l_server_target}')
     system(f'{sudo_cmd} rsync -avh --delete {server_source} {server_target}')
     print(f'==> Copied server files from {server_source} to {server_target}')
 

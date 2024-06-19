@@ -25,9 +25,8 @@ def main():
 
 def beacon():
     """
-    The type of execution depends on the requested entity defined in the 
-    `path_entry_type_mappings` generated from `request_entity_path_id` (or aliases)
-    in `entity_defaults`.
+    The type of execution depends on the requested entity defined in the
+    `request_entity_path_id` (or aliases) in `entity_defaults`.
     The entity is determined from different potential inputs and overwritten
     by the next one in the order, if existing:
 
@@ -39,49 +38,34 @@ def beacon():
     Fallback is `/info`.
     """
     
-    p_e_m = BYC.get("path_entry_type_mappings", {})
-    e_p_m = BYC.get("entry_type_path_mappings", {})
     d_p_e = BYC.get("data_pipeline_entities", [])
-    byc.update({"request_path_root": "beacon"})
-    rest_path_elements(byc)
+    rq_id = BYC.get("request_entity_id", "info")
+    rq_p_id = BYC.get("request_entity_path_id", "info")
+    rp_id = BYC.get("response_entity_id")
 
-    e_p_id = BYC_PARS.get("request_entity_path_id", "___none___")
-    if e_p_id in p_e_m:
-        byc.update({"request_entity_path_id": e_p_id})
-    rq_p_id = byc.get("request_entity_path_id", "info")
-    update_entity_ids_from_path(byc)
-    rp_p_id = byc.get("response_entity_path_id", rq_p_id)
-    prdbug(f'beacon.py - request_entity_path_id: {rq_p_id}')
-    prdbug(f'beacon.py - response_entity_path_id: {rp_p_id}')
-
-    # e = p_e_m.get(rq_p_id)
-    e = p_e_m.get(rp_p_id)
-    f = e_p_m.get(e)
-
-    if not f:
+    if not rp_id:
         pass
-    elif e in d_p_e:
-        initialize_bycon_service(byc, f)
-        r = BeaconDataResponse(byc).resultsetResponse()
+    elif rq_id in d_p_e:
+        r = BeaconDataResponse().resultsetResponse()
         print_json_response(r)
-    elif f:
+    elif rq_p_id:
         # dynamic package/function loading; e.g. `filtering_terms` loads
         # `filtering_terms` from `filtering_terms.py`...
         try:
-            mod = import_module(f)
-            serv = getattr(mod, f)
+            mod = import_module(rq_p_id)
+            serv = getattr(mod, rq_p_id)
             serv()
             exit()
         except Exception as e:
             print('Content-Type: text')
             print('status:422')
             print()
-            print('Service {} WTF error: {}'.format(f, e))
+            print(f'Service {rq_id} WTF error: {e}')
 
             exit()
 
     BYC["ERRORS"].append("No correct service path provided. Please refer to the documentation at http://docs.progenetix.org")
-    BeaconErrorResponse(byc).response(422)
+    BeaconErrorResponse().response(422)
 
 
 ################################################################################

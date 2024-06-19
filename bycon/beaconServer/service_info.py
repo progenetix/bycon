@@ -21,7 +21,7 @@ def main():
 ################################################################################
 
 def service_info():
-    initialize_bycon_service(byc, "service_info")
+    # initialize_bycon_service()
     b_e_d = BYC.get("entity_defaults", {})
     pgx_info = b_e_d.get("info", {})
     c = pgx_info.get("content", {})

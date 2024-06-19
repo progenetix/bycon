@@ -22,8 +22,8 @@ def main():
 ################################################################################
 
 def info():
-    initialize_bycon_service(byc, "info")
-    r = BeaconInfoResponse(byc)
+    # initialize_bycon_service()
+    r = BeaconInfoResponse()
 
     b_e_d = BYC.get("entity_defaults", {})
     info = b_e_d.get("info", {})

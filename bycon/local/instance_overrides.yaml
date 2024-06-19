@@ -1,0 +1,137 @@
+################################################################################
+# general override for site installation #######################################
+################################################################################
+
+local:
+  beacon_defaults:
+    defaults:
+      default_dataset_id: progenetix
+  entity_defaults:
+    info:
+      collection: Null
+      response_schema: beaconInfoResponse
+      beacon_schema:
+        entity_type: configuration
+        schema: https://progenetix.org/services/schemas/beaconInfoResults/
+      content:
+        beacon_id: org.progenetix
+        name: Progenetix Cancer Genomics Beacon+
+        api_version: v2.1.0-beaconplus
+        version: v2.1.0-beaconplus
+        id: org.progenetix.beacon
+        environment: prod
+        description: >-
+          Beacon+ provides a forward looking implementation of the Beacon v2 API, with
+          focus on structural genome variants and metadata based on the cancer and reference
+          genome profiling data in the Progenetix oncogenomic data resource (https://progenetix.org).
+        type:
+          group: org.ga4gh
+          artifact: beacon
+          version: v2.1.0-beaconplus
+        documentation_url: http://docs.progenetix.org
+        service_url: http://progenetix.org/beacon/
+        welcome_url: https://progenetix.org/biosamples/
+        alternative_url: https://progenetix.org
+        contact_url: mailto:contact@progenetix.org
+        created_at: 2015-11-13T00:00:00
+        updated_at: 2023-02-16T12:45:00
+        organization:
+          id: org.baudisgroup.info
+          name: Theoretical Cytogenetics and Oncogenomics group at UZH and SIB
+          description: >
+            The *Theoretical Cytogenetics and Oncogenomics* group at the University of
+            Zurich (UZH) and the Swiss Institute of Bioinformatics (SIB) performs research
+            in cancer genomics and provides bioinformatics tools and cancer genome data
+            resources to the scientific community.
+          address: >-
+            Department of Molecular Life Sciences
+            University of Zurich
+            Winterthurerstrasse 190
+            CH-8057 Zurich
+            Switzerland
+          welcome_url: https://progenetix.org/biosamples/
+          contact_url: mailto:contact@progenetix.org
+          logoUrl: https://progenetix.org/img/progenetix-logo.png
+          info:
+            update_date_time: 2023-01-16T12:45:00
+        create_date_time: 2015-11-13T00:00:00
+        update_date_time: 2023-01-16T12:45:00
+
+    ############################################################################
+
+    phenopacket:
+      request_entity_path_id: phenopackets
+      response_entity_id: phenopacket
+      collection: individuals
+      response_schema: beaconResultsetsResponse
+      beacon_schema:
+        entity_type: phenopacket
+        schema: https://progenetix.org/services/schemas/phenopacket/
+      h->o_access_key: individuals._id
+
+################################################################################
+# domain specific ##############################################################
+################################################################################
+
+progenetix:
+  domains:
+    - progenetix.org
+    - www.progenetix.org
+    - progenetix.test
+  beacon_defaults:
+    defaults:
+      default_dataset_id: progenetix
+    test_domains:
+      - progenetix.test
+
+beaconplus:
+  domains:
+    - beaconplus.progenetix.org
+    - beaconplus.test
+  beacon_defaults:
+    defaults:
+      default_dataset_id: examplez
+    test_domains:
+      - beaconplus.test
+
+cancercelllines:
+  domains:
+    - cancercelllines.org
+    - www.cancercelllines.org
+    - cancercelllines.test
+  beacon_defaults:
+    defaults:
+      default_dataset_id: cellz
+    test_domains:
+      - cancercelllines.test
+  entity_defaults:
+    info:
+      content:
+        beacon_id: org.cancercelllines
+        name: Cancer Cell Line Genomics Beacon+
+        id: org.cancercelllines.beacon
+        environment: prod
+        description: >-
+          The cancercelllines.org Beacon is a specific instance of the Progenetix
+          Beacon+ environment providing information about genommic variations in
+          cancer cell lines.
+        type:
+          group: org.ga4gh
+          artifact: beacon
+          version: v2.1.0-beaconplus
+        documentation_url: http://docs.cancercelllines.org
+        service_url: http://cancercelllines.org/beacon/
+        welcome_url: https://cancercelllines.org/biosamples/
+        alternative_url: https://cancercelllines.org
+        contact_url: mailto:contact@progenetix.org
+        created_at: 2023-07-01T00:00:00
+        updated_at: 2024-02-24T13:00:00
+        organization:
+          welcome_url: https://cancercelllines.org/
+          contact_url: mailto:contact@progenetix.org
+          logoUrl: https://cancercelllines.org/img/cancercelllines-icon-400x300.png
+          info:
+            update_date_time: 2024-02-24T12:45:00
+      create_date_time: 2023-07-01T00:00:00
+      update_date_time: 2024-02-24T13:00:00
+

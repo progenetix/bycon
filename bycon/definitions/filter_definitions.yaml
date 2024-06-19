@@ -170,22 +170,45 @@ HP:
   examples:
     - HP:0012209
 
-PATOsex:
-  id: pato
+
+NCITsex:
+  id: ncit
   ft_type: ontologyTerm
-  iri_prefix: http://purl.obolibrary.org/obo/PATO_
-  description: >
-    Some PATO codes specific for genotypic sex...
-  name: "Phenotypic Qualities Ontology"
-  namespace_prefix: PATO
-  url: https://github.com/pato-ontology/pato/
-  db_key: 'sex.id'
+  iri_prefix: http://purl.obolibrary.org/obo/NCIT_
+  name: NCI Thesaurus OBO Edition
+  namespace_prefix: NCIT
+  url: https://github.com/NCI-Thesaurus/thesaurus-obo-edition
+  reference:
+    root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
+    replace:
+      - "NCIT:"
+      - ""
+  db_key: sex.id
+  description: Some NCIT codes specific for sex...
   scope: individuals
   entity: individual
-  pattern: '^PATO(:002000[012])?$'
+  pattern: '^NCIT(:C\d+?)?$'
   collationed: True
   examples:
-    - PATO:0020000
+    - NCIT:C20197
+    - NCIT:C16576
+
+# PATOsex:
+#   id: ncit
+#   ft_type: ontologyTerm
+#   iri_prefix: http://purl.obolibrary.org/obo/PATO_
+#   description: >
+#     Some PATO codes specific for genotypic sex...
+#   name: "Phenotypic Qualities Ontology"
+#   namespace_prefix: PATO
+#   url: https://github.com/pato-ontology/pato/
+#   db_key: 'sex.id'
+#   scope: individuals
+#   entity: individual
+#   pattern: '^PATO(:002000[012])?$'
+#   collationed: True
+#   examples:
+#     - PATO:0020000
 
 EFOcnvassessment:
   id: efo

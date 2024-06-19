@@ -30,16 +30,13 @@ try:
     from service_utils import *
     from variant_mapping import *
 
-    byc: object = {
-        "parsed_config_paths": []
-    }
-
-    read_service_definition_files(byc)
-    # updates `entity_defaults`, `dataset_definitions` and `local_paths`
-    update_rootpars_from_local(LOC_PATH, byc)
-    set_entity_mappings()
-    set_beacon_defaults(byc)
-    parse_arguments(byc)
+    read_service_definition_files()
+    update_rootpars_from_local()
+    rest_path_elements()
+    set_beacon_defaults()
+    parse_arguments()
+    set_entities()
+    initialize_bycon_service()
 
 except Exception:
     if not "local" in ENV:

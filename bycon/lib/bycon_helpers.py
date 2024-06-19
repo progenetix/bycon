@@ -41,10 +41,9 @@ def refactor_value_from_defined_type(parameter, values, definition):
     p_d_t = definition.get("type", "string")
     values = list(x for x in values if x is not None)
     values = list(x for x in values if x.lower() not in ["none", "null"])
-    # prdbug(f'...refactor_value_from_defined_type {parameter} ({p_d_t}): {values}')
 
     if len(values) == 0:
-        return False
+        return None
 
     if "array" in p_d_t:
         p_i_i = definition.get("items", {})
@@ -55,9 +54,11 @@ def refactor_value_from_defined_type(parameter, values, definition):
         if "number" in p_i_t:
             return list(map(float, values))
         return list(map(str, values))
-    
+
+
     if len(values) == 1:
         value = values[0]
+        prdbug(f'... parameter *{parameter}* => {value} ({p_d_t})')
         if "int" in p_d_t:
             return int(value)
         if "number" in p_d_t:
@@ -73,7 +74,7 @@ def refactor_value_from_defined_type(parameter, values, definition):
 
 ################################################################################
 
-def select_this_server(byc: dict) -> str:
+def select_this_server() -> str:
     """
     Cloudflare based encryption may lead to "http" based server addresses in the
     URI, but then the browser ... will complain if the handover URLs won't use
@@ -151,6 +152,11 @@ def hex_2_rgb( hexcolor ):
 def return_paginated_list(this, skip, limit):
     if limit < 1:
         return this
+
+    if BYC.get("PAGINATED_STATUS", False):
+        return this
+
+    BYC.update({"PAGINATED_STATUS": True})
 
     p_range = [
         skip * limit,
@@ -331,6 +337,16 @@ def decamelize_words(j_d):
         j_d = re.sub(r"\b{}\b".format(d), humps.decamelize(d), j_d)
     return j_d
 
+
+################################################################################
+
+def prdbughead(this=""):
+    BYC.update({"DEBUG_MODE": True})
+    if not "local" in ENV:
+        print('Content-Type: text/plain')
+        print('status: 302')
+        print()
+        print(this)
 
 ################################################################################
 

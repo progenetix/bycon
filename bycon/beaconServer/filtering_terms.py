@@ -24,8 +24,8 @@ def main():
 ################################################################################
 
 def filtering_terms():
-    initialize_bycon_service(byc, "filtering_terms")
-    r = BeaconDataResponse(byc)
+    # initialize_bycon_service()
+    r = BeaconDataResponse()
     print_json_response(r.filteringTermsResponse())
 
 

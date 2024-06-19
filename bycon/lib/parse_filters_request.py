@@ -5,7 +5,7 @@ from config import *
 
 ################################################################################
 
-def parse_filters(byc):
+def parse_filters():
     """
     The function checks the filter values for a match to any of the filter
     definitions. The optional `!` flag (no match) is not considered during
@@ -13,7 +13,7 @@ def parse_filters(byc):
     This filter check is complementary to the evaluation during the filter query
     generation and provides a warning if the filter pattern doesn't exist.
     """
-    f_defs = byc["filter_definitions"]
+    f_defs = BYC.get("filter_definitions", {})
     filters = BYC_PARS.get("filters", [])
     checked = [ ]
     for f in filters:
@@ -32,5 +32,5 @@ def parse_filters(byc):
 
         if f not in checked:
             checked.append( f )
-    byc.update({"filters": checked})
+    BYC.update({"BYC_FILTERS": checked})
 

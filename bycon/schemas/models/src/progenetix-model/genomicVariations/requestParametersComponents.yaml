@@ -13,7 +13,8 @@ definitions:
       - hg38
       - GRCh38.p13
   RefSeqId:
-    description: Reference sequence id for genomic reference sequence in which variant
+    description: >-
+      Reference sequence id for genomic reference sequence in which variant
       coordinates are given, e.g. "NC_000009" for human chromosome 9. Preferably the
       RefSeqId, alternatively, names, synonymous or aliases e.g. "Chr9" could be used.
     type: string
@@ -21,6 +22,7 @@ definitions:
       - NC_000009
       - Chr9
       - NC_012920.1
+      - refseq:NC_000017.11
   ReferenceBases:
     description: >-
       Reference bases for this variant (starting from `start`).

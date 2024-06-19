@@ -38,6 +38,12 @@ A plot of the called CNV segments per sample, with the samples ordered by their 
 **data_key:** callsets_variants_bundles    
 **data_type:** samples    
 
+### `geomapplot` 
+**description:**
+A leaflet based plot of geolocations.    
+**data_key:** geolocs_list    
+**data_type:** geolocs    
+
 ## Plot Parameters
 ### `plot_id` 
 **default:** `genomeplot`    
@@ -336,3 +342,80 @@ text padding of markers versus background/box
 
 ### `plot_footer_font_color` 
 **default:** `#999999`    
+
+### `cytoband_shades` 
+**type:** object    
+**default:**  
+    - `gpos100`: `{'0%': 'rgb(39,39,39)', '100%': 'rgb(0,0,0)'}`      
+    - `gpos75`: `{'0%': 'rgb(87,87,87)', '100%': 'rgb(39,39,39)'}`      
+    - `gpos50`: `{'0%': 'rgb(196,196,196)', '100%': 'rgb(111,111,111)'}`      
+    - `gpos25`: `{'0%': 'rgb(223,223,223)', '100%': 'rgb(196,196,196)'}`      
+    - `gneg`: `{'0%': 'white', '100%': 'rgb(223,223,223)'}`      
+    - `gvar`: `{'0%': 'rgb(196,196,196)', '100%': 'rgb(111,111,111)'}`      
+    - `stalk`: `{'0%': 'rgb(39,39,39)', '100%': 'rgb(0,0,0)'}`      
+    - `acen`: `{'0%': 'rgb(163,55,247)', '100%': 'rgb(138,43,226)'}`    
+
+### `tiles_source` 
+**default:** `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`    
+
+### `attribution` 
+**default:** `Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>`    
+
+### `init_latitude` 
+**default:** `30`    
+
+### `init_longitude` 
+**default:** `9`    
+
+### `zoom` 
+**default:** `1`    
+
+### `head` 
+**default:** `<meta charset="utf-8"> <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />`    
+
+### `map_w_px` 
+**default:** `800`    
+
+### `map_h_px` 
+**default:** `512`    
+
+### `marker_type` 
+**default:** `marker`    
+
+### `bubble_stroke_color` 
+**default:** `#dd6633`    
+
+### `bubble_stroke_weight` 
+**default:** `1`    
+
+### `bubble_fill_color` 
+**default:** `#cc9966`    
+
+### `bubble_opacity` 
+**default:** `0.4`    
+
+### `marker_scale` 
+**default:** `2`    
+
+### `marker_max_r` 
+**default:** `1000`    
+
+### `zoom_min` 
+**default:** `2`    
+
+### `zoom_max` 
+**default:** `14`    
+
+### `plot_variant_types` 
+**type:** object    
+**default:**  
+    - `EFO:0030065`: `{'color_key': 'plot_loh_color', 'label': 'copy-neutral loss of heterozygosity'}`      
+    - `EFO:0030067`: `{'color_key': 'plot_del_color', 'label': 'copy number loss'}`      
+    - `EFO:0030068`: `{'color_key': 'plot_del_color', 'label': 'low-level copy number loss'}`      
+    - `EFO:0020073`: `{'color_key': 'plot_homodel_color', 'label': 'high-level copy number loss'}`      
+    - `EFO:0030069`: `{'color_key': 'plot_homodel_color', 'label': 'complete genomic deletion'}`      
+    - `EFO:0030070`: `{'color_key': 'plot_dup_color', 'label': 'copy number gain'}`      
+    - `EFO:0030071`: `{'color_key': 'plot_dup_color', 'label': 'low-level copy number gain'}`      
+    - `EFO:0030072`: `{'color_key': 'plot_amp_color', 'label': 'high-level copy number gain'}`      
+    - `EFO:0030073`: `{'color_key': 'plot_amp_color', 'label': 'focal genome amplification'}`      
+    - `EFO:0001059`: `{'color_key': 'plot_snv_color', 'label': 'sequence_alteration'}`    

@@ -36,7 +36,7 @@ configuration:
 ################################################################################
 
 entryType:
-  request_entity_path_id: entryTypes
+  request_entity_path_id: entry_types
   response_entity_id: entryType
   collection: Null
   response_schema: beaconEntryTypesResponse

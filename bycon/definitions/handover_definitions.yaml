@@ -37,7 +37,6 @@ h->o_types:
       id: 'pgx:HO.biosamples'
       label: "Biosamples"
     note: "retrieve data of the biosamples matched by the query"
-    requestedSchema: biosample
     paginated_entities:
       - biosample
       - analysis
@@ -49,7 +48,6 @@ h->o_types:
       id: 'pgx:HO.biosamplestable'
       label: "Biosamples Table"
     note: "retrieve data of the biosamples matched by the query as tab-delimited table"
-    requestedSchema: biosample
     output: datatable
     paginated_entities:
       - biosample
@@ -62,7 +60,6 @@ h->o_types:
       id: 'pgx:HO.biosamplesmap'
       label: "Biosamples Map"
     note: "geographic map of the biosamples matched by the query"
-    requestedSchema: biosample
     output: map
     paginated_entities:
       - biosample
@@ -75,7 +72,6 @@ h->o_types:
       id: 'pgx:HO.phenopackets'
       label: "Phenopackets"
     note: "retrieve data of the phenopackets matched by the query"
-    requestedSchema: phenopacket
     paginated_entities:
       - biosample
       - individual
@@ -88,7 +84,6 @@ h->o_types:
       id: 'pgx:HO.individuals'
       label: "Individuals"
     note: "retrieve data of the individuals matched by the query"
-    requestedSchema: individual
     paginated_entities:
       - biosample
       - individual
@@ -101,7 +96,6 @@ h->o_types:
       id: 'pgx:HO.variants'
       label: "Found Variants (.json)"
     note: "retrieve variants matched by the query"
-    requestedSchema: genomicVariant
     paginated_entities:
       - all
     h->o_key: 'variants._id'
@@ -112,7 +106,6 @@ h->o_types:
       id: 'pgx:HO.pgxseg'
       label: "Found Variants (.pgxseg)"
     note: "retrieve variants matched by the query as .pgxseg download"
-    requestedSchema: genomicVariant
     output: pgxseg
     paginated_entities:
       - all
@@ -124,7 +117,6 @@ h->o_types:
       id: 'EDAM:3016'
       label: "VCF"
     note: "retrieve variants matched by the query as .vcf download"
-    requestedSchema: genomicVariant
     output: vcf
     paginated_entities:
       - all
@@ -136,7 +128,6 @@ h->o_types:
       id: 'pgx:HO.bedfile2ucsc'
       label: "Show Found Variants in the UCSC browser"
     note: "map variants matched by the query to the UCSC browser"
-    requestedSchema: genomicVariant
     output: ucscbrowser
     paginated_entities:
       - all
@@ -219,9 +210,9 @@ h->o_methods:
     target_collection: biosamples
     target_entity: biosample
     target_key: id
-  variants.callset_id->analyses.id:
+  variants.analysis_id->analyses.id:
     source_collection: variants
-    source_key: callset_id
+    source_key: analysis_id
     target_collection: analyses
     target_entity: analysis
     target_key: id

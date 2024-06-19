@@ -10,14 +10,14 @@ from os import environ
 ################################################################################
 ################################################################################
 
-def reshape_resultset_results(ds_id, r_s_res, byc):
-    r_s_res = remap_variants(r_s_res, byc)
-    r_s_res = remap_analyses(r_s_res, byc)
-    r_s_res = remap_biosamples(r_s_res, byc)
-    r_s_res = remap_cohorts(r_s_res, byc)
-    r_s_res = remap_individuals(r_s_res, byc)
-    r_s_res = remap_phenopackets(ds_id, r_s_res, byc)
-    r_s_res = remap_runs(r_s_res, byc)
+def reshape_resultset_results(ds_id, r_s_res):
+    r_s_res = remap_variants(r_s_res)
+    r_s_res = remap_analyses(r_s_res)
+    r_s_res = remap_biosamples(r_s_res)
+    r_s_res = remap_cohorts(r_s_res)
+    r_s_res = remap_individuals(r_s_res)
+    r_s_res = remap_phenopackets(ds_id, r_s_res)
+    r_s_res = remap_runs(r_s_res)
     r_s_res = remap_all(r_s_res)
 
     return r_s_res
@@ -25,7 +25,7 @@ def reshape_resultset_results(ds_id, r_s_res, byc):
 
 ################################################################################
 
-def remap_variants(r_s_res, byc):
+def remap_variants(r_s_res):
     """
     Since the Beacon default model works from the concept of a canonical genomic
     variation and the bycon data model uses variant instances, the different
@@ -33,11 +33,11 @@ def remap_variants(r_s_res, byc):
     with individual instances indicated through their identifiers in `caseLevelData`.
     """
 
-    if not "genomicVariant" in byc["response_entity_id"]:
+    if not "genomicVariant" in BYC["response_entity_id"]:
         return r_s_res
 
     # TODO: still used???
-    special_output = byc.get("output", "___none___").lower()
+    special_output = BYC_PARS.get("output", "___none___").lower()
 
     if "vcf" in special_output or "pgxseg" in special_output:
         return r_s_res
@@ -61,13 +61,13 @@ def remap_variants(r_s_res, byc):
                 c_v = d_v.get(c_k)
                 if c_v:
                     c_l_v.update({c_k: c_v})
-            a_id = d_v.get("callset_id")
+            a_id = d_v.get("analysis_id")
             if a_id:
                 c_l_v.update({"analysis_id": a_id})
             v["case_level_data"].append(c_l_v)
 
         # TODO: Keep legacy pars?
-        legacy_pars = ["_id", "id", "variant_internal_id", "reference_name", "type", "biosample_id", "callset_id", "individual_id",
+        legacy_pars = ["_id", "id", "variant_internal_id", "reference_name", "type", "biosample_id", "analysis_id", "individual_id",
                        "variant_type", "reference_bases", "alternate_bases", "start", "end", "required", "info"]
         for p in legacy_pars:
             v["variation"].pop(p, None)
@@ -87,8 +87,8 @@ def remap_variants(r_s_res, byc):
 
 ################################################################################
 
-def remap_analyses(r_s_res, byc):
-    if not "analysis" in byc["response_entity_id"]:
+def remap_analyses(r_s_res):
+    if not "analysis" in BYC["response_entity_id"]:
         return r_s_res
     pop_keys = ["info", "provenance", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats"]
     if "cnvstats" in BYC_PARS.get("output", "___none___").lower():
@@ -104,8 +104,8 @@ def remap_analyses(r_s_res, byc):
 
 ################################################################################
 
-def remap_cohorts(r_s_res, byc):
-    if not "cohort" in byc["response_entity_id"]:
+def remap_cohorts(r_s_res):
+    if not "cohort" in BYC["response_entity_id"]:
         return r_s_res
 
     cohorts = []
@@ -125,8 +125,8 @@ def remap_cohorts(r_s_res, byc):
 
 ################################################################################
 
-def remap_runs(r_s_res, byc):
-    if not "run" in byc["response_entity_id"]:
+def remap_runs(r_s_res):
+    if not "run" in BYC["response_entity_id"]:
         return r_s_res
 
     runs = []
@@ -146,8 +146,8 @@ def remap_runs(r_s_res, byc):
 
 ################################################################################
 
-def remap_biosamples(r_s_res, byc):
-    if not "biosample" in byc["response_entity_id"]:
+def remap_biosamples(r_s_res):
+    if not "biosample" in BYC["response_entity_id"]:
         return r_s_res
     if not r_s_res:
         return None
@@ -157,7 +157,7 @@ def remap_biosamples(r_s_res, byc):
         # TODO: REMOVE VERIFIER HACKS
         e_r = []
         for r_k, r_v in bs_r.get("references", {}).items():
-            if (r_i := __reference_object_from_ontology_term(r_k, r_v, byc)):
+            if (r_i := __reference_object_from_ontology_term(r_k, r_v)):
                 e_r.append(r_i)
 
         r_s_res[bs_i].update({
@@ -182,13 +182,13 @@ def remap_biosamples(r_s_res, byc):
 
 ################################################################################
 
-def __reference_object_from_ontology_term(filter_type, ontology_term, byc):
+def __reference_object_from_ontology_term(filter_type, ontology_term):
+    f_d_s = BYC.get("filter_definitions", {})
     if "label" in ontology_term:
         ontology_term.update({"description": ontology_term.get("label", "")})
         ontology_term.pop("label", None)
-    f_t_d = byc["filter_definitions"].get(filter_type, {})
-    r_d = f_t_d.get("reference")
-    if not r_d:
+    f_t_d = f_d_s.get(filter_type, {})
+    if not (r_d := f_t_d.get("reference")):
         return ontology_term
     r_r = r_d.get("replace", [])
     if len(r_r) == 2:
@@ -199,8 +199,8 @@ def __reference_object_from_ontology_term(filter_type, ontology_term, byc):
 
 ################################################################################
 
-def remap_individuals(r_s_res, byc):
-    if not "individual" in byc["response_entity_id"]:
+def remap_individuals(r_s_res):
+    if not "individual" in BYC["response_entity_id"]:
         return r_s_res
 
     return r_s_res
@@ -208,8 +208,8 @@ def remap_individuals(r_s_res, byc):
 
 ################################################################################
 
-def remap_phenopackets(ds_id, r_s_res, byc):
-    if not "phenopacket" in byc["response_entity_id"]:
+def remap_phenopackets(ds_id, r_s_res):
+    if not "phenopacket" in BYC["response_entity_id"]:
         return r_s_res
 
     mongo_client = MongoClient(host=DB_MONGOHOST)
@@ -217,7 +217,7 @@ def remap_phenopackets(ds_id, r_s_res, byc):
     pxf_s = []
 
     for ind_i, ind in enumerate(r_s_res):
-        pxf = phenopack_individual(ind, data_db, byc)
+        pxf = phenopack_individual(ind, data_db)
         pxf_s.append(pxf)
 
     return pxf_s
@@ -225,7 +225,7 @@ def remap_phenopackets(ds_id, r_s_res, byc):
 
 ################################################################################
 
-def phenopack_individual(ind, data_db, byc):
+def phenopack_individual(ind, data_db):
     # TODO: key removal based on the ones not part of the respective PXF schemas
     # or better on filling them in only for existing parameters
 
@@ -234,15 +234,15 @@ def phenopack_individual(ind, data_db, byc):
     bs_pop_keys = ["info", "provenance", "_id", "followup_time", "followup_state", "cohorts", "icdo_morphology",
                    "icdo_topography"]
 
-    pxf_resources = _phenopack_resources(byc)
-    server = select_this_server(byc)
+    pxf_resources = _phenopack_resources()
+    server = select_this_server()
 
     bios_s = data_db["biosamples"].find({"individual_id": ind.get("id", "___none___")})
 
     for bios in bios_s:
         e_r = []
         for r_k, r_v in bios.get("references", {}).items():
-            e_r.append(__reference_object_from_ontology_term(r_k, r_v, byc))
+            e_r.append(__reference_object_from_ontology_term(r_k, r_v))
         bios.update({
             "external_references" : e_r,
             "files": [
@@ -324,20 +324,15 @@ def individual_remap_pgx_diseases(ind):
 
 ################################################################################
 
-def _phenopack_resources(byc):
+def _phenopack_resources():
     # TODO: make this general, at least for phenopacket response, and only scan used prefixes
-
-    f_d = byc["filter_definitions"]
+    f_d_s = BYC.get("filter_definitions", {})
     # rkeys = ["NCITgrade", "NCITstage", "NCITtnm", "NCIT", "PATOsex", "EFOfus" ]
-    rkeys = ["NCIT", "PATOsex", "EFOfus", "UBERON"]
-
+    rkeys = ["NCIT", "NCITsex", "EFOfus", "UBERON"]
     pxf_rs = []
-
     for r_k in rkeys:
-        if r_k not in f_d.keys():
+        if not (d := f_d_s.get(r_k)):
             continue
-
-        d = f_d[r_k]
 
         pxf_r = {
             "id": r_k,

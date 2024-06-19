@@ -41,6 +41,7 @@ limit:
     - --limit 
   description: limit number of documents; a value of 0 sets to unlimited
   default: 200
+  local: 0
 
 requested_granularity:
   type: string
@@ -58,14 +59,19 @@ request_entity_path_id:
   cmdFlags:
     - --requestEntityPathId
   description: >-
-    data entry point, equal to the first REST path element in Beacon
+    * data entry point, equal to the first REST path element in Beacon
+    * this only is used for command-line tests instead of the REST path
+      value seen by the stack in web server mode
 
 response_entity_path_id:
   type: string
   cmdFlags:
     - --responseEntityPathId
   description: >-
-    optional data delivery entry point, for {id} paths
+    * optional data delivery entry point, for {id} paths
+    * for command line (see above), but also potentially for selecting
+      a special response entity in byconaut services (e.g. `indviduals`
+      in `/sampletable/`)
 
 requested_schema:
   type: string
@@ -79,7 +85,9 @@ include_resultset_responses:
     - --includeResultsetResponses
   description: >-
     * include resultset responses, e.g. HIT, MISS
-    * kind of a holdover from Beacon pre-v1
+    * kind of a holdover from Beacon pre-v1 but HIT & ALL might have
+      some use in networks
+  default: HIT
 
 # query / data selection
 
@@ -91,6 +99,14 @@ dataset_ids:
     - -d
     - --datasetIds
   description: dataset ids
+
+cohort_ids:
+  type: array
+  items:
+    type: string
+  cmdFlags:
+    - --cohortIds
+  description: cohort ids
 
 filters:
   type: array
@@ -111,7 +127,9 @@ filter_logic:
   type: string
   cmdFlags:
     - --filterLogic
-  description: either OR or AND (translated to the MongoDB $and etc.)
+  description: >-
+    Global for either OR or AND (translated to the MongoDB $and etc.). The Beacon
+    protocol only knows AND.
   default: AND
 
 include_descendant_terms:
@@ -131,7 +149,7 @@ assembly_id:
   db_key: assembly_id
   cmdFlags:
     - --assemblyId
-  description: assembly id
+  description: assembly id; currently not used in bycon's version
   # default: GRCh38
 
 reference_name:
@@ -200,7 +218,8 @@ variant_min_length:
   pattern: '^\d+?$'
   cmdFlags:
     - --variantMinLength
-  description: 'variantMinLength: The minimal variant length in bases for e.g. CNV queries.'
+  description: >-
+    The minimal variant length in bases e.g. for CNV queries.
 
 variant_max_length:
   type: integer
@@ -208,7 +227,8 @@ variant_max_length:
   pattern: '^\d+?$'
   cmdFlags:
     - --variantMaxLength
-  description: 'variantMaxLength: The maximum variant length in bases for e.g. CNV queries.'
+  description: >-
+    The maximum variant length in bases e.g. for CNV queries.
 
 gene_id:
   type: array
@@ -230,7 +250,8 @@ aminoacid_change:
     - G244A
   cmdFlags:
     - --aminoacidChange
-  description: 'Aminoacid alteration in 1 letter format'
+  description: >-
+    Aminoacid alteration in 1 letter format
 
 genomic_allele_short_form:
   type: string
@@ -240,7 +261,8 @@ genomic_allele_short_form:
     - NC_000017.11:g.7674232C>G
   cmdFlags:
     - --genomicAlleleShortForm
-  description: 'Genomic HGVSId descriptor'
+  description: >-
+    Genomic HGVSId descriptor
 
 # ------------------------------------------------------------------------------
 # variant parameters - non-standard
@@ -338,7 +360,7 @@ analysis_ids:
   byc_entity: analysis
   cmdFlags:
     - --analysisIds
-  description: callset / analysis ids
+  description: analysis ids
 
 individual_ids:
   type: array
@@ -592,13 +614,6 @@ geo_distance:
     - --geoDistance
   description: only for the geolocations...
 
-marker_type:
-  type: string
-  cmdFlags:
-    - --markerType
-  description: marker type, only for the geolocations...
- 
-
 ################################################################################
 # plot ... 
 ################################################################################
@@ -614,3 +629,4 @@ plot_type:
   cmdFlags:
     - --plotType
   description: plot type (histoplot, samplesplot, arrayplot - more?)
+  default:

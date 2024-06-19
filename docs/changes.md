@@ -21,17 +21,25 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2023-06-19 (v.1.8.4)
+
+* changed the values for individual.sex from PATO to EFO (see the [Progenetix data notes](https://docs.progenetix.org/changelog/#2024-06-18-switching-ontology-use-for-individualsex))
+* changed the default for `includeResultsetResponses` from `ALL` to `HIT`, in
+  line w/ the Beacon standard definition
+    - now empty resultsets won't appear in the list
+    - the Progenetix / Beaconplus fron-ends call an `ALL` value...
+
 ### 2023-06-11 (v.1.8.3)
 
 * restructuring of the whole entity / path ... interpolation - now 
   `set_entities()` and `initialize_bycon_service()` are part of `bycon`
   `__init__.py`
-* now evaluates the `includeResultsetResponses` parameters (deault: `ALL`)
-  due to a request to provide only `HIT` resonses in a network context
-  although the definition & handling is a bit ambiguous (e.g. forcing `MISS`
-  responses with matching datasets will result in a `false` response w/ 0 count...?)
+* now evaluates the `includeResultsetResponses` parameters (default: `ALL`)
+  so that e.g. only `HIT` responses can be returned in a network context
     - `__acknowledge_HIT` removes all `exists: false` resultsets
     - `__acknowledge_MISS` removes all `exists: true` resultsets
+* bug fix: removal of the accidential filtering_terms scopes
+  (service entities)
 
 
 ### 2023-06-06 (v.1.8.2)

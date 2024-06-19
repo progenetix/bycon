@@ -14,7 +14,7 @@ properties:
     type: string
   variantInternalId:
     type: string
-  callsetId:
+  analysisId:
     type: string
   biosampleId:
     type: string

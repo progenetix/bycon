@@ -20,6 +20,8 @@ properties:
         $ref: ./requestParametersComponents.yaml#/definitions/Assembly
       referenceName:
         $ref: ./requestParametersComponents.yaml#/definitions/RefSeqId
+      mateName:
+        $ref: ./requestParametersComponents.yaml#/definitions/RefSeqId
       start:
         description: >-
           Precise or fuzzy start coordinate position(s), allele locus
@@ -107,8 +109,6 @@ properties:
         type: integer
         format: int64
         minimum: 1
-      mateName:
-        $ref: ./requestParametersComponents.yaml#/definitions/RefSeqId
       geneId:
         description: >-
           * A gene identifier
