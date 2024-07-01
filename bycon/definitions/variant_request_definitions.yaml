@@ -138,7 +138,6 @@ request_types:
       * `mateName` can be the same or different to `referenceName`
       * `mateName` is the higher numbered/named chromosome
     all_of:
-      # - assembly_id
       - reference_name
       - mate_name
       - start

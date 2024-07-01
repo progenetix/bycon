@@ -75,7 +75,7 @@ def ds_id_from_accessid():
         return False
     if ds_id not in BYC["DATABASE_NAMES"]:
         return False
-    BYC.update({"BYC_DATASET_IDS":  ds_ids})
+    BYC.update({"BYC_DATASET_IDS":  [ds_id]})
     return True
 
 

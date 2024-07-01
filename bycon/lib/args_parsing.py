@@ -11,7 +11,7 @@ def args_update_form():
     parameter collection (in "local" context).
     """
     a_defs = BYC.get("argument_definitions", {})
-    cmd_args = create_args_parser(a_defs)
+    cmd_args = __create_args_parser(a_defs)
     arg_vars = vars(cmd_args)
     for p in arg_vars.keys():
         if not (v := arg_vars.get(p)):
@@ -29,7 +29,7 @@ def args_update_form():
 
 ################################################################################
 
-def create_args_parser(a_defs):
+def __create_args_parser(a_defs):
     parser = argparse.ArgumentParser()
     for a_n, a_d in a_defs.items():
         if "cmdFlags" in a_d:
@@ -37,8 +37,7 @@ def create_args_parser(a_defs):
                 "flags": a_d.get("cmdFlags"),
                 "help": a_d.get("description", "TBD"),
             }
-            default = a_d.get("default")
-            if default:
+            if (default := a_d.get("default")):
                 argDef.update({"default": default})
             parser.add_argument(*argDef.pop("flags"), **argDef)
     cmd_args = parser.parse_args()

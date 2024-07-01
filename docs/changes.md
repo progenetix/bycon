@@ -21,6 +21,16 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2023-06-24 (v.1.8.5)
+
+* bug fix: `variantMinSize` wasn't evaluated if also `variantMaxSize` was given
+* `byconaut`: change in datastructure of status maps and frequencies
+    - we have abandoned the "max value ..." concepts which weren't used anyway
+      and switched to  bin coverage and frequency values for high level changes
+      additionally to the all CNV values
+    - this allows now a simple overplotting of high level gains and losses over
+      the low level/combined CNV histograms
+
 ### 2023-06-19 (v.1.8.4)
 
 * changed the values for individual.sex from PATO to EFO (see the [Progenetix data notes](https://docs.progenetix.org/changelog/#2024-06-18-switching-ontology-use-for-individualsex))

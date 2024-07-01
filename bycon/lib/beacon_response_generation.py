@@ -667,7 +667,7 @@ class ByconResultSets:
 
     def __result_sets_save_handovers(self):
         ho_client = MongoClient(host=DB_MONGOHOST)
-        ho_coll = ho_client[HOUSEKEEPING_DB].ho_db[HOUSEKEEPING_HO_COLL]
+        ho_coll = ho_client[HOUSEKEEPING_DB][HOUSEKEEPING_HO_COLL]
         for ds_id, d_s in self.datasets_results.items():
             if not d_s:
                 continue

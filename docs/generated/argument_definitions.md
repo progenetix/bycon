@@ -71,7 +71,7 @@ requested schema, e.g. biosample
 * include resultset responses, e.g. HIT, MISS     
 * kind of a holdover from Beacon pre-v1 but HIT & ALL might have
   some use in networks    
-**default:** `ALL`    
+**default:** `HIT`    
 
 ### `dataset_ids` 
 **type:** array    

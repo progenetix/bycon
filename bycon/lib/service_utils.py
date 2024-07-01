@@ -26,6 +26,7 @@ def initialize_bycon_service():
     update_requested_schema_from_request()
     set_special_modes()
     select_dataset_ids()
+    prdbug(f'initialize_bycon_service - ds_id: {BYC["BYC_DATASET_IDS"]}')
     set_user_name()
     set_returned_granularities()    
     parse_filters()

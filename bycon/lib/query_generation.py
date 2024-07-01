@@ -543,12 +543,8 @@ class ByconQuery():
             v_p_defs["end"]["db_key"]: { "$gt": int(vp[ "start" ][0]) }
         }
 
-        p_n = "variant_min_length"
-        if p_n in vp:
-            v_q.update( { v_p_defs[p_n]["db_key"]: { "$gte" : vp[p_n] } } )
-        p_n = "variant_max_length"
-        if "variant_max_length" in vp:
-            v_q.update( { v_p_defs[p_n]["db_key"]: { "$lte" : vp[p_n] } } )
+        if (l_q := self.__request_variant_size_limits(v_pars)):
+            v_q.update(l_q)
 
         p_n = "variant_type"
         if p_n in vp:
@@ -564,6 +560,28 @@ class ByconQuery():
 
 
     #--------------------------------------------------------------------------#
+
+    def __request_variant_size_limits(self, v_pars):
+        vp = v_pars
+        v_p_defs = self.argument_definitions
+        l_k = v_p_defs["variant_max_length"]["db_key"]
+        s_q = {l_k: {}}
+
+        p_n = "variant_min_length"
+        if (minl := vp.get(p_n)):
+            { v_p_defs["variant_max_length"]["db_key"]: {}}
+            s_q[l_k].update( { "$gte" : minl } )
+        p_n = "variant_max_length"
+        if (maxl := vp.get(p_n)):
+            s_q[l_k].update( { "$lte" : maxl } )
+
+        if s_q[l_k].keys():
+            return s_q
+
+        return None
+        
+    #--------------------------------------------------------------------------#
+
 
     def __create_variantBracketRequest_query(self, v_pars):
         vp = v_pars
@@ -788,7 +806,7 @@ class ByconQuery():
             return
 
         ho_client = MongoClient(host=DB_MONGOHOST)
-        ho_coll = ho_client[HOUSEKEEPING_DB].ho_db[HOUSEKEEPING_HO_COLL]
+        ho_coll = ho_client[HOUSEKEEPING_DB][HOUSEKEEPING_HO_COLL]
         h_o = ho_coll.find_one({"id": accessid})
 
         # accessid overrides ... ?
