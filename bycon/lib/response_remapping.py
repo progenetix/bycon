@@ -57,13 +57,9 @@ def remap_variants(r_s_res):
         }
         for d_v in d_vs:
             c_l_v = {}
-            for c_k in ("id", "biosample_id", "info"):
-                c_v = d_v.get(c_k)
-                if c_v:
+            for c_k in ("id", "biosample_id", "analysis_id", "individual_id", "info"):
+                if (c_v := d_v.get(c_k)):
                     c_l_v.update({c_k: c_v})
-            a_id = d_v.get("analysis_id")
-            if a_id:
-                c_l_v.update({"analysis_id": a_id})
             v["case_level_data"].append(c_l_v)
 
         # TODO: Keep legacy pars?
@@ -130,15 +126,16 @@ def remap_runs(r_s_res):
         return r_s_res
 
     runs = []
-    for cs_i, cs_r in enumerate(r_s_res):
+    for ana in r_s_res:
         r = {
-            "id": cs_r.get("id", ""),
-            "analysis_id": cs_r.get("id", ""),
-            "biosample_id": cs_r.get("biosample_id", ""),
-            "individual_id": cs_r.get("individual_id", ""),
+            "id": ana.get("id", ""),
+            "individual_id": ana.get("individual_id", ""),
             "run_date": datetime.datetime.fromisoformat(
-                cs_r.get("updated", datetime.datetime.now().isoformat())).isoformat()
+                ana.get("updated", datetime.datetime.now().isoformat())).isoformat()
         }
+        for p in ["biosample_id", "individual_id", "platform_model"]:
+            if (v := ana.get(p)):
+                r.update({p: v})
         runs.append(r)
 
     return runs
@@ -203,7 +200,12 @@ def remap_individuals(r_s_res):
     if not "individual" in BYC["response_entity_id"]:
         return r_s_res
 
-    return r_s_res
+    ind_s = []
+    for ind_i, ind in enumerate(r_s_res):
+        individual_remap_pgx_diseases(ind)
+        ind_s.append(ind)
+
+    return ind_s
 
 
 ################################################################################
@@ -264,7 +266,6 @@ def phenopack_individual(ind, data_db):
         ind.pop(k, None)
 
     individual_remap_pgx_diseases(ind)
-
     for d_i, d in enumerate(ind["diseases"]):
         for k in ["followup_state", "followup_time"]:
             ind["diseases"][d_i].pop(k, None)

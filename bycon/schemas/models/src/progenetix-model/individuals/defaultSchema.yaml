@@ -1,11 +1,9 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/individual/v2023-01-10
+$id: https://progenetix.org/services/schemas/individual/v2024-07-08
 title: Individual
 type: object
+note: Checked 2024-07-08 against beaconv2 main
 
-required:
-  - id
-  - sex
 properties:
   id:
     type: string
@@ -15,29 +13,14 @@ properties:
       - pgxind-kftx25eh
   sex:
     $ref: ../common/commonDefinitions.yaml#/definitions/Sex
-  ethnicities:
-    $note: forward-looking in Beacon+ as an array
-    type: array
-    items:
-      $ref: ../common/commonDefinitions.yaml#/definitions/Ethnicity
+  karyotypicSex:
+    $ref: ../common/commonDefinitions.yaml#/definitions/KaryotypicSex
+  ethnicity:
+    $ref: ../common/commonDefinitions.yaml#/definitions/Ethnicity
   geographicOrigin:
     $ref: ../common/commonDefinitions.yaml#/definitions/GeographicLocation
-  indexDisease:
-    $note: special for Beacon+ instead of diseases
-    description: >-
-      This is the main (cancer) disease analyzed by the associated biosample(s).
+  diseases:
     $ref: ../common/disease.yaml
-  auxiliaryDiseases:
-    $note: special for Beacon+ instead of diseases
-    description: >-
-      These are additional diseases, e.g. germline syndromes ("Li-Fraumeni" ...).
-    type: array
-    items:
-      $ref: ../common/disease.yaml
-    examples:
-      - disease_code:
-          id: NCIT:C3476
-          label: Li-Fraumeni Syndrome
   pedigrees:
     type: array
     items:
@@ -63,63 +46,14 @@ properties:
     items:
       $ref: ../common/exposure.yaml
   info:
-    description: >-
-      Additional structured data which may not be common across different Beacon
-      instances.
-    type: object
+    $ref: ../common/commonDefinitions.yaml#/definitions/Info
 
+################################################################################
 # additional properties from Phenopackets and/or Progenetix
-  description:
-    type: string
-    examples:
-      - HapMap project contributor
-
-  karyotypicSex:
-    description: >-
-      Chromosomal sex of an individual as being used by Phenopackets. Following
-      the definition there.
-    type: string
-    enum:
-      - UNKNOWN_KARYOTYPE
-      - XX
-      - XY
-      - XO
-      - XXY
-      - XXX
-      - XXYY
-      - XXXY
-      - XXXX
-      - XYY
-      - OTHER_KARYOTYPE
-
-  dateOfBirth:
-    type: string
-    format: date
-    examples:
-      - 1967-11-11
-      - 2002-09-21
-
-  externalReferences:
-    type: array
-    items:
-      $ref: ../common/externalReference.yaml
-    examples:
-      - id: biosample:SAME122868
-        description: HapMap individual
-      - id: PMID:9950502
-      - id: geo:GSE13331
-        description: Prognostic analysis of mantle cell lymphoma genomes
-
-  vitalStatus:
-    $ref: ../common/vitalStatus.yaml
+################################################################################
 
   provenance:
     $ref: ../common/provenance.yaml
-
-  ancestries:
-    type: array
-    items:
-      $ref: ../common/ancestry.yaml
 
   updated:
     type: string
@@ -127,5 +61,8 @@ properties:
     examples:
       - "2020-09-10T17:44:10.170Z"
 
+required:
+  - id
+  - sex
 additionalProperties: true
 

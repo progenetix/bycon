@@ -297,3 +297,16 @@ SO:0001413:
   cnv_dummy_value: Null
   child_terms:
     - SO:0001413
+    - SO:0000806
+
+SO:0000806:
+  variant_state:
+    id: SO:0000806
+    label: fusion
+  variant_type_id: SO:0000806
+  variant_type: BND
+  VRS_type: Null
+  VCF_symbolic_allele: <BND>
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0000806

@@ -16,14 +16,21 @@ definitions:
       - id: NCIT:C1799
         label: unknown
   KaryotypicSex:
-    description: 'The chromosomal sex of an individual represented from a selection
+    description: >-
+      The chromosomal sex of an individual represented from a selection
       of options. The values correspond to the ordinal values in the Phenopackets
-      schema where: 0 - UNKNOWN_KARYOTYPE (Untyped or inconclusive karyotyping); 1
-      - XX (Female); 2 - XY (Male); 3 - XO (Single X chromosome only); 4 - XXY (Two
-      X and one Y chromosome); 5 - XXX (Three X chromosomes); 6 - XXYY (Two X chromosomes
-      and two Y chromosomes); 7 - XXXY (Three X chromosomes and one Y chromosome);
-      8 - XXXX (Four X chromosomes); 9 - XYY (One X and two Y chromosomes); 10 - OTHER_KARYOTYPE
-      (None of the above types)'
+      schema where:
+      0 - UNKNOWN_KARYOTYPE (Untyped or inconclusive karyotyping)
+      1 - XX (Female)
+      2 - XY (Male)
+      3 - XO (Single X chromosome only)
+      4 - XXY (Two X and one Y chromosome)
+      5 - XXX (Three X chromosomes)
+      6 - XXYY (Two X chromosomes and two Y chromosomes)
+      7 - XXXY (Three X chromosomes and one Y chromosome)
+      8 - XXXX (Four X chromosomes)
+      9 - XYY (One X and two Y chromosomes)
+      10 - OTHER_KARYOTYPE (None of the above types)
     $comments: Compares to https://github.com/phenopackets/phenopacket-schema/blob/master/docs/karyotypicsex.rst
     type: string
     enum:
@@ -47,7 +54,8 @@ definitions:
       - '1999-08-05T17:21:00+01:00'
       - '2002-09-21T02:37:00-08:00'
   Ethnicity:
-    description: Ethnic background of the individual. Recommended is the use of a
+    description: >-
+      Ethnic background of the individual. Recommended is the use of a
       value from NCIT Race (NCIT:C17049) ontology term descendants, e.g. NCIT:C126531
       (Latin American). A geographic ancestral origin category that is assigned to
       a population group based mainly on physical characteristics that are thought
@@ -69,7 +77,8 @@ definitions:
       - id: NCIT:C104495
         label: Other race
   GeographicLocation:
-    description: Country or region of origin of the individual (birthplace or residence
+    description: >-
+      Country or region of origin of the individual (birthplace or residence
       place regardless of ethnic origin). Value from GAZ Geographic Location ontology
       (GAZ:00000448), e.g. GAZ:00002459 (United States of America).
     $ref: ./ontologyTerm.yaml

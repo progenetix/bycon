@@ -1,6 +1,7 @@
 import base36, humps, json, re, time
 
 from isodate import parse_duration
+from datetime import datetime
 from os import environ
 from pymongo import MongoClient
 
@@ -284,9 +285,7 @@ def assign_nested_value(parent, dotted_key, v, parameter_definitions={}):
 ################################################################################
 
 def get_nested_value(parent, dotted_key, parameter_type="string"):
-
-    ps = dotted_key.split('.')
-
+    ps = str(dotted_key).split('.')
     v = ""
 
     if len(ps) == 1:
@@ -342,11 +341,25 @@ def decamelize_words(j_d):
 
 def prdbughead(this=""):
     BYC.update({"DEBUG_MODE": True})
+    prtexthead()
+    print(this)
+
+################################################################################
+
+def prtexthead():
     if not "local" in ENV:
         print('Content-Type: text/plain')
         print('status: 302')
         print()
-        print(this)
+
+################################################################################
+
+def prdlhead(filename="download.txt"):
+    if not "local" in ENV:
+        print('Content-Type: text/tsv')
+        print(f'Content-Disposition: attachment; filename={filename}')
+        print('status: 200')
+        print()
 
 ################################################################################
 
@@ -365,6 +378,19 @@ def prjsonnice(this):
 
 def prjsoncam(this):
     prjsonnice(humps.camelize(this))
+
+################################################################################
+
+def isotoday():
+    return str(datetime.today().strftime('%Y-%m-%d'))
+
+################################################################################
+
+def isonow():
+    return str(datetime.datetime.now().isoformat())
+
+
+
 
 
 

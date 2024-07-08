@@ -49,7 +49,7 @@ class ChroNames:
     # -------------------------------------------------------------------------#
 
     def chro(self, s_id="___none___"):
-        return self.chro_aliases.get(s_id, "___none___")
+        return self.chro_aliases.get(s_id)
 
 
     # -------------------------------------------------------------------------#

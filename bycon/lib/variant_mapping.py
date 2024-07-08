@@ -64,7 +64,9 @@ class ByconVariant:
 
     # -------------------------------------------------------------------------#
 
-    def pgxVariant(self, variant={}):
+    def pgxVariant(self, variant=None):
+        if not variant:
+            return self.pgx_variant
         self.byc_variant = variant
         self.__create_canonical_variant()
         var_keys = self.pgx_variant.keys()

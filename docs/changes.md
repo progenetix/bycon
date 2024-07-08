@@ -21,6 +21,14 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2023-07-08 (v.1.8.6)
+
+* more work on cleaning up the table formats and `byconaut` tools
+* fix of `response_entity_path_id=analyses` for `services/sampletables`
+* some Progenetix data content cleanup (e.g. TNM and stage removal from `info.tnm`)
+* cleaner standard schema definitions for export/documentation (`genomicVariations`
+  will need more work...)
+
 ### 2023-06-24 (v.1.8.5)
 
 * bug fix: `variantMinSize` wasn't evaluated if also `variantMaxSize` was given

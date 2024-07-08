@@ -48,7 +48,6 @@ h->o_types:
       id: 'pgx:HO.biosamplestable'
       label: "Biosamples Table"
     note: "retrieve data of the biosamples matched by the query as tab-delimited table"
-    output: datatable
     paginated_entities:
       - biosample
       - analysis
@@ -106,7 +105,6 @@ h->o_types:
       id: 'pgx:HO.pgxseg'
       label: "Found Variants (.pgxseg)"
     note: "retrieve variants matched by the query as .pgxseg download"
-    output: pgxseg
     paginated_entities:
       - all
     h->o_key: 'variants._id'
@@ -128,7 +126,6 @@ h->o_types:
       id: 'pgx:HO.bedfile2ucsc'
       label: "Show Found Variants in the UCSC browser"
     note: "map variants matched by the query to the UCSC browser"
-    output: ucscbrowser
     paginated_entities:
       - all
     h->o_key: 'variants._id'

@@ -9,23 +9,22 @@ from config import *
 ################################################################################
 
 def select_dataset_ids():
-    if ds_id_from_rest_path_value() is not False:
+    if ds_id_from_rest_path_value():
         return
-    if ds_id_from_accessid() is not False:
+    if ds_id_from_accessid():
         return
-    if ds_id_from_record_id() is not False:
+    if ds_id_from_record_id():
         return
-    if ds_ids_from_form() is not False:
+    if ds_ids_from_form():
         return
-    if ds_id_from_default() is not False:
+    if ds_id_from_default():
         return
 
 
 ################################################################################
 
 def ds_id_from_rest_path_value():
-    ds_p_id = rest_path_value("datasets")
-    if not ds_p_id:
+    if not (ds_p_id := rest_path_value("datasets")):
         return False
 
     ds_ids = []
@@ -44,7 +43,7 @@ def ds_id_from_rest_path_value():
 
 def ds_id_from_record_id():
     """
-    For data retrieval associated with a single record by its path id siuch as
+    For data retrieval associated with a single record by its path id such as
     `biosamples/{id}` the default Beacon model does not provide any way to provide
     the associated dataset id with the request. The assumption is that any record
     id is unique across all datasets.
@@ -62,8 +61,7 @@ def ds_id_from_accessid():
     # TODO: This is very verbose. In principle there should be an earlier
     # test of existence...
 
-    accessid = BYC_PARS.get("accessid", False)
-    if any(x is False for x in [accessid]):
+    if not (accessid := BYC_PARS.get("accessid")):
         return False
 
     ho_client = MongoClient(host=DB_MONGOHOST)
@@ -71,9 +69,7 @@ def ds_id_from_accessid():
     if not h_o:
         return False
     ds_id = h_o.get("source_db", False)
-    if ds_id is False:
-        return False
-    if ds_id not in BYC["DATABASE_NAMES"]:
+    if (ds_id := str(h_o.get("source_db"))) not in BYC["DATABASE_NAMES"]:
         return False
     BYC.update({"BYC_DATASET_IDS":  [ds_id]})
     return True
@@ -82,26 +78,21 @@ def ds_id_from_accessid():
 ################################################################################
 
 def ds_ids_from_form():
-    f_ds_ids = BYC_PARS.get("dataset_ids", False)
-    if f_ds_ids is False:
+    
+    if not (f_ds_ids := BYC_PARS.get("dataset_ids")):
         return False
-    ds_ids = []
-    for ds_id in f_ds_ids:
-        if ds_id in BYC["DATABASE_NAMES"]:
-            ds_ids.append(ds_id)
-
-    if len(ds_ids) < 1:
-        return False
-    BYC.update({"BYC_DATASET_IDS":  ds_ids})
-    return True
+    ds_ids = [ds for ds in f_ds_ids if ds in BYC.get("DATABASE_NAMES",[])]
+    if len(ds_ids) > 0:
+        BYC.update({"BYC_DATASET_IDS":  ds_ids})
+        return True
+    return False
 
 
 ################################################################################
 
 def ds_id_from_default():
-    defaults: object = BYC["beacon_defaults"].get("defaults", {})
-    ds_id = defaults.get("default_dataset_id", "___undefined___")
-    if ds_id not in BYC["DATABASE_NAMES"]:
+    defaults: object = BYC["beacon_defaults"].get("defaults", {})  
+    if (ds_id := str(defaults.get("default_dataset_id"))) not in BYC["DATABASE_NAMES"]:
         return False
     BYC.update({"BYC_DATASET_IDS": [ ds_id ]})
     return True

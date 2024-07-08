@@ -9,7 +9,7 @@ while testing `bycon` and also implement the whole Beacon code base while not
 necessarily making use of all.
 
 With a feature-rich but overly complex `bycon` package fulfilling those requirements
-ongoing work startin in Spring 2023 mainly targets:
+ongoing work starting in Spring 2023 mainly targets:
 
 * disentanglement of non-Beacon code and Progenetix specific configuration from
   the package
@@ -51,4 +51,4 @@ ongoing work startin in Spring 2023 mainly targets:
       within their directories
     - this is in principle already possible, just need disentanglement etc.
 * [ ] Data: fix publication data for consequent inclusion of `ISO3166alpha2` codes
-* [ ] fix publications.py default filters "PMID" and "genomes:>0"
+* [x] fix publications.py default filters "PMID" and "genomes:>0"
