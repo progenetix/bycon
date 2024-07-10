@@ -1,7 +1,7 @@
 import datetime, re
 from pymongo import MongoClient
 
-from bycon_helpers import prdbug, select_this_server
+from bycon_helpers import prdbug, clean_empty_fields, select_this_server
 from config import *
 from variant_mapping import ByconVariant
 from os import environ
@@ -11,74 +11,75 @@ from os import environ
 ################################################################################
 
 def reshape_resultset_results(ds_id, r_s_res):
-    r_s_res = remap_variants(r_s_res)
+    if (variants := VariantsResponse(r_s_res).beaconVariants()):
+        return variants
     r_s_res = remap_analyses(r_s_res)
     r_s_res = remap_biosamples(r_s_res)
     r_s_res = remap_cohorts(r_s_res)
     r_s_res = remap_individuals(r_s_res)
     r_s_res = remap_phenopackets(ds_id, r_s_res)
     r_s_res = remap_runs(r_s_res)
-    r_s_res = remap_all(r_s_res)
-
-    return r_s_res
+    return remap_all(r_s_res)
 
 
 ################################################################################
 
-def remap_variants(r_s_res):
-    """
-    Since the Beacon default model works from the concept of a canonical genomic
-    variation and the bycon data model uses variant instances, the different
-    instances of a "canonical" variant have to be identified and grouped together
-    with individual instances indicated through their identifiers in `caseLevelData`.
-    """
+class VariantsResponse:
 
-    if not "genomicVariant" in BYC["response_entity_id"]:
-        return r_s_res
+    def __init__(self, pgxvars=[]):
+        self.pgx_vars = pgxvars
+        self.beacon_vars = []
+        self.case_pars = ["biosample_id", "analysis_id", "individual_id", "run_id"]
 
-    # TODO: still used???
-    special_output = BYC_PARS.get("output", "___none___").lower()
 
-    if "vcf" in special_output or "pgxseg" in special_output:
-        return r_s_res
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
 
-    variant_ids = []
-    for v in r_s_res:
-        variant_ids.append(v["variant_internal_id"])
-    variant_ids = list(set(variant_ids))
+    def beaconVariants(self):
+        if not "genomicVariant" in BYC["response_entity_id"]:
+            return False
+        self.__remap_vars_4_beacon()
+        return self.beacon_vars
 
-    variants = []
 
-    for d in variant_ids:
-        d_vs = [var for var in r_s_res if var.get('variant_internal_id', "__none__") == d]
-        v = {
-            "variant_internal_id": d,
-            "variation": ByconVariant().vrsVariant(d_vs[0]), "case_level_data": []
-        }
-        for d_v in d_vs:
-            c_l_v = {}
-            for c_k in ("id", "biosample_id", "analysis_id", "individual_id", "info"):
-                if (c_v := d_v.get(c_k)):
-                    c_l_v.update({c_k: c_v})
-            v["case_level_data"].append(c_l_v)
+    # -------------------------------------------------------------------------#
+    # ---------------------------- private ------------------------------------#
+    # -------------------------------------------------------------------------#
 
-        # TODO: Keep legacy pars?
-        legacy_pars = ["_id", "id", "variant_internal_id", "reference_name", "type", "biosample_id", "analysis_id", "individual_id",
-                       "variant_type", "reference_bases", "alternate_bases", "start", "end", "required", "info"]
-        for p in legacy_pars:
-            v["variation"].pop(p, None)
+    def __remap_vars_4_beacon(self):
+        variant_ids = set()
+        for v in self.pgx_vars:
+            if (viid := v.get("variant_internal_id")):
+                variant_ids.add(viid)
+        variant_ids = list(variant_ids)
 
-        for k in ["molecular_attributes", "variant_level_data", "identifiers"]:
-            k_v = v["variation"].get(k)
-            if not k_v:
-                 v["variation"].pop(k, None)
-        for k in ["variant_alternative_ids"]:
-            if len(v["variation"].get(k, [])) < 1:
-                v["variation"].pop(k, None)
+        for d in variant_ids:
+            d_vs = [var for var in self.pgx_vars if var.get('variant_internal_id', "__none__") == d]
+            c_l_d = []
+            for d_v in d_vs:
+                c_l_v = {}
+                for c_k in self.case_pars:
+                    if (c_v := d_v.get(c_k)):
+                        c_l_v.update({c_k: c_v})
+                c_l_d.append(c_l_v)
 
-        variants.append(v)
+            v_i = ByconVariant().vrsVariant(d_vs[0])
+            for c_k in self.case_pars + ["variant_internal_id", "info"]:
+                v_i.pop(c_k, None)
+            v_i = clean_empty_fields(v_i)
 
-    return variants
+            v = {
+                "variation": v_i,
+                "case_level_data": c_l_d,
+                "variant_internal_id": d
+            }
+
+            self.beacon_vars.append(v)
+
+    # -------------------------------------------------------------------------#
+    # ----------------------- / VariantsResponse -------------------------------#
+    # -------------------------------------------------------------------------#
 
 
 ################################################################################
@@ -282,26 +283,6 @@ def phenopack_individual(ind, data_db):
     }
 
     return pxf
-
-
-################################################################################
-
-def clean_empty_fields(this_object):
-    protected = ["external_references"]
-    if not isinstance(this_object, dict):
-        return this_object
-
-    for k in list(this_object.keys()):
-        if k in protected:
-            continue
-        if isinstance(this_object[k], dict):
-            if not this_object[k]:
-                this_object.pop(k, None)
-        elif isinstance(this_object[k], list):
-            if len(this_object[k]) < 1:
-                this_object.pop(k, None)
-
-    return this_object
 
 
 ################################################################################

@@ -1,9 +1,10 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://progenetix.org/services/schemas/analysis/v2021-11-01",
+    "$id": "https://progenetix.org/services/schemas/analysis/v2024-07-08",
     "title": "analysis",
-    "description": "The `analysis` object represents a information about the data generation (e.g. experimental platform) and data analysis steps leading to (a set of) genomic variation call(s). This is in contrast to the Beacon v2 default model which has a separate `run` schema.",
+    "description": "The `analysis` object represents a information about the data analysis steps leading to (a set of) genomic variation call(s).",
     "type": "object",
+    "note": "On 2024-07-08 aligned with current Beacon v2 main",
     "properties": {
         "id": {
             "type": "string",
@@ -23,50 +24,48 @@
                 "pgxbs-kftva59y"
             ]
         },
-        "description": {
+        "runId": {
+            "description": "Run identifier (external accession or internal ID). NOTE: Not used in bycon",
             "type": "string",
             "examples": [
-                "CNV analysis from SNP6 array"
+                "SRR10903401"
             ]
         },
-        "platformModel": {
-            "description": "Ontology value for experimental platform or methodology used. For sequencing platforms the use of \"OBI:0400103 - DNA sequencer\" is suggested.",
-            "$ref": "../common/ontologyTerm.json",
+        "analysisDate": {
+            "description": "Date at which analysis was performed.",
+            "type": "string",
+            "format": "date",
             "examples": [
-                {
-                    "id": "geo:GPL3381",
-                    "label": "Stanford Microarray Facility cDNA array [SHDV]"
-                },
-                {
-                    "id": "OBI:0002750",
-                    "label": "Oxford Nanopore MinION"
-                },
-                {
-                    "id": "EFO:0010938",
-                    "label": "large-insert clone DNA microarray"
-                }
+                "2021-10-17"
             ]
         },
-        "experimentAccession": {
-            "description": "Identifier for primary experimental data. Provenance: progenetix.org",
-            "$ref": "../common/ontologyTerm.json",
+        "pipelineName": {
+            "description": "Analysis pipeline and version if a standardized pipeline was used",
+            "type": "string",
             "examples": [
-                {
-                    "id": "geo:GSM93480"
-                }
+                "progenetix-labelseg-v1.2"
             ]
         },
-        "seriesAccession": {
-            "description": "Identifier for primary experimental series. Provenance: progenetix.org",
-            "$ref": "../common/ontologyTerm.json",
+        "pipelineRef": {
+            "description": "Link to Analysis pipeline resource",
+            "type": "string",
             "examples": [
-                {
-                    "id": "geo:GSE4079"
-                }
+                "https://github.com/baudisgroup/LabelSeg"
             ]
         },
-        "provenance": {
-            "$ref": "../common/provenance.json"
+        "aligner": {
+            "description": "Reference to mapping/alignment software NOTE: Not used in bycon",
+            "type": "string",
+            "examples": [
+                "bwa-0.7.8"
+            ]
+        },
+        "variantCaller": {
+            "description": "Reference to variant calling software / pipeline NOTE: Not used in bycon",
+            "type": "string",
+            "examples": [
+                "GATK4.0"
+            ]
         },
         "info": {
             "type": "object"
@@ -81,7 +80,8 @@
     },
     "required": [
         "id",
-        "biosampleId"
+        "biosampleId",
+        "analysisDate"
     ],
     "additionalProperties": true
 }

@@ -1,15 +1,15 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://progenetix.org/services/schemas/run/v2024-07-08",
     "title": "Experimental run",
-    "$comment": "version: ga4gh-beacon-biosample-v2.0.0",
-    "description": "Schema for the experimental run (e.g. sequencing run, array processing...) leading to the raw data for the (computational) analysis.",
+    "description": "Schema for the experimental run (e.g. sequencing run, array processing...) leading to the raw data for the (computational) analysis. NOTE: In the bycon environment run parameters are stored in the analysis documents and rewritten into this schema at export time.",
     "type": "object",
     "properties": {
         "id": {
-            "description": "Run ID.",
+            "description": "Run ID. NOTE: In bycon use of the analysis ID.",
             "type": "string",
             "examples": [
-                "SRR10903401"
+                "pgxcs-kftvldsu"
             ]
         },
         "biosampleId": {
@@ -85,8 +85,8 @@
             "$ref": "../common/ontologyTerm.json",
             "examples": [
                 {
-                    "id": "OBI:0002048",
-                    "label": "Illumina HiSeq 3000"
+                    "id": "geo:GPL3381",
+                    "label": "Stanford Microarray Facility cDNA array [SHDV]"
                 },
                 {
                     "id": "OBI:0002750",

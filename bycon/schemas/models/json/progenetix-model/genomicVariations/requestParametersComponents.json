@@ -17,7 +17,8 @@
             "example": [
                 "NC_000009",
                 "Chr9",
-                "NC_012920.1"
+                "NC_012920.1",
+                "refseq:NC_000017.11"
             ]
         },
         "ReferenceBases": {

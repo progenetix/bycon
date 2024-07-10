@@ -46,6 +46,7 @@ class BeaconResponseMeta:
         r_m = self.response_meta
         if BYC["TEST_MODE"] is True:
             r_m.update({"test_mode": BYC["TEST_MODE"]})
+        r_m.update({"returned_granularity": BYC["returned_granularity"]})
 
         info = BYC["entity_defaults"]["info"].get("content", {"api_version": "___none___"})
         for p in ["api_version", "beacon_id"]:

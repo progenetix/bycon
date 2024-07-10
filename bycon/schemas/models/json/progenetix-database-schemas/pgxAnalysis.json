@@ -22,15 +22,9 @@
                 "pgxbs-kftva59y"
             ]
         },
-        "description": {
-            "type": "string",
-            "examples": [
-                "SNP6 array"
-            ]
-        },
         "analysisOperation": {
             "description": "Basic type of (genomic) analysis from the EDAM ontology. In Progenetix and related resources this is used to disamiguate between sequence analyses (SNV etc. calling) and CNV profiling experiments.",
-            "$ref": "../common/ontologyTerm.json",
+            "$ref": "../progenetix-model/common/ontologyTerm.json",
             "examples": [
                 {
                     "id": "EDAM:operation_3961",
@@ -39,12 +33,19 @@
                 {
                     "id": "EDAM:operation_3227",
                     "label": "Variant Calling"
+                },
+                {
+                    "id": "EDAM:operation:3228",
+                    "label": "Structural variation detection"
                 }
             ]
         },
+        "analysisInfo": {
+            "$ref": "#/definitions/AnalysisInfo"
+        },
         "platformModel": {
-            "description": "Ontology value for experimental platform or methodology used. For sequencing platforms the use of \"OBI:0400103 - DNA sequencer\" is suggested.",
-            "$ref": "../common/ontologyTerm.json",
+            "description": "Ontology value for experimental platform or methodology used.",
+            "$ref": "../progenetix-model/common/ontologyTerm.json",
             "examples": [
                 {
                     "id": "geo:GPL3381",
@@ -62,40 +63,22 @@
         },
         "pipelineInfo": {
             "description": "Public or local pipeline identifier with version, as well as link and notes.",
-            "$ref": "../common/externalReference.json",
+            "$ref": "../progenetix-model/common/externalReference.json",
             "examples": [
                 {
                     "id": "Pipeline-panel-0001-v1",
-                    "reference\"": "https://doi.org/10.48511/workflowhub.workflow.111.1",
+                    "reference": "https://doi.org/10.48511/workflowhub.workflow.111.1",
                     "note": "Higly customized workflow. Please contact us at dev/null."
                 },
                 {
                     "id": "aroma.affymetrix",
                     "reference": "http://www.aroma-project.org",
-                    "notes\"": "The aroma.affymetrix package is an R package for analyzing small to extremely large Affymetrix data sets."
-                }
-            ]
-        },
-        "experimentAccession": {
-            "description": "Identifier for primary experimental data.",
-            "$ref": "../common/ontologyTerm.json",
-            "examples": [
-                {
-                    "id": "geo:GSM93480"
-                }
-            ]
-        },
-        "seriesAccession": {
-            "description": "Identifier for primary experimental series.",
-            "$ref": "../common/ontologyTerm.json",
-            "examples": [
-                {
-                    "id": "geo:GSE4079"
+                    "note": "The aroma.affymetrix package is an R package for analyzing small to extremely large Affymetrix data sets."
                 }
             ]
         },
         "provenance": {
-            "$ref": "../common/provenance.json"
+            "$ref": "../progenetix-model/common/provenance.json"
         },
         "cnvStatusmaps": {
             "$ref": "#/definitions/Statusmaps"
@@ -118,7 +101,34 @@
         }
     },
     "definitions": {
+        "AnalysisInfo": {
+            "description": "Information about the source series and experiment. NOTE: A `bycon` special.",
+            "type": "object",
+            "properties": {
+                "seriesId": {
+                    "description": "Identifier for the experimental series.",
+                    "examples": [
+                        "geo:GSM288124"
+                    ]
+                },
+                "experimentId": {
+                    "description": "Identifier for the experiment.",
+                    "examples": [
+                        "geo:GSM288124"
+                    ]
+                },
+                "experimentTitle": {
+                    "description": "The free text from the source, e.g. GEO \"!Sample_title\" value. Used e.g. for identification of related sample when reviewing a given series.",
+                    "examples": [
+                        "Glioma cell line LN229_Hahn",
+                        "004 RCC needle (SNP)",
+                        "0337c_hd"
+                    ]
+                }
+            }
+        },
         "Statusmaps": {
+            "type": "object",
             "properties": {
                 "interval_count": {
                     "description": "number of genomic bins",
@@ -141,33 +151,20 @@
                     "type": "array",
                     "items": "number"
                 },
-                "max": {
-                    "description": "Array of the maximum values (usually log2) observed in the called bins",
+                "hldup": {
+                    "description": "Array of fractional values for the  high level gain coverage...",
                     "type": "array",
                     "items": "number"
                 },
-                "min": {
-                    "description": "Array of the minimum values (usually log2) observed in the called bins",
+                "hldel": {
+                    "description": "Array of fractional values for the  high level loss coverage...",
                     "type": "array",
                     "items": "number"
                 }
             }
         },
-        "Chrofractions": {
-            "properties": {
-                "1": {
-                    "$ref": "#/definitions/Cnvstatistics"
-                },
-                "1p": {
-                    "$ref": "#/definitions/Cnvstatistics"
-                },
-                "1q": {
-                    "$ref": "#/definitions/Cnvstatistics"
-                },
-                "additionalProperties": true
-            }
-        },
         "Cnvstatistics": {
+            "type": "object",
             "properties": {
                 "cnvcoverage": {
                     "description": "sum of genome bases called as CNV",
@@ -199,6 +196,229 @@
                     "min": 0,
                     "max": 1
                 }
+            }
+        },
+        "Chrofractions": {
+            "description": "Chromosome and arm CNV statistics.",
+            "type": "object",
+            "properties": {
+                "1": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "1p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "1q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "2": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "2p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "2q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "3": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "3p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "3q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "4": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "4p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "4q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "5": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "5p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "5q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "6": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "6p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "6q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "7": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "7p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "7q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "8": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "8p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "8q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "9": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "9p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "9q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "10": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "10p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "10q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "11": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "11p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "11q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "12": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "12p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "12q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "13": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "13p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "13q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "14": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "14p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "14q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "15": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "15p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "15q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "16": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "16p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "16q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "17": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "17p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "17q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "18": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "18p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "18q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "19": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "19p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "19q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "20": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "20p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "20q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "21": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "21p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "21q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "22": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "22p": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "22q": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "X": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "Xp": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "Xq": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "Y": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "Yp": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "Yq": {
+                    "$ref": "#/definitions/Cnvstatistics"
+                },
+                "additionalProperties": true
             }
         }
     },

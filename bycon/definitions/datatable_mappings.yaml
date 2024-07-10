@@ -365,7 +365,9 @@ definitions:
       data_use_conditions_label:
         type: string
         db_key: data_use_conditions.label
-      # same as in biosample but different field
+
+      # same as in biosample but different fields; also, compared to Beacon/PXF
+      # we use separate objects for "index_disease" (cancer...) and others ("aux...")
       histological_diagnosis_id:
         type: string
         db_key: index_disease.disease_code.id
@@ -402,17 +404,8 @@ definitions:
       auxiliary_disease_notes:
         type: string
         db_key: auxiliary_disease.notes
-      cell_line_donation_id:
-        type: string
-        db_key: info.cell_line_donation.id
-        compact: True
-      cell_line_donation_label:
-        type: string
-        db_key: info.cell_line_donation.label
-        compact: True
 
       # bycon specials
-
       individual_legacy_id:
         description: >-
           The legacy identifier for the individual, which is an identifier
@@ -467,8 +460,6 @@ definitions:
         type: string
         db_key: analysis_info.experiment_title
         beacon_model_path: False
-        indexed: True
-        compact: False
         examples:
           - MDT-MB-100_Nsp
           - NT088_N
@@ -481,8 +472,13 @@ definitions:
         db_key: platform_model.label
       data_provenance:
         db_key: info.data_provenance
-      calling_pipeline:
-        db_key: info.calling_pipeline
+      pipeline_info_id:
+        db_key: pipeline_info.id
+        indexed: True
+      pipeline_info_reference:
+        db_key: pipeline_info.reference
+      pipeline_info_note:
+        db_key: pipeline_info.note
       library_source_id:
         db_key: library_source.id
         beacon_model_path: runs.librarySource.id
@@ -491,6 +487,25 @@ definitions:
         db_key: library_source.label
         beacon_model_path: runs.librarySource.label
         default: "genomic source"
+
+      # bycon specials
+      geoprov_city:
+        type: string
+        db_key: provenance.geo_location.properties.city
+        indexed: True
+      geoprov_country:
+        type: string
+        db_key: provenance.geo_location.properties.country
+        indexed: True
+      geoprov_iso_alpha3:
+        type: string
+        db_key: provenance.geo_location.properties.ISO3166alpha3
+        indexed: True
+      geoprov_long_lat:
+        type: array
+        items: number
+        db_key: provenance.geo_location.geometry.coordinates
+
 
 #------------------------------------------------------------------------------#
 
@@ -546,7 +561,7 @@ definitions:
       variant_state_id:
         type: string
         db_key: variant_state.id
-        indexed: True      # might not beneeded if first in a compound index
+        indexed: True      # might not be needed if first in a compound index
         compact: True
       variant_state_label:
         type: string
@@ -583,8 +598,11 @@ definitions:
         computed: True
       variant_fusion_id:
         type: string
-        db_key: info.fusion_id
+        db_key: fusion_id
         indexed: true
+      updated:
+        indexed: True
+        computed: True
 
       # special pgxseg columns
       log2:

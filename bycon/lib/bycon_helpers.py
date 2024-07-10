@@ -390,7 +390,25 @@ def isonow():
     return str(datetime.datetime.now().isoformat())
 
 
+################################################################################
 
+def clean_empty_fields(this_object, protected=[]):
+    if not isinstance(this_object, dict):
+        return this_object
+    for k in list(this_object.keys()):
+        if k in protected:
+            continue
+        if not this_object.get(k):
+            this_object.pop(k, None)
+        # prdbug(f'cleaning? {k} - {this_object.get(k)}')
+        elif isinstance(this_object[k], dict):
+            if not this_object.get(k):
+                this_object.pop(k, None)
+        elif isinstance(this_object[k], list):
+            if len(this_object[k]) < 1:
+                this_object.pop(k, None)
+
+    return this_object
 
 
 

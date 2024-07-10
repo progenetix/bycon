@@ -1,12 +1,9 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://progenetix.org/services/schemas/individual/v2023-01-10",
+    "$id": "https://progenetix.org/services/schemas/individual/v2024-07-08",
     "title": "Individual",
     "type": "object",
-    "required": [
-        "id",
-        "sex"
-    ],
+    "note": "Checked 2024-07-08 against beaconv2 main",
     "properties": {
         "id": {
             "type": "string",
@@ -18,36 +15,17 @@
         "sex": {
             "$ref": "../common/commonDefinitions.json#/definitions/Sex"
         },
-        "ethnicities": {
-            "$note": "forward-looking in Beacon+ as an array",
-            "type": "array",
-            "items": {
-                "$ref": "../common/commonDefinitions.json#/definitions/Ethnicity"
-            }
+        "karyotypicSex": {
+            "$ref": "../common/commonDefinitions.json#/definitions/KaryotypicSex"
+        },
+        "ethnicity": {
+            "$ref": "../common/commonDefinitions.json#/definitions/Ethnicity"
         },
         "geographicOrigin": {
             "$ref": "../common/commonDefinitions.json#/definitions/GeographicLocation"
         },
-        "indexDisease": {
-            "$note": "special for Beacon+ instead of diseases",
-            "description": "This is the main (cancer) disease analyzed by the associated biosample(s).",
+        "diseases": {
             "$ref": "../common/disease.json"
-        },
-        "auxiliaryDiseases": {
-            "$note": "special for Beacon+ instead of diseases",
-            "description": "These are additional diseases, e.g. germline syndromes (\"Li-Fraumeni\" ...).",
-            "type": "array",
-            "items": {
-                "$ref": "../common/disease.json"
-            },
-            "examples": [
-                {
-                    "disease_code": {
-                        "id": "NCIT:C3476",
-                        "label": "Li-Fraumeni Syndrome"
-                    }
-                }
-            ]
         },
         "pedigrees": {
             "type": "array",
@@ -86,70 +64,10 @@
             }
         },
         "info": {
-            "description": "Additional structured data which may not be common across different Beacon instances.",
-            "type": "object"
-        },
-        "description": {
-            "type": "string",
-            "examples": [
-                "HapMap project contributor"
-            ]
-        },
-        "karyotypicSex": {
-            "description": "Chromosomal sex of an individual as being used by Phenopackets. Following the definition there.",
-            "type": "string",
-            "enum": [
-                "UNKNOWN_KARYOTYPE",
-                "XX",
-                "XY",
-                "XO",
-                "XXY",
-                "XXX",
-                "XXYY",
-                "XXXY",
-                "XXXX",
-                "XYY",
-                "OTHER_KARYOTYPE"
-            ]
-        },
-        "dateOfBirth": {
-            "type": "string",
-            "format": "date",
-            "examples": [
-                "1967-11-11",
-                "2002-09-21"
-            ]
-        },
-        "externalReferences": {
-            "type": "array",
-            "items": {
-                "$ref": "../common/externalReference.json"
-            },
-            "examples": [
-                {
-                    "id": "biosample:SAME122868",
-                    "description": "HapMap individual"
-                },
-                {
-                    "id": "PMID:9950502"
-                },
-                {
-                    "id": "geo:GSE13331",
-                    "description": "Prognostic analysis of mantle cell lymphoma genomes"
-                }
-            ]
-        },
-        "vitalStatus": {
-            "$ref": "../common/vitalStatus.json"
+            "$ref": "../common/commonDefinitions.json#/definitions/Info"
         },
         "provenance": {
             "$ref": "../common/provenance.json"
-        },
-        "ancestries": {
-            "type": "array",
-            "items": {
-                "$ref": "../common/ancestry.json"
-            }
         },
         "updated": {
             "type": "string",
@@ -159,5 +77,9 @@
             ]
         }
     },
+    "required": [
+        "id",
+        "sex"
+    ],
     "additionalProperties": true
 }

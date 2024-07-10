@@ -25,8 +25,8 @@ properties:
   variantState:
     description: >-
       The parameter is used to define the type of variant, with current
-      use cases either being delineated as `SO:0001059: sequence_alteration`
-      or as one of the children of `EFO:0030063 genomic copy number assessment`
+      use cases either being delineated as child of `SO:0001059: sequence_alteration`
+      or as a child of `EFO:0030063 genomic copy number assessment`
     $ref: "../progenetix-model/common/ontologyTerm.yaml"
     examples:
       - id: SO:0001059
@@ -39,6 +39,11 @@ properties:
   referenceSequence:
     type: string
     pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'
+  fusionId:
+    description: >-
+      Experimental id to indicate variants which are part of the same 
+      fusion event.
+    type: string
   info:
     type: object
   updated:

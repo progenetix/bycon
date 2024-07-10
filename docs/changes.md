@@ -21,6 +21,15 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2023-07-10 (v.1.8.7)
+
+* fixed wrong `meta.returned_granularity`
+* changed the [`map` schema](https://progenetix.org/beacon/map/) in line with todays's discussions an
+  [pull request #134](https://github.com/ga4gh-beacon/beacon-v2/pull/134)
+* moved the post-processing of exported variants list to a new `VariantsResponse`
+  class and adjusted some of the optional parameters by editing the `ByconVariant().vrsVariant()`
+  class/method
+
 ### 2023-07-08 (v.1.8.6)
 
 * more work on cleaning up the table formats and `byconaut` tools
