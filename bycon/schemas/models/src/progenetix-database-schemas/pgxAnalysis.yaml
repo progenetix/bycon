@@ -15,19 +15,6 @@ properties:
     type: string
     examples:
       - pgxbs-kftva59y
-  analysisOperation:
-    description: >-
-      Basic type of (genomic) analysis from the EDAM ontology. In Progenetix and
-      related resources this is used to disamiguate between sequence analyses
-      (SNV etc. calling) and CNV profiling experiments.
-    $ref: "../progenetix-model/common/ontologyTerm.yaml"
-    examples:
-      - id: EDAM:operation_3961
-        label: "Copy number variation detection"
-      - id: EDAM:operation_3227
-        label: "Variant Calling"
-      - id: EDAM:operation:3228
-        label: "Structural variation detection"
   analysisInfo:
     $ref: "#/definitions/AnalysisInfo"
   platformModel:
@@ -62,6 +49,10 @@ properties:
     $ref: "#/definitions/Cnvstatistics"
   info:
     type: object
+  analysisDate:
+    type: string
+    format: date
+    example: 2024-08-21
   updated:
     type: string
     format: date-time
@@ -75,6 +66,19 @@ definitions:
       NOTE: A `bycon` special.
     type: object
     properties:
+      operation:
+        description: >-
+          Basic type of (genomic) analysis from the EDAM ontology. In Progenetix and
+          related resources this is used to disamiguate between sequence analyses
+          (SNV etc. calling) and CNV profiling experiments.
+        $ref: "../progenetix-model/common/ontologyTerm.yaml"
+        examples:
+          - id: EDAM:operation_3961
+            label: "Copy number variation detection"
+          - id: EDAM:operation_3227
+            label: "Variant Calling"
+          - id: EDAM:operation:3228
+            label: "Structural variation detection"
       seriesId:
         description: Identifier for the experimental series.
         examples:

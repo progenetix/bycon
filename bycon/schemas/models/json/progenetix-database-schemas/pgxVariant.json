@@ -29,6 +29,12 @@
         "location": {
             "$ref": "#/definitions/Location"
         },
+        "adjoinedSequences": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Location"
+            }
+        },
         "variantState": {
             "description": "The parameter is used to define the type of variant, with current use cases either being delineated as child of `SO:0001059: sequence_alteration` or as a child of `EFO:0030063 genomic copy number assessment`",
             "$ref": "../progenetix-model/common/ontologyTerm.json",
@@ -70,6 +76,9 @@
         "Location": {
             "type": "object",
             "properties": {
+                "type": {
+                    "type": "string"
+                },
                 "sequenceId": {
                     "type": "string"
                 },

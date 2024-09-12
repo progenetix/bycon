@@ -21,6 +21,42 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2023-08-13 (v.1.9.1)
+
+* modifications to the VRS Adjacency based format for fusions
+    - Example [progenetix.org/beacon/biosamples/pgxbs-kftvgifa/g_variants](https://progenetix.org/beacon/biosamples/pgxbs-kftvgifa/g_variants?includeHandovers=false)
+* modifications to the `ISCNdefuser` script in `byconaut` for testing fusions
+
+### 2023-08-07 (v.1.9.0)
+
+* adding the new `Adjunction ` variant format based on VRS v2.0pre
+    - query method `variantFusionRequest` (using `mate_...` parameters etc.)
+* update of the `byconaut` variantsImporter etc.
+* general refactoring of datatable import for fields containing objects
+    - now allows list of ordered parameters for the concatenated values, as well
+      as type definitions
+    - for details please look at `datatable_mappings.yaml`
+* rewrite of the `RefactoredValues` class in `bycon_helpers`
+
+### 2023-07-30 (v.1.8.9)
+
+* rewrite of query stack as `ByconDatasetResults` class
+    - including fix of `analyses` reporting: Now no aggregation towards biosamples
+      anymore
+    - no "non-aggregate" retrieval methods yet; might be added later
+* change of variant id query; now not in separate query type
+* multi-variant query responses are now aggregated towards response entity (e.g.
+  all variants have to occurr in same individual  or - usually - biosample)
+* TODO: check multi-variant queries for multi-analyses responses ...
+
+### 2023-07-17 (v.1.8.8)
+
+* We removed of the server URL rewrites to services for e.g. `output=table`
+pragmas. One has to use the specific endpoints (that have existed since Ocober 2023)
+and entities, e.g.:
+    - old: `https://progenetix.org/beacon/individuals/?filters=pgx:cohort-oneKgenomes&datasetIds=progenetix&output=table`
+    - now: `https://progenetix.org/services/sampletable/?datasetIds=progenetix&filters=pgx:cohort-oneKgenomes&response_entity_path_id=individuals`
+
 ### 2023-07-10 (v.1.8.7)
 
 * fixed wrong `meta.returned_granularity`
@@ -537,7 +573,7 @@ definitions and "local" ones. Partcullarly:
 
 * services: new frequency plot type `histoheatplot`:
     - also some new related parameters, e.g. `plotHeatIntensity`
-    - [/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C,!NCIT:C3247,!NCIT:C3510&filterPrecision=start&withSamples=500&collationTypes=NCIT&output=histoheatplot&plotAreaHeight=20&plotRegionGapWidth=&plotChros=3,17&plotHeatIntensity=1.5&plotGeneSymbols=TP53,BCL6&plotDendrogramStroke=2](http://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C,!NCIT:C3247,!NCIT:C3510&filterPrecision=start&withSamples=500&collationTypes=NCIT&output=histoheatplot&plotAreaHeight=20&plotRegionGapWidth=&plotChros=3,17&plotHeatIntensity=1.5&plotGeneSymbols=TP53,BCL6&plotDendrogramStroke=2)
+    - [/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C,!NCIT:C3247,!NCIT:C3510&filterPrecision=start&collationTypes=NCIT&output=histoheatplot&plotAreaHeight=20&plotRegionGapWidth=&plotChros=3,17&plotHeatIntensity=1.5&plotGeneSymbols=TP53,BCL6&plotDendrogramStroke=2](http://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C,!NCIT:C3247,!NCIT:C3510&filterPrecision=start&collationTypes=NCIT&output=histoheatplot&plotAreaHeight=20&plotRegionGapWidth=&plotChros=3,17&plotHeatIntensity=1.5&plotGeneSymbols=TP53,BCL6&plotDendrogramStroke=2)
 * `intervalFrequencies` now supports start-anchored greedy term matches as well
   as exclusion of individual terms through `!` prefix (as for normal filter searches)
 

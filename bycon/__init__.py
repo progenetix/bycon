@@ -31,7 +31,7 @@ try:
     from variant_mapping import *
 
     read_service_definition_files()
-    update_rootpars_from_local()
+    update_rootpars_from_local_or_HOST()
     rest_path_elements()
     set_beacon_defaults()
     parse_arguments()

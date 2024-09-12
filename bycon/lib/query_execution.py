@@ -6,335 +6,196 @@ from os import environ
 
 from config import *
 from bycon_helpers import prdbug, prjsonnice, test_truthy
-from query_generation import ByconQuery
 
 
 ################################################################################
 
-def execute_bycon_queries(ds_id, BQ):
-    """podmd
-    
-    Pre-configured queries are performed in an aggregation pipeline against
-    the standard "Progenetix"-type MongoDB collections.
+class ByconDatasetResults():
+    def __init__(self, ds_id, BQ):
+        self.dataset_results = {}
+        self.dataset_id = ds_id
+        self.res_obj_defs = BYC["handover_definitions"]["h->o_methods"]
+        self.res_ent_id = r_e_id = str(BYC.get("response_entity_id", "___none___"))
+        self.data_db = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))[ds_id]
+
+        self.__generate_queries(BQ)
         
-    podmd"""
 
-    # TODO: this should become a class w/ a method for each query type
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
 
-    h_o_methods = BYC["handover_definitions"]["h->o_methods"]
-    r_e_id = str(BYC.get("response_entity_id", "___none___"))
+    def retrieveResults(self):
+        self.__run_stacked_queries()
+        return self.dataset_results
 
-    exe_queries = {}
 
-    data_client = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))
-    data_db = data_client[ds_id]
-    data_collnames = data_db.list_collection_names()
+    # -------------------------------------------------------------------------#
+    # ----------------------------- private ------------------------------------#
+    # -------------------------------------------------------------------------#
 
-    q_e_s = BQ.get("entities", {})
-    v_i_q = BQ.get("variant_id_query")
-    for q_e, q_o in q_e_s.items():
-        collname = q_o.get("collection", "___none___")
-        q = q_o.get("query")
-        if q:
-            exe_queries.update({collname: q})
+    def __generate_queries(self, BQ):
+        c_n_s = self.data_db.list_collection_names()
+        q_e_s = BQ.get("entities", {})
+        self.queries = {}
+        for q_e, q_o in q_e_s.items():
+            c_n = q_o.get("collection", "___none___")
+            if (q := q_o.get("query")) and c_n in c_n_s:
+                self.queries.update({c_n: q})
 
-    # collection of results
-    prefetch = {}
-    prevars = {
-        "ds_id": ds_id,
-        "data_db": data_db,
-        "original_queries": exe_queries,
-        "pref_m": "",
-        "h_o_def": {},
-        "query": {}
-    }
 
-    ############################################################################
+    # -------------------------------------------------------------------------#
 
-    prdbug(f'queries at execution:')
-    prdbug(exe_queries)
+    def __run_stacked_queries(self):
+        if not (q_e_s := self.queries.keys()):
+            return
 
-    if not exe_queries.keys():
-        return prefetch
+        for e in q_e_s:
+            if "variants" in e:
+                continue
+            query = self.queries.get(e)
+            ent_resp_def = self.res_obj_defs.get(f'{e}.id')
+            self.__prefetch_entity_response(ent_resp_def, query)
 
-    ############################################################################
+        analysis_q_l = []
+        if (pre := self.dataset_results.get("analyses.id")):
+            analysis_q_l.append({"id": {"$in":pre.get("target_values")}})
+        if (pre := self.dataset_results.get("biosamples.id")):
+            analysis_q_l.append({"biosample_id": {"$in":pre.get("target_values")}})
+        if (pre := self.dataset_results.get("individuals.id")):
+            analysis_q_l.append({"individual_id": {"$in":pre.get("target_values")}})
 
-    """podmd
-    
-    All queries are aggregated towards biosamples.
-        
-    podmd"""
+        if len(analysis_q_l) > 0:
+            if len(analysis_q_l) > 1:
+                query = {"$and":analysis_q_l}
+            elif len(analysis_q_l) == 1:
+                query = analysis_q_l[0]
+            # CAVE: This would remove biosamples & individuals from the response
+            #       if they don't have any associated analysis...
+            ent_resp_def = self.res_obj_defs.get("analyses.id")
+            self.__prefetch_entity_response(ent_resp_def, query)
+            ent_resp_def = self.res_obj_defs.get("analyses.biosample_id->biosamples.id")
+            self.__prefetch_entity_response(ent_resp_def, query)
+            ent_resp_def = self.res_obj_defs.get("analyses.individual_id->individuals.id")
+            self.__prefetch_entity_response(ent_resp_def, query)
 
-    biosamples_query = exe_queries.get("biosamples", False)
-    if biosamples_query:
-        pref_k = "biosamples.id"
-        prevars.update({
-            "pref_m": pref_k,
-            "query": biosamples_query,
-            "h_o_def": h_o_methods.get(pref_k)
-        })
-        prefetch.update({pref_k: _prefetch_data(prevars)})
+        self.__run_variants_query()
+        self.__run_multi_variants_query()
 
-    individuals_query = exe_queries.get("individuals", False)
-    if individuals_query:
-        pref_k = "individuals.id"
-        prevars.update({
-            "pref_m": pref_k,
-            "query": individuals_query,
-            "h_o_def": h_o_methods.get(pref_k)
-        })
-        prefetch.update({pref_k: _prefetch_data(prevars)})
+        # prdbug(self.dataset_results)
 
-        pref_vs = prefetch["individuals.id"]["target_values"]
 
-        pref_k = "biosamples.id"
-        prevars.update({
-            "pref_m": pref_k,
-            "query": {"individual_id": {'$in': pref_vs}},
-            "h_o_def": h_o_methods.get(pref_k)
-        })
-        biosids_from_indq = _prefetch_data(prevars)
+    # -------------------------------------------------------------------------#
 
-        if "biosamples.id" in prefetch:
-            bsids = list(set(biosids_from_indq["target_values"]) & set(prefetch["biosamples.id"]["target_values"]))
-            prefetch["biosamples.id"].update({"target_values": bsids, "target_count": len(bsids)})
-        else:
-            prefetch["biosamples.id"] = biosids_from_indq
+    def __run_variants_query(self):
+        if not self.queries.get("variants"):
+            return
+        v_q_l = self.queries["variants"].copy()
+        if type(v_q_l) is not list:
+            v_q_l = [v_q_l]
 
-    callsets_query = exe_queries.get("analyses", False)
-    if callsets_query:     
-        # since analyses contain biosample_id no double calling is required
-        pref_k = "analyses.biosample_id->biosamples.id"
-        prevars.update({
-            "pref_m": pref_k,
-            "query": callsets_query,
-            "h_o_def": h_o_methods.get(pref_k)
-        })
-        prefetch.update({pref_k: _prefetch_data(prevars)})
+        query = v_q_l.pop(0)
+        if (pre := self.dataset_results.get("analyses.id")):
+            query = {"$and":[
+                {"analysis_id": {"$in":pre.get("target_values")}},
+                query
+            ]}
+        self.__update_dataset_results_from_variants(query)
 
-        if "biosamples.id" in prefetch.keys():
-            bsids = list(set(prefetch[pref_k]["target_values"]) & set(
-                prefetch["biosamples.id"]["target_values"]))
-            prefetch["biosamples.id"].update({"target_values": bsids, "target_count": len(bsids)})
-        else:
-            prefetch["biosamples.id"] = prefetch[pref_k]
 
-    variants_query = exe_queries.get("variants")
-    if not variants_query:
-        if "genomicVariant" in r_e_id and "biosamples.id" in prefetch.keys():
-            variants_query = {"biosample_id": {'$in': prefetch["biosamples.id"].get("target_values", ["___none___"])}}
+    # -------------------------------------------------------------------------#
 
-    if variants_query:
-        """podmd
-        ### `variants` Query and Aggregation
-
-        1. If a `variants` query exists (i.e. has been defined in `exe_queries`), in a first pass
-        all `biosample_id` values are retrieved.
-        2. If already a `"biosamples.id"` result exists (e.g. from a biosample query), the lists
-        of callset `id` values from the different queries are intersected. Otherwise, the analyses
-        from the variants query are the final ones.
-        3. Since so far not all matching variants have been retrieved (only the biosamples which
-        contain them), they are now fetched using the original query or a combination of the
-        original query and the matching biosamples from the intersect.
-        podmd"""
-
+    def __run_multi_variants_query(self):
+        # first query has to be popped of by
+        # also, biosamples.id exists already in results
+        # TODO: make aggregation entity flexible, depending on requested schema
+        if not self.queries.get("variants"):
+            return
+        variants_query = self.queries["variants"]
         if type(variants_query) is not list:
             variants_query = [variants_query]
+        # keeping the original
+        queries = variants_query.copy()
+        queries.pop(0)
+        if len(queries) < 1:
+            return
 
-        v_q_l = variants_query.copy()
+        prdbug(f' ====== {BYC["response_entity"]} =====')
+        res_e_id = BYC.get("response_entity_id", "biosample")
+        res_e_coll = BYC["response_entity"].get("collection", "biosamples")
+        id_k = f'{res_e_id}_id'
+        pref_k = f'variants.{id_k}->{res_e_coll}.id'
+        agg_k = f'{res_e_coll}.id'
 
-        pref_k = "variants.biosample_id->biosamples.id"
-        prevars.update({
-            "pref_m": pref_k,
-            "query": v_q_l.pop(0),
-            "h_o_def": h_o_methods.get(pref_k)
-        })
-        prefetch.update({pref_k: _prefetch_data(prevars)})
+        if "variant" in (res_e_id).lower():
+            id_k = 'biosample_id'
+            pref_k = f'variants.{id_k}->biosamples.id'
+            agg_k = 'biosamples.id'
 
-        prdbug(f'prefetch ... variants query: {prevars["query"]}')
-        prdbug(f'prefetch ... variants: {prefetch[pref_k]["target_count"]}')
+        for v_q in queries:
+            v_bsids = self.dataset_results[agg_k]["target_values"]
+            prdbug(f'before {self.dataset_results[agg_k]["target_count"]}')
+            if (len(v_bsids) == 0):
+                break
+            query = {"$and": [v_q, {id_k: {"$in": v_bsids}}]}
+            # prdbug(query)
+            ent_resp_def = self.res_obj_defs.get(pref_k)
+            self.__prefetch_entity_response(ent_resp_def, query)
+            prdbug(f'after {self.dataset_results[agg_k]["target_count"]}')
 
-        if "biosamples.id" in prefetch.keys():
-            bsids = list(set(prefetch["biosamples.id"]["target_values"]) & set(
-                prefetch[pref_k]["target_values"]))
-            prefetch["biosamples.id"].update({"target_values": bsids, "target_count": len(bsids)})
-            # variants_query = [{"$and": [variants_query[0], {"biosample_id": {"$in": bsids}}]}]
-        else:
-            prefetch["biosamples.id"] = prefetch[pref_k]
+        v_bsids = self.dataset_results[agg_k]["target_values"]
 
-        # if there are more than 1 variant query, intersect the biosample_ids from
-        # the previous queries (_i.e._ all variants have to occurr in the same biosample)
-        if len(v_q_l) > 0:
-            for v_q in v_q_l:
-                v_bsids = prefetch["biosamples.id"]["target_values"]
-                prdbug(f'before {prefetch["biosamples.id"]["target_count"]}')
-                if (len(v_bsids) == 0):
-                    break
-                v_q = {"$and": [v_q, {"biosample_id": {"$in": v_bsids}}]}
-                prevars.update({
-                    "pref_m": pref_k,
-                    "query": v_q,
-                    "h_o_def": h_o_methods.get(pref_k)
-                })
-                prefetch.update({pref_k: _prefetch_data(prevars)})
-                prefetch["biosamples.id"] = prefetch[pref_k]
-                prdbug(f'after {prefetch["biosamples.id"]["target_count"]}')
-
-        # collect variants from the multi match
-        # here we can use the $or query since the requirement (all variant results
-        # have to intersect for the same biosamples) has been met
-        pref_k = "variants._id"
         if len(variants_query) > 1:
-            v_v_q = {"$or": variants_query}
+            query = {"$or": variants_query}
         else:
-            v_v_q = variants_query[0]
-        if len(prefetch["biosamples.id"]["target_values"]) > 0:
-            v_v_q = {"$and": [v_v_q, {"biosample_id": {"$in": prefetch["biosamples.id"]["target_values"]}}]}
+            query = variants_query[0]
+        if len(v_bsids) > 0:
+            query = {"$and": [query, {id_k: {"$in": v_bsids}}]}
         else:
             # fallback for 0 match results
-            v_v_q = {"$and": [v_v_q, {"biosample_id": {"$in": ["___undefined___"]}}]}
+            query = {"$and": [query, {id_k: {"$in": ["___undefined___"]}}]}
 
-        prevars.update({
-            "pref_m": pref_k,
-            "query": v_v_q,
-            "h_o_def": h_o_methods.get(pref_k)
+        self.__update_dataset_results_from_variants(query)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __update_dataset_results_from_variants(self, query):
+        ent_resp_def = self.res_obj_defs.get("variants.id")
+        self.__prefetch_entity_response(ent_resp_def, query)
+        ent_resp_def = self.res_obj_defs.get("variants.analysis_id->analyses.id")
+        self.__prefetch_entity_response(ent_resp_def, query)
+        ent_resp_def = self.res_obj_defs.get("variants.biosample_id->biosamples.id")
+        self.__prefetch_entity_response(ent_resp_def, query)
+        ent_resp_def = self.res_obj_defs.get("variants.individual_id->individuals.id")
+        self.__prefetch_entity_response(ent_resp_def, query)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __prefetch_entity_response(self, h_o_def, query):
+        s_c = h_o_def.get("source_collection")
+        s_k = h_o_def.get("source_key")
+        t_c = h_o_def.get("target_collection")
+        t_k = h_o_def.get("target_key")
+
+        dist = self.data_db[s_c].distinct(s_k, query)
+        t_v_s = dist if dist else []
+
+        e_r = {**h_o_def}
+        e_r.update({
+            "id": str(uuid4()),
+            "source_db": self.dataset_id,
+            "target_values": t_v_s,
+            "target_count": len(t_v_s),
+            "original_queries": self.queries
         })
-        prefetch.update({pref_k: _prefetch_data(prevars)})
 
-        # prevars["pref_m"] = "variants.variant_internal_id"
-        # prevars["query"] = {"_id": {"$in": prefetch["variants._id"]["target_values"]}}
-        # prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
-
-    elif v_i_q:
-        pref_k = "variants._id"
-        prevars.update({
-            "pref_m": pref_k,
-            "query": v_i_q,
-            "h_o_def": h_o_methods.get(pref_k)
-        })
-        prefetch.update({pref_k: _prefetch_data(prevars)})
-        
-        # prevars["pref_m"] = "variants.variant_internal_id"
-        # prevars["query"] = {"_id": {"$in": prefetch["variants._id"]["target_values"]}}
-        # prefetch.update({prevars["pref_m"]: _prefetch_data(prevars)})
-
-
-    ############################################################################
-    """podmd
-    ### Result Aggregation
-
-    The above queries have provided `biosamples.id` values which now are used to retrieve the
-    matching final biosample and callset `_id` values.
-
-    For variants the `_id` values only exist if a variants query had been performed.
-    In that case no separate recall has to be performed since a biosample intersection
-    had been performed already (to limit the _a priori_ variant response).
-
-    If no variant query was performed _but_ the response asks for variants => all
-    callset variants will be returned.
-
-    TODO: Benchmark if the `_id` retrieval & storage speeds up biosample and callset recovery
-    in handover scenarios or if `id` is fine.
-
-    TODO: The return-driven query selection will need to be refined; queries can
-    potentially lead to huge responses here...
-    podmd"""
-
-    if not "biosamples.id" in prefetch:
-        pref_k = "biosamples.id"
-        prevars.update({
-            "pref_m": pref_k,
-            "query": {"id": "___undefined___"},
-            "h_o_def": h_o_methods.get(pref_k)
-        })
-        prefetch.update({pref_k: _prefetch_data(prevars)})
+        r_k = f'{t_c}.{t_k}'
+        self.dataset_results.update({r_k: e_r})
         return
-
-    pref_k = "analyses._id"
-    prevars.update({
-        "pref_m": pref_k,
-        "query": {"biosample_id": {"$in": prefetch["biosamples.id"]["target_values"]}},
-        "h_o_def": h_o_methods.get(pref_k)
-    })
-    prefetch.update({pref_k: _prefetch_data(prevars)})
-
-    pref_k = "biosamples._id"
-    prevars.update({
-        "pref_m": pref_k,
-        "query": {"id": {"$in": prefetch["biosamples.id"]["target_values"]}},
-        "h_o_def": h_o_methods.get(pref_k)
-    })
-    prefetch.update({pref_k: _prefetch_data(prevars)})
-
-    # TODO: have this checked... somewhere else based on the response_entity_id
-    if "individual" in r_e_id or "phenopacket" in r_e_id:
-        pref_k = "biosamples.individual_id->individuals.id"
-        prevars.update({
-            "pref_m": pref_k,
-            "query": {"_id": {"$in": prefetch["biosamples._id"]["target_values"]}},
-            "h_o_def": h_o_methods.get(pref_k)
-        })
-        prefetch.update({pref_k: _prefetch_data(prevars)})
-
-        pref_k = "individuals._id"
-        prevars.update({
-            "pref_m": pref_k,
-            "query": {"id": {"$in": prefetch["biosamples.individual_id->individuals.id"]["target_values"]}},
-            "h_o_def": h_o_methods.get(pref_k)
-        })
-        prefetch.update({pref_k: _prefetch_data(prevars)})
-
-    ############################################################################
-
-    data_client.close()
-
-    # only doing this here for the final data after aggregation
-    for p_k_s in prefetch.keys():
-        random.shuffle(prefetch[p_k_s]["target_values"])
-
-    try:
-        prdbug(f'{ds_id} biosample count after queries: {prefetch["biosamples._id"]["target_count"]}')
-    except:
-        pass
-
-    return prefetch
 
 
 ################################################################################
-
-def _prefetch_data(prevars):
-    """podmd
-    The prefetch pref_m queries the specified collection `source_collection` of
-    the `data_db` with the provided query, and stores the distinct values of the
-    `source_key` as `target_values`.
-
-    The results may reference across collections. A typical example here would be
-    to retrieve `biosample_id` values from the `variants` collection to point
-    to `id` values in the `biosamples` collection.
-
-    These "handover" objects can then be stored and used to retrieve values of
-    previous queries for procedural use or second-pass data retrieval.
-
-    podmd"""
-
-    pref_m = prevars["pref_m"]
-    data_db = prevars["data_db"]
-    h_o_def = prevars["h_o_def"]
-    # prdbug(pref_m)
-    # prdbug(prevars["query"])
-    dist = data_db[h_o_def["source_collection"]].distinct(h_o_def["source_key"], prevars["query"])
-    h_o = {**h_o_def}
-    t_v_s = dist if dist else []
-    h_o.update(
-        {
-            "id": str(uuid4()),
-            "source_db": prevars["ds_id"],
-            "target_values": t_v_s,
-            "target_count": len(t_v_s),
-            "original_queries": prevars.get("original_queries", None)
-        }
-    )
-    return h_o
-
-
+################################################################################
 ################################################################################

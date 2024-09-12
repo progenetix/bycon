@@ -35,7 +35,7 @@ A version of the histogram with predefined parameters for representing a small a
 ### `samplesplot` 
 **description:**
 A plot of the called CNV segments per sample, with the samples ordered by their clustering (_i.e._ similarity of binned CNV data).    
-**data_key:** callsets_variants_bundles    
+**data_key:** analyses_variants_bundles    
 **data_type:** samples    
 
 ### `geomapplot` 
@@ -92,13 +92,13 @@ Selection of which measurees are used to generate the clustering matrix
 ### `plot_dup_color` 
 **default:** `#FFC633`    
 
-### `plot_amp_color` 
+### `plot_hldup_color` 
 **default:** `#FF6600`    
 
 ### `plot_del_color` 
 **default:** `#33A0FF`    
 
-### `plot_homodel_color` 
+### `plot_hldel_color` 
 **default:** `#0033CC`    
 
 ### `plot_loh_color` 
@@ -412,10 +412,10 @@ text padding of markers versus background/box
     - `EFO:0030065`: `{'color_key': 'plot_loh_color', 'label': 'copy-neutral loss of heterozygosity'}`      
     - `EFO:0030067`: `{'color_key': 'plot_del_color', 'label': 'copy number loss'}`      
     - `EFO:0030068`: `{'color_key': 'plot_del_color', 'label': 'low-level copy number loss'}`      
-    - `EFO:0020073`: `{'color_key': 'plot_homodel_color', 'label': 'high-level copy number loss'}`      
-    - `EFO:0030069`: `{'color_key': 'plot_homodel_color', 'label': 'complete genomic deletion'}`      
+    - `EFO:0020073`: `{'color_key': 'plot_hldel_color', 'label': 'high-level copy number loss'}`      
+    - `EFO:0030069`: `{'color_key': 'plot_hldel_color', 'label': 'complete genomic deletion'}`      
     - `EFO:0030070`: `{'color_key': 'plot_dup_color', 'label': 'copy number gain'}`      
     - `EFO:0030071`: `{'color_key': 'plot_dup_color', 'label': 'low-level copy number gain'}`      
-    - `EFO:0030072`: `{'color_key': 'plot_amp_color', 'label': 'high-level copy number gain'}`      
-    - `EFO:0030073`: `{'color_key': 'plot_amp_color', 'label': 'focal genome amplification'}`      
+    - `EFO:0030072`: `{'color_key': 'plot_hldup_color', 'label': 'high-level copy number gain'}`      
+    - `EFO:0030073`: `{'color_key': 'plot_hldup_color', 'label': 'focal genome amplification'}`      
     - `EFO:0001059`: `{'color_key': 'plot_snv_color', 'label': 'sequence_alteration'}`    

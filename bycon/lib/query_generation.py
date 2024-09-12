@@ -31,13 +31,6 @@ class ByconQuery():
                                                 | of further query items, e.g.
                                                 | after creating an id query
 
-    variant_id_query: { __variant_id_query__ }  | special query added to queries
-                                                | by id values, e.g.
-                                                | * `/biosamples/{id}
-                                                | * `?biosampleIds={id1,id2,...}
-                                                | ... to retrieve all variants for
-                                                | the matched samples, individuals
-                                                | etc.
     ```
     """
 
@@ -149,10 +142,12 @@ class ByconQuery():
         # NOTE: _all_ variants cannot be retrieved for collections
         if entity not in BYC.get("data_pipeline_entities", []):
             return
+        if "variant" in entity.lower():
+            return
 
         v_q_id = f'{entity}_id'
-        v_q_id = re.sub("analysis", "callset", v_q_id)
-        v_q_id = re.sub("run", "callset", v_q_id)
+        # v_q_id = re.sub("analysis", "callset", v_q_id)
+        v_q_id = re.sub("run", "analysis", v_q_id)
 
         if len(entity_ids) == 1:
             q = {v_q_id: entity_ids[0]}
@@ -161,7 +156,12 @@ class ByconQuery():
         else:
             return
 
-        self.queries.update({"variant_id_query": q})
+        self.queries["entities"].update({
+            "genomicVariant": {
+                "query": q,
+                "collection": "variants"
+            }
+        })
 
 
     # -------------------------------------------------------------------------#
@@ -187,7 +187,7 @@ class ByconQuery():
         data_coll = data_db[r_c]
         rs = list(data_coll.aggregate([{"$sample": {"size": ret_no}}]))
 
-        q = {"_id": {"$in": list(s["_id"] for s in rs)}}
+        q = {"id": {"$in": list(s["id"] for s in rs)}}
 
         self.queries["entities"].update({r_e: {"query": q, "collection": r_c}})
         self.queries.update({"expand": False})
@@ -239,11 +239,8 @@ class ByconQuery():
         for v_p_i, v_p_s in enumerate(self.variant_multi_pars):
             self.variant_multi_pars[v_p_i] = self.__parse_variant_parameters(v_p_s)
 
-        # prdbug(self.variant_multi_pars)
-        # exit()
 
     # -------------------------------------------------------------------------#
-
 
     def __parse_variant_parameters(self, variant_pars):
         v_p_s = self.variant_request_definitions.get("request_pars", [])
@@ -259,7 +256,7 @@ class ByconQuery():
             if "variant_type" in v_p_k:
                 v_s_c = VariantTypes().variantStateChildren(v_p)
                 v_p_c[ v_p_k ] = { "$in": v_s_c }
-            elif "reference_name" in v_p_k:
+            elif "reference_name" in v_p_k or "mate_name" in v_p_k:
                 v_p_c[ v_p_k ] = self.ChroNames.refseq(v_p)
             else:
                 v_p_c[ v_p_k ] = v_p
@@ -278,11 +275,15 @@ class ByconQuery():
                 continue
 
             # a bit verbose for now...
-            if "geneVariantRequest" in  variant_request_type:
+            if "variantFusionRequest" in variant_request_type:
+                if (q := self.__create_variantFusionRequest_query(v_pars)):
+                    queries.append(q)
+                    continue
+            if "geneVariantRequest" in variant_request_type:
                 if (q := self.__create_geneVariantRequest_query(v_pars)):
                     queries.append(q)
                     continue
-            if "cytoBandRequest" in  variant_request_type:
+            if "cytoBandRequest" in variant_request_type:
                 if (q := self.__create_cytoBandRequest_query(v_pars)):
                     queries.append(q)
                     continue
@@ -311,6 +312,8 @@ class ByconQuery():
                     queries.append(q)
                     continue
 
+        prdbug(f'??? queries: {queries}')
+
         return queries
 
 
@@ -337,7 +340,9 @@ class ByconQuery():
         
         # Already hard-coding some types here - if conditions are met only
         # the respective types will be evaluated since only this key is used
-        if "start" in v_pars and "end" in v_pars:
+        if "mate_name" in  v_pars:
+            brts_k = [ "variantFusionRequest" ]
+        elif "start" in v_pars and "end" in v_pars:
             if len(v_pars[ "start" ]) == 1 and len(v_pars[ "end" ]) == 1:
                 brts_k = [ "variantRangeRequest" ]
             elif len(v_pars[ "start" ]) == 2 and len(v_pars[ "end" ]) == 2:
@@ -485,7 +490,7 @@ class ByconQuery():
             "end": [ end1 ]
         } )
         prdbug(cb_s)
-        # TODO: other global parameters (langth etc.)
+        # TODO: other global parameters (length etc.)
         # TODO: global variant parameters by definition file
         g_p_s = ["variant_type", "variant_min_length", "variant_max_length"]
         for g_p in g_p_s:
@@ -527,6 +532,39 @@ class ByconQuery():
         if not "variant_type" in vp:
             return
         v_q = self.__create_in_query_for_parameter("variant_type", v_p_defs["variant_type"]["db_key"], vp)
+
+        return v_q
+
+
+    #--------------------------------------------------------------------------#
+
+    def __create_variantFusionRequest_query(self, v_pars):    
+        vp = v_pars
+        v_p_defs = self.argument_definitions
+
+        # here we use the db fields of "mate_..." for all positional parameters
+        # since the match is against the `adjuncture` variant format
+        v_q = {
+            "$and": [
+                {
+                    v_p_defs["mate_name"]["db_key"]: vp["reference_name"],
+                    v_p_defs["mate_start"]["db_key"]: { "$gte": vp["start"][0] },
+                    v_p_defs["mate_end"]["db_key"]: { "$lt": vp["end"][-1] }
+                },
+                {
+                    v_p_defs["mate_name"]["db_key"]: vp["mate_name"],
+                    v_p_defs["mate_start"]["db_key"]: { "$gte": vp["mate_start"] },
+                    v_p_defs["mate_end"]["db_key"]: { "$lt": vp["mate_end"] }
+                }
+            ]
+        }
+
+        if (l_q := self.__request_variant_size_limits(v_pars)):
+            v_q.update(l_q)
+
+        p_n = "variant_type"
+        if p_n in vp:
+            v_q.update( self.__create_in_query_for_parameter(p_n, v_p_defs[p_n]["db_key"], vp) )
 
         return v_q
 
@@ -592,8 +630,6 @@ class ByconQuery():
             v_p_defs["reference_name"]["db_key"]: vp["reference_name"],
             v_p_defs["start"]["db_key"]: { "$gte": sorted(vp["start"])[0], "$lt": sorted(vp["start"])[-1] },
             v_p_defs["end"]["db_key"]: { "$gte": sorted(vp["end"])[0], "$lt": sorted(vp["end"])[-1] },
-            # v_p_defs["start"]["db_key"]: { "$gte": sorted(vp["start"])[0] },
-            # v_p_defs["end"]["db_key"]: { "$lt": sorted(vp["end"])[-1] }
         }
 
         if (v_t := self.__create_in_query_for_parameter("variant_type", v_p_defs["variant_type"]["db_key"], vp)):

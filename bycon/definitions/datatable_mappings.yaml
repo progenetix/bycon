@@ -11,7 +11,7 @@ description: >-
   `biosample_id` values being mapped to `id` if read in a `biosample` context
   but to `biosample_id` if read under a `genomicVariant` context.
 
-  #### Conventions
+  ## Conventions
 
   * the default `type` is string (not indicated); options are `integer`,
     `number`, `array` and `boolean`
@@ -27,7 +27,23 @@ description: >-
     some update function (e.g. the variant's `id` value from the stringified
     database ObjectId upon insertion ore `age_days` from the `age_iso` value)
 
-  #### ID handling
+  ### `array` fields
+
+  Columns with data of the type `array` are evaluated through the `RefactoredValues`
+  class:
+  * first the values are comma-split
+  * then values are type cast according to their `items.type`, with a special
+    treatment for `object`
+  * for `type: object`:
+      - the individual list values are split again following a `value1::value2`
+        ... etc. split 
+      - are assigned by **order** to the **ordered** parameters list in
+        `items.parameters` (if none given an `["id", "label"]` sequence is assumed)
+      - are type cast according to the **ordered** types list in
+        `items.types` (if none given ore wrong listy length fallback `string` is
+        being used)
+
+  ## ID handling
 
   The correct provenance handling is important. We use random/generated ID values
   (with optional leading prefixed for readability) to avoid value collisions and
@@ -39,14 +55,19 @@ description: >-
     biosample_id: 'pgxbs-kftvk186',
     individual_id: 'pgxind-kftx6109'
 
-
-
 definitions:
 
 #------------------------------------------------------------------------------#
 
   biosample:
     type: object
+    required:
+      - biosample_id
+      - individual_id
+    collection: biosamples
+    id_parameter: biosample_id
+    upstream:
+      - individuals
     parameters:
       biosample_id:
         type: string
@@ -119,18 +140,18 @@ definitions:
         db_key: sample_origin_detail.label
         beacon_model_path: biosamples.sampleOriginDetail.label
         compact: True
-      tnm_id:
-        type: string
-        db_key: pathological_tnm_finding.id
-        beacon_model_path: biosamples.pathologicalTnmFinding.id
-        indexed: True
-        compact: True
-      tnm_label:
-        type: string
-        db_key: pathological_tnm_finding.label
-        beacon_model_path: biosamples.pathologicalTnmFinding.label
-        indexed: True
-        compact: True
+      tnm:
+        type: array
+        items:
+          type: object
+          parameters:
+            - id
+            - label
+          indexed:
+            - id
+          split_by: '::'
+        db_key: pathological_tnm_findings
+        beacon_model_path: biosamples.pathologicalTnmFindings.id
       stage_id:
         type: string
         db_key: pathological_stage.id
@@ -158,7 +179,6 @@ definitions:
         type: string
         db_key: collection_moment
         indexed: True
-        compact: True
       # sex_id:
       #   type: string
       #   db_key: info.sex.id
@@ -301,7 +321,8 @@ definitions:
         indexed: True
       geoprov_long_lat:
         type: array
-        items: number
+        items:
+          type: number
         db_key: provenance.geo_location.geometry.coordinates
 
       # special export labels
@@ -315,49 +336,36 @@ definitions:
         db_key: False
         beacon_model_path: False
         compact: True
-      cnv_fraction:
-        type: number
-        db_key: False
-        beacon_model_path: False
-      cnv_del_fraction:
-        type: number
-        beacon_model_path: False
-        db_key: False
-      cnv_dup_fraction:
-        type: number
-        db_key: False
-        beacon_model_path: False
-
 
 #------------------------------------------------------------------------------#
 
   individual:
     type: object
+    required:
+      - individual_id
+    collection: individuals
+    id_parameter: individual_id
+    upstream: []
     parameters:
       individual_id:
         type: string
         db_key: id
         indexed: True
-        compact: True
       sex_id:
         type: string
         db_key: sex.id
         indexed: True
-        compact: True
       sex_label:
         type: string
         db_key: sex.label
-        compact: True
       age_iso:
         type: string
         db_key: index_disease.onset.age
         indexed: True
-        compact: True
       age_days:
         type: number
         db_key: index_disease.onset.age_days
         indexed: True
-        compact: False
         computed: True
       data_use_conditions_id:
         type: string
@@ -372,11 +380,9 @@ definitions:
         type: string
         db_key: index_disease.disease_code.id
         indexed: True
-        compact: True
       histological_diagnosis_label:
         type: string
         db_key: index_disease.disease_code.label
-        compact: True
       index_disease_notes:
         type: string
         db_key: index_disease.notes
@@ -384,16 +390,13 @@ definitions:
         type: string
         db_key: index_disease.followup_time
         indexed: True
-        compact: True
       index_disease_followup_state_id:
         type: string
         db_key: index_disease.followup_state.id
         indexed: True
-        compact: True
       index_disease_followup_state_label:
         type: string
         db_key: index_disease.followup_state.label
-        compact: True
       auxiliary_disease_id:
         type: string
         db_key: auxiliary_disease.disease_code.id
@@ -416,42 +419,82 @@ definitions:
         db_key: info.legacy_id
         beacon_model_path: False
         indexed: False
-        compact: False
 
 
-#------------------------------------------------------------------------------#
+#--------------------------- analysis & run -----------------------------------#
+  
+  # analysis & run data are combined in th analysis object / analyses collection
 
   analysis:
     type: object
+    required:
+      - analysis_id
+      - biosample_id
+      - individual_id
+    collection: analyses
+    id_parameter: analysis_id
+    upstream:
+      - individuals
+      - biosamples
     parameters:
       analysis_id:
         db_key: id
         beacon_model_path: analyses.id
         indexed: True
-        compact: True
       biosample_id:
         db_key: biosample_id
+        beacon_model_path: analyses.biosample_id
         indexed: True
-        compact: True
       individual_id:
         db_key: individual_id
+        beacon_model_path: analyses.individual_id
         indexed: True
+      platform_id:
+        db_key: platform_model.id
+        beacon_model_path: runs.platformModel.id
+        indexed: True
+      platform_label:
+        db_key: platform_model.label
+        beacon_model_path: runs.platformModel.label
+      pipeline_name:
+        db_key: pipeline_name
+        beacon_model_path: analyses.pipelineName
+        indexed: True
+      pipeline_ref:
+        db_key: pipeline_ref
+        beacon_model_path: analyses.pipelineRef
+ 
+ # In Beacon but not used by us
+ #      library_source_id:
+ #        db_key: library_source.id
+ #        beacon_model_path: runs.librarySource.id
+ #        default: "GENEPIO:0001966"
+ #      library_source_label:
+ #        db_key: library_source.label
+ #        beacon_model_path: runs.librarySource.label
+ #        default: "genomic source"
+
+      # bycon &  data management specials
       analysis_operation_id:
-        db_key: analysis_operation.id
+        db_key: analysis_info.operation.id
         indexed: True
+        examples:
+          - EDAM:operation_3961
+          - EDAM:operation_3227
       analysis_operation_label:
-        db_key: analysis_operation.label
-        indexed: False
+        db_key: analysis_info.operation.label
+        indexed: True
+        examples:
+          - Copy number variation detection
+          - Variant Calling
       experiment_id:
         db_key: analysis_info.experiment_id
         indexed: True
-        compact: True
         examples:
           - "geo:GSM288124"
       series_id:
         db_key: analysis_info.series_id
         indexed: True
-        compact: True
       experiment_title:
         description: >-
           The legacy title or name for the experiment, which is an identifier
@@ -464,31 +507,8 @@ definitions:
           - MDT-MB-100_Nsp
           - NT088_N
           - T48_Xba_051011
-      platform_id:
-        db_key: platform_model.id
-        indexed: True
-        compact: True
-      platform_label:
-        db_key: platform_model.label
       data_provenance:
         db_key: info.data_provenance
-      pipeline_info_id:
-        db_key: pipeline_info.id
-        indexed: True
-      pipeline_info_reference:
-        db_key: pipeline_info.reference
-      pipeline_info_note:
-        db_key: pipeline_info.note
-      library_source_id:
-        db_key: library_source.id
-        beacon_model_path: runs.librarySource.id
-        default: "GENEPIO:0001966"
-      library_source_label:
-        db_key: library_source.label
-        beacon_model_path: runs.librarySource.label
-        default: "genomic source"
-
-      # bycon specials
       geoprov_city:
         type: string
         db_key: provenance.geo_location.properties.city
@@ -503,7 +523,8 @@ definitions:
         indexed: True
       geoprov_long_lat:
         type: array
-        items: number
+        items:
+        type: number
         db_key: provenance.geo_location.geometry.coordinates
 
 
@@ -511,72 +532,90 @@ definitions:
 
   genomicVariant:
     type: object
+    required:
+      - analysis_id
+      - biosample_id
+      - individual_id
+    collection: variants
+    id_parameter: variant_id
+    upstream:
+      - analyses
+      - individuals
+      - biosamples
     parameters:
       variant_id:
         db_key: id
         indexed: True
-        compact: True
         computed: True
       variant_internal_id:
         type: string
         db_key: variant_internal_id
         indexed: True
-        compact: True
         computed: True
       analysis_id:
         type: string
         db_key: analysis_id
         indexed: True
-        compact: True
       biosample_id:
         type: string
         db_key: biosample_id
         indexed: True
-        compact: True
       individual_id:
         type: string
         db_key: individual_id
         indexed: True
-        compact: True
       sequence_id:
         type: string
         db_key: location.sequence_id
         indexed: True
-        compact: True
       reference_name:
         type: string
         db_key: location.chromosome
         indexed: True
-        compact: True
       start:
         type: integer
         db_key: location.start
         indexed: True
-        compact: True
       end:
         type: integer
         db_key: location.end
         indexed: True
-        compact: True
+      adjoined_sequences:
+        type: array
+        items:
+          type: object
+          parameters:
+            - sequence_id
+            - chromosome
+            - start
+            - end
+          types:
+            - string
+            - string
+            - integer
+            - integer
+          indexed:
+            - sequence_id
+            - start
+            - end
+          split_by: '::'
+        db_key: adjoined_sequences
+        indexed: True
       variant_state_id:
         type: string
         db_key: variant_state.id
         indexed: True      # might not be needed if first in a compound index
-        compact: True
       variant_state_label:
         type: string
         db_key: variant_state.label
-        compact: True
       reference_sequence:
         type: string
         db_key: reference_sequence
         indexed: True
-        compact: True
       sequence:
         type: string
         db_key: sequence
         indexed: True
-        compact: True
       annotation_derived:
         type: boolean
         db_key: info.annotation_derived
@@ -584,7 +623,8 @@ definitions:
         indexed: True
       aminoacid_changes:
         type: array
-        items: string
+        items:
+          type: string
         db_key: molecular_attributes.aminoacid_changes
         indexed: True
       genomic_hgvs_id:

@@ -149,5 +149,22 @@ GRANULARITY_LEVELS = {
   "record": 3
 }
 
+BYC_UNCAMELED = [
+  "gVariants",
+  "gVariant",
+  "sequenceId",
+  "relativeCopyClass",
+  "speciesId",
+  "chromosomeLocation",
+  "genomicLocation"
+]
+
+BYC_UPPER = [
+  "EFO",
+  "UBERON",
+  "NCIT",
+  "PMID"
+]
+
 ################################################################################
 

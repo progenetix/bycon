@@ -33,7 +33,6 @@ def dataset_response_add_handovers(ds_id, datasets_results):
             continue
 
         h_o_k = h_o_types[ h_o_t ].get("h->o_key", "___none___")
-        p_e = h_o_defs.get("paginated_entities", [])
         if not (h_o := datasets_results[ds_id].get(h_o_k)):
             continue
         # testing if this handover is active for the specified dataset      
@@ -51,38 +50,12 @@ def dataset_response_add_handovers(ds_id, datasets_results):
             "url": __handover_create_url(h_o_server, h_o_defs, ds_id, accessid)
         }
 
-        # if e_t in p_e or "all" in p_e:
-        #     h_o_r["info"].update({"skip": skip, "limit": limit})
-
         # TODO: needs a new schema to accommodate this not as HACK ...
         # the phenopackets URL needs matched variants, which it wouldn't know about ...
         if "phenopackets" in h_o_t:
-            if "variants._id" in datasets_results[ds_id].keys():
-                h_o_r["url"] += f'&variantsaccessid={datasets_results[ds_id]["variants._id"]["id"]}'
+            if "variants.id" in datasets_results[ds_id].keys():
+                h_o_r["url"] += f'&variantsaccessid={datasets_results[ds_id]["variants.id"]["id"]}'
 
-
-        # if e_t in p_e or "all" in p_e:
-        #     # avoiding endless loop
-        #     if limit < 1:
-        #         break
-        #     h_o_r.update({"pages":[]})
-        #     p_f = 0
-        #     p_t = p_f + limit
-        #     p_s = 0
-        #     while p_f < target_count + 1:
-        #         if target_count < p_t:
-        #             p_t = target_count
-        #         l = f"{p_f + 1}-{p_t}"
-        #         u = __handover_create_url(h_o_server, h_o_defs, ds_id, accessid, p_s, limit)
-        #         h_o_r["pages"].append( {
-        #             "handover_type": {"id": h_o_defs["handoverType"][ "id" ],"label": l }, 
-        #             "info": { "content_id": h_o_t},
-        #             "url": u
-        #         } )
-        #         p_s += 1
-        #         p_f += limit
-        #         p_t = p_f + limit
-        #     h_o_r["url"] += f'&skip={skip}&limit={limit}'
         if "url" in h_o_r:
             b_h_o.append( h_o_r )
 
@@ -91,16 +64,14 @@ def dataset_response_add_handovers(ds_id, datasets_results):
 
 ################################################################################
 
-def __handover_create_url(h_o_server, h_o_defs, ds_id, accessid, skip=BYC_PARS.get("skip"), limit=BYC_PARS.get("limit")):
+def __handover_create_url(h_o_server, h_o_defs, ds_id, accessid):
     if not (addr := h_o_defs.get("script_path_web")):
         return ""
     server = "" if "http" in addr else h_o_server
-    url = f'{server}{addr}?datasetIds={ds_id}&accessid={accessid}' #&skip={skip}&limit={limit}'
-    for p in ["method", "output", "plotType", "requestedSchema"]:
-        if not (v := h_o_defs.get(p)):
-            continue
-        url += f"&{p}={v}"
-    url += h_o_defs.get("url_opts", "")
+    url = f'{server}{addr}?datasetIds={ds_id}&accessid={accessid}'
+    for p in ["plotType", "output"]:
+        if (v := h_o_defs.get(p)):
+            url += f"&{p}={v}"
     return url
 
 

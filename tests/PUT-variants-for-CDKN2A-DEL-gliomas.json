@@ -17,7 +17,7 @@
                 "referenceName": "9",
                 "start": [21500001, 21975098],
                 "end": [21967753, 22500000], 
-                "variantType": "DEL"
+                "variantType": "EFO:0030067"
             }
         },
         "filters": [{"id": "NCIT:C3058"}]

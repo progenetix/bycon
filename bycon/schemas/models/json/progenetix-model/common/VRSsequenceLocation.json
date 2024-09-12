@@ -1,0 +1,50 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://progenetix.org/services/schemas/VRSsequenceLocation/v2024-08-13",
+    "title": "VRS SequenceLocation",
+    "type": "object",
+    "meta": {
+        "contributors": [
+            {
+                "description": "Michael Baudis",
+                "id": "orcid:0000-0002-9903-4248"
+            }
+        ],
+        "provenance": [
+            {
+                "description": "Progenetix `bycon` project",
+                "id": "https://github.com/progenetix/bycon/"
+            },
+            {
+                "description": "VRS 2.x specification",
+                "id": "https://vrs.ga4gh.org/en/2.x/concepts/location/SequenceLocation.html#sequencelocation"
+            }
+        ]
+    },
+    "description": "Simplified VRS v2 SequenceLocation.",
+    "definitions": {
+        "SequenceLocation": {
+            "description": "A Location defined by an interval on a referenced Sequence.",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "SequenceLocation",
+                    "default": "SequenceLocation"
+                },
+                "sequenceReference": {
+                    "type": "string",
+                    "description": "A reference to a Sequence on which the location is defined as an IRI. TODO: VRS2 also allows a SequenceReference object here, essentially a GA4GH refget accession object."
+                },
+                "start": {
+                    "type": "integer",
+                    "description": "Start of the interval. TODO: VRS2 also allows intervals \"Range\" here."
+                },
+                "end": {
+                    "type": "integer",
+                    "description": "Start of the interval. TODO: VRS2 also allows intervals \"Range\" here."
+                }
+            }
+        }
+    }
+}

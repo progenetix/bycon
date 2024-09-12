@@ -22,24 +22,6 @@
                 "pgxbs-kftva59y"
             ]
         },
-        "analysisOperation": {
-            "description": "Basic type of (genomic) analysis from the EDAM ontology. In Progenetix and related resources this is used to disamiguate between sequence analyses (SNV etc. calling) and CNV profiling experiments.",
-            "$ref": "../progenetix-model/common/ontologyTerm.json",
-            "examples": [
-                {
-                    "id": "EDAM:operation_3961",
-                    "label": "Copy number variation detection"
-                },
-                {
-                    "id": "EDAM:operation_3227",
-                    "label": "Variant Calling"
-                },
-                {
-                    "id": "EDAM:operation:3228",
-                    "label": "Structural variation detection"
-                }
-            ]
-        },
         "analysisInfo": {
             "$ref": "#/definitions/AnalysisInfo"
         },
@@ -92,6 +74,11 @@
         "info": {
             "type": "object"
         },
+        "analysisDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2024-08-21"
+        },
         "updated": {
             "type": "string",
             "format": "date-time",
@@ -105,6 +92,24 @@
             "description": "Information about the source series and experiment. NOTE: A `bycon` special.",
             "type": "object",
             "properties": {
+                "operation": {
+                    "description": "Basic type of (genomic) analysis from the EDAM ontology. In Progenetix and related resources this is used to disamiguate between sequence analyses (SNV etc. calling) and CNV profiling experiments.",
+                    "$ref": "../progenetix-model/common/ontologyTerm.json",
+                    "examples": [
+                        {
+                            "id": "EDAM:operation_3961",
+                            "label": "Copy number variation detection"
+                        },
+                        {
+                            "id": "EDAM:operation_3227",
+                            "label": "Variant Calling"
+                        },
+                        {
+                            "id": "EDAM:operation:3228",
+                            "label": "Structural variation detection"
+                        }
+                    ]
+                },
                 "seriesId": {
                     "description": "Identifier for the experimental series.",
                     "examples": [

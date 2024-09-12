@@ -24,8 +24,13 @@ http://progenetix.test/beacon/datasets/progenetix/biosamples?filters=NCIT:C3058&
 
 http://progenetix.test/beacon/g_variants/pgxvar-660fff082a1761bdde9c6e47,pgxvar-660dccff46aa9c3c26e7a565/
 
-http://beaconplus.test/beacon/biosamples/?cytoBands=8q24.1&limit=100&skip=0&datasetIds=progenetix&variantType=EFO%3A0030070&filters=NCIT:C4017
+http://beaconplus.test/beacon/biosamples/?cytoBands=8q24.1&limit=100&skip=0&datasetIds=progenetix&variantType=EFO:0030070&filters=NCIT:C4017
 
 http://progenetix.test/beacon/biosamples/?limit=100&referenceName=refseq:NC_000009.12&variantType=EFO:0030067&start=21000000,21975098&end=21967753,23000000&filters=NCIT:C3058
 
 http://progenetix.test/beacon/datasets/progenetix/biosamples?requestedGranularity=count&variantMaxLength=3000000&limit=100&variantType=EFO:0030067&geneId=TP53,CDKN2A&filters=NCIT:C3058
+
+## Fusion...
+
+http://progenetix.test/beacon/g_variants/?referenceName=8&mateName=12&start=45100000&end=47300000&mateStart=26200000&mateEnd=35600000&variantType=SO:0000806
+

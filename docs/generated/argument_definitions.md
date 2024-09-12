@@ -95,13 +95,13 @@ cohort ids
     - `type`: `string`    
 **cmdFlags:** `--filters`    
 **description:**
-prefixed filter values, comma concatenated    
+prefixed filter values, comma concatenated; or objects in POST    
 
 ### `filter_precision` 
 **type:** string    
 **cmdFlags:** `--filterPrecision`    
 **description:**
-`either` start or `exact` (`exact being internal default`) for matching filter values    
+either `start` or `exact` for matching filter values    
 **default:** `exact`    
 
 ### `filter_logic` 
@@ -136,7 +136,7 @@ chromosome
 
 ### `mate_name` 
 **type:** string    
-**db_key:** location.sequence_id    
+**db_key:** adjoined_sequences.sequence_id    
 **pattern:** `^\w+.*?\w?$`    
 **cmdFlags:** `--mateName`    
 **description:**
@@ -185,6 +185,22 @@ genomic start position
 **cmdFlags:** `--end`    
 **description:**
 genomic end position    
+
+### `mate_start` 
+**type:** integer    
+**db_key:** adjoined_sequences.start    
+**pattern:** `^\d+?$`    
+**cmdFlags:** `--mateStart`    
+**description:**
+genomic start position of fusion partner breakpoint region    
+
+### `mate_end` 
+**type:** integer    
+**db_key:** adjoined_sequences.end    
+**pattern:** `^\d+?$`    
+**cmdFlags:** `--MateEnd`    
+**description:**
+genomic end position of fusion partner breakpoint region    
 
 ### `variant_min_length` 
 **type:** integer    
@@ -339,12 +355,14 @@ variant ids
 **cmdFlags:** `--debugMode`    
 **description:**
 debug setting    
+**default:** `False`    
 
 ### `show_help` 
 **type:** boolean    
 **cmdFlags:** `--showHelp`    
 **description:**
 specific help display    
+**default:** `False`    
 
 ### `test_mode_count` 
 **type:** integer    
@@ -370,13 +388,6 @@ For defining a special output format, mostly for `byconaut` services use. Exampl
 **description:**
 only used for web requests & testing    
 
-### `only_handovers` 
-**type:** boolean    
-**default:** `False`    
-**cmdFlags:** `--onlyHandovers`    
-**description:**
-only used for web requests & testing    
-
 ### `method` 
 **type:** string    
 **cmdFlags:** `--method`    
@@ -386,16 +397,10 @@ special method
 
 ### `group_by` 
 **type:** string    
-**cmdFlags:** `-g,--groupBy`    
+**cmdFlags:** `--groupBy`    
 **description:**
 group parameter e.g. for subset splitting    
 **default:** `text`    
-
-### `parse` 
-**type:** string    
-**cmdFlags:** `-p,--parse`    
-**description:**
-input value to be parsed    
 
 ### `mode` 
 **type:** string    
@@ -403,17 +408,18 @@ input value to be parsed
 **description:**
 mode, e.g. file type    
 
-### `key` 
-**type:** string    
-**cmdFlags:** `-k,--key`    
-**description:**
-some key or word    
-
 ### `update` 
-**type:** string    
+**type:** boolean    
 **cmdFlags:** `-u,--update`    
 **description:**
-update existing records    
+update existing records - might be deprecated; only used for publications    
+**default:** `False`    
+
+### `force` 
+**type:** boolean    
+**cmdFlags:** `--force`    
+**description:**
+force mode, e.g. for update or insert (cmd line)    
 **default:** `False`    
 
 ### `inputfile` 
@@ -448,19 +454,13 @@ random number to limit processing, where supported
 minimal number, e.g. for collations, where supported    
 **default:** `0`    
 
-### `source` 
-**type:** string    
-**cmdFlags:** `-s,--source`    
-**description:**
-some source label, e.g. `analyses`    
-
 ### `delivery_keys` 
 **type:** array    
 **items:**  
     - `type`: `string`    
 **cmdFlags:** `--deliveryKeys`    
 **description:**
-delivery keys    
+delivery keys to force only some parameters in custom exporters    
 
 ### `collation_types` 
 **type:** array    
@@ -469,12 +469,6 @@ delivery keys
 **cmdFlags:** `--collationTypes`    
 **description:**
 selected collation types, e.g. "EFO"    
-
-### `with_samples` 
-**type:** integer    
-**cmdFlags:** `--withSamples`    
-**description:**
-only for the collations; number of code_matches...    
 
 ### `selected_beacons` 
 **type:** array    

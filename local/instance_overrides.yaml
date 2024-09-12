@@ -67,7 +67,7 @@ local:
       beacon_schema:
         entity_type: phenopacket
         schema: https://progenetix.org/services/schemas/phenopacket/
-      h->o_access_key: individuals._id
+      h->o_access_key: individuals.id
 
 ################################################################################
 # domain specific ##############################################################
@@ -134,4 +134,47 @@ cancercelllines:
             update_date_time: 2024-02-24T12:45:00
       create_date_time: 2023-07-01T00:00:00
       update_date_time: 2024-02-24T13:00:00
+
+refcnv:
+  domains:
+    - refcnv.org
+    - www.refcnv.org
+    - refcnv.test
+  beacon_defaults:
+    defaults:
+      default_dataset_id: refcnv
+    test_domains:
+      - refcnv.test
+  entity_defaults:
+    info:
+      content:
+        beacon_id: org.refcnv
+        name: refCNV - CNV reference data
+        id: org.refCNV.beacon
+        environment: prod
+        description: >-
+          The refcnv.org Beacon is a specific instance of the Progenetix
+          Beacon+ environment providing information about genomic copy number
+          variations (CNV) in germline samples from reference datasets such as
+          the "1000 genomes project", processed by different experimental
+          platforms and analysis pipelines.
+        type:
+          group: org.ga4gh
+          artifact: beacon
+          version: v2.2.0-beaconplus
+        documentation_url: http://docs.refcnv.org
+        service_url: http://refcnv.org/beacon/
+        welcome_url: https://refcnv.org/biosamples/
+        alternative_url: https://refcnv.org
+        contact_url: mailto:contact@progenetix.org
+        created_at: 2024-07-16T00:00:00
+        updated_at: 2024-07-16T00:00:00
+        organization:
+          welcome_url: https://refcnv.org/
+          contact_url: mailto:contact@progenetix.org
+          logoUrl: https://refcnv.org/img/refcnv-icon-400x300.png
+          info:
+            update_date_time: 2024-07-16T00:00:00
+      create_date_time: 2024-07-16T00:00:00
+      update_date_time: 2024-07-16T00:00:00
 

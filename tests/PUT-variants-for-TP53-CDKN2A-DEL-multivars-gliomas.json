@@ -17,20 +17,20 @@
                     "referenceName": "refseq:NC_000009.12",
                     "start": [21500001, 21975098],
                     "end": [21967753, 22500000], 
-                    "variantType": "DEL"
+                    "variantType": "EFO:0030067"
                 },
                 {
                     "assemblyId": "GRCh38",
                     "referenceName": "refseq:NC_000017.11",
                     "start": [6000000, 7687480],
                     "end": [7668422, 8000000], 
-                    "variantType": "DEL"
+                    "variantType": "EFO:0030067"
                 }
             ]
         },
         "filters": [{"id": "NCIT:C3058"}]
     },
-    "requestedGranularity": "count",
+    "requestedGranularity": "record",
     "pagination": {"skip": 0, "limit": 5},   
-    "debugMode": 1
+    "debugMode": 0
 }

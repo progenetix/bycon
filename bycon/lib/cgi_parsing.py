@@ -3,7 +3,7 @@ from urllib.parse import urlparse, parse_qs, unquote
 from os import environ
 
 from args_parsing import args_update_form
-from bycon_helpers import prdbug, prdbughead, refactor_value_from_defined_type, set_debug_state, test_truthy
+from bycon_helpers import prdbug, prdbughead, RefactoredValues, set_debug_state, test_truthy
 from config import *
 
 ################################################################################
@@ -88,7 +88,7 @@ def parse_GET():
         # CAVE: Only predefined parameters are accepted!
         if p_d in a_defs:
             values = form_return_listvalue(form_data, p)
-            v = refactor_value_from_defined_type(p, values, a_defs[p_d])
+            v = RefactoredValues(a_defs[p_d]).refVal(values)
             if v is not None:
                 BYC_PARS.update({p_d: v})
         else:
@@ -105,11 +105,11 @@ def rest_path_elements():
     The function deparses a Beacon REST path into its components and assigns
     those to the respective variables. The assumes structure is:
 
-    `__root__/__request-entity__/__entity-id__/__response-entity__/?query...`
-        |             |                 |               |
-    "beacon"  e.g. "biosamples"  "pgxbs-t4ee3"  e.g. "genomicVariations"
-        |             |                 |               |
-    required      required          optional        optional
+    `__root__/__request_entity_path_id__/__entity-id__/__response_entity_path_id__/?query...`
+        |             |                     |                   |
+    "beacon"  e.g. "biosamples"     "pgxbs-t4ee3"   e.g. "genomicVariations"
+        |             |                     |                   |
+    required      required              optional            optional
     """
     if not environ.get('REQUEST_URI'):
         return

@@ -1,74 +1,74 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/analysis/v2024-07-08
+$id: https://progenetix.org/services/schemas/analysis/v2024-07-19
 title: analysis
+note: >-
+  On 2024-07-19 aligned with current Beacon v2.1 main
 description: >-
-  The `analysis` object represents a information about the data analysis steps
+  The `analysis` schema represents a information about the data analysis steps
   leading to (a set of) genomic variation call(s).
 type: object
-note: >-
-  On 2024-07-08 aligned with current Beacon v2 main
-
 properties:
   id:
+    description: >-
+      Analysis id for internal referencing; unique in the dataset.
     type: string
-    examples:
-      - pgxcs-kftvldsu
-  biosampleId:
-    type: string
-    examples:
-      - pgxbs-kftva59y
-  individualId:
-    type: string
-    examples:
-      - pgxbs-kftva59y
   runId:
     description: >-
-      Run identifier (external accession or internal ID).
-      NOTE: Not used in bycon
+      Local reference to the associated experimental run.
     type: string
     examples:
       - SRR10903401
+  biosampleId:
+    description: >-
+      Local reference to the `id` of the biosample this analysis is reporting on.
+    type: string
+    examples:
+      - S0001
+      - onekgbs-NA07346
+  individualId:
+    description: >-
+      Local reference to the `id` of the individual this analysis is reporting on.
+    type: string
+    examples:
+      - P0001
+      - onekgind-NA07346
   analysisDate:
-    description: Date at which analysis was performed.
+    description: >
+      Date at which analysis was performed.
     type: string
     format: date
     examples:
       - '2021-10-17'
   pipelineName:
     description: >-
-      Analysis pipeline and version if a standardized pipeline was used
+      Analysis pipeline and version.
     type: string
     examples:
-      - progenetix-labelseg-v1.2
+      - Pipeline-panel-0001-v1
   pipelineRef:
     description: >-
-      Link to Analysis pipeline resource
+      Link to information about or repository of the analysis pipeline.
     type: string
     examples:
-      - https://github.com/baudisgroup/LabelSeg
+      - https://doi.org/10.48511/workflowhub.workflow.111.1
+      - https://doi.org/10.1093/bib/bbad541
   aligner:
     description: >-
-      Reference to mapping/alignment software
-      NOTE: Not used in bycon
+      Name or identifier of the mapping/alignment software/pipeline
     type: string
     examples:
       - bwa-0.7.8
   variantCaller:
-    description: >-
-      Reference to variant calling software / pipeline
-      NOTE: Not used in bycon
+    description:  >-
+      Name or identifier of the variant calling software/pipeline
     type: string
     examples:
       - GATK4.0
+      - labelSeg
   info:
-    type: object
-  updated:
-    type: string
-    format: date-time
-    examples:
-      - "2020-09-10T17:44:10.170Z"
+    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/definitions/Info
 required:
   - id
-  - biosampleId
   - analysisDate
+  - pipelineName
 additionalProperties: true

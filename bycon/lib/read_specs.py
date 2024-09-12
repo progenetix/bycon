@@ -38,7 +38,7 @@ def read_service_definition_files():
 
 ################################################################################
 
-def update_rootpars_from_local():
+def update_rootpars_from_local_or_HOST():
     # avoiding re-parsing of directories, e.g. during init stage
     p_c_p = BYC.get("parsed_config_paths", [])
     if LOC_PATH in p_c_p:
@@ -89,32 +89,28 @@ def update_rootpars_from_local():
 def dbstats_return_latest():
     # TODO: This is too hacky & should be moved to an external function
     # which updates the database_definitions / beacon_info yamls...
-    stats = MongoClient(host=DB_MONGOHOST)[HOUSEKEEPING_DB][HOUSEKEEPING_INFO_COLL].find( { }, { "_id": 0 } ).sort( "date", -1 ).limit( 1 )
-    return list(stats)[0]
+    stats = MongoClient(host=DB_MONGOHOST)[HOUSEKEEPING_DB][HOUSEKEEPING_INFO_COLL].find( { }, { "_id": 0 } ).sort( {"date": -1} ).limit( 1 )
+    stats = list(stats)
+    if len(stats) > 0:
+        return stats[0]
+    else:
+        return []
 
 
 ################################################################################
 
-def datasets_update_latest_stats(collection_type="datasets"):
-    results = [ ]
-    def_k = re.sub(r's$', "_definitions", collection_type)
-    q_k = re.sub(r's$', "_ids", collection_type)
+def datasets_update_latest_stats():
+    results = []
     stat = dbstats_return_latest()
-
-    for coll_id, coll in BYC[ def_k ].items():
-        if q_k in BYC:
-            if len(BYC[ q_k ]) > 0:
-                if not coll_id in BYC[ q_k ]:
-                    continue
-
-        if collection_type in stat:
-            if coll_id in stat[ collection_type ].keys():
-                ds_vs = stat[ collection_type ][coll_id]
+    for coll_id, coll in BYC["dataset_definitions"].items():
+        if not coll_id in BYC.get("BYC_DATASET_IDS", []):
+            continue
+        if "datasets" in stat:
+            if (ds_vs := stat[ "datasets" ].get(coll_id)):
                 if "filtering_terms" in BYC["response_entity_id"]:
-                    coll.update({ "filtering_terms": stat[ collection_type ][coll_id].get("filtering_terms", []) } )
-
+                    coll.update({ "filtering_terms": ds_vs.get("filtering_terms", []) } )
+        # TODO: Add stats ...
         results.append(coll)
-
     return results
 
 

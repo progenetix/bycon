@@ -7,7 +7,7 @@ from config import *
 
 from bycon_helpers import *
 from handover_generation import dataset_response_add_handovers
-from query_execution import execute_bycon_queries
+from query_execution import ByconDatasetResults # execute_bycon_queries
 from query_generation import ByconQuery
 from read_specs import datasets_update_latest_stats
 from response_remapping import *
@@ -513,6 +513,8 @@ class ByconFilteringTerms:
             if c_t not in f_d_s:
                 continue
             f_d = f_d_s[c_t]
+            if not "ontologyTerm" in f_d.get("ft_type"):
+                continue
             r = {}
             for k in res_schema.keys():
                 if k in f_d:
@@ -710,7 +712,8 @@ class ByconResultSets:
         ds_r_start = datetime.datetime.now()
         for i, r_set in enumerate(self.result_sets):
             ds_id = r_set.get("id", "___none___")
-            ds_res = execute_bycon_queries(ds_id, self.record_queries)
+            DR = ByconDatasetResults(ds_id, self.record_queries)
+            ds_res = DR.retrieveResults()
             self.datasets_results.update({ds_id: ds_res})            
         ds_r_duration = datetime.datetime.now() - ds_r_start
         
@@ -734,7 +737,7 @@ class ByconResultSets:
             if (h_o_k := e_d_s.get("h->o_access_key", "___none___")) not in ds_results.keys():
                 continue
             res = ds_results.get(h_o_k, {})
-            q_k = res.get("target_key", "_id")
+            q_k = res.get("target_key", "id")
             q_db = res.get("source_db", "___none___")
             q_coll = res.get("target_collection", "___none___")
             q_v_s = res.get("target_values", [])
@@ -750,8 +753,8 @@ class ByconResultSets:
             self.datasets_data.update({ds_id: r_s_res})
 
         ds_d_duration = datetime.datetime.now() - ds_d_start
-        
         dbm = f'... datasets data retrieval needed {ds_d_duration.total_seconds()} seconds'
+        prdbug(dbm)
 
         return
 
@@ -771,11 +774,11 @@ class ByconResultSets:
 
             r_s_res = []
 
-            if "variants._id" in ds_results:
-                q_v_s = ds_results["variants._id"]["target_values"]
+            if "variants.id" in ds_results:
+                q_v_s = ds_results["variants.id"]["target_values"]
                 q_v_s = return_paginated_list(q_v_s, self.skip, self.limit)
                 for v_id in q_v_s:
-                    v = v_coll.find_one({"_id":v_id})
+                    v = v_coll.find_one({"id":v_id})
                     r_s_res.append(v)
                 self.datasets_data.update({ds_id: r_s_res})
 
@@ -790,6 +793,7 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __populate_result_sets(self):
+        ds_v_start = datetime.datetime.now()
         for i, r_set in enumerate(self.result_sets):
             ds_id = r_set["id"]
             ds_res = self.datasets_results.get(ds_id)
@@ -798,6 +802,7 @@ class ByconResultSets:
             r_set.update({"results_handovers": dataset_response_add_handovers(ds_id, self.datasets_results)})
             q_c = ds_res.get("target_count", 0)
             r_s_res = self.datasets_data.get(ds_id, [])
+            r_s_res = list(x for x in r_s_res if x)
             r_s_res = reshape_resultset_results(ds_id, r_s_res)
             info = {"counts": {}}
             rs_c = len(r_s_res) if type(r_s_res) is list else 0
@@ -816,30 +821,14 @@ class ByconResultSets:
                 "exists": True if rs_c > 0 else False,
                 "results": r_s_res
             })
-
+        ds_v_duration = datetime.datetime.now() - ds_v_start
+        dbm = f'... __populate_result_sets needed {ds_v_duration.total_seconds()} seconds'
+        prdbug(dbm)
         return
 
 
 ################################################################################
 # common response functions ####################################################
-################################################################################
-
-# def response_delete_none_values(response):
-#     """Delete None values recursively from all of the dictionaries"""
-
-#     for key, value in list(response.items()):
-#         if isinstance(value, dict):
-#             response_delete_none_values(value)
-#         elif value is None:
-#             del response[key]
-#         elif isinstance(value, list):
-#             for v_i in value:
-#                 if isinstance(v_i, dict):
-#                     response_delete_none_values(v_i)
-
-#     return response
-
-
 ################################################################################
 
 def print_json_response(this={}, status_code=200):

@@ -23,15 +23,28 @@ EDAMoperation:
     replace:
       - "EDAM:"
       - ""
-  db_key: 'analysis_operation.id'
+  db_key: 'analysis_info.operation.id'
   description: Genomic analysis type
   scope: analyses
   entity: analysis
   pattern: '^EDAM:operation_\d+?$'
   collationed: True
   examples:
-    - operation_3961  # Copy number variation detection
-    - operation_3227  # Variant Calling
+    - EDAM:operation_3961  # Copy number variation detection
+    - EDAM:operation_3227  # Variant Calling
+
+analysisPipeline:
+  id: analysisPipeline
+  ft_type: alphanumeric
+  format: string
+  db_key: 'pipeline_name'
+  scope: analyses
+  entity: analysis
+  pattern: '^..+?$'
+  collationed: True
+  collation_include_normals: True
+  examples:
+    - era-EnsembleCNV
 
 genomes:
   id: genomes

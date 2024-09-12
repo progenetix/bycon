@@ -31,3 +31,19 @@ cellz:
       - id: DUO:0000004
         label: no restriction
         version: 2021-11-11
+
+refcnv:
+  id: refcnv
+  name: CNV reference data
+  identifier: 'org.refcnv'
+  description: "germline CNV data from reference datasets, called by various pipelines"
+  createDateTime: 2024-07-16
+  updateDateTime: 2024-07-16
+  version: 2024-07-16
+  externalUrl: "https://refcnv.org"
+  assemblyId: GRCh38
+  dataUseConditions:
+    duoDataUse:
+      - id: DUO:0000004
+        label: no restriction
+        version: 2021-11-11

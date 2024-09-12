@@ -1,6 +1,6 @@
 import argparse, humps, re
 
-from bycon_helpers import prdbug, refactor_value_from_defined_type, set_debug_state, test_truthy
+from bycon_helpers import prdbug, RefactoredValues, set_debug_state, test_truthy
 from config import *
 
 ################################################################################
@@ -20,7 +20,7 @@ def args_update_form():
         if not (a_d := a_defs.get(p_d)):
             continue
         values = str(v).split(',')
-        p_v = refactor_value_from_defined_type(p, values, a_defs[p_d])
+        p_v = RefactoredValues(a_defs[p_d]).refVal(values)
         if p_v is not None:
             BYC_PARS.update({p_d: p_v})
 

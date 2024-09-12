@@ -9,16 +9,16 @@ while testing `bycon` and also implement the whole Beacon code base while not
 necessarily making use of all.
 
 With a feature-rich but overly complex `bycon` package fulfilling those requirements
-ongoing work starting in Spring 2023 mainly targets:
+ongoing work mainly targets:
 
 * disentanglement of non-Beacon code and Progenetix specific configuration from
   the package
 * simplification of configuration and processing pipelines to the emerging practices
-  of a "matured" Beacon v2 protocol
+  of a "matured" Beacon v2.n protocol
 
 ## Bugs & TODO
 
-* [ ] create a new `beaconDataPipeline.py` app which runs all requests against the
+* [x] create a class which runs all requests against the
   "data" entry types (_i.e._ `g_variants`, `biosamples`, `individuals`, `analyses`,
   `runs`) and simplify `beacon.py` to a pure remapper(?)
 * [ ] add non-CNV variants to standard plots
@@ -38,7 +38,7 @@ ongoing work starting in Spring 2023 mainly targets:
       separately (e.g. w/ hard-coded `progenetix` db?): `publications` and `ontologymaps` => hard coded to `progenetix`
 * [x] split installation method into separate parts for `beaconServer` and `services` (the latter then in `byconaut`)
 * [x] add method to subset samples for multi-histogram generation
-* [ ] option for summary histogram over? under? samplesplot
+* [ ] `byconaut`: option for summary histogram over? under? samplesplot
 * [x] script for auto-generation of parameter documentation
 * [x] fix filter queries for correct no-match:
     - query type indicates that the filter is "collationed"

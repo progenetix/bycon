@@ -1,0 +1,29 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/VRSadjacency/v2024-08-13
+title: VRS Adjacency
+type: object
+meta:
+  contributors:
+    - description: "Michael Baudis"
+      id: "orcid:0000-0002-9903-4248"
+  provenance:
+    - description: "Progenetix `bycon` project"
+      id: 'https://github.com/progenetix/bycon/'
+    - description: VRS 2.x specification
+      id: 'https://vrs.ga4gh.org/en/2.x/concepts/molecular_variation/Adjacency.html'
+description: >-
+  Simplified VRS adjacency/fusion schema for use in `bycon`.
+required:
+  all_of:
+    - type
+    - adjoinedSequences
+properties:
+  type:
+    type: string
+    const: Adjacency
+    default: Adjacency
+    description: MUST be "Adjacency"
+  adjoinedSequences:
+    type: array
+    items:
+      $ref: './VRSsequenceLocation.yaml'

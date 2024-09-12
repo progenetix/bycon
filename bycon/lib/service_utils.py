@@ -9,7 +9,6 @@ from beacon_auth import *
 from bycon_helpers import return_paginated_list, prdbug, set_debug_state, test_truthy
 from dataset_parsing import select_dataset_ids
 from parse_filters_request import parse_filters
-from read_specs import update_rootpars_from_local
 
 
 ################################################################################
@@ -55,14 +54,17 @@ def set_entities():
     # reating the maps for entity <-> path (or alias) mapping
     p_e_m = {}
     e_p_m = {}
+
     for e, e_d in b_e_d.items():
+        # here the response entity can be overridden in the prefs, e.g. for services
+        r_e = e_d.get("response_entity_id", e)
         if (p := e_d.get("request_entity_path_id")):
-            p_e_m.update({ p: e })
-            e_p_m.update({ e: p })
+            p_e_m.update({ p: r_e })
+            e_p_m.update({ r_e: p })
         for a in e_d.get("request_entity_path_aliases", []):
-            p_e_m.update({ a: e })
+            p_e_m.update({ a: r_e })
         if "beaconResultsetsResponse" in e_d.get("response_schema", ""):
-            d_p_e.append(e)
+            d_p_e.append(r_e)
 
     # TODO - FIX to remove all the specials
     d_p_e = ['analysis', 'biosample', 'genomicVariant', 'individual', 'run']
@@ -95,6 +97,7 @@ def set_entities():
 
     # TODO: breaks the services use ATM if a correct schema is added
     if (rp_id := BYC_PARS.get("requested_schema", "___none___")) not in e_p_m:
+        prdbug(f'response_entity_id: {rp_id} or {rp_p_id} but {e_p_m}')
         rp_id = p_e_m.get(rp_p_id)
 
     # as above. in case of alias

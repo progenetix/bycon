@@ -45,7 +45,7 @@ def beacon():
 
     if not rp_id:
         pass
-    elif rq_id in d_p_e:
+    elif rp_id in d_p_e:
         r = BeaconDataResponse().resultsetResponse()
         print_json_response(r)
     elif rq_p_id:

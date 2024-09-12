@@ -78,7 +78,6 @@ def ds_id_from_accessid():
 ################################################################################
 
 def ds_ids_from_form():
-    
     if not (f_ds_ids := BYC_PARS.get("dataset_ids")):
         return False
     ds_ids = [ds for ds in f_ds_ids if ds in BYC.get("DATABASE_NAMES",[])]

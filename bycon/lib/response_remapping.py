@@ -1,10 +1,11 @@
 import datetime, re
 from pymongo import MongoClient
+from os import environ
+from isodate import date_isoformat
 
 from bycon_helpers import prdbug, clean_empty_fields, select_this_server
 from config import *
 from variant_mapping import ByconVariant
-from os import environ
 
 ################################################################################
 ################################################################################
@@ -62,6 +63,8 @@ class VariantsResponse:
                 for c_k in self.case_pars:
                     if (c_v := d_v.get(c_k)):
                         c_l_v.update({c_k: c_v})
+                if (id_v := d_v.get("id")):
+                    c_l_v.update({"variant_id": id_v})
                 c_l_d.append(c_l_v)
 
             v_i = ByconVariant().vrsVariant(d_vs[0])
@@ -77,6 +80,7 @@ class VariantsResponse:
 
             self.beacon_vars.append(v)
 
+
     # -------------------------------------------------------------------------#
     # ----------------------- / VariantsResponse -------------------------------#
     # -------------------------------------------------------------------------#
@@ -88,12 +92,17 @@ def remap_analyses(r_s_res):
     if not "analysis" in BYC["response_entity_id"]:
         return r_s_res
     pop_keys = ["info", "provenance", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats"]
-    if "cnvstats" in BYC_PARS.get("output", "___none___").lower():
+    # TODO: move the cnvstats option away from here
+    if "cnvstats" in str(BYC.get("request_entity_path_id")):
         pop_keys = ["info", "provenance", "cnv_statusmaps"]
 
     for cs_i, cs_r in enumerate(r_s_res):
-        # TODO: REMOVE VERIFIER HACKS
-        r_s_res[cs_i].update({"pipeline_name": "progenetix", "analysis_date": "1967-11-11"})
+        # TODO: REMOVE VERIFIER HACKS (partially done...)
+        p_i = cs_r.get("pipeline_info", {"id": "progenetix"})
+        r_s_res[cs_i].update({
+            "pipeline_name": p_i.get("id", "progenetix"),
+            "analysis_date": cs_r.get("analysis_date", date_isoformat(datetime.datetime.now()))
+        })
         for k in pop_keys:
             r_s_res[cs_i].pop(k, None)
     return r_s_res
@@ -151,30 +160,37 @@ def remap_biosamples(r_s_res):
         return None
 
     bs_pop_keys = ["_id", "followup_state", "followup_time", "references"]  # "info"
+    r_s_u = []
     for bs_i, bs_r in enumerate(r_s_res):
+        # some none results might have crept in?
+        if type(bs_r) is not dict:
+            continue
         # TODO: REMOVE VERIFIER HACKS
-        e_r = []
-        for r_k, r_v in bs_r.get("references", {}).items():
-            if (r_i := __reference_object_from_ontology_term(r_k, r_v)):
-                e_r.append(r_i)
-
-        r_s_res[bs_i].update({
+        bs_r.update({
             "sample_origin_type": {"id": "OBI:0001479", "label": "specimen from organism"},
-            "external_references": e_r
+            "external_references": []
         })
+        if (b_r_s := bs_r.get("references")):
+            for r_k, r_v in b_r_s.items():
+                if (r_i := __reference_object_from_ontology_term(r_k, r_v)):
+                    bs_r["external_references"].append(r_i)
+
         for f in ["tumor_grade", "pathological_stage", "histological_diagnosis"]:
             try:
-                if f in r_s_res[bs_i]:
-                    if not r_s_res[bs_i][f]:
-                        r_s_res[bs_i].pop(f, None)
-                    elif not r_s_res[bs_i][f]["id"]:
-                        r_s_res[bs_i].pop(f, None)
-                    elif len(r_s_res[bs_i][f]["id"]) < 4:
-                        r_s_res[bs_i].pop(f, None)
+                if f in bs_r:
+                    if not bs_r[f]:
+                        bs_r.pop(f, None)
+                    elif not bs_r[f]["id"]:
+                        bs_r.pop(f, None)
+                    elif len(bs_r[f]["id"]) < 4:
+                        bs_r.pop(f, None)
             except:
                 pass
         for k in bs_pop_keys:
-            r_s_res[bs_i].pop(k, None)
+            bs_r.pop(k, None)
+        r_s_u.append(bs_r)
+
+    r_s_res = r_s_u
     return r_s_res
 
 

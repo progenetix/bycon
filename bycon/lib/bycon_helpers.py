@@ -38,39 +38,91 @@ def set_debug_state(debug=False) -> bool:
 
 ################################################################################
 
-def refactor_value_from_defined_type(parameter, values, definition):
-    p_d_t = definition.get("type", "string")
-    values = list(x for x in values if x is not None)
-    values = list(x for x in values if x.lower() not in ["none", "null"])
+class RefactoredValues():
 
-    if len(values) == 0:
-        return None
+    def __init__(self, parameter_definition={}):
+        self.v_list = []
+        self.parameter_definition = parameter_definition
 
-    if "array" in p_d_t:
-        p_i_i = definition.get("items", {})
-        p_i_t = p_i_i.get("type", "string")
-        # prdbug(f'... => array items type is {p_i_t}')
-        if "int" in p_i_t:
-            return list(map(int, values))
-        if "number" in p_i_t:
-            return list(map(float, values))
-        return list(map(str, values))
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def refVal(self, vs=[]):
+        if type(vs) != list:
+            vs = [vs]
+        self.v_list = vs
+        self.__refactor_values_from_defined_type()
+        return self.v_list
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- private ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __refactor_values_from_defined_type(self):
+        p_d_t = self.parameter_definition.get("type", "string")
+        values = list(x for x in self.v_list if x is not None)
+        values = list(x for x in values if x.lower() not in ["none", "null"])
+
+        if len(values) == 0:
+            self.v_list = None
+            return
+
+        defs = self.parameter_definition
+        if "array" in p_d_t:
+            # remapping definitions to the current item definitions
+            defs = self.parameter_definition.get("items", {"type": "string"})
+        p_t = defs.get("type", "string")
+
+        v_l = []
+        for v in values:
+            v_l.append(self.__cast_type(defs, p_t, v))
+        if "array" in p_d_t:
+            self.v_list = v_l
+            return
+
+        # testing against the input values; ==0 already checked
+        if len(values) == 1:
+            self.v_list = v_l[0]
+            return
+
+        # re-joining for bug report ...
+        self.v_list = ','.join(values)
+        BYC["WARNINGS"].append(f"!!! Multiple values ({self.v_list}) for {p_d_t} in request")
+        return
 
 
-    if len(values) == 1:
-        value = values[0]
-        prdbug(f'... parameter *{parameter}* => {value} ({p_d_t})')
-        if "int" in p_d_t:
-            return int(value)
-        if "number" in p_d_t:
-            return float(value)
-        if "bool" in p_d_t:
-            return test_truthy(value)
-        return str(value)
+    # -------------------------------------------------------------------------#
 
-    BYC["WARNINGS"].append(f"!!! Multiple values for {parameter} in request")
-    # re-joining ...
-    return ','.join(values)
+    def __cast_type(self, defs, p_type, p_value):
+        prdbug(f'casting {p_type} ... {p_value}')
+        if "object" in p_type:
+            return self.__split_string_to_object(defs, p_value)
+        if "int" in p_type:
+            return int(p_value)
+        if "number" in p_type:
+            return float(p_value)
+        if "bool" in p_type:
+            return test_truthy(p_value)
+        return str(p_value)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __split_string_to_object(self, defs, value):
+        o_p = defs.get("parameters", ["id", "label"])
+        o_s = defs.get("split", "::")
+        t_s = defs.get("types", [])
+        if len(t_s) != len(o_p):
+            t_s = ["string"] * len(o_p)
+        o = {}
+        for v_i, v_v in enumerate(value.split(o_s)):
+            if "int" in t_s[v_i] and re.match(r'^\d+?$', v_v):
+                v_v = int(v_v)
+            elif "num" in t_s[v_i] and re.match(r'^\d+?(\.\d+?)?$', v_v):
+                v_v = float(v_v)
+            o.update({o_p[v_i]: v_v})
+        return o
 
 
 ################################################################################
@@ -210,114 +262,15 @@ def mongo_test_mode_query(db_name, coll_name, test_mode_count=5):
         return results, f"{db_name} db `{db_name}` does not exist"
     try:
         rs = list(mongo_client[db_name][coll_name].aggregate([{"$sample": {"size": test_mode_count}}]))
-        ids = list(s["_id"] for s in rs)
+        ids = list(s["id"] for s in rs)
     except Exception as e:
         BYC["ERRORS"].append(e)
 
     mongo_client.close()
-    query = {"_id": {"$in": ids}}
+    query = {"id": {"$in": ids}}
 
     return query
 
-################################################################################
-
-def assign_nested_value(parent, dotted_key, v, parameter_definitions={}):
-    parameter_type = parameter_definitions.get("type", "string")
-    parameter_default = parameter_definitions.get("default")
-    if v is None:
-        if parameter_default:
-            v = parameter_default
-    if v is None:
-        return parent
-
-    if "num" in parameter_type:
-        if str(v).strip().lstrip('-').replace('.','',1).isdigit():
-            v = float(v)
-    elif "integer" in parameter_type:
-        if str(v).strip().isdigit():
-            v = int(v)
-    else:
-        v = str(v)
-
-    ps = dotted_key.split('.')
-
-    if len(ps) == 1:
-        if "array" in parameter_type:
-            parent.update({ps[0]: v.split(',')})
-        else:
-            parent.update({ps[0]: v })
-        return parent
-
-    if ps[0] not in parent or parent[ ps[0] ] is None:
-        parent.update({ps[0]: {}})
-
-    if len(ps) == 2:
-        if "array" in parameter_type:
-            parent[ ps[0] ].update({ps[1]: v.split(',')})
-        else:
-            parent[ ps[0] ].update({ps[1]: v })
-        return parent
-
-    if  ps[1] not in parent[ ps[0] ] or parent[ ps[0] ][ ps[1] ] is None:
-        parent[ ps[0] ].update({ps[1]: {}})
-    if len(ps) == 3:
-        if "array" in parameter_type:
-            parent[ ps[0] ][ ps[1] ].update({ps[2]: v.split(',')})
-        else:
-            parent[ ps[0] ][ ps[1] ].update({ps[2]: v })
-        return parent
-
-    if  ps[2] not in parent[ ps[0] ][ ps[1] ] or parent[ ps[0] ][ ps[1] ][ ps[2] ] is None:
-        parent[ ps[0] ][ ps[1] ].update({ps[2]: {}})
-    if len(ps) == 4:
-        if "array" in parameter_type:
-            parent[ ps[0] ][ ps[1] ][ ps[2] ].update({ps[3]: v.split(',')})
-        else:
-            parent[ ps[0] ][ ps[1] ][ ps[2] ].update({ps[3]: v })
-        return parent
-    
-    if len(ps) > 4:
-        print("¡¡¡ Parameter key "+dotted_key+" nested too deeply (>4) !!!")
-        return '_too_deep_'
-
-    return parent
-
-################################################################################
-
-def get_nested_value(parent, dotted_key, parameter_type="string"):
-    ps = str(dotted_key).split('.')
-    v = ""
-
-    if len(ps) == 1:
-        try:
-            v = parent[ ps[0] ]
-        except:
-            v = ""
-    elif len(ps) == 2:
-        try:
-            v = parent[ ps[0] ][ ps[1] ]
-        except:
-            v = ""
-    elif len(ps) == 3:
-        try:
-            v = parent[ ps[0] ][ ps[1] ][ ps[2] ]
-        except:
-            v = ""
-    elif len(ps) == 4:
-        try:
-            v = parent[ ps[0] ][ ps[1] ][ ps[2] ][ ps[3] ]
-        except:
-            v = ""
-    elif len(ps) == 5:
-        try:
-            v = parent[ ps[0] ][ ps[1] ][ ps[2] ][ ps[3] ][ ps[4] ]
-        except:
-            v = ""
-    elif len(ps) > 5:
-        print("¡¡¡ Parameter key "+dotted_key+" nested too deeply (>5) !!!")
-        return '_too_deep_'
-
-    return v
 
 ################################################################################
 
@@ -330,10 +283,10 @@ def test_truthy(this):
 ################################################################################
 
 def decamelize_words(j_d):
-    # TODO: move words to config
-    de_cams = ["gVariants", "gVariant", "sequenceId", "relativeCopyClass", "speciesId", "chromosomeLocation", "genomicLocation"]
-    for d in de_cams:
+    for d in BYC_UNCAMELED:
         j_d = re.sub(r"\b{}\b".format(d), humps.decamelize(d), j_d)
+    for d in BYC_UPPER:
+        j_d = j_d.replace(d.lower(), d)
     return j_d
 
 
@@ -361,11 +314,13 @@ def prdlhead(filename="download.txt"):
         print('status: 200')
         print()
 
+
 ################################################################################
 
 def prdbug(this):
     if BYC["DEBUG_MODE"] is True:
-        prjsonnice(this)
+        prjsontrue(this)
+        # prjsonnice(this)
 
 
 ################################################################################
@@ -376,13 +331,21 @@ def prjsonnice(this):
 
 ################################################################################
 
+def prjsontrue(this):
+    print(json.dumps(this, indent=4, sort_keys=True, default=str) + "\n")
+
+
+################################################################################
+
 def prjsoncam(this):
     prjsonnice(humps.camelize(this))
+
 
 ################################################################################
 
 def isotoday():
     return str(datetime.today().strftime('%Y-%m-%d'))
+
 
 ################################################################################
 
@@ -409,6 +372,5 @@ def clean_empty_fields(this_object, protected=[]):
                 this_object.pop(k, None)
 
     return this_object
-
 
 

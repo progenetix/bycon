@@ -1,4 +1,6 @@
 # This file (re-)defines the dataset specific authorizations
+# These definitions are for now kept in this separate file for testing and
+# overall transparency
 anonymous:
   default: record
 mbaudis:
@@ -6,5 +8,6 @@ mbaudis:
   progenetix: record
   cellz: record
   examplez: record
+  refcnv: record
 testuser:
   examplez: count    
