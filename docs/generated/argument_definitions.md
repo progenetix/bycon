@@ -379,7 +379,8 @@ For defining a special output format, mostly for `byconaut` services use. Exampl
     
 * `cnvstats`, for `analyses`, to present some CNV statistics     
 * `pgxseg`, using the `.pgxseg` variant file format     
-* `text`, for some services to deliver a text table instead of JSON    
+* `text`, for some services to deliver a text table instead of JSON     
+* in byconaut for the target database when copying...    
 
 ### `include_handovers` 
 **type:** boolean    

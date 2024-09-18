@@ -1,0 +1,16 @@
+defaults:
+  method: counts
+  response_entity_id: dbstats
+  stats_number: 1
+meta:
+  returned_schemas:
+    - entity_type: dbstats
+      schema: https://progenetix.org/services/schemas/DBstats/
+  info: >
+    The latest dbstats payload can be accessed in `response.results`.
+method_keys:
+  counts:
+    - counts
+  filtering_terms:
+    - counts
+    - filtering_terms

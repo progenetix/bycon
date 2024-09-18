@@ -1,0 +1,160 @@
+################################################################################
+# Beacon entry type defaults - please adjust esp. info and schema paths...
+# TODO: Some of the entry type configuration duplicates data from the Beacon
+# framework and might be disentangled further on ...
+################################################################################
+
+collationplots:
+  request_entity_path_id: collationplots
+  request_entity_path_aliases:
+    - collationPlots
+
+cytomapper:
+  request_entity_path_id: cytomapper
+
+endpoints:
+  request_entity_path_id: endpoints
+
+cnvstats:
+  request_entity_path_id: cnvstats
+  request_entity_id: analysis
+  response_entity_id: analysis
+  response_entity_path_id: analyses
+  collection: analyses
+  response_schema: beaconResultsetsResponse
+  beacon_schema:
+    entity_type: analysis
+    schema: https://progenetix.org/services/schemas/analysis/
+
+
+dbstats:
+  request_entity_path_id: dbstats
+
+ids:
+  request_entity_path_id: ids
+
+ontologymaps:
+  request_entity_id: ontologymaps
+  response_entity_id: ontologymaps
+  request_entity_path_id: ontologymaps
+  request_entity_path_aliases:
+    - ontologymaps
+    - ontologyMaps
+
+pgxsegvariants:
+  request_entity_path_id: pgxsegvariants
+  response_entity_id: genomicVariant
+  response_entity_path_id: genomicVariations
+  collection: variants
+  response_schema: beaconResultsetsResponse
+  request_entity_path_aliases:
+    - pgxseg
+
+samplemap:
+  request_entity_path_id: samplemap
+  collection: biosamples
+  response_schema: beaconResultsetsResponse
+  response_entity_id: biosample
+
+samplematrix:
+  request_entity_path_id: samplematrix
+  request_entity_id: samplematrix
+  response_entity_id: samplematrix
+  collection: biosamples
+  response_schema: beaconResultsetsResponse
+  response_entity_id: biosample
+
+sampletable:
+  request_entity_path_id: sampletable
+  collection: biosamples
+  response_schema: beaconResultsetsResponse
+  response_entity_id: biosample
+  
+sampleplots:
+  request_entity_path_id: sampleplots
+  request_entity_path_aliases:
+    - samplesPlotter
+
+schemas:
+  request_entity_path_id: schemas
+
+uploader:
+  request_entity_path_id: uploader
+
+variantsbedfile:
+  request_entity_path_id: variantsbedfile
+  request_entity_id: genomicVariant
+  collection: variants
+  response_schema: beaconResultsetsResponse
+  response_entity_id: genomicVariant
+
+vcfvariants:
+  request_entity_path_id: vcfvariants
+  request_entity_path_aliases:
+    - vcf
+  response_entity_id: genomicVariant
+  collection: variants
+  response_schema: beaconResultsetsResponse
+  h->o_access_key: variants._id
+
+##############################################################################
+
+collation:
+  request_entity_path_id: collations
+  collection: collations
+  response_schema: byconautServiceResponse
+  beacon_schema:
+    entity_type: Collation
+    schema: https://progenetix.org/services/schemas/Collation/
+
+##############################################################################
+
+gene:
+  request_entity_path_id: genespans
+  request_entity_path_aliases:
+    - genes
+  response_entity_id: gene
+  collection: genes
+  response_schema: beaconCollectionsResponse
+  beacon_schema:
+    entity_type: gene
+    schema: https://progenetix.org/services/schemas/ProgenetixGene/
+
+##############################################################################
+
+geoLocation:
+  request_entity_path_id: geolocations
+  request_entity_path_aliases:
+    - geolocs
+  response_entity_id: geoLocation
+  collection: geolocs
+  response_schema: beaconCollectionsResponse
+  beacon_schema:
+    entity_type: GeoLocation
+    schema: https://progenetix.org/services/schemas/GeoLocation/
+
+
+##############################################################################
+
+intervalFrequencies:
+  request_entity_path_id: intervalFrequencies
+  request_entity_path_aliases:
+    - interval_frequencies
+  response_entity_id: intervalFrequencies
+  collection: collations
+  response_schema: beaconCollectionsResponse
+  beacon_schema:
+    entity_type: intervalFrequencies
+    schema: https://progenetix.org/services/schemas/IntervalFrequencies/
+
+##############################################################################
+
+publication:
+  request_entity_path_id: publications
+  response_entity_id: publication
+  collection: publications
+  response_schema: beaconCollectionsResponse
+  beacon_schema:
+    entity_type: intervalFrequencies
+    schema: https://progenetix.org/services/schemas/Publication/
+

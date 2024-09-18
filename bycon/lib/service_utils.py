@@ -6,7 +6,7 @@ from os import environ, path
 from args_parsing import *
 from config import *
 from beacon_auth import *
-from bycon_helpers import return_paginated_list, prdbug, set_debug_state, test_truthy
+from bycon_helpers import return_paginated_list, prdbug, prdbughead, set_debug_state, test_truthy
 from dataset_parsing import select_dataset_ids
 from parse_filters_request import parse_filters
 

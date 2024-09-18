@@ -21,6 +21,10 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2023-09-12 (v.1.9.2)
+
+* mostly `byconaut` additions (housekeeping scripts etc. and map plot fix)
+
 ### 2023-08-13 (v.1.9.1)
 
 * modifications to the VRS Adjacency based format for fusions
