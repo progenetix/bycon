@@ -115,7 +115,8 @@ def write_log(log, file):
         print(f'=> {len(log)} log entries so there are some problems...')
         log_file = file + '.log'
         lf = open(log_file, "w")
-        lf.write("\n".join(log))
+        for ll in log:
+            lf.write(f'{ll}\n')
         lf.close()
         print(f'Wrote errors to {log_file}')
 

@@ -21,6 +21,32 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2023-09-19 (v.1.9.4)
+
+* `byconaut` => `bycon refactoring
+    - move of many "mature" utility functions from `byconaut` into the `bycon`
+      repository following the previous `services` move
+        * `housekeepers`
+        * `importers`
+* move of the `ontologymaps` and `publications` collections from `progenetix`
+  to `_byconServicesDB`
+    - clearer separation between "Beacon core" and "additional services"
+```
+use admin
+db.runCommand(
+    {
+        renameCollection: 'progenetix.ontologymaps',
+        to              : '_byconServicesDB.ontologymaps'
+    }
+);
+db.runCommand(
+    {
+        renameCollection: 'progenetix.publications',
+        to              : '_byconServicesDB.publications'
+    }
+);
+```
+
 ### 2023-09-13 (v.1.9.3)
 
 * services moved to bycon from byconaut

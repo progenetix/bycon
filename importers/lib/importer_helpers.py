@@ -328,7 +328,7 @@ class ByconautImporter():
             bar.finish()
 
         for c in dcs:
-            bar = Bar(f'Moving {c} for ', max = len(source_ids), suffix='%(percent)d%%'+f' of {str(len(source_ids))} {icn}' ) if not BYC["TEST_MODE"] else False
+            bar = Bar(f'Moving {c} ', max = len(source_ids), suffix='%(percent)d%%'+f' of {str(len(source_ids))} {icn}' ) if not BYC["TEST_MODE"] else False
             source_coll = self.mongo_client[ds_id][c]
             target_coll = self.mongo_client[tds_id][c]
             mov_nos.update({c: 0})
@@ -391,7 +391,7 @@ class ByconautImporter():
                 bar.finish()
 
         for c in dcs:
-            bar = Bar(f'Deleting {c} for ', max = len(del_ids), suffix='%(percent)d%%'+f' of {str(len(del_ids))} {icn}' ) if not BYC["TEST_MODE"] else False
+            bar = Bar(f'Deleting {c} ', max = len(del_ids), suffix='%(percent)d%%'+f' of {str(len(del_ids))} {icn}' ) if not BYC["TEST_MODE"] else False
             del_coll = self.mongo_client[ds_id][c]
             del_nos.update({c: 0})
             for del_id in del_ids:

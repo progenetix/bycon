@@ -21,7 +21,7 @@ properties:
     type: string
     examples:
       - pgxind-kftx5ruq
-  description:
+  notes:
     type: string
     examples:
       - breast carcinoma

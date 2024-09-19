@@ -152,6 +152,8 @@ definitions:
           split_by: '::'
         db_key: pathological_tnm_findings
         beacon_model_path: biosamples.pathologicalTnmFindings.id
+        examples:
+          - "NCIT:C48721::T1a Stage Finding,NCIT:C48699::M0 Stage Finding"
       stage_id:
         type: string
         db_key: pathological_stage.id

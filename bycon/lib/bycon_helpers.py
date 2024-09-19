@@ -111,7 +111,7 @@ class RefactoredValues():
 
     def __split_string_to_object(self, defs, value):
         o_p = defs.get("parameters", ["id", "label"])
-        o_s = defs.get("split", "::")
+        o_s = defs.get("split_by", "::")
         t_s = defs.get("types", [])
         if len(t_s) != len(o_p):
             t_s = ["string"] * len(o_p)
