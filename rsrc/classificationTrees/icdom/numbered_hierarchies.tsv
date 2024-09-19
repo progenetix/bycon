@@ -1,0 +1,1135 @@
+pgx:icdom-800	Neoplasms, NOS	0	1
+pgx:icdom-80000	Neoplasm, benign	2	2
+pgx:icdom-80001	Neoplasm, uncertain whether benign or malignant	2	3
+pgx:icdom-80003	Neoplasm, malignant	2	4
+pgx:icdom-80006	Neoplasm, metastatic	2	5
+pgx:icdom-80009	Neoplasm, malignant, uncertain whether primary or metastatic	2	6
+pgx:icdom-80010	Tumor cells, benign	2	7
+pgx:icdom-80011	Tumor cells, uncertain whether benign or malignant	2	8
+pgx:icdom-80013	Tumor cells, malignant	2	9
+pgx:icdom-80023	Malignant tumor, small cell type	2	10
+pgx:icdom-80033	Malignant tumor, giant cell type	2	11
+pgx:icdom-80043	Malignant tumor, spindle cell type	2	12
+pgx:icdom-80050	Clear cell tumor, NOS	2	13
+pgx:icdom-80053	Malignant tumor, clear cell type	2	14
+pgx:icdom-801-804	Epithelial neoplasms, NOS	0	15
+pgx:icdom-80100	Epithelial tumor, benign	2	16
+pgx:icdom-80102	Carcinoma in situ, NOS	2	17
+pgx:icdom-80103	Carcinoma, NOS	2	18
+pgx:icdom-80106	Carcinoma, metastatic, NOS	2	19
+pgx:icdom-80109	Carcinomatosis	2	20
+pgx:icdom-80110	Epithelioma, benign	2	21
+pgx:icdom-80113	Epithelioma, malignant	2	22
+pgx:icdom-80123	Large cell carcinoma, NOS	2	23
+pgx:icdom-80133	Large cell neuroendocrine carcinoma	2	24
+pgx:icdom-80143	Large cell carcinoma with rhabdoid phenotype	2	25
+pgx:icdom-80153	Glassy cell carcinoma	2	26
+pgx:icdom-80203	Carcinoma, undifferentiated, NOS	2	27
+pgx:icdom-80213	Carcinoma, anaplastic, NOS	2	28
+pgx:icdom-80223	Pleomorphic carcinoma	2	29
+pgx:icdom-80303	Giant cell and spindle cell carcinoma	2	30
+pgx:icdom-80313	Giant cell carcinoma	2	31
+pgx:icdom-80323	Spindle cell carcinoma, NOS	2	32
+pgx:icdom-80333	Pseudosarcomatous carcinoma	2	33
+pgx:icdom-80343	Polygonal cell carcinoma	2	34
+pgx:icdom-80353	Carcinoma with osteoclast-like giant cells	2	35
+pgx:icdom-80400	Tumorlet, benign	2	36
+pgx:icdom-80401	Tumorlet, NOS	2	37
+pgx:icdom-80413	Small cell carcinoma, NOS	2	38
+pgx:icdom-80423	Oat cell carcinoma	2	39
+pgx:icdom-80433	Small cell carcinoma, fusiform cell	2	40
+pgx:icdom-80443	Small cell carcinoma, intermediate cell	2	41
+pgx:icdom-80453	Combined small cell carcinoma	2	42
+pgx:icdom-80463	Non-small cell carcinoma	2	43
+pgx:icdom-805-808	Squamous cell neoplasms	0	44
+pgx:icdom-80500	Papilloma, NOS	2	45
+pgx:icdom-80502	Papillary carcinoma in situ	2	46
+pgx:icdom-80503	Papillary carcinoma, NOS	2	47
+pgx:icdom-80510	Verrucous papilloma	2	48
+pgx:icdom-80513	Verrucous carcinoma, NOS	2	49
+pgx:icdom-80520	Squamous cell papilloma, NOS	2	50
+pgx:icdom-80522	Papillary squamous cell carcinoma, non-invasive	2	51
+pgx:icdom-80523	Papillary squamous cell carcinoma	2	52
+pgx:icdom-80530	Squamous cell papilloma, inverted	2	53
+pgx:icdom-80600	Squamous papillomatosis	2	54
+pgx:icdom-80702	Squamous cell carcinoma in situ, NOS	2	55
+pgx:icdom-80703	Squamous cell carcinoma, NOS	2	56
+pgx:icdom-80706	Squamous cell carcinoma, metastatic, NOS	2	57
+pgx:icdom-80713	Squamous cell carcinoma, keratinizing, NOS	2	58
+pgx:icdom-80723	Squamous cell carcinoma, large cell, nonkeratinizing, NOS	2	59
+pgx:icdom-80733	Squamous cell carcinoma, small cell, nonkeratinizing	2	60
+pgx:icdom-80743	Squamous cell carcinoma, spindle cell	2	61
+pgx:icdom-80753	Squamous cell carcinoma, adenoid	2	62
+pgx:icdom-80762	Squamous cell carcinoma in situ with questionable stromal invasion	2	63
+pgx:icdom-80763	Squamous cell carcinoma, microinvasive	2	64
+pgx:icdom-80770	Squamous intraepithelial neoplasia, low grade	2	65
+pgx:icdom-80772	Squamous intraepithelial neoplasia, high grade	2	66
+pgx:icdom-80783	Squamous cell carcinoma with horn formation	2	67
+pgx:icdom-80802	Queyrat erythroplasia	2	68
+pgx:icdom-80812	Bowen disease	2	69
+pgx:icdom-80823	Lymphoepithelial carcinoma	2	70
+pgx:icdom-80833	Basaloid squamous cell carcinoma	2	71
+pgx:icdom-80843	Squamous cell carcinoma, clear cell type	2	72
+pgx:icdom-809-811	Basal cell neoplasms	0	73
+pgx:icdom-80901	Basal cell tumor	2	74
+pgx:icdom-80903	Basal cell carcinoma, NOS	2	75
+pgx:icdom-80913	Multifocal superficial basal cell carcinoma	2	76
+pgx:icdom-80923	Infiltrating basal cell carcinoma, NOS	2	77
+pgx:icdom-80933	Basal cell carcinoma, fibroepithelial	2	78
+pgx:icdom-80943	Basosquamous carcinoma	2	79
+pgx:icdom-80953	Metatypical carcinoma	2	80
+pgx:icdom-80960	Intraepidermal epithelioma of Jadassohn	2	81
+pgx:icdom-80973	Basal cell carcinoma, nodular	2	82
+pgx:icdom-80983	Adenoid basal carcinoma	2	83
+pgx:icdom-81000	Trichoepithelioma	2	84
+pgx:icdom-81010	Trichofolliculoma	2	85
+pgx:icdom-81020	Trichilemmoma	2	86
+pgx:icdom-81023	Trichilemmocarcinoma	2	87
+pgx:icdom-81030	Pilar tumor	2	88
+pgx:icdom-81100	Pilomatrixoma, NOS	2	89
+pgx:icdom-81103	Pilomatrix carcinoma	2	90
+pgx:icdom-812-813	Transitional cell papillomas and carcinomas	0	91
+pgx:icdom-81200	Transitional cell papilloma, benign	2	92
+pgx:icdom-81201	Urothelial papilloma, NOS	2	93
+pgx:icdom-81202	Transitional cell carcinoma in situ	2	94
+pgx:icdom-81203	Transitional cell carcinoma, NOS	2	95
+pgx:icdom-81210	Schneiderian papilloma, NOS	2	96
+pgx:icdom-81211	Transitional cell papilloma, inverted, NOS	2	97
+pgx:icdom-81213	Schneiderian carcinoma	2	98
+pgx:icdom-81223	Transitional cell carcinoma, spindle cell	2	99
+pgx:icdom-81233	Basaloid carcinoma	2	100
+pgx:icdom-81243	Cloacogenic carcinoma	2	101
+pgx:icdom-81301	Papillary transitional cell neoplasm of low malignant potential	2	102
+pgx:icdom-81302	Papillary transitional cell carcinoma, non-invasive	2	103
+pgx:icdom-81303	Papillary transitional cell carcinoma	2	104
+pgx:icdom-81313	Transitional cell carcinoma, micropapillary	2	105
+pgx:icdom-814-838	Adenomas and adenocarcinomas	0	106
+pgx:icdom-81400	Adenoma, NOS	2	107
+pgx:icdom-81401	Atypical adenoma	2	108
+pgx:icdom-81402	Adenocarcinoma in situ, NOS	2	109
+pgx:icdom-81403	Adenocarcinoma, NOS	2	110
+pgx:icdom-81406	Adenocarcinoma, metastatic, NOS	2	111
+pgx:icdom-81413	Scirrhous adenocarcinoma	2	112
+pgx:icdom-81423	Linitis plastica	2	113
+pgx:icdom-81433	Superficial spreading adenocarcinoma	2	114
+pgx:icdom-81443	Adenocarcinoma, intestinal type	2	115
+pgx:icdom-81453	Carcinoma, diffuse type	2	116
+pgx:icdom-81460	Monomorphic adenoma	2	117
+pgx:icdom-81470	Basal cell adenoma	2	118
+pgx:icdom-81473	Basal cell adenocarcinoma	2	119
+pgx:icdom-81480	Glandular intraepithelial neoplasia, low grade	2	120
+pgx:icdom-81482	Glandular intraepithelial neoplasia, high grade	2	121
+pgx:icdom-81490	Canalicular adenoma	2	122
+pgx:icdom-81500	Pancreatic endocrine tumor, benign	2	123
+pgx:icdom-81501	Pancreatic endocrine tumor, NOS	2	124
+pgx:icdom-81503	Pancreatic endocrine tumor, malignant	2	125
+pgx:icdom-81510	Insulinoma, NOS	2	126
+pgx:icdom-81513	Insulinoma, malignant	2	127
+pgx:icdom-81521	Glucagonoma, NOS	2	128
+pgx:icdom-81523	Glucagonoma, malignant	2	129
+pgx:icdom-81531	Gastrinoma, NOS	2	130
+pgx:icdom-81533	Gastrinoma, malignant	2	131
+pgx:icdom-81543	Mixed pancreatic endocrine and exocrine tumor, malignant	2	132
+pgx:icdom-81551	Vipoma, NOS	2	133
+pgx:icdom-81553	Vipoma, malignant	2	134
+pgx:icdom-81561	Somatostatinoma, NOS	2	135
+pgx:icdom-81563	Somatostatinoma, malignant	2	136
+pgx:icdom-81581	Endocrine tumor, functioning, NOS	2	137
+pgx:icdom-81600	Bile duct adenoma	2	138
+pgx:icdom-81603	Cholangiocarcinoma	2	139
+pgx:icdom-81610	Bile duct cystadenoma	2	140
+pgx:icdom-81613	Bile duct cystadenocarcinoma	2	141
+pgx:icdom-81623	Klatskin tumor	2	142
+pgx:icdom-81630	Pancreatobiliary neoplasm, non-invasive	2	143
+pgx:icdom-81632	Papillary neoplasm, pancreatobiliary-type, with high grade intraepithelial neoplasia	2	144
+pgx:icdom-81633	Pancreatobiliary-type carcinoma	2	145
+pgx:icdom-81700	Liver cell adenoma	2	146
+pgx:icdom-81703	Hepatocellular carcinoma, NOS	2	147
+pgx:icdom-81713	Hepatocellular carcinoma, fibrolamellar	2	148
+pgx:icdom-81723	Hepatocellular carcinoma, scirrhous	2	149
+pgx:icdom-81733	Hepatocellular carcinoma, spindle cell variant	2	150
+pgx:icdom-81743	Hepatocellular carcinoma, clear cell type	2	151
+pgx:icdom-81753	Hepatocellular carcinoma, pleomorphic type	2	152
+pgx:icdom-81803	Combined hepatocellular carcinoma and cholangiocarcinoma	2	153
+pgx:icdom-81900	Trabecular adenoma	2	154
+pgx:icdom-81903	Trabecular adenocarcinoma	2	155
+pgx:icdom-81910	Embryonal adenoma	2	156
+pgx:icdom-82000	Eccrine dermal cylindroma	2	157
+pgx:icdom-82003	Adenoid cystic carcinoma	2	158
+pgx:icdom-82012	Cribriform carcinoma in situ	2	159
+pgx:icdom-82013	Cribriform carcinoma, NOS	2	160
+pgx:icdom-82020	Microcystic adenoma	2	161
+pgx:icdom-82040	Lactating adenoma	2	162
+pgx:icdom-82100	Adenomatous polyp, NOS	2	163
+pgx:icdom-82102	Adenocarcinoma in situ in adenomatous polyp	2	164
+pgx:icdom-82103	Adenocarcinoma in adenomatous polyp	2	165
+pgx:icdom-82110	Tubular adenoma, NOS	2	166
+pgx:icdom-82113	Tubular adenocarcinoma	2	167
+pgx:icdom-82120	Flat adenoma	2	168
+pgx:icdom-82130	Serrated adenoma	2	169
+pgx:icdom-82133	Serrated adenocarcinoma	2	170
+pgx:icdom-82143	Parietal cell carcinoma	2	171
+pgx:icdom-82153	Adenocarcinoma of anal glands	2	172
+pgx:icdom-82200	Adenomatous polyposis coli	2	173
+pgx:icdom-82203	Adenocarcinoma in adenomatous polyposis coli	2	174
+pgx:icdom-82210	Multiple adenomatous polyps	2	175
+pgx:icdom-82213	Adenocarcinoma in multiple adenomatous polyps	2	176
+pgx:icdom-82302	Ductal carcinoma in situ, solid type	2	177
+pgx:icdom-82303	Solid carcinoma, NOS	2	178
+pgx:icdom-82313	Carcinoma simplex	2	179
+pgx:icdom-82401	Carcinoid tumor of uncertain malignant potential	2	180
+pgx:icdom-82403	Carcinoid tumor, NOS	2	181
+pgx:icdom-82413	Enterochromaffin cell carcinoid	2	182
+pgx:icdom-82421	Enterochromaffin-like cell carcinoid, NOS	2	183
+pgx:icdom-82423	Enterochromaffin-like cell tumor, malignant	2	184
+pgx:icdom-82433	Goblet cell carcinoid	2	185
+pgx:icdom-82443	Mixed adenoneuroendocrine carcinoma	2	186
+pgx:icdom-82451	Tubular carcinoid	2	187
+pgx:icdom-82453	Adenocarcinoid tumor	2	188
+pgx:icdom-82463	Neuroendocrine carcinoma, NOS	2	189
+pgx:icdom-82473	Merkel cell carcinoma	2	190
+pgx:icdom-82481	Apudoma	2	191
+pgx:icdom-82493	Atypical carcinoid tumor	2	192
+pgx:icdom-82501	Pulmonary adenomatosis	2	193
+pgx:icdom-82503	Bronchiolo-alveolar adenocarcinoma, NOS	2	194
+pgx:icdom-82510	Alveolar adenoma	2	195
+pgx:icdom-82513	Alveolar adenocarcinoma	2	196
+pgx:icdom-82523	Bronchiolo-alveolar carcinoma, non- mucinous	2	197
+pgx:icdom-82533	Bronchiolo-alveolar carcinoma, mucinous	2	198
+pgx:icdom-82543	Bronchiolo-alveolar carcinoma, mixed mucinous and non-mucinous	2	199
+pgx:icdom-82553	Adenocarcinoma with mixed subtypes	2	200
+pgx:icdom-82600	Papillary adenoma, NOS	2	201
+pgx:icdom-82603	Papillary adenocarcinoma, NOS	2	202
+pgx:icdom-82610	Villous adenoma, NOS	2	203
+pgx:icdom-82612	Adenocarcinoma in situ in villous adenoma	2	204
+pgx:icdom-82613	Adenocarcinoma in villous adenoma	2	205
+pgx:icdom-82623	Villous adenocarcinoma	2	206
+pgx:icdom-82630	Tubulovillous adenoma, NOS	2	207
+pgx:icdom-82632	Adenocarcinoma in situ in tubulovillous adenoma	2	208
+pgx:icdom-82633	Adenocarcinoma in tubulovillous adenoma	2	209
+pgx:icdom-82640	Papillomatosis, glandular	2	210
+pgx:icdom-82653	Micropapillary carcinoma, NOS	2	211
+pgx:icdom-82700	Chromophobe adenoma	2	212
+pgx:icdom-82703	Chromophobe carcinoma	2	213
+pgx:icdom-82710	Prolactinoma	2	214
+pgx:icdom-82720	Pituitary adenoma, NOS	2	215
+pgx:icdom-82723	Pituitary carcinoma, NOS	2	216
+pgx:icdom-82800	Acidophil adenoma	2	217
+pgx:icdom-82803	Acidophil carcinoma	2	218
+pgx:icdom-82810	Mixed acidophil-basophil adenoma	2	219
+pgx:icdom-82813	Mixed acidophil-basophil carcinoma	2	220
+pgx:icdom-82900	Oxyphilic adenoma	2	221
+pgx:icdom-82903	Oxyphilic adenocarcinoma	2	222
+pgx:icdom-83000	Basophil adenoma	2	223
+pgx:icdom-83003	Basophil carcinoma	2	224
+pgx:icdom-83100	Clear cell adenoma	2	225
+pgx:icdom-83103	Clear cell adenocarcinoma, NOS	2	226
+pgx:icdom-83111	Hypernephroid tumor	2	227
+pgx:icdom-83123	Renal cell carcinoma, NOS	2	228
+pgx:icdom-83130	Clear cell adenofibroma	2	229
+pgx:icdom-83131	Clear cell adenofibroma of borderline malignancy	2	230
+pgx:icdom-83133	Clear cell adenocarcinofibroma	2	231
+pgx:icdom-83143	Lipid-rich carcinoma	2	232
+pgx:icdom-83153	Glycogen-rich carcinoma	2	233
+pgx:icdom-83163	Cyst-associated renal cell carcinoma	2	234
+pgx:icdom-83173	Renal cell carcinoma, chromophobe type	2	235
+pgx:icdom-83183	Renal cell carcinoma, sarcomatoid	2	236
+pgx:icdom-83193	Collecting duct carcinoma	2	237
+pgx:icdom-83203	Granular cell carcinoma	2	238
+pgx:icdom-83210	Chief cell adenoma	2	239
+pgx:icdom-83220	Water-clear cell adenoma	2	240
+pgx:icdom-83223	Water-clear cell adenocarcinoma	2	241
+pgx:icdom-83230	Mixed cell adenoma	2	242
+pgx:icdom-83233	Mixed cell adenocarcinoma	2	243
+pgx:icdom-83240	Lipoadenoma	2	244
+pgx:icdom-83250	Metanephric adenoma	2	245
+pgx:icdom-83300	Follicular adenoma	2	246
+pgx:icdom-83301	Atypical follicular adenoma	2	247
+pgx:icdom-83303	Follicular adenocarcinoma, NOS	2	248
+pgx:icdom-83313	Follicular adenocarcinoma, well differentiated	2	249
+pgx:icdom-83323	Follicular adenocarcinoma, trabecular	2	250
+pgx:icdom-83330	Microfollicular adenoma, NOS	2	251
+pgx:icdom-83333	Fetal adenocarcinoma	2	252
+pgx:icdom-83340	Macrofollicular adenoma	2	253
+pgx:icdom-83353	Follicular carcinoma, minimally invasive	2	254
+pgx:icdom-83360	Hyalinizing trabecular adenoma	2	255
+pgx:icdom-83373	Insular carcinoma	2	256
+pgx:icdom-83403	Papillary carcinoma, follicular variant	2	257
+pgx:icdom-83413	Papillary microcarcinoma	2	258
+pgx:icdom-83423	Papillary carcinoma, oxyphilic cell	2	259
+pgx:icdom-83433	Papillary carcinoma, encapsulated	2	260
+pgx:icdom-83443	Papillary carcinoma, columnar cell	2	261
+pgx:icdom-83453	Medullary carcinoma with amyloid stroma	2	262
+pgx:icdom-83463	Mixed medullary-follicular carcinoma	2	263
+pgx:icdom-83473	Mixed medullary-papillary carcinoma	2	264
+pgx:icdom-83503	Nonencapsulated sclerosing carcinoma	2	265
+pgx:icdom-83601	Multiple endocrine adenomas	2	266
+pgx:icdom-83610	Juxtaglomerular tumor	2	267
+pgx:icdom-83700	Adrenal cortical adenoma, NOS	2	268
+pgx:icdom-83703	Adrenal cortical carcinoma	2	269
+pgx:icdom-83710	Adrenal cortical adenoma, compact cell	2	270
+pgx:icdom-83720	Adrenal cortical adenoma, pigmented	2	271
+pgx:icdom-83730	Adrenal cortical adenoma, clear cell	2	272
+pgx:icdom-83740	Adrenal cortical adenoma, glomerulosa cell	2	273
+pgx:icdom-83750	Adrenal cortical adenoma, mixed cell	2	274
+pgx:icdom-83800	Endometrioid adenoma, NOS	2	275
+pgx:icdom-83801	Endometrioid adenoma, borderline malignancy	2	276
+pgx:icdom-83803	Endometrioid adenocarcinoma, NOS	2	277
+pgx:icdom-83810	Endometrioid adenofibroma, NOS	2	278
+pgx:icdom-83811	Endometrioid adenofibroma, borderline malignancy	2	279
+pgx:icdom-83813	Endometrioid adenofibroma, malignant	2	280
+pgx:icdom-83823	Endometrioid adenocarcinoma, secretory variant	2	281
+pgx:icdom-83833	Endometrioid adenocarcinoma, ciliated cell variant	2	282
+pgx:icdom-83843	Adenocarcinoma, endocervical type	2	283
+pgx:icdom-839-842	Adnexal and skin appendage neoplasms	0	284
+pgx:icdom-83900	Skin appendage adenoma	2	285
+pgx:icdom-83903	Skin appendage carcinoma	2	286
+pgx:icdom-83910	Follicular fibroma	2	287
+pgx:icdom-83920	Syringofibroadenoma	2	288
+pgx:icdom-84000	Sweat gland adenoma	2	289
+pgx:icdom-84001	Sweat gland tumor, NOS	2	290
+pgx:icdom-84003	Sweat gland adenocarcinoma	2	291
+pgx:icdom-84010	Apocrine adenoma	2	292
+pgx:icdom-84013	Apocrine adenocarcinoma	2	293
+pgx:icdom-84020	Nodular hidradenoma	2	294
+pgx:icdom-84023	Nodular hidradenoma, malignant	2	295
+pgx:icdom-84030	Eccrine spiradenoma	2	296
+pgx:icdom-84033	Malignant eccrine spiradenoma	2	297
+pgx:icdom-84040	Hidrocystoma	2	298
+pgx:icdom-84050	Papillary hidradenoma	2	299
+pgx:icdom-84060	Papillary syringadenoma	2	300
+pgx:icdom-84070	Syringoma, NOS	2	301
+pgx:icdom-84073	Sclerosing sweat duct carcinoma	2	302
+pgx:icdom-84080	Eccrine papillary adenoma	2	303
+pgx:icdom-84081	Aggressive digital papillary adenoma	2	304
+pgx:icdom-84083	Eccrine papillary adenocarcinoma	2	305
+pgx:icdom-84090	Eccrine poroma	2	306
+pgx:icdom-84093	Eccrine poroma, malignant	2	307
+pgx:icdom-84100	Sebaceous adenoma	2	308
+pgx:icdom-84103	Sebaceous adenocarcinoma	2	309
+pgx:icdom-84133	Eccrine adenocarcinoma	2	310
+pgx:icdom-84200	Ceruminous adenoma	2	311
+pgx:icdom-84203	Ceruminous adenocarcinoma	2	312
+pgx:icdom-843	Mucoepidermoid neoplasms	0	313
+pgx:icdom-84301	Mucoepidermoid tumor	2	314
+pgx:icdom-84303	Mucoepidermoid carcinoma	2	315
+pgx:icdom-844-849	Cystic, mucinous and serous neoplasms	0	316
+pgx:icdom-84400	Cystadenoma, NOS	2	317
+pgx:icdom-84403	Cystadenocarcinoma, NOS	2	318
+pgx:icdom-84410	Serous cystadenoma, NOS	2	319
+pgx:icdom-84413	Serous cystadenocarcinoma, NOS	2	320
+pgx:icdom-84421	Serous cystadenoma, borderline malignancy	2	321
+pgx:icdom-84430	Clear cell cystadenoma	2	322
+pgx:icdom-84441	Clear cell cystic tumor of borderline malignancy	2	323
+pgx:icdom-84500	Papillary cystadenoma, NOS	2	324
+pgx:icdom-84503	Papillary cystadenocarcinoma, NOS	2	325
+pgx:icdom-84511	Papillary cystadenoma, borderline malignancy	2	326
+pgx:icdom-84521	Solid pseudopapillary tumor	2	327
+pgx:icdom-84523	Solid pseudopapillary carcinoma	2	328
+pgx:icdom-84530	Intraductal papillary-mucinous adenoma	2	329
+pgx:icdom-84532	Intraductal papillary-mucinous carcinoma, non-invasive	2	330
+pgx:icdom-84533	Intraductal papillary-mucinous carcinoma, invasive	2	331
+pgx:icdom-84540	Cystic tumor of atrio-ventricular node	2	332
+pgx:icdom-84600	Papillary serous cystadenoma, NOS	2	333
+pgx:icdom-84603	Papillary serous cystadenocarcinoma	2	334
+pgx:icdom-84610	Serous surface papilloma	2	335
+pgx:icdom-84613	Serous surface papillary carcinoma	2	336
+pgx:icdom-84621	Serous papillary cystic tumor of borderline malignancy	2	337
+pgx:icdom-84631	Serous surface papillary tumor of borderline malignancy	2	338
+pgx:icdom-84700	Mucinous cystadenoma, NOS	2	339
+pgx:icdom-84702	Mucinous cystadenocarcinoma, non-invasive	2	340
+pgx:icdom-84703	Mucinous cystadenocarcinoma, NOS	2	341
+pgx:icdom-84710	Papillary mucinous cystadenoma, NOS	2	342
+pgx:icdom-84713	Papillary mucinous cystadenocarcinoma	2	343
+pgx:icdom-84721	Mucinous cystic tumor of borderline malignancy	2	344
+pgx:icdom-84731	Papillary mucinous cystadenoma, borderline malignancy	2	345
+pgx:icdom-84800	Mucinous adenoma	2	346
+pgx:icdom-84801	Low grade appendiceal mucinous neoplasm	2	347
+pgx:icdom-84803	Mucinous adenocarcinoma	2	348
+pgx:icdom-84806	Pseudomyxoma peritonei	2	349
+pgx:icdom-84813	Mucin-producing adenocarcinoma	2	350
+pgx:icdom-84823	Mucinous adenocarcinoma, endocervical type	2	351
+pgx:icdom-84903	Signet ring cell carcinoma	2	352
+pgx:icdom-84906	Metastatic signet ring cell carcinoma	2	353
+pgx:icdom-850-854	Ductal and lobular neoplasms	0	354
+pgx:icdom-85002	Intraductal carcinoma, noninfiltrating, NOS	2	355
+pgx:icdom-85003	Infiltrating duct carcinoma, NOS	2	356
+pgx:icdom-85012	Comedocarcinoma, noninfiltrating	2	357
+pgx:icdom-85013	Comedocarcinoma, NOS	2	358
+pgx:icdom-85023	Secretory carcinoma of breast	2	359
+pgx:icdom-85030	Intraductal papilloma	2	360
+pgx:icdom-85032	Noninfiltrating intraductal papillary adenocarcinoma	2	361
+pgx:icdom-85033	Intraductal papillary adenocarcinoma with invasion	2	362
+pgx:icdom-85040	Intracystic papillary adenoma	2	363
+pgx:icdom-85042	Noninfiltrating intracystic carcinoma	2	364
+pgx:icdom-85043	Intracystic carcinoma, NOS	2	365
+pgx:icdom-85050	Intraductal papillomatosis, NOS	2	366
+pgx:icdom-85060	Adenoma of nipple	2	367
+pgx:icdom-85072	Intraductal micropapillary carcinoma	2	368
+pgx:icdom-85083	Cystic hypersecretory carcinoma	2	369
+pgx:icdom-85103	Medullary carcinoma, NOS	2	370
+pgx:icdom-85123	Medullary carcinoma with lymphoid stroma	2	371
+pgx:icdom-85133	Atypical medullary carcinoma	2	372
+pgx:icdom-85143	Duct carcinoma, desmoplastic type	2	373
+pgx:icdom-85202	Lobular carcinoma in situ, NOS	2	374
+pgx:icdom-85203	Lobular carcinoma, NOS	2	375
+pgx:icdom-85213	Infiltrating ductular carcinoma	2	376
+pgx:icdom-85222	Intraductal carcinoma and lobular carcinoma in situ	2	377
+pgx:icdom-85223	Infiltrating duct and lobular carcinoma	2	378
+pgx:icdom-85233	Infiltrating duct mixed with other types of carcinoma	2	379
+pgx:icdom-85243	Infiltrating lobular mixed with other types of carcinoma	2	380
+pgx:icdom-85253	Polymorphous low grade adenocarcinoma	2	381
+pgx:icdom-85303	Inflammatory carcinoma	2	382
+pgx:icdom-85403	Paget disease, mammary	2	383
+pgx:icdom-85413	Paget disease and infiltrating duct carcinoma of breast	2	384
+pgx:icdom-85423	Paget disease, extramammary	2	385
+pgx:icdom-85433	Paget disease and intraductal carcinoma of breast	2	386
+pgx:icdom-855	Acinar cell neoplasms	0	387
+pgx:icdom-85500	Acinar cell adenoma	2	388
+pgx:icdom-85501	Acinar cell tumor	2	389
+pgx:icdom-85503	Acinar cell carcinoma	2	390
+pgx:icdom-85513	Acinar cell cystadenocarcinoma	2	391
+pgx:icdom-85523	Mixed acinar-ductal carcinoma	2	392
+pgx:icdom-856-857	Complex epithelial neoplasms	0	393
+pgx:icdom-85600	Mixed squamous cell and glandular papilloma	2	394
+pgx:icdom-85603	Adenosquamous carcinoma	2	395
+pgx:icdom-85610	Adenolymphoma	2	396
+pgx:icdom-85623	Epithelial-myoepithelial carcinoma	2	397
+pgx:icdom-85703	Adenocarcinoma with squamous metaplasia	2	398
+pgx:icdom-85713	Adenocarcinoma with cartilaginous and osseous metaplasia	2	399
+pgx:icdom-85723	Adenocarcinoma with spindle cell metaplasia	2	400
+pgx:icdom-85733	Adenocarcinoma with apocrine metaplasia	2	401
+pgx:icdom-85743	Adenocarcinoma with neuroendocrine differentiation	2	402
+pgx:icdom-85753	Metaplastic carcinoma, NOS	2	403
+pgx:icdom-85763	Hepatoid adenocarcinoma	2	404
+pgx:icdom-858	Thymic epithelial neoplasms	0	405
+pgx:icdom-85800	Thymoma, benign	2	406
+pgx:icdom-85801	Thymoma, NOS	2	407
+pgx:icdom-85803	Thymoma, malignant, NOS	2	408
+pgx:icdom-85811	Thymoma, type A, NOS	2	409
+pgx:icdom-85813	Thymoma, type A, malignant	2	410
+pgx:icdom-85821	Thymoma, type AB, NOS	2	411
+pgx:icdom-85823	Thymoma, type AB, malignant	2	412
+pgx:icdom-85831	Thymoma, type B1, NOS	2	413
+pgx:icdom-85833	Thymoma, type B1, malignant	2	414
+pgx:icdom-85841	Thymoma, type B2, NOS	2	415
+pgx:icdom-85843	Thymoma, type B2, malignant	2	416
+pgx:icdom-85851	Thymoma, type B3, NOS	2	417
+pgx:icdom-85853	Thymoma, type B3, malignant	2	418
+pgx:icdom-85863	Thymic carcinoma, NOS	2	419
+pgx:icdom-85870	Ectopic hamartomatous thymoma	2	420
+pgx:icdom-85883	Spindle epithelial tumor with thymus-like element	2	421
+pgx:icdom-85893	Carcinoma showing thymus-like element	2	422
+pgx:icdom-859-867	Specialized gonadal neoplasms	0	423
+pgx:icdom-85901	Sex cord-gonadal stromal tumor, NOS	2	424
+pgx:icdom-85911	Sex cord-gonadal stromal tumor, incompletely differentiated	2	425
+pgx:icdom-85921	Sex cord-gonadal stromal tumor, mixed forms	2	426
+pgx:icdom-85931	Stromal tumor with minor sex cord elements	2	427
+pgx:icdom-86000	Thecoma, NOS	2	428
+pgx:icdom-86003	Thecoma, malignant	2	429
+pgx:icdom-86010	Thecoma, luteinized	2	430
+pgx:icdom-86020	Sclerosing stromal tumor	2	431
+pgx:icdom-86100	Luteoma, NOS	2	432
+pgx:icdom-86201	Granulosa cell tumor, adult type	2	433
+pgx:icdom-86203	Granulosa cell tumor, malignant	2	434
+pgx:icdom-86211	Granulosa cell-theca cell tumor	2	435
+pgx:icdom-86221	Granulosa cell tumor, juvenile	2	436
+pgx:icdom-86231	Sex cord tumor with annular tubules	2	437
+pgx:icdom-86300	Androblastoma, benign	2	438
+pgx:icdom-86301	Androblastoma, NOS	2	439
+pgx:icdom-86303	Androblastoma, malignant	2	440
+pgx:icdom-86310	Sertoli-Leydig cell tumor, well differentiated	2	441
+pgx:icdom-86311	Sertoli-Leydig cell tumor of intermediate differentiation	2	442
+pgx:icdom-86313	Sertoli-Leydig cell tumor, poorly differentiated	2	443
+pgx:icdom-86321	Gynandroblastoma	2	444
+pgx:icdom-86331	Sertoli-Leydig cell tumor, retiform	2	445
+pgx:icdom-86341	Sertoli-Leydig cell tumor, intermediate differentiation, with heterologous elements	2	446
+pgx:icdom-86343	Sertoli-Leydig cell tumor, poorly differentiated, with heterologous elements	2	447
+pgx:icdom-86401	Sertoli cell tumor, NOS	2	448
+pgx:icdom-86403	Sertoli cell carcinoma	2	449
+pgx:icdom-86410	Sertoli cell tumor with lipid storage	2	450
+pgx:icdom-86421	Large cell calcifying Sertoli cell tumor	2	451
+pgx:icdom-86500	Leydig cell tumor, benign	2	452
+pgx:icdom-86501	Leydig cell tumor, NOS	2	453
+pgx:icdom-86503	Leydig cell tumor, malignant	2	454
+pgx:icdom-86600	Hilus cell tumor	2	455
+pgx:icdom-86700	Lipid cell tumor of ovary	2	456
+pgx:icdom-86703	Steroid cell tumor, malignant	2	457
+pgx:icdom-86710	Adrenal rest tumor	2	458
+pgx:icdom-868-871	Paragangliomas and glomus tumors	0	459
+pgx:icdom-86800	Paraganglioma, benign	2	460
+pgx:icdom-86801	Paraganglioma, NOS	2	461
+pgx:icdom-86803	Paraganglioma, malignant	2	462
+pgx:icdom-86811	Sympathetic paraganglioma	2	463
+pgx:icdom-86821	Parasympathetic paraganglioma	2	464
+pgx:icdom-86830	Gangliocytic paraganglioma	2	465
+pgx:icdom-86901	Glomus jugulare tumor, NOS	2	466
+pgx:icdom-86911	Aortic body tumor	2	467
+pgx:icdom-86921	Carotid body tumor	2	468
+pgx:icdom-86931	Extra-adrenal paraganglioma, NOS	2	469
+pgx:icdom-86933	Extra-adrenal paraganglioma, malignant	2	470
+pgx:icdom-87000	Pheochromocytoma, NOS	2	471
+pgx:icdom-87003	Pheochromocytoma, malignant	2	472
+pgx:icdom-87103	Glomangiosarcoma	2	473
+pgx:icdom-87110	Glomus tumor, NOS	2	474
+pgx:icdom-87113	Glomus tumor, malignant	2	475
+pgx:icdom-87120	Glomangioma	2	476
+pgx:icdom-87130	Glomangiomyoma	2	477
+pgx:icdom-872-879	Nevi and melanomas	0	478
+pgx:icdom-87200	Pigmented nevus, NOS	2	479
+pgx:icdom-87202	Melanoma in situ	2	480
+pgx:icdom-87203	Malignant melanoma, NOS	2	481
+pgx:icdom-87213	Nodular melanoma	2	482
+pgx:icdom-87220	Balloon cell nevus	2	483
+pgx:icdom-87223	Balloon cell melanoma	2	484
+pgx:icdom-87230	Halo nevus	2	485
+pgx:icdom-87233	Malignant melanoma, regressing	2	486
+pgx:icdom-87250	Neuronevus	2	487
+pgx:icdom-87260	Magnocellular nevus	2	488
+pgx:icdom-87270	Dysplastic nevus	2	489
+pgx:icdom-87280	Diffuse melanocytosis	2	490
+pgx:icdom-87281	Meningeal melanocytoma	2	491
+pgx:icdom-87283	Meningeal melanomatosis	2	492
+pgx:icdom-87300	Nonpigmented nevus	2	493
+pgx:icdom-87303	Amelanotic melanoma	2	494
+pgx:icdom-87400	Junctional nevus, NOS	2	495
+pgx:icdom-87403	Malignant melanoma in junctional nevus	2	496
+pgx:icdom-87412	Precancerous melanosis, NOS	2	497
+pgx:icdom-87413	Malignant melanoma in precancerous melanosis	2	498
+pgx:icdom-87422	Lentigo maligna	2	499
+pgx:icdom-87423	Lentigo maligna melanoma	2	500
+pgx:icdom-87433	Superficial spreading melanoma	2	501
+pgx:icdom-87443	Acral lentiginous melanoma, malignant	2	502
+pgx:icdom-87453	Desmoplastic melanoma, malignant	2	503
+pgx:icdom-87463	Mucosal lentiginous melanoma	2	504
+pgx:icdom-87500	Intradermal nevus	2	505
+pgx:icdom-87600	Compound nevus	2	506
+pgx:icdom-87610	Small congenital nevus	2	507
+pgx:icdom-87611	Giant pigmented nevus, NOS	2	508
+pgx:icdom-87613	Malignant melanoma in giant pigmented nevus	2	509
+pgx:icdom-87621	Proliferative dermal lesion in congenital nevus	2	510
+pgx:icdom-87700	Epithelioid and spindle cell nevus	2	511
+pgx:icdom-87703	Mixed epithelioid and spindle cell melanoma	2	512
+pgx:icdom-87710	Epithelioid cell nevus	2	513
+pgx:icdom-87713	Epithelioid cell melanoma	2	514
+pgx:icdom-87720	Spindle cell nevus, NOS	2	515
+pgx:icdom-87723	Spindle cell melanoma, NOS	2	516
+pgx:icdom-87733	Spindle cell melanoma, type A	2	517
+pgx:icdom-87743	Spindle cell melanoma, type B	2	518
+pgx:icdom-87800	Blue nevus, NOS	2	519
+pgx:icdom-87803	Blue nevus, malignant	2	520
+pgx:icdom-87900	Cellular blue nevus	2	521
+pgx:icdom-880	Soft tissue tumors and sarcomas, NOS	0	522
+pgx:icdom-88000	Soft tissue tumor, benign	2	523
+pgx:icdom-88003	Sarcoma, NOS	2	524
+pgx:icdom-88009	Sarcomatosis, NOS	2	525
+pgx:icdom-88013	Spindle cell sarcoma	2	526
+pgx:icdom-88023	Giant cell sarcoma	2	527
+pgx:icdom-88033	Small cell sarcoma	2	528
+pgx:icdom-88043	Epithelioid sarcoma	2	529
+pgx:icdom-88053	Undifferentiated sarcoma	2	530
+pgx:icdom-88063	Desmoplastic small round cell tumor	2	531
+pgx:icdom-881-883	Fibromatous neoplasms	0	532
+pgx:icdom-88100	Fibroma, NOS	2	533
+pgx:icdom-88101	Cellular fibroma	2	534
+pgx:icdom-88103	Fibrosarcoma, NOS	2	535
+pgx:icdom-88110	Fibromyxoma	2	536
+pgx:icdom-88113	Fibromyxosarcoma	2	537
+pgx:icdom-88120	Periosteal fibroma	2	538
+pgx:icdom-88123	Periosteal fibrosarcoma	2	539
+pgx:icdom-88130	Fascial fibroma	2	540
+pgx:icdom-88133	Fascial fibrosarcoma	2	541
+pgx:icdom-88143	Infantile fibrosarcoma	2	542
+pgx:icdom-88150	Solitary fibrous tumor	2	543
+pgx:icdom-88153	Solitary fibrous tumor, malignant	2	544
+pgx:icdom-88200	Elastofibroma	2	545
+pgx:icdom-88211	Aggressive fibromatosis	2	546
+pgx:icdom-88221	Abdominal fibromatosis	2	547
+pgx:icdom-88230	Desmoplastic fibroma	2	548
+pgx:icdom-88240	Myofibroma	2	549
+pgx:icdom-88241	Myofibromatosis	2	550
+pgx:icdom-88250	Myofibroblastoma	2	551
+pgx:icdom-88251	Myofibroblastic tumor, NOS	2	552
+pgx:icdom-88260	Angiomyofibroblastoma	2	553
+pgx:icdom-88271	Myofibroblastic tumor, peribronchial	2	554
+pgx:icdom-88300	Benign fibrous histiocytoma	2	555
+pgx:icdom-88301	Atypical fibrous histiocytoma	2	556
+pgx:icdom-88303	Malignant fibrous histiocytoma	2	557
+pgx:icdom-88310	Histiocytoma, NOS	2	558
+pgx:icdom-88320	Dermatofibroma, NOS	2	559
+pgx:icdom-88323	Dermatofibrosarcoma, NOS	2	560
+pgx:icdom-88333	Pigmented dermatofibrosarcoma protuberans	2	561
+pgx:icdom-88341	Giant cell fibroblastoma	2	562
+pgx:icdom-88351	Plexiform fibrohistiocytic tumor	2	563
+pgx:icdom-88361	Angiomatoid fibrous histiocytoma	2	564
+pgx:icdom-884	Myxomatous neoplasms	0	565
+pgx:icdom-88400	Myxoma, NOS	2	566
+pgx:icdom-88403	Myxosarcoma	2	567
+pgx:icdom-88411	Angiomyxoma	2	568
+pgx:icdom-88420	Ossifying fibromyxoid tumor	2	569
+pgx:icdom-885-888	Lipomatous neoplasms	0	570
+pgx:icdom-88500	Lipoma, NOS	2	571
+pgx:icdom-88501	Atypical lipoma	2	572
+pgx:icdom-88503	Liposarcoma, NOS	2	573
+pgx:icdom-88510	Fibrolipoma	2	574
+pgx:icdom-88513	Liposarcoma, well differentiated	2	575
+pgx:icdom-88520	Fibromyxolipoma	2	576
+pgx:icdom-88523	Myxoid liposarcoma	2	577
+pgx:icdom-88533	Round cell liposarcoma	2	578
+pgx:icdom-88540	Pleomorphic lipoma	2	579
+pgx:icdom-88543	Pleomorphic liposarcoma	2	580
+pgx:icdom-88553	Mixed liposarcoma	2	581
+pgx:icdom-88560	Intramuscular lipoma	2	582
+pgx:icdom-88570	Spindle cell lipoma	2	583
+pgx:icdom-88573	Fibroblastic liposarcoma	2	584
+pgx:icdom-88583	Dedifferentiated liposarcoma	2	585
+pgx:icdom-88600	Angiomyolipoma	2	586
+pgx:icdom-88610	Angiolipoma, NOS	2	587
+pgx:icdom-88620	Chondroid lipoma	2	588
+pgx:icdom-88700	Myelolipoma	2	589
+pgx:icdom-88800	Hibernoma	2	590
+pgx:icdom-88810	Lipoblastomatosis	2	591
+pgx:icdom-889-892	Myomatous neoplasms	0	592
+pgx:icdom-88900	Leiomyoma, NOS	2	593
+pgx:icdom-88901	Leiomyomatosis, NOS	2	594
+pgx:icdom-88903	Leiomyosarcoma, NOS	2	595
+pgx:icdom-88910	Epithelioid leiomyoma	2	596
+pgx:icdom-88913	Epithelioid leiomyosarcoma	2	597
+pgx:icdom-88920	Cellular leiomyoma	2	598
+pgx:icdom-88930	Bizarre leiomyoma	2	599
+pgx:icdom-88940	Angiomyoma	2	600
+pgx:icdom-88943	Angiomyosarcoma	2	601
+pgx:icdom-88950	Myoma	2	602
+pgx:icdom-88953	Myosarcoma	2	603
+pgx:icdom-88963	Myxoid leiomyosarcoma	2	604
+pgx:icdom-88971	Smooth muscle tumor of uncertain malignant potential	2	605
+pgx:icdom-88981	Metastasizing leiomyoma	2	606
+pgx:icdom-89000	Rhabdomyoma, NOS	2	607
+pgx:icdom-89003	Rhabdomyosarcoma, NOS	2	608
+pgx:icdom-89013	Pleomorphic rhabdomyosarcoma, adult type	2	609
+pgx:icdom-89023	Mixed type rhabdomyosarcoma	2	610
+pgx:icdom-89030	Fetal rhabdomyoma	2	611
+pgx:icdom-89040	Adult rhabdomyoma	2	612
+pgx:icdom-89050	Genital rhabdomyoma	2	613
+pgx:icdom-89103	Embryonal rhabdomyosarcoma, NOS	2	614
+pgx:icdom-89123	Spindle cell rhabdomyosarcoma	2	615
+pgx:icdom-89203	Alveolar rhabdomyosarcoma	2	616
+pgx:icdom-89213	Rhabdomyosarcoma with ganglionic differentiation	2	617
+pgx:icdom-893-899	Complex mixed and stromal neoplasms	0	618
+pgx:icdom-89300	Endometrial stromal nodule	2	619
+pgx:icdom-89303	Endometrial stromal sarcoma, NOS	2	620
+pgx:icdom-89313	Endometrial stromal sarcoma, low grade	2	621
+pgx:icdom-89320	Adenomyoma	2	622
+pgx:icdom-89333	Adenosarcoma	2	623
+pgx:icdom-89343	Carcinofibroma	2	624
+pgx:icdom-89350	Stromal tumor, benign	2	625
+pgx:icdom-89351	Stromal tumor, NOS	2	626
+pgx:icdom-89353	Stromal sarcoma, NOS	2	627
+pgx:icdom-89360	Gastrointestinal stromal tumor, benign	2	628
+pgx:icdom-89361	Gastrointestinal stromal tumor, NOS	2	629
+pgx:icdom-89363	Gastrointestinal stromal sarcoma	2	630
+pgx:icdom-89400	Pleomorphic adenoma	2	631
+pgx:icdom-89403	Mixed tumor, malignant, NOS	2	632
+pgx:icdom-89413	Carcinoma in pleomorphic adenoma	2	633
+pgx:icdom-89503	Mullerian mixed tumor	2	634
+pgx:icdom-89513	Mesodermal mixed tumor	2	635
+pgx:icdom-89590	Benign cystic nephroma	2	636
+pgx:icdom-89591	Cystic partially differentiated nephroblastoma	2	637
+pgx:icdom-89593	Malignant cystic nephroma	2	638
+pgx:icdom-89601	Mesoblastic nephroma	2	639
+pgx:icdom-89603	Nephroblastoma, NOS	2	640
+pgx:icdom-89633	Malignant rhabdoid tumor	2	641
+pgx:icdom-89643	Clear cell sarcoma of kidney	2	642
+pgx:icdom-89650	Nephrogenic adenofibroma	2	643
+pgx:icdom-89660	Renomedullary interstitial cell tumor	2	644
+pgx:icdom-89670	Ossifying renal tumor	2	645
+pgx:icdom-89703	Hepatoblastoma	2	646
+pgx:icdom-89713	Pancreatoblastoma	2	647
+pgx:icdom-89723	Pulmonary blastoma	2	648
+pgx:icdom-89733	Pleuropulmonary blastoma	2	649
+pgx:icdom-89741	Sialoblastoma	2	650
+pgx:icdom-89751	Calcifying nested epithelial stromal tumor	2	651
+pgx:icdom-89803	Carcinosarcoma, NOS	2	652
+pgx:icdom-89813	Carcinosarcoma, embryonal	2	653
+pgx:icdom-89820	Myoepithelioma	2	654
+pgx:icdom-89823	Malignant myoepithelioma	2	655
+pgx:icdom-89830	Adenomyoepithelioma	2	656
+pgx:icdom-89900	Mesenchymoma, benign	2	657
+pgx:icdom-89901	Mesenchymoma, NOS	2	658
+pgx:icdom-89903	Mesenchymoma, malignant	2	659
+pgx:icdom-89913	Embryonal sarcoma	2	660
+pgx:icdom-900-903	Fibroepithelial neoplasms	0	661
+pgx:icdom-90000	Brenner tumor, NOS	2	662
+pgx:icdom-90001	Brenner tumor, borderline malignancy	2	663
+pgx:icdom-90003	Brenner tumor, malignant	2	664
+pgx:icdom-90100	Fibroadenoma, NOS	2	665
+pgx:icdom-90110	Intracanalicular fibroadenoma	2	666
+pgx:icdom-90120	Pericanalicular fibroadenoma	2	667
+pgx:icdom-90130	Adenofibroma, NOS	2	668
+pgx:icdom-90140	Serous adenofibroma, NOS	2	669
+pgx:icdom-90141	Serous adenofibroma of borderline malignancy	2	670
+pgx:icdom-90143	Serous adenocarcinofibroma	2	671
+pgx:icdom-90150	Mucinous adenofibroma, NOS	2	672
+pgx:icdom-90151	Mucinous adenofibroma of borderline malignancy	2	673
+pgx:icdom-90153	Mucinous adenocarcinofibroma	2	674
+pgx:icdom-90160	Giant fibroadenoma	2	675
+pgx:icdom-90200	Phyllodes tumor, benign	2	676
+pgx:icdom-90201	Phyllodes tumor, borderline	2	677
+pgx:icdom-90203	Phyllodes tumor, malignant	2	678
+pgx:icdom-90300	Juvenile fibroadenoma	2	679
+pgx:icdom-904	Synovial-like neoplasms	0	680
+pgx:icdom-90400	Synovioma, benign	2	681
+pgx:icdom-90403	Synovial sarcoma, NOS	2	682
+pgx:icdom-90413	Synovial sarcoma, spindle cell	2	683
+pgx:icdom-90423	Synovial sarcoma, epithelioid cell	2	684
+pgx:icdom-90433	Synovial sarcoma, biphasic	2	685
+pgx:icdom-90443	Clear cell sarcoma, NOS	2	686
+pgx:icdom-905	Mesothelial neoplasms	0	687
+pgx:icdom-90500	Mesothelioma, benign	2	688
+pgx:icdom-90503	Mesothelioma, malignant	2	689
+pgx:icdom-90510	Fibrous mesothelioma, benign	2	690
+pgx:icdom-90513	Fibrous mesothelioma, malignant	2	691
+pgx:icdom-90520	Epithelioid mesothelioma, benign	2	692
+pgx:icdom-90523	Epithelioid mesothelioma, malignant	2	693
+pgx:icdom-90533	Mesothelioma, biphasic, malignant	2	694
+pgx:icdom-90540	Adenomatoid tumor, NOS	2	695
+pgx:icdom-90550	Multicystic mesothelioma, benign	2	696
+pgx:icdom-90551	Cystic mesothelioma, NOS	2	697
+pgx:icdom-906-909	Germ cell neoplasms	0	698
+pgx:icdom-90603	Dysgerminoma	2	699
+pgx:icdom-90613	Seminoma, NOS	2	700
+pgx:icdom-90623	Seminoma, anaplastic	2	701
+pgx:icdom-90633	Spermatocytic seminoma	2	702
+pgx:icdom-90642	Intratubular malignant germ cells	2	703
+pgx:icdom-90643	Germinoma	2	704
+pgx:icdom-90653	Germ cell tumor, nonseminomatous	2	705
+pgx:icdom-90703	Embryonal carcinoma, NOS	2	706
+pgx:icdom-90713	Yolk sac tumor	2	707
+pgx:icdom-90723	Polyembryoma	2	708
+pgx:icdom-90731	Gonadoblastoma	2	709
+pgx:icdom-90800	Teratoma, benign	2	710
+pgx:icdom-90801	Teratoma, NOS	2	711
+pgx:icdom-90803	Teratoma, malignant, NOS	2	712
+pgx:icdom-90813	Teratocarcinoma	2	713
+pgx:icdom-90823	Malignant teratoma, undifferentiated	2	714
+pgx:icdom-90833	Malignant teratoma, intermediate	2	715
+pgx:icdom-90840	Dermoid cyst, NOS	2	716
+pgx:icdom-90843	Teratoma with malignant transformation	2	717
+pgx:icdom-90853	Mixed germ cell tumor	2	718
+pgx:icdom-90900	Struma ovarii, NOS	2	719
+pgx:icdom-90903	Struma ovarii, malignant	2	720
+pgx:icdom-90911	Strumal carcinoid	2	721
+pgx:icdom-910	Trophoblastic neoplasms	0	722
+pgx:icdom-91000	Hydatidiform mole, NOS	2	723
+pgx:icdom-91001	Invasive hydatidiform mole	2	724
+pgx:icdom-91003	Choriocarcinoma, NOS	2	725
+pgx:icdom-91013	Choriocarcinoma combined with other germ cell elements	2	726
+pgx:icdom-91023	Malignant teratoma, trophoblastic	2	727
+pgx:icdom-91030	Partial hydatidiform mole	2	728
+pgx:icdom-91041	Placental site trophoblastic tumor	2	729
+pgx:icdom-91053	Trophoblastic tumor, epithelioid	2	730
+pgx:icdom-911	Mesonephromas	0	731
+pgx:icdom-91100	Mesonephroma, benign	2	732
+pgx:icdom-91101	Mesonephric tumor, NOS	2	733
+pgx:icdom-91103	Mesonephroma, malignant	2	734
+pgx:icdom-912-916	Blood vessel tumors	0	735
+pgx:icdom-91200	Hemangioma, NOS	2	736
+pgx:icdom-91203	Hemangiosarcoma	2	737
+pgx:icdom-91210	Cavernous hemangioma	2	738
+pgx:icdom-91220	Venous hemangioma	2	739
+pgx:icdom-91230	Racemose hemangioma	2	740
+pgx:icdom-91243	Kupffer cell sarcoma	2	741
+pgx:icdom-91250	Epithelioid hemangioma	2	742
+pgx:icdom-91300	Hemangioendothelioma, benign	2	743
+pgx:icdom-91301	Hemangioendothelioma, NOS	2	744
+pgx:icdom-91303	Hemangioendothelioma, malignant	2	745
+pgx:icdom-91310	Capillary hemangioma	2	746
+pgx:icdom-91320	Intramuscular hemangioma	2	747
+pgx:icdom-91331	Epithelioid hemangioendothelioma, NOS	2	748
+pgx:icdom-91333	Epithelioid hemangioendothelioma, malignant	2	749
+pgx:icdom-91351	Endovascular papillary angioendothelioma	2	750
+pgx:icdom-91361	Spindle cell hemangioendothelioma	2	751
+pgx:icdom-91403	Kaposi sarcoma	2	752
+pgx:icdom-91410	Angiokeratoma	2	753
+pgx:icdom-91420	Verrucous keratotic hemangioma	2	754
+pgx:icdom-91500	Hemangiopericytoma, benign	2	755
+pgx:icdom-91501	Hemangiopericytoma, NOS	2	756
+pgx:icdom-91503	Hemangiopericytoma, malignant	2	757
+pgx:icdom-91600	Angiofibroma, NOS	2	758
+pgx:icdom-91610	Acquired tufted hemangioma	2	759
+pgx:icdom-91611	Hemangioblastoma	2	760
+pgx:icdom-917	Lymphatic vessel tumors	0	761
+pgx:icdom-91700	Lymphangioma, NOS	2	762
+pgx:icdom-91703	Lymphangiosarcoma	2	763
+pgx:icdom-91710	Capillary lymphangioma	2	764
+pgx:icdom-91720	Cavernous lymphangioma	2	765
+pgx:icdom-91730	Cystic lymphangioma	2	766
+pgx:icdom-91740	Lymphangiomyoma	2	767
+pgx:icdom-91741	Lymphangiomyomatosis	2	768
+pgx:icdom-91750	Hemolymphangioma	2	769
+pgx:icdom-918-924	Osseous and chondromatous neoplasms	0	770
+pgx:icdom-91800	Osteoma, NOS	2	771
+pgx:icdom-91803	Osteosarcoma, NOS	2	772
+pgx:icdom-91813	Chondroblastic osteosarcoma	2	773
+pgx:icdom-91823	Fibroblastic osteosarcoma	2	774
+pgx:icdom-91833	Telangiectatic osteosarcoma	2	775
+pgx:icdom-91843	Osteosarcoma in Paget disease of bone	2	776
+pgx:icdom-91853	Small cell osteosarcoma	2	777
+pgx:icdom-91863	Central osteosarcoma	2	778
+pgx:icdom-91873	Intraosseous well differentiated osteosarcoma	2	779
+pgx:icdom-91910	Osteoid osteoma, NOS	2	780
+pgx:icdom-91923	Parosteal osteosarcoma	2	781
+pgx:icdom-91933	Periosteal osteosarcoma	2	782
+pgx:icdom-91943	High grade surface osteosarcoma	2	783
+pgx:icdom-91953	Intracortical osteosarcoma	2	784
+pgx:icdom-92000	Osteoblastoma, NOS	2	785
+pgx:icdom-92001	Aggressive osteoblastoma	2	786
+pgx:icdom-92100	Osteochondroma	2	787
+pgx:icdom-92101	Osteochondromatosis, NOS	2	788
+pgx:icdom-92200	Chondroma, NOS	2	789
+pgx:icdom-92201	Chondromatosis, NOS	2	790
+pgx:icdom-92203	Chondrosarcoma, NOS	2	791
+pgx:icdom-92210	Juxtacortical chondroma	2	792
+pgx:icdom-92213	Juxtacortical chondrosarcoma	2	793
+pgx:icdom-92300	Chondroblastoma, NOS	2	794
+pgx:icdom-92303	Chondroblastoma, malignant	2	795
+pgx:icdom-92313	Myxoid chondrosarcoma	2	796
+pgx:icdom-92403	Mesenchymal chondrosarcoma	2	797
+pgx:icdom-92410	Chondromyxoid fibroma	2	798
+pgx:icdom-92423	Clear cell chondrosarcoma	2	799
+pgx:icdom-92433	Dedifferentiated chondrosarcoma	2	800
+pgx:icdom-925	Giant cell tumors	0	801
+pgx:icdom-92501	Giant cell tumor of bone, NOS	2	802
+pgx:icdom-92503	Giant cell tumor of bone, malignant	2	803
+pgx:icdom-92511	Giant cell tumor of soft parts, NOS	2	804
+pgx:icdom-92513	Malignant giant cell tumor of soft parts	2	805
+pgx:icdom-92520	Tenosynovial giant cell tumor	2	806
+pgx:icdom-92523	Malignant tenosynovial giant cell tumor	2	807
+pgx:icdom-926	Miscellaneous bone tumors	0	808
+pgx:icdom-92603	Ewing sarcoma	2	809
+pgx:icdom-92613	Adamantinoma of long bones	2	810
+pgx:icdom-92620	Ossifying fibroma	2	811
+pgx:icdom-927-934	Odontogenic tumors	0	812
+pgx:icdom-92700	Odontogenic tumor, benign	2	813
+pgx:icdom-92701	Odontogenic tumor, NOS	2	814
+pgx:icdom-92703	Odontogenic tumor, malignant	2	815
+pgx:icdom-92710	Ameloblastic fibrodentinoma	2	816
+pgx:icdom-92720	Cementoma, NOS	2	817
+pgx:icdom-92730	Cementoblastoma, benign	2	818
+pgx:icdom-92740	Cementifying fibroma	2	819
+pgx:icdom-92750	Gigantiform cementoma	2	820
+pgx:icdom-92800	Odontoma, NOS	2	821
+pgx:icdom-92810	Compound odontoma	2	822
+pgx:icdom-92820	Complex odontoma	2	823
+pgx:icdom-92900	Ameloblastic fibro-odontoma	2	824
+pgx:icdom-92903	Ameloblastic odontosarcoma	2	825
+pgx:icdom-93000	Adenomatoid odontogenic tumor	2	826
+pgx:icdom-93010	Calcifying odontogenic cyst	2	827
+pgx:icdom-93020	Odontogenic ghost cell tumor	2	828
+pgx:icdom-93100	Ameloblastoma, NOS	2	829
+pgx:icdom-93103	Ameloblastoma, malignant	2	830
+pgx:icdom-93110	Odontoameloblastoma	2	831
+pgx:icdom-93120	Squamous odontogenic tumor	2	832
+pgx:icdom-93200	Odontogenic myxoma	2	833
+pgx:icdom-93210	Central odontogenic fibroma	2	834
+pgx:icdom-93220	Peripheral odontogenic fibroma	2	835
+pgx:icdom-93300	Ameloblastic fibroma	2	836
+pgx:icdom-93303	Ameloblastic fibrosarcoma	2	837
+pgx:icdom-93400	Calcifying epithelial odontogenic tumor	2	838
+pgx:icdom-93411	Clear cell odontogenic tumor	2	839
+pgx:icdom-93423	Odontogenic carcinosarcoma	2	840
+pgx:icdom-935-937	Miscellaneous tumors	0	841
+pgx:icdom-93501	Craniopharyngioma	2	842
+pgx:icdom-93511	Craniopharyngioma, adamantinomatous	2	843
+pgx:icdom-93521	Craniopharyngioma, papillary	2	844
+pgx:icdom-93601	Pinealoma	2	845
+pgx:icdom-93611	Pineocytoma	2	846
+pgx:icdom-93623	Pineoblastoma	2	847
+pgx:icdom-93630	Melanotic neuroectodermal tumor	2	848
+pgx:icdom-93643	Peripheral neuroectodermal tumor	2	849
+pgx:icdom-93653	Askin tumor	2	850
+pgx:icdom-93703	Chordoma, NOS	2	851
+pgx:icdom-93713	Chondroid chordoma	2	852
+pgx:icdom-93723	Dedifferentiated chordoma	2	853
+pgx:icdom-93730	Parachordoma	2	854
+pgx:icdom-938-948	Gliomas	0	855
+pgx:icdom-93803	Glioma, malignant	2	856
+pgx:icdom-93813	Gliomatosis cerebri	2	857
+pgx:icdom-93823	Mixed glioma	2	858
+pgx:icdom-93831	Subependymoma	2	859
+pgx:icdom-93841	Subependymal giant cell astrocytoma	2	860
+pgx:icdom-93900	Choroid plexus papilloma, NOS	2	861
+pgx:icdom-93901	Atypical choroid plexus papilloma	2	862
+pgx:icdom-93903	Choroid plexus carcinoma	2	863
+pgx:icdom-93913	Ependymoma, NOS	2	864
+pgx:icdom-93923	Ependymoma, anaplastic	2	865
+pgx:icdom-93933	Papillary ependymoma	2	866
+pgx:icdom-93941	Myxopapillary ependymoma	2	867
+pgx:icdom-93953	Papillary tumor of the pineal region	2	868
+pgx:icdom-94003	Astrocytoma, NOS	2	869
+pgx:icdom-94013	Astrocytoma, anaplastic	2	870
+pgx:icdom-94103	Protoplasmic astrocytoma	2	871
+pgx:icdom-94113	Gemistocytic astrocytoma	2	872
+pgx:icdom-94121	Desmoplastic infantile astrocytoma	2	873
+pgx:icdom-94130	Dysembryoplastic neuroepithelial tumor	2	874
+pgx:icdom-94203	Fibrillary astrocytoma	2	875
+pgx:icdom-94211	Pilocytic astrocytoma	2	876
+pgx:icdom-94233	Polar spongioblastoma	2	877
+pgx:icdom-94243	Pleomorphic xanthoastrocytoma	2	878
+pgx:icdom-94253	Pilomyxoid astrocytoma	2	879
+pgx:icdom-94303	Astroblastoma	2	880
+pgx:icdom-94311	Angiocentric glioma	2	881
+pgx:icdom-94321	Pituicytoma	2	882
+pgx:icdom-94403	Glioblastoma, NOS	2	883
+pgx:icdom-94413	Giant cell glioblastoma	2	884
+pgx:icdom-94421	Gliofibroma	2	885
+pgx:icdom-94423	Gliosarcoma	2	886
+pgx:icdom-94441	Chordoid glioma	2	887
+pgx:icdom-94503	Oligodendroglioma, NOS	2	888
+pgx:icdom-94513	Oligodendroglioma, anaplastic	2	889
+pgx:icdom-94603	Oligodendroblastoma	2	890
+pgx:icdom-94703	Medulloblastoma, NOS	2	891
+pgx:icdom-94713	Desmoplastic nodular medulloblastoma	2	892
+pgx:icdom-94723	Medullomyoblastoma	2	893
+pgx:icdom-94733	Primitive neuroectodermal tumor, NOS	2	894
+pgx:icdom-94743	Large cell medulloblastoma	2	895
+pgx:icdom-94803	Cerebellar sarcoma, NOS	2	896
+pgx:icdom-949-952	Neuroepitheliomatous neoplasms	0	897
+pgx:icdom-94900	Ganglioneuroma	2	898
+pgx:icdom-94903	Ganglioneuroblastoma	2	899
+pgx:icdom-94910	Ganglioneuromatosis	2	900
+pgx:icdom-94920	Gangliocytoma	2	901
+pgx:icdom-94930	Dysplastic gangliocytoma of cerebellum (Lhermitte-Duclos)	2	902
+pgx:icdom-95003	Neuroblastoma, NOS	2	903
+pgx:icdom-95010	Medulloepithelioma, benign	2	904
+pgx:icdom-95013	Medulloepithelioma, NOS	2	905
+pgx:icdom-95020	Teratoid medulloepithelioma, benign	2	906
+pgx:icdom-95023	Teratoid medulloepithelioma	2	907
+pgx:icdom-95033	Neuroepithelioma, NOS	2	908
+pgx:icdom-95043	Spongioneuroblastoma	2	909
+pgx:icdom-95051	Ganglioglioma, NOS	2	910
+pgx:icdom-95053	Ganglioglioma, anaplastic	2	911
+pgx:icdom-95061	Central neurocytoma	2	912
+pgx:icdom-95070	Pacinian tumor	2	913
+pgx:icdom-95083	Atypical teratoid/rhabdoid tumor	2	914
+pgx:icdom-95091	Papillary glioneuronal tumor	2	915
+pgx:icdom-95100	Retinocytoma	2	916
+pgx:icdom-95103	Retinoblastoma, NOS	2	917
+pgx:icdom-95113	Retinoblastoma, differentiated	2	918
+pgx:icdom-95123	Retinoblastoma, undifferentiated	2	919
+pgx:icdom-95133	Retinoblastoma, diffuse	2	920
+pgx:icdom-95141	Retinoblastoma, spontaneously regressed	2	921
+pgx:icdom-95203	Olfactory neurogenic tumor	2	922
+pgx:icdom-95213	Olfactory neurocytoma	2	923
+pgx:icdom-95223	Olfactory neuroblastoma	2	924
+pgx:icdom-95233	Olfactory neuroepithelioma	2	925
+pgx:icdom-953	Meningiomas	0	926
+pgx:icdom-95300	Meningioma, NOS	2	927
+pgx:icdom-95301	Meningiomatosis, NOS	2	928
+pgx:icdom-95303	Meningioma, malignant	2	929
+pgx:icdom-95310	Meningothelial meningioma	2	930
+pgx:icdom-95320	Fibrous meningioma	2	931
+pgx:icdom-95330	Psammomatous meningioma	2	932
+pgx:icdom-95340	Angiomatous meningioma	2	933
+pgx:icdom-95350	Hemangioblastic meningioma	2	934
+pgx:icdom-95370	Transitional meningioma	2	935
+pgx:icdom-95381	Clear cell meningioma	2	936
+pgx:icdom-95383	Papillary meningioma	2	937
+pgx:icdom-95391	Atypical meningioma	2	938
+pgx:icdom-95393	Meningeal sarcomatosis	2	939
+pgx:icdom-954-957	Nerve sheath tumors	0	940
+pgx:icdom-95400	Neurofibroma, NOS	2	941
+pgx:icdom-95401	Neurofibromatosis, NOS	2	942
+pgx:icdom-95403	Malignant peripheral nerve sheath tumor	2	943
+pgx:icdom-95410	Melanotic neurofibroma	2	944
+pgx:icdom-95500	Plexiform neurofibroma	2	945
+pgx:icdom-95600	Neurilemoma, NOS	2	946
+pgx:icdom-95601	Neurinomatosis	2	947
+pgx:icdom-95603	Neurilemoma, malignant	2	948
+pgx:icdom-95613	Malignant peripheral nerve sheath tumor with rhabdomyoblastic differentiation	2	949
+pgx:icdom-95620	Neurothekeoma	2	950
+pgx:icdom-95700	Neuroma, NOS	2	951
+pgx:icdom-95710	Perineurioma, NOS	2	952
+pgx:icdom-95713	Perineurioma, malignant	2	953
+pgx:icdom-958	Granular cell tumors and alveolar soft part sarcomas	0	954
+pgx:icdom-95800	Granular cell tumor, NOS	2	955
+pgx:icdom-95803	Granular cell tumor, malignant	2	956
+pgx:icdom-95813	Alveolar soft part sarcoma	2	957
+pgx:icdom-95820	Granular cell tumor of the sellar region	2	958
+pgx:icdom-959-972	Hodgkin and non-Hodgkin lymphomas	0	959
+pgx:icdom-959	Malignant lymphomas, NOS or diffuse	1	960
+pgx:icdom-95903	Malignant lymphoma, NOS	2	961
+pgx:icdom-95913	Malignant lymphoma, non-Hodgkin, NOS	2	962
+pgx:icdom-95963	Composite Hodgkin and non-Hodgkin lymphoma	2	963
+pgx:icdom-95973	Primary cutaneous follicle centre lymphoma	2	964
+pgx:icdom-965-966	Hodgkin lymphoma	1	965
+pgx:icdom-96503	Hodgkin lymphoma, NOS	2	966
+pgx:icdom-96513	Hodgkin lymphoma, lymphocyte-rich	2	967
+pgx:icdom-96523	Hodgkin lymphoma, mixed cellularity, NOS	2	968
+pgx:icdom-96533	Hodgkin lymphoma, lymphocyte depletion, NOS	2	969
+pgx:icdom-96543	Hodgkin lymphoma, lymphocyte depletion, diffuse fibrosis	2	970
+pgx:icdom-96553	Hodgkin lymphoma, lymphocyte depletion, reticular	2	971
+pgx:icdom-96593	Hodgkin lymphoma, nodular lymphocyte predominance	2	972
+pgx:icdom-96613	Hodgkin granuloma	2	973
+pgx:icdom-96623	Hodgkin sarcoma	2	974
+pgx:icdom-96633	Hodgkin lymphoma, nodular sclerosis, NOS	2	975
+pgx:icdom-96643	Hodgkin lymphoma, nodular sclerosis, cellular phase	2	976
+pgx:icdom-96653	Hodgkin lymphoma, nodular sclerosis, grade 1	2	977
+pgx:icdom-96673	Hodgkin lymphoma, nodular sclerosis, grade 2	2	978
+pgx:icdom-967-972	Non-hodgkin lymphomas	1	979
+pgx:icdom-967-969	Mature B-cell lymphomas	1	980
+pgx:icdom-96703	Malignant lymphoma, small B lymphocytic, NOS	2	981
+pgx:icdom-96713	Malignant lymphoma, lymphoplasmacytic	2	982
+pgx:icdom-96733	Mantle cell lymphoma	2	983
+pgx:icdom-96753	Malignant lymphoma, mixed small and large cell, diffuse	2	984
+pgx:icdom-96783	Primary effusion lymphoma	2	985
+pgx:icdom-96793	Mediastinal large B-cell lymphoma	2	986
+pgx:icdom-96803	Malignant lymphoma, large B-cell, diffuse, NOS	2	987
+pgx:icdom-96843	Malignant lymphoma, large B-cell, diffuse, immunoblastic, NOS	2	988
+pgx:icdom-96873	Burkitt lymphoma, NOS	2	989
+pgx:icdom-96883	T-cell/histiocyte rich large B-cell lymphoma	2	990
+pgx:icdom-96893	Splenic marginal zone B-cell lymphoma	2	991
+pgx:icdom-96903	Follicular lymphoma, NOS	2	992
+pgx:icdom-96913	Follicular lymphoma, grade 2	2	993
+pgx:icdom-96953	Follicular lymphoma, grade 1	2	994
+pgx:icdom-96983	Follicular lymphoma, grade 3	2	995
+pgx:icdom-96993	Marginal zone B-cell lymphoma, NOS	2	996
+pgx:icdom-970-971	Mature T- and NK-cell lymphomas	1	997
+pgx:icdom-97003	Mycosis fungoides	2	998
+pgx:icdom-97013	Sezary syndrome	2	999
+pgx:icdom-97023	Mature T-cell lymphoma, NOS	2	1000
+pgx:icdom-97053	Angioimmunoblastic T-cell lymphoma	2	1001
+pgx:icdom-97083	Subcutaneous panniculitis-like T-cell lymphoma	2	1002
+pgx:icdom-97093	Cutaneous T-cell lymphoma, NOS	2	1003
+pgx:icdom-97123	Intravascular large B-cell lymphoma	2	1004
+pgx:icdom-97143	Anaplastic large cell lymphoma, T cell and Null cell type	2	1005
+pgx:icdom-97163	Hepatosplenic T-cell lymphoma	2	1006
+pgx:icdom-97173	Intestinal T-cell lymphoma	2	1007
+pgx:icdom-97183	Primary cutaneous CD30+ T-cell lymphoproliferative disorder	2	1008
+pgx:icdom-97193	NK/T-cell lymphoma, nasal and nasal-type	2	1009
+pgx:icdom-972	Precursor cell lymphoblastic lymphoma	1	1010
+pgx:icdom-97243	Systemic EBV positive T-cell lymphoproliferative disease of childhood	2	1011
+pgx:icdom-97253	Hydroa vacciniforme-like lymphoma	2	1012
+pgx:icdom-97263	Primary cutaneous gamma-delta T-cell lymphoma	2	1013
+pgx:icdom-97273	Precursor cell lymphoblastic lymphoma, NOS	2	1014
+pgx:icdom-97283	Precursor B-cell lymphoblastic lymphoma	2	1015
+pgx:icdom-97293	Precursor T-cell lymphoblastic lymphoma	2	1016
+pgx:icdom-973	Plasma cell tumors	0	1017
+pgx:icdom-97313	Plasmacytoma, NOS	2	1018
+pgx:icdom-97323	Multiple myeloma	2	1019
+pgx:icdom-97333	Plasma cell leukemia	2	1020
+pgx:icdom-97343	Plasmacytoma, extramedullary	2	1021
+pgx:icdom-97353	Plasmablastic lymphoma	2	1022
+pgx:icdom-97373	ALK positive large B-cell lymphoma	2	1023
+pgx:icdom-97383	Large B-cell lymphoma arising in HHV8-associated multicentric Castleman disease	2	1024
+pgx:icdom-974	Mast cell tumors	0	1025
+pgx:icdom-97401	Mastocytoma, NOS	2	1026
+pgx:icdom-97403	Mast cell sarcoma	2	1027
+pgx:icdom-97411	Indolent systemic mastocytosis	2	1028
+pgx:icdom-97413	Malignant mastocytosis	2	1029
+pgx:icdom-97423	Mast cell leukemia	2	1030
+pgx:icdom-975	Neoplasms of histiocytes and accessory lymphoid cells	0	1031
+pgx:icdom-97503	Malignant histiocytosis	2	1032
+pgx:icdom-97513	Langerhans cell histiocytosis, NOS	2	1033
+pgx:icdom-97553	Histiocytic sarcoma	2	1034
+pgx:icdom-97563	Langerhans cell sarcoma	2	1035
+pgx:icdom-97573	Interdigitating dendritic cell sarcoma	2	1036
+pgx:icdom-97583	Follicular dendritic cell sarcoma	2	1037
+pgx:icdom-97593	Fibroblastic reticular cell tumor	2	1038
+pgx:icdom-976	Immunoproliferative diseases	0	1039
+pgx:icdom-97603	Immunoproliferative disease, NOS	2	1040
+pgx:icdom-97613	Waldenstrom macroglobulinemia	2	1041
+pgx:icdom-97623	Heavy chain disease, NOS	2	1042
+pgx:icdom-97643	Immunoproliferative small intestinal disease	2	1043
+pgx:icdom-97651	Monoclonal gammopathy of undetermined significance	2	1044
+pgx:icdom-97661	Angiocentric immunoproliferative lesion	2	1045
+pgx:icdom-97671	Angioimmunoblastic lymphadenopathy (AIC)	2	1046
+pgx:icdom-97681	T-gamma lymphoproliferative disease	2	1047
+pgx:icdom-97691	Immunoglobulin deposition disease	2	1048
+pgx:icdom-980-994	Leukemias	0	1049
+pgx:icdom-980	Leukemias, NOS	1	1050
+pgx:icdom-98003	Leukemia, NOS	2	1051
+pgx:icdom-98013	Acute leukemia, NOS	2	1052
+pgx:icdom-98053	Acute biphenotypic leukemia	2	1053
+pgx:icdom-98063	Mixed phenotype acute leukemia with t(9;22)(q34;q11.2); BCR-ABL1	2	1054
+pgx:icdom-98073	Mixed phenotype acute leukemia with t(v;11q23); MLL rearranged	2	1055
+pgx:icdom-98083	Mixed phenotype acute leukemia, B/myeloid, NOS	2	1056
+pgx:icdom-98093	Mixed phenotype acute leukemia, T/myeloid, NOS	2	1057
+pgx:icdom-981-983	Lymphoid leukemias	1	1058
+pgx:icdom-98113	B lymphoblastic leukemia/lymphoma, NOS	2	1059
+pgx:icdom-98123	B lymphoblastic leukemia/lymphoma with t(9;22)(q34;q11.2); BCR-ABL1	2	1060
+pgx:icdom-98133	B lymphoblastic leukemia/lymphoma with t(v;11q23); MLL rearranged	2	1061
+pgx:icdom-98143	B lymphoblastic leukemia/lymphoma with t(12;21)(p13;q22); TEL-AML1 (ETV6-RUNX1)	2	1062
+pgx:icdom-98153	B lymphoblastic leukemia/lymphoma with hyperdiploidy	2	1063
+pgx:icdom-98163	B lymphoblastic leukemia/lymphoma with hypodiploidy (Hypodiploid ALL)	2	1064
+pgx:icdom-98173	B lymphoblastic leukemia/lymphoma with t(5;14)(q31;q32); IL3-IGH	2	1065
+pgx:icdom-98183	B lymphoblastic leukemia/lymphoma with t(1;19)(q23;p13.3); E2A-PBX1 (TCF3-PBX1)	2	1066
+pgx:icdom-98203	Lymphoid leukemia, NOS	2	1067
+pgx:icdom-98233	B-cell chronic lymphocytic leukemia/small lymphocytic lymphoma	2	1068
+pgx:icdom-98263	Burkitt cell leukemia	2	1069
+pgx:icdom-98273	Adult T-cell leukemia/lymphoma (HTLV-1 positive)	2	1070
+pgx:icdom-98313	T-cell large granular lymphocytic leukemia	2	1071
+pgx:icdom-98323	Prolymphocytic leukemia, NOS	2	1072
+pgx:icdom-98333	Prolymphocytic leukemia, B-cell type	2	1073
+pgx:icdom-98343	Prolymphocytic leukemia, T-cell type	2	1074
+pgx:icdom-98353	Precursor cell lymphoblastic leukemia, NOS	2	1075
+pgx:icdom-98363	Precursor B-cell lymphoblastic leukemia	2	1076
+pgx:icdom-98373	Precursor T-cell lymphoblastic leukemia	2	1077
+pgx:icdom-984-993	Myeloid leukemias	1	1078
+pgx:icdom-98403	Acute myeloid leukemia, M6 type	2	1079
+pgx:icdom-98603	Myeloid leukemia, NOS	2	1080
+pgx:icdom-98613	Acute myeloid leukemia, NOS	2	1081
+pgx:icdom-98633	Chronic myeloid leukemia, NOS	2	1082
+pgx:icdom-98653	Acute myeloid leukemia with t(6;9)(p23;q34); DEK-NUP214	2	1083
+pgx:icdom-98663	Acute promyelocytic leukemia, t(15;17)(q22;q11-12)	2	1084
+pgx:icdom-98673	Acute myelomonocytic leukemia	2	1085
+pgx:icdom-98693	Acute myeloid leukemia with inv(3)(q21;q26.2) or t(13.3)(q21;q26.2); RPN1-EVI1	2	1086
+pgx:icdom-98703	Acute basophilic leukemia	2	1087
+pgx:icdom-98713	Acute myeloid leukemia with abnormal marrow eosinophils	2	1088
+pgx:icdom-98723	Acute myeloid leukemia, minimal differentiation	2	1089
+pgx:icdom-98733	Acute myeloid leukemia without maturation	2	1090
+pgx:icdom-98743	Acute myeloid leukemia with maturation	2	1091
+pgx:icdom-98753	Chronic myelogenous leukemia, BCR/ABL positive	2	1092
+pgx:icdom-98763	Atypical chronic myeloid leukemia, BCR/ABL negative	2	1093
+pgx:icdom-98913	Acute monocytic leukemia	2	1094
+pgx:icdom-98953	Acute myeloid leukemia with myelodysplasia-related changes	2	1095
+pgx:icdom-98963	Acute myeloid leukemia, t(8;21)(q22;q22)	2	1096
+pgx:icdom-98973	Acute myeloid leukemia, 11q23 abnormalities	2	1097
+pgx:icdom-98981	Transient abnormal myelopoiesis	2	1098
+pgx:icdom-98983	Myeloid leukemia associated with Down Syndrome	2	1099
+pgx:icdom-99103	Acute megakaryoblastic leukemia	2	1100
+pgx:icdom-99113	Acute myeloid leukemia (megakaryoblastic) with t(1;22)(p13;q13); RBM15-MKL1	2	1101
+pgx:icdom-99203	Therapy related myeloid neoplasm	2	1102
+pgx:icdom-99303	Myeloid sarcoma	2	1103
+pgx:icdom-99313	Acute panmyelosis with myelofibrosis	2	1104
+pgx:icdom-994	Other leukemias	1	1105
+pgx:icdom-99403	Hairy cell leukemia	2	1106
+pgx:icdom-99453	Chronic myelomonocytic leukemia, NOS	2	1107
+pgx:icdom-99463	Juvenile myelomonocytic leukemia	2	1108
+pgx:icdom-99483	Aggressive NK-cell leukemia	2	1109
+pgx:icdom-995-996	Chronic myeloproliferative disorders	0	1110
+pgx:icdom-99503	Polycythemia vera	2	1111
+pgx:icdom-99603	Myeloproliferative neoplasm, NOS	2	1112
+pgx:icdom-99613	Primary myelofibrosis	2	1113
+pgx:icdom-99623	Essential thrombocythemia	2	1114
+pgx:icdom-99633	Chronic neutrophilic leukemia	2	1115
+pgx:icdom-99643	Chronic eosinophilic leukemia, NOS	2	1116
+pgx:icdom-99653	Myeloid and lymphoid neoplasms with PDGFRA rearrangement	2	1117
+pgx:icdom-99663	Myeloid neoplasms with PDGFRB rearrangement	2	1118
+pgx:icdom-99673	Myeloid and lymphoid neoplasms with FGFR1 abnormalities	2	1119
+pgx:icdom-997	Other hematologic disorders	0	1120
+pgx:icdom-99701	Lymphoproliferative disorder, NOS	2	1121
+pgx:icdom-99711	Post transplant lymphoproliferative disorder, NOS	2	1122
+pgx:icdom-99713	Polymorphic post transplant lymphoproliferative disorder	2	1123
+pgx:icdom-99753	Myloproliferative neoplasm, unclassifiable	2	1124
+pgx:icdom-998-999	Myelodysplastic syndromes	0	1125
+pgx:icdom-99803	Refractory anemia	2	1126
+pgx:icdom-99823	Refractory anemia with sideroblasts	2	1127
+pgx:icdom-99833	Refractory anemia with excess blasts	2	1128
+pgx:icdom-99843	Refractory anemia with excess blasts in transformation	2	1129
+pgx:icdom-99853	Refractory cytopenia with multilineage dysplasia	2	1130
+pgx:icdom-99863	Myelodysplastic syndrome with 5q deletion (5q-) syndrome	2	1131
+pgx:icdom-99873	Therapy-related myelodysplastic syndrome, NOS	2	1132
+pgx:icdom-99893	Myelodysplastic syndrome, NOS	2	1133
+pgx:icdom-99913	Refractory neutropenia	2	1134
+pgx:icdom-99923	Refractory thrombocytopenia	2	1135

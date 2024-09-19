@@ -26,6 +26,8 @@ properties:
     examples:
       - breast carcinoma
       - adenocarcinoma [cell line HeLa]
+      - rectal adenocarcinoma [MSI, grade 3, metastasized]
+      - rectal adenocarcinoma [MSI, brain metastasis]
   externalReferences:
     type: array
     items:

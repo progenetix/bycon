@@ -21,6 +21,10 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2023-09-13 (v.1.9.3)
+
+* services moved to bycon from byconaut
+
 ### 2023-09-12 (v.1.9.2)
 
 * mostly `byconaut` additions (housekeeping scripts etc. and map plot fix)

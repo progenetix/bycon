@@ -52,7 +52,7 @@ def publications():
         BeaconErrorResponse().response(422)
 
     mongo_client = MongoClient(host=DB_MONGOHOST)
-    pub_coll = mongo_client[ "progenetix" ][ "publications" ]
+    pub_coll = mongo_client[ "_byconServicesDB" ][ "publications" ]
     p_re = re.compile( f_d_s["pubmed"]["pattern"] )
     d_k = set_selected_delivery_keys(s_c.get("method_keys"))
     p_l = [ ]
@@ -134,7 +134,7 @@ def _create_filters_query():
     if BYC["TEST_MODE"] is True:
         test_mode_count = int(BYC_PARS.get('test_mode_count', 5))
         mongo_client = MongoClient(host=DB_MONGOHOST)
-        data_coll = mongo_client[ "progenetix" ][ "publications" ]
+        data_coll = mongo_client[ "_byconServicesDB" ][ "publications" ]
 
         rs = list(data_coll.aggregate([{"$sample": {"size": test_mode_count}}]))
         query = {"_id": {"$in": list(s["_id"] for s in rs)}}

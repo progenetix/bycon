@@ -1,0 +1,12 @@
+EFO:0030063	genomic copy number assessment	0	1
+EFO:0030064	regional base ploidy	1	2
+EFO:0030065	copy-neutral loss of heterozygosity	2	3
+EFO:0030066	relative copy number variation	1	4
+EFO:0030067	copy number loss	2	5
+EFO:0030068	low-level copy number loss	3	6
+EFO:0020073	high-level copy number loss	3	7
+EFO:0030069	complete genomic deletion	4	8
+EFO:0030070	copy number gain	2	9
+EFO:0030071	low-level copy number gain	3	10
+EFO:0030072	high-level copy number gain	3	11
+EFO:0030073	focal genome amplification	4	12
