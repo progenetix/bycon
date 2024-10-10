@@ -59,8 +59,8 @@ def install_beacon_server(no_sudo):
     b_i_d_p = path.join( *install["bycon_install_dir"] )
 
     l_conf_source = path.join(dir_path, "local", "")
-    server_source = path.join(dir_path, "bycon", "beaconServer", "")
-    services_source = path.join(dir_path, "bycon", "services", "")
+    server_source = path.join(dir_path, "beaconServer", "")
+    services_source = path.join(dir_path, "byconServices", "")
     l_conf_target = path.join(dir_path, "bycon", "local", "")
     l_server_target = path.join(b_i_d_p, "local", "")
     server_target = path.join(b_i_d_p, "beaconServer", "")

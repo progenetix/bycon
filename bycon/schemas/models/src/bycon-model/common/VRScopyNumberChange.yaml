@@ -1,0 +1,30 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/VRScopyNumberChange/v2024-08-13
+title: VRS Copy Number Change
+type: object
+description: >-
+  Simplified VRS CNV schema for use in `bycon`.
+required:
+  all_of:
+    - type
+    - subject
+    - location
+properties:
+  type:
+    type: string
+    const: CopyNumberChange
+    default: CopyNumberChange
+    description: MUST be "CopyNumberChange"
+  copy_change:
+    type: string
+    description: >-
+      MUST be one of "EFO:0030069" (complete genomic loss), "EFO:0020073"
+      (high-level loss),  "EFO:0030068" (low-level loss), "EFO:0030067" (loss),
+      "EFO:0030064" (regional base ploidy),  "EFO:0030070" (gain), "EFO:0030071"
+      (low-level gain), "EFO:0030072" (high-level gain).
+  location:
+    $ref: './VRSsequenceLocation.yaml'
+  required:
+    - copy_change
+    - location
+    - variantType

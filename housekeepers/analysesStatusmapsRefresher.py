@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-from os import environ
-import sys, datetime
+import datetime
 from isodate import date_isoformat
 from pymongo import MongoClient
 from progress.bar import Bar
 
 from bycon import *
-from bycon.services import collation_utils, file_utils, interval_utils, service_helpers
+from byconServiceLibs import *
 
 loc_path = path.dirname( path.abspath(__file__) )
 log_path = path.join( loc_path, pardir, "logs" )
@@ -32,16 +31,13 @@ def main():
 
 def analyses_refresher():
     initialize_bycon_service()
-    interval_utils.generate_genome_bins()
-    service_helpers.ask_limit_reset()
-
-    if len(BYC["BYC_DATASET_IDS"]) > 1:
-        print("Please give only one dataset using -d")
-        exit()
+    GB = GenomeBins()
+    ask_limit_reset()
+    assertSingleDatasetOrExit()
 
     ds_id = BYC["BYC_DATASET_IDS"][0]
-    collation_utils.set_collation_types()
-    print(f'=> Using data values from {ds_id} for {BYC.get("genomic_interval_count", 0)} intervals...')
+    set_collation_types()
+    print(f'=> Using data values from {ds_id} for {GB.get_genome_bin_count()} intervals...')
 
     limit = BYC_PARS.get("limit", 0)
     data_client = MongoClient(host=DB_MONGOHOST)
@@ -57,21 +53,21 @@ def analyses_refresher():
 
     if not ds_results.get("analyses.id"):
         print(f'... collecting analysis id values from {ds_id} ...')
-        cs_ids = []
+        ana_ids = []
         c_i = 0
         for ana in cs_coll.find( {} ):
             c_i += 1
-            cs_ids.append(ana["id"])
+            ana_ids.append(ana["id"])
             if limit > 0:
                 if limit == c_i:
                     break
-        cs_no = len(cs_ids)
+        cs_no = len(ana_ids)
         print(f'¡¡¡ Using {cs_no} analyses from {ds_id} !!!')
     else:
-        cs_ids = ds_results["analyses.id"]["target_values"]
-        cs_no = len(cs_ids)
+        ana_ids = ds_results["analyses.id"]["target_values"]
+        cs_no = len(ana_ids)
 
-    print(f'Re-generating statusmaps with {BYC["genomic_interval_count"]} intervals for {cs_no} analyses...')
+    print(f'Re-generating statusmaps with {GB.get_genome_bin_count()} intervals for {cs_no} analyses...')
     bar = Bar("{} analyses".format(ds_id), max = cs_no, suffix='%(percent)d%%'+" of "+str(cs_no) )
     counter = 0
     updated = 0
@@ -80,36 +76,36 @@ def analyses_refresher():
     if "n" in proceed.lower():
         exit()
 
-    no_cnv_type = 0
-    for ana_id in cs_ids:
+    GB = GenomeBins()
 
+    duplicates = []
+
+    no_cnv_type = 0
+    for ana_id in ana_ids:
         ana = cs_coll.find_one( { "id": ana_id } )
         _id = ana.get("_id")
         counter += 1
-
-        bar.next()
-
         if "SNV" in ana.get("variant_class", "CNV"):
             no_cnv_type += 1
             continue
 
-        # only the defined parameters will be overwritten
-        cs_update_obj = { "info": ana.get("info", {}) }
-        cs_update_obj["info"].pop("statusmaps", None)
-        cs_update_obj["info"].pop("cnvstatistics", None)
-
+        bar.next()
         cs_vars = v_coll.find({ "analysis_id": ana_id })
-        maps, cs_cnv_stats, cs_chro_stats = interval_utils.interval_cnv_arrays(cs_vars)
-
-        cs_update_obj.update({"cnv_statusmaps": maps})
-        cs_update_obj.update({"cnv_stats": cs_cnv_stats})
-        cs_update_obj.update({"cnv_chro_stats": cs_chro_stats})
-        cs_update_obj.update({ "updated": datetime.datetime.now().isoformat() })
+        maps, cs_cnv_stats, cs_chro_stats, dids = GB.getAnalysisFracMapsAndStats(cs_vars)
+        if len(dids) > 0:
+            duplicates += dids
+        update_obj = {
+            "info": ana.get("info", {}),
+            "cnv_statusmaps": maps,
+            "cnv_stats": cs_cnv_stats,
+            "cnv_chro_stats": cs_chro_stats,
+            "updated": datetime.datetime.now().isoformat()
+        }
 
         if BYC.get("TEST_MODE", False) is True: 
-            prjsonnice(cs_chro_stats)
+            pass
         else:
-            cs_coll.update_one( { "_id": _id }, { '$set': cs_update_obj }  )
+            cs_coll.update_one( { "_id": _id }, { '$set': update_obj }  )
             updated += 1
 
         ####################################################################
@@ -120,10 +116,23 @@ def analyses_refresher():
 
     print(f"{counter} analyses were processed")
     print(f"{no_cnv_type} analyses were not from CNV calling")
-    print(f'{updated} analyses were updated for\n    `cnv_statusmaps`\n    `cnv_stats`\n    `cnv_chro_stats`\nusing {BYC["genomic_interval_count"]} bins ({BYC_PARS.get("genome_binning", "")})')
+    print(f'{updated} analyses were updated for\n    `cnv_statusmaps`\n    `cnv_stats`\n    `cnv_chro_stats`\nusing {GB.get_genome_bin_count()} bins ({BYC_PARS.get("genome_binning", "")})')
+
+    if len(duplicates) > 0:
+        print(f'¡¡¡ {len(duplicates)} duplicate variant entries were found !!!')
+        delete = input(f'Do you want to delete **{len(duplicates)}** duplicate variants?\n(y|N): ')
+        if "y" in delete.lower():
+            del_no = 0
+            for v__id in duplicates:
+                if BYC.get("TEST_MODE", False) is True:
+                    print(f'...would delete {v_coll.find_one( { "_id": v__id } )}')
+                else:
+                    v_coll.delete_one( { "_id": v__id } )
+                    del_no += 1
+            print(f'{del_no} duplicates were deleted')
 
     log = BYC.get("WARNINGS", [])
-    file_utils.write_log(log, path.join( log_path, "analyses_statusmaps" ))
+    write_log(log, path.join( log_path, "analyses_statusmaps" ))
 
 
 ################################################################################

@@ -5,8 +5,8 @@ from os import path, environ, pardir
 from pymongo import MongoClient
 from progress.bar import Bar
 
-from bycon import *
-from bycon.services import collation_utils
+from bycon import BYC, config, initialize_bycon_service, prdbug
+from byconServiceLibs import assertSingleDatasetOrExit, hierarchy_from_file, set_collation_types, write_log
 
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
@@ -22,21 +22,12 @@ pkg_path = path.join( dir_path, pardir )
 ################################################################################
 
 def main():
-    collations_creator()
-
-################################################################################
-
-def collations_creator():
     initialize_bycon_service()
-
-    if len(BYC["BYC_DATASET_IDS"]) > 1:
-        print("Please give only one dataset using -d")
-        exit()
-    ds_id = BYC["BYC_DATASET_IDS"][0]
+    ds_id = assertSingleDatasetOrExit()
 
     print(f'Creating collations for {ds_id}')
 
-    collation_utils.set_collation_types()
+    set_collation_types()
     f_d_s = BYC.get("filter_definitions", {})
 
     for coll_type, coll_defs in f_d_s.items():
@@ -44,6 +35,7 @@ def collations_creator():
         if not collationed:
             continue
         pre_h_f = path.join( pkg_path, "rsrc", "classificationTrees", coll_type, "numbered_hierarchies.tsv" )
+        pre_c_f = path.join( pkg_path, "logs", "inventory", f'{ds_id}_{coll_type}_existing_codes.tsv' )
         collection = coll_defs["scope"]
         db_key = coll_defs["db_key"]
 
@@ -57,12 +49,8 @@ def collations_creator():
             print( "Creating dummy hierarchy for " + coll_type)
             hier =  _get_dummy_hierarchy(ds_id, coll_type, coll_defs)
 
-        coll_client = MongoClient(host=DB_MONGOHOST)
-        coll_coll = coll_client[ ds_id ]["collations"]
-
-        data_client = MongoClient(host=DB_MONGOHOST)
-        data_db = data_client[ ds_id ]
-        data_coll = data_db[ collection ]
+        coll_coll = MongoClient(host=config.DB_MONGOHOST)[ ds_id ]["collations"]
+        data_coll = MongoClient(host=config.DB_MONGOHOST)[ ds_id ][ collection ]
 
         onto_ids = _get_ids_for_prefix( data_coll, coll_defs )
         onto_keys = list( set( onto_ids ) & hier.keys() )
@@ -126,10 +114,16 @@ def collations_creator():
         # UPDATE   
         if not BYC["TEST_MODE"]:
             bar.finish()
-            print("==> Updating database ...")
             if matched > 0:
+                print("==> Updating database ...")
                 coll_coll.delete_many( { "collation_type": coll_type } )
                 coll_coll.insert_many( sel_hiers )
+                print("==> Writing Codes ...")
+                codes = []
+                for h in sel_hiers:
+                    if (c := h.get("code_matches",0)) > 0:
+                        codes.append( f'{h["id"]}\t{h.get("label","")}\t{h.get("code_matches","")}' )
+                write_log(codes, pre_c_f, "")
 
         print(f'===> Found {matched} of {no} {coll_type} codes & added them to {ds_id}.collations <===')
 
@@ -143,15 +137,13 @@ def get_prefix_hierarchy( ds_id, coll_type, pre_h_f):
         print(f'¡¡¡ missing {coll_type} !!!')
         return
 
-    hier = collation_utils.hierarchy_from_file(ds_id, coll_type, pre_h_f)
+    hier = hierarchy_from_file(ds_id, coll_type, pre_h_f)
     no = len(hier.keys())
 
     # now adding terms missing from the tree ###################################
     print("Looking for missing {} codes in {}.{} ...".format(coll_type, ds_id, coll_defs["scope"]))
-    data_client = MongoClient(host=DB_MONGOHOST)
-    data_db = data_client[ ds_id ]
-    data_coll = data_db[coll_defs["scope"]]
 
+    data_coll = MongoClient(host=config.DB_MONGOHOST)[ ds_id ][coll_defs["scope"]]
     db_key = coll_defs.get("db_key", "")    
     onto_ids = _get_ids_for_prefix( data_coll, coll_defs )
 
@@ -229,7 +221,7 @@ def _make_dummy_publication_hierarchy():
     f_d_s = BYC.get("filter_definitions", {})
     coll_type = "pubmed"
     coll_defs = f_d_s[coll_type]
-    data_coll = MongoClient(host=DB_MONGOHOST)["_byconServicesDB"]["publications"]
+    data_coll = MongoClient(host=config.DB_MONGOHOST)["_byconServicesDB"]["publications"]
     query = { "id": { "$regex": r'^PMID\:\d+?$' } }
     no = data_coll.count_documents( query )
     bar = Bar("Publications...", max = no, suffix='%(percent)d%%'+" of "+str(no) )
@@ -262,8 +254,7 @@ def _make_dummy_publication_hierarchy():
 ################################################################################
 
 def _get_dummy_hierarchy(ds_id, coll_type, coll_defs):
-    data_client = MongoClient(host=DB_MONGOHOST)
-    data_db = data_client[ ds_id ]
+    data_db = MongoClient(host=config.DB_MONGOHOST)[ ds_id ]
     data_coll = data_db[ coll_defs["scope"] ]
     data_pat = coll_defs["pattern"]
     db_key = coll_defs["db_key"]

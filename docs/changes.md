@@ -21,7 +21,60 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
-### 2023-09-19 (v.1.9.4)
+### 2024-10-10 (v2.0.0 "Taito City")
+
+#### General Summary
+
+The 2.0.0 version of `bycon` represents a milestone release where a general
+updated project structure and code base has been established. The main changes involve:
+
+* re-integration of utility functionality into the project
+    - `byconServices`, `housekeepers`, `importers`, `rsrc` have been (re-)integrated
+      from `byconaut`
+    - similarly, `byconServiceLibs` are now part of the `bycon` libraries
+* re-structuring of the `beaconServer` apps and calling
+    - all general Beacon functions in `bycon` are now invoked from a few
+      classes which correspond to the Beacon response types
+* (ongoing) deprecation of non-standard parameters and functions
+
+#### Recent Additions
+
+* rewrote path parsing and entity selection
+    - added `path_id_value_bycon_parameter` to map the REST path `{id}`
+      to a parameter name (e.g. `biosampleId` or `filters` for some services); this removes the separate processing of `request_entity_path_id_value`
+      later on
+* moved more service functions into dedicated modules; most of the service "apps"
+  now just call the response modules/functions
+    - this might led to a future removal of the separate apps/module files
+      and adding the calls directly to `services.py` in the near future...
+
+### 2024-09-30 (v 1.9.8)
+
+* general refactoring of the calling from the `beacon.py` app
+    - remval of all the dedicated caller modules (e.g. `datasets.py`, `filtering_terms.py` ...)
+      which are now just called by there response functions
+* more code streamlining for `byconServices` apps
+    - mostly removal of executable status
+    - more removal of functions from main modules (e.g. `ontologymaps` now uses a
+      separate `OntologyMaps` class in a library module)
+
+### 2024-09-25 (v 1.9.7)
+
+* **BUG FIX**: CNV statistics accessible through the `progenetix.org/services/cnvstats`
+  endpoint had been broken for a while, delivering wrong CNV coverage values.
+
+### 2024-09-25 (v 1.9.6)
+
+* fixes: some broken apps due to incomplete library referencing after update
+
+### 2024-09-24 (v 1.9.5)
+
+* refactoring of service library loading
+    - the main `bycon/__init__.py` now pre-loads the `byconServices` libraries
+* renaming of `services` to `byconServices`
+    - for the web server the `byconServices` files are still copied to `services`
+
+### 2024-09-19 (v.1.9.4)
 
 * `byconaut` => `bycon refactoring
     - move of many "mature" utility functions from `byconaut` into the `bycon`
@@ -47,21 +100,21 @@ db.runCommand(
 );
 ```
 
-### 2023-09-13 (v.1.9.3)
+### 2024-09-13 (v.1.9.3)
 
 * services moved to bycon from byconaut
 
-### 2023-09-12 (v.1.9.2)
+### 2024-09-12 (v.1.9.2)
 
 * mostly `byconaut` additions (housekeeping scripts etc. and map plot fix)
 
-### 2023-08-13 (v.1.9.1)
+### 2024-08-13 (v.1.9.1)
 
 * modifications to the VRS Adjacency based format for fusions
     - Example [progenetix.org/beacon/biosamples/pgxbs-kftvgifa/g_variants](https://progenetix.org/beacon/biosamples/pgxbs-kftvgifa/g_variants?includeHandovers=false)
 * modifications to the `ISCNdefuser` script in `byconaut` for testing fusions
 
-### 2023-08-07 (v.1.9.0)
+### 2024-08-07 (v.1.9.0)
 
 * adding the new `Adjunction ` variant format based on VRS v2.0pre
     - query method `variantFusionRequest` (using `mate_...` parameters etc.)
@@ -72,7 +125,7 @@ db.runCommand(
     - for details please look at `datatable_mappings.yaml`
 * rewrite of the `RefactoredValues` class in `bycon_helpers`
 
-### 2023-07-30 (v.1.8.9)
+### 2024-07-30 (v.1.8.9)
 
 * rewrite of query stack as `ByconDatasetResults` class
     - including fix of `analyses` reporting: Now no aggregation towards biosamples
@@ -83,7 +136,7 @@ db.runCommand(
   all variants have to occurr in same individual  or - usually - biosample)
 * TODO: check multi-variant queries for multi-analyses responses ...
 
-### 2023-07-17 (v.1.8.8)
+### 2024-07-17 (v.1.8.8)
 
 * We removed of the server URL rewrites to services for e.g. `output=table`
 pragmas. One has to use the specific endpoints (that have existed since Ocober 2023)
@@ -91,7 +144,7 @@ and entities, e.g.:
     - old: `https://progenetix.org/beacon/individuals/?filters=pgx:cohort-oneKgenomes&datasetIds=progenetix&output=table`
     - now: `https://progenetix.org/services/sampletable/?datasetIds=progenetix&filters=pgx:cohort-oneKgenomes&response_entity_path_id=individuals`
 
-### 2023-07-10 (v.1.8.7)
+### 2024-07-10 (v.1.8.7)
 
 * fixed wrong `meta.returned_granularity`
 * changed the [`map` schema](https://progenetix.org/beacon/map/) in line with todays's discussions an
@@ -100,7 +153,7 @@ and entities, e.g.:
   class and adjusted some of the optional parameters by editing the `ByconVariant().vrsVariant()`
   class/method
 
-### 2023-07-08 (v.1.8.6)
+### 2024-07-08 (v.1.8.6)
 
 * more work on cleaning up the table formats and `byconaut` tools
 * fix of `response_entity_path_id=analyses` for `services/sampletables`
@@ -108,7 +161,7 @@ and entities, e.g.:
 * cleaner standard schema definitions for export/documentation (`genomicVariations`
   will need more work...)
 
-### 2023-06-24 (v.1.8.5)
+### 2024-06-24 (v.1.8.5)
 
 * bug fix: `variantMinSize` wasn't evaluated if also `variantMaxSize` was given
 * `byconaut`: change in datastructure of status maps and frequencies
@@ -118,7 +171,7 @@ and entities, e.g.:
     - this allows now a simple overplotting of high level gains and losses over
       the low level/combined CNV histograms
 
-### 2023-06-19 (v.1.8.4)
+### 2024-06-19 (v.1.8.4)
 
 * changed the values for individual.sex from PATO to EFO (see the [Progenetix data notes](https://docs.progenetix.org/changelog/#2024-06-18-switching-ontology-use-for-individualsex))
 * changed the default for `includeResultsetResponses` from `ALL` to `HIT`, in
@@ -126,7 +179,7 @@ and entities, e.g.:
     - now empty resultsets won't appear in the list
     - the Progenetix / Beaconplus fron-ends call an `ALL` value...
 
-### 2023-06-11 (v.1.8.3)
+### 2024-06-11 (v.1.8.3)
 
 * restructuring of the whole entity / path ... interpolation - now 
   `set_entities()` and `initialize_bycon_service()` are part of `bycon`
@@ -139,14 +192,14 @@ and entities, e.g.:
   (service entities)
 
 
-### 2023-06-06 (v.1.8.2)
+### 2024-06-06 (v.1.8.2)
 
 * removed server side pagination; this should be implemented by clients based
   on the numbers from the response summary
 * FIX: pagination did not work correctly when requesting
   pavges > 1 using a handover id (due to a "double pagination" at query and response preparation times)
 
-### 2023-05-27 (v.1.8.1)
+### 2024-05-27 (v.1.8.1)
 
 * re-organized the `local` config location
 * fixed the correct entity use for non-standard (services...) in test mode
@@ -155,7 +208,7 @@ and entities, e.g.:
   the same first 100 etc. samples are returned)
 * more fixes for geographic map output after recent code rewrite
 
-### 2023-05-05 (v1.8.0)
+### 2024-05-05 (v1.8.0)
 
 With this update the `byc` collection object has been abandoned & removed. Parameters
 and definitions are now predefined in the global parameters in `/bycon/config.py`
@@ -163,17 +216,17 @@ and (similar to before) populated from external definition files or (for `BYC_PA
 from processed commansd line, URL or POST parameters. These changes have been propagated
 through both `bycon` and `byconaut`.
 
-### 2023-05-03 (v1.7.2)
+### 2024-05-03 (v1.7.2)
 
 This update moves most definitions and pre-processed parameters from the `byc`
 object to the global `BYC` object and eliminates (much of) the "passing `byc` around"
 necessity. Still needs some additional cleanups.
 
-### 2023-04-25 (v1.7.1)
+### 2024-04-25 (v1.7.1)
 
 * bug fix (typo in new `info.var_length` calculation)
 
-### 2023-04-16 (v1.7.0)
+### 2024-04-16 (v1.7.0)
 
 This version provides a larger update to the multi-variant query concept. We now
 provide:
@@ -215,7 +268,7 @@ provide:
    ... see [Github issue #123](https://github.com/ga4gh-beacon/beacon-v2/issues/123#issuecomment-2059711886)).
 
 
-### 2023-04-03 (v1.6.5)
+### 2024-04-03 (v1.6.5)
 
 #### Multi-variant matches first pass
 
@@ -517,7 +570,7 @@ the `byconeer` project.
 
 This is an extensive internal code update which
 
-* moves service response generation to byconaut (implemented as `ByconautServiceResponse`
+* moves service response generation to byconaut (implemented as `ByconServiceResponse`
 class w/ its methods)
 * removes many of the methods from `service_utils` since they have been implemented
 in the beacon or services response classes and (mostly) limits the library to
@@ -656,7 +709,7 @@ definitions and "local" ones. Partcullarly:
 
 ##### `byconaut`
 
-* moved `geomap_utils` to `byconaut/services/lib`
+* moved `geoloc_utils` to `byconaut/services/lib`
 * improved index generation for `2dsphere` indexes
 * moved `geolocs` to `_byconServicesDB` and adjusted code accordingly
 * fixed `frequencyMapsGenerator` for the new database

@@ -9,10 +9,10 @@ from bycon_helpers import *
 from handover_generation import dataset_response_add_handovers
 from query_execution import ByconDatasetResults # execute_bycon_queries
 from query_generation import ByconQuery
-from read_specs import datasets_update_latest_stats
+from read_specs import datasets_update_latest_stats, load_yaml_empty_fallback
 from response_remapping import *
 from variant_mapping import ByconVariant
-from schema_parsing import object_instance_from_schema_name
+from schema_parsing import get_schema_file_path, object_instance_from_schema_name
 from service_utils import set_special_modes
 
 ################################################################################
@@ -37,6 +37,7 @@ class BeaconResponseMeta:
         self.__meta_add_parameters()
         self.__meta_add_received_request_summary_parameters()
         return self.response_meta
+
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private ------------------------------------#
@@ -101,7 +102,7 @@ class BeaconResponseMeta:
             if p in BYC_PARS and p in r_r_s:
                 r_r_s.update({p: BYC_PARS.get(p)})
 
-        for q in ["cohort_ids"]:
+        for q in ["cohort_ids", "cyto_bands", "chro_bases"]:
             if q in BYC_PARS:
                 r_r_s.update({"request_parameters": always_merger.merge( r_r_s.get("request_parameters", {}), { "cohort_ids": BYC_PARS.get(q) })})
 
@@ -125,13 +126,14 @@ class BeaconErrorResponse:
     def __init__(self):
         self.error_response = object_instance_from_schema_name("beaconErrorResponse", "")
         self.meta = BeaconResponseMeta().populatedMeta()
+        self.errors = BYC.get("ERRORS", [])
 
     
     # -------------------------------------------------------------------------#
 
     def error(self, error_code=422):
         self.error_response.update({
-            "error": {"error_code": error_code, "error_message": ", ".join(BYC["ERRORS"])},
+            "error": {"error_code": error_code, "error_message": ", ".join(self.errors)},
             "meta": self.meta
         })
         return self.error_response
@@ -139,9 +141,12 @@ class BeaconErrorResponse:
 
     # -------------------------------------------------------------------------#
 
-    def response(self, error_code=422):
+    def respond_if_errors(self, error_code=422):
+        prdbug(len(self.errors))
+        if len(self.errors) < 1:
+            return False
         self.error_response.update({
-            "error": {"error_code": error_code, "error_message": ", ".join(BYC["ERRORS"])},
+            "error": {"error_code": error_code, "error_message": ", ".join(self.errors)},
             "meta": self.meta
         })
         print_json_response(self.error_response)
@@ -157,8 +162,11 @@ class BeaconInfoResponse:
     """
     def __init__(self):
         self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
+        self.response_entity_id = BYC.get("response_entity_id", "info")
+        self.entity_defaults = BYC.get("entity_defaults", {})
         self.data_response = object_instance_from_schema_name("beaconInfoResponse", "")
         self.data_response.update({"meta": BeaconResponseMeta().populatedMeta() })
+        self.info_response_content = {}
 
         return
     
@@ -167,7 +175,10 @@ class BeaconInfoResponse:
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def populatedInfoResponse(self, response={}):
+    def populatedInfoResponse(self):
+        self.__populateInfoResponse()
+        response = self.info_response_content
+        self.__response_add_returned_schemas()
         r_k_s = []
         for p in response.keys():
             if "NoneType" in str(type(response[p])):
@@ -178,14 +189,62 @@ class BeaconInfoResponse:
         return self.data_response
 
 
+    # -------------------------------------------------------------------------#
+    # ---------------------------- private ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __populateInfoResponse(self):
+        if "configuration" in self.response_entity_id:
+            c_f = get_schema_file_path("beaconConfiguration")
+            self.info_response_content = load_yaml_empty_fallback(c_f)
+            return
+        if "beaconMap" in self.response_entity_id:
+            c_f = get_schema_file_path("beaconMap")
+            self.info_response_content = load_yaml_empty_fallback(c_f)
+            return
+        if "entryType" in self.response_entity_id:
+            c_f = get_schema_file_path("beaconConfiguration")
+            e_t_s = load_yaml_empty_fallback(c_f)
+            self.info_response_content = {"entry_types": e_t_s["entryTypes"] }
+            return
+        if "info" in self.response_entity_id:
+            info = self.entity_defaults.get("info", {})
+            pgx_info = info.get("content", {})
+            beacon_info = object_instance_from_schema_name("beaconInfoResults", "")
+            for k in beacon_info.keys():
+                if k in pgx_info:
+                    beacon_info.update({k:pgx_info[k]})
+            self.info_response_content = beacon_info
+            return
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __response_add_returned_schemas(self):
+        if not "info" in self.response_entity_id:
+            return
+
+        ets = set()
+        beacon_schemas = []
+        for e_t, e_d in self.entity_defaults.items():
+            if e_d.get("is_beacon_default", False) is True and e_t not in ets:
+                beacon_schemas.append(e_d.get("beacon_schema", {}))
+                ets.add(e_t)
+
+        self.data_response.update( { "returned_schemas": beacon_schemas } )
+
+
 ################################################################################
 
 class BeaconDataResponse:
     def __init__(self):
         self.user_name = BYC.get("USER", "anonymous")
         self.include_handovers = BYC_PARS.get("include_handovers", False)
+        self.response_entity_id = BYC.get("response_entity_id")
         self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
         self.record_queries = {}
+        self.response_schema = BYC.get("response_schema", "___none___")
         self.data_response = object_instance_from_schema_name(BYC["response_schema"], "")
         self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta() })
         for m in ["beacon_handovers", "info"]:
@@ -199,14 +258,27 @@ class BeaconDataResponse:
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
+    def dataResponseFromEntry(self):
+        rp_id = self.response_entity_id
+        prdbug(self.response_schema)
+        if "beaconResultsetsResponse" in self.response_schema:
+            return self.resultsetResponse()
+        if "beaconCollectionsResponse" in self.response_schema:
+            return self.collectionsResponse()
+        if "beaconFilteringTermsResponse" in self.response_schema:
+            return self.filteringTermsResponse()
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
     def resultsetResponse(self):
-        dbm = f'... resultsetResponse start, schema {BYC["response_schema"]}'
+        dbm = f'... resultsetResponse start, schema {self.response_schema}'
         prdbug(dbm)
-        if not "beaconResultsetsResponse" in BYC["response_schema"]:
+        if not "beaconResultsetsResponse" in self.response_schema:
             return
 
         self.result_sets_start = datetime.datetime.now()
-        self.result_sets, self.record_queries = ByconResultSets().populatedResultSets()
+        self.result_sets, self.record_queries = ByconResultSets().get_populated_result_sets()
         self.__acknowledge_HIT()
         self.__acknowledge_MISS()
         self.data_response["response"].update({"result_sets": self.result_sets})
@@ -404,7 +476,6 @@ class ByconFilteringTerms:
     def __init__(self):
         self.response_entity_id = BYC.get("response_entity_id", "filteringTerm")
         self.data_collection = BYC["response_entity"].get("collection", "collations")
-        self.path_id_value = BYC.get("request_entity_path_id_value", [])
         self.filter_collation_types = set()
         self.filtering_terms = []
         self.filter_resources = []
@@ -438,22 +509,11 @@ class ByconFilteringTerms:
         else:
             f_re = None
 
-        # TODO: This should be derived from some entity definitions
-        # TODO: whole query generation in separate function ...
-        # now added globally to filters since Q aggregation and 
-        # https://github.com/ga4gh-beacon/beacon-v2/pull/118
-        scopes = BYC.get("data_pipeline_entities", [])
-        prdbug(f'... __return_filtering_terms - data_pipeline_entities: {BYC.get("data_pipeline_entities", [])}')
         query = {}
         q_list = []
 
-        q_scope = BYC_PARS.get("scope", "___none___")
-        if q_scope in scopes:
-            q_list.append({"scope": q_scope})
-
-        q_types = BYC_PARS.get("collation_types", [])
         mode = BYC_PARS.get("mode", "___none___")
-        if len(q_types) > 0:
+        if len(q_types := BYC_PARS.get("collation_types", [])) > 0:
             q_list.append({"collation_type": {"$in": q_types }})
         elif not "withpubmed" in mode:
             query = {"collation_type": {"$not": {"$regex":"pubmed"}}}
@@ -464,8 +524,7 @@ class ByconFilteringTerms:
             query = {"$and": q_list}
 
         if BYC["TEST_MODE"] is True:
-            t_m_c = BYC_PARS.get("test_mode_count", 5)
-            query = mongo_test_mode_query(BYC["BYC_DATASET_IDS"][0], f_coll, t_m_c)
+            query = mongo_test_mode_query(BYC["BYC_DATASET_IDS"][0], f_coll)
 
         for ds_id in BYC["BYC_DATASET_IDS"]:
             fields = {"_id": 0}
@@ -485,14 +544,11 @@ class ByconFilteringTerms:
                 if ft_k and ft_s:
                     f_t.update({"target": f'{ft_s}.{ft_k}'})
 
-                f_t.update({"scopes": scopes})
-
                 lab = f_t.get("label")
                 if lab is None:
                     f_t.pop("label", None)
 
                 # TODO: this is not required & also not as defined (singular `scope`)
-                # f_t.update({"scopes": scopes})
                 t_f_t_s.append(f_t)
             self.filtering_terms.extend(t_f_t_s)
 
@@ -535,7 +591,6 @@ class ByconCollections:
     def __init__(self):
         self.response_entity_id = BYC.get("response_entity_id", "dataset")
         self.data_collection = BYC["response_entity"].get("collection", "collations")
-        self.path_id_value = BYC.get("request_entity_path_id_value", [])
         self.collections = []
         self.collections_queries = {}
         return
@@ -586,10 +641,10 @@ class ByconCollections:
         if BYC["TEST_MODE"] is True:
             limit = BYC_PARS.get("test_mode_count", 5)
         else:
-            c_q = BYC_PARS.get("cohort_ids", [])
-            if len(c_q) < 1:
-                if len(self.path_id_value) > 0:
-                    c_q = self.path_id_value
+            c_q = BYC_PARS.get("filters", [])
+            # if len(c_q) < 1:
+            #     if len(self.path_id_value) > 0:
+            #         c_q = self.path_id_value
 
             if len(c_q) > 0:
                 query = {
@@ -619,6 +674,8 @@ class ByconResultSets:
         self.datasets_results = dict()  # the object with matched ids per dataset, per h_o
         self.datasets_data = dict()     # the object with data of requested entity per dataset
         self.result_sets = list()       # data rewrapped into the resultSets list
+        self.flattened_data = list()    # data from all resultSets as flat list
+        self.entity_defaults = BYC.get("entity_defaults", {})
         self.data_collection = BYC["response_entity"].get("collection", "biosamples")
         self.response_entity_id = BYC.get("response_entity_id", "biosample")
         self.limit = BYC_PARS.get("limit")
@@ -634,7 +691,7 @@ class ByconResultSets:
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def populatedResultSets(self):
+    def get_populated_result_sets(self):
         self.__retrieve_datasets_data()
         self.__retrieve_variants_data()
         self.__populate_result_sets()
@@ -644,10 +701,15 @@ class ByconResultSets:
 
     # -------------------------------------------------------------------------#
 
-    def datasetsData(self):
+    def get_flattened_data(self):
         self.__retrieve_datasets_data()
         self.__retrieve_variants_data()
-        return self.datasets_data
+
+        for ds_id, data in self.datasets_data.items():
+            for r in data:
+                r.update({"dataset_id": ds_id})
+                self.flattened_data.append(r)
+        return self.flattened_data
 
 
     # -------------------------------------------------------------------------#
@@ -661,7 +723,7 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __get_handover_access_key(self):
-        e_d_s = BYC["entity_defaults"].get(self.response_entity_id, {})
+        e_d_s = self.entity_defaults.get(self.response_entity_id, {})
         self.handover_key = e_d_s.get("h->o_access_key", "___none___")
         return
 
@@ -834,10 +896,10 @@ class ByconResultSets:
 def print_json_response(this={}, status_code=200):
     if not "local" in ENV:
         print('Content-Type: application/json')
-        print('status:' + str(status_code))
-        print()
+        print(f'status:{status_code}\n\n')
 
-    prjsoncam(this) # !!! There are some "do not camelize" exceptions downstream
+    # There are some "do not camelize" exceptions downstream
+    prjsoncam(this) 
     print()
     exit()
 
@@ -847,12 +909,12 @@ def print_json_response(this={}, status_code=200):
 def print_text_response(this="", status_code=200):
     if "server" in ENV:
         print('Content-Type: text/plain')
-        print('status:' + str(status_code))
-        print()
+        print(f'status:{status_code}\n\n')
 
     print(this)
     print()
     exit()
+
 
 ################################################################################
 
@@ -866,6 +928,7 @@ def print_html_response(this="", status_code=200):
     print()
     exit()
 
+
 ################################################################################
 
 def print_uri_rewrite_response(uri_base="", uri_stuff=""):
@@ -873,3 +936,4 @@ def print_uri_rewrite_response(uri_base="", uri_stuff=""):
     print("Location: {}{}".format(uri_base, uri_stuff))
     print()
     exit()
+

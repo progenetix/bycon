@@ -5,7 +5,7 @@ from pymongo import MongoClient
 
 from bycon_helpers import days_from_iso8601duration, prdbug, return_paginated_list
 from config import *
-from cytoband_parsing import bands_from_cytobands
+from cytoband_parsing import Cytobands
 from genome_utils import ChroNames, GeneInfo, VariantTypes
 
 ################################################################################
@@ -48,8 +48,6 @@ class ByconQuery():
 
         self.requested_entity = BYC.get("request_entity_id", False)
         self.response_entity = BYC.get("response_entity_id", "___none___")
-        self.path_id_value = BYC.get("request_entity_path_id_value", [])
-        prdbug(f'ByconQuery `request_entity_path_id_value`: {self.path_id_value}')
         prdbug(f'ByconQuery `response_entity_id`: {self.response_entity}')
 
         # TODO: call the variant type definition from inside this class since
@@ -67,7 +65,6 @@ class ByconQuery():
         }
 
         self.__queries_for_test_mode()
-        self.__query_from_path_id()
         self.__update_queries_from_id_values()
         self.__query_from_hoid()
         self.__query_from_variant_pars()
@@ -85,31 +82,6 @@ class ByconQuery():
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def __query_from_path_id(self):
-        if self.queries.get("expand") is False:
-            return
-        if len(p_id_v := self.path_id_value) < 1:
-            return
-
-        r_t_s = self.response_types
-        r_e = self.requested_entity
-
-        if not r_e:
-            return
-        r_c = r_t_s[r_e].get("collection")
-        if not r_c:
-            return
-
-        q = {"id": {"$in":p_id_v}}
-
-        self.queries["entities"].update({r_e: {"query":q, "collection": r_c}})
-        if len(p_id_v) == 1:
-            self.__id_query_add_variant_query(r_e, p_id_v)
-        self.queries.update({"expand": False})
-
-
     # -------------------------------------------------------------------------#
 
     def __update_queries_from_id_values(self):
@@ -140,13 +112,10 @@ class ByconQuery():
 
     def __id_query_add_variant_query(self, entity, entity_ids):
         # NOTE: _all_ variants cannot be retrieved for collections
-        if entity not in BYC.get("data_pipeline_entities", []):
-            return
         if "variant" in entity.lower():
             return
 
         v_q_id = f'{entity}_id'
-        # v_q_id = re.sub("analysis", "callset", v_q_id)
         v_q_id = re.sub("run", "analysis", v_q_id)
 
         if len(entity_ids) == 1:
@@ -482,14 +451,14 @@ class ByconQuery():
 
         if not (cb_s := vp.get("cyto_bands")):
             return False
-        cbs1, chro1, start1, end1, error1 = bands_from_cytobands(cb_s)
-        s_id1 = self.ChroNames.refseq(chro1)
+        CB = Cytobands()
+        cbs, chro, start, end = CB.bands_from_cytostring(cb_s)
+        sequence_id = self.self.ChroNames.refseq(chro)
         v_pars.update( {
-            "reference_name": s_id1,
-            "start": [ start1 ],
-            "end": [ end1 ]
+            "reference_name": sequence_id,
+            "start": [start],
+            "end": [end]
         } )
-        prdbug(cb_s)
         # TODO: other global parameters (length etc.)
         # TODO: global variant parameters by definition file
         g_p_s = ["variant_type", "variant_min_length", "variant_max_length"]
@@ -904,11 +873,6 @@ class ByconQuery():
 ################################################################################
 ################################################################################
 ################################################################################
-################################################################################
-################################################################################
-################################################################################
-
-# TODO: GeoQuery class
 
 def geo_query():
     g_l_d = BYC.get("geoloc_definitions", {})
@@ -974,7 +938,7 @@ def geo_query():
         geo_q = {"id": re.compile(geo_pars["id"], re.IGNORECASE)}
         return geo_q, geo_pars
     if "ISO3166alpha2" in req_type:
-        geo_q = {"provenance.geo_location.properties.ISO3166alpha2": BYC_PARS["iso3166alpha2"].upper()}
+        geo_q = {"geo_location.properties.ISO3166alpha2": BYC_PARS["iso3166alpha2"].upper()}
         return geo_q, geo_pars
     if "geoquery" in req_type:
         geoq_l = [return_geo_longlat_query(geo_root, geo_pars)]

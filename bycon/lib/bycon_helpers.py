@@ -86,9 +86,7 @@ class RefactoredValues():
             self.v_list = v_l[0]
             return
 
-        # re-joining for bug report ...
-        self.v_list = ','.join(values)
-        BYC["WARNINGS"].append(f"!!! Multiple values ({self.v_list}) for {p_d_t} in request")
+        BYC["WARNINGS"].append(f"!!! Multiple values ({','.join(values)}) for {p_d_t} in request")
         return
 
 
@@ -152,13 +150,6 @@ def select_this_server() -> str:
     # ... since cloudflare provides https mapping using this as fallback
 
     return s
-
-
-################################################################################
-
-def generate_id(prefix):
-    time.sleep(.001)
-    return '{}-{}'.format(prefix, base36.dumps(int(time.time() * 1000)))  ## for time in ms
 
 
 ################################################################################
@@ -250,10 +241,11 @@ def mongo_result_list(db_name, coll_name, query, fields):
 
 ################################################################################
 
-def mongo_test_mode_query(db_name, coll_name, test_mode_count=5):
+def mongo_test_mode_query(db_name, coll_name):
     query = {}
     error = False
     ids = []
+    t_m_c = BYC_PARS.get("test_mode_count", 5)
 
     mongo_client = MongoClient(host=DB_MONGOHOST)
     db_names = list(mongo_client.list_database_names())
@@ -261,7 +253,7 @@ def mongo_test_mode_query(db_name, coll_name, test_mode_count=5):
         BYC["ERRORS"].append(f"db `{db_name}` does not exist")
         return results, f"{db_name} db `{db_name}` does not exist"
     try:
-        rs = list(mongo_client[db_name][coll_name].aggregate([{"$sample": {"size": test_mode_count}}]))
+        rs = list(mongo_client[db_name][coll_name].aggregate([{"$sample": {"size": t_m_c}}]))
         ids = list(s["id"] for s in rs)
     except Exception as e:
         BYC["ERRORS"].append(e)
@@ -299,11 +291,21 @@ def prdbughead(this=""):
 
 ################################################################################
 
+def prjsonhead():
+    if not "local" in ENV:
+        print('Content-Type: application/json')
+        print('status:200')
+        print()
+
+
+################################################################################
+
 def prtexthead():
     if not "local" in ENV:
         print('Content-Type: text/plain')
         print('status: 302')
         print()
+
 
 ################################################################################
 
@@ -320,7 +322,6 @@ def prdlhead(filename="download.txt"):
 def prdbug(this):
     if BYC["DEBUG_MODE"] is True:
         prjsontrue(this)
-        # prjsonnice(this)
 
 
 ################################################################################
@@ -372,5 +373,20 @@ def clean_empty_fields(this_object, protected=[]):
                 this_object.pop(k, None)
 
     return this_object
+
+
+################################################################################
+
+def mongo_and_or_query_from_list(query, logic="AND"):
+    if type(query) != list:
+        return query
+    if len(query) == 1:
+        return query[0]
+    elif len(query) > 1:
+        if "OR" in logic.upper():
+            return {"$or": query}
+        return {"$and": query}
+    else:
+        return {}
 
 

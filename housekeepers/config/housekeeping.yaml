@@ -32,11 +32,11 @@ indexed_special_dbs:
   cellz:
     biosamples:
       location:
-        db_key: provenance.geo_location.geometry
+        db_key: geo_location.geometry
         type: 2dsphere
     individuals:
       location:
-        db_key: provenance.geo_location.geometry
+        db_key: geo_location.geometry
         type: 2dsphere
     variants:
       id_aggregate:
@@ -74,11 +74,11 @@ indexed_special_dbs:
   progenetix:
     biosamples:
       location:
-        db_key: provenance.geo_location.geometry
+        db_key: geo_location.geometry
         type: 2dsphere
     individuals:
       location:
-        db_key: provenance.geo_location.geometry
+        db_key: geo_location.geometry
         type: 2dsphere
     variants:
       variantbracketquery:
@@ -155,13 +155,13 @@ indexed_special_dbs:
       genomes_count:
         db_key: counts.genomes
       geoprov_city:
-        db_key: provenance.geo_location.properties.city
+        db_key: geo_location.properties.city
       geoprov_country:
-        db_key: provenance.geo_location.properties.country
+        db_key: geo_location.properties.country
       geoprov_iso_alpha3:
-        db_key: provenance.geo_location.properties.ISO3166alpha3
+        db_key: geo_location.properties.ISO3166alpha3
       location:
-        db_key: provenance.geo_location.geometry
+        db_key: geo_location.geometry
         type: 2dsphere
 
 

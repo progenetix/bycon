@@ -1,0 +1,63 @@
+UBERON:0001737	larynx	7
+UBERON:0000977	pleura	4
+UBERON:0002367	prostate gland	10
+UBERON:0002370	thymus	2
+UBERON:0008948	upper lobe of lung	17
+UBERON:0008949	lower lobe of lung	9
+UBERON:0008955	middle lobe of lung	2
+UBERON:0001069	head of pancreas	3
+UBERON:0002046	thyroid gland	13
+UBERON:0002048	lung	1
+UBERON:0002107	liver	10
+UBERON:0001235	adrenal cortex	5
+UBERON:0001255	urinary bladder	1
+UBERON:0001256	wall of urinary bladder	4
+UBERON:0002371	bone marrow	3
+UBERON:0003688	omentum	1
+UBERON:0006082	fundus of urinary bladder	1
+UBERON:0002369	adrenal gland	5
+UBERON:0000014	zone of skin	1
+UBERON:0001085	skin of trunk	2
+UBERON:0000955	brain	15
+UBERON:0001869	cerebral hemisphere	17
+UBERON:0001871	temporal lobe	2
+UBERON:0002021	occipital lobe	1
+UBERON:0036214	rectosigmoid junction	2
+UBERON:0018707	bladder organ	10
+UBERON:0001723	tongue	9
+UBERON:0002113	kidney	22
+UBERON:0000473	testis	4
+UBERON:0000992	ovary	25
+UBERON:0001542	inguinal lymph node	1
+UBERON:0015870	lymph node of head	2
+UBERON:0016399	lymph node of upper limb	3
+UBERON:0001150	body of pancreas	1
+UBERON:0001828	gingiva	3
+UBERON:0006956	buccal mucosa	3
+UBERON:0000314	cecum mucosa	4
+UBERON:0001295	endometrium	25
+UBERON:0001156	ascending colon	9
+UBERON:0001158	descending colon	1
+UBERON:0001052	rectum	2
+UBERON:0001155	colon	11
+UBERON:0002115	jejunum	1
+UBERON:0013473	lower esophagus	5
+UBERON:0013474	middle part of esophagus	1
+UBERON:0000995	uterus	1
+UBERON:0022276	splenic flexure of colon	1
+UBERON:0000002	uterine cervix	11
+UBERON:0001160	fundus of stomach	1
+UBERON:0001161	body of stomach	5
+UBERON:0001162	cardia of stomach	3
+UBERON:0001163	lesser curvature of stomach	1
+UBERON:0001165	pyloric antrum	7
+UBERON:0003679	mouth floor	4
+UBERON:0003576	hip connective tissue	5
+UBERON:0003586	trunk connective tissue	3
+UBERON:0003837	thoracic segment connective tissue	1
+UBERON:0002372	tonsil	2
+UBERON:0000310	breast	32
+UBERON:0001731	cavity of pharynx	1
+UBERON:0003693	retroperitoneal space	3
+UBERON:0013398	choroidal gland	1
+UBERON:0035639	ocular adnexa	1

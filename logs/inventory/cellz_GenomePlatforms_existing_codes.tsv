@@ -1,0 +1,90 @@
+EFO:0001456	DNA assay	976
+geo:GPL3355	Stanford Microarray Facility cDNA array [SHDJ]	8
+geo:GPL1448	Stanford Microarray Facility cDNA array [SHDK]	17
+geo:GPL5620	Stanford Microarray Facility cDNA array [SHGS]	5
+geo:GPL179	Stanford Microarray Facility cDNA array [SVA]	4
+geo:GPL2830	Stanford Microarray Facility cDNA array [SVI]	10
+geo:GPL7778	Stanford Microarray Facility cDNA array [Print_1060]	4
+geo:GPL7779	Stanford Microarray Facility cDNA array [Print_1126]	5
+geo:GPL7780	Stanford Microarray Facility cDNA array [Print_1257]	10
+geo:GPL7781	Stanford Microarray Facility cDNA array [Print_849]	5
+geo:GPL7782	Stanford Microarray Facility cDNA array [Print_924]	8
+geo:GPL7783	Stanford Microarray Facility cDNA array [Print_989]	7
+geo:GPL7784	Stanford Microarray Facility cDNA array [Print_999]	11
+geo:GPL4012	3.7k full genome LUMC BAC array	10
+geo:GPL8634	3.7k full genome LUMC BAC array, condensed version	16
+geo:GPL4483	5808-v4-1q	1
+geo:GPL1424	AECOM-H3-H11	1
+geo:GPL8774	BCCRC 27K SMRT array	6
+geo:GPL2043	BCCRC Lam SMRT array 32k	28
+geo:GPL2735	BCCRC Lam SMRT array 32k_1.2	4
+geo:GPL2616	BCCRC Lam SMRTr array	19
+geo:GPL3895	CCDTM Hs_CCDTM17.5k	16
+geo:GPL4615	Chr8 BACs 5.7K DNA array	24
+geo:GPL1998	CNIO H. sapiens 13.6k Oncochip 1	8
+geo:GPL5452	DKFZ Homo sapiens 8k BAC-array	4
+geo:GPL6181	Human 3K BAC/PAC array (Ensembl Ver39)	7
+geo:GPL28	HumArray 1.14	8
+geo:GPL3898	Institute of Cancer Research 5808-spot slide_version3	7
+geo:GPL6853	Mermaid_Human_32K_CGH_v1.0	34
+geo:GPL6520	National Cancer Center of Singapore Human 32k BAC array(A) version 1	7
+geo:GPL6521	National Cancer Center of Singapore Human 32k BAC array(B) version 1	7
+geo:GPL4560	Netherlands Cancer Institute human 3.5k BAC array	21
+geo:GPL4894	Penn/CHOP Homo sapiens 4.5K (BAC array for studying Neuroblastoma)	228
+geo:GPL4482	spotted DNA/cDNA	4
+geo:GPL4723	SWEGENE_BAC_32K_Full	58
+geo:GPL6359	UCSF Cancer Center HumArray3.2	59
+geo:GPL3789	UCSF HUMAN 1.14	35
+geo:GPL3868	UCSF HUMAN 1.14 v2	4
+geo:GPL3869	UCSF HUMAN 1.14 v3	5
+geo:GPL3993	UCSF HUMAN 1.14 v4	4
+geo:GPL13176	University of Pennsylvania/Nathanson Lab_HomoSapiens_5212 unique BACS_coleman_collaboration	9
+geo:GPL2842	VUMC MACF human 5K BAC v22	1
+geo:GPL21558	[OncoScan_CNV] Affymetrix OncoScan CNV FFPE Assay	5
+geo:GPL18602	[OncoScan] Affymetrix OncoScan FFPE Assay	33
+geo:GPL2014	Affymetrix GeneChip Human Mapping 50K Hind - prerelease	58
+geo:GPL2015	Affymetrix GeneChip Human Mapping 50K Xba - prerelease	58
+geo:GPL5149	Agilent Homo sapiens 185K array	7
+geo:GPL8355	Agilent-012700 Human Genome CGH Microarray 44A G4410A_beta (Feature Number version)	6
+geo:GPL2879	Agilent-013282 Human Genome CGH Microarray 44B (Feature number version)	50
+geo:GPL11068	Agilent-013282 Human Genome CGH Microarray 44B (Probe name version)	129
+geo:GPL4544	Agilent-014584 Human Genome 244K CGH Microarray (Alpha Test)	29
+geo:GPL4091	Agilent-014693 Human Genome CGH Microarray 244A (Feature number version)	75
+geo:GPL9128	Agilent-014693 Human Genome CGH Microarray 244A (Probe name version)	40
+geo:GPL9075	Agilent-014698 Human Genome CGH Microarray 105A (G4412A) [Probe Name version]	11
+geo:GPL5477	Agilent-014950 Human Genome CGH Microarray 4x44K (Feature Number version)	19
+geo:GPL8841	Agilent-014950 Human Genome CGH Microarray 4x44K (Probe Name version)	5
+geo:GPL8736	Agilent-021529 Human CGH Whole Genome Microarray 1x1M (G4447A) (Feature Number version)	8
+geo:GPL9777	Agilent-021850 SurePrint G3 Human CGH Microarray (Feature Number version)	37
+geo:GPL10123	Agilent-022060 SurePrint G3 Human CGH Microarray 4x180K (Feature Number version)	13
+geo:GPL10150	Agilent-022060 SurePrint G3 Human CGH Microarray 4x180K (Probe Name version)	42
+geo:GPL7313	CSHL Homo Sapiens 85k oligo array 4.0	253
+geo:GPL5737	Human 30K 60-mer oligo array	49
+geo:GPL6984	Illumina Human1M-Duov3 DNA Analysis BeadChip (Human1M-Duov3_B)	17
+geo:GPL6983	Illumina Human1Mv1 DNA Analysis BeadChip (Human1Mv1_C)	65
+geo:GPL6986	Illumina HumanCNV370-Duov1 DNA Analysis BeadChip (HumanCNV370v1)	26
+geo:GPL6988	Illumina HumanExon510-Sv1 DNA Analysis BeadChip (HumanExon510Sv1_D)	4
+geo:GPL13786	NCI NimbleGen Homo sapiens HG19 Whole Genome 385K Tiling Set version 1	71
+geo:GPL6639	Nimblegen 385K custom array (Human tiling array of hg16 at 50bp resolution (chr17q, chr20q, etc)).	10
+geo:GPL5144	Nimblegen Homo sapiens 4 array Tiling Set	7
+geo:GPL9708	NimbleGen Human CGH 385K Whole-Genome Tiling Array v1.0	19
+geo:GPL15436	NimbleGen Human CGH 3x720K Whole-Genome Tiling v3.0 Array [090527_HG18_WG_CGH_v3.1_HX3]	14
+geo:GPL2826	VUMC MACF human 30K oligo v31	1
+geo:GPL2834	VUMC MACF human 30K oligo v36	21
+geo:GPL18637	[CytoScan750K_Array] Affymetrix CytoScan 750K Array	13
+geo:GPL16131	[CytoScanHD_Array] Affymetrix CytoScan HD Array	88
+geo:GPL6804	[GenomeWideSNP_5] Affymetrix Genome-Wide Human SNP 5.0 Array	1
+geo:GPL6801	[GenomeWideSNP_6] Affymetrix Genome-Wide Human SNP 6.0 Array	267
+geo:GPL1266	[Mapping10K_Xba131] Affymetrix Human Mapping 10K SNP Array	4
+geo:GPL2641	[Mapping10K_Xba142] Affymetrix Human Mapping 10K 2.0 Array	29
+geo:GPL3718	[Mapping250K_Nsp] Affymetrix Mapping 250K Nsp SNP Array	251
+geo:GPL3720	[Mapping250K_Sty] Affymetrix Mapping 250K Sty2 SNP Array	1039
+geo:GPL9202	Agilent/FIMM Human 95K Array	2
+geo:GPL2004	[Mapping50K_Hind240] Affymetrix Human Mapping 50K Hind240 SNP Array	182
+geo:GPL2005	[Mapping50K_Xba240] Affymetrix Human Mapping 50K Xba240 SNP Array	165
+geo:GPL13135	HumanOmniExpress BeadChip	6
+geo:GPL6980	Illumina HumanHap300-Duov2 Genotyping BeadChip (HumanHap300v2_A)	2
+geo:GPL8882	Illumina HumanOmni1-Quad BeadChip	1
+geo:GPL16110	Illumina HumanOmni2.5 BeadChip (hg19)	1
+geo:GPL5711	Sentrix BeadChip Array HumanHap300 Genotyping BeadChip 317K, TagSNP Phase I, v1.1	76
+geo:GPL11365	Agilent-029830 Human Genome CGH + SNP Microarray (Probe Name version)	2

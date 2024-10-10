@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from os import environ
 
 from config import *
-from bycon_helpers import prdbug, prjsonnice, test_truthy
+from bycon_helpers import mongo_and_or_query_from_list, prdbug, prjsonnice, test_truthy
 
 
 ################################################################################
@@ -66,10 +66,7 @@ class ByconDatasetResults():
             analysis_q_l.append({"individual_id": {"$in":pre.get("target_values")}})
 
         if len(analysis_q_l) > 0:
-            if len(analysis_q_l) > 1:
-                query = {"$and":analysis_q_l}
-            elif len(analysis_q_l) == 1:
-                query = analysis_q_l[0]
+            query = mongo_and_or_query_from_list(analysis_q_l)
             # CAVE: This would remove biosamples & individuals from the response
             #       if they don't have any associated analysis...
             ent_resp_def = self.res_obj_defs.get("analyses.id")

@@ -105,7 +105,7 @@ def rest_path_elements():
     The function deparses a Beacon REST path into its components and assigns
     those to the respective variables. The assumes structure is:
 
-    `__root__/__request_entity_path_id__/__entity-id__/__response_entity_path_id__/?query...`
+    `__root__/__request_entity_path_id__/__path_parameter__/__response_entity_path_id__/?query...`
         |             |                     |                   |
     "beacon"  e.g. "biosamples"     "pgxbs-t4ee3"   e.g. "genomicVariations"
         |             |                     |                   |
@@ -134,11 +134,11 @@ def rest_path_elements():
         if r_i >= len(p_items):
             break
         p_v = unquote(p_items[r_i])
-        prdbug(f'... rest_path_elements: {p_k} - {p_v}')
         BYC.update({p_k: p_v})
 
     if (rpidv := BYC.get("request_entity_path_id_value")):
         BYC.update({"request_entity_path_id_value": rpidv.split(",") })
+
     return
 
 

@@ -154,18 +154,6 @@ definitions:
         beacon_model_path: biosamples.pathologicalTnmFindings.id
         examples:
           - "NCIT:C48721::T1a Stage Finding,NCIT:C48699::M0 Stage Finding"
-      stage_id:
-        type: string
-        db_key: pathological_stage.id
-        beacon_model_path: biosamples.pathologicalStage.id
-        indexed: True
-        compact: True
-      stage_label:
-        type: string
-        db_key: pathological_stage.label
-        beacon_model_path: biosamples.pathologicalStage.label
-        indexed: True
-        compact: True
       tumor_grade_id:
         type: string
         db_key: tumor_grade.id
@@ -311,21 +299,21 @@ definitions:
         compact: False
       geoprov_city:
         type: string
-        db_key: provenance.geo_location.properties.city
+        db_key: geo_location.properties.city
         indexed: True
       geoprov_country:
         type: string
-        db_key: provenance.geo_location.properties.country
+        db_key: geo_location.properties.country
         indexed: True
       geoprov_iso_alpha3:
         type: string
-        db_key: provenance.geo_location.properties.ISO3166alpha3
+        db_key: geo_location.properties.ISO3166alpha3
         indexed: True
       geoprov_long_lat:
         type: array
         items:
           type: number
-        db_key: provenance.geo_location.geometry.coordinates
+        db_key: geo_location.geometry.coordinates
 
       # special export labels
       group_id:
@@ -513,21 +501,21 @@ definitions:
         db_key: info.data_provenance
       geoprov_city:
         type: string
-        db_key: provenance.geo_location.properties.city
+        db_key: geo_location.properties.city
         indexed: True
       geoprov_country:
         type: string
-        db_key: provenance.geo_location.properties.country
+        db_key: geo_location.properties.country
         indexed: True
       geoprov_iso_alpha3:
         type: string
-        db_key: provenance.geo_location.properties.ISO3166alpha3
+        db_key: geo_location.properties.ISO3166alpha3
         indexed: True
       geoprov_long_lat:
         type: array
         items:
         type: number
-        db_key: provenance.geo_location.geometry.coordinates
+        db_key: geo_location.geometry.coordinates
 
 
 #------------------------------------------------------------------------------#

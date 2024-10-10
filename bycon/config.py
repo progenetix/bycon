@@ -91,14 +91,12 @@ BYC = {
   "authorizations": {},
   "local_paths": {},
   "plot_defaults": {},
-  "map_defaults": {},
   "query_meta": {},
   "service_config": {},
 
   # -------------------------------------------------------------------------- #
 
   "authorized_granularities": {},
-  "data_pipeline_entities": [],
   "parsed_config_paths": [],
   "request_entity_path_id": None,
   "request_entity_id": None,
@@ -106,15 +104,9 @@ BYC = {
   "response_entity_id": None,
   "response_entity": {},
   "response_schema": "beaconInfoResponse",
-  "returned_granularity": "boolean",
-
-  "cytobands": [],
-  "cytolimits": {},
-  "genome_size": 0,
-  "cytoband_intervals": {},
-  "genomic_intervals": {},
-  "genomic_interval_count": 0
-
+  "bycon_response_class": "BeaconInfoResponse",
+  "path_id_value_bycon_parameter": None,
+  "returned_granularity": "boolean"
 }
 
 # collection object for cmd arguments and web parameters (depending on the ENV)

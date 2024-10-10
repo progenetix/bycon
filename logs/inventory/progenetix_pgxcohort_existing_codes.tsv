@@ -1,0 +1,10 @@
+pgx:cohort-2021progenetix	Version at Progenetix Update 2021	132990
+pgx:cohort-DIPG	DIPG samples	1108
+pgx:cohort-TCGA	TCGA samples	22142
+pgx:cohort-TCGAcancers	TCGA Cancer samples	11090
+pgx:cohort-arraymap	arrayMap collection	62147
+pgx:cohort-carriocordo2021heterogeneity	Carrio-Cordo and Baudis - Genomic Heterogeneity in Cancer Types (2021)	57016
+pgx:cohort-celllines	Cancer cell lines	5752
+pgx:cohort-excluded	Excluded samples	618
+pgx:cohort-gao2021signatures	Gao and Baudis - Cancer CNV Signatures (2021)	31612
+pgx:cohort-oneKgenomes	1000 genomes reference samples	3201

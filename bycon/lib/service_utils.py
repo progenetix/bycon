@@ -49,74 +49,52 @@ def set_entities():
     BYC definitions.
     """
     b_e_d = BYC.get("entity_defaults", {})
-    d_p_e = BYC.get("data_pipeline_entities", [])
 
-    # reating the maps for entity <-> path (or alias) mapping
-    p_e_m = {}
-    e_p_m = {}
-
+    dealiased_path_ids = {}
     for e, e_d in b_e_d.items():
-        # here the response entity can be overridden in the prefs, e.g. for services
-        r_e = e_d.get("response_entity_id", e)
-        if (p := e_d.get("request_entity_path_id")):
-            p_e_m.update({ p: r_e })
-            e_p_m.update({ r_e: p })
-        for a in e_d.get("request_entity_path_aliases", []):
-            p_e_m.update({ a: r_e })
-        if "beaconResultsetsResponse" in e_d.get("response_schema", ""):
-            d_p_e.append(r_e)
+        p_id = e_d.get("request_entity_path_id")
+        dealiased_path_ids.update({p_id: e})
+        for p_a_s in e_d.get("request_entity_path_aliases", []):
+            dealiased_path_ids.update({p_a_s: e})
 
-    # TODO - FIX to remove all the specials
-    d_p_e = ['analysis', 'biosample', 'genomicVariant', 'individual', 'run']
-
-    # override of path
-    if (e_p_id := BYC_PARS.get("request_entity_path_id", "___none___")) in p_e_m:
+    # this allows to override the path values with parameters
+    # it should only apply to special cases (e.g. overriding the standard
+    # biosample table export in services with individuals) or for command
+    # line testing
+    if (e_p_id := BYC_PARS.get("request_entity_path_id", "___none___")) in dealiased_path_ids.keys():
         BYC.update({"request_entity_path_id": e_p_id})
-    if (r_p_id := BYC_PARS.get("response_entity_path_id", "___none___")) in p_e_m:
-        BYC.update({"response_entity_path_id": r_p_id})
+    if (e_p_id := BYC_PARS.get("response_entity_path_id", "___none___")) in dealiased_path_ids.keys():
+        BYC.update({"response_entity_path_id": e_p_id})
 
-    rq_p_id = BYC.get("request_entity_path_id", "info")
-    rp_p_id = BYC.get("response_entity_path_id", rq_p_id)
+    p_i_d = BYC.get("request_entity_path_id", "___none___")
+    if p_i_d not in dealiased_path_ids.keys():
+        p_i_d = "info"
+    rp_i_d = BYC.get("response_entity_path_id", "___none___")
+    if rp_i_d not in dealiased_path_ids.keys():
+        rp_i_d = p_i_d
 
-    prdbug(f'... set_entities - request_entity_path_id: {rq_p_id}')
-    prdbug(f'... set_entities - response_entity_path_id: {rp_p_id}')
+    # after settling the paths we can get the entity ids
+    q_id = dealiased_path_ids[p_i_d]
+    r_id = dealiased_path_ids[rp_i_d]
 
-    rq_id = p_e_m.get(rq_p_id)
-    # again mapped to get the standard path for the entity in case the
-    # original one was an alias (e.g. `service-info` for `info`)
-    # rq_p_id = e_p_m.get(rq_id)
+    rq_d = b_e_d.get(q_id)
+    rp_d = b_e_d.get(r_id)
 
-    # usually no different response entity
-    if rp_p_id not in p_e_m:
-        rp_p_id = e_p_m.get(rq_id)
-
-    # there is a `requestedSchema` parameter (not `requestEntityId`)
-    # in Beacon; so this is now used to provide the requested entity
-    # if not, using the one from the response path item (which had a
-    # fallback to the request path already)
-
-    # TODO: breaks the services use ATM if a correct schema is added
-    if (rp_id := BYC_PARS.get("requested_schema", "___none___")) not in e_p_m:
-        prdbug(f'response_entity_id: {rp_id} or {rp_p_id} but {e_p_m}')
-        rp_id = p_e_m.get(rp_p_id)
-
-    # as above. in case of alias
-    rp_p_id = e_p_m.get(rp_id)
-
-    r_e = b_e_d.get(rp_id, {"response_schema": "beaconInfoResponse"})
-    r_s = r_e.get("response_schema", "beaconInfoResponse")
+    p_p = rq_d.get("path_id_value_bycon_parameter", "id")
 
     BYC.update({
-        "data_pipeline_entities": d_p_e,
-        "request_entity_id": rq_id,
-        "request_entity_path_id": rq_p_id,
-        "response_entity_id": rp_id,
-        "response_entity_path_id": rp_p_id,
-        "response_entity": r_e,
-        "response_schema": r_s
+        "path_id_value_bycon_parameter": p_p,
+        "request_entity_id": rq_d.get("request_entity_id", q_id),
+        "request_entity_path_id": p_i_d,
+        "response_entity_id": rp_d.get("response_entity_id", q_id),
+        "response_entity_path_id": rp_i_d,
+        "response_entity": rp_d,
+        "response_schema": rp_d.get("response_schema", "beaconInfoResponse"),
+        "bycon_response_class": rp_d.get("bycon_response_class", "BeaconInfoResponse")
     })
 
-    # prdbug(f'"response_entity_id": {rp_id}; ')
+    if (rpidv := BYC.get("request_entity_path_id_value")):
+        BYC_PARS.update({p_p: rpidv})
 
 
 ################################################################################

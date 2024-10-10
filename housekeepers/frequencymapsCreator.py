@@ -1,42 +1,22 @@
 #!/usr/bin/env python3
 
-import re, json, yaml
-from os import path, environ, pardir
-import sys, datetime
-from isodate import date_isoformat
-from pymongo import MongoClient
-import argparse
-from progress.bar import Bar
+import datetime
 import time
+from pymongo import MongoClient
+from progress.bar import Bar
 
 from bycon import *
-from bycon.services import bycon_bundler, interval_utils, collation_utils, service_helpers
+from byconServiceLibs import assertSingleDatasetOrExit, ask_limit_reset, ByconBundler, GenomeBins, set_collation_types
 
-"""
-## `frequencymapsCreator`
-"""
-
-################################################################################
-################################################################################
 ################################################################################
 
 def main():
-    frequencymaps_creator()
-
-################################################################################
-
-def frequencymaps_creator():
     initialize_bycon_service()
-    interval_utils.generate_genome_bins()
-    service_helpers.ask_limit_reset()
-
-    if len(BYC["BYC_DATASET_IDS"]) > 1:
-        print("Please give only one dataset using -d")
-        exit()
-
-    ds_id = BYC["BYC_DATASET_IDS"][0]
-    collation_utils.set_collation_types()
-    print(f'=> Using data values from {ds_id} for {BYC.get("genomic_interval_count", 0)} intervals...')
+    GB = GenomeBins()
+    ask_limit_reset()
+    ds_id = assertSingleDatasetOrExit()
+    set_collation_types()
+    print(f'=> Using data values from {ds_id} for {GB.get_genome_bin_count()} intervals...')
 
     data_client = MongoClient(host=DB_MONGOHOST)
     data_db = data_client[ ds_id ]
@@ -53,7 +33,6 @@ def frequencymaps_creator():
         bar = Bar(f'{coll_no} {ds_id} fMaps', max = coll_no, suffix='%(percent)d%%'+f' of {coll_no}' )
 
     coll_i = 0
-
     for c_id in coll_ids:
         coll = coll_coll.find_one({"id": c_id})
         c_o_id = coll.get("_id")
@@ -74,8 +53,9 @@ def frequencymaps_creator():
         
         prdbug(f'=> processing {c_id} with limit {BYC_PARS.get("limit")}')
         RSS = ByconResultSets().datasetsResults()
-        pdb = bycon_bundler.ByconBundler().resultsets_frequencies_bundles(RSS)
+        pdb = ByconBundler().resultsets_frequencies_bundles(RSS)
         if_bundles = pdb.get("interval_frequencies_bundles")
+        GB = GenomeBins()
 
         if not BYC["TEST_MODE"]:
             bar.next()
@@ -94,7 +74,6 @@ def frequencymaps_creator():
         if cnv_cs_count < 1:
             continue
 
-
         update_obj = {
             "id": c_id,
             "label": coll["label"],
@@ -105,7 +84,7 @@ def frequencymaps_creator():
             "child_terms": coll["child_terms"],
             "updated": datetime.datetime.now().isoformat(),
             "frequencymap": {
-                "interval_count": BYC["genomic_interval_count"],
+                "interval_count": GB.get_genome_bin_count(),
                 "binning": BYC_PARS.get("genome_binning", ""),
                 "intervals": if_bundles[0].get("interval_frequencies", []),
                 "frequencymap_samples": cnv_cs_count,

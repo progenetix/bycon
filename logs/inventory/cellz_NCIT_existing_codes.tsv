@@ -1,0 +1,382 @@
+NCIT:C132256	Unspecified Tissue	82
+NCIT:C159209	Kidney Leiomyoma	5
+NCIT:C158913	Metastatic Prostate Neuroendocrine Carcinoma	1
+NCIT:C3867	Fallopian Tube Carcinoma	1
+NCIT:C7736	Vaginal Squamous Cell Carcinoma, Not Otherwise Specified	1
+NCIT:C4866	Vulvar Carcinoma	3
+NCIT:C4052	Vulvar Squamous Cell Carcinoma	10
+NCIT:C4908	Ovarian Carcinoma	49
+NCIT:C40439	Ovarian Small Cell Carcinoma, Hypercalcemic Type	3
+NCIT:C40093	Ovarian Squamous Cell Carcinoma	2
+NCIT:C4270	Malignant Ovarian Brenner Tumor	3
+NCIT:C7700	Ovarian Adenocarcinoma	20
+NCIT:C40078	Ovarian Clear Cell Adenocarcinoma	69
+NCIT:C5228	Ovarian Cystadenocarcinoma	13
+NCIT:C4026	Ovarian Mucinous Cystadenocarcinoma	6
+NCIT:C7978	Ovarian Serous Cystadenocarcinoma	147
+NCIT:C5243	Ovarian Mucinous Adenocarcinoma	13
+NCIT:C7550	Ovarian Serous Adenocarcinoma	12
+NCIT:C105555	Ovarian High Grade Serous Adenocarcinoma	232
+NCIT:C105556	Ovarian Low Grade Serous Adenocarcinoma	12
+NCIT:C6256	Ovarian Serous Surface Papillary Adenocarcinoma	1
+NCIT:C7979	Ovarian Endometrioid Adenocarcinoma	117
+NCIT:C7558	Endometrial Carcinoma	6
+NCIT:C114656	Endometrial Adenosquamous Carcinoma	10
+NCIT:C27838	Endometrial Serous Adenocarcinoma	4
+NCIT:C40156	Endometrial Undifferentiated Carcinoma	1
+NCIT:C8028	Endometrial Clear Cell Adenocarcinoma	1
+NCIT:C7359	Endometrial Adenocarcinoma	99
+NCIT:C6287	Endometrial Endometrioid Adenocarcinoma	19
+NCIT:C6290	Endometrial Endometrioid Adenocarcinoma, Variant with Squamous Differentiation	2
+NCIT:C9039	Cervical Carcinoma	5
+NCIT:C27676	Human Papillomavirus-Related Cervical Squamous Cell Carcinoma	58
+NCIT:C27677	Human Papillomavirus-Related Cervical Adenocarcinoma	17
+NCIT:C4028	Cervical Squamous Cell Carcinoma	4
+NCIT:C180839	Cervical Squamous Cell Carcinoma, Not Otherwise Specified	13
+NCIT:C4029	Cervical Adenocarcinoma	2
+NCIT:C4519	Cervical Adenosquamous Carcinoma	9
+NCIT:C40212	Cervical Poorly Differentiated Adenosquamous Carcinoma	7
+NCIT:C4863	Prostate Carcinoma	225
+NCIT:C6766	Prostate Small Cell Neuroendocrine Carcinoma	7
+NCIT:C2919	Prostate Adenocarcinoma	37
+NCIT:C39903	Prostate Adenocarcinoma with Neuroendocrine Differentiation	2
+NCIT:C7729	Squamous Cell Carcinoma of the Penis	5
+NCIT:C4031	Bladder Squamous Cell Carcinoma	4
+NCIT:C39851	Bladder Urothelial Carcinoma	72
+NCIT:C4830	Ureter Urothelial Carcinoma	1
+NCIT:C7355	Renal Pelvis Urothelial Carcinoma	4
+NCIT:C4912	Bladder Carcinoma	136
+NCIT:C7899	Recurrent Bladder Carcinoma	6
+NCIT:C6142	Renal Pelvis Carcinoma	2
+NCIT:C7572	Kidney Medullary Carcinoma	1
+NCIT:C9385	Renal Cell Carcinoma	116
+NCIT:C27893	Sarcomatoid Renal Cell Carcinoma	4
+NCIT:C51302	Hereditary Leiomyomatosis and Renal Cell Carcinoma	1
+NCIT:C4033	Clear Cell Renal Cell Carcinoma	100
+NCIT:C4146	Chromophobe Renal Cell Carcinoma	1
+NCIT:C6975	Papillary Renal Cell Carcinoma	20
+NCIT:C27394	Vaginal Melanoma	2
+NCIT:C40329	Vulvar Melanoma	1
+NCIT:C8715	Rhabdoid Tumor of the Kidney	8
+NCIT:C6339	Uterine Corpus Sarcoma	14
+NCIT:C6340	Uterine Corpus Leiomyosarcoma	9
+NCIT:C42700	Uterine Carcinosarcoma	14
+NCIT:C4646	Gestational Choriocarcinoma	10
+NCIT:C9192	Ovarian Carcinosarcoma	2
+NCIT:C8107	Ovarian Yolk Sac Tumor	1
+NCIT:C8106	Ovarian Dysgerminoma	2
+NCIT:C8114	Ovarian Mixed Germ Cell Tumor	11
+NCIT:C3153	Krukenberg Tumor	4
+NCIT:C5234	Ovarian Leiomyosarcoma	3
+NCIT:C40318	Vulvar Leiomyosarcoma	5
+NCIT:C6341	Testicular Embryonal Carcinoma	6
+NCIT:C40407	Kidney Wilms Tumor	2
+NCIT:C3888	Kidney Angiomyolipoma	3
+NCIT:C6261	Ovarian Granulosa Cell Tumor	3
+NCIT:C3877	Testicular Teratoma	4
+NCIT:C129927	Sacral Chordoma	8
+NCIT:C4504	Malignant Breast Phyllodes Tumor	1
+NCIT:C7439	Breast Papillary Ductal Carcinoma In Situ with Invasion	17
+NCIT:C76328	Metastatic Breast Lobular Carcinoma	2
+NCIT:C4872	Breast Carcinoma	24
+NCIT:C5214	Breast Adenocarcinoma	101
+NCIT:C7950	Invasive Breast Lobular Carcinoma	10
+NCIT:C4001	Breast Inflammatory Carcinoma	13
+NCIT:C4017	Breast Ductal Carcinoma	641
+NCIT:C4194	Invasive Breast Carcinoma of No Special Type	905
+NCIT:C5161	Breast Pleomorphic Carcinoma	20
+NCIT:C6393	Invasive Breast Ductal Carcinoma and Invasive Lobular Carcinoma	32
+NCIT:C40359	Breast Squamous Cell Carcinoma, Acantholytic Variant	8
+NCIT:C6040	Poorly Differentiated Thyroid Gland Carcinoma	9
+NCIT:C4035	Thyroid Gland Papillary Carcinoma	18
+NCIT:C8054	Thyroid Gland Follicular Carcinoma	8
+NCIT:C4946	Thyroid Gland Oncocytic Carcinoma	1
+NCIT:C65200	Thyroid Gland Follicular Carcinoma, Minimally Invasive	8
+NCIT:C3879	Thyroid Gland Medullary Carcinoma	1
+NCIT:C46099	Hereditary Thyroid Gland Medullary Carcinoma	4
+NCIT:C4917	Lung Small Cell Carcinoma	408
+NCIT:C9231	Merkel Cell Carcinoma	14
+NCIT:C96157	Colorectal Large Cell Neuroendocrine Carcinoma	2
+NCIT:C6764	Gastric Small Cell Neuroendocrine Carcinoma	4
+NCIT:C95583	Pancreatic Small Cell Neuroendocrine Carcinoma	1
+NCIT:C9325	Adrenal Cortical Carcinoma	16
+NCIT:C4038	Lung Carcinoid Tumor	5
+NCIT:C6422	Midgut Neuroendocrine Tumor G1	2
+NCIT:C95595	Pancreatic Somatostatinoma	3
+NCIT:C4446	Pancreatic Serotonin-Producing Neuroendocrine Tumor	4
+NCIT:C45835	Pancreatic Neuroendocrine Tumor G2	1
+NCIT:C135080	Duodenal Neuroendocrine Tumor	2
+NCIT:C3225	Multiple Endocrine Neoplasia Type 1	1
+NCIT:C4550	Conjunctival Melanoma	4
+NCIT:C7712	Uveal Melanoma	37
+NCIT:C7541	Retinoblastoma	11
+NCIT:C42596	Sporadic Retinoblastoma	1
+NCIT:C4438	Liver Angiosarcoma	1
+NCIT:C3728	Hepatoblastoma	151
+NCIT:C7955	Childhood Hepatocellular Carcinoma	8
+NCIT:C9161	Anal Squamous Cell Carcinoma	3
+NCIT:C4024	Esophageal Squamous Cell Carcinoma	104
+NCIT:C4025	Esophageal Adenocarcinoma	47
+NCIT:C7027	Barrett Adenocarcinoma	8
+NCIT:C5543	Cecum Adenocarcinoma	57
+NCIT:C4910	Colon Carcinoma	865
+NCIT:C4349	Colon Adenocarcinoma	706
+NCIT:C7966	Colon Mucinous Adenocarcinoma	8
+NCIT:C7967	Colon Signet Ring Cell Adenocarcinoma	1
+NCIT:C9383	Rectal Adenocarcinoma	52
+NCIT:C5673	Colorectal Adenoma	6
+NCIT:C43584	Rectosigmoid Adenocarcinoma	1
+NCIT:C2955	Colorectal Carcinoma	32
+NCIT:C5105	Colorectal Adenocarcinoma	13
+NCIT:C7889	Duodenal Adenocarcinoma	6
+NCIT:C7888	Small Intestinal Adenocarcinoma	1
+NCIT:C41247	Pancreatic Mucinous-Cystic Neoplasm	1
+NCIT:C95506	Pancreatic Intraductal Tubulopapillary Neoplasm	1
+NCIT:C3850	Pancreatic Carcinoma	25
+NCIT:C43298	Hereditary Pancreatic Carcinoma	2
+NCIT:C45843	Pancreatic Mixed Adenoneuroendocrine Carcinoma	1
+NCIT:C5721	Pancreatic Adenosquamous Carcinoma	20
+NCIT:C8294	Pancreatic Adenocarcinoma	97
+NCIT:C7977	Pancreatic Acinar Cell Carcinoma	1
+NCIT:C9120	Pancreatic Ductal Adenocarcinoma	201
+NCIT:C5722	Pancreatic Undifferentiated Carcinoma	2
+NCIT:C38342	Pancreatic Intraductal Papillary-Mucinous Neoplasm	1
+NCIT:C95749	Gastric Choriocarcinoma	3
+NCIT:C8398	Gastric Fundus Carcinoma	2
+NCIT:C4911	Gastric Carcinoma	16
+NCIT:C4004	Gastric Adenocarcinoma	192
+NCIT:C5248	Gastric Mucinous Adenocarcinoma	2
+NCIT:C5473	Gastric Tubular Adenocarcinoma	43
+NCIT:C5250	Gastric Signet Ring Cell Adenocarcinoma	36
+NCIT:C5474	Gastric Adenosquamous Carcinoma	4
+NCIT:C5476	Gastric Undifferentiated Carcinoma	1
+NCIT:C6650	Ampulla of Vater Adenocarcinoma	5
+NCIT:C8459	Hepatosplenic T-Cell Lymphoma	1
+NCIT:C4436	Cholangiocarcinoma	9
+NCIT:C35417	Intrahepatic Cholangiocarcinoma	36
+NCIT:C36077	Hilar Cholangiocarcinoma	4
+NCIT:C3844	Gallbladder Carcinoma	12
+NCIT:C3099	Hepatocellular Carcinoma	5
+NCIT:C27688	Hepatitis C Virus-Related Hepatocellular Carcinoma	9
+NCIT:C7956	Adult Hepatocellular Carcinoma	174
+NCIT:C3828	Combined Hepatocellular Carcinoma and Cholangiocarcinoma	1
+NCIT:C9296	Gastroesophageal Junction Adenocarcinoma	2
+NCIT:C7106	Liver Epithelial Neoplasm	17
+NCIT:C3276	Vestibular Schwannoma	1
+NCIT:C6083	External Ear Squamous Cell Carcinoma	1
+NCIT:C4044	Laryngeal Squamous Cell Carcinoma	79
+NCIT:C4043	Hypopharyngeal Squamous Cell Carcinoma	21
+NCIT:C4943	Pyriform Fossa Squamous Cell Carcinoma	2
+NCIT:C3871	Nasopharyngeal Carcinoma	17
+NCIT:C8183	Tonsillar Squamous Cell Carcinoma	12
+NCIT:C8181	Oropharyngeal Squamous Cell Carcinoma	17
+NCIT:C102872	Pharyngeal Squamous Cell Carcinoma	1
+NCIT:C3878	Thyroid Gland Anaplastic Carcinoma	59
+NCIT:C46008	Thyroid Gland Anaplastic Carcinoma, Squamous Cell Carcinoma Pattern	7
+NCIT:C6041	Thyroid Gland Sarcoma	2
+NCIT:C5938	Parotid Gland Mucoepidermoid Carcinoma	1
+NCIT:C5943	Submandibular Gland Squamous Cell Carcinoma	8
+NCIT:C5412	Clivus Chordoma	2
+NCIT:C8192	Nasal Cavity Squamous Cell Carcinoma	4
+NCIT:C116316	Sinonasal Adenocarcinoma, Intestinal-Type	1
+NCIT:C6064	Maxillary Sinus Squamous Cell Carcinoma	6
+NCIT:C68611	Sinonasal Squamous Cell Carcinoma	3
+NCIT:C34447	Head and Neck Squamous Cell Carcinoma	28
+NCIT:C37290	Head and Neck Basaloid Carcinoma	2
+NCIT:C4833	Oral Cavity Squamous Cell Carcinoma	42
+NCIT:C129857	Gingival Squamous Cell Carcinoma	14
+NCIT:C129289	Gingival Spindle Cell Carcinoma	1
+NCIT:C8171	Lower Gingival Squamous Cell Carcinoma	1
+NCIT:C8172	Retromolar Trigone Squamous Cell Carcinoma	4
+NCIT:C8173	Upper Gingival Squamous Cell Carcinoma	2
+NCIT:C170774	Alveolar Ridge Squamous Cell Carcinoma	6
+NCIT:C4040	Buccal Mucosa Squamous Cell Carcinoma	17
+NCIT:C4041	Floor of Mouth Squamous Cell Carcinoma	36
+NCIT:C4648	Tongue Squamous Cell Carcinoma	44
+NCIT:C3798	Malignant Peripheral Nerve Sheath Tumor	12
+NCIT:C4827	Adrenal Gland Neuroblastoma	28
+NCIT:C7542	Askin Tumor	9
+NCIT:C8776	Peripheral Primitive Neuroectodermal Tumor of Bone	1
+NCIT:C94764	Diffuse Intrinsic Pontine Glioma	37
+NCIT:C3058	Glioblastoma	383
+NCIT:C3796	Gliosarcoma	14
+NCIT:C4325	Giant Cell Glioblastoma	2
+NCIT:C5150	Cerebellar Glioblastoma	1
+NCIT:C3288	Oligodendroglioma	10
+NCIT:C4050	Oligoastrocytoma	2
+NCIT:C4326	Anaplastic Oligodendroglioma	3
+NCIT:C129271	Astrocytoma, IDH-Mutant, Grade 2	1
+NCIT:C9477	Anaplastic Astrocytoma	19
+NCIT:C4047	Pilocytic Astrocytoma	3
+NCIT:C60781	Astrocytoma	122
+NCIT:C3716	Primitive Neuroectodermal Tumor	14
+NCIT:C3270	Neuroblastoma	280
+NCIT:C3222	Medulloblastoma	12
+NCIT:C129440	Medulloblastoma, WNT-Activated	1
+NCIT:C129442	Medulloblastoma, SHH-Activated, TP53-Mutant	13
+NCIT:C129443	Medulloblastoma, SHH-Activated, TP53-Wildtype	6
+NCIT:C129445	Medulloblastoma, Non-WNT/Non-SHH, Group 3	20
+NCIT:C129446	Medulloblastoma, Non-WNT/Non-SHH, Group 4	2
+NCIT:C6906	Atypical Teratoid/Rhabdoid Tumor	7
+NCIT:C3230	Meningioma	5
+NCIT:C4656	Intracranial Meningioma	2
+NCIT:C4878	Lung Carcinoma	5
+NCIT:C2926	Lung Non-Small Cell Carcinoma	55
+NCIT:C3512	Lung Adenocarcinoma	1681
+NCIT:C5650	Lung Papillary Adenocarcinoma	17
+NCIT:C2923	Minimally Invasive Lung Adenocarcinoma	40
+NCIT:C7270	Minimally Invasive Lung Mixed Non-Mucinous and Mucinous Adenocarcinoma	35
+NCIT:C4450	Lung Large Cell Carcinoma	114
+NCIT:C4452	Lung Giant Cell Carcinoma	16
+NCIT:C45542	Lung Pleomorphic Carcinoma	1
+NCIT:C45543	Lung Carcinosarcoma	1
+NCIT:C9133	Lung Adenosquamous Carcinoma	31
+NCIT:C3493	Lung Squamous Cell Carcinoma	145
+NCIT:C35875	Bronchogenic Carcinoma	4
+NCIT:C45544	Lung Mucoepidermoid Carcinoma	8
+NCIT:C3467	Primary Cutaneous T-Cell Non-Hodgkin Lymphoma	11
+NCIT:C3246	Mycosis Fungoides	1
+NCIT:C3510	Cutaneous Melanoma	1085
+NCIT:C4022	Acral Lentiginous Melanoma	18
+NCIT:C9151	Lentigo Maligna Melanoma	2
+NCIT:C4225	Cutaneous Nodular Melanoma	2
+NCIT:C4633	Amelanotic Cutaneous Melanoma	2
+NCIT:C9152	Low-CSD Melanoma	15
+NCIT:C4819	Skin Squamous Cell Carcinoma	87
+NCIT:C3146	Keratoacanthoma	1
+NCIT:C9280	Primary Mediastinal (Thymic) Large B-Cell Lymphoma	12
+NCIT:C7376	Pleural Malignant Mesothelioma	26
+NCIT:C45662	Pleural Epithelioid Mesothelioma	59
+NCIT:C45663	Pleural Sarcomatoid Mesothelioma	20
+NCIT:C45665	Pleural Biphasic Mesothelioma	25
+NCIT:C3411	Thymoma	1
+NCIT:C3169	Mast Cell Leukemia	4
+NCIT:C3171	Acute Myeloid Leukemia	5
+NCIT:C8252	Therapy-Related Acute Myeloid Leukemia	4
+NCIT:C27753	Acute Myeloid Leukemia Not Otherwise Specified	4
+NCIT:C9163	Childhood Acute Monocytic Leukemia	313
+NCIT:C7972	Childhood Acute Megakaryoblastic Leukemia	3
+NCIT:C9381	Childhood Acute Myeloid Leukemia with Maturation	9
+NCIT:C7965	Adult Acute Megakaryoblastic Leukemia	7
+NCIT:C7961	Adult Acute Myeloid Leukemia with Maturation	1
+NCIT:C8263	Adult Acute Monocytic Leukemia	59
+NCIT:C7463	Acute Myelomonocytic Leukemia	11
+NCIT:C7152	Erythroleukemia	31
+NCIT:C3182	Acute Promyelocytic Leukemia with PML-RARA	21
+NCIT:C82426	Acute Myeloid Leukemia with inv(3) (q21.3;q26.2) or t(3;3) (q21.3;q26.2); GATA2, MECOM	3
+NCIT:C9154	Adult Acute Myeloid Leukemia	148
+NCIT:C9160	Childhood Acute Myeloid Leukemia	14
+NCIT:C3174	Chronic Myelogenous Leukemia, BCR-ABL1 Positive	5914
+NCIT:C7320	Childhood Chronic Myelogenous Leukemia, BCR-ABL1 Positive	8
+NCIT:C9110	Blast Phase Chronic Myelogenous Leukemia, BCR-ABL1 Positive	21
+NCIT:C3163	Chronic Lymphocytic Leukemia	7
+NCIT:C4753	B-Cell Prolymphocytic Leukemia	4
+NCIT:C4563	Chronic Eosinophilic Leukemia, Not Otherwise Specified	2
+NCIT:C4664	T-Cell Large Granular Lymphocyte Leukemia	2
+NCIT:C7402	Hairy Cell Leukemia	6
+NCIT:C3168	Childhood Acute Lymphoblastic Leukemia	1
+NCIT:C7953	Childhood T Acute Lymphoblastic Leukemia	326
+NCIT:C9140	Childhood B Acute Lymphoblastic Leukemia	57
+NCIT:C68659	Childhood B Acute Lymphoblastic Leukemia with t(9;22)(q34.1;q11.2); BCR-ABL1	3
+NCIT:C3183	T Acute Lymphoblastic Leukemia	1
+NCIT:C9142	Adult T Acute Lymphoblastic Leukemia	62
+NCIT:C9143	Adult B Acute Lymphoblastic Leukemia	67
+NCIT:C114819	Adult B Acute Lymphoblastic Leukemia with t(9;22)(q34.1;q11.2); BCR-ABL1	2
+NCIT:C8644	B Acute Lymphoblastic Leukemia	15
+NCIT:C80347	B Acute Lymphoblastic Leukemia with t(1;19)(q23;p13.3); E2A-PBX1 (TCF3-PBX1)	7
+NCIT:C7954	Adult Burkitt Leukemia	8
+NCIT:C3366	Sezary Syndrome	25
+NCIT:C4673	Acute Biphenotypic Leukemia	4
+NCIT:C3242	Plasma Cell Myeloma	158
+NCIT:C3457	B-Cell Non-Hodgkin Lymphoma	19
+NCIT:C2912	Burkitt Lymphoma	84
+NCIT:C27694	EBV-Related Burkitt Lymphoma	315
+NCIT:C36081	Diffuse Large B-Cell Lymphoma Activated B-Cell Type	20
+NCIT:C4337	Mantle Cell Lymphoma	34
+NCIT:C80307	Waldenstrom Macroglobulinemia	8
+NCIT:C3465	Grade 1 Follicular Lymphoma	1
+NCIT:C4341	Marginal Zone Lymphoma	1
+NCIT:C4663	Splenic Marginal Zone Lymphoma	5
+NCIT:C8863	Nodal Marginal Zone Lymphoma	4
+NCIT:C3209	Follicular Lymphoma	4
+NCIT:C8851	Diffuse Large B-Cell Lymphoma	22
+NCIT:C125904	High Grade B-Cell Lymphoma with MYC and BCL2 or BCL6 Rearrangements	3
+NCIT:C6915	Primary Effusion Lymphoma	55
+NCIT:C80280	Diffuse Large B-Cell Lymphoma, Not Otherwise Specified	27
+NCIT:C36080	Diffuse Large B-Cell Lymphoma Germinal Center B-Cell Type	88
+NCIT:C80334	B Lymphoblastic Leukemia/Lymphoma with t(12;21)(p13.2;q22.1); ETV6-RUNX1	7
+NCIT:C9349	Plasmacytoma	7
+NCIT:C3184	Adult T-Cell Leukemia/Lymphoma	3
+NCIT:C37193	Anaplastic Large Cell Lymphoma, ALK-Positive	33
+NCIT:C37194	Anaplastic Large Cell Lymphoma, ALK-Negative	5
+NCIT:C4684	Nasal Type Extranodal NK/T-Cell Lymphoma	8
+NCIT:C9265	Mycosis Fungoides and Sezary Syndrome	1
+NCIT:C3466	T-Cell Non-Hodgkin Lymphoma	1
+NCIT:C7210	Childhood T Lymphoblastic Lymphoma	17
+NCIT:C3208	Lymphoma	1
+NCIT:C5051	AIDS-Related Non-Hodgkin Lymphoma	4
+NCIT:C3211	Non-Hodgkin Lymphoma	1
+NCIT:C9360	Lymphoblastic Lymphoma	1
+NCIT:C9357	Hodgkin Lymphoma	33
+NCIT:C82217	Natural Killer Cell Lymphoblastic Leukemia/Lymphoma	4
+NCIT:C3178	Chronic Myelomonocytic Leukemia	1
+NCIT:C3519	Atypical Chronic Myeloid Leukemia, BCR-ABL1 Negative	1
+NCIT:C27912	Therapy-Related Myeloid Neoplasm	1
+NCIT:C3247	Myelodysplastic Syndrome	7
+NCIT:C3407	Essential Thrombocythemia	2
+NCIT:C43223	Myeloid Leukemia Associated with Down Syndrome	7
+NCIT:C4304	Malignancy in Giant Cell Tumor of Bone	3
+NCIT:C27482	Secondary Chondrosarcoma	2
+NCIT:C4023	Small Cell Osteosarcoma	2
+NCIT:C6476	Dedifferentiated Chondrosarcoma	6
+NCIT:C7155	Primary Central Chondrosarcoma	11
+NCIT:C3158	Leiomyosarcoma	3
+NCIT:C27904	Retroperitoneal Leiomyosarcoma	1
+NCIT:C3359	Rhabdomyosarcoma	12
+NCIT:C121654	Spindle Cell/Sclerosing Rhabdomyosarcoma	1
+NCIT:C3749	Alveolar Rhabdomyosarcoma	25
+NCIT:C8971	Embryonal Rhabdomyosarcoma	47
+NCIT:C27372	Childhood Desmoplastic Small Round Cell Tumor	1
+NCIT:C6586	Extrarenal Rhabdoid Tumor	6
+NCIT:C8795	Recurrent Undifferentiated Pleomorphic Sarcoma	1
+NCIT:C27502	Extraskeletal Myxoid Chondrosarcoma	2
+NCIT:C3400	Synovial Sarcoma	2
+NCIT:C4279	Biphasic Synovial Sarcoma	6
+NCIT:C4277	Spindle Cell Synovial Sarcoma	4
+NCIT:C3750	Alveolar Soft Part Sarcoma	1
+NCIT:C27373	Adult Desmoplastic Small Round Cell Tumor	1
+NCIT:C4247	Undifferentiated Pleomorphic Sarcoma	10
+NCIT:C6496	Myxofibrosarcoma	2
+NCIT:C8973	Endometrioid Stromal Sarcoma	2
+NCIT:C8810	Extraskeletal Osteosarcoma	1
+NCIT:C3868	Gastrointestinal Stromal Tumor	21
+NCIT:C6505	Atypical Lipomatous Tumor/Well Differentiated Liposarcoma	3
+NCIT:C3194	Liposarcoma	13
+NCIT:C27781	Myxoid Liposarcoma	1
+NCIT:C3704	Dedifferentiated Liposarcoma	11
+NCIT:C3705	Pleomorphic Liposarcoma	2
+NCIT:C2946	Chondrosarcoma	5
+NCIT:C9145	Osteosarcoma	159
+NCIT:C3043	Fibrosarcoma	113
+NCIT:C3088	Angiosarcoma	1
+NCIT:C4817	Ewing Sarcoma	120
+NCIT:C3800	Epithelioid Hemangioendothelioma	1
+NCIT:C7695	Primary Peritoneal Serous Papillary Adenocarcinoma	1
+NCIT:C3345	Pseudomyxoma Peritonei	1
+NCIT:C9350	Peritoneal Malignant Mesothelioma	1
+NCIT:C3752	Embryonal Carcinoma	2
+NCIT:C3769	Endometrioid Adenocarcinoma	4
+NCIT:C3812	Carcinoma of Unknown Primary	4
+NCIT:C3712	Squamous Papilloma	1
+NCIT:C3234	Mesothelioma	3
+NCIT:C4456	Malignant Mesothelioma	1
+NCIT:C27779	Lymphohistiocytoid Mesothelioma	2
+NCIT:C7985	Epithelioid Mesothelioma	2
+NCIT:C3224	Melanoma	775
+NCIT:C3802	Amelanotic Melanoma	186
+NCIT:C114828	Mucosal Melanoma	5
+NCIT:C27291	Ewing Sarcoma/Peripheral Primitive Neuroectodermal Tumor	4
+NCIT:C129863	NCIT:C129863	1
+NCIT:C28244	NCIT:C28244	3
+NCIT:C2897	NCIT:C2897	3
+NCIT:C97074	NCIT:C97074	1

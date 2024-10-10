@@ -1,63 +1,172 @@
 import csv, re
 from os import path
 
-from config import BYC
-from bycon_helpers import generate_id
+from config import *
 from genome_utils import ChroNames
-from variant_mapping import ByconVariant
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-def parse_cytoband_file():
-    """podmd
- 
-    podmd"""
-    g_rsrc_p = ChroNames().genomePath()
-    cb_file = path.join( g_rsrc_p, "cytoBandIdeo.txt")
-    cb_keys = [ "chro", "start", "end", "cytoband", "staining" ]
-    cytobands = [ ]
-    cytolimits = { }
-    genome_size = 0
-    i = 0
-    c_bands = [ ]
-    with open(cb_file) as cb_f:                                                                                          
-        for c_band in csv.DictReader(filter(lambda row: row.startswith('#') is False, cb_f), fieldnames=cb_keys, delimiter='\t'):
-            c_bands.append(c_band)
 
-    #--------------------------------------------------------------------------#
+class Cytobands():
 
-    # !!! making sure the chromosomes are sorted !!!
-    for chro in BYC["interval_definitions"]["chromosomes"]:
-        chro = str(chro)
-        c_m = f'chr{chro}'
-        chrobands = [ ]
-        for cb in c_bands:
-            if cb["chro"] == c_m:
-                cb["i"] = i
-                cb["chro"] = cb["chro"].replace("chr", "")
-                cb["chroband"] = cb["chro"]+cb[ "cytoband" ]
-                cytobands.append(dict(cb))
-                chrobands.append(dict(cb))
-                i += 1
-        cytolimits.update({
-            chro: {
-                "chro": [ int(cytobands[0]["start"]), int(cytobands[-1]["end"]) ],
-                "size": int(cytobands[-1]["end"]) - int(cytobands[0]["start"]),
-                "p": arm_base_range(chro, "p", cytobands),
-                "q": arm_base_range(chro, "q", cytobands)
+    def __init__(self):
+        self.cytobands = [ ]
+        self.cytolimits = { }
+        self.genome_size = 0
+        self.filtered_bands = []
+        self.chro = None
+        self.start = None
+        self.end = None
+        self.ChroNames = ChroNames()
+        self.cytoband_response = {}
+        self.sorted_chros = BYC["interval_definitions"]["chromosomes"]
+
+        self.__parse_cytoband_file()
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def get_all_cytobands(self):
+        return self.cytobands
+
+    def get_all_cytolimits(self):
+        return self.cytolimits
+
+    def get_genome_size(self):
+        return self.genome_size
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+
+    def cytobands_response(self):
+        self.__cytobands_from_request_pars()
+        self.__cytobands_response_object()
+        return self.cytoband_response
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def bands_from_cytostring(self, cytoband=""):
+        self.cytostring = cytoband
+        self.__cytobands_from_cytoband_string()
+        return self.filtered_bands, self.chro, self.start, self.end
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- private -----------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __cytobands_from_cytoband_string(self):
+        self.filtered_bands, self.chro, self.start, self.end = bands_from_cytobands(self.cytostring)
+
+
+    # -------------------------------------------------------------------------#
+
+
+    def __cytobands_from_request_pars(self):
+        if (c_b := BYC_PARS.get("cyto_bands")):
+            self.filtered_bands, self.chro, self.start, self.end = bands_from_cytobands(c_b)
+        if (c_b := BYC_PARS.get("chro_bases")):
+            self.filtered_bands, self.chro, self.start, self.end = bands_from_chrobases(c_b)
+        else:
+            return
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __cytobands_response_object(self):
+        if len(self.filtered_bands) < 1:
+            return
+
+        cb_label = cytobands_label(self.filtered_bands)
+        size = int(self.end - self.start)
+        chro_bases = f'{self.chro}:{self.start}-{self.end}'
+        sequence_id = self.ChroNames.refseq(self.chro)
+
+        self.cytoband_response = {
+            "info": {
+                "cytoBands": cb_label,
+                "bandList": [x['chroband'] for x in self.filtered_bands ],
+                "chroBases": chro_bases,
+                "referenceName": self.chro,
+                "size": size,
+            },        
+            "chromosome_location": {
+                "type": "ChromosomeLocation",
+                "species_id": "taxonomy:9606",
+                "chr": self.chro,
+                "interval": {
+                    "start": self.filtered_bands[0]["cytoband"],
+                    "end": self.filtered_bands[-1]["cytoband"],
+                    "type": "CytobandInterval"
+                }
+            },
+            "genomic_location": {
+                "type": "SequenceLocation",
+                "sequence_id": sequence_id,
+                "interval": {
+                    "start": {
+                        "type": "Number",
+                        "value": self.start
+                    },
+                    "end": {
+                        "type": "Number",
+                        "value": self.end
+                    },
+                    "type": "SequenceInterval"
+                }
             }
-        })
-        genome_size += int(chrobands[-1]["end"])
+        }
 
-    #--------------------------------------------------------------------------#
 
-    BYC.update( {
-        "cytobands": cytobands,
-        "cytolimits": cytolimits,
-        "genome_size": genome_size
-    } )
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __parse_cytoband_file(self):
+        g_rsrc_p = self.ChroNames.genomePath()
+        cb_file = path.join(g_rsrc_p, "cytoBandIdeo.txt")
+        cb_keys = [ "chro", "start", "end", "cytoband", "staining" ]
+        i = 0
+        c_bands = [ ]
+        with open(cb_file) as cb_f:                                                                                          
+            for c_band in csv.DictReader(filter(lambda row: row.startswith('#') is False, cb_f), fieldnames=cb_keys, delimiter='\t'):
+                c_bands.append(c_band)
+
+        #--------------------------------------------------------------------------#
+
+        # !!! making sure the chromosomes are sorted !!!
+        # TODO: should be in ChroNames?
+        for chro in self.sorted_chros:
+            chro = str(chro)
+            c_m = f'chr{chro}'
+            chrobands = [ ]
+            for cb in c_bands:
+                if cb["chro"] == c_m:
+                    cb["i"] = i
+                    cb["chro"] = cb["chro"].replace("chr", "")
+                    cb["chroband"] = f'{cb["chro"]}{cb["cytoband"]}'
+                    self.cytobands.append(dict(cb))
+                    chrobands.append(dict(cb))
+                    i += 1
+            self.cytolimits.update({
+                chro: {
+                    "chro": [ int(chrobands[0]["start"]), int(chrobands[-1]["end"]) ],
+                    "size": int(chrobands[-1]["end"]) - int(chrobands[0]["start"]),
+                    "p": arm_base_range("p", chrobands),
+                    "q": arm_base_range("q", chrobands)
+                }
+            })
+            self.genome_size += int(chrobands[-1]["end"])
+
+        #--------------------------------------------------------------------------#
+
 
 
 ################################################################################
@@ -65,8 +174,7 @@ def parse_cytoband_file():
 def bands_from_cytobands(chr_bands):
     argdefs = BYC.get("argument_definitions", {})
     cytoband_defs = BYC.get("cytobands", [])
-    cb_pat = re.compile( argdefs["cyto_bands"]["items"]["pattern"] )
-    error = ""
+    cb_pat = re.compile( argdefs["cyto_bands"]["pattern"] )
     end_re = re.compile(r"^([pq]\d.*?)\.?\d$")
     arm_re = re.compile(r"^([pq]).*?$")
     p_re = re.compile(r"^p.*?$")
@@ -79,13 +187,17 @@ def bands_from_cytobands(chr_bands):
     if "q10" in chr_bands:
         chr_bands = re.sub("q10", "qcen", chr_bands)
 
+    if not cb_pat.match(chr_bands):
+        return([], "", "", "")
+
     chro, cb_start, cb_end = cb_pat.match(chr_bands).group(1,2,3)
     cytobands = list(filter(lambda d: d[ "chro" ] == chro, cytoband_defs.copy()))
+
     if len(cytobands) < 10:
-        return([], "", "", "", "error")
+        return([], "", "", "")
 
     if cb_start is None and cb_end is None:
-        return cytobands, chro, int( cytobands[0]["start"] ), int( cytobands[-1]["end"] ), error
+        return cytobands, chro, int( cytobands[0]["start"] ), int( cytobands[-1]["end"] )
 
     p_bands = list(filter(lambda d: p_re.match(d[ "cytoband" ]), cytobands))
     q_bands = list(filter(lambda d: q_re.match(d[ "cytoband" ]), cytobands))
@@ -162,7 +274,7 @@ def bands_from_cytobands(chr_bands):
 
     matched = cytoband_defs[cb_from:cb_to]
  
-    return matched, chro, int( matched[0]["start"] ), int( matched[-1]["end"]), error
+    return matched, chro, int( matched[0]["start"] ), int( matched[-1]["end"])
 
 
 ################################################################################
@@ -175,12 +287,11 @@ def match_bands(band, cytobands):
 
 ################################################################################
 
-def arm_base_range(chro, arm, cytobands):
+def arm_base_range(arm, chrobands):
     if arm not in ["p","q", "P", "Q"]:
         return 0, 1
     arm_re = re.compile(rf"^{arm}", re.IGNORECASE)
-    bands = list(filter(lambda d: d[ "chro" ] == chro, cytobands))
-    bands = list(filter(lambda d: arm_re.match(d[ "cytoband" ]), bands))
+    bands = list(filter(lambda d: arm_re.match(d[ "cytoband" ]), chrobands))
     return [ int(bands[0]["start"]), int(bands[-1]["end"]) ]
 
 

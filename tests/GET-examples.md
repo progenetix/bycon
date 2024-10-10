@@ -1,36 +1,53 @@
-# Various test examples
+# Bycon Tests
 
-http://progenetix.test/beacon/biosamples/?datasetIds=progenetix&referenceName=refseq:NC_000009.12&variantType=EFO:0030067&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058
+## Standard Beacon Protocol
 
-http://progenetix.org/beacon/genomicVariations/?referenceName=NC_000017.11&start=7577120&referenceBases=G&alternateBases=A
+http://progenetix.test/beacon/biosamples?filters=NCIT:C3697
 
-https://progenetix.org/beacon/g_variants/?filters=NCIT:C7712&output=pgxseg
+http://progenetix.test/beacon/biosamples/pgxbs-kftvhyvb/phenopackets
 
-https://progenetix.org/beacon/analyses/?referenceName=17&variantType=DEL&start=5000000&start=7676592&end=7669607&end=10000000&filters=&output=pgxmatrix
+http://progenetix.test/beacon/biosamples?referenceName=refseq:NC_000009.12&variantType=EFO:0030067&start=21000000,21975098&end=21967753,23000000&filters=NCIT:C3058&limit=10
 
-https://progenetix.org/beacon/analyses?referenceName=17&variantType=DEL&start=5000000&start=7676592&end=7669607&end=10000000&filters=cellosaurus&output=pgxmatrix
+http://progenetix.test/beacon/genomicVariations/?referenceName=NC_000017.11&start=7577120&referenceBases=G&alternateBases=A
 
-http://progenetix.org/beacon/biosamples?filters=NCIT:C3697&output=table
+http://progenetix.test/beacon/g_variants/pgxvar-5bab576a727983b2e00b8d32
 
-http://progenetix.org/beacon/biosamples?referenceName=9&start=10000000,12000000&end=12500000,15000000&variantType=DEL&filters=pgx:icdom-81703
+http://progenetix.test/beacon/analyses/?referenceName=17&variantType=DEL&start=5000000&start=7676592&end=7669607&end=10000000&requestedGranularity=count
 
-http://progenetix.org/beacon/biosamples/onekgbs-HG00142/g_variants
+http://refcnv.test/beacon/biosamples/onekgbs-HG00142/g_variants
 
-http://progenetix.org/beacon/biosamples/pgxbs-kftvhyvb/phenopackets
+## Beacon Requests bwith Additional or Experimental paramaters
 
-http://progenetix.org/services/sampleplots/pgxbs-kftvkafc/?datasetIds=progenetix&plotType=samplesplot&plot_chros=3,5,6,14
-
-http://progenetix.test/beacon/datasets/progenetix/biosamples?filters=NCIT:C3058&variant_query_digests=9:21500001-21975098--21967753-24000000:DEL,17:6000000-7687480--7668422-8000000:DEL
-
-http://progenetix.test/beacon/g_variants/pgxvar-660fff082a1761bdde9c6e47,pgxvar-660dccff46aa9c3c26e7a565/
-
-http://beaconplus.test/beacon/biosamples/?cytoBands=8q24.1&limit=100&skip=0&datasetIds=progenetix&variantType=EFO:0030070&filters=NCIT:C4017
-
-http://progenetix.test/beacon/biosamples/?limit=100&referenceName=refseq:NC_000009.12&variantType=EFO:0030067&start=21000000,21975098&end=21967753,23000000&filters=NCIT:C3058
-
-http://progenetix.test/beacon/datasets/progenetix/biosamples?requestedGranularity=count&variantMaxLength=3000000&limit=100&variantType=EFO:0030067&geneId=TP53,CDKN2A&filters=NCIT:C3058
-
-## Fusion...
+http://progenetix.test/beacon/biosamples/?cytoBands=8q24.1&limit=100&variantType=EFO:0030070&filters=NCIT:C4017
 
 http://progenetix.test/beacon/g_variants/?referenceName=8&mateName=12&start=45100000&end=47300000&mateStart=26200000&mateEnd=35600000&variantType=SO:0000806
+
+
+
+
+## Bycon Services
+
+
+http://progenetix.test/services/collations?id=pgx:icdom-81703
+
+http://progenetix.test/services/collationplots/pgx:icdom-81703
+
+http://progenetix.test/services/pgxsegvariants/pgxbs-kftva59y
+
+http://progenetix.test/services/samplematrix/pgxbs-kftva59y
+
+http://progenetix.test/services/samplematrix?referenceName=17&variantType=DEL&start=5000000&start=7676592&end=7669607&end=10000000&filters=pgx:icdom-81703
+
+http://progenetix.test/services/sampletable?filters=NCIT:C3697
+
+http://progenetix.test/services/sampleplots/pgxbs-kftvkafc/?plotType=samplesplot&plotPars=plot_chros=3,5,6,14
+
+
+
+http://progenetix.test/services/ontologymaps?filters=NCIT:C105555
+
+
+## Not Working
+
+http://progenetix.test/beacon/biosamples?requestedGranularity=count&variantMaxLength=3000000&limit=100&variantType=EFO:0030067&geneId=TP53,CDKN2A&filters=NCIT:C3058
 

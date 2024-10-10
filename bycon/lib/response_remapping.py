@@ -91,10 +91,10 @@ class VariantsResponse:
 def remap_analyses(r_s_res):
     if not "analysis" in BYC["response_entity_id"]:
         return r_s_res
-    pop_keys = ["info", "provenance", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats"]
+    pop_keys = ["info", "geo_location", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats"]
     # TODO: move the cnvstats option away from here
     if "cnvstats" in str(BYC.get("request_entity_path_id")):
-        pop_keys = ["info", "provenance", "cnv_statusmaps"]
+        pop_keys = ["info", "cnv_statusmaps"]
 
     for cs_i, cs_r in enumerate(r_s_res):
         # TODO: REMOVE VERIFIER HACKS (partially done...)
@@ -249,8 +249,8 @@ def phenopack_individual(ind, data_db):
     # or better on filling them in only for existing parameters
 
     pxf_bios = []
-    ind_pop_keys = ["_id", "provenance", "external_references", "description", "info"]
-    bs_pop_keys = ["info", "provenance", "_id", "followup_time", "followup_state", "cohorts", "icdo_morphology",
+    ind_pop_keys = ["_id", "geo_location", "external_references", "description", "info"]
+    bs_pop_keys = ["info", "geo_location", "_id", "followup_time", "followup_state", "cohorts", "icdo_morphology",
                    "icdo_topography"]
 
     pxf_resources = _phenopack_resources()

@@ -1,0 +1,53 @@
+pgx:icdom-80703	Squamous cell carcinoma, NOS	45
+pgx:icdom-80713	Squamous cell carcinoma, keratinizing, NOS	6
+pgx:icdom-80723	Squamous cell carcinoma, large cell, nonkeratinizing, NOS	5
+pgx:icdom-80833	Basaloid squamous cell carcinoma	1
+pgx:icdom-81203	Transitional cell carcinoma, NOS	14
+pgx:icdom-81303	Papillary transitional cell carcinoma	2
+pgx:icdom-81403	Adenocarcinoma, NOS	57
+pgx:icdom-81443	Adenocarcinoma, intestinal type	1
+pgx:icdom-81453	Carcinoma, diffuse type	5
+pgx:icdom-81703	Hepatocellular carcinoma, NOS	9
+pgx:icdom-81803	Combined hepatocellular carcinoma and cholangiocarcinoma	1
+pgx:icdom-82113	Tubular adenocarcinoma	5
+pgx:icdom-82523	Bronchiolo-alveolar carcinoma, non- mucinous	1
+pgx:icdom-82603	Papillary adenocarcinoma, NOS	18
+pgx:icdom-83103	Clear cell adenocarcinoma, NOS	12
+pgx:icdom-83173	Renal cell carcinoma, chromophobe type	2
+pgx:icdom-83403	Papillary carcinoma, follicular variant	3
+pgx:icdom-83703	Adrenal cortical carcinoma	4
+pgx:icdom-83803	Endometrioid adenocarcinoma, NOS	19
+pgx:icdom-84413	Serous cystadenocarcinoma, NOS	31
+pgx:icdom-84803	Mucinous adenocarcinoma	4
+pgx:icdom-84823	Mucinous adenocarcinoma, endocervical type	1
+pgx:icdom-85003	Infiltrating duct carcinoma, NOS	23
+pgx:icdom-85203	Lobular carcinoma, NOS	5
+pgx:icdom-85223	Infiltrating duct and lobular carcinoma	2
+pgx:icdom-85503	Acinar cell carcinoma	5
+pgx:icdom-85753	Metaplastic carcinoma, NOS	1
+pgx:icdom-85823	Thymoma, type AB, malignant	1
+pgx:icdom-85843	Thymoma, type B2, malignant	1
+pgx:icdom-87000	Pheochromocytoma, NOS	3
+pgx:icdom-87003	Pheochromocytoma, malignant	2
+pgx:icdom-87203	Malignant melanoma, NOS	10
+pgx:icdom-87433	Superficial spreading melanoma	1
+pgx:icdom-87703	Mixed epithelioid and spindle cell melanoma	1
+pgx:icdom-87743	Spindle cell melanoma, type B	1
+pgx:icdom-88053	Undifferentiated sarcoma	1
+pgx:icdom-88113	Fibromyxosarcoma	1
+pgx:icdom-88303	Malignant fibrous histiocytoma	1
+pgx:icdom-88583	Dedifferentiated liposarcoma	2
+pgx:icdom-88903	Leiomyosarcoma, NOS	4
+pgx:icdom-89503	Mullerian mixed tumor	1
+pgx:icdom-90433	Synovial sarcoma, biphasic	1
+pgx:icdom-90523	Epithelioid mesothelioma, malignant	2
+pgx:icdom-90533	Mesothelioma, biphasic, malignant	2
+pgx:icdom-90613	Seminoma, NOS	4
+pgx:icdom-93823	Mixed glioma	5
+pgx:icdom-94003	Astrocytoma, NOS	3
+pgx:icdom-94013	Astrocytoma, anaplastic	5
+pgx:icdom-94403	Glioblastoma, NOS	13
+pgx:icdom-94503	Oligodendroglioma, NOS	9
+pgx:icdom-96803	Malignant lymphoma, large B-cell, diffuse, NOS	3
+pgx:icdom-98613	Acute myeloid leukemia, NOS	3
+pgx:icdom-83701	pgx:icdom-83701	1

@@ -1,35 +1,17 @@
 #!/usr/bin/env python3
 
-from pymongo import MongoClient
-from os import path, pardir, mkdir, system, environ
+from os import path, pardir, mkdir, system
 import datetime, shutil
-from pathlib import Path
 from isodate import date_isoformat
 
-from bycon import *
+from bycon import BYC, BYC_PARS, initialize_bycon_service
+from byconServiceLibs import assertSingleDatasetOrExit
 
-dir_path = path.dirname( path.abspath(__file__) )
-pkg_path = path.join( dir_path, pardir )
-
-################################################################################
-################################################################################
 ################################################################################
 
 def main():
-    """
-    ./bin/database_archiver -d progenetix
-    """
-    database_archiver()
-
-################################################################################
-
-def database_archiver():
     initialize_bycon_service()
-
-    if len(BYC["BYC_DATASET_IDS"]) != 1:
-        print("No single existing dataset was provided with -d ...")
-        exit()
-    ds_id = BYC["BYC_DATASET_IDS"][0]
+    ds_id = assertSingleDatasetOrExit()
 
     output_dir = BYC_PARS.get("outputdir")
     if not output_dir:
@@ -54,8 +36,6 @@ def database_archiver():
     print(sysCmd)
     system(sysCmd)
 
-################################################################################
-################################################################################
 ################################################################################
 
 if __name__ == '__main__':

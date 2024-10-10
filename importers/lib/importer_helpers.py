@@ -7,7 +7,7 @@ from config import *
 from bycon_helpers import prjsonnice, prdbug
 from variant_mapping import ByconVariant
 
-from bycon.services import bycon_bundler, datatable_utils, file_utils
+from byconServiceLibs import assertSingleDatasetOrExit, ByconBundler, import_datatable_dict_line, write_log
 
 ################################################################################
 ################################################################################
@@ -167,10 +167,7 @@ class ByconautImporter():
 
     def __initialize_importer(self):
         BYC.update({"BYC_DATASET_IDS": BYC_PARS.get("dataset_ids", [])})
-        if len(BYC["BYC_DATASET_IDS"]) != 1:
-            print("No single existing dataset was provided with -d ...")
-            exit()
-        self.dataset_id = BYC["BYC_DATASET_IDS"][0]
+        self.dataset_id = assertSingleDatasetOrExit()
         self.input_file = BYC_PARS.get("inputfile")
         if not self.input_file:
             print("No input file file specified (-i, --inputfile) => quitting ...")
@@ -259,7 +256,7 @@ class ByconautImporter():
     def __read_data_file(self):
         iid = self.import_id
 
-        bb = bycon_bundler.ByconBundler()
+        bb = ByconBundler()
         self.data_in = bb.read_pgx_file(self.input_file)
         print(f'=> The input file contains {len(self.data_in.data)} items')
 
@@ -446,7 +443,7 @@ class ByconautImporter():
         for new_doc in checked_docs:
             o_id = new_doc[iid]
             update_i = import_coll.find_one({"id": o_id})
-            update_i = datatable_utils.import_datatable_dict_line(update_i, fn, new_doc, ien)
+            update_i = import_datatable_dict_line(update_i, fn, new_doc, ien)
             update_i.update({"updated": datetime.datetime.now().isoformat()})
 
             if not BYC["TEST_MODE"]:
@@ -495,7 +492,7 @@ class ByconautImporter():
         i_no = 0
         for new_doc in checked_docs:
             update_i = {"id": new_doc[iid]}
-            update_i = datatable_utils.import_datatable_dict_line(update_i, fn, new_doc, ien)
+            update_i = import_datatable_dict_line(update_i, fn, new_doc, ien)
             update_i.update({"updated": datetime.datetime.now().isoformat()})
 
             if not BYC["TEST_MODE"]:
@@ -554,7 +551,7 @@ class ByconautImporter():
 
         i_no = 0
         for new_doc in import_vars:
-            insert_v = datatable_utils.import_datatable_dict_line({}, fn, new_doc, ien)
+            insert_v = import_datatable_dict_line({}, fn, new_doc, ien)
             insert_v = ByconVariant().pgxVariant(insert_v)
             insert_v.update({"updated": datetime.datetime.now().isoformat()})
 
@@ -599,7 +596,7 @@ class ByconautImporter():
         if len(self.log) < 1:
             return
 
-        file_utils.write_log(self.log, self.input_file)
+        write_log(self.log, self.input_file)
         if (force := BYC_PARS.get("force")):
             print(f'¡¡¡ {len(self.log)} errors => still proceeding since"--force {force}" in effect')
         else:

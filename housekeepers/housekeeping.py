@@ -7,11 +7,7 @@ from pymongo import MongoClient
 from progress.bar import Bar
 
 from bycon import *
-from bycon.services import collation_utils, service_helpers
-
-# from collation_utils import *
-from service_helpers import *
-
+from byconServiceLibs import *
 
 loc_path = path.dirname( path.abspath(__file__) )
 lib_path = path.join(loc_path , "lib")
@@ -21,25 +17,15 @@ from doc_generator import doc_generator
 
 services_conf_path = path.join( loc_path, "config" )
 
-"""
-The housekeeping script contains **non-destructive** maintenance scripts which
-e.g. may insert derived helper values (e.g. `age_days`).
-"""
-
 ################################################################################
 ################################################################################
 ################################################################################
 
 def main():
-    housekeeping()
-
-################################################################################
-
-def housekeeping():
     initialize_bycon_service()
     read_service_prefs("housekeeping", services_conf_path)
 
-    collation_utils.set_collation_types()
+    set_collation_types()
 
     # TODO: rewrap, use config etc.
     generated_docs_path = path.join( loc_path, pardir, "docs", "generated")
@@ -47,11 +33,7 @@ def housekeeping():
     doc_generator(generated_docs_path)
     doc_generator(bycon_generated_docs_path)
 
-    if len(BYC["BYC_DATASET_IDS"]) != 1:
-        print("No single existing dataset was provided with -d ...")
-        exit()
-
-    ds_id = BYC["BYC_DATASET_IDS"][0]
+    ds_id = assertSingleDatasetOrExit()
 
     # collecting the actions
     todos = {
@@ -109,7 +91,7 @@ def housekeeping():
     #>------------------------------------------------------------------------<#
 
     if "y" in todos.get("update_cs_statusmaps", "y").lower():
-        print(f'==> executing "{loc_path}/analysesStatusmapsRefresher.py -d {ds_id}"')
+        print(f'==> executing "{loc_path}/analysesStatusmapsRefresher.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}"')
         system(f'{loc_path}/analysesStatusmapsRefresher.py -d {ds_id}')
 
     #>------------------------ / analyses ------------------------------------<#
@@ -191,7 +173,7 @@ def housekeeping():
     #>---------------------- update collations -------------------------------<#
 
     if not "n" in todos.get("update_collations", "y").lower():
-        print(f'\n{__hl()}==> executing "{loc_path}/collationsCreator.py -d {ds_id}"\n')
+        print(f'\n{__hl()}==> executing "{loc_path}/collationsCreator.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}"\n')
         system(f'{loc_path}/collationsCreator.py -d {ds_id}')
 
     #>--------------------- / update collations ------------------------------<#
@@ -199,7 +181,7 @@ def housekeeping():
     #>--------------------- update frequencymaps -----------------------------<#
 
     if not "n" in todos.get("update_frequencymaps", "y").lower():
-        print(f'\n{__hl()}==> executing "{loc_path}/frequencymapsCreator.py -d {ds_id}"\n')
+        print(f'\n{__hl()}==> executing "{loc_path}/frequencymapsCreator.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}"\n')
         system(f'{loc_path}/frequencymapsCreator.py -d {ds_id}')
 
     #>-------------------- / update frequencymaps ----------------------------<#

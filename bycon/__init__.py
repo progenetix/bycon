@@ -30,6 +30,8 @@ try:
     from service_utils import *
     from variant_mapping import *
 
+    # import byconServiceLibs
+
     read_service_definition_files()
     update_rootpars_from_local_or_HOST()
     rest_path_elements()

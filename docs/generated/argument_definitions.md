@@ -484,20 +484,16 @@ selected collation types, e.g. "EFO"
 one of the predefined genome binning keys - default 1Mb    
 
 ### `cyto_bands` 
-**type:** array    
+**type:** string    
+**pattern:** `^(?:chro?)?([12]?[\dXY])([pq](?:(?:ter)|(?:cen)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?\-?([pq](?:(?:cen)|(?:ter)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?$`    
 **db_key:** None    
-**items:**  
-    - `type`: `string`      
-    - `pattern`: `^(?:chro?)?([12]?[\dXY])([pq](?:(?:ter)|(?:cen)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?\-?([pq](?:(?:cen)|(?:ter)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?$`    
 **cmdFlags:** `--cytoBands`    
 **description:**
 cytobands, e.g. 8q21q24.1    
 
 ### `chro_bases` 
-**type:** array    
-**items:**  
-    - `type`: `string`      
-    - `pattern`: `^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$`    
+**type:** string    
+**pattern:** `^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$`    
 **db_key:** None    
 **cmdFlags:** `--chroBases`    
 **description:**
