@@ -108,7 +108,7 @@ pgxsegvariants:
   response_schema: beaconResultsetsResponse
   request_entity_path_aliases:
     - pgxseg
-  # DODO: change? a bit non-standard... 
+  # TODO: change? a bit non-standard... 
   path_id_value_bycon_parameter: biosample_ids
 
 publication:

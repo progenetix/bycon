@@ -47,8 +47,8 @@ class ByconQuery():
         self.ChroNames = ChroNames()
 
         self.requested_entity = BYC.get("request_entity_id", False)
-        self.response_entity = BYC.get("response_entity_id", "___none___")
-        prdbug(f'ByconQuery `response_entity_id`: {self.response_entity}')
+        self.response_entity = BYC.get("response_entity", {})
+        self.response_entity_id = BYC.get("response_entity_id", "")
 
         # TODO: call the variant type definition from inside this class since
         # e.g. multivars ... need this for each instance
@@ -142,10 +142,7 @@ class ByconQuery():
             return
 
         ret_no = BYC_PARS.get("test_mode_count", 5)
-        r_t_s = self.response_types
-        if (r_e := self.requested_entity) not in r_t_s.keys():
-            return
-        if not (r_c := r_t_s[r_e].get("collection")):
+        if not (r_c := self.response_entity.get("collection")):
             return
 
         data_db = MongoClient(host=DB_MONGOHOST)[self.ds_id]
@@ -158,7 +155,7 @@ class ByconQuery():
 
         q = {"id": {"$in": list(s["id"] for s in rs)}}
 
-        self.queries["entities"].update({r_e: {"query": q, "collection": r_c}})
+        self.queries["entities"].update({self.response_entity_id: {"query": q, "collection": r_c}})
         self.queries.update({"expand": False})
 
 

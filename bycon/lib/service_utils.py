@@ -80,6 +80,9 @@ def set_entities():
     rq_d = b_e_d.get(q_id)
     rp_d = b_e_d.get(r_id)
 
+    prdbug(f'rq_d: {rq_d}')
+    prdbug(f'rp_d: {rp_d}')
+
     p_p = rq_d.get("path_id_value_bycon_parameter", "id")
 
     BYC.update({
