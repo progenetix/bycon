@@ -9,7 +9,7 @@ from bycon_helpers import *
 from handover_generation import dataset_response_add_handovers
 from query_execution import ByconDatasetResults # execute_bycon_queries
 from query_generation import ByconQuery
-from read_specs import datasets_update_latest_stats, load_yaml_empty_fallback
+from read_specs import load_yaml_empty_fallback
 from response_remapping import *
 from variant_mapping import ByconVariant
 from schema_parsing import get_schema_file_path, object_instance_from_schema_name
@@ -612,20 +612,40 @@ class ByconCollections:
     def __collections_return_datasets(self):
         if not "dataset" in self.response_entity_id:
             return
-        dbstats = datasets_update_latest_stats()
-        for i, d_s in enumerate(dbstats):
-            ds_id = d_s.get("id", "___none___")
-            if ds_id in BYC["BYC_DATASET_IDS"]:
-                # TODO: remove verifier hack
-                for t in ["createDateTime", "updateDateTime"]:
-                    d = str(d_s.get(t, "1967-11-11"))
-                    if re.match(r'^\d\d\d\d\-\d\d\-\d\d$', d):
-                        dbstats[i].update({t:f'{d}T00:00:00+00:00'})
-
+        dbstats = __datasets_update_latest_stats()
         self.collections = dbstats
         self.collections_queries.update({"datasets":{}})
 
         return
+
+
+    # -------------------------------------------------------------------------#
+
+    def __datasets_update_latest_stats():
+        results = []
+        stat = []
+
+        stats = MongoClient(host=DB_MONGOHOST)[HOUSEKEEPING_DB][HOUSEKEEPING_INFO_COLL].find( { }, { "_id": 0 } ).sort( {"date": -1} ).limit( 1 )
+        stats = list(stats)
+
+        if len(stats) > 0:
+            stat = stats[0]
+        else:
+            return results
+        for coll_id, coll in BYC["dataset_definitions"].items():
+            if not coll_id in BYC.get("BYC_DATASET_IDS", []):
+                continue
+            if "datasets" in stat:
+                if (ds_vs := stat[ "datasets" ].get(coll_id)):
+                    if "filtering_terms" in BYC["response_entity_id"]:
+                        coll.update({ "filtering_terms": ds_vs.get("filtering_terms", []) } )
+            # TODO: remove verifier hack
+            for t in ["createDateTime", "updateDateTime"]:
+                d = str(d_s.get(t, "1967-11-11"))
+                if re.match(r'^\d\d\d\d\-\d\d\-\d\d$', d):
+                    coll.update({t:f'{d}T00:00:00+00:00'})
+            results.append(coll)
+        return results
 
 
     # -------------------------------------------------------------------------#

@@ -3,7 +3,6 @@ from deepmerge import always_merger
 from json_ref_dict import RefDict, materialize
 from os import path, pardir, scandir, environ
 from pathlib import Path
-from pymongo import MongoClient
 
 from cgi_parsing import prdbug
 from config import *
@@ -32,6 +31,13 @@ def read_service_definition_files():
             o = yaml.load( od , Loader=yaml.FullLoader)
         BYC.update({d: o})
 
+    e_d = always_merger.merge(
+        BYC.get("entity_defaults", {}),
+        BYC.get("services_entity_defaults", {})
+    )
+
+    BYC.update({"entity_defaults": e_d})
+
 
 ################################################################################
 
@@ -42,14 +48,11 @@ def update_rootpars_from_local_or_HOST():
         return
 
     p_c_p.append(LOC_PATH)
-    s_f = path.join(LOC_PATH, 'services_entity_defaults.yaml')
-    s = load_yaml_empty_fallback(s_f)
-    BYC.update({"entity_defaults": always_merger.merge(BYC.get("entity_defaults", {}), s)})
 
     # overwriting installation-wide defaults with instance-specific ones
     # _i.e._ matching the current domain (to allow presentation of different
     # Beacon instances from the same server)
-    i_ovr_f = path.join(LOC_PATH, "instance_overrides.yaml")
+    i_ovr_f = path.join(LOC_PATH, "instance_definitions.yaml")
     i_ovr = load_yaml_empty_fallback(i_ovr_f)
 
     if "local" in i_ovr:
@@ -83,44 +86,12 @@ def update_rootpars_from_local_or_HOST():
 
 ################################################################################
 
-def dbstats_return_latest():
-    # TODO: This is too hacky & should be moved to an external function
-    # which updates the database_definitions / beacon_info yamls...
-    stats = MongoClient(host=DB_MONGOHOST)[HOUSEKEEPING_DB][HOUSEKEEPING_INFO_COLL].find( { }, { "_id": 0 } ).sort( {"date": -1} ).limit( 1 )
-    stats = list(stats)
-    if len(stats) > 0:
-        return stats[0]
-    else:
-        return []
-
-
-################################################################################
-
-def datasets_update_latest_stats():
-    results = []
-    stat = dbstats_return_latest()
-    for coll_id, coll in BYC["dataset_definitions"].items():
-        if not coll_id in BYC.get("BYC_DATASET_IDS", []):
-            continue
-        if "datasets" in stat:
-            if (ds_vs := stat[ "datasets" ].get(coll_id)):
-                if "filtering_terms" in BYC["response_entity_id"]:
-                    coll.update({ "filtering_terms": ds_vs.get("filtering_terms", []) } )
-        # TODO: Add stats ...
-        results.append(coll)
-    return results
-
-
-################################################################################
-
 def load_yaml_empty_fallback(yp):
     y = {}
     try:
-        # print(yp)
         with open( yp ) as yd:
             y = yaml.load( yd , Loader=yaml.FullLoader)
     except Exception as e:
-        # print(e)
         pass
     return y
 
