@@ -9,7 +9,7 @@ BY=(./dist/*tar.gz)
 pip3 install $BY --break-system-packages
 # pipreqs --force .
 # python3 -m build --wheel && twine upload dist/*
-# git tag v1.9.3  & git push --tags
+# git tag v2.0.0  & git push --tags
 ./install.py
 rm -rf ./build
 rm -rf ./dist

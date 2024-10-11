@@ -21,6 +21,12 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2024-10-10 (v2.0.1)
+
+* bug fix for query generation for `/datasets` endpoint where `testMode=true`
+  pragma wasn't interpolated towards alternative response entities
+    - test with <https://progenetix.org/beacon/datasets/progenetix/biosamples/?testMode=true>
+
 ### 2024-10-10 (v2.0.0 "Taito City")
 
 #### General Summary
@@ -314,7 +320,7 @@ a few parameters:
     - `beacon_defaults` file changed to `entity_defaults` since only entities
       defined in it
     - paths are now defined within the entity definitions, no separate aliases etc.
-    - local overrides for the Beacon entity defaults now in `local/instance_overrides.yaml`
+    - local overrides for the Beacon entity defaults now in `local/instance_definitions.yaml`
     - for byconaut a separate `services_entity_defaults` file provides the additional
       services (e.g. `sampleplots` ... pseudo-entities)
 
@@ -362,7 +368,7 @@ a few parameters:
 
 ### 2024-02-24 (v1.5.2)
 
-* new `instance_overrides.yaml` config document in `local`
+* new `instance_definitions.yaml` config document in `local`
     - this allows to override Beacon instance parameters based on
       the URL the service is running under, enabling multiple Beacon
       instances per server

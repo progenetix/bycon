@@ -2,53 +2,68 @@
 
 ## Project Structure
 
-The `bycon` project contains libraries (`/lib`), global configuration files
-(`/config`), resource files (`/rsrc`) and data scheams (`/schemas`). All these
-are distributed as part of the `bycon` package.
+The `bycon` project contains source code for the eponymous Python package
+as well as a number of server applications which are used to provide a Beacon 
+webserver, additional server functions for statistical and graphical readouts
+(specifically geared towards copy number variation data) as well as support 
+applications and libraries for data I/O and management of the implied MongoDB
+database environment. 
 
-!!! warning "Highly Experimental"
-    
-    While in principle one can use the current code base
-    to create a complete Beacon v2 setup this requires some customization, e.g.
-    through editing the `/local/....yaml` configuration files as well as the 
-    `/install.yaml` data.
+!!! warning "Experimental Libraries"
+
+    At this time (**bycon v2.0 "Taito City"**) the project's
+    libraries - which in principle can be installed directly from the Python Package
+    Index - should *not* be used for external applications since libary structure
+    and dependencies might change and are only kept in sync within the wider project
+    itself.
 
 Additionally to the library and associated files a complete `bycon`-base Beacon
 server setup requires the installation of various endpoint apps contained in
-`/beaconServer`. Progenetix also makes use of many server apps (e.g. for retrieving
-supporting data such as collation statistics or genomic parameters) which are
-now contained in the [`byconaut`](http://github.com/progenetix/byconaut/) project as `/services`.
+`/beaconServer` and - optionally -  `/byconServices` (e.g. for retrieving
+supporting data such as collation statistics or genomic parameters).
 
-##  `bycon` library install
+We also provide a number of utility scripts and libraries which are not part of the
+general installation and might contain deprecated code or dependencies through the
+[`byconaut`](https://github.com/progenetix/byconaut/) project.
 
-In February 2023 `bycon` has been mad available as a Pypi package with standard
-installation through `pip install bycon`. However, this installation will lack
-the server components and is by itself only suitable for library utilization.
+##  `bycon` library install (not recommended)
+
+Since February 2023 `bycon` has been mad available as a Pypi package with standard
+installation through `pip3 install bycon`. However, this installation will lack
+the server components and is by itself only suitable for library utilization. 
+In contrast to the package manager based library installations we highly recommend
+to install locally from the source, using the installer provided with the project. 
+Please follow the *Beacon Server Installation* procedure below.
 
 ## Beacon Server Installation
 
 ### Requirements
 
-An installation of a Beacon environment may involve following repositories:
+An installation of a Beacon environment may involve following repositories and
+external requirements:
 
 * [`bycon`](https://github.com/progenetix/bycon/)
+    - this repository
     - the core Beacon code for libraries and server API
-* [`byconaut`](https://github.com/progenetix/byconaut/)
-    - additional server functionality
-    - utility scripts
-    - example data
+    - required
+* a [MongoDB](https://www.mongodb.com/) database instance
+    - see below
+    - required
+* a webserver setup
+    - see below
+    - required for full functionality but tests can be run by custom scripts or
+      local calls (YMMV)
 * [`beaconplus-web`](https://github.com/progenetix/beaconplus-web/)
-    - the web front-end (React based)
-    - represents an advanced Beacon query interface
-
-The project's Beacon deployment had been developed with some prerequisites:
+    - the web front-end (React based with static compilation)
+    - represents an advanced Beacon query interface 
+    - optional
 
 #### MongoDB database instance
 
 The MongoDB host server can be set with the environmental variable `BYCON_MONGO_HOST`.
 It otherwise defaults to `localhost`.
 
-##### MongoDB installation
+##### Installation
 
 We use a [Homebrew](https://brew.sh) based installation, as detailed on the
 [MongoDB website](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/).
@@ -74,7 +89,7 @@ brew upgrade mongodb-community
 brew services restart mongodb/brew/mongodb-community
 ```
 
-#### Webserver Setup (Apache)
+#### Webserver Setup
 
 We use a "classical" webserver setup with Apache but probably other options would
 be fine...
@@ -151,14 +166,41 @@ into the webserver root. Necessary parameters have to be adjusted in the accompa
 
 !!! warning "Configuration adjustments"
     
-    Many of the parameters in `bycon` are pre-defined in `bycon/config/....yaml`
-    files which are installed into the `bycon` package in your Python `site-packages`
-    tree. These configurations can be overwritten by providing modified copies
-    in `your_script_directory/local/`.
+    Many of the parameters in `bycon` are pre-defined in `bycon/config.py`
+    file and the `bycon/definitions/....yaml` files which are installed into the
+    `bycon` package in your Python `site-packages` tree. Additional configurations
+    can be provided through files in `local/....yaml` and are the copied during
+    installation into `your_script_directory/local/`.
 
-#### Some configurations
+### Some configurations
 
-##### `local/local_paths.yaml`
+#### `local/authorizations.yaml` (**experimental**)
+
+While the Progenetix related prjects do not use any authentication
+procedures we provide an experimental framework for setting
+per dataset access according to a **trusted** user if needed.
+This essentially requires access control through a gatekeeper/proxy
+service and addition of a registered user with default and dataset specific
+permissions corresponding to Beacon `responseGranularity` levels. 
+
+In the example below the beacon will respond with a `count` response
+but e.g. grant record level access to a `testuser` but only
+for the `examplez` dataset.
+
+```yaml
+anonymous:
+  default: boolean
+mbaudis:
+  default: count
+  progenetix: record
+  cellz: record
+  examplez: record
+  refcnv: record
+testuser:
+  examplez: record    
+```
+
+#### `local/local_paths.yaml`
 
 Here at minimum the paths for the webserver `tmp` has to be defined (path elements
 as list items):
@@ -174,10 +216,36 @@ server_tmp_dir_loc:
 server_tmp_dir_web: /tmp
 ```
 
-##### `local/beacon_defaults.yaml`
+#### `local/dataset_definitions.yaml`
 
-Please modify the data here, especially the defaults and the `entity_defaults`
-for the `info` entry type.
+Please modify the data here for your local datasets. The schema should follow
+this default, with dataset ids as the root parameters:
+
+```yaml
+examplez:
+  id: examplez
+  name: Progenetix examples
+  identifier: 'org.progenetix.examplez'
+  description: "selected examples for database test installation"
+  createDateTime: 2023-04-01
+  updateDateTime: 2023-08-21
+  version: 2023-08-21
+  externalUrl: "https://bycon.progenetix.org"
+  assemblyId: GRCh38
+  dataUseConditions:
+    duoDataUse:
+      - id: DUO:0000004
+        label: no restriction
+        version: 2023-08-21
+```
+
+#### `local/instance_definitions.yaml`
+
+This file defines the different Beacon instances provided through
+your installation, e.g. their `info` endpoint's content, URLs
+and potentially additional entry types supported.
+
+==TBD==
 
 ## Local stack installation 
 
@@ -187,30 +255,32 @@ script for the distribution of the server scripts. The following utility code
 is provided with the `updev.sh` script (may change over time...):
 
 ```bash
-pip3 uninstall bycon
+pip3 uninstall bycon --break-system-packages
 rm -rf ./dist
+rm ./bycon/beaconServer/local/*.*
 python3 -m build --sdist .
 BY=(./dist/*tar.gz)
-pip install $BY
+pip3 install $BY --break-system-packages
 ./install.py
-../byconaut/install.py
+rm -rf ./build
+rm -rf ./dist
+rm -rf ./bycon.egg-info
 ```
 
 There is also a `--noo-sudo` modification option: `./install.py --no-sudo`
 
-The last step in the batch assumes that one has the `byconaut` project in a local
-sister directory.
+## Loading and maintaining data
 
-!!! note "Script dependencies"
-    
-    Many functions in `bycon` require the existence of local configuration files
-    (e.g. for dataset definitions) in a `local` directory in the path of your
-    calling scripts or CGIs.
+The `bycon` project now contains support apps for data
+importing and preprocessing; this is evolving...
 
-## Loading data
+### Importing data `importers`
 
-We provide some data loading documentation and example data inside the
-[`byconaut`](https://github.com/progenetix/byconaut/) package. This is evolving...
+==TBD==
+
+### Maintaining, pre-processing or deleting data `housekeepers`
+
+==TBD==
 
 ## Testing
 

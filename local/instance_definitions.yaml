@@ -68,6 +68,7 @@ local:
         entity_type: phenopacket
         schema: https://progenetix.org/services/schemas/phenopacket/
       h->o_access_key: individuals.id
+      path_id_value_bycon_parameter: individual_ids
 
 ################################################################################
 # domain specific ##############################################################
