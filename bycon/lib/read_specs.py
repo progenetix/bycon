@@ -17,16 +17,15 @@ def read_service_definition_files():
       |- lib - read_specs.py
       |- definitions - __name__.yaml
     podmd"""
-    conf_dir = path.join(PKG_PATH, "definitions")
-    if not path.isdir(conf_dir):
+    if not path.isdir(CONF_PATH):
         return
-    b_d_fs = [ f.name for f in scandir(conf_dir) if f.is_file() ]
+    b_d_fs = [ f.name for f in scandir(CONF_PATH) if f.is_file() ]
     b_d_fs = [ f for f in b_d_fs if f.endswith("yaml") ]
     b_d_fs = [ Path(f).stem for f in b_d_fs ]
 
     for d in b_d_fs:
         o = {}
-        ofp = path.join( conf_dir, f'{d}.yaml' )
+        ofp = path.join(CONF_PATH, f'{d}.yaml' )
         with open( ofp ) as od:
             o = yaml.load( od , Loader=yaml.FullLoader)
         BYC.update({d: o})

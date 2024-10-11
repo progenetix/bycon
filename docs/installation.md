@@ -26,6 +26,85 @@ We also provide a number of utility scripts and libraries which are not part of 
 general installation and might contain deprecated code or dependencies through the
 [`byconaut`](https://github.com/progenetix/byconaut/) project.
 
+
+### `./beaconServer`
+
+* web applications for data access
+* Python modules for Beacon query and response functions in `lib`
+
+### `./bycon`
+
+* Python libraries for data handling and Beacon API functions with a main
+  `beacon.py` application calling the server functions and libraries as well as
+  configuration data contained in subdirectories and files:
+    - `./bycon/byconServiceLibs` for beyond Beacon functionality executed through
+      the endpoints in `byconServices`
+    - `./bycon/config` for instance independent or default configuration files
+    - `./bycon/lib` for the Python libraries (_i.e._ the real code)
+    - `./bycon/rsrc` with support files (ATM the genome and cytoband mappings)
+    - `./bycon/schemas` contains Beacon and other schema files, both in YAML 
+      source and JSON compiled format (JSON is read by the scripts)
+
+### `docs`
+
+* documentation, in Markdown, as source for documentation builded with `mkdocs`
+
+### `lib`
+
+* Python libraries
+
+### `rsrc`
+
+* various resources beyond configuration data
+    - mapping input table(s) for ontology trees
+    - ...
+
+### `importers` and `housekeepers`
+
+* Python scripts for data import and maintenance; see below
+
+### Overview
+
+```
+bycon
+  |
+  |- beaconServer
+  |   |
+  |   `- beacon.py
+  |- bycon
+  |   |
+  |   |- config
+  |   |   |
+  |   |   |- beacon_mappings.yaml
+  |   |   |- dataset_definitions.yaml
+  |   |   |- filter_definitions.yaml
+  |   |   `- ..._definitions.yaml
+  |   |- lib
+  |   |   |
+  |   |   |- cgi_parsing.py
+  |   |   |- read_specs.py
+  |   |   |- query_generation.py
+  |   |   |- query_execution.py
+  |   |    `- ...
+  |   |- byconServiceLibs
+  |   |   |
+  |   |   |- bycon_plot.py
+  |   |    `- ...
+  |   `- rsrc
+  |        `- ...
+  |- docs
+  |    `- ... documentation website source files ...
+  |- local
+  |   |- beacon_defaults.yaml
+  |   |- dataset_definitions.yaml
+  |   `- local_paths.yaml
+  |   `- local_paths.yaml
+  |- install.py
+  `- `requirements.txt` and other Python packaging files
+...
+```
+
+
 ##  `bycon` library install (not recommended)
 
 Since February 2023 `bycon` has been mad available as a Pypi package with standard
@@ -174,6 +253,11 @@ into the webserver root. Necessary parameters have to be adjusted in the accompa
 
 ### Some configurations
 
+#### Preamble & Imports
+
+The scripts in `beaconServer` and `byconServices` are configured as exacutables using
+the system Python `#!/usr/bin/env python3`.
+
 #### `local/authorizations.yaml` (**experimental**)
 
 While the Progenetix related prjects do not use any authentication
@@ -267,7 +351,7 @@ rm -rf ./dist
 rm -rf ./bycon.egg-info
 ```
 
-There is also a `--noo-sudo` modification option: `./install.py --no-sudo`
+There is also a `--no-sudo` modification option: `./install.py --no-sudo`
 
 ## Loading and maintaining data
 

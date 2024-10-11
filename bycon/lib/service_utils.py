@@ -25,7 +25,6 @@ def initialize_bycon_service():
     update_requested_schema_from_request()
     set_special_modes()
     select_dataset_ids()
-    prdbug(f'initialize_bycon_service - ds_id: {BYC["BYC_DATASET_IDS"]}')
     set_user_name()
     set_returned_granularities()    
     parse_filters()
@@ -79,9 +78,6 @@ def set_entities():
 
     rq_d = b_e_d.get(q_id)
     rp_d = b_e_d.get(r_id)
-
-    prdbug(f'rq_d: {rq_d}')
-    prdbug(f'rp_d: {rp_d}')
 
     p_p = rq_d.get("path_id_value_bycon_parameter", "id")
 

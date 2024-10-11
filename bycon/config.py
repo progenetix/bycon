@@ -12,11 +12,10 @@ Global variables
 ENV = environ.get('HTTP_HOST', "local")
 
 PKG_PATH = pkg_path
-CONF_PATH = path.join( pkg_path, "definitions")
+CONF_PATH = path.join( pkg_path, "config")
 LIB_PATH = path.join( pkg_path, "lib")
 
 # path of the calling script is used to point to a local config directory
-# __caller_path = path.dirname(path.abspath((inspect.stack()[1])[1]))
 __caller_path = path.dirname( path.abspath(sys.argv[0]))
 LOC_PATH = path.join(__caller_path, pardir, "local")
 

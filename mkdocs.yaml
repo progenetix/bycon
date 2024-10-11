@@ -13,13 +13,13 @@ nav:
   - Upcoming & To Do: future
   - Parameters: generated/argument_definitions
   - API Tests: tests
-  - Code notes: code-notes
   - Progenetix Site: http://progenetix.org
-  - Baudisgroup: http://info.baudisgroup.org
   - Code Repos:
     - bycon: https://github.com/progenetix/bycon
     - byconaut: https://github.com/progenetix/byconaut
-    - Front End: https://github.com/progenetix/progenetix-web
+    - Front End: https://github.com/progenetix/beaconplus-web
+    - Progenetix Front End: https://github.com/progenetix/progenetix-web
+  - Baudisgroup: http://info.baudisgroup.org
 
 ###############################################################################
 

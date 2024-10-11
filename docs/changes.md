@@ -26,6 +26,16 @@ milestones.
 * bug fix for query generation for `/datasets` endpoint where `testMode=true`
   pragma wasn't interpolated towards alternative response entities
     - test with <https://progenetix.org/beacon/datasets/progenetix/biosamples/?testMode=true>
+* clean up of location and handling of configuration files, both for the package
+  and local installs
+    - renamed `bycon/definitions` back to `bycon/config` since no other local
+      configs in the package anymore
+    - removed the previous duplication of local configs since now consistent
+      hierarchy both for local scripts in the project directory as well as in the
+      web server context (_i.e._ the `local` directory is at the same level so
+      local references work)
+    - removed `install.yaml` and point to `local/local_paths.yaml` during installations
+      so that no double definition of local paths is needed
 
 ### 2024-10-10 (v2.0.0 "Taito City")
 
