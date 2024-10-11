@@ -4,6 +4,22 @@
 
 The `bycon` project - at least at its current stage - is a mix of _Progenetix_ (i.e. GA4GH object model derived, _MongoDB_ implemented) - data management, and the implementation of middleware & server for the Beacon API.
 
+Some features and pecularities of the `bycon` solution are:
+* A single install can host multiple beacons and multiple datasets
+  and those can be intersected.
+* `bycon` handles Beacon queries with full model aggregation; it does not
+  matter which endpoint and response entity are combined with what
+  type of filter or variant parameter since always all entities are evaluated
+  and the response is aggregated. A single query can include parameters for an
+  individual's sex, the histoloical diagnosis of a biosample, an experimental
+  platform and genomic variation parameters and the response can deliver
+  biosamples, individuals ... matching all those parameters.
+* With its origin in the Progenetix resource ("beaconized" since 2016) 
+  `bycon` provides strong support for copy number variation data, including
+  additional services such as CNV frequency plots for matched results or
+  various file export formats beyond the standard JSON response.
+* We provide several front-end projects of which one ([BeaconPlus](https://github.com/progenetix/beaconplus)) is a general version easily adaptible for individual use cases.
+
 !!! info "Bycon Code"
 
     The `bycon` code is maintained in the [`progenetix/bycon` repository](http://github.com/progenetix/bycon/). Some additional utility scripts & functions can be found in the
