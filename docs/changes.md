@@ -1,25 +1,16 @@
 # Changes & To Do
 
-## Notes about Previous Development
-
-The `bycon` package was started during the development of the [**Beacon v2**](https://docs.genomebeacons.org)
-specification with the aims to a) test and demonstrate features of the emerging
-specification in a real-world use case while b) serving the needs of the [Progenetix](https://progenetix.org)
-oncogenomic resource. Many of the recent changes are aimed at disentangling
-the code base from this specific use case.
-
-An earlier version of the Progenetix && Beacon "BeaconPlus" stack had been provided
-through the Perl based [**PGX** project](http://github.com/progenetix/PGX/).
-
-## Known Bugs
-
-* pagination for download file handovers has some hiccups
-
 ## Changes Tracker
 
 While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
+
+### 2024-10-17 (v2.0.2)
+
+* added a `ontologymapsReplacer.py` service app to (re-) create the `_byconServicesDB.ontologymaps` collection
+    - this uses the now extended `OntologyMaps` class
+* fixed the `schemas` service (recently broken during path parsing refactoring)
 
 ### 2024-10-10 (v2.0.1)
 
@@ -1067,3 +1058,9 @@ Bug fix release:
 #### 2023-01-15
 
 - [x] create bycon documentation subdomain & configure Github pages for it  
+
+
+## Known Bugs
+
+* ... they change all the time ...
+

@@ -169,31 +169,6 @@ definitions:
         type: string
         db_key: collection_moment
         indexed: True
-      # sex_id:
-      #   type: string
-      #   db_key: info.sex.id
-      #   indexed: True
-      #   compact: True
-      # sex_label:
-      #   type: string
-      #   db_key: info.sex.label
-      #   compact: True
-      # followup_state_id:
-      #   type: string
-      #   db_key: followup_state.id
-      #   default: 'EFO:0030039'
-      #   indexed: True
-      #   compact: True
-      # followup_state_label:
-      #   type: string
-      #   db_key: followup_state.label
-      #   default: 'no followup status'
-      #   compact: True
-      # followup_time:
-      #   type: string
-      #   db_key: followup_time
-      #   indexed: True
-      #   compact: True
       # recurrence:
       #   db_key: info.recurrence
       #   type: string

@@ -22,7 +22,7 @@ properties:
   diseases:
     type: array
     items:
-      $ref: ../common/disease.yaml
+      $ref: ../bycon-model/common/disease.yaml
   info:
     description: >-
       Additional structured data which may not be common across different resources.
@@ -33,6 +33,8 @@ properties:
     type: string
     examples:
       - HapMap project contributor
+  indexDisease:
+    $ref: ../bycon-model/common/disease.yaml
   externalReferences:
     type: array
     items:

@@ -1,4 +1,6 @@
 import re
+from random import sample
+from progress.bar import Bar
 
 from pymongo import MongoClient
 
@@ -8,6 +10,7 @@ from bycon import (
     DB_MONGOHOST,
     mongo_and_or_query_from_list,
     prdbug,
+    prjsonnice,
     rest_path_value
 )
 
@@ -16,10 +19,28 @@ class OntologyMaps:
         self.query = {}
         self.term_groups = []
         self.unique_terms = []
+        self.ontology_maps = []
+        self.erroneous_maps = []
         self.filters = BYC.get("BYC_FILTERS", [])
         self.filter_definitions = BYC.get("filter_definitions", {})
         # TODO: Shouldn't be hard coded here
         self.filter_id_matches = ["NCIT", "pgx:icdom", "pgx:icdot", "UBERON"]
+        self.ds_id = BYC["BYC_DATASET_IDS"][0]
+
+        self.ontologymaps_coll = MongoClient(host=DB_MONGOHOST)["_byconServicesDB"]["ontologymaps"]
+        self.bios_coll = MongoClient(host=DB_MONGOHOST)[self.ds_id]["biosamples"]
+
+        self.combos = [
+            {
+                "icdom": "icdo_morphology",
+                "icdot": "icdo_topography",
+                "NCIT": "histological_diagnosis"
+            },
+            {
+                "icdot": "icdo_topography",
+                "UBERON": "sample_origin_detail"
+            }
+        ]
 
         self.__ontologymaps_query()
 
@@ -35,7 +56,11 @@ class OntologyMaps:
     # -------------------------------------------------------------------------#
 
     def ontology_maps_results(self):
-        self.__retrieve_ontologymaps()
+        if len(self.query.keys()) < 1:
+            BYC["ERRORS"].append("No correct filter value provided!")
+        else:
+            self.__retrieve_ontologymaps()
+
         return [
             { 
                 "term_groups": self.term_groups,
@@ -43,6 +68,33 @@ class OntologyMaps:
             }
         ]
 
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def replace_ontology_maps(self):
+        self.__create_ontology_maps()
+        if BYC["TEST_MODE"] is True:
+            for o in self.ontology_maps:
+                prjsonnice(o)
+            print(f'==>> {len(self.ontology_maps)} maps would be created')
+            return self.ontology_maps
+        self.ontologymaps_coll.delete_many({})
+        for o in self.ontology_maps:
+            self.ontologymaps_coll.insert_one(o)
+        o_c = self.ontologymaps_coll.count_documents({})
+        print(f'==>> {o_c} maps have been created in the database')
+        return self.ontology_maps
+ 
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def retrieve_erroneous_maps(self):
+        if len(self.ontology_maps) < 1:
+            self.__create_ontology_maps()
+        return self.erroneous_maps
+ 
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
@@ -80,37 +132,84 @@ class OntologyMaps:
 
         self.query = mongo_and_or_query_from_list(q_list, "AND")
 
+
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
 
     def __retrieve_ontologymaps(self):
         u_c_d = { }
-        mongo_client = MongoClient(host=DB_MONGOHOST)
-        mongo_coll = mongo_client["_byconServicesDB"]["ontologymaps"]
-        for o in mongo_coll.find( self.query, { '_id': False } ):
+        for o in self.ontologymaps_coll.find( self.query, { '_id': False } ):
             for c in o["code_group"]:
                 pre, code = re.split("[:-]", c["id"], maxsplit=1)
                 u_c_d.update( { c["id"]: { "id": c["id"], "label": c["label"] } } )
             self.term_groups.append( o["code_group"] )
-        mongo_client.close( )
 
         for k, u in u_c_d.items():
             self.unique_terms.append(u)        
 
+        # if "termGroups" in BYC["response_entity_id"]:
+        #     t_g_s = []
+        #     for tg in self.term_groups:
+        #         t_l = []
+        #         for t in tg:
+        #             t_l.append(str(t.get("id", "")))
+        #             t_l.append(str(t.get("label", "")))
+        #         t_g_s.append("\t".join(t_l))
+
+        #     if "text" in BYC_PARS.get("output", "___none___"):
+        #         print_text_response("\n".join(t_g_s))
+        #     results = c_g
 
 
-        if "termGroups" in BYC["response_entity_id"]:
-            t_g_s = []
-            for tg in self.term_groups:
-                t_l = []
-                for t in tg:
-                    t_l.append(str(t.get("id", "")))
-                    t_l.append(str(t.get("label", "")))
-                t_g_s.append("\t".join(t_l))
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
-            if "text" in BYC_PARS.get("output", "___none___"):
-                print_text_response("\n".join(t_g_s))
-            results = c_g
+    def __create_ontology_maps(self):
+        keyed_maps = {}
+        bios_no = self.bios_coll.count_documents({})
 
+        for c in self.combos:
+            map_type = "::".join(c.keys())
+            print(f'Re-generating {map_type} ontology maps from {bios_no} samples...')
+            bar = Bar(f'Processing {bios_no} from {self.ds_id}', max = bios_no, suffix='%(percent)d%%' )
+            for bios in self.bios_coll.find({}, { '_id': False }).limit(BYC_PARS.get("limit", 0)):
+                bar.next()
+                ids = []
+                qs = {}
+                cg = []
+                errors = []
+                for k, v in c.items():
+                    o_re = re.compile(self.filter_definitions.get(k, {}).get("pattern", "___none___"))
+                    o = bios.get(v, {"id": "___none___", "label": "___none___"})
+                    oid = o.get("id")
+                    ids.append(str(oid))
+                    qs.update({f'{v}.id': oid})
+                    cg.append(o)
+                    if not o_re.match(str(oid)):
+                        errors.append(f'{v}.id: {oid}')
+                uid = "::".join(ids)
+                if uid in keyed_maps.keys():
+                    continue
+                keyed_maps.update({
+                    uid: {
+                        "id": uid,
+                        "map_type": map_type,
+                        "code_group": cg,
+                        "local_query": qs,
+                        "examples": [],
+                        "errors": errors
+                    }
+                })
+            bar.finish()
 
+        for k, v in keyed_maps.items():
+            examples = self.bios_coll.distinct("notes", v["local_query"])
+            s_no = min(10, len(examples))
+            e = sample(examples, s_no)
+            e = [t for t in e if len(t) > 2]
+            v.update({"examples": e})
+            if len(v.get("errors", 0)) > 0:
+                self.erroneous_maps.append(v)
+                continue
+            self.ontology_maps.append(v)
 

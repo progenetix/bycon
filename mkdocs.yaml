@@ -9,6 +9,8 @@ repo_url: https://github.com/progenetix/bycon
 nav:
   - Documentation Home: /
   - Installation: installation
+  - Importing Data: importers
+  - Maintenance: housekeepers
   - Recent Changes: changes
   - Upcoming & To Do: future
   - Parameters: generated/argument_definitions
@@ -68,6 +70,7 @@ plugins:
     - search
     - macros
     - mermaid2
+    - mkdocstrings
 
 extra:
   excerpt_separator: <!--more-->

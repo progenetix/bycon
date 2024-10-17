@@ -71,7 +71,7 @@ def ds_id_from_accessid():
     ds_id = h_o.get("source_db", False)
     if (ds_id := str(h_o.get("source_db"))) not in BYC["DATABASE_NAMES"]:
         return False
-    BYC.update({"BYC_DATASET_IDS":  [ds_id]})
+    BYC.update({"BYC_DATASET_IDS": [ds_id]})
     return True
 
 
@@ -93,7 +93,7 @@ def ds_id_from_default():
     defaults: object = BYC["beacon_defaults"].get("defaults", {})  
     if (ds_id := str(defaults.get("default_dataset_id"))) not in BYC["DATABASE_NAMES"]:
         return False
-    BYC.update({"BYC_DATASET_IDS": [ ds_id ]})
+    BYC.update({"BYC_DATASET_IDS": [ds_id]})
     return True
 
 

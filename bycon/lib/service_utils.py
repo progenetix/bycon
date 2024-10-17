@@ -116,4 +116,3 @@ def set_response_schema():
     r_s = r_e.get("response_schema", "beaconInfoResponse")
     BYC.update({"response_schema": r_s})
 
-

@@ -6,12 +6,7 @@ from byconServiceLibs import ByconServiceResponse, OntologyMaps, read_service_pr
 podmd"""
 
 def ontologymaps():
-    OM = OntologyMaps()
-
-    query = OM.ontology_maps_query()
-    if len(query.keys()) < 1:
-        BYC["ERRORS"].append("No correct filter value provided!")  
-    results = OM.ontology_maps_results()
+    results = OntologyMaps().ontology_maps_results()
     BeaconErrorResponse().respond_if_errors()
     ByconServiceResponse().print_populated_response(results)
 

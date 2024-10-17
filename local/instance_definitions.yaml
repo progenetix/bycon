@@ -64,6 +64,7 @@ local:
       response_entity_id: phenopacket
       collection: individuals
       response_schema: beaconResultsetsResponse
+      bycon_response_class: BeaconDataResponse
       beacon_schema:
         entity_type: phenopacket
         schema: https://progenetix.org/services/schemas/phenopacket/

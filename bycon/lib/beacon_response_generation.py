@@ -373,6 +373,8 @@ class BeaconDataResponse:
         self.result_sets = rss
 
 
+    # -------------------------------------------------------------------------#
+
     def __acknowledge_MISS(self):
         if not "MISS" in (i_rs_r := BYC_PARS.get("include_resultset_responses", "ALL")).upper():
             return

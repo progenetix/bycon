@@ -157,6 +157,7 @@ sampleplots:
 
 schemas:
   request_entity_path_id: schemas
+  path_id_value_bycon_parameter: id
 
 uploader:
   request_entity_path_id: uploader

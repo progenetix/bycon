@@ -3,13 +3,12 @@
 
 pip3 uninstall bycon --break-system-packages
 rm -rf ./dist
-rm ./bycon/beaconServer/local/*.*
 python3 -m build --sdist .
 BY=(./dist/*tar.gz)
 pip3 install $BY --break-system-packages
 # pipreqs --force .
 # python3 -m build --wheel && twine upload dist/*
-# git tag v2.0.0  & git push --tags
+# git tag v2.0.2  & git push --tags
 ./install.py
 rm -rf ./build
 rm -rf ./dist

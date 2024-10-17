@@ -1,15 +1,16 @@
 from bycon import prjsonhead, prjsontrue, BYC, BYC_PARS, BeaconErrorResponse, read_schema_file
 
 """podmd
+This helper service reads and serves local schema definition files. The name of
+the schema (corresponding to the file name minus extension) is provided either
+as an `id` query parameter or as the first part of the path after `schemas/`.
+
 * <https://progenetix.org/services/schemas/biosample>
 podmd"""
 
 def schemas():
-    if not (schema_name := BYC_PARS.get("id")):
-        if len(schema_name := BYC.get("request_entity_path_id_value", {})) > 0:
-            schema_name = schema_name[0]
-    if schema_name:
-        schema_name = schema_name.split('.').pop(0)
+    if (ids := BYC_PARS.get("id"), []):
+        schema_name = ids[0].split('.').pop(0)
         if (s := read_schema_file(schema_name, "")):
             prjsonhead()
             prjsontrue(s)

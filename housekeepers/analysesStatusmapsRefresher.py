@@ -25,11 +25,6 @@ log_path = path.join( loc_path, pardir, "logs" )
 ################################################################################
 
 def main():
-    analyses_refresher()
-
-################################################################################
-
-def analyses_refresher():
     initialize_bycon_service()
     GB = GenomeBins()
     ask_limit_reset()
