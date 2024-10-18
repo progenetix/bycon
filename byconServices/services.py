@@ -10,12 +10,6 @@ from bycon import (
     set_debug_state
 )
 
-"""
-The `services` application deparses a request URI and calls the respective
-script. The functionality is combined with the correct configuration of a 
-rewrite in the server configuration for creation of canonical URLs.
-"""
-
 ################################################################################
 ################################################################################
 ################################################################################
@@ -29,6 +23,11 @@ def main():
 ################################################################################
 
 def services():
+    """
+    The `services` application deparses a request URI and calls the respective
+    script. The functionality is combined with the correct configuration of a 
+    rewrite in the server configuration for creation of canonical URLs.
+    """
     set_debug_state(debug=0)
 
     rq_id = BYC.get("request_entity_id", "ids")

@@ -139,7 +139,7 @@ def export_pgxseg_download(datasets_results, ds_id):
 ################################################################################
 
 def write_variants_bedfile(datasets_results, ds_id):
-    """podmd
+    """
     ##### Accepts
 
     * a Bycon `h_o` handover object with its `target_values` representing `_id` 
@@ -157,7 +157,7 @@ def write_variants_bedfile(datasets_results, ds_id):
     +separate configuration entry and subroutine.
     * evaluate to use "bedDetails" format
 
-    podmd"""
+    """
     if not (local_paths := BYC.get("local_paths")):
         return False
     tmp_path = path.join( *local_paths[ "server_tmp_dir_loc" ])

@@ -11,8 +11,8 @@ from variant_mapping import ByconVariant
 ################################################################################
 
 def dataset_response_add_handovers(ds_id, datasets_results):
-    """podmd
-    podmd"""
+    """
+    """
     b_h_o = [ ]
     if BYC_PARS.get("include_handovers", True) is not True:
         return b_h_o

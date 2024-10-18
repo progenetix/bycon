@@ -10,6 +10,9 @@ services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config"
 ################################################################################
 
 def uploader():
+    """
+    ==TBD==
+    """
     read_service_prefs("uploader", services_conf_path)
     file_id = str(uuid4())
     form_data = cgi.FieldStorage()

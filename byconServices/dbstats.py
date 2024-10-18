@@ -2,11 +2,12 @@ from pymongo import MongoClient
 from bycon import BYC, DB_MONGOHOST, HOUSEKEEPING_DB, HOUSEKEEPING_INFO_COLL, print_json_response
 from byconServiceLibs import ByconServiceResponse
 
-"""podmd
-* <https://progenetix.org/services/dbstats/>
-podmd"""
-
 def dbstats():
+    """
+    ==TBD==
+    
+    * <https://progenetix.org/services/dbstats/>
+    """
     stats_client = MongoClient(host=DB_MONGOHOST)
     stats_coll = stats_client[HOUSEKEEPING_DB][HOUSEKEEPING_INFO_COLL]
     results = []

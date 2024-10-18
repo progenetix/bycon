@@ -1,6 +1,7 @@
 import csv, re
 from os import path
 
+from bycon_helpers import prdbug
 from config import *
 from genome_utils import ChroNames
 
@@ -8,8 +9,12 @@ from genome_utils import ChroNames
 ################################################################################
 ################################################################################
 
-
 class Cytobands():
+    """
+    The `Cytobands()` class provides methods to access cytoband information from
+    a standard UCSC-style cytoband file (cytoBandIdeo.txt), to filter those for
+    cytoband or genomic ranges and to convert between cytoband and genomic coordinates.
+    """
 
     def __init__(self):
         self.cytobands = [ ]
@@ -33,16 +38,20 @@ class Cytobands():
     def get_all_cytobands(self):
         return self.cytobands
 
+
+    # -------------------------------------------------------------------------#
+
     def get_all_cytolimits(self):
         return self.cytolimits
+
+
+    # -------------------------------------------------------------------------#
 
     def get_genome_size(self):
         return self.genome_size
 
 
     # -------------------------------------------------------------------------#
-    # -------------------------------------------------------------------------#
-
 
     def cytobands_response(self):
         self.__cytobands_from_request_pars()
@@ -51,11 +60,10 @@ class Cytobands():
 
 
     # -------------------------------------------------------------------------#
-    # -------------------------------------------------------------------------#
 
     def bands_from_cytostring(self, cytoband=""):
         self.cytostring = cytoband
-        self.__cytobands_from_cytoband_string()
+        self.__bands_from_cytobands()
         return self.filtered_bands, self.chro, self.start, self.end
 
 
@@ -63,17 +71,11 @@ class Cytobands():
     # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 
-    def __cytobands_from_cytoband_string(self):
-        self.filtered_bands, self.chro, self.start, self.end = bands_from_cytobands(self.cytostring)
-
-
-    # -------------------------------------------------------------------------#
-
-
     def __cytobands_from_request_pars(self):
         if (c_b := BYC_PARS.get("cyto_bands")):
-            self.filtered_bands, self.chro, self.start, self.end = bands_from_cytobands(c_b)
-        if (c_b := BYC_PARS.get("chro_bases")):
+            self.cytostring = c_b
+            self.__bands_from_cytobands()
+        if (c_b := BYC_PARS.get("chro_bases", [])):
             self.filtered_bands, self.chro, self.start, self.end = bands_from_chrobases(c_b)
         else:
             return
@@ -83,6 +85,7 @@ class Cytobands():
 
     def __cytobands_response_object(self):
         if len(self.filtered_bands) < 1:
+            BYC["ERRORS"].append("No matching cytobands!")
             return
 
         cb_label = cytobands_label(self.filtered_bands)
@@ -165,116 +168,122 @@ class Cytobands():
             })
             self.genome_size += int(chrobands[-1]["end"])
 
-        #--------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
 
+    def __bands_from_cytobands(self):
+        argdefs = BYC.get("argument_definitions", {})
+        cb_pat = re.compile( argdefs["cyto_bands"]["pattern"] )
+        end_re = re.compile(r"^([pq]\d.*?)\.?\d$")
+        arm_re = re.compile(r"^([pq]).*?$")
+        p_re = re.compile(r"^p.*?$")
+        q_re = re.compile(r"^q.*?$")
 
+        chr_bands = self.cytostring
 
-################################################################################
+        if "p10" in chr_bands:
+            chr_bands = re.sub("p10", "pcen", chr_bands)
+        if "q10" in chr_bands:
+            chr_bands = re.sub("q10", "qcen", chr_bands)
 
-def bands_from_cytobands(chr_bands):
-    argdefs = BYC.get("argument_definitions", {})
-    cytoband_defs = BYC.get("cytobands", [])
-    cb_pat = re.compile( argdefs["cyto_bands"]["pattern"] )
-    end_re = re.compile(r"^([pq]\d.*?)\.?\d$")
-    arm_re = re.compile(r"^([pq]).*?$")
-    p_re = re.compile(r"^p.*?$")
-    q_re = re.compile(r"^q.*?$")
+        if not cb_pat.match(chr_bands):
+            return([], "", "", "")
 
-    # chr_bands = "4pcenqcen"
+        chro, cb_start, cb_end = cb_pat.match(chr_bands).group(1,2,3)
+        cytobands = list(filter(lambda d: d["chro"] == chro, self.cytobands.copy()))
 
-    if "p10" in chr_bands:
-        chr_bands = re.sub("p10", "pcen", chr_bands)
-    if "q10" in chr_bands:
-        chr_bands = re.sub("q10", "qcen", chr_bands)
+        if len(cytobands) < 10:
+            BYC["ERRORS"].append(f"No matching cytobands for chromosome {chro}!")
+            return
 
-    if not cb_pat.match(chr_bands):
-        return([], "", "", "")
+        if cb_start is None and cb_end is None:
+            self.filtered_bands = cytobands
+            self.chro = chro
+            self.start = int( cytobands[0]["start"] )
+            self.end = int( cytobands[-1]["end"])
+            return
 
-    chro, cb_start, cb_end = cb_pat.match(chr_bands).group(1,2,3)
-    cytobands = list(filter(lambda d: d[ "chro" ] == chro, cytoband_defs.copy()))
+        p_bands = list(filter(lambda d: p_re.match(d["cytoband"]), cytobands))
+        q_bands = list(filter(lambda d: q_re.match(d["cytoband"]), cytobands))
 
-    if len(cytobands) < 10:
-        return([], "", "", "")
+        # if there was no end, the start band is queried again until its last match
+        if cb_end is None:
+            cb_end = cb_start
 
-    if cb_start is None and cb_end is None:
-        return cytobands, chro, int( cytobands[0]["start"] ), int( cytobands[-1]["end"] )
+        if "qter" in cb_start:
+            cb_start = cytobands[-1]["cytoband"]
+        if "qter" in cb_end:
+            cb_end = cytobands[-1]["cytoband"]
+        if "pter" in cb_start:
+            cb_start = cytobands[0]["cytoband"]
+        if "pter" in cb_end:
+            cb_end = cytobands[0]["cytoband"]
+        if "pcen" in cb_start:
+            cb_start = p_bands[-1]["cytoband"]
+        if "pcen" in cb_end:
+            cb_end = p_bands[-1]["cytoband"]
+        if "qcen" in cb_start:
+            cb_start = q_bands[0]["cytoband"]
+        if "qcen" in cb_end:
+            cb_end = q_bands[0]["cytoband"]
 
-    p_bands = list(filter(lambda d: p_re.match(d[ "cytoband" ]), cytobands))
-    q_bands = list(filter(lambda d: q_re.match(d[ "cytoband" ]), cytobands))
+        if "p" in cb_end:
+            if "q" in cb_start:
+                cb_start, cb_end = cb_end, cb_start
 
-    # if there was no end, the start band is queried again until its last match
-    if cb_end is None:
-        cb_end = cb_start
+        # using a numeric comparison to sort bands for p higher to lower
+        cb_re = re.compile(r'^([pq])((\d)(?:\d(?:\.\d\d?\d?)?)?)$', re.IGNORECASE)
+        if cb_re.match(cb_start) and cb_re.match(cb_end):
+            fb1 = float( cb_re.match(cb_start).group(2) )
+            fb2 = float( cb_re.match(cb_end).group(2) )
+            arm1 = cb_re.match(cb_start).group(1)
+            arm2 = cb_re.match(cb_end).group(1)
+            mb1 = int( cb_re.match(cb_start).group(3) )
+            mb2 = int( cb_re.match(cb_end).group(3) )
+            if arm1 == arm2:
+                if "p" in arm1:
+                    if not mb1 > mb2:
+                        if fb2 > fb1:
+                            cb_start, cb_end = cb_end, cb_start
+                elif "q" in arm1:
+                    if not mb2 > mb1:
+                        if fb2 < fb1:
+                            cb_start, cb_end = cb_end, cb_start
 
-    if "qter" in cb_start:
-        cb_start = cytobands[-1]["cytoband"]
-    if "qter" in cb_end:
-        cb_end = cytobands[-1]["cytoband"]
-    if "pter" in cb_start:
-        cb_start = cytobands[0]["cytoband"]
-    if "pter" in cb_end:
-        cb_end = cytobands[0]["cytoband"]
-    if "pcen" in cb_start:
-        cb_start = p_bands[-1]["cytoband"]
-    if "pcen" in cb_end:
-        cb_end = p_bands[-1]["cytoband"]
-    if "qcen" in cb_start:
-        cb_start = q_bands[0]["cytoband"]
-    if "qcen" in cb_end:
-        cb_end = q_bands[0]["cytoband"]
+        # print("\n", chro, cb_start, cb_end, chr_bands)
 
-    if "p" in cb_end:
-        if "q" in cb_start:
-            cb_start, cb_end = cb_end, cb_start
+        # TODO: this is ugly - somehow had problems w/ recursion version :-/
+        start_bands = match_bands(cb_start, cytobands)
+        if len(start_bands) < 1:
+            if end_re.match(cb_start):
+                band = end_re.match(cb_start).group(1)
+                start_bands = match_bands(band, cytobands)
+                if len(start_bands) < 1:
+                    if arm_re.match(cb_start):
+                        band = arm_re.match(cb_start).group(1)
+                        start_bands = match_bands(band, cytobands)
 
-    # using a numeric comparison to sort bands for p higher to lower
-    cb_re = re.compile(r'^([pq])((\d)(?:\d(?:\.\d\d?\d?)?)?)$', re.IGNORECASE)
-    if cb_re.match(cb_start) and cb_re.match(cb_end):
-        fb1 = float( cb_re.match(cb_start).group(2) )
-        fb2 = float( cb_re.match(cb_end).group(2) )
-        arm1 = cb_re.match(cb_start).group(1)
-        arm2 = cb_re.match(cb_end).group(1)
-        mb1 = int( cb_re.match(cb_start).group(3) )
-        mb2 = int( cb_re.match(cb_end).group(3) )
-        if arm1 == arm2:
-            if "p" in arm1:
-                if not mb1 > mb2:
-                    if fb2 > fb1:
-                        cb_start, cb_end = cb_end, cb_start
-            elif "q" in arm1:
-                if not mb2 > mb1:
-                    if fb2 < fb1:
-                        cb_start, cb_end = cb_end, cb_start
+        end_bands = match_bands(cb_end, cytobands)
+        if len(end_bands) < 1:
+            if end_re.match(cb_end):
+                band = end_re.match(cb_end).group(1)
+                end_bands = match_bands(band, cytobands)
+                if len(end_bands) < 1:
+                    if arm_re.match(cb_end):
+                        band = arm_re.match(cb_end).group(1)
+                        end_bands = match_bands(band, cytobands)
 
-    # print("\n", chro, cb_start, cb_end, chr_bands)
+        cb_from = start_bands[0]["i"]
+        cb_to = end_bands[-1]["i"] + 1
 
-    # TODO: this is ugly - someho whad problems w/ recursion version :-/
-    start_bands = match_bands(cb_start, cytobands)
-    if len(start_bands) < 1:
-        if end_re.match(cb_start):
-            band = end_re.match(cb_start).group(1)
-            start_bands = match_bands(band, cytobands)
-            if len(start_bands) < 1:
-                if arm_re.match(cb_start):
-                    band = arm_re.match(cb_start).group(1)
-                    start_bands = match_bands(band, cytobands)
+        matched = self.cytobands[cb_from:cb_to]
 
-    end_bands = match_bands(cb_end, cytobands)
-    if len(end_bands) < 1:
-        if end_re.match(cb_end):
-            band = end_re.match(cb_end).group(1)
-            end_bands = match_bands(band, cytobands)
-            if len(end_bands) < 1:
-                if arm_re.match(cb_end):
-                    band = arm_re.match(cb_end).group(1)
-                    end_bands = match_bands(band, cytobands)
+        self.filtered_bands = matched
+        self.chro = chro
+        self.start = int( matched[0]["start"] )
+        self.end = int( matched[-1]["end"])
 
-    cb_from = start_bands[0]["i"]
-    cb_to = end_bands[-1]["i"] + 1
+    #--------------------------------------------------------------------------#
 
-    matched = cytoband_defs[cb_from:cb_to]
- 
-    return matched, chro, int( matched[0]["start"] ), int( matched[-1]["end"])
 
 
 ################################################################################
@@ -321,31 +330,30 @@ def cytobands_label(cytobands):
 def cytobands_label_from_positions(chro, start, end):
     cytobands, chro, start, end = cytobands_list_from_positions(chro, start, end)
     cbl = cytobands_label(cytobands)
-
     return cbl
 
 
 ################################################################################
 
 def bands_from_chrobases(chro_bases):
-    cb_pat = re.compile( BYC["argument_definitions"]["chro_bases"]["items"]["pattern"] )
+    cb_pat = re.compile( BYC["argument_definitions"]["chro_bases"]["pattern"] )
     if not cb_pat.match(chro_bases):
         return [], "NA", 0, 0
     chro, cb_start, cb_end = cb_pat.match(chro_bases).group(2,3,5)
-
     return cytobands_list_from_positions(chro, cb_start, cb_end)
 
 
 ################################################################################
 
 def cytobands_list_from_positions(chro, start=None, end=None):
+    cytobands = Cytobands().get_all_cytobands()
     if start:
         start = int(start)
         if not end:
             end = start + 1
         end = int(end)
 
-    cytobands = list(filter(lambda d: d[ "chro" ] == chro, BYC.get("cytobands", [])))
+    cytobands = list(filter(lambda d: d[ "chro" ] == chro, cytobands))
     if start == None:
         start = 0
     if end == None:

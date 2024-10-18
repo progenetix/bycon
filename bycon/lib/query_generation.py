@@ -286,7 +286,7 @@ class ByconQuery():
     ################################################################################
 
     def __get_variant_request_type(self, v_pars):
-        """podmd
+        """
         This method guesses the type of variant request, based on the complete
         fulfillment of the required parameters (all of `all_of`, one if `one_of`).
         In case of multiple types the one with most matched parameters is prefered.
@@ -296,7 +296,7 @@ class ByconQuery():
         TODO: This is all a bit too complex; probbaly better to just do it as a
               stack of dedicated tests and including a "defined to fail" query
               which is only removed after a successfull type match.
-        podmd"""
+        """
 
         variant_request_type = None
 
@@ -607,9 +607,9 @@ class ByconQuery():
     #--------------------------------------------------------------------------#
 
     def __create_variantAlleleRequest_query(self, v_pars):
-        """podmd
+        """
      
-        podmd"""
+        """
         vp = v_pars
         v_p_defs = self.argument_definitions
         # TODO: Regexes for ref or alt with wildcard characters

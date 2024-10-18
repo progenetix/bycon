@@ -49,9 +49,6 @@ general installation and might contain deprecated code or dependencies through t
 
 * documentation, in Markdown, as source for documentation builded with `mkdocs`
 
-### `lib`
-
-* Python libraries
 
 ### `rsrc`
 

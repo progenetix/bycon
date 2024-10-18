@@ -15,6 +15,14 @@ from bycon import (
 )
 
 class OntologyMaps:
+    """
+    The `OntologyMaps` class is used to create, retrieve and store ontology maps,
+    i.e. the corresponding terms for codes from different ontologies or controlled
+    vocabularies. In the context of the Progenetix Beacon as a data-rich `bycon`
+    deployment, a particlular use is the mapping of codes from different cancer
+    related diagnostic codes, specifically from ICD-O 3 histology/topography doublets
+    with NCIt cancer codes.
+    """
     def __init__(self):
         self.query = {}
         self.term_groups = []

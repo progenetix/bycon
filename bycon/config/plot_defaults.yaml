@@ -6,7 +6,7 @@
 # `bycon` package.
 
 plot_type_defs:
-
+  
   histoplot:
     description: >-
       The default option, used to plot histograms of the CNV frequencies per
@@ -63,7 +63,6 @@ plot_type_defs:
 #------------------------------------------------------------------------------#
 
 plot_parameters:
-
   # To limit the amount of pre-defined parameters accepted through the `bycon`
   # interface we are using a special syntax for plot parameters. Plot parameters
   # (see below for all pre-defined ones) are provided as a single string to `plotPars`

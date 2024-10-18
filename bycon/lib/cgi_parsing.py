@@ -8,14 +8,27 @@ from config import *
 
 ################################################################################
 
-def parse_arguments():
+class ByconParameters:
+    def __init__(self):
+        self.arg_defs = BYC.get("argument_definitions", {})
+        self.byc_pars = {}
+
+
+################################################################################
+
+def arguments_set_defaults():
     a_defs = BYC.get("argument_definitions", {})
     for a, d in a_defs.items():
         if "default" in d:
             BYC_PARS.update({a: d["default"]})
-    if "local" in ENV:
-        if "local" in d:
+        if "local" in d and "local" in ENV:
             BYC_PARS.update({a: d["local"]})
+
+
+################################################################################
+
+def parse_arguments():
+    if "local" in ENV:
         args_update_form()
     else:
         r_m = environ.get('REQUEST_METHOD', '')

@@ -9,12 +9,16 @@ from bycon import (
     rest_path_value
 )
 
-"""podmd
-The service provides the schemas for the `BeaconMap` OpenAPI endpoints.
-* <https://progenetix.org/services/endpoints/analyses>
-podmd"""
 
 def endpoints():
+    """
+    The service provides the schemas for the `BeaconMap` OpenAPI endpoints.
+
+    #### Examples (using the Progenetix resource as endpoint):
+
+    * <https://progenetix.org/services/endpoints/analyses>
+    * <https://progenetix.org/services/endpoints/biosamples>
+    """
     # TODO: This needs some error fallback, test for existing entities etc.
     schema_name = rest_path_value("endpoints")
     if schema_name:

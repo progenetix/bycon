@@ -40,7 +40,7 @@ cytomapper:
   beacon_schema:
     entity_type: cytobandMapping
     schema: https://progenetix.org/services/schemas/CytobandMapping/
-  path_id_value_bycon_parameter: cytoBands
+  path_id_value_bycon_parameter: cyto_bands
 
 endpoints:
   request_entity_path_id: endpoints
@@ -78,6 +78,7 @@ geoLocation:
 
 ids:
   request_entity_path_id: ids
+  path_id_value_bycon_parameter: id
 
 intervalFrequencies:
   request_entity_path_id: intervalFrequencies
@@ -155,8 +156,10 @@ sampleplots:
     schema: NA
   path_id_value_bycon_parameter: biosample_ids
 
-schemas:
-  request_entity_path_id: schemas
+byconschemas:
+  request_entity_path_aliases:
+    - schemas
+  request_entity_path_id: byconschemas
   path_id_value_bycon_parameter: id
 
 uploader:

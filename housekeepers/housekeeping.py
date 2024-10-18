@@ -29,9 +29,9 @@ def main():
 
     # TODO: rewrap, use config etc.
     generated_docs_path = path.join( loc_path, pardir, "docs", "generated")
-    bycon_generated_docs_path = path.join( loc_path, pardir, pardir, "bycon", "docs", "generated")
+    # bycon_generated_docs_path = path.join( loc_path, pardir, pardir, "bycon", "docs", "generated")
     doc_generator(generated_docs_path)
-    doc_generator(bycon_generated_docs_path)
+    # doc_generator(bycon_generated_docs_path)
 
     ds_id = assertSingleDatasetOrExit()
 

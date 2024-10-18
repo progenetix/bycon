@@ -10,13 +10,13 @@ from config import *
 ################################################################################
 
 def read_service_definition_files():
-    """podmd
+    """
     Reading the config from the same wrapper dir:
     module
       |
       |- lib - read_specs.py
       |- definitions - __name__.yaml
-    podmd"""
+    """
     if not path.isdir(CONF_PATH):
         return
     b_d_fs = [ f.name for f in scandir(CONF_PATH) if f.is_file() ]

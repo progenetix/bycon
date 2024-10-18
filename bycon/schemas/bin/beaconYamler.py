@@ -13,10 +13,10 @@ this_script = re.sub(".py", ".yaml", path.basename( __file__ ) )
 with open(path.join( here_path, "config", this_script), 'r') as c_f:
     config = yaml.load(c_f, Loader=yaml.FullLoader)
 
-"""podmd
+"""
 The script converts files in directories between yaml <-> json
 It requires the specification of input and output directories and file formats.
-podmd"""
+"""
 
 ################################################################################
 ################################################################################

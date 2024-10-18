@@ -12,7 +12,9 @@ services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config"
 ################################################################################
 
 def publications():
-    initialize_bycon_service()
+    """
+    ==TBD==
+    """
     read_service_prefs("publications", services_conf_path)
 
     f_d_s = BYC.get("filter_definitions", {})
@@ -161,10 +163,10 @@ def _create_filters_query():
                 continue
             q_list.append( { dbk: { op: int(no) } } )
         elif "start" in filter_precision or len(pre_code) == 1:
-            """podmd
+            """
             If there was only prefix a regex match is enforced - basically here
             for the selection of PMID labeled publications.
-            podmd"""
+            """
             q_list.append( { "id": re.compile(r'^'+f_val ) } )
         elif "pgxuse" in f_val:
             if ":y" in f_val.lower():

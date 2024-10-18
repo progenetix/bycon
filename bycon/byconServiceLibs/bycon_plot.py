@@ -27,7 +27,6 @@ from clustering_utils import cluster_frequencies, cluster_samples
 ################################################################################
 
 class ByconPlotPars:
-
     def __init__(self):
         self.plot_type = BYC_PARS.get("plot_type", "histoplot")
         self.plot_defaults = BYC.get("plot_defaults", {})

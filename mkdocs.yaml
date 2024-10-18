@@ -13,6 +13,7 @@ nav:
   - Maintenance: housekeepers
   - Recent Changes: changes
   - Upcoming & To Do: future
+  - Services: generated/services
   - Parameters: generated/argument_definitions
   - API Tests: tests
   - Progenetix Site: http://progenetix.org

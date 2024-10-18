@@ -48,6 +48,7 @@ def set_entities():
     BYC definitions.
     """
     b_e_d = BYC.get("entity_defaults", {})
+    a_defs = BYC.get("argument_definitions", {})
 
     dealiased_path_ids = {}
     for e, e_d in b_e_d.items():
@@ -93,7 +94,9 @@ def set_entities():
     })
 
     if (rpidv := BYC.get("request_entity_path_id_value")):
-        BYC_PARS.update({p_p: rpidv})
+        if p_p in a_defs.keys():
+            v = RefactoredValues(a_defs[p_p]).refVal(rpidv)
+            BYC_PARS.update({p_p: v})
 
 
 ################################################################################

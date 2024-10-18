@@ -1,47 +1,44 @@
-#!/usr/bin/env python3
 import re
 from os import path
 
-from bycon import *
+from bycon import BYC, BYC_PARS, print_uri_rewrite_response, rest_path_value
 from byconServiceLibs import read_service_prefs
 
-services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )
-
-"""podmd
-The `ids` service forwards compatible, prefixed ids (see `config/ids.yaml`) to specific
-website endpoints. There is no check if the id exists; this is left to the web
-page handling itself.
-
-Stacking with the "pgx:" prefix is allowed.
-* <https://progenetix.org/services/ids/pgxbs-kftva5zv>
-* <https://progenetix.org/services/ids/PMID:28966033>
-* <https://progenetix.org/services/ids/NCIT:C3262>
-podmd"""
+################################################################################
 
 def ids():
-    set_debug_state(debug=0)
-    read_service_prefs( "ids", services_conf_path)
+    """
+    The `ids` service forwards compatible, prefixed ids (see `config/ids.yaml`) to specific
+    website endpoints. There is no check if the id exists; this is left to the web
+    page handling itself.
+
+    Stacking with the "pgx:" prefix is allowed.
+
+    #### Examples (using the Progenetix resource as endpoint):
+
+    * <https://progenetix.org/services/ids/pgxbs-kftva5zv>
+    * <https://progenetix.org/services/ids/PMID:28966033>
+    * <https://progenetix.org/services/ids/NCIT:C3262>
+    """
+
+    conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )
+    read_service_prefs( "ids", conf_path)
     id_in = rest_path_value("ids")
-    output = rest_path_value(id_in)
     s_c = BYC.get("service_config", {})
     f_p_s = s_c.get("format_patterns", {})
 
-    if id_in:
+    if len(id_in := BYC_PARS.get("id", [])) > 0:
+        lid = id_in[0]
         for f_p in f_p_s:
-            pat = re.compile( f_p["pattern"] )
-            if pat.match(id_in):
-                lid = id_in  
+            pat = re.compile(f_p["pattern"])
+            if pat.match(lid):
                 link = f_p["link"]
-                pim = f_p.get("prepend_if_missing", "")
-                if len(pim) > 0:
+                if len(pim := f_p.get("prepend_if_missing", "")) > 0:
                     if pim in lid:
                         pass
                     else:
                         lid = pim+lid
                 print_uri_rewrite_response(link, lid)
 
-    print('Content-Type: text')
-    print('status:422')
-    print()
-    print("No correct id provided. Please refer to the documentation at http://info.progenetix.org/tags/services/")
-    exit()
+    BYC.update({"ERRORS": ["No correct id provided. Please refer to the documentation at http://info.progenetix.org/"]})
+    BeaconErrorResponse().respond_if_errors()

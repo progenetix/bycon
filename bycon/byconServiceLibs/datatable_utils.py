@@ -83,8 +83,8 @@ def import_datatable_dict_line(parent, fieldnames, lineobj, primary_scope="biosa
 ################################################################################
 
 def create_table_header(io_params):
-    """podmd
-    podmd"""
+    """
+    """
     header_labs = [ ]
     for par, par_defs in io_params.items():
         pres = par_defs.get("prefix_split", {})

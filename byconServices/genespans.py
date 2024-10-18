@@ -15,12 +15,17 @@ from byconServiceLibs import ByconServiceResponse, read_service_prefs
 
 services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )
 
-"""
-* http://progenetix.test/services/genespans/MYC
-* http://progenetix.test/services/genespans/?geneId=MYC
-"""
 
 def genespans():
+    """
+    The `genespans` function provides a JSON response with the coordinates of
+    matching gene IDs.
+
+    #### Examples (using the Progenetix resource as endpoint):
+
+    * https://progenetix.test/services/genespans/MYC
+    * https://progenetix.test/services/genespans/?geneId=MYC
+    """
     read_service_prefs("genespans", services_conf_path)
 
     # form id assumes start match (e.g. for autocompletes)

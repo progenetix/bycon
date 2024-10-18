@@ -1,4 +1,8 @@
 from config import *
+from os import path, pardir
+
+loc_path = path.dirname( path.abspath(__file__) )
+pkg_path = path.join(loc_path, pardir, pardir)
 
 def doc_generator(generated_docs_path):
     if path.exists(generated_docs_path):

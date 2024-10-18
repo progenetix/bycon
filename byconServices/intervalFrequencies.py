@@ -1,11 +1,11 @@
 from bycon import BYC_PARS, BeaconErrorResponse
 from byconServiceLibs import ByconBundler, GenomeBins, ByconServiceResponse, export_pgxseg_frequencies, export_pgxmatrix_frequencies
 
-"""podmd
+"""
 * https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C7376,PMID:22824167,pgx:icdom-85003
 * https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&id=pgxcohort-TCGAcancers
 * http://progenetix.test/services/intervalFrequencies/?datasetIds=progenetix&output=pgxmatrix&filters=NCIT:C7376,PMID:22824167
-podmd"""
+"""
 
 def intervalFrequencies():
     pdb = ByconBundler().collationsPlotbundles()

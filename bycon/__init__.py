@@ -36,6 +36,7 @@ try:
     update_rootpars_from_local_or_HOST()
     rest_path_elements()
     set_beacon_defaults()
+    arguments_set_defaults()
     parse_arguments()
     set_entities()
     initialize_bycon_service()
