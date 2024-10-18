@@ -1,4 +1,4 @@
-## `byconschemas`
+## `/byconschemas`
 
 This helper service reads and serves local schema definition files. The name of
 the schema (corresponding to the file name minus extension) is provided either
@@ -7,12 +7,12 @@ as an `id` query parameter or as the first part of the path after `schemas/`.
 * <https://progenetix.org/services/schemas/biosample>
 
 
-## `cnvstats`
+## `/cnvstats`
 
 ==TBD==
 
 
-## `collationplots`
+## `/collationplots`
 
 The `collationplots` function is a service to provide plots for CNV data aggregated
 for samples matching individual filter values such as diagnostic codes or experimental
@@ -29,15 +29,55 @@ For a single plot one can provide the entity id as path id value.
 * https://progenetix.org/services/collationplots/?collationTypes=icdom&minNumber=1000&plotType=histoheatplot
 
 
-## `collations`
+## `/collations`
 
-==TBD==
+The `collations` service provides access to information about data "subsets"
+in the project databases. Collations typically are aggregations of samples
+sharing an ontology code (e.g. NCIT) or external identifier (e.g. PMID). Therefore,
+in the context of Beacon the collations in `bycon` provide the `filtering_terms`
+available through Beacon queries, but also additional information e.g. about
+child terms and statistics related to the terms.
+
+In the case of the web projects the main purpose of the `services/collations/
+endpoin is in providing the child terms and path relations for generating ontology
+trees in the UI.
+
+### Parameters
+
+* `collationTypes=...`
+* `includeDescendantTerms=false`
+  - only delivers data about codes with direct matches, i.e. excluding such
+  where only a child term had a direct match
+  - this is especially useful for e.g. getting a fast overview about mappings
+  of deeply nested coding systems like `NCIT`
+* `deliveryKeys=...`
+
+### Examples
+
+* <https://progenetix.org/services/collations?deliveryKeys=id,count&collationTypes=cellosaurus>
+* <https://progenetix.org/services/collations?collationTypes=NCIT>
+* <https://progenetix.org/services/collations?collationTypes=NCIT&includeDescendantTerms=false>
 
 
-## `cytomapper`
+## `/cytomapper`
 
 The `cytomapper` function provides a JSON response with cytoband information
 such as matched cytobands and the genome coordinates of their extend.
+
+There is **currently only support for GRCh38**.
+
+#### Response Schema
+
+* <https://progenetix.org/services/schemas/CytobandMapping/>
+
+#### Parameters
+
+* `cytoBands` (path default)
+    - a properly formatted cytoband annotation
+    - "8", "9p11q21", "8q", "1p12qter"
+* or `chroBases`
+    - `7:23028447-45000000`
+    - `X:99202660`
 
 #### Examples (using the Progenetix resource as endpoint):
 
@@ -46,14 +86,18 @@ such as matched cytobands and the genome coordinates of their extend.
 * https://progenetix.org/services/cytomapper?chroBases=12:10000000-45000000
 
 
-## `dbstats`
+## `/dbstats`
 
-==TBD==
+This service endpoint provides statistic information about the resource's
+datasets.
+
+#### Examples
 
 * <https://progenetix.org/services/dbstats/>
+* <https://progenetix.org/services/dbstats/examplez>
 
 
-## `endpoints`
+## `/endpoints`
 
 The service provides the schemas for the `BeaconMap` OpenAPI endpoints.
 
@@ -63,7 +107,7 @@ The service provides the schemas for the `BeaconMap` OpenAPI endpoints.
 * <https://progenetix.org/services/endpoints/biosamples>
 
 
-## `genespans`
+## `/genespans`
 
 The `genespans` function provides a JSON response with the coordinates of
 matching gene IDs.
@@ -74,12 +118,12 @@ matching gene IDs.
 * https://progenetix.test/services/genespans/?geneId=MYC
 
 
-## `geolocations`
+## `/geolocations`
 
 None
 
 
-## `ids`
+## `/ids`
 
 The `ids` service forwards compatible, prefixed ids (see `config/ids.yaml`) to specific
 website endpoints. There is no check if the id exists; this is left to the web
@@ -94,32 +138,32 @@ Stacking with the "pgx:" prefix is allowed.
 * <https://progenetix.org/services/ids/NCIT:C3262>
 
 
-## `intervalFrequencies`
+## `/intervalFrequencies`
 
 None
 
 
-## `ontologymaps`
+## `/ontologymaps`
 
 None
 
 
-## `pgxsegvariants`
+## `/pgxsegvariants`
 
 None
 
 
-## `publications`
+## `/publications`
 
 ==TBD==
 
 
-## `samplemap`
+## `/samplemap`
 
 ==TBD==
 
 
-## `samplematrix`
+## `/samplematrix`
 
 The service uses the standard bycon data retrieval pipeline with `analysis`
 as entity type. Therefore, all standard Beacon query parameters work and also
@@ -127,7 +171,7 @@ the path is interpreted for an biosample `id` value if there is an entry at
 `.../biosamples/{id}`
 
 
-## `sampleplots`
+## `/sampleplots`
 
 The plot service uses the standard bycon data retrieval pipeline with `biosample`
 as entity type. Therefore, all standard Beacon query parameters work and also
@@ -148,7 +192,7 @@ the fallback). Plot options are available as usual.
 * http://progenetix.org/services/sampleplots?datasetIds=progenetix&plotMinLength=1000&plotMaxLength=3000000&geneId=CDKN2A&variantType=EFO:0020073&plotPars=plotChros=9::plotGeneSymbols=CDKN2A::plotWidth=300&plotType=histoplot
 
 
-## `sampletable`
+## `/sampletable`
 
 The service uses the standard bycon data retrieval pipeline with `biosample`
 as entity type. Therefore, all standard Beacon query parameters work and also
@@ -164,19 +208,23 @@ The table type can be changed with `tableType=individuals` (or `analyses`).
 * http://progenetix.org/services/sampletable?filters=pgx:icdom-81703
 
 
-## `services`
+## `/services`
 
 The `services` application deparses a request URI and calls the respective
 script. The functionality is combined with the correct configuration of a 
 rewrite in the server configuration for creation of canonical URLs.
 
 
-## `uploader`
+## `/uploader`
 
-==TBD==
+This service is used by UI implementations to upload user provided `.pgxseg` files
+for visualization of the variants using the packages plotting functions.
+
+As exception to the general rule the `uploader` service does not make use of standard
+argument parsing but directly uses `cgi.FieldStorage()` and `....file.read()`.
 
 
-## `variantsbedfile`
+## `/variantsbedfile`
 
 The `variantsbedfile` function provides a BED file with the matched genomic
 variants from a Beacon query or a sample id.
@@ -186,7 +234,7 @@ variants from a Beacon query or a sample id.
 * http://progenetix.org/services/variantsbedfile/pgxbs-kftvjv8w
 
 
-## `vcfvariants`
+## `/vcfvariants`
 
 The VCF service uses the standard bycon data retrieval pipeline with `biosample`
 as entity type. Therefore, all standard Beacon query parameters work and also

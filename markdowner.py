@@ -25,7 +25,7 @@ def main():
             continue
         # print(f'from {fn} import {fn}')
 
-        pp_fh.write(f'## `{fn}`\n\n')
+        pp_fh.write(f'## `/{fn}`\n\n')
 
         func = getattr(byconServices, fn)
         pp_fh.write(f'{inspect.getdoc(func)}\n\n\n')
