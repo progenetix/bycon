@@ -11,11 +11,9 @@ nav:
   - Installation: installation
   - Importing Data: importers
   - Maintenance: housekeepers
+  - API Documentation: API
   - Recent Changes: changes
   - Upcoming & To Do: future
-  - Services: generated/services
-  - Parameters: generated/argument_definitions
-  - API Tests: tests
   - Progenetix Site: http://progenetix.org
   - Code Repos:
     - bycon: https://github.com/progenetix/bycon

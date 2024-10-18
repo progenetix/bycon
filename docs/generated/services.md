@@ -1,12 +1,10 @@
 ## `byconschemas`
 
-podmd
 This helper service reads and serves local schema definition files. The name of
 the schema (corresponding to the file name minus extension) is provided either
 as an `id` query parameter or as the first part of the path after `schemas/`.
 
 * <https://progenetix.org/services/schemas/biosample>
-podmd
 
 
 ## `cnvstats`
