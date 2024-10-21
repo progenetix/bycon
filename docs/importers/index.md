@@ -64,6 +64,26 @@ Use the provided variants table template to reformat your input data accordingly
 
 Some considerations:
 
-* 
+* the upstream ids (`analysis_id`, `biosample_id`, `individual_id`) have to match the
+  ones in the metadata tables
+* for `sequence_id` please use the refSeq ids for GRCh38 (e.g. `refseq:NC_000005.10`
+instead of `chr5` or such); see `bycon/rsrc/genomes/grch38/refseq_chromosomes.yaml`
+
+...
+
+### 4. Import the data
+
+Importing data requires the existence of all upstream entities. Basically, if one
+imports biosamples it is checked if they have values for `individual_id` and then if
+these values have existing records. Therefore a complete import sequence when using a
+combined `metadata.tsv` file will look like:
+
+1. `importers/individualsInserter.py -d myOwnDatasetName -i wherever/metadata.tsv`
+2. `importers/biosamplesInserter.py -d myOwnDatasetName -i wherever/metadata.tsv`
+3. `importers/analysisInserter.py -d myOwnDatasetName -i wherever/metadata.tsv`
+4. `importers/variantsInserter.py -d myOwnDatasetName -i wherever/variants.tsv`
+
+The `-d` option is used to provide a dataset name (of an existing dataset; see
+further information how to get there...).
 
 
