@@ -58,6 +58,17 @@ Some considerations:
   labeling (e.g. "Serous ovarian tumor [Serous papillary adenocarcinoma, metastasized, G2]")
 * time periods (age, followup...) are provided as ISO8601 strings (e.g. `P23Y5M` or `P95D`)
 
+**Multiple samples or analyses per individual**
+
+We do not provide an automated mechanism to generate "same individual id for every
+two samples" or such scenarios, e.g. the frequent case where of tumor + reference pairs
+or primary tumor + metastasis etc. In such a case one can just create a table for the
+total number of analyses and then collapse e.g. 2 biosammple / individual ids by 
+using the same values where appropiate and then remove the lines for the non-existing
+ids from the upstream `individuals.tsv` file (or a duplicate of the `metadata.tsv` if
+starting from this).
+
+
 ### 3. Format the variants table
 
 Use the provided variants table template to reformat your input data accordingly.
@@ -85,5 +96,8 @@ combined `metadata.tsv` file will look like:
 
 The `-d` option is used to provide a dataset name (of an existing dataset; see
 further information how to get there...).
+
+Obviously, separate metadata files can be used for the different entities depending
+on your preferences & project organization.
 
 
