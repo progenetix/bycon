@@ -1,21 +1,18 @@
-#!/usr/bin/env python3
-
-
 from bycon import *
 from byconServiceLibs import ByconMap, ByconServiceResponse, open_text_streaming, ByconGeolocs
 
-"""
-* <https://progenetix.org/services/geolocations?city=zurich>
-* <https://progenetix.org/services/geolocations?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
-* <https://progenetix.org/services/geolocations?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000&output=map>
-* <http://progenetix.org/services/geolocations?inputfile=https://raw.githubusercontent.com/progenetix/pgxMaps/main/rsrc/locationtest.tsv&debug=&output=map&>
-* <http://progenetix.org/cgi/bycon/services/geolocations.py?city=New&ISO3166alpha2=UK&output=map&markerType=marker>
-"""
-
-def main():
-    geolocations()
-
 def geolocations():
+    """
+    ==TBD==
+
+    #### Examples
+
+    * <https://progenetix.org/services/geolocations?city=zurich>
+    * <https://progenetix.org/services/geolocations?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
+    * <https://progenetix.org/services/geolocations?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000&output=map>
+    * <http://progenetix.org/services/geolocations?inputfile=https://raw.githubusercontent.com/progenetix/pgxMaps/main/rsrc/locationtest.tsv&debug=&output=map&>
+    * <http://progenetix.org/cgi/bycon/services/geolocations.py?city=New&ISO3166alpha2=UK&output=map&markerType=marker>
+    """
     # TODO: make the input parsing a class
     GEOL = ByconGeolocs()
     if "inputfile" in BYC_PARS:

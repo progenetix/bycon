@@ -6,6 +6,7 @@ rm -rf ./dist
 python3 -m build --sdist .
 BY=(./dist/*tar.gz)
 pip3 install $BY --break-system-packages
+./markdowner.py
 # pipreqs --force .
 # python3 -m build --wheel && twine upload dist/*
 # git tag v2.0.2  & git push --tags

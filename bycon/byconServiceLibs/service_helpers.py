@@ -18,7 +18,7 @@ class ByconID:
     #----------------------------- public -------------------------------------#
     #--------------------------------------------------------------------------#
 
-    def makeID(prefix=""):
+    def makeID(self, prefix=""):
         time.sleep(self.sleep)
         linker = "-" if len(str(prefix)) > 0 else ""
         return f'{prefix}{linker}{base36.dumps(int(time.time() * 1000))}'

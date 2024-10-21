@@ -4,9 +4,9 @@ Importing and updating of data for `bycon` databases is discussed in
 this section. The relevant apps can be found in the `importers` directory
 in the project's root.
 
-## Importing Records in an Existing Database
+The workflows discussed here assume that the database is already set up.
 
-### Import Table Formats
+## Import Table Formats
 
 Importing new sample data alwaays requires the initial import of
 _analysis_ data, _i.e._ at least an experimental identifier which then acts as
@@ -19,6 +19,51 @@ create separate files for all `analyses` & `biosamples` & `individuala`
 entities; the importers will handle the data in a single file
 which makes sense when having singular relation 1 individual => 1 biosample => 1 analysis (=> n variants).
 
+## Workflow
+
+### 1. Create a import tables
+
+Run the `importers/importTablesGenerator.py` script to create empty import tables.
+You will be asked to provide an (optional) directory path and the number of analyses
+to be imported. This number is used to provide unique, linked identifiers for the
+metadata entities (analyses, biosamples, individuals). Probably the `metadata.tsv`
+table will be enough but there are separate tables for te different entities with
+all supported parameters.
+
+### 2. Fill in the metadata tables
+
+#### Identifiers
+
+* stick with the provided ones or replace them with your own (unique) ones but
+  make sure to track provenance with some provided fields:
+    - `experiment_id` as structured analysis identifier (e.g. `geo:GSM288124`)
+    - `experiment_title` for some colloquial labe (e.g. `sample_03_2nd_run`)
+    - `biosample_name` for a local identifier of the biosample in case you use the
+      random identifiers from the template (e.g. `005cb7ce-5050-43aa-85ff-cd56ed830535` or `FCL 0089`)
+* **use the same `analysis_id` identifiers as in the variants import table**
+
+#### Metadata
+
+Fill in the metadata tables with the relevant data according to best practices etc.
+For more information and examples please refer to the
+[Beacon documentation](https://docs.genomebeacons.org/model/) and bycon's
+[datatable mappings](). Particularly, the bycon version does not provide support for
+all Beacon parameters but then also adds additionl fields which mostly support
+cancer specific use cases (e.g. `icdo_morphology`, `icdo_topography`) and dedicated
+fields for selected external identifiers (e.g. `geo_accession`, `tcga_id`).
+
+Some considerations:
+
+* `biosample_notes` (in Beacon `biosamples.notes`) can e.g. be used for a descriptive
+  labeling (e.g. "Serous ovarian tumor [Serous papillary adenocarcinoma, metastasized, G2]")
+* time periods (age, followup...) are provided as ISO8601 strings (e.g. `P23Y5M` or `P95D`)
+
+### 3. Format the variants table
+
+Use the provided variants table template to reformat your input data accordingly.
+
+Some considerations:
+
+* 
 
 
-==TBD==

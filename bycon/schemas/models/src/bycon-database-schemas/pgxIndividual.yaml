@@ -29,22 +29,18 @@ properties:
     type: object
 
 # additional properties from Phenopackets and/or Progenetix
-  description:
-    type: string
-    examples:
-      - HapMap project contributor
   indexDisease:
     $ref: ../bycon-model/common/disease.yaml
   externalReferences:
     type: array
     items:
-      $ref: ../common/externalReference.yaml
+      $ref: ../bycon-model/common/externalReference.yaml
     examples:
       - id: biosample:SAME122868
-        description: HapMap individual
+        notes: HapMap individual
       - id: PMID:9950502
-      - id: geo:GSE13331
-        description: Prognostic analysis of mantle cell lymphoma genomes
+      - id: 022f39e9-57ee-4b2b-8b3a-8929e3d69a37
+        notes: TCGA case_id
   vitalStatus:
     $ref: ../common/vitalStatus.yaml
   geoLocation:

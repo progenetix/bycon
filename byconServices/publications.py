@@ -1,19 +1,30 @@
-#!/usr/bin/env python3
-import re, sys, traceback
+import re
 from os import environ, path, pardir
 from pymongo import MongoClient
 from operator import itemgetter
 
-from bycon import *
+from bycon import BYC, BeaconErrorResponse, DB_MONGOHOST, geo_query
 from byconServiceLibs import ByconMap, ByconServiceResponse, read_service_prefs
 
 services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )
 
 ################################################################################
 
+# TODO: rewrite with class, use of standard filter query etc.
+
 def publications():
     """
-    ==TBD==
+    The _publications_ servive provides API functionality for accessing the
+    Progenetix [publications](http://progenetix.org/publications/) collection, which
+    represents curated information about several thousand articles reporting
+    genome-wide screening experiments in cancer. 
+
+    #### Examples
+
+    * <https://progenetix.org/services/publications/?filters=PMID>
+    * <http://progenetix.org/services/publications/?filters=PMID,genomes:&gt;200,arraymap:&gt;1>
+    * <http://progenetix.org/services/publications/?filters=PMID:22824167&method=details>
+    * <http://progenetix.org/services/publications/?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
     """
     read_service_prefs("publications", services_conf_path)
 

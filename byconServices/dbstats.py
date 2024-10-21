@@ -4,9 +4,13 @@ from byconServiceLibs import ByconServiceResponse
 
 def dbstats():
     """
-    ==TBD==
+    This service endpoint provides statistic information about the resource's
+    datasets.
+
+    #### Examples
     
     * <https://progenetix.org/services/dbstats/>
+    * <https://progenetix.org/services/dbstats/examplez>
     """
     stats_client = MongoClient(host=DB_MONGOHOST)
     stats_coll = stats_client[HOUSEKEEPING_DB][HOUSEKEEPING_INFO_COLL]

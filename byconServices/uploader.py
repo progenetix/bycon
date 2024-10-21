@@ -2,18 +2,18 @@ import cgi
 from os import path
 from uuid import uuid4
 
-from bycon import *
-from byconServiceLibs import read_service_prefs
-
-services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )
+from bycon import BYC, print_json_response, select_this_server, print_uri_rewrite_response
 
 ################################################################################
 
 def uploader():
     """
-    ==TBD==
+    This service is used by UI implementations to upload user provided `.pgxseg` files
+    for visualization of the variants using the packages plotting functions.
+    
+    As exception to the general rule the `uploader` service does not make use of standard
+    argument parsing but directly uses `cgi.FieldStorage()` and `....file.read()`.
     """
-    read_service_prefs("uploader", services_conf_path)
     file_id = str(uuid4())
     form_data = cgi.FieldStorage()
     base_url = select_this_server()

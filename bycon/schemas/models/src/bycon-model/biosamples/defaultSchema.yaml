@@ -109,6 +109,18 @@ properties:
         label: HEK-293T cell
       - id: OBI:0002606
         label: nasopharyngeal swab specimen
+  sampleOriginType:
+    description: Category of sample origin. Value from Ontology for Biomedical Investigations
+      (OBI) material entity (BFO:0000040) ontology, e.g. 'specimen from organism'
+      (OBI:0001479),'xenograft' (OBI:0100058), 'cell culture' (OBI:0001876)
+    $ref: ../common/ontologyTerm.yaml
+    examples:
+      - id: OBI:0001479
+        label: specimen from organism
+      - id: OBI:0001876
+        label: cell culture
+      - id: OBI:0100058
+        label: xenograft
 
 # in Progenetix but not in Beacon
   icdoMorphology:
@@ -152,18 +164,6 @@ properties:
   #   format: date
   #   examples:
   #     - '2021-04-23'
-  # sampleOriginType:
-  #   description: Category of sample origin. Value from Ontology for Biomedical Investigations
-  #     (OBI) material entity (BFO:0000040) ontology, e.g. 'specimen from organism'
-  #     (OBI:0001479),'xenograft' (OBI:0100058), 'cell culture' (OBI:0001876)
-  #   $ref: ../common/ontologyTerm.yaml
-  #   examples:
-  #     - id: OBI:0001479
-  #       label: specimen from organism
-  #     - id: OBI:0001876
-  #       label: cell culture
-  #     - id: OBI:0100058
-  #       label: xenograft
   # obtentionProcedure:
   #   description: Ontology value from NCIT Intervention or Procedure ontology term
   #     (NCIT:C25218) describing the procedure for sample obtention, e.g. NCIT:C15189

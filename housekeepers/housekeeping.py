@@ -13,7 +13,6 @@ loc_path = path.dirname( path.abspath(__file__) )
 lib_path = path.join(loc_path , "lib")
 sys.path.append( lib_path )
 from mongodb_utils import mongodb_update_indexes
-from doc_generator import doc_generator
 
 services_conf_path = path.join( loc_path, "config" )
 
@@ -26,12 +25,6 @@ def main():
     read_service_prefs("housekeeping", services_conf_path)
 
     set_collation_types()
-
-    # TODO: rewrap, use config etc.
-    generated_docs_path = path.join( loc_path, pardir, "docs", "generated")
-    # bycon_generated_docs_path = path.join( loc_path, pardir, pardir, "bycon", "docs", "generated")
-    doc_generator(generated_docs_path)
-    # doc_generator(bycon_generated_docs_path)
 
     ds_id = assertSingleDatasetOrExit()
 

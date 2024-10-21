@@ -14,17 +14,21 @@ non-variant parameters) in the local `rsrc/templates/` directory.
 """
 
 ################################################################################
-################################################################################
-################################################################################
 
 def main():
-
-    initialize_bycon_service()
-
     dt_m = BYC["datatable_mappings"].get("definitions", {})
+    ordered_mcs = BYC["datatable_mappings"].get("ordered_metadata_core", [])
     rsrc_p = path.join(pkg_path, "rsrc", "templates")
+    root_path = input(f'Templates will be saved inside\n=> {rsrc_p}\nEnter a different path or just hit ENTER to use the default:\n')
+
+    if len(root_path) > 0:
+        if path.exists(root_path):
+            rsrc_p = root_path
+        else:
+            print(f'Path\n{root_path}\ndoes not exist; using default path\n=> {rsrc_p}')
+
     s_no = 0
-    proceed = input(f'Do you want to create individual_id & biosample_id & analysis_id values?\nEnter a number; hit ENTER for no id values: ')
+    proceed = input(f'Do you want to create individual_id & biosample_id & analysis_id values?\nEnter a number or just hit ENTER for no id values: ')
     if re.match(r'^\d+?$', proceed):
         s_no = int(proceed)
             
@@ -69,23 +73,47 @@ def main():
             for id_s in ids:
                 d_line = []
                 for p_n in entity_cols:
-                    t_v = ""
-                    if p_n in id_s:
-                        t_v = id_s.get(p_n)
-                    d_line.append(t_v)
+                    d_line.append(id_s.get(p_n, ""))
                 table.append("\t".join(d_line))
-
-        f_p = path.join(rsrc_p, t_t+"_template.tsv")
+        f_n = t_t.replace("analysis", "analyse")+"s.tsv"
+        f_p = path.join(rsrc_p, f_n)
         f = open(f_p, "w")
         f.write("\n".join(table))
         f.close()
         print(f'===> Wrote {f_p}')
 
-    f_p = path.join(rsrc_p, "metadata_template.tsv")
-    f = open(f_p, "w")
-    f.write("\t".join(all_cols)+"\n")
-    f.close()
-    print(f'===> Wrote {f_p}')
+    # (semi-)ordered headers for the "metadata from all entities" files
+    o_c_s = []
+    a_c_s = []
+    for c in ordered_mcs:
+        if c in all_cols:
+            o_c_s.append(c)
+            a_c_s.append(c)
+    for c in all_cols:
+        if c not in a_c_s:
+            a_c_s.append(c)
+
+    a_p = path.join(rsrc_p, "metadata_all.tsv")
+    c_p = path.join(rsrc_p, "metadata.tsv")
+    f = open(a_p, "w")
+    f.write(f'{"\t".join(a_c_s)}\n')
+    for id_s in ids:
+        d_line = []
+        for p_n in a_c_s:
+            d_line.append(id_s.get(p_n, ""))
+        f.write(f'{"\t".join(d_line)}\n')  
+    f.close()  
+    print(f'===> Wrote {a_p}')
+    f = open(c_p, "w")
+    f.write(f'{"\t".join(o_c_s)}\n')
+    for id_s in ids:
+        d_line = []
+        for p_n in o_c_s:
+            d_line.append(id_s.get(p_n, ""))
+        f.write(f'{"\t".join(d_line)}\n')  
+    f.close()  
+    print(f'===> Wrote {c_p}')
+
     system(f'open {rsrc_p}')
 
 ################################################################################

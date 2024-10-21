@@ -61,12 +61,10 @@ def pgxseg_biosample_meta_line(biosample, group_id_key="histological_diagnosis_i
     g_lab_k = re.sub("_id", "_label", g_id_k)
     line = [ f'#sample=>id={biosample.get("id", "¡¡¡NONE!!!")}' ]
     for par, par_defs in io_params.items():
-        if (in_pgxseg := par_defs.get("compact", False)) is False:
-            continue
-
         parameter_type = par_defs.get("type", "string")
-        db_key = par_defs.get("db_key", "___undefined___")
-        p_type =par_defs.get("type", "string")
+        if not (db_key := par_defs.get("db_key")):
+            continue
+        p_type = par_defs.get("type", "string")
         v = get_nested_value(biosample, db_key, p_type)
         h_v = ""
         if isinstance(v, list):
