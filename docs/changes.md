@@ -6,6 +6,17 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2024-10-21 (v2.0.3)
+
+* bringing the documentaion into `bycon`
+    - seriously using Python heredocs, starting with embedding the main information
+      about their functionality into the service caller functions
+    - project root `markdowner.py` now parses services (and some preference
+    files) into `.md` sources for website generation
+        * see e.g. <http://bycon.progenetix.org/generated/services/>
+    - data import documentation at <http://bycon.progenetix.org/importers/>
+* revision of `importTablesGenerator.py`
+
 ### 2024-10-17 (v2.0.2)
 
 * added a `ontologymapsReplacer.py` service app to (re-) create the `_byconServicesDB.ontologymaps` collection
