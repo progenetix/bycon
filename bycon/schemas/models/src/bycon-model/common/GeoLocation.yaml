@@ -62,6 +62,17 @@ definitions:
       parameters provide additional information for the interpretation of the
       location parameters.
     properties:
+      id:
+        type: string
+        description: >-
+          The identifier for the location, used to match individual entries
+          with the geometry and properties paramaters from a lookup database.
+        examples:
+          - zurich::switzerland
+          - heidelberg::germany
+          - newyorkcity::unitedstates
+          - cambridge::unitedkingdom
+          - cambridge::unitedstates
       label:
         type: string
         examples:

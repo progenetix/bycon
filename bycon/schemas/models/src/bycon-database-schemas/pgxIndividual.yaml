@@ -38,7 +38,6 @@ properties:
     examples:
       - id: biosample:SAME122868
         notes: HapMap individual
-      - id: PMID:9950502
       - id: 022f39e9-57ee-4b2b-8b3a-8929e3d69a37
         notes: TCGA case_id
   vitalStatus:

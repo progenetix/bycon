@@ -16,8 +16,8 @@ CONF_PATH = path.join( pkg_path, "config")
 LIB_PATH = path.join( pkg_path, "lib")
 
 # path of the calling script is used to point to a local config directory
-__caller_path = path.dirname( path.abspath(sys.argv[0]))
-LOC_PATH = path.join(__caller_path, pardir, "local")
+CALLER_PATH = path.dirname( path.abspath(sys.argv[0]))
+LOC_PATH = path.join(CALLER_PATH, pardir, "local")
 
 REQUEST_PATH_ROOT = "beacon"
 

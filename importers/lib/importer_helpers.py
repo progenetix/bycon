@@ -1,6 +1,8 @@
 import datetime
 from os import path
 from progress.bar import Bar
+from pymongo import MongoClient
+from random import sample as random_samples
 
 # bycon
 from config import *
@@ -14,14 +16,18 @@ from byconServiceLibs import assertSingleDatasetOrExit, ByconBundler, import_dat
 ################################################################################
 
 class ByconautImporter():
-    def __init__(self):
+    def __init__(self, use_file=True):
         self.log = []
         self.entity = None
         self.dataset_id = BYC["BYC_DATASET_IDS"][0]
+        self.limit = BYC_PARS.get("limit", 0)
         self.input_file = None
         self.import_collname = None
         self.import_entity = None
         self.import_id = None
+        self.use_file = use_file
+        self.input_file = None
+        self.output_dir = None
         self.upstream = ["individuals", "biosamples", "analyses"]
         self.downstream = []
         self.downstream_only = False
@@ -162,16 +168,64 @@ class ByconautImporter():
 
 
     #--------------------------------------------------------------------------#
+
+    def move_individuals_and_downstream_from_ds_results(self, dataset_results={}):
+        self.__prepare_individuals()
+
+        self.target_db = BYC_PARS.get("output", "___none___")
+        self.downstream = ["biosamples", "analyses", "variants"]
+        iid = self.import_id
+
+        if not (ds := dataset_results.get(self.dataset_id)):
+            return
+
+        ind_ids = ds["individuals.id"].get("target_values", [])
+
+        if self.limit > 0:
+            if len(ind_ids) > self.limit:
+                ind_ids = random_samples(ind_ids, self.limit)
+
+        self.import_docs = []
+        for ind_id in ind_ids:
+            self.import_docs.append({iid: ind_id})
+
+        self.__move_database_records()
+
+
+    #--------------------------------------------------------------------------#
+
+    def export_database_from_ids(self):
+        if not self.output_dir:
+            print("No output directory `--outputdir` specified => quitting ...")
+            exit()
+
+        self.__prepare_individuals()
+        # TODO: Use some default nanme but check for existence and offer deletion
+        self.target_db = BYC_PARS.get("output", f'tmpdb_{datetime.datetime.now().isoformat()}')
+        self.downstream = ["biosamples", "analyses", "variants"]
+
+        if self.target_db in BYC["DATABASE_NAMES"]:
+            print(f'¡¡¡ You cannot export using an existing database name !!!')
+            exit()
+
+        self.mongo_client[self.target_db].drop()
+        self.__move_database_records()
+        self.__export_database()
+        return self.target_db
+
+
+    #--------------------------------------------------------------------------#
     #----------------------------- Private ------------------------------------#
     #--------------------------------------------------------------------------#
 
     def __initialize_importer(self):
         BYC.update({"BYC_DATASET_IDS": BYC_PARS.get("dataset_ids", [])})
         self.dataset_id = assertSingleDatasetOrExit()
-        self.input_file = BYC_PARS.get("inputfile")
-        if not self.input_file:
-            print("No input file file specified (-i, --inputfile) => quitting ...")
-            exit()
+        if self.use_file:
+            self.input_file = BYC_PARS.get("inputfile")
+            if not self.input_file:
+                print("No input file file specified (-i, --inputfile) => quitting ...")
+                exit()
         if not BYC["TEST_MODE"]:
             tmi = input("Do you want to run in TEST MODE (i.e. no database insertions/updates)?\n(Y|n): ")
             if not "n" in tmi.lower():
@@ -254,6 +308,8 @@ class ByconautImporter():
     #--------------------------------------------------------------------------#
 
     def __read_data_file(self):
+        if not self.use_file:
+            return
         iid = self.import_id
 
         bb = ByconBundler()
@@ -280,13 +336,26 @@ class ByconautImporter():
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
 
+    def __export_database(self):
+        tds_id = self.target_db
+        db_odir = self.output_dir
+
+        e_ds_dir = Path( path.join( db_odir, tds_id ) )
+        e_ds_archive = f'{db}.tar.gz'
+        system(f'mongodump --db {db} --out {mongo_dir}')
+        system(f'cd {mongo_dir} && tar -czf {e_ds_archive} {db} && rm -rf {db}')
+
+
+    #--------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
+
     def __move_database_records(self):
         ds_id = self.dataset_id
         tds_id = self.target_db
         icn = self.import_collname
         dcs = self.downstream
+        ucs = self.upstream
         iid = self.import_id
-        fn = self.data_in.fieldnames
 
         if tds_id not in BYC["DATABASE_NAMES"]:
             print(f'¡¡¡ No existing target database defined using `--output` !!!')
@@ -309,8 +378,13 @@ class ByconautImporter():
 
         #---------------------------- Mover Stage -----------------------------#
 
+        # the `target_coll.insert_one({"id": "___init___"})` serves to initialize
+        # the target collection and to avoid the need for a separate check for
+        # the existence of the target collection
         mov_nos = {icn: 0}
-        bar = Bar("Moving ", max = len(source_ids), suffix='%(percent)d%%'+f' of {str(len(source_ids))} {icn}' ) if not BYC["TEST_MODE"] else False
+        if not BYC["TEST_MODE"]:
+            bar = Bar("Moving ", max = len(source_ids), suffix='%(percent)d%%'+f' of {str(len(source_ids))} {icn}' )
+            target_coll.insert_one({"id": "___init___"})
         for m_id in source_ids:
             d_c = source_coll.count_documents({"id": m_id})
             t_c = target_coll.count_documents({"id": m_id})
@@ -322,12 +396,15 @@ class ByconautImporter():
             if not BYC["TEST_MODE"]:
                 bar.next()
         if not BYC["TEST_MODE"]:
+            target_coll.delete_one({"id": "___init___"})
             bar.finish()
 
         for c in dcs:
-            bar = Bar(f'Moving {c} ', max = len(source_ids), suffix='%(percent)d%%'+f' of {str(len(source_ids))} {icn}' ) if not BYC["TEST_MODE"] else False
             source_coll = self.mongo_client[ds_id][c]
             target_coll = self.mongo_client[tds_id][c]
+            if not BYC["TEST_MODE"]:
+                target_coll.insert_one({"id": "___init___"})
+                bar = Bar(f'Moving {c} ', max = len(source_ids), suffix='%(percent)d%%'+f' of {str(len(source_ids))} {icn}' )
             mov_nos.update({c: 0})
             for m_id in source_ids:
                 d_c = source_coll.count_documents({iid: m_id})
@@ -340,6 +417,7 @@ class ByconautImporter():
                 if not BYC["TEST_MODE"]:
                     bar.next()
             if not BYC["TEST_MODE"]:
+                target_coll.delete_one({"id": "___init___"})
                 bar.finish()
 
         if not BYC["TEST_MODE"]:

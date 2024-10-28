@@ -9,21 +9,11 @@ from progress.bar import Bar
 from bycon import *
 from byconServiceLibs import *
 
-loc_path = path.dirname( path.abspath(__file__) )
-lib_path = path.join(loc_path , "lib")
-sys.path.append( lib_path )
-from mongodb_utils import mongodb_update_indexes
-
-services_conf_path = path.join( loc_path, "config" )
-
 ################################################################################
 ################################################################################
 ################################################################################
 
 def main():
-    initialize_bycon_service()
-    read_service_prefs("housekeeping", services_conf_path)
-
     set_collation_types()
 
     ds_id = assertSingleDatasetOrExit()
@@ -46,7 +36,7 @@ def main():
 
     if "y" in todos.get("mongodb_index_creation", "n").lower():
         print(f'\n{__hl()}==> updating indexes for {ds_id}"')
-        mongodb_update_indexes(ds_id)
+        system(f'{loc_path}/mongodbIndexer.py -d {ds_id}')
 
     #>------------------- / MongoDB index updates ----------------------------<#
 
@@ -166,8 +156,9 @@ def main():
     #>---------------------- update collations -------------------------------<#
 
     if not "n" in todos.get("update_collations", "y").lower():
-        print(f'\n{__hl()}==> executing "{loc_path}/collationsCreator.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}"\n')
-        system(f'{loc_path}/collationsCreator.py -d {ds_id}')
+        cmd = f'{loc_path}/collationsCreator.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}'
+        print(f'\n{__hl()}==> executing \n\n{cmd}\n')
+        system(cmd)
 
     #>--------------------- / update collations ------------------------------<#
 

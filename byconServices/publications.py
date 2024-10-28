@@ -3,7 +3,14 @@ from os import environ, path, pardir
 from pymongo import MongoClient
 from operator import itemgetter
 
-from bycon import BYC, BeaconErrorResponse, DB_MONGOHOST, geo_query
+from bycon import (
+    BYC,
+    BYC_PARS,
+    BeaconErrorResponse,
+    DB_MONGOHOST,
+    geo_query,
+    prdbug
+)
 from byconServiceLibs import ByconMap, ByconServiceResponse, read_service_prefs
 
 services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )

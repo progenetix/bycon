@@ -278,7 +278,7 @@ class ByconQuery():
                     queries.append(q)
                     continue
 
-        prdbug(f'??? queries: {queries}')
+        prdbug(f'__loop_multivars queries: {queries}')
 
         return queries
 

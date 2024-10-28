@@ -1,6 +1,5 @@
 import csv, re, requests
 # from attrdictionary import AttrDict
-from random import sample as randomSamples
 
 # bycon
 from bycon import RefactoredValues, prdbug, prdlhead, prjsonnice, BYC, BYC_PARS, ENV

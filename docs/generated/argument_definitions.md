@@ -441,13 +441,6 @@ output directory where supported (cmd line)
 **description:**
 output file where supported (cmd line)    
 
-### `randno` 
-**type:** integer    
-**cmdFlags:** `-r,--randno`    
-**description:**
-random number to limit processing, where supported    
-**default:** `0`    
-
 ### `min_number` 
 **type:** integer    
 **cmdFlags:** `--minNumber`    

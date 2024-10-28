@@ -441,28 +441,15 @@ class ByconBundler:
         #     return
 
         fmap_name = "frequencymap"
-
         query = CollationQuery().getQuery()
-
-        # id_q = {}
-        # if len(filters) > 0:
-        #     fids = [x.get("id", "___none___") for x in filters]
-        #     id_q = {"id": {"$in": fids}}
-        # elif len(self.collation_types) > 0:
-        #     id_q = {"collation_type": {"$in": self.collation_types}}
-
+ 
         prdbug(f'... __isetBundlesFromCollationParameters query {query}')
 
         mongo_client = MongoClient(host=DB_MONGOHOST)
         for ds_id in datset_ids:
             coll_db = mongo_client[ds_id]
             coll_ids = coll_db[ "collations" ].distinct("id", query)
-            for f_val in coll_ids:
-                f_q = { "id": f_val }
-                if not (collation_f := coll_db["frequencymaps"].find_one(f_q)):
-                    continue
-                if not (collation_c := coll_db["collations"].find_one(f_q)):
-                    continue
+            for collation_f in coll_db["frequencymaps" ].find(query):
                 if not fmap_name in collation_f:
                     continue
                 fmap_count = collation_f[ fmap_name ].get("cnv_analyses", 0)
@@ -470,8 +457,8 @@ class ByconBundler:
                     continue
                 r_o = {
                     "dataset_id": ds_id,
-                    "group_id": f_val,
-                    "label": re.sub(r';', ',', collation_c["label"]),
+                    "group_id": collation_f.get("id", ""),
+                    "label": re.sub(r';', ',', collation_f.get("label", "")),
                     "sample_count": fmap_count,
                     "frequencymap_samples": collation_f[ fmap_name ].get("frequencymap_samples", fmap_count),
                     "interval_frequencies": collation_f[ fmap_name ]["intervals"] }                    

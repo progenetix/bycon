@@ -1,22 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://progenetix.org/services/schemas/pgxCollation/v2022-03-08",
+    "$id": "https://progenetix.org/services/schemas/pgxCollation/v2024-10-17",
     "title": "pgxCollation",
-    "meta": {
-        "contributors": [
-            {
-                "description": "Michael Baudis",
-                "id": "orcid:0000-0002-9903-4248"
-            }
-        ],
-        "provenance": [
-            {
-                "description": "Progenetix `bycon` project",
-                "id": "https://github.com/progenetix/bycon/"
-            }
-        ],
-        "sb_status": "community"
-    },
     "description": "A Collation summarizes information of all biosamples matching a given term (e.g. PMID or NCIT code), as well as the connected items if the code is part of a hierarchy (paths leading to the code, child terms).",
     "properties": {
         "id": {

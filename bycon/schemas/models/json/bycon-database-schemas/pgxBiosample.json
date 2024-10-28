@@ -51,7 +51,7 @@
             },
             "examples": [
                 {
-                    "id": "pgxcohort-arraymap",
+                    "id": "pgx:cohort-arraymap",
                     "label": "arrayMap collection"
                 }
             ]

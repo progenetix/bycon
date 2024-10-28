@@ -62,7 +62,7 @@ ordered_metadata_core:
   - individual_id
   - experiment_title
   - biosample_name
-  - biosample_notes
+  - notes
   - histological_diagnosis_id
   - histological_diagnosis_label
   - experiment_id
@@ -86,6 +86,8 @@ ordered_metadata_core:
   - pathological_stage_label
   - tumor_grade_id
   - tumor_grade_label
+  - ethnicity_id
+  - ethnicity_label
   - index_disease_followup_time
   - index_disease_followup_state_id
   - index_disease_followup_state_label
@@ -95,6 +97,21 @@ ordered_metadata_core:
   - pipeline_ref
   - analysis_operation_id
   - analysis_operation_label
+  - geoprov_id
+
+
+ordered_variants_core:
+  - analysis_id
+  - biosample_id
+  - individual_id
+  - reference_name
+  - start
+  - end
+  - variant_state_id
+  - variant_state_label
+  - reference_sequence
+  - sequence
+
 
 definitions:
 
@@ -140,14 +157,6 @@ definitions:
       pipeline_ref:
         db_key: pipeline_ref
         beacon_model_path: analyses.pipelineRef
- 
- # In Beacon but not used by us
- #      library_source_id:
- #        beacon_model_path: runs.librarySource.id
- #        default: "GENEPIO:0001966"
- #      library_source_label:
- #        beacon_model_path: runs.librarySource.label
- #        default: "genomic source"
 
       # bycon &  data management specials
       analysis_operation_id:
@@ -184,23 +193,6 @@ definitions:
           - T48_Xba_051011
       data_provenance:
         db_key: info.data_provenance
-      geoprov_city:
-        type: string
-        db_key: geo_location.properties.city
-        indexed: True
-      geoprov_country:
-        type: string
-        db_key: geo_location.properties.country
-        indexed: True
-      geoprov_iso_alpha3:
-        type: string
-        db_key: geo_location.properties.ISO3166alpha3
-        indexed: True
-      geoprov_long_lat:
-        type: array
-        items:
-        type: number
-        db_key: geo_location.geometry.coordinates
 
 
 #------------------------------------------------------------------------------#
@@ -391,23 +383,31 @@ definitions:
           - pgx:cohort-TCGA
           - pgx:cohort-TCGAcancers
           - pgx:cohort-arraymap
+      geoprov_id:
+        type: string
+        db_key: geo_location.properties.id
+        indexed: True
       geoprov_city:
         type: string
         db_key: geo_location.properties.city
         indexed: True
+        computed: True
       geoprov_country:
         type: string
         db_key: geo_location.properties.country
         indexed: True
+        computed: True
       geoprov_iso_alpha3:
         type: string
         db_key: geo_location.properties.ISO3166alpha3
         indexed: True
+        computed: True
       geoprov_long_lat:
         type: array
         items:
-          type: number
+        type: number
         db_key: geo_location.geometry.coordinates
+        computed: True
 
       # special export labels
       group_id:
@@ -505,7 +505,16 @@ definitions:
       auxiliary_disease_notes:
         type: string
         db_key: auxiliary_disease.notes
-
+      ethnicity_id:
+        type: string
+        db_key: ethnicity.id
+        beacon_model_path: individuals.ethnicity.id
+        indexed: True
+      ethnicity_label:
+        type: string
+        db_key: ethnicity.label
+        beacon_model_path: individuals.ethnicity.label
+        indexed: True
 
 #------------------------------------------------------------------------------#
 
@@ -547,6 +556,7 @@ definitions:
         type: string
         db_key: location.sequence_id
         indexed: True
+        computed: True
       reference_name:
         type: string
         db_key: location.chromosome

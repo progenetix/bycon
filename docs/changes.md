@@ -6,6 +6,29 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2024-10-28 (v2.0.5)
+
+This update targets the example database:
+
+* `housekeepers/recordsSampler.py` now provides a method to create an example database (currently hard coded to `examplez`)
+based on a query towards a target database e.g. such as
+```bash
+./housekeepers/recordsSampler.py -d progenetix --filters "pgx:icdom-81703,pgx:icdom-94003" --filterLogic OR  --limit 222
+```
+* the project's `rsrc/mongodump/` directory contains now
+    - the resulting `examplez` database dump (database contents might change over time)
+    - a dump of the `_byconServicesDB` to be installed alongside for query support
+
+The [documentation](https://bycon.progenetix.org/installation/#loading-and-maintaining-data) has been updated accordingly.
+
+### 2024-10-22 (v2.0.4)
+
+* fixed new `/ids` services bug
+* fixed new `/publication` services bug
+* modifications to table definitions
+    - add `individuals.ethnicity`
+    - added variants table generation for most frequent parameters
+
 ### 2024-10-21 (v2.0.3)
 
 * bringing the documentaion into `bycon`

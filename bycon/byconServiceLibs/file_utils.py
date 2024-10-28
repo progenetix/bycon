@@ -53,7 +53,7 @@ def read_tsv_to_dictlist(filepath, max_count=0):
         for l in data:
             dictlist.append(dict(l))
     if 0 < max_count < len(dictlist):
-        dictlist = random_samples(dictlist, k=max_count)
+        dictlist = random_samples(dictlist, max_count)
 
     return dictlist, fieldnames
 
@@ -76,7 +76,7 @@ def read_www_tsv_to_dictlist(www, max_count=0):
             dictlist.append(dict(l))
 
     if 0 < max_count < len(dictlist):
-        dictlist = random_samples(dictlist, k=max_count)
+        dictlist = random_samples(dictlist, max_count)
 
     return dictlist, fieldnames
 
