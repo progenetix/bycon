@@ -1,35 +1,11 @@
-NCIT:C48699	M0 Stage Finding	235
-NCIT:C48700	M1 Stage Finding	8
-NCIT:C48701	M1a Stage Finding	2
-NCIT:C48704	MX Stage Finding	100
-NCIT:C48705	N0 Stage Finding	172
-NCIT:C95921	N0 (i-) Stage Finding	5
-NCIT:C95922	N0 (i+) Stage Finding	2
-NCIT:C95925	N0 (mol+) Stage Finding	1
-NCIT:C48706	N1 Stage Finding	29
-NCIT:C48707	N1a Stage Finding	6
-NCIT:C48708	N1b Stage Finding	4
-NCIT:C95955	N1mi Stage Finding	2
-NCIT:C48714	N3 Stage Finding	4
-NCIT:C48715	N3a Stage Finding	7
-NCIT:C48718	NX Stage Finding	40
-NCIT:C48786	N2 Stage Finding	55
-NCIT:C48711	N2a Stage Finding	3
-NCIT:C48712	N2b Stage Finding	9
-NCIT:C48713	N2c Stage Finding	6
-NCIT:C48719	T0 Stage Finding	3
-NCIT:C48720	T1 Stage Finding	33
-NCIT:C48721	T1a Stage Finding	14
-NCIT:C48722	T1b Stage Finding	18
-NCIT:C48723	T1c Stage Finding	5
-NCIT:C48724	T2 Stage Finding	95
-NCIT:C48725	T2a Stage Finding	28
-NCIT:C48726	T2b Stage Finding	5
-NCIT:C48727	T2c Stage Finding	3
-NCIT:C48728	T3 Stage Finding	68
-NCIT:C48729	T3a Stage Finding	15
-NCIT:C48730	T3b Stage Finding	9
-NCIT:C48732	T4 Stage Finding	25
-NCIT:C48733	T4a Stage Finding	14
-NCIT:C48734	T4b Stage Finding	7
-NCIT:C48737	TX Stage Finding	3
+NCIT:C48699	M0 Stage Finding	32
+NCIT:C48704	MX Stage Finding	9
+NCIT:C48705	N0 Stage Finding	27
+NCIT:C48718	NX Stage Finding	10
+NCIT:C48786	N2 Stage Finding	4
+NCIT:C48720	T1 Stage Finding	16
+NCIT:C48724	T2 Stage Finding	17
+NCIT:C48728	T3 Stage Finding	10
+NCIT:C48729	T3a Stage Finding	2
+NCIT:C48730	T3b Stage Finding	1
+NCIT:C48732	T4 Stage Finding	5

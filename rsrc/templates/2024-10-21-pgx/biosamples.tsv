@@ -1,6 +1,0 @@
-biosample_id	individual_id	biosample_notes	histological_diagnosis_id	histological_diagnosis_label	pathological_stage_id	pathological_stage_label	biosample_status_id	biosample_status_label	sample_origin_type_id	sample_origin_type_label	sampled_tissue_id	sampled_tissue_label	tnm	tumor_grade_id	tumor_grade_label	age_iso	icdo_morphology_id	icdo_morphology_label	icdo_topography_id	icdo_topography_label	pubmed_id	pubmed_label	cellosaurus_id	cellosaurus_label	cbioportal_id	cbioportal_label	tcgaproject_id	tcgaproject_label	cohort_ids	biosample_name	geoprov_city	geoprov_country	geoprov_iso_alpha3	geoprov_long_lat	group_id	group_label
-pgxbios-m2ij794p	pgxind-m2ij794p																																			
-pgxbios-m2ij7951	pgxind-m2ij7951																																			
-pgxbios-m2ij795e	pgxind-m2ij795e																																			
-pgxbios-m2ij795q	pgxind-m2ij795q																																			
-pgxbios-m2ij7963	pgxind-m2ij7963																																			

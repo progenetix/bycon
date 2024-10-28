@@ -18,6 +18,7 @@ non-variant parameters) in the local `rsrc/templates/` directory.
 def main():
     dt_m = BYC["datatable_mappings"].get("definitions", {})
     ordered_mcs = BYC["datatable_mappings"].get("ordered_metadata_core", [])
+    ordered_vcs = BYC["datatable_mappings"].get("ordered_variants_core", [])
     rsrc_p = path.join(pkg_path, "rsrc", "templates")
     root_path = input(f'Templates will be saved inside\n=> {rsrc_p}\nEnter a different path or just hit ENTER to use the default:\n')
 
@@ -59,26 +60,29 @@ def main():
     all_cols = []
 
     for t_t, t_d in dt_m.items():
+        if "genomicVariant" in t_t:
+            continue
         entity_cols = []
         table = []
         for p_n, p_d in t_d["parameters"].items():
             p_t = p_d.get("type", "string")
             entity_cols.append(p_n)
-            if "variant" not in t_t.lower() and p_n not in all_cols:
+            if not "variant" in t_t.lower() and not p_n in all_cols:
                 all_cols.append(p_n)
 
-        table.append("\t".join(entity_cols))
-
-        if "variant" not in t_t.lower():
-            for id_s in ids:
-                d_line = []
-                for p_n in entity_cols:
-                    d_line.append(id_s.get(p_n, ""))
-                table.append("\t".join(d_line))
         f_n = t_t.replace("analysis", "analyse")+"s.tsv"
         f_p = path.join(rsrc_p, f_n)
         f = open(f_p, "w")
-        f.write("\n".join(table))
+        f.write(f'{"\t".join(entity_cols)}\n')
+        if "variant" in t_t.lower():
+            f.close()
+            print(f'===> Wrote {f_p}')
+            continue
+        for id_s in ids:
+            d_line = []
+            for p_n in entity_cols:
+                d_line.append(id_s.get(p_n, ""))
+            f.write(f'{"\t".join(d_line)}\n')
         f.close()
         print(f'===> Wrote {f_p}')
 
@@ -113,6 +117,20 @@ def main():
         f.write(f'{"\t".join(d_line)}\n')  
     f.close()  
     print(f'===> Wrote {c_p}')
+
+
+    # genomicVariant
+    a_v_s = dt_m["genomicVariant"]["parameters"].keys()
+    a_v_p = path.join(rsrc_p, "variants_all.tsv")
+    c_v_p = path.join(rsrc_p, "variants.tsv")
+    f = open(a_v_p, "w")
+    f.write(f'{"\t".join(a_v_s)}\n')
+    f.close()  
+    print(f'===> Wrote {a_v_p}')
+    f = open(c_v_p, "w")
+    f.write(f'{"\t".join(ordered_vcs)}\n')
+    f.close()  
+    print(f'===> Wrote {c_v_p}')
 
     system(f'open {rsrc_p}')
 

@@ -1,7 +1,14 @@
 import re
 from os import path
 
-from bycon import BYC, BYC_PARS, print_uri_rewrite_response, rest_path_value
+from bycon import (
+    BeaconErrorResponse,
+    BYC,
+    BYC_PARS,
+    prdbug,
+    print_uri_rewrite_response,
+    rest_path_value
+)
 from byconServiceLibs import read_service_prefs
 
 ################################################################################
@@ -27,8 +34,7 @@ def ids():
     s_c = BYC.get("service_config", {})
     f_p_s = s_c.get("format_patterns", {})
 
-    if len(id_in := BYC_PARS.get("id", [])) > 0:
-        lid = id_in[0]
+    if len(lid := BYC_PARS.get("id", "")) > 0:
         for f_p in f_p_s:
             pat = re.compile(f_p["pattern"])
             if pat.match(lid):

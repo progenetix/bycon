@@ -4,7 +4,7 @@
 This service provides access to binned CNV frequency information of data
 "collations" in the Progenetix project databases. A typical use would be the
 retrieval of data for a single collation, e.g. by its identifier (e.g.
-`NCIT:C7376`, `PMID:22824167`, `pgxcohort-TCGAcancers`).
+`NCIT:C7376`, `PMID:22824167`, `pgx:cohort-TCGAcancers`).
 
 #### Response
 
@@ -95,7 +95,7 @@ The output parameter here can set set autput format. Options are:
 
 #### Examples
 
-* <https://progenetix.org/services/intervalFrequencies/?id=pgxcohort-TCGAcancers>
+* <https://progenetix.org/services/intervalFrequencies/?id=pgx:cohort-TCGAcancers>
 * <https://progenetix.org/services/intervalFrequencies/?filters=NCIT:C7376,PMID:22824167>
 * <https://progenetix.org/services/intervalFrequencies/?output=pgxseg&filters=NCIT:C7376,PMID:22824167>
 * <https://progenetix.org/services/intervalFrequencies/?output=pgxmatrix&filters=NCIT:C7376,PMID:22824167>

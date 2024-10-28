@@ -1,9 +1,9 @@
-import re, time, base36
+import re, time, base36, datetime
 from humps import decamelize
 from os import path
 from pathlib import Path
 
-from bycon import load_yaml_empty_fallback, BYC, BYC_PARS, ENV
+from bycon import load_yaml_empty_fallback, BYC, BYC_PARS, ENV, prdbug
 
 ################################################################################
 
@@ -68,6 +68,7 @@ def open_text_streaming(filename="data.pgxseg"):
 
 def close_text_streaming():
     print()
+    prdbug(f'... closing text streaming at {datetime.datetime.now().strftime("%H:%M:%S")}')
     exit()
 
 

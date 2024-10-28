@@ -46,6 +46,13 @@ def set_entities():
     This function evaluates the definitions for the entities and their selection
     by path elements (including aliases) or parameters and updates the global
     BYC definitions.
+
+    As approximation in a script one can override the original selection by providing
+    a `--responseEntityPathId analyses` (or "individuals" etc.) parameter or forcing
+    ```
+    BYC_PARS.update({"response_entity_path_id":"analyses"})
+    set_entities()
+    ```
     """
     b_e_d = BYC.get("entity_defaults", {})
     a_defs = BYC.get("argument_definitions", {})
@@ -61,16 +68,15 @@ def set_entities():
     # it should only apply to special cases (e.g. overriding the standard
     # biosample table export in services with individuals) or for command
     # line testing
-    if (e_p_id := BYC_PARS.get("request_entity_path_id", "___none___")) in dealiased_path_ids.keys():
-        BYC.update({"request_entity_path_id": e_p_id})
-    if (e_p_id := BYC_PARS.get("response_entity_path_id", "___none___")) in dealiased_path_ids.keys():
-        BYC.update({"response_entity_path_id": e_p_id})
+    if (q_p_id := BYC_PARS.get("request_entity_path_id", "___none___")) in dealiased_path_ids.keys():
+        BYC.update({"request_entity_path_id": q_p_id})
+    if (p_p_id := BYC_PARS.get("response_entity_path_id", "___none___")) in dealiased_path_ids.keys():
+        BYC.update({"response_entity_path_id": p_p_id})
 
-    p_i_d = BYC.get("request_entity_path_id", "___none___")
-    if p_i_d not in dealiased_path_ids.keys():
+    if (p_i_d := BYC.get("request_entity_path_id", "___none___")) not in dealiased_path_ids.keys():
         p_i_d = "info"
-    rp_i_d = BYC.get("response_entity_path_id", "___none___")
-    if rp_i_d not in dealiased_path_ids.keys():
+    
+    if (rp_i_d := BYC.get("response_entity_path_id", "___none___")) not in dealiased_path_ids.keys():
         rp_i_d = p_i_d
 
     # after settling the paths we can get the entity ids

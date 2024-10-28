@@ -43,7 +43,7 @@ properties:
     items:
       $ref: ../bycon-model/common/ontologyTerm.yaml
     examples:
-      - id: pgxcohort-arraymap
+      - id: pgx:cohort-arraymap
         label: arrayMap collection
   collectionMoment:
     description: >-

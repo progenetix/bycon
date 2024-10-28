@@ -1,5 +1,5 @@
 import re
-from random import sample
+from random import sample as random_samples
 from progress.bar import Bar
 
 from pymongo import MongoClient
@@ -213,7 +213,7 @@ class OntologyMaps:
         for k, v in keyed_maps.items():
             examples = self.bios_coll.distinct("notes", v["local_query"])
             s_no = min(10, len(examples))
-            e = sample(examples, s_no)
+            e = random_samples(examples, s_no)
             e = [t for t in e if len(t) > 2]
             v.update({"examples": e})
             if len(v.get("errors", 0)) > 0:

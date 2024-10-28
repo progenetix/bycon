@@ -150,7 +150,7 @@ properties:
     items:
       $ref: ../common/ontologyTerm.yaml
     examples:
-      - id: pgxcohort-arraymap
+      - id: pgx:cohort-arraymap
         label: arrayMap collection
   geoLocation:
     $ref: ../common/GeoLocation.yaml

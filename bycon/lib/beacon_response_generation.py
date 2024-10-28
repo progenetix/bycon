@@ -698,7 +698,6 @@ class ByconResultSets:
         self.result_sets = list()       # data rewrapped into the resultSets list
         self.flattened_data = list()    # data from all resultSets as flat list
         self.entity_defaults = BYC.get("entity_defaults", {})
-        self.data_collection = BYC["response_entity"].get("collection", "biosamples")
         self.response_entity_id = BYC.get("response_entity_id", "biosample")
         self.limit = BYC_PARS.get("limit")
         self.skip = BYC_PARS.get("skip")
@@ -713,6 +712,11 @@ class ByconResultSets:
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
+    def get_record_queries(self):
+        return self.record_queries
+
+
+    # -------------------------------------------------------------------------#
     def get_populated_result_sets(self):
         self.__retrieve_datasets_data()
         self.__retrieve_variants_data()
@@ -738,6 +742,24 @@ class ByconResultSets:
 
     def datasetsResults(self):
         return self.datasets_results
+
+
+    # -------------------------------------------------------------------------#
+
+    def dataset_results_individual_ids(self, ds_id="___none___"):
+        individual_ids = set()
+        self.response_entity_id = "individual"
+        self.__retrieve_datasets_data()
+        if not ds_id in self.datasets_data:
+            BYC["ERRORS"].append("no correct dataset id provided to `dataset_results_biosample_ids`")
+            return []
+
+        data = self.datasets_data[ds_id]
+        for s in data:
+            if (ind_id := s.get("individual_id")):
+                individual_ids.add(ind_id)
+
+        return list(individual_ids)
 
 
     # -------------------------------------------------------------------------#
@@ -809,7 +831,7 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __retrieve_datasets_data(self):
-        if "variants" in self.data_collection:
+        if "variant" in self.response_entity_id.lower():
             return
 
         e_d_s = BYC["entity_defaults"].get(self.response_entity_id, {})
@@ -846,7 +868,7 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __retrieve_variants_data(self):
-        if not "variants" in self.data_collection:
+        if not "variant" in self.response_entity_id.lower():
             return
 
         ds_v_start = datetime.datetime.now()

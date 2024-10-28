@@ -15,7 +15,9 @@ to write into the target directories.
 
 Versions after 2023-02-07 _only_ copy the script directories and local configuration
 directory to the server path; additionally a bycon package install is needed with
-`pip3 install "bycon>=2.0.0"` (v2 "Taito City").
+`pip3 install "bycon>=2.0.0"` (v2 "Taito City"). However, the preferred method is
+to modify your local configuration and then perform a package build, installation
+and server installation by running the `updev.sh` script.
 """
 
 ################################################################################

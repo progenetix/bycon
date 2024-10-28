@@ -3,7 +3,7 @@ from byconServiceLibs import ByconBundler, GenomeBins, ByconServiceResponse, exp
 
 """
 * https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C7376,PMID:22824167,pgx:icdom-85003
-* https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&id=pgxcohort-TCGAcancers
+* https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&id=pgx:cohort-TCGAcancers
 * http://progenetix.test/services/intervalFrequencies/?datasetIds=progenetix&output=pgxmatrix&filters=NCIT:C7376,PMID:22824167
 """
 

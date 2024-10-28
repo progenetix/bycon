@@ -102,7 +102,7 @@ bycon
 ```
 
 
-##  `bycon` library install (not recommended)
+##  `bycon` PyPi based library installation (not recommended)
 
 Since February 2023 `bycon` has been mad available as a Pypi package with standard
 installation through `pip3 install bycon`. However, this installation will lack
@@ -237,8 +237,8 @@ Some configuration:
 ### Installation Procedure
 
 The project root contains an `install.py` script to distribute the server scripts
-into the webserver root. Necessary parameters have to be adjusted in the accompagnying
-`install.yaml`.
+into the webserver root. Necessary parameters such as local paths
+have to be adjusted in the configuration files in `local/`, such as in `local_paths.yaml`.
 
 !!! warning "Configuration adjustments"
     
@@ -247,6 +247,11 @@ into the webserver root. Necessary parameters have to be adjusted in the accompa
     `bycon` package in your Python `site-packages` tree. Additional configurations
     can be provided through files in `local/....yaml` and are the copied during
     installation into `your_script_directory/local/`.
+
+!!! warning "Recommended installation"
+
+    The preferred method is to modify your local configuration and then perform a local package build, installation
+    and server installation by running the `updev.sh` script.  
 
 ### Some configurations
 
@@ -355,7 +360,30 @@ There is also a `--no-sudo` modification option: `./install.py --no-sudo`
 The `bycon` project now contains support apps for data
 importing and preprocessing; this is evolving...
 
-### Importing data `importers`
+### Option 1: Direct MongoDB example data import
+
+The project comes with a small example dataset (called `examplez`) which can be imported
+directly from the MongoDB database dump. The following command will import the data (adjust the path if necessary):
+  
+```bash
+tar -xzf ./rsrc/mongodump/examplez.tar.gz --directory ./rsrc/mongodump/
+mongosh examplez --eval 'db.dropDatabase()'
+mongorestore --db examplez ./rsrc/mongodump/examplez/
+rm -rf ./rsrc/mongodump/examplez/
+```
+
+Additionally you might want to import the services database which
+e.g. contains collections for genome positions for genes an geolocations
+of most cities (which support specific query types). 
+
+```bash
+tar -xzf ./rsrc/mongodump/_byconServicesDB.tar.gz --directory ./rsrc/mongodump/
+mongosh _byconServicesDB --eval 'db.dropDatabase()'
+mongorestore --db examplez ./rsrc/mongodump/_byconServicesDB/
+rm -rf ./rsrc/mongodump/_byconServicesDB/
+```
+
+### Option 2: Importing data `importers`
 
 ==TBD==
 

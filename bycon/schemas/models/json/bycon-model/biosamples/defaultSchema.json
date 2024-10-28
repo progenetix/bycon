@@ -144,6 +144,24 @@
                 }
             ]
         },
+        "sampleOriginType": {
+            "description": "Category of sample origin. Value from Ontology for Biomedical Investigations (OBI) material entity (BFO:0000040) ontology, e.g. 'specimen from organism' (OBI:0001479),'xenograft' (OBI:0100058), 'cell culture' (OBI:0001876)",
+            "$ref": "../common/ontologyTerm.json",
+            "examples": [
+                {
+                    "id": "OBI:0001479",
+                    "label": "specimen from organism"
+                },
+                {
+                    "id": "OBI:0001876",
+                    "label": "cell culture"
+                },
+                {
+                    "id": "OBI:0100058",
+                    "label": "xenograft"
+                }
+            ]
+        },
         "icdoMorphology": {
             "description": "The ICD-O 3 morphology code of this biosample, in a \"pseudo-prefixed\" transformation (since no direct ICD-O 3 registry can be referenced).",
             "$ref": "../common/ontologyTerm.json",
@@ -183,7 +201,7 @@
             },
             "examples": [
                 {
-                    "id": "pgxcohort-arraymap",
+                    "id": "pgx:cohort-arraymap",
                     "label": "arrayMap collection"
                 }
             ]

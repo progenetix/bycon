@@ -77,9 +77,8 @@ Some considerations:
 
 * the upstream ids (`analysis_id`, `biosample_id`, `individual_id`) have to match the
   ones in the metadata tables
-* for `sequence_id` please use the refSeq ids for GRCh38 (e.g. `refseq:NC_000005.10`
-instead of `chr5` or such); see `bycon/rsrc/genomes/grch38/refseq_chromosomes.yaml`
-
+* for `reference_name` you can just use the chromosome (`5`...) which then is
+  expanded to the refSeq ids for **GRCh38** (e.g. `refseq:NC_000005.10`); see `bycon/rsrc/genomes/grch38/refseq_chromosomes.yaml`
 ...
 
 ### 4. Import the data

@@ -25,7 +25,6 @@ log_path = path.join( loc_path, pardir, "logs" )
 ################################################################################
 
 def main():
-    initialize_bycon_service()
     GB = GenomeBins()
     ask_limit_reset()
     assertSingleDatasetOrExit()
