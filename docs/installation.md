@@ -45,18 +45,18 @@ general installation and might contain deprecated code or dependencies through t
     - `./bycon/schemas` contains Beacon and other schema files, both in YAML 
       source and JSON compiled format (JSON is read by the scripts)
 
-### `docs`
+### `./docs`
 
 * documentation, in Markdown, as source for documentation builded with `mkdocs`
 
 
-### `rsrc`
+### `./rsrc`
 
 * various resources beyond configuration data
     - mapping input table(s) for ontology trees
     - ...
 
-### `importers` and `housekeepers`
+### `./importers` and `./housekeepers`
 
 * Python scripts for data import and maintenance; see below
 
@@ -94,22 +94,22 @@ bycon
   |- local
   |   |- beacon_defaults.yaml
   |   |- dataset_definitions.yaml
+  |   |- instance_definitions.yaml
   |   `- local_paths.yaml
-  |   `- local_paths.yaml
+  |   
   |- install.py
   `- `requirements.txt` and other Python packaging files
 ...
 ```
 
+??? note "PyPi based `bycon` library installation (not recommended)""
 
-##  `bycon` PyPi based library installation (not recommended)
-
-Since February 2023 `bycon` has been mad available as a Pypi package with standard
-installation through `pip3 install bycon`. However, this installation will lack
-the server components and is by itself only suitable for library utilization. 
-In contrast to the package manager based library installations we highly recommend
-to install locally from the source, using the installer provided with the project. 
-Please follow the *Beacon Server Installation* procedure below.
+    Since February 2023 `bycon` has been mad available as a Pypi package with standard
+    installation through `pip3 install bycon`. However, this installation will lack
+    the server components and is by itself only suitable for library utilization. 
+    In contrast to the package manager based library installations we highly recommend
+    to install locally from the source, using the installer provided with the project. 
+    Please follow the *Beacon Server Installation* procedure below.
 
 ## Beacon Server Installation
 
@@ -178,8 +178,8 @@ Some configuration:
     * we also use a `/bycon` wrapper directory inside the CGI dir (for hosting the
       `beaconServer` and optionally `services` directories with their `....py`
       scripts)
-    * we use a rewrite directive to the main beacon (& optional services) apps which
-      handle then path deparsing and calling of individual apps:
+    * **we use a rewrite directive to the main beacon** (& optional services) apps which
+      handle then path deparsing and calling of individual apps (see box below)
 - a server-writable temporary directory
     * our use: `/Library/WebServer/Documents/tmp/` 
 
@@ -257,10 +257,10 @@ have to be adjusted in the configuration files in `local/`, such as in `local_pa
 
 #### Preamble & Imports
 
-The scripts in `beaconServer` and `byconServices` are configured as exacutables using
+The scripts in `beaconServer` and `byconServices` are configured as executables using
 the system Python `#!/usr/bin/env python3`.
 
-#### `local/authorizations.yaml` (**experimental**)
+#### `./local/authorizations.yaml` (**experimental**)
 
 While the Progenetix related prjects do not use any authentication
 procedures we provide an experimental framework for setting
@@ -286,7 +286,7 @@ testuser:
   examplez: record    
 ```
 
-#### `local/local_paths.yaml`
+#### `./local/local_paths.yaml`
 
 Here at minimum the paths for the webserver `tmp` has to be defined (path elements
 as list items):
@@ -302,7 +302,7 @@ server_tmp_dir_loc:
 server_tmp_dir_web: /tmp
 ```
 
-#### `local/dataset_definitions.yaml`
+#### `./local/dataset_definitions.yaml`
 
 Please modify the data here for your local datasets. The schema should follow
 this default, with dataset ids as the root parameters:
@@ -331,7 +331,12 @@ This file defines the different Beacon instances provided through
 your installation, e.g. their `info` endpoint's content, URLs
 and potentially additional entry types supported.
 
-==TBD==
+The file has 2 root parameters for instance definitions:
+
+* **`local`** can be used to override package provided `beacon_defaults` (_i.e._ the `local.beacon.defaults` object is merged with the `config.yaml` provided global `BYC["beacon_defaults"]` object) and `entity_defaults` can modify or add to the ones defined in bycon's `entity_defaults.yaml`
+* **domain specific** root parameters allow to modify domains etc. for multi-beacon
+  setups, including again entity and beacon defaults per domain/beacon
+
 
 ## Local stack installation 
 
@@ -385,6 +390,22 @@ rm -rf ./rsrc/mongodump/_byconServicesDB/
 
 ### Option 2: Importing data `importers`
 
+#### Core Data
+
+A basic setup for a Beacon compatible database - as supported by the `bycon` package -
+consists of the core data collections mirroring the Beacon default data model:
+
+* `variants`
+* `analyses` (which covers parameters from both Beacon `analysis` and `run` entity schemas)
+* `biosamples`
+* `individuals`
+
+Databases are implemented in an existing MongoDB setup using utility applications by importing data from tab-delimited data files. In principle, only 2 import files are needed for inserting and updating of records:
+* a file for the non-variant metadata[^1] with specific header values, where as
+  the absolute minimum id values for the different entities have to be provided
+* a file for genomic variants, again with specific headers but also containing
+  the upstream ids for the corresponding analysis, biosample and individual
+
 The `importers` directory contains scripts supporting data import with a separate [documentation page](./importers/).
 
 ### Maintaining, pre-processing or deleting data `housekeepers`
@@ -413,4 +434,5 @@ or from the corresponding one in the web cgi directory, if installed.
 Of note the `--requestEntityPathId biosamples` etc. here simulates
 the corresponding REST path following the `/beacon/` component.
 
+[^1]: Metadata in biomedical genomics is "everything but the sequence variation"
 
