@@ -31,7 +31,7 @@ The [documentation](https://bycon.progenetix.org/installation/#loading-and-maint
 
 ### 2024-10-21 (v2.0.3)
 
-* bringing the documentaion into `bycon`
+* bringing the documentation into `bycon`
     - seriously using Python heredocs, starting with embedding the main information
       about their functionality into the service caller functions
     - project root `markdowner.py` now parses services (and some preference
@@ -337,7 +337,7 @@ a few parameters:
       by a future parsing of simple statements like `t(8;14)(q24;q32)`
 * moved some cytoband functionality to the main `bycon` package, from `byconaut`,
   to allow processing of cytoband requests in the main Beacon service
-* `byconaut` was restructured for exacutables, with `housekeepers` and `importers`
+* `byconaut` was restructured for executables, with `housekeepers` and `importers`
   directories
 
 ### 2024-03-25 (v1.6.4)
