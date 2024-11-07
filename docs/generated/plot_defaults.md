@@ -32,6 +32,19 @@ A version of the histogram with predefined parameters for representing a small a
     - `plot_axis_y_max`: `80`    
 **modded:** histoplot    
 
+### `histocircleplot` 
+**description:**
+A version circular of the histogram.    
+**data_key:** interval_frequencies_bundles    
+**data_type:** collations    
+**mods:**  
+    - `plot_width`: `640`      
+    - `plot_chro_height`: `16`      
+    - `plot_axislab_y_width`: `0`      
+    - `plot_area_opacity`: `0`      
+    - `plot_dendrogram_width`: `0`      
+    - `plot_labelcol_width`: `0`    
+
 ### `samplesplot` 
 **description:**
 A plot of the called CNV segments per sample, with the samples ordered by their clustering (_i.e._ similarity of binned CNV data).    
@@ -355,6 +368,22 @@ text padding of markers versus background/box
     - `stalk`: `{'0%': 'rgb(39,39,39)', '100%': 'rgb(0,0,0)'}`      
     - `acen`: `{'0%': 'rgb(163,55,247)', '100%': 'rgb(138,43,226)'}`    
 
+### `histoval_directions` 
+**type:** object    
+**default:**  
+    - `gain_frequency`: `1`      
+    - `gain_hlfrequency`: `1`      
+    - `loss_frequency`: `-1`      
+    - `loss_hlfrequency`: `-1`    
+
+### `histoval_colorkeys` 
+**type:** object    
+**default:**  
+    - `gain_frequency`: `plot_dup_color`      
+    - `gain_hlfrequency`: `plot_hldup_color`      
+    - `loss_frequency`: `plot_del_color`      
+    - `loss_hlfrequency`: `plot_hldel_color`    
+
 ### `tiles_source` 
 **default:** `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`    
 
@@ -405,17 +434,3 @@ text padding of markers versus background/box
 
 ### `zoom_max` 
 **default:** `14`    
-
-### `plot_variant_types` 
-**type:** object    
-**default:**  
-    - `EFO:0030065`: `{'color_key': 'plot_loh_color', 'label': 'copy-neutral loss of heterozygosity'}`      
-    - `EFO:0030067`: `{'color_key': 'plot_del_color', 'label': 'copy number loss'}`      
-    - `EFO:0030068`: `{'color_key': 'plot_del_color', 'label': 'low-level copy number loss'}`      
-    - `EFO:0020073`: `{'color_key': 'plot_hldel_color', 'label': 'high-level copy number loss'}`      
-    - `EFO:0030069`: `{'color_key': 'plot_hldel_color', 'label': 'complete genomic deletion'}`      
-    - `EFO:0030070`: `{'color_key': 'plot_dup_color', 'label': 'copy number gain'}`      
-    - `EFO:0030071`: `{'color_key': 'plot_dup_color', 'label': 'low-level copy number gain'}`      
-    - `EFO:0030072`: `{'color_key': 'plot_hldup_color', 'label': 'high-level copy number gain'}`      
-    - `EFO:0030073`: `{'color_key': 'plot_hldup_color', 'label': 'focal genome amplification'}`      
-    - `EFO:0001059`: `{'color_key': 'plot_snv_color', 'label': 'sequence_alteration'}`    

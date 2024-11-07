@@ -22,7 +22,7 @@ def set_beacon_defaults():
 ################################################################################
 
 def initialize_bycon_service():
-    update_requested_schema_from_request()
+    # update_requested_schema_from_request()
     set_special_modes()
     select_dataset_ids()
     set_user_name()
@@ -107,15 +107,15 @@ def set_entities():
 
 ################################################################################
 
-def update_requested_schema_from_request():
-    # query_meta may come from the meta in a POST
-    b_qm = BYC.get("query_meta", {})
+# def update_requested_schema_from_request():
+#     # query_meta may come from the meta in a POST
+#     b_qm = BYC.get("query_meta", {})
 
-    # TODO: check if correct schema in request
-    if "requested_schema" in BYC_PARS:
-        BYC.update({"response_entity_id": BYC_PARS.get("requested_schema", BYC["response_entity_id"])})
-    elif "requested_schemas" in b_qm:
-        BYC.update({"response_entity_id": b_qm["requested_schemas"][0].get("entity_type", BYC["response_entity_id"])})
+#     # TODO: check if correct schema in request
+#     if "requested_schema" in BYC_PARS:
+#         BYC.update({"response_entity_id": BYC_PARS.get("requested_schema", BYC["response_entity_id"])})
+#     elif "requested_schemas" in b_qm:
+#         BYC.update({"response_entity_id": b_qm["requested_schemas"][0].get("entity_type", BYC["response_entity_id"])})
 
 
 ################################################################################

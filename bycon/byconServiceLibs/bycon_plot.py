@@ -1,4 +1,4 @@
-import base64, inspect, io, re, sys
+import base64, inspect, io, math, re, sys
 from datetime import datetime, date
 from humps import decamelize
 from os import environ, path
@@ -30,6 +30,7 @@ class ByconPlotPars:
     def __init__(self):
         self.plot_type = BYC_PARS.get("plot_type", "histoplot")
         self.plot_defaults = BYC.get("plot_defaults", {})
+        self.plot_variant_types = self.plot_defaults.get("plot_variant_types", {})
         p_t_s = self.plot_defaults.get("plot_type_defs", {})
         p_d_p = self.plot_defaults.get("plot_parameters", {})
         self.plv = {}
@@ -44,7 +45,7 @@ class ByconPlotPars:
         for p_k, p_d in p_d_p.items():
             if "default" in p_d:
                 self.plv.update({p_k: p_d["default"]})
-                if (p_k := p_d_m):
+                if p_k in p_d_m:
                     self.plv.update({p_k: p_d_m[p_k]})
             else:
                 self.plv.update({p_k: ""})
@@ -72,6 +73,12 @@ class ByconPlotPars:
 
     def plotDefaults(self):
         return self.plv
+
+
+    # -------------------------------------------------------------------------#
+
+    def plotVariantTypes(self):
+        return self.plot_variant_types
 
 
     # -------------------------------------------------------------------------#
@@ -111,7 +118,6 @@ class ByconPlotPars:
                 dbm = f'{p_k}: {p_d} ({p_k_t}), type {type(p_d)}'
                 if "array" in p_k_t:
                     p_i_t = p_d_p[p_k].get("items", "string")
-                    prdbug(f'... plot parameter {p_k}: {p_d}')
                     if type(p_d) is not list:
                         p_d = re.split(',', p_d)
                     if "int" in p_i_t:
@@ -131,6 +137,7 @@ class ByconPlotPars:
                     self.plv.update({p_k: p_d})
                 else:
                     self.plv.update({p_k: str(p_d)})
+
 
 
 ################################################################################
@@ -156,10 +163,11 @@ class ByconPlot:
         prdbug(f"... plot_type: {self.plot_type}")
         self.plot_type_defs = bpp.plotTypeDefinitions()
         self.plv = bpp.plotDefaults()
+        self.plot_variant_types = bpp.plotVariantTypes()
 
-        self.Cytobands = Cytobands()
-        self.cytolimits = self.Cytobands.get_all_cytolimits()
-        self.cytobands = self.Cytobands.get_all_cytobands()
+        self.cytobands = Cytobands()
+        self.cytolimits = self.cytobands.get_all_cytolimits()
+        self.cytobands = self.cytobands.get_all_cytobands()
 
         self.plot_data_bundle = plot_data_bundle
         self.svg = None
@@ -203,12 +211,8 @@ class ByconPlot:
         self.__initialize_plot_values()
         if self.__plot_respond_empty_results() is False:
             self.__plot_add_title()
-            self.__plot_add_cytobands()
-            self.__plot_add_samplestrips()
-            self.__plot_add_histodata()
-            self.__plot_add_probesplot()
-            self.__plot_add_cluster_tree()
-            self.__plot_add_markers()
+            self.__try_plot_circular()
+            self.__try_plot_linear()
         self.__plot_add_footer()
 
         self.svg = self.__create_svg()
@@ -218,6 +222,31 @@ class ByconPlot:
         prdbug(dbm)
 
 
+    # -------------------------------------------------------------------------#
+
+    def __try_plot_circular(self):
+        if not "circ" in self.plot_type:
+            return
+        self.__plot_add_circle_settings()
+        self.__plot_add_cytobands_circle()
+        self.__plot_add_histogram_circle()
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __try_plot_linear(self):
+        if "circ" in self.plot_type:
+            return
+        self.__plot_add_cytobands()
+        self.__plot_add_samplestrips()
+        self.__plot_add_histodata()
+        self.__plot_add_probesplot()
+        self.__plot_add_cluster_tree()
+        self.__plot_add_markers()
+
+
+    # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
 
     def __initialize_plot_values(self):
@@ -388,6 +417,305 @@ class ByconPlot:
         self.plv["Y"] += self.plv["plot_title_font_size"]
 
 
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __plot_add_circle_settings(self):
+        # this makes it somehow related to chromosome size
+        # TODO: make it a proper plotPars parameter
+        chrobasegap = 6000000
+        g_w_gaps = self.plv.get("plot_genome_size", 1) + chrobasegap * (len(self.plv["plot_chros"]) + 7)
+        gapf = chrobasegap / g_w_gaps
+
+        g_w = self.plv.get("plot_region_gap_width", 2)
+
+        r_o = self.plv["plot_area_width"] / 2
+        r_l = r_o - self.plv["plot_font_size"]
+        r_chr_o = r_l - g_w
+        r_chr_i = r_chr_o - self.plv.get("plot_chro_height", 12)
+        r_h_o = r_chr_i - g_w
+        r_h_zero = r_h_o - self.plv["plot_area_height"] / 2
+        r_h_i = r_h_o - self.plv["plot_area_height"]
+
+        # self.__plot_add_cytoband_svg_gradients()
+        self.__cytoband_solid_colors()
+        self.plv.update({
+            "start_f": -0.25 + 4 * gapf,
+            "circ_gap_fraction": gapf,
+            "circ_genome_with_gaps": g_w_gaps,
+            "circ_center_x": self.plv["plot_area_x0"] + r_o,
+            "circ_center_y": self.plv["Y"] + r_o,
+            "circ_radius_outer": r_o,
+            "circ_radius_label": r_l,
+            "circ_radius_chro_o": r_chr_o,
+            "circ_radius_chro_i": r_chr_i,
+            "circ_radius_hist_o": r_h_o,
+            "circ_radius_hist_zero": r_h_zero,
+            "circ_radius_hist_i": r_h_i
+        })
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __plot_add_cytobands_circle(self):
+        if self.plv["plot_chro_height"] < 1:
+            return
+
+        g_w_gaps = self.plv["circ_genome_with_gaps"]
+        area_f_0 = self.plv["start_f"]
+
+        for chro in self.plv["plot_chros"]:
+            c_l = self.cytolimits.get(str(chro), {})
+            chr_f = c_l["size"] / g_w_gaps
+            lab_f = area_f_0 + chr_f / 2
+            l_x, l_y, l_red, l_deg = self.__pgCirclePoint(self.plv["circ_radius_label"], lab_f)
+            l_deg += 90
+
+            self.plv["pls"].append("""
+    <text x="{}" y="{}"
+        style="text-anchor: middle; font-size: {}px; fill: {};"
+        transform="rotate({} {} {})">
+        {}
+    </text>',
+            """.format(
+                l_x, l_y,
+                self.plv["plot_font_size"],
+                self.plv["plot_font_color"],
+                l_deg,
+                l_x,
+                l_y,
+                chro
+            ))
+
+            # bands
+
+            chr_cb_s = list(filter(lambda d: d["chro"] == chro, self.cytobands.copy()))
+
+            last = len(chr_cb_s) - 1
+
+            for cb in chr_cb_s:
+                s_b = cb["start"]
+                e_b = cb["end"]
+                c = cb["staining"]
+
+                cb_l = int(e_b) - int(s_b)
+
+                cbPlotStartF = area_f_0
+                cbPlotStopF = area_f_0 + cb_l / g_w_gaps
+
+                rgb = self.plv["cytoband_colors"][c]
+
+                pieSVG = self.__pgSVGpie(
+                    self.plv["circ_radius_chro_o"],
+                    self.plv["circ_radius_chro_i"],
+                    cbPlotStartF,
+                    cbPlotStopF,
+                    rgb
+                )
+
+                self.plv["pls"].append(pieSVG)
+
+                area_f_0 = cbPlotStopF
+
+            area_f_0 += self.plv["circ_gap_fraction"]
+
+        self.plv["Y"] += self.plv["plot_area_width"]
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __plot_add_histogram_circle(self):
+        f_set = self.plv["results"][0]
+        i_f = f_set.get("interval_frequencies", [])
+        cnv_c = self.plv.get("histoval_colorkeys", {})
+        cnv_f = self.plv.get("histoval_directions", {})
+        area_f_0 = self.plv["start_f"]
+
+        for chro in self.plv["plot_chros"]:
+            c_l = self.cytolimits.get(str(chro), {})
+            chr_f = c_l["size"] / self.plv["circ_genome_with_gaps"]
+            c_f_s = area_f_0
+            c_f_e = area_f_0 + chr_f
+            z_x, z_y, z_rad, z_deg = self.__pgCirclePoint(self.plv["circ_radius_hist_zero"], c_f_s)
+            e_x, e_y, e_rad, e_deg = self.__pgCirclePoint(self.plv["circ_radius_hist_zero"], c_f_e)
+
+            largeArcFlag = 0
+            if c_f_s > 0.75:
+                largeArcFlag = 1
+
+            # background
+            pieSVG = self.__pgSVGpie(
+                self.plv["circ_radius_hist_o"],
+                self.plv["circ_radius_hist_i"],
+                c_f_s,
+                c_f_e,
+                self.plv.get("plot_area_color", "#66ddff")
+            )
+            self.plv["pls"].append(pieSVG)
+
+            c_i_f = list(filter(lambda d: d["reference_name"] == chro, i_f.copy()))
+            c_i_no = len(c_i_f)
+
+            # using explicit order for overplotting with HL values
+            for GL in ["gain_frequency", "gain_hlfrequency", "loss_frequency", "loss_hlfrequency"]:
+                p_c_k = cnv_c.get(GL, "___none___")
+                p_c = self.plv.get(p_c_k, "#808080")
+                h_f = cnv_f.get(GL, 1)
+
+                histoSVG = f'\n<path d= "' + " ".join([str(x) for x in [
+                    'M', e_x, e_y,
+                    'A', self.plv["circ_radius_hist_zero"], self.plv["circ_radius_hist_zero"],
+                    '0', largeArcFlag, '0', z_x, z_y,
+                    'L ']])
+
+                for c_i_i, i_v in enumerate(c_i_f, start=1):
+                    i_s = i_v.get("start", 0)
+                    m = i_s + (i_v.get("end", 0) - i_s) / 2
+                    l_f_p = m / self.plv["circ_genome_with_gaps"]
+                    l_f_f = area_f_0 + l_f_p
+                    v = i_v.get(GL, 0)
+                    h = v * self.plv["plot_y2pf"] * h_f
+                    r_v = self.plv["circ_radius_hist_zero"] + h
+                    s_x, s_y, s_rad, s_deg = self.__pgCirclePoint(r_v, l_f_f)
+                    prdbug(f'... {GL} {v} -> {r_v} -> {s_x} {s_y}')
+                    histoSVG += f'{s_x} {s_y} '
+
+                histoSVG += f' Z" style="stroke-width: 0.0;  fill: {p_c};" />'
+                self.plv["pls"].append(histoSVG)
+            area_f_0 += chr_f + self.plv["circ_gap_fraction"]
+
+        self.__plot_histogram_circle_add_grid()
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __plot_histogram_circle_add_grid(self):
+        area_f_0 = self.plv["start_f"]
+        u = self.plv["plot_label_y_unit"]
+        self.plv["styles"].append(
+            f'.label-y-c {{text-anchor: middle; fill: {self.plv["plot_label_y_font_color"]}; font-size: {self.plv["plot_label_y_font_size"]}px;}}'
+        )
+        self.plv["styles"].append(
+            f'.gridline {{stroke-width: {self.plv["plot_grid_stroke"]}px; stroke: {self.plv["plot_grid_color"]}; opacity: {self.plv["plot_grid_opacity"]} ; }}',
+        )
+
+        labs = []
+        for labv in self.plv["plot_label_y_values"]:
+            labs.append(labv)
+            labs.append(-labv)
+
+        top_lab_y_0 = self.plv["circ_center_y"] - self.plv["circ_radius_hist_zero"]
+        top_lab_x = self.plv["circ_center_x"]
+
+        for y_m in labs:
+            y_l_y = top_lab_y_0 + y_m * self.plv["plot_y2pf"] + 3
+            self.plv["pls"].append(f'<text x="{top_lab_x}" y="{y_l_y}" class="label-y-c">{y_m}{u}</text>')
+
+        labs.append(0)
+
+        for chro in self.plv["plot_chros"]:
+            c_l = self.cytolimits.get(str(chro), {})
+            chr_f = c_l["size"] / self.plv["circ_genome_with_gaps"]
+            c_f_s = area_f_0
+            c_f_e = area_f_0 + chr_f
+
+            largeArcFlag = 0
+            if c_f_s > 0.75:
+                largeArcFlag = 1
+
+            for y_m in labs:
+                if abs(y_m) >= self.plv["plot_axis_y_max"]:
+                    continue
+                grad = self.plv["circ_radius_hist_zero"] + y_m * self.plv["plot_y2pf"]
+                line = self.__pgSVGarc(
+                    grad,
+                    c_f_s,
+                    c_f_e,
+                    self.plv.get("plot_grid_color", "#66ddff")
+                )
+                self.plv["pls"].append(line)
+            area_f_0 += chr_f + self.plv["circ_gap_fraction"]
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __pgCirclePoint(self, radius, circ_f=0):
+        """
+        Radius and circle fraction are provided as variables while the center
+        is inheruted.
+        """
+        pointRad = circ_f * 2 * math.pi;
+        pointDeg = circ_f * 360;
+        x = round(math.cos(pointRad) * radius + self.plv.get("circ_center_x", 0), 2)
+        y = round(math.sin(pointRad) * radius + self.plv.get("circ_center_y", 0), 2)
+
+        return  x, y, pointRad, pointDeg
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+
+    def __pgSVGpie(
+        self,
+        radiusi,
+        radiuso,
+        piestartf,
+        piestopf,
+        rgb
+    ):
+
+        largeArcFlag = 0
+        if piestopf - piestartf > 0.5:
+            largeArcFlag = 1
+        startXi, startYi, irad, ideg = self.__pgCirclePoint(radiusi, piestartf)
+        startXo, startYo, irad, ideg = self.__pgCirclePoint(radiuso, piestartf)
+        stopXi, stopYi, erad, edeg = self.__pgCirclePoint(radiusi, piestopf)
+        stopXo, stopYo, erad, edeg = self.__pgCirclePoint(radiuso, piestopf)
+
+        svgpath = " ".join([str(x) for x in [
+            'M', startXi, startYi,
+            'A', radiusi, radiusi,
+            0, largeArcFlag, 1, stopXi, stopYi,
+            'L', stopXo, stopYo, 'A', radiuso, radiuso,
+            0, largeArcFlag, 0, startXo, startYo
+        ]])
+
+        return f'<path d="{svgpath} Z" fill="{rgb}" stroke="none" />'
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+
+    def __pgSVGarc(
+        self,
+        radius,
+        arcstartf,
+        arcstopf,
+        rgb
+    ):
+
+        largeArcFlag = 0
+        if arcstopf - arcstartf > 0.5:
+            largeArcFlag = 1
+        startX, startY, irad, ideg = self.__pgCirclePoint(radius, arcstartf)
+        stopX, stopY, erad, edeg = self.__pgCirclePoint(radius, arcstopf)
+
+        degdelta = edeg - ideg
+
+        svgpath = " ".join([str(x) for x in [
+            'M', startX, startY,
+            'A', radius, radius,
+            degdelta, largeArcFlag, 1, stopX, stopY
+        ]])
+
+        return f'<path d="{svgpath}" fill="none" stroke="{rgb}" />'
+
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
 
@@ -407,7 +735,6 @@ class ByconPlot:
 
         for chro in self.plv["plot_chros"]:
             c_l = self.cytolimits.get(str(chro), {})
-
             chr_w = c_l["size"] * self.plv["plot_b2pf"]
             chr_c = x + chr_w / 2
 
@@ -485,6 +812,16 @@ class ByconPlot:
             c_defs += f'\n</linearGradient>'
 
         self.plv["pls"].insert(0, c_defs)
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __cytoband_solid_colors(self):
+
+        self.plv["cytoband_colors"] = {}
+        for cs_k, cs_c in self.plv["cytoband_shades"].items():
+            self.plv["cytoband_colors"].update({cs_k: cs_c["100%"]})
 
 
     # -------------------------------------------------------------------------#
@@ -571,7 +908,7 @@ class ByconPlot:
     def __plot_add_one_samplestrip(self, s):
         x = self.plv["plot_area_x0"]
         h = self.plv["plot_samplestrip_height"]
-        pvts = self.plv.get("plot_variant_types", {})
+        pvts = self.plot_variant_types
 
         col_c = {}
         for vt, cd in pvts.items():
@@ -722,19 +1059,8 @@ class ByconPlot:
         # TODO: in contrast to the Perl version here we don't correct for interval
         #       sets which _do not_ correspond to the full chromosome coordinates
 
-        cnv_c = {
-            "gain_frequency": self.plv["plot_dup_color"],
-            "loss_frequency": self.plv["plot_del_color"],
-            "gain_hlfrequency": self.plv["plot_hldup_color"],
-            "loss_hlfrequency": self.plv["plot_hldel_color"]
-        }
-        # just to have + / - direction by key
-        cnv_f = {
-            "gain_frequency": -1,
-            "gain_hlfrequency": -1,
-            "loss_frequency": 1,
-            "loss_hlfrequency": 1
-        }
+        cnv_c = self.plv.get("histoval_colorkeys", {})
+        cnv_f = self.plv.get("histoval_directions", {})
 
         for chro in self.plv["plot_chros"]:
 
@@ -746,9 +1072,9 @@ class ByconPlot:
 
             # here w/ given order for overplotting the HL ones ...
             for GL in ["gain_frequency", "gain_hlfrequency", "loss_frequency", "loss_hlfrequency"]:
-
-                p_c = cnv_c[GL]
-                h_f = cnv_f[GL]
+                p_c_k = cnv_c.get(GL, "___none___")
+                p_c = self.plv.get(p_c_k, "#808080")
+                h_f = cnv_f.get(GL, 1)
 
                 p = f'<polygon points="{round(x, 1)},{round(h_y_0, 1)}'
 
@@ -760,7 +1086,7 @@ class ByconPlot:
                     e = i_x_0 + i_v.get("end", 0) * self.plv["plot_b2pf"]
                     v = i_v.get(GL, 0)
                     h = v * self.plv["plot_y2pf"]
-                    h_p = h_y_0 + h * h_f
+                    h_p = h_y_0 - h * h_f
 
                     point = f' {round(s, 1)},{round(h_p, 1)}'
 
@@ -1289,7 +1615,7 @@ class ByconPlot:
             return
         g_l = []
         for q_g in g_s_s:
-            cytoBands, chro, start, end = self.Cytobands.bands_from_cytostring(q_g)
+            cytoBands, chro, start, end = self.cytobands.bands_from_cytostring(q_g)
             if len(cytoBands) < 1:
                 continue
             m = self.__make_marker_object(

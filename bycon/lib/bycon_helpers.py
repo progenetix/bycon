@@ -93,7 +93,7 @@ class RefactoredValues():
     # -------------------------------------------------------------------------#
 
     def __cast_type(self, defs, p_type, p_value):
-        prdbug(f'casting {p_type} ... {p_value}')
+        # prdbug(f'casting {p_type} ... {p_value}')
         if "object" in p_type:
             return self.__split_string_to_object(defs, p_value)
         if "int" in p_type:

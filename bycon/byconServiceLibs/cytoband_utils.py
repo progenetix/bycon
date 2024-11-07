@@ -1,8 +1,11 @@
-import csv, datetime, re, time, base36, yaml
+import csv, datetime, re, sys, time, base36, yaml
 from os import environ, path, pardir
 
 from bycon import BYC, Cytobands, ByconVariant, ChroNames
-from byconServiceLibs import ByconID
+
+services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
+sys.path.append( services_lib_path )
+from service_helpers import ByconID
 
 ################################################################################
 ################################################################################

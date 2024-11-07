@@ -25,8 +25,9 @@ def export_datatable_download(flattened_data):
             parameter_type = par_defs.get("type", "string")
             db_key = par_defs.get("db_key", "___undefined___")
             v = get_nested_value(pgxdoc, db_key)
+            # TODO !!! This does not handle the object exports properly !!!
             if isinstance(v, list):
-                line.append("::".join(map(str, (v))))
+                line.append("&&".join(map(str, (v))))
             else:
                 line.append(str(v))
         print("\t".join( line ))
@@ -73,7 +74,8 @@ def import_datatable_dict_line(parent, fieldnames, lineobj, primary_scope="biosa
             else:
                 v = ""
         else:
-            v = RefactoredValues(par_defs).refVal(v.split(","))
+            split_by = par_defs.get("split_by", "&&")
+            v = RefactoredValues(par_defs).refVal(v.split(split_by))
 
         assign_nested_value(parent, dotted_key, v, par_defs)
 

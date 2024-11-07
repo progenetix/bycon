@@ -8,6 +8,7 @@ from config import *
 
 ################################################################################
 
+# TODO
 class ByconParameters:
     def __init__(self):
         self.arg_defs = BYC.get("argument_definitions", {})
@@ -187,17 +188,33 @@ def rest_path_value(key=""):
 ################################################################################
 
 def form_return_listvalue(form_data, parameter):
+    """
+    This function returns a list of values from a form data object. Additionally
+    it performs an explicit merge-split cycle on the values which have a
+    `type: array` definition in `argument_definitions` to ensure that e.g. multi-value
+    versions in GET requests are correctly processed.
+    """
+    a_defs = BYC.get("argument_definitions", {})
+    p_defs = a_defs.get(parameter, {})
+    p_type = p_defs.get("type", "string")
     l_v = []
-    if len(form_data) > 0:
-        if parameter in form_data:
-            v = form_data.getlist(parameter)
-            if "null" in v:
-                v.remove("null")
-            if "undefined" in v:
-                v.remove("undefined")
-            if len(v) > 0:
-                l_v = ','.join(v)
-                l_v = l_v.split(',')
+
+    if len(form_data) < 1: return l_v
+    if not parameter in form_data: return l_v
+
+    v = form_data.getlist(parameter)
+
+    if "null" in v: v.remove("null")
+    if "undefined" in v: v.remove("undefined")
+    if "None" in v: v.remove("None")
+
+    if len(v) < 1: return l_v
+
+    if "array" in p_type:
+        l_v = ','.join(v)
+        l_v = l_v.split(',')
+    else:
+        l_v = v
     return l_v
 
 

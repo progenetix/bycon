@@ -47,7 +47,6 @@ class ByconBundler:
         self.callsetVariantsBundles = []
         self.intervalFrequenciesBundles = []
         self.limit = BYC_PARS.get("limit", 0)
-        prdbug(f'... ByconBundler - limit: {self.limit}')
         self.skip = BYC_PARS.get("skip", 0)
 
         self.bundle = {
@@ -251,7 +250,6 @@ class ByconBundler:
 
     def __callsets_bundle_from_result_set(self, bundle_type="analyses"):
         # TODO: doesn't really work for biosamples until we have status maps etc.
-        # prdbug(self.datasets_results)
         for ds_id, ds_res in self.datasets_results.items():
             res_k = f'{bundle_type}.id'
             if not ds_res:
@@ -339,6 +337,7 @@ class ByconBundler:
         GB = GenomeBins()
 
         for v in varlines:
+            # prdbug(f'... __keyed_bundle_add_variants_from_lines variant {self.data}')
             bs_id = v.get("biosample_id", "___none___")
 
             # If the biosample exists in metadata all the other items will exist by id
@@ -357,7 +356,7 @@ class ByconBundler:
             
             bios = bios_ided.get(bs_id)
             cs = cs_ided.get(cs_id)
-            ind_id = bios.get("individual_id", "___nothing___")
+            ind_id = bios.get("individual_id", "___none___")
             ind = inds_ided.get(ind_id)
 
             update_v = {
@@ -368,11 +367,9 @@ class ByconBundler:
 
             update_v = import_datatable_dict_line(update_v, fieldnames, v, "genomicVariant")
             update_v = ByconVariant().pgxVariant(update_v)
-
             update_v.update({
                 "updated": datetime.datetime.now().isoformat()
             })
-
             vars_ided[cs_id].append(update_v)
 
         for cs_id, cs_vars in vars_ided.items():

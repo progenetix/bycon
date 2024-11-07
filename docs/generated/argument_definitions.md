@@ -57,12 +57,6 @@ The requested granularity of the beacon
   a special response entity in byconaut services (e.g. `indviduals`
   in `/sampletable/`)    
 
-### `requested_schema` 
-**type:** string    
-**cmdFlags:** `--requestedSchema`    
-**description:**
-requested schema, e.g. biosample    
-
 ### `include_resultset_responses` 
 **type:** string    
 **cmdFlags:** `--includeResultsetResponses`    

@@ -1,15 +1,18 @@
-import datetime
+import datetime, sys
 from os import path
 from progress.bar import Bar
 from pymongo import MongoClient
 from random import sample as random_samples
 
 # bycon
-from config import *
-from bycon_helpers import prjsonnice, prdbug
-from variant_mapping import ByconVariant
+from bycon import BYC, BYC_PARS, ByconVariant, DB_MONGOHOST, prjsonnice, prdbug
 
-from byconServiceLibs import assertSingleDatasetOrExit, ByconBundler, import_datatable_dict_line, write_log
+services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
+sys.path.append( services_lib_path )
+from bycon_bundler import ByconBundler
+from datatable_utils import import_datatable_dict_line
+from file_utils import write_log
+from service_helpers import assertSingleDatasetOrExit, ByconID
 
 ################################################################################
 ################################################################################
@@ -32,9 +35,9 @@ class ByconautImporter():
         self.downstream = []
         self.downstream_only = False
         self.mongo_client = MongoClient(host=DB_MONGOHOST)
-        self.ind_coll = mongo_client[ self.dataset_id ]["individuals"]
-        self.bios_coll = mongo_client[ self.dataset_id ]["biosamples"]
-        self.ana_coll = mongo_client[ self.dataset_id ]["analyses"]
+        self.ind_coll = self.mongo_client[ self.dataset_id ]["individuals"]
+        self.bios_coll = self.mongo_client[ self.dataset_id ]["biosamples"]
+        self.ana_coll = self.mongo_client[ self.dataset_id ]["analyses"]
         self.target_db = "___none___"
         self.allow_duplicates = False
 
@@ -156,6 +159,44 @@ class ByconautImporter():
     def import_variants(self):
         self.__prepare_variants()
         self.__insert_variant_records_from_file()
+
+
+    #--------------------------------------------------------------------------#
+
+    def retrieve_variant_identifiers(self):
+        # self.__prepare_variants()
+
+        bb = ByconBundler()
+        data = bb.read_pgx_file(self.input_file)
+        variants = data.data
+        v_i_c = len(variants)
+        print(f'=> The file contains {v_i_c} variants')
+
+        bar = Bar("Checking ", max = v_i_c, suffix='%(percent)d%%'+f' of {str(v_i_c)} variants' )
+
+        a_id_s = {}
+        for v in variants:
+            bar.next()
+            a_id = v.get("analysis_id", "___none___")
+            a_id_s.update({a_id: "{}\t{}\t{}\t{}".format(
+                a_id,
+                v.get("biosample_id"),
+                v.get("individual_id"),
+                v.get("sample_id", "")
+            )})
+        bar.finish()
+
+        print(f'=> The file contains {len(a_id_s)} analysis_id values')
+
+        missing_analyses = []
+        for a_id, ids in a_id_s.items():
+            ana_id = v.get("analysis_id", "___none___")
+            if not self.ana_coll.find_one({"id": ana_id}):
+                missing_analyses.append(ids)
+
+        print(f'=> {len(missing_analyses)} analysis_id values were missing')
+
+        return missing_analyses
 
 
     #--------------------------------------------------------------------------#
@@ -317,19 +358,18 @@ class ByconautImporter():
         print(f'=> The input file contains {len(self.data_in.data)} items')
 
         self.import_docs = []
-
-        import_ids = []
+        self.import_ids = []
         l_no = 0
         for new_doc in self.data_in.data:
             l_no += 1
             if not (import_id_v := new_doc.get(iid)):
                 self.log.append(f'¡¡¡ no {iid} value in entry {l_no} => skipping !!!')
                 continue
-            if import_id_v in import_ids and not self.allow_duplicates:
+            if import_id_v in self.import_ids and not self.allow_duplicates:
                 self.log.append(f'¡¡¡ duplicated {iid} value in entry {l_no} => skipping !!!')
                 continue
 
-            import_ids.append(import_id_v)
+            self.import_ids.append(import_id_v)          
             self.import_docs.append(dict(new_doc))
 
 

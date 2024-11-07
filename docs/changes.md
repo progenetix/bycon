@@ -6,6 +6,13 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2024-11-07 (v2.0.6)
+
+* `histocircleplot`: [/services/collationplots/pgx:icdom-85003?plotType=histocircleplot&plotPars=plotTitle=Genomes+are+circular,+sometimes...](https://progenetix.org/services/collationplots/pgx:icdom-85003?plotType=histocircleplot&plotPars=plotTitle=Genomes+are+circular,+sometimes...)
+    - this works for single collations
+    - so far no gene label options etc.; just for fun...
+* some further modification for the importer... scripts which are now reduced to very basic function callers
+
 ### 2024-10-28 (v2.0.5)
 
 This update targets the example database:

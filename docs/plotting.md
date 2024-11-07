@@ -1,6 +1,4 @@
----
-title: Plotting
----
+# Plotting
 
 ## `byconaut` Plot functionality
 
@@ -20,15 +18,6 @@ are:
 
 * `services/collationplots/`
 * `services/sampleplots/`
-
-### Plotting Applications
-
-Plotting "applications" provide command line utilities for the plotting of database
-content and local files. These are maintained in the `byconaut/bin` directory:
-
-* `bin/collationsPlotter.py`
-* `bin/samplesPlotter.py`
-* `bin/pgxsegPlotter.py`
 
 ### Plotting Functionality
 
@@ -68,6 +57,8 @@ endpoint, e.g. [/services/collations?datasetIds=progenetix](http://progenetix.or
 Please note that the `datasetIds` parameter will fall back to the default parameter
 if not indicated.
 
+**NEW** Nobember 2024: `histocircleplot` (see below)
+
 ##### Examples
 
 The examples below link to {{config.api_site_label}}.
@@ -81,6 +72,10 @@ The examples below link to {{config.api_site_label}}.
         * `plot_title`
         * `plot_area_height`
         * `plot_axis_y_max` & `plot_label_y_values`
+* [/services/collationplots/pgx:icdom-85003?plotType=histocircleplot&plotPars=plotTitle=Genomes+are+circular,+sometimes...](https://progenetix.org/services/collationplots/pgx:icdom-85003?plotType=histocircleplot&plotPars=plotTitle=Genomes+are+circular,+sometimes...)
+    - this works for single collations
+    - so far no gene label options etc.; just for fun...
+
 
 #### CNV sample plots - `/services/sampleplots`
 

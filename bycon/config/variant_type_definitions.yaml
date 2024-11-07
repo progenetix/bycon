@@ -22,8 +22,6 @@ EFO:0030064:
   variant_state:
     id: EFO:0030064
     label: regional base ploidy
-  variant_type_id: Null
-  variant_type: Null
   VRS_type: Null
   VCF_symbolic_allele: Null
   cnv_dummy_value: Null
@@ -278,8 +276,6 @@ SO:0000159:
   variant_state:
     id: SO:0000159
     label: deletion
-  variant_type_id: SO:0000159
-  variant_type: DEL
   VRS_type: Allele
   VCF_symbolic_allele: Null
   cnv_dummy_value: Null

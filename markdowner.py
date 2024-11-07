@@ -12,6 +12,12 @@ import byconServices
 ################################################################################
 
 def main():
+    """
+    The `markdowner` script processes some of the inline documentation in the
+    `bycon` package as well as some configuration files and generates markdown
+    files for processing by the `mkdocs` website generator. It is invoked when
+    running the local `./updev.sh` command.
+    """
     generated_docs_path = path.join( dir_path, "docs", "generated")
 
     p = Path(path.join( dir_path, "byconServices" ))
@@ -96,7 +102,6 @@ def main():
         pp_fh = open(pp_f, "w")
         pp_fh.write("\n".join(ls).replace("\n\n", "\n").replace("\n\n", "\n"))
         pp_fh.close()
-
 
 ################################################################################
 ################################################################################

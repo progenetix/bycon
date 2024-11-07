@@ -21,7 +21,7 @@ services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config"
 
 def publications():
     """
-    The _publications_ servive provides API functionality for accessing the
+    The _publications_ service provides API functionality for accessing the
     Progenetix [publications](http://progenetix.org/publications/) collection, which
     represents curated information about several thousand articles reporting
     genome-wide screening experiments in cancer. 

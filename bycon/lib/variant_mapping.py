@@ -34,11 +34,10 @@ class ByconVariant:
 
         self.ChroNames = ChroNames()
         self.variant_types = BYC.get("variant_type_definitions", {})
-
-        t_states = {}
+        self.variant_types_map = {}
         for v_t, v_d in self.variant_types.items():
-            t_states.update({v_d["variant_type"]: v_d["variant_type_id"]})
-        self.variant_types_map = t_states
+            if (variant_type := v_d.get("variant_type")) and (variant_type_id := v_d.get("variant_type_id")):
+                self.variant_types_map.update({variant_type: variant_type_id})
 
         # datatable mappings contain the "name to place in object" definitions
         # these are in essence identical to the `db_key` mappings in
@@ -65,6 +64,7 @@ class ByconVariant:
     # -------------------------------------------------------------------------#
 
     def pgxVariant(self, variant=None):
+
         if not variant:
             return self.pgx_variant
         self.byc_variant = variant
@@ -80,6 +80,7 @@ class ByconVariant:
             self.pgx_variant.pop("location", None)
         else:
             self.pgx_variant.pop("adjoined_sequences", None)
+        self.pgx_variant.pop("variant_type", None)
         return self.pgx_variant
 
 
@@ -136,9 +137,7 @@ class ByconVariant:
         ... TODO ...
         """
         self.byc_variant = variant
-        # prdbug(self.byc_variant)
         self.__create_canonical_variant()
-        # prdbug(self.byc_variant)
 
         vt_defs = self.variant_types
         state_id = self.byc_variant["variant_state"].get("id", "___none___")
@@ -283,7 +282,6 @@ class ByconVariant:
         s = loc.get("start")
         e = loc.get("end")
         if type(s) is not int or type(e) is not int:
-            prdbug(self.byc_variant)
             return
         self.byc_variant["info"].update({"var_length": e - s})
         return
@@ -294,7 +292,6 @@ class ByconVariant:
     def __byc_variant_normalize_type(self):
         vt_defs = self.variant_types
         v = self.byc_variant
-
         v_state = v.get("variant_state", {})
         state_id = v_state.get("id", "___none___")
         variant_type = v.get("variant_type", "___none___")
@@ -320,13 +317,11 @@ class ByconVariant:
     # -------------------------------------------------------------------------#
 
     def __byc_variant_normalize_chromosome(self):
-        v = self.byc_variant
-        if not "location" in v:
+        if not "location" in (v := self.byc_variant):
             return
 
         refs_ids = self.ChroNames.allRefseqs()
         chro_ids = self.ChroNames.allChros()
-
 
         s_id = v["location"].get("sequence_id", "___none___")
         chro = v["location"].get("chromosome", "___none___")

@@ -14,8 +14,8 @@
             "variant_multi_pars": [
                 {
                     "referenceName": "refseq:NC_000017.11",
-                    "start": [7673802],
-                    "referenceBases": "G",
+                    "start": [7620000],
+                    "end": [7680000],
                     "alternateBases": "A"
                 },
                 {

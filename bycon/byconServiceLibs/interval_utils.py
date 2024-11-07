@@ -8,6 +8,8 @@ from bycon import Cytobands, cytobands_label_from_positions, prdbug, BYC, BYC_PA
 ################################################################################
 
 """
+TODO: add docstrings to the modules & set up parsing...
+
 The methods here address genomic binning, the assignment of sample-specific
 bin values (e.g. CNV overlap, maximum/minimum observed value in the bin...) as
 well as the calculation of bin statistics.

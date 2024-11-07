@@ -16,20 +16,21 @@ description: >-
   * the default `type` is string (not indicated); options are `integer`,
     `number`, `array` and `boolean`
   * the same is true for `items` in arrays
-  * if a `prefix_split` exists values from the array will be assigned to separate
-    columns according to the prefix; _i.e._ a prefix of `PMID` under `external_references`
-    by convention will lead to the creation of `external_references_id__PMID` and
-    `external_references_label__PMID`
   * `indexed` indicates if the according `db_key` should be indexed by the DB
   * `computed` indicates that the value of the field will be assigned through
     some update function (e.g. the variant's `id` value from the stringified
     database ObjectId upon insertion ore `age_days` from the `age_iso` value)
+  * `exported: False` indicates that the parameter will not be written, only
+    be processed during import (e.g. for legacy parameters such as `variant_type
+    which have a different representation in the database)
 
   ### `array` fields
 
   Columns with data of the type `array` are evaluated through the `RefactoredValues`
   class:
-  * first the values are comma-split
+  * first the values are split by the `split_by` value
+      - the default is `&&` to avoid "comma in text" errors and to allow for the
+        `::` delimiter to be used in the object splits (e.g. `id::label`)
   * then values are type cast according to their `items.type`, with a special
     treatment for `object`
   * for `type: object`:
@@ -633,7 +634,13 @@ definitions:
         indexed: True
         computed: True
 
-      # special pgxseg columns
+      # special pgxseg columns for importing
       log2:
         db_key: info.cnv_value
         type: number
+      variant_type:
+        db_key: variant_type
+        type: string
+        exported: False
+
+
