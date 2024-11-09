@@ -301,6 +301,18 @@ plot_parameters:
     type: string
     default: "%"
 
+  # circles -------------------------------------------------------------------#
+
+  circ_start_gap:
+    description: in degrees; top (usually) gap providing separation & space for labels
+    type: integer
+    default: 20
+
+  circ_start_angle:
+    description: in degrees; start of plot circle from 12 o'clock position
+    type: integer
+    default: 0
+
   # probeplot -----------------------------------------------------------------#
 
   plot_probe_y_factor:

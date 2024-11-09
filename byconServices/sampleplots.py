@@ -9,7 +9,6 @@ from byconServiceLibs import (
     ExportFile
 )
 
-
 ################################################################################
 
 def sampleplots():

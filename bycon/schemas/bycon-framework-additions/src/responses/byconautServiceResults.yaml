@@ -5,8 +5,8 @@ properties:
   results:
     type: array
     items:
-      $ref: '#/definitions/ResultItem'
-definitions:
+      $ref: '#/$defs/ResultItem'
+$defs:
   ResultItem:
     type: object
     properties:

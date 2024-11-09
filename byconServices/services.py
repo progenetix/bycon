@@ -6,8 +6,10 @@ from importlib import import_module
 from bycon import (
     BYC,
     BeaconErrorResponse,
+    prdbug,
     print_text_response,
-    set_debug_state
+    set_debug_state,
+    set_entities
 )
 
 ################################################################################
@@ -33,7 +35,7 @@ def services():
     rq_id = BYC.get("request_entity_id", "ids")
     rq_p_id = BYC.get("request_entity_path_id", "ids")
     rp_id = BYC.get("response_entity_id")
-
+    
     if not rp_id:
         pass
     elif rq_p_id:

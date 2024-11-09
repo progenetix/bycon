@@ -5,18 +5,18 @@
     "type": "object",
     "properties": {
         "$schema": {
-            "$ref": "../common/beaconCommonComponents.json#/definitions/$schema"
+            "$ref": "../common/beaconCommonComponents.json#/$defs/$schema"
         },
         "endpointSets": {
             "description": "List of enpoints included in this Beacon instance. This is list is meant to inform Beacon clients, e.g. a Beacon Network, about the available endpoints, it is not used to generate any automatic list, but could be used for Beacon validation purposes.",
             "type": "object",
             "additionalProperties": {
-                "$ref": "#/definitions/Endpoint"
+                "$ref": "#/$defs/Endpoint"
             },
             "minProperties": 1
         }
     },
-    "definitions": {
+    "$defs": {
         "Endpoint": {
             "type": "object",
             "properties": {
@@ -47,7 +47,7 @@
                     "description": "Optional. A list describing additional endpoints implemented by this Beacon instance for that entry type. Additional details on the endpoint parameters, supported HTTP verbs, etc. could be obtained by parsing the OpenAPI definition referenced in the `openAPIEndpointsDefinition` attribute.",
                     "type": "object",
                     "additionalProperties": {
-                        "$ref": "#/definitions/RelatedEndpoint"
+                        "$ref": "#/$defs/RelatedEndpoint"
                     },
                     "minProperties": 0
                 }

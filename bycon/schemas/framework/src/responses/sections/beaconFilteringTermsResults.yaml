@@ -6,12 +6,12 @@ properties:
     type: array
     description: Ontology resources defined externally to this beacon implementation
     items:
-      $ref: '#/definitions/Resource'
+      $ref: '#/$defs/Resource'
   filteringTerms:
     type: array
     items:
-      $ref: '#/definitions/FilteringTerm'
-definitions:
+      $ref: '#/$defs/FilteringTerm'
+$defs:
   FilteringTerm:
     type: object
     description: Entities can be filtered using this term.

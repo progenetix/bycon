@@ -1,5 +1,4 @@
-<!--podmd-->
-## _intervalFrequencies_
+# _intervalFrequencies_
 
 This service provides access to binned CNV frequency information of data
 "collations" in the Progenetix project databases. A typical use would be the

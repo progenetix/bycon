@@ -78,7 +78,7 @@ bycon
   |   |   `- ..._definitions.yaml
   |   |- lib
   |   |   |
-  |   |   |- cgi_parsing.py
+  |   |   |- parameter_parsing.py
   |   |   |- read_specs.py
   |   |   |- query_generation.py
   |   |   |- query_execution.py
@@ -217,8 +217,10 @@ Some configuration:
 
     RewriteEngine On
 
-    RewriteRule     "^/?services/(.*)"     /cgi-bin/bycon/services/services.py/$1      [PT]
-    RewriteRule     "^/?beacon/(.*)"     /cgi-bin/bycon/beaconServer/beacon.py/$1      [PT]
+    RewriteRule "^/beacon/(.*)"   /cgi-bin/bycon/beaconServer/beacon.py/$1 [PT]
+    RewriteRule "^/services/(.*)" /cgi-bin/bycon/services/services.py/$1   [PT]
+    RewriteRule "^/?services$"    /cgi-bin/bycon/services/services.py      [PT]
+    RewriteRule "^/?beacon$"      /cgi-bin/bycon/beaconServer/beacon.py    [PT]
     ```
 
     ```

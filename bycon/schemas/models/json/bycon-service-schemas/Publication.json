@@ -90,7 +90,7 @@
             "type": "string"
         },
         "contact": {
-            "$ref": "#/definitions/Contact/properties"
+            "$ref": "#/$defs/Contact/properties"
         },
         "geoLocation": {
             "$ref": "GeoLocation.json#/properties"
@@ -106,7 +106,7 @@
             ]
         }
     },
-    "definitions": {
+    "$defs": {
         "Contact": {
             "type": "object",
             "properties": {

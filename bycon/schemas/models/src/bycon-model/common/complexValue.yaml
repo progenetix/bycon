@@ -8,8 +8,8 @@ properties:
     description: List of quantities required to fully describe the complex value
     type: array
     items:
-      $ref: '#/definitions/TypedQuantity'
-definitions:
+      $ref: '#/$defs/TypedQuantity'
+$defs:
   TypedQuantity:
     properties:
       quantityType:

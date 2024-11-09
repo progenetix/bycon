@@ -27,6 +27,7 @@ def main():
     """
     
     b_r_c = BYC.get("bycon_response_class", "___none___")
+
     r = None
     if b_r_c == "BeaconInfoResponse":
         r = BeaconInfoResponse().populatedInfoResponse()

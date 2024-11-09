@@ -1,7 +1,7 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 description: "Component definitions used in 'requestParameters.json'.\nThe purpose\
   \ of this file is to separate components from actual parameters to avoid confusion."
-definitions:
+$defs:
   Assembly:
     description: Genomic assembly accession and version as RefSqeq assembly accession
       (e.g. "GCF_000001405.39") or a versioned assembly name or synonym such as UCSC

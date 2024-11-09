@@ -6,7 +6,7 @@
     "type": "object",
     "properties": {
         "timestamp": {
-            "$ref": "..common//commonDefinitions.json#/definitions/Timestamp"
+            "$ref": "..common//commonDefinitions.json#/$defs/Timestamp"
         },
         "updatedBy": {
             "type": "string"

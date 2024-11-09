@@ -657,7 +657,6 @@ class ByconQuery():
     def __query_from_filters(self):
         if self.queries.get("expand") is False:
             return
-
         if len(BYC["BYC_FILTERS"]) < 1:
             return
 
@@ -720,6 +719,7 @@ class ByconQuery():
                     f_lists[f_entity][f_field].append(f_info["id"])
 
         # now processing the filter lists into the queries
+
         for f_entity in f_lists.keys():
             f_s_l = []
             for f_field, f_query_vals in f_lists[f_entity].items():

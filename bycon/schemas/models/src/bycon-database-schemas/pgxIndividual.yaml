@@ -16,9 +16,9 @@ properties:
     examples:
       - pgxind-kftx25eh
   sex:
-    $ref: ../common/commonDefinitions.yaml#/definitions/Sex
+    $ref: ../common/commonDefinitions.yaml#/$defs/Sex
   ethnicity:
-    $ref: ../common/commonDefinitions.yaml#/definitions/Ethnicity
+    $ref: ../common/commonDefinitions.yaml#/$defs/Ethnicity
   diseases:
     type: array
     items:

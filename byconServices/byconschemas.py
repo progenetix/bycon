@@ -1,6 +1,5 @@
 from bycon import prdbug, prjsonhead, prjsontrue, BYC, BYC_PARS, BeaconErrorResponse, read_schema_file
 
-
 def byconschemas():
     """
     This helper service reads and serves local schema definition files. The name of

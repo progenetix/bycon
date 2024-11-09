@@ -6,7 +6,7 @@ description: >-
 type: object
 properties:
   timestamp:
-    $ref: ..common//commonDefinitions.yaml#/definitions/Timestamp
+    $ref: ..common//commonDefinitions.yaml#/$defs/Timestamp
   updatedBy:
     type: string  
   comment:

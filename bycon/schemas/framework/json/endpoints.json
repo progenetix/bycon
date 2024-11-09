@@ -217,14 +217,14 @@
                 "name": "skip",
                 "in": "query",
                 "schema": {
-                    "$ref": "./common/beaconCommonComponents.json#/definitions/Skip"
+                    "$ref": "./common/beaconCommonComponents.json#/$defs/Skip"
                 }
             },
             "limit": {
                 "name": "limit",
                 "in": "query",
                 "schema": {
-                    "$ref": "./common/beaconCommonComponents.json#/definitions/Limit"
+                    "$ref": "./common/beaconCommonComponents.json#/$defs/Limit"
                 }
             }
         }

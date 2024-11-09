@@ -8,7 +8,7 @@ description: >-
   * the corresponding start and end base positions
 properties:
   chromosomeLocation:
-    $ref: "https://raw.githubusercontent.com/ga4gh/vrs/1.2/schema/vrs.json#/definitions/ChromosomeLocation"
+    $ref: "https://raw.githubusercontent.com/ga4gh/vrs/1.2/schema/vrs.json#/$defs/ChromosomeLocation"
   sequenceLocation:
-    $ref: "https://raw.githubusercontent.com/ga4gh/vrs/1.2/schema/vrs.json#/definitions/SequenceLocation"
+    $ref: "https://raw.githubusercontent.com/ga4gh/vrs/1.2/schema/vrs.json#/$defs/SequenceLocation"
 additionalProperties: true

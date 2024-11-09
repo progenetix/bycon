@@ -6,6 +6,12 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2024-11-09 (v2.0.7)
+
+* some library re-shuffling/condensation
+* more work on circle plotting, e.g. separate class `ByconCircleTools`
+* more documentation
+
 ### 2024-11-07 (v2.0.6)
 
 * `histocircleplot`: [/services/collationplots/pgx:icdom-85003?plotType=histocircleplot&plotPars=plotTitle=Genomes+are+circular,+sometimes...](https://progenetix.org/services/collationplots/pgx:icdom-85003?plotType=histocircleplot&plotPars=plotTitle=Genomes+are+circular,+sometimes...)
@@ -485,7 +491,7 @@ a few parameters:
 * `byconaut`: added option to use sequence id values for plotPars.plot_chros, e.g. `plotPars=plot_width=980::plotChros=NC_000023.11`
 * fix: a `g_variants` endpoint w/o any parameter led to a query error
 * removal of some `byconaut` code remnants
-* some internal reshuffling; e.g. move of export/print helpers to from `cgi_parsing`
+* some internal reshuffling; e.g. move of export/print helpers to from `parameter_parsing`
   to `beacon_response_generation` and `bycon_helpers`
 
 ### 2024-01-18 (v1.4.0)
@@ -981,7 +987,7 @@ definitions and "local" ones. Partcullarly:
 * removal of deprecated `cgitb` use & replacing it w/ a simple _Exception_/traceback
   wrapper
 * expansion of the [plotting documentation](http://bycon.progenetix.org/plotting/)
-* move of the plot arguments parsing to `cgi_parsing.py`
+* move of the plot arguments parsing to `parameter_parsing.py`
 
 #### 2023-05-01 (v1.0.37)
 

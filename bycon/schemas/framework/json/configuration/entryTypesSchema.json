@@ -6,10 +6,10 @@
     "properties": {
         "entryTypes": {
             "description": "List of entry types.",
-            "$ref": "#/definitions/EntryTypes"
+            "$ref": "#/$defs/EntryTypes"
         }
     },
-    "definitions": {
+    "$defs": {
         "EntryTypes": {
             "description": "This is a dictionary of the entry types implemented in this Beacon instance.",
             "additionalProperties": {

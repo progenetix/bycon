@@ -3,7 +3,7 @@ from pymongo import MongoClient
 from os import environ
 
 from bycon_helpers import prdbug
-from cgi_parsing import rest_path_value
+from parameter_parsing import rest_path_value
 from config import *
 
 ################################################################################
@@ -13,8 +13,8 @@ def select_dataset_ids():
         return
     if ds_id_from_accessid():
         return
-    if ds_id_from_record_id():
-        return
+    # if ds_id_from_record_id():
+    #     return
     if ds_ids_from_form():
         return
     if ds_id_from_default():

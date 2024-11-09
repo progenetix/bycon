@@ -4,7 +4,7 @@ title: Progenetix
 type: object
 description: >
   This is the root schema for the Progenetix resource, corresponding to the principle elements of the core data schema.
-definitions:
+$defs:
   id: "#root"
   biosample: 
     $ref: biosample.yaml#/properties

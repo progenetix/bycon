@@ -282,6 +282,18 @@ font color for Y-axis labels (percents ...)
 **type:** string    
 **default:** `%`    
 
+### `circ_start_gap` 
+**description:**
+in degrees; top (usually) gap providing separation & space for labels    
+**type:** integer    
+**default:** `20`    
+
+### `circ_start_angle` 
+**description:**
+in degrees; start of plot circle from 12 o'clock position    
+**type:** integer    
+**default:** `0`    
+
 ### `plot_probe_y_factor` 
 **description:**
 relative y-scaling of the probes in array-/probeplots    

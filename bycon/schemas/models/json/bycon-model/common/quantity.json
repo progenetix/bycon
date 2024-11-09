@@ -5,7 +5,7 @@
     "type": "object",
     "properties": {
         "unit": {
-            "$ref": "./commonDefinitions.json#/definitions/Unit"
+            "$ref": "./commonDefinitions.json#/$defs/Unit"
         },
         "value": {
             "description": "The value of the quantity in the units",

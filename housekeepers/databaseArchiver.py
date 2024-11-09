@@ -10,7 +10,6 @@ from byconServiceLibs import assertSingleDatasetOrExit
 ################################################################################
 
 def main():
-    initialize_bycon_service()
     ds_id = assertSingleDatasetOrExit()
 
     output_dir = BYC_PARS.get("outputdir")

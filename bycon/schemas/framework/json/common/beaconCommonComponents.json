@@ -3,7 +3,7 @@
     "title": "Beacon Common Components",
     "description": "Definition of relatively simple components used in different points of the Beacon specification, both in requests and responses, therefore not associated exclusively with one or the other. Separate schema documents are provided for complex components.",
     "type": "object",
-    "definitions": {
+    "$defs": {
         "$schema": {
             "type": "string",
             "$comment": "TO REVIEW: adding a `format` or `regex` attribute that validates correctly against a file path (relative).",
@@ -47,7 +47,7 @@
             "description": "Set of schemas to be used in the response to a request.",
             "type": "array",
             "items": {
-                "$ref": "#/definitions/SchemasPerEntity"
+                "$ref": "#/$defs/SchemasPerEntity"
             }
         },
         "SchemasPerEntity": {
@@ -74,22 +74,22 @@
             "type": "object",
             "properties": {
                 "skip": {
-                    "$ref": "#/definitions/Skip"
+                    "$ref": "#/$defs/Skip"
                 },
                 "limit": {
-                    "$ref": "#/definitions/Limit"
+                    "$ref": "#/$defs/Limit"
                 },
                 "currentPage": {
                     "description": "Token of the returned page. To be used only in the response to allow the client to check if the returned page is the one requested.",
-                    "$ref": "#/definitions/PageToken"
+                    "$ref": "#/$defs/PageToken"
                 },
                 "nextPage": {
                     "description": "Token of the next page. Used to navigate forward. If empty, it is assumed that no more pages are available",
-                    "$ref": "#/definitions/PageToken"
+                    "$ref": "#/$defs/PageToken"
                 },
                 "previousPage": {
                     "description": "Token of the previous page. Used to navigate backwards. If empty, it is assumed that the current page is the first one.",
-                    "$ref": "#/definitions/PageToken"
+                    "$ref": "#/$defs/PageToken"
                 }
             }
         },
@@ -187,7 +187,7 @@
             "type": "array",
             "items": {
                 "description": "Requested schema to be used for individuals in the response.",
-                "$ref": "#/definitions/Handover"
+                "$ref": "#/$defs/Handover"
             }
         },
         "Handover": {
@@ -199,7 +199,7 @@
             ],
             "properties": {
                 "handoverType": {
-                    "$ref": "#/definitions/HandoverType"
+                    "$ref": "#/$defs/HandoverType"
                 },
                 "note": {
                     "type": "string",

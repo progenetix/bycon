@@ -3,7 +3,7 @@ from os import environ
 
 from beacon_response_generation import BeaconResponseMeta, print_json_response
 from bycon_helpers import mongo_result_list, mongo_test_mode_query, mongo_and_or_query_from_list, return_paginated_list
-from cgi_parsing import prdbug
+from parameter_parsing import prdbug
 from config import AUTHORIZATIONS, BYC, BYC_PARS
 from export_file_generation import *
 from response_remapping import *

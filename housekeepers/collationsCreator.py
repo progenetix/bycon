@@ -22,7 +22,6 @@ pkg_path = path.join( dir_path, pardir )
 ################################################################################
 
 def main():
-    initialize_bycon_service()
     ds_id = assertSingleDatasetOrExit()
 
     print(f'Creating collations for {ds_id}')

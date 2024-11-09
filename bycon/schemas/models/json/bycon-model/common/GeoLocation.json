@@ -9,13 +9,13 @@
             "const": "Feature"
         },
         "geometry": {
-            "$ref": "#/definitions/GeoGeometry"
+            "$ref": "#/$defs/GeoGeometry"
         },
         "properties": {
-            "$ref": "#/definitions/GeoLabels"
+            "$ref": "#/$defs/GeoLabels"
         }
     },
-    "definitions": {
+    "$defs": {
         "GeoGeometry": {
             "description": "The geographic point object uses the default units from the [DCMI point scheme](http://dublincore.org/documents/dcmi-point/) and avoids optional representation in non-standard units. It consists of an array with at least 2 ordered numbers for - longitude/easting - latitude/nothing.\n",
             "properties": {

@@ -16,7 +16,7 @@ properties:
     examples:
       - pgxbs-kftva59y
   analysisInfo:
-    $ref: "#/definitions/AnalysisInfo"
+    $ref: "#/$defs/AnalysisInfo"
   platformModel:
     description: >-
       Ontology value for experimental platform or methodology used.
@@ -42,11 +42,11 @@ properties:
   geoLocation:
     $ref: ../bycon-model/common/GeoLocation.yaml
   cnvStatusmaps:
-    $ref: "#/definitions/Statusmaps"
+    $ref: "#/$defs/Statusmaps"
   cnvStats:
-    $ref: "#/definitions/Cnvstatistics"
+    $ref: "#/$defs/Cnvstatistics"
   cnvChroStats:
-    $ref: "#/definitions/Cnvstatistics"
+    $ref: "#/$defs/Cnvstatistics"
   info:
     type: object
   analysisDate:
@@ -59,7 +59,7 @@ properties:
     examples:
       - "2020-09-10T17:44:10.170Z"
 
-definitions:
+$defs:
   AnalysisInfo:
     description: >-
       Information about the source series and experiment.
@@ -170,149 +170,149 @@ definitions:
     type: object
     properties:
       "1":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       1p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       1q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "2":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       2p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       2q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "3":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       3p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       3q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "4":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       4p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       4q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "5":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       5p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       5q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "6":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       6p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       6q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "7":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       7p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       7q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "8":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       8p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       8q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "9":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       9p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       9q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "10":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       10p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       10q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "11":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       11p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       11q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "12":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       12p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       12q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "13":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       13p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       13q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "14":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       14p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       14q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "15":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       15p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       15q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "16":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       16p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       16q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "17":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       17p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       17q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "18":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       18p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       18q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "19":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       19p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       19q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "20":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       20p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       20q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "21":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       21p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       21q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       "22":
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       22p:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       22q:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       X:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       Xp:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       Xq:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       Y:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       Yp:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       Yq:
-        $ref: "#/definitions/Cnvstatistics"
+        $ref: "#/$defs/Cnvstatistics"
       additionalProperties: true
 
 required:

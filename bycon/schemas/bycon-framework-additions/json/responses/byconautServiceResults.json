@@ -6,11 +6,11 @@
         "results": {
             "type": "array",
             "items": {
-                "$ref": "#/definitions/ResultItem"
+                "$ref": "#/$defs/ResultItem"
             }
         }
     },
-    "definitions": {
+    "$defs": {
         "ResultItem": {
             "type": "object",
             "properties": {

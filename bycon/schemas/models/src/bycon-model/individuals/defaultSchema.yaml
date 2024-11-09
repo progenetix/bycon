@@ -12,13 +12,13 @@ properties:
     examples:
       - pgxind-kftx25eh
   sex:
-    $ref: ../common/commonDefinitions.yaml#/definitions/Sex
+    $ref: ../common/commonDefinitions.yaml#/$defs/Sex
   karyotypicSex:
-    $ref: ../common/commonDefinitions.yaml#/definitions/KaryotypicSex
+    $ref: ../common/commonDefinitions.yaml#/$defs/KaryotypicSex
   ethnicity:
-    $ref: ../common/commonDefinitions.yaml#/definitions/Ethnicity
+    $ref: ../common/commonDefinitions.yaml#/$defs/Ethnicity
   geographicOrigin:
-    $ref: ../common/commonDefinitions.yaml#/definitions/GeographicLocation
+    $ref: ../common/commonDefinitions.yaml#/$defs/GeographicLocation
   diseases:
     $ref: ../common/disease.yaml
   pedigrees:
@@ -46,7 +46,7 @@ properties:
     items:
       $ref: ../common/exposure.yaml
   info:
-    $ref: ../common/commonDefinitions.yaml#/definitions/Info
+    $ref: ../common/commonDefinitions.yaml#/$defs/Info
 
 ################################################################################
 # additional properties from Phenopackets and/or Progenetix

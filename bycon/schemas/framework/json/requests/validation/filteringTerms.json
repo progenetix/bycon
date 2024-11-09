@@ -12,19 +12,19 @@
             "items": {
                 "anyOf": [
                     {
-                        "$ref": "#/definitions/OntologyFilter"
+                        "$ref": "#/$defs/OntologyFilter"
                     },
                     {
-                        "$ref": "#/definitions/AlphanumericFilter"
+                        "$ref": "#/$defs/AlphanumericFilter"
                     },
                     {
-                        "$ref": "#/definitions/CustomFilter"
+                        "$ref": "#/$defs/CustomFilter"
                     }
                 ]
             }
         }
     },
-    "definitions": {
+    "$defs": {
         "OntologyFilter": {
             "type": "object",
             "description": "Filter results to include records that contain a specific ontology term.",

@@ -16,10 +16,10 @@
             ]
         },
         "sex": {
-            "$ref": "../common/commonDefinitions.json#/definitions/Sex"
+            "$ref": "../common/commonDefinitions.json#/$defs/Sex"
         },
         "ethnicity": {
-            "$ref": "../common/commonDefinitions.json#/definitions/Ethnicity"
+            "$ref": "../common/commonDefinitions.json#/$defs/Ethnicity"
         },
         "diseases": {
             "type": "array",

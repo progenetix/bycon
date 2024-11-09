@@ -424,9 +424,13 @@ class ByconPlot:
     def __plot_add_circle_settings(self):
         # this makes it somehow related to chromosome size
         # TODO: make it a proper plotPars parameter
-        chrobasegap = 6000000
-        g_w_gaps = self.plv.get("plot_genome_size", 1) + chrobasegap * (len(self.plv["plot_chros"]) + 7)
-        gapf = chrobasegap / g_w_gaps
+
+        startgap_f = self.plv.get("circ_start_gap", 20) / 360
+        startangle_f = self.plv.get("circ_start_angle", 0) / 360
+
+        chrogap_f = 0.003
+        genome_f = 1 - startgap_f - (len(self.plv["plot_chros"]) - 1) * chrogap_f
+        g_w_gaps = self.plv.get("plot_genome_size", 1) / genome_f
 
         g_w = self.plv.get("plot_region_gap_width", 2)
 
@@ -441,8 +445,8 @@ class ByconPlot:
         # self.__plot_add_cytoband_svg_gradients()
         self.__cytoband_solid_colors()
         self.plv.update({
-            "start_f": -0.25 + 4 * gapf,
-            "circ_gap_fraction": gapf,
+            "start_f": -0.25 + 0.015 + startangle_f,
+            "circ_gap_fraction": chrogap_f,
             "circ_genome_with_gaps": g_w_gaps,
             "circ_center_x": self.plv["plot_area_x0"] + r_o,
             "circ_center_y": self.plv["Y"] + r_o,
@@ -455,6 +459,8 @@ class ByconPlot:
             "circ_radius_hist_i": r_h_i
         })
 
+        self.BCT = ByconCircleTools(self.plv["circ_center_x"], self.plv["circ_center_y"])
+
 
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
@@ -466,34 +472,17 @@ class ByconPlot:
         g_w_gaps = self.plv["circ_genome_with_gaps"]
         area_f_0 = self.plv["start_f"]
 
+        chrotextstyle = f'text-anchor: middle; font-size: {self.plv["plot_font_size"]}px'
+
         for chro in self.plv["plot_chros"]:
             c_l = self.cytolimits.get(str(chro), {})
             chr_f = c_l["size"] / g_w_gaps
             lab_f = area_f_0 + chr_f / 2
-            l_x, l_y, l_red, l_deg = self.__pgCirclePoint(self.plv["circ_radius_label"], lab_f)
-            l_deg += 90
-
-            self.plv["pls"].append("""
-    <text x="{}" y="{}"
-        style="text-anchor: middle; font-size: {}px; fill: {};"
-        transform="rotate({} {} {})">
-        {}
-    </text>',
-            """.format(
-                l_x, l_y,
-                self.plv["plot_font_size"],
-                self.plv["plot_font_color"],
-                l_deg,
-                l_x,
-                l_y,
-                chro
-            ))
+            chro_lab = self.BCT.svg_text(self.plv["circ_radius_label"], lab_f, chro, chrotextstyle)
+            self.plv["pls"].append(chro_lab)
 
             # bands
-
             chr_cb_s = list(filter(lambda d: d["chro"] == chro, self.cytobands.copy()))
-
-            last = len(chr_cb_s) - 1
 
             for cb in chr_cb_s:
                 s_b = cb["start"]
@@ -501,13 +490,12 @@ class ByconPlot:
                 c = cb["staining"]
 
                 cb_l = int(e_b) - int(s_b)
-
                 cbPlotStartF = area_f_0
                 cbPlotStopF = area_f_0 + cb_l / g_w_gaps
 
                 rgb = self.plv["cytoband_colors"][c]
 
-                pieSVG = self.__pgSVGpie(
+                pieSVG = self.BCT.svg_pie(
                     self.plv["circ_radius_chro_o"],
                     self.plv["circ_radius_chro_i"],
                     cbPlotStartF,
@@ -516,7 +504,6 @@ class ByconPlot:
                 )
 
                 self.plv["pls"].append(pieSVG)
-
                 area_f_0 = cbPlotStopF
 
             area_f_0 += self.plv["circ_gap_fraction"]
@@ -539,15 +526,15 @@ class ByconPlot:
             chr_f = c_l["size"] / self.plv["circ_genome_with_gaps"]
             c_f_s = area_f_0
             c_f_e = area_f_0 + chr_f
-            z_x, z_y, z_rad, z_deg = self.__pgCirclePoint(self.plv["circ_radius_hist_zero"], c_f_s)
-            e_x, e_y, e_rad, e_deg = self.__pgCirclePoint(self.plv["circ_radius_hist_zero"], c_f_e)
+            z_x, z_y = self.BCT.point_xy(self.plv["circ_radius_hist_zero"], c_f_s)
+            e_x, e_y = self.BCT.point_xy(self.plv["circ_radius_hist_zero"], c_f_e)
 
             largeArcFlag = 0
-            if c_f_s > 0.75:
+            if c_f_s > (self.plv["start_f"] + 1):
                 largeArcFlag = 1
 
             # background
-            pieSVG = self.__pgSVGpie(
+            pieSVG = self.BCT.svg_pie(
                 self.plv["circ_radius_hist_o"],
                 self.plv["circ_radius_hist_i"],
                 c_f_s,
@@ -579,8 +566,7 @@ class ByconPlot:
                     v = i_v.get(GL, 0)
                     h = v * self.plv["plot_y2pf"] * h_f
                     r_v = self.plv["circ_radius_hist_zero"] + h
-                    s_x, s_y, s_rad, s_deg = self.__pgCirclePoint(r_v, l_f_f)
-                    prdbug(f'... {GL} {v} -> {r_v} -> {s_x} {s_y}')
+                    s_x, s_y = self.BCT.point_xy(r_v, l_f_f)
                     histoSVG += f'{s_x} {s_y} '
 
                 histoSVG += f' Z" style="stroke-width: 0.0;  fill: {p_c};" />'
@@ -597,7 +583,7 @@ class ByconPlot:
         area_f_0 = self.plv["start_f"]
         u = self.plv["plot_label_y_unit"]
         self.plv["styles"].append(
-            f'.label-y-c {{text-anchor: middle; fill: {self.plv["plot_label_y_font_color"]}; font-size: {self.plv["plot_label_y_font_size"]}px;}}'
+            f'.label-y-c {{text-anchor: end; fill: {self.plv["plot_label_y_font_color"]}; font-size: {self.plv["plot_label_y_font_size"]}px;}}'
         )
         self.plv["styles"].append(
             f'.gridline {{stroke-width: {self.plv["plot_grid_stroke"]}px; stroke: {self.plv["plot_grid_color"]}; opacity: {self.plv["plot_grid_opacity"]} ; }}',
@@ -608,12 +594,22 @@ class ByconPlot:
             labs.append(labv)
             labs.append(-labv)
 
-        top_lab_y_0 = self.plv["circ_center_y"] - self.plv["circ_radius_hist_zero"]
-        top_lab_x = self.plv["circ_center_x"]
+        if self.plv.get("circ_start_gap", 20) > 10:
+            top_lab_y_0 = self.plv["circ_center_y"] - self.plv["circ_radius_hist_zero"]
+            top_lab_x = self.plv["circ_center_x"] - self.plv.get("plot_region_gap_width", 2)
 
-        for y_m in labs:
-            y_l_y = top_lab_y_0 + y_m * self.plv["plot_y2pf"] + 3
-            self.plv["pls"].append(f'<text x="{top_lab_x}" y="{y_l_y}" class="label-y-c">{y_m}{u}</text>')
+            for y_m in labs:
+                y_l_y = self.plv["circ_radius_hist_zero"] + y_m * self.plv["plot_y2pf"] - 3
+                lab_f = self.plv["start_f"] - 0.015
+                # self.plv["pls"].append(f'<text x="{top_lab_x}" y="{y_l_y}" class="label-y-c">{y_m}{u}</text>')
+                lab = self.BCT.svg_text(
+                    y_l_y,
+                    lab_f,
+                    f'{y_m}{u}',
+                    f'text-anchor: middle; font-size: {self.plv["plot_label_y_font_size"]}px; fill: {self.plv["plot_label_y_font_color"]};'
+                )
+                self.plv["pls"].append(lab)
+
 
         labs.append(0)
 
@@ -631,7 +627,7 @@ class ByconPlot:
                 if abs(y_m) >= self.plv["plot_axis_y_max"]:
                     continue
                 grad = self.plv["circ_radius_hist_zero"] + y_m * self.plv["plot_y2pf"]
-                line = self.__pgSVGarc(
+                line = self.BCT.svg_arc(
                     grad,
                     c_f_s,
                     c_f_e,
@@ -640,81 +636,6 @@ class ByconPlot:
                 self.plv["pls"].append(line)
             area_f_0 += chr_f + self.plv["circ_gap_fraction"]
 
-
-    # -------------------------------------------------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def __pgCirclePoint(self, radius, circ_f=0):
-        """
-        Radius and circle fraction are provided as variables while the center
-        is inheruted.
-        """
-        pointRad = circ_f * 2 * math.pi;
-        pointDeg = circ_f * 360;
-        x = round(math.cos(pointRad) * radius + self.plv.get("circ_center_x", 0), 2)
-        y = round(math.sin(pointRad) * radius + self.plv.get("circ_center_y", 0), 2)
-
-        return  x, y, pointRad, pointDeg
-
-
-    # -------------------------------------------------------------------------#
-    # -------------------------------------------------------------------------#
-
-
-    def __pgSVGpie(
-        self,
-        radiusi,
-        radiuso,
-        piestartf,
-        piestopf,
-        rgb
-    ):
-
-        largeArcFlag = 0
-        if piestopf - piestartf > 0.5:
-            largeArcFlag = 1
-        startXi, startYi, irad, ideg = self.__pgCirclePoint(radiusi, piestartf)
-        startXo, startYo, irad, ideg = self.__pgCirclePoint(radiuso, piestartf)
-        stopXi, stopYi, erad, edeg = self.__pgCirclePoint(radiusi, piestopf)
-        stopXo, stopYo, erad, edeg = self.__pgCirclePoint(radiuso, piestopf)
-
-        svgpath = " ".join([str(x) for x in [
-            'M', startXi, startYi,
-            'A', radiusi, radiusi,
-            0, largeArcFlag, 1, stopXi, stopYi,
-            'L', stopXo, stopYo, 'A', radiuso, radiuso,
-            0, largeArcFlag, 0, startXo, startYo
-        ]])
-
-        return f'<path d="{svgpath} Z" fill="{rgb}" stroke="none" />'
-
-    # -------------------------------------------------------------------------#
-    # -------------------------------------------------------------------------#
-
-
-    def __pgSVGarc(
-        self,
-        radius,
-        arcstartf,
-        arcstopf,
-        rgb
-    ):
-
-        largeArcFlag = 0
-        if arcstopf - arcstartf > 0.5:
-            largeArcFlag = 1
-        startX, startY, irad, ideg = self.__pgCirclePoint(radius, arcstartf)
-        stopX, stopY, erad, edeg = self.__pgCirclePoint(radius, arcstopf)
-
-        degdelta = edeg - ideg
-
-        svgpath = " ".join([str(x) for x in [
-            'M', startX, startY,
-            'A', radius, radius,
-            degdelta, largeArcFlag, 1, stopX, stopY
-        ]])
-
-        return f'<path d="{svgpath}" fill="none" stroke="{rgb}" />'
 
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
@@ -1724,5 +1645,129 @@ style="margin: auto; font-family: Helvetica, sans-serif;">
 ################################################################################
 ################################################################################
 ################################################################################
+
+class ByconCircleTools:
+    def __init__(self, center_x=0, center_y=0, point_precision=2):
+        self.cx = center_x
+        self.cy = center_y
+        self.point_precision = point_precision
+        self.svg = ""
+
+    # -------------------------------------------------------------------------#
+    # ------------------------------- public ----------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def point_xy(self, radius=100, fraction=0.5):
+        self.point_radius = radius
+        self.point_fraction = fraction
+        self.__pgCirclePoint()
+
+        return self.point_X, self.point_Y
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def svg_pie(self, radiusi, radiuso, startf, stopf, rgb="rgb(127,127,127)"):
+        self.radius_i = radiusi
+        self.radius_o = radiuso
+        self.start_f = startf
+        self.stop_f = stopf
+
+        self.__pgSVGpie()
+
+        self.svg = f'<path d="{self.svgpath} Z" fill="{rgb}" stroke="none" />'
+        return self.svg
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def svg_arc(self, radius, startf, stopf, rgb="rgb(127,127,127)"):
+        self.arc_radius = radius
+        self.start_f = startf
+        self.stop_f = stopf
+
+        self.__pgSVGarc()
+        self.svg = f'<path d="{self.svgpath}" fill="none" stroke="{rgb}" />'
+
+        return self.svg
+
+
+    # -------------------------------------------------------------------------#
+    # ------------------------------- private ---------------------------------#
+
+    def svg_text(self, radius, text_f, text="", style=""):
+        self.point_fraction = text_f
+        self.point_radius = radius
+        self.__pgCirclePoint()
+        return """
+    <text x="{}" y="{}"
+        style="{}"
+        transform="rotate({} {} {})">
+        {}
+    </text>',
+            """.format(
+            self.point_X, self.point_Y,
+            style,
+            self.point_DEG + 90, self.point_X, self.point_Y,
+            text
+        )
+
+
+    # -------------------------------------------------------------------------#
+    # ------------------------------- private ---------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __pgCirclePoint(self):
+        """
+        Radius and circle fraction are provided as variables while the center
+        is inheruted.
+        """
+        self.point_RAD = self.point_fraction * 2 * math.pi;
+        self.point_DEG = self.point_fraction * 360;
+        self.point_X = round(math.cos(self.point_RAD) * self.point_radius + self.cx, self.point_precision)
+        self.point_Y = round(math.sin(self.point_RAD) * self.point_radius + self.cy, self.point_precision)
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __pgSVGpie(self):
+        largeArcFlag = 0
+        if self.stop_f - self.start_f > 0.5:
+            largeArcFlag = 1
+        startXi, startYi = self.point_xy(self.radius_i, self.start_f)
+        startXo, startYo = self.point_xy(self.radius_o, self.start_f)
+        stopXi, stopYi = self.point_xy(self.radius_i, self.stop_f)
+        stopXo, stopYo = self.point_xy(self.radius_o, self.stop_f)
+
+        self.svgpath = " ".join([str(x) for x in [
+            'M', startXi, startYi,
+            'A', self.radius_i, self.radius_i,
+            0, largeArcFlag, 1, stopXi, stopYi,
+            'L', stopXo, stopYo, 'A', self.radius_o, self.radius_o,
+            0, largeArcFlag, 0, startXo, startYo
+        ]])
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __pgSVGarc(self):
+        largeArcFlag = 0
+        if self.stop_f - self.start_f > 0.5:
+            largeArcFlag = 1
+        startX, startY = self.point_xy(self.arc_radius, self.start_f)
+        stopX, stopY = self.point_xy(self.arc_radius, self.stop_f)
+
+        degdelta = (self.stop_f - self.start_f) * 360
+
+        self.svgpath = " ".join([str(x) for x in [
+            'M', startX, startY,
+            'A', self.arc_radius, self.arc_radius,
+            degdelta, largeArcFlag, 1, stopX, stopY
+        ]])
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
 

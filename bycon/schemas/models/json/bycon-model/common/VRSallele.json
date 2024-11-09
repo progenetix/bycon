@@ -22,10 +22,10 @@
             "$ref": "./VRSsequenceLocation.json"
         },
         "state": {
-            "$ref": "#/definitions/LiteralSequenceExpression"
+            "$ref": "#/$defs/LiteralSequenceExpression"
         }
     },
-    "definitions": {
+    "$defs": {
         "LiteralSequenceExpression": {
             "description": "An explicit expression of a Sequence.",
             "type": "object",

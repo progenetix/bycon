@@ -1,4 +1,4 @@
-## _geolocations_
+# _geolocations_
 
 This service provides geographic location mapping for cities above 25'000
 inhabitants (\~22750 cities), through either:

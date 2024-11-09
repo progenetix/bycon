@@ -5,7 +5,7 @@
     "type": "object",
     "properties": {
         "$schema": {
-            "$ref": "../common/beaconCommonComponents.json#/definitions/$schema"
+            "$ref": "../common/beaconCommonComponents.json#/$defs/$schema"
         },
         "id": {
             "description": "A (unique) identifier of the element.",
@@ -50,7 +50,7 @@
             "type": "string"
         },
         "nonFilteredQueriesAllowed": {
-            "$ref": "../common/beaconCommonComponents.json#/definitions/NonFilteredQueriesAllowed"
+            "$ref": "../common/beaconCommonComponents.json#/$defs/NonFilteredQueriesAllowed"
         }
     },
     "required": [

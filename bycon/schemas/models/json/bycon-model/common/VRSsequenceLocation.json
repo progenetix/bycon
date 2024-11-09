@@ -4,7 +4,7 @@
     "title": "VRS SequenceLocation",
     "type": "object",
     "description": "Simplified VRS v2 SequenceLocation.",
-    "definitions": {
+    "$defs": {
         "SequenceLocation": {
             "description": "A Location defined by an interval on a referenced Sequence.",
             "type": "object",

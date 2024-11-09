@@ -30,7 +30,7 @@ properties:
       - staging
     example: dev
   organization:
-    $ref: '#/definitions/BeaconOrganization'
+    $ref: '#/$defs/BeaconOrganization'
   description:
     type: string
     description: Description of the Beacon.
@@ -63,7 +63,7 @@ properties:
       additionalInfoKey2:
         - additionalInfoValue2
         - additionalInfoValue3
-definitions:
+$defs:
   BeaconOrganization:
     description: Organization owning the Beacon.
     type: object

@@ -27,12 +27,12 @@
             "type": "string"
         },
         "location": {
-            "$ref": "#/definitions/Location"
+            "$ref": "#/$defs/Location"
         },
         "adjoinedSequences": {
             "type": "array",
             "items": {
-                "$ref": "#/definitions/Location"
+                "$ref": "#/$defs/Location"
             }
         },
         "variantState": {
@@ -72,7 +72,7 @@
             ]
         }
     },
-    "definitions": {
+    "$defs": {
         "Location": {
             "type": "object",
             "properties": {

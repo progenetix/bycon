@@ -18,8 +18,8 @@ properties:
   location:
     $ref: './VRSsequenceLocation.yaml'
   state:
-    $ref: '#/definitions/LiteralSequenceExpression'
-definitions:
+    $ref: '#/$defs/LiteralSequenceExpression'
+$defs:
   LiteralSequenceExpression:
     description: An explicit expression of a Sequence.
     type: object

@@ -21,11 +21,11 @@ properties:
   individualId:
     type: string
   location:
-    $ref: "#/definitions/Location"
+    $ref: "#/$defs/Location"
   adjoinedSequences:
     type: array
     items:
-      $ref: "#/definitions/Location"
+      $ref: "#/$defs/Location"
   variantState:
     description: >-
       The parameter is used to define the type of variant, with current
@@ -56,7 +56,7 @@ properties:
     examples:
       - "2020-09-10T17:44:10.170Z"
 
-definitions:
+$defs:
   Location:
     type: object
     properties:

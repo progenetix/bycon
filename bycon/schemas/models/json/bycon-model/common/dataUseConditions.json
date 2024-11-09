@@ -7,12 +7,12 @@
         "duoDataUse": {
             "type": "array",
             "items": {
-                "$ref": "#/definitions/DUODataUse"
+                "$ref": "#/$defs/DUODataUse"
             },
             "minItems": 1
         }
     },
-    "definitions": {
+    "$defs": {
         "DUODataUse": {
             "allOf": [
                 {

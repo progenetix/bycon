@@ -40,7 +40,7 @@ properties:
   hierarchy_paths:
     type: array
     items:
-      $ref: '#/definitions/PathItem'
+      $ref: '#/$defs/PathItem'
   parent_terms:
     type: array
     items: string
@@ -74,7 +74,7 @@ properties:
   code_matches:
     type: integer
 
-definitions:
+$defs:
   PathItem:
     type: object
     properties:

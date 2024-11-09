@@ -9,7 +9,6 @@ from bycon_helpers import *
 from handover_generation import dataset_response_add_handovers
 from query_execution import ByconDatasetResults # execute_bycon_queries
 from query_generation import ByconQuery
-from read_specs import load_yaml_empty_fallback
 from response_remapping import *
 from variant_mapping import ByconVariant
 from schema_parsing import get_schema_file_path, object_instance_from_schema_name
@@ -565,7 +564,7 @@ class ByconFilteringTerms:
         r_o = {}
         f_d_s = BYC.get("filter_definitions", {})
         collation_types = list(self.filter_collation_types)
-        res_schema = object_instance_from_schema_name("beaconFilteringTermsResults", "definitions/Resource",
+        res_schema = object_instance_from_schema_name("beaconFilteringTermsResults", "$defs/Resource",
                                                       "json")
         for c_t in collation_types:
             if c_t not in f_d_s:
@@ -796,7 +795,7 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __create_empty_result_sets(self):
-        r_set = object_instance_from_schema_name("beaconResultsets", "definitions/ResultsetInstance")
+        r_set = object_instance_from_schema_name("beaconResultsets", "$defs/ResultsetInstance")
         r_sets = []
         for ds_id in BYC["BYC_DATASET_IDS"]:
             ds_rset = r_set.copy()

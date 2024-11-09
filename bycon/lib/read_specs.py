@@ -4,8 +4,9 @@ from json_ref_dict import RefDict, materialize
 from os import path, pardir, scandir, environ
 from pathlib import Path
 
-from cgi_parsing import prdbug
 from config import *
+from bycon_helpers import load_yaml_empty_fallback, prdbug, prdbughead
+from parameter_parsing import *
 
 ################################################################################
 
@@ -81,16 +82,4 @@ def update_rootpars_from_local_or_HOST():
         BYC.update({p: always_merger.merge(BYC.get(p, {}), d)})
 
     return
-
-
-################################################################################
-
-def load_yaml_empty_fallback(yp):
-    y = {}
-    try:
-        with open( yp ) as yd:
-            y = yaml.load( yd , Loader=yaml.FullLoader)
-    except Exception as e:
-        pass
-    return y
 

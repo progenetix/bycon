@@ -2,7 +2,7 @@ import re
 from copy import deepcopy
 from deepmerge import always_merger
 
-from cgi_parsing import prdbug
+from parameter_parsing import prdbug
 from config import *
 from bycon_helpers import clean_empty_fields
 from schema_parsing import object_instance_from_schema_name

@@ -22,6 +22,7 @@ def set_user_name():
     elif (un := BYC_PARS.get("user_name", "anonymous")) in BYC.get("authorizations", {}):
         BYC.update({"USER": un})
 
+
 ################################################################################
 
 def set_returned_granularities():

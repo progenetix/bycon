@@ -213,7 +213,7 @@ properties:
   #   items:
   #     $ref: ../common/ontologyTerm.yaml
   info:
-    $ref: ../common/commonDefinitions.yaml#/definitions/Info
+    $ref: ../common/commonDefinitions.yaml#/$defs/Info
 required:
   - id
 additionalProperties: true

@@ -7,7 +7,7 @@
             "$ref": "./sections/beaconResponseMeta.json"
         },
         "error": {
-            "$ref": "../common/beaconCommonComponents.json#/definitions/BeaconError"
+            "$ref": "../common/beaconCommonComponents.json#/$defs/BeaconError"
         }
     },
     "required": [

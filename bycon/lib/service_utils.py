@@ -3,12 +3,10 @@ import re
 from deepmerge import always_merger
 from os import environ, path
 
-from args_parsing import *
 from config import *
 from beacon_auth import *
-from bycon_helpers import return_paginated_list, prdbug, prdbughead, set_debug_state, test_truthy
+from bycon_helpers import return_paginated_list, prdbug, prdbughead, RefactoredValues, set_debug_state, test_truthy
 from dataset_parsing import select_dataset_ids
-from parse_filters_request import parse_filters
 
 
 ################################################################################
@@ -22,12 +20,10 @@ def set_beacon_defaults():
 ################################################################################
 
 def initialize_bycon_service():
-    # update_requested_schema_from_request()
     set_special_modes()
     select_dataset_ids()
     set_user_name()
     set_returned_granularities()    
-    parse_filters()
 
 
 ################################################################################
@@ -57,6 +53,8 @@ def set_entities():
     b_e_d = BYC.get("entity_defaults", {})
     a_defs = BYC.get("argument_definitions", {})
 
+    # here aliases are read in, e.g. to allow "schemas" instead of "byconschemas"
+    # ("schemas" is avoided since being "keywordy") etc.
     dealiased_path_ids = {}
     for e, e_d in b_e_d.items():
         p_id = e_d.get("request_entity_path_id")
@@ -91,7 +89,7 @@ def set_entities():
     BYC.update({
         "path_id_value_bycon_parameter": p_p,
         "request_entity_id": rq_d.get("request_entity_id", q_id),
-        "request_entity_path_id": p_i_d,
+        "request_entity_path_id": q_id,
         "response_entity_id": rp_d.get("response_entity_id", q_id),
         "response_entity_path_id": rp_i_d,
         "response_entity": rp_d,
@@ -103,25 +101,4 @@ def set_entities():
         if p_p in a_defs.keys():
             v = RefactoredValues(a_defs[p_p]).refVal(rpidv)
             BYC_PARS.update({p_p: v})
-
-
-################################################################################
-
-# def update_requested_schema_from_request():
-#     # query_meta may come from the meta in a POST
-#     b_qm = BYC.get("query_meta", {})
-
-#     # TODO: check if correct schema in request
-#     if "requested_schema" in BYC_PARS:
-#         BYC.update({"response_entity_id": BYC_PARS.get("requested_schema", BYC["response_entity_id"])})
-#     elif "requested_schemas" in b_qm:
-#         BYC.update({"response_entity_id": b_qm["requested_schemas"][0].get("entity_type", BYC["response_entity_id"])})
-
-
-################################################################################
-
-def set_response_schema():
-    r_e = BYC.get("response_entity", {})
-    r_s = r_e.get("response_schema", "beaconInfoResponse")
-    BYC.update({"response_schema": r_s})
 

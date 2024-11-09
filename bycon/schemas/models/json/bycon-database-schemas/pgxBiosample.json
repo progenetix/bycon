@@ -195,7 +195,7 @@
             ]
         },
         "analysisInfo": {
-            "$ref": "#/definitions/AnalysisInfo"
+            "$ref": "#/$defs/AnalysisInfo"
         },
         "updated": {
             "type": "string",
@@ -209,7 +209,7 @@
             "type": "object"
         }
     },
-    "definitions": {
+    "$defs": {
         "AnalysisInfo": {
             "properties": {
                 "experiment_id": {

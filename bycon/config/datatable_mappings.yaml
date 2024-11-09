@@ -114,7 +114,7 @@ ordered_variants_core:
   - sequence
 
 
-definitions:
+$defs:
 
 #--------------------------- analysis & run -----------------------------------#
   

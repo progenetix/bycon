@@ -52,7 +52,7 @@
         "hierarchy_paths": {
             "type": "array",
             "items": {
-                "$ref": "#/definitions/PathItem"
+                "$ref": "#/$defs/PathItem"
             }
         },
         "parent_terms": {
@@ -107,7 +107,7 @@
             "type": "integer"
         }
     },
-    "definitions": {
+    "$defs": {
         "PathItem": {
             "type": "object",
             "properties": {

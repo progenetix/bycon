@@ -1,8 +1,9 @@
-import base36, humps, json, re, time
+import base36, humps, json, re, time, yaml
 
 from isodate import parse_duration
 from datetime import datetime
 from os import environ
+from pathlib import Path
 from pymongo import MongoClient
 
 from config import *
@@ -390,3 +391,13 @@ def mongo_and_or_query_from_list(query, logic="AND"):
         return {}
 
 
+################################################################################
+
+def load_yaml_empty_fallback(yp):
+    y = {}
+    f = Path(yp)
+    if not f.is_file():
+        return y
+    with open( yp ) as yd:
+        y = yaml.load( yd , Loader=yaml.FullLoader)
+    return y

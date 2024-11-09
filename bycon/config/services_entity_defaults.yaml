@@ -4,6 +4,12 @@
 # framework and might be disentangled further on ...
 ################################################################################
 
+byconschemas:
+  request_entity_path_aliases:
+    - schemas
+  request_entity_path_id: byconschemas
+  path_id_value_bycon_parameter: id
+
 cnvstats:
   request_entity_path_id: cnvstats
   request_entity_id: analysis
@@ -155,12 +161,6 @@ sampleplots:
     entity_type: SVG
     schema: NA
   path_id_value_bycon_parameter: biosample_ids
-
-byconschemas:
-  request_entity_path_aliases:
-    - schemas
-  request_entity_path_id: byconschemas
-  path_id_value_bycon_parameter: id
 
 uploader:
   request_entity_path_id: uploader

@@ -11,10 +11,10 @@ properties:
     type: array
     items:
       anyOf:
-        - $ref: '#/definitions/OntologyFilter'
-        - $ref: '#/definitions/AlphanumericFilter'
-        - $ref: '#/definitions/CustomFilter'
-definitions:
+        - $ref: '#/$defs/OntologyFilter'
+        - $ref: '#/$defs/AlphanumericFilter'
+        - $ref: '#/$defs/CustomFilter'
+$defs:
   OntologyFilter:
     type: object
     description: Filter results to include records that contain a specific ontology

@@ -14,7 +14,7 @@
         },
         "info": {
             "description": "Additional details that could be of interest. Provided to clearly enclose any attribute that is not part of the Beacon specification.",
-            "$ref": "../../../framework/json/common/beaconCommonComponents.json#/definitions/Info"
+            "$ref": "../../../framework/json/common/beaconCommonComponents.json#/$defs/Info"
         },
         "response": {
             "type": "object",

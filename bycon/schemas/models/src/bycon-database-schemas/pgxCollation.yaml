@@ -89,7 +89,7 @@ properties:
   hierarchyPaths:
     type: array
     items:
-      $ref: '#/definitions/HierarchyPath/properties' 
+      $ref: '#/$defs/HierarchyPath/properties' 
     description: >
       All term paths leading to any instance of this code from the hierarchy
       root term.
@@ -109,7 +109,7 @@ properties:
     examples:
       - "2022-03-08T10:44:10.170Z"
 
-definitions:
+$defs:
 
   HierarchyPath:
     description: >-

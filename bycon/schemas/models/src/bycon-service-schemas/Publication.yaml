@@ -89,7 +89,7 @@ properties:
     type: string
 
   contact:
-    $ref: '#/definitions/Contact/properties'
+    $ref: '#/$defs/Contact/properties'
 
   geoLocation:
     $ref: 'GeoLocation.yaml#/properties'
@@ -103,7 +103,7 @@ properties:
     examples:
       - "2020-09-10T17:44:10.170Z"
 
-definitions:
+$defs:
   Contact:
     type: object
     properties:

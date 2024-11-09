@@ -99,7 +99,7 @@
             ]
         },
         "info": {
-            "$ref": "../common/commonDefinitions.json#/definitions/Info"
+            "$ref": "../common/commonDefinitions.json#/$defs/Info"
         }
     },
     "required": [

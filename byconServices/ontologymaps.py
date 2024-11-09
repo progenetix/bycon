@@ -1,7 +1,6 @@
 from bycon import BYC, BeaconErrorResponse, print_json_response
 from byconServiceLibs import ByconServiceResponse, OntologyMaps, read_service_prefs
 
-
 def ontologymaps():
     """
 
