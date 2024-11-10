@@ -3,10 +3,11 @@
 import inspect, sys, re, yaml
 from os import getlogin, makedirs, path, system
 from pathlib import Path
+from json_ref_dict import RefDict, materialize
 
 dir_path = path.dirname( path.abspath(__file__) )
 
-from bycon import BYC
+from bycon import * #BYC, read_schema_file
 import byconServices
 
 ################################################################################
@@ -41,6 +42,12 @@ def main():
 
     #>------------------------------------------------------------------------<#
 
+    """
+    The block below parses the `entity_defaults.yaml` file and extracts some
+    definitions, examples and links for creating a Markdown page (for processing
+    with the mkdocs engine).
+    Very scripty single use code...
+    """
 
     pp_f = path.join(generated_docs_path, f"beacon-responses.md")
     pp_fh = open(pp_f, "w")
@@ -51,10 +58,14 @@ def main():
 The following is a list of standard Beacon responses supported by the `bycon` package.
 Responses for individual entities or endpoints are grouped by their Beacon framework
 response classes (e.g. `beaconResultsetsResponse` for `biosamples`, `g_variants` etc.).
-
+\n\n
 Please be reminded about the general syntax used in Beacon: A **path element** such
 as `/biosamples` corresponds to an entity (here `biosample`). Below these relations
 are indicated by the `@` symbol.
+\n\n
+#### Schemas **{S}**, Tests **{T}** and Examples **{E}**
+Tests, examples and schemas are run from the server defined in this site's build instructions
+(see the `reference_server_url` entry in `mkdocs.yaml` file in the repository's root).
 \n\n""")
 
     for e, e_d in BYC["entity_defaults"].items():
@@ -67,20 +78,36 @@ are indicated by the `@` symbol.
 
     for r_s in beacon_ets:
         pp_fh.write(f'## {r_s}\n\n')
+        if (schema := read_schema_file(r_s, "")):
+            if len((s_desc := schema.get("description"), "")) > 1:
+                pp_fh.write(f'{s_desc}\n\n')
+        e_url = '{{config.reference_server_url}}/services/schemas' + f'/{r_s}'
+        pp_fh.write(f'* **{{S}}** <{e_url}>\n\n')
         for e_d in beacon_ets[r_s]:
             pp_fh.write(f'### {e_d["response_entity_id"]} @ `/{e_d["request_entity_path_id"]}`\n\n')
+            b_s = e_d.get("beacon_schema", {})
+            b_s_s = b_s.get("schema", "")
+            b_s_n = b_s_s.rstrip("/").split('/')[-1]
+
+            description = ""
+            # TODO: Doesn't work if schema has reference to external file ...
+            if (schema := read_schema_file(b_s_n, "")):
+                if len((s_desc := schema.get("description"), "")) > 1:
+                    description += f'{s_desc}\n\n'
             if (d := e_d.get("description")):
-                pp_fh.write(f'#### Description\n\n{e_d["description"]}\n\n')
-            if (s := e_d.get("beacon_schema")):
-                pp_fh.write(f'#### Schema for _{s.get("entity_type")}_\n\n')
-                pp_fh.write(f'* <{s.get("schema", "")}>\n\n')
+                description += f'{d}\n\n'
+            if len(description) > 2:
+                pp_fh.write(f'{description}\n\n')
+            s_url = '{{config.reference_server_url}}/services/schemas' + f'/{b_s_n}'
+            pp_fh.write(f'* **{{S}}** <{s_url}>\n\n')
             test_url = '{{config.reference_server_url}}/beacon' + f'/{e_d["request_entity_path_id"]}'
             if "BeaconDataResponse" in e_d.get("bycon_response_class", ""):
                 test_url += "?testMode=true"
-            pp_fh.write(f'#### Tests\n\n* <{test_url}>\n\n')
-            for e in e_d.get("tests", []):
-                e_url = '{{config.reference_server_url}}/beacon' + f'/{e_d["request_entity_path_id"]}'
-                pp_fh.write(f'* <{e_url}{e}>\n\n')
+            pp_fh.write(f'* **{{T}}** <{test_url}>\n\n')
+            if len(e_s := e_d.get("examples", [])) > 0:
+                for e in e_s:
+                    e_url = '{{config.reference_server_url}}/beacon' + f'/{e_d["request_entity_path_id"]}'
+                    pp_fh.write(f'* **{{E}}** <{e_url}{e}>\n\n')
             pp_fh.write('\n\n')
     pp_fh.close()
 
@@ -97,7 +124,14 @@ are indicated by the `@` symbol.
         },
         "argument_definitions": {
             "title": "`bycon` Arguments and Parameters",
-            "preamble": "The following is a list of arguments and parameters used in the `bycon` package as well as the `byconaut` tools."
+            "preamble": """
+The following is a list of arguments and parameters used in the `bycon` package
+as well as the `byconaut` tools.
+
+
+Parameters are listed in `snake_case` format although for command line arguments
+(and also optionally web requests) `camelCase` versions are required (see the `cmdFlags`).
+"""
         }
     }
 

@@ -308,12 +308,12 @@ components:
       name: skip
       in: query
       schema:
-        $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/$defs/Skip
+        $ref: https://progenetix.org/services/schemas/beaconCommonComponents.json#/$defs/Skip
     limit:
       name: limit
       in: query
       schema:
-        $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/$defs/Limit
+        $ref: https://progenetix.org/services/schemas/beaconCommonComponents.json#/$defs/Limit
     entryId:
       name: id
       in: path

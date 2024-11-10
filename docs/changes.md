@@ -6,6 +6,13 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2024-11-10 (v2.0.9)
+
+* switching schema model internal references to own server instead of the hardcoded
+  Github repo from the standard schema; e.g.
+    - from <https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/definitions>
+    - to <https://progenetix.org/services/schemas/beaconCommonComponents.json#/definitions>
+
 ### 2024-11-09 (v2.0.8)
 
 * some library re-shuffling/condensation

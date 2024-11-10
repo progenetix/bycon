@@ -32,7 +32,7 @@
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse.json"
                     }
                 }
             }
@@ -55,7 +55,7 @@
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse.json"
                     }
                 }
             }
@@ -73,7 +73,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/ga4gh-service-info-1-0-0-schema.json"
+                                    "$ref": "https://progenetix.org/services/schemas/ga4gh-service-info-1-0-0-schema.json"
                                 }
                             }
                         }
@@ -95,14 +95,14 @@
                             "application/json": {
                                 "schema": {
                                     "description": "Response of a request for information about a Beacon",
-                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconConfigurationResponse.json"
+                                    "$ref": "https://progenetix.org/services/schemas/beaconConfigurationResponse.json"
                                 }
                             }
                         }
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse.json"
                     }
                 }
             }
@@ -122,14 +122,14 @@
                             "application/json": {
                                 "schema": {
                                     "description": "Response of a request for information about a Beacon",
-                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconEntryTypesResponse.json"
+                                    "$ref": "https://progenetix.org/services/schemas/beaconEntryTypesResponse.json"
                                 }
                             }
                         }
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse.json"
                     }
                 }
             }
@@ -149,14 +149,14 @@
                             "application/json": {
                                 "schema": {
                                     "description": "Response of a request for information about a Beacon",
-                                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconMapResponse.json"
+                                    "$ref": "https://progenetix.org/services/schemas/beaconMapResponse.json"
                                 }
                             }
                         }
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse.json"
                     }
                 }
             }
@@ -178,11 +178,11 @@
                 ],
                 "responses": {
                     "200": {
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconFilteringTermsResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconFilteringTermsResponse.json"
                     },
                     "default": {
                         "description": "An unsuccessful operation",
-                        "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json"
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse.json"
                     }
                 }
             }
@@ -196,7 +196,7 @@
                     "application/json": {
                         "schema": {
                             "description": "Response of a request for information about a Beacon",
-                            "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconInfoResponse.json"
+                            "$ref": "https://progenetix.org/services/schemas/beaconInfoResponse.json"
                         }
                     }
                 }
@@ -217,14 +217,14 @@
                 "name": "skip",
                 "in": "query",
                 "schema": {
-                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/$defs/Skip"
+                    "$ref": "https://progenetix.org/services/schemas/beaconCommonComponents.json#/$defs/Skip"
                 }
             },
             "limit": {
                 "name": "limit",
                 "in": "query",
                 "schema": {
-                    "$ref": "https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/$defs/Limit"
+                    "$ref": "https://progenetix.org/services/schemas/beaconCommonComponents.json#/$defs/Limit"
                 }
             }
         }

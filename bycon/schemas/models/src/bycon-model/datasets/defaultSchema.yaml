@@ -38,8 +38,6 @@ properties:
       3986 format).
     examples:
       - http://example.org/wiki/Main_Page
-  info:
-    $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/$defs/Info
   dataUseConditions:
     description: Data use conditions applying to this dataset.
     $ref: ../common/dataUseConditions.yaml

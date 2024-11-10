@@ -1,5 +1,8 @@
 # `bycon` Arguments and Parameters
-The following is a list of arguments and parameters used in the `bycon` package as well as the `byconaut` tools.
+The following is a list of arguments and parameters used in the `bycon` package
+as well as the `byconaut` tools.
+Parameters are listed in `snake_case` format although for command line arguments
+(and also optionally web requests) `camelCase` versions are required (see the `cmdFlags`).
 ## Definitions
 ### `user_name` 
 **type:** string    

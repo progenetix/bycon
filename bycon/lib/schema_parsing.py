@@ -20,6 +20,7 @@ def read_schema_file(schema_name, item, ext="json"):
             schema_name = r_p_id
 
     s_f_p = get_default_schema_file_path(schema_name, "defaultSchema", ext)
+    # prdbug(f'...read_schema_file {schema_name}: {s_f_p}')
     if s_f_p is False:  # in case the name had been used as request_entity_path_id
         s_f_p = get_schema_file_path(schema_name, ext)
 

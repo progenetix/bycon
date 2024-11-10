@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "description": "Beacon response that includes record level details, grouped in Resultsets.",
+    "description": "A `beaconResultsetsResponse` returns the results of a query against a beacon, which - beyond the summary count response for overall matches - contains details about the matches in individual **collections** in the beacon or beacon network. The types of `beaconResultsets` objects are defined in the beacon's configuration; if using the Beacon v2+ default model the types `dataset` and `cohort` are supported. `beaconResultsets` typically contain a list of records matched by the query.",
     "type": "object",
     "properties": {
         "meta": {

@@ -26,7 +26,7 @@ paths:
         '200':
           $ref: '#/components/responses/ResultsOKResponse'
         default:
-          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json
+          $ref: https://progenetix.org/services/schemas/beaconErrorResponse.json
     post:
       description: Get a list of sequencing runs
       operationId: postRunsRequest
@@ -36,14 +36,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/requests/beaconRequestBody.json
+              $ref: https://progenetix.org/services/schemas/beaconRequestBody.json
         required: true
       responses:
         '200':
           $ref: '#/components/responses/ResultsOKResponse'
         default:
           description: An unsuccessful operation
-          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json
+          $ref: https://progenetix.org/services/schemas/beaconErrorResponse.json
   /runs/{id}:
     parameters:
       - $ref: '#/components/parameters/entryId'
@@ -58,7 +58,7 @@ paths:
           $ref: '#/components/responses/ResultsOKResponse'
         default:
           description: An unsuccessful operation
-          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json
+          $ref: https://progenetix.org/services/schemas/beaconErrorResponse.json
     post:
       description: Get details about one Run, identified by its (unique) 'id'
       operationId: postOneRun
@@ -68,14 +68,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/requests/beaconRequestBody.json
+              $ref: https://progenetix.org/services/schemas/beaconRequestBody.json
         required: true
       responses:
         '200':
           $ref: '#/components/responses/ResultsOKResponse'
         default:
           description: An unsuccessful operation
-          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json
+          $ref: https://progenetix.org/services/schemas/beaconErrorResponse.json
   /runs/{id}/g_variants:
     parameters:
       - $ref: '#/components/parameters/entryId'
@@ -94,7 +94,7 @@ paths:
           $ref: '#/components/responses/ResultsOKResponse'
         default:
           description: An unsuccessful operation
-          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json
+          $ref: https://progenetix.org/services/schemas/beaconErrorResponse.json
     post:
       description: Get the genomic variants list from one run, identified by its (unique)
         'id'
@@ -105,14 +105,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/requests/beaconRequestBody.json
+              $ref: https://progenetix.org/services/schemas/beaconRequestBody.json
         required: true
       responses:
         '200':
           $ref: '#/components/responses/ResultsOKResponse'
         default:
           description: An unsuccessful operation
-          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json
+          $ref: https://progenetix.org/services/schemas/beaconErrorResponse.json
   /runs/{id}/analyses:
     parameters:
       - $ref: '#/components/parameters/entryId'
@@ -131,7 +131,7 @@ paths:
           $ref: '#/components/responses/ResultsOKResponse'
         default:
           description: An unsuccessful operation
-          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json
+          $ref: https://progenetix.org/services/schemas/beaconErrorResponse.json
     post:
       description: Get the analysis list from one sequencing run, identified by its
         (unique) 'id'
@@ -142,14 +142,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/requests/beaconRequestBody.json
+              $ref: https://progenetix.org/services/schemas/beaconRequestBody.json
         required: true
       responses:
         '200':
           $ref: '#/components/responses/ResultsOKResponse'
         default:
           description: An unsuccessful operation
-          $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconErrorResponse.json
+          $ref: https://progenetix.org/services/schemas/beaconErrorResponse.json
 components:
   responses:
     ResultsOKResponse:
@@ -158,9 +158,9 @@ components:
         application/json:
           schema:
             oneOf:
-              - $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconBooleanResponse.json
-              - $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconCountResponse.json
-              - $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/responses/beaconResultsetsResponse.json
+              - $ref: https://progenetix.org/services/schemas/beaconBooleanResponse.json
+              - $ref: https://progenetix.org/services/schemas/beaconCountResponse.json
+              - $ref: https://progenetix.org/services/schemas/beaconResultsetsResponse.json
   parameters:
     requestedSchema:
       name: requestedSchema
@@ -175,14 +175,14 @@ components:
       name: skip
       in: query
       schema:
-        $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/$defs/Skip
+        $ref: https://progenetix.org/services/schemas/beaconCommonComponents.json#/$defs/Skip
     limit:
       name: limit
       in: query
       schema:
-        $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/$defs/Limit
+        $ref: https://progenetix.org/services/schemas/beaconCommonComponents.json#/$defs/Limit
     includeResultsetResponses:
-      $ref: https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/$defs/IncludeResultsetResponses
+      $ref: https://progenetix.org/services/schemas/beaconCommonComponents.json#/$defs/IncludeResultsetResponses
     entryId:
       name: id
       in: path
