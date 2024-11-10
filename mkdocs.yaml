@@ -4,6 +4,8 @@ site_author: Michael Baudis
 repo_name: bycon
 repo_url: https://github.com/progenetix/bycon
 
+reference_server_url: https://beaconplus.progenetix.org
+
 ###############################################################################
 
 nav:

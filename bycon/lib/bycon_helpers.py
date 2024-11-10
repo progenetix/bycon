@@ -178,6 +178,10 @@ def days_from_iso8601duration(iso8601duration):
         days += int(duration.days)
     except AttributeError:
         pass
+    # try:
+    #     days += int(duration.seconds) / 
+    # except AttributeError:
+    #     pass
 
     return days
 

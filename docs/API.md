@@ -1,10 +1,9 @@
 # API Documentation
 
-## Beacon Endpoints
+## Beacon Responses [:link:](/generated/beacon-responses)
 
-==TBD==
 
-## Service Endpoints
+## Service Endpoints [:link:](/generated/services)
 
 Additionally to the standard Beacon endpoints provided for the Beacon framework and default data model
 `bycon` also has a number of service endpoints. Some of them are used to provide direct Beacon support (e.g. `/endpoints` or `/schemas` to implement endpoints accessed from Beacon responses), while others

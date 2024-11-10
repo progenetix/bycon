@@ -6,11 +6,17 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
-### 2024-11-09 (v2.0.7)
+### 2024-11-09 (v2.0.8)
 
 * some library re-shuffling/condensation
 * more work on circle plotting, e.g. separate class `ByconCircleTools`
 * more documentation
+
+### 2024-11-07 (v2.0.7)
+
+* fixed `/datasets` response, recently broken during class refactoring
+* added Beacon response documentation from parsing `entity_defaults` with the
+  `markdowner.py` script into `/docs/generated`
 
 ### 2024-11-07 (v2.0.6)
 

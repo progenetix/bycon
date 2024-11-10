@@ -41,6 +41,52 @@ def main():
 
     #>------------------------------------------------------------------------<#
 
+
+    pp_f = path.join(generated_docs_path, f"beacon-responses.md")
+    pp_fh = open(pp_f, "w")
+    md = []
+    beacon_ets = {}
+    pp_fh.write("""# Beacon Responses
+
+The following is a list of standard Beacon responses supported by the `bycon` package.
+Responses for individual entities or endpoints are grouped by their Beacon framework
+response classes (e.g. `beaconResultsetsResponse` for `biosamples`, `g_variants` etc.).
+
+Please be reminded about the general syntax used in Beacon: A **path element** such
+as `/biosamples` corresponds to an entity (here `biosample`). Below these relations
+are indicated by the `@` symbol.
+\n\n""")
+
+    for e, e_d in BYC["entity_defaults"].items():
+        if not (e_d.get("is_beacon_entity", False)):
+            continue
+        r_s = e_d.get("response_schema")
+        if not r_s in beacon_ets:
+            beacon_ets.update({r_s: []})
+        beacon_ets[r_s].append(e_d)
+
+    for r_s in beacon_ets:
+        pp_fh.write(f'## {r_s}\n\n')
+        for e_d in beacon_ets[r_s]:
+            pp_fh.write(f'### {e_d["response_entity_id"]} @ `/{e_d["request_entity_path_id"]}`\n\n')
+            if (d := e_d.get("description")):
+                pp_fh.write(f'#### Description\n\n{e_d["description"]}\n\n')
+            if (s := e_d.get("beacon_schema")):
+                pp_fh.write(f'#### Schema for _{s.get("entity_type")}_\n\n')
+                pp_fh.write(f'* <{s.get("schema", "")}>\n\n')
+            test_url = '{{config.reference_server_url}}/beacon' + f'/{e_d["request_entity_path_id"]}'
+            if "BeaconDataResponse" in e_d.get("bycon_response_class", ""):
+                test_url += "?testMode=true"
+            pp_fh.write(f'#### Tests\n\n* <{test_url}>\n\n')
+            for e in e_d.get("tests", []):
+                e_url = '{{config.reference_server_url}}/beacon' + f'/{e_d["request_entity_path_id"]}'
+                pp_fh.write(f'* <{e_url}{e}>\n\n')
+            pp_fh.write('\n\n')
+    pp_fh.close()
+
+
+    #>------------------------------------------------------------------------<#
+
     file_pars = {
         "plot_defaults":{
             "chapters": {

@@ -227,7 +227,7 @@ class BeaconInfoResponse:
         ets = set()
         beacon_schemas = []
         for e_t, e_d in self.entity_defaults.items():
-            if e_d.get("is_beacon_default", False) is True and e_t not in ets:
+            if e_d.get("is_beacon_entity", False) is True and e_t not in ets:
                 beacon_schemas.append(e_d.get("beacon_schema", {}))
                 ets.add(e_t)
 
@@ -613,7 +613,7 @@ class ByconCollections:
     def __collections_return_datasets(self):
         if not "dataset" in self.response_entity_id:
             return
-        dbstats = __datasets_update_latest_stats()
+        dbstats = self.__datasets_update_latest_stats()
         self.collections = dbstats
         self.collections_queries.update({"datasets":{}})
 
@@ -622,7 +622,7 @@ class ByconCollections:
 
     # -------------------------------------------------------------------------#
 
-    def __datasets_update_latest_stats():
+    def __datasets_update_latest_stats(self):
         results = []
         stat = []
 
@@ -642,7 +642,7 @@ class ByconCollections:
                         coll.update({ "filtering_terms": ds_vs.get("filtering_terms", []) } )
             # TODO: remove verifier hack
             for t in ["createDateTime", "updateDateTime"]:
-                d = str(d_s.get(t, "1967-11-11"))
+                d = str(coll.get(t, "1967-11-11"))
                 if re.match(r'^\d\d\d\d\-\d\d\-\d\d$', d):
                     coll.update({t:f'{d}T00:00:00+00:00'})
             results.append(coll)

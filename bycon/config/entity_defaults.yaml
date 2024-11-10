@@ -1,4 +1,8 @@
 info:
+  description: >-
+    The `info` endpoint provides information about the Beacon, such as its name,
+    the organization responsible for the Beacon, a contact email,
+    and the API version. It is based on the GA4GH `service-info` standard.
   request_entity_path_id: info
   request_entity_path_aliases:
     - "/"
@@ -10,12 +14,14 @@ info:
   beacon_schema:
     entity_type: configuration
     schema: https://progenetix.org/services/schemas/beaconInfoResults/
-  is_beacon_default: true
+  is_beacon_entity: true
   content: {}
 
 ################################################################################
 
 beaconMap:
+  description: >-
+    The `beaconMap` object provides a map of the Beacon's REST endpoints.
   request_entity_path_id: map
   response_entity_id: beaconMap
   collection: Null
@@ -24,7 +30,7 @@ beaconMap:
   beacon_schema:
     entity_type: map
     schema: https://progenetix.org/services/schemas/beaconMapSchema/
-  is_beacon_default: true
+  is_beacon_entity: true
 
 ################################################################################
 
@@ -37,7 +43,7 @@ configuration:
   beacon_schema:
     entity_type: configuration
     schema: https://progenetix.org/services/schemas/beaconConfigurationSchema/
-  is_beacon_default: true
+  is_beacon_entity: true
 
 ################################################################################
 
@@ -50,7 +56,7 @@ entryType:
   beacon_schema:
     entity_type: entryType
     schema: https://progenetix.org/services/schemas/entryTypesSchema/
-  is_beacon_default: true
+  is_beacon_entity: true
 
 ################################################################################
 
@@ -63,7 +69,7 @@ filteringTerm:
   beacon_schema:
     entity_type: filteringTerm
     schema: https://progenetix.org/services/schemas/filteringTermsSchema/
-  is_beacon_default: true
+  is_beacon_entity: true
   path_id_value_bycon_parameter: filters
 
 ################################################################################
@@ -78,7 +84,7 @@ analysis:
     entity_type: analysis
     schema: https://progenetix.org/services/schemas/analysis/
   h->o_access_key: analyses.id
-  is_beacon_default: true
+  is_beacon_entity: true
   path_id_value_bycon_parameter: analysis_ids
 
 ################################################################################
@@ -95,15 +101,17 @@ biosample:
     entity_type: biosample
     schema: https://progenetix.org/services/schemas/biosample/
   h->o_access_key: biosamples.id
-  is_beacon_default: true
+  is_beacon_entity: true
   path_id_value_bycon_parameter: biosample_ids
+  tests:
+    - ?filters=NCIT:C4017&limit=3
 
 ##############################################################################
 
 genomicVariant:
-  request_entity_path_id: genomicVariations
+  request_entity_path_id: g_variants
   request_entity_path_aliases:
-    - g_variants
+    - genomicVariations
     - variants
   response_entity_id: genomicVariant
   collection: variants
@@ -113,8 +121,10 @@ genomicVariant:
     entity_type: genomicVariant
     schema: https://progenetix.org/services/schemas/genomicVariant/
   h->o_access_key: variants.id
-  is_beacon_default: true
+  is_beacon_entity: true
   path_id_value_bycon_parameter: variant_ids
+  tests:
+    - ?geneId=CDKN2A&variantMaxSize=100000&limit=5
 
 ##############################################################################
 
@@ -128,8 +138,10 @@ individual:
     entity_type: individual
     schema: https://progenetix.org/services/schemas/individual/
   h->o_access_key: individuals.id
-  is_beacon_default: true
+  is_beacon_entity: true
   path_id_value_bycon_parameter: individual_ids
+  tests:
+    - ?filters=EFO:0030049&limit=5
 
 ##############################################################################
 
@@ -143,7 +155,7 @@ run:
     entity_type: run
     schema: https://progenetix.org/services/schemas/run/
   h->o_access_key: analyses.id
-  is_beacon_default: true
+  is_beacon_entity: true
   path_id_value_bycon_parameter: run_ids
 
 ################################################################################
@@ -160,7 +172,7 @@ cohort:
   pagination:
     skip: 0
     limit: 10
-  is_beacon_default: true
+  is_beacon_entity: true
   path_id_value_bycon_parameter: filters
 
 ##############################################################################
@@ -177,6 +189,6 @@ dataset:
   pagination:
     skip: 0
     limit: 10
-  is_beacon_default: true
+  is_beacon_entity: true
   path_id_value_bycon_parameter: dataset_ids
 
