@@ -24,7 +24,7 @@ def main():
     p = Path(path.join( dir_path, "byconServices" ))
     s_p_s = [ f for f in p.rglob("*.py") if f.is_file() ]
 
-    pp_f = path.join(generated_docs_path, f"services.md")
+    pp_f = path.join(generated_docs_path, f"beacon-services.md")
     pp_fh = open(pp_f, "w")
     md = []
     for f in sorted(s_p_s):
@@ -33,7 +33,7 @@ def main():
             continue
         # print(f'from {fn} import {fn}')
 
-        pp_fh.write(f'## `/{fn}`\n\n')
+        pp_fh.write(f'### `/{fn}`\n\n')
 
         func = getattr(byconServices, fn)
         pp_fh.write(f'{inspect.getdoc(func)}\n\n\n')
@@ -91,18 +91,7 @@ the selected or granted `responseGranularity` please check `beaconResultsetsResp
             "endpoints": [],
         }
     }
-    pp_fh.write("""# Beacon Responses
-
-The following is a list of standard Beacon responses supported by the `bycon` package.
-Responses for individual entities or endpoints are grouped by their Beacon framework
-response classes (e.g. `beaconResultsetsResponse` for `biosamples`, `g_variants` etc.).\n\n
-Please be reminded about the general syntax used in Beacon: A **path element** such
-as `/biosamples` corresponds to an entity (here `biosample`). Below these relations
-are indicated by the `@` symbol.\n\n
-#### Schemas **{S}**, Tests **{T}** and Examples **{E}**
-Tests, examples and schemas are run from the server defined in this site's build instructions
-(see the `reference_server_url` entry in `mkdocs.yaml` file in the repository's root).
-\n\n""")
+    # pp_fh.write("""<!--start-->""")
 
     for e, e_d in BYC["entity_defaults"].items():
         if not (e_d.get("is_beacon_entity", False)):
@@ -146,7 +135,6 @@ Tests, examples and schemas are run from the server defined in this site's build
                     pp_fh.write(f'* **{{E}}** <{e_url}{e}>\n\n')
             pp_fh.write('\n\n')
         pp_fh.write(f'{beacon_ets[r_s].get("postscript", "")}\n\n')
-
     pp_fh.close()
 
 
@@ -158,19 +146,8 @@ Tests, examples and schemas are run from the server defined in this site's build
                 "plot_type_defs": "Plot Types",
                 "plot_parameters": "Plot Parameters"
             },
-            "title": "Plot Parameters and Information"
         },
-        "argument_definitions": {
-            "title": "`bycon` Arguments and Parameters",
-            "preamble": """
-The following is a list of arguments and parameters used in the `bycon` package
-as well as the `byconaut` tools.
-
-
-Parameters are listed in `snake_case` format although for command line arguments
-(and also optionally web requests) `camelCase` versions are required (see the `cmdFlags`).
-"""
-        }
+        "argument_definitions": {}
     }
 
     for d_k, d_v in file_pars.items():
@@ -179,8 +156,7 @@ Parameters are listed in `snake_case` format although for command line arguments
 
         pp_f = path.join(generated_docs_path, f"{d_k}.md")
 
-        ls = [f'# {d_v.get("title")}']
-        ls.append(f'{d_v.get("preamble", "")}')
+        ls = []
 
         if not "chapters" in d_v:
             d_v = {
@@ -193,9 +169,9 @@ Parameters are listed in `snake_case` format although for command line arguments
                 pp = BYC[d_k]
             else:
                 pp = BYC[d_k].get(chapter, {})
-            ls.append(f'## {title}')
+            ls.append(f'### {title}')
             for pk, pi in pp.items():
-                ls.append(f'### `{pk}` \n')
+                ls.append(f'#### `{pk}` \n')
 
                 for pik, piv in pi.items():
                     if type(piv) is dict:

@@ -10,20 +10,23 @@ reference_server_url: https://progenetix.org
 
 nav:
   - Documentation Home: /
-  - Installation: installation
-  - Importing Data: importers
-  - Maintenance: housekeepers
-  - Beacon API: API
-  - Bycon Services: services
-  - Recent Changes: changes
-  - Upcoming & To Do: future
-  - Progenetix Site: http://progenetix.org
+  - Setup & Maintainance:
+    - Installation: installation.md
+    - Importing Data: importers/index.md
+    - Housekeeping: housekeepers/index.md
+  - Beacon API:
+    - Beacon API: API-beacon.md
+    - Services API: API-services.md
+    - API Parameters: API-parameters.md
+  - Recent Changes: changes.md
+  # - Upcoming & To Do: future.md
   - Code Repositories:
     - bycon: https://github.com/progenetix/bycon
     - byconaut: https://github.com/progenetix/byconaut
     - Front End: https://github.com/progenetix/beaconplus-web
     - Progenetix Front End: https://github.com/progenetix/progenetix-web
   - More Info:
+    - Progenetix Site: http://progenetix.org
     - baudisgroup@UZH: https://info.baudisgroup.org
     - Beacon Documentation: https://docs.genomebeacons.org
 
@@ -69,12 +72,14 @@ theme:
     - content.tabs.link
     - search.highlight
     - search.share
+    - navigation.expand
 
 plugins:
     - search
     - macros
     - mermaid2
     - mkdocstrings
+    - include-markdown
 
 extra:
   excerpt_separator: <!--more-->

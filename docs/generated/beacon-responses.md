@@ -1,20 +1,3 @@
-# Beacon Responses
-
-The following is a list of standard Beacon responses supported by the `bycon` package.
-Responses for individual entities or endpoints are grouped by their Beacon framework
-response classes (e.g. `beaconResultsetsResponse` for `biosamples`, `g_variants` etc.).
-
-
-Please be reminded about the general syntax used in Beacon: A **path element** such
-as `/biosamples` corresponds to an entity (here `biosample`). Below these relations
-are indicated by the `@` symbol.
-
-
-#### Schemas **{S}**, Tests **{T}** and Examples **{E}**
-Tests, examples and schemas are run from the server defined in this site's build instructions
-(see the `reference_server_url` entry in `mkdocs.yaml` file in the repository's root).
-
-
 ## beaconBooleanResponse
 
 Complete definition for a minimal response that provides *only* an aggregate Boolean `"exists": true` or `"exists": false` answer to the query.  
@@ -116,7 +99,7 @@ The type of response used for the endpoint depends on the requested and granted 
 
 None
 
-The type of response used for the endpoint depends on the requested and granted `responseGranularity`, _i.e._ while a "record" level `responseGranularity` has to be served through a `beaconResultsetsResponse` other granularities might employ aggregate response types.
+The type of response used for the endpoint depends on the requested and granted `responseGranularity`, _i.e._ while a "record" level `responseGranularity` has to be served through a `beaconResultsetsResponse` other granularities might employ summary response types.
 
 
 

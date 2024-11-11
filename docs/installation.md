@@ -434,7 +434,22 @@ or from the corresponding one in the web cgi directory, if installed.
 ```
 
 Of note the `--requestEntityPathId biosamples` etc. here simulates
-the corresponding REST path following the `/beacon/` component.
+
+## `services.py` and URL Mapping
+
+Bycon web services are called through the `services.py` app which is installed
+at the bycon server root. The system path for `services.py` is
+
+```
+{bycon_install_dir}/services/services.py
+```
+
+... where `bycon_install_dir` has to be user defined inside the `local/local_paths.yaml`
+configuration file (see [Installation](installation.md)). The service URL format `progenetix.org/services/__service-name__?parameter=value`
+is based on the remapping of the `services.py` script to the `/services` path and
+then extraction of the service name as the path parameter following `/services/`.
+
+
 
 [^1]: Metadata in biomedical genomics is "everything but the sequence variation"
 

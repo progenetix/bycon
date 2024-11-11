@@ -65,7 +65,7 @@ direct access to the frequecy list at `response.results[0].interval_frequencies`
 ##### `id`
 
 * standard parameter to retrieve a frequency set by its `id`
-* available values can be looked up using the [`collations`](collations.md)
+* available values can be looked up using the `collations`
 service:
   - <https://progenetix.org/services/collations?method=ids&filters=NCIT&datasetIds=progenetix>
 * an `id` value will override any given `filters`

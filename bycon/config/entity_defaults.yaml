@@ -125,7 +125,7 @@ individual:
     The type of response used for the endpoint depends on the requested and granted
     `responseGranularity`, _i.e._ while a "record" level `responseGranularity`
     has to be served through a `beaconResultsetsResponse` other granularities
-    might employ aggregate response types.
+    might employ summary response types.
   request_entity_path_id: individuals
   response_entity_id: individual
   collection: individuals
