@@ -52,17 +52,53 @@ def main():
     pp_f = path.join(generated_docs_path, f"beacon-responses.md")
     pp_fh = open(pp_f, "w")
     md = []
-    beacon_ets = {}
+    # populating with the response types to enforce some order
+    # and to add the non-document response types
+    beacon_ets = {
+        "beaconBooleanResponse": {
+            "postscript": """
+For a list of entities potentially served by `beaconBooleanResponse` depending on
+the selected or granted `responseGranularity` please check `beaconResultsetsResponse`.
+""",
+            "endpoints": [],
+        },
+        "beaconCountResponse": {
+            "postscript": """
+For a list of entities potentially served by `beaconCountResponse` depending on
+the selected or granted `responseGranularity` please check `beaconResultsetsResponse`.
+""",
+            "endpoints": [],
+        },
+        "beaconResultsetsResponse": {
+            "endpoints": [],
+        },
+        "beaconCollectionsResponse": {
+            "endpoints": [],
+        },
+        "beaconFilteringTermsResponse": {
+            "endpoints": [],
+        },
+        "beaconInfoResponse": {
+            "endpoints": [],
+        },
+        "beaconConfigurationResponse": {
+            "endpoints": [],
+        },
+        "beaconMapResponse": {
+            "endpoints": [],
+        },
+        "beaconEntryTypesResponse": {
+            "endpoints": [],
+        }
+    }
     pp_fh.write("""# Beacon Responses
 
 The following is a list of standard Beacon responses supported by the `bycon` package.
 Responses for individual entities or endpoints are grouped by their Beacon framework
-response classes (e.g. `beaconResultsetsResponse` for `biosamples`, `g_variants` etc.).
-\n\n
+response classes (e.g. `beaconResultsetsResponse` for `biosamples`, `g_variants` etc.).\n\n
 Please be reminded about the general syntax used in Beacon: A **path element** such
 as `/biosamples` corresponds to an entity (here `biosample`). Below these relations
-are indicated by the `@` symbol.
-\n\n
+are indicated by the `@` symbol.\n\n
 #### Schemas **{S}**, Tests **{T}** and Examples **{E}**
 Tests, examples and schemas are run from the server defined in this site's build instructions
 (see the `reference_server_url` entry in `mkdocs.yaml` file in the repository's root).
@@ -73,8 +109,8 @@ Tests, examples and schemas are run from the server defined in this site's build
             continue
         r_s = e_d.get("response_schema")
         if not r_s in beacon_ets:
-            beacon_ets.update({r_s: []})
-        beacon_ets[r_s].append(e_d)
+            beacon_ets.update({r_s: {"endpoints": []}})
+        beacon_ets[r_s]["endpoints"].append(e_d)
 
     for r_s in beacon_ets:
         pp_fh.write(f'## {r_s}\n\n')
@@ -83,7 +119,7 @@ Tests, examples and schemas are run from the server defined in this site's build
                 pp_fh.write(f'{s_desc}\n\n')
         e_url = '{{config.reference_server_url}}/services/schemas' + f'/{r_s}'
         pp_fh.write(f'* **{{S}}** <{e_url}>\n\n')
-        for e_d in beacon_ets[r_s]:
+        for e_d in beacon_ets[r_s].get("endpoints", []):
             pp_fh.write(f'### {e_d["response_entity_id"]} @ `/{e_d["request_entity_path_id"]}`\n\n')
             b_s = e_d.get("beacon_schema", {})
             b_s_s = b_s.get("schema", "")
@@ -109,6 +145,8 @@ Tests, examples and schemas are run from the server defined in this site's build
                     e_url = '{{config.reference_server_url}}/beacon' + f'/{e_d["request_entity_path_id"]}'
                     pp_fh.write(f'* **{{E}}** <{e_url}{e}>\n\n')
             pp_fh.write('\n\n')
+        pp_fh.write(f'{beacon_ets[r_s].get("postscript", "")}\n\n')
+
     pp_fh.close()
 
 

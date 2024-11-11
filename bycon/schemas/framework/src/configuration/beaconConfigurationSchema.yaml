@@ -1,8 +1,9 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 title: Beacon Configuration
 description: >-
-  Files complaint with this schema are the configuration ones. The details
-  returned in `service-info` are mirroring the ones in this configuration file.
+  The Beacon configuration reports several attributes of the beacon instance related
+  to security, maturity and available entry types.
+  Where appropriate the details returned in `service-info` should mirror the ones in this configuration.
 type: object
 properties:
   $schema:

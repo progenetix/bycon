@@ -35,6 +35,9 @@ cohort:
 ################################################################################
 
 genomicVariant:
+  description: >-
+    The type of response used for the endpoint depends on the requested and granted
+    `responseGranularity`.
   request_entity_path_id: g_variants
   request_entity_path_aliases:
     - genomicVariations
@@ -58,6 +61,9 @@ genomicVariant:
 ################################################################################
 
 analysis:
+  description: >-
+    The type of response used for the endpoint depends on the requested and granted
+    `responseGranularity`.
   request_entity_path_id: analyses
   response_entity_id: analysis
   collection: analyses  
@@ -73,6 +79,9 @@ analysis:
 ##############################################################################
 
 run:
+  description: >-
+    The type of response used for the endpoint depends on the requested and granted
+    `responseGranularity`.
   request_entity_path_id: runs
   response_entity_id: run
   collection: analyses  
@@ -88,6 +97,9 @@ run:
 ################################################################################
 
 biosample:
+  description: >-
+    The type of response used for the endpoint depends on the requested and granted
+    `responseGranularity`.
   request_entity_path_id: biosamples
   request_entity_path_aliases:
     - samples
@@ -109,6 +121,11 @@ biosample:
 ##############################################################################
 
 individual:
+  description: >-
+    The type of response used for the endpoint depends on the requested and granted
+    `responseGranularity`, _i.e._ while a "record" level `responseGranularity`
+    has to be served through a `beaconResultsetsResponse` other granularities
+    might employ aggregate response types.
   request_entity_path_id: individuals
   response_entity_id: individual
   collection: individuals
@@ -142,10 +159,6 @@ filteringTerm:
 ################################################################################
 
 info:
-  description: >-
-    The `info` endpoint provides information about the Beacon, such as its name,
-    the organization responsible for the Beacon, a contact email,
-    and the API version. It is based on the GA4GH `service-info` standard.
   request_entity_path_id: info
   request_entity_path_aliases:
     - "/"
@@ -163,8 +176,6 @@ info:
 ################################################################################
 
 beaconMap:
-  description: >-
-    The `beaconMap` object provides a map of the Beacon's REST endpoints.
   request_entity_path_id: map
   response_entity_id: beaconMap
   collection: Null

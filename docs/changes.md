@@ -8,6 +8,10 @@ milestones.
 
 ### 2024-11-10 (v2.0.9)
 
+Mostly work on schemas and generated documentation:
+
+* removing examples etc. from the schemas since they're not tracked and don't represent anything bycon specific
+* starting to improve top-level "description"s in schemas, which are then parsed using `markdowner.py`
 * switching schema model internal references to own server instead of the hardcoded
   Github repo from the standard schema; e.g.
     - from <https://raw.githubusercontent.com/ga4gh-beacon/beacon-v2/main/framework/json/common/beaconCommonComponents.json#/definitions>

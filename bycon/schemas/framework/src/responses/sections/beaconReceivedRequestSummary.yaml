@@ -1,5 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-description: Section of the response that summarize the request received as it has
+description: >-
+  Section of the response that summarize the request received as it has
   been interpreted by teh Beacon server. Although it is not expected to differ from
   the request received, in case of unexpected results or formats, this summary could
   help to determine the source of confusion or errors. The required properties include
