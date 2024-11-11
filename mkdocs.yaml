@@ -15,7 +15,7 @@ nav:
     - Importing Data: importers/index.md
     - Housekeeping: housekeepers/index.md
   - Beacon API:
-    - Beacon API: API-beacon.md
+    - Beacon API: API.md
     - Services API: API-services.md
     - API Parameters: API-parameters.md
   - Recent Changes: changes.md
