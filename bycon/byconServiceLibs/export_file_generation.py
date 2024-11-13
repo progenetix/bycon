@@ -55,7 +55,7 @@ def stream_pgx_meta_header(ds_id, ds_results):
 
 def pgxseg_biosample_meta_line(biosample, group_id_key="histological_diagnosis_id"):
     dt_m = BYC["datatable_mappings"]
-    io_params = dt_m["definitions"][ "biosample" ]["parameters"]
+    io_params = dt_m["$defs"][ "biosample" ]["parameters"]
 
     g_id_k = group_id_key
     g_lab_k = re.sub("_id", "_label", g_id_k)

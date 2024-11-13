@@ -16,7 +16,7 @@ non-variant parameters) in the local `rsrc/templates/` directory.
 ################################################################################
 
 def main():
-    dt_m = BYC["datatable_mappings"].get("definitions", {})
+    dt_m = BYC["datatable_mappings"].get("$defs", {})
     ordered_mcs = BYC["datatable_mappings"].get("ordered_metadata_core", [])
     ordered_vcs = BYC["datatable_mappings"].get("ordered_variants_core", [])
     rsrc_p = path.join(pkg_path, "rsrc", "templates")

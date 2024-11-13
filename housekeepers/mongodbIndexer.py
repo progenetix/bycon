@@ -33,7 +33,7 @@ def mongodb_indexer():
             print(f"¡¡¡ Collection {collname} does not exist in {ds_id} !!!")
             continue
         i_coll = data_db[ collname ]
-        io_params = dt_m["definitions"][ r_t ]["parameters"]
+        io_params = dt_m["$defs"][ r_t ]["parameters"]
 
         for p_k, p_v in io_params.items():
             if (i_t := p_v.get("indexed", False)) is False:

@@ -9,10 +9,10 @@ from bycon import RefactoredValues, prdbug, prdlhead, prjsonnice, BYC, BYC_PARS,
 def export_datatable_download(flattened_data):
     dt_m = BYC["datatable_mappings"]
     r_t = BYC.get("response_entity_id", "___none___")
-    if not r_t in dt_m["definitions"]:
+    if not r_t in dt_m["$defs"]:
         return
     sel_pars = BYC_PARS.get("delivery_keys", [])
-    io_params = dt_m["definitions"][ r_t ]["parameters"]
+    io_params = dt_m["$defs"][ r_t ]["parameters"]
     if len(sel_pars) > 0:
         io_params = { k: v for k, v in io_params.items() if k in sel_pars }
     prdlhead(f'{r_t}.tsv')
@@ -39,9 +39,9 @@ def export_datatable_download(flattened_data):
 
 def import_datatable_dict_line(parent, fieldnames, lineobj, primary_scope="biosample"):
     dt_m = BYC["datatable_mappings"]
-    if not primary_scope in dt_m["definitions"]:
+    if not primary_scope in dt_m["$defs"]:
         return
-    io_params = dt_m["definitions"][ primary_scope ]["parameters"]
+    io_params = dt_m["$defs"][ primary_scope ]["parameters"]
     def_params = create_table_header(io_params)
     for f_n in fieldnames:
         if "#"in f_n:
