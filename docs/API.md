@@ -12,7 +12,7 @@ are indicated by the `@` symbol.\n\n
 
 #### Schemas **{S}**, Tests **{T}** and Examples **{E}**
 Tests, examples and schemas are run from the server defined in this site's build instructions
-(see the current _{{config.reference_server_url}}_ entry for `reference_server_url` entry in `mkdocs.yaml` file in the [{{config.repo_url}}](repository's root).
+(see the current _{{config.reference_server_url}}_ entry for `reference_server_url` entry in the <{{config.repo_url}}/blob/main/mkdocs.yaml> configuration file.
 
 {%
     include-markdown "generated/beacon-responses.md"
