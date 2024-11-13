@@ -6,6 +6,13 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2024-11-13 (v2.0.10)
+
+* fixed some intermediary issue with a few service calls
+* more explicit definition of `array` columns in import tables
+* documentation now with generated and inlined information from
+  some schemas into <https://bycon.progenetix.org/API/#api-beacon-responses>
+
 ### 2024-11-10 (v2.0.9)
 
 Mostly work on schemas and generated documentation:

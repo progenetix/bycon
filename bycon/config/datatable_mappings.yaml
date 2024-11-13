@@ -100,7 +100,6 @@ ordered_metadata_core:
   - analysis_operation_label
   - geoprov_id
 
-
 ordered_variants_core:
   - analysis_id
   - biosample_id
@@ -285,6 +284,7 @@ $defs:
         beacon_model_path: biosamples.sampleOriginDetail.label
       tnm:
         type: array
+        split_by: '&&'
         items:
           type: object
           parameters:
@@ -296,7 +296,7 @@ $defs:
         db_key: pathological_tnm_findings
         beacon_model_path: biosamples.pathologicalTnmFindings.id
         examples:
-          - "NCIT:C48721::T1a Stage Finding,NCIT:C48699::M0 Stage Finding"
+          - "NCIT:C48721::T1a Stage Finding&&NCIT:C48699::M0 Stage Finding"
       tumor_grade_id:
         type: string
         db_key: tumor_grade.id
@@ -373,17 +373,22 @@ $defs:
         type: string
         db_key: references.tcgaproject.label
         beacon_model_path: False
-      cohort_ids:
+      cohorts:
         type: array
+        split_by: '&&'
+        items:
+          type: object
+          parameters:
+            - id
+            - label
+          indexed:
+            - id
+          split_by: '::'
         beacon_model_path: False
-        db_key: cohort_ids
+        db_key: cohorts
         indexed: True
         examples:
-          - pgx:cohort-2021progenetix
-          - pgx:cohort-DIPG
-          - pgx:cohort-TCGA
-          - pgx:cohort-TCGAcancers
-          - pgx:cohort-arraymap
+          - pgx:cohort-TCGAcancers::TCGA Cancer samples&&pgx:cohort-TCGA::TCGA Samples
       geoprov_id:
         type: string
         db_key: geo_location.properties.id
@@ -405,6 +410,7 @@ $defs:
         computed: True
       geoprov_long_lat:
         type: array
+        split_by: ','
         items:
         type: number
         db_key: geo_location.geometry.coordinates
@@ -434,6 +440,17 @@ $defs:
         type: string
         db_key: id
         indexed: True
+      individual_name:
+        description: >-
+          The legacy name for the individual, which is an identifier
+          used during import, e.g. the id used in the donor publication or study.
+          It is *not* considered unique in the database but just used during
+          import the stage when generating the unique `id` values. Also, it does
+          not have to/should correspond to a real (human) name.
+        type: string
+        db_key: name
+        beacon_model_path: False
+        indexed: True
       sex_id:
         type: string
         db_key: sex.id
@@ -452,6 +469,7 @@ $defs:
         computed: True
       external_references:
         type: array
+        split_by: '&&'
         items:
           type: object
           parameters:
@@ -482,7 +500,7 @@ $defs:
       notes:
         description: >-
           Any relevant info about the biosample that does not fit into any
-          other field in the schema. In teh context of biosample it goes into
+          other field in the schema. In the context of biosample it goes into
           `notes`.
         db_key: index_disease.notes
       index_disease_followup_time:
@@ -572,6 +590,7 @@ $defs:
         indexed: True
       adjoined_sequences:
         type: array
+        split_by: '&&'
         items:
           type: object
           parameters:
@@ -591,6 +610,8 @@ $defs:
           split_by: '::'
         db_key: adjoined_sequences
         indexed: True
+        examples:
+          - refseq:NC_000014.9::14::89300000::107043718&&refseq:NC_000018.10::18::45900000::63900000
       variant_state_id:
         type: string
         db_key: variant_state.id

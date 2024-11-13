@@ -5,10 +5,11 @@ pip3 uninstall bycon --break-system-packages
 python3 -m build --sdist .
 BY=(./dist/*tar.gz)
 pip3 install $BY --break-system-packages
+./bycon/schemas/bin/yamlerRunner.sh
 ./markdowner.py
 # pipreqs --force .
 # python3 -m build --wheel && twine upload dist/*
-# git tag v2.0.5  & git push --tags
+# git tag v2.0.9  & git push --tags
 ./install.py
 rm -rf ./build
 rm -rf ./dist

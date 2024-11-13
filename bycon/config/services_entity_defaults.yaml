@@ -1,7 +1,6 @@
 ################################################################################
-# Beacon entry type defaults - please adjust esp. info and schema paths...
-# TODO: Some of the entry type configuration duplicates data from the Beacon
-# framework and might be disentangled further on ...
+# byconServices modules & their path values
+# the keys correspond to the names of byconServices modules
 ################################################################################
 
 byconschemas:
@@ -32,9 +31,13 @@ collationplots:
     schema: NA
   path_id_value_bycon_parameter: filters
 
-collation:
+collations:
   request_entity_path_id: collations
+  request_entity_id: collation
+  response_entity_id: collation
   collection: collations
+  request_entity_path_aliases:
+    - collations
   response_schema: byconautServiceResponse
   beacon_schema:
     entity_type: Collation
@@ -48,9 +51,6 @@ cytomapper:
     schema: https://progenetix.org/services/schemas/CytobandMapping/
   path_id_value_bycon_parameter: cyto_bands
 
-endpoints:
-  request_entity_path_id: endpoints
-
 dbstats:
   request_entity_path_id: dbstats
   beacon_schema:
@@ -58,7 +58,10 @@ dbstats:
     schema: https://progenetix.org/services/schemas/DBstats/
   path_id_value_bycon_parameter: dataset_ids
 
-gene:
+endpoints:
+  request_entity_path_id: endpoints
+
+genespans:
   request_entity_path_id: genespans
   request_entity_path_aliases:
     - genes
@@ -70,10 +73,11 @@ gene:
     schema: https://progenetix.org/services/schemas/ProgenetixGene/
   path_id_value_bycon_parameter: gene_ids
 
-geoLocation:
+geolocations:
   request_entity_path_id: geolocations
   request_entity_path_aliases:
     - geolocs
+    - geoLocations
   response_entity_id: geoLocation
   collection: geolocs
   response_schema: beaconCollectionsResponse
@@ -118,7 +122,7 @@ pgxsegvariants:
   # TODO: change? a bit non-standard... 
   path_id_value_bycon_parameter: biosample_ids
 
-publication:
+publications:
   request_entity_path_id: publications
   response_entity_id: publication
   collection: publications
