@@ -8,6 +8,7 @@ from bycon import (
     ChroNames,
     cytobands_label_from_positions,
     GeneInfo,
+    prdbug,
     print_json_response,
     rest_path_value
 )
@@ -29,10 +30,9 @@ def genespans():
     read_service_prefs("genespans", services_conf_path)
 
     # form id assumes start match (e.g. for autocompletes)
-    gene_id = rest_path_value("genespans")
-    if gene_id:
+    if len(gene_ids := BYC.get("request_entity_path_id_value", [])) == 1:
         # REST path id assumes exact match
-        results = GeneInfo().returnGene(gene_id)
+        results = GeneInfo().returnGene(gene_ids[0])
     else:
         gene_ids = BYC_PARS.get("gene_id", [])
         gene_id = gene_ids[0] if len(gene_ids) > 0 else None
@@ -61,6 +61,8 @@ def genespans():
                 s_comps.append(str(g.get(k, "")))
             print("\t".join(s_comps))
         exit()
+
+    # prdbug(f'????')
 
     ByconServiceResponse().print_populated_response(results)
 

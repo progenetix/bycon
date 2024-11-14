@@ -6,6 +6,13 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2024-11-14 (v2.0.11)
+
+* properly have response code before document type in http header ...
+* slight modification for parameter processing in `serices/genespans/`
+* fixed missed splitting of `camelCase` list parameters, introduced
+  some time last week...
+
 ### 2024-11-13 (v2.0.10)
 
 * fixed some intermediary issue with a few service calls

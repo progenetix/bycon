@@ -33,6 +33,7 @@ def main():
         r = BeaconInfoResponse().populatedInfoResponse()
     elif b_r_c == "BeaconDataResponse":
         r = BeaconDataResponse().dataResponseFromEntry()
+    BeaconErrorResponse().respond_if_errors(422)
     if r:
         print_json_response(r)
  

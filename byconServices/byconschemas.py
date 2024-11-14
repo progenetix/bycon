@@ -16,4 +16,4 @@ def byconschemas():
             exit()
     
     BYC["ERRORS"].append("No correct schema id provided!")
-    BeaconErrorResponse().respond_if_errors(422)
+    BeaconErrorResponse().respond_if_errors()

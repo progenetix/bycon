@@ -253,8 +253,9 @@ def form_return_listvalue(form_data, parameter):
     `type: array` definition in `argument_definitions` to ensure that e.g. multi-value
     versions in GET requests are correctly processed.
     """
+    p_d = humps.decamelize(parameter)
     a_defs = BYC.get("argument_definitions", {})
-    p_defs = a_defs.get(parameter, {})
+    p_defs = a_defs.get(p_d, {})
     p_type = p_defs.get("type", "string")
     l_v = []
 

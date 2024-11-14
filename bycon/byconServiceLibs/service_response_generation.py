@@ -40,7 +40,6 @@ class ByconServiceResponse:
         self.data_response["response"].update({"results": colls})
         self.__service_response_update_summaries()
         self.__serviceResponse_force_granularities()
-        return self.data_response
 
 
     # -------------------------------------------------------------------------#
@@ -74,12 +73,6 @@ class ByconServiceResponse:
     def print_populated_response(self, results=[]):
         self.populated_response(results)
         print_json_response(self.data_response)
-
-
-    # -------------------------------------------------------------------------#
-
-    def errorResponse(self):
-        return self.error_response
 
 
     # -------------------------------------------------------------------------#

@@ -56,7 +56,7 @@ def services():
             exit()
 
     BYC["ERRORS"].append("No correct service path provided. Please refer to the documentation at http://bycon.progenetix.org")
-    BeaconErrorResponse().respond_if_errors(422)
+    BeaconErrorResponse().respond_if_errors()
 
 
 ################################################################################

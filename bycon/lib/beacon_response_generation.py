@@ -1,4 +1,4 @@
-import json, sys
+import json, requests, sys
 from datetime import datetime
 from deepmerge import always_merger
 from os import environ
@@ -125,30 +125,18 @@ class BeaconErrorResponse:
     def __init__(self):
         self.error_response = object_instance_from_schema_name("beaconErrorResponse", "")
         self.meta = BeaconResponseMeta().populatedMeta()
-        self.errors = BYC.get("ERRORS", [])
-
-    
-    # -------------------------------------------------------------------------#
-
-    def error(self, error_code=422):
-        self.error_response.update({
-            "error": {"error_code": error_code, "error_message": ", ".join(self.errors)},
-            "meta": self.meta
-        })
-        return self.error_response
 
 
     # -------------------------------------------------------------------------#
 
     def respond_if_errors(self, error_code=422):
-        prdbug(len(self.errors))
-        if len(self.errors) < 1:
+        if len(errors := BYC.get("ERRORS", [])) < 1:
             return False
         self.error_response.update({
-            "error": {"error_code": error_code, "error_message": ", ".join(self.errors)},
+            "error": {"error_code": error_code, "error_message": ", ".join(errors)},
             "meta": self.meta
         })
-        print_json_response(self.error_response)
+        print_json_response(self.error_response, error_code)
 
 
 ################################################################################
@@ -938,8 +926,9 @@ class ByconResultSets:
 
 def print_json_response(this={}, status_code=200):
     if not "local" in ENV:
+        print(f'status: {status_code}')
         print('Content-Type: application/json')
-        print(f'status:{status_code}\n\n')
+        print()
 
     # There are some "do not camelize" exceptions downstream
     prjsoncam(this) 
@@ -951,8 +940,9 @@ def print_json_response(this={}, status_code=200):
 
 def print_text_response(this="", status_code=200):
     if "server" in ENV:
+        print(f'status: {status_code}')
         print('Content-Type: text/plain')
-        print(f'status:{status_code}\n\n')
+        print()
 
     print(this)
     print()
@@ -963,8 +953,8 @@ def print_text_response(this="", status_code=200):
 
 def print_html_response(this="", status_code=200):
     if "server" in ENV:
+        print(f'status: {status_code}')
         print('Content-Type: text/html')
-        print('status:' + str(status_code))
         print()
 
     print(this)

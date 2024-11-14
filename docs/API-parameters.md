@@ -6,7 +6,7 @@ The `bycon` package supports number of parameters for filtering and querying the
 standard Beacon parameters and can - depending on the parameter and the current scope - in general be
 invoked through HTTP requests and as command line arguments.
 
-Only parameters sefined in `config/argument_definitions.yaml` will be
+Only parameters defined in `config/argument_definitions.yaml` will be
 interpreted.
 
 Parameters are listed in `snake_case` format although for command line arguments

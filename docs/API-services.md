@@ -40,7 +40,7 @@ format. Here, the data is a dictionary/object with a single key (`genes`):
 
 #### Request Example
 
-* <https://progenetix.org/services/genespans?geneId=CDKN2>
+* <{{config.reference_server_url}}/services/genespans?geneId=CDKN2>
 
 ## Plotting
 
