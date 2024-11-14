@@ -40,6 +40,7 @@ class ByconServiceResponse:
         self.data_response["response"].update({"results": colls})
         self.__service_response_update_summaries()
         self.__serviceResponse_force_granularities()
+        return self.data_response
 
 
     # -------------------------------------------------------------------------#
@@ -94,7 +95,6 @@ class ByconServiceResponse:
             }
         })
 
-        return
 
     # -------------------------------------------------------------------------#
 
@@ -113,7 +113,6 @@ class ByconServiceResponse:
 class CollationQuery:
 
     def __init__(self):
-
         self.collection = "collations"
 
         if BYC["TEST_MODE"] is True:

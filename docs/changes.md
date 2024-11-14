@@ -6,6 +6,12 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2024-11-14 (v2.0.12)
+
+* bug fix: the global ENV was previously set to "local" if not called 
+  over HTTP (`ENV = environ.get('HTTP_HOST', "local")`) which led
+  to a wrong "local" context identification when testing from "localhost"; changed to `ENV = environ.get('HTTP_HOST', "___shell___")` and appropriate tests against this value
+
 ### 2024-11-14 (v2.0.11)
 
 * properly have response code before document type in http header ...

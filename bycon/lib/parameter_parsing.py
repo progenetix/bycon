@@ -28,7 +28,7 @@ class ByconParameters:
         for a, d in self.arg_defs.items():
             if "default" in d:
                 self.byc_pars.update({a: d["default"]})
-            if "local" in d and "local" in ENV:
+            if "local" in d and "___shell___" in ENV:
                 self.byc_pars.update({a: d["local"]})
 
 
@@ -40,14 +40,14 @@ def arguments_set_defaults():
     for a, d in a_defs.items():
         if "default" in d:
             BYC_PARS.update({a: d["default"]})
-        if "local" in d and "local" in ENV:
+        if "local" in d and "___shell___" in ENV:
             BYC_PARS.update({a: d["local"]})
 
 
 ################################################################################
 
 def parse_arguments():
-    if "local" in ENV:
+    if "___shell___" in ENV:
         args_update_form()
     else:
         r_m = environ.get('REQUEST_METHOD', '')

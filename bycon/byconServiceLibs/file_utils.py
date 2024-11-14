@@ -30,12 +30,12 @@ class ExportFile:
 
     def checkOutputFile(self):
         if not self.file_path:
-            if "local" in ENV:
+            if "___shell___" in ENV:
                 BYC["ERRORS"].append("No output file specified (-o, --outputfile) => quitting ...")
             return False
         if self.file_type:
             if not self.file_path.endswith(self.file_type):
-                if "local" in ENV:
+                if "___shell___" in ENV:
                     BYC["ERRORS"].append(f"The output file should be an `{self.file_type}` => quitting ...")
                 return False
         return self.file_path

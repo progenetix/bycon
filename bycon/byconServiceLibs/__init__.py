@@ -25,7 +25,7 @@ try:
     from service_response_generation import *
 
 except Exception:
-    if not "local" in ENV:
+    if not "___shell___" in ENV:
         print('Content-Type: text/plain')
         print('status: 302')
         print()

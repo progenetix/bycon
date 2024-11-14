@@ -21,12 +21,12 @@ def set_debug_state(debug=False) -> bool:
 
     if test_truthy(debug):
         BYC.update({"DEBUG_MODE": True})
-        if not "local" in ENV:
+        if not "___shell___" in ENV:
             print('Content-Type: text')
             print()
         return True
 
-    if not "local" in ENV:
+    if not "___shell___" in ENV:
         r_uri = environ.get('REQUEST_URI', "___none___")
         if re.match(r'^.*?[?&/]debugMode?=(\w+?)\b.*?$', r_uri):
             d = re.match(r'^.*?[?&/]debugMode?=(\w+?)\b.*?$', r_uri).group(1)
@@ -297,7 +297,7 @@ def prdbughead(this=""):
 ################################################################################
 
 def prjsonhead():
-    if not "local" in ENV:
+    if not "___shell___" in ENV:
         print('Content-Type: application/json')
         print('status:200')
         print()
@@ -306,7 +306,7 @@ def prjsonhead():
 ################################################################################
 
 def prtexthead():
-    if not "local" in ENV:
+    if not "___shell___" in ENV:
         print('Content-Type: text/plain')
         print('status: 302')
         print()
@@ -315,7 +315,7 @@ def prtexthead():
 ################################################################################
 
 def prdlhead(filename="download.txt"):
-    if not "local" in ENV:
+    if not "___shell___" in ENV:
         print('Content-Type: text/tsv')
         print(f'Content-Disposition: attachment; filename={filename}')
         print('status: 200')

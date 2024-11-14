@@ -60,9 +60,9 @@ def update_rootpars_from_local_or_HOST():
         i_o_edfs = i_ovr["local"].get("entity_defaults", {})
         BYC.update({"beacon_defaults": always_merger.merge(BYC.get("beacon_defaults", {}), i_o_bdfs)})
         BYC.update({"entity_defaults": always_merger.merge(BYC.get("entity_defaults", {}), i_o_edfs)})
-    if not "local" in ENV:
+    if not "___shell___" in ENV:
         instance = "___none___"
-        host = environ.get("HTTP_HOST", "local")
+        host = environ.get("HTTP_HOST", "___none___")
         for i_k, i_v in i_ovr.items():
             doms = i_v.get("domains", [])
             if host in doms:

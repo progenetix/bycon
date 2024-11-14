@@ -33,12 +33,12 @@ def main():
         r = BeaconInfoResponse().populatedInfoResponse()
     elif b_r_c == "BeaconDataResponse":
         r = BeaconDataResponse().dataResponseFromEntry()
-    BeaconErrorResponse().respond_if_errors(422)
+    BeaconErrorResponse().respond_if_errors()
     if r:
         print_json_response(r)
  
     BYC["ERRORS"].append("No correct service path provided. Please refer to the documentation at http://docs.progenetix.org")
-    BeaconErrorResponse().respond_if_errors(422)
+    BeaconErrorResponse().respond_if_errors()
 
 
 ################################################################################

@@ -56,7 +56,7 @@ def read_service_prefs(service, service_pref_path):
 ################################################################################
 
 def open_text_streaming(filename="data.pgxseg"):
-    if not "local" in ENV:
+    if not "___shell___" in ENV:
         print('Content-Type: text/plain')
         if not "browser" in filename:
             print('Content-Disposition: attachment; filename="{}"'.format(filename))
@@ -77,7 +77,7 @@ def close_text_streaming():
 def open_json_streaming(filename="data.json"):
     meta = BYC["service_response"].get("meta", {})
 
-    if not "local" in ENV:
+    if not "___shell___" in ENV:
         print_json_download_header(filename)
 
     print('{"meta":', end='')

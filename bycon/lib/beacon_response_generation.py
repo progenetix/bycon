@@ -925,7 +925,7 @@ class ByconResultSets:
 ################################################################################
 
 def print_json_response(this={}, status_code=200):
-    if not "local" in ENV:
+    if not "___shell___" in ENV:
         print(f'status: {status_code}')
         print('Content-Type: application/json')
         print()
@@ -939,7 +939,7 @@ def print_json_response(this={}, status_code=200):
 ################################################################################
 
 def print_text_response(this="", status_code=200):
-    if "server" in ENV:
+    if not "___shell___" in ENV:
         print(f'status: {status_code}')
         print('Content-Type: text/plain')
         print()

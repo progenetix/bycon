@@ -1632,7 +1632,7 @@ style="margin: auto; font-family: Helvetica, sans-serif;">
     # -------------------------------------------------------------------------#
 
     def __print_svg_response(self):
-        if not "local" in ENV:
+        if not "___shell___" in ENV:
             print('Content-Type: image/svg+xml')
             print('status: 200')
             print()

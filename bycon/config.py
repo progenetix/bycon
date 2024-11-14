@@ -9,7 +9,7 @@ pkg_path = path.dirname( path.abspath(__file__) )
 Global variables
 """
 
-ENV = environ.get('HTTP_HOST', "local")
+ENV = environ.get('HTTP_HOST', "___shell___")
 
 PKG_PATH = pkg_path
 CONF_PATH = path.join( pkg_path, "config")

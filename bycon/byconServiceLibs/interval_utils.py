@@ -287,7 +287,7 @@ class GenomeBins:
             if not (v_i_id := v.get("variant_internal_id")):
                 continue
             if v_i_id in digests:
-                if "local" in ENV:
+                if "___shell___" in ENV:
                     BYC["WARNINGS"].append(v)
                     print(f'\n¡¡¡ {v_i_id} already counted for {v.get("analysis_id", None)}')
                     if v.get("_id"):
