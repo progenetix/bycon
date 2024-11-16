@@ -342,7 +342,6 @@ plot_parameters:
       * comma-concatenation for multiple values
       * label is optional
     type: array
-    # default: []
 
   plot_regionlabel_color:
     default: "#ddceff"

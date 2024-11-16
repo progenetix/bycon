@@ -11,7 +11,7 @@ database environment.
 
 !!! warning "Experimental Libraries"
 
-    At this time (**bycon v2.0 "Taito City"**) the project's
+    At this time (**bycon v2.n "Taito City"**) the project's
     libraries - which in principle can be installed directly from the Python Package
     Index - should *not* be used for external applications since libary structure
     and dependencies might change and are only kept in sync within the wider project
@@ -236,24 +236,22 @@ Some configuration:
     ```
 
 
-### Installation Procedure
+### Local Installation Procedure
 
 The project root contains an `install.py` script to distribute the server scripts
 into the webserver root. Necessary parameters such as local paths
 have to be adjusted in the configuration files in `local/`, such as in `local_paths.yaml`.
 
-!!! warning "Configuration adjustments"
+!!!  "Configuration adjustments"
     
     Many of the parameters in `bycon` are pre-defined in `bycon/config.py`
     file and the `bycon/definitions/....yaml` files which are installed into the
-    `bycon` package in your Python `site-packages` tree. Additional configurations
-    can be provided through files in `local/....yaml` and are the copied during
-    installation into `your_script_directory/local/`.
-
-!!! warning "Recommended installation"
-
+    `bycon` package in your Python `site-packages` tree. 
+    For your own databases to run additional configurations
+    **have to be provided through files in `local/....yaml`**. Those are then added during installation to `your_script_directory/local/`.
     The preferred method is to modify your local configuration and then perform a local package build, installation
-    and server installation by running the `updev.sh` script.  
+    and server installation by running the `updev.sh` script. This has to be
+    re-run after each modification of the `local` parameters.
 
 ### Some configurations
 

@@ -164,7 +164,7 @@ def write_variants_bedfile(datasets_results, ds_id):
         return False
     h_o_server = select_this_server()
     ext_url = f'http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg38'
-    bed_url = f''
+    bed_url = f'{h_o_server}/'
 
     vs = { "DUP": [ ], "DEL": [ ], "LOH": [ ], "SNV": [ ]}
     colors = {
@@ -179,14 +179,19 @@ def write_variants_bedfile(datasets_results, ds_id):
     data_client = MongoClient(host=DB_MONGOHOST)
     v_coll = data_client[ ds_id ][ "variants" ]
     ds_results = datasets_results.get(ds_id, {})
+
     if not "variants.id" in ds_results:
         BYC["ERRORS"].append("No variants found in the dataset results.")
         return [ext_url, bed_url]
+
     v_ids = ds_results["variants.id"].get("target_values", [])
     v_count = ds_results["variants.id"].get("target_count", 0)
     accessid = ds_results["variants.id"].get("id", "___none___")
     if test_truthy( BYC_PARS.get("paginate_results", True) ):
         v_ids = return_paginated_list(v_ids, BYC_PARS.get("skip", 0), BYC_PARS.get("limit", 0))
+
+    if len(v_ids) < 1:
+        return [ext_url, bed_url]
 
     bed_file_name = f'{accessid}.bed'
     bed_file = path.join( tmp_path, bed_file_name )
@@ -194,8 +199,9 @@ def write_variants_bedfile(datasets_results, ds_id):
     for v_id in v_ids:
         v = v_coll.find_one( { "id": v_id }, { "_id": 0 } )
         pv = ByconVariant().byconVariant(v)
-        if (pvt := pv.get("variant_type", "___none___")) not in vs.keys():
+        if (pvt := pv.get("variant_dupdel", "___none___")) not in vs.keys():
             continue
+        pv.update({"variant_length": int(pv["location"].get("end", 1)) - int(pv["location"].get("start", 0))})
         vs[pvt].append(pv)
 
     b_f = open( bed_file, 'w' )
@@ -203,10 +209,7 @@ def write_variants_bedfile(datasets_results, ds_id):
     ucsc_chr = ""
     for vt in vs.keys():
         if len(vs[vt]) > 0:
-            try:
-                vs[vt] = sorted(vs[vt], key=lambda k: k['variant_length'], reverse=True)
-            except:
-                pass
+            vs[vt] = sorted(vs[vt], key=lambda k: k['variant_length'], reverse=True)
             col_key = f"plot_{vt}_color"
             col_rgb = colors.get(col_key, (127, 127, 127))
             # col_rgb = [127, 127, 127]
@@ -214,8 +217,8 @@ def write_variants_bedfile(datasets_results, ds_id):
             b_f.write("#chrom\tchromStart\tchromEnd\tbiosampleId\n")
             for v in vs[vt]:
                 ucsc_chr = "chr"+v["location"]["chromosome"]
-                ucsc_min = int( v["location"]["start"] + 1 )
-                ucsc_max = int( v["location"]["end"] )
+                ucsc_min = int(v["location"]["start"]) + 1
+                ucsc_max = int(v["location"]["end"] )
                 l = f'{ucsc_chr}\t{ucsc_min}\t{ucsc_max}\t{v.get("biosample_id", "___none___")}\n'
                 pos.add(ucsc_min)
                 pos.add(ucsc_max)

@@ -200,7 +200,9 @@ def hex_2_rgb( hexcolor ):
 
 def return_paginated_list(this, skip, limit):
     if limit < 1:
-        return this
+        return list(this)
+    if len(list(this)) < 1:
+        return []
 
     if BYC.get("PAGINATED_STATUS", False):
         return this

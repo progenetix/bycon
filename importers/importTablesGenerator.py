@@ -73,7 +73,7 @@ def main():
         f_n = t_t.replace("analysis", "analyse")+"s.tsv"
         f_p = path.join(rsrc_p, f_n)
         f = open(f_p, "w")
-        f.write(f'{"\t".join(entity_cols)}\n')
+        f.write("{}\n".format("\t".join(entity_cols)))
         if "variant" in t_t.lower():
             f.close()
             print(f'===> Wrote {f_p}')
@@ -82,7 +82,7 @@ def main():
             d_line = []
             for p_n in entity_cols:
                 d_line.append(id_s.get(p_n, ""))
-            f.write(f'{"\t".join(d_line)}\n')
+            f.write("{}\n".format("\t".join(d_line)))
         f.close()
         print(f'===> Wrote {f_p}')
 
@@ -100,21 +100,21 @@ def main():
     a_p = path.join(rsrc_p, "metadata_all.tsv")
     c_p = path.join(rsrc_p, "metadata.tsv")
     f = open(a_p, "w")
-    f.write(f'{"\t".join(a_c_s)}\n')
+    f.write("{}\n".format("\t".join(a_c_s)))
     for id_s in ids:
         d_line = []
         for p_n in a_c_s:
             d_line.append(id_s.get(p_n, ""))
-        f.write(f'{"\t".join(d_line)}\n')  
+        f.write("{}\n".format("\t".join(d_line)))
     f.close()  
     print(f'===> Wrote {a_p}')
     f = open(c_p, "w")
-    f.write(f'{"\t".join(o_c_s)}\n')
+    f.write("{}\n".format("\t".join(a_c_s)))
     for id_s in ids:
         d_line = []
         for p_n in o_c_s:
             d_line.append(id_s.get(p_n, ""))
-        f.write(f'{"\t".join(d_line)}\n')  
+        f.write("{}\n".format("\t".join(d_line)))
     f.close()  
     print(f'===> Wrote {c_p}')
 
@@ -124,11 +124,11 @@ def main():
     a_v_p = path.join(rsrc_p, "variants_all.tsv")
     c_v_p = path.join(rsrc_p, "variants.tsv")
     f = open(a_v_p, "w")
-    f.write(f'{"\t".join(a_v_s)}\n')
+    f.write("{}\n".format("\t".join(a_v_s)))
     f.close()  
     print(f'===> Wrote {a_v_p}')
     f = open(c_v_p, "w")
-    f.write(f'{"\t".join(ordered_vcs)}\n')
+    f.write("{}\n".format("\t".join(ordered_vcs)))
     f.close()  
     print(f'===> Wrote {c_v_p}')
 
