@@ -242,8 +242,8 @@ The project root contains an `install.py` script to distribute the server script
 into the webserver root. Necessary parameters such as local paths
 have to be adjusted in the configuration files in `local/`, such as in `local_paths.yaml`.
 
-!!!  "Configuration adjustments"
-    
+!!! warning "Configuration adjustments"
+
     Many of the parameters in `bycon` are pre-defined in `bycon/config.py`
     file and the `bycon/definitions/....yaml` files which are installed into the
     `bycon` package in your Python `site-packages` tree. 

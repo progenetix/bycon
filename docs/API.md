@@ -11,6 +11,7 @@ are indicated by the `@` symbol.\n\n
     A complete list of parameters accepted by the API is provided on the [_Web and Command Line Parameters_](API-parameters.md) page.
 
 #### Schemas **{S}**, Tests **{T}** and Examples **{E}**
+
 Tests, examples and schemas are run from the server defined in this site's build instructions
 (see the current _{{config.reference_server_url}}_ entry for `reference_server_url` entry in the <{{config.repo_url}}/blob/main/mkdocs.yaml> configuration file.
 
