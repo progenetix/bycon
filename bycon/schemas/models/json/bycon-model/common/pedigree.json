@@ -10,7 +10,7 @@
             "example": "Pedigree1001"
         },
         "disease": {
-            "$ref": "../common/disease.json"
+            "$ref": "disease.json"
         },
         "numSubjects": {
             "description": "Total number of subjects in pedigree.",

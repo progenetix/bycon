@@ -40,8 +40,8 @@ properties:
         notes: HapMap individual
       - id: 022f39e9-57ee-4b2b-8b3a-8929e3d69a37
         notes: TCGA case_id
-  vitalStatus:
-    $ref: ../common/vitalStatus.yaml
+  VitalStatus:
+    $ref: ../common/VitalStatus.yaml
   geoLocation:
     $ref: ../common/GeoLocation.yaml
   ancestries:

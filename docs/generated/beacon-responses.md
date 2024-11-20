@@ -224,7 +224,7 @@ The type of response used for the endpoint depends on the requested and granted 
 
 ### phenopacket @ `/phenopackets`
 
-The Phenopacket class is a bare-bones JSON-schema rewrite of the Phenopackets v2 standard.
+The Phenopacket class is a bare-bones JSON-schema rewrite of the Phenopackets v2 standard ("PXF"), for the representation of attributes supported in the `bycon` framework. At this time the Phenopackets schema is not part of the Beacon v2 default data model. However, many sub-schemas in Beacon v2 have been informed by the PXF model and development process, allowing a straightforward cross-mapping of the data structures.
 
 The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
 In the `bycon` framework Phenopackets are generated at export time by aggregating the relevant information from the matched `individual`, `biosample`s, `analysis`(/es) and `genomicVariation`s.

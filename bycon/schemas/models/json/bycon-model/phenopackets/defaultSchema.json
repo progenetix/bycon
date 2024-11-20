@@ -50,13 +50,14 @@
         "interpretations": {
             "type": "array",
             "items": {
-                "$ref": "Interpretation.json"
+                "$ref": "../common/Interpretation.json"
             }
         },
         "medicalActions": {
             "type": "array",
             "items": {
-                "$ref": "MedicalAction.json"
+                "description": "TODO: Define class \"MedicalAction\". <https://phenopacket-schema.readthedocs.io/en/latest/medical-action.html#medicalaction>",
+                "type": "object"
             }
         }
     }

@@ -42,10 +42,13 @@ properties:
   interpretations:
     type: array
     items:
-      $ref: Interpretation.yaml
+      $ref: ../common/Interpretation.yaml
   medicalActions:
     type: array
     items:
-      $ref: MedicalAction.yaml
+      description: >-
+        TODO: Define class "MedicalAction".
+        <https://phenopacket-schema.readthedocs.io/en/latest/medical-action.html#medicalaction>
+      type: object
 
 

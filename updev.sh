@@ -14,3 +14,4 @@ pip3 install $BY --break-system-packages
 rm -rf ./build
 rm -rf ./dist
 rm -rf ./bycon.egg-info
+# rsync -avh --exclude=logs ./ ~/Github/bycon/

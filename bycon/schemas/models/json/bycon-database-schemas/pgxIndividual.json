@@ -50,8 +50,8 @@
                 }
             ]
         },
-        "vitalStatus": {
-            "$ref": "../common/vitalStatus.json"
+        "VitalStatus": {
+            "$ref": "../common/VitalStatus.json"
         },
         "geoLocation": {
             "$ref": "../common/GeoLocation.json"
