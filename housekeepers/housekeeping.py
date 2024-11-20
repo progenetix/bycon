@@ -167,8 +167,8 @@ def main():
     #>--------------------- update frequencymaps -----------------------------<#
 
     if not "n" in todos.get("update_frequencymaps", "y").lower():
-        print(f'\n{__hl()}==> executing "{loc_path}/frequencymapsCreator.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}"\n')
-        system(f'{loc_path}/frequencymapsCreator.py -d {ds_id}')
+        print(f'\n{__hl()}==> executing "{loc_path}/collationsFrequencymapsCreator.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}"\n')
+        system(f'{loc_path}/collationsFrequencymapsCreator.py -d {ds_id}')
 
     #>-------------------- / update frequencymaps ----------------------------<#
 

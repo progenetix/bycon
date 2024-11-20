@@ -1,3 +1,78 @@
+## beaconCollectionsResponse
+
+A type of Beacon response that includes details about the **collections** in a beacon. The types of collections are defined in each beacon's configuration; if using the Beacon v2+ default model usually the types `dataset` and `cohort` are supported.
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconCollectionsResponse>
+
+### dataset @ `/datasets`
+
+A dataset available in the beacon.
+
+
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/dataset>
+
+* **{T}** <{{config.reference_server_url}}/beacon/datasets?testMode=true>
+
+* **{E}** <{{config.reference_server_url}}/beacon/datasets/progenetix>
+
+
+
+### cohort @ `/cohorts`
+
+A cohort available in the beacon.
+
+
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/cohort>
+
+* **{T}** <{{config.reference_server_url}}/beacon/cohorts?testMode=true>
+
+
+
+
+
+## beaconInfoResponse
+
+The `beaconInfoResponse` provides metadata describing a Beacon instance, such as its name, the organization responsible for the Beacon, contact information, site logo and alternative URLs and importantly the beacon's API version. It is based on the GA4GH `service-info` standard.
+The content of the `beaconInfoResponse` can be used by clients such as web front ends or beacon aggregators to evaluate potential access patterns and to display information about the beacon.
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconInfoResponse>
+
+### info @ `/info`
+
+Metadata describing a Beacon instance.
+
+
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconInfoResults>
+
+* **{T}** <{{config.reference_server_url}}/beacon/info>
+
+
+
+
+
+## beaconConfigurationResponse
+
+The `beaconConfigurationResponse` returns information about configuration parameters of a given beacon instance such as maturity or security attributes or supported entry types. It is directed towards Beacon clients like web pages or network aggregators.
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconConfigurationResponse>
+
+### configuration @ `/configuration`
+
+The Beacon configuration reports several attributes of the beacon instance related to security, maturity and available entry types. Where appropriate the details returned in `service-info` should mirror the ones in this configuration.
+
+
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconConfigurationSchema>
+
+* **{T}** <{{config.reference_server_url}}/beacon/configuration>
+
+
+
+
+
 ## beaconBooleanResponse
 
 Complete definition for a minimal response that provides *only* an aggregate Boolean `"exists": true` or `"exists": false` answer to the query.  
@@ -10,16 +85,52 @@ For a list of entities potentially served by `beaconBooleanResponse` depending o
 the selected or granted `responseGranularity` please check `beaconResultsetsResponse`.
 
 
-## beaconCountResponse
+## beaconFilteringTermsResponse
 
-Complete definition for a minimal response that provides an aggregate Boolean `"exists": true` or `"exists": false` answer to the query as well as the count of the matched records.
-Additional information - which should not consist of record-level information - can be provided through `beaconHandovers`.  
+The filtering terms response provides information about available individual filters for a beacon's entry types as well as optional information about the ontologies the filters belong to.
 
-* **{S}** <{{config.reference_server_url}}/services/schemas/beaconCountResponse>
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconFilteringTermsResponse>
+
+### filteringTerm @ `/filtering_terms`
+
+Schema for the Filtering Terms list related to the hosting entry type. It is kept separated to allow updating it independently.
 
 
-For a list of entities potentially served by `beaconCountResponse` depending on
-the selected or granted `responseGranularity` please check `beaconResultsetsResponse`.
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/filteringTermsSchema>
+
+* **{T}** <{{config.reference_server_url}}/beacon/filtering_terms?testMode=true>
+
+
+
+
+
+## beaconErrorResponse
+
+A `beaconErrorResponse` denotes an unsuccessful operation, e.g. due to a missing parameter or an invalid query. The response contains an error object.
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconErrorResponse>
+
+
+
+## beaconMapResponse
+
+A `beaconMapResponse` provides information about the beacon instance such as the different endpoints supported by this implementation of the Beacon API. This response is aimed to allow Beacon clients such as web front ends and Beacon network aggregators to evaluate which access patterns can be implemented against individual beacons.
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconMapResponse>
+
+### beaconMap @ `/map`
+
+Map of a Beacon, its entry types and endpoints. It isconceptually similar to a website sitemap.
+
+
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconMapSchema>
+
+* **{T}** <{{config.reference_server_url}}/beacon/map>
+
+
+
 
 
 ## beaconResultsetsResponse
@@ -99,7 +210,7 @@ The type of response used for the endpoint depends on the requested and granted 
 
 None
 
-The type of response used for the endpoint depends on the requested and granted `responseGranularity`, _i.e._ while a "record" level `responseGranularity` has to be served through a `beaconResultsetsResponse` other granularities might employ summary response types.
+The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
 
 
 
@@ -111,118 +222,20 @@ The type of response used for the endpoint depends on the requested and granted 
 
 
 
+### phenopacket @ `/phenopackets`
 
+The Phenopacket class is a bare-bones JSON-schema rewrite of the Phenopackets v2 standard.
 
-## beaconCollectionsResponse
+The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
+In the `bycon` framework Phenopackets are generated at export time by aggregating the relevant information from the matched `individual`, `biosample`s, `analysis`(/es) and `genomicVariation`s.
 
-A type of Beacon response that includes details about the **collections** in a beacon. The types of collections are defined in each beacon's configuration; if using the Beacon v2+ default model usually the types `dataset` and `cohort` are supported.
 
-* **{S}** <{{config.reference_server_url}}/services/schemas/beaconCollectionsResponse>
 
-### dataset @ `/datasets`
+* **{S}** <{{config.reference_server_url}}/services/schemas/phenopacket>
 
-A dataset available in the beacon.
+* **{T}** <{{config.reference_server_url}}/beacon/phenopackets?testMode=true>
 
-
-
-* **{S}** <{{config.reference_server_url}}/services/schemas/dataset>
-
-* **{T}** <{{config.reference_server_url}}/beacon/datasets?testMode=true>
-
-* **{E}** <{{config.reference_server_url}}/beacon/datasets/progenetix>
-
-
-
-### cohort @ `/cohorts`
-
-A cohort available in the beacon.
-
-
-
-* **{S}** <{{config.reference_server_url}}/services/schemas/cohort>
-
-* **{T}** <{{config.reference_server_url}}/beacon/cohorts?testMode=true>
-
-
-
-
-
-## beaconFilteringTermsResponse
-
-The filtering terms response provides information about available individual filters for a beacon's entry types as well as optional information about the ontologies the filters belong to.
-
-* **{S}** <{{config.reference_server_url}}/services/schemas/beaconFilteringTermsResponse>
-
-### filteringTerm @ `/filtering_terms`
-
-Schema for the Filtering Terms list related to the hosting entry type. It is kept separated to allow updating it independently.
-
-
-
-* **{S}** <{{config.reference_server_url}}/services/schemas/filteringTermsSchema>
-
-* **{T}** <{{config.reference_server_url}}/beacon/filtering_terms?testMode=true>
-
-
-
-
-
-## beaconInfoResponse
-
-The `beaconInfoResponse` provides metadata describing a Beacon instance, such as its name, the organization responsible for the Beacon, contact information, site logo and alternative URLs and importantly the beacon's API version. It is based on the GA4GH `service-info` standard.
-The content of the `beaconInfoResponse` can be used by clients such as web front ends or beacon aggregators to evaluate potential access patterns and to display information about the beacon.
-
-* **{S}** <{{config.reference_server_url}}/services/schemas/beaconInfoResponse>
-
-### info @ `/info`
-
-Metadata describing a Beacon instance.
-
-
-
-* **{S}** <{{config.reference_server_url}}/services/schemas/beaconInfoResults>
-
-* **{T}** <{{config.reference_server_url}}/beacon/info>
-
-
-
-
-
-## beaconConfigurationResponse
-
-The `beaconConfigurationResponse` returns information about configuration parameters of a given beacon instance such as maturity or security attributes or supported entry types. It is directed towards Beacon clients like web pages or network aggregators.
-
-* **{S}** <{{config.reference_server_url}}/services/schemas/beaconConfigurationResponse>
-
-### configuration @ `/configuration`
-
-The Beacon configuration reports several attributes of the beacon instance related to security, maturity and available entry types. Where appropriate the details returned in `service-info` should mirror the ones in this configuration.
-
-
-
-* **{S}** <{{config.reference_server_url}}/services/schemas/beaconConfigurationSchema>
-
-* **{T}** <{{config.reference_server_url}}/beacon/configuration>
-
-
-
-
-
-## beaconMapResponse
-
-A `beaconMapResponse` provides information about the beacon instance such as the different endpoints supported by this implementation of the Beacon API. This response is aimed to allow Beacon clients such as web front ends and Beacon network aggregators to evaluate which access patterns can be implemented against individual beacons.
-
-* **{S}** <{{config.reference_server_url}}/services/schemas/beaconMapResponse>
-
-### beaconMap @ `/map`
-
-Map of a Beacon, its entry types and endpoints. It isconceptually similar to a website sitemap.
-
-
-
-* **{S}** <{{config.reference_server_url}}/services/schemas/beaconMapSchema>
-
-* **{T}** <{{config.reference_server_url}}/beacon/map>
+* **{E}** <{{config.reference_server_url}}/beacon/phenopackets?filters=EFO:0030049&limit=5>
 
 
 
@@ -246,5 +259,17 @@ Schema for the entry types list.
 
 
 
+
+
+## beaconCountResponse
+
+Complete definition for a minimal response that provides an aggregate Boolean `"exists": true` or `"exists": false` answer to the query as well as the count of the matched records.
+Additional information - which should not consist of record-level information - can be provided through `beaconHandovers`.  
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconCountResponse>
+
+
+For a list of entities potentially served by `beaconBooleanResponse` depending on
+the selected or granted `responseGranularity` please check `beaconResultsetsResponse`.
 
 

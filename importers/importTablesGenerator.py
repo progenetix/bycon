@@ -52,8 +52,8 @@ def main():
     for i in range(s_no):
         rid = BID.makeID()
         ids.append({
-            "biosample_id": f'{pre}bios-{rid}',
-            "analysis_id": f'{pre}ana-{rid}',
+            "biosample_id": f'{pre}bs-{rid}',
+            "analysis_id": f'{pre}cs-{rid}',
             "individual_id": f'{pre}ind-{rid}'
         })
 

@@ -54,44 +54,23 @@ def main():
     md = []
     # populating with the response types to enforce some order
     # and to add the non-document response types
-    beacon_ets = {
-        "beaconBooleanResponse": {
-            "postscript": """
+
+    s_path = Path(path.join( PKG_PATH, "schemas", "framework", "src", "responses"))
+    r_s_f = [ Path(f.name).stem for f in s_path.glob("beacon*") if f.is_file() ]
+
+    beacon_ets = {}
+    for r_s in r_s_f:
+        beacon_ets.update({r_s: {"endpoints": []}})
+
+    for e in ["beaconBooleanResponse", "beaconCountResponse"]:
+        if e not in beacon_ets:
+            continue
+        beacon_ets[e].update({
+        "postscript": """
 For a list of entities potentially served by `beaconBooleanResponse` depending on
 the selected or granted `responseGranularity` please check `beaconResultsetsResponse`.
-""",
-            "endpoints": [],
-        },
-        "beaconCountResponse": {
-            "postscript": """
-For a list of entities potentially served by `beaconCountResponse` depending on
-the selected or granted `responseGranularity` please check `beaconResultsetsResponse`.
-""",
-            "endpoints": [],
-        },
-        "beaconResultsetsResponse": {
-            "endpoints": [],
-        },
-        "beaconCollectionsResponse": {
-            "endpoints": [],
-        },
-        "beaconFilteringTermsResponse": {
-            "endpoints": [],
-        },
-        "beaconInfoResponse": {
-            "endpoints": [],
-        },
-        "beaconConfigurationResponse": {
-            "endpoints": [],
-        },
-        "beaconMapResponse": {
-            "endpoints": [],
-        },
-        "beaconEntryTypesResponse": {
-            "endpoints": [],
-        }
-    }
-    # pp_fh.write("""<!--start-->""")
+"""
+        })
 
     for e, e_d in BYC["entity_defaults"].items():
         if not (e_d.get("is_beacon_entity", False)):

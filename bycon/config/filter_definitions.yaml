@@ -244,13 +244,14 @@ EFOfus:
   name: "Experimental Factor Ontology"
   namespace_prefix: EFO
   url: "http://www.ebi.ac.uk/efo/EFO_0030038"
-  db_key: 'followup_state.id'
-  scope: biosamples
-  entity: biosample
+  db_key: 'index_disease.followup_state.id'
+  scope: individuals
+  entity: individual
   pattern: '^EFO(:\d+?)?$'
   collationed: True
   examples:
     - EFO:0030039
+    - EFO:0030049
 
 EFOmaterial:
   id: efo

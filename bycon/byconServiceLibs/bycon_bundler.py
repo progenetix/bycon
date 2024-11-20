@@ -38,6 +38,7 @@ class ByconBundler:
     def __init__(self):
         self.errors = []
         self.filepath = None
+        self.datset_ids = BYC.get("BYC_DATASET_IDS", [])
         self.datasets_results = None
         self.collation_types = BYC_PARS.get("collation_types", [])
         self.min_number = BYC_PARS.get("min_number", 0)
@@ -193,7 +194,7 @@ class ByconBundler:
 
     #--------------------------------------------------------------------------#
 
-    def callsets_frequencies_bundles(self):       
+    def callsets_frequencies_bundles(self):
         self.__callsetBundleCreateIsets()
         return self.intervalFrequenciesBundles
 
@@ -201,6 +202,9 @@ class ByconBundler:
     #--------------------------------------------------------------------------#
 
     def collationsPlotbundles(self):       
+        if len(self.datset_ids) < 1:
+            BYC["ERRORS"].append("¡¡¡ No `datasetdIds` parameter !!!")
+            return
         self.__isetBundlesFromCollationParameters()
         self.plotDataBundle.update({ "interval_frequencies_bundles": self.intervalFrequenciesBundles })
         return self.plotDataBundle
@@ -430,9 +434,6 @@ class ByconBundler:
     #--------------------------------------------------------------------------#
 
     def __isetBundlesFromCollationParameters(self):
-        if len(datset_ids := BYC.get("BYC_DATASET_IDS", [])) < 1:
-            BYC["ERRORS"].append("¡¡¡ No `datasetdIds` parameter !!!")
-            return
         # if len(filters := BYC.get("BYC_FILTERS",[])) < 1 and len(self.collation_types) < 1:
         #     BYC["ERRORS"].append("¡¡¡ No `filters` or `collationTypes` parameter !!!")
         #     return
@@ -443,13 +444,16 @@ class ByconBundler:
         prdbug(f'... __isetBundlesFromCollationParameters query {query}')
 
         mongo_client = MongoClient(host=DB_MONGOHOST)
-        for ds_id in datset_ids:
+        for ds_id in self.datset_ids:
             coll_db = mongo_client[ds_id]
-            coll_ids = coll_db[ "collations" ].distinct("id", query)
-            for collation_f in coll_db["frequencymaps" ].find(query):
-                if not fmap_name in collation_f:
+
+# after new collationsFrequencymapsCreator.py run
+#           for collation_f in coll_db["collations" ].find(query):
+            for collation_f in coll_db["frequencymaps"].find(query):
+
+                if not (fmap := collation_f.get(fmap_name)):
                     continue
-                fmap_count = collation_f[ fmap_name ].get("cnv_analyses", 0)
+                fmap_count = fmap.get("cnv_analyses", 0)
                 if fmap_count < self.min_number:
                     continue
                 r_o = {
@@ -457,8 +461,9 @@ class ByconBundler:
                     "group_id": collation_f.get("id", ""),
                     "label": re.sub(r';', ',', collation_f.get("label", "")),
                     "sample_count": fmap_count,
-                    "frequencymap_samples": collation_f[ fmap_name ].get("frequencymap_samples", fmap_count),
-                    "interval_frequencies": collation_f[ fmap_name ]["intervals"] }                    
+                    "frequencymap_samples": fmap.get("frequencymap_samples", fmap_count),
+                    "interval_frequencies": fmap.get("intervals", [])
+                }                    
                 self.intervalFrequenciesBundles.append(r_o)
         mongo_client.close( )
 

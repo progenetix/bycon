@@ -2,7 +2,7 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://progenetix.org/services/schemas/phenopacket/v2023-01-10",
     "title": "Phenopacket",
-    "description": "The Phenopacket class is a bare-bones JSON-schema rewrite of the Phenopackets v2 standard.",
+    "description": "The Phenopacket class is a bare-bones JSON-schema rewrite of the Phenopackets v2 standard (\"PXF\"), for the representation of attributes supported in the `bycon` framework. At this time the Phenopackets schema is not part of the Beacon v2 default data model. However, many sub-schemas in Beacon v2 have been informed by the PXF model and development process, allowing a straightforward cross-mapping of the data structures.",
     "properties": {
         "id": {
             "type": "string",
@@ -46,6 +46,18 @@
         },
         "metaData": {
             "ref": "../common/metaData.json"
+        },
+        "interpretations": {
+            "type": "array",
+            "items": {
+                "$ref": "Interpretation.json"
+            }
+        },
+        "medicalActions": {
+            "type": "array",
+            "items": {
+                "$ref": "MedicalAction.json"
+            }
         }
     }
 }

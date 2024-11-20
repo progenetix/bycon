@@ -45,12 +45,12 @@ provide additions and overrides in the `byconaut/local` directory.
 * `bin/collationsCreator.py -d examplez --collationTypes "PMID"`
 
 
-## Pre-computing Binned CNV Frequencies - `frequencymapsCreator`
+## Pre-computing Binned CNV Frequencies - `collationsFrequencymapsCreator`
 
 This app creates the frequency maps for the "collations" collection. Basically,
 all samples matching any of the collation codes and representing CNV analyses
 are selected and the frequencies of CNVs per genomic bin are aggregated. The
-result contains teh gain and loss frquencies for all genomic intervals, for the
+result contains the gain and loss frequencies for all genomic intervals, for the
 given entity.
 
 ### Arguments
@@ -61,8 +61,8 @@ given entity.
 
 ### Use
 
-* `bin/frequencymapsCreator.py -d progenetix`
-* `bin/frequencymapsCreator.py -d examplez --collationTypes "icdot"`
+* `bin/collationsFrequencymapsCreator.py -d progenetix`
+* `bin/collationsFrequencymapsCreator.py -d examplez --collationTypes "icdot"`
 
 ## Deleting Records
 

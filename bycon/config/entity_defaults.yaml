@@ -123,9 +123,7 @@ biosample:
 individual:
   description: >-
     The type of response used for the endpoint depends on the requested and granted
-    `responseGranularity`, _i.e._ while a "record" level `responseGranularity`
-    has to be served through a `beaconResultsetsResponse` other granularities
-    might employ summary response types.
+    `responseGranularity`.
   request_entity_path_id: individuals
   response_entity_id: individual
   collection: individuals
@@ -134,6 +132,31 @@ individual:
   beacon_schema:
     entity_type: individual
     schema: https://progenetix.org/services/schemas/individual/
+  h->o_access_key: individuals.id
+  is_beacon_entity: true
+  path_id_value_bycon_parameter: individual_ids
+  examples:
+    - ?filters=EFO:0030049&limit=5
+
+
+############################################################################
+
+phenopacket:
+  description: >-
+    The type of response used for the endpoint depends on the requested and granted
+    `responseGranularity`.
+
+    In the `bycon` framework Phenopackets are generated at export time by aggregating
+    the relevant information from the matched `individual`, `biosample`s, `analysis`(/es)
+    and `genomicVariation`s.
+  request_entity_path_id: phenopackets
+  response_entity_id: phenopacket
+  collection: individuals
+  response_schema: beaconResultsetsResponse
+  bycon_response_class: BeaconDataResponse
+  beacon_schema:
+    entity_type: phenopacket
+    schema: https://progenetix.org/services/schemas/phenopacket/
   h->o_access_key: individuals.id
   is_beacon_entity: true
   path_id_value_bycon_parameter: individual_ids

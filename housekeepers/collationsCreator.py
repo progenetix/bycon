@@ -60,7 +60,7 @@ def main():
             if o_id in hier.keys():
                 onto_keys.update( hier[ o_id ][ "parent_terms" ] )
 
-        sel_hiers = [ ]
+        sel_hiers = {}
         no = len(hier.keys())
         matched = 0
         if not BYC["TEST_MODE"]:
@@ -107,21 +107,24 @@ def main():
                     update_obj.update({"reference": ref })
                 matched += 1
                 if not BYC["TEST_MODE"]:
-                    sel_hiers.append( update_obj )
+                    sel_hiers.update({sub_id: update_obj})
                 else:
                     print(f'{sub_id}:\t{code_no} ({child_no} deep) samples - {count} / {no} {coll_type}')
         # UPDATE   
         if not BYC["TEST_MODE"]:
             bar.finish()
             if matched > 0:
-                print("==> Updating database ...")
-                coll_coll.delete_many( { "collation_type": coll_type } )
-                coll_coll.insert_many( sel_hiers )
-                print("==> Writing Codes ...")
                 codes = []
-                for h in sel_hiers:
-                    if (c := h.get("code_matches",0)) > 0:
-                        codes.append( f'{h["id"]}\t{h.get("label","")}\t{h.get("code_matches","")}' )
+                print("==> Updating database ...")
+                ex_codes = coll_coll.distinct("id", { "collation_type": coll_type })
+                for ex_c in ex_codes:
+                    if ex_c not in sel_hiers.keys():
+                        coll_coll.delete_one( { "id": ex_c } )
+                for coll_id, update_obj in sel_hiers.items():
+                    coll_coll.update_one( { "id": coll_id }, { "$set": update_obj }, upsert=True )
+                    if (c := update_obj.get("code_matches", 0)) > 0:
+                        codes.append( f'{coll_id}\t{update_obj.get("label","")}\t{c}' )
+                print("==> Writing Codes ...")
                 write_log(codes, pre_c_f, "")
 
         print(f'===> Found {matched} of {no} {coll_type} codes & added them to {ds_id}.collations <===')

@@ -194,7 +194,8 @@ class ByconCollations:
                 if i_d not in s_s:
                     s_s[ i_d ] = { }
                 if len(d_k) < 1:
-                    d_k = list(f.keys())                    
+                    d_k = list(f.keys())
+                    d_k.delete("frequencymap")         
                 for k in d_k:
                     if k in ["count", "code_matches", "cnv_analyses"]:
                         s_s[ i_d ].update({k: s_s[ i_d ].get(k, 0) + f.get(k, 0)})

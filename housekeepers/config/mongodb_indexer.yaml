@@ -24,9 +24,6 @@ indexed_special_collections:
       db_key: count
     code_matches:
       db_key: code_matches
-  frequencymaps:
-    id:
-      db_key: id
 
 indexed_special_dbs:
   cellz:
