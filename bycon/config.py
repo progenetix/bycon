@@ -45,8 +45,12 @@ GEOLOCS_COLL = "geolocs"
 # to be modified during execution ##############################################
 ################################################################################
 
-mongo_client = MongoClient(host=DB_MONGOHOST)
-db_names = list(mongo_client.list_database_names())
+if "DATABASE_NAMES" in environ:
+    db_names = environ["DATABASE_NAMES"].split()
+else:
+    mongo_client = MongoClient(host=DB_MONGOHOST)
+    db_names = list(mongo_client.list_database_names())
+    db_names = [x for x in db_names if x not in [HOUSEKEEPING_DB, SERVICES_DB, "admin", "config", "local"]]
 
 BYC = {
   "DEBUG_MODE": False,
@@ -56,7 +60,7 @@ BYC = {
   "USER": "anonymous",
 
   "BYC_DATASET_IDS": [],
-  "DATABASE_NAMES": [x for x in db_names if x not in [HOUSEKEEPING_DB, SERVICES_DB, "admin", "config", "local"]],
+  "DATABASE_NAMES": db_names,
   "BYC_FILTERS": [],
 
   "beacon_defaults": {
