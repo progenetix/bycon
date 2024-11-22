@@ -27,8 +27,8 @@ def main():
     print(f'Creating collations for {ds_id}')
 
     set_collation_types()
-    f_d_s = BYC.get("filter_definitions", {})
-
+    f_d_s = BYC["filter_definitions"].get("$defs", {})
+    
     for coll_type, coll_defs in f_d_s.items():
         collationed = coll_defs.get("collationed")
         if not collationed:
@@ -133,7 +133,7 @@ def main():
 ################################################################################
 
 def get_prefix_hierarchy( ds_id, coll_type, pre_h_f):
-    f_d_s = BYC.get("filter_definitions", {})
+    f_d_s = BYC["filter_definitions"].get("$defs", {})
 
     if not (coll_defs := f_d_s.get(coll_type)):
         print(f'¡¡¡ missing {coll_type} !!!')
@@ -220,7 +220,7 @@ def get_prefix_hierarchy( ds_id, coll_type, pre_h_f):
 ################################################################################
 
 def _make_dummy_publication_hierarchy():
-    f_d_s = BYC.get("filter_definitions", {})
+    f_d_s = BYC["filter_definitions"].get("$defs", {})
     coll_type = "pubmed"
     coll_defs = f_d_s[coll_type]
     data_coll = MongoClient(host=config.DB_MONGOHOST)["_byconServicesDB"]["publications"]

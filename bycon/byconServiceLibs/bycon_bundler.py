@@ -447,9 +447,9 @@ class ByconBundler:
         for ds_id in self.datset_ids:
             coll_db = mongo_client[ds_id]
 
-# after new collationsFrequencymapsCreator.py run
-#           for collation_f in coll_db["collations" ].find(query):
-            for collation_f in coll_db["frequencymaps"].find(query):
+            # after new collationsFrequencymapsCreator.py run
+            for collation_f in coll_db["collations" ].find(query):
+            # for collation_f in coll_db["frequencymaps"].find(query):
 
                 if not (fmap := collation_f.get(fmap_name)):
                     continue

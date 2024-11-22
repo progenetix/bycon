@@ -30,7 +30,7 @@ class OntologyMaps:
         self.ontology_maps = []
         self.erroneous_maps = []
         self.filters = BYC.get("BYC_FILTERS", [])
-        self.filter_definitions = BYC.get("filter_definitions", {})
+        self.filter_definitions = BYC["filter_definitions"].get("$defs", {})
         # TODO: Shouldn't be hard coded here
         self.filter_id_matches = ["NCIT", "pgx:icdom", "pgx:icdot", "UBERON"]
         self.ds_id = BYC["BYC_DATASET_IDS"][0]

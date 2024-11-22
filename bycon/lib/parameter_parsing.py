@@ -10,7 +10,7 @@ from config import *
 # TODO
 class ByconParameters:
     def __init__(self):
-        self.arg_defs = BYC.get("argument_definitions", {})
+        self.arg_defs = BYC["argument_definitions"].get("$defs", {})
         self.byc_pars = {}
 
         self.__arguments_set_defaults()
@@ -36,8 +36,8 @@ class ByconParameters:
 ################################################################################
 
 def arguments_set_defaults():
-    a_defs = BYC.get("argument_definitions", {})
-    for a, d in a_defs.items():
+    arg_defs = BYC["argument_definitions"].get("$defs", {})
+    for a, d in arg_defs.items():
         if "default" in d:
             BYC_PARS.update({a: d["default"]})
         if "local" in d and "___shell___" in ENV:
@@ -64,17 +64,17 @@ def args_update_form():
     This function adds comand line arguments to the `BYC_PARS` input
     parameter collection (in "local" context).
     """
-    a_defs = BYC.get("argument_definitions", {})
-    cmd_args = __create_args_parser(a_defs)
+    arg_defs = BYC["argument_definitions"].get("$defs", {})
+    cmd_args = __create_args_parser(arg_defs)
     arg_vars = vars(cmd_args)
     for p in arg_vars.keys():
         if not (v := arg_vars.get(p)):
             continue
         p_d = humps.decamelize(p)
-        if not (a_d := a_defs.get(p_d)):
+        if not (a_d := arg_defs.get(p_d)):
             continue
         values = str(v).split(',')
-        p_v = RefactoredValues(a_defs[p_d]).refVal(values)
+        p_v = RefactoredValues(arg_defs[p_d]).refVal(values)
         if p_v is not None:
             BYC_PARS.update({p_d: p_v})
 
@@ -83,9 +83,9 @@ def args_update_form():
 
 ################################################################################
 
-def __create_args_parser(a_defs):
+def __create_args_parser(arg_defs):
     parser = argparse.ArgumentParser()
-    for a_n, a_d in a_defs.items():
+    for a_n, a_d in arg_defs.items():
         if "cmdFlags" in a_d:
             argDef = {
                 "flags": a_d.get("cmdFlags"),
@@ -104,7 +104,7 @@ def parse_POST():
     content_len = environ.get('CONTENT_LENGTH', '0')
     content_typ = environ.get('CONTENT_TYPE', '')
 
-    a_defs = BYC.get("argument_definitions", {})
+    arg_defs = BYC["argument_definitions"].get("$defs", {})
 
     # TODO: catch error & return for non-json posts
     if "json" in content_typ:
@@ -131,12 +131,12 @@ def parse_POST():
                             elif "g_variant" in rp:
                                 for vp, vv in v[rp].items():
                                     vp_d = humps.decamelize(vp)
-                                    if vp_d in a_defs:
+                                    if vp_d in arg_defs:
                                         BYC_PARS.update({vp_d: vv})
-                            elif rp_d in a_defs:
+                            elif rp_d in arg_defs:
                                 BYC_PARS.update({rp_d: rv})
             else:
-                if j_p_d in a_defs:
+                if j_p_d in arg_defs:
                     BYC_PARS.update({j_p_d: jbod.get(j_p)})
 
         # transferring pagination where existing to standard form values
@@ -153,15 +153,15 @@ def parse_POST():
 ################################################################################
 
 def parse_GET():
-    a_defs = BYC.get("argument_definitions", {})
+    arg_defs = BYC["argument_definitions"].get("$defs", {})
     form_data = cgi.FieldStorage()
     # BYC.update({"DEBUG_MODE": set_debug_state(True) })
     for p in form_data:
         p_d = humps.decamelize(p)
         # CAVE: Only predefined parameters are accepted!
-        if p_d in a_defs:
+        if p_d in arg_defs:
             values = form_return_listvalue(form_data, p)
-            v = RefactoredValues(a_defs[p_d]).refVal(values)
+            v = RefactoredValues(arg_defs[p_d]).refVal(values)
             if v is not None:
                 BYC_PARS.update({p_d: v})
         else:
@@ -254,8 +254,8 @@ def form_return_listvalue(form_data, parameter):
     versions in GET requests are correctly processed.
     """
     p_d = humps.decamelize(parameter)
-    a_defs = BYC.get("argument_definitions", {})
-    p_defs = a_defs.get(p_d, {})
+    arg_defs = BYC["argument_definitions"].get("$defs", {})
+    p_defs = arg_defs.get(p_d, {})
     p_type = p_defs.get("type", "string")
     l_v = []
 
@@ -288,7 +288,7 @@ def parse_filters():
     This filter check is complementary to the evaluation during the filter query
     generation and provides a warning if the filter pattern doesn't exist.
     """
-    f_defs = BYC.get("filter_definitions", {})
+    f_d_s = BYC["filter_definitions"].get("$defs", {})
     filters = BYC_PARS.get("filters", [])
     checked = [ ]
     for f in filters:
@@ -298,7 +298,7 @@ def parse_filters():
             continue
         deflagged = re.sub(r'^!', '', f["id"])
         matched = False
-        for f_t, f_d in f_defs.items():
+        for f_t, f_d in f_d_s.items():
             if re.compile( f_d["pattern"] ).match( deflagged ):
                 matched = True
                 continue

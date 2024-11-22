@@ -550,7 +550,7 @@ class ByconFilteringTerms:
 
     def __return_filter_resources(self):
         r_o = {}
-        f_d_s = BYC.get("filter_definitions", {})
+        f_d_s = BYC["filter_definitions"].get("$defs", {})
         collation_types = list(self.filter_collation_types)
         res_schema = object_instance_from_schema_name("beaconFilteringTermsResults", "$defs/Resource",
                                                       "json")

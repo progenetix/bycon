@@ -6,6 +6,20 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2024-11-22 (v2.0.13)
+
+* introducing the option to set `DATABASE_NAMES` through an environmental
+  parameter, to allow setups w/ external databases (thanks to Matt Baker!)
+* wrapped the filter classes in the `filter_definitions` file into a
+  `$defs` root parameter to allow for more structured definition of the filter parameters (e.g. `description` etc.)
+* wrapped the argument definitions into a
+  `$defs` root parameter
+* added a `local/filter_definitions.yaml` file to allow local overrides of the
+  filter definitions
+* abandoned the `frequencymaps` collection in favour of the `frequencymap`s inside
+  the `collations` collection
+    - ¡¡¡ This requires re-generation of the maps !!!
+
 ### 2024-11-14 (v2.0.12)
 
 * bug fix: the global ENV was previously set to "local" if not called 

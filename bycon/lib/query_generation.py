@@ -42,7 +42,7 @@ class ByconQuery():
             self.ds_id = BYC["BYC_DATASET_IDS"][0]
         else:
             self.ds_id = dataset_id
-        self.argument_definitions = BYC.get("argument_definitions", {})
+        self.argument_definitions = BYC["argument_definitions"].get("$defs", {})
         self.cytoband_definitions = BYC.get("cytobands", [])
         self.ChroNames = ChroNames()
 
@@ -741,7 +741,7 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __query_from_collationed_filter(self, coll_coll, f_val):
-        f_d_s = BYC.get("filter_definitions", {})
+        f_d_s = BYC["filter_definitions"].get("$defs", {})
         if f_val not in self.collation_ids:
             return False
 
@@ -760,7 +760,7 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __query_from_filter_definitions(self, f_val):
-        f_d_s = BYC.get("filter_definitions", {})
+        f_d_s = BYC["filter_definitions"].get("$defs", {})
         f_info = {
             "id": f_val,
             "scope": "biosamples",

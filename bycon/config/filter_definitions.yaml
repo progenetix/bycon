@@ -1,523 +1,158 @@
-age:
-  id: NCIT_C156420
-  ft_type: alphanumeric
-  format: iso8601duration
-  name: Age at diagnosis
-  scope: individuals
-  entity: individual
-  db_key: index_disease.onset.age_days
-  pattern: '^ageAtDiagnosis:.+?$'
-  collationed: False
-  examples:
-    - 'ageAtDiagnosis:<=P18Y'
+description: >
+  This file contains definitions for classes of filter values that can be used in the
+  API `filters` query parameters.
 
-EDAMoperation:
-  id: EDAMoperation
-  ft_type: ontologyTerm
-  iri_prefix: http://purl.obolibrary.org/obo/EDAM_
-  name: EDAM ontology
-  namespace_prefix: EDAM
-  url: https://github.com/edamontology/edam-browser
-  reference:
-    root: 'https://edamontology.github.io/edam-browser/#'
-    replace:
-      - "EDAM:"
-      - ""
-  db_key: 'analysis_info.operation.id'
-  description: Genomic analysis type
-  scope: analyses
-  entity: analysis
-  pattern: '^EDAM:operation_\d+?$'
-  collationed: True
-  examples:
-    - EDAM:operation_3961  # Copy number variation detection
-    - EDAM:operation_3227  # Variant Calling
+  !!! note "Local Filter Definitions"
 
-analysisPipeline:
-  id: analysisPipeline
-  ft_type: alphanumeric
-  format: string
-  db_key: 'pipeline_name'
-  scope: analyses
-  entity: analysis
-  pattern: '^..+?$'
-  collationed: True
-  collation_include_normals: True
-  examples:
-    - era-EnsembleCNV
+      `FilteringTerms` defined in this file are in addition to the ones being
+      provided through `bycon/config/filtering_terms.yaml` and might be edited
+      according to local needs.
 
-genomes:
-  id: genomes
-  ft_type: alphanumeric
-  format: integer
-  name: genome count
-  scope: publications
-  entity: publication
-  db_key: counts.genomes
-  pattern: '^\d+$'
-  collationed: False
-  examples:
-    - 'genomes:>0'
+  Filter "classes" refer to a set of related values with the same application scope.
 
-NCITgrade:
-  id: ncit
-  ft_type: ontologyTerm
-  name: NCI Thesaurus OBO Edition
-  iri_prefix: http://purl.obolibrary.org/obo/NCIT_
-  namespace_prefix: NCIT
-  url: https://github.com/NCI-Thesaurus/thesaurus-obo-edition
-  reference:
-    root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
-    replace:
-      - "NCIT:"
-      - ""
-  db_key: 'tumor_grade.id'
-  description: Disease Grade codes
-  scope: biosamples
-  entity: biosample
-  pattern: '^NCIT(:C\d+?)?$'
-  collationed: True
-  examples:
-    - 'NCIT:C28078'
-    - 'NCIT:C28080'
+  - `id`: The ID of the filter, _i.e._ the value compared to the `db_key` parameter
+    in the database backend
+  - `ft_type`: The type of the filter. This can be one of the following:
+    - `alphanumeric`: An alphanumeric value.
+    - `ontologyTerm`: An ontology term.
+    - `custom`: A custom filter.
+  - `format`: The format of the filter value.
+  - `name`: The name of the filter.
+  - `scope`: The scope of the filter. .
+  - `entity`: The entity type that the filter is associated with.
+  - `db_key`: The database key that the filter corresponds to.
+  - `pattern`: The regular expression pattern that the filter value must match.
+  - `collationed`: Whether the filter value should be collationed, _i.e._ if an
+    aggregate of the matched samples is being created (e.g. CNV frequency maps
+    based on all matched samples)
+  - `examples`: A list of example values for the filter.
 
-NCITstage:
-  id: ncit
-  ft_type: ontologyTerm
-  iri_prefix: http://purl.obolibrary.org/obo/NCIT_
-  name: NCI Thesaurus OBO Edition
-  namespace_prefix: NCIT
-  url: https://github.com/NCI-Thesaurus/thesaurus-obo-edition
-  reference:
-    root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
-    replace:
-      - "NCIT:"
-      - ""
-  db_key: 'pathological_stage.id'
-  description: Disease Stage codes
-  scope: biosamples
-  entity: biosample
-  pattern: '^NCIT(:C\d+?)?$'
-  collationed: True
-  examples:
-    - NCIT:C27970
-    - NCIT:C27969
+  The definitions can be used to validate the input values and to provide
+  additional information for the API documentation.
 
-NCITtnm:
-  id: ncit
-  ft_type: ontologyTerm
-  name: NCI Thesaurus OBO Edition
-  iri_prefix: http://purl.obolibrary.org/obo/NCIT_
-  namespace_prefix: NCIT
-  url: https://github.com/NCI-Thesaurus/thesaurus-obo-edition
-  reference:
-    root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
-    replace:
-      - "NCIT:"
-      - ""
-  db_key: 'pathological_tnm_findings.id'
-  description: NCIT TNM codes
-  scope: biosamples
-  entity: biosample
-  pattern: '^NCIT(:C\d+?)?$'
-  collationed: True
-  examples:
-    - NCIT:C48700
-    - NCIT:C48786
+  The definitions are used in the `filters` section of the API query
+  parameters, e.g. `filters: { "genomes": "genomes:>0" }`.
 
-# Bio-Metadata
-NCIT:
-  id: ncit/neoplasm-core.owl
-  ft_type: ontologyTerm
-  iri_prefix: http://purl.obolibrary.org/obo/NCIT_
-  name: NCI Thesaurus OBO Edition
-  namespace_prefix: NCIT
-  url: http://purl.obolibrary.org/obo/ncit/neoplasm-core.owl
-  reference:
-    root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
-    replace:
-      - "NCIT:"
-      - ""
-  db_key: 'histological_diagnosis.id'
-  scope: biosamples
-  entity: biosample
-  pattern: '^NCIT(:C\d+?)?$'
-  collationed: True
-  examples:
-    - NCIT:C27676
-    - NCIT:C9325
+$defs:
+  genomes:
+    id: genomes
+    ft_type: alphanumeric
+    format: integer
+    name: genome count
+    scope: publications
+    entity: publication
+    db_key: counts.genomes
+    pattern: '^\d+$'
+    collationed: False
+    examples:
+      - 'genomes:>0'
 
-NCITauxiliary:
-  id: ncit
-  ft_type: ontologyTerm
-  iri_prefix: http://purl.obolibrary.org/obo/NCIT_
-  name: NCIt Diseases
-  namespace_prefix: NCIT
-  url: https://github.com/NCI-Thesaurus/thesaurus-obo-edition
-  reference:
-    root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
-    replace:
-      - "NCIT:"
-      - ""
-  db_key: 'auxiliary_disease.disease_code.id'
-  scope: individuals
-  entity: individual
-  pattern: '^NCIT(:C\d+?)?$'
-  collationed: True
-  examples:
-    - NCIT:C27676
-    - NCIT:C9325
+  # PATOsex:
+  #   id: ncit
+  #   ft_type: ontologyTerm
+  #   iri_prefix: http://purl.obolibrary.org/obo/PATO_
+  #   description: >
+  #     Some PATO codes specific for genotypic sex...
+  #   name: "Phenotypic Qualities Ontology"
+  #   namespace_prefix: PATO
+  #   url: https://github.com/pato-ontology/pato/
+  #   db_key: 'sex.id'
+  #   scope: individuals
+  #   entity: individual
+  #   pattern: '^PATO(:002000[012])?$'
+  #   collationed: True
+  #   examples:
+  #     - PATO:0020000
 
-HP:
-  id: hp
-  ft_type: ontologyTerm
-  iri_prefix: http://purl.obolibrary.org/obo/HP_
-  name: "Human Phenotype Ontology"
-  namespace_prefix: HP
-  url: "https://hpo.jax.org/"
-  db_key: 'phenotypic_features.feature_type.id'
-  scope: individuals
-  entity: individual
-  pattern: '^HP(:\d+?)?$'
-  collationed: True
-  examples:
-    - HP:0012209
+  icdom:
+    id: pgx_icdom
+    ft_type: ontologyTerm
+    name: "ICD-O 3 Morphologies (Progenetix)"
+    namespace_prefix: pgx
+    url: https://progenetix.org/
+    reference:
+      root: https://progenetix.org/services/ids/
+    db_key: 'icdo_morphology.id'
+    scope: biosamples
+    entity: biosample
+    pattern: '^(?:pgx:)?icdom-\d{1,5}(-\d{1,5})?$'
+    collationed: True
+    examples:
+      - pgx:icdom-85003
+      - pgx:icdom-94403
 
+  icdot:
+    id: pgx_icdot
+    ft_type: ontologyTerm
+    name: "ICD-O 3 Topographies (Progenetix)"
+    namespace_prefix: pgx
+    url: "https://progenetix.org/"
+    reference:
+      root: https://progenetix.org/services/ids/
+    db_key: 'icdo_topography.id'
+    scope: biosamples
+    entity: biosample
+    pattern: '^(?:pgx:)?icdot-C\d\d?(\.\d)?$'
+    collationed: True
+    examples:
+      - pgx:icdot-C42.2
+      - pgx:icdot-C54.1
+      - pgx:icdot-C5
 
-NCITsex:
-  id: ncit
-  ft_type: ontologyTerm
-  iri_prefix: http://purl.obolibrary.org/obo/NCIT_
-  name: NCI Thesaurus OBO Edition
-  namespace_prefix: NCIT
-  url: https://github.com/NCI-Thesaurus/thesaurus-obo-edition
-  reference:
-    root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
-    replace:
-      - "NCIT:"
-      - ""
-  db_key: sex.id
-  description: Some NCIT codes specific for sex...
-  scope: individuals
-  entity: individual
-  pattern: '^NCIT(:C\d+?)?$'
-  collationed: True
-  examples:
-    - NCIT:C20197
-    - NCIT:C16576
+  TCGAproject:
+    id: tcgaproject
+    ft_type: ontologyTerm
+    name: "The Cancer Genome Atlas"
+    namespace_prefix: pgx
+    url: "http://cancergenome.nih.gov"
+    reference:
+      root: https://portal.gdc.cancer.gov/projects/
+      replace:
+        - "pgx:"
+        - ""
+    scope: biosamples
+    entity: biosample
+    pattern: '^(?:pgx:)?TCGA\-\w{2,4}?$'
+    db_key: 'references.tcgaproject.id'
+    collationed: True
+    examples:
+      - pgx:TCGA-DLBC
+      - pgx:TCGA-ESCA
+      - pgx:TCGA-GBM
 
-# PATOsex:
-#   id: ncit
-#   ft_type: ontologyTerm
-#   iri_prefix: http://purl.obolibrary.org/obo/PATO_
-#   description: >
-#     Some PATO codes specific for genotypic sex...
-#   name: "Phenotypic Qualities Ontology"
-#   namespace_prefix: PATO
-#   url: https://github.com/pato-ontology/pato/
-#   db_key: 'sex.id'
-#   scope: individuals
-#   entity: individual
-#   pattern: '^PATO(:002000[012])?$'
-#   collationed: True
-#   examples:
-#     - PATO:0020000
+  cbioportal:
+    id: cbioportal
+    ft_type: ontologyTerm
+    name: "cBioPortal"
+    iri_prefix: https://www.cbioportal.org/study/summary?id=
+    namespace_prefix: cbioportal
+    url: "https://www.cbioportal.org"
+    reference:
+      root: https://www.cbioportal.org/study/summary?id=
+      replace:
+        - "cbioportal:"
+        - ""
+    scope: biosamples
+    entity: biosample
+    db_key: 'references.cbioportal.id'
+    pattern: '^cbioportal:\w+?$'
+    collationed: True
+    examples:
+      - 'cbioportal:msk_impact_2017'
 
-EFOcnvassessment:
-  id: efo
-  ft_type: ontologyTerm
-  iri_prefix: http://www.ebi.ac.uk/efo/EFO_
-  name: "Experimental Factor Ontology"
-  namespace_prefix: EFO
-  url: "http://www.ebi.ac.uk/efo/EFO_0030063"
-  db_key: 'variant_state.id'
-  scope: variants
-  pattern: '^EFO(:\d+?)?$'
-  collationed: False
-  examples:
-    - EFO:0030070
-
-EFOfus:
-  id: efo
-  ft_type: ontologyTerm
-  iri_prefix: http://www.ebi.ac.uk/efo/EFO_
-  name: "Experimental Factor Ontology"
-  namespace_prefix: EFO
-  url: "http://www.ebi.ac.uk/efo/EFO_0030038"
-  db_key: 'index_disease.followup_state.id'
-  scope: individuals
-  entity: individual
-  pattern: '^EFO(:\d+?)?$'
-  collationed: True
-  examples:
-    - EFO:0030039
-    - EFO:0030049
-
-EFOmaterial:
-  id: efo
-  ft_type: ontologyTerm
-  iri_prefix: http://www.ebi.ac.uk/efo/EFO_
-  name: "Experimental Factor Ontology"
-  namespace_prefix: EFO
-  url: "https://www.ebi.ac.uk/efo/"
-  db_key: 'biosample_status.id'
-  scope: biosamples
-  entity: biosample
-  pattern: '^(?:EFO)|(?:OBI):\d+?$'
-  collationed: True
-  collation_include_normals: true
-  examples:
-    - EFO:0009656
-    - EFO:0030035
-
-icdom:
-  id: pgx_icdom
-  ft_type: ontologyTerm
-  name: "ICD-O 3 Morphologies (Progenetix)"
-  namespace_prefix: pgx
-  url: https://progenetix.org/
-  reference:
-    root: https://progenetix.org/services/ids/
-  db_key: 'icdo_morphology.id'
-  scope: biosamples
-  entity: biosample
-  pattern: '^(?:pgx:)?icdom-\d{1,5}(-\d{1,5})?$'
-  collationed: True
-  examples:
-    - pgx:icdom-85003
-    - pgx:icdom-94403
-
-icdot:
-  id: pgx_icdot
-  ft_type: ontologyTerm
-  name: "ICD-O 3 Topographies (Progenetix)"
-  namespace_prefix: pgx
-  url: "https://progenetix.org/"
-  reference:
-    root: https://progenetix.org/services/ids/
-  db_key: 'icdo_topography.id'
-  scope: biosamples
-  entity: biosample
-  pattern: '^(?:pgx:)?icdot-C\d\d?(\.\d)?$'
-  collationed: True
-  examples:
-    - pgx:icdot-C42.2
-    - pgx:icdot-C54.1
-    - pgx:icdot-C5
-
-# Procedural Metadata
-pubmed:
-  id: pubmed
-  ft_type: ontologyTerm
-  name: NCBI PubMed
-  namespace_prefix: PMID
-  url: "https://www.ncbi.nlm.nih.gov/pubmed/"
-  reference:
-    root: https://europepmc.org/article/MED/
-    replace:
-      - "PMID:"
-      - ""
-  db_key: 'references.pubmed.id'
-  scope: biosamples
-  entity: biosample
-  pattern: '^PMID(:\d+?)?$'
-  collationed: True
-  examples:
-    - PMID:28966033
-    - PMID:9405679
-
-GEOseries:
-  id: geo_gse
-  ft_type: ontologyTerm
-  namespace_prefix: geo
-  name: NCBI GEO Series
-  url: "https://www.ncbi.nlm.nih.gov/geo/"
-  reference:
-    root: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
-    replace:
-      - "geo:"
-      - ""
-  pattern: '^geo:GSE\d+?$'
-  scope: analyses
-  entity: analysis
-  db_key: 'analysis_info.series_id'
-  collationed: True
-  examples:
-    - geo:GSE19331
-
-GenomePlatforms:
-  id: geo_gpl
-  ft_type: ontologyTerm
-  namespace_prefix: geo
-  name: Genomic Analysis Platforms
-  url: "https://www.ncbi.nlm.nih.gov/geo/"
-  reference:
-    root: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
-    replace:
-      - "geo:"
-      - ""
-  pattern: '^(?:EFO:)|(?:geo:GPL)|(?:arrayexpress:E)[\w\-]+?$'
-  scope: analyses
-  entity: analysis
-  db_key: 'platform_model.id'
-  collationed: True
-  examples:
-    - geo:GPL6504
-    - geo:GPL6801
-    - arrayexpress:A-AFFY-72
-    - EFO:0010938
-
-GEOexperiment:
-  id: geo_gsm
-  ft_type: ontologyTerm
-  namespace_prefix: geo
-  url: "https://www.ncbi.nlm.nih.gov/geo/"
-  name: NCBI GEO Experiment
-  reference:
-    root: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
-    replace:
-      - "geo:"
-      - ""
-  pattern: '^(?:geo:)?GSM\d+?$'
-  scope: analyses
-  entity: analysis
-  db_key: 'analysis_info.experiment_id'
-  collationed: False
-  examples:
-    - geo:GSM253289
-
-AEseries:
-  id: AEseries
-  ft_type: ontologyTerm
-  namespace_prefix: arrayexpress
-  name: EBI ArrayExpress Series
-  url: https://www.ebi.ac.uk/arrayexpress/
-  reference:
-    root: https://www.ebi.ac.uk/arrayexpress/series/
-    replace:
-      - "arrayexpress:"
-      - ""
-  pattern: '^arrayexpress:E[\-\w]+$'
-  scope: analyses
-  entity: analysis
-  db_key: 'analysis_info.series_id'
-  collationed: True
-
-AEexperiment:
-  id: AEexperiment
-  ft_type: ontologyTerm
-  name: "EBI ArrayExpress"
-  namespace_prefix: arrayexpress
-  url: "https://www.ebi.ac.uk/arrayexpress/"
-  reference:
-    root: https://www.ebi.ac.uk/arrayexpress/experiments/
-    replace:
-      - "arrayexpress:"
-      - ""
-  db_key: 'analysis_info.experiment_id'
-  scope: analyses
-  entity: analysis
-  pattern: '^arrayexpress:[AEP]-\w{4}-[\-\w]+$'
-  collationed: False
-  examples:
-    - arrayexpress:E-MEXP-1008-SAMPLE_1
-
-TCGAproject:
-  id: tcgaproject
-  ft_type: ontologyTerm
-  name: "The Cancer Genome Atlas"
-  namespace_prefix: pgx
-  url: "http://cancergenome.nih.gov"
-  reference:
-    root: https://portal.gdc.cancer.gov/projects/
-    replace:
-      - "pgx:"
-      - ""
-  scope: biosamples
-  entity: biosample
-  pattern: '^(?:pgx:)?TCGA\-\w{2,4}?$'
-  db_key: 'references.tcgaproject.id'
-  collationed: True
-  examples:
-    - pgx:TCGA-DLBC
-    - pgx:TCGA-ESCA
-    - pgx:TCGA-GBM
-
-UBERON:
-  id: uberon
-  ft_type: ontologyTerm
-  name: Uberon cross-species anatomical structures ontology
-  iri_prefix: http://purl.obolibrary.org/obo/UBERON_
-  namespace_prefix: UBERON
-  url: "http://uberon.org"
-  reference:
-    root: http://purl.obolibrary.org/obo/
-    replace:
-      - ":"
-      - "_"
-  scope: biosamples
-  entity: biosample
-  db_key: 'sample_origin_detail.id'
-  pattern: '^UBERON(:\d+?)?$'
-  collationed: True
-  examples:
-    - UBERON:0000959
-    - UBERON:0001869
-
-cbioportal:
-  id: cbioportal
-  ft_type: ontologyTerm
-  name: "cBioPortal"
-  iri_prefix: https://www.cbioportal.org/study/summary?id=
-  namespace_prefix: cbioportal
-  url: "https://www.cbioportal.org"
-  reference:
-    root: https://www.cbioportal.org/study/summary?id=
-    replace:
-      - "cbioportal:"
-      - ""
-  scope: biosamples
-  entity: biosample
-  db_key: 'references.cbioportal.id'
-  pattern: '^cbioportal:\w+?$'
-  collationed: True
-  examples:
-    - 'cbioportal:msk_impact_2017'
-
-cellosaurus:
-  id: cellosaurus
-  ft_type: ontologyTerm
-  name: "Cellosaurus cell line resource"
-  iri_prefix: https://www.cellosaurus.org/
-  namespace_prefix: cellosaurus
-  url: "https://www.cellosaurus.org/"
-  reference:
-    root: https://www.cellosaurus.org/
-    replace:
-      - "cellosaurus:"
-      - ""
-  db_key: 'references.cellosaurus.id'
-  scope: biosamples
-  entity: biosample
-  pattern: '^cellosaurus:CVCL_\w*?$'
-  collationed: True
-  examples:
-    - 'cellosaurus:CVCL_1650'
-    - 'cellosaurus:CVCL_0006'
-
-pgxcohort:
-  id: pgx_cohorts
-  ft_type: custom
-  name: "Progenetix cohorts"
-  iri_prefix: https://progenetix.org/ids/
-  namespace_prefix: pgx
-  url: "https://progenetix.org"
-  db_key: 'cohorts.id'
-  scope: biosamples
-  entity: biosample
-  pattern: '^pgx:cohort(-\w+)?'
-  collationed: True
-  examples:
-    - 'pgx:cohort-arraymap'
-    - 'pgx:cohort-TCGA'
+  pgxcohort:
+    id: pgx_cohorts
+    ft_type: custom
+    name: "Progenetix cohorts"
+    iri_prefix: https://progenetix.org/ids/
+    namespace_prefix: pgx
+    url: "https://progenetix.org"
+    db_key: 'cohorts.id'
+    scope: biosamples
+    entity: biosample
+    pattern: '^pgx:cohort(-\w+)?'
+    collationed: True
+    examples:
+      - 'pgx:cohort-arraymap'
+      - 'pgx:cohort-TCGA'
 

@@ -1,23 +1,23 @@
-### Definitions
+### Argument Definitions
 #### `user_name` 
+**description:**
+TODO: Temporary(?) for authentication testing.    
 **type:** string    
 **pattern:** `^\w+$`    
 **cmdFlags:** `--userName`    
-**description:**
-faking a user name    
 
 #### `test_mode` 
+**description:**
+Ativates the Beacon test setting, i.e. returning some random documents    
 **type:** boolean    
 **cmdFlags:** `-t,--testMode`    
-**description:**
-test setting, i.e. returning some random documents    
 **default:** `False`    
 
 #### `skip` 
+**description:**
+Number of pages to be skipped.    
 **type:** integer    
 **cmdFlags:** `--skip`    
-**description:**
-pages to be skipped    
 **default:** `0`    
 
 #### `limit` 
@@ -29,31 +29,31 @@ limit number of documents; a value of 0 sets to unlimited
 **local:** 0    
 
 #### `requested_granularity` 
-**type:** string    
-**pattern:** `^\w+$`    
 **description:**
 The requested granularity of the beacon    
+**type:** string    
+**pattern:** `^\w+$`    
 **cmdFlags:** `--requestedGranularity`    
 **default:** `record`    
 
 #### `request_entity_path_id` 
-**type:** string    
-**cmdFlags:** `--requestEntityPathId`    
 **description:**
     
 * data entry point, equal to the first REST path element in Beacon     
 * this only is used for command-line tests instead of the REST path
   value seen by the stack in web server mode    
+**type:** string    
+**cmdFlags:** `--requestEntityPathId`    
 
 #### `response_entity_path_id` 
-**type:** string    
-**cmdFlags:** `--responseEntityPathId`    
 **description:**
     
 * optional data delivery entry point, for {id} paths     
 * for command line (see above), but also potentially for selecting
   a special response entity in byconaut services (e.g. `indviduals`
   in `/sampletable/`)    
+**type:** string    
+**cmdFlags:** `--responseEntityPathId`    
 
 #### `include_resultset_responses` 
 **type:** string    

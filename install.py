@@ -44,12 +44,15 @@ def main(no_sudo):
     for p in ["system_user", "system_group", "bycon_install_dir"]:
         p_v = install.get(p)
         if p_v is None:
-            print("¡¡¡ No `{}` value defined in {} !!!".format(p, i_f))
+            print(f'¡¡¡ No `{p}` value defined in `{i_f}` !!!')
             exit()
 
     s_u = install["system_user"]
     s_g = install["system_group"]
     b_i_d_p = path.join( *install["bycon_install_dir"] )
+    if not path.isdir(b_i_d_p):
+        print(f'¡¡¡ No directory exists at `{b_i_d_p}`, defined as `bycon_install_dir` in `{i_f}`!!!')
+        exit()
 
     server_source = path.join(dir_path, "beaconServer", "")
     services_source = path.join(dir_path, "byconServices", "")

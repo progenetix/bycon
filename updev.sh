@@ -9,9 +9,9 @@ pip3 install $BY --break-system-packages
 ./markdowner.py
 # pipreqs --force .
 # python3 -m build --wheel && twine upload dist/*
-# git tag v2.0.9  & git push --tags
 ./install.py
 rm -rf ./build
 rm -rf ./dist
 rm -rf ./bycon.egg-info
-# rsync -avh --exclude=logs ./ ~/Github/bycon/
+rsync -avh --exclude=logs ./ ~/Github/bycon/
+# git tag v2.0.13  & git push --tags

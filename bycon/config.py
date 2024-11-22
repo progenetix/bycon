@@ -72,11 +72,11 @@ BYC = {
 
   # ..._mappings / ..._definitions are generated from YAML files & should stay static
 
-  "argument_definitions": {},
+  "argument_definitions": {"$defs":{}},
   "dataset_definitions": {},
   "datatable_mappings": {},
   "entity_defaults": {"info":{}},
-  "filter_definitions": {},
+  "filter_definitions": {"$defs":{}},
   "geoloc_definitions": {},
   "handover_definitions": {},
   "interval_definitions": {},

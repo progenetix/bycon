@@ -33,7 +33,7 @@ def variants_from_revish(bs_id, cs_id, technique, iscn):
 ################################################################################
 
 def deparse_ISCN_to_variants(iscn):
-    argdefs = BYC.get("argument_definitions", {})
+    argdefs = BYC["argument_definitions"].get("$defs", {})
     chro_names = ChroNames()
     i_d = BYC["interval_definitions"]
     v_t_defs = BYC.get("variant_type_definitions")

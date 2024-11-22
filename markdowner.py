@@ -126,7 +126,11 @@ the selected or granted `responseGranularity` please check `beaconResultsetsResp
                 "plot_parameters": "Plot Parameters"
             },
         },
-        "argument_definitions": {}
+        "argument_definitions": {
+            "chapters": {
+                "$defs": "Argument Definitions"
+            }
+        }
     }
 
     for d_k, d_v in file_pars.items():
@@ -137,17 +141,9 @@ the selected or granted `responseGranularity` please check `beaconResultsetsResp
 
         ls = []
 
-        if not "chapters" in d_v:
-            d_v = {
-                "chapters":{
-                    "root": "Definitions"}
-            }
 
         for chapter, title in d_v.get("chapters").items():
-            if "root" in chapter:
-                pp = BYC[d_k]
-            else:
-                pp = BYC[d_k].get(chapter, {})
+            pp = BYC[d_k].get(chapter, {})
             ls.append(f'### {title}')
             for pk, pi in pp.items():
                 ls.append(f'#### `{pk}` \n')

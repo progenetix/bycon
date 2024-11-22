@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
 
-import datetime
-import time
+import datetime, time
 from pymongo import MongoClient
 from progress.bar import Bar
 from random import shuffle as random_shuffle
 
 from bycon import *
-from byconServiceLibs import assertSingleDatasetOrExit, ask_limit_reset, ByconBundler, GenomeBins, set_collation_types
+from byconServiceLibs import (
+    assertSingleDatasetOrExit,
+    ask_limit_reset,
+    ByconBundler,
+    CollationQuery,
+    GenomeBins,
+    set_collation_types
+)
 
 ################################################################################
 
@@ -26,8 +32,6 @@ def main():
 
     BYC.update({"PAGINATED_STATUS": False})
 
-    set_collation_types()
-
     data_client = MongoClient(host=DB_MONGOHOST)
     data_db = data_client[ ds_id ]
     coll_coll = data_db[ "collations" ]
@@ -35,14 +39,29 @@ def main():
     bios_coll = data_db[ "biosamples" ]
     cs_coll = data_db["analyses"]
 
-    coll_ids = _filter_coll_ids(coll_coll)    
+    query = {}
+    if len(BYC_PARS.get("filters", [])) > 0 or len(BYC_PARS.get("collation_types", [])) > 0:
+        query = CollationQuery().getQuery()
+    coll_ids = coll_coll.distinct("id", query)
+    random_shuffle(coll_ids)
     coll_no = len(coll_ids)
+
+    print(f'=> Processing {len(coll_ids)} collations from {ds_id}...')
 
     if not BYC["TEST_MODE"]:
         bar = Bar(f'{coll_no} {ds_id} fMaps', max = coll_no, suffix='%(percent)d%%'+f' of {coll_no}' )
 
-    coll_i = 0
-    for c_id in random_shuffle(coll_ids):
+    # this just counts the number of collations with existing frequencymaps
+    # and adjusts the progress bar accordingly (including a fancy delayed growth...)
+    if skip_existing is True:
+        query.update({"frequencymap": {"$exists": True}})
+        coll_i = coll_coll.count_documents(query)
+        if not BYC["TEST_MODE"]:
+            for i in range(coll_i):
+                time.sleep(0.001)
+                bar.next()
+
+    for c_id in coll_ids:
         coll = coll_coll.find_one({"id": c_id})
         c_o_id = coll.get("_id")
         if not coll:
@@ -50,15 +69,13 @@ def main():
             if not BYC["TEST_MODE"]:
                 bar.next()
             continue
-        coll_i += 1
-
-        prdbug(f'??? skip {c_id} with existing frequencymap')
 
         if not BYC["TEST_MODE"]:
             bar.next()
+
         if skip_existing is True:
             if "frequencymap" in coll:
-                prdbug(f'!!! skip {c_id} with existing frequencymap')
+                prdbug(f'\n... skipping {c_id} with existing frequencymap')
                 continue
 
         start_time = time.time()
@@ -104,35 +121,6 @@ def main():
     
     if not BYC["TEST_MODE"]:
         bar.finish()
-
-
-################################################################################
-
-def _filter_coll_ids(coll_coll):
-    # collation types have been limited potentially before
-    f_d_s = BYC.get("filter_definitions", {})
-    c_t_s = list(f_d_s.keys())
-    query = { "collation_type":{"$in": c_t_s } }
-    if len(BYC["BYC_FILTERS"]) > 0:
-        f_l = []
-        for c_t in BYC["BYC_FILTERS"]:
-            f_l.append( c_t["id"])
-        if len(f_l) > 1:
-            query = { "$and": [
-                            { "collation_type":{"$in": c_t_s }},
-                            { "id": {"$in": f_l }}
-                        ]
-                    }
-        elif len(f_l) == 1:
-            query = { "$and": [
-                            {"collation_type":{"$in": c_t_s }},
-                            {"id": f_l[0]}
-                        ]
-                    }
-
-    coll_ids = coll_coll.distinct("id", query)
-
-    return coll_ids
 
 
 ################################################################################

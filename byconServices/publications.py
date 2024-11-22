@@ -134,7 +134,7 @@ def __check_publications_map_response(results):
 def _create_filters_query():
     filters = BYC.get("BYC_FILTERS", [])
     filter_precision = BYC_PARS.get("filter_precision", "exact")
-    f_d_s = BYC.get("filter_definitions", {})
+    f_d_s = BYC["filter_definitions"].get("$defs", {})
     query = { }
     error = ""
 

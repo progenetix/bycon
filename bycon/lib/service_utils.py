@@ -51,7 +51,7 @@ def set_entities():
     ```
     """
     b_e_d = BYC.get("entity_defaults", {})
-    a_defs = BYC.get("argument_definitions", {})
+    arg_defs = BYC["argument_definitions"].get("$defs", {})
 
     # here aliases are read in, e.g. to allow "schemas" instead of "byconschemas"
     # ("schemas" is avoided since being "keywordy") etc.
@@ -98,7 +98,7 @@ def set_entities():
     })
 
     if (rpidv := BYC.get("request_entity_path_id_value")):
-        if p_p in a_defs.keys():
-            v = RefactoredValues(a_defs[p_p]).refVal(rpidv)
+        if p_p in arg_defs.keys():
+            v = RefactoredValues(arg_defs[p_p]).refVal(rpidv)
             BYC_PARS.update({p_p: v})
 

@@ -105,7 +105,7 @@ class GenomeBins:
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
-
+    # TODO: Not used anywhere?
     def getAnalysisCoverageMaps(self, analysis_variants=[]):
         self.__prepare_analysis_intervals()
         self.analysis_variants = analysis_variants
@@ -137,7 +137,7 @@ class GenomeBins:
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
-
+    # TODO: Not used anywhere?
     def genomeCNVstats(self, analysis_variants=[]):
         self.__prepare_analysis_intervals()
         self.analysis_variants = analysis_variants
@@ -157,7 +157,7 @@ class GenomeBins:
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
-
+    # TODO: Not used anywhere?
     def getVariantDuplicates(self, analysis_variants=[]):
         self.__prepare_analysis_intervals()
         self.analysis_variants = analysis_variants

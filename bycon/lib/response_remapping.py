@@ -197,7 +197,7 @@ def remap_biosamples(r_s_res):
 ################################################################################
 
 def __reference_object_from_ontology_term(filter_type, ontology_term):
-    f_d_s = BYC.get("filter_definitions", {})
+    f_d_s = BYC["filter_definitions"].get("$defs", {})
     if "label" in ontology_term:
         ontology_term.update({"description": ontology_term.get("label", "")})
         ontology_term.pop("label", None)
@@ -324,7 +324,7 @@ def individual_remap_pgx_diseases(ind):
 
 def _phenopack_resources():
     # TODO: make this general, at least for phenopacket response, and only scan used prefixes
-    f_d_s = BYC.get("filter_definitions", {})
+    f_d_s = BYC["filter_definitions"].get("$defs", {})
     # rkeys = ["NCITgrade", "NCITstage", "NCITtnm", "NCIT", "PATOsex", "EFOfus" ]
     rkeys = ["NCIT", "NCITsex", "EFOfus", "UBERON"]
     pxf_rs = []

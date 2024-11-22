@@ -171,7 +171,7 @@ class Cytobands():
     #--------------------------------------------------------------------------#
 
     def __bands_from_cytobands(self):
-        argdefs = BYC.get("argument_definitions", {})
+        argdefs = BYC["argument_definitions"].get("$defs", {})
         cb_pat = re.compile( argdefs["cyto_bands"]["pattern"] )
         end_re = re.compile(r"^([pq]\d.*?)\.?\d$")
         arm_re = re.compile(r"^([pq]).*?$")
@@ -336,7 +336,8 @@ def cytobands_label_from_positions(chro, start, end):
 ################################################################################
 
 def bands_from_chrobases(chro_bases):
-    cb_pat = re.compile( BYC["argument_definitions"]["chro_bases"]["pattern"] )
+    argdefs = BYC["argument_definitions"].get("$defs", {})
+    cb_pat = re.compile( argdefs["chro_bases"]["pattern"] )
     if not cb_pat.match(chro_bases):
         return [], "NA", 0, 0
     chro, cb_start, cb_end = cb_pat.match(chro_bases).group(2,3,5)
