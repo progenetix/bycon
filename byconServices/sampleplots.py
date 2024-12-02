@@ -1,7 +1,7 @@
 from os import path
 from pathlib import Path
 
-from bycon import BYC, BYC_PARS, ByconResultSets
+from bycon import BYC, BYC_PARS, ByconResultSets, prdbug
 from byconServiceLibs import (
     ByconBundler,
     ByconPlot, 
@@ -40,10 +40,9 @@ def sampleplots():
     else:
         RSS = ByconResultSets().datasetsResults()
         pdb = pb.resultsets_frequencies_bundles(RSS)
-
         # getting the variants for the samples is time consuming so only optional
         if "samples" in ByconPlotPars().plotType():
-            pdb.update( ByconBundler().resultsets_callset_bundles(RSS) )
+            pdb.update( ByconBundler().resultsets_analysis_bundles(RSS) )
 
     svg_f = ExportFile("svg").checkOutputFile()
     BP = ByconPlot(pdb)

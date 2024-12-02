@@ -38,7 +38,9 @@ data_db = data_client[ ds_id ]
 cs_coll = data_db[ "analyses" ]
 v_coll = data_db[ "variants" ]
 
+
 record_queries = ByconQuery().recordsQuery()
+
 ds_results = {}
 if len(record_queries["entities"].keys()) > 0:
     DR = ByconDatasetResults(ds_id, record_queries)
@@ -78,7 +80,7 @@ for ana_id in ana_ids:
     ana = cs_coll.find_one( { "id": ana_id } )
     _id = ana.get("_id")
     counter += 1
-    if "SNV" in ana.get("variant_class", "CNV"):
+    if "EDAM:operation_3227" in ana.get("operation",{"id":"EDAM:operation_3961"}).get("id", "EDAM:operation_3961"):
         no_cnv_type += 1
         continue
 

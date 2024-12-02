@@ -83,30 +83,30 @@ def read_www_tsv_to_dictlist(www, max_count=0):
 
 ################################################################################
 
-def callset_guess_probefile_path(callset):
-    if not (local_paths := BYC.get("local_paths")):
-        return False
-    if not "server_callsets_dir_loc" in local_paths:
-        return False
-    if not "analysis_info" in callset:
-        return False
+# def callset_guess_probefile_path(callset):
+#     if not (local_paths := BYC.get("local_paths")):
+#         return False
+#     if not "server_callsets_dir_loc" in local_paths:
+#         return False
+#     if not "analysis_info" in callset:
+#         return False
 
-    d = Path( path.join( *local_paths["server_callsets_dir_loc"]))
-    n = local_paths.get("probefile_name", "___none___")
+#     d = Path( path.join( *local_paths["server_callsets_dir_loc"]))
+#     n = local_paths.get("probefile_name", "___none___")
 
-    if not d.is_dir():
-        return False
+#     if not d.is_dir():
+#         return False
 
-    # TODO: not only geo cleaning?
-    s_id = callset["analysis_info"].get("series_id", "___none___").replace("geo:", "")
-    e_id = callset["analysis_info"].get("experiment_id", "___none___").replace("geo:", "")
+#     # TODO: not only geo cleaning?
+#     s_id = callset["analysis_info"].get("series_id", "___none___").replace("geo:", "")
+#     e_id = callset["analysis_info"].get("experiment_id", "___none___").replace("geo:", "")
 
-    p_f = Path( path.join( d, s_id, e_id, n ) )
+#     p_f = Path( path.join( d, s_id, e_id, n ) )
 
-    if not p_f.is_file():
-        return False
+#     if not p_f.is_file():
+#         return False
 
-    return p_f
+#     return p_f
 
 ################################################################################
 

@@ -35,13 +35,12 @@ def main():
     data_client = MongoClient(host=DB_MONGOHOST)
     data_db = data_client[ ds_id ]
     coll_coll = data_db[ "collations" ]
-    ind_coll = data_db["individuals"]
-    bios_coll = data_db[ "biosamples" ]
     cs_coll = data_db["analyses"]
 
     query = {}
     if len(BYC_PARS.get("filters", [])) > 0 or len(BYC_PARS.get("collation_types", [])) > 0:
         query = CollationQuery().getQuery()
+    # query.update({"cnv_analyses":{"$gt":0}}) # this is actually only known after maps creation
     coll_ids = coll_coll.distinct("id", query)
     random_shuffle(coll_ids)
     coll_no = len(coll_ids)
@@ -99,13 +98,12 @@ def main():
             continue
 
         update_obj = {
-            "cnv_analyses": analyses_count,
+            "cnv_analyses": cnv_cs_count,
             "frequencymap": {
                 "interval_count": interval_count,
                 "binning": binning,
                 "intervals": if_bundles[0].get("interval_frequencies", []),
-                "frequencymap_samples": cnv_cs_count,
-                "cnv_analyses": analyses_count
+                "frequencymap_samples": cnv_cs_count
             }
         }
 

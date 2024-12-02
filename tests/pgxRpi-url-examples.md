@@ -18,7 +18,8 @@ https://progenetix.org/services/pgxsegvariants/?biosampleIds=pgxbs-kftvh94d,pgxb
 
 # service
 
-## callset matrix
+## analysis matrix
+
 https://progenetix.org/services/samplematrix/?biosampleIds=pgxbs-kftvh94d,pgxbs-kftvh94g,pgxbs-kftvh972
 https://progenetix.org/services/samplematrix/?individualIds=pgxind-kftx3565,pgxind-kftx5g4v
 https://progenetix.org/services/samplematrix/?filters=pgx:icdom-88503

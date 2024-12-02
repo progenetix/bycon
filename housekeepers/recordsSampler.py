@@ -4,12 +4,12 @@ from os import pardir, path, system
 from bycon import *
 from pymongo import MongoClient
 
+from bycon import byconServiceLibs
+from importer_helpers import ByconautImporter
+
 loc_path = path.dirname( path.abspath(__file__) )
 project_path = path.join(loc_path , pardir)
 rsrc_path = path.join(project_path, "rsrc")
-lib_path = path.join(project_path, "importers", "lib")
-sys.path.append( lib_path )
-from importer_helpers import *
 
 """
 """
@@ -27,7 +27,7 @@ def main():
     number of random records pulled from the query results.
 
     The script will first create the database and then populate it with the records
-    for the standrd entities. Optionally one can select to proceed with the additional
+    for the standard entities. Optionally one can select to proceed with the additional
     steps for a CNV supporting database and create an archive for distribution.
 
     #### Examples

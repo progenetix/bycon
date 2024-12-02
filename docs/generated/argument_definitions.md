@@ -8,7 +8,7 @@ TODO: Temporary(?) for authentication testing.
 
 #### `test_mode` 
 **description:**
-Ativates the Beacon test setting, i.e. returning some random documents    
+Activates the Beacon test setting, i.e. returning some random documents    
 **type:** boolean    
 **cmdFlags:** `-t,--testMode`    
 **default:** `False`    
@@ -27,6 +27,13 @@ Number of pages to be skipped.
 limit number of documents; a value of 0 sets to unlimited    
 **default:** `200`    
 **local:** 0    
+
+#### `paginate_results` 
+**description:**
+Custom bycon parameter used for paginating results in some bycon services.    
+**type:** boolean    
+**cmdFlags:** `--paginateResults`    
+**default:** `True`    
 
 #### `requested_granularity` 
 **description:**

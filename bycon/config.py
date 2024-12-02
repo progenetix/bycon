@@ -84,8 +84,10 @@ BYC = {
   "variant_type_definitions": {},
 
   "loc_mod_pars": [
+    "argument_definitions",
     "authorizations",
     "dataset_definitions",
+    "filter_definitions",
     "local_paths",
     "datatable_mappings",
     "plot_defaults"

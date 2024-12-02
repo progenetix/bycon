@@ -464,48 +464,70 @@ class BeaconDataResponse:
 class ByconFilteringTerms:
     def __init__(self):
         self.response_entity_id = BYC.get("response_entity_id", "filteringTerm")
+        self.ft_instance = object_instance_from_schema_name("beaconFilteringTermsResults", "$defs/FilteringTerm")
         self.data_collection = BYC["response_entity"].get("collection", "collations")
         self.filter_collation_types = set()
         self.filtering_terms = []
         self.filter_resources = []
         self.filtering_terms_query = {}
+        self.ds_id = BYC["BYC_DATASET_IDS"][0]
+        self.special_mode = BYC_PARS.get("mode", "___none___")
+        self.filter_id_match_mode = "full"
 
-        return
+        def_keys = self.ft_instance.get("default", self.ft_instance.keys())
+        if "termTree" in self.special_mode:
+            def_keys = ["id", "label", "count", "hierarchy_paths", "cnv_analyses", "collation_type"]
+
+        self.delivery_keys = BYC_PARS.get("delivery_keys", def_keys)
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
     def populatedFilteringTerms(self):
+        self.__filtering_terms_query()
         self.__return_filtering_terms()
         self.__return_filter_resources()
         return self.filtering_terms, self.filter_resources, self.filtering_terms_query
+
+
+    # -------------------------------------------------------------------------#
+
+    def get_query(self):
+        self.__filtering_terms_query()
+        return self.filtering_terms_query
+
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 
-    def __return_filtering_terms(self):
-
-        f_coll = self.data_collection
-
-        ft_fs = []
-        for f in BYC["BYC_FILTERS"]:
-            ft_fs.append('(' + f.get("id", "___none___") + ')')
-        if len(ft_fs) > 0:
-            f_s = '|'.join(ft_fs)
-            f_re = re.compile(r'^' + '|'.join(ft_fs))
-        else:
-            f_re = None
-
+    def __filtering_terms_query(self):
         query = {}
         q_list = []
+        ft_fs = []
+        f_re = None
 
-        mode = BYC_PARS.get("mode", "___none___")
+        if "start" in self.filter_id_match_mode:
+            for f in BYC["BYC_FILTERS"]:
+                ft_fs.append('(' + f.get("id", "___none___") + ')')
+            if len(ft_fs) > 0:
+                f_s = '|'.join(ft_fs)
+                f_re = re.compile(r'^' + '|'.join(ft_fs))
+
+            # construction of a start-anchored regex query for multiple partial
+            # filter id matches (non-standard; e.g. for autocompletes or custom
+            # lookups)
+            if f_re:
+                q_list.append({"id": {"$regex": f_re}})
+
+        elif len(BYC["BYC_FILTERS"]) > 0:
+            q_list.append({"id": {"$in": [f.get("id") for f in BYC["BYC_FILTERS"]]}})
+
         if len(q_types := BYC_PARS.get("collation_types", [])) > 0:
             q_list.append({"collation_type": {"$in": q_types }})
-        elif not "withpubmed" in mode:
-            query = {"collation_type": {"$not": {"$regex":"pubmed"}}}
+        elif not "withpubmed" in self.special_mode:
+            q_list.append({"collation_type": {"$not": {"$regex":"pubmed"}}})
 
         if len(q_list) == 1:
             query = q_list[0]
@@ -513,37 +535,32 @@ class ByconFilteringTerms:
             query = {"$and": q_list}
 
         if BYC["TEST_MODE"] is True:
-            query = mongo_test_mode_query(BYC["BYC_DATASET_IDS"][0], f_coll)
+            query = mongo_test_mode_query(self.ds_id, f_coll)
 
-        for ds_id in BYC["BYC_DATASET_IDS"]:
-            fields = {"_id": 0}
-            f_s = mongo_result_list(ds_id, f_coll, query, fields)
-            t_f_t_s = []
-            for f in f_s:
-                self.filter_collation_types.add(f.get("collation_type", None))
-                f_t = {"count": f.get("count", 0)}
-                for k in ["id", "label"]:
-                    if k in f:
-                        f_t.update({k: f[k]})
-                f_t.update({"type": f.get("ft_type", "ontologyTerm")})
-                if "ontologyTerm" in f_t["type"]:
-                    f_t.update({"type": f.get("name", "ontologyTerm")})
-                ft_k = f.get("db_key")
-                ft_s = f.get("scope")
-                if ft_k and ft_s:
-                    f_t.update({"target": f'{ft_s}.{ft_k}'})
-
-                lab = f_t.get("label")
-                if lab is None:
-                    f_t.pop("label", None)
-
-                # TODO: this is not required & also not as defined (singular `scope`)
-                t_f_t_s.append(f_t)
-            self.filtering_terms.extend(t_f_t_s)
+        prdbug(f'filtering_terms_query: {query}')
 
         self.filtering_terms_query = query
 
-        return
+
+    # -------------------------------------------------------------------------#
+
+    def __return_filtering_terms(self):
+        f_coll = self.data_collection
+        fields = {"_id": 0}
+        for k in self.delivery_keys:
+            fields.update({k: 1})
+        if "collation_type" not in fields:
+            fields.update({"collation_type": 1})
+
+        f_s = mongo_result_list(self.ds_id, f_coll, self.filtering_terms_query, fields)
+        t_f_t_s = []
+        for f in f_s:
+            self.filter_collation_types.add(f.get("collation_type", None))
+            if "collation_type" not in self.delivery_keys:
+                f.pop("collation_type", None)
+            t_f_t_s.append(f)
+
+        self.filtering_terms = t_f_t_s
 
 
     # -------------------------------------------------------------------------#

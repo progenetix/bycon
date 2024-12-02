@@ -55,10 +55,6 @@ properties:
     type: string
     examples:
       - 'https://europepmc.org/article/MED/10471496'
-  code:
-    type: string
-    examples:
-      - PMID:10471496
   dataset_id:
     type: string
     examples:

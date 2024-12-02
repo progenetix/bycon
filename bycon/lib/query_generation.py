@@ -125,6 +125,8 @@ class ByconQuery():
         else:
             return
 
+        BYC.update({"AGGREGATE_VARIANT_RESULTS": False})
+
         self.queries["entities"].update({
             "genomicVariant": {
                 "query": q,
@@ -277,6 +279,10 @@ class ByconQuery():
                 if (q := self.__create_variantAlleleRequest_query(v_pars)):
                     queries.append(q)
                     continue
+            if "variantTypeFilteredRequest" in variant_request_type:
+                if (q := self.__create_variantTypeRequest_query(v_pars)):
+                    queries.append(q)
+                    continue
 
         prdbug(f'__loop_multivars queries: {queries}')
 
@@ -323,6 +329,8 @@ class ByconQuery():
             brts_k = [ "cytoBandRequest" ]
         elif "variant_query_digests" in  v_pars:
             brts_k = [ "variantQueryDigestsRequest" ]
+        elif "variant_type" in v_pars and len(BYC.get("BYC_FILTERS", [])) > 0:
+            brts_k = [ "variantTypeFilteredRequest" ]
             
         vrt_matches = [ ]
         for vrt in brts_k:

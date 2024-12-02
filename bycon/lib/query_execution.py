@@ -43,6 +43,8 @@ class ByconDatasetResults():
             if (q := q_o.get("query")) and c_n in c_n_s:
                 self.queries.update({c_n: q})
 
+        prdbug(self.queries)
+
 
     # -------------------------------------------------------------------------#
 
@@ -160,6 +162,8 @@ class ByconDatasetResults():
     def __update_dataset_results_from_variants(self, query):
         ent_resp_def = self.res_obj_defs.get("variants.id")
         self.__prefetch_entity_response(ent_resp_def, query)
+        if BYC.get("AGGREGATE_VARIANT_RESULTS", True) is False:
+            return
         ent_resp_def = self.res_obj_defs.get("variants.analysis_id->analyses.id")
         self.__prefetch_entity_response(ent_resp_def, query)
         ent_resp_def = self.res_obj_defs.get("variants.biosample_id->biosamples.id")

@@ -45,7 +45,7 @@ class ByconBundler:
         self.header = []
         self.data = []
         self.fieldnames = []
-        self.callsetVariantsBundles = []
+        self.analysisVariantsBundles = []
         self.intervalFrequenciesBundles = []
         self.limit = BYC_PARS.get("limit", 0)
         self.skip = BYC_PARS.get("skip", 0)
@@ -61,7 +61,7 @@ class ByconBundler:
         }
 
         self.keyedBundle = {
-            "variants_by_callset_id": {},
+            "variants_by_analysis_id": {},
             "analyses_by_id": {},
             "individuals_by_id": {},
             "biosamples_by_id": {},
@@ -153,7 +153,7 @@ class ByconBundler:
         self.pgxseg_to_keyed_bundle(filepath)
         self.__flatten_keyed_bundle()
         return {
-            "interval_frequencies_bundles": self.callsets_frequencies_bundles(),
+            "interval_frequencies_bundles": self.analyses_frequencies_bundles(),
             "analyses_variants_bundles": self.analyses_variants_bundles()
         }
 
@@ -170,32 +170,32 @@ class ByconBundler:
                 "variants": list(filter(lambda v: v.get("analysis_id", "___none___") == cs_id, bb["variants"]))
             })
             c_p_l.append(p_o)          
-        self.callsetVariantsBundles = c_p_l
-        return self.callsetVariantsBundles
+        self.analysisVariantsBundles = c_p_l
+        return self.analysisVariantsBundles
 
 
     #--------------------------------------------------------------------------#
 
-    def resultsets_callset_bundles(self, datasets_results={}):
+    def resultsets_analysis_bundles(self, datasets_results={}):
         self.datasets_results = datasets_results
-        self.__callsets_bundle_from_result_set()
-        self.__callsets_add_database_variants()
-        return { "analyses_variants_bundles": self.callsetVariantsBundles }
+        self.__analyses_bundle_from_result_set()
+        self.__analyses_add_database_variants()
+        return { "analyses_variants_bundles": self.analysisVariantsBundles }
 
 
     #--------------------------------------------------------------------------#
 
     def resultsets_frequencies_bundles(self, datasets_results={}):
         self.datasets_results = datasets_results
-        self.__callsets_bundle_from_result_set()
-        self.__callsetBundleCreateIsets()
+        self.__analyses_bundle_from_result_set()
+        self.__analysisBundleCreateIsets()
         return {"interval_frequencies_bundles": self.intervalFrequenciesBundles}
 
 
     #--------------------------------------------------------------------------#
 
-    def callsets_frequencies_bundles(self):
-        self.__callsetBundleCreateIsets()
+    def analyses_frequencies_bundles(self):
+        self.__analysisBundleCreateIsets()
         return self.intervalFrequenciesBundles
 
 
@@ -245,41 +245,34 @@ class ByconBundler:
             b_k_b["analyses_by_id"].update({ cs_id: cs })
             b_k_b["individuals_by_id"].update({ ind_id: ind })
             b_k_b["biosamples_by_id"].update({ bs_id: bios })
-            b_k_b["variants_by_callset_id"].update({ cs_id: [] })
+            b_k_b["variants_by_analysis_id"].update({ cs_id: [] })
 
         self.keyedBundle = b_k_b
 
 
     #--------------------------------------------------------------------------#
 
-    def __callsets_bundle_from_result_set(self, bundle_type="analyses"):
+    def __analyses_bundle_from_result_set(self):
         # TODO: doesn't really work for biosamples until we have status maps etc.
+        bundle_type = "analyses"
         for ds_id, ds_res in self.datasets_results.items():
+            prdbug(f'... __analyses_bundle_from_result_set {ds_id} => {ds_res.keys()}')
             res_k = f'{bundle_type}.id'
             if not ds_res:
                 continue
             if not res_k in ds_res:
                 continue
 
-            biosample_key = "biosample_id"
-            if bundle_type == "biosamples":
-                biosample_key = "id"
-
-            # TODO: since 1->many this wouldn't work for the biosamples type
-            analysis_key = "id"
-            if bundle_type == "biosamples":
-                analysis_key = "analysis_id"
-
             mongo_client = MongoClient(host=DB_MONGOHOST)
             sample_coll = mongo_client[ds_id][bundle_type]
             s_r = ds_res[res_k]
             s_ids = s_r["target_values"]
             r_no = len(s_ids)
-            if r_no < 1:
-                continue
-            prdbug(f'...... __callsets_bundle_from_result_set limit: {self.limit}')
+            # if r_no < 1:
+            #     continue
+            prdbug(f'...... __analyses_bundle_from_result_set limit: {self.limit}')
             s_ids = return_paginated_list(s_ids, self.skip, self.limit)
-            prdbug(f'...... __callsets_bundle_from_result_set after: {len(s_ids)}')
+            prdbug(f'...... __analyses_bundle_from_result_set after: {len(s_ids)}')
             for s_id in s_ids:
                 s = sample_coll.find_one({"id": s_id })
 
@@ -291,25 +284,25 @@ class ByconBundler:
 
                 p_o = {
                     "dataset_id": ds_id,
-                    "analysis_id": s.get(analysis_key, "NA"),
-                    "biosample_id": s.get(biosample_key, "NA"),
-                    "label": s.get("label", s.get(biosample_key, "")),
+                    "analysis_id": s.get("id", "NA"),
+                    "biosample_id": s.get("biosample_id", "NA"),
+                    "label": s.get("label", s.get("biosample_id", "")),
                     "cnv_chro_stats": s.get("cnv_chro_stats"),
                     "cnv_statusmaps": s.get("cnv_statusmaps"),
-                    "probefile": callset_guess_probefile_path(s),
+                    # "probefile": analysis_guess_probefile_path(s),
                     "variants": []
                 }
 
                 # TODO: add optional probe read in
                 self.bundle[bundle_type].append(p_o)
-            prdbug(f'...... __callsets_bundle_from_result_set number: {len(self.bundle[bundle_type])}')
+            prdbug(f'...... __analyses_bundle_from_result_set number: {len(self.bundle[bundle_type])}')
 
         return
 
 
     #--------------------------------------------------------------------------#
 
-    def __callsets_add_database_variants(self):
+    def __analyses_add_database_variants(self):
         bb = self.bundle
         c_p_l = []
 
@@ -322,7 +315,7 @@ class ByconBundler:
             p_o.update({"variants": list(var_coll.find(v_q))})
             c_p_l.append(p_o)
 
-        self.callsetVariantsBundles = c_p_l
+        self.analysisVariantsBundles = c_p_l
         return
 
 
@@ -336,7 +329,7 @@ class ByconBundler:
         inds_ided = b_k_b.get("individuals_by_id", {})
         bios_ided = b_k_b.get("biosamples_by_id", {})
         cs_ided = b_k_b.get("analyses_by_id", {})
-        vars_ided = b_k_b.get("variants_by_callset_id", {})
+        vars_ided = b_k_b.get("variants_by_analysis_id", {})
 
         GB = GenomeBins()
 
@@ -387,7 +380,7 @@ class ByconBundler:
             "individuals_by_id": inds_ided,
             "biosamples_by_id": bios_ided,
             "analyses_by_id": cs_ided,
-            "variants_by_callset_id": vars_ided
+            "variants_by_analysis_id": vars_ided
         })
 
 
@@ -398,7 +391,7 @@ class ByconBundler:
         bios_k = b_k_b.get("biosamples_by_id", {})
         ind_k = b_k_b.get("individuals_by_id", {})
         cs_k = b_k_b.get("analyses_by_id", {})
-        v_cs_k = b_k_b.get("variants_by_callset_id", {})
+        v_cs_k = b_k_b.get("variants_by_analysis_id", {})
 
         self.bundle.update({
             "biosamples": list( bios_k.values() ),
@@ -410,10 +403,12 @@ class ByconBundler:
 
     #--------------------------------------------------------------------------#
 
-    def __callsetBundleCreateIsets(self, label=""):
-        self.dataset_ids = list(set([cs.get("dataset_id", "NA") for cs in self.bundle["analyses"]]))
+    def __analysisBundleCreateIsets(self, label=""):
+
+        # self.dataset_ids = list(set([cs.get("dataset_id", "NA") for cs in self.bundle["analyses"]]))
         GB = GenomeBins()
-        for ds_id in self.dataset_ids:
+        for ds_id in self.datasets_results.keys():
+        # for ds_id in self.dataset_ids:
             dscs = list(filter(lambda cs: cs.get("dataset_id", "NA") == ds_id, self.bundle["analyses"]))
             intervals, cnv_ana_count = GB.intervalFrequencyMaps(dscs)
             if cnv_ana_count < self.min_number:
@@ -427,17 +422,14 @@ class ByconBundler:
             }
             for intv_i, intv in enumerate(intervals):
                 iset["interval_frequencies"].append(intv.copy())
-            prdbug(f'... __callsetBundleCreateIsets {ds_id} => sample_count {cnv_ana_count} ...')
+            prdbug(f'... __analysisBundleCreateIsets {ds_id} => sample_count {cnv_ana_count} ...')
+            
             self.intervalFrequenciesBundles.append(iset)
 
 
     #--------------------------------------------------------------------------#
 
     def __isetBundlesFromCollationParameters(self):
-        # if len(filters := BYC.get("BYC_FILTERS",[])) < 1 and len(self.collation_types) < 1:
-        #     BYC["ERRORS"].append("¡¡¡ No `filters` or `collationTypes` parameter !!!")
-        #     return
-
         fmap_name = "frequencymap"
         query = CollationQuery().getQuery()
  
@@ -446,14 +438,10 @@ class ByconBundler:
         mongo_client = MongoClient(host=DB_MONGOHOST)
         for ds_id in self.datset_ids:
             coll_db = mongo_client[ds_id]
-
-            # after new collationsFrequencymapsCreator.py run
             for collation_f in coll_db["collations" ].find(query):
-            # for collation_f in coll_db["frequencymaps"].find(query):
-
                 if not (fmap := collation_f.get(fmap_name)):
                     continue
-                fmap_count = fmap.get("cnv_analyses", 0)
+                fmap_count = fmap.get("frequencymap_samples", 0)
                 if fmap_count < self.min_number:
                     continue
                 r_o = {

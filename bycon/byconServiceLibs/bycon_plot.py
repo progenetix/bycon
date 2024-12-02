@@ -150,7 +150,7 @@ class ByconPlot:
 
     ## Input
 
-    A plot data bundle containing lists of callset object bundles (_i.e._ the
+    A plot data bundle containing lists of analysis object bundles (_i.e._ the
     analyses with all their individual variants added) and/or interval frequencies
     set bundles (_i.e._ list of one or more binned CNV frequencies in object
     wrappers with some information about the set).
@@ -160,7 +160,6 @@ class ByconPlot:
     def __init__(self, plot_data_bundle: dict):
         bpp = ByconPlotPars()
         self.plot_type = bpp.plotType()
-        prdbug(f"... plot_type: {self.plot_type}")
         self.plot_type_defs = bpp.plotTypeDefinitions()
         self.plv = bpp.plotDefaults()
         self.plot_variant_types = bpp.plotVariantTypes()
@@ -255,7 +254,7 @@ class ByconPlot:
 
         p_t_s = self.plot_type_defs
         p_t = self.plot_type
-        d_k = p_t_s[p_t].get("data_key")
+        d_k = p_t_s[p_t].get("data_key", "___none___")
         d_t = p_t_s[p_t].get("data_type", "analyses")
 
         sample_count = 0
@@ -269,8 +268,10 @@ class ByconPlot:
         self.plv.update({
             "dataset_ids": list(set([s.get("dataset_id", "NA") for s in self.plv["results"]]))
         })
+        prdbug(f'... datasets: {self.plv["dataset_ids"]}')
 
         self.__filter_empty_callsets_results()
+
 
         if self.plv["results_number"] < 2:
             self.plv.update({"plot_labelcol_width": 0})
@@ -1592,7 +1593,7 @@ class ByconPlot:
 
         if self.plv.get("sample_count", 0) > 1:
             self.plv["pls"].append(
-                f'<text x="{x_a_0}" y="{self.plv["Y"]}" class="footer-l">{self.plv["sample_count"]} {self.plv["data_type"]}</text>')
+                f'<text x="{x_a_0}" y="{self.plv["Y"]}" class="footer-l">{self.plv["sample_count"]} samples</text>')
 
         self.plv["Y"] += self.plv["plot_margins"]
 

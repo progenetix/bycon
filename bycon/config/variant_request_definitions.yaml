@@ -117,6 +117,16 @@ request_types:
       - reference_bases
       - alternate_bases
 
+  variantTypeFilteredRequest:
+    description: >-
+      This is a special case where it is checked separately if a filter query
+      exists, so that not only a type is being queried. However, this shouldn't
+      be used except for something approximating an "id" query. The use case was
+      retrieval of all sequence variants for a given cellline id which doesn't
+      necessarily corresponds to a single sample etc.
+    all_of:
+      - variant_type
+
   geneVariantRequest:
     description: >-
       A variant overlapping with the genomic coordinates of a gene or other named

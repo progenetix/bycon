@@ -118,18 +118,26 @@ class CollationQuery:
         if BYC["TEST_MODE"] is True:
             BYC_PARS.update({"test_mode_count": 2})
             self.query = mongo_test_mode_query(BYC["BYC_DATASET_IDS"][0], self.collection)
-        else:
-            q_list = []
-            all_ids = []
-            if len(filters := BYC_PARS.get("filters", [])) > 0:
-                q_list.append({"id": {"$in": filters}})
-            if len(c_types := BYC_PARS.get("collation_types", [])) > 0:
-                q_list.append({"collation_type": {"$in": c_types }})
-            self.query = mongo_and_or_query_from_list(q_list)
+            return
+
+        q_list = []
+        all_ids = []
+        filters = BYC_PARS.get("filters", [])
+        c_types = BYC_PARS.get("collation_types", [])
+
+        if len(filters) > 0:
+            q_list.append({"id": {"$in": filters}})
+        if len(c_types) > 0:
+            q_list.append({"collation_type": {"$in": c_types }})
+        self.query = mongo_and_or_query_from_list(q_list)
 
         # fallback to illicit query to avoid empty query / all ids
         if len(self.query.keys()) < 1:
-            self.query = {"id":"___undefined___"}
+            if "all" in c_types:
+                self.query = {}
+                return
+            else:
+                self.query = {"id":"___undefined___"}
 
 
     # -------------------------------------------------------------------------#
@@ -171,7 +179,6 @@ class ByconCollations:
         d_k = BYC_PARS.get("delivery_keys", [])
 
         # TODO: This should be derived from some entity definitions
-        # TODO: whole query generation in separate function ...
         query = CollationQuery().getQuery()
 
         prdbug(f'Collation query: {query}')
@@ -195,7 +202,7 @@ class ByconCollations:
                     s_s[ i_d ] = { }
                 if len(d_k) < 1:
                     d_k = list(f.keys())
-                    d_k.delete("frequencymap")         
+                    d_k = [x for x in d_k if x not in ["_id", "frequencymap"]]
                 for k in d_k:
                     if k in ["count", "code_matches", "cnv_analyses"]:
                         s_s[ i_d ].update({k: s_s[ i_d ].get(k, 0) + f.get(k, 0)})
