@@ -1,0 +1,21 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+type: object
+description: >-
+  A `beaconMapResponse` provides information about the beacon instance such as the
+  different endpoints supported by this implementation of the Beacon API. This response
+  is aimed to allow Beacon clients such as web front ends and Beacon network aggregators
+  to evaluate which access patterns can be implemented against individual beacons.
+properties:
+  meta:
+    description: >-
+      Information about the response that could be relevant for the Beacon
+      client in order to interpret the results.
+    $ref: ./sections/beaconInformationalResponseMeta.yaml
+  response:
+    description: >-
+      Returning the Beacon Map.
+    $ref: ../configuration/beaconMapSchema.yaml
+required:
+  - meta
+  - response
+additionalProperties: true

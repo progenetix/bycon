@@ -1,0 +1,36 @@
+@import "../variables";
+
+//react-select prefix defined in component
+
+.react-select-container {
+  .react-select__indicator {
+    padding: 0 8px;
+    svg {
+      height: 1.5rem;
+    }
+  }
+  .react-select__control {
+    background-color: white;
+    border-color: $border;
+    border-radius: 4px;
+    color: $text;
+    min-height: $control-height;
+  }
+}
+
+.is-danger .react-select-container .react-select__control {
+  border-color: $danger;
+}
+
+.is-fullwidth .react-select-container .react-select__control {
+  width: 100%;
+}
+
+.react-select__option:hover {
+  &:not(.react-select__option--is-selected) {
+    background-color: $info-light;
+  }
+}
+.react-select__option.react-select__option--is-selected {
+  background-color: $info;
+}

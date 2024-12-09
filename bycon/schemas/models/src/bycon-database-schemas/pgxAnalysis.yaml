@@ -1,0 +1,321 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/pgxAnalysis/v2024-02-24
+title: pgxAnalysis
+type: object
+properties:
+  id:
+    type: string
+    examples:
+      - pgxcs-kftvldsu
+  biosampleId:
+    type: string
+    examples:
+      - pgxbs-kftva59y
+  individualId:
+    type: string
+    examples:
+      - pgxbs-kftva59y
+  analysisInfo:
+    $ref: "#/$defs/AnalysisInfo"
+  platformModel:
+    description: >-
+      Ontology value for experimental platform or methodology used.
+    $ref: "../bycon-model/common/ontologyTerm.yaml"
+    examples:
+      - id: "geo:GPL3381"
+        label: "Stanford Microarray Facility cDNA array [SHDV]"
+      - id: "OBI:0002750"
+        label: "Oxford Nanopore MinION"
+      - id: "EFO:0010938"
+        label: "large-insert clone DNA microarray"
+  pipelineInfo:
+    description: >-
+      Public or local pipeline identifier with version, as well as link and notes.
+    $ref: ../bycon-model/common/externalReference.json
+    examples:
+      - id: Pipeline-panel-0001-v1
+        reference: https://doi.org/10.48511/workflowhub.workflow.111.1
+        note: Higly customized workflow. Please contact us at dev/null.
+      - id: aroma.affymetrix
+        reference: http://www.aroma-project.org
+        note: The aroma.affymetrix package is an R package for analyzing small to extremely large Affymetrix data sets.
+  geoLocation:
+    $ref: ../bycon-model/common/GeoLocation.yaml
+  cnvStatusmaps:
+    $ref: "#/$defs/Statusmaps"
+  cnvStats:
+    $ref: "#/$defs/Cnvstatistics"
+  cnvChroStats:
+    $ref: "#/$defs/Cnvstatistics"
+  info:
+    type: object
+  analysisDate:
+    type: string
+    format: date
+    example: 2024-08-21
+  updated:
+    type: string
+    format: date-time
+    examples:
+      - "2020-09-10T17:44:10.170Z"
+
+$defs:
+  AnalysisInfo:
+    description: >-
+      Information about the source series and experiment.
+      NOTE: A `bycon` special.
+    type: object
+    properties:
+      operation:
+        description: >-
+          Basic type of (genomic) analysis from the EDAM ontology. In Progenetix and
+          related resources this is used to disamiguate between sequence analyses
+          (SNV etc. calling) and CNV profiling experiments.
+        $ref: "../bycon-model/common/ontologyTerm.yaml"
+        examples:
+          - id: EDAM:operation_3961
+            label: "Copy number variation detection"
+          - id: EDAM:operation_3227
+            label: "Variant Calling"
+          - id: EDAM:operation:3228
+            label: "Structural variation detection"
+      seriesId:
+        description: Identifier for the experimental series.
+        examples:
+          - "geo:GSM288124"
+      experimentId:
+        description: Identifier for the experiment.
+        examples:
+          - "geo:GSM288124"
+      experimentTitle:
+        description: >-
+          The free text from the source, e.g. GEO "!Sample_title" value. Used e.g.
+          for identification of related sample when reviewing a given series.
+        examples:
+          - "Glioma cell line LN229_Hahn"
+          - "004 RCC needle (SNP)"
+          - "0337c_hd"
+  Statusmaps:
+    type: object
+    description: >-
+      The wrapper containing binned coverage values for genomic CNV status
+      NOTE: A `bycon` special.
+    properties:
+      interval_count:
+        description: number of genomic bins
+        type: integer
+      binning:
+        description: type of genomic bins
+        type: string
+        examples:
+          - 1Mb
+      dup:
+        description: >-
+          Array of fractional values for the gain coverage of the respective
+          genomic bins. The length of the array corresponds to the `interval_count`
+          value.
+        type: array
+        items: number
+      del:
+        description: >-
+          Array of fractional values for the loss coverage...
+        type: array
+        items: number
+      hldup:
+        description: >-
+          Array of fractional values for the  high level gain coverage...
+        type: array
+        items: number
+      hldel:
+        description: >-
+          Array of fractional values for the  high level loss coverage...
+        type: array
+        items: number
+
+  Cnvstatistics:
+    type: object
+    description: >-
+      CNV statistics (coverage, fraction) e.g. to identify genomic instability
+      types. 
+      NOTE: A `bycon` special.
+    properties:
+      cnvcoverage:
+        description: sum of genome bases called as CNV
+        type: integer
+      dupcoverage:
+        description: sum of genome bases called as gain CNV
+        type: integer
+      delcoverage:
+        description: sum of genome bases called as loss CNV
+        type: integer
+      cnvfraction:
+        description: genome fraction called as CNV
+        type: number
+        min: 0
+        max: 1
+      dupfraction:
+        description: genome fraction called as CNV
+        type: number
+        min: 0
+        max: 1
+      delfraction:
+        description: genome fraction called as CNV
+        type: number
+        min: 0
+        max: 1
+
+  Chrofractions:
+    description: >-
+      Chromosome and arm CNV statistics.
+    type: object
+    properties:
+      "1":
+        $ref: "#/$defs/Cnvstatistics"
+      1p:
+        $ref: "#/$defs/Cnvstatistics"
+      1q:
+        $ref: "#/$defs/Cnvstatistics"
+      "2":
+        $ref: "#/$defs/Cnvstatistics"
+      2p:
+        $ref: "#/$defs/Cnvstatistics"
+      2q:
+        $ref: "#/$defs/Cnvstatistics"
+      "3":
+        $ref: "#/$defs/Cnvstatistics"
+      3p:
+        $ref: "#/$defs/Cnvstatistics"
+      3q:
+        $ref: "#/$defs/Cnvstatistics"
+      "4":
+        $ref: "#/$defs/Cnvstatistics"
+      4p:
+        $ref: "#/$defs/Cnvstatistics"
+      4q:
+        $ref: "#/$defs/Cnvstatistics"
+      "5":
+        $ref: "#/$defs/Cnvstatistics"
+      5p:
+        $ref: "#/$defs/Cnvstatistics"
+      5q:
+        $ref: "#/$defs/Cnvstatistics"
+      "6":
+        $ref: "#/$defs/Cnvstatistics"
+      6p:
+        $ref: "#/$defs/Cnvstatistics"
+      6q:
+        $ref: "#/$defs/Cnvstatistics"
+      "7":
+        $ref: "#/$defs/Cnvstatistics"
+      7p:
+        $ref: "#/$defs/Cnvstatistics"
+      7q:
+        $ref: "#/$defs/Cnvstatistics"
+      "8":
+        $ref: "#/$defs/Cnvstatistics"
+      8p:
+        $ref: "#/$defs/Cnvstatistics"
+      8q:
+        $ref: "#/$defs/Cnvstatistics"
+      "9":
+        $ref: "#/$defs/Cnvstatistics"
+      9p:
+        $ref: "#/$defs/Cnvstatistics"
+      9q:
+        $ref: "#/$defs/Cnvstatistics"
+      "10":
+        $ref: "#/$defs/Cnvstatistics"
+      10p:
+        $ref: "#/$defs/Cnvstatistics"
+      10q:
+        $ref: "#/$defs/Cnvstatistics"
+      "11":
+        $ref: "#/$defs/Cnvstatistics"
+      11p:
+        $ref: "#/$defs/Cnvstatistics"
+      11q:
+        $ref: "#/$defs/Cnvstatistics"
+      "12":
+        $ref: "#/$defs/Cnvstatistics"
+      12p:
+        $ref: "#/$defs/Cnvstatistics"
+      12q:
+        $ref: "#/$defs/Cnvstatistics"
+      "13":
+        $ref: "#/$defs/Cnvstatistics"
+      13p:
+        $ref: "#/$defs/Cnvstatistics"
+      13q:
+        $ref: "#/$defs/Cnvstatistics"
+      "14":
+        $ref: "#/$defs/Cnvstatistics"
+      14p:
+        $ref: "#/$defs/Cnvstatistics"
+      14q:
+        $ref: "#/$defs/Cnvstatistics"
+      "15":
+        $ref: "#/$defs/Cnvstatistics"
+      15p:
+        $ref: "#/$defs/Cnvstatistics"
+      15q:
+        $ref: "#/$defs/Cnvstatistics"
+      "16":
+        $ref: "#/$defs/Cnvstatistics"
+      16p:
+        $ref: "#/$defs/Cnvstatistics"
+      16q:
+        $ref: "#/$defs/Cnvstatistics"
+      "17":
+        $ref: "#/$defs/Cnvstatistics"
+      17p:
+        $ref: "#/$defs/Cnvstatistics"
+      17q:
+        $ref: "#/$defs/Cnvstatistics"
+      "18":
+        $ref: "#/$defs/Cnvstatistics"
+      18p:
+        $ref: "#/$defs/Cnvstatistics"
+      18q:
+        $ref: "#/$defs/Cnvstatistics"
+      "19":
+        $ref: "#/$defs/Cnvstatistics"
+      19p:
+        $ref: "#/$defs/Cnvstatistics"
+      19q:
+        $ref: "#/$defs/Cnvstatistics"
+      "20":
+        $ref: "#/$defs/Cnvstatistics"
+      20p:
+        $ref: "#/$defs/Cnvstatistics"
+      20q:
+        $ref: "#/$defs/Cnvstatistics"
+      "21":
+        $ref: "#/$defs/Cnvstatistics"
+      21p:
+        $ref: "#/$defs/Cnvstatistics"
+      21q:
+        $ref: "#/$defs/Cnvstatistics"
+      "22":
+        $ref: "#/$defs/Cnvstatistics"
+      22p:
+        $ref: "#/$defs/Cnvstatistics"
+      22q:
+        $ref: "#/$defs/Cnvstatistics"
+      X:
+        $ref: "#/$defs/Cnvstatistics"
+      Xp:
+        $ref: "#/$defs/Cnvstatistics"
+      Xq:
+        $ref: "#/$defs/Cnvstatistics"
+      Y:
+        $ref: "#/$defs/Cnvstatistics"
+      Yp:
+        $ref: "#/$defs/Cnvstatistics"
+      Yq:
+        $ref: "#/$defs/Cnvstatistics"
+      additionalProperties: true
+
+required:
+  - id
+  - biosampleId
+additionalProperties: true

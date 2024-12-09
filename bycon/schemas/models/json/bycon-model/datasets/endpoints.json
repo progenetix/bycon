@@ -1,0 +1,563 @@
+{
+    "openapi": "3.0.2",
+    "servers": [],
+    "info": {
+        "version": "2.0.0",
+        "title": "GA4GH Beacon API Specification - Datasets Endpoints",
+        "description": "TBD",
+        "contact": {
+            "email": "beacon@ga4gh.org"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "tags": [
+        {
+            "name": "GET Endpoints",
+            "description": "Available endpoints in this API. All of them have a POST counterpart."
+        },
+        {
+            "name": "POST Endpoints",
+            "description": "The same operations than GET, just by POST."
+        }
+    ],
+    "paths": {
+        "/datasets": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/requestedSchema"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skip"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/components/parameters/datasetIds"
+                    },
+                    {
+                        "$ref": "#/components/parameters/filters"
+                    }
+                ],
+                "description": "Get a list of datasets",
+                "operationId": "getDatasets",
+                "tags": [
+                    "GET Endpoints"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CollectionsResponse"
+                    },
+                    "default": {
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            },
+            "post": {
+                "description": "Get a list of datasets",
+                "operationId": "postDatasetsRequest",
+                "tags": [
+                    "POST Endpoints"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "https://progenetix.org/services/schemas/beaconRequestBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CollectionsResponse"
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            }
+        },
+        "/datasets/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/entryId"
+                }
+            ],
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/requestedSchema"
+                    }
+                ],
+                "description": "Get details about one dataset, identified by its (unique) 'id'",
+                "operationId": "getOneDataset",
+                "tags": [
+                    "GET Endpoints"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CollectionsResponse"
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            },
+            "post": {
+                "description": "Get details about one dataset, identified by its (unique) 'id'",
+                "operationId": "postOneDataset",
+                "tags": [
+                    "POST Endpoints"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "https://progenetix.org/services/schemas/beaconRequestBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/CollectionsResponse"
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            }
+        },
+        "/datasets/{id}/g_variants": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/entryId"
+                }
+            ],
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/requestedSchema"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skip"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "description": "Get the genomic variants list from one dataset, identified by its (unique) 'id'",
+                "operationId": "getOneDatasetEntries",
+                "tags": [
+                    "GET Endpoints"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            },
+            "post": {
+                "description": "Get the genomic variants list from one dataset, identified by its (unique) 'id'",
+                "operationId": "postOneDatasetEntries",
+                "tags": [
+                    "POST Endpoints"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "https://progenetix.org/services/schemas/beaconRequestBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            }
+        },
+        "/datasets/{id}/analyses": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/entryId"
+                }
+            ],
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/requestedSchema"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skip"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "description": "Get the biosamples list from one dataset, identified by its (unique) 'id'",
+                "operationId": "getOneDatasetAnalyses",
+                "tags": [
+                    "GET Endpoints"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            },
+            "post": {
+                "description": "Get the analyses list from one dataset, identified by its (unique) `id`",
+                "operationId": "postOneDatasetAnalyses",
+                "tags": [
+                    "POST Endpoints"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "https://progenetix.org/services/schemas/beaconRequestBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            }
+        },
+        "/datasets/{id}/biosamples": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/entryId"
+                }
+            ],
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/requestedSchema"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skip"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "description": "Get the biosamples list from one dataset, identified by its (unique) `id`",
+                "operationId": "getOneDatasetBiosamples",
+                "tags": [
+                    "GET Endpoints"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            },
+            "post": {
+                "description": "Get the biosamples list from one dataset, identified by its (unique) 'id'",
+                "operationId": "postOneDatasetBiosamples",
+                "tags": [
+                    "POST Endpoints"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "https://progenetix.org/services/schemas/beaconRequestBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            }
+        },
+        "/datasets/{id}/individuals": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/entryId"
+                }
+            ],
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/requestedSchema"
+                    },
+                    {
+                        "$ref": "#/components/parameters/skip"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "description": "Get the individuals list from one dataset, identified by its (unique) `id`",
+                "operationId": "getOneDatasetIndividuals",
+                "tags": [
+                    "GET Endpoints"
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            },
+            "post": {
+                "description": "Get the biosamples list from one dataset, identified by its (unique) 'id'",
+                "operationId": "postOneDatasetIndividuals",
+                "tags": [
+                    "POST Endpoints"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "https://progenetix.org/services/schemas/beaconRequestBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ResultsOKResponse"
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            }
+        },
+        "/datasets/{id}/filtering_terms": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/entryId"
+                }
+            ],
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/skip"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "description": "Get the list of filtering terms that could be used with a given dataset, identified by its (unique) 'id'",
+                "operationId": "getOneDatasetFilteringTerms",
+                "tags": [
+                    "GET Endpoints"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "https://progenetix.org/services/schemas/beaconFilteringTermsResponse/"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            },
+            "post": {
+                "description": "Get the list of filtering terms that could be used with a given dataset, identified by its (unique) 'id'",
+                "operationId": "postOneDatasetFilteringTerms",
+                "tags": [
+                    "POST Endpoints"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "https://progenetix.org/services/schemas/beaconRequestBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "https://progenetix.org/services/schemas/beaconFilteringTermsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An unsuccessful operation",
+                        "$ref": "https://progenetix.org/services/schemas/beaconErrorResponse"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "responses": {
+            "ResultsOKResponse": {
+                "description": "Successful operation.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "https://progenetix.org/services/schemas/beaconBooleanResponse"
+                                },
+                                {
+                                    "$ref": "https://progenetix.org/services/schemas/beaconCountResponse"
+                                },
+                                {
+                                    "$ref": "https://progenetix.org/services/schemas/beaconResultsetsResponse"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "CollectionsResponse": {
+                "description": "Successful collection list operation.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "https://progenetix.org/services/schemas/beaconBooleanResponse"
+                                },
+                                {
+                                    "$ref": "https://progenetix.org/services/schemas/beaconCountResponse"
+                                },
+                                {
+                                    "$ref": "https://progenetix.org/services/schemas/beaconCollectionsResponse"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "parameters": {
+            "requestedSchema": {
+                "name": "requestedSchema",
+                "description": "Schema to be used to format the `result` field in the response. The response will use Beacon format.",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                },
+                "example": "ga4gh-service-info-v1.0"
+            },
+            "skip": {
+                "name": "skip",
+                "in": "query",
+                "schema": {
+                    "$ref": "https://progenetix.org/services/schemas/beaconCommonComponents.json#/$defs/Skip"
+                }
+            },
+            "limit": {
+                "name": "limit",
+                "in": "query",
+                "schema": {
+                    "$ref": "https://progenetix.org/services/schemas/beaconCommonComponents.json#/$defs/Limit"
+                }
+            },
+            "entryId": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "datasetIds": {
+                "name": "datasetIds",
+                "in": "query",
+                "schema": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        [
+                            "progenetix",
+                            "examplez"
+                        ],
+                        "cellz"
+                    ]
+                }
+            },
+            "filters": {
+                "name": "filters",
+                "in": "query",
+                "schema": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        [
+                            "DUO:0000007"
+                        ]
+                    ]
+                }
+            }
+        }
+    }
+}

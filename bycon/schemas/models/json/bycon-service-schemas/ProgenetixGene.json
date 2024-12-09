@@ -1,0 +1,113 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://progenetix.org/services/schemas/ProgenetixGene/v2022-12-21",
+    "title": "ProgenetixGene",
+    "type": "object",
+    "description": "Genomic mapping position of the coding region of a gene.",
+    "required": {
+        "all_of": [
+            "referenceName start end symbol"
+        ]
+    },
+    "properties": {
+        "symbol": {
+            "type": "string",
+            "examples": [
+                "TP53"
+            ]
+        },
+        "accessionVersion": {
+            "type": "string",
+            "examples": [
+                "NC_000016.10",
+                "NW_003315972.2"
+            ]
+        },
+        "geneId": {
+            "type": "string",
+            "examples": [
+                "1029"
+            ]
+        },
+        "referenceName": {
+            "type": "string",
+            "examples": [
+                "17",
+                "X"
+            ]
+        },
+        "start": {
+            "type": "integer",
+            "examples": [
+                7669608
+            ]
+        },
+        "end": {
+            "type": "integer",
+            "examples": [
+                7676593
+            ]
+        },
+        "cytobands": {
+            "type": "string",
+            "examples": [
+                "17p13.1"
+            ]
+        },
+        "geneLocusLength": {
+            "type": "integer",
+            "examples": [
+                27572
+            ]
+        },
+        "synonyms": {
+            "type": "array",
+            "items": "string",
+            "examples": [
+                [
+                    "ARF",
+                    "MLM",
+                    "P14",
+                    "P16",
+                    "P19",
+                    "INK4"
+                ]
+            ]
+        },
+        "swissProtAccessions": {
+            "type": "array",
+            "items": "string",
+            "examples": [
+                [
+                    "P42771",
+                    "Q8N726"
+                ]
+            ]
+        },
+        "omimIds": {
+            "type": "array",
+            "items": "string",
+            "examples": [
+                [
+                    "600160"
+                ]
+            ]
+        },
+        "ensemblGene_Ids": {
+            "type": "array",
+            "items": "string",
+            "examples": [
+                [
+                    "ENSG00000147889"
+                ]
+            ]
+        },
+        "geneType": {
+            "type": "string",
+            "examples": [
+                "PROTEIN_CODING"
+            ]
+        }
+    },
+    "additionalProperties": true
+}

@@ -1,0 +1,22 @@
+.Panel_heading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+  padding: 0 1em;
+  min-height: $size-1;
+}
+
+.Panel__block {
+  padding: 1rem 1rem;
+  @include tablet {
+    padding: 1.5rem 2rem;
+  }
+}
+
+.Panel .ReactCollapse--collapse {
+  transition: height 200ms;
+}

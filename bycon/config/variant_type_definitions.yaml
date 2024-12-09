@@ -1,0 +1,308 @@
+################################################################################
+#
+# `variant_type_definitions` provides:
+# 
+# * `variant_state` - the VRS variant state / type object (`id` as CURIe, `label`)
+# * query expansion for variant types using `child_terms`
+# * `DUPDEL` - basic CNV directionality type
+# * `variant_type_id` - the variant state ID for mapping the `variant_type` to the
+#   basic concept (_i.e._ several concepts are `DEL` => common `EFO:0030067)
+# * `VCF` - VCF variant type (symbolic allele)
+# * `cnv_dummy_value` - a log2 value for an (idealized) tumor/normal experiment
+#   resulting in the given CNV type (e.g. to assign a numeric value to ISCN data)
+# * `child_terms` - query expansion for any given value (_i.e._ additional terms
+#   representing sub-entities)
+#     - Note: For other ontologies such expansions are usually defined in the
+#       pre-processing package (`byconaut`) and then stored in the generated
+#       collations.
+#
+################################################################################
+
+EFO:0030064:
+  variant_state:
+    id: EFO:0030064
+    label: regional base ploidy
+  VRS_type: Null
+  VCF_symbolic_allele: Null
+  cnv_dummy_value: Null
+  child_terms:
+    - EFO:0030064
+
+EFO:0030065:
+  variant_state:
+    id: EFO:0030065
+    label: copy-neutral loss of heterozygosity
+  variant_type_id: EFO:0030065
+  variant_type: LOH
+  VRS_type: Null
+  VCF_symbolic_allele: Null
+  cnv_dummy_value: Null
+  child_terms:
+    - EFO:0030065
+
+EFO:0030066:
+  variant_state:
+    id: EFO:0030066
+    label: copy number variation
+  variant_type_id: EFO:0030066
+  variant_type: CNV
+  VRS_type: CopyNumberChange
+  VCF_symbolic_allele: <CNV>
+  cnv_dummy_value: Null
+  child_terms:
+    - EFO:0030066
+    - EFO:0030067
+    - EFO:0030068
+    - EFO:0020073
+    - EFO:0030069
+    - EFO:0030070
+    - EFO:0030071
+    - EFO:0030072
+    - EFO:0030073      
+
+SO:0001743:
+  description: >-
+    This is an alternative to `EFO:0030067`. The SO definitions for CNVs are
+    slightly misleading (type of `sequence_length_alteration`) and do not
+    include the more specific child terms from EFO or VRS. 
+  variant_state:
+    id: SO:0001743
+    label: copy_number_loss
+  DUPDEL: DEL
+  variant_type_id: SO:0001743
+  variant_type: DEL
+  VRS_type: CopyNumberChange
+  VCF_symbolic_allele: <DEL>
+  cnv_dummy_value: -1
+  child_terms:
+    - EFO:0030067
+    - SO:0001743
+    - EFO:0030068
+    - EFO:0020073
+    - EFO:0030069
+
+EFO:0030067:
+  variant_state:
+    id: EFO:0030067
+    label: copy number loss
+  DUPDEL: DEL
+  variant_type_id: EFO:0030067
+  variant_type: DEL
+  VRS_type: CopyNumberChange
+  VCF_symbolic_allele: <DEL>
+  cnv_dummy_value: -1
+  child_terms:
+    - EFO:0030067
+    - SO:0001743
+    - EFO:0030068
+    - EFO:0020073
+    - EFO:0030069
+
+EFO:0030068:
+  variant_state:
+    id: EFO:0030068
+    label: low-level copy number loss
+  DUPDEL: DEL
+  variant_type_id: EFO:0030067
+  variant_type: DEL
+  VRS_type: CopyNumberChange
+  VCF_symbolic_allele: <DEL>
+  cnv_dummy_value: -1
+  child_terms:
+    - EFO:0030068
+
+EFO:0020073:
+  variant_state:
+    id: EFO:0020073
+    label: high-level copy number loss
+  DUPDEL: DEL
+  variant_type_id: EFO:0030067
+  variant_type: DEL
+  HLDUPDEL: HLDEL
+  VRS_type: CopyNumberChange
+  VCF_symbolic_allele: <DEL>
+  cnv_dummy_value: -1.75
+  child_terms:
+    - EFO:0020073
+    - EFO:0030069
+
+EFO:0030069:
+  variant_state:
+    id: EFO:0030069
+    label: complete genomic deletion
+  DUPDEL: DEL
+  HLDUPDEL: HLDEL
+  variant_type_id: EFO:0030067
+  variant_type: DEL
+  VRS_type: CopyNumberChange
+  VCF_symbolic_allele: <DEL>
+  cnv_dummy_value: -2
+  child_terms:
+    - EFO:0030069
+
+EFO:0030070:
+  variant_state:
+    id: EFO:0030070
+    label: copy number gain
+  DUPDEL: DUP
+  variant_type_id: EFO:0030070
+  variant_type: DUP
+  VRS_type: CopyNumberChange
+  VCF_symbolic_allele: <DUP>
+  cnv_dummy_value: 0.58
+  child_terms:
+    - EFO:0030070
+    - SO:0001742
+    - EFO:0030071
+    - EFO:0030072
+    - EFO:0030073
+
+SO:0001742:
+  description: >-
+    This is an alternative to `EFO:0030070`. The SO definitions for CNVs are
+    slightly misleading (type of `sequence_length_alteration`) and do not
+    include the more specific child terms from EFO or VRS. 
+  variant_state:
+    id: SO:0001742
+    label: copy_number_gain
+  DUPDEL: DUP
+  variant_type_id: SO:0001742
+  variant_type: DUP
+  VRS_type: CopyNumberChange
+  VCF_symbolic_allele: <DUP>
+  cnv_dummy_value: 0.58
+  child_terms:
+    - EFO:0030070
+    - SO:0001742
+    - EFO:0030071
+    - EFO:0030072
+    - EFO:0030073
+
+EFO:0030071:
+  variant_state:
+    id: EFO:0030071
+    label: low-level copy number gain
+  DUPDEL: DUP
+  variant_type_id: EFO:0030070
+  variant_type: DUP
+  VRS_type: CopyNumberChange
+  VCF_symbolic_allele: <DUP>
+  cnv_dummy_value: 0.58
+  child_terms:
+    - EFO:0030071
+
+EFO:0030072:
+  variant_state:
+    id: EFO:0030072
+    label: high-level copy number gain
+  DUPDEL: DUP
+  HLDUPDEL: HLDUP
+  variant_type_id: EFO:0030070
+  variant_type: DUP
+  VRS_type: CopyNumberChange
+  VCF_symbolic_allele: <DUP>
+  cnv_dummy_value: 2
+  child_terms:
+    - EFO:0030072
+    - EFO:0030073
+
+EFO:0030073:
+  variant_state:
+    id: EFO:0030073
+    label: focal genome amplification
+  DUPDEL: DUP
+  HLDUPDEL: HLDUP
+  variant_type_id: EFO:0030070
+  variant_type: DUP
+  VRS_type: CopyNumberChange
+  VCF_symbolic_allele: <DUP>
+  cnv_dummy_value: 2
+  child_terms:
+    - EFO:0030073
+
+SO:0001059:
+  variant_state:
+    id: SO:0001059
+    label: sequence_alteration
+  variant_type_id: SO:0001059
+  variant_type: SNV
+  VRS_type: Allele
+  VCF_symbolic_allele: Null
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0001059
+    - SO:0001483
+    - SO:0002007
+    - SO:0000667
+    - SO:0000159
+
+SO:0001483:
+  variant_state:
+    id: SO:0001483
+    label: SNP
+  variant_type_id: SO:0001059
+  variant_type: SNV
+  VRS_type: Allele
+  VCF_symbolic_allele: Null
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0001483
+
+SO:0002007:
+  variant_state:
+    id: SO:0002007
+    label: MNV
+  variant_type_id: SO:0002007
+  variant_type: MNV
+  VRS_type: Allele
+  VCF_symbolic_allele: Null
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0002007
+
+SO:0000667:
+  variant_state:
+    id: SO:0000667
+    label: INS
+  variant_type_id: SO:0000667
+  variant_type: INS
+  VRS_type: Allele
+  VCF_symbolic_allele: Null
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0000667
+
+SO:0000159:
+  variant_state:
+    id: SO:0000159
+    label: deletion
+  VRS_type: Allele
+  VCF_symbolic_allele: Null
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0000159
+
+SO:0001413:
+  variant_state:
+    id: SO:0001413
+    label: translocation breakpoint
+  variant_type_id: SO:0001413
+  variant_type: BND
+  VRS_type: Adjacency
+  VCF_symbolic_allele: <BND>
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0001413
+    - SO:0000806
+
+SO:0000806:
+  variant_state:
+    id: SO:0000806
+    label: fusion
+  variant_type_id: SO:0000806
+  variant_type: BND
+  VRS_type: Adjacency
+  VCF_symbolic_allele: <BND>
+  cnv_dummy_value: Null
+  child_terms:
+    - SO:0000806

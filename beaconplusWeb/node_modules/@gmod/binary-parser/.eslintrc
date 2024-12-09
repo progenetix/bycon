@@ -1,0 +1,46 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "airbnb-base",
+    "prettier"
+  ],
+  "plugins": [
+    "prettier"
+  ],
+  "globals": {
+    "window": true,
+    "self": true,
+    "__webpack_require__": true
+  },
+  "env": {
+    "jest": true
+  },
+  "rules": {
+    "strict": 0,
+    "no-underscore-dangle": 0,
+    "no-bitwise": 0,
+    "no-await-in-loop": "warn",
+    "no-param-reassign": "warn",
+    "no-restricted-globals": 0,
+    "no-loop-func": "warn",
+    "no-plusplus": 0,
+    "no-var": 0,
+    "vars-on-top": 0,
+    "func-names": 0,
+    "camelcase": 0,
+    "object-shorthand": 0,
+    "prefer-rest-params": 0,
+    "prefer-arrow-callback": 0,
+    "prefer-destructuring": 0,
+    "prefer-const": 0,
+    "no-restricted-syntax": "warn",
+    "class-methods-use-this": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        "doubleQuote": true,
+        "semi": true
+      }
+    ]
+  }
+}

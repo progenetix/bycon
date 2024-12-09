@@ -1,0 +1,108 @@
+{
+  "name": "jexl",
+  "version": "2.3.0",
+  "description": "Javascript Expression Language: Powerful context-based expression parser and evaluator",
+  "main": "dist/Jexl.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "format": "prettier --write '**/*.{json,js,md}'",
+    "lint": "eslint '**/*.js'",
+    "test": "npm run lint && NODE_PATH=./ RESOURCES_PATH=./lib jest --coverage --colors",
+    "test:watch": "NODE_PATH=./ RESOURCES_PATH=./lib jest --watchAll --colors",
+    "build": "babel lib -d dist",
+    "prepublishOnly": "npm test && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TomFrost/jexl"
+  },
+  "keywords": [
+    "JSON",
+    "expression",
+    "evaluator",
+    "parser",
+    "target",
+    "context",
+    "jsep",
+    "filter",
+    "selector"
+  ],
+  "author": "Tom Shawver <tom@frosteddesign.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TomFrost/jexl/issues"
+  },
+  "homepage": "https://github.com/TomFrost/jexl",
+  "eslintIgnore": [
+    "node_modules",
+    "coverage"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.{md,json}": [
+      "prettier --write",
+      "git add"
+    ],
+    "**/*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": true,
+    "testPathIgnorePatterns": [],
+    "coverageThreshold": {
+      "global": {
+        "branches": 85,
+        "functions": 90,
+        "lines": 95,
+        "statements": 95
+      }
+    },
+    "collectCoverageFrom": [
+      "lib/**/*.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "./lib/PromiseSync.js"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.10.2",
+    "@babel/plugin-transform-runtime": "^7.10.1",
+    "@babel/preset-env": "^7.10.2",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "husky": "^4.2.5",
+    "jest": "^25.5.4",
+    "lint-staged": "^10.2.2",
+    "prettier": "^2.0.5"
+  },
+  "babel": {
+    "plugins": [
+      "@babel/plugin-transform-runtime"
+    ],
+    "presets": [
+      [
+        "@babel/env",
+        {
+          "targets": {
+            "ie": 11
+          }
+        }
+      ]
+    ]
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.10.2"
+  }
+}

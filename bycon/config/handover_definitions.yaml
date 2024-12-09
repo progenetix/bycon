@@ -1,0 +1,178 @@
+---
+
+# TODO: The handover specification in Beacon uses the `handoverType.id`
+#       parameter to inform about the handover's format.
+#       However, since several handovers might have the same _format_ (e.g. VCF)
+#       but a different content the front end interprets now the `contentId`
+#       from the h->o (the key served as `info.contentId`).
+
+h->o_types:
+
+  # histoplot:
+  #   handoverType:
+  #     id: 'pgx:HO.histoplot'
+  #     label: CNV Histogram
+  #   note: create a CNV histogram from matched biosamples
+  #   h->o_key: 'biosamples.id'
+  #   script_path_web: '/services/sampleplots'
+  #   plotType: histoplot
+
+  histoplot:
+    handoverType:
+      id: 'pgx:HO.histoplot'
+      label: CNV Histogram
+    note: create a CNV histogram from matched analses
+    h->o_key: 'analyses.id'
+    script_path_web: '/services/sampleplots'
+    plotType: histoplot
+
+  samplesplot:
+    handoverType:
+      id: 'pgx:HO.samplesplot'
+      label: Clustered sample CNV tracks
+    note: create CNV plots from matched biosamples
+    h->o_key: 'biosamples.id'
+    script_path_web: '/services/sampleplots'
+    plotType: samplesplot
+
+  biosamples:
+    handoverType:
+      id: 'pgx:HO.biosamples'
+      label: Biosamples
+    note: retrieve data of the biosamples matched by the query
+    h->o_key: 'biosamples.id'
+    script_path_web: '/beacon/biosamples'
+
+  biosamplestable:
+    handoverType:
+      id: 'pgx:HO.biosamplestable'
+      label: Biosamples Table
+    note: retrieve data of the biosamples matched by the query as tab-delimited table
+    h->o_key: 'biosamples.id'
+    script_path_web: '/services/sampletable'
+
+  biosamplesmap:
+    handoverType:
+      id: 'pgx:HO.biosamplesmap'
+      label: Biosamples Map
+    note: geographic map of the biosamples matched by the query
+    h->o_key: 'biosamples.id'
+    script_path_web: '/services/samplemap'
+    plotType: map
+
+  phenopackets:
+    handoverType:
+      id: 'pgx:HO.phenopackets'
+      label: Phenopackets
+    note: retrieve data of the phenopackets matched by the query
+    h->o_key: 'biosamples.id'
+    script_path_web: '/beacon/phenopackets'
+
+  individuals:
+    handoverType:
+      id: 'pgx:HO.individuals'
+      label: Individuals
+    note: retrieve data of the individuals matched by the query
+    h->o_key: 'individuals.id'
+    script_path_web: '/beacon/individuals'
+
+  variants:
+    handoverType:
+      id: 'pgx:HO.variants'
+      label: Found Variants (.json)
+    note: retrieve variants matched by the query
+    h->o_key: 'variants.id'
+    script_path_web: '/beacon/g_variants'
+
+  pgxseg:
+    handoverType:
+      id: 'pgx:HO.pgxseg'
+      label: Found Variants (.pgxseg)
+    note: retrieve variants matched by the query as .pgxseg download
+    h->o_key: 'variants.id'
+    script_path_web: '/services/pgxsegvariants'
+  
+  vcf:
+    handoverType:
+      id: 'EDAM:3016'
+      label: VCF
+    note: retrieve variants matched by the query as .vcf download
+    output: vcf
+    h->o_key: 'variants.id'
+    script_path_web: '/services/vcfvariants'
+
+  UCSClink:
+    handoverType:
+      id: 'pgx:HO.bedfile2ucsc'
+      label: Show Found Variants in the UCSC browser
+    note: map variants matched by the query to the UCSC browser
+    h->o_key: 'variants.id'
+    script_path_web: '/services/variantsbedfile'
+    output: ucsc
+
+# handover methods describe the source and target collections for stored
+# document identifiers (so far id, id or variant_internal_id). The source parameters are
+# used for creating a `distinct` operation for the `source_key` in the
+# `source_collection`, using a provided query.
+
+h->o_methods:
+  biosamples.id:
+    source_collection: biosamples
+    source_key: id
+    target_collection: biosamples
+    target_entity: biosample
+    target_key: id
+  biosamples.individual_id->individuals.id:
+    source_collection: biosamples
+    source_key: individual_id
+    target_collection: individuals
+    target_entity: individual
+    target_key: id
+  analyses.id:
+    source_collection: analyses
+    source_key: id
+    target_collection: analyses
+    target_entity: analysis
+    target_key: id
+  analyses.biosample_id->biosamples.id:
+    source_collection: analyses
+    source_key: biosample_id
+    target_collection: biosamples
+    target_entity: biosample
+    target_key: id
+  analyses.individual_id->individuals.id:
+    source_collection: analyses
+    source_key: individual_id
+    target_collection: individuals
+    target_entity: individual
+    target_key: id
+  individuals.id:
+    source_collection: individuals
+    source_key: id
+    target_collection: individuals
+    target_entity: individual
+    target_key: id
+  variants.id:
+    source_collection: variants
+    source_key: id
+    target_collection: variants
+    target_entity: genomicVariant
+    target_key: id
+  variants.analysis_id->analyses.id:
+    source_collection: variants
+    source_key: analysis_id
+    target_collection: analyses
+    target_entity: analysis
+    target_key: id
+  variants.biosample_id->biosamples.id:
+    source_collection: variants
+    source_key: biosample_id
+    target_collection: biosamples
+    target_entity: biosample
+    target_key: id
+  variants.individual_id->individuals.id:
+    source_collection: variants
+    source_key: individual_id
+    target_collection: individuals
+    target_entity: individual
+    target_key: id

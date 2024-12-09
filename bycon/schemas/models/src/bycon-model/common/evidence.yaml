@@ -1,0 +1,20 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Evidence
+description: 'Definition of an evidence class. Provenance: GA4GH Phenopackets v2 `Evidence`'
+type: object
+properties:
+  evidenceCode:
+    description: An ontology class that represents the evidence type
+    $ref: ./ontologyTerm.yaml
+    example:
+      id: ECO:0006017
+      label: author statement from published clinical study used in manual assertion
+  reference:
+    description: Representation of the source of the evidence
+    $ref: ./externalReference.yaml
+    example:
+      id: PMID:30962759
+      label: Recurrent Erythema Nodosum in a Child with a SHOC2 Gene Mutation
+required:
+  - evidenceCode
+additionalProperties: true

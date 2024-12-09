@@ -1,0 +1,32 @@
+{
+    "$schema":"https://json-schema.org/draft/2020-12/schema",
+    "meta": {
+        "apiVersion": "2.0",
+        "requestedSchemas": [
+            {
+                "entityType": "biosample",
+                "schema:": "https://progenetix.org/services/schemas/biosample/"
+            }
+        ]
+    },
+    "query": {
+        "requestParameters": {
+            "datasets": {
+                "datasetIds": ["progenetix"]
+            }
+        },
+        "filters": [
+            { "id": "NCIT:C4536", "scope": "biosamples", "includeDescendantTerms": false },
+            { "id": "NCIT:C95597", "scope": "biosamples", "includeDescendantTerms": false },
+            { "id": "NCIT:C7712", "scope": "biosamples", "includeDescendantTerms": false }
+        ],
+        "filterLogic": "OR"
+    },
+    "pagination": {
+        "skip": 0,
+        "limit": 10
+    },   
+    "includeResultsetResponses": "HIT",
+    "requestedGranularity": "record",
+    "debugMode": 0
+}

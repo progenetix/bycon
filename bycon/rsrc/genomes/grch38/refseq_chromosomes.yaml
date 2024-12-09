@@ -1,0 +1,101 @@
+# GRCh38.p13
+chr1:
+  chr: "1"
+  genbank_id: "CM000663.2"
+  refseq_id: "refseq:NC_000001.11"
+chr2:
+  chr: "2"
+  genbank_id: "CM000664.2"
+  refseq_id: "refseq:NC_000002.12"
+chr3:
+  chr: "3"
+  genbank_id: "CM000665.2"
+  refseq_id: "refseq:NC_000003.12"
+chr4:
+  chr: "4"
+  genbank_id: "CM000666.2"
+  refseq_id: "refseq:NC_000004.12"
+chr5:
+  chr: "5"
+  genbank_id: "CM000667.2"
+  refseq_id: "refseq:NC_000005.10"
+chr6:
+  chr: "6"
+  genbank_id: "CM000668.2"
+  refseq_id: "refseq:NC_000006.12"
+chr7:
+  chr: "7"
+  genbank_id: "CM000669.2"
+  refseq_id: "refseq:NC_000007.14"
+chr8:
+  chr: "8"
+  genbank_id: "CM000670.2"
+  refseq_id: "refseq:NC_000008.11"
+chr9:
+  chr: "9"
+  genbank_id: "CM000671.2"
+  refseq_id: "refseq:NC_000009.12"
+chr10:
+  chr: "10"
+  genbank_id: "CM000672.2"
+  refseq_id: "refseq:NC_000010.11"
+chr11:
+  chr: "11"
+  genbank_id: "CM000673.2"
+  refseq_id: "refseq:NC_000011.10"
+chr12:
+  chr: "12"
+  genbank_id: "CM000674.2"
+  refseq_id: "refseq:NC_000012.12"
+chr13:
+  chr: "13"
+  genbank_id: "CM000675.2"
+  refseq_id: "refseq:NC_000013.11"
+chr14:
+  chr: "14"
+  genbank_id: "CM000676.2"
+  refseq_id: "refseq:NC_000014.9"
+chr15:
+  chr: "15"
+  genbank_id: "CM000677.2"
+  refseq_id: "refseq:NC_000015.10"
+chr16:
+  chr: "16"
+  genbank_id: "CM000678.2"
+  refseq_id: "refseq:NC_000016.10"
+chr17:
+  chr: "17"
+  genbank_id: "CM000679.2"
+  refseq_id: "refseq:NC_000017.11"
+chr18:
+  chr: "18"
+  genbank_id: "CM000680.2"
+  refseq_id: "refseq:NC_000018.10"
+chr19:
+  chr: "19"
+  genbank_id: "CM000681.2"
+  refseq_id: "refseq:NC_000019.10"
+chr20:
+  chr: "20"
+  genbank_id: "CM000682.2"
+  refseq_id: "refseq:NC_000020.11"
+chr21:
+  chr: "21"
+  genbank_id: "CM000683.2"
+  refseq_id: "refseq:NC_000021.9"
+chr22:
+  chr: "22"
+  genbank_id: "CM000684.2"
+  refseq_id: "refseq:NC_000022.11"
+chrX:
+  chr: "X"
+  genbank_id: "CM000685.2"
+  refseq_id: "refseq:NC_000023.11"
+chrY:
+  chr: "Y"
+  genbank_id: "CM000686.2"
+  refseq_id: "refseq:NC_000024.10"
+MT:
+  chr: "MT"
+  genbank_id: "J01415.2"
+  refseq_id: "refseq:NC_012920.1"

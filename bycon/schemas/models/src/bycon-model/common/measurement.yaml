@@ -1,0 +1,45 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/measurement/v2021-11-12
+title: Measurement
+description: Definition of a measurement class.
+type: object
+properties:
+  assayCode:
+    description: >-
+      Class that describes the assay used to produce the measurement
+    $ref: ./ontologyTerm.yaml
+    example:
+      id: LOINC:26515-7
+      label: Platelets [#/volume] in Blood
+  measurementValue:
+    description: The result of the measurement
+    oneOf:
+      - $ref: value.yaml#/oneOf
+      - $ref: complexValue.yaml
+  observationMoment:
+    description: >-
+      Moment in time at which measurement was performed. Recommended.
+    $ref: timeElement.yaml#/oneOf
+    examples:
+      - age:
+         iso8601duration: P53Y8M
+  date:
+    description: Date of measurement.
+    type: string
+    format: date-time
+  procedure:
+    description: >-
+      Clinical procedure performed to acquire the sample used for the measurement.
+    $ref: procedure.yaml
+    example:
+      code:
+        id: NCIT:C5189
+        label: Radical Cystoprostatectomy
+  notes:
+    description: Unstructured text to describe this measurement.
+    type: string
+    example: Some free text
+required:
+  - assayCode
+  - measurementValue
+additionalProperties: true

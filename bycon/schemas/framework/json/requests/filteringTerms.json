@@ -1,0 +1,145 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Filtering Term Element",
+    "description": "Filtering terms are the main means to select subsets of records from a Beacon response. While the name implies the application to a generated response, in practice implementations may apply them at the query stage. Note: In the processing of Beacon v2.0 requests multiple filters are assumed to be chained by the logical AND operator.",
+    "type": "array",
+    "items": {
+        "$ref": "#/$defs/FilteringTerm"
+    },
+    "$defs": {
+        "FilteringTerm": {
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/OntologyFilter"
+                },
+                {
+                    "$ref": "#/$defs/AlphanumericFilter"
+                },
+                {
+                    "$ref": "#/$defs/CustomFilter"
+                }
+            ]
+        },
+        "OntologyFilter": {
+            "type": "object",
+            "description": "Filter results to include records that contain a specific ontology term.",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "Term ID to be queried, using CURIE syntax where possible.",
+                    "examples": [
+                        "HP:0002664"
+                    ]
+                },
+                "includeDescendantTerms": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Define if the Beacon should implement the ontology hierarchy, thus query the descendant terms of `id`."
+                },
+                "similarity": {
+                    "type": "string",
+                    "enum": [
+                        "exact",
+                        "high",
+                        "medium",
+                        "low"
+                    ],
+                    "default": "exact",
+                    "description": "Allow the Beacon to return results which do not match the filter exactly, but do match to a certain degree of similarity. The Beacon defines the semantic similarity model implemented and how to apply the thresholds of 'high', 'medium' and 'low' similarity."
+                },
+                "scopes": {
+                    "description": "Entry types affected by this filter.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        [
+                            "biosamples",
+                            "analyses",
+                            "individuals",
+                            "genomicVariations"
+                        ],
+                        [
+                            "biosamples"
+                        ],
+                        [
+                            "individuals",
+                            "biosamples"
+                        ]
+                    ]
+                },
+                "excluded": {
+                    "description": "Flag to indicate whether the phenotype was observed or not. The default is `false`. Provenance: Phenopackets, e.g. in PhenotypivcFeature WARN: This is a _BeaconPlus_ parameter **not yet** yet Beacon v2.",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "AlphanumericFilter": {
+            "description": "Filter results based on operators and values applied to alphanumeric fields.",
+            "type": "object",
+            "required": [
+                "id",
+                "operator",
+                "value"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "Field identfier to be queried.",
+                    "example": "age"
+                },
+                "operator": {
+                    "type": "string",
+                    "enum": [
+                        "=",
+                        "<",
+                        ">",
+                        "!",
+                        ">=",
+                        "<="
+                    ],
+                    "description": "Defines how the value relates to the field `id`.",
+                    "default": "="
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Alphanumeric search term to be used within the query which can contain wildcard characters (%) to denote any number of unknown characters.  Values can be assocatied with units if applicable.",
+                    "example": "P70Y"
+                },
+                "scopes": {
+                    "description": "The entry types affected by this filter. ",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "CustomFilter": {
+            "type": "object",
+            "description": "Filter results to include records that contain a custom term defined by this Beacon.",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "Custom filter terms should contain a unique identifier.",
+                    "examples": [
+                        "demographic.ethnicity:asian"
+                    ]
+                },
+                "scopes": {
+                    "description": "The entry types affected by this filter. ",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "additionalProperties": true
+}

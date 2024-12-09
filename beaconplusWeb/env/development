@@ -1,0 +1,3 @@
+NEXT_PUBLIC_API_PATH=/api/
+NEXT_PUBLIC_USE_PROXY=true
+NEXT_PUBLIC_SITE_URL=http://beaconplus.test/

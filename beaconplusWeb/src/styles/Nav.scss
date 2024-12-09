@@ -1,0 +1,32 @@
+@import "./variables";
+
+.section.Nav__header {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid $border;
+}
+
+.Nav__wrapper {
+  display: flex;
+  align-items: baseline;
+}
+
+.Nav__links {
+  display: flex;
+}
+
+.Nav__logo {
+  color: $text;
+  font-size: $size-large;
+  display: flex;
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+.Nav__plus {
+  color: $red;
+}
+
+.Nav__link--active {
+  color: $info;
+}

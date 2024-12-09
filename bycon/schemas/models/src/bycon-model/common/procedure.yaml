@@ -1,0 +1,37 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/procedure/v2021-11-12
+title: Procedure
+description: Class describing a clinical procedure or intervention.
+type: object
+properties:
+  procedureCode:
+    description: >-
+      Clinical procedure performed. Recommended values from Medical Action
+      Ontology (MAXO) `Medical action` term tree (MAXO:0000001)
+    $ref: ./ontologyTerm.yaml
+    examples:
+      - id: MAXO:0001175
+        label: liver transplantation
+      - id: MAXO:0000136
+        label: high-resolution microendoscopy
+      - id: OBI:0002654
+        label: needle biopsy
+  bodySite:
+    description: >-
+      Specific body site where the procedure was performed. Recommended
+      valuee from Uber-anatomy ontology (UBERON)
+    $ref: ./ontologyTerm.yaml
+    examples:
+      - id: UBERON:0003403
+        label: Skin of forearm
+      - id: UBERON:0003214
+        label: mammary gland alveolus
+  dateOfProcedure:
+    description: Date of procedure, in ISO8601 format
+    type: string
+    format: date-time
+    example: '2010-07-10'
+  ageAtProcedure:
+    $ref: timeElement.yaml#/oneOf
+required:
+  - procedureCode

@@ -1,0 +1,23 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/OntologyClass/v2021-01-12
+title: OntologyClass
+type: object
+description: >
+  The `OntologyClass` object is the main wrapper for identifiers, used for well-formed CURIE representations of ontology classes for biological or technical concepts and knowledge resources, as well as for "private" identifiers such as internal classifications. 
+properties:
+  id:
+    type: string
+    description: >
+      Identifier as string (CURIE highly recommended). 
+    examples:
+      - UBERON:0000002
+      - PMID:9892199
+      - icdom-85003
+  label:
+    type: string
+    examples:
+      - neoplastic sample
+      - Adenocarcinoma, NOS
+required:
+    - id
+additionalProperties: true

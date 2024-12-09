@@ -1,0 +1,158 @@
+description: >
+  This file contains definitions for classes of filter values that can be used in the
+  API `filters` query parameters.
+
+  !!! note "Local Filter Definitions"
+
+      `FilteringTerms` defined in this file are in addition to the ones being
+      provided through `bycon/config/filtering_terms.yaml` and might be edited
+      according to local needs.
+
+  Filter "classes" refer to a set of related values with the same application scope.
+
+  - `id`: The ID of the filter, _i.e._ the value compared to the `db_key` parameter
+    in the database backend
+  - `ft_type`: The type of the filter. This can be one of the following:
+    - `alphanumeric`: An alphanumeric value.
+    - `ontologyTerm`: An ontology term.
+    - `custom`: A custom filter.
+  - `format`: The format of the filter value.
+  - `name`: The name of the filter.
+  - `scope`: The scope of the filter. .
+  - `entity`: The entity type that the filter is associated with.
+  - `db_key`: The database key that the filter corresponds to.
+  - `pattern`: The regular expression pattern that the filter value must match.
+  - `collationed`: Whether the filter value should be collationed, _i.e._ if an
+    aggregate of the matched samples is being created (e.g. CNV frequency maps
+    based on all matched samples)
+  - `examples`: A list of example values for the filter.
+
+  The definitions can be used to validate the input values and to provide
+  additional information for the API documentation.
+
+  The definitions are used in the `filters` section of the API query
+  parameters, e.g. `filters: { "genomes": "genomes:>0" }`.
+
+$defs:
+  genomes:
+    id: genomes
+    ft_type: alphanumeric
+    format: integer
+    name: genome count
+    scope: publications
+    entity: publication
+    db_key: counts.genomes
+    pattern: '^\d+$'
+    collationed: False
+    examples:
+      - 'genomes:>0'
+
+  # PATOsex:
+  #   id: ncit
+  #   ft_type: ontologyTerm
+  #   iri_prefix: http://purl.obolibrary.org/obo/PATO_
+  #   description: >
+  #     Some PATO codes specific for genotypic sex...
+  #   name: "Phenotypic Qualities Ontology"
+  #   namespace_prefix: PATO
+  #   url: https://github.com/pato-ontology/pato/
+  #   db_key: 'sex.id'
+  #   scope: individuals
+  #   entity: individual
+  #   pattern: '^PATO(:002000[012])?$'
+  #   collationed: True
+  #   examples:
+  #     - PATO:0020000
+
+  icdom:
+    id: pgx_icdom
+    ft_type: ontologyTerm
+    name: "ICD-O 3 Morphologies (Progenetix)"
+    namespace_prefix: pgx
+    url: https://progenetix.org/
+    reference:
+      root: https://progenetix.org/services/ids/
+    db_key: 'icdo_morphology.id'
+    scope: biosamples
+    entity: biosample
+    pattern: '^(?:pgx:)?icdom-\d{1,5}(-\d{1,5})?$'
+    collationed: True
+    examples:
+      - pgx:icdom-85003
+      - pgx:icdom-94403
+
+  icdot:
+    id: pgx_icdot
+    ft_type: ontologyTerm
+    name: "ICD-O 3 Topographies (Progenetix)"
+    namespace_prefix: pgx
+    url: "https://progenetix.org/"
+    reference:
+      root: https://progenetix.org/services/ids/
+    db_key: 'icdo_topography.id'
+    scope: biosamples
+    entity: biosample
+    pattern: '^(?:pgx:)?icdot-C\d\d?(\.\d)?$'
+    collationed: True
+    examples:
+      - pgx:icdot-C42.2
+      - pgx:icdot-C54.1
+      - pgx:icdot-C5
+
+  TCGAproject:
+    id: tcgaproject
+    ft_type: ontologyTerm
+    name: "The Cancer Genome Atlas"
+    namespace_prefix: pgx
+    url: "http://cancergenome.nih.gov"
+    reference:
+      root: https://portal.gdc.cancer.gov/projects/
+      replace:
+        - "pgx:"
+        - ""
+    scope: biosamples
+    entity: biosample
+    pattern: '^(?:pgx:)?TCGA\-\w{2,4}?$'
+    db_key: 'references.tcgaproject.id'
+    collationed: True
+    examples:
+      - pgx:TCGA-DLBC
+      - pgx:TCGA-ESCA
+      - pgx:TCGA-GBM
+
+  cbioportal:
+    id: cbioportal
+    ft_type: ontologyTerm
+    name: "cBioPortal"
+    iri_prefix: https://www.cbioportal.org/study/summary?id=
+    namespace_prefix: cbioportal
+    url: "https://www.cbioportal.org"
+    reference:
+      root: https://www.cbioportal.org/study/summary?id=
+      replace:
+        - "cbioportal:"
+        - ""
+    scope: biosamples
+    entity: biosample
+    db_key: 'references.cbioportal.id'
+    pattern: '^cbioportal:\w+?$'
+    collationed: True
+    examples:
+      - 'cbioportal:msk_impact_2017'
+
+  pgxcohort:
+    id: pgx_cohorts
+    ft_type: custom
+    name: "Progenetix cohorts"
+    iri_prefix: https://progenetix.org/ids/
+    namespace_prefix: pgx
+    url: "https://progenetix.org"
+    db_key: 'cohorts.id'
+    scope: biosamples
+    entity: biosample
+    pattern: '^pgx:cohort(-\w+)?'
+    collationed: True
+    examples:
+      - 'pgx:cohort-arraymap'
+      - 'pgx:cohort-TCGA'
+

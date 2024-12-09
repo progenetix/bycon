@@ -1,0 +1,18 @@
+.InputLabel__Wrapper {
+  display: flex;
+  margin-bottom: 0.5rem;
+  align-items: center;
+
+  label {
+    font-weight: bold;
+    font-size: 0.9em;
+  }
+
+  .icon__wrapper {
+    display: flex;
+    align-items: center;
+  }
+  .icon {
+    cursor: help;
+  }
+}

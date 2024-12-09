@@ -1,0 +1,25 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "Meta information about the response.",
+    "type": "object",
+    "properties": {
+        "beaconId": {
+            "description": "Identifier of the beacon, as defined in `Beacon`.",
+            "$ref": "../../common/beaconCommonComponents.json#/$defs/BeaconId"
+        },
+        "apiVersion": {
+            "description": "Version of the API.",
+            "$ref": "../../common/beaconCommonComponents.json#/$defs/ApiVersion"
+        },
+        "returnedSchemas": {
+            "$ref": "../../common/beaconCommonComponents.json#/$defs/ListOfSchemas"
+        }
+    },
+    "$comment": "TO REVIEW: the required properties below results in a warning in the example.",
+    "required": [
+        "beaconId",
+        "apiVersion",
+        "returnedSchemas"
+    ],
+    "additionalProperties": true
+}

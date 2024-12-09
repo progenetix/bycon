@@ -1,0 +1,44 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/PublicationSampleCounts/v2021-04-13
+title: PublicationSampleCounts
+type: object
+description: >
+  PublicationSampleCounts contains the count data for publication content, used
+  for the Progenetix publications collection.
+properties:
+  ccgh:
+    description: >
+      The number of samples reported in this publication analyzed by chromosomal
+      Comparative Genomic Hybridization (CGH)
+    type: integer
+  acgh:
+    description: >
+      The number of samples reported in this publication analyzed by any type
+      of genomic hybridization array
+    type: integer
+  wes:
+    description: >
+      The number of samples reported in this publication analyzed by whole
+      exome sequencing (WES)
+    type: integer
+  wgs:
+    description: >
+      The number of samples reported in this publication analyzed by whole
+      genome sequencing (WGS)
+    type: integer
+  ngs:
+    description: >
+      The number of samples reported in this publication analyzed by any of
+      WGS and/or WES. The number is at least the maximum of wes and wgs.
+    type: integer
+  genomes:
+    description: >
+      The number of samples reported in this publication analyzed. The number
+      is at least the maximum of ccgh, acgh, wes, wgs.
+    type: integer
+  progenetix:
+    description: >
+      The number of samples from this publication in the Progenetix biosamples
+      collection
+    type: integer
+

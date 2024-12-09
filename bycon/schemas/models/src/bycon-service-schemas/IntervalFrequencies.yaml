@@ -1,0 +1,30 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/IntervalFrequencies/v2022-02-16
+title: IntervalFrequencies
+type: object
+description: |
+  This schema represents genomic event frequencies for binned genome intervals.
+properties:
+  datasetId:
+    type: string
+    description: >-
+      The dataset this ferequency set was derived from.
+    examples:
+      - progenetix
+  groupId:
+    type: string
+    description: >-
+      The idemntifier for this frequency set (typically a CURIE).
+    examples:
+      - NCIT:C3730
+  sourceCollection:
+    type: string
+    description: |
+      The gatabase collection that was queried to gather the response items.
+    examples:
+      - analyses
+  intervalFrequencies:
+      type: array
+      description: >
+        Array of frequency objects.
+      items: IntervalFrequencyItem.yaml/#properties

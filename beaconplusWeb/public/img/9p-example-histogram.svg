@@ -1,0 +1,120 @@
+
+<svg
+xmlns="http://www.w3.org/2000/svg"
+xmlns:xlink="http://www.w3.org/1999/xlink"
+version="1.1"
+id="genomeplot"
+width="300px"
+height="222px"
+style="margin: auto; font-family: Helvetica, sans-serif;">
+<style type="text/css"><![CDATA[
+.plot-area {fill: #eef6ff; fill-opacity: 0.8;}
+  .title-left {text-anchor: end; fill: #000000; font-size: 7.8px;}
+  .label-y {text-anchor: end; fill: #666666; font-size: 8px;}
+  .gridline {stroke-width: 1px; stroke: #c0e3ee; opacity: 0.8 ; }
+  .marker {text-anchor: middle; fill: #dd3333; font-size: 10px;}
+  .footer-r {text-anchor: end; fill: #999999; font-size: 10px;}
+  .footer-l {text-anchor: start; fill: #999999; font-size: 10px;}
+]]></style>
+<rect x="0" y="0" width="300" height="222" style="fill: #ffffff" />
+
+<linearGradient id="genomeplotgpos100" x1="0%" x2="0%" y1="0%" y2="80%" spreadMethod="reflect">
+  <stop offset="0%" stop-color="rgb(39,39,39)" />
+  <stop offset="100%" stop-color="rgb(0,0,0)" />
+</linearGradient>
+<linearGradient id="genomeplotgpos75" x1="0%" x2="0%" y1="0%" y2="80%" spreadMethod="reflect">
+  <stop offset="0%" stop-color="rgb(87,87,87)" />
+  <stop offset="100%" stop-color="rgb(39,39,39)" />
+</linearGradient>
+<linearGradient id="genomeplotgpos50" x1="0%" x2="0%" y1="0%" y2="80%" spreadMethod="reflect">
+  <stop offset="0%" stop-color="rgb(196,196,196)" />
+  <stop offset="100%" stop-color="rgb(111,111,111)" />
+</linearGradient>
+<linearGradient id="genomeplotgpos25" x1="0%" x2="0%" y1="0%" y2="80%" spreadMethod="reflect">
+  <stop offset="0%" stop-color="rgb(223,223,223)" />
+  <stop offset="100%" stop-color="rgb(196,196,196)" />
+</linearGradient>
+<linearGradient id="genomeplotgneg" x1="0%" x2="0%" y1="0%" y2="80%" spreadMethod="reflect">
+  <stop offset="0%" stop-color="white" />
+  <stop offset="100%" stop-color="rgb(223,223,223)" />
+</linearGradient>
+<linearGradient id="genomeplotgvar" x1="0%" x2="0%" y1="0%" y2="80%" spreadMethod="reflect">
+  <stop offset="0%" stop-color="rgb(196,196,196)" />
+  <stop offset="100%" stop-color="rgb(111,111,111)" />
+</linearGradient>
+<linearGradient id="genomeplotstalk" x1="0%" x2="0%" y1="0%" y2="80%" spreadMethod="reflect">
+  <stop offset="0%" stop-color="rgb(39,39,39)" />
+  <stop offset="100%" stop-color="rgb(0,0,0)" />
+</linearGradient>
+<linearGradient id="genomeplotacen" x1="0%" x2="0%" y1="0%" y2="80%" spreadMethod="reflect">
+  <stop offset="0%" stop-color="rgb(163,55,247)" />
+  <stop offset="100%" stop-color="rgb(138,43,226)" />
+</linearGradient>
+<text x="165.0" y="41" style="text-anchor: middle; font-size: 10px">9</text>
+<rect x="55" y="45.4" width="3.5" height="11.2" style="fill: url(#genomeplotgneg); " />
+<rect x="58.5" y="44" width="3.8" height="14" style="fill: url(#genomeplotgpos25); " />
+<rect x="62.3" y="44" width="7.0" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="69.3" y="44" width="8.3" height="14" style="fill: url(#genomeplotgpos75); " />
+<rect x="77.6" y="44" width="3.8" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="81.4" y="44" width="3.0" height="14" style="fill: url(#genomeplotgpos25); " />
+<rect x="84.4" y="44" width="2.2" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="86.6" y="44" width="9.1" height="14" style="fill: url(#genomeplotgpos100); " />
+<rect x="95.7" y="44" width="3.8" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="99.5" y="44" width="8.3" height="14" style="fill: url(#genomeplotgpos100); " />
+<rect x="107.8" y="44" width="4.9" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="112.7" y="44" width="2.5" height="14" style="fill: url(#genomeplotgpos25); " />
+<rect x="115.2" y="44" width="1.7" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="117.0" y="44" width="1.6" height="14" style="fill: url(#genomeplotgpos50); " />
+<rect x="118.6" y="44" width="3.5" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="122.1" y="46.8" width="1.3" height="8.4" style="fill: url(#genomeplotacen); " />
+<rect x="123.4" y="46.8" width="4.0" height="8.4" style="fill: url(#genomeplotacen); " />
+<rect x="127.3" y="44" width="25.4" height="14" style="fill: url(#genomeplotgvar); " />
+<rect x="152.8" y="44" width="5.6" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="158.3" y="44" width="6.8" height="14" style="fill: url(#genomeplotgpos25); " />
+<rect x="165.2" y="44" width="3.2" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="168.3" y="44" width="8.4" height="14" style="fill: url(#genomeplotgpos50); " />
+<rect x="176.8" y="44" width="3.0" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="179.8" y="44" width="4.8" height="14" style="fill: url(#genomeplotgpos50); " />
+<rect x="184.6" y="44" width="4.5" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="189.0" y="44" width="5.6" height="14" style="fill: url(#genomeplotgpos50); " />
+<rect x="194.6" y="44" width="2.2" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="196.8" y="44" width="3.2" height="14" style="fill: url(#genomeplotgpos25); " />
+<rect x="200.0" y="44" width="4.3" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="204.3" y="44" width="4.1" height="14" style="fill: url(#genomeplotgpos25); " />
+<rect x="208.4" y="44" width="5.2" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="213.6" y="44" width="8.9" height="14" style="fill: url(#genomeplotgpos100); " />
+<rect x="222.5" y="44" width="4.9" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="227.5" y="44" width="5.7" height="14" style="fill: url(#genomeplotgpos25); " />
+<rect x="233.2" y="44" width="4.5" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="237.7" y="44" width="7.8" height="14" style="fill: url(#genomeplotgpos75); " />
+<rect x="245.4" y="44" width="5.2" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="250.7" y="44" width="7.0" height="14" style="fill: url(#genomeplotgpos25); " />
+<rect x="257.7" y="44" width="4.9" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="262.6" y="44" width="0.8" height="14" style="fill: url(#genomeplotgpos25); " />
+<rect x="263.4" y="44" width="3.2" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="266.6" y="45.4" width="2.2" height="11.2" style="fill: url(#genomeplotgpos25); " />
+<rect x="268.8" y="44" width="6.2" height="14" style="fill: url(#genomeplotgneg); " />
+<rect x="55" y="61" width="220" height="100" class="plot-area" />
+<line x1="22"  y1="111.0"  x2="275"  y2="111.0" class="gridline" />
+<line x1="55" y1="123.5" x2="275" y2="123.5" class="gridline" />
+<text x="52" y="127.5" class="label-y">25%</text>
+<line x1="55" y1="98.5" x2="275" y2="98.5" class="gridline" />
+<text x="52" y="102.5" class="label-y">25%</text>
+<line x1="55" y1="136.0" x2="275" y2="136.0" class="gridline" />
+<text x="52" y="140.0" class="label-y">50%</text>
+<line x1="55" y1="86.0" x2="275" y2="86.0" class="gridline" />
+<text x="52" y="90.0" class="label-y">50%</text>
+<line x1="55" y1="148.5" x2="275" y2="148.5" class="gridline" />
+<text x="52" y="152.5" class="label-y">75%</text>
+<line x1="55" y1="73.5" x2="275" y2="73.5" class="gridline" />
+<text x="52" y="77.5" class="label-y">75%</text>
+<polygon points="55,111.0 55.0,106.0 56.6,105.5 58.2,106.2 59.8,106.2 61.4,106.0 62.9,105.2 64.5,105.8 66.1,106.0 67.7,106.0 69.3,106.8 70.9,107.0 72.5,106.5 74.1,105.8 75.7,106.0 77.3,105.8 78.8,106.2 80.4,106.0 82.0,106.5 83.6,107.0 85.2,106.8 86.8,107.5 88.4,109.2 90.0,109.0 91.6,109.8 93.2,108.5 94.7,108.8 96.3,108.5 97.9,108.5 99.5,108.2 101.1,108.2 102.7,107.5 104.3,107.8 105.9,107.5 107.5,106.8 109.0,106.2 110.6,105.8 112.2,106.2 113.8,107.5 115.4,108.0 117.0,108.5 118.6,108.8 120.2,108.2 121.8,108.2 123.4,108.5 150.4,108.5 152.0,108.0 153.6,108.8 155.1,108.5 156.7,108.8 158.3,108.8 159.9,108.5 161.5,108.0 163.1,106.2 164.7,106.8 166.3,106.8 167.9,106.2 171.0,106.2 172.6,106.5 175.8,106.5 177.4,106.0 179.0,106.2 180.6,106.5 182.2,106.2 183.8,106.2 185.4,106.5 186.9,106.5 188.5,106.2 191.7,106.2 193.3,105.5 194.9,105.8 196.5,106.0 198.1,105.8 199.7,105.2 201.2,105.0 202.8,105.0 204.4,105.2 206.0,105.0 207.6,105.5 209.2,105.2 210.8,104.8 212.4,105.2 214.0,105.5 215.6,105.2 217.1,105.2 218.7,105.0 220.3,105.2 221.9,105.2 223.5,105.0 225.1,105.0 226.7,104.8 228.3,105.0 229.9,105.0 231.5,104.8 233.0,104.8 234.6,104.2 236.2,104.0 237.8,104.8 239.4,104.5 241.0,104.2 242.6,104.8 244.2,105.0 245.8,104.5 248.9,104.5 250.5,104.0 252.1,104.2 253.7,104.5 255.3,104.5 256.9,104.0 258.5,103.2 260.1,103.8 261.7,103.8 263.2,103.5 264.8,103.2 266.4,103.0 268.0,103.0 269.6,103.2 271.2,104.0 272.8,103.8 274.4,104.0 275.0,111.0" fill="#FFC633" stroke-width="0px" />
+<polygon points="55,111.0 55.0,110.5 56.6,109.8 58.2,110.5 59.8,110.8 61.4,110.8 62.9,110.2 64.5,110.0 66.1,110.0 67.7,110.2 69.3,110.5 72.5,110.5 74.1,110.0 75.7,110.0 77.3,110.2 78.8,110.5 83.6,110.5 85.2,110.2 86.8,110.5 88.4,110.8 90.0,111.0 91.6,110.8 93.2,110.2 94.7,110.2 96.3,111.0 97.9,110.8 101.1,110.8 102.7,110.5 105.9,110.5 107.5,110.8 109.0,110.5 110.6,110.0 112.2,110.2 113.8,111.0 115.4,110.8 117.0,111.0 118.6,111.0 120.2,110.8 121.8,111.0 169.5,111.0 171.0,110.8 172.6,110.8 174.2,111.0 191.7,111.0 193.3,110.8 198.1,110.8 199.7,110.2 201.2,110.0 202.8,110.2 204.4,110.5 206.0,110.2 207.6,110.8 210.8,110.8 212.4,111.0 214.0,111.0 215.6,110.8 218.7,110.8 220.3,111.0 221.9,111.0 223.5,110.8 225.1,110.8 226.7,110.5 228.3,110.8 229.9,110.5 231.5,110.8 239.4,110.8 241.0,110.5 242.6,110.8 244.2,110.8 245.8,110.5 247.3,110.2 248.9,110.5 250.5,110.5 252.1,110.2 253.7,110.8 256.9,110.8 258.5,110.5 260.1,110.8 261.7,110.8 263.2,110.5 264.8,110.5 266.4,111.0 269.6,111.0 271.2,110.5 272.8,110.8 274.4,111.0 275.0,111.0" fill="#FF6600" stroke-width="0px" />
+<polygon points="55,111.0 55.0,135.0 56.6,135.0 58.2,135.2 59.8,134.5 61.4,135.0 62.9,134.5 64.5,135.0 66.1,136.2 67.7,137.0 69.3,137.8 70.9,137.8 72.5,137.2 74.1,136.2 75.7,135.8 77.3,135.8 78.8,136.2 80.4,136.2 82.0,136.8 83.6,137.0 85.2,139.8 86.8,143.2 88.4,161.0 90.0,161.0 91.6,147.8 93.2,146.0 94.7,143.5 96.3,140.8 97.9,139.5 99.5,137.2 101.1,137.2 102.7,136.0 104.3,133.8 105.9,133.2 107.5,128.5 109.0,128.2 110.6,127.2 113.8,127.2 115.4,125.8 117.0,121.5 118.6,119.8 120.2,120.2 121.8,120.2 123.4,119.8 150.4,119.8 152.0,121.0 153.6,120.2 155.1,120.8 156.7,120.5 158.3,120.2 159.9,121.0 161.5,121.0 163.1,123.2 164.7,122.0 166.3,121.5 167.9,122.0 169.5,122.2 171.0,122.5 172.6,122.2 174.2,122.2 175.8,122.0 177.4,122.2 179.0,122.5 180.6,122.2 182.2,122.5 183.8,122.8 185.4,122.5 186.9,122.2 191.7,122.2 193.3,122.0 194.9,122.2 196.5,121.5 198.1,121.5 199.7,121.8 201.2,121.8 202.8,121.5 204.4,121.5 206.0,121.8 207.6,121.8 209.2,121.5 210.8,122.0 212.4,121.0 214.0,121.0 215.6,121.2 217.1,120.2 220.3,120.2 221.9,121.2 223.5,120.0 225.1,119.8 226.7,120.5 228.3,121.0 229.9,121.5 231.5,120.8 233.0,120.8 234.6,120.5 236.2,120.0 237.8,120.5 239.4,120.5 241.0,120.8 242.6,120.8 244.2,120.0 245.8,120.2 247.3,120.2 248.9,120.5 250.5,120.8 252.1,120.8 253.7,121.2 255.3,121.2 256.9,120.8 258.5,120.5 260.1,120.8 261.7,120.5 263.2,120.0 264.8,119.8 266.4,120.0 268.0,119.5 269.6,119.8 271.2,119.2 272.8,118.8 274.4,119.0 275.0,111.0" fill="#33A0FF" stroke-width="0px" />
+<polygon points="55,111.0 55.0,114.8 56.6,114.8 58.2,115.5 59.8,114.8 61.4,115.5 62.9,114.5 64.5,114.5 66.1,115.2 67.7,116.2 69.3,118.0 70.9,116.5 72.5,116.2 74.1,116.0 75.7,115.5 77.3,116.0 78.8,116.0 80.4,116.2 82.0,116.0 83.6,116.0 85.2,119.8 86.8,125.5 88.4,161.0 90.0,161.0 91.6,132.5 93.2,128.2 94.7,123.5 96.3,121.8 97.9,119.5 99.5,117.8 101.1,117.2 102.7,116.8 104.3,115.5 105.9,115.5 107.5,111.5 109.0,111.5 110.6,112.0 112.2,111.8 113.8,112.8 115.4,112.2 117.0,111.5 118.6,111.0 120.2,111.5 148.8,111.5 150.4,111.8 152.0,112.2 153.6,111.2 155.1,111.2 156.7,111.0 159.9,111.0 161.5,111.2 163.1,111.0 164.7,111.2 166.3,111.0 167.9,111.2 169.5,111.5 171.0,111.2 172.6,111.5 174.2,111.5 175.8,111.2 177.4,111.2 179.0,111.5 180.6,111.2 182.2,111.2 183.8,111.5 185.4,111.5 186.9,111.2 188.5,111.0 190.1,111.5 191.7,111.2 193.3,111.0 194.9,111.8 196.5,111.5 198.1,111.2 199.7,111.8 201.2,111.2 202.8,111.2 204.4,112.0 206.0,111.8 207.6,111.5 209.2,111.2 210.8,112.0 212.4,111.5 214.0,111.8 215.6,111.5 217.1,111.2 218.7,111.0 220.3,111.0 221.9,111.5 223.5,111.2 225.1,111.5 226.7,111.2 228.3,111.8 229.9,112.2 231.5,111.2 233.0,111.5 234.6,111.2 239.4,111.2 241.0,111.5 242.6,111.2 244.2,111.0 245.8,111.2 247.3,111.0 248.9,111.2 250.5,111.5 252.1,111.2 253.7,111.2 255.3,111.5 256.9,111.2 258.5,111.0 260.1,111.5 261.7,111.2 263.2,111.0 264.8,111.5 266.4,111.2 268.0,111.2 269.6,112.2 271.2,111.8 272.8,111.0 274.4,111.2 275.0,111.0" fill="#0033CC" stroke-width="0px" />
+<rect x="89.9" y="61" width="1" height="105" class="marker" style="fill: #dd3333; opacity: 0.4; " />
+<rect x="67.4" y="166" width="45.0" height="18" class="marker" style="fill: #dd3333; opacity: 0.1; " />
+<text x="89.9" y="179" class="marker">CDKN2A</text>
+<text x="118" y="179" class="footer-l"> 3706 focal high-level deletions</text>
+</svg>
+

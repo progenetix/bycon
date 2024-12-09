@@ -1,0 +1,87 @@
+genome_default: GRCh38
+cnv_amp_max_size: 3000000
+genome_bin_default: 1Mb
+genome_bin_sizes:
+  description: >-
+    * keyword defined base sizes of genomic binning intervals for CNV satus and
+      frequency maps (parameter --genomeBinning)
+    * only ...Mb, kb or b are supported as unit (or no unit => b)
+  values:
+    default: 1000000
+    1Mb: 1000000
+    2Mb: 2000000
+    3Mb: 3000000
+    4Mb: 4000000
+    5Mb: 5000000
+    6Mb : 6000000
+    7Mb: 7000000
+    8Mb: 8000000
+    9Mb: 9000000
+    10Mb: 10000000
+    15Mb: 15000000
+    20Mb: 20000000
+    100kb: 100000
+    10kb: 10000
+
+genome_path_ids:
+  description: >-
+    * supported genome editions (with existing cytoband files)
+    * the keys are stemmed & lower cased programmatically during matching
+    * CAVE: support for non-GRCh38 currently degraded
+  values:
+    grch38: grch38
+    # grch37: hg19
+    # ncbi36: hg18
+    # ncbi35: hg17
+    # ncbi34: hg16
+    # mm8: mm8
+    # mm9: mm9
+    # msarhar1: mSarHar1.11
+    # zf7: zf7
+
+terminal_intervals_soft_expansion_fraction:
+  description: >-
+    This parameter is used for the generation of chromosome-dependend bins. The
+    current method creates equally sized bins (e.g. 1Mb) from centromere -> telomere,
+    both for p & q arms. This usually results in the last (p, q) interval being
+    <1MB. For some chromosomes this interval may be _very_ small; if the last
+    interval is smaller than this value the previous interval will be expanded 
+    (e.g. 1050000) and becomes last.
+  value: 0.1
+
+interval_min_fraction:
+  description: >-
+    This value can be used to exclude intervals with a very low CNV overlap (e.g.
+    when denoising or to limit edge counts). It is e.g. used for frequency
+    calculations; a default of 0.001 results in <1kb not being counted for 1Mb
+    bins.
+  value: 0.001
+
+chromosomes:            # defined in order & as strings
+  - "1"
+  - "2"
+  - "3"
+  - "4"
+  - "5"
+  - "6"
+  - "7"
+  - "8"
+  - "9"
+  - "10"
+  - "11"
+  - "12"
+  - "13"
+  - "14"
+  - "15"
+  - "16"
+  - "17"
+  - "18"
+  - "19"
+  - "20"
+  - "21"
+  - "22"
+  - "X"
+  - "Y"
+
+cytobands:
+  pattern: ^(chro?)?([12]?[\dXY])([pq]((ter)|(cen)|([1-4]([0-8](\.\d\d*?)?)?)?))?\-?([pq]((ter)|(cen)|([1-4]([0-8](\.\d\d*?)?)?)?))?$

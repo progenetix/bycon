@@ -1,0 +1,157 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/pgxBiosample/v2022-03-01
+title: Progenetix Biosample
+type: object
+description: >-
+  A Biosample refers to a unit of biological material from which the substrate
+  molecules (e.g. genomic DNA, RNA, proteins) for molecular analyses (e.g.
+  sequencing, array hybridisation, mass-spectrometry) are extracted. Examples
+  would be a tissue biopsy, a single cell from a culture for single cell genome
+  sequencing or a protein fraction from a gradient centrifugation. Several
+  instances (e.g. technical replicates) or types of experiments (e.g.
+  genomic array as well as RNA-seq experiments) may refer to the same Biosample.
+required:
+  - id
+properties:
+  id:
+    type: string
+    examples:
+      - pgxbs-kftvjtgm
+  individualId:
+    type: string
+    examples:
+      - pgxind-kftx5ruq
+  notes:
+    type: string
+    examples:
+      - breast carcinoma
+      - adenocarcinoma [cell line HeLa]
+      - rectal adenocarcinoma [MSI, grade 3, metastasized]
+      - rectal adenocarcinoma [MSI, brain metastasis]
+  externalReferences:
+    type: array
+    items:
+      $ref: ../bycon-model/common/externalReference.yaml
+    examples:
+      - id: PMID:9892199
+  celllineInfo:
+      $ref: ../bycon-model/common/celllineInfo.yaml
+  cohorts:
+    description: >
+      Cohorts describe collections of samples or individuals which are part of a common epistemic group, e.g. have been used for a study or share a set of features.
+    type: array
+    items:
+      $ref: ../bycon-model/common/ontologyTerm.yaml
+    examples:
+      - id: pgx:cohort-arraymap
+        label: arrayMap collection
+  collectionMoment:
+    description: >-
+      Individual's or cell cullture age at the time of sample collection
+      in the ISO8601 duration format `P[n]Y[n]M[n]DT[n]H[n]M[n]S`.
+    type: string
+    examples:
+      - P32Y6M1D
+      - P7D
+  geoLocation:
+    $ref: ../bycon-model/common/GeoLocation.yaml
+  sampleOriginDetail:
+    $ref: ../bycon-model/common/ontologyTerm.yaml
+  histologicalDiagnosis:
+    $ref: ../bycon-model/common/ontologyTerm.yaml
+    examples:
+      - id: NCIT:C3778
+        label : Serous Cystadenocarcinoma
+  icdoMorphology:
+    description: >-
+      The ICD-O 3 morphology code of this biosample, in a "pseudo-prefixed" transformation (since no direct ICD-O 3 registry can be referenced).
+    $ref: ../bycon-model/common/ontologyTerm.yaml
+    examples:
+      - id: icdom-94703
+        label : Medulloblastoma, NOS
+  icdoTopography:
+    description: >-
+      The ICD-O 3 topography code of this biosample, in a "pseudo-prefixed" transformation (since no direct ICD-O 3 registry can be referenced).
+    $ref: ../bycon-model/common/ontologyTerm.yaml
+    examples:
+      - id: icdot-C71.6
+        label : cerebellum
+  biosampleStatus:
+    description: >-
+      Ontology value from Experimental Factor Ontology (EFO) Material Entity term (BFO:0000040).
+    $ref: ../bycon-model/common/ontologyTerm.yaml
+  tumorProgression:
+    $ref: ../bycon-model/common/ontologyTerm.yaml
+    examples:
+      - id: NCIT:C3677
+        label: Benign Neoplasm
+      - id: NCIT:C8450
+        label: Primary Malignant Neoplasm
+      - id: NCIT:C95606
+        label: Second Primary Malignant Neoplasm
+      - id: NCIT:C3261
+        label: Metastatic Neoplasm
+      - id: NCIT:C4813
+        label: Recurrent Malignant Neoplasm
+  tumorGrade:
+    description: >
+      Tumor grade as child term of NCIT:C28076 (Disease Grade Qualifier) or equivalent.
+    $ref: ../bycon-model/common/ontologyTerm.yaml
+    examples:
+      - id: NCIT:C28076
+        label: grade 3
+      - id: NCIT:C28080
+        label: Grade 3a
+      - id: NCIT:C62397
+        label: WHO Central Nervous System Grade IV
+  pathologicalStage:
+    description: >
+      Pathological stage, as subclass of NCIT:C28108 - Disease Stage Qualifier.
+    $ref: ../bycon-model/common/ontologyTerm.yaml
+    examples:
+      - id: NCIT:C27977
+        label: Stage IIIA
+      - id: NCIT:C80136
+        label: Binet Stage C
+  pathologicalTnmFinding:
+    description: >
+      A child class of NCIT:C48698 Cancer TNM Finding Category
+    type: array
+    items:
+      $ref: ../bycon-model/common/ontologyTerm.yaml
+    examples:
+      - - id: NCIT:C48700
+          label: M1 Stage Finding
+        - id: NCIT:C48720
+          label: T1 Stage Finding
+  followupState:
+    $ref: ../bycon-model/common/ontologyTerm.yaml
+    examples:
+      - id: pgx:FU0005
+        label : death from disease
+  followupTime:
+    type: string
+    examples:
+      - P23M
+  analysisInfo:
+    $ref: "#/$defs/AnalysisInfo"
+  updated:
+    type: string
+    format: date-time
+    examples:
+      - "2020-09-10T17:44:10.170Z"
+  info:
+    description: >-
+      Additional structured data which may not be common across different Beacon
+      instances.
+    type: object
+
+$defs:
+  AnalysisInfo:
+    properties:
+      experiment_id:
+        type: string
+      platform_id:
+        type: string
+      series_id:
+        type: string

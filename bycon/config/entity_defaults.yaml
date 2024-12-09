@@ -1,0 +1,273 @@
+dataset:
+  request_entity_path_id: datasets
+  response_entity_id: dataset
+  collection: Null
+  response_schema: beaconCollectionsResponse
+  bycon_response_class: BeaconDataResponse
+  beacon_schema:
+    entity_type: dataset
+    schema: https://progenetix.org/services/schemas/dataset/
+  pagination:
+    skip: 0
+    limit: 10
+  is_beacon_entity: true
+  path_id_value_bycon_parameter: dataset_ids
+  examples:
+    - /progenetix
+  tests:
+    - description: default test mode
+      test_values:
+        testMode: true
+
+##############################################################################
+
+cohort:
+  request_entity_path_id: cohorts
+  response_entity_id: cohort
+  collection: collations
+  response_schema: beaconCollectionsResponse
+  bycon_response_class: BeaconDataResponse
+  beacon_schema:
+    entity_type: cohort
+    schema: https://progenetix.org/services/schemas/cohort/
+  pagination:
+    skip: 0
+    limit: 10
+  is_beacon_entity: true
+  path_id_value_bycon_parameter: filters
+  tests:
+    - description: default test mode
+      test_values:
+        testMode: true
+
+################################################################################
+
+genomicVariant:
+  description: >-
+    The type of response used for the endpoint depends on the requested and granted
+    `responseGranularity`.
+  request_entity_path_id: g_variants
+  request_entity_path_aliases:
+    - genomicVariations
+    - variants
+  response_entity_id: genomicVariant
+  collection: variants
+  response_schema: beaconResultsetsResponse
+  bycon_response_class: BeaconDataResponse
+  beacon_schema:
+    entity_type: genomicVariant
+    schema: https://progenetix.org/services/schemas/genomicVariant/
+  h->o_access_key: variants.id
+  is_beacon_entity: true
+  path_id_value_bycon_parameter: variant_ids
+  examples:
+    - /pgxvar-5bab576a727983b2e00b8d32
+    - /pgxvar-5bab576a727983b2e00b8d32/individuals
+    - ?geneId=CDKN2A&variantMaxSize=100000&limit=5
+    - ?referenceName=NC_000017.11&start=7577120&referenceBases=G&alternateBases=A
+  tests:
+    - description: default test mode
+      test_values:
+        testMode: true
+
+################################################################################
+
+analysis:
+  description: >-
+    The type of response used for the endpoint depends on the requested and granted
+    `responseGranularity`.
+  request_entity_path_id: analyses
+  response_entity_id: analysis
+  collection: analyses  
+  response_schema: beaconResultsetsResponse
+  bycon_response_class: BeaconDataResponse
+  beacon_schema:
+    entity_type: analysis
+    schema: https://progenetix.org/services/schemas/analysis/
+  h->o_access_key: analyses.id
+  is_beacon_entity: true
+  path_id_value_bycon_parameter: analysis_ids
+  tests:
+    - description: default test mode
+      test_values:
+        testMode: true
+
+##############################################################################
+
+run:
+  description: >-
+    The type of response used for the endpoint depends on the requested and granted
+    `responseGranularity`.
+  request_entity_path_id: runs
+  response_entity_id: run
+  collection: analyses  
+  response_schema: beaconResultsetsResponse
+  bycon_response_class: BeaconDataResponse
+  beacon_schema:
+    entity_type: run
+    schema: https://progenetix.org/services/schemas/run/
+  h->o_access_key: analyses.id
+  is_beacon_entity: true
+  path_id_value_bycon_parameter: run_ids
+  tests:
+    - description: default test mode
+      test_values:
+        testMode: true
+
+################################################################################
+
+biosample:
+  description: >-
+    The type of response used for the endpoint depends on the requested and granted
+    `responseGranularity`.
+  request_entity_path_id: biosamples
+  request_entity_path_aliases:
+    - samples
+  response_entity_id: biosample
+  collection: biosamples  
+  response_schema: beaconResultsetsResponse
+  bycon_response_class: BeaconDataResponse
+  beacon_schema:
+    entity_type: biosample
+    schema: https://progenetix.org/services/schemas/biosample/
+  h->o_access_key: biosamples.id
+  is_beacon_entity: true
+  path_id_value_bycon_parameter: biosample_ids
+  examples:
+    - ?filters=NCIT:C4017&limit=3
+    - ?referenceName=refseq:NC_000009.12&variantType=EFO:0030067&start=21000000,21975098&end=21967753,23000000&filters=NCIT:C3058&limit=10
+  tests:
+    - description: default test mode
+      test_values:
+        testMode: true
+
+
+##############################################################################
+
+individual:
+  description: >-
+    The type of response used for the endpoint depends on the requested and granted
+    `responseGranularity`.
+  request_entity_path_id: individuals
+  response_entity_id: individual
+  collection: individuals
+  response_schema: beaconResultsetsResponse
+  bycon_response_class: BeaconDataResponse
+  beacon_schema:
+    entity_type: individual
+    schema: https://progenetix.org/services/schemas/individual/
+  h->o_access_key: individuals.id
+  is_beacon_entity: true
+  path_id_value_bycon_parameter: individual_ids
+  examples:
+    - ?filters=EFO:0030049&limit=5
+  tests:
+    - description: default test mode
+      test_values:
+        testMode: true
+
+
+############################################################################
+
+phenopacket:
+  description: >-
+    The type of response used for the endpoint depends on the requested and granted
+    `responseGranularity`.
+
+    In the `bycon` framework Phenopackets are generated at export time by aggregating
+    the relevant information from the matched `individual`, `biosample`s, `analysis`(/es)
+    and `genomicVariation`s.
+  request_entity_path_id: phenopackets
+  response_entity_id: phenopacket
+  collection: individuals
+  response_schema: beaconResultsetsResponse
+  bycon_response_class: BeaconDataResponse
+  beacon_schema:
+    entity_type: phenopacket
+    schema: https://progenetix.org/services/schemas/phenopacket/
+  h->o_access_key: individuals.id
+  is_beacon_entity: true
+  path_id_value_bycon_parameter: individual_ids
+  examples:
+    - ?filters=EFO:0030049&limit=5
+  tests:
+    - description: default test mode
+      test_values:
+        testMode: true
+
+
+################################################################################
+
+filteringTerm:
+  request_entity_path_id: filtering_terms
+  response_entity_id: filteringTerm
+  collection: collations
+  response_schema: beaconFilteringTermsResponse
+  bycon_response_class: BeaconDataResponse
+  beacon_schema:
+    entity_type: filteringTerm
+    schema: https://progenetix.org/services/schemas/filteringTermsSchema/
+  is_beacon_entity: true
+  path_id_value_bycon_parameter: filters
+  tests:
+    - description: default test mode
+      test_values:
+        testMode: true
+
+
+################################################################################
+
+info:
+  request_entity_path_id: info
+  request_entity_path_aliases:
+    - "/"
+    - "service-info"
+    - "service_info"
+  response_entity_id: info
+  response_schema: beaconInfoResponse
+  bycon_response_class: BeaconInfoResponse
+  beacon_schema:
+    entity_type: configuration
+    schema: https://progenetix.org/services/schemas/beaconInfoResults/
+  is_beacon_entity: true
+  content: {}
+
+################################################################################
+
+beaconMap:
+  request_entity_path_id: map
+  response_entity_id: beaconMap
+  collection: Null
+  response_schema: beaconMapResponse
+  bycon_response_class: BeaconInfoResponse
+  beacon_schema:
+    entity_type: map
+    schema: https://progenetix.org/services/schemas/beaconMapSchema/
+  is_beacon_entity: true
+
+################################################################################
+
+configuration:
+  request_entity_path_id: configuration
+  response_entity_id: configuration
+  collection: Null
+  response_schema: beaconConfigurationResponse
+  bycon_response_class: BeaconInfoResponse
+  beacon_schema:
+    entity_type: configuration
+    schema: https://progenetix.org/services/schemas/beaconConfigurationSchema/
+  is_beacon_entity: true
+
+################################################################################
+
+entryType:
+  request_entity_path_id: entry_types
+  response_entity_id: entryType
+  collection: Null
+  response_schema: beaconEntryTypesResponse
+  bycon_response_class: BeaconInfoResponse
+  beacon_schema:
+    entity_type: entryType
+    schema: https://progenetix.org/services/schemas/entryTypesSchema/
+  is_beacon_entity: true
+

@@ -1,0 +1,92 @@
+site_name: bycon Documentation
+site_description: 'Documentation for the bycon GA4GH Beacon framework'
+site_author: Michael Baudis
+repo_name: bycon
+repo_url: https://github.com/progenetix/bycon
+
+reference_server_url: https://progenetix.org
+
+###############################################################################
+
+nav:
+  - Documentation Home: /
+  - Setup & Maintainance:
+    - Installation: installation.md
+    - Importing Data: importers/index.md
+    - Housekeeping: housekeepers/index.md
+  - Beacon API:
+    - Beacon API: API.md
+    - Services API: API-services.md
+    - API Parameters: API-parameters.md
+  - Front End: beaconplus.md
+  - Recent Changes: changes.md
+  # - Upcoming & To Do: future.md
+  - Code Repositories:
+    - bycon: https://github.com/progenetix/bycon
+    - byconaut: https://github.com/progenetix/byconaut
+    # - Front End: https://github.com/progenetix/beaconplus-web
+    - Progenetix Front End: https://github.com/progenetix/progenetix-web
+  - More Info:
+    - Progenetix Site: http://progenetix.org
+    - baudisgroup@UZH: https://info.baudisgroup.org
+    - Beacon Documentation: https://docs.genomebeacons.org
+
+###############################################################################
+
+markdown_extensions:
+  - toc:
+      toc_depth: 2-3
+      permalink: true
+  - admonition
+  - attr_list
+  - footnotes
+  - md_in_html
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.saneheaders
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.magiclink:
+      hide_protocol: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - tables
+  - mdx_gh_links:
+      user: ga4gh-beacon
+      repo: beacon-v2
+  - pymdownx.emoji
+
+theme:
+  # name: readthedocs
+  name: material
+  palette:
+    primary: deep orange
+  favicon: img/site-logo-topright.png
+  logo: img/site-logo-topright.png
+  features:
+    - content.tabs.link
+    - search.highlight
+    - search.share
+    - navigation.expand
+
+plugins:
+    - search
+    - macros
+    - mermaid2
+    - mkdocstrings
+    - include-markdown
+
+extra:
+  excerpt_separator: <!--more-->
+  blog_list_length: 100
+  social:
+    - icon: fontawesome/brands/github 
+      link: https://github.com/progenetix
+extra_css:
+  - css/extra.css

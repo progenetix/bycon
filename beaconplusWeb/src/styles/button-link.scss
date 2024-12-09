@@ -1,0 +1,30 @@
+.button-link {
+  font-weight: 400;
+  color: $link;
+  background-color: transparent;
+  border-color: transparent;
+
+  &:hover {
+    color: $link-hover;
+    text-decoration: underline;
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  &:focus {
+    text-decoration: underline;
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  // Remove all padding and height so it's just plain, unpadded text.
+  &.button-text {
+    padding: 0;
+    height: unset;
+  }
+}
+
+.message .button-link {
+  color: currentColor;
+  text-decoration: underline;
+}

@@ -1,0 +1,26 @@
+@import "./variables";
+$container-offset: (2 * $gap) !default;
+
+.BeaconPlus__query-summary {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  li {
+    margin-bottom: 0.5rem;
+    margin-right: 0.75rem;
+    small {
+      font-weight: bold;
+    }
+  }
+}
+
+// same as bulma container, but limits to desktop size
+.BeaconPlus__container {
+  flex-grow: 1;
+  margin: 0 auto;
+  position: relative;
+  width: auto;
+  @include from($desktop) {
+    max-width: $desktop - $container-offset;
+  }
+}

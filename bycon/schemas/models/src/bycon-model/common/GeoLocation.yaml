@@ -1,0 +1,120 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/GeoLocation/v2023-08-15
+
+title: GeoLocation
+
+type: object
+
+description: >
+  A GeoLocation object represents a geographic location formatted as a
+  *GeoJSON feature*. The format is compatible with RFC 7946, while currently
+  limiting its scope to features of type "Point".
+  Also, the schema defines some optional parameters compatible with the `GeoJSON
+  Feature` `properties` wrapper object.
+  Examples could be:  
+  * an address, e.g. of a lab performing an analysis
+  * provenance of an individual, obfuscated to a larger order administrative
+    entity (Suffolk, U.K.)
+  * a lat/long/alt position where an environmental sample was collected  
+
+properties:
+  type:
+    const: "Feature"
+  geometry:
+    $ref: "#/$defs/GeoGeometry"
+  properties:
+    $ref: "#/$defs/GeoLabels"
+
+$defs:
+  GeoGeometry:
+    description: >
+      The geographic point object uses the default units from the
+      [DCMI point scheme](http://dublincore.org/documents/dcmi-point/) and
+      avoids optional representation in non-standard units. It consists of an
+      array with at least 2 ordered numbers for
+      - longitude/easting
+      - latitude/nothing.
+    properties:
+      type:
+        const: Point
+      coordinates:
+        description: >
+          An array of 2 (longitude, latitude) or 3 (longitude, latitude, altitude) values.
+        type: array
+        items:
+          type: number
+          format: float
+        minItems: 2
+        maxItems: 3
+        examples:
+          - - 8.55
+            - 47.37 
+          - - 86.925026
+            - 27.987850
+            - 8848.86
+    required:
+      - type
+      - coordinates
+
+  GeoLabels:
+    description: >-
+      GeoLabels represent an instance of the GeoJSON `properties` object. The
+      parameters provide additional information for the interpretation of the
+      location parameters.
+    properties:
+      id:
+        type: string
+        description: >-
+          The identifier for the location, used to match individual entries
+          with the geometry and properties paramaters from a lookup database.
+        examples:
+          - zurich::switzerland
+          - heidelberg::germany
+          - newyorkcity::unitedstates
+          - cambridge::unitedkingdom
+          - cambridge::unitedstates
+      label:
+        type: string
+        examples:
+          - Heidelberg, Germany
+          - Gainesville, FL, United States of America
+          - Zurich, Switzerland
+          - Str Marasesti 5, 300077 Timisoara, Romania
+      city:
+        type: string
+        description: >-
+          The optional name of the city the point location maps to. While this
+          is a commonly used the point location, it should be considered
+          secondary to the `geometry` values in interpreting the geographic location.
+      country:
+        type: string
+        description: >-
+          The optional name of the country the location maps to, for sanity
+          checks and procedural convenience (see notes for "city").
+        examples:
+          - Switzerland
+      ISO3166alpha3:
+        type: string
+        examples:
+          - USA
+          - CHE
+      precision:
+        type: string
+        description: >
+          Used together with coordinate annotation, precision represents an
+          optional label describing the precision that can be inferred from the
+          coordinates. For a precision level of "city", coordinates would have
+          to be interpreted as representing any possible location within the
+          city's administrative boundaries, not necessarily at the exact
+          position of the point coordinates.
+          The `precision` parameter can be used to indicate an obfuscation of
+          the coordinates, e.g. for privacy protection.
+        examples:
+          - city
+
+required:
+  - type
+  - geometry
+  - properties
+
+additionalProperties: True

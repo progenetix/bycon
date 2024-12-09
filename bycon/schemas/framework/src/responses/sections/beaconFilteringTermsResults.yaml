@@ -1,0 +1,121 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+description: >-
+  Filtering terms and ontology resources utilised in this Beacon.
+type: object
+properties:
+  resources:
+    type: array
+    items:
+      $ref: '#/$defs/Resource'
+  filteringTerms:
+    type: array
+    items:
+      $ref: '#/$defs/FilteringTerm'
+$defs:
+  FilteringTerm:
+    type: object
+    description: >-
+      Entities can be filtered using this term.
+    required:
+      - type
+      - id
+    default:
+      - id
+      - type
+      - count
+    properties:
+      type:
+        type: string
+        description: >-
+          Either "custom", "alphanumeric" or ontology/terminology full name.
+          TODO: An ontology ... with a registered prefix does not need a full name
+          so one may better use CURIE to indicate that the resource can be retrieved
+          from the id. This also will allow to provide an enum here.
+        examples: 
+          - "Human Phenotype Ontology"
+          - alphanumeric
+      id:
+        description: >-
+          The field id in the case of numeric or alphanumeric fields, or
+          the term id in the case of ontology or custom terms. CURIE syntax in the
+          case of an ontology term.
+        type: string
+        examples:
+          - 'NCIT:C8936'
+          - HP:0008773
+      label:
+        description: >-
+          This would be the "preferred Label" in the case of an ontology term.
+        type: string
+        examples:
+          - 'B Lymphoblastic Leukemia/Lymphoma'
+          - 'Aplasia/Hypoplasia of the middle ear'
+      scopes:
+        description: >-
+          Entry types affected by this filter.
+        examples: 
+          - 
+            - individual 
+            - biosample 
+            - analysis 
+            - run 
+            - genomicVariation 
+          - 
+            - biosample
+        type: array
+        items:
+          type: string
+      count:
+        description: >-
+          The number of entries that have this term in the given context. This
+          is an approximation and depends on the individual beacon set up. For
+          example, for a non-dataset specific entry point the beacon might chose
+          to report the aggregate number of all counts for all datasets or for a
+          default dataset etc.
+          Source: bycon.progenetix.org
+  Resource:
+    type: object
+    description: >-
+      Description of an ontology resource defined externally to this beacon
+      implementation, such as MeSH or EFO, based on the phenopackets resource object
+      (https://phenopacket-schema.readthedocs.io/en/latest/resource.html)
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        description: >-
+          Preferably OBO ID representing the resource; alternatively a URI pointing
+          towards the definitions may be used if not in OBO.
+        examples:
+          - hp
+      name:
+        type: string
+        description: >-
+          The name of the ontology referred to by the id element
+        examples:
+          - Human Phenotype Ontology
+      url:
+        type: string
+        description: >-
+          Uniform Resource Locator of the resource
+        examples:
+          - https://purl.obolibrary.org/obo/hp.owl
+      version:
+        type: string
+        description: >-
+          The version of the resource or ontology used to make the annotation
+        examples:
+          - 17-06-2019
+      nameSpacePrefix:
+        type: string
+        description: >-
+          The prefix used in the CURIE of an OntologyClass
+        examples:
+          - HP
+      iriPrefix:
+        type: string
+        description: The full Internationalized Resource Identifier (IRI) prefix
+        examples:
+          - https://purl.obolibrary.org/obo/HP_
+additionalProperties: true

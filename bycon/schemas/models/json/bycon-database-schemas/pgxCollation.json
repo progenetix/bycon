@@ -1,0 +1,158 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://progenetix.org/services/schemas/pgxCollation/v2024-10-17",
+    "title": "pgxCollation",
+    "description": "A Collation summarizes information of all biosamples matching a given term (e.g. PMID or NCIT code), as well as the connected items if the code is part of a hierarchy (paths leading to the code, child terms).",
+    "properties": {
+        "id": {
+            "type": "string",
+            "examples": [
+                "NCIT:C9272",
+                "NCIT:C3167",
+                "PMID:22824167"
+            ]
+        },
+        "label": {
+            "type": "string",
+            "examples": [
+                "Salivary Gland Carcinoma",
+                "Acute Lymphoblastic Leukemia",
+                "Beleut M, Zimmermann P et al. (2012): Integrative genome-wide expression profiling identifies three..."
+            ]
+        },
+        "collationType": {
+            "description": "Key for the type of filter definition used to map the corresponding collation items (e.g. biosamples, analyses...). These only sometimes correspond directly to prefixes, when unanimous (PMID ...).",
+            "type": "string",
+            "examples": [
+                "PMID",
+                "NCITstage",
+                "NCITtnm",
+                "icdom"
+            ]
+        },
+        "namespacePrefix": {
+            "type": "string",
+            "examples": [
+                "pgx",
+                "PMID",
+                "NCIT",
+                "UBERON"
+            ]
+        },
+        "datasetId": {
+            "description": "The dataset the collation was generated from.",
+            "type": "string",
+            "examples": [
+                "progenetix"
+            ]
+        },
+        "reference": {
+            "description": "A url to the code, in a local or remote location.",
+            "type": "string",
+            "examples": [
+                "https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C2910"
+            ]
+        },
+        "scope": {
+            "description": "The scope (i.e. the data collection) the collation items are retrieved from.",
+            "type": "string",
+            "oneOf": [
+                "biosamples",
+                "analyses",
+                "individuals"
+            ]
+        },
+        "dbKey": {
+            "description": "The key in the corresponding collection (scope), in dot annotation.",
+            "type": "string",
+            "examples": [
+                "histological_diagnosis.id",
+                "sample_origin_detail.id",
+                "sex.id"
+            ]
+        },
+        "childTerms": {
+            "type": "array",
+            "description": "All downstream terms, from all paths of this term in a hierarchical system including itself.",
+            "examples": [
+                [
+                    "NCIT:C3168",
+                    "NCIT:C9142",
+                    "NCIT:C8644",
+                    "NCIT:C9143",
+                    "NCIT:C4967",
+                    "NCIT:C9140",
+                    "NCIT:C7953"
+                ],
+                [
+                    "PMID:22824167"
+                ]
+            ]
+        },
+        "parentTerms": {
+            "type": "array",
+            "description": "All upstream terms, from all paths, of this term in a hierarchical system including itself.",
+            "examples": [
+                [
+                    "NCIT:C3262",
+                    "NCIT:C3263",
+                    "NCIT:C2910"
+                ],
+                [
+                    "PMID:22824167"
+                ]
+            ]
+        },
+        "hierarchyPaths": {
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/HierarchyPath/properties"
+            },
+            "description": "All term paths leading to any instance of this code from the hierarchy root term.\n"
+        },
+        "count": {
+            "type": "integer",
+            "description": "The number of biosamples in the collection with this code or one of its child terms.\n"
+        },
+        "codeMatches": {
+            "type": "integer",
+            "description": "The number of biosamples in the collection with this code. This can be 0 if the entity is only represented through its child terms.\n"
+        },
+        "updated": {
+            "type": "string",
+            "format": "date-time",
+            "examples": [
+                "2022-03-08T10:44:10.170Z"
+            ]
+        }
+    },
+    "$defs": {
+        "HierarchyPath": {
+            "description": "A path from the root of a hierarchy to - and including - a given term id.",
+            "properties": {
+                "depth": {
+                    "type": "integer",
+                    "description": "The number of codes on the path upstream of the term."
+                },
+                "order": {
+                    "type": "integer",
+                    "description": "The position in a rooted hierarchy, where each branch ends on a separate line."
+                },
+                "path": {
+                    "type": "array",
+                    "description": "All ordered terms of this path, starting from the root term and ending with, and including, the current term.",
+                    "examples": [
+                        [
+                            "NCIT:C3262",
+                            "NCIT:C7062",
+                            "NCIT:C9305",
+                            "NCIT:C7055",
+                            "NCIT:C3167"
+                        ]
+                    ]
+                }
+            }
+        }
+    },
+    "additionalProperties": true
+}

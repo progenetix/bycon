@@ -1,0 +1,25 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/metaData/v2022-04-06
+title: Metadata
+description: >-
+  Metadata to be used with a Phenopacket.
+type: object
+properties:
+  submittedBy:
+    type: string
+  createdBy:
+    type: string  
+  externalReferences:
+    type: array
+    items:
+      $ref: ../common/externalReference.yaml
+  phenopacketSchemaVersion:
+    type: string
+  resources:
+    type: array
+    items:
+      $ref: resource.yaml
+  updates:
+    type: array
+    items:
+      $ref: update.yaml

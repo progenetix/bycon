@@ -1,0 +1,16 @@
+examplez:
+  id: examplez
+  name: Progenetix examples
+  identifier: 'org.progenetix.examplez'
+  description: >-
+    selected examples for database test installation
+  createDateTime: 2023-04-01
+  updateDateTime: 2024-12-04
+  version: 2023-08-21
+  externalUrl: "https://beaconplus.progenetix.org"
+  assemblyId: GRCh38
+  dataUseConditions:
+    duoDataUse:
+      - id: DUO:0000004
+        label: no restriction
+        version: 2023-08-21

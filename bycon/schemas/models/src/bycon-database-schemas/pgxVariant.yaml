@@ -1,0 +1,76 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://progenetix.org/services/schemas/pgx23Variant/v2023-05-25
+title: Progenetix Database Variant
+type: object
+description: >-
+  Schema for a genomic variant in Progenetix collections.
+required:
+  - biosampleId
+  - variantInternalId
+  - variantState
+  - location
+properties:
+  id:
+    type: string
+  variantInternalId:
+    type: string
+  analysisId:
+    type: string
+  biosampleId:
+    type: string
+  individualId:
+    type: string
+  location:
+    $ref: "#/$defs/Location"
+  adjoinedSequences:
+    type: array
+    items:
+      $ref: "#/$defs/Location"
+  variantState:
+    description: >-
+      The parameter is used to define the type of variant, with current
+      use cases either being delineated as child of `SO:0001059: sequence_alteration`
+      or as a child of `EFO:0030063 genomic copy number assessment`
+    $ref: "../bycon-model/common/ontologyTerm.yaml"
+    examples:
+      - id: SO:0001059
+        label: sequence_alteration
+      - id: EFO:0030067
+        label: copy number loss
+  sequence:
+    type: string
+    pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'
+  referenceSequence:
+    type: string
+    pattern: '^([ACGTUNRYSWKMBDHV\-\.]*)$'
+  fusionId:
+    description: >-
+      Experimental id to indicate variants which are part of the same 
+      fusion event.
+    type: string
+  info:
+    type: object
+  updated:
+    type: string
+    format: date-time
+    examples:
+      - "2020-09-10T17:44:10.170Z"
+
+$defs:
+  Location:
+    type: object
+    properties:
+      type:
+        type: string
+      sequenceId:
+        type: string
+      chromosome:
+        description: >-
+          the chromosome in its bare form `7`, `X`
+        type: string
+      start:
+        type: integer
+      end:
+        type: integer
+
+additionalProperties: true

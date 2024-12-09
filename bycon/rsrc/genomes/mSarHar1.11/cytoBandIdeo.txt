@@ -1,0 +1,12 @@
+# This is an ad hoc Tasmanian devil chromosome cordinate file, based on the
+# 2019 assembly (which e.g. used ONT for scaffold support).
+# https://www.ncbi.nlm.nih.gov/assembly/GCF_902635505.1/#/st
+# No banding information available...
+chr1	0	716413629	pq	gpos50	NC_045426.1
+chr2	0	662751787	pq	gpos50	NC_045427.1
+chr3	0	611347268	pq	gpos50	NC_045428.1
+chr4	0	464895054	pq	gpos50	NC_045429.1
+chr5	0	288121652	pq	gpos50	NC_045430.1
+chr6	0	254895979	pq	gpos50	NC_045431.1
+chrX	0	83081154	pq	gpos50	NC_045432.1
+chrY	0	130564	pq	gpos50	NC_045433.1

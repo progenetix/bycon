@@ -1,0 +1,18 @@
+default:
+  CDKN2AcnvQuery:
+    filters: [NCIT:C3058]
+    reference_name: refseq:NC_000009.12
+    start: [21000001 21975098]
+    end: [21967753 23000000]
+    variant_type: EFO:0030067
+  EIF4A1snvQuery:
+    reference_name: refseq:NC_000017.11
+    start: [7577120]
+    variant_type: SO:0001059
+    alternate_bases: A
+    reference_bases: G
+  CDKN2ArangeQuery:
+    filters: [NCIT:C3058]
+    reference_name: refseq:NC_000009.12
+    start: [21967753]
+    end: [21975098]

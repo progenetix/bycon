@@ -1,0 +1,51 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "Schema for the Beacon request. It is named `RequestBody` to keep the same nomenclature used by OpenAPI v3, but it actually contains the definition of the whole HTTP POST request payload.",
+    "type": "object",
+    "properties": {
+        "$schema": {
+            "$ref": "../common/beaconCommonComponents.json#/$defs/$schema"
+        },
+        "meta": {
+            "description": "Information relevant for building the response.",
+            "$ref": "./beaconRequestMeta.json"
+        },
+        "query": {
+            "$ref": "#/$defs/BeaconQuery"
+        }
+    },
+    "$defs": {
+        "BeaconQuery": {
+            "description": "Parameters to limit the list of returned results.",
+            "type": "object",
+            "properties": {
+                "requestParameters": {
+                    "description": "Parameters used for the entry type specific query elements.",
+                    "$ref": "./requestParameters.json"
+                },
+                "filters": {
+                    "description": "Ontology based filters. Using CURIE syntax is encouraged.",
+                    "$ref": "./filteringTerms.json"
+                },
+                "includeResultsetResponses": {
+                    "$ref": "../common/beaconCommonComponents.json#/$defs/IncludeResultsetResponses"
+                },
+                "pagination": {
+                    "description": "Pagination parameters applied to response documents, in case of record level granularity.",
+                    "$ref": "../common/beaconCommonComponents.json#/$defs/Pagination"
+                },
+                "requestedGranularity": {
+                    "description": "Requested granularity for the response. Beacons do not have to respond with the requested granularity, e.g. may respond with count results although record level granularity had been requested but indicate the granularity of the response in the response's metadata.",
+                    "$ref": "../common/beaconCommonComponents.json#/$defs/Granularity"
+                },
+                "testMode": {
+                    "description": "Used for indicating that a request or response is done in a test context.",
+                    "$ref": "../common/beaconCommonComponents.json#/$defs/TestMode"
+                }
+            }
+        }
+    },
+    "required": [
+        "meta"
+    ]
+}

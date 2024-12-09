@@ -1,0 +1,56 @@
+.stain {
+  --hue: 240;
+  --sat: 21%;
+  outline: none;
+}
+
+.stain--gpos100 {
+  fill: hsl(var(--hue), var(--sat), 15%);
+}
+.stain--gpos75 {
+  fill: hsl(var(--hue), var(--sat), 30%);
+/*  fill: linear-gradient(to bottom, rgb(255,87,87), rgb(39,39,39) 70%, rgb(87,87,87));*/
+}
+.stain--gpos66 {
+/*  fill: linear-gradient(to bottom, rgb(87,87,87), rgb(39,39,39) 70%, rgb(87,87,87));*/
+  fill: hsl(var(--hue), var(--sat), 40%);
+}
+.stain--gpos50 {
+  fill: hsl(var(--hue), var(--sat), 45%);
+/*  fill: linear-gradient(to bottom, rgb(196,196,196), rgb(111,111,111) 70%, rgb(196,196,196));*/
+}
+.stain--gpos33 {
+  fill: hsl(var(--hue), var(--sat), 50%);
+/*  fill: linear-gradient(to bottom, rgb(201,201,201), rgb(125,125,125) 70%, rgb(201,201,201));*/
+}
+.stain--gpos25 {
+  fill: hsl(var(--hue), var(--sat), 38%);
+/*  fill: linear-gradient(to bottom, rgb(223,223,223), rgb(196,196,196) 70%, rgb(223,223,223));*/
+}
+.stain--gvar {
+  fill: hsl(var(--hue), var(--sat), 90%);
+}
+.stain--gneg {
+  fill: hsl(var(--hue), var(--sat), 98%);
+}
+.stain--acen {
+  fill: $orange;
+}
+.stain--stalk {
+  fill: $green;
+}
+
+svg .selection {
+  fill: #ff9899;
+  fill-opacity: 0.2;
+  stroke: #ff9899;
+}
+svg .selectionEnd {
+  fill: #3298dc;
+  fill-opacity: 0.2;
+  stroke: #3298dc;
+}
+
+svg .annotation {
+  font-size: 1rem;
+}

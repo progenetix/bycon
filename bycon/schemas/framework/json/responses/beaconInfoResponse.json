@@ -1,0 +1,20 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "description": "The `beaconInfoResponse` provides metadata describing a Beacon instance, such as its name, the organization responsible for the Beacon, contact information, site logo and alternative URLs and importantly the beacon's API version. It is based on the GA4GH `service-info` standard.\nThe content of the `beaconInfoResponse` can be used by clients such as web front ends or beacon aggregators to evaluate potential access patterns and to display information about the beacon.",
+    "properties": {
+        "meta": {
+            "description": "Information about the response that could be relevant for the Beacon client in order to interpret the results.",
+            "$ref": "./sections/beaconInformationalResponseMeta.json"
+        },
+        "response": {
+            "description": "Metadata describing a Beacon instance.",
+            "$ref": "./sections/beaconInfoResults.json"
+        }
+    },
+    "required": [
+        "meta",
+        "response"
+    ],
+    "additionalProperties": true
+}

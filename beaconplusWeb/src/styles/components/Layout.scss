@@ -1,0 +1,168 @@
+@import "../variables";
+
+$side-background-color: $scheme-main-bis;
+$side-width: 14rem;
+
+.Layout__app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.Layout__header {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid $border;
+  background-color: $visual-identity-color;
+  min-height: 25px;
+  display: flex;
+}
+
+.Layout__logo_topright {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.Layout__img__topright {
+  position: absolute;
+  width: 50%;
+  top: 20px;
+  right: 10px;
+}
+
+.Layout__img__width-40 {
+  width: 40px;
+}
+
+.Layout__img__width-60 {
+  width: 60px;
+}
+
+.Layout__img__width-160 {
+  width: 160px;
+}
+
+.Layout__burger {
+  @include desktop {
+    display: none !important;
+  }
+  margin-left: 1rem;
+  cursor: pointer;
+}
+
+.Layout__side-logo {
+  cursor: pointer;
+  height: 48px;
+  margin-top: -7px;
+  margin-bottom: 11px;
+  @include until($desktop) {
+    display: none;
+  }
+}
+
+.Layout__header_wrapper {
+  display: flex;
+  align-items: baseline;
+}
+
+.Layout__main {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  flex-grow: 1;
+  @include desktop {
+    padding: 0 3rem;
+  }
+}
+
+.Layout__duo {
+  min-height: 100%;
+  max-width: 100%;
+  @include until($desktop) {
+    margin: 0 !important ;
+  }
+  display: flex;
+}
+
+.Layout__side-background {
+  @include until($desktop) {
+    display: none;
+  }
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 50%;
+  top: 0;
+  background-color: $side-background-color;
+  z-index: -1;
+}
+
+.Layout__lead {
+  padding: 1rem;
+  @include desktop {
+    padding: 3rem;
+  }
+  background-color: #fff;
+  overflow: hidden;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.Layout__side {
+  @include until($desktop) {
+    &:not(.open) {
+      display: none;
+    }
+  }
+
+  padding: 1rem 0 2rem 0;
+  @include desktop {
+    padding: 3rem 0 3rem 0;
+    flex: 0 0 $side-width;
+  }
+  background-color: $side-background-color;
+}
+
+.Layout__side__item {
+  display: block;
+  cursor: pointer;
+  color: $text;
+
+  &.is-active {
+    color: $link;
+  }
+
+  &.is-active {
+    background-color: $scheme-main-ter;
+  }
+  &:hover {
+    background-color: $scheme-main-ter;
+  }
+}
+
+.Layout__side__category {
+  font-size: $size-5;
+  font-weight: bold;
+  padding: 0.4rem 0.75rem;
+}
+
+.Layout__side__sub {
+  font-size: $size-6;
+  padding: 0.1rem 0.75rem 0.4rem 2rem;
+}
+
+.Layout__cc__icons {
+  height: 14px !important;
+  margin-left: 3px;
+  vertical-align: text-bottom;
+}
+
+.Layout__side-image {
+  cursor: pointer;
+  margin-top: 11px;
+  margin-bottom: 11px;
+  @include until($desktop) {
+    display: none;
+  }
+}
