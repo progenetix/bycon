@@ -1,4 +1,0 @@
-$schema: https://json-schema.org/draft/2020-12/schema
-type: array
-items:
-  $ref: https://progenetix.org/services/schemas/sections/beaconFilteringTermsResults.json#/$defs/FilteringTerm
