@@ -20,6 +20,7 @@
     "@tippyjs/react": "^4.2.0",
     "animate": "^1.0.0",
     "animate.css": "^4.1.1",
+    "build": "^0.1.4",
     "classnames": "^2.2.6",
     "env-cmd": "^10.1.0",
     "file-saver": "^2.0.5",

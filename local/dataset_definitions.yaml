@@ -15,56 +15,6 @@ progenetix:
       - id: DUO:0000004
         label: no restriction
         version: 2021-11-11
-  # TODO: probably temporary ...
-  test_queries:
-    CDKN2AcnvQuery:
-      filters:
-        - NCIT:C3058
-      reference_name: refseq:NC_000009.12
-      start:
-        - 21000001
-        - 21975098
-      end:
-        - 21967753
-        - 23000000
-      variant_type: EFO:0030067
-    EIF4A1snvQuery:
-      reference_name: refseq:NC_000017.11
-      start:
-        - 7577120
-      alternate_bases: A
-      reference_bases: G
-    EIF4A1rangeQuery:
-      reference_name: refseq:NC_000017.11
-      start:
-        - 7572825
-      end:
-        - 7579005
-      variant_type: SO:0001059
-    # geneMatchQuery:
-    #   gene_id: CDK2
-    #   variant_min_length: 100000
-    #   variant_max_length: 200000
-    #   variant_type: EFO:0030070
-    HeLaIdentifierQuery:
-      filters:
-        - cellosaurus:CVCL_0030
-    CDKN2AshortFormExample:
-      filters:
-        - NCIT:C3058
-      variant_query_digests: 9:21000001-21975098--21967753-24000000:DEL
-    fusionExample:
-      variant_type: SO:0000806
-      reference_name: refseq:NC_000008.11
-      mate_name: refseq:NC_000012.12
-      start:
-        - 45100000
-      end:
-        - 47300000
-      mate_start:
-        - 26200000
-      mate_end:
-        - 35600000
 
 cellz:
   id: cellz

@@ -46,7 +46,7 @@ def main():
         exit()
     set_entities()
 
-    example_queries = BYC["dataset_definitions"]["progenetix"].get("test_queries", {})
+    example_queries = BYC.get("test_queries", {})
 
     BYC_PARS.update({"response_entity_path_id":"analyses"})
     BYC_PARS.update({"inputfile":"___dummy___"})
@@ -87,7 +87,7 @@ def main():
             continue
 
         f_i_ids = ds["analyses.id"].get("target_values", [])
-        ana_ids.update(random_samples(f_i_ids, min(50, len(f_i_ids))))
+        ana_ids.update(random_samples(f_i_ids, min(BYC_PARS.get("limit", 200), len(f_i_ids))))
         print(f'==> now {len(ana_ids)}')
 
     BYC_PARS.update({"analysis_ids": list(ana_ids)})    

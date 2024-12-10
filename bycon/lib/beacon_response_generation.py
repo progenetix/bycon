@@ -537,7 +537,7 @@ class ByconFilteringTerms:
         if BYC["TEST_MODE"] is True:
             query = mongo_test_mode_query(self.ds_id, f_coll)
 
-        prdbug(f'filtering_terms_query: {query}')
+        # prdbug(f'filtering_terms_query: {query}')
 
         self.filtering_terms_query = query
 

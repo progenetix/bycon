@@ -17,11 +17,6 @@ request_pars:
   - mate_end
   - variant_min_length
   - variant_max_length
-  # - gene_id
-  # - aminoacid_change
-  # - genomic_allele_short_form
-  # - cyto_bands
-  # - variant_query_digests
 
 # BeaconPlus
 multi_request_pars:

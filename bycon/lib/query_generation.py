@@ -3,7 +3,7 @@ from bson import SON
 from os import environ
 from pymongo import MongoClient
 
-from bycon_helpers import days_from_iso8601duration, prdbug, return_paginated_list
+from bycon_helpers import days_from_iso8601duration, prdbug, prjsonnice, return_paginated_list
 from config import *
 from cytoband_parsing import Cytobands
 from genome_utils import ChroNames, GeneInfo, VariantTypes
@@ -189,23 +189,31 @@ class ByconQuery():
         v_p_s = self.variant_request_definitions.get("request_pars", [])
         v_mp_s = self.variant_request_definitions.get("multi_request_pars", [])
 
+        vips = []
+
         # standard pars
+        s_q_p_0 = {}
         if (v_s_s := v_p_s & BYC_PARS.keys()):
-            s_q_p_0 = {}
             for v_p in v_s_s:
                 v_v = BYC_PARS.get(v_p)
                 s_q_p_0.update({ v_p: v_v })
                 BYC_VARGS.update({ v_p: v_v })
                 prdbug(f'...__preprocess_variant_pars: {v_p} {v_v}')
-            self.variant_multi_pars.append(s_q_p_0)
 
         for v_mp in v_mp_s:
             if len(v_mp_vs := BYC_PARS.get(v_mp, [])) > 0:
                 for v in v_mp_vs:
-                    self.variant_multi_pars.append({v_mp: v})
+                    if len(s_q_p_0.keys()) > 0:
+                        t_p = s_q_p_0.copy()
+                        t_p.update({v_mp: v})
+                        vips.append(self.__parse_variant_parameters(t_p))
+                    else:
+                        vips.append({v_mp: v})
+        if (len(vips)) < 1:
+            if len(s_q_p_0.keys()) > 0:
+                vips.append(self.__parse_variant_parameters(s_q_p_0))
 
-        for v_p_i, v_p_s in enumerate(self.variant_multi_pars):
-            self.variant_multi_pars[v_p_i] = self.__parse_variant_parameters(v_p_s)
+        self.variant_multi_pars = vips
 
 
     # -------------------------------------------------------------------------#
@@ -713,7 +721,7 @@ class ByconQuery():
 
             # TODO: needs a general solution; so far for the iso age w/
             #       pre-calculated days field...
-            if "alphanumeric" in f_info.get("type", "ontology"):
+            if "alphanumeric" in f_info.get("ft_type", "ontology"):
                 f_class, comp, val = re.match(r'^(\w+):([<>=]+?)(\w[\w.]+?)$', f_info["id"]).group(1, 2, 3)
                 if "iso8601duration" in f_info.get("format", "___none___"):
                     val = days_from_iso8601duration(val)
@@ -737,7 +745,7 @@ class ByconQuery():
                 if len(f_query_vals) == 1:
                     f_s_l.append({f_field: f_query_vals[0]})
                 else:
-                    if "alphanumeric" in f_infos[f_entity][f_field].get("type", "ontology"):
+                    if "alphanumeric" in f_infos[f_entity][f_field].get("ft_type", "ontology"):
                         q_l = []
                         for a_q_v in f_query_vals:
                             q_l.append({f_field: a_q_v})
@@ -775,12 +783,16 @@ class ByconQuery():
         f_info = {
             "id": f_val,
             "scope": "biosamples",
-            "type": "___undefined___",
+            "ft_type": "___undefined___",
             "db_key": "___undefined___",
             "child_terms": [f_val]
         }
 
+        prdbug(f'...__query_from_filter_definitions: {f_val}')
+
         for f_d in f_d_s.values():
+            if f_d.get("collationed", False) is True:
+                continue
             f_re = re.compile(f_d.get("pattern", "___none___"))
             if f_re.match(f_val):
                 f_info = {
@@ -788,7 +800,7 @@ class ByconQuery():
                     "scope": f_d.get("scope", "biosamples"),
                     "entity": f_d.get("entity", "biosample"),
                     "db_key": f_d["db_key"],
-                    "type": f_d.get("type", "ontology"),
+                    "ft_type": f_d.get("ft_type", "ontology"),
                     "format": f_d.get("format", "___none___"),
                     "child_terms": [f_val]
                 }
