@@ -119,7 +119,7 @@ class ByconDatasetResults():
         if len(queries) < 1:
             return
 
-        prdbug(f' ====== {BYC["response_entity"]} =====')
+        prdbug(f' ====== {BYC.get("response_entity_id", "biosample")} =====')
         res_e_id = BYC.get("response_entity_id", "biosample")
         res_e_coll = BYC["response_entity"].get("collection", "biosamples")
         id_k = f'{res_e_id}_id'

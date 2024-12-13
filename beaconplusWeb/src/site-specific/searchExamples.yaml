@@ -155,8 +155,6 @@
   description: |
     This example shows a short form version of the CDKN2A deletion example.
   parameters:
-    cytoBands:
-      isHidden: true
     variantQueryDigests:
       isHidden: false
       defaultValue: "9:21000001-21975098--21967753-24000000:DEL"

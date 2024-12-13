@@ -23,7 +23,7 @@ parameters:
   geneId:
     label: Gene Symbol
     placeholder: MYCN
-    infoText: One or more comma concatenated gene symbols (HUGO), e.g. "TP53,CDKN2A".
+    infoText: A gene symbol (HUGO), e.g. "TP53" or "CDKN2A".
     isHidden: true
   aminoacidChange:
     label: Aminoacid alteration
@@ -209,7 +209,8 @@ parameters:
       create bracket requests or (experimentally) fusion requests (where the 2nd
       region denotes the "mateName" chromosome of the fusion partner).
       Example here would be the use of "8q24,14q32" to search for fusion events
-      involving MYC and IGH (_i.e._ the typical "Burkitt lymphoma fusion").
+      involving MYC and IGH (_i.e._ the typical "Burkitt lymphoma fusion").</br>
+      This is *not* a standard Beacon option.
     isHidden: true
   variantQueryDigests:
     label: Variation Shorthand(s)
@@ -220,7 +221,8 @@ parameters:
       * define a variant request in a concatenated `referenceName:start--end:variantType`
         or `referenceName:start:referenceBases>alternateBases` format
       * optionally comma-concatenate 2 or more of such strings, to identify samples
-        carrying matches for all of these variations
+        carrying matches for all of these variations</br>
+      This is *not* a standard Beacon option.
     isHidden: true
   variantMinLength:
     label: Min Variant Length

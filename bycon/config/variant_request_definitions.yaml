@@ -17,12 +17,12 @@ request_pars:
   - mate_end
   - variant_min_length
   - variant_max_length
-
-# BeaconPlus
-multi_request_pars:
   - gene_id
   - aminoacid_change
   - genomic_allele_short_form
+
+# BeaconPlus
+multi_request_pars:
   - cyto_bands
   - variant_query_digests
 
@@ -109,8 +109,9 @@ request_types:
       # - assembly_id
       - start
       - reference_name
-      - reference_bases
       - alternate_bases
+    optional:
+      - reference_bases
 
   variantTypeFilteredRequest:
     description: >-

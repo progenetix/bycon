@@ -185,33 +185,25 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __preprocess_variant_pars(self):
-        self.variant_multi_pars = BYC_PARS.get("variant_multi_pars", [])
+        v_m_ps = BYC_PARS.get("variant_multi_pars", [])
+
         v_p_s = self.variant_request_definitions.get("request_pars", [])
-        v_mp_s = self.variant_request_definitions.get("multi_request_pars", [])
-
-        vips = []
-
         # standard pars
         s_q_p_0 = {}
         if (v_s_s := v_p_s & BYC_PARS.keys()):
             for v_p in v_s_s:
-                v_v = BYC_PARS.get(v_p)
-                s_q_p_0.update({ v_p: v_v })
-                BYC_VARGS.update({ v_p: v_v })
-                prdbug(f'...__preprocess_variant_pars: {v_p} {v_v}')
+                s_q_p_0.update({ v_p: BYC_PARS.get(v_p) })
+        if len(s_q_p_0.keys()) > 0:
+            v_m_ps.append(s_q_p_0)
 
-        for v_mp in v_mp_s:
-            if len(v_mp_vs := BYC_PARS.get(v_mp, [])) > 0:
-                for v in v_mp_vs:
-                    if len(s_q_p_0.keys()) > 0:
-                        t_p = s_q_p_0.copy()
-                        t_p.update({v_mp: v})
-                        vips.append(self.__parse_variant_parameters(t_p))
-                    else:
-                        vips.append({v_mp: v})
-        if (len(vips)) < 1:
-            if len(s_q_p_0.keys()) > 0:
-                vips.append(self.__parse_variant_parameters(s_q_p_0))
+        vips = []
+        for v in v_m_ps:
+            vp = {}
+            if (v_s_s := v_p_s & v.keys()):
+                for v_p in v_s_s:
+                    vp.update({ v_p: v.get(v_p) })
+                if len(vp.keys()) > 0:
+                    vips.append(self.__parse_variant_parameters(vp))
 
         self.variant_multi_pars = vips
 
@@ -225,17 +217,17 @@ class ByconQuery():
 
         # value checks
         v_p_c = { }
-
         for p_k, v_p in variant_pars.items():
-            v_p = variant_pars[ p_k ]
             v_p_k = humps.decamelize(p_k)
             if "variant_type" in v_p_k:
                 v_s_c = VariantTypes().variantStateChildren(v_p)
-                v_p_c[ v_p_k ] = { "$in": v_s_c }
-            elif "reference_name" in v_p_k or "mate_name" in v_p_k:
-                v_p_c[ v_p_k ] = self.ChroNames.refseq(v_p)
-            else:
-                v_p_c[ v_p_k ] = v_p
+                v_p_c.update({v_p_k: { "$in": v_s_c }})
+                continue
+            if "reference_name" in v_p_k or "mate_name" in v_p_k:
+                v_p_c.update({v_p_k: self.ChroNames.refseq(v_p)})
+                continue
+            
+            v_p_c.update({v_p_k: v_p})
 
         return v_p_c
 
@@ -388,10 +380,10 @@ class ByconQuery():
             "end": [ gene.get("end", 1) ]
         }
         # TODO: global variant parameters by definition file
-        g_p_s = ["variant_type", "variant_min_length", "variant_max_length"]
-        for g_p in g_p_s:
-            if g_p in BYC_VARGS:
-                v_pars.update( { g_p: BYC_VARGS[g_p] } )
+        # g_p_s = ["variant_type", "variant_min_length", "variant_max_length"]
+        # for g_p in g_p_s:
+        #     if g_p in BYC_VARGS:
+        #         v_pars.update( { g_p: BYC_VARGS[g_p] } )
         q_t = self.__create_variantRangeRequest_query(v_pars)
         prdbug(f'...geneVariantRequest query result: {q_t}')
 
@@ -477,10 +469,10 @@ class ByconQuery():
         } )
         # TODO: other global parameters (length etc.)
         # TODO: global variant parameters by definition file
-        g_p_s = ["variant_type", "variant_min_length", "variant_max_length"]
-        for g_p in g_p_s:
-            if g_p in BYC_VARGS:
-                v_pars.update( { g_p: BYC_VARGS[g_p] } )
+        # g_p_s = ["variant_type", "variant_min_length", "variant_max_length"]
+        # for g_p in g_p_s:
+        #     if g_p in BYC_VARGS:
+        #         v_pars.update( { g_p: BYC_VARGS[g_p] } )
         self.variant_request_type = "variantRangeRequest"
         q = self.__create_variantRangeRequest_query(v_pars)
         return q
@@ -722,10 +714,14 @@ class ByconQuery():
             # TODO: needs a general solution; so far for the iso age w/
             #       pre-calculated days field...
             if "alphanumeric" in f_info.get("ft_type", "ontology"):
-                f_class, comp, val = re.match(r'^(\w+):([<>=]+?)(\w[\w.]+?)$', f_info["id"]).group(1, 2, 3)
-                if "iso8601duration" in f_info.get("format", "___none___"):
-                    val = days_from_iso8601duration(val)
-                f_lists[f_entity][f_field].append(self.__mongo_comparator_query(comp, val))
+                prdbug(f'__query_from_filters ... alphanumeric: {f_info["id"]}')
+                if re.match(r'^(\w+):([<>=]+?)?(\w[\w.]+?)$', f_info["id"]):
+                    f_class, comp, val = re.match(r'^(\w+):([<>=]+?)?(\w[\w.]+?)$', f_info["id"]).group(1, 2, 3)
+                    if "iso8601duration" in f_info.get("format", "___none___"):
+                        val = days_from_iso8601duration(val)
+                    f_lists[f_entity][f_field].append(self.__mongo_comparator_query(comp, val))
+                else:
+                    f_lists[f_entity][f_field].append(f_info["id"])
             elif f_desc is True:
                 if f_neg is True:
                     f_lists[f_entity][f_field].append({'$nin': f_info["child_terms"]})

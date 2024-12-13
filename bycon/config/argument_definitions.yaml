@@ -260,10 +260,8 @@ $defs:
       The maximum variant length in bases e.g. for CNV queries.
 
   gene_id:
-    type: array
-    items:
-      type: string
-      pattern: '^\w+?(\w+?(\-\w+?)?)?$'
+    type: string
+    pattern: '^\w+?(\w+?(\-\w+?)?)?$'
     db_key: Null
     cmdFlags:
       - --geneId
@@ -328,9 +326,9 @@ $defs:
       - --variantInternalId
     description: 'An id value used for all variant instances of the same composition; a kind of `digest`'
 
-  ################################################################################
+  ##############################################################################
   # non-standard parameters
-  ################################################################################
+  ##############################################################################
 
   accessid:
     type: string

@@ -179,7 +179,7 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
           ) : null}
         </div>
         <div className="column is-one-third">
-          {info.counts.variants > 0 ? (
+          {info.counts.variants > 0 && query.referenceName ? (
             <div>
               <UCSCRegion query={query} />
             </div>

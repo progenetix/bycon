@@ -99,7 +99,13 @@ indexed_special_dbs:
           location.start: 1
           location.end: 1
           variant_state.id: 1
+        type: compound
+      variantallelerangequery:
+        db_key:
+          location.sequence_id: 1
+          location.start: 1
           sequence: 1
+          location.end: 1
         type: compound
 
   _byconHousekeepingDB:
