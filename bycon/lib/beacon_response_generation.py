@@ -2,6 +2,7 @@ import json, requests, sys
 from datetime import datetime
 from deepmerge import always_merger
 from os import environ
+from random import sample as random_samples
 
 from config import *
 
@@ -16,6 +17,87 @@ from service_utils import set_special_modes
 
 ################################################################################
 
+class MultiQueryResponses():
+    def __init__(self, dataset_id):
+        multiqueries={"useStandardArgs":{}}
+        if "testqueries" in BYC_PARS.get("mode", "").lower():
+            multiqueries = BYC.get("test_queries")
+        self.entity_ids = set()
+        self.target_path_id = "biosamples"
+        self.multiqueries = multiqueries
+        self.ds_id = dataset_id
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def get_analysis_ids(self):
+        self.target_path_id = "analyses"
+        self.__run_multi_queries()
+        return self.entity_ids
+
+
+    # -------------------------------------------------------------------------#
+
+    def get_biosample_ids(self):
+        self.target_path_id = "biosamples"
+        self.__run_multi_queries()
+        return self.entity_ids
+
+
+    # -------------------------------------------------------------------------#
+
+    def get_individual_ids(self):
+        self.target_path_id = "individuals"
+        self.__run_multi_queries()
+        return self.entity_ids
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- private -----------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __run_multi_queries(self):
+        ho_id = f'{self.target_path_id}.id'
+        for qek, qev in self.multiqueries.items():
+            for p, v in qev.items():
+                if p == "filters":
+                    f_l = []
+                    for f in v:
+                        f_l.append({"id": f})
+                    if len(f_l) > 0:
+                        BYC.update({"BYC_FILTERS":f_l})
+                else:
+                    BYC_PARS.update({p: v})
+
+            prdbug(f'... getting data for {qek}')
+            BRS = ByconResultSets()
+            ds_results = BRS.datasetsResults()
+
+            # clean out those globals for next run
+            # filters are tricky since they have a default `[]` value
+            # and have been pre-parsed into BYC_FILTERS at the stage of
+            # `ByconResultSets()` (_i.e._ embedded `ByconQuery()`)
+            for p, v in qev.items():
+                if p == "filters":
+                    BYC_PARS.update({"filters": []})
+                else:
+                    BYC_PARS.pop(p)
+            BYC.update({"BYC_FILTERS": []})
+            
+            if not (ds := ds_results.get(self.ds_id)):
+                r_c = BRS.get_record_queries()
+                BYC["ERRORS"].append(f'ERROR - no {qek} data for {self.ds_id}')
+                continue
+            f_i_ids = ds[ho_id].get("target_values", [])
+            self.entity_ids = set(self.entity_ids)
+            self.entity_ids.update(random_samples(f_i_ids, min(BYC_PARS.get("limit", 200), len(f_i_ids))))
+            BYC["NOTES"].append(f'{qek} with {ds[ho_id].get("target_count", 0)} {self.target_path_id} hits')
+            self.entity_ids = list(self.entity_ids)
+
+
+
+################################################################################
 
 class BeaconResponseMeta:
     def __init__(self, data_response=None):

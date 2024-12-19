@@ -6,6 +6,19 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2024-12-19 (v2.1.1)
+
+* Housekeepers updates:
+    - rewrote `collationsFrequencymapsCreator.py` to avoid slow processing coming
+      from use of standard query and bundle generation per collation
+    - introduced `queriesTester.py` which can use generic parameters or a set of
+      queries from `local/test_queries.yaml`
+        * this is based on the new `MultiQueryResponses` class which can loop through
+          multiple queries by injecting query parameters in BYC_PARS and then
+          call `ByconResultSets()` and create a set of matched ids from all calls
+    - modified `recordsSampler.py` to allow creation of example/excerpt datanases
+      from query parameters or the `local/test_queries.yaml` definitions
+
 ### 2024-12-09 (v2.1.0)
 
 * integration of the React based `BeaconPlus` front end into the project

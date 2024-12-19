@@ -47,6 +47,7 @@ GEOLOCS_COLL = "geolocs"
 
 errors = []
 warnings = []
+notes = []
 
 if "DATABASE_NAMES" in environ:
   db_names = environ["DATABASE_NAMES"].split()
@@ -63,6 +64,7 @@ BYC = {
   "TEST_MODE": False,
   "ERRORS": errors,
   "WARNINGS": warnings,
+  "NOTES": notes,
   "USER": "anonymous",
 
   "BYC_DATASET_IDS": [],

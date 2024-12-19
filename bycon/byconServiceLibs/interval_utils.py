@@ -2,8 +2,9 @@ import re, sys
 import numpy as np
 from copy import deepcopy
 from os import path, pardir
+from pymongo import MongoClient
 
-from bycon import Cytobands, cytobands_label_from_positions, prdbug, BYC, BYC_PARS, ENV
+from bycon import Cytobands, cytobands_label_from_positions, DB_MONGOHOST, prdbug, BYC, BYC_PARS, ENV
 
 ################################################################################
 
@@ -151,6 +152,19 @@ class GenomeBins:
 
     def intervalFrequencyMaps(self, analyses=[]):
         self.analyses = analyses
+        self.__interval_counts_from_analyses()
+        return self.interval_frequencies, self.analyses_count
+
+
+    #--------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
+
+    def intervalAidFrequencyMaps(self, ds_id, analysis_ids=["___none___"]):
+        data_client = MongoClient(host=DB_MONGOHOST)
+        data_db = data_client[ ds_id ]
+        ana_coll = data_db["analyses"]
+        # self.analyses = list(ana_coll.find({"id": {"$in": analysis_ids}}))
+        self.analyses = ana_coll.find({"id": {"$in": analysis_ids}})
         self.__interval_counts_from_analyses()
         return self.interval_frequencies, self.analyses_count
 
@@ -470,4 +484,4 @@ class GenomeBins:
                 })
 
         if type(self.analyses).__name__ == "Cursor":
-            analyses.close()
+            self.analyses.close()

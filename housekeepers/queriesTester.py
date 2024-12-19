@@ -8,6 +8,8 @@ from service_helpers import assertSingleDatasetOrExit
 
 
 """
+* ./housekeepers/queriesTester.py -d progenetix --filters "pgx:icdom-81703"
+* ./housekeepers/queriesTester.py -d progenetix --mode testqueries
 """
 
 ################################################################################
@@ -15,43 +17,13 @@ from service_helpers import assertSingleDatasetOrExit
 ################################################################################
 
 ds_id = assertSingleDatasetOrExit()
-BYC_PARS.update({"response_entity_path_id":"analyses"})
+target_path_id = "individuals"
+ho_key = f'{target_path_id}.id'
+BYC_PARS.update({"response_entity_path_id":target_path_id})
 set_entities()
-for qek, qev in BYC.get("test_queries", {}).items():
-    for p, v in qev.items():
-        if p == "filters":
-            f_l = []
-            for f in v:
-                f_l.append({"id": f})
-            if len(f_l) > 0:
-                BYC.update({"BYC_FILTERS":f_l})
-        else:
-            BYC_PARS.update({p: v})
 
-    # print(f'... getting data for {qek}')
-    BRS = ByconResultSets()
-    r_c = BRS.get_record_queries()
-    ds_results = BRS.datasetsResults()
-    # print(f'... got it')
+r_ids = MultiQueryResponses(ds_id).get_individual_ids()
 
-    # clean out those globals for next run
-    # filters are tricky since they have a default `[]` value
-    # and have been pre-parsed into BYC_FILTERS at the stage of
-    # `ByconResultSets()` (_i.e._ embedded `ByconQuery()`)
-    for p, v in qev.items():
-        if p == "filters":
-            BYC_PARS.update({"filters": []})
-        else:
-            BYC_PARS.pop(p)
-    BYC.update({"BYC_FILTERS": []})
-    
-    if not (ds := ds_results.get(ds_id)):
-        print(f'ERROR - no {qek} data for {ds_id}')
-        prjsonnice(r_c)
-        continue
-    if BYC.get("DEBUG_MODE"):
-        print(f'############################### {qek} ###############################')
-        prjsonnice(r_c)
+print(f'{"\n".join(BYC.get("NOTES", []))}')
 
-    print(f'==> {qek} with {ds["analyses.id"].get("target_count")} analysis hits')
 

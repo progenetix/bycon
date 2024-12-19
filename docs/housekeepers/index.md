@@ -61,7 +61,7 @@ given entity.
 
 ### Use
 
-* `bin/collationsFrequencymapsCreator.py -d progenetix`
+* `bin/collationsFrequencymapsCreator.py -d progenetix --limit 0`
 * `bin/collationsFrequencymapsCreator.py -d examplez --collationTypes "icdot"`
 
 ## Deleting Records

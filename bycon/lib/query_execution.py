@@ -7,7 +7,6 @@ from os import environ
 from config import *
 from bycon_helpers import mongo_and_or_query_from_list, prdbug, prjsonnice, test_truthy
 
-
 ################################################################################
 
 class ByconDatasetResults():

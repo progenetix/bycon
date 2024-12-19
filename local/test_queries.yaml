@@ -53,13 +53,15 @@ AgeAtDXquery:
     - ageAtDiagnosis:>=P65Y
     - ageAtDiagnosis:<=P69Y
 
-MultiAlleleCNVquery:
+MultiAlleleCNVSNVquery:
   variant_multi_pars:
     - reference_name: refseq:NC_000017.11
-      start: [7673801]
-      alternate_bases: A
+      start: [7668422]
+      end: [7687490]
+      # alternate_bases: G
+      variant_type: SO:0001059
     - reference_name: refseq:NC_000017.11
-      start: [5000000, 7687480]
+      start: [5000000, 7687490]
       end: [7668422, 9000000]
       variant_type: EFO:0030067
 

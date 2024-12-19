@@ -536,11 +536,6 @@ $defs:
       - --collationTypes
     description: selected collation types, e.g. "EFO"
 
-  selected_beacons:
-    type: array
-    items:
-      type: string
-
   # ------------------------------------------------------------------------------
   # genomic parameters
   # ------------------------------------------------------------------------------

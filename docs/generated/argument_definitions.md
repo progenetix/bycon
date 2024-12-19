@@ -461,11 +461,6 @@ delivery keys to force only some parameters in custom exporters
 **description:**
 selected collation types, e.g. "EFO"    
 
-#### `selected_beacons` 
-**type:** array    
-**items:**  
-    - `type`: `string`    
-
 #### `genome_binning` 
 **type:** string    
 **default:** `1Mb`    
