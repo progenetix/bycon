@@ -1,0 +1,74 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://progenetix.org/services/schemas/pgxIndividual/v2022-03-07",
+    "title": "pgxIndividual",
+    "type": "object",
+    "description": "An pgxIndividual entry stores information about the individual (subject) from which biosamples were extracted (e.g. cancer samples, reference tissue), but where this information is shared to all the derived mobjects (e.g. genotypic sex ...).",
+    "required": [
+        "id"
+    ],
+    "properties": {
+        "id": {
+            "type": "string",
+            "description": "The resource-local identifier for this individual.",
+            "examples": [
+                "pgxind-kftx25eh"
+            ]
+        },
+        "sex": {
+            "$ref": "../common/commonDefinitions.json#/$defs/Sex"
+        },
+        "ethnicity": {
+            "$ref": "../common/commonDefinitions.json#/$defs/Ethnicity"
+        },
+        "diseases": {
+            "type": "array",
+            "items": {
+                "$ref": "../bycon-model/common/disease.json"
+            }
+        },
+        "info": {
+            "description": "Additional structured data which may not be common across different resources.",
+            "type": "object"
+        },
+        "indexDisease": {
+            "$ref": "../bycon-model/common/disease.json"
+        },
+        "externalReferences": {
+            "type": "array",
+            "items": {
+                "$ref": "../bycon-model/common/externalReference.json"
+            },
+            "examples": [
+                {
+                    "id": "biosample:SAME122868",
+                    "notes": "HapMap individual"
+                },
+                {
+                    "id": "022f39e9-57ee-4b2b-8b3a-8929e3d69a37",
+                    "notes": "TCGA case_id"
+                }
+            ]
+        },
+        "VitalStatus": {
+            "$ref": "../common/VitalStatus.json"
+        },
+        "geoLocation": {
+            "$ref": "../common/GeoLocation.json"
+        },
+        "ancestries": {
+            "type": "array",
+            "items": {
+                "$ref": "../common/ancestry.json"
+            }
+        },
+        "updated": {
+            "type": "string",
+            "format": "date-time",
+            "examples": [
+                "2020-09-10T17:44:10.170Z"
+            ]
+        }
+    },
+    "additionalProperties": true
+}

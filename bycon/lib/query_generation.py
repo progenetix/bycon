@@ -3,11 +3,14 @@ from bson import SON
 from os import environ
 from pymongo import MongoClient
 
-from bycon_helpers import days_from_iso8601duration, prdbug, return_paginated_list
+from bycon_helpers import days_from_iso8601duration, prdbug, prjsonnice, return_paginated_list
 from config import *
-from cytoband_parsing import bands_from_cytobands
+from cytoband_parsing import Cytobands
 from genome_utils import ChroNames, GeneInfo, VariantTypes
 
+
+################################################################################
+################################################################################
 ################################################################################
 
 class ByconQuery():
@@ -31,41 +34,30 @@ class ByconQuery():
                                                 | of further query items, e.g.
                                                 | after creating an id query
 
-    variant_id_query: { __variant_id_query__ }  | special query added to queries
-                                                | by id values, e.g.
-                                                | * `/biosamples/{id}
-                                                | * `?biosampleIds={id1,id2,...}
-                                                | ... to retrieve all variants for
-                                                | the matched samples, individuals
-                                                | etc.
     ```
     """
 
-    def __init__(self, byc: dict, dataset_id=False):
+    def __init__(self, dataset_id=False):
         self.response_types = BYC.get("entity_defaults", {})
         f_t_d = self.response_types.get("filteringTerm", {})
         self.filtering_terms_coll = f_t_d.get("collection", "___none___")
         if dataset_id is False:
-            self.ds_id = byc.get("dataset_ids", False)[0]
+            self.ds_id = BYC["BYC_DATASET_IDS"][0]
         else:
             self.ds_id = dataset_id
-        self.argument_definitions = BYC.get("argument_definitions", {})
-        self.cytoband_definitions = byc.get("cytobands", [])
+        self.argument_definitions = BYC["argument_definitions"].get("$defs", {})
+        self.cytoband_definitions = BYC.get("cytobands", [])
         self.ChroNames = ChroNames()
-        self.filters = byc.get("filters", [])
 
-        self.requested_entity = byc.get("request_entity_id", False)
-        self.response_entity = byc.get("response_entity_id", "___none___")
-        self.path_id_value = byc.get("request_entity_path_id_value", [])
+        self.requested_entity = BYC.get("request_entity_id", False)
+        self.response_entity = BYC.get("response_entity", {})
+        self.response_entity_id = BYC.get("response_entity_id", "")
 
         # TODO: call the variant type definition from inside this class since
         # e.g. multivars ... need this for each instance
-        self.variant_request_type = byc.get("variant_request_type", "___none___")
+        self.variant_request_type = None
         self.variant_request_definitions = BYC.get("variant_request_definitions", {})
         self.variant_type_definitions = BYC.get("variant_type_definitions", {})
-
-        self.filter_definitions = byc.get("filter_definitions", {})
-        self.geoloc_definitions = byc.get("geoloc_definitions", {})
 
         self.limit = BYC_PARS.get("limit")
         self.skip = BYC_PARS.get("skip")
@@ -76,7 +68,6 @@ class ByconQuery():
         }
 
         self.__queries_for_test_mode()
-        self.__query_from_path_id()
         self.__update_queries_from_id_values()
         self.__query_from_hoid()
         self.__query_from_variant_pars()
@@ -94,30 +85,6 @@ class ByconQuery():
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def __query_from_path_id(self):
-        if self.queries.get("expand") is False:
-            return
-        if len(p_id_v := self.path_id_value) < 1:
-            return
-
-        r_t_s = self.response_types
-        r_e = self.requested_entity
-        if not r_e:
-            return
-        r_c = r_t_s[r_e].get("collection")
-        if not r_c:
-            return
-
-        q = {"id": {"$in":p_id_v}}
-
-        self.queries["entities"].update({r_e: {"query":q, "collection": r_c}})
-        if len(p_id_v) == 1:
-            self.__id_query_add_variant_query(r_e, p_id_v)
-        self.queries.update({"expand": False})
-
-
     # -------------------------------------------------------------------------#
 
     def __update_queries_from_id_values(self):
@@ -148,12 +115,11 @@ class ByconQuery():
 
     def __id_query_add_variant_query(self, entity, entity_ids):
         # NOTE: _all_ variants cannot be retrieved for collections
-        if entity not in BYC.get("data_pipeline_entities", []):
+        if "variant" in entity.lower():
             return
 
         v_q_id = f'{entity}_id'
-        v_q_id = re.sub("analysis", "callset", v_q_id)
-        v_q_id = re.sub("run", "callset", v_q_id)
+        v_q_id = re.sub("run", "analysis", v_q_id)
 
         if len(entity_ids) == 1:
             q = {v_q_id: entity_ids[0]}
@@ -162,7 +128,14 @@ class ByconQuery():
         else:
             return
 
-        self.queries.update({"variant_id_query": q})
+        BYC.update({"AGGREGATE_VARIANT_RESULTS": False})
+
+        self.queries["entities"].update({
+            "genomicVariant": {
+                "query": q,
+                "collection": "variants"
+            }
+        })
 
 
     # -------------------------------------------------------------------------#
@@ -174,24 +147,20 @@ class ByconQuery():
             return
 
         ret_no = BYC_PARS.get("test_mode_count", 5)
-        r_t_s = self.response_types
-        if (r_e := self.response_entity) not in r_t_s.keys():
-            return
-        if not (r_c := r_t_s[r_e].get("collection")):
+        if not (r_c := self.response_entity.get("collection")):
             return
 
         data_db = MongoClient(host=DB_MONGOHOST)[self.ds_id]
-        data_collnames = data_db.list_collection_names()
-
-        if r_c not in data_collnames:
+        if r_c not in data_db.list_collection_names():
+            # TODO: warning?
             return
 
         data_coll = data_db[r_c]
         rs = list(data_coll.aggregate([{"$sample": {"size": ret_no}}]))
 
-        q = {"_id": {"$in": list(s["_id"] for s in rs)}}
+        q = {"id": {"$in": list(s["id"] for s in rs)}}
 
-        self.queries["entities"].update({r_e: {"query": q, "collection": r_c}})
+        self.queries["entities"].update({self.response_entity_id: {"query": q, "collection": r_c}})
         self.queries.update({"expand": False})
 
 
@@ -208,7 +177,7 @@ class ByconQuery():
         r_t_s = self.response_types
         r_c = r_t_s[r_e].get("collection")
 
-        # TODO: new preprocessing which should result in a list of variant queries
+        # new preprocessing which results in a list of variant queries
         self.__preprocess_variant_pars()        
         if not (v_queries := self.__loop_multivars()):
             return
@@ -219,32 +188,30 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __preprocess_variant_pars(self):
-        self.variant_multi_pars = BYC_PARS.get("variant_multi_pars", [])
+        v_m_ps = BYC_PARS.get("variant_multi_pars", [])
+
         v_p_s = self.variant_request_definitions.get("request_pars", [])
-        v_mp_s = self.variant_request_definitions.get("multi_request_pars", [])
+        # standard pars
         s_q_p_0 = {}
-        for v_p, v_v in BYC_PARS.items():
-            if v_p in v_p_s:
-                s_q_p_0.update({ v_p: v_v })
-                BYC_VARGS.update({ v_p: v_v })
-                prdbug(f'...__preprocess_variant_pars: {v_p} {v_v}')
+        if (v_s_s := v_p_s & BYC_PARS.keys()):
+            for v_p in v_s_s:
+                s_q_p_0.update({ v_p: BYC_PARS.get(v_p) })
+        if len(s_q_p_0.keys()) > 0:
+            v_m_ps.append(s_q_p_0)
 
-        if s_q_p_0:
-            self.variant_multi_pars.append(s_q_p_0)
+        vips = []
+        for v in v_m_ps:
+            vp = {}
+            if (v_s_s := v_p_s & v.keys()):
+                for v_p in v_s_s:
+                    vp.update({ v_p: v.get(v_p) })
+                if len(vp.keys()) > 0:
+                    vips.append(self.__parse_variant_parameters(vp))
 
-        for v_mp in v_mp_s:
-            if len(v_mp_vs := BYC_PARS.get(v_mp, [])) > 0:
-                for v in v_mp_vs:
-                    self.variant_multi_pars.append({v_mp: v})
+        self.variant_multi_pars = vips
 
-        for v_p_i, v_p_s in enumerate(self.variant_multi_pars):
-            self.variant_multi_pars[v_p_i] = self.__parse_variant_parameters(v_p_s)
-
-        # prdbug(self.variant_multi_pars)
-        # exit()
 
     # -------------------------------------------------------------------------#
-
 
     def __parse_variant_parameters(self, variant_pars):
         v_p_s = self.variant_request_definitions.get("request_pars", [])
@@ -253,17 +220,17 @@ class ByconQuery():
 
         # value checks
         v_p_c = { }
-
         for p_k, v_p in variant_pars.items():
-            v_p = variant_pars[ p_k ]
             v_p_k = humps.decamelize(p_k)
             if "variant_type" in v_p_k:
                 v_s_c = VariantTypes().variantStateChildren(v_p)
-                v_p_c[ v_p_k ] = { "$in": v_s_c }
-            elif "reference_name" in v_p_k:
-                v_p_c[ v_p_k ] = self.ChroNames.refseq(v_p)
-            else:
-                v_p_c[ v_p_k ] = v_p
+                v_p_c.update({v_p_k: { "$in": v_s_c }})
+                continue
+            if "reference_name" in v_p_k or "mate_name" in v_p_k:
+                v_p_c.update({v_p_k: self.ChroNames.refseq(v_p)})
+                continue
+            
+            v_p_c.update({v_p_k: v_p})
 
         return v_p_c
 
@@ -279,11 +246,15 @@ class ByconQuery():
                 continue
 
             # a bit verbose for now...
-            if "geneVariantRequest" in  variant_request_type:
+            if "variantFusionRequest" in variant_request_type:
+                if (q := self.__create_variantFusionRequest_query(v_pars)):
+                    queries.append(q)
+                    continue
+            if "geneVariantRequest" in variant_request_type:
                 if (q := self.__create_geneVariantRequest_query(v_pars)):
                     queries.append(q)
                     continue
-            if "cytoBandRequest" in  variant_request_type:
+            if "cytoBandRequest" in variant_request_type:
                 if (q := self.__create_cytoBandRequest_query(v_pars)):
                     queries.append(q)
                     continue
@@ -311,6 +282,15 @@ class ByconQuery():
                 if (q := self.__create_variantAlleleRequest_query(v_pars)):
                     queries.append(q)
                     continue
+            if "variantTypeFilteredRequest" in variant_request_type:
+                if (q := self.__create_variantTypeRequest_query(v_pars)):
+                    queries.append(q)
+                    continue
+
+        if len(queries) == 1:
+            queries = queries[0]
+
+        prdbug(f'__loop_multivars queries: {queries}')
 
         return queries
 
@@ -318,7 +298,7 @@ class ByconQuery():
     ################################################################################
 
     def __get_variant_request_type(self, v_pars):
-        """podmd
+        """
         This method guesses the type of variant request, based on the complete
         fulfillment of the required parameters (all of `all_of`, one if `one_of`).
         In case of multiple types the one with most matched parameters is prefered.
@@ -328,7 +308,7 @@ class ByconQuery():
         TODO: This is all a bit too complex; probbaly better to just do it as a
               stack of dedicated tests and including a "defined to fail" query
               which is only removed after a successfull type match.
-        podmd"""
+        """
 
         variant_request_type = None
 
@@ -338,7 +318,9 @@ class ByconQuery():
         
         # Already hard-coding some types here - if conditions are met only
         # the respective types will be evaluated since only this key is used
-        if "start" in v_pars and "end" in v_pars:
+        if "mate_name" in  v_pars:
+            brts_k = [ "variantFusionRequest" ]
+        elif "start" in v_pars and "end" in v_pars:
             if len(v_pars[ "start" ]) == 1 and len(v_pars[ "end" ]) == 1:
                 brts_k = [ "variantRangeRequest" ]
             elif len(v_pars[ "start" ]) == 2 and len(v_pars[ "end" ]) == 2:
@@ -353,6 +335,8 @@ class ByconQuery():
             brts_k = [ "cytoBandRequest" ]
         elif "variant_query_digests" in  v_pars:
             brts_k = [ "variantQueryDigestsRequest" ]
+        elif "variant_type" in v_pars and len(BYC.get("BYC_FILTERS", [])) > 0:
+            brts_k = [ "variantTypeFilteredRequest" ]
             
         vrt_matches = [ ]
         for vrt in brts_k:
@@ -398,11 +382,6 @@ class ByconQuery():
             "start": [ gene.get("start", 0) ],
             "end": [ gene.get("end", 1) ]
         }
-        # TODO: global variant parameters by definition file
-        g_p_s = ["variant_type", "variant_min_length", "variant_max_length"]
-        for g_p in g_p_s:
-            if g_p in BYC_VARGS:
-                v_pars.update( { g_p: BYC_VARGS[g_p] } )
         q_t = self.__create_variantRangeRequest_query(v_pars)
         prdbug(f'...geneVariantRequest query result: {q_t}')
 
@@ -476,52 +455,19 @@ class ByconQuery():
         vp = v_pars
         c_b_d = self.cytoband_definitions
 
-        cb_s = vp.get("cyto_bands", [])
-        cbs1, chro1, start1, end1, error1 = bands_from_cytobands(cb_s[0])
-        s_id1 = self.ChroNames.refseq(chro1)
+        if not (cb_s := vp.get("cyto_bands")):
+            return False
+        CB = Cytobands()
+        cbs, chro, start, end = CB.bands_from_cytostring(cb_s)
+        sequence_id = self.self.ChroNames.refseq(chro)
         v_pars.update( {
-            "reference_name": s_id1,
-            "start": [ start1 ],
-            "end": [ end1 ]
+            "reference_name": sequence_id,
+            "start": [start],
+            "end": [end]
         } )
-        # TODO: other global parameters (langth etc.)
-        # TODO: global variant parameters by definition file
-        g_p_s = ["variant_type", "variant_min_length", "variant_max_length"]
-        for g_p in g_p_s:
-            if g_p in BYC_VARGS:
-                v_pars.update( { g_p: BYC_VARGS[g_p] } )
-        if len(cb_s) == 1:           
-            self.variant_request_type = "variantRangeRequest"
-            q = self.__create_variantRangeRequest_query(v_pars)
-            return q
-
-        elif len(cb_s) > 1:
-            cbs2, chro2, start2, end2, error2 = bands_from_cytobands(cb_s[1])
-            s_id2 = self.ChroNames.refseq(chro2)
-
-            # TODO: here is a prototype for a variant query list, used for co-occurring
-            # variants in the same biosample
-            if s_id1 != s_id2:
-                v_q_l = []
-                q1 = self.__create_variantRangeRequest_query(v_pars)
-                v_q_l.append(q1)
-                v_pars.update( {
-                    "reference_name": s_id2,
-                    "start": [ start2 ],
-                    "end": [ end2 ]
-                } )
-                q2 = self.__create_variantRangeRequest_query(v_pars)
-                v_q_l.append(q2)
-                self.variant_request_type = "variantsMultimatchRequest"
-                return v_q_l
-
-            v_pars.update( {
-                "start": [ start1, start2 ],
-                "end": [ end1, end2 ]
-            } )
-            self.variant_request_type = "variantBracketRequest"
-            q = self.__create_variantBracketRequest_query(v_pars)
-            return q
+        self.variant_request_type = "variantRangeRequest"
+        q = self.__create_variantRangeRequest_query(v_pars)
+        return q
 
 
     #--------------------------------------------------------------------------#
@@ -561,6 +507,39 @@ class ByconQuery():
 
     #--------------------------------------------------------------------------#
 
+    def __create_variantFusionRequest_query(self, v_pars):    
+        vp = v_pars
+        v_p_defs = self.argument_definitions
+
+        # here we use the db fields of "mate_..." for all positional parameters
+        # since the match is against the `adjuncture` variant format
+        v_q = {
+            "$and": [
+                {
+                    v_p_defs["mate_name"]["db_key"]: vp["reference_name"],
+                    v_p_defs["mate_start"]["db_key"]: { "$gte": vp["start"][0] },
+                    v_p_defs["mate_end"]["db_key"]: { "$lt": vp["end"][-1] }
+                },
+                {
+                    v_p_defs["mate_name"]["db_key"]: vp["mate_name"],
+                    v_p_defs["mate_start"]["db_key"]: { "$gte": vp["mate_start"][0] },
+                    v_p_defs["mate_end"]["db_key"]: { "$lt": vp["mate_end"][-1] }
+                }
+            ]
+        }
+
+        if (l_q := self.__request_variant_size_limits(v_pars)):
+            v_q.update(l_q)
+
+        p_n = "variant_type"
+        if p_n in vp:
+            v_q.update( self.__create_in_query_for_parameter(p_n, v_p_defs[p_n]["db_key"], vp) )
+
+        return v_q
+
+
+    #--------------------------------------------------------------------------#
+
     def __create_variantRangeRequest_query(self, v_pars):    
         vp = v_pars
         v_p_defs = self.argument_definitions
@@ -571,12 +550,8 @@ class ByconQuery():
             v_p_defs["end"]["db_key"]: { "$gt": int(vp[ "start" ][0]) }
         }
 
-        p_n = "variant_min_length"
-        if p_n in vp:
-            v_q.update( { v_p_defs[p_n]["db_key"]: { "$gte" : vp[p_n] } } )
-        p_n = "variant_max_length"
-        if "variant_max_length" in vp:
-            v_q.update( { v_p_defs[p_n]["db_key"]: { "$lte" : vp[p_n] } } )
+        if (l_q := self.__request_variant_size_limits(v_pars)):
+            v_q.update(l_q)
 
         p_n = "variant_type"
         if p_n in vp:
@@ -593,6 +568,28 @@ class ByconQuery():
 
     #--------------------------------------------------------------------------#
 
+    def __request_variant_size_limits(self, v_pars):
+        vp = v_pars
+        v_p_defs = self.argument_definitions
+        l_k = v_p_defs["variant_max_length"]["db_key"]
+        s_q = {l_k: {}}
+
+        p_n = "variant_min_length"
+        if (minl := vp.get(p_n)):
+            { v_p_defs["variant_max_length"]["db_key"]: {}}
+            s_q[l_k].update( { "$gte" : minl } )
+        p_n = "variant_max_length"
+        if (maxl := vp.get(p_n)):
+            s_q[l_k].update( { "$lte" : maxl } )
+
+        if s_q[l_k].keys():
+            return s_q
+
+        return None
+        
+    #--------------------------------------------------------------------------#
+
+
     def __create_variantBracketRequest_query(self, v_pars):
         vp = v_pars
         prdbug(f'...__create_variantBracketRequest_query parameters: {vp}')
@@ -602,8 +599,6 @@ class ByconQuery():
             v_p_defs["reference_name"]["db_key"]: vp["reference_name"],
             v_p_defs["start"]["db_key"]: { "$gte": sorted(vp["start"])[0], "$lt": sorted(vp["start"])[-1] },
             v_p_defs["end"]["db_key"]: { "$gte": sorted(vp["end"])[0], "$lt": sorted(vp["end"])[-1] },
-            # v_p_defs["start"]["db_key"]: { "$gte": sorted(vp["start"])[0] },
-            # v_p_defs["end"]["db_key"]: { "$lt": sorted(vp["end"])[-1] }
         }
 
         if (v_t := self.__create_in_query_for_parameter("variant_type", v_p_defs["variant_type"]["db_key"], vp)):
@@ -615,9 +610,9 @@ class ByconQuery():
     #--------------------------------------------------------------------------#
 
     def __create_variantAlleleRequest_query(self, v_pars):
-        """podmd
+        """
      
-        podmd"""
+        """
         vp = v_pars
         v_p_defs = self.argument_definitions
         # TODO: Regexes for ref or alt with wildcard characters
@@ -665,8 +660,7 @@ class ByconQuery():
     def __query_from_filters(self):
         if self.queries.get("expand") is False:
             return
-
-        if len(self.filters) < 1:
+        if len(BYC["BYC_FILTERS"]) < 1:
             return
 
         data_db = MongoClient(host=DB_MONGOHOST)[self.ds_id]
@@ -676,7 +670,7 @@ class ByconQuery():
         f_lists = {}
         f_infos = {}
 
-        for f in self.filters:
+        for f in BYC["BYC_FILTERS"]:
             f_val = f["id"]
             f_neg = f.get("excluded", False)
             if re.compile(r'^!').match(f_val):
@@ -707,13 +701,19 @@ class ByconQuery():
             if f_field not in f_infos[f_entity].keys():
                 f_infos[f_entity].update({f_field: f_info})
 
+            prdbug(f'...__query_from_filters *include_descendant_terms*: {f_desc}')
+
             # TODO: needs a general solution; so far for the iso age w/
             #       pre-calculated days field...
-            if "alphanumeric" in f_info.get("type", "ontology"):
-                f_class, comp, val = re.match(r'^(\w+):([<>=]+?)(\w[\w.]+?)$', f_info["id"]).group(1, 2, 3)
-                if "iso8601duration" in f_info.get("format", "___none___"):
-                    val = days_from_iso8601duration(val)
-                f_lists[f_entity][f_field].append(self.__mongo_comparator_query(comp, val))
+            if "alphanumeric" in f_info.get("ft_type", "ontology"):
+                prdbug(f'__query_from_filters ... alphanumeric: {f_info["id"]}')
+                if re.match(r'^(\w+):([<>=]+?)?(\w[\w.]+?)$', f_info["id"]):
+                    f_class, comp, val = re.match(r'^(\w+):([<>=]+?)?(\w[\w.]+?)$', f_info["id"]).group(1, 2, 3)
+                    if "iso8601duration" in f_info.get("format", "___none___"):
+                        val = days_from_iso8601duration(val)
+                    f_lists[f_entity][f_field].append(self.__mongo_comparator_query(comp, val))
+                else:
+                    f_lists[f_entity][f_field].append(f_info["id"])
             elif f_desc is True:
                 if f_neg is True:
                     f_lists[f_entity][f_field].append({'$nin': f_info["child_terms"]})
@@ -726,13 +726,14 @@ class ByconQuery():
                     f_lists[f_entity][f_field].append(f_info["id"])
 
         # now processing the filter lists into the queries
+
         for f_entity in f_lists.keys():
             f_s_l = []
             for f_field, f_query_vals in f_lists[f_entity].items():
                 if len(f_query_vals) == 1:
                     f_s_l.append({f_field: f_query_vals[0]})
                 else:
-                    if "alphanumeric" in f_infos[f_entity][f_field].get("type", "ontology"):
+                    if "alphanumeric" in f_infos[f_entity][f_field].get("ft_type", "ontology"):
                         q_l = []
                         for a_q_v in f_query_vals:
                             q_l.append({f_field: a_q_v})
@@ -747,14 +748,13 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __query_from_collationed_filter(self, coll_coll, f_val):
-        f_d_s = self.filter_definitions
+        f_d_s = BYC["filter_definitions"].get("$defs", {})
         if f_val not in self.collation_ids:
             return False
 
         f_info = coll_coll.find_one({"id": f_val})
         f_ct = f_info.get("collation_type", "___none__")
-        f_d = f_d_s.get(f_ct)
-        if not f_d:
+        if not (f_d := f_d_s.get(f_ct)):
             return False
 
         # TODO: the whole "get entity" is a bit cumbersome ... should be added
@@ -767,16 +767,20 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __query_from_filter_definitions(self, f_val):
-        f_defs = self.filter_definitions
+        f_d_s = BYC["filter_definitions"].get("$defs", {})
         f_info = {
             "id": f_val,
             "scope": "biosamples",
-            "type": "___undefined___",
+            "ft_type": "___undefined___",
             "db_key": "___undefined___",
             "child_terms": [f_val]
         }
 
-        for f_d in f_defs.values():
+        prdbug(f'...__query_from_filter_definitions: {f_val}')
+
+        for f_d in f_d_s.values():
+            if f_d.get("collationed", False) is True:
+                continue
             f_re = re.compile(f_d.get("pattern", "___none___"))
             if f_re.match(f_val):
                 f_info = {
@@ -784,7 +788,7 @@ class ByconQuery():
                     "scope": f_d.get("scope", "biosamples"),
                     "entity": f_d.get("entity", "biosample"),
                     "db_key": f_d["db_key"],
-                    "type": f_d.get("type", "ontology"),
+                    "ft_type": f_d.get("ft_type", "ontology"),
                     "format": f_d.get("format", "___none___"),
                     "child_terms": [f_val]
                 }
@@ -796,7 +800,7 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __query_from_geoquery(self, entity="biosample"):
-        geo_q, geo_pars = geo_query(self.geoloc_definitions)
+        geo_q, geo_pars = geo_query()
         if not geo_q:
             return
         self.__update_queries_for_entity(geo_q, entity)
@@ -815,7 +819,7 @@ class ByconQuery():
             return
 
         ho_client = MongoClient(host=DB_MONGOHOST)
-        ho_coll = ho_client[HOUSEKEEPING_DB].ho_db[HOUSEKEEPING_HO_COLL]
+        ho_coll = ho_client[HOUSEKEEPING_DB][HOUSEKEEPING_HO_COLL]
         h_o = ho_coll.find_one({"id": accessid})
 
         # accessid overrides ... ?
@@ -877,18 +881,15 @@ class ByconQuery():
 ################################################################################
 ################################################################################
 ################################################################################
-################################################################################
-################################################################################
-################################################################################
 
-# TODO: GeoQuery class
+def geo_query():
+    g_l_d = BYC.get("geoloc_definitions", {})
+    g_p_defs = g_l_d.get("parameters", {})
+    g_p_rts = g_l_d.get("request_types", {})
+    geo_root = g_l_d.get("geo_root", "___none___")
 
-def geo_query(geoloc_definitions):
     geo_q = None
     geo_pars = None
-    g_p_defs = geoloc_definitions["parameters"]
-    g_p_rts = geoloc_definitions["request_types"]
-    geo_root = geoloc_definitions["geo_root"]
     geo_form_pars = {}
     for g_f_p in g_p_defs.keys():
         f_v = BYC_PARS.get(g_f_p)
@@ -945,7 +946,7 @@ def geo_query(geoloc_definitions):
         geo_q = {"id": re.compile(geo_pars["id"], re.IGNORECASE)}
         return geo_q, geo_pars
     if "ISO3166alpha2" in req_type:
-        geo_q = {"provenance.geo_location.properties.ISO3166alpha2": BYC_PARS["iso3166alpha2"].upper()}
+        geo_q = {"geo_location.properties.ISO3166alpha2": BYC_PARS["iso3166alpha2"].upper()}
         return geo_q, geo_pars
     if "geoquery" in req_type:
         geoq_l = [return_geo_longlat_query(geo_root, geo_pars)]

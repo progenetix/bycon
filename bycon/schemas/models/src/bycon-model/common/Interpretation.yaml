@@ -1,0 +1,44 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Interpretation
+description: >-
+  This object intends to represent the interpretation of a genomic analysis, such
+  as the report from a diagnostic laboratory.
+  Source: Phenopackets v2 <https://phenopacket-schema.readthedocs.io/en/latest/interpretation.html#interpretation>
+type: object
+properties:
+  id:
+    description: Interpretation identifier.
+    type: string
+    examples:
+      - CONSORTIUM:0000123456
+  progressStatus:
+    type: string
+    enum:
+      - UNKNOWN_PROGRESS
+      - IN_PROGRESS
+      - COMPLETED
+      - SOLVED
+      - UNSOLVED
+  diagnosis:
+    $ref: '#/$defs/Diagnosis'
+  summary:
+    type: string
+    description: >-
+      Additional data about this interpretation, e.g. free text summary.
+$defs:
+  Diagnosis:
+    properties:
+      disease:
+        $ref: ontologyTerm.yaml
+      genomicInterpretations:
+        type: array
+        items:
+          description: >-
+            TODO: Define class "GenomicInterpretation".
+          type: object
+    required:
+      - disease
+required:
+  - id
+  - progressStatus
+additionalProperties: true

@@ -1,0 +1,111 @@
+// variables is put in a separate file so we can reuse then in scoped css modules.
+@import "./variables";
+
+html,
+body {
+  height: 100%;
+}
+
+#__next {
+  height: 100%;
+}
+
+@import "components/DataTable";
+@import "components/ReactSelect";
+@import "components/Layout";
+@import "components/Panel";
+@import "components/Input";
+@import "components/Dropzone";
+@import "components/Chromosome";
+
+@import "button-link";
+
+@import "BeaconForm";
+@import "Nav";
+@import "Subsets";
+
+@import "~bulma/sass/base/_all";
+@import "~bulma/sass/elements/_all";
+@import "~bulma/sass/form/_all";
+@import "~bulma/sass/components/_all";
+@import "~bulma/sass/grid/_all";
+@import "~bulma/sass/helpers/_all";
+@import "~bulma/sass/layout/_all";
+
+@import "~leaflet/dist/leaflet.css";
+@import "~tippy.js/dist/tippy.css";
+@import "~tippy.js/themes/light.css";
+@import "~tippy.js/themes/light-border.css";
+@import "~animate.css/animate.min.css";
+
+.is-clickable {
+  cursor: pointer;
+}
+
+.abbr {
+  text-decoration: underline dotted;
+}
+
+.span-blue {
+  color: #3333ff;
+  font-weight: 700;
+}
+.span-del-color {
+  color: #33a0ff;
+  font-weight: 700;
+}
+.span-dup-color {
+  color: #ffc633;
+  font-weight: 700;
+}
+.span-hldel-color {
+  color: #0033cc;
+  font-weight: 700;
+}
+.span-hldup-color {
+  color: #ff6600;
+  font-weight: 700;
+}
+.span-purple {
+  color: #ff33ff;
+  font-weight: 700;
+}
+.span-red {
+  color: #ff3333;
+  font-weight: 700;
+}
+
+.svg-histolinks {
+  padding: 0px;
+  font-size: 0.8em;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.admonition {
+    background-color: #eefcff;
+    border: .05rem solid #448aff;
+    border-radius: .5rem;
+    box-shadow: 0 0.2rem 0.5rem #0000000d, 0 0 0.05rem #0000001a;
+    color: #333;
+    display: flow-root;
+    font-size: .9em;
+    margin: 1.5625em 0;
+    padding: .6rem;
+    page-break-inside:avoid
+}
+
+.admonition-title {
+  background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="rgb(43,22,255)" viewBox="0 0 24 24"><path d="M13 9h-2V7h2m0 10h-2v-6h2m-1-9A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2z"/></svg>');
+  background-position: left center;
+  background-repeat: no-repeat;
+  border: none;
+  font-weight: 700;
+  margin: 0rem -.8rem 2rem 0.05rem;
+  padding-left: 2.5rem;
+  padding-bottom: .3rem;
+  padding-top: .3rem;
+  position:relative
+}
+
+

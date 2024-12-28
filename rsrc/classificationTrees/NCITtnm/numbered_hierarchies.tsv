@@ -1,0 +1,117 @@
+NCIT:C48698	Cancer TNM Finding Category	0	1
+NCIT:C133398	Postneoadjuvant Therapy Pathologic TNM Finding	1	2
+NCIT:C143081	Posttherapy Clinical TNM Finding	1	3
+NCIT:C48739	Pathologic TNM Finding	1	4
+NCIT:C48886	Pathologic Distant Metastasis TNM Finding	2	5
+NCIT:C48740	pM0 Stage Finding	3	6
+NCIT:C48741	pM1 Stage Finding	3	7
+NCIT:C48742	pM1a Stage Finding	4	8
+NCIT:C48743	pM1b Stage Finding	4	9
+NCIT:C48744	pM1c Stage Finding	4	10
+NCIT:C48887	Pathologic Regional Lymph Nodes TNM Finding	2	11
+NCIT:C48745	pN0 Stage Finding	3	12
+NCIT:C48746	pN1 Stage Finding	3	13
+NCIT:C48747	pN1a Stage Finding	4	14
+NCIT:C48748	pN1b Stage Finding	4	15
+NCIT:C48749	pN1c Stage Finding	4	16
+NCIT:C48750	pN2 Stage Finding	3	17
+NCIT:C48751	pN2a Stage Finding	4	18
+NCIT:C48752	pN2b Stage Finding	4	19
+NCIT:C48753	pN2c Stage Finding	4	20
+NCIT:C48754	pN3 Stage Finding	3	21
+NCIT:C48755	pN3a Stage Finding	4	22
+NCIT:C48756	pN3b Stage Finding	4	23
+NCIT:C48757	pN3c Stage Finding	4	24
+NCIT:C48888	Pathologic Primary Tumor TNM Finding	2	25
+NCIT:C48758	pT0 Stage Finding	3	26
+NCIT:C48759	pT1 Stage Finding	3	27
+NCIT:C48760	pT1a Stage Finding	4	28
+NCIT:C48761	pT1b Stage Finding	4	29
+NCIT:C48763	pT1c Stage Finding	4	30
+NCIT:C48764	pT2 Stage Finding	3	31
+NCIT:C48765	pT2a Stage Finding	4	32
+NCIT:C48766	pT2b Stage Finding	4	33
+NCIT:C48767	pT2c Stage Finding	4	34
+NCIT:C48768	pT3 Stage Finding	3	35
+NCIT:C48769	pT3a Stage Finding	4	36
+NCIT:C48770	pT3b Stage Finding	4	37
+NCIT:C48771	pT3c Stage Finding	4	38
+NCIT:C48772	pT4 Stage Finding	3	39
+NCIT:C48773	pT4a Stage Finding	4	40
+NCIT:C48774	pT4b Stage Finding	4	41
+NCIT:C48775	pT4c Stage Finding	4	42
+NCIT:C48776	pT4d Stage Finding	4	43
+NCIT:C48879	Generic TNM Finding	1	44
+NCIT:C48777	Cancer TNM Vessel Invasion Finding Category	2	45
+NCIT:C147091	Lymphovascular Invasion 0	3	46
+NCIT:C147092	Lymphovascular Invasion 1	3	47
+NCIT:C147093	Lymphovascular Invasion 9	3	48
+NCIT:C147094	Lymphovascular Invasion 2	3	49
+NCIT:C147095	Lymphovascular Invasion 3	3	50
+NCIT:C147096	Lymphovascular Invasion 4	3	51
+NCIT:C48883	Generic Distant Metastasis TNM Finding	2	52
+NCIT:C48699	M0 Stage Finding	3	53
+NCIT:C95956	cM0 (i+) Stage Finding	4	54
+NCIT:C48700	M1 Stage Finding	3	55
+NCIT:C48701	M1a Stage Finding	4	56
+NCIT:C48702	M1b Stage Finding	4	57
+NCIT:C48703	M1c Stage Finding	4	58
+NCIT:C48704	MX Stage Finding	3	59
+NCIT:C48884	Generic Regional Lymph Nodes TNM Finding	2	60
+NCIT:C48705	N0 Stage Finding	3	61
+NCIT:C95921	N0 (i-) Stage Finding	4	62
+NCIT:C95922	N0 (i+) Stage Finding	4	63
+NCIT:C95923	N0 (mol-) Stage Finding	4	64
+NCIT:C95925	N0 (mol+) Stage Finding	4	65
+NCIT:C48706	N1 Stage Finding	3	66
+NCIT:C48707	N1a Stage Finding	4	67
+NCIT:C48708	N1b Stage Finding	4	68
+NCIT:C95929	N1bI Stage Finding	5	69
+NCIT:C95935	N1bII Stage Finding	5	70
+NCIT:C95936	N1bIII Stage Finding	5	71
+NCIT:C95937	N1bIV Stage Finding	5	72
+NCIT:C48709	N1c Stage Finding	4	73
+NCIT:C95955	N1mi Stage Finding	4	74
+NCIT:C48714	N3 Stage Finding	3	75
+NCIT:C48715	N3a Stage Finding	4	76
+NCIT:C48716	N3b Stage Finding	4	77
+NCIT:C48717	N3c Stage Finding	4	78
+NCIT:C48718	NX Stage Finding	3	79
+NCIT:C48786	N2 Stage Finding	3	80
+NCIT:C48711	N2a Stage Finding	4	81
+NCIT:C48712	N2b Stage Finding	4	82
+NCIT:C48713	N2c Stage Finding	4	83
+NCIT:C96026	N4 Stage Finding	3	84
+NCIT:C48885	Generic Primary Tumor TNM Finding	2	85
+NCIT:C106299	Any T	3	86
+NCIT:C132010	T5 Stage Finding	3	87
+NCIT:C48719	T0 Stage Finding	3	88
+NCIT:C48720	T1 Stage Finding	3	89
+NCIT:C48721	T1a Stage Finding	4	90
+NCIT:C48722	T1b Stage Finding	4	91
+NCIT:C48723	T1c Stage Finding	4	92
+NCIT:C95805	T1mi Stage Finding	4	93
+NCIT:C48724	T2 Stage Finding	3	94
+NCIT:C148411	T2d Stage Finding	4	95
+NCIT:C48725	T2a Stage Finding	4	96
+NCIT:C48726	T2b Stage Finding	4	97
+NCIT:C48727	T2c Stage Finding	4	98
+NCIT:C48728	T3 Stage Finding	3	99
+NCIT:C148412	T3d Stage Finding	4	100
+NCIT:C48729	T3a Stage Finding	4	101
+NCIT:C48730	T3b Stage Finding	4	102
+NCIT:C48731	T3c Stage Finding	4	103
+NCIT:C48732	T4 Stage Finding	3	104
+NCIT:C48733	T4a Stage Finding	4	105
+NCIT:C48734	T4b Stage Finding	4	106
+NCIT:C48735	T4c Stage Finding	4	107
+NCIT:C48736	T4d Stage Finding	4	108
+NCIT:C48737	TX Stage Finding	3	109
+NCIT:C48738	Tis Stage Finding	3	110
+NCIT:C96025	Ta Stage Finding	4	111
+NCIT:C48880	Recurrent Cancer TNM Finding	1	112
+NCIT:C48881	Clinical TNM Finding	1	113
+NCIT:C161009	Clinical Primary Tumor TNM Finding	2	114
+NCIT:C162609	Clinical Regional Lymph Nodes TNM Finding	2	115
+NCIT:C162610	Clinical Distant Metastasis TNM Finding	2	116
+NCIT:C48882	Autopsy TNM Finding	1	117

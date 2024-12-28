@@ -5,21 +5,21 @@ type: object
 properties:
   beaconId:
     description: Identifier of the beacon, as defined in `Beacon`.
-    $ref: ../../common/beaconCommonComponents.yaml#/definitions/BeaconId
+    $ref: ../../common/beaconCommonComponents.yaml#/$defs/BeaconId
   apiVersion:
     description: Version of the API.
-    $ref: ../../common/beaconCommonComponents.yaml#/definitions/ApiVersion
+    $ref: ../../common/beaconCommonComponents.yaml#/$defs/ApiVersion
   returnedSchemas:
-    $ref: ../../common/beaconCommonComponents.yaml#/definitions/ListOfSchemas
+    $ref: ../../common/beaconCommonComponents.yaml#/$defs/ListOfSchemas
   returnedGranularity:
     description: Requested granularity. Targeted Beacon could respond or not with
       the requested granularity. E.g. record level granularity could be requested,
       but the Beacon could respond only with boolean or count results.
-    $ref: ../../common/beaconCommonComponents.yaml#/definitions/Granularity
+    $ref: ../../common/beaconCommonComponents.yaml#/$defs/Granularity
   testMode:
     description: Used for indicating that a response is returned in a test context.
       Purposed for compliance testing. Information returned could be fake.
-    $ref: ../../common/beaconCommonComponents.yaml#/definitions/TestMode
+    $ref: ../../common/beaconCommonComponents.yaml#/$defs/TestMode
   receivedRequestSummary:
     description: Section of the response that summarize the request received as it
       has been interpreted by teh Beacon server.

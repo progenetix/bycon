@@ -1,0 +1,39 @@
+@import "./variables";
+
+.Subsets__tree {
+  margin-bottom: 3rem;
+}
+
+.Subsets__controls {
+  display: flex;
+  flex-wrap: wrap;
+  & > * {
+    margin-right: 0.5rem;
+  }
+  margin-bottom: 1rem;
+}
+
+.Subsets__tree__row {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.Subsets__tree__cell {
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+  height: 30px;
+  min-width: 0;
+}
+
+.Subsets__tree__label {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.Subsets__tree__info {
+  display: flex;
+  min-width: 0;
+}

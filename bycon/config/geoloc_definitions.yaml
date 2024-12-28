@@ -1,0 +1,65 @@
+geo_root: 'geo_location'
+
+parameters:
+  geo_latitude:
+    type: float
+    pattern: '^\-?\d+?(\.\d+?)?$'
+    db_key: geo_location.geometry
+  geo_longitude:
+    type: float
+    pattern: '^\-?\d+?(\.\d+?)?$'
+    db_key: geo_location.geometry
+  geo_distance:
+    type: float
+    pattern: '^\d+?(\.\d+?)?$'
+    default: 10000
+    db_key: geo_location.geometry
+  city:
+    type: string
+    pattern: '^\w.{0,126}\w$'
+    db_key: geo_location.properties.city
+  country:
+    type: string
+    pattern: '^\w.{1,126}\w$'
+    db_key: geo_location.properties.country
+  id:
+    type: string
+    pattern: '^\w+?(\:\:\w+?)?$'
+    db_key: id
+  iso3166alpha3:
+    type: string
+    pattern: '^\w\w\w$'
+    db_key: geo_location.properties.ISO3166alpha3
+  iso3166alpha2:
+    type: string
+    pattern: '^\w\w\w$'
+    db_key: geo_location.properties.ISO3166alpha2
+
+request_types:
+
+  geoquery:
+    all_of:
+      - geo_latitude
+      - geo_longitude
+      - geo_distance
+    any_of:
+      - iso3166alpha3
+      - iso3166alpha2
+      - country
+  city:
+    all_of:
+      - city
+    any_of:
+      - iso3166alpha3
+      - iso3166alpha2
+      - country
+  ISO3166alpha3:
+    all_of:
+      - iso3166alpha3
+  ISO3166alpha2:
+    all_of:
+      - iso3166alpha2
+  id:
+    all_of:
+      - id
+

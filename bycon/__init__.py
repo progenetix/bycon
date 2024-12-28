@@ -8,20 +8,18 @@ bycon_lib_path = path.join( pkg_path, "lib" )
 sys.path.append( pkg_path )
 sys.path.append( bycon_lib_path )
 
+from config import *
+
 try:
 
-    from config import *
-
-    from args_parsing import *
     from beacon_auth import *
     from beacon_response_generation import *
     from bycon_helpers import *
-    from cgi_parsing import *
     from cytoband_parsing import *
     from dataset_parsing import *
     from genome_utils import *
     from handover_generation import *
-    from parse_filters_request import *
+    from parameter_parsing import *
     from query_execution import *
     from query_generation import *
     from read_specs import *
@@ -30,19 +28,20 @@ try:
     from service_utils import *
     from variant_mapping import *
 
-    byc: object = {
-        "parsed_config_paths": []
-    }
+    # import byconServiceLibs
 
-    read_service_definition_files(byc)
-    # updates `entity_defaults`, `dataset_definitions` and `local_paths`
-    update_rootpars_from_local(LOC_PATH, byc)
-    set_entity_mappings()
-    set_beacon_defaults(byc)
-    parse_arguments(byc)
+    read_service_definition_files()
+    update_rootpars_from_local_or_HOST()
+    rest_path_elements()
+    set_beacon_defaults()
+    arguments_set_defaults()
+    parse_arguments()
+    set_entities()
+    initialize_bycon_service()
+    parse_filters()
 
 except Exception:
-    if not "local" in ENV:
+    if not "___shell___" in ENV:
         print('Content-Type: text/plain')
         print('status: 302')
         print()

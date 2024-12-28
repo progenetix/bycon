@@ -36,7 +36,7 @@
             "example": "dev"
         },
         "organization": {
-            "$ref": "#/definitions/BeaconOrganization"
+            "$ref": "#/$defs/BeaconOrganization"
         },
         "description": {
             "type": "string",
@@ -79,7 +79,7 @@
             }
         }
     },
-    "definitions": {
+    "$defs": {
         "BeaconOrganization": {
             "description": "Organization owning the Beacon.",
             "type": "object",

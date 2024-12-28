@@ -1,0 +1,20 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/VRSadjacency/v2024-08-13
+title: VRS Adjacency
+type: object
+description: >-
+  Simplified VRS adjacency/fusion schema for use in `bycon`.
+required:
+  all_of:
+    - type
+    - adjoinedSequences
+properties:
+  type:
+    type: string
+    const: Adjacency
+    default: Adjacency
+    description: MUST be "Adjacency"
+  adjoinedSequences:
+    type: array
+    items:
+      $ref: './VRSsequenceLocation.yaml'

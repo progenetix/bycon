@@ -1,106 +1,131 @@
-# `bycon` Arguments and Parameters
-The following is a list of arguments and parameters used in the `bycon` package as well as the `byconaut` tools.
-## Definitions
-### `user_name` 
+### Argument Definitions
+#### `user_name` 
+**description:**
+TODO: Temporary(?) for authentication testing.    
 **type:** string    
 **pattern:** `^\w+$`    
 **cmdFlags:** `--userName`    
-**description:**
-faking a user name    
 
-### `test_mode` 
+#### `test_mode` 
+**description:**
+Activates the Beacon test setting, i.e. returning some random documents    
 **type:** boolean    
 **cmdFlags:** `-t,--testMode`    
-**description:**
-test setting, i.e. returning some random documents    
 **default:** `False`    
 
-### `skip` 
+#### `skip` 
+**description:**
+Number of pages to be skipped.    
 **type:** integer    
 **cmdFlags:** `--skip`    
-**description:**
-pages to be skipped    
 **default:** `0`    
 
-### `limit` 
+#### `limit` 
 **type:** integer    
 **cmdFlags:** `-l,--limit`    
 **description:**
 limit number of documents; a value of 0 sets to unlimited    
 **default:** `200`    
+**local:** 0    
 
-### `requested_granularity` 
-**type:** string    
-**pattern:** `^\w+$`    
+#### `paginate_results` 
+**description:**
+Custom bycon parameter used for paginating results in some bycon services.    
+**type:** boolean    
+**cmdFlags:** `--paginateResults`    
+**default:** `True`    
+
+#### `requested_granularity` 
 **description:**
 The requested granularity of the beacon    
+**type:** string    
+**pattern:** `^\w+$`    
 **cmdFlags:** `--requestedGranularity`    
 **default:** `record`    
 
-### `request_entity_path_id` 
+#### `request_entity_path_id` 
+**description:**
+    
+* data entry point, equal to the first REST path element in Beacon     
+* this only is used for command-line tests instead of the REST path
+  value seen by the stack in web server mode    
 **type:** string    
 **cmdFlags:** `--requestEntityPathId`    
-**description:**
-data entry point, equal to the first REST path element in Beacon    
 
-### `requested_schema` 
+#### `response_entity_path_id` 
+**description:**
+    
+* optional data delivery entry point, for {id} paths     
+* for command line (see above), but also potentially for selecting
+  a special response entity in byconaut services (e.g. `indviduals`
+  in `/sampletable/`)    
 **type:** string    
-**cmdFlags:** `--requestedSchema`    
-**description:**
-requested schema, e.g. biosample    
+**cmdFlags:** `--responseEntityPathId`    
 
-### `include_resultset_responses` 
+#### `include_resultset_responses` 
 **type:** string    
 **cmdFlags:** `--includeResultsetResponses`    
 **description:**
     
 * include resultset responses, e.g. HIT, MISS     
-* kind of a holdover from Beacon pre-v1    
+* kind of a holdover from Beacon pre-v1 but HIT & ALL might have
+  some use in networks    
+**default:** `HIT`    
 
-### `dataset_ids` 
+#### `dataset_ids` 
 **type:** array    
-**items:** string    
+**items:**  
+    - `type`: `string`    
 **cmdFlags:** `-d,--datasetIds`    
 **description:**
 dataset ids    
 
-### `filters` 
+#### `cohort_ids` 
 **type:** array    
-**items:** string    
+**items:**  
+    - `type`: `string`    
+**cmdFlags:** `--cohortIds`    
+**description:**
+cohort ids    
+
+#### `filters` 
+**type:** array    
+**items:**  
+    - `type`: `string`    
 **cmdFlags:** `--filters`    
 **description:**
-prefixed filter values, comma concatenated    
+prefixed filter values, comma concatenated; or objects in POST    
 
-### `filter_precision` 
+#### `filter_precision` 
 **type:** string    
 **cmdFlags:** `--filterPrecision`    
 **description:**
-`either` start or `exact` (`exact being internal default`) for matching filter values    
+either `start` or `exact` for matching filter values    
 **default:** `exact`    
 
-### `filter_logic` 
+#### `filter_logic` 
 **type:** string    
 **cmdFlags:** `--filterLogic`    
 **description:**
-either OR or AND (translated to the MongoDB $and etc.)    
+Global for either OR or AND (translated to the MongoDB $and etc.). The Beacon protocol only knows AND.    
 **default:** `AND`    
 
-### `include_descendant_terms` 
+#### `include_descendant_terms` 
 **type:** boolean    
 **cmdFlags:** `--includeDescendantTerms`    
 **description:**
 global treatment of descendant terms    
 **default:** `True`    
 
-### `assembly_id` 
+#### `assembly_id` 
 **type:** string    
 **pattern:** `^\w+?[\w\-\.]*?\w*?$`    
 **db_key:** assembly_id    
 **cmdFlags:** `--assemblyId`    
 **description:**
-assembly id    
+assembly id; currently not used in bycon's version    
 
-### `reference_name` 
+#### `reference_name` 
 **type:** string    
 **db_key:** location.sequence_id    
 **pattern:** `^\w+.*?\w?$`    
@@ -108,15 +133,15 @@ assembly id
 **description:**
 chromosome    
 
-### `mate_name` 
+#### `mate_name` 
 **type:** string    
-**db_key:** location.sequence_id    
+**db_key:** adjoined_sequences.sequence_id    
 **pattern:** `^\w+.*?\w?$`    
 **cmdFlags:** `--mateName`    
 **description:**
 chromosome    
 
-### `reference_bases` 
+#### `reference_bases` 
 **type:** string    
 **db_key:** reference_sequence    
 **pattern:** `^[ACGTN]+$`    
@@ -124,7 +149,7 @@ chromosome
 **description:**
 reference bases    
 
-### `alternate_bases` 
+#### `alternate_bases` 
 **type:** string    
 **db_key:** sequence    
 **pattern:** `^[ACGTN]+$`    
@@ -132,7 +157,7 @@ reference bases
 **description:**
 alternate bases    
 
-### `variant_type` 
+#### `variant_type` 
 **type:** string    
 **db_key:** variant_state.id    
 **pattern:** `^\w+[\w \-\:]\w+?$`    
@@ -140,7 +165,7 @@ alternate bases
 **description:**
 variant type, e.g. DUP    
 
-### `start` 
+#### `start` 
 **type:** array    
 **db_key:** location.start    
 **items:**  
@@ -150,7 +175,7 @@ variant type, e.g. DUP
 **description:**
 genomic start position    
 
-### `end` 
+#### `end` 
 **type:** array    
 **db_key:** location.end    
 **items:**  
@@ -160,31 +185,47 @@ genomic start position
 **description:**
 genomic end position    
 
-### `variant_min_length` 
+#### `mate_start` 
+**type:** integer    
+**db_key:** adjoined_sequences.start    
+**pattern:** `^\d+?$`    
+**cmdFlags:** `--mateStart`    
+**description:**
+genomic start position of fusion partner breakpoint region    
+
+#### `mate_end` 
+**type:** integer    
+**db_key:** adjoined_sequences.end    
+**pattern:** `^\d+?$`    
+**cmdFlags:** `--MateEnd`    
+**description:**
+genomic end position of fusion partner breakpoint region    
+
+#### `variant_min_length` 
 **type:** integer    
 **db_key:** info.var_length    
 **pattern:** `^\d+?$`    
 **cmdFlags:** `--variantMinLength`    
 **description:**
-variantMinLength: The minimal variant length in bases for e.g. CNV queries.    
+The minimal variant length in bases e.g. for CNV queries.    
 
-### `variant_max_length` 
+#### `variant_max_length` 
 **type:** integer    
 **db_key:** info.var_length    
 **pattern:** `^\d+?$`    
 **cmdFlags:** `--variantMaxLength`    
 **description:**
-variantMaxLength: The maximum variant length in bases for e.g. CNV queries.    
+The maximum variant length in bases e.g. for CNV queries.    
 
-### `gene_id` 
+#### `gene_id` 
 **type:** string    
-**db_key:** None    
 **pattern:** `^\w+?(\w+?(\-\w+?)?)?$`    
+**db_key:** None    
 **cmdFlags:** `--geneId`    
 **description:**
 gene id    
 
-### `aminoacid_change` 
+#### `aminoacid_change` 
 **type:** string    
 **db_key:** molecular_attributes.aminoacid_changes    
 **pattern:** `^\w+?$`    
@@ -193,7 +234,7 @@ gene id
 **description:**
 Aminoacid alteration in 1 letter format    
 
-### `genomic_allele_short_form` 
+#### `genomic_allele_short_form` 
 **type:** string    
 **db_key:** identifiers.genomicHGVS_id    
 **pattern:** `^\w+.*\w$`    
@@ -202,7 +243,27 @@ Aminoacid alteration in 1 letter format
 **description:**
 Genomic HGVSId descriptor    
 
-### `variant_internal_id` 
+#### `variant_query_digests` 
+**type:** array    
+**db_key:** None    
+**items:**  
+    - `type`: `string`      
+    - `pattern`: `^(?:chro?)?([12]?[\dXY]):(\d+?(?:-\d+?)?)(?:--(\d+?(?:-\d+?)?))?(?::([\w\:\>]+?))?$`    
+**cmdFlags:** `--variantQueryDigests`    
+**examples:** `9:9000001-21975098--21967753-24000000:DEL`    
+**description:**
+EXPERIMENTAL Variant query digest-style short form    
+
+#### `variant_multi_pars` 
+**type:** array    
+**db_key:** None    
+**items:**  
+    - `type`: `object`    
+**cmdFlags:** `--variantMultiPars`    
+**description:**
+EXPERIMENTAL List of multiple variant queries, for POST    
+
+#### `variant_internal_id` 
 **type:** string    
 **db_key:** variant_internal_id    
 **pattern:** `^\w[\w\:\-\,]+?\w$`    
@@ -211,7 +272,7 @@ Genomic HGVSId descriptor
 **description:**
 An id value used for all variant instances of the same composition; a kind of `digest`    
 
-### `accessid` 
+#### `accessid` 
 **type:** string    
 **db_key:** id    
 **pattern:** `^\w[\w\-]+?\w$`    
@@ -220,7 +281,7 @@ An id value used for all variant instances of the same composition; a kind of `d
 **description:**
 An accessid for retrieving handovers etc.    
 
-### `file_id` 
+#### `file_id` 
 **type:** string    
 **pattern:** `^\w[\w\-]+?\w$`    
 **examples:** `90e19951-1443-4fa8-8e0b-6b5d8c5e45cc`    
@@ -228,7 +289,7 @@ An accessid for retrieving handovers etc.
 **description:**
 A file id e.g. as generated by the uploader service    
 
-### `id` 
+#### `id` 
 **type:** string    
 **db_key:** id    
 **pattern:** `^\w[\w\:\-\,]+?\w$`    
@@ -237,65 +298,77 @@ A file id e.g. as generated by the uploader service
 **description:**
 An id; this parameter only makes sense for specific REST entry types    
 
-### `ids` 
+#### `ids` 
 **type:** array    
-**items:** string    
+**items:**  
+    - `type`: `string`      
+    - `pattern`: `^\w[\w:-]+\w$`    
 **cmdFlags:** `--ids`    
 **description:**
 One or more ids; this parameter only makes sense for specific REST entry types    
 
-### `biosample_ids` 
+#### `biosample_ids` 
 **type:** array    
-**items:** string    
+**items:**  
+    - `type`: `string`      
+    - `pattern`: `^\w[\w:-]+\w$`    
 **byc_entity:** biosample    
 **cmdFlags:** `--biosampleIds`    
 **description:**
 biosample ids    
 
-### `analysis_ids` 
+#### `analysis_ids` 
 **type:** array    
-**items:** string    
+**items:**  
+    - `type`: `string`      
+    - `pattern`: `^\w[\w:-]+\w$`    
 **byc_entity:** analysis    
 **cmdFlags:** `--analysisIds`    
 **description:**
-callset / analysis ids    
+analysis ids    
 
-### `individual_ids` 
+#### `individual_ids` 
 **type:** array    
-**items:** string    
+**items:**  
+    - `type`: `string`      
+    - `pattern`: `^\w[\w:-]+\w$`    
 **byc_entity:** individual    
 **cmdFlags:** `--individualIds`    
 **description:**
 subject ids    
 
-### `variant_ids` 
+#### `variant_ids` 
 **type:** array    
-**items:** string    
+**items:**  
+    - `type`: `string`      
+    - `pattern`: `^\w[\w:-]+\w$`    
 **byc_entity:** genomicVariant    
 **cmdFlags:** `--variantIds`    
 **description:**
 variant ids    
 
-### `debug_mode` 
+#### `debug_mode` 
 **type:** boolean    
 **cmdFlags:** `--debugMode`    
 **description:**
 debug setting    
+**default:** `False`    
 
-### `show_help` 
+#### `show_help` 
 **type:** boolean    
 **cmdFlags:** `--showHelp`    
 **description:**
 specific help display    
+**default:** `False`    
 
-### `test_mode_count` 
+#### `test_mode_count` 
 **type:** integer    
 **cmdFlags:** `--testModeCount`    
 **description:**
 setting the number of documents reurned in test mode    
 **default:** `5`    
 
-### `output` 
+#### `output` 
 **type:** string    
 **cmdFlags:** `--output`    
 **description:**
@@ -303,184 +376,147 @@ For defining a special output format, mostly for `byconaut` services use. Exampl
     
 * `cnvstats`, for `analyses`, to present some CNV statistics     
 * `pgxseg`, using the `.pgxseg` variant file format     
-* `text`, for some services to deliver a text table instead of JSON    
+* `text`, for some services to deliver a text table instead of JSON     
+* in byconaut for the target database when copying...    
 
-### `include_handovers` 
+#### `include_handovers` 
 **type:** boolean    
 **default:** `True`    
 **cmdFlags:** `--includeHandovers`    
 **description:**
 only used for web requests & testing    
 
-### `only_handovers` 
-**type:** boolean    
-**default:** `False`    
-**cmdFlags:** `--onlyHandovers`    
-**description:**
-only used for web requests & testing    
-
-### `method` 
+#### `method` 
 **type:** string    
 **cmdFlags:** `--method`    
 **description:**
 special method    
 **default:** `None`    
 
-### `group_by` 
+#### `group_by` 
 **type:** string    
-**cmdFlags:** `-g,--groupBy`    
+**cmdFlags:** `--groupBy`    
 **description:**
 group parameter e.g. for subset splitting    
 **default:** `text`    
 
-### `parse` 
-**type:** string    
-**cmdFlags:** `-p,--parse`    
-**description:**
-input value to be parsed    
-
-### `mode` 
+#### `mode` 
 **type:** string    
 **cmdFlags:** `-m,--mode`    
 **description:**
 mode, e.g. file type    
 
-### `key` 
-**type:** string    
-**cmdFlags:** `-k,--key`    
-**description:**
-some key or word    
-
-### `update` 
-**type:** string    
+#### `update` 
+**type:** boolean    
 **cmdFlags:** `-u,--update`    
 **description:**
-update existing records    
+update existing records - might be deprecated; only used for publications    
 **default:** `False`    
 
-### `inputfile` 
+#### `force` 
+**type:** boolean    
+**cmdFlags:** `--force`    
+**description:**
+force mode, e.g. for update or insert (cmd line)    
+**default:** `False`    
+
+#### `inputfile` 
 **type:** string    
 **cmdFlags:** `-i,--inputfile`    
 **description:**
 a custom file to specify input data, usually tab-delimited with special header    
 
-### `outputdir` 
+#### `outputdir` 
 **type:** string    
 **cmdFlags:** `--outputdir`    
 **description:**
 output directory where supported (cmd line)    
 
-### `outputfile` 
+#### `outputfile` 
 **type:** string    
 **cmdFlags:** `-o,--outputfile`    
 **description:**
 output file where supported (cmd line)    
 
-### `randno` 
-**type:** integer    
-**cmdFlags:** `-r,--randno`    
-**description:**
-random number to limit processing, where supported    
-**default:** `0`    
-
-### `min_number` 
+#### `min_number` 
 **type:** integer    
 **cmdFlags:** `--minNumber`    
 **description:**
 minimal number, e.g. for collations, where supported    
 **default:** `0`    
 
-### `source` 
-**type:** string    
-**cmdFlags:** `-s,--source`    
-**description:**
-some source label, e.g. `analyses`    
-
-### `delivery_keys` 
+#### `delivery_keys` 
 **type:** array    
-**items:** string    
+**items:**  
+    - `type`: `string`    
 **cmdFlags:** `--deliveryKeys`    
 **description:**
-delivery keys    
+delivery keys to force only some parameters in custom exporters    
 
-### `collation_types` 
+#### `collation_types` 
 **type:** array    
-**items:** string    
+**items:**  
+    - `type`: `string`    
 **cmdFlags:** `--collationTypes`    
 **description:**
 selected collation types, e.g. "EFO"    
 
-### `with_samples` 
-**type:** integer    
-**cmdFlags:** `--withSamples`    
-**description:**
-only for the collations; number of code_matches...    
-
-### `selected_beacons` 
-**type:** array    
-**items:** string    
-
-### `genome_binning` 
+#### `genome_binning` 
 **type:** string    
 **default:** `1Mb`    
 **cmdFlags:** `--genomeBinning`    
 **description:**
 one of the predefined genome binning keys - default 1Mb    
 
-### `cyto_bands` 
+#### `cyto_bands` 
 **type:** string    
-**db_key:** None    
 **pattern:** `^(?:chro?)?([12]?[\dXY])([pq](?:(?:ter)|(?:cen)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?\-?([pq](?:(?:cen)|(?:ter)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?$`    
+**db_key:** None    
 **cmdFlags:** `--cytoBands`    
 **description:**
 cytobands, e.g. 8q21q24.1    
 
-### `chro_bases` 
+#### `chro_bases` 
 **type:** string    
-**db_key:** None    
 **pattern:** `^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$`    
+**db_key:** None    
 **cmdFlags:** `--chroBases`    
 **description:**
 only for the cytoband converter ... e.g. 8:0-120000000    
 
-### `city` 
+#### `city` 
 **type:** string    
 **cmdFlags:** `-c,--city`    
 **description:**
 only for the geolocations...    
 
-### `geo_latitude` 
+#### `geo_latitude` 
 **type:** number    
 **cmdFlags:** `--geoLatitude`    
 **description:**
 only for the geolocations...    
 
-### `geo_longitude` 
+#### `geo_longitude` 
 **type:** number    
 **cmdFlags:** `--geoLongitude`    
 **description:**
 only for the geolocations...    
 
-### `geo_distance` 
+#### `geo_distance` 
 **type:** integer    
 **cmdFlags:** `--geoDistance`    
 **description:**
 only for the geolocations...    
 
-### `marker_type` 
-**type:** string    
-**cmdFlags:** `--markerType`    
-**description:**
-marker type, only for the geolocations...    
-
-### `plot_pars` 
+#### `plot_pars` 
 **type:** string    
 **cmdFlags:** `--plotPars`    
 **description:**
 plot parameters in form `par=value` concatenated by `::`    
 
-### `plot_type` 
+#### `plot_type` 
 **type:** string    
 **cmdFlags:** `--plotType`    
 **description:**
 plot type (histoplot, samplesplot, arrayplot - more?)    
+**default:** `None`    

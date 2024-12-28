@@ -1,0 +1,156 @@
+################################################################################
+#
+# TODO: Beacon scouts for VQS ...
+#
+################################################################################
+
+request_pars:
+  - assembly_id
+  - reference_name
+  - mate_name
+  - reference_bases
+  - alternate_bases
+  - variant_type
+  - start
+  - end
+  - mate_start
+  - mate_end
+  - variant_min_length
+  - variant_max_length
+  - gene_id
+  - aminoacid_change
+  - genomic_allele_short_form
+
+# BeaconPlus
+multi_request_pars:
+  - cyto_bands
+  - variant_query_digests
+
+# As long as there are no variant query schemas to define valid Beacon
+# variant parameter combinations the `request_types` here provide sets
+# of combinations valid at least for `bycon` Progenetix etc. data.
+request_types:
+
+  variantQueryDigestsRequest:
+    all_of:
+      - variant_query_digests
+
+  cytoBandRequest:
+    all_of:
+      - cyto_bands
+    optional:
+      - variant_type
+      - variant_min_length
+      - variant_max_length
+
+  aminoacidChangeRequest:
+    all_of:
+      - aminoacid_change
+    optional:
+      - gene_id
+
+  genomicAlleleShortFormRequest:
+    all_of:
+      - genomic_allele_short_form
+
+  # variantTypeRequest:
+  #   description: >-
+  #     This dangerous query only uses a variant type, e.g. to limit an "all variants"
+  #     retrieval to SNVs or CNVs.
+  #     TODO: Add some private parameter to make this work only for special
+  #     circumstances... May be used w/ a combination of filter length > 0 check.
+  #   all_of:
+  #     - variant_type
+
+  variantBracketRequest:
+    description: >-
+      This specific request allows for the bracketed search of genomic variants
+      with start and end coordinates and a variant type. in contrast to a
+      beaconRangeRequest, the start and end positions of the matched variants
+      have to fall into the (1 base or longer) intervals for start and end,
+      respectively (while for the range request variants falling between start
+      and end are being matched).
+      `start` and `end` parameters are lists of 1 or 2 integers. The most common
+      use here would be a use of 2 integers both for start and end, to allow
+      fuzzy matching of CNVs and similar variants of imprecise length and
+      position.
+    all_of:
+      # - assembly_id
+      - start
+      - end
+      - reference_name
+    optional:
+      - variant_type
+      - variant_min_length
+      - variant_max_length
+
+  variantRangeRequest:
+    description: >-
+      The beaconRangeRequest queries variants falling between start and end.
+      `start` and `end` parameters should be single values.
+    all_of:
+      # - assembly_id
+      - start
+      - end
+      - reference_name
+    optional:
+      - variant_type
+      - reference_bases
+      - alternate_bases
+      - variant_min_length
+      - variant_max_length
+
+  variantAlleleRequest:
+    description: >-
+      This type corresponds to the original BeaconAlleleRequest, in which at a
+      specified genome position a query looks for a combination of reference and
+      replacement base(s).
+    all_of:
+      # - assembly_id
+      - start
+      - reference_name
+      - alternate_bases
+    optional:
+      - reference_bases
+
+  variantTypeFilteredRequest:
+    description: >-
+      This is a special case where it is checked separately if a filter query
+      exists, so that not only a type is being queried. However, this shouldn't
+      be used except for something approximating an "id" query. The use case was
+      retrieval of all sequence variants for a given cellline id which doesn't
+      necessarily corresponds to a single sample etc.
+    all_of:
+      - variant_type
+
+  geneVariantRequest:
+    description: >-
+      A variant overlapping with the genomic coordinates of a gene or other named
+      sequence element.
+    all_of:
+      - gene_id
+    optional:
+      - variant_type
+      - reference_bases
+      - alternate_bases
+      - variant_min_length
+      - variant_max_length
+
+  variantFusionRequest:
+    description: >-
+      This request is similar to the CNV request in using possibly fuzzy
+      intervals for start and end of structural variants. However, here the
+      "end" position refers to the fusion partner on the same or different
+      chromosome as specified through "mateName".
+      Conventions:
+      * `mateName` can be the same or different to `referenceName`
+      * `mateName` is the higher numbered/named chromosome
+    all_of:
+      - reference_name
+      - mate_name
+      - start
+      - end
+      - mate_start
+      - mate_end
+    optional:
+      - variant_min_length

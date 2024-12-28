@@ -1,0 +1,831 @@
+CVCL_0393	NCIT:C3058	Glioblastoma
+CVCL_0371	NCIT:C5250	Gastric signet ring cell adenocarcinoma
+CVCL_0099	NCIT:C4004	Gastric adenocarcinoma
+CVCL_0078	NCIT:C4004	Gastric adenocarcinoma
+CVCL_0076	NCIT:C4004	Gastric adenocarcinoma
+CVCL_1124	NCIT:C4827	Adrenal gland neuroblastoma
+CVCL_1234	NCIT:C4827	Adrenal gland neuroblastoma
+CVCL_1605	NCIT:C4827	Adrenal gland neuroblastoma
+CVCL_1771	NCIT:C4827	Adrenal gland neuroblastoma
+CVCL_0179	NCIT:C4194	Invasive breast carcinoma of no special type
+CVCL_1115	NCIT:C4017	Ductal breast carcinoma
+CVCL_0031	NCIT:C4194	Invasive breast carcinoma of no special type
+CVCL_0621	NCIT:C4017	Ductal breast carcinoma
+CVCL_0623	NCIT:C4194	Invasive breast carcinoma of no special type
+CVCL_0033	NCIT:C4017	Ductal breast carcinoma
+CVCL_0588	NCIT:C4194	Invasive breast carcinoma of no special type
+CVCL_1114	NCIT:C4017	Ductal breast carcinoma
+CVCL_1207	NCIT:C4017	Ductal breast carcinoma
+CVCL_1782	NCIT:C4194	Invasive breast carcinoma of no special type
+CVCL_1252	NCIT:C4017	Ductal breast carcinoma
+CVCL_1661	NCIT:C4194	Invasive breast carcinoma of no special type
+CVCL_1405	NCIT:C6287	Endometrial Endometrioid Adenocarcinoma
+CVCL_0505	NCIT:C114656	Endometrial adenosquamous carcinoma
+CVCL_0028	NCIT:C7359	Endometrial adenocarcinoma
+CVCL_1329	NCIT:C7359	Endometrial adenocarcinoma
+CVCL_1074	NCIT:C4017	Ductal breast carcinoma
+CVCL_1092	NCIT:C7439	Breast Papillary Ductal Carcinoma In Situ with Invasion 
+CVCL_0332	NCIT:C4194	Invasive breast carcinoma of no special type
+CVCL_0062	NCIT:C4194	Invasive breast carcinoma of no special type
+CVCL_0417	NCIT:C3802	Amelanotic melanoma
+CVCL_0419	NCIT:C4017	Ductal breast carcinoma
+CVCL_1781	NCIT:C4194	Invasive breast carcinoma of no special type
+CVCL_1104	NCIT:C4017	Ductal breast carcinoma
+CVCL_1258	NCIT:C40359	Breast squamous cell carcinoma, acantholytic variant
+CVCL_2319	NCIT:C4194	Invasive breast carcinoma of no special type
+CVCL_1400	NCIT:C4194	Invasive breast carcinoma of no special type
+CVCL_0620	NCIT:C4017	Ductal breast carcinoma
+CVCL_0418	NCIT:C4017	Ductal breast carcinoma
+CVCL_0553	NCIT:C6393	Invasive Breast Ductal Carcinoma and Invasive Lobular Carcinoma
+CVCL_1183	NCIT:C4017	Ductal breast carcinoma
+CVCL_1110	NCIT:C4017	Ductal breast carcinoma
+CVCL_1812	NCIT:C4017	Ductal breast carcinoma
+CVCL_2094	NCIT:C4194	Invasive breast carcinoma of no special type
+CVCL_1408	NCIT:C4017	Ductal breast carcinoma
+CVCL_1106	NCIT:C4017	Ductal breast carcinoma
+CVCL_2529	NCIT:C6287	Endometrial Endometrioid Adenocarcinoma
+CVCL_1406	NCIT:C6287	Endometrial Endometrioid Adenocarcinoma
+CVCL_1191	NCIT:C6287	Endometrial Endometrioid Adenocarcinoma
+CVCL_1550	NCIT:C3512	Lung adenocarcinoma
+CVCL_1555	NCIT:C45663	Pleural sarcomatoid mesothelioma
+CVCL_1557	NCIT:C7270	Minimally Invasive Lung Mixed Non-Mucinous and Mucinous Adenocarcinoma
+CVCL_1518	NCIT:C45663	Pleural sarcomatoid mesothelioma
+CVCL_0459	NCIT:C4450	Lung large cell carcinoma
+CVCL_1195	NCIT:C3512	Lung adenocarcinoma
+CVCL_5160	NCIT:C3512	Lung adenocarcinoma
+CVCL_0236	NCIT:C3512	Lung adenocarcinoma
+CVCL_1517	NCIT:C3512	Lung adenocarcinoma
+CVCL_1547	NCIT:C3512	Lung adenocarcinoma
+CVCL_0580	NCIT:C9152	Superficial Spreading Melanoma
+CVCL_6805	NCIT:C3510 	Cutaneous Melanoma
+CVCL_A338	NCIT:C3510 	Cutaneous Melanoma
+CVCL_1438	NCIT:C3510 	Cutaneous Melanoma
+CVCL_1780	NCIT:C3510 	Cutaneous Melanoma
+CVCL_5239	NCIT:C3510 	Cutaneous Melanoma
+CVCL_1395	NCIT:C3802	Amelanotic melanoma
+CVCL_8787	NCIT:C3510 	Cutaneous Melanoma
+CVCL_4633	NCIT:C3510 	Cutaneous Melanoma
+CVCL_1531	NCIT:C3512	Lung adenocarcinoma
+CVCL_1559	NCIT:C7270	Minimally Invasive Lung Mixed Non-Mucinous and Mucinous Adenocarcinoma
+CVCL_1532	NCIT:C4450	Lung large cell carcinoma
+CVCL_1524	NCIT:C3512	Lung adenocarcinoma
+CVCL_1543	NCIT:C3512	Lung adenocarcinoma
+CVCL_1556	NCIT:C7270	Minimally Invasive Lung Mixed Non-Mucinous and Mucinous Adenocarcinoma
+CVCL_1490	NCIT:C3493	Lung squamous cell carcinoma
+CVCL_1529	NCIT:C4917	Lung small cell carcinoma
+CVCL_1779 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_DG74	NCIT:C3510	Cutaneous Melanoma
+CVCL_6795	NCIT:C3510	Cutaneous Melanoma
+CVCL_V620 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_V621 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_V622 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_V623 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_V624 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_V625 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_DI28 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_DI29 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_DI30 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_DI31 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_DI32 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_DI33 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_DI34 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_DI35 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_DI36 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_DI37 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_DI38 ['NCIT:C2926'] NCIT:C3512 Lung adenocarcinoma
+CVCL_3612 ['NCIT:C7979', 'NCIT:C2855', 'NCIT:C3769'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_1288 ['NCIT:C8181', 'NCIT:C4648', 'NCIT:C4833'] NCIT:C4648 Tongue squamous cell carcinoma
+CVCL_3425 ['NCIT:C4017'] NCIT:C4872 Breast carcinoma
+CVCL_0598 ['NCIT:C4017'] NCIT:C132256 Unspecified tissue
+CVCL_1729 ['NCIT:C4349', 'NCIT:C9383'] NCIT:C9383 Rectal adenocarcinoma
+CVCL_1102 ['NCIT:C8181', 'NCIT:C4833'] NCIT:C129857 Gingival squamous cell carcinoma
+CVCL_1287 ['NCIT:C8181', 'NCIT:C4833'] NCIT:C4833 Oral cavity squamous cell carcinoma
+CVCL_1171 ['NCIT:C8181', 'NCIT:C102872'] NCIT:C102872 Pharyngeal squamous cell carcinoma
+CVCL_0178 ['NCIT:C4017', 'NCIT:C4194'] NCIT:C4194 Invasive breast carcinoma of no special type
+CVCL_3375 ['NCIT:C3771'] NCIT:C76328 Metastatic breast lobular carcinoma
+CVCL_3424 ['NCIT:C3771'] NCIT:C7950 Invasive breast lobular carcinoma
+CVCL_3421 ['NCIT:C4017'] NCIT:C4872 Breast carcinoma
+CVCL_0617 ['NCIT:C4017', 'NCIT:C7950'] NCIT:C7950 Invasive breast lobular carcinoma
+CVCL_0618 ['NCIT:C4017', 'NCIT:C4872'] NCIT:C4872 Breast carcinoma
+CVCL_0291 ['NCIT:C4910', 'NCIT:C4349'] NCIT:C4910 Colon carcinoma
+CVCL_9875 ['NCIT:C4017'] NCIT:C4194 Invasive breast carcinoma of no special type
+CVCL_1544 ['NCIT:C2926', 'NCIT:C45662', 'NCIT:C7985', 'NCIT:C4456', 'NCIT:C3234'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_0395 ['NCIT:C2919'] NCIT:C4863 Prostate carcinoma
+CVCL_0035 ['NCIT:C4863', 'NCIT:C2919'] NCIT:C4863 Prostate carcinoma
+CVCL_CZ98 ['NCIT:C7978'] NCIT:C5228 Ovarian cystadenocarcinoma
+CVCL_DA03 ['NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_3936 ['NCIT:C7978'] NCIT:C5228 Ovarian cystadenocarcinoma
+CVCL_DA02 ['NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_2754 ['NCIT:C4017'] NCIT:C4194 Invasive breast carcinoma of no special type
+CVCL_1100 ['NCIT:C4028'] NCIT:C27676 Human papillomavirus-related cervical squamous cell carcinoma
+CVCL_4747 ['NCIT:C2919'] NCIT:C4863 Prostate carcinoma
+CVCL_4748 ['NCIT:C4863', 'NCIT:C2919'] NCIT:C4863 Prostate carcinoma
+CVCL_4744 ['NCIT:C2919'] NCIT:C4863 Prostate carcinoma
+CVCL_CZ95 ['NCIT:C4908'] NCIT:C40078 Ovarian clear cell adenocarcinoma
+CVCL_0475 ['NCIT:C7978'] NCIT:C7550 Ovarian serous adenocarcinoma
+CVCL_CZ93 ['NCIT:C3769'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_CZ94 ['NCIT:C4908'] NCIT:C40078 Ovarian clear cell adenocarcinoma
+CVCL_D130 ['NCIT:C4017'] NCIT:C4194 Invasive breast carcinoma of no special type
+CVCL_0126 ['NCIT:C4912', 'NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_1292 ['NCIT:C4912', 'NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_1738 ['NCIT:C4912', 'NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_4778 ['NCIT:C2919'] NCIT:C4863 Prostate carcinoma
+CVCL_DA00 ['NCIT:C7978'] NCIT:C7550 Ovarian serous adenocarcinoma
+CVCL_H619 ['NCIT:C3769'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_CZ99 ['NCIT:C7978'] NCIT:C5228 Ovarian cystadenocarcinoma
+CVCL_DA01 ['NCIT:C7978'] NCIT:C7550 Ovarian serous adenocarcinoma
+CVCL_0465 ['NCIT:C105555', 'NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_2755 ['NCIT:C4017'] NCIT:C4194 Invasive breast carcinoma of no special type
+CVCL_C301 ['NCIT:C3510'] NCIT:C7712 Uveal melanoma
+CVCL_1047 ['NCIT:C3211'] NCIT:C9140 Childhood B acute lymphoblastic leukemia
+CVCL_1291 ['NCIT:C7899', 'NCIT:C39851'] NCIT:C7899 Recurrent bladder carcinoma
+CVCL_0473 ['NCIT:C4908'] NCIT:C27676 Human papillomavirus-related cervical squamous cell carcinoma
+CVCL_1058 ['NCIT:C3043', 'NCIT:C8971'] NCIT:C8971 Embryonal rhabdomyosarcoma
+CVCL_0134 ['NCIT:C7979', 'NCIT:C2855', 'NCIT:C3769'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_F638 ['NCIT:C3769'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_0201 ['NCIT:C105555', 'NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_0135 ['NCIT:C3769'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_DG88 ['NCIT:C7978'] NCIT:C7550 Ovarian serous adenocarcinoma
+CVCL_1627 ['NCIT:C105555', 'NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_1628 ['NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_1629 ['NCIT:C105555', 'NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_2686 ['NCIT:C7978'] NCIT:C36101 BRCA2 syndrome
+CVCL_3605 ['NCIT:C9145'] NCIT:C132256 Unspecified tissue
+CVCL_6785	NCIT:C3510	Cutaneous Melanoma
+CVCL_C265	NCIT:C3510	Cutaneous Melanoma
+CVCL_W886	NCIT:C3510	Cutaneous Melanoma
+CVCL_0B67	NCIT:C3510	Cutaneous Melanoma
+CVCL_DG75	NCIT:C3510	Cutaneous Melanoma
+CVCL_DG76	NCIT:C3510	Cutaneous Melanoma
+CVCL_L028	NCIT:C3510	Cutaneous Melanoma
+CVCL_7156	NCIT:C3510	Cutaneous Melanoma
+CVCL_C281	NCIT:C3510	Cutaneous Melanoma
+CVCL_DF84 ['NCIT:C4017'] NCIT:C36100 BRCA1 syndrome
+CVCL_F639 ['NCIT:C3769'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_1229 ['NCIT:C4247', 'NCIT:C3359'] NCIT:C4247 Undifferentiated pleomorphic sarcoma
+CVCL_DG89 ['NCIT:C7978'] NCIT:C7550 Ovarian serous adenocarcinoma
+CVCL_2690 ['NCIT:C7978'] NCIT:C36101 BRCA2 syndrome
+CVCL_6786	NCIT:C3510	Cutaneous Melanoma
+CVCL_C270	NCIT:C3510	Cutaneous Melanoma
+CVCL_6808	NCIT:C3510	Cutaneous Melanoma
+CVCL_AP86	NCIT:C3510	Cutaneous Melanoma
+CVCL_1345 ['NCIT:C105555', 'NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_0479 ['NCIT:C3756'] NCIT:C8114 Ovarian mixed germ cell tumor
+CVCL_DG02 ['NCIT:C3359'] NCIT:C3749 Alveolar rhabdomyosarcoma
+CVCL_0041 ['NCIT:C3749', 'NCIT:C3359'] NCIT:C3749 Alveolar rhabdomyosarcoma
+CVCL_M599 ['NCIT:C3359'] NCIT:C8971 Embryonal rhabdomyosarcoma
+CVCL_A339	NCIT:C3510	Cutaneous Melanoma
+CVCL_6792 ['NCIT:C9152'] NCIT:C3224 Melanoma
+CVCL_A341	NCIT:C3510	Cutaneous Melanoma
+CVCL_6796	NCIT:C3510	Cutaneous Melanoma
+CVCL_2240	NCIT:C3510	Cutaneous Melanoma
+CVCL_6803	NCIT:C3510	Cutaneous Melanoma
+CVCL_C280	NCIT:C3510	Cutaneous Melanoma
+CVCL_6995	NCIT:C3510	Cutaneous Melanoma
+CVCL_C283	NCIT:C3510	Cutaneous Melanoma
+CVCL_6806	NCIT:C3510	Cutaneous Melanoma
+CVCL_6807	NCIT:C3510	Cutaneous Melanoma
+CVCL_1775 ['NCIT:C4861'] NCIT:C8263 Adult acute monocytic leukemia
+CVCL_0336 ['NCIT:C3099', 'NCIT:C7956'] NCIT:C7956 Adult hepatocellular carcinoma
+CVCL_0027 ['NCIT:C3728', 'NCIT:C3099'] NCIT:C3728 Hepatoblastoma
+CVCL_0326 ['NCIT:C7955', 'NCIT:C3099'] NCIT:C7955 Childhood hepatocellular carcinoma
+CVCL_0485 ['NCIT:C3099', 'NCIT:C7956'] NCIT:C7956 Adult hepatocellular carcinoma
+CVCL_S678	NCIT:C3510	Cutaneous Melanoma
+CVCL_DI15	NCIT:C3510	Cutaneous Melanoma
+CVCL_4632	NCIT:C3510	Cutaneous Melanoma
+CVCL_7943	NCIT:C3510	Cutaneous Melanoma
+CVCL_DI14	NCIT:C3510	Cutaneous Melanoma
+CVCL_DI12	NCIT:C3510	Cutaneous Melanoma
+CVCL_C586	NCIT:C3510	Cutaneous Melanoma
+CVCL_8030	NCIT:C3510	Cutaneous Melanoma
+CVCL_8058	NCIT:C3510	Cutaneous Melanoma
+CVCL_C588	NCIT:C3510	Cutaneous Melanoma
+CVCL_DI13	NCIT:C3510	Cutaneous Melanoma
+CVCL_DI11	NCIT:C3510	Cutaneous Melanoma
+CVCL_8051	NCIT:C3510	Cutaneous Melanoma
+CVCL_8033	NCIT:C3510	Cutaneous Melanoma
+CVCL_8032	NCIT:C3510	Cutaneous Melanoma
+CVCL_W875	NCIT:C3510	Cutaneous Melanoma
+CVCL_S856	NCIT:C3510	Cutaneous Melanoma
+CVCL_S857	NCIT:C3510	Cutaneous Melanoma
+CVCL_W878	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH61	NCIT:C3510	Cutaneous Melanoma
+CVCL_U801	NCIT:C3510	Cutaneous Melanoma
+CVCL_1097 ['NCIT:C3802', 'NCIT:C3510'] NCIT:C3802 Amelanotic melanoma
+CVCL_U797	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH62	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH63	NCIT:C3510	Cutaneous Melanoma
+CVCL_H604	NCIT:C3510	Cutaneous Melanoma
+CVCL_H607	NCIT:C3510	Cutaneous Melanoma
+CVCL_H608	NCIT:C3510	Cutaneous Melanoma
+CVCL_H945	NCIT:C3510	Cutaneous Melanoma
+CVCL_H946	NCIT:C3510	Cutaneous Melanoma
+CVCL_H944	NCIT:C3510	Cutaneous Melanoma
+CVCL_W869	NCIT:C3510	Cutaneous Melanoma
+CVCL_H943	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH67	NCIT:C3510	Cutaneous Melanoma
+CVCL_W871	NCIT:C3510	Cutaneous Melanoma
+CVCL_W872	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH69	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH71	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH70	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH72	NCIT:C3510	Cutaneous Melanoma
+CVCL_DG37	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH73	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH74	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH75	NCIT:C3510	Cutaneous Melanoma
+CVCL_0359 ['NCIT:C4912', 'NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_0554 ['NCIT:C4912', 'NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_DH76	NCIT:C3510	Cutaneous Melanoma
+CVCL_0318 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_W874	NCIT:C3510	Cutaneous Melanoma
+CVCL_2601 ['NCIT:C3510'] NCIT:C3802 Amelanotic melanoma
+CVCL_2602	NCIT:C3510	Cutaneous Melanoma
+CVCL_C836	NCIT:C3510	Cutaneous Melanoma
+CVCL_C837	NCIT:C3510	Cutaneous Melanoma
+CVCL_2604 ['NCIT:C3510'] NCIT:C3802 Amelanotic melanoma
+CVCL_C838	NCIT:C3510	Cutaneous Melanoma
+CVCL_C839	NCIT:C3510	Cutaneous Melanoma
+CVCL_2605	NCIT:C3510	Cutaneous Melanoma
+CVCL_C840	NCIT:C3510	Cutaneous Melanoma
+CVCL_2607	NCIT:C3510	Cutaneous Melanoma
+CVCL_C841	NCIT:C3510	Cutaneous Melanoma
+CVCL_C842	NCIT:C3510	Cutaneous Melanoma
+CVCL_2608	NCIT:C3510	Cutaneous Melanoma
+CVCL_C843	NCIT:C3510	Cutaneous Melanoma
+CVCL_2609	NCIT:C3510	Cutaneous Melanoma
+CVCL_4449	NCIT:C3510	Cutaneous Melanoma
+CVCL_C845	NCIT:C3510	Cutaneous Melanoma
+CVCL_4450	NCIT:C3510	Cutaneous Melanoma
+CVCL_2610 ['NCIT:C3510'] NCIT:C3802 Amelanotic melanoma
+CVCL_C846	NCIT:C3510	Cutaneous Melanoma
+CVCL_4451	NCIT:C3510	Cutaneous Melanoma
+CVCL_C847	NCIT:C3510	Cutaneous Melanoma
+CVCL_C848	NCIT:C3510	Cutaneous Melanoma
+CVCL_4452	NCIT:C3510	Cutaneous Melanoma
+CVCL_DG38	NCIT:C3510	Cutaneous Melanoma
+CVCL_2612	NCIT:C3510	Cutaneous Melanoma
+CVCL_C850	NCIT:C3510	Cutaneous Melanoma
+CVCL_C851	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH58	NCIT:C3510	Cutaneous Melanoma
+CVCL_C852	NCIT:C3510	Cutaneous Melanoma
+CVCL_A777	NCIT:C3510	Cutaneous Melanoma
+CVCL_A776	NCIT:C3510	Cutaneous Melanoma
+CVCL_U799	NCIT:C3510	Cutaneous Melanoma
+CVCL_2713	NCIT:C3510	Cutaneous Melanoma
+CVCL_U798	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH60	NCIT:C3510	Cutaneous Melanoma
+CVCL_W879	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH66	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH65	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH64	NCIT:C3510	Cutaneous Melanoma
+CVCL_D853	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH59	NCIT:C3510	Cutaneous Melanoma
+CVCL_1382 ['NCIT:C5543', 'NCIT:C4349'] NCIT:C5543 Cecum adenocarcinoma
+CVCL_S808	NCIT:C3510	Cutaneous Melanoma
+CVCL_7948 ['NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_8253 ['NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_0021 ['NCIT:C3058', 'NCIT:C60781'] NCIT:C60781 Astrocytoma
+CVCL_1331 ['NCIT:C4910', 'NCIT:C4349'] NCIT:C4910 Colon carcinoma
+CVCL_0207 ['NCIT:C7953', 'NCIT:C3167'] NCIT:C7953 Childhood T acute lymphoblastic leukemia
+CVCL_0002 ['NCIT:C9154', 'NCIT:C27753'] NCIT:C9154 Adult acute myeloid leukemia
+CVCL_0004 ['NCIT:C3174'] NCIT:C9110 Blast phase chronic myelogenous leukemia, BCR-ABL1 positive
+CVCL_0013 ['NCIT:C9142', 'NCIT:C3167'] NCIT:C9142 Adult T acute lymphoblastic leukemia
+CVCL_1452 ['NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_0014 ['NCIT:C9349', 'NCIT:C3242'] NCIT:C3242 Plasma cell myeloma
+CVCL_1711 ['NCIT:C3468', 'NCIT:C3720', 'NCIT:C37193'] NCIT:C37193 Anaplastic large cell lymphoma, ALK-positive
+CVCL_1381 ['NCIT:C3802', 'NCIT:C3510'] NCIT:C3802 Amelanotic melanoma
+CVCL_1304 ['NCIT:C7979', 'NCIT:C5228', 'NCIT:C3769'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_1067 ['NCIT:C6975', 'NCIT:C9385'] NCIT:C6975 Papillary renal cell carcinoma
+CVCL_1773 ['NCIT:C27893', 'NCIT:C4033', 'NCIT:C9385'] NCIT:C4033 Clear cell renal cell carcinoma
+CVCL_DH83 ['NCIT:C4017'] NCIT:C5214 Breast adenocarcinoma
+CVCL_M372 ['NCIT:C4017'] NCIT:C5214 Breast adenocarcinoma
+CVCL_A116 ['NCIT:C3510'] NCIT:C9151 Lentigo maligna melanoma
+CVCL_A118	NCIT:C3510	Cutaneous Melanoma
+CVCL_A119	NCIT:C3510	Cutaneous Melanoma
+CVCL_A121 ['NCIT:C3510'] NCIT:C4225 Cutaneous nodular melanoma
+CVCL_A123	NCIT:C3510	Cutaneous Melanoma
+CVCL_A133 ['NCIT:C3510'] NCIT:C3802 Amelanotic melanoma
+CVCL_A139	NCIT:C3510	Cutaneous Melanoma
+CVCL_A146	NCIT:C3510	Cutaneous Melanoma
+CVCL_A155	NCIT:C3510	Cutaneous Melanoma
+CVCL_A156	NCIT:C3510	Cutaneous Melanoma
+CVCL_A158	NCIT:C3510	Cutaneous Melanoma
+CVCL_A160	NCIT:C3510	Cutaneous Melanoma
+CVCL_A162	NCIT:C3510	Cutaneous Melanoma
+CVCL_A163 ['NCIT:C3510'] NCIT:C4022 Acral lentiginous melanoma
+CVCL_A165	NCIT:C3510	Cutaneous Melanoma
+CVCL_A167	NCIT:C3510	Cutaneous Melanoma
+CVCL_A170	NCIT:C3510	Cutaneous Melanoma
+CVCL_A171	NCIT:C3510	Cutaneous Melanoma
+CVCL_A172	NCIT:C3510	Cutaneous Melanoma
+CVCL_A174	NCIT:C3510	Cutaneous Melanoma
+CVCL_A175	NCIT:C3510	Cutaneous Melanoma
+CVCL_A176	NCIT:C3510	Cutaneous Melanoma
+CVCL_A180	NCIT:C3510	Cutaneous Melanoma
+CVCL_A186	NCIT:C3510	Cutaneous Melanoma
+CVCL_A188	NCIT:C3510	Cutaneous Melanoma
+CVCL_A192	NCIT:C3510	Cutaneous Melanoma
+CVCL_A193	NCIT:C3510	Cutaneous Melanoma
+CVCL_A194	NCIT:C3510	Cutaneous Melanoma
+CVCL_A195	NCIT:C3510	Cutaneous Melanoma
+CVCL_C291	NCIT:C3510	Cutaneous Melanoma
+CVCL_A197	NCIT:C3510	Cutaneous Melanoma
+CVCL_A198	NCIT:C3510	Cutaneous Melanoma
+CVCL_A201	NCIT:C3510	Cutaneous Melanoma
+CVCL_A203	NCIT:C3510	Cutaneous Melanoma
+CVCL_A205	NCIT:C3510	Cutaneous Melanoma
+CVCL_A207	NCIT:C3510	Cutaneous Melanoma
+CVCL_A208	NCIT:C3510	Cutaneous Melanoma
+CVCL_A211	NCIT:C3510	Cutaneous Melanoma
+CVCL_A212	NCIT:C3510	Cutaneous Melanoma
+CVCL_A214	NCIT:C3510	Cutaneous Melanoma
+CVCL_A215	NCIT:C3510	Cutaneous Melanoma
+CVCL_A220	NCIT:C3510	Cutaneous Melanoma
+CVCL_A221	NCIT:C3510	Cutaneous Melanoma
+CVCL_A228	NCIT:C3510	Cutaneous Melanoma
+CVCL_A229	NCIT:C3510	Cutaneous Melanoma
+CVCL_A232	NCIT:C3510	Cutaneous Melanoma
+CVCL_A125	NCIT:C3510	Cutaneous Melanoma
+CVCL_A127	NCIT:C3510	Cutaneous Melanoma
+CVCL_A131	NCIT:C3510	Cutaneous Melanoma
+CVCL_A134	NCIT:C3510	Cutaneous Melanoma
+CVCL_A136	NCIT:C3510	Cutaneous Melanoma
+CVCL_A137	NCIT:C3510	Cutaneous Melanoma
+CVCL_A138	NCIT:C3510	Cutaneous Melanoma
+CVCL_A144	NCIT:C3510	Cutaneous Melanoma
+CVCL_A145	NCIT:C3510	Cutaneous Melanoma
+CVCL_A147	NCIT:C3510	Cutaneous Melanoma
+CVCL_A148	NCIT:C3510	Cutaneous Melanoma
+CVCL_A149	NCIT:C3510	Cutaneous Melanoma
+CVCL_A152	NCIT:C3510	Cutaneous Melanoma
+CVCL_C505	NCIT:C3510	Cutaneous Melanoma
+CVCL_3114 ['NCIT:C105555', 'NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_4992 ['NCIT:C4908'] NCIT:C8114 Ovarian mixed germ cell tumor
+CVCL_1617 ['NCIT:C7978'] NCIT:C7550 Ovarian serous adenocarcinoma
+CVCL_2682 ['NCIT:C7978'] NCIT:C5228 Ovarian cystadenocarcinoma
+CVCL_2691 ['NCIT:C5228', 'NCIT:C7978'] NCIT:C36101 BRCA2 syndrome
+CVCL_2689 ['NCIT:C7978'] NCIT:C5228 Ovarian cystadenocarcinoma
+CVCL_DI16 ['NCIT:C3769'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_B476 ['NCIT:C7978'] NCIT:C5228 Ovarian cystadenocarcinoma
+CVCL_3352 ['NCIT:C4017'] NCIT:C4872 Breast carcinoma
+CVCL_1616 ['NCIT:C7550', 'NCIT:C7978'] NCIT:C7550 Ovarian serous adenocarcinoma
+CVCL_5381 ['NCIT:C7978'] NCIT:C7550 Ovarian serous adenocarcinoma
+CVCL_2683 ['NCIT:C7978'] NCIT:C5228 Ovarian cystadenocarcinoma
+CVCL_2687 ['NCIT:C7978'] NCIT:C5228 Ovarian cystadenocarcinoma
+CVCL_0589 ['NCIT:C9381', 'NCIT:C27753'] NCIT:C9381 Childhood acute myeloid leukemia with maturation
+CVCL_1650 ['NCIT:C8644', 'NCIT:C9140'] NCIT:C9140 Childhood B acute lymphoblastic leukemia
+CVCL_0219 ['NCIT:C4910', 'NCIT:C4349'] NCIT:C4349 Colon adenocarcinoma
+CVCL_1563 ['NCIT:C4349'] NCIT:C5543 Cecum adenocarcinoma
+CVCL_1587 ['NCIT:C5543', 'NCIT:C4349'] NCIT:C5543 Cecum adenocarcinoma
+CVCL_S959 ['NCIT:C4349'] NCIT:C5105 Colorectal adenocarcinoma
+CVCL_1515 ['NCIT:C2926', 'NCIT:C3512'] NCIT:C3512 Lung adenocarcinoma
+CVCL_1549 ['NCIT:C2926', 'NCIT:C3512'] NCIT:C3512 Lung adenocarcinoma
+CVCL_1386 ['NCIT:C5543', 'NCIT:C4349'] NCIT:C5543 Cecum adenocarcinoma
+CVCL_1581 ['NCIT:C5543', 'NCIT:C4349'] NCIT:C5543 Cecum adenocarcinoma
+CVCL_1484 ['NCIT:C2926', 'NCIT:C3512'] NCIT:C3512 Lung adenocarcinoma
+CVCL_1385 ['NCIT:C5543', 'NCIT:C4349'] NCIT:C5543 Cecum adenocarcinoma
+CVCL_1564 ['NCIT:C5543', 'NCIT:C4349'] NCIT:C5543 Cecum adenocarcinoma
+CVCL_1718 ['NCIT:C9383', 'NCIT:C4349'] NCIT:C9383 Rectal adenocarcinoma
+CVCL_1488 ['NCIT:C2926', 'NCIT:C3512'] NCIT:C3512 Lung adenocarcinoma
+CVCL_1523 ['NCIT:C2926', 'NCIT:C3512'] NCIT:C3512 Lung adenocarcinoma
+CVCL_1551 ['NCIT:C2926', 'NCIT:C3512'] NCIT:C3512 Lung adenocarcinoma
+CVCL_1129 ['NCIT:C4910', 'NCIT:C4349'] NCIT:C4910 Colon carcinoma
+CVCL_1521 ['NCIT:C2926', 'NCIT:C3512'] NCIT:C3512 Lung adenocarcinoma
+CVCL_1546 ['NCIT:C2926', 'NCIT:C3512'] NCIT:C3512 Lung adenocarcinoma
+CVCL_5113 ['NCIT:C45662', 'NCIT:C7985'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_5114 ['NCIT:C7985'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_5190 ['NCIT:C7376'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_5178 ['NCIT:C7376'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_5179 ['NCIT:C7376'] NCIT:C45665 Pleural biphasic mesothelioma
+CVCL_5180 ['NCIT:C7376'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_5181 ['NCIT:C7376'] NCIT:C45663 Pleural sarcomatoid mesothelioma
+CVCL_5182 ['NCIT:C7376'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_5183 ['NCIT:C7376'] NCIT:C27779 Lymphohistiocytoid mesothelioma
+CVCL_5184 ['NCIT:C7376'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_5185 ['NCIT:C7376'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_5186 ['NCIT:C7376'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_5187 ['NCIT:C7376'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_6031	NCIT:C3510	Cutaneous Melanoma
+CVCL_6224	NCIT:C3510	Cutaneous Melanoma
+CVCL_3880	NCIT:C3510	Cutaneous Melanoma
+CVCL_6069	NCIT:C3510	Cutaneous Melanoma
+CVCL_6090	NCIT:C3510	Cutaneous Melanoma
+CVCL_3876	NCIT:C3510	Cutaneous Melanoma
+CVCL_6097	NCIT:C3510	Cutaneous Melanoma
+CVCL_6101	NCIT:C3510	Cutaneous Melanoma
+CVCL_8082	NCIT:C3510	Cutaneous Melanoma
+CVCL_0525 ['NCIT:C3099', 'NCIT:C7956'] NCIT:C7106 Liver and intrahepatic bile duct epithelial neoplasm
+CVCL_3840 ['NCIT:C3099', 'NCIT:C7956'] NCIT:C7956 Adult hepatocellular carcinoma
+CVCL_0090 ['NCIT:C3099', 'NCIT:C7956'] NCIT:C7956 Adult hepatocellular carcinoma
+CVCL_0497 ['NCIT:C3099', 'NCIT:C7956'] NCIT:C7956 Adult hepatocellular carcinoma
+CVCL_0250 ['NCIT:C3099', 'NCIT:C7956'] NCIT:C7956 Adult hepatocellular carcinoma
+CVCL_0077 ['NCIT:C3099', 'NCIT:C7956'] NCIT:C7956 Adult hepatocellular carcinoma
+CVCL_0366 ['NCIT:C3099', 'NCIT:C7956'] NCIT:C7956 Adult hepatocellular carcinoma
+CVCL_0454 ['NCIT:C3099', 'NCIT:C7956'] NCIT:C7956 Adult hepatocellular carcinoma
+CVCL_D748	NCIT:C3510	Cutaneous Melanoma
+CVCL_D751	NCIT:C3510	Cutaneous Melanoma
+CVCL_2047 ['NCIT:C105555', 'NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_3495 ['NCIT:C132256'] NCIT:C4863 Prostate carcinoma
+CVCL_2235 ['NCIT:C4863', 'NCIT:C2919'] NCIT:C4863 Prostate carcinoma
+CVCL_2945 ['NCIT:C27753'] NCIT:C9154 Adult acute myeloid leukemia
+CVCL_4784 ['NCIT:C2919'] NCIT:C4863 Prostate carcinoma
+CVCL_1107 ['NCIT:C4648'] NCIT:C173807 Tongue adenosquamous carcinoma
+CVCL_0313 ['NCIT:C8294', 'NCIT:C9120'] NCIT:C9120 Pancreatic ductal adenocarcinoma
+CVCL_1584 ['NCIT:C4878', 'NCIT:C2926', 'NCIT:C4038', 'NCIT:C3512'] NCIT:C4038 Lung carcinoid tumor
+CVCL_1720 ['NCIT:C2923', 'NCIT:C7270'] NCIT:C2923 Minimally invasive lung adenocarcinoma
+CVCL_1060 ['NCIT:C4648', 'NCIT:C7991'] NCIT:C5943 Submandibular gland squamous cell carcinoma
+CVCL_2253 ['NCIT:C4028', 'NCIT:C27676'] NCIT:C27676 Human papillomavirus-related cervical squamous cell carcinoma
+CVCL_1401 ['NCIT:C4028', 'NCIT:C2929'] NCIT:C27676 Human papillomavirus-related cervical squamous cell carcinoma
+CVCL_0032 ['NCIT:C4028', 'NCIT:C27676'] NCIT:C27676 Human papillomavirus-related cervical squamous cell carcinoma
+CVCL_2075 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_1094 ['NCIT:C4028'] NCIT:C180839 Cervical squamous cell carcinoma, not otherwise specified
+CVCL_1095 ['NCIT:C4028', 'NCIT:C27676'] NCIT:C27676 Human papillomavirus-related cervical squamous cell carcinoma
+CVCL_1293 ['NCIT:C4028', 'NCIT:C9039'] NCIT:C9039 Cervical carcinoma
+CVCL_4996 ['NCIT:C4028'] NCIT:C27676 Human papillomavirus-related cervical squamous cell carcinoma
+CVCL_1727 ['NCIT:C4028', 'NCIT:C27676'] NCIT:C27676 Human papillomavirus-related cervical squamous cell carcinoma
+CVCL_2076 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_DI25 ['NCIT:C3510'] NCIT:C132256 Unspecified tissue
+CVCL_0018 ['NCIT:C3222'] NCIT:C129445 Medulloblastoma, non-WNT/non-SHH, group 3
+CVCL_1275 ['NCIT:C3222'] NCIT:C129445 Medulloblastoma, non-WNT/non-SHH, group 3
+CVCL_1161 ['NCIT:C3222'] NCIT:C129445 Medulloblastoma, non-WNT/non-SHH, group 3
+CVCL_1167 ['NCIT:C3222'] NCIT:C129442 Medulloblastoma, SHH-activated, TP53-mutant
+CVCL_M137 ['NCIT:C3222'] NCIT:C129445 Medulloblastoma, non-WNT/non-SHH, group 3
+CVCL_1624 ['NCIT:C3222'] NCIT:C129443 Medulloblastoma, SHH-activated, TP53-wildtype
+CVCL_8585 ['NCIT:C3222'] NCIT:C129442 Medulloblastoma, SHH-activated, TP53-mutant
+CVCL_1786 ['NCIT:C4912', 'NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_3502 ['NCIT:C3183'] NCIT:C7953 Childhood T acute lymphoblastic leukemia
+CVCL_0367 ['NCIT:C3183'] NCIT:C7953 Childhood T acute lymphoblastic leukemia
+CVCL_1049 ['NCIT:C4912', 'NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_3088 ['NCIT:C4910', 'NCIT:C4349'] NCIT:C4910 Colon carcinoma
+CVCL_0941 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C132256 Unspecified tissue
+CVCL_3160 ['NCIT:C4833'] NCIT:C34447 Head and neck squamous cell carcinoma
+CVCL_3002 ['NCIT:C8294'] NCIT:C9120 Pancreatic ductal adenocarcinoma
+CVCL_1632 ['NCIT:C9160', 'NCIT:C27753'] NCIT:C9160 Childhood acute myeloid leukemia
+CVCL_1428 ['NCIT:C4017'] NCIT:C4872 Breast carcinoma
+CVCL_2814 ['NCIT:C4017', 'NCIT:C4194'] NCIT:C4194 Invasive breast carcinoma of no special type
+CVCL_1321 ['NCIT:C8923', 'NCIT:C9154'] NCIT:C9154 Adult acute myeloid leukemia
+CVCL_2786 ['NCIT:C3099', 'NCIT:C7956'] NCIT:C7956 Adult hepatocellular carcinoma
+CVCL_1604 ['NCIT:C5027'] NCIT:C6341 Testicular embryonal carcinoma
+CVCL_0390 ['NCIT:C3088'] NCIT:C3800 Epithelioid hemangioendothelioma
+CVCL_0302 ['NCIT:C9384'] NCIT:C132256 Unspecified tissue
+CVCL_1728 ['NCIT:C4912', 'NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_3077 ['NCIT:C3172'] NCIT:C8263 Adult acute monocytic leukemia
+CVCL_2067 ['NCIT:C4017', 'NCIT:C4872'] NCIT:C4017 Breast ductal carcinoma
+CVCL_2785 ['NCIT:C3099', 'NCIT:C27688'] NCIT:C3098 Hepatitis C infection
+CVCL_3143 ['NCIT:C67369', 'NCIT:C95595'] NCIT:C95595 Pancreatic somatostatinoma
+CVCL_2320 ['NCIT:C4028'] NCIT:C27677 Human papillomavirus-related endocervical adenocarcinoma
+CVCL_2307 ['NCIT:C4833'] NCIT:C4040 Buccal mucosa squamous cell carcinoma
+CVCL_C171 ['NCIT:C8181'] NCIT:C4044 Laryngeal squamous cell carcinoma
+CVCL_6410 ['NCIT:C3183'] NCIT:C7953 Childhood T acute lymphoblastic leukemia
+CVCL_6429 ['NCIT:C3183'] NCIT:C7953 Childhood T acute lymphoblastic leukemia
+CVCL_1048 ['NCIT:C4912', 'NCIT:C39851'] NCIT:C4830 Ureter urothelial carcinoma
+CVCL_1059 ['NCIT:C3802', 'NCIT:C3510'] NCIT:C3802 Amelanotic melanoma
+CVCL_1083 ['NCIT:C4912', 'NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_1808 ['NCIT:C4912', 'NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_1221 ['NCIT:C159209', 'NCIT:C3486'] NCIT:C3150 Kidney neoplasm
+CVCL_1281 ['NCIT:C3099', 'NCIT:C7956'] NCIT:C7956 Adult hepatocellular carcinoma
+CVCL_1721 ['NCIT:C4912', 'NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_1284 ['NCIT:C4833'] NCIT:C4040 Buccal mucosa squamous cell carcinoma
+CVCL_3001 ['NCIT:C4833'] NCIT:C4041 Floor of mouth squamous cell carcinoma
+CVCL_1337 ['NCIT:C4833'] NCIT:C4041 Floor of mouth squamous cell carcinoma
+CVCL_2788 ['NCIT:C3099', 'NCIT:C27688'] NCIT:C3098 Hepatitis C infection
+CVCL_1289 ['NCIT:C4648', 'NCIT:C4833'] NCIT:C4648 Tongue squamous cell carcinoma
+CVCL_2787 ['NCIT:C3099', 'NCIT:C27688'] NCIT:C3098 Hepatitis C infection
+CVCL_2795 ['NCIT:C4028'] NCIT:C27676 Human papillomavirus-related cervical squamous cell carcinoma
+CVCL_2784 ['NCIT:C4041', 'NCIT:C4833'] NCIT:C4041 Floor of mouth squamous cell carcinoma
+CVCL_2956 ['NCIT:C3099', 'NCIT:C7956'] NCIT:C7956 Adult hepatocellular carcinoma
+CVCL_3827 ['NCIT:C3174'] NCIT:C9110 Blast phase chronic myelogenous leukemia, BCR-ABL1 positive
+CVCL_1075 ['NCIT:C3167'] NCIT:C9143 Adult B acute lymphoblastic leukemia
+CVCL_3119 ['NCIT:C2912'] NCIT:C27694 EBV-related Burkitt lymphoma
+CVCL_2792 ['NCIT:C3183'] NCIT:C9142 Adult T acute lymphoblastic leukemia
+CVCL_1683 ['NCIT:C3211'] NCIT:C3457 B-cell non-Hodgkin lymphoma
+CVCL_1707 ['NCIT:C6287', 'NCIT:C7359'] NCIT:C7359 Endometrial adenocarcinoma
+CVCL_1941 ['NCIT:C7700'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_1615 ['NCIT:C5228', 'NCIT:C7978'] NCIT:C7978 Ovarian serous cystadenocarcinoma
+CVCL_0697 ['NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_1470 ['NCIT:C2926', 'NCIT:C3512'] NCIT:C3512 Lung adenocarcinoma
+CVCL_2461 ['NCIT:C3167'] NCIT:C7953 Childhood T acute lymphoblastic leukemia
+CVCL_1282 ['NCIT:C3510'] NCIT:C27394 Vaginal melanoma
+CVCL_1294 ['NCIT:C4910', 'NCIT:C4349'] NCIT:C9383 Rectal adenocarcinoma
+CVCL_6543 ['NCIT:C7359', 'NCIT:C3769'] NCIT:C7359 Endometrial adenocarcinoma
+CVCL_1784 ['NCIT:C4878'] NCIT:C4038 Lung carcinoid tumor
+CVCL_2862 ['NCIT:C4004', 'NCIT:C7889'] NCIT:C7889 Duodenal adenocarcinoma
+CVCL_2765 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_2714 ['NCIT:C4912', 'NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_1888 ['NCIT:C80280', 'NCIT:C3209', 'NCIT:C8851'] NCIT:C3209 Follicular lymphoma
+CVCL_1238 ['NCIT:C2946'] NCIT:C27502 Extraskeletal myxoid chondrosarcoma
+CVCL_2892 ['NCIT:C27753'] NCIT:C9154 Adult acute myeloid leukemia
+CVCL_1942 ['NCIT:C7700'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_1133 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_0040 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_1666 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_0068 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_0938 ['NCIT:C3510'] NCIT:C132256 Unspecified tissue
+CVCL_0993 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C132256 Unspecified tissue
+CVCL_1033 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_3112 ['NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_1631 ['NCIT:C8644'] NCIT:C9140 Childhood B acute lymphoblastic leukemia
+CVCL_3216 ['NCIT:C3211'] NCIT:C3457 B-cell non-Hodgkin lymphoma
+CVCL_1638 ['NCIT:C8294', 'NCIT:C9120'] NCIT:C9120 Pancreatic ductal adenocarcinoma
+CVCL_3007 ['NCIT:C3749'] NCIT:C8971 Embryonal rhabdomyosarcoma
+CVCL_1274 ['NCIT:C3769'] NCIT:C7359 Endometrial adenocarcinoma
+CVCL_1374 ['NCIT:C3167'] NCIT:C9140 Childhood B acute lymphoblastic leukemia
+CVCL_0471 ['NCIT:C3513', 'NCIT:C7027'] NCIT:C7027 Barrett adenocarcinoma
+CVCL_1219 ['NCIT:C8054', 'NCIT:C65200'] NCIT:C8054 Thyroid gland follicular carcinoma
+CVCL_2447 ['NCIT:C8054', 'NCIT:C65200'] NCIT:C8054 Thyroid gland follicular carcinoma
+CVCL_2295 ['NCIT:C3510'] NCIT:C3802 Amelanotic melanoma
+CVCL_2520 ['NCIT:C4910', 'NCIT:C4349'] NCIT:C4910 Colon carcinoma
+CVCL_2027 ['NCIT:C27694', 'NCIT:C2912'] NCIT:C27694 EBV-related Burkitt lymphoma
+CVCL_1222 ['NCIT:C7954', 'NCIT:C2912'] NCIT:C7954 Adult Burkitt leukemia
+CVCL_2588 ['NCIT:C4910', 'NCIT:C4349'] NCIT:C4910 Colon carcinoma
+CVCL_0814 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C132256 Unspecified tissue
+CVCL_2514 ['NCIT:C4349', 'NCIT:C9383'] NCIT:C4349 Colon adenocarcinoma
+CVCL_1614 ['NCIT:C105555', 'NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_0582 ['NCIT:C65200'] NCIT:C8054 Thyroid gland follicular carcinoma
+CVCL_0036 ['NCIT:C4912', 'NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_2443 ['NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_0878 ['NCIT:C66759', 'NCIT:C4304'] NCIT:C132256 Unspecified tissue
+CVCL_1180 ['NCIT:C3792'] NCIT:C129863 Oral epithelial dysplasia
+CVCL_2315 ['NCIT:C4833'] NCIT:C170774 Alveolar ridge squamous cell carcinoma
+CVCL_1134 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_2761 ['NCIT:C3211'] NCIT:C97074 Hereditary spherocytosis
+CVCL_1121 ['NCIT:C35875', 'NCIT:C3512'] NCIT:C35875 Bronchogenic carcinoma
+CVCL_3317 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_1220 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_0891 ['NCIT:C9357'] NCIT:C132256 Unspecified tissue
+CVCL_1553 ['NCIT:C45665', 'NCIT:C4456'] NCIT:C45665 Pleural biphasic mesothelioma
+CVCL_0950 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_1009	NCIT:C3510	Cutaneous Melanoma
+CVCL_1430 ['NCIT:C45665', 'NCIT:C4456'] NCIT:C45665 Pleural biphasic mesothelioma
+CVCL_2995 ['NCIT:C9349'] NCIT:C3242 Plasma cell myeloma
+CVCL_5121 ['NCIT:C4028'] NCIT:C27676 Human papillomavirus-related cervical squamous cell carcinoma
+CVCL_0030 ['NCIT:C4029'] NCIT:C27677 Human papillomavirus-related endocervical adenocarcinoma
+CVCL_M172 ['NCIT:C3099'] NCIT:C7955 Childhood hepatocellular carcinoma
+CVCL_W086 ['NCIT:C4456'] NCIT:C7376 Pleural malignant mesothelioma
+CVCL_2536 ['NCIT:C4456'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_H669 ['NCIT:C4456'] NCIT:C7376 Pleural malignant mesothelioma
+CVCL_H677 ['NCIT:C4456'] NCIT:C7376 Pleural malignant mesothelioma
+CVCL_W085 ['NCIT:C4456'] NCIT:C7376 Pleural malignant mesothelioma
+CVCL_W083 ['NCIT:C4456'] NCIT:C7376 Pleural malignant mesothelioma
+CVCL_2671 ['NCIT:C4456'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_W082 ['NCIT:C4456'] NCIT:C7376 Pleural malignant mesothelioma
+CVCL_W084 ['NCIT:C4456'] NCIT:C7376 Pleural malignant mesothelioma
+CVCL_7956 ['NCIT:C4456'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_A533 ['NCIT:C45655'] NCIT:C45663 Pleural sarcomatoid mesothelioma
+CVCL_M005 ['NCIT:C4456'] NCIT:C45665 Pleural biphasic mesothelioma
+CVCL_2581 ['NCIT:C4456'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_H668 ['NCIT:C4456'] NCIT:C7376 Pleural malignant mesothelioma
+CVCL_H681 ['NCIT:C7985'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_F504 ['NCIT:C4456'] NCIT:C45665 Pleural biphasic mesothelioma
+CVCL_S993 ['NCIT:C4456'] NCIT:C7376 Pleural malignant mesothelioma
+CVCL_A731 ['NCIT:C45655'] NCIT:C45663 Pleural sarcomatoid mesothelioma
+CVCL_2658 ['NCIT:C4456'] NCIT:C7376 Pleural malignant mesothelioma
+CVCL_8063 ['NCIT:C4833'] NCIT:C8173 Upper gingival squamous cell carcinoma
+CVCL_Y285 ['NCIT:C8863'] NCIT:C4663 Splenic marginal zone lymphoma
+CVCL_DH35	NCIT:C3510	Cutaneous Melanoma
+CVCL_7674 ['NCIT:C4833'] NCIT:C6064 Maxillary sinus squamous cell carcinoma
+CVCL_2539 ['NCIT:C8863'] NCIT:C4663 Splenic marginal zone lymphoma
+CVCL_C123 ['NCIT:C8863', 'NCIT:C4341'] NCIT:C4663 Splenic marginal zone lymphoma
+CVCL_1290 ['NCIT:C80280', 'NCIT:C36080'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_1660 ['NCIT:C80280', 'NCIT:C8851'] NCIT:C8851 Diffuse large B-cell lymphoma
+CVCL_1168 ['NCIT:C80280', 'NCIT:C36080'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_H633 ['NCIT:C3468'] NCIT:C37193 Anaplastic large cell lymphoma, ALK-positive
+CVCL_H614 ['NCIT:C3468'] NCIT:C37194 Anaplastic large cell lymphoma, ALK-negative
+CVCL_2098 ['NCIT:C3468', 'NCIT:C37193'] NCIT:C37193 Anaplastic large cell lymphoma, ALK-positive
+CVCL_1735 ['NCIT:C80280', 'NCIT:C36080'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_B228 ['NCIT:C3720'] NCIT:C37193 Anaplastic large cell lymphoma, ALK-positive
+CVCL_H631 ['NCIT:C3211'] NCIT:C3467 Primary cutaneous T-cell non-Hodgkin lymphoma
+CVCL_1324 ['NCIT:C3468', 'NCIT:C37193'] NCIT:C37193 Anaplastic large cell lymphoma, ALK-positive
+CVCL_0538 ['NCIT:C3468', 'NCIT:C37193'] NCIT:C37193 Anaplastic large cell lymphoma, ALK-positive
+CVCL_DH37 ['NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_DH38 ['NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_DH39 ['NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_DH40 ['NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_DH41 ['NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_7166 ['NCIT:C3270'] NCIT:C4817 Ewing sarcoma
+CVCL_1136 ['NCIT:C4017'] NCIT:C4872 Breast carcinoma
+CVCL_DG69 ['NCIT:C3058'] NCIT:C4325 Giant cell glioblastoma
+CVCL_1889 ['NCIT:C80280', 'NCIT:C36080'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_A442 ['NCIT:C80280'] NCIT:C36081 Diffuse large B-cell lymphoma activated B-cell type
+CVCL_A480 ['NCIT:C3170'] NCIT:C7965 Adult acute megakaryoblastic leukemia
+CVCL_8800 ['NCIT:C80280', 'NCIT:C36081'] NCIT:C36081 Diffuse large B-cell lymphoma activated B-cell type
+CVCL_1879 ['NCIT:C80280'] NCIT:C8851 Diffuse large B-cell lymphoma
+CVCL_1325 ['NCIT:C80280', 'NCIT:C36080'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_8795 ['NCIT:C80280', 'NCIT:C8851', 'NCIT:C36081'] NCIT:C36081 Diffuse large B-cell lymphoma activated B-cell type
+CVCL_4213 ['NCIT:C80280'] NCIT:C36081 Diffuse large B-cell lymphoma activated B-cell type
+CVCL_1881 ['NCIT:C80280'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_DG36 ['NCIT:C3510'] NCIT:C114828 Mucosal melanoma
+CVCL_T324 ['NCIT:C3224'] NCIT:C3510 Cutaneous melanoma
+CVCL_1896 ['NCIT:C80280'] NCIT:C36081 Diffuse large B-cell lymphoma activated B-cell type
+CVCL_0A72 ['NCIT:C4878'] NCIT:C4450 Lung large cell carcinoma
+CVCL_1885 ['NCIT:C80280', 'NCIT:C36081', 'NCIT:C8851'] NCIT:C36081 Diffuse large B-cell lymphoma activated B-cell type
+CVCL_0067 ['NCIT:C3211', 'NCIT:C27694'] NCIT:C27694 EBV-related Burkitt lymphoma
+CVCL_3302 ['NCIT:C80280', 'NCIT:C36080'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_V744 ['NCIT:C3510'] NCIT:C114828 Mucosal melanoma
+CVCL_3611 ['NCIT:C80280', 'NCIT:C36080'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_7933 ['NCIT:C4017'] NCIT:C4872 Breast carcinoma
+CVCL_A222	NCIT:C3510	Cutaneous Melanoma
+CVCL_S607 ['NCIT:C27753'] NCIT:C9154 Adult acute myeloid leukemia
+CVCL_2037 ['NCIT:C3247', 'NCIT:C27753'] NCIT:C3247 Myelodysplastic syndrome
+CVCL_2119 ['NCIT:C8923', 'NCIT:C9154', 'NCIT:C27753'] NCIT:C9154 Adult acute myeloid leukemia
+CVCL_A662 ['NCIT:C27912'] NCIT:C3247 Myelodysplastic syndrome
+CVCL_0098 ['NCIT:C9154', 'NCIT:C27753'] NCIT:C9154 Adult acute myeloid leukemia
+CVCL_IR87 ['NCIT:C3058', 'NCIT:C3059'] NCIT:C3058 Glioblastoma
+CVCL_IS01 ['NCIT:C3058', 'NCIT:C3059'] NCIT:C3058 Glioblastoma
+CVCL_IR63 ['NCIT:C3058', 'NCIT:C3059'] NCIT:C3058 Glioblastoma
+CVCL_IS00 ['NCIT:C3058', 'NCIT:C3059'] NCIT:C3058 Glioblastoma
+CVCL_IS02 ['NCIT:C3058', 'NCIT:C3059'] NCIT:C3058 Glioblastoma
+CVCL_6809 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_1910 ['NCIT:C3802', 'NCIT:C3510'] NCIT:C3802 Amelanotic melanoma
+CVCL_0001 ['NCIT:C8923', 'NCIT:C7152'] NCIT:C7152 Erythroleukemia
+CVCL_0006 ['NCIT:C9163', 'NCIT:C4861', 'NCIT:C27753'] NCIT:C9163 Childhood acute monocytic leukemia
+CVCL_0007 ['NCIT:C4861', 'NCIT:C8263'] NCIT:C8263 Adult acute monocytic leukemia
+CVCL_0026 ['NCIT:C8294', 'NCIT:C9120'] NCIT:C9120 Pancreatic ductal adenocarcinoma
+CVCL_C434 ['NCIT:C5214'] NCIT:C132256 Unspecified tissue
+CVCL_0278 ['NCIT:C4017'] NCIT:C4872 Breast carcinoma
+CVCL_G209 ['NCIT:C4017'] NCIT:C4872 Breast carcinoma
+CVCL_1621 ['NCIT:C4017'] NCIT:C4872 Breast carcinoma
+CVCL_2756 ['NCIT:C4017'] NCIT:C4194 Invasive breast carcinoma of no special type
+CVCL_0064 ['NCIT:C9163', 'NCIT:C27753'] NCIT:C9163 Childhood acute monocytic leukemia
+CVCL_F645 ['NCIT:C4004'] NCIT:C4911 Gastric carcinoma
+CVCL_5215 ['NCIT:C4017'] NCIT:C4872 Breast carcinoma
+CVCL_5218 ['NCIT:C4017'] NCIT:C4872 Breast carcinoma
+CVCL_5589 ['NCIT:C4017'] NCIT:C4194 Invasive breast carcinoma of no special type
+CVCL_M891 ['NCIT:C39851'] NCIT:C4912 Bladder carcinoma
+CVCL_0065 ['NCIT:C7953', 'NCIT:C3167'] NCIT:C7953 Childhood T acute lymphoblastic leukemia
+CVCL_1087 ['NCIT:C3211', 'NCIT:C2912'] NCIT:C2912 Burkitt lymphoma
+CVCL_AP77	NCIT:C3510	Cutaneous Melanoma
+CVCL_AP95	NCIT:C3510	Cutaneous Melanoma
+CVCL_0B66	NCIT:C3510	Cutaneous Melanoma
+CVCL_C269	NCIT:C3510	Cutaneous Melanoma
+CVCL_0B72	NCIT:C3510	Cutaneous Melanoma
+CVCL_C279	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH08 ['NCIT:C2996'] NCIT:C8106 Ovarian dysgerminoma
+CVCL_DH20 ['NCIT:C7978'] NCIT:C7550 Ovarian serous adenocarcinoma
+CVCL_DH12 ['NCIT:C2855'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_DH15 ['NCIT:C7978'] NCIT:C7550 Ovarian serous adenocarcinoma
+CVCL_DH11 ['NCIT:C2855'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_DH14 ['NCIT:C7978'] NCIT:C7550 Ovarian serous adenocarcinoma
+CVCL_1994 ['NCIT:C105555', 'NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_DH24 ['NCIT:C34448'] NCIT:C9192 Ovarian carcinosarcoma
+CVCL_0152 ['NCIT:C8294', 'NCIT:C9120'] NCIT:C9120 Pancreatic ductal adenocarcinoma
+CVCL_0B68	NCIT:C3510	Cutaneous Melanoma
+CVCL_C273	NCIT:C3510	Cutaneous Melanoma
+CVCL_AP88	NCIT:C3510	Cutaneous Melanoma
+CVCL_C272	NCIT:C3510	Cutaneous Melanoma
+CVCL_6802	NCIT:C3510	Cutaneous Melanoma
+CVCL_DH18 ['NCIT:C7978'] NCIT:C7550 Ovarian serous adenocarcinoma
+CVCL_5213 ['NCIT:C4033'] NCIT:C9385 Renal cell carcinoma
+CVCL_6186 ['NCIT:C4033'] NCIT:C9385 Renal cell carcinoma
+CVCL_6192 ['NCIT:C4033'] NCIT:C9385 Renal cell carcinoma
+CVCL_V606 ['NCIT:C4033'] NCIT:C4912 Bladder carcinoma
+CVCL_V612 ['NCIT:C4033', 'NCIT:C9385'] NCIT:C4033 Clear cell renal cell carcinoma
+CVCL_0237 ['NCIT:C8294', 'NCIT:C9120'] NCIT:C9120 Pancreatic ductal adenocarcinoma
+CVCL_DH09 ['NCIT:C2855'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_DH17 ['NCIT:C7978'] NCIT:C7550 Ovarian serous adenocarcinoma
+CVCL_0202 ['NCIT:C105555', 'NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_AX39 ['NCIT:C7700'] NCIT:C4817 Ewing sarcoma
+CVCL_0186 ['NCIT:C8294', 'NCIT:C9120'] NCIT:C9120 Pancreatic ductal adenocarcinoma
+CVCL_0235 ['NCIT:C4033', 'NCIT:C6975'] NCIT:C6975 Papillary renal cell carcinoma
+CVCL_0425 ['NCIT:C3174'] NCIT:C9110 Blast phase chronic myelogenous leukemia, BCR-ABL1 positive
+CVCL_0428 ['NCIT:C8294', 'NCIT:C9120'] NCIT:C9120 Pancreatic ductal adenocarcinoma
+CVCL_4012 ['NCIT:C8294'] NCIT:C9120 Pancreatic ductal adenocarcinoma
+CVCL_3172 ['NCIT:C8294', 'NCIT:C9120'] NCIT:C9120 Pancreatic ductal adenocarcinoma
+CVCL_0455 ['NCIT:C45544', 'NCIT:C2926'] NCIT:C45544 Lung mucoepidermoid carcinoma
+CVCL_0480 ['NCIT:C8294', 'NCIT:C9120'] NCIT:C9120 Pancreatic ductal adenocarcinoma
+CVCL_0599 ['NCIT:C3224', 'NCIT:C3510'] NCIT:C3224 Melanoma
+CVCL_0619 ['NCIT:C4017'] NCIT:C7950 Invasive breast lobular carcinoma
+CVCL_1119 ['NCIT:C8294', 'NCIT:C9120'] NCIT:C2975 Cystic fibrosis
+CVCL_5707 ['NCIT:C80326'] NCIT:C9140 Childhood B acute lymphoblastic leukemia
+CVCL_1179 ['NCIT:C8851', 'NCIT:C36080'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_2206 ['NCIT:C80280', 'NCIT:C8851', 'NCIT:C36080'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_DH43 ['NCIT:C3211'] NCIT:C8851 Diffuse large B-cell lymphoma
+CVCL_X904 ['NCIT:C4033'] NCIT:C9385 Renal cell carcinoma
+CVCL_4019 ['NCIT:C4033'] NCIT:C9385 Renal cell carcinoma
+CVCL_6189 ['NCIT:C4033'] NCIT:C9385 Renal cell carcinoma
+CVCL_6198 ['NCIT:C4033'] NCIT:C9385 Renal cell carcinoma
+CVCL_9549 ['NCIT:C4033'] NCIT:C9385 Renal cell carcinoma
+CVCL_1887 ['NCIT:C8851'] NCIT:C9143 Adult B acute lymphoblastic leukemia
+CVCL_1157 ['NCIT:C3222'] NCIT:C129445 Medulloblastoma, non-WNT/non-SHH, group 3
+CVCL_1425 ['NCIT:C4861', 'NCIT:C8263'] NCIT:C8263 Adult acute monocytic leukemia
+CVCL_1695 ['NCIT:C4827', 'NCIT:C3270'] NCIT:C4827 Adrenal gland neuroblastoma
+CVCL_1609 ['NCIT:C8263', 'NCIT:C27753'] NCIT:C8263 Adult acute monocytic leukemia
+CVCL_1619 ['NCIT:C8923', 'NCIT:C9154'] NCIT:C9154 Adult acute myeloid leukemia
+CVCL_1639 ['NCIT:C8294', 'NCIT:C9120'] NCIT:C9120 Pancreatic ductal adenocarcinoma
+CVCL_1793 ['NCIT:C3209'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_2973 ['NCIT:C8644'] NCIT:C7954 Adult Burkitt leukemia
+CVCL_1897 ['NCIT:C9280'] NCIT:C8851 Diffuse large B-cell lymphoma
+CVCL_1878 ['NCIT:C80280', 'NCIT:C36080'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_1880 ['NCIT:C80280'] NCIT:C8851 Diffuse large B-cell lymphoma
+CVCL_2010 ['NCIT:C6261'] NCIT:C40439 Ovarian small cell carcinoma, hypercalcemic type
+CVCL_0539 ['NCIT:C80280', 'NCIT:C36080'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_0858 ['NCIT:C8294'] NCIT:C3262 Neoplasm
+CVCL_M574 ['NCIT:C3211'] NCIT:C5051 AIDS-related non-Hodgkin lymphoma
+CVCL_M653 ['NCIT:C2912'] NCIT:C27694 EBV-related Burkitt lymphoma
+CVCL_E219 ['NCIT:C2912'] NCIT:C27694 EBV-related Burkitt lymphoma
+CVCL_M646 ['NCIT:C2912'] NCIT:C27694 EBV-related Burkitt lymphoma
+CVCL_M710 ['NCIT:C80280', 'NCIT:C8851'] NCIT:C8851 Diffuse large B-cell lymphoma
+CVCL_1822 ['NCIT:C9280'] NCIT:C8851 Diffuse large B-cell lymphoma
+CVCL_1819 ['NCIT:C80280'] NCIT:C8851 Diffuse large B-cell lymphoma
+CVCL_8803 ['NCIT:C80280', 'NCIT:C8851'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_1165 ['NCIT:C3222'] NCIT:C129445 Medulloblastoma, non-WNT/non-SHH, group 3
+CVCL_1418 ['NCIT:C9154', 'NCIT:C27753'] NCIT:C9154 Adult acute myeloid leukemia
+CVCL_1714 ['NCIT:C3167', 'NCIT:C7210'] NCIT:C7210 Childhood T lymphoblastic lymphoma
+CVCL_1883 ['NCIT:C8851'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_1844 ['NCIT:C7464', 'NCIT:C9154'] NCIT:C9154 Adult acute myeloid leukemia
+CVCL_2421 ['NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_3326 ['NCIT:C80280', 'NCIT:C36080'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_4042 ['NCIT:C4017'] NCIT:C4194 Invasive breast carcinoma of no special type
+CVCL_4380 ['NCIT:C80280'] NCIT:C8851 Diffuse large B-cell lymphoma
+CVCL_4995 ['NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_5400 ['NCIT:C4349'] NCIT:C4910 Colon carcinoma
+CVCL_5412 ['NCIT:C4349'] NCIT:C9383 Rectal adenocarcinoma
+CVCL_6073	NCIT:C3510	Cutaneous Melanoma
+CVCL_6076	NCIT:C3510	Cutaneous Melanoma
+CVCL_6080	NCIT:C3510	Cutaneous Melanoma
+CVCL_6093	NCIT:C3510	Cutaneous Melanoma
+CVCL_6102	NCIT:C3510	Cutaneous Melanoma
+CVCL_6104	NCIT:C3510	Cutaneous Melanoma
+CVCL_6109	NCIT:C3510	Cutaneous Melanoma
+CVCL_6121	NCIT:C3510	Cutaneous Melanoma
+CVCL_C529 ['NCIT:C3871'] NCIT:C132256 Unspecified tissue
+CVCL_7041 ['NCIT:C27243'] NCIT:C3868 Gastrointestinal stromal tumor
+CVCL_7043 ['NCIT:C27243'] NCIT:C3868 Gastrointestinal stromal tumor
+CVCL_R580 ['NCIT:C4833'] NCIT:C132256 Unspecified tissue
+CVCL_8801 ['NCIT:C80280'] NCIT:C8851 Diffuse large B-cell lymphoma
+CVCL_9990 ['NCIT:C9145'] NCIT:C4023 Small cell osteosarcoma
+CVCL_A183	NCIT:C3510	Cutaneous Melanoma
+CVCL_N787	NCIT:C3510	Cutaneous Melanoma
+CVCL_S666	NCIT:C3510	Cutaneous Melanoma
+CVCL_S669	NCIT:C3510	Cutaneous Melanoma
+CVCL_C288	NCIT:C3510	Cutaneous Melanoma
+CVCL_A344 ['NCIT:C4286'] NCIT:C3877 Testicular teratoma
+CVCL_D702	NCIT:C3510	Cutaneous Melanoma
+CVCL_D880 ['NCIT:C4277'] NCIT:C6534 Monophasic synovial sarcoma
+CVCL_DF76 ['NCIT:C4028'] NCIT:C27677 Human papillomavirus-related endocervical adenocarcinoma
+CVCL_DF77 ['NCIT:C4028'] NCIT:C27677 Human papillomavirus-related endocervical adenocarcinoma
+CVCL_DF79 ['NCIT:C4519'] NCIT:C40212 Cervical adenosquamous carcinoma, glassy cell variant
+CVCL_DF80 ['NCIT:C4519'] NCIT:C40212 Cervical adenosquamous carcinoma, glassy cell variant
+CVCL_DG01 ['NCIT:C4349'] NCIT:C5105 Colorectal adenocarcinoma
+CVCL_DH78 ['NCIT:C4908'] NCIT:C40093 Ovarian squamous cell carcinoma
+CVCL_DI27	NCIT:C3510	Cutaneous Melanoma
+CVCL_DI44	NCIT:C3510	Cutaneous Melanoma
+CVCL_DI46	NCIT:C3510	Cutaneous Melanoma
+CVCL_DI48	NCIT:C3510	Cutaneous Melanoma
+CVCL_F641 ['NCIT:C8294'] NCIT:C4349 Colon adenocarcinoma
+CVCL_2207 ['NCIT:C80280', 'NCIT:C36080'] NCIT:C36080 Diffuse large B-cell lymphoma germinal center B-cell type
+CVCL_2291 ['NCIT:C105555', 'NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_2419 ['NCIT:C105555', 'NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_2425 ['NCIT:C4908'] NCIT:C5243 Ovarian mucinous adenocarcinoma
+CVCL_L791 ['NCIT:C7985'] NCIT:C45662 Pleural epithelioid mesothelioma
+CVCL_S807	NCIT:C3510	Cutaneous Melanoma
+CVCL_UE17 ['NCIT:C2919'] NCIT:C39903 Prostate adenocarcinoma with neuroendocrine differentiation
+CVCL_W527 ['NCIT:C3359'] NCIT:C8971 Embryonal rhabdomyosarcoma
+CVCL_4993 ['NCIT:C7978'] NCIT:C105555 High grade ovarian serous adenocarcinoma
+CVCL_5393 ['NCIT:C4349'] NCIT:C5543 Cecum adenocarcinoma
+CVCL_5401 ['NCIT:C4349'] NCIT:C4910 Colon carcinoma
+CVCL_5408 ['NCIT:C4349'] NCIT:C2955 Colorectal carcinoma
+CVCL_6021	NCIT:C3510	Cutaneous Melanoma
+CVCL_6026	NCIT:C3510	Cutaneous Melanoma
+CVCL_6030	NCIT:C3510	Cutaneous Melanoma
+CVCL_6070	NCIT:C3510	Cutaneous Melanoma
+CVCL_6074	NCIT:C3510	Cutaneous Melanoma
+CVCL_6105	NCIT:C3510	Cutaneous Melanoma
+CVCL_6111	NCIT:C3510	Cutaneous Melanoma
+CVCL_6122	NCIT:C3510	Cutaneous Melanoma
+CVCL_C528 ['NCIT:C3871'] NCIT:C132256 Unspecified tissue
+CVCL_7040 ['NCIT:C27243'] NCIT:C3868 Gastrointestinal stromal tumor
+CVCL_7042 ['NCIT:C27243'] NCIT:C3868 Gastrointestinal stromal tumor
+CVCL_7044 ['NCIT:C27243'] NCIT:C3868 Gastrointestinal stromal tumor
+CVCL_7165 ['NCIT:C8294'] NCIT:C9120 Pancreatic ductal adenocarcinoma
+CVCL_7820 ['NCIT:C4833'] NCIT:C4041 Floor of mouth squamous cell carcinoma
+CVCL_8719 ['NCIT:C4277'] NCIT:C6534 Monophasic synovial sarcoma
+CVCL_A124	NCIT:C3510	Cutaneous Melanoma
+CVCL_N786	NCIT:C3510	Cutaneous Melanoma
+CVCL_C292	NCIT:C3510	Cutaneous Melanoma
+CVCL_S667	NCIT:C3510	Cutaneous Melanoma
+CVCL_S670	NCIT:C3510	Cutaneous Melanoma
+CVCL_A189	NCIT:C3510	Cutaneous Melanoma
+CVCL_L280 ['NCIT:C5027'] NCIT:C3877 Testicular teratoma
+CVCL_C827 ['NCIT:C8294'] NCIT:C9120 Pancreatic ductal adenocarcinoma
+CVCL_DF87 ['NCIT:C7978'] NCIT:C7550 Ovarian serous adenocarcinoma
+CVCL_DH79 ['NCIT:C3769'] NCIT:C7979 Ovarian endometrioid adenocarcinoma
+CVCL_DH81 ['NCIT:C3222'] NCIT:C129442 Medulloblastoma, SHH-activated, TP53-mutant
+CVCL_DI43	NCIT:C3510	Cutaneous Melanoma
+CVCL_DI45	NCIT:C3510	Cutaneous Melanoma
+CVCL_DI47	NCIT:C3510	Cutaneous Melanoma
+CVCL_L296	NCIT:C132256	Unspecified tissue
+CVCL_L297	NCIT:C132256	Unspecified tissue
+CVCL_M821 ['NCIT:C3194'] NCIT:C3705 Pleomorphic liposarcoma
+CVCL_U957 ['NCIT:C4017'] NCIT:C5214 Breast adenocarcinoma
+CVCL_7772 ['NCIT:C34447'] NCIT:C4648 Tongue squamous cell carcinoma
+CVCL_1851 ['NCIT:C80347'] NCIT:C9140 Childhood B acute lymphoblastic leukemia
+CVCL_0337 ['NCIT:C9265'] NCIT:C3366 Sezary syndrome
+CVCL_3806 ['NCIT:C9357'] NCIT:C132256 Unspecified tissue
+CVCL_0590 ['NCIT:C80347'] NCIT:C9140 Childhood B acute lymphoblastic leukemia
+CVCL_1084 ['NCIT:C7716'] NCIT:C7355 Renal pelvis urothelial carcinoma
+CVCL_0216 ['NCIT:C43223'] NCIT:C2993 Down syndrome
+CVCL_2804 ['NCIT:C43223'] NCIT:C2993 Down syndrome
+CVCL_1194 ['NCIT:C3812'] NCIT:C132256 Unspecified tissue
+

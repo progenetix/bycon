@@ -1,0 +1,64 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/QueryBufferItem/v2020-12-08
+title: QueryBufferItem
+type: object
+description: |
+  This schema represents objects for the temporary storage of Progenetix / bycon
+  query results.
+properties:
+  id:
+    type: string
+    description: |
+      The unique identifier of this query result object in string format, e.g.
+      as a UUID v4.
+    examples:
+      - "37cff434-2c4d-11eb-827a-c21bd2cbdf2b"
+  sourceDb:
+    type: string
+    description: |
+      The name of the database the query belongs to.
+    examples:
+      - progenetix
+  sourceCollection:
+    type: string
+    description: |
+      The gatabase collection that was queried to gather the response items.
+    examples:
+      - analyses
+  sourceKey:
+      type: string
+      description: |
+        The key in the sourceCollection that provided the response values stored
+        in this QueryBufferItem.
+  targetCollection:
+    type: string
+    description: |
+      The database collection that should be queried with the targetValues.
+    examples:
+      - biosamples
+  targetKey:
+    type: string
+    description: |
+      The key in the targetCollection that should be used for creating a query
+      against, using the targetValues.
+    examples:
+      - _id
+      - id
+      - biosample_id
+  targetCount:
+    type: integer
+  targetValues:
+    type: array
+    description:
+      The identifiers (e.g. biosample_id values or _id ObjectId values) used to
+      retrieve tha data through matching them to the targetKey in the
+      targetCollection.
+      NOTE - While the type here is given as string they may also be internal
+      identifiers such as MongoDB ObjectId entries.
+    items:
+      type: string
+
+
+
+   
+

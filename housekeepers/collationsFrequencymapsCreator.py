@@ -1,0 +1,121 @@
+#!/usr/local/bin/python3
+
+import datetime, time
+from pymongo import MongoClient
+from progress.bar import Bar
+from random import shuffle as random_shuffle
+
+from bycon import *
+from byconServiceLibs import (
+    assertSingleDatasetOrExit,
+    ask_limit_reset,
+    ByconBundler,
+    CollationQuery,
+    GenomeBins,
+    set_collation_types
+)
+
+"""
+The `collationsFrequencymapsCreator.py` script is used to create frequency maps
+from the CNV status maps in the `analysis` records. It is an essential part of
+a fully functional `bycon` database setup if this includes CNV data and should be
+run after any content changes (new data or changing of collations / filters).
+
+The script will add `frequencymap` object to each of the collations.
+
+#### Examples
+
+* `./collationsFrequencymapsCreator.py -d examplez`
+* `./collationsFrequencymapsCreator.py -d examplez --mode "skip existing"`
+
+"""
+
+ask_limit_reset()
+ds_id = assertSingleDatasetOrExit()
+GB = GenomeBins()
+interval_count = GB.get_genome_bin_count()
+binning = GB.get_genome_binning()
+print(f'=> Using data values from {ds_id} for {interval_count} intervals...')
+
+if "skip" in (BYC_PARS.get("mode", "")).lower():
+    skip_existing = True
+else:
+    skip_existing = False
+
+BYC.update({"PAGINATED_STATUS": False})
+
+data_client = MongoClient(host=DB_MONGOHOST)
+data_db = data_client[ ds_id ]
+coll_coll = data_db[ "collations" ]
+cs_coll = data_db["analyses"]
+
+query = {}
+if len(BYC_PARS.get("filters", [])) > 0 or len(BYC_PARS.get("collation_types", [])) > 0:
+    query = CollationQuery().getQuery()
+coll_ids = coll_coll.distinct("id", query)
+random_shuffle(coll_ids)
+coll_no = len(coll_ids)
+
+print(f'=> Processing {len(coll_ids)} collations from {ds_id}...')
+
+if not BYC["TEST_MODE"]:
+    bar = Bar(f'{coll_no} {ds_id} fMaps', max = coll_no, suffix='%(percent)d%%'+f' of {coll_no}' )
+
+# this just counts the number of collations with existing frequencymaps
+# and adjusts the progress bar accordingly (including a fancy delayed growth...)
+if skip_existing is True:
+    query.update({"frequencymap": {"$exists": True}})
+    coll_i = coll_coll.count_documents(query)
+    if not BYC["TEST_MODE"]:
+        for i in range(coll_i):
+            time.sleep(0.001)
+            bar.next()
+
+for c_id in coll_ids:
+    coll = coll_coll.find_one({"id": c_id})
+    c_o_id = coll.get("_id")
+    if not coll:
+        print(f"\n¡¡¡ some error - collation {c_id} not found !!!")
+        if not BYC["TEST_MODE"]:
+            bar.next()
+        continue
+
+    if not BYC["TEST_MODE"]:
+        bar.next()
+
+    if skip_existing is True:
+        if "frequencymap" in coll:
+            prdbug(f'\n... skipping {c_id} with existing frequencymap')
+            continue
+
+    start_time = time.time()
+    BYC.update({"BYC_FILTERS":[{"id":c_id}, {"id": "EDAM:operation_3961"}]})
+    a_ids = MultiQueryResponses(ds_id).get_analysis_ids()
+    intervals, cnv_ana_count = GB.intervalAidFrequencyMaps(ds_id, a_ids)
+
+    if cnv_ana_count < 1:
+        continue
+
+    update_obj = {
+        "cnv_analyses": cnv_ana_count,
+        "frequencymap": {
+            "interval_count": interval_count,
+            "binning": binning,
+            "intervals": intervals,
+            "frequencymap_samples": cnv_ana_count
+        }
+    }
+
+    if cnv_ana_count > 2000:
+        proc_time = time.time() - start_time
+        print(f'\n==> Processed {c_id}: {cnv_ana_count} in {"%.2f" % proc_time}s: {"%.4f" % (proc_time/cnv_ana_count)}s per analysis')
+
+    if not BYC["TEST_MODE"]:
+        coll_coll.update_one(
+        {"_id": c_o_id},
+        {"$set": update_obj}
+    )
+
+if not BYC["TEST_MODE"]:
+    bar.finish()
+

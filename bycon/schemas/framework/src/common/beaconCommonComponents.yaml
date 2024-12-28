@@ -6,7 +6,7 @@ description: >-
   exclusively with one or the other.
   Separate schema documents are provided for complex components.
 type: object
-definitions:
+$defs:
   $schema:
     type: string
     $comment: 'TO REVIEW: adding a `format` or `regex` attribute that validates correctly
@@ -45,7 +45,7 @@ definitions:
     description: Set of schemas to be used in the response to a request.
     type: array
     items:
-      $ref: '#/definitions/SchemasPerEntity'
+      $ref: '#/$defs/SchemasPerEntity'
   SchemasPerEntity:
     description: Schema to be used for the requested entry type in the response.
     type: object
@@ -66,24 +66,24 @@ definitions:
     type: object
     properties:
       skip:
-        $ref: '#/definitions/Skip'
+        $ref: '#/$defs/Skip'
       limit:
-        $ref: '#/definitions/Limit'
+        $ref: '#/$defs/Limit'
       currentPage:
         description: >-
           Token of the returned page. To be used only in the response to allow
           the client to check if the returned page is the one requested.
-        $ref: '#/definitions/PageToken'
+        $ref: '#/$defs/PageToken'
       nextPage:
         description: >-
           Token of the next page. Used to navigate forward. If empty, it is
           assumed that no more pages are available
-        $ref: '#/definitions/PageToken'
+        $ref: '#/$defs/PageToken'
       previousPage:
         description: >-
           Token of the previous page. Used to navigate backwards. If empty, it
           is assumed that the current page is the first one.
-        $ref: '#/definitions/PageToken'
+        $ref: '#/$defs/PageToken'
   Skip:
     description: >-
       * In the request: number of pages to skip
@@ -205,7 +205,7 @@ definitions:
     type: array
     items:
       description: Requested schema to be used for individuals in the response.
-      $ref: '#/definitions/Handover'
+      $ref: '#/$defs/Handover'
   Handover:
     type: object
     description: >-
@@ -225,7 +225,7 @@ definitions:
       - url
     properties:
       handoverType:
-        $ref: '#/definitions/HandoverType'
+        $ref: '#/$defs/HandoverType'
       note:
         type: string
         description: An optional text including considerations on the handover link

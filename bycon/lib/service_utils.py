@@ -3,74 +3,32 @@ import re
 from deepmerge import always_merger
 from os import environ, path
 
-from args_parsing import *
 from config import *
 from beacon_auth import *
-from bycon_helpers import return_paginated_list, prdbug, set_debug_state, test_truthy
+from bycon_helpers import return_paginated_list, prdbug, prdbughead, RefactoredValues, set_debug_state, test_truthy
 from dataset_parsing import select_dataset_ids
-from parse_filters_request import parse_filters
-from read_specs import update_rootpars_from_local
 
 
 ################################################################################
 
-def set_beacon_defaults(byc):
+def set_beacon_defaults():
     defaults: object = BYC["beacon_defaults"].get("defaults", {})
     for d_k, d_v in defaults.items():
-        byc.update( { d_k: d_v } )
-  
-
-################################################################################
-
-def initialize_bycon_service(byc, service="info"):
-    b_e_d = BYC.get("entity_defaults", {})
-    p_e_m = BYC.get("path_entry_type_mappings", {})
-    e_p_m = BYC.get("entry_type_path_mappings", {})
-    if service in p_e_m.keys():
-        e = p_e_m.get(service)
-        service = e_p_m.get(e)
-    entry_type = p_e_m.get(service, "___none___")
-
-    """
-    Here we allow the addition of additional configuration files, necessary
-    for options beyond basic library use. Files are read in from a `local`
-    directory inside the script directory
-        * this is the location of configuration file w/ content differing on
-          the beaconServer instance
-        * these files are inserted during installation (see the documentation)
-    """
-    if "services" in LOC_PATH or "byconaut" in LOC_PATH:
-        scope = "services"
-    else:
-        scope = "beacon"
-    
-    byc.update({
-        "request_path_root": scope
-    })
-    if entry_type in b_e_d:
-        for d_k, d_v in b_e_d[entry_type].items():
-            # avoiding the overwriting of e.g. request pat or id if different response
-            if "request" in d_k:
-                continue
-            byc.update({d_k: d_v})
-
-    # update response_entity_id from path
-    update_entity_ids_from_path(byc)
-
-    # update response_entity_id from form
-    update_requested_schema_from_request(byc)
-    set_response_entity(byc)
-    set_response_schema(byc)
-    set_special_modes(byc)
-    select_dataset_ids(byc)
-    set_user_name(byc)
-    set_returned_granularities(byc)    
-    parse_filters(byc)
+        BYC.update( { d_k: d_v } )
 
 
 ################################################################################
 
-def set_special_modes(byc):
+def initialize_bycon_service():
+    set_special_modes()
+    select_dataset_ids()
+    set_user_name()
+    set_returned_granularities()    
+
+
+################################################################################
+
+def set_special_modes():
     if "test_mode" in BYC_PARS:
         BYC.update({"TEST_MODE": test_truthy(BYC_PARS["test_mode"])})
     if BYC.get("TEST_MODE") is True:
@@ -79,48 +37,68 @@ def set_special_modes(byc):
 
 ################################################################################
 
-def update_entity_ids_from_path(byc):
-    if not (req_p_id := byc.get("request_entity_path_id")):
-        return
-    if not (res_p_id := byc.get("response_entity_path_id")):
-        res_p_id = req_p_id
+def set_entities():
+    """
+    This function evaluates the definitions for the entities and their selection
+    by path elements (including aliases) or parameters and updates the global
+    BYC definitions.
 
-    # TODO: this gets the correct entity_id w/ entity_path_id fallback
-    p_e_m = BYC.get("path_entry_type_mappings", {})
-    byc.update({
-        "request_entity_id": p_e_m.get(req_p_id, req_p_id),
-        "response_entity_id": p_e_m.get(res_p_id, req_p_id)
+    As approximation in a script one can override the original selection by providing
+    a `--responseEntityPathId analyses` (or "individuals" etc.) parameter or forcing
+    ```
+    BYC_PARS.update({"response_entity_path_id":"analyses"})
+    set_entities()
+    ```
+    """
+    b_e_d = BYC.get("entity_defaults", {})
+    arg_defs = BYC["argument_definitions"].get("$defs", {})
+
+    # here aliases are read in, e.g. to allow "schemas" instead of "byconschemas"
+    # ("schemas" is avoided since being "keywordy") etc.
+    dealiased_path_ids = {}
+    for e, e_d in b_e_d.items():
+        p_id = e_d.get("request_entity_path_id")
+        dealiased_path_ids.update({p_id: e})
+        for p_a_s in e_d.get("request_entity_path_aliases", []):
+            dealiased_path_ids.update({p_a_s: e})
+
+    # this allows to override the path values with parameters
+    # it should only apply to special cases (e.g. overriding the standard
+    # biosample table export in services with individuals) or for command
+    # line testing
+    if (q_p_id := BYC_PARS.get("request_entity_path_id", "___none___")) in dealiased_path_ids.keys():
+        BYC.update({"request_entity_path_id": q_p_id})
+    if (p_p_id := BYC_PARS.get("response_entity_path_id", "___none___")) in dealiased_path_ids.keys():
+        BYC.update({"response_entity_path_id": p_p_id})
+
+    if (p_i_d := BYC.get("request_entity_path_id", "___none___")) not in dealiased_path_ids.keys():
+        p_i_d = "info"
+    
+    if (rp_i_d := BYC.get("response_entity_path_id", "___none___")) not in dealiased_path_ids.keys():
+        rp_i_d = p_i_d
+
+    # after settling the paths we can get the entity ids
+    q_id = dealiased_path_ids[p_i_d]
+    r_id = dealiased_path_ids[rp_i_d]
+
+    rq_d = b_e_d.get(q_id)
+    rp_d = b_e_d.get(r_id)
+
+    p_p = rq_d.get("path_id_value_bycon_parameter", "id")
+
+    BYC.update({
+        "path_id_value_bycon_parameter": p_p,
+        "request_entity_id": rq_d.get("request_entity_id", q_id),
+        "request_entity_path_id": q_id,
+        "response_entity_id": rp_d.get("response_entity_id", q_id),
+        "response_entity_path_id": rp_i_d,
+        "response_entity": rp_d,
+        "response_schema": rp_d.get("response_schema", "beaconInfoResponse"),
+        "bycon_response_class": rp_d.get("bycon_response_class", "BeaconInfoResponse")
     })
 
-
-################################################################################
-
-def update_requested_schema_from_request(byc):
-    # query_meta may come from the meta in a POST
-    b_qm = byc.get("query_meta", {})
-
-    # TODO: check if correct schema in request
-    if "requested_schema" in BYC_PARS:
-        byc.update({"response_entity_id": BYC_PARS.get("requested_schema", byc["response_entity_id"])})
-    elif "requested_schemas" in b_qm:
-        byc.update({"response_entity_id": b_qm["requested_schemas"][0].get("entity_type", byc["response_entity_id"])})
-
-
-################################################################################
-
-def set_response_entity(byc):
-    byc.update({"response_entity": {}})
-    b_rt_s = BYC.get("entity_defaults", {})
-    r_e_id = byc.get("response_entity_id", "___none___")
-    if (r_e := b_rt_s.get(r_e_id)):
-        byc.update({"response_entity": r_e})
-
-
-################################################################################
-
-def set_response_schema(byc):
-    r_e = byc.get("response_entity", {})
-    r_s = r_e.get("response_schema", "beaconInfoResponse")
-    byc.update({"response_schema": r_s})
-
+    if (rpidv := BYC.get("request_entity_path_id_value")):
+        if p_p in arg_defs.keys():
+            v = RefactoredValues(arg_defs[p_p]).refVal(rpidv)
+            BYC_PARS.update({p_p: v})
 

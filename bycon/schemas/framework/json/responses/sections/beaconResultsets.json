@@ -5,12 +5,12 @@
     "type": "object",
     "properties": {
         "$schema": {
-            "$ref": "../../common/beaconCommonComponents.json#/definitions/$schema"
+            "$ref": "../../common/beaconCommonComponents.json#/$defs/$schema"
         },
         "resultSets": {
             "type": "array",
             "items": {
-                "$ref": "#/definitions/ResultsetInstance"
+                "$ref": "#/$defs/ResultsetInstance"
             },
             "minItems": 0
         }
@@ -19,7 +19,7 @@
         "resultSets"
     ],
     "additionalProperties": true,
-    "definitions": {
+    "$defs": {
         "ResultsetInstance": {
             "type": "object",
             "properties": {
@@ -42,7 +42,7 @@
                 },
                 "resultsHandovers": {
                     "description": "List of handovers that apply to this resultset, not to the whole Beacon or to a result in particular.",
-                    "$ref": "../../common/beaconCommonComponents.json#/definitions/ListOfHandovers"
+                    "$ref": "../../common/beaconCommonComponents.json#/$defs/ListOfHandovers"
                 },
                 "info": {
                     "description": "Additional details that could be of interest about the Resultset. Provided to clearly enclose any attribute that is not part of the Beacon specification.",

@@ -11,7 +11,7 @@ description: >-
 type: object
 properties:
   $schema:
-    $ref: ../common/beaconCommonComponents.yaml#/definitions/$schema
+    $ref: ../common/beaconCommonComponents.yaml#/$defs/$schema
   id:
     description: A (unique) identifier of the element.
     type: string
@@ -48,8 +48,8 @@ properties:
       this entry type could be of only one of the types (e.g. a given Dataset contains
       Individuals, while another Dataset could contain Genomic Variants, but not both
       at once).
-    includedConcepts:
-      type: array
+    type: array
+    items:
       $ref: ../common/basicElement.yaml
   filteringTerms:
     description: Reference to the file with the list of filtering terms that could
@@ -58,7 +58,7 @@ properties:
       should allow for updating the list of accepted filtering terms when it is necessary.
     type: string
   nonFilteredQueriesAllowed:
-    $ref: ../common/beaconCommonComponents.yaml#/definitions/NonFilteredQueriesAllowed
+    $ref: ../common/beaconCommonComponents.yaml#/$defs/NonFilteredQueriesAllowed
 required:
   - id
   - name

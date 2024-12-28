@@ -1,12 +1,13 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 title: Beacon Configuration
 description: >-
-  Files complaint with this schema are the configuration ones. The details
-  returned in `service-info` are mirroring the ones in this configuration file.
+  The Beacon configuration reports several attributes of the beacon instance related
+  to security, maturity and available entry types.
+  Where appropriate the details returned in `service-info` should mirror the ones in this configuration.
 type: object
 properties:
   $schema:
-    $ref: ../common/beaconCommonComponents.yaml#/definitions/$schema
+    $ref: ../common/beaconCommonComponents.yaml#/$defs/$schema
   maturityAttributes:
     description: Declares the level of maturity of the Beacon instance.
     type: object
@@ -36,7 +37,7 @@ properties:
         description: >-
           Default granularity. Some responses could return higher detail,
           but this would be the granularity by default.
-        $ref: ../common/beaconCommonComponents.yaml#/definitions/Granularity
+        $ref: ../common/beaconCommonComponents.yaml#/$defs/Granularity
       securityLevels:
         description: >-
           All access levels supported by the Beacon. Any combination is
@@ -50,8 +51,8 @@ properties:
           default:
             - CONTROLLED
   entryTypes:
-    $ref: '#/definitions/EntryTypes'
-definitions:
+    $ref: '#/$defs/EntryTypes'
+$defs:
   EntryTypes:
     description: >-
       This is a dictionary of the entry types implemented in this Beacon

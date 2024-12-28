@@ -16,9 +16,9 @@
 
 h2 {
     color:  var(--md-accent-font-color);
-    border-top:  var(--md-accent-font-color) thin solid;
+/*    border-top:  var(--md-accent-font-color) thin solid;
     border-bottom:  var(--md-accent-font-color) thin solid;
-}
+*/}
 
 .blog-post-preview {
     border-left:  var(--md-accent-font-color) thin solid;

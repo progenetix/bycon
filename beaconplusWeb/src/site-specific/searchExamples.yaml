@@ -1,0 +1,211 @@
+---
+- label: "CNV Example"
+  note: "Example for focal CDKN2A deletion matches."
+  description: |
+    This example shows the query for CNV deletion variants overlapping the
+    CDKN2A gene's coding region with at least a single base, but limited
+    to "focal" hits (here i.e. <= ~2Mbp in size). The query is against the
+    examplez collection and can be modified e.g. through changing the position
+    parameters or data source.
+  img: /img/BeaconBracketQuery-limited-match-graphics.png
+  parameters:
+    referenceName:
+      isHidden: false
+      defaultValue: "refseq:NC_000009.12"
+    start:
+      isHidden: false
+      defaultValue: "21000001,21975098"
+    end:
+      isHidden: false
+      defaultValue: "21967753,23000000"
+    variantType:
+      isHidden: false
+      defaultValue: "EFO:0030067"
+    alternateBases:
+      isHidden: true
+    referenceBases:
+      isHidden: true
+    allTermsFilters:
+      isHidden: false
+      defaultValue: ["NCIT:C3058"]
+    analysisOperation:
+      isHidden: true
+    sex:
+      isHidden: false
+
+- label: "SNV Example"
+  note: "Example for specific EIF4A1 mutation"
+  description: |
+    This example shows a core Beacon query, against a specific
+    mutation in the EIF4A1 gene, in the DIPG childhood brain tumor dataset.
+  parameters:
+    referenceName:
+      isHidden: false
+      defaultValue: "refseq:NC_000017.11"
+    start:
+      isHidden: false
+      defaultValue: 7577121
+    variantType:
+      isHidden: false
+      defaultValue: "SO:0001059"
+    alternateBases:
+      isHidden: false
+      defaultValue: "A"
+    referenceBases:
+      isHidden: false
+      defaultValue: "G"
+
+- label: "Range Example"
+  note: "Example for EIF4A1 transcript region matches (precise variants)"
+  description: |
+    As in the standard SNV query, this example shows a Beacon query against
+    mutations in the `EIF4A1` gene in the DIPG childhood brain tumor dataset.
+    However, this range + wildcard query will return any variant with
+    alternate bases (indicated through "N").
+    Since parameters will be interpreted using an "AND" paradigm, either <i>Alternate
+    Bases</i> OR <i>Variant Type</i> should be specified.
+    The exact variants which were being found can be retrieved through the variant
+    handover [H—>O] link.
+  parameters:
+    datasetIds:
+      isHidden: false
+    referenceName:
+      isHidden: false
+      defaultValue: "refseq:NC_000017.11"
+    start:
+      isHidden: false
+      defaultValue: 7572826
+    end:
+      isHidden: false
+      defaultValue: 7579005
+    variantType:
+      isHidden: false
+      defaultValue: "SO:0001059"
+    alternateBases:
+      isHidden: false
+      defaultValue: ""
+    referenceBases:
+      isHidden: false
+      defaultValue: ""
+  img: /img/BeaconRangeQuery-graphics.png
+
+- label: "Gene Match"
+  note: |
+    Where supported beacons can discover variants overlap with the region of a known gene.
+  description: |
+    Beacons in v2 can support the discovery of variants with overlap with the
+    genomic location of a gene, indicated by its symbol (e.g. `CDK2`). Additional
+    parameters can _optionally_ be used to make matches more specific:
+    - `variantMinLength` and `variantMaxLength` to limit matched CNV sizes
+    - `genomicAlleleShortForm` (e.g. `V600E` with `BRAF`)
+    - `variantType` and `alternateBases` to specify variants
+  img: /img/BeaconGeneQuery-graphics.png
+  parameters:
+    geneId:
+      isHidden: false
+      defaultValue: CDK2
+    referenceName:
+      isHidden: true
+    start:
+      isHidden: true
+    end:
+      isHidden: true
+    variantMinLength:
+      isHidden: false
+      defaultValue: 10000
+    variantMaxLength:
+      isHidden: false
+      defaultValue: 5000000
+    variantType:
+      isHidden: false
+      defaultValue: "EFO:0030070"
+    alternateBases:
+      isHidden: false
+    referenceBases:
+      isHidden: true
+
+- label: "Identifier - HeLa"
+  note: "Samples can be identified through identifiers."
+  description: |
+    This example retrieves _HeLa_ instances - including cell lines derived from
+    _HeLa_ - by _HeLa's_ _cellosaurus_ identifier `cellosaurus:CVCL_0030`.
+  parameters:
+    aminoacidChange:
+      isHidden: true
+    geneId:
+      isHidden: true
+    referenceName:
+      isHidden: true
+    start:
+      isHidden: true
+    end:
+      isHidden: true
+    variantType:
+      isHidden: true
+    alternateBases:
+      isHidden: true
+    referenceBases:
+      isHidden: true
+    allTermsFilters:
+      isHidden: false
+      defaultValue: ["cellosaurus:CVCL_0030"]
+
+- label: "Variant Short Form Example"
+  note: "This is an experimental example for short form vbariant(s) support."
+  description: |
+    This example shows a short form version of the CDKN2A deletion example.
+  parameters:
+    variantQueryDigests:
+      isHidden: false
+      defaultValue: "9:21000001-21975098--21967753-24000000:DEL"
+    variantType:
+      isHidden: true
+    allTermsFilters:
+      isHidden: false
+      defaultValue: [NCIT:C3058]
+    aminoacidChange:
+      isHidden: true
+    geneId:
+      isHidden: true
+    referenceName:
+      isHidden: true
+    start:
+      isHidden: true
+    end:
+      isHidden: true
+    alternateBases:
+      isHidden: true
+    referenceBases:
+      isHidden: true
+
+- label: "Fusion Example"
+  note: |
+    This is an experimental example for a fusion query (by positions).
+    http://progenetix.org/beacon/g_variants/?referenceName=8&mateName=12&start=45100000&end=47300000&mateStart=26200000&mateEnd=35600000&variantType=SO:0000806
+  description: |
+    This is an experimental example for a fusion query (by positions).
+  img: /img/BeaconFusionQuery-graphics.png
+  parameters:
+    variantType:
+      isHidden: false
+      defaultValue: SO:0000806
+    allTermsFilters:
+      isHidden: false
+    referenceName:
+      isHidden: false
+      defaultValue: refseq:NC_000008.11
+    mateName:
+      isHidden: false
+      defaultValue: refseq:NC_000012.12
+    start:
+      isHidden: false
+      defaultValue: 45100000
+    end:
+      isHidden: false
+      defaultValue: 47300000
+    mateStart:
+      isHidden: false
+      defaultValue: 26200000
+    mateEnd:
+      isHidden: false
+      defaultValue: 35600000

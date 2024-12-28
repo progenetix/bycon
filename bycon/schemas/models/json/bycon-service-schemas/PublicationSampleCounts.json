@@ -1,0 +1,37 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://progenetix.org/services/schemas/PublicationSampleCounts/v2021-04-13",
+    "title": "PublicationSampleCounts",
+    "type": "object",
+    "description": "PublicationSampleCounts contains the count data for publication content, used for the Progenetix publications collection.\n",
+    "properties": {
+        "ccgh": {
+            "description": "The number of samples reported in this publication analyzed by chromosomal Comparative Genomic Hybridization (CGH)\n",
+            "type": "integer"
+        },
+        "acgh": {
+            "description": "The number of samples reported in this publication analyzed by any type of genomic hybridization array\n",
+            "type": "integer"
+        },
+        "wes": {
+            "description": "The number of samples reported in this publication analyzed by whole exome sequencing (WES)\n",
+            "type": "integer"
+        },
+        "wgs": {
+            "description": "The number of samples reported in this publication analyzed by whole genome sequencing (WGS)\n",
+            "type": "integer"
+        },
+        "ngs": {
+            "description": "The number of samples reported in this publication analyzed by any of WGS and/or WES. The number is at least the maximum of wes and wgs.\n",
+            "type": "integer"
+        },
+        "genomes": {
+            "description": "The number of samples reported in this publication analyzed. The number is at least the maximum of ccgh, acgh, wes, wgs.\n",
+            "type": "integer"
+        },
+        "progenetix": {
+            "description": "The number of samples from this publication in the Progenetix biosamples collection\n",
+            "type": "integer"
+        }
+    }
+}

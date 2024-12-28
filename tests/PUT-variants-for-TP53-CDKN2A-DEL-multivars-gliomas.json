@@ -1,0 +1,34 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "meta": {
+        "apiVersion": "2.0",
+        "requestedSchemas": [
+            {
+                "entityType": "genomicVariation",
+                "schema:": "https://progenetix.org/services/schemas/genomicVariant/"
+            }
+        ]
+    },
+    "query": {
+        "requestParameters": {
+            "variantMultiPars": [
+                {
+                    "referenceName": "refseq:NC_000009.12",
+                    "start": [21500001, 21975098],
+                    "end": [21967753, 22500000], 
+                    "variantType": "EFO:0030067"
+                },
+                {
+                    "referenceName": "refseq:NC_000017.11",
+                    "start": [6000000, 7687480],
+                    "end": [7668422, 8000000], 
+                    "variantType": "EFO:0030067"
+                }
+            ]
+        },
+        "filters": [{"id": "NCIT:C3058"}]
+    },
+    "requestedGranularity": "record",
+    "pagination": {"skip": 0, "limit": 5},   
+    "debugMode": 0
+}

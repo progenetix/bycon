@@ -23,7 +23,7 @@
             "example": "My project"
         },
         "type": {
-            "$ref": "#/definitions/ServiceType"
+            "$ref": "#/$defs/ServiceType"
         },
         "description": {
             "type": "string",
@@ -86,7 +86,7 @@
             "example": "1.0.0"
         }
     },
-    "definitions": {
+    "$defs": {
         "ServiceType": {
             "description": "Type of a GA4GH service",
             "type": "object",

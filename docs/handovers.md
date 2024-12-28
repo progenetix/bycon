@@ -1,6 +1,5 @@
----
-title: Beacon "Handovers"
----
+# Beacon "Handovers"
+
 
 Beacon `handover` objects represent an efficient and - used properly -
 privacy protecting mechanism to enable data delivery, in conjunction with

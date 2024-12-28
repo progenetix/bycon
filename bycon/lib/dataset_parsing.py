@@ -3,49 +3,47 @@ from pymongo import MongoClient
 from os import environ
 
 from bycon_helpers import prdbug
-from cgi_parsing import rest_path_value
+from parameter_parsing import rest_path_value
 from config import *
 
 ################################################################################
 
-def select_dataset_ids(byc):
-    byc.update({"dataset_ids": []})
-    if ds_id_from_rest_path_value(byc) is not False:
+def select_dataset_ids():
+    if ds_id_from_rest_path_value():
         return
-    if ds_id_from_accessid(byc) is not False:
+    if ds_id_from_accessid():
         return
-    if ds_id_from_record_id(byc) is not False:
+    # if ds_id_from_record_id():
+    #     return
+    if ds_ids_from_form():
         return
-    if ds_ids_from_form(byc) is not False:
-        return
-    if ds_id_from_default(byc) is not False:
+    if ds_id_from_default():
         return
 
 
 ################################################################################
 
-def ds_id_from_rest_path_value(byc):
-    ds_p_id = rest_path_value("datasets")
-    if not ds_p_id:
+def ds_id_from_rest_path_value():
+    if not (ds_p_id := rest_path_value("datasets")):
         return False
 
     ds_ids = []
     for ds_id in ds_p_id.split(","):
-        if ds_id in byc["dataset_definitions"].keys():
+        if ds_id in BYC["DATABASE_NAMES"]:
             ds_ids.append(ds_id)
 
     if len(ds_ids) < 1:
         return False
 
-    byc.update({"dataset_ids": ds_ids})
+    BYC.update({"BYC_DATASET_IDS":  ds_ids})
     return True
 
 
 ################################################################################
 
-def ds_id_from_record_id(byc):
+def ds_id_from_record_id():
     """
-    For data retrieval associated with a single record by its path id siuch as
+    For data retrieval associated with a single record by its path id such as
     `biosamples/{id}` the default Beacon model does not provide any way to provide
     the associated dataset id with the request. The assumption is that any record
     id is unique across all datasets.
@@ -59,12 +57,11 @@ def ds_id_from_record_id(byc):
 
 ################################################################################
 
-def ds_id_from_accessid(byc):
+def ds_id_from_accessid():
     # TODO: This is very verbose. In principle there should be an earlier
     # test of existence...
 
-    accessid = BYC_PARS.get("accessid", False)
-    if any(x is False for x in [accessid]):
+    if not (accessid := BYC_PARS.get("accessid")):
         return False
 
     ho_client = MongoClient(host=DB_MONGOHOST)
@@ -72,38 +69,31 @@ def ds_id_from_accessid(byc):
     if not h_o:
         return False
     ds_id = h_o.get("source_db", False)
-    if ds_id is False:
+    if (ds_id := str(h_o.get("source_db"))) not in BYC["DATABASE_NAMES"]:
         return False
-    if ds_id not in byc["dataset_definitions"].keys():
-        return False
-    byc.update({"dataset_ids": [ds_id]})
+    BYC.update({"BYC_DATASET_IDS": [ds_id]})
     return True
 
 
 ################################################################################
 
-def ds_ids_from_form(byc):
-    f_ds_ids = BYC_PARS.get("dataset_ids", False)
-    if f_ds_ids is False:
+def ds_ids_from_form():
+    if not (f_ds_ids := BYC_PARS.get("dataset_ids")):
         return False
-    ds_ids = []
-    for ds_id in f_ds_ids:
-        if ds_id in byc["dataset_definitions"].keys():
-            ds_ids.append(ds_id)
-
-    if len(ds_ids) < 1:
-        return False
-    byc.update({"dataset_ids": ds_ids})
-    return True
+    ds_ids = [ds for ds in f_ds_ids if ds in BYC.get("DATABASE_NAMES",[])]
+    if len(ds_ids) > 0:
+        BYC.update({"BYC_DATASET_IDS":  ds_ids})
+        return True
+    return False
 
 
 ################################################################################
 
-def ds_id_from_default(byc):
-    ds_id = byc.get("default_dataset_id", "___undefined___")
-    if ds_id not in byc["dataset_definitions"].keys():
+def ds_id_from_default():
+    defaults: object = BYC["beacon_defaults"].get("defaults", {})  
+    if (ds_id := str(defaults.get("default_dataset_id"))) not in BYC["DATABASE_NAMES"]:
         return False
-    byc.update({"dataset_ids": [ ds_id ]})
+    BYC.update({"BYC_DATASET_IDS": [ds_id]})
     return True
 
 

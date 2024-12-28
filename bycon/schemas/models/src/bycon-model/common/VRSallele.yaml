@@ -1,0 +1,41 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/VRSallele/v2023-07-25
+title: VRS Allele
+type: object
+description: >-
+  Simplified VRS allele for use in `bycon`.
+required:
+  all_of:
+    - type
+    - state
+    - location
+properties:
+  type:
+    type: string
+    const: Allele
+    default: Allele
+    description: MUST be "Allele"
+  location:
+    $ref: './VRSsequenceLocation.yaml'
+  state:
+    $ref: '#/$defs/LiteralSequenceExpression'
+$defs:
+  LiteralSequenceExpression:
+    description: An explicit expression of a Sequence.
+    type: object
+    properties:
+      type:
+        type: string
+        const: LiteralSequenceExpression
+        default: LiteralSequenceExpression
+        description: MUST be "LiteralSequenceExpression"
+      sequence:
+        description: >-
+          A character string of Residues that represents a biological sequence
+          using the conventional sequence order for nucleic acid sequences.
+        type: string
+        pattern: ^[A-Z*\-]*$
+    required:
+      - sequence
+      - type
+    additionalProperties: false
