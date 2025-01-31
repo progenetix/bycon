@@ -40,10 +40,11 @@ def set_debug_state(debug=False) -> bool:
 ################################################################################
 
 class RefactoredValues():
-
     def __init__(self, parameter_definition={}):
         self.v_list = []
+        self.v_string = ""
         self.parameter_definition = parameter_definition
+        self.join_by = parameter_definition.get("split_by", "&&")
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -56,14 +57,48 @@ class RefactoredValues():
         self.__refactor_values_from_defined_type()
         return self.v_list
 
+
+    # -------------------------------------------------------------------------#
+
+    def strVal(self, vs=""):
+        if type(vs) != list:
+            vs = [vs]
+        self.v_list = vs
+        self.__stringify_values_from_defined_type()
+        return self.v_string
+
+
     # -------------------------------------------------------------------------#
     # ----------------------------- private ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __stringify_values_from_defined_type(self):
+        defs = self.parameter_definition
+
+        values = self.v_list
+
+        if len(values) == 0:
+            self.v_list = None
+            return
+
+        if "array" in defs.get("type", "string"):
+            # remapping definitions to the current item definitions
+            defs = self.parameter_definition.get("items", {"type": "string"})
+        p_t = defs.get("type", "string")
+
+        v_l = []
+        for v in values:
+            v_l.append(self.__cast_string(defs, v))
+
+        self.v_string = str(self.join_by.join(v_l))
+
+
     # -------------------------------------------------------------------------#
 
     def __refactor_values_from_defined_type(self):
         p_d_t = self.parameter_definition.get("type", "string")
         values = list(x for x in self.v_list if x is not None)
-        values = list(x for x in values if x.lower() not in ["none", "null"])
+        values = list(x for x in values if str(x).lower() not in ["none", "null"])
 
         if len(values) == 0:
             self.v_list = None
@@ -73,11 +108,10 @@ class RefactoredValues():
         if "array" in p_d_t:
             # remapping definitions to the current item definitions
             defs = self.parameter_definition.get("items", {"type": "string"})
-        p_t = defs.get("type", "string")
 
         v_l = []
         for v in values:
-            v_l.append(self.__cast_type(defs, p_t, v))
+            v_l.append(self.__cast_type(defs, v))
         if "array" in p_d_t:
             self.v_list = v_l
             return
@@ -93,8 +127,21 @@ class RefactoredValues():
 
     # -------------------------------------------------------------------------#
 
-    def __cast_type(self, defs, p_type, p_value):
-        # prdbug(f'casting {p_type} ... {p_value}')
+    def __cast_string(self, defs, p_value):
+        p_type = defs.get("type", "string")
+        if "object" in p_type:
+            return self.__object_to_string(defs, p_value)
+        if "array" in p_type:
+            if type(p_value) != list:
+                p_value = [p_value]
+            return self.join_by.join(p_value)
+        return str(p_value)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __cast_type(self, defs, p_value):
+        p_type = defs.get("type", "string")
         if "object" in p_type:
             return self.__split_string_to_object(defs, p_value)
         if "int" in p_type:
@@ -124,6 +171,17 @@ class RefactoredValues():
         return o
 
 
+    # -------------------------------------------------------------------------#
+
+    def __object_to_string(self, defs, value):
+        o_p = defs.get("parameters", ["id", "label"])
+        o_s = defs.get("split_by", "::")
+        s_l = []
+        for k in o_p:
+            s_l.append(str(value.get(k, "")))
+        return o_s.join(s_l)
+
+
 ################################################################################
 
 def select_this_server() -> str:
@@ -135,20 +193,27 @@ def select_this_server() -> str:
     always use https _unless_ the request comes from a host listed a test instance.
     """
     s_uri = str(environ.get('SCRIPT_URI'))
-    test_sites = BYC["beacon_defaults"].get("test_domains", [])
-    https = "https://"
-    http = "http://"
+    X_FORWARDED_PROTO = str(environ.get('HTTP_X_FORWARDED_PROTO'))
 
-    s = f'{https}{ENV}'
-    for site in test_sites:
-        if site in s_uri:
-            if https in s_uri:
-                s = f'{https}{site}'
-            else:
-                s = f'{http}{site}'
+    test_sites = BYC["beacon_defaults"].get("test_domains", [])
+
+    for k in environ.keys():
+        prdbug(f'{k} => {str(environ.get(k))}')
+
+    s = f'https://{ENV}'
+    if not "https" in s_uri and not "https" in X_FORWARDED_PROTO:
+        s = s.replace("https://", "http://")
+
+    # for site in test_sites:
+    #     if site in s_uri:
+    #         if https in s_uri:
+    #             s = f'{https}{site}'
+    #         else:
+    #             s = f'{http}{site}'
 
     # TODO: ERROR hack for https/http mix, CORS...
     # ... since cloudflare provides https mapping using this as fallback
+
 
     return s
 
@@ -183,7 +248,7 @@ def days_from_iso8601duration(iso8601duration):
     # except AttributeError:
     #     pass
 
-    return days
+    return int(days)
 
 
 ################################################################################

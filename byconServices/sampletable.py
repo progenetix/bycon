@@ -1,5 +1,5 @@
 from bycon import *
-from byconServiceLibs import export_datatable_download
+from byconServiceLibs import ByconDatatableExporter
 
 
 def sampletable():
@@ -18,4 +18,4 @@ def sampletable():
     * http://progenetix.org/services/sampletable?filters=pgx:icdom-81703
     """
     fd = ByconResultSets().get_flattened_data()
-    export_datatable_download(fd)
+    ByconDatatableExporter().stream_datatable(fd)

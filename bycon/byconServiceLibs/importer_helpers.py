@@ -164,8 +164,6 @@ class ByconautImporter():
     #--------------------------------------------------------------------------#
 
     def retrieve_variant_identifiers(self):
-        # self.__prepare_variants()
-
         bb = ByconBundler()
         data = bb.read_pgx_file(self.input_file)
         variants = data.data
@@ -697,8 +695,10 @@ class ByconautImporter():
         iid = self.import_id
         import_id_v = new_doc[iid]
         if "individuals" in self.upstream:
+            prdbug(self.ind_coll.find_one({"id": ind_id}))
             if not self.ind_coll.find_one({"id": ind_id}):
-                self.log.append(f'individual {ind_id} for {ien} {import_id_v} should exist before {ien} import')
+                prdbug(f'... {ind_id} for {self.dataset_id}.{self.ind_coll} not found')
+                self.log.append(f'individual {ind_id} for {self.dataset_id}.{ien} {import_id_v} should exist before {ien} import')
         if "biosamples" in self.upstream:
             if not self.bios_coll.find_one({"id": bios_id}):
                 self.log.append(f'biosample {bios_id} for {ien} {import_id_v} should exist before {ien} import')

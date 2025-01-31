@@ -44,7 +44,7 @@ def sampleplots():
         if "samples" in ByconPlotPars().plotType():
             pdb.update( ByconBundler().resultsets_analysis_bundles(RSS) )
 
-    svg_f = ExportFile("svg").checkOutputFile()
+    svg_f = ExportFile("svg").check_outputfile_path()
     BP = ByconPlot(pdb)
     if svg_f:
         BP.svg2file(svg_f)

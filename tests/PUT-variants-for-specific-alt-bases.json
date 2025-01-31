@@ -1,7 +1,7 @@
 {
     "$schema":"beaconRequestBody.json",
     "meta": {
-        "apiVersion": "2.0",
+        "apiVersion": "2.1",
         "requestedSchemas": [
             {
                 "entityType": "genomicVariation",

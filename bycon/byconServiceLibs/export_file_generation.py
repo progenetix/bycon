@@ -6,8 +6,9 @@ from pymongo import MongoClient
 from bycon import (
     BYC,
     BYC_PARS,
-    DB_MONGOHOST,
     ByconVariant,
+    DB_MONGOHOST,
+    ENV,
     prdbug,
     return_paginated_list,
     select_this_server,
@@ -17,8 +18,7 @@ from bycon import (
 services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 sys.path.append( services_lib_path )
 from interval_utils import GenomeBins
-from service_helpers import open_text_streaming, close_text_streaming
-from datatable_utils import assign_nested_value, get_nested_value
+from datatable_utils import get_nested_value
 
 ################################################################################
 
@@ -491,3 +491,21 @@ def export_vcf_download(datasets_results, ds_id):
         
     close_text_streaming()
 
+
+################################################################################
+
+def open_text_streaming(filename="data.pgxseg"):
+    if not "___shell___" in ENV:
+        print('Content-Type: text/plain')
+        if not "browser" in filename:
+            print('Content-Disposition: attachment; filename="{}"'.format(filename))
+        print('status: 200')
+        print()
+
+
+################################################################################
+
+def close_text_streaming():
+    print()
+    prdbug(f'... closing text streaming at {datetime.datetime.now().strftime("%H:%M:%S")}')
+    exit()

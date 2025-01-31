@@ -64,7 +64,7 @@
             }
         },
         "info": {
-            "$ref": "../common/commonDefinitions.json#/$defs/Info"
+            "$ref": "../../../../framework/json/common/info.json"
         },
         "geoLocation": {
             "$ref": "../common/GeoLocation.json"

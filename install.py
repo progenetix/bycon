@@ -21,6 +21,7 @@ to modify your local configuration and then perform a package build, installatio
 and server installation by running the `updev.sh` script.
 """
 
+
 ################################################################################
 ################################################################################
 ################################################################################
@@ -79,6 +80,7 @@ def main(no_sudo):
     ############################################################################
 
     proceed = input(f'Do you want to build the web frontend?\n"y" => test server, "s" => main server, otherwise enter for stopping: ')
+    proceed = ""
     if "s" in proceed.lower():
         cmd = "update"
     elif "y" in proceed.lower():

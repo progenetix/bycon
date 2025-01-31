@@ -23,7 +23,7 @@ def geolocations():
             BYC["ERRORS"].append("No query generated - missing or malformed parameters")
         else:
             results = mongo_result_list(SERVICES_DB, GEOLOCS_COLL, query, { '_id': False } )
-    
+
     BeaconErrorResponse().respond_if_errors()
 
     if "map" in str(BYC_PARS.get("plot_type", "___none___")):

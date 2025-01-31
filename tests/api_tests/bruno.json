@@ -1,0 +1,13 @@
+{
+  "version": "1",
+  "name": "byconTests",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "presets": {
+    "requestType": "http",
+    "requestUrl": "http://progenetix.test"
+  }
+}

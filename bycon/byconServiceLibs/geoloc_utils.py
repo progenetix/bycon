@@ -6,7 +6,7 @@ from bycon import BYC, BYC_PARS, RefactoredValues, prdbug, print_html_response
 services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 sys.path.append( services_lib_path )
 from bycon_plot import ByconPlotPars
-from file_utils import read_www_tsv_to_dictlist
+from file_utils import ByconTSVreader
 
 ################################################################################
 
@@ -100,13 +100,15 @@ class ByconGeolocs:
     def __read_geomarker_table_web(self):
         if not "http" in self.geo_webfile:
             return
-        lf, fieldnames = read_www_tsv_to_dictlist(self.geo_webfile)
+
+        prdbug(self.geo_webfile)
+        lf, fieldnames = ByconTSVreader().www_to_dictlist(self.geo_webfile)
 
         p_defs = {
             "group_lon": {"type": "number"},
             "group_lat": {"type": "number"},
             "group_label": {"type": "string"},
-            "item_size": {"type": "number"},
+            "item_size": {"type": "number", "default": 1},
             "item_label": {"type": "string"},
             "item_link": {"type": "string"},
             "marker_type": {"type": "string"},
@@ -117,8 +119,13 @@ class ByconGeolocs:
         for line in lf:
             p_vals = {}
             for p in p_defs:
-                v_s = line.get(p, "")
                 par_defs = p_defs[p]
+                default = par_defs.get("default", "")
+                v_s = line.get(p, default)
+                prdbug(p)
+                prdbug(par_defs)
+                prdbug(v_s)
+
                 p_vals.update({p: RefactoredValues(par_defs).refVal(v_s)})
 
             if not re.match(r'^\-?\d+?(?:\.\d+?)?$', str(p_vals.get("group_lat"))):

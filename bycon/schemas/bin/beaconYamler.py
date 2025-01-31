@@ -74,6 +74,7 @@ def convert_dir(in_path, out_path, from_type, to_type, config):
     conversion_method = "_{}2{}".format(from_type, to_type)
 
     for f_n in fs:
+        print(f'...{conversion_method} of {f_n}')
         eval(conversion_method)(f_n, in_path, out_path, config)
 
     d_s = [ d.name for d in scandir(in_path) if d.is_dir() ]

@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://progenetix.org/services/schemas/byconautServiceResponse/v2023-10-04",
+    "$id": "https://progenetix.org/services/schemas/byconautServiceResponse/v2024-12-28",
     "description": "Byconaut service responses provide lists of items and a summary.",
     "type": "object",
     "properties": {
@@ -14,7 +14,7 @@
         },
         "info": {
             "description": "Additional details that could be of interest. Provided to clearly enclose any attribute that is not part of the Beacon specification.",
-            "$ref": "../../../framework/json/common/beaconCommonComponents.json#/$defs/Info"
+            "$ref": "../../../framework/json/common/info.json"
         },
         "response": {
             "type": "object",

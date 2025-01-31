@@ -33,11 +33,12 @@ def publications():
     * <http://progenetix.org/services/publications/?filters=PMID:22824167&method=details>
     * <http://progenetix.org/services/publications/?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
     """
+
+    # The `publications.yaml` file contains an override for `filter_definitions`
     read_service_prefs("publications", services_conf_path)
+    f_d_s = BYC["filter_definitions"].get("$defs", {})
 
-    f_d_s = BYC.get("filter_definitions", {})
-
-    query = _create_filters_query()
+    query = __create_filters_query()
     geo_q, geo_pars = geo_query()
 
     if geo_q:
@@ -54,9 +55,7 @@ def publications():
     pub_coll = mongo_client[ "_byconServicesDB" ][ "publications" ]
     p_re = re.compile( f_d_s["pubmed"]["pattern"] )
     d_k = BYC_PARS.get("delivery_keys", [])
-    p_l = [ ]
-
-    prdbug(f'query: {query}')
+    p_l = []
 
     for pub in pub_coll.find( query, { "_id": 0 } ):
         s = { }
@@ -131,7 +130,7 @@ def __check_publications_map_response(results):
 
 ################################################################################
 
-def _create_filters_query():
+def __create_filters_query():
     filters = BYC.get("BYC_FILTERS", [])
     filter_precision = BYC_PARS.get("filter_precision", "exact")
     f_d_s = BYC["filter_definitions"].get("$defs", {})
@@ -154,6 +153,7 @@ def _create_filters_query():
 
     for f in filters:
         f_val = f.get("id", "")
+        prdbug(f_val)
         if len(f_val) < 1:
             continue
         pre_code = re.split('-|:', f_val)

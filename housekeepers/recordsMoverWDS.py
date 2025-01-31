@@ -9,7 +9,11 @@ sys.path.append( lib_path )
 from importer_helpers import ByconautImporter
 
 """
-./housekeepers/recordsMoverWDS.py -d progenetix --output cellz -i ./imports/1kdeltest.tsv --testMode false
+The `recordsMoverWDS.py` script is used to move records from a source database
+(indicated with `-d`) to a target database (indicated with `--output`). It requires
+the use of a tab-separated file with the record `individual_id` identifiers to be moved.
+
+* ./housekeepers/recordsMoverWDS.py -d progenetix --output cellz -i ./imports/1kdeltest.tsv --testMode false
 """
 
 BI = ByconautImporter()

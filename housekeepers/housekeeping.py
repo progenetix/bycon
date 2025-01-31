@@ -17,6 +17,7 @@ loc_path = path.dirname( path.abspath(__file__) )
 
 def main():
     set_collation_types()
+    ask_limit_reset()
 
     ds_id = assertSingleDatasetOrExit()
 
@@ -76,8 +77,9 @@ def main():
     #>------------------------------------------------------------------------<#
 
     if "y" in todos.get("update_cs_statusmaps", "y").lower():
-        print(f'==> executing "{loc_path}/analysesStatusmapsRefresher.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}"')
-        system(f'{loc_path}/analysesStatusmapsRefresher.py -d {ds_id}')
+        command = f'{loc_path}/analysesStatusmapsRefresher.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}'
+        print(f'==> executing "{command}"')
+        system(command)
 
     #>------------------------ / analyses ------------------------------------<#
 
@@ -158,17 +160,18 @@ def main():
     #>---------------------- update collations -------------------------------<#
 
     if not "n" in todos.get("update_collations", "y").lower():
-        cmd = f'{loc_path}/collationsCreator.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}'
-        print(f'\n{__hl()}==> executing \n\n{cmd}\n')
-        system(cmd)
+        command = f'{loc_path}/collationsCreator.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}'
+        print(f'\n{__hl()}==> executing \n\n{command}\n')
+        system(command)
 
     #>--------------------- / update collations ------------------------------<#
 
     #>--------------------- update frequencymaps -----------------------------<#
 
     if not "n" in todos.get("update_frequencymaps", "y").lower():
-        print(f'\n{__hl()}==> executing "{loc_path}/collationsFrequencymapsCreator.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}"\n')
-        system(f'{loc_path}/collationsFrequencymapsCreator.py -d {ds_id}')
+        command = f'{loc_path}/collationsFrequencymapsCreator.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}'
+        print(f'\n{__hl()}==> executing "{command}"\n')
+        system(command)
 
     #>-------------------- / update frequencymaps ----------------------------<#
 

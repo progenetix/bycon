@@ -60,7 +60,7 @@ The requested granularity of the beacon
   a special response entity in byconaut services (e.g. `indviduals`
   in `/sampletable/`)    
 **type:** string    
-**cmdFlags:** `--responseEntityPathId`    
+**cmdFlags:** `-e,--responseEntityPathId`    
 
 #### `include_resultset_responses` 
 **type:** string    

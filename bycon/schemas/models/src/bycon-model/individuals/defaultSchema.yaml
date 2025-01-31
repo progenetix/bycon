@@ -46,7 +46,7 @@ properties:
     items:
       $ref: ../common/exposure.yaml
   info:
-    $ref: ../common/commonDefinitions.yaml#/$defs/Info
+    $ref: ../../../../framework/json/common/info.yaml
 
 ################################################################################
 # additional properties from Phenopackets and/or Progenetix

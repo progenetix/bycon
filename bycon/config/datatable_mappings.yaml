@@ -412,9 +412,9 @@ $defs:
         type: array
         split_by: ','
         items:
-        type: number
+          type: number
         db_key: geo_location.geometry.coordinates
-        computed: True
+        # computed: True
 
       # special export labels
       group_id:

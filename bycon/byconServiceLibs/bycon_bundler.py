@@ -90,7 +90,7 @@ class ByconBundler:
                 if line.startswith("#"):
                     h_lines.append(line)
 
-        d_lines, fieldnames = read_tsv_to_dictlist(self.filepath, max_count=0)
+        d_lines, fieldnames = ByconTSVreader().file_to_dictlist(self.filepath, max_count=0)
         self.header = h_lines
         self.data = d_lines
         self.fieldnames = fieldnames
@@ -104,7 +104,7 @@ class ByconBundler:
         self.filepath = filepath
         self.probedata = []
 
-        p_lines, fieldnames = read_tsv_to_dictlist(self.filepath, max_count=0)
+        p_lines, fieldnames = ByconTSVreader().file_to_dictlist(self.filepath, max_count=0)
 
         p_o = {
             "probe_id": False,
@@ -404,7 +404,6 @@ class ByconBundler:
     #--------------------------------------------------------------------------#
 
     def __analysisBundleCreateIsets(self, label=""):
-
         # self.dataset_ids = list(set([cs.get("dataset_id", "NA") for cs in self.bundle["analyses"]]))
         GB = GenomeBins()
         for ds_id in self.datasets_results.keys():

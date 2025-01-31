@@ -6,6 +6,20 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-01-29 (v2.1.4)
+
+* some refactoring of file and table handling
+* changed the URL generation for handovers to always use the protocol sequrity
+  from the request (http or https)
+
+### 2025-01-16 (v2.1.3)
+
+* fixed publications query bug which was introduced by the recent
+  `bycon` refactoring
+* fixed `geoloc_utils.py` service library bug for empty marker sizes
+* some removal of unused code
+* `housekeepeing.py` now correctly asks for & uses global `--limit`
+
 ### 2024-12-20 (v2.1.2)
 
 !!! warn "Python path"

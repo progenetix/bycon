@@ -1,40 +1,100 @@
-import csv, re, requests
-# from attrdictionary import AttrDict
+import csv, re, requests, sys
+from os import path
 
 # bycon
-from bycon import RefactoredValues, prdbug, prdlhead, prjsonnice, BYC, BYC_PARS, ENV
+from bycon import (
+    BYC,
+    BYC_PARS,
+    RefactoredValues,
+    prdbug,
+    prdlhead,
+    prjsonnice
+)
+
+services_lib_path = path.join(path.dirname(path.abspath(__file__)))
+sys.path.append(services_lib_path)
+from file_utils import ExportFile
+
 
 ################################################################################
 
-def export_datatable_download(flattened_data):
-    dt_m = BYC["datatable_mappings"]
-    r_t = BYC.get("response_entity_id", "___none___")
-    if not r_t in dt_m["$defs"]:
-        return
-    sel_pars = BYC_PARS.get("delivery_keys", [])
-    io_params = dt_m["$defs"][ r_t ]["parameters"]
-    if len(sel_pars) > 0:
-        io_params = { k: v for k, v in io_params.items() if k in sel_pars }
-    prdlhead(f'{r_t}.tsv')
-    header = create_table_header(io_params)
-    print("\t".join( header ))
+class ByconDatatableExporter:
+    def __init__(self, file_type=None):
+        self.datatable_mappings = BYC.get("datatable_mappings", {"$defs": {}})
+        self.entity = BYC.get("response_entity_id", "___none___")
+        if not self.entity in self.datatable_mappings["$defs"]:
+            # TODO: proper error handling
+            return
 
-    for pgxdoc in flattened_data:
-        line = [ ]
-        for par, par_defs in io_params.items():
+        self.file_name = f'{self.entity}.tsv'
+
+        sel_pars = BYC_PARS.get("delivery_keys", [])      
+        io_params = self.datatable_mappings["$defs"][self.entity]["parameters"]
+        if len(sel_pars) > 0:
+            io_params = { k: v for k, v in io_params.items() if k in sel_pars }
+
+        self.io_params = io_params
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def stream_datatable(self, flattened_data):
+        prdlhead(self.file_name)
+        print(f'{self.__create_table_header()}\n')
+        for pgxdoc in flattened_data:
+            print(f'{self.__table_line_from_pgxdoc(pgxdoc)}\n')
+        exit()
+
+
+    # -------------------------------------------------------------------------#
+
+    def export_datatable(self, flattened_data):
+        if not (table_file := ExportFile().check_outputfile_path()):
+            return
+
+        t_f = open(table_file, "w")
+        t_f.write(f'{self.__create_table_header()}\n')
+        for pgxdoc in flattened_data:
+            t_f.write(f'{self.__table_line_from_pgxdoc(pgxdoc)}\n')
+        t_f.close()
+        exit()
+
+
+    # -------------------------------------------------------------------------#
+    # ---------------------------- private ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __table_line_from_pgxdoc(self, pgxdoc):
+        line = []
+        for par, par_defs in self.io_params.items():
             parameter_type = par_defs.get("type", "string")
             db_key = par_defs.get("db_key", "___undefined___")
             v = get_nested_value(pgxdoc, db_key)
-            # TODO !!! This does not handle the object exports properly !!!
-            if isinstance(v, list):
-                line.append("&&".join(map(str, (v))))
-            else:
-                line.append(str(v))
-        print("\t".join( line ))
+            line.append(RefactoredValues(par_defs).strVal(v))
+        return "\t".join( line )
 
-    exit()
+    # -------------------------------------------------------------------------#
+
+    def __create_table_header(self):
+        """
+        """
+        header_labs = [ ]
+        for par, par_defs in self.io_params.items():
+            pres = par_defs.get("prefix_split", {})
+            if len(pres.keys()) < 1:
+                header_labs.append( par )
+                continue
+            for pre in pres.keys():
+                header_labs.append( par+"_id"+"___"+pre )
+                header_labs.append( par+"_label"+"___"+pre )
+
+        return "\t".join(header_labs)
 
 
+################################################################################
+################################################################################
 ################################################################################
 
 def import_datatable_dict_line(parent, fieldnames, lineobj, primary_scope="biosample"):
@@ -42,11 +102,10 @@ def import_datatable_dict_line(parent, fieldnames, lineobj, primary_scope="biosa
     if not primary_scope in dt_m["$defs"]:
         return
     io_params = dt_m["$defs"][ primary_scope ]["parameters"]
-    def_params = create_table_header(io_params)
     for f_n in fieldnames:
         if "#"in f_n:
             continue
-        if f_n not in def_params:
+        if f_n not in io_params.keys():
             continue
         if not (par_defs := io_params.get(f_n, {})):
             continue
@@ -80,23 +139,6 @@ def import_datatable_dict_line(parent, fieldnames, lineobj, primary_scope="biosa
         assign_nested_value(parent, dotted_key, v, par_defs)
 
     return parent
-
-################################################################################
-
-def create_table_header(io_params):
-    """
-    """
-    header_labs = [ ]
-    for par, par_defs in io_params.items():
-        pres = par_defs.get("prefix_split", {})
-        if len(pres.keys()) < 1:
-            header_labs.append( par )
-            continue
-        for pre in pres.keys():
-            header_labs.append( par+"_id"+"___"+pre )
-            header_labs.append( par+"_label"+"___"+pre )
-
-    return header_labs
 
 
 ################################################################################

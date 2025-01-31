@@ -84,7 +84,7 @@ properties:
       - id: EFO:0010938
         label: large-insert clone DNA microarray
   info:
-    $ref: ../common/commonDefinitions.yaml#/$defs/Info
+    $ref: ../../../../framework/json/common/info.yaml
 required:
   - id
   - biosampleId

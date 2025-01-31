@@ -82,6 +82,7 @@ $defs:
         in `/sampletable/`)
     type: string
     cmdFlags:
+      - -e
       - --responseEntityPathId
 
   # requested_schema:
