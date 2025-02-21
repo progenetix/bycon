@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 
-import datetime, time
+import time
 from pymongo import MongoClient
 from progress.bar import Bar
 from random import shuffle as random_shuffle
@@ -31,6 +31,7 @@ The script will add `frequencymap` object to each of the collations.
 """
 
 ask_limit_reset()
+limit = BYC_PARS.get("limit", 200)
 ds_id = assertSingleDatasetOrExit()
 GB = GenomeBins()
 interval_count = GB.get_genome_bin_count()
@@ -72,6 +73,7 @@ if skip_existing is True:
             bar.next()
 
 for c_id in coll_ids:
+
     coll = coll_coll.find_one({"id": c_id})
     c_o_id = coll.get("_id")
     if not coll:
@@ -80,8 +82,6 @@ for c_id in coll_ids:
             bar.next()
         continue
 
-    if not BYC["TEST_MODE"]:
-        bar.next()
 
     if skip_existing is True:
         if "frequencymap" in coll:
@@ -89,12 +89,26 @@ for c_id in coll_ids:
             continue
 
     start_time = time.time()
-    BYC.update({"BYC_FILTERS":[{"id":c_id}, {"id": "EDAM:operation_3961"}]})
-    a_ids = MultiQueryResponses(ds_id).get_analysis_ids()
-    intervals, cnv_ana_count = GB.intervalAidFrequencyMaps(ds_id, a_ids)
+    BYC_PARS.update({"filters":[{"id":c_id}, {"id": "EDAM:operation_3961"}]})
 
-    if cnv_ana_count < 1:
+    record_queries = ByconQuery().recordsQuery()
+    DR = ByconDatasetResults(ds_id, record_queries)
+    ds_results = DR.retrieveResults()
+    ana_ids = ds_results["analyses.id"]["target_values"]
+
+    prdbug(f'...{len(ana_ids)} matched analyses')
+
+    if not BYC["TEST_MODE"]:
+        bar.next()
+
+    if len(ana_ids) < 1:
         continue
+
+    ana_ids = return_paginated_list(ana_ids, 0, limit)
+    prdbug(f'... after limit {len(ana_ids)}')
+
+    intervals, cnv_ana_count = GB.intervalAidFrequencyMaps(ds_id, ana_ids)
+    prdbug(f'... retrieved {cnv_ana_count} CNV analyses')
 
     update_obj = {
         "cnv_analyses": cnv_ana_count,

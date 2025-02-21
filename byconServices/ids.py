@@ -7,7 +7,7 @@ from bycon import (
     BYC_PARS,
     prdbug,
     print_uri_rewrite_response,
-    rest_path_value
+    ByconParameters
 )
 from byconServiceLibs import read_service_prefs
 
@@ -30,7 +30,7 @@ def ids():
 
     conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )
     read_service_prefs( "ids", conf_path)
-    id_in = rest_path_value("ids")
+    id_in = ByconParameters().rest_path_value("ids")
     s_c = BYC.get("service_config", {})
     f_p_s = s_c.get("format_patterns", {})
 
@@ -38,13 +38,13 @@ def ids():
         for f_p in f_p_s:
             pat = re.compile(f_p["pattern"])
             if pat.match(lid):
-                link = f_p["link"]
+                link = f_p.get("link", "http://localhost")
                 if len(pim := f_p.get("prepend_if_missing", "")) > 0:
                     if pim in lid:
                         pass
                     else:
                         lid = pim+lid
-                print_uri_rewrite_response(link, lid)
+                print_uri_rewrite_response(f'{link}{lid}')
 
     BYC.update({"ERRORS": ["No correct id provided. Please refer to the documentation at http://info.progenetix.org/"]})
     BeaconErrorResponse().respond_if_errors()

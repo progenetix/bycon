@@ -10,6 +10,7 @@ reference_server_url: https://progenetix.org
 
 nav:
   - Documentation Home: /
+  - Recent Changes: changes.md
   - Setup & Maintainance:
     - Installation: installation.md
     - Importing Data: importers/index.md
@@ -19,7 +20,6 @@ nav:
     - Services API: API-services.md
     - API Parameters: API-parameters.md
   - Front End: beaconplus.md
-  - Recent Changes: changes.md
   # - Upcoming & To Do: future.md
   - Code Repositories:
     - bycon: https://github.com/progenetix/bycon

@@ -5,8 +5,8 @@ from bycon import *
 from pymongo import MongoClient
 from random import sample as random_samples
 
-from bycon import byconServiceLibs
-from importer_helpers import ByconautImporter
+from bycon import byconServiceLibs, ByconDatasets
+from bycon_importer import ByconImporter
 from service_helpers import assertSingleDatasetOrExit
 
 loc_path = path.dirname( path.abspath(__file__) )
@@ -50,12 +50,13 @@ steps for a CNV supporting database and create an archive for distribution.
 """
 
 ds_id = assertSingleDatasetOrExit()
+database_names = ByconDatasets().get_database_names()
 examples_db = BYC_PARS.get("output", "examplez")
 proceed = input(f'Re-create the example "{examples_db}" database from {ds_id} data? (y/N): ')
 if not "y" in proceed.lower():
     print("Exiting...")
     exit()
-if examples_db in BYC.get("DATABASE_NAMES", []) and not "examplez" in examples_db:
+if examples_db in database_names and not "examplez" in examples_db:
     proceed = input(f'¡ This will delete the existing "{examples_db}" database !\nPlease type the database name to confirm: ')
     if examples_db != proceed:
         print("Exiting...")
@@ -64,7 +65,7 @@ if examples_db in BYC.get("DATABASE_NAMES", []) and not "examplez" in examples_d
 BYC_PARS.update({"response_entity_path_id":"individuals"})
 BYC_PARS.update({"inputfile":"___dummy___"})
 BYC_PARS.update({"output": examples_db})
-set_entities()
+ByconEntities().set_entities()
 
 # TODO: prototyping use of a seies of queries to collect matching
 # individuals & subsampling those. 
@@ -93,7 +94,7 @@ for coll in list(test_colls):
     if not BYC["TEST_MODE"]:
         mongo_db.create_collection(coll)
 
-ByconautImporter(False).move_individuals_and_downstream_from_ds_results(ds_results)
+ByconImporter(False).move_individuals_and_downstream_from_ds_results(ds_results)
 
 print(f"Finished re-creating the example database '{examples_db}'.")
 print(f"For full functionality you might want to run \n\n`{loc_path}/housekeeping.py -d {examples_db}`\n\nor continue with the following commands.\n")

@@ -16,6 +16,6 @@ def variantsbedfile():
     ds_id = list(rss.keys())[0]
     ucsclink, bedfilelink = write_variants_bedfile(rss, ds_id)
     if "ucsc" in BYC_PARS.get("output", "bed").lower():
-        print_uri_rewrite_response(ucsclink, bedfilelink)
+        print_uri_rewrite_response(f'{ucsclink}{bedfilelink}')
     print_uri_rewrite_response(bedfilelink)
 

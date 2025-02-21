@@ -6,6 +6,52 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+
+### 2025-02-21 (v2.2.1)
+
+This is a test run for a major query module change:
+
+* treating all queries individually in an AND context and aggregating by intyersection
+  of id values
+    - e.g. 2 filtering terms with value collision in the same property (e.g. `EFO:0010942,EFO:0010943`
+      in `biosamples.biosample_status.id`) wwill run as separate internal db queries
+      and the intersection of values will lead to an empty list for `biosample_id`
+      but for a list of `individual_id` values for individuals which have both
+      samples for EFO:0010942 ("primary tumor sample") and EFO:0010943 ("recurrent tumor sample")
+    - this also applies to variant queries; _i.e._ the so far experimental mullti
+      variant queries will result in matches for `analysis_id` values for such
+      with both/multiple variants; or even only at a higher level if multiple
+      samples ... (e.g. hit on germline and different on the tumor sample in same
+      individual)
+* TODO
+    - extensive testing (check special queries especially, e.g. geo queries)
+    - code cleanup
+    - documentation
+    - re-introduction of Boolean option ...
+
+
+### 2025-02-14 (v2.2.0)
+
+* fixed wrong aggregation of `individuals.sex` data (notes in the Progenetix news
+  after updating ...)
+* corrected filter logic where so far terms for the same field were treated as `OR`
+  (which allows some nice multi-target queries but is in conflict w/ the Beacon behaviour)
+* added `type` -> `VRStype` to variants, to be used for query disambiguation
+    - currently `Adjacency`, `Allele` and `CopyNumberChange` are being used
+    - query integration to follow
+* modified the format for export of annotated variants (e.g. with `MolecularEffects`)
+  to follow the Beacon schema (some nesting level mismatch before) 
+* some code cleanup, e.g. adding some initialization functions which aren't used
+  anywhere else to the root `__init__.py`.
+* moved input parameter processing to new `ByconParameters` class
+* fixed sample strip plots (some default nesting error)
+* rewrite/finishing of Cytobands class and move to `genome_utils`
+* schema parsing now in new `ByconSchemas` class
+
+### 2025-02-08 (v2.1.5)
+
+* fixed the all datasets info return for the `/datasets` endpoint
+
 ### 2025-01-29 (v2.1.4)
 
 * some refactoring of file and table handling

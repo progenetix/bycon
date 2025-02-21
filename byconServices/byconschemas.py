@@ -1,4 +1,12 @@
-from bycon import prdbug, prjsonhead, prjsontrue, BYC, BYC_PARS, BeaconErrorResponse, read_schema_file
+from bycon import (
+    BYC,
+    BYC_PARS,
+    prdbug,
+    prjsonhead,
+    prjsontrue,
+    BeaconErrorResponse,
+    ByconSchemas
+)
 
 def byconschemas():
     """
@@ -10,7 +18,7 @@ def byconschemas():
     """
     if (schema_name := BYC_PARS.get("id")):
         schema_name = schema_name.split('.').pop(0)
-        if (s := read_schema_file(schema_name, "")):
+        if (s := ByconSchemas(schema_name, "").read_schema_file()):
             prjsonhead()
             prjsontrue(s)
             exit()

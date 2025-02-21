@@ -20,7 +20,7 @@ ds_id = assertSingleDatasetOrExit()
 target_path_id = "individuals"
 ho_key = f'{target_path_id}.id'
 BYC_PARS.update({"response_entity_path_id":target_path_id})
-set_entities()
+ByconEntities().set_entities()
 
 r_ids = MultiQueryResponses(ds_id).get_individual_ids()
 

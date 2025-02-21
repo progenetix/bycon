@@ -1,7 +1,7 @@
 $defs:
   age:
     id: NCIT_C156420
-    ft_type: alphanumeric
+    type: alphanumeric
     format: iso8601duration
     name: Age at diagnosis
     scope: individuals
@@ -14,7 +14,7 @@ $defs:
 
   EDAMoperation:
     id: EDAMoperation
-    ft_type: ontologyTerm
+    type: ontologyTerm
     iri_prefix: http://purl.obolibrary.org/obo/EDAM_
     name: EDAM ontology
     namespace_prefix: EDAM
@@ -36,7 +36,7 @@ $defs:
 
   analysisPipeline:
     id: analysisPipeline
-    ft_type: alphanumeric
+    type: alphanumeric
     format: string
     db_key: 'pipeline_name'
     scope: analyses
@@ -49,7 +49,7 @@ $defs:
 
   NCITgrade:
     id: ncit
-    ft_type: ontologyTerm
+    type: ontologyTerm
     name: NCI Thesaurus OBO Edition
     iri_prefix: http://purl.obolibrary.org/obo/NCIT_
     namespace_prefix: NCIT
@@ -71,7 +71,7 @@ $defs:
 
   NCITstage:
     id: ncit
-    ft_type: ontologyTerm
+    type: ontologyTerm
     iri_prefix: http://purl.obolibrary.org/obo/NCIT_
     name: NCI Thesaurus OBO Edition
     namespace_prefix: NCIT
@@ -93,7 +93,7 @@ $defs:
 
   NCITtnm:
     id: ncit
-    ft_type: ontologyTerm
+    type: ontologyTerm
     name: NCI Thesaurus OBO Edition
     iri_prefix: http://purl.obolibrary.org/obo/NCIT_
     namespace_prefix: NCIT
@@ -116,7 +116,7 @@ $defs:
   # Bio-Metadata
   NCIT:
     id: ncit/neoplasm-core.owl
-    ft_type: ontologyTerm
+    type: ontologyTerm
     iri_prefix: http://purl.obolibrary.org/obo/NCIT_
     name: NCI Thesaurus OBO Edition
     namespace_prefix: NCIT
@@ -137,7 +137,7 @@ $defs:
 
   NCITauxiliary:
     id: ncit
-    ft_type: ontologyTerm
+    type: ontologyTerm
     iri_prefix: http://purl.obolibrary.org/obo/NCIT_
     name: NCIt Diseases
     namespace_prefix: NCIT
@@ -158,7 +158,7 @@ $defs:
 
   HP:
     id: hp
-    ft_type: ontologyTerm
+    type: ontologyTerm
     iri_prefix: http://purl.obolibrary.org/obo/HP_
     name: "Human Phenotype Ontology"
     namespace_prefix: HP
@@ -174,7 +174,7 @@ $defs:
 
   NCITsex:
     id: ncit
-    ft_type: ontologyTerm
+    type: ontologyTerm
     iri_prefix: http://purl.obolibrary.org/obo/NCIT_
     name: NCI Thesaurus OBO Edition
     namespace_prefix: NCIT
@@ -196,7 +196,7 @@ $defs:
 
   EFOcnvassessment:
     id: efo
-    ft_type: ontologyTerm
+    type: ontologyTerm
     iri_prefix: http://www.ebi.ac.uk/efo/EFO_
     name: "Experimental Factor Ontology"
     namespace_prefix: EFO
@@ -210,7 +210,7 @@ $defs:
 
   EFOfus:
     id: efo
-    ft_type: ontologyTerm
+    type: ontologyTerm
     iri_prefix: http://www.ebi.ac.uk/efo/EFO_
     name: "Experimental Factor Ontology"
     namespace_prefix: EFO
@@ -226,7 +226,7 @@ $defs:
 
   EFOmaterial:
     id: efo
-    ft_type: ontologyTerm
+    type: ontologyTerm
     iri_prefix: http://www.ebi.ac.uk/efo/EFO_
     name: "Experimental Factor Ontology"
     namespace_prefix: EFO
@@ -244,7 +244,7 @@ $defs:
   # Procedural Metadata
   pubmed:
     id: pubmed
-    ft_type: ontologyTerm
+    type: ontologyTerm
     name: NCBI PubMed
     namespace_prefix: PMID
     url: "https://www.ncbi.nlm.nih.gov/pubmed/"
@@ -264,7 +264,7 @@ $defs:
 
   GEOseries:
     id: geo_gse
-    ft_type: ontologyTerm
+    type: ontologyTerm
     namespace_prefix: geo
     name: NCBI GEO Series
     url: "https://www.ncbi.nlm.nih.gov/geo/"
@@ -283,7 +283,7 @@ $defs:
 
   GenomePlatforms:
     id: geo_gpl
-    ft_type: ontologyTerm
+    type: ontologyTerm
     namespace_prefix: geo
     name: Genomic Analysis Platforms
     url: "https://www.ncbi.nlm.nih.gov/geo/"
@@ -305,7 +305,7 @@ $defs:
 
   GEOexperiment:
     id: geo_gsm
-    ft_type: ontologyTerm
+    type: ontologyTerm
     namespace_prefix: geo
     url: "https://www.ncbi.nlm.nih.gov/geo/"
     name: NCBI GEO Experiment
@@ -324,7 +324,7 @@ $defs:
 
   AEseries:
     id: AEseries
-    ft_type: ontologyTerm
+    type: ontologyTerm
     namespace_prefix: arrayexpress
     name: EBI ArrayExpress Series
     url: https://www.ebi.ac.uk/arrayexpress/
@@ -341,7 +341,7 @@ $defs:
 
   AEexperiment:
     id: AEexperiment
-    ft_type: ontologyTerm
+    type: ontologyTerm
     name: "EBI ArrayExpress"
     namespace_prefix: arrayexpress
     url: "https://www.ebi.ac.uk/arrayexpress/"
@@ -360,7 +360,7 @@ $defs:
 
   UBERON:
     id: uberon
-    ft_type: ontologyTerm
+    type: ontologyTerm
     name: Uberon cross-species anatomical structures ontology
     iri_prefix: http://purl.obolibrary.org/obo/UBERON_
     namespace_prefix: UBERON
@@ -381,7 +381,7 @@ $defs:
 
   cellosaurus:
     id: cellosaurus
-    ft_type: ontologyTerm
+    type: ontologyTerm
     name: "Cellosaurus cell line resource"
     iri_prefix: https://www.cellosaurus.org/
     namespace_prefix: cellosaurus

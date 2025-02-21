@@ -1,4 +1,3 @@
-import inspect
 from os import environ, path, pardir
 from pymongo import MongoClient
 import sys
@@ -7,6 +6,11 @@ pkg_path = path.dirname( path.abspath(__file__) )
 
 """
 Global variables
+Potentially in th eenvironment:
+
+DATABASE_NAMES
+DB_MONGOHOST
+
 """
 
 ENV = environ.get('HTTP_HOST', "___shell___")
@@ -46,30 +50,16 @@ GEOLOCS_COLL = "geolocs"
 ################################################################################
 
 errors = []
-warnings = []
-notes = []
 
-if "DATABASE_NAMES" in environ:
-  db_names = environ["DATABASE_NAMES"].split()
-else:
-  try:
-    mongo_client = MongoClient(host=DB_MONGOHOST)
-    db_names = list(mongo_client.list_database_names())
-    db_names = [x for x in db_names if x not in [HOUSEKEEPING_DB, SERVICES_DB, "admin", "config", "local"]]
-  except Exception as e:
-    db_names = []
-    errors.append(f'Could not connect to MongoDB:\n####\n{e}\n####')
 BYC = {
   "DEBUG_MODE": False,
   "TEST_MODE": False,
   "ERRORS": errors,
-  "WARNINGS": warnings,
-  "NOTES": notes,
+  "WARNINGS": [],
+  "NOTES": [],
   "USER": "anonymous",
 
   "BYC_DATASET_IDS": [],
-  "DATABASE_NAMES": db_names,
-  "BYC_FILTERS": [],
 
   "beacon_defaults": {
     "defaults": {
@@ -106,21 +96,17 @@ BYC = {
   "authorizations": {},
   "local_paths": {},
   "plot_defaults": {},
-  "query_meta": {},
+  "request_meta": {},
   "service_config": {},
 
   # -------------------------------------------------------------------------- #
 
   "authorized_granularities": {},
-  "parsed_config_paths": [],
-  "request_entity_path_id": None,
   "request_entity_id": None,
-  "response_entity_path_id": None,
   "response_entity_id": None,
   "response_entity": {},
   "response_schema": "beaconInfoResponse",
   "bycon_response_class": "BeaconInfoResponse",
-  "path_id_value_bycon_parameter": None,
   "returned_granularity": "boolean"
 }
 

@@ -7,6 +7,7 @@ from bycon import (
     BYC,
     BYC_PARS,
     BeaconErrorResponse,
+    ByconFilters,
     DB_MONGOHOST,
     geo_query,
     prdbug
@@ -131,7 +132,7 @@ def __check_publications_map_response(results):
 ################################################################################
 
 def __create_filters_query():
-    filters = BYC.get("BYC_FILTERS", [])
+    filters = ByconFilters().get_filters()
     filter_precision = BYC_PARS.get("filter_precision", "exact")
     f_d_s = BYC["filter_definitions"].get("$defs", {})
     query = { }

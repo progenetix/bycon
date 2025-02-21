@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "description": "Component definitions used in 'requestParameters.json'.\nThe purpose of this file is to separate components from actual parameters to avoid confusion.",
+    "description": "Component definitions used in 'requestParameters.json'. The purpose of this file is to separate components from actual parameters to avoid confusion.",
     "$defs": {
         "Assembly": {
             "description": "Genomic assembly accession and version as RefSqeq assembly accession (e.g. \"GCF_000001405.39\") or a versioned assembly name or synonym such as UCSC Genome Browser assembly (e.g. \"hg38\") or Genome Reference Consortium Human (e.g. \"GRCh38.p13\") names.",

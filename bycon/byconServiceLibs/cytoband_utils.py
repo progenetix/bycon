@@ -1,4 +1,5 @@
-import csv, datetime, re, sys, time, base36, yaml
+import csv, re, sys, time, base36, yaml
+from datetime import datetime
 from os import environ, path, pardir
 
 from bycon import BYC, Cytobands, ByconVariant, ChroNames
@@ -23,7 +24,7 @@ def variants_from_revish(bs_id, cs_id, technique, iscn):
             "id": BID.makeID("pgxvar"),
             "biosample_id": bs_id,
             "analysis_id": cs_id,
-            "updated": datetime.datetime.now().isoformat()
+            "updated": datetime.now().isoformat()
         })
         variants.append(ByconVariant().byconVariant(v))
 

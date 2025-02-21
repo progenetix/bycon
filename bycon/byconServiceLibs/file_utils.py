@@ -1,9 +1,8 @@
-import csv, datetime, re, requests
+import csv, re, requests
 
 from pathlib import Path
 from os import environ, path
 from pymongo import MongoClient
-from copy import deepcopy
 from random import sample as random_samples
 
 from bycon import (
@@ -100,7 +99,7 @@ class ByconTSVreader():
     # -------------------------------------------------------------------------#
 
     def __dictread(self):
-        data = csv.DictReader(filter(lambda row: row.startswith('#') is False, csvfile), delimiter="\t", quotechar='"')
+        data = csv.DictReader(filter(lambda row: row.startswith('#') is False, self.tsv_data), delimiter="\t", quotechar='"')
         self.fieldnames = list(data.fieldnames)
         for l in data:
             self.dictlist.append(dict(l))

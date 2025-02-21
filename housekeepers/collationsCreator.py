@@ -1,11 +1,12 @@
 #!/usr/local/bin/python3
 
-import datetime, json, re, sys, yaml
+import json, re, sys, yaml
+from datetime import datetime
 from os import path, environ, pardir
 from pymongo import MongoClient
 from progress.bar import Bar
 
-from bycon import BYC, config, initialize_bycon_service, prdbug
+from bycon import BYC, config, prdbug
 from byconServiceLibs import assertSingleDatasetOrExit, hierarchy_from_file, set_collation_types, write_log
 
 dir_path = path.dirname( path.abspath(__file__) )
@@ -91,7 +92,7 @@ def __process_collation_type(ds_id, coll_type, coll_defs):
             update_obj = hier[c_id].copy()
             update_obj.update({
                 "id": c_id,
-                "ft_type": coll_defs.get("ft_type", "ontologyTerm"),
+                "type": coll_defs.get("type", "ontologyTerm"),
                 "name": coll_defs.get("name", ""),
                 "collation_type": coll_type,
                 "reference": "https://progenetix.org/services/ids/"+c_id,
@@ -101,7 +102,7 @@ def __process_collation_type(ds_id, coll_type, coll_defs):
                 "code_matches": code_no,
                 "count": child_no,
                 "dataset_id": ds_id,
-                "updated": datetime.datetime.now().isoformat(),
+                "updated": datetime.now().isoformat(),
                 "db_key": db_key
             })
             if "reference" in coll_defs:
@@ -161,15 +162,15 @@ def get_prefix_hierarchy(ds_id, coll_type, pre_h_f):
         hier.update( {
             "NCIT:C000000": {
                 "id": "NCIT:C000000",
-                "label": "Unplaced Entities",
-                "ft_type": "ontologyTerm",
+                "label": "Unplaced Entities, e.g. non-neoplastic or deprecated",
+                "type": "ontologyTerm",
                 "name": "NCI Thesaurus OBO Edition",
                 "collation_type": coll_type,
                 "namespace_prefix": coll_defs.get("namespace_prefix", ""),
                 "scope": coll_defs.get("scope", ""),
                 "entity": coll_defs.get("entity", ""),
                 "db_key": coll_defs.get("db_key", ""),
-                "hierarchy_paths": [ { "order": no, "depth": 1, "path": [ "NCIT:C3262", "NCIT:C000000" ] } ]
+                "hierarchy_paths": [ { "order": no, "depth": 0, "path": [ "NCIT:C000000" ] } ]
             }
         } )
 
@@ -182,7 +183,7 @@ def get_prefix_hierarchy(ds_id, coll_type, pre_h_f):
         if coll_type == "NCIT":
             hier.update( {
                     c_id: { "id": c_id, "label": l, "hierarchy_paths":
-                        [ { "order": int(no), "depth": 3, "path": [ "NCIT:C3262", "NCIT:C000000", c_id ] } ]
+                        [ { "order": int(no), "depth": 2, "path": ["NCIT:C000000", c_id ] } ]
                     }
                 }
             )
@@ -241,14 +242,14 @@ def __make_dummy_publication_hierarchy():
             c_id: {
                 "id":  c_id,
                 "label": pub["label"],
-                "ft_type": "ontologyTerm",
+                "type": "ontologyTerm",
                 "name": "NCBI PubMed",
                 "collation_type": coll_type,
                 "namespace_prefix": coll_defs.get("namespace_prefix", ""),
                 "scope": coll_defs.get("scope", ""),
                 "entity": coll_defs.get("entity", ""),
                 "db_key": coll_defs.get("db_key", ""),
-                "updated": datetime.datetime.now().isoformat(),
+                "updated": datetime.now().isoformat(),
                 "hierarchy_paths": [ { "order": int(order), "depth": 0, "path": [ c_id ] } ],
                 "parent_terms": [ c_id ],
                 "child_terms": [ c_id ]
@@ -285,13 +286,13 @@ def __get_hierarchy_item(data_coll, coll_defs, coll_type, c_id, order, depth, pa
     return {
         "id":  c_id,
         "label": __get_label_for_code(data_coll, coll_defs, c_id),
-        "ft_type": coll_defs.get("ft_type", ""),
+        "type": coll_defs.get("type", ""),
         "collation_type": coll_type,
         "namespace_prefix": coll_defs.get("namespace_prefix", ""),
         "scope": coll_defs.get("scope", ""),
         "entity": coll_defs.get("entity", ""),
         "db_key": coll_defs.get("db_key", ""),
-        "updated": datetime.datetime.now().isoformat(),
+        "updated": datetime.now().isoformat(),
         "hierarchy_paths": [ { "order": int(order), "depth": int(depth), "path": list(path) } ],
         "parent_terms": list(path),
         "child_terms": [ c_id ]
@@ -338,22 +339,10 @@ def __get_label_for_code(data_coll, coll_defs, c_id):
 
     db_key = coll_defs["db_key"]
     id_key = re.sub(".id", "", db_key)
-    example = data_coll.find_one( { db_key: c_id } )
-
-    if id_key in example.keys():
-        if isinstance(example[ id_key ], list):
-            for o_t in example[ id_key ]:
-                if c_id in o_t["id"]:
-                    for k in label_keys:
-                        if k in o_t:
-                            return o_t[k]
-                    continue
-        elif type(example[ id_key ]) is object:
-            o_t = example[ id_key ]
-            if c_id in o_t.get("id", "___none___"):
-                for k in label_keys:
-                        if k in o_t:
-                            return o_t[k]
+    if not (example := data_coll.find_one( { db_key: c_id } )):
+        return c_id
+    if (ex_lab := example.get(id_key, {"label": None}).get("label")):
+        return ex_lab
 
     return c_id
 

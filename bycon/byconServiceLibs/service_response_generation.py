@@ -7,7 +7,7 @@ from parameter_parsing import prdbug
 from config import AUTHORIZATIONS, BYC, BYC_PARS
 from export_file_generation import *
 from response_remapping import *
-from schema_parsing import object_instance_from_schema_name
+from schema_parsing import ByconSchemas
 
 ################################################################################
 
@@ -19,8 +19,8 @@ class ByconServiceResponse:
         # TBD for authentication? 
         self.returned_granularity = BYC.get("returned_granularity", "record")
         self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
-        self.data_response = object_instance_from_schema_name(response_schema, "")
-        self.error_response = object_instance_from_schema_name("beaconErrorResponse", "")
+        self.data_response = ByconSchemas(response_schema, "").get_schema_instance()
+        self.error_response = ByconSchemas("beaconErrorResponse", "").get_schema_instance()
         self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta() })
         if not self.data_response.get("info"):
             self.data_response.pop("info", None)

@@ -3,7 +3,7 @@
 from os import pardir, path, sys
 
 from bycon import byconServiceLibs
-from importer_helpers import ByconautImporter
+from bycon_importer import ByconImporter
 
-BI = ByconautImporter()
+BI = ByconImporter()
 BI.delete_variants_of_analyses()

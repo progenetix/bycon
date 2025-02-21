@@ -1,11 +1,12 @@
-import datetime, sys
+import sys
+from datetime import datetime
 from os import path
 from progress.bar import Bar
 from pymongo import MongoClient
 from random import sample as random_samples
 
 # bycon
-from bycon import BYC, BYC_PARS, ByconVariant, DB_MONGOHOST, prjsonnice, prdbug
+from bycon import BYC, BYC_PARS, ByconDatasets, ByconVariant, DB_MONGOHOST, prjsonnice, prdbug
 
 services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 sys.path.append( services_lib_path )
@@ -18,11 +19,12 @@ from service_helpers import assertSingleDatasetOrExit, ByconID
 ################################################################################
 ################################################################################
 
-class ByconautImporter():
+class ByconImporter():
     def __init__(self, use_file=True):
         self.log = []
         self.entity = None
         self.dataset_id = BYC["BYC_DATASET_IDS"][0]
+        self.database_names = ByconDatasets().get_database_names()
         self.limit = BYC_PARS.get("limit", 0)
         self.input_file = None
         self.import_collname = None
@@ -240,10 +242,10 @@ class ByconautImporter():
 
         self.__prepare_individuals()
         # TODO: Use some default nanme but check for existence and offer deletion
-        self.target_db = BYC_PARS.get("output", f'tmpdb_{datetime.datetime.now().isoformat()}')
+        self.target_db = BYC_PARS.get("output", f'tmpdb_{datetime.now().isoformat()}')
         self.downstream = ["biosamples", "analyses", "variants"]
 
-        if self.target_db in BYC["DATABASE_NAMES"]:
+        if self.target_db in self.database_names:
             print(f'¡¡¡ You cannot export using an existing database name !!!')
             exit()
 
@@ -333,7 +335,7 @@ class ByconautImporter():
 
     def __check_dataset(self):
         # done after assignment of import_collname
-        if self.dataset_id not in BYC.get("DATABASE_NAMES",[]):
+        if self.dataset_id not in self.database_names:
             print(f'Dataset {self.dataset_id} does not exist. You have to create it first.')
             if "individuals" in str(self.import_collname):
                 proceed = input(f'Please type the name of the dataset and hit Enter: ')
@@ -395,7 +397,7 @@ class ByconautImporter():
         ucs = self.upstream
         iid = self.import_id
 
-        if tds_id not in BYC["DATABASE_NAMES"]:
+        if tds_id not in self.database_names:
             print(f'¡¡¡ No existing target database defined using `--output` !!!')
             exit()
 
@@ -560,7 +562,7 @@ class ByconautImporter():
             o_id = new_doc[iid]
             update_i = import_coll.find_one({"id": o_id})
             update_i = import_datatable_dict_line(update_i, fn, new_doc, ien)
-            update_i.update({"updated": datetime.datetime.now().isoformat()})
+            update_i.update({"updated": datetime.now().isoformat()})
 
             if not BYC["TEST_MODE"]:
                 import_coll.update_one({"id": o_id}, {"$set": update_i})
@@ -609,7 +611,7 @@ class ByconautImporter():
         for new_doc in checked_docs:
             update_i = {"id": new_doc[iid]}
             update_i = import_datatable_dict_line(update_i, fn, new_doc, ien)
-            update_i.update({"updated": datetime.datetime.now().isoformat()})
+            update_i.update({"updated": datetime.now().isoformat()})
 
             if not BYC["TEST_MODE"]:
                 import_coll.insert_one(update_i)
@@ -669,7 +671,7 @@ class ByconautImporter():
         for new_doc in import_vars:
             insert_v = import_datatable_dict_line({}, fn, new_doc, ien)
             insert_v = ByconVariant().pgxVariant(insert_v)
-            insert_v.update({"updated": datetime.datetime.now().isoformat()})
+            insert_v.update({"updated": datetime.now().isoformat()})
 
             if not BYC["TEST_MODE"]:
                 vid = import_coll.insert_one(insert_v).inserted_id

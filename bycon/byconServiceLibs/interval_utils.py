@@ -4,7 +4,7 @@ from copy import deepcopy
 from os import path, pardir
 from pymongo import MongoClient
 
-from bycon import Cytobands, cytobands_label_from_positions, DB_MONGOHOST, prdbug, BYC, BYC_PARS, ENV
+from bycon import Cytobands, DB_MONGOHOST, prdbug, BYC, BYC_PARS, ENV
 
 ################################################################################
 
@@ -163,7 +163,6 @@ class GenomeBins:
         data_client = MongoClient(host=DB_MONGOHOST)
         data_db = data_client[ ds_id ]
         ana_coll = data_db["analyses"]
-        # self.analyses = list(ana_coll.find({"id": {"$in": analysis_ids}}))
         self.analyses = ana_coll.find({"id": {"$in": analysis_ids}})
         self.__interval_counts_from_analyses()
         return self.interval_frequencies, self.analyses_count
@@ -239,7 +238,7 @@ class GenomeBins:
                 if end >= p_max:
                     arm = "q"
                 size = end - start
-                cbs = cytobands_label_from_positions(chro, start, end)
+                cbs = Cytobands().cytobands_label_from_positions(chro, start, end)
 
                 self.genomic_intervals.append({
                     "no": i,

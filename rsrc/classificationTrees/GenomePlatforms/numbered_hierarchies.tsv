@@ -294,3 +294,9 @@ OBI:0000626	DNA sequencing assay	1	293
 OBI:0002117	whole genome sequencing assay	2	294
 OBI:0002118	exome sequencing assay	2	295
 NCIT:C16437	Chromosome Banding	1	296
+NCIT:C153598	DNA Sequencing	1	297
+NCIT:C101294	Whole Genome Sequencing	2	298
+NCIT:C165220	Low-Pass Whole Genome Sequencing	3	299
+NCIT:C19653	Whole-Genome Shotgun Sequencing	3	300
+NCIT:C101295	Whole Exome Sequencing	2	301
+NCIT:C158253	Targeted Genome Sequencing	2	302

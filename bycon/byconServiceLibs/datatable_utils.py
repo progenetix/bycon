@@ -154,7 +154,7 @@ def assign_nested_value(parent, dotted_key, v, parameter_definitions={}):
         if type(v) is not list:
             v = v.split(',')
     elif "num" in parameter_type:
-        if str(v).strip().lstrip('-').replace('.','',1).isdigit():
+        if str(v).strip().lstrip('-').replace('.','', 1).isdigit():
             v = float(v)
     elif "integer" in parameter_type:
         if str(v).strip().isdigit():

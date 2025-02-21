@@ -116,63 +116,35 @@ h->o_types:
 # `source_collection`, using a provided query.
 
 h->o_methods:
-  biosamples.id:
-    source_collection: biosamples
-    source_key: id
-    target_collection: biosamples
-    target_entity: biosample
-    target_key: id
-  biosamples.individual_id->individuals.id:
-    source_collection: biosamples
-    source_key: individual_id
-    target_collection: individuals
-    target_entity: individual
-    target_key: id
-  analyses.id:
-    source_collection: analyses
-    source_key: id
-    target_collection: analyses
-    target_entity: analysis
-    target_key: id
-  analyses.biosample_id->biosamples.id:
-    source_collection: analyses
-    source_key: biosample_id
-    target_collection: biosamples
-    target_entity: biosample
-    target_key: id
-  analyses.individual_id->individuals.id:
-    source_collection: analyses
-    source_key: individual_id
-    target_collection: individuals
-    target_entity: individual
-    target_key: id
   individuals.id:
     source_collection: individuals
     source_key: id
     target_collection: individuals
     target_entity: individual
     target_key: id
+    mapped_key: individual_id
+    distinct_keys: ['id']
+  biosamples.id:
+    source_collection: biosamples
+    source_key: id
+    target_collection: biosamples
+    target_entity: biosample
+    target_key: id
+    mapped_key: biosample_id
+    distinct_keys: ['id', 'individual_id']
+  analyses.id:
+    source_collection: analyses
+    source_key: id
+    target_collection: analyses
+    target_entity: analysis
+    target_key: id
+    mapped_key: analysis_id
+    distinct_keys: ['id', 'biosample_id', 'individual_id']
   variants.id:
     source_collection: variants
     source_key: id
     target_collection: variants
     target_entity: genomicVariant
     target_key: id
-  variants.analysis_id->analyses.id:
-    source_collection: variants
-    source_key: analysis_id
-    target_collection: analyses
-    target_entity: analysis
-    target_key: id
-  variants.biosample_id->biosamples.id:
-    source_collection: variants
-    source_key: biosample_id
-    target_collection: biosamples
-    target_entity: biosample
-    target_key: id
-  variants.individual_id->individuals.id:
-    source_collection: variants
-    source_key: individual_id
-    target_collection: individuals
-    target_entity: individual
-    target_key: id
+    mapped_key: variant_id
+    distinct_keys: ['id', 'analysis_id', 'biosample_id', 'individual_id']

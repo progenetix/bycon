@@ -16,7 +16,7 @@ from bycon import (
 
 services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 sys.path.append( services_lib_path )
-from clustering_utils import cluster_frequencies, cluster_samples
+from bycon_cluster import ByconCluster
 
 # http://progenetix.org/services/sampleplots?&filters=pgx:icdom-85003&plotType=histoplot&skip=0&limit=100&plotPars=plot_chros=8,9,17::labels=8:120000000-123000000:Some+Interesting+Region::plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1::plot_width=800&filters=pgx:icdom-85003&plotType=histoplot
 # http://progenetix.org/services/samplesplot?datasetIds=progenetix&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&plotType=histoplot&plotPars=plot_gene_symbols=CDKN2A,MTAP,EGFR,BCL6
@@ -29,8 +29,9 @@ from clustering_utils import cluster_frequencies, cluster_samples
 class ByconPlotPars:
     def __init__(self):
         self.plot_type = BYC_PARS.get("plot_type", "histoplot")
-        self.plot_defaults = BYC.get("plot_defaults", {})
+        self.plot_defaults = BYC.get("plot_defaults", {"parameters": {}})
         self.plot_variant_types = self.plot_defaults.get("plot_variant_types", {})
+
         p_t_s = self.plot_defaults.get("plot_type_defs", {})
         p_d_p = self.plot_defaults.get("plot_parameters", {})
         self.plv = {}
@@ -238,7 +239,9 @@ class ByconPlot:
         if "circ" in self.plot_type:
             return
         self.__plot_add_cytobands()
+        prdbug(f'... next __plot_add_samplestrips')
         self.__plot_add_samplestrips()
+        prdbug(f'... done with __plot_add_samplestrips')
         self.__plot_add_histodata()
         self.__plot_add_probesplot()
         self.__plot_add_cluster_tree()
@@ -752,11 +755,12 @@ class ByconPlot:
     def __plot_add_samplestrips(self):
         if not "sample" in self.plot_type:
             return
-        # prdbug(f'{inspect.stack()[1][3]} from {inspect.stack()[2][3]}')
+        prdbug(f'{inspect.stack()[1][3]} from {inspect.stack()[2][3]}')
 
         self.plv.update({"plot_first_area_y0": self.plv["Y"]})
         self.plv["pls"].append("")
         self.plv.update({"plot_strip_bg_i": len(self.plv["pls"]) - 1})
+
 
         if len(self.plv["results"]) > 0:
             self.__plot_order_samples()
@@ -797,6 +801,7 @@ class ByconPlot:
         if len(self.plv["dataset_ids"]) > 1:
             if len(ds_lab := sample.get("dataset_id", "")) > 3:
                 ds_lab = f' ({ds_lab})'
+
         return f'{lab}{ds_lab}'
 
 
@@ -817,11 +822,11 @@ class ByconPlot:
         prdbug(f'{inspect.stack()[1][3]} from {inspect.stack()[2][3]}')
 
         if self.plv.get("plot_cluster_results", True) is True and len(self.plv["results"]) > 2:
-            dendrogram = cluster_samples(self.plv)
-            new_order = dendrogram.get("leaves", [])
-            if len(new_order) == len(self.plv["results"]):
-                self.plv["results"][:] = [self.plv["results"][i] for i in dendrogram.get("leaves", [])]
-                self.plv.update({"dendrogram": dendrogram})
+            dendrogram = ByconCluster(self.plv).cluster_samples()
+            # new_order = dendrogram.get("leaves", [])
+            # if len(new_order) == len(self.plv["results"]):
+            self.plv["results"][:] = [self.plv["results"][i] for i in dendrogram.get("leaves", [])]
+            self.plv.update({"dendrogram": dendrogram})
 
 
     # -------------------------------------------------------------------------#
@@ -834,6 +839,7 @@ class ByconPlot:
 
         col_c = {}
         for vt, cd in pvts.items():
+
             ck = cd.get("color_key", "___none___")
             col_c.update({vt: self.plv.get(ck, "rgb(111,111,111)")})
 
@@ -957,11 +963,11 @@ class ByconPlot:
     def __plot_order_histograms(self):
         prdbug(f'{inspect.stack()[1][3]} from {inspect.stack()[2][3]}')
         if self.plv.get("plot_cluster_results", True) is True and len(self.plv["results"]) > 2:
-            dendrogram = cluster_frequencies(self.plv)
-            new_order = dendrogram.get("leaves", [])
-            if len(new_order) == len(self.plv["results"]):
-                self.plv["results"][:] = [self.plv["results"][i] for i in dendrogram.get("leaves", [])]
-                self.plv.update({"dendrogram": dendrogram})
+            dendrogram = ByconCluster(self.plv).cluster_frequencies()
+            # new_order = dendrogram.get("leaves", [])
+            # if len(new_order) == len(self.plv["results"]):
+            self.plv["results"][:] = [self.plv["results"][i] for i in dendrogram.get("leaves", [])]
+            self.plv.update({"dendrogram": dendrogram})
 
 
     # -------------------------------------------------------------------------#

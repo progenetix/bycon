@@ -159,6 +159,8 @@ sampletable:
 
 sampleplots:
   request_entity_path_id: sampleplots
+  request_entity_id: biosample
+  response_entity_id: biosample
   request_entity_path_aliases:
     - samplesPlotter
   beacon_schema:

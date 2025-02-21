@@ -1,11 +1,13 @@
 import sys, re
 
+from datetime import datetime
 from os import path, environ
 from pymongo import MongoClient
 
 from bycon import (
     BYC,
     BYC_PARS,
+    ByconFilters,
     ByconVariant,
     DB_MONGOHOST,
     ENV,
@@ -97,7 +99,7 @@ def __pgxmatrix_interval_header(info_columns):
 ################################################################################
 
 def print_filters_meta_line():
-    if len(filters := BYC.get("BYC_FILTERS", [])) < 1:
+    if len(filters := ByconFilters().get_filters()) < 1:
         return
     f_vs = []
     for f in filters:
@@ -497,8 +499,7 @@ def export_vcf_download(datasets_results, ds_id):
 def open_text_streaming(filename="data.pgxseg"):
     if not "___shell___" in ENV:
         print('Content-Type: text/plain')
-        if not "browser" in filename:
-            print('Content-Disposition: attachment; filename="{}"'.format(filename))
+        print(f'Content-Disposition: attachment; filename="{filename}"')
         print('status: 200')
         print()
 
@@ -507,5 +508,5 @@ def open_text_streaming(filename="data.pgxseg"):
 
 def close_text_streaming():
     print()
-    prdbug(f'... closing text streaming at {datetime.datetime.now().strftime("%H:%M:%S")}')
+    prdbug(f'... closing text streaming at {datetime.now().strftime("%H:%M:%S")}')
     exit()

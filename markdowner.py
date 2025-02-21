@@ -7,7 +7,7 @@ from json_ref_dict import RefDict, materialize
 
 dir_path = path.dirname( path.abspath(__file__) )
 
-from bycon import * #BYC, read_schema_file
+from bycon import *
 import byconServices
 
 ################################################################################
@@ -82,7 +82,8 @@ the selected or granted `responseGranularity` please check `beaconResultsetsResp
 
     for r_s in beacon_ets:
         pp_fh.write(f'## {r_s}\n\n')
-        if (schema := read_schema_file(r_s, "")):
+
+        if (schema := ByconSchemas(r_s, "").read_schema_file()):
             if len((s_desc := schema.get("description"), "")) > 1:
                 pp_fh.write(f'{s_desc}\n\n')
         e_url = '{{config.reference_server_url}}/services/schemas' + f'/{r_s}'
@@ -95,7 +96,7 @@ the selected or granted `responseGranularity` please check `beaconResultsetsResp
 
             description = ""
             # TODO: Doesn't work if schema has reference to external file ...
-            if (schema := read_schema_file(b_s_n, "")):
+            if (schema := ByconSchemas(b_s_n, "").read_schema_file()):
                 if len((s_desc := schema.get("description"), "")) > 1:
                     description += f'{s_desc}\n\n'
             if (d := e_d.get("description")):
@@ -119,6 +120,12 @@ the selected or granted `responseGranularity` please check `beaconResultsetsResp
 
     #>------------------------------------------------------------------------<#
 
+    """
+    Here we process the `plot_defaults.yaml` and `argument_definitions.yaml` files
+    into Markdown pages.
+    """
+
+
     file_pars = {
         "plot_defaults":{
             "chapters": {
@@ -140,8 +147,6 @@ the selected or granted `responseGranularity` please check `beaconResultsetsResp
         pp_f = path.join(generated_docs_path, f"{d_k}.md")
 
         ls = []
-
-
         for chapter, title in d_v.get("chapters").items():
             pp = BYC[d_k].get(chapter, {})
             ls.append(f'### {title}')

@@ -73,6 +73,7 @@ $defs:
     type: string
     cmdFlags:
       - --requestEntityPathId
+    default: info
 
   response_entity_path_id:
     description: >-
@@ -153,9 +154,21 @@ $defs:
     description: global treatment of descendant terms
     default: true
 
-  # ------------------------------------------------------------------------------
+  # ----------------------------------------------------------------------------
   # variant parameters
-  # ------------------------------------------------------------------------------
+  # ----------------------------------------------------------------------------
+
+  # first some in test mode ----------------------------------------------------
+
+  vrsType:
+    type: string
+    pattern: '^\w+$'
+    db_key: type
+    cmdFlags:
+      - --vrsType
+    description: VRS variant schema type, e.g. `Allele` or `CopyNumberChange`
+
+  # ----------------------------------------------------------------------------
 
   assembly_id:
     type: string
@@ -361,20 +374,20 @@ $defs:
       - --id
     description: An id; this parameter only makes sense for specific REST entry types
 
-  ids:
+  path_ids:
     type: array
     items:
       type: string
-      pattern: '^\w[\w:-]+\w$'
+      pattern: '^\w[\w,:-]+\w$'
     cmdFlags:
-      - --ids
+      - --pathIds
     description: 'One or more ids; this parameter only makes sense for specific REST entry types'
 
   biosample_ids:
     type: array
     items:
       type: string
-      pattern: '^\w[\w:-]+\w$'
+      pattern: '^\w[\w,:-]+\w$'
     byc_entity: biosample
     cmdFlags:
       - --biosampleIds
@@ -384,7 +397,7 @@ $defs:
     type: array
     items:
       type: string
-      pattern: '^\w[\w:-]+\w$'
+      pattern: '^\w[\w,:-]+\w$'
     byc_entity: analysis
     cmdFlags:
       - --analysisIds
@@ -394,7 +407,7 @@ $defs:
     type: array
     items:
       type: string
-      pattern: '^\w[\w:-]+\w$'
+      pattern: '^\w[\w,:-]+\w$'
     byc_entity: individual
     cmdFlags:
       - --individualIds
@@ -404,7 +417,7 @@ $defs:
     type: array
     items:
       type: string
-      pattern: '^\w[\w:-]+\w$'
+      pattern: '^\w[\w,:-]+\w$'
     byc_entity: genomicVariant
     cmdFlags:
       - --variantIds

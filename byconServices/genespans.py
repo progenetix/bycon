@@ -6,12 +6,12 @@ from bycon import (
     BYC,
     BYC_PARS,
     ChroNames,
-    cytobands_label_from_positions,
+    Cytobands,
     GeneInfo,
     prdbug,
-    print_json_response,
-    rest_path_value
+    print_json_response
 )
+
 from byconServiceLibs import ByconServiceResponse, read_service_prefs
 
 services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )
@@ -30,7 +30,7 @@ def genespans():
     read_service_prefs("genespans", services_conf_path)
 
     # form id assumes start match (e.g. for autocompletes)
-    if len(gene_ids := BYC.get("request_entity_path_id_value", [])) == 1:
+    if len(gene_ids := BYC.get("path_ids", [])) == 1:
         # REST path id assumes exact match
         results = GeneInfo().returnGene(gene_ids[0])
     else:
@@ -84,7 +84,7 @@ def _gene_add_cytobands(gene):
     if not start or not end:
         return gene
 
-    gene.update({"cytobands": f'{chro}{cytobands_label_from_positions(chro, start, end)}'})
+    gene.update({"cytobands": f'{Cytobands().cytobands_label_from_positions(chro, start, end)}'})
 
     return gene
 

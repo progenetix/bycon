@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 
 from bycon import byconServiceLibs
-from importer_helpers import ByconautImporter
+from bycon_importer import ByconImporter
 
-BI = ByconautImporter()
+BI = ByconImporter()
 BI.update_individuals()

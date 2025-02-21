@@ -1,5 +1,5 @@
 #!/usr/local/bin/python3
-import datetime
+from datetime import datetime
 from isodate import date_isoformat
 from pymongo import MongoClient
 from progress.bar import Bar
@@ -94,7 +94,7 @@ for ana_id in ana_ids:
         "cnv_statusmaps": maps,
         "cnv_stats": cs_cnv_stats,
         "cnv_chro_stats": cs_chro_stats,
-        "updated": datetime.datetime.now().isoformat()
+        "updated": datetime.now().isoformat()
     }
 
     if BYC.get("TEST_MODE", False) is True: 

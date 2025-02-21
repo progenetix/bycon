@@ -7,8 +7,8 @@ from os import pardir, path, sys
 #sys.path.append( lib_path )
 
 from bycon import byconServiceLibs
-from importer_helpers import ByconautImporter
+from bycon_importer import ByconImporter
 
-BI = ByconautImporter()
+BI = ByconImporter()
 BI.delete_individuals_and_downstream()
 

@@ -6,7 +6,7 @@ from bycon import (
     prdbug,
     prjsonhead,
     prjsontrue,
-    rest_path_value
+    ByconParameters
 )
 
 
@@ -20,7 +20,7 @@ def endpoints():
     * <https://progenetix.org/services/endpoints/biosamples>
     """
     # TODO: This needs some error fallback, test for existing entities etc.
-    schema_name = rest_path_value("endpoints")
+    schema_name = ByconParameters().rest_path_value("endpoints")
     if schema_name:
         p = path.join( PKG_PATH, "schemas", "models", "src", "bycon-model", schema_name, "endpoints.yaml")
     else:

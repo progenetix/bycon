@@ -12,7 +12,7 @@ description: >
 
   - `id`: The ID of the filter, _i.e._ the value compared to the `db_key` parameter
     in the database backend
-  - `ft_type`: The type of the filter. This can be one of the following:
+  - `type`: The type of the filter. This can be one of the following:
     - `alphanumeric`: An alphanumeric value.
     - `ontologyTerm`: An ontology term.
     - `custom`: A custom filter.
@@ -36,7 +36,7 @@ description: >
 $defs:
   genomes:
     id: genomes
-    ft_type: alphanumeric
+    type: alphanumeric
     format: integer
     name: genome count
     scope: publications
@@ -49,7 +49,7 @@ $defs:
 
   # PATOsex:
   #   id: ncit
-  #   ft_type: ontologyTerm
+  #   type: ontologyTerm
   #   iri_prefix: http://purl.obolibrary.org/obo/PATO_
   #   description: >
   #     Some PATO codes specific for genotypic sex...
@@ -66,7 +66,7 @@ $defs:
 
   icdom:
     id: pgx_icdom
-    ft_type: ontologyTerm
+    type: ontologyTerm
     name: "ICD-O 3 Morphologies (Progenetix)"
     namespace_prefix: pgx
     url: https://progenetix.org/
@@ -83,7 +83,7 @@ $defs:
 
   icdot:
     id: pgx_icdot
-    ft_type: ontologyTerm
+    type: ontologyTerm
     name: "ICD-O 3 Topographies (Progenetix)"
     namespace_prefix: pgx
     url: "https://progenetix.org/"
@@ -101,7 +101,7 @@ $defs:
 
   TCGAproject:
     id: tcgaproject
-    ft_type: ontologyTerm
+    type: ontologyTerm
     name: "The Cancer Genome Atlas"
     namespace_prefix: pgx
     url: "http://cancergenome.nih.gov"
@@ -122,7 +122,7 @@ $defs:
 
   cbioportal:
     id: cbioportal
-    ft_type: ontologyTerm
+    type: ontologyTerm
     name: "cBioPortal"
     iri_prefix: https://www.cbioportal.org/study/summary?id=
     namespace_prefix: cbioportal
@@ -142,7 +142,7 @@ $defs:
 
   pgxcohort:
     id: pgx_cohorts
-    ft_type: custom
+    type: custom
     name: "Progenetix cohorts"
     iri_prefix: https://progenetix.org/ids/
     namespace_prefix: pgx

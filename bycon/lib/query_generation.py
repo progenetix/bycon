@@ -5,9 +5,8 @@ from pymongo import MongoClient
 
 from bycon_helpers import days_from_iso8601duration, prdbug, prjsonnice, return_paginated_list
 from config import *
-from cytoband_parsing import Cytobands
-from genome_utils import ChroNames, GeneInfo, VariantTypes
-
+from genome_utils import ChroNames, Cytobands, GeneInfo, VariantTypes
+from parameter_parsing import ByconFilters
 
 ################################################################################
 ################################################################################
@@ -61,6 +60,7 @@ class ByconQuery():
 
         self.limit = BYC_PARS.get("limit")
         self.skip = BYC_PARS.get("skip")
+        self.filters = ByconFilters().get_filters()
 
         self.queries = {
             "expand": True,
@@ -100,10 +100,10 @@ class ByconQuery():
             if len(id_v_s) < 1:
                 continue
             elif len(id_v_s) == 1:
-                q = {"id": id_v_s[0]}
+                q = [{"id": id_v_s[0]}]
                 self.__id_query_add_variant_query(entity, id_v_s)
             elif len(id_v_s) > 1:
-                q = {"id": {"$in": id_v_s}}
+                q = [{"id": {"$in": id_v_s}}]
                 self.__id_query_add_variant_query(entity, id_v_s)
 
             if q is not False:
@@ -122,9 +122,9 @@ class ByconQuery():
         v_q_id = re.sub("run", "analysis", v_q_id)
 
         if len(entity_ids) == 1:
-            q = {v_q_id: entity_ids[0]}
+            q = [{v_q_id: entity_ids[0]}]
         elif len(entity_ids) > 1:
-            q = {v_q_id: {"$in": entity_ids } }
+            q = [{v_q_id: {"$in": entity_ids } }]
         else:
             return
 
@@ -158,7 +158,7 @@ class ByconQuery():
         data_coll = data_db[r_c]
         rs = list(data_coll.aggregate([{"$sample": {"size": ret_no}}]))
 
-        q = {"id": {"$in": list(s["id"] for s in rs)}}
+        q = [{"id": {"$in": list(s["id"] for s in rs)}}]
 
         self.queries["entities"].update({self.response_entity_id: {"query": q, "collection": r_c}})
         self.queries.update({"expand": False})
@@ -287,10 +287,10 @@ class ByconQuery():
                     queries.append(q)
                     continue
 
-        if len(queries) == 1:
-            queries = queries[0]
+        # if len(queries) == 1:
+        #     queries = queries[0]
 
-        prdbug(f'__loop_multivars queries: {queries}')
+        # prdbug(f'__loop_multivars queries: {queries}')
 
         return queries
 
@@ -335,7 +335,7 @@ class ByconQuery():
             brts_k = [ "cytoBandRequest" ]
         elif "variant_query_digests" in  v_pars:
             brts_k = [ "variantQueryDigestsRequest" ]
-        elif "variant_type" in v_pars and len(BYC.get("BYC_FILTERS", [])) > 0:
+        elif "variant_type" in v_pars and len(self.filters) > 0:
             brts_k = [ "variantTypeFilteredRequest" ]
             
         vrt_matches = [ ]
@@ -660,8 +660,10 @@ class ByconQuery():
     def __query_from_filters(self):
         if self.queries.get("expand") is False:
             return
-        if len(BYC["BYC_FILTERS"]) < 1:
+        if len(self.filters) < 1:
             return
+
+        logic = self.__boolean_to_mongo_logic(BYC_PARS.get("filter_logic"))
 
         data_db = MongoClient(host=DB_MONGOHOST)[self.ds_id]
         coll_coll = data_db[ self.filtering_terms_coll ]
@@ -670,8 +672,10 @@ class ByconQuery():
         f_lists = {}
         f_infos = {}
 
-        for f in BYC["BYC_FILTERS"]:
-            f_val = f["id"]
+        for i, f in enumerate(self.filters):
+            f_k = f'f_{i}'
+            f_val = f.get("id")
+            prdbug(f_val)
             f_neg = f.get("excluded", False)
             if re.compile(r'^!').match(f_val):
                 f_neg = True
@@ -701,11 +705,9 @@ class ByconQuery():
             if f_field not in f_infos[f_entity].keys():
                 f_infos[f_entity].update({f_field: f_info})
 
-            prdbug(f'...__query_from_filters *include_descendant_terms*: {f_desc}')
-
-            # TODO: needs a general solution; so far for the iso age w/
-            #       pre-calculated days field...
-            if "alphanumeric" in f_info.get("ft_type", "ontology"):
+            # TODO: needs a general solution for alphanumerics; so far for the
+            # iso age w/ pre-calculated days field...
+            if "alphanumeric" in f_info.get("type", "ontology"):
                 prdbug(f'__query_from_filters ... alphanumeric: {f_info["id"]}')
                 if re.match(r'^(\w+):([<>=]+?)?(\w[\w.]+?)$', f_info["id"]):
                     f_class, comp, val = re.match(r'^(\w+):([<>=]+?)?(\w[\w.]+?)$', f_info["id"]).group(1, 2, 3)
@@ -718,7 +720,7 @@ class ByconQuery():
                 if f_neg is True:
                     f_lists[f_entity][f_field].append({'$nin': f_info["child_terms"]})
                 else:
-                    f_lists[f_entity][f_field].extend(f_info["child_terms"])
+                    f_lists[f_entity][f_field].append({'$in': f_info["child_terms"]})
             else:
                 if f_neg is True:
                     f_lists[f_entity][f_field].append({'$nin': [f_info["id"]]})
@@ -733,16 +735,10 @@ class ByconQuery():
                 if len(f_query_vals) == 1:
                     f_s_l.append({f_field: f_query_vals[0]})
                 else:
-                    if "alphanumeric" in f_infos[f_entity][f_field].get("ft_type", "ontology"):
-                        q_l = []
-                        for a_q_v in f_query_vals:
-                            q_l.append({f_field: a_q_v})
-                        f_s_l.append({"$and": q_l})
-                    else:
-                        f_s_l.append({f_field: {"$in": f_query_vals}})
+                    for f_q_v in f_query_vals:
+                        f_s_l.append({f_field: f_q_v})
 
-            for q in f_s_l:
-                self.__update_queries_for_entity(q, f_entity)
+            self.__update_queries_for_entity(f_s_l, f_entity)
 
 
     # -------------------------------------------------------------------------#
@@ -771,7 +767,7 @@ class ByconQuery():
         f_info = {
             "id": f_val,
             "scope": "biosamples",
-            "ft_type": "___undefined___",
+            "type": "___undefined___",
             "db_key": "___undefined___",
             "child_terms": [f_val]
         }
@@ -788,7 +784,7 @@ class ByconQuery():
                     "scope": f_d.get("scope", "biosamples"),
                     "entity": f_d.get("entity", "biosample"),
                     "db_key": f_d["db_key"],
-                    "ft_type": f_d.get("ft_type", "ontology"),
+                    "type": f_d.get("type", "ontology"),
                     "format": f_d.get("format", "___none___"),
                     "child_terms": [f_val]
                 }
@@ -803,7 +799,7 @@ class ByconQuery():
         geo_q, geo_pars = geo_query()
         if not geo_q:
             return
-        self.__update_queries_for_entity(geo_q, entity)
+        self.__update_queries_for_entity([geo_q], entity)
 
 
     # -------------------------------------------------------------------------#
@@ -836,23 +832,36 @@ class ByconQuery():
         if len(t_v) < 1:
             return
         h_o_q = {t_k: {'$in': t_v}}
-        self.__update_queries_for_entity(h_o_q, t_e)
+        self.__update_queries_for_entity([h_o_q], t_e)
 
 
     # -------------------------------------------------------------------------#
 
     def __update_queries_for_entity(self, query, entity):
+        # TODO: This is now for using generally query lists abnd aggregate 
+        # by multiple queries & intersection of matched ids during execution
+        # => logic right now always AND
         logic = self.__boolean_to_mongo_logic(BYC_PARS.get("filter_logic"))
         r_t_s = self.response_types
         r_c = r_t_s[entity].get("collection")
         q_e = self.queries.get("entities")
 
+        if type(query) is not list:
+            query = [query]
+
+
         if entity not in q_e:
             q_e.update({entity:{"query": query, "collection": r_c}})
-        elif logic in q_e[entity]["query"]:
-            q_e[entity]["query"][logic].append(query)
         else:
-            q_e[entity].update({"query": {logic: [q_e[entity]["query"], query]}})
+            q_e[entity]["query"] = [*q_e[entity]["query"], *query]
+
+        # if entity not in q_e:
+        #     q_e.update({entity:{"query": query, "collection": r_c}})
+        # elif logic in q_e[entity]["query"]:
+        #     q_e[entity]["query"][logic].append(query)
+        # else:
+        #     q_e[entity].update({"query": {logic: [q_e[entity]["query"], query]}})
+
         self.queries.update({"entities": q_e})
 
 

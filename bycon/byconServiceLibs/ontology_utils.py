@@ -7,11 +7,12 @@ from pymongo import MongoClient
 from bycon import (
     BYC,
     BYC_PARS,
+    ByconFilters,
+    ByconParameters,
     DB_MONGOHOST,
     mongo_and_or_query_from_list,
     prdbug,
-    prjsonnice,
-    rest_path_value
+    prjsonnice
 )
 
 class OntologyMaps:
@@ -29,7 +30,7 @@ class OntologyMaps:
         self.unique_terms = []
         self.ontology_maps = []
         self.erroneous_maps = []
-        self.filters = BYC.get("BYC_FILTERS", [])
+        self.filters = ByconFilters().get_filters()
         self.filter_definitions = BYC["filter_definitions"].get("$defs", {})
         # TODO: Shouldn't be hard coded here
         self.filter_id_matches = ["NCIT", "pgx:icdom", "pgx:icdot", "UBERON"]
@@ -109,7 +110,7 @@ class OntologyMaps:
     # -------------------------------------------------------------------------#
 
     def __ontologymaps_query(self):
-        if (p_filter := rest_path_value("ontologymaps")):
+        if (p_filter := ByconParameters().rest_path_value("ontologymaps")):
             self.filters.append({"id": p_filter})
         q_list = [ ]
         q_dups = [ ]

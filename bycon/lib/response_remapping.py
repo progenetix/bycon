@@ -1,4 +1,7 @@
-import datetime, re
+import re
+from copy import deepcopy
+from datetime import datetime
+from deepmerge import always_merger
 from pymongo import MongoClient
 from os import environ
 from isodate import date_isoformat
@@ -31,6 +34,7 @@ class VariantsResponse:
         self.pgx_vars = pgxvars
         self.beacon_vars = []
         self.case_pars = ["biosample_id", "analysis_id", "individual_id", "run_id"]
+        self.var_pars = ["identifiers", "molecular_attributes", "variant_level_data"]
 
 
     # -------------------------------------------------------------------------#
@@ -57,7 +61,21 @@ class VariantsResponse:
 
         for d in variant_ids:
             d_vs = [var for var in self.pgx_vars if var.get('variant_internal_id', "__none__") == d]
-            c_l_d = []
+
+            v_i = deepcopy(ByconVariant().vrsVariant(d_vs[0]))
+            for c_k in self.case_pars + ["variant_internal_id", "info"] + self.var_pars:
+                v_i.pop(c_k, None)
+            v_i = clean_empty_fields(v_i)
+
+            v = {
+                "variation": v_i,
+                "case_level_data": [],
+                "variant_internal_id": d
+            }
+
+            for v_k in self.var_pars:
+                v.update({v_k: {}})
+
             for d_v in d_vs:
                 c_l_v = {}
                 for c_k in self.case_pars:
@@ -65,24 +83,17 @@ class VariantsResponse:
                         c_l_v.update({c_k: c_v})
                 if (id_v := d_v.get("id")):
                     c_l_v.update({"variant_id": id_v})
-                c_l_d.append(c_l_v)
+                v["case_level_data"].append(c_l_v)
 
-            v_i = ByconVariant().vrsVariant(d_vs[0])
-            for c_k in self.case_pars + ["variant_internal_id", "info"]:
-                v_i.pop(c_k, None)
-            v_i = clean_empty_fields(v_i)
-
-            v = {
-                "variation": v_i,
-                "case_level_data": c_l_d,
-                "variant_internal_id": d
-            }
+                for v_k in self.var_pars:
+                    if (v_v := d_v.get(v_k)):
+                        v[v_k].update(always_merger.merge(v[v_k], v_v))
 
             self.beacon_vars.append(v)
 
 
     # -------------------------------------------------------------------------#
-    # ----------------------- / VariantsResponse -------------------------------#
+    # ----------------------- / VariantsResponse ------------------------------#
     # -------------------------------------------------------------------------#
 
 
@@ -93,7 +104,7 @@ def remap_analyses(r_s_res):
         return r_s_res
     pop_keys = ["info", "geo_location", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats"]
     # TODO: move the cnvstats option away from here
-    if "cnvstats" in str(BYC.get("request_entity_path_id")):
+    if "cnvstats" in str(BYC_PARS.get("request_entity_path_id")):
         pop_keys = ["info", "cnv_statusmaps"]
 
     for cs_i, cs_r in enumerate(r_s_res):
@@ -101,7 +112,7 @@ def remap_analyses(r_s_res):
         p_i = cs_r.get("pipeline_info", {"id": "progenetix"})
         r_s_res[cs_i].update({
             "pipeline_name": p_i.get("id", "progenetix"),
-            "analysis_date": cs_r.get("analysis_date", date_isoformat(datetime.datetime.now()))
+            "analysis_date": cs_r.get("analysis_date", date_isoformat(datetime.now()))
         })
         for k in pop_keys:
             r_s_res[cs_i].pop(k, None)
@@ -140,8 +151,8 @@ def remap_runs(r_s_res):
         r = {
             "id": ana.get("id", ""),
             "individual_id": ana.get("individual_id", ""),
-            "run_date": datetime.datetime.fromisoformat(
-                ana.get("updated", datetime.datetime.now().isoformat())).isoformat()
+            "run_date": datetime.fromisoformat(
+                ana.get("updated", datetime.now().isoformat())).isoformat()
         }
         for p in ["biosample_id", "individual_id", "platform_model"]:
             if (v := ana.get(p)):

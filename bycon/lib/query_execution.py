@@ -17,7 +17,17 @@ class ByconDatasetResults():
         self.res_ent_id = r_e_id = str(BYC.get("response_entity_id", "___none___"))
         self.data_db = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))[ds_id]
 
+        self.id_responses = {}
+        # "variant_id": None,
+        # "analysis_id": None,
+        # "biosample_id": None,
+        # "individual_id": None
+
         self.__generate_queries(BQ)
+        prdbug(self.queries)
+        self.__run_stacked_queries()
+        for k in self.id_responses:
+            prdbug(f'> finally > {k}: {len(self.id_responses.get(k, []))}')
         
 
     # -------------------------------------------------------------------------#
@@ -25,12 +35,11 @@ class ByconDatasetResults():
     # -------------------------------------------------------------------------#
 
     def retrieveResults(self):
-        self.__run_stacked_queries()
         return self.dataset_results
 
 
     # -------------------------------------------------------------------------#
-    # ----------------------------- private ------------------------------------#
+    # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 
     def __generate_queries(self, BQ):
@@ -42,8 +51,6 @@ class ByconDatasetResults():
             if (q := q_o.get("query")) and c_n in c_n_s:
                 self.queries.update({c_n: q})
 
-        prdbug(self.queries)
-
 
     # -------------------------------------------------------------------------#
 
@@ -52,148 +59,101 @@ class ByconDatasetResults():
             return
 
         for e in q_e_s:
-            if "variants" in e:
-                continue
             query = self.queries.get(e)
             ent_resp_def = self.res_obj_defs.get(f'{e}.id')
-            self.__prefetch_entity_response(ent_resp_def, query)
+            self.__prefetch_entity_multi_id_response(ent_resp_def, query)
 
-        analysis_q_l = []
-        if (pre := self.dataset_results.get("analyses.id")):
-            analysis_q_l.append({"id": {"$in":pre.get("target_values")}})
-        if (pre := self.dataset_results.get("biosamples.id")):
-            analysis_q_l.append({"biosample_id": {"$in":pre.get("target_values")}})
-        if (pre := self.dataset_results.get("individuals.id")):
-            analysis_q_l.append({"individual_id": {"$in":pre.get("target_values")}})
+        # requerying top-down to intersect for entities w/o shared keys - e.g. if
+        # a variant query was run the variant_id values are not filtered by the
+        # analysis ... queries since analyses don't know about variant_id values
 
-        if len(analysis_q_l) > 0:
-            query = mongo_and_or_query_from_list(analysis_q_l)
-            # CAVE: This would remove biosamples & individuals from the response
-            #       if they don't have any associated analysis...
-            ent_resp_def = self.res_obj_defs.get("analyses.id")
-            self.__prefetch_entity_response(ent_resp_def, query)
-            ent_resp_def = self.res_obj_defs.get("analyses.biosample_id->biosamples.id")
-            self.__prefetch_entity_response(ent_resp_def, query)
-            ent_resp_def = self.res_obj_defs.get("analyses.individual_id->individuals.id")
-            self.__prefetch_entity_response(ent_resp_def, query)
+        if "individual_id" in self.id_responses:
+            query = [{"id": {"$in": list(self.id_responses.get("individual_id"))}}]
+            ent_resp_def = self.res_obj_defs.get(f'individuals.id')
+            self.__prefetch_entity_multi_id_response(ent_resp_def, query)
 
-        self.__run_variants_query()
-        self.__run_multi_variants_query()
+            query = [{"individual_id": {"$in": list(self.id_responses.get("individual_id"))}}]
+            ent_resp_def = self.res_obj_defs.get(f'biosamples.id')
+            self.__prefetch_entity_multi_id_response(ent_resp_def, query)
 
-        # prdbug(self.dataset_results)
+        if "biosample_id" in self.id_responses:
+            query = [{"biosample_id": {"$in": list(self.id_responses.get("biosample_id"))}}]
+            ent_resp_def = self.res_obj_defs.get(f'analyses.id')
+            self.__prefetch_entity_multi_id_response(ent_resp_def, query)
 
+        if "analysis_id" in self.id_responses and "variant_id" in self.id_responses:
+            query = [{"analysis_id": {"$in": list(self.id_responses.get("analysis_id"))}}]
+            ent_resp_def = self.res_obj_defs.get(f'variants.id')
+            self.__prefetch_entity_multi_id_response(ent_resp_def, query)
 
-    # -------------------------------------------------------------------------#
-
-    def __run_variants_query(self):
-        if not self.queries.get("variants"):
-            return
-        v_q_l = self.queries["variants"].copy()
-        if type(v_q_l) is not list:
-            v_q_l = [v_q_l]
-
-        query = v_q_l.pop(0)
-        if (pre := self.dataset_results.get("analyses.id")):
-            query = {"$and":[
-                {"analysis_id": {"$in":pre.get("target_values")}},
-                query
-            ]}
-        self.__update_dataset_results_from_variants(query)
+        prdbug(self.dataset_results.keys())
 
 
     # -------------------------------------------------------------------------#
 
-    def __run_multi_variants_query(self):
-        # first query has to be popped of by
-        # also, biosamples.id exists already in results
-        # TODO: make aggregation entity flexible, depending on requested schema
-        if not self.queries.get("variants"):
-            return
-        variants_query = self.queries["variants"]
-        if type(variants_query) is not list:
-            variants_query = [variants_query]
-        # keeping the original
-        queries = variants_query.copy()
-        queries.pop(0)
-        if len(queries) < 1:
-            return
-
-        prdbug(f' ====== {BYC.get("response_entity_id", "biosample")} =====')
-        res_e_id = BYC.get("response_entity_id", "biosample")
-        res_e_coll = BYC["response_entity"].get("collection", "biosamples")
-        id_k = f'{res_e_id}_id'
-        pref_k = f'variants.{id_k}->{res_e_coll}.id'
-        agg_k = f'{res_e_coll}.id'
-
-        if "variant" in (res_e_id).lower():
-            id_k = 'biosample_id'
-            pref_k = f'variants.{id_k}->biosamples.id'
-            agg_k = 'biosamples.id'
-
-        for v_q in queries:
-            v_bsids = self.dataset_results[agg_k]["target_values"]
-            prdbug(f'before {self.dataset_results[agg_k]["target_count"]}')
-            if (len(v_bsids) == 0):
-                break
-            query = {"$and": [v_q, {id_k: {"$in": v_bsids}}]}
-            # prdbug(query)
-            ent_resp_def = self.res_obj_defs.get(pref_k)
-            self.__prefetch_entity_response(ent_resp_def, query)
-            prdbug(f'after {self.dataset_results[agg_k]["target_count"]}')
-
-        v_bsids = self.dataset_results[agg_k]["target_values"]
-
-        if len(variants_query) > 1:
-            query = {"$or": variants_query}
-        else:
-            query = variants_query[0]
-        if len(v_bsids) > 0:
-            query = {"$and": [query, {id_k: {"$in": v_bsids}}]}
-        else:
-            # fallback for 0 match results
-            query = {"$and": [query, {id_k: {"$in": ["___undefined___"]}}]}
-
-        self.__update_dataset_results_from_variants(query)
-
-
-    # -------------------------------------------------------------------------#
-
-    def __update_dataset_results_from_variants(self, query):
-        ent_resp_def = self.res_obj_defs.get("variants.id")
-        self.__prefetch_entity_response(ent_resp_def, query)
-        if BYC.get("AGGREGATE_VARIANT_RESULTS", True) is False:
-            return
-        ent_resp_def = self.res_obj_defs.get("variants.analysis_id->analyses.id")
-        self.__prefetch_entity_response(ent_resp_def, query)
-        ent_resp_def = self.res_obj_defs.get("variants.biosample_id->biosamples.id")
-        self.__prefetch_entity_response(ent_resp_def, query)
-        ent_resp_def = self.res_obj_defs.get("variants.individual_id->individuals.id")
-        self.__prefetch_entity_response(ent_resp_def, query)
-
-
-    # -------------------------------------------------------------------------#
-
-    def __prefetch_entity_response(self, h_o_def, query):
+    def __prefetch_entity_multi_id_response(self, h_o_def, query):
         s_c = h_o_def.get("source_collection")
         s_k = h_o_def.get("source_key")
         t_c = h_o_def.get("target_collection")
         t_k = h_o_def.get("target_key")
+        d_k_s = h_o_def.get("distinct_keys", ["id"])
+        m_k = h_o_def.get("mapped_key", "id")
 
-        dist = self.data_db[s_c].distinct(s_k, query)
-        t_v_s = dist if dist else []
+        d_group = {'_id': 0}
+        for d_k in d_k_s:
+            dist_k = f'distincts_{d_k}'
+            d_group.update({dist_k: {'$addToSet': f'${d_k}'}})
+
+        if type(query) is not list:
+            query = [query]
+
+        for qq in query:
+
+            # Aggregation pipeline to get distinct values for each key
+            pipeline = [ 
+                { '$match': qq },
+                { '$group': d_group } 
+            ]
+            result = list(self.data_db[s_c].aggregate(pipeline))
+
+            id_matches = {}
+            for d_k in d_k_s:
+                if d_k == 'id':
+                    id_matches.update({m_k: []})
+                else:
+                    id_matches.update({d_k: []})
+
+            if result:
+                for d_k in d_k_s:
+                    dist_k = f'distincts_{d_k}'
+                    # print(f'>>>>> {dist_k}: {len(result[0].get(dist_k, []))}')
+                    if d_k == 'id':
+                        id_k = h_o_def.get("mapped_key", "id")
+                        id_matches.update({id_k: result[0].get(dist_k, [])})
+                    else:
+                        id_matches.update({d_k: result[0].get(dist_k, [])})
+
+            for id_k in id_matches:
+                if (ex_resp := self.id_responses.get(id_k)):
+                    self.id_responses.update({id_k: list(set(ex_resp) & set(id_matches[id_k]))})
+                else:
+                    self.id_responses.update({id_k: id_matches[id_k]})
+
+        # this sets the match as an intersection with previous matches for the
+        # same key
+        t_v_s = self.id_responses.get(m_k, [])
 
         e_r = {**h_o_def}
         e_r.update({
             "id": str(uuid4()),
             "source_db": self.dataset_id,
-            "target_values": t_v_s,
+            "target_values": t_v_s,    #t_v_s,
             "target_count": len(t_v_s),
             "original_queries": self.queries
         })
 
         r_k = f'{t_c}.{t_k}'
         self.dataset_results.update({r_k: e_r})
-        return
 
 
 ################################################################################

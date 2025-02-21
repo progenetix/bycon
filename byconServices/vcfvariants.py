@@ -14,7 +14,6 @@ def vcfvariants():
 
     * http://progenetix.org/services/vcfvariants/pgxbs-kftvjv8w
     """
-    # initialize_bycon_service()
     # TODO: Fix this, to be correctly read from services_entity_defaults
     BYC.update({"request_entity_id": "biosample"})
     rss = ByconResultSets().datasetsResults()

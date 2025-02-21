@@ -5,7 +5,7 @@ from deepmerge import always_merger
 from parameter_parsing import prdbug
 from config import *
 from bycon_helpers import clean_empty_fields
-from schema_parsing import object_instance_from_schema_name
+from schema_parsing import ByconSchemas
 from genome_utils import ChroNames
 
 ################################################################################
@@ -45,10 +45,10 @@ class ByconVariant:
         d_m = BYC["datatable_mappings"].get("definitions", {})
         d_m_v = d_m.get("genomicVariant", {})
         self.variant_mappings = d_m_v.get("parameters", {})
-        self.vrs_allele = object_instance_from_schema_name("VRSallele", "")
-        self.vrs_cnv = object_instance_from_schema_name("VRScopyNumberChange", "")
-        self.vrs_adjacency = object_instance_from_schema_name("VRSadjacency", "")
-        self.pgx_variant = object_instance_from_schema_name("pgxVariant", "")
+        self.vrs_allele = ByconSchemas("VRSallele", "").get_schema_instance()
+        self.vrs_cnv = ByconSchemas("VRScopyNumberChange", "").get_schema_instance()
+        self.vrs_adjacency = ByconSchemas("VRSadjacency", "").get_schema_instance()
+        self.pgx_variant = ByconSchemas("pgxVariant", "").get_schema_instance()
 
 
     # -------------------------------------------------------------------------#

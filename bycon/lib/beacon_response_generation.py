@@ -8,18 +8,18 @@ from config import *
 
 from bycon_helpers import *
 from handover_generation import dataset_response_add_handovers
+from parameter_parsing import ByconFilters, ByconParameters
 from query_execution import ByconDatasetResults # execute_bycon_queries
 from query_generation import ByconQuery
 from response_remapping import *
+from schema_parsing import ByconSchemas
 from variant_mapping import ByconVariant
-from schema_parsing import get_schema_file_path, object_instance_from_schema_name
-from service_utils import set_special_modes
 
 ################################################################################
 
 class MultiQueryResponses():
     def __init__(self, dataset_id):
-        multiqueries={"useStandardArgs":{}}
+        multiqueries = {"ByconQuery": {}}
         if "testqueries" in BYC_PARS.get("mode", "").lower():
             multiqueries = BYC.get("test_queries")
         self.entity_ids = set()
@@ -61,29 +61,13 @@ class MultiQueryResponses():
         ho_id = f'{self.target_path_id}.id'
         for qek, qev in self.multiqueries.items():
             for p, v in qev.items():
-                if p == "filters":
-                    f_l = []
-                    for f in v:
-                        f_l.append({"id": f})
-                    if len(f_l) > 0:
-                        BYC.update({"BYC_FILTERS":f_l})
-                else:
-                    BYC_PARS.update({p: v})
-
-            prdbug(f'... getting data for {qek}')
+                BYC_PARS.update({p: v})
             BRS = ByconResultSets()
             ds_results = BRS.datasetsResults()
 
             # clean out those globals for next run
-            # filters are tricky since they have a default `[]` value
-            # and have been pre-parsed into BYC_FILTERS at the stage of
-            # `ByconResultSets()` (_i.e._ embedded `ByconQuery()`)
             for p, v in qev.items():
-                if p == "filters":
-                    BYC_PARS.update({"filters": []})
-                else:
-                    BYC_PARS.pop(p)
-            BYC.update({"BYC_FILTERS": []})
+                BYC_PARS.pop(p)
             
             if not (ds := ds_results.get(self.ds_id)):
                 r_c = BRS.get_record_queries()
@@ -96,16 +80,15 @@ class MultiQueryResponses():
             self.entity_ids = list(self.entity_ids)
 
 
-
 ################################################################################
 
 class BeaconResponseMeta:
     def __init__(self, data_response=None):
         self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
-        self.response_meta = object_instance_from_schema_name("beaconResponseMeta", "")
+        self.response_meta = ByconSchemas("beaconResponseMeta", "").get_schema_instance()
         self.data_response = data_response
         self.record_queries = None
-
+        self.filters = ByconFilters().get_filters()
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -167,7 +150,7 @@ class BeaconResponseMeta:
         r_r_s.update({"pagination": {"skip": BYC_PARS.get("skip"), "limit": BYC_PARS.get("limit")}})
         r_r_s.update({"dataset_ids": BYC["BYC_DATASET_IDS"]})
 
-        fs = BYC["BYC_FILTERS"]
+        fs = self.filters
         fs_p = []
         if len(fs) > 0:
             for f in fs:
@@ -200,7 +183,7 @@ class BeaconErrorResponse:
     The responses are then provided by the dedicated methods
     """
     def __init__(self):
-        self.error_response = object_instance_from_schema_name("beaconErrorResponse", "")
+        self.error_response = ByconSchemas("beaconErrorResponse", "").get_schema_instance()
         self.meta = BeaconResponseMeta().populatedMeta()
 
 
@@ -228,7 +211,7 @@ class BeaconInfoResponse:
         self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
         self.response_entity_id = BYC.get("response_entity_id", "info")
         self.entity_defaults = BYC.get("entity_defaults", {})
-        self.data_response = object_instance_from_schema_name("beaconInfoResponse", "")
+        self.data_response = ByconSchemas("beaconInfoResponse", "").get_schema_instance()
         self.data_response.update({"meta": BeaconResponseMeta().populatedMeta() })
         self.info_response_content = {}
     
@@ -257,22 +240,22 @@ class BeaconInfoResponse:
 
     def __populateInfoResponse(self):
         if "configuration" in self.response_entity_id:
-            c_f = get_schema_file_path("beaconConfiguration")
+            c_f = ByconSchemas("beaconConfiguration").get_schema_file_path()
             self.info_response_content = load_yaml_empty_fallback(c_f)
             return
         if "beaconMap" in self.response_entity_id:
-            c_f = get_schema_file_path("beaconMap")
+            c_f = ByconSchemas("beaconMap").get_schema_file_path()
             self.info_response_content = load_yaml_empty_fallback(c_f)
             return
         if "entryType" in self.response_entity_id:
-            c_f = get_schema_file_path("beaconConfiguration")
+            c_f = ByconSchemas("beaconConfiguration").get_schema_file_path()
             e_t_s = load_yaml_empty_fallback(c_f)
             self.info_response_content = {"entry_types": e_t_s["entryTypes"] }
             return
         if "info" in self.response_entity_id:
             info = self.entity_defaults.get("info", {})
             pgx_info = info.get("content", {})
-            beacon_info = object_instance_from_schema_name("beaconInfoResults", "")
+            beacon_info = ByconSchemas("beaconInfoResults", "").get_schema_instance()
             for k in beacon_info.keys():
                 if k in pgx_info:
                     beacon_info.update({k:pgx_info[k]})
@@ -307,11 +290,11 @@ class BeaconDataResponse:
         self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
         self.record_queries = {}
         self.response_schema = BYC.get("response_schema", "___none___")
-        self.data_response = object_instance_from_schema_name(BYC["response_schema"], "")
+        self.data_response = ByconSchemas(BYC["response_schema"], "").get_schema_instance()
         self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta() })
         for m in ["beacon_handovers", "info"]:
             self.data_response.pop(m, None)
-        self.data_time_init = datetime.datetime.now()
+        self.data_time_init = datetime.now()
     
 
     # -------------------------------------------------------------------------#
@@ -337,7 +320,7 @@ class BeaconDataResponse:
         if not "beaconResultsetsResponse" in self.response_schema:
             return
 
-        self.result_sets_start = datetime.datetime.now()
+        self.result_sets_start = datetime.now()
         self.result_sets, self.record_queries = ByconResultSets().get_populated_result_sets()
         self.__acknowledge_HIT()
         self.__acknowledge_MISS()
@@ -350,7 +333,7 @@ class BeaconDataResponse:
 
         self.__response_clean_parameters()
         self.__check_switch_to_error_response()
-        self.result_sets_end = datetime.datetime.now()
+        self.result_sets_end = datetime.now()
         self.result_sets_duration = self.result_sets_end - self.result_sets_start
 
         self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta(self.record_queries) })
@@ -447,7 +430,7 @@ class BeaconDataResponse:
     def __collections_response_remap_cohorts(self, colls=[]):
         if not "cohort" in BYC.get("response_entity_id", "___none___"):
             return colls
-        pop_keys = ["_id", "child_terms", "code_matches", "count", "dataset_id", "db_key", "namespace_prefix", "ft_type", "collation_type", "hierarchy_paths", "parent_terms", "scope"]
+        pop_keys = ["_id", "child_terms", "code_matches", "count", "dataset_id", "db_key", "namespace_prefix", "type", "collation_type", "hierarchy_paths", "parent_terms", "scope"]
         for c in colls:
             c_k = f'{c.get("scope", "")}.{c.get("db_key", "")}'
             c.update({
@@ -537,7 +520,7 @@ class BeaconDataResponse:
 class ByconFilteringTerms:
     def __init__(self):
         self.response_entity_id = BYC.get("response_entity_id", "filteringTerm")
-        self.ft_instance = object_instance_from_schema_name("beaconFilteringTermsResults", "$defs/FilteringTerm")
+        self.ft_instance = ByconSchemas("beaconFilteringTermsResults", "$defs/FilteringTerm").get_schema_instance()
         self.data_collection = BYC["response_entity"].get("collection", "collations")
         self.filter_collation_types = set()
         self.filtering_terms = []
@@ -546,6 +529,7 @@ class ByconFilteringTerms:
         self.ds_id = BYC["BYC_DATASET_IDS"][0]
         self.special_mode = BYC_PARS.get("mode", "___none___")
         self.filter_id_match_mode = "full"
+        self.filters = ByconFilters().get_filters()
 
         def_keys = self.ft_instance.get("default", self.ft_instance.keys())
         if "termTree" in self.special_mode:
@@ -582,7 +566,7 @@ class ByconFilteringTerms:
         f_re = None
 
         if "start" in self.filter_id_match_mode:
-            for f in BYC["BYC_FILTERS"]:
+            for f in self.filters:
                 ft_fs.append('(' + f.get("id", "___none___") + ')')
             if len(ft_fs) > 0:
                 f_s = '|'.join(ft_fs)
@@ -594,8 +578,8 @@ class ByconFilteringTerms:
             if f_re:
                 q_list.append({"id": {"$regex": f_re}})
 
-        elif len(BYC["BYC_FILTERS"]) > 0:
-            q_list.append({"id": {"$in": [f.get("id") for f in BYC["BYC_FILTERS"]]}})
+        elif len(self.filters) > 0:
+            q_list.append({"id": {"$in": [f.get("id") for f in self.filters]}})
 
         if len(q_types := BYC_PARS.get("collation_types", [])) > 0:
             q_list.append({"collation_type": {"$in": q_types }})
@@ -608,7 +592,7 @@ class ByconFilteringTerms:
             query = {"$and": q_list}
 
         if BYC["TEST_MODE"] is True:
-            query = mongo_test_mode_query(self.ds_id, f_coll)
+            query = mongo_test_mode_query(self.ds_id, self.data_collection)
 
         # prdbug(f'filtering_terms_query: {query}')
 
@@ -618,14 +602,13 @@ class ByconFilteringTerms:
     # -------------------------------------------------------------------------#
 
     def __return_filtering_terms(self):
-        f_coll = self.data_collection
         fields = {"_id": 0}
         for k in self.delivery_keys:
             fields.update({k: 1})
         if "collation_type" not in fields:
             fields.update({"collation_type": 1})
 
-        f_s = mongo_result_list(self.ds_id, f_coll, self.filtering_terms_query, fields)
+        f_s = mongo_result_list(self.ds_id, self.data_collection, self.filtering_terms_query, fields)
         t_f_t_s = []
         for f in f_s:
             self.filter_collation_types.add(f.get("collation_type", None))
@@ -642,13 +625,12 @@ class ByconFilteringTerms:
         r_o = {}
         f_d_s = BYC["filter_definitions"].get("$defs", {})
         collation_types = list(self.filter_collation_types)
-        res_schema = object_instance_from_schema_name("beaconFilteringTermsResults", "$defs/Resource",
-                                                      "json")
+        res_schema = ByconSchemas("beaconFilteringTermsResults", "$defs/Resource").get_schema_instance()
         for c_t in collation_types:
             if c_t not in f_d_s:
                 continue
             f_d = f_d_s[c_t]
-            if not "ontologyTerm" in f_d.get("ft_type"):
+            if not "ontologyTerm" in f_d.get("type"):
                 continue
             r = {}
             for k in res_schema.keys():
@@ -684,6 +666,7 @@ class ByconCollections:
         self.__collections_return_cohorts()
         return self.collections, self.collections_queries
 
+
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
@@ -712,6 +695,7 @@ class ByconCollections:
         else:
             return results
         for coll_id, coll in BYC["dataset_definitions"].items():
+            prdbug(f'... processing dataset {coll_id} => {BYC.get("BYC_DATASET_IDS", [])}')
             if not coll_id in BYC.get("BYC_DATASET_IDS", []):
                 continue
             if "datasets" in stat:
@@ -741,10 +725,6 @@ class ByconCollections:
             limit = BYC_PARS.get("test_mode_count", 5)
         else:
             c_q = BYC_PARS.get("filters", [])
-            # if len(c_q) < 1:
-            #     if len(self.path_id_value) > 0:
-            #         c_q = self.path_id_value
-
             if len(c_q) > 0:
                 query = {
                     "$and": [
@@ -840,6 +820,24 @@ class ByconResultSets:
 
 
     # -------------------------------------------------------------------------#
+
+    def dataset_results_analysis_ids(self, ds_id="___none___"):
+        analysis_ids = set()
+        self.response_entity_id = "analysis"
+        self.__retrieve_datasets_data()
+        if not ds_id in self.datasets_data:
+            BYC["ERRORS"].append("no correct dataset id provided to `dataset_results_biosample_ids`")
+            return []
+
+        data = self.datasets_data[ds_id]
+        for s in data:
+            if (ana_id := s.get("analysis_id")):
+                analysis_ids.add(ana_id)
+
+        return list(analysis_ids)
+
+
+    # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 
@@ -873,7 +871,7 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __create_empty_result_sets(self):
-        r_set = object_instance_from_schema_name("beaconResultsets", "$defs/ResultsetInstance")
+        r_set = ByconSchemas("beaconResultsets", "$defs/ResultsetInstance").get_schema_instance()
         r_sets = []
         for ds_id in BYC["BYC_DATASET_IDS"]:
             ds_rset = r_set.copy()
@@ -892,13 +890,13 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __retrieve_datasets_results(self):
-        ds_r_start = datetime.datetime.now()
+        ds_r_start = datetime.now()
         for i, r_set in enumerate(self.result_sets):
             ds_id = r_set.get("id", "___none___")
             DR = ByconDatasetResults(ds_id, self.record_queries)
             ds_res = DR.retrieveResults()
             self.datasets_results.update({ds_id: ds_res})            
-        ds_r_duration = datetime.datetime.now() - ds_r_start
+        ds_r_duration = datetime.now() - ds_r_start
         
         dbm = f'... datasets results querying needed {ds_r_duration.total_seconds()} seconds'
         prdbug(dbm)
@@ -913,7 +911,7 @@ class ByconResultSets:
 
         e_d_s = BYC["entity_defaults"].get(self.response_entity_id, {})
 
-        ds_d_start = datetime.datetime.now()
+        ds_d_start = datetime.now()
         for ds_id, ds_results in self.datasets_results.items():
             if not ds_results:
                 continue
@@ -935,7 +933,7 @@ class ByconResultSets:
                 r_s_res.append(o)
             self.datasets_data.update({ds_id: r_s_res})
 
-        ds_d_duration = datetime.datetime.now() - ds_d_start
+        ds_d_duration = datetime.now() - ds_d_start
         dbm = f'... datasets data retrieval needed {ds_d_duration.total_seconds()} seconds'
         prdbug(dbm)
 
@@ -948,7 +946,7 @@ class ByconResultSets:
         if not "variant" in self.response_entity_id.lower():
             return
 
-        ds_v_start = datetime.datetime.now()
+        ds_v_start = datetime.now()
         for ds_id, ds_results in self.datasets_results.items():
 
             mongo_client = MongoClient(host=DB_MONGOHOST)
@@ -965,7 +963,7 @@ class ByconResultSets:
                     r_s_res.append(v)
                 self.datasets_data.update({ds_id: r_s_res})
 
-        ds_v_duration = datetime.datetime.now() - ds_v_start
+        ds_v_duration = datetime.now() - ds_v_start
 
         dbm = f'... variants retrieval needed {ds_v_duration.total_seconds()} seconds'
         prdbug(dbm)
@@ -976,7 +974,7 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __populate_result_sets(self):
-        ds_v_start = datetime.datetime.now()
+        ds_v_start = datetime.now()
         for i, r_set in enumerate(self.result_sets):
             ds_id = r_set["id"]
             ds_res = self.datasets_results.get(ds_id)
@@ -1004,7 +1002,7 @@ class ByconResultSets:
                 "exists": True if rs_c > 0 else False,
                 "results": r_s_res
             })
-        ds_v_duration = datetime.datetime.now() - ds_v_start
+        ds_v_duration = datetime.now() - ds_v_start
         dbm = f'... __populate_result_sets needed {ds_v_duration.total_seconds()} seconds'
         prdbug(dbm)
         return
@@ -1016,7 +1014,7 @@ class ByconResultSets:
 
 def print_json_response(this={}, status_code=200):
     if not "___shell___" in ENV:
-        print(f'status: {status_code}')
+        print(f'Status: {status_code}')
         print('Content-Type: application/json')
         print()
 
@@ -1030,7 +1028,7 @@ def print_json_response(this={}, status_code=200):
 
 def print_text_response(this="", status_code=200):
     if not "___shell___" in ENV:
-        print(f'status: {status_code}')
+        print(f'Status: {status_code}')
         print('Content-Type: text/plain')
         print()
 
@@ -1042,8 +1040,8 @@ def print_text_response(this="", status_code=200):
 ################################################################################
 
 def print_html_response(this="", status_code=200):
-    if "server" in ENV:
-        print(f'status: {status_code}')
+    if not "___shell___" in ENV:
+        print(f'Status: {status_code}')
         print('Content-Type: text/html')
         print()
 
@@ -1054,9 +1052,9 @@ def print_html_response(this="", status_code=200):
 
 ################################################################################
 
-def print_uri_rewrite_response(uri_base="", uri_stuff=""):
+def print_uri_rewrite_response(uri=""):
     print("Status: 302")
-    print("Location: {}{}".format(uri_base, uri_stuff))
+    print(f'Location: {uri}')
     print()
     exit()
 

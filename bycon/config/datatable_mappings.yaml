@@ -109,8 +109,10 @@ ordered_variants_core:
   - end
   - variant_state_id
   - variant_state_label
+  - vrs_type
   - reference_sequence
   - sequence
+  - adjoined_sequences
 
 
 $defs:
@@ -627,6 +629,10 @@ $defs:
         type: string
         db_key: sequence
         indexed: True
+      vrs_type:
+        type: string
+        db_key: type
+        indexed: True
       annotation_derived:
         type: boolean
         db_key: info.annotation_derived
@@ -647,10 +653,6 @@ $defs:
         db_key: info.var_length
         indexed: true
         computed: True
-      variant_fusion_id:
-        type: string
-        db_key: fusion_id
-        indexed: true
       updated:
         indexed: True
         computed: True

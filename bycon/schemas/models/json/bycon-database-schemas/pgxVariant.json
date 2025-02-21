@@ -6,6 +6,7 @@
     "description": "Schema for a genomic variant in Progenetix collections.",
     "required": [
         "biosampleId",
+        "individualId",
         "variantInternalId",
         "variantState",
         "location"
@@ -57,9 +58,8 @@
             "type": "string",
             "pattern": "^([ACGTUNRYSWKMBDHV\\-\\.]*)$"
         },
-        "fusionId": {
-            "description": "Experimental id to indicate variants which are part of the same  fusion event.",
-            "type": "string"
+        "type": {
+            "$ref": "#/$defs/VRStype"
         },
         "info": {
             "type": "object"
@@ -70,7 +70,17 @@
             "examples": [
                 "2020-09-10T17:44:10.170Z"
             ]
-        }
+        },
+        "required": [
+            {
+                "oneOf": [
+                    "location",
+                    "adjoinedSequences"
+                ]
+            },
+            "id",
+            "variantInternalId"
+        ]
     },
     "$defs": {
         "Location": {
@@ -93,6 +103,19 @@
                     "type": "integer"
                 }
             }
+        },
+        "VRStype": {
+            "description": "Type of the variation according to the VRS model. Examples are here e.g. `Adjacency` or `Allele`. Origin: VRS v2",
+            "type": "string",
+            "enum": [
+                "Adjacency",
+                "Allele",
+                "CisPhasedBlock",
+                "CopyNumberChange",
+                "CopyNumberCount",
+                "DerivativeMolecule",
+                "Terminus"
+            ]
         }
     },
     "additionalProperties": true

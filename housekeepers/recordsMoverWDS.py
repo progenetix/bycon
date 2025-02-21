@@ -6,7 +6,7 @@ from os import pardir, path
 loc_path = path.dirname( path.abspath(__file__) )
 lib_path = path.join(loc_path , pardir, "importers", "lib")
 sys.path.append( lib_path )
-from importer_helpers import ByconautImporter
+from bycon_importer import ByconImporter
 
 """
 The `recordsMoverWDS.py` script is used to move records from a source database
@@ -16,5 +16,5 @@ the use of a tab-separated file with the record `individual_id` identifiers to b
 * ./housekeepers/recordsMoverWDS.py -d progenetix --output cellz -i ./imports/1kdeltest.tsv --testMode false
 """
 
-BI = ByconautImporter()
+BI = ByconImporter()
 BI.move_individuals_and_downstream()

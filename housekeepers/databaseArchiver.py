@@ -1,10 +1,11 @@
 #!/usr/local/bin/python3
 
 from os import path, pardir, mkdir, system
-import datetime, shutil
+from datetime import datetime
+import shutil
 from isodate import date_isoformat
 
-from bycon import BYC, BYC_PARS, initialize_bycon_service
+from bycon import BYC, BYC_PARS
 from byconServiceLibs import assertSingleDatasetOrExit
 
 ################################################################################
@@ -31,7 +32,7 @@ def main():
         e_ds_archive = f'{db}.tar.gz'
         system(f'rm -rf {db_tmp}')
         system(f'mongodump --db {db} --out {tmp_dir}')
-    sysCmd = f'cd {output_dir} && tar -czf {date_isoformat(datetime.datetime.now())}-{ds_id}.tar.gz {ds_id} && rm -rf {tmp_dir}'
+    sysCmd = f'cd {output_dir} && tar -czf {date_isoformat(datetime.now())}-{ds_id}.tar.gz {ds_id} && rm -rf {tmp_dir}'
     print(sysCmd)
     system(sysCmd)
 

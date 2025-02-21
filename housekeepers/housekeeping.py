@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 
-import re, json, yaml, sys, datetime
+import re, json, yaml, sys
+from datetime import datetime
 from isodate import date_isoformat
 from os import path, environ, pardir, system
 from pymongo import MongoClient
@@ -20,6 +21,7 @@ def main():
     ask_limit_reset()
 
     ds_id = assertSingleDatasetOrExit()
+    database_names = ByconDatasets().get_database_names()
 
     # collecting the actions
     todos = {
@@ -181,18 +183,18 @@ def main():
 
 def __dataset_update_counts():
 
-    b_info = { "date": date_isoformat(datetime.datetime.now()), "datasets": { } }
+    b_info = { "date": date_isoformat(datetime.now()), "datasets": { } }
     mongo_client = MongoClient(host=DB_MONGOHOST)
 
     # this is independend of the dataset selected for the script & will update
     # for all in any run
     for i_ds_id in BYC["dataset_definitions"].keys():
-        if not i_ds_id in BYC["DATABASE_NAMES"]:
+        if not i_ds_id in database_names:
             print(f'¡¡¡ Dataset "{i_ds_id}" does not exist !!!')
             continue
 
         ds_db = mongo_client[ i_ds_id ]
-        b_i_ds = { "counts": { }, "updated": datetime.datetime.now().isoformat() }
+        b_i_ds = { "counts": { }, "updated": datetime.now().isoformat() }
         c_n = ds_db.list_collection_names()
         for c in ["biosamples", "individuals", "variants", "analyses"]:
             if c not in c_n:

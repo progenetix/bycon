@@ -1,4 +1,6 @@
-import csv, datetime, re, sys
+import csv, re, sys
+
+from datetime import datetime
 
 from os import environ, path
 from pymongo import MongoClient
@@ -365,7 +367,7 @@ class ByconBundler:
             update_v = import_datatable_dict_line(update_v, fieldnames, v, "genomicVariant")
             update_v = ByconVariant().pgxVariant(update_v)
             update_v.update({
-                "updated": datetime.datetime.now().isoformat()
+                "updated": datetime.now().isoformat()
             })
             vars_ided[cs_id].append(update_v)
 
@@ -374,7 +376,7 @@ class ByconBundler:
             cs_ided[cs_id].update({"cnv_statusmaps": maps})
             cs_ided[cs_id].update({"cnv_stats": cs_cnv_stats})
             cs_ided[cs_id].update({"cnv_chro_stats": cs_chro_stats})
-            cs_ided[cs_id].update({"updated": datetime.datetime.now().isoformat()})
+            cs_ided[cs_id].update({"updated": datetime.now().isoformat()})
 
         self.keyedBundle.update({
             "individuals_by_id": inds_ided,

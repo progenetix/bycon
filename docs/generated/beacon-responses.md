@@ -93,10 +93,6 @@ The filtering terms response provides information about available individual fil
 
 ### filteringTerm @ `/filtering_terms`
 
-Schema for the Filtering Terms list related to the hosting entry type. It is kept separated to allow updating it independently.
-
-
-
 * **{S}** <{{config.reference_server_url}}/services/schemas/filteringTermsSchema>
 
 * **{T}** <{{config.reference_server_url}}/beacon/filtering_terms?testMode=true>

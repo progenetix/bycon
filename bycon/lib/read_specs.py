@@ -42,12 +42,6 @@ def read_service_definition_files():
 ################################################################################
 
 def update_rootpars_from_local_or_HOST():
-    # avoiding re-parsing of directories, e.g. during init stage
-    p_c_p = BYC.get("parsed_config_paths", [])
-    if LOC_PATH in p_c_p:
-        return
-
-    p_c_p.append(LOC_PATH)
 
     # overwriting installation-wide defaults with instance-specific ones
     # _i.e._ matching the current domain (to allow presentation of different

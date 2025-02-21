@@ -5,11 +5,10 @@ from importlib import import_module
 
 from bycon import (
     BYC,
+    BYC_PARS,
     BeaconErrorResponse,
     prdbug,
-    print_text_response,
-    set_debug_state,
-    set_entities
+    print_text_response
 )
 
 ################################################################################
@@ -30,11 +29,13 @@ def services():
     script. The functionality is combined with the correct configuration of a 
     rewrite in the server configuration for creation of canonical URLs.
     """
-    set_debug_state(debug=0)
-
     rq_id = BYC.get("request_entity_id", "ids")
     rq_p_id = BYC.get("request_entity_path_id", "ids")
     rp_id = BYC.get("response_entity_id")
+
+    # print('Content-Type: text')
+    # print()
+    # print(f'rq_id: {rq_id}, rq_p_id: {rq_p_id}, rp_id: {rp_id}')
     
     if not rp_id:
         pass

@@ -47,4 +47,4 @@ def uploader():
         print_json_response(response)
 
     plot_type = form_data["plotType"]
-    print_uri_rewrite_response(f'{base_url}/services/sampleplots/?datasetIds=upload&fileId={file_id}&plotType={plot_type}', "")
+    print_uri_rewrite_response(f'{base_url}/services/sampleplots/?datasetIds=upload&fileId={file_id}&plotType={plot_type}')
