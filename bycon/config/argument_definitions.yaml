@@ -274,12 +274,14 @@ $defs:
       The maximum variant length in bases e.g. for CNV queries.
 
   gene_id:
-    type: string
-    pattern: '^\w+?(\w+?(\-\w+?)?)?$'
+    type: array
+    items:
+      pattern: '^\w+?(\w+?(\-\w+?)?)?$'
+      type: string
     db_key: Null
     cmdFlags:
       - --geneId
-    description: gene id
+    description: one or more (comma concatenated) gene ids
 
   aminoacid_change:
     type: string
@@ -305,9 +307,9 @@ $defs:
     description: >-
       Genomic HGVSId descriptor
 
-  # ------------------------------------------------------------------------------
-  # variant parameters - non-standard
-  # ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# variant parameters - non-standard
+# ------------------------------------------------------------------------------
 
   variant_query_digests:
     type: array
@@ -340,9 +342,9 @@ $defs:
       - --variantInternalId
     description: 'An id value used for all variant instances of the same composition; a kind of `digest`'
 
-  ##############################################################################
-  # non-standard parameters
-  ##############################################################################
+################################################################################
+# non-standard parameters
+################################################################################
 
   accessid:
     type: string
@@ -423,9 +425,9 @@ $defs:
       - --variantIds
     description: variant ids
 
-  # ------------------------------------------------------------------------------
-  # technical / procedural - non-standard
-  # ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# technical / procedural - non-standard
+# ------------------------------------------------------------------------------
 
   debug_mode:
     type: boolean

@@ -21,7 +21,6 @@ def main():
     ask_limit_reset()
 
     ds_id = assertSingleDatasetOrExit()
-    database_names = ByconDatasets().get_database_names()
 
     # collecting the actions
     todos = {
@@ -185,6 +184,7 @@ def __dataset_update_counts():
 
     b_info = { "date": date_isoformat(datetime.now()), "datasets": { } }
     mongo_client = MongoClient(host=DB_MONGOHOST)
+    database_names = ByconDatasets().get_database_names()
 
     # this is independend of the dataset selected for the script & will update
     # for all in any run

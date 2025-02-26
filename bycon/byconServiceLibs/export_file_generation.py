@@ -12,6 +12,7 @@ from bycon import (
     DB_MONGOHOST,
     ENV,
     prdbug,
+    RefactoredValues,
     return_paginated_list,
     select_this_server,
     test_truthy
@@ -24,67 +25,209 @@ from datatable_utils import get_nested_value
 
 ################################################################################
 
-def stream_pgx_meta_header(ds_id, ds_results):
-    skip = BYC_PARS.get("skip", 0)
-    limit = BYC_PARS.get("limit", 0)
-    ds_d = BYC.get("dataset_definitions", {})
-    ds_ds_d = ds_d.get(ds_id, {})
+class PGXfreq:
+    def __init__(self, frequencysets=[]):
+        self.frequencysets = frequencysets
+        self.header_cols = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
+        self.meta_items = ["group_id", "label", "dataset_id", "sample_count"]
+        self.filename = "frequencies.pgxfreq"
+        self.output_lines = []
 
-    mongo_client = MongoClient(host=DB_MONGOHOST)
-    bs_coll = mongo_client[ds_id]["biosamples"]
+        self.__add_meta_lines()
 
-    open_text_streaming()
 
-    for d in ["id", "assemblyId"]:
-        print(f'#meta=>{d}={ds_ds_d.get(d, "")}')
-    # for k, n in s_r_rs["info"]["counts"].items():
-    #     print("#meta=>{}={}".format(k, n))
-    print(f'#meta=>pagination.skip={skip};pagination.limit={limit}')
-            
-    print_filters_meta_line()
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
 
-    for bs_id in ds_results["biosamples.id"][ "target_values" ]:
-        bs = bs_coll.find_one( { "id": bs_id } )
-        if not bs:
-            continue
-        h_line = pgxseg_biosample_meta_line(bs, "histological_diagnosis_id")
-        print(h_line)
+    def stream_pgxfreq(self):
+        self.__add_header_line()
+        self.__add_frequency_lines()
+        open_text_streaming(self.filename)
+        for l in self.output_lines:
+            print(l)
+        exit()
 
-    return
+
+    # -------------------------------------------------------------------------#
+
+    def stream_pgxmatrix(self):
+        self.filename = "interval_frequencies.pgxmatrix"
+        self.__add_matrix_header_line()
+        self.__add_frequency_matrix_lines()
+        open_text_streaming(self.filename)
+        for l in self.output_lines:
+            print(l)
+        exit()
+
+
+    # -------------------------------------------------------------------------#
+    # ---------------------------- private ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __add_meta_lines(self):
+        g_b = GenomeBins().get_genome_binning()
+        i_no = GenomeBins().get_genome_bin_count()
+        self.output_lines.append(f'#meta=>genome_binning={g_b};interval_number={i_no}')
+        for f_set in self.frequencysets:
+            line = ["#group=>"]
+            for k in self.meta_items:
+                line.append(f'{k}={f_set.get(k, "___undefined___")}')
+            self.output_lines.append(f'#group=>{";".join(line)}')
+
+
+    # -------------------------------------------------------------------------#
+
+    def __add_header_line(self):
+        self.output_lines.append("\t".join(self.header_cols))
+
+
+    # -------------------------------------------------------------------------#
+
+    def __add_frequency_lines(self):
+        for f_set in self.frequencysets:
+            for intv in f_set.get("interval_frequencies", []):
+                line = [f_set.get("group_id", "___undefined___")]
+                for k in self.header_cols:
+                    line.append(str(intv.get(k, "")))
+                self.output_lines.append("\t".join(line))
+
+
+    # -------------------------------------------------------------------------#
+
+    def __add_matrix_header_line(self):
+        g_b_s = GenomeBins().get_genome_bins()
+        line = ["group_id"]
+        for iv in g_b_s:
+            line.append(f'{iv["reference_name"]}:{int(iv["start"]):09}-{int(iv["end"]):09}:DUP')
+        for iv in g_b_s:
+            line.append(f'{iv["reference_name"]}:{int(iv["start"]):09}-{int(iv["end"]):09}:DEL')
+        self.output_lines.append("\t".join(line))
+
+
+    # -------------------------------------------------------------------------#
+
+    def __add_frequency_matrix_lines(self):
+        for f_set in self.frequencysets:
+            line = [f_set.get("group_id", "___undefined___")]
+            for intv in f_set.get("interval_frequencies"):
+                line.append( str(intv["gain_frequency"]) )
+            for intv in f_set["interval_frequencies"]:
+                line.append( str(intv["loss_frequency"]) )
+            self.output_lines.append("\t".join(line))
 
 
 ################################################################################
-
-def pgxseg_biosample_meta_line(biosample, group_id_key="histological_diagnosis_id"):
-    dt_m = BYC["datatable_mappings"]
-    io_params = dt_m["$defs"][ "biosample" ]["parameters"]
-
-    g_id_k = group_id_key
-    g_lab_k = re.sub("_id", "_label", g_id_k)
-    line = [ f'#sample=>id={biosample.get("id", "¡¡¡NONE!!!")}' ]
-    for par, par_defs in io_params.items():
-        parameter_type = par_defs.get("type", "string")
-        if not (db_key := par_defs.get("db_key")):
-            continue
-        p_type = par_defs.get("type", "string")
-        v = get_nested_value(biosample, db_key, p_type)
-        h_v = ""
-        if isinstance(v, list):
-            h_v = "::".join(map(str, (v)))
-        else:
-            h_v = str(v)
-
-        if len(h_v) > 0:
-            if g_id_k == par:
-                line.append("group_id={}".format(h_v))
-            if g_lab_k == par:
-                line.append("group_label={}".format(h_v))
-            line.append("{}={}".format(par, h_v))
-
-    return ";".join(line)
+################################################################################
+################################################################################
 
 
-################################################################################    
+class PGXseg:
+    def __init__(self, dataset_results, ds_id=None):
+        self.ds_id = ds_id if ds_id else list(dataset_results.keys())[0]
+        self.skip = BYC_PARS.get("skip", 0)
+        self.limit = BYC_PARS.get("limit", 0)
+        self.datatable_mappings = BYC.get("datatable_mappings", {"$defs": {}})
+        dataset_defs = BYC.get("dataset_definitions", {})
+        self.dataset_definition = dataset_defs.get(self.ds_id, {})
+        self.dataset_result = dataset_results.get(self.ds_id, {})
+        self.mongo_client = MongoClient(host=DB_MONGOHOST)
+        self.header_cols = self.datatable_mappings.get("ordered_pgxseg_columns", [])
+        self.bios_pars = self.datatable_mappings["$defs"]["biosample"]["parameters"]
+        self.var_pars = self.datatable_mappings["$defs"]["genomicVariant"]["parameters"]
+        self.filename = "variants.pgxseg"
+        self.output_lines = []
+
+        self.__add_meta_lines()
+        self.__add_header_line()
+        self.__add_variants()
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def stream_pgxseg(self):
+        open_text_streaming(self.filename)
+        for l in self.output_lines:
+            print(l)
+        return
+
+
+    # -------------------------------------------------------------------------#
+    # ---------------------------- private ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __add_meta_lines(self):
+        if not (bios_ids := self.dataset_result.get("biosamples.id", {}).get("target_values")):
+            BYC["ERRORS"].append("No biosamples found in the dataset results.")
+            return
+        bs_coll = self.mongo_client[self.ds_id]["biosamples"]
+        for bs_id in bios_ids:
+            if not (bs := bs_coll.find_one( {"id": bs_id})):
+                continue
+            line = self.__bios_meta_line(bs)
+            self.output_lines.append(";".join(line))
+
+
+    # -------------------------------------------------------------------------#
+
+    def __bios_meta_line(self, bios):
+        line = [f'#sample=>id={bios.get("id", "___undefined___")}']
+        for par, par_defs in self.bios_pars.items():
+            db_key = par_defs.get("db_key", "___undefined___")
+            v = get_nested_value(bs, db_key)
+            v = RefactoredValues(par_defs).strVal(v)
+            if len(v) > 0:
+                line.append(f'{par}={v}')
+        return line
+
+
+    # -------------------------------------------------------------------------#
+
+    def __add_header_line(self):
+        self.output_lines.append("\t".join(self.header_cols))
+
+
+    # -------------------------------------------------------------------------#
+
+    def __add_variants(self):
+        if not (var_ids := self.dataset_result.get("variants.id", {}).get("target_values")):
+            BYC["ERRORS"].append("No variants found in the dataset results.")
+            return
+        if test_truthy(BYC_PARS.get("paginate_results", True)):
+            var_ids = return_paginated_list(var_ids, self.skip, self.limit)
+        vs_coll = self.mongo_client[self.ds_id]["variants"]
+
+        v_instances = []
+        for v_id in var_ids:
+            v_s = vs_coll.find_one({"id": v_id}, {"_id": 0})
+            v_instances.append(ByconVariant().byconVariant(v_s))
+        v_instances = list(sorted(v_instances, key=lambda x: (f'{x["location"]["chromosome"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x["location"]['start'])))
+        for v in v_instances:
+            self.__variant_line(v)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __variant_line(self, v_pgxseg):
+        for p in ("sequence", "reference_sequence"):
+            if not v_pgxseg[p]:
+                v_pgxseg.update({p: "."})
+
+        line = []
+        for par in self.header_cols:
+            par_defs = self.var_pars.get(par, {})
+            db_key = par_defs.get("db_key", "___undefined___")
+            v = get_nested_value(v_pgxseg, db_key)
+            v = RefactoredValues(par_defs).strVal(v)
+            line.append(v)
+        self.output_lines.append("\t".join(line))
+
+
+################################################################################
+################################################################################
+################################################################################
 
 def __pgxmatrix_interval_header(info_columns):
     GBins = GenomeBins().get_genome_bins()
@@ -105,35 +248,6 @@ def print_filters_meta_line():
     for f in filters:
         f_vs.append(f.get("id", ""))
     print("#meta=>filters="+','.join(f_vs))
-
-
-################################################################################
-
-def export_pgxseg_download(datasets_results, ds_id):
-    skip = BYC_PARS.get("skip", 0)
-    limit = BYC_PARS.get("limit", 0)
-    data_client = MongoClient(host=DB_MONGOHOST)
-    v_coll = data_client[ ds_id ][ "variants" ]
-    ds_results = datasets_results.get(ds_id, {})
-    if not "variants.id" in ds_results:
-        BYC["ERRORS"].append("No variants found in the dataset results.")
-        return
-    v_ids = ds_results["variants.id"].get("target_values", [])
-    if test_truthy( BYC_PARS.get("paginate_results", True) ):
-        v_ids = return_paginated_list(v_ids, skip, limit)
-
-    stream_pgx_meta_header(ds_id, ds_results)
-    print_pgxseg_header_line()
-
-    v_instances = []
-    for v_id in v_ids:
-        v_s = v_coll.find_one( { "id": v_id }, { "_id": 0 } )
-        v_instances.append(ByconVariant().byconVariant(v_s))
-
-    v_instances = list(sorted(v_instances, key=lambda x: (f'{x["location"]["chromosome"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x["location"]['start'])))
-    for v in v_instances:
-        print_variant_pgxseg(v)
-    close_text_streaming()
 
 
 ################################################################################
@@ -237,44 +351,6 @@ def write_variants_bedfile(datasets_results, ds_id):
 
 ################################################################################
 
-def print_variant_pgxseg(v_pgxseg):
-    print( pgxseg_variant_line(v_pgxseg) )
-
-
-################################################################################
-
-def print_pgxseg_header_line():
-    print( pgxseg_header_line() )
-
-################################################################################
-
-def pgxseg_header_line():
-    return "\t".join( ["biosample_id", "reference_name", "start", "end", "log2", "variant_type", "reference_bases", "alternate_bases", "variant_state_id", "variant_state_label"])
-
-################################################################################
-
-def pgxseg_variant_line(v_pgxseg):
-    for p in ("sequence", "reference_sequence"):
-        if not v_pgxseg[p]:
-            v_pgxseg.update({p: "."})
-    log_v = v_pgxseg.get("info", {}).get("cnv_value", ".")
-    v_l = (
-        v_pgxseg.get("biosample_id"),
-        v_pgxseg["location"]["chromosome"],
-        v_pgxseg["location"]["start"],
-        v_pgxseg["location"]["end"],
-        "NA" if not log_v else log_v,
-        v_pgxseg.get("variant_type", "."),
-        v_pgxseg.get("reference_sequence"),
-        v_pgxseg.get("sequence"),
-        v_pgxseg["variant_state"].get("id"),
-        v_pgxseg["variant_state"].get("label")
-    )
-
-    return "\t".join([str(x) for x in v_l])
-
-################################################################################
-
 def export_callsets_matrix(datasets_results, ds_id):
     skip = BYC_PARS.get("skip", 0)
     limit = BYC_PARS.get("limit", 0)
@@ -348,64 +424,6 @@ def export_callsets_matrix(datasets_results, ds_id):
                 ]
             ))
 
-    close_text_streaming()
-
-################################################################################
-
-def export_pgxseg_frequencies(results):
-    g_b = BYC_PARS.get("genome_binning", "")
-    i_no = GenomeBins().get_genome_bin_count()
-
-    open_text_streaming("interval_frequencies.pgxfreq")
-    print(f'#meta=>genome_binning={g_b};interval_number={i_no}')
-    h_ks = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
-    # should get error checking if made callable
-    for f_set in results:
-        m_line = []
-        for k in ["group_id", "label", "dataset_id", "sample_count"]:
-            m_line.append(k+"="+str(f_set[k]))
-        print("#group=>"+';'.join(m_line))
-    print("group_id\t"+"\t".join(h_ks))
-    for f_set in results:
-        for intv in f_set["interval_frequencies"]:
-            v_line = [ ]
-            v_line.append(f_set[ "group_id" ])
-            for k in h_ks:
-                v_line.append(str(intv[k]))
-            print("\t".join(v_line))
-    close_text_streaming()
-
-
-################################################################################
-
-def export_pgxmatrix_frequencies(results):
-    g_b = BYC_PARS.get("genome_binning", "")
-    i_no = GenomeBins().get_genome_bin_count()
-
-    open_text_streaming("interval_frequencies.pgxmatrix")
-
-    print(f'#meta=>genome_binning={g_b};interval_number={i_no}')
-
-    # should get error checking if made callable
-    for f_set in results:
-        m_line = []
-        for k in ["group_id", "label", "dataset_id", "sample_count"]:
-            m_line.append(k+"="+str(f_set[k]))
-        print("#group=>"+';'.join(m_line))
-    # header
-
-    h_line = [ "group_id" ]
-    h_line = __pgxmatrix_interval_header(h_line)
-    print("\t".join(h_line))
-
-    for f_set in results:
-        f_line = [ f_set[ "group_id" ] ]
-        for intv in f_set["interval_frequencies"]:
-            f_line.append( str(intv["gain_frequency"]) )
-        for intv in f_set["interval_frequencies"]:
-            f_line.append( str(intv["loss_frequency"]) )
-
-        print("\t".join(f_line))
     close_text_streaming()
 
 

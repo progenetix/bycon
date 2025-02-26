@@ -239,6 +239,8 @@ class ByconQuery():
 
     def __loop_multivars(self):
 
+        # TODO: proper self.queries handling
+
         queries = []
 
         for v_pars in self.variant_multi_pars:
@@ -252,7 +254,7 @@ class ByconQuery():
                     continue
             if "geneVariantRequest" in variant_request_type:
                 if (q := self.__create_geneVariantRequest_query(v_pars)):
-                    queries.append(q)
+                    queries = [*queries, *q]
                     continue
             if "cytoBandRequest" in variant_request_type:
                 if (q := self.__create_cytoBandRequest_query(v_pars)):
@@ -368,24 +370,29 @@ class ByconQuery():
 
     def __create_geneVariantRequest_query(self, v_pars):
         # query database for gene and use coordinates to create range query
-        gene_id = v_pars.get("gene_id", "___none___")
+        gene_id = v_pars.get("gene_id", [])
         prdbug(f'...geneVariantRequest gene_id: {gene_id}')
-        gene_data = GeneInfo().returnGene(gene_id)
-        prdbug(f'...geneVariantRequest gene_data: {gene_data}')
-        # TODO: error report/warning
-        if not gene_data:
-            return False
-        gene = gene_data[0]
-        # Since this is a pre-processor to the range request
-        v_pars = {
-            "reference_name": f'refseq:{gene.get("accession_version", "___none___")}',
-            "start": [ gene.get("start", 0) ],
-            "end": [ gene.get("end", 1) ]
-        }
-        q_t = self.__create_variantRangeRequest_query(v_pars)
-        prdbug(f'...geneVariantRequest query result: {q_t}')
+        queries = []
+        for g in gene_id:
+            # TODO: error report/warning
+            if not (gene_data := GeneInfo().returnGene(g)):
+                continue
+            gene = gene_data[0]
+            prdbug(f'...geneVariantRequest gene_data: {gene}')
+            # Since this is a pre-processor to the range request
+            v_pars.update({
+                "reference_name": f'refseq:{gene.get("accession_version", "___none___")}',
+                "start": [ gene.get("start", 0) ],
+                "end": [ gene.get("end", 1) ]
+            })
+            q_t = self.__create_variantRangeRequest_query(v_pars)
+            prdbug(f'...geneVariantRequest query result: {q_t}')
+            queries.append(q_t)
 
-        return q_t
+        if len(queries) < 1:
+            return False
+
+        return queries
 
     #--------------------------------------------------------------------------#
 
@@ -822,23 +829,22 @@ class ByconQuery():
         if not h_o:
             return
 
-        t_k = h_o["target_key"]
         t_v = h_o["target_values"]
-        c_n = h_o["target_collection"]
-        t_e = h_o["target_entity"]
+        c_n = h_o["collection"]
+        t_e = h_o["entity_id"]
         t_c = h_o["target_count"]
 
         t_v = return_paginated_list(t_v, self.skip, self.limit)
         if len(t_v) < 1:
             return
-        h_o_q = {t_k: {'$in': t_v}}
-        self.__update_queries_for_entity([h_o_q], t_e)
+        h_o_q = [{"id": {'$in': t_v}}]
+        self.__update_queries_for_entity(h_o_q, t_e)
 
 
     # -------------------------------------------------------------------------#
 
     def __update_queries_for_entity(self, query, entity):
-        # TODO: This is now for using generally query lists abnd aggregate 
+        # TODO: This is now for using generally query lists and aggregate 
         # by multiple queries & intersection of matched ids during execution
         # => logic right now always AND
         logic = self.__boolean_to_mongo_logic(BYC_PARS.get("filter_logic"))

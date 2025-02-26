@@ -114,6 +114,18 @@ ordered_variants_core:
   - sequence
   - adjoined_sequences
 
+ordered_pgxseg_columns:
+  - biosample_id
+  - reference_name
+  - start
+  - end
+  - log2
+  - variant_type
+  - reference_sequence
+  - sequence
+  - variant_state_id
+  - variant_state_label
+
 
 $defs:
 
@@ -412,7 +424,7 @@ $defs:
         computed: True
       geoprov_long_lat:
         type: array
-        split_by: ','
+        split_by: '::'
         items:
           type: number
         db_key: geo_location.geometry.coordinates

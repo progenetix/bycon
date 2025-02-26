@@ -1,5 +1,5 @@
 from bycon import BYC_PARS, BeaconErrorResponse
-from byconServiceLibs import ByconBundler, GenomeBins, ByconServiceResponse, export_pgxseg_frequencies, export_pgxmatrix_frequencies
+from byconServiceLibs import ByconBundler, GenomeBins, ByconServiceResponse, PGXfreq
 
 """
 * https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C7376,PMID:22824167,pgx:icdom-85003
@@ -15,8 +15,8 @@ def intervalFrequencies():
 
     file_type = BYC_PARS.get("output", "___none___")
     if "pgxseg" in file_type or "pgxfreq" in file_type:
-        export_pgxseg_frequencies(ifb)
+        PGXfreq(ifb).stream_pgxfreq()
     elif "matrix" in file_type:
-        export_pgxmatrix_frequencies(ifb)
+        PGXfreq(ifb).stream_pgxmatrix()
 
     ByconServiceResponse().print_populated_response(ifb)

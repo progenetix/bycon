@@ -19,14 +19,14 @@ from file_utils import ExportFile
 ################################################################################
 
 class ByconDatatableExporter:
-    def __init__(self, file_type=None):
+    def __init__(self, data=[]):
         self.datatable_mappings = BYC.get("datatable_mappings", {"$defs": {}})
         self.entity = BYC.get("response_entity_id", "___none___")
         if not self.entity in self.datatable_mappings["$defs"]:
             # TODO: proper error handling
             return
 
-        self.file_name = f'{self.entity}.tsv'
+        self.data = data
 
         sel_pars = BYC_PARS.get("delivery_keys", [])      
         io_params = self.datatable_mappings["$defs"][self.entity]["parameters"]
@@ -40,23 +40,24 @@ class ByconDatatableExporter:
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def stream_datatable(self, flattened_data):
+    def stream_datatable(self, file_type=None):
+        self.file_name = f'{self.entity}.tsv'
         prdlhead(self.file_name)
         print(f'{self.__create_table_header()}\n')
-        for pgxdoc in flattened_data:
+        for pgxdoc in self.data:
             print(f'{self.__table_line_from_pgxdoc(pgxdoc)}\n')
         exit()
 
 
     # -------------------------------------------------------------------------#
 
-    def export_datatable(self, flattened_data):
+    def export_datatable(self, file_type=None):
         if not (table_file := ExportFile().check_outputfile_path()):
             return
 
         t_f = open(table_file, "w")
         t_f.write(f'{self.__create_table_header()}\n')
-        for pgxdoc in flattened_data:
+        for pgxdoc in self.data:
             t_f.write(f'{self.__table_line_from_pgxdoc(pgxdoc)}\n')
         t_f.close()
         exit()
@@ -115,6 +116,8 @@ def import_datatable_dict_line(parent, fieldnames, lineobj, primary_scope="biosa
 
         v = lineobj[f_n].strip()
         if v.lower() in (".", "na"):
+            v = ""
+        if "{" in v and "}" in v:
             v = ""
         if len(v) < 1:
             if f_n in io_params.keys():

@@ -1,4 +1,5 @@
 from bycon import (
+    BYC,
     BYC_PARS,
     BeaconDataResponse,
     print_json_response

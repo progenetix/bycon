@@ -91,6 +91,7 @@ class ByconBundler:
                 line = line.strip()
                 if line.startswith("#"):
                     h_lines.append(line)
+        prdbug(f'... read_pgx_file with {len(h_lines)} metadata lines')
 
         d_lines, fieldnames = ByconTSVreader().file_to_dictlist(self.filepath, max_count=0)
         self.header = h_lines
@@ -154,9 +155,13 @@ class ByconBundler:
     def pgxseg_to_plotbundle(self, filepath):
         self.pgxseg_to_keyed_bundle(filepath)
         self.__flatten_keyed_bundle()
+
+        afb = self.analyses_frequencies_bundles()
+        avb = self.analyses_variants_bundles()
+
         return {
-            "interval_frequencies_bundles": self.analyses_frequencies_bundles(),
-            "analyses_variants_bundles": self.analyses_variants_bundles()
+            "interval_frequencies_bundles": afb,
+            "analyses_variants_bundles": avb
         }
 
 
@@ -197,7 +202,7 @@ class ByconBundler:
     #--------------------------------------------------------------------------#
 
     def analyses_frequencies_bundles(self):
-        self.__analysisBundleCreateIsets()
+        self.__fileAnalysisBundleCreateIsets()
         return self.intervalFrequenciesBundles
 
 
@@ -217,6 +222,7 @@ class ByconBundler:
     #--------------------------------------------------------------------------#
 
     def __deparse_pgxseg_samples_header(self):
+        dbm = f'... __deparse_pgxseg_samples_header'
         b_k_b = self.keyedBundle
         h_l = self.header
 
@@ -226,13 +232,14 @@ class ByconBundler:
             l = re.sub("#sample=>", "", l)
             bios_d = {}
             for p_v in l.split(";"):
+                if len(p_v.split("=")) < 2:
+                    continue
                 k, v = p_v.split("=")
                 v = re.sub(r'^[\'\"]', '', v)
                 v = re.sub(r'[\'\"]$', '', v)
                 bios_d.update({k:v})
             fieldnames = list(bios_d.keys())
-            bs_id = bios_d.get("biosample_id")
-            if bs_id is None:
+            if not (bs_id := bios_d.get("biosample_id")):
                 continue
 
             bios = {"id": bs_id} 
@@ -240,7 +247,7 @@ class ByconBundler:
             cs_id = bios.get("analysis_id", re.sub("pgxbs", "pgxcs", bs_id) )
             ind_id = bios.get("individual_id", re.sub("pgxbs", "pgxind", bs_id) )
             ind = {"id": ind_id} 
-            cs = {"id": cs_id, "biosample_id": bs_id, "individual_id": ind_id} 
+            cs = {"id": cs_id, "biosample_id": bs_id, "individual_id": ind_id}
 
             bios.update({"individual_id": ind_id})
 
@@ -336,7 +343,6 @@ class ByconBundler:
         GB = GenomeBins()
 
         for v in varlines:
-            # prdbug(f'... __keyed_bundle_add_variants_from_lines variant {self.data}')
             bs_id = v.get("biosample_id", "___none___")
 
             # If the biosample exists in metadata all the other items will exist by id
@@ -426,6 +432,28 @@ class ByconBundler:
             prdbug(f'... __analysisBundleCreateIsets {ds_id} => sample_count {cnv_ana_count} ...')
             
             self.intervalFrequenciesBundles.append(iset)
+
+
+    #--------------------------------------------------------------------------#
+
+    def __fileAnalysisBundleCreateIsets(self, label=""):
+        # self.dataset_ids = list(set([cs.get("dataset_id", "NA") for cs in self.bundle["analyses"]]))
+        ds_id = "file"
+        GB = GenomeBins()
+        dscs = self.bundle["analyses"]
+        intervals, cnv_ana_count = GB.intervalFrequencyMaps(dscs)
+        iset = {
+            "dataset_id": ds_id,
+            "group_id": ds_id,
+            "label": label,
+            "sample_count": cnv_ana_count,
+            "interval_frequencies": []
+        }
+        for intv_i, intv in enumerate(intervals):
+            iset["interval_frequencies"].append(intv.copy())
+        prdbug(f'... __analysisBundleCreateIsets {ds_id} => sample_count {cnv_ana_count} ...')
+        
+        self.intervalFrequenciesBundles.append(iset)
 
 
     #--------------------------------------------------------------------------#

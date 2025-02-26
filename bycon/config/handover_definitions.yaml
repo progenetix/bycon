@@ -111,40 +111,28 @@ h->o_types:
     output: ucsc
 
 # handover methods describe the source and target collections for stored
-# document identifiers (so far id, id or variant_internal_id). The source parameters are
-# used for creating a `distinct` operation for the `source_key` in the
-# `source_collection`, using a provided query.
+# document identifiers (so far id). The source parameters are
+# used for creating a `distinct` operation for the `id` in the
+# `collection`, using a provided query.
 
 h->o_methods:
   individuals.id:
-    source_collection: individuals
-    source_key: id
-    target_collection: individuals
-    target_entity: individual
-    target_key: id
-    mapped_key: individual_id
-    distinct_keys: ['id']
+    collection: individuals
+    entity_id: individual
+    mapped_id: individual_id
+    upstream_ids: []
   biosamples.id:
-    source_collection: biosamples
-    source_key: id
-    target_collection: biosamples
-    target_entity: biosample
-    target_key: id
-    mapped_key: biosample_id
-    distinct_keys: ['id', 'individual_id']
+    collection: biosamples
+    entity_id: biosample
+    mapped_id: biosample_id
+    upstream_ids: ['individual_id']
   analyses.id:
-    source_collection: analyses
-    source_key: id
-    target_collection: analyses
-    target_entity: analysis
-    target_key: id
-    mapped_key: analysis_id
-    distinct_keys: ['id', 'biosample_id', 'individual_id']
+    collection: analyses
+    entity_id: analysis
+    mapped_id: analysis_id
+    upstream_ids: ['biosample_id', 'individual_id']
   variants.id:
-    source_collection: variants
-    source_key: id
-    target_collection: variants
-    target_entity: genomicVariant
-    target_key: id
-    mapped_key: variant_id
-    distinct_keys: ['id', 'analysis_id', 'biosample_id', 'individual_id']
+    collection: variants
+    entity_id: genomicVariant
+    mapped_id: variant_id
+    upstream_ids: ['analysis_id', 'biosample_id', 'individual_id']

@@ -29,6 +29,7 @@ from bycon_cluster import ByconCluster
 class ByconPlotPars:
     def __init__(self):
         self.plot_type = BYC_PARS.get("plot_type", "histoplot")
+        prdbug(self.plot_type)
         self.plot_defaults = BYC.get("plot_defaults", {"parameters": {}})
         self.plot_variant_types = self.plot_defaults.get("plot_variant_types", {})
 
@@ -159,6 +160,7 @@ class ByconPlot:
     """
 
     def __init__(self, plot_data_bundle: dict):
+
         bpp = ByconPlotPars()
         self.plot_type = bpp.plotType()
         self.plot_type_defs = bpp.plotTypeDefinitions()

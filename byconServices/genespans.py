@@ -35,7 +35,10 @@ def genespans():
         results = GeneInfo().returnGene(gene_ids[0])
     else:
         gene_ids = BYC_PARS.get("gene_id", [])
+        # print(type(BYC_PARS.get("gene_id", [])))
         gene_id = gene_ids[0] if len(gene_ids) > 0 else None
+        # print(gene_id)
+        # exit()
         results = GeneInfo().returnGenelist(gene_id)
 
     BeaconErrorResponse().respond_if_errors()
@@ -43,6 +46,7 @@ def genespans():
     for gene in results:
         _gene_add_cytobands(gene)
 
+    # TODO: In some general method
     if len(d_k := BYC_PARS.get("delivery_keys", [])) > 0:
         for i, g in enumerate(results):
             g_n = {}
@@ -70,6 +74,7 @@ def genespans():
 ################################################################################
 
 def _gene_add_cytobands(gene):
+    # TODO: this should be a method in the GeneInfo class
 
     chro_names = ChroNames()
     gene.update({"cytobands": None})

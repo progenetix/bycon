@@ -1,5 +1,5 @@
 from bycon import *
-from byconServiceLibs import export_pgxseg_download
+from byconServiceLibs import PGXseg
 
 """
 The service uses the standard bycon data retrieval pipeline with `biosample`
@@ -14,4 +14,4 @@ the path is interpreted for an biosample `id` value if there is an entry at
 def pgxsegvariants():
     rss = ByconResultSets().datasetsResults()
     ds_id = list(rss.keys())[0]
-    export_pgxseg_download(rss, ds_id)
+    PGXseg(rss, ds_id).stream_pgxseg()

@@ -18,4 +18,4 @@ def sampletable():
     * http://progenetix.org/services/sampletable?filters=pgx:icdom-81703
     """
     fd = ByconResultSets().get_flattened_data()
-    ByconDatatableExporter().stream_datatable(fd)
+    ByconDatatableExporter(fd).stream_datatable()

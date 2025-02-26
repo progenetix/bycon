@@ -362,17 +362,16 @@ class ByconEntities:
         self.entity_defaults = BYC.get("entity_defaults", {})
         self.arg_defs = BYC["argument_definitions"].get("$defs", {})
         self.dealiased_path_ids = {}
-        self.request_entity_path_id = "info"
-        self.response_entity_path_id = "info"
+        self.request_entity_path_id = None
+        self.response_entity_path_id = None
         self.request_path_part = BYC_PARS.get("request_entity_path_id", "___none___")
         self.response_path_part = BYC_PARS.get("response_entity_path_id", "___none___")
         self.path_ids = BYC_PARS.get("path_ids", False)
-        self.request_entity_id = "info"
-        self.response_entity_id = "info"
+        self.request_entity_id = None
+        self.response_entity_id = None
         self.response_entity = {}
 
         self.__map_entity_aliases()
-        self.__harmonize_path_ids()
         self.__assign_entities()
         self.__path_ids_to_pars()
 
@@ -403,19 +402,16 @@ class ByconEntities:
                 self.dealiased_path_ids.update({p_id: e})
             for p_a_s in e_d.get("request_entity_path_aliases", []):
                 self.dealiased_path_ids.update({p_a_s: e})
-
-    # -------------------------------------------------------------------------#
-
-    def __harmonize_path_ids(self):
-        """
-        The default entyity id is mapped to the path id and its aliases.
-        """
         if self.request_path_part in self.dealiased_path_ids.keys():
             self.request_entity_path_id = self.request_path_part
+        else:
+            self.request_entity_path_id = "info" 
+
+        """
+        A response_path_id is assigned if a separate response path was provided
+        """
         if self.response_path_part in self.dealiased_path_ids.keys():
             self.response_entity_path_id = self.response_path_part
-        else:
-            self.response_entity_path_id = self.request_entity_path_id
 
 
     # -------------------------------------------------------------------------#
@@ -423,15 +419,23 @@ class ByconEntities:
     def __assign_entities(self):
         # entity retrieval from path ids
         self.request_entity_id = self.dealiased_path_ids.get(self.request_entity_path_id)
-        self.response_entity_id = self.dealiased_path_ids.get(self.response_entity_path_id)
-
         # get entity definitions 
         self.request_entity = self.entity_defaults.get(self.request_entity_id)
-        self.response_entity = self.entity_defaults.get(self.response_entity_id)
-
         # re-assign the default path
         if (dp := self.request_entity.get("request_entity_path_id")):
             self.request_entity_path_id = dp
+
+        if not self.response_entity_path_id:
+            # in byconServices there are default standard entitys for some requests
+            if (rpid := self.request_entity.get("response_entity_path_alias")):
+                self.response_entity_path_id = rpid
+            else:
+                # fallback to the standard "no different response entity" case
+                self.response_entity_path_id = self.request_entity_path_id
+
+
+        self.response_entity_id = self.dealiased_path_ids.get(self.response_entity_path_id)
+        self.response_entity = self.entity_defaults.get(self.response_entity_id)
 
 
     # -------------------------------------------------------------------------#
@@ -542,8 +546,8 @@ class ByconDatasets:
         h_o = ho_client[HOUSEKEEPING_DB][HOUSEKEEPING_HO_COLL].find_one({"id": accessid})
         if not h_o:
             return
-        ds_id = h_o.get("source_db", False)
-        if (ds_id := str(h_o.get("source_db"))) not in self.database_names:
+        ds_id = h_o.get("ds_id", False)
+        if (ds_id := str(h_o.get("ds_id"))) not in self.database_names:
             return
         self.dataset_ids = [ds_id]
 
@@ -721,6 +725,8 @@ class RefactoredValues():
     # -------------------------------------------------------------------------#
 
     def __object_to_string(self, defs, value):
+        if type(value) != dict:
+            return ""
         o_p = defs.get("parameters", ["id", "label"])
         o_s = defs.get("split_by", "::")
         s_l = []

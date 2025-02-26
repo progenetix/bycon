@@ -20,8 +20,7 @@ def endpoints():
     * <https://progenetix.org/services/endpoints/biosamples>
     """
     # TODO: This needs some error fallback, test for existing entities etc.
-    schema_name = ByconParameters().rest_path_value("endpoints")
-    if schema_name:
+    if (schema_name := ByconParameters().rest_path_value("endpoints")):
         p = path.join( PKG_PATH, "schemas", "models", "src", "bycon-model", schema_name, "endpoints.yaml")
     else:
         p = path.join( PKG_PATH, "schemas", "models", "src", "bycon-model", "endpoints.yaml")

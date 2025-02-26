@@ -12,13 +12,9 @@ byconschemas:
 cnvstats:
   request_entity_path_id: cnvstats
   request_entity_id: analysis
-  response_entity_id: analysis
-  response_entity_path_id: analyses
+  response_entity_path_alias: analyses
   collection: analyses
   response_schema: beaconResultsetsResponse
-  beacon_schema:
-    entity_type: analysis
-    schema: https://progenetix.org/services/schemas/analysis/
   path_id_value_bycon_parameter: analysis_id
 
 collationplots:
@@ -115,7 +111,7 @@ pgxsegvariants:
   request_entity_path_id: pgxsegvariants
   request_entity_id: biosample
   response_entity_id: genomicVariant
-  response_entity_path_id: genomicVariations
+  response_entity_path_alias: genomicVariations
   response_schema: beaconResultsetsResponse
   request_entity_path_aliases:
     - pgxseg
@@ -136,7 +132,8 @@ samplemap:
   request_entity_path_id: samplemap
   request_entity_id: biosample
   response_entity_id: biosample
-  response_entity_path_id: biosamples
+  response_entity_path_alias: biosamples
+  h->o_access_key: biosamples.id
   collection: biosamples
   response_schema: beaconResultsetsResponse
   path_id_value_bycon_parameter: biosample_ids
@@ -145,6 +142,7 @@ samplematrix:
   request_entity_path_id: samplematrix
   request_entity_id: biosample
   response_entity_id: biosample
+  h->o_access_key: biosamples.id
   collection: biosamples
   response_schema: beaconResultsetsResponse
   path_id_value_bycon_parameter: biosample_ids
@@ -154,6 +152,7 @@ sampletable:
   request_entity_id: biosample
   response_entity_id: biosample
   collection: biosamples
+  h->o_access_key: biosamples.id
   response_schema: beaconResultsetsResponse
   path_id_value_bycon_parameter: biosample_ids
 
@@ -163,6 +162,7 @@ sampleplots:
   response_entity_id: biosample
   request_entity_path_aliases:
     - samplesPlotter
+  h->o_access_key: biosamples.id
   beacon_schema:
     entity_type: SVG
     schema: NA
@@ -190,7 +190,7 @@ vcfvariants:
   response_entity_id: genomicVariant
   collection: variants
   response_schema: beaconResultsetsResponse
-  h->o_access_key: variants._id
+  h->o_access_key: variants.id
   beacon_schema:
     entity_type: VCF
     schema: https://samtools.github.io/hts-specs/VCFv4.4.pdf

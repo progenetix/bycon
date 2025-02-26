@@ -85,6 +85,7 @@ class MultiQueryResponses():
 class BeaconResponseMeta:
     def __init__(self, data_response=None):
         self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
+        self.entity_defaults = BYC.get("entity_defaults", {})
         self.response_meta = ByconSchemas("beaconResponseMeta", "").get_schema_instance()
         self.data_response = data_response
         self.record_queries = None
@@ -113,7 +114,7 @@ class BeaconResponseMeta:
             r_m.update({"test_mode": BYC["TEST_MODE"]})
         r_m.update({"returned_granularity": BYC["returned_granularity"]})
 
-        info = BYC["entity_defaults"]["info"].get("content", {"api_version": "___none___"})
+        info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
         for p in ["api_version", "beacon_id"]:
             if p in info.keys():
                 r_m.update({p: info.get(p, "___none___")})
@@ -165,7 +166,7 @@ class BeaconResponseMeta:
             if q in BYC_PARS:
                 r_r_s.update({"request_parameters": always_merger.merge( r_r_s.get("request_parameters", {}), { "cohort_ids": BYC_PARS.get(q) })})
 
-        info = BYC["entity_defaults"]["info"].get("content", {"api_version": "___none___"})
+        info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
         for p in ["api_version", "beacon_id"]:
             r_r_s.update({p: info.get(p, "___none___")})
 
@@ -303,7 +304,6 @@ class BeaconDataResponse:
 
     def dataResponseFromEntry(self):
         rp_id = self.response_entity_id
-        prdbug(self.response_schema)
         if "beaconResultsetsResponse" in self.response_schema:
             return self.resultsetResponse()
         if "beaconCollectionsResponse" in self.response_schema:
@@ -349,10 +349,10 @@ class BeaconDataResponse:
         if not "beaconCollectionsResponse" in BYC["response_schema"]:
             return
 
-        colls, queries = ByconCollections().populatedCollections()
-        colls = self.__collections_response_remap_cohorts(colls)
-        self.data_response["response"].update({"collections": colls})
-        self.record_queries.update({"entities": queries})
+        self.colls, self.queries = ByconCollections().populatedCollections()
+        self.__collections_response_remap_cohorts()
+        self.data_response["response"].update({"collections": self.colls})
+        self.record_queries.update({"entities": self.queries})
         self.__collections_response_update_summaries()
         self.__check_switch_to_error_response()
         self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta(self.record_queries) })
@@ -427,11 +427,11 @@ class BeaconDataResponse:
 
     # -------------------------------------------------------------------------#
 
-    def __collections_response_remap_cohorts(self, colls=[]):
+    def __collections_response_remap_cohorts(self):
         if not "cohort" in BYC.get("response_entity_id", "___none___"):
             return colls
         pop_keys = ["_id", "child_terms", "code_matches", "count", "dataset_id", "db_key", "namespace_prefix", "type", "collation_type", "hierarchy_paths", "parent_terms", "scope"]
-        for c in colls:
+        for c in self.colls:
             c_k = f'{c.get("scope", "")}.{c.get("db_key", "")}'
             c.update({
                 "id": c.get("id", "___none___"),
@@ -446,8 +446,6 @@ class BeaconDataResponse:
             })
             for k in pop_keys:
                 c.pop(k, None)
-
-        return colls
 
 
     # -------------------------------------------------------------------------#
@@ -788,6 +786,8 @@ class ByconResultSets:
         self.__retrieve_datasets_data()
         self.__retrieve_variants_data()
 
+        prdbug(self.datasets_data)
+
         for ds_id, data in self.datasets_data.items():
             for r in data:
                 r.update({"dataset_id": ds_id})
@@ -909,18 +909,18 @@ class ByconResultSets:
         if "variant" in self.response_entity_id.lower():
             return
 
-        e_d_s = BYC["entity_defaults"].get(self.response_entity_id, {})
+        e_d_s = self.entity_defaults.get(self.response_entity_id, {})
 
         ds_d_start = datetime.now()
         for ds_id, ds_results in self.datasets_results.items():
             if not ds_results:
                 continue
             if (h_o_k := e_d_s.get("h->o_access_key", "___none___")) not in ds_results.keys():
+                prdbug(f'h_o_k .... {h_o_k}')
                 continue
             res = ds_results.get(h_o_k, {})
-            q_k = res.get("target_key", "id")
-            q_db = res.get("source_db", "___none___")
-            q_coll = res.get("target_collection", "___none___")
+            q_db = res.get("ds_id", "___none___")
+            q_coll = res.get("collection", "___none___")
             q_v_s = res.get("target_values", [])
             q_v_s = return_paginated_list(q_v_s, self.skip, self.limit)
 
@@ -929,7 +929,7 @@ class ByconResultSets:
 
             r_s_res = []
             for q_v in q_v_s:
-                o = data_coll.find_one({q_k: q_v })
+                o = data_coll.find_one({"id": q_v })
                 r_s_res.append(o)
             self.datasets_data.update({ds_id: r_s_res})
 
@@ -992,7 +992,7 @@ class ByconResultSets:
                     continue
                 collection = h_o_k.split('.')[0]
                 info["counts"].update({collection: h_o["target_count"]})
-                entity = h_o.get("target_entity", "___none___")
+                entity = h_o.get("entity_id", "___none___")
                 if entity == self.response_entity_id:
                     rs_c = h_o["target_count"]
             self.result_sets[i].update({

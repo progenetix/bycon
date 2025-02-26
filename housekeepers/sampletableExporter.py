@@ -4,4 +4,4 @@ from bycon import *
 from byconServiceLibs import ByconDatatableExporter, ByconDatatableExporter
 
 fd = ByconResultSets().get_flattened_data()
-ByconDatatableExporter().export_datatable(fd)
+ByconDatatableExporter(fd).export_datatable()

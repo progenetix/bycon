@@ -227,12 +227,14 @@ The minimal variant length in bases e.g. for CNV queries.
 The maximum variant length in bases e.g. for CNV queries.    
 
 #### `gene_id` 
-**type:** string    
-**pattern:** `^\w+?(\w+?(\-\w+?)?)?$`    
+**type:** array    
+**items:**  
+    - `pattern`: `^\w+?(\w+?(\-\w+?)?)?$`      
+    - `type`: `string`    
 **db_key:** None    
 **cmdFlags:** `--geneId`    
 **description:**
-gene id    
+one or more (comma concatenated) gene ids    
 
 #### `aminoacid_change` 
 **type:** string    

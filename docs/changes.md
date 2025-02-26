@@ -7,6 +7,30 @@ push releases out for all of them; they serve more as internal development
 milestones.
 
 
+### 2025-02-26 (v2.2.3)
+
+* streamlining of internal data retrieval; now the storage objects for
+  the matched ids are generated at the end of the rewritten query execution pipeline
+* `PGXseg class`
+    - for now only export handling
+    - to be expanded fro file reading
+    - needs template based parameter mapping & re-use of `__table_line_from_pgxdoc`
+      method from `ByconDatatableExporter` etc.
+    - additional fixes in the ByconBundler class for handling pgzseg imports
+      (some of it will be refactored to PGXseg later on)
+* `PGXfreq` class, used to export CNV frequency files (list or matrix)
+* fixed gene position retrieval and `geneId` based queries
+    - now able to handle multi-gene queries though additional constraints (size,
+      CNV class) are the same for all genes
+        * (beacon/biosamples/?geneId=CDKN2A,TP53&variantMinLength=10000&variantMaxLength=20000000&variantType=DEL&filters=NCIT:C3510)[http://progenetix.org/beacon/biosamples/?geneId=CDKN2A,TP53&variantMinLength=10000&variantMaxLength=20000000&variantType=DEL&filters=NCIT:C3510]
+
+
+### 2025-02-21 (v2.2.2)
+
+* fixed data retrieval for some services where the handover key wasn't defined
+  for the specific service (e.g. samplemap) and the previous complex remapping
+  had be removed
+
 ### 2025-02-21 (v2.2.1)
 
 This is a test run for a major query module change:

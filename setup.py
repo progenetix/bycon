@@ -8,10 +8,9 @@ import pathlib
 
 here = pathlib.Path(__file__).parent.resolve()
 long_description = (here / "README.md").read_text(encoding="utf-8")
-
 setup(
     name="bycon",
-    version="2.2.1",
+    version="2.2.3",
     description="A Python-based environment for the Beacon v2 genomics API",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -47,3 +46,4 @@ setup(
         "Helpers": "https://github.com/progenetix/byconaut/",
     },
 )
+

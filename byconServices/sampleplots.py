@@ -34,19 +34,17 @@ def sampleplots():
     file_id = str(BYC_PARS.get("file_id", "___no-input-file___"))
     inputfile = Path( path.join( *BYC["local_paths"][ "server_tmp_dir_loc" ], file_id ) )
 
-    pb = ByconBundler()
+    BB = ByconBundler()
     if inputfile.is_file():
-        pdb = pb.pgxseg_to_plotbundle(inputfile)
+        pdb = BB.pgxseg_to_plotbundle(inputfile)
     else:
         RSS = ByconResultSets().datasetsResults()
-        pdb = pb.resultsets_frequencies_bundles(RSS)
+        pdb = BB.resultsets_frequencies_bundles(RSS)
         # getting the variants for the samples is time consuming so only optional
         if "samples" in ByconPlotPars().plotType():
             pdb.update( ByconBundler().resultsets_analysis_bundles(RSS) )
-
-    svg_f = ExportFile("svg").check_outputfile_path()
     BP = ByconPlot(pdb)
-    if svg_f:
+    if (svg_f := ExportFile("svg").check_outputfile_path()):
         BP.svg2file(svg_f)
     else:
         BP.svgResponse()
