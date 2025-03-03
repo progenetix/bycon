@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="//pagecdn.io/lib/swagger-ui/v3.31.1/swagger-ui.css">
+<link rel="stylesheet" type="text/css" href="/swagger/swagger-ui.css">
 <title>OpenAPI Progenetix Beacon Test</title>
 <body>
 <div id="openapi">
-<script src="//pagecdn.io/lib/swagger-ui/v3.31.1/swagger-ui-bundle.js"></script>
+<script src="/swagger/swagger-ui-bundle.js"></script>
 <script>
 window.onload = function () {
   const ui = SwaggerUIBundle({
