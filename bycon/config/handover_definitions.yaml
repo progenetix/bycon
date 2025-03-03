@@ -109,30 +109,3 @@ h->o_types:
     h->o_key: 'variants.id'
     script_path_web: '/services/variantsbedfile'
     output: ucsc
-
-# handover methods describe the source and target collections for stored
-# document identifiers (so far id). The source parameters are
-# used for creating a `distinct` operation for the `id` in the
-# `collection`, using a provided query.
-
-h->o_methods:
-  individuals.id:
-    collection: individuals
-    entity_id: individual
-    mapped_id: individual_id
-    upstream_ids: []
-  biosamples.id:
-    collection: biosamples
-    entity_id: biosample
-    mapped_id: biosample_id
-    upstream_ids: ['individual_id']
-  analyses.id:
-    collection: analyses
-    entity_id: analysis
-    mapped_id: analysis_id
-    upstream_ids: ['biosample_id', 'individual_id']
-  variants.id:
-    collection: variants
-    entity_id: genomicVariant
-    mapped_id: variant_id
-    upstream_ids: ['analysis_id', 'biosample_id', 'individual_id']

@@ -1,7 +1,12 @@
 ################################################################################
 # byconServices modules & their path values
-# the keys correspond to the names of byconServices modules
+#
+# * keys correspond to the names of byconServices modules
+#
 ################################################################################
+
+
+## Special services which have their own entities / output formats
 
 byconschemas:
   request_entity_path_aliases:
@@ -11,33 +16,31 @@ byconschemas:
 
 cnvstats:
   request_entity_path_id: cnvstats
-  request_entity_id: analysis
   response_entity_path_alias: analyses
   collection: analyses
   response_schema: beaconResultsetsResponse
-  path_id_value_bycon_parameter: analysis_id
+  path_id_value_bycon_parameter: analysis_ids
+
+collations:
+  request_entity_path_id: collations
+  response_entity_id: collation
+  collection: collations
+  request_entity_path_aliases:
+    - collations
+    - collation
+  response_schema: byconautServiceResponse
+  beacon_schema:
+    entity_type: Collation
+    schema: https://progenetix.org/services/schemas/Collation/
+  path_id_value_bycon_parameter: filters
 
 collationplots:
   request_entity_path_id: collationplots
-  request_entity_id: collation
   request_entity_path_aliases:
     - collationPlots
   beacon_schema:
     entity_type: SVG
     schema: NA
-  path_id_value_bycon_parameter: filters
-
-collations:
-  request_entity_path_id: collations
-  request_entity_id: collation
-  response_entity_id: collation
-  collection: collations
-  request_entity_path_aliases:
-    - collations
-  response_schema: byconautServiceResponse
-  beacon_schema:
-    entity_type: Collation
-    schema: https://progenetix.org/services/schemas/Collation/
   path_id_value_bycon_parameter: filters
 
 cytomapper:
@@ -99,24 +102,11 @@ intervalFrequencies:
   path_id_value_bycon_parameter: filters
 
 ontologymaps:
-  request_entity_id: ontologymaps
-  response_entity_id: ontologymaps
   request_entity_path_id: ontologymaps
   request_entity_path_aliases:
     - ontologymaps
     - ontologyMaps
   path_id_value_bycon_parameter: filters
-
-pgxsegvariants:
-  request_entity_path_id: pgxsegvariants
-  request_entity_id: biosample
-  response_entity_id: genomicVariant
-  response_entity_path_alias: genomicVariations
-  response_schema: beaconResultsetsResponse
-  request_entity_path_aliases:
-    - pgxseg
-  # TODO: change? a bit non-standard... 
-  path_id_value_bycon_parameter: biosample_ids
 
 publications:
   request_entity_path_id: publications
@@ -128,55 +118,65 @@ publications:
     schema: https://progenetix.org/services/schemas/Publication/
   path_id_value_bycon_parameter: filters
 
+uploader:
+  request_entity_path_id: uploader
+
+
+################################################################################
+#
+# Services that provide alternative outputs for  Beacon entities
+#
+# The response entity is derived from the `response_entity_path_alias` which
+# invokes the `response_entity_path_id` in the default entity definitions.
+#
+################################################################################
+
+
+pgxsegvariants:
+  request_entity_path_id: pgxsegvariants
+  response_entity_path_alias: g_variants
+  response_schema: beaconResultsetsResponse
+  request_entity_path_aliases:
+    - pgxseg
+  # TODO: change? a bit non-standard... 
+  path_id_value_bycon_parameter: biosample_ids
+
 samplemap:
   request_entity_path_id: samplemap
-  request_entity_id: biosample
-  response_entity_id: biosample
   response_entity_path_alias: biosamples
-  h->o_access_key: biosamples.id
   collection: biosamples
   response_schema: beaconResultsetsResponse
   path_id_value_bycon_parameter: biosample_ids
 
 samplematrix:
   request_entity_path_id: samplematrix
-  request_entity_id: biosample
-  response_entity_id: biosample
-  h->o_access_key: biosamples.id
+  response_entity_path_alias: biosamples
   collection: biosamples
   response_schema: beaconResultsetsResponse
   path_id_value_bycon_parameter: biosample_ids
 
 sampletable:
   request_entity_path_id: sampletable
-  request_entity_id: biosample
-  response_entity_id: biosample
+  response_entity_path_alias: biosamples
   collection: biosamples
-  h->o_access_key: biosamples.id
   response_schema: beaconResultsetsResponse
   path_id_value_bycon_parameter: biosample_ids
 
 sampleplots:
   request_entity_path_id: sampleplots
-  request_entity_id: biosample
-  response_entity_id: biosample
+  response_entity_path_alias: biosamples
   request_entity_path_aliases:
     - samplesPlotter
-  h->o_access_key: biosamples.id
   beacon_schema:
     entity_type: SVG
     schema: NA
   path_id_value_bycon_parameter: biosample_ids
 
-uploader:
-  request_entity_path_id: uploader
-
 variantsbedfile:
   request_entity_path_id: variantsbedfile
-  request_entity_id: genomicVariant
   collection: variants
   response_schema: beaconResultsetsResponse
-  response_entity_id: genomicVariant
+  response_entity_path_alias: g_variants
   beacon_schema:
     entity_type: BED
     schema: https://samtools.github.io/hts-specs/BEDv1.pdf
@@ -184,13 +184,11 @@ variantsbedfile:
 
 vcfvariants:
   request_entity_path_id: vcfvariants
-  request_entity_id: biosample  # currently not parsed
   request_entity_path_aliases:
     - vcf
-  response_entity_id: genomicVariant
+  response_entity_path_alias: g_variants
   collection: variants
   response_schema: beaconResultsetsResponse
-  h->o_access_key: variants.id
   beacon_schema:
     entity_type: VCF
     schema: https://samtools.github.io/hts-specs/VCFv4.4.pdf

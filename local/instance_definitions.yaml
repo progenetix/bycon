@@ -52,6 +52,18 @@ local:
           welcome_url: https://progenetix.org/biosamples/
           contact_url: mailto:contact@progenetix.org
           logoUrl: https://progenetix.org/img/progenetix-logo.png
+          location:
+            type: Feature
+            geometry:
+              type: Point
+              coordinates:
+                - 47.37
+                - 8.55
+            properties:
+              label: Winterthurerstrasse 190, Zurich, Switzerland
+              city: Zurich
+              country: Switzerland
+              ISO3166alpha3: CHE
           info:
             update_date_time: 2023-01-16T12:45:00
         create_date_time: 2015-11-13T00:00:00

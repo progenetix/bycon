@@ -623,4 +623,4 @@ $defs:
     cmdFlags:
       - --plotType
     description: plot type (histoplot, samplesplot, arrayplot - more?)
-    default:
+    default: histoplot

@@ -29,7 +29,7 @@ def read_service_definition_files():
         ofp = path.join(CONF_PATH, f'{d}.yaml' )
         with open( ofp ) as od:
             o = yaml.load( od , Loader=yaml.FullLoader)
-        BYC.update({d: o})
+        BYC.update({d: o})        
 
     e_d = always_merger.merge(
         BYC.get("entity_defaults", {}),

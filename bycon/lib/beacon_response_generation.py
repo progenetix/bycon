@@ -277,6 +277,8 @@ class BeaconInfoResponse:
             if e_d.get("is_beacon_entity", False) is True and e_t not in ets:
                 beacon_schemas.append(e_d.get("beacon_schema", {}))
                 ets.add(e_t)
+            else:
+                prdbug(f'... skipping {e_t} schema')
 
         self.data_response.update( { "returned_schemas": beacon_schemas } )
 
@@ -429,8 +431,8 @@ class BeaconDataResponse:
 
     def __collections_response_remap_cohorts(self):
         if not "cohort" in BYC.get("response_entity_id", "___none___"):
-            return colls
-        pop_keys = ["_id", "child_terms", "code_matches", "count", "dataset_id", "db_key", "namespace_prefix", "type", "collation_type", "hierarchy_paths", "parent_terms", "scope"]
+            return
+        pop_keys = ["_id", "frequencymap", "child_terms", "code_matches", "count", "dataset_id", "db_key", "namespace_prefix", "type", "collation_type", "hierarchy_paths", "parent_terms", "scope"]
         for c in self.colls:
             c_k = f'{c.get("scope", "")}.{c.get("db_key", "")}'
             c.update({
@@ -652,7 +654,6 @@ class ByconCollections:
         self.data_collection = BYC["response_entity"].get("collection", "collations")
         self.collections = []
         self.collections_queries = {}
-        return
 
 
     # -------------------------------------------------------------------------#
@@ -672,26 +673,20 @@ class ByconCollections:
     def __collections_return_datasets(self):
         if not "dataset" in self.response_entity_id:
             return
-        dbstats = self.__datasets_update_latest_stats()
-        self.collections = dbstats
+        self.__datasets_update_latest_stats()
         self.collections_queries.update({"datasets":{}})
-
-        return
 
 
     # -------------------------------------------------------------------------#
 
     def __datasets_update_latest_stats(self):
-        results = []
-        stat = []
-
         stats = MongoClient(host=DB_MONGOHOST)[HOUSEKEEPING_DB][HOUSEKEEPING_INFO_COLL].find( { }, { "_id": 0 } ).sort( {"date": -1} ).limit( 1 )
         stats = list(stats)
 
         if len(stats) > 0:
             stat = stats[0]
         else:
-            return results
+            return
         for coll_id, coll in BYC["dataset_definitions"].items():
             prdbug(f'... processing dataset {coll_id} => {BYC.get("BYC_DATASET_IDS", [])}')
             if not coll_id in BYC.get("BYC_DATASET_IDS", []):
@@ -705,9 +700,7 @@ class ByconCollections:
                 d = str(coll.get(t, "1967-11-11"))
                 if re.match(r'^\d\d\d\d\-\d\d\-\d\d$', d):
                     coll.update({t:f'{d}T00:00:00+00:00'})
-            results.append(coll)
-        return results
-
+            self.collections.append(coll)
 
     # -------------------------------------------------------------------------#
 
@@ -716,7 +709,6 @@ class ByconCollections:
             return
 
         # TODO: reshape cohorts according to schema
-        cohorts =  []
         query = { "collation_type": "pgxcohort" }
         limit = 0
         if BYC["TEST_MODE"] is True:
@@ -736,12 +728,9 @@ class ByconCollections:
             mongo_db = mongo_client[ ds_id ]        
             mongo_coll = mongo_db[ "collations" ]
             for cohort in mongo_coll.find( query, limit=limit ):
-                cohorts.append(cohort)
+                self.collections.append(cohort)
 
-        self.collections = cohorts
         self.collections_queries.update({"cohorts":query})
-
-        return
 
 
 ################################################################################
@@ -785,8 +774,6 @@ class ByconResultSets:
     def get_flattened_data(self):
         self.__retrieve_datasets_data()
         self.__retrieve_variants_data()
-
-        prdbug(self.datasets_data)
 
         for ds_id, data in self.datasets_data.items():
             for r in data:
@@ -843,7 +830,8 @@ class ByconResultSets:
 
     def __get_handover_access_key(self):
         e_d_s = self.entity_defaults.get(self.response_entity_id, {})
-        self.handover_key = e_d_s.get("h->o_access_key", "___none___")
+        coll = e_d_s.get("collection", "___none___")
+        self.handover_key = f'{coll}.id'
         return
 
 
@@ -915,10 +903,9 @@ class ByconResultSets:
         for ds_id, ds_results in self.datasets_results.items():
             if not ds_results:
                 continue
-            if (h_o_k := e_d_s.get("h->o_access_key", "___none___")) not in ds_results.keys():
-                prdbug(f'h_o_k .... {h_o_k}')
+            if self.handover_key not in ds_results.keys():
                 continue
-            res = ds_results.get(h_o_k, {})
+            res = ds_results.get(self.handover_key, {})
             q_db = res.get("ds_id", "___none___")
             q_coll = res.get("collection", "___none___")
             q_v_s = res.get("target_values", [])

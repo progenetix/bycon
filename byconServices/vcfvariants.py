@@ -1,5 +1,5 @@
 from bycon import BYC, ByconResultSets
-from byconServiceLibs import export_vcf_download
+from byconServiceLibs import PGXvcf
 
 ################################################################################
 
@@ -14,9 +14,5 @@ def vcfvariants():
 
     * http://progenetix.org/services/vcfvariants/pgxbs-kftvjv8w
     """
-    # TODO: Fix this, to be correctly read from services_entity_defaults
-    BYC.update({"request_entity_id": "biosample"})
-    rss = ByconResultSets().datasetsResults()
-    # Note: only the first dataset will be exported ...
-    ds_id = list(rss.keys())[0]
-    export_vcf_download(rss, ds_id)
+    f_d = ByconResultSets().get_flattened_data()
+    PGXvcf(f_d).stream_pgxvcf()

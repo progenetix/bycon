@@ -13,9 +13,22 @@ class ByconDatasetResults():
     def __init__(self, ds_id, BQ):
         self.dataset_results = {}
         self.dataset_id = ds_id
-        self.res_obj_defs = BYC["handover_definitions"]["h->o_methods"]
+        self.entity_defaults = BYC["entity_defaults"]
         self.res_ent_id = r_e_id = str(BYC.get("response_entity_id", "___none___"))
         self.data_db = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))[ds_id]
+
+        self.queried_entities = ["individual", "biosample", "analysis", "genomicVariant"]
+
+        self.res_obj_defs = {}
+        for e in self.queried_entities:
+            e_d = self.entity_defaults.get(e, {})
+            c = e_d.get("collection", "___none___")
+            self.res_obj_defs.update({f'{c}.id': {
+                "collection": c,
+                "entity_id": e,
+                "id_parameter": f'{e}_id',
+                "upstream_ids": e_d.get("upstream_ids", [])
+            }})
 
         self.id_responses = {}
 
@@ -66,7 +79,7 @@ class ByconDatasetResults():
     def __prefetch_entity_multi_id_response(self, h_o_def, query):
         t_c = h_o_def.get("collection")
         d_k_s = h_o_def.get("upstream_ids", [])
-        m_k = h_o_def.get("mapped_id", "id")
+        m_k = h_o_def.get("id_parameter", "id")
 
         d_group = {'_id': 0, "distincts_id": {'$addToSet': f'$id'}} 
         for d_k in d_k_s:
@@ -128,7 +141,7 @@ class ByconDatasetResults():
 
     def __set_dataset_results(self):
         for h_o_k, h_o_def in self.res_obj_defs.items():
-            m_k = m_k = h_o_def.get("mapped_id", "id")
+            m_k = m_k = h_o_def.get("id_parameter", "id")
             e_r = {**h_o_def}
             if not (t_v_s := self.id_responses.get(m_k)):
                 continue

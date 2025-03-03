@@ -46,13 +46,13 @@ class ByconDatatableExporter:
         print(f'{self.__create_table_header()}\n')
         for pgxdoc in self.data:
             print(f'{self.__table_line_from_pgxdoc(pgxdoc)}\n')
-        exit()
 
 
     # -------------------------------------------------------------------------#
 
     def export_datatable(self, file_type=None):
         if not (table_file := ExportFile().check_outputfile_path()):
+            prdbug(ExportFile().check_outputfile_path())
             return
 
         t_f = open(table_file, "w")
@@ -60,7 +60,6 @@ class ByconDatatableExporter:
         for pgxdoc in self.data:
             t_f.write(f'{self.__table_line_from_pgxdoc(pgxdoc)}\n')
         t_f.close()
-        exit()
 
 
     # -------------------------------------------------------------------------#

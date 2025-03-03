@@ -19,6 +19,3 @@ page.
 
 The installation is documented [`on the website`](http://bycon.progenetix.org/installation/)
 (and in the page's Markdown [source here](./docs/installation.md)).
-
-Since version `1.0.55` (2023-06-22) additional "services" may be installed from
-the [`byconaut`](https://github.com/progenetix/byconaut/) repository.

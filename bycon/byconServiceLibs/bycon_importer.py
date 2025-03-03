@@ -210,6 +210,33 @@ class ByconImporter():
 
     #--------------------------------------------------------------------------#
 
+    def move_biosamples_and_downstream(self):
+        self.__prepare_biosamples()
+        self.target_db = BYC_PARS.get("output", "___none___")
+        self.downstream = ["analyses", "variants"]
+        self.__move_database_records()
+
+
+    #--------------------------------------------------------------------------#
+
+    def move_analyses_and_downstream(self):
+        self.__prepare_analyses()
+        self.target_db = BYC_PARS.get("output", "___none___")
+        self.downstream = ["variants"]
+        self.__move_database_records()
+
+
+    #--------------------------------------------------------------------------#
+
+    def move_individuals(self):
+        self.__prepare_individuals()
+        self.target_db = BYC_PARS.get("output", "___none___")
+        self.downstream = []
+        self.__move_database_records()
+
+
+    #--------------------------------------------------------------------------#
+
     def move_individuals_and_downstream_from_ds_results(self, dataset_results={}):
         self.__prepare_individuals()
 
@@ -398,7 +425,9 @@ class ByconImporter():
         iid = self.import_id
 
         if tds_id not in self.database_names:
-            print(f'¡¡¡ No existing target database defined using `--output` !!!')
+            print(f'No *existing* target database was defined using `--output`.')
+            print(f'You can create a database (here `{tds_id}`) by running a command like:\n')
+            print(f'mongosh --eval {"'"}db.placeholder.insertOne{"({"}"id":"dummy"{"})'"} {tds_id}')
             exit()
 
         source_coll = self.mongo_client[ds_id][icn]

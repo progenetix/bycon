@@ -364,8 +364,8 @@ class ByconEntities:
         self.dealiased_path_ids = {}
         self.request_entity_path_id = None
         self.response_entity_path_id = None
-        self.request_path_part = BYC_PARS.get("request_entity_path_id", "___none___")
-        self.response_path_part = BYC_PARS.get("response_entity_path_id", "___none___")
+        self.request_path_id_par = BYC_PARS.get("request_entity_path_id", "___none___")
+        self.response_path_id_par = BYC_PARS.get("response_entity_path_id", "___none___")
         self.path_ids = BYC_PARS.get("path_ids", False)
         self.request_entity_id = None
         self.response_entity_id = None
@@ -402,16 +402,16 @@ class ByconEntities:
                 self.dealiased_path_ids.update({p_id: e})
             for p_a_s in e_d.get("request_entity_path_aliases", []):
                 self.dealiased_path_ids.update({p_a_s: e})
-        if self.request_path_part in self.dealiased_path_ids.keys():
-            self.request_entity_path_id = self.request_path_part
+        if self.request_path_id_par in self.dealiased_path_ids.keys():
+            self.request_entity_path_id = self.request_path_id_par
         else:
             self.request_entity_path_id = "info" 
 
         """
         A response_path_id is assigned if a separate response path was provided
         """
-        if self.response_path_part in self.dealiased_path_ids.keys():
-            self.response_entity_path_id = self.response_path_part
+        if self.response_path_id_par in self.dealiased_path_ids.keys():
+            self.response_entity_path_id = self.response_path_id_par
 
 
     # -------------------------------------------------------------------------#

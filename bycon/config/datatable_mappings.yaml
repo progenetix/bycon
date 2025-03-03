@@ -131,7 +131,7 @@ $defs:
 
 #--------------------------- analysis & run -----------------------------------#
   
-  # analysis & run data are combined in th analysis object / analyses collection
+  # analysis & run data are combined in the analysis object / analyses collection
 
   analysis:
     type: object
@@ -141,7 +141,7 @@ $defs:
       - individual_id
     collection: analyses
     id_parameter: analysis_id
-    upstream:
+    upstream_colls:
       - individuals
       - biosamples
     parameters:
@@ -218,7 +218,7 @@ $defs:
       - individual_id
     collection: biosamples
     id_parameter: biosample_id
-    upstream:
+    upstream_colls:
       - individuals
     parameters:
       biosample_id:
@@ -448,7 +448,7 @@ $defs:
       - individual_id
     collection: individuals
     id_parameter: individual_id
-    upstream: []
+    upstream_colls: []
     parameters:
       individual_id:
         type: string
@@ -559,7 +559,7 @@ $defs:
       - individual_id
     collection: variants
     id_parameter: variant_id
-    upstream:
+    upstream_colls:
       - analyses
       - individuals
       - biosamples

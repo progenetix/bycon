@@ -7,9 +7,6 @@ dataset:
   beacon_schema:
     entity_type: dataset
     schema: https://progenetix.org/services/schemas/dataset/
-  pagination:
-    skip: 0
-    limit: 10
   is_beacon_entity: true
   path_id_value_bycon_parameter: dataset_ids
   examples:
@@ -19,7 +16,7 @@ dataset:
       test_values:
         testMode: true
 
-##############################################################################
+################################################################################
 
 cohort:
   request_entity_path_id: cohorts
@@ -30,9 +27,6 @@ cohort:
   beacon_schema:
     entity_type: cohort
     schema: https://progenetix.org/services/schemas/cohort/
-  pagination:
-    skip: 0
-    limit: 10
   is_beacon_entity: true
   path_id_value_bycon_parameter: filters
   tests:
@@ -57,7 +51,10 @@ genomicVariant:
   beacon_schema:
     entity_type: genomicVariant
     schema: https://progenetix.org/services/schemas/genomicVariant/
-  h->o_access_key: variants.id
+  upstream_ids:
+    - analysis_id
+    - biosample_id
+    - individual_id
   is_beacon_entity: true
   path_id_value_bycon_parameter: variant_ids
   examples:
@@ -84,7 +81,9 @@ analysis:
   beacon_schema:
     entity_type: analysis
     schema: https://progenetix.org/services/schemas/analysis/
-  h->o_access_key: analyses.id
+  upstream_ids:
+    - biosample_id
+    - individual_id
   is_beacon_entity: true
   path_id_value_bycon_parameter: analysis_ids
   tests:
@@ -106,7 +105,6 @@ run:
   beacon_schema:
     entity_type: run
     schema: https://progenetix.org/services/schemas/run/
-  h->o_access_key: analyses.id
   is_beacon_entity: true
   path_id_value_bycon_parameter: run_ids
   tests:
@@ -130,7 +128,8 @@ biosample:
   beacon_schema:
     entity_type: biosample
     schema: https://progenetix.org/services/schemas/biosample/
-  h->o_access_key: biosamples.id
+  upstream_ids:
+    - individual_id
   is_beacon_entity: true
   path_id_value_bycon_parameter: biosample_ids
   examples:
@@ -156,7 +155,7 @@ individual:
   beacon_schema:
     entity_type: individual
     schema: https://progenetix.org/services/schemas/individual/
-  h->o_access_key: individuals.id
+  upstream_ids: []
   is_beacon_entity: true
   path_id_value_bycon_parameter: individual_ids
   examples:
@@ -185,7 +184,6 @@ phenopacket:
   beacon_schema:
     entity_type: phenopacket
     schema: https://progenetix.org/services/schemas/phenopacket/
-  h->o_access_key: individuals.id
   is_beacon_entity: true
   path_id_value_bycon_parameter: individual_ids
   examples:

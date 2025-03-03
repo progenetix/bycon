@@ -85,6 +85,21 @@ class ByconPlotPars:
 
     # -------------------------------------------------------------------------#
 
+    def plotVariantColors(self):
+        var_cols = {}
+        for v_t, v_d in self.plot_variant_types.items():
+            c_k = v_d.get("color_key", "___none___")
+            hex_c = self.plv.get(c_k, "#808080")
+            rgb_c = list(ImageColor.getcolor(hex_c, "RGB"))
+            var_cols.update({
+                v_t: {"rgb_col": rgb_c, "hex_col": hex_c, "label": v_d.get("label", "___none___")}
+
+            })
+        return var_cols
+
+
+    # -------------------------------------------------------------------------#
+
     def plotParameters(self, modded={}):
         for m_k, m_v in modded.items():
             self.plv.update({m_k: m_v})
@@ -616,7 +631,6 @@ class ByconPlot:
                 )
                 self.plv["pls"].append(lab)
 
-
         labs.append(0)
 
         for chro in self.plv["plot_chros"]:
@@ -685,12 +699,10 @@ class ByconPlot:
 
             chr_cb_s = list(filter(lambda d: d["chro"] == chro, self.cytobands.copy()))
 
-            last = len(chr_cb_s) - 1
-            this_n = 0
+            last = len(chr_cb_s)
 
-            for cb in chr_cb_s:
+            for this_n, cb in enumerate(chr_cb_s, start=1):
 
-                this_n += 1
                 s_b = cb["start"]
                 e_b = cb["end"]
                 c = cb["staining"]

@@ -20,8 +20,11 @@ from bycon import (
 
 services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 sys.path.append( services_lib_path )
+from bycon_plot import ByconPlotPars
 from interval_utils import GenomeBins
 from datatable_utils import get_nested_value
+from service_helpers import ByconID
+
 
 ################################################################################
 
@@ -164,9 +167,9 @@ class PGXseg:
             return
         bs_coll = self.mongo_client[self.ds_id]["biosamples"]
         for bs_id in bios_ids:
-            if not (bs := bs_coll.find_one( {"id": bs_id})):
+            if not (bios := bs_coll.find_one( {"id": bs_id})):
                 continue
-            line = self.__bios_meta_line(bs)
+            line = self.__bios_meta_line(bios)
             self.output_lines.append(";".join(line))
 
 
@@ -176,7 +179,7 @@ class PGXseg:
         line = [f'#sample=>id={bios.get("id", "___undefined___")}']
         for par, par_defs in self.bios_pars.items():
             db_key = par_defs.get("db_key", "___undefined___")
-            v = get_nested_value(bs, db_key)
+            v = get_nested_value(bios, db_key)
             v = RefactoredValues(par_defs).strVal(v)
             if len(v) > 0:
                 line.append(f'{par}={v}')
@@ -229,6 +232,158 @@ class PGXseg:
 ################################################################################
 ################################################################################
 
+class PGXbed:
+    """
+    ##### Accepts
+
+    * a Bycon flattened data object, _i.e._ a list of matched variants.
+        
+    The function creates a basic BED file and returns its local path. A standard 
+    use would be to create a link to this file and submit it as `hgt.customText` 
+    parameter to the UCSC browser.
+
+    ##### TODO
+
+    * evaluate to use "bedDetails" format
+
+    """
+    def __init__(self, flattened_data=[]):
+        self.flattened_data = flattened_data
+        self.filename = f"variants-{ByconID(0).makeID()}.bed"
+        self.flavour = BYC_PARS.get("output", "ucsc").lower()
+        self.output_lines = []
+        self.ucsc_link = f'http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg38'
+        self.tmp_path = path.join(*BYC["local_paths"]["server_tmp_dir_loc"])
+        web_root = BYC["local_paths"].get("server_tmp_dir_web", "/tmp")
+        self.bed_url = f'{select_this_server()}{web_root}'
+        self.var_cols = ByconPlotPars().plotVariantColors()
+        self.var_count = len(self.flattened_data)
+        self.starts_ends = []
+        self.chro = ""
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def stream_pgxbed(self):
+        if "igv" in self.flavour:
+            self.__add_igv_variants()
+        else:
+            self.__add_ucsc_variants()
+        open_text_streaming(self.filename)
+        for l in self.output_lines:
+            print(l)
+        return
+
+
+    #--------------------------------------------------------------------------#
+
+    def bed_ucsc_link(self):
+        self.__add_ucsc_variants()
+        self.__write_bed_file()
+        self.ucsc_link += f'&position={self.chro}:{min(self.starts_ends)}-{max(self.starts_ends)}&hgt.customText={self.bed_url}'
+        return self.ucsc_link
+
+
+    #--------------------------------------------------------------------------#
+
+    def bedfile_link(self):
+        if "igv" in self.flavour:
+            self.__add_igv_variants()
+        else:
+            self.__add_ucsc_variants()
+        self.__write_bed_file()
+        return self.bed_url
+
+
+    # -------------------------------------------------------------------------#
+    # ---------------------------- private ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __add_igv_variants(self):
+        self.output_lines.append(f"ID\tchrom\tloc.start\tloc.end\tnum.mark\tseg.mean")
+        # TODO: sort?
+        for v in self.flattened_data:
+            self.__variant_igv_line(v)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __variant_igv_line(self, v):
+        l = v.get("location", {})
+        chro = l.get("chromosome", "___none___")
+        start = l.get("start", 0) + 1
+        end = l.get("end", 1)
+        logv = v.get("info", {}).get("cnv_value", "")
+        self.output_lines.append(f'{v.get("biosample_id", "___none___")}\t{chro}\t{start}\t{end}\t\t{logv}')
+        # TODO: this obviously doesn't work for multiple chromosomes in the same track
+        if len(self.chro) < 1:
+            self.chro = chro
+
+
+    # -------------------------------------------------------------------------#
+
+    def __add_ucsc_variants(self):
+        for variant_type, v_c_d in self.var_cols.items():
+            t_v_s = [v for v in self.flattened_data if v.get("variant_state", {}).get("id", "___none___") == variant_type]
+            if len(t_v_s) < 1:
+                continue
+            t_w_l = []
+            for v in t_v_s:
+                if not (l := v.get("location")):
+                    continue
+                v.update({"variant_length": int(l.get("end", 1)) - int(l.get("start", 0))})
+                t_w_l.append(v)
+            t_w_l = sorted(t_w_l, key=lambda k: k['variant_length'], reverse=True)
+            col = self.var_cols[variant_type].get("rgb_col", [0, 0, 0])
+            label = self.var_cols[variant_type].get("label", variant_type)
+            self.output_lines.append(f"track name={variant_type} visibility=squish description=\"{label} variants\" color={col[0]},{col[1]},{col[2]}")
+            self.output_lines.append(f"#chrom\tchromStart\tchromEnd\tbiosampleId")
+            for v in t_w_l:
+                self.__variant_ucsc_line(v)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __variant_ucsc_line(self, v):
+        l = v.get("location", {})
+        chro = l.get("chromosome", "___none___")
+        start = l.get("start", 0)
+        end = l.get("end", 0)
+        self.starts_ends.append(start)
+        self.starts_ends.append(end)
+        self.output_lines.append(f'{chro}\t{start}\t{end}\t{v.get("biosample_id", "___none___")}')
+        # TODO: this obviously doesn't work for multiple chromosomes in the same track
+        if len(self.chro) < 1:
+            self.chro = chro
+
+
+    # -------------------------------------------------------------------------#
+
+    def __write_bed_file(self):
+        if not self.__check_file():
+            return False
+        with open(self.bed_file, 'w') as b_f:
+            for l in self.output_lines:
+                b_f.write(f'{l}\n')
+        self.bed_url += f'/{self.filename}'
+        return True
+
+
+    # -------------------------------------------------------------------------#
+
+    def __check_file(self):
+        if not path.isdir(self.tmp_path):
+            BYC["ERRORS"].append(f"Temporary directory `{self.tmp_path}` not found.")
+            return False
+        self.bed_file = path.join(self.tmp_path, self.filename)
+        return True
+
+################################################################################
+################################################################################
+################################################################################
+
 def __pgxmatrix_interval_header(info_columns):
     GBins = GenomeBins().get_genome_bins()
     int_line = info_columns.copy()
@@ -250,106 +405,6 @@ def print_filters_meta_line():
     print("#meta=>filters="+','.join(f_vs))
 
 
-################################################################################
-
-def write_variants_bedfile(datasets_results, ds_id):
-    """
-    ##### Accepts
-
-    * a Bycon `h_o` handover object with its `target_values` representing `_id` 
-    objects of a `variants` collection
-        
-    The function creates a basic BED file and returns its local path. A standard 
-    use would be to create a link to this file and submit it as `hgt.customText` 
-    parameter to the UCSC browser.
-
-    ##### TODO
-
-    * The creation of the different variant types is still rudimentary and has to be 
-    expanded in lockstep with improving Beacon documentation and examples. The 
-    definition of the types and their match patterns should also be moved to a 
-    +separate configuration entry and subroutine.
-    * evaluate to use "bedDetails" format
-
-    """
-    if not (local_paths := BYC.get("local_paths")):
-        return False
-    tmp_path = path.join( *local_paths[ "server_tmp_dir_loc" ])
-    if not path.isdir(tmp_path):
-        BYC["ERRORS"].append(f"Temporary directory `{tmp_path}` not found.")
-        return False
-    h_o_server = select_this_server()
-    ext_url = f'http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg38'
-    bed_url = f'{h_o_server}/'
-
-    vs = { "DUP": [ ], "DEL": [ ], "LOH": [ ], "SNV": [ ]}
-    colors = {
-        "plot_DUP_color": (255, 198, 51),
-        "plot_AMP_color": (255,102,0),
-        "plot_DEL_color": (51, 160, 255),
-        "plot_HOMODEL_color": (0, 51, 204),
-        "plot_LOH_color": (102, 170, 153),
-        "plot_SNV_color": (255, 51, 204)
-    }
-
-    data_client = MongoClient(host=DB_MONGOHOST)
-    v_coll = data_client[ ds_id ][ "variants" ]
-    ds_results = datasets_results.get(ds_id, {})
-
-    if not "variants.id" in ds_results:
-        BYC["ERRORS"].append("No variants found in the dataset results.")
-        return [ext_url, bed_url]
-
-    v_ids = ds_results["variants.id"].get("target_values", [])
-    v_count = ds_results["variants.id"].get("target_count", 0)
-    accessid = ds_results["variants.id"].get("id", "___none___")
-    if test_truthy( BYC_PARS.get("paginate_results", True) ):
-        v_ids = return_paginated_list(v_ids, BYC_PARS.get("skip", 0), BYC_PARS.get("limit", 0))
-
-    if len(v_ids) < 1:
-        return [ext_url, bed_url]
-
-    bed_file_name = f'{accessid}.bed'
-    bed_file = path.join( tmp_path, bed_file_name )
-
-    for v_id in v_ids:
-        v = v_coll.find_one( { "id": v_id }, { "_id": 0 } )
-        pv = ByconVariant().byconVariant(v)
-        if (pvt := pv.get("variant_dupdel", "___none___")) not in vs.keys():
-            continue
-        pv.update({"variant_length": int(pv["location"].get("end", 1)) - int(pv["location"].get("start", 0))})
-        vs[pvt].append(pv)
-
-    b_f = open( bed_file, 'w' )
-    pos = set()
-    ucsc_chr = ""
-    for vt in vs.keys():
-        if len(vs[vt]) > 0:
-            vs[vt] = sorted(vs[vt], key=lambda k: k['variant_length'], reverse=True)
-            col_key = f"plot_{vt}_color"
-            col_rgb = colors.get(col_key, (127, 127, 127))
-            # col_rgb = [127, 127, 127]
-            b_f.write(f'track name={vt} visibility=squish description=\"overall {v_count} variants matching the query; {len(vs[vt])} in this track\" color={col_rgb[0]},{col_rgb[1]},{col_rgb[2]}\n')
-            b_f.write("#chrom\tchromStart\tchromEnd\tbiosampleId\n")
-            for v in vs[vt]:
-                ucsc_chr = "chr"+v["location"]["chromosome"]
-                ucsc_min = int(v["location"]["start"]) + 1
-                ucsc_max = int(v["location"]["end"] )
-                l = f'{ucsc_chr}\t{ucsc_min}\t{ucsc_max}\t{v.get("biosample_id", "___none___")}\n'
-                pos.add(ucsc_min)
-                pos.add(ucsc_max)
-                b_f.write( l )
- 
-    b_f.close()
-    ucsc_range = sorted(pos)
-    ucsc_pos = "{}:{}-{}".format(ucsc_chr, ucsc_range[0], ucsc_range[-1])
-    ext_url = f'{ext_url}&position={ucsc_pos}&hgt.customText='
-    bed_url = f'{h_o_server}{local_paths.get("server_tmp_dir_web", "/tmp")}/{bed_file_name}'
-
-    return [ext_url, bed_url]
-
-
-################################################################################
 
 def export_callsets_matrix(datasets_results, ds_id):
     skip = BYC_PARS.get("skip", 0)
@@ -428,90 +483,110 @@ def export_callsets_matrix(datasets_results, ds_id):
 
 
 ################################################################################
+################################################################################
+################################################################################
 
-def export_vcf_download(datasets_results, ds_id):
-    """
-    """
-    # TODO: VCF schema in some config file...
-    skip = BYC_PARS.get("skip", 0)
-    limit = BYC_PARS.get("limit", 0)
-    open_text_streaming(f"{ds_id}_variants.vcf")
-    print(
-        """##fileformat=VCFv4.4
-##reference=GRCh38
-##ALT=<ID=DUP,Description="Duplication">
-##ALT=<ID=DEL,Description="Deletion">
-##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the longest variant described in this record">
-##INFO=<ID=SVLEN,Number=A,Type=Integer,Description="Length of structural variant">
-##INFO=<ID=CN,Number=A,Type=Float,Description="Copy number of CNV/breakpoint">
-##INFO=<ID=SVCLAIM,Number=A,Type=String,Description="Claim made by the structural variant call. Valid values are D, J, DJ for abundance, adjacency and both respectively">
-##INFO=<ID=IMPRECISE,Number=0,Type=Flag,Description="Imprecise structural variation">
-##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">"""
-    )
 
-    v_o = {
-        "#CHROM": ".",
-        "POS": ".",
-        "ID": ".",
-        "REF": ".",
-        "ALT": ".",
-        "QUAL": ".",
-        "FILTER": "PASS",
-        "FORMAT": "",
-        "INFO": ""
-    }
+class PGXvcf:
+    def __init__(self, flattened_data=[]):
+        self.flattened_data = flattened_data
+        self.filename = f"variants-{ByconID(0).makeID()}.vcf"
+        self.skip = BYC_PARS.get("skip", 0)
+        self.limit = BYC_PARS.get("limit", 0)
+        self.output_lines = []
+        self.var_line_proto ={
+            "#CHROM": ".",
+            "POS": ".",
+            "ID": ".",
+            "REF": ".",
+            "ALT": ".",
+            "QUAL": ".",
+            "FILTER": "PASS",
+            "FORMAT": "",
+            "INFO": ""
+        }
+        self.var_pars = BYC["datatable_mappings"]["$defs"]["genomicVariant"]["parameters"]
+        self.__add_VCF_header()
+        self.__add_variants()
 
-    data_client = MongoClient(host=DB_MONGOHOST)
-    v_coll = data_client[ ds_id ][ "variants" ]
-    ds_results = datasets_results.get(ds_id, {})
-    if not "variants.id" in ds_results:
-        BYC["ERRORS"].append("No variants found in the dataset results.")
+
+    #--------------------------------------------------------------------------#
+    #----------------------------- public -------------------------------------#
+    #--------------------------------------------------------------------------#
+
+    def stream_pgxvcf(self):
+        open_text_streaming(self.filename)
+        for l in self.output_lines:
+            print(l)
         return
-    v_ids = ds_results["variants.id"].get("target_values", [])
-    if test_truthy( BYC_PARS.get("paginate_results", True) ):
-        v_ids = return_paginated_list(v_ids, skip, limit)
-
-    v_instances = []
-    for v_id in v_ids:
-        v = v_coll.find_one( { "id": v_id }, { "_id": 0 } )
-        v_instances.append(ByconVariant().byconVariant(v))
 
 
-    v_instances = list(sorted(v_instances, key=lambda x: (f'{x["location"]["chromosome"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x["location"]['start'])))
+    #--------------------------------------------------------------------------#
+    #---------------------------- private -------------------------------------#
+    #--------------------------------------------------------------------------#
 
-    variant_ids = []
-    for v in v_instances:
-        v_iid = v.get("variant_internal_id", "__none__")
-        if v_iid not in variant_ids:
-            variant_ids.append(v_iid)
+    def __add_VCF_header(self):
+        h_l = [
+            f'##fileformat=VCFv4.4',
+            f'##reference=GRCh38',
+            f'##ALT=<ID=DUP,Description="Duplication">',
+            f'##ALT=<ID=DEL,Description="Deletion">',
+            f'##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the longest variant described in this record">',
+            f'##INFO=<ID=SVLEN,Number=A,Type=Integer,Description="Length of structural variant">',
+            f'##INFO=<ID=CN,Number=A,Type=Float,Description="Copy number of CNV/breakpoint">',
+            f'##INFO=<ID=SVCLAIM,Number=A,Type=String,Description="Claim made by the structural variant call. Valid values are D, J, DJ for abundance, adjacency and both respectively">',
+            f'##INFO=<ID=IMPRECISE,Number=0,Type=Flag,Description="Imprecise structural variation">',
+            f'##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">'
+        ]
+        for l in h_l:
+            self.output_lines.append(l)
 
-    biosample_ids = []
-    for v in v_instances:
-        biosample_ids.append(v.get("biosample_id", "__none__"))
-    # no duplicates here since each has its column
-    biosample_ids = list(set(biosample_ids))
+    #--------------------------------------------------------------------------#
 
-    for bsid in biosample_ids:
-        v_o.update({bsid: "."})
+    def __add_variants(self):
+        v_instances = self.flattened_data
+        if test_truthy( BYC_PARS.get("paginate_results", True) ):
+            v_instances = return_paginated_list(v_instances, self.skip, self.limit)
+        v_instances = [ByconVariant().byconVariant(v) for v in v_instances]
+        v_instances = list(sorted(v_instances, key=lambda x: (f'{x["location"]["chromosome"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x["location"]['start'])))
 
-    print("\t".join(v_o.keys()))
+        variant_ids = []
+        for v in v_instances:
+            v_iid = v.get("variant_internal_id", "__none__")
+            if v_iid not in variant_ids:
+                variant_ids.append(v_iid)
 
-    bv = ByconVariant()
-    for d in variant_ids:
-        d_vs = [var for var in v_instances if var.get('variant_internal_id', "__none__") == d]
-        vcf_v = bv.vcfVariant(d_vs[0])
+        biosample_ids = []
+        for v in v_instances:
+            biosample_ids.append(v.get("biosample_id", "__none__"))
+        biosample_ids = list(set(biosample_ids))
+
         for bsid in biosample_ids:
-            vcf_v.update({bsid: "."})
-        for d_v in d_vs:
-            b_i = d_v.get("biosample_id", "__none__")
-            vcf_v.update({b_i: "0/1"})
+            self.var_line_proto.update({bsid: "."})
 
-        r_l = map(str, list(vcf_v.values()))
-        print("\t".join(r_l))
-        
-    close_text_streaming()
+        self.__add_header_line()
+
+        BV = ByconVariant()
+        for d in variant_ids:
+            d_vs = [var for var in v_instances if var.get('variant_internal_id', "__none__") == d]
+            vcf_v = BV.vcfVariant(d_vs[0])
+            for bsid in biosample_ids:
+                vcf_v.update({bsid: "."})
+            for d_v in d_vs:
+                b_i = d_v.get("biosample_id", "__none__")
+                vcf_v.update({b_i: "0/1"})
+            r_l = map(str, list(vcf_v.values()))
+            self.output_lines.append("\t".join(r_l))
+
+    #--------------------------------------------------------------------------#
+
+    def __add_header_line(self):
+        # TODO: Sample info
+        self.output_lines.append("\t".join(self.var_line_proto.keys()))
 
 
+################################################################################
+################################################################################
 ################################################################################
 
 def open_text_streaming(filename="data.pgxseg"):
