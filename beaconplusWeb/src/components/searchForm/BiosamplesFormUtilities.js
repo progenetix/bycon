@@ -233,7 +233,7 @@ function CytoBandsData({ data }) {
   return (
     <div className="content has-text-black">
       <div>
-        CytoBands: <b>{data[0].chromosome_location.chr}{data[0].info.cytoBands}</b>
+        CytoBands: <b>{data[0].info.cytoBands}</b>
       </div>
       <div>
         Chromosome: <b>{data[0].chromosome_location.chr}</b>

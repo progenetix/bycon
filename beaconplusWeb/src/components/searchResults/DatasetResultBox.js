@@ -41,10 +41,10 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
     resultsHandovers,
     info,
     resultsCount
-    // paginatedResultsCount
   } = responseSet
 
-  const limit = responseMeta.receivedRequestSummary?.pagination?.limit ? responseMeta.receivedRequestSummary?.pagination?.limit : 121
+  // TODO: This is ugly; something like := ?
+  const limit = responseMeta.receivedRequestSummary?.pagination?.limit ? responseMeta.receivedRequestSummary?.pagination?.limit : 200
 
   const handoverById = (givenId) =>
     resultsHandovers.find(({ info: { contentId } }) => contentId === givenId)
@@ -57,12 +57,14 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
   biosamplesTableHandover.pages = []
   var cntr = 0
   var skpr = 0
-  while (cntr < biocount) {
-    const pagu = "&skip=" + skpr + "&limit=" + limit
-    cntr += limit
-    skpr += 1
-    biosamplesHandover.pages.push({"url": replaceWithProxy(biosamplesHandover.url + pagu), "label": "Part" + skpr})
-    biosamplesTableHandover.pages.push({"url": replaceWithProxy(biosamplesTableHandover.url + pagu), "label": "Part" + skpr})
+  if (biocount > 0) {
+    while (cntr < biocount) {
+      const pagu = "&skip=" + skpr + "&limit=" + limit
+      cntr += limit
+      skpr += 1
+      biosamplesHandover.pages.push({"url": replaceWithProxy(biosamplesHandover.url + pagu), "label": "Part" + skpr})
+      biosamplesTableHandover.pages.push({"url": replaceWithProxy(biosamplesTableHandover.url + pagu), "label": "Part" + skpr})
+    }
   }
 
   const variantsHandover = handoverById(HANDOVER_IDS.variants)
@@ -179,7 +181,7 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
           ) : null}
         </div>
         <div className="column is-one-third">
-          {info.counts.variants > 0 && query.referenceName ? (
+          {info.counts.variants > 0 && query?.referenceName ? (
             <div>
               <UCSCRegion query={query} />
             </div>
@@ -238,7 +240,7 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
       <hr/>
       <h2 className="subtitle has-text-dark">{id} Data Downloads</h2>
 
-      {biosamplesTableHandover?.pages && (
+      {biosamplesTableHandover?.pages.length > 0 && (
         <div className="tabs">
           <div>
             <b>Download Sample Data (TSV)</b>
@@ -251,7 +253,7 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
           </div>
         </div>
       )}
-      {biosamplesHandover?.pages && (
+      {biosamplesHandover?.pages.length > 0 && (
         <div className="tabs">
           <div>
             <b>Download Sample Data (JSON)</b>
@@ -264,7 +266,7 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
           </div>
         </div>
       )}
-      {variantsHandover?.pages && (
+      {variantsHandover?.pages.length > 0 && (
         <div className="tabs ">
           <div>
             <b>Download Variants (Beacon VRS)</b>
@@ -277,7 +279,7 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
           </div>
         </div>
       )}
-      {vcfHandover?.pages && (
+      {vcfHandover?.pages.length > 0 && (
         <div className="tabs ">
           <div>
             <b>Download Variants (VCF)</b>
@@ -290,7 +292,7 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
           </div>
         </div>
       )}
-      {pgxsegHandover?.pages && (
+      {pgxsegHandover?.pages.length > 0 && (
         <div className="tabs ">
           <div>
             <b>Download Variants (.pgxseg)</b>

@@ -6,7 +6,15 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
-### 2025-02-27 (v2.2.4)
+### 2025-03-06 (v2.2.5)
+
+* first partially functional version of the OpenAPI generation
+    - not all services yet
+    - main Beacon parameters but avoiding many optional parameters
+    - served at `/api/` or `/services/api/`
+    - rendered at the servers' root `.../api` (e.g. <https://progenetix.org/api>)
+
+### 2025-03-03 (v2.2.4)
 
 * created a new `PGXbed` class for handling of `.bed` file creation and UCSC link
 generation.
@@ -16,13 +24,14 @@ generation.
 * created a new `PGXvcf` class
 * added the GeoJSON location to the `/beacon/service-info/` endpoint as proposed
   on [Github service-info](https://github.com/ga4gh-discovery/ga4gh-service-info/issues/73).
+* plots: fixed bug where instead of the last chromosome band the second-to-last
+  was plotted with a slimmer width/height ...
 * preparation for a new `/api` endpoint
     - to provide OpenAPI mappings
     - currently residing in `/services` on the server which requires an addition
       to the server's rewrite rules (and restart etc. - YMMV)
         * `RewriteRule "^/?api/?$" ${BYCON_WEB_DIR}/services/api.py [PT]`
-* plots: fixed bug where intead of the last chromosome band the second-to-last
-  was plotted with a slimmer width/height ...
+    - absolutely no practical functionality yet; purely for testing
 
 ### 2025-02-26 (v2.2.3)
 

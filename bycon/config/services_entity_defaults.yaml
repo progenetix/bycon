@@ -8,6 +8,9 @@
 
 ## Special services which have their own entities / output formats
 
+api:
+  request_entity_path_id: api
+
 byconschemas:
   request_entity_path_aliases:
     - schemas

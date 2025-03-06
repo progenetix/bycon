@@ -25,16 +25,30 @@ export function BiosamplesResults({ response, isLoading, error, query }) {
 }
 
 function AlleleResponses({ biosampleResponseSets, responseMeta, query }) {
-  if (biosampleResponseSets?.[0].resultsCount < 1) {
-    return (
+  return biosampleResponseSets.map((r, i) => (
+    <>
+    {r.resultsCount > 0 && (
+     <DatasetResultBox key={i} data={r} responseMeta={responseMeta} query={query} />
+    )
+    }
+    {r.resultsCount < 1 && (
+     <NoResults data={r}  />
+    )
+    }
+    </>
+  ))
+}
+
+function NoResults({ data: responseSet}) {
+  const {id} = responseSet
+  return (
+   <div className="box">
+      <h2 className="subtitle has-text-dark">{id}</h2>
       <div className="notification">
         No results could be found for this query.
       </div>
-    )
-  }
-  return biosampleResponseSets.map((r, i) => (
-    <DatasetResultBox key={i} data={r} responseMeta={responseMeta} query={query} />
-  ))
+    </div>
+  )
 }
 
 function QuerySummary({ query }) {

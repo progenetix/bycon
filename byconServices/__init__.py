@@ -4,6 +4,7 @@ from os import path
 
 sys.path.append( path.dirname( path.abspath(__file__) ) )
 
+from api import api
 from byconschemas import byconschemas
 from cnvstats import cnvstats
 from collationplots import collationplots

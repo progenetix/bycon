@@ -1,12 +1,14 @@
-import { siteDataset, useFilterTreesByType } from "../hooks/api"
+import { useFilterTreesByType } from "../hooks/api"
 import { WithData } from "./Loader"
 import React from "react"
 import { keyBy } from "lodash"
 import { buildTree, TreePanel } from "./classificationTree/TreePanel"
 
-
-export default function SubsetsHierarchyLoader({ collationTypes, defaultTreeDepth }) {
-  const collationsHierarchyReply = useFilterTreesByType({collationTypes})
+export default function SubsetsHierarchyLoader({ collationTypes, datasetIds, defaultTreeDepth }) {
+  const collationsHierarchyReply = useFilterTreesByType({
+    datasetIds,
+    collationTypes
+  })
 
   return (
     <WithData
@@ -15,6 +17,7 @@ export default function SubsetsHierarchyLoader({ collationTypes, defaultTreeDept
       render={(collationsHierarchyReply) => (
         <SubsetsResponse
           collationsHierarchies={collationsHierarchyReply.response.filteringTerms}
+          datasetIds={datasetIds}
           defaultTreeDepth={defaultTreeDepth}
         />
       )}
@@ -22,13 +25,13 @@ export default function SubsetsHierarchyLoader({ collationTypes, defaultTreeDept
   )
 }
 
-function SubsetsResponse({ collationsHierarchies, defaultTreeDepth }) {
+function SubsetsResponse({ collationsHierarchies, datasetIds, defaultTreeDepth }) {
   const subsetById = keyBy(collationsHierarchies, "id")
   const { tree, size } = buildTree(collationsHierarchies, subsetById)
 
   return (
     <TreePanel
-      datasetIds={siteDataset}
+      datasetIds={datasetIds}
       subsetById={subsetById}
       tree={tree}
       size={size}

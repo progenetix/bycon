@@ -701,6 +701,11 @@ class RefactoredValues():
             return float(p_value)
         if "bool" in p_type:
             return test_truthy(p_value)
+        if len(en := defs.get("enum", [])) > 0:
+            prdbug(f'... {p_value} in {en}')
+            if str(p_value) in en:
+                return str(p_value)
+            return None
         return str(p_value)
 
 
