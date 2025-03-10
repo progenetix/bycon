@@ -377,6 +377,14 @@ class BeaconDataResponse:
         self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta(self.record_queries) })
         return self.data_response
 
+    # -------------------------------------------------------------------------#
+
+    def filteringTermsList(self):
+        if not "beaconFilteringTermsResponse" in BYC["response_schema"]:
+            return
+        fts, ress, query = ByconFilteringTerms().populatedFilteringTerms()
+        return fts
+
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
@@ -521,7 +529,7 @@ class ByconFilteringTerms:
     def __init__(self):
         self.response_entity_id = BYC.get("response_entity_id", "filteringTerm")
         self.ft_instance = ByconSchemas("beaconFilteringTermsResults", "$defs/FilteringTerm").get_schema_instance()
-        self.data_collection = BYC["response_entity"].get("collection", "collations")
+        self.data_collection = "collations"
         self.filter_collation_types = set()
         self.filtering_terms = []
         self.filter_resources = []
@@ -546,6 +554,14 @@ class ByconFilteringTerms:
         self.__return_filtering_terms()
         self.__return_filter_resources()
         return self.filtering_terms, self.filter_resources, self.filtering_terms_query
+
+
+    # -------------------------------------------------------------------------#
+
+    def filteringTermsList(self):
+        self.__filtering_terms_query()
+        self.__return_filtering_terms()
+        return self.filtering_terms
 
 
     # -------------------------------------------------------------------------#

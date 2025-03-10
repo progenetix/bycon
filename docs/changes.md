@@ -6,6 +6,28 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-03-10 (v2.2.6)
+
+#### VQS & OpenAPI
+
+* added several VQS parameter candidates to the `argument_definitions` file
+    - these are by no means finalized; e.g. `breakpoint_range` and `adjacency_accession`
+      are just placeholders for now
+* added remapping of those parameters to existing parameters to keep the pre-defined
+  queries for now, inside `__parse_variant_parameters`
+      - e.g.
+```Python
+if "sequence_length" in v_p_k:
+    if len(v_p) == 1:
+        v_p.append(v_p[0] + 1)
+    v_p_c.update({
+        "variant_min_length": v_p[0],
+        "variant_max_length": v_p[1]
+    })
+if "adjacency_accession" in v_p_k:
+    v_p_c.update({"mate_name": self.ChroNames.refseq(v_p)})
+```
+
 ### 2025-03-06 (v2.2.5)
 
 * first partially functional version of the OpenAPI generation

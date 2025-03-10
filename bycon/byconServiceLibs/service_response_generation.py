@@ -116,7 +116,6 @@ class CollationQuery:
         self.collection = "collations"
 
         if BYC["TEST_MODE"] is True:
-            BYC_PARS.update({"test_mode_count": 2})
             self.query = mongo_test_mode_query(BYC["BYC_DATASET_IDS"][0], self.collection)
             return
 

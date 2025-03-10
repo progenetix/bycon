@@ -27,6 +27,7 @@ EFO:0030064:
   cnv_dummy_value: Null
   child_terms:
     - EFO:0030064
+  beacon_query: False
 
 EFO:0030065:
   variant_state:
@@ -39,6 +40,7 @@ EFO:0030065:
   cnv_dummy_value: Null
   child_terms:
     - EFO:0030065
+  beacon_query: False
 
 EFO:0030066:
   variant_state:
@@ -58,7 +60,8 @@ EFO:0030066:
     - EFO:0030070
     - EFO:0030071
     - EFO:0030072
-    - EFO:0030073      
+    - EFO:0030073
+  beacon_query: True
 
 SO:0001743:
   description: >-
@@ -80,6 +83,7 @@ SO:0001743:
     - EFO:0030068
     - EFO:0020073
     - EFO:0030069
+  beacon_query: False
 
 EFO:0030067:
   variant_state:
@@ -97,6 +101,7 @@ EFO:0030067:
     - EFO:0030068
     - EFO:0020073
     - EFO:0030069
+  beacon_query: True
 
 EFO:0030068:
   variant_state:
@@ -110,6 +115,7 @@ EFO:0030068:
   cnv_dummy_value: -1
   child_terms:
     - EFO:0030068
+  beacon_query: True
 
 EFO:0020073:
   variant_state:
@@ -125,6 +131,7 @@ EFO:0020073:
   child_terms:
     - EFO:0020073
     - EFO:0030069
+  beacon_query: True
 
 EFO:0030069:
   variant_state:
@@ -139,6 +146,7 @@ EFO:0030069:
   cnv_dummy_value: -2
   child_terms:
     - EFO:0030069
+  beacon_query: True
 
 EFO:0030070:
   variant_state:
@@ -156,6 +164,7 @@ EFO:0030070:
     - EFO:0030071
     - EFO:0030072
     - EFO:0030073
+  beacon_query: True
 
 SO:0001742:
   description: >-
@@ -177,6 +186,7 @@ SO:0001742:
     - EFO:0030071
     - EFO:0030072
     - EFO:0030073
+  beacon_query: True
 
 EFO:0030071:
   variant_state:
@@ -190,6 +200,7 @@ EFO:0030071:
   cnv_dummy_value: 0.58
   child_terms:
     - EFO:0030071
+  beacon_query: True
 
 EFO:0030072:
   variant_state:
@@ -205,6 +216,7 @@ EFO:0030072:
   child_terms:
     - EFO:0030072
     - EFO:0030073
+  beacon_query: True
 
 EFO:0030073:
   variant_state:
@@ -219,6 +231,7 @@ EFO:0030073:
   cnv_dummy_value: 2
   child_terms:
     - EFO:0030073
+  beacon_query: True
 
 SO:0001059:
   variant_state:
@@ -235,6 +248,7 @@ SO:0001059:
     - SO:0002007
     - SO:0000667
     - SO:0000159
+  beacon_query: True
 
 SO:0001483:
   variant_state:
@@ -247,6 +261,7 @@ SO:0001483:
   cnv_dummy_value: Null
   child_terms:
     - SO:0001483
+  beacon_query: True
 
 SO:0002007:
   variant_state:
@@ -259,6 +274,7 @@ SO:0002007:
   cnv_dummy_value: Null
   child_terms:
     - SO:0002007
+  beacon_query: True
 
 SO:0000667:
   variant_state:
@@ -271,6 +287,7 @@ SO:0000667:
   cnv_dummy_value: Null
   child_terms:
     - SO:0000667
+  beacon_query: True
 
 SO:0000159:
   variant_state:
@@ -281,6 +298,7 @@ SO:0000159:
   cnv_dummy_value: Null
   child_terms:
     - SO:0000159
+  beacon_query: True
 
 SO:0001413:
   variant_state:
@@ -294,6 +312,7 @@ SO:0001413:
   child_terms:
     - SO:0001413
     - SO:0000806
+  beacon_query: True
 
 SO:0000806:
   variant_state:
@@ -306,3 +325,4 @@ SO:0000806:
   cnv_dummy_value: Null
   child_terms:
     - SO:0000806
+  beacon_query: True

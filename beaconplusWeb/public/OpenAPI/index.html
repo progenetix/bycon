@@ -8,13 +8,20 @@
 <body>
 <div id="openapi">
 <script src="./swagger-ui-bundle.js"></script>
-<script src="./swagger-ui-standalone-preset.js"> </script>
 <script>
 window.onload = function () {
+  var url_string = window.location.href;
+  var url = new URL(url_string);
+  var modeValue = url.searchParams.get("mode");  
+  var api = "/api";
+  if (modeValue != null) {
+    api = "/api?mode=" + modeValue;
+  }
   const ui = SwaggerUIBundle({
-    url: "/api",
+    url: api,
     dom_id: "#openapi"
   })
 }
 </script>
 </body>
+

@@ -60,6 +60,15 @@ class ChroNames:
 
     # -------------------------------------------------------------------------#
 
+    def refseqLabeled(self, s_id="___none___"):
+        chrLabs = []
+        for chrId, chr_def in self.refseq_chromosomes.items():
+            chrLabs.append({chr_def["refseq_id"]: chrId})
+        return chrLabs
+
+
+    # -------------------------------------------------------------------------#
+
     def genomePath(self):
         return self.genome_rsrc_path
 

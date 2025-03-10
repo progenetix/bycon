@@ -1,4 +1,5 @@
 dataset:
+  description: Information about the datasets available in the beacon instance
   request_entity_path_id: datasets
   response_entity_id: dataset
   collection: Null
@@ -19,6 +20,7 @@ dataset:
 ################################################################################
 
 cohort:
+  description: Information about the cohorts available in the beacon instance
   request_entity_path_id: cohorts
   response_entity_id: cohort
   collection: collations
@@ -38,6 +40,7 @@ cohort:
 
 genomicVariant:
   description: >-
+    Information about matching genomic variants from the corresponding dataset.
     The type of response used for the endpoint depends on the requested and granted
     `responseGranularity`.
   request_entity_path_id: g_variants
@@ -71,6 +74,7 @@ genomicVariant:
 
 analysis:
   description: >-
+    Information about matching analyses from the corresponding dataset.
     The type of response used for the endpoint depends on the requested and granted
     `responseGranularity`.
   request_entity_path_id: analyses
@@ -95,6 +99,7 @@ analysis:
 
 run:
   description: >-
+    Information about matching experimental runs from the corresponding dataset.
     The type of response used for the endpoint depends on the requested and granted
     `responseGranularity`.
   request_entity_path_id: runs
@@ -116,6 +121,7 @@ run:
 
 biosample:
   description: >-
+    Information about matching samples from the corresponding dataset.
     The type of response used for the endpoint depends on the requested and granted
     `responseGranularity`.
   request_entity_path_id: biosamples
@@ -145,6 +151,7 @@ biosample:
 
 individual:
   description: >-
+    Information about matching subjects (individuals) from the corresponding dataset.
     The type of response used for the endpoint depends on the requested and granted
     `responseGranularity`.
   request_entity_path_id: individuals
@@ -170,12 +177,9 @@ individual:
 
 phenopacket:
   description: >-
-    The type of response used for the endpoint depends on the requested and granted
-    `responseGranularity`.
-
-    In the `bycon` framework Phenopackets are generated at export time by aggregating
-    the relevant information from the matched `individual`, `biosample`s, `analysis`(/es)
-    and `genomicVariation`s.
+    Information about matching subjects (individuals) from the corresponding dataset,
+    converted to Phenopackets format by aggregating the relevant information from
+    the matched `individual`, `biosample`s, `analysis`(/es) and `genomicVariation`s.
   request_entity_path_id: phenopackets
   response_entity_id: phenopacket
   collection: individuals
@@ -197,6 +201,8 @@ phenopacket:
 ################################################################################
 
 filteringTerm:
+  description: >-
+    Information about the filtering terms available in the beacon instance.
   request_entity_path_id: filtering_terms
   response_entity_id: filteringTerm
   collection: collations
@@ -216,6 +222,8 @@ filteringTerm:
 ################################################################################
 
 info:
+  description: >-
+    Information about the beacon instance.
   request_entity_path_id: info
   request_entity_path_aliases:
     - "/"
@@ -233,6 +241,8 @@ info:
 ################################################################################
 
 beaconMap:
+  description: >-
+    Map of the beacon instance configuration.
   request_entity_path_id: map
   response_entity_id: beaconMap
   collection: Null
@@ -246,6 +256,8 @@ beaconMap:
 ################################################################################
 
 configuration:
+  description: >-
+    Information about the beacon instance configuration.
   request_entity_path_id: configuration
   response_entity_id: configuration
   collection: Null

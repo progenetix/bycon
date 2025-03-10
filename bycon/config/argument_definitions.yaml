@@ -71,6 +71,19 @@ $defs:
     description: The requested granularity of the beacon
     default: record
     in: query
+    examples:
+      - emptyValue:
+          value: ""
+          summary: Granularity of the response
+      - record:
+          value: record
+          summary: Data record
+      - count:
+          value: count
+          summary: Count of the matched records
+      - boolean:
+          value: boolean
+          summary: Boolean for match / no match
 
   request_entity_path_id:
     description: >-
@@ -140,7 +153,11 @@ $defs:
     description: prefixed filter values, comma concatenated; or objects in POST
     in: query
     beacon_query: True
+    vqs_query: true
     examples:
+      - emptyValue:
+          value: ""
+          summary: A Beacon filter value, e.g. a CURIE for a disease code
       - NCIT:
           value:
             - NCIT:C9335
@@ -186,6 +203,87 @@ $defs:
     cmdFlags:
       - --vrsType
     description: VRS variant schema type, e.g. `Allele` or `CopyNumberChange`
+    beacon_query: False
+    vqs_query: true
+    in: query
+
+  reference_accession:
+    type: string
+    db_key: location.sequence_id
+    pattern: '^\w+.*?\w?$'
+    cmdFlags:
+      - --referenceAccession
+    description: reference accession, i.e. a versioned sequence reference ID
+    beacon_query: False
+    vqs_query: true
+    in: query
+
+  copy_change:
+    type: string
+    db_key: variant_state.id
+    pattern: '^\w+[\w \-\:]\w+?$'
+    cmdFlags:
+      - --copyChange
+    description: variant type, e.g. EFO:0030067 or DUP
+    beacon_query: False
+    vqs_query: True
+    in: query
+
+  sequence_length:
+    type: array
+    db_key: info.var_length
+    items:
+      type: integer
+      pattern: '^\d+?$'
+    cmdFlags:
+      - --sequenceLength
+    description: |-
+      * length (range) of variant sequence
+      * should replace variant_min_length and variant_max_length
+    beacon_query: False
+    vqs_query: True
+    in: query
+
+  breakpoint_range:
+    type: array
+    db_key: adjoined_sequences.start
+    items:
+      type: integer
+      pattern: '^\d+?$'
+    minItems: 2
+    maxItems: 2
+    cmdFlags:
+      - --breakpointRange
+    description: range for breakpoint or lower chromosome position in adjacency
+    beacon_query: False
+    vqs_query: True
+    in: query
+
+  adjacency_accession:
+    type: string
+    db_key: adjoined_sequences.sequence_id
+    pattern: '^\w+.*?\w?$'
+    cmdFlags:
+      - --adjacencyAccession
+    description: adjacency accession, i.e. a versioned sequence reference ID
+    beacon_query: False
+    vqs_query: true
+    in: query
+
+  adjacency_range:
+    type: array
+    db_key: adjoined_sequences.start
+    items:
+      type: integer
+      pattern: '^\d+?$'
+    minItems: 2
+    maxItems: 2
+    cmdFlags:
+      - --adjacencyRange
+    description: range for higher chromosome position in adjacency
+    beacon_query: False
+    vqs_query: True
+    in: query
 
   # ----------------------------------------------------------------------------
 
@@ -209,12 +307,12 @@ $defs:
     beacon_query: True
     in: query
     examples:
-      - RefseqID:
-          value: refseq:NC_000017.11
-          summary: A versioned reference ID for chromosome 17
+      - emptyValue:
+          value: ""
+          summary: A versioned reference ID or a chromsome name / number
       - chromosome:
           value: "9"
-          summary: A chromsome name / number
+          summary: chromsome 9
 
   mate_name:
     type: string
@@ -225,6 +323,10 @@ $defs:
     description: chromosome
     beacon_query: True
     in: query
+    examples:
+      - emptyValue:
+          value: ""
+          summary: A versioned reference ID or a chromsome name / number
 
   reference_bases:
     type: string
@@ -256,12 +358,15 @@ $defs:
     beacon_query: True
     in: query
     examples:
+      - emptyValue:
+          value: ""
+          summary: An EFO or SO code in CURIE format, or a VCF-style label
       - EFOhllossCNV:
           value: EFO:0030067
           summary: high-level copy number loss
       - VCFdup:
           value: DUP
-          summary: A VCF-style copy number duplication    
+          summary: copy number duplication    
 
   start:
     type: array
@@ -269,10 +374,13 @@ $defs:
     items:
       type: integer
       pattern: '^\d+?$'
+    minItems: 1
+    maxItems: 2
     cmdFlags:
       - --start
     description: genomic start position
     beacon_query: True
+    vqs_query: True
     in: query
 
   end:
@@ -281,10 +389,13 @@ $defs:
     items:
       type: integer
       pattern: '^\d+?$'
+    minItems: 1
+    maxItems: 2
     cmdFlags:
       - --end
     description: genomic end position
     beacon_query: True
+    vqs_query: True
     in: query
 
   mate_start:
@@ -335,8 +446,13 @@ $defs:
       - --geneId
     description: one or more (comma concatenated) gene ids
     beacon_query: True
+    vqs_query: True
     in: query
     examples:
+      - emptyValue:
+          value: 
+            - ""
+          summary: A HUGO gene symbol
       - TP53:
           value: 
             - TP53
@@ -356,6 +472,9 @@ $defs:
       Aminoacid alteration in 1 letter format
     in: query
     examples:
+      - emptyValue:
+          value: ""
+          summary: Aminoacid alteration in 1 letter format
       - V600E:
           value: V600E
       - M734V:

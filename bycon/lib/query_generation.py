@@ -56,6 +56,9 @@ class ByconQuery():
         # e.g. multivars ... need this for each instance
         self.variant_request_type = None
         self.variant_request_definitions = BYC.get("variant_request_definitions", {})
+        self.variant_par_names = self.variant_request_definitions.get("request_pars", [])
+        self.variant_par_names += self.variant_request_definitions.get("VQS_pars", [])
+
         self.variant_type_definitions = BYC.get("variant_type_definitions", {})
 
         self.limit = BYC_PARS.get("limit")
@@ -190,7 +193,7 @@ class ByconQuery():
     def __preprocess_variant_pars(self):
         v_m_ps = BYC_PARS.get("variant_multi_pars", [])
 
-        v_p_s = self.variant_request_definitions.get("request_pars", [])
+        v_p_s = self.variant_par_names
         # standard pars
         s_q_p_0 = {}
         if (v_s_s := v_p_s & BYC_PARS.keys()):
@@ -214,12 +217,13 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __parse_variant_parameters(self, variant_pars):
-        v_p_s = self.variant_request_definitions.get("request_pars", [])
+        v_p_s = self.variant_par_names
         a_defs = self.argument_definitions
         v_t_defs = self.variant_type_definitions
 
         # value checks
         v_p_c = { }
+        pop_list = []
         for p_k, v_p in variant_pars.items():
             v_p_k = humps.decamelize(p_k)
             if "variant_type" in v_p_k:
@@ -229,8 +233,50 @@ class ByconQuery():
             if "reference_name" in v_p_k or "mate_name" in v_p_k:
                 v_p_c.update({v_p_k: self.ChroNames.refseq(v_p)})
                 continue
+
+
+            # VQS - TODO (remapping to be transferred ...)
+            if "reference_accession" in v_p_k:
+                v_p_c.update({"reference_name": self.ChroNames.refseq(v_p)})
+                pop_list.append(p_k)
+                continue
+            if "adjacency_accession" in v_p_k:
+                v_p_c.update({"mate_name": self.ChroNames.refseq(v_p)})
+                pop_list.append(p_k)
+                continue
+            if "breakpoint_range" in v_p_k:
+                if len(v_p) == 1:
+                    v_p.append(v_p[0] + 1)
+                v_p_c.update({"start": [v_p[0]], "end": [v_p[1]]})
+                pop_list.append(p_k)
+                continue
+            if "adjacency_range" in v_p_k:
+                if len(v_p) == 1:
+                    v_p.append(v_p[0] + 1)
+                v_p_c.update({"mate_start": [v_p[0]], "mate_end": [v_p[1]]})
+                pop_list.append(p_k)
+                continue
+            # VQS 
+            if "copy_change" in v_p_k:
+                v_s_c = VariantTypes().variantStateChildren(v_p)
+                v_p_c.update({"variant_type": { "$in": v_s_c }})
+                pop_list.append(p_k)
+                continue               
+            # VQS
+            if "sequence_length" in v_p_k:
+                if len(v_p) == 1:
+                    v_p.append(v_p[0] + 1)
+                v_p_c.update({
+                    "variant_min_length": v_p[0],
+                    "variant_max_length": v_p[1]
+                })
+                pop_list.append(p_k)
+                continue
             
             v_p_c.update({v_p_k: v_p})
+
+        for p_l in pop_list:
+            variant_pars.pop(p_l, None)
 
         return v_p_c
 
@@ -524,13 +570,13 @@ class ByconQuery():
             "$and": [
                 {
                     v_p_defs["mate_name"]["db_key"]: vp["reference_name"],
-                    v_p_defs["mate_start"]["db_key"]: { "$gte": vp["start"][0] },
-                    v_p_defs["mate_end"]["db_key"]: { "$lt": vp["end"][-1] }
+                    v_p_defs["mate_start"]["db_key"]: { "$lt": vp["end"][-1] },
+                    v_p_defs["mate_end"]["db_key"]: { "$gte": vp["start"][0] }
                 },
                 {
                     v_p_defs["mate_name"]["db_key"]: vp["mate_name"],
-                    v_p_defs["mate_start"]["db_key"]: { "$gte": vp["mate_start"][0] },
-                    v_p_defs["mate_end"]["db_key"]: { "$lt": vp["mate_end"][-1] }
+                    v_p_defs["mate_start"]["db_key"]: { "$lt": vp["mate_end"][-1] },
+                    v_p_defs["mate_end"]["db_key"]: { "$gte": vp["mate_start"][0] }
                 }
             ]
         }

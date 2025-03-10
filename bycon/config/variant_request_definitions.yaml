@@ -20,6 +20,15 @@ request_pars:
   - gene_id
   - aminoacid_change
   - genomic_allele_short_form
+VQS_pars:
+  - vrs_type
+  - reference_accession
+  - adjacency_accession
+  - copy_change
+  - sequence
+  - sequence_length
+  - breakpoint_range
+  - adjacency_range
 
 # BeaconPlus
 multi_request_pars:

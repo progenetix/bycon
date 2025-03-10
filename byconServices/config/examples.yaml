@@ -1,0 +1,114 @@
+Bv2cnvbracketquery:
+  entities:
+    - genomicVariant
+    - analysis
+    - biosample
+    - individual
+  example_values:
+    filters:
+      - NCIT:
+          value: ["NCIT:C3058"]
+          summary: Glioblastoma
+    reference_name:
+      - chr9:
+          value: refseq:NC_000009.12
+          summary: Chromosome 9 (GRCh38)
+    start:
+      - CDKN2AstartBracket:
+          value: [21000001, 21975098]
+          summary: Range for start of CNV involving CDKN2A
+    end:
+      - CDKN2AendBracket:
+          value: [21967753, 23000000]
+          summary: Range for end of CNV involving CDKN2A
+    variant_type:
+      - HLDEL:
+          value: EFO:0020073
+          summary: High-level copy number loss
+
+VQScopyChangeRequest:
+  entities:
+    - genomicVariant
+    - analysis
+    - biosample
+    - individual
+  example_values:
+    filters:
+      - NCIT:
+          value: ["NCIT:C3058"]
+          summary: Glioblastoma
+    reference_accession:
+      - chr9:
+          value: refseq:NC_000009.12
+          summary: RefSeq ID for Chromosome 9 (GRCh38)
+    start:
+      - CDKN2AstartBracket:
+          value: [21000001, 21975098]
+          summary: Range for start of CNV involving CDKN2A
+    end:
+      - CDKN2AendBracket:
+          value: [21967753, 23000000]
+          summary: Range for end of CNV involving CDKN2A
+    copy_change:
+      - HLDEL:
+          value: EFO:0020073
+          summary: High-level copy number loss
+
+VQSgeneIdRequest:
+  entities:
+    - genomicVariant
+    - analysis
+    - biosample
+    - individual
+  example_values:
+    gene_id:
+      - CDKN2A:
+          value: ["CDKN2A"]
+          summary: CDKN2A
+    copy_change:
+      - HLDEL:
+          value: EFO:0020073
+          summary: High-level copy number loss
+    sequence_length:
+      - focal:
+          value: [10000, 3000000]
+          summary: Focal CNV
+
+VQSadjacencyRequest:
+  entities:
+    - genomicVariant
+    - analysis
+    - biosample
+    - individual
+  example_values:
+    filters:
+      - icdom:
+          value: ["pgx:icdom-95903"]
+          summary: Malignant lymphoma, NOS (ICD-O 3 code 9680/3)
+    reference_accession:
+      - chr8:
+          value: refseq:NC_000008.11
+          summary: RefSeq ID for Chromosome 8 (GRCh38)
+    breakpoint_range:     
+      - chr8q24:
+          value: [116700000,145138636]
+          summary: Range for band q24 on chromosome 8
+    adjacency_accession:
+      - chr8:
+          value: refseq:NC_000014.9
+          summary: RefSeq ID for Chromosome 14 (GRCh38)
+    adjacency_range:
+      - chr14q32:
+          value: [89300000,107043718]
+          summary: Range for band q32 on chromosome 14
+    vrs_type:
+      - Adjacency:
+          value: Adjacency
+          summary: Adjacency
+
+
+
+
+
+
+

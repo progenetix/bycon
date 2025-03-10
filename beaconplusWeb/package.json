@@ -10,6 +10,9 @@
     "test": "jest",
     "lint": "eslint src"
   },
+  "scarfSettings": {
+    "enabled": false
+  },
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
