@@ -2,14 +2,14 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://progenetix.org/services/schemas/pgxCollation/v2024-10-17",
     "title": "pgxCollation",
-    "description": "A Collation summarizes information of all biosamples matching a given term (e.g. PMID or NCIT code), as well as the connected items if the code is part of a hierarchy (paths leading to the code, child terms).",
+    "description": "A Collation summarizes information of all biosamples matching a given term (e.g. pubmed or NCIT code), as well as the connected items if the code is part of a hierarchy (paths leading to the code, child terms).",
     "properties": {
         "id": {
             "type": "string",
             "examples": [
                 "NCIT:C9272",
                 "NCIT:C3167",
-                "PMID:22824167"
+                "pubmed:22824167"
             ]
         },
         "label": {
@@ -21,10 +21,10 @@
             ]
         },
         "collationType": {
-            "description": "Key for the type of filter definition used to map the corresponding collation items (e.g. biosamples, analyses...). These only sometimes correspond directly to prefixes, when unanimous (PMID ...).",
+            "description": "Key for the type of filter definition used to map the corresponding collation items (e.g. biosamples, analyses...). These only sometimes correspond directly to prefixes, when unanimous (pubmed ...).",
             "type": "string",
             "examples": [
-                "PMID",
+                "pubmed",
                 "NCITstage",
                 "NCITtnm",
                 "icdom"
@@ -34,7 +34,7 @@
             "type": "string",
             "examples": [
                 "pgx",
-                "PMID",
+                "pubmed",
                 "NCIT",
                 "UBERON"
             ]
@@ -85,7 +85,7 @@
                     "NCIT:C7953"
                 ],
                 [
-                    "PMID:22824167"
+                    "pubmed:22824167"
                 ]
             ]
         },
@@ -99,7 +99,7 @@
                     "NCIT:C2910"
                 ],
                 [
-                    "PMID:22824167"
+                    "pubmed:22824167"
                 ]
             ]
         },

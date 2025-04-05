@@ -335,7 +335,7 @@ parameters:
     infoText: |
       Add any **filters** to the search. These will usually
       correspond to CURIE values supported by the resource (e.g.
-      "cellosaurus:CVCL_0004"; "NCIT:C3222"; "PMID:18559507").
+      "cellosaurus:CVCL_0004"; "NCIT:C3222"; "pubmed:18559507").
       This field relies on the existence of the term in the Beacon `filteringTermsResponse`.
     options:
       - value: [""]

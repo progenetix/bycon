@@ -726,7 +726,7 @@ class ByconQuery():
         f_infos = {}
 
         for i, f in enumerate(self.filters):
-            f_k = f'f_{i}'
+            f = self.__substitute_filter_id(f)
             f_val = f.get("id")
             prdbug(f_val)
             f_neg = f.get("excluded", False)
@@ -792,6 +792,12 @@ class ByconQuery():
                         f_s_l.append({f_field: f_q_v})
 
             self.__update_queries_for_entity(f_s_l, f_entity)
+
+    # -------------------------------------------------------------------------#
+
+    def __substitute_filter_id(self, f):
+        f.update({"id": f.get("id", "___none___").replace("PMID:", "pubmed:")})
+        return f
 
 
     # -------------------------------------------------------------------------#

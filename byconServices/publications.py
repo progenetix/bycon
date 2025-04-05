@@ -29,9 +29,9 @@ def publications():
 
     #### Examples
 
-    * <https://progenetix.org/services/publications/?filters=PMID>
-    * <http://progenetix.org/services/publications/?filters=PMID,genomes:&gt;200,arraymap:&gt;1>
-    * <http://progenetix.org/services/publications/?filters=PMID:22824167&method=details>
+    * <https://progenetix.org/services/publications/?filters=pubmed>
+    * <http://progenetix.org/services/publications/?filters=pubmed,genomes:&gt;200,arraymap:&gt;1>
+    * <http://progenetix.org/services/publications/?filters=pubmed:22824167&method=details>
     * <http://progenetix.org/services/publications/?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
     """
 
@@ -160,7 +160,7 @@ def __create_filters_query():
         pre_code = re.split('-|:', f_val)
         pre = pre_code[0]
         prk = pre
-        if "PMID" in pre:
+        if "pubmed" in pre:
            prk = "pubmed" 
 
         if str(prk) not in f_d_s.keys():
@@ -184,7 +184,7 @@ def __create_filters_query():
         elif "start" in filter_precision or len(pre_code) == 1:
             """
             If there was only prefix a regex match is enforced - basically here
-            for the selection of PMID labeled publications.
+            for the selection of pubmed labeled publications.
             """
             q_list.append( { "id": re.compile(r'^'+f_val ) } )
         elif "pgxuse" in f_val:

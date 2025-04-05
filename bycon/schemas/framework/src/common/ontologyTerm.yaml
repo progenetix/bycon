@@ -11,7 +11,7 @@ properties:
       - ga4gh:GA.01234abcde
       - DUO:0000004
       - orcid:0000-0003-3463-0775
-      - PMID:15254584
+      - pubmed:15254584
   label:
     type: string
     description: The text that describes the term. By default it could be the preferred

@@ -116,20 +116,11 @@ function Side({ onClick }) {
           label="TNM & Grade"
           isSub="isSub"
         />
-        <MenuInternalLinkItem href={SITE_DEFAULTS.PROJECTDOCLINK} label="Documentation" />
-{/*       
         <MenuInternalLinkItem
-          href={SITE_DEFAULTS.NEWSLINK}
-          label="News"
-          isSub="isSub"
+          href="/OpenAPI"
+          label="OpenAPI Paths and Examples"
         />
-       <MenuInternalLinkItem
-          href={`${SITE_DEFAULTS.MASTERDOCLINK}/use-cases`}
-          label="Downloads & Use Cases"
-          isSub="isSub"
-        />
-*/}     
-
+        <MenuInternalLinkItem href={SITE_DEFAULTS.PROJECTDOCLINK} label="Documentation" />
         <MenuInternalLinkItem
           href={SITE_DEFAULTS.ORGSITELINK}
           label="Baudisgroup @ UZH"

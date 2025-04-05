@@ -8,7 +8,7 @@
         "id": {
             "type": "string",
             "examples": [
-                "PMID:22824167"
+                "pubmed:22824167"
             ]
         },
         "label": {
@@ -28,13 +28,13 @@
         "collation_type": {
             "type": "string",
             "examples": [
-                "PMID"
+                "pubmed"
             ]
         },
         "namespace_prefix": {
             "type": "string",
             "examples": [
-                "PMID"
+                "pubmed"
             ]
         },
         "scope": {
@@ -60,7 +60,7 @@
             "items": "string",
             "examples": [
                 [
-                    "PMID:10471496"
+                    "pubmed:10471496"
                 ]
             ]
         },
@@ -69,7 +69,7 @@
             "items": "string",
             "examples": [
                 [
-                    "PMID:10471496"
+                    "pubmed:10471496"
                 ]
             ]
         },

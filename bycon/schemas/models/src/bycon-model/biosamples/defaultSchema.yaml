@@ -142,7 +142,7 @@ properties:
     items:
       $ref: ../common/externalReference.yaml
     examples:
-      - id: PMID:9892199
+      - id: pubmed:9892199
   cohorts:
     description: >
       Cohorts describe collections of samples or individuals which are part of a common epistemic group, e.g. have been used for a study or share a set of features.

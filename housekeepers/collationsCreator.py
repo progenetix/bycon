@@ -46,7 +46,7 @@ def __process_collation_type(ds_id, coll_type, coll_defs):
     db_key = coll_defs["db_key"]
 
     if "pubmed" in coll_type:
-        hier =  __make_dummy_publication_hierarchy()
+        hier =  __make_dummy_publication_hierarchy(ds_id)
     elif path.exists( pre_h_f ):
         print( "Creating hierarchy for " + coll_type)
         hier =  get_prefix_hierarchy(ds_id, coll_type, pre_h_f)
@@ -121,10 +121,10 @@ def __process_collation_type(ds_id, coll_type, coll_defs):
         if matched > 0:
             codes = []
             print("==> Updating database ...")
-            ex_codes = coll_coll.distinct("id", { "collation_type": coll_type })
-            for ex_c in ex_codes:
-                if ex_c not in sel_hiers.keys():
-                    coll_coll.delete_one( { "id": ex_c } )
+            # ex_codes = coll_coll.distinct("id", { "collation_type": coll_type })
+            # for ex_c in ex_codes:
+            #     if ex_c not in sel_hiers.keys():
+            #         coll_coll.delete_one( { "id": ex_c } )
             for coll_id, update_obj in sel_hiers.items():
                 coll_coll.update_one( { "id": coll_id }, { "$set": update_obj }, upsert=True )
                 if (c := update_obj.get("code_matches", 0)) > 0:
@@ -192,7 +192,7 @@ def get_prefix_hierarchy(ds_id, coll_type, pre_h_f):
             hier.update( { c_id: { "id": c_id, "label": l, "hierarchy_paths": [ o_p ] } } )
         print("Added:\t{}\t{}".format(c_id, l))
     if added_no > 0:
-        print("===> Added {} {} codes from {}.{} <===".format(added_no, coll_type, ds_id, coll_defs["scope"] ) )
+        print(f"===> Added {added_no} {coll_type} codes from {ds_id}.{coll_defs["scope"]} <===")
 
     #--------------------------------------------------------------------------#
 
@@ -224,21 +224,33 @@ def get_prefix_hierarchy(ds_id, coll_type, pre_h_f):
 
 ################################################################################
 
-def __make_dummy_publication_hierarchy():
+def __make_dummy_publication_hierarchy(ds_id):
     f_d_s = BYC["filter_definitions"].get("$defs", {})
     coll_type = "pubmed"
     coll_defs = f_d_s[coll_type]
-    data_coll = MongoClient(host=config.DB_MONGOHOST)["_byconServicesDB"]["publications"]
-    query = { "id": { "$regex": r'^PMID\:\d+?$' } }
-    no = data_coll.count_documents( query )
+
+    data_db = MongoClient(host=config.DB_MONGOHOST)[ ds_id ]
+    data_coll = data_db[ coll_defs["scope"] ]
+    data_pat = coll_defs["pattern"]
+    db_key = coll_defs["db_key"]
+
+    pre_ids = __get_ids_for_prefix(data_coll, coll_defs)
+
+    pub_coll = MongoClient(host=config.DB_MONGOHOST)["_byconServicesDB"]["publications"]
+    query = { "id": { "$regex": r'^pubmed\:\d+?$' } }
+    no = len(pre_ids)
     bar = Bar("Publications...", max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
     hier = {}
 
-    for order, pub in enumerate( data_coll.find( query, { "_id": 0 } ) ):
+    order = 0
+    for pmid in pre_ids:
+        if not (pub := pub_coll.find_one( {"id": pmid }, { "_id": 0 } )):
+            pub  = { "id": pmid, "label": pmid }
+        order += 1
         c_id = pub["id"]
         bar.next()
-        hier.update( { 
+        hier.update( {
             c_id: {
                 "id":  c_id,
                 "label": pub["label"],
@@ -337,13 +349,18 @@ def __get_label_for_code(data_coll, coll_defs, c_id):
 
     label_keys = ["label", "description", "note"]
 
-    db_key = coll_defs["db_key"]
+    db_key = coll_defs.get("db_key", "___none___")
     id_key = re.sub(".id", "", db_key)
+    if db_key == id_key:
+        return c_id
     if not (example := data_coll.find_one( { db_key: c_id } )):
         return c_id
-    if (ex_lab := example.get(id_key, {"label": None}).get("label")):
+    if not (ex_par := example.get(id_key)):
+        return c_id
+    if isinstance(ex_par, list):
+        ex_par = ex_par[0]
+    if (ex_lab := ex_par.get("label")):
         return ex_lab
-
     return c_id
 
 

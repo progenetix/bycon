@@ -24,7 +24,7 @@ export function ReferenceLink(externalReference) {
       "https://www.cellosaurus.org/" +
       externalReference.id.replace("cellosaurus:", "")
     )
-  } else if (externalReference.id.includes("PMID:")) {
+  } else if (externalReference.id.includes("pubmed:")) {
     return "/publication/?id=" + externalReference.id
   } else if (externalReference.id.includes("geo:")) {
     return (

@@ -51,4 +51,4 @@ ongoing work mainly targets:
       within their directories
     - this is in principle already possible, just need disentanglement etc.
 * [ ] Data: fix publication data for consequent inclusion of `ISO3166alpha2` codes
-* [x] fix publications.py default filters "PMID" and "genomes:>0"
+* [x] fix publications.py default filters "pubmed" and "genomes:>0"

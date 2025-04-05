@@ -6,6 +6,17 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-04-04 (v2.3.0 "Logan Airport")
+
+* changed genespans response to have `chromosome` and `referenceName`
+* fixed the geo query which had been broken by the query proocess refactoring
+  in 2.2.3 (the new query uses a MongoDB aggregation which is not compatible
+  with the geo `$near` query...)
+* fix for some plot parameters where an incorrect auto-detection of sample strip
+  height led to ignoring of modified values
+* update to ICD-O topographu hierarchy where now the `C...9` "NOS" codes are
+  treated as parent terms of the more specific ones
+
 ### 2025-03-10 (v2.2.6)
 
 #### VQS & OpenAPI
@@ -663,13 +674,13 @@ a few parameters:
       handover in the temp storage ...
 * moved (partially so far) `external_references` to `references` in biosamples
     - reference objects are now standard `id`, `label` term objects
-    - `references` is an object, i.e. the items are keyed `{"pubmed": {"id": "PMID:1234567", ...`
+    - `references` is an object, i.e. the items are keyed `{"pubmed": {"id": "pubmed:1234567", ...`
     - regeneration of the reference structure from Beacon/Phenopackets is done at export time
 * `byconaut` with new `/services/samplemap/` endpoint for plotting geolocations
   of sample data after standard Beacon query
 * `filter_definitions`
     - fix for arrayexpress series processing (now `AEseries`)
-    - changed `collatiionType` `PMID` => `pubmed`
+    - changed `collatiionType` `pubmed` => `pubmed`
 * fixed `uploader` fail due to missing import
 
 ### 2024-02-07 (v1.4.2)

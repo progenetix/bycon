@@ -17,7 +17,7 @@ We here show examples using the Progenetix instance with its `/beacon/` root pat
 
 ### `/filtering_terms/` + query
 
-* [/filtering_terms/?filters=PMID](http://progenetix.org/beacon/filtering_terms/?filters=PMID)
+* [/filtering_terms/?filters=pubmed](http://progenetix.org/beacon/filtering_terms/?filters=pubmed)
 * [/filtering_terms/?filters=NCIT,icdom](http://progenetix.org/beacon/filtering_terms/?filters=NCIT,icdom)
 
 ### `/biosamples/` + query

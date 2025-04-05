@@ -94,10 +94,12 @@ for c_id in coll_ids:
     record_queries = ByconQuery().recordsQuery()
     DR = ByconDatasetResults(ds_id, record_queries)
     ds_results = DR.retrieveResults()
+    if not "analyses.id" in ds_results:
+        print(f'!!! no results for {c_id} !!!')
+        print(f'\n... ds_results keys: {list(ds_results.keys())}')
+        continue
     ana_ids = ds_results["analyses.id"]["target_values"]
-
     prdbug(f'...{len(ana_ids)} matched analyses')
-
     if not BYC["TEST_MODE"]:
         bar.next()
 

@@ -24,8 +24,8 @@ For a single plot one can provide the entity id as path id value.
 #### Examples (using the Progenetix resource as endpoint):
 
 * https://progenetix.org/services/collationplots/pgx:cohort-TCGAcancers
-* https://progenetix.org/services/collationplots/?filters=NCIT:C7376,PMID:22824167,pgx:icdom-85003
-* https://progenetix.org/services/collationplots/?filters=NCIT:C7376,PMID:22824167&plotType=histoheatplot
+* https://progenetix.org/services/collationplots/?filters=NCIT:C7376,pubmed:22824167,pgx:icdom-85003
+* https://progenetix.org/services/collationplots/?filters=NCIT:C7376,pubmed:22824167&plotType=histoheatplot
 * https://progenetix.org/services/collationplots/?collationTypes=icdom&minNumber=1000&plotType=histoheatplot
 
 
@@ -33,7 +33,7 @@ For a single plot one can provide the entity id as path id value.
 
 The `collations` service provides access to information about data "subsets"
 in the project databases. Collations typically are aggregations of samples
-sharing an ontology code (e.g. NCIT) or external identifier (e.g. PMID). Therefore,
+sharing an ontology code (e.g. NCIT) or external identifier (e.g. pubmed). Therefore,
 in the context of Beacon the collations in `bycon` provide the `filtering_terms`
 available through Beacon queries, but also additional information e.g. about
 child terms and statistics related to the terms.
@@ -142,7 +142,7 @@ Stacking with the "pgx:" prefix is allowed.
 #### Examples (using the Progenetix resource as endpoint):
 
 * <https://progenetix.org/services/ids/pgxbs-kftva5zv>
-* <https://progenetix.org/services/ids/PMID:28966033>
+* <https://progenetix.org/services/ids/pubmed:28966033>
 * <https://progenetix.org/services/ids/NCIT:C3262>
 
 
@@ -172,9 +172,9 @@ genome-wide screening experiments in cancer.
 
 #### Examples
 
-* <https://progenetix.org/services/publications/?filters=PMID>
-* <http://progenetix.org/services/publications/?filters=PMID,genomes:&gt;200,arraymap:&gt;1>
-* <http://progenetix.org/services/publications/?filters=PMID:22824167&method=details>
+* <https://progenetix.org/services/publications/?filters=pubmed>
+* <http://progenetix.org/services/publications/?filters=pubmed,genomes:&gt;200,arraymap:&gt;1>
+* <http://progenetix.org/services/publications/?filters=pubmed:22824167&method=details>
 * <http://progenetix.org/services/publications/?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
 
 

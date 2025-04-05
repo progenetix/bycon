@@ -32,14 +32,19 @@ def hierarchy_from_file(ds_id, coll_type, pre_h_f):
     coll_defs = f_d_s[coll_type]
     hier = { }
     f = open(pre_h_f, 'r+')
-    h_in  = [line for line in f.readlines()]
+    h_in  = [line for line in f.readlines() if not re.match("^#", line)]
     f.close()
     parents = [ ]
     no = len(h_in)
     bar = Bar(coll_type, max = no, suffix='%(percent)d%%'+" of "+str(no) )
     for c_l in h_in:
         bar.next()
-        c, l, d, i = re.split("\t", c_l.rstrip() )
+        try:
+            c, l, d, i = re.split("\t", c_l.rstrip() )
+        except Exception as e:
+            print(f"Error in line: {c_l}")
+            print(e)
+            exit()
         d = int(d)
         max_p = len(parents) - 1
         if max_p < d:

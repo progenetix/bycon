@@ -66,7 +66,7 @@ title above the plot
 
 #### `plot_group_by` 
 **description:**
-group samples in histograms by a filter type (NCIT, PMID...)    
+group samples in histograms by a filter type (NCIT, pubmed...)    
 **default:** ``    
 
 #### `plot_filter_empty_samples` 

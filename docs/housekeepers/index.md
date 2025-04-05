@@ -42,7 +42,7 @@ provide additions and overrides in the `byconaut/local` directory.
 ### Use
 
 * `bin/collationsCreator.py -d progenetix`
-* `bin/collationsCreator.py -d examplez --collationTypes "PMID"`
+* `bin/collationsCreator.py -d examplez --collationTypes "pubmed"`
 
 
 ## Pre-computing Binned CNV Frequencies - `collationsFrequencymapsCreator`
@@ -57,7 +57,7 @@ given entity.
 
 * `-d`, `--datasetIds` ... to select the dataset (only one per run)
 * `--collationTypes` ... to (optionally) limit the processing to a selected
-  collation types (e.g. `NCIT`, `PMID`, `icdom` ...)
+  collation types (e.g. `NCIT`, `pubmed`, `icdom` ...)
 
 ### Use
 

@@ -5,7 +5,7 @@ def collations():
     """
     The `collations` service provides access to information about data "subsets"
     in the project databases. Collations typically are aggregations of samples
-    sharing an ontology code (e.g. NCIT) or external identifier (e.g. PMID). Therefore,
+    sharing an ontology code (e.g. NCIT) or external identifier (e.g. pubmed). Therefore,
     in the context of Beacon the collations in `bycon` provide the `filtering_terms`
     available through Beacon queries, but also additional information e.g. about
     child terms and statistics related to the terms.

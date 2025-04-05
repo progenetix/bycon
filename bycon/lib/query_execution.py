@@ -17,9 +17,13 @@ class ByconDatasetResults():
         self.res_ent_id = r_e_id = str(BYC.get("response_entity_id", "___none___"))
         self.data_db = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))[ds_id]
 
+        # This is bycon and model specific; in the default model there would also
+        # be `run` (which has it's data here as part of `analysis`). Also in
+        # `bycon` we have `phenopacket` which is a derived entity.
         self.queried_entities = ["individual", "biosample", "analysis", "genomicVariant"]
 
         self.res_obj_defs = {}
+        self.queries = {}
         for e in self.queried_entities:
             e_d = self.entity_defaults.get(e, {})
             c = e_d.get("collection", "___none___")
@@ -54,17 +58,19 @@ class ByconDatasetResults():
     def __generate_queries(self, BQ):
         c_n_s = self.data_db.list_collection_names()
         q_e_s = BQ.get("entities", {})
-        self.queries = {}
-        for q_e, q_o in q_e_s.items():
-            c_n = q_o.get("collection", "___none___")
-            if (q := q_o.get("query")) and c_n in c_n_s:
-                self.queries.update({c_n: q})
-        # prdbug(self.queries)
+        for e, q_o in q_e_s.items():
+            c = q_o.get("collection", "___none___")
+            if (q := q_o.get("query")) and c in c_n_s:
+                self.queries.update({c: q})
 
 
     # -------------------------------------------------------------------------#
 
     def __run_stacked_queries(self):
+        """
+        The `self.queries` object 
+
+        """
         if not (q_e_s := self.queries.keys()):
             return
 
@@ -77,6 +83,11 @@ class ByconDatasetResults():
     # -------------------------------------------------------------------------#
 
     def __prefetch_entity_multi_id_response(self, h_o_def, query):
+        """
+
+
+
+        """
         t_c = h_o_def.get("collection")
         d_k_s = h_o_def.get("upstream_ids", [])
         m_k = h_o_def.get("id_parameter", "id")
@@ -91,6 +102,12 @@ class ByconDatasetResults():
 
         for qq in query:
             # Aggregation pipeline to get distinct values for each key
+
+            # geo $near queries don't work in aggregation pipelines
+            if "geo_location.geometry" in qq:
+                ids = self.data_db[t_c].distinct("id", qq)
+                qq = {"id": {"$in": ids}}
+
             pipeline = [ 
                 { '$match': qq },
                 { '$group': d_group } 
@@ -120,6 +137,7 @@ class ByconDatasetResults():
         # requerying top-down to intersect for entities w/o shared keys - e.g. if
         # a variant query was run the variant_id values are not filtered by the
         # analysis ... queries since analyses don't know about variant_id values
+        # TODO: rethink... this is a bit hardcoded/verbose
         if (ind_ids := self.id_responses.get("individual_id")):
             query = [{"individual_id": {"$in": ind_ids}}]
             ent_resp_def = self.res_obj_defs.get(f'biosamples.id')
@@ -131,6 +149,9 @@ class ByconDatasetResults():
             self.__prefetch_entity_multi_id_response(ent_resp_def, query)
 
         if (ana_ids := self.id_responses.get("analysis_id")):
+            # another special case - variants are only queried if previously queried
+            # otherwise one creates a variant storage for potentially millions
+            # of variants just matching biosamples ... etc.
             if self.id_responses.get("variant_id"):
                 query = [{"analysis_id": {"$in": ana_ids}}]
                 ent_resp_def = self.res_obj_defs.get(f'variants.id')

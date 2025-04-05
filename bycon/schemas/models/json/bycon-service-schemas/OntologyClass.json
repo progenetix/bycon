@@ -10,7 +10,7 @@
             "description": "Identifier as string (CURIE highly recommended). \n",
             "examples": [
                 "UBERON:0000002",
-                "PMID:9892199",
+                "pubmed:9892199",
                 "icdom-85003"
             ]
         },

@@ -17,8 +17,8 @@ def collationplots():
     #### Examples (using the Progenetix resource as endpoint):
 
     * https://progenetix.org/services/collationplots/pgx:cohort-TCGAcancers
-    * https://progenetix.org/services/collationplots/?filters=NCIT:C7376,PMID:22824167,pgx:icdom-85003
-    * https://progenetix.org/services/collationplots/?filters=NCIT:C7376,PMID:22824167&plotType=histoheatplot
+    * https://progenetix.org/services/collationplots/?filters=NCIT:C7376,pubmed:22824167,pgx:icdom-85003
+    * https://progenetix.org/services/collationplots/?filters=NCIT:C7376,pubmed:22824167&plotType=histoheatplot
     * https://progenetix.org/services/collationplots/?collationTypes=icdom&minNumber=1000&plotType=histoheatplot
     """
     pdb = ByconBundler().collationsPlotbundles()

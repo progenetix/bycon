@@ -15,10 +15,10 @@ defaults:
         scopes:
           publications:
             default: 1
-        pattern: '^(PMID)(\:(\d+?))?$'
+        pattern: '^(pubmed)(\:(\d+?))?$'
         examples:
-          - 'PMID:28966033'
-          - 'PMID:9405679'
+          - 'pubmed:28966033'
+          - 'pubmed:9405679'
         collation: datacollections
       wes:
         db_key: 'counts.wes'

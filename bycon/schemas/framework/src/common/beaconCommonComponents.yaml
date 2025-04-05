@@ -61,7 +61,7 @@ $defs:
       - ga4gh:GA.01234abcde
       - DUO:0000004
       - orcid:0000-0003-3463-0775
-      - PMID:15254584
+      - pubmed:15254584
   ListOfSchemas:
     description: >-
       Set of schemas to be used in the response to a request.

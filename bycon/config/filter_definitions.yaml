@@ -246,21 +246,21 @@ $defs:
     id: pubmed
     type: ontologyTerm
     name: NCBI PubMed
-    namespace_prefix: PMID
+    namespace_prefix: pubmed
     url: "https://www.ncbi.nlm.nih.gov/pubmed/"
     reference:
       root: https://europepmc.org/article/MED/
       replace:
-        - "PMID:"
+        - "pubmed:"
         - ""
     db_key: 'references.pubmed.id'
     scope: biosamples
     entity: biosample
-    pattern: '^PMID(:\d+?)?$'
+    pattern: '^pubmed(:\d+?)?$'
     collationed: True
     examples:
-      - PMID:28966033
-      - PMID:9405679
+      - pubmed:28966033
+      - pubmed:9405679
 
   GEOseries:
     id: geo_gse

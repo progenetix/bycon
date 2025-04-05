@@ -49,7 +49,7 @@ Plots can now be generated:
 
 CNV histograms can be generated either (fast) for one or multiple of the "collations" _i.e._
 samples sharing a common code (diagnosis, technnique...) or identifier (cell line id, 
-PMID ...), or as single histogram for the output of a Beacon query.
+pubmed ...), or as single histogram for the output of a Beacon query.
 
 A complete list of collations can be retrieved through the `/services/collations/`
 endpoint, e.g. [/services/collations?datasetIds=progenetix](http://progenetix.org/services/collations?datasetIds=progenetix) - an option `&output=text` should provide this as a table instead of Beacon-style JSON response.

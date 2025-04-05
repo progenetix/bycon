@@ -1,4 +1,36 @@
+beacon_v2:
+  label: "Beacon v2 API"
+  link: ""
+
+
+Bv2minimalAlleleRequest:
+  label: "Example: v1 Style Allele Request"
+  entities:
+    - genomicVariant
+  example_values:
+    reference_name:
+      - chr17:
+          value: "17"
+          summary: Chromosome 17
+    start:
+      - CDKN2AstartBracket:
+          value: [7577120]
+          summary: Base position on chromosome 17 (0-based)
+    alternate_bases:
+      - A:
+          value: A
+          summary: An `A` allele at the specified position
+    reference_bases:
+      - G:
+          value: G
+          summary: A reference `G` allele at the specified position
+    requested_granularity:
+      - bool:
+          value: boolean
+          summary: The minimal boolean response
+
 Bv2cnvbracketquery:
+  label: "Example: Bv2 CNV / bracket"
   entities:
     - genomicVariant
     - analysis
@@ -27,6 +59,7 @@ Bv2cnvbracketquery:
           summary: High-level copy number loss
 
 VQScopyChangeRequest:
+  label: "Proposal: VQS CNV / bracket"
   entities:
     - genomicVariant
     - analysis
@@ -55,6 +88,7 @@ VQScopyChangeRequest:
           summary: High-level copy number loss
 
 VQSgeneIdRequest:
+  label: "Proposal: VQS CNV by Gene ID"
   entities:
     - genomicVariant
     - analysis
@@ -75,6 +109,7 @@ VQSgeneIdRequest:
           summary: Focal CNV
 
 VQSadjacencyRequest:
+  label: "Proposal: VQS Fusion / Adjacency"
   entities:
     - genomicVariant
     - analysis

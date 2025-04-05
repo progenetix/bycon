@@ -12,7 +12,7 @@ properties:
   id:
     type: string
     examples:
-      - PMID:22824167
+      - pubmed:22824167
 
   pubmedid:
     type: string

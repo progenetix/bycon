@@ -244,7 +244,7 @@ export function usePublication(id) {
 export function usePublicationList({ geoCity, geodistanceKm }) {
   const qParams = new URLSearchParams({
     ...mkGeoParams(geoCity, geodistanceKm),
-    filters: "PMID,genomes:>0",
+    filters: "pubmed,genomes:>0",
     method: "details"
   }).toString()
   const url = `${basePath}services/publications?${qParams}`
@@ -268,7 +268,7 @@ export function useLiteratureCellLineMatches(cln)
 export function usePublicationWithDataList({ geoCity, geodistanceKm }) {
   const qParams = new URLSearchParams({
     ...mkGeoParams(geoCity, geodistanceKm),
-    filters: "PMID,progenetix:>0",
+    filters: "pubmed,progenetix:>0",
     method: "details"
   }).toString()
   const url = `${basePath}services/publications?${qParams}`
@@ -280,7 +280,7 @@ export function usePublicationWithDataList({ geoCity, geodistanceKm }) {
 export function useProgenetixRefPublicationList({ geoCity, geodistanceKm }) {
   const qParams = new URLSearchParams({
     ...mkGeoParams(geoCity, geodistanceKm),
-    filters: "PMID,pgxuse:yes",
+    filters: "pubmed,pgxuse:yes",
     method: "details"
   }).toString()
   const url = `${basePath}services/publications?${qParams}`

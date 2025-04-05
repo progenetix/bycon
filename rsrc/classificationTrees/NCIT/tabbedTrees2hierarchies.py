@@ -5,9 +5,10 @@ from os import path, pardir, system
 
 loc_path = path.join( path.dirname( path.abspath(__file__) ) )
 
-id_file = path.join( loc_path, "ids.tsv" )
-label_file = path.join( loc_path, "labels.tsv" )
-hier_file = path.join( loc_path, "new_numbered_hierarchies.tsv" )
+id_file = path.join( loc_path, "hyperplasia_ids.tsv" )
+label_file = path.join( loc_path, "hyperplasia_labels.tsv" )
+hier_file = path.join( loc_path, "hyperplasia_numbered_hierarchies.tsv" )
+start_count = 370514
 
 with open(id_file, mode='r', newline='') as id_fh:
     id_lines = id_fh.readlines()
@@ -26,7 +27,7 @@ for i, code in enumerate(id_lines):
 				f'NCIT:{cell.strip()}',
 				label_lines[i].split('\t')[col].strip(),
 				str(col),
-				str(i+1)
+				str(i+1+start_count)
 			])
 			hier_lines.append(h_l)
 

@@ -13,7 +13,7 @@ properties:
     description: Representation of the source of the evidence
     $ref: ./externalReference.yaml
     example:
-      id: PMID:30962759
+      id: pubmed:30962759
       label: Recurrent Erythema Nodosum in a Child with a SHOC2 Gene Mutation
 required:
   - evidenceCode

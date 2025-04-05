@@ -9,7 +9,7 @@ properties:
   id:
     type: string
     examples:
-      - PMID:22824167
+      - pubmed:22824167
   label:
     description: >
       An informative short text label.
@@ -24,11 +24,11 @@ properties:
   collation_type:
     type: string
     examples:
-      - 'PMID'
+      - 'pubmed'
   namespace_prefix:
     type: string
     examples:
-      - 'PMID'
+      - 'pubmed'
   scope:
     type: string
     examples:
@@ -45,12 +45,12 @@ properties:
     type: array
     items: string
     examples:
-      - - PMID:10471496
+      - - pubmed:10471496
   child_terms:
     type: array
     items: string
     examples:
-      - - PMID:10471496
+      - - pubmed:10471496
   reference:
     type: string
     examples:

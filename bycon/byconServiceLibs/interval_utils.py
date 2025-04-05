@@ -442,9 +442,14 @@ class GenomeBins:
         min_f = self.interval_definitions["interval_min_fraction"].get("value", 0.001)
         self.interval_frequencies = deepcopy(self.genomic_intervals)
         int_no = self.interval_count
-        self.analyses_count = 0
 
-        # analyses can be either a list or a MongoDB Cursor (which has to be re-set)
+        pars = {
+            "gain": {"cov_l": "dup", "hl_l": "hldup"},
+            "loss": {"cov_l": "del", "hl_l": "hldel"}
+        }
+
+        self.analyses_count = 0
+        # analyses can be either a list or a MongoDB Cursor (which has to be reset)
         if type(self.analyses).__name__ == "Cursor":
             self.analyses.rewind()
 
@@ -452,10 +457,6 @@ class GenomeBins:
         if (a_no := len(list(self.analyses))) > 0:
             f_factor = 100 / a_no
             self.analyses_count = a_no
-        pars = {
-            "gain": {"cov_l": "dup", "hl_l": "hldup"},
-            "loss": {"cov_l": "del", "hl_l": "hldel"}
-        }
 
         for t in pars.keys():
             covs = np.zeros((self.analyses_count, int_no))
@@ -484,3 +485,5 @@ class GenomeBins:
 
         if type(self.analyses).__name__ == "Cursor":
             self.analyses.close()
+
+

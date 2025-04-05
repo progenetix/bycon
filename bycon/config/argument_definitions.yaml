@@ -1,9 +1,9 @@
 description: >-
   The file defines the command line arguments accepted by the bycon package.
-  While the `argDef` parameters contain the standard structure for the `argparse`
-  module, they are wrapped in an additional object structure for package-specific
-  information. Due to the `argparse` object structure it is assumed that the
-  `argDef` object only contains a single key (_i.e._ the parameter name).
+  The parameters contain the standard structure for the `argparse`
+  module but are wrapped in an additional object structure for package-specific
+  information such as OpenAPI information (`in`, `examples`...) and scope
+  information (e.g. `beacon_query` flag for form inclusion).
 
 ################################################################################
 # standard Beacon parameters 
@@ -162,9 +162,9 @@ $defs:
           value:
             - NCIT:C9335
           summary: A neoplasia disease code (CURIE format)
-      - PMID:
+      - pubmed:
           value:
-            - PMID:28966033
+            - pubmed:28966033
           summary: A publiction identifier (CURIE format)
 
   filter_precision:

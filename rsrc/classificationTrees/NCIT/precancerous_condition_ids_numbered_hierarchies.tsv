@@ -1,0 +1,1421 @@
+NCIT:C3341	Precancerous Condition	0	369094
+NCIT:C2917	Carcinoma In Situ	1	369095
+NCIT:C132783	Stage 0 Major Salivary Gland Cancer AJCC v8	2	369096
+NCIT:C139534	Anatomic Stage 0 Breast Cancer AJCC v8	2	369097
+NCIT:C2924	Breast Ductal Carcinoma In Situ	3	369098
+NCIT:C176005	Breast Ductal Carcinoma In Situ, Comedo Type	4	369099
+NCIT:C203339	Recurrent Breast Ductal Carcinoma In Situ	4	369100
+NCIT:C4190	Breast Papillary Ductal Carcinoma In Situ	4	369101
+NCIT:C176011	Breast Solid Papillary Carcinoma In Situ	5	369102
+NCIT:C5139	Breast Micropapillary Ductal Carcinoma In Situ	5	369103
+NCIT:C5137	Breast Ductal Carcinoma In Situ, Non-Comedo Type	4	369104
+NCIT:C5138	Breast Ductal Carcinoma In Situ, Cribriform Pattern	4	369105
+NCIT:C66933	Breast Ductal Carcinoma In Situ, Solid Type	4	369106
+NCIT:C7949	Breast Ductal Carcinoma In Situ, High Grade	4	369107
+NCIT:C9456	Breast Ductal Carcinoma In Situ, Intermediate Grade	4	369108
+NCIT:C9457	Breast Ductal Carcinoma In Situ, Low Grade	4	369109
+NCIT:C139555	Prognostic Stage 0 Breast Cancer AJCC v8	2	369110
+NCIT:C140361	Stage 0is Renal Pelvis and Ureter Cancer AJCC v8	2	369111
+NCIT:C140362	Stage 0is Renal Pelvis Cancer AJCC v8	3	369112
+NCIT:C140363	Stage 0is Ureter Cancer AJCC v8	3	369113
+NCIT:C140459	Stage 0is Urethral Cancer AJCC v8	2	369114
+NCIT:C27093	Stage 0 Squamous Cell Carcinoma	2	369115
+NCIT:C133255	Stage 0 Cutaneous Squamous Cell Carcinoma of the Head and Neck AJCC v8	3	369116
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	3	369117
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	3	369118
+NCIT:C136719	Lung Squamous Cell Carcinoma In Situ	3	369119
+NCIT:C8763	Stage 0 Lung Squamous Cell Carcinoma AJCC v6 and v7	4	369120
+NCIT:C157575	Anal Intraepithelial Neoplasia 3	3	369121
+NCIT:C212849	Conjunctival Squamous Cell Carcinoma In Situ	3	369122
+NCIT:C27790	Penile Carcinoma In Situ	3	369123
+NCIT:C28292	Squamous Cell Carcinoma In Situ of the Nipple	3	369124
+NCIT:C2906	Skin Squamous Cell Carcinoma In Situ	3	369125
+NCIT:C62571	Bowen Disease of the Skin	4	369126
+NCIT:C3639	Tracheal Carcinoma In Situ	3	369127
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	3	369128
+NCIT:C6052	Stage 0 Oral Cavity Squamous Cell Carcinoma AJCC v6 and v7	3	369129
+NCIT:C6121	Stage 0 Laryngeal Squamous Cell Carcinoma AJCC v6, v7, and v8	3	369130
+NCIT:C4592	Stage 0 Epiglottic Carcinoma AJCC v6, v7, and v8	4	369131
+NCIT:C6128	Stage 0 Laryngeal Verrucous Carcinoma AJCC v6, v7, and v8	4	369132
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	3	369133
+NCIT:C8903	Stage 0 Bladder Squamous Cell Carcinoma AJCC v6 and v7	3	369134
+NCIT:C27467	Stage 0 Lung Cancer AJCC v6 and v7	2	369135
+NCIT:C9104	Stage 0 Lung Non-Small Cell Cancer AJCC v6 and v7	3	369136
+NCIT:C35758	Stage 0 Lung Large Cell Carcinoma AJCC v6 and v7	4	369137
+NCIT:C8748	Stage 0 Lung Adenosquamous Carcinoma AJCC v6 and v7	4	369138
+NCIT:C8758	Stage 0 Lung Adenocarcinoma AJCC v6 and v7	4	369139
+NCIT:C35180	Digestive System Carcinoma In Situ	2	369140
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	3	369141
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	3	369142
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	3	369143
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	3	369144
+NCIT:C133550	Clinical Stage 0 Gastroesophageal Junction Adenocarcinoma AJCC v8	3	369145
+NCIT:C133564	Pathologic Stage 0 Gastroesophageal Junction Adenocarcinoma AJCC v8	3	369146
+NCIT:C133647	Clinical Stage 0 Gastric Cancer AJCC v8	3	369147
+NCIT:C133654	Pathologic Stage 0 Gastric Cancer AJCC v8	3	369148
+NCIT:C133795	Stage 0 Anal Cancer AJCC v8	3	369149
+NCIT:C157575	Anal Intraepithelial Neoplasia 3	4	369150
+NCIT:C133894	Stage 0 Small Intestinal Adenocarcinoma AJCC v8	3	369151
+NCIT:C134118	Stage 0 Appendix Carcinoma AJCC v8	3	369152
+NCIT:C134182	Stage 0 Colorectal Cancer AJCC v8	3	369153
+NCIT:C134271	Stage 0 Colon Cancer AJCC v8	4	369154
+NCIT:C134291	Stage 0 Rectal Cancer AJCC v8	4	369155
+NCIT:C134663	Stage 0 Gallbladder Cancer AJCC v8	3	369156
+NCIT:C134865	Stage 0 Ampulla of Vater Cancer AJCC v8	3	369157
+NCIT:C134914	Stage 0 Pancreatic Cancer AJCC v8	3	369158
+NCIT:C207706	Stage 0 Appendix Carcinoma AJCC v9	3	369159
+NCIT:C3637	Stage 0 Esophageal Cancer AJCC v6	3	369160
+NCIT:C4439	Stage 0 Gallbladder Cancer AJCC v6 and v7	3	369161
+NCIT:C4593	Stage 0 Appendix Carcinoma AJCC v7	3	369162
+NCIT:C4892	Stage 0 Small Intestinal Cancer AJCC v7	3	369163
+NCIT:C4444	Stage 0 Ampulla of Vater Cancer AJCC v7	4	369164
+NCIT:C5729	Stage 0 Pancreatic Cancer AJCC v6 and v7	3	369165
+NCIT:C67493	High-Grade Biliary Intraepithelial Neoplasia	3	369166
+NCIT:C7678	Adenocarcinoma In Situ in Adenomatous Polyp	3	369167
+NCIT:C7788	Stage 0 Gastric Cancer AJCC v6 and v7	3	369168
+NCIT:C4428	Gastric Cardia Carcinoma In Situ AJCC v6 and v7	4	369169
+NCIT:C4429	Gastric Fundus Carcinoma In Situ AJCC v6 and v7	4	369170
+NCIT:C4430	Gastric Body Carcinoma In Situ AJCC v6 and v7	4	369171
+NCIT:C4431	Gastric Pylorus Carcinoma In Situ AJCC v6 and v7	4	369172
+NCIT:C8400	Gastric Antrum Carcinoma In Situ AJCC v6 and v7	5	369173
+NCIT:C7794	Stage 0 Anal Canal Cancer AJCC v6 and v7	3	369174
+NCIT:C27282	Stage 0 AIDS-Related Anal Canal Cancer AJCC v6 and v7	4	369175
+NCIT:C8932	Stage 0 Colorectal Cancer AJCC v6 and v7	3	369176
+NCIT:C3638	Stage 0 Colon Cancer AJCC v6 and v7	4	369177
+NCIT:C4594	Cecum Carcinoma In Situ	5	369178
+NCIT:C4853	Stage 0 Rectal Cancer AJCC v6 and v7	4	369179
+NCIT:C5017	Stage 0 Rectosigmoid Cancer AJCC v6 and v7	4	369180
+NCIT:C89771	Stage 0 Esophageal Cancer AJCC v7	3	369181
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	4	369182
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	4	369183
+NCIT:C3640	Stage 0 Skin Cancer	2	369184
+NCIT:C2906	Skin Squamous Cell Carcinoma In Situ	3	369185
+NCIT:C62571	Bowen Disease of the Skin	4	369186
+NCIT:C5893	Stage 0 Lip Basal Cell Carcinoma AJCC v6 and v7	3	369187
+NCIT:C3641	Stage 0 Breast Cancer AJCC v6 and v7	2	369188
+NCIT:C176503	Male Breast Carcinoma In Situ	3	369189
+NCIT:C176580	Female Breast Carcinoma In Situ	3	369190
+NCIT:C2924	Breast Ductal Carcinoma In Situ	3	369191
+NCIT:C176005	Breast Ductal Carcinoma In Situ, Comedo Type	4	369192
+NCIT:C203339	Recurrent Breast Ductal Carcinoma In Situ	4	369193
+NCIT:C4190	Breast Papillary Ductal Carcinoma In Situ	4	369194
+NCIT:C176011	Breast Solid Papillary Carcinoma In Situ	5	369195
+NCIT:C5139	Breast Micropapillary Ductal Carcinoma In Situ	5	369196
+NCIT:C5137	Breast Ductal Carcinoma In Situ, Non-Comedo Type	4	369197
+NCIT:C5138	Breast Ductal Carcinoma In Situ, Cribriform Pattern	4	369198
+NCIT:C66933	Breast Ductal Carcinoma In Situ, Solid Type	4	369199
+NCIT:C7949	Breast Ductal Carcinoma In Situ, High Grade	4	369200
+NCIT:C9456	Breast Ductal Carcinoma In Situ, Intermediate Grade	4	369201
+NCIT:C9457	Breast Ductal Carcinoma In Situ, Low Grade	4	369202
+NCIT:C4018	Breast Lobular Carcinoma In Situ	3	369203
+NCIT:C137839	Breast Pleomorphic Lobular Carcinoma In Situ	4	369204
+NCIT:C175949	Breast Classic Lobular Carcinoma In Situ	4	369205
+NCIT:C83170	Breast Classic Lobular Carcinoma In Situ Type A	5	369206
+NCIT:C83171	Breast Classic Lobular Carcinoma In Situ Type B	5	369207
+NCIT:C175950	Breast Florid Lobular Carcinoma In Situ	4	369208
+NCIT:C4195	Breast Ductal Carcinoma In Situ and Lobular Carcinoma In Situ	3	369209
+NCIT:C37266	Bladder Urothelial Carcinoma In Situ	2	369210
+NCIT:C140418	Stage 0is Bladder Cancer AJCC v8	3	369211
+NCIT:C3644	Stage 0is Bladder Urothelial Carcinoma AJCC v6 and v7	3	369212
+NCIT:C4000	Stage 0 Cervical Cancer AJCC v6	2	369213
+NCIT:C4123	Adenocarcinoma In Situ	2	369214
+NCIT:C133894	Stage 0 Small Intestinal Adenocarcinoma AJCC v8	3	369215
+NCIT:C134914	Stage 0 Pancreatic Cancer AJCC v8	3	369216
+NCIT:C136486	Lung Adenocarcinoma In Situ	3	369217
+NCIT:C136716	Lung Non-Mucinous Adenocarcinoma In Situ	4	369218
+NCIT:C136717	Lung Mucinous Adenocarcinoma In Situ	4	369219
+NCIT:C4144	Adenocarcinoma In Situ in Tubulovillous Adenoma	3	369220
+NCIT:C5729	Stage 0 Pancreatic Cancer AJCC v6 and v7	3	369221
+NCIT:C6877	Grade III Glandular Intraepithelial Neoplasia	3	369222
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	4	369223
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	4	369224
+NCIT:C133550	Clinical Stage 0 Gastroesophageal Junction Adenocarcinoma AJCC v8	4	369225
+NCIT:C133564	Pathologic Stage 0 Gastroesophageal Junction Adenocarcinoma AJCC v8	4	369226
+NCIT:C2924	Breast Ductal Carcinoma In Situ	4	369227
+NCIT:C176005	Breast Ductal Carcinoma In Situ, Comedo Type	5	369228
+NCIT:C203339	Recurrent Breast Ductal Carcinoma In Situ	5	369229
+NCIT:C4190	Breast Papillary Ductal Carcinoma In Situ	5	369230
+NCIT:C176011	Breast Solid Papillary Carcinoma In Situ	6	369231
+NCIT:C5139	Breast Micropapillary Ductal Carcinoma In Situ	6	369232
+NCIT:C5137	Breast Ductal Carcinoma In Situ, Non-Comedo Type	5	369233
+NCIT:C5138	Breast Ductal Carcinoma In Situ, Cribriform Pattern	5	369234
+NCIT:C66933	Breast Ductal Carcinoma In Situ, Solid Type	5	369235
+NCIT:C7949	Breast Ductal Carcinoma In Situ, High Grade	5	369236
+NCIT:C9456	Breast Ductal Carcinoma In Situ, Intermediate Grade	5	369237
+NCIT:C9457	Breast Ductal Carcinoma In Situ, Low Grade	5	369238
+NCIT:C3642	Grade III Prostatic Intraepithelial Neoplasia	4	369239
+NCIT:C40105	Stage 0 Fallopian Tube Cancer AJCC v7	4	369240
+NCIT:C126449	Serous Tubal Intraepithelial Carcinoma	5	369241
+NCIT:C4018	Breast Lobular Carcinoma In Situ	4	369242
+NCIT:C137839	Breast Pleomorphic Lobular Carcinoma In Situ	5	369243
+NCIT:C175949	Breast Classic Lobular Carcinoma In Situ	5	369244
+NCIT:C83170	Breast Classic Lobular Carcinoma In Situ Type A	6	369245
+NCIT:C83171	Breast Classic Lobular Carcinoma In Situ Type B	6	369246
+NCIT:C175950	Breast Florid Lobular Carcinoma In Situ	5	369247
+NCIT:C4195	Breast Ductal Carcinoma In Situ and Lobular Carcinoma In Situ	4	369248
+NCIT:C4520	Cervical Adenocarcinoma In Situ	4	369249
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	5	369250
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	5	369251
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	4	369252
+NCIT:C7678	Adenocarcinoma In Situ in Adenomatous Polyp	3	369253
+NCIT:C7679	Adenocarcinoma In Situ in Tubular Adenoma	3	369254
+NCIT:C8376	Adenocarcinoma In Situ in Villous Adenoma	3	369255
+NCIT:C8758	Stage 0 Lung Adenocarcinoma AJCC v6 and v7	3	369256
+NCIT:C8894	Stage 0 Bladder Adenocarcinoma AJCC v6 and v7	3	369257
+NCIT:C4522	Stage 0 Vulvar Cancer AJCC v6	2	369258
+NCIT:C4531	Stage 0is Urethral Cancer AJCC v7	2	369259
+NCIT:C4942	Stage 0 Pharyngeal Cancer	2	369260
+NCIT:C132995	Stage 0 Oropharyngeal (p16-Negative) Carcinoma AJCC v8	3	369261
+NCIT:C4590	Stage 0 Oropharyngeal Carcinoma AJCC v6 and v7	3	369262
+NCIT:C6039	Stage 0 Oropharyngeal Squamous Cell Carcinoma AJCC v6 and v7	4	369263
+NCIT:C9099	Stage 0 Nasopharyngeal Carcinoma AJCC v6, v7, and v8	3	369264
+NCIT:C6035	Stage 0 Nasopharyngeal Undifferentiated Carcinoma AJCC v6, v7, and v8	4	369265
+NCIT:C6036	Stage 0 Nasopharyngeal Keratinizing Squamous Cell Carcinoma AJCC v6, v7, and v8	4	369266
+NCIT:C9101	Stage 0 Hypopharyngeal Carcinoma AJCC v6, v7, and v8	3	369267
+NCIT:C6048	Stage 0 Hypopharyngeal Squamous Cell Carcinoma AJCC v6, v7, and v8	4	369268
+NCIT:C65163	Papillary Carcinoma In Situ	2	369269
+NCIT:C4190	Breast Papillary Ductal Carcinoma In Situ	3	369270
+NCIT:C176011	Breast Solid Papillary Carcinoma In Situ	4	369271
+NCIT:C5139	Breast Micropapillary Ductal Carcinoma In Situ	4	369272
+NCIT:C6128	Stage 0 Laryngeal Verrucous Carcinoma AJCC v6, v7, and v8	3	369273
+NCIT:C7518	Stage 0is Renal Pelvis and Ureter Cancer AJCC v7	2	369274
+NCIT:C4529	Stage 0is Ureter Cancer AJCC v7	3	369275
+NCIT:C4597	Stage 0is Renal Pelvis Cancer AJCC v7	3	369276
+NCIT:C7855	Stage 0 Vaginal Cancer AJCC v6	2	369277
+NCIT:C7939	Stage 0 Lip and Oral Cavity Cancer AJCC v6 and v7	2	369278
+NCIT:C4587	Stage 0 Oral Cavity Cancer AJCC v6 and v7	3	369279
+NCIT:C6052	Stage 0 Oral Cavity Squamous Cell Carcinoma AJCC v6 and v7	4	369280
+NCIT:C4588	Stage 0 Lip Cancer AJCC v6 and v7	3	369281
+NCIT:C5893	Stage 0 Lip Basal Cell Carcinoma AJCC v6 and v7	4	369282
+NCIT:C89445	Stage 0 Vulvar Cancer AJCC v7	2	369283
+NCIT:C89476	Stage 0 Vaginal Cancer AJCC v7	2	369284
+NCIT:C89550	Stage 0 Cervical Cancer AJCC v7	2	369285
+NCIT:C4520	Cervical Adenocarcinoma In Situ	3	369286
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	4	369287
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	4	369288
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	3	369289
+NCIT:C9100	Stage 0 Laryngeal Cancer AJCC v6, v7, and V8	2	369290
+NCIT:C6121	Stage 0 Laryngeal Squamous Cell Carcinoma AJCC v6, v7, and v8	3	369291
+NCIT:C4592	Stage 0 Epiglottic Carcinoma AJCC v6, v7, and v8	4	369292
+NCIT:C6128	Stage 0 Laryngeal Verrucous Carcinoma AJCC v6, v7, and v8	4	369293
+NCIT:C91741	External Auditory Canal Squamous Cell Carcinoma In Situ	2	369294
+NCIT:C3186	Leukoplakia	1	369295
+NCIT:C3187	Oral Leukoplakia	2	369296
+NCIT:C36262	Oral Cavity Leukoplakia	3	369297
+NCIT:C3722	Oral Cavity Hairy Leukoplakia	4	369298
+NCIT:C3952	Hairy Leukoplakia of Tongue	5	369299
+NCIT:C3881	Leukoplakia of Gingiva	4	369300
+NCIT:C3886	Leukoplakia of Tongue	4	369301
+NCIT:C3952	Hairy Leukoplakia of Tongue	5	369302
+NCIT:C7743	Mouth Mucous Membrane Leukoplakia	4	369303
+NCIT:C8425	Leukoplakia of Buccal Mucosa	5	369304
+NCIT:C38383	Aneuploid Dysplastic Oral Leukoplakia	3	369305
+NCIT:C3951	Leukoplakia of Lip	3	369306
+NCIT:C4694	Ulcerated Oral Leukoplakia	3	369307
+NCIT:C4695	Speckled Oral Leukoplakia	3	369308
+NCIT:C4696	Proliferative Verrucous Leukoplakia	3	369309
+NCIT:C94837	Erythroleukoplakia	3	369310
+NCIT:C3509	Genital Leukoplakia	2	369311
+NCIT:C3151	Penile Leukoplakia	3	369312
+NCIT:C3152	Vulval Leukoplakia	3	369313
+NCIT:C3663	Vaginal Leukoplakia	3	369314
+NCIT:C3976	Cervical Leukoplakia	3	369315
+NCIT:C3953	Esophageal Leukoplakia	2	369316
+NCIT:C4679	Laryngeal Keratosis	2	369317
+NCIT:C3935	Leukoplakia of Vocal Cords	3	369318
+NCIT:C4709	Interarytenoid Leukoplakia	4	369319
+NCIT:C7745	Mucous Membrane Leukoplakia	2	369320
+NCIT:C7743	Mouth Mucous Membrane Leukoplakia	3	369321
+NCIT:C8425	Leukoplakia of Buccal Mucosa	4	369322
+NCIT:C8390	Anal Leukoplakia	2	369323
+NCIT:C3646	Neoplasm of Uncertain Malignant Potential	1	369324
+NCIT:C126469	Borderline Broad Ligament Serous Tumor	2	369325
+NCIT:C158622	Borderline Serous Cystadenofibroma	2	369326
+NCIT:C40029	Borderline Ovarian Serous Cystadenofibroma	3	369327
+NCIT:C167366	Adnexal Cribriform Tumor	2	369328
+NCIT:C178255	Atypical Neurofibromatous Neoplasm of Uncertain Biologic Potential	2	369329
+NCIT:C187284	Thyroid Gland Tumor of Uncertain Malignant Potential	2	369330
+NCIT:C155978	Thyroid Gland Follicular Tumor of Uncertain Malignant Potential	3	369331
+NCIT:C27729	Thyroid Gland Well-Differentiated Tumor of Uncertain Malignant Potential	3	369332
+NCIT:C192124	Borderline Paratesticular Serous Tumor	2	369333
+NCIT:C192127	Borderline Paratesticular Mucinous Tumor	2	369334
+NCIT:C201978	Pulmonary Mucinous Cystic Tumor of Borderline Malignancy	2	369335
+NCIT:C202851	Smooth Muscle Tumor of Uncertain Malignant Potential	2	369336
+NCIT:C181941	Female Reproductive System Smooth Muscle Tumor of Uncertain Malignant Potential	3	369337
+NCIT:C179362	Ovarian Smooth Muscle Tumor of Uncertain Malignant Potential	4	369338
+NCIT:C181939	Vulvar Smooth Muscle Tumor of Uncertain Malignant Potential	4	369339
+NCIT:C181940	Vaginal Smooth Muscle Tumor of Uncertain Malignant Potential	4	369340
+NCIT:C40177	Uterine Corpus Smooth Muscle Tumor of Uncertain Malignant Potential	4	369341
+NCIT:C180540	Uterine Corpus Spindle Smooth Muscle Tumor of Uncertain Malignant Potential	5	369342
+NCIT:C180541	Uterine Corpus Myxoid Smooth Muscle Tumor of Uncertain Malignant Potential	5	369343
+NCIT:C180542	Uterine Corpus Epithelioid Smooth Muscle Tumor of Uncertain Malignant Potential	5	369344
+NCIT:C202852	Sinonasal Smooth Muscle Tumor of Uncertain Malignant Potential	3	369345
+NCIT:C27497	Glomus Tumor of Uncertain Malignant Potential	2	369346
+NCIT:C27880	Bladder Urothelial Proliferation of Uncertain Malignant Potential	2	369347
+NCIT:C27897	T-Cell Proliferation of Uncertain Malignant Potential	2	369348
+NCIT:C3721	Lymphomatoid Papulosis	3	369349
+NCIT:C139014	Type D Lymphomatoid Papulosis	4	369350
+NCIT:C139015	Type E Lymphomatoid Papulosis	4	369351
+NCIT:C139017	Lymphomatoid Papulosis with DUSP22-IRF4 Gene Rearrangement	4	369352
+NCIT:C7197	Type A Lymphomatoid Papulosis	4	369353
+NCIT:C7198	Type B Lymphomatoid Papulosis	4	369354
+NCIT:C7199	Type C Lymphomatoid Papulosis	4	369355
+NCIT:C7196	Borderline Primary Cutaneous CD30-Positive T-Cell Lymphoproliferative Disorder	3	369356
+NCIT:C39905	Prostate Stromal Tumor of Uncertain Malignant Potential	2	369357
+NCIT:C40024	Borderline Peritoneal Serous Tumor	2	369358
+NCIT:C40106	Borderline Fallopian Tube Neoplasm	2	369359
+NCIT:C40107	Borderline Fallopian Tube Serous Tumor	3	369360
+NCIT:C40108	Borderline Fallopian Tube Mucinous Tumor	3	369361
+NCIT:C40110	Borderline Fallopian Tube Endometrioid Tumor	3	369362
+NCIT:C4524	Multilocular Cystic Renal Neoplasm of Low Malignant Potential	2	369363
+NCIT:C4711	Borderline Cystadenoma	2	369364
+NCIT:C4177	Borderline Serous Cystadenoma	3	369365
+NCIT:C4183	Borderline Papillary Serous Cystadenoma	4	369366
+NCIT:C4178	Borderline Papillary Cystadenoma	3	369367
+NCIT:C4183	Borderline Papillary Serous Cystadenoma	4	369368
+NCIT:C4186	Borderline Papillary Mucinous Cystadenoma	4	369369
+NCIT:C4783	Borderline Ovarian Epithelial Tumor	2	369370
+NCIT:C115352	Recurrent Borderline Ovarian Surface Epithelial-Stromal Tumor	3	369371
+NCIT:C158616	Borderline Ovarian Mixed Epithelial Tumor/Atypical Proliferative Ovarian Mixed Epithelial Tumor	3	369372
+NCIT:C7281	Borderline Ovarian Seromucinous Tumor/Atypical Proliferative Ovarian Seromucinous Tumor	4	369373
+NCIT:C179251	Borderline Ovarian Endometrioid Tumor	3	369374
+NCIT:C159486	Borderline Ovarian Endometrioid Tumor/Atypical Proliferative Ovarian Endometrioid Tumor with Microinvasion	4	369375
+NCIT:C7983	Borderline Ovarian Endometrioid Tumor/Atypical Proliferative Ovarian Endometrioid Tumor	4	369376
+NCIT:C40069	Borderline Ovarian Endometrioid Adenofibroma	5	369377
+NCIT:C27289	Borderline Ovarian Endometrioid Cystadenofibroma	6	369378
+NCIT:C179259	Borderline Ovarian Seromucinous Tumor	3	369379
+NCIT:C159313	Borderline Ovarian Seromucinous Tumor/Atypical Proliferative Ovarian Seromucinous Tumor with Microinvasion	4	369380
+NCIT:C7281	Borderline Ovarian Seromucinous Tumor/Atypical Proliferative Ovarian Seromucinous Tumor	4	369381
+NCIT:C40036	Borderline Ovarian Mucinous Tumor	3	369382
+NCIT:C122586	Borderline Ovarian Mucinous Tumor/Atypical Proliferative Ovarian Mucinous Tumor	4	369383
+NCIT:C159312	Borderline Ovarian Mucinous Tumor/Atypical Proliferative Ovarian Mucinous Tumor with Intraepithelial Carcinoma	5	369384
+NCIT:C40037	Borderline Ovarian Mucinous Tumor, Intestinal Type	4	369385
+NCIT:C40038	Borderline Ovarian Mucinous Tumor, Endocervical-Like	4	369386
+NCIT:C66775	Borderline Ovarian Mucinous Adenofibroma	4	369387
+NCIT:C40080	Borderline Ovarian Clear Cell Tumor	3	369388
+NCIT:C40081	Borderline Ovarian Clear Cell Adenofibroma	4	369389
+NCIT:C126308	Borderline Ovarian Clear Cell Tumor/Atypical Proliferative Ovarian Clear Cell Tumor	5	369390
+NCIT:C40082	Borderline Ovarian Clear Cell Tumor/Atypical Proliferative Ovarian Clear Cell Tumor with Intraepithelial Carcinoma	6	369391
+NCIT:C40083	Borderline Ovarian Clear Cell Cystadenofibroma	5	369392
+NCIT:C5226	Borderline Ovarian Serous Tumor	3	369393
+NCIT:C122584	Borderline Ovarian Serous Tumor/Atypical Proliferative Ovarian Serous Tumor	4	369394
+NCIT:C122585	Borderline Ovarian Serous Tumor-Micropapillary Variant/Non-Invasive Low Grade Ovarian Serous Carcinoma	4	369395
+NCIT:C40028	Borderline Ovarian Serous Adenofibroma	4	369396
+NCIT:C40029	Borderline Ovarian Serous Cystadenofibroma	5	369397
+NCIT:C9459	Borderline Ovarian Brenner Tumor	3	369398
+NCIT:C94821	Stage I Borderline Ovarian Surface Epithelial-Stromal Tumor	3	369399
+NCIT:C94822	Stage II Borderline Ovarian Surface Epithelial-Stromal Tumor	3	369400
+NCIT:C94824	Stage III Borderline Ovarian Surface Epithelial-Stromal Tumor	3	369401
+NCIT:C94825	Stage IV Borderline Ovarian Surface Epithelial-Stromal Tumor	3	369402
+NCIT:C54000	Gastrointestinal Stromal Tumor of Uncertain Malignant Potential	2	369403
+NCIT:C95898	Gastric Gastrointestinal Stromal Tumor of Uncertain Malignant Potential	3	369404
+NCIT:C5716	Borderline Exocrine Pancreatic Neoplasm	2	369405
+NCIT:C41249	Pancreatic Intraductal Papillary-Mucinous Neoplasm, Low Grade	3	369406
+NCIT:C41251	Pancreatic Intraductal Papillary-Mucinous Neoplasm, High Grade	3	369407
+NCIT:C4845	Pancreatic Intraepithelial Neoplasia	3	369408
+NCIT:C172803	Low Grade Pancreatic Intraepithelial Neoplasia	4	369409
+NCIT:C4846	Pancreatic Intraepithelial Neoplasia-2	5	369410
+NCIT:C6820	Pancreatic Intraepithelial Neoplasia-1	5	369411
+NCIT:C95429	Pancreatic Intraepithelial Neoplasia-1A	6	369412
+NCIT:C95430	Pancreatic Intraepithelial Neoplasia-1B	6	369413
+NCIT:C95432	High Grade Pancreatic Intraepithelial Neoplasia	4	369414
+NCIT:C95488	Non-Invasive Pancreatic Mucinous-Cystic Neoplasm	3	369415
+NCIT:C95483	Pancreatic Mucinous-Cystic Neoplasm, Low Grade	4	369416
+NCIT:C95493	Pancreatic Mucinous-Cystic Neoplasm, High Grade	4	369417
+NCIT:C95506	Pancreatic Intraductal Tubulopapillary Neoplasm	3	369418
+NCIT:C7182	B-Cell Proliferation of Uncertain Malignant Potential	2	369419
+NCIT:C138181	In Situ Follicular Neoplasia	3	369420
+NCIT:C138191	In Situ Mantle Cell Neoplasia	3	369421
+NCIT:C7183	Polymorphic Post-Transplant Lymphoproliferative Disorder	3	369422
+NCIT:C157476	Recurrent Polymorphic Post-Transplant Lymphoproliferative Disorder	4	369423
+NCIT:C157477	Refractory Polymorphic Post-Transplant Lymphoproliferative Disorder	4	369424
+NCIT:C7930	Lymphomatoid Granulomatosis	3	369425
+NCIT:C123392	Childhood Lymphomatoid Granulomatosis	4	369426
+NCIT:C115204	Childhood Grade III Lymphomatoid Granulomatosis	5	369427
+NCIT:C115367	Recurrent Childhood Grade III Lymphomatoid Granulomatosis	6	369428
+NCIT:C123393	Recurrent Childhood Lymphomatoid Granulomatosis	5	369429
+NCIT:C115367	Recurrent Childhood Grade III Lymphomatoid Granulomatosis	6	369430
+NCIT:C186662	Central Nervous System Lymphomatoid Granulomatosis	4	369431
+NCIT:C202989	Refractory Lymphomatoid Granulomatosis	4	369432
+NCIT:C45267	Cutaneous Lymphomatoid Granulomatosis	4	369433
+NCIT:C45607	Pulmonary Lymphomatoid Granulomatosis	4	369434
+NCIT:C7931	Grade I Lymphomatoid Granulomatosis	4	369435
+NCIT:C115430	Recurrent Grade I Lymphomatoid Granulomatosis	5	369436
+NCIT:C7932	Grade II Lymphomatoid Granulomatosis	4	369437
+NCIT:C115431	Recurrent Grade II Lymphomatoid Granulomatosis	5	369438
+NCIT:C7933	Grade III Lymphomatoid Granulomatosis	4	369439
+NCIT:C115150	Adult Grade III Lymphomatoid Granulomatosis	5	369440
+NCIT:C115349	Recurrent Adult Grade III Lymphomatoid Granulomatosis	6	369441
+NCIT:C115204	Childhood Grade III Lymphomatoid Granulomatosis	5	369442
+NCIT:C115367	Recurrent Childhood Grade III Lymphomatoid Granulomatosis	6	369443
+NCIT:C69144	Recurrent Grade III Lymphomatoid Granulomatosis	5	369444
+NCIT:C115349	Recurrent Adult Grade III Lymphomatoid Granulomatosis	6	369445
+NCIT:C115367	Recurrent Childhood Grade III Lymphomatoid Granulomatosis	6	369446
+NCIT:C7934	Recurrent Lymphomatoid Granulomatosis	4	369447
+NCIT:C115430	Recurrent Grade I Lymphomatoid Granulomatosis	5	369448
+NCIT:C115431	Recurrent Grade II Lymphomatoid Granulomatosis	5	369449
+NCIT:C123393	Recurrent Childhood Lymphomatoid Granulomatosis	5	369450
+NCIT:C115367	Recurrent Childhood Grade III Lymphomatoid Granulomatosis	6	369451
+NCIT:C69144	Recurrent Grade III Lymphomatoid Granulomatosis	5	369452
+NCIT:C115349	Recurrent Adult Grade III Lymphomatoid Granulomatosis	6	369453
+NCIT:C115367	Recurrent Childhood Grade III Lymphomatoid Granulomatosis	6	369454
+NCIT:C7503	Borderline Phyllodes Tumor	2	369455
+NCIT:C181907	Borderline Vulvar Phyllodes Tumor	3	369456
+NCIT:C5316	Borderline Breast Phyllodes Tumor	3	369457
+NCIT:C7422	Precancerous Condition by Site	1	369458
+NCIT:C27274	Premalignant Hematologic Condition	2	369459
+NCIT:C162188	Clonal Hematopoiesis	3	369460
+NCIT:C155821	Age-Related Clonal Hematopoiesis	4	369461
+NCIT:C158547	Clonal Hematopoiesis of Indeterminate Potential	4	369462
+NCIT:C177451	Idiopathic Cytopenia of Undetermined Significance	3	369463
+NCIT:C177452	Clonal Cytopenia of Undetermined Significance	3	369464
+NCIT:C177453	Idiopathic Dysplasia of Uncertain Significance	3	369465
+NCIT:C198588	Myelodysplastic Syndrome, Not Otherwise Specified without Dysplasia	3	369466
+NCIT:C27897	T-Cell Proliferation of Uncertain Malignant Potential	3	369467
+NCIT:C3721	Lymphomatoid Papulosis	4	369468
+NCIT:C139014	Type D Lymphomatoid Papulosis	5	369469
+NCIT:C139015	Type E Lymphomatoid Papulosis	5	369470
+NCIT:C139017	Lymphomatoid Papulosis with DUSP22-IRF4 Gene Rearrangement	5	369471
+NCIT:C7197	Type A Lymphomatoid Papulosis	5	369472
+NCIT:C7198	Type B Lymphomatoid Papulosis	5	369473
+NCIT:C7199	Type C Lymphomatoid Papulosis	5	369474
+NCIT:C7196	Borderline Primary Cutaneous CD30-Positive T-Cell Lymphoproliferative Disorder	4	369475
+NCIT:C7182	B-Cell Proliferation of Uncertain Malignant Potential	3	369476
+NCIT:C138181	In Situ Follicular Neoplasia	4	369477
+NCIT:C138191	In Situ Mantle Cell Neoplasia	4	369478
+NCIT:C7183	Polymorphic Post-Transplant Lymphoproliferative Disorder	4	369479
+NCIT:C157476	Recurrent Polymorphic Post-Transplant Lymphoproliferative Disorder	5	369480
+NCIT:C157477	Refractory Polymorphic Post-Transplant Lymphoproliferative Disorder	5	369481
+NCIT:C7930	Lymphomatoid Granulomatosis	4	369482
+NCIT:C123392	Childhood Lymphomatoid Granulomatosis	5	369483
+NCIT:C115204	Childhood Grade III Lymphomatoid Granulomatosis	6	369484
+NCIT:C115367	Recurrent Childhood Grade III Lymphomatoid Granulomatosis	7	369485
+NCIT:C123393	Recurrent Childhood Lymphomatoid Granulomatosis	6	369486
+NCIT:C115367	Recurrent Childhood Grade III Lymphomatoid Granulomatosis	7	369487
+NCIT:C186662	Central Nervous System Lymphomatoid Granulomatosis	5	369488
+NCIT:C202989	Refractory Lymphomatoid Granulomatosis	5	369489
+NCIT:C45267	Cutaneous Lymphomatoid Granulomatosis	5	369490
+NCIT:C45607	Pulmonary Lymphomatoid Granulomatosis	5	369491
+NCIT:C7931	Grade I Lymphomatoid Granulomatosis	5	369492
+NCIT:C115430	Recurrent Grade I Lymphomatoid Granulomatosis	6	369493
+NCIT:C7932	Grade II Lymphomatoid Granulomatosis	5	369494
+NCIT:C115431	Recurrent Grade II Lymphomatoid Granulomatosis	6	369495
+NCIT:C7933	Grade III Lymphomatoid Granulomatosis	5	369496
+NCIT:C115150	Adult Grade III Lymphomatoid Granulomatosis	6	369497
+NCIT:C115349	Recurrent Adult Grade III Lymphomatoid Granulomatosis	7	369498
+NCIT:C115204	Childhood Grade III Lymphomatoid Granulomatosis	6	369499
+NCIT:C115367	Recurrent Childhood Grade III Lymphomatoid Granulomatosis	7	369500
+NCIT:C69144	Recurrent Grade III Lymphomatoid Granulomatosis	6	369501
+NCIT:C115349	Recurrent Adult Grade III Lymphomatoid Granulomatosis	7	369502
+NCIT:C115367	Recurrent Childhood Grade III Lymphomatoid Granulomatosis	7	369503
+NCIT:C7934	Recurrent Lymphomatoid Granulomatosis	5	369504
+NCIT:C115430	Recurrent Grade I Lymphomatoid Granulomatosis	6	369505
+NCIT:C115431	Recurrent Grade II Lymphomatoid Granulomatosis	6	369506
+NCIT:C123393	Recurrent Childhood Lymphomatoid Granulomatosis	6	369507
+NCIT:C115367	Recurrent Childhood Grade III Lymphomatoid Granulomatosis	7	369508
+NCIT:C69144	Recurrent Grade III Lymphomatoid Granulomatosis	6	369509
+NCIT:C115349	Recurrent Adult Grade III Lymphomatoid Granulomatosis	7	369510
+NCIT:C115367	Recurrent Childhood Grade III Lymphomatoid Granulomatosis	7	369511
+NCIT:C7764	Atypical Lymphoproliferative Disorder	3	369512
+NCIT:C130041	Indolent T-Lymphoblastic Proliferation	4	369513
+NCIT:C139023	Primary Cutaneous Acral CD8-Positive T-Cell Lymphoproliferative Disorder	4	369514
+NCIT:C199580	EBV-Positive Polymorphic B-Cell Lymphoproliferative Disorder, Not Otherwise Specified	4	369515
+NCIT:C3056	Castleman Disease	4	369516
+NCIT:C115200	Unicentric Castleman Disease	5	369517
+NCIT:C27853	Castleman Disease, Hyaline-Vascular Type	5	369518
+NCIT:C27854	Castleman Disease, Plasma Cell Type	5	369519
+NCIT:C27855	Multicentric Castleman Disease	5	369520
+NCIT:C150404	HHV8-Positive Multicentric Castleman Disease	6	369521
+NCIT:C62776	Cutaneous Pseudolymphoma	4	369522
+NCIT:C9472	Atypical Gastric Lymphoid Hyperplasia	4	369523
+NCIT:C27642	Head and Neck Precancerous Condition	2	369524
+NCIT:C7411	Laryngeal Precancerous Condition	3	369525
+NCIT:C4679	Laryngeal Keratosis	4	369526
+NCIT:C3935	Leukoplakia of Vocal Cords	5	369527
+NCIT:C4709	Interarytenoid Leukoplakia	6	369528
+NCIT:C7425	Oral Cavity and Lip Precancerous Condition	3	369529
+NCIT:C133192	Oral Intraepithelial Neoplasia	4	369530
+NCIT:C3025	Erythroplakia	4	369531
+NCIT:C3187	Oral Leukoplakia	4	369532
+NCIT:C36262	Oral Cavity Leukoplakia	5	369533
+NCIT:C3722	Oral Cavity Hairy Leukoplakia	6	369534
+NCIT:C3952	Hairy Leukoplakia of Tongue	7	369535
+NCIT:C3881	Leukoplakia of Gingiva	6	369536
+NCIT:C3886	Leukoplakia of Tongue	6	369537
+NCIT:C3952	Hairy Leukoplakia of Tongue	7	369538
+NCIT:C7743	Mouth Mucous Membrane Leukoplakia	6	369539
+NCIT:C8425	Leukoplakia of Buccal Mucosa	7	369540
+NCIT:C38383	Aneuploid Dysplastic Oral Leukoplakia	5	369541
+NCIT:C3951	Leukoplakia of Lip	5	369542
+NCIT:C4694	Ulcerated Oral Leukoplakia	5	369543
+NCIT:C4695	Speckled Oral Leukoplakia	5	369544
+NCIT:C4696	Proliferative Verrucous Leukoplakia	5	369545
+NCIT:C94837	Erythroleukoplakia	5	369546
+NCIT:C34866	Oral Cavity Submucous Fibrosis	4	369547
+NCIT:C4697	Smoker's Keratosis	4	369548
+NCIT:C27788	Female Reproductive System Precancerous Condition	2	369549
+NCIT:C126469	Borderline Broad Ligament Serous Tumor	3	369550
+NCIT:C127048	Atypical Endometriosis	3	369551
+NCIT:C158622	Borderline Serous Cystadenofibroma	3	369552
+NCIT:C40029	Borderline Ovarian Serous Cystadenofibroma	4	369553
+NCIT:C179738	Serous Tubal Intraepithelial Lesion	3	369554
+NCIT:C180860	Cervical Stratified Mucin-Producing Intraepithelial Lesion	3	369555
+NCIT:C181941	Female Reproductive System Smooth Muscle Tumor of Uncertain Malignant Potential	3	369556
+NCIT:C179362	Ovarian Smooth Muscle Tumor of Uncertain Malignant Potential	4	369557
+NCIT:C181939	Vulvar Smooth Muscle Tumor of Uncertain Malignant Potential	4	369558
+NCIT:C181940	Vaginal Smooth Muscle Tumor of Uncertain Malignant Potential	4	369559
+NCIT:C40177	Uterine Corpus Smooth Muscle Tumor of Uncertain Malignant Potential	4	369560
+NCIT:C180540	Uterine Corpus Spindle Smooth Muscle Tumor of Uncertain Malignant Potential	5	369561
+NCIT:C180541	Uterine Corpus Myxoid Smooth Muscle Tumor of Uncertain Malignant Potential	5	369562
+NCIT:C180542	Uterine Corpus Epithelioid Smooth Muscle Tumor of Uncertain Malignant Potential	5	369563
+NCIT:C27723	Vulvar Lichen Sclerosus	3	369564
+NCIT:C27789	Endometrial Atypical Hyperplasia/Endometrioid Intraepithelial Neoplasia	3	369565
+NCIT:C3782	Cervical Intraepithelial Neoplasia	3	369566
+NCIT:C4630	Low Grade Cervical Intraepithelial Neoplasia	4	369567
+NCIT:C40196	Low Grade Cervical Squamous Intraepithelial Neoplasia	5	369568
+NCIT:C40199	Cervical Squamous Intraepithelial Neoplasia 1	6	369569
+NCIT:C7674	Low Grade Cervical Glandular Intraepithelial Neoplasia	5	369570
+NCIT:C7346	Cervical Squamous Intraepithelial Neoplasia	4	369571
+NCIT:C40196	Low Grade Cervical Squamous Intraepithelial Neoplasia	5	369572
+NCIT:C40199	Cervical Squamous Intraepithelial Neoplasia 1	6	369573
+NCIT:C40197	High Grade Cervical Squamous Intraepithelial Neoplasia	5	369574
+NCIT:C40198	Cervical Squamous Intraepithelial Neoplasia 2	6	369575
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	6	369576
+NCIT:C7670	High Grade Cervical Intraepithelial Neoplasia	4	369577
+NCIT:C4000	Stage 0 Cervical Cancer AJCC v6	5	369578
+NCIT:C40197	High Grade Cervical Squamous Intraepithelial Neoplasia	5	369579
+NCIT:C40198	Cervical Squamous Intraepithelial Neoplasia 2	6	369580
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	6	369581
+NCIT:C7675	High Grade Cervical Glandular Intraepithelial Neoplasia	5	369582
+NCIT:C4520	Cervical Adenocarcinoma In Situ	6	369583
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	7	369584
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	7	369585
+NCIT:C89550	Stage 0 Cervical Cancer AJCC v7	5	369586
+NCIT:C4520	Cervical Adenocarcinoma In Situ	6	369587
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	7	369588
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	7	369589
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	6	369590
+NCIT:C94676	Cervical Intraepithelial Neoplasia Grade 2/3	5	369591
+NCIT:C7673	Cervical Glandular Intraepithelial Neoplasia	4	369592
+NCIT:C7674	Low Grade Cervical Glandular Intraepithelial Neoplasia	5	369593
+NCIT:C7675	High Grade Cervical Glandular Intraepithelial Neoplasia	5	369594
+NCIT:C4520	Cervical Adenocarcinoma In Situ	6	369595
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	7	369596
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	7	369597
+NCIT:C40106	Borderline Fallopian Tube Neoplasm	3	369598
+NCIT:C40107	Borderline Fallopian Tube Serous Tumor	4	369599
+NCIT:C40108	Borderline Fallopian Tube Mucinous Tumor	4	369600
+NCIT:C40110	Borderline Fallopian Tube Endometrioid Tumor	4	369601
+NCIT:C40334	Vulvar Dysplastic Nevus	3	369602
+NCIT:C4521	Vaginal Intraepithelial Neoplasia	3	369603
+NCIT:C4644	Low Grade Vaginal Intraepithelial Neoplasia	4	369604
+NCIT:C7663	High Grade Vaginal Intraepithelial Neoplasia	4	369605
+NCIT:C4645	Grade 2 Vaginal Intraepithelial Neoplasia	5	369606
+NCIT:C7855	Stage 0 Vaginal Cancer AJCC v6	5	369607
+NCIT:C89476	Stage 0 Vaginal Cancer AJCC v7	5	369608
+NCIT:C4756	Vulvar Intraepithelial Neoplasia	3	369609
+NCIT:C128142	Vulvar Squamous Intraepithelial Lesion, HPV-Associated	4	369610
+NCIT:C4760	Low Grade Vulvar Squamous Intraepithelial Lesion	5	369611
+NCIT:C4761	High Grade Vulvar Squamous Intraepithelial Lesion	5	369612
+NCIT:C37272	Vulvar Intraepithelial Neoplasia, HPV-Independent	4	369613
+NCIT:C4522	Stage 0 Vulvar Cancer AJCC v6	4	369614
+NCIT:C89445	Stage 0 Vulvar Cancer AJCC v7	4	369615
+NCIT:C4783	Borderline Ovarian Epithelial Tumor	3	369616
+NCIT:C115352	Recurrent Borderline Ovarian Surface Epithelial-Stromal Tumor	4	369617
+NCIT:C158616	Borderline Ovarian Mixed Epithelial Tumor/Atypical Proliferative Ovarian Mixed Epithelial Tumor	4	369618
+NCIT:C7281	Borderline Ovarian Seromucinous Tumor/Atypical Proliferative Ovarian Seromucinous Tumor	5	369619
+NCIT:C179251	Borderline Ovarian Endometrioid Tumor	4	369620
+NCIT:C159486	Borderline Ovarian Endometrioid Tumor/Atypical Proliferative Ovarian Endometrioid Tumor with Microinvasion	5	369621
+NCIT:C7983	Borderline Ovarian Endometrioid Tumor/Atypical Proliferative Ovarian Endometrioid Tumor	5	369622
+NCIT:C40069	Borderline Ovarian Endometrioid Adenofibroma	6	369623
+NCIT:C27289	Borderline Ovarian Endometrioid Cystadenofibroma	7	369624
+NCIT:C179259	Borderline Ovarian Seromucinous Tumor	4	369625
+NCIT:C159313	Borderline Ovarian Seromucinous Tumor/Atypical Proliferative Ovarian Seromucinous Tumor with Microinvasion	5	369626
+NCIT:C7281	Borderline Ovarian Seromucinous Tumor/Atypical Proliferative Ovarian Seromucinous Tumor	5	369627
+NCIT:C40036	Borderline Ovarian Mucinous Tumor	4	369628
+NCIT:C122586	Borderline Ovarian Mucinous Tumor/Atypical Proliferative Ovarian Mucinous Tumor	5	369629
+NCIT:C159312	Borderline Ovarian Mucinous Tumor/Atypical Proliferative Ovarian Mucinous Tumor with Intraepithelial Carcinoma	6	369630
+NCIT:C40037	Borderline Ovarian Mucinous Tumor, Intestinal Type	5	369631
+NCIT:C40038	Borderline Ovarian Mucinous Tumor, Endocervical-Like	5	369632
+NCIT:C66775	Borderline Ovarian Mucinous Adenofibroma	5	369633
+NCIT:C40080	Borderline Ovarian Clear Cell Tumor	4	369634
+NCIT:C40081	Borderline Ovarian Clear Cell Adenofibroma	5	369635
+NCIT:C126308	Borderline Ovarian Clear Cell Tumor/Atypical Proliferative Ovarian Clear Cell Tumor	6	369636
+NCIT:C40082	Borderline Ovarian Clear Cell Tumor/Atypical Proliferative Ovarian Clear Cell Tumor with Intraepithelial Carcinoma	7	369637
+NCIT:C40083	Borderline Ovarian Clear Cell Cystadenofibroma	6	369638
+NCIT:C5226	Borderline Ovarian Serous Tumor	4	369639
+NCIT:C122584	Borderline Ovarian Serous Tumor/Atypical Proliferative Ovarian Serous Tumor	5	369640
+NCIT:C122585	Borderline Ovarian Serous Tumor-Micropapillary Variant/Non-Invasive Low Grade Ovarian Serous Carcinoma	5	369641
+NCIT:C40028	Borderline Ovarian Serous Adenofibroma	5	369642
+NCIT:C40029	Borderline Ovarian Serous Cystadenofibroma	6	369643
+NCIT:C9459	Borderline Ovarian Brenner Tumor	4	369644
+NCIT:C94821	Stage I Borderline Ovarian Surface Epithelial-Stromal Tumor	4	369645
+NCIT:C94822	Stage II Borderline Ovarian Surface Epithelial-Stromal Tumor	4	369646
+NCIT:C94824	Stage III Borderline Ovarian Surface Epithelial-Stromal Tumor	4	369647
+NCIT:C94825	Stage IV Borderline Ovarian Surface Epithelial-Stromal Tumor	4	369648
+NCIT:C38164	Male Reproductive System Precancerous Condition	2	369649
+NCIT:C39905	Prostate Stromal Tumor of Uncertain Malignant Potential	3	369650
+NCIT:C4064	Prostatic Intraepithelial Neoplasia	3	369651
+NCIT:C5541	High Grade Prostatic Intraepithelial Neoplasia	4	369652
+NCIT:C3642	Grade III Prostatic Intraepithelial Neoplasia	5	369653
+NCIT:C39887	High Grade Prostatic Intraepithelial Neoplasia, Signet Ring Variant	5	369654
+NCIT:C39888	High Grade Prostatic Intraepithelial Neoplasia, Mucinous Variant	5	369655
+NCIT:C39889	High Grade Prostatic Intraepithelial Neoplasia, Foamy Variant	5	369656
+NCIT:C39890	High Grade Prostatic Intraepithelial Neoplasia, Inverted Variant	5	369657
+NCIT:C39891	High Grade Prostatic Intraepithelial Neoplasia, Small Cell Neuroendocrine Variant	5	369658
+NCIT:C7360	Grade II Prostatic Intraepithelial Neoplasia	5	369659
+NCIT:C5542	Low Grade Prostatic Intraepithelial Neoplasia	4	369660
+NCIT:C4596	Penile Intraepithelial Neoplasia	3	369661
+NCIT:C162539	Differentiated Penile Intraepithelial Neoplasia, Human Papillomavirus-Independent	4	369662
+NCIT:C162541	Human Papillomavirus-Related Penile Intraepithelial Neoplasia	4	369663
+NCIT:C162542	Basaloid (Undifferentiated) Penile Intraepithelial Neoplasia	5	369664
+NCIT:C162543	Warty (Bowenoid) Penile Intraepithelial Neoplasia	5	369665
+NCIT:C162546	Warty-Basaloid Penile Intraepithelial Neoplasia	5	369666
+NCIT:C39963	Penile Bowenoid Papulosis	5	369667
+NCIT:C7666	Low Grade Penile Intraepithelial Neoplasia	4	369668
+NCIT:C7667	High Grade Penile Intraepithelial Neoplasia	4	369669
+NCIT:C27790	Penile Carcinoma In Situ	5	369670
+NCIT:C7665	Grade II Penile Intraepithelial Neoplasia	5	369671
+NCIT:C39840	Urinary System Precancerous Condition	2	369672
+NCIT:C27879	Papillary Urothelial Hyperplasia	3	369673
+NCIT:C66851	Diffuse Hyperplastic Perilobar Nephroblastomatosis	3	369674
+NCIT:C7435	Pulmonary Precancerous Condition	2	369675
+NCIT:C45607	Pulmonary Lymphomatoid Granulomatosis	3	369676
+NCIT:C5665	Atypical Adenomatous Lung Hyperplasia	3	369677
+NCIT:C7436	Bronchial Intraepithelial Neoplasia	3	369678
+NCIT:C7437	Diffuse Idiopathic Pulmonary Neuroendocrine Cell Hyperplasia	3	369679
+NCIT:C7659	Digestive System Precancerous Condition	2	369680
+NCIT:C35180	Digestive System Carcinoma In Situ	3	369681
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	4	369682
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	4	369683
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	4	369684
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	4	369685
+NCIT:C133550	Clinical Stage 0 Gastroesophageal Junction Adenocarcinoma AJCC v8	4	369686
+NCIT:C133564	Pathologic Stage 0 Gastroesophageal Junction Adenocarcinoma AJCC v8	4	369687
+NCIT:C133647	Clinical Stage 0 Gastric Cancer AJCC v8	4	369688
+NCIT:C133654	Pathologic Stage 0 Gastric Cancer AJCC v8	4	369689
+NCIT:C133795	Stage 0 Anal Cancer AJCC v8	4	369690
+NCIT:C157575	Anal Intraepithelial Neoplasia 3	5	369691
+NCIT:C133894	Stage 0 Small Intestinal Adenocarcinoma AJCC v8	4	369692
+NCIT:C134118	Stage 0 Appendix Carcinoma AJCC v8	4	369693
+NCIT:C134182	Stage 0 Colorectal Cancer AJCC v8	4	369694
+NCIT:C134271	Stage 0 Colon Cancer AJCC v8	5	369695
+NCIT:C134291	Stage 0 Rectal Cancer AJCC v8	5	369696
+NCIT:C134663	Stage 0 Gallbladder Cancer AJCC v8	4	369697
+NCIT:C134865	Stage 0 Ampulla of Vater Cancer AJCC v8	4	369698
+NCIT:C134914	Stage 0 Pancreatic Cancer AJCC v8	4	369699
+NCIT:C207706	Stage 0 Appendix Carcinoma AJCC v9	4	369700
+NCIT:C3637	Stage 0 Esophageal Cancer AJCC v6	4	369701
+NCIT:C4439	Stage 0 Gallbladder Cancer AJCC v6 and v7	4	369702
+NCIT:C4593	Stage 0 Appendix Carcinoma AJCC v7	4	369703
+NCIT:C4892	Stage 0 Small Intestinal Cancer AJCC v7	4	369704
+NCIT:C4444	Stage 0 Ampulla of Vater Cancer AJCC v7	5	369705
+NCIT:C5729	Stage 0 Pancreatic Cancer AJCC v6 and v7	4	369706
+NCIT:C67493	High-Grade Biliary Intraepithelial Neoplasia	4	369707
+NCIT:C7678	Adenocarcinoma In Situ in Adenomatous Polyp	4	369708
+NCIT:C7788	Stage 0 Gastric Cancer AJCC v6 and v7	4	369709
+NCIT:C4428	Gastric Cardia Carcinoma In Situ AJCC v6 and v7	5	369710
+NCIT:C4429	Gastric Fundus Carcinoma In Situ AJCC v6 and v7	5	369711
+NCIT:C4430	Gastric Body Carcinoma In Situ AJCC v6 and v7	5	369712
+NCIT:C4431	Gastric Pylorus Carcinoma In Situ AJCC v6 and v7	5	369713
+NCIT:C8400	Gastric Antrum Carcinoma In Situ AJCC v6 and v7	6	369714
+NCIT:C7794	Stage 0 Anal Canal Cancer AJCC v6 and v7	4	369715
+NCIT:C27282	Stage 0 AIDS-Related Anal Canal Cancer AJCC v6 and v7	5	369716
+NCIT:C8932	Stage 0 Colorectal Cancer AJCC v6 and v7	4	369717
+NCIT:C3638	Stage 0 Colon Cancer AJCC v6 and v7	5	369718
+NCIT:C4594	Cecum Carcinoma In Situ	6	369719
+NCIT:C4853	Stage 0 Rectal Cancer AJCC v6 and v7	5	369720
+NCIT:C5017	Stage 0 Rectosigmoid Cancer AJCC v6 and v7	5	369721
+NCIT:C89771	Stage 0 Esophageal Cancer AJCC v7	4	369722
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	5	369723
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	5	369724
+NCIT:C7407	Anal Precancerous Condition	3	369725
+NCIT:C133795	Stage 0 Anal Cancer AJCC v8	4	369726
+NCIT:C157575	Anal Intraepithelial Neoplasia 3	5	369727
+NCIT:C4595	Anal Intraepithelial Neoplasia	4	369728
+NCIT:C157573	Low Grade Anal Intraepithelial Neoplasia	5	369729
+NCIT:C27238	Low Grade Anal Canal Intraepithelial Neoplasia	6	369730
+NCIT:C172706	High Grade Anal Intraepithelial Neoplasia	5	369731
+NCIT:C157574	Anal Intraepithelial Neoplasia 2	6	369732
+NCIT:C157575	Anal Intraepithelial Neoplasia 3	6	369733
+NCIT:C27275	High Grade Anal Canal Intraepithelial Neoplasia	6	369734
+NCIT:C43598	Perianal Intraepithelial Neoplasia	5	369735
+NCIT:C7490	Anal Canal Intraepithelial Neoplasia	5	369736
+NCIT:C27238	Low Grade Anal Canal Intraepithelial Neoplasia	6	369737
+NCIT:C27275	High Grade Anal Canal Intraepithelial Neoplasia	6	369738
+NCIT:C7412	Pancreatic Precancerous Condition	3	369739
+NCIT:C5716	Borderline Exocrine Pancreatic Neoplasm	4	369740
+NCIT:C41249	Pancreatic Intraductal Papillary-Mucinous Neoplasm, Low Grade	5	369741
+NCIT:C41251	Pancreatic Intraductal Papillary-Mucinous Neoplasm, High Grade	5	369742
+NCIT:C4845	Pancreatic Intraepithelial Neoplasia	5	369743
+NCIT:C172803	Low Grade Pancreatic Intraepithelial Neoplasia	6	369744
+NCIT:C4846	Pancreatic Intraepithelial Neoplasia-2	7	369745
+NCIT:C6820	Pancreatic Intraepithelial Neoplasia-1	7	369746
+NCIT:C95429	Pancreatic Intraepithelial Neoplasia-1A	8	369747
+NCIT:C95430	Pancreatic Intraepithelial Neoplasia-1B	8	369748
+NCIT:C95432	High Grade Pancreatic Intraepithelial Neoplasia	6	369749
+NCIT:C95488	Non-Invasive Pancreatic Mucinous-Cystic Neoplasm	5	369750
+NCIT:C95483	Pancreatic Mucinous-Cystic Neoplasm, Low Grade	6	369751
+NCIT:C95493	Pancreatic Mucinous-Cystic Neoplasm, High Grade	6	369752
+NCIT:C95506	Pancreatic Intraductal Tubulopapillary Neoplasm	5	369753
+NCIT:C7423	Esophageal Precancerous Condition	3	369754
+NCIT:C2891	Barrett Esophagus	4	369755
+NCIT:C157606	Refractory Barrett Esophagus	5	369756
+NCIT:C4839	Esophageal Intraepithelial Neoplasia	4	369757
+NCIT:C27423	Esophageal Squamous Intraepithelial Neoplasia	5	369758
+NCIT:C27426	High Grade Esophageal Squamous Intraepithelial Neoplasia	6	369759
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	7	369760
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	7	369761
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	7	369762
+NCIT:C27427	Low Grade Esophageal Squamous Intraepithelial Neoplasia	6	369763
+NCIT:C27424	Esophageal Glandular Intraepithelial Neoplasia	5	369764
+NCIT:C27428	Low Grade Esophageal Glandular Intraepithelial Neoplasia	6	369765
+NCIT:C27429	High Grade Esophageal Glandular Intraepithelial Neoplasia	6	369766
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	7	369767
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	7	369768
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	7	369769
+NCIT:C95613	Intraepithelial Neoplasia in Barrett Esophagus	6	369770
+NCIT:C27425	Esophageal High Grade Intraepithelial Neoplasia	5	369771
+NCIT:C27426	High Grade Esophageal Squamous Intraepithelial Neoplasia	6	369772
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	7	369773
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	7	369774
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	7	369775
+NCIT:C27429	High Grade Esophageal Glandular Intraepithelial Neoplasia	6	369776
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	7	369777
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	7	369778
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	7	369779
+NCIT:C3637	Stage 0 Esophageal Cancer AJCC v6	6	369780
+NCIT:C89771	Stage 0 Esophageal Cancer AJCC v7	6	369781
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	7	369782
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	7	369783
+NCIT:C4840	Esophageal Low Grade Intraepithelial Neoplasia	5	369784
+NCIT:C27427	Low Grade Esophageal Squamous Intraepithelial Neoplasia	6	369785
+NCIT:C27428	Low Grade Esophageal Glandular Intraepithelial Neoplasia	6	369786
+NCIT:C7424	Gastric Precancerous Condition	3	369787
+NCIT:C133647	Clinical Stage 0 Gastric Cancer AJCC v8	4	369788
+NCIT:C133654	Pathologic Stage 0 Gastric Cancer AJCC v8	4	369789
+NCIT:C27836	Persistent Superficial Gastritis	4	369790
+NCIT:C3955	Gastric Intraepithelial Neoplasia	4	369791
+NCIT:C27436	Low Grade Gastric Intraepithelial Neoplasia	5	369792
+NCIT:C27437	High Grade Gastric Intraepithelial Neoplasia	5	369793
+NCIT:C7405	Chronic Atrophic Gastritis	4	369794
+NCIT:C156076	Autoimmune Atrophic Chronic Gastritis	5	369795
+NCIT:C9472	Atypical Gastric Lymphoid Hyperplasia	4	369796
+NCIT:C95752	Autoimmune Gastritis	4	369797
+NCIT:C95898	Gastric Gastrointestinal Stromal Tumor of Uncertain Malignant Potential	4	369798
+NCIT:C7655	Hepatobiliary Precancerous Condition	3	369799
+NCIT:C4828	Primary Sclerosing Cholangitis	4	369800
+NCIT:C7656	Liver Dysplastic Nodule	4	369801
+NCIT:C96768	High Grade Liver Dysplastic Nodule	5	369802
+NCIT:C96770	Low Grade Liver Dysplastic Nodule	5	369803
+NCIT:C82891	Hepatocellular Large Cell Change	4	369804
+NCIT:C96765	Hepatocellular Small Cell Change	4	369805
+NCIT:C96807	Bile Duct Intraductal Papillary Neoplasm, Low Grade	4	369806
+NCIT:C96809	Bile Duct Intraductal Papillary Neoplasm, High Grade	4	369807
+NCIT:C96836	Bile Duct Mucinous Cystic Neoplasm, Low Grade	4	369808
+NCIT:C96838	Bile Duct Mucinous Cystic Neoplasm, High Grade	4	369809
+NCIT:C96877	Gallbladder Intracholecystic Papillary Neoplasm, Low Grade	4	369810
+NCIT:C96879	Gallbladder Intracholecystic Papillary Neoplasm, High Grade	4	369811
+NCIT:C96883	Gallbladder Mucinous Cystic Neoplasm, Low Grade	4	369812
+NCIT:C96886	Gallbladder Mucinous Cystic Neoplasm, High Grade	4	369813
+NCIT:C7657	Intestinal Precancerous Condition	3	369814
+NCIT:C3138	Inflammatory Bowel Disease	4	369815
+NCIT:C157936	Non-infective Inflammatory Bowel Disease	5	369816
+NCIT:C164676	Inflammatory Bowel Disease 28	5	369817
+NCIT:C27110	Colitis of Indeterminate Type	5	369818
+NCIT:C2952	Ulcerative Colitis	5	369819
+NCIT:C122413	Ulcerative Colitis Flare	6	369820
+NCIT:C2965	Crohn Disease	5	369821
+NCIT:C35210	Crohn Disease of Small Intestine	6	369822
+NCIT:C35329	Crohn Ileitis	7	369823
+NCIT:C35211	Crohn Colitis	6	369824
+NCIT:C7658	Intestinal Intraepithelial Neoplasia	4	369825
+NCIT:C27459	Colorectal Intraepithelial Neoplasia	5	369826
+NCIT:C27460	Colorectal Low Grade Intraepithelial Neoplasia	6	369827
+NCIT:C27461	Colorectal High Grade Intraepithelial Neoplasia	6	369828
+NCIT:C27462	Small Intestinal Intraepithelial Neoplasia	5	369829
+NCIT:C27463	Small Intestinal Low Grade Intraepithelial Neoplasia	6	369830
+NCIT:C27464	Small Intestinal High Grade Intraepithelial Neoplasia	6	369831
+NCIT:C8962	Digestive System Intraepithelial Neoplasia	3	369832
+NCIT:C133550	Clinical Stage 0 Gastroesophageal Junction Adenocarcinoma AJCC v8	4	369833
+NCIT:C133564	Pathologic Stage 0 Gastroesophageal Junction Adenocarcinoma AJCC v8	4	369834
+NCIT:C3955	Gastric Intraepithelial Neoplasia	4	369835
+NCIT:C27436	Low Grade Gastric Intraepithelial Neoplasia	5	369836
+NCIT:C27437	High Grade Gastric Intraepithelial Neoplasia	5	369837
+NCIT:C4595	Anal Intraepithelial Neoplasia	4	369838
+NCIT:C157573	Low Grade Anal Intraepithelial Neoplasia	5	369839
+NCIT:C27238	Low Grade Anal Canal Intraepithelial Neoplasia	6	369840
+NCIT:C172706	High Grade Anal Intraepithelial Neoplasia	5	369841
+NCIT:C157574	Anal Intraepithelial Neoplasia 2	6	369842
+NCIT:C157575	Anal Intraepithelial Neoplasia 3	6	369843
+NCIT:C27275	High Grade Anal Canal Intraepithelial Neoplasia	6	369844
+NCIT:C43598	Perianal Intraepithelial Neoplasia	5	369845
+NCIT:C7490	Anal Canal Intraepithelial Neoplasia	5	369846
+NCIT:C27238	Low Grade Anal Canal Intraepithelial Neoplasia	6	369847
+NCIT:C27275	High Grade Anal Canal Intraepithelial Neoplasia	6	369848
+NCIT:C4839	Esophageal Intraepithelial Neoplasia	4	369849
+NCIT:C27423	Esophageal Squamous Intraepithelial Neoplasia	5	369850
+NCIT:C27426	High Grade Esophageal Squamous Intraepithelial Neoplasia	6	369851
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	7	369852
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	7	369853
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	7	369854
+NCIT:C27427	Low Grade Esophageal Squamous Intraepithelial Neoplasia	6	369855
+NCIT:C27424	Esophageal Glandular Intraepithelial Neoplasia	5	369856
+NCIT:C27428	Low Grade Esophageal Glandular Intraepithelial Neoplasia	6	369857
+NCIT:C27429	High Grade Esophageal Glandular Intraepithelial Neoplasia	6	369858
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	7	369859
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	7	369860
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	7	369861
+NCIT:C95613	Intraepithelial Neoplasia in Barrett Esophagus	6	369862
+NCIT:C27425	Esophageal High Grade Intraepithelial Neoplasia	5	369863
+NCIT:C27426	High Grade Esophageal Squamous Intraepithelial Neoplasia	6	369864
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	7	369865
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	7	369866
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	7	369867
+NCIT:C27429	High Grade Esophageal Glandular Intraepithelial Neoplasia	6	369868
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	7	369869
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	7	369870
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	7	369871
+NCIT:C3637	Stage 0 Esophageal Cancer AJCC v6	6	369872
+NCIT:C89771	Stage 0 Esophageal Cancer AJCC v7	6	369873
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	7	369874
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	7	369875
+NCIT:C4840	Esophageal Low Grade Intraepithelial Neoplasia	5	369876
+NCIT:C27427	Low Grade Esophageal Squamous Intraepithelial Neoplasia	6	369877
+NCIT:C27428	Low Grade Esophageal Glandular Intraepithelial Neoplasia	6	369878
+NCIT:C4843	Biliary Intraepithelial Neoplasia	4	369879
+NCIT:C172804	Low Grade Biliary Intraepithelial Neoplasia	5	369880
+NCIT:C67491	Biliary Intraepithelial Neoplasia-1	6	369881
+NCIT:C67492	Biliary Intraepithelial Neoplasia-2	6	369882
+NCIT:C43606	Gallbladder Biliary Intraepithelial Neoplasia	5	369883
+NCIT:C43607	Gallbladder Flat Biliary Intraepithelial Neoplasia	6	369884
+NCIT:C43609	Gallbladder Papillary Biliary Intraepithelial Neoplasia	6	369885
+NCIT:C67493	High-Grade Biliary Intraepithelial Neoplasia	5	369886
+NCIT:C96945	Bile Duct Biliary Intraepithelial Neoplasia	5	369887
+NCIT:C96942	Extrahepatic Bile Duct Biliary Intraepithelial Neoplasia	6	369888
+NCIT:C96943	Intrahepatic Bile Duct Biliary Intraepithelial Neoplasia	6	369889
+NCIT:C4845	Pancreatic Intraepithelial Neoplasia	4	369890
+NCIT:C172803	Low Grade Pancreatic Intraepithelial Neoplasia	5	369891
+NCIT:C4846	Pancreatic Intraepithelial Neoplasia-2	6	369892
+NCIT:C6820	Pancreatic Intraepithelial Neoplasia-1	6	369893
+NCIT:C95429	Pancreatic Intraepithelial Neoplasia-1A	7	369894
+NCIT:C95430	Pancreatic Intraepithelial Neoplasia-1B	7	369895
+NCIT:C95432	High Grade Pancreatic Intraepithelial Neoplasia	5	369896
+NCIT:C7658	Intestinal Intraepithelial Neoplasia	4	369897
+NCIT:C27459	Colorectal Intraepithelial Neoplasia	5	369898
+NCIT:C27460	Colorectal Low Grade Intraepithelial Neoplasia	6	369899
+NCIT:C27461	Colorectal High Grade Intraepithelial Neoplasia	6	369900
+NCIT:C27462	Small Intestinal Intraepithelial Neoplasia	5	369901
+NCIT:C27463	Small Intestinal Low Grade Intraepithelial Neoplasia	6	369902
+NCIT:C27464	Small Intestinal High Grade Intraepithelial Neoplasia	6	369903
+NCIT:C95918	Ampullary Flat Intraepithelial Neoplasia, High Grade	4	369904
+NCIT:C96418	Appendix Intraepithelial Neoplasia	4	369905
+NCIT:C96419	Appendix Low Grade Intraepithelial Neoplasia	5	369906
+NCIT:C96420	Appendix High Grade Intraepithelial Neoplasia	5	369907
+NCIT:C8957	Cutaneous Precancerous Condition	2	369908
+NCIT:C126877	Epidermodysplasia Verruciformis	3	369909
+NCIT:C176608	Epidermodysplasia Verruciformis, Susceptibility to, 4	4	369910
+NCIT:C27531	Pre-Malignant Skin Epithelial Lesion	3	369911
+NCIT:C165475	Arsenical Keratosis	4	369912
+NCIT:C165477	PUVA Keratosis	4	369913
+NCIT:C3148	Actinic Keratosis	4	369914
+NCIT:C203799	Proliferative Actinic Keratosis	5	369915
+NCIT:C203800	Hypertrophic Actinic Keratosis	5	369916
+NCIT:C203801	Lichenoid Actinic Keratosis	5	369917
+NCIT:C203802	Atrophic Actinic Keratosis	5	369918
+NCIT:C203803	Acantholytic Actinic Keratosis	5	369919
+NCIT:C203804	Pigmented Actinic Keratosis	5	369920
+NCIT:C203806	Bowenoid Actinic Keratosis	5	369921
+NCIT:C6080	External Ear Actinic Keratosis	5	369922
+NCIT:C8374	Bowenoid Papulosis	4	369923
+NCIT:C39963	Penile Bowenoid Papulosis	5	369924
+NCIT:C27723	Vulvar Lichen Sclerosus	3	369925
+NCIT:C27749	Precancerous Dermatitis	3	369926
+NCIT:C3147	Tylosis	3	369927
+NCIT:C122925	Type A Tylosis	4	369928
+NCIT:C122926	Type B Tylosis	4	369929
+NCIT:C3312	Parapsoriasis	3	369930
+NCIT:C3670	Large Plaque Parapsoriasis	4	369931
+NCIT:C3920	Parapsoriasis Lichenoides	4	369932
+NCIT:C3921	Small Plaque Parapsoriasis	4	369933
+NCIT:C3452	Xeroderma Pigmentosum	3	369934
+NCIT:C114770	Xeroderma Pigmentosum, Complementation Group C	4	369935
+NCIT:C114771	Xeroderma Pigmentosum, Complementation Group E	4	369936
+NCIT:C141367	Xeroderma Pigmentosum Variant Type	4	369937
+NCIT:C3965	Xeroderma Pigmentosum, Complementation Group A	4	369938
+NCIT:C3966	Xeroderma Pigmentosum, Complementation Group B	4	369939
+NCIT:C3967	Xeroderma Pigmentosum, Complementation Group D	4	369940
+NCIT:C3968	Xeroderma Pigmentosum, Complementation Group F	4	369941
+NCIT:C3969	Xeroderma Pigmentosum, Complementation Group G	4	369942
+NCIT:C3694	Cutaneous Dysplastic Nevus	3	369943
+NCIT:C3721	Lymphomatoid Papulosis	3	369944
+NCIT:C139014	Type D Lymphomatoid Papulosis	4	369945
+NCIT:C139015	Type E Lymphomatoid Papulosis	4	369946
+NCIT:C139017	Lymphomatoid Papulosis with DUSP22-IRF4 Gene Rearrangement	4	369947
+NCIT:C7197	Type A Lymphomatoid Papulosis	4	369948
+NCIT:C7198	Type B Lymphomatoid Papulosis	4	369949
+NCIT:C7199	Type C Lymphomatoid Papulosis	4	369950
+NCIT:C4233	Precancerous Melanosis	3	369951
+NCIT:C85019	Porokeratosis	3	369952
+NCIT:C8355	Atypical Hyperplasia	1	369953
+NCIT:C45667	Atypical Mesothelial Hyperplasia	2	369954
+NCIT:C46101	Neoplastic C-Cell Hyperplasia	2	369955
+NCIT:C5195	Breast Atypical Hyperplasia	2	369956
+NCIT:C40386	Breast Atypical Myoepitheliosis	3	369957
+NCIT:C4730	Breast Atypical Lobular Hyperplasia	3	369958
+NCIT:C54184	Breast Columnar Cell Hyperplasia with Atypia	3	369959
+NCIT:C8436	Breast Atypical Ductal Hyperplasia	3	369960
+NCIT:C5665	Atypical Adenomatous Lung Hyperplasia	2	369961
+NCIT:C8356	Atypical Glandular Hyperplasia	2	369962
+NCIT:C5595	Prostatic Atypical Adenomatous Hyperplasia	3	369963
+NCIT:C8366	Intraepithelial Neoplasia	1	369964
+NCIT:C133192	Oral Intraepithelial Neoplasia	2	369965
+NCIT:C164249	Differentiated Intraepithelial Neoplasia	2	369966
+NCIT:C162539	Differentiated Penile Intraepithelial Neoplasia, Human Papillomavirus-Independent	3	369967
+NCIT:C37272	Vulvar Intraepithelial Neoplasia, HPV-Independent	3	369968
+NCIT:C27269	Glandular Cell Intraepithelial Neoplasia	2	369969
+NCIT:C27424	Esophageal Glandular Intraepithelial Neoplasia	3	369970
+NCIT:C27428	Low Grade Esophageal Glandular Intraepithelial Neoplasia	4	369971
+NCIT:C27429	High Grade Esophageal Glandular Intraepithelial Neoplasia	4	369972
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	5	369973
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	5	369974
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	5	369975
+NCIT:C95613	Intraepithelial Neoplasia in Barrett Esophagus	4	369976
+NCIT:C27789	Endometrial Atypical Hyperplasia/Endometrioid Intraepithelial Neoplasia	3	369977
+NCIT:C36086	Breast Flat Ductal Epithelial Atypia	3	369978
+NCIT:C3955	Gastric Intraepithelial Neoplasia	3	369979
+NCIT:C27436	Low Grade Gastric Intraepithelial Neoplasia	4	369980
+NCIT:C27437	High Grade Gastric Intraepithelial Neoplasia	4	369981
+NCIT:C4064	Prostatic Intraepithelial Neoplasia	3	369982
+NCIT:C5541	High Grade Prostatic Intraepithelial Neoplasia	4	369983
+NCIT:C3642	Grade III Prostatic Intraepithelial Neoplasia	5	369984
+NCIT:C39887	High Grade Prostatic Intraepithelial Neoplasia, Signet Ring Variant	5	369985
+NCIT:C39888	High Grade Prostatic Intraepithelial Neoplasia, Mucinous Variant	5	369986
+NCIT:C39889	High Grade Prostatic Intraepithelial Neoplasia, Foamy Variant	5	369987
+NCIT:C39890	High Grade Prostatic Intraepithelial Neoplasia, Inverted Variant	5	369988
+NCIT:C39891	High Grade Prostatic Intraepithelial Neoplasia, Small Cell Neuroendocrine Variant	5	369989
+NCIT:C7360	Grade II Prostatic Intraepithelial Neoplasia	5	369990
+NCIT:C5542	Low Grade Prostatic Intraepithelial Neoplasia	4	369991
+NCIT:C4843	Biliary Intraepithelial Neoplasia	3	369992
+NCIT:C172804	Low Grade Biliary Intraepithelial Neoplasia	4	369993
+NCIT:C67491	Biliary Intraepithelial Neoplasia-1	5	369994
+NCIT:C67492	Biliary Intraepithelial Neoplasia-2	5	369995
+NCIT:C43606	Gallbladder Biliary Intraepithelial Neoplasia	4	369996
+NCIT:C43607	Gallbladder Flat Biliary Intraepithelial Neoplasia	5	369997
+NCIT:C43609	Gallbladder Papillary Biliary Intraepithelial Neoplasia	5	369998
+NCIT:C67493	High-Grade Biliary Intraepithelial Neoplasia	4	369999
+NCIT:C96945	Bile Duct Biliary Intraepithelial Neoplasia	4	370000
+NCIT:C96942	Extrahepatic Bile Duct Biliary Intraepithelial Neoplasia	5	370001
+NCIT:C96943	Intrahepatic Bile Duct Biliary Intraepithelial Neoplasia	5	370002
+NCIT:C4845	Pancreatic Intraepithelial Neoplasia	3	370003
+NCIT:C172803	Low Grade Pancreatic Intraepithelial Neoplasia	4	370004
+NCIT:C4846	Pancreatic Intraepithelial Neoplasia-2	5	370005
+NCIT:C6820	Pancreatic Intraepithelial Neoplasia-1	5	370006
+NCIT:C95429	Pancreatic Intraepithelial Neoplasia-1A	6	370007
+NCIT:C95430	Pancreatic Intraepithelial Neoplasia-1B	6	370008
+NCIT:C95432	High Grade Pancreatic Intraepithelial Neoplasia	4	370009
+NCIT:C7658	Intestinal Intraepithelial Neoplasia	3	370010
+NCIT:C27459	Colorectal Intraepithelial Neoplasia	4	370011
+NCIT:C27460	Colorectal Low Grade Intraepithelial Neoplasia	5	370012
+NCIT:C27461	Colorectal High Grade Intraepithelial Neoplasia	5	370013
+NCIT:C27462	Small Intestinal Intraepithelial Neoplasia	4	370014
+NCIT:C27463	Small Intestinal Low Grade Intraepithelial Neoplasia	5	370015
+NCIT:C27464	Small Intestinal High Grade Intraepithelial Neoplasia	5	370016
+NCIT:C7661	Low Grade Glandular Intraepithelial Neoplasia	3	370017
+NCIT:C172803	Low Grade Pancreatic Intraepithelial Neoplasia	4	370018
+NCIT:C4846	Pancreatic Intraepithelial Neoplasia-2	5	370019
+NCIT:C6820	Pancreatic Intraepithelial Neoplasia-1	5	370020
+NCIT:C95429	Pancreatic Intraepithelial Neoplasia-1A	6	370021
+NCIT:C95430	Pancreatic Intraepithelial Neoplasia-1B	6	370022
+NCIT:C172804	Low Grade Biliary Intraepithelial Neoplasia	4	370023
+NCIT:C67491	Biliary Intraepithelial Neoplasia-1	5	370024
+NCIT:C67492	Biliary Intraepithelial Neoplasia-2	5	370025
+NCIT:C27428	Low Grade Esophageal Glandular Intraepithelial Neoplasia	4	370026
+NCIT:C27436	Low Grade Gastric Intraepithelial Neoplasia	4	370027
+NCIT:C27460	Colorectal Low Grade Intraepithelial Neoplasia	4	370028
+NCIT:C27463	Small Intestinal Low Grade Intraepithelial Neoplasia	4	370029
+NCIT:C5542	Low Grade Prostatic Intraepithelial Neoplasia	4	370030
+NCIT:C7674	Low Grade Cervical Glandular Intraepithelial Neoplasia	4	370031
+NCIT:C96419	Appendix Low Grade Intraepithelial Neoplasia	4	370032
+NCIT:C7662	High Grade Glandular Intraepithelial Neoplasia	3	370033
+NCIT:C27429	High Grade Esophageal Glandular Intraepithelial Neoplasia	4	370034
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	5	370035
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	5	370036
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	5	370037
+NCIT:C27437	High Grade Gastric Intraepithelial Neoplasia	4	370038
+NCIT:C27461	Colorectal High Grade Intraepithelial Neoplasia	4	370039
+NCIT:C27464	Small Intestinal High Grade Intraepithelial Neoplasia	4	370040
+NCIT:C5541	High Grade Prostatic Intraepithelial Neoplasia	4	370041
+NCIT:C3642	Grade III Prostatic Intraepithelial Neoplasia	5	370042
+NCIT:C39887	High Grade Prostatic Intraepithelial Neoplasia, Signet Ring Variant	5	370043
+NCIT:C39888	High Grade Prostatic Intraepithelial Neoplasia, Mucinous Variant	5	370044
+NCIT:C39889	High Grade Prostatic Intraepithelial Neoplasia, Foamy Variant	5	370045
+NCIT:C39890	High Grade Prostatic Intraepithelial Neoplasia, Inverted Variant	5	370046
+NCIT:C39891	High Grade Prostatic Intraepithelial Neoplasia, Small Cell Neuroendocrine Variant	5	370047
+NCIT:C7360	Grade II Prostatic Intraepithelial Neoplasia	5	370048
+NCIT:C67493	High-Grade Biliary Intraepithelial Neoplasia	4	370049
+NCIT:C6877	Grade III Glandular Intraepithelial Neoplasia	4	370050
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	5	370051
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	5	370052
+NCIT:C133550	Clinical Stage 0 Gastroesophageal Junction Adenocarcinoma AJCC v8	5	370053
+NCIT:C133564	Pathologic Stage 0 Gastroesophageal Junction Adenocarcinoma AJCC v8	5	370054
+NCIT:C2924	Breast Ductal Carcinoma In Situ	5	370055
+NCIT:C176005	Breast Ductal Carcinoma In Situ, Comedo Type	6	370056
+NCIT:C203339	Recurrent Breast Ductal Carcinoma In Situ	6	370057
+NCIT:C4190	Breast Papillary Ductal Carcinoma In Situ	6	370058
+NCIT:C176011	Breast Solid Papillary Carcinoma In Situ	7	370059
+NCIT:C5139	Breast Micropapillary Ductal Carcinoma In Situ	7	370060
+NCIT:C5137	Breast Ductal Carcinoma In Situ, Non-Comedo Type	6	370061
+NCIT:C5138	Breast Ductal Carcinoma In Situ, Cribriform Pattern	6	370062
+NCIT:C66933	Breast Ductal Carcinoma In Situ, Solid Type	6	370063
+NCIT:C7949	Breast Ductal Carcinoma In Situ, High Grade	6	370064
+NCIT:C9456	Breast Ductal Carcinoma In Situ, Intermediate Grade	6	370065
+NCIT:C9457	Breast Ductal Carcinoma In Situ, Low Grade	6	370066
+NCIT:C3642	Grade III Prostatic Intraepithelial Neoplasia	5	370067
+NCIT:C40105	Stage 0 Fallopian Tube Cancer AJCC v7	5	370068
+NCIT:C126449	Serous Tubal Intraepithelial Carcinoma	6	370069
+NCIT:C4018	Breast Lobular Carcinoma In Situ	5	370070
+NCIT:C137839	Breast Pleomorphic Lobular Carcinoma In Situ	6	370071
+NCIT:C175949	Breast Classic Lobular Carcinoma In Situ	6	370072
+NCIT:C83170	Breast Classic Lobular Carcinoma In Situ Type A	7	370073
+NCIT:C83171	Breast Classic Lobular Carcinoma In Situ Type B	7	370074
+NCIT:C175950	Breast Florid Lobular Carcinoma In Situ	6	370075
+NCIT:C4195	Breast Ductal Carcinoma In Situ and Lobular Carcinoma In Situ	5	370076
+NCIT:C4520	Cervical Adenocarcinoma In Situ	5	370077
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	6	370078
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	6	370079
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	5	370080
+NCIT:C7660	Grade II Glandular Intraepithelial Neoplasia	4	370081
+NCIT:C7360	Grade II Prostatic Intraepithelial Neoplasia	5	370082
+NCIT:C7675	High Grade Cervical Glandular Intraepithelial Neoplasia	4	370083
+NCIT:C4520	Cervical Adenocarcinoma In Situ	5	370084
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	6	370085
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	6	370086
+NCIT:C95432	High Grade Pancreatic Intraepithelial Neoplasia	4	370087
+NCIT:C95918	Ampullary Flat Intraepithelial Neoplasia, High Grade	4	370088
+NCIT:C96420	Appendix High Grade Intraepithelial Neoplasia	4	370089
+NCIT:C7673	Cervical Glandular Intraepithelial Neoplasia	3	370090
+NCIT:C7674	Low Grade Cervical Glandular Intraepithelial Neoplasia	4	370091
+NCIT:C7675	High Grade Cervical Glandular Intraepithelial Neoplasia	4	370092
+NCIT:C4520	Cervical Adenocarcinoma In Situ	5	370093
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	6	370094
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	6	370095
+NCIT:C8436	Breast Atypical Ductal Hyperplasia	3	370096
+NCIT:C27881	Transitional Cell Intraepithelial Neoplasia	2	370097
+NCIT:C4116	Stage 0 Transitional Cell Carcinoma	3	370098
+NCIT:C140358	Stage 0a Renal Pelvis and Ureter Cancer AJCC v8	4	370099
+NCIT:C140359	Stage 0a Renal Pelvis Cancer AJCC v8	5	370100
+NCIT:C140360	Stage 0a Ureter Cancer AJCC v8	5	370101
+NCIT:C140361	Stage 0is Renal Pelvis and Ureter Cancer AJCC v8	4	370102
+NCIT:C140362	Stage 0is Renal Pelvis Cancer AJCC v8	5	370103
+NCIT:C140363	Stage 0is Ureter Cancer AJCC v8	5	370104
+NCIT:C39850	Stage 0 Renal Pelvis and Ureter Cancer AJCC v7	4	370105
+NCIT:C6149	Stage 0 Ureter Cancer AJCC v7	5	370106
+NCIT:C4529	Stage 0is Ureter Cancer AJCC v7	6	370107
+NCIT:C6203	Stage 0a Ureter Cancer AJCC v7	6	370108
+NCIT:C6193	Stage 0 Renal Pelvis Cancer AJCC v7	5	370109
+NCIT:C4597	Stage 0is Renal Pelvis Cancer AJCC v7	6	370110
+NCIT:C6202	Stage 0a Renal Pelvis Cancer AJCC v7	6	370111
+NCIT:C7517	Stage 0a Renal Pelvis and Ureter Cancer AJCC v7	5	370112
+NCIT:C6202	Stage 0a Renal Pelvis Cancer AJCC v7	6	370113
+NCIT:C6203	Stage 0a Ureter Cancer AJCC v7	6	370114
+NCIT:C7518	Stage 0is Renal Pelvis and Ureter Cancer AJCC v7	5	370115
+NCIT:C4529	Stage 0is Ureter Cancer AJCC v7	6	370116
+NCIT:C4597	Stage 0is Renal Pelvis Cancer AJCC v7	6	370117
+NCIT:C6188	Stage 0 Bladder Urothelial Carcinoma AJCC v6 and v7	4	370118
+NCIT:C3644	Stage 0is Bladder Urothelial Carcinoma AJCC v6 and v7	5	370119
+NCIT:C9267	Stage 0a Bladder Urothelial Carcinoma AJCC v6 and v7	5	370120
+NCIT:C3782	Cervical Intraepithelial Neoplasia	2	370121
+NCIT:C4630	Low Grade Cervical Intraepithelial Neoplasia	3	370122
+NCIT:C40196	Low Grade Cervical Squamous Intraepithelial Neoplasia	4	370123
+NCIT:C40199	Cervical Squamous Intraepithelial Neoplasia 1	5	370124
+NCIT:C7674	Low Grade Cervical Glandular Intraepithelial Neoplasia	4	370125
+NCIT:C7346	Cervical Squamous Intraepithelial Neoplasia	3	370126
+NCIT:C40196	Low Grade Cervical Squamous Intraepithelial Neoplasia	4	370127
+NCIT:C40199	Cervical Squamous Intraepithelial Neoplasia 1	5	370128
+NCIT:C40197	High Grade Cervical Squamous Intraepithelial Neoplasia	4	370129
+NCIT:C40198	Cervical Squamous Intraepithelial Neoplasia 2	5	370130
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	5	370131
+NCIT:C7670	High Grade Cervical Intraepithelial Neoplasia	3	370132
+NCIT:C4000	Stage 0 Cervical Cancer AJCC v6	4	370133
+NCIT:C40197	High Grade Cervical Squamous Intraepithelial Neoplasia	4	370134
+NCIT:C40198	Cervical Squamous Intraepithelial Neoplasia 2	5	370135
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	5	370136
+NCIT:C7675	High Grade Cervical Glandular Intraepithelial Neoplasia	4	370137
+NCIT:C4520	Cervical Adenocarcinoma In Situ	5	370138
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	6	370139
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	6	370140
+NCIT:C89550	Stage 0 Cervical Cancer AJCC v7	4	370141
+NCIT:C4520	Cervical Adenocarcinoma In Situ	5	370142
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	6	370143
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	6	370144
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	5	370145
+NCIT:C94676	Cervical Intraepithelial Neoplasia Grade 2/3	4	370146
+NCIT:C7673	Cervical Glandular Intraepithelial Neoplasia	3	370147
+NCIT:C7674	Low Grade Cervical Glandular Intraepithelial Neoplasia	4	370148
+NCIT:C7675	High Grade Cervical Glandular Intraepithelial Neoplasia	4	370149
+NCIT:C4520	Cervical Adenocarcinoma In Situ	5	370150
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	6	370151
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	6	370152
+NCIT:C4521	Vaginal Intraepithelial Neoplasia	2	370153
+NCIT:C4644	Low Grade Vaginal Intraepithelial Neoplasia	3	370154
+NCIT:C7663	High Grade Vaginal Intraepithelial Neoplasia	3	370155
+NCIT:C4645	Grade 2 Vaginal Intraepithelial Neoplasia	4	370156
+NCIT:C7855	Stage 0 Vaginal Cancer AJCC v6	4	370157
+NCIT:C89476	Stage 0 Vaginal Cancer AJCC v7	4	370158
+NCIT:C7348	High Grade Intraepithelial Neoplasia	2	370159
+NCIT:C27425	Esophageal High Grade Intraepithelial Neoplasia	3	370160
+NCIT:C27426	High Grade Esophageal Squamous Intraepithelial Neoplasia	4	370161
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	5	370162
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	5	370163
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	5	370164
+NCIT:C27429	High Grade Esophageal Glandular Intraepithelial Neoplasia	4	370165
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	5	370166
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	5	370167
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	5	370168
+NCIT:C3637	Stage 0 Esophageal Cancer AJCC v6	4	370169
+NCIT:C89771	Stage 0 Esophageal Cancer AJCC v7	4	370170
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	5	370171
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	5	370172
+NCIT:C7662	High Grade Glandular Intraepithelial Neoplasia	3	370173
+NCIT:C27429	High Grade Esophageal Glandular Intraepithelial Neoplasia	4	370174
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	5	370175
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	5	370176
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	5	370177
+NCIT:C27437	High Grade Gastric Intraepithelial Neoplasia	4	370178
+NCIT:C27461	Colorectal High Grade Intraepithelial Neoplasia	4	370179
+NCIT:C27464	Small Intestinal High Grade Intraepithelial Neoplasia	4	370180
+NCIT:C5541	High Grade Prostatic Intraepithelial Neoplasia	4	370181
+NCIT:C3642	Grade III Prostatic Intraepithelial Neoplasia	5	370182
+NCIT:C39887	High Grade Prostatic Intraepithelial Neoplasia, Signet Ring Variant	5	370183
+NCIT:C39888	High Grade Prostatic Intraepithelial Neoplasia, Mucinous Variant	5	370184
+NCIT:C39889	High Grade Prostatic Intraepithelial Neoplasia, Foamy Variant	5	370185
+NCIT:C39890	High Grade Prostatic Intraepithelial Neoplasia, Inverted Variant	5	370186
+NCIT:C39891	High Grade Prostatic Intraepithelial Neoplasia, Small Cell Neuroendocrine Variant	5	370187
+NCIT:C7360	Grade II Prostatic Intraepithelial Neoplasia	5	370188
+NCIT:C67493	High-Grade Biliary Intraepithelial Neoplasia	4	370189
+NCIT:C6877	Grade III Glandular Intraepithelial Neoplasia	4	370190
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	5	370191
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	5	370192
+NCIT:C133550	Clinical Stage 0 Gastroesophageal Junction Adenocarcinoma AJCC v8	5	370193
+NCIT:C133564	Pathologic Stage 0 Gastroesophageal Junction Adenocarcinoma AJCC v8	5	370194
+NCIT:C2924	Breast Ductal Carcinoma In Situ	5	370195
+NCIT:C176005	Breast Ductal Carcinoma In Situ, Comedo Type	6	370196
+NCIT:C203339	Recurrent Breast Ductal Carcinoma In Situ	6	370197
+NCIT:C4190	Breast Papillary Ductal Carcinoma In Situ	6	370198
+NCIT:C176011	Breast Solid Papillary Carcinoma In Situ	7	370199
+NCIT:C5139	Breast Micropapillary Ductal Carcinoma In Situ	7	370200
+NCIT:C5137	Breast Ductal Carcinoma In Situ, Non-Comedo Type	6	370201
+NCIT:C5138	Breast Ductal Carcinoma In Situ, Cribriform Pattern	6	370202
+NCIT:C66933	Breast Ductal Carcinoma In Situ, Solid Type	6	370203
+NCIT:C7949	Breast Ductal Carcinoma In Situ, High Grade	6	370204
+NCIT:C9456	Breast Ductal Carcinoma In Situ, Intermediate Grade	6	370205
+NCIT:C9457	Breast Ductal Carcinoma In Situ, Low Grade	6	370206
+NCIT:C3642	Grade III Prostatic Intraepithelial Neoplasia	5	370207
+NCIT:C40105	Stage 0 Fallopian Tube Cancer AJCC v7	5	370208
+NCIT:C126449	Serous Tubal Intraepithelial Carcinoma	6	370209
+NCIT:C4018	Breast Lobular Carcinoma In Situ	5	370210
+NCIT:C137839	Breast Pleomorphic Lobular Carcinoma In Situ	6	370211
+NCIT:C175949	Breast Classic Lobular Carcinoma In Situ	6	370212
+NCIT:C83170	Breast Classic Lobular Carcinoma In Situ Type A	7	370213
+NCIT:C83171	Breast Classic Lobular Carcinoma In Situ Type B	7	370214
+NCIT:C175950	Breast Florid Lobular Carcinoma In Situ	6	370215
+NCIT:C4195	Breast Ductal Carcinoma In Situ and Lobular Carcinoma In Situ	5	370216
+NCIT:C4520	Cervical Adenocarcinoma In Situ	5	370217
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	6	370218
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	6	370219
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	5	370220
+NCIT:C7660	Grade II Glandular Intraepithelial Neoplasia	4	370221
+NCIT:C7360	Grade II Prostatic Intraepithelial Neoplasia	5	370222
+NCIT:C7675	High Grade Cervical Glandular Intraepithelial Neoplasia	4	370223
+NCIT:C4520	Cervical Adenocarcinoma In Situ	5	370224
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	6	370225
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	6	370226
+NCIT:C95432	High Grade Pancreatic Intraepithelial Neoplasia	4	370227
+NCIT:C95918	Ampullary Flat Intraepithelial Neoplasia, High Grade	4	370228
+NCIT:C96420	Appendix High Grade Intraepithelial Neoplasia	4	370229
+NCIT:C7663	High Grade Vaginal Intraepithelial Neoplasia	3	370230
+NCIT:C4645	Grade 2 Vaginal Intraepithelial Neoplasia	4	370231
+NCIT:C7855	Stage 0 Vaginal Cancer AJCC v6	4	370232
+NCIT:C89476	Stage 0 Vaginal Cancer AJCC v7	4	370233
+NCIT:C7670	High Grade Cervical Intraepithelial Neoplasia	3	370234
+NCIT:C4000	Stage 0 Cervical Cancer AJCC v6	4	370235
+NCIT:C40197	High Grade Cervical Squamous Intraepithelial Neoplasia	4	370236
+NCIT:C40198	Cervical Squamous Intraepithelial Neoplasia 2	5	370237
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	5	370238
+NCIT:C7675	High Grade Cervical Glandular Intraepithelial Neoplasia	4	370239
+NCIT:C4520	Cervical Adenocarcinoma In Situ	5	370240
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	6	370241
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	6	370242
+NCIT:C89550	Stage 0 Cervical Cancer AJCC v7	4	370243
+NCIT:C4520	Cervical Adenocarcinoma In Situ	5	370244
+NCIT:C180845	Human Papillomavirus-Related Cervical Adenocarcinoma In Situ	6	370245
+NCIT:C180846	Human Papillomavirus-Independent Cervical Adenocarcinoma In Situ	6	370246
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	5	370247
+NCIT:C94676	Cervical Intraepithelial Neoplasia Grade 2/3	4	370248
+NCIT:C8336	High Grade Squamous Intraepithelial Neoplasia	3	370249
+NCIT:C172706	High Grade Anal Intraepithelial Neoplasia	4	370250
+NCIT:C157574	Anal Intraepithelial Neoplasia 2	5	370251
+NCIT:C157575	Anal Intraepithelial Neoplasia 3	5	370252
+NCIT:C27275	High Grade Anal Canal Intraepithelial Neoplasia	5	370253
+NCIT:C27093	Stage 0 Squamous Cell Carcinoma	4	370254
+NCIT:C133255	Stage 0 Cutaneous Squamous Cell Carcinoma of the Head and Neck AJCC v8	5	370255
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	5	370256
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	5	370257
+NCIT:C136719	Lung Squamous Cell Carcinoma In Situ	5	370258
+NCIT:C8763	Stage 0 Lung Squamous Cell Carcinoma AJCC v6 and v7	6	370259
+NCIT:C157575	Anal Intraepithelial Neoplasia 3	5	370260
+NCIT:C212849	Conjunctival Squamous Cell Carcinoma In Situ	5	370261
+NCIT:C27790	Penile Carcinoma In Situ	5	370262
+NCIT:C28292	Squamous Cell Carcinoma In Situ of the Nipple	5	370263
+NCIT:C2906	Skin Squamous Cell Carcinoma In Situ	5	370264
+NCIT:C62571	Bowen Disease of the Skin	6	370265
+NCIT:C3639	Tracheal Carcinoma In Situ	5	370266
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	5	370267
+NCIT:C6052	Stage 0 Oral Cavity Squamous Cell Carcinoma AJCC v6 and v7	5	370268
+NCIT:C6121	Stage 0 Laryngeal Squamous Cell Carcinoma AJCC v6, v7, and v8	5	370269
+NCIT:C4592	Stage 0 Epiglottic Carcinoma AJCC v6, v7, and v8	6	370270
+NCIT:C6128	Stage 0 Laryngeal Verrucous Carcinoma AJCC v6, v7, and v8	6	370271
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	5	370272
+NCIT:C8903	Stage 0 Bladder Squamous Cell Carcinoma AJCC v6 and v7	5	370273
+NCIT:C27426	High Grade Esophageal Squamous Intraepithelial Neoplasia	4	370274
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	5	370275
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	5	370276
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	5	370277
+NCIT:C40197	High Grade Cervical Squamous Intraepithelial Neoplasia	4	370278
+NCIT:C40198	Cervical Squamous Intraepithelial Neoplasia 2	5	370279
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	5	370280
+NCIT:C4761	High Grade Vulvar Squamous Intraepithelial Lesion	4	370281
+NCIT:C7351	Grade II Squamous Intraepithelial Neoplasia	4	370282
+NCIT:C157574	Anal Intraepithelial Neoplasia 2	5	370283
+NCIT:C40198	Cervical Squamous Intraepithelial Neoplasia 2	5	370284
+NCIT:C7665	Grade II Penile Intraepithelial Neoplasia	5	370285
+NCIT:C7667	High Grade Penile Intraepithelial Neoplasia	4	370286
+NCIT:C27790	Penile Carcinoma In Situ	5	370287
+NCIT:C7665	Grade II Penile Intraepithelial Neoplasia	5	370288
+NCIT:C7668	Conjunctival Squamous Intraepithelial Neoplasia 3	4	370289
+NCIT:C7669	High Grade Corneal Squamous Intraepithelial Neoplasia	4	370290
+NCIT:C8368	Grade II Intraepithelial Neoplasia	3	370291
+NCIT:C4645	Grade 2 Vaginal Intraepithelial Neoplasia	4	370292
+NCIT:C7351	Grade II Squamous Intraepithelial Neoplasia	4	370293
+NCIT:C157574	Anal Intraepithelial Neoplasia 2	5	370294
+NCIT:C40198	Cervical Squamous Intraepithelial Neoplasia 2	5	370295
+NCIT:C7665	Grade II Penile Intraepithelial Neoplasia	5	370296
+NCIT:C7660	Grade II Glandular Intraepithelial Neoplasia	4	370297
+NCIT:C7360	Grade II Prostatic Intraepithelial Neoplasia	5	370298
+NCIT:C7436	Bronchial Intraepithelial Neoplasia	2	370299
+NCIT:C8334	Squamous Cell Intraepithelial Neoplasia	2	370300
+NCIT:C27423	Esophageal Squamous Intraepithelial Neoplasia	3	370301
+NCIT:C27426	High Grade Esophageal Squamous Intraepithelial Neoplasia	4	370302
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	5	370303
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	5	370304
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	5	370305
+NCIT:C27427	Low Grade Esophageal Squamous Intraepithelial Neoplasia	4	370306
+NCIT:C4394	Anogenital Papillomaviral Intraepithelial Neoplasia	3	370307
+NCIT:C4595	Anal Intraepithelial Neoplasia	3	370308
+NCIT:C157573	Low Grade Anal Intraepithelial Neoplasia	4	370309
+NCIT:C27238	Low Grade Anal Canal Intraepithelial Neoplasia	5	370310
+NCIT:C172706	High Grade Anal Intraepithelial Neoplasia	4	370311
+NCIT:C157574	Anal Intraepithelial Neoplasia 2	5	370312
+NCIT:C157575	Anal Intraepithelial Neoplasia 3	5	370313
+NCIT:C27275	High Grade Anal Canal Intraepithelial Neoplasia	5	370314
+NCIT:C43598	Perianal Intraepithelial Neoplasia	4	370315
+NCIT:C7490	Anal Canal Intraepithelial Neoplasia	4	370316
+NCIT:C27238	Low Grade Anal Canal Intraepithelial Neoplasia	5	370317
+NCIT:C27275	High Grade Anal Canal Intraepithelial Neoplasia	5	370318
+NCIT:C4596	Penile Intraepithelial Neoplasia	3	370319
+NCIT:C162539	Differentiated Penile Intraepithelial Neoplasia, Human Papillomavirus-Independent	4	370320
+NCIT:C162541	Human Papillomavirus-Related Penile Intraepithelial Neoplasia	4	370321
+NCIT:C162542	Basaloid (Undifferentiated) Penile Intraepithelial Neoplasia	5	370322
+NCIT:C162543	Warty (Bowenoid) Penile Intraepithelial Neoplasia	5	370323
+NCIT:C162546	Warty-Basaloid Penile Intraepithelial Neoplasia	5	370324
+NCIT:C39963	Penile Bowenoid Papulosis	5	370325
+NCIT:C7666	Low Grade Penile Intraepithelial Neoplasia	4	370326
+NCIT:C7667	High Grade Penile Intraepithelial Neoplasia	4	370327
+NCIT:C27790	Penile Carcinoma In Situ	5	370328
+NCIT:C7665	Grade II Penile Intraepithelial Neoplasia	5	370329
+NCIT:C4756	Vulvar Intraepithelial Neoplasia	3	370330
+NCIT:C128142	Vulvar Squamous Intraepithelial Lesion, HPV-Associated	4	370331
+NCIT:C4760	Low Grade Vulvar Squamous Intraepithelial Lesion	5	370332
+NCIT:C4761	High Grade Vulvar Squamous Intraepithelial Lesion	5	370333
+NCIT:C37272	Vulvar Intraepithelial Neoplasia, HPV-Independent	4	370334
+NCIT:C4522	Stage 0 Vulvar Cancer AJCC v6	4	370335
+NCIT:C89445	Stage 0 Vulvar Cancer AJCC v7	4	370336
+NCIT:C6093	Corneal Squamous Intraepithelial Neoplasia	3	370337
+NCIT:C6094	Low Grade Corneal Squamous Intraepithelial Neoplasia	4	370338
+NCIT:C7669	High Grade Corneal Squamous Intraepithelial Neoplasia	4	370339
+NCIT:C6120	Conjunctival Squamous Intraepithelial Neoplasia	3	370340
+NCIT:C212836	Pigmented Conjunctival Squamous Intraepithelial Neoplasia	4	370341
+NCIT:C212841	Conjunctival Squamous Intraepithelial Neoplasia with Mucinous Differentiation	4	370342
+NCIT:C212845	Conjunctival Squamous Intraepithelial Neoplasia 2	4	370343
+NCIT:C6097	Conjunctival Squamous Intraepithelial Neoplasia 1	4	370344
+NCIT:C7668	Conjunctival Squamous Intraepithelial Neoplasia 3	4	370345
+NCIT:C7346	Cervical Squamous Intraepithelial Neoplasia	3	370346
+NCIT:C40196	Low Grade Cervical Squamous Intraepithelial Neoplasia	4	370347
+NCIT:C40199	Cervical Squamous Intraepithelial Neoplasia 1	5	370348
+NCIT:C40197	High Grade Cervical Squamous Intraepithelial Neoplasia	4	370349
+NCIT:C40198	Cervical Squamous Intraepithelial Neoplasia 2	5	370350
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	5	370351
+NCIT:C8335	Low Grade Squamous Intraepithelial Neoplasia	3	370352
+NCIT:C157573	Low Grade Anal Intraepithelial Neoplasia	4	370353
+NCIT:C27238	Low Grade Anal Canal Intraepithelial Neoplasia	5	370354
+NCIT:C27427	Low Grade Esophageal Squamous Intraepithelial Neoplasia	4	370355
+NCIT:C40196	Low Grade Cervical Squamous Intraepithelial Neoplasia	4	370356
+NCIT:C40199	Cervical Squamous Intraepithelial Neoplasia 1	5	370357
+NCIT:C4760	Low Grade Vulvar Squamous Intraepithelial Lesion	4	370358
+NCIT:C6094	Low Grade Corneal Squamous Intraepithelial Neoplasia	4	370359
+NCIT:C6097	Conjunctival Squamous Intraepithelial Neoplasia 1	4	370360
+NCIT:C7666	Low Grade Penile Intraepithelial Neoplasia	4	370361
+NCIT:C8336	High Grade Squamous Intraepithelial Neoplasia	3	370362
+NCIT:C172706	High Grade Anal Intraepithelial Neoplasia	4	370363
+NCIT:C157574	Anal Intraepithelial Neoplasia 2	5	370364
+NCIT:C157575	Anal Intraepithelial Neoplasia 3	5	370365
+NCIT:C27275	High Grade Anal Canal Intraepithelial Neoplasia	5	370366
+NCIT:C27093	Stage 0 Squamous Cell Carcinoma	4	370367
+NCIT:C133255	Stage 0 Cutaneous Squamous Cell Carcinoma of the Head and Neck AJCC v8	5	370368
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	5	370369
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	5	370370
+NCIT:C136719	Lung Squamous Cell Carcinoma In Situ	5	370371
+NCIT:C8763	Stage 0 Lung Squamous Cell Carcinoma AJCC v6 and v7	6	370372
+NCIT:C157575	Anal Intraepithelial Neoplasia 3	5	370373
+NCIT:C212849	Conjunctival Squamous Cell Carcinoma In Situ	5	370374
+NCIT:C27790	Penile Carcinoma In Situ	5	370375
+NCIT:C28292	Squamous Cell Carcinoma In Situ of the Nipple	5	370376
+NCIT:C2906	Skin Squamous Cell Carcinoma In Situ	5	370377
+NCIT:C62571	Bowen Disease of the Skin	6	370378
+NCIT:C3639	Tracheal Carcinoma In Situ	5	370379
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	5	370380
+NCIT:C6052	Stage 0 Oral Cavity Squamous Cell Carcinoma AJCC v6 and v7	5	370381
+NCIT:C6121	Stage 0 Laryngeal Squamous Cell Carcinoma AJCC v6, v7, and v8	5	370382
+NCIT:C4592	Stage 0 Epiglottic Carcinoma AJCC v6, v7, and v8	6	370383
+NCIT:C6128	Stage 0 Laryngeal Verrucous Carcinoma AJCC v6, v7, and v8	6	370384
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	5	370385
+NCIT:C8903	Stage 0 Bladder Squamous Cell Carcinoma AJCC v6 and v7	5	370386
+NCIT:C27426	High Grade Esophageal Squamous Intraepithelial Neoplasia	4	370387
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	5	370388
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	5	370389
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	5	370390
+NCIT:C40197	High Grade Cervical Squamous Intraepithelial Neoplasia	4	370391
+NCIT:C40198	Cervical Squamous Intraepithelial Neoplasia 2	5	370392
+NCIT:C7347	Cervical Squamous Cell Carcinoma In Situ	5	370393
+NCIT:C4761	High Grade Vulvar Squamous Intraepithelial Lesion	4	370394
+NCIT:C7351	Grade II Squamous Intraepithelial Neoplasia	4	370395
+NCIT:C157574	Anal Intraepithelial Neoplasia 2	5	370396
+NCIT:C40198	Cervical Squamous Intraepithelial Neoplasia 2	5	370397
+NCIT:C7665	Grade II Penile Intraepithelial Neoplasia	5	370398
+NCIT:C7667	High Grade Penile Intraepithelial Neoplasia	4	370399
+NCIT:C27790	Penile Carcinoma In Situ	5	370400
+NCIT:C7665	Grade II Penile Intraepithelial Neoplasia	5	370401
+NCIT:C7668	Conjunctival Squamous Intraepithelial Neoplasia 3	4	370402
+NCIT:C7669	High Grade Corneal Squamous Intraepithelial Neoplasia	4	370403
+NCIT:C8367	Low Grade Intraepithelial Neoplasia	2	370404
+NCIT:C4630	Low Grade Cervical Intraepithelial Neoplasia	3	370405
+NCIT:C40196	Low Grade Cervical Squamous Intraepithelial Neoplasia	4	370406
+NCIT:C40199	Cervical Squamous Intraepithelial Neoplasia 1	5	370407
+NCIT:C7674	Low Grade Cervical Glandular Intraepithelial Neoplasia	4	370408
+NCIT:C4644	Low Grade Vaginal Intraepithelial Neoplasia	3	370409
+NCIT:C4840	Esophageal Low Grade Intraepithelial Neoplasia	3	370410
+NCIT:C27427	Low Grade Esophageal Squamous Intraepithelial Neoplasia	4	370411
+NCIT:C27428	Low Grade Esophageal Glandular Intraepithelial Neoplasia	4	370412
+NCIT:C7661	Low Grade Glandular Intraepithelial Neoplasia	3	370413
+NCIT:C172803	Low Grade Pancreatic Intraepithelial Neoplasia	4	370414
+NCIT:C4846	Pancreatic Intraepithelial Neoplasia-2	5	370415
+NCIT:C6820	Pancreatic Intraepithelial Neoplasia-1	5	370416
+NCIT:C95429	Pancreatic Intraepithelial Neoplasia-1A	6	370417
+NCIT:C95430	Pancreatic Intraepithelial Neoplasia-1B	6	370418
+NCIT:C172804	Low Grade Biliary Intraepithelial Neoplasia	4	370419
+NCIT:C67491	Biliary Intraepithelial Neoplasia-1	5	370420
+NCIT:C67492	Biliary Intraepithelial Neoplasia-2	5	370421
+NCIT:C27428	Low Grade Esophageal Glandular Intraepithelial Neoplasia	4	370422
+NCIT:C27436	Low Grade Gastric Intraepithelial Neoplasia	4	370423
+NCIT:C27460	Colorectal Low Grade Intraepithelial Neoplasia	4	370424
+NCIT:C27463	Small Intestinal Low Grade Intraepithelial Neoplasia	4	370425
+NCIT:C5542	Low Grade Prostatic Intraepithelial Neoplasia	4	370426
+NCIT:C7674	Low Grade Cervical Glandular Intraepithelial Neoplasia	4	370427
+NCIT:C96419	Appendix Low Grade Intraepithelial Neoplasia	4	370428
+NCIT:C8335	Low Grade Squamous Intraepithelial Neoplasia	3	370429
+NCIT:C157573	Low Grade Anal Intraepithelial Neoplasia	4	370430
+NCIT:C27238	Low Grade Anal Canal Intraepithelial Neoplasia	5	370431
+NCIT:C27427	Low Grade Esophageal Squamous Intraepithelial Neoplasia	4	370432
+NCIT:C40196	Low Grade Cervical Squamous Intraepithelial Neoplasia	4	370433
+NCIT:C40199	Cervical Squamous Intraepithelial Neoplasia 1	5	370434
+NCIT:C4760	Low Grade Vulvar Squamous Intraepithelial Lesion	4	370435
+NCIT:C6094	Low Grade Corneal Squamous Intraepithelial Neoplasia	4	370436
+NCIT:C6097	Conjunctival Squamous Intraepithelial Neoplasia 1	4	370437
+NCIT:C7666	Low Grade Penile Intraepithelial Neoplasia	4	370438
+NCIT:C8962	Digestive System Intraepithelial Neoplasia	2	370439
+NCIT:C133550	Clinical Stage 0 Gastroesophageal Junction Adenocarcinoma AJCC v8	3	370440
+NCIT:C133564	Pathologic Stage 0 Gastroesophageal Junction Adenocarcinoma AJCC v8	3	370441
+NCIT:C3955	Gastric Intraepithelial Neoplasia	3	370442
+NCIT:C27436	Low Grade Gastric Intraepithelial Neoplasia	4	370443
+NCIT:C27437	High Grade Gastric Intraepithelial Neoplasia	4	370444
+NCIT:C4595	Anal Intraepithelial Neoplasia	3	370445
+NCIT:C157573	Low Grade Anal Intraepithelial Neoplasia	4	370446
+NCIT:C27238	Low Grade Anal Canal Intraepithelial Neoplasia	5	370447
+NCIT:C172706	High Grade Anal Intraepithelial Neoplasia	4	370448
+NCIT:C157574	Anal Intraepithelial Neoplasia 2	5	370449
+NCIT:C157575	Anal Intraepithelial Neoplasia 3	5	370450
+NCIT:C27275	High Grade Anal Canal Intraepithelial Neoplasia	5	370451
+NCIT:C43598	Perianal Intraepithelial Neoplasia	4	370452
+NCIT:C7490	Anal Canal Intraepithelial Neoplasia	4	370453
+NCIT:C27238	Low Grade Anal Canal Intraepithelial Neoplasia	5	370454
+NCIT:C27275	High Grade Anal Canal Intraepithelial Neoplasia	5	370455
+NCIT:C4839	Esophageal Intraepithelial Neoplasia	3	370456
+NCIT:C27423	Esophageal Squamous Intraepithelial Neoplasia	4	370457
+NCIT:C27426	High Grade Esophageal Squamous Intraepithelial Neoplasia	5	370458
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	6	370459
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	6	370460
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	6	370461
+NCIT:C27427	Low Grade Esophageal Squamous Intraepithelial Neoplasia	5	370462
+NCIT:C27424	Esophageal Glandular Intraepithelial Neoplasia	4	370463
+NCIT:C27428	Low Grade Esophageal Glandular Intraepithelial Neoplasia	5	370464
+NCIT:C27429	High Grade Esophageal Glandular Intraepithelial Neoplasia	5	370465
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	6	370466
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	6	370467
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	6	370468
+NCIT:C95613	Intraepithelial Neoplasia in Barrett Esophagus	5	370469
+NCIT:C27425	Esophageal High Grade Intraepithelial Neoplasia	4	370470
+NCIT:C27426	High Grade Esophageal Squamous Intraepithelial Neoplasia	5	370471
+NCIT:C133447	Clinical Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	6	370472
+NCIT:C133519	Pathologic Stage 0 Esophageal Squamous Cell Carcinoma AJCC v8	6	370473
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	6	370474
+NCIT:C27429	High Grade Esophageal Glandular Intraepithelial Neoplasia	5	370475
+NCIT:C133402	Clinical Stage 0 Esophageal Adenocarcinoma AJCC v8	6	370476
+NCIT:C133413	Pathologic Stage 0 Esophageal Adenocarcinoma AJCC v8	6	370477
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	6	370478
+NCIT:C3637	Stage 0 Esophageal Cancer AJCC v6	5	370479
+NCIT:C89771	Stage 0 Esophageal Cancer AJCC v7	5	370480
+NCIT:C5023	Stage 0 Esophageal Squamous Cell Carcinoma AJCC v7	6	370481
+NCIT:C8629	Stage 0 Esophageal Adenocarcinoma AJCC v7	6	370482
+NCIT:C4840	Esophageal Low Grade Intraepithelial Neoplasia	4	370483
+NCIT:C27427	Low Grade Esophageal Squamous Intraepithelial Neoplasia	5	370484
+NCIT:C27428	Low Grade Esophageal Glandular Intraepithelial Neoplasia	5	370485
+NCIT:C4843	Biliary Intraepithelial Neoplasia	3	370486
+NCIT:C172804	Low Grade Biliary Intraepithelial Neoplasia	4	370487
+NCIT:C67491	Biliary Intraepithelial Neoplasia-1	5	370488
+NCIT:C67492	Biliary Intraepithelial Neoplasia-2	5	370489
+NCIT:C43606	Gallbladder Biliary Intraepithelial Neoplasia	4	370490
+NCIT:C43607	Gallbladder Flat Biliary Intraepithelial Neoplasia	5	370491
+NCIT:C43609	Gallbladder Papillary Biliary Intraepithelial Neoplasia	5	370492
+NCIT:C67493	High-Grade Biliary Intraepithelial Neoplasia	4	370493
+NCIT:C96945	Bile Duct Biliary Intraepithelial Neoplasia	4	370494
+NCIT:C96942	Extrahepatic Bile Duct Biliary Intraepithelial Neoplasia	5	370495
+NCIT:C96943	Intrahepatic Bile Duct Biliary Intraepithelial Neoplasia	5	370496
+NCIT:C4845	Pancreatic Intraepithelial Neoplasia	3	370497
+NCIT:C172803	Low Grade Pancreatic Intraepithelial Neoplasia	4	370498
+NCIT:C4846	Pancreatic Intraepithelial Neoplasia-2	5	370499
+NCIT:C6820	Pancreatic Intraepithelial Neoplasia-1	5	370500
+NCIT:C95429	Pancreatic Intraepithelial Neoplasia-1A	6	370501
+NCIT:C95430	Pancreatic Intraepithelial Neoplasia-1B	6	370502
+NCIT:C95432	High Grade Pancreatic Intraepithelial Neoplasia	4	370503
+NCIT:C7658	Intestinal Intraepithelial Neoplasia	3	370504
+NCIT:C27459	Colorectal Intraepithelial Neoplasia	4	370505
+NCIT:C27460	Colorectal Low Grade Intraepithelial Neoplasia	5	370506
+NCIT:C27461	Colorectal High Grade Intraepithelial Neoplasia	5	370507
+NCIT:C27462	Small Intestinal Intraepithelial Neoplasia	4	370508
+NCIT:C27463	Small Intestinal Low Grade Intraepithelial Neoplasia	5	370509
+NCIT:C27464	Small Intestinal High Grade Intraepithelial Neoplasia	5	370510
+NCIT:C95918	Ampullary Flat Intraepithelial Neoplasia, High Grade	3	370511
+NCIT:C96418	Appendix Intraepithelial Neoplasia	3	370512
+NCIT:C96419	Appendix Low Grade Intraepithelial Neoplasia	4	370513
+NCIT:C96420	Appendix High Grade Intraepithelial Neoplasia	4	370514

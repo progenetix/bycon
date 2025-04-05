@@ -91,6 +91,8 @@ geolocations:
 ids:
   request_entity_path_id: ids
   path_id_value_bycon_parameter: id
+  request_entity_path_aliases:
+    - id
 
 intervalFrequencies:
   request_entity_path_id: intervalFrequencies

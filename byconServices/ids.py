@@ -24,7 +24,7 @@ def ids():
     #### Examples (using the Progenetix resource as endpoint):
 
     * <https://progenetix.org/services/ids/pgxbs-kftva5zv>
-    * <https://progenetix.org/services/ids/PMID:28966033>
+    * <https://progenetix.org/services/ids/pubmed:28966033>
     * <https://progenetix.org/services/ids/NCIT:C3262>
     """
 

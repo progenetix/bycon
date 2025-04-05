@@ -33,7 +33,7 @@ properties:
     items:
       $ref: ../bycon-model/common/externalReference.yaml
     examples:
-      - id: PMID:9892199
+      - id: pubmed:9892199
   celllineInfo:
       $ref: ../bycon-model/common/celllineInfo.yaml
   cohorts:

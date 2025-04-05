@@ -326,9 +326,10 @@ class ByconPlot:
         genome_width = paw - gap_sw
         b2pf = genome_width / chr_b_s  # TODO: only exists if using stack
 
-        lab_f_s = round(self.plv["plot_samplestrip_height"] * 0.65, 1)
-        if lab_f_s < self.plv["plot_labelcol_font_size"]:
-            self.plv.update({"plot_labelcol_font_size": lab_f_s})
+        # TODO: This "auto correction" breaks adjustment for histoplots
+        # lab_f_s = round(self.plv["plot_samplestrip_height"] * 0.65, 1)
+        # if lab_f_s < self.plv["plot_labelcol_font_size"]:
+        #     self.plv.update({"plot_labelcol_font_size": lab_f_s})
 
         self.plv.update({
             "styles": [

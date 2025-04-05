@@ -10,8 +10,6 @@ dataset:
     schema: https://progenetix.org/services/schemas/dataset/
   is_beacon_entity: true
   path_id_value_bycon_parameter: dataset_ids
-  examples:
-    - /progenetix
   tests:
     - description: default test mode
       test_values:
@@ -60,11 +58,6 @@ genomicVariant:
     - individual_id
   is_beacon_entity: true
   path_id_value_bycon_parameter: variant_ids
-  examples:
-    - /pgxvar-5bab576a727983b2e00b8d32
-    - /pgxvar-5bab576a727983b2e00b8d32/individuals
-    - ?geneId=CDKN2A&variantMaxSize=100000&limit=5
-    - ?referenceName=NC_000017.11&start=7577120&referenceBases=G&alternateBases=A
   tests:
     - description: default test mode
       test_values:
@@ -138,9 +131,6 @@ biosample:
     - individual_id
   is_beacon_entity: true
   path_id_value_bycon_parameter: biosample_ids
-  examples:
-    - ?filters=NCIT:C4017&limit=3
-    - ?referenceName=refseq:NC_000009.12&variantType=EFO:0030067&start=21000000,21975098&end=21967753,23000000&filters=NCIT:C3058&limit=10
   tests:
     - description: default test mode
       test_values:
@@ -190,8 +180,6 @@ phenopacket:
     schema: https://progenetix.org/services/schemas/phenopacket/
   is_beacon_entity: true
   path_id_value_bycon_parameter: individual_ids
-  examples:
-    - ?filters=EFO:0030049&limit=5
   tests:
     - description: default test mode
       test_values:

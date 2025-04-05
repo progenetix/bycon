@@ -254,7 +254,7 @@ def isonow():
 
 ################################################################################
 
-def clean_empty_fields(this_object, protected=[]):
+def clean_empty_fields(this_object, protected=["external_references"]):
     if not isinstance(this_object, dict):
         return this_object
     for k in list(this_object.keys()):

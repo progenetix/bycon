@@ -1,7 +1,8 @@
 #!/usr/local/bin/python3
 
-import json
+import json, yaml
 from humps import camelize
+from markdown import markdown as md
 from os import path
 
 from collections import OrderedDict
@@ -13,19 +14,26 @@ services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config"
 ################################################################################
 
 note = """
-<hr/>
-<b>
 This page presents a prototype for an OpenAPI (Swagger) definition for the
-<a href="https://genomebeacons.org" target="_blank">GA4GH Beacon API</a>. The definitions are generated from the
-<a href="https://github.com/progenetix/bycon/tree/main/bycon/config" target="_blank">`entity_defaults` and `argument_definitions`</a>
-in the <a href="https://bycon.progenetix.org" target="_blank">bycon project</a>.
-</b>
-<hr/>
-The definitions are not yet complete. Please be aware that the whole capabilities
-of the project cannot be represented solely through the OpenAPI definitions and also
-involve features such as filtering terms logic and result aggregation across the different entities.
+[GA4GH Beacon API](https://genomebeacons.org"). The definitions are generated
+from the [`entity_defaults` and `argument_definitions`](https://github.com/progenetix/bycon/tree/main/bycon/config)
+in the [**bycon project**](https://bycon.progenetix.org). The definitions are not
+yet complete. Please be aware that the whole capabilities of the project cannot
+be represented solely through the OpenAPI definitions and also involve features
+such as filtering terms and result aggregation across the different entities.
 Additionally, the bycon project implements a number of data services beyong Beacon
 standards which again are only partially covered here.
+
+#### `bycon` and Data Aggregation
+
+The Beacon standard implements a REST style syntax - e.g. consistent id-based document retrieval
+for entities indicated through their entry path - but is not _explicit_
+regarding result aggregation following queries. The `bycon`
+framework provide full data aggregation; _i.e._ queries with parameters against
+*any* of the main data entities (g_variants, runs, analyses, biosamples, infividuals) will return results from all entities, with the
+results representing an intersection of the query results at the level of the response
+entity.
+
 """
 
 def api():
@@ -46,7 +54,7 @@ class ByconOpenAPI:
 
         self.beacon_eps = ["info", "dataset", "cohort", "genomicVariant", "analysis", "biosample", "individual", "filteringTerm"]
         self.service_eps = ["collations", "intervalFrequencies", "geolocations", "publications"]
-        self.collation_types = ["NCIT", "PMID", "NCITsex", "icdom"]
+        self.collation_types = ["NCIT", "pubmed", "NCITsex", "icdom"]
         self.general_pars = ["skip", "limit", "requested_granularity"]
 
         self.include_id_paths = True
@@ -60,7 +68,7 @@ class ByconOpenAPI:
             "info": {
                 "title": info.get("name", "Progenetix Beacon API"),
                 "version": info.get("version", ""),
-                "description": info.get("description", "") + note,
+                "description": f'<p>{info.get("description", "")}</p>{md(note)}',
                 "contact": {"email": info.get("contact_url", "").replace("mailto:", "")}
             },
             "paths": {},
@@ -97,9 +105,13 @@ class ByconOpenAPI:
     # -------------------------------------------------------------------------#
 
     def __add_example_links(self):
-        e_l = ['<a href="?mode=">[Show all paths]</a>']
-        for e in self.examples.keys():
-            e_l.append(f'<a href="?mode={e}">{e} example]</a>')
+        e_l = []
+        for e, e_d in self.examples.items():
+            l = e_d.get("label", e)
+            h = e_d.get("link", e)
+            if len(h) > 0:
+                h = f'mode={h}'
+            e_l.append(f'<a href="?{h}">[{l}]</a>')
         self.oapi["info"]["description"] += f'<hr/><b>{" | ".join(e_l)}</b><hr/>'
 
 
@@ -109,9 +121,11 @@ class ByconOpenAPI:
         if not (e := self.examples.get(self.mode)):
             self.mode = False
             return
-
-        self.beacon_eps = e.get("entities", self.beacon_eps)
-        self.service_eps = []
+        
+        # if entities are defined -> all defaults are ignored
+        if (e_s := e.get("entities")):
+            self.beacon_eps = e_s
+            self.service_eps = []
 
         self.include_id_paths = False
         self.get_parameter_values = False
@@ -122,7 +136,6 @@ class ByconOpenAPI:
             pars[k]["examples"] = e_v
         for p in self.general_pars:
             pars.update({p: self.argument_definitions[p]})
-
 
         self.argument_definitions = pars
 
@@ -148,6 +161,7 @@ class ByconOpenAPI:
         p = e_d.get("request_entity_path_id", None)
         r = e_d.get("response_entity_id", None)
         s = e_d.get("response_schema", None)
+        c = e_d.get("bycon_response_class", "BeaconInfoResponse")
         rqp = e_d.get("response_entity_path_alias", p)
 
         pars = []
@@ -165,13 +179,13 @@ class ByconOpenAPI:
 
         entity_path = f"/{path_part}/{p}"
         self.oapi["paths"].update({
-            entity_path: {"get": self.__path_create_get(p, rqp, r, s, pars)}
+            entity_path: self.__path_add_methods(p, rqp, r, s, pars)
         })
 
         if s == "beaconResultsetsResponse" and self.include_id_paths is True:
             pars = ["id"]
             self.oapi["paths"].update({
-                f"{entity_path}/{{id}}": {"get": self.__path_create_get(p, rqp, r, s, pars)}
+                f"{entity_path}/{{id}}": self.__path_add_methods(p, rqp, r, s, pars)
             })
 
             # now for the retrieval of the other entities by this id, e.g.
@@ -183,25 +197,50 @@ class ByconOpenAPI:
                 b_p = b_d.get("request_entity_path_id", None)
                 if b_s == "beaconResultsetsResponse" and b_r != r:
                     self.oapi["paths"].update({
-                        f"{entity_path}/{{id}}/{b_p}": {"get": self.__path_create_get(p, rqp, b_r, b_s, pars)}
+                        f"{entity_path}/{{id}}/{b_p}": self.__path_add_methods(p, rqp, b_r, b_s, pars)
                     })
 
-        if s != "beaconInfoResponse":
-            for c_p in list(self.general_pars):
-                self.oapi["paths"][entity_path]["get"]["parameters"].append({"$ref": f'#/components/parameters/{camelize(c_p)}'})
+        if "BeaconDataResponse" in c:
+            if  "parameters" in self.oapi["paths"][entity_path]["get"]:
+                for c_p in list(self.general_pars):
+                    self.oapi["paths"][entity_path]["get"]["parameters"].append({"$ref": f'#/components/parameters/{camelize(c_p)}'})
 
 
     # -------------------------------------------------------------------------#
 
-    def __path_create_get(self, entity_path_id, response_entity_path_alias, target_entity, response_schema, pars):
-        # using response_entity_path_alias since service responses have special
-        # paths
+    def __path_add_methods(self, entity_path_id, response_entity_path_alias, target_entity, response_schema, pars):
         if self.mode:
             tag = self.mode
         elif entity_path_id in self.service_eps:
             tag = "Services"
         else:
             tag = "Beacon"
+        schema_link = f"{self.this_server}/services/schemas/{response_schema}"
+        r = {"get": self.__path_create_get(tag, response_entity_path_alias, target_entity, schema_link, pars)}
+        if response_schema == "beaconResultsetsResponse":
+            r.update({"post": self.__path_create_post(tag, target_entity, schema_link)})
+
+        if not "service-info" in entity_path_id:
+            r["get"]["responses"].update({
+                "default": {
+                    "description": "An unsuccessful operation.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": f'{self.this_server}/services/schemas/beaconErrorResponse'
+                            }
+                        }
+                    }
+                }
+            })
+
+        return r
+
+
+    # -------------------------------------------------------------------------#
+
+    def __path_create_get(self, tag, response_entity_path_alias, target_entity, schema_link, pars):
+        # TODO: pre-define schemas and update the copy here
         return {
             "summary": f"Get {target_entity} entries",
             "description": f"Get {target_entity} entries",
@@ -213,7 +252,51 @@ class ByconOpenAPI:
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": f"{self.this_server}/services/schemas/{response_schema}"
+                                "$ref": schema_link
+                            }
+                        }
+                    }
+                },
+                "default": {
+                    "description": "An unsuccessful operation.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": f'{self.this_server}/services/schemas/beaconErrorResponse'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+    # -------------------------------------------------------------------------#
+
+
+    def __path_create_post(self, tag, target_entity, schema_link):
+        # TODO: pre-define schemas and update the copy here
+        return {
+            "summary": f"Post request for {target_entity} entries",
+            "description": f"Post request for {target_entity} entries",
+            "tags": [f'{tag}'],
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                           "$ref": f'{self.this_server}/services/schemas/beaconRequestBody'
+                        }
+                    }
+                },
+                "required": True
+            },
+            "responses": {
+                "200": {
+                    "description": f"A response for {target_entity} entries",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": schema_link
                             }
                         }
                     }
@@ -247,19 +330,30 @@ class ByconOpenAPI:
             if (i := definition.get(d_k)):
                 p["schema"].update({d_k: i})
 
+        return self.__parameter_add_examples(p, parameter, definition, scope)
+
+
+    # ------------------------------------------------------------------------ #
+
+    def __parameter_add_examples(self, p, parameter, definition, scope):
+
         e_s = definition.get("examples", [])
         e_s += self.__parameter_get_values(parameter)
-        if len(e_s) > 0:
-            p.update({"examples":{}})
-            for e in e_s:
-                k = list(e.keys())[0]
-                if (paths := e[k].get("in_paths")):
-                    if scope in paths:
-                        p["examples"].update(e)
-                else:
+
+        if len(e_s) < 1:
+            return p
+
+        p.update({"examples":{}})
+        for e in e_s:
+            k = list(e.keys())[0]
+            if (paths := e[k].get("in_paths")):
+                if scope in paths:
                     p["examples"].update(e)
+            else:
+                p["examples"].update(e)
 
         return p
+
 
     # ------------------------------------------------------------------------ #
         
@@ -282,51 +376,39 @@ class ByconOpenAPI:
             for c in r_l:
                 k = list(c.keys())[0]
                 v = list(c.values())[0]
-                vals.append({v:{"value": k, "summary": f'{v} ({k})'}})
+                vals.append({
+                    v:{
+                        "value": k,
+                        "summary": f'{v} ({k})'
+                    }
+                })
 
         elif par in ["variant_type"]:
             for v_t, v_d in BYC.get("variant_type_definitions").items():
                 if not v_d.get("beacon_query", True):
                     continue
-                vals.append({v_t:{"value": v_t, "summary": f'{v_t} ({v_d.get("variant_state", {}).get("label", "")})'}})
+                vals.append({
+                    v_t:{
+                        "value": v_t,
+                        "summary": f'{v_t} ({v_d.get("variant_state", {}).get("label", "")})'
+                    }
+                })
 
         elif par == "filters":
+            # TODO: This is a temporary solution to get some random filters using
+            #       the TEST_MODE settings.
             BYC.update({"response_entity_id": "filteringTerm", "TEST_MODE": True})
             BYC_PARS.update({"test_mode_count": 10})
             f_t_s = ByconFilteringTerms().filteringTermsList()
             for f in f_t_s:
-                vals.append({f["id"]:{"value": [f["id"]], "summary": f'{f["id"]}: {f['label']}'}})
+                vals.append({
+                    f["id"]:{
+                        "value": [f["id"]],
+                        "summary": f'{f["id"]}: {f['label']}'
+                    }
+                })
 
         return vals
-
-# def __path_create_post(source_entity, response_entity_path_alias, target_entity, this_server, response_schema, par_def):
-#     return  # {
-            #     "summary": f"Post request for {r} entries",
-            #     "description": f"Post request for {r} entries",
-            #     "requestBody": {
-            #         "content": {
-            #             "application/json": {
-            #                 "schema": {
-            #                    "$ref": f'{this_server}/services/schemas/beaconRequestBody.json'
-            #                 }
-            #             }
-            #         },
-            #         "required": True
-            #     },
-            #     "responses": {
-            #         "200": {
-            #             "description": f"A {path_part} response for {r} entries",
-            #             "content": {
-            #                 "application/json": {
-            #                     "schema": {
-            #                         "$ref": f"{this_server}/services/schemas/{s}"
-            #                     }
-            #                 }
-            #             }
-            #         }
-            #     }
-            # }
-
 
 
 ################################################################################

@@ -399,7 +399,7 @@ L.{}([{}, {}], {{
 
             try:
                 pmid = r["references"]["pubmed"]["id"]
-                pmid = pmid.replace("PMID:", "")
+                pmid = pmid.replace("pubmed:", "")
                 if pmid in geokb[k]["pubmeds"]:
                     geokb[k]["pubmeds"][pmid]["count"] += 1
                 else:

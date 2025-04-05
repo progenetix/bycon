@@ -38,7 +38,7 @@ format_patterns:
   - pattern: '^(?:pgx:)?(NCIT:C\d{4,8})$'
     link: '/subset/?id='
 
-  - pattern: '^(?:pgx:)?(PMID:\d{5,10})$'
+  - pattern: '^(?:pgx:)?(pubmed:\d{5,10})$'
     link: '/publication/?id='
 
   - pattern: '^(?:pgx:)?(cellosaurus:CVCL_[A-Z0-9]{4})$'

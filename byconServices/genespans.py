@@ -27,7 +27,6 @@ def genespans():
     * https://progenetix.test/services/genespans/MYC
     * https://progenetix.test/services/genespans/?geneId=MYC
     """
-    read_service_prefs("genespans", services_conf_path)
 
     # form id assumes start match (e.g. for autocompletes)
     if len(gene_ids := BYC.get("path_ids", [])) == 1:
@@ -89,7 +88,11 @@ def _gene_add_cytobands(gene):
     if not start or not end:
         return gene
 
-    gene.update({"cytobands": f'{Cytobands().cytobands_label_from_positions(chro, start, end)}'})
+    gene.update({
+        "cytobands": f'{Cytobands().cytobands_label_from_positions(chro, start, end)}',
+        "chromosome": chro,
+        "reference_name": chro_names.refseq(acc)
+    })
 
     return gene
 

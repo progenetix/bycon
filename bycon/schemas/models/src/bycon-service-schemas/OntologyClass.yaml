@@ -11,7 +11,7 @@ properties:
       Identifier as string (CURIE highly recommended). 
     examples:
       - UBERON:0000002
-      - PMID:9892199
+      - pubmed:9892199
       - icdom-85003
   label:
     type: string

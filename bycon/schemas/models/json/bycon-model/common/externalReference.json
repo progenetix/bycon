@@ -8,7 +8,7 @@
             "description": "An application specific identifier. RECOMMENDED.",
             "type": "string",
             "examples": [
-                "PMID:34054918"
+                "pubmed:34054918"
             ]
         },
         "reference": {
