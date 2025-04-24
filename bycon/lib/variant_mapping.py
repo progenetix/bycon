@@ -214,7 +214,7 @@ class ByconVariant:
 
     def __vrs_adjacency(self):
         """
-        A variant with a specified sequence as a subtype of VRS `Adjacency`.
+        A variant with a specified order as a subtype of VRS `Adjacency`.
         """
 
         vt_defs = self.variant_types

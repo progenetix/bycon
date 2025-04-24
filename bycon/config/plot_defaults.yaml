@@ -513,6 +513,6 @@ plot_variant_types:
   EFO:0030073:
     color_key: plot_hldup_color
     label: focal genome amplification
-  EFO:0001059:
+  SO:0001059:
     color_key: plot_snv_color
     label: sequence_alteration

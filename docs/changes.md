@@ -6,6 +6,29 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-04-25 (v2.4.0 "Cotswolds")
+
+* transitioning from the deprecated `cgi` module for form parameter
+  processing (`cgi.FieldStorage`) to `mycgi`
+    - TODO: evaluate web framework or direct `urllib.parse` for form processing
+* start with prototyping of `cohorts` files which should replace
+  the auto-generation from `biosamples.cohorts.id` (though probably
+  still keep using this parameter for the time being instead of being
+  completely query defined)
+* Bug fix: UCSC bed file did not include SNV variants due to wrong 
+  `variantType` code (`EFO:0001059` instead of `SO:0001059` in `plot_variant_types`
+  definition used for bed file subsetting)
+
+### 2025-04-15 (v2.3.1)
+
+* fixed a slowdown (existing for a long time...) in variant processing where
+  the a new `ByconVariant` class was initiated for each processed variant
+* added the option to have a variant response from a pure `filters` based
+  request (e.g. `/biosamples?filters=NCIT:C3058`) although capping the variants
+  returned at a limit of currently 300'000 (avoids time outs and running into
+  MongoDB limits)
+* added `NCITrace` filters class (`individual.ethnicity.id`)
+
 ### 2025-04-04 (v2.3.0 "Logan Airport")
 
 * changed genespans response to have `chromosome` and `referenceName`

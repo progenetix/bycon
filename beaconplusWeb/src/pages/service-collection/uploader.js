@@ -157,7 +157,7 @@ function Dropzone({ setResult }) {
     accept: [".tsv", ".tab", ".pgxseg"],
     onDrop: async (acceptedFiles) => {
       const data = new FormData()
-      data.append("upload_file", acceptedFiles[0], acceptedFiles[0].name)
+      data.append("inputfile", acceptedFiles[0], acceptedFiles[0].name)
       // data.append("plotType", "histoplot")
       const result = await uploadFile(data)
       setResult(result)

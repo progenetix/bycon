@@ -29,9 +29,9 @@ from bycon_cluster import ByconCluster
 class ByconPlotPars:
     def __init__(self):
         self.plot_type = BYC_PARS.get("plot_type", "histoplot")
-        prdbug(self.plot_type)
         self.plot_defaults = BYC.get("plot_defaults", {"parameters": {}})
         self.plot_variant_types = self.plot_defaults.get("plot_variant_types", {})
+        self.plot_pars = re.split(r'::|&', BYC_PARS.get("plot_pars", ""))
 
         p_t_s = self.plot_defaults.get("plot_type_defs", {})
         p_d_p = self.plot_defaults.get("plot_parameters", {})
@@ -115,24 +115,24 @@ class ByconPlotPars:
         p_d_p = self.plot_defaults.get("plot_parameters", {})
 
         bps = {}
-        plot_pars = BYC_PARS.get("plot_pars", "")
-        prdbug(f'__process_plot_parameters - all: {plot_pars}')
-        for ppv in re.split(r'::|&', plot_pars):
-            pp_pv = ppv.split('=')
-            if len(pp_pv) == 2:
-                pp, pv = pp_pv
-                if pv in ["null", "undefined"]:
-                    continue
-                pp = decamelize(pp)
-                bps.update({pp: pv})
-                prdbug(f'__process_plot_parameters {pp} => {pv}')
 
-        dbm = f'... plotPars: {bps}'
+        for ppv in self.plot_pars:
+            if len(pp_pv := ppv.split('=')) != 2:
+                continue
+            pp, pv = pp_pv
+            if pv.lower() in ["null", "undefined", "none"]:
+                continue
+            if len(pv) < 1:
+                continue
+            pp = decamelize(pp)
+            bps.update({pp: pv})
+            prdbug(f'__process_plot_parameters {pp} => {pv}')
+
         for p_k, p_d in p_d_p.items():
             if p_k in bps:
                 p_k_t = p_d_p[p_k].get("type", "string")
                 p_d = bps.get(p_k)
-                dbm = f'{p_k}: {p_d} ({p_k_t}), type {type(p_d)}'
+
                 if "array" in p_k_t:
                     p_i_t = p_d_p[p_k].get("items", "string")
                     if type(p_d) is not list:
@@ -143,9 +143,9 @@ class ByconPlotPars:
                         p_d = list(map(float, p_d))
                     else:
                         p_d = list(map(str, p_d))
-
                     if len(p_d) > 0:
                         self.plv.update({p_k: p_d})
+
                 elif "int" in p_k_t:
                     self.plv.update({p_k: int(p_d)})
                 elif "num" in p_k_t:
@@ -154,7 +154,6 @@ class ByconPlotPars:
                     self.plv.update({p_k: p_d})
                 else:
                     self.plv.update({p_k: str(p_d)})
-
 
 
 ################################################################################

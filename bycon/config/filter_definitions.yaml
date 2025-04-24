@@ -69,6 +69,27 @@ $defs:
       - 'NCIT:C28078'
       - 'NCIT:C28080'
 
+  NCITrace:
+    id: ncit
+    type: ontologyTerm
+    iri_prefix: http://purl.obolibrary.org/obo/NCIT_
+    name: NCI Thesaurus OBO Edition
+    namespace_prefix: NCIT
+    url: https://github.com/NCI-Thesaurus/thesaurus-obo-edition
+    reference:
+      root: https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=
+      replace:
+        - "NCIT:"
+        - ""
+    db_key: 'ethnicity.id'
+    description: Ethnicity Codes
+    scope: individuals
+    entity: individual
+    pattern: '^NCIT(:C\d+?)?$'
+    collationed: True
+    examples:
+      - NCIT:C41226
+
   NCITstage:
     id: ncit
     type: ontologyTerm

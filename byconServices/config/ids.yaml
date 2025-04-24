@@ -56,9 +56,3 @@ format_patterns:
     examples:
       - geo:GPL6801
     link: '/subset/?id='
-
-  - pattern: '^(?:pgx:)?(geo:GSM\d+)$'
-    examples:
-      - geo:GSM491153
-    link: '/biosample/?id='
-

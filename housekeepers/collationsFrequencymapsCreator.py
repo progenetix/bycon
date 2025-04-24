@@ -60,7 +60,7 @@ coll_no = len(coll_ids)
 print(f'=> Processing {len(coll_ids)} collations from {ds_id}...')
 
 if not BYC["TEST_MODE"]:
-    bar = Bar(f'{coll_no} {ds_id} fMaps', max = coll_no, suffix='%(percent)d%%'+f' of {coll_no}' )
+    bar = Bar(f'{ds_id} fMaps', max = coll_no, suffix='%(percent)d%%'+f' of {coll_no}' )
 
 # this just counts the number of collations with existing frequencymaps
 # and adjusts the progress bar accordingly (including a fancy delayed growth...)

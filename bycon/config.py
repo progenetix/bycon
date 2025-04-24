@@ -45,6 +45,10 @@ SERVICES_DB = "_byconServicesDB"
 GENES_COLL = "genes"
 GEOLOCS_COLL = "geolocs"
 
+MONGO_DISTINCT_STORAGE_LIMIT = 300000
+VARIANTS_RESPONSE_LIMIT = 300000
+
+
 ################################################################################
 # to be modified during execution ##############################################
 ################################################################################

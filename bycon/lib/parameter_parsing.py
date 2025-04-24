@@ -1,4 +1,5 @@
-import argparse, cgi, humps, json, re, sys
+import argparse, humps, json, re, sys
+from mycgi import Form
 from urllib.parse import urlparse, unquote
 from os import environ
 from pymongo import MongoClient
@@ -238,7 +239,7 @@ class ByconParameters:
         if self.request_type != "GET":
             return
 
-        self.form_data = cgi.FieldStorage()
+        self.form_data = Form()
         for p in self.form_data:
             p_d = humps.decamelize(p)
             # CAVE: Only predefined parameters are accepted!

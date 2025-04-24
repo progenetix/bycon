@@ -472,9 +472,9 @@ class BeaconDataResponse:
             return
         if not "response" in self.data_response:
             return
-        rsr = self.data_response["response"].get("result_sets")
-        if not rsr:
-            return
+        rsr = self.data_response["response"].get("result_sets", [])
+        # if not rsr:
+        #     return
 
         t_count = 0
         t_exists = False
@@ -950,9 +950,9 @@ class ByconResultSets:
             return
 
         ds_v_start = datetime.now()
+        mongo_client = MongoClient(host=DB_MONGOHOST)
         for ds_id, ds_results in self.datasets_results.items():
 
-            mongo_client = MongoClient(host=DB_MONGOHOST)
             data_db = mongo_client[ ds_id ]
             v_coll = mongo_client[ ds_id ][ "variants" ]
 

@@ -1,4 +1,4 @@
-import cgi
+from mycgi import Form
 from os import path
 from uuid import uuid4
 
@@ -15,7 +15,11 @@ def uploader():
     argument parsing but directly uses `cgi.FieldStorage()` and `....file.read()`.
     """
     file_id = str(uuid4())
-    form_data = cgi.FieldStorage()
+
+    form_data = Form()
+    fileitem = form_data['inputfile']
+    filename = fileitem.filename
+    data = fileitem.value
     base_url = select_this_server()
 
     response = {
@@ -27,24 +31,18 @@ def uploader():
         "host": base_url
     }
 
-    if not "upload_file" in form_data:
-        response.update({"error": "ERROR: No `upload_file` parameter in POST..." })
+    if not filename:
+        response.update({"error": "ERROR: No `inputfile` file parameter submitted ..." })
         print_json_response(response)
 
-    file_item = form_data["upload_file"]
-    file_name = path.basename(file_item.filename)
-    file_type = file_name.split('.')[-1]
-    data = file_item.file.read()
-
     response.update({
-        "file_name": file_name,
-        "file_type": file_type
+        "filename": filename,
+        "data": data
     })
 
     with open(response["loc_path"], 'wb') as f:
         f.write(data)
-    if not "plotType" in form_data:
+    if not (plot_type := form_data.getvalue("plotType")):
         print_json_response(response)
 
-    plot_type = form_data["plotType"]
     print_uri_rewrite_response(f'{base_url}/services/sampleplots/?datasetIds=upload&fileId={file_id}&plotType={plot_type}')

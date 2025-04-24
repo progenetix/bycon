@@ -32,6 +32,7 @@ class VariantsResponse:
 
     def __init__(self, pgxvars=[]):
         self.pgx_vars = pgxvars
+        self.VAR = ByconVariant()
         self.beacon_vars = []
         self.case_pars = ["biosample_id", "analysis_id", "individual_id", "run_id"]
         self.var_pars = ["identifiers", "molecular_attributes", "variant_level_data"]
@@ -62,7 +63,7 @@ class VariantsResponse:
         for d in variant_ids:
             d_vs = [var for var in self.pgx_vars if var.get('variant_internal_id', "__none__") == d]
 
-            v_i = deepcopy(ByconVariant().vrsVariant(d_vs[0]))
+            v_i = deepcopy(self.VAR.vrsVariant(d_vs[0]))
             for c_k in self.case_pars + ["variant_internal_id", "info"] + self.var_pars:
                 v_i.pop(c_k, None)
             v_i = clean_empty_fields(v_i)

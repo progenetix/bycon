@@ -30,7 +30,6 @@ def ids():
 
     conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )
     read_service_prefs( "ids", conf_path)
-    id_in = ByconParameters().rest_path_value("ids")
     s_c = BYC.get("service_config", {})
     f_p_s = s_c.get("format_patterns", {})
 
