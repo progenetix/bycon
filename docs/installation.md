@@ -129,10 +129,11 @@ external requirements:
     - see below
     - required for full functionality but tests can be run by custom scripts or
       local calls (YMMV)
-* [`beaconplus-web`](https://github.com/progenetix/beaconplus-web/)
-    - the web front-end (React based with static compilation)
-    - represents an advanced Beacon query interface 
+* a web front end
     - optional
+    - we provide a React based fron end with static compilation inside `bycon/beaconplusWeb`; more extended
+    variants from the same stack are e.g. [`progenetix-web`](https://github.com/progenetix/progenetix-web/)
+    - represents an advanced Beacon query interface 
 
 #### MongoDB database instance
 
