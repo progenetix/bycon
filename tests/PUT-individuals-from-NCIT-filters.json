@@ -12,7 +12,7 @@
                 "datasetIds": ["progenetix"]
             }
         },
-        "filters": [{"id": "NCIT:C4536"}]
-    },
-    "debugMode": 0
+        "filters": [{"id": "NCIT:C4536"}],
+        "debugMode": 0
+    }
 }

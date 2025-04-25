@@ -205,6 +205,7 @@ class ByconQuery():
         vips = []
         for v in v_m_ps:
             vp = {}
+
             if (v_s_s := v_p_s & v.keys()):
                 for v_p in v_s_s:
                     vp.update({ v_p: v.get(v_p) })
@@ -338,7 +339,7 @@ class ByconQuery():
         # if len(queries) == 1:
         #     queries = queries[0]
 
-        # prdbug(f'__loop_multivars queries: {queries}')
+        prdbug(f'__loop_multivars queries: {queries}')
 
         return queries
 
@@ -362,7 +363,7 @@ class ByconQuery():
 
         brts = self.variant_request_definitions.get("request_types", {})
         brts_k = brts.keys()
-        prdbug(f'...brts_k: {brts_k}')
+        # prdbug(f'...brts_k: {brts_k}')
         
         # Already hard-coding some types here - if conditions are met only
         # the respective types will be evaluated since only this key is used
@@ -409,6 +410,7 @@ class ByconQuery():
             vrt_matches = sorted(vrt_matches, key=lambda k: k['par_no'], reverse=True)
             variant_request_type = vrt_matches[0]["type"]
 
+        prdbug(f'...variant_request_type: {variant_request_type}')
         return variant_request_type
 
 
@@ -645,7 +647,6 @@ class ByconQuery():
 
     def __create_variantBracketRequest_query(self, v_pars):
         vp = v_pars
-        prdbug(f'...__create_variantBracketRequest_query parameters: {vp}')
         v_p_defs = self.argument_definitions
 
         v_q = {

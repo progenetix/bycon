@@ -26,9 +26,9 @@
                 }
             ]
         },
-        "filters": [{"id": "NCIT:C3058"}]
-    },
-    "requestedGranularity": "record",
-    "pagination": {"skip": 0, "limit": 5},   
-    "debugMode": 0
+        "filters": [{"id": "NCIT:C3058"}],
+        "requestedGranularity": "record",
+        "pagination": {"skip": 0, "limit": 5},   
+        "debugMode": 0
+    }
 }

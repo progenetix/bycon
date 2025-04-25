@@ -21,12 +21,12 @@
                 "alternateBases": "A"
             }
         },
-        "filters": []
-    },
-    "requestedGranularity": "record",
-    "pagination": {
-        "skip": 0,
-        "limit": 5
-    },
-    "debugMode": true
+        "filters": [],
+        "requestedGranularity": "record",
+        "pagination": {
+            "skip": 0,
+            "limit": 5
+        },
+        "debugMode": true
+    }
 }

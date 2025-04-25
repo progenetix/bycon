@@ -17,11 +17,11 @@
         },
         "filters": [
             { "id": "NCIT:C4536" },
-        ]
-    },
-    "pagination": {
-        "skip": 0,
-        "limit": 10
-    },   
-    "debugMode": 1
+        ],
+        "pagination": {
+            "skip": 0,
+            "limit": 10
+        },   
+        "debugMode": 1
+    }
 }

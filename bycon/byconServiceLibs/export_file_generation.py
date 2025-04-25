@@ -282,7 +282,7 @@ class PGXbed:
     def bed_ucsc_link(self):
         self.__add_ucsc_variants()
         self.__write_bed_file()
-        self.ucsc_link += f'&position={self.chro}:{min(self.starts_ends)}-{max(self.starts_ends)}&hgt.customText={self.bed_url}'
+        self.ucsc_link += f'&position={self.chro}:{min(self.starts_ends)+1}-{max(self.starts_ends)}&hgt.customText={self.bed_url}'
         return self.ucsc_link
 
 

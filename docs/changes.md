@@ -6,6 +6,14 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-04-25 (v2.4.1)
+
+* fixing query aggregation where some upstream matches were incorrectly
+  removed from the resultset
+* some refactoring of parameter processing (esp. for `POST`) in a more modular way
+    - also fixing some parameter parsing for `POST` where the "technical"
+      parameters were expected to be outside of `query` (wrong) and then fixing the test examples accordingly
+
 ### 2025-04-25 (v2.4.0 "Cotswolds")
 
 * transitioning from the deprecated `cgi` module for form parameter
@@ -15,9 +23,12 @@ milestones.
   the auto-generation from `biosamples.cohorts.id` (though probably
   still keep using this parameter for the time being instead of being
   completely query defined)
-* Bug fix: UCSC bed file did not include SNV variants due to wrong 
-  `variantType` code (`EFO:0001059` instead of `SO:0001059` in `plot_variant_types`
-  definition used for bed file subsetting)
+* Bug fix: 
+  - UCSC bed file did not include SNV variants due to wrong 
+    `variantType` code (`EFO:0001059` instead of `SO:0001059` in `plot_variant_types`
+    definition used for bed file subsetting)
+  - UCSC link used 0-based start position, _i.e._ a single base change in the generated
+    bed file was shown in a 2 base window (starting one too early)
 
 ### 2025-04-15 (v2.3.1)
 

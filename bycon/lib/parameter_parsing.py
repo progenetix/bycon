@@ -15,6 +15,8 @@ class ByconParameters:
         self.byc_pars = {}
         self.request_uri = environ.get('REQUEST_URI', False)
         self.request_type = "__none__"
+        self.request_meta = {}
+        self.request_query = {}
 
         self.__detect_request_environment()
 
@@ -70,13 +72,10 @@ class ByconParameters:
     def __detect_request_environment(self):
         if "___shell___" in ENV:
             self.request_type = "SHELL"
-            return
-        if "POST" in environ.get('REQUEST_METHOD', ''):
+        elif "POST" in environ.get('REQUEST_METHOD', ''):
             self.request_type = "POST"
-            return
-        if "GET" in environ.get('REQUEST_METHOD', ''):
+        else:
             self.request_type = "GET"
-            return
 
     # -------------------------------------------------------------------------#
 
@@ -188,49 +187,78 @@ class ByconParameters:
         content_typ = environ.get('CONTENT_TYPE', '')
 
         # TODO: catch error & return for non-json posts
-        if "json" in content_typ:
-            body = sys.stdin.read(int(content_len))
-            jbod = json.loads(body)
-            if (d_m := jbod.get("debugMode")):
-                self.byc_pars.update({"debug_mode": True})
+        if not "json" in content_typ:
+            return
 
-            for j_p in jbod:
-                j_p_d = humps.decamelize(j_p)
-                if "debugMode" in j_p:
-                    continue
-                # TODO: this hacks the v2 structure; ideally should use requestParameters schemas
-                if "query" in j_p:
-                    for p, v in jbod["query"].items():
-                        if p == "filters":
-                            self.byc_pars.update({p: v})
-                        elif p == "requestParameters":
-                            for rp, rv in v.items():
-                                rp_d = humps.decamelize(rp)
-                                if "datasets" in rp:
-                                    if "datasetIds" in rv:
-                                        self.byc_pars.update({"dataset_ids": rv["datasetIds"]})
-                                elif "g_variant" in rp:
-                                    for vp, vv in v[rp].items():
-                                        vp_d = humps.decamelize(vp)
-                                        if vp_d in self.arg_defs:
-                                            self.byc_pars.update({vp_d: vv})
-                                elif rp_d in self.arg_defs:
-                                    self.byc_pars.update({rp_d: rv})
-                else:
-                    if j_p_d in self.arg_defs:
-                        self.byc_pars.update({j_p_d: jbod.get(j_p)})
+        body = sys.stdin.read(int(content_len))
+        jbod = json.loads(body)
 
-            # transferring pagination where existing to standard form values
-            pagination = jbod.get("pagination", {})
-            for p_k in ["skip", "limit"]:
-                if p_k in pagination:
-                    if re.match(r'^\d+$', str(pagination[p_k])):
-                        self.byc_pars.update({p_k: pagination[p_k]})
+        self.request_meta.update(jbod.get("meta", {}))
+        self.request_query.update(jbod.get("query", {}))
 
-            # so far not used...
-            BYC.update({
-                "request_meta": jbod.get("meta", {})
-            })
+        self.__POST_parse_meta()
+        self.__POST_parse_query()
+
+
+    # -------------------------------------------------------------------------#
+
+    def __POST_parse_meta(self):
+        BYC.update({"request_meta": self.request_meta})
+
+
+    # -------------------------------------------------------------------------#
+
+    def __POST_parse_query(self):
+        for p, v in self.request_query.items():
+
+            p_d = humps.decamelize(p)
+
+            if p == "filters":
+                self.byc_pars.update({p: v})
+                continue
+
+            if p == "requestParameters":
+                for rp, rv in v.items():
+                    rp_d = humps.decamelize(rp)
+
+                    if "datasets" in rp:
+                        if (ds_ids := rv.get("datasetIds")):
+                            self.byc_pars.update({"dataset_ids": ds_ids})
+
+                    elif "g_variant" in rp_d:
+                        for vp, vv in v[rp].items():
+                            vp_d = humps.decamelize(vp)
+                            if vp_d in self.arg_defs:
+                                self.byc_pars.update({vp_d: vv})
+
+                    elif "variant_multi_pars" in rp_d:
+                        vmp = []
+                        for v_p_s in rv:
+                            varp = {}
+                            for vp, vv in v_p_s.items():
+                                vp_d = humps.decamelize(vp)
+                                if vp_d in self.arg_defs:
+                                    varp.update({vp_d: vv})
+                            vmp.append(varp)
+                        self.byc_pars.update({rp_d: vmp})
+
+                    elif rp_d in self.arg_defs:
+                        self.byc_pars.update({rp_d: rv})
+
+                continue
+
+            if p == "pagination":
+                for p_k in ["skip", "limit"]:
+                    if p_k in v:
+                        self.byc_pars.update({p_k: v[p_k]})
+                continue
+
+            if p_d in self.arg_defs:
+                self.byc_pars.update({p_d: v})
+            else:
+                w_m = f'!!! Unmatched parameter {p}: {v}'
+                BYC["WARNINGS"].append(w_m)
+                prdbug(f'!!! Unmatched parameter {p}: {v}')
 
 
     # -------------------------------------------------------------------------#
@@ -250,9 +278,9 @@ class ByconParameters:
                 if v or v == 0:
                     self.byc_pars.update({p_d: v})
             else:
-                w_m = f'!!! Unmatched parameter {p_d}: {self.form_data.getvalue(p)}'
+                w_m = f'!!! Unmatched parameter {p}: {self.form_data.getvalue(p)}'
                 BYC["WARNINGS"].append(w_m)
-                prdbug(f'!!! Unmatched parameter {p_d}: {self.form_data.getvalue(p)}')
+                prdbug(f'!!! Unmatched parameter {p}: {self.form_data.getvalue(p)}')
 
 
     # -------------------------------------------------------------------------#

@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "meta": {
-        "apiVersion": "2.0",
+        "apiVersion": "2.1",
         "requestedSchemas": [
             {
                 "entityType": "genomicVariation",
@@ -26,9 +26,9 @@
                 }
             ]
         },
-        "filters": []
-    },
-    "requestedGranularity": "record",
-    "pagination": {"skip": 0, "limit": 5},   
-    "debugMode": true
+        "filters": [],
+        "requestedGranularity": "record",
+        "pagination": {"skip": 0, "limit": 5},   
+        "debugMode": true
+    }
 }

@@ -20,8 +20,8 @@
                 "pgxbs-kftvj1nt"
             ]
         },
-        "filters": []
-    },
-    "requestedGranularity": "count",
-    "debugMode": 0
+        "filters": [],
+        "requestedGranularity": "count",
+        "debugMode": 0
+    }
 }

@@ -1,7 +1,7 @@
 {
     "$schema":"beaconRequestBody.json",
     "meta": {
-        "apiVersion": "2.0",
+        "apiVersion": "2.1",
         "requestedSchemas": [
           { "entityType": "core", "schema:": "https://progenetix.org/services/schemas/Core/"}
         ]
@@ -17,7 +17,7 @@
             { "id": "NCIT:C95597" },
             { "id": "NCIT:C7712" }
         ],
-        "filterLogic": "OR"
-    },
-    "debugMode": 1
+        "filterLogic": "OR",
+        "debugMode": 1
+    }
 }

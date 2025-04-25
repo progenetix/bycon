@@ -1,6 +1,11 @@
-from bycon import BYC, BYC_PARS, ByconResultSets, prdbug, print_uri_rewrite_response
+from bycon import (
+    BYC,
+    BYC_PARS,
+    ByconResultSets,
+    prdbug,
+    print_uri_rewrite_response
+)
 from byconServiceLibs import PGXbed
-
 
 def variantsbedfile():
     """
@@ -19,7 +24,7 @@ def variantsbedfile():
     * http://progenetix.org/services/variantsbedfile/?datasetIds=progenetix&geneId=CDKN2A&variantMaxLength=1000000&filters=NCIT:C3058&limit=50&output=ucsc
 
     """
-    # 
+
     f_d = ByconResultSets().get_flattened_data()
     BED = PGXbed(f_d)
     if "ucsc" in BYC_PARS.get("output", "bed").lower():

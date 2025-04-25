@@ -1,7 +1,7 @@
 {
     "$schema":"beaconRequestBody.json",
     "meta": {
-        "apiVersion": "2.0",
+        "apiVersion": "2.1",
         "requestedSchemas": [
             {
                 "entityType": "genomicVariation",
@@ -20,8 +20,8 @@
                 "variantType": "EFO:0030067"
             }
         },
-        "filters": [{"id": "NCIT:C3058"}]
-    },
-    "pagination": {"skip": 0, "limit": 5},   
-    "debugMode": 0
+        "filters": [{"id": "NCIT:C3058"}],
+        "pagination": {"skip": 0, "limit": 5},   
+        "debugMode": 0
+    }
 }

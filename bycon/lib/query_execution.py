@@ -1,8 +1,5 @@
-import random
-
 from uuid import uuid4
 from pymongo import MongoClient
-from os import environ
 
 from config import *
 from bycon_helpers import *
@@ -15,11 +12,12 @@ class ByconDatasetResults():
         self.dataset_id = ds_id
         self.entity_defaults = BYC["entity_defaults"]
         self.res_ent_id = r_e_id = str(BYC.get("response_entity_id", "___none___"))
-        self.data_db = MongoClient(host=environ.get("BYCON_MONGO_HOST", "localhost"))[ds_id]
+        self.data_db = MongoClient(host=DB_MONGOHOST)[ds_id]
 
         # This is bycon and model specific; in the default model there would also
         # be `run` (which has it's data here as part of `analysis`). Also in
         # `bycon` we have `phenopacket` which is a derived entity.
+        # TODO: limit to the lowest level & upstream?
         self.queried_entities = ["individual", "biosample", "analysis", "genomicVariant"]
 
         self.res_obj_defs = {}
@@ -137,18 +135,22 @@ class ByconDatasetResults():
         # requerying top-down to intersect for entities w/o shared keys - e.g. if
         # a variant query was run the variant_id values are not filtered by the
         # analysis ... queries since analyses don't know about variant_id values
+        # Note: "upstream_ids" have to be empty otherwise lower level mismatches
+        # will delete upstream matches (e.g. no overlap in analyses but matches
+        # on variant in different ones for a biosample should keep the biosample)
         # TODO: rethink... this is a bit hardcoded/verbose
+
         if (ind_ids := self.id_responses.get("individual_id")):
             query = [{"individual_id": {"$in": ind_ids.get("values", [])}}]
             ent_resp_def = self.res_obj_defs.get(f'biosamples.id')
+            ent_resp_def.update({"upstream_ids":[]})
             self.__prefetch_entity_multi_id_response(ent_resp_def, query)
 
         if (bios_ids := self.id_responses.get("biosample_id")):
             query = [{"biosample_id": {"$in": bios_ids.get("values", [])}}]
             ent_resp_def = self.res_obj_defs.get(f'analyses.id')
+            ent_resp_def.update({"upstream_ids":[]})
             self.__prefetch_entity_multi_id_response(ent_resp_def, query)
-
-        prdbug(self.id_responses)
 
         if (ana_ids := self.id_responses.get("analysis_id")):
             # another special case - variants are only queried if previously queried
@@ -158,7 +160,9 @@ class ByconDatasetResults():
             if self.id_responses.get("genomicVariant_id"):
                 query = [{"analysis_id": {"$in": ana_ids.get("values", [])}}]
                 ent_resp_def = self.res_obj_defs.get(f'variants.id')
+                ent_resp_def.update({"upstream_ids":[]})
                 self.__prefetch_entity_multi_id_response(ent_resp_def, query)
+
             elif "genomicVariant" in self.res_ent_id:
                 # TODO: Has to be optimized for large numbers...
                 e = "genomicVariant"

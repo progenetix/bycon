@@ -1,7 +1,7 @@
 {
     "$schema":"https://json-schema.org/draft/2020-12/schema",
     "meta": {
-        "apiVersion": "2.0",
+        "apiVersion": "2.1",
         "requestedSchemas": [
             {
                 "entityType": "biosample",
@@ -16,15 +16,18 @@
             }
         },
         "filters": [
-            { "id": "NCIT:C102872", "scope": "analyses", "includeDescendantTerms": false }
+            {
+                "id": "NCIT:C102872",
+                "scope": "analyses",
+                "includeDescendantTerms": false
+            }
         ],
-        "filterLogic": "OR"
-    },
-    "pagination": {
-        "skip": 0,
-        "limit": 10
-    },   
-    "includeResultsetResponses": "HIT",
-    "requestedGranularity": "count",
-    "debugMode": 0
+        "pagination": {
+            "skip": 0,
+            "limit": 10
+        },   
+        "includeResultsetResponses": "HIT",
+        "requestedGranularity": "count",
+        "debugMode": 0
+    }
 }
