@@ -18,8 +18,10 @@ class ByconDatasetResults():
         # be `run` (which has it's data here as part of `analysis`). Also in
         # `bycon` we have `phenopacket` which is a derived entity.
         # TODO: limit to the lowest level & upstream?
-        self.queried_entities = ["individual", "biosample", "analysis", "genomicVariant"]
+        # q_e_d = self.entity_defaults.get(self.res_ent_id, {})
+        # self.queried_entities = q_e_d.get("upstream", [])
 
+        self.queried_entities = ["individual", "biosample", "analysis", "genomicVariant"]
         self.res_obj_defs = {}
         self.queries = {}
         for e in self.queried_entities:
@@ -29,7 +31,7 @@ class ByconDatasetResults():
                 "collection": c,
                 "entity_id": e,
                 "id_parameter": f'{e}_id',
-                "upstream_ids": e_d.get("upstream_ids", [])
+                "upstream_ids": [f'{x}_id' for x in e_d.get("upstream", [])]
             }})
 
         self.id_responses = {}
@@ -98,8 +100,7 @@ class ByconDatasetResults():
             query = [query]
 
         for qq in query:
-            # Aggregation pipeline to get distinct values for each key
-
+            # Aggregation pipeline to get distinct values for each key since
             # geo $near queries don't work in aggregation pipelines
             if "geo_location.geometry" in qq:
                 ids = self.data_db[t_c].distinct("id", qq)
@@ -131,60 +132,67 @@ class ByconDatasetResults():
 
     # -------------------------------------------------------------------------#
 
+    def __refetch_entity_id_response(self, h_o_def, query):
+        t_c = h_o_def.get("collection")
+        id_k = h_o_def.get("id_parameter")
+        ids = self.data_db[t_c].distinct("id", query)
+
+        if (ex_resp := self.id_responses.get(id_k)):
+            self.id_responses.update({id_k: {"values": list(set(ex_resp.get("values", [])) & set(ids))}})
+        else:
+            self.id_responses.update({id_k: {"values": ids}})
+        self.id_responses[id_k].update({"count": len(self.id_responses[id_k]["values"])})
+
+
+    # -------------------------------------------------------------------------#
+
     def __requery_to_aggregate(self):
         # requerying top-down to intersect for entities w/o shared keys - e.g. if
         # a variant query was run the variant_id values are not filtered by the
         # analysis ... queries since analyses don't know about variant_id values
-        # Note: "upstream_ids" have to be empty otherwise lower level mismatches
-        # will delete upstream matches (e.g. no overlap in analyses but matches
-        # on variant in different ones for a biosample should keep the biosample)
         # TODO: rethink... this is a bit hardcoded/verbose
+        # it would also be more efficient to stop processing at the lowest queried
+        # entity and use this for all lover level handovers instead of
+        # pre-generating them
 
-        if (ind_ids := self.id_responses.get("individual_id")):
-            query = [{"individual_id": {"$in": ind_ids.get("values", [])}}]
-            ent_resp_def = self.res_obj_defs.get(f'biosamples.id')
-            ent_resp_def.update({"upstream_ids":[]})
-            self.__prefetch_entity_multi_id_response(ent_resp_def, query)
+        query = {"individual_id": {"$in": self.id_responses.get("individual_id").get("values", [])}}
+        ent_resp_def = self.res_obj_defs.get(f'biosamples.id')
+        self.__refetch_entity_id_response(ent_resp_def, query)
 
-        if (bios_ids := self.id_responses.get("biosample_id")):
-            query = [{"biosample_id": {"$in": bios_ids.get("values", [])}}]
-            ent_resp_def = self.res_obj_defs.get(f'analyses.id')
-            ent_resp_def.update({"upstream_ids":[]})
-            self.__prefetch_entity_multi_id_response(ent_resp_def, query)
+        query = {"biosample_id": {"$in": self.id_responses.get("biosample_id").get("values", [])}}
+        ent_resp_def = self.res_obj_defs.get(f'analyses.id')
+        self.__refetch_entity_id_response(ent_resp_def, query)
 
-        if (ana_ids := self.id_responses.get("analysis_id")):
-            # another special case - variants are only queried if previously queried
-            # otherwise one creates a variant storage for potentially millions
-            # of variants just matching biosamples ... etc.
+        # another special case - variants are only queried if previously queried
+        # otherwise one creates a variant storage for potentially millions
+        # of variants just matching biosamples ... etc.
+        if self.id_responses.get("genomicVariant_id"):
+            query = {"analysis_id": {"$in": self.id_responses.get("analysis_id").get("values", [])}}
+            ent_resp_def = self.res_obj_defs.get(f'variants.id')
+            self.__refetch_entity_id_response(ent_resp_def, query)
 
-            if self.id_responses.get("genomicVariant_id"):
-                query = [{"analysis_id": {"$in": ana_ids.get("values", [])}}]
-                ent_resp_def = self.res_obj_defs.get(f'variants.id')
-                ent_resp_def.update({"upstream_ids":[]})
-                self.__prefetch_entity_multi_id_response(ent_resp_def, query)
+        elif "genomicVariant" in self.res_ent_id:
+            # TODO: Has to be optimized for large numbers...
+            e = "genomicVariant"
+            v_ids = []
+            for ana_id in self.id_responses.get("analysis_id").get("values", []):
+                v_ids += self.data_db["variants"].distinct("id", {"analysis_id": ana_id})
+            v_ids = list(set(v_ids))
 
-            elif "genomicVariant" in self.res_ent_id:
-                # TODO: Has to be optimized for large numbers...
-                e = "genomicVariant"
-                v_ids = []
-                for ana_id in ana_ids.get("values", []):
-                    v_ids += self.data_db["variants"].distinct("id", {"analysis_id": ana_id})
-                v_ids = list(set(v_ids))
+            v_no = len(v_ids)
+            if v_no > VARIANTS_RESPONSE_LIMIT:
+                v_ids = return_paginated_list(v_ids, 0, VARIANTS_RESPONSE_LIMIT)
+                BYC["WARNINGS"].append(f"Too many genomicVariant values ({v_no}) for dataset {self.dataset_id}. Only the first {VARIANTS_RESPONSE_LIMIT} will be returned.")
 
-                v_no = len(v_ids)
-                if v_no > VARIANTS_RESPONSE_LIMIT:
-                    v_ids = return_paginated_list(v_ids, 0, VARIANTS_RESPONSE_LIMIT)
-                    BYC["WARNINGS"].append(f"Too many genomicVariant values ({v_no}) for dataset {self.dataset_id}. Only the first {VARIANTS_RESPONSE_LIMIT} will be returned.")
-
-                self.id_responses.update({"genomicVariant_id": {"values": v_ids, "count": v_no}})
-                e_d = self.entity_defaults.get("genomicVariant", {})
-                c = e_d.get("collection", "___none___")
-                self.res_obj_defs.update({f'{c}.id': {
-                    "collection": c,
-                    "entity_id": e,
-                    "id_parameter": "genomicVariant_id",
-                    "upstream_ids": e_d.get("upstream_ids", [])
-                }})
+            self.id_responses.update({"genomicVariant_id": {"values": v_ids, "count": v_no}})
+            e_d = self.entity_defaults.get("genomicVariant", {})
+            c = e_d.get("collection", "___none___")
+            self.res_obj_defs.update({f'{c}.id': {
+                "collection": c,
+                "entity_id": e,
+                "id_parameter": "genomicVariant_id",
+                "upstream_ids": [f'{x}_id' for x in e_d.get("upstream", [])]
+            }})
 
 
 

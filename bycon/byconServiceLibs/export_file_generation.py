@@ -253,8 +253,8 @@ class PGXbed:
         self.flavour = BYC_PARS.get("output", "ucsc").lower()
         self.output_lines = []
         self.ucsc_link = f'http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg38'
-        self.tmp_path = path.join(*BYC["local_paths"]["server_tmp_dir_loc"])
-        web_root = BYC["local_paths"].get("server_tmp_dir_web", "/tmp")
+        self.tmp_path = path.join(*BYC["env_paths"]["server_tmp_dir_loc"])
+        web_root = BYC["env_paths"].get("server_tmp_dir_web", "/tmp")
         self.bed_url = f'{select_this_server()}{web_root}'
         self.var_cols = ByconPlotPars().plotVariantColors()
         self.var_count = len(self.flattened_data)

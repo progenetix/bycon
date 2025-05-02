@@ -15,7 +15,7 @@ Information about the datasets served by the one or more beacon instances (see b
 Beacon instance parameters; e.g. a single installation can serve several beacons
 with their own domains (independent of the datasets/databases).
 
-#### `local_paths.yaml`
+#### `env_paths.yaml`
 
 * `server_tmp_dir_loc` which is needed for some temporary files (e.g. BED
   files for UCSC browser integration)

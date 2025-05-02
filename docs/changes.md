@@ -6,6 +6,13 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-05-02 (v2.4.2)
+
+* moving to the homebrew based server setup which includes a change of
+  the local paths
+    - also changes the name of the paths file from `local/local_pats.yaml` to `local/env_pats.yaml`
+
+
 ### 2025-04-25 (v2.4.1)
 
 * fixing query aggregation where some upstream matches were incorrectly
@@ -329,7 +336,7 @@ The [documentation](https://bycon.progenetix.org/installation/#loading-and-maint
       hierarchy both for local scripts in the project directory as well as in the
       web server context (_i.e._ the `local` directory is at the same level so
       local references work)
-    - removed `install.yaml` and point to `local/local_paths.yaml` during installations
+    - removed `install.yaml` and point to `local/env_paths.yaml` during installations
       so that no double definition of local paths is needed
 
 ### 2024-10-10 (v2.0.0 "Taito City")

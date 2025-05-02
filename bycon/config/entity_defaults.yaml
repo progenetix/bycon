@@ -52,10 +52,10 @@ genomicVariant:
   beacon_schema:
     entity_type: genomicVariant
     schema: https://progenetix.org/services/schemas/genomicVariant/
-  upstream_ids:
-    - analysis_id
-    - biosample_id
-    - individual_id
+  upstream:
+    - analysis
+    - biosample
+    - individual
   is_beacon_entity: true
   path_id_value_bycon_parameter: variant_ids
   tests:
@@ -78,9 +78,9 @@ analysis:
   beacon_schema:
     entity_type: analysis
     schema: https://progenetix.org/services/schemas/analysis/
-  upstream_ids:
-    - biosample_id
-    - individual_id
+  upstream:
+    - biosample
+    - individual
   is_beacon_entity: true
   path_id_value_bycon_parameter: analysis_ids
   tests:
@@ -127,8 +127,8 @@ biosample:
   beacon_schema:
     entity_type: biosample
     schema: https://progenetix.org/services/schemas/biosample/
-  upstream_ids:
-    - individual_id
+  upstream:
+    - individual
   is_beacon_entity: true
   path_id_value_bycon_parameter: biosample_ids
   tests:
@@ -152,7 +152,7 @@ individual:
   beacon_schema:
     entity_type: individual
     schema: https://progenetix.org/services/schemas/individual/
-  upstream_ids: []
+  upstream: []
   is_beacon_entity: true
   path_id_value_bycon_parameter: individual_ids
   examples:

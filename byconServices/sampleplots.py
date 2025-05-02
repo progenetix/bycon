@@ -32,7 +32,7 @@ def sampleplots():
     * http://progenetix.org/services/sampleplots?datasetIds=progenetix&plotMinLength=1000&plotMaxLength=3000000&geneId=CDKN2A&variantType=EFO:0020073&plotPars=plotChros=9::plotGeneSymbols=CDKN2A::plotWidth=300&plotType=histoplot
     """
     file_id = str(BYC_PARS.get("file_id", "___no-input-file___"))
-    inputfile = Path( path.join( *BYC["local_paths"][ "server_tmp_dir_loc" ], file_id ) )
+    inputfile = Path( path.join( *BYC["env_paths"][ "server_tmp_dir_loc" ], file_id ) )
 
     BB = ByconBundler()
     if inputfile.is_file():

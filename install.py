@@ -9,10 +9,10 @@ dir_path = path.dirname( path.abspath(__file__) )
 
 """
 The install script copies the relevant bycon files to the webserver directory
-specified in the `./local/local_paths.yaml` file and sets the file permissions
+specified in the `./local/env_paths.yaml` file and sets the file permissions
 accordingly. By default, it requires admin permissions (sudo). If you want to run
 it without sudo, invoke it with `--no-sudo`. The current use will need to be able
-to write into the target directories. 
+to write into the target directories.
 
 Versions after 2023-02-07 _only_ copy the script directories and local configuration
 directory to the server path; additionally a bycon package install is needed with
@@ -33,8 +33,8 @@ def main(no_sudo):
         sudo_cmd = "sudo"
 
     local_conf_source = path.join(dir_path, "local", "")
-    i_f = path.join(local_conf_source, "local_paths.yaml" )
- 
+    i_f = path.join(local_conf_source, "env_paths.yaml" )
+
     try:
         with open( i_f ) as y_c:
             install = yaml.load( y_c , Loader=yaml.FullLoader)
@@ -97,6 +97,7 @@ def main(no_sudo):
     with chdir(path.join(dir_path, "beaconplusWeb")):
         system(f'npm run {cmd}')
         system(f'{sudo_cmd} rsync -avh out/* {w_r_d}')
+        print(f'... website files copied to `{w_r_d}`')
         system(f'rm -rf out')
         system(f'rm -rf .next')
 

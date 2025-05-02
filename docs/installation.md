@@ -95,7 +95,7 @@ bycon
   |   |- beacon_defaults.yaml
   |   |- dataset_definitions.yaml
   |   |- instance_definitions.yaml
-  |   `- local_paths.yaml
+  |   `- env_paths.yaml
   |   
   |- install.py
   `- `requirements.txt` and other Python packaging files
@@ -241,7 +241,7 @@ Some configuration:
 
 The project root contains an `install.py` script to distribute the server scripts
 into the webserver root. Necessary parameters such as local paths
-have to be adjusted in the configuration files in `local/`, such as in `local_paths.yaml`.
+have to be adjusted in the configuration files in `local/`, such as in `env_paths.yaml`.
 
 !!! warning "Configuration adjustments"
 
@@ -287,7 +287,7 @@ testuser:
   examplez: record    
 ```
 
-#### `./local/local_paths.yaml`
+#### `./local/env_paths.yaml`
 
 Here at minimum the paths for the webserver `tmp` has to be defined (path elements
 as list items):
@@ -443,7 +443,7 @@ at the bycon server root. The system path for `services.py` is
 {bycon_install_dir}/services/services.py
 ```
 
-... where `bycon_install_dir` has to be user defined inside the `local/local_paths.yaml`
+... where `bycon_install_dir` has to be user defined inside the `local/env_paths.yaml`
 configuration file (see [Installation](installation.md)). The service URL format `progenetix.org/services/__service-name__?parameter=value`
 is based on the remapping of the `services.py` script to the `/services` path and
 then extraction of the service name as the path parameter following `/services/`.

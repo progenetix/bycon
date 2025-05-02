@@ -8,7 +8,7 @@ The Beacon<sup><span style="color: #d00;">+</span></sup> implementation is a
 custom front end on top of the [`bycon`](http://bycon.progenetix.org)
 code with emphasis on structural genome variations from cancer samples.
 
-An extended implementation of the Beacon<sup><span style="color: #d00;">+</span></sup> code is provided through the [Progenetix](https://progenetix.org) project.s
+An extended implementation of the Beacon<sup><span style="color: #d00;">+</span></sup> code is provided through the [Progenetix](https://progenetix.org) project.
 
 !!! note "More Documentation"
 

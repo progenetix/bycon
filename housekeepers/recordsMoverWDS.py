@@ -33,7 +33,7 @@ assertSingleDatasetOrExit()
 #TODO: Here only as prototype for a query based sample selection
 if len(BYC_PARS.get("filters", [])) > 0:
     f_d = ByconResultSets().get_flattened_data()
-    file = path.join(*BYC["local_paths"]["server_tmp_dir_loc"], f"individuals-{ByconID(0).makeID()}.tsv")
+    file = path.join(*BYC["env_paths"]["server_tmp_dir_loc"], f"individuals-{ByconID(0).makeID()}.tsv")
     BYC_PARS.update({"outputfile": file, "inputfile": file})
     ByconDatatableExporter(f_d).export_datatable()    
 

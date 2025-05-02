@@ -91,14 +91,14 @@ BYC = {
     "authorizations",
     "dataset_definitions",
     "filter_definitions",
-    "local_paths",
+    "env_paths",
     "datatable_mappings",
     "test_queries",
     "plot_defaults"
   ],
 
   "authorizations": {},
-  "local_paths": {},
+  "env_paths": {},
   "plot_defaults": {},
   "request_meta": {},
   "service_config": {},

@@ -1,0 +1,51 @@
+# Local file system configuration ##############################################
+
+system_user: root
+system_group: staff
+
+bycon_install_dir:
+  - /
+  - opt
+  - homebrew
+  - var
+  - www
+  - cgi-bin
+  - bycon
+
+server_tmp_dir_loc:
+  - /
+  - opt
+  - homebrew
+  - var
+  - www
+  - Documents
+  - tmp
+
+server_tmp_dir_web: /tmp
+
+# optional website root directory
+
+server_site_dir_loc:
+  - /
+  - opt
+  - homebrew
+  - var
+  - www
+  - Documents
+  - Sites
+  - beaconplus
+
+# optional array plotting resources
+
+server_callsets_dir_loc:
+  - /
+  - opt
+  - homebrew
+  - var
+  - www
+  - Documents
+  - Sites
+  - arraymap
+  - grch38
+
+probefile_name: probes,cn.tsv

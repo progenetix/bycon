@@ -24,8 +24,8 @@ def uploader():
 
     response = {
         "error": {},
-        "rel_path": f'{BYC["local_paths"].get("server_tmp_dir_web", "/tmp")}/{file_id}',
-        "loc_path": path.join( *BYC["local_paths"][ "server_tmp_dir_loc" ], file_id ),
+        "rel_path": f'{BYC["env_paths"].get("server_tmp_dir_web", "/tmp")}/{file_id}',
+        "loc_path": path.join( *BYC["env_paths"][ "server_tmp_dir_loc" ], file_id ),
         "file_id": file_id,
         "plot_link": '/services/sampleplots/?fileId='+file_id,
         "host": base_url
