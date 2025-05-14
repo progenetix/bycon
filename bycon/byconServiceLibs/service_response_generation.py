@@ -13,7 +13,7 @@ from schema_parsing import ByconSchemas
 
 class ByconServiceResponse:
 
-    def __init__(self, response_schema="byconautServiceResponse"):
+    def __init__(self, response_schema="byconServiceResponse"):
         self.response_schema = response_schema
         self.requested_granularity = BYC_PARS.get("requested_granularity", "record")
         # TBD for authentication? 
@@ -33,7 +33,7 @@ class ByconServiceResponse:
     # -------------------------------------------------------------------------#
 
     def collations_response(self):
-        if not "byconautServiceResponse" in self.response_schema:
+        if not "byconServiceResponse" in self.response_schema:
             return
 
         colls = ByconCollations().populatedCollations()
@@ -53,7 +53,7 @@ class ByconServiceResponse:
     # -------------------------------------------------------------------------#
 
     def emptyResponse(self):
-        if not "byconautServiceResponse" in self.response_schema:
+        if not "byconServiceResponse" in self.response_schema:
             return
         return self.data_response
 
@@ -61,7 +61,7 @@ class ByconServiceResponse:
     # -------------------------------------------------------------------------#
 
     def populated_response(self, results=[]):
-        if not "byconautServiceResponse" in self.response_schema:
+        if not "byconServiceResponse" in self.response_schema:
             return
         self.data_response["response"].update({"results": results})
         self.__service_response_update_summaries()

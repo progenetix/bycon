@@ -1,4 +1,10 @@
-NCIT:C27993	general qualifier	0	1
-NCIT:C17998	unknown	1	2
-NCIT:C20197	male	1	3
-NCIT:C16576	female	1	4
+# Note: This mixes genotypic and fuzzy (NCIT...) concepts.
+pgx:sex	annotated sex	0	1
+pgx:sex-male	male	1	2
+PATO:0020002	male genotypic sex	2	3
+NCIT:C20197	male	3	4
+pgx:sex-female	female	1	5
+PATO:0020001	female genotypic sex	2	6
+NCIT:C16576	female	3	7
+pgx:sex-unknown	unknown sex	1	8
+NCIT:C17998	unknown	2	9

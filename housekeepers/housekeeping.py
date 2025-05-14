@@ -20,7 +20,7 @@ def main():
     set_collation_types()
     ask_limit_reset()
 
-    ds_id = assertSingleDatasetOrExit()
+    ds_id = assert_single_dataset_or_exit()
 
     # collecting the actions
     todos = {

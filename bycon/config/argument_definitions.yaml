@@ -92,6 +92,7 @@ $defs:
         value seen by the stack in web server mode
     type: string
     cmdFlags:
+      - -p
       - --requestEntityPathId
     default: info
 
@@ -103,7 +104,7 @@ $defs:
         in `/sampletable/`)
     type: string
     cmdFlags:
-      - -e
+      - -r
       - --responseEntityPathId
 
   # requested_schema:

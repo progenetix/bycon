@@ -1,7 +1,7 @@
 ---
 parameters:
   datasetIds:
-    label: Dataset
+    label: Dataset(s)
     options:
       - value: progenetix
         label: Progenetix cancer genome variants
@@ -273,7 +273,7 @@ parameters:
       codes please be aware that probably use of an "OR" filter logic will be appropriate.
       This field relies on the existence of the term in the Beacon `filteringTermsResponse`.
     isMulti: true
-    isHidden: true
+    isHidden: false
     options:
       - value: ""
         label: "(no selection)"
@@ -318,15 +318,15 @@ parameters:
   sex:
     label: Genotypic Sex
     infoText: |
-      Genotypic sex of the individual.
+      (Assumed) genotypic sex of the individual.
     defaultValue: ""
     isHidden: false
     options:
       - value: ""
-        label: "(no selection)"
-      - value: NCIT:C16576
+        label: (no selection)
+      - value: pgx:sex-female
         label: female
-      - value: NCIT:C20197
+      - value: pgx:sex-male
         label: male
   allTermsFilters:
     label: Select Filters

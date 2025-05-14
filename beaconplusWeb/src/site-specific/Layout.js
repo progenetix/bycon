@@ -92,6 +92,7 @@ function Side({ onClick }) {
       </a>
       <ul className="Layout__side__items">
         <MenuInternalLinkItem href="/search/" label="Search Samples" />
+        <MenuInternalLinkItem href="/subsetsSearch/" label="Compare CNV Profiles" />
         <MenuInternalLinkItem
           href="/subsets/NCIT-subsets"
           label="CNV Profiles by Cancer Type"

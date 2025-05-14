@@ -7,7 +7,7 @@ from pymongo import MongoClient
 from progress.bar import Bar
 
 from bycon import BYC, config, prdbug
-from byconServiceLibs import assertSingleDatasetOrExit, hierarchy_from_file, set_collation_types, write_log
+from byconServiceLibs import assert_single_dataset_or_exit, hierarchy_from_file, set_collation_types, write_log
 
 dir_path = path.dirname( path.abspath(__file__) )
 pkg_path = path.join( dir_path, pardir )
@@ -23,7 +23,7 @@ pkg_path = path.join( dir_path, pardir )
 ################################################################################
 
 def main():
-    ds_id = assertSingleDatasetOrExit()
+    ds_id = assert_single_dataset_or_exit()
 
     print(f'Creating collations for {ds_id}')
 
@@ -55,6 +55,8 @@ def __process_collation_type(ds_id, coll_type, coll_defs):
         print( "Creating dummy hierarchy for " + coll_type)
         hier =  __get_dummy_hierarchy(ds_id, coll_type, coll_defs)
 
+    hier_min = coll_defs.get("term_min_depth", 0) + 1
+
     coll_coll = MongoClient(host=config.DB_MONGOHOST)[ ds_id ]["collations"]
     data_coll = MongoClient(host=config.DB_MONGOHOST)[ ds_id ][ collection ]
 
@@ -75,6 +77,11 @@ def __process_collation_type(ds_id, coll_type, coll_defs):
     for count, c_id in enumerate(hier.keys(), start=1):
         if not BYC["TEST_MODE"]:
             bar.next()
+        
+        parents = hier[c_id].get("parent_terms", [])
+        if len(parents) < hier_min:
+            continue
+
         children = list(set(hier[c_id]["child_terms"]) & onto_keys)
         hier[c_id].update( {"child_terms": children})
         if len( children ) < 1:

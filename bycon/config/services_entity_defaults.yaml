@@ -31,7 +31,7 @@ collations:
   request_entity_path_aliases:
     - collations
     - collation
-  response_schema: byconautServiceResponse
+  response_schema: byconServiceResponse
   beacon_schema:
     entity_type: Collation
     schema: https://progenetix.org/services/schemas/Collation/

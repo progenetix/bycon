@@ -29,11 +29,11 @@ export default function FileLoaderPage() {
           methods, provided through the `bycon` package and with demonstration
           applications in{" "}
           <a
-            href="https://github.com/progenetix/byconaut"
+            href="https://github.com/progenetix/bycon"
             target="_blank"
             rel="noreferrer"
           >
-            <i>byconaut</i>
+            <i>bycon</i>
           </a>.
         </p>
       </Panel>

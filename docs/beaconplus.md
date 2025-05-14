@@ -1,6 +1,6 @@
 # BeaconPlus - Beacon Front-end for Genomic Data Queries
 
-![Beacon Icon](http://docs.progenetix.org/img/logo_beacon.png){ align=right width=25px} As part of the Beacon project, since early 2016 the [Theoretical Cytogenetics and Oncogenomics Group](http://info.baudisgroup.org) at the University of Zurich develops the
+![Beacon Icon](https://docs.progenetix.org/img/logo_beacon.png){ align=right width=25px} As part of the Beacon project, since early 2016 the [Theoretical Cytogenetics and Oncogenomics Group](https://baudisgroup.org) at the University of Zurich develops the
 [Beacon<sup><span style="color: #d00;">+</span></sup> demonstrator](https://beaconplus.progenetix.org/),
 to show current functionality and test future Beacon protocol extensions.
 

@@ -7,7 +7,7 @@ from random import shuffle as random_shuffle
 
 from bycon import *
 from byconServiceLibs import (
-    assertSingleDatasetOrExit,
+    assert_single_dataset_or_exit,
     ask_limit_reset,
     ByconBundler,
     CollationQuery,
@@ -32,7 +32,7 @@ The script will add `frequencymap` object to each of the collations.
 
 ask_limit_reset()
 limit = BYC_PARS.get("limit", 200)
-ds_id = assertSingleDatasetOrExit()
+ds_id = assert_single_dataset_or_exit()
 GB = GenomeBins()
 interval_count = GB.get_genome_bin_count()
 binning = GB.get_genome_binning()
@@ -42,6 +42,8 @@ if "skip" in (BYC_PARS.get("mode", "")).lower():
     skip_existing = True
 else:
     skip_existing = False
+
+print(f'=> Skipping existing frequencymaps: {skip_existing}')
 
 BYC.update({"PAGINATED_STATUS": False})
 
@@ -107,7 +109,7 @@ for c_id in coll_ids:
         continue
 
     ana_ids = return_paginated_list(ana_ids, 0, limit)
-    prdbug(f'... after limit {len(ana_ids)}')
+    prdbug(f'\n... after limit {len(ana_ids)}')
 
     intervals, cnv_ana_count = GB.intervalAidFrequencyMaps(ds_id, ana_ids)
     prdbug(f'... retrieved {cnv_ana_count} CNV analyses')

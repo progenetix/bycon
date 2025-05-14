@@ -26,7 +26,7 @@ log_path = path.join( loc_path, pardir, "logs" )
 
 GB = GenomeBins()
 ask_limit_reset()
-assertSingleDatasetOrExit()
+assert_single_dataset_or_exit()
 
 ds_id = BYC["BYC_DATASET_IDS"][0]
 set_collation_types()

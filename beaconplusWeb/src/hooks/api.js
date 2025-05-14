@@ -90,6 +90,14 @@ export function useBeaconQuery(queryData) {
   )
 }
 
+export function useSubsetsQuery(queryData) {
+  return useProgenetixApi(
+    queryData
+      ? `${basePath}services/collationplots/?${buildFilterParameters(queryData)}`
+      : null
+  )
+}
+
 export function urlRetrieveIds(urlQuery) {
   var { id, datasetIds } = urlQuery
   if (!datasetIds) {
@@ -152,6 +160,35 @@ export function makeFilters({
   ]
 }
 
+export function buildFilterParameters(queryData) {
+  const {
+    bioontology,
+    referenceid,
+    cohorts,
+    analysisOperation,
+    sex,
+    materialtype,
+    allTermsFilters,
+    clinicalClasses
+  } = queryData
+
+  const filters = makeFilters({
+    allTermsFilters,
+    clinicalClasses,
+    bioontology,
+    referenceid,
+    cohorts,
+    analysisOperation,
+    sex,
+    materialtype
+  })
+  return new URLSearchParams(
+    flattenParams([
+      ["filters", filters]
+    ]).filter(([, v]) => !!v)
+  ).toString()
+}
+
 export function buildQueryParameters(queryData) {
   const {
     start,
@@ -208,6 +245,7 @@ export function buildQueryParameters(queryData) {
     ]).filter(([, v]) => !!v)
   ).toString()
 }
+
 
 export function useDataVisualization(queryData) {
   var q_path = "beacon/biosamples"

@@ -541,7 +541,9 @@ export function BeaconSearchForm({
             requestTypeExamples={requestTypeExamples}
           />
         </div>
-        <ExampleDescription example={example} />   
+        {example?.description && (
+          <ExampleDescription description={example.description} />   
+        )}
       </div>
       {example?.img && (
           <div>

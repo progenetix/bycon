@@ -7,7 +7,7 @@ from random import sample as random_samples
 
 from bycon import byconServiceLibs, ByconDatasets
 from bycon_importer import ByconImporter
-from service_helpers import assertSingleDatasetOrExit
+from service_helpers import assert_single_dataset_or_exit
 
 loc_path = path.dirname( path.abspath(__file__) )
 project_path = path.join(loc_path , pardir)
@@ -49,7 +49,7 @@ steps for a CNV supporting database and create an archive for distribution.
 * `.recordsSampler.py -d progenetix --output examplez --mode testqueries`
 """
 
-ds_id = assertSingleDatasetOrExit()
+ds_id = assert_single_dataset_or_exit()
 database_names = ByconDatasets().get_database_names()
 examples_db = BYC_PARS.get("output", "examplez")
 proceed = input(f'Re-create the example "{examples_db}" database from {ds_id} data? (y/N): ')

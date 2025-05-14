@@ -2,63 +2,63 @@
 
 ## Project Structure
 
-The `bycon` project contains source code for the eponymous Python package
-as well as a number of server applications which are used to provide a Beacon 
-webserver, additional server functions for statistical and graphical readouts
-(specifically geared towards copy number variation data) as well as support 
-applications and libraries for data I/O and management of the implied MongoDB
-database environment. 
+The `bycon` project contains 
+
+* a number of applications to generate a web server exposing a Beacon API
+* "beyond Beacon" services functions for file exports and graphical readouts
+(with some emphasis on genomic copy number variation data)
+* source code for the eponymous Python package
+* support applications and libraries for data I/O and management of the database environment
+* source code for a React based web front end for the Beacon API
+* documentation source files in the form of a Markdown based `mkdocs` project
 
 !!! warning "Experimental Libraries"
 
-    At this time (**bycon v2.n "Taito City"**) the project's
-    libraries - which in principle can be installed directly from the Python Package
+    At this time (**bycon v2.4+ "Cotwolds"**) the project
+    libraries - which are available through the Python Package
     Index - should *not* be used for external applications since libary structure
-    and dependencies might change and are only kept in sync within the wider project
-    itself.
+    and dependencies might change and are only kept in sync _within_ the project itself.
 
-Additionally to the library and associated files a complete `bycon`-base Beacon
-server setup requires the installation of various endpoint apps contained in
-`/beaconServer` and - optionally -  `/byconServices` (e.g. for retrieving
-supporting data such as collation statistics or genomic parameters).
+!!! node "User defined directories"
 
-We also provide a number of utility scripts and libraries which are not part of the
-general installation and might contain deprecated code or dependencies through the
-[`byconaut`](https://github.com/progenetix/byconaut/) project.
+    The project uses a number of user defined directories for
+    configuration files and data. The directories are defined in the
+    `local/env_paths.yaml` file and can be modified to your needs.
+    The default directories are:
+
+    - essentiall is `local` for configuration files
+    - optionally `rsrc` additional classifications and identifiers
 
 
-### `./beaconServer`
+### `beaconServer`
 
-* web applications for data access
-* Python modules for Beacon query and response functions in `lib`
+* the `beacon.py` web app for all standard Beacon API functions
 
-### `./bycon`
+### `bycon`
 
-* Python libraries for data handling and Beacon API functions with a main
-  `beacon.py` application calling the server functions and libraries as well as
+* Python libraries for data handling and Beacon API functions as well as
   configuration data contained in subdirectories and files:
-    - `./bycon/byconServiceLibs` for beyond Beacon functionality executed through
+    - `bycon/byconServiceLibs` for beyond Beacon functionality executed through
       the endpoints in `byconServices`
-    - `./bycon/config` for instance independent or default configuration files
-    - `./bycon/lib` for the Python libraries (_i.e._ the real code)
-    - `./bycon/rsrc` with support files (ATM the genome and cytoband mappings)
-    - `./bycon/schemas` contains Beacon and other schema files, both in YAML 
+    - `bycon/config` for default configuration files
+    - `bycon/lib` for the Python libraries (_i.e._ the real code)
+    - `bycon/rsrc` with support files (ATM the genome and cytoband mappings)
+    - `bycon/schemas` contains Beacon and other schema files, both in YAML 
       source and JSON compiled format (JSON is read by the scripts)
 
-### `./docs`
+### `docs`
 
 * documentation, in Markdown, as source for documentation builded with `mkdocs`
 
-
-### `./rsrc`
+### `rsrc`
 
 * various resources beyond configuration data
     - mapping input table(s) for ontology trees
     - ...
 
-### `./importers` and `./housekeepers`
+### `importers` and `housekeepers`
 
-* Python scripts for data import and maintenance; see below
+* Python utility applications for data import and maintenance; see below
 
 ### Overview
 
@@ -91,6 +91,7 @@ bycon
   |        `- ...
   |- docs
   |    `- ... documentation website source files ...
+  |
   |- local
   |   |- beacon_defaults.yaml
   |   |- dataset_definitions.yaml
@@ -101,15 +102,6 @@ bycon
   `- `requirements.txt` and other Python packaging files
 ...
 ```
-
-??? note "PyPi based `bycon` library installation (not recommended)""
-
-    Since February 2023 `bycon` has been mad available as a Pypi package with standard
-    installation through `pip3 install bycon`. However, this installation will lack
-    the server components and is by itself only suitable for library utilization. 
-    In contrast to the package manager based library installations we highly recommend
-    to install locally from the source, using the installer provided with the project. 
-    Please follow the *Beacon Server Installation* procedure below.
 
 ## Beacon Server Installation
 
@@ -151,7 +143,7 @@ brew tap mongodb/brew
 brew install mongodb-community
 ```
 
-Then this shoul dbe started as a service & (probably) needs a restart of the computer
+Then this shouldbe started as a service & (probably) needs a restart of the computer
 (in case another or version was running etc.).
 
 ```sh
@@ -169,20 +161,22 @@ brew services restart mongodb/brew/mongodb-community
 #### Webserver Setup
 
 We use a "classical" webserver setup with Apache but probably other options would
-be fine...
+be fine.
+
+**NEW 2025-05-02 (v2.4.2)** The installation procedure on Mac OS now uses
+a `brew` based installation of the Apache webserver.
 
 Some configuration:
 
 - a directory for executables (e.g. .../cgi-bin/) 
     * this has to be set as the default executable (CGI) directory
-    * our Mac OS use: `/Library/WebServer/cgi-bin/`
-    * we also use a `/bycon` wrapper directory inside the CGI dir (for hosting the
-      `beaconServer` and optionally `services` directories with their `....py`
+      - on Mac OS homebrew installation: `/opt/homebrew/var/www/cgi-bin/`
+    * we also use a `.../cgi-bin/bycon` wrapper directory for hosting the `beaconServer` and optionally `services` directories with their `....py`
       scripts)
     * **we use a rewrite directive to the main beacon** (& optional services) apps which
       handle then path deparsing and calling of individual apps (see box below)
 - a server-writable temporary directory
-    * our use: `/Library/WebServer/Documents/tmp/` 
+    * our use: `/opt/homebrew/var/www/Documents/tmp/` 
 
 ??? info "Example `httpd.conf` configuration settings"
 
@@ -192,7 +186,7 @@ Some configuration:
     ```
     # Set the document root - here using our example, YMMV
 
-    DocumentRoot    /Library/WebServer/Documents
+    DocumentRoot    /opt/homebrew/var/www/Documents
     ```
 
 

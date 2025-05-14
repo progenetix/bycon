@@ -4,7 +4,7 @@ from bycon import *
 from pymongo import MongoClient
 
 from bycon import byconServiceLibs
-from service_helpers import assertSingleDatasetOrExit
+from service_helpers import assert_single_dataset_or_exit
 
 
 """
@@ -16,7 +16,7 @@ from service_helpers import assertSingleDatasetOrExit
 ################################################################################
 ################################################################################
 
-ds_id = assertSingleDatasetOrExit()
+ds_id = assert_single_dataset_or_exit()
 target_path_id = "individuals"
 ho_key = f'{target_path_id}.id'
 BYC_PARS.update({"response_entity_path_id":target_path_id})

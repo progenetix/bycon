@@ -11,7 +11,7 @@ from bycon import (
     ByconResultSets,
     prdbug
 )
-from byconServiceLibs import assertSingleDatasetOrExit, ByconDatatableExporter, ByconImporter, ByconID
+from byconServiceLibs import assert_single_dataset_or_exit, ByconDatatableExporter, ByconImporter, ByconID
 
 # loc_path = path.dirname( path.abspath(__file__) )
 # lib_path = path.join(loc_path , pardir, "importers", "lib")
@@ -28,7 +28,7 @@ the use of a tab-separated file with the record `individual_id` identifiers to b
 # BYC_PARS.update({"request_entity_path_id": "individuals"})
 BYC.update({"BYC_DATASET_IDS": BYC_PARS.get("dataset_ids", [])})
 ByconEntities().set_entities()
-assertSingleDatasetOrExit()
+assert_single_dataset_or_exit()
 
 #TODO: Here only as prototype for a query based sample selection
 if len(BYC_PARS.get("filters", [])) > 0:

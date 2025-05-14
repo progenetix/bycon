@@ -55,7 +55,7 @@ def read_service_prefs(service, service_pref_path):
 
 ################################################################################
 
-def assertSingleDatasetOrExit():
+def assert_single_dataset_or_exit():
     if len(BYC["BYC_DATASET_IDS"]) == 1:
         return BYC["BYC_DATASET_IDS"][0]
     prtexthead()

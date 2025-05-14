@@ -95,8 +95,12 @@ def main(no_sudo):
         print(f'¡¡¡ No web directory exists at `{w_r_d}`, defined as `server_site_dir_loc` in `{i_f}`!!!')
         exit()
     with chdir(path.join(dir_path, "beaconplusWeb")):
-        system(f'npm run {cmd}')
-        system(f'{sudo_cmd} rsync -avh out/* {w_r_d}')
+        c = f'npm run {cmd}'
+        system(c)
+        print(f'==> {c}')
+        c = f'{sudo_cmd} rsync -avh out/* {w_r_d}'
+        system(c)
+        print(f'==> {c}')
         print(f'... website files copied to `{w_r_d}`')
         system(f'rm -rf out')
         system(f'rm -rf .next')

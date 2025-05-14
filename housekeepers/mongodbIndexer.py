@@ -19,7 +19,7 @@ def main():
 
 def mongodb_indexer():
     read_service_prefs("mongodb_indexer", services_conf_path)
-    ds_id = assertSingleDatasetOrExit()
+    ds_id = assert_single_dataset_or_exit()
 
     dt_m = BYC["datatable_mappings"]
     s_c = BYC.get("service_config", {})

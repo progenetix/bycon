@@ -313,6 +313,7 @@ class BeaconDataResponse:
         if "beaconFilteringTermsResponse" in self.response_schema:
             return self.filteringTermsResponse()
 
+
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
 

@@ -192,8 +192,30 @@ $defs:
     examples:
       - HP:0012209
 
+# PATOsex:
+#   description: >
+#     Some PATO codes specific for genotypic sex...
+#   id: pato
+#   ft_type: ontologyTerm
+#   iri_prefix: http://purl.obolibrary.org/obo/PATO_
+#   name: "Phenotypic Qualities Ontology"
+#   namespace_prefix: PATO
+#   url: https://github.com/pato-ontology/pato/
+#   db_key: sex.id
+#   scope: individuals
+#   entity: individual
+#   pattern: '^PATO(:002000[012])?$'
+#   collationed: True
+#   examples:
+#     - PATO:0020002
+
 
   NCITsex:
+    description: >-
+      Some NCIT codes specific for sex... However, while these are by definition
+      not limited to genotypic sex we use them as indicators for XX/XY as we interpret
+      the data as such during curation.
+      Note: We use a tree w/ additional parent terms to allow query expansion.
     id: ncit
     type: ontologyTerm
     iri_prefix: http://purl.obolibrary.org/obo/NCIT_
@@ -206,14 +228,15 @@ $defs:
         - "NCIT:"
         - ""
     db_key: sex.id
-    description: Some NCIT codes specific for sex...
+    term_min_depth: 1
     scope: individuals
     entity: individual
-    pattern: '^NCIT(:C\d+?)?$'
+    pattern: '^\w+(:[\w\-]+)?$'
     collationed: True
     examples:
       - NCIT:C20197
       - NCIT:C16576
+      - pgx:sex-female
 
   EFOcnvassessment:
     id: efo

@@ -13,7 +13,7 @@ sys.path.append( services_lib_path )
 from bycon_bundler import ByconBundler
 from datatable_utils import import_datatable_dict_line
 from file_utils import write_log
-from service_helpers import assertSingleDatasetOrExit, ByconID
+from service_helpers import assert_single_dataset_or_exit, ByconID
 
 ################################################################################
 ################################################################################
@@ -21,22 +21,25 @@ from service_helpers import assertSingleDatasetOrExit, ByconID
 
 class ByconImporter():
     def __init__(self, use_file=True):
+        self.database_names = ByconDatasets().get_database_names()
+        self.dataset_id = assert_single_dataset_or_exit()
+        self.limit = BYC_PARS.get("limit", 0)
+        self.input_file = BYC_PARS.get("inputfile")
+        self.mongo_client = MongoClient(host=DB_MONGOHOST)
+
+        self.delMatchedVars = "n"
         self.log = []
         self.entity = None
-        self.dataset_id = BYC["BYC_DATASET_IDS"][0]
-        self.database_names = ByconDatasets().get_database_names()
-        self.limit = BYC_PARS.get("limit", 0)
+        self.dataset_id = None
         self.input_file = None
         self.import_collname = None
         self.import_entity = None
         self.import_id = None
         self.use_file = use_file
-        self.input_file = None
         self.output_dir = None
         self.upstream = ["individuals", "biosamples", "analyses"]
         self.downstream = []
         self.downstream_only = False
-        self.mongo_client = MongoClient(host=DB_MONGOHOST)
         self.ind_coll = self.mongo_client[ self.dataset_id ]["individuals"]
         self.bios_coll = self.mongo_client[ self.dataset_id ]["biosamples"]
         self.ana_coll = self.mongo_client[ self.dataset_id ]["analyses"]
@@ -287,13 +290,9 @@ class ByconImporter():
     #--------------------------------------------------------------------------#
 
     def __initialize_importer(self):
-        BYC.update({"BYC_DATASET_IDS": BYC_PARS.get("dataset_ids", [])})
-        self.dataset_id = assertSingleDatasetOrExit()
-        if self.use_file:
-            self.input_file = BYC_PARS.get("inputfile")
-            if not self.input_file:
-                print("No input file file specified (-i, --inputfile) => quitting ...")
-                exit()
+        if self.use_file and not self.input_file:
+            print("No input file file specified (-i, --inputfile) => quitting ...")
+            exit()
         if not BYC["TEST_MODE"]:
             tmi = input("Do you want to run in TEST MODE (i.e. no database insertions/updates)?\n(Y|n): ")
             if not "n" in tmi.lower():
@@ -664,9 +663,8 @@ class ByconImporter():
 
         import_coll = self.mongo_client[ ds_id ][icn]
 
-        delMatchedVars = "y"
         if not BYC["TEST_MODE"]:
-            delMatchedVars = input(f'Delete the variants of the same analysis ids as in the input file?\n(Y|n): ')
+            self.delMatchedVars = input(f'Delete the variants of the same analysis ids as in the input file?\n(Y|n): ')
 
         #----------------------- Checking database content --------------------# 
 
@@ -685,7 +683,7 @@ class ByconImporter():
             if not (ana_id := v.get("analysis_id")):
                 print(f"¡¡¡ The `analysis_id` parameter is required for variant assignment  line {c}!!!")
                 exit()
-            if not "n" in delMatchedVars.lower():
+            if not "n" in self.delMatchedVars.lower():
                 ana_del_ids.add(ana_id)
             if not "delete" in vs_id.lower():
                 import_vars.append(v)

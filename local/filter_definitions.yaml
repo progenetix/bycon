@@ -18,7 +18,7 @@ description: >
     - `custom`: A custom filter.
   - `format`: The format of the filter value.
   - `name`: The name of the filter.
-  - `scope`: The scope of the filter. .
+  - `scope`: The scope of the filter, _i.e._ the entity path where it is applied.
   - `entity`: The entity type that the filter is associated with.
   - `db_key`: The database key that the filter corresponds to.
   - `pattern`: The regular expression pattern that the filter value must match.
@@ -46,23 +46,6 @@ $defs:
     collationed: False
     examples:
       - 'genomes:>0'
-
-  # PATOsex:
-  #   id: ncit
-  #   type: ontologyTerm
-  #   iri_prefix: http://purl.obolibrary.org/obo/PATO_
-  #   description: >
-  #     Some PATO codes specific for genotypic sex...
-  #   name: "Phenotypic Qualities Ontology"
-  #   namespace_prefix: PATO
-  #   url: https://github.com/pato-ontology/pato/
-  #   db_key: 'sex.id'
-  #   scope: individuals
-  #   entity: individual
-  #   pattern: '^PATO(:002000[012])?$'
-  #   collationed: True
-  #   examples:
-  #     - PATO:0020000
 
   icdom:
     id: pgx_icdom
@@ -140,8 +123,8 @@ $defs:
     examples:
       - 'cbioportal:msk_impact_2017'
 
-  pgxcohort:
-    id: pgx_cohorts
+  pgxcohorts:
+    id: pgxcohorts
     type: custom
     name: "Progenetix cohorts"
     iri_prefix: https://progenetix.org/ids/

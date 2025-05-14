@@ -486,6 +486,7 @@ class ByconDatasets:
         self.dataset_defs = BYC.get("dataset_definitions", {})
         self.dataset_ids = []
         self.database_names = []
+        self.allow_default = True
 
         self.__get_database_names()
         self.__ds_ids_from_rest_path_value()
@@ -494,6 +495,13 @@ class ByconDatasets:
         self.__ds_ids_from_form()
         self.__ds_ids_from_all_datasets()
         self.__ds_ids_from_default()
+
+        ds_ids = self.dataset_ids
+
+
+
+
+
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -591,6 +599,9 @@ class ByconDatasets:
         ds_ids = [ds for ds in f_ds_ids if ds in self.database_names]
         if len(ds_ids) > 0:
             self.dataset_ids = ds_ids
+        else:
+            BYC["ERRORS"].append(f"!!! The requested dataset id(s) {f_ds_ids} do not match any of the available datasets.")
+            prdbug(f"!!! The dataset id(s) {f_ds_ids} do not match any of the available datasets.")
 
 
     # -------------------------------------------------------------------------#
@@ -607,6 +618,8 @@ class ByconDatasets:
 
     def __ds_ids_from_default(self):
         if len(self.dataset_ids) > 0:
+            return
+        if self.allow_default is False:
             return
         defaults: object = BYC["beacon_defaults"].get("defaults", {})  
         if (ds_id := str(defaults.get("default_dataset_id"))) not in self.database_names:

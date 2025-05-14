@@ -25,6 +25,8 @@ by the next one in the order, if existing:
 Fallback is `/info` - so the 422 shouldn't be a thing...
 """
 
+BeaconErrorResponse().respond_if_errors()
+
 b_r_c = BYC.get("bycon_response_class", "___none___")
 
 r = None

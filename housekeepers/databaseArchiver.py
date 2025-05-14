@@ -6,12 +6,12 @@ import shutil
 from isodate import date_isoformat
 
 from bycon import BYC, BYC_PARS
-from byconServiceLibs import assertSingleDatasetOrExit
+from byconServiceLibs import assert_single_dataset_or_exit
 
 ################################################################################
 
 def main():
-    ds_id = assertSingleDatasetOrExit()
+    ds_id = assert_single_dataset_or_exit()
 
     output_dir = BYC_PARS.get("outputdir")
     if not output_dir:

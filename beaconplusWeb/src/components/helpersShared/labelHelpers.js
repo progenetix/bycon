@@ -12,3 +12,4 @@ export function subsetCountLabel(subset) {
   const cnvCountLabel = subset.cnvAnalyses ? `, ${subset.cnvAnalyses} ${pluralizeWord("CNV profile", subset.cnvAnalyses)}` : ""
   return `(${subset.count} ${pluralizeWord("sample", subset.count)}${cnvCountLabel})`
 }
+

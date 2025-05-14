@@ -7,5 +7,5 @@ module.exports = {
     "data_master_site": "https://progenetix.org",
     "docs_master_site": "https://docs.progenetix.org",
     "news_site": "https://docs.progenetix.org/news",
-    "organization_site": "https://info.baudisgroup.org",
+    "organization_site": "https://baudisgroup.org",
 }
