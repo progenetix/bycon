@@ -1,6 +1,6 @@
+import React from "react"
 import { useFilterTreesByType } from "../hooks/api"
 import { WithData } from "./Loader"
-import React from "react"
 import { keyBy } from "lodash"
 import { buildTree, TreePanel } from "./classificationTree/TreePanel"
 

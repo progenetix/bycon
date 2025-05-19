@@ -1,5 +1,6 @@
 import React from "react"
 import { Layout } from "../../site-specific/Layout"
+import { DATASETDEFAULT } from "../../hooks/api"
 import SubsetsHierarchyLoader from  "../../components/SubsetsHierarchyLoader"
 
 export default function NCITclinical_SubsetsPage() {
@@ -21,9 +22,9 @@ export default function NCITclinical_SubsetsPage() {
           response.
         </p>
       </div>
-      <SubsetsHierarchyLoader collationTypes="NCITtnm" />
-      <SubsetsHierarchyLoader collationTypes="NCITgrade" />
-      <SubsetsHierarchyLoader collationTypes="NCITstage" />
+      <SubsetsHierarchyLoader collationTypes="NCITtnm" datasetIds={DATASETDEFAULT}/>
+      <SubsetsHierarchyLoader collationTypes="NCITgrade" datasetIds={DATASETDEFAULT}/>
+      <SubsetsHierarchyLoader collationTypes="NCITstage" datasetIds={DATASETDEFAULT}/>
     </Layout>
   )
 }

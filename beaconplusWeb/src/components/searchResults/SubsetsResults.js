@@ -1,32 +1,27 @@
-// import { SITE_DEFAULTS } from "../../hooks/api"
 import React from "react"
 import { SubsetHistogram } from "../SVGloaders"
-import {
-  makeFilters
-  // useSubsethistogram
-} from "../../hooks/api"
-// import { useContainerDimensions } from "../../hooks/containerDimensions"
+import {makeFilters, makePlotGeneSymbols} from "../../hooks/api"
 
 export function SubsetsResults({query}) {
-  console.log(query)
-  console.log(query.datasetIds)
   const datasetIds = query.datasetIds.join(",")
   const filters = makeFilters(query).join(",")
-  // const componentRef = useRef()
-  // const { width } = useContainerDimensions(componentRef)
-  // const size = width
+  const plotGeneSymbols = makePlotGeneSymbols(query)
+  const plotChros = query.plotChros ? query.plotChros.trim().split(",") : null
+
   return (
     <>
       <div className="subtitle ">
         <QuerySummary query={query} />
       </div>
       <SubsetHistogram
-        datasetIds={datasetIds} id={filters}
+        datasetIds={datasetIds}
+        id={filters}
+        plotGeneSymbols={plotGeneSymbols}
+        plotChros={plotChros}
       />
     </>
   )
 }
-
 
 function QuerySummary({ query }) {
   const filters = makeFilters(query)

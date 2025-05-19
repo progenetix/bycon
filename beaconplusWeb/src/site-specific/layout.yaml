@@ -1,0 +1,34 @@
+sitePars:
+  longName: BeaconPlus Beacon implementation project'
+  firstYear: 2016
+  orgSiteLink: https://baudisgroup.org/
+  orgSiteLabel: Computational Oncogenomics Group
+  siteLogo: /img/beaconplus-logo-400x150.png
+  siteLogoAlt: BeaconPlus
+  docLink: https://bycon.progenetix.org
+
+layoutSideItems:
+  - href: /search/
+    label: Search Samples
+  - href: /subsetsSearch/
+    label: Compare CNV Profiles
+  - href: /subsets/NCIT-subsets
+    label: CNV Profiles by Cancer Type
+  - href: /subsets/NCIT-subsets
+    label: NCIT Neoplasia Codes
+    isSub: isSub
+  - href: /subsets/icdom-subsets
+    label: ICD-O Morphologies
+    isSub: isSub
+  - href: /subsets/icdot-subsets
+    label: ICD-O Organ Sites
+    isSub: isSub
+  - href: /subsets/NCITclinical-subsets
+    label: TNM & Grade
+    isSub: isSub
+  - href: /OpenAPI
+    label: OpenAPI Paths and Examples
+  - href: https://bycon.progenetix.org
+    label: Documentation
+  - href: https://baudisgroup.org/
+    label: Baudisgroup @ UZH

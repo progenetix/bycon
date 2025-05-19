@@ -1,0 +1,39 @@
+---
+# - label: "Some Label"
+#   note: Internal note to understand the example.
+#   description: |
+#     The bdescription text that will be rendered on the page.
+#   parameters:
+#     bioontology:
+#       defaultValue:
+#         - NCIT:C3512
+#         - NCIT:C3493
+#         - NCIT:C4450
+#         - NCIT:C4917
+- label: "Lung Cancers"
+  note: "Lung cancers with different histological types"
+  description: |
+    This example shows CNV frequency profiles for different lung cancer types.
+  parameters:
+    bioontology:
+      defaultValue:
+        - NCIT:C3512
+        - NCIT:C3493
+        - NCIT:C4450
+        - NCIT:C4917
+- label: "Breast Cancers and Cell Lines"
+  note: "Breast cancers and cell lines"
+  description: |
+    Breast cancers and cell lines by calling profiles from Progenetix
+    and [cancercelllines.org](https://cancercelllines.org/). Note: Progenetix also
+    contains a minority subset of cell lines.
+  parameters:
+    datasetIds:
+      defaultValue:
+        - progenetix
+        - cellz
+    bioontology:
+      defaultValue:
+        - NCIT:C9245
+    plotChros:
+      defaultValue: 1,3,5,7,8,11,16,17,20

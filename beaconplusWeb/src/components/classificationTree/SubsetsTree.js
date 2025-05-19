@@ -1,4 +1,4 @@
-import { sampleSearchPageFiltersLink } from "../../hooks/api"
+import { sampleSearchPageFiltersLink, subsetSearchPageFiltersLink } from "../../hooks/api"
 import { subsetCountLabel } from "../helpersShared/labelHelpers"
 import React, { useEffect, useMemo, useState } from "react"
 import cn from "classnames"
@@ -33,15 +33,18 @@ export function SubsetsTree({
   const hasSelectedSubsets = checkedSubsets.length > 0
   const selectSamplesHref =
     hasSelectedSubsets &&
-    sampleSelectUrl({ subsets: checkedSubsets, datasetIds, sampleFilterScope })
+    sampleSelectUrl({ subsets: checkedSubsets, datasetIds })
+  const selectSubsetsHref =
+    hasSelectedSubsets &&
+    subsetSelectUrl({ subsets: checkedSubsets, datasetIds })
 
   const height = Math.min(size * ROW_HEIGHT, 800)
   return (
     <>
-      <div className="Subsets__controls">
-        <div className="field">
+      <div className="columns" style={{ padding: "0px" }}>
+        <div className="column is-half">
           <input
-            className="input "
+            className="input mb-3"
             placeholder="Filter subsets e.g. by prefix ..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
@@ -49,6 +52,7 @@ export function SubsetsTree({
         </div>
         {!isFlat && (
           <>
+            <div className="column is-half">
             <div className="level-left">
               <div className="level-item">
                 <p>Hierarchy Depth:</p>
@@ -72,24 +76,38 @@ export function SubsetsTree({
                 </span>
               </div>
             </div>
+            </div>
           </>
         )}
-        {hasSelectedSubsets && (
-          <a className="button is-primary " href={selectSamplesHref || null}>
-            Search Samples from selection
-          </a>
-        )}{" "}
       </div>
-      <ul className="tags">
-        {!hasSelectedSubsets && (
-          <span className="tag is-dark">No Selection</span>
-        )}
-        {checkedSubsets.map((subset) => (
-          <li className="tag is-primary" key={subset.id}>
-            {subset.label ? subset.label : subset.id} ({subset.count})
-          </li>
-        ))}
-      </ul>
+      {hasSelectedSubsets && (
+        <div className="columns" style={{ padding: "0px" }}>
+          <div className="column is-half">
+            <a className="button is-primary " href={selectSubsetsHref || null}>
+              Compare Subsets from Selection
+            </a>
+          </div>
+          {checkedSubsets.length === 1 && (
+            <div className="column is-half">
+              <a className="button is-primary " href={selectSamplesHref || null}>
+                Search Samples from Selection
+              </a>
+            </div>
+          )}
+        </div>
+      )}
+      <div className="columns" style={{ padding: "10px" }}>
+        <ul>
+          {!hasSelectedSubsets && (
+            <span className="tag is-dark">No Selection</span>
+          )}
+          {checkedSubsets.map((subset) => (
+            <li className="tag is-primary" style={{ marginRight: "10px" }} key={subset.id}>
+              {subset.label ? subset.label : subset.id} ({subset.count}){" "}
+            </li>
+          ))}
+        </ul>
+      </div>
       {filteredTree ? (
         <Tree
           levelSelector={levelSelector}
@@ -349,17 +367,21 @@ function useFilterTree(tree) {
   return { searchInput, debouncedSearchInput, setSearchInput, filteredTree }
 }
 
-function sampleSelectUrl({ subsets, datasetIds, sampleFilterScope }) {
+function sampleSelectUrl({ subsets, datasetIds }) {
+  // here the `allTermsFilters` parameter has to be used instead of `filters` for
+  // transfer to the search form since no `filters` field exist in the form
+  // but rather several scoped fields
+  const sampleFilterScope = "allTermsFilters"
   const filters = subsets.map(({ id }) => id).join(",")
-  // here the `bioontology` parameter has to be used instead of `filters` for transfer to the search form
   return sampleSearchPageFiltersLink({ datasetIds, sampleFilterScope, filters })
 }
 
-// function canSearch(subset) {
-//   // Only necessary for NCIT
-//   if (!subset.id.includes("NCIT:")) return true
-//   const minDepth = subset.hierarchyPaths
-//     ? min(subset.hierarchyPaths?.map((hp) => hp.depth))
-//     : 999
-//   return minDepth >= 2
-// }
+function subsetSelectUrl({ subsets, datasetIds }) {
+  // here the `allTermsFilters` parameter has to be used instead of `filters` for
+  // transfer to the search form since no `filters` field exist in the form
+  // but rather several scoped fields
+  const sampleFilterScope = "allTermsFilters"
+  const filters = subsets.map(({ id }) => id).join(",")
+  return subsetSearchPageFiltersLink({ datasetIds, sampleFilterScope, filters })
+}
+

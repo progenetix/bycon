@@ -1,24 +1,39 @@
 import React from "react"
-import { merge } from "lodash"
-import SubsetsSearchPanel from "../components/subsetsForm/SubsetsSearchPanel"
+import { concat, merge } from "lodash"
+import SubsetsSearchPanel from "../components/searchForm/SubsetsSearchPanel"
 import parConfig from "../config/beaconSearchParameters.yaml"
 import subsetsParMods from "../config/subsetsSearchParametersMods.yaml"
-import { Layout } from "./../site-specific/Layout"
-import requestTypeExamples from "../site-specific/searchExamples.yaml"
+import subsetsParLoc from "../site-specific/subsetsSearchParameters.yaml"
+import { Layout } from "../site-specific/Layout"
+import baseSubsetsExamples from "../config/subsetsExamples.yaml"
+import locSubsetsExamples from "../site-specific/subsetsExamples.yaml"
+import { DATASETDEFAULT } from "../hooks/api"
 
 const parametersConfig = merge(
   parConfig,
-  subsetsParMods
+  subsetsParMods,
+  subsetsParLoc
 )
 
-export default function Page() {
+const subsetsExamples = concat(
+  baseSubsetsExamples,
+  locSubsetsExamples
+)
+
+if (!parametersConfig.parameters?.datasetIds?.defaultValue) {
+  parametersConfig.parameters.datasetIds.defaultValue = [DATASETDEFAULT]
+}
+
+export function Page() {
   return (
     <Layout title="Search and Compare Subsets" headline="">
       <SubsetsSearchPanel
         parametersConfig={parametersConfig}
-        requestTypeExamples={requestTypeExamples}
+        requestTypeExamples={subsetsExamples}
         collapsed={false}
       />
     </Layout>
   )
 }
+
+export default Page

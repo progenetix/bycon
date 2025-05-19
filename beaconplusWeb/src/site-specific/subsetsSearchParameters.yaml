@@ -1,0 +1,23 @@
+---
+description: |
+  Here one can override the default `isHidden` settings for subset search parameters
+  (_i.e._ `datasetIds` and the scoped `filters` parameters).
+parameters:
+  datasetIds:
+    isHidden: false
+  cohorts:
+    isHidden: true
+  analysisOperation:
+    isHidden: true
+  bioontology:
+    isHidden: false
+  referenceid:
+    isHidden: true
+  clinicalClasses:
+    isHidden: true
+  materialtype:
+    isHidden: true
+  sex:
+    isHidden: true
+  allTermsFilters:
+    isHidden: false

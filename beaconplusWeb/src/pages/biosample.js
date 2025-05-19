@@ -10,7 +10,7 @@ import { InternalLink, ReferenceLink } from "../components/helpersShared/linkHel
 import { WithData } from "../components/Loader"
 import { withUrlQuery } from "../hooks/url-query"
 import { AncestryData } from "../components/AncestryData"
-import { Layout } from "./../site-specific/Layout"
+import { Layout } from "../site-specific/Layout"
 import { ShowJSON } from "../components/RawData"
 import { AnalysisHistogram } from "../components/SVGloaders"
 import { pluralizeWord }  from "../components/helpersShared/labelHelpers"
@@ -19,7 +19,7 @@ const itemColl = "biosamples"
 // const exampleId = "pgxbs-kftvir6m"
 
 const SampleDetailsPage = withUrlQuery(({ urlQuery }) => {
-  const { id, datasetIds, hasAllParams } = urlRetrieveIds(urlQuery)
+  var {id, datasetIds } = urlRetrieveIds(urlQuery)
   const iURL = `${basePath}beacon/biosamples/${id}/individuals?datasetIds=${datasetIds}&limit=1`
   var [individual, setIndividual] = useState([]);
   useEffect(() => {
@@ -36,10 +36,10 @@ const SampleDetailsPage = withUrlQuery(({ urlQuery }) => {
 
   return (
     <Layout title="Sample Details">
-      {!hasAllParams ? (
-        NoResultsHelp(itemColl)
-      ) : (
+      {id && datasetIds ? (
         <BiosampleLoader biosId={id} individual={individual} datasetIds={datasetIds} />
+      ) : (
+        NoResultsHelp(itemColl)
       )}
     </Layout>
   )

@@ -34,11 +34,14 @@ export function SubsetHistogram({
   plotCytoregionLabels,
   title,
   description,
-  size: givenSize 
+  size: givenSize,
+  plotChros
 }) {
   const componentRef = useRef()
   const { width } = useContainerDimensions(componentRef)
   const size = givenSize || width
+  const idNo = id.split(",").length
+  // const dsNo = datasetIds.split(",").length
   return (
     <div ref={componentRef}>
       <SVGloader
@@ -49,7 +52,8 @@ export function SubsetHistogram({
           plotRegionLabels,
           plotGeneSymbols,
           plotCytoregionLabels,
-          size
+          size,
+          plotChros
         })}
       />
       <div className="img-legend">
@@ -68,10 +72,14 @@ export function SubsetHistogram({
         <Link href={subsetHistoBaseLink(id, datasetIds)}>
           <a>Download SVG</a>
         </Link>
-        {" | "}
-        <Link href={subsetIdLink(id)}>
-          <a>Go to {id}</a>
-        </Link>
+        {idNo === 1 && (
+          <>
+          {" | "}
+          <Link href={subsetIdLink(id)}>
+            <a>Go to {id}</a>
+          </Link>
+          </>
+        )}
         {" | "}
         <Link href={subsetPgxsegLink(id)}>
           <a>Download CNV Frequencies</a>
