@@ -2,14 +2,11 @@ import React, { useState } from "react"
 import cn from "classnames"
 import { FaBars, FaTimes } from "react-icons/fa"
 import { ErrorBoundary } from "react-error-boundary"
-import { MarkdownParser } from "../components/MarkdownParser"
 import Head from "next/head"
 import {ErrorFallback, MenuInternalLinkItem} from "../components/MenuHelpers"
-import Panel from "../components/Panel"
-import { THISYEAR } from "../hooks/api"
-import layoutConfig from "../site-specific/layout.yaml"
+import { SITE_DEFAULTS, THISYEAR } from "../hooks/api"
 
-export function Layout({ title, headline, leadPanelMarkdown, tailPanelMarkdown, children }) {
+export function Layout({ title, headline, children }) {
   const [sideOpen, setSideOpen] = useState(false)
   return (
     <div className="Layout__app">
@@ -48,26 +45,18 @@ export function Layout({ title, headline, leadPanelMarkdown, tailPanelMarkdown, 
                 // reset the state of your app so the error doesn't happen again
               }}
             >
-              {leadPanelMarkdown && (
-                <Panel heading="" className="content">
-                  {MarkdownParser(leadPanelMarkdown)}
-                </Panel>
-              )}
               {children}
-              {tailPanelMarkdown && (
-                <Panel heading="" className="content">
-                  {MarkdownParser(tailPanelMarkdown)}
-                </Panel>
-              )}
             </ErrorBoundary>
           </div>
         </div>
       </main>
       <footer className="footer">
         <div className="content container has-text-centered">
-          © {layoutConfig.sitePars.firstYear} - {THISYEAR} {layoutConfig.sitePars.longName} by
+          © 2000 - {THISYEAR} Progenetix Cancer Genomics Information Resource by
           the{" "}
-          <a href={layoutConfig.sitePars.orgSiteLink}>{layoutConfig.sitePars.orgSiteLabel}</a>{" "}
+          <a href={SITE_DEFAULTS.ORGSITELINK}>
+            Computational Oncogenomics Group
+          </a>{" "}
           at the{" "}
           <a href="https://www.mls.uzh.ch/en/research/baudis/">
             University of Zurich
@@ -92,25 +81,51 @@ export function Layout({ title, headline, leadPanelMarkdown, tailPanelMarkdown, 
 }
 
 function Side({ onClick }) {
-
   return (
     <div onClick={onClick}>
       <a href="/">
         <img
           className="Layout__side-logo"
-          src={layoutConfig.sitePars.siteLogo}
-          alt={layoutConfig.sitePars.siteLogoAlt}
+          src={SITE_DEFAULTS.SITE_LOGO}
+          alt="BeaconPlus"
         />
       </a>
       <ul className="Layout__side__items">
-        {layoutConfig.layoutSideItems.map((item, i) => (
-          <MenuInternalLinkItem
-            key={i}
-            href={item.href}
-            label={item.label}
-            isSub={item.isSub}
-          />
-        ))}
+        <MenuInternalLinkItem href="/search/" label="Search Samples" />
+        <MenuInternalLinkItem href="/subsetsSearch/" label="Compare CNV Profiles" />
+        <MenuInternalLinkItem
+          href="/subsets/NCIT-subsets"
+          label="CNV Profiles by Cancer Type"
+        />
+        <MenuInternalLinkItem
+          href="/subsets/NCIT-subsets"
+          label="NCIT Neoplasia Codes"
+          isSub="isSub"
+        />
+        <MenuInternalLinkItem
+          href="/subsets/icdom-subsets"
+          label="ICD-O Morphologies"
+          isSub="isSub"
+        />
+        <MenuInternalLinkItem
+          href="/subsets/icdot-subsets"
+          label="ICD-O Organ Sites"
+          isSub="isSub"
+        />
+        <MenuInternalLinkItem
+          href="/subsets/NCITclinical-subsets"
+          label="TNM & Grade"
+          isSub="isSub"
+        />
+        <MenuInternalLinkItem
+          href="/OpenAPI"
+          label="OpenAPI Paths and Examples"
+        />
+        <MenuInternalLinkItem href={SITE_DEFAULTS.PROJECTDOCLINK} label="Documentation" />
+        <MenuInternalLinkItem
+          href={SITE_DEFAULTS.ORGSITELINK}
+          label="Baudisgroup @ UZH"
+        />
       </ul>
     </div>
   )

@@ -1,3 +1,4 @@
+import { SITE_DEFAULTS } from "../../hooks/api"
 import { Layout } from "../../site-specific/Layout"
 import React, { useState } from "react"
 import { useDropzone } from "react-dropzone"
@@ -178,8 +179,8 @@ function Dropzone({ setResult }) {
 function Results({ results, onCancelClicked }) {
   const fileId = results.fileId
   // const visualizationLink = getVisualizationLink("", "", fileId, "", "")
-  const histoPlotLink = `/services/sampleplots/?datasetIds=upload&fileId=${fileId}`
-  const samplesPlotLink = `/services/sampleplots/?datasetIds=upload&plotType=samplesplot&fileId=${fileId}`
+  const histoPlotLink = `${SITE_DEFAULTS.API_PATH}services/sampleplots/?datasetIds=upload&fileId=${fileId}`
+  const samplesPlotLink = `${SITE_DEFAULTS.API_PATH}services/sampleplots/?datasetIds=upload&plotType=samplesplot&fileId=${fileId}`
 
   console.log("histoPlotLink...", histoPlotLink)
 

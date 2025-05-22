@@ -4,6 +4,7 @@ import {
   urlRetrieveIds
 } from "../hooks/api"
 import { InternalLink } from "../components/helpersShared/linkHelpers"
+
 import { Loader } from "../components/Loader"
 import { withUrlQuery } from "../hooks/url-query"
 import { Layout } from "../site-specific/Layout"
@@ -12,13 +13,13 @@ const itemColl = "analyses"
 // const exampleId = "pgxcs-kftvlijb"
 
 const AnalysisDetailsPage = withUrlQuery(({ urlQuery }) => {
-  var { id, datasetIds} = urlRetrieveIds(urlQuery)
+  const { id, datasetIds, hasAllParams } = urlRetrieveIds(urlQuery)
   return (
     <Layout title="Analysis Details" headline="Analysis Details">
-      {id && datasetIds ? (
-        <AnalysisLoader csId={id} datasetIds={datasetIds} />
-      ) : (
+      {!hasAllParams ? (
         NoResultsHelp(itemColl)
+      ) : (
+        <AnalysisLoader csId={id} datasetIds={datasetIds} />
       )}
     </Layout>
   )

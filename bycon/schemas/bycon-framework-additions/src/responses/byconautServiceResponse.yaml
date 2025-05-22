@@ -18,7 +18,7 @@ properties:
   response:
     type: object
     description: Response for queries that recovers any result.
-    $ref: ./byconServiceResults.yaml
+    $ref: ./byconautServiceResults.yaml
 required:
   - meta
   - responseSummary

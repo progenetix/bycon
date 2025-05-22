@@ -7,13 +7,13 @@ import { Layout } from "../site-specific/Layout"
 import { withUrlQuery } from "../hooks/url-query"
 
 const SubsetDetailsPage = withUrlQuery(({ urlQuery }) => {
-  var { id, datasetIds } = urlRetrieveIds(urlQuery)
+  const { id, datasetIds, hasAllParams } = urlRetrieveIds(urlQuery)
   return (
     <Layout title="Subset Details">
-      {id && datasetIds ? (
-        <SubsetLoader id={id} datasetIds={datasetIds} />
-      ) : (
+      {!hasAllParams ? (
         NoResultsHelp("subset details")
+      ) : (
+        <SubsetLoader id={id} datasetIds={datasetIds} />
       )}
     </Layout>
   )

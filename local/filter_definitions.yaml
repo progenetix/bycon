@@ -123,8 +123,8 @@ $defs:
     examples:
       - 'cbioportal:msk_impact_2017'
 
-  pgxcohort:
-    id: pgxcohort
+  pgxcohorts:
+    id: pgxcohorts
     type: custom
     name: "Progenetix cohorts"
     iri_prefix: https://progenetix.org/ids/
@@ -133,7 +133,7 @@ $defs:
     db_key: 'cohorts.id'
     scope: biosamples
     entity: biosample
-    pattern: '^pgx:cohort[\w\-]+?$'
+    pattern: '^pgx:cohort(-\w+)?'
     collationed: True
     examples:
       - 'pgx:cohort-arraymap'

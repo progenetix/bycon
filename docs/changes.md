@@ -6,20 +6,6 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
-### 2025-05-19: (v2.4.4)
-
-* extensive internal website code changes ("beaconplusWeb")
-    - addes a new `/subsetsSearch/` endpoint to allow for multi-selection of
-      subsets, e.g. to compare CNV histograms of different cancer types or from
-      different internal databases (canver cell lines vs. overall Progenetix collection etc.)
-    - added the multi-subset selection to the code trees (e.g. multi-checkmark
-      selection of subsets for comparative CNV profile display)
-    - some code re-organization to allow combination of project provided and
-      additional (`/src/site-specific/`) parameter selections and examples
-    - moved navifgation side column parameters and other website parameters
-      to `/src/site-specific/layout.yaml`
-* cohorts term fix
-
 ### 2025-05-15: (v2.4.3 "Bologna")
 
 * expanded `NCITsex` ontology to have hierarchical terms with the current NCIT

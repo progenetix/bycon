@@ -6,11 +6,8 @@ import {
 import React, { useMemo, useState } from "react" //useEffect, 
 import { useForm } from "react-hook-form"
 import PropTypes from "prop-types"
-import {MarkdownParser} from "../MarkdownParser"
 import { merge, transform } from "lodash"
 import SelectField from "../formShared/SelectField"
-import InputField from "../formShared/InputField"
-import {GeneSymbolSelector} from "../formShared/GeneSymbolSelector"
 import useDeepCompareEffect from "use-deep-compare-effect"
 import { withUrlQuery } from "../../hooks/url-query"
 import cn from "classnames"
@@ -25,7 +22,7 @@ export default SubsetsSearchForm
 SubsetsSearchForm.propTypes = {
   isQuerying: PropTypes.bool.isRequired,
   setSearchQuery: PropTypes.func.isRequired,
-  requestTypeExamples: PropTypes.object.isRequired,
+  // requestTypeExamples: PropTypes.object.isRequired,
   parametersConfig: PropTypes.object.isRequired
 }
 
@@ -41,13 +38,12 @@ function urlQueryToFormParam(urlQuery, key, parametersConfig) {
 function SubsetSearchForm({
     isQuerying,
     setSearchQuery,
-    requestTypeExamples,
+    // requestTypeExamples,
     parametersConfig,
-    urlQuery,
-    setUrlQuery
+    urlQuery
   }) {
 
-  const [example, setExample] = useState(null)
+  const [example] = useState(null)
   let parameters = useMemo(
     () =>
       makeParameters(parametersConfig, example),
@@ -148,17 +144,12 @@ function SubsetSearchForm({
     control
   }
 
-  // Note: Which of the fields is displayed is determined in 
-  // config/subsetsSearchParametersMods.
-
   return (
     <>
       <article className="message is-info">
         <div className="message-body">
-          <div className="content">{MarkdownParser(`On this page you can combine one or multiple disease or other
-      codes from one or more datasets, to display their CNV profiles (regional CNV frequencies).
-      These based on pre-computed CNV frequencies for the given code; for a combination of parameters
-      please go to the [Search Page](/search/).`)}</div>
+          <div className="content">{`On this page you can combine one or multiple disease or other
+      codes from one or more datasets, to display their CNV profiles (regional CNV frequencies).`}</div>
         </div>
       </article>
       <div>
@@ -171,45 +162,45 @@ function SubsetSearchForm({
           <SelectField
             {...parameters.datasetIds} {...selectProps}
           />               
-          <SelectField
-            className="column, py-0 mb-3"
-            {...parameters.referenceid}
-            {...selectProps}
-            isLoading={isRefSubsetsDataLoading}
-          />
+          <div className="columns my-0">
+            <SelectField
+              className="column, py-0 mb-3"
+              {...parameters.referenceid}
+              {...selectProps}
+              isLoading={isRefSubsetsDataLoading}
+            />
+{/*            <InputField
+              className={cn(
+                !parameters.cohorts.isHidden && "column",
+                "py-0 mb-3"
+              )}
+              {...fieldProps}
+              {...parameters.cohorts}
+            />
+*/}          
+          </div>
           <SelectField
             {...parameters.bioontology}
-            {...selectProps}
+              {...selectProps}
             isLoading={isBioSubsetsDataLoading}
           />
-          <SelectField
-            {...parameters.referenceid}
-            {...selectProps}
-            isLoading={isRefSubsetsDataLoading}
-          />
-          <SelectField
-            {...parameters.clinicalClasses}
-            {...selectProps}
-            isLoading={isClinicalDataLoading}
-          />
-          <SelectField
-            {...parameters.allTermsFilters}
-            {...selectProps}
-            isLoading={isAllSubsetsDataLoading}
-          />
-          <GeneSymbolSelector
-            {...selectProps}
-            name="plotGeneSymbols"
-            label="Gene Symbol(s) for Labeling"
-          />
-          <InputField
-            name="plotChros"
-            label="Chromosomes to Plot"
-            infoText="The chromosomes to be included in the plot, in the order they should appear. The values should just be the comma-separated chromosome numbers (e.g. '1,3,19,X' - unquoted, no spaces). The default is chr 1-22."
-            errors={errors}
-            register={register}
-          />
-          <div className="field mt-5">
+          <div className="columns my-0">
+            <SelectField
+              className="column py-0 mb-3"
+              {...parameters.clinicalClasses}
+              {...selectProps}
+              isLoading={isClinicalDataLoading}
+            />
+            <SelectField
+              className="column py-0 mb-3"
+              {...parameters.allTermsFilters}
+              {...selectProps}
+              isLoading={isAllSubsetsDataLoading}
+            />
+     
+          </div>
+          {/*<InputField {...parameters.accessid} {...fieldProps} />*/}
+         <div className="field mt-5">
             <div className="control">
               <button
                 type="submit"
@@ -217,13 +208,13 @@ function SubsetSearchForm({
                   "is-loading": isQuerying
                 })}
               >
-                Retrieve CNV Profiles
+                Query Database
               </button>
             </div>
           </div>
         </form>
       </div>
-      <div style={{ "padding-top": "20px" }}>
+{/*      <div style={{ "padding-top": "20px" }}>
         <div className="buttons">
           <ExamplesButtons
             onExampleClicked={handleExampleClicked(
@@ -235,7 +226,13 @@ function SubsetSearchForm({
           />
         </div>
         <ExampleDescription example={example} />   
-      </div>  
+      </div>
+      {example?.img && (
+          <div>
+            <img src={example.img}/>
+          </div>
+      )}
+*/}    
       </>
   )
 }
@@ -248,39 +245,39 @@ export function InfodotTab(short, full) {
   )
 }
 
-function ExamplesButtons({ requestTypeExamples, onExampleClicked }) {
-  return (
-    <div className="column is-full" style={{ padding: "0px" }}>
-      <div className="columns">
-        <div className="column is-one-fifth label">
-          Query Examples
-        </div>
-        <div className="column">
-          {Object.entries(requestTypeExamples || []).map(([id, value]) => (
-            <button
-              key={id}
-              className="button is-link is-outlined"
-              onClick={() => onExampleClicked(value)}
-            >
-              {value.label}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
+// function ExamplesButtons({ requestTypeExamples, onExampleClicked }) {
+//   return (
+//     <div className="column is-full" style={{ padding: "0px" }}>
+//       <div className="columns">
+//         <div className="column is-one-fifth label">
+//           Query Examples
+//         </div>
+//         <div className="column">
+//           {Object.entries(requestTypeExamples || []).map(([id, value]) => (
+//             <button
+//               key={id}
+//               className="button is-link is-outlined"
+//               onClick={() => onExampleClicked(value)}
+//             >
+//               {value.label}
+//             </button>
+//           ))}
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }
 
 
-function ExampleDescription({ example }) {
-  return example?.description ? (
-    <article className="message is-info">
-      <div className="message-body">
-        <div className="content">{MarkdownParser(example?.description)}</div>
-      </div>
-    </article>
-  ) : null
-}
+// function ExampleDescription({ example }) {
+//   return example?.description ? (
+//     <article className="message is-info">
+//       <div className="message-body">
+//         <div className="content">{MarkdownParser(example?.description)}</div>
+//       </div>
+//     </article>
+//   ) : null
+// }
 
 function makeParameters(
   parametersConfig,
@@ -359,13 +356,4 @@ function useFilteringTerms(watchForm, ct) {
     collationTypes: ct
   })
 }
-
-const handleExampleClicked = (reset, setExample, setUrlQuery) => (example) => {
-  setUrlQuery({}, { replace: true })
-  setExample(example)
-  console.log("Example clicked", example)
-
-}
-
-
 

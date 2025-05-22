@@ -1,6 +1,5 @@
 import React from "react"
 import { Layout } from "../../site-specific/Layout"
-import { DATASETDEFAULT } from "../../hooks/api"
 import SubsetsHierarchyLoader from  "../../components/SubsetsHierarchyLoader"
 
 export default function Page() {
@@ -20,7 +19,7 @@ export default function Page() {
           response.
         </p>
       </div>
-      <SubsetsHierarchyLoader collationTypes="NCIT" datasetIds={DATASETDEFAULT}/>
+      <SubsetsHierarchyLoader collationTypes="NCIT" />
     </Layout>
   )
 }

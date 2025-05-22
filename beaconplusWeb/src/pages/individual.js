@@ -14,14 +14,14 @@ const itemColl = "individuals"
 // const exampleId = "pgxind-kftx266l"
 
 const IndividualDetailsPage = withUrlQuery(({ urlQuery }) => {
-  var { id, datasetIds } = urlRetrieveIds(urlQuery)
+  const { id, datasetIds, hasAllParams } = urlRetrieveIds(urlQuery)
   return (
     <Layout title="Individual Details">
-    {id && datasetIds ? (
-      <IndividualLoader id={id} datasetIds={datasetIds} />
-    ) : (
-      NoResultsHelp(itemColl)
-    )}
+      {!hasAllParams ? (
+        NoResultsHelp(itemColl)
+      ) : (
+        <IndividualLoader id={id} datasetIds={datasetIds} />
+      )}
     </Layout>
   )
 })

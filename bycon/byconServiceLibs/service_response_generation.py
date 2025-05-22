@@ -19,7 +19,7 @@ class ByconServiceResponse:
         # TBD for authentication? 
         self.returned_granularity = BYC.get("returned_granularity", "record")
         self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
-        self.data_response = ByconSchemas(self.response_schema, "").get_schema_instance()
+        self.data_response = ByconSchemas(response_schema, "").get_schema_instance()
         self.error_response = ByconSchemas("beaconErrorResponse", "").get_schema_instance()
         self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta() })
         if not self.data_response.get("info"):

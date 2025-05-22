@@ -83,7 +83,6 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def recordsQuery(self):
-        prdbug(f'...recordsQuery: {self.queries}')
         return self.queries
 
 
@@ -781,7 +780,6 @@ class ByconQuery():
                     f_lists[f_entity][f_field].append({'$nin': [f_info["id"]]})
                 else:
                     f_lists[f_entity][f_field].append(f_info["id"])
-            prdbug(f'... f_neg: {f_neg} ==>> f_field: {f_lists[f_entity][f_field]}')
 
         # now processing the filter lists into the queries
 
@@ -810,7 +808,7 @@ class ByconQuery():
         if f_val not in self.collation_ids:
             return False
 
-        f_info = coll_coll.find_one({"id": f_val}, {"frequencymap": 0})
+        f_info = coll_coll.find_one({"id": f_val})
         f_ct = f_info.get("collation_type", "___none__")
         if not (f_d := f_d_s.get(f_ct)):
             return False
