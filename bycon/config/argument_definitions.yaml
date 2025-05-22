@@ -826,6 +826,7 @@ $defs:
 
   plot_pars:
     type: string
+    forceNoSplit: true
     cmdFlags:
       - --plotPars
     description: plot parameters in form `par=value` concatenated by `::`

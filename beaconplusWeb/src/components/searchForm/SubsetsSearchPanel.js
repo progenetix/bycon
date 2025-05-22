@@ -19,10 +19,7 @@ export default function SubsetsSearchPanel({
   requestTypeExamples,
   collapsed
 }) {
-
-  // console.log(parametersConfig)
-
-
+  
   const [query, setQuery] = useState(null) // actual valid query
   const [searchCollapsed, setSearchCollapsed] = useState(collapsed)
 

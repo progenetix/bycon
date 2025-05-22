@@ -19,7 +19,7 @@
         "response": {
             "type": "object",
             "description": "Response for queries that recovers any result.",
-            "$ref": "./byconautServiceResults.json"
+            "$ref": "./byconServiceResults.json"
         }
     },
     "required": [

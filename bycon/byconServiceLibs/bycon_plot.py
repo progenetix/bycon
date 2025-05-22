@@ -101,7 +101,9 @@ class ByconPlotPars:
     # -------------------------------------------------------------------------#
 
     def plotParameters(self, modded={}):
-        for m_k, m_v in modded.items():
+        for m_k in modded.keys():
+            if not (m_v := modded.get(m_k)):
+                continue
             self.plv.update({m_k: m_v})
         self.__process_plot_parameters()
         return self.plv
@@ -120,40 +122,47 @@ class ByconPlotPars:
             if len(pp_pv := ppv.split('=')) != 2:
                 continue
             pp, pv = pp_pv
+            prdbug(f'__process_plot_parameters {pp} => {pv}')
             if pv.lower() in ["null", "undefined", "none"]:
                 continue
             if len(pv) < 1:
                 continue
             pp = decamelize(pp)
+            if pp not in p_d_p:
+                continue
+            if pp in bps:
+                # this handles repeated parameter definitions in plotVars string
+                pv = ",".join(list(map(str, (bps.get(pp, ""), pv))))
             bps.update({pp: pv})
             prdbug(f'__process_plot_parameters {pp} => {pv}')
 
         for p_k, p_d in p_d_p.items():
-            if p_k in bps:
-                p_k_t = p_d_p[p_k].get("type", "string")
-                p_d = bps.get(p_k)
+            if not p_k in bps:
+                continue
+            p_k_t = p_d_p[p_k].get("type", "string")
+            p_d = bps.get(p_k)
 
-                if "array" in p_k_t:
-                    p_i_t = p_d_p[p_k].get("items", "string")
-                    if type(p_d) is not list:
-                        p_d = re.split(',', p_d)
-                    if "int" in p_i_t:
-                        p_d = list(map(int, p_d))
-                    elif "number" in p_i_t:
-                        p_d = list(map(float, p_d))
-                    else:
-                        p_d = list(map(str, p_d))
-                    if len(p_d) > 0:
-                        self.plv.update({p_k: p_d})
-
-                elif "int" in p_k_t:
-                    self.plv.update({p_k: int(p_d)})
-                elif "num" in p_k_t:
-                    self.plv.update({p_k: float(p_d)})
-                elif "bool" in p_k_t:
-                    self.plv.update({p_k: p_d})
+            if "array" in p_k_t:
+                p_i_t = p_d_p[p_k].get("items", "string")
+                if type(p_d) is not list:
+                    p_d = re.split(',', p_d)
+                if "int" in p_i_t:
+                    p_d = list(map(int, p_d))
+                elif "number" in p_i_t:
+                    p_d = list(map(float, p_d))
                 else:
-                    self.plv.update({p_k: str(p_d)})
+                    p_d = list(map(str, p_d))
+                if len(p_d) > 0:
+                    self.plv.update({p_k: p_d})
+
+            elif "int" in p_k_t:
+                self.plv.update({p_k: int(p_d)})
+            elif "num" in p_k_t:
+                self.plv.update({p_k: float(p_d)})
+            elif "bool" in p_k_t:
+                self.plv.update({p_k: p_d})
+            else:
+                self.plv.update({p_k: str(p_d)})
 
 
 ################################################################################
@@ -288,9 +297,9 @@ class ByconPlot:
             "dataset_ids": list(set([s.get("dataset_id", "NA") for s in self.plv["results"]]))
         })
         prdbug(f'... datasets: {self.plv["dataset_ids"]}')
+        prdbug(self.plot_type)
 
         self.__filter_empty_callsets_results()
-
 
         if self.plv["results_number"] < 2:
             self.plv.update({"plot_labelcol_width": 0})

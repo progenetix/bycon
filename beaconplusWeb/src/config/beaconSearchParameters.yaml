@@ -22,9 +22,11 @@ parameters:
       - GRCh38
   geneId:
     label: Gene Symbol
-    placeholder: MYCN
-    infoText: A gene symbol (HUGO), e.g. "TP53" or "CDKN2A".
+    placeholder: 
+      - MYCN
+    infoText: One or more gene symbols (HUGO), e.g. "TP53" or "CDKN2A,KRAS".
     isHidden: true
+    isMulti: true
   aminoacidChange:
     label: Aminoacid alteration
     placeholder: V600E

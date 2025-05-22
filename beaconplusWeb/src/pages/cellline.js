@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react"
 import {
-  SITE_DEFAULTS,
   basePath,
   useProgenetixApi,
   sampleSearchPageFiltersLink,
+  urlRetrieveIds,
   NoResultsHelp
 } from "../hooks/api"
 import { Loader } from "../components/Loader"
-import { Layout } from "./../site-specific/Layout"
+import { Layout } from "../site-specific/Layout"
 import Panel from "../components/Panel"
 import { AncestryData } from "../components/AncestryData"
 import { LiteratureSearch } from "../components/LiteratureSearch"
@@ -20,11 +20,8 @@ const exampleId = "cellosaurus:CVCL_0023"
 const searchPage = "filterSearch"
 
 const CellLineDetailsPage = withUrlQuery(({ urlQuery }) => {
-  var { id, datasetIds } = urlQuery
-  if (!datasetIds) {
-    datasetIds = SITE_DEFAULTS.DATASETID
-  }
-  const hasAllParams = id && datasetIds
+  var { id, datasetIds } = urlRetrieveIds(urlQuery)
+
   const [plotGeneSymbols, setGeneSymbols] = useState("");
   const [plotCytoregionLabels, setCytoregionSymbols] = useState("");
 
@@ -47,7 +44,7 @@ const CellLineDetailsPage = withUrlQuery(({ urlQuery }) => {
 
   return (
     <Layout title="Cell Line Details" headline="">
-      {!hasAllParams ? (
+      {!id || !datasetIds ? (
         NoResultsHelp(exampleId, "subsetdetails")
       ) : (
       <>

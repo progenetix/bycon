@@ -3,8 +3,7 @@ import { Infodot } from "../../components/Infodot"
 import { Layout } from "../../site-specific/Layout"
 import {
   ontologymapsBaseUrl,
-  ontologymapsPrefUrl,
-  SITE_DEFAULTS
+  ontologymapsPrefUrl
 } from "../../hooks/api"
 import CustomSelect from "../../components/Select"
 import { Loader } from "../../components/Loader"
@@ -50,7 +49,7 @@ export default function OntologymapsPage() {
         </p>
         <p>
           More documentation with focus on the API functionality can be found on
-          the <a href={SITE_DEFAULTS.MASTERDOCLINK}>documentation pages</a>.
+          the documentation pages.
         </p>
         <p>
           The data of all mappings can be retrieved trough this API call:{" "}

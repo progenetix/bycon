@@ -102,8 +102,8 @@ def main(no_sudo):
         system(c)
         print(f'==> {c}')
         print(f'... website files copied to `{w_r_d}`')
-        system(f'rm -rf out')
-        system(f'rm -rf .next')
+        system(f'rm -rf ./out')
+        system(f'rm -rf ./.next')
 
 
 ################################################################################

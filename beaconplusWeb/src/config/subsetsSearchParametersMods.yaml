@@ -1,10 +1,63 @@
 ---
+description: |
+  These settings are for the subsets selection form. Here we re-use the fields
+  from the `beaconSearchParameters` and then set everything but parameters suitable
+  for `collations...` endpoints to `isHidden: true` - basically everything
+  apart from `datasetIds` and the scoped `filters` parameters (e.g. `bioontology`,
+  `allTermsFilters`...).
 parameters:
   datasetIds:
     isHidden: false
     infoText: |
       Select one or more datasets to have their respective disease or other
-      grouping derived CNV profiles (histograms) displayed.`
+      grouping derived CNV profiles (histograms) displayed.
+  cohorts:
+    isHidden: true
+  analysisOperation:
+    isHidden: true
+  bioontology:
+    infoLink: "https://info.progenetix.org/doc/filters-documentation.html"
+    infoText: |
+      Select one or more datasets to have their respective disease derived CNV
+      profiles (histograms) displayed.
+    isHidden: false
+  referenceid:
+    isHidden: true
+  clinicalClasses:
+    isHidden: true
+  materialtype:
+    isHidden: true
+  sex:
+    isHidden: true
+  allTermsFilters:
+    label: Various Subsets
+    isHidden: false
+    infoText: |
+      General selection of all subsets (potentially) available for display.
+
+# <--------------------------- plot parameters ------------------------------> #
+
+  plotChros:
+    label: Chromosomes to Plot
+    isHidden: false
+    infoText: |-
+      The chromosomes to be included in the plot, in the order they should appear.
+      The values should just be the comma-separated chromosome numbers (e.g.
+      `1,3,19,X` - unquoted). The default uses chromosomes 1 - 22.
+  plotParsString:
+    name: plotParsString
+    label: Plot Parameters
+    isHidden: false
+    infoText: |-
+      Plot parameters in string format. The parameters are separated by **semicolons**,
+      and the key and value are separated by a colon.
+      Example:
+      ```
+      plot_axis_y_max:75;plot_area_color:#ccffdd
+      ```
+
+# <----------------- below do not apply to subsets in any case --------------> #
+
   assemblyId:
     isHidden: true
   geneId:
@@ -38,26 +91,6 @@ parameters:
   referenceBases:
     isHidden: true
   alternateBases:
-    isHidden: true
-  cohorts:
-    isHidden: true
-  analysisOperation:
-    isHidden: true
-  bioontology:
-    infoLink: "https://info.progenetix.org/doc/filters-documentation.html"
-    infoText: |
-      Select one or more datasets to have their respective disease or other
-      grouping derived CNV profiles (histograms) displayed.
-    isHidden: false
-  referenceid:
-    isHidden: true
-  clinicalClasses:
-    isHidden: true
-  materialtype:
-    isHidden: true
-  sex:
-    isHidden: true
-  allTermsFilters:
     isHidden: true
   accessid:
     isHidden: true

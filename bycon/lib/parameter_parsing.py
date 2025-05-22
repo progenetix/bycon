@@ -714,6 +714,10 @@ class RefactoredValues():
             self.v_list = v_l[0]
             return
 
+        if self.parameter_definition.get("forceNoSplit"):
+            self.v_list = ",".join(v_l)
+            return
+
         BYC["WARNINGS"].append(f"!!! Multiple values ({','.join(values)}) for {p_d_t} in request")
         return
 

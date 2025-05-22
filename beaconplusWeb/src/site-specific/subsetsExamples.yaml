@@ -1,0 +1,7 @@
+---
+description: |-
+  Please see `../config/subsetsExamples.yaml` for details.
+  Additionally this preference file has a `skipDefaults` option which can be set
+  to `true` to skip the default examples in `../config/subsetsExamples.yaml`.
+skipDefaults: false
+examples: []

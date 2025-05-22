@@ -1,0 +1,73 @@
+---
+description: |
+  Here one can override the default `isHidden` settings for search parameters
+  or add other values (see the main file in `config` for structure).
+parameters:
+  datasetIds:
+    isHidden: false
+  assemblyId:
+    isHidden: true
+  geneId:
+    isHidden: true
+  aminoacidChange:
+    isHidden: true
+  genomicAlleleShortForm:
+    isHidden: true
+  referenceName:
+    isHidden: false
+  mateName:
+    isHidden: true
+  variantType:
+    isHidden: false
+  start:
+    isHidden: false
+  end:
+    isHidden: false
+  mateStart:
+    isHidden: true
+  mateEnd:
+    isHidden: true
+  cytoBands:
+    isHidden: true
+  variantQueryDigests:
+    isHidden: true
+  variantMinLength:
+    isHidden: true
+  variantMaxLength:
+    isHidden: true
+  referenceBases:
+    isHidden: true
+  alternateBases:
+    isHidden: false
+  cohorts:
+    isHidden: true
+  analysisOperation:
+    isHidden: false
+  bioontology:
+    isHidden: false
+  referenceid:
+    isHidden: true
+  clinicalClasses:
+    isHidden: true
+  materialtype:
+    isHidden: true
+  sex:
+    isHidden: false
+  allTermsFilters:
+    isHidden: false
+  accessid:
+    isHidden: true
+  filterLogic:
+    isHidden: true
+  includeDescendantTerms:
+    isHidden: true
+  geoCity:
+    isHidden: true
+  geodistanceKm:
+    isHidden: true
+  skip:
+    isHidden: true
+  limit:
+    isHidden: false
+  includeResultsetResponses:
+    isHidden: true
