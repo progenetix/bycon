@@ -175,11 +175,11 @@ parameters:
     infoText: |
       The 1-based genomic position of the variant, or the start of a range query,
       specified through a single value.
-      However, in case of fuzzy requests for e.g. copy number variants, the start
+      However, in case of bracket requests for e.g. copy number variants, the start
       position will usually be provided as a range for the possible occurrence of
       the CNV start (e.g. "21500001-21975098").
   end:
-    label: End (Range or Structural Var.)
+    label: End
     placeholder: "21967753-24000000"
     infoText: |
       The 1-based genomic end position of a range query, specified through a

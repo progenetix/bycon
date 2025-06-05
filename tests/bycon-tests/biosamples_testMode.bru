@@ -1,0 +1,26 @@
+meta {
+  name: biosamples_testMode
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{BYCONHOST}}/beacon/biosamples/?testMode=true
+  body: none
+  auth: none
+}
+
+params:query {
+  testMode: true
+}
+
+assert {
+  res.body.responseSummary.exists: eq true
+}
+
+tests {
+  test("should get a 200 response code", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+}

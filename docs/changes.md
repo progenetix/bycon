@@ -6,6 +6,35 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+
+### 2025-06-05: (v2.4.7 "Thessaloniki")
+
+* added a global `NO_PARAM_VALUES` which is used to set matching parameters (e.g. "none", "null", "undefined") to empty strings during input processing (circumvents issues with empty parameters in web front-ends)
+* added clustering, tree generation and labels to the `histocircleplot` plot option
+* started to move request tests to [Bruno](https://docs.usebruno.com/) (in `tests/bycon-tests`)
+
+### 2025-05-26: (v2.4.6)
+
+* filter definitions in `filter_definitions.yaml` have now optional lists of
+  filters to be in- or excluded when generating CNV frequency maps
+    - this is helpful in cases like TCGA cohorts which include cancer and reference samples and e.g. one might want the cancer samples only
+    - this works _only_ at the level of frequency map generation right now; for normal sample retrieval one just adds the parameterdirectly to the query
+    - example:
+```
+    cnv_required_filters:
+      - EFO:0009656
+```
+
+### 2025-05-19: (v2.4.5)
+
+* more additions to the `beaconplusWeb` front end
+    - plot parameters for the `/subsetsSearch/` endpoint
+* plot parameter adjustments
+    - change of the custom, concatenated `plotPars` format to support parameter
+      concatenation by semicolon `;` (from `::`) and assignment to `:` (from `=`); e.g. `plotPars=plot_axis_y_max:75;plot_area_color=%23ccffdd;plot_gene_symbols:ESR1;plot_gene_symbols:MYC;plot_gene_symbols:TP53`
+    - now support of multiple assignments - see `plot_gene_symbols` above
+ 
+
 ### 2025-05-19: (v2.4.4)
 
 * extensive internal website code changes ("beaconplusWeb")
@@ -1087,7 +1116,7 @@ definitions and "local" ones. Partcullarly:
 * fix `.pgxseg` file loader bug (thanks Huan Zhang!)
 * starting `variant_mapping.py` for a consolidated `ByconVariant` class
 
-#### 2023-07-13 (v1.0.66) 
+#### 2023-07-13 (v1.0.66)
 
 * modified `return_filtering_terms_response` to parse over the collations from
   different datasets

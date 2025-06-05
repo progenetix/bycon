@@ -92,7 +92,7 @@ properties:
     $ref: '#/$defs/Contact/properties'
 
   geoLocation:
-    $ref: 'GeoLocation.yaml#/properties'
+    $ref: '../bycon-model/common/GeoLocation.yaml#/properties'
 
   info:
     type: object

@@ -5,6 +5,7 @@ import {makeFilters, makePlotGeneSymbols} from "../../hooks/api"
 export function SubsetsResults({query}) {
   const datasetIds = query.datasetIds.join(",")
   const filters = makeFilters(query).join(",")
+  const plotType = query.plotType ? query.plotType : "histoplot"
   const plotGeneSymbols = makePlotGeneSymbols(query)
   const plotChros = query.plotChros ? query.plotChros.trim().split(",") : null
   const plotParsString = query.plotParsString ? query.plotParsString.trim().replace(/:/g, "=").split(";").join("::") : null
@@ -22,6 +23,7 @@ export function SubsetsResults({query}) {
         plotGeneSymbols={plotGeneSymbols}
         plotChros={plotChros}
         plotParsString={plotParsString}
+        plotType={plotType}
       />
     </>
   )

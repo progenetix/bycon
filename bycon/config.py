@@ -19,6 +19,8 @@ PKG_PATH = pkg_path
 CONF_PATH = path.join( pkg_path, "config")
 LIB_PATH = path.join( pkg_path, "lib")
 
+NO_PARAM_VALUES = ["none", "null", "undefined"]
+
 # path of the calling script is used to point to a local config directory
 CALLER_PATH = path.dirname( path.abspath(sys.argv[0]))
 LOC_PATH = path.join(CALLER_PATH, pardir, "local")

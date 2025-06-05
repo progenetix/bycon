@@ -202,6 +202,10 @@ function SubsetSearchForm({
             {...selectProps}
           />
 */}       
+          <SelectField
+            {...parameters.plotType}
+            {...selectProps}
+          />
           <GeneSymbolSelector
             {...selectProps}
             name="plotGeneSymbols"

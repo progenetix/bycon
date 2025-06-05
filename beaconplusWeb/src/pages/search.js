@@ -1,5 +1,6 @@
 import React from "react"
-import { concat, merge } from "lodash"
+// import { concat, merge } from "lodash"
+import { merge } from "lodash"
 import BiosamplesSearchPanel from "../components/searchForm/BiosamplesSearchPanel"
 import parConfig from "../config/beaconSearchParameters.yaml"
 import searchParLoc from "../site-specific/beaconSearchParameters.yaml"
@@ -14,7 +15,7 @@ const parametersConfig = merge(
   searchParLoc
 )
 
-const searchExamples = concat(
+const searchExamples = merge(
   baseSearchExamples,
   locSearchExamples
 )

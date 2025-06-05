@@ -27,6 +27,7 @@ The script will add `frequencymap` object to each of the collations.
 
 * `./collationsFrequencymapsCreator.py -d examplez`
 * `./collationsFrequencymapsCreator.py -d examplez --mode "skip existing"`
+* `./collationsFrequencymapsCreator.py -d examplez --collationTypes "pubmed,icdom,icdot"`
 
 """
 
@@ -91,7 +92,13 @@ for c_id in coll_ids:
             continue
 
     start_time = time.time()
-    BYC_PARS.update({"filters":[{"id":c_id}, {"id": "EDAM:operation_3961"}]})
+    BYC_PARS.update({"filters":[{"id": c_id}]})
+    for exc_f in coll.get("cnv_excluded_filters", []):
+        BYC_PARS["filters"].append({"id": exc_f, "excluded": True})
+        prdbug(f'... {c_id} excluding {exc_f}')
+    for inc_f in coll.get("cnv_required_filters", []):
+        prdbug(f'... {c_id} requiring {inc_f}')
+        BYC_PARS["filters"].append({"id": inc_f})
 
     record_queries = ByconQuery().recordsQuery()
     DR = ByconDatasetResults(ds_id, record_queries)

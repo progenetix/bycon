@@ -370,6 +370,7 @@ export function useSubsethistogram({
   datasetIds,
   id,
   fileId,
+  plotType,
   plotRegionLabels,
   plotGeneSymbols,
   plotCytoregionLabels,
@@ -381,6 +382,7 @@ export function useSubsethistogram({
   const params = []
   const plotParsVals = []
   fileId && params.push(["fileId", fileId])
+  plotType && params.push(["plotType", plotType])
   size && plotParsVals.push("plot_width="+size)
   plotRegionLabels && plotParsVals.push("plot_region_labels="+plotRegionLabels.join(","))
   plotGeneSymbols && plotParsVals.push("plot_gene_symbols="+plotGeneSymbols.join(","))

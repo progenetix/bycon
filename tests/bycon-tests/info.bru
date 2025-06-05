@@ -1,0 +1,19 @@
+meta {
+  name: info
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{BYCONHOST}}/beacon/info
+  body: none
+  auth: none
+}
+
+
+tests {
+  test("should get a 200 response code", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+}

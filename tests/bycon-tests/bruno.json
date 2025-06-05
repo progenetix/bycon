@@ -1,0 +1,12 @@
+{
+  "version": "2025-05-28",
+  "name": "bycon.test",
+  "type": "collection",
+  "filesystemAccess": {
+    "allow": true
+  },
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

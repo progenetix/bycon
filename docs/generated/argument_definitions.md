@@ -5,6 +5,7 @@ TODO: Temporary(?) for authentication testing.
 **type:** string    
 **pattern:** `^\w+$`    
 **cmdFlags:** `--userName`    
+**in:** query    
 
 #### `test_mode` 
 **description:**
@@ -12,6 +13,8 @@ Activates the Beacon test setting, i.e. returning some random documents
 **type:** boolean    
 **cmdFlags:** `-t,--testMode`    
 **default:** `False`    
+**in:** query    
+**beacon_query:** True    
 
 #### `skip` 
 **description:**
@@ -19,6 +22,7 @@ Number of pages to be skipped.
 **type:** integer    
 **cmdFlags:** `--skip`    
 **default:** `0`    
+**in:** query    
 
 #### `limit` 
 **type:** integer    
@@ -27,6 +31,7 @@ Number of pages to be skipped.
 limit number of documents; a value of 0 sets to unlimited    
 **default:** `200`    
 **local:** 0    
+**in:** query    
 
 #### `paginate_results` 
 **description:**
@@ -39,9 +44,12 @@ Custom bycon parameter used for paginating results in some bycon services.
 **description:**
 The requested granularity of the beacon    
 **type:** string    
+**enum:** `record,count,boolean`    
 **pattern:** `^\w+$`    
 **cmdFlags:** `--requestedGranularity`    
 **default:** `record`    
+**in:** query    
+**examples:** `{'emptyValue': {'value': '', 'summary': 'Granularity of the response'}},{'record': {'value': 'record', 'summary': 'Data record'}},{'count': {'value': 'count', 'summary': 'Count of the matched records'}},{'boolean': {'value': 'boolean', 'summary': 'Boolean for match / no match'}}`    
 
 #### `request_entity_path_id` 
 **description:**
@@ -50,7 +58,7 @@ The requested granularity of the beacon
 * this only is used for command-line tests instead of the REST path
   value seen by the stack in web server mode    
 **type:** string    
-**cmdFlags:** `--requestEntityPathId`    
+**cmdFlags:** `-p,--requestEntityPathId`    
 **default:** `info`    
 
 #### `response_entity_path_id` 
@@ -61,7 +69,7 @@ The requested granularity of the beacon
   a special response entity in byconaut services (e.g. `indviduals`
   in `/sampletable/`)    
 **type:** string    
-**cmdFlags:** `-e,--responseEntityPathId`    
+**cmdFlags:** `-r,--responseEntityPathId`    
 
 #### `include_resultset_responses` 
 **type:** string    
@@ -72,6 +80,7 @@ The requested granularity of the beacon
 * kind of a holdover from Beacon pre-v1 but HIT & ALL might have
   some use in networks    
 **default:** `HIT`    
+**in:** query    
 
 #### `dataset_ids` 
 **type:** array    
@@ -96,6 +105,10 @@ cohort ids
 **cmdFlags:** `--filters`    
 **description:**
 prefixed filter values, comma concatenated; or objects in POST    
+**in:** query    
+**beacon_query:** True    
+**vqs_query:** True    
+**examples:** `{'emptyValue': {'value': '', 'summary': 'A Beacon filter value, e.g. a CURIE for a disease code'}},{'NCIT': {'value': ['NCIT:C9335'], 'summary': 'A neoplasia disease code (CURIE format)'}},{'pubmed': {'value': ['pubmed:28966033'], 'summary': 'A publiction identifier (CURIE format)'}}`    
 
 #### `filter_precision` 
 **type:** string    
@@ -118,13 +131,95 @@ Global for either OR or AND (translated to the MongoDB $and etc.). The Beacon pr
 global treatment of descendant terms    
 **default:** `True`    
 
-#### `vrsType` 
+#### `vrs_type` 
 **type:** string    
 **pattern:** `^\w+$`    
 **db_key:** type    
 **cmdFlags:** `--vrsType`    
 **description:**
 VRS variant schema type, e.g. `Allele` or `CopyNumberChange`    
+**beacon_query:** False    
+**vqs_query:** True    
+**in:** query    
+
+#### `reference_accession` 
+**type:** string    
+**db_key:** location.sequence_id    
+**pattern:** `^\w+.*?\w?$`    
+**cmdFlags:** `--referenceAccession`    
+**description:**
+reference accession, i.e. a versioned sequence reference ID    
+**beacon_query:** False    
+**vqs_query:** True    
+**in:** query    
+
+#### `copy_change` 
+**type:** string    
+**db_key:** variant_state.id    
+**pattern:** `^\w+[\w \-\:]\w+?$`    
+**cmdFlags:** `--copyChange`    
+**description:**
+variant type, e.g. EFO:0030067 or DUP    
+**beacon_query:** False    
+**vqs_query:** True    
+**in:** query    
+
+#### `sequence_length` 
+**type:** array    
+**db_key:** info.var_length    
+**items:**  
+    - `type`: `integer`      
+    - `pattern`: `^\d+?$`    
+**cmdFlags:** `--sequenceLength`    
+**description:**
+    
+* length (range) of variant sequence
+    
+* should replace variant_min_length and variant_max_length    
+**beacon_query:** False    
+**vqs_query:** True    
+**in:** query    
+
+#### `breakpoint_range` 
+**type:** array    
+**db_key:** adjoined_sequences.start    
+**items:**  
+    - `type`: `integer`      
+    - `pattern`: `^\d+?$`    
+**minItems:** 2    
+**maxItems:** 2    
+**cmdFlags:** `--breakpointRange`    
+**description:**
+range for breakpoint or lower chromosome position in adjacency    
+**beacon_query:** False    
+**vqs_query:** True    
+**in:** query    
+
+#### `adjacency_accession` 
+**type:** string    
+**db_key:** adjoined_sequences.sequence_id    
+**pattern:** `^\w+.*?\w?$`    
+**cmdFlags:** `--adjacencyAccession`    
+**description:**
+adjacency accession, i.e. a versioned sequence reference ID    
+**beacon_query:** False    
+**vqs_query:** True    
+**in:** query    
+
+#### `adjacency_range` 
+**type:** array    
+**db_key:** adjoined_sequences.start    
+**items:**  
+    - `type`: `integer`      
+    - `pattern`: `^\d+?$`    
+**minItems:** 2    
+**maxItems:** 2    
+**cmdFlags:** `--adjacencyRange`    
+**description:**
+range for higher chromosome position in adjacency    
+**beacon_query:** False    
+**vqs_query:** True    
+**in:** query    
 
 #### `assembly_id` 
 **type:** string    
@@ -141,6 +236,9 @@ assembly id; currently not used in bycon's version
 **cmdFlags:** `--referenceName`    
 **description:**
 chromosome    
+**beacon_query:** True    
+**in:** query    
+**examples:** `{'emptyValue': {'value': '', 'summary': 'A versioned reference ID or a chromsome name / number'}},{'chromosome': {'value': '9', 'summary': 'chromsome 9'}}`    
 
 #### `mate_name` 
 **type:** string    
@@ -149,6 +247,9 @@ chromosome
 **cmdFlags:** `--mateName`    
 **description:**
 chromosome    
+**beacon_query:** True    
+**in:** query    
+**examples:** `{'emptyValue': {'value': '', 'summary': 'A versioned reference ID or a chromsome name / number'}}`    
 
 #### `reference_bases` 
 **type:** string    
@@ -157,6 +258,8 @@ chromosome
 **cmdFlags:** `--referenceBases`    
 **description:**
 reference bases    
+**beacon_query:** True    
+**in:** query    
 
 #### `alternate_bases` 
 **type:** string    
@@ -165,6 +268,8 @@ reference bases
 **cmdFlags:** `--alternateBases`    
 **description:**
 alternate bases    
+**beacon_query:** True    
+**in:** query    
 
 #### `variant_type` 
 **type:** string    
@@ -172,7 +277,10 @@ alternate bases
 **pattern:** `^\w+[\w \-\:]\w+?$`    
 **cmdFlags:** `--variantType`    
 **description:**
-variant type, e.g. DUP    
+variant type, e.g. EFO:0030067 or DUP    
+**beacon_query:** True    
+**in:** query    
+**examples:** `{'emptyValue': {'value': '', 'summary': 'An EFO or SO code in CURIE format, or a VCF-style label'}},{'EFOhllossCNV': {'value': 'EFO:0030067', 'summary': 'high-level copy number loss'}},{'VCFdup': {'value': 'DUP', 'summary': 'copy number duplication'}}`    
 
 #### `start` 
 **type:** array    
@@ -180,9 +288,14 @@ variant type, e.g. DUP
 **items:**  
     - `type`: `integer`      
     - `pattern`: `^\d+?$`    
+**minItems:** 1    
+**maxItems:** 2    
 **cmdFlags:** `--start`    
 **description:**
 genomic start position    
+**beacon_query:** True    
+**vqs_query:** True    
+**in:** query    
 
 #### `end` 
 **type:** array    
@@ -190,9 +303,14 @@ genomic start position
 **items:**  
     - `type`: `integer`      
     - `pattern`: `^\d+?$`    
+**minItems:** 1    
+**maxItems:** 2    
 **cmdFlags:** `--end`    
 **description:**
 genomic end position    
+**beacon_query:** True    
+**vqs_query:** True    
+**in:** query    
 
 #### `mate_start` 
 **type:** integer    
@@ -217,6 +335,8 @@ genomic end position of fusion partner breakpoint region
 **cmdFlags:** `--variantMinLength`    
 **description:**
 The minimal variant length in bases e.g. for CNV queries.    
+**beacon_query:** True    
+**in:** query    
 
 #### `variant_max_length` 
 **type:** integer    
@@ -225,6 +345,8 @@ The minimal variant length in bases e.g. for CNV queries.
 **cmdFlags:** `--variantMaxLength`    
 **description:**
 The maximum variant length in bases e.g. for CNV queries.    
+**beacon_query:** True    
+**in:** query    
 
 #### `gene_id` 
 **type:** array    
@@ -235,24 +357,30 @@ The maximum variant length in bases e.g. for CNV queries.
 **cmdFlags:** `--geneId`    
 **description:**
 one or more (comma concatenated) gene ids    
+**beacon_query:** True    
+**vqs_query:** True    
+**in:** query    
+**examples:** `{'emptyValue': {'value': [''], 'summary': 'A HUGO gene symbol'}},{'TP53': {'value': ['TP53'], 'summary': 'TP53 gene identifier'}},{'CDKN2A': {'value': ['CDKN2A'], 'summary': 'CDKN2A gene identifier'}}`    
 
 #### `aminoacid_change` 
 **type:** string    
 **db_key:** molecular_attributes.aminoacid_changes    
 **pattern:** `^\w+?$`    
-**examples:** `V600E,M734V,G244A`    
 **cmdFlags:** `--aminoacidChange`    
 **description:**
 Aminoacid alteration in 1 letter format    
+**in:** query    
+**examples:** `{'emptyValue': {'value': '', 'summary': 'Aminoacid alteration in 1 letter format'}},{'V600E': {'value': 'V600E'}},{'M734V': {'value': 'M734V'}},{'G244A': {'value': 'G244A'}}`    
 
 #### `genomic_allele_short_form` 
 **type:** string    
 **db_key:** identifiers.genomicHGVS_id    
 **pattern:** `^\w+.*\w$`    
-**examples:** `NC_000017.11:g.7674232C>G`    
 **cmdFlags:** `--genomicAlleleShortForm`    
 **description:**
 Genomic HGVSId descriptor    
+**in:** query    
+**examples:** `{'gHGVS': {'value': 'NC_000017.11:g.7674232C>G'}}`    
 
 #### `variant_query_digests` 
 **type:** array    
@@ -261,9 +389,9 @@ Genomic HGVSId descriptor
     - `type`: `string`      
     - `pattern`: `^(?:chro?)?([12]?[\dXY]):(\d+?(?:-\d+?)?)(?:--(\d+?(?:-\d+?)?))?(?::([\w\:\>]+?))?$`    
 **cmdFlags:** `--variantQueryDigests`    
-**examples:** `9:9000001-21975098--21967753-24000000:DEL`    
 **description:**
 EXPERIMENTAL Variant query digest-style short form    
+**examples:** `{'DELdigest': {'value': '9:9000001-21975098--21967753-24000000:DEL'}}`    
 
 #### `variant_multi_pars` 
 **type:** array    
@@ -278,36 +406,37 @@ EXPERIMENTAL List of multiple variant queries, for POST
 **type:** string    
 **db_key:** variant_internal_id    
 **pattern:** `^\w[\w\:\-\,]+?\w$`    
-**examples:** `11:52900000-134452384:EFO_0030067`    
 **cmdFlags:** `--variantInternalId`    
 **description:**
 An id value used for all variant instances of the same composition; a kind of `digest`    
+**examples:** `{'EFO_0030067': {'value': '11:52900000-134452384:EFO_0030067'}}`    
 
 #### `accessid` 
 **type:** string    
 **db_key:** id    
 **pattern:** `^\w[\w\-]+?\w$`    
-**examples:** `b59857bc-0c4a-4ac8-804b-6596c6566494`    
 **cmdFlags:** `--accessid`    
 **description:**
 An accessid for retrieving handovers etc.    
+**examples:** `{'accessid': {'value': 'b59857bc-0c4a-4ac8-804b-6596c6566494'}}`    
 
 #### `file_id` 
 **type:** string    
 **pattern:** `^\w[\w\-]+?\w$`    
-**examples:** `90e19951-1443-4fa8-8e0b-6b5d8c5e45cc`    
 **cmdFlags:** `--fileId`    
 **description:**
 A file id e.g. as generated by the uploader service    
+**examples:** `{'FileID': {'value': '90e19951-1443-4fa8-8e0b-6b5d8c5e45cc'}}`    
 
 #### `id` 
 **type:** string    
 **db_key:** id    
 **pattern:** `^\w[\w\:\-\,]+?\w$`    
-**examples:** `pgxvar-5bab576a727983b2e00b8d32,pgxind-kftx25eh`    
 **cmdFlags:** `--id`    
 **description:**
 An id; this parameter only makes sense for specific REST entry types    
+**in:** path    
+**examples:** `{'variant_id': {'value': 'pgxvar-5bab576a727983b2e00b8d32', 'summary': 'An internal variant ID', 'in_paths': ['g_variants']}},{'individual_id': {'value': 'pgxind-kftx25eh', 'summary': 'An internal ID for an individual / subject', 'in_paths': ['individuals']}},{'biosample_id': {'value': 'pgxbs-kftviphc', 'summary': 'An internal biosample ID', 'in_paths': ['biosamples']}},{'analysis_id': {'value': 'pgxcs-kftwaay4', 'summary': 'An internal analysis ID', 'in_paths': ['analyses']}}`    
 
 #### `path_ids` 
 **type:** array    
@@ -316,7 +445,7 @@ An id; this parameter only makes sense for specific REST entry types
     - `pattern`: `^\w[\w,:-]+\w$`    
 **cmdFlags:** `--pathIds`    
 **description:**
-One or more ids; this parameter only makes sense for specific REST entry types    
+One or more ids provided in the path for specific REST entry types    
 
 #### `biosample_ids` 
 **type:** array    
@@ -388,7 +517,7 @@ For defining a special output format, mostly for `byconaut` services use. Exampl
 * `cnvstats`, for `analyses`, to present some CNV statistics     
 * `pgxseg`, using the `.pgxseg` variant file format     
 * `text`, for some services to deliver a text table instead of JSON     
-* in byconaut for the target database when copying...    
+* for the target database when copying...    
 
 #### `include_handovers` 
 **type:** boolean    
@@ -521,6 +650,7 @@ only for the geolocations...
 
 #### `plot_pars` 
 **type:** string    
+**forceNoSplit:** True    
 **cmdFlags:** `--plotPars`    
 **description:**
 plot parameters in form `par=value` concatenated by `::`    
@@ -530,4 +660,4 @@ plot parameters in form `par=value` concatenated by `::`
 **cmdFlags:** `--plotType`    
 **description:**
 plot type (histoplot, samplesplot, arrayplot - more?)    
-**default:** `None`    
+**default:** `histoplot`    

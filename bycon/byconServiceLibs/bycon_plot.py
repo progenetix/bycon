@@ -18,7 +18,7 @@ services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 sys.path.append( services_lib_path )
 from bycon_cluster import ByconCluster
 
-# http://progenetix.org/services/sampleplots?&filters=pgx:icdom-85003&plotType=histoplot&skip=0&limit=100&plotPars=plot_chros=8,9,17::labels=8:120000000-123000000:Some+Interesting+Region::plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1::plot_width=800&filters=pgx:icdom-85003&plotType=histoplot
+# http://progenetix.org/services/sampleplots?&filters=pgx:icdom-85003&plotType=histoplot&skip=0&limit=100&plotPars=plot_chros=8,9,17;labels=8:120000000-123000000:Some+Interesting+Region;plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1;plot_width=800&filters=pgx:icdom-85003&plotType=histoplot
 # http://progenetix.org/services/samplesplot?datasetIds=progenetix&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&plotType=histoplot&plotPars=plot_gene_symbols=CDKN2A,MTAP,EGFR,BCL6
 # http://progenetix.org/services/samplesplot?datasetIds=progenetix&referenceName=9&variantType=DEL&start=21500000&start=21975098&end=21967753&end=22500000&filters=NCIT:C3058&plotType=samplesplot&plotPars=plot_gene_symbols=CDKN2A,MTAP,EGFR,BCL6
 
@@ -31,7 +31,7 @@ class ByconPlotPars:
         self.plot_type = BYC_PARS.get("plot_type", "histoplot")
         self.plot_defaults = BYC.get("plot_defaults", {"parameters": {}})
         self.plot_variant_types = self.plot_defaults.get("plot_variant_types", {})
-        self.plot_pars = re.split(r'::|&', BYC_PARS.get("plot_pars", ""))
+        self.plot_pars = re.split(r'::|;', BYC_PARS.get("plot_pars", ""))
 
         p_t_s = self.plot_defaults.get("plot_type_defs", {})
         p_d_p = self.plot_defaults.get("plot_parameters", {})
@@ -119,7 +119,7 @@ class ByconPlotPars:
         bps = {}
 
         for ppv in self.plot_pars:
-            if len(pp_pv := ppv.split('=')) != 2:
+            if len(pp_pv := re.split(r':|=', ppv)) != 2:
                 continue
             pp, pv = pp_pv
             prdbug(f'__process_plot_parameters {pp} => {pv}')
@@ -252,9 +252,21 @@ class ByconPlot:
     def __try_plot_circular(self):
         if not "circ" in self.plot_type:
             return
-        self.__plot_add_circle_settings()
-        self.__plot_add_cytobands_circle()
-        self.__plot_add_histogram_circle()
+        self.__plot_order_histograms()
+        self.plv.update({"plot_first_area_y0": self.plv["Y"]})
+        for f_set in self.plv["results"]:
+            self.__plot_add_circle_settings()
+            self.__plot_add_cytobands_circle()
+            self.__plot_add_histogram_circle(f_set)
+            self.plv["Y"] += self.plv["circ_radius_outer"]
+            # the half plot_area_height is subtracted since the label function
+            # adds the same amount for Y-centering linear histogram labels
+            # TODO: should be unified
+            self.plv["Y"] -= self.plv["plot_area_height"] * 0.5
+            self.__histoplot_add_left_label(f_set)
+            self.plv["Y"] += self.plv["circ_radius_outer"]
+            self.plv["Y"] += self.plv["plot_area_height"] * 0.5
+        self.__plot_add_cluster_tree()
 
 
     # -------------------------------------------------------------------------#
@@ -447,14 +459,12 @@ class ByconPlot:
         self.plv["Y"] += self.plv["plot_title_font_size"]
 
 
-
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
 
     def __plot_add_circle_settings(self):
         # this makes it somehow related to chromosome size
         # TODO: make it a proper plotPars parameter
-
         startgap_f = self.plv.get("circ_start_gap", 20) / 360
         startangle_f = self.plv.get("circ_start_angle", 0) / 360
 
@@ -486,7 +496,8 @@ class ByconPlot:
             "circ_radius_chro_i": r_chr_i,
             "circ_radius_hist_o": r_h_o,
             "circ_radius_hist_zero": r_h_zero,
-            "circ_radius_hist_i": r_h_i
+            "circ_radius_hist_i": r_h_i,
+            "plot_clusteritem_height": r_o * 2
         })
 
         self.BCT = ByconCircleTools(self.plv["circ_center_x"], self.plv["circ_center_y"])
@@ -538,14 +549,11 @@ class ByconPlot:
 
             area_f_0 += self.plv["circ_gap_fraction"]
 
-        self.plv["Y"] += self.plv["plot_area_width"]
-
 
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def __plot_add_histogram_circle(self):
-        f_set = self.plv["results"][0]
+    def __plot_add_histogram_circle(self, f_set):
         i_f = f_set.get("interval_frequencies", [])
         cnv_c = self.plv.get("histoval_colorkeys", {})
         cnv_f = self.plv.get("histoval_directions", {})
@@ -1274,11 +1282,18 @@ class ByconPlot:
             if y_m >= self.plv["plot_axis_y_max"]:
                 continue
 
+            u = self.plv["plot_label_y_unit"]
+            skip = False
+
             for f in [1, -1]:
                 if u == "" and f == 1:
                     neg = "-"
                 else:
                     neg = ""
+                if skip is True:
+                    continue
+                if y_m == 0:
+                    u = ""
 
                 y_v = h_y_0 + f * y_m * self.plv["plot_y2pf"]
                 y_l_y = y_v + self.plv["plot_label_y_font_size"] / 2
@@ -1290,6 +1305,8 @@ class ByconPlot:
 
                 self.plv["pls"].append(f'<text x="{x_y_l}" y="{y_l_y}" class="label-y">{neg}{y_m}{u}</text>')
 
+                if y_m == 0:
+                    skip = True
 
     # -------------------------------------------------------------------------#
     # --------------------------- probesplot ----------------------------------#

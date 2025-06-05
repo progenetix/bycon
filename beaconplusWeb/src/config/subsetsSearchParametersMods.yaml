@@ -37,6 +37,19 @@ parameters:
 
 # <--------------------------- plot parameters ------------------------------> #
 
+  plotType:
+    label: Plot Type
+    options:
+      - value: histoplot
+        label: CNV Frequency Histogram
+      - value: histoheatplot
+        label: Heatplot-like Frequency Plot
+      - value: histosparkplot
+        label: Sparkline Frequency Plot
+      - value: histocircleplot
+        label: Circular Frequency Histograms
+    isHidden: false
+    isMulti: false
   plotChros:
     label: Chromosomes to Plot
     isHidden: false

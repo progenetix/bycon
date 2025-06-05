@@ -1,0 +1,52 @@
+meta {
+  name: biosamples_POST-CDKN2A-gliomas
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{BYCONHOST}}/beacon/biosamples
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "$schema":"beaconRequestBody.json",
+      "meta": {
+          "apiVersion": "2.1",
+          "requestedSchemas": [
+              {
+                  "entityType": "genomicVariation",
+                  "schema:": "https://progenetix.org/services/schemas/genomicVariant/"
+              }
+          ]
+      },
+      "query": {
+          "requestParameters": {
+              "datasets": {"datasetIds": ["progenetix"]},
+              "g_variant": {
+                  "assemblyId": "GRCh38",
+                  "referenceName": "9",
+                  "start": [21500001, 21975098],
+                  "end": [21967753, 22500000], 
+                  "variantType": "EFO:0030067"
+              }
+          },
+          "filters": [{"id": "NCIT:C3058"}],
+          "pagination": {"skip": 0, "limit": 10},   
+          "debugMode": 0
+      }
+  }
+}
+
+assert {
+  res.body.responseSummary.exists: eq true
+}
+
+tests {
+  test("should get a 200 response code", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+}

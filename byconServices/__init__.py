@@ -23,7 +23,7 @@ from samplemap import samplemap
 from samplematrix import samplematrix
 from sampleplots import sampleplots
 from sampletable import sampletable
-from services import services
+# from services import services
 from uploader import uploader
 from variantsbedfile import variantsbedfile
 from vcfvariants import vcfvariants

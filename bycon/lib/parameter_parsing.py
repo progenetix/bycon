@@ -12,6 +12,7 @@ from config import *
 class ByconParameters:
     def __init__(self):
         self.arg_defs = BYC["argument_definitions"].get("$defs", {})
+        self.no_value = NO_PARAM_VALUES
         self.byc_pars = {}
         self.request_uri = environ.get('REQUEST_URI', False)
         self.request_type = "__none__"
@@ -77,6 +78,7 @@ class ByconParameters:
         else:
             self.request_type = "GET"
 
+
     # -------------------------------------------------------------------------#
 
     def __process_parameters(self):
@@ -135,6 +137,8 @@ class ByconParameters:
             if r_i >= p_len:
                 break
             p_v = unquote(p_items[r_i])
+            if p_v.lower() in self.no_value:
+                break
             self.byc_pars.update({p_k: p_v})
 
         if (rpidv := self.byc_pars.get("path_ids")):
@@ -167,6 +171,8 @@ class ByconParameters:
 
         for p in arg_vars.keys():
             if not (v := arg_vars.get(p)):
+                continue
+            if str(v).lower() in self.no_value:
                 continue
             p_d = humps.decamelize(p)
             if not (a_d := self.arg_defs.get(p_d)):
@@ -691,7 +697,7 @@ class RefactoredValues():
     def __refactor_values_from_defined_type(self):
         p_d_t = self.parameter_definition.get("type", "string")
         values = list(x for x in self.v_list if x is not None)
-        values = list(x for x in values if str(x).lower() not in ["none", "null"])
+        values = list(x for x in values if str(x).lower() not in ["none", "null", "undefined"])
 
         if len(values) == 0:
             self.v_list = None

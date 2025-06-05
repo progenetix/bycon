@@ -1,0 +1,26 @@
+meta {
+  name: cohorts_testMode
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{BYCONHOST}}/beacon/cohorts/?testMode=true
+  body: none
+  auth: none
+}
+
+params:query {
+  testMode: true
+}
+
+assert {
+  res.body.responseSummary.exists: eq true
+}
+
+tests {
+  test("should get a 200 response code", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+}

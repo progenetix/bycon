@@ -1,0 +1,27 @@
+{
+    "$schema":"beaconRequestBody.json",
+    "meta": {
+        "apiVersion": "2.1",
+        "requestedSchemas": [
+            {
+                "entityType": "genomicVariation",
+                "schema:": "https://progenetix.org/services/schemas/genomicVariant/"
+            }
+        ]
+    },
+    "query": {
+        "requestParameters": {
+            "datasets": {"datasetIds": ["progenetix"]},
+            "g_variant": {
+                "assemblyId": "GRCh38",
+                "referenceName": "9",
+                "start": [21500001, 21975098],
+                "end": [21967753, 22500000], 
+                "variantType": "EFO:0030067"
+            }
+        },
+        "filters": [{"id": "NCIT:C3058"}],
+        "pagination": {"skip": 0, "limit": 10},   
+        "debugMode": false
+    }
+}

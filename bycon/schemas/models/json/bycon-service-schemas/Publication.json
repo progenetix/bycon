@@ -93,7 +93,7 @@
             "$ref": "#/$defs/Contact/properties"
         },
         "geoLocation": {
-            "$ref": "GeoLocation.json#/properties"
+            "$ref": "../bycon-model/common/GeoLocation.json#/properties"
         },
         "info": {
             "type": "object"

@@ -84,7 +84,7 @@ $defs:
       eventDate:
         description: date of collection event/data point
         type: string
-        format: datetime
+        format: date-time
         examples:
           - '2018-10-01T13:23:45Z'
           - '2019-04-23T09:11:13Z'
@@ -98,7 +98,7 @@ $defs:
           start:
             description: earliest date of visit
             type: string
-            format: datetime
+            format: date-time
             examples:
               - '2018-10-01T13:23:45Z'
               - '2019-04-23T09:11:13Z'
@@ -106,7 +106,7 @@ $defs:
           end:
             description: latest date of visit
             type: string
-            format: datetime
+            format: date-time
             examples:
               - '2018-10-01T13:23:45Z'
               - '2019-04-23T09:11:13Z'

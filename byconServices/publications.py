@@ -58,7 +58,10 @@ def publications():
     d_k = BYC_PARS.get("delivery_keys", [])
     p_l = []
 
+    prdbug(f'query: {query}')
+
     for pub in pub_coll.find( query, { "_id": 0 } ):
+        prdbug(f'pub: {pub}')
         s = { }
         if len(d_k) < 1:
             s = pub

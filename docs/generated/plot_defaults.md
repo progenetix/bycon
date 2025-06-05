@@ -37,12 +37,10 @@ A version circular of the histogram.
 **data_key:** interval_frequencies_bundles    
 **data_type:** collations    
 **mods:**  
-    - `plot_width`: `640`      
-    - `plot_chro_height`: `16`      
+    - `plot_width`: `720`      
+    - `plot_chro_height`: `14`      
     - `plot_axislab_y_width`: `0`      
-    - `plot_area_opacity`: `0`      
-    - `plot_dendrogram_width`: `0`      
-    - `plot_labelcol_width`: `0`    
+    - `plot_area_opacity`: `0`    
 
 #### `samplesplot` 
 **description:**

@@ -83,7 +83,7 @@ function Subset({ subset, datasetIds }) {
 
   <h5>
     <InternalLink
-      href={`${basePath}services/intervalFrequencies/${subset.id}/?output=pgxfreq`}
+      href={`${basePath}services/intervalFrequencies/${subset.id}`}
       label="Download CNV frequencies"
     />
   </h5>

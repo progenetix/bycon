@@ -15,6 +15,7 @@ services_conf_path = path.join( loc_path, "config" )
 def main():
     mongodb_indexer()
 
+
 ################################################################################
 
 def mongodb_indexer():

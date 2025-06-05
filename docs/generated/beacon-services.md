@@ -1,3 +1,8 @@
+### `/api`
+
+None
+
+
 ### `/byconschemas`
 
 This helper service reads and serves local schema definition files. The name of
@@ -226,13 +231,6 @@ The table type can be changed with `tableType=individuals` (or `analyses`).
 * http://progenetix.org/services/sampletable/pgxbs-kftvjv8w
 * http://progenetix.org/services/sampletable?datasetIds=cellz&filters=cellosaurus:CVCL_0030
 * http://progenetix.org/services/sampletable?filters=pgx:icdom-81703
-
-
-### `/services`
-
-The `services` application deparses a request URI and calls the respective
-script. The functionality is combined with the correct configuration of a 
-rewrite in the server configuration for creation of canonical URLs.
 
 
 ### `/uploader`

@@ -1,0 +1,22 @@
+meta {
+  name: filtering_terms_testMode
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{BYCONHOST}}/beacon/filtering_terms/?testMode=true
+  body: none
+  auth: none
+}
+
+params:query {
+  testMode: true
+}
+
+tests {
+  test("should get a 200 response code", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+}

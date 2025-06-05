@@ -101,6 +101,8 @@ def __process_collation_type(ds_id, coll_type, coll_defs):
                 "id": c_id,
                 "type": coll_defs.get("type", "ontologyTerm"),
                 "name": coll_defs.get("name", ""),
+                "cnv_excluded_filters": coll_defs.get("cnv_excluded_filters", []),
+                "cnv_required_filters": coll_defs.get("cnv_required_filters", []),
                 "collation_type": coll_type,
                 "reference": "https://progenetix.org/services/ids/"+c_id,
                 "namespace_prefix": coll_defs.get("namespace_prefix", ""),
@@ -228,6 +230,7 @@ def get_prefix_hierarchy(ds_id, coll_type, pre_h_f):
     bar.finish()
 
     return hier
+
 
 ################################################################################
 

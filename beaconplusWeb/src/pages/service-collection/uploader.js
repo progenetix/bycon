@@ -43,7 +43,7 @@ export default function FileLoaderPage() {
 
       <Panel heading="Segment File format" className="content">
         <p>
-          <b>NEW 2021</b>: We now recommend the use of our <code>.pgxseg</code>{" "}
+          We recommend the use of our <code>.pgxseg</code>{" "}
           file format for th eupload of CNV segments files. As an extension of
           the standard tab-delimited segment file format below, the{" "}
           <code>.pgxseg</code> file format allows the addition of e.g. group

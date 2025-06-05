@@ -60,6 +60,9 @@ $defs:
     entity: biosample
     pattern: '^(?:pgx:)?icdom-\d{1,5}(-\d{1,5})?$'
     collationed: True
+    cnv_excluded_filters: []
+    cnv_required_filters:
+      - EDAM:operation_3961
     examples:
       - pgx:icdom-85003
       - pgx:icdom-94403
@@ -77,6 +80,9 @@ $defs:
     entity: biosample
     pattern: '^(?:pgx:)?icdot-C\d\d?(\.\d)?$'
     collationed: True
+    cnv_excluded_filters: []
+    cnv_required_filters:
+      - EDAM:operation_3961
     examples:
       - pgx:icdot-C42.2
       - pgx:icdot-C54.1
@@ -97,7 +103,14 @@ $defs:
     entity: biosample
     pattern: '^(?:pgx:)?TCGA\-\w{2,4}?$'
     db_key: 'references.tcgaproject.id'
+    cnv_excluded_filters: []
+    cnv_required_filters:
+      - EDAM:operation_3961
+      - EFO:0009656
     collationed: True
+    cnv_excluded_filters: []
+    cnv_required_filters:
+      - EDAM:operation_3961
     examples:
       - pgx:TCGA-DLBC
       - pgx:TCGA-ESCA
@@ -120,8 +133,11 @@ $defs:
     db_key: 'references.cbioportal.id'
     pattern: '^cbioportal:\w+?$'
     collationed: True
+    cnv_excluded_filters: []
+    cnv_required_filters:
+      - EDAM:operation_3961
     examples:
-      - 'cbioportal:msk_impact_2017'
+      - cbioportal:msk_impact_2017
 
   pgxcohort:
     id: pgxcohort
@@ -135,7 +151,10 @@ $defs:
     entity: biosample
     pattern: '^pgx:cohort[\w\-]+?$'
     collationed: True
+    cnv_excluded_filters: []
+    cnv_required_filters:
+      - EDAM:operation_3961
     examples:
-      - 'pgx:cohort-arraymap'
-      - 'pgx:cohort-TCGA'
+      - pgx:cohort-arraymap
+      - pgx:cohort-TCGA
 

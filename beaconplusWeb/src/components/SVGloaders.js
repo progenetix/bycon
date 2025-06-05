@@ -35,6 +35,7 @@ export function SubsetHistogram({
   title,
   description,
   size: givenSize,
+  plotType,
   plotChros,
   plotParsString
 }) {
@@ -50,6 +51,7 @@ export function SubsetHistogram({
           datasetIds,
           id,
           fileId,
+          plotType,
           plotRegionLabels,
           plotGeneSymbols,
           plotCytoregionLabels,

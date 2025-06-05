@@ -1,0 +1,15 @@
+meta {
+  name: biosamples-POSTfile
+  type: http
+  seq: 13
+}
+
+post {
+  url: http://progenetix.test/beacon/biosamples
+  body: file
+  auth: inherit
+}
+
+body:file {
+  file: @file(/Users/mbaudis/switchdrive/baudisgroup/dbtools/bycon/tests/POSTit/g_variants-POST-for-CDKN2A-DEL-gliomas.json) @contentType(application/json; charset=utf-8)
+}

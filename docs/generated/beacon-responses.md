@@ -8,19 +8,21 @@ A type of Beacon response that includes details about the **collections** in a b
 
 A dataset available in the beacon.
 
+Information about the datasets available in the beacon instance
+
 
 
 * **{S}** <{{config.reference_server_url}}/services/schemas/dataset>
 
 * **{T}** <{{config.reference_server_url}}/beacon/datasets?testMode=true>
 
-* **{E}** <{{config.reference_server_url}}/beacon/datasets/progenetix>
-
 
 
 ### cohort @ `/cohorts`
 
 A cohort available in the beacon.
+
+Information about the cohorts available in the beacon instance
 
 
 
@@ -43,6 +45,8 @@ The content of the `beaconInfoResponse` can be used by clients such as web front
 
 Metadata describing a Beacon instance.
 
+Information about the beacon instance.
+
 
 
 * **{S}** <{{config.reference_server_url}}/services/schemas/beaconInfoResults>
@@ -62,6 +66,8 @@ The `beaconConfigurationResponse` returns information about configuration parame
 ### configuration @ `/configuration`
 
 The Beacon configuration reports several attributes of the beacon instance related to security, maturity and available entry types. Where appropriate the details returned in `service-info` should mirror the ones in this configuration.
+
+Information about the beacon instance configuration.
 
 
 
@@ -93,6 +99,10 @@ The filtering terms response provides information about available individual fil
 
 ### filteringTerm @ `/filtering_terms`
 
+Information about the filtering terms available in the beacon instance.
+
+
+
 * **{S}** <{{config.reference_server_url}}/services/schemas/filteringTermsSchema>
 
 * **{T}** <{{config.reference_server_url}}/beacon/filtering_terms?testMode=true>
@@ -119,6 +129,8 @@ A `beaconMapResponse` provides information about the beacon instance such as the
 
 Map of a Beacon, its entry types and endpoints. It isconceptually similar to a website sitemap.
 
+Map of the beacon instance configuration.
+
 
 
 * **{S}** <{{config.reference_server_url}}/services/schemas/beaconMapSchema>
@@ -138,7 +150,7 @@ The types of `beaconResultsets` objects are defined in the beacon's configuratio
 
 ### genomicVariant @ `/g_variants`
 
-The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
+Information about matching genomic variants from the corresponding dataset. The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
 
 
 
@@ -146,21 +158,13 @@ The type of response used for the endpoint depends on the requested and granted 
 
 * **{T}** <{{config.reference_server_url}}/beacon/g_variants?testMode=true>
 
-* **{E}** <{{config.reference_server_url}}/beacon/g_variants/pgxvar-5bab576a727983b2e00b8d32>
-
-* **{E}** <{{config.reference_server_url}}/beacon/g_variants/pgxvar-5bab576a727983b2e00b8d32/individuals>
-
-* **{E}** <{{config.reference_server_url}}/beacon/g_variants?geneId=CDKN2A&variantMaxSize=100000&limit=5>
-
-* **{E}** <{{config.reference_server_url}}/beacon/g_variants?referenceName=NC_000017.11&start=7577120&referenceBases=G&alternateBases=A>
-
 
 
 ### analysis @ `/analyses`
 
 The `analysis` schema represents a information about the data analysis steps leading to (a set of) genomic variation call(s).
 
-The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
+Information about matching analyses from the corresponding dataset. The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
 
 
 
@@ -174,7 +178,7 @@ The type of response used for the endpoint depends on the requested and granted 
 
 Schema for the experimental run (e.g. sequencing run, array processing...) leading to the raw data for the (computational) analysis. NOTE: In the bycon environment run parameters are stored in the analysis documents and rewritten into this schema at export time.
 
-The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
+Information about matching experimental runs from the corresponding dataset. The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
 
 
 
@@ -188,7 +192,7 @@ The type of response used for the endpoint depends on the requested and granted 
 
 A Biosample refers to a unit of biological material from which the substrate molecules (e.g. genomic DNA, RNA, proteins) for molecular analyses (e.g. sequencing, array hybridisation, mass-spectrometry) are extracted. Examples would be a tissue biopsy, a single cell from a culture for single cell genome sequencing or a protein fraction from a gradient centrifugation. Several instances (e.g. technical replicates) or types of experiments (e.g. genomic array as well as RNA-seq experiments) may refer to the same Biosample.
 
-The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
+Information about matching samples from the corresponding dataset. The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
 
 
 
@@ -196,17 +200,13 @@ The type of response used for the endpoint depends on the requested and granted 
 
 * **{T}** <{{config.reference_server_url}}/beacon/biosamples?testMode=true>
 
-* **{E}** <{{config.reference_server_url}}/beacon/biosamples?filters=NCIT:C4017&limit=3>
-
-* **{E}** <{{config.reference_server_url}}/beacon/biosamples?referenceName=refseq:NC_000009.12&variantType=EFO:0030067&start=21000000,21975098&end=21967753,23000000&filters=NCIT:C3058&limit=10>
-
 
 
 ### individual @ `/individuals`
 
 None
 
-The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
+Information about matching subjects (individuals) from the corresponding dataset. The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
 
 
 
@@ -222,16 +222,13 @@ The type of response used for the endpoint depends on the requested and granted 
 
 The Phenopacket class is a bare-bones JSON-schema rewrite of the Phenopackets v2 standard ("PXF"), for the representation of attributes supported in the `bycon` framework. At this time the Phenopackets schema is not part of the Beacon v2 default data model. However, many sub-schemas in Beacon v2 have been informed by the PXF model and development process, allowing a straightforward cross-mapping of the data structures.
 
-The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
-In the `bycon` framework Phenopackets are generated at export time by aggregating the relevant information from the matched `individual`, `biosample`s, `analysis`(/es) and `genomicVariation`s.
+Information about matching subjects (individuals) from the corresponding dataset, converted to Phenopackets format by aggregating the relevant information from the matched `individual`, `biosample`s, `analysis`(/es) and `genomicVariation`s.
 
 
 
 * **{S}** <{{config.reference_server_url}}/services/schemas/phenopacket>
 
 * **{T}** <{{config.reference_server_url}}/beacon/phenopackets?testMode=true>
-
-* **{E}** <{{config.reference_server_url}}/beacon/phenopackets?filters=EFO:0030049&limit=5>
 
 
 

@@ -22,6 +22,7 @@ def main():
     generated_docs_path = path.join( dir_path, "docs", "generated")
 
     p = Path(path.join( dir_path, "byconServices" ))
+    print(f'... generating docs in {p}')
     s_p_s = [ f for f in p.rglob("*.py") if f.is_file() ]
 
     pp_f = path.join(generated_docs_path, f"beacon-services.md")
@@ -29,7 +30,7 @@ def main():
     md = []
     for f in sorted(s_p_s):
         fn = f.name.split('.')[0]
-        if fn in [ "__init__"]:
+        if fn in [ "__init__", "services"]:
             continue
         # print(f'from {fn} import {fn}')
 
