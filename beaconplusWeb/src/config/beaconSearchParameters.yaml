@@ -1,417 +1,376 @@
----
 parameters:
+  accessid:
+    isHidden: true
+    label: Accession Prefilter
+  allTermsFilters:
+    infoLink: https://info.progenetix.org/doc/filters-documentation.html
+    infoText: Add any **filters** to the search. These will usually correspond to
+      CURIE values supported by the resource (e.g. `cellosaurus:CVCL_0004`, `NCIT:C3222`,
+      `pubmed:18559507`). This field relies on the existence of the term in the Beacon
+      `filteringTermsResponse`.
+    isMulti: true
+    label: Select Filters
+    options:
+    - label: (no selection)
+      value:
+      - ''
+  alternateBases:
+    label: Alternate Base(s)
+    placeholder: A
+  aminoacidChange:
+    infoText: Aminoacid alteration in 1 letter format (e.g. "V600E").
+    isHidden: true
+    label: Aminoacid alteration
+    placeholder: V600E
+  analysisOperation:
+    infoText: The general type of analysis - i.e. copy number profiling or sequence
+      variation analysis
+    isHidden: false
+    label: Genomic Analysis Type
+    options:
+    - label: all analyses
+      value: ''
+    - label: Copy number variation detection
+      value: EDAM:operation_3961
+    - label: (Sequence) Variant Calling
+      value: EDAM:operation_3227
+  assemblyId:
+    infoText: The genome reference assembly.
+    isHidden: true
+    label: Genome Assembly
+    options:
+    - GRCh38
+  bioontology:
+    infoLink: https://info.progenetix.org/doc/filters-documentation.html
+    infoText: Special filter type for disease classification codes. If using multiple
+      codes please be aware that probably use of an "OR" filter logic will be appropriate.
+      This field relies on the existence of the term in the Beacon `filteringTermsResponse`.
+    isHidden: false
+    isMulti: true
+    label: Cancer Classification(s)
+    options:
+    - label: (no selection)
+      value: ''
+  clinicalClasses:
+    infoText: Clinical and diagnostic support classifications, such as tumor grading
+      or staging.
+    isHidden: true
+    isMulti: true
+    label: Clinical Classes
+    options:
+    - label: (no selection)
+      value: ''
+  cohorts:
+    infoText: An aggregation of samples by origin (e.g. study, external resource),
+      shared features or use in a publication.
+    isHidden: true
+    isMulti: true
+    label: Cohorts
+  cytoBands:
+    infoText: The field for cytoband annotation style requests currently supports
+      single cytogenetic regions (resulting in a range request for the whole region).
+      Additionally, providing exactly 2, comma separated regions can be used to create
+      bracket requests or (experimentally) fusion requests (where the 2nd region denotes
+      the "mateName" chromosome of the fusion partner). Example here would be the
+      use of "8q24,14q32" to search for fusion events involving MYC and IGH (i.e.
+      the typical "Burkitt lymphoma fusion"). This is *not* a standard Beacon option.
+    isHidden: true
+    label: Cytoband Annotation
+    placeholder: 8q24.12
+    type: string
   datasetIds:
+    isMulti: true
     label: Dataset(s)
     options:
-      - value: progenetix
-        label: Progenetix cancer genome variants
-      - value: cellz
-        label: Cancer Cell Lines Collection
-      - value: examplez
-        label: Test Database - examplez
-      - value: refcnv
-        label: refCNV - germline reference CNVs
-    isMulti: true
-  assemblyId:
-    label: Genome Assembly
-    infoText: |
-      The genome reference assembly.
-    # defaultValue: "GRCh38"
+    - label: Progenetix examples (examplez)
+      value: examplez
+    - label: Progenetix (progenetix)
+      value: progenetix
+    - label: Cancer Cell Lines (cellz)
+      value: cellz
+    - label: CNV reference data (refcnv)
+      value: refcnv
+  end:
+    infoText: The 1-based genomic end position of a range query, specified through
+      a single value, or in case of fuzzy requests for e.g. copy number variants the
+      end provided as a range for the possible occurrence of the CNV end (e.g. "21967753-22500000").
+    label: End
+    placeholder: 21967753-24000000
+  filterLogic:
+    infoText: Boolean logic for filter values; the default **AND** in the Beacon stack
+      assumes different logical scopes for used filters (e.g. collisions occurr if
+      multiple cancer diagnoses are used with AND). Please be aware that "Filters"
+      here include the "Cancer Classification", "Biosample Type" and "Filters" fields.
     isHidden: true
+    label: Filter Logic
     options:
-      - GRCh38
+    - label: AND
+      value: AND
+    - label: OR
+      value: OR
   geneId:
-    label: Gene Symbol
-    placeholder: 
-      - MYCN
     infoText: One or more gene symbols (HUGO), e.g. "TP53" or "CDKN2A,KRAS".
     isHidden: true
     isMulti: true
-  aminoacidChange:
-    label: Aminoacid alteration
-    placeholder: V600E
-    infoText: Aminoacid alteration in 1 letter format (e.g. "V600E").
-    isHidden: true
+    label: Gene Symbol
+    placeholder:
+    - MYCN
   genomicAlleleShortForm:
-    label: Genomic HGVS ID 
-    placeholder: NC_000017.11:g.7674232C>G
     infoText: Genomic HGVSId descriptor.
     isHidden: true
-  referenceName:
-    label: Chromosome
-    infoText: The chromosome (transmitted as refseq id).
-    options:
-      - label: "(none)"
-        value: ""
-      - label: "1 (NC_000001.11)"
-        value: "refseq:NC_0000001.11"
-      - label: "2 (NC_000002.12)"
-        value: "refseq:NC_000002.12"
-      - label: "3 (NC_000003.12)"
-        value: "refseq:NC_000003.12"
-      - label: "4 (NC_000004.12)"
-        value: "refseq:NC_000004.12"
-      - label: "5 (NC_000005.10)"
-        value: "refseq:NC_000005.10"
-      - label: "6 (NC_000006.12)"
-        value: "refseq:NC_000006.12"
-      - label: "7 (NC_000007.14)"
-        value: "refseq:NC_000007.14"
-      - label: "8 (NC_000008.11)"
-        value: "refseq:NC_000008.11"
-      - label: "9 (NC_000009.12)"
-        value: "refseq:NC_000009.12"
-      - label: "10 (NC_000010.11)"
-        value: "refseq:NC_000010.11"
-      - label: "11 (NC_000011.10)"
-        value: "refseq:NC_000011.10"
-      - label: "12 (NC_000012.12)"
-        value: "refseq:NC_000012.12"
-      - label: "13 (NC_000013.11)"
-        value: "refseq:NC_000013.11"
-      - label: "14 (NC_000014.9)"
-        value: "refseq:NC_000014.9"
-      - label: "15 (NC_000015.10)"
-        value: "refseq:NC_000015.10"
-      - label: "16 (NC_000016.10)"
-        value: "refseq:NC_000016.10"
-      - label: "17 (NC_000017.11)"
-        value: "refseq:NC_000017.11"
-      - label: "18 (NC_000018.10)"
-        value: "refseq:NC_000018.10"
-      - label: "19 (NC_000019.10)"
-        value: "refseq:NC_000019.10"
-      - label: "20 (NC_000020.11)"
-        value: "refseq:NC_000020.11"
-      - label: "21 (NC_000021.9)"
-        value: "refseq:NC_000021.9"
-      - label: "22 (NC_000022.11)"
-        value: "refseq:NC_000022.11"
-      - label: "X (NC_000023.11)"
-        value: "refseq:NC_000023.11"
-      - label: "Y (NC_000024.10)"
-        value: "refseq:NC_000024.10"
-  mateName:
-    label: Fusion Chromosome
-    infoText: The second chromosome in a fusion (transmitted as refseq id).
-    options:
-      - label: "(none)"
-        value: ""
-      - label: "1 (NC_000001.11)"
-        value: "refseq:NC_0000001.11"
-      - label: "2 (NC_000002.12)"
-        value: "refseq:NC_000002.12"
-      - label: "3 (NC_000003.12)"
-        value: "refseq:NC_000003.12"
-      - label: "4 (NC_000004.12)"
-        value: "refseq:NC_000004.12"
-      - label: "5 (NC_000005.10)"
-        value: "refseq:NC_000005.10"
-      - label: "6 (NC_000006.12)"
-        value: "refseq:NC_000006.12"
-      - label: "7 (NC_000007.14)"
-        value: "refseq:NC_000007.14"
-      - label: "8 (NC_000008.11)"
-        value: "refseq:NC_000008.11"
-      - label: "9 (NC_000009.12)"
-        value: "refseq:NC_000009.12"
-      - label: "10 (NC_000010.11)"
-        value: "refseq:NC_000010.11"
-      - label: "11 (NC_000011.10)"
-        value: "refseq:NC_000011.10"
-      - label: "12 (NC_000012.12)"
-        value: "refseq:NC_000012.12"
-      - label: "13 (NC_000013.11)"
-        value: "refseq:NC_000013.11"
-      - label: "14 (NC_000014.9)"
-        value: "refseq:NC_000014.9"
-      - label: "15 (NC_000015.10)"
-        value: "refseq:NC_000015.10"
-      - label: "16 (NC_000016.10)"
-        value: "refseq:NC_000016.10"
-      - label: "17 (NC_000017.11)"
-        value: "refseq:NC_000017.11"
-      - label: "18 (NC_000018.10)"
-        value: "refseq:NC_000018.10"
-      - label: "19 (NC_000019.10)"
-        value: "refseq:NC_000019.10"
-      - label: "20 (NC_000020.11)"
-        value: "refseq:NC_000020.11"
-      - label: "21 (NC_000021.9)"
-        value: "refseq:NC_000021.9"
-      - label: "22 (NC_000022.11)"
-        value: "refseq:NC_000022.11"
-      - label: "X (NC_000023.11)"
-        value: "refseq:NC_000023.11"
-      - label: "Y (NC_000024.10)"
-        value: "refseq:NC_000024.10"
-  variantType:
-    label: "Variant Type"
-    infoText: >-
-      The type of a structural variant for e.g. CNV searches.
-    defaultValue: ""
-    options:
-      - value: "(none)"
-        label: ""
-      - value: "EFO:0030067"
-        label: "EFO:0030067 (copy number deletion)"
-      - value: "EFO:0030070"
-        label: "EFO:0030070 (copy number gain)"
-      - value: "EFO:0020073"
-        label: "EFO:0020073 (high-level copy number loss)"
-      - value: "EFO:0030072"
-        label: "EFO:0030072 (high-level copy number gain)"
-      - value: "EFO:0030066"
-        label: "EFO:0030066 (any relative CN variation)"
-      - value: "SO:0001059"
-        label: "SO:0001059 (any sequence alteration - SNV, INDEL...)"
-      - value: "SO:0000806"
-        label: "SO:0000806 (fusion)"
-      - value: "SO:0001413"
-        label: "SO:0001413 (translocation breakpoint)"
-  start:
-    label: Start or Position
-    placeholder: "19000001-21975098"
-    infoText: |
-      The 1-based genomic position of the variant, or the start of a range query,
-      specified through a single value.
-      However, in case of bracket requests for e.g. copy number variants, the start
-      position will usually be provided as a range for the possible occurrence of
-      the CNV start (e.g. "21500001-21975098").
-  end:
-    label: End
-    placeholder: "21967753-24000000"
-    infoText: |
-      The 1-based genomic end position of a range query, specified through a
-      single value, or in case of fuzzy requests for e.g. copy number variants
-      the end provided as a range for the possible occurrence of
-      the CNV end (e.g. "21967753-22500000").
-  mateStart:
-    label: Mate Start
-    placeholder: "23000000"
-    infoText: |
-      The (1-based) stat of genomic position of the range in which the fusion partners
-      breakpoint position should fall. In contrast to the general "start" parameter
-      only a single value can be used.
-  mateEnd:
-    label: Mate End
-    placeholder: "23000000"
-    infoText: |
-      The (1-based) stat of genomic position of the range in which the fusion partners
-      breakpoint position should fall. In contrast to the general "end" parameter
-      only a single value can be used.
-  cytoBands:
-    label: Cytoband Annotation
-    type: string
-    placeholder: 8q24.12
-    infoText: |
-      The field for cytoband annotation style requests currently supports
-      single cytogenetic regions (resulting in a range request for the whole region).
-      Additionally, providing exactly 2, comma separated regions can be used to
-      create bracket requests or (experimentally) fusion requests (where the 2nd
-      region denotes the "mateName" chromosome of the fusion partner).
-      Example here would be the use of "8q24,14q32" to search for fusion events
-      involving MYC and IGH (_i.e._ the typical "Burkitt lymphoma fusion").</br>
-      This is *not* a standard Beacon option.
-    isHidden: true
-  variantQueryDigests:
-    label: Variation Shorthand(s)
-    type: string
-    placeholder: "9:9000001-21975098--21967753-24000000:DEL"
-    infoText: |
-      This experimental parameter allows to
-      * define a variant request in a concatenated `referenceName:start--end:variantType`
-        or `referenceName:start:referenceBases>alternateBases` format
-      * optionally comma-concatenate 2 or more of such strings, to identify samples
-        carrying matches for all of these variations</br>
-      This is *not* a standard Beacon option.
-    isHidden: true
-  variantMinLength:
-    label: Min Variant Length
-    type: number
-    infoText: |
-      The minimal length, in bases, of a genomic variant. This parameter can be
-      applied to e.g. CNV queries.
-    isHidden: true
-  variantMaxLength:
-    label: Max Variant Length
-    type: number
-    infoText: |
-      The maximal length, in bases, of a genomic variant. This parameter can be
-      applied to e.g. CNV queries.
-    isHidden: true
-  referenceBases:
-    infoText: |
-      The minimal length, in bases, of a genomic variant. This parameter can be
-      applied to e.g. CNV queries.
-    placeholder: "N"
-    label: Reference Base(s)
-  alternateBases:
-    placeholder: "A"
-    label: Alternate Base(s)
-  cohorts:
-    label: Cohorts
-    infoText: >
-      An aggregation of samples by origin (e.g. study, external resource), shared features or use in a publication.
-    isMulti: true
-    isHidden: true
-  analysisOperation:
-    label: Genomic Analysis Type
-    infoText: >
-      The general type of analysis - i.e. copy number profiling or sequence variation analysis
-    isHidden: false
-    options:
-      - value: ""
-        label: "all analyses"
-      - value: "EDAM:operation_3961"
-        label: "Copy number variation detection"
-      - value: "EDAM:operation_3227"
-        label: "(Sequence) Variant Calling"
-  bioontology:
-    label: Cancer Classification(s)
-    infoLink: "https://info.progenetix.org/doc/filters-documentation.html"
-    infoText: |
-      Special filter type for disease classification codes. If using multiple
-      codes please be aware that probably use of an "OR" filter logic will be appropriate.
-      This field relies on the existence of the term in the Beacon `filteringTermsResponse`.
-    isMulti: true
-    isHidden: false
-    options:
-      - value: ""
-        label: "(no selection)"
-  referenceid:
-    label: Reference ID(s)
-    infoText: |
-      Special filter type for external reference codes such as PMIDs or cellosaurus
-      id values.
-      If using multiple codes please be aware that probably use of an "OR" filter
-      logic will be appropriate.
-      This field relies on the existence of the term in the Beacon `filteringTermsResponse`.
-    isMulti: true
-    isHidden: true
-    options:
-      - value: ""
-        label: "(no selection)"
-  clinicalClasses:
-    label: Clinical Classes
-    infoText: |
-      Clinical and diagnostic support classifications, such as tumor grading or staging.
-    isMulti: true
-    isHidden: true
-    options:
-      - value: ""
-        label: "(no selection)"
-  materialtype:
-    label: Biosample Type
-    infoText: |
-      Special filter type, to e.g. limit responses to neoplastic or reference
-      samples, respectively, when not using specific cancer classification codes.
-    defaultValue: ""
-    isHidden: true
-    options:
-      - value: ""
-        label: "(no selection)"
-      - value: EFO:0009656
-        label: neoplastic sample
-      - value: EFO:0030035
-        label: cancer cell line sample
-      - value: EFO:0009654
-        label: reference sample
-  sex:
-    label: Genotypic Sex
-    infoText: |
-      (Assumed) genotypic sex of the individual.
-    defaultValue: ""
-    isHidden: false
-    options:
-      - value: ""
-        label: (no selection)
-      - value: pgx:sex-female
-        label: female
-      - value: pgx:sex-male
-        label: male
-  allTermsFilters:
-    label: Select Filters
-    isMulti: true
-    infoLink: "https://info.progenetix.org/doc/filters-documentation.html"
-    infoText: |
-      Add any **filters** to the search. These will usually
-      correspond to CURIE values supported by the resource (e.g.
-      "cellosaurus:CVCL_0004"; "NCIT:C3222"; "pubmed:18559507").
-      This field relies on the existence of the term in the Beacon `filteringTermsResponse`.
-    options:
-      - value: [""]
-        label: "(no selection)"
-  accessid:
-    label: Accession Prefilter
-    isHidden: true
-  filterLogic:
-    label: Filter Logic
-    isHidden: true
-    infoText: |
-      Boolean logic for filter values; the default **AND** in the Beacon stack assumes different
-      logical scopes for used filters (e.g. collisions occurr if multiple cancer
-      diagnoses are used with AND). Please be aware that "Filters" here include
-      the "Cancer Classification", "Biosample Type" and "Filters" fields.
-    options:
-      - value: AND
-        label: AND
-      - value: OR
-        label: OR
-  includeDescendantTerms:
-    label: Include Child Terms
-    infoText: >-
-      As standard, any selected filter will also include matches on its child
-      terms; i.e. NCIT:C3052 - Digestive System Neoplasm will include results
-      from gastric, esophagus, colon ... cancer. However, this parameter allows
-      to limit searches to the exact code match.
-    isHidden: true
-    options:
-      - value: "true"
-        label: always match child terms
-      - value: "false"
-        label: only match exact code(s)
-  # filterPrecision:
-  #   label: Filter Precision
-  #   infoText: |
-  #     Logic for the matching of filter terms. The use of "start" will e.g.
-  #     allow to match all "icdom-8500_" values (i.e. ductal breast carcinomas
-  #     and precursors - "...85000, ...85001, ...85002, ...85003")
-  #   defaultValue: "exact"
-  #   options:
-  #   - value: exact
-  #     label: Exact term match
-  #   - value: start
-  #     label: Start-anchored term match
+    label: Genomic HGVS ID
+    placeholder: NC_000017.11:g.7674232C>G
   geoCity:
-    label: City
-    infoText: |
-      Selector for a city for which the samples have been annotated, usually corresponding to origin of the data.
+    infoText: Selector for a city for which the samples have been annotated, usually
+      corresponding to origin of the data.
     isHidden: true
+    label: City
   geodistanceKm:
-    infoText: |
-      Proximity of the data matches to the selected city, to allow for fuzzy
-      annotations or large geographic area searches (e.g. "European samples" through
-      "Zurich + 2000km").
+    defaultValue: 100
+    infoText: Proximity of the data matches to the selected city, to allow for fuzzy
+      annotations or large geographic area searches (e.g. European samples through
+      `Zurich` and `2000km`).
     isHidden: true
     label: Range (km)
     type: number
-    defaultValue: 100
-  skip:
-    label: Skip Pages
-    infoText: >
-      The number of result pages to skip when retrieving data.
-    # defaultValue: 0
-    # isHidden: true
-  limit:
-    label: Response Limit / Page Size
-    infoText: |
-      The maximum number of biosamples to retrieve per page and also the size of response pages.
-    # defaultValue: 200
-    # isHidden: true
-  includeResultsetResponses:
-    label: Show results
-    infoText: |
-      We want also empty result boxes so it is ALL (incontrast to Beacon default HIT).
-    defaultValue: ALL
+  includeDescendantTerms:
+    infoText: As standard, any selected filter will also include matches on its child
+      terms; i.e. NCIT:C3052 - Digestive System Neoplasm will include results from
+      gastric, esophagus, colon ... cancer. However, this parameter allows to limit
+      searches to the exact code match.
     isHidden: true
+    label: Include Child Terms
+    options:
+    - label: always match child terms
+      value: 'true'
+    - label: only match exact code(s)
+      value: 'false'
+  includeResultsetResponses:
+    defaultValue: ALL
+    infoText: We want also empty result boxes so it is ALL (incontrast to Beacon default
+      HIT).
+    isHidden: true
+    label: Show results
+  limit:
+    infoText: The maximum number of biosamples to retrieve per page and also the size
+      of response pages. A parameter here can override the Beacon specific default.
+    label: Response Limit / Page Size
+  mateEnd:
+    infoText: The (1-based) stat of genomic position of the range in which the fusion
+      partners breakpoint position should fall. In contrast to the general "end" parameter
+      only a single value can be used.
+    label: Mate End
+    placeholder: '23000000'
+  mateName:
+    infoText: The second chromosome in a fusion (transmitted as refseq id).
+    label: Fusion Chromosome
+    options:
+    - label: (none)
+      value: ''
+    - label: 1 (NC_000001.11)
+      value: refseq:NC_0000001.11
+    - label: 2 (NC_000002.12)
+      value: refseq:NC_000002.12
+    - label: 3 (NC_000003.12)
+      value: refseq:NC_000003.12
+    - label: 4 (NC_000004.12)
+      value: refseq:NC_000004.12
+    - label: 5 (NC_000005.10)
+      value: refseq:NC_000005.10
+    - label: 6 (NC_000006.12)
+      value: refseq:NC_000006.12
+    - label: 7 (NC_000007.14)
+      value: refseq:NC_000007.14
+    - label: 8 (NC_000008.11)
+      value: refseq:NC_000008.11
+    - label: 9 (NC_000009.12)
+      value: refseq:NC_000009.12
+    - label: 10 (NC_000010.11)
+      value: refseq:NC_000010.11
+    - label: 11 (NC_000011.10)
+      value: refseq:NC_000011.10
+    - label: 12 (NC_000012.12)
+      value: refseq:NC_000012.12
+    - label: 13 (NC_000013.11)
+      value: refseq:NC_000013.11
+    - label: 14 (NC_000014.9)
+      value: refseq:NC_000014.9
+    - label: 15 (NC_000015.10)
+      value: refseq:NC_000015.10
+    - label: 16 (NC_000016.10)
+      value: refseq:NC_000016.10
+    - label: 17 (NC_000017.11)
+      value: refseq:NC_000017.11
+    - label: 18 (NC_000018.10)
+      value: refseq:NC_000018.10
+    - label: 19 (NC_000019.10)
+      value: refseq:NC_000019.10
+    - label: 20 (NC_000020.11)
+      value: refseq:NC_000020.11
+    - label: 21 (NC_000021.9)
+      value: refseq:NC_000021.9
+    - label: 22 (NC_000022.11)
+      value: refseq:NC_000022.11
+    - label: X (NC_000023.11)
+      value: refseq:NC_000023.11
+    - label: Y (NC_000024.10)
+      value: refseq:NC_000024.10
+  mateStart:
+    infoText: The (1-based) stat of genomic position of the range in which the fusion
+      partners breakpoint position should fall. In contrast to the general "start"
+      parameter only a single value can be used.
+    label: Mate Start
+    placeholder: '23000000'
+  materialtype:
+    defaultValue: ''
+    infoText: Special filter type, to e.g. limit responses to neoplastic or reference
+      samples, respectively, when not using specific cancer classification codes.
+    isHidden: true
+    label: Biosample Type
+    options:
+    - label: (no selection)
+      value: ''
+    - label: neoplastic sample
+      value: EFO:0009656
+    - label: cancer cell line sample
+      value: EFO:0030035
+    - label: reference sample
+      value: EFO:0009654
+  referenceBases:
+    infoText: The minimal length, in bases, of a genomic variant. This parameter can
+      be applied to e.g. CNV queries.
+    label: Reference Base(s)
+    placeholder: N
+  referenceName:
+    infoText: The chromosome (transmitted as refseq id).
+    label: Chromosome
+    options:
+    - label: (none)
+      value: ''
+    - label: 1 (NC_000001.11)
+      value: refseq:NC_0000001.11
+    - label: 2 (NC_000002.12)
+      value: refseq:NC_000002.12
+    - label: 3 (NC_000003.12)
+      value: refseq:NC_000003.12
+    - label: 4 (NC_000004.12)
+      value: refseq:NC_000004.12
+    - label: 5 (NC_000005.10)
+      value: refseq:NC_000005.10
+    - label: 6 (NC_000006.12)
+      value: refseq:NC_000006.12
+    - label: 7 (NC_000007.14)
+      value: refseq:NC_000007.14
+    - label: 8 (NC_000008.11)
+      value: refseq:NC_000008.11
+    - label: 9 (NC_000009.12)
+      value: refseq:NC_000009.12
+    - label: 10 (NC_000010.11)
+      value: refseq:NC_000010.11
+    - label: 11 (NC_000011.10)
+      value: refseq:NC_000011.10
+    - label: 12 (NC_000012.12)
+      value: refseq:NC_000012.12
+    - label: 13 (NC_000013.11)
+      value: refseq:NC_000013.11
+    - label: 14 (NC_000014.9)
+      value: refseq:NC_000014.9
+    - label: 15 (NC_000015.10)
+      value: refseq:NC_000015.10
+    - label: 16 (NC_000016.10)
+      value: refseq:NC_000016.10
+    - label: 17 (NC_000017.11)
+      value: refseq:NC_000017.11
+    - label: 18 (NC_000018.10)
+      value: refseq:NC_000018.10
+    - label: 19 (NC_000019.10)
+      value: refseq:NC_000019.10
+    - label: 20 (NC_000020.11)
+      value: refseq:NC_000020.11
+    - label: 21 (NC_000021.9)
+      value: refseq:NC_000021.9
+    - label: 22 (NC_000022.11)
+      value: refseq:NC_000022.11
+    - label: X (NC_000023.11)
+      value: refseq:NC_000023.11
+    - label: Y (NC_000024.10)
+      value: refseq:NC_000024.10
+  referenceid:
+    infoText: Special filter type for external reference codes such as PMIDs or cellosaurus
+      id values. If using multiple codes please be aware that probably use of an "OR"
+      filter logic will be appropriate. This field relies on the existence of the
+      term in the Beacon `filteringTermsResponse`.
+    isHidden: true
+    isMulti: true
+    label: Reference ID(s)
+    options:
+    - label: (no selection)
+      value: ''
+  sex:
+    defaultValue: ''
+    infoText: Genotypic (assumed) sex of the individual.
+    isHidden: false
+    label: Genotypic Sex
+    options:
+    - label: (no selection)
+      value: ''
+    - label: female
+      value: pgx:sex-female
+    - label: male
+      value: pgx:sex-male
+  skip:
+    infoText: The number of result pages to skip when retrieving data.
+    label: Skip Pages
+  start:
+    infoText: The 1-based genomic position of the variant, or the start of a range
+      query, specified through a single value. However, in case of bracket requests
+      for e.g. copy number variants, the start position will usually be provided as
+      a range for the possible occurrence of the CNV start (e.g. "21500001-21975098").
+    label: Start or Position
+    placeholder: 19000001-21975098
+  variantMaxLength:
+    infoText: The maximal length, in bases, of a genomic variant. This parameter can
+      be applied to e.g. CNV queries.
+    isHidden: true
+    label: Max Variant Length
+    type: number
+  variantMinLength:
+    infoText: The minimal length, in bases, of a genomic variant. This parameter can
+      be applied to e.g. CNV queries.
+    isHidden: true
+    label: Min Variant Length
+    type: number
+  variantQueryDigests:
+    infoText: 'This experimental parameter allows you to A: define a variant request
+      in a concatenated `referenceName:start--end:variantType` or  `referenceName:start:referenceBases>alternateBases`
+      format and B) optionally comma-concatenate 2 or more of such strings, to identify
+      samples carrying matches for all of these variations
+
+      This is *not* a standard Beacon option.'
+    isHidden: true
+    label: Variation Shorthand(s)
+    placeholder: 9:9000001-21975098--21967753-24000000:DEL
+    type: string
+  variantType:
+    defaultValue: ''
+    infoText: The type of a structural variant for e.g. CNV searches.
+    label: Variant Type
+    options:
+    - label: ''
+      value: (none)
+    - label: EFO:0030067 (copy number deletion)
+      value: EFO:0030067
+    - label: EFO:0030070 (copy number gain)
+      value: EFO:0030070
+    - label: EFO:0020073 (high-level copy number loss)
+      value: EFO:0020073
+    - label: EFO:0030072 (high-level copy number gain)
+      value: EFO:0030072
+    - label: EFO:0030066 (any relative CN variation)
+      value: EFO:0030066
+    - label: SO:0001059 (any sequence alteration - SNV, INDEL...)
+      value: SO:0001059
+    - label: SO:0000806 (fusion)
+      value: SO:0000806
+    - label: SO:0001413 (translocation breakpoint)
+      value: SO:0001413

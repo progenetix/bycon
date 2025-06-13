@@ -15,6 +15,7 @@ dataset:
       test_values:
         testMode: true
 
+
 ################################################################################
 
 cohort:
@@ -33,6 +34,7 @@ cohort:
     - description: default test mode
       test_values:
         testMode: true
+
 
 ################################################################################
 
@@ -63,6 +65,7 @@ genomicVariant:
       test_values:
         testMode: true
 
+
 ################################################################################
 
 analysis:
@@ -87,6 +90,7 @@ analysis:
     - description: default test mode
       test_values:
         testMode: true
+
 
 ##############################################################################
 
@@ -226,6 +230,7 @@ info:
   is_beacon_entity: true
   content: {}
 
+
 ################################################################################
 
 beaconMap:
@@ -241,6 +246,7 @@ beaconMap:
     schema: https://progenetix.org/services/schemas/beaconMapSchema/
   is_beacon_entity: true
 
+
 ################################################################################
 
 configuration:
@@ -255,6 +261,7 @@ configuration:
     entity_type: configuration
     schema: https://progenetix.org/services/schemas/beaconConfigurationSchema/
   is_beacon_entity: true
+
 
 ################################################################################
 

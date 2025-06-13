@@ -30,17 +30,6 @@ def select_this_server() -> str:
     if not "https" in s_uri and not "https" in X_FORWARDED_PROTO:
         s = s.replace("https://", "http://")
 
-    # for site in test_sites:
-    #     if site in s_uri:
-    #         if https in s_uri:
-    #             s = f'{https}{site}'
-    #         else:
-    #             s = f'{http}{site}'
-
-    # TODO: ERROR hack for https/http mix, CORS...
-    # ... since cloudflare provides https mapping using this as fallback
-
-
     return s
 
 
@@ -120,7 +109,7 @@ def return_paginated_list(this, skip, limit):
 
 ################################################################################
 
-def mongo_result_list(db_name, coll_name, query, fields):
+def mongo_result_list(db_name, coll_name, query, fields={}):
     results = []
 
     mongo_client = MongoClient(host=DB_MONGOHOST)
@@ -262,7 +251,6 @@ def clean_empty_fields(this_object, protected=["external_references"]):
             continue
         if not this_object.get(k):
             this_object.pop(k, None)
-        # prdbug(f'cleaning? {k} - {this_object.get(k)}')
         elif isinstance(this_object[k], dict):
             if not this_object.get(k):
                 this_object.pop(k, None)

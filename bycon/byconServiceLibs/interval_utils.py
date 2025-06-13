@@ -163,7 +163,9 @@ class GenomeBins:
         data_client = MongoClient(host=DB_MONGOHOST)
         data_db = data_client[ ds_id ]
         ana_coll = data_db["analyses"]
-        self.analyses = ana_coll.find({"id": {"$in": analysis_ids}})
+        self.analyses = ana_coll.find({"id": {"$in": analysis_ids}, "operation.id": "EDAM:operation_3961"})
+        if len(self.analyses) < 1:
+            return {}, 0
         self.__interval_counts_from_analyses()
         return self.interval_frequencies, self.analyses_count
 

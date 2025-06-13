@@ -188,19 +188,14 @@ function Biosample({ biosId, biosample, individual, datasetIds }) {
 
   {/*------------------------------------------------------------------------*/}
 
-  {biosample?.provenance && (
+  {biosample?.geoLocation && (
     <>
-    <h5>Provenance</h5>
+    <h5>Origin</h5>
     <ul>
-      {biosample.provenance?.material?.label && (
-        <>
-          <li>Material: {biosample.biosampleStatus.label}</li>
-        </>
-      )}
-      {biosample.provenance?.geoLocation?.properties?.label && (
+      {biosample.geoLocation?.properties?.label && (
         <>
           <li>
-            Origin: {biosample.provenance.geoLocation.properties.label}
+            Origin: {biosample.geoLocation.properties.label}
           </li>
         </>
       )}

@@ -9,7 +9,7 @@ from bycon import (
     BeaconErrorResponse,
     ByconFilters,
     DB_MONGOHOST,
-    geo_query,
+    GeoQuery,
     prdbug
 )
 from byconServiceLibs import ByconMap, ByconServiceResponse, read_service_prefs
@@ -40,7 +40,7 @@ def publications():
     f_d_s = BYC["filter_definitions"].get("$defs", {})
 
     query = __create_filters_query()
-    geo_q, geo_pars = geo_query()
+    geo_q = GeoQuery().get_geoquery()
 
     if geo_q:
         if len(query.keys()) < 1:
@@ -61,7 +61,7 @@ def publications():
     prdbug(f'query: {query}')
 
     for pub in pub_coll.find( query, { "_id": 0 } ):
-        prdbug(f'pub: {pub}')
+        # prdbug(f'pub: {pub}')
         s = { }
         if len(d_k) < 1:
             s = pub
@@ -107,7 +107,7 @@ def __check_publications_map_response(results):
     u_locs = {}
     for p in results:
         counts = p.get("counts", {})
-        geoloc = p.get("provenance", {}).get("geo_location", None)
+        geoloc = p.get("geo_location", None)
         if not geoloc:
             pass
         l_k = "{}::{}".format(geoloc["geometry"]["coordinates"][1], geoloc["geometry"]["coordinates"][0])

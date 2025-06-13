@@ -81,7 +81,6 @@ BYC = {
   "datatable_mappings": {},
   "entity_defaults": {"info":{}},
   "filter_definitions": {"$defs":{}},
-  "geoloc_definitions": {},
   "handover_definitions": {},
   "interval_definitions": {},
   "test_queries": {},

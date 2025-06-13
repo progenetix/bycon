@@ -61,7 +61,7 @@ ordered_metadata_core:
   - analysis_id
   - biosample_id
   - individual_id
-  - experiment_title
+  - experiment_label
   - biosample_name
   - notes
   - histological_diagnosis_id
@@ -174,32 +174,32 @@ $defs:
 
       # bycon &  data management specials
       analysis_operation_id:
-        db_key: analysis_info.operation.id
+        db_key: operation.id
         indexed: True
         examples:
           - EDAM:operation_3961
           - EDAM:operation_3227
       analysis_operation_label:
-        db_key: analysis_info.operation.label
+        db_key: operation.label
         indexed: True
         examples:
           - Copy number variation detection
           - Variant Calling
       experiment_id:
-        db_key: analysis_info.experiment_id
+        db_key: experiment.id
         indexed: True
         examples:
           - "geo:GSM288124"
       series_id:
-        db_key: analysis_info.series_id
+        db_key: series.id
         indexed: True
-      experiment_title:
+      experiment_label:
         description: >-
           The legacy title or name for the experiment, which is an identifier
           used during import, e.g. the id used in the donor publication or study.
           This is complementary to  the `experiment_id` such as `geo:GSM288124`.
         type: string
-        db_key: analysis_info.experiment_title
+        db_key: experiment.label
         beacon_model_path: False
         examples:
           - MDT-MB-100_Nsp

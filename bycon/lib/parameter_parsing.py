@@ -283,6 +283,7 @@ class ByconParameters:
                 v = RefactoredValues(a_d).refVal(values)
                 if v or v == 0:
                     self.byc_pars.update({p_d: v})
+                    prdbug(f'__pars_from_GET: {p_d} =>> {v}')
             else:
                 w_m = f'!!! Unmatched parameter {p}: {self.form_data.getvalue(p)}'
                 BYC["WARNINGS"].append(w_m)

@@ -626,7 +626,25 @@ only for the cytoband converter ... e.g. 8:0-120000000
 
 #### `city` 
 **type:** string    
-**cmdFlags:** `-c,--city`    
+**cmdFlags:** `--city`    
+**description:**
+only for the geolocations...    
+
+#### `country` 
+**type:** string    
+**cmdFlags:** `--country`    
+**description:**
+only for the geolocations...    
+
+#### `iso3166alpha3` 
+**type:** string    
+**cmdFlags:** `--iso3166alpha3`    
+**description:**
+only for the geolocations...    
+
+#### `iso3166alpha2` 
+**type:** string    
+**cmdFlags:** `--iso3166alpha2`    
 **description:**
 only for the geolocations...    
 
@@ -645,8 +663,9 @@ only for the geolocations...
 #### `geo_distance` 
 **type:** integer    
 **cmdFlags:** `--geoDistance`    
+**default:** `2000`    
 **description:**
-only for the geolocations...    
+distance from long, lat point in geolocation queries    
 
 #### `plot_pars` 
 **type:** string    

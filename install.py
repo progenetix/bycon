@@ -36,8 +36,8 @@ def main(no_sudo):
     i_f = path.join(local_conf_source, "env_paths.yaml" )
 
     try:
-        with open( i_f ) as y_c:
-            install = yaml.load( y_c , Loader=yaml.FullLoader)
+        with open(i_f) as y_c:
+            install = yaml.load(y_c, Loader=yaml.FullLoader)
     except Exception as e:
         print(e)
         exit()

@@ -6,12 +6,28 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-06-13: (v2.4.8 "Friday the 13th")
+
+* fixed `geoprov_id` based geolocation importing in `datatable_utils.py` and
+  adjusted the publication table accordingly
+* fixed recently broken importers (empty defaults post value assignments...)
+* removed `geoloc_definitions`
+    - new `GeoQuery()` class
+    - parameters are now only defined in `argument_definitions` and limited to
+      `["city","country","iso3166alpha2","iso3166alpha3","geo_latitude","geo_longitude","geo_distance"]` in the class itself (ATM)
+* reversal of some of the `cnv_required_filters` ... option introduced in 2.4.6
+    - this led to a problem at >220000 analyses, where then the query first
+      matched all CNV samples before intersecting w/ the specific codes & therefore
+      running into the upper limit of MongoDB
+    - `EDAM:operation_3961` is now a hard filter in the `intervalAidFrequencyMaps`
+      function (TODO: better solution?)
 
 ### 2025-06-05: (v2.4.7 "Thessaloniki")
 
 * added a global `NO_PARAM_VALUES` which is used to set matching parameters (e.g. "none", "null", "undefined") to empty strings during input processing (circumvents issues with empty parameters in web front-ends)
 * added clustering, tree generation and labels to the `histocircleplot` plot option
 * started to move request tests to [Bruno](https://docs.usebruno.com/) (in `tests/bycon-tests`)
+* circle plots are now clustered if more than one, with cluster tree and labels
 
 ### 2025-05-26: (v2.4.6)
 

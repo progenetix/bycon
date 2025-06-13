@@ -36,7 +36,7 @@ properties:
   db_key:
     type: string
     examples:
-      - 'external_references.id'
+      - 'references.pubmed.id'
   hierarchy_paths:
     type: array
     items:

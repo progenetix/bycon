@@ -182,10 +182,6 @@ class ByconCollations:
 
         prdbug(f'Collation query: {query}')
         
-        # TODO
-        # if not query:
-        #     warning = 'No limit (filters, collationTypes, id) on collation listing -> abortin...'
-
         s_s = { }
         for ds_id in BYC["BYC_DATASET_IDS"]:
             prdbug(f'... parsing collations for {ds_id}')

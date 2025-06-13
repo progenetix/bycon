@@ -104,14 +104,9 @@ def publications_inserter():
                         continue
                     if v.lower() == "delete":
                         v = ""
-                    datatable_utils.assign_nested_value(n_p, k, v)
 
-            city_tag = pub.get("provenance_id", "")
-            if len(pub["provenance_id"]) > 4:
-                geo_info = mongo_client["_byconServicesDB"]["geolocs"].find_one({"id": pub["provenance_id"]}, {"_id": 0, "id": 0})
-                if geo_info is not None:
-                    n_p["provenance"].update({"geo_location":geo_info["geo_location"]})
-            n_p.pop("provenance_id", None)
+            if (geoprov_id := pub.get("geoprov_id")):
+                add_geolocation_to_pgxdoc(n_p, geoprov_id)
 
             epmc, e = retrieve_epmc_publications(pmid)
             if e is not False:
@@ -241,20 +236,18 @@ def get_empty_publication():
     publication = ByconSchemas("Publication", "").get_schema_instance()
     publication.update({
         "updated": date_isoformat(datetime.now()),
-        "provenance": {
-            "geo_location": {
-                "type": 'Feature',
-                "geometry": {"type": 'Point', "coordinates": [0, 0]},
-                "properties": {
-                    "label": 'Atlantis, Null Island',
-                    "city": 'Atlantis',
-                    "country": 'Null Island',
-                    "continent": 'Africa',
-                    "latitude": 0,
-                    "longitude": 0,
-                    "ISO3166alpha3": 'AAA',
-                    "precision": 'city'
-                }
+        "geo_location": {
+            "type": 'Feature',
+            "geometry": {"type": 'Point', "coordinates": [0, 0]},
+            "properties": {
+                "label": 'Atlantis, Null Island',
+                "city": 'Atlantis',
+                "country": 'Null Island',
+                "continent": 'Africa',
+                "latitude": 0,
+                "longitude": 0,
+                "ISO3166alpha3": 'AAA',
+                "precision": 'city'
             }
         },
         "counts": {"ccgh": 0, "acgh": 0, "wes": 0, "wgs": 0, "ngs": 0, "genomes": 0, "progenetix": 0, "arraymap": 0},

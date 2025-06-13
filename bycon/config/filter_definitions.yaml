@@ -13,6 +13,8 @@ $defs:
       - 'ageAtDiagnosis:<=P18Y'
 
   EDAMoperation:
+    description: >-
+      Genomic analysis type, e.g. variant calling, copy number variation detection
     id: EDAMoperation
     type: ontologyTerm
     iri_prefix: http://purl.obolibrary.org/obo/EDAM_
@@ -24,7 +26,7 @@ $defs:
       replace:
         - "EDAM:"
         - ""
-    db_key: 'analysis_info.operation.id'
+    db_key: operation.id
     description: Genomic analysis type
     scope: analyses
     entity: analysis
@@ -43,9 +45,6 @@ $defs:
     entity: analysis
     pattern: '^..+?$'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - era-EnsembleCNV
 
@@ -89,9 +88,6 @@ $defs:
     entity: individual
     pattern: '^NCIT(:C\d+?)?$'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - NCIT:C41226
 
@@ -113,9 +109,6 @@ $defs:
     entity: biosample
     pattern: '^NCIT(:C\d+?)?$'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - NCIT:C27970
       - NCIT:C27969
@@ -138,9 +131,6 @@ $defs:
     entity: biosample
     pattern: '^NCIT(:C\d+?)?$'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - NCIT:C48700
       - NCIT:C48786
@@ -163,9 +153,6 @@ $defs:
     entity: biosample
     pattern: '^NCIT(:C\d+?)?$'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - NCIT:C27676
       - NCIT:C9325
@@ -187,9 +174,6 @@ $defs:
     entity: individual
     pattern: '^NCIT(:C\d+?)?$'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - NCIT:C27676
       - NCIT:C9325
@@ -206,9 +190,6 @@ $defs:
     entity: individual
     pattern: '^HP(:\d+?)?$'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - HP:0012209
 
@@ -253,9 +234,6 @@ $defs:
     entity: individual
     pattern: '^\w+(:[\w\-]+)?$'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - NCIT:C20197
       - NCIT:C16576
@@ -287,9 +265,6 @@ $defs:
     entity: individual
     pattern: '^EFO(:\d+?)?$'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - EFO:0030039
       - EFO:0030049
@@ -306,9 +281,6 @@ $defs:
     entity: biosample
     pattern: '^(?:EFO)|(?:OBI):\d+?$'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - EFO:0009656
       - EFO:0030035
@@ -330,9 +302,6 @@ $defs:
     entity: biosample
     pattern: '^pubmed(:\d+?)?$'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - pubmed:28966033
       - pubmed:9405679
@@ -351,11 +320,8 @@ $defs:
     pattern: '^geo:GSE\d+?$'
     scope: analyses
     entity: analysis
-    db_key: 'analysis_info.series_id'
+    db_key: 'series.id'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - geo:GSE19331
 
@@ -375,9 +341,6 @@ $defs:
     entity: analysis
     db_key: 'platform_model.id'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - geo:GPL6504
       - geo:GPL6801
@@ -398,7 +361,7 @@ $defs:
     pattern: '^(?:geo:)?GSM\d+?$'
     scope: analyses
     entity: analysis
-    db_key: 'analysis_info.experiment_id'
+    db_key: 'experiment.id'
     collationed: False
     examples:
       - geo:GSM253289
@@ -417,11 +380,8 @@ $defs:
     pattern: '^arrayexpress:E[\-\w]+$'
     scope: analyses
     entity: analysis
-    db_key: 'analysis_info.series_id'
+    db_key: 'series.id'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
 
   AEexperiment:
     id: AEexperiment
@@ -434,7 +394,7 @@ $defs:
       replace:
         - "arrayexpress:"
         - ""
-    db_key: 'analysis_info.experiment_id'
+    db_key: experiment.id
     scope: analyses
     entity: analysis
     pattern: '^arrayexpress:[AEP]-\w{4}-[\-\w]+$'
@@ -459,9 +419,6 @@ $defs:
     db_key: 'sample_origin_detail.id'
     pattern: '^UBERON(:\d+?)?$'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - UBERON:0000959
       - UBERON:0001869
@@ -483,9 +440,6 @@ $defs:
     entity: biosample
     pattern: '^cellosaurus:CVCL_\w*?$'
     collationed: True
-    cnv_excluded_filters: []
-    cnv_required_filters:
-      - EDAM:operation_3961
     examples:
       - 'cellosaurus:CVCL_1650'
       - 'cellosaurus:CVCL_0006'

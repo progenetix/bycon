@@ -277,8 +277,6 @@ class ByconBundler:
             s_r = ds_res[res_k]
             s_ids = s_r["target_values"]
             r_no = len(s_ids)
-            # if r_no < 1:
-            #     continue
             prdbug(f'...... __analyses_bundle_from_result_set limit: {self.limit}')
             s_ids = return_paginated_list(s_ids, self.skip, self.limit)
             prdbug(f'...... __analyses_bundle_from_result_set after: {len(s_ids)}')
@@ -415,7 +413,6 @@ class ByconBundler:
         # self.dataset_ids = list(set([cs.get("dataset_id", "NA") for cs in self.bundle["analyses"]]))
         GB = GenomeBins()
         for ds_id in self.datasets_results.keys():
-        # for ds_id in self.dataset_ids:
             dscs = list(filter(lambda cs: cs.get("dataset_id", "NA") == ds_id, self.bundle["analyses"]))
             intervals, cnv_ana_count = GB.intervalFrequencyMaps(dscs)
             if cnv_ana_count < self.min_number:

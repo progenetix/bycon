@@ -237,24 +237,24 @@ function Node({
               <Expander isOpen={isOpen} setOpen={setOpen} />
             </span>
           )}
-          <Tippy content={`Show data for subset "${subset.label}"`}>
+          <Tippy content={`Show data for subset"${subset.id}"`}>
             <>
             {(subset?.label && (
               <span className="Subsets__tree__label" title={subset.label}>
               <a href={`/${detailsPage}/?id=${subsetId}&datasetIds=${datasetIds}`}>
-              {subset.label}</a>: {subsetId}
+              {subset.label}</a>: {subset.id}
               </span>
             ))
             || 
-              <span className="Subsets__tree__label" title={subsetId}>
+              <span className="Subsets__tree__label" title={subset.id}>
               <a href={`/${detailsPage}/?id=${subsetId}&datasetIds=${datasetIds}`}>
-              {subsetId}</a>: {subsetId}
+              {subset.id}</a>: {subset.id}
               </span>
             }
             </>
           </Tippy>
           {isSearchPossible ? (
-            <Tippy content={`Click to retrieve samples for ${subsetId}`}>
+            <Tippy content={`Click to retrieve samples for ${subset.id}`}>
               <a
                 style={{ flexShrink: "0" }}
                 href={sampleSelectUrl({

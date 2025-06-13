@@ -37,7 +37,7 @@ all supported parameters.
 * stick with the provided ones or replace them with your own (unique) ones but
   make sure to track provenance with some provided fields:
     - `experiment_id` as structured analysis identifier (e.g. `geo:GSM288124`)
-    - `experiment_title` for some colloquial labe (e.g. `sample_03_2nd_run`)
+    - `experiment_label` for some colloquial label (e.g. `sample_03_2nd_run`)
     - `biosample_name` for a local identifier of the biosample in case you use the
       random identifiers from the template (e.g. `005cb7ce-5050-43aa-85ff-cd56ed830535` or `FCL 0089`)
 * **use the same `analysis_id` identifiers as in the variants import table**

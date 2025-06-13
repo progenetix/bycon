@@ -31,7 +31,8 @@ def main():
         "update_cs_statusmaps": input(f'Update statusmaps in `analyses` for {ds_id}?\n(y|N): '),
         "update_collations": input(f'Create `collations` for {ds_id}?\n(Y|n): '),
         "update_frequencymaps": input(f'Create `frequencymaps` for {ds_id} collations?\n(Y|n): '),
-        "datasets_counts": input("Recalculate counts for all datasets?\n(y|N): ")
+        "datasets_counts": input("Recalculate counts for all datasets?\n(y|N): "),
+        "geolocs_updates": input("Relabel all biosamples with existing geolocation?\n(y|N): ")
     }
 
     data_db = MongoClient(host=DB_MONGOHOST)[ ds_id ]
@@ -43,6 +44,134 @@ def main():
         system(f'{loc_path}/mongodbIndexer.py -d {ds_id}')
 
     #>------------------- / MongoDB index updates ----------------------------<#
+
+    #>------------------------- biosamples -----------------------------------<#
+
+    if "y" in todos.get("geolocs_updates", "n").lower():
+        geo_db = MongoClient(host=DB_MONGOHOST)[SERVICES_DB]
+        max_dist_m = 2
+        biosamples_coll = data_db["biosamples"]
+        dist_locs = biosamples_coll.distinct("geo_location")
+        print(f'=> Found {len(dist_locs)} distinct geolocations in biosamples.')
+
+        gn = len(dist_locs)
+        if not BYC["TEST_MODE"]:
+            bar = Bar(f"=> {gn} geolocations", max = gn, suffix='%(percent)d%%'+" of "+str(gn) )
+
+        for loc in dist_locs:
+            if not BYC["TEST_MODE"]:
+                bar.next()
+            if not isinstance(loc, dict):
+                continue
+            if not len(coords := loc.get("geometry", {}).get("coordinates", [])) == 2:
+                continue
+
+            city = loc.get("properties", {}).get("city", "")
+            country = loc.get("properties", {}).get("country", "")
+
+            query = { "geo_location.geometry":{
+                '$near': SON(
+                    [
+                        (
+                            '$geometry', SON(
+                                [
+                                    ('type', 'Point'),
+                                    ('coordinates', coords)
+                                ]
+                            )
+                        ),
+                        ('$maxDistance', max_dist_m)
+                    ]
+                )
+            }}
+
+            if city == "Leipzig" and country == "Germany":
+                loc_query = {"id": "leipzig::germany"}
+            elif city == "Berlin" and country == "Germany":
+                loc_query = {"id": "berlin::germany"}
+            elif city == "Barcelona" and country == "Spain":
+                loc_query = {"id": "barcelona::spain"}
+            elif city == "Rotterdam":
+                loc_query = {"id": "rotterdam::netherlands"}
+            elif city == "Bochum":
+                loc_query = {"id": "bochum::germany"}
+            elif city == "Bologna":
+                loc_query = {"id": "bologna::italy"}
+            elif city == "Marseille":
+                loc_query = {"id": "marseille::france"}
+            elif city == "Madrid" and country == "Spain":
+                loc_query = {"id": "madrid::spain"}
+            elif city == "Kanazawa":
+                loc_query = {"id": "kanazawashi::japan"}
+            elif city == "London" and country == "United Kingdom":
+                loc_query = {"id": "london::unitedkingdom"}
+            elif city == "Amsterdam" and country == "Netherlands":
+                loc_query = {"id": "amsterdam::netherlands"}
+            elif city == "Goettingen":
+                loc_query = {"id": "goettingen::germany"}
+            elif city == "Bethesda":
+                loc_query = {"id": "bethesda::unitedstates"}
+            elif city == "Cambridge UK":
+                loc_query = {"id": "cambridge::unitedkingdom"}
+            elif city == "Hong Kong":
+                loc_query = {"id": "hongkong::china"}
+            elif city == "Leiden":
+                loc_query = {"id": "leiden::netherlands"}
+            elif city == "New Taipei":
+                loc_query = {"id": "taipei::taiwan"}
+            elif city == "Nijmegen":
+                loc_query = {"id": "nijmegen::netherlands"}
+            elif city == "Marburg":
+                loc_query = {"id": "marburganderlahn::germany"}
+            elif city == "bronx":
+                loc_query = {"id": "newyorkcity::unitedstates"}
+            elif city == "Plzen":
+                loc_query = {"id": "pilsen::czechrepublic"}
+            elif city == "saint louis":
+                loc_query = {"id": "stlouis::unitedstates"}
+            elif city == "Birmingham" and country == "United States of America":
+                loc_query = {"id": "birmingham::unitedstates"}
+            elif city == "Augusta" and country == "United States of America":
+                loc_query = {"id": "augusta::unitedstates"}
+            # elif city == "":
+            #     loc_query = {"id": ""}
+            # elif city == "" and country == "":
+            #     loc_query = {"id": ""}
+            else:
+                loc_query = query
+
+            geolocs = mongo_result_list(SERVICES_DB, GEOLOCS_COLL, loc_query, { '_id': False } )
+            if len(geolocs) != 1:
+                e = [city, country, coords[0], coords[1], len(geolocs)]
+                print("\t".join(str(x) for x in e))
+
+                continue
+
+            # continue
+
+            geo_location = geolocs[0].get("geo_location", {})
+            geo_location["properties"].update({"geoprov_id": geolocs[0].get("id", "")})
+
+            dist_k = "_id"
+            loc_samples = biosamples_coll.distinct(dist_k, query)
+            if BYC["TEST_MODE"]:
+                prjsonnice(geo_location)
+                print(f'=> Found {len(loc_samples)} biosamples for {city}, {country}\n')
+
+            for bio_s_id in loc_samples:
+                if BYC["TEST_MODE"]:
+                    print(f'==> Updating biosample {bio_s_id} with geolocation {geo_location}')
+                else:
+                    biosamples_coll.update_one(
+                        {dist_k: bio_s_id},
+                        {"$set": {"geo_location": geo_location}}
+                    )
+
+        if not BYC["TEST_MODE"]:
+            bar.finish()
+
+
+    #>----------------------- / biosamples -----------------------------------<#
 
     #>------------------------- analyses -------------------------------------<#
 
@@ -77,7 +206,7 @@ def main():
 
     #>------------------------------------------------------------------------<#
 
-    if "y" in todos.get("update_cs_statusmaps", "y").lower():
+    if "y" in todos.get("update_cs_statusmaps", "n").lower():
         command = f'{loc_path}/analysesStatusmapsRefresher.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}'
         print(f'==> executing "{command}"')
         system(command)
@@ -160,7 +289,7 @@ def main():
 
     #>---------------------- update collations -------------------------------<#
 
-    if not "n" in todos.get("update_collations", "y").lower():
+    if "y" in todos.get("update_collations", "n").lower():
         command = f'{loc_path}/collationsCreator.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}'
         print(f'\n{__hl()}==> executing \n\n{command}\n')
         system(command)
@@ -169,7 +298,7 @@ def main():
 
     #>--------------------- update frequencymaps -----------------------------<#
 
-    if not "n" in todos.get("update_frequencymaps", "y").lower():
+    if "y" in todos.get("update_frequencymaps", "n").lower():
         command = f'{loc_path}/collationsFrequencymapsCreator.py -d {ds_id} --limit {BYC_PARS.get("limit", 200)}'
         print(f'\n{__hl()}==> executing "{command}"\n')
         system(command)
