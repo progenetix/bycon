@@ -19,7 +19,6 @@ try:
     from export_file_generation import *
     from file_utils import *
     from geoloc_utils import *
-    from interval_utils import *
     from ontology_utils import *
     from service_helpers import *
     from service_response_generation import *

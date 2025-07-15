@@ -7,11 +7,12 @@ from os import pardir, path
 from bycon import (
     BYC,
     BYC_PARS,
+    ByconID,
     ByconEntities,
     ByconResultSets,
     prdbug
 )
-from byconServiceLibs import assert_single_dataset_or_exit, ByconDatatableExporter, ByconImporter, ByconID
+from byconServiceLibs import assert_single_dataset_or_exit, ByconDatatableExporter, ByconImporter
 
 # loc_path = path.dirname( path.abspath(__file__) )
 # lib_path = path.join(loc_path , pardir, "importers", "lib")

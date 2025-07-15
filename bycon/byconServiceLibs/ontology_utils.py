@@ -4,16 +4,18 @@ from progress.bar import Bar
 
 from pymongo import MongoClient
 
-from bycon import (
-    BYC,
-    BYC_PARS,
-    ByconFilters,
-    ByconParameters,
-    DB_MONGOHOST,
-    mongo_and_or_query_from_list,
-    prdbug,
-    prjsonnice
-)
+from bycon import *
+
+# from bycon import (
+#     BYC,
+#     BYC_PARS,
+#     ByconFilters,
+#     ByconParameters,
+#     DB_MONGOHOST,
+#     mongo_and_or_query_from_list,
+#     prdbug,
+#     prjsonnice
+# )
 
 class OntologyMaps:
     """

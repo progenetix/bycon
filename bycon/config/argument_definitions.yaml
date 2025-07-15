@@ -175,6 +175,14 @@ $defs:
     description: either `start` or `exact` for matching filter values
     default: exact
 
+  summary_terms:
+    type: array
+    items:
+      type: string
+    cmdFlags:
+      - --summaryTerms
+    description: Experimental for Beacon v2+ for indicating which summaries to provide
+
   filter_logic:
     type: string
     cmdFlags:
@@ -798,8 +806,25 @@ $defs:
   city:
     type: string
     cmdFlags:
-      - -c
       - --city
+    description: only for the geolocations...
+
+  country:
+    type: string
+    cmdFlags:
+      - --country
+    description: only for the geolocations...
+
+  iso3166alpha3:
+    type: string
+    cmdFlags:
+      - --iso3166alpha3
+    description: only for the geolocations...
+
+  iso3166alpha2:
+    type: string
+    cmdFlags:
+      - --iso3166alpha2
     description: only for the geolocations...
 
   geo_latitude:
@@ -818,7 +843,9 @@ $defs:
     type: integer
     cmdFlags:
       - --geoDistance
-    description: only for the geolocations...
+    default: 2000
+    description: distance from long, lat point in geolocation queries
+
 
   ################################################################################
   # plot ... 

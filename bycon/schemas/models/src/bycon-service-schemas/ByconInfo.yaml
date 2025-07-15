@@ -1,0 +1,17 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/ByconInfoItem/v2025-06-16
+title: ByconInfoItem
+type: object
+description: >-
+  This schema represents objects for the storage of database content (e.g.
+  datasets, counts, collation items).
+properties:
+  date:
+    type: string
+    format: date
+  datasets:
+    $ref: "#/$defs/DatasetInfo"
+
+$defs:
+  DatasetInfo:
+    type: object

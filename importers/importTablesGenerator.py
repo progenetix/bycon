@@ -2,10 +2,9 @@
 
 from os import path, pardir, system
 from bycon import *
-from byconServiceLibs import ByconID
 
 dir_path = path.dirname( path.relpath(__file__) )
-pkg_path = path.join( dir_path, pardir )
+project_path = path.join( dir_path, pardir )
 
 """
 This script uses the `datatable_definitions.yaml` from `bycon` tpo generate import
@@ -19,7 +18,7 @@ def main():
     dt_m = BYC["datatable_mappings"].get("$defs", {})
     ordered_mcs = BYC["datatable_mappings"].get("ordered_metadata_core", [])
     ordered_vcs = BYC["datatable_mappings"].get("ordered_variants_core", [])
-    rsrc_p = path.join(pkg_path, "rsrc", "templates")
+    rsrc_p = path.join(project_path, "rsrc", "templates")
     root_path = input(f'Templates will be saved inside\n=> {rsrc_p}\nEnter a different path or just hit ENTER to use the default:\n')
 
     if len(root_path) > 0:

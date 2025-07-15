@@ -22,9 +22,12 @@ class ByconSchemas:
         self.ext = "json"
         self.schema_path = False
 
-        if self.schema_name in self.entity_defaults:
-            if (r_p_id := self.entity_defaults[self.schema_name].get("request_entity_path_id")):
-                self.schema_path_id = r_p_id
+        # TODO: commented out since on 2025-07-04 in bycon the
+        # `bycon-model/__request_entity_path_id__/defaultSchema.yaml`
+        # was replaced with `bycon-model/__request_entity_id__.yaml`
+        # if self.schema_name in self.entity_defaults:
+        #     if (r_p_id := self.entity_defaults[self.schema_name].get("request_entity_path_id")):
+        #         self.schema_path_id = r_p_id
 
         self.__retrieve_schema_file_path()
 
@@ -68,19 +71,19 @@ class ByconSchemas:
     # -------------------------------------------------------------------------#
 
     def __retrieve_schema_file_path(self):
-        self.__get_default_schema_file_path()
+        # self.__get_default_schema_file_path()
         self.__get_schema_file_path()
 
 
     # -------------------------------------------------------------------------#
 
-    def __get_default_schema_file_path(self):
-        f_n = f'defaultSchema.{self.ext}'
-        s_p_s = [ f for f in self.schemas_root.rglob("*") if f.is_file() ]
-        s_p_s = [ f for f in s_p_s if f.name == f_n ]
-        s_p_s = [ f for f in s_p_s if f.parent.name == self.schema_path_id ]
-        if len(s_p_s) == 1:
-            self.schema_path = f'{s_p_s[0].resolve()}'
+    # def __get_default_schema_file_path(self):
+    #     f_n = f'defaultSchema.{self.ext}'
+    #     s_p_s = [ f for f in self.schemas_root.rglob("*") if f.is_file() ]
+    #     s_p_s = [ f for f in s_p_s if f.name == f_n ]
+    #     s_p_s = [ f for f in s_p_s if f.parent.name == self.schema_path_id ]
+    #     if len(s_p_s) == 1:
+    #         self.schema_path = f'{s_p_s[0].resolve()}'
 
 
     # -------------------------------------------------------------------------#

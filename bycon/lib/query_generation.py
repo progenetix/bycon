@@ -3,7 +3,7 @@ from bson import SON
 from os import environ
 from pymongo import MongoClient
 
-from bycon_helpers import days_from_iso8601duration, prdbug, prjsonnice, return_paginated_list
+from bycon_helpers import days_from_iso8601duration, mongo_and_or_query_from_list, prdbug, prjsonnice, return_paginated_list
 from config import *
 from genome_utils import ChroNames, Cytobands, GeneInfo, VariantTypes
 from parameter_parsing import ByconFilters
@@ -858,7 +858,7 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __query_from_geoquery(self, entity="biosample"):
-        geo_q, geo_pars = geo_query()
+        geo_q = GeoQuery().get_geoquery()
         if not geo_q:
             return
         self.__update_queries_for_entity([geo_q], entity)
@@ -952,137 +952,151 @@ class ByconQuery():
 ################################################################################
 ################################################################################
 
-def geo_query():
-    g_l_d = BYC.get("geoloc_definitions", {})
-    g_p_defs = g_l_d.get("parameters", {})
-    g_p_rts = g_l_d.get("request_types", {})
-    geo_root = g_l_d.get("geo_root", "___none___")
+class GeoQuery():
+    """
+    This class is used to generate a query for the geolocation data.
+    It is an extension of the standard BeaconQuery process.
+    """
 
-    geo_q = None
-    geo_pars = None
-    geo_form_pars = {}
-    for g_f_p in g_p_defs.keys():
-        f_v = BYC_PARS.get(g_f_p)
-        if f_v:
-            geo_form_pars.update({g_f_p: f_v})
-    if len(geo_form_pars.keys()) < 1:
-        return geo_q, geo_pars
-    req_type = ""
-    # TODO: Make this modular & fix the one_of interpretation to really only 1
-    for rt in g_p_rts:
-        g_p = {}
-        min_p_no = 1
-        mat_p_no = 0
-        if "all_of" in g_p_rts[rt]:
-            g_q_k = g_p_rts[rt]["all_of"]
-            min_p_no = len(g_q_k)
-        elif "one_of" in g_p_rts[rt]:
-            g_q_k = g_p_rts[rt]["one_of"]
-        else:
-            continue
-
-        all_p = g_p_rts[rt].get("any_of", []) + g_q_k
-        for g_k in g_p_defs.keys():
-            if g_k not in all_p:
-                continue
-            g_default = g_p_defs[g_k].get("default")
-            # TODO: This is an ISO lower hack ...
-            if g_k in geo_form_pars.keys():
-                g_v = geo_form_pars[g_k]
-            elif g_default:
-                g_v = g_default
-            else:
-                continue
-            if not re.compile(g_p_defs[g_k]["pattern"]).match(str(g_v)):
-                continue
-            if "float" in g_p_defs[g_k]["type"]:
-                g_p[g_k] = float(g_v)
-            else:
-                g_p[g_k] = g_v
-            if g_k in g_q_k:
-                mat_p_no += 1
-
-        if mat_p_no < min_p_no:
-            continue
-
-        req_type = rt
-        geo_pars = g_p
-
-    if "city" in req_type:
-        geo_q = return_geo_city_query(geo_root, geo_pars)
-        return geo_q, geo_pars
-
-    if "id" in req_type:
-        geo_q = {"id": re.compile(geo_pars["id"], re.IGNORECASE)}
-        return geo_q, geo_pars
-    if "ISO3166alpha2" in req_type:
-        geo_q = {"geo_location.properties.ISO3166alpha2": BYC_PARS["iso3166alpha2"].upper()}
-        return geo_q, geo_pars
-    if "geoquery" in req_type:
-        geoq_l = [return_geo_longlat_query(geo_root, geo_pars)]
-        for g_k in g_p_rts["geoquery"]["any_of"]:
-            if g_k in geo_pars.keys():
-                g_v = geo_pars[g_k]
-                geopar = ".".join([geo_root, "properties", g_k])
-                geoq_l.append({geopar: re.compile(r'^' + str(g_v), re.IGNORECASE)})
-
-        if len(geoq_l) > 1:
-            geo_q = {"$and": geoq_l}
-        else:
-            geo_q = geoq_l[0]
-    return geo_q, geo_pars
-
-
-################################################################################
-
-def return_geo_city_query(geo_root, geo_pars):
-    geoq_l = []
-
-    for g_k, g_v in geo_pars.items():
-        if len(geo_root) > 0:
-            geopar = ".".join([geo_root, "properties", g_k])
-        else:
-            geopar = ".".join(["properties", g_k])
-
-        geoq_l.append({geopar: re.compile(r'^' + str(g_v), re.IGNORECASE)})
-
-    if len(geoq_l) > 1:
-        return {"$and": geoq_l}
-    else:
-        return geoq_l[0]
-
-
-################################################################################
-
-def return_geo_longlat_query(geo_root, geo_pars):
-    if len(geo_root) > 0:
-        geojsonpar = ".".join((geo_root, "geometry"))
-    else:
-        geojsonpar = "geo_location.geometry"
-
-    geo_q = {
-        geojsonpar: {
-            '$near': SON(
-                [
-                    (
-                        '$geometry', SON(
-                            [
-                                ('type', 'Point'),
-                                ('coordinates', [
-                                    geo_pars["geo_longitude"],
-                                    geo_pars["geo_latitude"]
-                                ])
-                            ]
-                        )
-                    ),
-                    ('$maxDistance', geo_pars["geo_distance"])
-                ]
-            )
+    def __init__(self, geo_root="geo_location"):
+        self.argument_definitions = BYC.get("argument_definitions", {}).get("parameters", {})
+        
+        # this is a remnant of geo objects in different nestings...
+        self.geo_root = geo_root
+        self.geo_dot_keys = {
+            "properties": "properties",
+            "geometry": "geometry"
         }
-    }
+        if len(self.geo_root) > 0:
+            for k, v in self.geo_dot_keys.items():
+                self.geo_dot_keys[k] = ".".join([self.geo_root, v])
 
-    return geo_q
+        self.geo_pars = {
+            "city": None,
+            "country": None,
+            "iso3166alpha2": None,
+            "iso3166alpha3": None,
+            "geo_latitude": None,
+            "geo_longitude": None,
+            "geo_distance": None
+        }
+
+        self.__get_geo_pars()
+
+        self.query = {
+            "expand": True,
+            "geo_query": {}
+        }
+
+        self.__geo_city_query()
+        self.__geo_geo_longlat_query()
+
+#         self.query = mongo_and_or_query_from_list(geoq_l)
 
 
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def get_geoquery(self):
+        return self.query.get("geo_query", {})
+
+
+    # -------------------------------------------------------------------------#
+
+    def get_geopars(self):
+        return self.geo_pars
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- private -----------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __get_geo_pars(self):
+        """
+        This method retrieves the geolocation parameters from the general
+        parameters object.
+        """
+        g_k_s = list(self.geo_pars.keys())
+
+        for p_k, p_v_s in BYC_PARS.items():
+            if not p_k in g_k_s:
+                continue
+            self.geo_pars.update({p_k: p_v_s})
+
+        # remove all keys with empty values
+        for g_k in g_k_s:
+            if not self.geo_pars.get(g_k):
+                self.geo_pars.pop(g_k, None)
+
+        prdbug(f'...__get_geo_pars: {self.geo_pars}')
+
+
+
+    # -------------------------------------------------------------------------#
+
+    def __geo_geo_longlat_query(self):
+        if self.query.get("expand") is not True:
+            return
+
+        for g_k in ["geo_latitude", "geo_longitude", "geo_distance"]:
+            if not self.geo_pars.get(g_k):
+                return
+
+        geoq_l = [ {
+            self.geo_dot_keys["geometry"]: {
+                '$near': SON(
+                    [
+                        (
+                            '$geometry', SON(
+                                [
+                                    ('type', 'Point'),
+                                    ('coordinates', [
+                                        self.geo_pars.get("geo_longitude"),
+                                        self.geo_pars.get("geo_latitude")
+                                    ])
+                                ]
+                            )
+                        ),
+                        ('$maxDistance', self.geo_pars.get("geo_distance"))
+                    ]
+                )
+            }
+        } ]
+
+        self.query.update({
+            "geo_query": mongo_and_or_query_from_list(geoq_l),
+            "expand": False
+        })
+
+
+    # -------------------------------------------------------------------------#
+
+    def __geo_city_query(self):
+        if self.query.get("expand") is not True:
+            return
+        if len(city_v := self.geo_pars.get("city", "")) < 1:
+            return
+
+        geoq_l = [
+            {f'{self.geo_dot_keys["properties"]}.city': re.compile(r'^' + str(city_v), re.IGNORECASE)}
+        ]
+
+        for g_k in ["country", "iso3166alpha3", "iso3166alpha2"]:
+            if len(g_v := self.geo_pars.get(g_k, "")) < 1:
+                continue
+
+            geoq_l.append(
+                {f'{self.geo_dot_keys["properties"]}.{g_k}': re.compile(r'^' + str(g_v) + r'$', re.IGNORECASE)}
+            )
+
+        self.query.update({
+            "geo_query": mongo_and_or_query_from_list(geoq_l),
+            "expand": False
+        })
+
+
+################################################################################
+################################################################################
 ################################################################################
 

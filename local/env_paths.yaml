@@ -35,6 +35,12 @@ server_site_dir_loc:
   - Sites
   - beaconplus
 
+housekeeping_log_dir_loc:
+
+  - ___PROJECT_PATH___
+  - ___pardir___
+  - bycon_logs
+
 # optional array plotting resources
 
 server_callsets_dir_loc:

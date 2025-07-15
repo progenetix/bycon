@@ -1,5 +1,16 @@
 # Bycon Tests
 
+## Using IP and script paths
+
+This is especially useful if one wants to make sure which specific nmachine is being
+used, circumvent services like Cloudflare etc.
+
+http://127.0.0.1/cgi-bin/bycon/services/services.py?requestEntityPathId=collationplots&filters=pgx:icdom-85003
+http://130.60.62.5/cgi-bin/bycon/services/services.py?requestEntityPathId=collationplots&filters=pgx:icdom-85003
+http://127.0.0.1/cgi-bin/bycon/beaconServer/beacon.py?requestEntityPathId=datasets
+http://127.0.0.1/cgi-bin/bycon/beaconServer/beacon.py?requestEntityPathId=biosamples&testMode=true
+
+
 ## Standard Beacon Protocol
 
 http://progenetix.test/beacon/biosamples?filters=NCIT:C3697

@@ -1,10 +1,12 @@
 import csv, re, requests, sys
 from os import path
+from pymongo import MongoClient
 
 # bycon
 from bycon import (
     BYC,
     BYC_PARS,
+    DB_MONGOHOST,
     RefactoredValues,
     prdbug,
     prdlhead,
@@ -116,12 +118,19 @@ def import_datatable_dict_line(parent, fieldnames, lineobj, primary_scope="biosa
         v = lineobj[f_n].strip()
         if v.lower() in (".", "na"):
             v = ""
-        if "{" in v and "}" in v:
+        if v.startswith("{") and v.endswith("}"):
             v = ""
         if len(v) < 1:
             if f_n in io_params.keys():
                 v = io_params[f_n].get("default", "")
         if len(v) < 1:
+            continue
+
+        # prdbug(f'Importing {f_n} with value: {v}')
+
+        # special case for geolocations
+        if "geoprov_id" in f_n:
+            add_geolocation_to_pgxdoc(parent, v)
             continue
 
         # this makes only sense for updating existing data; if there would be
@@ -228,3 +237,26 @@ def get_nested_value(parent, dotted_key, parameter_type="string"):
         return '_too_deep_'
 
     return v
+
+################################################################################
+
+def add_geolocation_to_pgxdoc(pgxdoc, geoprov_id):
+    """
+    Adds a geolocation to a pgxdoc by its ID.
+    """
+    if not geoprov_id:
+        return pgxdoc
+
+    if not "::" in geoprov_id:
+        return pgxdoc
+
+    mongo_client = MongoClient(host=DB_MONGOHOST)
+    geo_info = mongo_client["_byconServicesDB"]["geolocs"].find_one({"id": geoprov_id}, {"_id": 0, "id": 0})
+    if geo_info is None:
+        return pgxdoc
+    pgxdoc.update({"geo_location": geo_info.get("geo_location", {})})
+    pgxdoc["geo_location"]["properties"].update({"geoprov_id": geoprov_id})
+    mongo_client.close()
+
+    return pgxdoc
+

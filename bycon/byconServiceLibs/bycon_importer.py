@@ -6,14 +6,14 @@ from pymongo import MongoClient
 from random import sample as random_samples
 
 # bycon
-from bycon import BYC, BYC_PARS, ByconDatasets, ByconVariant, DB_MONGOHOST, prjsonnice, prdbug
+from bycon import BYC, BYC_PARS, ByconDatasets, ByconID, ByconVariant, DB_MONGOHOST, prjsonnice, prdbug
 
 services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 sys.path.append( services_lib_path )
 from bycon_bundler import ByconBundler
 from datatable_utils import import_datatable_dict_line
 from file_utils import write_log
-from service_helpers import assert_single_dataset_or_exit, ByconID
+from service_helpers import assert_single_dataset_or_exit
 
 ################################################################################
 ################################################################################
@@ -30,8 +30,6 @@ class ByconImporter():
         self.delMatchedVars = "n"
         self.log = []
         self.entity = None
-        self.dataset_id = None
-        self.input_file = None
         self.import_collname = None
         self.import_entity = None
         self.import_id = None
@@ -398,6 +396,8 @@ class ByconImporter():
             self.import_ids.append(import_id_v)          
             self.import_docs.append(dict(new_doc))
 
+        # prdbug(self.import_docs)
+
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
@@ -724,9 +724,8 @@ class ByconImporter():
         iid = self.import_id
         import_id_v = new_doc[iid]
         if "individuals" in self.upstream:
-            prdbug(self.ind_coll.find_one({"id": ind_id}))
             if not self.ind_coll.find_one({"id": ind_id}):
-                prdbug(f'... {ind_id} for {self.dataset_id}.{self.ind_coll} not found')
+                prdbug(f'... {ind_id} for `{self.dataset_id}.individuals` not found')
                 self.log.append(f'individual {ind_id} for {self.dataset_id}.{ien} {import_id_v} should exist before {ien} import')
         if "biosamples" in self.upstream:
             if not self.bios_coll.find_one({"id": bios_id}):

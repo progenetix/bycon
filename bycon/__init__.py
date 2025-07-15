@@ -16,8 +16,11 @@ try:
     from beacon_auth import *
     from beacon_response_generation import *
     from bycon_helpers import *
+    from bycon_info import *
+    from bycon_summarizer import *
     from genome_utils import *
     from handover_generation import *
+    from interval_utils import *
     from parameter_parsing import *
     from query_execution import *
     from query_generation import *
@@ -39,8 +42,8 @@ try:
 
     if (tm := BYC_PARS.get("test_mode")):
         BYC.update({"TEST_MODE": test_truthy(tm)})
-    if BYC.get("TEST_MODE") is True:
-        BYC_PARS.update({"include_handovers": True})
+    # if BYC.get("TEST_MODE") is True:
+    #     BYC_PARS.update({"include_handovers": True})
 
     set_user_name()
     set_returned_granularities()    

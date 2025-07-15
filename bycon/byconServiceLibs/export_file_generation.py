@@ -8,9 +8,11 @@ from bycon import (
     BYC,
     BYC_PARS,
     ByconFilters,
+    ByconID,
     ByconVariant,
     DB_MONGOHOST,
     ENV,
+    GenomeBins,
     prdbug,
     RefactoredValues,
     return_paginated_list,
@@ -21,9 +23,7 @@ from bycon import (
 services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 sys.path.append( services_lib_path )
 from bycon_plot import ByconPlotPars
-from interval_utils import GenomeBins
 from datatable_utils import get_nested_value
-from service_helpers import ByconID
 
 
 ################################################################################

@@ -1,19 +1,20 @@
 import json, requests, sys
 from datetime import datetime
 from deepmerge import always_merger
-from os import environ
+from os import environ, pardir, path
 from random import sample as random_samples
 
 from config import *
 
 from bycon_helpers import *
+from bycon_info import ByconInfo
+from bycon_summarizer import ByconSummary
 from handover_generation import dataset_response_add_handovers
 from parameter_parsing import ByconFilters, ByconParameters
 from query_execution import ByconDatasetResults # execute_bycon_queries
 from query_generation import ByconQuery
 from response_remapping import *
 from schema_parsing import ByconSchemas
-from variant_mapping import ByconVariant
 
 ################################################################################
 
@@ -87,6 +88,7 @@ class BeaconResponseMeta:
         self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
         self.entity_defaults = BYC.get("entity_defaults", {})
         self.response_meta = ByconSchemas("beaconResponseMeta", "").get_schema_instance()
+        self.returned_granularity = BYC.get("returned_granularity", "boolean")
         self.data_response = data_response
         self.record_queries = None
         self.filters = ByconFilters().get_filters()
@@ -112,7 +114,7 @@ class BeaconResponseMeta:
         r_m = self.response_meta
         if BYC["TEST_MODE"] is True:
             r_m.update({"test_mode": BYC["TEST_MODE"]})
-        r_m.update({"returned_granularity": BYC["returned_granularity"]})
+        r_m.update({"returned_granularity": self.returned_granularity})
 
         info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
         for p in ["api_version", "beacon_id"]:
@@ -290,6 +292,7 @@ class BeaconDataResponse:
         self.user_name = BYC.get("USER", "anonymous")
         self.include_handovers = BYC_PARS.get("include_handovers", False)
         self.response_entity_id = BYC.get("response_entity_id")
+        self.returned_granularity = BYC.get("returned_granularity", "boolean")
         self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
         self.record_queries = {}
         self.response_schema = BYC.get("response_schema", "___none___")
@@ -324,11 +327,14 @@ class BeaconDataResponse:
             return
 
         self.result_sets_start = datetime.now()
-        self.result_sets, self.record_queries = ByconResultSets().get_populated_result_sets()
+        BRS = ByconResultSets()
+        self.result_sets, self.record_queries = BRS.get_populated_result_sets()
+        self.dataset_results = BRS.datasetsResults()
         self.__acknowledge_HIT()
         self.__acknowledge_MISS()
         self.data_response["response"].update({"result_sets": self.result_sets})
         self.__resultset_response_update_summaries()
+        # self.__resultset_response_add_aggregations()
         self.__resultSetResponse_force_autorized_granularities()
 
         if not self.data_response.get("info"):
@@ -349,7 +355,7 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def collectionsResponse(self):
-        if not "beaconCollectionsResponse" in BYC["response_schema"]:
+        if not "beaconCollectionsResponse" in self.response_schema:
             return
 
         self.colls, self.queries = ByconCollections().populatedCollections()
@@ -366,7 +372,7 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def filteringTermsResponse(self):
-        if not "beaconFilteringTermsResponse" in BYC["response_schema"]:
+        if not "beaconFilteringTermsResponse" in self.response_schema:
             return
 
         fts, ress, query = ByconFilteringTerms().populatedFilteringTerms()
@@ -378,10 +384,11 @@ class BeaconDataResponse:
         self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta(self.record_queries) })
         return self.data_response
 
+
     # -------------------------------------------------------------------------#
 
     def filteringTermsList(self):
-        if not "beaconFilteringTermsResponse" in BYC["response_schema"]:
+        if not "beaconFilteringTermsResponse" in self.response_schema:
             return
         fts, ress, query = ByconFilteringTerms().populatedFilteringTerms()
         return fts
@@ -413,7 +420,7 @@ class BeaconDataResponse:
                 rs.pop("results", None)
             if "boolean" in rs_granularity:
                 rs.pop("results_count", None)
-        if "boolean" in BYC.get("returned_granularity", "boolean"):
+        if "boolean" in self.returned_granularity:
             self.data_response["response_summary"].pop("num_total_results", None)
             self.data_response.pop("response", None)
 
@@ -469,20 +476,13 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def __resultset_response_update_summaries(self):
-        if not "beaconResultsetsResponse" in BYC["response_schema"]:
+        if not "beaconResultsetsResponse" in self.response_schema:
             return
-        if not "response" in self.data_response:
-            return
-        rsr = self.data_response["response"].get("result_sets", [])
-        # if not rsr:
-        #     return
-
         t_count = 0
         t_exists = False
-        for i, r_s in enumerate(rsr):
+        for r_s in self.data_response.get("response", {}).get("result_sets", []):
             r_c = r_s.get("results_count", 0)
             t_count += r_c
-
         if t_count > 0:
             t_exists = True
 
@@ -493,13 +493,11 @@ class BeaconDataResponse:
             }
         })
 
-        return
-
-
-   # -------------------------------------------------------------------------#
+ 
+    # -------------------------------------------------------------------------#
 
     def __collections_response_update_summaries(self):
-        if not "beaconCollectionsResponse" in BYC["response_schema"]:
+        if not "beaconCollectionsResponse" in self.response_schema:
             return
         if not "response" in self.data_response:
             return
@@ -527,7 +525,7 @@ class BeaconDataResponse:
 ################################################################################
 
 class ByconFilteringTerms:
-    def __init__(self):
+    def __init__(self, dataset_id=None):
         self.response_entity_id = BYC.get("response_entity_id", "filteringTerm")
         self.ft_instance = ByconSchemas("beaconFilteringTermsResults", "$defs/FilteringTerm").get_schema_instance()
         self.data_collection = "collations"
@@ -535,7 +533,7 @@ class ByconFilteringTerms:
         self.filtering_terms = []
         self.filter_resources = []
         self.filtering_terms_query = {}
-        self.ds_id = BYC["BYC_DATASET_IDS"][0]
+        self.ds_id = BYC["BYC_DATASET_IDS"][0] if dataset_id is None else dataset_id
         self.special_mode = BYC_PARS.get("mode", "___none___")
         self.filter_id_match_mode = "full"
         self.filters = ByconFilters().get_filters()
@@ -563,6 +561,14 @@ class ByconFilteringTerms:
         self.__filtering_terms_query()
         self.__return_filtering_terms()
         return self.filtering_terms
+
+
+    # -------------------------------------------------------------------------#
+
+    def filteringTermsIdList(self):
+        self.__filtering_terms_query()
+        self.__return_filtering_terms()
+        return [x.get("id") for x in self.filtering_terms]
 
 
     # -------------------------------------------------------------------------#
@@ -697,21 +703,22 @@ class ByconCollections:
     # -------------------------------------------------------------------------#
 
     def __datasets_update_latest_stats(self):
-        stats = MongoClient(host=DB_MONGOHOST)[HOUSEKEEPING_DB][HOUSEKEEPING_INFO_COLL].find( { }, { "_id": 0 } ).sort( {"date": -1} ).limit( 1 )
-        stats = list(stats)
+        stat = list(ByconInfo().beaconinfo_get_latest())
+        if len(stat) < 1:
+            ds_stats = {}
+        ds_stats = stat[0].get("datasets", {})
 
-        if len(stats) > 0:
-            stat = stats[0]
-        else:
-            return
         for coll_id, coll in BYC["dataset_definitions"].items():
             prdbug(f'... processing dataset {coll_id} => {BYC.get("BYC_DATASET_IDS", [])}')
             if not coll_id in BYC.get("BYC_DATASET_IDS", []):
                 continue
-            if "datasets" in stat:
-                if (ds_vs := stat[ "datasets" ].get(coll_id)):
-                    if "filtering_terms" in BYC["response_entity_id"]:
-                        coll.update({ "filtering_terms": ds_vs.get("filtering_terms", []) } )
+            if (ds_vs := ds_stats.get(coll_id)):
+                if "filtering_terms" in BYC["response_entity_id"]:
+                    coll.update({ "filtering_terms": []})
+                    coll_items = ds_vs.get("collations", {})
+                    for c_id, c_v in ds_vs.get("collations", {}).items():
+                        coll["filtering_terms"].append({"id":c_id, "label": c_v.get("label", c_id)})
+            # TODO: update counts
             # TODO: remove verifier hack
             for t in ["createDateTime", "updateDateTime"]:
                 d = str(coll.get(t, "1967-11-11"))
@@ -760,8 +767,11 @@ class ByconResultSets:
         self.flattened_data = list()    # data from all resultSets as flat list
         self.entity_defaults = BYC.get("entity_defaults", {})
         self.response_entity_id = BYC.get("response_entity_id", "biosample")
+        self.returned_granularity = BYC.get("returned_granularity", "boolean")
+        self.summary_terms = BYC_PARS.get("summary_terms", [])
         self.limit = BYC_PARS.get("limit")
         self.skip = BYC_PARS.get("skip")
+        self.mongo_client = MongoClient(host=DB_MONGOHOST)
 
         self.record_queries = ByconQuery().recordsQuery()
         self.__create_empty_result_sets()
@@ -780,7 +790,6 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
     def get_populated_result_sets(self):
         self.__retrieve_datasets_data()
-        self.__retrieve_variants_data()
         self.__populate_result_sets()
         self.__result_sets_save_handovers()
         return self.result_sets, self.record_queries
@@ -790,7 +799,6 @@ class ByconResultSets:
 
     def get_flattened_data(self):
         self.__retrieve_datasets_data()
-        self.__retrieve_variants_data()
 
         for ds_id, data in self.datasets_data.items():
             for r in data:
@@ -911,68 +919,33 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __retrieve_datasets_data(self):
-        if "variant" in self.response_entity_id.lower():
-            return
-
-        e_d_s = self.entity_defaults.get(self.response_entity_id, {})
-
         ds_d_start = datetime.now()
-        for ds_id, ds_results in self.datasets_results.items():
-            if not ds_results:
-                continue
-            if self.handover_key not in ds_results.keys():
-                continue
-            res = ds_results.get(self.handover_key, {})
-            q_db = res.get("ds_id", "___none___")
-            q_coll = res.get("collection", "___none___")
-            q_v_s = res.get("target_values", [])
-            q_v_s = return_paginated_list(q_v_s, self.skip, self.limit)
-
-            mongo_client = MongoClient(host=DB_MONGOHOST)
-            data_coll = mongo_client[ q_db ][ q_coll ]
-
-            r_s_res = []
-            for q_v in q_v_s:
-                o = data_coll.find_one({"id": q_v })
-                r_s_res.append(o)
-            self.datasets_data.update({ds_id: r_s_res})
-
+        for ds_id in self.datasets_results.keys():
+            self.__retrieve_single_dataset_data(ds_id)
         ds_d_duration = datetime.now() - ds_d_start
         dbm = f'... datasets data retrieval needed {ds_d_duration.total_seconds()} seconds'
         prdbug(dbm)
 
-        return
-
 
     # -------------------------------------------------------------------------#
 
-    def __retrieve_variants_data(self):
-        if not "variant" in self.response_entity_id.lower():
+    def __retrieve_single_dataset_data(self, ds_id):
+        if not (ds_results := self.datasets_results.get(ds_id)):
             return
+        if not self.handover_key in ds_results.keys():
+            return
+        res = ds_results.get(self.handover_key, {})
+        q_coll = res.get("collection", "___none___")
+        q_v_s = res.get("target_values", [])
+        q_v_s = return_paginated_list(q_v_s, self.skip, self.limit)
 
-        ds_v_start = datetime.now()
-        mongo_client = MongoClient(host=DB_MONGOHOST)
-        for ds_id, ds_results in self.datasets_results.items():
+        data_coll = self.mongo_client[ds_id][q_coll]
 
-            data_db = mongo_client[ ds_id ]
-            v_coll = mongo_client[ ds_id ][ "variants" ]
-
-            r_s_res = []
-
-            if "variants.id" in ds_results:
-                q_v_s = ds_results["variants.id"]["target_values"]
-                q_v_s = return_paginated_list(q_v_s, self.skip, self.limit)
-                for v_id in q_v_s:
-                    v = v_coll.find_one({"id":v_id})
-                    r_s_res.append(v)
-                self.datasets_data.update({ds_id: r_s_res})
-
-        ds_v_duration = datetime.now() - ds_v_start
-
-        dbm = f'... variants retrieval needed {ds_v_duration.total_seconds()} seconds'
-        prdbug(dbm)
-
-        return
+        r_s_res = []
+        for q_v in q_v_s:
+            o = data_coll.find_one({"id": q_v })
+            r_s_res.append(o)
+        self.datasets_data.update({ds_id: r_s_res})
 
 
     # -------------------------------------------------------------------------#
@@ -984,7 +957,14 @@ class ByconResultSets:
             ds_res = self.datasets_results.get(ds_id)
             if not ds_res:
                 continue
+
             r_set.update({"results_handovers": dataset_response_add_handovers(ds_id, self.datasets_results)})
+
+            # avoiding summary generation for boolean responses
+            if not "boolean" in self.returned_granularity:
+                if (s_r := self.__dataset_response_add_aggregations(ds_id, ds_res)):
+                    r_set.update({"summary_results": s_r})
+
             q_c = ds_res.get("target_count", 0)
             r_s_res = self.datasets_data.get(ds_id, [])
             r_s_res = list(x for x in r_s_res if x)
@@ -1010,6 +990,70 @@ class ByconResultSets:
         dbm = f'... __populate_result_sets needed {ds_v_duration.total_seconds()} seconds'
         prdbug(dbm)
         return
+
+    # -------------------------------------------------------------------------#
+
+    def __dataset_response_add_aggregations(self, ds_id, ds_res):
+        prdbug(f'... __resultset_response_add_aggregations for dataset {ds_id} - summary_terms: {self.summary_terms}')
+
+        self.__set_available_aggregation_ids(ds_id)
+
+        s_r = []
+        # CNV frequencies; only returned for `/analyses`
+        if (cnv_f := self.__analyses_cnvfrequencies(ds_id, ds_res)):
+            s_r.append(cnv_f)
+
+        return s_r
+
+
+    # -------------------------------------------------------------------------#
+
+    def __set_available_aggregation_ids(self, ds_id):
+
+        """
+        This function sets the available aggregation ids based on the
+        summary_terms and response_entity_id.
+        """
+
+        self.available_aggregation_ids = set(self.summary_terms)
+
+        if len(self.available_aggregation_ids) > 0:
+            ft_original = BYC_PARS.get("filters", [])
+            BYC_PARS.update({"filters": []})
+            coll_ids = ByconFilteringTerms(ds_id).filteringTermsIdList()
+            BYC_PARS.update({"filters": ft_original})
+
+            self.available_aggregation_ids = self.available_aggregation_ids & set(coll_ids)
+
+
+        # temporary home for specials ... 
+        if "cnvfrequencies" in self.summary_terms and "analysis" in self.response_entity_id:
+            self.available_aggregation_ids.add("cnvfrequencies")
+
+        self.available_aggregation_ids = list(self.available_aggregation_ids)
+        prdbug(f'__set_available_aggregation_ids: {self.available_aggregation_ids}')
+
+
+    # -------------------------------------------------------------------------#
+
+    def __analyses_cnvfrequencies(self, ds_id, ds_res):
+        if not "cnvfrequencies" in self.available_aggregation_ids:
+            return False
+
+        analyses_result = ds_res.get("analyses.id", {})
+        BSUM = ByconSummary()
+        int_f = BSUM.analyses_frequencies_bundle(ds_id, analyses_result)
+        d = int_f.get("interval_frequencies", [])
+        c = int_f.get("sample_count", 0)
+        return {
+            "id": "cnvfrequencies",
+            "entity": "analysis",
+            "distribution": {
+                "items":d,
+            },
+            "description": f'Binned CNV frequencies for {c} matched analyses',
+            "count": c
+        }
 
 
 ################################################################################

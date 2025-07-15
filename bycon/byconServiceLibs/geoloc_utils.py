@@ -8,78 +8,10 @@ sys.path.append( services_lib_path )
 from bycon_plot import ByconPlotPars
 from file_utils import ByconTSVreader
 
-################################################################################
-
-
-class GeoQuery:
-    def __init__(self):
-        g_l_d = BYC.get("geoloc_definitions", {})
-        self.parameter_definitions = g_l_d.get("parameters", {})
-        self.request_types = g_l_d.get("request_types", {})
-        self.geo_root = g_l_d.get("geo_root", "geo_location")
-        self.form_pars = {}
-        self.parameters = None
-        self.query_type = None
-        self.query = None
-
-        self.__parse_geoquery_parameters()
-
-
-    # -------------------------------------------------------------------------#
-    # ----------------------------- public ------------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def get_geopars(self):
-        return self.parameters
-
-
-    # -------------------------------------------------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def get_geoquery(self):
-        return self.query
-
-
-    #--------------------------------------------------------------------------#
-    #----------------------------- private ------------------------------------#
-    #--------------------------------------------------------------------------#
-
-    def __parse_geoquery_parameters(self):
-        for g_f_p in self.parameter_definitions.keys():
-            if (f_v := BYC_PARS.get(g_f_p)):
-                self.form_pars.update({g_f_p: f_v})
-
-
-    # -------------------------------------------------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def __create_geo_city_query(self):
-        if not (city := self.parameters.get("city")):
-            return
-
-        gr = f'{self.geo_root}.properties'
-        geoq_l = [{f'{gr}.city': re.compile(r'^' + city, re.IGNORECASE)}]
-
-        # TODO: Other optional parameters
-        self.query = mongo_and_or_query_from_list(geoq_l)
-
-        return
-
-
-    # -------------------------------------------------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def __create_geo_longlat_query(self):
-        return
-
-
-################################################################################
-################################################################################
-################################################################################
 
 class ByconGeolocs:
-    def __init__(self):
-        self.geo_root = BYC.get("geoloc_definitions", {}).get("geo_root", "geo_location")
+    def __init__(self, geo_root="geo_location"):
+        self.geo_root = geo_root
         self.geo_locations = []
         self.geo_webfile = BYC_PARS.get("inputfile", "")
 

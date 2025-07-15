@@ -1,15 +1,18 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/pgx23Variant/v2023-05-25
+$id: https://progenetix.org/services/schemas/pgx23Variant/v2025-07-10
 title: Progenetix Database Variant
 type: object
 description: >-
   Schema for a genomic variant in Progenetix collections.
 required:
+  - id
   - biosampleId
   - individualId
   - variantInternalId
   - variantState
-  - location
+  - oneOf:
+    - location
+    - adjoinedSequences
 properties:
   id:
     type: string
@@ -53,12 +56,6 @@ properties:
     format: date-time
     examples:
       - "2020-09-10T17:44:10.170Z"
-  required:
-    - oneOf:
-      - location
-      - adjoinedSequences
-    - id
-    - variantInternalId
 
 $defs:
   Location:
@@ -80,8 +77,7 @@ $defs:
     description: >-
       Type of the variation according to the VRS model. Examples are here e.g.
       `Adjacency` or `Allele`.
-      Origin: VRS v2
-
+      Origin: VRS v2; not yet fully implemented in bycon
     type: string
     enum:
       - Adjacency

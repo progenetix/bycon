@@ -10,7 +10,7 @@ from bycon import BYC, config, prdbug
 from byconServiceLibs import assert_single_dataset_or_exit, hierarchy_from_file, set_collation_types, write_log
 
 dir_path = path.dirname( path.abspath(__file__) )
-pkg_path = path.join( dir_path, pardir )
+project_path = path.join( dir_path, pardir )
 
 
 """
@@ -40,8 +40,7 @@ def main():
 ################################################################################
 
 def __process_collation_type(ds_id, coll_type, coll_defs):
-    pre_h_f = path.join( pkg_path, "rsrc", "classificationTrees", coll_type, "numbered_hierarchies.tsv" )
-    pre_c_f = path.join( pkg_path, "logs", "inventory", f'{ds_id}_{coll_type}_existing_codes.tsv' )
+    pre_h_f = path.join( project_path, "rsrc", "classificationTrees", coll_type, "numbered_hierarchies.tsv" )
     collection = coll_defs["scope"]
     db_key = coll_defs["db_key"]
 
@@ -101,8 +100,6 @@ def __process_collation_type(ds_id, coll_type, coll_defs):
                 "id": c_id,
                 "type": coll_defs.get("type", "ontologyTerm"),
                 "name": coll_defs.get("name", ""),
-                "cnv_excluded_filters": coll_defs.get("cnv_excluded_filters", []),
-                "cnv_required_filters": coll_defs.get("cnv_required_filters", []),
                 "collation_type": coll_type,
                 "reference": "https://progenetix.org/services/ids/"+c_id,
                 "namespace_prefix": coll_defs.get("namespace_prefix", ""),
@@ -128,18 +125,9 @@ def __process_collation_type(ds_id, coll_type, coll_defs):
     if not BYC["TEST_MODE"]:
         bar.finish()
         if matched > 0:
-            codes = []
             print("==> Updating database ...")
-            # ex_codes = coll_coll.distinct("id", { "collation_type": coll_type })
-            # for ex_c in ex_codes:
-            #     if ex_c not in sel_hiers.keys():
-            #         coll_coll.delete_one( { "id": ex_c } )
             for coll_id, update_obj in sel_hiers.items():
                 coll_coll.update_one( { "id": coll_id }, { "$set": update_obj }, upsert=True )
-                if (c := update_obj.get("code_matches", 0)) > 0:
-                    codes.append( f'{coll_id}\t{update_obj.get("label","")}\t{c}' )
-            print("==> Writing Codes ...")
-            write_log(codes, pre_c_f, "")
 
     print(f'===> Found {matched} of {no} {coll_type} codes & added them to {ds_id}.collations <===')
 

@@ -21,7 +21,7 @@ properties:
     items:
       type: object
 examples:
-  - uri: http://progenetix.test/beacon/biosamples/pgxbs-kftviebk/genomicVariations/?output=pgxseg
+  - uri: http://progenetix.org/services/pgxsegvariants/pgxbs-kftviebk/
     fileAttributes:
       fileFormat: pgxseg
       genomeAssembly: GRCh38

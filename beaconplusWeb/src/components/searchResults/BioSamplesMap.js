@@ -35,12 +35,12 @@ function Map({ biosamples, height, datasetId }) {
 
     const byCoordinates = groupBy(
       biosamples,
-      "provenance.geoLocation.geometry.coordinates"
+      "geoLocation.geometry.coordinates"
     )
 
     const circles = Object.entries(byCoordinates).flatMap(([, biosamples]) => {
       const randomId = Math.random().toString(36).substring(2, 15)
-      const geoLocation = biosamples[0].provenance?.geoLocation
+      const geoLocation = biosamples[0]?.geoLocation
       if (!geoLocation) return []
       const radius = 3000 + 2000 * biosamples.length
       const root = document.getElementById('root');

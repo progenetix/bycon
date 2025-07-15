@@ -1,0 +1,85 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://progenetix.org/services/schemas/individual/v2025-07-04",
+    "title": "Individual",
+    "type": "object",
+    "note": "Checked 2024-07-08 against beaconv2 main",
+    "properties": {
+        "id": {
+            "type": "string",
+            "description": "The resource-local identifier for this individual.",
+            "examples": [
+                "pgxind-kftx25eh"
+            ]
+        },
+        "sex": {
+            "$ref": "./common/commonDefinitions.json#/$defs/Sex"
+        },
+        "karyotypicSex": {
+            "$ref": "./common/commonDefinitions.json#/$defs/KaryotypicSex"
+        },
+        "ethnicity": {
+            "$ref": "./common/commonDefinitions.json#/$defs/Ethnicity"
+        },
+        "geographicOrigin": {
+            "$ref": "./common/commonDefinitions.json#/$defs/GeographicLocation"
+        },
+        "diseases": {
+            "$ref": "./common/disease.json"
+        },
+        "pedigrees": {
+            "type": "array",
+            "items": {
+                "$ref": "./common/pedigree.json"
+            }
+        },
+        "phenotypicFeatures": {
+            "type": "array",
+            "items": {
+                "$ref": "./common/phenotypicFeature.json"
+            }
+        },
+        "treatments": {
+            "type": "array",
+            "items": {
+                "$ref": "./common/treatment.json"
+            }
+        },
+        "interventionsOrProcedures": {
+            "type": "array",
+            "items": {
+                "$ref": "./common/procedure.json"
+            }
+        },
+        "measures": {
+            "type": "array",
+            "items": {
+                "$ref": "./common/measurement.json"
+            }
+        },
+        "exposures": {
+            "type": "array",
+            "items": {
+                "$ref": "./common/exposure.json"
+            }
+        },
+        "info": {
+            "$ref": "../../../framework/json/common/info.json"
+        },
+        "geoLocation": {
+            "$ref": "./common/GeoLocation.json"
+        },
+        "updated": {
+            "type": "string",
+            "format": "date-time",
+            "examples": [
+                "2020-09-10T17:44:10.170Z"
+            ]
+        }
+    },
+    "required": [
+        "id",
+        "sex"
+    ],
+    "additionalProperties": true
+}

@@ -1,0 +1,3 @@
+individual_id	individual_name	sex_id	sex_label	age_iso	age_days	index_disease_followup_time	index_disease_followup_state_id	index_disease_followup_state_label	ethnicity_id	ethnicity_label	histological_diagnosis_id	histological_diagnosis_label
+pgxind-m84cxmg4	GENIE-MSK-P-0000634	NCIT:C16576	female	P28Y5M30D	10409	P23M	EFO:0030049	dead (follow-up status)	NCIT:C41261	White	NCIT:C105556	Ovarian Low Grade Serous Adenocarcinoma
+pgxind-m84cxmgh	GENIE-MSK-P-0000915	NCIT:C20197	male	P68Y7M23D	25073	P32M	EFO:0030049	dead (follow-up status)	NCIT:C41261	White	NCIT:C9383	Rectal Adenocarcinoma

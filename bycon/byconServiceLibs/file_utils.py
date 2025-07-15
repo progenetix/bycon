@@ -1,7 +1,7 @@
 import csv, re, requests
 
 from pathlib import Path
-from os import environ, path
+from os import environ, pardir, path
 from pymongo import MongoClient
 from random import sample as random_samples
 
@@ -10,6 +10,7 @@ from bycon import (
     BYC,
     BYC_PARS,
     ENV,
+    PROJECT_PATH,
     prdbug,
     prjsonnice,
     return_paginated_list
@@ -111,14 +112,20 @@ class ByconTSVreader():
 ################################################################################
 ################################################################################
 
+def log_path_root():
+    logdir_parts = map(lambda x: eval(x.replace("___", "")) if "___" in x else x, BYC["env_paths"]["housekeeping_log_dir_loc"])
+    return path.join(*logdir_parts)
+
+################################################################################
+
 def write_log(log, log_file, ext=".log"):
     if len(log) > 0:
-        print(f'=> {len(log)} log entries so there are some problems...')
+        print(f'=> {len(log)} log entries ...')
         if len(ext) > 0:
             log_file += ext
         lf = open(log_file, "w")
         for ll in log:
             lf.write(f'{ll}\n')
         lf.close()
-        print(f'Wrote errors to {log_file}')
+        print(f'Wrote log to {log_file}')
 

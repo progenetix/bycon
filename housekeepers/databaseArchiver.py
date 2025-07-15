@@ -4,6 +4,7 @@ from os import path, pardir, mkdir, system
 from datetime import datetime
 import shutil
 from isodate import date_isoformat
+from uuid import uuid4
 
 from bycon import BYC, BYC_PARS
 from byconServiceLibs import assert_single_dataset_or_exit
@@ -23,9 +24,7 @@ def main():
 
     ############################################################################
 
-    tmp_dir = path.join( output_dir, ds_id )
-    if path.isdir(tmp_dir):
-        shutil.rmtree(tmp_dir)
+    tmp_dir = path.join(output_dir, f'{str(uuid4())}')
     mkdir(tmp_dir)
     for db in [ds_id, "_byconServicesDB"]:
         db_tmp = path.join( tmp_dir, db )

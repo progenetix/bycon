@@ -16,8 +16,8 @@ local:
       content:
         beacon_id: org.progenetix
         name: Progenetix Cancer Genomics Beacon+
-        api_version: v2.1.0-beaconplus
-        version: v2.1.0-beaconplus
+        api_version: v2.2.0-beaconplus
+        version: v2.2.0-beaconplus
         id: org.progenetix.beacon
         environment: prod
         description: >-
@@ -27,7 +27,7 @@ local:
         type:
           group: org.ga4gh
           artifact: beacon
-          version: v2.1.0-beaconplus
+          version: v2.2.0-beaconplus
         documentation_url: http://docs.progenetix.org
         service_url: http://progenetix.org/beacon/
         welcome_url: https://progenetix.org/biosamples/
@@ -102,8 +102,8 @@ beaconplus:
       content:
         beacon_id: org.progenetix.beaconplus
         name: Beacon+ Development Environment
-        api_version: v2.1.0-beaconplus
-        version: v2.1.0-beaconplus
+        api_version: v2.2.0-beaconplus
+        version: v2.2.0-beaconplus
         id: org.progenetix.beaconplus
         environment: dev
         description: >-
@@ -138,7 +138,7 @@ cancercelllines:
         type:
           group: org.ga4gh
           artifact: beacon
-          version: v2.1.0-beaconplus
+          version: v2.2.0-beaconplus
         documentation_url: http://docs.cancercelllines.org
         service_url: http://cancercelllines.org/beacon/
         welcome_url: https://cancercelllines.org/biosamples/

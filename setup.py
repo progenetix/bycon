@@ -1,5 +1,4 @@
 """A setuptools based setup module.
-See:
 https://packaging.python.org/guides/distributing-packages-using-setuptools/
 https://github.com/pypa/sampleproject
 """
@@ -10,7 +9,7 @@ here = pathlib.Path(__file__).parent.resolve()
 long_description = (here / "README.md").read_text(encoding="utf-8")
 setup(
     name="bycon",
-    version="2.4.7",
+    version="2.4.9",
     description="A Python-based environment for the Beacon v2 genomics API",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -30,6 +29,8 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Programming Language :: Python :: 3 :: Only"
     ],
     keywords="genomics, Beacon",
@@ -45,4 +46,3 @@ setup(
         "Source": "https://github.com/progenetix/bycon/"
     },
 )
-

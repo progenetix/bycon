@@ -37,16 +37,15 @@
                     "type": "boolean"
                 },
                 "resultsCount": {
-                    "description": "Number of results in this Resulset.",
+                    "description": "Number of results in this Resultset.",
                     "type": "integer"
                 },
                 "resultsHandovers": {
-                    "description": "List of handovers that apply to this resultset, not to the whole Beacon or to a result in particular.",
+                    "description": "List of handover objects that apply to this resultset, not to the whole Beacon or to a result in particular.",
                     "$ref": "../../common/beaconCommonComponents.json#/$defs/ListOfHandovers"
                 },
                 "info": {
-                    "description": "Additional details that could be of interest about the Resultset. Provided to clearly enclose any attribute that is not part of the Beacon specification.",
-                    "type": "object"
+                    "$ref": "../../common/info.json"
                 },
                 "results": {
                     "type": "array",
@@ -59,9 +58,7 @@
             "required": [
                 "id",
                 "setType",
-                "exists",
-                "resultsCount",
-                "results"
+                "exists"
             ],
             "additionalProperties": true
         }

@@ -1,15 +1,15 @@
 #!/usr/local/bin/python3
 from datetime import datetime
 from isodate import date_isoformat
+from os import path, mkdir
 from pymongo import MongoClient
 from progress.bar import Bar
 
 from bycon import *
 from byconServiceLibs import *
 
-loc_path = path.dirname( path.abspath(__file__) )
-log_path = path.join( loc_path, pardir, "logs" )
-
+log_path = path.join(log_path_root(), "analyses_statusmaps_logs")
+mkdir(log_path)
 """
 
 ## `analysesStatusmapsRefresher`

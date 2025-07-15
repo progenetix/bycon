@@ -1,0 +1,54 @@
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://progenetix.org/services/schemas/phenopacket/v2025-07-04
+title: Phenopacket
+description: >-
+  The Phenopacket class is a bare-bones JSON-schema rewrite of the Phenopackets v2
+  standard ("PXF"), for the representation of attributes supported in the `bycon` framework.
+  At this time the Phenopackets schema is not part of the Beacon v2 default data
+  model. However, many sub-schemas in Beacon v2 have been informed by the PXF
+  model and development process, allowing a straightforward cross-mapping of the
+  data structures.
+properties:
+  id:
+    type: string
+    description: >-
+      The resource-local identifier for this Phenopacket.
+    examples:
+      - pgxpxf-kftx25eh
+  subject:
+    $ref: ./individual.yaml
+  biosamples:
+    type: array
+    items:
+      $ref: ./biosample.yaml
+  diseases:
+    type: array
+    items:
+      $ref: ./common/disease.yaml
+  phenotypicFeatures:
+    type: array
+    items:
+      $ref: ./common/phenotypicFeature.yaml
+  measurements:
+    type: array
+    items:
+      $ref: ./common/measurement.yaml
+  files:
+    type: array
+    items:
+      $ref: ./common/file.yaml
+  metaData:
+    ref: ./common/metaData.yaml
+  interpretations:
+    type: array
+    items:
+      $ref: ./common/Interpretation.yaml
+  medicalActions:
+    type: array
+    items:
+      description: >-
+        TODO: Define class "MedicalAction".
+        <https://phenopacket-schema.readthedocs.io/en/latest/medical-action.html#medicalaction>
+      type: object
+
+

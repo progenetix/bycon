@@ -51,6 +51,24 @@ class ByconDatasetResults():
 
 
     # -------------------------------------------------------------------------#
+
+    def retrieve_individual_ids(self):
+        return self.dataset_results.get("individuals.id", {}).get("target_values", [])
+
+
+    # -------------------------------------------------------------------------#
+
+    def retrieve_biosample_ids(self):
+        return self.dataset_results.get("biosamples.id", {}).get("target_values", [])
+
+
+    # -------------------------------------------------------------------------#
+
+    def retrieve_analysis_ids(self):
+        return self.dataset_results.get("analyses.id", {}).get("target_values", [])
+
+
+    # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 
@@ -67,7 +85,7 @@ class ByconDatasetResults():
 
     def __run_stacked_queries(self):
         """
-        The `self.queries` object 
+        The `self.queries` object
 
         """
         if not (q_e_s := self.queries.keys()):
@@ -91,7 +109,7 @@ class ByconDatasetResults():
         d_k_s = h_o_def.get("upstream_ids", [])
         m_k = h_o_def.get("id_parameter", "id")
 
-        d_group = {'_id': 0, "distincts_id": {'$addToSet': f'$id'}} 
+        d_group = {'_id': 0, "distincts_id": {'$addToSet': f'$id'}}
         for d_k in d_k_s:
             dist_k = f'distincts_{d_k}'
             d_group.update({dist_k: {'$addToSet': f'${d_k}'}})
@@ -106,9 +124,10 @@ class ByconDatasetResults():
                 ids = self.data_db[t_c].distinct("id", qq)
                 qq = {"id": {"$in": ids}}
 
-            pipeline = [ 
+            pipeline = [
                 { '$match': qq },
-                { '$group': d_group } 
+                { "$sample": { "size": 220000 }},
+                { '$group': d_group }
             ]
             result = list(self.data_db[t_c].aggregate(pipeline))
 

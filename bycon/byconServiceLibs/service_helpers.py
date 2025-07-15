@@ -7,25 +7,6 @@ from bycon import load_yaml_empty_fallback, BYC, BYC_PARS, ENV, prdbug, prtexthe
 
 ################################################################################
 
-class ByconID:
-    def __init__(self, sleep=0.01):
-        self.errors = []
-        self.prefix = ""
-        self.sleep = sleep
-
-
-    #--------------------------------------------------------------------------#
-    #----------------------------- public -------------------------------------#
-    #--------------------------------------------------------------------------#
-
-    def makeID(self, prefix=""):
-        time.sleep(self.sleep)
-        linker = "-" if len(str(prefix)) > 0 else ""
-        return f'{prefix}{linker}{base36.dumps(int(time.time() * 1000))}'
-
-
-################################################################################
-
 def ask_limit_reset():
     limit = BYC_PARS.get("limit")
     if limit > 0 and limit < 1000: 

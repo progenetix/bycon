@@ -18,7 +18,7 @@ def geolocations():
     if "inputfile" in BYC_PARS:
         results = GEOL.get_locations_from_web()
     else:
-        query, geo_pars = geo_query()
+        query = GeoQuery().get_geoquery()
         if not query:
             BYC["ERRORS"].append("No query generated - missing or malformed parameters")
         else:
@@ -34,13 +34,13 @@ def geolocations():
     if len(results) == 1:
         if (gd := BYC_PARS.get("geo_distance")):
             l_l = results[0]["geo_location"]["geometry"]["coordinates"]
-            geo_pars = {
+            BYC_PARS.update({
                 "geo_longitude": l_l[0],
                 "geo_latitude": l_l[1],
                 "geo_distance": int(gd)
-            }
+            })
             prdbug(results)
-            query = return_geo_longlat_query(geo_root, geo_pars)
+            query = GeoQuery().get_geoquery()
             results = mongo_result_list(SERVICES_DB, GEOLOCS_COLL, query, { '_id': False } )
 
     BeaconErrorResponse().respond_if_errors()

@@ -37,6 +37,7 @@ ds_id = assert_single_dataset_or_exit()
 GB = GenomeBins()
 interval_count = GB.get_genome_bin_count()
 binning = GB.get_genome_binning()
+script_start_time = time.time()
 print(f'=> Using data values from {ds_id} for {interval_count} intervals...')
 
 if "skip" in (BYC_PARS.get("mode", "")).lower():
@@ -77,6 +78,8 @@ if skip_existing is True:
 
 for c_id in coll_ids:
 
+    prdbug(c_id)
+
     coll = coll_coll.find_one({"id": c_id})
     c_o_id = coll.get("_id")
     if not coll:
@@ -84,7 +87,6 @@ for c_id in coll_ids:
         if not BYC["TEST_MODE"]:
             bar.next()
         continue
-
 
     if skip_existing is True:
         if "frequencymap" in coll:
@@ -121,6 +123,9 @@ for c_id in coll_ids:
     intervals, cnv_ana_count = GB.intervalAidFrequencyMaps(ds_id, ana_ids)
     prdbug(f'... retrieved {cnv_ana_count} CNV analyses')
 
+    if cnv_ana_count < 1:
+        continue
+
     update_obj = {
         "cnv_analyses": cnv_ana_count,
         "frequencymap": {
@@ -131,7 +136,7 @@ for c_id in coll_ids:
         }
     }
 
-    if cnv_ana_count > 2000:
+    if cnv_ana_count > 5000:
         proc_time = time.time() - start_time
         print(f'\n==> Processed {c_id}: {cnv_ana_count} in {"%.2f" % proc_time}s: {"%.4f" % (proc_time/cnv_ana_count)}s per analysis')
 
@@ -144,3 +149,6 @@ for c_id in coll_ids:
 if not BYC["TEST_MODE"]:
     bar.finish()
 
+script_duration = (time.time() - script_start_time) / 60
+
+print(f'\n==> Total run time was ~{"%.0f" %  script_duration} minutes')

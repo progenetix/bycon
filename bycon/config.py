@@ -1,6 +1,7 @@
 from os import environ, path, pardir
 from pymongo import MongoClient
 import sys
+import socket
 
 pkg_path = path.dirname( path.abspath(__file__) )
 
@@ -14,6 +15,7 @@ DB_MONGOHOST
 """
 
 ENV = environ.get('HTTP_HOST', "___shell___")
+HOSTNAME = environ.get('HOSTNAME', socket.gethostname())
 
 PKG_PATH = pkg_path
 CONF_PATH = path.join( pkg_path, "config")
@@ -23,7 +25,8 @@ NO_PARAM_VALUES = ["none", "null", "undefined"]
 
 # path of the calling script is used to point to a local config directory
 CALLER_PATH = path.dirname( path.abspath(sys.argv[0]))
-LOC_PATH = path.join(CALLER_PATH, pardir, "local")
+PROJECT_PATH = path.join(CALLER_PATH, pardir)
+LOC_PATH = path.join(PROJECT_PATH, "local")
 
 REQUEST_PATH_ROOT = "beacon"
 
@@ -49,7 +52,6 @@ GEOLOCS_COLL = "geolocs"
 
 MONGO_DISTINCT_STORAGE_LIMIT = 300000
 VARIANTS_RESPONSE_LIMIT = 300000
-
 
 ################################################################################
 # to be modified during execution ##############################################
@@ -81,7 +83,6 @@ BYC = {
   "datatable_mappings": {},
   "entity_defaults": {"info":{}},
   "filter_definitions": {"$defs":{}},
-  "geoloc_definitions": {},
   "handover_definitions": {},
   "interval_definitions": {},
   "test_queries": {},
@@ -158,6 +159,7 @@ BYC_UPPER = [
   "EFO",
   "UBERON",
   "NCIT",
+  "PATO",
   "pubmed"
 ]
 

@@ -1,17 +1,19 @@
 #!/usr/local/bin/python3
 
-from os import path, pardir, environ
+from os import mkdir, path
 from pymongo import MongoClient
 from isodate import date_isoformat
 import csv, datetime, requests, sys
 import datetime
 
 from bycon import *
-from byconServiceLibs import datatable_utils, service_helpers
+from byconServiceLibs import datatable_utils, log_path_root, service_helpers
 
 loc_path = path.dirname( path.abspath(__file__) )
 services_conf_path = path.join( loc_path, "config" )
-services_tmp_path = path.join( loc_path, pardir, "logs" )
+
+log_path = path.join(log_path_root(), "publication_inserter_logs")
+mkdir(log_path)
 
 """
 * pubUpdater.py -t 1 -f "../rsrc/publications.txt"
@@ -39,7 +41,7 @@ def publications_inserter():
         pub_file = input_file
     else:
         print("No inputfile file specified => pulling the online table ...")
-        pub_file = path.join( services_tmp_path, "pubtable.tsv" )
+        pub_file = path.join( log_path, {date_isoformat(datetime.now())}, "-pubtable.tsv" )
         print(f'... reading from {g_url["base_url"]}')
         r =  requests.get(g_url["base_url"], params=g_url["params"])
         if r.ok:
@@ -104,14 +106,9 @@ def publications_inserter():
                         continue
                     if v.lower() == "delete":
                         v = ""
-                    datatable_utils.assign_nested_value(n_p, k, v)
 
-            city_tag = pub.get("provenance_id", "")
-            if len(pub["provenance_id"]) > 4:
-                geo_info = mongo_client["_byconServicesDB"]["geolocs"].find_one({"id": pub["provenance_id"]}, {"_id": 0, "id": 0})
-                if geo_info is not None:
-                    n_p["provenance"].update({"geo_location":geo_info["geo_location"]})
-            n_p.pop("provenance_id", None)
+            if (geoprov_id := pub.get("geoprov_id")):
+                add_geolocation_to_pgxdoc(n_p, geoprov_id)
 
             epmc, e = retrieve_epmc_publications(pmid)
             if e is not False:
@@ -241,20 +238,18 @@ def get_empty_publication():
     publication = ByconSchemas("Publication", "").get_schema_instance()
     publication.update({
         "updated": date_isoformat(datetime.now()),
-        "provenance": {
-            "geo_location": {
-                "type": 'Feature',
-                "geometry": {"type": 'Point', "coordinates": [0, 0]},
-                "properties": {
-                    "label": 'Atlantis, Null Island',
-                    "city": 'Atlantis',
-                    "country": 'Null Island',
-                    "continent": 'Africa',
-                    "latitude": 0,
-                    "longitude": 0,
-                    "ISO3166alpha3": 'AAA',
-                    "precision": 'city'
-                }
+        "geo_location": {
+            "type": 'Feature',
+            "geometry": {"type": 'Point', "coordinates": [0, 0]},
+            "properties": {
+                "label": 'Atlantis, Null Island',
+                "city": 'Atlantis',
+                "country": 'Null Island',
+                "continent": 'Africa',
+                "latitude": 0,
+                "longitude": 0,
+                "ISO3166alpha3": 'AAA',
+                "precision": 'city'
             }
         },
         "counts": {"ccgh": 0, "acgh": 0, "wes": 0, "wgs": 0, "ngs": 0, "genomes": 0, "progenetix": 0, "arraymap": 0},
