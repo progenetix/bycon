@@ -12,7 +12,7 @@ entryTypes:
     ontologyTermForThisType:
       id: NCIT:C47824
       label: Data set
-    partOfSpecification: Beacon v2.0.0
+    partOfSpecification: Beacon v2.2.0
     description: >-
       A Dataset is a collection of related sets of information, e.g. genomic
       variations together with associated procedural and biological metadata. In a
@@ -22,7 +22,7 @@ entryTypes:
       id: dataset
       name: Default schema for datasets
       referenceToSchemaDefinition: http://progenetix.org/services/schemas/dataset
-      schemaVersion: v2.0.0
+      schemaVersion: v2.2.0
     aCollectionOf:
       - id: genomicVariant
         name: Genomic Variants
@@ -39,14 +39,14 @@ entryTypes:
     ontologyTermForThisType:
       id: NCIT:C61512
       label: Cohort
-    partOfSpecification: Beacon v2.0.0
+    partOfSpecification: Beacon v2.2.0
     description: A group of individuals, identified by a common characteristic. [
       NCI ]
     defaultSchema:
       id: cohort
       name: Default schema for cohorts
       referenceToSchemaDefinition: http://progenetix.org/services/schemas/cohort
-      schemaVersion: v2.0.0
+      schemaVersion: v2.2.0
     aCollectionOf:
       - id: individual
         name: Individuals
@@ -57,13 +57,13 @@ entryTypes:
     ontologyTermForThisType:
       id: ENSGLOSSARY:0000092
       label: Variant
-    partOfSpecification: Beacon v2.0.0
+    partOfSpecification: Beacon v2.2.0
     description: The location of a sequence.
     defaultSchema:
       id: genomicVariant
       name: Default schema for a genomic variation
       referenceToSchemaDefinition: http://progenetix.org/services/schemas/genomicVariant
-      schemaVersion: v2.0.0
+      schemaVersion: v2.2.0
     additionallySupportedSchemas: []
   individual:
     id: individual
@@ -71,7 +71,7 @@ entryTypes:
     ontologyTermForThisType:
       id: NCIT:C25190
       label: Person
-    partOfSpecification: Beacon v2.0.0
+    partOfSpecification: Beacon v2.2.0
     description: A human being. It could be a Patient, a Tissue Donor, a Participant,
       a Human Study Subject, etc.
     defaultSchema:
@@ -85,7 +85,7 @@ entryTypes:
     ontologyTermForThisType:
       id: NCIT:C70699
       label: Biospecimen
-    partOfSpecification: Beacon v2.0.0
+    partOfSpecification: Beacon v2.2.0
     description: Any material sample taken from a biological entity for testing, diagnostic,
       propagation, treatment or research purposes, including a sample obtained from
       a living organism or taken from the biological object after halting of all its
@@ -103,14 +103,14 @@ entryTypes:
     ontologyTermForThisType:
       id: NCIT:C148088
       label: Sequencing run
-    partOfSpecification: Beacon v2.0.0
+    partOfSpecification: Beacon v2.2.0
     description: The valid and completed operation of a high-throughput sequencing
       instrument for a single sequencing process. [ NCI ]
     defaultSchema:
       id: run
       name: Default schema for a sequencing run
       referenceToSchemaDefinition: http://progenetix.org/services/schemas/run
-      schemaVersion: v2.0.0
+      schemaVersion: v2.2.0
     additionallySupportedSchemas: []
   analysis:
     id: analysis
@@ -118,13 +118,13 @@ entryTypes:
     ontologyTermForThisType:
       id: edam:operation_2945
       label: Analysis
-    partOfSpecification: Beacon v2.0.0
+    partOfSpecification: Beacon v2.2.0
     description: Apply analytical methods to existing data of a specific type.
     defaultSchema:
       id: analysis
       name: Default schema for a bioinformatics analysis
       referenceToSchemaDefinition: http://progenetix.org/services/schemas/analysis
-      schemaVersion: v2.0.0
+      schemaVersion: v2.2.0
     additionallySupportedSchemas: []
   phenopacket:
     id: phenopacket

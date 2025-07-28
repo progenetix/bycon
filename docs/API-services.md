@@ -1,4 +1,4 @@
-# API: Beacon Services
+# API: `bycon` Services
 
 The _bycon_ environment provides a number of data services beyond typical Beacon
 functionality. These services can be loosely grouped into two major types:

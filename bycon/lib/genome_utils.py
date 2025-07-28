@@ -15,6 +15,7 @@ class ChroNames:
         self.refseq_chromosomes = {}
         self.chro_aliases = {}
         self.refseq_aliases = {}
+        self.ga4ghSQ_aliases = {}
         self.__set_genome_rsrc_path()
         self.__parse_refseq_file()
         self.__chro_id_data()
@@ -42,6 +43,12 @@ class ChroNames:
 
     # -------------------------------------------------------------------------#
 
+    def ga4ghSQs(self):
+        return list(set(self.ga4ghSQ_aliases.values()))
+
+
+    # -------------------------------------------------------------------------#
+
     def refseqAliases(self):
         return list(self.refseq_aliases.keys())
 
@@ -56,6 +63,12 @@ class ChroNames:
 
     def refseq(self, s_id="___none___"):
         return self.refseq_aliases.get(s_id, "___none___")
+
+
+    # -------------------------------------------------------------------------#
+
+    def ga4ghSQ(self, s_id="___none___"):
+        return self.ga4ghSQ_aliases.get(s_id, "___none___")
 
 
     # -------------------------------------------------------------------------#
@@ -112,7 +125,13 @@ class ChroNames:
               - "refseq:NC_000015.10": "refseq:NC_000015.10"
               - "NC_000015.10": "refseq:NC_000015.10"
               - "CM000677.2": "refseq:NC_000015.10"
-            "chro_aliases": all aliases for a stripped chromosome name
+          - "ga4ghSQ_aliases": all alternative names for a ga4gh SQ id are keys
+              - "15": "refseq:NC_000015.10"
+              - "chr15": "refseq:NC_000015.10"
+              - "refseq:NC_000015.10": "refseq:NC_000015.10"
+              - "NC_000015.10": "refseq:NC_000015.10"
+              - "CM000677.2": "refseq:NC_000015.10"
+          - "chro_aliases": all aliases for a stripped chromosome name
               - "15": "15"
               - "chr15": "15"
               - "refseq:NC_000015.10": "15"
@@ -125,21 +144,18 @@ class ChroNames:
             return
 
         for c, c_d in v_d_refsc.items():
-            refseq_stripped = re.sub("refseq:", "", c_d["refseq_id"])
-            self.refseq_aliases.update({
-                c: c_d["refseq_id"],
-                c_d["chr"]: c_d["refseq_id"],
-                c_d["refseq_id"]: c_d["refseq_id"],
-                refseq_stripped: c_d["refseq_id"],
-                c_d["genbank_id"]: c_d["refseq_id"]
-            }),
-            self.chro_aliases.update({
-                c: c_d["chr"],
-                c_d["chr"]: c_d["chr"],
-                c_d["refseq_id"]: c_d["chr"],
-                refseq_stripped: c_d["chr"],
-                c_d["genbank_id"]: c_d["chr"]
-            })
+            rid = c_d.get("refseq_id", "___none___")
+            rid_stripped = re.sub("refseq:", "", rid)
+            sqid = c_d.get("sequence_id", "___none___")
+            sqid_stripped = re.sub("ga4gh:", "", sqid)
+            chro = c_d.get("chr", "___none___")
+            gbid = c_d.get("genbank_id", "___none___")
+            for alias in [c, chro, rid, rid_stripped, sqid, sqid_stripped, gbid]:
+                if alias == "___none___":
+                    continue
+                self.ga4ghSQ_aliases.update({alias: sqid})
+                self.refseq_aliases.update({alias: rid})
+                self.chro_aliases.update({alias: chro})
 
 
 ################################################################################

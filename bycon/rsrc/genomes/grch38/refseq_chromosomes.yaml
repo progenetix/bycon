@@ -3,99 +3,124 @@ chr1:
   chr: "1"
   genbank_id: "CM000663.2"
   refseq_id: "refseq:NC_000001.11"
+  sequence_id: "ga4gh:SQ.Ya6Rs7DHhDeg7YaOSg1EoNi3U_nQ9SvO"
 chr2:
   chr: "2"
   genbank_id: "CM000664.2"
   refseq_id: "refseq:NC_000002.12"
+  sequence_id: "ga4gh:SQ.pnAqCRBrTsUoBghSD1yp_jXWSmlbdh4g"
 chr3:
   chr: "3"
   genbank_id: "CM000665.2"
   refseq_id: "refseq:NC_000003.12"
+  sequence_id: "ga4gh:SQ.Zu7h9AggXxhTaGVsy7h_EZSChSZGcmgX"
 chr4:
   chr: "4"
   genbank_id: "CM000666.2"
   refseq_id: "refseq:NC_000004.12"
+  sequence_id: "ga4gh:SQ.HxuclGHh0XCDuF8x6yQrpHUBL7ZntAHc"
 chr5:
   chr: "5"
   genbank_id: "CM000667.2"
   refseq_id: "refseq:NC_000005.10"
+  sequence_id: "ga4gh:SQ.aUiQCzCPZ2d0csHbMSbh2NzInhonSXwI"
 chr6:
   chr: "6"
   genbank_id: "CM000668.2"
   refseq_id: "refseq:NC_000006.12"
+  sequence_id: "ga4gh:SQ.0iKlIQk2oZLoeOG9P1riRU6hvL5Ux8TV"
 chr7:
   chr: "7"
   genbank_id: "CM000669.2"
   refseq_id: "refseq:NC_000007.14"
+  sequence_id: "ga4gh:SQ.F-LrLMe1SRpfUZHkQmvkVKFEGaoDeHul"
 chr8:
   chr: "8"
   genbank_id: "CM000670.2"
   refseq_id: "refseq:NC_000008.11"
+  sequence_id: "ga4gh:SQ.209Z7zJ-mFypBEWLk4rNC6S_OxY5p7bs"
 chr9:
   chr: "9"
   genbank_id: "CM000671.2"
   refseq_id: "refseq:NC_000009.12"
+  sequence_id: "ga4gh:SQ.KEO-4XBcm1cxeo_DIQ8_ofqGUkp4iZhI"
 chr10:
   chr: "10"
   genbank_id: "CM000672.2"
   refseq_id: "refseq:NC_000010.11"
+  sequence_id: "ga4gh:SQ.ss8r_wB0-b9r44TQTMmVTI92884QvBiB"
 chr11:
   chr: "11"
   genbank_id: "CM000673.2"
   refseq_id: "refseq:NC_000011.10"
+  sequence_id: "ga4gh:SQ.2NkFm8HK88MqeNkCgj78KidCAXgnsfV1"
 chr12:
   chr: "12"
   genbank_id: "CM000674.2"
   refseq_id: "refseq:NC_000012.12"
+  sequence_id: "ga4gh:SQ.6wlJpONE3oNb4D69ULmEXhqyDZ4vwNfl"
 chr13:
   chr: "13"
   genbank_id: "CM000675.2"
   refseq_id: "refseq:NC_000013.11"
+  sequence_id: "ga4gh:SQ._0wi-qoDrvram155UmcSC-zA5ZK4fpLT"
 chr14:
   chr: "14"
   genbank_id: "CM000676.2"
   refseq_id: "refseq:NC_000014.9"
+  sequence_id: "ga4gh:SQ.eK4D2MosgK_ivBkgi6FVPg5UXs1bYESm"
 chr15:
   chr: "15"
   genbank_id: "CM000677.2"
   refseq_id: "refseq:NC_000015.10"
+  sequence_id: "ga4gh:SQ.AsXvWL1-2i5U_buw6_niVIxD6zTbAuS6"
 chr16:
   chr: "16"
   genbank_id: "CM000678.2"
   refseq_id: "refseq:NC_000016.10"
+  sequence_id: "ga4gh:SQ.yC_0RBj3fgBlvgyAuycbzdubtLxq-rE0"
 chr17:
   chr: "17"
   genbank_id: "CM000679.2"
   refseq_id: "refseq:NC_000017.11"
+  sequence_id: "ga4gh:SQ.dLZ15tNO1Ur0IcGjwc3Sdi_0A6Yf4zm7"
 chr18:
   chr: "18"
   genbank_id: "CM000680.2"
   refseq_id: "refseq:NC_000018.10"
+  sequence_id: "ga4gh:SQ.vWwFhJ5lQDMhh-czg06YtlWqu0lvFAZV"
 chr19:
   chr: "19"
   genbank_id: "CM000681.2"
   refseq_id: "refseq:NC_000019.10"
+  sequence_id: "ga4gh:SQ.IIB53T8CNeJJdUqzn9V_JnRtQadwWCbl"
 chr20:
   chr: "20"
   genbank_id: "CM000682.2"
   refseq_id: "refseq:NC_000020.11"
+  sequence_id: "ga4gh:SQ.-A1QmD_MatoqxvgVxBLZTONHz9-c7nQo"
 chr21:
   chr: "21"
   genbank_id: "CM000683.2"
   refseq_id: "refseq:NC_000021.9"
+  sequence_id: "ga4gh:SQ.5ZUqxCmDDgN4xTRbaSjN8LwgZironmB8"
 chr22:
   chr: "22"
   genbank_id: "CM000684.2"
   refseq_id: "refseq:NC_000022.11"
+  sequence_id: "ga4gh:SQ.7B7SHsmchAR0dFcDCuSFjJAo7tX87krQ"
 chrX:
   chr: "X"
   genbank_id: "CM000685.2"
   refseq_id: "refseq:NC_000023.11"
+  sequence_id: "ga4gh:SQ.w0WZEvgJF0zf_P4yyTzjjv9oW1z61HHP"
 chrY:
   chr: "Y"
   genbank_id: "CM000686.2"
   refseq_id: "refseq:NC_000024.10"
+  sequence_id: "ga4gh:SQ.8_liLu1aycC0tPQPFmUaGXJLDs5SbPZ5"
 MT:
   chr: "MT"
   genbank_id: "J01415.2"
-  refseq_id: "refseq:NC_012920.1"
+  refseq_id: "refseq:NC_012920.1"  
+  sequence_id: "ga4gh:SQ.k3grVkjY-hoWcCUojHw6VU6GE3MZ8Sct"

@@ -1080,7 +1080,6 @@ class ByconPlot:
         prdbug(f'{inspect.stack()[1][3]} from {inspect.stack()[2][3]}')
 
         i_f = f_set.get("interval_frequencies", [])
-
         x = 0
         h = self.plv["plot_samplestrip_height"]
 
@@ -1179,23 +1178,15 @@ class ByconPlot:
     # -------------------------------------------------------------------------#
 
     def __mix_frequencies_2_rgb(self, gain_f, loss_f, max_f=80):
-        prdbug(f'{inspect.stack()[1][3]} from {inspect.stack()[2][3]}')
-        rgb = [127, 127, 127]
-        h_i = self.plv.get("plot_heat_intensity", 1)
-        if h_i < 0.1:
+        if (h_i := self.plv.get("plot_heat_intensity", 1)) < 0.1:
             h_i = 0.1
-        f_f = max_f / self.plv.get("plot_heat_intensity", 1)
+        f_f = max_f / h_i
         dup_rgb = list(ImageColor.getcolor(self.plv["plot_dup_color"], "RGB"))
         del_rgb = list(ImageColor.getcolor(self.plv["plot_del_color"], "RGB"))
-        for i in (0,1,2):
-            dup_rgb[i] = int(dup_rgb[i] * gain_f / f_f)
-            del_rgb[i] = int(del_rgb[i] * loss_f / f_f)
-            rgb[i] = dup_rgb[i] + del_rgb[i]
-            if rgb[i] > 255:
-                rgb[i] = 255
-            rgb[i] = str(rgb[i])
-
-        return f'rgb({",".join(rgb)})'
+        rgb = [127, 127, 127]
+        for i, c in enumerate(rgb):
+            rgb[i] = int((dup_rgb[i] * gain_f + del_rgb[i] * loss_f) / f_f)
+        return f'rgb({",".join([str(min(x, 255)) for x in rgb])})'
 
 
     # -------------------------------------------------------------------------#
@@ -1234,16 +1225,14 @@ class ByconPlot:
             f'.title-left {{text-anchor: end; fill: {self.plv["plot_font_color"]}; font-size: {self.plv["plot_labelcol_font_size"]}px;}}'
         )
         g_id = f_set.get("group_id", "NA")
-        g_ds_id = f_set.get("dataset_id", False)
-        g_lab = f_set.get("label", "")
         g_no = f_set.get("sample_count", 0)
 
         # The condition splits the label data on 2 lines if a text label pre-exists
-        if len(self.plv["dataset_ids"]) > 1 and g_ds_id is not False:
+        if len(self.plv["dataset_ids"]) > 1 and (g_ds_id := f_set.get("dataset_id")):
             count_lab = f' ({g_ds_id}, {g_no} {"samples" if g_no > 1 else "sample"})'
         else:
             count_lab = f' ({g_no} {"samples" if g_no > 1 else "sample"} )'
-        if len(g_lab) > 0:
+        if len(g_lab := f_set.get("label", "")) > 0:
             lab_y = h_y_0 - self.plv["plot_labelcol_font_size"] * 0.2
             self.plv["pls"].append(f'<text x="{lab_x_e}" y="{lab_y}" class="title-left">{g_lab}</text>')
             lab_y = h_y_0 + self.plv["plot_labelcol_font_size"] * 1.2
@@ -1395,13 +1384,6 @@ class ByconPlot:
                     h = -h_y_0
                 h_p = h_y_0 - h
 
-                # draw.ellipse(
-                #     [
-                #         (s-p_half, h_p - p_half),
-                #         (s+p_half, h_p + p_half)
-                #     ],
-                #     fill=(0,0,63,p_dense)
-                # )
                 draw.point((round(s, 2),round(h_p, 2)), (0,0,63,p_dense))
 
             x += chr_w + self.plv["plot_region_gap_width"]

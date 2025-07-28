@@ -18,8 +18,8 @@ from schema_parsing import ByconSchemas
 
 ################################################################################
 
-class MultiQueryResponses():
-    def __init__(self, dataset_id):
+class MultiQueryResponses:
+    def __init__(self, dataset_id=None):
         multiqueries = {"ByconQuery": {}}
         if "testqueries" in BYC_PARS.get("mode", "").lower():
             multiqueries = BYC.get("test_queries")
@@ -768,7 +768,7 @@ class ByconResultSets:
         self.entity_defaults = BYC.get("entity_defaults", {})
         self.response_entity_id = BYC.get("response_entity_id", "biosample")
         self.returned_granularity = BYC.get("returned_granularity", "boolean")
-        self.summary_terms = BYC_PARS.get("summary_terms", [])
+        self.aggregation_terms = BYC_PARS.get("aggregation_terms", [])
         self.limit = BYC_PARS.get("limit")
         self.skip = BYC_PARS.get("skip")
         self.mongo_client = MongoClient(host=DB_MONGOHOST)
@@ -994,7 +994,7 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __dataset_response_add_aggregations(self, ds_id, ds_res):
-        prdbug(f'... __resultset_response_add_aggregations for dataset {ds_id} - summary_terms: {self.summary_terms}')
+        prdbug(f'... __resultset_response_add_aggregations for dataset {ds_id} - aggregation_terms: {self.aggregation_terms}')
 
         self.__set_available_aggregation_ids(ds_id)
 
@@ -1012,10 +1012,10 @@ class ByconResultSets:
 
         """
         This function sets the available aggregation ids based on the
-        summary_terms and response_entity_id.
+        aggregation_terms and response_entity_id.
         """
 
-        self.available_aggregation_ids = set(self.summary_terms)
+        self.available_aggregation_ids = set(self.aggregation_terms)
 
         if len(self.available_aggregation_ids) > 0:
             ft_original = BYC_PARS.get("filters", [])
@@ -1027,7 +1027,7 @@ class ByconResultSets:
 
 
         # temporary home for specials ... 
-        if "cnvfrequencies" in self.summary_terms and "analysis" in self.response_entity_id:
+        if "cnvfrequencies" in self.aggregation_terms and "analysis" in self.response_entity_id:
             self.available_aggregation_ids.add("cnvfrequencies")
 
         self.available_aggregation_ids = list(self.available_aggregation_ids)

@@ -117,11 +117,11 @@ prefixed filter values, comma concatenated; or objects in POST
 either `start` or `exact` for matching filter values    
 **default:** `exact`    
 
-#### `summary_terms` 
+#### `aggregation_terms` 
 **type:** array    
 **items:**  
     - `type`: `string`    
-**cmdFlags:** `--summaryTerms`    
+**cmdFlags:** `--aggregationTerms`    
 **description:**
 Experimental for Beacon v2+ for indicating which summaries to provide    
 

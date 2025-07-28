@@ -40,10 +40,8 @@ try:
     ByconEntities().set_entities()
     ByconDatasets().set_dataset_ids()
 
-    if (tm := BYC_PARS.get("test_mode")):
-        BYC.update({"TEST_MODE": test_truthy(tm)})
-    # if BYC.get("TEST_MODE") is True:
-    #     BYC_PARS.update({"include_handovers": True})
+    # if (tm := BYC_PARS.get("test_mode")):
+    BYC.update({"TEST_MODE": ByconH().truth(BYC_PARS.get("test_mode"))})
 
     set_user_name()
     set_returned_granularities()    
