@@ -9,3 +9,6 @@ pymongo==4.11.3
 PyYAML==6.0.2
 scipy==1.15.2
 setuptools==76.1.0
+ga4gh.vrs[extras]
+seqrepo
+

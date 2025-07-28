@@ -4,4 +4,4 @@ from bycon import byconServiceLibs
 from bycon_importer import ByconImporter
 
 BI = ByconImporter()
-BI.import_biosamples()
+BI.import_records("biosample")

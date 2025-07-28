@@ -6,4 +6,4 @@ from bycon import byconServiceLibs
 from bycon_importer import ByconImporter
 
 BI = ByconImporter()
-BI.delete_biosamples()
+BI.delete_records("biosample")
