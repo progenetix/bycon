@@ -6,7 +6,17 @@ from pymongo import MongoClient
 from random import sample as random_samples
 
 # bycon
-from bycon import BYC, BYC_PARS, ByconDatasets, ByconID, ByconVariant, DB_MONGOHOST, prjsonnice, prdbug
+from bycon import (
+    BYC,
+    BYC_PARS,
+    ByconDatasets,
+    ByconID,
+    ByconVariant,
+    DB_MONGOHOST,
+    prjsonnice,
+    prdbug,
+    RecordsHierarchy
+)
 
 services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 sys.path.append( services_lib_path )
@@ -37,9 +47,8 @@ class ByconImporter():
         self.import_id = None
         self.use_file = use_file
         self.output_dir = None
-        self.import_entities = ["individual", "biosample", "analysis", "genomicVariant"]
-        # TODO: programmatic upstream & downstream, maybe in another class
-        self.upstream = ["individual", "biosample", "analysis"]
+        self.import_entities = RecordsHierarchy().entities()
+        self.upstream = []
         self.downstream = []
         self.downstream_only = False
         self.dataset_client = self.mongo_client[ self.dataset_id ]
@@ -71,6 +80,7 @@ class ByconImporter():
     def import_records(self, entity="___none___"):
         if not entity in self.import_entities:
             print(f'!!! No correct entity provided.')
+            exit()
         self.__prepare_entity(entity)
         self.__insert_database_records_from_file()
 
@@ -80,6 +90,7 @@ class ByconImporter():
     def delete_records(self, entity="___none___"):
         if not entity in self.import_entities:
             print(f'!!! No correct entity provided.')
+            exit()
         self.__prepare_entity(entity)
         self.__delete_database_records()
 
@@ -88,32 +99,20 @@ class ByconImporter():
 
     def update_records(self, entity="___none___"):
         if not entity in self.import_entities:
-            print(f'!!! No correct entity provided.'):
+            print(f'!!! No correct entity provided.')
+            exit()
         self.__prepare_entity(entity)
         self.__update_database_records_from_file()
 
 
     #--------------------------------------------------------------------------#
 
-    def delete_individuals_and_downstream(self):
-        self.__prepare_entity("individual")
-        self.downstream = ["biosample", "analysis", "genomicVariant"]
-        self.__delete_database_records()
-
-
-    #--------------------------------------------------------------------------#
-
-    def delete_biosamples_and_downstream(self):
-        self.__prepare_entity("biosample")
-        self.downstream = ["analysis", "genomicVariant"]
-        self.__delete_database_records()
-
-
-    #--------------------------------------------------------------------------#
-
-    def delete_analyses_and_downstream(self):
-        self.__prepare_entity("analysis")
-        self.downstream = ["genomicVariant"]
+    def delete_records_and_downstream(self, entity="___none___"):
+        if not entity in self.import_entities:
+            print(f'!!! No correct entity provided.')
+            exit()
+        self.__prepare_entity(entity)
+        self.downstream = RecordsHierarchy().downstream(entity)
         self.__delete_database_records()
 
 
@@ -164,42 +163,22 @@ class ByconImporter():
 
     #--------------------------------------------------------------------------#
 
-    def move_individuals_and_downstream(self):
-        self.__prepare_entity("individual")
-        self.downstream = ["biosample", "analysis", "genomicVariant"]
-        self.__move_database_records()
-
-
-    #--------------------------------------------------------------------------#
-
-    def move_biosamples_and_downstream(self):
-        self.__prepare_entity("biosample")
-        self.downstream = ["analysis", "genomicVariant"]
-        self.__move_database_records()
-
-
-    #--------------------------------------------------------------------------#
-
-    def move_analyses_and_downstream(self):
-        self.__prepare_entity("analysis")
-        self.downstream = ["genomicVariant"]
-        self.__move_database_records()
-
-
-    #--------------------------------------------------------------------------#
-
-    def move_individuals(self):
-        self.__prepare_entity("individual")
-        self.downstream = []
+    def move_records_and_downstream(self, entity="___none___"):
+        if not entity in self.import_entities:
+            print(f'!!! No correct entity provided.')
+            exit()
+        self.__prepare_entity(entity)
+        self.downstream = RecordsHierarchy().downstream(entity)
         self.__move_database_records()
 
 
     #--------------------------------------------------------------------------#
 
     def move_individuals_and_downstream_from_ds_results(self, dataset_results={}):
-        self.__prepare_entity("individual")
-
-        self.downstream = ["biosample", "analysis", "genomicVariant"]
+        entity = "individual"
+        self.__prepare_entity(entity)
+        self.downstream = RecordsHierarchy().downstream(entity)
+        
         iid = self.import_id
 
         if not (ds := dataset_results.get(self.dataset_id)):
@@ -228,7 +207,7 @@ class ByconImporter():
         self.__prepare_entity("individual")
         # TODO: Use some default nanme but check for existence and offer deletion
         self.target_db = BYC_PARS.get("output", f'tmpdb_{datetime.now().isoformat()}')
-        self.downstream = ["biosample", "analysis", "genomicVariant"]
+        self.downstream = RecordsHierarchy().downstream("individual")
 
         if self.target_db in self.database_names:
             print(f'¡¡¡ You cannot export using an existing database name !!!')
@@ -265,7 +244,7 @@ class ByconImporter():
         self.import_collname = e_d.get("collection", "___none___")
         self.import_entity = entity
         self.import_id = f"{entity}_id"
-        self.upstream = e_d.get("upstream", [])
+        self.upstream = RecordsHierarchy().upstream(entity)
         if "genomicVariant" in entity:
             self.import_id = "analysis_id"
             self.allow_duplicates = True
@@ -646,7 +625,7 @@ class ByconImporter():
         iid = self.import_id
         import_id_v = new_doc[iid]
 
-        for u in in self.upstream:
+        for u in self.upstream:
             if not (e_d := self.entity_defaults.get(u)):
                 return
             # no exception for genomicVariant since never upstream...

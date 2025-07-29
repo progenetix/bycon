@@ -39,5 +39,4 @@ if len(BYC_PARS.get("filters", [])) > 0:
     ByconDatatableExporter(f_d).export_datatable()    
 
 BI = ByconImporter()
-BI.move_biosamples_and_downstream()
-BI.move_individuals()
+BI.move_records_and_downstream("individual")

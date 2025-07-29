@@ -9,6 +9,50 @@ from config import *
 
 ################################################################################
 
+class RecordsHierarchy:
+    def __init__(self):
+        self.record_entities = ["individual", "biosample", "analysis", "genomicVariant"]
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def entities(self):
+        return self.record_entities
+
+
+    # -------------------------------------------------------------------------#
+
+    def downstream(self, entity="___none___"):
+        ds = []
+        if entity not in self.record_entities:
+            return ds
+        now = False
+        for e in self.record_entities:
+            if now:
+                ds.append(e)
+            if e == entity:
+                now = True
+        return ds
+
+
+    # -------------------------------------------------------------------------#
+
+    def upstream(self, entity="___none___"):
+        us = []
+        if entity not in self.record_entities:
+            return us
+        now = True
+        for e in self.record_entities:
+            if e == entity:
+                now = False
+            if now:
+                us.append(e)
+        return us
+
+
+################################################################################
+
 class ByconSchemas:
     def __init__(self, schema_name="", root_key=""):
         self.entity_defaults = BYC.get("entity_defaults", {})

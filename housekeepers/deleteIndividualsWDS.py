@@ -10,5 +10,5 @@ from bycon import byconServiceLibs
 from bycon_importer import ByconImporter
 
 BI = ByconImporter()
-BI.delete_individuals_and_downstream()
+BI.delete_records_and_downstream("individual")
 
