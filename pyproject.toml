@@ -1,0 +1,44 @@
+# pyproject.toml
+[build-system]
+requires = ["setuptools >= 42.0.0", "Cython"]
+build-backend = "setuptools.build_meta"
+
+[project]
+version = "2.5.0"
+name = "bycon"
+urls = {source = "https://github.com/progenetix/bycon", documentation = "https://bycon.progenetix.org"}
+
+authors=[
+	{name = "Michael Baudis", email = "m@baud.is"}
+]
+description = "A Python-based environment for the GA4GH Beacon genomics API"
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["genomics", "Beacon", "GA4GH", "Progenetix", "MongoDB"]
+license = "CC0-1.0"
+classifiers = [
+	"Intended Audience :: Developers",
+	"Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+	"Topic :: Scientific/Engineering :: Bio-Informatics",
+	"Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator",
+	"Topic :: Scientific/Engineering :: Medical Science Apps.",
+	"Topic :: Software Development :: Libraries :: Python Modules"
+]
+dependencies = [
+    "base36",
+    "Cython",
+	"isodate",
+	"json_ref_dict",
+	"Markdown",
+	"numpy",
+	"Pillow",
+	"pyhumps",
+	"pymongo",
+	"PyYAML",
+	"scipy"
+]
+
+[project.optional-dependencies]
+
+[project.scripts]
+

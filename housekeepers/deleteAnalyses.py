@@ -6,5 +6,5 @@ from bycon import byconServiceLibs
 from bycon_importer import ByconImporter
 
 BI = ByconImporter()
-BI.delete_analyses()
+BI.delete_records("analysis")
 

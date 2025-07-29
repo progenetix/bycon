@@ -3,6 +3,7 @@ from pymongo import MongoClient
 
 from config import *
 from bycon_helpers import *
+from schema_parsing import RecordsHierarchy
 
 ################################################################################
 
@@ -21,7 +22,7 @@ class ByconDatasetResults():
         # q_e_d = self.entity_defaults.get(self.res_ent_id, {})
         # self.queried_entities = q_e_d.get("upstream", [])
 
-        self.queried_entities = ["individual", "biosample", "analysis", "genomicVariant"]
+        self.queried_entities = RecordsHierarchy().entities()
         self.res_obj_defs = {}
         self.queries = {}
         for e in self.queried_entities:
@@ -31,7 +32,7 @@ class ByconDatasetResults():
                 "collection": c,
                 "entity_id": e,
                 "id_parameter": f'{e}_id',
-                "upstream_ids": [f'{x}_id' for x in e_d.get("upstream", [])]
+                "upstream_ids": [f'{x}_id' for x in RecordsHierarchy().upstream(e)]
             }})
 
         self.id_responses = {}
@@ -193,6 +194,7 @@ class ByconDatasetResults():
         elif "genomicVariant" in self.res_ent_id:
             # TODO: Has to be optimized for large numbers...
             e = "genomicVariant"
+            id_p = f"{e}_id"
             v_ids = []
             for ana_id in self.id_responses.get("analysis_id").get("values", []):
                 v_ids += self.data_db["variants"].distinct("id", {"analysis_id": ana_id})
@@ -201,16 +203,16 @@ class ByconDatasetResults():
             v_no = len(v_ids)
             if v_no > VARIANTS_RESPONSE_LIMIT:
                 v_ids = return_paginated_list(v_ids, 0, VARIANTS_RESPONSE_LIMIT)
-                BYC["WARNINGS"].append(f"Too many genomicVariant values ({v_no}) for dataset {self.dataset_id}. Only the first {VARIANTS_RESPONSE_LIMIT} will be returned.")
+                BYC["WARNINGS"].append(f"Too many {e} values ({v_no}) for dataset {self.dataset_id}. Only the first {VARIANTS_RESPONSE_LIMIT} will be returned.")
 
-            self.id_responses.update({"genomicVariant_id": {"values": v_ids, "count": v_no}})
-            e_d = self.entity_defaults.get("genomicVariant", {})
+            self.id_responses.update({id_p: {"values": v_ids, "count": v_no}})
+            e_d = self.entity_defaults.get(e, {})
             c = e_d.get("collection", "___none___")
             self.res_obj_defs.update({f'{c}.id': {
                 "collection": c,
                 "entity_id": e,
-                "id_parameter": "genomicVariant_id",
-                "upstream_ids": [f'{x}_id' for x in e_d.get("upstream", [])]
+                "id_parameter": id_p,
+                "upstream_ids": [f'{x}_id' for x in RecordsHierarchy().upstream(e)]
             }})
 
 

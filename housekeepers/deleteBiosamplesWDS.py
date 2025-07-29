@@ -7,4 +7,4 @@ from bycon_importer import ByconImporter
 
 
 BI = ByconImporter()
-BI.delete_biosamples_and_downstream()
+BI.delete_records_and_downstream("biosample")

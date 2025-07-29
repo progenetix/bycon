@@ -34,21 +34,6 @@ entryTypes:
       - id: analysis
         name: Genomic Analyses
     additionalSupportedSchemas: []
-    # `bycon` config
-    request_entity_path_id: datasets
-    response_entity_id: dataset
-    collection: Null
-    response_schema: beaconCollectionsResponse
-    bycon_response_class: BeaconDataResponse
-    beacon_schema:
-      entity_type: dataset
-      schema: https://progenetix.org/services/schemas/dataset/
-    is_beacon_entity: true
-    path_id_value_bycon_parameter: dataset_ids
-    tests:
-      - description: default test mode
-        test_values:
-          testMode: true
 
   cohort:
     id: cohort
@@ -69,21 +54,6 @@ entryTypes:
       - id: individual
         name: Individuals
     additionalSupportedSchemas: []
-    # `bycon` config
-    request_entity_path_id: cohorts
-    response_entity_id: cohort
-    collection: collations
-    response_schema: beaconCollectionsResponse
-    bycon_response_class: BeaconDataResponse
-    beacon_schema:
-      entity_type: cohort
-      schema: https://progenetix.org/services/schemas/cohort/
-    is_beacon_entity: true
-    path_id_value_bycon_parameter: filters
-    tests:
-      - description: default test mode
-        test_values:
-          testMode: true
 
   genomicVariant:
     id: genomicVariant
@@ -102,28 +72,6 @@ entryTypes:
       referenceToSchemaDefinition: http://progenetix.org/services/schemas/genomicVariant
       schemaVersion: v2.2.0
     additionallySupportedSchemas: []
-    # `bycon` config
-    request_entity_path_id: g_variants
-    request_entity_path_aliases:
-      - genomicVariations
-      - variants
-    response_entity_id: genomicVariant
-    collection: variants
-    response_schema: beaconResultsetsResponse
-    bycon_response_class: BeaconDataResponse
-    beacon_schema:
-      entity_type: genomicVariant
-      schema: https://progenetix.org/services/schemas/genomicVariant/
-    upstream:
-      - analysis
-      - biosample
-      - individual
-    is_beacon_entity: true
-    path_id_value_bycon_parameter: variant_ids
-    tests:
-      - description: default test mode
-        test_values:
-          testMode: true
 
 ################################################################################
 
@@ -143,24 +91,6 @@ entryTypes:
       name: Default schema for an individual
       referenceToSchemaDefinition: http://progenetix.org/services/schemas/individual
     additionallySupportedSchemas: []
-    # `bycon` config
-    request_entity_path_id: individuals
-    response_entity_id: individual
-    collection: individuals
-    response_schema: beaconResultsetsResponse
-    bycon_response_class: BeaconDataResponse
-    beacon_schema:
-      entity_type: individual
-      schema: https://progenetix.org/services/schemas/individual/
-    upstream: []
-    is_beacon_entity: true
-    path_id_value_bycon_parameter: individual_ids
-    examples:
-      - ?filters=EFO:0030049&limit=5
-    tests:
-      - description: default test mode
-        test_values:
-          testMode: true
 
 ################################################################################
 
@@ -180,25 +110,6 @@ entryTypes:
       name: Default schema for a biological sample
       referenceToSchemaDefinition: http://progenetix.org/services/schemas/biosample
     additionallySupportedSchemas: []
-    # `bycon` config
-    request_entity_path_id: biosamples
-    request_entity_path_aliases:
-      - samples
-    response_entity_id: biosample
-    collection: biosamples  
-    response_schema: beaconResultsetsResponse
-    bycon_response_class: BeaconDataResponse
-    beacon_schema:
-      entity_type: biosample
-      schema: https://progenetix.org/services/schemas/biosample/
-    upstream:
-      - individual
-    is_beacon_entity: true
-    path_id_value_bycon_parameter: biosample_ids
-    tests:
-      - description: default test mode
-        test_values:
-          testMode: true
 
 ################################################################################
 
@@ -217,21 +128,6 @@ entryTypes:
       referenceToSchemaDefinition: http://progenetix.org/services/schemas/run
       schemaVersion: v2.2.0
     additionallySupportedSchemas: []
-    # `bycon` config
-    request_entity_path_id: runs
-    response_entity_id: run
-    collection: analyses  
-    response_schema: beaconResultsetsResponse
-    bycon_response_class: BeaconDataResponse
-    beacon_schema:
-      entity_type: run
-      schema: https://progenetix.org/services/schemas/run/
-    is_beacon_entity: true
-    path_id_value_bycon_parameter: run_ids
-    tests:
-      - description: default test mode
-        test_values:
-          testMode: true
 
 ################################################################################
 
@@ -252,24 +148,6 @@ entryTypes:
       referenceToSchemaDefinition: http://progenetix.org/services/schemas/analysis
       schemaVersion: v2.2.0
     additionallySupportedSchemas: []
-    # `bycon` config
-    request_entity_path_id: analyses
-    response_entity_id: analysis
-    collection: analyses  
-    response_schema: beaconResultsetsResponse
-    bycon_response_class: BeaconDataResponse
-    beacon_schema:
-      entity_type: analysis
-      schema: https://progenetix.org/services/schemas/analysis/
-    upstream:
-      - biosample
-      - individual
-    is_beacon_entity: true
-    path_id_value_bycon_parameter: analysis_ids
-    tests:
-      - description: default test mode
-        test_values:
-          testMode: true
 
 ################################################################################
 
@@ -286,8 +164,7 @@ entryTypes:
       the matched `individual`, `biosample`s, `analysis`(/es) and `genomicVariation`s.
     defaultSchema:
       id: phenopacket
-      name: Default schema for an phenopacket
+      name: Default schema for a phenopacket
       referenceToSchemaDefinition: http://progenetix.org/services/schemas/phenopacket
     additionallySupportedSchemas: []
-    # `bycon` config
 

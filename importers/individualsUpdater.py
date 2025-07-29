@@ -4,4 +4,4 @@ from bycon import byconServiceLibs
 from bycon_importer import ByconImporter
 
 BI = ByconImporter()
-BI.update_individuals()
+BI.update_records("individual")

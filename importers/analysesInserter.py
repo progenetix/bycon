@@ -4,4 +4,4 @@ from bycon import byconServiceLibs
 from bycon_importer import ByconImporter
 
 BI = ByconImporter()
-BI.import_analyses()
+BI.import_records("analysis")

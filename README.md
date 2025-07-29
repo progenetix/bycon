@@ -1,18 +1,15 @@
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0%201.0-lightgrey.svg)](http://creativecommons.org/publicdomain/zero/1.0/)
 
-# Bycon - a Python-based environment for the Beacon v2 genomics API
+# Bycon - a Python-based full stack environment for the Beacon genomics API
 
-The `bycon` project - at least at its current stage - is a mix of _Progenetix_ (i.e. GA4GH object model derived, _MongoDB_ implemented) - data management, and the implementation of middleware & server for the Beacon API.
+The `bycon` project implements a data hosting environment for genomic and pheno-clinical data aligned with the GA4GH Beacon data model. It provides a Beacon API for data query and retrieval but also has extended functionality with a focus on genomic copy number variation data. For a prominent implementation example showcasing `bycon` features please see the [*Progenetix* oncogenomic resource](https://progenetix.org).
 
-In its current state the `bycon` package is undergoing a transition from resource
-specific to general use environment. There is still some entanglement between
-code and use case specific definitions (e.g. database definitions inside the
-distribution) though this is (early 2023) in a process of "disentanglement".
+The underlying database system utilizes a _MongoDB_ instance and a storage model following for te most part the GA4GH object model. Also, the `bycon` project implements functions for the ingestion and management of  genomic variants and phenoclinical data, and provides a fromnt end for the Beacon API as a statically compiled React project.
 
 ## More Documentation
 
 Documentation has been moved to [`bycon.progenetix.org`](http://bycon.progenetix.org).
-W/ the rapid code development it is recommended to keep following the [Changes](http://bycon.progenetix.org/changes/)
+Due to the rapid code development it is recommended to keep following the [Changes](http://bycon.progenetix.org/changes/)
 page.
 
 ### Installation
