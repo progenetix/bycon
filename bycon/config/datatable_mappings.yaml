@@ -141,9 +141,6 @@ $defs:
       - individual_id
     collection: analyses
     id_parameter: analysis_id
-    upstream_colls:
-      - individuals
-      - biosamples
     parameters:
       analysis_id:
         db_key: id
@@ -218,8 +215,6 @@ $defs:
       - individual_id
     collection: biosamples
     id_parameter: biosample_id
-    upstream_colls:
-      - individuals
     parameters:
       biosample_id:
         type: string
@@ -448,7 +443,6 @@ $defs:
       - individual_id
     collection: individuals
     id_parameter: individual_id
-    upstream_colls: []
     parameters:
       individual_id:
         type: string
@@ -559,10 +553,6 @@ $defs:
       - individual_id
     collection: variants
     id_parameter: variant_id
-    upstream_colls:
-      - analyses
-      - individuals
-      - biosamples
     parameters:
       variant_id:
         db_key: id

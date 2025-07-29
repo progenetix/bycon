@@ -1,4 +1,4 @@
-import inspect, json, re, yaml
+import json, yaml
 from deepmerge import always_merger
 from json_ref_dict import RefDict, materialize
 from os import path, pardir, scandir, environ
@@ -6,7 +6,6 @@ from pathlib import Path
 
 from config import *
 from bycon_helpers import load_yaml_empty_fallback, prdbug, prdbughead
-from parameter_parsing import *
 
 ################################################################################
 
@@ -25,10 +24,7 @@ def read_service_definition_files():
     b_d_fs = [ Path(f).stem for f in b_d_fs ]
 
     for d in b_d_fs:
-        o = {}
-        ofp = path.join(CONF_PATH, f'{d}.yaml' )
-        with open( ofp ) as od:
-            o = yaml.load( od , Loader=yaml.FullLoader)
+        o = load_yaml_empty_fallback(path.join(CONF_PATH, f'{d}.yaml' ))
         BYC.update({d: o})        
 
     e_d = always_merger.merge(
@@ -42,12 +38,11 @@ def read_service_definition_files():
 ################################################################################
 
 def update_rootpars_from_local_or_HOST():
+    """Overwriting of installation-wide defaults with instance-specific ones
+    _i.e._ matching the current domain (to allow presentation of different
+    Beacon instances from the same server)"""
 
-    # overwriting installation-wide defaults with instance-specific ones
-    # _i.e._ matching the current domain (to allow presentation of different
-    # Beacon instances from the same server)
-    i_ovr_f = path.join(LOC_PATH, "instance_definitions.yaml")
-    i_ovr = load_yaml_empty_fallback(i_ovr_f)
+    i_ovr = load_yaml_empty_fallback(path.join(LOC_PATH, "instance_definitions.yaml"))
 
     if "local" in i_ovr:
         i_o_bdfs = i_ovr["local"].get("beacon_defaults", {})

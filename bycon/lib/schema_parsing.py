@@ -10,6 +10,10 @@ from config import *
 ################################################################################
 
 class RecordsHierarchy:
+    """This class provides hierarchy methods for the main data entities which are
+    applied e.g. during query execution and record insertion and update processes.
+    """
+
     def __init__(self):
         self.record_entities = ["individual", "biosample", "analysis", "genomicVariant"]
 
