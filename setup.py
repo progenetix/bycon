@@ -11,5 +11,5 @@ setup(
     packages=find_packages(where=here),
     setup_requires=['setuptools_scm'],
     include_package_data=True,
-    package_data={'bycon': ['**/*.yaml', '**/*.txt', '**/*.json']}
+    package_data={'bycon': ['**/*.yaml', '**/*.txt', '**/*.tsv', '**/*.md', '**/*.json']}
 )
