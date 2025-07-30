@@ -10,7 +10,7 @@ from bycon import (
     ENV,
     GeneInfo,
     Cytobands,
-    test_truthy,
+    ByconH,
     prdbug
 )
 
@@ -384,7 +384,7 @@ class ByconPlot:
         p_t_s = self.plot_type_defs
         d_k = p_t_s["samplesplot"].get("data_key")
 
-        if test_truthy(self.plv.get("plot_filter_empty_samples", False)):
+        if ByconH().truth(self.plv.get("plot_filter_empty_samples", False)):
             self.plot_data_bundle.update({d_k: [s for s in self.plot_data_bundle[d_k] if len(s['variants']) > 0]})
 
         self.plv.update({

@@ -42,6 +42,35 @@ class ByconH:
             return True
         return False
 
+    #--------------------------------------------------------------------------#
+
+    def paginated_list(self, this, skip=0, limit=300000):
+        if limit < 1:
+            return list(this)
+        if len(list(this)) < 1:
+            return []
+
+        if BYC.get("PAGINATED_STATUS", False):
+            return this
+        BYC.update({"PAGINATED_STATUS": True})
+
+        p_range = [
+            skip * limit,
+            skip * limit + limit,
+        ]
+        t_no = len(this)
+        r_l_i = t_no - 1
+
+        if p_range[0] > r_l_i:
+            p_range[0] = r_l_i
+        if p_range[-1] > t_no:
+            p_range[-1] = t_no
+
+        if p_range[0] > t_no:
+            return []
+
+        return this[p_range[0]:p_range[-1]]
+
 
 ################################################################################
 
@@ -51,7 +80,7 @@ def select_this_server() -> str:
     URI, but then the browser ... will complain if the handover URLs won't use
     encryption. OTOH for local testing one may need to stick w/ http if no pseudo-
     https scenario had been implemented. Therefore handover addresses etc. will
-    always use https _unless_ the request comes from a host listed a test instance.
+    always use https _unless_ the request comes from a host listed as test instance.
     """
     s_uri = str(environ.get('SCRIPT_URI'))
     X_FORWARDED_PROTO = str(environ.get('HTTP_X_FORWARDED_PROTO'))
@@ -103,47 +132,6 @@ def days_from_iso8601duration(iso8601duration):
 
 ################################################################################
 
-def hex_2_rgb( hexcolor ):
-    rgb = [127, 127, 127]
-    h = hexcolor.lstrip('#')
-    rgb = tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
-
-    return rgb
-
-
-################################################################################
-
-def return_paginated_list(this, skip, limit):
-    if limit < 1:
-        return list(this)
-    if len(list(this)) < 1:
-        return []
-
-    if BYC.get("PAGINATED_STATUS", False):
-        return this
-
-    BYC.update({"PAGINATED_STATUS": True})
-
-    p_range = [
-        skip * limit,
-        skip * limit + limit,
-    ]
-    t_no = len(this)
-    r_l_i = t_no - 1
-
-    if p_range[0] > r_l_i:
-        p_range[0] = r_l_i
-    if p_range[-1] > t_no:
-        p_range[-1] = t_no
-
-    if p_range[0] > t_no:
-        return []
-
-    return this[p_range[0]:p_range[-1]]
-
-
-################################################################################
-
 def mongo_result_list(db_name, coll_name, query, fields={}):
     results = []
 
@@ -159,39 +147,6 @@ def mongo_result_list(db_name, coll_name, query, fields={}):
     mongo_client.close()
 
     return results
-
-
-################################################################################
-
-def mongo_test_mode_query(db_name, coll_name):
-    query = {}
-    error = False
-    ids = []
-    t_m_c = BYC_PARS.get("test_mode_count", 5)
-
-    mongo_client = MongoClient(host=DB_MONGOHOST)
-    db_names = list(mongo_client.list_database_names())
-    if db_name not in db_names:
-        BYC["ERRORS"].append(f"db `{db_name}` does not exist")
-        return results, f"{db_name} db `{db_name}` does not exist"
-    try:
-        rs = list(mongo_client[db_name][coll_name].aggregate([{"$sample": {"size": t_m_c}}]))
-        ids = list(s["id"] for s in rs)
-    except Exception as e:
-        BYC["ERRORS"].append(e)
-
-    mongo_client.close()
-    query = {"id": {"$in": ids}}
-
-    return query
-
-
-################################################################################
-
-def test_truthy(this):
-    if str(this).lower() in ["1", "true", "y", "yes"]:
-        return True
-    return False
 
 
 ################################################################################
@@ -294,21 +249,6 @@ def clean_empty_fields(this_object, protected=["external_references"]):
                 this_object.pop(k, None)
 
     return this_object
-
-
-################################################################################
-
-def mongo_and_or_query_from_list(query, logic="AND"):
-    if type(query) != list:
-        return query
-    if len(query) == 1:
-        return query[0]
-    elif len(query) > 1:
-        if "OR" in logic.upper():
-            return {"$or": query}
-        return {"$and": query}
-    else:
-        return {}
 
 
 ################################################################################

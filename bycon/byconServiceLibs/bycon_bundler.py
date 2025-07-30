@@ -11,8 +11,9 @@ from bycon import (
     BYC_PARS,
     DB_MONGOHOST,
     ByconVariant,
+    CollationQuery,
     GenomeBins,
-    return_paginated_list,
+    ByconH,
     prdbug
 )
 
@@ -20,7 +21,6 @@ services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 sys.path.append( services_lib_path )
 from datatable_utils import import_datatable_dict_line
 from file_utils import *
-from service_response_generation import CollationQuery
 
 ################################################################################
 ################################################################################
@@ -278,7 +278,7 @@ class ByconBundler:
             s_ids = s_r["target_values"]
             r_no = len(s_ids)
             prdbug(f'...... __analyses_bundle_from_result_set limit: {self.limit}')
-            s_ids = return_paginated_list(s_ids, self.skip, self.limit)
+            s_ids = ByconH().paginated_list(s_ids, self.skip, self.limit)
             prdbug(f'...... __analyses_bundle_from_result_set after: {len(s_ids)}')
             for s_id in s_ids:
                 s = sample_coll.find_one({"id": s_id })

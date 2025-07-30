@@ -6,17 +6,6 @@ from pymongo import MongoClient
 
 from bycon import *
 
-# from bycon import (
-#     BYC,
-#     BYC_PARS,
-#     ByconFilters,
-#     ByconParameters,
-#     DB_MONGOHOST,
-#     mongo_and_or_query_from_list,
-#     prdbug,
-#     prjsonnice
-# )
-
 class OntologyMaps:
     """
     The `OntologyMaps` class is used to create, retrieve and store ontology maps,
@@ -141,7 +130,10 @@ class OntologyMaps:
                 else:
                     q_list.append( { "code_group.id": f_val } )
 
-        self.query = mongo_and_or_query_from_list(q_list, "AND")
+        if len(q_list) == 1:
+            self.query = q_list[0]
+        elif len(q_list) > 1:
+            self.query = {"$and": q_list}
 
 
     # -------------------------------------------------------------------------#
@@ -157,19 +149,6 @@ class OntologyMaps:
 
         for k, u in u_c_d.items():
             self.unique_terms.append(u)        
-
-        # if "termGroups" in BYC["response_entity_id"]:
-        #     t_g_s = []
-        #     for tg in self.term_groups:
-        #         t_l = []
-        #         for t in tg:
-        #             t_l.append(str(t.get("id", "")))
-        #             t_l.append(str(t.get("label", "")))
-        #         t_g_s.append("\t".join(t_l))
-
-        #     if "text" in BYC_PARS.get("output", "___none___"):
-        #         print_text_response("\n".join(t_g_s))
-        #     results = c_g
 
 
     # -------------------------------------------------------------------------#

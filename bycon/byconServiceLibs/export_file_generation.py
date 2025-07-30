@@ -9,15 +9,14 @@ from bycon import (
     BYC_PARS,
     ByconFilters,
     ByconID,
+    ByconH,
     ByconVariant,
     DB_MONGOHOST,
     ENV,
     GenomeBins,
     prdbug,
     RefactoredValues,
-    return_paginated_list,
-    select_this_server,
-    test_truthy
+    select_this_server
 )
 
 services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
@@ -198,8 +197,8 @@ class PGXseg:
         if not (var_ids := self.dataset_result.get("variants.id", {}).get("target_values")):
             BYC["ERRORS"].append("No variants found in the dataset results.")
             return
-        if test_truthy(BYC_PARS.get("paginate_results", True)):
-            var_ids = return_paginated_list(var_ids, self.skip, self.limit)
+        if ByconH().truth(BYC_PARS.get("paginate_results", True)):
+            var_ids = ByconH().paginated_list(var_ids, self.skip, self.limit)
         vs_coll = self.mongo_client[self.ds_id]["variants"]
 
         v_instances = []
@@ -438,8 +437,8 @@ def export_callsets_matrix(datasets_results, ds_id):
     q_vals = cs_r["target_values"]
     r_no = len(q_vals)
     if r_no > limit:
-        if test_truthy( BYC_PARS.get("paginate_results", True) ):
-            q_vals = return_paginated_list(q_vals, skip, limit)
+        if ByconH().truth( BYC_PARS.get("paginate_results", True) ):
+            q_vals = ByconH().paginated_list(q_vals, skip, limit)
         print(f'#meta=>"WARNING: Only {len(q_vals)} analyses will be included due to pagination skip {skip} and limit {limit}."')
 
     bios_ids = set()
@@ -545,8 +544,8 @@ class PGXvcf:
 
     def __add_variants(self):
         v_instances = self.flattened_data
-        if test_truthy( BYC_PARS.get("paginate_results", True) ):
-            v_instances = return_paginated_list(v_instances, self.skip, self.limit)
+        if ByconH().truth( BYC_PARS.get("paginate_results", True) ):
+            v_instances = ByconH().paginated_list(v_instances, self.skip, self.limit)
         v_instances = [ByconVariant().byconVariant(v) for v in v_instances]
         v_instances = list(sorted(v_instances, key=lambda x: (f'{x["location"]["chromosome"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x["location"]['start'])))
 

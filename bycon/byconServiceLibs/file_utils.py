@@ -12,8 +12,7 @@ from bycon import (
     ENV,
     PROJECT_PATH,
     prdbug,
-    prjsonnice,
-    return_paginated_list
+    prjsonnice
 )
 
 

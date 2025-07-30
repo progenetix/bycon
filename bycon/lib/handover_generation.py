@@ -4,7 +4,7 @@ from pathlib import Path
 from os import environ, pardir, path
 import sys
 
-from bycon_helpers import hex_2_rgb, prdbug, select_this_server
+from bycon_helpers import prdbug, select_this_server
 from config import *
 from variant_mapping import ByconVariant
 
@@ -73,5 +73,4 @@ def __handover_create_url(h_o_server, h_o_defs, ds_id, accessid):
         if (v := h_o_defs.get(p)):
             url += f"&{p}={v}"
     return url
-
 
