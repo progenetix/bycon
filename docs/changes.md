@@ -6,6 +6,39 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### Upcoming
+
+* VRS 2.n support employing `vrs-python`
+
+### 2025-07-29: (v2.5.0 "Forked")
+
+The 2.5.0 release does not contain additional functional changes compared to the
+2.4.n but rather focusses on installation clean-up and code streamlining & maintenance:
+
+#### Setup & procedural
+
+* finally moving development process from "local cloud drive edits and random
+  pushes to Github" to a more standard model w/ forks & PRs
+* rewrite of the `setuptools` configuration, now using the recommended `pyproject.toml`
+  format, and making some sense of the packaging structure during the process
+
+#### Code & definitions
+
+* more cleanup of temporary definitions etc.
+* starting to move helpers into a class `ByconH`, e.g. `ByconH().truth(BYC_PARS.get("test_mode"))`
+* refactoring `bycon_importer.py` and importers 
+* adds a RecordsHierarchy class to `schema_parsing.py` for definition of the queried entities and their hierarchy
+    - this also provides downstream and upstream functions
+    - utilizes the RecordsHierarchy ... downstream etc. to slim down the importers and updaters etc.
+* preparing for VRS 2 use by adding `ga4gh:SQ...` identifier aliases and adding a `ga4ghSQs()` and `ga4ghSQ(...)` functions to `ChroNames()`:
+```
+chr3:
+  chr: "3"
+  genbank_id: "CM000665.2"
+  refseq_id: "refseq:NC_000003.12"
+  sequence_id: "ga4gh:SQ.Zu7h9AggXxhTaGVsy7h_EZSChSZGcmgX"
+```
+
 ### 2025-07-13: (v2.4.9 "Montréal")
 
 * prototype for `summary_response`, currently limited to the to 

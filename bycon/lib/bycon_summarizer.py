@@ -9,7 +9,7 @@ from copy import deepcopy
 # services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 # sys.path.append( services_lib_path )
 from config import *
-from bycon_helpers import prdbug, return_paginated_list
+from bycon_helpers import prdbug, ByconH
 from interval_utils import GenomeBins
 
 ################################################################################
@@ -49,7 +49,7 @@ class ByconSummary():
         sample_coll = MongoClient(host=DB_MONGOHOST)[self.ds_id]["analyses"]
         s_ids = self.analyses_result.get("target_values", [])
         r_no = len(s_ids)
-        s_ids = return_paginated_list(s_ids, self.skip, self.limit)
+        s_ids = ByconH().paginated_list(s_ids, self.skip, self.limit)
 
         prdbug(f'... __analyses_bundle_analyses_result {self.ds_id} => {r_no} samples, limit: {self.limit}, after: {len(s_ids)}')
 

@@ -12,7 +12,7 @@ Documentation has been moved to [`bycon.progenetix.org`](http://bycon.progenetix
 Due to the rapid code development it is recommended to keep following the [Changes](http://bycon.progenetix.org/changes/)
 page.
 
-### Installation
+## Installation
 
 The installation is documented [`on the website`](http://bycon.progenetix.org/installation/)
 (and in the page's Markdown [source here](./docs/installation.md)).

@@ -3,7 +3,7 @@ from bson import SON
 from os import environ
 from pymongo import MongoClient
 
-from bycon_helpers import days_from_iso8601duration, mongo_and_or_query_from_list, prdbug, prjsonnice, return_paginated_list
+from bycon_helpers import days_from_iso8601duration, prdbug, prjsonnice, ByconH
 from config import *
 from genome_utils import ChroNames, Cytobands, GeneInfo, VariantTypes
 from parameter_parsing import ByconFilters
@@ -889,7 +889,7 @@ class ByconQuery():
         t_e = h_o["entity_id"]
         t_c = h_o["target_count"]
 
-        t_v = return_paginated_list(t_v, self.skip, self.limit)
+        t_v = ByconH().paginated_list(t_v, self.skip, self.limit)
         if len(t_v) < 1:
             return
         h_o_q = [{"id": {'$in': t_v}}]
@@ -990,8 +990,6 @@ class GeoQuery():
 
         self.__geo_city_query()
         self.__geo_geo_longlat_query()
-
-#         self.query = mongo_and_or_query_from_list(geoq_l)
 
 
     # -------------------------------------------------------------------------#
@@ -1099,4 +1097,85 @@ class GeoQuery():
 ################################################################################
 ################################################################################
 ################################################################################
+
+class CollationQuery:
+    def __init__(self):
+        self.collection = "collations"
+        self.dataset_id = BYC["BYC_DATASET_IDS"][0]
+        self.test_mode_count = BYC_PARS.get("test_mode_count", 5)
+        self.filters = BYC_PARS.get("filters", [])
+        self.collation_types = BYC_PARS.get("collation_types", [])
+        self.query = False
+
+        self.__coll_test_mode_query()
+        self.__coll_query()
+
+        if self.query is False:
+            self.query = {"id":"___undefined___"}
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def getQuery(self):
+        return self.query
+
+
+    # -------------------------------------------------------------------------#
+    # ---------------------------- private ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __coll_query(self):
+        if type(self.query) is dict:
+            return
+
+        q_list = []
+        if len(self.filters) > 0:
+            q_list.append({"id": {"$in": self.filters}})
+        if len(self.collation_types) > 0:
+            if "all" in self.collation_types[0]:
+                self.collation_types = []
+            q_list.append({"collation_type": {"$in": self.collation_types }})
+        if len(q_list) < 1:
+            return
+        self.query = mongo_and_or_query_from_list(q_list)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __coll_test_mode_query(self):
+        if BYC["TEST_MODE"] is not True:
+            return
+        mongo_client = MongoClient(host=DB_MONGOHOST)
+        db_names = list(mongo_client.list_database_names())
+        if self.dataset_id not in db_names:
+            BYC["ERRORS"].append(f"db `{self.dataset_id}` does not exist")
+            self.query = {"_id": "___undefined___"}
+            return
+        try:
+            rs = list(mongo_client[self.dataset_id]["collations"].aggregate([{"$sample": {"size": self.test_mode_count}}]))
+            ids = list(s["id"] for s in rs)
+            self.query = {"id": {"$in": ids}}
+        except Exception as e:
+            BYC["ERRORS"].append(e)
+            self.query = {"_id": "___undefined___"}
+        mongo_client.close()
+
+
+################################################################################
+################################################################################
+################################################################################
+
+def mongo_and_or_query_from_list(query, logic="AND"):
+    if type(query) != list:
+        return query
+    if len(query) == 1:
+        return query[0]
+    elif len(query) > 1:
+        if "OR" in logic.upper():
+            return {"$or": query}
+        return {"$and": query}
+    else:
+        return {}
 

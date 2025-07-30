@@ -12,7 +12,7 @@ from bycon_summarizer import ByconSummary
 from handover_generation import dataset_response_add_handovers
 from parameter_parsing import ByconFilters, ByconParameters
 from query_execution import ByconDatasetResults # execute_bycon_queries
-from query_generation import ByconQuery
+from query_generation import ByconQuery, CollationQuery
 from response_remapping import *
 from schema_parsing import ByconSchemas
 
@@ -615,9 +615,8 @@ class ByconFilteringTerms:
             query = {"$and": q_list}
 
         if BYC["TEST_MODE"] is True:
-            query = mongo_test_mode_query(self.ds_id, self.data_collection)
-
-        # prdbug(f'filtering_terms_query: {query}')
+            # this handles test mode, too...
+            query = CollationQuery().getQuery()
 
         self.filtering_terms_query = query
 
@@ -937,7 +936,7 @@ class ByconResultSets:
         res = ds_results.get(self.handover_key, {})
         q_coll = res.get("collection", "___none___")
         q_v_s = res.get("target_values", [])
-        q_v_s = return_paginated_list(q_v_s, self.skip, self.limit)
+        q_v_s = ByconH().paginated_list(q_v_s, self.skip, self.limit)
 
         data_coll = self.mongo_client[ds_id][q_coll]
 

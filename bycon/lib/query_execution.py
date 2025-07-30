@@ -202,7 +202,7 @@ class ByconDatasetResults():
 
             v_no = len(v_ids)
             if v_no > VARIANTS_RESPONSE_LIMIT:
-                v_ids = return_paginated_list(v_ids, 0, VARIANTS_RESPONSE_LIMIT)
+                v_ids = ByconH().paginated_list(v_ids, 0, VARIANTS_RESPONSE_LIMIT)
                 BYC["WARNINGS"].append(f"Too many {e} values ({v_no}) for dataset {self.dataset_id}. Only the first {VARIANTS_RESPONSE_LIMIT} will be returned.")
 
             self.id_responses.update({id_p: {"values": v_ids, "count": v_no}})

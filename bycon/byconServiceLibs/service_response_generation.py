@@ -2,17 +2,17 @@ from deepmerge import always_merger
 from os import environ
 
 from beacon_response_generation import BeaconResponseMeta, print_json_response
-from bycon_helpers import mongo_result_list, mongo_test_mode_query, mongo_and_or_query_from_list, return_paginated_list
-from parameter_parsing import prdbug
+from bycon_helpers import mongo_result_list
 from config import AUTHORIZATIONS, BYC, BYC_PARS
 from export_file_generation import *
+from parameter_parsing import prdbug
+from query_generation import CollationQuery
 from response_remapping import *
 from schema_parsing import ByconSchemas
 
 ################################################################################
 
 class ByconServiceResponse:
-
     def __init__(self, response_schema="byconServiceResponse"):
         self.response_schema = response_schema
         self.requested_granularity = BYC_PARS.get("requested_granularity", "record")
@@ -104,47 +104,6 @@ class ByconServiceResponse:
         if "boolean" in self.returned_granularity:
             self.data_response["response_summary"].pop("num_total_results", None)
             self.data_response.pop("response", None)
-
-
-################################################################################
-################################################################################
-################################################################################
-
-class CollationQuery:
-
-    def __init__(self):
-        self.collection = "collations"
-
-        if BYC["TEST_MODE"] is True:
-            self.query = mongo_test_mode_query(BYC["BYC_DATASET_IDS"][0], self.collection)
-            return
-
-        q_list = []
-        all_ids = []
-        filters = BYC_PARS.get("filters", [])
-        c_types = BYC_PARS.get("collation_types", [])
-
-        if len(filters) > 0:
-            q_list.append({"id": {"$in": filters}})
-        if len(c_types) > 0:
-            q_list.append({"collation_type": {"$in": c_types }})
-        self.query = mongo_and_or_query_from_list(q_list)
-
-        # fallback to illicit query to avoid empty query / all ids
-        if len(self.query.keys()) < 1:
-            if "all" in c_types:
-                self.query = {}
-                return
-            else:
-                self.query = {"id":"___undefined___"}
-
-
-    # -------------------------------------------------------------------------#
-    # ----------------------------- public ------------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def getQuery(self):
-        return self.query
 
 
 ################################################################################

@@ -10,7 +10,6 @@ from byconServiceLibs import (
     assert_single_dataset_or_exit,
     ask_limit_reset,
     ByconBundler,
-    CollationQuery,
     GenomeBins,
     set_collation_types
 )
@@ -117,7 +116,7 @@ for c_id in coll_ids:
     if len(ana_ids) < 1:
         continue
 
-    ana_ids = return_paginated_list(ana_ids, 0, limit)
+    ana_ids = ByconH().paginated_list(ana_ids, 0, limit)
     prdbug(f'\n... after limit {len(ana_ids)}')
 
     intervals, cnv_ana_count = GB.intervalAidFrequencyMaps(ds_id, ana_ids)

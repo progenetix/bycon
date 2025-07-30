@@ -4,7 +4,7 @@ from urllib.parse import urlparse, unquote
 from os import environ
 from pymongo import MongoClient
 
-from bycon_helpers import prdbug, prdbughead, test_truthy
+from bycon_helpers import prdbug, prdbughead, ByconH
 from config import *
 
 ################################################################################
@@ -320,7 +320,7 @@ class ByconParameters:
         debug = self.byc_pars.get("debug_mode", False)
         if BYC["DEBUG_MODE"] is True:
             debug = True
-        if test_truthy(debug):
+        if ByconH().truth(debug):
             BYC.update({"DEBUG_MODE": True})
             if self.request_type != "SHELL":
                 print('Content-Type: text')
@@ -749,7 +749,7 @@ class RefactoredValues():
         if "number" in p_type:
             return float(p_value)
         if "bool" in p_type:
-            return test_truthy(p_value)
+            return ByconH().truth(p_value)
         if len(en := defs.get("enum", [])) > 0:
             prdbug(f'... {p_value} in {en}')
             if str(p_value) in en:
