@@ -45,9 +45,9 @@ class ByconDatatableExporter:
     def stream_datatable(self, file_type=None):
         self.file_name = f'{self.entity}.tsv'
         prdlhead(self.file_name)
-        print(f'{self.__create_table_header()}\n')
+        print(f'{self.__create_table_header()}')
         for pgxdoc in self.data:
-            print(f'{self.__table_line_from_pgxdoc(pgxdoc)}\n')
+            print(f'{self.__table_line_from_pgxdoc(pgxdoc)}')
 
 
     # -------------------------------------------------------------------------#
