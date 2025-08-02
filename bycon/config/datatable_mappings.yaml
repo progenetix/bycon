@@ -204,7 +204,7 @@ $defs:
           - T48_Xba_051011
       data_provenance:
         db_key: info.data_provenance
-      individual_legacy_ids:
+      analysis_legacy_ids:
         type: array
         split_by: '&&'
         db_key: info.legacy_ids
