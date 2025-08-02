@@ -204,6 +204,13 @@ $defs:
           - T48_Xba_051011
       data_provenance:
         db_key: info.data_provenance
+      individual_legacy_ids:
+        type: array
+        split_by: '&&'
+        db_key: info.legacy_ids
+        items:
+          type: string
+        indexed: True
 
 
 #------------------------------------------------------------------------------#
@@ -495,6 +502,14 @@ $defs:
         type: string
         db_key: data_use_conditions.label
         default: no restriction
+      individual_legacy_ids:
+        type: array
+        split_by: '&&'
+        db_key: info.legacy_ids
+        items:
+          type: string
+        indexed: True
+
 
       # same as in biosample but different fields; also, compared to Beacon/PXF
       # we use separate objects for "index_disease" (cancer...) and others ("aux...")
