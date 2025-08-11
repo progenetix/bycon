@@ -88,7 +88,7 @@ SO:0001743:
 EFO:0030067:
   variant_state:
     id: EFO:0030067
-    label: copy number loss
+    label: loss
   DUPDEL: DEL
   variant_type_id: EFO:0030067
   variant_type: DEL
@@ -106,7 +106,7 @@ EFO:0030067:
 EFO:0030068:
   variant_state:
     id: EFO:0030068
-    label: low-level copy number loss
+    label: low-level loss
   DUPDEL: DEL
   variant_type_id: EFO:0030067
   variant_type: DEL
@@ -120,7 +120,7 @@ EFO:0030068:
 EFO:0020073:
   variant_state:
     id: EFO:0020073
-    label: high-level copy number loss
+    label: high-level loss
   DUPDEL: DEL
   variant_type_id: EFO:0030067
   variant_type: DEL
@@ -151,7 +151,7 @@ EFO:0030069:
 EFO:0030070:
   variant_state:
     id: EFO:0030070
-    label: copy number gain
+    label: gain
   DUPDEL: DUP
   variant_type_id: EFO:0030070
   variant_type: DUP
@@ -191,7 +191,7 @@ SO:0001742:
 EFO:0030071:
   variant_state:
     id: EFO:0030071
-    label: low-level copy number gain
+    label: low-level gain
   DUPDEL: DUP
   variant_type_id: EFO:0030070
   variant_type: DUP
@@ -205,7 +205,7 @@ EFO:0030071:
 EFO:0030072:
   variant_state:
     id: EFO:0030072
-    label: high-level copy number gain
+    label: high-level gain
   DUPDEL: DUP
   HLDUPDEL: HLDUP
   variant_type_id: EFO:0030070

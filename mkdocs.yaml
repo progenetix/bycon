@@ -79,7 +79,7 @@ plugins:
     - search
     - macros
     - mermaid2
-    - mkdocstrings
+    # - mkdocstrings
     - include-markdown
 
 extra:

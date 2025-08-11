@@ -38,7 +38,6 @@ data_db = data_client[ ds_id ]
 cs_coll = data_db[ "analyses" ]
 v_coll = data_db[ "variants" ]
 
-
 record_queries = ByconQuery().recordsQuery()
 
 ds_results = {}
@@ -71,10 +70,7 @@ proceed = input(f'Do you want to continue to update database **{ds_id}**?\n(Y|n)
 if "n" in proceed.lower():
     exit()
 
-GB = GenomeBins()
-
 duplicates = []
-
 no_cnv_type = 0
 for ana_id in ana_ids:
     ana = cs_coll.find_one( { "id": ana_id } )

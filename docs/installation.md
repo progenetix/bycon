@@ -14,12 +14,12 @@ The `bycon` project contains
 
 !!! warning "Experimental Libraries"
 
-    At this time (**bycon v2.4+ "Cotwolds"**) the project
+    At this time (**bycon v2.5+ "Forked"**) the project
     libraries - which are available through the Python Package
     Index - should *not* be used for external applications since libary structure
     and dependencies might change and are only kept in sync _within_ the project itself.
 
-!!! node "User defined directories"
+!!! note "User defined directories"
 
     The project uses a number of user defined directories for
     configuration files and data. The directories are defined in the
@@ -143,8 +143,7 @@ brew tap mongodb/brew
 brew install mongodb-community
 ```
 
-Then this shouldbe started as a service & (probably) needs a restart of the computer
-(in case another or version was running etc.).
+Then this should be started as a service.
 
 ```sh
 brew services start mongodb-community
@@ -161,10 +160,8 @@ brew services restart mongodb/brew/mongodb-community
 #### Webserver Setup
 
 We use a "classical" webserver setup with Apache but probably other options would
-be fine.
-
-**NEW 2025-05-02 (v2.4.2)** The installation procedure on Mac OS now uses
-a `brew` based installation of the Apache webserver.
+be fine. The installation procedure on Mac OS now uses a `brew` based installation
+of the Apache webserver.
 
 Some configuration:
 
@@ -181,32 +178,56 @@ Some configuration:
 ??? info "Example `httpd.conf` configuration settings"
 
     These are some example configuration settings. Please search for the corresponding
-    settings in your server configuration and adjust acordingly.
+    settings in your server configuration and adjust acordingly. 
 
     ```
-    # Set the document root - here using our example, YMMV
+    # Set the server and document root - here using our example, YMMV
 
-    DocumentRoot    /opt/homebrew/var/www/Documents
+    ServerRoot      /opt/homebrew/opt/httpd
+
+    # Variables section - for modification #########################################
+
+    Define WEBSERVER_ROOT         /opt/homebrew/var/www
+    Define APACHE_CONFDIR         /opt/homebrew/etc/httpd
+    Define APACHE_LOG_DIR         /opt/homebrew/var/log/httpd
+    Define BYCON_WEB_DIR          /cgi-bin/bycon
+    Define APACHE_MODULES_DIR     lib/httpd/modules
+    Define APACHE_LOCK_DIR        /tmp
+
+    # Variables - derived ##########################################################
+
+    Define DOCUMENT_ROOT          ${WEBSERVER_ROOT}/Documents
+    Define SITES_ROOT             ${DOCUMENT_ROOT}/Sites
+    Define CGI_BIN_DIR            ${WEBSERVER_ROOT}/cgi-bin
+    Define TMP_DIR                ${DOCUMENT_ROOT}/tmp
+    Define APACHE_MIME_TYPES_FILE ${APACHE_CONFDIR}/mime.types
+
+    ################################################################################
+
+    DocumentRoot    ${DOCUMENT_ROOT}
     ```
 
+    Script execution:
 
     ```
-    # Enable script execution
 
-    LoadModule cgi_module /usr/libexec/apache2/mod_cgi.so
+    ## CGI-BIN #####################################################################
 
-    # Configure the global CGI-BIN
+    LoadModule cgi_module ${APACHE_MODULES_DIR}/mod_cgi.so
 
-    ScriptAlias  /cgi      /Library/WebServer/cgi-bin
-    ScriptAlias  /cgi-bin  /Library/WebServer/cgi-bin
+    ScriptAlias  /cgi      ${CGI_BIN_DIR}
+    ScriptAlias  /cgi-bin  ${CGI_BIN_DIR}
 
-    <Directory "/Library/WebServer/cgi-bin">
+    <Directory "${CGI_BIN_DIR}">
         AllowOverride None
         Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
         SetHandler cgi-script
         Require all granted
     </Directory>
+
+    ## / CGI-BIN ###################################################################
     ```
+
     ```
     # Allow (some) CGI-BIN scripts to be called with a short alias.
 
@@ -219,15 +240,28 @@ Some configuration:
     ```
 
     ```
-    # Configure the global tmp
+    ## Global tmp ##################################################################
 
-    Alias  /tmp      /Library/WebServer/Documents/tmp
+    Alias  /tmp      ${TMP_DIR}
 
-    <Directory /Library/WebServer/Documents/tmp>
+    <Directory "${TMP_DIR}">
         Options Indexes FollowSymlinks
         AllowOverride All
         Require all granted
     </Directory>
+
+    ## / Global tmp ################################################################
+    
+    ## Add MIME types for serving files ############################################
+
+    <IfModule mime_module>
+        TypesConfig ${APACHE_MIME_TYPES_FILE}
+        AddType application/x-compress   .Z
+        AddType application/x-gzip       .gz .tgz
+    </IfModule>
+
+    ## / MIME types ################################################################
+
     ```
 
 
@@ -333,7 +367,7 @@ The file has 2 root parameters for instance definitions:
   setups, including again entity and beacon defaults per domain/beacon
 
 
-## Local stack installation 
+## Local stack installation
 
 The local developer mode installation removes the system `bycon`, compiles the
 current code base (e.g. containing your modifications) and then runs the installer
@@ -342,11 +376,11 @@ is provided with the `updev.sh` script (may change over time...):
 
 ```bash
 pip3 uninstall bycon --break-system-packages
-rm -rf ./dist
-rm ./bycon/beaconServer/local/*.*
 python3 -m build --sdist .
 BY=(./dist/*tar.gz)
 pip3 install $BY --break-system-packages
+./bycon/schemas/bin/yamlerRunner.sh
+./markdowner.py
 ./install.py
 rm -rf ./build
 rm -rf ./dist

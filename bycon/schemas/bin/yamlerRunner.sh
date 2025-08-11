@@ -1,9 +1,9 @@
 BASEDIR=$(dirname $0)
 BYCONSCHEMAS=$BASEDIR/..
 
-BEACONROOT=/Users/$USER/GitHub/beacon-v2
 
 # initial conversion from separate schemas
+# BEACONROOT=/Users/$USER/GitHub/beacon-v2
 # BEACONMODELPATH=$BEACONROOT/models/src/
 # BEACONFRAMEWORKPATH=$BEACONROOT/framework/src/
 

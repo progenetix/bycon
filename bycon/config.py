@@ -7,7 +7,7 @@ pkg_path = path.dirname( path.abspath(__file__) )
 
 """
 Global variables
-Potentially in th eenvironment:
+Potentially in the environment:
 
 DATABASE_NAMES
 DB_MONGOHOST

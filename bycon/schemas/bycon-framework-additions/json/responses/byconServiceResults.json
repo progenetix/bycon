@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "description": "Simple results object for byconaut services",
+    "description": "List of result objects for bycon services",
     "type": "object",
     "properties": {
         "results": {
