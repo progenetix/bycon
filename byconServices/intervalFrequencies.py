@@ -1,10 +1,10 @@
-from bycon import BYC_PARS, BeaconErrorResponse
+from bycon import BYC_PARS, BeaconErrorResponse, BeaconDataResponse, print_json_response
 from byconServiceLibs import ByconBundler, GenomeBins, ByconServiceResponse, PGXfreq
 
 """
 * https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C7376,pubmed:22824167,pgx:icdom-85003
 * https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&id=pgx:cohort-TCGAcancers
-* http://progenetix.test/services/intervalFrequencies/?datasetIds=progenetix&output=pgxmatrix&filters=NCIT:C7376,pubmed:22824167
+* http://progenetix.test/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C7376,pubmed:22824167
 """
 
 def intervalFrequencies():
@@ -20,3 +20,5 @@ def intervalFrequencies():
         PGXfreq(ifb).stream_pgxmatrix()
 
     ByconServiceResponse().print_populated_response(ifb)
+    # r = BeaconDataResponse().dataResponseFromEntry()
+    # print_json_response(r)

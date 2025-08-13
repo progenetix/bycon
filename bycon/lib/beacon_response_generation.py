@@ -134,47 +134,51 @@ class BeaconResponseMeta:
     # -------------------------------------------------------------------------#
 
     def __meta_add_received_request_summary_parameters(self):
-        r_m = self.response_meta
         if self.record_queries:
-            r_m.update({"info": always_merger.merge(r_m.get("info", {}), {"original_queries": self.record_queries})})
-        if "returned_schemas" in r_m:
-            r_m.update({"returned_schemas":[self.beacon_schema]})
+            self.response_meta.update({"info": always_merger.merge(self.response_meta.get("info", {}), {"original_queries": self.record_queries})})
+        if "returned_schemas" in self.response_meta:
+            self.response_meta.update({"returned_schemas":[self.beacon_schema]})
 
-        if not "received_request_summary" in r_m:
+        if not (r_r_s := self.response_meta.get("received_request_summary")):
             return
 
-        r_r_s = r_m["received_request_summary"]
-        r_r_s.update({
-            "requested_schemas": [self.beacon_schema]
-        })
         if BYC["TEST_MODE"] is True:
             r_r_s.update({"test_mode": BYC["TEST_MODE"]})
 
-        r_r_s.update({"pagination": {"skip": BYC_PARS.get("skip"), "limit": BYC_PARS.get("limit")}})
-        r_r_s.update({"dataset_ids": BYC["BYC_DATASET_IDS"]})
+        r_r_s.update({
+            "requested_schemas": [self.beacon_schema],
+            "pagination": {"skip": BYC_PARS.get("skip"), "limit": BYC_PARS.get("limit")},
+            "dataset_ids": BYC["BYC_DATASET_IDS"]
+        })
 
-        fs = self.filters
         fs_p = []
-        if len(fs) > 0:
-            for f in fs:
-                fs_p.append(f.get("id"))
-        r_r_s.update({"filters":fs_p})
+        if len(self.filters) > 0:
+            for f in self.filters:
+                if (f_id := f.get("id")):
+                    fs_p.append(f_id)
+        if len(fs_p) > 0:
+            r_r_s.update({"filters": self.filters})
+        else:
+            r_r_s.pop("filters", None)
 
         for p in ["include_resultset_responses", "requested_granularity"]:
             if p in BYC_PARS and p in r_r_s:
                 r_r_s.update({p: BYC_PARS.get(p)})
 
+        if r_r_s.get("request_parameters"):
+            r_r_s["request_parameters"].pop("$schema", None)
         for q in ["cohort_ids", "cyto_bands", "chro_bases"]:
             if q in BYC_PARS:
-                r_r_s.update({"request_parameters": always_merger.merge( r_r_s.get("request_parameters", {}), { "cohort_ids": BYC_PARS.get(q) })})
+                r_r_s.update({"request_parameters": always_merger.merge( r_r_s.get("request_parameters", {}), { q: BYC_PARS.get(q) })})
 
-        info = self.entity_defaults["info"].get("content", {"api_version": "___none___"})
+        if not r_r_s.get("request_parameters"):
+            r_r_s.pop("request_parameters", None)
+
+        info = self.entity_defaults["info"].get("content", {})
         for p in ["api_version", "beacon_id"]:
             r_r_s.update({p: info.get(p, "___none___")})
 
         self.response_meta.update({"received_request_summary": r_r_s})
-
-        return
 
 
 ################################################################################
