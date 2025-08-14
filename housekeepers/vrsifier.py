@@ -26,14 +26,23 @@ data_client = MongoClient(host=DB_MONGOHOST)
 var_coll = data_client[ds_id]["variants"]
 
 mode = str(BYC_PARS.get("mode"))
-print(mode)
+supported_modes = ["Allele", "CopyNumberChange"]
 
-if mode not in ["Allele", "CopyNumberChange"]:
+if mode not in supported_modes:
+    print(f"Mode '{mode}' is not supported.\nSupported modes are: {supported_modes} and the current mode should be indicated with e.g.\n`--mode {supported_modes[0]}`.")
+    print 
     exit()
 
 q = {"type":mode}
 
 v_no = var_coll.count_documents(q)
+
+if not BYC["TEST_MODE"]:
+    print(f"Found {v_no} variants of type '{mode}' in dataset '{ds_id}'.")
+    if not "y" in input(f"Do you **really* want to VRSify {v_no} variants?\n(y|N): "):
+        exit()
+
+
 
 if not BYC["TEST_MODE"]:
     bar = Bar(f'VRSifying {mode} ', max = v_no, suffix='%(percent)d%%'+" of "+str(v_no) )      
@@ -44,7 +53,7 @@ for v in var_coll.find(q):
     if not BYC["TEST_MODE"]:
         bar.next()
     i += 1
-    if i > 5:
+    if BYC["TEST_MODE"] and BYC_PARS.get("test_mode_count"):
       break
     _id = v.get("_id")
     vrs_v = BV.vrsVariant(v)
