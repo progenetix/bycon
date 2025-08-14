@@ -8,6 +8,7 @@ from bycon import (
     BYC_PARS,
     DB_MONGOHOST,
     RefactoredValues,
+    get_nested_value,
     prdbug,
     prdlhead,
     prjsonnice
@@ -200,43 +201,6 @@ def assign_nested_value(parent, dotted_key, v, parameter_definitions={}):
         return '_too_deep_'
 
     return parent
-
-################################################################################
-
-def get_nested_value(parent, dotted_key, parameter_type="string"):
-    ps = str(dotted_key).split('.')
-    v = ""
-
-    if len(ps) == 1:
-        try:
-            v = parent[ ps[0] ]
-        except:
-            v = ""
-    elif len(ps) == 2:
-        try:
-            v = parent[ ps[0] ][ ps[1] ]
-        except:
-            v = ""
-    elif len(ps) == 3:
-        try:
-            v = parent[ ps[0] ][ ps[1] ][ ps[2] ]
-        except:
-            v = ""
-    elif len(ps) == 4:
-        try:
-            v = parent[ ps[0] ][ ps[1] ][ ps[2] ][ ps[3] ]
-        except:
-            v = ""
-    elif len(ps) == 5:
-        try:
-            v = parent[ ps[0] ][ ps[1] ][ ps[2] ][ ps[3] ][ ps[4] ]
-        except:
-            v = ""
-    elif len(ps) > 5:
-        print("¡¡¡ Parameter key "+dotted_key+" nested too deeply (>5) !!!")
-        return '_too_deep_'
-
-    return v
 
 ################################################################################
 

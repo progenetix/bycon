@@ -21,6 +21,14 @@ server_tmp_dir_loc:
   - Documents
   - tmp
 
+SEQREPO_ROOT_DIR:
+  - /
+  - Users
+  - Shared
+  - seqrepo
+  
+SEQREPO_VERSION: "2024-12-20"
+
 server_tmp_dir_web: /tmp
 
 # optional website root directory

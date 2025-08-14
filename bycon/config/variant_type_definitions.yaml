@@ -23,6 +23,7 @@ EFO:0030064:
     id: EFO:0030064
     label: regional base ploidy
   VRS_type: Null
+  VRS_cnv_type: Null
   VCF_symbolic_allele: Null
   cnv_dummy_value: Null
   child_terms:
@@ -36,6 +37,7 @@ EFO:0030065:
   variant_type_id: EFO:0030065
   variant_type: LOH
   VRS_type: Null
+  VRS_cnv_type: Null
   VCF_symbolic_allele: Null
   cnv_dummy_value: Null
   child_terms:
@@ -49,6 +51,7 @@ EFO:0030066:
   variant_type_id: EFO:0030066
   variant_type: CNV
   VRS_type: CopyNumberChange
+  VRS_cnv_type: Null
   VCF_symbolic_allele: <CNV>
   cnv_dummy_value: Null
   child_terms:
@@ -75,6 +78,7 @@ SO:0001743:
   variant_type_id: SO:0001743
   variant_type: DEL
   VRS_type: CopyNumberChange
+  VRS_cnv_type: loss
   VCF_symbolic_allele: <DEL>
   cnv_dummy_value: -1
   child_terms:
@@ -93,6 +97,7 @@ EFO:0030067:
   variant_type_id: EFO:0030067
   variant_type: DEL
   VRS_type: CopyNumberChange
+  VRS_cnv_type: loss
   VCF_symbolic_allele: <DEL>
   cnv_dummy_value: -1
   child_terms:
@@ -111,6 +116,7 @@ EFO:0030068:
   variant_type_id: EFO:0030067
   variant_type: DEL
   VRS_type: CopyNumberChange
+  VRS_cnv_type: low-level loss
   VCF_symbolic_allele: <DEL>
   cnv_dummy_value: -1
   child_terms:
@@ -126,6 +132,7 @@ EFO:0020073:
   variant_type: DEL
   HLDUPDEL: HLDEL
   VRS_type: CopyNumberChange
+  VRS_cnv_type: high-level loss
   VCF_symbolic_allele: <DEL>
   cnv_dummy_value: -1.75
   child_terms:
@@ -142,6 +149,7 @@ EFO:0030069:
   variant_type_id: EFO:0030067
   variant_type: DEL
   VRS_type: CopyNumberChange
+  VRS_cnv_type: high-level loss
   VCF_symbolic_allele: <DEL>
   cnv_dummy_value: -2
   child_terms:
@@ -156,6 +164,7 @@ EFO:0030070:
   variant_type_id: EFO:0030070
   variant_type: DUP
   VRS_type: CopyNumberChange
+  VRS_cnv_type: gain
   VCF_symbolic_allele: <DUP>
   cnv_dummy_value: 0.58
   child_terms:
@@ -178,6 +187,7 @@ SO:0001742:
   variant_type_id: SO:0001742
   variant_type: DUP
   VRS_type: CopyNumberChange
+  VRS_cnv_type: gain
   VCF_symbolic_allele: <DUP>
   cnv_dummy_value: 0.58
   child_terms:
@@ -196,6 +206,7 @@ EFO:0030071:
   variant_type_id: EFO:0030070
   variant_type: DUP
   VRS_type: CopyNumberChange
+  VRS_cnv_type: low-level gain
   VCF_symbolic_allele: <DUP>
   cnv_dummy_value: 0.58
   child_terms:
@@ -211,6 +222,7 @@ EFO:0030072:
   variant_type_id: EFO:0030070
   variant_type: DUP
   VRS_type: CopyNumberChange
+  VRS_cnv_type: high-level gain
   VCF_symbolic_allele: <DUP>
   cnv_dummy_value: 2
   child_terms:
@@ -227,6 +239,7 @@ EFO:0030073:
   variant_type_id: EFO:0030070
   variant_type: DUP
   VRS_type: CopyNumberChange
+  VRS_cnv_type: high-level gain
   VCF_symbolic_allele: <DUP>
   cnv_dummy_value: 2
   child_terms:

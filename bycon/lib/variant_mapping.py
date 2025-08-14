@@ -2,9 +2,13 @@ import re
 from copy import deepcopy
 from deepmerge import always_merger
 
-from parameter_parsing import prdbug
+from ga4gh.vrs.dataproxy import create_dataproxy
+from ga4gh.vrs.extras.translator import AlleleTranslator, CnvTranslator
+
+
+from parameter_parsing import prdbug, RefactoredValues
 from config import *
-from bycon_helpers import clean_empty_fields
+from bycon_helpers import clean_empty_fields, get_nested_value
 from schema_parsing import ByconSchemas
 from genome_utils import ChroNames
 
@@ -42,13 +46,18 @@ class ByconVariant:
         # datatable mappings contain the "name to place in object" definitions
         # these are in essence identical to the `db_key` mappings in
         # `argument_definitions` but logically different (query vs. defiition; `default`...)
-        d_m = BYC["datatable_mappings"].get("definitions", {})
-        d_m_v = d_m.get("genomicVariant", {})
-        self.variant_mappings = d_m_v.get("parameters", {})
+        self.datatable_mappings = BYC.get("datatable_mappings", {"$defs": {}})
+        self.header_cols = self.datatable_mappings.get("ordered_pgxseg_columns", [])
+        self.variant_mappings = self.datatable_mappings["$defs"].get("genomicVariant", {}).get("parameters", {})
         self.vrs_allele = ByconSchemas("VRSallele", "").get_schema_instance()
         self.vrs_cnv = ByconSchemas("VRScopyNumberChange", "").get_schema_instance()
         self.vrs_adjacency = ByconSchemas("VRSadjacency", "").get_schema_instance()
         self.pgx_variant = ByconSchemas("pgxVariant", "").get_schema_instance()
+
+        seqrepo_rest_service_url = 'seqrepo+file:///Users/Shared/seqrepo/2024-12-20'
+        seqrepo_dataproxy = create_dataproxy(uri=seqrepo_rest_service_url)
+        self.translator = AlleleTranslator(data_proxy=seqrepo_dataproxy)
+        self.cnv_translator = CnvTranslator(data_proxy=seqrepo_dataproxy)
 
 
     # -------------------------------------------------------------------------#
@@ -144,7 +153,6 @@ class ByconVariant:
         state_defs = vt_defs.get(state_id, {})
         vrs_type = state_defs.get("VRS_type", "___none___")
 
-        # TODO: fusion type ...
         if "Allele" in str(vrs_type):
             vrs_v = self.__vrs_allele()
         elif "Adjacency" in str(vrs_type):
@@ -154,12 +162,14 @@ class ByconVariant:
 
         # TODO: since the vrs_variant has been created as a new object we now
         #       add the annotation fields back (should empties be omitted?)
-        for v_s in ("biosample_id", "analysis_id", "id", "variant_internal_id"):
+        for v_s in ("biosample_id", "analysis_id"): # "id", "variant_internal_id"
             if (v_v := self.byc_variant.get(v_s)):
                 vrs_v.update({v_s: v_v})
-        vrs_v.update({"variant_alternative_ids": self.byc_variant.get("variant_alternative_ids", [])})
-        for v_o in ("identifiers", "info", "molecular_attributes", "variant_level_data"):
-            vrs_v.update({v_o: self.byc_variant.get(v_o, {})})
+        if len(v_a := self.byc_variant.get("variant_alternative_ids", [])) > 0:
+            vrs_v.update({"variant_alternative_ids": v_a})
+        for v_o in ("identifiers", "molecular_attributes", "variant_level_data"): # "info",
+            if (v_v := self.byc_variant.get(v_o)):
+                vrs_v.update({v_o: v_v})
 
         self.vrs_variant.update(vrs_v)
         return self.vrs_variant
@@ -173,16 +183,30 @@ class ByconVariant:
         This remapping just covers the formats supported in the `bycon` environment
         but does not try to accommodate all use cases.
         """
-        vt_defs = self.variant_types
         v = self.byc_variant
-        vrs_a = deepcopy(self.vrs_allele)
-        vrs_v = {
-            "state": {
-                "sequence": v.get("sequence")
-            },
-            "location": self.__vrs_location(v)
-        }
-        vrs_v = always_merger.merge(vrs_a, vrs_v)
+        l = v.get("location", {})
+        v_s = v.get("variant_state", {})
+        s_id = l.get("sequence_id")
+        chro = l.get("chromosome")
+        spdi = f'{s_id.replace("refseq:", "")}:{l.get("start")}:{v.get("reference_sequence", "")}:{v.get("sequence", "")}'.replace(":None", ":")
+
+        vrs_v = self.translator.translate_from(spdi, "spdi", require_validation=False)
+        vrs_v = vrs_v.model_dump(exclude_none=True)
+
+        # legacy
+        vrs_v["location"].update({
+            "sequence_id": s_id,
+            "chromosome": chro
+        })
+        s = vrs_v["location"].get("start", 0)
+        e = vrs_v["location"].get("end", 0)
+        l = e - s
+        # TODO ... thinking about lengths
+        vrs_v.update({
+            "variant_internal_id": spdi,
+            "variant_state": v_s,
+            "info": { "version": 'VRSv2', "var_length": l }
+        })
 
         return vrs_v
 
@@ -196,19 +220,53 @@ class ByconVariant:
         but does not try to accommodate all use cases.
         """
 
-        vt_defs = self.variant_types
         v = self.byc_variant
-
-        vrs_c = deepcopy(self.vrs_cnv)
-        vrs_v = {
-            "copy_change": v["variant_state"].get("id", "___none___").lower(),
-            "location": self.__vrs_location(v),
-            "type": "CopyNumberChange"
-        }
-        vrs_v = always_merger.merge(vrs_c, vrs_v)
+        l = v.get("location", {})
+        v_s = v.get("variant_state", {})
+        v_s_id = v_s.get("id", "___none___").replace(":", "_")
+        s_id = l.get("sequence_id")
+        chro = l.get("chromosome")
+        pgxseg_l = self.__pgxseg_line()
+        
+        if not (cnv_l := self.byc_variant.get("VRS_cnv_type")):
+            return v
+        cnv_i = self.byc_variant.get("variant_state", {}).get("id", None)
+        vrs_v = self.cnv_translator.translate_from(pgxseg_l, "pgxseg", copy_change=cnv_l)
+        vrs_v = vrs_v.model_dump(exclude_none=True)
+        # legacy
+        vrs_v["location"].update({
+            "sequence_id": s_id,
+            "chromosome": chro
+        })
+        s = vrs_v["location"].get("start", 0)
+        e = vrs_v["location"].get("end", 0)
+        l = e - s
+        # TODO ... thinking about lengths
+        vrs_v.update({
+            "variant_internal_id": f'{s_id.replace("refseq:", "")}:{s}-{e}:{v_s_id}',
+            "variant_state": v_s,
+            "info": { "version": 'VRSv2', "var_length": l }
+        })
 
         return vrs_v
 
+
+    # -------------------------------------------------------------------------#
+
+
+    def __pgxseg_line(self):
+        for p in ("sequence", "reference_sequence"):
+            if not self.byc_variant:
+                self.byc_variant.update({p: "."})
+
+        line = []
+        for par in self.header_cols:
+            par_defs = self.variant_mappings.get(par, {})
+            db_key = par_defs.get("db_key", "___undefined___")
+            v = get_nested_value(self.byc_variant, db_key)
+            v = RefactoredValues(par_defs).strVal(v)
+            line.append(v)
+        return "\t".join(line)
 
     # -------------------------------------------------------------------------#
 
@@ -305,6 +363,7 @@ class ByconVariant:
                 "variant_state": state_defs["variant_state"],
                 "variant_dupdel": state_defs.get("DUPDEL"),
                 "variant_type": state_defs.get("variant_type"),
+                "VRS_cnv_type": state_defs.get("VRS_cnv_type"),
                 "VCF_symbolic_allele": state_defs.get("VCF_symbolic_allele")
             })
         else:
