@@ -6,6 +6,24 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-08-21: (v2.6.0+pre-VRSv2-adoption)
+
+**Breaking Change**
+
+This is the first PR to introduce changes needed for representing Progenetix variants in VRSv2 format. It includes the use of a `vrs_translator.py`, derived from vrs-python and with added formats for pgxseg CNV import but also a rudimentary class for `Adjacency` (limited to the structural variant needs of `bycon`/Progenetix).
+
+Supported variant types so far are
+
+* Allele (using the standard vrs-python code) with added `pgxseg` input format)
+* Adjacency (implemented as new class w/ support for specific pgxadjoined input string)
+* CopyNumberChange (again pgxseg input and some trimming of the vrs-python methods)
+
+The changes include some redefinition of the variant input table format.
+
+The  use of the current version requires some reprocessing of existing variants using the `vrsifier.py` temporary housekeeping script, as well as additional preparation (making sure all variants have a correct VRS "type") and clean-up.
+
+**This PR is for internal distribution among the baudisgroup sites, not a release.**
+
 ### 2025-07-29: (v2.5.0 "Forked")
 
 The 2.5.0 release does not contain additional functional changes compared to the
