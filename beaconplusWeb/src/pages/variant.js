@@ -11,19 +11,19 @@ import { Layout } from "../site-specific/Layout"
 import { ShowJSON } from "../components/RawData"
 import { BiosamplePlot } from "../components/SVGloaders"
 import React from "react"
-import { refseq2chro } from "../components/Chromosome"
+// import { refseq2chro } from "../components/Chromosome"
 
-const entity = "variants"
+const itemColl = "variants"
 // const exampleId = "pgxvar-5bab576a727983b2e00b8d32"
 
 const VariantDetailsPage = withUrlQuery(({ urlQuery }) => {
-  const { id, datasetIds, hasAllParams } = urlRetrieveIds(urlQuery)
+  const { id, datasetIds } = urlRetrieveIds(urlQuery)
   return (
-    <Layout title="Variant Details" headline="Variant Details">
-      {!hasAllParams ? (
-        NoResultsHelp(entity)
-      ) : (
+    <Layout title="Variant Details">
+      {id && datasetIds ? (
         <VariantLoader id={id} datasetIds={datasetIds} />
+      ) : (
+        NoResultsHelp(itemColl)
       )}
     </Layout>
   )
@@ -32,7 +32,7 @@ const VariantDetailsPage = withUrlQuery(({ urlQuery }) => {
 export default VariantDetailsPage
 
 function VariantLoader({ id, datasetIds }) {
-  const apiReply = useDataItemDelivery(id, entity, datasetIds)
+  const apiReply = useDataItemDelivery(id, itemColl, datasetIds)
   return (
     <WithData
       apiReply={apiReply}
@@ -51,7 +51,7 @@ function VariantLoader({ id, datasetIds }) {
 
 function VariantResponse({ response, id, datasetIds }) {
   if (!response.response.resultSets[0].results[0]) {
-    return NoResultsHelp(entity)
+    return NoResultsHelp(itemColl)
   }
   return (
     <Variant
@@ -62,7 +62,7 @@ function VariantResponse({ response, id, datasetIds }) {
 }
 
 function Variant({ variant, id, datasetIds }) {
-  // TODO: add variatrion type or sequence from VRS response
+  // TODO: add variation type or sequence from VRS response
 
   const v = variant.variation ? variant.variation : false
   console.log(v)
@@ -81,7 +81,7 @@ function Variant({ variant, id, datasetIds }) {
 
   locations.forEach(function (loc) {
     if (loc.sequenceReference) {
-      const chro = refseq2chro(loc.sequenceReference)
+      const chro = loc.chromosome
       chros.push(chro)
       var start = 0
       var end = 1
@@ -234,7 +234,7 @@ function Variant({ variant, id, datasetIds }) {
         <a
           rel="noreferrer"
           target="_blank"
-          href={getDataItemUrl(id, entity, datasetIds)}
+          href={getDataItemUrl(id, itemColl, datasetIds)}
         >
           {"{JSON↗}"}
         </a>

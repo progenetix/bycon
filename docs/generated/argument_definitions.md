@@ -261,7 +261,7 @@ chromosome
 
 #### `reference_bases` 
 **type:** string    
-**db_key:** reference_sequence    
+**db_key:** state.reference_sequence    
 **pattern:** `^[ACGTN]+$`    
 **cmdFlags:** `--referenceBases`    
 **description:**
@@ -271,7 +271,7 @@ reference bases
 
 #### `alternate_bases` 
 **type:** string    
-**db_key:** sequence    
+**db_key:** state.sequence    
 **pattern:** `^[ACGTN]+$`    
 **cmdFlags:** `--alternateBases`    
 **description:**

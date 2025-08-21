@@ -339,7 +339,7 @@ $defs:
 
   reference_bases:
     type: string
-    db_key: reference_sequence
+    db_key: state.reference_sequence
     pattern: '^[ACGTN]+$'
     cmdFlags:
       - --referenceBases
@@ -349,7 +349,7 @@ $defs:
 
   alternate_bases:
     type: string
-    db_key: sequence
+    db_key: state.sequence
     pattern: '^[ACGTN]+$'
     cmdFlags:
       - --alternateBases

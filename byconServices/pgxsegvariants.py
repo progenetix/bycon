@@ -8,6 +8,7 @@ the path is interpreted for an biosample `id` value if there is an entry at
 `.../pgxsegvariants/{id}`
 
 * http://progenetix.org/services/pgxsegvariants/pgxbs-kftvjv8w
+* http://progenetix.org/services/pgxsegvariants/?filters=NCIT:C6393
 
 """
 

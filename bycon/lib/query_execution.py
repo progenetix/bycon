@@ -216,7 +216,6 @@ class ByconDatasetResults():
             }})
 
 
-
     # -------------------------------------------------------------------------#
 
     def __set_dataset_results(self):

@@ -47,7 +47,7 @@ def api():
 class ByconOpenAPI:
     def __init__(self):
         self.entity_defaults = BYC.get("entity_defaults", {})
-        self.examples = load_yaml_empty_fallback(path.join(services_conf_path, "examples.yaml"))
+        self.examples = load_yaml_empty_fallback(path.join(services_conf_path, "api_examples.yaml"))
         self.argument_definitions = BYC.get("argument_definitions", {}).get("$defs", {})
         self.mode = BYC_PARS.get("mode", "__none__")
         self.this_server = select_this_server()

@@ -117,6 +117,9 @@ Selection of which measurees are used to generate the clustering matrix
 #### `plot_snv_color` 
 **default:** `#FF3300`    
 
+#### `plot_fusion_color` 
+**default:** `#C20EE8`    
+
 #### `plot_chros` 
 **type:** array    
 **items:** string    

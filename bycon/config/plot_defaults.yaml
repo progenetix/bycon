@@ -155,6 +155,8 @@ plot_parameters:
     default: "#0066FF"
   plot_snv_color:
     default: "#FF3300"
+  plot_fusion_color:
+    default: "#C20EE8"
 
   plot_chros:
     type: array
@@ -516,3 +518,7 @@ plot_variant_types:
   SO:0001059:
     color_key: plot_snv_color
     label: sequence_alteration
+  SO:0000806:
+    color_key: plot_fusion_color
+    label: fusion
+

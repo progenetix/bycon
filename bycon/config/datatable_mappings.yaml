@@ -614,23 +614,19 @@ $defs:
           type: object
           parameters:
             - sequence_id
-            - chromosome
-            - start
-            - end
+            - pos_type
+            - range
           types:
             - string
             - string
-            - integer
-            - integer
+            - string
           indexed:
             - sequence_id
-            - start
-            - end
           split_by: '::'
         db_key: adjoined_sequences
         indexed: True
         examples:
-          - refseq:NC_000014.9::14::89300000::107043718&&refseq:NC_000018.10::18::45900000::63900000
+          - refseq:NC_000014.9::end::89300000,107043718&&refseq:NC_000018.10::start::45900000,63900000
       variant_state_id:
         type: string
         db_key: variant_state.id
@@ -644,7 +640,7 @@ $defs:
         indexed: True
       sequence:
         type: string
-        db_key: sequence
+        db_key: state.sequence
         indexed: True
       vrs_type:
         type: string
@@ -671,6 +667,7 @@ $defs:
         indexed: true
         computed: True
       updated:
+        db_key: updated
         indexed: True
         computed: True
 

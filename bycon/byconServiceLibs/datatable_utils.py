@@ -8,6 +8,7 @@ from bycon import (
     BYC_PARS,
     DB_MONGOHOST,
     RefactoredValues,
+    get_nested_value,
     prdbug,
     prdlhead,
     prjsonnice
@@ -74,8 +75,28 @@ class ByconDatatableExporter:
             parameter_type = par_defs.get("type", "string")
             db_key = par_defs.get("db_key", "___undefined___")
             v = get_nested_value(pgxdoc, db_key)
-            line.append(RefactoredValues(par_defs).strVal(v))
+            # TODO: Hack due to special format ...
+            if "adjoined_sequences" in par:
+                line.append(self.__adjoined_sequences_handling(v))
+            else:
+                line.append(RefactoredValues(par_defs).strVal(v))
         return "\t".join( line )
+
+
+    # -------------------------------------------------------------------------#
+
+    def __adjoined_sequences_handling(self, adjseqs):
+        adj_l = []
+        for l in adjseqs:
+            refseq = l.get("sequence_id")
+            if (s_l := l.get("start")):
+                s, e, pos_type = min(s_l), max(s_l), "start"
+            elif (e_l := l.get("end")):
+                s, e, pos_type = min(e_l), max(e_l), "end"
+            adj_l.append("::".join([refseq, pos_type, f'{s},{e}']))
+
+        return "&&".join(adj_l).replace("refseq:", "")
+
 
     # -------------------------------------------------------------------------#
 
@@ -115,15 +136,16 @@ def import_datatable_dict_line(parent, fieldnames, lineobj, primary_scope="biosa
             continue
         p_type = par_defs.get("type", "string")
 
-        v = lineobj[f_n].strip()
-        if v.lower() in (".", "na"):
+        v = lineobj.get(f_n, "").strip()
+        strv = str(v)
+        if strv.lower() in (".", "na", "none"):
             v = ""
-        if v.startswith("{") and v.endswith("}"):
+        if strv.startswith("{") and v.endswith("}"):
             v = ""
-        if len(v) < 1:
+        if len(strv) < 1:
             if f_n in io_params.keys():
                 v = io_params[f_n].get("default", "")
-        if len(v) < 1:
+        if len(strv) < 1:
             continue
 
         # prdbug(f'Importing {f_n} with value: {v}')
@@ -131,6 +153,34 @@ def import_datatable_dict_line(parent, fieldnames, lineobj, primary_scope="biosa
         # special case for geolocations
         if "geoprov_id" in f_n:
             add_geolocation_to_pgxdoc(parent, v)
+            continue
+
+        if "adjoined_sequences" in f_n:
+            pgxadjoined_re = re.compile(
+                r"""
+                (?P<adj_seqid_1>(?:refseq:)?[\w\.]+)::
+                (?P<pos_type_1>\w+)::
+                (?P<range_1>\d+,\d+)&&
+                (?P<adj_seqid_2>(?:refseq:)?[\w\.]+)::
+                (?P<pos_type_2>\w+)::
+                (?P<range_2>\d+,\d+)
+                (::(?P<other>.*))?
+                """, re.X)
+            m = pgxadjoined_re.match(v)
+            if not m:
+                return None
+            g = m.groupdict()
+            locs = []
+            for ri in ["1", "2"]:
+                refseq = g.get(f"adj_seqid_{ri}", "___unknown___")
+                range_l = list(int(x) for x in re.split(",", g.get(f"range_{ri}", [])))
+                pos_type = g.get(f"pos_type_{ri}", "end")
+                locs.append({
+                    "sequence_id": refseq,
+                    pos_type: range_l
+                })
+
+            parent.update({f_n: locs})
             continue
 
         # this makes only sense for updating existing data; if there would be
@@ -200,43 +250,6 @@ def assign_nested_value(parent, dotted_key, v, parameter_definitions={}):
         return '_too_deep_'
 
     return parent
-
-################################################################################
-
-def get_nested_value(parent, dotted_key, parameter_type="string"):
-    ps = str(dotted_key).split('.')
-    v = ""
-
-    if len(ps) == 1:
-        try:
-            v = parent[ ps[0] ]
-        except:
-            v = ""
-    elif len(ps) == 2:
-        try:
-            v = parent[ ps[0] ][ ps[1] ]
-        except:
-            v = ""
-    elif len(ps) == 3:
-        try:
-            v = parent[ ps[0] ][ ps[1] ][ ps[2] ]
-        except:
-            v = ""
-    elif len(ps) == 4:
-        try:
-            v = parent[ ps[0] ][ ps[1] ][ ps[2] ][ ps[3] ]
-        except:
-            v = ""
-    elif len(ps) == 5:
-        try:
-            v = parent[ ps[0] ][ ps[1] ][ ps[2] ][ ps[3] ][ ps[4] ]
-        except:
-            v = ""
-    elif len(ps) > 5:
-        print("¡¡¡ Parameter key "+dotted_key+" nested too deeply (>5) !!!")
-        return '_too_deep_'
-
-    return v
 
 ################################################################################
 

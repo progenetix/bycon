@@ -14,6 +14,7 @@ from bycon import (
     DB_MONGOHOST,
     ENV,
     GenomeBins,
+    get_nested_value,
     prdbug,
     RefactoredValues,
     select_this_server
@@ -22,7 +23,6 @@ from bycon import (
 services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 sys.path.append( services_lib_path )
 from bycon_plot import ByconPlotPars
-from datatable_utils import get_nested_value
 
 
 ################################################################################
@@ -136,7 +136,7 @@ class PGXseg:
         self.mongo_client = MongoClient(host=DB_MONGOHOST)
         self.header_cols = self.datatable_mappings.get("ordered_pgxseg_columns", [])
         self.bios_pars = self.datatable_mappings["$defs"]["biosample"]["parameters"]
-        self.var_pars = self.datatable_mappings["$defs"]["genomicVariant"]["parameters"]
+        self.variant_mappings = self.datatable_mappings["$defs"]["genomicVariant"]["parameters"]
         self.filename = "variants.pgxseg"
         self.output_lines = []
 
@@ -207,19 +207,19 @@ class PGXseg:
             v_instances.append(ByconVariant().byconVariant(v_s))
         v_instances = list(sorted(v_instances, key=lambda x: (f'{x["location"]["chromosome"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x["location"]['start'])))
         for v in v_instances:
-            self.__variant_line(v)
+            self.variant_line(v)
 
 
     # -------------------------------------------------------------------------#
 
-    def __variant_line(self, v_pgxseg):
+    def variant_line(self, v_pgxseg):
         for p in ("sequence", "reference_sequence"):
             if not v_pgxseg[p]:
                 v_pgxseg.update({p: "."})
 
         line = []
         for par in self.header_cols:
-            par_defs = self.var_pars.get(par, {})
+            par_defs = self.variant_mappings.get(par, {})
             db_key = par_defs.get("db_key", "___undefined___")
             v = get_nested_value(v_pgxseg, db_key)
             v = RefactoredValues(par_defs).strVal(v)

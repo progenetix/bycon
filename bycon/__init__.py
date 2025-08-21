@@ -28,6 +28,7 @@ try:
     from response_remapping import *
     from schema_parsing import *
     from variant_mapping import *
+    from vrs_translator import *
 
     read_service_definition_files()
     update_rootpars_from_local_or_HOST()
