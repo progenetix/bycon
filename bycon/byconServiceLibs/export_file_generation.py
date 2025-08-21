@@ -251,7 +251,7 @@ class PGXbed:
         self.filename = f"variants-{ByconID(0).makeID()}.bed"
         self.flavour = BYC_PARS.get("output", "ucsc").lower()
         self.output_lines = []
-        self.ucsc_link = f'http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg38'
+        self.ucsc_link = f'http://www.genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg38'
         self.tmp_path = path.join(*BYC["env_paths"]["server_tmp_dir_loc"])
         web_root = BYC["env_paths"].get("server_tmp_dir_web", "/tmp")
         self.bed_url = f'{select_this_server()}{web_root}'
@@ -330,9 +330,12 @@ class PGXbed:
                 continue
             t_w_l = []
             for v in t_v_s:
+                se = []
                 if not (l := v.get("location")):
                     continue
-                v.update({"variant_length": int(l.get("end", 1)) - int(l.get("start", 0))})
+                se.append(int(l.get("start", 0)))
+                se.append(int(l.get("end", 1)))
+                v.update({"variant_length": se[-1] - se[0]})
                 t_w_l.append(v)
             t_w_l = sorted(t_w_l, key=lambda k: k['variant_length'], reverse=True)
             col = self.var_cols[variant_type].get("rgb_col", [0, 0, 0])
@@ -348,8 +351,9 @@ class PGXbed:
     def __variant_ucsc_line(self, v):
         l = v.get("location", {})
         chro = l.get("chromosome", "___none___")
-        start = l.get("start", 0)
-        end = l.get("end", 0)
+        se = [l.get("start", 0), l.get("end", 0)]
+        start = min(se)
+        end = max(se)
         self.starts_ends.append(start)
         self.starts_ends.append(end)
         self.output_lines.append(f'{chro}\t{start}\t{end}\t{v.get("biosample_id", "___none___")}')

@@ -24,6 +24,14 @@ The  use of the current version requires some reprocessing of existing variants 
 
 **This PR is for internal distribution among the baudisgroup sites, not a release.**
 
+#### Additional changes
+
+* `ByconPlot` now splits `Adjacency` variants into 2 separate locations
+  before plotting; so the 2 breakpoint/fusion regions are shown on
+  their chromosomes (but no connections..., yet)
+* fixing UCSC link for `.bed` display (they want `www.genome.ucsc.edu`, broken w/o "www")
+* * adding order check for start, end in bed file generation
+
 ### 2025-07-29: (v2.5.0 "Forked")
 
 The 2.5.0 release does not contain additional functional changes compared to the
