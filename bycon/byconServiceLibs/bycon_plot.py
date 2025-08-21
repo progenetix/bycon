@@ -792,9 +792,11 @@ class ByconPlot:
         self.plv["pls"].append("")
         self.plv.update({"plot_strip_bg_i": len(self.plv["pls"]) - 1})
 
-
-        if len(self.plv["results"]) > 0:
-            self.__plot_order_samples()
+        s_no = len(self.plv["results"])
+        prdbug(f'... {s_no} samplestrips to come')
+        if s_no > 0:
+            if s_no > 2:
+                self.__plot_order_samples()
             for s in self.plv["results"]:
                 self.__plot_add_one_samplestrip(s)
                 if self.plv["plot_labelcol_font_size"] > 5 and len(self.plv["results"]) > 1:
@@ -875,23 +877,29 @@ class ByconPlot:
             col_c.update({vt: self.plv.get(ck, "rgb(111,111,111)")})
 
         v_s = s.get("variants", [])
+        for av in list(filter(lambda d: d.get("type", "___none___") == "Adjacency", v_s)):
+            for l in av.get("adjoined_sequences", []):
+                avn = av.copy()
+                poss = []
+                for p in l.get("start", []):
+                    poss.append(p)
+                for p in l.get("end", []):
+                    poss.append(p)
+                l.update({"start": poss[0], "end": poss[-1]})
+                avn.update({"location": l})
+                avn.pop("adjoined_sequences", None)
+                v_s.append(avn)
+        vs = list(filter(lambda d: d.get("type", "___none___") != "Adjacency", v_s))
         for chro in self.plv["plot_chros"]:
             c_l = self.cytolimits.get(str(chro), {})
             chr_w = c_l["size"] * self.plv["plot_b2pf"]
-            c_v_s = list(filter(lambda d: d["location"]["chromosome"] == chro, v_s.copy()))
+            c_v_s = list(filter(lambda d: d.get("location", {}).get("chromosome", "___none___") == chro, v_s.copy()))
             for p_v in c_v_s:
-                if "variant_state" in p_v:
-                    t = p_v["variant_state"].get("id", "___none___")
-                else:
-                    t = p_v.get("variant_dupdel", "___none___")
+                t = p_v.get("variant_state", {}).get("id", "___none___")
                 c = col_c.get(t, "rgb(111,111,111)")
 
-                if "location" in p_v:
-                    s_v = int(p_v["location"].get("start", 0))
-                    e_v = int(p_v["location"].get("end", s_v + 1))
-                else:
-                    s_v = int(p_v.get("start", 0))
-                    e_v = int(p_v.get("end", s_v + 1))
+                s_v = int(p_v.get("location", {}).get("start", 0))
+                e_v = int(p_v.get("location", {}).get("end", s_v + 1))
                 l = round((e_v - s_v) * self.plv["plot_b2pf"], 1)
                 if l < 0.5:
                     l = 0.5

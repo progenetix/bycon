@@ -261,21 +261,7 @@ def load_yaml_empty_fallback(yp):
     with open( yp ) as yd:
         y = yaml.load( yd , Loader=yaml.FullLoader)
     return y
-
-################################################################################
-
-def force_debug_mode():
-    BYC.update({"DEBUG_MODE": True})
-    if not "___shell___" in ENV:
-        print('Content-Type: text')
-        print()
-    return True
-
-
-
-
-
-
+    
 
 ################################################################################
 

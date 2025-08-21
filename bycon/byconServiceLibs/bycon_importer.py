@@ -77,6 +77,26 @@ class ByconImporter():
 
     #--------------------------------------------------------------------------#
 
+    def read_records(self, entity="___none___"):
+        if not entity in self.import_entities:
+            print(f'!!! No correct entity provided.')
+            exit()
+        self.import_entity = entity
+        self.import_id = f"{entity}_id"
+        self.upstream = RecordsHierarchy().upstream(entity)
+        if "genomicVariant" in entity:
+            self.import_id = "analysis_id"
+            self.allow_duplicates = True
+        self.__read_data_file()
+
+        data = self.data_in.data
+        fieldnames = self.data_in.fieldnames
+
+        return data, fieldnames
+
+
+     #--------------------------------------------------------------------------#
+
     def import_records(self, entity="___none___"):
         if not entity in self.import_entities:
             print(f'!!! No correct entity provided.')

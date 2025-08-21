@@ -1,10 +1,11 @@
 import re
 from copy import deepcopy
 from deepmerge import always_merger
+from humps import decamelize
 
 from ga4gh.vrs.dataproxy import create_dataproxy
-from ga4gh.vrs.extras.translator import AlleleTranslator, CnvTranslator
 
+from vrs_translator import AdjacencyTranslator, AlleleTranslator, CnvTranslator
 
 from parameter_parsing import prdbug, RefactoredValues
 from config import *
@@ -30,9 +31,6 @@ class ByconVariant:
         Progenetix platform and does not cover some use cases outside of Progenetix
         and Beacon "common use" scenarios (as of Beacon v2 / 2023).
         """
-        self.byc_variant = {}
-        self.pgx_variant = {}
-        self.vrs_variant = {}
         self.vcf_variant = {}
         self.pgxseg_variant = {}
 
@@ -56,8 +54,9 @@ class ByconVariant:
 
         seqrepo_rest_service_url = 'seqrepo+file:///Users/Shared/seqrepo/2024-12-20'
         seqrepo_dataproxy = create_dataproxy(uri=seqrepo_rest_service_url)
-        self.translator = AlleleTranslator(data_proxy=seqrepo_dataproxy)
-        self.cnv_translator = CnvTranslator(data_proxy=seqrepo_dataproxy)
+        self.vrs_allele_translator = AlleleTranslator(data_proxy=seqrepo_dataproxy)
+        self.vrs_cnv_translator = CnvTranslator(data_proxy=seqrepo_dataproxy, identify=False)
+        self.vrs_adjacency_translator = AdjacencyTranslator(data_proxy=seqrepo_dataproxy, identify=False)
 
 
     # -------------------------------------------------------------------------#
@@ -145,33 +144,37 @@ class ByconVariant:
         Mapping of the relevant variant parameters into a VRS object
         ... TODO ...
         """
+        
         self.byc_variant = variant
         self.__create_canonical_variant()
 
         vt_defs = self.variant_types
-        state_id = self.byc_variant["variant_state"].get("id", "___none___")
+        state_id = self.byc_variant.get("variant_state", {}).get("id", "___none___")
         state_defs = vt_defs.get(state_id, {})
-        vrs_type = state_defs.get("VRS_type", "___none___")
+        vrs_type = state_defs.get("VRS_type", self.byc_variant.get("type", "___none___"))
 
         if "Allele" in str(vrs_type):
-            vrs_v = self.__vrs_allele()
+            self.__vrs_allele()
         elif "Adjacency" in str(vrs_type):
-            vrs_v = self.__vrs_adjacency()
+            self.__vrs_adjacency()
         else:
-            vrs_v = self.__vrs_cnv()
+            self.__vrs_cnv()
 
         # TODO: since the vrs_variant has been created as a new object we now
         #       add the annotation fields back (should empties be omitted?)
-        for v_s in ("biosample_id", "analysis_id"): # "id", "variant_internal_id"
+        for v_s in ("individual_id", "biosample_id", "analysis_id"): # "id", "variant_internal_id"
             if (v_v := self.byc_variant.get(v_s)):
-                vrs_v.update({v_s: v_v})
+                self.vrs_variant.update({v_s: v_v})
+        if (r_s := self.byc_variant.get("state", {}).get("reference_sequence")):
+            self.vrs_variant["state"].update({
+                "reference_sequence": r_s
+            })
         if len(v_a := self.byc_variant.get("variant_alternative_ids", [])) > 0:
-            vrs_v.update({"variant_alternative_ids": v_a})
+            self.vrs_variant.update({"variant_alternative_ids": v_a})
         for v_o in ("identifiers", "molecular_attributes", "variant_level_data"): # "info",
             if (v_v := self.byc_variant.get(v_o)):
-                vrs_v.update({v_o: v_v})
+                self.vrs_variant.update({v_o: v_v})
 
-        self.vrs_variant.update(vrs_v)
         return self.vrs_variant
 
 
@@ -188,27 +191,31 @@ class ByconVariant:
         v_s = v.get("variant_state", {})
         s_id = l.get("sequence_id")
         chro = l.get("chromosome")
-        spdi = f'{s_id.replace("refseq:", "")}:{l.get("start")}:{v.get("reference_sequence", "")}:{v.get("sequence", "")}'.replace(":None", ":")
+        pgxseg_l = self.__pgxseg_line().replace("\t", "::")
+        
+        prdbug(v)
+        prdbug(f'pgxseg line: {pgxseg_l}')
 
-        vrs_v = self.translator.translate_from(spdi, "spdi", require_validation=False)
-        vrs_v = vrs_v.model_dump(exclude_none=True)
+        vrs_v = self.vrs_allele_translator.translate_from(pgxseg_l, "pgxseg", require_validation=False)
+        self.vrs_variant = decamelize(vrs_v.model_dump(exclude_none=True))
 
         # legacy
-        vrs_v["location"].update({
+        self.vrs_variant["location"].update({
             "sequence_id": s_id,
             "chromosome": chro
         })
-        s = vrs_v["location"].get("start", 0)
-        e = vrs_v["location"].get("end", 0)
+        s = self.vrs_variant["location"].get("start", 0)
+        e = self.vrs_variant["location"].get("end", 0)
         l = e - s
         # TODO ... thinking about lengths
-        vrs_v.update({
-            "variant_internal_id": spdi,
+        v_i = v.get("info", {})
+        v_i.update({ "version": 'VRSv2', "var_length": l })
+        self.vrs_variant.update({
+            "variant_internal_id": f'{s_id.replace("refseq:", "")}:{s}:{self.vrs_variant.get("state", {}).get("sequence", "")}',
             "variant_state": v_s,
-            "info": { "version": 'VRSv2', "var_length": l }
+            "reference_sequence": v.get("reference_sequence", ""),
+            "info": v_i
         })
-
-        return vrs_v
 
 
     # -------------------------------------------------------------------------#
@@ -226,38 +233,39 @@ class ByconVariant:
         v_s_id = v_s.get("id", "___none___").replace(":", "_")
         s_id = l.get("sequence_id")
         chro = l.get("chromosome")
-        pgxseg_l = self.__pgxseg_line()
+        pgxseg_l = self.__pgxseg_line().replace("\t", "::")
         
         if not (cnv_l := self.byc_variant.get("VRS_cnv_type")):
             return v
-        cnv_i = self.byc_variant.get("variant_state", {}).get("id", None)
-        vrs_v = self.cnv_translator.translate_from(pgxseg_l, "pgxseg", copy_change=cnv_l)
-        vrs_v = vrs_v.model_dump(exclude_none=True)
+
+        prdbug(pgxseg_l)
+
+        vrs_v = self.vrs_cnv_translator.translate_from(pgxseg_l, "pgxseg", copy_change=cnv_l)
+        self.vrs_variant = decamelize(vrs_v.model_dump(exclude_none=True))
         # legacy
-        vrs_v["location"].update({
+        # TODO ... thinking about lengths
+        s = self.vrs_variant["location"].get("start", 0)
+        e = self.vrs_variant["location"].get("end", 0)
+        l = e - s
+        v_i = v.get("info", {})
+        v_i.update({ "version": 'VRSv2', "var_length": l })
+        self.vrs_variant["location"].update({
             "sequence_id": s_id,
             "chromosome": chro
         })
-        s = vrs_v["location"].get("start", 0)
-        e = vrs_v["location"].get("end", 0)
-        l = e - s
-        # TODO ... thinking about lengths
-        vrs_v.update({
+        self.vrs_variant.update({
             "variant_internal_id": f'{s_id.replace("refseq:", "")}:{s}-{e}:{v_s_id}',
             "variant_state": v_s,
-            "info": { "version": 'VRSv2', "var_length": l }
+            "info": v_i
         })
-
-        return vrs_v
 
 
     # -------------------------------------------------------------------------#
 
-
     def __pgxseg_line(self):
-        for p in ("sequence", "reference_sequence"):
-            if not self.byc_variant:
-                self.byc_variant.update({p: "."})
+        # for p in ("sequence", "reference_sequence"):
+        #     if not self.byc_variant:
+        #         self.byc_variant.update({p: "."})
 
         line = []
         for par in self.header_cols:
@@ -265,6 +273,8 @@ class ByconVariant:
             db_key = par_defs.get("db_key", "___undefined___")
             v = get_nested_value(self.byc_variant, db_key)
             v = RefactoredValues(par_defs).strVal(v)
+            if v.lower() in ("___delete___", "__delete__", "none", "___none___", "__none__", "-"):
+                v = ""
             line.append(v)
         return "\t".join(line)
 
@@ -275,42 +285,47 @@ class ByconVariant:
         A variant with a specified order as a subtype of VRS `Adjacency`.
         """
 
-        vt_defs = self.variant_types
         v = self.byc_variant
+        v_i = v.get("info", {})
+        adjseqs = v.get("adjoined_sequences", [])
 
-        s_i = []
-        a_s = v.get("adjoined_sequences", [])
-        for a_i, a_l in enumerate(a_s):
-            l = self.__vrs_location({"location": a_l})
-            if a_i == 0:
-                l.update({
-                    "end": [l["start"], l["end"]]
-                })
-                l.pop("start", None)
-            else:
-                l.update({
-                    "start": [l["start"], l["end"]]
-                })
-                l.pop("end", None)                
-            s_i.append(l)
+        adj_l = []
+        chros = []          # to update the VRS locations by order, later
+        refss = []          # to update the VRS locations by order, later
+        pos_type = "end"    # canonical for simple fusions's first partner
 
-        vrs_v = deepcopy(self.vrs_adjacency)
-        vrs_v.update({
-            "adjoined_sequences": s_i,
-            "type": "Adjacency"
+        for l in adjseqs:
+            refseq = l.get("sequence_id")
+            chro = chro = self.ChroNames.chro(refseq)
+            if "start" in l and "end" in l: # assignment test would fail on 0
+                s = l.get("start")
+                e = l.get("end")
+            elif (s_l := l.get("start")):
+                s, e, pos_type = min(s_l), max(s_l), "start"
+            elif (e_l := l.get("end")):
+                s, e, pos_type = min(e_l), max(e_l), "end"
+
+            chros.append(chro)
+            refss.append(refseq)
+            adj_l.append("::".join([refseq, pos_type, f'{s},{e}']))
+            pos_type = "start" # init guess for second partner
+
+        pgxadjoined = "&&".join(adj_l).replace("refseq:", "")
+        vrs_v = self.vrs_adjacency_translator.translate_from(pgxadjoined, "pgxadjoined")
+        self.vrs_variant = decamelize(vrs_v.model_dump(exclude_none=True))
+
+        for i in [0, 1]:
+            self.vrs_variant["adjoined_sequences"][i].update({
+                "chromosome": chros[i],
+                "sequence_id": refss[i]
+            })
+
+        v_i.update({ "version": 'VRSv2' })
+        self.vrs_variant.update({
+            "variant_internal_id": pgxadjoined,
+            "variant_state": { "id": 'SO:0000806', "label": 'fusion' },
+            "info": v_i
         })
-
-        return vrs_v
-
-    # -------------------------------------------------------------------------#
-
-    def __vrs_location(self, v):
-        return {
-            "type": "SequenceLocation",
-            "sequenceReference": v["location"].get("sequence_id"),
-            "start": v["location"].get("start"),
-            "end": v["location"].get("end")
-        }
 
 
     # -------------------------------------------------------------------------#
@@ -323,11 +338,11 @@ class ByconVariant:
         self.__byc_variant_normalize_chromosome()
         self.__byc_variant_normalize_positions()
         self.__byc_variant_normalize_sequences()
-        self.__byc_variant_add_digest()
-        self.__byc_variant_add_adjacency_digest()
-        if not "info" in self.byc_variant:
-            self.byc_variant.update({"info": {}})
-        self.__byc_variant_add_length()
+        # self.__byc_variant_add_digest()
+        # self.__byc_variant_add_adjacency_digest()
+        # if not "info" in self.byc_variant:
+        #     self.byc_variant.update({"info": {}})
+        # self.__byc_variant_add_length()
 
         return
 
@@ -350,6 +365,7 @@ class ByconVariant:
     def __byc_variant_normalize_type(self):
         vt_defs = self.variant_types
         v = self.byc_variant
+
         v_state = v.get("variant_state", {})
         state_id = v_state.get("id", "___none___")
         variant_type = v.get("variant_type", "___none___")
@@ -403,11 +419,13 @@ class ByconVariant:
 
     def __byc_variant_normalize_sequences(self):
         v = self.byc_variant
-        seq = v.get("sequence", v.get("alternate_bases"))
-        r_seq = v.get("reference_sequence", "")
+        seq = v.get("sequence", v.get("state", {}).get("sequence", ""))
+        r_seq = v.get("reference_sequence", v.get("state", {}).get("reference_sequence", ""))
         # TODO: check, normalize, default...
+        state = v.get("state", {})
+        state.update({"sequence": seq})
         v.update({
-            "sequence": seq,
+            "state": state,
             "reference_sequence": r_seq        
         })
 

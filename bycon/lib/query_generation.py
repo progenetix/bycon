@@ -297,7 +297,9 @@ class ByconQuery():
 
             # a bit verbose for now...
             if "variantFusionRequest" in variant_request_type:
+                # prdbug(v_pars)
                 if (q := self.__create_variantFusionRequest_query(v_pars)):
+                    # prdbug(q)
                     queries.append(q)
                     continue
             if "geneVariantRequest" in variant_request_type:
@@ -568,21 +570,44 @@ class ByconQuery():
         v_p_defs = self.argument_definitions
 
         # here we use the db fields of "mate_..." for all positional parameters
-        # since the match is against the `adjuncture` variant format
-        v_q = {
-            "$and": [
-                {
-                    v_p_defs["mate_name"]["db_key"]: vp["reference_name"],
-                    v_p_defs["mate_start"]["db_key"]: { "$lt": vp["end"][-1] },
-                    v_p_defs["mate_end"]["db_key"]: { "$gte": vp["start"][0] }
-                },
-                {
-                    v_p_defs["mate_name"]["db_key"]: vp["mate_name"],
-                    v_p_defs["mate_start"]["db_key"]: { "$lt": vp["mate_end"][-1] },
-                    v_p_defs["mate_end"]["db_key"]: { "$gte": vp["mate_start"][0] }
-                }
-            ]
-        }
+        # since the match is against the `adjoined_sequences` variant format
+        try:
+            v_q = {
+                "$and": [
+                    {
+                        "adjoined_sequences.0.sequence_id": vp["reference_name"],
+                        "$or": [
+                            {
+                                "adjoined_sequences.0.start.0": { "$lt": vp["end"][-1] },
+                                "adjoined_sequences.0.start.1": { "$gte": vp["start"][0] }
+                            },
+                            {
+                                "adjoined_sequences.0.end.0": { "$lt": vp["end"][-1] },
+                                "adjoined_sequences.0.end.1": { "$gte": vp["start"][0] }
+                            }
+
+
+                        ]
+                    },
+                    {
+                        "adjoined_sequences.1.sequence_id": vp["mate_name"],
+                        "$or": [
+                            {
+                                "adjoined_sequences.1.start.0": { "$lt": vp["mate_end"] },
+                                "adjoined_sequences.1.start.1": { "$gte": vp["mate_start"] }
+                            },
+                            {
+                                "adjoined_sequences.1.end.0": { "$lt": vp["mate_end"] },
+                                "adjoined_sequences.1.end.1": { "$gte": vp["mate_start"] }
+                            }
+
+
+                        ]
+                    }
+                ]
+            }
+        except Exception as e:
+            prdbug(e)
 
         if (l_q := self.__request_variant_size_limits(v_pars)):
             v_q.update(l_q)
