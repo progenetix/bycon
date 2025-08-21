@@ -20,7 +20,7 @@ where = ["."]
 include = ["bycon*"]
 
 [project]
-version = "2.5.0"
+version = "v2.6.0+pre-VRSv2-adoption"
 name = "bycon"
 urls = {source = "https://github.com/progenetix/bycon", documentation = "https://bycon.progenetix.org"}
 
