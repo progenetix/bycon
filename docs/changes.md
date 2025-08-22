@@ -6,7 +6,7 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
-### 2025-08-21: (v2.6.0+pre-VRSv2-adoption)
+### 2025-08-22: (v2.6.0+pre-VRSv2-adoption)
 
 **Breaking Change**
 
@@ -30,7 +30,7 @@ The  use of the current version requires some reprocessing of existing variants 
   before plotting; so the 2 breakpoint/fusion regions are shown on
   their chromosomes (but no connections..., yet)
 * fixing UCSC link for `.bed` display (they want `www.genome.ucsc.edu`, broken w/o "www")
-* * adding order check for start, end in bed file generation
+* adding order check for start, end in bed file generation
 
 ### 2025-07-29: (v2.5.0 "Forked")
 
