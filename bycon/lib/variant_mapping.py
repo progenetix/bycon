@@ -100,6 +100,7 @@ class ByconVariant:
 
         * standard VCF column headers such as as `#CHROM` as keys
         * an `INFO` key + string for CNVs
+        TODO: change to vrs-python?
         """
         self.byc_variant = variant
         self.__create_canonical_variant()
@@ -113,7 +114,7 @@ class ByconVariant:
             "POS": int(v["location"].get("start", 0)) + 1,
             "ID": ".",
             "REF": v.get("reference_sequence", "."),
-            "ALT": v.get("sequence", ""),
+            "ALT": v.get("state", {}).get("sequence", "."),
             "QUAL": ".",
             "FILTER": "PASS",
             "FORMAT": "GT",
@@ -338,8 +339,6 @@ class ByconVariant:
         self.__byc_variant_normalize_chromosome()
         self.__byc_variant_normalize_positions()
         self.__byc_variant_normalize_sequences()
-        # self.__byc_variant_add_digest()
-        # self.__byc_variant_add_adjacency_digest()
         # if not "info" in self.byc_variant:
         #     self.byc_variant.update({"info": {}})
         # self.__byc_variant_add_length()
@@ -412,13 +411,13 @@ class ByconVariant:
         else:
             v["errors"].append(f'problem with sequence_id {s_id} / chromosome {chro} match')
         self.byc_variant.update(v)
-        return
 
 
     # -------------------------------------------------------------------------#
 
     def __byc_variant_normalize_sequences(self):
         v = self.byc_variant
+        # first legacy ...
         seq = v.get("sequence", v.get("state", {}).get("sequence", ""))
         r_seq = v.get("reference_sequence", v.get("state", {}).get("reference_sequence", ""))
         # TODO: check, normalize, default...
@@ -430,7 +429,6 @@ class ByconVariant:
         })
 
         self.byc_variant.update(v)
-        return
 
 
     # -------------------------------------------------------------------------#
@@ -444,45 +442,4 @@ class ByconVariant:
         if not v["location"].get("end"):
             v["location"].update({"end": int(v["location"].get("start")) + len(v.get("sequence", ""))})
         self.byc_variant.update(v)
-        return
-
-
-    # -------------------------------------------------------------------------#
-
-    def __byc_variant_add_digest(self):
-        v = self.byc_variant
-        if not "location" in v:
-            return
-        seq_re = '^[ACGTN]+$'  
-        v_lab = v["variant_state"].get("id", "___NA___").replace(":", "_")
-        v_seqid = v["location"].get("chromosome", "___NA___")
-        seq = v.get("sequence", "")
-        rseq = v.get("reference_sequence", "")
-
-        if re.match(f'{seq_re}', str(seq)) or re.match(f'{seq_re}', str(rseq)):
-            v_lab = f'{rseq}>{seq}'
-        v.update({"variant_internal_id": f'{v_seqid}:{v["location"]["start"]}-{v["location"]["end"]}:{v_lab}'})
-
-        self.byc_variant.update(v)
-        return
-
-
-    # -------------------------------------------------------------------------#
-
-    def __byc_variant_add_adjacency_digest(self):
-        v = self.byc_variant
-        if not "adjoined_sequences" in v:
-            return
-        v_lab = v["variant_state"].get("id", "___NA___").replace(":", "_")
-        a = v.get("adjoined_sequences", [])
-        if len(a) < 2:
-            return
-        a_1 = a[0]
-        a_2 = a[1]
-        d = f'{a_1.get("chromosome", "___NA___")}:{a_1["start"]}-{a_1["end"]}::{a_2.get("chromosome", "___NA___")}:{a_2["start"]}-{a_2["end"]}:{v_lab}'
-        self.byc_variant.update({"variant_internal_id": d})
-        for p in ["sequence", "reference_sequence", "location"]:
-            self.byc_variant.pop(p, None)
-        return
-
 
