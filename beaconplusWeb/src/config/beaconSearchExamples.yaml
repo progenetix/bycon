@@ -99,6 +99,9 @@
     - `variantMinLength` and `variantMaxLength` to limit matched CNV sizes
     - `genomicAlleleShortForm` (e.g. `V600E` with `BRAF`)
     - `variantType` and `alternateBases` to specify variants
+    While it is not _per se_ necessary to use a filter, this example contains
+    a disease match filter since running against large databases such as Progenetix
+    might lead to technical problems.
   img: /img/BeaconGeneQuery-graphics.png
   parameters:
     geneId:
@@ -115,7 +118,7 @@
       defaultValue: 10000
     variantMaxLength:
       isHidden: false
-      defaultValue: 5000000
+      defaultValue: 3000000
     variantType:
       isHidden: false
       defaultValue: "EFO:0030070"
@@ -123,6 +126,9 @@
       isHidden: false
     referenceBases:
       isHidden: true
+    allTermsFilters:
+      isHidden: false
+      defaultValue: ["pgx:icdom-85003"]
 
 - label: "Identifier - HeLa"
   note: "Samples can be identified through identifiers."
