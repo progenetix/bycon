@@ -299,13 +299,15 @@ class GenomeBins:
         if type(self.analysis_variants).__name__ == "Cursor":
             self.analysis_variants.rewind()
         for v in self.analysis_variants:
+            # skipping non-CNV vars
+            if not "CopyNumberChange" in v.get("type", "__none__"):
+                continue
             v_t_c = v.get("variant_state", {}).get("id", "__NA__")
             if v_t_c not in self.variant_type_definitions.keys():
                 continue
-            if not (dup_del := self.variant_type_definitions[v_t_c].get("DUPDEL")):
-                # skipping non-CNV vars
+            dup_del = self.variant_type_definitions[v_t_c].get("DUPDEL", "___none___")
+            if not (cov_lab := self.cov_labs[dup_del]):
                 continue
-            cov_lab = self.cov_labs[dup_del]
             hl_dupdel = self.variant_type_definitions[v_t_c].get("HLDUPDEL", "___none___")
             hl_lab = self.hl_labs.get(hl_dupdel)
 
