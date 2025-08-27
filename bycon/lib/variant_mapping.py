@@ -372,8 +372,10 @@ class ByconVariant:
         if state_id not in vt_defs.keys():   
             state_id = self.variant_types_map.get(variant_type, "___none___")
 
-        if state_id in vt_defs.keys():
-            state_defs = vt_defs[state_id]
+        prdbug(state_id)
+
+        if (state_defs := vt_defs.get(state_id)):
+            prdbug(state_defs["variant_state"])
             v.update({
                 "variant_state": state_defs["variant_state"],
                 "variant_dupdel": state_defs.get("DUPDEL"),
@@ -385,7 +387,6 @@ class ByconVariant:
             v["errors"].append(f'no variant type / state could be assigned')
 
         self.byc_variant.update(v)
-        return
 
 
     # -------------------------------------------------------------------------#

@@ -3,7 +3,7 @@
 from datetime import datetime
 from os import path, pardir
 
-from bycon import byconServiceLibs, ByconVariant, prjsonnice
+from bycon import BYC, BYC_PARS, byconServiceLibs, ByconVariant, prjsonnice
 from bycon_importer import ByconImporter
 from byconServiceLibs import import_datatable_dict_line
 
