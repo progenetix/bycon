@@ -217,6 +217,7 @@ class ByconParameters:
     def __POST_parse_query(self):
         for p, v in self.request_query.items():
 
+            # parameters are defined in snake_case
             p_d = humps.decamelize(p)
 
             if p == "filters":
@@ -230,13 +231,11 @@ class ByconParameters:
                     if "datasets" in rp:
                         if (ds_ids := rv.get("datasetIds")):
                             self.byc_pars.update({"dataset_ids": ds_ids})
-
                     elif "g_variant" in rp_d:
                         for vp, vv in v[rp].items():
                             vp_d = humps.decamelize(vp)
                             if vp_d in self.arg_defs:
                                 self.byc_pars.update({vp_d: vv})
-
                     elif "variant_multi_pars" in rp_d:
                         vmp = []
                         for v_p_s in rv:
@@ -247,7 +246,6 @@ class ByconParameters:
                                     varp.update({vp_d: vv})
                             vmp.append(varp)
                         self.byc_pars.update({rp_d: vmp})
-
                     elif rp_d in self.arg_defs:
                         self.byc_pars.update({rp_d: rv})
 
@@ -259,12 +257,14 @@ class ByconParameters:
                         self.byc_pars.update({p_k: v[p_k]})
                 continue
 
-            if p_d in self.arg_defs:
-                self.byc_pars.update({p_d: v})
-            else:
+            if p_d not in self.arg_defs:
                 w_m = f'!!! Unmatched parameter {p}: {v}'
                 BYC["WARNINGS"].append(w_m)
-                prdbug(f'!!! Unmatched parameter {p}: {v}')
+                prdbug(w_m)
+                continue
+
+            # remaining (defined) parameters
+            self.byc_pars.update({p_d: v})
 
 
     # -------------------------------------------------------------------------#
