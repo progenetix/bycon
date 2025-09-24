@@ -21,6 +21,7 @@ mongo_client = MongoClient(host=DB_MONGOHOST)[ ds_id ]
 ind_coll = mongo_client["individuals"]
 bs_coll = mongo_client["biosamples"]
 ana_coll = mongo_client["analyses"]
+var_coll = mongo_client["variants"]
 
 for ind_id in ind_ids:
 	ind = ind_coll.find_one({"id": ind_id})
@@ -31,5 +32,11 @@ for ind_id in ind_ids:
 	phggid = re.sub("DIPG_IND_", "pHGG_META_", l_ids[0])
 
 	bs_ids = bs_coll.distinct("id", {"individual_id": ind_id})
-	ana_ids = ana_coll.distinct("id", {"individual_id": ind_id})
-	print(f'{phggid}: {bs_ids} - {ana_ids}')
+	for bs_id in bs_ids:
+		print(f'{phggid}: {bs_id}')
+		anas = ana_coll.find({"biosample_id": bs_id})
+		for ana in anas:
+			ana_id = ana.get("id")
+			print(f'{ana_id}: {ana.get("operation", {}).get("id", "****")}')
+			v_types = var_coll.distinct("type", {"analysis_id": ana_id})
+			print(f'{phggid}: {bs_id} - {ana_id}: {v_types}')
