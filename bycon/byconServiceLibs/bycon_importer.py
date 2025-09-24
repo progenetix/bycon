@@ -52,9 +52,6 @@ class ByconImporter():
         self.downstream = []
         self.downstream_only = False
         self.dataset_client = self.mongo_client[ self.dataset_id ]
-        # self.ind_coll = self.mongo_client[ self.dataset_id ]["individuals"]
-        # self.bios_coll = self.mongo_client[ self.dataset_id ]["biosamples"]
-        # self.ana_coll = self.mongo_client[ self.dataset_id ]["analyses"]
         self.target_db = "___none___"
         self.allow_duplicates = False
 
