@@ -7,17 +7,17 @@ from pymongo import MongoClient
 from bycon import *
 from byconServiceLibs import assert_single_dataset_or_exit, ByconDatatableExporter, ByconDatatableExporter
 
+# ./housekeepers/_dipg-updater.py -d progenetix --filters "pgx:cohort-DIPG" --requestEntityPathId individuals --debugMode 0
 
-ds_id = "progenetix"
-
-BYC_PARS.update({"dataset_ids": [ds_id], "filters": [{"id":"pgx:cohort-DIPG"}]})
 assert_single_dataset_or_exit()
+
+ds_id = ByconDatasets().get_dataset_ids()[0]
 
 dsr = ByconResultSets().datasetsResults()
 
 ind_ids = dsr[ds_id]['individuals.id']["target_values"]
 
-mongo_client = MongoClient(host=DB_MONGOHOST)[ ds_id ]
+mongo_client = MongoClient(host=DB_MONGOHOST)[ds_id]
 ind_coll = mongo_client["individuals"]
 bs_coll = mongo_client["biosamples"]
 ana_coll = mongo_client["analyses"]
