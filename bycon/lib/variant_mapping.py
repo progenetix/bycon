@@ -47,9 +47,9 @@ class ByconVariant:
         self.datatable_mappings = BYC.get("datatable_mappings", {"$defs": {}})
         self.header_cols = self.datatable_mappings.get("ordered_pgxseg_columns", [])
         self.variant_mappings = self.datatable_mappings["$defs"].get("genomicVariant", {}).get("parameters", {})
-        self.vrs_allele = ByconSchemas("VRSallele", "").get_schema_instance()
-        self.vrs_cnv = ByconSchemas("VRScopyNumberChange", "").get_schema_instance()
-        self.vrs_adjacency = ByconSchemas("VRSadjacency", "").get_schema_instance()
+        # self.vrs_allele = ByconSchemas("VRSallele", "").get_schema_instance()
+        # self.vrs_cnv = ByconSchemas("VRScopyNumberChange", "").get_schema_instance()
+        # self.vrs_adjacency = ByconSchemas("VRSadjacency", "").get_schema_instance()
         self.pgx_variant = ByconSchemas("pgxVariant", "").get_schema_instance()
 
         seqrepo_rest_service_url = 'seqrepo+file:///Users/Shared/seqrepo/2024-12-20'
