@@ -10,7 +10,7 @@ from ga4gh.vrs.dataproxy import create_dataproxy
 from bycon import *
 from byconServiceLibs import assert_single_dataset_or_exit, ByconTSVreader, ByconDatatableExporter
 
-# ./housekeepers/_dipg-updater.py -d progenetix --filters "pgx:cohort-DIPG" --requestEntityPathId individuals --debugMode 0
+# ./housekeepers/_dipg-updater.py -d progenetix --filters "pgx:cohort-DIPG" --requestEntityPathId individuals --debugMode 0 -i /Users/mbaudis/switchdrive/baudisgroup/dbdata/2025-DIPG-revision/2025-Serhiis-data/Wrong_variants_update/META_MAF_38.tsv
 
 seqrepo_rest_service_url = 'seqrepo+file:///Users/Shared/seqrepo/2024-12-20'
 seqrepo_dataproxy = create_dataproxy(uri=seqrepo_rest_service_url)
@@ -37,6 +37,8 @@ ds_id = ByconDatasets().get_dataset_ids()[0]
 dsr = ByconResultSets().datasetsResults()
 
 ind_ids = dsr[ds_id]['individuals.id']["target_values"]
+print(f'... {len(ind_ids)} individuals matched the query')
+
 
 mongo_client = MongoClient(host=DB_MONGOHOST)[ds_id]
 ind_coll = mongo_client["individuals"]
@@ -47,7 +49,7 @@ var_coll = mongo_client["variants"]
 ids = {
 	"individuals": {},
 	"biosamples": {},
-	"analyses": {},
+	"analyses": set(),
 	"analyses_with_alleles": set()
 }
 
@@ -66,16 +68,16 @@ for ind_id in ind_ids:
 	# bs_ids = bs_coll.distinct("id", {"individual_id": ind_id, "histological_diagnosis.id": "NCIT:C4822"})
 	bs = list(bios)[-1]
 	bs_id = bs.get("id")
-	print(f'histo: {bs["histological_diagnosis"]}')
+	# print(f'histo: {bs["histological_diagnosis"]}')
 	# print(f'{phggid}: {bs_id}')
-	ids["biosamples"].add(bs_id)
+	ids["biosamples"].update({phggid: bs_id})
 	anas = list(ana_coll.find({"biosample_id": bs_id}))
 	if len(anas) < 1:
 		continue
 	for ana in anas:
 		ana_id = ana.get("id")
 		ids["analyses"].add(ana_id)
-		print(f'{ana_id}: {ana.get("operation", {}).get("id", "****")}')
+		# print(f'{ana_id}: {ana.get("operation", {}).get("id", "****")}')
 		v_types = var_coll.distinct("type", {"analysis_id": ana_id})
 		# print(f'{phggid}: {bs_id} - {ana_id}: {v_types}')
 		if "Allele" in v_types:
@@ -91,9 +93,15 @@ for k, v in ids.items():
 import_ids = ids["individuals"].keys()
 import_variants = []
 
-for v in data:
-	if not (legacy_id := l.get("Tumor_Sample_Barcode", "___none___")) in import_ids:
+# print(import_ids)
+
+nomatch = []
+
+for i, v in enumerate(data):
+	if not (legacy_id := v.get("Tumor_Sample_Barcode", "___none___")) in import_ids:
+		nomatch.append({i: legacy_id})
 		continue
+	# print(legacy_id)
 
 	ref = v.get("Reference_Allele")
 	# ref = ''.join(["N" for char in ref])
@@ -116,9 +124,10 @@ for v in data:
 
 	import_variants.append(i_v)
 
-prjsonnice(import_variants)
+# prjsonnice(import_variants)
 
 print(f'... {len(data)} lines were read in')
+print(f'... {len(nomatch)} lines had no matching sample id')
 print(f'... {len(ids["analyses_with_alleles"])} analyses were labeled as "Allele" before')
 print(f'... {len(import_ids)} match existing legacy ids')
 print(f'==>> {len(import_variants)} were converted')
