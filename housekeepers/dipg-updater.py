@@ -46,8 +46,8 @@ var_coll = mongo_client["variants"]
 
 ids = {
 	"individuals": {},
-	"biosamples": {},
-	"analyses": {},
+	"biosamples": set(),
+	"analyses": set(),
 	"analyses_with_alleles": set()
 }
 
