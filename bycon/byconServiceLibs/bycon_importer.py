@@ -52,9 +52,6 @@ class ByconImporter():
         self.downstream = []
         self.downstream_only = False
         self.dataset_client = self.mongo_client[ self.dataset_id ]
-        # self.ind_coll = self.mongo_client[ self.dataset_id ]["individuals"]
-        # self.bios_coll = self.mongo_client[ self.dataset_id ]["biosamples"]
-        # self.ana_coll = self.mongo_client[ self.dataset_id ]["analyses"]
         self.target_db = "___none___"
         self.allow_duplicates = False
 
@@ -312,8 +309,6 @@ class ByconImporter():
 
             self.import_ids.append(import_id_v)          
             self.import_docs.append(dict(new_doc))
-
-        # prdbug(self.import_docs)
 
 
     #--------------------------------------------------------------------------#
@@ -619,9 +614,11 @@ class ByconImporter():
         #---------------------------- Import Stage ----------------------------# 
 
         i_no = 0
+        BV = ByconVariant()
         for new_doc in import_vars:
             insert_v = import_datatable_dict_line({}, fn, new_doc, ien)
-            insert_v = ByconVariant().pgxVariant(insert_v)
+            # insert_v = ByconVariant().pgxVariant(insert_v)
+            insert_v = BV.vrsVariant(insert_v)
             insert_v.update({"updated": datetime.now().isoformat()})
 
             if not BYC["TEST_MODE"]:

@@ -1,0 +1,7 @@
+biosample_id	variant_id	analysis_id	individual_id	reference_name	start	end	reference_sequence	sequence	variant_classification	state_super_id	variant_state_id	case_id	sample_id	variant_type
+pgxbs-kftvhxry	 	pgxcs-ltoijq1h	pgxind-kftx3tgx	2	169811281	169811284	GTG	__None__	In_Frame_Del	SO:0001059	SO:0000159	pgx:TCGA.edc62c30-cacc-457d-96ba-d05ed35432a3	pgx:TCGA.1e6b9fc4-3fed-4d32-89b8-aa15fb4a5840	DEL
+pgxbs-kftvi9fi	 	pgxcs-ltoi957x	pgxind-kftx3wiv	6	73466313	73466313	__None__	GT	Frame_Shift_Ins	SO:0001059	SO:0000667	pgx:TCGA.45c3cd39-1c5d-4e26-8afc-5bed3c230088	pgx:TCGA.00ab48d1-6b1c-4663-a9b1-69d22f93af1a	INS
+pgxbs-kftvhxry	 	pgxcs-ltoijq1h	pgxind-kftx3tgx	1	226064453	226064454	G	C	Missense_Mutation	SO:0001059	SO:0001483	pgx:TCGA.edc62c30-cacc-457d-96ba-d05ed35432a3	pgx:TCGA.1e6b9fc4-3fed-4d32-89b8-aa15fb4a5840	SNV
+pgxbs-kftvhxry	 	pgxcs-ltoijq1h	pgxind-kftx3tgx	2	26279161	26279162	A	T	Missense_Mutation	SO:0001059	SO:0001483	pgx:TCGA.edc62c30-cacc-457d-96ba-d05ed35432a3	pgx:TCGA.1e6b9fc4-3fed-4d32-89b8-aa15fb4a5840	SNV
+pgxbs-kftvhxry	 	pgxcs-ltoijq1h	pgxind-kftx3tgx	2	31266475	31266476	C	A	Silent	SO:0001059	SO:0001483	pgx:TCGA.edc62c30-cacc-457d-96ba-d05ed35432a3	pgx:TCGA.1e6b9fc4-3fed-4d32-89b8-aa15fb4a5840	SNV
+pgxbs-kftvhxry	 	pgxcs-ltoijq1h	pgxind-kftx3tgx	3	138500763	138500764	T	C	Missense_Mutation	SO:0001059	SO:0001483	pgx:TCGA.edc62c30-cacc-457d-96ba-d05ed35432a3	pgx:TCGA.1e6b9fc4-3fed-4d32-89b8-aa15fb4a5840	SNV

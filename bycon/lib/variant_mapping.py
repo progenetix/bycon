@@ -47,9 +47,9 @@ class ByconVariant:
         self.datatable_mappings = BYC.get("datatable_mappings", {"$defs": {}})
         self.header_cols = self.datatable_mappings.get("ordered_pgxseg_columns", [])
         self.variant_mappings = self.datatable_mappings["$defs"].get("genomicVariant", {}).get("parameters", {})
-        self.vrs_allele = ByconSchemas("VRSallele", "").get_schema_instance()
-        self.vrs_cnv = ByconSchemas("VRScopyNumberChange", "").get_schema_instance()
-        self.vrs_adjacency = ByconSchemas("VRSadjacency", "").get_schema_instance()
+        # self.vrs_allele = ByconSchemas("VRSallele", "").get_schema_instance()
+        # self.vrs_cnv = ByconSchemas("VRScopyNumberChange", "").get_schema_instance()
+        # self.vrs_adjacency = ByconSchemas("VRSadjacency", "").get_schema_instance()
         self.pgx_variant = ByconSchemas("pgxVariant", "").get_schema_instance()
 
         seqrepo_rest_service_url = 'seqrepo+file:///Users/Shared/seqrepo/2024-12-20'
@@ -372,8 +372,10 @@ class ByconVariant:
         if state_id not in vt_defs.keys():   
             state_id = self.variant_types_map.get(variant_type, "___none___")
 
-        if state_id in vt_defs.keys():
-            state_defs = vt_defs[state_id]
+        prdbug(state_id)
+
+        if (state_defs := vt_defs.get(state_id)):
+            prdbug(state_defs["variant_state"])
             v.update({
                 "variant_state": state_defs["variant_state"],
                 "variant_dupdel": state_defs.get("DUPDEL"),
@@ -385,7 +387,6 @@ class ByconVariant:
             v["errors"].append(f'no variant type / state could be assigned')
 
         self.byc_variant.update(v)
-        return
 
 
     # -------------------------------------------------------------------------#

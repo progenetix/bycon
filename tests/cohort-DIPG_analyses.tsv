@@ -1,0 +1,201 @@
+analysis_id	biosample_id	individual_id	platform_id	platform_label	pipeline_name	pipeline_ref	analysis_operation_id	analysis_operation_label	experiment_id	series_id	experiment_label	data_provenance	analysis_legacy_ids
+pgxcs-kftvgl5h	pgxbs-kftvgl5h	pgxind-kftx2bqc	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961		21931021_BSG003TBS	PMID21931021	21931021_BSG003TBS		
+pgxcs-kftvj9qn	pgxbs-kftvj9qn	pgxind-kl8hk4u3	geo:GPL6801	[GenomeWideSNP_6] Affymetrix Genome-Wide Human SNP 6.0 Array	labelSeg-based calibration		EDAM:operation_3961		geo:GSM1212607	geo:GSE50024	GSM1212607		
+pgxcs-kftvj9r6	pgxbs-kftvj9r6	pgxind-kl8hk4na	geo:GPL6801	[GenomeWideSNP_6] Affymetrix Genome-Wide Human SNP 6.0 Array	labelSeg-based calibration		EDAM:operation_3961		geo:GSM1212618	geo:GSE50024	GSM1212618		
+pgxcs-kftvmlyj	pgxbs-kftvgk8c	pgxind-kftx2am2	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_001&&DIPG_CS_0522
+pgxcs-kftvmlyz	pgxbs-kftvgk8d	pgxind-kftx2am4	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0523&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_002
+pgxcs-kftvmlzg	pgxbs-kftvgk8f	pgxind-kftx2am6	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_003&&DIPG_CS_0524
+pgxcs-kftvmlzx	pgxbs-kftvgk8h	pgxind-kftx2am8	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0525&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_004
+pgxcs-kftvmm0f	pgxbs-kftvgk8i	pgxind-kftx2ama	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0526&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_005
+pgxcs-kftvmm0v	pgxbs-kftvgk8k	pgxind-kftx2amc	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_006&&DIPG_CS_0527
+pgxcs-kftvmm1c	pgxbs-kftvgk8m	pgxind-kftx2ame	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0528&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_007
+pgxcs-kftvmm1t	pgxbs-kftvgk8n	pgxind-kftx2amg	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0529&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_008
+pgxcs-kftvmm2a	pgxbs-kftvgk8p	pgxind-kftx2ami	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_009&&DIPG_CS_0530
+pgxcs-kftvmm2q	pgxbs-kftvgk8q	pgxind-kftx2amk	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0531&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_010
+pgxcs-kftvmm37	pgxbs-kftvgk8s	pgxind-kftx2amm	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0532&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_011
+pgxcs-kftvmm3o	pgxbs-kftvgk8u	pgxind-kftx2amo	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0534&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_013
+pgxcs-kftvmm45	pgxbs-kftvgk8v	pgxind-kftx2amq	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0533&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_012
+pgxcs-kftvmm4m	pgxbs-kftvgk8x	pgxind-kftx2ams	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_014&&DIPG_CS_0535
+pgxcs-kftvmm53	pgxbs-kftvgk8z	pgxind-kftx2amu	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_015&&DIPG_CS_0536
+pgxcs-kftvmm5j	pgxbs-kftvgk90	pgxind-kftx2amw	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_016&&DIPG_CS_0537
+pgxcs-kftvmm60	pgxbs-kftvgk92	pgxind-kftx2amy	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0538&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_017
+pgxcs-kftvmm8n	pgxbs-kftvgk94	pgxind-kftx2an0	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0540&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_019
+pgxcs-kftvmm95	pgxbs-kftvgk96	pgxind-kftx2an2	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_021&&DIPG_CS_0542
+pgxcs-kftvmm9n	pgxbs-kftvgk97	pgxind-kftx2an4	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_020&&DIPG_CS_0541
+pgxcs-kftvmmal	pgxbs-kftvgk9b	pgxind-kftx2an7	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0543&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_023
+pgxcs-kftvmmb2	pgxbs-kftvgk9c	pgxind-kftx2an9	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0544&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_024
+pgxcs-kftvmmbj	pgxbs-kftvgk9e	pgxind-kftx2anb	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_018&&DIPG_CS_0539
+pgxcs-kftvmmc0	pgxbs-kftvgk9f	pgxind-kftx2and	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0545&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_025
+pgxcs-kftvmmch	pgxbs-kftvgk9h	pgxind-kftx2anf	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_026&&DIPG_CS_0546
+pgxcs-kftvmmcy	pgxbs-kftvgk9j	pgxind-kftx2anh	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_027&&DIPG_CS_0547
+pgxcs-kftvmmdf	pgxbs-kftvgk9k	pgxind-kftx2anj	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0548&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_028
+pgxcs-kftvmmdw	pgxbs-kftvgk9m	pgxind-kftx2anm	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_029&&DIPG_CS_0549
+pgxcs-kftvmmed	pgxbs-kftvgk9o	pgxind-kftx2ann	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0551&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_031
+pgxcs-kftvmmeu	pgxbs-kftvgk9p	pgxind-kftx2anp	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_030&&DIPG_CS_0550
+pgxcs-kftvmmfb	pgxbs-kftvgk9r	pgxind-kftx2anr	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0553&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_033
+pgxcs-kftvmmfs	pgxbs-kftvgk9s	pgxind-kftx2ant	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_034&&DIPG_CS_0554
+pgxcs-kftvmmg9	pgxbs-kftvgk9u	pgxind-kftx2anv	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_032&&DIPG_CS_0552
+pgxcs-kftvmmgq	pgxbs-kftvgk9v	pgxind-kftx2anx	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_035&&DIPG_CS_0555
+pgxcs-kftvmmh6	pgxbs-kftvgk9x	pgxind-kftx2anz	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0556&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_036
+pgxcs-kftvmmhn	pgxbs-kftvgk9z	pgxind-kftx2ao1	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0557&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_037
+pgxcs-kftvmmkg	pgxbs-kftvgka9	pgxind-kftx2aod	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_043&&DIPG_CS_0558
+pgxcs-kftvmmld	pgxbs-kftvgkac	pgxind-kftx2aoh	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0559&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_045
+pgxcs-kftvmmms	pgxbs-kftvgkah	pgxind-kftx2aon	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0560&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_048
+pgxcs-kftvmmnp	pgxbs-kftvgkak	pgxind-kftx2aos	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0561&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_050
+pgxcs-kftvmmqi	pgxbs-kftvgkau	pgxind-kftx2ap4	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_056&&DIPG_CS_0562
+pgxcs-kftvmmrg	pgxbs-kftvgkax	pgxind-kftx2ap8	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0563&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_058
+pgxcs-kftvmmsd	pgxbs-kftvgkb0	pgxind-kftx2apc	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_060&&DIPG_CS_0564
+pgxcs-kftvmmtt	pgxbs-kftvgkb5	pgxind-kftx2apj	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0568&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_064
+pgxcs-kftvmmua	pgxbs-kftvgkb7	pgxind-kftx2apl	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_063&&DIPG_CS_0567
+pgxcs-kftvmmur	pgxbs-kftvgkb8	pgxind-kftx2apn	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_065&&DIPG_CS_0569
+pgxcs-kftvmmv7	pgxbs-kftvgkba	pgxind-kftx2app	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_066&&DIPG_CS_0570
+pgxcs-kftvmmvo	pgxbs-kftvgkbc	pgxind-kftx2apr	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_067&&DIPG_CS_0571
+pgxcs-kftvmmw5	pgxbs-kftvgkbd	pgxind-kftx2apt	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_068&&DIPG_CS_0572
+pgxcs-kftvmmwl	pgxbs-kftvgkbf	pgxind-kftx2apv	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0573&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_069
+pgxcs-kftvmmxj	pgxbs-kftvgkbi	pgxind-kftx2apz	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_071&&DIPG_CS_0575
+pgxcs-kftvmmy0	pgxbs-kftvgkbk	pgxind-kftx2aq1	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0576&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_072
+pgxcs-kftvmmyh	pgxbs-kftvgkbm	pgxind-kftx2aq3	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_073&&DIPG_CS_0577
+pgxcs-kftvmmyx	pgxbs-kftvgkbn	pgxind-kftx2aq5	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_074&&DIPG_CS_0578
+pgxcs-kftvmmze	pgxbs-kftvgkbp	pgxind-kftx2aq7	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_075&&DIPG_CS_0579
+pgxcs-kftvmmzv	pgxbs-kftvgkbr	pgxind-kftx2aq9	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_091&&DIPG_CS_0580
+pgxcs-kftvmnqb	pgxbs-kftvgke4	pgxind-kftx2at6	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0581&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_143
+pgxcs-kftvmnqs	pgxbs-kftvgke6	pgxind-kftx2at8	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_144&&DIPG_CS_0582
+pgxcs-kftvmnr9	pgxbs-kftvgke8	pgxind-kftx2ata	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0583&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_145
+pgxcs-kftvmnw5	pgxbs-kftvgke9	pgxind-kftx2atc	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0584&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_146
+pgxcs-kftvmnwm	pgxbs-kftvgkeb	pgxind-kftx2ate	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0585&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_147
+pgxcs-kftvmnx6	pgxbs-kftvgkec	pgxind-kftx2atg	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_148&&DIPG_CS_0586
+pgxcs-kftvmnxn	pgxbs-kftvgkee	pgxind-kftx2ati	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0587&&pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_149
+pgxcs-kftvmny4	pgxbs-kftvgkeg	pgxind-kftx2atk	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_150&&DIPG_CS_0588
+pgxcs-kftvmnym	pgxbs-kftvgkeh	pgxind-kftx2atm	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130424PFI::23079654-pfi-dkfz_11_151&&DIPG_CS_0589
+pgxcs-kftvmq49	pgxbs-kl8hk2ya	pgxind-kl8hk2zl	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0509&&pgxcs::AM20130503HAW::22661320-haw-DIPG29
+pgxcs-kftvmq4q	pgxbs-kl8hk4so	pgxind-kl8hk4tf	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130503HAW::22661320-haw-DIPG30&&DIPG_CS_0510
+pgxcs-kftvmq56	pgxbs-kl8hk3u7	pgxind-kl8hk3wd	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::AM20130503HAW::22661320-haw-DIPG26&&DIPG_CS_0506
+pgxcs-kftvmrt6	pgxbs-kftvgkrh	pgxind-kftx2b9b	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P01&&DIPG_CS_0345
+pgxcs-kftvmrtn	pgxbs-kftvgkrj	pgxind-kftx2b9d	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0346&&pgxcs::E-TABM-1107::22389665-gri-P02
+pgxcs-kftvmru3	pgxbs-kftvgkrk	pgxind-kftx2b9f	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P03&&DIPG_CS_0347
+pgxcs-kftvmruk	pgxbs-kftvgkrm	pgxind-kftx2b9h	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P04&&DIPG_CS_0204
+pgxcs-kftvmrv1	pgxbs-kftvgkro	pgxind-kftx2b9j	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P06&&DIPG_CS_0206
+pgxcs-kftvmrvh	pgxbs-kftvgkrp	pgxind-kftx2b9l	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0207&&pgxcs::E-TABM-1107::22389665-gri-P08
+pgxcs-kftvmrvy	pgxbs-kftvgkrr	pgxind-kftx2b9n	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0208&&pgxcs::E-TABM-1107::22389665-gri-P09
+pgxcs-kftvmrwe	pgxbs-kftvgkrt	pgxind-kftx2b9p	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0209&&pgxcs::E-TABM-1107::22389665-gri-P10
+pgxcs-kftvmrwv	pgxbs-kftvgkru	pgxind-kftx2b9r	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0210&&pgxcs::E-TABM-1107::22389665-gri-P11
+pgxcs-kftvmrxc	pgxbs-kftvgkrw	pgxind-kftx2b9t	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P12&&DIPG_CS_0211
+pgxcs-kftvmrxt	pgxbs-kftvgkry	pgxind-kftx2b9v	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0212&&pgxcs::E-TABM-1107::22389665-gri-P13
+pgxcs-kftvmrya	pgxbs-kftvgkrz	pgxind-kftx2b9x	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P14&&DIPG_CS_0213
+pgxcs-kftvmryq	pgxbs-kftvgks1	pgxind-kftx2b9z	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0214&&pgxcs::E-TABM-1107::22389665-gri-P15
+pgxcs-kftvmrz7	pgxbs-kftvgks3	pgxind-kftx2ba1	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P16&&DIPG_CS_0349
+pgxcs-kftvmrzn	pgxbs-kftvgks4	pgxind-kftx2ba3	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P17&&DIPG_CS_0215
+pgxcs-kftvms04	pgxbs-kftvgks6	pgxind-kftx2ba5	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0216&&pgxcs::E-TABM-1107::22389665-gri-P18
+pgxcs-kftvms0l	pgxbs-kftvgks8	pgxind-kftx2ba7	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P19&&DIPG_CS_0217
+pgxcs-kftvms11	pgxbs-kftvgks9	pgxind-kftx2ba9	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P20&&DIPG_CS_0218
+pgxcs-kftvms1i	pgxbs-kftvgksb	pgxind-kftx2bab	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P21&&DIPG_CS_0219
+pgxcs-kftvms1y	pgxbs-kftvgksd	pgxind-kftx2bad	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0220&&pgxcs::E-TABM-1107::22389665-gri-P23
+pgxcs-kftvms2f	pgxbs-kftvgkse	pgxind-kftx2baf	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P24&&DIPG_CS_0221
+pgxcs-kftvms2v	pgxbs-kftvgksg	pgxind-kftx2bah	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0222&&pgxcs::E-TABM-1107::22389665-gri-P25
+pgxcs-kftvms3c	pgxbs-kftvgksh	pgxind-kftx2baj	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0223&&pgxcs::E-TABM-1107::22389665-gri-P26
+pgxcs-kftvms3t	pgxbs-kftvgksj	pgxind-kftx2bal	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P27&&DIPG_CS_0224
+pgxcs-kftvms49	pgxbs-kftvgksl	pgxind-kftx2bao	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P28&&DIPG_CS_0351
+pgxcs-kftvms4q	pgxbs-kftvgksm	pgxind-kftx2baq	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0226&&pgxcs::E-TABM-1107::22389665-gri-P30
+pgxcs-kftvms56	pgxbs-kftvgkso	pgxind-kftx2bas	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P31&&DIPG_CS_0227
+pgxcs-kftvms5n	pgxbs-kftvgksq	pgxind-kftx2bau	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0228&&pgxcs::E-TABM-1107::22389665-gri-P32
+pgxcs-kftvms63	pgxbs-kftvgksr	pgxind-kftx2baw	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0229&&pgxcs::E-TABM-1107::22389665-gri-P33
+pgxcs-kftvms6k	pgxbs-kftvgkst	pgxind-kftx2bay	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P34&&DIPG_CS_0230
+pgxcs-kftvms70	pgxbs-kftvgksu	pgxind-kftx2bb0	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P36&&DIPG_CS_0232
+pgxcs-kftvms7h	pgxbs-kftvgksw	pgxind-kftx2bb2	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0233&&pgxcs::E-TABM-1107::22389665-gri-P37
+pgxcs-kftvms7x	pgxbs-kftvgksy	pgxind-kftx2bb4	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0352&&pgxcs::E-TABM-1107::22389665-gri-P38
+pgxcs-kftvms8e	pgxbs-kftvgksz	pgxind-kftx2bb6	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P39&&DIPG_CS_0353
+pgxcs-kftvmsaq	pgxbs-kftvgkt1	pgxind-kftx2bb8	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0235&&pgxcs::E-TABM-1107::22389665-gri-P41
+pgxcs-kftvmsb9	pgxbs-kftvgkt2	pgxind-kftx2bba	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0236&&pgxcs::E-TABM-1107::22389665-gri-P42
+pgxcs-kftvmsbq	pgxbs-kftvgkt4	pgxind-kftx2bbc	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0237&&pgxcs::E-TABM-1107::22389665-gri-P43
+pgxcs-kftvmsc7	pgxbs-kftvgkt6	pgxind-kftx2bbe	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0238&&pgxcs::E-TABM-1107::22389665-gri-P44
+pgxcs-kftvmsco	pgxbs-kftvgkt7	pgxind-kftx2bbg	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0240&&pgxcs::E-TABM-1107::22389665-gri-P46
+pgxcs-kftvmsd4	pgxbs-kftvgkt9	pgxind-kftx2bbi	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0243&&pgxcs::E-TABM-1107::22389665-gri-P48
+pgxcs-kftvmsdl	pgxbs-kftvgktb	pgxind-kftx2bbk	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P49&&DIPG_CS_0244
+pgxcs-kftvmse2	pgxbs-kftvgktc	pgxind-kftx2bbm	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0245&&pgxcs::E-TABM-1107::22389665-gri-P50
+pgxcs-kftvmsej	pgxbs-kftvgkte	pgxind-kftx2bbo	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0247&&pgxcs::E-TABM-1107::22389665-gri-P52
+pgxcs-kftvmsf0	pgxbs-kftvgktg	pgxind-kftx2bbq	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P54&&DIPG_CS_0249
+pgxcs-kftvmsfh	pgxbs-kftvgkth	pgxind-kftx2bbs	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P55&&DIPG_CS_0250
+pgxcs-kftvmsfx	pgxbs-kftvgktj	pgxind-kftx2bbu	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P56&&DIPG_CS_0251
+pgxcs-kftvmsge	pgxbs-kftvgktk	pgxind-kftx2bbw	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0252&&pgxcs::E-TABM-1107::22389665-gri-P57
+pgxcs-kftvmsgv	pgxbs-kftvgktm	pgxind-kftx2bby	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P59&&DIPG_CS_0354
+pgxcs-kftvmshb	pgxbs-kftvgkto	pgxind-kftx2bc0	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0254&&pgxcs::E-TABM-1107::22389665-gri-P60
+pgxcs-kftvmsi9	pgxbs-kftvgktr	pgxind-kftx2bc4	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0256&&pgxcs::E-TABM-1107::22389665-gri-P62
+pgxcs-kftvmsip	pgxbs-kftvgktt	pgxind-kftx2bc6	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0257&&pgxcs::E-TABM-1107::22389665-gri-P63
+pgxcs-kftvmsj6	pgxbs-kftvgktu	pgxind-kftx2bc7	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P64&&DIPG_CS_0258
+pgxcs-kftvmsjm	pgxbs-kftvgktw	pgxind-kftx2bc9	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P65&&DIPG_CS_0259
+pgxcs-kftvmsk3	pgxbs-kftvgkty	pgxind-kftx2bcb	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P68&&DIPG_CS_0262
+pgxcs-kftvmskj	pgxbs-kftvgktz	pgxind-kftx2bcd	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P69&&DIPG_CS_0263
+pgxcs-kftvmsl0	pgxbs-kftvgku1	pgxind-kftx2bcf	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0264&&pgxcs::E-TABM-1107::22389665-gri-P70
+pgxcs-kftvmslg	pgxbs-kftvgku3	pgxind-kftx2bch	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P72&&DIPG_CS_0265
+pgxcs-kftvmslx	pgxbs-kftvgku4	pgxind-kftx2bcj	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P73&&DIPG_CS_0266
+pgxcs-kftvmsme	pgxbs-kftvgku6	pgxind-kftx2bcl	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P75&&DIPG_CS_0268
+pgxcs-kftvmsmu	pgxbs-kftvgku7	pgxind-kftx2bcn	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0269&&pgxcs::E-TABM-1107::22389665-gri-P76
+pgxcs-kftvmsnb	pgxbs-kftvgku9	pgxind-kftx2bcp	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0270&&pgxcs::E-TABM-1107::22389665-gri-P77
+pgxcs-kftvmsnr	pgxbs-kftvgkub	pgxind-kftx2bcr	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0271&&pgxcs::E-TABM-1107::22389665-gri-P78
+pgxcs-kftvmso9	pgxbs-kftvgkuc	pgxind-kftx2bct	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P81&&DIPG_CS_0274
+pgxcs-kftvmsop	pgxbs-kftvgkue	pgxind-kftx2bcv	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0275&&pgxcs::E-TABM-1107::22389665-gri-P82
+pgxcs-kftvmsp6	pgxbs-kftvgkug	pgxind-kftx2bcx	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0276&&pgxcs::E-TABM-1107::22389665-gri-P83
+pgxcs-kftvmspm	pgxbs-kftvgkuh	pgxind-kftx2bcz	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P84&&DIPG_CS_0277
+pgxcs-kftvmsq3	pgxbs-kftvgkuj	pgxind-kftx2bd1	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0279&&pgxcs::E-TABM-1107::22389665-gri-P86
+pgxcs-kftvmsqk	pgxbs-kftvgkuk	pgxind-kftx2bd3	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0281&&pgxcs::E-TABM-1107::22389665-gri-P88
+pgxcs-kftvmsr0	pgxbs-kftvgkum	pgxind-kftx2bd5	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P89&&DIPG_CS_0282
+pgxcs-kftvmsrh	pgxbs-kftvgkuo	pgxind-kftx2bd6	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::E-TABM-1107::22389665-gri-P90&&DIPG_CS_0283
+pgxcs-kftvmvyy	pgxbs-kftvgl5d	pgxind-kftx2bq8	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG001T	PMID21931021	21931021_BSG001T		DIPG_CS_0356&&pgxcs::PMID21931021::21931021-pau-BSG001T
+pgxcs-kftvmvzf	pgxbs-kftvgl5f	pgxind-kftx2bqa	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG025T	PMID21931021	21931021_BSG025T		pgxcs::PMID21931021::21931021-pau-BSG025T&&DIPG_CS_0921
+pgxcs-kftvmw0d	pgxbs-kftvgl5i	pgxind-kftx2bqe	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG003TCB	PMID21931021	21931021_BSG003TCB		pgxcs::PMID21931021::21931021-pau-BSG003TCB&&DIPG_CS_0357
+pgxcs-kftvmw0u	pgxbs-kftvgl5k	pgxind-kftx2bqg	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG004TD	PMID21931021	21931021_BSG004TD		pgxcs::PMID21931021::21931021-pau-BSG004TD&&DIPG_CS_0358
+pgxcs-kftvmw1b	pgxbs-kftvgl5m	pgxind-kftx2bqi	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG005T	PMID21931021	21931021_BSG005T		DIPG_CS_0359&&pgxcs::PMID21931021::21931021-pau-BSG005T
+pgxcs-kftvmw2p	pgxbs-kftvgl5q	pgxind-kftx2bqo	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG033T	PMID21931021	21931021_BSG033T		pgxcs::PMID21931021::21931021-pau-BSG033T&&DIPG_CS_0377
+pgxcs-kftvmw36	pgxbs-kftvgl5s	pgxind-kftx2bqq	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG010T	PMID21931021	21931021_BSG010T		pgxcs::PMID21931021::21931021-pau-BSG010T&&DIPG_CS_0361
+pgxcs-kftvmw44	pgxbs-kftvgl5v	pgxind-kftx2bqu	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG012T	PMID21931021	21931021_BSG012T		pgxcs::PMID21931021::21931021-pau-BSG012T&&DIPG_CS_0362
+pgxcs-kftvmw51	pgxbs-kftvgl5z	pgxind-kftx2bqy	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG015T	PMID21931021	21931021_BSG015T		DIPG_CS_0363&&pgxcs::PMID21931021::21931021-pau-BSG015T
+pgxcs-kftvmw5i	pgxbs-kftvgl60	pgxind-kftx2br0	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG017T	PMID21931021	21931021_BSG017T		pgxcs::PMID21931021::21931021-pau-BSG017T&&DIPG_CS_0364
+pgxcs-kftvmw5z	pgxbs-kftvgl62	pgxind-kftx2br2	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG018T	PMID21931021	21931021_BSG018T		DIPG_CS_0917&&pgxcs::PMID21931021::21931021-pau-BSG018T
+pgxcs-kftvmw6f	pgxbs-kftvgl63	pgxind-kftx2br4	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG019T	PMID21931021	21931021_BSG019T		DIPG_CS_0918&&pgxcs::PMID21931021::21931021-pau-BSG019T
+pgxcs-kftvmw6w	pgxbs-kftvgl65	pgxind-kftx2br7	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG020T	PMID21931021	21931021_BSG020T		pgxcs::PMID21931021::21931021-pau-BSG020T&&DIPG_CS_0366
+pgxcs-kftvmw7d	pgxbs-kftvgl67	pgxind-kftx2br9	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG021T	PMID21931021	21931021_BSG021T		DIPG_CS_0919&&pgxcs::PMID21931021::21931021-pau-BSG021T
+pgxcs-kftvmw8b	pgxbs-kftvgl6a	pgxind-kftx2brd	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG022TD	PMID21931021	21931021_BSG022TD		pgxcs::PMID21931021::21931021-pau-BSG022TD&&DIPG_CS_0920
+pgxcs-kftvmw8s	pgxbs-kftvgl6b	pgxind-kftx2brf	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG023T	PMID21931021	21931021_BSG023T		pgxcs::PMID21931021::21931021-pau-BSG023T&&DIPG_CS_0369
+pgxcs-kftvmw9q	pgxbs-kftvgl6f	pgxind-kftx2bri	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG024TD	PMID21931021	21931021_BSG024TD		pgxcs::PMID21931021::21931021-pau-BSG024TD&&DIPG_CS_0370
+pgxcs-kftvmwao	pgxbs-kftvgl6i	pgxind-kftx2brm	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG026T	PMID21931021	21931021_BSG026T		pgxcs::PMID21931021::21931021-pau-BSG026T&&DIPG_CS_0922
+pgxcs-kftvmwb4	pgxbs-kftvgl6k	pgxind-kftx2bro	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG029T	PMID21931021	21931021_BSG029T		pgxcs::PMID21931021::21931021-pau-BSG029T&&DIPG_CS_0924
+pgxcs-kftvmwbl	pgxbs-kftvgl6l	pgxind-kftx2brq	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG030T	PMID21931021	21931021_BSG030T		DIPG_CS_0374&&pgxcs::PMID21931021::21931021-pau-BSG030T
+pgxcs-kftvmwc2	pgxbs-kftvgl6n	pgxind-kftx2brs	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG031T	PMID21931021	21931021_BSG031T		DIPG_CS_0375&&pgxcs::PMID21931021::21931021-pau-BSG031T
+pgxcs-kftvmwcj	pgxbs-kftvgl6p	pgxind-kftx2bru	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG032T	PMID21931021	21931021_BSG032T		DIPG_CS_0376&&pgxcs::PMID21931021::21931021-pau-BSG032T
+pgxcs-kftvmwd0	pgxbs-kftvgl6q	pgxind-kftx2brw	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG009T	PMID21931021	21931021_BSG009T		pgxcs::PMID21931021::21931021-pau-BSG009T&&DIPG_CS_0360
+pgxcs-kftvmwdh	pgxbs-kftvgl6s	pgxind-kftx2bry	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG034T	PMID21931021	21931021_BSG034T		DIPG_CS_0378&&pgxcs::PMID21931021::21931021-pau-BSG034T
+pgxcs-kftvmwdy	pgxbs-kftvgl6u	pgxind-kftx2bs0	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG035T	PMID21931021	21931021_BSG035T		pgxcs::PMID21931021::21931021-pau-BSG035T&&DIPG_CS_0379
+pgxcs-kftvmwef	pgxbs-kftvgl6v	pgxind-kftx2bs2	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG037T	PMID21931021	21931021_BSG037T		DIPG_CS_0380&&pgxcs::PMID21931021::21931021-pau-BSG037T
+pgxcs-kftvmwew	pgxbs-kftvgl6x	pgxind-kftx2bs4	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG038T	PMID21931021	21931021_BSG038T		pgxcs::PMID21931021::21931021-pau-BSG038T&&DIPG_CS_0925
+pgxcs-kftvmwfc	pgxbs-kftvgl6z	pgxind-kftx2bs6	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG039T	PMID21931021	21931021_BSG039T		pgxcs::PMID21931021::21931021-pau-BSG039T&&DIPG_CS_0382
+pgxcs-kftvmwft	pgxbs-kftvgl70	pgxind-kftx2bs9	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG040T	PMID21931021	21931021_BSG040T		pgxcs::PMID21931021::21931021-pau-BSG040T&&DIPG_CS_0383
+pgxcs-kftvmwga	pgxbs-kftvgl72	pgxind-kftx2bsb	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG042T	PMID21931021	21931021_BSG042T		pgxcs::PMID21931021::21931021-pau-BSG042T&&DIPG_CS_0384
+pgxcs-kftvmwgr	pgxbs-kftvgl73	pgxind-kftx2bsc	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG043T	PMID21931021	21931021_BSG043T		DIPG_CS_0926&&pgxcs::PMID21931021::21931021-pau-BSG043T
+pgxcs-kftvmwh7	pgxbs-kftvgl75	pgxind-kftx2bsf	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG044T	PMID21931021	21931021_BSG044T		DIPG_CS_0386&&pgxcs::PMID21931021::21931021-pau-BSG044T
+pgxcs-kftvmwhp	pgxbs-kftvgl76	pgxind-kftx2bsh	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG045T	PMID21931021	21931021_BSG045T		pgxcs::PMID21931021::21931021-pau-BSG045T&&DIPG_CS_0927
+pgxcs-kftvmwi6	pgxbs-kftvgl78	pgxind-kftx2bsj	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG046T	PMID21931021	21931021_BSG046T		DIPG_CS_0928&&pgxcs::PMID21931021::21931021-pau-BSG046T
+pgxcs-kftvmwin	pgxbs-kftvgl7a	pgxind-kftx2bsl	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG047T	PMID21931021	21931021_BSG047T		pgxcs::PMID21931021::21931021-pau-BSG047T&&DIPG_CS_0929
+pgxcs-kftvmwj5	pgxbs-kftvgl7b	pgxind-kftx2bsn	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG509T	PMID21931021	21931021_BSG509T		DIPG_CS_0389&&pgxcs::PMID21931021::21931021-pau-BSG509T
+pgxcs-kftvmwjn	pgxbs-kftvgl7d	pgxind-kftx2bsp	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG529T	PMID21931021	21931021_BSG529T		pgxcs::PMID21931021::21931021-pau-BSG529T&&DIPG_CS_0930
+pgxcs-kftvmwk5	pgxbs-kftvgl7f	pgxind-kftx2bsr	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG900TD	PMID21931021	21931021_BSG900TD		pgxcs::PMID21931021::21931021-pau-BSG900TD&&DIPG_CS_0931
+pgxcs-kftvmwkn	pgxbs-kftvgl7g	pgxind-kftx2bst	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG901TD	PMID21931021	21931021_BSG901TD		pgxcs::PMID21931021::21931021-pau-BSG901TD&&DIPG_CS_0390
+pgxcs-kftvmwl5	pgxbs-kftvgl7i	pgxind-kftx2bsv	EFO:0001456	DNA assay	labelSeg-based calibration		EDAM:operation_3961	Copy number variation detection	21931021_BSG902TD	PMID21931021	21931021_BSG902TD		pgxcs::PMID21931021::21931021-pau-BSG902TD&&DIPG_CS_0932
+pgxcs-kftvn4ez	pgxbs-kftvglxr	pgxind-kl8hk4g9	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0862&&pgxcs::GSE21420::21138945-bar-BSG10
+pgxcs-kftvn4ff	pgxbs-kftvglxt	pgxind-kl8hk4jy	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0854&&pgxcs::GSE21420::21138945-bar-BSG2
+pgxcs-kftvn4fw	pgxbs-kftvglxv	pgxind-kl8hk3jl	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0858&&pgxcs::GSE21420::21138945-bar-BSG6
+pgxcs-kftvn4gu	pgxbs-kftvglxy	pgxind-kl8hk41w	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::GSE21420::21138945-bar-HGG14&&DIPG_CS_0879
+pgxcs-kftvn4hb	pgxbs-kftvgly0	pgxind-kl8hk39r	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::GSE21420::21138945-bar-HGG15&&DIPG_CS_0880
+pgxcs-kftvn4hr	pgxbs-kftvgly1	pgxind-kl8hk4up	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0867&&pgxcs::GSE21420::21138945-bar-HGG2
+pgxcs-kftvn4i8	pgxbs-kftvgly3	pgxind-kl8hk3tn	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0886&&pgxcs::GSE21420::21138945-bar-HGG21
+pgxcs-kftvn4iq	pgxbs-kftvgly4	pgxind-kl8hk4r3	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0887&&pgxcs::GSE21420::21138945-bar-HGG22
+pgxcs-kftvn4jp	pgxbs-kftvgly8	pgxind-kl8hk4dg	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0868&&pgxcs::GSE21420::21138945-bar-HGG3
+pgxcs-kftvn4k7	pgxbs-kftvgly9	pgxind-kl8hk4c0	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0869&&pgxcs::GSE21420::21138945-bar-HGG4
+pgxcs-kftvn4ko	pgxbs-kftvglyb	pgxind-kl8hk4b8	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::GSE21420::21138945-bar-HGG7&&DIPG_CS_0872
+pgxcs-kftvn4l6	pgxbs-kftvglyd	pgxind-kl8hk34m	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::GSE21420::21138945-bar-HGG8&&DIPG_CS_0873
+pgxcs-kftvnflg	pgxbs-kftvgmzi	pgxind-kftx2dy6	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0896&&pgxcs::GSE19578::20479398-pau-HGG003
+pgxcs-kftvnflx	pgxbs-kftvgmzk	pgxind-kftx2dy8	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0897&&pgxcs::GSE19578::20479398-pau-HGG004
+pgxcs-kftvnfme	pgxbs-kftvgmzl	pgxind-kftx2dya	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0393&&pgxcs::GSE19578::20479398-pau-HGG005
+pgxcs-kftvnfmv	pgxbs-kftvgmzn	pgxind-kftx2dyc	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::GSE19578::20479398-pau-HGG006&&DIPG_CS_0394
+pgxcs-kftvnfnt	pgxbs-kftvgmzq	pgxind-kftx2dyg	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					DIPG_CS_0898&&pgxcs::GSE19578::20479398-pau-HGG012
+pgxcs-kftvnfoq	pgxbs-kftvgmzu	pgxind-kftx2dyk	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::GSE19578::20479398-pau-HGG020&&DIPG_CS_0400
+pgxcs-kftvnfp7	pgxbs-kftvgmzv	pgxind-kftx2dym	EFO:0001456	DNA assay			EDAM:operation_3961	Copy number variation detection					pgxcs::GSE19578::20479398-pau-HGG022&&DIPG_CS_0900
