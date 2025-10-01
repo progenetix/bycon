@@ -124,14 +124,14 @@ for v in data:
 
 	import_variants.append(i_v)
 
-# prjsonnice(import_variants)
+prjsonnice(import_variants)
 
 print(f'... {len(data)} lines were read in')
 print(f'... {len(ids["analyses_with_alleles"])} analyses were labeled as "Allele" before')
 print(f'... {len(import_ids)} match existing legacy ids')
 print(f'==>> {len(import_variants)} were converted')
 
-print(f'==>> missing legacy ids: {missing_lids}')
+# print(f'==>> missing legacy ids: {missing_lids}')
 
 
 
