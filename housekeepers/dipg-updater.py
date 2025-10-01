@@ -96,8 +96,11 @@ for k, v in ids.items():
 import_ids = ids["individuals"].keys()
 import_variants = []
 
+missing_lids = set()
+
 for v in data:
-	if not (legacy_id := l.get("Tumor_Sample_Barcode", "___none___")) in import_ids:
+	if not (legacy_id := v.get("Tumor_Sample_Barcode", "___none___")) in import_ids:
+		missing_lids.add(legacy_id)
 		continue
 
 	ref = v.get("Reference_Allele")
@@ -127,6 +130,8 @@ print(f'... {len(data)} lines were read in')
 print(f'... {len(ids["analyses_with_alleles"])} analyses were labeled as "Allele" before')
 print(f'... {len(import_ids)} match existing legacy ids')
 print(f'==>> {len(import_variants)} were converted')
+
+print(f'==>> missing legacy ids: {missing_lids}')
 
 
 
