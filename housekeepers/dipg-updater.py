@@ -37,12 +37,17 @@ ds_id = ByconDatasets().get_dataset_ids()[0]
 dsr = ByconResultSets().datasetsResults()
 
 ind_ids = dsr[ds_id]['individuals.id']["target_values"]
+print(f'... {len(ind_ids)} individuals were found')
+
 
 mongo_client = MongoClient(host=DB_MONGOHOST)[ds_id]
 ind_coll = mongo_client["individuals"]
 bs_coll = mongo_client["biosamples"]
 ana_coll = mongo_client["analyses"]
 var_coll = mongo_client["variants"]
+
+dipg_inds = ind_coll.distinct("id", {"info.legacy_ids": {"$regex": r'DIPG'}})
+print(f'... {len(dipg_inds)} individuals were found through DIPG search')
 
 ids = {
 	"individuals": {},
@@ -66,7 +71,7 @@ for ind_id in ind_ids:
 	# bs_ids = bs_coll.distinct("id", {"individual_id": ind_id, "histological_diagnosis.id": "NCIT:C4822"})
 	bs = list(bios)[-1]
 	bs_id = bs.get("id")
-	print(f'histo: {bs["histological_diagnosis"]}')
+	# print(f'histo: {bs["histological_diagnosis"]}')
 	# print(f'{phggid}: {bs_id}')
 	ids["biosamples"].add(bs_id)
 	anas = list(ana_coll.find({"biosample_id": bs_id}))
@@ -75,7 +80,7 @@ for ind_id in ind_ids:
 	for ana in anas:
 		ana_id = ana.get("id")
 		ids["analyses"].add(ana_id)
-		print(f'{ana_id}: {ana.get("operation", {}).get("id", "****")}')
+		# print(f'{ana_id}: {ana.get("operation", {}).get("id", "****")}')
 		v_types = var_coll.distinct("type", {"analysis_id": ana_id})
 		# print(f'{phggid}: {bs_id} - {ana_id}: {v_types}')
 		if "Allele" in v_types:
@@ -116,7 +121,7 @@ for v in data:
 
 	import_variants.append(i_v)
 
-prjsonnice(import_variants)
+# prjsonnice(import_variants)
 
 print(f'... {len(data)} lines were read in')
 print(f'... {len(ids["analyses_with_alleles"])} analyses were labeled as "Allele" before')
