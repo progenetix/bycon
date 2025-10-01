@@ -11,6 +11,7 @@ from bycon import *
 from byconServiceLibs import assert_single_dataset_or_exit, ByconTSVreader, ByconDatatableExporter
 
 # ./housekeepers/_dipg-updater.py -d progenetix --filters "pgx:cohort-DIPG" --requestEntityPathId individuals --debugMode 0
+# http://progenetix.test/services/sampletable/?responseEntityPathId=individuals&filters=pgx:cohort-DIPG&limit=0
 
 seqrepo_rest_service_url = 'seqrepo+file:///Users/Shared/seqrepo/2024-12-20'
 seqrepo_dataproxy = create_dataproxy(uri=seqrepo_rest_service_url)
@@ -67,12 +68,12 @@ for ind_id in ind_ids:
 		continue
 	ids["individuals"].update({phggid: ind_id})
 
-	bios = bs_coll.find({"individual_id": ind_id, "histological_diagnosis.id": {"$ne": "NCIT:C132256"}})
+	bios = list(bs_coll.find({"individual_id": ind_id, "histological_diagnosis.id": {"$ne": "NCIT:C132256"}}))
 	# bs_ids = bs_coll.distinct("id", {"individual_id": ind_id, "histological_diagnosis.id": "NCIT:C4822"})
 	bs = list(bios)[-1]
 	bs_id = bs.get("id")
 	# print(f'histo: {bs["histological_diagnosis"]}')
-	# print(f'{phggid}: {bs_id}')
+	# print(f'{phggid}: {list(bios)}')
 	ids["biosamples"].add(bs_id)
 	anas = list(ana_coll.find({"biosample_id": bs_id}))
 	if len(anas) < 1:
