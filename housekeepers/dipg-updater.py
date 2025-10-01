@@ -4,10 +4,10 @@ from datetime import datetime
 from os import path, pardir
 from pymongo import MongoClient
 
-# from vrs_translator import AlleleTranslator
 from ga4gh.vrs.dataproxy import create_dataproxy
 
 from bycon import *
+from vrs_translator import AlleleTranslator
 from byconServiceLibs import assert_single_dataset_or_exit, ByconTSVreader, ByconDatatableExporter
 
 # ./housekeepers/_dipg-updater.py -d progenetix --filters "pgx:cohort-DIPG" --requestEntityPathId individuals --debugMode 0
@@ -106,7 +106,7 @@ for v in data:
 	ref = v.get("Reference_Allele")
 	# ref = ''.join(["N" for char in ref])
 
-	gnomad_string = f'{v.get("Chromosome")}-{v.get("Start_Position")}-{ref}-{v.get("Tumor_Seq_Allele")}'
+	gnomad_string = f'chr{v.get("Chromosome")}-{v.get("Start_Position")}-{ref}-{v.get("Tumor_Seq_Allele")}'
 
 	vrs_v = vrs_allele_translator.translate_from(gnomad_string, "gnomad", require_validation=False)
 	vrs_v = decamelize(vrs_v.model_dump(exclude_none=True))
