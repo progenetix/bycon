@@ -4,10 +4,10 @@ from datetime import datetime
 from os import path, pardir
 from pymongo import MongoClient
 
-# from vrs_translator import AlleleTranslator
 from ga4gh.vrs.dataproxy import create_dataproxy
 
 from bycon import *
+from vrs_translator import AlleleTranslator
 from byconServiceLibs import assert_single_dataset_or_exit, ByconTSVreader, ByconDatatableExporter
 
 # ./housekeepers/_dipg-updater.py -d progenetix --filters "pgx:cohort-DIPG" --requestEntityPathId individuals --debugMode 0
@@ -97,14 +97,17 @@ for k, v in ids.items():
 import_ids = ids["individuals"].keys()
 import_variants = []
 
+missing_lids = set()
+
 for v in data:
-	if not (legacy_id := l.get("Tumor_Sample_Barcode", "___none___")) in import_ids:
+	if not (legacy_id := v.get("Tumor_Sample_Barcode", "___none___")) in import_ids:
+		missing_lids.add(legacy_id)
 		continue
 
 	ref = v.get("Reference_Allele")
 	# ref = ''.join(["N" for char in ref])
 
-	gnomad_string = f'{v.get("Chromosome")}-{v.get("Start_Position")}-{ref}-{v.get("Tumor_Seq_Allele")}'
+	gnomad_string = f'chr{v.get("Chromosome")}-{v.get("Start_Position")}-{ref}-{v.get("Tumor_Seq_Allele")}'
 
 	vrs_v = vrs_allele_translator.translate_from(gnomad_string, "gnomad", require_validation=False)
 	vrs_v = decamelize(vrs_v.model_dump(exclude_none=True))
@@ -122,12 +125,14 @@ for v in data:
 
 	import_variants.append(i_v)
 
-# prjsonnice(import_variants)
+prjsonnice(import_variants)
 
 print(f'... {len(data)} lines were read in')
 print(f'... {len(ids["analyses_with_alleles"])} analyses were labeled as "Allele" before')
 print(f'... {len(import_ids)} match existing legacy ids')
 print(f'==>> {len(import_variants)} were converted')
+
+# print(f'==>> missing legacy ids: {missing_lids}')
 
 
 
