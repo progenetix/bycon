@@ -3,7 +3,7 @@ from copy import deepcopy
 from deepmerge import always_merger
 from humps import decamelize
 
-from ga4gh.vrs.dataproxy import create_dataproxy
+from ga4gh.vrs.dataproxy import create_dataproxy, SequenceProxy
 
 from vrs_translator import AdjacencyTranslator, AlleleTranslator, CnvTranslator
 
@@ -53,10 +53,10 @@ class ByconVariant:
         self.pgx_variant = ByconSchemas("pgxVariant", "").get_schema_instance()
 
         seqrepo_rest_service_url = 'seqrepo+file:///Users/Shared/seqrepo/2024-12-20'
-        seqrepo_dataproxy = create_dataproxy(uri=seqrepo_rest_service_url)
-        self.vrs_allele_translator = AlleleTranslator(data_proxy=seqrepo_dataproxy)
-        self.vrs_cnv_translator = CnvTranslator(data_proxy=seqrepo_dataproxy, identify=False)
-        self.vrs_adjacency_translator = AdjacencyTranslator(data_proxy=seqrepo_dataproxy, identify=False)
+        self.seqrepo_dataproxy = create_dataproxy(uri=seqrepo_rest_service_url)
+        self.vrs_allele_translator = AlleleTranslator(data_proxy=self.seqrepo_dataproxy)
+        self.vrs_cnv_translator = CnvTranslator(data_proxy=self.seqrepo_dataproxy, identify=False)
+        self.vrs_adjacency_translator = AdjacencyTranslator(data_proxy=self.seqrepo_dataproxy, identify=False)
 
 
     # -------------------------------------------------------------------------#
@@ -90,6 +90,16 @@ class ByconVariant:
             self.pgx_variant.pop("adjoined_sequences", None)
         self.pgx_variant.pop("variant_type", None)
         return self.pgx_variant
+
+
+    # -------------------------------------------------------------------------#
+
+    def referenceBases(self, refseq, pos_range):
+        refseq = re.sub("refseq:", "", refseq)
+        seq_proxy = SequenceProxy(self.seqrepo_dataproxy, refseq)
+        if type(pos_range) is int:
+            return seq_proxy[pos_range]
+        return seq_proxy[pos_range[0]:pos_range[1]]
 
 
     # -------------------------------------------------------------------------#
@@ -180,6 +190,8 @@ class ByconVariant:
 
 
     # -------------------------------------------------------------------------#
+    # ----------------------------- private -----------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __vrs_allele(self):
         """
@@ -192,12 +204,23 @@ class ByconVariant:
         v_s = v.get("variant_state", {})
         s_id = l.get("sequence_id")
         chro = l.get("chromosome")
-        pgxseg_l = self.__pgxseg_line().replace("\t", "::")
+        # pgxseg_l = self.__pgxseg_line().replace("\t", "::")
         
-        prdbug(v)
-        prdbug(f'pgxseg line: {pgxseg_l}')
+        gnomad_chr = chro
+        gnomad_pos = l.get("start") + 1
+        gnomad_ref = v.get("reference_sequence", "")
+        gnomad_alt = v.get("sequence", "")
 
-        vrs_v = self.vrs_allele_translator.translate_from(pgxseg_l, "pgxseg", require_validation=False)
+        if len(gnomad_ref) == 0 or len(gnomad_alt) == 0:
+            gnomad_pos -= 1
+            pad_base = self.referenceBases(s_id, gnomad_pos - 1)
+            gnomad_ref = f'{pad_base}{gnomad_ref}'
+            gnomad_alt = f'{pad_base}{gnomad_alt}'
+        gnomad_string = f'chr{gnomad_chr}-{gnomad_pos}-{gnomad_ref}-{gnomad_alt}'
+        prdbug(f'gnomad_string: {gnomad_string}')
+
+        # vrs_v = self.vrs_allele_translator.translate_from(pgxseg_l, "pgxseg", require_validation=False)
+        vrs_v = self.vrs_allele_translator.translate_from(gnomad_string, "gnomad", require_validation=False)
         self.vrs_variant = decamelize(vrs_v.model_dump(exclude_none=True))
 
         # legacy
@@ -279,6 +302,7 @@ class ByconVariant:
             line.append(v)
         return "\t".join(line)
 
+
     # -------------------------------------------------------------------------#
 
     def __vrs_adjacency(self):
@@ -330,8 +354,6 @@ class ByconVariant:
 
 
     # -------------------------------------------------------------------------#
-    # ----------------------------- private -----------------------------------#
-    # -------------------------------------------------------------------------#
 
     def __create_canonical_variant(self):
         self.byc_variant.update({"errors": []})
@@ -372,10 +394,8 @@ class ByconVariant:
         if state_id not in vt_defs.keys():   
             state_id = self.variant_types_map.get(variant_type, "___none___")
 
-        prdbug(state_id)
-
         if (state_defs := vt_defs.get(state_id)):
-            prdbug(state_defs["variant_state"])
+            # prdbug(state_defs["variant_state"])
             v.update({
                 "variant_state": state_defs["variant_state"],
                 "variant_dupdel": state_defs.get("DUPDEL"),
