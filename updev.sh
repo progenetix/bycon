@@ -16,7 +16,7 @@ pip3 install $BY --no-index --no-build-isolation --break-system-packages
 # generating some documentation source pages, e.g. for parameters
 ./markdowner.py
 
-# installation of beacon and sevices apps into the webserver locations
+# installation of beacon and services apps into the webserver locations
 # this also asks for website generation
 ./install.py
 

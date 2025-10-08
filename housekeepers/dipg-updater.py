@@ -4,13 +4,14 @@ from datetime import datetime
 from os import path, pardir
 from pymongo import MongoClient
 
-# from vrs_translator import AlleleTranslator
 from ga4gh.vrs.dataproxy import create_dataproxy
 
 from bycon import *
+from vrs_translator import AlleleTranslator
 from byconServiceLibs import assert_single_dataset_or_exit, ByconTSVreader, ByconDatatableExporter
 
 # ./housekeepers/_dipg-updater.py -d progenetix --filters "pgx:cohort-DIPG" --requestEntityPathId individuals --debugMode 0
+# http://progenetix.test/services/sampletable/?responseEntityPathId=individuals&filters=pgx:cohort-DIPG&limit=0
 
 seqrepo_rest_service_url = 'seqrepo+file:///Users/Shared/seqrepo/2024-12-20'
 seqrepo_dataproxy = create_dataproxy(uri=seqrepo_rest_service_url)
@@ -67,12 +68,12 @@ for ind_id in ind_ids:
 		continue
 	ids["individuals"].update({phggid: ind_id})
 
-	bios = bs_coll.find({"individual_id": ind_id, "histological_diagnosis.id": {"$ne": "NCIT:C132256"}})
+	bios = list(bs_coll.find({"individual_id": ind_id, "histological_diagnosis.id": {"$ne": "NCIT:C132256"}}))
 	# bs_ids = bs_coll.distinct("id", {"individual_id": ind_id, "histological_diagnosis.id": "NCIT:C4822"})
 	bs = list(bios)[-1]
 	bs_id = bs.get("id")
 	# print(f'histo: {bs["histological_diagnosis"]}')
-	# print(f'{phggid}: {bs_id}')
+	# print(f'{phggid}: {list(bios)}')
 	ids["biosamples"].add(bs_id)
 	anas = list(ana_coll.find({"biosample_id": bs_id}))
 	if len(anas) < 1:
@@ -106,7 +107,7 @@ for v in data:
 	ref = v.get("Reference_Allele")
 	# ref = ''.join(["N" for char in ref])
 
-	gnomad_string = f'{v.get("Chromosome")}-{v.get("Start_Position")}-{ref}-{v.get("Tumor_Seq_Allele")}'
+	gnomad_string = f'chr{v.get("Chromosome")}-{v.get("Start_Position")}-{ref}-{v.get("Tumor_Seq_Allele")}'
 
 	vrs_v = vrs_allele_translator.translate_from(gnomad_string, "gnomad", require_validation=False)
 	vrs_v = decamelize(vrs_v.model_dump(exclude_none=True))

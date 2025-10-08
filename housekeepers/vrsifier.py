@@ -11,6 +11,9 @@ from byconServiceLibs import (
     write_log
 )
 
+from ga4gh.vrs.dataproxy import create_dataproxy, SequenceProxy
+
+
 """
 
 """
@@ -49,11 +52,17 @@ BV = ByconVariant()
 for v in var_coll.find(q):
     if not BYC["TEST_MODE"]:
         bar.next()
+
+    # if len(v.get("reference_sequence", "")) != 0 and len(v.get("sequence", "")) != 0:
+    #     continue
+
     i += 1
     if BYC["TEST_MODE"] and i > BYC_PARS.get("test_mode_count"):
       break
+
     _id = v.get("_id")
     byc_id = f'bycvar-{_id}'
+
     vrs_v = BV.vrsVariant(v)
     if (e := vrs_v.get("ERROR")):
         print(e)
