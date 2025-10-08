@@ -25,7 +25,7 @@ def main():
     # collecting the actions
     todos = {
         "mongodb_index_creation": input("Check & refresh MongoDB indexes?\n(y|N): "),
-        "individual_age_days": input("Recalculate `age_days` in individuals?\n(y|N): "),
+        "individual_times_days": input("Recalculate `age_days` and `followup_days` in individuals?\n(y|N): "),
         "analyses_labels": input("Create/update `label` field for analyses, from biosamples?\n(y|N): "),
         "variant_lengths": input("Recalculate `info.var_length` in variants?\n(y|N): "),
         "update_cs_statusmaps": input(f'Update statusmaps in `analyses` for {ds_id}?\n(y|N): '),
@@ -218,7 +218,7 @@ def main():
     ind_coll = data_db["individuals"]
 
     # age_days
-    if "y" in todos.get("individual_age_days", "n").lower():
+    if "y" in todos.get("individual_times_days", "n").lower():
         query = {"index_disease.onset.age": {"$regex": '^P'}}
         no = ind_coll.count_documents(query)
         bar = Bar(f"=> `age_days` ...", max = no, suffix='%(percent)d%%'+" of "+str(no) )
@@ -235,6 +235,23 @@ def main():
         bar.finish()
 
         print(f'=> {age_c} individuals received an `index_disease.onset.age_days` value.')
+
+        query = {"index_disease.followup_time": {"$regex": '^P'}}
+        no = ind_coll.count_documents(query)
+        bar = Bar(f"=> `followup_days` ...", max = no, suffix='%(percent)d%%'+" of "+str(no) )
+
+        f_c = 0
+        for ind in ind_coll.find(query):
+            followup_days = days_from_iso8601duration(ind["index_disease"]["followup_time"])
+            if followup_days is False:
+                continue
+            ind_coll.update_one({"_id": ind["_id"]}, {"$set": {"index_disease.followup_days": followup_days}})
+            f_c += 1
+            bar.next()
+
+        bar.finish()
+
+        print(f'=> {f_c} individuals received an `index_disease.followup_days` value.')
 
     #>----------------------- / individuals ----------------------------------<#
 

@@ -12,6 +12,19 @@ $defs:
     examples:
       - 'ageAtDiagnosis:<=P18Y'
 
+  followupTime:
+    id: followupTime
+    type: alphanumeric
+    format: iso8601duration
+    name: Followup Time
+    scope: individuals
+    entity: individual
+    db_key: index_disease.followup_days
+    pattern: '^followupTime:.+?$'
+    collationed: False
+    examples:
+      - 'followupTime:>=P12M'
+
   EDAMoperation:
     description: >-
       Genomic analysis type, e.g. variant calling, copy number variation detection

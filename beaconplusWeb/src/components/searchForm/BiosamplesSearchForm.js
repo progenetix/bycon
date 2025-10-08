@@ -56,6 +56,7 @@ function useIsFilterlogicWarningVisible(watch) {
   const allTermsFilters = watch("allTermsFilters")
   const sex = watch("sex")
   const materialtype = watch("materialtype")
+  const freeFilters = watch("freeFilters")
   const filters = makeFilters({
     allTermsFilters,
     bioontology,
@@ -63,7 +64,8 @@ function useIsFilterlogicWarningVisible(watch) {
     clinicalClasses,
     cohorts,
     sex,
-    materialtype
+    materialtype,
+    freeFilters
   })
   return filterLogic === "AND" && filters.length > 1
 }
@@ -444,6 +446,7 @@ export function BeaconSearchForm({
               }
             />
           </div>
+          <InputField {...parameters.freeFilters} {...fieldProps} />
           <InputField {...parameters.accessid} {...fieldProps} />
           {!parameters.geoCity.isHidden && (
             <div className="columns my-0">

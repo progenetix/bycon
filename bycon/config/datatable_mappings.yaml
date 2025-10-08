@@ -530,6 +530,11 @@ $defs:
         type: string
         db_key: index_disease.followup_time
         indexed: True
+      index_disease_followup_days:
+        type: number
+        db_key: index_disease.followup_time
+        indexed: True
+        computed: True
       index_disease_followup_state_id:
         type: string
         db_key: index_disease.followup_state.id

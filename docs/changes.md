@@ -6,6 +6,18 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-10-08: (v2.6.0)
+
+* further work on VRSification
+* some temporary fixes for the `vrs_translator.py` to allow
+  processing of some generic Progenetix variants, in combination
+  with (temporary) `vrsifier.py` housekeeping script etc.
+* (re-)adding an option to query follow-up times, supported by a calculated 
+  `index_disease.followup_days` field in the database
+* adding a `freeFilters` text field to the front end (which 
+  is especially useful for alphanumerics such as `followupTime:>P12M,followupTime:<=P13M`)
+
+
 ### 2025-08-22: (v2.6.0+pre-VRSv2-adoption)
 
 **Breaking Change**

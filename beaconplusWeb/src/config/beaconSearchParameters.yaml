@@ -108,6 +108,13 @@ parameters:
       value: AND
     - label: OR
       value: OR
+
+  freeFilters:
+    infoText: Free text input for filter terms (one or more comma-concatenated).
+    isHidden: false
+    label: Free Text Filter(s)
+    type: string
+
   geneId:
     infoText: One or more gene symbols (HUGO), e.g. "TP53" or "CDKN2A,KRAS".
     isHidden: true
