@@ -53,9 +53,11 @@ http://progenetix.test/services/sampletable?filters=NCIT:C3697
 
 http://progenetix.test/services/sampleplots/pgxbs-kftvkafc/?plotType=samplesplot&plotPars=plot_chros=3,5,6,14
 
-
+http://progenetix.test/services/sampleplots/?referenceName=refseq:NC_000009.12&start=21000001,21975098&end=21967753,23000000&variantType=EFO:0020073&filters=NCIT:C3058&plotPars=plotChros:7,9,10::plotGeneSymbols:EGFR,CDKN2A&limit=0
 
 http://progenetix.test/services/ontologymaps?filters=NCIT:C105555
+
+http://progenetix.test/services/sampleplots/?filters=NCIT:C4872,EFO:0030041,followupTime:>=P60M&plotPars=plotChros:1,8,17::plotGeneSymbols:MYC,ERBB2,TP53&limit=1000
 
 
 ## Not Working

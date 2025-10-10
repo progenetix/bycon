@@ -99,11 +99,12 @@ def select_this_server() -> str:
 
 ################################################################################
 
-def days_from_iso8601duration(iso8601duration):
+def days_from_iso8601duration(iso8601duration=""):
     """A simple function to convert ISO8601 duration strings to days. This is
     potentially lossy since it does not include time parsing."""
 
     # TODO: check format
+    is_isodate_duration = is_isodate_duration.upper()
     is_isodate_duration = re.match(r'^P\d+?[YMD](\d+?[M])?(\d+?[D])?', iso8601duration)
     if not is_isodate_duration:
         return False

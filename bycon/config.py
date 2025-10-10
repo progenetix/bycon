@@ -6,8 +6,8 @@ import socket
 pkg_path = path.dirname( path.abspath(__file__) )
 
 """
-Global variables
-Potentially in the environment:
+Runtime global variables that might be modified through providing them
+in the environment:
 
 DATABASE_NAMES
 DB_MONGOHOST
@@ -18,8 +18,8 @@ ENV = environ.get('HTTP_HOST', "___shell___")
 HOSTNAME = environ.get('HOSTNAME', socket.gethostname())
 
 PKG_PATH = pkg_path
-CONF_PATH = path.join( pkg_path, "config")
-LIB_PATH = path.join( pkg_path, "lib")
+CONF_PATH = path.join(pkg_path, "config")
+LIB_PATH = path.join(pkg_path, "lib")
 
 NO_PARAM_VALUES = ["none", "null", "undefined"]
 
@@ -29,8 +29,7 @@ PROJECT_PATH = path.join(CALLER_PATH, pardir)
 LOC_PATH = path.join(PROJECT_PATH, "local")
 
 REQUEST_PATH_ROOT = "beacon"
-
-if "services" in LOC_PATH or "byconaut" in LOC_PATH:
+if "services" in LOC_PATH:
     REQUEST_PATH_ROOT = "services"
 
 #------------------------------------------------------------------------------#
@@ -79,12 +78,17 @@ BYC = {
   # ..._mappings / ..._definitions are generated from YAML files & should stay static
 
   "argument_definitions": {"$defs":{}},
+  "authorizations": {},
   "dataset_definitions": {},
   "datatable_mappings": {},
   "entity_defaults": {"info":{}},
+  "env_paths": {},
   "filter_definitions": {"$defs":{}},
   "handover_definitions": {},
   "interval_definitions": {},
+  "plot_defaults": {},
+  "request_meta": {},
+  "service_config": {},
   "test_queries": {},
   "variant_request_definitions": {},
   "variant_type_definitions": {},
@@ -93,18 +97,13 @@ BYC = {
     "argument_definitions",
     "authorizations",
     "dataset_definitions",
-    "filter_definitions",
     "env_paths",
+    "filter_definitions",
     "datatable_mappings",
     "test_queries",
     "plot_defaults"
   ],
 
-  "authorizations": {},
-  "env_paths": {},
-  "plot_defaults": {},
-  "request_meta": {},
-  "service_config": {},
 
   # -------------------------------------------------------------------------- #
 

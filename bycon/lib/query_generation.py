@@ -789,8 +789,8 @@ class ByconQuery():
             # iso age w/ pre-calculated days field...
             if "alphanumeric" in f_info.get("type", "ontology"):
                 prdbug(f'__query_from_filters ... alphanumeric: {f_info["id"]}')
-                if re.match(r'^(\w+):([<>=]+?)?(\w[\w.]+?)$', f_info["id"]):
-                    f_class, comp, val = re.match(r'^(\w+):([<>=]+?)?(\w[\w.]+?)$', f_info["id"]).group(1, 2, 3)
+                if re.match(r'^(\w+):?([<>=]+?)?(\w[\w.]+?)$', f_info["id"]):
+                    f_class, comp, val = re.match(r'^(\w+):?([<>=]+?)?(\w[\w.]+?)$', f_info["id"]).group(1, 2, 3)
                     if "iso8601duration" in f_info.get("format", "___none___"):
                         val = days_from_iso8601duration(val)
                     f_lists[f_entity][f_field].append(self.__mongo_comparator_query(comp, val))

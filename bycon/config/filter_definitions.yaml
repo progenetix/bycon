@@ -1,13 +1,14 @@
 $defs:
+
   age:
-    id: NCIT_C156420
+    id: ageAtDiagnosis
     type: alphanumeric
     format: iso8601duration
     name: Age at diagnosis
     scope: individuals
     entity: individual
     db_key: index_disease.onset.age_days
-    pattern: '^ageAtDiagnosis:.+?$'
+    pattern: '^ageAtDiagnosis:?[<>=]+P\d\w+?$'
     collationed: False
     examples:
       - 'ageAtDiagnosis:<=P18Y'
@@ -20,7 +21,7 @@ $defs:
     scope: individuals
     entity: individual
     db_key: index_disease.followup_days
-    pattern: '^followupTime:.+?$'
+    pattern: '^followupTime:?[<>=]+P\d\w+?$'
     collationed: False
     examples:
       - 'followupTime:>=P12M'
