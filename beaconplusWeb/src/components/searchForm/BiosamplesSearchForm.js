@@ -763,7 +763,8 @@ function validateForm(formValues) {
       !variantQueryDigests &&
       !cytoBands &&
       !variantType &&
-      !geneId&& !aminoacidChange &&
+      !geneId &&
+      !aminoacidChange &&
       !genomicAlleleShortForm &&
       !bioontology &&
       !referenceid &&

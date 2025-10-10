@@ -153,6 +153,7 @@ export function makeFilters({
     ...(referenceid ?? []),
     ...(cohorts ? [cohorts] : []),
     ...(analysisOperation ? [analysisOperation] : []),
+    ...(materialtype ? [materialtype] : []),
     ...(sex ? [sex] : []),
     ...(ageAtDiagnosis ? ["ageAtDiagnosis:"+ageAtDiagnosis] : []),
     ...(followupTime ? ["followupTime:"+followupTime] : []),
