@@ -11,6 +11,7 @@ in the environment:
 
 DATABASE_NAMES
 DB_MONGOHOST
+BYC_LOCAL_CONF ==> LOC_PATH
 
 """
 
@@ -26,10 +27,12 @@ NO_PARAM_VALUES = ["none", "null", "undefined"]
 # path of the calling script is used to point to a local config directory
 CALLER_PATH = path.dirname( path.abspath(sys.argv[0]))
 PROJECT_PATH = path.join(CALLER_PATH, pardir)
-LOC_PATH = path.join(PROJECT_PATH, "local")
+
+# local dataset configurations etc.
+LOC_PATH = environ.get('BYC_LOCAL_CONF', path.join(PROJECT_PATH, "local"))
 
 REQUEST_PATH_ROOT = "beacon"
-if "services" in LOC_PATH:
+if "services" in PROJECT_PATH:
     REQUEST_PATH_ROOT = "services"
 
 #------------------------------------------------------------------------------#
@@ -94,9 +97,7 @@ BYC = {
   "variant_type_definitions": {},
 
   "loc_mod_pars": [
-    "argument_definitions",
     "authorizations",
-    "dataset_definitions",
     "env_paths",
     "filter_definitions",
     "datatable_mappings",

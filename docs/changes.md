@@ -6,6 +6,20 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-10-13: (v2.6.1):
+
+* proper parsing of age and followup filters (`ageAtDiagnosis`, `followupTime`)
+    - added the respective fields to the query form, additionally to the `freeFilters`
+      test option from 2.6.0
+* some reconfiguration of configuration processing
+    - add the config readers directly to `__init__.py`, removing `read_specs.py`
+    - now `domain_definitions` directory in `bycon/local/` with single file per
+      base domain; `localhost.yaml` serves for defaults
+    - now `dataset_definitions` directory in `bycon/local/` with single file per
+      dataset
+    - added environmental variable `BYC_LOCAL_CONF` to enable free placement
+      of the `local` directory outside of the project
+
 ### 2025-10-08: (v2.6.0)
 
 * further work on VRSification
