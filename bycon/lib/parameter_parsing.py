@@ -434,10 +434,11 @@ class ByconEntities:
         The default entyity id is mapped to the path id and its aliases.
         """
         for e, e_d in self.entity_defaults.items():
+            e_id = e_d.get("id", e)
             if (p_id := e_d.get("request_entity_path_id")):
-                self.dealiased_path_ids.update({p_id: e})
+                self.dealiased_path_ids.update({p_id: e_id})
             for p_a_s in e_d.get("request_entity_path_aliases", []):
-                self.dealiased_path_ids.update({p_a_s: e})
+                self.dealiased_path_ids.update({p_a_s: e_id})
         if self.request_path_id_par in self.dealiased_path_ids.keys():
             self.request_entity_path_id = self.request_path_id_par
         else:

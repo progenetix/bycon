@@ -85,7 +85,7 @@ class MultiQueryResponses:
 
 class BeaconResponseMeta:
     def __init__(self, data_response=None):
-        self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
+        self.beacon_schema = BYC["response_entity"].get("defaultSchema", "___none___")
         self.entity_defaults = BYC.get("entity_defaults", {})
         self.response_meta = ByconSchemas("beaconResponseMeta", "").get_schema_instance()
         self.returned_granularity = BYC.get("returned_granularity", "boolean")
@@ -215,7 +215,7 @@ class BeaconInfoResponse:
     The responses are then provided by the dedicated methods
     """
     def __init__(self):
-        self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
+        self.beacon_schema = BYC["response_entity"].get("defaultSchema", "___none___")
         self.response_entity_id = BYC.get("response_entity_id", "info")
         self.entity_defaults = BYC.get("entity_defaults", {})
         self.data_response = ByconSchemas("beaconInfoResponse", "").get_schema_instance()
@@ -281,7 +281,7 @@ class BeaconInfoResponse:
         beacon_schemas = []
         for e_t, e_d in self.entity_defaults.items():
             if e_d.get("is_beacon_entity", False) is True and e_t not in ets:
-                beacon_schemas.append(e_d.get("beacon_schema", {}))
+                beacon_schemas.append(e_d.get("defaultSchema", {}))
                 ets.add(e_t)
             else:
                 prdbug(f'... skipping {e_t} schema')
@@ -297,7 +297,7 @@ class BeaconDataResponse:
         self.include_handovers = BYC_PARS.get("include_handovers", False)
         self.response_entity_id = BYC.get("response_entity_id")
         self.returned_granularity = BYC.get("returned_granularity", "boolean")
-        self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
+        self.beacon_schema = BYC["response_entity"].get("defaultSchema", "___none___")
         self.record_queries = {}
         self.response_schema = BYC.get("response_schema", "___none___")
         self.data_response = ByconSchemas(BYC["response_schema"], "").get_schema_instance()

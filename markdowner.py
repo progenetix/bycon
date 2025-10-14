@@ -90,8 +90,8 @@ the selected or granted `responseGranularity` please check `beaconResultsetsResp
         e_url = '{{config.reference_server_url}}/services/schemas' + f'/{r_s}'
         pp_fh.write(f'* **{{S}}** <{e_url}>\n\n')
         for e_d in beacon_ets[r_s].get("endpoints", []):
-            pp_fh.write(f'### {e_d["response_entity_id"]} @ `/{e_d["request_entity_path_id"]}`\n\n')
-            b_s = e_d.get("beacon_schema", {})
+            pp_fh.write(f'### {e_d.get("id", "__NA__")} @ `/{e_d["request_entity_path_id"]}`\n\n')
+            b_s = e_d.get("defaultSchema", {})
             b_s_s = b_s.get("schema", "")
             b_s_n = b_s_s.rstrip("/").split('/')[-1]
 

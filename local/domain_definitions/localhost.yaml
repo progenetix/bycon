@@ -7,8 +7,8 @@ entity_defaults:
   info:
     collection: Null
     response_schema: beaconInfoResponse
-    beacon_schema:
-      entity_type: configuration
+    defaultSchema:
+      id: configuration
       schema: https://progenetix.org/services/schemas/beaconInfoResults/
     content:
       beacon_id: org.progenetix
