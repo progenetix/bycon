@@ -1,5 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 endpointSets:
+
   datasetEndpoints:
     entryType: dataset
     openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/datasets
@@ -22,6 +23,7 @@ endpointSets:
       analysisLookup:
         returnedEntryType: analysis
         url: https://progenetix.org/beacon/datasets/{id}/analyses
+
   cohortEndpoints:
     entryType: cohort
     openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/cohorts
@@ -44,6 +46,7 @@ endpointSets:
       analysisLookup:
         returnedEntryType: analysis
         url: https://progenetix.org/beacon/cohorts/{id}/analyses
+
   genomicVariantEndpoints:
     entryType: genomicVariant
     openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/genomicVariations
@@ -63,6 +66,7 @@ endpointSets:
       runLookup:
         returnedEntryType: run
         url: https://progenetix.org/beacon/g_variants/{id}/runs
+
   phenopacketEndpoints:
     entryType: phenopacket
     openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/phenopackets
@@ -82,6 +86,7 @@ endpointSets:
       genomicVariantLookup:
         returnedEntryType: genomicVariant
         url: https://progenetix.org/beacon/phenopackets/{id}/g_variants
+
   individualEndpoints:
     entryType: individual
     openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/individuals
@@ -101,6 +106,7 @@ endpointSets:
       genomicVariantLookup:
         returnedEntryType: genomicVariant
         url: https://progenetix.org/beacon/individuals/{id}/g_variants
+
   biosampleEndpoints:
     entryType: biosample
     openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/biosamples
@@ -120,6 +126,7 @@ endpointSets:
       genomicVariantLookup:
         returnedEntryType: genomicVariant
         url: https://progenetix.org/beacon/biosamples/{id}/g_variants
+
   analysisEndpoints:
     entryType: analysis
     openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/analyses
@@ -139,6 +146,7 @@ endpointSets:
       genomicVariantLookup:
         returnedEntryType: genomicVariant
         url: https://progenetix.org/beacon/analyses/{id}/g_variants
+
   runEndpoints:
     entryType: run
     openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/runs
@@ -163,9 +171,18 @@ informationalEndpoints:
   info:
     entryType: info
     rootUrl: https://progenetix.org/beacon/info
-  apiInfo:
-    entryType: api
-    rootUrl: https://progenetix.org/beacon/api
+  beaconMap:
+    entryType: beaconMap
+    rootUrl: https://progenetix.org/beacon/map
+  configuration:
+    entryType: configuration
+    rootUrl: https://progenetix.org/beacon/configuration
+  configuration:
+    entryType: configuration
+    rootUrl: https://progenetix.org/beacon/configuration
+  entryType:
+    entryType: entryType
+    rootUrl: https://progenetix.org/beacon/entry_types
   filteringTerm:
     entryType: filteringTerm
     rootUrl: https://progenetix.org/beacon/filtering_terms

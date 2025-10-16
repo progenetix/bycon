@@ -288,7 +288,6 @@ entryTypes:
   info:
     description: >-
       Information about the beacon instance.
-    request_entity_path_id: info
     request_entity_path_aliases:
       - "/"
       - "service-info"
@@ -308,7 +307,6 @@ entryTypes:
   beaconMap:
     description: >-
       Map of the beacon instance configuration.
-    request_entity_path_id: map
     id: beaconMap
     collection: Null
     response_schema: beaconMapResponse
@@ -324,7 +322,6 @@ entryTypes:
   configuration:
     description: >-
       Information about the beacon instance configuration.
-    request_entity_path_id: configuration
     id: configuration
     collection: Null
     response_schema: beaconConfigurationResponse
@@ -338,7 +335,6 @@ entryTypes:
   ################################################################################
 
   entryType:
-    request_entity_path_id: entry_types
     id: entryType
     collection: Null
     response_schema: beaconEntryTypesResponse
