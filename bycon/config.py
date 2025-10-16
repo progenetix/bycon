@@ -71,13 +71,9 @@ BYC = {
 
   "BYC_DATASET_IDS": [],
 
-  "beacon_defaults": {
-    "defaults": {
-      "default_dataset_id": "examplez",
-      "test_domains": ["localhost"]
-    },
-  },
-
+  "default_dataset_id": "examplez",
+  "test_domains": ["localhost"],
+ 
   # ..._mappings / ..._definitions are generated from YAML files & should stay static
 
   "argument_definitions": {"$defs":{}},
@@ -159,8 +155,7 @@ BYC_UPPER = [
   "EFO",
   "UBERON",
   "NCIT",
-  "PATO",
-  "pubmed"
+  "PATO"
 ]
 
 ################################################################################

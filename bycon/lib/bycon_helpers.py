@@ -85,7 +85,7 @@ def select_this_server() -> str:
     s_uri = str(environ.get('SCRIPT_URI'))
     X_FORWARDED_PROTO = str(environ.get('HTTP_X_FORWARDED_PROTO'))
 
-    test_sites = BYC["beacon_defaults"].get("test_domains", [])
+    test_sites = BYC.get("test_domains", [])
 
     # for k in environ.keys():
     #     prdbug(f'{k} => {str(environ.get(k))}')

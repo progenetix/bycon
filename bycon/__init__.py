@@ -47,9 +47,18 @@ try:
         BYC.update({d: o})
 
     e_d = always_merger.merge(
-        BYC.get("entity_defaults", {}),
-        BYC.get("services_entity_defaults", {})
+        BYC.get("beacon_configuration", {}).get("entryTypes", {}),
+        BYC.get("services_configuration", {}).get("entryTypes", {})
     )
+
+    # This is WIP - mapping of entryTypes to endpoints using the default map
+    endpoints = BYC.get("beacon_map", {}).get("endpointSets", {})
+    infos = BYC.get("beacon_map", {}).get("informationalEndpoints", {})
+    for e in list(endpoints.values()) + list(infos.values()):
+        if (e_id := e.get("entryType")) and (e_path_id := e.get("rootUrl")):
+            if e_id in e_d:
+                e_path_id = e_path_id.strip("/").split("/")[-1].strip("/")
+                e_d[e_id].update({"request_entity_path_id": e_path_id})
 
     BYC.update({"entity_defaults": e_d})
 
@@ -66,22 +75,27 @@ try:
 
         # first general info & defaults
         if "localhost" in doms:
-            doms = doms.pop(doms.index("localhost"))
+            doms.pop(doms.index("localhost"))
             ld = load_yaml_empty_fallback(path.join(dom_df_p, "localhost.yaml" ))
+            if (dds_id := ld.get("default_dataset_id")):
+                BYC.update({"default_dataset_id": dds_id})
+            if (t_doms := ld.get("test_domains")):
+                BYC.update({"test_domains": t_doms})
             BYC.update({
-                "beacon_defaults": always_merger.merge(BYC.get("beacon_defaults", {}), ld.get("beacon_defaults", {})),
                 "entity_defaults": always_merger.merge(BYC.get("entity_defaults", {}), ld.get("entity_defaults", {}))
             })
 
         # server specific setting of defaults dataset ids etc.
         if not "___shell___" in ENV:
-            instance = None
             for dr in doms:
                 dd = load_yaml_empty_fallback(path.join(dom_df_p, f"{dr}.yaml" ))
-                ddoms = dd.get("domains", [])
+                ddoms = dd.get("domains", []) + dd.get("test_domains", [])
                 if environ.get("HTTP_HOST", "___none___") in ddoms:
+                    if (dds_id := dd.get("default_dataset_id")):
+                        BYC.update({"default_dataset_id": dds_id})
+                    if (t_doms := dd.get("test_domains")):
+                        BYC.update({"test_domains": t_doms})
                     BYC.update({
-                        "beacon_defaults": always_merger.merge(BYC.get("beacon_defaults", {}), dd.get("beacon_defaults", {})),
                         "entity_defaults": always_merger.merge(BYC.get("entity_defaults", {}), dd.get("entity_defaults", {}))
                     })
 
@@ -99,10 +113,6 @@ try:
         for d in [ Path(f).stem for f in ds_df_f ]:
             df = load_yaml_empty_fallback(path.join(ds_df_p, f'{d}.yaml' ))
             BYC["dataset_definitions"].update({d: always_merger.merge(BYC["dataset_definitions"].get(d, {}), df)})
-
-    if (defaults := BYC["beacon_defaults"].get("defaults", {})):
-        for d_k, d_v in defaults.items():
-            BYC.update( { d_k: d_v } )
 
     # / configuration ##########################################################
 

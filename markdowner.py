@@ -92,7 +92,7 @@ the selected or granted `responseGranularity` please check `beaconResultsetsResp
         for e_d in beacon_ets[r_s].get("endpoints", []):
             pp_fh.write(f'### {e_d.get("id", "__NA__")} @ `/{e_d["request_entity_path_id"]}`\n\n')
             b_s = e_d.get("defaultSchema", {})
-            b_s_s = b_s.get("schema", "")
+            b_s_s = b_s.get("referenceToSchemaDefinition", "")
             b_s_n = b_s_s.rstrip("/").split('/')[-1]
 
             description = ""

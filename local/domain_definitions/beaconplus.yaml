@@ -1,11 +1,9 @@
 domains:
   - beaconplus.progenetix.org
   - beaconplus.test
-beacon_defaults:
-  defaults:
-    default_dataset_id: examplez
-  test_domains:
-    - beaconplus.test
+default_dataset_id: examplez
+test_domains:
+  - beaconplus.test
 entity_defaults:
   info:
     content:

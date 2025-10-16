@@ -470,7 +470,6 @@ class ByconEntities:
                 # fallback to the standard "no different response entity" case
                 self.response_entity_path_id = self.request_entity_path_id
 
-
         self.response_entity_id = self.dealiased_path_ids.get(self.response_entity_path_id)
         self.response_entity = self.entity_defaults.get(self.response_entity_id)
 
@@ -625,8 +624,7 @@ class ByconDatasets:
             return
         if self.allow_default is False:
             return
-        defaults: object = BYC["beacon_defaults"].get("defaults", {})  
-        if (ds_id := str(defaults.get("default_dataset_id"))) not in self.database_names:
+        if (ds_id := str(BYC.get("default_dataset_id"))) not in self.database_names:
             return
         self.dataset_ids =  [ds_id]
 

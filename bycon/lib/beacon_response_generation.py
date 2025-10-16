@@ -247,8 +247,17 @@ class BeaconInfoResponse:
 
     def __populateInfoResponse(self):
         if "configuration" in self.response_entity_id:
-            c_f = ByconSchemas("beaconConfiguration").get_schema_file_path()
-            self.info_response_content = load_yaml_empty_fallback(c_f)
+            # c_f = ByconSchemas("beaconConfiguration").get_schema_file_path()
+            # self.info_response_content = load_yaml_empty_fallback(c_f)
+            self.info_response_content = BYC.get("beacon_configuration", {})
+            betks = []
+            for e_t, e_d in self.entity_defaults.items():
+                if e_d.get("is_beacon_entity", False) is True:
+                    betks.append(e_t)
+            bet = {}
+            for k in sorted(betks):
+                bet.update({k: self.entity_defaults.get(k, {})})
+            self.info_response_content.update({"entry_types": bet})
             return
         if "beaconMap" in self.response_entity_id:
             c_f = ByconSchemas("beaconMap").get_schema_file_path()

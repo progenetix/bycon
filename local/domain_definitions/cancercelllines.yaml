@@ -3,11 +3,9 @@ domains:
   - www.cancercelllines.org
   - staging.cancercelllines.org
   - cancercelllines.test
-beacon_defaults:
-  defaults:
-    default_dataset_id: cellz
-  test_domains:
-    - cancercelllines.test
+default_dataset_id: cellz
+test_domains:
+  - cancercelllines.test
 entity_defaults:
   info:
     content:

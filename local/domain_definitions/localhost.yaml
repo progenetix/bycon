@@ -1,8 +1,6 @@
 domains:
   - localhost
-beacon_defaults:
-  defaults:
-    default_dataset_id: progenetix
+default_dataset_id: progenetix
 entity_defaults:
   info:
     collection: Null

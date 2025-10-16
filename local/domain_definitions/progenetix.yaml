@@ -3,9 +3,7 @@ domains:
   - www.progenetix.org
   - staging.progenetix.org
   - progenetix.test
-beacon_defaults:
-  defaults:
-    default_dataset_id: progenetix
-  test_domains:
-    - progenetix.test
+default_dataset_id: progenetix
+test_domains:
+  - progenetix.test
 
