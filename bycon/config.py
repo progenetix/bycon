@@ -54,7 +54,8 @@ BYC_DBS = {
   "run_coll": "analyses",
   "phenopacket_coll": "individuals",
   "filteringTerm_coll": "collations",
-  "cohort_coll": "collations"
+  "cohort_coll": "collations",
+  "publication_coll": "publications"
 }
 
 MONGO_DISTINCT_STORAGE_LIMIT = 300000

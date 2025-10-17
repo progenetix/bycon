@@ -53,7 +53,7 @@ class ByconOpenAPI:
         self.this_server = select_this_server()
 
         self.beacon_eps = ["info", "dataset", "cohort", "genomicVariant", "analysis", "biosample", "individual", "filteringTerm"]
-        self.service_eps = ["collation", "intervalFrequencies", "geolocations", "publications"]
+        self.service_eps = ["collation", "intervalFrequencies", "geolocation", "publication"]
         self.collation_types = ["NCIT", "pubmed", "NCITsex", "icdom"]
         self.general_pars = ["skip", "limit", "requested_granularity"]
 

@@ -65,7 +65,6 @@ entryTypes:
 
   gene:
     id: gene
-    collection: genes
     response_schema: beaconCollectionsResponse
     defaultSchema:
       id: gene
@@ -74,7 +73,6 @@ entryTypes:
 
   geolocation:
     id: geolocation
-    collection: geolocs
     response_schema: beaconCollectionsResponse
     defaultSchema:
       id: GeoLocation
@@ -100,9 +98,8 @@ entryTypes:
     id: ontologymaps
     path_id_value_bycon_parameter: filters
 
-  publications:
+  publication:
     id: publication
-    collection: publications
     response_schema: beaconCollectionsResponse
     defaultSchema:
       id: publication
@@ -118,33 +115,31 @@ entryTypes:
 # Services that provide alternative outputs for  Beacon entities
 #
 # The response entity is derived from the `response_entity_path_alias` which
-# invokes the `response_entity_path_id` in the default entity definitions.
+# invokes the `response_entity_path_id`:
+#
+# `__root__/__request_entity_path_id__/__path_parameter__/__response_entity_path_id__/?query...`
 #
 ################################################################################
 
 
   pgxsegvariants:
     response_entity_path_alias: g_variants
-    response_schema: beaconResultsetsResponse
     # TODO: change? a bit non-standard... 
+    defaultSchema:
+      id: pgxseg
+      schema: https://docs.progenetix.org/file-formats/#pgxseg-sample-variant-files
     path_id_value_bycon_parameter: biosample_ids
 
   samplemap:
     response_entity_path_alias: biosamples
-    collection: biosamples
-    response_schema: beaconResultsetsResponse
     path_id_value_bycon_parameter: biosample_ids
 
   samplematrix:
     response_entity_path_alias: biosamples
-    collection: biosamples
-    response_schema: beaconResultsetsResponse
     path_id_value_bycon_parameter: biosample_ids
 
   sampletable:
     response_entity_path_alias: biosamples
-    collection: biosamples
-    response_schema: beaconResultsetsResponse
     path_id_value_bycon_parameter: biosample_ids
 
   sampleplots:
@@ -155,8 +150,6 @@ entryTypes:
     path_id_value_bycon_parameter: biosample_ids
 
   variantsbedfile:
-    collection: variants
-    response_schema: beaconResultsetsResponse
     response_entity_path_alias: g_variants
     defaultSchema:
       id: BED
@@ -165,8 +158,6 @@ entryTypes:
 
   vcfvariants:
     response_entity_path_alias: g_variants
-    collection: variants
-    response_schema: beaconResultsetsResponse
     defaultSchema:
       id: VCF
       schema: https://samtools.github.io/hts-specs/VCFv4.4.pdf

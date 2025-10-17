@@ -45,7 +45,7 @@ endpointSets:
     rootUrlAliases: 
       - https://progenetix.org/services/genes
 
-  geolocations:
+  geolocation:
     entryType: geolocation
     rootUrl: https://progenetix.org/services/geolocations
     rootUrlAliases: 
@@ -76,7 +76,7 @@ endpointSets:
     rootUrlAliases: 
       - https://progenetix.org/services/pgxseg
 
-  publications:
+  publication:
     entryType: publication
     rootUrl: https://progenetix.org/services/publications
 
