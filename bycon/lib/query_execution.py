@@ -13,7 +13,7 @@ class ByconDatasetResults():
         self.dataset_id = ds_id
         self.entity_defaults = BYC["entity_defaults"]
         self.res_ent_id = r_e_id = str(BYC.get("response_entity_id", "___none___"))
-        self.data_db = MongoClient(host=DB_MONGOHOST)[ds_id]
+        self.data_db = MongoClient(host=BYC_DBS["mongodb_host"])[ds_id]
 
         # This is bycon and model specific; in the default model there would also
         # be `run` (which has it's data here as part of `analysis`). Also in
@@ -26,8 +26,7 @@ class ByconDatasetResults():
         self.res_obj_defs = {}
         self.queries = {}
         for e in self.queried_entities:
-            e_d = self.entity_defaults.get(e, {})
-            c = e_d.get("collection", "___none___")
+            c = BYC_DBS.get(f"{e}_coll", "___none___")
             self.res_obj_defs.update({f'{c}.id': {
                 "collection": c,
                 "entity_id": e,
@@ -38,6 +37,7 @@ class ByconDatasetResults():
         self.id_responses = {}
 
         self.__generate_queries(BQ)
+        prdbug(f"... queries {self.queries}")
         self.__run_stacked_queries()
         self.__requery_to_aggregate()
         self.__set_dataset_results()
@@ -77,7 +77,7 @@ class ByconDatasetResults():
         c_n_s = self.data_db.list_collection_names()
         q_e_s = BQ.get("entities", {})
         for e, q_o in q_e_s.items():
-            c = q_o.get("collection", "___none___")
+            c = BYC_DBS.get(f"{e}_coll", "___none___")
             if (q := q_o.get("query")) and c in c_n_s:
                 self.queries.update({c: q})
 
@@ -206,8 +206,7 @@ class ByconDatasetResults():
                 BYC["WARNINGS"].append(f"Too many {e} values ({v_no}) for dataset {self.dataset_id}. Only the first {VARIANTS_RESPONSE_LIMIT} will be returned.")
 
             self.id_responses.update({id_p: {"values": v_ids, "count": v_no}})
-            e_d = self.entity_defaults.get(e, {})
-            c = e_d.get("collection", "___none___")
+            c = BYC_DBS.get(f"{e}_coll", "___none___")
             self.res_obj_defs.update({f'{c}.id': {
                 "collection": c,
                 "entity_id": e,

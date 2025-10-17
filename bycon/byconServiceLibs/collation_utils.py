@@ -6,7 +6,7 @@ from bycon import BYC, BYC_PARS
 ################################################################################
 
 def set_collation_types():
-    f_d_s = BYC["filter_definitions"].get("$defs", {})
+    f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
     cts = BYC_PARS.get("collation_types")
     if not cts:
         return
@@ -28,7 +28,7 @@ def set_collation_types():
 ################################################################################
 
 def hierarchy_from_file(ds_id, coll_type, pre_h_f):
-    f_d_s = BYC["filter_definitions"].get("$defs", {})
+    f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
     coll_defs = f_d_s[coll_type]
     hier = { }
     f = open(pre_h_f, 'r+')

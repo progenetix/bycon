@@ -6,14 +6,18 @@ local setup. At the v2.0 version these files are:
 
 Please see the notes in the installation documentation.
 
-#### `dataset_definitions.yaml`
+#### `dataset_definitions`
 
-Information about the datasets served by the one or more beacon instances (see below).
+Information about the datasets served by the one or more beacon instances.
 
-#### `instance_definitions.yaml`
+#### `domain_definitions`
 
 Beacon instance parameters; e.g. a single installation can serve several beacons
 with their own domains (independent of the datasets/databases).
+
+The definitions in `localhost.yaml` are read in first and then modified from the
+other definitions in case of online access (based on the detected `HTTP_HOST`
+value). 
 
 #### `env_paths.yaml`
 

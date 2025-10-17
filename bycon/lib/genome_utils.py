@@ -592,10 +592,10 @@ class GeneInfo:
     # -------------------------------------------------------------------------#
 
     def __gene_id_data(self, gene_id, single=True):
-        mongo_client = MongoClient(host=DB_MONGOHOST)
+        mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         db_names = list(mongo_client.list_database_names())
-        if SERVICES_DB not in db_names:
-            BYC["ERRORS"].append(f"services db `{SERVICES_DB}` does not exist")
+        if BYC_DBS["services_db"] not in db_names:
+            BYC["ERRORS"].append(f"services db `{BYC_DBS["services_db"]}` does not exist")
             return
 
         q_f_s = ["symbol", "ensembl_gene_ids", "synonyms"]
@@ -608,7 +608,7 @@ class GeneInfo:
             q_list.append({q_f: q_re })
         query = { "$or": q_list }
 
-        g_coll = mongo_client[SERVICES_DB][GENES_COLL]
+        g_coll = mongo_client[BYC_DBS["services_db"]][BYC_DBS["genes_coll"]]
 
         if single is True:
             gene = g_coll.find_one(query, { '_id': False } )

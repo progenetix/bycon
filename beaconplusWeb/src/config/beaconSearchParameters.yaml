@@ -2,6 +2,17 @@ parameters:
   accessid:
     isHidden: true
     label: Accession Prefilter
+
+  ageAtDiagnosis:
+    infoText: Search for samples by the age at diagnosis, as ISO Duration
+      (e.g `>=P18Y`, `<P6M`). For bracketing age ranges please use the 
+      `Free Text Filter(s)` field with full, named filters (e.g.
+      `ageAtDiagnosis:>=P18Y,ageAtDiagnosis:<=P65Y`).
+    isHidden: false
+    label: Age at Diagnosis
+    type: string
+    placeholder: '>=P18Y'
+
   allTermsFilters:
     infoLink: https://info.progenetix.org/doc/filters-documentation.html
     infoText: Add any **filters** to the search. These will usually correspond to
@@ -109,6 +120,26 @@ parameters:
     - label: OR
       value: OR
 
+  followupState:
+    infoText: Survival state, especially when used with `Follow-up time`.
+    isHidden: false
+    label: Follow-up State
+    options:
+    - label: (not specified)
+      value: ''
+    - label: Alive
+      value: EFO:0030041
+    - label: Dead
+      value: EFO:0030049
+
+  followupTime:
+    infoText: Filter samples for a minimum or maximum follow-up using an ISO Duration
+      (e.g. `>=P5Y`, `<P6M`), especially in combination with a `Follow-up State`.
+    isHidden: false
+    label: Follow-up Time
+    type: string
+    placeholder: '>=P60M'
+
   freeFilters:
     infoText: Free text input for filter terms (one or more comma-concatenated).
     isHidden: false
@@ -122,16 +153,19 @@ parameters:
     label: Gene Symbol
     placeholder:
     - MYCN
+
   genomicAlleleShortForm:
     infoText: Genomic HGVSId descriptor.
     isHidden: true
     label: Genomic HGVS ID
     placeholder: NC_000017.11:g.7674232C>G
+
   geoCity:
     infoText: Selector for a city for which the samples have been annotated, usually
       corresponding to origin of the data.
     isHidden: true
     label: City
+
   geodistanceKm:
     defaultValue: 100
     infoText: Proximity of the data matches to the selected city, to allow for fuzzy
@@ -140,6 +174,7 @@ parameters:
     isHidden: true
     label: Range (km)
     type: number
+
   includeDescendantTerms:
     infoText: As standard, any selected filter will also include matches on its child
       terms; i.e. NCIT:C3052 - Digestive System Neoplasm will include results from
@@ -152,22 +187,26 @@ parameters:
       value: 'true'
     - label: only match exact code(s)
       value: 'false'
+
   includeResultsetResponses:
     defaultValue: ALL
     infoText: We want also empty result boxes so it is ALL (incontrast to Beacon default
       HIT).
     isHidden: true
     label: Show results
+
   limit:
     infoText: The maximum number of biosamples to retrieve per page and also the size
       of response pages. A parameter here can override the Beacon specific default.
     label: Response Limit / Page Size
+
   mateEnd:
     infoText: The (1-based) stat of genomic position of the range in which the fusion
       partners breakpoint position should fall. In contrast to the general "end" parameter
       only a single value can be used.
     label: Mate End
     placeholder: '23000000'
+
   mateName:
     infoText: The second chromosome in a fusion (transmitted as refseq id).
     label: Fusion Chromosome
@@ -222,12 +261,14 @@ parameters:
       value: refseq:NC_000023.11
     - label: Y (NC_000024.10)
       value: refseq:NC_000024.10
+
   mateStart:
     infoText: The (1-based) stat of genomic position of the range in which the fusion
       partners breakpoint position should fall. In contrast to the general "start"
       parameter only a single value can be used.
     label: Mate Start
     placeholder: '23000000'
+
   materialtype:
     defaultValue: ''
     infoText: Special filter type, to e.g. limit responses to neoplastic or reference
@@ -243,11 +284,13 @@ parameters:
       value: EFO:0030035
     - label: reference sample
       value: EFO:0009654
+
   referenceBases:
     infoText: The minimal length, in bases, of a genomic variant. This parameter can
       be applied to e.g. CNV queries.
     label: Reference Base(s)
     placeholder: N
+
   referenceName:
     infoText: The chromosome (transmitted as refseq id).
     label: Chromosome
@@ -302,6 +345,7 @@ parameters:
       value: refseq:NC_000023.11
     - label: Y (NC_000024.10)
       value: refseq:NC_000024.10
+
   referenceid:
     infoText: Special filter type for external reference codes such as PMIDs or cellosaurus
       id values. If using multiple codes please be aware that probably use of an "OR"
@@ -313,6 +357,7 @@ parameters:
     options:
     - label: (no selection)
       value: ''
+
   sex:
     defaultValue: ''
     infoText: Genotypic (assumed) sex of the individual.
@@ -325,9 +370,11 @@ parameters:
       value: pgx:sex-female
     - label: male
       value: pgx:sex-male
+
   skip:
     infoText: The number of result pages to skip when retrieving data.
     label: Skip Pages
+
   start:
     infoText: The 1-based genomic position of the variant, or the start of a range
       query, specified through a single value. However, in case of bracket requests
@@ -335,18 +382,21 @@ parameters:
       a range for the possible occurrence of the CNV start (e.g. "21500001-21975098").
     label: Start or Position
     placeholder: 19000001-21975098
+
   variantMaxLength:
     infoText: The maximal length, in bases, of a genomic variant. This parameter can
       be applied to e.g. CNV queries.
     isHidden: true
     label: Max Variant Length
     type: number
+
   variantMinLength:
     infoText: The minimal length, in bases, of a genomic variant. This parameter can
       be applied to e.g. CNV queries.
     isHidden: true
     label: Min Variant Length
     type: number
+
   variantQueryDigests:
     infoText: 'This experimental parameter allows you to A: define a variant request
       in a concatenated `referenceName:start--end:variantType` or  `referenceName:start:referenceBases>alternateBases`
@@ -358,6 +408,7 @@ parameters:
     label: Variation Shorthand(s)
     placeholder: 9:9000001-21975098--21967753-24000000:DEL
     type: string
+
   variantType:
     defaultValue: ''
     infoText: The type of a structural variant for e.g. CNV searches.

@@ -11,7 +11,7 @@ from config import *
 
 class ByconParameters:
     def __init__(self):
-        self.arg_defs = BYC["argument_definitions"].get("$defs", {})
+        self.arg_defs = BYC.get("argument_definitions", {}).get("$defs", {})
         self.no_value = NO_PARAM_VALUES
         self.byc_pars = {}
         self.request_uri = environ.get('REQUEST_URI', False)
@@ -34,6 +34,7 @@ class ByconParameters:
     def set_parameters(self):
         self.__process_parameters()
         BYC_PARS.update(self.byc_pars)
+        # prdbughead(BYC_PARS)
         return self.byc_pars
 
 
@@ -42,7 +43,7 @@ class ByconParameters:
     def rest_path_value(self, key=""):
         """
         This function splits the path of the REQUEST_URI and returns the path element
-        after a provided key. The typical uise case would be to get the entity or
+        after a provided key. The typical use case would be to get the entity or
         executing script, or an {id} value from a REST path e.g.
 
         * `/beacon/biosamples/?` => "beacon" -> "biosamples"
@@ -128,6 +129,8 @@ class ByconParameters:
         p_len = len(p_items)
         r_i = p_items.index(REQUEST_PATH_ROOT)
 
+        # prdbughead(p_items)
+
         if p_len == r_i + 1:
             self.byc_pars.update({"request_entity_path_id": "info"})
             return
@@ -140,6 +143,7 @@ class ByconParameters:
             if p_v.lower() in self.no_value:
                 break
             self.byc_pars.update({p_k: p_v})
+            # prdbug(f"{p_k} ==> {p_v}")
 
         if (rpidv := self.byc_pars.get("path_ids")):
             self.byc_pars.update({"path_ids": rpidv.split(",") })
@@ -331,7 +335,7 @@ class ByconParameters:
 
 class ByconFilters:
     def __init__(self):
-        self.filter_defs = BYC["filter_definitions"].get("$defs", {})
+        self.filter_defs = BYC.get("filter_definitions", {}).get("$defs", {})
         self.filter_patterns = [f.get("pattern") for f in self.filter_defs.values()]
         self.filter_pars = BYC_PARS.get("filters", [])
         self.parsed_filters = []
@@ -396,7 +400,7 @@ class ByconFilters:
 class ByconEntities:
     def __init__(self):
         self.entity_defaults = BYC.get("entity_defaults", {})
-        self.arg_defs = BYC["argument_definitions"].get("$defs", {})
+        self.arg_defs = BYC.get("argument_definitions", {}).get("$defs", {})
         self.dealiased_path_ids = {}
         self.request_entity_path_id = None
         self.response_entity_path_id = None
@@ -421,9 +425,9 @@ class ByconEntities:
             "request_entity_id": self.request_entity_id,
             "response_entity_id": self.response_entity_id,
             "response_entity": self.response_entity,
-            "response_schema": self.response_entity.get("response_schema", "beaconInfoResponse"),
-            "bycon_response_class": self.response_entity.get("bycon_response_class", "BeaconInfoResponse")
+            "response_schema": self.response_entity.get("response_schema", "beaconInfoResponse")
         })
+
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
@@ -434,14 +438,19 @@ class ByconEntities:
         The default entyity id is mapped to the path id and its aliases.
         """
         for e, e_d in self.entity_defaults.items():
+            e_id = e_d.get("id", e)
             if (p_id := e_d.get("request_entity_path_id")):
-                self.dealiased_path_ids.update({p_id: e})
+                self.dealiased_path_ids.update({p_id: e_id})
+            # # TODO: correct? g_variants...
+            # if (r_id := e_d.get("response_entity_path_id")):
+            #     self.dealiased_path_ids.update({r_id: e_id})
             for p_a_s in e_d.get("request_entity_path_aliases", []):
-                self.dealiased_path_ids.update({p_a_s: e})
+                self.dealiased_path_ids.update({p_a_s: e_id})
+
         if self.request_path_id_par in self.dealiased_path_ids.keys():
             self.request_entity_path_id = self.request_path_id_par
         else:
-            self.request_entity_path_id = "info" 
+            self.request_entity_path_id = "info"
 
         """
         A response_path_id is assigned if a separate response path was provided
@@ -449,13 +458,15 @@ class ByconEntities:
         if self.response_path_id_par in self.dealiased_path_ids.keys():
             self.response_entity_path_id = self.response_path_id_par
 
+        # prdbug(f"{self.request_entity_path_id} --- {self.response_entity_path_id}")
+
 
     # -------------------------------------------------------------------------#
 
     def __assign_entities(self):
         # entity retrieval from path ids
         self.request_entity_id = self.dealiased_path_ids.get(self.request_entity_path_id)
-        # get entity definitions 
+        # get entity definitions
         self.request_entity = self.entity_defaults.get(self.request_entity_id)
         # re-assign the default path
         if (dp := self.request_entity.get("request_entity_path_id")):
@@ -468,7 +479,6 @@ class ByconEntities:
             else:
                 # fallback to the standard "no different response entity" case
                 self.response_entity_path_id = self.request_entity_path_id
-
 
         self.response_entity_id = self.dealiased_path_ids.get(self.response_entity_path_id)
         self.response_entity = self.entity_defaults.get(self.response_entity_id)
@@ -535,9 +545,9 @@ class ByconDatasets:
           self.database_names = environ["DATABASE_NAMES"].split()
         else:
           try:
-            mongo_client = MongoClient(host=DB_MONGOHOST)
+            mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
             db_names = list(mongo_client.list_database_names())
-            self.database_names = [x for x in db_names if x not in [HOUSEKEEPING_DB, SERVICES_DB, "admin", "config", "local"]]
+            self.database_names = [x for x in db_names if x not in [BYC_DBS["housekeeping_db"], BYC_DBS["services_db"], "admin", "config", "local"]]
           except Exception as e:
             BYC["WARNINGS"].append(f'Could not connect to MongoDB:\n####\n{e}\n####')
 
@@ -582,8 +592,8 @@ class ByconDatasets:
         if not (accessid := BYC_PARS.get("accessid")):
             return
 
-        ho_client = MongoClient(host=DB_MONGOHOST)
-        h_o = ho_client[HOUSEKEEPING_DB][HOUSEKEEPING_HO_COLL].find_one({"id": accessid})
+        ho_client = MongoClient(host=BYC_DBS["mongodb_host"])
+        h_o = ho_client[BYC_DBS["housekeeping_db"]][BYC_DBS["handover_coll"]].find_one({"id": accessid})
         if not h_o:
             return
         ds_id = h_o.get("ds_id", False)
@@ -624,8 +634,7 @@ class ByconDatasets:
             return
         if self.allow_default is False:
             return
-        defaults: object = BYC["beacon_defaults"].get("defaults", {})  
-        if (ds_id := str(defaults.get("default_dataset_id"))) not in self.database_names:
+        if (ds_id := str(BYC.get("default_dataset_id"))) not in self.database_names:
             return
         self.dataset_ids =  [ds_id]
 

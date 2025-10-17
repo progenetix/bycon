@@ -11,7 +11,7 @@ from bycon import (
     ByconID,
     ByconH,
     ByconVariant,
-    DB_MONGOHOST,
+    BYC_DBS,
     ENV,
     GenomeBins,
     get_nested_value,
@@ -133,7 +133,7 @@ class PGXseg:
         dataset_defs = BYC.get("dataset_definitions", {})
         self.dataset_definition = dataset_defs.get(self.ds_id, {})
         self.dataset_result = dataset_results.get(self.ds_id, {})
-        self.mongo_client = MongoClient(host=DB_MONGOHOST)
+        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         self.header_cols = self.datatable_mappings.get("ordered_pgxseg_columns", [])
         self.bios_pars = self.datatable_mappings["$defs"]["biosample"]["parameters"]
         self.variant_mappings = self.datatable_mappings["$defs"]["genomicVariant"]["parameters"]
@@ -420,7 +420,7 @@ def export_callsets_matrix(datasets_results, ds_id):
 
     if not (cs_r := datasets_results[ds_id].get("analyses.id")):
         return
-    mongo_client = MongoClient(host=DB_MONGOHOST)
+    mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
     bs_coll = mongo_client[ ds_id ][ "biosamples" ]
     cs_coll = mongo_client[ ds_id ][ "analyses" ]
 

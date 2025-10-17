@@ -35,7 +35,7 @@ def main():
         "geolocs_updates": input("Relabel all biosamples with existing geolocation?\n(y|N): ")
     }
 
-    data_db = MongoClient(host=DB_MONGOHOST)[ ds_id ]
+    data_db = MongoClient(host=BYC_DBS["mongodb_host"])[ ds_id ]
 
     #>-------------------- MongoDB index updates -----------------------------<#
 
@@ -48,7 +48,7 @@ def main():
     #>------------------------- biosamples -----------------------------------<#
 
     if "y" in todos.get("geolocs_updates", "n").lower():
-        geo_db = MongoClient(host=DB_MONGOHOST)[SERVICES_DB]
+        geo_db = MongoClient(host=BYC_DBS["mongodb_host"])[BYC_DBS["services_db"]]
         max_dist_m = 2
         biosamples_coll = data_db["biosamples"]
         dist_locs = biosamples_coll.distinct("geo_location")
@@ -140,7 +140,7 @@ def main():
             else:
                 loc_query = query
 
-            geolocs = mongo_result_list(SERVICES_DB, GEOLOCS_COLL, loc_query, { '_id': False } )
+            geolocs = mongo_result_list(BYC_DBS["services_db"], BYC_DBS["geolocs_coll"], loc_query, { '_id': False } )
             if len(geolocs) != 1:
                 e = [city, country, coords[0], coords[1], len(geolocs)]
                 print("\t".join(str(x) for x in e))

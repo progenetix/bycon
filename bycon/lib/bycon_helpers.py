@@ -85,7 +85,7 @@ def select_this_server() -> str:
     s_uri = str(environ.get('SCRIPT_URI'))
     X_FORWARDED_PROTO = str(environ.get('HTTP_X_FORWARDED_PROTO'))
 
-    test_sites = BYC["beacon_defaults"].get("test_domains", [])
+    test_sites = BYC.get("test_domains", [])
 
     # for k in environ.keys():
     #     prdbug(f'{k} => {str(environ.get(k))}')
@@ -99,11 +99,12 @@ def select_this_server() -> str:
 
 ################################################################################
 
-def days_from_iso8601duration(iso8601duration):
+def days_from_iso8601duration(iso8601duration=""):
     """A simple function to convert ISO8601 duration strings to days. This is
     potentially lossy since it does not include time parsing."""
 
     # TODO: check format
+    # is_isodate_duration = is_isodate_duration.upper()
     is_isodate_duration = re.match(r'^P\d+?[YMD](\d+?[M])?(\d+?[D])?', iso8601duration)
     if not is_isodate_duration:
         return False
@@ -135,7 +136,7 @@ def days_from_iso8601duration(iso8601duration):
 def mongo_result_list(db_name, coll_name, query, fields={}):
     results = []
 
-    mongo_client = MongoClient(host=DB_MONGOHOST)
+    mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
     db_names = list(mongo_client.list_database_names())
     if db_name not in db_names:
         BYC["ERRORS"].append(f"db `{db_name}` does not exist")

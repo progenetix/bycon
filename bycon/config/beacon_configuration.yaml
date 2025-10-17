@@ -22,7 +22,7 @@ entryTypes:
     defaultSchema:
       id: dataset
       name: Default schema for datasets
-      referenceToSchemaDefinition: http://progenetix.org/services/schemas/dataset
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/dataset
       schemaVersion: v2.2.0
     aCollectionOf:
       - id: genomicVariant
@@ -34,6 +34,15 @@ entryTypes:
       - id: analysis
         name: Genomic Analyses
     additionalSupportedSchemas: []
+    #- byconic -#
+    path_id_value_bycon_parameter: dataset_ids
+    response_schema: beaconCollectionsResponse
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
+################################################################################
 
   cohort:
     id: cohort
@@ -43,17 +52,25 @@ entryTypes:
       label: Cohort
     partOfSpecification: Beacon v2.2.0
     description: >-
-      A group of individuals, identified by a common characteristic. [
-      NCI ]
+      A group of individuals, identified by a common characteristic.
     defaultSchema:
       id: cohort
       name: Default schema for cohorts
-      referenceToSchemaDefinition: http://progenetix.org/services/schemas/cohort
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/cohort
       schemaVersion: v2.2.0
     aCollectionOf:
       - id: individual
         name: Individuals
     additionalSupportedSchemas: []
+    #- byconic -#
+    path_id_value_bycon_parameter: filters
+    response_schema: beaconCollectionsResponse
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
+################################################################################
 
   genomicVariant:
     id: genomicVariant
@@ -69,10 +86,17 @@ entryTypes:
     defaultSchema:
       id: genomicVariant
       name: Default schema for a genomic variation
-      referenceToSchemaDefinition: http://progenetix.org/services/schemas/genomicVariant
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/genomicVariant
       schemaVersion: v2.2.0
     additionallySupportedSchemas: []
-
+    #- byconic -#
+    response_schema: beaconResultsetsResponse
+    path_id_value_bycon_parameter: variant_ids
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+   
 ################################################################################
 
   individual:
@@ -89,8 +113,18 @@ entryTypes:
     defaultSchema:
       id: individual
       name: Default schema for an individual
-      referenceToSchemaDefinition: http://progenetix.org/services/schemas/individual
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/individual
     additionallySupportedSchemas: []
+    #- byconic -#
+    response_schema: beaconResultsetsResponse
+    path_id_value_bycon_parameter: individual_ids
+    examples:
+      - ?filters=EFO:0030049&limit=5
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
 
 ################################################################################
 
@@ -108,8 +142,16 @@ entryTypes:
     defaultSchema:
       id: biosample
       name: Default schema for a biological sample
-      referenceToSchemaDefinition: http://progenetix.org/services/schemas/biosample
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/biosample
     additionallySupportedSchemas: []
+    #- byconic -#
+    response_schema: beaconResultsetsResponse
+    path_id_value_bycon_parameter: biosample_ids
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
 
 ################################################################################
 
@@ -125,9 +167,16 @@ entryTypes:
     defaultSchema:
       id: run
       name: Default schema for a sequencing run
-      referenceToSchemaDefinition: http://progenetix.org/services/schemas/run
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/run
       schemaVersion: v2.2.0
     additionallySupportedSchemas: []
+    #- byconic -#
+    response_schema: beaconResultsetsResponse
+    path_id_value_bycon_parameter: run_ids
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
 
 ################################################################################
 
@@ -145,9 +194,17 @@ entryTypes:
     defaultSchema:
       id: analysis
       name: Default schema for a bioinformatics analysis
-      referenceToSchemaDefinition: http://progenetix.org/services/schemas/analysis
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/analysis
       schemaVersion: v2.2.0
     additionallySupportedSchemas: []
+    #- byconic -#
+    response_schema: beaconResultsetsResponse
+    path_id_value_bycon_parameter: analysis_ids
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
 
 ################################################################################
 
@@ -165,6 +222,81 @@ entryTypes:
     defaultSchema:
       id: phenopacket
       name: Default schema for a phenopacket
-      referenceToSchemaDefinition: http://progenetix.org/services/schemas/phenopacket
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/phenopacket
     additionallySupportedSchemas: []
+    #- byconic -#
+    response_schema: beaconResultsetsResponse
+    path_id_value_bycon_parameter: individual_ids
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
+
+################################################################################
+################################################################################
+################################################################################
+
+  filteringTerm:
+    id: filteringTerm
+    description: >-
+      Information about the filtering terms available in the beacon instance.
+    response_schema: beaconFilteringTermsResponse
+    defaultSchema:
+      id: filteringTerm
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/filteringTermsSchema/
+    path_id_value_bycon_parameter: filters
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
+
+################################################################################
+
+  info:
+    id: info
+    description: >-
+      Information about the beacon instance.
+    response_schema: beaconInfoResponse
+    defaultSchema:
+      id: configuration
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/beaconInfoResults/
+    content: {}
+
+
+  ################################################################################
+
+  beaconMap:
+    id: beaconMap
+    description: >-
+      Map of the beacon instance configuration.
+    response_schema: beaconMapResponse
+    defaultSchema:
+      id: map
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/beaconMapSchema/
+
+
+  ################################################################################
+
+  configuration:
+    description: >-
+      Information about the beacon instance configuration.
+    id: configuration
+    response_schema: beaconConfigurationResponse
+    defaultSchema:
+      id: configuration
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/beaconConfigurationSchema/
+
+
+  ################################################################################
+
+  entryType:
+    id: entryType
+    response_schema: beaconEntryTypesResponse
+    defaultSchema:
+      id: entryType
+      referenceToSchemaDefinition: https://progenetix.org/services/schemas/entryTypesSchema/
+
+
 

@@ -79,8 +79,8 @@ def main(no_sudo):
 
     ############################################################################
 
-    # proceed = ""
-    proceed = input(f'Do you want to build the web frontend?\n"y" => test server, "s" => main server, otherwise enter for stopping: ')
+    proceed = ""
+    # proceed = input(f'Do you want to build the web frontend?\n"y" => test server, "s" => main server, otherwise enter for stopping: ')
     if "s" in proceed.lower():
         cmd = "update"
     elif "y" in proceed.lower():

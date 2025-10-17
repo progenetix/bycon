@@ -1,0 +1,165 @@
+################################################################################
+# byconServices modules & their path values
+#
+# * keys correspond to the names of byconServices modules
+#
+################################################################################
+
+$schema: https://json-schema.org/draft/2020-12/schema
+maturityAttributes:
+  productionStatus: PROD
+securityAttributes:
+  defaultGranularity: record
+  securityLevels:
+    - PUBLIC
+entryTypes:
+
+  api:
+    id: api
+
+  byconschemas:
+    id: byconschemas
+    path_id_value_bycon_parameter: id
+
+  cnvstats:
+    id: cnvstats
+    response_entity_path_alias: analyses
+    collection: analyses
+    response_schema: beaconResultsetsResponse
+    path_id_value_bycon_parameter: analysis_ids
+
+  collation:
+    id: collation
+    collection: collations
+    request_entity_path_aliases:
+      - collations
+    response_schema: byconServiceResponse
+    defaultSchema:
+      id: Collation
+      schema: https://progenetix.org/services/schemas/Collation/
+    path_id_value_bycon_parameter: filters
+
+  collationplot:
+    id: collationplot
+    defaultSchema:
+      id: SVG
+      schema: NA
+    path_id_value_bycon_parameter: filters
+
+  cytobands:
+    id: cytobands
+    defaultSchema:
+      id: cytobandMapping
+      schema: https://progenetix.org/services/schemas/CytobandMapping/
+    path_id_value_bycon_parameter: cyto_bands
+
+  dbstats:
+    id: dbstats
+    defaultSchema:
+      id: dbstats
+      schema: https://progenetix.org/services/schemas/DBstats/
+    path_id_value_bycon_parameter: dataset_ids
+
+  endpoints:
+    id: endpoints
+
+  gene:
+    id: gene
+    response_schema: beaconCollectionsResponse
+    defaultSchema:
+      id: gene
+      schema: https://progenetix.org/services/schemas/ProgenetixGene/
+    path_id_value_bycon_parameter: gene_ids
+
+  geolocation:
+    id: geolocation
+    response_schema: beaconCollectionsResponse
+    defaultSchema:
+      id: GeoLocation
+      schema: https://progenetix.org/services/schemas/GeoLocation/
+    path_id_value_bycon_parameter: gene_ids
+
+  ids:
+    id: ids
+    path_id_value_bycon_parameter: id
+    request_entity_path_aliases:
+      - id
+
+  intervalFrequencies:
+    id: intervalFrequencies
+    collection: collations
+    response_schema: beaconCollectionsResponse
+    defaultSchema:
+      id: intervalFrequencies
+      schema: https://progenetix.org/services/schemas/IntervalFrequencies/
+    path_id_value_bycon_parameter: filters
+
+  ontologymaps:
+    id: ontologymaps
+    path_id_value_bycon_parameter: filters
+
+  publication:
+    id: publication
+    response_schema: beaconCollectionsResponse
+    defaultSchema:
+      id: publication
+      schema: https://progenetix.org/services/schemas/Publication/
+    path_id_value_bycon_parameter: filters
+
+  uploader:
+    id: uploader
+
+
+################################################################################
+#
+# Services that provide alternative outputs for  Beacon entities
+#
+# The response entity is derived from the `response_entity_path_alias` which
+# invokes the `response_entity_path_id`:
+#
+# `__root__/__request_entity_path_id__/__path_parameter__/__response_entity_path_id__/?query...`
+#
+################################################################################
+
+
+  pgxsegvariants:
+    response_entity_path_alias: g_variants
+    # TODO: change? a bit non-standard... 
+    defaultSchema:
+      id: pgxseg
+      schema: https://docs.progenetix.org/file-formats/#pgxseg-sample-variant-files
+    path_id_value_bycon_parameter: biosample_ids
+
+  samplemap:
+    response_entity_path_alias: biosamples
+    path_id_value_bycon_parameter: biosample_ids
+
+  samplematrix:
+    response_entity_path_alias: biosamples
+    path_id_value_bycon_parameter: biosample_ids
+
+  sampletable:
+    response_entity_path_alias: biosamples
+    path_id_value_bycon_parameter: biosample_ids
+
+  sampleplots:
+    response_entity_path_alias: biosamples
+    defaultSchema:
+      id: SVG
+      schema: NA
+    path_id_value_bycon_parameter: biosample_ids
+
+  variantsbedfile:
+    response_entity_path_alias: g_variants
+    defaultSchema:
+      id: BED
+      schema: https://samtools.github.io/hts-specs/BEDv1.pdf
+    path_id_value_bycon_parameter: biosample_ids
+
+  vcfvariants:
+    response_entity_path_alias: g_variants
+    defaultSchema:
+      id: VCF
+      schema: https://samtools.github.io/hts-specs/VCFv4.4.pdf
+    path_id_value_bycon_parameter: biosample_ids
+

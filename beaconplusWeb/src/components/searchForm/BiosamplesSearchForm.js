@@ -56,6 +56,9 @@ function useIsFilterlogicWarningVisible(watch) {
   const allTermsFilters = watch("allTermsFilters")
   const sex = watch("sex")
   const materialtype = watch("materialtype")
+  const ageAtDiagnosis = watch("ageAtDiagnosis")
+  const followupTime = watch("followupTime")
+  const followupState = watch("followupState")
   const freeFilters = watch("freeFilters")
   const filters = makeFilters({
     allTermsFilters,
@@ -65,6 +68,9 @@ function useIsFilterlogicWarningVisible(watch) {
     cohorts,
     sex,
     materialtype,
+    ageAtDiagnosis,
+    followupTime,
+    followupState,
     freeFilters
   })
   return filterLogic === "AND" && filters.length > 1
@@ -408,6 +414,14 @@ export function BeaconSearchForm({
               {...parameters.sex}
               {...selectProps}
             />
+            <InputField
+              className={cn(
+                !parameters.ageAtDiagnosis.isHidden && "column",
+                "py-0 mb-3"
+              )}
+              {...fieldProps}
+              {...parameters.ageAtDiagnosis}
+            />
             <SelectField
               className={cn(
                 !parameters.materialtype.isHidden && "column",
@@ -417,6 +431,26 @@ export function BeaconSearchForm({
               {...selectProps}
             />
           </div>
+
+          <div className="columns my-0">
+            <InputField
+              className={cn(
+                !parameters.followupTime.isHidden && "column",
+                "py-0 mb-3"
+              )}
+              {...fieldProps}
+              {...parameters.followupTime}
+            />
+            <SelectField
+              className={cn(
+                !parameters.followupState.isHidden && "column",
+                "py-0 mb-3"
+              )}
+              {...parameters.followupState}
+              {...selectProps}
+            />
+          </div>
+
           <div className="columns my-0">
             <SelectField
               className="column py-0 mb-3"
@@ -709,6 +743,9 @@ function validateForm(formValues) {
     clinicalClasses,
     referenceid,
     cohorts,
+    ageAtDiagnosis,
+    followupTime,
+    followupState,
     freeFilters,
     allTermsFilters
   } = formValues
@@ -717,7 +754,28 @@ function validateForm(formValues) {
   const setMissing = (name) =>
     errors.push([name, { type: "manual", message: "Parameter is missing" }])
 
-  if (!referenceName && !referenceBases && !alternateBases && !start && !end && !variantQueryDigests && !cytoBands && !variantType && !geneId && !aminoacidChange && !genomicAlleleShortForm && !bioontology && !referenceid && !allTermsFilters && !freeFilters && !clinicalClasses && !cohorts) {
+  if (
+      !referenceName && 
+      !referenceBases && 
+      !alternateBases && 
+      !start &&
+      !end &&
+      !variantQueryDigests &&
+      !cytoBands &&
+      !variantType &&
+      !geneId &&
+      !aminoacidChange &&
+      !genomicAlleleShortForm &&
+      !bioontology &&
+      !referenceid &&
+      !ageAtDiagnosis && 
+      !followupTime && 
+      !followupState && 
+      !allTermsFilters &&
+      !freeFilters &&
+      !clinicalClasses &&
+      !cohorts
+  ) {
     !referenceName && setMissing("referenceName")
     !referenceBases && setMissing("referenceBases")
     !alternateBases && setMissing("alternateBases")
@@ -733,6 +791,9 @@ function validateForm(formValues) {
     !bioontology && setMissing("bioontology")
     !clinicalClasses && setMissing("clinicalClasses")
     !referenceid && setMissing("referenceid")
+    !ageAtDiagnosis && setMissing("ageAtDiagnosis")
+    !followupTime && setMissing("followupTime")
+    !followupState && setMissing("followupState")
     !freeFilters && setMissing("freeFilters")
     !allTermsFilters && setMissing("allTermsFilters")
     !cohorts && setMissing("allTermsFilters")

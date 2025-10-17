@@ -33,7 +33,7 @@ set_collation_types()
 print(f'=> Using data values from {ds_id} for {GB.get_genome_bin_count()} intervals...')
 
 limit = BYC_PARS.get("limit", 0)
-data_client = MongoClient(host=DB_MONGOHOST)
+data_client = MongoClient(host=BYC_DBS["mongodb_host"])
 data_db = data_client[ ds_id ]
 cs_coll = data_db[ "analyses" ]
 v_coll = data_db[ "variants" ]

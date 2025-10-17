@@ -8,11 +8,11 @@ from random import sample as random_samples
 # bycon
 from bycon import (
     BYC,
+    BYC_DBS,
     BYC_PARS,
     ByconDatasets,
     ByconID,
     ByconVariant,
-    DB_MONGOHOST,
     prjsonnice,
     prdbug,
     RecordsHierarchy
@@ -37,7 +37,7 @@ class ByconImporter():
         self.limit = BYC_PARS.get("limit", 0)
         self.input_file = BYC_PARS.get("inputfile")
         self.target_db = BYC_PARS.get("output", "___none___")
-        self.mongo_client = MongoClient(host=DB_MONGOHOST)
+        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
 
         self.delMatchedVars = "n"
         self.log = []
@@ -258,7 +258,8 @@ class ByconImporter():
     def __prepare_entity(self, entity="___none___"):
         if not (e_d := self.entity_defaults.get(entity)):
             return
-        self.import_collname = e_d.get("collection", "___none___")
+        import_collkey = f"{entity}_coll"
+        self.import_collname = BYC_DBS.get(import_collkey, "___none___")
         self.import_entity = entity
         self.import_id = f"{entity}_id"
         self.upstream = RecordsHierarchy().upstream(entity)
@@ -336,7 +337,7 @@ class ByconImporter():
 
         dcs = []
         for d in self.downstream:
-            if (c := self.entity_defaults.get(d, {}).get("collection")):
+            if (c := BYC_DBS.get(f"{d}_coll")):
                 dcs.append(c)
 
         if tds_id not in self.database_names:
@@ -422,7 +423,7 @@ class ByconImporter():
         fn = self.data_in.fieldnames
         dcs = []
         for d in self.downstream:
-            if (c := self.entity_defaults.get(d, {}).get("collection")):
+            if (c := BYC_DBS.get(f"{d}_coll")):
                 dcs.append(c)
 
         del_coll = self.mongo_client[ds_id][icn]
@@ -645,9 +646,10 @@ class ByconImporter():
         for u in self.upstream:
             if not (e_d := self.entity_defaults.get(u)):
                 return
+            if not (u_coll := BYC_DBS.get(f"{u}_coll")):
+                return
             # no exception for genomicVariant since never upstream...
             u_id = new_doc.get(f'{u}_id', "___none___")
-            u_coll = e_d.get("collection")
             if not self.dataset_client[u_coll].find_one({"id": u_id}):
                 prdbug(f'... {u_id} for `{self.dataset_id}.{u_coll}` not found')
                 self.log.append(f'{u} {u_id} for {self.dataset_id}.{ien} {import_id_v} should exist before {ien} import')

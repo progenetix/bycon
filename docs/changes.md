@@ -6,6 +6,33 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-10-13 (v2.6.2):
+
+* refactored configuration files and processing to be more "Beacon standard":
+    - moved the beacon_configuration.yaml to `config` and used as base for
+      entry type configurations as well as for the `/configuration` endpoint
+    - added database and collection parameters to `BYC_DBS` and removed the
+      entry type specific ones from the entry type configurations
+    - removed the `bycon_response_class` parameter and instead using now
+      `BYC["info_responses"]` and `BYC["data_responses"]` to map main processing
+    - retrieving the path for the entry types now from `/config/beacon_map.yaml`/`config/services_map.yaml`
+      `rootUrl` and (custom) `rootUrlAliases`
+    - modified configuration reading in `bycon/__init__.py` accordingly
+
+### 2025-10-13: (v2.6.1):
+
+* proper parsing of age and followup filters (`ageAtDiagnosis`, `followupTime`)
+    - added the respective fields to the query form, additionally to the `freeFilters`
+      test option from 2.6.0
+* some reconfiguration of configuration processing
+    - add the config readers directly to `__init__.py`, removing `read_specs.py`
+    - now `domain_definitions` directory in `bycon/local/` with single file per
+      base domain; `localhost.yaml` serves for defaults
+    - now `dataset_definitions` directory in `bycon/local/` with single file per
+      dataset
+    - added environmental variable `BYC_LOCAL_CONF` to enable free placement
+      of the `local` directory outside of the project
+
 ### 2025-10-08: (v2.6.0)
 
 * further work on VRSification

@@ -10,8 +10,8 @@ class ByconInfo():
     def __init__(self, distvars=True):
         self.count_distvars = distvars
         self.database_names = ByconDatasets().get_database_names()
-        self.mongo_client = MongoClient(host=DB_MONGOHOST)
-        self.info_coll = self.mongo_client[ HOUSEKEEPING_DB ][ HOUSEKEEPING_INFO_COLL ]
+        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
+        self.info_coll = self.mongo_client[ BYC_DBS["housekeeping_db"] ][ BYC_DBS["info_coll"] ]
         self.dataset_ids = list(BYC["dataset_definitions"].keys())
         self.data_colls = ["biosamples", "individuals", "variants", "analyses"]
         self.today = date_isoformat(datetime.now())
@@ -27,9 +27,9 @@ class ByconInfo():
         self.info_coll.delete_many({"date": self.today})
         if not BYC["TEST_MODE"]:
             self.info_coll.insert_one(self.status)
-            print(f'\n{self.__hl()}==> updated entry {self.status["date"]} in {HOUSEKEEPING_DB}.{HOUSEKEEPING_INFO_COLL}')
+            print(f'\n{self.__hl()}==> updated entry {self.status["date"]} in {BYC_DBS["housekeeping_db"]}.{BYC_DBS["info_coll"]}')
         else:
-            print(f'\n{self.__hl()}==> no {HOUSEKEEPING_DB}.{HOUSEKEEPING_INFO_COLL} update since in TEST_MODE')
+            print(f'\n{self.__hl()}==> no {BYC_DBS["housekeeping_db"]}.{BYC_DBS["info_coll"]} update since in TEST_MODE')
 
 
     #--------------------------------------------------------------------------#

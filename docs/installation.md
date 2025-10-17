@@ -93,7 +93,6 @@ bycon
   |    `- ... documentation website source files ...
   |
   |- local
-  |   |- beacon_defaults.yaml
   |   |- dataset_definitions.yaml
   |   |- instance_definitions.yaml
   |   `- env_paths.yaml

@@ -1,0 +1,113 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+endpointSets:
+
+  api:
+    entryType: api
+    rootUrl: https://progenetix.org/services/api
+
+  byconschemas:
+    entryType: byconschemas
+    rootUrl: https://progenetix.org/services/byconschemas
+    rootUrlAliases: 
+      - https://progenetix.org/services/schemas
+
+  cnvstats:
+    entryType: cnvstats
+    rootUrl: https://progenetix.org/services/cnvstats
+
+  collation:
+    entryType: collation
+    rootUrl: https://progenetix.org/services/collations
+    rootUrlAliases: 
+      - https://progenetix.org/services/collations
+
+  collationplot:
+    entryType: collationplot
+    rootUrl: https://progenetix.org/services/collationplots
+    rootUrlAliases: 
+      - https://progenetix.org/services/collationPlots
+
+  cytomapper:
+    entryType: cytobands
+    rootUrl: https://progenetix.org/services/cytomapper
+
+  dbstats:
+    entryType: dbstats
+    rootUrl: https://progenetix.org/services/dbstats
+
+  endpoints:
+    entryType: endpoints
+    rootUrl: https://progenetix.org/services/endpoints
+
+  genespans:
+    entryType: gene
+    rootUrl: https://progenetix.org/services/genespans
+    rootUrlAliases: 
+      - https://progenetix.org/services/genes
+
+  geolocation:
+    entryType: geolocation
+    rootUrl: https://progenetix.org/services/geolocations
+    rootUrlAliases: 
+      - https://progenetix.org/services/geolocs
+      - https://progenetix.org/services/geoLocations
+
+  ids:
+    entryType: ids
+    rootUrl: https://progenetix.org/services/ids
+    rootUrlAliases: 
+      - https://progenetix.org/services/id
+
+  intervalFrequencies:
+    entryType: intervalFrequencies
+    rootUrl: https://progenetix.org/services/intervalFrequencies
+    rootUrlAliases: 
+      - https://progenetix.org/services/interval_frequencies
+
+  ontologymaps:
+    entryType: ontologymaps
+    rootUrl: https://progenetix.org/services/ontologymaps
+    rootUrlAliases: 
+      - https://progenetix.org/services/ontologyMaps
+
+  pgxsegvariants:
+    entryType: pgxsegvariants
+    rootUrl: https://progenetix.org/services/pgxsegvariants
+    rootUrlAliases: 
+      - https://progenetix.org/services/pgxseg
+
+  publication:
+    entryType: publication
+    rootUrl: https://progenetix.org/services/publications
+
+  samplemap:
+    entryType: samplemap
+    rootUrl: https://progenetix.org/services/samplemap
+
+  samplematrix:
+    entryType: samplematrix
+    rootUrl: https://progenetix.org/services/samplematrix
+
+  sampleplots:
+    entryType: sampleplots
+    rootUrl: https://progenetix.org/services/sampleplots
+    rootUrlAliases: 
+      - https://progenetix.org/services/samplesPlotter
+
+  sampletable:
+    entryType: sampletable
+    rootUrl: https://progenetix.org/services/sampletable
+
+  uploader:
+    entryType: uploader
+    rootUrl: https://progenetix.org/services/uploader
+
+  variantsbedfile:
+    entryType: variantsbedfile
+    rootUrl: https://progenetix.org/services/variantsbedfile
+
+  vcfvariants:
+    entryType: vcfvariants
+    rootUrl: https://progenetix.org/services/vcfvariants
+    rootUrlAliases: 
+      - https://progenetix.org/services/vcf

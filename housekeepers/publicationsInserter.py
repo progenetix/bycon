@@ -51,7 +51,7 @@ def publications_inserter():
         else:
             print(f'Download failed: status code {r.status_code}\n{r.text}')
 
-    mongo_client = MongoClient(host=DB_MONGOHOST)
+    mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
     pub_coll = mongo_client["_byconServicesDB"]["publications"]
     bios_coll = mongo_client["progenetix"]["biosamples"]
     publication_ids = pub_coll.distinct("id")

@@ -85,7 +85,7 @@ class MultiQueryResponses:
 
 class BeaconResponseMeta:
     def __init__(self, data_response=None):
-        self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
+        self.beacon_schema = BYC["response_entity"].get("defaultSchema", "___none___")
         self.entity_defaults = BYC.get("entity_defaults", {})
         self.response_meta = ByconSchemas("beaconResponseMeta", "").get_schema_instance()
         self.returned_granularity = BYC.get("returned_granularity", "boolean")
@@ -215,7 +215,7 @@ class BeaconInfoResponse:
     The responses are then provided by the dedicated methods
     """
     def __init__(self):
-        self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
+        self.beacon_schema = BYC["response_entity"].get("defaultSchema", "___none___")
         self.response_entity_id = BYC.get("response_entity_id", "info")
         self.entity_defaults = BYC.get("entity_defaults", {})
         self.data_response = ByconSchemas("beaconInfoResponse", "").get_schema_instance()
@@ -247,8 +247,17 @@ class BeaconInfoResponse:
 
     def __populateInfoResponse(self):
         if "configuration" in self.response_entity_id:
-            c_f = ByconSchemas("beaconConfiguration").get_schema_file_path()
-            self.info_response_content = load_yaml_empty_fallback(c_f)
+            # c_f = ByconSchemas("beaconConfiguration").get_schema_file_path()
+            # self.info_response_content = load_yaml_empty_fallback(c_f)
+            self.info_response_content = BYC.get("beacon_configuration", {})
+            betks = []
+            for e_t, e_d in self.entity_defaults.items():
+                if e_d.get("is_beacon_entity", False) is True:
+                    betks.append(e_t)
+            bet = {}
+            for k in sorted(betks):
+                bet.update({k: self.entity_defaults.get(k, {})})
+            self.info_response_content.update({"entry_types": bet})
             return
         if "beaconMap" in self.response_entity_id:
             c_f = ByconSchemas("beaconMap").get_schema_file_path()
@@ -281,7 +290,7 @@ class BeaconInfoResponse:
         beacon_schemas = []
         for e_t, e_d in self.entity_defaults.items():
             if e_d.get("is_beacon_entity", False) is True and e_t not in ets:
-                beacon_schemas.append(e_d.get("beacon_schema", {}))
+                beacon_schemas.append(e_d.get("defaultSchema", {}))
                 ets.add(e_t)
             else:
                 prdbug(f'... skipping {e_t} schema')
@@ -297,7 +306,7 @@ class BeaconDataResponse:
         self.include_handovers = BYC_PARS.get("include_handovers", False)
         self.response_entity_id = BYC.get("response_entity_id")
         self.returned_granularity = BYC.get("returned_granularity", "boolean")
-        self.beacon_schema = BYC["response_entity"].get("beacon_schema", "___none___")
+        self.beacon_schema = BYC["response_entity"].get("defaultSchema", "___none___")
         self.record_queries = {}
         self.response_schema = BYC.get("response_schema", "___none___")
         self.data_response = ByconSchemas(BYC["response_schema"], "").get_schema_instance()
@@ -649,7 +658,7 @@ class ByconFilteringTerms:
 
     def __return_filter_resources(self):
         r_o = {}
-        f_d_s = BYC["filter_definitions"].get("$defs", {})
+        f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
         collation_types = list(self.filter_collation_types)
         res_schema = ByconSchemas("beaconFilteringTermsResults", "$defs/Resource").get_schema_instance()
         for c_t in collation_types:
@@ -677,7 +686,8 @@ class ByconCollections:
 
     def __init__(self):
         self.response_entity_id = BYC.get("response_entity_id", "dataset")
-        self.data_collection = BYC["response_entity"].get("collection", "collations")
+        coll_id = f'{self.response_entity_id}_coll'
+        self.data_collection = BYC_DBS.get(coll_id, "collations")
         self.collections = []
         self.collections_queries = {}
 
@@ -750,7 +760,7 @@ class ByconCollections:
                     ]
                 }
 
-        mongo_client = MongoClient(host=DB_MONGOHOST)
+        mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         for ds_id in BYC["BYC_DATASET_IDS"]:
             mongo_db = mongo_client[ ds_id ]        
             mongo_coll = mongo_db[ "collations" ]
@@ -774,7 +784,7 @@ class ByconResultSets:
         self.aggregation_terms = BYC_PARS.get("aggregation_terms", [])
         self.limit = BYC_PARS.get("limit")
         self.skip = BYC_PARS.get("skip")
-        self.mongo_client = MongoClient(host=DB_MONGOHOST)
+        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
 
         self.record_queries = ByconQuery().recordsQuery()
         self.__create_empty_result_sets()
@@ -857,17 +867,15 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __get_handover_access_key(self):
-        e_d_s = self.entity_defaults.get(self.response_entity_id, {})
-        coll = e_d_s.get("collection", "___none___")
+        coll = BYC_DBS.get(f"{self.response_entity_id}_coll", "___none___")
         self.handover_key = f'{coll}.id'
-        return
 
 
     # -------------------------------------------------------------------------#
 
     def __result_sets_save_handovers(self):
-        ho_client = MongoClient(host=DB_MONGOHOST)
-        ho_coll = ho_client[HOUSEKEEPING_DB][HOUSEKEEPING_HO_COLL]
+        ho_client = MongoClient(host=BYC_DBS["mongodb_host"])
+        ho_coll = ho_client[BYC_DBS["housekeeping_db"]][BYC_DBS["handover_coll"]]
         for ds_id, d_s in self.datasets_results.items():
             if not d_s:
                 continue

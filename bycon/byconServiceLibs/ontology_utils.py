@@ -22,13 +22,13 @@ class OntologyMaps:
         self.ontology_maps = []
         self.erroneous_maps = []
         self.filters = ByconFilters().get_filters()
-        self.filter_definitions = BYC["filter_definitions"].get("$defs", {})
+        self.filter_definitions = BYC.get("filter_definitions", {}).get("$defs", {})
         # TODO: Shouldn't be hard coded here
         self.filter_id_matches = ["NCIT", "pgx:icdom", "pgx:icdot", "UBERON"]
         self.ds_id = BYC["BYC_DATASET_IDS"][0]
 
-        self.ontologymaps_coll = MongoClient(host=DB_MONGOHOST)["_byconServicesDB"]["ontologymaps"]
-        self.bios_coll = MongoClient(host=DB_MONGOHOST)[self.ds_id]["biosamples"]
+        self.ontologymaps_coll = MongoClient(host=BYC_DBS["mongodb_host"])["_byconServicesDB"]["ontologymaps"]
+        self.bios_coll = MongoClient(host=BYC_DBS["mongodb_host"])[self.ds_id]["biosamples"]
 
         self.combos = [
             {

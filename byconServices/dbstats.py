@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from bycon import BYC, DB_MONGOHOST, HOUSEKEEPING_DB, HOUSEKEEPING_INFO_COLL, print_json_response
+from bycon import BYC, BYC_DBS, print_json_response
 from byconServiceLibs import ByconServiceResponse
 
 def dbstats():
@@ -12,8 +12,8 @@ def dbstats():
     * <https://progenetix.org/services/dbstats/>
     * <https://progenetix.org/services/dbstats/examplez>
     """
-    stats_client = MongoClient(host=DB_MONGOHOST)
-    stats_coll = stats_client[HOUSEKEEPING_DB][HOUSEKEEPING_INFO_COLL]
+    stats_client = MongoClient(host=BYC_DBS["mongodb_host"])
+    stats_coll = stats_client[BYC_DBS["housekeeping_db"]][BYC_DBS["info_coll"]]
     results = []
     stats = stats_coll.find({}, {"_id": 0 }).sort("date", -1).limit(1)
     stat = list(stats)[0]

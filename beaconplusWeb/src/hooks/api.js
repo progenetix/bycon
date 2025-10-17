@@ -141,6 +141,9 @@ export function makeFilters({
   cohorts,
   sex,
   materialtype,
+  ageAtDiagnosis,
+  followupTime,
+  followupState,
   freeFilters
 }) {
   return [
@@ -150,8 +153,11 @@ export function makeFilters({
     ...(referenceid ?? []),
     ...(cohorts ? [cohorts] : []),
     ...(analysisOperation ? [analysisOperation] : []),
-    ...(sex ? [sex] : []),
     ...(materialtype ? [materialtype] : []),
+    ...(sex ? [sex] : []),
+    ...(ageAtDiagnosis ? ["ageAtDiagnosis:"+ageAtDiagnosis] : []),
+    ...(followupTime ? ["followupTime:"+followupTime] : []),
+    ...(followupState ? [followupState] : []),
     ...(freeFilters ? freeFilters.split(",") : [])
   ]
 }
@@ -166,6 +172,9 @@ export function buildFilterParameters(queryData) {
     materialtype,
     allTermsFilters,
     clinicalClasses,
+    ageAtDiagnosis,
+    followupTime,
+    followupState,
     freeFilters
   } = queryData
 
@@ -178,6 +187,9 @@ export function buildFilterParameters(queryData) {
     analysisOperation,
     sex,
     materialtype,
+    ageAtDiagnosis,
+    followupTime,
+    followupState,
     freeFilters
   })
   return new URLSearchParams(
@@ -198,6 +210,9 @@ export function buildQueryParameters(queryData) {
     sex,
     materialtype,
     allTermsFilters,
+    ageAtDiagnosis,
+    followupTime,
+    followupState,
     freeFilters,
     clinicalClasses,
     geoCity,
@@ -233,6 +248,9 @@ export function buildQueryParameters(queryData) {
     analysisOperation,
     sex,
     materialtype,
+    ageAtDiagnosis,
+    followupTime,
+    followupState,
     freeFilters
   })
   const geoParams = mkGeoParams(geoCity, geodistanceKm) ?? {}

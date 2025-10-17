@@ -8,7 +8,7 @@ A type of Beacon response that includes details about the **collections** in a b
 
 A dataset available in the beacon.
 
-Information about the datasets available in the beacon instance
+A Dataset is a collection of related sets of information, e.g. genomic variations together with associated procedural and biological metadata. In a Beacon context, a datasets may consist of information generated in a specific study or project, or represent the main content of the Beacon resource.
 
 
 
@@ -22,7 +22,7 @@ Information about the datasets available in the beacon instance
 
 A cohort available in the beacon.
 
-Information about the cohorts available in the beacon instance
+A group of individuals, identified by a common characteristic.
 
 
 
@@ -162,31 +162,19 @@ Information about matching genomic variants from the corresponding dataset. The 
 
 
 
-### analysis @ `/analyses`
+### individual @ `/individuals`
 
-The `analysis` schema represents a information about the data analysis steps leading to (a set of) genomic variation call(s).
+None
 
-Information about matching analyses from the corresponding dataset. The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
-
-
-
-* **{S}** <{{config.reference_server_url}}/services/schemas/analysis>
-
-* **{T}** <{{config.reference_server_url}}/beacon/analyses?testMode=true>
+Information about matching subjects (individuals) from the corresponding dataset. The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
 
 
 
-### run @ `/runs`
+* **{S}** <{{config.reference_server_url}}/services/schemas/individual>
 
-Schema for the experimental run (e.g. sequencing run, array processing...) leading to the raw data for the (computational) analysis. NOTE: In the bycon environment run parameters are stored in the analysis documents and rewritten into this schema at export time.
+* **{T}** <{{config.reference_server_url}}/beacon/individuals?testMode=true>
 
-Information about matching experimental runs from the corresponding dataset. The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
-
-
-
-* **{S}** <{{config.reference_server_url}}/services/schemas/run>
-
-* **{T}** <{{config.reference_server_url}}/beacon/runs?testMode=true>
+* **{E}** <{{config.reference_server_url}}/beacon/individuals?filters=EFO:0030049&limit=5>
 
 
 
@@ -204,19 +192,31 @@ Information about matching samples from the corresponding dataset. The type of r
 
 
 
-### individual @ `/individuals`
+### run @ `/runs`
 
-None
+Schema for the experimental run (e.g. sequencing run, array processing...) leading to the raw data for the (computational) analysis. NOTE: In the bycon environment run parameters are stored in the analysis documents and rewritten into this schema at export time.
 
-Information about matching subjects (individuals) from the corresponding dataset. The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
+The valid and completed operation of a high-throughput sequencing instrument for a single sequencing process. [ NCI ]
 
 
 
-* **{S}** <{{config.reference_server_url}}/services/schemas/individual>
+* **{S}** <{{config.reference_server_url}}/services/schemas/run>
 
-* **{T}** <{{config.reference_server_url}}/beacon/individuals?testMode=true>
+* **{T}** <{{config.reference_server_url}}/beacon/runs?testMode=true>
 
-* **{E}** <{{config.reference_server_url}}/beacon/individuals?filters=EFO:0030049&limit=5>
+
+
+### analysis @ `/analyses`
+
+The `analysis` schema represents a information about the data analysis steps leading to (a set of) genomic variation call(s).
+
+Information about matching analyses from the corresponding dataset. The type of response used for the endpoint depends on the requested and granted `responseGranularity`.
+
+
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/analysis>
+
+* **{T}** <{{config.reference_server_url}}/beacon/analyses?testMode=true>
 
 
 

@@ -46,7 +46,7 @@ class ByconSummary():
     #--------------------------------------------------------------------------#
 
     def __analyses_bundle_analyses_result(self, label=""):
-        sample_coll = MongoClient(host=DB_MONGOHOST)[self.ds_id]["analyses"]
+        sample_coll = MongoClient(host=BYC_DBS["mongodb_host"])[self.ds_id]["analyses"]
         s_ids = self.analyses_result.get("target_values", [])
         r_no = len(s_ids)
         s_ids = ByconH().paginated_list(s_ids, self.skip, self.limit)

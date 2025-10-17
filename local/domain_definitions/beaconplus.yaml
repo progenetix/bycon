@@ -1,0 +1,19 @@
+domains:
+  - beaconplus.progenetix.org
+  - beaconplus.test
+default_dataset_id: examplez
+test_domains:
+  - beaconplus.test
+entity_defaults:
+  info:
+    content:
+      beacon_id: org.progenetix.beaconplus
+      name: Beacon+ Development Environment
+      api_version: v2.2.0-beaconplus
+      version: v2.2.0-beaconplus
+      id: org.progenetix.beaconplus
+      environment: dev
+      description: >-
+        Beacon+ provides a forward looking implementation of the Beacon v2 API, with
+        focus on structural genome variants and metadata based on the cancer and reference
+        genome profiling data in the Progenetix oncogenomic data resource (https://progenetix.org).

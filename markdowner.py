@@ -90,9 +90,9 @@ the selected or granted `responseGranularity` please check `beaconResultsetsResp
         e_url = '{{config.reference_server_url}}/services/schemas' + f'/{r_s}'
         pp_fh.write(f'* **{{S}}** <{e_url}>\n\n')
         for e_d in beacon_ets[r_s].get("endpoints", []):
-            pp_fh.write(f'### {e_d["response_entity_id"]} @ `/{e_d["request_entity_path_id"]}`\n\n')
-            b_s = e_d.get("beacon_schema", {})
-            b_s_s = b_s.get("schema", "")
+            pp_fh.write(f'### {e_d.get("id", "__NA__")} @ `/{e_d["request_entity_path_id"]}`\n\n')
+            b_s = e_d.get("defaultSchema", {})
+            b_s_s = b_s.get("referenceToSchemaDefinition", "")
             b_s_n = b_s_s.rstrip("/").split('/')[-1]
 
             description = ""
@@ -107,7 +107,7 @@ the selected or granted `responseGranularity` please check `beaconResultsetsResp
             s_url = '{{config.reference_server_url}}/services/schemas' + f'/{b_s_n}'
             pp_fh.write(f'* **{{S}}** <{s_url}>\n\n')
             test_url = '{{config.reference_server_url}}/beacon' + f'/{e_d["request_entity_path_id"]}'
-            if "BeaconDataResponse" in e_d.get("bycon_response_class", ""):
+            if e_d.get("response_schema", "___none___") in ["beaconCollectionsResponse", "beaconResultsetsResponse", "beaconFilteringTermsResponse"]:
                 test_url += "?testMode=true"
             pp_fh.write(f'* **{{T}}** <{test_url}>\n\n')
             if len(e_s := e_d.get("examples", [])) > 0:

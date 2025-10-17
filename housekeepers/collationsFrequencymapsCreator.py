@@ -48,7 +48,7 @@ print(f'=> Skipping existing frequencymaps: {skip_existing}')
 
 BYC.update({"PAGINATED_STATUS": False})
 
-data_client = MongoClient(host=DB_MONGOHOST)
+data_client = MongoClient(host=BYC_DBS["mongodb_host"])
 data_db = data_client[ ds_id ]
 coll_coll = data_db[ "collations" ]
 cs_coll = data_db["analyses"]
