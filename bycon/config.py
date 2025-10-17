@@ -10,7 +10,7 @@ Runtime global variables that might be modified through providing them
 in the environment:
 
 DATABASE_NAMES
-DB_MONGOHOST
+BYCON_MONGO_HOST
 BYC_LOCAL_CONF ==> LOC_PATH
 
 """
@@ -39,18 +39,23 @@ if "services" in PROJECT_PATH:
 # Database settings
 #------------------------------------------------------------------------------#
 
-DB_MONGOHOST = environ.get("BYCON_MONGO_HOST", "localhost")
-
-# TODO: wrap them into object to make them mutable for local changes
-# or through environment variables like the host
-
-HOUSEKEEPING_DB = "_byconHousekeepingDB"
-HOUSEKEEPING_INFO_COLL = "beaconinfo"
-HOUSEKEEPING_HO_COLL = "querybuffer"
-
-SERVICES_DB = "_byconServicesDB"
-GENES_COLL = "genes"
-GEOLOCS_COLL = "geolocs"
+BYC_DBS = {
+  "mongodb_host": environ.get("BYCON_MONGO_HOST", "localhost"),
+  "housekeeping_db": "_byconHousekeepingDB",
+  "services_db": "_byconServicesDB",
+  "info_coll": "beaconinfo",
+  "handover_coll": "querybuffer",
+  "genes_coll": "genes",
+  "geolocs_coll": "geolocs",
+  "genomicVariant_coll": "variants",
+  "biosample_coll": "biosamples",
+  "individual_coll": "individuals",
+  "analysis_coll": "analyses",
+  "run_coll": "analyses",
+  "phenopacket_coll": "individuals",
+  "filteringTerm_coll": "collations",
+  "cohort_coll": "collations"
+}
 
 MONGO_DISTINCT_STORAGE_LIMIT = 300000
 VARIANTS_RESPONSE_LIMIT = 300000
@@ -76,13 +81,13 @@ BYC = {
  
   # ..._mappings / ..._definitions are generated from YAML files & should stay static
 
-  "argument_definitions": {"$defs":{}},
+  "argument_definitions": {},
   "authorizations": {},
   "dataset_definitions": {},
   "datatable_mappings": {},
-  "entity_defaults": {"info":{}},
+  "entity_defaults": {},
   "env_paths": {},
-  "filter_definitions": {"$defs":{}},
+  "filter_definitions": {},
   "handover_definitions": {},
   "interval_definitions": {},
   "plot_defaults": {},
@@ -100,6 +105,17 @@ BYC = {
     "test_queries",
     "plot_defaults"
   ],
+  "info_responses": [
+    "beaconInfoResponse" ,
+    "beaconConfigurationResponse",
+    "beaconMapResponse",
+    "beaconEntryTypesResponse"
+  ],
+  "data_responses": [
+    "beaconCollectionsResponse" ,
+    "beaconResultsetsResponse",
+    "beaconFilteringTermsResponse"
+  ],
 
 
   # -------------------------------------------------------------------------- #
@@ -109,7 +125,6 @@ BYC = {
   "response_entity_id": None,
   "response_entity": {},
   "response_schema": "beaconInfoResponse",
-  "bycon_response_class": "BeaconInfoResponse",
   "returned_granularity": "boolean"
 }
 

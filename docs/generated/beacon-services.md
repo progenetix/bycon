@@ -186,6 +186,7 @@ genome-wide screening experiments in cancer.
 ### `/samplemap`
 
 ==TBD==
+* https://progenetix.org/services/samplemap?geoLatitude=25.05&geoLongitude=121.53&geoDistance=2000000&filters=NCIT:C8614
 
 
 ### `/samplematrix`

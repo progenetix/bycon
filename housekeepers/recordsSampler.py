@@ -82,7 +82,7 @@ if not (ds := ds_results.get(ds_id)):
     print(f'{"\n".join(BYC.get("NOTES", []))}')
     exit()
 
-mongo_client = MongoClient(host=DB_MONGOHOST)
+mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
 mongo_db = mongo_client[examples_db]
 test_colls = mongo_db.list_collection_names()
 for coll in list(test_colls):

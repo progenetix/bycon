@@ -158,7 +158,7 @@ Information about matching genomic variants from the corresponding dataset. The 
 
 * **{S}** <{{config.reference_server_url}}/services/schemas/genomicVariant>
 
-* **{T}** <{{config.reference_server_url}}/beacon/g_variants>
+* **{T}** <{{config.reference_server_url}}/beacon/g_variants?testMode=true>
 
 
 

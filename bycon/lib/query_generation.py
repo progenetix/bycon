@@ -38,13 +38,11 @@ class ByconQuery():
 
     def __init__(self, dataset_id=False):
         self.response_types = BYC.get("entity_defaults", {})
-        f_t_d = self.response_types.get("filteringTerm", {})
-        self.filtering_terms_coll = f_t_d.get("collection", "___none___")
         if dataset_id is False:
             self.ds_id = BYC["BYC_DATASET_IDS"][0]
         else:
             self.ds_id = dataset_id
-        self.argument_definitions = BYC["argument_definitions"].get("$defs", {})
+        self.argument_definitions = BYC.get("argument_definitions", {}).get("$defs", {})
         self.cytoband_definitions = BYC.get("cytobands", [])
         self.ChroNames = ChroNames()
 
@@ -151,10 +149,10 @@ class ByconQuery():
             return
 
         ret_no = BYC_PARS.get("test_mode_count", 5)
-        if not (r_c := self.response_entity.get("collection")):
+        if not (r_c := BYC_DBS.get(f"{self.response_entity_id}_coll")):
             return
 
-        data_db = MongoClient(host=DB_MONGOHOST)[self.ds_id]
+        data_db = MongoClient(host=BYC_DBS["mongodb_host"])[self.ds_id]
         if r_c not in data_db.list_collection_names():
             # TODO: warning?
             return
@@ -178,8 +176,7 @@ class ByconQuery():
         self.variant_multi_pars = BYC_PARS.get("variant_multi_pars", [])
 
         r_e = "genomicVariant"
-        r_t_s = self.response_types
-        r_c = r_t_s[r_e].get("collection")
+        r_c = BYC_DBS.get(f"{r_e}_coll")
 
         # new preprocessing which results in a list of variant queries
         self.__preprocess_variant_pars()        
@@ -745,8 +742,10 @@ class ByconQuery():
 
         logic = self.__boolean_to_mongo_logic(BYC_PARS.get("filter_logic"))
 
-        data_db = MongoClient(host=DB_MONGOHOST)[self.ds_id]
-        coll_coll = data_db[ self.filtering_terms_coll ]
+        data_db = MongoClient(host=BYC_DBS["mongodb_host"])[self.ds_id]
+        if not (ft_collname := BYC_DBS.get("filteringTerm_coll")):
+            return
+        coll_coll = data_db[ft_collname]
         self.collation_ids = coll_coll.distinct("id", {})
 
         f_lists = {}
@@ -831,7 +830,7 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __query_from_collationed_filter(self, coll_coll, f_val):
-        f_d_s = BYC["filter_definitions"].get("$defs", {})
+        f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
         if f_val not in self.collation_ids:
             return False
 
@@ -850,7 +849,7 @@ class ByconQuery():
     # -------------------------------------------------------------------------#
 
     def __query_from_filter_definitions(self, f_val):
-        f_d_s = BYC["filter_definitions"].get("$defs", {})
+        f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
         f_info = {
             "id": f_val,
             "scope": "biosamples",
@@ -901,12 +900,8 @@ class ByconQuery():
         if not (accessid := BYC_PARS.get("accessid")):
             return
 
-        ho_client = MongoClient(host=DB_MONGOHOST)
-        ho_coll = ho_client[HOUSEKEEPING_DB][HOUSEKEEPING_HO_COLL]
-        h_o = ho_coll.find_one({"id": accessid})
-
-        # accessid overrides ... ?
-        if not h_o:
+        ho_coll = MongoClient(host=BYC_DBS["mongodb_host"])[BYC_DBS["housekeeping_db"]][BYC_DBS["handover_coll"]]
+        if not (h_o := ho_coll.find_one({"id": accessid})):
             return
 
         t_v = h_o["target_values"]
@@ -1172,7 +1167,7 @@ class CollationQuery:
     def __coll_test_mode_query(self):
         if BYC["TEST_MODE"] is not True:
             return
-        mongo_client = MongoClient(host=DB_MONGOHOST)
+        mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         db_names = list(mongo_client.list_database_names())
         if self.dataset_id not in db_names:
             BYC["ERRORS"].append(f"db `{self.dataset_id}` does not exist")

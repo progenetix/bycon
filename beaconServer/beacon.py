@@ -27,17 +27,17 @@ Fallback is `/info` - so the 422 shouldn't be a thing...
 
 BeaconErrorResponse().respond_if_errors()
 
-b_r_c = BYC.get("bycon_response_class", "___none___")
+b_r_s = BYC.get("response_schema", "beaconInfoResponse")
 
 r = None
-if b_r_c == "BeaconInfoResponse":
+if b_r_s in BYC.get("info_responses", []):
     r = BeaconInfoResponse().populatedInfoResponse()
-elif b_r_c == "BeaconDataResponse":
+elif b_r_s in BYC.get("data_responses", []):
     r = BeaconDataResponse().dataResponseFromEntry()
 BeaconErrorResponse().respond_if_errors()
 if r:
     print_json_response(r)
 
-BYC["ERRORS"].append("No correct service path provided. Please refer to the documentation at http://docs.progenetix.org")
+BYC["ERRORS"].append("No correct Beacon path provided. Please refer to the documentation at http://docs.progenetix.org")
 BeaconErrorResponse().respond_if_errors()
 

@@ -46,19 +46,38 @@ try:
         o = load_yaml_empty_fallback(path.join(CONF_PATH, f'{d}.yaml' ))
         BYC.update({d: o})
 
-    e_d = always_merger.merge(
-        BYC.get("beacon_configuration", {}).get("entryTypes", {}),
-        BYC.get("services_configuration", {}).get("entryTypes", {})
-    )
+    b_e_t = BYC.get("beacon_configuration", {}).get("entryTypes", {})
+    s_e_t = BYC.get("services_configuration", {}).get("entryTypes", {})
+
+    b_e_t_k = list(b_e_t.keys())
+    for e_k in b_e_t_k:
+        b_e_t[e_k].update({"is_beacon_entity": True})
+
+    e_d = always_merger.merge(b_e_t, s_e_t)
 
     # This is WIP - mapping of entryTypes to endpoints using the default map
     endpoints = BYC.get("beacon_map", {}).get("endpointSets", {})
     infos = BYC.get("beacon_map", {}).get("informationalEndpoints", {})
-    for e in list(endpoints.values()) + list(infos.values()):
-        if (e_id := e.get("entryType")) and (e_path_id := e.get("rootUrl")):
+    services = BYC.get("services_map", {}).get("endpointSets", {})
+    for e in list(endpoints.values()) + list(infos.values()) + list(services.values()):
+        if (e_id := e.get("entryType")):
             if e_id in e_d:
-                e_path_id = e_path_id.strip("/").split("/")[-1].strip("/")
-                e_d[e_id].update({"request_entity_path_id": e_path_id})
+                if (e_path_id := e.get("rootUrl")):
+                    e_path_id = e_path_id.strip("/").split("/")[-1].strip("/")
+                    if e_path_id == "beacon":
+                        e_path_id = "info"
+                    e_d[e_id].update({"request_entity_path_id": e_path_id})
+                if (e_path_aliases := e.get("rootUrlAliases")):
+                    e_a_s = []
+                    for e_a in e_path_aliases:
+                        e_a_id = e_a.strip("/").split("/")[-1].strip("/")
+                        if e_a_id in ["beacon", "services"]:
+                            e_a_id = "info"
+                        e_a_s.append(e_a_id)
+                    e_d[e_id].update({"request_entity_path_aliases": e_a_s})
+                #     print(f"mapped {e_id} to {e_path_id} and {e_a_s}")
+                # else:
+                #     print(f"mapped {e_id} to {e_path_id}")
 
     BYC.update({"entity_defaults": e_d})
 

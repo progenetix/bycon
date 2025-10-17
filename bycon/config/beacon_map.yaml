@@ -51,6 +51,9 @@ endpointSets:
     entryType: genomicVariant
     openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/genomicVariations
     rootUrl: https://progenetix.org/beacon/g_variants
+    rootUrlAliases: 
+      - https://progenetix.org/beacon/genomicVariations
+      - https://progenetix.org/beacon/variants
     singleEntryUrl: https://progenetix.org/beacon/g_variants/{id}
     filteringTermsUrl: https://progenetix.org/beacon/filtering_terms
     endpoints:
@@ -111,6 +114,8 @@ endpointSets:
     entryType: biosample
     openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/biosamples
     rootUrl: https://progenetix.org/beacon/biosamples
+    rootUrlAliases: 
+      - https://progenetix.org/beacon/samples
     singleEntryUrl: https://progenetix.org/beacon/biosamples/{id}
     filteringTermsUrl: https://progenetix.org/beacon/filtering_terms
     endpoints:
@@ -171,6 +176,10 @@ informationalEndpoints:
   info:
     entryType: info
     rootUrl: https://progenetix.org/beacon/info
+    rootUrlAliases: 
+      - https://progenetix.org/beacon/
+      - https://progenetix.org/beacon/service-info
+      - https://progenetix.org/beacon/service_info
   beaconMap:
     entryType: beaconMap
     rootUrl: https://progenetix.org/beacon/map
@@ -186,4 +195,6 @@ informationalEndpoints:
   filteringTerm:
     entryType: filteringTerm
     rootUrl: https://progenetix.org/beacon/filtering_terms
+    rootUrlAliases: 
+      - https://progenetix.org/beacon/filteringTerms/
 

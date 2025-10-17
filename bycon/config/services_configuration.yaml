@@ -16,18 +16,13 @@ entryTypes:
 
   api:
     id: api
-    request_entity_path_id: api
 
   byconschemas:
-    id: schema
-    request_entity_path_aliases:
-      - schemas
-    request_entity_path_id: byconschemas
+    id: byconschemas
     path_id_value_bycon_parameter: id
 
   cnvstats:
     id: cnvstats
-    request_entity_path_id: cnvstats
     response_entity_path_alias: analyses
     collection: analyses
     response_schema: beaconResultsetsResponse
@@ -35,31 +30,24 @@ entryTypes:
 
   collation:
     id: collation
-    request_entity_path_id: collations
     collection: collations
     request_entity_path_aliases:
       - collations
-      - collation
     response_schema: byconServiceResponse
     defaultSchema:
       id: Collation
       schema: https://progenetix.org/services/schemas/Collation/
     path_id_value_bycon_parameter: filters
 
-  collationplots:
+  collationplot:
     id: collationplot
-    request_entity_path_id: collationplots
-    request_entity_path_aliases:
-      - collationPlots
-      - collationplots
     defaultSchema:
       id: SVG
       schema: NA
     path_id_value_bycon_parameter: filters
 
-  cytomapper:
+  cytobands:
     id: cytobands
-    request_entity_path_id: cytomapper
     defaultSchema:
       id: cytobandMapping
       schema: https://progenetix.org/services/schemas/CytobandMapping/
@@ -67,7 +55,6 @@ entryTypes:
 
   dbstats:
     id: dbstats
-    request_entity_path_id: dbstats
     defaultSchema:
       id: dbstats
       schema: https://progenetix.org/services/schemas/DBstats/
@@ -75,13 +62,9 @@ entryTypes:
 
   endpoints:
     id: endpoints
-    request_entity_path_id: endpoints
 
-  genespans:
+  gene:
     id: gene
-    request_entity_path_id: genespans
-    request_entity_path_aliases:
-      - genes
     collection: genes
     response_schema: beaconCollectionsResponse
     defaultSchema:
@@ -89,12 +72,8 @@ entryTypes:
       schema: https://progenetix.org/services/schemas/ProgenetixGene/
     path_id_value_bycon_parameter: gene_ids
 
-  geolocations:
-    id: geoLocation
-    request_entity_path_id: geolocations
-    request_entity_path_aliases:
-      - geolocs
-      - geoLocations
+  geolocation:
+    id: geolocation
     collection: geolocs
     response_schema: beaconCollectionsResponse
     defaultSchema:
@@ -103,16 +82,13 @@ entryTypes:
     path_id_value_bycon_parameter: gene_ids
 
   ids:
-    request_entity_path_id: ids
+    id: ids
     path_id_value_bycon_parameter: id
     request_entity_path_aliases:
       - id
 
   intervalFrequencies:
     id: intervalFrequencies
-    request_entity_path_id: intervalFrequencies
-    request_entity_path_aliases:
-      - interval_frequencies
     collection: collations
     response_schema: beaconCollectionsResponse
     defaultSchema:
@@ -122,15 +98,10 @@ entryTypes:
 
   ontologymaps:
     id: ontologymaps
-    request_entity_path_id: ontologymaps
-    request_entity_path_aliases:
-      - ontologymaps
-      - ontologyMaps
     path_id_value_bycon_parameter: filters
 
   publications:
     id: publication
-    request_entity_path_id: publications
     collection: publications
     response_schema: beaconCollectionsResponse
     defaultSchema:
@@ -139,7 +110,7 @@ entryTypes:
     path_id_value_bycon_parameter: filters
 
   uploader:
-    request_entity_path_id: uploader
+    id: uploader
 
 
 ################################################################################
@@ -153,47 +124,37 @@ entryTypes:
 
 
   pgxsegvariants:
-    request_entity_path_id: pgxsegvariants
     response_entity_path_alias: g_variants
     response_schema: beaconResultsetsResponse
-    request_entity_path_aliases:
-      - pgxseg
     # TODO: change? a bit non-standard... 
     path_id_value_bycon_parameter: biosample_ids
 
   samplemap:
-    request_entity_path_id: samplemap
     response_entity_path_alias: biosamples
     collection: biosamples
     response_schema: beaconResultsetsResponse
     path_id_value_bycon_parameter: biosample_ids
 
   samplematrix:
-    request_entity_path_id: samplematrix
     response_entity_path_alias: biosamples
     collection: biosamples
     response_schema: beaconResultsetsResponse
     path_id_value_bycon_parameter: biosample_ids
 
   sampletable:
-    request_entity_path_id: sampletable
     response_entity_path_alias: biosamples
     collection: biosamples
     response_schema: beaconResultsetsResponse
     path_id_value_bycon_parameter: biosample_ids
 
   sampleplots:
-    request_entity_path_id: sampleplots
     response_entity_path_alias: biosamples
-    request_entity_path_aliases:
-      - samplesPlotter
     defaultSchema:
       id: SVG
       schema: NA
     path_id_value_bycon_parameter: biosample_ids
 
   variantsbedfile:
-    request_entity_path_id: variantsbedfile
     collection: variants
     response_schema: beaconResultsetsResponse
     response_entity_path_alias: g_variants
@@ -203,9 +164,6 @@ entryTypes:
     path_id_value_bycon_parameter: biosample_ids
 
   vcfvariants:
-    request_entity_path_id: vcfvariants
-    request_entity_path_aliases:
-      - vcf
     response_entity_path_alias: g_variants
     collection: variants
     response_schema: beaconResultsetsResponse

@@ -5,10 +5,10 @@ from operator import itemgetter
 
 from bycon import (
     BYC,
+    BYC_DBS,
     BYC_PARS,
     BeaconErrorResponse,
     ByconFilters,
-    DB_MONGOHOST,
     GeoQuery,
     prdbug
 )
@@ -37,7 +37,7 @@ def publications():
 
     # The `publications.yaml` file contains an override for `filter_definitions`
     read_service_prefs("publications", services_conf_path)
-    f_d_s = BYC["filter_definitions"].get("$defs", {})
+    f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
 
     query = __create_filters_query()
     geo_q = GeoQuery().get_geoquery()
@@ -52,7 +52,7 @@ def publications():
     
     BeaconErrorResponse().respond_if_errors()
 
-    mongo_client = MongoClient(host=DB_MONGOHOST)
+    mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
     pub_coll = mongo_client[ "_byconServicesDB" ][ "publications" ]
     p_re = re.compile( f_d_s["pubmed"]["pattern"] )
     d_k = BYC_PARS.get("delivery_keys", [])
@@ -137,13 +137,13 @@ def __check_publications_map_response(results):
 def __create_filters_query():
     filters = ByconFilters().get_filters()
     filter_precision = BYC_PARS.get("filter_precision", "exact")
-    f_d_s = BYC["filter_definitions"].get("$defs", {})
+    f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
     query = { }
     error = ""
 
     if BYC["TEST_MODE"] is True:
         test_mode_count = int(BYC_PARS.get('test_mode_count', 5))
-        mongo_client = MongoClient(host=DB_MONGOHOST)
+        mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         data_coll = mongo_client[ "_byconServicesDB" ][ "publications" ]
 
         rs = list(data_coll.aggregate([{"$sample": {"size": test_mode_count}}]))

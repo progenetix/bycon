@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from bycon import (
     BYC,
     BYC_PARS,
-    DB_MONGOHOST,
+    BYC_DBS,
     RefactoredValues,
     get_nested_value,
     prdbug,
@@ -263,7 +263,7 @@ def add_geolocation_to_pgxdoc(pgxdoc, geoprov_id):
     if not "::" in geoprov_id:
         return pgxdoc
 
-    mongo_client = MongoClient(host=DB_MONGOHOST)
+    mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
     geo_info = mongo_client["_byconServicesDB"]["geolocs"].find_one({"id": geoprov_id}, {"_id": 0, "id": 0})
     if geo_info is None:
         return pgxdoc

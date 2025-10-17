@@ -35,11 +35,8 @@ entryTypes:
         name: Genomic Analyses
     additionalSupportedSchemas: []
     #- byconic -#
-    is_beacon_entity: true
-    collection: Null
     path_id_value_bycon_parameter: dataset_ids
     response_schema: beaconCollectionsResponse
-    bycon_response_class: BeaconDataResponse
     tests:
       - description: default test mode
         test_values:
@@ -66,11 +63,8 @@ entryTypes:
         name: Individuals
     additionalSupportedSchemas: []
     #- byconic -#
-    is_beacon_entity: true
-    collection: collations
     path_id_value_bycon_parameter: filters
     response_schema: beaconCollectionsResponse
-    bycon_response_class: BeaconDataResponse
     tests:
       - description: default test mode
         test_values:
@@ -96,12 +90,7 @@ entryTypes:
       schemaVersion: v2.2.0
     additionallySupportedSchemas: []
     #- byconic -#
-    is_beacon_entity: true
-    collection: variants
     response_schema: beaconResultsetsResponse
-    request_entity_path_aliases:
-      - genomicVariations
-      - variants
     path_id_value_bycon_parameter: variant_ids
     tests:
       - description: default test mode
@@ -127,10 +116,7 @@ entryTypes:
       referenceToSchemaDefinition: https://progenetix.org/services/schemas/individual
     additionallySupportedSchemas: []
     #- byconic -#
-    is_beacon_entity: true
-    collection: individuals
     response_schema: beaconResultsetsResponse
-    bycon_response_class: BeaconDataResponse
     path_id_value_bycon_parameter: individual_ids
     examples:
       - ?filters=EFO:0030049&limit=5
@@ -159,12 +145,7 @@ entryTypes:
       referenceToSchemaDefinition: https://progenetix.org/services/schemas/biosample
     additionallySupportedSchemas: []
     #- byconic -#
-    is_beacon_entity: true
-    collection: biosamples  
     response_schema: beaconResultsetsResponse
-    bycon_response_class: BeaconDataResponse
-    request_entity_path_aliases:
-      - samples
     path_id_value_bycon_parameter: biosample_ids
     tests:
       - description: default test mode
@@ -190,10 +171,7 @@ entryTypes:
       schemaVersion: v2.2.0
     additionallySupportedSchemas: []
     #- byconic -#
-    is_beacon_entity: true
-    collection: analyses  
     response_schema: beaconResultsetsResponse
-    bycon_response_class: BeaconDataResponse
     path_id_value_bycon_parameter: run_ids
     tests:
       - description: default test mode
@@ -220,10 +198,7 @@ entryTypes:
       schemaVersion: v2.2.0
     additionallySupportedSchemas: []
     #- byconic -#
-    is_beacon_entity: true
-    collection: analyses  
     response_schema: beaconResultsetsResponse
-    bycon_response_class: BeaconDataResponse
     path_id_value_bycon_parameter: analysis_ids
     tests:
       - description: default test mode
@@ -250,10 +225,7 @@ entryTypes:
       referenceToSchemaDefinition: https://progenetix.org/services/schemas/phenopacket
     additionallySupportedSchemas: []
     #- byconic -#
-    is_beacon_entity: true
-    collection: individuals
     response_schema: beaconResultsetsResponse
-    bycon_response_class: BeaconDataResponse
     path_id_value_bycon_parameter: individual_ids
     tests:
       - description: default test mode
@@ -269,13 +241,10 @@ entryTypes:
     id: filteringTerm
     description: >-
       Information about the filtering terms available in the beacon instance.
-    collection: collations
     response_schema: beaconFilteringTermsResponse
-    bycon_response_class: BeaconDataResponse
     defaultSchema:
       id: filteringTerm
       referenceToSchemaDefinition: https://progenetix.org/services/schemas/filteringTermsSchema/
-    is_beacon_entity: true
     path_id_value_bycon_parameter: filters
     tests:
       - description: default test mode
@@ -286,35 +255,26 @@ entryTypes:
 ################################################################################
 
   info:
+    id: info
     description: >-
       Information about the beacon instance.
-    request_entity_path_aliases:
-      - "/"
-      - "service-info"
-      - "service_info"
-    id: info
     response_schema: beaconInfoResponse
-    bycon_response_class: BeaconInfoResponse
     defaultSchema:
       id: configuration
       referenceToSchemaDefinition: https://progenetix.org/services/schemas/beaconInfoResults/
-    is_beacon_entity: true
     content: {}
 
 
   ################################################################################
 
   beaconMap:
+    id: beaconMap
     description: >-
       Map of the beacon instance configuration.
-    id: beaconMap
-    collection: Null
     response_schema: beaconMapResponse
-    bycon_response_class: BeaconInfoResponse
     defaultSchema:
       id: map
       referenceToSchemaDefinition: https://progenetix.org/services/schemas/beaconMapSchema/
-    is_beacon_entity: true
 
 
   ################################################################################
@@ -323,26 +283,20 @@ entryTypes:
     description: >-
       Information about the beacon instance configuration.
     id: configuration
-    collection: Null
     response_schema: beaconConfigurationResponse
-    bycon_response_class: BeaconInfoResponse
     defaultSchema:
       id: configuration
       referenceToSchemaDefinition: https://progenetix.org/services/schemas/beaconConfigurationSchema/
-    is_beacon_entity: true
 
 
   ################################################################################
 
   entryType:
     id: entryType
-    collection: Null
     response_schema: beaconEntryTypesResponse
-    bycon_response_class: BeaconInfoResponse
     defaultSchema:
       id: entryType
       referenceToSchemaDefinition: https://progenetix.org/services/schemas/entryTypesSchema/
-    is_beacon_entity: true
 
 
 

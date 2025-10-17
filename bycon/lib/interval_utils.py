@@ -4,7 +4,7 @@ from copy import deepcopy
 from os import path, pardir
 from pymongo import MongoClient
 
-from config import DB_MONGOHOST, BYC, BYC_PARS, ENV
+from config import BYC, BYC_DBS, BYC_PARS, ENV
 from genome_utils import Cytobands
 from bycon_helpers import prdbug
 
@@ -162,7 +162,7 @@ class GenomeBins:
     #--------------------------------------------------------------------------#
 
     def intervalAidFrequencyMaps(self, ds_id, analysis_ids=["___none___"]):
-        data_client = MongoClient(host=DB_MONGOHOST)
+        data_client = MongoClient(host=BYC_DBS["mongodb_host"])
         data_db = data_client[ ds_id ]
         ana_coll = data_db["analyses"]
         query = {"id": {"$in": analysis_ids}, "operation.id": "EDAM:operation_3961"}

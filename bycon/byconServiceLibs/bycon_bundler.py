@@ -9,7 +9,7 @@ from copy import deepcopy
 from bycon import (
     BYC,
     BYC_PARS,
-    DB_MONGOHOST,
+    BYC_DBS,
     ByconVariant,
     CollationQuery,
     GenomeBins,
@@ -272,7 +272,7 @@ class ByconBundler:
             if not res_k in ds_res:
                 continue
 
-            mongo_client = MongoClient(host=DB_MONGOHOST)
+            mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
             sample_coll = mongo_client[ds_id][bundle_type]
             s_r = ds_res[res_k]
             s_ids = s_r["target_values"]
@@ -313,7 +313,7 @@ class ByconBundler:
         bb = self.bundle
         c_p_l = []
 
-        mongo_client = MongoClient(host=DB_MONGOHOST)
+        mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         for p_o in bb.get("analyses", []):
             ds_id = p_o.get("dataset_id", "___none___")
             var_coll = mongo_client[ds_id]["variants"]
@@ -461,7 +461,7 @@ class ByconBundler:
  
         prdbug(f'... __isetBundlesFromCollationParameters query {query}')
 
-        mongo_client = MongoClient(host=DB_MONGOHOST)
+        mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         for ds_id in self.datset_ids:
             coll_db = mongo_client[ds_id]
             for collation_f in coll_db["collations" ].find(query):

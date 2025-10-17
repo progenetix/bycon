@@ -107,7 +107,7 @@ the selected or granted `responseGranularity` please check `beaconResultsetsResp
             s_url = '{{config.reference_server_url}}/services/schemas' + f'/{b_s_n}'
             pp_fh.write(f'* **{{S}}** <{s_url}>\n\n')
             test_url = '{{config.reference_server_url}}/beacon' + f'/{e_d["request_entity_path_id"]}'
-            if "BeaconDataResponse" in e_d.get("bycon_response_class", ""):
+            if e_d.get("response_schema", "___none___") in ["beaconCollectionsResponse", "beaconResultsetsResponse", "beaconFilteringTermsResponse"]:
                 test_url += "?testMode=true"
             pp_fh.write(f'* **{{T}}** <{test_url}>\n\n')
             if len(e_s := e_d.get("examples", [])) > 0:

@@ -53,7 +53,7 @@ class ByconOpenAPI:
         self.this_server = select_this_server()
 
         self.beacon_eps = ["info", "dataset", "cohort", "genomicVariant", "analysis", "biosample", "individual", "filteringTerm"]
-        self.service_eps = ["collations", "intervalFrequencies", "geolocations", "publications"]
+        self.service_eps = ["collation", "intervalFrequencies", "geolocations", "publications"]
         self.collation_types = ["NCIT", "pubmed", "NCITsex", "icdom"]
         self.general_pars = ["skip", "limit", "requested_granularity"]
 
@@ -157,11 +157,10 @@ class ByconOpenAPI:
     # -------------------------------------------------------------------------#
 
     def __add_entity_paths(self, path_part, entity):
-        e_d = self.entity_defaults[entity]
+        e_d = self.entity_defaults.get(entity, {})
         p = e_d.get("request_entity_path_id", None)
         r = e_d.get("response_entity_id", None)
         s = e_d.get("response_schema", None)
-        c = e_d.get("bycon_response_class", "BeaconInfoResponse")
         rqp = e_d.get("response_entity_path_alias", p)
 
         pars = []
@@ -200,7 +199,7 @@ class ByconOpenAPI:
                         f"{entity_path}/{{id}}/{b_p}": self.__path_add_methods(p, rqp, b_r, b_s, pars)
                     })
 
-        if "BeaconDataResponse" in c:
+        if s in BYC.get("data_responses", []):
             if  "parameters" in self.oapi["paths"][entity_path]["get"]:
                 for c_p in list(self.general_pars):
                     self.oapi["paths"][entity_path]["get"]["parameters"].append({"$ref": f'#/components/parameters/{camelize(c_p)}'})

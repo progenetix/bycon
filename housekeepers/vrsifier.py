@@ -24,7 +24,7 @@ from ga4gh.vrs.dataproxy import create_dataproxy, SequenceProxy
 
 ds_id = assert_single_dataset_or_exit()
 
-data_client = MongoClient(host=DB_MONGOHOST)
+data_client = MongoClient(host=BYC_DBS["mongodb_host"])
 var_coll = data_client[ds_id]["variants"]
 
 mode = str(BYC_PARS.get("mode"))

@@ -41,7 +41,7 @@ ind_ids = dsr[ds_id]['individuals.id']["target_values"]
 print(f'... {len(ind_ids)} individuals were found')
 
 
-mongo_client = MongoClient(host=DB_MONGOHOST)[ds_id]
+mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])[ds_id]
 ind_coll = mongo_client["individuals"]
 bs_coll = mongo_client["biosamples"]
 ana_coll = mongo_client["analyses"]

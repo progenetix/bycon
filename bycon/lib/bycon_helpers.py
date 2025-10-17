@@ -136,7 +136,7 @@ def days_from_iso8601duration(iso8601duration=""):
 def mongo_result_list(db_name, coll_name, query, fields={}):
     results = []
 
-    mongo_client = MongoClient(host=DB_MONGOHOST)
+    mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
     db_names = list(mongo_client.list_database_names())
     if db_name not in db_names:
         BYC["ERRORS"].append(f"db `{db_name}` does not exist")
