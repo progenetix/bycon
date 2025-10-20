@@ -1,0 +1,12 @@
+base36==0.1.1
+ga4gh_vrs==2.1.4+byconized
+isodate==0.7.2
+json_ref_dict==0.7.2
+Markdown==3.7
+mycgi==0.0.8
+numpy==2.3.4
+Pillow==12.0.0
+pyhumps==3.8.0
+pymongo==4.15.3
+PyYAML==6.0.2
+scipy==1.16.2

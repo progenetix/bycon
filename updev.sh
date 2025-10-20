@@ -10,9 +10,6 @@ python3 -m build --no-isolation --sdist .
 BY=(./dist/*tar.gz)
 pip3 install $BY --no-index --no-build-isolation --break-system-packages
 
-# making sure that schema source edits are propagated to JSON
-./bycon/schemas/bin/yamlerRunner.sh
-
 # generating some documentation source pages, e.g. for parameters
 ./markdowner.py
 

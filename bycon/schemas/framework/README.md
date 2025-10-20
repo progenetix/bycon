@@ -1,0 +1,1 @@
+This directory contains the schema source files for the Beacon framework.

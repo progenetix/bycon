@@ -38,6 +38,7 @@ BeaconErrorResponse().respond_if_errors()
 if r:
     print_json_response(r)
 
-BYC["ERRORS"].append("No correct Beacon path provided. Please refer to the documentation at http://docs.progenetix.org")
+e_m = "No correct Beacon path provided. Please refer to the documentation at http://docs.progenetix.org"
+BYC["ERRORS"].append(e_m)
 BeaconErrorResponse().respond_if_errors()
 

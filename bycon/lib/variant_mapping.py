@@ -47,10 +47,6 @@ class ByconVariant:
         self.datatable_mappings = BYC.get("datatable_mappings", {"$defs": {}})
         self.header_cols = self.datatable_mappings.get("ordered_pgxseg_columns", [])
         self.variant_mappings = self.datatable_mappings["$defs"].get("genomicVariant", {}).get("parameters", {})
-        # self.vrs_allele = ByconSchemas("VRSallele", "").get_schema_instance()
-        # self.vrs_cnv = ByconSchemas("VRScopyNumberChange", "").get_schema_instance()
-        # self.vrs_adjacency = ByconSchemas("VRSadjacency", "").get_schema_instance()
-        self.pgx_variant = ByconSchemas("pgxVariant", "").get_schema_instance()
 
         seqrepo_rest_service_url = 'seqrepo+file:///Users/Shared/seqrepo/2024-12-20'
         self.seqrepo_dataproxy = create_dataproxy(uri=seqrepo_rest_service_url)
@@ -67,29 +63,6 @@ class ByconVariant:
         self.byc_variant = variant
         self.__create_canonical_variant()
         return self.byc_variant
-
-
-    # -------------------------------------------------------------------------#
-
-    def pgxVariant(self, variant=None):
-
-        if not variant:
-            return self.pgx_variant
-        self.byc_variant = variant
-        self.__create_canonical_variant()
-        var_keys = list(self.pgx_variant.keys())
-        for p_k, p_d in self.byc_variant.items():
-            if p_k in var_keys:
-                self.pgx_variant.update({p_k: p_d})
-        for pgx_k in var_keys:
-            if not self.pgx_variant.get(pgx_k):
-                self.pgx_variant.pop(pgx_k, None)
-        if "adjoined_sequences" in self.byc_variant.keys():
-            self.pgx_variant.pop("location", None)
-        else:
-            self.pgx_variant.pop("adjoined_sequences", None)
-        self.pgx_variant.pop("variant_type", None)
-        return self.pgx_variant
 
 
     # -------------------------------------------------------------------------#
