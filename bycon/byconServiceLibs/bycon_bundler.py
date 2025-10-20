@@ -369,7 +369,7 @@ class ByconBundler:
             }
 
             update_v = import_datatable_dict_line(update_v, fieldnames, v, "genomicVariant")
-            update_v = ByconVariant().pgxVariant(update_v)
+            update_v = ByconVariant().vrsVariant(update_v)
             update_v.update({
                 "updated": datetime.now().isoformat()
             })

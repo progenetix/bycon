@@ -6,6 +6,19 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-10-21 (v2.6.3 "Small Surgery"):
+
+* schema file restructuring
+    - removed all JSON schemas fromn the source tree since they are generated
+      from YAML anyway and changed the file targets in `schema_parsing.py` to
+      `.yaml` accordingly
+    - flattened schema hierarchy structure since there is no need to distinguish
+      between `src` and `json` directories anymore
+    - removed the `schemas/bin` directory since no json files are generated anymore
+    - adjusted documentation generation in `markdowner.py` accordingly
+* cleaned out code w/ removal of "pgxVariant" references since using `vrsVariant`
+    - e.g. in `ByconVariant` and `ByconBundler`
+
 ### 2025-10-13 (v2.6.2):
 
 * refactored configuration files and processing to be more "Beacon standard":

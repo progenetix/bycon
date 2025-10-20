@@ -1,4 +1,4 @@
-import humps, re, json
+import humps, re, json, yaml
 
 from json_ref_dict import RefDict, materialize
 from os import path, scandir, pardir
@@ -67,7 +67,7 @@ class ByconSchemas:
         self.schema_name = schema_name
         self.schema_path_id = schema_name
         self.root_key = root_key
-        self.ext = "json"
+        self.ext = "yaml" # json
         self.schema_path = False
 
         # TODO: commented out since on 2025-07-04 in bycon the
@@ -137,6 +137,7 @@ class ByconSchemas:
     # -------------------------------------------------------------------------#
 
     def __get_schema_file_path(self):
+
         f_n = f'{self.schema_name}.{self.ext}'
         s_p_s = [ f for f in self.schemas_root.rglob("*") if f.is_file() ]
         s_p_s = [ f for f in s_p_s if f.name == f_n ]

@@ -21,9 +21,9 @@ def endpoints():
     """
     # TODO: This needs some error fallback, test for existing entities etc.
     if (schema_name := ByconParameters().rest_path_value("endpoints")):
-        p = path.join( PKG_PATH, "schemas", "models", "src", "bycon-model", schema_name, "endpoints.yaml")
+        p = path.join( PKG_PATH, "schemas", "models", "bycon-model", schema_name, "endpoints.yaml")
     else:
-        p = path.join( PKG_PATH, "schemas", "models", "src", "bycon-model", "endpoints.yaml")
+        p = path.join( PKG_PATH, "schemas", "models", "bycon-model", "endpoints.yaml")
 
     prjsonhead()
     prjsontrue(load_yaml_empty_fallback(p))

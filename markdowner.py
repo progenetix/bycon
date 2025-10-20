@@ -56,7 +56,7 @@ def main():
     # populating with the response types to enforce some order
     # and to add the non-document response types
 
-    s_path = Path(path.join( PKG_PATH, "schemas", "framework", "src", "responses"))
+    s_path = Path(path.join( PKG_PATH, "schemas", "framework", "responses"))
     r_s_f = [ Path(f.name).stem for f in s_path.glob("beacon*") if f.is_file() ]
 
     beacon_ets = {}
