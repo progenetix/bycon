@@ -14,7 +14,7 @@ sys.path.append( bycon_lib_path )
 try:
 
     from beacon_auth import *
-    from beacon_response_generation import *
+    from beacon_responses import *
     from bycon_helpers import *
     from bycon_info import *
     from bycon_summarizer import *

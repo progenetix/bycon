@@ -1,7 +1,7 @@
 from deepmerge import always_merger
 from os import environ
 
-from beacon_response_generation import BeaconResponseMeta, print_json_response
+from beacon_responses import BeaconResponseMeta, print_json_response
 from bycon_helpers import mongo_result_list
 from config import AUTHORIZATIONS, BYC, BYC_PARS
 from export_file_generation import *
@@ -24,8 +24,6 @@ class ByconServiceResponse:
         self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta() })
         if not self.data_response.get("info"):
             self.data_response.pop("info", None)
-
-        return
     
 
     # -------------------------------------------------------------------------#

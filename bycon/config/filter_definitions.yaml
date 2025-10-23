@@ -1,6 +1,44 @@
+description: >
+  Definitions for filters supported in the `bycon` framework. They are used both
+  to translate queries against the storage model, as well as for the creation
+  of *collations*, i.e. pre-computed counts of entities per filter value.
+
+  The definitions here are for different filter _classes_, not individual
+  _values_; _i.e._ an "NCITtnm" definition contains information common to all
+  term instances (NCIT terms for TNM status) and how they are identified in the
+  database (collection, database parameter...).
+
+  Filter "classes" refer to a set of related values with the same application scope.
+
+  - `id`: The ID of the filter class
+  - `type`: The Beacon aliogned type of the filter. This can be one of the following:
+      - `alphanumeric`: An alphanumeric value.
+      - `ontologyTerm`: An ontology term.
+      - `custom`: A custom filter.
+  - `format`: The format of the filter value.
+  - `name`: The name of the filter.
+  - `scope`: The scope of the filter, _i.e._ the entity path where it is applied.
+  - `entity`: The entity type that the filter is associated with.
+  - `db_key`: The database key that the filter corresponds to.
+  - `pattern`: The regular expression pattern that the filter value must match.
+  - `collationed`: Whether the filter value should be collationed, _i.e._ if an
+    aggregate of the matched samples is being created (e.g. CNV frequency maps
+    based on all matched samples)
+  - `examples`: A list of example values for the filter. In the case of alphanumeric
+    filters this is a list of values for which aggregations will be performed
+
+  The definitions can be used to validate the input values and to provide
+  additional information for the API documentation.
+
+  The definitions are used in the `filters` section of the API query
+  parameters, e.g. `filters: { "genomes": "genomes:>0" }`.
+
 $defs:
 
-  age:
+  ageAtDiagnosis:
+    description: >-
+      For age at diagnosis we use ISO 8601 duration format, e.g. P18Y for 18 years,
+      but compare this to a pre-calculated numeric value in days in the database.
     id: ageAtDiagnosis
     type: alphanumeric
     format: iso8601duration
@@ -9,9 +47,18 @@ $defs:
     entity: individual
     db_key: index_disease.onset.age_days
     pattern: '^ageAtDiagnosis:?[<>=]+P\d\w+?$'
-    collationed: False
+    collationed: True
     examples:
-      - 'ageAtDiagnosis:<=P18Y'
+      - id: 'ageAtDiagnosis:<=P18M'
+        label: 'Infant (0-18 months)'
+      - id: 'ageAtDiagnosis:<=P18Y'
+        label: 'Child and Adolescent (0-18 years)'
+      - id: 'ageAtDiagnosis:<=P16Y'
+        label: 'Child and Young Adolescent (0-16 years)'
+      - id: 'ageAtDiagnosis:>P18Y'
+        label: 'Adult (> 18 years)'
+      - id: 'ageAtDiagnosis:>P65Y'
+        label: 'Aged (> 65 years)'
 
   followupTime:
     id: followupTime
@@ -24,7 +71,12 @@ $defs:
     pattern: '^followupTime:?[<>=]+P\d\w+?$'
     collationed: False
     examples:
-      - 'followupTime:>=P12M'
+      - id: 'followupTime:>=P0M'
+        label: 'Any Followup Time'
+      - id: 'followupTime:>=P12M'
+        label: 'Followup Time >= 12 months'
+      - id: 'followupTime:>=P5Y'
+        label: 'Followup Time >= 5 years'
 
   EDAMoperation:
     description: >-
@@ -44,11 +96,15 @@ $defs:
     description: Genomic analysis type
     scope: analyses
     entity: analysis
-    pattern: '^EDAM:operation_\d+?$'
+    pattern: '^(:?EDAM:operation_)|(:?NCIT:C)\d+?$'
     collationed: False
-    examples:
-      - EDAM:operation_3961  # Copy number variation detection
-      - EDAM:operation_3227  # Variant Calling
+    anyOf:
+      - id: EDAM:operation_3961
+        label: Copy number variation detection
+      - id: EDAM:operation_3227
+        label: Variant Calling
+      - id: NCIT:C16437
+        label: Chromosome Banding
 
   analysisPipeline:
     id: analysisPipeline
@@ -253,19 +309,21 @@ $defs:
       - NCIT:C16576
       - pgx:sex-female
 
-  EFOcnvassessment:
-    id: efo
-    type: ontologyTerm
-    iri_prefix: http://www.ebi.ac.uk/efo/EFO_
-    name: "Experimental Factor Ontology"
-    namespace_prefix: EFO
-    url: "http://www.ebi.ac.uk/efo/EFO_0030063"
-    db_key: 'variant_state.id'
-    scope: variants
-    pattern: '^EFO(:\d+?)?$'
-    collationed: False
-    examples:
-      - EFO:0030070
+  # NOT a filter but a variant query parameter
+  # TODO: remove
+  # EFOcnvassessment:
+  #   id: efo
+  #   type: ontologyTerm
+  #   iri_prefix: http://www.ebi.ac.uk/efo/EFO_
+  #   name: "Experimental Factor Ontology"
+  #   namespace_prefix: EFO
+  #   url: "http://www.ebi.ac.uk/efo/EFO_0030063"
+  #   db_key: 'variant_state.id'
+  #   scope: variants
+  #   pattern: '^EFO(:\d+?)?$'
+  #   collationed: False
+  #   examples:
+  #     - EFO:0030070
 
   EFOfus:
     id: efo
