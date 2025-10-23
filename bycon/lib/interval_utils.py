@@ -4,7 +4,7 @@ from copy import deepcopy
 from os import path, pardir
 from pymongo import MongoClient
 
-from config import BYC, BYC_DBS, BYC_PARS, ENV
+from config import BYC, BYC_DBS, BYC_PARS, HTTP_HOST
 from genome_utils import Cytobands
 from bycon_helpers import prdbug
 
@@ -314,7 +314,7 @@ class GenomeBins:
             if not (v_i_id := v.get("variant_internal_id")):
                 continue
             if v_i_id in digests:
-                if "___shell___" in ENV:
+                if "___shell___" in HTTP_HOST:
                     BYC["WARNINGS"].append(v)
                     print(f'\n¡¡¡ {v_i_id} already counted for {v.get("analysis_id", None)}')
                     if v.get("_id"):

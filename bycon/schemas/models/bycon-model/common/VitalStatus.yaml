@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/VitalStatus/v2021-12-02
+$id: ___BEACON_ROOT___/services/schemas/VitalStatus/v2021-12-02
 title: VitalStatus
 description: >-
   This element can be used to report whether the individual is living or dead

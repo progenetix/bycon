@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/pgxBiosample/v2022-03-01
+$id: ___BEACON_ROOT___/services/schemas/pgxBiosample/v2022-03-01
 title: Progenetix Biosample
 type: object
 description: >-

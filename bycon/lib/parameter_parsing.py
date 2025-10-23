@@ -72,7 +72,7 @@ class ByconParameters:
     # -------------------------------------------------------------------------#
 
     def __detect_request_environment(self):
-        if "___shell___" in ENV:
+        if "___shell___" in HTTP_HOST:
             self.request_type = "SHELL"
         elif "POST" in environ.get('REQUEST_METHOD', ''):
             self.request_type = "POST"

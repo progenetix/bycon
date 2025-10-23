@@ -22,7 +22,7 @@ entryTypes:
     defaultSchema:
       id: dataset
       name: Default schema for datasets
-      referenceToSchemaDefinition: https://progenetix.org/services/schemas/dataset
+      referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/dataset
       schemaVersion: v2.2.0
     aCollectionOf:
       - id: genomicVariant
@@ -56,7 +56,7 @@ entryTypes:
     defaultSchema:
       id: cohort
       name: Default schema for cohorts
-      referenceToSchemaDefinition: https://progenetix.org/services/schemas/cohort
+      referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/cohort
       schemaVersion: v2.2.0
     aCollectionOf:
       - id: individual
@@ -86,7 +86,7 @@ entryTypes:
     defaultSchema:
       id: genomicVariant
       name: Default schema for a genomic variation
-      referenceToSchemaDefinition: https://progenetix.org/services/schemas/genomicVariant
+      referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/genomicVariant
       schemaVersion: v2.2.0
     additionallySupportedSchemas: []
     #- byconic -#
@@ -113,7 +113,7 @@ entryTypes:
     defaultSchema:
       id: individual
       name: Default schema for an individual
-      referenceToSchemaDefinition: https://progenetix.org/services/schemas/individual
+      referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/individual
     additionallySupportedSchemas: []
     #- byconic -#
     response_schema: beaconResultsetsResponse
@@ -142,7 +142,7 @@ entryTypes:
     defaultSchema:
       id: biosample
       name: Default schema for a biological sample
-      referenceToSchemaDefinition: https://progenetix.org/services/schemas/biosample
+      referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/biosample
     additionallySupportedSchemas: []
     #- byconic -#
     response_schema: beaconResultsetsResponse
@@ -167,7 +167,7 @@ entryTypes:
     defaultSchema:
       id: run
       name: Default schema for a sequencing run
-      referenceToSchemaDefinition: https://progenetix.org/services/schemas/run
+      referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/run
       schemaVersion: v2.2.0
     additionallySupportedSchemas: []
     #- byconic -#
@@ -194,7 +194,7 @@ entryTypes:
     defaultSchema:
       id: analysis
       name: Default schema for a bioinformatics analysis
-      referenceToSchemaDefinition: https://progenetix.org/services/schemas/analysis
+      referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/analysis
       schemaVersion: v2.2.0
     additionallySupportedSchemas: []
     #- byconic -#
@@ -222,7 +222,7 @@ entryTypes:
     defaultSchema:
       id: phenopacket
       name: Default schema for a phenopacket
-      referenceToSchemaDefinition: https://progenetix.org/services/schemas/phenopacket
+      referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/phenopacket
     additionallySupportedSchemas: []
     #- byconic -#
     response_schema: beaconResultsetsResponse
@@ -244,7 +244,7 @@ entryTypes:
     response_schema: beaconFilteringTermsResponse
     defaultSchema:
       id: filteringTerm
-      referenceToSchemaDefinition: https://progenetix.org/services/schemas/filteringTermsSchema/
+      referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/filteringTermsSchema/
     path_id_value_bycon_parameter: filters
     tests:
       - description: default test mode
@@ -261,7 +261,7 @@ entryTypes:
     response_schema: beaconInfoResponse
     defaultSchema:
       id: configuration
-      referenceToSchemaDefinition: https://progenetix.org/services/schemas/beaconInfoResults/
+      referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/beaconInfoResults/
     content: {}
 
 
@@ -274,7 +274,7 @@ entryTypes:
     response_schema: beaconMapResponse
     defaultSchema:
       id: map
-      referenceToSchemaDefinition: https://progenetix.org/services/schemas/beaconMapSchema/
+      referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/beaconMapSchema/
 
 
   ################################################################################
@@ -286,7 +286,7 @@ entryTypes:
     response_schema: beaconConfigurationResponse
     defaultSchema:
       id: configuration
-      referenceToSchemaDefinition: https://progenetix.org/services/schemas/beaconConfigurationSchema/
+      referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/beaconConfigurationSchema/
 
 
   ################################################################################
@@ -296,7 +296,7 @@ entryTypes:
     response_schema: beaconEntryTypesResponse
     defaultSchema:
       id: entryType
-      referenceToSchemaDefinition: https://progenetix.org/services/schemas/entryTypesSchema/
+      referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/entryTypesSchema/
 
 
 

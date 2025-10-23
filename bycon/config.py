@@ -15,8 +15,13 @@ BYC_LOCAL_CONF ==> LOC_PATH
 
 """
 
-ENV = environ.get('HTTP_HOST', "___shell___")
+HTTP_HOST = environ.get('HTTP_HOST', "___shell___")
 HOSTNAME = environ.get('HOSTNAME', socket.gethostname())
+REQUEST_SCHEME = environ.get('REQUEST_SCHEME', "___shell___")
+
+BEACON_ROOT = f"{REQUEST_SCHEME}://{HTTP_HOST}"
+if HTTP_HOST == "___shell___":
+    BEACON_ROOT = f"cli://{HOSTNAME}"
 
 PKG_PATH = pkg_path
 CONF_PATH = path.join(pkg_path, "config")
@@ -129,7 +134,7 @@ BYC = {
   "returned_granularity": "boolean"
 }
 
-# collection object for cmd arguments and web parameters (depending on the ENV)
+# collection object for cmd arguments and web parameters (depending on the HTTP_HOST)
 # all possible parameters rare defined in `argument_definitions.yaml`, partially
 # provifding default values
 BYC_PARS = {}

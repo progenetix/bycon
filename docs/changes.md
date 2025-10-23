@@ -6,6 +6,17 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-10-23 (v2.6.4 "___BEACON_ROOT___"):
+
+* changed from hard coded `https://progenetix.org` to template `___BEACON_ROOT___`
+  in map, schema and configuration files and for handover generation
+    - the `___BEACON_ROOT___` is replaced during request processing through the
+      detected `f"{REQUEST_SCHEME}://{HTTP_HOST}"`
+* fixed UCSC link generation for BeaconPlus
+* removed `beaconMap.yaml` from `schemas`, since now part of `config/beacon_map.yaml`
+* renamed `ENV` to `HTTP_HOST` for consistency
+* new `dict_replace_values` function in `bycon_helpers.py`
+
 ### 2025-10-21 (v2.6.3 "Small Surgery"):
 
 * schema file restructuring
@@ -430,9 +441,9 @@ This is a test run for a major query module change:
 
 ### 2024-11-14 (v2.0.12)
 
-* bug fix: the global ENV was previously set to "local" if not called 
-  over HTTP (`ENV = environ.get('HTTP_HOST' => "local")`) which led
-  to a wrong "local" context identification when testing from "localhost"; changed to `ENV = environ.get('HTTP_HOST' => "___shell___")` and appropriate tests against this value
+* bug fix: the global HTTP_HOST was previously set to "local" if not called 
+  over HTTP (`HTTP_HOST = environ.get('HTTP_HOST' => "local")`) which led
+  to a wrong "local" context identification when testing from "localhost"; changed to `HTTP_HOST = environ.get('HTTP_HOST' => "___shell___")` and appropriate tests against this value
 
 ### 2024-11-14 (v2.0.11)
 

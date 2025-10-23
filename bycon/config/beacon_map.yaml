@@ -3,198 +3,198 @@ endpointSets:
 
   datasetEndpoints:
     entryType: dataset
-    openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/datasets
-    rootUrl: https://progenetix.org/beacon/datasets
-    singleEntryUrl: https://progenetix.org/beacon/datasets/{id}
-    filteringTermsUrl: https://progenetix.org/beacon/filtering_terms
+    openAPIEndpointsDefinition: ___BEACON_ROOT___/services/endpoints/datasets
+    rootUrl: ___BEACON_ROOT___/beacon/datasets
+    singleEntryUrl: ___BEACON_ROOT___/beacon/datasets/{id}
+    filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     endpoints:
       genomicVariantLookup:
         returnedEntryType: genomicVariant
-        url: https://progenetix.org/beacon/datasets/{id}/g_variants
+        url: ___BEACON_ROOT___/beacon/datasets/{id}/g_variants
       biosampleLookup:
         returnedEntryType: biosample
-        url: https://progenetix.org/beacon/datasets/{id}/biosamples
+        url: ___BEACON_ROOT___/beacon/datasets/{id}/biosamples
       individualLookup:
         returnedEntryType: individual
-        url: https://progenetix.org/beacon/datasets/{id}/individuals
+        url: ___BEACON_ROOT___/beacon/datasets/{id}/individuals
       runLookup:
         returnedEntryType: run
-        url: https://progenetix.org/beacon/datasets/{id}/runs
+        url: ___BEACON_ROOT___/beacon/datasets/{id}/runs
       analysisLookup:
         returnedEntryType: analysis
-        url: https://progenetix.org/beacon/datasets/{id}/analyses
+        url: ___BEACON_ROOT___/beacon/datasets/{id}/analyses
 
   cohortEndpoints:
     entryType: cohort
-    openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/cohorts
-    rootUrl: https://progenetix.org/beacon/cohorts
-    singleEntryUrl: https://progenetix.org/beacon/cohorts/{id}
-    filteringTermsUrl: https://progenetix.org/beacon/filtering_terms
+    openAPIEndpointsDefinition: ___BEACON_ROOT___/services/endpoints/cohorts
+    rootUrl: ___BEACON_ROOT___/beacon/cohorts
+    singleEntryUrl: ___BEACON_ROOT___/beacon/cohorts/{id}
+    filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     endpoints:
       individualLookup:
         returnedEntryType: individual
-        url: https://progenetix.org/beacon/cohorts/{id}/individuals
+        url: ___BEACON_ROOT___/beacon/cohorts/{id}/individuals
       genomicVariantLookup:
         returnedEntryType: genomicVariant
-        url: https://progenetix.org/beacon/cohorts/{id}/g_variants
+        url: ___BEACON_ROOT___/beacon/cohorts/{id}/g_variants
       biosampleLookup:
         returnedEntryType: biosample
-        url: https://progenetix.org/beacon/cohorts/{id}/biosamples
+        url: ___BEACON_ROOT___/beacon/cohorts/{id}/biosamples
       runLookup:
         returnedEntryType: run
-        url: https://progenetix.org/beacon/cohorts/{id}/runs
+        url: ___BEACON_ROOT___/beacon/cohorts/{id}/runs
       analysisLookup:
         returnedEntryType: analysis
-        url: https://progenetix.org/beacon/cohorts/{id}/analyses
+        url: ___BEACON_ROOT___/beacon/cohorts/{id}/analyses
 
   genomicVariantEndpoints:
     entryType: genomicVariant
-    openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/genomicVariations
-    rootUrl: https://progenetix.org/beacon/g_variants
+    openAPIEndpointsDefinition: ___BEACON_ROOT___/services/endpoints/genomicVariations
+    rootUrl: ___BEACON_ROOT___/beacon/g_variants
     rootUrlAliases: 
-      - https://progenetix.org/beacon/genomicVariations
-      - https://progenetix.org/beacon/variants
-    singleEntryUrl: https://progenetix.org/beacon/g_variants/{id}
-    filteringTermsUrl: https://progenetix.org/beacon/filtering_terms
+      - ___BEACON_ROOT___/beacon/genomicVariations
+      - ___BEACON_ROOT___/beacon/variants
+    singleEntryUrl: ___BEACON_ROOT___/beacon/g_variants/{id}
+    filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     endpoints:
       individualLookup:
         returnedEntryType: individual
-        url: https://progenetix.org/beacon/g_variants/{id}/individuals
+        url: ___BEACON_ROOT___/beacon/g_variants/{id}/individuals
       biosampleLookup:
         returnedEntryType: biosample
-        url: https://progenetix.org/beacon/g_variants/{id}/biosamples
+        url: ___BEACON_ROOT___/beacon/g_variants/{id}/biosamples
       analysisLookup:
         returnedEntryType: analysis
-        url: https://progenetix.org/beacon/g_variants/{id}/analyses
+        url: ___BEACON_ROOT___/beacon/g_variants/{id}/analyses
       runLookup:
         returnedEntryType: run
-        url: https://progenetix.org/beacon/g_variants/{id}/runs
+        url: ___BEACON_ROOT___/beacon/g_variants/{id}/runs
 
   phenopacketEndpoints:
     entryType: phenopacket
-    openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/phenopackets
-    rootUrl: https://progenetix.org/beacon/phenopackets
-    singleEntryUrl: https://progenetix.org/beacon/phenopackets/{id}
-    filteringTermsUrl: https://progenetix.org/beacon/filtering_terms
+    openAPIEndpointsDefinition: ___BEACON_ROOT___/services/endpoints/phenopackets
+    rootUrl: ___BEACON_ROOT___/beacon/phenopackets
+    singleEntryUrl: ___BEACON_ROOT___/beacon/phenopackets/{id}
+    filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     endpoints:
       biosampleLookup:
         returnedEntryType: biosample
-        url: https://progenetix.org/beacon/phenopackets/{id}/biosamples
+        url: ___BEACON_ROOT___/beacon/phenopackets/{id}/biosamples
       analysisLookup:
         returnedEntryType: analysis
-        url: https://progenetix.org/beacon/phenopackets/{id}/analyses
+        url: ___BEACON_ROOT___/beacon/phenopackets/{id}/analyses
       runLookup:
         returnedEntryType: run
-        url: https://progenetix.org/beacon/phenopackets/{id}/runs
+        url: ___BEACON_ROOT___/beacon/phenopackets/{id}/runs
       genomicVariantLookup:
         returnedEntryType: genomicVariant
-        url: https://progenetix.org/beacon/phenopackets/{id}/g_variants
+        url: ___BEACON_ROOT___/beacon/phenopackets/{id}/g_variants
 
   individualEndpoints:
     entryType: individual
-    openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/individuals
-    rootUrl: https://progenetix.org/beacon/individuals
-    singleEntryUrl: https://progenetix.org/beacon/individuals/{id}
-    filteringTermsUrl: https://progenetix.org/beacon/filtering_terms
+    openAPIEndpointsDefinition: ___BEACON_ROOT___/services/endpoints/individuals
+    rootUrl: ___BEACON_ROOT___/beacon/individuals
+    singleEntryUrl: ___BEACON_ROOT___/beacon/individuals/{id}
+    filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     endpoints:
       biosampleLookup:
         returnedEntryType: biosample
-        url: https://progenetix.org/beacon/individuals/{id}/biosamples
+        url: ___BEACON_ROOT___/beacon/individuals/{id}/biosamples
       analysisLookup:
         returnedEntryType: analysis
-        url: https://progenetix.org/beacon/individuals/{id}/analyses
+        url: ___BEACON_ROOT___/beacon/individuals/{id}/analyses
       runLookup:
         returnedEntryType: run
-        url: https://progenetix.org/beacon/individuals/{id}/runs
+        url: ___BEACON_ROOT___/beacon/individuals/{id}/runs
       genomicVariantLookup:
         returnedEntryType: genomicVariant
-        url: https://progenetix.org/beacon/individuals/{id}/g_variants
+        url: ___BEACON_ROOT___/beacon/individuals/{id}/g_variants
 
   biosampleEndpoints:
     entryType: biosample
-    openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/biosamples
-    rootUrl: https://progenetix.org/beacon/biosamples
+    openAPIEndpointsDefinition: ___BEACON_ROOT___/services/endpoints/biosamples
+    rootUrl: ___BEACON_ROOT___/beacon/biosamples
     rootUrlAliases: 
-      - https://progenetix.org/beacon/samples
-    singleEntryUrl: https://progenetix.org/beacon/biosamples/{id}
-    filteringTermsUrl: https://progenetix.org/beacon/filtering_terms
+      - ___BEACON_ROOT___/beacon/samples
+    singleEntryUrl: ___BEACON_ROOT___/beacon/biosamples/{id}
+    filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     endpoints:
       individualLookup:
         returnedEntryType: individual
-        url: https://progenetix.org/beacon/biosamples/{id}/individuals
+        url: ___BEACON_ROOT___/beacon/biosamples/{id}/individuals
       analysisLookup:
         returnedEntryType: analysis
-        url: https://progenetix.org/beacon/biosamples/{id}/analyses
+        url: ___BEACON_ROOT___/beacon/biosamples/{id}/analyses
       runLookup:
         returnedEntryType: run
-        url: https://progenetix.org/beacon/biosamples/{id}/runs
+        url: ___BEACON_ROOT___/beacon/biosamples/{id}/runs
       genomicVariantLookup:
         returnedEntryType: genomicVariant
-        url: https://progenetix.org/beacon/biosamples/{id}/g_variants
+        url: ___BEACON_ROOT___/beacon/biosamples/{id}/g_variants
 
   analysisEndpoints:
     entryType: analysis
-    openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/analyses
-    rootUrl: https://progenetix.org/beacon/analyses
-    singleEntryUrl: https://progenetix.org/beacon/analyses/{id}
-    filteringTermsUrl: https://progenetix.org/beacon/filtering_terms
+    openAPIEndpointsDefinition: ___BEACON_ROOT___/services/endpoints/analyses
+    rootUrl: ___BEACON_ROOT___/beacon/analyses
+    singleEntryUrl: ___BEACON_ROOT___/beacon/analyses/{id}
+    filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     endpoints:
       individualLookup:
         returnedEntryType: individual
-        url: https://progenetix.org/beacon/analyses/{id}/individuals
+        url: ___BEACON_ROOT___/beacon/analyses/{id}/individuals
       biosampleLookup:
         returnedEntryType: biosample
-        url: https://progenetix.org/beacon/analyses/{id}/biosamples
+        url: ___BEACON_ROOT___/beacon/analyses/{id}/biosamples
       runLookup:
         returnedEntryType: run
-        url: https://progenetix.org/beacon/analyses/{id}/runs
+        url: ___BEACON_ROOT___/beacon/analyses/{id}/runs
       genomicVariantLookup:
         returnedEntryType: genomicVariant
-        url: https://progenetix.org/beacon/analyses/{id}/g_variants
+        url: ___BEACON_ROOT___/beacon/analyses/{id}/g_variants
 
   runEndpoints:
     entryType: run
-    openAPIEndpointsDefinition: https://progenetix.org/services/endpoints/runs
-    rootUrl: https://progenetix.org/beacon/runs
-    singleEntryUrl: https://progenetix.org/beacon/runs/{id}
-    filteringTermsUrl: https://progenetix.org/beacon/filtering_terms
+    openAPIEndpointsDefinition: ___BEACON_ROOT___/services/endpoints/runs
+    rootUrl: ___BEACON_ROOT___/beacon/runs
+    singleEntryUrl: ___BEACON_ROOT___/beacon/runs/{id}
+    filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     endpoints:
       individualLookup:
         returnedEntryType: individual
-        url: https://progenetix.org/beacon/runs/{id}/individuals
+        url: ___BEACON_ROOT___/beacon/runs/{id}/individuals
       biosampleLookup:
         returnedEntryType: biosample
-        url: https://progenetix.org/beacon/runs/{id}/biosamples
+        url: ___BEACON_ROOT___/beacon/runs/{id}/biosamples
       analysisLookup:
         returnedEntryType: analysis
-        url: https://progenetix.org/beacon/runs/{id}/analyses
+        url: ___BEACON_ROOT___/beacon/runs/{id}/analyses
       genomicVariantLookup:
         returnedEntryType: genomicVariant
-        url: https://progenetix.org/beacon/runs/{id}/g_variants
+        url: ___BEACON_ROOT___/beacon/runs/{id}/g_variants
 
 informationalEndpoints:
   info:
     entryType: info
-    rootUrl: https://progenetix.org/beacon/info
+    rootUrl: ___BEACON_ROOT___/beacon/info
     rootUrlAliases: 
-      - https://progenetix.org/beacon/
-      - https://progenetix.org/beacon/service-info
-      - https://progenetix.org/beacon/service_info
+      - ___BEACON_ROOT___/beacon/
+      - ___BEACON_ROOT___/beacon/service-info
+      - ___BEACON_ROOT___/beacon/service_info
   beaconMap:
     entryType: beaconMap
-    rootUrl: https://progenetix.org/beacon/map
+    rootUrl: ___BEACON_ROOT___/beacon/map
   configuration:
     entryType: configuration
-    rootUrl: https://progenetix.org/beacon/configuration
+    rootUrl: ___BEACON_ROOT___/beacon/configuration
   configuration:
     entryType: configuration
-    rootUrl: https://progenetix.org/beacon/configuration
+    rootUrl: ___BEACON_ROOT___/beacon/configuration
   entryType:
     entryType: entryType
-    rootUrl: https://progenetix.org/beacon/entry_types
+    rootUrl: ___BEACON_ROOT___/beacon/entry_types
   filteringTerm:
     entryType: filteringTerm
-    rootUrl: https://progenetix.org/beacon/filtering_terms
+    rootUrl: ___BEACON_ROOT___/beacon/filtering_terms
     rootUrlAliases: 
-      - https://progenetix.org/beacon/filteringTerms/
+      - ___BEACON_ROOT___/beacon/filteringTerms/
 

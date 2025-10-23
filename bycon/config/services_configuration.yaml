@@ -36,7 +36,7 @@ entryTypes:
     response_schema: byconServiceResponse
     defaultSchema:
       id: Collation
-      schema: https://progenetix.org/services/schemas/Collation/
+      schema: ___BEACON_ROOT___/services/schemas/Collation/
     path_id_value_bycon_parameter: filters
 
   collationplot:
@@ -50,14 +50,14 @@ entryTypes:
     id: cytobands
     defaultSchema:
       id: cytobandMapping
-      schema: https://progenetix.org/services/schemas/CytobandMapping/
+      schema: ___BEACON_ROOT___/services/schemas/CytobandMapping/
     path_id_value_bycon_parameter: cyto_bands
 
   dbstats:
     id: dbstats
     defaultSchema:
       id: dbstats
-      schema: https://progenetix.org/services/schemas/DBstats/
+      schema: ___BEACON_ROOT___/services/schemas/DBstats/
     path_id_value_bycon_parameter: dataset_ids
 
   endpoints:
@@ -68,7 +68,7 @@ entryTypes:
     response_schema: beaconCollectionsResponse
     defaultSchema:
       id: gene
-      schema: https://progenetix.org/services/schemas/ProgenetixGene/
+      schema: ___BEACON_ROOT___/services/schemas/ProgenetixGene/
     path_id_value_bycon_parameter: gene_ids
 
   geolocation:
@@ -76,7 +76,7 @@ entryTypes:
     response_schema: beaconCollectionsResponse
     defaultSchema:
       id: GeoLocation
-      schema: https://progenetix.org/services/schemas/GeoLocation/
+      schema: ___BEACON_ROOT___/services/schemas/GeoLocation/
     path_id_value_bycon_parameter: gene_ids
 
   ids:
@@ -91,7 +91,7 @@ entryTypes:
     response_schema: beaconCollectionsResponse
     defaultSchema:
       id: intervalFrequencies
-      schema: https://progenetix.org/services/schemas/IntervalFrequencies/
+      schema: ___BEACON_ROOT___/services/schemas/IntervalFrequencies/
     path_id_value_bycon_parameter: filters
 
   ontologymaps:
@@ -103,7 +103,7 @@ entryTypes:
     response_schema: beaconCollectionsResponse
     defaultSchema:
       id: publication
-      schema: https://progenetix.org/services/schemas/Publication/
+      schema: ___BEACON_ROOT___/services/schemas/Publication/
     path_id_value_bycon_parameter: filters
 
   uploader:

@@ -21,7 +21,7 @@ def dataset_response_add_handovers(ds_id, datasets_results):
     skip = BYC_PARS.get("skip")
     limit = BYC_PARS.get("limit")
     e_t = BYC["response_entity"].get("response_entity_id", "___none___")
-    h_o_server = select_this_server()
+    # h_o_server = select_this_server()
     h_o_types = BYC["handover_definitions"]["h->o_types"]
     ds_h_o = BYC["dataset_definitions"][ds_id].get("handoverTypes", h_o_types.keys())
     ds_res_k = list(datasets_results[ds_id].keys())
@@ -47,7 +47,7 @@ def dataset_response_add_handovers(ds_id, datasets_results):
                 "count": target_count
             },
             "note": h_o_defs[ "note" ],
-            "url": __handover_create_url(h_o_server, h_o_defs, ds_id, accessid)
+            "url": __handover_create_url(h_o_defs, ds_id, accessid)
         }
 
         # TODO: needs a new schema to accommodate this not as HACK ...
@@ -64,11 +64,10 @@ def dataset_response_add_handovers(ds_id, datasets_results):
 
 ################################################################################
 
-def __handover_create_url(h_o_server, h_o_defs, ds_id, accessid):
+def __handover_create_url(h_o_defs, ds_id, accessid):
     if not (addr := h_o_defs.get("script_path_web")):
         return ""
-    server = "" if "http" in addr else h_o_server
-    url = f'{server}{addr}?datasetIds={ds_id}&accessid={accessid}'
+    url = f'{addr}?datasetIds={ds_id}&accessid={accessid}'.replace("___BEACON_ROOT___", BEACON_ROOT)
     for p in ["plotType", "output"]:
         if (v := h_o_defs.get(p)):
             url += f"&{p}={v}"

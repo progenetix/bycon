@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/pgxIndividual/v2022-03-07
+$id: ___BEACON_ROOT___/services/schemas/pgxIndividual/v2022-03-07
 title: pgxIndividual
 type: object
 description: >-

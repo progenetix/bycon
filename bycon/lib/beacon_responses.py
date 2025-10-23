@@ -28,6 +28,7 @@ class BeaconResponseMeta:
         self.record_queries = None
         self.filters = ByconFilters().get_filters()
 
+
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
@@ -195,12 +196,12 @@ class BeaconInfoResponse:
             self.info_response_content.update({"entry_types": bet})
             return
         if "beaconMap" in self.response_entity_id:
-            c_f = ByconSchemas("beaconMap").get_schema_file_path()
-            self.info_response_content = load_yaml_empty_fallback(c_f)
+            b_m = BYC.get("beacon_map", {})
+            b_m = dict_replace_values(b_m, "___BEACON_ROOT___", BEACON_ROOT)
+            self.info_response_content = b_m
             return
         if "entryType" in self.response_entity_id:
-            c_f = ByconSchemas("beaconConfiguration").get_schema_file_path()
-            e_t_s = load_yaml_empty_fallback(c_f)
+            e_t_s = BYC.get("beacon_configuration", {})
             self.info_response_content = {"entry_types": e_t_s["entryTypes"] }
             return
         if "info" in self.response_entity_id:
@@ -1007,7 +1008,7 @@ class ByconResultSets:
 ################################################################################
 
 def print_json_response(this={}, status_code=200):
-    if not "___shell___" in ENV:
+    if not "___shell___" in HTTP_HOST:
         print(f'Status: {status_code}')
         print('Content-Type: application/json')
         print()
@@ -1021,7 +1022,7 @@ def print_json_response(this={}, status_code=200):
 ################################################################################
 
 def print_text_response(this="", status_code=200):
-    if not "___shell___" in ENV:
+    if not "___shell___" in HTTP_HOST:
         print(f'Status: {status_code}')
         print('Content-Type: text/plain')
         print()
@@ -1034,7 +1035,7 @@ def print_text_response(this="", status_code=200):
 ################################################################################
 
 def print_html_response(this="", status_code=200):
-    if not "___shell___" in ENV:
+    if not "___shell___" in HTTP_HOST:
         print(f'Status: {status_code}')
         print('Content-Type: text/html')
         print()

@@ -12,7 +12,7 @@ from bycon import (
     ByconH,
     ByconVariant,
     BYC_DBS,
-    ENV,
+    HTTP_HOST,
     GenomeBins,
     get_nested_value,
     prdbug,
@@ -594,7 +594,7 @@ class PGXvcf:
 ################################################################################
 
 def open_text_streaming(filename="data.pgxseg"):
-    if not "___shell___" in ENV:
+    if not "___shell___" in HTTP_HOST:
         print('Content-Type: text/plain')
         print(f'Content-Disposition: attachment; filename="{filename}"')
         print('status: 200')

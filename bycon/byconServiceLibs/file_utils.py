@@ -9,7 +9,7 @@ from bycon import (
     ByconVariant,
     BYC,
     BYC_PARS,
-    ENV,
+    HTTP_HOST,
     PROJECT_PATH,
     prdbug,
     prjsonnice
@@ -51,7 +51,7 @@ class ExportFile:
     def __handle_file_error(self, error=None):
         if not error:
             return
-        if "___shell___" in ENV:
+        if "___shell___" in HTTP_HOST:
             print(error)
             exit()
         BYC["ERRORS"].append(error)

@@ -336,7 +336,7 @@ a few parameters:
 * fix: a `g_variants` endpoint w/o any parameter led to a query error
 * removal of some `byconaut` code remnants
 * some internal reshuffling; e.g. move of export/print helpers to from `parameter_parsing`
-  to `beacon_response_generation` and `bycon_helpers`
+  to `beacon_responses` and `bycon_helpers`
 
 ### 2024-01-18 (v1.4.0)
 
@@ -675,7 +675,7 @@ definitions and "local" ones. Partcullarly:
 * bug fix sample plots
 * internal function re-organization (`initialize_bycon_queries` deprecated & replaced
   by `parse_filters` & `parse_variants`)
-* also addition to the ENV config in byconaut
+* also addition to the HTTP_HOST config in byconaut
 
 ### 2023-07-04 (v1.0.61)
 

@@ -31,7 +31,7 @@ class ByconID:
 
 class ByconH:
     def __init__(self):
-        self.env = ENV
+        self.env = HTTP_HOST
 
     #--------------------------------------------------------------------------#
     #----------------------------- public -------------------------------------#
@@ -90,7 +90,7 @@ def select_this_server() -> str:
     # for k in environ.keys():
     #     prdbug(f'{k} => {str(environ.get(k))}')
 
-    s = f'https://{ENV}'
+    s = f'https://{HTTP_HOST}'
     if not "https" in s_uri and not "https" in X_FORWARDED_PROTO:
         s = s.replace("https://", "http://")
 
@@ -152,6 +152,27 @@ def mongo_result_list(db_name, coll_name, query, fields={}):
 
 ################################################################################
 
+def dict_replace_values(this_dict, old_value, new_value):
+    for k, v in this_dict.items():
+        if type(v) is dict:
+            this_dict[k] = dict_replace_values(v, old_value, new_value)
+        elif type(v) is list:
+            new_list = []
+            for i in v:
+                if type(i) is dict:
+                    new_list.append(dict_replace_values(i, old_value, new_value))
+                elif type(i) is str and old_value in i:
+                    new_list.append(i.replace(old_value, new_value))
+                else:
+                    new_list.append(i)
+            this_dict[k] = new_list
+        elif type(v) is str and old_value in v:
+            this_dict[k] = v.replace(old_value, new_value)
+    return this_dict
+
+
+################################################################################
+
 def decamelize_words(j_d):
     for d in BYC_UNCAMELED:
         j_d = re.sub(r"\b{}\b".format(d), humps.decamelize(d), j_d)
@@ -170,7 +191,7 @@ def prdbughead(this=""):
 ################################################################################
 
 def prjsonhead():
-    if not "___shell___" in ENV:
+    if not "___shell___" in HTTP_HOST:
         print('Content-Type: application/json')
         print('status:200')
         print()
@@ -179,7 +200,7 @@ def prjsonhead():
 ################################################################################
 
 def prtexthead():
-    if not "___shell___" in ENV:
+    if not "___shell___" in HTTP_HOST:
         print('Content-Type: text/plain')
         print('status: 302')
         print()
@@ -188,7 +209,7 @@ def prtexthead():
 ################################################################################
 
 def prdlhead(filename="download.txt"):
-    if not "___shell___" in ENV:
+    if not "___shell___" in HTTP_HOST:
         print('Content-Type: text/tsv')
         print(f'Content-Disposition: attachment; filename={filename}')
         print('status: 200')
