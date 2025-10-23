@@ -54,6 +54,8 @@ try:
         b_e_t[e_k].update({"is_beacon_entity": True})
 
     e_d = always_merger.merge(b_e_t, s_e_t)
+    e_d = dict_replace_values(e_d, "___BEACON_ROOT___", BEACON_ROOT)
+
 
     # This is WIP - mapping of entryTypes to endpoints using the default map
     endpoints = BYC.get("beacon_map", {}).get("endpointSets", {})
@@ -105,7 +107,7 @@ try:
             })
 
         # server specific setting of defaults dataset ids etc.
-        if not "___shell___" in ENV:
+        if not "___shell___" in HTTP_HOST:
             for dr in doms:
                 dd = load_yaml_empty_fallback(path.join(dom_df_p, f"{dr}.yaml" ))
                 ddoms = dd.get("domains", []) + dd.get("test_domains", [])
@@ -149,7 +151,7 @@ try:
     # / parameters & modifications #############################################
 
 except Exception:
-    if not "___shell___" in ENV:
+    if not "___shell___" in HTTP_HOST:
         print('Content-Type: text/plain')
         print('status: 302')
         print()

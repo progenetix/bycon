@@ -4,7 +4,7 @@ from json_ref_dict import RefDict, materialize
 from os import path, scandir, pardir
 from pathlib import Path
 
-from bycon_helpers import prjsonnice, prdbug
+from bycon_helpers import dict_replace_values, prjsonnice, prdbug
 from config import *
 
 ################################################################################
@@ -99,10 +99,11 @@ class ByconSchemas:
         if self.schema_path is not False:
             if len(self.root_key) > 1:
                 self.schema_path += f'#/{self.root_key}'
-            root_def = RefDict(self.schema_path)   
+            root_def = RefDict(self.schema_path)
             exclude_keys = [ "examples" ] #"format",
             self.schema_instance = materialize(root_def, exclude_keys=exclude_keys)
             assert isinstance(self.schema_instance, dict)
+            self.schema_instance = dict_replace_values(self.schema_instance, "___BEACON_ROOT___", BEACON_ROOT)
             return self.schema_instance
 
         return False

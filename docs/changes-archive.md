@@ -675,7 +675,7 @@ definitions and "local" ones. Partcullarly:
 * bug fix sample plots
 * internal function re-organization (`initialize_bycon_queries` deprecated & replaced
   by `parse_filters` & `parse_variants`)
-* also addition to the ENV config in byconaut
+* also addition to the HTTP_HOST config in byconaut
 
 ### 2023-07-04 (v1.0.61)
 

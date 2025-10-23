@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/file/v2022-05-04
+$id: ___BEACON_ROOT___/services/schemas/file/v2022-05-04
 title: File
 description: Information about a file referenced from a Phenopacket.
 type: object

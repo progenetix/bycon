@@ -7,7 +7,7 @@ from PIL import Image, ImageColor, ImageDraw
 from bycon import (
     BYC,
     BYC_PARS,
-    ENV,
+    HTTP_HOST,
     GeneInfo,
     Cytobands,
     ByconH,
@@ -1669,7 +1669,7 @@ style="margin: auto; font-family: Helvetica, sans-serif;">
     # -------------------------------------------------------------------------#
 
     def __print_svg_response(self):
-        if not "___shell___" in ENV:
+        if not "___shell___" in HTTP_HOST:
             print('Content-Type: image/svg+xml')
             print('status: 200')
             print()

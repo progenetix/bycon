@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/analysis/v2025-07-04
+$id: ___BEACON_ROOT___/services/schemas/analysis/v2025-07-04
 title: analysis
 note: >-
   On 2024-07-19 aligned with current Beacon v2.1 main

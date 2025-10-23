@@ -17,7 +17,7 @@ def set_user_name():
     overwritten later, e.g. for testing purposes.
     """
     # local user has full permissions
-    if "___shell___" in ENV:
+    if "___shell___" in HTTP_HOST:
         BYC.update({"USER": "local"})
     elif (un := BYC_PARS.get("user_name", "anonymous")) in BYC.get("authorizations", {}):
         BYC.update({"USER": un})

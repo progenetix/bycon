@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://progenetix.org/services/schemas/genomicVariant/v2025-07-06
+$id: ___BEACON_ROOT___/services/schemas/genomicVariant/v2025-07-06
 title: Genomic Variation
 description: >-
   Schema for a genomic variation returned by the Beacon.
