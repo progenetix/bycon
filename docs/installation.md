@@ -273,7 +273,7 @@ have to be adjusted in the configuration files in `local/`, such as in `env_path
 !!! warning "Configuration adjustments"
 
     Many of the parameters in `bycon` are pre-defined in `bycon/config.py`
-    file and the `bycon/definitions/....yaml` files which are installed into the
+    file and the `bycon/config/....yaml` files which are installed into the
     `bycon` package in your Python `site-packages` tree. 
     For your own databases to run additional configurations
     **have to be provided through files in `local/....yaml`**. Those are then added
@@ -353,17 +353,15 @@ examplez:
         version: 2023-08-21
 ```
 
-#### `local/instance_definitions.yaml`
+#### `local/domain_definitions`
 
 This file defines the different Beacon instances provided through
 your installation, e.g. their `info` endpoint's content, URLs
 and potentially additional entry types supported.
 
-The file has 2 root parameters for instance definitions:
+#### `local/dataset_definitions`
 
-* **`local`** can be used to override package provided `beacon_defaults` (_i.e._ the `local.beacon.defaults` object is merged with the `config.yaml` provided global `BYC["beacon_defaults"]` object) and `entity_defaults` can modify or add to the ones defined in bycon's `entity_defaults.yaml`
-* **domain specific** root parameters allow to modify domains etc. for multi-beacon
-  setups, including again entity and beacon defaults per domain/beacon
+
 
 
 ## Local stack installation

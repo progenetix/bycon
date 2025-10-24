@@ -766,6 +766,7 @@ class ByconQuery():
             if f_info is False:
                 f_info = self.__query_from_filter_definitions(f_val)
 
+            prdbug(f'... f_info: {f_info}')
             if f_info is False:
                 continue
 
@@ -805,7 +806,7 @@ class ByconQuery():
                     f_lists[f_entity][f_field].append({'$nin': [f_info["id"]]})
                 else:
                     f_lists[f_entity][f_field].append(f_info["id"])
-            prdbug(f'... f_neg: {f_neg} ==>> f_field: {f_lists[f_entity][f_field]}')
+            prdbug(f'... f_neg: {f_neg} ==>> {f_field}: {f_lists[f_entity][f_field]}')
 
         # now processing the filter lists into the queries
 
@@ -850,13 +851,6 @@ class ByconQuery():
 
     def __query_from_filter_definitions(self, f_val):
         f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
-        f_info = {
-            "id": f_val,
-            "scope": "biosamples",
-            "type": "___undefined___",
-            "db_key": "___undefined___",
-            "child_terms": [f_val]
-        }
 
         prdbug(f'...__query_from_filter_definitions: {f_val}')
 
@@ -864,6 +858,7 @@ class ByconQuery():
             if f_d.get("collationed", False) is True:
                 continue
             f_re = re.compile(f_d.get("pattern", "___none___"))
+            prdbug(f"pattern check: {f_d.get("pattern", "___none___")} <> {f_val}")
             if f_re.match(f_val):
                 f_info = {
                     "id": f_val,
@@ -923,25 +918,15 @@ class ByconQuery():
         # by multiple queries & intersection of matched ids during execution
         # => logic right now always AND
         logic = self.__boolean_to_mongo_logic(BYC_PARS.get("filter_logic"))
-        r_t_s = self.response_types
-        r_c = r_t_s[entity].get("collection")
+        r_c = BYC_DBS.get(f"{entity}_coll", "___none___")
         q_e = self.queries.get("entities")
 
         if type(query) is not list:
             query = [query]
-
-
         if entity not in q_e:
             q_e.update({entity:{"query": query, "collection": r_c}})
         else:
             q_e[entity]["query"] = [*q_e[entity]["query"], *query]
-
-        # if entity not in q_e:
-        #     q_e.update({entity:{"query": query, "collection": r_c}})
-        # elif logic in q_e[entity]["query"]:
-        #     q_e[entity]["query"][logic].append(query)
-        # else:
-        #     q_e[entity].update({"query": {logic: [q_e[entity]["query"], query]}})
 
         self.queries.update({"entities": q_e})
 

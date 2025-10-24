@@ -17,10 +17,6 @@ entity_defaults:
         The cancercelllines.org Beacon is a specific instance of the Progenetix
         Beacon+ environment providing information about genommic variations in
         cancer cell lines.
-      type:
-        group: org.ga4gh
-        artifact: beacon
-        version: v2.2.0-beaconplus
       documentation_url: http://docs.cancercelllines.org
       service_url: http://cancercelllines.org/beacon/
       welcome_url: https://cancercelllines.org/biosamples/

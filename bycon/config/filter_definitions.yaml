@@ -46,8 +46,8 @@ $defs:
     scope: individuals
     entity: individual
     db_key: index_disease.onset.age_days
-    pattern: '^ageAtDiagnosis:?[<>=]+P\d\w+?$'
-    collationed: True
+    pattern: '^ageAtDiagnosis:?[<>=]+?P\d\w+?$'
+    collationed: False
     examples:
       - id: 'ageAtDiagnosis:<=P18M'
         label: 'Infant (0-18 months)'

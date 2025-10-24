@@ -262,7 +262,14 @@ entryTypes:
     defaultSchema:
       id: configuration
       referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/beaconInfoResults/
-    content: {}
+    content:
+      api_version: ___BEACON_API_VERSION___
+      version: ___BEACON_API_VERSION___
+      beacon_id: org.progenetix.bycon
+      type:
+        group: org.ga4gh
+        artifact: beacon
+        version: ___BEACON_API_VERSION___
 
 
   ################################################################################

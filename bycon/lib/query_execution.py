@@ -175,11 +175,11 @@ class ByconDatasetResults():
         # entity and use this for all lover level handovers instead of
         # pre-generating them
 
-        query = {"individual_id": {"$in": self.id_responses.get("individual_id").get("values", [])}}
+        query = {"individual_id": {"$in": self.id_responses.get("individual_id", {}).get("values", [])}}
         ent_resp_def = self.res_obj_defs.get(f'biosamples.id')
         self.__refetch_entity_id_response(ent_resp_def, query)
 
-        query = {"biosample_id": {"$in": self.id_responses.get("biosample_id").get("values", [])}}
+        query = {"biosample_id": {"$in": self.id_responses.get("biosample_id", {}).get("values", [])}}
         ent_resp_def = self.res_obj_defs.get(f'analyses.id')
         self.__refetch_entity_id_response(ent_resp_def, query)
 
@@ -187,7 +187,7 @@ class ByconDatasetResults():
         # otherwise one creates a variant storage for potentially millions
         # of variants just matching biosamples ... etc.
         if self.id_responses.get("genomicVariant_id"):
-            query = {"analysis_id": {"$in": self.id_responses.get("analysis_id").get("values", [])}}
+            query = {"analysis_id": {"$in": self.id_responses.get("analysis_id", {}).get("values", [])}}
             ent_resp_def = self.res_obj_defs.get(f'variants.id')
             self.__refetch_entity_id_response(ent_resp_def, query)
 
@@ -196,7 +196,7 @@ class ByconDatasetResults():
             e = "genomicVariant"
             id_p = f"{e}_id"
             v_ids = []
-            for ana_id in self.id_responses.get("analysis_id").get("values", []):
+            for ana_id in self.id_responses.get("analysis_id", {}).get("values", []):
                 v_ids += self.data_db["variants"].distinct("id", {"analysis_id": ana_id})
             v_ids = list(set(v_ids))
 

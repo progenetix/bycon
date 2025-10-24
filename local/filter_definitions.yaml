@@ -1,4 +1,4 @@
-description: >
+description: >-
   This file contains definitions for classes of filter values that can be used in the
   API `filters` query parameters.
 

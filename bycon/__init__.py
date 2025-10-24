@@ -35,8 +35,7 @@ try:
     Reading the config from the same wrapper dir:
     module
       |
-      |- lib - read_specs.py
-      |- definitions - __name__.yaml
+      |- config - __name__.yaml
     """
     if not path.isdir(CONF_PATH):
         sys.exit(f"Config directory {CONF_PATH} does not exist.")
@@ -47,39 +46,37 @@ try:
         BYC.update({d: o})
 
     b_e_t = BYC.get("beacon_configuration", {}).get("entryTypes", {})
-    s_e_t = BYC.get("services_configuration", {}).get("entryTypes", {})
-
     b_e_t_k = list(b_e_t.keys())
     for e_k in b_e_t_k:
         b_e_t[e_k].update({"is_beacon_entity": True})
 
-    e_d = always_merger.merge(b_e_t, s_e_t)
-    e_d = dict_replace_values(e_d, "___BEACON_ROOT___", BEACON_ROOT)
+    s_e_t = BYC.get("services_configuration", {}).get("entryTypes", {})
 
+    e_d = always_merger.merge(b_e_t, s_e_t)
+    for v in ["BEACON_ROOT", "BEACON_API_VERSION"]:
+        if (r_v := globals().get(v)):
+            e_d = dict_replace_values(e_d, f"___{v}___", r_v)
 
     # This is WIP - mapping of entryTypes to endpoints using the default map
     endpoints = BYC.get("beacon_map", {}).get("endpointSets", {})
     infos = BYC.get("beacon_map", {}).get("informationalEndpoints", {})
     services = BYC.get("services_map", {}).get("endpointSets", {})
     for e in list(endpoints.values()) + list(infos.values()) + list(services.values()):
-        if (e_id := e.get("entryType")):
-            if e_id in e_d:
-                if (e_path_id := e.get("rootUrl")):
-                    e_path_id = e_path_id.strip("/").split("/")[-1].strip("/")
-                    if e_path_id == "beacon":
-                        e_path_id = "info"
-                    e_d[e_id].update({"request_entity_path_id": e_path_id})
-                if (e_path_aliases := e.get("rootUrlAliases")):
-                    e_a_s = []
-                    for e_a in e_path_aliases:
-                        e_a_id = e_a.strip("/").split("/")[-1].strip("/")
-                        if e_a_id in ["beacon", "services"]:
-                            e_a_id = "info"
-                        e_a_s.append(e_a_id)
-                    e_d[e_id].update({"request_entity_path_aliases": e_a_s})
-                #     print(f"mapped {e_id} to {e_path_id} and {e_a_s}")
-                # else:
-                #     print(f"mapped {e_id} to {e_path_id}")
+        if not (e_id := e.get("entryType", "___none___")) in e_d:
+            continue
+        if (e_path_id := e.get("rootUrl")):
+            e_path_id = e_path_id.strip("/").split("/")[-1].strip("/")
+            if e_path_id == "beacon":
+                e_path_id = "info"
+            e_d[e_id].update({"request_entity_path_id": e_path_id})
+        if (e_path_aliases := e.get("rootUrlAliases")):
+            e_a_s = []
+            for e_a in e_path_aliases:
+                e_a_id = e_a.strip("/").split("/")[-1].strip("/")
+                if e_a_id in ["beacon", "services"]:
+                    e_a_id = "info"
+                e_a_s.append(e_a_id)
+            e_d[e_id].update({"request_entity_path_aliases": e_a_s})
 
     BYC.update({"entity_defaults": e_d})
 
@@ -88,30 +85,18 @@ try:
     """Overwriting of installation-wide defaults with instance-specific ones
     _i.e._ matching the current domain (to allow presentation of different
     Beacon instances from the same server)"""
-
-    dom_df_p = path.join(LOC_PATH, "domain_definitions")
-    if path.isdir(dom_df_p):
+    
+    if path.isdir(dom_df_p := path.join(LOC_PATH, "domain_definitions")):
         doms = [ f.name for f in scandir(dom_df_p) if f.is_file() ]
         doms = [ Path(f).stem for f in doms if f.endswith("yaml") ]
-
-        # first general info & defaults
-        if "localhost" in doms:
-            doms.pop(doms.index("localhost"))
-            ld = load_yaml_empty_fallback(path.join(dom_df_p, "localhost.yaml" ))
-            if (dds_id := ld.get("default_dataset_id")):
-                BYC.update({"default_dataset_id": dds_id})
-            if (t_doms := ld.get("test_domains")):
-                BYC.update({"test_domains": t_doms})
-            BYC.update({
-                "entity_defaults": always_merger.merge(BYC.get("entity_defaults", {}), ld.get("entity_defaults", {}))
-            })
 
         # server specific setting of defaults dataset ids etc.
         if not "___shell___" in HTTP_HOST:
             for dr in doms:
+                prdbug(f'...checking domain definition => {dr}')
                 dd = load_yaml_empty_fallback(path.join(dom_df_p, f"{dr}.yaml" ))
                 ddoms = dd.get("domains", []) + dd.get("test_domains", [])
-                if environ.get("HTTP_HOST", "___none___") in ddoms:
+                if HTTP_HOST in ddoms:
                     if (dds_id := dd.get("default_dataset_id")):
                         BYC.update({"default_dataset_id": dds_id})
                     if (t_doms := dd.get("test_domains")):

@@ -9,8 +9,6 @@ entity_defaults:
     content:
       beacon_id: org.progenetix.beaconplus
       name: Beacon+ Development Environment
-      api_version: v2.2.0-beaconplus
-      version: v2.2.0-beaconplus
       id: org.progenetix.beaconplus
       environment: dev
       description: >-

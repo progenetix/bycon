@@ -19,10 +19,6 @@ entity_defaults:
         variations (CNV) in germline samples from reference datasets such as
         the "1000 genomes project", processed by different experimental
         platforms and analysis pipelines.
-      type:
-        group: org.ga4gh
-        artifact: beacon
-        version: v2.2.0-beaconplus
       documentation_url: http://docs.refcnv.org
       service_url: http://refcnv.org/beacon/
       welcome_url: https://refcnv.org/biosamples/

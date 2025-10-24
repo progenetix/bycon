@@ -15,6 +15,8 @@ BYC_LOCAL_CONF ==> LOC_PATH
 
 """
 
+BEACON_API_VERSION = "v2.2.2-beaconplus"
+
 HTTP_HOST = environ.get('HTTP_HOST', "___shell___")
 HOSTNAME = environ.get('HOSTNAME', socket.gethostname())
 REQUEST_SCHEME = environ.get('REQUEST_SCHEME', "___shell___")
