@@ -83,7 +83,8 @@ class ByconVariant:
 
         * standard VCF column headers such as as `#CHROM` as keys
         * an `INFO` key + string for CNVs
-        TODO: change to vrs-python?
+        TODO: change to vrs-python!!! Also fixing ref seq problem for sequence
+        variants etc (not relevant for CNVs)
         """
         self.byc_variant = variant
         self.__create_canonical_variant()
@@ -91,26 +92,29 @@ class ByconVariant:
         vt_defs = self.variant_types
         v = self.byc_variant
 
-        # TODO: VCF schema in some config file...
+        # TODO: VCF schema in some config file... or better using vrs translator
+        # but this doesn't suppot CNVs yet?
         v_v = {
             "#CHROM": v["location"].get("chromosome", "."),
             "POS": int(v["location"].get("start", 0)) + 1,
             "ID": ".",
-            "REF": v.get("reference_sequence", "."),
-            "ALT": v.get("state", {}).get("sequence", "."),
+            "REF": v.get("reference_sequence", ""),
+            "ALT": v.get("state", {}).get("sequence", ""),
             "QUAL": ".",
             "FILTER": "PASS",
             "FORMAT": "GT",
             "INFO": ""
         }
 
-        if not v_v["ALT"]:
-            v_v.update({"ALT": ""})
-
         if (v_s_id := v["variant_state"].get("id", "___none___")) in vt_defs.keys():
             s_a = vt_defs[v_s_id].get("VCF_symbolic_allele")
             if s_a and len(v_v["ALT"]) < 1:
                 v_v.update({"ALT": s_a})
+
+        for s in ["REF", "ALT"]:
+            if len(v_v[s]) < 1:
+                v_v.update({s: "."})
+
 
         v_l = v["info"].get("var_length", "___none___")
         if type(v_l) is int:

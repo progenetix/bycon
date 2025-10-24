@@ -202,9 +202,10 @@ class PGXseg:
         vs_coll = self.mongo_client[self.ds_id]["variants"]
 
         v_instances = []
+        BV = ByconVariant()
         for v_id in var_ids:
             v_s = vs_coll.find_one({"id": v_id}, {"_id": 0})
-            v_instances.append(ByconVariant().byconVariant(v_s))
+            v_instances.append(BV.byconVariant(v_s))
         v_instances = list(sorted(v_instances, key=lambda x: (f'{x["location"]["chromosome"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x["location"]['start'])))
         for v in v_instances:
             self.variant_line(v)
@@ -213,16 +214,15 @@ class PGXseg:
     # -------------------------------------------------------------------------#
 
     def variant_line(self, v_pgxseg):
-        for p in ("sequence", "reference_sequence"):
-            if not v_pgxseg[p]:
-                v_pgxseg.update({p: "."})
-
         line = []
         for par in self.header_cols:
             par_defs = self.variant_mappings.get(par, {})
             db_key = par_defs.get("db_key", "___undefined___")
             v = get_nested_value(v_pgxseg, db_key)
+            # print(f"par `{par}` db_key `{db_key}` value `{v}`")
             v = RefactoredValues(par_defs).strVal(v)
+            if "sequence" in par and len(v) < 1:
+                v = "."
             line.append(v)
         self.output_lines.append("\t".join(line))
 
