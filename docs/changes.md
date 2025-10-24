@@ -6,8 +6,9 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
-### 2025-10-23 (v2.6.4 "___BEACON_ROOT___"):
+### 2025-10-23 (v2.6.4 `___BEACON_ROOT___`)
 
+* 2025-10-24: v2.6.4.1 fixes pgxseg export
 * changed from hard coded `https://progenetix.org` to template `___BEACON_ROOT___`
   in map, schema and configuration files and for handover generation
     - the `___BEACON_ROOT___` is replaced during request processing through the
