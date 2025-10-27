@@ -115,7 +115,6 @@ class ByconVariant:
             if len(v_v[s]) < 1:
                 v_v.update({s: "."})
 
-
         v_l = v["info"].get("var_length", "___none___")
         if type(v_l) is int:
             if v_l >= 50:
