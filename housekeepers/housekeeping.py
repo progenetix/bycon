@@ -272,12 +272,12 @@ def main():
         e_c = 0
         for ind in ind_coll.find(query):
             loc = ind.get("location", {})
-            s = loc.get("start")
-            e = loc.get("end")
-            if not s or not e:
+            if not (s := loc.get("start")) or not (e := loc.get("end")):
                 e_c += 1
                 continue
-            ind_coll.update_one({"_id": ind["_id"]}, {"$set": {update_field: e - s}})
+            s_l = ind.get("state", {}).get("length", 0)
+            l = abs(e - s - s_l)
+            ind_coll.update_one({"_id": ind["_id"]}, {"$set": {update_field: l}})
             v_c += 1
             bar.next()
 

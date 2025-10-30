@@ -32,7 +32,6 @@ class ByconVariant:
         and Beacon "common use" scenarios (as of Beacon v2 / 2023).
         """
         self.vcf_variant = {}
-        self.pgxseg_variant = {}
 
         self.ChroNames = ChroNames()
         self.variant_types = BYC.get("variant_type_definitions", {})
