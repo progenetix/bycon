@@ -27,7 +27,7 @@ def main():
         "mongodb_index_creation": input("Check & refresh MongoDB indexes?\n(y|N): "),
         "individual_times_days": input("Recalculate `age_days` and `followup_days` in individuals?\n(y|N): "),
         "analyses_labels": input("Create/update `label` field for analyses, from biosamples?\n(y|N): "),
-        "variant_lengths": input("Recalculate `info.var_length` in variants?\n(y|N): "),
+        "update_variants": input("Update variants to latest format (VRS v2)?\n(y|N): "),
         "update_cs_statusmaps": input(f'Update statusmaps in `analyses` for {ds_id}?\n(y|N): '),
         "update_collations": input(f'Create `collations` for {ds_id}?\n(Y|n): '),
         "update_frequencymaps": input(f'Create `frequencymaps` for {ds_id} collations?\n(Y|n): '),
@@ -258,33 +258,31 @@ def main():
     #>-------------------------- variants ------------------------------------<#
 
     ind_coll = data_db["variants"]
-    update_field = "info.var_length"
 
     # length
-    if "y" in todos.get("variant_lengths", "n").lower():
+    if "y" in todos.get("update_variants", "n").lower():
         # query = {"location.start": {"$exists": True}, "location.end": {"$exists": True}}
         # no = ind_coll.count_documents(query)
         query = {}
         no = ind_coll.estimated_document_count(query)
-        bar = Bar(f"=> `{update_field}` ...", max = no, suffix='%(percent)d%%'+" of "+str(no) )
+        bar = Bar(f"=> variants ...", max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
         v_c = 0
         e_c = 0
+        BV = ByconVariant()
         for ind in ind_coll.find(query):
-            loc = ind.get("location", {})
-            if not (s := loc.get("start")) or not (e := loc.get("end")):
+            variant = BV.vrsVariant(ind)
+            # prjsonnice(variant)
+            if not (l := variant.get("info", {}).get("var_length")):
                 e_c += 1
-                continue
-            s_l = ind.get("state", {}).get("length", 0)
-            l = abs(e - s - s_l)
-            ind_coll.update_one({"_id": ind["_id"]}, {"$set": {update_field: l}})
             v_c += 1
+            ind_coll.update_one({"_id": ind["_id"]}, {"$set": {update_field: l}})
             bar.next()
 
         bar.finish()
 
-        print(f'=> {v_c} variants with updated `{update_field}` value.')
-        print(f'=> {e_c} variants failed to update...')
+        print(f'=> {v_c} variants were updated.')
+        print(f'=> {e_c} variants had no length (e.g. adjacencies...)')
 
     #>------------------------- / variants -----------------------------------<#
 

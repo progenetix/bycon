@@ -114,7 +114,7 @@ class ByconVariant:
             if len(v_v[s]) < 1:
                 v_v.update({s: "."})
 
-        v_l = v["info"].get("var_length", "___none___")
+        v_l = v.get("info", {}).get("var_length")
         if type(v_l) is int:
             if v_l >= 50:
                 v_v.update({"INFO": f'IMPRECISE;SVCLAIM=D;END={v.get("end")};SVLEN={v_l}'})
@@ -203,17 +203,11 @@ class ByconVariant:
             "sequence_id": s_id,
             "chromosome": chro
         })
-        s = self.vrs_variant["location"].get("start", 0)
-        e = self.vrs_variant["location"].get("end", 0)
-        l = e - s
-        # TODO ... thinking about lengths
-        v_i = v.get("info", {})
-        v_i.update({ "version": 'VRSv2', "var_length": l })
         self.vrs_variant.update({
             "variant_internal_id": f'{s_id.replace("refseq:", "")}:{s}:{self.vrs_variant.get("state", {}).get("sequence", "")}',
             "variant_state": v_s,
             "reference_sequence": v.get("reference_sequence", ""),
-            "info": v_i
+            "info": v.get("info", {}).update({ "version": 'VRSv2' })
         })
 
 
@@ -241,13 +235,6 @@ class ByconVariant:
 
         vrs_v = self.vrs_cnv_translator.translate_from(pgxseg_l, "pgxseg", copy_change=cnv_l)
         self.vrs_variant = decamelize(vrs_v.model_dump(exclude_none=True))
-        # legacy
-        # TODO ... thinking about lengths
-        s = self.vrs_variant["location"].get("start", 0)
-        e = self.vrs_variant["location"].get("end", 0)
-        l = e - s
-        v_i = v.get("info", {})
-        v_i.update({ "version": 'VRSv2', "var_length": l })
         self.vrs_variant["location"].update({
             "sequence_id": s_id,
             "chromosome": chro
@@ -255,7 +242,7 @@ class ByconVariant:
         self.vrs_variant.update({
             "variant_internal_id": f'{s_id.replace("refseq:", "")}:{s}-{e}:{v_s_id}',
             "variant_state": v_s,
-            "info": v_i
+            "info": v.get("info", {}).update({ "version": 'VRSv2' })
         })
 
 
@@ -336,24 +323,20 @@ class ByconVariant:
         self.__byc_variant_normalize_chromosome()
         self.__byc_variant_normalize_positions()
         self.__byc_variant_normalize_sequences()
-        # if not "info" in self.byc_variant:
-        #     self.byc_variant.update({"info": {}})
-        # self.__byc_variant_add_length()
+        self.__byc_variant_add_length()
 
-        return
 
     # -------------------------------------------------------------------------#
 
     def __byc_variant_add_length(self):
-        if not "location" in self.byc_variant:
-            return
         loc = self.byc_variant.get("location", {})
-        s = loc.get("start")
-        e = loc.get("end")
-        if type(s) is not int or type(e) is not int:
+        if not (s := loc.get("start")) or not (e := loc.get("end")):
             return
-        self.byc_variant["info"].update({"var_length": e - s})
-        return
+        s_l = ind.get("state", {}).get("length", 0)
+        l = abs(e - s - s_l)
+        if not "info" in self.byc_variant:
+            self.byc_variant.update({"info": {}})
+        self.byc_variant["info"].update({"var_length": l})
 
 
     # -------------------------------------------------------------------------#
