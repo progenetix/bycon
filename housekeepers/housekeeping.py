@@ -155,7 +155,7 @@ def main():
             if not (l := variant.get("info", {}).get("var_length")):
                 e_c += 1
             v_c += 1
-            var_coll.update_one({"_id": var["_id"]}, {"$set": {update_field: l}})
+            var_coll.update_one({"_id": var["_id"]}, {"$set": variant})
             bar.next()
 
         bar.finish()
