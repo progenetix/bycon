@@ -332,7 +332,7 @@ class ByconVariant:
         loc = self.byc_variant.get("location", {})
         if not (s := loc.get("start")) or not (e := loc.get("end")):
             return
-        s_l = ind.get("state", {}).get("length", 0)
+        s_l = self.byc_variant.get("state", {}).get("length", 0)
         l = abs(e - s - s_l)
         if not "info" in self.byc_variant:
             self.byc_variant.update({"info": {}})
