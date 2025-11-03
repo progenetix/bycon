@@ -134,7 +134,7 @@ class ByconGeoResource:
             bgl = s.get("geo_location")
             if type(bgl) is not dict:
                 atl_count += 1
-                pcoords = atlantis_coords
+                pcoords = self.atlantis_coords
             else:
                 pcoords = bgl.get("geometry", {}).get("coordinates", [])
 
