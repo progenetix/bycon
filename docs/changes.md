@@ -6,6 +6,22 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-11-03 (v2.6.5 "geonames")
+
+* updated the `geolocs` database with the latest GeoNames dump (2025-10-29)
+    - now using `cities500`, _i.e._ 10x the number of previous entries
+    - created `geoUpdater.py` housekeeping script for future updates of the
+      `geolocs` collection
+    - added a function to `housekeeping.py` to update the `geo_location` in
+      biosamples from the existing long, lat data to pull the nearest match from
+      the `geolocs` collection
+        * side effect are now some rather granular annotations; e.g. New York
+          coordinates which point to Manhattan are now labeled as "Financial District"
+          instead of "New York City"
+        * unknown coords ar now all mapped to Atlantis whish - as everybody knows -
+          sits below the Bermuda Triangle (centered at about lat: 25, long: -71)
+    - ... above now handled by `ByconGeoResource` class
+
 ### 2025-10-23 (v2.6.4 `___BEACON_ROOT___`)
 
 * 2025-10-24: v2.6.4.1 fixes pgxseg export

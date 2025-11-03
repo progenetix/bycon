@@ -7,13 +7,13 @@ import csv, datetime, requests, sys
 import datetime
 
 from bycon import *
-from byconServiceLibs import datatable_utils, log_path_root, service_helpers
+from byconServiceLibs import ByconGeoResource, datatable_utils, log_path_root, service_helpers
 
 loc_path = path.dirname( path.abspath(__file__) )
 services_conf_path = path.join( loc_path, "config" )
 
 log_path = path.join(log_path_root(), "publication_inserter_logs")
-mkdir(log_path)
+# mkdir(log_path)
 
 """
 * pubUpdater.py -t 1 -f "../rsrc/publications.txt"
@@ -41,7 +41,7 @@ def publications_inserter():
         pub_file = input_file
     else:
         print("No inputfile file specified => pulling the online table ...")
-        pub_file = path.join( log_path, {date_isoformat(datetime.now())}, "-pubtable.tsv" )
+        pub_file = path.join( log_path, f"{date_isoformat(datetime.now())}-pubtable.tsv" )
         print(f'... reading from {g_url["base_url"]}')
         r =  requests.get(g_url["base_url"], params=g_url["params"])
         if r.ok:
@@ -52,7 +52,7 @@ def publications_inserter():
             print(f'Download failed: status code {r.status_code}\n{r.text}')
 
     mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-    pub_coll = mongo_client["_byconServicesDB"]["publications"]
+    pub_coll = mongo_client[BYC_DBS["services_db"]][BYC_DBS["publication_coll"]]
     bios_coll = mongo_client["progenetix"]["biosamples"]
     publication_ids = pub_coll.distinct("id")
     progenetix_ids = bios_coll.distinct("external_references.id")
@@ -144,6 +144,7 @@ def publications_inserter():
                     
     print(f"{up_count} publications were inserted or updated")
 
+    ByconGeoResource().update_geolocations(BYC_DBS["services_db"], BYC_DBS["publication_coll"])
 
 ##############################################################################
 ##############################################################################

@@ -35,7 +35,7 @@ def main():
         "geolocs_updates": input("Relabel all biosamples with existing geolocation?\n(y|N): ")
     }
 
-    data_db = MongoClient(host=BYC_DBS["mongodb_host"])[ ds_id ]
+    data_db = MongoClient(host=BYC_DBS["mongodb_host"])[ds_id]
     services_db = MongoClient(host=BYC_DBS["mongodb_host"])[BYC_DBS["services_db"]]
 
     #>-------------------- MongoDB index updates -----------------------------<#
@@ -51,77 +51,7 @@ def main():
     #>------------------------ geo locations ---------------------------------<#
 
     if "y" in todos.get("geolocs_updates", "n").lower():
-        geo_coll = services_db[BYC_DBS["geolocs_coll"]]
-        biosamples_coll = data_db[BYC_DBS["biosample_coll"]]
-        atlantis = {
-                "geonameid": "0",
-                "id": "atlantis::bermudatriangle",
-                "geo_source": "custom entry",
-                "geo_location": {
-                    "type": 'Feature',
-                    "geometry": { "type": 'Point', "coordinates": [ -71, 25 ] },
-                    "properties": {
-                        "geoprov_id": "atlantis::bermudatriangle::-71::25",
-                        "label": f"Atlantis, Bermuda Triangle",
-                        "ISO3166alpha2": "00",
-                        "ISO3166alpha3": "000",
-                        "city": "Atlantis",
-                        "continent": "AT",
-                        "country": "Bermuda Triangle"
-                }
-              }
-            }
-
-        gn = biosamples_coll.count_documents({})
-        atl_count = 0
-        if not BYC["TEST_MODE"]:
-            bar = Bar(f"=> {gn} samples for geolocs", max = gn, suffix='%(percent)d%%'+" of "+str(gn) )
-
-        for s in biosamples_coll.find():
-            if not BYC["TEST_MODE"]:
-                bar.next()
-            bgl = s.get("geo_location")
-            if type(bgl) is not dict:
-                atl_count += 1
-                nearest = [atlantis]
-            else:
-                pcoords = bgl.get("geometry", {}).get("coordinates", [])
-                if not pcoords or len(pcoords) != 2:
-                    nocoords += 1
-                    print(bgl.get("properties"))
-                    continue
-                geo_q = {
-                    "geo_location.geometry": {
-                        "$near": {
-                            "$geometry": {
-                                "type": "Point",
-                                "coordinates": pcoords
-                            },
-                            "$maxDistance": 500000
-                        }
-                    }
-                }
-                nearest = list(geo_coll.find(geo_q).limit(1))
-
-            if len(nearest) < 1:
-                continue
-
-            if not (n_g_l := nearest[0].get("geo_location")):
-                continue
-
-            if not BYC["TEST_MODE"]:
-                biosamples_coll.update_one(
-                    {"_id": s.get("_id")},
-                    {"$set": {"geo_location": n_g_l}}
-                )
-            else:
-                print(f"Would update sample {bgl} to geo_location {n_g_l}")
-
-        if not BYC["TEST_MODE"]:
-            bar.finish()
-        
-        print(f"Samples without valid geo_location: {atl_count}")
-
+        ByconGeoResource().update_geolocations(ds_id, "biosamples")
 
     #>----------------------- / biosamples -----------------------------------<#
 

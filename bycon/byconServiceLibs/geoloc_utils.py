@@ -1,7 +1,9 @@
 import math, re, sys
 from os import path
+from pymongo import MongoClient
+from progress.bar import Bar
 
-from bycon import BYC, BYC_PARS, RefactoredValues, prdbug, print_html_response
+from bycon import BYC, BYC_DBS, BYC_PARS, GeoQuery, RefactoredValues, prdbug, print_html_response
 
 services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 sys.path.append( services_lib_path )
@@ -102,6 +104,71 @@ class ByconGeolocs:
             self.geo_locations.append(m_v)
 
 
+################################################################################
+################################################################################
+################################################################################
+
+class ByconGeoResource:
+    def __init__(self):
+        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
+        self.geolocs_coll = self.mongo_client[BYC_DBS["services_db"]][BYC_DBS["geolocs_coll"]]
+        self.atlantis_coords = [ -71, 25 ]
+        self.geo_distance = 500000  # 500 km
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def update_geolocations(self, database=None, update_coll=None, query={}):
+        self.update_coll = self.mongo_client[database][update_coll]
+ 
+        gn = self.update_coll.count_documents({})
+        atl_count = 0
+        if not BYC["TEST_MODE"]:
+            bar = Bar(f"=> {gn} samples for geolocs", max = gn, suffix='%(percent)d%%'+" of "+str(gn) )
+
+        for s in self.update_coll.find():
+            if not BYC["TEST_MODE"]:
+                bar.next()
+            bgl = s.get("geo_location")
+            if type(bgl) is not dict:
+                atl_count += 1
+                pcoords = atlantis_coords
+            else:
+                pcoords = bgl.get("geometry", {}).get("coordinates", [])
+
+            if len(pcoords) != 2:
+                nocoords += 1
+                print(bgl.get("properties"))
+                continue
+            BYC_PARS.update({
+                "geo_latitude": pcoords[1],
+                "geo_longitude": pcoords[0],
+                "geo_distance": self.geo_distance
+            })
+            geo_q = GeoQuery().get_geoquery()
+            nearest = list(self.geolocs_coll.find(geo_q).limit(1))
+            if len(nearest) < 1:
+                continue
+            if not (n_g_l := nearest[0].get("geo_location")):
+                continue
+
+            if not BYC["TEST_MODE"]:
+                self.update_coll.update_one(
+                    {"_id": s.get("_id")},
+                    {"$set": {"geo_location": n_g_l}}
+                )
+            else:
+                pass
+                print(f"Would update sample {bgl.get('properties', {}).get("geoprov_id")} to geo_location {n_g_l.get('properties', {}).get("id")}")
+
+        if not BYC["TEST_MODE"]:
+            bar.finish()
+                 
+
+################################################################################
+################################################################################
 ################################################################################
 
 class ByconMap:
@@ -252,7 +319,7 @@ class ByconMap:
         g = geoloc.get("geometry", {})
         m_t = self.plv.get("marker_type", "marker")
         m_max_r = self.plv.get("marker_max_r", 1000)
-        m_f = int(int(m_max_r) / math.sqrt(4 * self.marker_max / math.pi))
+        m_f = int(int(m_max_r) / math.sqrt(self.marker_max / math.pi))
 
         label = p.get("label", None)
         if label is None:
@@ -269,7 +336,7 @@ class ByconMap:
             label += f'<hr/>latitude: {g["coordinates"][1]}, longitude: {g["coordinates"][0]}'
 
         count = float(p.get("marker_count", 1))
-        size = count * m_f * float(self.plv.get("marker_scale", 2))
+        size = int(count * m_f * math.sqrt(float(self.plv.get("marker_scale", 2))))
         marker_icon = p.get("marker_icon", "")
 
         if ".png" in marker_icon or ".jpg" in marker_icon:

@@ -1046,26 +1046,6 @@ class GeoQuery():
             if not self.geo_pars.get(g_k):
                 return
 
-        # geoq_l = [ {
-        #     self.geo_dot_keys["geometry"]: {
-        #         '$near': SON(
-        #             [
-        #                 (
-        #                     '$geometry', SON(
-        #                         [
-        #                             ('type', 'Point'),
-        #                             ('coordinates', [
-        #                                 self.geo_pars.get("geo_longitude"),
-        #                                 self.geo_pars.get("geo_latitude")
-        #                             ])
-        #                         ]
-        #                     )
-        #                 ),
-        #                 ('$maxDistance', self.geo_pars.get("geo_distance"))
-        #             ]
-        #         )
-        #     }
-        # } ]
         geoq_l = [ {
             self.geo_dot_keys["geometry"]: {
                 '$near': {
