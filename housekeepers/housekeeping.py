@@ -36,6 +36,7 @@ def main():
     }
 
     data_db = MongoClient(host=BYC_DBS["mongodb_host"])[ ds_id ]
+    services_db = MongoClient(host=BYC_DBS["mongodb_host"])[BYC_DBS["services_db"]]
 
     #>-------------------- MongoDB index updates -----------------------------<#
 
@@ -47,128 +48,79 @@ def main():
 
     #>------------------------- biosamples -----------------------------------<#
 
+    #>------------------------ geo locations ---------------------------------<#
+
     if "y" in todos.get("geolocs_updates", "n").lower():
-        geo_db = MongoClient(host=BYC_DBS["mongodb_host"])[BYC_DBS["services_db"]]
-        max_dist_m = 2
-        biosamples_coll = data_db["biosamples"]
-        dist_locs = biosamples_coll.distinct("geo_location")
-        print(f'=> Found {len(dist_locs)} distinct geolocations in biosamples.')
+        geo_coll = services_db[BYC_DBS["geolocs_coll"]]
+        biosamples_coll = data_db[BYC_DBS["biosample_coll"]]
+        atlantis = {
+                "geonameid": "0",
+                "id": "atlantis::bermudatriangle",
+                "geo_source": "custom entry",
+                "geo_location": {
+                    "type": 'Feature',
+                    "geometry": { "type": 'Point', "coordinates": [ -71, 25 ] },
+                    "properties": {
+                        "geoprov_id": "atlantis::bermudatriangle::-71::25",
+                        "label": f"Atlantis, Bermuda Triangle",
+                        "ISO3166alpha2": "00",
+                        "ISO3166alpha3": "000",
+                        "city": "Atlantis",
+                        "continent": "AT",
+                        "country": "Bermuda Triangle"
+                }
+              }
+            }
 
-        gn = len(dist_locs)
+        gn = biosamples_coll.count_documents({})
+        atl_count = 0
         if not BYC["TEST_MODE"]:
-            bar = Bar(f"=> {gn} geolocations", max = gn, suffix='%(percent)d%%'+" of "+str(gn) )
+            bar = Bar(f"=> {gn} samples for geolocs", max = gn, suffix='%(percent)d%%'+" of "+str(gn) )
 
-        for loc in dist_locs:
+        for s in biosamples_coll.find():
             if not BYC["TEST_MODE"]:
                 bar.next()
-            if not isinstance(loc, dict):
-                continue
-            if not len(coords := loc.get("geometry", {}).get("coordinates", [])) == 2:
-                continue
-
-            city = loc.get("properties", {}).get("city", "")
-            country = loc.get("properties", {}).get("country", "")
-
-            query = { "geo_location.geometry":{
-                '$near': SON(
-                    [
-                        (
-                            '$geometry', SON(
-                                [
-                                    ('type', 'Point'),
-                                    ('coordinates', coords)
-                                ]
-                            )
-                        ),
-                        ('$maxDistance', max_dist_m)
-                    ]
-                )
-            }}
-
-            if city == "Leipzig" and country == "Germany":
-                loc_query = {"id": "leipzig::germany"}
-            elif city == "Berlin" and country == "Germany":
-                loc_query = {"id": "berlin::germany"}
-            elif city == "Barcelona" and country == "Spain":
-                loc_query = {"id": "barcelona::spain"}
-            elif city == "Rotterdam":
-                loc_query = {"id": "rotterdam::netherlands"}
-            elif city == "Bochum":
-                loc_query = {"id": "bochum::germany"}
-            elif city == "Bologna":
-                loc_query = {"id": "bologna::italy"}
-            elif city == "Marseille":
-                loc_query = {"id": "marseille::france"}
-            elif city == "Madrid" and country == "Spain":
-                loc_query = {"id": "madrid::spain"}
-            elif city == "Kanazawa":
-                loc_query = {"id": "kanazawashi::japan"}
-            elif city == "London" and country == "United Kingdom":
-                loc_query = {"id": "london::unitedkingdom"}
-            elif city == "Amsterdam" and country == "Netherlands":
-                loc_query = {"id": "amsterdam::netherlands"}
-            elif city == "Goettingen":
-                loc_query = {"id": "goettingen::germany"}
-            elif city == "Bethesda":
-                loc_query = {"id": "bethesda::unitedstates"}
-            elif city == "Cambridge UK":
-                loc_query = {"id": "cambridge::unitedkingdom"}
-            elif city == "Hong Kong":
-                loc_query = {"id": "hongkong::china"}
-            elif city == "Leiden":
-                loc_query = {"id": "leiden::netherlands"}
-            elif city == "New Taipei":
-                loc_query = {"id": "taipei::taiwan"}
-            elif city == "Nijmegen":
-                loc_query = {"id": "nijmegen::netherlands"}
-            elif city == "Marburg":
-                loc_query = {"id": "marburganderlahn::germany"}
-            elif city == "bronx":
-                loc_query = {"id": "newyorkcity::unitedstates"}
-            elif city == "Plzen":
-                loc_query = {"id": "pilsen::czechrepublic"}
-            elif city == "saint louis":
-                loc_query = {"id": "stlouis::unitedstates"}
-            elif city == "Birmingham" and country == "United States of America":
-                loc_query = {"id": "birmingham::unitedstates"}
-            elif city == "Augusta" and country == "United States of America":
-                loc_query = {"id": "augusta::unitedstates"}
-            # elif city == "":
-            #     loc_query = {"id": ""}
-            # elif city == "" and country == "":
-            #     loc_query = {"id": ""}
+            bgl = s.get("geo_location")
+            if type(bgl) is not dict:
+                atl_count += 1
+                nearest = [atlantis]
             else:
-                loc_query = query
+                pcoords = bgl.get("geometry", {}).get("coordinates", [])
+                if not pcoords or len(pcoords) != 2:
+                    nocoords += 1
+                    print(bgl.get("properties"))
+                    continue
+                geo_q = {
+                    "geo_location.geometry": {
+                        "$near": {
+                            "$geometry": {
+                                "type": "Point",
+                                "coordinates": pcoords
+                            },
+                            "$maxDistance": 500000
+                        }
+                    }
+                }
+                nearest = list(geo_coll.find(geo_q).limit(1))
 
-            geolocs = mongo_result_list(BYC_DBS["services_db"], BYC_DBS["geolocs_coll"], loc_query, { '_id': False } )
-            if len(geolocs) != 1:
-                e = [city, country, coords[0], coords[1], len(geolocs)]
-                print("\t".join(str(x) for x in e))
-
+            if len(nearest) < 1:
                 continue
 
-            # continue
+            if not (n_g_l := nearest[0].get("geo_location")):
+                continue
 
-            geo_location = geolocs[0].get("geo_location", {})
-            geo_location["properties"].update({"geoprov_id": geolocs[0].get("id", "")})
-
-            dist_k = "_id"
-            loc_samples = biosamples_coll.distinct(dist_k, query)
-            if BYC["TEST_MODE"]:
-                prjsonnice(geo_location)
-                print(f'=> Found {len(loc_samples)} biosamples for {city}, {country}\n')
-
-            for bio_s_id in loc_samples:
-                if BYC["TEST_MODE"]:
-                    print(f'==> Updating biosample {bio_s_id} with geolocation {geo_location}')
-                else:
-                    biosamples_coll.update_one(
-                        {dist_k: bio_s_id},
-                        {"$set": {"geo_location": geo_location}}
-                    )
+            if not BYC["TEST_MODE"]:
+                biosamples_coll.update_one(
+                    {"_id": s.get("_id")},
+                    {"$set": {"geo_location": n_g_l}}
+                )
+            else:
+                print(f"Would update sample {bgl} to geo_location {n_g_l}")
 
         if not BYC["TEST_MODE"]:
             bar.finish()
+        
+        print(f"Samples without valid geo_location: {atl_count}")
 
 
     #>----------------------- / biosamples -----------------------------------<#

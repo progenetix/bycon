@@ -93,6 +93,24 @@ $defs:
           checks and procedural convenience (see notes for "city").
         examples:
           - Switzerland
+      continent:
+        type: string
+        description: >-
+          The optional continent label.
+        enum:
+          - Africa
+          - Antarctica
+          - Asia
+          - Europe
+          - North America
+          - Oceania
+          - South America
+          - Atlantis
+      ISO3166alpha2:
+        type: string
+        examples:
+          - US
+          - CH
       ISO3166alpha3:
         type: string
         examples:

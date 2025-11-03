@@ -72,17 +72,17 @@ class ByconTSVreader():
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def file_to_dictlist(self, filepath, max_count=None):
+    def file_to_dictlist(self, filepath, fieldnames=None, max_count=None):
         if type(max_count) is int:
             self.max_lines = max_count
         with open(filepath, newline='') as self.tsv_data:
-            self.__dictread()
+            self.__dictread(fieldnames)
         return self.dictlist, self.fieldnames
 
 
     # -------------------------------------------------------------------------#
 
-    def www_to_dictlist(self, www, max_count=None):
+    def www_to_dictlist(self, www, fieldnames=None, max_count=None):
         if type(max_count) is int:
             self.max_lines = max_count
         with requests.Session() as s:
@@ -90,7 +90,7 @@ class ByconTSVreader():
             # TODO: error capture/return
             decoded_content = download.content.decode('utf-8')
             self.tsv_data = list(decoded_content.splitlines())
-            self.__dictread()
+            self.__dictread(fieldnames)
         return self.dictlist, self.fieldnames
 
 
@@ -98,8 +98,8 @@ class ByconTSVreader():
     # ---------------------------- private ------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def __dictread(self):
-        data = csv.DictReader(filter(lambda row: row.startswith('#') is False, self.tsv_data), delimiter="\t", quotechar='"')
+    def __dictread(self, fieldnames=None):
+        data = csv.DictReader(filter(lambda row: row.startswith('#') is False, self.tsv_data), fieldnames=fieldnames, delimiter="\t", quotechar='"')
         self.fieldnames = list(data.fieldnames)
         for l in data:
             self.dictlist.append(dict(l))
