@@ -68,8 +68,8 @@ def __handover_create_url(h_o_defs, ds_id, accessid):
     if not (addr := h_o_defs.get("script_path_web")):
         return ""
     url = f'{addr}?datasetIds={ds_id}&accessid={accessid}'.replace("___BEACON_ROOT___", BEACON_ROOT)
-    for p in ["plotType", "output"]:
-        if (v := h_o_defs.get(p)):
-            url += f"&{p}={v}"
+    if "parvals" in h_o_defs:
+        for pv_k, pv_v in h_o_defs["parvals"].items():
+            url += f'&{pv_k}={pv_v}'
     return url
 
