@@ -139,26 +139,23 @@ def main():
 
     #>-------------------------- variants ------------------------------------<#
 
-    ind_coll = data_db["variants"]
+    var_coll = data_db["variants"]
 
     # length
     if "y" in todos.get("update_variants", "n").lower():
-        # query = {"location.start": {"$exists": True}, "location.end": {"$exists": True}}
-        # no = ind_coll.count_documents(query)
         query = {}
-        no = ind_coll.estimated_document_count(query)
+        no = var_coll.estimated_document_count(query)
         bar = Bar(f"=> variants ...", max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
         v_c = 0
         e_c = 0
         BV = ByconVariant()
-        for ind in ind_coll.find(query):
-            variant = BV.vrsVariant(ind)
-            # prjsonnice(variant)
+        for var in var_coll.find(query):
+            variant = BV.vrsVariant(var)
             if not (l := variant.get("info", {}).get("var_length")):
                 e_c += 1
             v_c += 1
-            ind_coll.update_one({"_id": ind["_id"]}, {"$set": {update_field: l}})
+            var_coll.update_one({"_id": var["_id"]}, {"$set": {update_field: l}})
             bar.next()
 
         bar.finish()

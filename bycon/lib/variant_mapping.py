@@ -160,6 +160,13 @@ class ByconVariant:
         for v_o in ("identifiers", "molecular_attributes", "variant_level_data"): # "info",
             if (v_v := self.byc_variant.get(v_o)):
                 self.vrs_variant.update({v_o: v_v})
+        if not (v_i := self.vrs_variant.get("info")):
+            self.vrs_variant.update({"info": {"version": 'VRSv2'}})
+        else:
+            self.vrs_variant["info"].update({"version": 'VRSv2'})
+
+        # this here needs the "info"
+        self.__vrs_variant_add_length()
 
         return self.vrs_variant
 
@@ -206,8 +213,7 @@ class ByconVariant:
         self.vrs_variant.update({
             "variant_internal_id": f'{s_id.replace("refseq:", "")}:{self.vrs_variant["location"].get("start", 0)}:{self.vrs_variant.get("state", {}).get("sequence", "")}',
             "variant_state": v_s,
-            "reference_sequence": v.get("reference_sequence", ""),
-            "info": v.get("info", {}).update({ "version": 'VRSv2' })
+            "reference_sequence": v.get("reference_sequence", "")
         })
 
 
@@ -231,8 +237,6 @@ class ByconVariant:
         if not (cnv_l := self.byc_variant.get("VRS_cnv_type")):
             return v
 
-        prdbug(pgxseg_l)
-
         vrs_v = self.vrs_cnv_translator.translate_from(pgxseg_l, "pgxseg", copy_change=cnv_l)
         self.vrs_variant = decamelize(vrs_v.model_dump(exclude_none=True))
         self.vrs_variant["location"].update({
@@ -241,8 +245,7 @@ class ByconVariant:
         })
         self.vrs_variant.update({
             "variant_internal_id": f'{s_id.replace("refseq:", "")}:{self.vrs_variant["location"].get("start", 0)}-{self.vrs_variant["location"].get("end", 1)}:{v_s_id}',
-            "variant_state": v_s,
-            "info": v.get("info", {}).update({ "version": 'VRSv2' })
+            "variant_state": v_s
         })
 
 
@@ -323,20 +326,17 @@ class ByconVariant:
         self.__byc_variant_normalize_chromosome()
         self.__byc_variant_normalize_positions()
         self.__byc_variant_normalize_sequences()
-        self.__byc_variant_add_length()
 
 
     # -------------------------------------------------------------------------#
 
-    def __byc_variant_add_length(self):
-        loc = self.byc_variant.get("location", {})
+    def __vrs_variant_add_length(self):
+        loc = self.vrs_variant.get("location", {})
         if not (s := loc.get("start")) or not (e := loc.get("end")):
             return
-        s_l = self.byc_variant.get("state", {}).get("length", 0)
+        s_l = self.vrs_variant.get("state", {}).get("length", 0)
         l = abs(e - s - s_l)
-        if not "info" in self.byc_variant:
-            self.byc_variant.update({"info": {}})
-        self.byc_variant["info"].update({"var_length": l})
+        self.vrs_variant["info"].update({"var_length": l})
 
 
     # -------------------------------------------------------------------------#
