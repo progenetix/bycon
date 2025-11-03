@@ -204,7 +204,7 @@ class ByconVariant:
             "chromosome": chro
         })
         self.vrs_variant.update({
-            "variant_internal_id": f'{s_id.replace("refseq:", "")}:{self.vrs_variant.get("location", {}).get("start", 0)}:{self.vrs_variant.get("state", {}).get("sequence", "")}',
+            "variant_internal_id": f'{s_id.replace("refseq:", "")}:{self.vrs_variant["location"].get("start", 0)}:{self.vrs_variant.get("state", {}).get("sequence", "")}',
             "variant_state": v_s,
             "reference_sequence": v.get("reference_sequence", ""),
             "info": v.get("info", {}).update({ "version": 'VRSv2' })
@@ -240,7 +240,7 @@ class ByconVariant:
             "chromosome": chro
         })
         self.vrs_variant.update({
-            "variant_internal_id": f'{s_id.replace("refseq:", "")}:{self.vrs_variant.get("location", {}).get("start", 0)}-{self.vrs_variant.get("location", {}).get("end", 1)}:{v_s_id}',
+            "variant_internal_id": f'{s_id.replace("refseq:", "")}:{self.vrs_variant["location"].get("start", 0)}-{self.vrs_variant["location"].get("end", 1)}:{v_s_id}',
             "variant_state": v_s,
             "info": v.get("info", {}).update({ "version": 'VRSv2' })
         })
