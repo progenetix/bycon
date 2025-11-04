@@ -24,8 +24,11 @@ Some features and pecularities of the `bycon` solution are:
 
 !!! info "Bycon Code"
 
-    The `bycon` code is maintained in the [`progenetix/bycon` repository](http://github.com/progenetix/bycon/). Some additional utility scripts & functions can be found in the
-    [`byconaut`](http://github.com/progenetix/byconaut/) repository but are so not (well) documented & may contain deprecated or "internal use" code.
+    The `bycon` code is maintained in the [`progenetix/bycon` repository](http://github.com/progenetix/bycon/).
+    Additional software projects in thne [`progenetix`](http://github.com/progenetix/)
+    and [`baudisgroup`](http://github.com/baudisgroup/) organizations on GitHub
+    might provide related functionality and extensions (e.g. addtitional web front ends).
+
 
 More information about the original use _Progenetix_ case can be found [on the project's documentation site](https://docs.progenetix.org/).
 

@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 
-from os import mkdir, path
+from os import path
+from pathlib import Path
 from pymongo import MongoClient
 from isodate import date_isoformat
 import csv, datetime, requests, sys
@@ -12,8 +13,8 @@ from byconServiceLibs import ByconGeoResource, datatable_utils, log_path_root, s
 loc_path = path.dirname( path.abspath(__file__) )
 services_conf_path = path.join( loc_path, "config" )
 
-log_path = path.join(log_path_root(), "publication_inserter_logs")
-# mkdir(log_path)
+log_path = Path(path.join(log_path_root(), "publication_inserter_logs"))
+log_path.mkdir(parents=True, exist_ok=True)
 
 """
 * pubUpdater.py -t 1 -f "../rsrc/publications.txt"

@@ -44,9 +44,9 @@ server_site_dir_loc:
   - beaconplus
 
 housekeeping_log_dir_loc:
-
-  - ___PROJECT_PATH___
-  - ___pardir___
+  - /
+  - Users
+  - Shared
   - bycon_logs
 
 # optional array plotting resources
