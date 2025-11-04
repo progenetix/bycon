@@ -341,15 +341,17 @@ class ByconMap:
 
         if ".png" in marker_icon or ".jpg" in marker_icon:
             m_t = "marker"
+
+        map_marker = ""
         
         if "circle" in m_t:
-            map_marker = """
+            map_marker += """
 L.{}([{}, {}], {{
     ...circleOptions,
     ...{{radius: {}, count: {}}}
-}}).bindPopup('{}', {{maxHeight: 200}})
+}}).bindPopup('{}', {{maxHeight: 200}}),
 """.format(
-        m_t,
+        "circle",
         g["coordinates"][1],
         g["coordinates"][0],
         size,
@@ -357,13 +359,12 @@ L.{}([{}, {}], {{
         label
     )
 
-        else:
-            map_marker = """
+        map_marker += """
 L.{}([{}, {}], {{
     ...{{count: {}}}
 }}).bindPopup('{}', {{maxHeight: 200}})
 """.format(
-        m_t,
+        "marker",
         g["coordinates"][1],
         g["coordinates"][0],
         count,
