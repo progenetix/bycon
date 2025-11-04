@@ -19,7 +19,6 @@ try:
     from bycon_info import *
     from bycon_summarizer import *
     from genome_utils import *
-    from handover_generation import *
     from interval_utils import *
     from parameter_parsing import *
     from query_execution import *

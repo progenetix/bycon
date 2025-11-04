@@ -12,7 +12,7 @@ h->o_types:
     handoverType:
       id: 'pgx:HO.histoplot'
       label: CNV Histogram
-    note: create a CNV histogram from matched analses
+    note: create a CNV histogram from matched analyses
     h->o_key: 'analyses.id'
     script_path_web: '___BEACON_ROOT___/services/sampleplots'
     parvals:

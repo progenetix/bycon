@@ -6,6 +6,10 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-11-04 (v2.6.6)
+
+* created ByconHO class in `beacon_responses.py` and deleted `handover_generation.py`
+
 ### 2025-11-03 (v2.6.5 "geonames")
 
 * updated the `geolocs` database with the latest GeoNames dump (2025-10-29)

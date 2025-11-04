@@ -16,9 +16,11 @@ from interval_utils import GenomeBins
 ################################################################################
 ################################################################################
 
-class ByconSummary():
+class ByconSummary:
     """
     # The `ByconSummary` class
+
+    ==WiP==
 
     """
 

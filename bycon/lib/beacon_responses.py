@@ -9,7 +9,6 @@ from config import *
 from bycon_helpers import *
 from bycon_info import ByconInfo
 from bycon_summarizer import ByconSummary
-from handover_generation import dataset_response_add_handovers
 from parameter_parsing import ByconFilters, ByconParameters
 from query_execution import ByconDatasetResults # execute_bycon_queries
 from query_generation import ByconQuery, CollationQuery
@@ -234,6 +233,9 @@ class BeaconInfoResponse:
         self.data_response.update( { "returned_schemas": beacon_schemas } )
 
 
+
+################################################################################
+################################################################################
 ################################################################################
 
 class BeaconDataResponse:
@@ -707,6 +709,8 @@ class ByconCollections:
 
 
 ################################################################################
+################################################################################
+################################################################################
 
 class ByconResultSets:
     def __init__(self):
@@ -899,13 +903,14 @@ class ByconResultSets:
 
     def __populate_result_sets(self):
         ds_v_start = datetime.now()
+        BHO = ByconHO()
         for i, r_set in enumerate(self.result_sets):
             ds_id = r_set["id"]
             ds_res = self.datasets_results.get(ds_id)
             if not ds_res:
                 continue
 
-            r_set.update({"results_handovers": dataset_response_add_handovers(ds_id, self.datasets_results)})
+            r_set.update({"results_handovers": BHO.get_dataset_handovers(ds_id, self.datasets_results)})
 
             # avoiding summary generation for boolean responses
             if not "boolean" in self.returned_granularity:
@@ -1001,6 +1006,83 @@ class ByconResultSets:
             "description": f'Binned CNV frequencies for {c} matched analyses',
             "count": c
         }
+
+
+################################################################################
+################################################################################
+################################################################################
+
+class ByconHO:
+    def __init__(self):
+        self.dataset_definitions = BYC.get("dataset_definitions", {})
+        self.handover_types = BYC.get("handover_definitions", {}).get("h->o_types", {})
+        self.response_entity_id = BYC.get("response_entity_id")
+
+
+    #--------------------------------------------------------------------------#
+    #----------------------------- public -------------------------------------#
+    #--------------------------------------------------------------------------#
+
+    def get_dataset_handovers(self, ds_id=None, datasets_results={}):
+        self.dataset_handover = []
+        self.dataset_id = ds_id
+        if not (ds_def := self.dataset_definitions.get(str(ds_id))):
+            return self.dataset_handover
+        if not (ds_r := datasets_results.get(ds_id)):
+            return self.dataset_handover
+        self.dataset_results = ds_r
+
+        ds_h_o = list(
+            ds_def.get("handoverTypes", self.handover_types.keys()) & self.handover_types.keys()
+        )
+
+        for h_o_t in self.handover_types.keys():
+            self.__process_handover(h_o_t)
+
+        return self.dataset_handover
+
+
+    #--------------------------------------------------------------------------#
+    #----------------------------- private ------------------------------------#
+    #--------------------------------------------------------------------------#
+
+    def __process_handover(self, h_o_t):
+        h_o_defs = self.handover_types.get(h_o_t)
+        h_o_k = h_o_defs.get("h->o_key", "___none___")
+        if not (h_o := self.dataset_results.get(h_o_k)):
+            return
+        if (target_count := h_o.get("target_count", 0)) < 1:
+            return
+
+        h_o_r = {
+            "handover_type": h_o_defs.get("handoverType", {}),
+            "info": {
+                "content_id": h_o_t,
+                "count": target_count
+            },
+            "note": h_o_defs.get("note", ""),
+            "url": self.__handover_create_url(h_o_defs, h_o.get("id"))
+        }
+
+        # TODO: needs a new schema to accommodate this not as HACK ...
+        # the phenopackets URL needs matched variants, which it wouldn't know about ...
+        if "phenopackets" in h_o_t:
+            if (v_access_id := self.dataset_results.get("variants.id", {}).get("id")):
+                h_o_r["url"] += f'&variantsaccessid={v_access_id}'
+
+        self.dataset_handover.append(h_o_r)
+
+
+    #--------------------------------------------------------------------------#
+
+    def __handover_create_url(self, h_o_defs, accessid):
+        if not (addr := h_o_defs.get("script_path_web")):
+            return ""
+        url = f'{addr}?datasetIds={self.dataset_id}&accessid={accessid}'.replace("___BEACON_ROOT___", BEACON_ROOT)
+        if "parvals" in h_o_defs:
+            for pv_k, pv_v in h_o_defs["parvals"].items():
+                url += f'&{pv_k}={pv_v}'
+        return url
 
 
 ################################################################################
