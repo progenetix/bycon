@@ -10,6 +10,25 @@ from variant_mapping import ByconVariant
 
 ################################################################################
 
+class ByconHO:
+    def __init__(self):
+        self.dataset_definitions = BYC.get("dataset_definitions", {})
+        self.handover_types = BYC.get("handover_definitions", {}).get("h->o_types", {})
+        self.response_entity_id = BYC.get("response_entity_id")
+
+
+    def get_dataset_handover(self, ds_id=None):
+        b_h_o = []
+        if not (ds_def := self.dataset_definitions.get(str(ds_id))):
+            return b_h_o
+        ds_h_o = ds_def.get("handoverTypes", self.handover_types.keys())
+
+
+
+
+
+################################################################################
+
 def dataset_response_add_handovers(ds_id, datasets_results):
     """
     """
@@ -18,10 +37,7 @@ def dataset_response_add_handovers(ds_id, datasets_results):
         return b_h_o
     if not ds_id in BYC["dataset_definitions"]:
         return b_h_o
-    skip = BYC_PARS.get("skip")
-    limit = BYC_PARS.get("limit")
     e_t = BYC["response_entity"].get("response_entity_id", "___none___")
-    # h_o_server = select_this_server()
     h_o_types = BYC["handover_definitions"]["h->o_types"]
     ds_h_o = BYC["dataset_definitions"][ds_id].get("handoverTypes", h_o_types.keys())
     ds_res_k = list(datasets_results[ds_id].keys())
@@ -32,7 +48,7 @@ def dataset_response_add_handovers(ds_id, datasets_results):
         if h_o_t not in ds_h_o:
             continue
 
-        h_o_k = h_o_types[ h_o_t ].get("h->o_key", "___none___")
+        h_o_k = h_o_types[h_o_t].get("h->o_key", "___none___")
         if not (h_o := datasets_results[ds_id].get(h_o_k)):
             continue
         # testing if this handover is active for the specified dataset      
