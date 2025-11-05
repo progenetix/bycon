@@ -233,7 +233,7 @@ geo:GPL9042	NimbleGen_HG18_WG_385k_v2	3	232
 geo:GPL10461	NimbleGen_Homo Sapiens_720k_080530_HG18_WG_CGH_v2_HX3	3	233
 geo:GPL6254	Phalanx Human OneArray	3	234
 geo:GPL8720	ROMA 390K Rubble Rep Human Microarray (Design 36)	3	235
-geo:GPL3896	Sentrix庐 Linkage IV Panel BeadChip	3	236
+geo:GPL3896	Sentrix Linkage IV Panel BeadChip	3	236
 geo:GPL9852	UMR745 INSERM Human NF1 8x15K v1.0	3	237
 geo:GPL10001	VUMC MACF Human 30K oligo (batch68.gal)	3	238
 geo:GPL3055	VUMC MACF human 30K oligo v30	3	239
@@ -290,13 +290,8 @@ geo:GPL11365	Agilent-029830 Human Genome CGH + SNP Microarray (Probe Name versio
 EFO:0030076	methylation-specific microarray	3	290
 geo:GPL23976	Illumina Infinium HumanMethylation850 BeadChip	4	291
 EFO:0010937	comparative genomic hybridization (CGH)	1	292
-OBI:0000626	DNA sequencing assay	1	293
-OBI:0002117	whole genome sequencing assay	2	294
-OBI:0002118	exome sequencing assay	2	295
-NCIT:C16437	Chromosome Banding	1	296
-NCIT:C153598	DNA Sequencing	1	297
-NCIT:C101294	Whole Genome Sequencing	2	298
-NCIT:C165220	Low-Pass Whole Genome Sequencing	3	299
-NCIT:C19653	Whole-Genome Shotgun Sequencing	3	300
-NCIT:C101295	Whole Exome Sequencing	2	301
-NCIT:C158253	Targeted Genome Sequencing	2	302
+NCIT:C16437	Chromosome Banding	1	293
+OBI:0000626	DNA sequencing assay	1	294
+OBI:0002117	whole genome sequencing assay	2	295
+OBI:0002118	exome sequencing assay	2	296
+NCIT:C158253	Targeted Genome Sequencing	2	297
