@@ -239,7 +239,7 @@ class ByconMap:
         self.geoGlobe = """<head>
   <style> body {{ margin: 0; }} </style>
 
-  <script src="//cdn.jsdelivr.net/npm/globe.gl"></script>
+  <script src="https://cdn.jsdelivr.net/npm/globe.gl"></script>
 <!--    <script src="../../dist/globe.gl.js"></script>-->
 </head>
 
@@ -250,10 +250,12 @@ class ByconMap:
   const world = new Globe(document.getElementById('globeViz'))
     .globeTileEngineUrl((x, y, l) => `https://tile.openstreetmap.org/${{l}}/${{x}}/${{y}}.png`)
     .pointsData([{}])
+    .pointAltitude('count')
+    .pointLabel('label')
 
     // Add auto-rotation
     world.controls().autoRotate = true;
-    world.controls().autoRotateSpeed = 0.6;
+    world.controls().autoRotateSpeed = 0.1;
 </script>
 </body>
         """.format(",\n".join(self.leaf_markers))
@@ -358,18 +360,35 @@ class ByconMap:
 
 
     # -------------------------------------------------------------------------#
-    # -------------------------------------------------------------------------#
 
     def __point_count_from_geo_location(self, geoloc):
         p = geoloc.get("properties", {})
+        count = float(p.get("marker_count", 1))
+        count = count / float(self.marker_max)
+        g = geoloc.get("geometry", {})
+
+
+        label = p.get("label", None)
+        if label is None:
+            label = p.get("city", "NA")
+            country = p.get("country", None)
+            if country:
+                label = f'{label}, {country}'
+
         items = p.get("items", [])
         items = [x for x in items if x is not None]
-        count = float(p.get("marker_count", 1))
-        g = geoloc.get("geometry", {})
-        return f"{{lat: {g['coordinates'][1]}, lng: {g['coordinates'][0]}, pop: {count * 100000}}}"
+        if len(items) > 0:
+            label += f'<hr/>{"<br/>".join(items)}'
+        else:
+            label += f'<hr/>latitude: {g["coordinates"][1]}, longitude: {g["coordinates"][0]}'
 
 
 
+
+        return f"{{lat: {g['coordinates'][1]}, lng: {g['coordinates'][0]}, count: {count}, label: '{label}'}}"
+
+
+    # -------------------------------------------------------------------------#
 
     def __map_marker_from_geo_location(self, geoloc):
         p = geoloc.get("properties", {})
