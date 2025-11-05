@@ -84,6 +84,10 @@ endpointSets:
     entryType: samplemap
     rootUrl: ___BEACON_ROOT___/services/samplemap
 
+  sampleglobe:
+    entryType: sampleglobe
+    rootUrl: ___BEACON_ROOT___/services/sampleglobe
+
   samplematrix:
     entryType: samplematrix
     rootUrl: ___BEACON_ROOT___/services/samplematrix
@@ -97,6 +101,10 @@ endpointSets:
   sampletable:
     entryType: sampletable
     rootUrl: ___BEACON_ROOT___/services/sampletable
+
+  tester:
+    entryType: tester
+    rootUrl: ___BEACON_ROOT___/services/tester
 
   uploader:
     entryType: uploader

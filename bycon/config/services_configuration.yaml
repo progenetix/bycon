@@ -106,6 +106,9 @@ entryTypes:
       schema: ___BEACON_ROOT___/services/schemas/Publication/
     path_id_value_bycon_parameter: filters
 
+  tester:
+    id: tester
+
   uploader:
     id: uploader
 
@@ -131,6 +134,10 @@ entryTypes:
     path_id_value_bycon_parameter: biosample_ids
 
   samplemap:
+    response_entity_path_alias: biosamples
+    path_id_value_bycon_parameter: biosample_ids
+
+  sampleglobe:
     response_entity_path_alias: biosamples
     path_id_value_bycon_parameter: biosample_ids
 

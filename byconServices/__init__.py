@@ -19,11 +19,12 @@ from intervalFrequencies import intervalFrequencies
 from ontologymaps import ontologymaps
 from pgxsegvariants import pgxsegvariants
 from publications import publications
+from sampleglobe import sampleglobe
 from samplemap import samplemap
 from samplematrix import samplematrix
 from sampleplots import sampleplots
 from sampletable import sampletable
-# from services import services
+from tester import tester
 from uploader import uploader
 from variantsbedfile import variantsbedfile
 from vcfvariants import vcfvariants

@@ -207,6 +207,15 @@ class ByconMap:
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
 
+    def printGlobeHTML(self):
+        self.__create_globe_html_from_geolocations()
+        print_html_response(self.map_html)
+        exit()
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
     def add_data_from_results_list(self, geolocs=[]):
         self.geolocs = [x["geo_location"] for x in geolocs if "geo_location" in x]
 
@@ -220,6 +229,43 @@ class ByconMap:
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __create_globe_html_from_geolocations(self):
+        self.__marker_max_from_geo_locations()    
+        for geoloc in self.geolocs:
+            self.leaf_markers.append( self.__point_count_from_geo_location(geoloc) )
+
+        self.geoGlobe = """<head>
+  <style> body {{ margin: 0; }} </style>
+
+  <script src="//cdn.jsdelivr.net/npm/globe.gl"></script>
+<!--    <script src="../../dist/globe.gl.js"></script>-->
+</head>
+
+<body>
+<div id="globeViz"></div>
+
+<script type="module">
+  const world = new Globe(document.getElementById('globeViz'))
+    .globeTileEngineUrl((x, y, l) => `https://tile.openstreetmap.org/${{l}}/${{x}}/${{y}}.png`)
+    .pointsData([{}])
+
+    // Add auto-rotation
+    world.controls().autoRotate = true;
+    world.controls().autoRotateSpeed = 0.6;
+</script>
+</body>
+        """.format(",\n".join(self.leaf_markers))
+
+        self.map_html = """
+<html>
+{}
+</html>""".format(self.geoGlobe)
+
+
+
+
     # -------------------------------------------------------------------------#
 
     def __create_map_html_from_geolocations(self):
@@ -313,6 +359,17 @@ class ByconMap:
 
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
+
+    def __point_count_from_geo_location(self, geoloc):
+        p = geoloc.get("properties", {})
+        items = p.get("items", [])
+        items = [x for x in items if x is not None]
+        count = float(p.get("marker_count", 1))
+        g = geoloc.get("geometry", {})
+        return f"{{lat: {g['coordinates'][1]}, lng: {g['coordinates'][0]}, pop: {count * 100000}}}"
+
+
+
 
     def __map_marker_from_geo_location(self, geoloc):
         p = geoloc.get("properties", {})

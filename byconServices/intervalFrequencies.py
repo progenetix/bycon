@@ -20,5 +20,3 @@ def intervalFrequencies():
         PGXfreq(ifb).stream_pgxmatrix()
 
     ByconServiceResponse().print_populated_response(ifb)
-    # r = BeaconDataResponse().dataResponseFromEntry()
-    # print_json_response(r)

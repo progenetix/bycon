@@ -183,6 +183,13 @@ genome-wide screening experiments in cancer.
 * <http://progenetix.org/services/publications/?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
 
 
+### `/sampleglobe`
+
+==TBD==
+* https://progenetix.org/services/sampleglobe?geoLatitude=25.05&geoLongitude=121.53&geoDistance=2000000&filters=NCIT:C8614
+* https://progenetix.org/services/sampleglobe?datasetIds=progenetix&filters=NCIT:C9335&&plotPars=markerType:circle::marker_scale:8&limit=0
+
+
 ### `/samplemap`
 
 ==TBD==
@@ -233,6 +240,11 @@ The table type can be changed with `tableType=individuals` (or `analyses`).
 * http://progenetix.org/services/sampletable/pgxbs-kftvjv8w
 * http://progenetix.org/services/sampletable?datasetIds=cellz&filters=cellosaurus:CVCL_0030
 * http://progenetix.org/services/sampletable?filters=pgx:icdom-81703
+
+
+### `/tester`
+
+    
 
 
 ### `/uploader`
