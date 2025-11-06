@@ -6,9 +6,11 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
-### 2025-11-04 (v2.6.6)
+### 2025-11-04 (v2.6.6 "GlobeProjector")
 
 * created ByconHO class in `beacon_responses.py` and deleted `handover_generation.py`
+* created new `/services/sampleglobe` endpoint for plotting sample provenance
+  on a globe projection using [Globe.gl](https://globe.gl)
 
 ### 2025-11-03 (v2.6.5 "geonames")
 
