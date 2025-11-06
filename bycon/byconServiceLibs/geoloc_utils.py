@@ -247,11 +247,18 @@ class ByconMap:
 <div id="globeViz"></div>
 
 <script type="module">
-  const world = new Globe(document.getElementById('globeViz'))
-    .globeTileEngineUrl((x, y, l) => `https://tile.openstreetmap.org/${{l}}/${{x}}/${{y}}.png`)
-    .pointsData([{}])
-    .pointAltitude('count')
-    .pointLabel('label')
+    import {{ MeshLambertMaterial, DoubleSide }} from "https://esm.sh/three";
+    import * as topojson from "https://esm.sh/topojson-client";
+
+    fetch("https://cdn.jsdelivr.net/npm/world-atlas/land-110m.json").then(res => res.json())
+      .then(landTopo => {
+        world
+          .backgroundColor("rgba(0,0,0,0)")
+          .showGlobe(false)
+          .showAtmosphere(false)
+            .pointsData([{}])
+            .pointAltitude("count")
+            .pointLabel("label");
 
     // Add auto-rotation
     world.controls().autoRotate = true;
@@ -266,6 +273,8 @@ class ByconMap:
 </html>""".format(self.geoGlobe)
 
 
+  # const world = new Globe(document.getElementById('globeViz'))
+  #   .globeTileEngineUrl((x, y, l) => `https://tile.openstreetmap.org/${{l}}/${{x}}/${{y}}.png`)
 
 
     # -------------------------------------------------------------------------#
