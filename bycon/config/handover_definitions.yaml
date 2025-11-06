@@ -50,7 +50,8 @@ h->o_types:
       label: Biosamples Map
     note: geographic map of the biosamples matched by the query
     h->o_key: 'biosamples.id'
-    script_path_web: '___BEACON_ROOT___/services/samplemap'
+    # script_path_web: '___BEACON_ROOT___/services/samplemap'
+    script_path_web: '___BEACON_ROOT___/services/sampleglobe'
     parvals:
       plotPars: "marker_type:circle::marker_scale:20"
       plotType: map

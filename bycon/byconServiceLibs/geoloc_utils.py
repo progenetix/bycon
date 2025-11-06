@@ -182,6 +182,8 @@ class ByconMap:
         self.geolocs = []
         self.marker_max = 1
         self.leaf_markers = []
+        self.globe_markers = []
+        self.globe_marker_max_height = 0.4
         self.markersJS = ""
         self.geoMap = ""
 
@@ -232,9 +234,21 @@ class ByconMap:
     # -------------------------------------------------------------------------#
 
     def __create_globe_html_from_geolocations(self):
-        self.__marker_max_from_geo_locations()    
+        self.__marker_max_from_geo_locations()
+        points_data = [] 
         for geoloc in self.geolocs:
-            self.leaf_markers.append( self.__point_count_from_geo_location(geoloc) )
+            g_m = self.__point_count_from_geo_location(geoloc)
+            self.globe_markers.append(g_m)
+            points_data.append('{' + ", ".join(list(f"{k}: {v}" for k, v in g_m.items())) + '}')
+
+        pov = self.globe_markers[0]
+        pov_lng = pov.get("lng", 0)
+        pov_lat = pov.get("lat", 0)
+        if pov_lat < 0:
+            pov_lat += 20
+        else:
+            pov_lat -= 20
+        points = ",\n".join(points_data)
 
         self.geoGlobe = """<head>
   <style> body {{ margin: 0; }} </style>
@@ -247,34 +261,32 @@ class ByconMap:
 <div id="globeViz"></div>
 
 <script type="module">
-    import {{ MeshLambertMaterial, DoubleSide }} from "https://esm.sh/three";
-    import * as topojson from "https://esm.sh/topojson-client";
+  const world = new Globe(document.getElementById('globeViz'))
+    .globeImageUrl("https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-blue-marble.jpg")
+    .bumpImageUrl("https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png")
+    .backgroundImageUrl("https://cdn.jsdelivr.net/npm/three-globe/example/img/night-sky.png")
 
-    fetch("https://cdn.jsdelivr.net/npm/world-atlas/land-110m.json").then(res => res.json())
-      .then(landTopo => {
-        world
-          .backgroundColor("rgba(0,0,0,0)")
-          .showGlobe(false)
-          .showAtmosphere(false)
-            .pointsData([{}])
-            .pointAltitude("count")
-            .pointLabel("label");
+    .pointOfView({{lat: {}, lng: {}, altitude: 2.5}})
+
+    .pointsData([{}])
+    .pointAltitude('alt')
+    .pointLabel('label')
+    .pointRadius(0.3)
+    .labelSize(1)
 
     // Add auto-rotation
     world.controls().autoRotate = true;
-    world.controls().autoRotateSpeed = 0.1;
+    world.controls().autoRotateSpeed = 0.05;
 </script>
 </body>
-        """.format(",\n".join(self.leaf_markers))
+        """.format(pov_lat, pov_lng, points)
 
-        self.map_html = """
-<html>
-{}
-</html>""".format(self.geoGlobe)
+        self.map_html = self.geoGlobe
 
 
-  # const world = new Globe(document.getElementById('globeViz'))
-  #   .globeTileEngineUrl((x, y, l) => `https://tile.openstreetmap.org/${{l}}/${{x}}/${{y}}.png`)
+#     <!--
+#     .globeTileEngineUrl((x, y, l) => `https://tile.openstreetmap.org/${{l}}/${{x}}/${{y}}.png`)
+# -->
 
 
     # -------------------------------------------------------------------------#
@@ -337,10 +349,7 @@ class ByconMap:
             self.markersJS
         )
 
-        self.map_html = """
-<html>
-{}
-</html>""".format(self.geoMap)
+        self.map_html = self.geoMap
 
 
     # -------------------------------------------------------------------------#
@@ -362,21 +371,15 @@ class ByconMap:
     # -------------------------------------------------------------------------#
 
     def __marker_max_from_geo_locations(self):
-        for g_l in self.geolocs:
-            c = float( g_l["properties"].get("marker_count", 1) )
-            if c > self.marker_max:
-                self.marker_max = c
-
+        self.marker_max = max(list(int(x["properties"].get("marker_count", 1)) for x in self.geolocs))
 
     # -------------------------------------------------------------------------#
 
     def __point_count_from_geo_location(self, geoloc):
         p = geoloc.get("properties", {})
-        count = float(p.get("marker_count", 1))
-        count = count / float(self.marker_max)
+        count = int(p.get("marker_count", 1))
+        alt = float(count * self.globe_marker_max_height / self.marker_max)
         g = geoloc.get("geometry", {})
-
-
         label = p.get("label", None)
         if label is None:
             label = p.get("city", "NA")
@@ -391,10 +394,13 @@ class ByconMap:
         else:
             label += f'<hr/>latitude: {g["coordinates"][1]}, longitude: {g["coordinates"][0]}'
 
-
-
-
-        return f"{{lat: {g['coordinates'][1]}, lng: {g['coordinates'][0]}, count: {count}, label: '{label}'}}"
+        return {
+            "lat": g['coordinates'][1],
+            "lng": g['coordinates'][0],
+            "alt": alt,
+            "count": count,
+            "label": f"'{label}'"
+        }
 
 
     # -------------------------------------------------------------------------#
