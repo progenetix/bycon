@@ -426,6 +426,8 @@ class ByconMap:
         else:
             label += f'<hr/>latitude: {g["coordinates"][1]}, longitude: {g["coordinates"][0]}'
 
+        label = label.replace("'", "\\'")
+
         count = float(p.get("marker_count", 1))
         size = int(count * m_f * math.sqrt(float(self.plv.get("marker_scale", 2))))
         marker_icon = p.get("marker_icon", "")
