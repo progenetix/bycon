@@ -963,20 +963,10 @@ class ByconResultSets:
     def __set_available_aggregation_ids(self, ds_id):
 
         """
-        This function sets the available aggregation ids based on the
-        aggregation_terms and response_entity_id.
+        WiP
         """
 
         self.available_aggregation_ids = set(self.aggregation_terms)
-
-        if len(self.available_aggregation_ids) > 0:
-            ft_original = BYC_PARS.get("filters", [])
-            BYC_PARS.update({"filters": []})
-            coll_ids = ByconFilteringTerms(ds_id).filteringTermsIdList()
-            BYC_PARS.update({"filters": ft_original})
-
-            self.available_aggregation_ids = self.available_aggregation_ids & set(coll_ids)
-
 
         # temporary home for specials ... 
         if "cnvfrequencies" in self.aggregation_terms and "analysis" in self.response_entity_id:

@@ -28,6 +28,18 @@ entity_defaults:
         welcome_url: https://cancercelllines.org/
         contact_url: mailto:contact@progenetix.org
         logoUrl: https://cancercelllines.org/img/cancercelllines-icon-400x300.png
+        location:
+          type: Feature
+          geometry:
+            type: Point
+            coordinates:
+              - 47.37
+              - 8.55
+          properties:
+            label: Winterthurerstrasse 190, Zurich, Switzerland
+            city: Zurich
+            country: Switzerland
+            ISO3166alpha3: CHE
         info:
           update_date_time: 2024-02-24T12:45:00
     create_date_time: 2023-07-01T00:00:00
