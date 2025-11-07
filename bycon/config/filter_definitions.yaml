@@ -353,9 +353,19 @@ $defs:
     entity: biosample
     pattern: '^(?:EFO)|(?:OBI):\d+?$'
     collationed: True
-    examples:
-      - EFO:0009656
-      - EFO:0030035
+    anyOf:
+      - id: EFO:0009656
+        label: neoplastic sample
+      - id: EFO:0009654
+        label: reference sample
+      - id: EFO:0010941
+        label: metastasis sample
+      - id: EFO:0010942
+        label: primary tumor sample
+      - id: EFO:0010943
+        label: recurrent tumor sample
+      - id: EFO:0030035
+        label: cancer cell line sample
 
   # Procedural Metadata
   pubmed:

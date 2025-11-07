@@ -266,7 +266,7 @@ class ByconMap:
     .bumpImageUrl("https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png")
     .backgroundImageUrl("https://cdn.jsdelivr.net/npm/three-globe/example/img/night-sky.png")
 
-    .pointOfView({{lat: {}, lng: {}, altitude: 2.5}})
+    .pointOfView({{lat: {}, lng: {}, altitude: 2}})
 
     .pointsData([{}])
     .pointAltitude('alt')
@@ -399,7 +399,7 @@ class ByconMap:
             "lng": g['coordinates'][0],
             "alt": alt,
             "count": count,
-            "label": f"'{label}'"
+            "label": f"'{label.replace("'", "\\'")}'"
         }
 
 
@@ -425,6 +425,8 @@ class ByconMap:
             label += f'<hr/>{"<br/>".join(items)}'
         else:
             label += f'<hr/>latitude: {g["coordinates"][1]}, longitude: {g["coordinates"][0]}'
+
+        label = label.replace("'", "\\'")
 
         count = float(p.get("marker_count", 1))
         size = int(count * m_f * math.sqrt(float(self.plv.get("marker_scale", 2))))
@@ -494,7 +496,7 @@ L.{}([{}, {}], {{
                 if pmid in geokb[k]["pubmeds"]:
                     geokb[k]["pubmeds"][pmid]["count"] += 1
                 else:
-                    lab = f'<a href="https://europepmc.org/article/MED/{pmid}"" />{pmid}</a>'
+                    lab = f'<a href="https://europepmc.org/article/MED/{pmid}" />{pmid}</a>'
                     geokb[k]["pubmeds"].update({
                         pmid: {
                             "label": lab,

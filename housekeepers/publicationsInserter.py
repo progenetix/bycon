@@ -18,7 +18,6 @@ log_path.mkdir(parents=True, exist_ok=True)
 
 """
 * pubUpdater.py -t 1 -f "../rsrc/publications.txt"
-* pubUpdater.py -t 1 -f "../rsrc/publications.txt"
 """
 
 ##############################################################################
