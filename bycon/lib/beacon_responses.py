@@ -984,11 +984,6 @@ class ByconResultSets:
 
             r_set.update({"results_handovers": BHO.get_dataset_handovers(ds_id, self.datasets_results)})
 
-            # avoiding summary generation for boolean responses
-            if not "boolean" in self.returned_granularity:
-                if (s_r := self.__dataset_response_add_aggregations(ds_id, ds_res)):
-                    r_set.update({"summary_results": s_r})
-
             q_c = ds_res.get("target_count", 0)
 
             info = {"counts": {}}
@@ -1014,7 +1009,7 @@ class ByconResultSets:
                 r_s_res = reshape_resultset_results(ds_id, r_s_res)
                 self.result_sets[i].update({"results": r_s_res})
             if self.returned_granularity == "aggregated":
-                self.result_sets[i].update({"aggregations": self.datasets_aggregations.get(ds_id, [])})
+                self.result_sets[i].update({"summary_results": self.datasets_aggregations.get(ds_id, [])})
 
         ds_v_duration = datetime.now() - ds_v_start
         dbm = f'... __populate_result_sets needed {ds_v_duration.total_seconds()} seconds'
@@ -1023,35 +1018,20 @@ class ByconResultSets:
 
     # -------------------------------------------------------------------------#
 
-    def __dataset_response_add_aggregations(self, ds_id, ds_res):
-        prdbug(f'... __resultset_response_add_aggregations for dataset {ds_id} - aggregation_terms: {self.aggregation_terms}')
+    # def __set_available_aggregation_ids(self, ds_id):
 
-        self.__set_available_aggregation_ids(ds_id)
+    #     """
+    #     WiP
+    #     """
 
-        s_r = []
-        # CNV frequencies; only returned for `/analyses`
-        if (cnv_f := self.__analyses_cnvfrequencies(ds_id, ds_res)):
-            s_r.append(cnv_f)
+    #     self.available_aggregation_ids = set(self.aggregation_terms)
 
-        return s_r
+    #     # temporary home for specials ... 
+    #     if "cnvfrequencies" in self.aggregation_terms and "analysis" in self.response_entity_id:
+    #         self.available_aggregation_ids.add("cnvfrequencies")
 
-
-    # -------------------------------------------------------------------------#
-
-    def __set_available_aggregation_ids(self, ds_id):
-
-        """
-        WiP
-        """
-
-        self.available_aggregation_ids = set(self.aggregation_terms)
-
-        # temporary home for specials ... 
-        if "cnvfrequencies" in self.aggregation_terms and "analysis" in self.response_entity_id:
-            self.available_aggregation_ids.add("cnvfrequencies")
-
-        self.available_aggregation_ids = list(self.available_aggregation_ids)
-        prdbug(f'__set_available_aggregation_ids: {self.available_aggregation_ids}')
+    #     self.available_aggregation_ids = list(self.available_aggregation_ids)
+    #     prdbug(f'__set_available_aggregation_ids: {self.available_aggregation_ids}')
 
 
     # -------------------------------------------------------------------------#
