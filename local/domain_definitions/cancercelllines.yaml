@@ -15,7 +15,7 @@ entity_defaults:
       environment: prod
       description: >-
         The cancercelllines.org Beacon is a specific instance of the Progenetix
-        Beacon+ environment providing information about genommic variations in
+        Beacon+ environment providing information about genomic variations in
         cancer cell lines.
       documentation_url: http://docs.cancercelllines.org
       service_url: http://cancercelllines.org/beacon/

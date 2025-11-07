@@ -161,7 +161,8 @@ GRANULARITY_LEVELS = {
   "none": 0,
   "boolean": 1,
   "count": 2,
-  "record": 3
+  "aggregated": 3,
+  "record": 4
 }
 
 BYC_UNCAMELED = [

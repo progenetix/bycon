@@ -716,6 +716,7 @@ class ByconResultSets:
     def __init__(self):
         self.datasets_results = dict()  # the object with matched ids per dataset, per h_o
         self.datasets_data = dict()     # the object with data of requested entity per dataset
+        self.datasets_aggregations = dict()     # the object with aggregations of requested entity per dataset
         self.result_sets = list()       # data rewrapped into the resultSets list
         self.flattened_data = list()    # data from all resultSets as flat list
         self.entity_defaults = BYC.get("entity_defaults", {})
@@ -873,6 +874,7 @@ class ByconResultSets:
         ds_d_start = datetime.now()
         for ds_id in self.datasets_results.keys():
             self.__retrieve_single_dataset_data(ds_id)
+            self.__aggregate_single_dataset_data(ds_id)
         ds_d_duration = datetime.now() - ds_d_start
         dbm = f'... datasets data retrieval needed {ds_d_duration.total_seconds()} seconds'
         prdbug(dbm)
@@ -890,6 +892,8 @@ class ByconResultSets:
         q_v_s = res.get("target_values", [])
         q_v_s = ByconH().paginated_list(q_v_s, self.skip, self.limit)
 
+        prdbug(f'... retrieving data for dataset {ds_id}, collection {q_coll}, {len(q_v_s)} records')
+
         data_coll = self.mongo_client[ds_id][q_coll]
 
         r_s_res = []
@@ -897,6 +901,74 @@ class ByconResultSets:
             o = data_coll.find_one({"id": q_v })
             r_s_res.append(o)
         self.datasets_data.update({ds_id: r_s_res})
+
+
+    # -------------------------------------------------------------------------#
+
+    def __aggregate_single_dataset_data(self, ds_id):
+        if not (ds_results := self.datasets_results.get(ds_id)):
+            return
+
+        if not (coll_k := "biosamples.id") in ds_results.keys():
+            return
+        res = ds_results.get(coll_k, {})
+        q_coll = res.get("collection", "___none___")
+        q_v_s = res.get("target_values", [])
+        # q_v_s = ByconH().paginated_list(q_v_s, 0, self.limit)
+
+        # temporary aggregation implementation
+        # WiP - maybe extending w/ 2-dimensional later ...
+        agg_terms = {
+            "histologicalDiagnoses": {
+                "id": "histologicalDiagnoses",
+                "label": "Histological Diagnoses",
+                "description": "Count of histological diagnoses in matched biosamples",
+                "concepts": ["biosample.histological_diagnosis"],
+                "keyed_distribution": {}
+            },
+            "sampleOriginDetails": {
+                "id": "sampleOriginDetails",
+                "label": "Anatomical Origin",
+                "description": "Count of anatomical sites in matched biosamples",
+                "concepts": ["biosample.sample_origin_detail"],
+                "keyed_distribution": {}
+            }
+        }
+
+        agg_q = {}
+        agg_map = {}
+        for a_k, a_v in agg_terms.items():
+            c = a_v.get("concepts", "")[0]
+            e, c = c.split(".", 1)
+            agg_q.update({c: 1})
+            agg_map.update({c: a_k})
+
+
+        data_coll = self.mongo_client[ds_id][q_coll]
+        for q_v in q_v_s:
+            o = data_coll.find_one({"id": q_v }, agg_q)
+            for a_c, a_k in agg_map.items():
+                if not (agg_id := o.get(a_c, {}).get("id")):
+                    continue
+                if not agg_id in agg_terms[a_k]["keyed_distribution"].keys():
+                    agg_terms[a_k]["keyed_distribution"].update({
+                        agg_id: {
+                            "id": agg_id,
+                            "label": o.get(a_c, {}).get("label"),
+                            "count": 0
+                        }
+                    })
+                agg_terms[a_k]["keyed_distribution"][agg_id]["count"] += 1
+
+        for a_k, a_v in agg_terms.items():
+            kd = a_v.get("keyed_distribution", {})
+            d_items = list(kd.values())
+            agg_terms[a_k].update({"distribution": d_items})
+            agg_terms[a_k].pop("keyed_distribution", None)
+
+        agg_res = list(agg_terms.values())
+
+        self.datasets_aggregations.update({ds_id: agg_res})
 
 
     # -------------------------------------------------------------------------#
@@ -918,11 +990,9 @@ class ByconResultSets:
                     r_set.update({"summary_results": s_r})
 
             q_c = ds_res.get("target_count", 0)
-            r_s_res = self.datasets_data.get(ds_id, [])
-            r_s_res = list(x for x in r_s_res if x)
-            r_s_res = reshape_resultset_results(ds_id, r_s_res)
+
             info = {"counts": {}}
-            rs_c = len(r_s_res) if type(r_s_res) is list else 0
+            rs_c = 0
             for h_o_k, h_o in ds_res.items():
                 if not "target_count" in h_o:
                     continue
@@ -935,9 +1005,17 @@ class ByconResultSets:
                 "info": info,
                 "response_entity_id" : self.response_entity_id,
                 "results_count": rs_c,
-                "exists": True if rs_c > 0 else False,
-                "results": r_s_res
+                "exists": True if rs_c > 0 else False
             })
+            prdbug(f'... populated result set for dataset {ds_id}, self.returned_granularity: {self.returned_granularity}, target_count: {q_c}')
+            if self.returned_granularity == "record":
+                r_s_res = self.datasets_data.get(ds_id, [])
+                r_s_res = list(x for x in r_s_res if x)
+                r_s_res = reshape_resultset_results(ds_id, r_s_res)
+                self.result_sets[i].update({"results": r_s_res})
+            if self.returned_granularity == "aggregated":
+                self.result_sets[i].update({"aggregations": self.datasets_aggregations.get(ds_id, [])})
+
         ds_v_duration = datetime.now() - ds_v_start
         dbm = f'... __populate_result_sets needed {ds_v_duration.total_seconds()} seconds'
         prdbug(dbm)

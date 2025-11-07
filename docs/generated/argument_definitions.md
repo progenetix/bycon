@@ -44,7 +44,7 @@ Custom bycon parameter used for paginating results in some bycon services.
 **description:**
 The requested granularity of the beacon    
 **type:** string    
-**enum:** `record,count,boolean`    
+**enum:** `record,count,boolean,aggregated`    
 **pattern:** `^\w+$`    
 **cmdFlags:** `--requestedGranularity`    
 **default:** `record`    
