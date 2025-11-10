@@ -12,8 +12,8 @@ import { useContainerDimensions } from "../../hooks/containerDimensions"
 import SVGloader from "../SVGloaders"
 import { ExternalLink } from "../helpersShared/linkHelpers"
 import { svgFetcher } from "../../hooks/fetcher"
-import BiosamplesStatsDataTable from "./BiosamplesStatsDataTable"
-import { WithData } from "../Loader"
+// import BiosamplesStatsDataTable from "./BiosamplesStatsDataTable"
+// import { WithData } from "../Loader"
 import { refseq2chro } from "../Chromosome"
 import { AggregatedPlots } from "../AggregatedPlots"
 
@@ -330,9 +330,9 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
 
 function ResultsTab({
   histoplotUrl,
-  biosamplesReply,
-  variantCount,
-  datasetId
+  // biosamplesReply,
+  // variantCount,
+  // datasetId
 }) {
   return (
     <div>
@@ -342,6 +342,7 @@ function ResultsTab({
           <ExternalLink href={histoplotUrl} label="Reload histogram in new window" />
         </div>
       )}
+      {/*
       <WithData
         apiReply={biosamplesReply}
         background
@@ -353,6 +354,8 @@ function ResultsTab({
           />
         )}
       />
+      */}
+
     </div>
   )
 }
