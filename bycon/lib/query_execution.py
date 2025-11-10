@@ -15,6 +15,8 @@ class ByconDatasetResults():
         self.res_ent_id = r_e_id = str(BYC.get("response_entity_id", "___none___"))
         self.data_db = MongoClient(host=BYC_DBS["mongodb_host"])[ds_id]
 
+
+
         # This is bycon and model specific; in the default model there would also
         # be `run` (which has it's data here as part of `analysis`). Also in
         # `bycon` we have `phenopacket` which is a derived entity.
@@ -79,7 +81,8 @@ class ByconDatasetResults():
         for e, q_o in q_e_s.items():
             c = BYC_DBS.get(f"{e}_coll", "___none___")
             if (q := q_o.get("query")) and c in c_n_s:
-                self.queries.update({c: q})
+                self.queries.update({e: q})
+                # self.queries.update({c: q})
 
 
     # -------------------------------------------------------------------------#
@@ -92,10 +95,16 @@ class ByconDatasetResults():
         if not (q_e_s := self.queries.keys()):
             return
 
-        for e in q_e_s:
+        for e in self.queried_entities:
+            if not (e in q_e_s):
+                continue
             query = self.queries.get(e)
-            ent_resp_def = self.res_obj_defs.get(f'{e}.id')
+            c = BYC_DBS.get(f"{e}_coll", "___none___")
+            ent_resp_def = self.res_obj_defs.get(f'{c}.id')
+            prdbug(f"... prefetching entity multi id response for {e} with query {query}")
             self.__prefetch_entity_multi_id_response(ent_resp_def, query)
+            prdbug(f"... prefetching worked")
+        # prdbug(f"... id responses so far: {self.id_responses}")
 
 
     # -------------------------------------------------------------------------#
@@ -187,11 +196,16 @@ class ByconDatasetResults():
         # otherwise one creates a variant storage for potentially millions
         # of variants just matching biosamples ... etc.
         if self.id_responses.get("genomicVariant_id"):
-            query = {"analysis_id": {"$in": self.id_responses.get("analysis_id", {}).get("values", [])}}
+            query = {"$and": [
+                    {"analysis_id": {"$in": self.id_responses.get("analysis_id", {}).get("values", [])}},
+                    {"id": {"$in": self.id_responses.get("genomicVariant_id", {}).get("values", [])}}
+                ]
+            }
             ent_resp_def = self.res_obj_defs.get(f'variants.id')
+            prdbug("... requerying variants with analysis_ids")
             self.__refetch_entity_id_response(ent_resp_def, query)
 
-        elif "genomicVariant" in self.res_ent_id:
+        if "genomicVariant" in self.res_ent_id:
             # TODO: Has to be optimized for large numbers...
             e = "genomicVariant"
             id_p = f"{e}_id"

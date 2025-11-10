@@ -82,7 +82,7 @@ export function urlRetrieveIds(urlQuery) {
 export function useBeaconQuery(queryData) {
   return useProgenetixApi(
     queryData
-      ? `${basePath}beacon/biosamples/?includeHandovers=true&requestedGranularity=count&${buildQueryParameters(queryData)}`
+      ? `${basePath}beacon/biosamples/?includeHandovers=true&requestedGranularity=aggregated&${buildQueryParameters(queryData)}`
       : null
   )
 }

@@ -871,6 +871,7 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __retrieve_datasets_data(self):
+        prdbug('... retrieving datasets data')
         ds_d_start = datetime.now()
         for ds_id in self.datasets_results.keys():
             self.__retrieve_single_dataset_data(ds_id)
@@ -935,6 +936,8 @@ class ByconResultSets:
             }
         }
 
+        prdbug(f'... aggregating data for dataset {ds_id}, collection {q_coll}, {len(q_v_s)} records')
+
         agg_q = {}
         agg_map = {}
         for a_k, a_v in agg_terms.items():
@@ -946,15 +949,20 @@ class ByconResultSets:
 
         data_coll = self.mongo_client[ds_id][q_coll]
         for q_v in q_v_s:
-            o = data_coll.find_one({"id": q_v }, agg_q)
+            if not (o := data_coll.find_one({"id": q_v }, agg_q)):
+                continue
             for a_c, a_k in agg_map.items():
                 if not (agg_id := o.get(a_c, {}).get("id")):
                     continue
                 if not agg_id in agg_terms[a_k]["keyed_distribution"].keys():
                     agg_terms[a_k]["keyed_distribution"].update({
                         agg_id: {
-                            "id": agg_id,
-                            "label": o.get(a_c, {}).get("label"),
+                            "concept_values": [
+                                {
+                                    "id": agg_id,
+                                    "label": o.get(a_c, {}).get("label")
+                                }
+                            ],
                             "count": 0
                         }
                     })

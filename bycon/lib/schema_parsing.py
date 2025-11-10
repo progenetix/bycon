@@ -12,6 +12,10 @@ from config import *
 class RecordsHierarchy:
     """This class provides hierarchy methods for the main data entities which are
     applied e.g. during query execution and record insertion and update processes.
+
+    Note: The order of entities in `self.record_entities` defines the hierarchy.
+    This is important also for query order, where the variants query comes last
+    so it can be exempted from re-querying.
     """
 
     def __init__(self):
