@@ -31,7 +31,7 @@ function AggregatedDiagnoses({ agg }) {
 
     const dist_all = agg["distribution"].map(item => ({
       id: item.conceptValues[0].id,
-      label: item.conceptValues[0].label + " (" + item.count +")",
+      label: `${item.conceptValues[0].label} (${item.conceptValues[0].id}, ${item.count})`,
       count: item.count
     })).sort((a, b) => a.count < b.count ? 1 : -1)
 
@@ -44,22 +44,21 @@ function AggregatedDiagnoses({ agg }) {
         count: 0
     }
 
+    var col_no = 25
     var i = 0
     dist_all.forEach(function (item) {
         i += 1
-        if (i < 21) {
+        if (i < col_no) {
             dist.push(item)
         } else {
             other["count"] += item["count"]
         }
-
     });
 
     if (other["count"] > 0) {
         other["label"] += " (" + other.count +")"
         dist.push(other)
     }
-
 
     const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
     const containerRef = useCallback((node) => {
@@ -71,7 +70,17 @@ function AggregatedDiagnoses({ agg }) {
         c = 0
     }
 
-    const padd = boundingRect.width / c
+    const padd_l = 70
+    const padd_r = 30
+    const padd_t = 30
+    const padd_b = 120
+
+    const plot_h = 250
+
+    var outer_w = boundingRect.width
+    var inner_w = outer_w - padd_l - padd_r
+
+    const padd = outer_w / c
 
     return (
         <>
@@ -79,21 +88,16 @@ function AggregatedDiagnoses({ agg }) {
         <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
             <VictoryChart
                 domainPadding={{ x: padd }}
-                height={250}
-                width={boundingRect.width}
+                height={plot_h}
+                width={outer_w}
                 theme={VictoryTheme.material}
-                  padding={{
-                    left: 50,
-                    top: 30,
-                    right: 10,
-                    bottom: 120,
-                  }}
+                padding={{left: padd_l, top: padd_t, right: padd_r, bottom: padd_b}}
               >
                 <VictoryLabel         
                     text={agg_l}         
                     textAnchor="middle"
-                    x={boundingRect.width * 0.5}        
-                    y={25}
+                    x={inner_w * 0.5}        
+                    y={padd_t}
                 />
                 <VictoryBar
                     data={dist}
