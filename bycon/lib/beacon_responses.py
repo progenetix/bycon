@@ -932,6 +932,14 @@ class ByconResultSets:
                 "label": "Anatomical Origin",
                 "description": "Count of anatomical sites in matched biosamples",
                 "concepts": ["biosample.sample_origin_detail"],
+                "term_level": 4, 
+                "keyed_distribution": {}
+            },
+            "sampleICDO3histology": {
+                "id": "sampleICDO3histology",
+                "label": "ICD-O 3 Histology",
+                "description": "ICD-O 3 histologies in matched biosamples",
+                "concepts": ["biosample.icdo_morphology"],
                 "keyed_distribution": {}
             }
         }
