@@ -1,0 +1,18 @@
+description: >-
+  ...
+$defs:
+  histologicalDiagnoses:
+    id: histologicalDiagnoses
+    label: Histological Diagnoses
+    description: >-
+      Count of histological diagnoses in matched biosamples
+    concepts:
+      - biosample.histological_diagnosis
+
+  sampleOriginDetails:
+    id: sampleOriginDetails
+    label: Anatomical Origin
+    description: >-
+      Count of anatomical sites in matched biosamples
+    concepts:
+      - biosample.sample_origin_detail

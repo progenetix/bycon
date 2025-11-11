@@ -15,7 +15,7 @@ export function AggregatedPlots({ summaryResults }) {
     {console.log(r)}
     {console.log(r["concepts"].length)}
     {r["concepts"].length == 1 && (
-     <AggregatedDiagnoses agg={r} />
+        <AggregatedDiagnoses agg={r} />
     )
     }
     </>

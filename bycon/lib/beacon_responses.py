@@ -723,6 +723,7 @@ class ByconResultSets:
         self.response_entity_id = BYC.get("response_entity_id", "biosample")
         self.returned_granularity = BYC.get("returned_granularity", "boolean")
         self.aggregation_terms = BYC_PARS.get("aggregation_terms", [])
+        self.aggregator_definitions = BYC.get("aggregator_definitions", {}).get("$defs", {})
         self.limit = BYC_PARS.get("limit")
         self.skip = BYC_PARS.get("skip")
         self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
@@ -919,28 +920,14 @@ class ByconResultSets:
 
         # temporary aggregation implementation
         # WiP - maybe extending w/ 2-dimensional later ...
-        agg_terms = {
-            "histologicalDiagnoses": {
-                "id": "histologicalDiagnoses",
-                "label": "Histological Diagnoses",
-                "description": "Count of histological diagnoses in matched biosamples",
-                "concepts": ["biosample.histological_diagnosis"],
-                "keyed_distribution": {}
-            },
-            "sampleOriginDetails": {
-                "id": "sampleOriginDetails",
-                "label": "Anatomical Origin",
-                "description": "Count of anatomical sites in matched biosamples",
-                "concepts": ["biosample.sample_origin_detail"],
-                "keyed_distribution": {}
-            }
-        }
+        agg_terms = self.aggregator_definitions
 
         prdbug(f'... aggregating data for dataset {ds_id}, collection {q_coll}, {len(q_v_s)} records')
 
         agg_q = {}
         agg_map = {}
         for a_k, a_v in agg_terms.items():
+            a_v.update({"keyed_distribution": {}})
             c = a_v.get("concepts", "")[0]
             e, c = c.split(".", 1)
             agg_q.update({c: 1})
