@@ -7,7 +7,46 @@ $defs:
     description: >-
       Count of histological diagnoses in matched biosamples
     concepts:
-      - biosample.histological_diagnosis
+      - biosample.histological_diagnosis.id
+
+  # cancerTypes:
+  #   id: cancerTypes
+  #   label: Cancer Classes
+  #   description: >-
+  #     General cancer types
+  #   concepts:
+  #     - biosample.histological_diagnosis
+  #   selection:
+  #     - NCIT:C3708
+  #     - NCIT:C3224
+  #     - NCIT:C2926
+  #     - NCIT:C3493
+  #     - NCIT:C4917
+  #     - NCIT:C212063
+  #     - NCIT:C3247
+  #     - NCIT:C3174
+  #     - NCIT:C4345
+  #     - NCIT:C9118
+  #     - NCIT:C2859
+  #     - NCIT:C4025
+  #     - NCIT:C4004
+  #     - NCIT:C5105
+  #     - NCIT:C8294
+  #     - NCIT:C7888
+  #     - NCIT:C9039
+  #     - NCIT:C40026
+  #     - NCIT:C35850
+  #     - NCIT:C3798
+  #     - NCIT:C132067
+  #     - NCIT:C6960
+  #     - NCIT:C3058
+  #     - NCIT:C182151
+  #     - NCIT:C3467
+  #     - NCIT:C9357
+  #     - NCIT:C9280
+  #     - NCIT:C2912
+  #     - NCIT:C3209
+  #     - NCIT:C4337
 
   sampleOriginDetails:
     id: sampleOriginDetails
@@ -15,7 +54,7 @@ $defs:
     description: >-
       Count of anatomical sites in matched biosamples
     concepts:
-      - biosample.sample_origin_detail
+      - biosample.sample_origin_detail.id
 
   sampleICDO3histology:
     id: sampleICDO3histology
@@ -23,4 +62,26 @@ $defs:
     description: 
       - ICD-O 3 histologies in matched biosamples
     concepts:
-      - biosample.icdo_morphology
+      - biosample.icdo_morphology.id
+
+  sampleCountries:
+    id: sampleCountries
+    label: Sample Countries
+    label_key: country
+    description: >-
+      Count of countries of origin in matched biosamples
+    concepts:
+      - biosample.geo_location.properties.ISO3166alpha3
+
+  # ageAtDiagnosis:
+  #   id: ageAtDiagnosis
+  #   label: Age at Diagnosis
+  #   id_key: age_days
+  #   label_key: ___dynamic___
+  #   description: >-
+  #     Age at diagnosis
+  #   concepts:
+  #     - individual.index_disease.onset
+
+
+

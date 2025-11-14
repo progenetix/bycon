@@ -10,32 +10,38 @@ import {
 } from 'victory';
 
 export function AggregatedPlots({ summaryResults }) {
-  return summaryResults.map((r) => (
-    <>
-    {console.log(r)}
-    {console.log(r["concepts"].length)}
-    {r["concepts"].length == 1 && (
-        <AggregatedDiagnoses agg={r} />
+    return (
+        <>
+        {summaryResults ? (
+            summaryResults.map((r) => (
+                <>
+                {r["concepts"].length == 1 && (
+                    <AggregatedPlot agg={r} />
+                )
+                }
+                </>
+                )
+            )
+        ) : (
+            ""
+        )}
+        </>
     )
-    }
-    </>
-  ))
 }
 
 
-function AggregatedDiagnoses({ agg }) {
 
-    console.log(agg)
+function AggregatedPlot({ agg }) {
 
-    // const agg = summaryResults.find(item => item.id === "histologicalDiagnoses");
-
-    const dist_all = agg["distribution"].map(item => ({
+    var dist_all = agg["distribution"].map(item => ({
       id: item.conceptValues[0].id,
       label: `${item.conceptValues[0].label} (${item.conceptValues[0].id}, ${item.count})`,
       count: item.count
-    })).sort((a, b) => a.count < b.count ? 1 : -1)
+    }))
 
     const agg_l = agg["label"]
+
+    dist_all = agg["sorted"] ? dist_all : dist_all.sort((a, b) => a.count < b.count ? 1 : -1)
 
     var dist = []
     var other = {
@@ -78,7 +84,6 @@ function AggregatedDiagnoses({ agg }) {
     const plot_h = 250
 
     var outer_w = boundingRect.width
-    var inner_w = outer_w - padd_l - padd_r
 
     const padd = outer_w / c
 
@@ -96,8 +101,8 @@ function AggregatedDiagnoses({ agg }) {
                 <VictoryLabel         
                     text={agg_l}         
                     textAnchor="middle"
-                    x={inner_w * 0.5}        
-                    y={padd_t}
+                    x={outer_w * 0.5}        
+                    y={padd_t - 15}
                 />
                 <VictoryBar
                     data={dist}

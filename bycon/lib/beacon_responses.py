@@ -461,6 +461,13 @@ class BeaconDataResponse:
         if t_count > 0:
             t_exists = True
 
+        if self.response_entity_id and "dataset" in self.response_entity_id:
+            if t_count == 1:
+                BA = ByconAggregations()        
+                self.data_response.update({
+                    "summary_results": BA.datasetAllAggregation(BYC["BYC_DATASET_IDS"][0])
+                })
+
         self.data_response.update({
             "response_summary": {
                 "num_total_results": t_count,
@@ -647,6 +654,7 @@ class ByconCollections:
     def __collections_return_datasets(self):
         if not "dataset" in self.response_entity_id:
             return
+
         self.__datasets_update_latest_stats()
         self.collections_queries.update({"datasets":{}})
 
@@ -711,6 +719,160 @@ class ByconCollections:
 ################################################################################
 ################################################################################
 ################################################################################
+
+class ByconAggregations:
+    def __init__(self):
+        self.aggregator_definitions = BYC.get("aggregator_definitions", {}).get("$defs", {})
+        self.dataset_aggregation = [] 
+        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def datasetResultAggregation(self, ds_id=None, datasets_results={}):
+        if not ds_id:
+            return self.dataset_aggregation
+        self.datasets_results = datasets_results
+        if not (ds_results := self.datasets_results.get(ds_id)):
+            return
+
+        if (coll_k := "biosamples.id") in ds_results.keys():
+            res = ds_results.get(coll_k, {})
+            q_coll = res.get("collection", "___none___")
+            q_v_s = res.get("target_values", [])
+            query = {"id": {"$in": q_v_s}}
+            prdbug(f'... aggregating biosample data for {ds_id} from {len(q_v_s)} biosamples.id hits')
+            self.__aggregate_dataset_data(ds_id, q_coll, query)
+
+        if (coll_k := "individuals.id") in ds_results.keys():
+            res = ds_results.get(coll_k, {})
+            q_coll = res.get("collection", "___none___")
+            q_v_s = res.get("target_values", [])
+            query = {"id": {"$in": q_v_s}}
+            self.__aggregate_dataset_ages(ds_id, q_coll, query)
+
+        return self.dataset_aggregation
+
+
+    # -------------------------------------------------------------------------#
+
+    def datasetAllAggregation(self, ds_id=None):
+        if not ds_id:
+            return self.dataset_aggregation
+
+        self.__aggregate_dataset_data(ds_id, "biosamples", {})
+        self.__aggregate_dataset_ages(ds_id, "individuals", {})
+
+        return self.dataset_aggregation
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- private -----------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __aggregate_dataset_data(self, ds_id, q_coll="biosamples", query={}):
+        # temporary aggregation implementation
+        # WiP - maybe extending w/ 2-dimensional later ...
+        # ... which is also the reason for having plural "concepts"
+        agg_terms = self.aggregator_definitions
+        data_coll = self.mongo_client[ds_id][q_coll]
+
+        for a_k, a_v in agg_terms.items():
+            c = a_v.get("concepts", ["___none___"])[0]
+            e, c = c.split(".", 1)
+            a_v.update({
+                "distribution": []
+            })
+
+            # one could aggregate all terms in one pipeline, but this is clearer
+            agg_p = [
+                { "$match": query },
+                { "$group": {
+                        "_id": f'${c}',
+                        "count": { "$sum": 1 }
+                    }
+                },
+                { "$sort": { "count": -1 } }
+            ]
+            agg_d = data_coll.aggregate(agg_p)
+
+            # label lookups only for term-based aggregations
+            term_coll = self.mongo_client[ds_id]["collations"]
+            for a in agg_d:
+                if type(i_k := a.get("_id")) is not str:
+                    continue
+                label = i_k
+                if (coll := term_coll.find_one( {"id": i_k})):
+                    label = coll.get("label", label)
+                a_v["distribution"].append({
+                    "concept_values": [
+                        {"id": i_k, "label": label}
+                    ],
+                    "count": a.get("count", 0)
+                })
+
+        agg_res = list(agg_terms.values())
+
+        self.dataset_aggregation += agg_res
+
+
+    # -------------------------------------------------------------------------#
+
+    def __aggregate_dataset_ages(self, ds_id, q_coll="individuals", query={}):
+
+        agg = {
+            "id": "age_distribution",
+            "label": "Age Distribution (... if known)",
+            "description": "Matched individuals in age ranges",
+            "concepts": ["individual.index_disease.onset"],
+            "sorted": True,
+            "distribution": []
+        }
+
+        data_coll = self.mongo_client[ds_id][q_coll]
+
+        age_breaks = ["P18M", "P18Y", "P25Y", "P65Y", "P80Y", "P150Y"]
+        ll = 0
+        ll_iso = "P0D"
+        ul = 0
+
+        prdbug(f'aggregating on {ds_id}.{q_coll} for ages')
+        prdbug(f'limited to {query}')
+
+        matches = 0
+        for age_b in age_breaks:
+            ul = days_from_iso8601duration(age_b)
+            query.update({
+                "index_disease.onset.age_days": {"$gte": ll, "$lt": ul}
+            })
+
+            prdbug(query)
+
+            count = data_coll.count_documents(query)
+            matches += count
+
+            agg["distribution"].append({
+                "concept_values": [
+                    {
+                        "id": f'{ll_iso}-{age_b}',
+                        "label": f"Age {ll_iso} to {age_b}"
+                    }
+                ],
+                "count": count
+            })
+
+            ll = ul
+            ll_iso = age_b
+
+
+        self.dataset_aggregation.append(agg)
+
+
+################################################################################
+################################################################################
+################################################################################
+
 
 class ByconResultSets:
     def __init__(self):
@@ -874,9 +1036,12 @@ class ByconResultSets:
     def __retrieve_datasets_data(self):
         prdbug('... retrieving datasets data')
         ds_d_start = datetime.now()
+        BA = ByconAggregations()
         for ds_id in self.datasets_results.keys():
             self.__retrieve_single_dataset_data(ds_id)
-            self.__aggregate_single_dataset_data(ds_id)
+            self.datasets_aggregations.update({
+                ds_id: BA.datasetResultAggregation(ds_id, self.datasets_results)
+            })
         ds_d_duration = datetime.now() - ds_d_start
         dbm = f'... datasets data retrieval needed {ds_d_duration.total_seconds()} seconds'
         prdbug(dbm)
@@ -903,67 +1068,6 @@ class ByconResultSets:
             o = data_coll.find_one({"id": q_v })
             r_s_res.append(o)
         self.datasets_data.update({ds_id: r_s_res})
-
-
-    # -------------------------------------------------------------------------#
-
-    def __aggregate_single_dataset_data(self, ds_id):
-        if not (ds_results := self.datasets_results.get(ds_id)):
-            return
-
-        if not (coll_k := "biosamples.id") in ds_results.keys():
-            return
-        res = ds_results.get(coll_k, {})
-        q_coll = res.get("collection", "___none___")
-        q_v_s = res.get("target_values", [])
-        # q_v_s = ByconH().paginated_list(q_v_s, 0, self.limit)
-
-        # temporary aggregation implementation
-        # WiP - maybe extending w/ 2-dimensional later ...
-        agg_terms = self.aggregator_definitions
-
-        prdbug(f'... aggregating data for dataset {ds_id}, collection {q_coll}, {len(q_v_s)} records')
-
-        agg_q = {}
-        agg_map = {}
-        for a_k, a_v in agg_terms.items():
-            a_v.update({"keyed_distribution": {}})
-            c = a_v.get("concepts", "")[0]
-            e, c = c.split(".", 1)
-            agg_q.update({c: 1})
-            agg_map.update({c: a_k})
-
-
-        data_coll = self.mongo_client[ds_id][q_coll]
-        for q_v in q_v_s:
-            if not (o := data_coll.find_one({"id": q_v }, agg_q)):
-                continue
-            for a_c, a_k in agg_map.items():
-                if not (agg_id := o.get(a_c, {}).get("id")):
-                    continue
-                if not agg_id in agg_terms[a_k]["keyed_distribution"].keys():
-                    agg_terms[a_k]["keyed_distribution"].update({
-                        agg_id: {
-                            "concept_values": [
-                                {
-                                    "id": agg_id,
-                                    "label": o.get(a_c, {}).get("label")
-                                }
-                            ],
-                            "count": 0
-                        }
-                    })
-                agg_terms[a_k]["keyed_distribution"][agg_id]["count"] += 1
-
-        for a_k, a_v in agg_terms.items():
-            kd = a_v.get("keyed_distribution", {})
-            d_items = list(kd.values())
-            agg_terms[a_k].update({"distribution": d_items})
-            agg_terms[a_k].pop("keyed_distribution", None)
-
-        agg_res = list(agg_terms.values())
-
-        self.datasets_aggregations.update({ds_id: agg_res})
 
 
     # -------------------------------------------------------------------------#
