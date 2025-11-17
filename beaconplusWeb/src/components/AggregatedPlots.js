@@ -9,6 +9,18 @@ import {
     // VictoryZoomContainer
 } from 'victory';
 
+//----------------------------------------------------------------------------//
+
+const padd_l = 70
+const padd_r = 30
+const padd_t = 30
+const padd_b = 120
+const plot_h = 250
+
+var col_no = 25
+
+//----------------------------------------------------------------------------//
+
 export function AggregatedPlots({ summaryResults }) {
     return (
         <>
@@ -29,10 +41,9 @@ export function AggregatedPlots({ summaryResults }) {
     )
 }
 
-
+//----------------------------------------------------------------------------//
 
 function AggregatedPlot({ agg }) {
-
     var dist_all = agg["distribution"].map(item => ({
       id: item.conceptValues[0].id,
       label: `${item.conceptValues[0].label} (${item.conceptValues[0].id}, ${item.count})`,
@@ -50,7 +61,6 @@ function AggregatedPlot({ agg }) {
         count: 0
     }
 
-    var col_no = 25
     var i = 0
     dist_all.forEach(function (item) {
         i += 1
@@ -76,13 +86,7 @@ function AggregatedPlot({ agg }) {
         c = 0
     }
 
-    const padd_l = 70
-    const padd_r = 30
-    const padd_t = 30
-    const padd_b = 120
-
-    const plot_h = 250
-
+    // TODO: 
     var outer_w = boundingRect.width
 
     const padd = outer_w / c
@@ -141,11 +145,3 @@ function AggregatedPlot({ agg }) {
         </>
     );
 }
-
-                // containerComponent={
-                //     <VictoryZoomContainer
-                //       zoomDimension="x"
-                //       zoomDomain={{ x: [0, 15] }}
-                //       minimumZoom={{ x: 1 }}
-                //     />
-                //   }

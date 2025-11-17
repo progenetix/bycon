@@ -125,6 +125,22 @@ either `start` or `exact` for matching filter values
 **description:**
 Experimental for Beacon v2+ for indicating which summaries to provide    
 
+#### `age_splits` 
+**type:** array    
+**items:**  
+    - `type`: `string`    
+**cmdFlags:** `--ageSplits`    
+**description:**
+Experimental for Beacon v2+ aggregation of ageAtDiagnosis by ISO8601 durations    
+
+#### `followup_splits` 
+**type:** array    
+**items:**  
+    - `type`: `string`    
+**cmdFlags:** `--followupSplits`    
+**description:**
+Experimental for Beacon v2+ aggregation of followupTime by ISO8601 durations    
+
 #### `filter_logic` 
 **type:** string    
 **cmdFlags:** `--filterLogic`    

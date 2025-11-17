@@ -432,6 +432,26 @@ $defs:
         db_key: geo_location.geometry.coordinates
         # computed: True
 
+
+      age_days:
+        type: number
+        db_key: individual_info.index_disease.onset.age_days
+        indexed: True
+        computed: True
+      followup_days:
+        type: number
+        db_key: individual_info.index_disease.followup_days
+        indexed: True
+        computed: True
+      sex_id:
+        type: string
+        db_key: individual_info.index_disease.id
+        indexed: True
+      sex_label:
+        type: string
+        db_key: individual_info.index_disease.label
+
+
       # special export labels
       group_id:
         type: string
@@ -532,7 +552,7 @@ $defs:
         indexed: True
       index_disease_followup_days:
         type: number
-        db_key: index_disease.followup_time
+        db_key: index_disease.followup_days
         indexed: True
         computed: True
       index_disease_followup_state_id:

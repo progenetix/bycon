@@ -97,7 +97,8 @@ def main():
 
     #>------------------------ individuals -----------------------------------<#
 
-    ind_coll = data_db["individuals"]
+    ind_coll = data_db[BYC_DBS["individual_coll"]]
+    bios_coll = data_db[BYC_DBS["biosample_coll"]]
 
     # age_days
     if "y" in todos.get("individual_times_days", "n").lower():
@@ -112,6 +113,11 @@ def main():
                 continue
             ind_coll.update_one({"_id": ind["_id"]}, {"$set": {"index_disease.onset.age_days": age_days}})
             age_c += 1
+            for bios in bios_coll.find({"individual_id":ind["id"], "biosample_status.id":{"$ne":'EFO:0009654'}}):
+                if (ind_info := bios.get("individual_info")) is not True:
+                    ind_info = {}
+                ind_info.update({"age_at_diagnosis_days": age_days})
+                bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info": ind_info}})
             bar.next()
 
         bar.finish()
@@ -127,13 +133,31 @@ def main():
             followup_days = days_from_iso8601duration(ind["index_disease"]["followup_time"])
             if followup_days is False:
                 continue
-            ind_coll.update_one({"_id": ind["_id"]}, {"$set": {"index_disease.followup_days": followup_days}})
+            ind_coll.update_one(
+                {"_id": ind["_id"]},
+                {"$set": {"index_disease.followup_days": followup_days}}
+            )
             f_c += 1
+            for bios in bios_coll.find({"individual_id":ind["id"], "biosample_status.id":{"$ne":'EFO:0009654'}}):
+                if (ind_info := bios.get("individual_info")) is not True:
+                    ind_info = {}
+                ind_info.update({"index_disease_followup_days": followup_days})
+                bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info": ind_info}})
             bar.next()
 
         bar.finish()
 
         print(f'=> {f_c} individuals received an `index_disease.followup_days` value.')
+
+        print(f'... now updating `individual_info.index_disease` in biosamples.')
+
+        for ind in ind_coll.find({"index_disease":{"$exists": True}}):
+            for bios in bios_coll.find({"individual_id":ind["id"], "biosample_status.id":{"$ne":'EFO:0009654'}}):
+                bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info": {"index_disease": ind.get("index_disease", {})}}})
+
+        for ind in ind_coll.find({"sex":{"$exists": True}}):
+            for bios in bios_coll.find({"individual_id":ind["id"]}):
+                bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info": {"sex": ind.get("sex", {})}}})
 
     #>----------------------- / individuals ----------------------------------<#
 
