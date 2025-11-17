@@ -770,6 +770,7 @@ class ByconAggregations:
             a_v.update({"distribution": []})    
             self.__aggregate_single_concept(a_k, a_v, query)
             self.__aggregate_single_concept_buckets(a_k, a_v, query)
+            self.__aggregate_2_concepts(a_k, a_v, query)
 
 
     # -------------------------------------------------------------------------#
@@ -777,8 +778,10 @@ class ByconAggregations:
     def __aggregate_single_concept(self, a_k, a_v, query={}):
         if len(splits := a_v.get("splits", [])) > 0:
             return
-        c = a_v.get("concepts", ["___none___"])[0]
-        e, c = c.split(".", 1)
+        concepts = a_v.get("concepts", [])
+        if len(concepts) != 1:
+            return
+        e, c = concepts[0].split(".", 1)
 
         collection = "biosamples"
         if "individual" in e:
@@ -798,7 +801,7 @@ class ByconAggregations:
 
         # label lookups only for term-based aggregations
         for a in agg_d:
-            if type(i_k := a.get("_id")) is not str:
+            if not (i_k := a.get("_id")):
                 continue
             label = i_k
             if (coll := self.term_coll.find_one( {"id": i_k})):
@@ -811,6 +814,63 @@ class ByconAggregations:
             })
 
         self.dataset_aggregation.append(a_v)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __aggregate_2_concepts(self, a_k, a_v, query={}):
+        if len(splits := a_v.get("splits", [])) > 0:
+            return
+        concepts = a_v.get("concepts", [])
+        if len(concepts) != 2:
+            return
+        e_one, c_one = concepts[0].split(".", 1)
+        e_two, c_two = concepts[1].split(".", 1)
+
+        if e_one != e_two:
+            return
+
+        collection = "biosamples"
+        if "individual" in e_one:
+            collection = "individuals"
+        data_coll = self.data_client[collection]
+
+        agg_p = [
+            { "$match": query },
+            { "$group":
+                {
+                    "_id": {
+                        c_one.replace(".", "_"): f'${c_one}',
+                        c_two.replace(".", "_"): f'${c_two}'
+                    },
+                    "count": { "$sum": 1 }
+                }
+            },
+            { "$sort": { "count": -1 } }
+        ]
+        agg_d = data_coll.aggregate(agg_p)
+
+        # label lookups only for term-based aggregations
+        for a in agg_d:
+            prdbug(a)
+            if not (i_k := a.get("_id")):
+                continue
+            c_v_s = []
+            id_v_s = list(i_k.values())
+            for i in [0, 1]:
+                v = id_v_s[i]
+                label = v
+                if (coll := self.term_coll.find_one( {"id": v})):
+                    label = coll.get("label", label)
+                    c_v_s.append({"id": v, "label": label})
+
+            a_v["distribution"].append({
+                "concept_values": c_v_s,
+                "count": a.get("count", 0)
+            })
+
+        self.dataset_aggregation.append(a_v)
+
 
     # -------------------------------------------------------------------------#
 
@@ -828,8 +888,10 @@ class ByconAggregations:
             return
         if len(splits := a_v.get("splits", [])[0]) < 1:
             return
-        c = a_v.get("concepts", ["___none___"])[0]
-        e, c = c.split(".", 1)
+        concepts = a_v.get("concepts", [])
+        if len(concepts) != 1:
+            return
+        e, c = concepts[0].split(".", 1)
 
         collection = "biosamples"
         if "individual" in e:

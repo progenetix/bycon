@@ -19,6 +19,20 @@ const plot_h = 250
 
 var col_no = 25
 
+const barStyle = {
+  data: {
+    fill: "#c43a31",
+    fillOpacity: 0.4,
+    stroke: "#c43a31",
+    strokeWidth: 2,
+  },
+  labels: {
+    fontSize: 12,
+    fill: "#c43a31",
+  },
+}
+
+
 //----------------------------------------------------------------------------//
 
 export function AggregatedPlots({ summaryResults }) {
@@ -42,6 +56,22 @@ export function AggregatedPlots({ summaryResults }) {
 }
 
 //----------------------------------------------------------------------------//
+
+
+// function AggregatedStackedPlot({ agg }) {
+//     var dist_all = {}
+//     let dictionary = Object.fromEntries(agg.map(x => [x.id, x.country]));
+
+//     agg["distribution"].map(item => ({
+//       id: item.conceptValues[0].id,
+//       label: `${item.conceptValues[0].label} (${item.conceptValues[0].id}, ${item.count})`,
+//       count: item.count
+//     }))
+
+
+// }
+
+
 
 function AggregatedPlot({ agg }) {
     var dist_all = agg["distribution"].map(item => ({
@@ -115,18 +145,7 @@ function AggregatedPlot({ agg }) {
                     theme={VictoryTheme.clean}
                     labelComponent={<VictoryTooltip />}
                     labels={({ label }) => label}
-                    style={{
-                      data: {
-                        fill: "#c43a31",
-                        fillOpacity: 0.4,
-                        stroke: "#c43a31",
-                        strokeWidth: 2,
-                      },
-                      labels: {
-                        fontSize: 12,
-                        fill: "#c43a31",
-                      },
-                    }}
+                    style={barStyle}
                 />
                 <VictoryAxis
                     crossAxis 

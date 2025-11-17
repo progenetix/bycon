@@ -9,30 +9,30 @@ $defs:
     concepts:
       - biosample.histological_diagnosis.id
 
-  cancerTypes:
-    id: cancerTypes
-    label: Cancer Classes
-    description: >-
-      General cancer types
-    concepts:
-      - biosample.histological_diagnosis
-      - biosample.individual_info.index_disease.onset
-    selections:
-      -
-        - NCIT:C3708
-        - NCIT:C3224
-        - NCIT:C2926
-      - []
-    limits:
-      - []
-      -
-        - P0D
-        - P18M
-        - P18Y
-        - P40Y
-        - P65Y
-        - P80Y
-        - P120Y
+  # cancerTypes:
+  #   id: cancerTypes
+  #   label: Cancer Classes
+  #   description: >-
+  #     General cancer types
+  #   concepts:
+  #     - biosample.histological_diagnosis
+  #     - biosample.individual_info.index_disease.onset.age_days
+  #   selections:
+  #     -
+  #       - NCIT:C3708
+  #       - NCIT:C3224
+  #       - NCIT:C2926
+  #     - []
+  #   limits:
+  #     - []
+  #     -
+  #       - P0D
+  #       - P18M
+  #       - P18Y
+  #       - P40Y
+  #       - P65Y
+  #       - P80Y
+  #       - P120Y
 
   sampleOriginDetails:
     id: sampleOriginDetails
@@ -49,6 +49,15 @@ $defs:
       - ICD-O 3 histologies in matched biosamples
     concepts:
       - biosample.icdo_morphology.id
+
+  sampleICDO3histologyBySex:
+    id: sampleICDO3histologyBySex
+    label: ICD-O 3 Histology by Sex
+    description: 
+      - ICD-O 3 histologies by sex in matched biosamples
+    concepts:
+      - biosample.icdo_morphology.id
+      - biosample.individual_info.sex.id
 
   sampleCountries:
     id: sampleCountries

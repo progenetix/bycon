@@ -144,20 +144,27 @@ def main():
                 ind_info.update({"index_disease_followup_days": followup_days})
                 bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info": ind_info}})
             bar.next()
-
         bar.finish()
 
         print(f'=> {f_c} individuals received an `index_disease.followup_days` value.')
 
         print(f'... now updating `individual_info.index_disease` in biosamples.')
-
+        no = ind_coll.count_documents({"index_disease":{"$exists": True}})
+        bar = Bar(f"=> individuals", max = no, suffix='%(percent)d%%'+" of "+str(no) )
         for ind in ind_coll.find({"index_disease":{"$exists": True}}):
             for bios in bios_coll.find({"individual_id":ind["id"], "biosample_status.id":{"$ne":'EFO:0009654'}}):
                 bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info": {"index_disease": ind.get("index_disease", {})}}})
+            bar.next()
+        bar.finish()
 
+        print(f'... now updating `individual_info.sex` in biosamples.')
+        no = ind_coll.count_documents({"sex":{"$exists": True}})
+        bar = Bar(f"=> individuals", max = no, suffix='%(percent)d%%'+" of "+str(no) )
         for ind in ind_coll.find({"sex":{"$exists": True}}):
             for bios in bios_coll.find({"individual_id":ind["id"]}):
-                bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info": {"sex": ind.get("sex", {})}}})
+                bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info.sex": ind.get("sex", {})}})
+            bar.next()
+        bar.finish()
 
     #>----------------------- / individuals ----------------------------------<#
 
