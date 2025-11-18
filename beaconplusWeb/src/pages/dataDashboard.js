@@ -1,6 +1,7 @@
 import React from "react"
 import DatasetStats from "./../components/DatasetStats"
-import { Layout } from "./../site-specific/Layout"
+import Panel from "../components/Panel"
+import {Layout} from "./../site-specific/Layout"
 import { withUrlQuery } from "../hooks/url-query"
 import { urlRetrieveIds } from "./../hooks/api"
 
@@ -24,7 +25,9 @@ Please allow for some loading time.`
 
   return (
     <Layout title={title} headline={title} leadPanelMarkdown={leadText}>
-      <DatasetStats dataset_id={datasetIds} age_splits={ageSplits} />
+      <Panel>
+        <DatasetStats dataset_id={datasetIds} age_splits={ageSplits} filterUnknowns={true} />
+      </Panel>
     </Layout>
   )
 })

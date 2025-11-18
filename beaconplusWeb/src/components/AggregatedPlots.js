@@ -35,17 +35,21 @@ const barStyle = {
 
 //----------------------------------------------------------------------------//
 
-export function AggregatedPlots({ summaryResults }) {
+export function AggregatedPlots({ summaryResults, filterUnknowns }) {
     return (
         <>
         {summaryResults ? (
             summaryResults.map((r) => (
                 <>
                 {r["concepts"].length == 1 && (
-                    <AggregatedPlot agg={r} />
+                    <AggregatedPlot agg={r} filterUnknowns={filterUnknowns} />
                 )
                 }
-                </>
+{/*                {r["concepts"].length == 2 && (
+                    <AggregatedStackedPlot agg={r} />
+                )
+                }
+*/}                </>
                 )
             )
         ) : (
@@ -57,30 +61,32 @@ export function AggregatedPlots({ summaryResults }) {
 
 //----------------------------------------------------------------------------//
 
-
+// NOT IMPLEMENTED YET - already fails at some point due to lack of data check?
 // function AggregatedStackedPlot({ agg }) {
-//     var dist_all = {}
-//     let dictionary = Object.fromEntries(agg.map(x => [x.id, x.country]));
-
-//     agg["distribution"].map(item => ({
-//       id: item.conceptValues[0].id,
-//       label: `${item.conceptValues[0].label} (${item.conceptValues[0].id}, ${item.count})`,
-//       count: item.count
-//     }))
-
+//     console.log(agg);
+//     let dictionary = Object.assign({}, ...agg["distribution"].map((x) => (
+//             {
+//                 [x.conceptValues[0].id]: {
+//                     "label": x.conceptValues[0].label,
+//                     "count": x.count,
+//                     "secondary": x.conceptValues[1]
+//                 }
+//             }
+//         )
+//     ));
+//     console.log(dictionary);
 
 // }
 
 
-
-function AggregatedPlot({ agg }) {
+function AggregatedPlot({ agg, filterUnknowns }) {
     var dist_all = agg["distribution"].map(item => ({
       id: item.conceptValues[0].id,
       label: `${item.conceptValues[0].label} (${item.conceptValues[0].id}, ${item.count})`,
       count: item.count
     }))
 
-    const agg_l = agg["label"]
+    var agg_l = agg["label"]
 
     dist_all = agg["sorted"] ? dist_all : dist_all.sort((a, b) => a.count < b.count ? 1 : -1)
 
@@ -105,6 +111,15 @@ function AggregatedPlot({ agg }) {
         other["label"] += " (" + other.count +")"
         dist.push(other)
     }
+
+    if (filterUnknowns == true) {
+        var lb = dist.length
+        dist = dist.filter(item => item.id !== "unknown")
+        var la = dist.length
+        if (lb != la) {
+            agg_l += " (unknowns removed)"
+        }
+     }
 
     const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
     const containerRef = useCallback((node) => {

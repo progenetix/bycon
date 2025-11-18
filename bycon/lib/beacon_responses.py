@@ -761,8 +761,9 @@ class ByconAggregations:
 
     def __aggregate_dataset_data(self, query={}):
         # temporary aggregation implementation
-        # WiP - maybe extending w/ 2-dimensional later ...
-        # ... which is also the reason for having plural "concepts"
+        # WiP
+        # TODO: 2-dimensional with buckets; they need another way - e.g. $switch
+        # https://www.mongodb.com/docs/manual/reference/operator/aggregation/switch/
         agg_terms = self.aggregator_definitions
 
         # one could aggregate all terms in one pipeline, but this is clearer

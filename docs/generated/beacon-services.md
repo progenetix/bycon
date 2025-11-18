@@ -240,6 +240,7 @@ The table type can be changed with `tableType=individuals` (or `analyses`).
 * http://progenetix.org/services/sampletable/pgxbs-kftvjv8w
 * http://progenetix.org/services/sampletable?datasetIds=cellz&filters=cellosaurus:CVCL_0030
 * http://progenetix.org/services/sampletable?filters=pgx:icdom-81703
+* https://progenetix.org/services/sampletable/?responseEntityPathId=analyses&filters=pgx:icdom-81703
 
 
 ### `/tester`

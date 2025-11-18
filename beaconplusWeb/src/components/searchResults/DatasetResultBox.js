@@ -239,7 +239,7 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
       {tabComponent ? <div>{tabComponent}</div> : null}
 
       <br/>
-      <AggregatedPlots summaryResults={summaryResults} />
+      <AggregatedPlots summaryResults={summaryResults} filterUnknowns={true} />
       <br/>
       <hr/>
       <h2 className="subtitle has-text-dark">{id} Data Downloads</h2>

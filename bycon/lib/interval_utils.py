@@ -302,8 +302,7 @@ class GenomeBins:
             # skipping non-CNV vars
             if not "CopyNumberChange" in v.get("type", "__none__"):
                 continue
-            v_t_c = v.get("variant_state", {}).get("id", "__NA__")
-            if v_t_c not in self.variant_type_definitions.keys():
+            if (v_t_c := v.get("variant_state", {}).get("id", "__NA__")) not in self.variant_type_definitions.keys():
                 continue
             dup_del = self.variant_type_definitions[v_t_c].get("DUPDEL", "___none___")
             if not (cov_lab := self.cov_labs[dup_del]):

@@ -6,6 +6,36 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-11-18 (v2.6.7 "DashboardDabbler")
+
+* implemented a basic dashboard at `___BEACON_ROOT___/dataDashboard/` using the
+  draft version of a Beacon v2.n aggregation response
+    - simple Victory based bar plots defined in `beaconplusWeb/src/components/AggregatedPlots.js`
+    - only one-dimensional so far; 2-dimensional for stacked plots coming up
+* ... based on the `ByconAggregations` class to handle aggregation definitions
+      and processing
+    - added `aggregation_definitions.yaml` file for defining available aggregations
+      and their parameters
+    - modified `ByconResultSets` to include aggregation processing if requested
+      through the `aggregated` granularity parameter
+* added a new `individual_info` object property to biosamples which contains 
+  data extracted from the corresponding individual, to allow easier aggregation
+    - one has to run the updated `housekeeping.py` script to populate this field
+```
+  individual_info: {
+    index_disease: {
+      disease_code: { id: 'NCIT:C8851', label: 'Diffuse Large B-Cell Lymphoma' },
+      stage: { id: 'NCIT:C27966', label: 'Stage I' },
+      clinical_tnm_finding: [ { id: 'NCIT:C48720', label: 'T1 Stage Finding' } ],
+      followup_state: { id: 'EFO:0030049', label: 'dead (follow-up status)' },
+      followup_time: 'P1M',
+      onset: { age: 'P41Y', age_days: 14974 },
+      followup_days: 30
+    },
+    sex: { id: 'NCIT:C16576', label: 'female' }
+```
+  
+
 ### 2025-11-04 (v2.6.6 "GlobeProjector")
 
 * created ByconHO class in `beacon_responses.py` and deleted `handover_generation.py`
