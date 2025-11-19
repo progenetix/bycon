@@ -4,14 +4,19 @@ import {
   basePath,
   useProgenetixApi,
 } from "./../hooks/api"
+import { Loader } from "./Loader"
 
 export default function DatasetStats({dataset_id, age_splits, filterUnknowns}) {
   const summaryURL = `${basePath}beacon/datasets/${dataset_id}?ageSplits=${age_splits}`
-  const summaryReply = useProgenetixApi(summaryURL)
+  const { data, isLoading } = useProgenetixApi(summaryURL)
   return (
-    <AggregatedPlots
-      summaryResults={summaryReply?.data?.summaryResults}
-      filterUnknowns={filterUnknowns}
-    />
+    <Loader isLoading={isLoading} background>
+      {data && (
+        <AggregatedPlots
+          summaryResults={data.summaryResults}
+          filterUnknowns={filterUnknowns}
+        />
+      )}
+    </Loader>
   )
 }

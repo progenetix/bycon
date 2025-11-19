@@ -54,8 +54,8 @@ milestones.
         * side effect are now some rather granular annotations; e.g. New York
           coordinates which point to Manhattan are now labeled as "Financial District"
           instead of "New York City"
-        * unknown coords ar now all mapped to Atlantis whish - as everybody knows -
-          sits below the Bermuda Triangle (centered at about lat: 25, long: -71)
+        * unknown coords ar now all mapped to Atlantis which - as everyone knows -
+          is the sunken place below the Bermuda Triangle (centered at about lat: 25, long: -71)
     - ... above now handled by `ByconGeoResource` class
 
 ### 2025-10-23 (v2.6.4 `___BEACON_ROOT___`)

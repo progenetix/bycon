@@ -239,6 +239,8 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
       {tabComponent ? <div>{tabComponent}</div> : null}
 
       <br/>
+      <hr/>
+      <h2 className="subtitle has-text-dark">Matched {id} Data  Overview</h2>
       <AggregatedPlots summaryResults={summaryResults} filterUnknowns={true} />
       <br/>
       <hr/>
