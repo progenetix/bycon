@@ -777,16 +777,17 @@ class ByconAggregations:
     # -------------------------------------------------------------------------#
 
     def __aggregate_single_concept(self, a_k, a_v, query={}):
-        if len(splits := a_v.get("splits", [])) > 0:
-            return
         concepts = a_v.get("concepts", [])
         if len(concepts) != 1:
             return
-        e, c = concepts[0].split(".", 1)
+        if len(concepts[0].get("splits", [])) > 0:
+            return
+        
+        c = concepts[0].get("property")
+        d = concepts[0].get("scope")
+        if not (collection := BYC_DBS.get(f"{d}_coll")):
+            return
 
-        collection = "biosamples"
-        if "individual" in e:
-            collection = "individuals"
         data_coll = self.data_client[collection]
 
         agg_p = [
@@ -820,20 +821,25 @@ class ByconAggregations:
     # -------------------------------------------------------------------------#
 
     def __aggregate_2_concepts(self, a_k, a_v, query={}):
-        if len(splits := a_v.get("splits", [])) > 0:
-            return
+        # TODO: abstract this as entry point into switch and id scenarios
         concepts = a_v.get("concepts", [])
         if len(concepts) != 2:
             return
-        e_one, c_one = concepts[0].split(".", 1)
-        e_two, c_two = concepts[1].split(".", 1)
-
-        if e_one != e_two:
+        if len(concepts[0].get("splits", [])) > 0 or len(concepts[1].get("splits", [])) > 0:
             return
 
-        collection = "biosamples"
-        if "individual" in e_one:
-            collection = "individuals"
+        prdbug(f'... aggregating 2 concepts for {a_k}')
+        prdbug(f'... concepts: {concepts}')
+
+        c_one = concepts[0].get("property")
+        d_one = concepts[0].get("scope")
+        c_two = concepts[1].get("property")
+        d_two = concepts[1].get("scope")
+        if d_one != d_two:
+            return
+
+        if not (collection := BYC_DBS.get(f"{d_one}_coll")):
+            return
         data_coll = self.data_client[collection]
 
         agg_p = [
@@ -853,13 +859,11 @@ class ByconAggregations:
 
         # label lookups only for term-based aggregations
         for a in agg_d:
-            prdbug(a)
             if not (i_k := a.get("_id")):
                 continue
             c_v_s = []
             id_v_s = list(i_k.values())
-            for i in [0, 1]:
-                v = id_v_s[i]
+            for v in id_v_s:
                 label = v
                 if (coll := self.term_coll.find_one( {"id": v})):
                     label = coll.get("label", label)
@@ -875,29 +879,69 @@ class ByconAggregations:
 
     # -------------------------------------------------------------------------#
 
-    def __aggregate_single_concept_buckets(self, a_k, a_v, query={}):
-        if not "splits" in a_v:
-            return
-        if "ageAtDiagnosis" in a_k:
-            if type(age_splits := BYC_PARS.get("age_splits")) is list:
-                a_v.update({"splits": [age_splits]})
-        elif "followupTime" in a_k:
-            if type(followup_splits := BYC_PARS.get("followup_splits")) is list:
-                a_v.update({"splits": [followup_splits]})
+    def __id_or_switch(self, a_k, a_v, query={}):
+        return
 
-        if len(a_v.get("splits", [])) < 1:
-            return
-        if len(splits := a_v.get("splits", [])[0]) < 1:
-            return
+
+    """
+    Switch example for age at diagnosis buckets:
+
+    ```
+    db.biosamples.aggregate([
+        { $match: {"histological_diagnosis.id":"NCIT:C4194"} },
+        { $group: {
+            "_id": {
+                "sex": "$individual_info.sex.id",
+                "ageAtDiagnosis": {
+                    $switch: {
+                        "branches": [
+                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 365 ] }, "then": "<P1Y" },
+                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 730 ] }, "then": "<P2Y" },
+                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 1825 ] }, "then": "<P5Y" },
+                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 3650 ] }, "then": "<P10Y" },
+                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 7300 ] }, "then": "<P20Y" },
+                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 14600 ] }, "then": "<P40Y" },
+                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 29200 ] }, "then": "<P80Y" },
+                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 29200 ] }, "then": "<P80Y" }
+                        ],
+                        "default": "undefined"
+                    }
+                }
+            },
+            "count": { $sum: 1 }
+        }}
+    ])
+    ```
+    """
+
+
+
+    # -------------------------------------------------------------------------#
+
+    def __aggregate_single_concept_buckets(self, a_k, a_v, query={}):
+        # TODO: evaluate if bucket => switch is better here
+        # and have then the switch generation as function called for
+        # bucket-like concepts in general
         concepts = a_v.get("concepts", [])
         if len(concepts) != 1:
             return
-        e, c = concepts[0].split(".", 1)
-
-        collection = "biosamples"
-        if "individual" in e:
-            collection = "individuals"
+        if len(splits := concepts[0].get("splits", [])) < 1:
+            return
+        c = concepts[0].get("property")
+        d = concepts[0].get("scope")
+        if not (collection := BYC_DBS.get(f"{d}_coll")):
+            return
         data_coll = self.data_client[collection]
+
+        if "ageAtDiagnosis" in a_k:
+            if type(age_splits := BYC_PARS.get("age_splits")) is list:
+                splits = age_splits
+        elif "followupTime" in a_k:
+            if type(followup_splits := BYC_PARS.get("followup_splits")) is list:
+                splits = followup_splits
+
+        if len(splits) < 1:
+            return
 
         lower_bounds = []
         labs = {}
@@ -923,7 +967,6 @@ class ByconAggregations:
                 }
             }
         ]
-        prdbug(agg_p)
         agg_d = data_coll.aggregate(agg_p)
 
         # label lookups only for term-based aggregations

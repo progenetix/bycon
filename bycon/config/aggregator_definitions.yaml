@@ -7,32 +7,31 @@ $defs:
     description: >-
       Count of histological diagnoses in matched biosamples
     concepts:
-      - biosample.histological_diagnosis.id
+      - scope: biosample
+        property: histological_diagnosis.id
 
   # cancerTypes:
-  #   id: cancerTypes
-  #   label: Cancer Classes
+  #   id: cancerTypesAges
+  #   label: Cancer Classes by Age
   #   description: >-
-  #     General cancer types
+  #     General cancer types by age range
   #   concepts:
-  #     - biosample.histological_diagnosis
-  #     - biosample.individual_info.index_disease.onset.age_days
-  #   selections:
-  #     -
-  #       - NCIT:C3708
-  #       - NCIT:C3224
-  #       - NCIT:C2926
-  #     - []
-  #   limits:
-  #     - []
-  #     -
-  #       - P0D
-  #       - P18M
-  #       - P18Y
-  #       - P40Y
-  #       - P65Y
-  #       - P80Y
-  #       - P120Y
+  #     - scope: biosample
+  #       property: histological_diagnosis
+  #       selections:
+  #         - NCIT:C3708
+  #         - NCIT:C3224
+  #         - NCIT:C2926      
+  #     - scope: biosample
+  #       property: individual_info.index_disease.onset.age_days
+  #       splits:
+  #         - P0D
+  #         - P18M
+  #         - P18Y
+  #         - P40Y
+  #         - P65Y
+  #         - P80Y
+  #         - P120Y
 
   sampleOriginDetails:
     id: sampleOriginDetails
@@ -40,7 +39,8 @@ $defs:
     description: >-
       Count of anatomical sites in matched biosamples
     concepts:
-      - biosample.sample_origin_detail.id
+      - scope: biosample
+        property: sample_origin_detail.id
 
   sampleICDO3histology:
     id: sampleICDO3histology
@@ -48,7 +48,8 @@ $defs:
     description: 
       - ICD-O 3 histologies in matched biosamples
     concepts:
-      - biosample.icdo_morphology.id
+      - scope: biosample
+        property: icdo_morphology.id
 
   sampleICDO3histologyBySex:
     id: sampleICDO3histologyBySex
@@ -56,8 +57,10 @@ $defs:
     description: 
       - ICD-O 3 histologies by sex in matched biosamples
     concepts:
-      - biosample.icdo_morphology.id
-      - biosample.individual_info.sex.id
+      - scope: biosample
+        property: icdo_morphology.id
+      - scope: biosample
+        property: individual_info.sex.id
 
   sampleCountries:
     id: sampleCountries
@@ -66,7 +69,8 @@ $defs:
     description: >-
       Count of countries of origin in matched biosamples
     concepts:
-      - biosample.geo_location.properties.ISO3166alpha3
+      - scope: biosample
+        property: geo_location.properties.ISO3166alpha3
 
   ageAtDiagnosis:
     id: ageAtDiagnosis
@@ -75,16 +79,16 @@ $defs:
       Age at diagnosis
     sorted: True
     concepts:
-      - biosample.individual_info.index_disease.onset.age_days
-    splits:
-      -
-        - P0D
-        - P18M
-        - P18Y
-        - P40Y
-        - P65Y
-        - P80Y
-        - P120Y
+      - scope: biosample
+        property: individual_info.index_disease.onset.age_days
+        splits:
+          - P0D
+          - P18M
+          - P18Y
+          - P40Y
+          - P65Y
+          - P80Y
+          - P120Y
 
   followupTime:
     id: followupTime
@@ -93,17 +97,17 @@ $defs:
       Follow-up time after diagnosis
     sorted: True
     concepts:
-      - biosample.individual_info.index_disease.followup_days
-    splits:
-      -
-        - P0D
-        - P6M
-        - P1Y
-        - P18M
-        - P3Y
-        - P5Y
-        - P10Y
-        - P120Y
+      - scope: biosample
+        property: individual_info.index_disease.followup_days
+        splits:
+          - P0D
+          - P6M
+          - P1Y
+          - P18M
+          - P3Y
+          - P5Y
+          - P10Y
+          - P120Y
 
 
 
