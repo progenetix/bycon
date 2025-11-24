@@ -31,28 +31,16 @@ $defs:
           - NCIT:C3457 # B-Cell Non-Hodgkin Lymphoma
 
 
-  # cancerTypes:
-  #   id: cancerTypesAges
-  #   label: Cancer Classes by Age
-  #   description: >-
-  #     General cancer types by age range
-  #   concepts:
-  #     - scope: biosample
-  #       property: histological_diagnosis
-  #       selections:
-  #         - NCIT:C3708
-  #         - NCIT:C3224
-  #         - NCIT:C2926      
-  #     - scope: biosample
-  #       property: individual_info.index_disease.onset.age_days
-  #       splits:
-  #         - P0D
-  #         - P18M
-  #         - P18Y
-  #         - P40Y
-  #         - P65Y
-  #         - P80Y
-  #         - P120Y
+  cancerTypesBySex:
+    id: cancerTypesBySex
+    label: Cancer Classes by Sex
+    description: >-
+      General cancer types by sex
+    concepts:
+      - scope: biosample
+        property: histological_diagnosis.id
+      - scope: biosample
+        property: individual_info.sex.id
 
   sampleOriginDetails:
     id: sampleOriginDetails

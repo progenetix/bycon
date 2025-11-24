@@ -771,7 +771,7 @@ class ByconAggregations:
             a_v.update({"distribution": []})    
             self.__aggregate_single_concept(a_k, a_v, query)
             # self.__aggregate_single_concept_buckets(a_k, a_v, query)
-            # self.__aggregate_2_concepts(a_k, a_v, query)
+            self.__aggregate_2_concepts(a_k, a_v, query)
 
 
     # -------------------------------------------------------------------------#
@@ -810,7 +810,6 @@ class ByconAggregations:
 
         # label lookups only for term-based aggregations
         for a in agg_d:
-            prdbug(a)
             if not (i_k := a.get("_id")):
                 continue
             if type(i_k) is dict and "id" in i_k:

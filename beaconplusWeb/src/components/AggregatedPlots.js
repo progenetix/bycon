@@ -4,6 +4,7 @@ import {
     VictoryLabel,
     VictoryAxis,
     VictoryBar,
+    VictoryStack,
     VictoryTheme,
     VictoryTooltip,
     // VictoryZoomContainer
@@ -45,11 +46,11 @@ export function AggregatedPlots({ summaryResults, filterUnknowns }) {
                     <AggregatedPlot agg={r} filterUnknowns={filterUnknowns} />
                 )
                 }
-{/*                {r["concepts"].length == 2 && (
+                {r["concepts"].length == 2 && (
                     <AggregatedStackedPlot agg={r} />
                 )
                 }
-*/}                </>
+                </>
                 )
             )
         ) : (
@@ -62,22 +63,101 @@ export function AggregatedPlots({ summaryResults, filterUnknowns }) {
 //----------------------------------------------------------------------------//
 
 // NOT IMPLEMENTED YET - already fails at some point due to lack of data check?
-// function AggregatedStackedPlot({ agg }) {
-//     console.log(agg);
-//     let dictionary = Object.assign({}, ...agg["distribution"].map((x) => (
-//             {
-//                 [x.conceptValues[0].id]: {
-//                     "label": x.conceptValues[0].label,
-//                     "count": x.count,
-//                     "secondary": x.conceptValues[1]
-//                 }
-//             }
-//         )
-//     ));
-//     console.log(dictionary);
+function AggregatedStackedPlot({ agg }) {
 
-// }
+    var keyedFirst = {}
+    var secondKeys = {}
 
+    agg["distribution"].forEach(function (v) {
+        let cvs = v["conceptValues"];
+        let c = v["count"]
+        let k1 = cvs[0]["id"];
+        var k2 = "undefined";
+        if (cvs.length > 1) {
+            k2 = cvs[1]["id"];
+        }
+        if (! (k1 in keyedFirst) ) {
+            keyedFirst[k1] = {"sum": 0};
+        }
+        if (! secondKeys[k2]) {
+            secondKeys[k2] = 1;
+        }
+        keyedFirst[k1][k2] = c;
+        keyedFirst[k1]["sum"] += c;
+    });
+
+    // Create items array
+    var sortedEntries = Object.keys(keyedFirst).map(function(key) {
+      return [key, keyedFirst[key]];
+    });
+
+    // Sort the array based on the second element
+    sortedEntries = sortedEntries.sort((a, b) => a[1].sum < b[1].sum ? 1 : -1)
+
+    if (sortedEntries.length > 20) {
+            sortedEntries = sortedEntries.slice(0, 20)
+    }
+    var barData = [];
+
+    Object.keys(secondKeys).sort().forEach(function (s) {
+        var thisBar = [];
+        for (const [first, seconds] of sortedEntries) {
+            var barField = { "x": first, "y": 0};
+            if (seconds[s]) {
+                barField["y"] = seconds[s];
+            }
+            thisBar.push(barField)
+        }
+        barData.push(thisBar);
+    })
+
+    console.log(barData)
+    return (
+        <VictoryChart
+            domainPadding={{ x: 20 }}
+            height={plot_h}
+            width={600}
+            theme={VictoryTheme.material}
+            padding={{left: padd_l, top: padd_t, right: padd_r, bottom: padd_b}}
+          >
+            <VictoryLabel         
+                text={agg["label"]}         
+                textAnchor="middle"
+                x={300}        
+                y={padd_t - 15}
+            />
+            <VictoryStack
+                colorScale={"qualitative"}
+            >
+                {barData.map((data, i) => (
+                    <VictoryBar
+                        key={i}
+                        data={data}
+                        x="x"         
+                        y="y"
+                        theme={VictoryTheme.clean}
+                        labelComponent={<VictoryTooltip />}
+                        labels={({ datum }) => `${datum.x}: ${datum.y}`}
+                        // style={barStyle}
+                    />
+                ))}
+            </VictoryStack>
+            <VictoryAxis
+                crossAxis 
+                style={{
+                  tickLabels: { angle: -60, textAnchor: "end" },
+                }}
+            />
+            <VictoryAxis
+                dependentAxis 
+                style={{}}
+            />
+        </VictoryChart>
+    );
+
+}
+
+//----------------------------------------------------------------------------//
 
 function AggregatedPlot({ agg, filterUnknowns }) {
     var dist_all = agg["distribution"].map(item => ({
