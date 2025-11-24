@@ -9,6 +9,27 @@ $defs:
     concepts:
       - scope: biosample
         property: histological_diagnosis.id
+        termIds:
+          - NCIT:C9335 # Malignant neoplasm of breast
+          - NCIT:C4863 # Prostate Carcinoma
+          - NCIT:C4908 # Ovarian Carcinoma
+          - NCIT:C4024 # Esophageal Squamous Cell Carcinoma
+          - NCIT:C4025 # Esophageal Adenocarcinoma
+          - NCIT:C4016 # Malignant Bone Neoplasm
+          - NCIT:C3493 # Lung Squamous Cell Carcinoma
+          - NCIT:C207229 # Pancreatic Carcinoma
+          - NCIT:C4911 # Gastric Carcinoma
+          - NCIT:C2955 # Colorectal Carcinoma
+          - NCIT:C7927 # Liver Carcinoma
+          - NCIT:C3058 # Glioblastoma
+          - NCIT:C3224 # Melanoma
+          - NCIT:C3194 # Liposarcoma
+          - NCIT:C4925 # Malignant Germ Cell Tumor
+          - NCIT:C27753 # Acute Myeloid Leukemia, Not Otherwise Specified
+          - NCIT:C3163 # Chronic Lymphocytic Leukemia
+          - NCIT:C3466 # T-Cell Non-Hodgkin Lymphoma
+          - NCIT:C3457 # B-Cell Non-Hodgkin Lymphoma
+
 
   # cancerTypes:
   #   id: cancerTypesAges
@@ -107,7 +128,7 @@ $defs:
           - P3Y
           - P5Y
           - P10Y
-          - P120Y
+          - P60Y
 
 
 

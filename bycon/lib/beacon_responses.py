@@ -1,4 +1,4 @@
-import json, requests, sys
+import json, requests, sys, yaml
 from datetime import datetime
 from deepmerge import always_merger
 from os import environ, pardir, path
@@ -770,8 +770,8 @@ class ByconAggregations:
         for a_k, a_v in agg_terms.items():
             a_v.update({"distribution": []})    
             self.__aggregate_single_concept(a_k, a_v, query)
-            self.__aggregate_single_concept_buckets(a_k, a_v, query)
-            self.__aggregate_2_concepts(a_k, a_v, query)
+            # self.__aggregate_single_concept_buckets(a_k, a_v, query)
+            # self.__aggregate_2_concepts(a_k, a_v, query)
 
 
     # -------------------------------------------------------------------------#
@@ -780,37 +780,50 @@ class ByconAggregations:
         concepts = a_v.get("concepts", [])
         if len(concepts) != 1:
             return
-        if len(concepts[0].get("splits", [])) > 0:
-            return
+
+        concept = concepts[0]
         
-        c = concepts[0].get("property")
-        d = concepts[0].get("scope")
+        c = concept.get("property")
+        d = concept.get("scope")
         if not (collection := BYC_DBS.get(f"{d}_coll")):
             return
 
         data_coll = self.data_client[collection]
 
-        agg_p = [
-            { "$match": query },
+        _id = self.__id_object(a_k, concept)
+
+        agg_p = [ { "$match": query } ]
+        agg_p.append(            
             { "$group": {
-                    "_id": f'${c}',
+                    "_id": _id,
                     "count": { "$sum": 1 }
                 }
-            },
-            { "$sort": { "count": -1 } }
-        ]
+            }        
+        )
+        # sorting either on logical order () detection order
+        if a_v.get("sorted") is True:
+            agg_p.append({ "$sort": { "_id.sort": 1 } })
+        else:
+            agg_p.append({ "$sort": { "count": -1 } })
+
         agg_d = data_coll.aggregate(agg_p)
 
         # label lookups only for term-based aggregations
         for a in agg_d:
+            prdbug(a)
             if not (i_k := a.get("_id")):
                 continue
-            label = i_k
-            if (coll := self.term_coll.find_one( {"id": i_k})):
-                label = coll.get("label", label)
+            if type(i_k) is dict and "id" in i_k:
+                id_v = i_k.get("id")
+                label = i_k.get("label", id_v)
+            else:
+                id_v = i_k
+                label = id_v
+                if (coll := self.term_coll.find_one( {"id": i_k})):
+                    label = coll.get("label", id_v)
             a_v["distribution"].append({
                 "concept_values": [
-                    {"id": i_k, "label": label}
+                    {"id": id_v, "label": label}
                 ],
                 "count": a.get("count", 0)
             })
@@ -827,9 +840,6 @@ class ByconAggregations:
             return
         if len(concepts[0].get("splits", [])) > 0 or len(concepts[1].get("splits", [])) > 0:
             return
-
-        prdbug(f'... aggregating 2 concepts for {a_k}')
-        prdbug(f'... concepts: {concepts}')
 
         c_one = concepts[0].get("property")
         d_one = concepts[0].get("scope")
@@ -879,113 +889,130 @@ class ByconAggregations:
 
     # -------------------------------------------------------------------------#
 
-    def __id_or_switch(self, a_k, a_v, query={}):
-        return
-
-
-    """
-    Switch example for age at diagnosis buckets:
-
-    ```
-    db.biosamples.aggregate([
-        { $match: {"histological_diagnosis.id":"NCIT:C4194"} },
-        { $group: {
-            "_id": {
-                "sex": "$individual_info.sex.id",
-                "ageAtDiagnosis": {
-                    $switch: {
-                        "branches": [
-                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 365 ] }, "then": "<P1Y" },
-                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 730 ] }, "then": "<P2Y" },
-                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 1825 ] }, "then": "<P5Y" },
-                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 3650 ] }, "then": "<P10Y" },
-                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 7300 ] }, "then": "<P20Y" },
-                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 14600 ] }, "then": "<P40Y" },
-                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 29200 ] }, "then": "<P80Y" },
-                            { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 29200 ] }, "then": "<P80Y" }
-                        ],
-                        "default": "undefined"
-                    }
-                }
-            },
-            "count": { $sum: 1 }
-        }}
-    ])
-    ```
-    """
-
+    def __id_object(self, a_k, concept):
+        if (_id := self.__switch_branches_from_terms(a_k, concept)):
+            return _id
+        if (_id := self.__switch_branches_from_splits(a_k, concept)):
+            return _id
+        return f"${concept.get('property')}"
 
 
     # -------------------------------------------------------------------------#
 
-    def __aggregate_single_concept_buckets(self, a_k, a_v, query={}):
-        # TODO: evaluate if bucket => switch is better here
-        # and have then the switch generation as function called for
-        # bucket-like concepts in general
-        concepts = a_v.get("concepts", [])
-        if len(concepts) != 1:
-            return
-        if len(splits := concepts[0].get("splits", [])) < 1:
-            return
-        c = concepts[0].get("property")
-        d = concepts[0].get("scope")
-        if not (collection := BYC_DBS.get(f"{d}_coll")):
-            return
-        data_coll = self.data_client[collection]
+    def __switch_branches_from_terms(self, a_k, concept):
+        """
+        Switch example for term list from children:
 
-        if "ageAtDiagnosis" in a_k:
-            if type(age_splits := BYC_PARS.get("age_splits")) is list:
-                splits = age_splits
-        elif "followupTime" in a_k:
-            if type(followup_splits := BYC_PARS.get("followup_splits")) is list:
-                splits = followup_splits
+        ```
+        db.biosamples.aggregate([
+            { $group: {
+                "_id": {
+                    "cancerType": {
+                        $switch: {
+                            "branches": [
+                                { "case": { $in: [ "$histological_diagnosis.id", ["NCIT:C3466", "NCIT:C3457", "NCIT:C3163"] ]}, "then": {"id": "...", "label": "Some Lymphoma"} },
+                                { "case": { $in: [ "$histological_diagnosis.id", ["NCIT:C3512", "NCIT:C3493"] ]}, "then": {"id": "...", "label": "Some Lung Cancer"} }
+                            ],
+                            "default": {"id": "other", "label": "other"}
+                        }
+                    }
+                },
+                "count": { $sum: 1 }
+            }}
+        ])
+        ```
+        """
 
-        if len(splits) < 1:
-            return
+        if len(terms := concept.get("termIds", [])) < 1:
+            return False
 
-        lower_bounds = []
-        labs = {}
-        # TODO: fix regex
-        if re.match(r"^P\d", str(splits[0])):
-            for l in splits:
-                d = days_from_iso8601duration(l)
-                labs.update({f"{d}": f">= {l}"})
-                lower_bounds.append(d)
-        else:
-            for l in splits:
-                labs.update({f"{l}": l})
-                lower_bounds.append(l)
+        p = concept.get('property')
 
-        agg_p = [
-            { "$match": query },
-            { "$bucket":
-                {
-                    "groupBy": f'${c}',
-                    "boundaries": lower_bounds,
-                    "default": "unknown",
-                    "output": {"count": { "$sum": 1 }}
-                }
-            }
-        ]
-        agg_d = data_coll.aggregate(agg_p)
-
-        # label lookups only for term-based aggregations
-        for a in agg_d:
-            prdbug(a)
-            if not (i_k := a.get("_id")):
+        branches = []
+        for d_i, i_k in enumerate(terms):
+            if not (coll := self.term_coll.find_one( {"id": i_k})):
                 continue
-            i_k = f"{i_k}"
-            label = i_k
-            if label in labs:
-                label = labs[label]
-            a_v["distribution"].append({
-                "concept_values": [
-                    {"id": label, "label": label}
-                ],
-                "count": a.get("count", 0)
+            label = coll.get("label", i_k)
+            if len(child_terms := coll.get("child_terms", [])) < 1:
+                continue
+            branches.append({
+                "case": { "$in": [ f'${p}', child_terms ] },
+                "then": {"id": i_k, "label": label, "sort": d_i}
             })
 
-        self.dataset_aggregation.append(a_v)
+        _id = {
+            "$switch": {
+                "branches": branches,
+                "default": {"id": "other", "label": "other", "sort": len(terms)}
+            }
+        }
+
+        return _id
+
+
+    # -------------------------------------------------------------------------#
+
+    def __switch_branches_from_splits(self, a_k, concept):
+        """
+        Numeric splits can be implemented using `$bucket` or `$switch`. We're
+        preferimg switches since they can be combined with other aggregators.
+
+        Switch example for age at diagnosis buckets:
+
+        ```
+        db.biosamples.aggregate([
+            { $group: {
+                "_id": {
+                    "ageAtDiagnosis": {
+                        $switch: {
+                            "branches": [
+                                { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 365 ] }, "then": "<P1Y" },
+                                { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 1825 ] }, "then": "<P5Y" },
+=                               { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 14600 ] }, "then": "<P40Y" }
+                            ],
+                            "default": "undefined"
+                        }
+                    }
+                },
+                "count": { $sum: 1 }
+            }}
+        ])
+        ```
+        """
+        if len(splits := concept.get("splits", [])) < 1:
+            return False
+        p = concept.get('property')
+
+        day_labs = []
+        days = []
+        branches = []
+
+        prdbug(splits)
+        for l in splits:
+            if re.match(r"^P\d", str(l)):
+                if int(d := days_from_iso8601duration(l)) > 0:
+                    day_labs.append(f"<{l}")
+                    days.append(d)
+        prdbug(days)
+
+        for d_i, d_l in enumerate(day_labs):
+            branches.append({
+                "case": { "$lt": [ f'${p}', days[d_i] ] },
+                "then": {"id": d_l, "label": d_l, "sort": d_i}
+            })
+
+        prdbug(branches)
+
+        _id = {
+            "$switch": {
+                "branches": branches,
+                "default": {"id": "other", "label": "other", "sort": len(day_labs)}
+            }
+        }
+
+        return _id
+
+
 
 ################################################################################
 ################################################################################
@@ -1337,6 +1364,8 @@ class ByconHO:
 ################################################################################
 
 def print_json_response(this={}, status_code=200):
+    if "yaml" in BYC_PARS.get("mode", ""):
+        print_yaml_response(this, status_code)
     if not "___shell___" in HTTP_HOST:
         print(f'Status: {status_code}')
         print('Content-Type: application/json')
@@ -1344,6 +1373,20 @@ def print_json_response(this={}, status_code=200):
 
     # There are some "do not camelize" exceptions downstream
     prjsoncam(this) 
+    print()
+    exit()
+
+
+################################################################################
+
+def print_yaml_response(this={}, status_code=200):
+    if not "___shell___" in HTTP_HOST:
+        print(f'Status: {status_code}')
+        print('Content-Type: application/x-yaml')
+        print()
+
+    this = humps.camelize(this)
+    print(yaml.dump(humps.camelize(this)))
     print()
     exit()
 
