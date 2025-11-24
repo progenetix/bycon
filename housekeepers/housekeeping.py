@@ -25,6 +25,7 @@ def main():
     # collecting the actions
     todos = {
         "mongodb_index_creation": input("Check & refresh MongoDB indexes?\n(y|N): "),
+        "logical_sex_assignments": input("Assign logical sex values from biosample histologies etc. in individuals?\n(y|N): "),
         "individual_times_days": input("Recalculate `age_days` and `followup_days` in individuals?\n(y|N): "),
         "analyses_labels": input("Create/update `label` field for analyses, from biosamples?\n(y|N): "),
         "update_variants": input("Update variants to latest format (VRS v2)?\n(y|N): "),
@@ -100,6 +101,45 @@ def main():
     ind_coll = data_db[BYC_DBS["individual_coll"]]
     bios_coll = data_db[BYC_DBS["biosample_coll"]]
 
+    # NCIT:C2919 prostate
+    # male_histos = ["NCIT:C2919"]
+    # female_histos = ["NCIT:C2919"]
+
+    female_uberon = ["UBERON:0000002", "UBERON:0000995", "UBERON:0000474"]
+    male_uberon = ["UBERON:0002367", "UBERON:0000473"]
+
+
+    if "y" in todos.get("logical_sex_assignments", "n").lower():
+        for bios in bios_coll.find({"sample_origin_detail.id":{"$in": female_uberon}}):
+            if not (f_id := bios.get("individual_id")):
+                continue
+            ind_coll.find_one_and_update(
+                {"id": f_id},
+                {"$set":{"sex": { "id": 'NCIT:C16576', "label": 'female' }}}
+            )
+
+        for bios in bios_coll.find({"sample_origin_detail.id":{"$in": male_uberon}}):
+            if not (m_id := bios.get("individual_id")):
+                continue
+            ind_coll.find_one_and_update(
+                {"id": m_id},
+                {"$set":{"sex": { "id": 'NCIT:C20197', "label": 'male' }}}
+            )
+
+        print(f'... now updating `individual_info.sex` in biosamples.')
+        no = ind_coll.count_documents({"sex":{"$exists": True}})
+        bar = Bar(f"=> individuals", max = no, suffix='%(percent)d%%'+" of "+str(no) )
+        for ind in ind_coll.find({"sex":{"$exists": True}}):
+            for bios in bios_coll.find({"individual_id":ind["id"]}):
+                bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info.sex": ind.get("sex", {})}})
+            bar.next()
+        bar.finish()
+
+
+
+
+
+
     # age_days
     if "y" in todos.get("individual_times_days", "n").lower():
         query = {"index_disease.onset.age": {"$regex": '^P'}}
@@ -154,15 +194,6 @@ def main():
         for ind in ind_coll.find({"index_disease":{"$exists": True}}):
             for bios in bios_coll.find({"individual_id":ind["id"], "biosample_status.id":{"$ne":'EFO:0009654'}}):
                 bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info": {"index_disease": ind.get("index_disease", {})}}})
-            bar.next()
-        bar.finish()
-
-        print(f'... now updating `individual_info.sex` in biosamples.')
-        no = ind_coll.count_documents({"sex":{"$exists": True}})
-        bar = Bar(f"=> individuals", max = no, suffix='%(percent)d%%'+" of "+str(no) )
-        for ind in ind_coll.find({"sex":{"$exists": True}}):
-            for bios in bios_coll.find({"individual_id":ind["id"]}):
-                bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info.sex": ind.get("sex", {})}})
             bar.next()
         bar.finish()
 

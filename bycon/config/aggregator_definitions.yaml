@@ -42,7 +42,7 @@ $defs:
       - scope: biosample
         property: individual_info.sex.id
 
-  sampleOriginDetails:
+  sampleOriginDetailsBySex:
     id: sampleOriginDetails
     label: Anatomical Origin
     description: >-
@@ -50,15 +50,17 @@ $defs:
     concepts:
       - scope: biosample
         property: sample_origin_detail.id
-
-  sampleICDO3histology:
-    id: sampleICDO3histology
-    label: ICD-O 3 Histology
-    description: 
-      - ICD-O 3 histologies in matched biosamples
-    concepts:
       - scope: biosample
-        property: icdo_morphology.id
+        property: individual_info.sex.id
+
+  # sampleICDO3histology:
+  #   id: sampleICDO3histology
+  #   label: ICD-O 3 Histology
+  #   description: 
+  #     - ICD-O 3 histologies in matched biosamples
+  #   concepts:
+  #     - scope: biosample
+  #       property: icdo_morphology.id
 
   sampleICDO3histologyBySex:
     id: sampleICDO3histologyBySex
