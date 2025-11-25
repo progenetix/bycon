@@ -12,11 +12,6 @@ import {
 
 //----------------------------------------------------------------------------//
 
-const padd_l = 70
-const padd_r = 30
-const padd_t = 30
-const padd_b = 120
-const plot_h = 250
 
 var col_no = 25
 
@@ -71,14 +66,14 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
         let l1 = cvs[0]["label"];
         var k2 = "undefined";
         let l2 = "undefined";
-        var lab = `${l1} (${c})`
+        var lab = l1
         if (cvs.length > 1) {
             k2 = cvs[1]["id"];
             l2 = k2
             if (cvs[1]["label"]) {
                 l2 = cvs[1]["label"];
             }
-            lab = `${l1} & ${l2} (${c})`
+            lab = `${l1} & ${l2}`
         }
         if (! (k1 in keyedFirst) ) {
             keyedFirst[k1] = {"sum": 0};
@@ -110,7 +105,7 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
     var dist = [];
     var other_count = 0
     var others = {
-        "other": {}
+        "other": {"sum": 0}
     }
     Object.keys(secondKeys).forEach(function (s) {
         others["other"][s] = { "count": 0, "label": secondKeys[s] }
@@ -126,7 +121,8 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
             for (const s of Object.keys(secondKeys)) {
                 if (seconds[s]) {
                     others["other"][s]["count"] += seconds[s]["count"];
-                    others["other"][s]["label"] = `${secondKeys[s]} (${others["other"][s]["count"]})`;
+                    others["other"]["sum"] += seconds[s]["count"];
+                    others["other"][s]["label"] = `other & ${secondKeys[s]}`;
                 }
             }
         }
@@ -142,10 +138,10 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
     Object.keys(secondKeys).sort().forEach(function (s) {
         var thisBar = [];
         for (const [first, seconds] of dist) {
-            var barField = { "x": first, "y": 0, "label": "" };
+            var barField = { "collabel": first, "count": 0, "label": "" };
             if (seconds[s]) {
-                barField["y"] = seconds[s]["count"];
-                barField["label"] = seconds[s]["label"];
+                barField["count"] = seconds[s]["count"];
+                barField["label"] = `${seconds[s]["label"]} (${seconds[s]["count"]} of ${seconds["sum"]})`;
             }
             thisBar.push(barField)
         }
@@ -157,60 +153,70 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
         if (node !== null) { setBoundingRect(node.getBoundingClientRect()); }
     }, []);
 
-    var c = dist.length
-    if (c < 1) {
-        c = 0
-    }
     var outer_w = boundingRect.width
-    const padd = outer_w / c
 
     return (
         <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
-            <VictoryChart
-                domainPadding={{ x: padd }}
-                height={plot_h}
-                width={outer_w}
-                theme={VictoryTheme.material}
-                padding={{left: padd_l, top: padd_t, right: padd_r, bottom: padd_b}}
-              >
-                <VictoryLabel         
-                    text={agg_l}         
-                    textAnchor="middle"
-                    x={outer_w * 0.5}        
-                    y={padd_t - 15}
-                />
-                <VictoryStack
-                    colorScale={"qualitative"}
-                >
-                    {barData.map((data, i) => (
-                        <VictoryBar
-                            key={i}
-                            data={data}
-                            x="x"         
-                            y="y"
-                            // theme={VictoryTheme.clean}
-                            labelComponent={<VictoryTooltip />}
-                            // labels={({ datum }) => `${datum.x}: ${datum.y}`}
-                            // style={barStyle}
-                        />
-                    ))}
-                </VictoryStack>
-                <VictoryAxis
-                    crossAxis 
-                    style={{
-                      tickLabels: { angle: -60, textAnchor: "end" },
-                    }}
-                />
-                <VictoryAxis
-                    dependentAxis 
-                    style={{}}
-                />
-            </VictoryChart>
+            <StackedBarChart
+                bar_data={barData} col_no={dist.length} outer_w={outer_w} title={agg_l}
+            />
         </div>
     );
 
 }
 
+//----------------------------------------------------------------------------//
+
+function StackedBarChart({ bar_data, col_no, outer_w, title}) {
+
+    const padd_l = 70
+    const padd_r = 30
+    const padd_t = 30
+    const padd_b = 120
+    const plot_h = 250
+
+    // const padd = outer_w / col_no
+
+    return(
+        <VictoryChart
+            domain={{ x: [0.5, col_no + 0.5] }}
+            height={plot_h}
+            width={outer_w}
+            theme={VictoryTheme.material}
+            padding={{left: padd_l, top: padd_t, right: padd_r, bottom: padd_b}}
+          >
+            <VictoryLabel         
+                text={title}         
+                textAnchor="middle"
+                x={outer_w * 0.5}        
+                y={padd_t - 15}
+            />
+            <VictoryStack
+                colorScale={"qualitative"}
+            >
+                {bar_data.map((data, i) => (
+                    <VictoryBar
+                        key={i}
+                        data={data}
+                        x="collabel"         
+                        y="count"
+                        labelComponent={<VictoryTooltip />}
+                    />
+                ))}
+            </VictoryStack>
+            <VictoryAxis
+                crossAxis 
+                style={{
+                  tickLabels: { angle: -60, textAnchor: "end" },
+                }}
+            />
+            <VictoryAxis
+                dependentAxis 
+                style={{}}
+            />
+        </VictoryChart>
+    )
+}
 //----------------------------------------------------------------------------//
 
 // function AggregatedPlot({ agg, filterUnknowns }) {

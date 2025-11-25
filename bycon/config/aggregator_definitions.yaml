@@ -3,7 +3,7 @@ description: >-
 $defs:
   histologicalDiagnoses:
     id: histologicalDiagnoses
-    label: Histological Diagnoses
+    label: Diagnostic Classes (by NCIT)
     description: >-
       Count of histological diagnoses in matched biosamples
     concepts:
@@ -29,6 +29,8 @@ $defs:
           - NCIT:C3163 # Chronic Lymphocytic Leukemia
           - NCIT:C3466 # T-Cell Non-Hodgkin Lymphoma
           - NCIT:C3457 # B-Cell Non-Hodgkin Lymphoma
+      - scope: biosample
+        property: individual_info.sex.id
 
 
   cancerTypesBySex:
