@@ -20,18 +20,18 @@ const plot_h = 250
 
 var col_no = 25
 
-const barStyle = {
-  data: {
-    fill: "#c43a31",
-    fillOpacity: 0.4,
-    stroke: "#c43a31",
-    strokeWidth: 2,
-  },
-  labels: {
-    fontSize: 12,
-    fill: "#c43a31",
-  },
-}
+// const barStyle = {
+//   data: {
+//     fill: "#c43a31",
+//     fillOpacity: 0.4,
+//     stroke: "#c43a31",
+//     strokeWidth: 2,
+//   },
+//   labels: {
+//     fontSize: 12,
+//     fill: "#c43a31",
+//   },
+// }
 
 
 //----------------------------------------------------------------------------//
@@ -42,12 +42,8 @@ export function AggregatedPlots({ summaryResults, filterUnknowns }) {
         {summaryResults ? (
             summaryResults.map((r) => (
                 <>
-                {r["concepts"].length == 5 && (
-                    <AggregatedPlot agg={r} filterUnknowns={filterUnknowns} />
-                )
-                }
                 {r["concepts"].length > 0 && (
-                    <AggregatedStackedPlot agg={r} />
+                    <AggregatedStackedPlot agg={r} filterUnknowns={filterUnknowns} />
                 )
                 }
                 </>
