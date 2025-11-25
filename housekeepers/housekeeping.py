@@ -136,10 +136,6 @@ def main():
         bar.finish()
 
 
-
-
-
-
     # age_days
     if "y" in todos.get("individual_times_days", "n").lower():
         query = {"index_disease.onset.age": {"$regex": '^P'}}
