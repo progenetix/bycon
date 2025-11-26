@@ -1,9 +1,11 @@
 import React, { useState, useCallback } from "react";
 import {
     VictoryChart,
+    // VictoryContainer,
     VictoryLabel,
     VictoryAxis,
     VictoryBar,
+    // VictoryPie,
     VictoryStack,
     VictoryTheme,
     VictoryTooltip,
@@ -157,13 +159,42 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
 
     return (
         <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
-            <StackedBarChart
-                bar_data={barData} col_no={dist.length} outer_w={outer_w} title={agg_l}
-            />
+{/*            {dist.length <= 5 ? (
+                <SimplePieChart
+                    bar_data={barData} col_no={dist.length} outer_w={outer_w} title={agg_l}
+                />
+            ) : (
+*/}                <StackedBarChart
+                    bar_data={barData} col_no={dist.length} outer_w={outer_w} title={agg_l}
+                />
+            {/*)}*/}
         </div>
     );
 
 }
+
+//----------------------------------------------------------------------------//
+
+// function SimplePieChart({ bar_data, outer_w}) { //, title
+
+//     return(
+
+//                 <VictoryPie
+//                     theme={VictoryTheme.material}
+//                     radius={outer_w * 0.05}
+//                     height={outer_w * 0.2}
+//                     width={outer_w * 0.2}
+//                     style={{ labels: { fontSize: 6} }}
+//                     // width={10}
+//                     // innerRadius={30}
+//                     // outerRadius={40}
+//                     data={bar_data[0]}
+//                     x="collabel"         
+//                     y="count"
+//                 />
+//     )
+// }
+
 
 //----------------------------------------------------------------------------//
 
