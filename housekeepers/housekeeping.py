@@ -108,7 +108,6 @@ def main():
     female_uberon = ["UBERON:0000002", "UBERON:0000995", "UBERON:0000474"]
     male_uberon = ["UBERON:0002367", "UBERON:0000473"]
 
-
     if "y" in todos.get("logical_sex_assignments", "n").lower():
         for bios in bios_coll.find({"sample_origin_detail.id":{"$in": female_uberon}}):
             if not (f_id := bios.get("individual_id")):

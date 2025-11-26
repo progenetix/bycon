@@ -982,8 +982,8 @@ class ByconAggregations:
             return False
         p = concept.get('property')
 
-        day_labs = []
-        days = []
+        day_labs = ["unknown"]
+        days = [0]
         branches = []
 
         prdbug(splits)
