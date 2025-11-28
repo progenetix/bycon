@@ -62,8 +62,13 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
     var agg_l = agg["label"]
 
     agg["distribution"].forEach(function (v) {
+        console.log(Object.keys(v))
+        console.log(v["conceptValues"])
         let cvs = v["conceptValues"];
         let c = v["count"]
+        if (cvs.length == 0) {
+            cvs = [{"id": "undefined", "label": "undefined"}];
+        }
         let k1 = cvs[0]["id"];
         let l1 = cvs[0]["label"];
         var k2 = "undefined";
@@ -114,10 +119,14 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
     })
 
     var i = 0
+    var max_y = 0
     for (const [first, seconds] of sortedEntries) {
         i += 1
         if (i <= col_no) {
             dist.push([first, seconds])
+            if (seconds["sum"] > max_y) {
+                max_y = seconds["sum"]
+            }
         } else {
             other_count += seconds["sum"]
             for (const s of Object.keys(secondKeys)) {
@@ -133,6 +142,10 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
     if (other_count > 0) {
         dist.push(["other", others["other"]])
         console.log("Adding other...")
+    }
+
+    if (other_count > max_y * 1.25) {
+        max_y = other_count * 0.9
     }
 
     var barData = [];
@@ -165,7 +178,7 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
                 />
             ) : (
 */}                <StackedBarChart
-                    bar_data={barData} col_no={dist.length} outer_w={outer_w} title={agg_l}
+                    bar_data={barData} col_no={dist.length} outer_w={outer_w} max_y={max_y} title={agg_l}
                 />
             {/*)}*/}
         </div>
@@ -198,7 +211,7 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
 
 //----------------------------------------------------------------------------//
 
-function StackedBarChart({ bar_data, col_no, outer_w, title}) {
+function StackedBarChart({ bar_data, col_no, outer_w, max_y, title}) {
 
     const padd_l = 70
     const padd_r = 30
@@ -210,7 +223,7 @@ function StackedBarChart({ bar_data, col_no, outer_w, title}) {
 
     return(
         <VictoryChart
-            domain={{ x: [0.5, col_no + 0.5] }}
+            domain={{ x: [0.5, col_no + 0.5], y: [0, max_y * 1.1] }}
             height={plot_h}
             width={outer_w}
             theme={VictoryTheme.material}
@@ -231,7 +244,7 @@ function StackedBarChart({ bar_data, col_no, outer_w, title}) {
                         data={data}
                         x="collabel"         
                         y="count"
-                        labelComponent={<VictoryTooltip />}
+                        labelComponent={<VictoryTooltip  />}
                     />
                 ))}
             </VictoryStack>
@@ -243,7 +256,18 @@ function StackedBarChart({ bar_data, col_no, outer_w, title}) {
             />
             <VictoryAxis
                 dependentAxis 
-                style={{}}
+                style={{
+                  axis: {
+                    stroke: "transparent",
+                  },
+                  tickLabels: {
+                    fontSize: 8,
+                  },
+                  grid: {
+                    stroke: "#d9d9d9",
+                    size: 5,
+                  },
+                }}
             />
         </VictoryChart>
     )

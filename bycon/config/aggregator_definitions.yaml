@@ -32,17 +32,35 @@ $defs:
       - scope: biosample
         property: individual_info.sex.id
 
-
-  cancerTypesBySex:
-    id: cancerTypesBySex
-    label: Cancer Classes by Sex
+  platformTechnologies:
+    id: platformTechnologies
+    label: Platforms
     description: >-
-      General cancer types by sex
+      Count of basic platform technologies used in matched analyses
     concepts:
-      - scope: biosample
-        property: histological_diagnosis.id
-      - scope: biosample
-        property: individual_info.sex.id
+      - scope: analysis
+        property: platform_model.id
+        termIds:
+          - EFO:0030075 # cDNA microarray
+          - EFO:0010938 # large-insert clone DNA microarray
+          - EFO:0010939 # oligonucleotide DNA microarray
+          - EFO:0010937 # comparative genomic hybridization (CGH)
+          - NCIT:C16437 # Chromosome Banding
+          - OBI:0002117 # whole genome sequencing assay
+          - OBI:0002118 # exome sequencing assay
+          - NCIT:C158253  # Targeted Genome Sequencing
+
+
+  # cancerTypesBySex:
+  #   id: cancerTypesBySex
+  #   label: Cancer Classes by Sex
+  #   description: >-
+  #     General cancer types by sex
+  #   concepts:
+  #     - scope: biosample
+  #       property: histological_diagnosis.id
+  #     - scope: biosample
+  #       property: individual_info.sex.id
 
   sampleOriginDetailsBySex:
     id: sampleOriginDetails
@@ -55,14 +73,21 @@ $defs:
       - scope: biosample
         property: individual_info.sex.id
 
-  # sampleICDO3histology:
-  #   id: sampleICDO3histology
-  #   label: ICD-O 3 Histology
-  #   description: 
-  #     - ICD-O 3 histologies in matched biosamples
-  #   concepts:
-  #     - scope: biosample
-  #       property: icdo_morphology.id
+  sampleICDO3histologyByAge:
+    id: sampleICDO3histologyByAge
+    label: ICD-O 3 Histology by Age at Diagnosis
+    description: 
+      - ICD-O 3 histologies in matched biosamples
+    concepts:
+      - scope: biosample
+        property: icdo_morphology.id
+      - scope: biosample
+        property: individual_info.index_disease.onset.age_days
+        splits:
+          - P0D
+          - P18Y
+          - P65Y
+          - P120Y
 
   sampleICDO3histologyBySex:
     id: sampleICDO3histologyBySex
@@ -85,11 +110,11 @@ $defs:
       - scope: biosample
         property: geo_location.properties.ISO3166alpha3
 
-  ageAtDiagnosis:
-    id: ageAtDiagnosis
-    label: Age at Diagnosis
+  ageAtDiagnosisBySex:
+    id: ageAtDiagnosisBySex
+    label: Age at Diagnosis by Sex
     description: >-
-      Age at diagnosis
+      Age at diagnosis by sex
     sorted: True
     concepts:
       - scope: biosample
@@ -102,6 +127,8 @@ $defs:
           - P65Y
           - P80Y
           - P120Y
+      - scope: biosample
+        property: individual_info.sex.id
 
   followupTime:
     id: followupTime

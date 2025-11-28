@@ -285,7 +285,6 @@ class BeaconDataResponse:
         self.__acknowledge_MISS()
         self.data_response["response"].update({"result_sets": self.result_sets})
         self.__resultset_response_update_summaries()
-        # self.__resultset_response_add_aggregations()
         self.__resultSetResponse_force_autorized_granularities()
 
         if not self.data_response.get("info"):
@@ -735,15 +734,10 @@ class ByconAggregations:
     # -------------------------------------------------------------------------#
 
     def datasetResultAggregation(self, dataset_result={}):
-        ds_results = dataset_result
+        self.dataset_result = dataset_result
 
         # CAVE: Always aggregating on biosamples
-        if (coll_k := "biosamples.id") in ds_results.keys():
-            res = ds_results.get(coll_k, {})
-            q_v_s = res.get("target_values", [])
-            query = {"id": {"$in": q_v_s}}
-            prdbug(f'... aggregating biosample data for {self.dataset_id} from {len(q_v_s)} biosamples.id hits')
-            self.__aggregate_dataset_data(query)
+        self.__aggregate_dataset_data(use_dataset_result=True)
 
         return self.dataset_aggregation
 
@@ -759,7 +753,7 @@ class ByconAggregations:
     # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 
-    def __aggregate_dataset_data(self, query={}):
+    def __aggregate_dataset_data(self, query={}, use_dataset_result=False):
         # temporary aggregation implementation
         # WiP
         # TODO: 2-dimensional with buckets; they need another way - e.g. $switch
@@ -768,6 +762,19 @@ class ByconAggregations:
 
         # one could aggregate all terms in one pipeline, but this is clearer
         for a_k, a_v in agg_terms.items():
+
+            if use_dataset_result:
+                concepts = a_v.get("concepts", [])
+                concept = concepts[0]
+                d = concept.get("scope")
+                coll = BYC_DBS.get(f"{d}_coll", "___none___")
+                if not (coll_k := f"{coll}.id") in self.dataset_result.keys():
+                    continue
+                res = self.dataset_result.get(coll_k, {})
+                q_v_s = res.get("target_values", [])
+                query = {"id": {"$in": q_v_s}}
+                prdbug(f'... aggregating {a_k} for {coll_k} with query {query}')
+
             a_v.update({"distribution": []})    
             self.__aggregate_single_concept(a_k, a_v, query)
             # self.__aggregate_single_concept_buckets(a_k, a_v, query)
@@ -807,9 +814,12 @@ class ByconAggregations:
             agg_p.append({ "$sort": { "count": -1 } })
 
         agg_d = data_coll.aggregate(agg_p)
+        # prjsonnice(collection)
+        # prjsonnice(agg_p)
 
         # label lookups only for term-based aggregations
         for a in agg_d:
+            # prjsonnice(a)
             if not (i_k := a.get("_id")):
                 continue
             if type(i_k) is dict and "id" in i_k:
@@ -837,8 +847,8 @@ class ByconAggregations:
         concepts = a_v.get("concepts", [])
         if len(concepts) != 2:
             return
-        if len(concepts[0].get("splits", [])) > 0 or len(concepts[1].get("splits", [])) > 0:
-            return
+        # if len(concepts[0].get("splits", [])) > 0 or len(concepts[1].get("splits", [])) > 0:
+        #     return
 
         c_one = concepts[0].get("property")
         d_one = concepts[0].get("scope")
@@ -856,8 +866,8 @@ class ByconAggregations:
             { "$group":
                 {
                     "_id": {
-                        c_one.replace(".", "_"): f'${c_one}',
-                        c_two.replace(".", "_"): f'${c_two}'
+                        c_one.replace(".", "_"): self.__id_object(a_k, concepts[0]),
+                        c_two.replace(".", "_"): self.__id_object(a_k, concepts[1])
                     },
                     "count": { "$sum": 1 }
                 }
@@ -873,6 +883,10 @@ class ByconAggregations:
             c_v_s = []
             id_v_s = list(i_k.values())
             for v in id_v_s:
+                if type(v) is dict and "id" in v:
+                    label = v.get("label", v.get("id"))
+                    c_v_s.append({"id": v.get("id"), "label": label})
+                    continue
                 label = v
                 if (coll := self.term_coll.find_one( {"id": v})):
                     label = coll.get("label", label)
@@ -939,6 +953,13 @@ class ByconAggregations:
                 "then": {"id": i_k, "label": label, "sort": d_i}
             })
 
+        # fallback dummy branch - at least one is needed or error
+        if len(branches) < 1:
+            branches.append({
+                "case": { "$in": [f'${p}', [ "___undefined___" ]] },
+                "then": {"id": "undefined", "label": "undefined", "sort": 1}
+            })
+
         _id = {
             "$switch": {
                 "branches": branches,
@@ -987,11 +1008,14 @@ class ByconAggregations:
         branches = []
 
         prdbug(splits)
+        pre = "P0D"
         for l in splits:
             if re.match(r"^P\d", str(l)):
                 if int(d := days_from_iso8601duration(l)) > 0:
-                    day_labs.append(f"<{l}")
+                    day_labs.append(f"[{pre}, {l})")
                     days.append(d)
+
+                pre = l
         prdbug(days)
 
         for d_i, d_l in enumerate(day_labs):
