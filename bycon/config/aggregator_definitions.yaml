@@ -12,10 +12,12 @@ $defs:
         termIds:
           - NCIT:C9335 # Malignant neoplasm of breast
           - NCIT:C4863 # Prostate Carcinoma
-          - NCIT:C4908 # Ovarian Carcinoma
+          - NCIT:C9384 # Kidney Carcinoma: 
+          - NCIT:C7431 # Malignant Ovarian Neoplasm
+          - NCIT:C61574 # Malignant Uterine Corpus Neoplasm
+          - NCIT:C9311 # Malignant Cervical Neoplasm
           - NCIT:C3513 # Esophageal Carcinoma
           - NCIT:C35850 # Head and Neck Carcinoma
-          - NCIT:C4016 # Malignant Bone Neoplasm
           - NCIT:C4878 # Lung Carcinoma
           - NCIT:C207229 # Pancreatic Carcinoma
           - NCIT:C4911 # Gastric Carcinoma
