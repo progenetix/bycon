@@ -13,17 +13,18 @@ $defs:
           - NCIT:C9335 # Malignant neoplasm of breast
           - NCIT:C4863 # Prostate Carcinoma
           - NCIT:C4908 # Ovarian Carcinoma
-          - NCIT:C4024 # Esophageal Squamous Cell Carcinoma
-          - NCIT:C4025 # Esophageal Adenocarcinoma
+          - NCIT:C3513 # Esophageal Carcinoma
+          - NCIT:C35850 # Head and Neck Carcinoma
           - NCIT:C4016 # Malignant Bone Neoplasm
-          - NCIT:C3493 # Lung Squamous Cell Carcinoma
+          - NCIT:C4878 # Lung Carcinoma
           - NCIT:C207229 # Pancreatic Carcinoma
           - NCIT:C4911 # Gastric Carcinoma
           - NCIT:C2955 # Colorectal Carcinoma
           - NCIT:C7927 # Liver Carcinoma
-          - NCIT:C3058 # Glioblastoma
+          - NCIT:C4822 # Malignant Glioma
+          - NCIT:C3716 # Primitive Neuroectodermal Tumor
           - NCIT:C3224 # Melanoma
-          - NCIT:C3194 # Liposarcoma
+          - NCIT:C9118 # Sarcoma
           - NCIT:C4925 # Malignant Germ Cell Tumor
           - NCIT:C27753 # Acute Myeloid Leukemia, Not Otherwise Specified
           - NCIT:C3163 # Chronic Lymphocytic Leukemia
@@ -49,7 +50,6 @@ $defs:
           - OBI:0002117 # whole genome sequencing assay
           - OBI:0002118 # exome sequencing assay
           - NCIT:C158253  # Targeted Genome Sequencing
-
 
   # cancerTypesBySex:
   #   id: cancerTypesBySex

@@ -418,7 +418,7 @@ $defs:
       replace:
         - "geo:"
         - ""
-    pattern: '^(?:EFO:)|(?:geo:GPL)|(?:arrayexpress:E)[\w\-]+?$'
+    pattern: '^(?:EFO:)|(?:geo:GPL)|(?:OBI:)|(?:NCIT:)|(?:arrayexpress:E)[\w\-]+?$'
     scope: analyses
     entity: analysis
     db_key: 'platform_model.id'

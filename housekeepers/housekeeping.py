@@ -87,6 +87,15 @@ def main():
         if not BYC["TEST_MODE"]:
             bar.finish()
 
+    analyses_coll.update_many(
+        {"operation.id":"EDAM:operation_3227"},
+        {"$unset":{"cnv_chro_stats": "", "cnv_stats":"", "cnv_statusmaps": ""}}
+    )
+    analyses_coll.update_many(
+        {"operation.id": "EDAM:operation_3961"},
+        {"$set":{"operation.label": "Copy number variation detection"}}
+    )
+
     #>------------------------------------------------------------------------<#
 
     if "y" in todos.get("update_cs_statusmaps", "n").lower():
