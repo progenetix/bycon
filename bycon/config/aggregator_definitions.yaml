@@ -37,7 +37,7 @@ $defs:
 
   platformTechnologies:
     id: platformTechnologies
-    label: Platforms
+    label: Platform Technologies
     description: >-
       Count of basic platform technologies used in matched analyses
     concepts:
@@ -55,7 +55,7 @@ $defs:
 
   allPlatformTechnologies:
     id: platformTechnologies
-    label: Platforms
+    label: All Platforms by ID
     description: >-
       Count of basic platform technologies used in matched analyses
     concepts:
