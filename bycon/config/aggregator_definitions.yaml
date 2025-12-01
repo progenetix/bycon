@@ -53,6 +53,15 @@ $defs:
           - OBI:0002118 # exome sequencing assay
           - NCIT:C158253  # Targeted Genome Sequencing
 
+  allPlatformTechnologies:
+    id: platformTechnologies
+    label: Platforms
+    description: >-
+      Count of basic platform technologies used in matched analyses
+    concepts:
+      - scope: analysis
+        property: platform_model.id
+
   # cancerTypesBySex:
   #   id: cancerTypesBySex
   #   label: Cancer Classes by Sex

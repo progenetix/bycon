@@ -7,6 +7,7 @@ module.exports = {
     })
     return config
   },
+  staticPageGenerationTimeout: 120,
   trailingSlash: true,
   productionBrowserSourceMaps: true
 }

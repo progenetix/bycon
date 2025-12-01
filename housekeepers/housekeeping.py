@@ -39,6 +39,10 @@ def main():
     data_db = MongoClient(host=BYC_DBS["mongodb_host"])[ds_id]
     services_db = MongoClient(host=BYC_DBS["mongodb_host"])[BYC_DBS["services_db"]]
 
+    ana_coll = data_db[BYC_DBS["analysis_coll"]]
+    ind_coll = data_db[BYC_DBS["individual_coll"]]
+    bios_coll = data_db[BYC_DBS["biosample_coll"]]
+
     #>-------------------- MongoDB index updates -----------------------------<#
 
     if "y" in todos.get("mongodb_index_creation", "n").lower():
@@ -60,13 +64,11 @@ def main():
 
     if "y" in todos.get("analyses_labels", "n").lower():
         cs_query = {}
-        analyses_coll = data_db["analyses"]
-        bios_coll = data_db["biosamples"]
-        no = analyses_coll.count_documents(cs_query)
+        no = ana_coll.count_documents(cs_query)
 
         if not BYC["TEST_MODE"]:
             bar = Bar(f"=> `labels` for {no} analyses", max = no, suffix='%(percent)d%%'+" of "+str(no) )
-        for cs in analyses_coll.find(cs_query):
+        for cs in ana_coll.find(cs_query):
             if not BYC["TEST_MODE"]:
                 bar.next()
             bs_id = cs.get("biosample_id", "___none___")
@@ -82,19 +84,25 @@ def main():
             if BYC["TEST_MODE"] is True:
                 print(f'{cs["id"]} => {bs_label}')
             else:
-                analyses_coll.update_one({"_id": cs["_id"]}, {"$set": {"label": bs_label}})
+                ana_coll.update_one({"_id": cs["_id"]}, {"$set": {"label": bs_label}})
 
         if not BYC["TEST_MODE"]:
             bar.finish()
 
-    analyses_coll.update_many(
+    ana_coll.update_many(
         {"operation.id":"EDAM:operation_3227"},
         {"$unset":{"cnv_chro_stats": "", "cnv_stats":"", "cnv_statusmaps": ""}}
     )
-    analyses_coll.update_many(
+    ana_coll.update_many(
         {"operation.id": "EDAM:operation_3961"},
         {"$set":{"operation.label": "Copy number variation detection"}}
     )
+
+    for bios in bios_coll.find({"cohorts.id":"pgx:cohort-TCGA"}):
+        ana_coll.update_many(
+            {"biosample_id": bios["id"], "operation.id": "EDAM:operation_3961"},
+            {"$set":{"platform_model": {"id":"geo:GPL6801", "label":"[GenomeWideSNP_6] Affymetrix Genome-Wide Human SNP 6.0 Array"}}}
+        )
 
     #>------------------------------------------------------------------------<#
 
@@ -106,9 +114,6 @@ def main():
     #>------------------------ / analyses ------------------------------------<#
 
     #>------------------------ individuals -----------------------------------<#
-
-    ind_coll = data_db[BYC_DBS["individual_coll"]]
-    bios_coll = data_db[BYC_DBS["biosample_coll"]]
 
     # NCIT:C2919 prostate
     # male_histos = ["NCIT:C2919"]
