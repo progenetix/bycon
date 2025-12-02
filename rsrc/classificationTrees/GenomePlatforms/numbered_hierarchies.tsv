@@ -295,3 +295,4 @@ OBI:0000626	DNA sequencing assay	1	294
 OBI:0002117	whole genome sequencing assay	2	295
 OBI:0002118	exome sequencing assay	2	296
 NCIT:C158253	Targeted Genome Sequencing	2	297
+pgx:gpl-MSK-IMPACT	Integrated Mutation Profiling of Actionable Cancer Targets (MSK-IMPACT)	3	298
