@@ -814,8 +814,6 @@ class ByconAggregations:
             agg_p.append({ "$sort": { "count": -1 } })
 
         agg_d = data_coll.aggregate(agg_p)
-        # prjsonnice(collection)
-        # prjsonnice(agg_p)
 
         # label lookups only for term-based aggregations
         for a in agg_d:
