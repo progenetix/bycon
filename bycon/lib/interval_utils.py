@@ -105,7 +105,6 @@ class GenomeBins:
     def get_genome_bin_count(self):
         return len(self.genomic_intervals)
 
-
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
     # TODO: Not used anywhere?
