@@ -819,7 +819,7 @@ $defs:
   gene_interval_tsv:
     type: string
     pattern: '^[\w\/\.\-]+$'
-    default: "rsrc/genomes/grch38/cancer_gene_list.tsv"
+    default: "cancer_gene_list.tsv"
     cmdFlags:
       - --geneIntervalTsv 
     description: >-
