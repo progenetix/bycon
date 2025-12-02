@@ -25,7 +25,7 @@ export default function DatasetStats({dataset_id, age_splits, followup_splits, f
     <Loader isLoading={isLoading} background>
       {data && (
         <AggregatedPlots
-          summaryResults={data.summaryResults}
+          summaryResults={data.response.collections[0].summaryResults}
           filterUnknowns={filterUnknowns}
         />
       )}

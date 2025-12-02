@@ -463,7 +463,7 @@ class BeaconDataResponse:
         if self.response_entity_id and "dataset" in self.response_entity_id:
             if t_count == 1 and "aggregated" in self.returned_granularity:
                 BA = ByconAggregations(BYC["BYC_DATASET_IDS"][0])        
-                self.data_response.update({
+                self.data_response["response"]["collections"][0].update({
                     "summary_results": BA.datasetAllAggregation()
                 })
 
