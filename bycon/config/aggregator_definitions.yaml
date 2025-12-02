@@ -50,7 +50,7 @@ $defs:
           - EFO:0010937 # comparative genomic hybridization (CGH)
           - NCIT:C16437 # Chromosome Banding
           - OBI:0002117 # whole genome sequencing assay
-          - OBI:0002118 # exome sequencing assay
+          - OBI:0002118 # whole exome sequencing assay
           - NCIT:C158253  # Targeted Genome Sequencing
 
   allPlatformTechnologies:
