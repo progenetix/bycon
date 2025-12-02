@@ -31,6 +31,14 @@ indexed_special_dbs:
       location:
         db_key: geo_location.geometry
         type: 2dsphere
+
+      biosample_sex:
+        db_key: individual_info.sex.id
+      biosample_age:
+        db_key: individual_info.index_disease.onset.age_days
+      biosample_followup:
+        db_key: individual_info.index_disease.followup_days
+
     individuals:
       location:
         db_key: geo_location.geometry
@@ -73,6 +81,12 @@ indexed_special_dbs:
       location:
         db_key: geo_location.geometry
         type: 2dsphere
+      biosample_sex:
+        db_key: individual_info.sex.id
+      biosample_age:
+        db_key: individual_info.index_disease.onset.age_days
+      biosample_followup:
+        db_key: individual_info.index_disease.followup_days
     individuals:
       location:
         db_key: geo_location.geometry

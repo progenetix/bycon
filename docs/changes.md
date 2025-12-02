@@ -6,6 +6,12 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-11-28 (v2.6.8 "Aggregator")
+
+* extending aggregation responses to support 2-dimensional aggregations
+    - implemented in `ByconAggregations` class
+    - now also supports `plot_type: "stackedBar"` for the dashboard
+
 ### 2025-11-18 (v2.6.7 "DashboardDabbler")
 
 * implemented a basic dashboard at `___BEACON_ROOT___/dataDashboard/` using the
