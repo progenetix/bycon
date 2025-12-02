@@ -271,7 +271,7 @@ def __make_dummy_publication_hierarchy(ds_id):
 ################################################################################
 
 def __get_dummy_hierarchy(ds_id, coll_type, coll_defs):
-    data_db = MongoClient(host=config.DB_MONGOHOST)[ ds_id ]
+    data_db = MongoClient(host=BYC_DBS["mongodb_host"])[ ds_id ]
     data_coll = data_db[ coll_defs["scope"] ]
     data_pat = coll_defs["pattern"]
     db_key = coll_defs["db_key"]
