@@ -14,22 +14,7 @@ import {
 
 //----------------------------------------------------------------------------//
 
-
 var col_no = 30
-
-// const barStyle = {
-//   data: {
-//     fill: "#c43a31",
-//     fillOpacity: 0.4,
-//     stroke: "#c43a31",
-//     strokeWidth: 2,
-//   },
-//   labels: {
-//     fontSize: 12,
-//     fill: "#c43a31",
-//   },
-// }
-
 
 //----------------------------------------------------------------------------//
 
@@ -156,7 +141,10 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
             var barField = { "collabel": first, "count": 0, "label": "" };
             if (seconds[s]) {
                 barField["count"] = seconds[s]["count"];
-                barField["label"] = `${seconds[s]["label"]} (${seconds[s]["count"]} of ${seconds["sum"]})`;
+                barField["label"] = `${seconds[s]["label"]}: ${seconds[s]["count"]}`;
+                if (agg["concepts"].length > 1) {
+                    barField["label"] += ` of ${seconds["sum"]}`;
+                }
             }
             thisBar.push(barField)
         }
