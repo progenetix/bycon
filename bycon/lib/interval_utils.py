@@ -136,19 +136,6 @@ class GenomeBins:
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
-    
-    def getAnalysisGeneFracMaps(self, analysis_variants=[ ]):
-        # computer per-gene CNV fraction maps for one analysis
-        # assume self.binning has been set to "genes_*" and __generate_gene_intervals() used
-        self.__prepare_analysis_intervals()
-        self.analysis_variants = analysis_variants
-        self.__interval_cnv_coverage_arrays()
-        self.__interval_cnv_fraction_arrays()
-        return self.fraction_maps
-
-    #--------------------------------------------------------------------------#
-    #--------------------------------------------------------------------------#
-    
     # TODO: Not used anywhere?
     def genomeCNVstats(self, analysis_variants=[]):
         self.__prepare_analysis_intervals()
@@ -156,7 +143,6 @@ class GenomeBins:
         self.__interval_cnv_coverage_arrays()
         self.__genome_cnv_statistics()
         return self.cnv_stats
-
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
@@ -238,7 +224,7 @@ class GenomeBins:
 
             base_keys = {"gene_id", "gene_symbol", "gene_type", "chrom", "start", "end"}
             info = {k: v for k, v in g.items() if k not in base_keys}
-            
+
             if gene_type:
                 info.setdefault("gene_type", gene_type)
 
