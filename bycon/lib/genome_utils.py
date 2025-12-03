@@ -626,15 +626,11 @@ class GeneIntervals:
     def __init__(self, tsv_path=None):
         if tsv_path is None:
             tsv_path = BYC_PARS.get("gene_interval_tsv", "")
-            print(tsv_path)
         if not tsv_path:
             raise ValueError("No TSV path provided for gene intervals (gene_interval_tsc is empty).")
         if not path.isabs(tsv_path):
-            print("No abosolute path")
             genome_rsrc_path = ChroNames().genomePath()
-            print(genome_rsrc_path)
             tsv_path = path.join(genome_rsrc_path, tsv_path)
-            print(tsv_path)
 
         self.tsv_path = path.normpath(tsv_path)
         self.genes = self.__load_genes()
