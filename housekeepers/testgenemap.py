@@ -71,10 +71,12 @@ def main():
         print("No genomic intervals found (check genome_binning / gene_interval_tsv). Exiting.")
         return
 
-    out_path = BYC_PARS.get("outputfile") or "gene_cnv_test.tsv"
-    out_path = path.abspath(out_path)
-    qc_path = "gene_cnv_qc.tsv"
-    qc_path = path.abspath(qc_path)
+    downloads_dir = "/Users/bgadmin/Downloads"
+    out_name = BYC_PARS.get("outputfile") or "gene_cnv_test.tsv"
+    out_name = path.basename(out_name)  
+    out_path = path.join(downloads_dir, out_name)
+    qc_name = "gene_cnv_qc.tsv"
+    qc_path = path.join(downloads_dir, qc_name)
     print(f"Writing per-gene CNV fractions to: {out_path}")
     print(f"Writing per-analysis QC summary to: {qc_path}")
 
