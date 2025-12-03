@@ -399,7 +399,7 @@ class ByconMap:
             "lng": g['coordinates'][0],
             "alt": alt,
             "count": count,
-            "label": f"'{label.replace("'", "\\'")}'"
+            "label": "'" + label.replace("'", "\\'") + "'"
         }
 
 
