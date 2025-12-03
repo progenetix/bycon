@@ -4,15 +4,6 @@ from pymongo import MongoClient
 
 from bycon import *
 from byconServiceLibs import *
-"""
-./housekeepers/testgenemap.py \
-  -d progenetix \
-  --genomeBinning genes_cancer \
-  --geneIntervalTsv cancer_gene_list.tsv \
-  --limit 10 \
-  --outputfile gene_cnv_test.tsv
-"""
-
 
 def _collect_analysis_ids(cs_coll):
     # which analysis to process
