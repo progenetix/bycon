@@ -595,7 +595,7 @@ class GeneInfo:
         mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         db_names = list(mongo_client.list_database_names())
         if BYC_DBS["services_db"] not in db_names:
-            BYC["ERRORS"].append(f"services db `{BYC_DBS["services_db"]}` does not exist")
+            BYC["ERRORS"].append(f"services db `{BYC_DBS['services_db']}` does not exist")
             return
 
         q_f_s = ["symbol", "ensembl_gene_ids", "synonyms"]
@@ -631,7 +631,7 @@ class GeneIntervals:
         if not tsv_path:
             genome_rsrc_path = ChroNames().genomePath()
             tsv_path = path.join(genome_rsrc_path, tsv_path)
-            
+
         self.tsv_path = path.normpath(tsv_path)
         self.genes = self.__load_genes()
     
