@@ -14,7 +14,7 @@ from byconServiceLibs import *
 def _collect_analysis_ids(cs_coll):
     # which analysis to process
     ana_ids = BYC_PARS.get("analysis_ids", [])
-    limit = BYC_PARS.get("limit", 0)
+    #limit = BYC_PARS.get("limit", 0)
 
     # if analysis_ids passed via CLI
     if ana_ids:
@@ -22,10 +22,11 @@ def _collect_analysis_ids(cs_coll):
 
     # collect from Mongo
     ana_ids = []
-    for i, ana in enumerate(cs_coll.find({}, {"id": 1})):
+    #for i, ana in enumerate(cs_coll.find({}, {"id": 1})):
+    for ana in cs_coll.find({}, {"id" : 1}):
         ana_ids.append(ana["id"])
-        if limit and (i + 1) >= limit:
-            break
+        #if limit and (i + 1) >= limit:
+            #break
 
     return ana_ids
 
@@ -111,7 +112,9 @@ def main():
         gain_thr = float(BYC_PARS.get("gene_dup_threshold", 0.3))
         del_thr = float(BYC_PARS.get("gene_del_threshold", 0.3))
 
-        for ana_id in ana_ids:
+        #for ana_id in ana_ids:
+        total_analyses = len(ana_ids)
+        for idx, ana_id in enumerate(ana_ids, start=1):
             cs_vars = v_coll.find({"analysis_id": ana_id})
             maps, cnv_stats, chro_stats, duplicates = GB.getAnalysisFracMapsAndStats(
                 analysis_variants=cs_vars
@@ -155,6 +158,9 @@ def main():
                 cnv_stats.get("dupfraction", 0.0),
                 cnv_stats.get("delfraction", 0.0),
             ])
+
+            if idx % 1000 == 0 or idx == total_analyses:
+                print(f"[testgenemap] Processed {idx}/{total_analyses} analyses")
 
     print("Done.")
 
