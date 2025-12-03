@@ -1,6 +1,12 @@
 import csv
 from os import path
+from pathlib import Path
 from pymongo import MongoClient
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from bycon import *
 from byconServiceLibs import *
