@@ -72,7 +72,7 @@ def main():
 
     out_path = BYC_PARS.get("outputfile") or "gene_cnv_test.tsv"
     out_path = path.abspath(out_path)
-    qc_path = BYC_PARS.get("qcfile") or "gene_cnv_qc.tsv"
+    qc_path = "gene_cnv_qc.tsv"
     qc_path = path.abspath(qc_path)
     print(f"Writing per-gene CNV fractions to: {out_path}")
     print(f"Writing per-analysis QC summary to: {qc_path}")
