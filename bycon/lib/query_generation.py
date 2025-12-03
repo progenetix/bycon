@@ -858,7 +858,7 @@ class ByconQuery():
             if f_d.get("collationed", False) is True:
                 continue
             f_re = re.compile(f_d.get("pattern", "___none___"))
-            prdbug(f"pattern check: {f_d.get("pattern", "___none___")} <> {f_val}")
+            prdbug(f"pattern check: {f_d.get('pattern', '___none___')} <> {f_val}")
             if f_re.match(f_val):
                 f_info = {
                     "id": f_val,
