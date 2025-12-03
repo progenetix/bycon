@@ -29,6 +29,21 @@ def _collect_analysis_ids(cs_coll):
 
     return ana_ids
 
+def _compute_gene_qc(dup, dele, gain_thr=0.3, del_thr=0.3):
+    n_genes = len(dup)
+    n_dup = 0
+    n_del = 0
+    n_any = 0
+    for d, l in zip(dup, dele):
+        is_dup = d >= gain_thr
+        is_del = l >= del_thr
+        if is_dup:
+            n_dup += 1
+        if is_del:
+            n_del += 1
+        if is_dup or is_del:
+            n_any += 1
+    return n_genes, n_dup, n_del, n_any
 
 def main():
     assert_single_dataset_or_exit()
@@ -57,10 +72,15 @@ def main():
 
     out_path = BYC_PARS.get("outputfile") or "gene_cnv_test.tsv"
     out_path = path.abspath(out_path)
+    qc_path = BYC_PARS.get("qcfile") or "gene_cnv_qc.tsv"
+    qc_path = path.abspath(qc_path)
     print(f"Writing per-gene CNV fractions to: {out_path}")
+    print(f"Writing per-analysis QC summary to: {qc_path}")
 
-    with open(out_path, "w", newline="") as out_f:
+    with open(out_path, "w", newline="") as out_f, open(qc_path, "w", newline="") as qc_f:
         writer = csv.writer(out_f, delimiter="\t")
+        qc_writer = csv.writer(qc_f, delimiter="\t")
+
         writer.writerow([
             "analysis_id",
             "gene_symbol",
@@ -74,14 +94,31 @@ def main():
             "hldel_frac",
         ])
 
+        qc_writer.writerow([
+            "analysis_id",
+            "n_genes",
+            "n_dup_genes",
+            "n_del_genes",
+            "n_any_genes",
+            "cnvcoverage",
+            "dupcoverage",
+            "delcoverage",
+            "cnvfraction",
+            "dupfraction",
+            "delfraction",
+        ])
+
+        gain_thr = float(BYC_PARS.get("gene_dup_threshold", 0.3))
+        del_thr = float(BYC_PARS.get("gene_del_threshold", 0.3))
+
         for ana_id in ana_ids:
             cs_vars = v_coll.find({"analysis_id": ana_id})
             maps, cnv_stats, chro_stats, duplicates = GB.getAnalysisFracMapsAndStats(
                 analysis_variants=cs_vars
             )
-            
-            dup = maps.get("dup",   [])
-            dele = maps.get("del",   [])
+
+            dup = maps.get("dup", [])
+            dele = maps.get("del", [])
             hldup = maps.get("hldup", [])
             hldel = maps.get("hldel", [])
 
@@ -102,6 +139,22 @@ def main():
                     hldup[i],
                     hldel[i],
                 ])
+
+            n_genes, n_dup, n_del, n_any = _compute_gene_qc(dup, dele, gain_thr=gain_thr, del_thr=del_thr)
+
+            qc_writer.writerow([
+                ana_id,
+                n_genes,
+                n_dup,
+                n_del,
+                n_any,
+                cnv_stats.get("cnvcoverage", 0),
+                cnv_stats.get("dupcoverage", 0),
+                cnv_stats.get("delcoverage", 0),
+                cnv_stats.get("cnvfraction", 0.0),
+                cnv_stats.get("dupfraction", 0.0),
+                cnv_stats.get("delfraction", 0.0),
+            ])
 
     print("Done.")
 
