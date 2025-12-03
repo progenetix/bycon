@@ -76,7 +76,7 @@ def main():
 
         for ana_id in ana_ids:
             cs_vars = v_coll.find({"analysis_id": ana_id})
-            maps, cnv_stats, chro_stats, duplicates = GB.getAnalysisGeneFracMapsandStats(
+            maps, cnv_stats, chro_stats, duplicates = GB.getAnalysisFracMapsandStats(
                 analysis_variants=cs_vars
             )
             dup = maps.get("dup",   [])
