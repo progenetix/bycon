@@ -1,4 +1,4 @@
-import base36, humps, json, re, time, yaml
+import base36, humps, json, random, re, time, yaml
 
 from isodate import parse_duration
 from datetime import datetime
@@ -44,7 +44,7 @@ class ByconH:
 
     #--------------------------------------------------------------------------#
 
-    def paginated_list(self, this, skip=0, limit=300000):
+    def paginated_list(self, this, skip=0, limit=300000, shuffle=False):
         if limit < 1:
             return list(this)
         if len(list(this)) < 1:
@@ -68,6 +68,9 @@ class ByconH:
 
         if p_range[0] > t_no:
             return []
+
+        if shuffle is True:
+            random.shuffle(this)
 
         return this[p_range[0]:p_range[-1]]
 

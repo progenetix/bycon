@@ -722,6 +722,7 @@ class ByconCollections:
 class ByconAggregations:
     def __init__(self, ds_id=None):
         self.dataset_id = ds_id
+        self.aggregation_terms = BYC_PARS.get("aggregation_terms", [])
         self.aggregator_definitions = BYC.get("aggregator_definitions", {}).get("$defs", {})
         self.dataset_aggregation = [] 
         self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
@@ -758,11 +759,15 @@ class ByconAggregations:
         # WiP
         # TODO: 2-dimensional with buckets; they need another way - e.g. $switch
         # https://www.mongodb.com/docs/manual/reference/operator/aggregation/switch/
-        agg_terms = self.aggregator_definitions
+
+
+        agg_terms = self.aggregator_definitions.keys()
+        if len(self.aggregation_terms) > 0:
+            agg_terms = list(set(agg_terms) & set(self.aggregation_terms))
 
         # one could aggregate all terms in one pipeline, but this is clearer
-        for a_k, a_v in agg_terms.items():
-
+        for a_k in agg_terms:
+            a_v = self.aggregator_definitions.get(a_k)
             if use_dataset_result:
                 concepts = a_v.get("concepts", [])
                 concept = concepts[0]
@@ -809,7 +814,7 @@ class ByconAggregations:
         )
         # sorting either on logical order () detection order
         if a_v.get("sorted") is True:
-            agg_p.append({ "$sort": { "_id.sort": 1 } })
+            agg_p.append({ "$sort": { "_id.order": 1 } })
         else:
             agg_p.append({ "$sort": { "count": -1 } })
 
@@ -841,7 +846,6 @@ class ByconAggregations:
     # -------------------------------------------------------------------------#
 
     def __aggregate_2_concepts(self, a_k, a_v, query={}):
-        # TODO: abstract this as entry point into switch and id scenarios
         concepts = a_v.get("concepts", [])
         if len(concepts) != 2:
             return
@@ -872,7 +876,15 @@ class ByconAggregations:
             },
             { "$sort": { "count": -1 } }
         ]
-        agg_d = data_coll.aggregate(agg_p)
+        agg_d = list(data_coll.aggregate(agg_p))
+
+        if len(agg_d) < 1:
+            return
+
+        if a_v.get("sorted") is True:
+            k = list(agg_d[0]["_id"].keys())[0]
+            if "order" in agg_d[0]["_id"][k]:
+                agg_d = sorted(agg_d, key=lambda x: x["_id"][k].get("order", 9999))
 
         # label lookups only for term-based aggregations
         for a in agg_d:
@@ -948,20 +960,20 @@ class ByconAggregations:
                 continue
             branches.append({
                 "case": { "$in": [ f'${p}', child_terms ] },
-                "then": {"id": i_k, "label": label, "sort": d_i}
+                "then": {"id": i_k, "label": label, "order": d_i}
             })
 
         # fallback dummy branch - at least one is needed or error
         if len(branches) < 1:
             branches.append({
                 "case": { "$in": [f'${p}', [ "___undefined___" ]] },
-                "then": {"id": "undefined", "label": "undefined", "sort": 1}
+                "then": {"id": "undefined", "label": "undefined", "order": 1}
             })
 
         _id = {
             "$switch": {
                 "branches": branches,
-                "default": {"id": "other", "label": "other", "sort": len(terms)}
+                "default": {"id": "other", "label": "other", "order": len(terms)}
             }
         }
 
@@ -1000,34 +1012,34 @@ class ByconAggregations:
         if len(splits := concept.get("splits", [])) < 1:
             return False
         p = concept.get('property')
+        f = concept.get('format', "")
 
-        day_labs = ["unknown"]
-        days = [0]
+        split_labs = splits
+        split_vals = splits
         branches = []
 
-        prdbug(splits)
-        pre = "P0D"
-        for l in splits:
-            if re.match(r"^P\d", str(l)):
-                if int(d := days_from_iso8601duration(l)) > 0:
-                    day_labs.append(f"[{pre}, {l})")
-                    days.append(d)
+        if "iso8601duration" in f:
+            p = f"{p}_days"
+            split_labs = ["unknown"]
+            split_vals = [0]
+            pre = "P0D"
+            for l in splits:
+                if re.match(r"^P\d", str(l)):
+                    if int(d := days_from_iso8601duration(l)) > 0:
+                        split_labs.append(f"[{pre}, {l})")
+                        split_vals.append(d)
+                    pre = l
 
-                pre = l
-        prdbug(days)
-
-        for d_i, d_l in enumerate(day_labs):
+        for d_i, d_l in enumerate(split_labs):
             branches.append({
-                "case": { "$lt": [ f'${p}', days[d_i] ] },
-                "then": {"id": d_l, "label": d_l, "sort": d_i}
+                "case": { "$lt": [ f'${p}', split_vals[d_i] ] },
+                "then": {"id": d_l, "label": d_l, "order": d_i}
             })
-
-        prdbug(branches)
 
         _id = {
             "$switch": {
                 "branches": branches,
-                "default": {"id": "other", "label": "other", "sort": len(day_labs)}
+                "default": {"id": "other", "label": "other", "order": len(split_labs)}
             }
         }
 
@@ -1049,8 +1061,6 @@ class ByconResultSets:
         self.entity_defaults = BYC.get("entity_defaults", {})
         self.response_entity_id = BYC.get("response_entity_id", "biosample")
         self.returned_granularity = BYC.get("returned_granularity", "boolean")
-        self.aggregation_terms = BYC_PARS.get("aggregation_terms", [])
-        self.aggregator_definitions = BYC.get("aggregator_definitions", {}).get("$defs", {})
         self.limit = BYC_PARS.get("limit")
         self.skip = BYC_PARS.get("skip")
         self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])

@@ -35,9 +35,9 @@ indexed_special_dbs:
       biosample_sex:
         db_key: individual_info.sex.id
       biosample_age:
-        db_key: individual_info.index_disease.onset.age_days
+        db_key: individual_info.age_days
       biosample_followup:
-        db_key: individual_info.index_disease.followup_days
+        db_key: individual_info.followup_days
 
     individuals:
       location:
@@ -84,9 +84,9 @@ indexed_special_dbs:
       biosample_sex:
         db_key: individual_info.sex.id
       biosample_age:
-        db_key: individual_info.index_disease.onset.age_days
+        db_key: individual_info.age_days
       biosample_followup:
-        db_key: individual_info.index_disease.followup_days
+        db_key: individual_info.followup_days
     individuals:
       location:
         db_key: geo_location.geometry

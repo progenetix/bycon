@@ -46,7 +46,7 @@ $defs:
     scope: individuals
     entity: individual
     db_key: index_disease.onset.age_days
-    pattern: '^ageAtDiagnosis:?[<>=]+?P\d\w+?$'
+    pattern: '^age(AtDiagnosis)?:?[<>=]+?P\d\w+?$'
     collationed: False
     examples:
       - id: 'ageAtDiagnosis:<=P18M'
@@ -68,7 +68,7 @@ $defs:
     scope: individuals
     entity: individual
     db_key: index_disease.followup_days
-    pattern: '^followupTime:?[<>=]+P\d\w+?$'
+    pattern: '^followup(Time)?:?[<>=]+P\d\w+?$'
     collationed: False
     examples:
       - id: 'followupTime:>=P0M'
