@@ -12,23 +12,41 @@ from bycon import *
 from byconServiceLibs import *
 
 def _collect_analysis_ids(cs_coll):
-    # which analysis to process
     ana_ids = BYC_PARS.get("analysis_ids", [])
-    #limit = BYC_PARS.get("limit", 0)
 
-    # if analysis_ids passed via CLI
     if ana_ids:
         return ana_ids
 
-    # collect from Mongo
-    ana_ids = []
-    #for i, ana in enumerate(cs_coll.find({}, {"id": 1})):
-    for ana in cs_coll.find({}, {"id" : 1}):
-        ana_ids.append(ana["id"])
-        #if limit and (i + 1) >= limit:
-            #break
+    collected = []
+    pipeline = [
+        {
+            "$lookup": {
+                "from": "biosamples",
+                "localField": "biosample_id",
+                "foreignField": "id",
+                "as": "bs",
+            }
+        },
+        {"$unwind": "$bs"},
+        {
+            "$match": {
+                "bs.biosample_status.label": {"$ne": "reference sample"}
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "id": 1,
+            }
+        },
+    ]
 
-    return ana_ids
+    for doc in cs_coll.aggregate(pipeline):
+        ana_id = doc.get("id")
+        if ana_id:
+            collected.append(ana_id)
+    
+    return collected
 
 def main():
     assert_single_dataset_or_exit()
