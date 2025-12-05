@@ -266,9 +266,12 @@ function StackedBarChart({ barData, legendData, col_no, outer_w, max_y, title}) 
             />
             {legendData.length > 1 && (
             <VictoryLegend
-                x={outer_w * 0.6}
-                y={padd_t + 20}
+                x={outer_w * 0.65}
+                y={padd_t}
+                orientation="horizontal"
+                itemsPerRow={3}
                 data={legendData}
+                colorScale={"qualitative"}
             />)}
         </VictoryChart>
     )
