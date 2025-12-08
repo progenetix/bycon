@@ -5,7 +5,7 @@ from os import path, pardir
 from pymongo import MongoClient
 
 from config import BYC, BYC_DBS, BYC_PARS, HTTP_HOST
-from genome_utils import Cytobands
+from genome_utils import Cytobands, GeneIntervals
 from bycon_helpers import prdbug
 
 ################################################################################
@@ -91,20 +91,17 @@ class GenomeBins:
     def get_genome_binning(self):
         return self.binning
 
-
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
 
     def get_genome_bins(self):
         return self.genomic_intervals
 
-
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
 
     def get_genome_bin_count(self):
         return len(self.genomic_intervals)
-
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
@@ -114,7 +111,6 @@ class GenomeBins:
         self.analysis_variants = analysis_variants
         self.__interval_cnv_coverage_arrays()
         return self.coverage_maps
-
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
@@ -147,7 +143,6 @@ class GenomeBins:
         self.__interval_cnv_coverage_arrays()
         self.__genome_cnv_statistics()
         return self.cnv_stats
-
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
@@ -199,6 +194,55 @@ class GenomeBins:
                 "size": int(cb["end"]) - int(cb["start"])
             })
 
+    #--------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
+    
+    def __generate_gene_intervals(self):
+        # generate genomic intervals from a gene list 
+        GI = GeneIntervals()
+        genes = GI.get_all_genes()
+
+        self.genomic_intervals = []
+        i = 1
+
+        for g in genes:
+            chro = g.get("chrom")
+            start = g.get("start")
+            end = g.get("end")
+            size = end - start
+            gene_id = g.get("gene_id", "")
+            gene_symbol = g.get("gene_symbol", gene_id or "")
+            gene_type = g.get("gene_type", "")
+
+            cbs = Cytobands().cytobands_label_from_positions(chro, start, end)
+            arm = ""
+            if isinstance(cbs, str):
+                if "p" in cbs:
+                    arm = "p"
+                elif "q" in cbs:
+                    arm = "q"
+
+            base_keys = {"gene_id", "gene_symbol", "gene_type", "chrom", "start", "end"}
+            info = {k: v for k, v in g.items() if k not in base_keys}
+
+            if gene_type:
+                info.setdefault("gene_type", gene_type)
+
+            self.genomic_intervals.append({
+                "no": i,
+                "id": gene_id or gene_symbol,
+                "reference_name": chro,
+                "arm": arm,
+                "cytobands": f"{cbs}",
+                "start": start,
+                "end": end,
+                "size": size,
+                "gene_symbol": gene_symbol,
+                "info": info
+            })
+            i += 1
+
+        self.interval_count = len(self.genomic_intervals)
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
@@ -212,8 +256,12 @@ class GenomeBins:
             self.genomic_intervals = deepcopy(self.cytoband_intervals)
             return
 
+        # gene intervals ################################################################
+        if self.binning.startswith("genes"):
+            self.__generate_gene_intervals()
+            return
+        
         # otherwise intervals ######################################################
-
         assert self.binning in i_d["genome_bin_sizes"]["values"].keys(), f'¡¡ Binning value "{self.binning}" not in list !!'
 
         int_b = i_d["genome_bin_sizes"]["values"][self.binning]
@@ -261,7 +309,6 @@ class GenomeBins:
                 i += 1
 
         self.interval_count = len(self.genomic_intervals)
-
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
@@ -334,7 +381,7 @@ class GenomeBins:
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
-
+    
     def __interval_cnv_fraction_arrays(self):
         if not self.coverage_maps:
             self.__interval_cnv_coverage_arrays()
