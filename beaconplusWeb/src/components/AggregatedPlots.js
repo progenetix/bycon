@@ -41,11 +41,13 @@ export function AggregatedPlots({ summaryResults, filterUnknowns }) {
 
 //----------------------------------------------------------------------------//
 
-function AggregatedStackedPlot({ agg, filterUnknowns }) {
+function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
 
     var keyedFirst = {}
     var secondKeys = {}
     var agg_l = agg["label"]
+
+    filterOthers = true
 
     agg["distribution"].forEach(function (v) {
         console.log(Object.keys(v))
@@ -78,14 +80,29 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
         keyedFirst[k1]["sum"] += c;
     });
 
+    var removed_count = 0
+
+    // Filter unknowns and undefineds prototyping WIP
     if (filterUnknowns == true) {
-        var lb = keyedFirst.length
-        delete keyedFirst["unknown"]
-        var la = keyedFirst.length
-        if (lb != la) {
-            agg_l += " (unknowns removed)"
+        if (Object.keys(keyedFirst).includes('undefined')) {
+            removed_count += keyedFirst["undefined"]["sum"]
+            delete keyedFirst["undefined"]
         }
-     }
+    }
+
+    if (filterUnknowns == true) {
+        if (Object.keys(keyedFirst).includes('unknown')) {
+            removed_count += keyedFirst["unknown"]["sum"]
+            delete keyedFirst["unknown"]
+        }
+    }
+
+    if (filterOthers == true) {
+        if (Object.keys(keyedFirst).includes('other')) {
+            removed_count += keyedFirst["other"]["sum"]
+            delete keyedFirst["other"]
+        }
+    }
 
     // Create items array
     var sortedEntries = Object.keys(keyedFirst).map(function(key) {
@@ -126,8 +143,17 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
     }
 
     if (other_count > 0) {
-        dist.push(["other", others["other"]])
-        console.log("Adding other...")
+        if (filterOthers == true) {
+            removed_count += other_count
+            other_count = 0
+        } else {
+            dist.push(["other", others["other"]])
+            console.log("Adding other...")
+        }
+    }
+
+    if (removed_count > 0) {
+        agg_l += ` (${removed_count} missing/others removed)`
     }
 
     if (other_count > max_y * 1.25) {
@@ -230,6 +256,21 @@ function StackedBarChart({ barData, legendData, col_no, outer_w, max_y, title}) 
                 x={outer_w * 0.5}        
                 y={padd_t - 15}
             />
+            <VictoryAxis
+                dependentAxis 
+                style={{
+                  axis: {
+                    stroke: "transparent",
+                  },
+                  tickLabels: {
+                    fontSize: 8,
+                  },
+                  grid: {
+                    stroke: "#d9d9d9",
+                    size: 5,
+                  },
+                }}
+            />
             <VictoryStack
                 colorScale={"qualitative"}
             >
@@ -246,32 +287,25 @@ function StackedBarChart({ barData, legendData, col_no, outer_w, max_y, title}) 
             <VictoryAxis
                 crossAxis 
                 style={{
-                  tickLabels: { angle: -60, textAnchor: "end" },
-                }}
-            />
-            <VictoryAxis
-                dependentAxis 
-                style={{
-                  axis: {
-                    stroke: "transparent",
-                  },
-                  tickLabels: {
-                    fontSize: 8,
-                  },
-                  grid: {
-                    stroke: "#d9d9d9",
-                    size: 5,
-                  },
+                    tickLabels: {
+                        angle: -60,
+                        textAnchor: "end"
+                    },
+                    grid: {
+                        stroke: "transparent",
+                    }
                 }}
             />
             {legendData.length > 1 && (
             <VictoryLegend
-                x={outer_w * 0.65}
-                y={padd_t}
-                orientation="horizontal"
-                itemsPerRow={3}
-                data={legendData}
+                dependentAxis 
                 colorScale={"qualitative"}
+                x={outer_w * 0.75}
+                y={18}
+                orientation="horizontal"
+                rowGutter={{ top: 0, bottom: -5 }}
+                itemsPerRow={2}
+                data={legendData}
             />)}
         </VictoryChart>
     )

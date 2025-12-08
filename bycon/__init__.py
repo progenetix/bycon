@@ -17,7 +17,6 @@ try:
     from beacon_responses import *
     from bycon_helpers import *
     from bycon_info import *
-    from bycon_summarizer import *
     from genome_utils import *
     from interval_utils import *
     from parameter_parsing import *

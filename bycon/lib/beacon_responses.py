@@ -8,12 +8,11 @@ from config import *
 
 from bycon_helpers import *
 from bycon_info import ByconInfo
-from bycon_summarizer import ByconSummary
 from parameter_parsing import ByconFilters, ByconParameters
 from query_execution import ByconDatasetResults # execute_bycon_queries
 from query_generation import ByconQuery, CollationQuery
 from response_remapping import *
-from schema_parsing import ByconSchemas
+from schema_parsing import ByconSchemas, RecordsHierarchy
 
 ################################################################################
 
@@ -467,6 +466,8 @@ class BeaconDataResponse:
                     "summary_results": BA.datasetAllAggregation()
                 })
 
+
+
         self.data_response.update({
             "response_summary": {
                 "num_total_results": t_count,
@@ -630,10 +631,12 @@ class ByconCollections:
 
     def __init__(self):
         self.response_entity_id = BYC.get("response_entity_id", "dataset")
+        self.queried_entities = RecordsHierarchy().entities()
         coll_id = f'{self.response_entity_id}_coll'
         self.data_collection = BYC_DBS.get(coll_id, "collations")
         self.collections = []
         self.collections_queries = {}
+        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
 
 
     # -------------------------------------------------------------------------#
@@ -661,21 +664,30 @@ class ByconCollections:
     # -------------------------------------------------------------------------#
 
     def __datasets_update_latest_stats(self):
-        stat = list(ByconInfo().beaconinfo_get_latest())
-        if len(stat) < 1:
-            ds_stats = {}
-        ds_stats = stat[0].get("datasets", {})
+        # stat = list(ByconInfo().beaconinfo_get_latest())
+        # if len(stat) < 1:
+        #     ds_stats = {}
+        # ds_stats = stat[0].get("datasets", {})
 
         for coll_id, coll in BYC["dataset_definitions"].items():
             prdbug(f'... processing dataset {coll_id} => {BYC.get("BYC_DATASET_IDS", [])}')
             if not coll_id in BYC.get("BYC_DATASET_IDS", []):
                 continue
-            if (ds_vs := ds_stats.get(coll_id)):
-                if "filtering_terms" in BYC["response_entity_id"]:
-                    coll.update({ "filtering_terms": []})
-                    coll_items = ds_vs.get("collations", {})
-                    for c_id, c_v in ds_vs.get("collations", {}).items():
-                        coll["filtering_terms"].append({"id":c_id, "label": c_v.get("label", c_id)})
+
+            counts = {}
+            for e in self.queried_entities:
+                coll_name = BYC_DBS.get(f'{e}_coll', '___none___')
+                d_c = self.mongo_client[coll_id][coll_name]
+                counts.update({e: d_c.count_documents({}) })
+
+            coll.update({"counts": counts})
+
+            # if (ds_vs := ds_stats.get(coll_id)):
+            #     if "filtering_terms" in BYC["response_entity_id"]:
+            #         coll.update({ "filtering_terms": []})
+            #         coll_items = ds_vs.get("collations", {})
+            #         for c_id, c_v in ds_vs.get("collations", {}).items():
+            #             coll["filtering_terms"].append({"id":c_id, "label": c_v.get("label", c_id)})
             # TODO: update counts
             # TODO: remove verifier hack
             for t in ["createDateTime", "updateDateTime"]:
@@ -1289,28 +1301,6 @@ class ByconResultSets:
         dbm = f'... __populate_result_sets needed {ds_v_duration.total_seconds()} seconds'
         prdbug(dbm)
         return
-
-
-    # -------------------------------------------------------------------------#
-
-    def __analyses_cnvfrequencies(self, ds_id, ds_res):
-        if not "cnvfrequencies" in self.available_aggregation_ids:
-            return False
-
-        analyses_result = ds_res.get("analyses.id", {})
-        BSUM = ByconSummary()
-        int_f = BSUM.analyses_frequencies_bundle(ds_id, analyses_result)
-        d = int_f.get("interval_frequencies", [])
-        c = int_f.get("sample_count", 0)
-        return {
-            "id": "cnvfrequencies",
-            "entity": "analysis",
-            "distribution": {
-                "items":d,
-            },
-            "description": f'Binned CNV frequencies for {c} matched analyses',
-            "count": c
-        }
 
 
 ################################################################################

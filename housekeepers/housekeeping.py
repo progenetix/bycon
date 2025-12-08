@@ -210,7 +210,14 @@ def main():
         if len(ind_info.keys()) < 1:
             continue
         for bios in bios_coll.find({"individual_id":ind["id"], "biosample_status.id":{"$ne":'EFO:0009654'}}):
-            bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info": ind_info}})
+            update_obj = {"individual_info": ind_info}
+            if "P" in (coll_iso := bios.get("collection_moment", "")) and not "age_days" in ind_info.keys():
+                age_days = days_from_iso8601duration(coll_iso)
+                if age_days is not False:
+                    update_obj.update({"collection_moment_days": age_days})
+                    ind_coll.update_one({"_id": ind["_id"]}, {"$set": {"index_disease.onset.age_days": age_days, "index_disease.onset.age": coll_iso}})
+                    print(f'=> updated individual {ind["id"]} with collection moment age {coll_iso}')
+            bios_coll.update_one({"_id": bios["_id"]}, {"$set": update_obj})
     bar.finish()
 
     #>----------------------- / individuals ----------------------------------<#

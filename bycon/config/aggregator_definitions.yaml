@@ -1,9 +1,16 @@
 description: >-
-  ...
+  Definitions of aggregations for the Bycon aggregator service.
+  Each aggregation definition contains an `id`, `label`, `description`, and a
+  list of one or more `concepts`, as well as an optional `sorted` property which
+  can indicate to the client that the returned `distribution` of the aggregation
+  result objects response has some pre-sorted order.
+  Each of the `concepts` defines the scope (individual, biosample, analysis),
+  property to aggregate on, and optional `termIds` or `splits` for selection
+  or binning of the results in the returned `distribution`.
 $defs:
   histologicalDiagnoses:
     id: histologicalDiagnoses
-    label: Diagnostic Classes (by NCIT)
+    label: Selected Diagnostic Classes (by NCIT)
     description: >-
       Count of histological diagnoses in matched biosamples
     concepts:
@@ -12,7 +19,7 @@ $defs:
         termIds:
           - NCIT:C9335 # Malignant neoplasm of breast
           - NCIT:C4863 # Prostate Carcinoma
-          - NCIT:C9384 # Kidney Carcinoma: 
+          - NCIT:C9384 # Kidney Carcinoma
           - NCIT:C7431 # Malignant Ovarian Neoplasm
           - NCIT:C61574 # Malignant Uterine Corpus Neoplasm
           - NCIT:C9311 # Malignant Cervical Neoplasm
@@ -93,7 +100,7 @@ $defs:
       - scope: biosample
         property: icdo_morphology.id
       - scope: biosample
-        property: individual_info.age
+        property: observation_moment.age
         format: iso8601duration
         splits:
           - P0D
@@ -184,7 +191,3 @@ $defs:
           - P5Y
           - P10Y
           - P60Y
-
-
-
-
