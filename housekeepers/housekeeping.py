@@ -26,7 +26,7 @@ def main():
     todos = {
         "mongodb_index_creation": input("Check & refresh MongoDB indexes?\n(y|N): "),
         "logical_sex_assignments": input("Assign logical sex values from biosample histologies etc. in individuals?\n(y|N): "),
-        "individual_times_days": input("Recalculate `age_days` and `followup_days` in individuals?\n(y|N): "),
+        "individual_times_days": input("Update Individual helper params (`age_days`, `followup_days`, `index_disease`...)?\n(y|N): "),
         "analyses_labels": input("Create/update `label` field for analyses, from biosamples?\n(y|N): "),
         "update_variants": input("Update variants to latest format (VRS v2)?\n(y|N): "),
         "update_cs_statusmaps": input(f'Update statusmaps in `analyses` for {ds_id}?\n(y|N): '),
@@ -139,16 +139,6 @@ def main():
                 {"$set":{"sex": { "id": 'NCIT:C20197', "label": 'male' }}}
             )
 
-        print(f'... now updating `individual_info.sex` in biosamples.')
-        no = ind_coll.count_documents({"sex":{"$exists": True}})
-        bar = Bar(f"=> individuals", max = no, suffix='%(percent)d%%'+" of "+str(no) )
-        for ind in ind_coll.find({"sex":{"$exists": True}}):
-            for bios in bios_coll.find({"individual_id":ind["id"]}):
-                bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info.sex": ind.get("sex", {})}})
-            bar.next()
-        bar.finish()
-
-
     # age_days
     if "y" in todos.get("individual_times_days", "n").lower():
         query = {"index_disease.onset.age": {"$regex": '^P'}}
@@ -162,11 +152,6 @@ def main():
                 continue
             ind_coll.update_one({"_id": ind["_id"]}, {"$set": {"index_disease.onset.age_days": age_days}})
             age_c += 1
-            for bios in bios_coll.find({"individual_id":ind["id"], "biosample_status.id":{"$ne":'EFO:0009654'}}):
-                if (ind_info := bios.get("individual_info")) is not True:
-                    ind_info = {}
-                ind_info.update({"age_at_diagnosis_days": age_days})
-                bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info": ind_info}})
             bar.next()
 
         bar.finish()
@@ -187,24 +172,46 @@ def main():
                 {"$set": {"index_disease.followup_days": followup_days}}
             )
             f_c += 1
-            for bios in bios_coll.find({"individual_id":ind["id"], "biosample_status.id":{"$ne":'EFO:0009654'}}):
-                if (ind_info := bios.get("individual_info")) is not True:
-                    ind_info = {}
-                ind_info.update({"index_disease_followup_days": followup_days})
-                bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info": ind_info}})
             bar.next()
         bar.finish()
 
         print(f'=> {f_c} individuals received an `index_disease.followup_days` value.')
 
-        print(f'... now updating `individual_info.index_disease` in biosamples.')
-        no = ind_coll.count_documents({"index_disease":{"$exists": True}})
-        bar = Bar(f"=> individuals", max = no, suffix='%(percent)d%%'+" of "+str(no) )
-        for ind in ind_coll.find({"index_disease":{"$exists": True}}):
-            for bios in bios_coll.find({"individual_id":ind["id"], "biosample_status.id":{"$ne":'EFO:0009654'}}):
-                bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info": {"index_disease": ind.get("index_disease", {})}}})
-            bar.next()
-        bar.finish()
+    #>------------------------------------------------------------------------<#
+
+    cancer_query = {"biosample_status.id":{"$ne":'EFO:0009654'}, "histological_diagnosis.id": {"$regex": '^NCIT:'}}
+    no = bios_coll.count_documents(cancer_query)
+    bar = Bar(f"=> `index_disease.disease_code` ...", max = no, suffix='%(percent)d%%'+" of "+str(no) )
+    for bios in bios_coll.find(cancer_query):
+        disease_code = bios.get("histological_diagnosis", None)
+        if disease_code:
+            ind_coll.update_one(
+                {"id": bios["individual_id"]},
+                {"$set": {"index_disease.disease_code": disease_code}}
+            )
+        bar.next()
+    bar.finish()
+
+    print(f'... now updating `individual_info` in biosamples.')
+
+    no = ind_coll.count_documents({"index_disease":{"$exists": True}})
+    bar = Bar(f"=> individuals", max = no, suffix='%(percent)d%%'+" of "+str(no) )
+    for ind in ind_coll.find({"index_disease":{"$exists": True}}):
+        bar.next()
+
+        ind_info = {}
+        if (fd := ind.get("index_disease", {}).get("followup_days")):
+            ind_info.update({"followup_days": fd})
+        if (ad := ind.get("index_disease", {}).get("onset", {}).get("age_days")):
+            ind_info.update({"age_days": ad})
+        if (sex := ind.get("sex")):
+            if (sid := sex.get("id")):
+                ind_info.update({"sex": sex})
+        if len(ind_info.keys()) < 1:
+            continue
+        for bios in bios_coll.find({"individual_id":ind["id"], "biosample_status.id":{"$ne":'EFO:0009654'}}):
+            bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info": ind_info}})
+    bar.finish()
 
     #>----------------------- / individuals ----------------------------------<#
 

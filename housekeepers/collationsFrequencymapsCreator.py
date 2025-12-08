@@ -4,6 +4,7 @@ import time
 from pymongo import MongoClient
 from progress.bar import Bar
 from random import shuffle as random_shuffle
+from random import sample as random_samples
 
 from bycon import *
 from byconServiceLibs import (
@@ -116,7 +117,9 @@ for c_id in coll_ids:
     if len(ana_ids) < 1:
         continue
 
-    ana_ids = ByconH().paginated_list(ana_ids, 0, limit)
+    if limit > 0 and len(ana_ids) > limit:
+        ana_ids = random_samples(ana_ids, limit)
+
     prdbug(f'\n... after limit {len(ana_ids)}')
 
     intervals, cnv_ana_count = GB.intervalAidFrequencyMaps(ds_id, ana_ids)

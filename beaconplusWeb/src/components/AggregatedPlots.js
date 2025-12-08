@@ -5,6 +5,7 @@ import {
     VictoryLabel,
     VictoryAxis,
     VictoryBar,
+    VictoryLegend,
     // VictoryPie,
     VictoryStack,
     VictoryTheme,
@@ -151,6 +152,12 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
         barData.push(thisBar);
     })
 
+    var legendData = [];
+    Object.keys(secondKeys).sort().forEach(function (s) {
+        legendData.push({"name": secondKeys[s]});
+    })
+
+
     const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
     const containerRef = useCallback((node) => {
         if (node !== null) { setBoundingRect(node.getBoundingClientRect()); }
@@ -166,7 +173,7 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
                 />
             ) : (
 */}                <StackedBarChart
-                    bar_data={barData} col_no={dist.length} outer_w={outer_w} max_y={max_y} title={agg_l}
+                    barData={barData} legendData={legendData} col_no={dist.length} outer_w={outer_w} max_y={max_y} title={agg_l}
                 />
             {/*)}*/}
         </div>
@@ -199,7 +206,7 @@ function AggregatedStackedPlot({ agg, filterUnknowns }) {
 
 //----------------------------------------------------------------------------//
 
-function StackedBarChart({ bar_data, col_no, outer_w, max_y, title}) {
+function StackedBarChart({ barData, legendData, col_no, outer_w, max_y, title}) {
 
     const padd_l = 70
     const padd_r = 30
@@ -226,7 +233,7 @@ function StackedBarChart({ bar_data, col_no, outer_w, max_y, title}) {
             <VictoryStack
                 colorScale={"qualitative"}
             >
-                {bar_data.map((data, i) => (
+                {barData.map((data, i) => (
                     <VictoryBar
                         key={i}
                         data={data}
@@ -257,6 +264,15 @@ function StackedBarChart({ bar_data, col_no, outer_w, max_y, title}) {
                   },
                 }}
             />
+            {legendData.length > 1 && (
+            <VictoryLegend
+                x={outer_w * 0.65}
+                y={padd_t}
+                orientation="horizontal"
+                itemsPerRow={3}
+                data={legendData}
+                colorScale={"qualitative"}
+            />)}
         </VictoryChart>
     )
 }

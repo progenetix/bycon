@@ -87,13 +87,14 @@ $defs:
   sampleICDO3histologyByAge:
     id: sampleICDO3histologyByAge
     label: ICD-O 3 Histology by Age at Diagnosis
-    description: 
-      - ICD-O 3 histologies in matched biosamples
+    description: >-
+      ICD-O 3 histologies in matched biosamples by age at diagnosis
     concepts:
       - scope: biosample
         property: icdo_morphology.id
       - scope: biosample
-        property: individual_info.index_disease.onset.age_days
+        property: individual_info.age
+        format: iso8601duration
         splits:
           - P0D
           - P18Y
@@ -108,6 +109,28 @@ $defs:
     concepts:
       - scope: biosample
         property: icdo_morphology.id
+      - scope: biosample
+        property: individual_info.sex.id
+
+  diseaseBySex:
+    id: diseaseBySex
+    label: Sex distributions for Diseases in Individuals
+    description: 
+      - Cancer type by sex in matched individuals
+    concepts:
+      - scope: individual
+        property: index_disease.disease_code.id
+      - scope: individual
+        property: sex.id
+
+  biosampleDiseaseBySex:
+    id: biosampleDiseaseBySex
+    label: Sex distributions for Diseases in Biosamples
+    description: 
+      - Cancer type by sex in matched biosamples
+    concepts:
+      - scope: biosample
+        property: histological_diagnosis.id
       - scope: biosample
         property: individual_info.sex.id
 
@@ -128,8 +151,9 @@ $defs:
       Age at diagnosis by sex
     sorted: True
     concepts:
-      - scope: biosample
-        property: individual_info.index_disease.onset.age_days
+      - scope: individual
+        property: index_disease.onset.age
+        format: iso8601duration
         splits:
           - P0D
           - P18M
@@ -138,8 +162,8 @@ $defs:
           - P65Y
           - P80Y
           - P120Y
-      - scope: biosample
-        property: individual_info.sex.id
+      - scope: individual
+        property: sex.id
 
   followupTime:
     id: followupTime
@@ -148,8 +172,9 @@ $defs:
       Follow-up time after diagnosis
     sorted: True
     concepts:
-      - scope: biosample
-        property: individual_info.index_disease.followup_days
+      - scope: individual
+        property: index_disease.followup
+        format: iso8601duration
         splits:
           - P0D
           - P6M
