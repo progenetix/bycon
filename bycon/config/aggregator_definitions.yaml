@@ -13,9 +13,9 @@ $defs:
     label: Selected Diagnostic Classes (by NCIT)
     description: >-
       Count of histological diagnoses in matched biosamples
+    scope: biosample
     concepts:
-      - scope: biosample
-        property: histological_diagnosis.id
+      - property: biosample.histological_diagnosis.id
         termIds:
           - NCIT:C9335 # Malignant neoplasm of breast
           - NCIT:C4863 # Prostate Carcinoma
@@ -39,17 +39,16 @@ $defs:
           - NCIT:C3163 # Chronic Lymphocytic Leukemia
           - NCIT:C3466 # T-Cell Non-Hodgkin Lymphoma
           - NCIT:C3457 # B-Cell Non-Hodgkin Lymphoma
-      - scope: biosample
-        property: individual_info.sex.id
+      - property: biosample.individual_info.sex.id
 
   platformTechnologies:
     id: platformTechnologies
     label: Platform Technologies
     description: >-
       Count of basic platform technologies used in matched analyses
+    scope: analysis
     concepts:
-      - scope: analysis
-        property: platform_model.id
+      - property: analysis.platform_model.id
         termIds:
           - EFO:0030075 # cDNA microarray
           - EFO:0010938 # large-insert clone DNA microarray
@@ -65,42 +64,29 @@ $defs:
     label: All Platforms by ID
     description: >-
       Count of basic platform technologies used in matched analyses
+    scope: analysis
     concepts:
-      - scope: analysis
-        property: platform_model.id
-
-  # cancerTypesBySex:
-  #   id: cancerTypesBySex
-  #   label: Cancer Classes by Sex
-  #   description: >-
-  #     General cancer types by sex
-  #   concepts:
-  #     - scope: biosample
-  #       property: histological_diagnosis.id
-  #     - scope: biosample
-  #       property: individual_info.sex.id
+      - property: analysis.platform_model.id
 
   sampleOriginDetailsBySex:
     id: sampleOriginDetails
     label: Anatomical Origin
     description: >-
       Count of anatomical sites in matched biosamples
+    scope: biosample
     concepts:
-      - scope: biosample
-        property: sample_origin_detail.id
-      - scope: biosample
-        property: individual_info.sex.id
+      - property: biosample.sample_origin_detail.id
+      - property: biosample.individual_info.sex.id
 
   sampleICDO3histologyByAge:
     id: sampleICDO3histologyByAge
     label: ICD-O 3 Histology by Age at Diagnosis
     description: >-
       ICD-O 3 histologies in matched biosamples by age at diagnosis
+    scope: biosample
     concepts:
-      - scope: biosample
-        property: icdo_morphology.id
-      - scope: biosample
-        property: observation_moment.age
+      - property: biosample.icdo_morphology.id
+      - property: biosample.observation_moment.age
         format: iso8601duration
         splits:
           - P0D
@@ -111,35 +97,32 @@ $defs:
   sampleICDO3histologyBySex:
     id: sampleICDO3histologyBySex
     label: ICD-O 3 Histology by Sex
+    scope: biosample
     description: 
       - ICD-O 3 histologies by sex in matched biosamples
     concepts:
-      - scope: biosample
-        property: icdo_morphology.id
-      - scope: biosample
-        property: individual_info.sex.id
+      - property: biosample.icdo_morphology.id
+      - property: biosample.individual_info.sex.id
 
   diseaseBySex:
     id: diseaseBySex
     label: Sex distributions for Diseases in Individuals
     description: 
       - Cancer type by sex in matched individuals
+    scope: individual
     concepts:
-      - scope: individual
-        property: index_disease.disease_code.id
-      - scope: individual
-        property: sex.id
+      - property: individual.index_disease.disease_code.id
+      - property: individual.sex.id
 
   biosampleDiseaseBySex:
     id: biosampleDiseaseBySex
     label: Sex distributions for Diseases in Biosamples
     description: 
       - Cancer type by sex in matched biosamples
+    scope: biosample
     concepts:
-      - scope: biosample
-        property: histological_diagnosis.id
-      - scope: biosample
-        property: individual_info.sex.id
+      - property: biosample.histological_diagnosis.id
+      - property: biosample.individual_info.sex.id
 
   sampleCountries:
     id: sampleCountries
@@ -147,15 +130,16 @@ $defs:
     label_key: country
     description: >-
       Count of countries of origin in matched biosamples
+    scope: biosample
     concepts:
-      - scope: biosample
-        property: geo_location.properties.ISO3166alpha3
+      - property: biosample.geo_location.properties.ISO3166alpha3
 
   ageAtDiagnosisBySex:
     id: ageAtDiagnosisBySex
     label: Age at Diagnosis by Sex
     description: >-
       Age at diagnosis by sex
+    scope: individual
     sorted: True
     concepts:
       - scope: individual
@@ -169,18 +153,17 @@ $defs:
           - P65Y
           - P80Y
           - P120Y
-      - scope: individual
-        property: sex.id
+      - property: individual.sex.id
 
   followupTime:
     id: followupTime
     label: Follow-up Time
     description: >-
       Follow-up time after diagnosis
+    scope: individual
     sorted: True
     concepts:
-      - scope: individual
-        property: index_disease.followup
+      - property: individual.index_disease.followup
         format: iso8601duration
         splits:
           - P0D

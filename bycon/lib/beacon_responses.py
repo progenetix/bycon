@@ -466,8 +466,6 @@ class BeaconDataResponse:
                     "summary_results": BA.datasetAllAggregation()
                 })
 
-
-
         self.data_response.update({
             "response_summary": {
                 "num_total_results": t_count,
@@ -782,9 +780,8 @@ class ByconAggregations:
             a_v = self.aggregator_definitions.get(a_k)
             if use_dataset_result:
                 concepts = a_v.get("concepts", [])
-                concept = concepts[0]
-                d = concept.get("scope")
-                coll = BYC_DBS.get(f"{d}_coll", "___none___")
+                scope, concept = concepts[0].get("property", "___none___.___none___").split('.', 1)
+                coll = BYC_DBS.get(f"{scope}_coll", "___none___")
                 if not (coll_k := f"{coll}.id") in self.dataset_result.keys():
                     continue
                 res = self.dataset_result.get(coll_k, {})
@@ -805,16 +802,13 @@ class ByconAggregations:
         if len(concepts) != 1:
             return
 
-        concept = concepts[0]
-        
-        c = concept.get("property")
-        d = concept.get("scope")
-        if not (collection := BYC_DBS.get(f"{d}_coll")):
+        scope, concept_id = concepts[0].get("property", "___none___.___none___").split('.', 1)
+        if not (collection := BYC_DBS.get(f"{scope}_coll")):
             return
 
         data_coll = self.data_client[collection]
 
-        _id = self.__id_object(a_k, concept)
+        _id = self.__id_object(a_k, concepts[0])
 
         agg_p = [ { "$match": query } ]
         agg_p.append(            
@@ -861,13 +855,11 @@ class ByconAggregations:
         concepts = a_v.get("concepts", [])
         if len(concepts) != 2:
             return
-        # if len(concepts[0].get("splits", [])) > 0 or len(concepts[1].get("splits", [])) > 0:
-        #     return
 
-        c_one = concepts[0].get("property")
-        d_one = concepts[0].get("scope")
-        c_two = concepts[1].get("property")
-        d_two = concepts[1].get("scope")
+        # TODO: more than 2 (loop) and $lookup for different collection
+
+        d_one, c_one = concepts[0].get("property", "___none1___.___none1___").split('.', 1)
+        d_two, c_two = concepts[1].get("property", "___none2___.___none2___").split('.', 1)
         if d_one != d_two:
             return
 
@@ -929,7 +921,8 @@ class ByconAggregations:
             return _id
         if (_id := self.__switch_branches_from_splits(a_k, concept)):
             return _id
-        return f"${concept.get('property')}"
+        scope, concept_id = concept.get("property", "___none___.___none___").split('.', 1)
+        return f"${concept_id}"
 
 
     # -------------------------------------------------------------------------#
@@ -961,7 +954,7 @@ class ByconAggregations:
         if len(terms := concept.get("termIds", [])) < 1:
             return False
 
-        p = concept.get('property')
+        scope, concept_id = concept.get("property", "___none___.___none___").split('.', 1)
 
         branches = []
         for d_i, i_k in enumerate(terms):
@@ -971,14 +964,14 @@ class ByconAggregations:
             if len(child_terms := coll.get("child_terms", [])) < 1:
                 continue
             branches.append({
-                "case": { "$in": [ f'${p}', child_terms ] },
+                "case": { "$in": [ f'${concept_id}', child_terms ] },
                 "then": {"id": i_k, "label": label, "order": d_i}
             })
 
         # fallback dummy branch - at least one is needed or error
         if len(branches) < 1:
             branches.append({
-                "case": { "$in": [f'${p}', [ "___undefined___" ]] },
+                "case": { "$in": [f'${concept_id}', [ "___undefined___" ]] },
                 "then": {"id": "undefined", "label": "undefined", "order": 1}
             })
 

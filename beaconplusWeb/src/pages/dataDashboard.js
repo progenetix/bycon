@@ -1,26 +1,47 @@
 import React from "react"
-import DatasetStats from "./../components/DatasetStats"
+import Panel from "./../components/Panel"
+import { AggregatedPlots } from "./../components/AggregatedPlots"
 import {Layout} from "./../site-specific/Layout"
-import { withUrlQuery } from "../hooks/url-query"
-import { urlRetrieveIds } from "./../hooks/api"
+import { DATASETDEFAULT, tryFetch, THISSITE } from "./../hooks/api"
 
 // http://beaconplus.org/stats/?datasetIds=progenetix&ageSplits=P0D,P1Y,P2Y,P18Y,P21Y,P40Y
 
-const StatsPage = withUrlQuery(({ urlQuery }) => {
-  var { datasetIds } = urlRetrieveIds(urlQuery)
-  console.log(datasetIds)
+export default function StatsPage({summaryResults, counts}) {
 
-  var ageSplits = urlQuery["ageSplits"]
 
-  const title = `${datasetIds} Data Content Overview`
-  const leadText = `This page shows some data statistics for the ${datasetIds}
+  const title = `${DATASETDEFAULT} Data Content Overview`
+  const leadText = `This page shows some data statistics for the ${DATASETDEFAULT}
 dataset. Please allow for some loading time.`
 
   return (
-    <Layout title={title} headline={title} leadPanelMarkdown={leadText}>
-        <DatasetStats dataset_id={datasetIds} age_splits={ageSplits} filterUnknowns={true} />
-    </Layout>
+<Layout title={title} headline={title} leadPanelMarkdown={leadText}>
+  <Panel heading="Dataset Summary">
+    <ul>
+      <li>Variants: {counts.genomicVariant}</li>
+      <li>Analyses: {counts.analysis}</li>
+      <li>Biosamples: {counts.biosample}</li>
+      <li>Individuals: {counts.individual}</li>
+    </ul>
+  </Panel>
+  <Panel heading="Some Content Statistics">
+    <AggregatedPlots
+      summaryResults={summaryResults}
+      filterUnknowns={true}
+    />
+  </Panel>
+</Layout>
   )
-})
+}
 
-export default StatsPage
+export const getStaticProps = async () => {
+  const aggregationReply = await tryFetch(
+    `${THISSITE}beacon/datasets/${DATASETDEFAULT}?requestedGranularity=aggregated`
+  )
+
+  return {
+    props: {
+      summaryResults: aggregationReply.response.collections[0].summaryResults,
+      counts: aggregationReply.response.collections[0].counts
+    }
+  }
+}

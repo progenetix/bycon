@@ -1,8 +1,26 @@
 # Data Summaries ("Aggregations")
 
+!!! note "WiP - To be edited"
+
+    This is the work in progress for a general aggregation/summary documentation.
+
 #### Further Info
 
 * [Proposals for Aggregated Response](https://github.com/ga4gh-beacon/beacon-v2/discussions/238)
+
+## General Structure, Calling and Scope
+
+Aggregation responses or summary data are called by setting the `requestedGranularity`
+to `true`. Example:
+
+* <https://progenetix.org/beacon/biosamples/?filters=pgx:icdom-81303&requestedGranularity=aggregated>
+
+#### Scope of the summary counts
+
+*TODO*: Do the counts have to be projected to the requested entity, or can they
+be reported on basis of pre-defined entities (e.g. can a request to `/individuals/`
+report the numbers for the matched sample histologies or the individuals with the
+matched histologies?).
 
 ## Components
 
@@ -62,6 +80,8 @@ concepts:
     property: sample_origin_detail.id
 ```
 
+The following example includes pre-defined age group splits which can be overridden by a request parameter (to be defined; probably best to have it in a POST object):
+
 ```
 id: ageAtSampleCollection
 label: Age at Sampling
@@ -94,6 +114,4 @@ concepts:
   - scope: individual
     property: sex.id
 ```
-
-
 
