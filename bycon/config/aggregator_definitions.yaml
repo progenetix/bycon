@@ -142,8 +142,7 @@ $defs:
     scope: individual
     sorted: True
     concepts:
-      - scope: individual
-        property: index_disease.onset.age
+      - property: individual.index_disease.onset.age
         format: iso8601duration
         splits:
           - P0D

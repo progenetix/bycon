@@ -47,7 +47,7 @@ supported by a Beacon implementation. These definitions should include:
     - usually one or 2 ("dimensions"); see below
 * additional `parameters` for modifying the aggregation behaviour or indicating
   behavior
-    - `sorted: true` can indicate that a response has a predefined order
+    - `sorted: true` can indicate to a client that a response has a predefined order
     
 #### Concept definitions and parameters
 
@@ -76,8 +76,7 @@ label: Anatomical Origin
 description: >-
   Count of anatomical sites in matched biosamples
 concepts:
-  - scope: biosample
-    property: sample_origin_detail.id
+  - property: biosample.sample_origin_detail.id
 ```
 
 The following example includes pre-defined age group splits which can be overridden by a request parameter (to be defined; probably best to have it in a POST object):
@@ -89,8 +88,7 @@ description: >-
   Age at collection of the sample
 sorted: True
 concepts:
-  - scope: biosample
-    property: collectionMoment
+  - property: biosample.collectionMoment
     splits:
       - P0D
       - P18M
@@ -109,9 +107,7 @@ label: Sex distributions for Diseases
 description: 
   - ICD-O 3 histologies by sex in matched biosamples
 concepts:
-  - scope: individual
-    property: diseases.diseaseCode.id
-  - scope: individual
-    property: sex.id
+  - property: individual.diseases.diseaseCode.id
+  - property: individual.ex.id
 ```
 

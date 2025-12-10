@@ -405,11 +405,6 @@ class BeaconDataResponse:
                 "cohort_type": "beacon-defined",
                 "cohort_size": c.get("count"),
                 "name": c.get("label", ""),
-                # "inclusion_criteria": {
-                #     "description": c.get("description", "NA"),
-                #     c_k: c.get("id"),
-                #     "dataset_id": c.get("dataset_id")
-                # }
             })
             for k in pop_keys:
                 c.pop(k, None)
@@ -780,7 +775,7 @@ class ByconAggregations:
             a_v = self.aggregator_definitions.get(a_k)
             if use_dataset_result:
                 concepts = a_v.get("concepts", [])
-                scope, concept = concepts[0].get("property", "___none___.___none___").split('.', 1)
+                scope, concept_id = concepts[0].get("property", "___none___.___none___").split('.', 1)
                 coll = BYC_DBS.get(f"{scope}_coll", "___none___")
                 if not (coll_k := f"{coll}.id") in self.dataset_result.keys():
                     continue
@@ -802,13 +797,15 @@ class ByconAggregations:
         if len(concepts) != 1:
             return
 
-        scope, concept_id = concepts[0].get("property", "___none___.___none___").split('.', 1)
+        concept = concepts[0]
+
+        scope, concept_id = concept.get("property", "___none___.___none___").split('.', 1)
         if not (collection := BYC_DBS.get(f"{scope}_coll")):
             return
 
         data_coll = self.data_client[collection]
 
-        _id = self.__id_object(a_k, concepts[0])
+        _id = self.__id_object(a_k, concept)
 
         agg_p = [ { "$match": query } ]
         agg_p.append(            
@@ -1014,9 +1011,12 @@ class ByconAggregations:
         ])
         ```
         """
+
         if len(splits := concept.get("splits", [])) < 1:
             return False
-        p = concept.get('property')
+
+        scope, concept_id = concept.get("property", "___none___.___none___").split('.', 1)
+
         f = concept.get('format', "")
 
         split_labs = splits
@@ -1024,7 +1024,7 @@ class ByconAggregations:
         branches = []
 
         if "iso8601duration" in f:
-            p = f"{p}_days"
+            concept_id = f"{concept_id}_days"
             split_labs = ["unknown"]
             split_vals = [0]
             pre = "P0D"
@@ -1037,7 +1037,7 @@ class ByconAggregations:
 
         for d_i, d_l in enumerate(split_labs):
             branches.append({
-                "case": { "$lt": [ f'${p}', split_vals[d_i] ] },
+                "case": { "$lt": [ f'${concept_id}', split_vals[d_i] ] },
                 "then": {"id": d_l, "label": d_l, "order": d_i}
             })
 
@@ -1304,6 +1304,7 @@ class ByconHO:
     def __init__(self):
         self.dataset_definitions = BYC.get("dataset_definitions", {})
         self.handover_types = BYC.get("handover_definitions", {}).get("h->o_types", {})
+        self.include_handovers = BYC_PARS.get("include_handovers", False)
         self.response_entity_id = BYC.get("response_entity_id")
 
 
@@ -1313,6 +1314,8 @@ class ByconHO:
 
     def get_dataset_handovers(self, ds_id=None, datasets_results={}):
         self.dataset_handover = []
+        if not self.include_handovers:
+            return self.dataset_handover
         self.dataset_id = ds_id
         if not (ds_def := self.dataset_definitions.get(str(ds_id))):
             return self.dataset_handover
