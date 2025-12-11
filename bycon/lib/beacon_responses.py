@@ -786,8 +786,19 @@ class ByconAggregations:
 
             a_v.update({"distribution": []})    
             self.__aggregate_single_concept(a_k, a_v, query)
-            # self.__aggregate_single_concept_buckets(a_k, a_v, query)
             self.__aggregate_2_concepts(a_k, a_v, query)
+            self.__reshape_dataset_aggregation()
+
+
+    # -------------------------------------------------------------------------#
+
+    def __reshape_dataset_aggregation(self):
+        """Post-processing of the aggregation results to remove unneeded keys.
+        """
+        for i_a, a_v in enumerate(self.dataset_aggregation):
+            for i_c, c_v in enumerate(a_v.get("concepts", [])):
+                c_v.pop("splits", None)
+                c_v.pop("termIds", None)
 
 
     # -------------------------------------------------------------------------#
@@ -825,7 +836,6 @@ class ByconAggregations:
 
         # label lookups only for term-based aggregations
         for a in agg_d:
-            # prjsonnice(a)
             if not (i_k := a.get("_id")):
                 continue
             if type(i_k) is dict and "id" in i_k:
@@ -1293,7 +1303,6 @@ class ByconResultSets:
         ds_v_duration = datetime.now() - ds_v_start
         dbm = f'... __populate_result_sets needed {ds_v_duration.total_seconds()} seconds'
         prdbug(dbm)
-        return
 
 
 ################################################################################
