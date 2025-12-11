@@ -872,8 +872,7 @@ class ByconAggregations:
                     },
                     "count": { "$sum": 1 }
                 }
-            },
-            { "$sort": { "count": -1 } }
+            }
         )
         # sorting either on logical order () detection order
         if a_v.get("sorted") is True:
