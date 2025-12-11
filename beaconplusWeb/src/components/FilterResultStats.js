@@ -7,18 +7,21 @@ import {
 import { Loader } from "./Loader"
 import Panel from "./Panel"
 
-export default function DatasetStats({dataset_id, ageSplits, followupSplits, aggregationTerms, filterUnknowns}) {
-  var summaryURL = `${basePath}beacon/datasets/${dataset_id}?requestedGranularity=aggregated`
+export default function FilterResultStats({dataset_id, ageSplits, followupSplits, filters, filterUnknowns}) {
+  var summaryURL = `${basePath}beacon/biosamples?requestedGranularity=aggregated`
   var params = []
 
+  if (dataset_id) {
+    params.push(`datasetIds=${dataset_id}`)
+  }
   if (followupSplits) {
     params.push(`followupSplits=${followupSplits}`)
   }
   if (ageSplits) {
     params.push(`ageSplits=${ageSplits}`)
   }
-  if (aggregationTerms) {
-    params.push(`aggregationTerms=${aggregationTerms}`)
+  if (filters) {
+    params.push(`filters=${filters}`)
   }
   if (params.length > 0) {
     summaryURL += `&${params.join("&")}`
@@ -31,15 +34,14 @@ export default function DatasetStats({dataset_id, ageSplits, followupSplits, agg
         <>
         <Panel heading="Dataset Summary">
           <ul>
-            <li>Variants: {data.response.collections[0].counts.genomicVariant}</li>
-            <li>Analyses: {data.response.collections[0].counts.analysis}</li>
-            <li>Biosamples: {data.response.collections[0].counts.biosample}</li>
-            <li>Individuals: {data.response.collections[0].counts.individual}</li>
+            <li>Analyses: {data.response.resultSets[0].info?.counts?.analyses}</li>
+            <li>Biosamples: {data.response.resultSets[0].info?.counts?.biosamples}</li>
+            <li>Individuals: {data.response.resultSets[0].info?.counts?.individuals}</li>
           </ul>
         </Panel>
         <Panel heading="Some Content Statistics">
           <AggregatedPlots
-            summaryResults={data.response.collections[0].summaryResults}
+            summaryResults={data.response.resultSets[0].summaryResults}
             filterUnknowns={filterUnknowns}
           />
         </Panel>

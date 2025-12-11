@@ -38,6 +38,8 @@ export const getStaticProps = async () => {
     `${THISSITE}beacon/datasets/${DATASETDEFAULT}?requestedGranularity=aggregated`
   )
 
+  console.log(aggregationReply)
+
   return {
     props: {
       summaryResults: aggregationReply.response.collections[0].summaryResults,
