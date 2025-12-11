@@ -468,8 +468,6 @@ class BeaconDataResponse:
             }
         })
 
-        return
-
 
 ################################################################################
 ################################################################################
@@ -613,8 +611,6 @@ class ByconFilteringTerms:
         for k, v in r_o.items():
             self.filter_resources.append(v)
 
-        return
-
 
 ################################################################################
 ################################################################################
@@ -624,12 +620,10 @@ class ByconCollections:
 
     def __init__(self):
         self.response_entity_id = BYC.get("response_entity_id", "dataset")
-        self.queried_entities = RecordsHierarchy().entities()
-        coll_id = f'{self.response_entity_id}_coll'
-        self.data_collection = BYC_DBS.get(coll_id, "collations")
         self.collections = []
         self.collections_queries = {}
         self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
+        self.queried_entities = RecordsHierarchy().entities()
 
 
     # -------------------------------------------------------------------------#
@@ -675,14 +669,6 @@ class ByconCollections:
 
             coll.update({"counts": counts})
 
-            # if (ds_vs := ds_stats.get(coll_id)):
-            #     if "filtering_terms" in BYC["response_entity_id"]:
-            #         coll.update({ "filtering_terms": []})
-            #         coll_items = ds_vs.get("collations", {})
-            #         for c_id, c_v in ds_vs.get("collations", {}).items():
-            #             coll["filtering_terms"].append({"id":c_id, "label": c_v.get("label", c_id)})
-            # TODO: update counts
-            # TODO: remove verifier hack
             for t in ["createDateTime", "updateDateTime"]:
                 d = str(coll.get(t, "1967-11-11"))
                 if re.match(r'^\d\d\d\d\-\d\d\-\d\d$', d):
@@ -710,10 +696,8 @@ class ByconCollections:
                     ]
                 }
 
-        mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         for ds_id in BYC["BYC_DATASET_IDS"]:
-            mongo_db = mongo_client[ ds_id ]        
-            mongo_coll = mongo_db[ "collations" ]
+            mongo_coll = self.mongo_client[ds_id]["collations"] 
             for cohort in mongo_coll.find( query, limit=limit ):
                 self.collections.append(cohort)
 
@@ -727,8 +711,16 @@ class ByconCollections:
 class ByconAggregations:
     def __init__(self, ds_id=None):
         self.dataset_id = ds_id
-        self.aggregation_terms = BYC_PARS.get("aggregation_terms", [])
-        self.aggregator_definitions = BYC.get("aggregator_definitions", {}).get("$defs", {})
+        a_d_s = BYC.get("aggregator_definitions", {}).get("$defs", {})
+
+        self.summaries = []
+        # ordered selection of aggregation concepts
+        for a_k in BYC_PARS.get("aggregation_terms", []):
+            if a_k in a_d_s.keys():
+                self.summaries.append(a_d_s[a_k])
+        if len(self.summaries) < 1:
+            self.summaries = list(a_d_s.values())
+
         self.dataset_aggregation = [] 
         self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         self.data_client = self.mongo_client[ds_id]
@@ -760,34 +752,39 @@ class ByconAggregations:
     # -------------------------------------------------------------------------#
 
     def __aggregate_dataset_data(self, query={}, use_dataset_result=False):
-        # temporary aggregation implementation
-        # WiP
-        # TODO: 2-dimensional with buckets; they need another way - e.g. $switch
-        # https://www.mongodb.com/docs/manual/reference/operator/aggregation/switch/
-
-
-        agg_terms = self.aggregator_definitions.keys()
-        if len(self.aggregation_terms) > 0:
-            agg_terms = list(set(agg_terms) & set(self.aggregation_terms))
-
         # one could aggregate all terms in one pipeline, but this is clearer
-        for a_k in agg_terms:
-            a_v = self.aggregator_definitions.get(a_k)
+        self.aggregation_pre_query = query
+        for a_v in self.summaries:
             if use_dataset_result:
-                concepts = a_v.get("concepts", [])
-                scope, concept_id = concepts[0].get("property", "___none___.___none___").split('.', 1)
-                coll = BYC_DBS.get(f"{scope}_coll", "___none___")
-                if not (coll_k := f"{coll}.id") in self.dataset_result.keys():
-                    continue
-                res = self.dataset_result.get(coll_k, {})
-                q_v_s = res.get("target_values", [])
-                query = {"id": {"$in": q_v_s}}
-                prdbug(f'... aggregating {a_k} for {coll_k} with query {query}')
-
+                self.__generate_query_from_dataset_result(a_v)
             a_v.update({"distribution": []})    
-            self.__aggregate_single_concept(a_k, a_v, query)
-            self.__aggregate_2_concepts(a_k, a_v, query)
+            self.__aggregate_from_dimensions(a_v)
             self.__reshape_dataset_aggregation()
+
+
+    # -------------------------------------------------------------------------#
+
+    def __aggregate_from_dimensions(self, a_v):
+        if len(a_v.get("concepts", [])) == 1:
+            self.__aggregate_single_concept(a_v)
+            return
+        if len(a_v.get("concepts", [])) == 2:
+            self.__aggregate_2_concepts(a_v)
+            return
+
+
+    # -------------------------------------------------------------------------#
+
+    def __generate_query_from_dataset_result(self, a_v):
+        # TODO: Default scope to response entity?
+        scope = a_v.get("scope", "biosample")
+        coll = BYC_DBS.get(f"{scope}_coll", "___none___")
+        # TODO: Fallback query for 0 results?
+        if not (coll_k := f"{coll}.id") in self.dataset_result.keys():
+            return
+        res = self.dataset_result.get(coll_k, {})
+        q_v_s = res.get("target_values", [])
+        self.aggregation_pre_query = {"id": {"$in": q_v_s}}
 
 
     # -------------------------------------------------------------------------#
@@ -803,22 +800,17 @@ class ByconAggregations:
 
     # -------------------------------------------------------------------------#
 
-    def __aggregate_single_concept(self, a_k, a_v, query={}):
-        concepts = a_v.get("concepts", [])
-        if len(concepts) != 1:
-            return
-
-        concept = concepts[0]
-
-        scope, concept_id = concept.get("property", "___none___.___none___").split('.', 1)
+    def __aggregate_single_concept(self, a_v):
+        concept = a_v.get("concepts", [{"property": "___none___.___none___"}])[0]
+        scope, concept_id = concept.get("property").split('.', 1)
         if not (collection := BYC_DBS.get(f"{scope}_coll")):
             return
 
         data_coll = self.data_client[collection]
 
-        _id = self.__id_object(a_k, concept)
+        _id = self.__id_object(concept)
 
-        agg_p = [ { "$match": query } ]
+        agg_p = [{ "$match": self.aggregation_pre_query }]
         agg_p.append(            
             { "$group": {
                     "_id": _id,
@@ -858,13 +850,9 @@ class ByconAggregations:
 
     # -------------------------------------------------------------------------#
 
-    def __aggregate_2_concepts(self, a_k, a_v, query={}):
+    def __aggregate_2_concepts(self, a_v):
         concepts = a_v.get("concepts", [])
-        if len(concepts) != 2:
-            return
-
         # TODO: more than 2 (loop) and $lookup for different collection
-
         d_one, c_one = concepts[0].get("property", "___none1___.___none1___").split('.', 1)
         d_two, c_two = concepts[1].get("property", "___none2___.___none2___").split('.', 1)
         if d_one != d_two:
@@ -874,19 +862,24 @@ class ByconAggregations:
             return
         data_coll = self.data_client[collection]
 
-        agg_p = [
-            { "$match": query },
+        agg_p = [{ "$match": self.aggregation_pre_query }]
+        agg_p.append(
             { "$group":
                 {
                     "_id": {
-                        c_one.replace(".", "_"): self.__id_object(a_k, concepts[0]),
-                        c_two.replace(".", "_"): self.__id_object(a_k, concepts[1])
+                        c_one.replace(".", "_"): self.__id_object(concepts[0]),
+                        c_two.replace(".", "_"): self.__id_object(concepts[1])
                     },
                     "count": { "$sum": 1 }
                 }
             },
             { "$sort": { "count": -1 } }
-        ]
+        )
+        # sorting either on logical order () detection order
+        if a_v.get("sorted") is True:
+            agg_p.append({ "$sort": { "_id.order": 1 } })
+        else:
+            agg_p.append({ "$sort": { "count": -1 } })
         agg_d = list(data_coll.aggregate(agg_p))
 
         if len(agg_d) < 1:
@@ -923,10 +916,10 @@ class ByconAggregations:
 
     # -------------------------------------------------------------------------#
 
-    def __id_object(self, a_k, concept):
-        if (_id := self.__switch_branches_from_terms(a_k, concept)):
+    def __id_object(self, concept):
+        if (_id := self.__switch_branches_from_terms(concept)):
             return _id
-        if (_id := self.__switch_branches_from_splits(a_k, concept)):
+        if (_id := self.__switch_branches_from_splits(concept)):
             return _id
         scope, concept_id = concept.get("property", "___none___.___none___").split('.', 1)
         return f"${concept_id}"
@@ -934,10 +927,11 @@ class ByconAggregations:
 
     # -------------------------------------------------------------------------#
 
-    def __switch_branches_from_terms(self, a_k, concept):
+    def __switch_branches_from_terms(self, concept):
         """
-        Switch example for term list from children:
+        Switch example for term list from children... 
 
+        Note: https://www.mongodb.com/docs/manual/reference/operator/aggregation/switch/
         ```
         db.biosamples.aggregate([
             { $group: {
@@ -994,7 +988,7 @@ class ByconAggregations:
 
     # -------------------------------------------------------------------------#
 
-    def __switch_branches_from_splits(self, a_k, concept):
+    def __switch_branches_from_splits(self, concept):
         """
         Numeric splits can be implemented using `$bucket` or `$switch`. We're
         preferimg switches since they can be combined with other aggregators.
@@ -1079,6 +1073,7 @@ class ByconResultSets:
         self.limit = BYC_PARS.get("limit")
         self.skip = BYC_PARS.get("skip")
         self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
+        self.ho_coll = self.mongo_client[BYC_DBS["housekeeping_db"]][BYC_DBS["handover_coll"]]
 
         self.record_queries = ByconQuery().recordsQuery()
         self.__create_empty_result_sets()
@@ -1168,8 +1163,6 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __result_sets_save_handovers(self):
-        ho_client = MongoClient(host=BYC_DBS["mongodb_host"])
-        ho_coll = ho_client[BYC_DBS["housekeeping_db"]][BYC_DBS["handover_coll"]]
         for ds_id, d_s in self.datasets_results.items():
             if not d_s:
                 continue
@@ -1178,12 +1171,10 @@ class ByconResultSets:
                 if not "target_values" in h_o:
                     continue
                 h_o_size = sys.getsizeof(h_o["target_values"])        
-                dbm = f'Storage size for {ds_id}.{h_o_k}: {h_o_size / 1000}kb'
-                prdbug(dbm)
-                # TODO: warning/error for exclusion due to size (breaking the MongoDB storage...)
                 if h_o_size < 15000000:
-                    ho_coll.update_one( { "id": h_o["id"] }, { '$set': h_o }, upsert=True )
-        ho_client.close()
+                    self.ho_coll.update_one( { "id": h_o["id"] }, { '$set': h_o }, upsert=True )
+                else:
+                    BYC["ERRORS"].append('Storage size for {ds_id}.{h_o_k}: {h_o_size / 1000}kb ==>> not saved')
 
 
     # -------------------------------------------------------------------------#

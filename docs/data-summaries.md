@@ -42,6 +42,7 @@ term selection (==TBD==). Example:
 
 * Age groups labeled by sex for TCGA cancer individuals in Progenetix
     - <https://progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers&aggregationTerms=ageAtDiagnosisBySex>
+    - the same shown in a plot <https://beaconplus.progenetix.org/queryResultsDashboard/?datasetIds=progenetix&filters=pgx:cohort-TCGAcancers&aggregationTerms=ageAtDiagnosisBySex>
     
 
 ## Components

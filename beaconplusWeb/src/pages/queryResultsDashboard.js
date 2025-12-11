@@ -1,6 +1,5 @@
 import React from "react"
 import FilterResultStats from "./../components/FilterResultStats"
-import Panel from "../components/Panel"
 import {Layout} from "./../site-specific/Layout"
 import { withUrlQuery } from "../hooks/url-query"
 import { basePath, urlRetrieveIds } from "./../hooks/api"
@@ -26,15 +25,16 @@ dataset. Current modification options are through URL parameters for (with examp
 * ${"`filters=pgx:cohort-TCGAcancers`"} ... as example for a custom filter
 * ${"`aggregationTerms=ageAtDiagnosisBySex`"} ... for limited aggregations
 
-An example URL would be:
+Example URL would be:
 
-${"`"}${basePath}queryResultsDashboard/?datasetIds=progenetix&filters=pgx:cohort-TCGAcancers&aggregationTerms=ageAtDiagnosisBySex${"`"}
-
+* TCGA samples in Progenetix for age groups, split by sex
+    - ${"`"}${basePath}queryResultsDashboard/?datasetIds=progenetix&filters=pgx:cohort-TCGAcancers&aggregationTerms=ageAtDiagnosisBySex${"`"}
+* Brain cancers in Progenetix by some aggregation types (see the bimodal age distribution)...
+    - ${"`"}${basePath}queryResultsDashboard/?datasetIds=progenetix&filters=NCIT:C3268&aggregationTerms=ageAtDiagnosisBySex,diseaseBySex,followupTime${"`"}
 Please allow for some loading time.`
 
   return (
     <Layout title={title} headline={title} leadPanelMarkdown={leadText}>
-      <Panel>
         <FilterResultStats 
             dataset_id={datasetIds}
             ageSplits={ageSplits}
@@ -43,7 +43,6 @@ Please allow for some loading time.`
             aggregationTerms={aggregationTerms}
             filterUnknowns={true}
         />
-      </Panel>
     </Layout>
   )
 })
