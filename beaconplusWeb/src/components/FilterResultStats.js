@@ -22,6 +22,8 @@ export default function FilterResultStats({dataset_id, ageSplits, followupSplits
   }
   if (filters) {
     params.push(`filters=${filters}`)
+  } else {
+    params.push(`testMode=true&testModeCount=1000`)
   }
   if (params.length > 0) {
     summaryURL += `&${params.join("&")}`
