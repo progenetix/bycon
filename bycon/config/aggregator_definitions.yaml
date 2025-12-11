@@ -41,6 +41,24 @@ $defs:
           - NCIT:C3457 # B-Cell Non-Hodgkin Lymphoma
       - property: biosample.individual_info.sex.id
 
+  selectedCarinomaDiagnoses:
+    id: selectedCarinomaDiagnoses
+    label: Selected Diagnostic Classes (carcinomas; by NCIT)
+    description: >-
+      Count of histological diagnoses in matched biosamples for selected carcinomas
+    scope: biosample
+    concepts:
+      - property: biosample.histological_diagnosis.id
+        termIds:
+          - NCIT:C9384 # Kidney Carcinoma
+          - NCIT:C3513 # Esophageal Carcinoma
+          - NCIT:C35850 # Head and Neck Carcinoma
+          - NCIT:C4878 # Lung Carcinoma
+          - NCIT:C207229 # Pancreatic Carcinoma
+          - NCIT:C4911 # Gastric Carcinoma
+          - NCIT:C2955 # Colorectal Carcinoma
+          - NCIT:C7927 # Liver Carcinoma
+
   platformTechnologies:
     id: platformTechnologies
     label: Platform Technologies

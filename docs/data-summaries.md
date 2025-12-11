@@ -5,6 +5,7 @@
 !!! warning
 
     This is the work in progress for a general aggregation/summary documentation.
+    The most recent version is currently maintained at [bycon.progenetix.org/data-summaries/](https://bycon.progenetix.org/data-summaries/).
 
 Data summaries (also referred to as "aggregations") are summary statistics delivered
 beacons. They can reflect different aspects of the beacon's content, such as:
@@ -20,20 +21,28 @@ or the intersection of two properties (2-dimensional aggregations).
 
     * [Proposals for Aggregated Response](https://github.com/ga4gh-beacon/beacon-v2/discussions/238)
 
-## General Structure, Calling and Scope
-
-Aggregation responses or summary data are called by setting the `requestedGranularity`
-to `aggregated`. Example:
-
-* TCGA cancer samples in Progenetix
-    - <https://progenetix.org/beacon/biosamples/?filters=pgx:cohort-TCGAcancers&requestedGranularity=aggregated>
-
 #### Scope of the summary counts
 
 *TODO*: Do the counts have to be projected to the requested entity, or can they
 be reported on basis of pre-defined entities (e.g. can a request to `/individuals/`
 report the numbers for the matched sample histologies or the individuals with the
 matched histologies?.
+
+## General Structure and Calling
+
+Aggregation responses or summary data are called by setting the `requestedGranularity`
+to `aggregated`. Example:
+
+* TCGA cancer samples in Progenetix
+    - <https://progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers>
+    
+The aggregation types to be returned can be specified by using the additional
+request `aggregationTerms` parameter as well as optional parameters for binning or
+term selection (==TBD==). Example:
+
+* Age groups labeled by sex for TCGA cancer individuals in Progenetix
+    - <https://progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers&aggregationTerms=ageAtDiagnosisBySex>
+    
 
 ## Components
 
@@ -98,9 +107,9 @@ Each `concept` involved in an aggregation should be defined with:
         * `splits` also correspond nicely to database aggregation concepts such
           as `$buckets` and `$splits` in MongoDB
 
-#### Examples
+### Examples
 
-##### Simple aggregation
+#### Single property aggregation
 
 ```
 id: sampleOriginDetails
@@ -110,6 +119,8 @@ description: >-
 concepts:
   - property: biosample.sample_origin_detail.id
 ```
+
+#### Single property aggregation with `splits`
 
 The following example includes pre-defined age group splits which can be overridden by a request parameter (to be defined; probably best to have it in a POST object):
 
@@ -131,7 +142,28 @@ concepts:
       - P120Y
 ```
 
-##### 2-dimensional aggregation
+#### Single property aggregation with `termIds`
+
+```
+id: selectedCarinomaDiagnoses
+label: Selected Diagnostic Classes (carcinomas; by NCIT)
+description: >-
+  Count of histological diagnoses in matched biosamples for selected carcinomas
+scope: biosample
+concepts:
+  - property: biosample.histological_diagnosis.id
+    termIds:
+      - NCIT:C9384 # Kidney Carcinoma
+      - NCIT:C3513 # Esophageal Carcinoma
+      - NCIT:C35850 # Head and Neck Carcinoma
+      - NCIT:C4878 # Lung Carcinoma
+      - NCIT:C207229 # Pancreatic Carcinoma
+      - NCIT:C4911 # Gastric Carcinoma
+      - NCIT:C2955 # Colorectal Carcinoma
+      - NCIT:C7927 # Liver Carcinoma
+```
+
+#### 2-dimensional aggregation
 
 ```
 id: diseaseBySex
@@ -140,6 +172,6 @@ description:
   - ICD-O 3 histologies by sex in matched biosamples
 concepts:
   - property: individual.diseases.diseaseCode.id
-  - property: individual.ex.id
+  - property: individual.sex.id
 ```
 
