@@ -3,7 +3,7 @@ import FilterResultStats from "./../components/FilterResultStats"
 import Panel from "../components/Panel"
 import {Layout} from "./../site-specific/Layout"
 import { withUrlQuery } from "../hooks/url-query"
-import { urlRetrieveIds } from "./../hooks/api"
+import { basePath, urlRetrieveIds } from "./../hooks/api"
 
 // http://beaconplus.org/stats/?datasetIds=progenetix&ageSplits=P0D,P1Y,P2Y,P18Y,P21Y,P40Y
 
@@ -24,6 +24,11 @@ dataset. Current modification options are through URL parameters for (with examp
 * ${"`ageSplits=P0D,P1Y,P2Y,P18Y,P21Y,P40Y`"} ... as example for age binning
 * ${"`followupTime=P0D,P1D,P6M,P1Y,P5Y,P10Y`"} ... as example for followup binning
 * ${"`filters=pgx:cohort-TCGAcancers`"} ... as example for a custom filter
+* ${"`aggregationTerms=ageAtDiagnosisBySex`"} ... for limited aggregations
+
+An example URL would be:
+
+${"`"}${basePath}queryResultsDashboard/?datasetIds=progenetix&filters=pgx:cohort-TCGAcancers&aggregationTerms=ageAtDiagnosisBySex${"`"}
 
 Please allow for some loading time.`
 
