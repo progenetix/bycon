@@ -14,6 +14,7 @@ const QueryStatsPage = withUrlQuery(({ urlQuery }) => {
   var ageSplits = urlQuery["ageSplits"]
   var followupSplits = urlQuery["followupSplits"]
   var filters = urlQuery["filters"]
+  var aggregationTerms = urlQuery["aggregationTerms"]
 
   const title = `${datasetIds} Data Content Overview`
   const leadText = `This page shows some data statistics for the ${datasetIds}
@@ -34,6 +35,7 @@ Please allow for some loading time.`
             ageSplits={ageSplits}
             followupSplits={followupSplits}
             filters={filters}
+            aggregationTerms={aggregationTerms}
             filterUnknowns={true}
         />
       </Panel>

@@ -7,7 +7,7 @@ import {
 import { Loader } from "./Loader"
 import Panel from "./Panel"
 
-export default function FilterResultStats({dataset_id, ageSplits, followupSplits, filters, filterUnknowns}) {
+export default function FilterResultStats({dataset_id, ageSplits, followupSplits, filters, aggregationTerms, filterUnknowns}) {
   var summaryURL = `${basePath}beacon/biosamples?requestedGranularity=aggregated`
   var params = []
 
@@ -16,6 +16,9 @@ export default function FilterResultStats({dataset_id, ageSplits, followupSplits
   }
   if (followupSplits) {
     params.push(`followupSplits=${followupSplits}`)
+  }
+  if (aggregationTerms) {
+    params.push(`aggregationTerms=${aggregationTerms}`)
   }
   if (ageSplits) {
     params.push(`ageSplits=${ageSplits}`)
