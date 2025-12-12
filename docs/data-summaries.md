@@ -87,7 +87,7 @@ supported by a Beacon implementation. These definitions should include:
 * a `description` of what the aggregation represents, e.g. used for info tooltips
 * the `concepts` involved in the aggregation
     - usually one or 2 ("dimensions"); see below
-* additional `parameters` for modifying the aggregation behaviour or indicating
+* additional parameters for modifying the aggregation behaviour or indicating
   behavior
     - `sorted: true` can indicate to a client that a response has a predefined order
     
@@ -95,10 +95,11 @@ supported by a Beacon implementation. These definitions should include:
 
 Each `concept` involved in an aggregation should be defined with:
 
-* the `scope`, _i.e._ the respective entity in the data model
-* the `property`, _i.e._ property in the respective entity to be aggregated
-    - TODO: Defining it as "concept" (e.g. `diseases.diseaseCode`) or specific
-      field (`diseases.diseaseCode.id`)? The latter seems more stringent.
+* the scoped `property`, _i.e._ property in the respective entity to be aggregated
+    - TODO: In cases of object style properties (e.g. `id, label` ontology terms)
+      we currently define it as specific field (e.g. `individual.diseases.diseaseCode.id`)
+      instead of the logical concept (`individual.diseases.diseaseCode`). This might
+      be changed if necessary.
 * optional modifiers:
     - `termIds` for specifying specific terms to be included in the aggregation
     - `splits` for specifying how to split the aggregation (e.g. binning for
@@ -184,30 +185,16 @@ in principle the protocol is open for higher dimensional intersections.
 ??? note "3-dimensional summary example"
 
     ```
-        summaryResults:
-    - concepts:
+    id: cancerTypesBySexAndCountry
+    label: Cancer types (by sex and origin)
+    scope: biosample
+    concepts:
       - property: biosample.histological_diagnosis.id
       - property: biosample.individual_info.sex.id
       - property: biosample.geo_location.properties.ISO3166alpha3
-      description:
-      - Cancer type by sex in matched biosamples
-      distribution:
-      - conceptValues:
-        - id: NCIT:C132256
-          label: Unspecified Tissue
-        - id: NCIT:C20197
-          label: male
-        - id: USA
-          label: USA
-        count: 277
-      - conceptValues:
-        - id: NCIT:C132256
-          label: Unspecified Tissue
-        - id: NCIT:C16576
-          label: female
-        - id: USA
-          label: USA
-        count: 268
+    description:
+      - Cancer type by sex and country of origin in matched biosamples
+    distribution:
       - conceptValues:
         - id: NCIT:C4017
           label: Breast Ductal Carcinoma
@@ -225,69 +212,21 @@ in principle the protocol is open for higher dimensional intersections.
           label: USA
         count: 238
       - conceptValues:
-        - id: NCIT:C3512
-          label: Lung Adenocarcinoma
+        - id: NCIT:C4017
+          label: Breast Ductal Carcinoma
         - id: NCIT:C16576
           label: female
-        - id: USA
-          label: USA
-        count: 220
-      - conceptValues:
-        - id: NCIT:C9245
-          label: Invasive Breast Carcinoma
-        - id: NCIT:C16576
-          label: female
-        - id: USA
-          label: USA
-        count: 164
-      - conceptValues:
-        - id: NCIT:C132256
-          label: Unspecified Tissue
-        - id: NCIT:C17998
-          label: unknown
-        - id: USA
-          label: USA
-        count: 133
-      - conceptValues:
-        - id: NCIT:C2919
-          label: Prostate Adenocarcinoma
-        - id: NCIT:C20197
-          label: male
-        - id: '000'
-          label: '000'
-        count: 126
-      - conceptValues:
-        - id: NCIT:C6287
-          label: Endometrial Endometrioid Adenocarcinoma
-        - id: NCIT:C16576
-          label: female
-        - id: USA
-          label: USA
-        count: 112
-      - conceptValues:
-        - id: NCIT:C2926
-          label: Lung Non-Small Cell Carcinoma
-        - id: NCIT:C17998
-          label: unknown
-        - id: USA
-          label: USA
-        count: 103
-      - conceptValues:
-        - id: NCIT:C3512
-          label: Lung Adenocarcinoma
-        - id: NCIT:C20197
-          label: male
-        - id: USA
-          label: USA
-        count: 100
-      - conceptValues:
-        - id: NCIT:C4194
-          label: Invasive Breast Carcinoma of No Special Type
-        - id: NCIT:C16576
-          label: female
-        - id: USA
-          label: USA
-        count: 98
+        - id: DEU
+          label: DEU
+        count: 66
+      ...
     ```
     ... etc.
+
+
+## Client: Dashboard Generation
+
+One of the main use cases for aggregation responses is to generate data dashboards.
+These dashboards can provide visual summaries of the data content of the resource,
+either as static overviews or dynamically generated views based on user queries.
 

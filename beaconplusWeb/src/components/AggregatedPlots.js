@@ -182,7 +182,6 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
         legendData.push({"name": secondKeys[s]});
     })
 
-
     const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
     const containerRef = useCallback((node) => {
         if (node !== null) { setBoundingRect(node.getBoundingClientRect()); }
