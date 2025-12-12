@@ -59,9 +59,9 @@ $defs:
           - NCIT:C2955 # Colorectal Carcinoma
           - NCIT:C7927 # Liver Carcinoma
 
-  platformTechnologies:
-    id: platformTechnologies
-    label: Platform Technologies
+  selectedPlatformTechnologies:
+    id: selectedPlatformTechnologies
+    label: Selected Platform Technologies
     description: >-
       Count of basic platform technologies used in matched analyses
     scope: analysis
@@ -141,6 +141,7 @@ $defs:
     concepts:
       - property: biosample.histological_diagnosis.id
       - property: biosample.individual_info.sex.id
+      # - property: biosample.geo_location.properties.ISO3166alpha3
 
   sampleCountries:
     id: sampleCountries

@@ -6,10 +6,25 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-12-12 (v2.6.9)
+
+The recent changes addressed several issues with the aggregation implementation
+including some further dashboard work:
+
+* now `ByconSummaries` class
+    - dimension agnostic, i.e. supports 1D, 2D, ... nD aggregations through the
+      same methods
+    - TODO: So far cross-entity aggregations are supported through some workarounds;
+      e.g. some information stored in `individual` (sex, age, followup...) is
+      repeated in the biosamples' `individual_info` property to allow biosample
+      aggregations on individual properties. A more generic solution would be
+      desirable, e.g. utilizing MongoDB's `$lookup`.
+* added (expanding ...) [doumentation page](/data-summaries/) about the Beacon Aggregation development
+
 ### 2025-11-28 (v2.6.8 "Aggregator")
 
 * extending aggregation responses to support 2-dimensional aggregations
-    - implemented in `ByconAggregations` class
+    - implemented in `ByconSummaries` class
     - now also supports `plot_type: "stackedBar"` for the dashboard
 
 ### 2025-11-18 (v2.6.7 "DashboardDabbler")
@@ -18,7 +33,7 @@ milestones.
   draft version of a Beacon v2.n aggregation response
     - simple Victory based bar plots defined in `beaconplusWeb/src/components/AggregatedPlots.js`
     - only one-dimensional so far; 2-dimensional for stacked plots coming up
-* ... based on the `ByconAggregations` class to handle aggregation definitions
+* ... based on the `ByconSummaries` class to handle aggregation definitions
       and processing
     - added `aggregation_definitions.yaml` file for defining available aggregations
       and their parameters
@@ -40,7 +55,7 @@ milestones.
     },
     sex: { id: 'NCIT:C16576', label: 'female' }
 ```
-  
+
 
 ### 2025-11-04 (v2.6.6 "GlobeProjector")
 

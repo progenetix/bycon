@@ -16,6 +16,7 @@ try:
     from beacon_auth import *
     from beacon_responses import *
     from bycon_helpers import *
+    from bycon_summaries import *
     from bycon_info import *
     from genome_utils import *
     from interval_utils import *

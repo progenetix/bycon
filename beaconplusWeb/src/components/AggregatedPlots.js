@@ -22,7 +22,7 @@ var col_no = 30
 export function AggregatedPlots({ summaryResults, filterUnknowns }) {
     return (
         <>
-        {summaryResults ? (
+        {summaryResults ? 
             summaryResults.map((r) => (
                 <>
                 {r["concepts"].length > 0 && (
@@ -30,7 +30,6 @@ export function AggregatedPlots({ summaryResults, filterUnknowns }) {
                 )
                 }
                 </>
-                )
             )
         ) : (
             ""
