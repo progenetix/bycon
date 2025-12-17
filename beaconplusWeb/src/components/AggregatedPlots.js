@@ -12,7 +12,10 @@ import {
     VictoryTooltip,
     // VictoryZoomContainer
 } from 'victory';
-
+// import Plot from 'react-plotly.js';
+import dynamic from "next/dynamic";
+const Plot = dynamic(() => import("react-plotly.js"), { ssr: false, })
+// import {PlotParams} from 'react-plotly.js';
 //----------------------------------------------------------------------------//
 
 var col_no = 30
@@ -49,8 +52,8 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
     filterOthers = true
 
     agg["distribution"].forEach(function (v) {
-        console.log(Object.keys(v))
-        console.log(v["conceptValues"])
+        // console.log(Object.keys(v))
+        // console.log(v["conceptValues"])
         let cvs = v["conceptValues"];
         let c = v["count"]
         if (cvs.length == 0) {
@@ -191,15 +194,15 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
 
     return (
         <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
-{/*            {dist.length <= 5 ? (
-                <SimplePieChart
-                    bar_data={barData} col_no={dist.length} outer_w={outer_w} title={agg_l}
+           {dist.length <= 5 ? (
+                <SimplePlotlyPie
+                    bar_data={barData} outer_w={outer_w} title={agg_l}
                 />
             ) : (
-*/}                <StackedBarChart
+                <StackedBarChart
                     barData={barData} legendData={legendData} col_no={dist.length} outer_w={outer_w} max_y={max_y} title={agg_l}
                 />
-            {/*)}*/}
+            )}
         </div>
     );
 
@@ -227,7 +230,32 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
 //     )
 // }
 
+//----------------------------------------------------------------------------//
+//----------------------------------------------------------------------------//
+//----------------------------------------------------------------------------//
 
+
+function SimplePlotlyPie({ bar_data, outer_w, title}) { //, title
+
+    console.log(title)
+    console.log(bar_data[0])
+    console.log(bar_data[1])
+
+    let collabels = bar_data[0].map(item => item.collabel);
+    let counts = bar_data[0].map(item => item.count);
+
+    return (
+      <Plot
+        data={[
+          {type: 'bar', x: collabels, y: counts},
+        ]}
+        layout={ {width: outer_w, height: 240, title: {text: title}} }
+      />
+    );
+}
+
+//----------------------------------------------------------------------------//
+//----------------------------------------------------------------------------//
 //----------------------------------------------------------------------------//
 
 function StackedBarChart({ barData, legendData, col_no, outer_w, max_y, title}) {
