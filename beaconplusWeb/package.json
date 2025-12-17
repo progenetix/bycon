@@ -36,7 +36,11 @@
     "materialize-css": "^1.0.0-rc.2",
     "next": "^12.3.4",
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     "plotly": "^1.0.6",
+=======
+    "plotly.js": "^3.3.1",
+>>>>>>> Stashed changes
 =======
     "plotly.js": "^3.3.1",
 >>>>>>> Stashed changes
