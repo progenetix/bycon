@@ -1,18 +1,4 @@
 import React, { useState, useCallback } from "react";
-import {
-    VictoryChart,
-    // VictoryContainer,
-    VictoryLabel,
-    VictoryAxis,
-    VictoryBar,
-    VictoryLegend,
-    // VictoryPie,
-    VictoryStack,
-    VictoryTheme,
-    VictoryTooltip,
-    // VictoryZoomContainer
-} from 'victory';
-// import Plot from 'react-plotly.js';
 import dynamic from "next/dynamic";
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false, })
 // import {PlotParams} from 'react-plotly.js';
@@ -60,25 +46,23 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
             cvs = [{"id": "undefined", "label": "undefined"}];
         }
         let k1 = cvs[0]["id"];
-        let l1 = cvs[0]["label"];
+        let l1 = cvs[0]["label"] ? cvs[0]["label"] : k1;
         var k2 = "undefined";
         let l2 = "undefined";
-        var lab = l1
         if (cvs.length > 1) {
             k2 = cvs[1]["id"];
             l2 = k2
             if (cvs[1]["label"]) {
                 l2 = cvs[1]["label"];
             }
-            lab = `${l1} & ${l2}`
         }
         if (! (k1 in keyedFirst) ) {
-            keyedFirst[k1] = {"sum": 0};
+            keyedFirst[k1] = {"sum": 0, "label": l1};
         }
         if (! secondKeys[k2]) {
             secondKeys[k2] = l2;
         }
-        keyedFirst[k1][k2] = {"count": c, "label": lab};
+        keyedFirst[k1][k2] = {"key": k2, "count": c, "label": l2};
         keyedFirst[k1]["sum"] += c;
     });
 
@@ -117,7 +101,7 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
     var dist = [];
     var other_count = 0
     var others = {
-        "other": {"sum": 0}
+        "other": {sum: 0, label: "other"}
     }
     Object.keys(secondKeys).forEach(function (s) {
         others["other"][s] = { "count": 0, "label": secondKeys[s] }
@@ -138,7 +122,6 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
                 if (seconds[s]) {
                     others["other"][s]["count"] += seconds[s]["count"];
                     others["other"]["sum"] += seconds[s]["count"];
-                    others["other"][s]["label"] = `other & ${secondKeys[s]}`;
                 }
             }
         }
@@ -162,28 +145,24 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
         max_y = other_count * 0.9
     }
 
-    var barData = [];
 
+    var tracesData = [];
     Object.keys(secondKeys).sort().forEach(function (s) {
-        var thisBar = [];
+        var thisTrace = {type: "bar", name: secondKeys[s], key: s, x: [], y: [], hovertext: []};
         for (const [first, seconds] of dist) {
-            var barField = { "collabel": first, "count": 0, "label": "" };
             if (seconds[s]) {
-                barField["count"] = seconds[s]["count"];
-                barField["label"] = `${seconds[s]["label"]}: ${seconds[s]["count"]}`;
-                if (agg["concepts"].length > 1) {
-                    barField["label"] += ` of ${seconds["sum"]}`;
+                thisTrace.y.push(seconds[s]["count"]);
+                thisTrace.x.push(first);
+                if (dist.length > 1) {
+                    let lab = `${seconds[s]["label"]}: ${seconds[s]["count"]}`;
+                    lab += ` of ${seconds["sum"]}`;
+                    thisTrace.hovertext.push(lab);
                 }
             }
-            thisBar.push(barField)
         }
-        barData.push(thisBar);
+        tracesData.push(thisTrace);
     })
 
-    var legendData = [];
-    Object.keys(secondKeys).sort().forEach(function (s) {
-        legendData.push({"name": secondKeys[s]});
-    })
 
     const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
     const containerRef = useCallback((node) => {
@@ -193,146 +172,59 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
     var outer_w = boundingRect.width
 
     return (
-        <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
-           {dist.length <= 5 ? (
-                <SimplePlotlyPie
-                    bar_data={barData} outer_w={outer_w} title={agg_l}
-                />
+        <>
+            {dist.length > 0 ? (
+                <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
+                   <>
+                   {/*The following has to be defined - avoiding here the incomplete pie definitions */}
+                   {dist.length <= 8 && tracesData.length == 1 ? (
+                        <SimplePlotlyPie
+                            tracesData={tracesData} outer_w={outer_w} title={agg_l}
+                        />
+                    ) : (
+                        <StackedPlotlyBar
+                            tracesData={tracesData} outer_w={outer_w} title={agg_l}
+                        />
+                    )}
+                   </>
+                </div>
             ) : (
-                <StackedBarChart
-                    barData={barData} legendData={legendData} col_no={dist.length} outer_w={outer_w} max_y={max_y} title={agg_l}
-                />
-            )}
-        </div>
+                <></>
+            )
+            }
+        </>
     );
 
 }
 
 //----------------------------------------------------------------------------//
-
-// function SimplePieChart({ bar_data, outer_w}) { //, title
-
-//     return(
-
-//                 <VictoryPie
-//                     theme={VictoryTheme.material}
-//                     radius={outer_w * 0.05}
-//                     height={outer_w * 0.2}
-//                     width={outer_w * 0.2}
-//                     style={{ labels: { fontSize: 6} }}
-//                     // width={10}
-//                     // innerRadius={30}
-//                     // outerRadius={40}
-//                     data={bar_data[0]}
-//                     x="collabel"         
-//                     y="count"
-//                 />
-//     )
-// }
-
-//----------------------------------------------------------------------------//
 //----------------------------------------------------------------------------//
 //----------------------------------------------------------------------------//
 
 
-function SimplePlotlyPie({ bar_data, outer_w, title}) { //, title
-
-    console.log(title)
-    console.log(bar_data[0])
-    console.log(bar_data[1])
-
-    let collabels = bar_data[0].map(item => item.collabel);
-    let counts = bar_data[0].map(item => item.count);
-
+function SimplePlotlyPie({ tracesData, outer_w, title}) { //, title
+    let pieData = {
+        type: "pie",
+        hole: .4,
+        values: tracesData[0]["y"],
+        labels: tracesData[0]["x"],
+    }
     return (
       <Plot
-        data={[
-          {type: 'bar', x: collabels, y: counts},
-        ]}
-        layout={ {width: outer_w, height: 240, title: {text: title}} }
+        data={[pieData]}
+        layout={ {width: outer_w, height: 400, title: {text: title}} }
       />
     );
 }
 
 //----------------------------------------------------------------------------//
-//----------------------------------------------------------------------------//
-//----------------------------------------------------------------------------//
 
-function StackedBarChart({ barData, legendData, col_no, outer_w, max_y, title}) {
-
-    const padd_l = 70
-    const padd_r = 30
-    const padd_t = 30
-    const padd_b = 120
-    const plot_h = 250
-
-    // const padd = outer_w / col_no
-
-    return(
-        <VictoryChart
-            domain={{ x: [0.5, col_no + 0.5], y: [0, max_y * 1.1] }}
-            height={plot_h}
-            width={outer_w}
-            theme={VictoryTheme.material}
-            padding={{left: padd_l, top: padd_t, right: padd_r, bottom: padd_b}}
-          >
-            <VictoryLabel         
-                text={title}         
-                textAnchor="middle"
-                x={outer_w * 0.5}        
-                y={padd_t - 15}
-            />
-            <VictoryAxis
-                dependentAxis 
-                style={{
-                  axis: {
-                    stroke: "transparent",
-                  },
-                  tickLabels: {
-                    fontSize: 8,
-                  },
-                  grid: {
-                    stroke: "#d9d9d9",
-                    size: 5,
-                  },
-                }}
-            />
-            <VictoryStack
-                colorScale={"qualitative"}
-            >
-                {barData.map((data, i) => (
-                    <VictoryBar
-                        key={i}
-                        data={data}
-                        x="collabel"         
-                        y="count"
-                        labelComponent={<VictoryTooltip  />}
-                    />
-                ))}
-            </VictoryStack>
-            <VictoryAxis
-                crossAxis 
-                style={{
-                    tickLabels: {
-                        angle: -60,
-                        textAnchor: "end"
-                    },
-                    grid: {
-                        stroke: "transparent",
-                    }
-                }}
-            />
-            {legendData.length > 1 && (
-            <VictoryLegend
-                dependentAxis 
-                colorScale={"qualitative"}
-                x={outer_w * 0.75}
-                y={18}
-                orientation="horizontal"
-                rowGutter={{ top: 0, bottom: -5 }}
-                itemsPerRow={2}
-                data={legendData}
-            />)}
-        </VictoryChart>
-    )
+function StackedPlotlyBar({ tracesData, outer_w, title}) { //, title
+    return (
+      <Plot
+        data={tracesData}
+        layout={ {barmode: 'stack', width: outer_w, height: 240, title: {text: title}} }
+      />
+    );
 }
+

@@ -47,7 +47,7 @@ class ByconVariant:
         self.header_cols = self.datatable_mappings.get("ordered_pgxseg_columns", [])
         self.variant_mappings = self.datatable_mappings["$defs"].get("genomicVariant", {}).get("parameters", {})
 
-        seqrepo_rest_service_url = 'seqrepo+file:///Users/Shared/seqrepo/2024-12-20'
+        seqrepo_rest_service_url = 'seqrepo+file:///Users/Shared/seqrepo/latest'
         self.seqrepo_dataproxy = create_dataproxy(uri=seqrepo_rest_service_url)
         self.vrs_allele_translator = AlleleTranslator(data_proxy=self.seqrepo_dataproxy)
         self.vrs_cnv_translator = CnvTranslator(data_proxy=self.seqrepo_dataproxy, identify=False)
