@@ -2,9 +2,9 @@
 pgx:sex	annotated sex	0	1
 pgx:sex-male	male	1	2
 PATO:0020002	male genotypic sex	2	3
-NCIT:C20197	male	3	4
+NCIT:C20197	male	2	4
 pgx:sex-female	female	1	5
 PATO:0020001	female genotypic sex	2	6
-NCIT:C16576	female	3	7
+NCIT:C16576	female	2	7
 pgx:sex-unknown	unknown sex	1	8
-NCIT:C17998	unknown	2	9
+NCIT:C17998	unknown sex	2	9

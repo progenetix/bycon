@@ -6,10 +6,18 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### ...
+
+* de-nested the `classificationTrees` into single tupe specific files
+  and moved the additional sources for their generation outside of the project
+    - also renamed some files/filter types (e.g. `NCIT` ==> `NCITneoplasm`, `NCITsex` ==> `pgxSex`)
+* in `beaconplusWeb` changes to `AggregationPlots`
+    - moved from `Victory` to `Plotly`; this requires `npm install react-plotly.js plotly.js`
+
 ### 2025-12-12 (v2.6.9)
 
 The recent changes addressed several issues with the aggregation implementation
-including some further dashboard work:
+
 
 * now `ByconSummaries` class
     - dimension agnostic, i.e. supports 1D, 2D, ... nD aggregations through the
@@ -275,7 +283,7 @@ chr3:
 
 ### 2025-05-15: (v2.4.3 "Bologna")
 
-* expanded `NCITsex` ontology to have hierarchical terms with the current NCIT
+* expanded `pgxSex` ontology to have hierarchical terms with the current NCIT
   terms at the tip of the branches
     - e.g. `pgx:sex` => `pgx:sex-female` => `PATO:0020001` => `NCIT:C16576`
     - allows for query expansion & use of alternate terms (e.g. PATO)

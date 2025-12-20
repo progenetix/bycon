@@ -338,7 +338,7 @@ def _phenopack_resources():
     # TODO: make this general, at least for phenopacket response, and only scan used prefixes
     f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
     # rkeys = ["NCITgrade", "NCITstage", "NCITtnm", "NCIT", "PATOsex", "EFOfus" ]
-    rkeys = ["NCIT", "NCITsex", "EFOfus", "UBERON"]
+    rkeys = ["NCIT", "pgxSex", "EFOfus", "UBERON"]
     pxf_rs = []
     for r_k in rkeys:
         if not (d := f_d_s.get(r_k)):

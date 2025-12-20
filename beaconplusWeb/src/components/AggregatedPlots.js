@@ -32,10 +32,10 @@ export function AggregatedPlots({ summaryResults, filterUnknowns }) {
 function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
 
     var keyedFirst = {}
-    var secondKeys = {}
+    var secondKeys = {} // second dimension `id: label`, e.g. for traces
     var agg_l = agg["label"]
 
-    filterOthers = true
+    filterOthers = false //true
 
     agg["distribution"].forEach(function (v) {
         // console.log(Object.keys(v))
@@ -57,12 +57,12 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
             }
         }
         if (! (k1 in keyedFirst) ) {
-            keyedFirst[k1] = {"sum": 0, "label": l1};
+            keyedFirst[k1] = {id: k1, label: l1, sum: 0, items: {}};
         }
         if (! secondKeys[k2]) {
             secondKeys[k2] = l2;
         }
-        keyedFirst[k1][k2] = {"key": k2, "count": c, "label": l2};
+        keyedFirst[k1]["items"][k2] = {"key": k2, "count": c, "label": l2};
         keyedFirst[k1]["sum"] += c;
     });
 
@@ -92,27 +92,31 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
 
     // Create items array
     var sortedEntries = Object.keys(keyedFirst).map(function(key) {
-      return [key, keyedFirst[key]];
+      return keyedFirst[key];
     });
 
-    // Sort the array based on the second element
-    sortedEntries = agg["sorted"] ? sortedEntries : sortedEntries.sort((a, b) => a[1].sum < b[1].sum ? 1 : -1)
+    console.log(sortedEntries)
+
+    // Sort the array based on the "sum" key in the second element
+    sortedEntries = agg["sorted"] ? sortedEntries : sortedEntries.sort((a, b) => a.sum < b.sum ? 1 : -1)
 
     var dist = [];
     var other_count = 0
     var others = {
-        "other": {sum: 0, label: "other"}
+        "other": {sum: 0, label: "other", items: {}}
     }
     Object.keys(secondKeys).forEach(function (s) {
-        others["other"][s] = { "count": 0, "label": secondKeys[s] }
+        console.log(s)
+        others["other"]["items"][s] = { "count": 0, "label": secondKeys[s] }
     })
 
     var i = 0
     var max_y = 0
-    for (const [first, seconds] of sortedEntries) {
+    for (const seconds of sortedEntries) {
+        console.log(seconds)
         i += 1
         if (i <= col_no) {
-            dist.push([first, seconds])
+            dist.push(seconds)
             if (seconds["sum"] > max_y) {
                 max_y = seconds["sum"]
             }
@@ -120,8 +124,8 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
             other_count += seconds["sum"]
             for (const s of Object.keys(secondKeys)) {
                 if (seconds[s]) {
-                    others["other"][s]["count"] += seconds[s]["count"];
-                    others["other"]["sum"] += seconds[s]["count"];
+                    others["other"]["items"][s]["count"] += seconds["items"][s]["count"];
+                    others["other"]["sum"] += seconds["items"][s]["count"];
                 }
             }
         }
@@ -132,7 +136,7 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
             removed_count += other_count
             other_count = 0
         } else {
-            dist.push(["other", others["other"]])
+            dist.push(others["other"])
             console.log("Adding other...")
         }
     }
@@ -145,16 +149,17 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
         max_y = other_count * 0.9
     }
 
-
     var tracesData = [];
     Object.keys(secondKeys).sort().forEach(function (s) {
+        console.log(s)
         var thisTrace = {type: "bar", name: secondKeys[s], key: s, x: [], y: [], hovertext: []};
-        for (const [first, seconds] of dist) {
-            if (seconds[s]) {
-                thisTrace.y.push(seconds[s]["count"]);
-                thisTrace.x.push(first);
+        for (const seconds of dist) {
+            console.log(seconds)
+            if (seconds["items"][s]) {
+                thisTrace.y.push(seconds["items"][s]["count"]);
+                thisTrace.x.push(seconds["id"]);
                 if (dist.length > 1) {
-                    let lab = `${seconds[s]["label"]}: ${seconds[s]["count"]}`;
+                    let lab = `${seconds["items"][s]["label"]}: ${seconds["items"][s]["count"]}`;
                     lab += ` of ${seconds["sum"]}`;
                     thisTrace.hovertext.push(lab);
                 }
@@ -223,7 +228,17 @@ function StackedPlotlyBar({ tracesData, outer_w, title}) { //, title
     return (
       <Plot
         data={tracesData}
-        layout={ {barmode: 'stack', width: outer_w, height: 240, title: {text: title}} }
+        layout={
+            {
+                barmode: 'stack',
+                width: outer_w,
+                height: 240,
+                title: {text: title},
+                yaxis2: {
+                    side: 'right'
+                }
+            }
+        }
       />
     );
 }

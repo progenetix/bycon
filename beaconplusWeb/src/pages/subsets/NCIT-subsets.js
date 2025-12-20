@@ -20,7 +20,7 @@ export default function Page() {
           response.
         </p>
       </div>
-      <SubsetsHierarchyLoader collationTypes="NCIT" datasetIds={DATASETDEFAULT}/>
+      <SubsetsHierarchyLoader collationTypes="NCITneoplasm" datasetIds={DATASETDEFAULT}/>
     </Layout>
   )
 }
