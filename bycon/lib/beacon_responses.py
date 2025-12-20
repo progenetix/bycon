@@ -12,7 +12,7 @@ from bycon_summaries import ByconSummaries
 from parameter_parsing import ByconFilters, ByconParameters
 from query_execution import ByconDatasetResults # execute_bycon_queries
 from query_generation import ByconQuery, CollationQuery
-from response_remapping import *
+from response_remapping import reshape_resultset_results
 from schema_parsing import ByconSchemas, RecordsHierarchy
 
 ################################################################################
@@ -182,8 +182,6 @@ class BeaconInfoResponse:
 
     def __populateInfoResponse(self):
         if "configuration" in self.response_entity_id:
-            # c_f = ByconSchemas("beaconConfiguration").get_schema_file_path()
-            # self.info_response_content = load_yaml_empty_fallback(c_f)
             self.info_response_content = BYC.get("beacon_configuration", {})
             betks = []
             for e_t, e_d in self.entity_defaults.items():
@@ -204,12 +202,10 @@ class BeaconInfoResponse:
             self.info_response_content = {"entry_types": e_t_s["entryTypes"] }
             return
         if "info" in self.response_entity_id:
-            info = self.entity_defaults.get("info", {})
-            pgx_info = info.get("content", {})
+            pgx_info = self.entity_defaults.get("info", {}).get("content", {})
             beacon_info = ByconSchemas("beaconInfoResults", "").get_schema_instance()
-            for k in beacon_info.keys():
-                if k in pgx_info:
-                    beacon_info.update({k:pgx_info[k]})
+            for k in beacon_info.keys() & pgx_info.keys():
+                beacon_info.update({k:pgx_info[k]})
             self.info_response_content = beacon_info
             return
 

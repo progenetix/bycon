@@ -837,6 +837,7 @@ class ByconQuery():
 
         f_info = coll_coll.find_one({"id": f_val}, {"frequencymap": 0})
         f_ct = f_info.get("collation_type", "___none__")
+
         if not (f_d := f_d_s.get(f_ct)):
             return False
 

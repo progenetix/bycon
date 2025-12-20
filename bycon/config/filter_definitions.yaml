@@ -206,7 +206,7 @@ $defs:
       - NCIT:C48786
 
   # Bio-Metadata
-  NCIT:
+  NCITneoplasm:
     id: ncit/neoplasm-core.owl
     type: ontologyTerm
     iri_prefix: http://purl.obolibrary.org/obo/NCIT_

@@ -108,7 +108,7 @@ prefixed filter values, comma concatenated; or objects in POST
 **in:** query    
 **beacon_query:** True    
 **vqs_query:** True    
-**examples:** `{'emptyValue': {'value': '', 'summary': 'A Beacon filter value, e.g. a CURIE for a disease code'}},{'NCIT': {'value': ['NCIT:C9335'], 'summary': 'A neoplasia disease code (CURIE format)'}},{'pubmed': {'value': ['pubmed:28966033'], 'summary': 'A publiction identifier (CURIE format)'}}`    
+**examples:** `{'emptyValue': {'value': '', 'summary': 'A Beacon filter value, e.g. a CURIE for a disease code'}},{'NCITneoplasm': {'value': ['NCIT:C9335'], 'summary': 'A neoplasia disease code (CURIE format)'}},{'pubmed': {'value': ['pubmed:28966033'], 'summary': 'A publiction identifier (CURIE format)'}}`    
 
 #### `filter_precision` 
 **type:** string    

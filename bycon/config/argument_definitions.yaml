@@ -159,7 +159,7 @@ $defs:
       - emptyValue:
           value: ""
           summary: A Beacon filter value, e.g. a CURIE for a disease code
-      - NCIT:
+      - NCITneoplasm:
           value:
             - NCIT:C9335
           summary: A neoplasia disease code (CURIE format)

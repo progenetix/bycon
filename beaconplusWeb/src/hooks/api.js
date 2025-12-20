@@ -420,6 +420,9 @@ export function useSubsethistogram({
 
 
 export function useCollationsById({ datasetIds }) {
+  if (! datasetIds) {
+    datasetIds = DATASETDEFAULT
+  }
   const { data, ...other } = useFiltersByType({
     collationTypes: "",
     datasetIds
@@ -441,12 +444,18 @@ export function useCollationsById({ datasetIds }) {
 
 export function useFiltersByType({ datasetIds, collationTypes }) {
   // TODO: construct URL w/o optional parameters if empty
+  if (! datasetIds) {
+    datasetIds = DATASETDEFAULT
+  }
   const url = `${basePath}beacon/datasets/${datasetIds}/filtering_terms/?collationTypes=${collationTypes}`
   return useProgenetixApi(url)
 }
 
 // general site listings for collations etc. are bound to the default dataset
 export function useFilterTreesByType({ datasetIds, collationTypes }) {
+  if (! datasetIds) {
+    datasetIds = DATASETDEFAULT
+  }
   const url = `${basePath}beacon/datasets/${datasetIds}/filtering_terms?collationTypes=${collationTypes}&mode=termTree`
   return useProgenetixApi(url)
 }
