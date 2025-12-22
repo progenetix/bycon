@@ -7,6 +7,7 @@ endpointSets:
     rootUrl: ___BEACON_ROOT___/beacon/datasets
     singleEntryUrl: ___BEACON_ROOT___/beacon/datasets/{id}
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
+    aggregationTermsUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     endpoints:
       genomicVariantLookup:
         returnedEntryType: genomicVariant

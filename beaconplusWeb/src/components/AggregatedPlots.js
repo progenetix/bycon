@@ -4,7 +4,7 @@ const Plot = dynamic(() => import("react-plotly.js"), { ssr: false, })
 // import {PlotParams} from 'react-plotly.js';
 //----------------------------------------------------------------------------//
 
-var col_no = 30
+var col_no = 20
 
 //----------------------------------------------------------------------------//
 
@@ -34,6 +34,7 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
     var keyedFirst = {}
     var secondKeys = {} // second dimension `id: label`, e.g. for traces
     var agg_l = agg["label"]
+    var presorted = agg["sorted"] ? true : false
 
     filterOthers = false //true
 
@@ -95,10 +96,8 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
       return keyedFirst[key];
     });
 
-    console.log(sortedEntries)
-
     // Sort the array based on the "sum" key in the second element
-    sortedEntries = agg["sorted"] ? sortedEntries : sortedEntries.sort((a, b) => a.sum < b.sum ? 1 : -1)
+    sortedEntries = presorted ? sortedEntries : sortedEntries.sort((a, b) => a.sum < b.sum ? 1 : -1)
 
     var dist = [];
     var other_count = 0
@@ -113,7 +112,7 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
     var i = 0
     var max_y = 0
     for (const seconds of sortedEntries) {
-        console.log(seconds)
+        // console.log(seconds)
         i += 1
         if (i <= col_no) {
             dist.push(seconds)
@@ -151,7 +150,7 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
 
     var tracesData = [];
     Object.keys(secondKeys).sort().forEach(function (s) {
-        console.log(s)
+        // console.log(s)
         var thisTrace = {type: "bar", name: secondKeys[s], key: s, x: [], y: [], hovertext: []};
         for (const seconds of dist) {
             console.log(seconds)
@@ -182,7 +181,7 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
                 <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
                    <>
                    {/*The following has to be defined - avoiding here the incomplete pie definitions */}
-                   {dist.length <= 8 && tracesData.length == 1 ? (
+                   {dist.length <= 8 && tracesData.length < 2 && !presorted ? (
                         <SimplePlotlyPie
                             tracesData={tracesData} outer_w={outer_w} title={agg_l}
                         />
@@ -201,6 +200,8 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
     );
 
 }
+
+ // 
 
 //----------------------------------------------------------------------------//
 //----------------------------------------------------------------------------//

@@ -254,6 +254,23 @@ entryTypes:
 
 ################################################################################
 
+  aggregationTerm:
+    id: aggregationTerm
+    description: >-
+      Information about the summary terms available in the beacon instance.
+    response_schema: beaconFilteringTermsResponse
+    defaultSchema:
+      id: aggregationTerm
+      referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/aggregationTermsSchema/
+    path_id_value_bycon_parameter: aggregationTerms
+    tests:
+      - description: default test mode
+        test_values:
+          testMode: true
+
+
+################################################################################
+
   info:
     id: info
     description: >-

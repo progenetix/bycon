@@ -211,7 +211,7 @@ def main():
             continue
         for bios in bios_coll.find({"individual_id":ind["id"], "biosample_status.id":{"$ne":'EFO:0009654'}}):
             update_obj = {"individual_info": ind_info}
-            if "P" in (coll_iso := bios.get("collection_moment", "")) and not "age_days" in ind_info.keys():
+            if "P" in (coll_iso := bios.get("collection_moment", "")):
                 age_days = days_from_iso8601duration(coll_iso)
                 if age_days is not False:
                     update_obj.update({"collection_moment_days": age_days})

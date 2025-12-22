@@ -104,7 +104,22 @@ $defs:
     scope: biosample
     concepts:
       - property: biosample.icdo_morphology.id
-      - property: biosample.observation_moment.age
+      - property: biosample.collection_moment
+        format: iso8601duration
+        splits:
+          - P0D
+          - P18Y
+          - P65Y
+          - P120Y
+
+  sampleByAgeAtCollection:
+    id: sampleICDO3histologyByAge
+    label: Age Groups
+    description: >-
+      Age at diagnosis (sample collection...)
+    scope: biosample
+    concepts:
+      - property: biosample.collection_moment
         format: iso8601duration
         splits:
           - P0D

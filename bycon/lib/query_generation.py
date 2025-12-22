@@ -707,8 +707,6 @@ class ByconQuery():
                 v_q.update( { v_p_defs[p]["db_key"]: { '$regex': qv } } )
             else:
                 v_q.update( { v_p_defs[p]["db_key"]: qv } )
-            
-        # v_q = { "$and": v_q_l }
 
         return v_q
 
@@ -740,34 +738,39 @@ class ByconQuery():
         if len(self.filters) < 1:
             return
 
-        logic = self.__boolean_to_mongo_logic(BYC_PARS.get("filter_logic"))
-
-        data_db = MongoClient(host=BYC_DBS["mongodb_host"])[self.ds_id]
         if not (ft_collname := BYC_DBS.get("filteringTerm_coll")):
+            BYC["ERRORS"].append("No filtering term collection `filteringTerm_coll` defined!")
             return
-        coll_coll = data_db[ft_collname]
-        self.collation_ids = coll_coll.distinct("id", {})
+        self.filter_collection = MongoClient(host=BYC_DBS["mongodb_host"])[self.ds_id][ft_collname]
 
+        entity_filters_lists = self.__assemble_filter_lists()
+
+        for f_entity, field_queries in entity_filters_lists.items():
+            f_s_l = []
+            for f_field, f_query_vals in field_queries.items():
+                if len(f_query_vals) == 1:
+                    f_s_l.append({f_field: f_query_vals[0]})
+                else:
+                    for f_q_v in f_query_vals:
+                        f_s_l.append({f_field: f_q_v})
+
+            self.__update_queries_for_entity(f_s_l, f_entity)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __assemble_filter_lists(self):
         f_lists = {}
-        f_infos = {}
 
-        for i, f in enumerate(self.filters):
+        for f in self.filters:
+
             f = self.__substitute_filter_id(f)
-            f_val = f.get("id")
-            prdbug(f_val)
-            f_neg = f.get("excluded", False)
-            if re.compile(r'^!').match(f_val):
-                f_neg = True
-                f_val = re.sub(r'^!', '', f_val)
-            f_val = re.sub(r'^!', '', f_val)
+            f_val, f_neg = self.__get_filter_value_and_negation(f)
             f_desc = f.get("includeDescendantTerms", BYC_PARS.get("include_descendant_terms"))
-
-            f_info = self.__query_from_collationed_filter(coll_coll, f_val)
+            if (f_info := self.__filter_info_from_collationed_filter(f_val)) is False:
+                f_info = self.__filter_info_from_filter_definitions(f_val)
             if f_info is False:
-                f_info = self.__query_from_filter_definitions(f_val)
-
-            prdbug(f'... f_info: {f_info}')
-            if f_info is False:
+                BYC["WARNINGS"].append(f"No filter query could be created for value {f_val}!!!")
                 continue
 
             if f_neg is True:
@@ -776,17 +779,15 @@ class ByconQuery():
             f_entity = f_info.get("entity")
             if f_entity not in f_lists.keys():
                 f_lists.update({f_entity: {}})
-            if f_entity not in f_infos.keys():
-                f_infos.update({f_entity: {}})
 
             f_field = f_info.get("db_key", "id")
             if f_field not in f_lists[f_entity].keys():
                 f_lists[f_entity].update({f_field: []})
-            if f_field not in f_infos[f_entity].keys():
-                f_infos[f_entity].update({f_field: f_info})
 
             # TODO: needs a general solution for alphanumerics; so far for the
-            # iso age w/ pre-calculated days field...
+            # iso age and followup_time w/ pre-calculated days field...
+            # TODO: The whole negation is a bit non-standard since the logic
+            # of "excluded" versus "not found" is complex. To be revised...
             if "alphanumeric" in f_info.get("type", "ontology"):
                 prdbug(f'__query_from_filters ... alphanumeric: {f_info["id"]}')
                 if re.match(r'^(\w+):?([<>=]+?)?(\w[\w.]+?)$', f_info["id"]):
@@ -806,20 +807,9 @@ class ByconQuery():
                     f_lists[f_entity][f_field].append({'$nin': [f_info["id"]]})
                 else:
                     f_lists[f_entity][f_field].append(f_info["id"])
-            prdbug(f'... f_neg: {f_neg} ==>> {f_field}: {f_lists[f_entity][f_field]}')
 
-        # now processing the filter lists into the queries
+        return f_lists
 
-        for f_entity in f_lists.keys():
-            f_s_l = []
-            for f_field, f_query_vals in f_lists[f_entity].items():
-                if len(f_query_vals) == 1:
-                    f_s_l.append({f_field: f_query_vals[0]})
-                else:
-                    for f_q_v in f_query_vals:
-                        f_s_l.append({f_field: f_q_v})
-
-            self.__update_queries_for_entity(f_s_l, f_entity)
 
     # -------------------------------------------------------------------------#
 
@@ -830,30 +820,43 @@ class ByconQuery():
 
     # -------------------------------------------------------------------------#
 
-    def __query_from_collationed_filter(self, coll_coll, f_val):
-        f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
-        if f_val not in self.collation_ids:
-            return False
-
-        f_info = coll_coll.find_one({"id": f_val}, {"frequencymap": 0})
-        f_ct = f_info.get("collation_type", "___none__")
-
-        if not (f_d := f_d_s.get(f_ct)):
-            return False
-
-        # TODO: the whole "get entity" is a bit cumbersome ... should be added
-        # to each collation in the next generation round
-        f_info.update({"entity": f_d.get("entity", "biosample")})
-
-        return f_info
+    def __get_filter_value_and_negation(self, f):
+        f_val = f.get("id")
+        f_neg = f.get("excluded", False)
+        if re.compile(r'^!').match(f_val):
+            f_neg = True
+            f_val = re.sub(r'^!', '', f_val)
+        f_val = re.sub(r'^!', '', f_val)
+        return f_val, f_neg
 
 
     # -------------------------------------------------------------------------#
 
-    def __query_from_filter_definitions(self, f_val):
+    def __filter_info_from_collationed_filter(self, f_val):
+        if (f_info := self.filter_collection.find_one(
+            {"id": f_val},
+            {
+                "_id": 0,
+                "id": 1,
+                "label": 1,
+                "type": 1,
+                "format": 1,
+                "db_key": 1,
+                "entity": 1,
+                "child_terms": 1
+            }
+        )):
+            return f_info
+
+        return False
+
+
+    # -------------------------------------------------------------------------#
+
+    def __filter_info_from_filter_definitions(self, f_val):
         f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
 
-        prdbug(f'...__query_from_filter_definitions: {f_val}')
+        prdbug(f'...__filter_info_from_filter_definitions: {f_val}')
 
         for f_d in f_d_s.values():
             if f_d.get("collationed", False) is True:
