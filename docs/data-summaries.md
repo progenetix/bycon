@@ -23,8 +23,8 @@ or the intersection of two properties (2-dimensional aggregations).
 
 !!! info "Fast Overview Using Test Implementations on Progenetix/beaconPlus"
 
-    In the spirit of the tried and tested "implementation driven development"
-    we provide full stack implementations on to of the [Progenetix](https://progenetix.org)
+    In spirit of the tried and tested "implementation driven development"
+    we provide full stack implementations on top of the [Progenetix](https://progenetix.org)
     resource through the [`bycon` framework](https://bycon.progenetix.org).
 
     The examples below link to the staging instance of Progenetix with - fully
@@ -34,9 +34,10 @@ or the intersection of two properties (2-dimensional aggregations).
     * [`/aggregation_terms/` endpoint response](https://staging.progenetix.org/beacon/aggregation_terms/)
     * [Example aggregation response for TCGA cancer samples](https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers&aggregationTerms=ageAtDiagnosisBySex)
         - This is a `resultSets` response for the `/biosamples/` endpoint with
-          `requestedGranularity=aggregated` and using all of the predefined
-          `aggregationTerms` (which can be retrieved with the call above)
+          `requestedGranularity=aggregated` and using the `ageAtDiagnosisBySex`
+          aggregation term known from the `/aggregation_terms/` call above
         - the summaries are reported in `summaryResults.n.summaryResults`
+    * Age/sex distribution for brain cancer samples shown in a [dashboard](https://staging.progenetix.org/queryResultsDashboard/?filters=NCIT:C3268&aggregationTerms=ageAtDiagnosisBySex)
     * [Content dashboard for the Progenetix data](https://staging.progenetix.org/dataDashboard/)
         - This is purely a showcase for 1 and 2 dimensional representations w/o
           any refinements. However, based on the JavaScript version of [plotly](https://plotly.com/)
