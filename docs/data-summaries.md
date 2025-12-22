@@ -21,6 +21,31 @@ or the intersection of two properties (2-dimensional aggregations).
 
     * [Proposals for Aggregated Response](https://github.com/ga4gh-beacon/beacon-v2/discussions/238)
 
+!!! info "Fast Overview Using Test Implementations on Progenetix/beaconPlus"
+
+    In the spirit of the tried and tested "implementation driven development"
+    we provide full stack implementations on to of the [Progenetix](https://progenetix.org)
+    resource through the [`bycon` framework](https://bycon.progenetix.org).
+
+    The examples below link to the staging instance of Progenetix with - fully
+    functional - test versions of aggregation responses (which obviously might
+    change along with the schema proposal).
+
+    * [`/aggregation_terms/` endpoint response](https://staging.progenetix.org/beacon/aggregation_terms/)
+    * [Example aggregation response for TCGA cancer samples](https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers&aggregationTerms=ageAtDiagnosisBySex)
+        - This is a `resultSets` response for the `/biosamples/` endpoint with
+          `requestedGranularity=aggregated` and using all of the predefined
+          `aggregationTerms` (which can be retrieved with the call above)
+        - the summaries are reported in `summaryResults.n.summaryResults`
+    * [Content dashboard for the Progenetix data](https://staging.progenetix.org/dataDashboard/)
+        - This is purely a showcase for 1 and 2 dimensional representations w/o
+          any refinements. However, based on the JavaScript version of [plotly](https://plotly.com/)
+          it provides some hints for the "front-end vs. back-end" discussions
+          (e.g. the library automatically allows to subset on the 2nd dimension
+          w/o any additional code or back-end support).
+        - One outcome of this implementation is the ambiguity of "other", "undefined",
+          "not reported" - which might need some specification for congruency.
+
 #### Scope of the summary counts
 
 *TODO*: Do the counts have to be projected to the requested entity, or can they
@@ -34,15 +59,15 @@ Aggregation responses or summary data are called by setting the `requestedGranul
 to `aggregated`. Example:
 
 * TCGA cancer samples in Progenetix
-    - <https://progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers>
+    - <https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers>
     
 The aggregation types to be returned can be specified by using the additional
 request `aggregationTerms` parameter as well as optional parameters for binning or
 term selection (==TBD==). Example:
 
 * Age groups labeled by sex for TCGA cancer individuals in Progenetix
-    - <https://progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers&aggregationTerms=ageAtDiagnosisBySex>
-    - age/sex distribution for brain cancer samples shown in a plot <https://beaconplus.progenetix.org/queryResultsDashboard/?datasetIds=progenetix&filters=NCIT:C3268&aggregationTerms=ageAtDiagnosisBySex>
+    - <https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers&aggregationTerms=ageAtDiagnosisBySex>
+    - age/sex distribution for brain cancer samples shown in a plot <https://staging.progenetix.org/queryResultsDashboard/?datasetIds=progenetix&filters=NCIT:C3268&aggregationTerms=ageAtDiagnosisBySex>
     
 
 ## Components
