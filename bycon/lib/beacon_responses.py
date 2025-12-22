@@ -294,6 +294,7 @@ class BeaconDataResponse:
         self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta(self.record_queries) })
 
         dbm = f'... data response duration was {self.result_sets_duration.total_seconds()} seconds'
+        prdbug(dbm)
 
         return self.data_response
 
@@ -329,15 +330,6 @@ class BeaconDataResponse:
         self.__check_switch_to_error_response()
         self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta(self.record_queries) })
         return self.data_response
-
-
-    # -------------------------------------------------------------------------#
-
-    def filteringTermsList(self):
-        if not "beaconFilteringTermsResponse" in self.response_schema:
-            return
-        fts, ress, query = ByconFilteringTerms().populatedFilteringTerms()
-        return fts
 
 
     # -------------------------------------------------------------------------#

@@ -31,6 +31,7 @@ endpointSets:
     rootUrl: ___BEACON_ROOT___/beacon/cohorts
     singleEntryUrl: ___BEACON_ROOT___/beacon/cohorts/{id}
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
+    aggregationTermsUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     endpoints:
       individualLookup:
         returnedEntryType: individual
@@ -57,6 +58,7 @@ endpointSets:
       - ___BEACON_ROOT___/beacon/variants
     singleEntryUrl: ___BEACON_ROOT___/beacon/g_variants/{id}
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
+    aggregationTermsUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     endpoints:
       individualLookup:
         returnedEntryType: individual
@@ -77,6 +79,7 @@ endpointSets:
     rootUrl: ___BEACON_ROOT___/beacon/phenopackets
     singleEntryUrl: ___BEACON_ROOT___/beacon/phenopackets/{id}
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
+    aggregationTermsUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     endpoints:
       biosampleLookup:
         returnedEntryType: biosample
@@ -97,6 +100,7 @@ endpointSets:
     rootUrl: ___BEACON_ROOT___/beacon/individuals
     singleEntryUrl: ___BEACON_ROOT___/beacon/individuals/{id}
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
+    aggregationTermsUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     endpoints:
       biosampleLookup:
         returnedEntryType: biosample
@@ -119,6 +123,7 @@ endpointSets:
       - ___BEACON_ROOT___/beacon/samples
     singleEntryUrl: ___BEACON_ROOT___/beacon/biosamples/{id}
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
+    aggregationTermsUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     endpoints:
       individualLookup:
         returnedEntryType: individual
@@ -159,6 +164,7 @@ endpointSets:
     rootUrl: ___BEACON_ROOT___/beacon/runs
     singleEntryUrl: ___BEACON_ROOT___/beacon/runs/{id}
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
+    aggregationTermsUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     endpoints:
       individualLookup:
         returnedEntryType: individual
@@ -198,4 +204,9 @@ informationalEndpoints:
     rootUrl: ___BEACON_ROOT___/beacon/filtering_terms
     rootUrlAliases: 
       - ___BEACON_ROOT___/beacon/filteringTerms/
+  aggregationTerm:
+    entryType: aggregationTerm
+    rootUrl: ___BEACON_ROOT___/beacon/aggregation_terms
+    rootUrlAliases: 
+      - ___BEACON_ROOT___/beacon/aggregation_terms/
 
