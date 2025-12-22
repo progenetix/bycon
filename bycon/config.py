@@ -87,6 +87,19 @@ BYC = {
   "default_dataset_id": "examplez",
   "test_domains": ["localhost"],
  
+  "info_responses": [
+    "beaconInfoResponse" ,
+    "beaconConfigurationResponse",
+    "beaconMapResponse",
+    "beaconEntryTypesResponse"
+  ],
+  "data_responses": [
+    "beaconCollectionsResponse" ,
+    "beaconResultsetsResponse",
+    "beaconAggregationTermsResponse",
+    "beaconFilteringTermsResponse"
+  ],
+
   # ..._mappings / ..._definitions are generated from YAML files & should stay static
 
   "argument_definitions": {},
@@ -112,17 +125,6 @@ BYC = {
     "datatable_mappings",
     "test_queries",
     "plot_defaults"
-  ],
-  "info_responses": [
-    "beaconInfoResponse" ,
-    "beaconConfigurationResponse",
-    "beaconMapResponse",
-    "beaconEntryTypesResponse"
-  ],
-  "data_responses": [
-    "beaconCollectionsResponse" ,
-    "beaconResultsetsResponse",
-    "beaconFilteringTermsResponse"
   ],
 
 

@@ -193,9 +193,6 @@ informationalEndpoints:
   configuration:
     entryType: configuration
     rootUrl: ___BEACON_ROOT___/beacon/configuration
-  configuration:
-    entryType: configuration
-    rootUrl: ___BEACON_ROOT___/beacon/configuration
   entryType:
     entryType: entryType
     rootUrl: ___BEACON_ROOT___/beacon/entry_types
@@ -208,5 +205,5 @@ informationalEndpoints:
     entryType: aggregationTerm
     rootUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     rootUrlAliases: 
-      - ___BEACON_ROOT___/beacon/aggregation_terms/
+      - ___BEACON_ROOT___/beacon/aggregationTerms/
 

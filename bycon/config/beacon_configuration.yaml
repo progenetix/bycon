@@ -258,7 +258,7 @@ entryTypes:
     id: aggregationTerm
     description: >-
       Information about the summary terms available in the beacon instance.
-    response_schema: beaconFilteringTermsResponse
+    response_schema: beaconAggregationTermsResponse
     defaultSchema:
       id: aggregationTerm
       referenceToSchemaDefinition: ___BEACON_ROOT___/services/schemas/aggregationTermsSchema/

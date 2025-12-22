@@ -32,7 +32,7 @@ class BeaconResponseMeta:
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def populatedMeta(self, record_queries=None):
+    def populatedMeta(self):
         if self.data_response:
             self.response_meta = always_merger.merge(self.response_meta, self.data_response.get("meta", {}))
 
@@ -262,6 +262,8 @@ class BeaconDataResponse:
             return self.collectionsResponse()
         if "beaconFilteringTermsResponse" in self.response_schema:
             return self.filteringTermsResponse()
+        if "beaconAggregationTermsResponse" in self.response_schema:
+            return self.aggregationTermsResponse()
 
 
     # -------------------------------------------------------------------------#
@@ -291,7 +293,7 @@ class BeaconDataResponse:
         self.result_sets_end = datetime.now()
         self.result_sets_duration = self.result_sets_end - self.result_sets_start
 
-        self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta(self.record_queries) })
+        self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta() })
 
         dbm = f'... data response duration was {self.result_sets_duration.total_seconds()} seconds'
         prdbug(dbm)
@@ -311,7 +313,7 @@ class BeaconDataResponse:
         self.record_queries.update({"entities": self.queries})
         self.__collections_response_update_summaries()
         self.__check_switch_to_error_response()
-        self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta(self.record_queries) })
+        self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta() })
         self.data_response.get("meta", {}).get("received_request_summary", {}).pop("include_resultset_responses", None)
         return self.data_response
 
@@ -328,7 +330,21 @@ class BeaconDataResponse:
         self.record_queries.update({"entities": {"filtering_terms": query}})
         self.__response_clean_parameters()
         self.__check_switch_to_error_response()
-        self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta(self.record_queries) })
+        self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta() })
+        return self.data_response
+
+
+    # -------------------------------------------------------------------------#
+
+    def aggregationTermsResponse(self):
+        if not "beaconAggregationTermsResponse" in self.response_schema:
+            return
+
+        a_d_s = list(BYC.get("aggregator_definitions", {}).get("$defs", {}).values())
+
+        self.data_response["response"].update({"aggregation_terms": a_d_s})
+        self.__response_clean_parameters()
+        self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta() })
         return self.data_response
 
 
@@ -337,8 +353,7 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def __check_switch_to_error_response(self):
-        r_q_e = self.record_queries.get("entities", {})
-        if not r_q_e:
+        if not (r_q_e := self.record_queries.get("entities", {})):
             BYC["ERRORS"].append("no valid query")
             self.data_response.update({"error": {"error_code": 422, "error_message": ", ".join(BYC["ERRORS"])}})
             self.data_response.pop("response", None)

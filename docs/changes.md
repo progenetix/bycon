@@ -6,18 +6,19 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
-### ...
+### 2025-12-22 (v2.7.0+pre1)
 
 * de-nested the `classificationTrees` into single tupe specific files
   and moved the additional sources for their generation outside of the project
     - also renamed some files/filter types (e.g. `NCIT` ==> `NCITneoplasm`, `NCITsex` ==> `pgxSex`)
 * in `beaconplusWeb` changes to `AggregationPlots`
     - moved from `Victory` to `Plotly`; this requires `npm install react-plotly.js plotly.js`
+* new `___BEACON_ROOT___/beacon/aggregation_terms` endpoint to indicate concepts
+  for available data summaries
 
 ### 2025-12-12 (v2.6.9)
 
 The recent changes addressed several issues with the aggregation implementation
-
 
 * now `ByconSummaries` class
     - dimension agnostic, i.e. supports 1D, 2D, ... nD aggregations through the

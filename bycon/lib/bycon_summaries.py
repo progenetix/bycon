@@ -10,15 +10,18 @@ from bycon_helpers import *
 class ByconSummaries:
     def __init__(self, ds_id=None):
         self.dataset_id = ds_id
-        a_d_s = BYC.get("aggregator_definitions", {}).get("$defs", {})
+        a_d_s = BYC.get("aggregator_definitions", {}).get("$defs", {}).values()
 
         self.summaries = []
         # ordered selection of aggregation concepts
-        for a_k in BYC_PARS.get("aggregation_terms", []):
-            if a_k in a_d_s.keys():
-                self.summaries.append(a_d_s[a_k])
-        if len(self.summaries) < 1:
-            self.summaries = list(a_d_s.values())
+        if len(a_t_s := BYC_PARS.get("aggregation_terms", [])) > 0:
+            for a_d_k in a_t_s:
+                for a_d in a_d_s:
+                    if a_d.get("id") in a_t_s:
+                        self.summaries.append(a_d)
+                        continue
+        else:
+            self.summaries = list(a_d_s)
 
         self.dataset_aggregation = [] 
         self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])

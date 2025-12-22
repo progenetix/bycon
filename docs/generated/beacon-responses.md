@@ -119,6 +119,26 @@ A `beaconErrorResponse` denotes an unsuccessful operation, e.g. due to a missing
 
 
 
+## beaconAggregationTermsResponse
+
+The aggregation terms response provides information about available individual aggregation options beacon's response.
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconAggregationTermsResponse>
+
+### aggregationTerm @ `/aggregation_terms`
+
+Information about the summary terms available in the beacon instance.
+
+
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/aggregationTermsSchema>
+
+* **{T}** <{{config.reference_server_url}}/beacon/aggregation_terms>
+
+
+
+
+
 ## beaconMapResponse
 
 A `beaconMapResponse` provides information about the beacon instance such as the different endpoints supported by this implementation of the Beacon API. This response is aimed to allow Beacon clients such as web front ends and Beacon network aggregators to evaluate which access patterns can be implemented against individual beacons.
