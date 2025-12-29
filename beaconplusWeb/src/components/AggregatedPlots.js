@@ -9,15 +9,21 @@ var col_no = 20
 //----------------------------------------------------------------------------//
 
 export function AggregatedPlots({ summaryResults, filterUnknowns }) {
+
+    const filterOthers = false //true
+
     return (
         <>
         {summaryResults ? 
             summaryResults.map((r) => (
                 <>
                 {r["concepts"].length > 0 && (
-                    <AggregatedStackedPlot agg={r} filterUnknowns={filterUnknowns} />
-                )
-                }
+                    <AggregationPlot
+                        agg={r}
+                        filterUnknowns={filterUnknowns}
+                        filterOthers={filterOthers}
+                    />
+                )}
                 </>
             )
         ) : (
@@ -29,14 +35,148 @@ export function AggregatedPlots({ summaryResults, filterUnknowns }) {
 
 //----------------------------------------------------------------------------//
 
-function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
+function AggregationPlot({ agg, filterUnknowns, filterOthers }) {
 
-    var keyedFirst = {}
-    var secondKeys = {} // second dimension `id: label`, e.g. for traces
+    let {tracesData, agg_l, presorted} = MakeTraces({ agg, filterUnknowns, filterOthers });
+
+    const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
+    const containerRef = useCallback((node) => {
+        if (node !== null) { setBoundingRect(node.getBoundingClientRect()); }
+    }, []);
+
+    var outer_w = boundingRect.width
+
+    return (
+        <>
+            {tracesData[0].x.length > 0 ? (
+                <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
+                   <>
+                   {/*The following has to be defined - avoiding here the incomplete pie definitions */}
+                   {tracesData[0].x.length <= 8 && tracesData.length < 2 && !presorted ? (
+                        <SimplePlotlyPie
+                            tracesData={tracesData} outer_w={outer_w} title={agg_l}
+                        />
+                    ) : (
+                        <StackedPlotlyBar
+                            tracesData={tracesData} outer_w={outer_w} title={agg_l}
+                        />
+                    )}
+                   </>
+                </div>
+            ) : (
+                <></>
+            )
+            }
+        </>
+    );
+
+}
+
+//----------------------------------------------------------------------------//
+
+function MakeTraces({ agg, filterUnknowns, filterOthers }) {
+
+    var keyedProps = []
+    var keyedFirsts = {}
+    var keyedSeconds = {} // second dimension `id: label`, e.g. for traces
     var agg_l = agg["label"]
-    var presorted = agg["sorted"] ? true : false
+    var tracesData = []
 
-    filterOthers = false //true
+    let presorted = agg["sorted"] ? true : false
+
+    // getting all keys and generating the sums for sorting
+    // very verbose for 1 or 2 dimensions only - can be optimized later
+    agg["distribution"].forEach(function (v) {
+        let cvs = v["conceptValues"];
+        let c = v["count"]
+        cvs.forEach(function (cv, index) {
+            ! keyedProps[index] ? keyedProps[index] = {} : keyedProps
+            let k = cv["id"];
+            let l = cv["label"] ? cv["label"] : k;
+            if (! (k in keyedProps[index]) ) {
+                keyedProps[index][k] = {id: k, label: l, sum: c};
+            } else {
+                keyedProps[index][k]["sum"] += c;
+            }
+        });
+    });
+
+    // console.log(keyedProps)
+
+    // sorting & limiting the first dimension
+    var sortedFirsts = Object.keys(keyedProps[0]).map(function(key) {
+      return keyedProps[0][key];
+    });
+
+    // Sort the array based on the "sum" key in the second element
+    sortedFirsts = presorted ? sortedFirsts : sortedFirsts.sort((a, b) => a.sum < b.sum ? 1 : -1);
+
+    var other = sortedFirsts.find(obj => obj.id === 'other') ? sortedFirsts.find(obj => obj.id === 'other') : {id: "other", label: "other", sum: 0};
+    var otherIds = []
+    // console.log("...other before", other);
+
+    sortedFirsts = sortedFirsts.filter(object => {
+        return object.id !== "other";
+    });
+
+    var filteredFirsts = []
+    i = 0
+    for (const first of sortedFirsts) {
+        i += 1
+        if (i <= col_no) {
+            filteredFirsts.push(first)
+        } else {
+            other["sum"] += first["sum"]
+            otherIds.push(first["id"])
+        }
+    }
+    if (other["sum"] > 0) {
+        filteredFirsts.push(other)
+    }
+
+    // ====================================================================== //
+
+    // Early return if only single dimension
+    if (keyedProps.length == 1) {
+        console.log(`single dimension for "${agg_l}"`)
+        var xs = [];
+        var ys = [];
+        var hos = [];
+        for (const first of filteredFirsts) {
+            xs.push(first["id"]);
+            ys.push(first["sum"]);
+            hos.push(`${first["label"]}: ${first["sum"]}`);
+        }
+        tracesData.push({type: "bar", name: agg_l, x: xs, y: ys, hovertext: hos});
+        console.log("..tracesData", tracesData);
+        return ({tracesData, agg_l, presorted})
+    }
+
+    // ====================================================================== //
+
+
+    // sorting & limiting the first dimension
+    var sortedSeconds = Object.keys(keyedProps[1]).map(function(key) {
+      return keyedProps[1][key];
+    });
+
+    sortedSeconds = sortedSeconds.sort((a, b) => a.sum < b.sum ? 1 : -1);
+    
+    for (const first of filteredFirsts) {
+        let id1 = filteredFirsts["id"]
+        let lab1 = filteredFirsts["label"]
+        let thisTrace = {type: "bar", name: lab1, x: [], y: [], hovertext: []}
+
+
+
+        for (const second of sortedSeconds) {
+            let id2 = sortedSeconds["id"]
+
+
+        }
+    }
+
+
 
     agg["distribution"].forEach(function (v) {
         // console.log(Object.keys(v))
@@ -57,43 +197,43 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
                 l2 = cvs[1]["label"];
             }
         }
-        if (! (k1 in keyedFirst) ) {
-            keyedFirst[k1] = {id: k1, label: l1, sum: 0, items: {}};
+        if (! (k1 in keyedFirsts) ) {
+            keyedFirsts[k1] = {id: k1, label: l1, sum: 0, items: {}};
         }
-        if (! secondKeys[k2]) {
-            secondKeys[k2] = l2;
+        if (! keyedSeconds[k2]) {
+            keyedSeconds[k2] = l2;
         }
-        keyedFirst[k1]["items"][k2] = {"key": k2, "count": c, "label": l2};
-        keyedFirst[k1]["sum"] += c;
+        keyedFirsts[k1]["items"][k2] = {"key": k2, "count": c, "label": l2};
+        keyedFirsts[k1]["sum"] += c;
     });
 
     var removed_count = 0
 
     // Filter unknowns and undefineds prototyping WIP
     if (filterUnknowns == true) {
-        if (Object.keys(keyedFirst).includes('undefined')) {
-            removed_count += keyedFirst["undefined"]["sum"]
-            delete keyedFirst["undefined"]
+        if (Object.keys(keyedFirsts).includes('undefined')) {
+            removed_count += keyedFirsts["undefined"]["sum"]
+            delete keyedFirsts["undefined"]
         }
     }
 
     if (filterUnknowns == true) {
-        if (Object.keys(keyedFirst).includes('unknown')) {
-            removed_count += keyedFirst["unknown"]["sum"]
-            delete keyedFirst["unknown"]
+        if (Object.keys(keyedFirsts).includes('unknown')) {
+            removed_count += keyedFirsts["unknown"]["sum"]
+            delete keyedFirsts["unknown"]
         }
     }
 
     if (filterOthers == true) {
-        if (Object.keys(keyedFirst).includes('other')) {
-            removed_count += keyedFirst["other"]["sum"]
-            delete keyedFirst["other"]
+        if (Object.keys(keyedFirsts).includes('other')) {
+            removed_count += keyedFirsts["other"]["sum"]
+            delete keyedFirsts["other"]
         }
     }
 
     // Create items array
-    var sortedEntries = Object.keys(keyedFirst).map(function(key) {
-      return keyedFirst[key];
+    var sortedEntries = Object.keys(keyedFirsts).map(function(key) {
+      return keyedFirsts[key];
     });
 
     // Sort the array based on the "sum" key in the second element
@@ -104,9 +244,9 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
     var others = {
         "other": {sum: 0, label: "other", items: {}}
     }
-    Object.keys(secondKeys).forEach(function (s) {
-        console.log(s)
-        others["other"]["items"][s] = { "count": 0, "label": secondKeys[s] }
+    Object.keys(keyedSeconds).forEach(function (s) {
+        // console.log(s)
+        others["other"]["items"][s] = { id: s, count: 0, label: keyedSeconds[s] }
     })
 
     var i = 0
@@ -121,7 +261,7 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
             }
         } else {
             other_count += seconds["sum"]
-            for (const s of Object.keys(secondKeys)) {
+            for (const s of Object.keys(keyedSeconds)) {
                 if (seconds[s]) {
                     others["other"]["items"][s]["count"] += seconds["items"][s]["count"];
                     others["other"]["sum"] += seconds["items"][s]["count"];
@@ -148,12 +288,11 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
         max_y = other_count * 0.9
     }
 
-    var tracesData = [];
-    Object.keys(secondKeys).sort().forEach(function (s) {
+    Object.keys(keyedSeconds).sort().forEach(function (s) {
         // console.log(s)
-        var thisTrace = {type: "bar", name: secondKeys[s], key: s, x: [], y: [], hovertext: []};
+        var thisTrace = {type: "bar", name: keyedSeconds[s], key: s, x: [], y: [], hovertext: []};
         for (const seconds of dist) {
-            console.log(seconds)
+            // console.log(seconds)
             if (seconds["items"][s]) {
                 thisTrace.y.push(seconds["items"][s]["count"]);
                 thisTrace.x.push(seconds["id"]);
@@ -167,41 +306,10 @@ function AggregatedStackedPlot({ agg, filterUnknowns, filterOthers }) {
         tracesData.push(thisTrace);
     })
 
-
-    const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
-    const containerRef = useCallback((node) => {
-        if (node !== null) { setBoundingRect(node.getBoundingClientRect()); }
-    }, []);
-
-    var outer_w = boundingRect.width
-
-    return (
-        <>
-            {dist.length > 0 ? (
-                <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
-                   <>
-                   {/*The following has to be defined - avoiding here the incomplete pie definitions */}
-                   {dist.length <= 8 && tracesData.length < 2 && !presorted ? (
-                        <SimplePlotlyPie
-                            tracesData={tracesData} outer_w={outer_w} title={agg_l}
-                        />
-                    ) : (
-                        <StackedPlotlyBar
-                            tracesData={tracesData} outer_w={outer_w} title={agg_l}
-                        />
-                    )}
-                   </>
-                </div>
-            ) : (
-                <></>
-            )
-            }
-        </>
-    );
-
+    return ({tracesData, agg_l, presorted})
+ 
 }
 
- // 
 
 //----------------------------------------------------------------------------//
 //----------------------------------------------------------------------------//
