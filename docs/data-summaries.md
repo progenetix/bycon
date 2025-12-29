@@ -256,3 +256,79 @@ One of the main use cases for aggregation responses is to generate data dashboar
 These dashboards can provide visual summaries of the data content of the resource,
 either as static overviews or dynamically generated views based on user queries.
 
+**Client or beacon side configurations?** While the actual rendering of dashboards
+is typically a client-side task, some aspects of dashboard generation might _in principle_ be influenced through beacon-side configurations. Examples here could be the limiting
+of responses (e.g. "top 10 diagnoses") and the determination of visualisation types for certain aggregations. Here some recommendation scan be provided (==WiP==):
+
+* clients should be able to request an upper limit for the number of categories
+  to be returned for a given aggregation term (==TBD: parameter name==)
+* rendering styles are defined client side w/o Beacon parameters
+
+### Example Dashboard Implementation using Plotly.js
+
+#### Data Transforms
+
+Plotly implements 1- and 2-dimensional charts through data `traces`, _i.e._ lists
+of one or more `trace` objects containing e.g. lists for `x` and `y` values and
+optional chart information.
+
+Example for a single data trace:
+
+```javascript
+{
+  x: [ 'USA', 'CHE', null ],
+  y: [ 389, 17, 16 ],
+  hovertext: [ 'United States: 389', 'Switzerland: 17', 'null: 16' ]
+}
+```
+
+
+##### 1D Aggregation to _Bar or Pie Chart_
+
+A summary response for a single (1D) property aggregation contains a `distribution` array where each item contains"
+
+* a list of 1 `conceptValues` (with `id` and `label`)
+* a `count`
+
+```javascript
+{
+  conceptValues: [ { id: 'USA', label: 'United States' } ],
+    count: 389
+},
+{
+  conceptValues: [ { id: 'CHE', label: 'Switzerland' } ],
+  count: 17
+},
+{ 
+  conceptValues: [ { id: null, label: null } ],
+  count: 16
+}
+```
+
+The transformation to a Plotly trace for a bar chart can be achieved through e.g.:
+
+```javascript
+let x = [];
+let y = [];
+let hovertext = [];
+
+distribution.forEach( (item) => {
+    x.push( item.conceptValues[0].id );
+    y.push( item.count );
+    hovertext.push( `${item.conceptValues[0].label}: ${item.count}` );
+} );
+let trace = { type: "bar", x: x, y: y, hovertext: hovertext };
+```
+
+Here, `hovertext` is an optional addition for better interactivity and `type: "bar"` could also be `type: "pie"` for pie charts.
+
+
+##### 2D Aggregation to _Stacked Bar Chart_
+
+
+##### ==TBD: Sankey Chart==
+
+
+
+
+

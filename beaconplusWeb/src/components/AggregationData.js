@@ -3,13 +3,14 @@
 
 export default function MakeTraces({ agg, filterUnknowns, filterOthers, colNo }) {
 
-    let presorted = agg["sorted"] ? true : false
-    let distribution = agg["distribution"]
-    let keyedProps = []
+    let presorted       = agg["sorted"] ? true : false
+    let distribution    = agg["distribution"]
 
     // getting all keys and generating the sums for sorting
     // for 1..n dimensions but downstream only 1 or 2 are used so far
+    let keyedProps      = []
     distribution.forEach(function (v) {
+        console.log(v)
         let cvs = v["conceptValues"];
         let c = v["count"]
         cvs.forEach(function (cv, index) {
@@ -25,7 +26,7 @@ export default function MakeTraces({ agg, filterUnknowns, filterOthers, colNo })
     });
 
     // sorting & limiting the first dimension based on the "sum" key
-    let sortedFirsts = Object.keys(keyedProps[0]).map(function(key) {
+    let sortedFirsts    = Object.keys(keyedProps[0]).map(function(key) {
       return keyedProps[0][key];
     });
     sortedFirsts = presorted ? sortedFirsts : sortedFirsts.sort((a, b) => a.sum < b.sum ? 1 : -1);
