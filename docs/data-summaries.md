@@ -305,7 +305,7 @@ A summary response for a single (1D) property aggregation contains a `distributi
 }
 ```
 
-The transformation to a Plotly trace for a bar chart can be achieved through e.g.:
+The transformation to a [Plotly trace for a bar chart](https://plotly.com/javascript/bar-charts/) can be achieved through e.g.:
 
 ```javascript
 let x = [];
@@ -321,9 +321,12 @@ let trace = { type: "bar", x: x, y: y, hovertext: hovertext };
 ```
 
 Here, `hovertext` is an optional addition for better interactivity and `type: "bar"` could also be `type: "pie"` for pie charts.
+Obviously, additional data manipulation (filtering, sorting, calculation of summary for "other" values...) will be needed.
 
 
 ##### 2D Aggregation to _Stacked Bar Chart_
+
+
 
 
 ##### ==TBD: Sankey Chart==

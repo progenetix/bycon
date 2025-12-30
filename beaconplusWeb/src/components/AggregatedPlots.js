@@ -77,17 +77,16 @@ function AggregationPlot({ agg, filterUnknowns, filterOthers }) {
 //----------------------------------------------------------------------------//
 //----------------------------------------------------------------------------//
 
-
 function SimplePlotlyPie({ tracesData, outer_w, title}) { //, title
-    let pieData = {
-        type: "pie",
-        hole: .4,
-        values: tracesData[0]["y"],
-        labels: tracesData[0]["x"],
+    for (let trace of tracesData) {
+        trace.type = 'pie';
+        trace.hole = 0.4,
+        trace.values = trace["y"],
+        trace.labels = trace["x"]
     }
     return (
       <Plot
-        data={[pieData]}
+        data={tracesData}
         layout={ {width: outer_w, height: 400, title: {text: title}} }
       />
     );
