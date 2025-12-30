@@ -326,7 +326,20 @@ Obviously, additional data manipulation (filtering, sorting, calculation of summ
 
 ##### 2D Aggregation to _Stacked Bar Chart_
 
+Creation of a stacked bar chart from a 2D aggregation response requires some data processing to collate all the
+different values for the 2nd dimension per value of the 1st dimension / independent axis.
+In the data structure of the 2D (or more than 2...) Beacon summary responses one would usually use **first concept** for the independent axis; however, the data structure would also allow to swap this.
 
+Processing Beacon summaries for a stacked bar chart requires to:
+
+* identify all unique values for the 1st and 2nd concept
+    - the first concept here defines the `x` axis categories
+        * example: diagnosis codes
+    - the second concept defines the split instances of observations
+        * example: sex (per diagnosis)
+* create a data trace for each unique value of the 2nd concept
+     - each trace will contain `x` and `y` values for all unique values of the 1st concept (e.g. `diagnosis`)
+       for the observations matching the 2nd concept value (e.g. `male`)
 
 
 ##### ==TBD: Sankey Chart==
