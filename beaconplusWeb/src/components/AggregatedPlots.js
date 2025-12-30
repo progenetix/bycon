@@ -5,7 +5,7 @@ import MakeTraces from "./AggregationData";
 
 //----------------------------------------------------------------------------//
 
-var colNo = 20
+var colNo = 15
 
 //----------------------------------------------------------------------------//
 
@@ -80,9 +80,10 @@ function AggregationPlot({ agg, filterUnknowns, filterOthers }) {
 function SimplePlotlyPie({ tracesData, outer_w, title}) { //, title
     for (let trace of tracesData) {
         trace.type = 'pie';
-        trace.hole = 0.4,
-        trace.values = trace["y"],
-        trace.labels = trace["x"]
+        trace.hole = 0.4;
+        trace.values = trace["y"];
+        trace.labels = trace["x"];
+        trace.hoverinfo = "text";
     }
     return (
       <Plot
@@ -97,6 +98,7 @@ function SimplePlotlyPie({ tracesData, outer_w, title}) { //, title
 function StackedPlotlyBar({ tracesData, outer_w, title}) { //, title
     for (let trace of tracesData) {
         trace.type = 'bar';
+        trace.hoverinfo = "text";
     }
     return (
       <Plot
@@ -106,10 +108,7 @@ function StackedPlotlyBar({ tracesData, outer_w, title}) { //, title
                 barmode: 'stack',
                 width: outer_w,
                 height: 240,
-                title: {text: title},
-                yaxis2: {
-                    side: 'right'
-                }
+                title: {text: title}
             }
         }
       />

@@ -291,18 +291,20 @@ A summary response for a single (1D) property aggregation contains a `distributi
 * a `count`
 
 ```javascript
-{
-  conceptValues: [ { id: 'USA', label: 'United States' } ],
-    count: 389
-},
-{
-  conceptValues: [ { id: 'CHE', label: 'Switzerland' } ],
-  count: 17
-},
-{ 
-  conceptValues: [ { id: null, label: null } ],
-  count: 16
-}
+distribution: [
+  {
+    conceptValues: [ { id: 'USA', label: 'United States' } ],
+      count: 389
+  },
+  {
+    conceptValues: [ { id: 'CHE', label: 'Switzerland' } ],
+    count: 17
+  },
+  { 
+    conceptValues: [ { id: null, label: null } ],
+    count: 16
+  }
+]
 ```
 
 The transformation to a [Plotly trace for a bar chart](https://plotly.com/javascript/bar-charts/) can be achieved through e.g.:
@@ -340,6 +342,8 @@ Processing Beacon summaries for a stacked bar chart requires to:
 * create a data trace for each unique value of the 2nd concept
      - each trace will contain `x` and `y` values for all unique values of the 1st concept (e.g. `diagnosis`)
        for the observations matching the 2nd concept value (e.g. `male`)
+
+![Stacked Bar Chart Example](img/summary-plot-2D-example.png)
 
 
 ##### ==TBD: Sankey Chart==

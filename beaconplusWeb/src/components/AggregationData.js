@@ -10,7 +10,7 @@ export default function MakeTraces({ agg, filterUnknowns, filterOthers, colNo })
     // for 1..n dimensions but downstream only 1 or 2 are used so far
     let keyedProps      = []
     distribution.forEach(function (v) {
-        console.log(v)
+        // console.log(v)
         let cvs = v["conceptValues"];
         let c = v["count"]
         cvs.forEach(function (cv, index) {
@@ -80,6 +80,25 @@ export default function MakeTraces({ agg, filterUnknowns, filterOthers, colNo })
 
 //----------------------------------------------------------------------------//
 
+function SingleTrace({filteredFirsts, other, filterOthers}) {
+    if (other["sum"] > 0 && filterOthers == false) {
+        filteredFirsts.push(other)
+    }
+    let xs = [];
+    let ys = [];
+    let hos = [];
+    for (const first of filteredFirsts) {
+        console.log("...SingleTrace first:", first)
+        xs.push(first["id"]);
+        ys.push(first["sum"]);
+        hos.push(`${first["label"]}: ${first["sum"]}`);
+    }
+    const tracesData = [{x: xs, y: ys, hovertext: hos}];
+    return ({tracesData})
+}
+
+//----------------------------------------------------------------------------//
+
 function MultiTraces({filteredFirsts, other, otherIds, filterOthers, sortedSeconds, distribution}) {
 
     let tracesData = []
@@ -137,21 +156,4 @@ function CountMatches(distribution, id1, id2) {
     return c
 }
 
-//----------------------------------------------------------------------------//
-
-function SingleTrace({filteredFirsts, other, filterOthers}) {
-    if (other["sum"] > 0 && filterOthers == false) {
-        filteredFirsts.push(other)
-    }
-    let xs = [];
-    let ys = [];
-    let hos = [];
-    for (const first of filteredFirsts) {
-        xs.push(first["id"]);
-        ys.push(first["sum"]);
-        hos.push(`${first["label"]}: ${first["sum"]}`);
-    }
-    const tracesData = [{x: xs, y: ys, hovertext: hos}];
-    return ({tracesData})
-}
 
