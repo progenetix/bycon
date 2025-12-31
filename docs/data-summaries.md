@@ -275,31 +275,42 @@ for certain aggregations. Here some recommendation scan be provided (==WiP==):
 
 ##### 1D Summary to _Bar or Pie Chart_
 
-```javascript
-distribution: [
-  {
-    conceptValues: [ { id: 'USA', label: 'United States' } ],
-      count: 389
-  },
-  {
-    conceptValues: [ { id: 'CHE', label: 'Switzerland' } ],
-    count: 17
-  },
-  { 
-    conceptValues: [ { id: null, label: null } ],
-    count: 16
-  }
-]
-```
-
-Plotly implements 1- and 2-dimensional charts through data `traces`, _i.e._ lists
-of one or more `trace` objects containing e.g. lists for `x` and `y` values and
-optional chart information. 
-
-A summary response for a single (1D) property aggregation contains a `distribution` array where each item contains"
+A "1D" summary aggregation involves a single property and reports a `distribution`
+array where each item contains:
 
 * a list of 1 `conceptValues` (with `id` and `label`)
 * a `count`
+
+An example summary response (here using the GeoJSON tagging for biosamples in
+Progenetix - not a standard Beacon property yet) would look like this:
+
+```javascript
+summaryResults: [ {
+    id: "sampleCountries",
+    label: "Sample Countries",
+    scope: "biosample",
+    concepts: [ { property: "biosample.geo_location.properties.ISO3166alpha3" } ],
+    description: "Count of countries of origin in matched biosamples",
+    distribution: [
+      {
+        conceptValues: [ { id: 'USA', label: 'United States' } ],
+        count: 389
+      },
+      {
+        conceptValues: [ { id: 'CHE', label: 'Switzerland' } ],
+        count: 17
+      },
+      { 
+        conceptValues: [ { id: null, label: null } ],
+        count: 16
+      }
+    ]
+} ]
+```
+
+`Plotly.js` implements 1- and 2-dimensional charts through data `traces`, _i.e._ lists
+of one or more `trace` objects containing e.g. lists for `x` and `y` values and
+optional chart information. 
 
 An example for a single data trace derived from the
 1D summary above would look like:
