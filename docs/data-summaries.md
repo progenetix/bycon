@@ -319,7 +319,7 @@ distribution.forEach( (item) => {
     y.push( item.count );
     hovertext.push( `${item.conceptValues[0].label}: ${item.count}` );
 } );
-let trace = { type: "bar", x: x, y: y, hovertext: hovertext };
+let trace = { type: "bar", x: x, y: y, hovertext: hovertext, hoverinfo: "text" };
 ```
 
 Here, `hovertext` is an optional addition for better interactivity and `type: "bar"` could also be `type: "pie"` for pie charts.
@@ -344,7 +344,11 @@ Processing Beacon summaries for a stacked bar chart requires to:
        for the observations matching the 2nd concept value (e.g. `male`)
 
 ![Stacked Bar Chart Example](img/summary-plot-2D-example.png)
-
+/// caption
+A stacked bar chart generated in Plotly.js from a Beacon summary response for a 2D aggregation.
+The `hovertext` shows the breakdown of counts per category, with the "label" of
+the 2nd concept shown in the legend and hover text.
+///
 
 ##### ==TBD: Sankey Chart==
 
