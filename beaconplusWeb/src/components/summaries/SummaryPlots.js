@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false, })
-import MakeTraces from "./AggregationData";
+import SummaryTraces from "./SummaryTraces";
 
 //----------------------------------------------------------------------------//
 
@@ -9,7 +9,7 @@ var colNo = 15
 
 //----------------------------------------------------------------------------//
 
-export function AggregatedPlots({ summaryResults, filterUnknowns }) {
+export function SummaryPlots({ summaryResults, filterUnknowns }) {
 
     const filterOthers = false //true
 
@@ -38,7 +38,7 @@ export function AggregatedPlots({ summaryResults, filterUnknowns }) {
 
 function AggregationPlot({ agg, filterUnknowns, filterOthers }) {
 
-    let {tracesData} = MakeTraces({ agg, filterUnknowns, filterOthers, colNo });
+    let {tracesData} = SummaryTraces({ agg, filterUnknowns, filterOthers, colNo });
 
     const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
     const containerRef = useCallback((node) => {

@@ -6,6 +6,12 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2025-12-31 (v2.7.0 "That Was 2025")
+
+* `beaconplusWeb` front end updates
+    - refactored data summaries source in `src/components/summaries/`
+    - improving of documentation in <https://bycon.progenetix.org/data-summaries/>
+
 ### 2025-12-22 (v2.7.0+pre1)
 
 * de-nested the `classificationTrees` into single tupe specific files

@@ -1,13 +1,12 @@
 import React from "react"
 import Panel from "./../components/Panel"
-import { AggregatedPlots } from "./../components/AggregatedPlots"
+import { SummaryPlots } from "./../components/summaries/SummaryPlots"
 import {Layout} from "./../site-specific/Layout"
 import { DATASETDEFAULT, tryFetch, THISSITE } from "./../hooks/api"
 
 // http://beaconplus.org/stats/?datasetIds=progenetix&ageSplits=P0D,P1Y,P2Y,P18Y,P21Y,P40Y
 
 export default function StatsPage({summaryResults, counts}) {
-
 
   const title = `${DATASETDEFAULT} Data Content Overview`
   const leadText = `This page shows some data statistics for the ${DATASETDEFAULT}
@@ -24,7 +23,7 @@ dataset. Please allow for some loading time.`
     </ul>
   </Panel>
   <Panel heading="Some Content Statistics">
-    <AggregatedPlots
+    <SummaryPlots
       summaryResults={summaryResults}
       filterUnknowns={true}
     />
@@ -38,7 +37,6 @@ export const getStaticProps = async () => {
     `${THISSITE}beacon/datasets/${DATASETDEFAULT}?requestedGranularity=aggregated`
   )
 
-  console.log(aggregationReply)
 
   return {
     props: {

@@ -1,5 +1,5 @@
 import React from "react"
-import { AggregatedPlots } from "./AggregatedPlots"
+import { SummaryPlots } from "./summaries/SummaryPlots"
 import {
   basePath,
   useProgenetixApi,
@@ -45,7 +45,7 @@ export default function FilterResultStats({dataset_id, ageSplits, followupSplits
           </ul>
         </Panel>
         <Panel heading="Some Content Statistics">
-          <AggregatedPlots
+          <SummaryPlots
             summaryResults={data.response.resultSets[0].summaryResults}
             filterUnknowns={filterUnknowns}
           />

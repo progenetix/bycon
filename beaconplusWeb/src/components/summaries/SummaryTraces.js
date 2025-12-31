@@ -1,7 +1,7 @@
 
 //----------------------------------------------------------------------------//
 
-export default function MakeTraces({ agg, filterUnknowns, filterOthers, colNo }) {
+export default function SummaryTraces({ agg, filterUnknowns, filterOthers, colNo }) {
 
     let presorted       = agg["sorted"] ? true : false
     let distribution    = agg["distribution"]

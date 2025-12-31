@@ -49,10 +49,13 @@ or the intersection of two properties (2-dimensional aggregations).
 
 #### Scope of the summary counts
 
-*TODO*: Do the counts have to be projected to the requested entity, or can they
-be reported on basis of pre-defined entities (e.g. can a request to `/individuals/`
-report the numbers for the matched sample histologies or the individuals with the
-matched histologies?.
+
+!!! question "On which entity are the counts reported?"
+
+    Do the counts have to be projected to the requested entity, or can they
+    be reported on basis of pre-defined entities (e.g. can a request to `/individuals/`
+    report the numbers for the matched sample histologies or the individuals with the
+    matched histologies?.
 
 ## General Structure and Calling
 
@@ -127,11 +130,11 @@ Each `concept` involved in an aggregation should be defined with:
       instead of the logical concept (`individual.diseases.diseaseCode`). This might
       be changed if necessary.
 * optional modifiers:
-    - `termIds` for specifying specific terms to be included in the aggregation
-    - `splits` for specifying how to split the aggregation (e.g. binning for
-      numeric or seudo-numeric values such as ISO8601 durations for ages)
-        * ATM `splits` seem as the best way to specify binning, but this might
-          be changed later on.
+    - `termIds` for specifying terms to be included in the aggregation
+    - `splits` for specifying how to split the values (e.g. binning for
+      numeric or pseudo-numeric values such as ISO8601 durations for ages)
+        * at this time `splits` seem as the best way to specify binning, but this might
+          be changed later on
         * `splits` also correspond nicely to database aggregation concepts such
           as `$buckets` and `$splits` in MongoDB
 
@@ -257,8 +260,10 @@ These dashboards can provide visual summaries of the data content of the resourc
 either as static overviews or dynamically generated views based on user queries.
 
 **Client or beacon side configurations?** While the actual rendering of dashboards
-is typically a client-side task, some aspects of dashboard generation might _in principle_ be influenced through beacon-side configurations. Examples here could be the limiting
-of responses (e.g. "top 10 diagnoses") and the determination of visualisation types for certain aggregations. Here some recommendation scan be provided (==WiP==):
+is typically a client-side task, some aspects of dashboard generation might _in principle_
+be influenced through beacon-side configurations. Examples here could be the limiting
+of responses (e.g. "top 10 diagnoses") and the determination of visualisation types
+for certain aggregations. Here some recommendation scan be provided (==WiP==):
 
 * clients should be able to request an upper limit for the number of categories
   to be returned for a given aggregation term (==TBD: parameter name==)
@@ -268,27 +273,7 @@ of responses (e.g. "top 10 diagnoses") and the determination of visualisation ty
 
 #### Data Transforms
 
-Plotly implements 1- and 2-dimensional charts through data `traces`, _i.e._ lists
-of one or more `trace` objects containing e.g. lists for `x` and `y` values and
-optional chart information.
-
-Example for a single data trace:
-
-```javascript
-{
-  x: [ 'USA', 'CHE', null ],
-  y: [ 389, 17, 16 ],
-  hovertext: [ 'United States: 389', 'Switzerland: 17', 'null: 16' ]
-}
-```
-
-
-##### 1D Aggregation to _Bar or Pie Chart_
-
-A summary response for a single (1D) property aggregation contains a `distribution` array where each item contains"
-
-* a list of 1 `conceptValues` (with `id` and `label`)
-* a `count`
+##### 1D Summary to _Bar or Pie Chart_
 
 ```javascript
 distribution: [
@@ -307,7 +292,28 @@ distribution: [
 ]
 ```
 
-The transformation to a [Plotly trace for a bar chart](https://plotly.com/javascript/bar-charts/) can be achieved through e.g.:
+Plotly implements 1- and 2-dimensional charts through data `traces`, _i.e._ lists
+of one or more `trace` objects containing e.g. lists for `x` and `y` values and
+optional chart information. 
+
+A summary response for a single (1D) property aggregation contains a `distribution` array where each item contains"
+
+* a list of 1 `conceptValues` (with `id` and `label`)
+* a `count`
+
+An example for a single data trace derived from the
+1D summary above would look like:
+
+```javascript
+{
+  x: [ 'USA', 'CHE', null ],
+  y: [ 389, 17, 16 ],
+  hovertext: [ 'United States: 389', 'Switzerland: 17', 'null: 16' ]
+}
+```
+
+The transformation from a Beacon summary to a [Plotly trace for a bar chart](https://plotly.com/javascript/bar-charts/)
+can be achieved through e.g.:
 
 ```javascript
 let x = [];
@@ -322,11 +328,11 @@ distribution.forEach( (item) => {
 let trace = { type: "bar", x: x, y: y, hovertext: hovertext, hoverinfo: "text" };
 ```
 
-Here, `hovertext` is an optional addition for better interactivity and `type: "bar"` could also be `type: "pie"` for pie charts.
-Obviously, additional data manipulation (filtering, sorting, calculation of summary for "other" values...) will be needed.
+Here, `hovertext` is an optional addition for better interactivity and `type: "bar"`
+could also be `type: "pie"` for pie charts. Obviously, additional data manipulation
+(filtering, sorting, calculation of summary for "other" values...) will be needed.
 
-
-##### 2D Aggregation to _Stacked Bar Chart_
+##### 2D Summary to _Stacked Bar Chart_
 
 Creation of a stacked bar chart from a 2D aggregation response requires some data processing to collate all the
 different values for the 2nd dimension per value of the 1st dimension / independent axis.
@@ -349,6 +355,9 @@ A stacked bar chart generated in Plotly.js from a Beacon summary response for a 
 The `hovertext` shows the breakdown of counts per category, with the "label" of
 the 2nd concept shown in the legend and hover text.
 ///
+
+
+
 
 ##### ==TBD: Sankey Chart==
 
