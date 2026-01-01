@@ -271,7 +271,11 @@ for certain aggregations. Here some recommendation scan be provided (==WiP==):
 
 ### Example Dashboard Implementation using Plotly.js
 
+[![plotly logo](img/plotly-logo.png){ style="float: right; margin: -40px 0px 10px 30px; width: 150px" }](https://plotly.com/javascript/)
+
+
 #### Data Transforms
+
 
 ##### 1D Summary to _Bar or Pie Chart_
 
@@ -339,9 +343,15 @@ distribution.forEach( (item) => {
 let trace = { type: "bar", x: x, y: y, hovertext: hovertext, hoverinfo: "text" };
 ```
 
+![pie chart example](img/summary-plot-pie-example.png){ style="float: left; margin: 0px 50px 10px 0px; width: 350px" }
+
 Here, `hovertext` is an optional addition for better interactivity and `type: "bar"`
 could also be `type: "pie"` for pie charts. Obviously, additional data manipulation
 (filtering, sorting, calculation of summary for "other" values...) will be needed.
+
+
+This example shows a pie chart for a similar 1D summary generated
+through `SimplePlotlyPie` in [`bycon`'s dashboard implementation](https://github.com/progenetix/bycon/blob/7a6c110f716187d4345b97df734b6e4234137b2d/beaconplusWeb/src/components/summaries/SummaryPlots.js).
 
 ##### 2D Summary to _Stacked Bar Chart_
 
