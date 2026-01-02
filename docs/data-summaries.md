@@ -381,11 +381,21 @@ the 2nd concept shown in the legend and hover text.
 ///
 
 
+##### Sankey diagrams
 
 
-##### ==TBD: Sankey Chart==
+Sankey diagrams are another way to visualise 2D (or more) aggregations. The data
+of a Beacon summary distribution can be transformed for Sankey charts by creating
 
+* a single list of unique nodes (_i.e._ `id` values) for all concept values in both dimensions
+* mapping each co-occurrence of 2 concept values to a `source` and `target` index in the node list
+  along with the respective `count` as `value`
 
+![Sankey Diagram Example](img/sankey-plot-example.png)
 
-
+/// caption
+This example for a Sankey chart shows the relation of binned age values and sex
+for ~15000 individuals in Progenetix with a match for a focal copy number deletion
+involving the CDKN2A locus, generated as a life response using the the [`bycon` code ](https://github.com/progenetix/bycon/) for summary response and Plotly.js based the [visualization](https://github.com/progenetix/bycon/blob/main/beaconplusWeb/src/components/summaries/). No styling added `¯\_(ツ)_/¯`
+///  
 
