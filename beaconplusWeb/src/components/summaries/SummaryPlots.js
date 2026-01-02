@@ -38,7 +38,7 @@ export function SummaryPlots({ summaryResults, filterUnknowns }) {
 
 function AggregationPlot({ agg, filterUnknowns, filterOthers }) {
 
-    let {tracesData} = SummaryTraces({ agg, filterUnknowns, filterOthers, colNo });
+    let {tracesData, sankeyLabels, sankeyLinks} = SummaryTraces({ agg, filterUnknowns, filterOthers, colNo });
 
     const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
     const containerRef = useCallback((node) => {
@@ -51,6 +51,7 @@ function AggregationPlot({ agg, filterUnknowns, filterOthers }) {
         <>
             {tracesData[0].x.length > 0 ? (
                 <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
+
                    <>
                    {/*The following has to be defined - avoiding here the incomplete pie definitions */}
                    {tracesData[0].x.length <= 8 && tracesData.length < 2 && !agg["sorted"] ? (
@@ -62,7 +63,20 @@ function AggregationPlot({ agg, filterUnknowns, filterOthers }) {
                             tracesData={tracesData} outer_w={outer_w} title={agg["label"]}
                         />
                     )}
-                   </>
+                    </>
+
+
+                    <>
+                    {sankeyLabels && sankeyLabels.length > 0 ? (
+                        <SankeyPlot
+                            sankeyLabels={sankeyLabels}
+                            sankeyLinks={sankeyLinks}
+                            outer_w={outer_w}
+                            title={agg["label"] + " - Sankey Diagram"}
+                        />
+                        ) : (<></>)
+                    }
+                    </>
                 </div>
             ) : (
                 <></>
@@ -111,6 +125,40 @@ function StackedPlotlyBar({ tracesData, outer_w, title}) { //, title
                 title: {text: title}
             }
         }
+      />
+    );
+}
+
+//----------------------------------------------------------------------------//
+
+function SankeyPlot({ sankeyLabels, sankeyLinks, outer_w, title}) { //, title
+
+    let sankeyData = {
+        type: "sankey",
+        orientation: "h",
+        node: {
+            pad: 15,
+            thickness: 30,
+            label: sankeyLabels,
+        },
+        link: sankeyLinks
+    };
+
+    sankeyData = [sankeyData];
+
+    let sankeyLayout = {
+        width: outer_w,
+        height: 400,
+        title: {text: title}
+    };
+
+    console.log("SankeyPlot sankeyData:", sankeyData[0]);
+    console.log("SankeyPlot sankeyLayout:", sankeyLayout);
+
+    return (
+      <Plot
+        data={sankeyData}
+        layout={sankeyLayout}
       />
     );
 }

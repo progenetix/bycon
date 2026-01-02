@@ -14,8 +14,8 @@ beacons. They can reflect different aspects of the beacon's content, such as:
 * content of the resources's collections (datasets or cohorts in the Beacon model)
 * dynamically generated summaries of query results
 
-Typical summaries reflect the count of value occurrences for individual properties,
-or the intersection of two properties (2-dimensional aggregations).
+Typical summaries reflect the count of value occurrences for individual properties (1-dimensional, "1D")
+or the intersection of two properties (2-dimensional aggregations, "2D").
 
 !!! info "Further Info"
 
@@ -49,10 +49,9 @@ or the intersection of two properties (2-dimensional aggregations).
 
 #### Scope of the summary counts
 
+!!! question "On which entity are the summaries reported?"
 
-!!! question "On which entity are the counts reported?"
-
-    Do the counts have to be projected to the requested entity, or can they
+    Do the summaries have to be projected to the requested entity, or can they
     be reported on basis of pre-defined entities (e.g. can a request to `/individuals/`
     report the numbers for the matched sample histologies or the individuals with the
     matched histologies?.
@@ -78,12 +77,14 @@ term selection (==TBD==). Example:
 
 Empowering aggregation responses or summary data relies on several components:
 
-* aggregation schema definitions
-* internal handling of aggregation pipelines
-* a response format for supported aggregations (similar to exposing `filtering_terms`)
-* a response format for the summaries
-* request parameters for selecting aggregation types
-    - additional request parameters for modifying responses (e.g. limits, binning...)
+* schema definitions
+* data aggregation pipelines
+* an informational response for about supported summaries (similar to the `/filtering_terms/` endpoint)
+* request parameters for selecting summary types
+    - `aggregationTermIds`, also suitable for `GET` requests
+    - `aggregationTerms` for `POST`ed aggregation schemas
+    - additional reuest parameters for modifying responses (e.g. limits, binning...)
+* the response format for the summaries
 * the front end logic - which is not part of this itself but serves for understanding
   requirements and test formats
 
@@ -351,7 +352,7 @@ could also be `type: "pie"` for pie charts. Obviously, additional data manipulat
 
 
 This example shows a pie chart for a similar 1D summary generated
-through `SimplePlotlyPie` in [`bycon`'s dashboard implementation](https://github.com/progenetix/bycon/blob/7a6c110f716187d4345b97df734b6e4234137b2d/beaconplusWeb/src/components/summaries/SummaryPlots.js).
+through `SimplePlotlyPie` in [`bycon`'s dashboard implementation](https://github.com/progenetix/bycon/blob/main/beaconplusWeb/src/components/summaries/).
 
 ##### 2D Summary to _Stacked Bar Chart_
 
@@ -369,6 +370,8 @@ Processing Beacon summaries for a stacked bar chart requires to:
 * create a data trace for each unique value of the 2nd concept
      - each trace will contain `x` and `y` values for all unique values of the 1st concept (e.g. `diagnosis`)
        for the observations matching the 2nd concept value (e.g. `male`)
+
+An example implementation targeting `Plotly.js` based visualization can be found as WiP inside the [`bycon/beaconplusWeb/` code ](https://github.com/progenetix/bycon/blob/main/beaconplusWeb/src/components/summaries/).
 
 ![Stacked Bar Chart Example](img/summary-plot-2D-example.png)
 /// caption

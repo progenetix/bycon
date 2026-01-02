@@ -10,7 +10,6 @@ export default function SummaryTraces({ agg, filterUnknowns, filterOthers, colNo
     // for 1..n dimensions but downstream only 1 or 2 are used so far
     let keyedProps      = []
     distribution.forEach(function (v) {
-        // console.log(v)
         let cvs = v["conceptValues"];
         let c = v["count"]
         cvs.forEach(function (cv, index) {
@@ -88,13 +87,13 @@ function SingleTrace({filteredFirsts, other, filterOthers}) {
     let ys = [];
     let hos = [];
     for (const first of filteredFirsts) {
-        console.log("...SingleTrace first:", first)
+        // console.log("...SingleTrace first:", first)
         xs.push(first["id"]);
         ys.push(first["sum"]);
         hos.push(`${first["label"]}: ${first["sum"]}`);
     }
     const tracesData = [{x: xs, y: ys, hovertext: hos}];
-    return ({tracesData})
+    return {tracesData};
 }
 
 //----------------------------------------------------------------------------//
@@ -102,6 +101,7 @@ function SingleTrace({filteredFirsts, other, filterOthers}) {
 function MultiTraces({filteredFirsts, other, otherIds, filterOthers, sortedSeconds, distribution}) {
 
     let tracesData = []
+    let {sankeyLabels, sankeyLinks} = SankeyLinks({filteredFirsts, sortedSeconds, distribution});
     
     for (const second of sortedSeconds) {
         let id2 = second["id"]
@@ -109,12 +109,10 @@ function MultiTraces({filteredFirsts, other, otherIds, filterOthers, sortedSecon
         let thisTrace = {name: lab2, x: [], y: [], hovertext: []}
         for (const first of filteredFirsts) {
             let id1 = first["id"]
-            let lab1 = first["label"]
             let c = CountMatches(distribution, id1, id2)
+            let lab = `${first["label"]} & ${lab2}: ${c} of ${first["sum"]}`;
             thisTrace.x.push(id1);
             thisTrace.y.push(c);
-            let lab = `${lab1} & ${lab2}: ${c}`;
-            lab += ` of ${first["sum"]}`;
             thisTrace.hovertext.push(lab);
         }
         // adding the "other" category if needed as last entry per trace
@@ -126,15 +124,54 @@ function MultiTraces({filteredFirsts, other, otherIds, filterOthers, sortedSecon
             if (c > 0) {
                 thisTrace.x.push("other");
                 thisTrace.y.push(c);
-                let lab = `other & ${lab2}: ${c}`;
-                lab += ` of ${other["sum"]}`;
+                let lab = `other & ${lab2}: ${c} of ${other["sum"]}`;
                 thisTrace.hovertext.push(lab);
             }
         }
         tracesData.push(thisTrace);
     }
 
-    return ({tracesData})
+    return {tracesData, sankeyLabels, sankeyLinks};
+ 
+}
+//----------------------------------------------------------------------------//
+
+function SankeyLinks({filteredFirsts, sortedSeconds, distribution}) {
+
+    // TODO: others
+    let sankeyKeys = []
+    let sankeyLabels = []
+    let sankeyLinks = {
+        source: [],
+        target: [],
+        value:  []
+    }
+
+    for (const f of filteredFirsts.concat(sortedSeconds)) {
+        if (!sankeyKeys.includes(f["id"])) {
+            sankeyKeys.push(f["id"])
+            sankeyLabels.push(`${f["label"]}: ${f["label"]} (${f["sum"]})`)
+        }
+    }
+
+    for (const d in distribution) {
+        let cvs = distribution[d]["conceptValues"];
+        if (cvs.length == 2) {
+            let id1 = cvs[0]["id"]
+            let id2 = cvs[1]["id"]
+            if (sankeyKeys.includes(id1)) {
+                let sourceIndex = sankeyKeys.indexOf(id1)
+                let targetIndex = sankeyKeys.indexOf(id2)
+                let count = distribution[d]["count"]
+                sankeyLinks["source"].push(sourceIndex)
+                sankeyLinks["target"].push(targetIndex)
+                sankeyLinks["value"].push(count)
+            }
+        }
+    }
+
+
+    return {sankeyLabels, sankeyLinks};
  
 }
 
@@ -153,7 +190,7 @@ function CountMatches(distribution, id1, id2) {
     if (matches.length > 0) {
         c = matches[0]["count"]
     }
-    return c
+    return c;
 }
 
 
