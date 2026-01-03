@@ -39,7 +39,6 @@ export function SummaryPlots({ summaryResults, filterUnknowns }) {
 function AggregationPlot({ agg, filterUnknowns, filterOthers }) {
 
     let concepts        = agg["concepts"]
-    console.log(Object.keys(agg));
 
     let dims = 1
     if (concepts && concepts.length > 0) {
@@ -161,9 +160,6 @@ function SankeyPlot({ sankeyLabels, sankeyLinks, outer_w, title}) { //, title
         height: 400,
         title: {text: title}
     };
-
-    console.log("SankeyPlot sankeyData:", sankeyData[0]);
-    console.log("SankeyPlot sankeyLayout:", sankeyLayout);
 
     return (
       <Plot
