@@ -383,7 +383,6 @@ the 2nd concept shown in the legend and hover text.
 
 ##### Sankey diagrams
 
-
 Sankey diagrams are another way to visualise 2D (or more) aggregations. The data
 of a Beacon summary distribution can be transformed for Sankey charts by creating
 

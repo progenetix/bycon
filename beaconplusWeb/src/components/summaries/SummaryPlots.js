@@ -5,13 +5,11 @@ import SummaryTraces from "./SummaryTraces";
 
 //----------------------------------------------------------------------------//
 
-var colNo = 15
+var colNo = 20
 
 //----------------------------------------------------------------------------//
 
 export function SummaryPlots({ summaryResults, filterUnknowns }) {
-
-    const filterOthers = false //true
 
     return (
         <>
@@ -22,7 +20,6 @@ export function SummaryPlots({ summaryResults, filterUnknowns }) {
                     <AggregationPlot
                         agg={r}
                         filterUnknowns={filterUnknowns}
-                        filterOthers={filterOthers}
                     />
                 )}
                 </>
@@ -36,16 +33,13 @@ export function SummaryPlots({ summaryResults, filterUnknowns }) {
 
 //----------------------------------------------------------------------------//
 
-function AggregationPlot({ agg, filterUnknowns, filterOthers }) {
+function AggregationPlot({ agg, filterUnknowns }) {
 
-    let concepts        = agg["concepts"]
+    console.log("==>> Plot for", agg["label"]);
+    let concepts = agg["concepts"]
+    let dimension = concepts.length
 
-    let dims = 1
-    if (concepts && concepts.length > 0) {
-        dims = concepts.length
-    }
-
-    let {tracesData, sankeyLabels, sankeyLinks} = SummaryTraces({ agg, filterUnknowns, filterOthers, colNo });
+    let {tracesData, sankeyLabels, sankeyLinks} = SummaryTraces({ agg, filterUnknowns, colNo });
 
     const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
     const containerRef = useCallback((node) => {
@@ -60,7 +54,7 @@ function AggregationPlot({ agg, filterUnknowns, filterOthers }) {
         return <></>;
     }
 
-    if (tracesData[0].x.length <= 8 && dims < 2 && !agg["sorted"]) {
+    if (tracesData[0].x.length <= 8 && dimension < 2 && !agg["sorted"]) {
         console.log("Rendering SimplePlotlyPie for", agg["label"]);
         return (
         <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
@@ -71,7 +65,7 @@ function AggregationPlot({ agg, filterUnknowns, filterOthers }) {
         );
     }
 
-    if (tracesData[0].x.length <= 8 && dims == 2 && sankeyLabels && sankeyLabels.length > 0) {
+    if (tracesData[0].x.length <= 10 && dimension == 2 && sankeyLabels && sankeyLabels.length > 0) {
         console.log("Rendering SankeyPlot for", agg["label"]);
         return (
         <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
@@ -130,7 +124,7 @@ function StackedPlotlyBar({ tracesData, outer_w, title}) { //, title
             {
                 barmode: 'stack',
                 width: outer_w,
-                height: 240,
+                height: 400,
                 title: {text: title}
             }
         }

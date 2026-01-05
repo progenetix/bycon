@@ -1,10 +1,13 @@
 
 //----------------------------------------------------------------------------//
 
-export default function SummaryTraces({ agg, filterUnknowns, filterOthers, colNo }) {
-
+export default function SummaryTraces({ agg, filterUnknowns, colNo }) {
+    // TODO: The handling of "other" is currently done downstream but it would be
+    // simpler to have a rewrite of the 2D distributions after collating everything
+    // above the cut-off - rewriting the first propertyValue to other...
     let presorted       = agg["sorted"] ? true : false
     let distribution    = agg["distribution"]
+    let dimension       = agg["concepts"] ? agg["concepts"].length : 1
 
     // getting all keys and generating the sums for sorting
     // for 1..n dimensions but downstream only 1 or 2 are used so far
@@ -16,7 +19,7 @@ export default function SummaryTraces({ agg, filterUnknowns, filterOthers, colNo
             ! keyedProps[index] ? keyedProps[index] = {} : keyedProps
             let k = cv["id"];
             let l = cv["label"] ? cv["label"] : k;
-            if (! (k in keyedProps[index]) ) {
+            if (! (k in keyedProps[index])) {
                 keyedProps[index][k] = {id: k, label: l, sum: c};
             } else {
                 keyedProps[index][k]["sum"] += c;
@@ -32,12 +35,15 @@ export default function SummaryTraces({ agg, filterUnknowns, filterOthers, colNo
 
     // finding or creating the "other" category for the first dimension
     let other = sortedFirsts.find(obj => obj.id === 'other') ? sortedFirsts.find(obj => obj.id === 'other') : {id: "other", label: "other", sum: 0};
-    let otherIds = []
+    if (! other["sum"]) {
+        other["sum"] = 0;
+    }
 
     // removal of the "other" category from the first dimension before processing
     sortedFirsts = sortedFirsts.filter(object => {
         return object.id !== "other";
     });
+
 
     // removal of the "unknown" and "undefined" categories from the first dimension
     if (filterUnknowns == true) {
@@ -49,22 +55,25 @@ export default function SummaryTraces({ agg, filterUnknowns, filterOthers, colNo
         });
     }
 
-    // filtering based on the column number with other matches counted with the "other" category
-    let filteredFirsts = []
-    let i = 0
-    for (const first of sortedFirsts) {
-        i += 1
-        if (i <= colNo) {
-            filteredFirsts.push(first)
-        } else {
-            other["sum"] += first["sum"]
-            otherIds.push(first["id"])
-        }
+    if (sortedFirsts.length > colNo) {
+        sortedFirsts = sortedFirsts.slice(0, colNo);
     }
 
-    // Early return if only single dimension
-    if (keyedProps.length == 1) {
-        return SingleTrace({filteredFirsts, other, filterOthers});
+    let sortedFirstIds = sortedFirsts.map(obj => obj.id);
+
+    if (dimension == 1) {
+        distribution.forEach(function (v) {
+            let cvs = v["conceptValues"];
+            if (! sortedFirstIds.includes(cvs[0]["id"]) ) {
+                other["sum"] += v["count"];
+            }
+        });
+        if (other["sum"] > 0) {
+            sortedFirsts.push(other);
+        }
+        // Early return if only single dimension
+        let {tracesData} = SingleTrace({sortedFirsts})
+        return {tracesData};
     }
 
     // sorting the second dimension
@@ -73,21 +82,53 @@ export default function SummaryTraces({ agg, filterUnknowns, filterOthers, colNo
     });
     sortedSeconds = sortedSeconds.sort((a, b) => a.sum < b.sum ? 1 : -1);
 
-    return MultiTraces({filteredFirsts, other, otherIds, filterOthers, sortedSeconds, distribution});
+    let limitedDistribution = [];
+    let otherSeconds = {}
+    for (let s of sortedSeconds) {
+        otherSeconds[s["id"]] = {id: s["id"], label: s["label"], count: 0};
+    }
+    otherSeconds["undefined"] = {id: "undefined", label: "undefined", count: 0};
+    distribution.forEach(function (v) {
+        let cvs = v["conceptValues"];
+        if (sortedFirstIds.includes(cvs[0]["id"])) {
+            limitedDistribution.push(v);
+        } else {
+            let secondId =  cvs[1] ? cvs[1]["id"] : "undefined";
+            otherSeconds[ secondId ]["count"] += v["count"];
+            other["sum"] += v["count"];
+        }
+    });
+
+    console.log("... sortedFirsts before other", sortedFirsts.at(-1));
+    sortedFirsts.push(other);
+    console.log("... sortedFirsts after other", sortedFirsts.at(-1));
+    // adding the "other" category for the second dimension if needed
+    for (let s in otherSeconds) {
+        if (otherSeconds[s]["count"] > 0) {
+            limitedDistribution.push({
+                conceptValues: [
+                    {id: "other", label: "other"},
+                    {id: otherSeconds[s]["id"], label: otherSeconds[s]["label"]}
+                ],
+                count: otherSeconds[s]["count"]
+            });
+        }
+    }
+
+    let {sankeyLabels, sankeyLinks} = SankeyLinks({sortedFirsts, sortedSeconds, limitedDistribution});
+    let {tracesData} = MultiTraces({sortedFirsts, sortedSeconds, limitedDistribution});
+    return {tracesData, sankeyLabels, sankeyLinks};
 
 }
 
 //----------------------------------------------------------------------------//
 
-function SingleTrace({filteredFirsts, other, filterOthers}) {
-    if (other["sum"] > 0 && filterOthers == false) {
-        filteredFirsts.push(other)
-    }
+function SingleTrace({sortedFirsts}) {
     let xs = [];
     let ys = [];
     let hos = [];
-    for (const first of filteredFirsts) {
-        // console.log("...SingleTrace first:", first)
+    for (const first of sortedFirsts) {
+        console.log("...SingleTrace first:", first)
         xs.push(first["id"]);
         ys.push(first["sum"]);
         hos.push(`${first["label"]}: ${first["sum"]}`);
@@ -98,47 +139,32 @@ function SingleTrace({filteredFirsts, other, filterOthers}) {
 
 //----------------------------------------------------------------------------//
 
-function MultiTraces({filteredFirsts, other, otherIds, filterOthers, sortedSeconds, distribution}) {
+function MultiTraces({sortedFirsts, sortedSeconds, limitedDistribution}) {
 
     let tracesData = []
-    let {sankeyLabels, sankeyLinks} = SankeyLinks({filteredFirsts, sortedSeconds, distribution});
     
     for (const second of sortedSeconds) {
         let id2 = second["id"]
         let lab2 = second["label"]
         let thisTrace = {name: lab2, x: [], y: [], hovertext: []}
-        for (const first of filteredFirsts) {
+        for (const first of sortedFirsts) {
             let id1 = first["id"]
-            let c = CountMatches(distribution, id1, id2)
+            let c = CountMatches(limitedDistribution, id1, id2)
             let lab = `${first["label"]} & ${lab2}: ${c} of ${first["sum"]}`;
             thisTrace.x.push(id1);
             thisTrace.y.push(c);
             thisTrace.hovertext.push(lab);
         }
-        // adding the "other" category if needed as last entry per trace
-        if (filterOthers == false) {
-            let c = 0
-            for (const oid of otherIds) {
-                c += CountMatches(distribution, oid, id2)
-            }
-            if (c > 0) {
-                thisTrace.x.push("other");
-                thisTrace.y.push(c);
-                let lab = `other & ${lab2}: ${c} of ${other["sum"]}`;
-                thisTrace.hovertext.push(lab);
-            }
-        }
         tracesData.push(thisTrace);
     }
 
-    return {tracesData, sankeyLabels, sankeyLinks};
+    return {tracesData};
  
 }
 //----------------------------------------------------------------------------//
 
-function SankeyLinks({filteredFirsts, sortedSeconds, distribution}) {
+function SankeyLinks({sortedFirsts, sortedSeconds, limitedDistribution}) {
 
-    // TODO: others
     let sankeyKeys = []
     let sankeyLabels = []
     let sankeyLinks = {
@@ -147,30 +173,30 @@ function SankeyLinks({filteredFirsts, sortedSeconds, distribution}) {
         value:  []
     }
 
-    for (const f of filteredFirsts.concat(sortedSeconds)) {
+    for (const f of sortedFirsts.concat(sortedSeconds)) {
         if (!sankeyKeys.includes(f["id"])) {
             sankeyKeys.push(f["id"])
             sankeyLabels.push(`${f["label"]}: ${f["label"]} (${f["sum"]})`)
         }
     }
 
-    for (const d in distribution) {
-        let cvs = distribution[d]["conceptValues"];
+    for (const d in limitedDistribution) {
+        let cvs = limitedDistribution[d]["conceptValues"];
+        // console.log("...SankeyLinks cvs:", cvs)
         if (cvs.length == 2) {
-            let id1 = cvs[0]["id"]
-            let id2 = cvs[1]["id"]
+            let id1 = cvs[0]["id"];
+            let id2 = cvs[1]["id"];
+            let targetIndex = sankeyKeys.indexOf(id2);
+            let count = limitedDistribution[d]["count"];
             if (sankeyKeys.includes(id1)) {
-                let sourceIndex = sankeyKeys.indexOf(id1)
-                let targetIndex = sankeyKeys.indexOf(id2)
-                let count = distribution[d]["count"]
-                sankeyLinks["source"].push(sourceIndex)
-                sankeyLinks["target"].push(targetIndex)
-                sankeyLinks["value"].push(count)
+                let sourceIndex = sankeyKeys.indexOf(id1);
+                sankeyLinks["source"].push(sourceIndex);
+                sankeyLinks["target"].push(targetIndex);
+                sankeyLinks["value"].push(count);
             }
         }
     }
-
-
+ 
     return {sankeyLabels, sankeyLinks};
  
 }
