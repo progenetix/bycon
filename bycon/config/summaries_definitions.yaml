@@ -8,8 +8,8 @@ description: >-
   property to aggregate on, and optional `termIds` or `splits` for selection
   or binning of the results in the returned `distribution`.
 $defs:
-  histologicalDiagnoses:
-    id: histologicalDiagnoses
+  selectedDiagnosesBySex:
+    id: selectedDiagnosesBySex
     label: Selected Diagnostic Classes (by NCIT)
     description: >-
       Count of histological diagnoses in matched biosamples
@@ -118,6 +118,7 @@ $defs:
     description: >-
       Age at diagnosis (sample collection...)
     scope: biosample
+    sorted: True
     concepts:
       - property: biosample.collection_moment
         format: iso8601duration

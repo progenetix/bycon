@@ -6,6 +6,13 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2026-01-10 (v2.7.1)
+
+* further refactoring of summaries processing
+    - `bycon` - renaming of `aggregator_definitions` to `summaries_definitions` to keep a distinction from Beacon aggregation (_i.e._ involving multiple beacons)
+    - `beaconplusWeb` with several changes in `components/summaries`, generally
+      involving code "reshaping" but no major functional changes
+
 ### 2025-12-31 (v2.7.0 "That Was 2025")
 
 * `beaconplusWeb` front end updates

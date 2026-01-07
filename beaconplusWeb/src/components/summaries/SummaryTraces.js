@@ -1,13 +1,13 @@
 
 //----------------------------------------------------------------------------//
 
-export default function SummaryTraces({ agg, filterUnknowns, colNo }) {
+export default function SummaryTraces({ summary, filterUnknowns, colNo, includeOthers }) {
     // TODO: The handling of "other" is currently done downstream but it would be
     // simpler to have a rewrite of the 2D distributions after collating everything
     // above the cut-off - rewriting the first propertyValue to other...
-    let presorted       = agg["sorted"] ? true : false
-    let distribution    = agg["distribution"]
-    let dimension       = agg["concepts"] ? agg["concepts"].length : 1
+    let presorted       = summary["sorted"] ? true : false
+    let distribution    = summary["distribution"]
+    let dimension       = summary["concepts"] ? summary["concepts"].length : 1
 
     // getting all keys and generating the sums for sorting
     // for 1..n dimensions but downstream only 1 or 2 are used so far
@@ -60,58 +60,69 @@ export default function SummaryTraces({ agg, filterUnknowns, colNo }) {
     }
 
     let sortedFirstIds = sortedFirsts.map(obj => obj.id);
+    let limitedDistribution = [];
+    let otherDistribution = [];
+    distribution.forEach(function (v) {
+        let cvs = v["conceptValues"];
+        if (sortedFirstIds.includes(cvs[0]["id"])) {
+            limitedDistribution.push(v);
+        } else {
+            otherDistribution.push(v);
+            other["sum"] += v["count"];
+        }
+    });
 
     if (dimension == 1) {
-        distribution.forEach(function (v) {
-            let cvs = v["conceptValues"];
-            if (! sortedFirstIds.includes(cvs[0]["id"]) ) {
-                other["sum"] += v["count"];
-            }
-        });
-        if (other["sum"] > 0) {
+        if (other["sum"] > 0 && includeOthers == true) {
             sortedFirsts.push(other);
+            limitedDistribution.push({
+                conceptValues: [
+                    {id: "other", label: "other"}
+                ],
+                count: other["sum"]
+            });
         }
         // Early return if only single dimension
         let {tracesData} = SingleTrace({sortedFirsts})
         return {tracesData};
     }
 
+    // Now only if more than 1 dimension
+
     // sorting the second dimension
-    let sortedSeconds = Object.keys(keyedProps[1]).map(function(key) {
-      return keyedProps[1][key];
-    });
+    let sortedSeconds = []
+    let otherSeconds = {}
+
+    if (dimension > 1) {
+        sortedSeconds = Object.keys(keyedProps[1]).map(function(key) {
+          return keyedProps[1][key];
+        });
+    }
     sortedSeconds = sortedSeconds.sort((a, b) => a.sum < b.sum ? 1 : -1);
 
-    let limitedDistribution = [];
-    let otherSeconds = {}
     for (let s of sortedSeconds) {
         otherSeconds[s["id"]] = {id: s["id"], label: s["label"], count: 0};
     }
     otherSeconds["undefined"] = {id: "undefined", label: "undefined", count: 0};
-    distribution.forEach(function (v) {
+    otherDistribution.forEach(function (v) {
         let cvs = v["conceptValues"];
-        if (sortedFirstIds.includes(cvs[0]["id"])) {
-            limitedDistribution.push(v);
-        } else {
-            let secondId =  cvs[1] ? cvs[1]["id"] : "undefined";
-            otherSeconds[ secondId ]["count"] += v["count"];
-            other["sum"] += v["count"];
-        }
+        let secondId =  cvs[1] ? cvs[1]["id"] : "undefined";
+        otherSeconds[ secondId ]["count"] += v["count"];
     });
 
-    console.log("... sortedFirsts before other", sortedFirsts.at(-1));
-    sortedFirsts.push(other);
-    console.log("... sortedFirsts after other", sortedFirsts.at(-1));
-    // adding the "other" category for the second dimension if needed
-    for (let s in otherSeconds) {
-        if (otherSeconds[s]["count"] > 0) {
-            limitedDistribution.push({
-                conceptValues: [
-                    {id: "other", label: "other"},
-                    {id: otherSeconds[s]["id"], label: otherSeconds[s]["label"]}
-                ],
-                count: otherSeconds[s]["count"]
-            });
+    if (includeOthers == true) {
+        sortedFirsts.push(other);
+        // adding the "other" category for the second dimension if needed
+        for (let s in otherSeconds) {
+            if (otherSeconds[s]["count"] > 0) {
+                limitedDistribution.push({
+                    conceptValues: [
+                        {id: "other", label: "other"},
+                        {id: otherSeconds[s]["id"], label: otherSeconds[s]["label"]}
+                    ],
+                    count: otherSeconds[s]["count"]
+                });
+            }
         }
     }
 
@@ -124,25 +135,20 @@ export default function SummaryTraces({ agg, filterUnknowns, colNo }) {
 //----------------------------------------------------------------------------//
 
 function SingleTrace({sortedFirsts}) {
-    let xs = [];
-    let ys = [];
-    let hos = [];
+    let tracesData = [{x: [], y: [], hovertext: []}];
     for (const first of sortedFirsts) {
         console.log("...SingleTrace first:", first)
-        xs.push(first["id"]);
-        ys.push(first["sum"]);
-        hos.push(`${first["label"]}: ${first["sum"]}`);
+        tracesData[0].x.push(first["id"]);
+        tracesData[0].y.push(first["sum"]);
+        tracesData[0].hovertext.push(`${first["label"]}: ${first["sum"]}`);
     }
-    const tracesData = [{x: xs, y: ys, hovertext: hos}];
     return {tracesData};
 }
 
 //----------------------------------------------------------------------------//
 
 function MultiTraces({sortedFirsts, sortedSeconds, limitedDistribution}) {
-
     let tracesData = []
-    
     for (const second of sortedSeconds) {
         let id2 = second["id"]
         let lab2 = second["label"]
@@ -157,7 +163,6 @@ function MultiTraces({sortedFirsts, sortedSeconds, limitedDistribution}) {
         }
         tracesData.push(thisTrace);
     }
-
     return {tracesData};
  
 }

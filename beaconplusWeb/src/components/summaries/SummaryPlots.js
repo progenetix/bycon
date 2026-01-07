@@ -5,7 +5,11 @@ import SummaryTraces from "./SummaryTraces";
 
 //----------------------------------------------------------------------------//
 
-var colNo = 20
+const colNo = 20
+const includeOthers = true
+// const includeOthers = false
+const dashboardPies = ["selectedPlatformTechnologies", "sampleCountries"]
+const dashboardSankeys = ["selectedDiagnosesBySex"]
 
 //----------------------------------------------------------------------------//
 
@@ -17,8 +21,8 @@ export function SummaryPlots({ summaryResults, filterUnknowns }) {
             summaryResults.map((r) => (
                 <>
                 {r["concepts"].length > 0 && (
-                    <AggregationPlot
-                        agg={r}
+                    <SummaryPlot
+                        summary={r}
                         filterUnknowns={filterUnknowns}
                     />
                 )}
@@ -33,13 +37,12 @@ export function SummaryPlots({ summaryResults, filterUnknowns }) {
 
 //----------------------------------------------------------------------------//
 
-function AggregationPlot({ agg, filterUnknowns }) {
+function SummaryPlot({ summary, filterUnknowns }) {
 
-    console.log("==>> Plot for", agg["label"]);
-    let concepts = agg["concepts"]
-    let dimension = concepts.length
+    console.log("==>> Plot for", summary["label"]);
+    let summaryId = summary["id"]
 
-    let {tracesData, sankeyLabels, sankeyLinks} = SummaryTraces({ agg, filterUnknowns, colNo });
+    let {tracesData, sankeyLabels, sankeyLinks} = SummaryTraces({ summary, filterUnknowns, colNo, includeOthers });
 
     const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
     const containerRef = useCallback((node) => {
@@ -48,42 +51,42 @@ function AggregationPlot({ agg, filterUnknowns }) {
 
     const outer_w = boundingRect.width
 
-    // console.log("tracesData for", agg["label"], ":", tracesData.length, concepts.length);
+    // console.log("tracesData for", summary["label"], ":", tracesData.length, concepts.length);
 
     if (tracesData.length == 0) {
         return <></>;
     }
 
-    if (tracesData[0].x.length <= 8 && dimension < 2 && !agg["sorted"]) {
-        console.log("Rendering SimplePlotlyPie for", agg["label"]);
+    if (dashboardPies.includes(summaryId)) {
+        console.log("Rendering SimplePlotlyPie for", summary["label"]);
         return (
         <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
             <SimplePlotlyPie
-                tracesData={tracesData} outer_w={outer_w} title={agg["label"]}
+                tracesData={tracesData} outer_w={outer_w} title={summary["label"]}
             />
         </div>
         );
     }
 
-    if (tracesData[0].x.length <= 10 && dimension == 2 && sankeyLabels && sankeyLabels.length > 0) {
-        console.log("Rendering SankeyPlot for", agg["label"]);
+    if (dashboardSankeys.includes(summaryId)) {
+        console.log("Rendering SankeyPlot for", summary["label"]);
         return (
         <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
             <SankeyPlot
                 sankeyLabels={sankeyLabels}
                 sankeyLinks={sankeyLinks}
                 outer_w={outer_w}
-                title={agg["label"] + " - Sankey Diagram"}
+                title={summary["label"] + " - Sankey Diagram"}
             />
         </div>
         );
     }
 
-    console.log("Rendering StackedPlotlyBar for", agg["label"]);
+    console.log("Rendering StackedPlotlyBar for", summary["label"]);
     return (
     <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
         <StackedPlotlyBar
-            tracesData={tracesData} outer_w={outer_w} title={agg["label"]}
+            tracesData={tracesData} outer_w={outer_w} title={summary["label"]}
         />
      </div>
     );

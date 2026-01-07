@@ -10,7 +10,7 @@ from bycon_helpers import *
 class ByconSummaries:
     def __init__(self, ds_id=None):
         self.dataset_id = ds_id
-        a_d_s = BYC.get("aggregator_definitions", {}).get("$defs", {}).values()
+        a_d_s = BYC.get("summaries_definitions", {}).get("$defs", {}).values()
 
         self.summaries = []
         # ordered selection of aggregation concepts
