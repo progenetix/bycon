@@ -13,16 +13,15 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
     // for 1..n dimensions but downstream only 1 or 2 are used so far
     let keyedProps      = []
     distribution.forEach(function (v) {
-        let cvs = v["conceptValues"];
-        let c = v["count"]
-        cvs.forEach(function (cv, index) {
+        const { conceptValues, count } = v;
+        conceptValues.forEach(function (cv, index) {
             ! keyedProps[index] ? keyedProps[index] = {} : keyedProps
-            let k = cv["id"];
-            let l = cv["label"] ? cv["label"] : k;
-            if (! (k in keyedProps[index])) {
-                keyedProps[index][k] = {id: k, label: l, sum: c};
+            let key = cv.id;
+            let label = cv.label || key;
+            if (! (key in keyedProps[index])) {
+                keyedProps[index][key] = {id: key, label: label, sum: count};
             } else {
-                keyedProps[index][k]["sum"] += c;
+                keyedProps[index][key]["sum"] += count;
             }
         });
     });
@@ -187,7 +186,6 @@ function SankeyLinks({sortedFirsts, sortedSeconds, limitedDistribution}) {
 
     for (const d in limitedDistribution) {
         let cvs = limitedDistribution[d]["conceptValues"];
-        // console.log("...SankeyLinks cvs:", cvs)
         if (cvs.length == 2) {
             let id1 = cvs[0]["id"];
             let id2 = cvs[1]["id"];

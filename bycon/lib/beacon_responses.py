@@ -462,7 +462,7 @@ class BeaconDataResponse:
             if t_count == 1 and "aggregated" in self.returned_granularity:
                 BA = ByconSummaries(BYC["BYC_DATASET_IDS"][0])        
                 self.data_response["response"]["collections"][0].update({
-                    "summary_results": BA.datasetAllAggregation()
+                    "summary_results": BA.datasetAllSummaries()
                 })
 
         self.data_response.update({
@@ -873,7 +873,7 @@ class ByconResultSets:
             BA = ByconSummaries(ds_id)
             self.__retrieve_single_dataset_data(ds_id)
             self.datasets_aggregations.update({
-                ds_id: BA.datasetResultAggregation(self.datasets_results[ds_id])
+                ds_id: BA.datasetResultSummaries(self.datasets_results[ds_id])
             })
         ds_d_duration = datetime.now() - ds_d_start
         dbm = f'... datasets data retrieval needed {ds_d_duration.total_seconds()} seconds'

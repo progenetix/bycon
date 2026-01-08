@@ -23,7 +23,7 @@ class ByconSummaries:
         else:
             self.summaries = list(a_d_s)
 
-        self.dataset_aggregation = [] 
+        self.dataset_summaries = [] 
         self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         self.data_client = self.mongo_client[ds_id]
         self.term_coll = self.data_client["collations"]
@@ -33,35 +33,35 @@ class ByconSummaries:
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def datasetResultAggregation(self, dataset_result={}):
+    def datasetResultSummaries(self, dataset_result={}):
         self.dataset_result = dataset_result
 
         # CAVE: Always aggregating on biosamples
-        self.__aggregate_dataset_data(use_dataset_result=True)
+        self.__summarize_dataset_data(use_dataset_result=True)
 
-        return self.dataset_aggregation
+        return self.dataset_summaries
 
 
     # -------------------------------------------------------------------------#
 
-    def datasetAllAggregation(self):
-        self.__aggregate_dataset_data()
-        return self.dataset_aggregation
+    def datasetAllSummaries(self):
+        self.__summarize_dataset_data()
+        return self.dataset_summaries
 
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 
-    def __aggregate_dataset_data(self, query={}, use_dataset_result=False):
+    def __summarize_dataset_data(self, query={}, use_dataset_result=False):
         # one could aggregate all terms in one pipeline, but this is clearer
         self.aggregation_pre_query = query
         for a_v in self.summaries:
             if use_dataset_result:
                 self.__generate_query_from_dataset_result(a_v)
             a_v.update({"distribution": []})    
-            self.__aggregate_concepts(a_v)
-            self.__reshape_dataset_aggregation()
+            self.__summarize_concepts(a_v)
+            self.__reshape_dataset_summaries()
 
 
     # -------------------------------------------------------------------------#
@@ -80,10 +80,10 @@ class ByconSummaries:
 
     # -------------------------------------------------------------------------#
 
-    def __reshape_dataset_aggregation(self):
+    def __reshape_dataset_summaries(self):
         """Post-processing of the aggregation results to remove unneeded keys.
         """
-        for i_a, a_v in enumerate(self.dataset_aggregation):
+        for i_a, a_v in enumerate(self.dataset_summaries):
             for i_c, c_v in enumerate(a_v.get("concepts", [])):
                 c_v.pop("splits", None)
                 c_v.pop("termIds", None)
@@ -91,7 +91,7 @@ class ByconSummaries:
 
     # -------------------------------------------------------------------------#
 
-    def __aggregate_concepts(self, a_v):
+    def __summarize_concepts(self, a_v):
         if len(concepts := a_v.get("concepts", [])) < 1:
             return
         scopes = set()
@@ -157,7 +157,7 @@ class ByconSummaries:
                 "count": a.get("count", 0)
             })
 
-        self.dataset_aggregation.append(a_v)
+        self.dataset_summaries.append(a_v)
 
 
     # -------------------------------------------------------------------------#
@@ -297,8 +297,6 @@ class ByconSummaries:
                 "default": {"id": "other", "label": "other", "order": len(split_labs)}
             }
         }
-
-        # prdbug(_id)
 
         return _id
 
