@@ -27,7 +27,7 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
     });
 
     // sorting & limiting the first dimension based on the "sum" key
-    let sortedFirsts    = Object.keys(keyedProps[0]).map(function(key) {
+    let sortedFirsts = Object.keys(keyedProps[0]).map(function(key) {
       return keyedProps[0][key];
     });
     sortedFirsts = presorted ? sortedFirsts : sortedFirsts.sort((a, b) => a.sum < b.sum ? 1 : -1);
@@ -43,8 +43,8 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
         return object.id !== "other";
     });
 
-
     // removal of the "unknown" and "undefined" categories from the first dimension
+    let unfilteredNo = sortedFirsts.length;
     if (filterUnknowns == true) {
         sortedFirsts = sortedFirsts.filter(object => {
             return object.id !== "unknown";
@@ -53,6 +53,8 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
             return object.id !== "undefined";
         });
     }
+    let filteredNo = unfilteredNo - sortedFirsts.length;
+    console.log(`Filtered out ${filteredNo} 'unknown'/'undefined' from first dimension.`);
 
     if (sortedFirsts.length > colNo) {
         sortedFirsts = sortedFirsts.slice(0, colNo);
@@ -134,74 +136,88 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
 //----------------------------------------------------------------------------//
 
 function SingleTrace({sortedFirsts}) {
-    let tracesData = [{x: [], y: [], hovertext: []}];
-    for (const first of sortedFirsts) {
-        console.log("...SingleTrace first:", first)
-        tracesData[0].x.push(first["id"]);
-        tracesData[0].y.push(first["sum"]);
-        tracesData[0].hovertext.push(`${first["label"]}: ${first["sum"]}`);
-    }
+    let tracesData = [{
+        x: sortedFirsts.map(first => (first.id)),
+        y: sortedFirsts.map(first => (first.sum)),
+        hovertext: sortedFirsts.map(first => (`${first.label}: ${first.sum}`))
+    }];
     return {tracesData};
 }
 
 //----------------------------------------------------------------------------//
 
 function MultiTraces({sortedFirsts, sortedSeconds, limitedDistribution}) {
-    let tracesData = []
-    for (const second of sortedSeconds) {
-        let id2 = second["id"]
-        let lab2 = second["label"]
-        let thisTrace = {name: lab2, x: [], y: [], hovertext: []}
-        for (const first of sortedFirsts) {
-            let id1 = first["id"]
-            let c = CountMatches(limitedDistribution, id1, id2)
-            let lab = `${first["label"]} & ${lab2}: ${c} of ${first["sum"]}`;
-            thisTrace.x.push(id1);
-            thisTrace.y.push(c);
-            thisTrace.hovertext.push(lab);
-        }
-        tracesData.push(thisTrace);
-    }
+    const tracesData = sortedSeconds.map(second => {
+      const trace = { name: second.label, x: [], y: [], hovertext: [] };
+      sortedFirsts.forEach(first => {
+        const count = CountMatches(limitedDistribution, first.id, second.id);
+        trace.x.push(first.id);
+        trace.y.push(count);
+        trace.hovertext.push(`${first.label} & ${second.label}: ${count} of ${first.sum}`);
+      });
+      return trace;
+    });
     return {tracesData};
- 
 }
+
 //----------------------------------------------------------------------------//
 
-function SankeyLinks({sortedFirsts, sortedSeconds, limitedDistribution}) {
-
-    let sankeyKeys = []
-    let sankeyLabels = []
-    let sankeyLinks = {
-        source: [],
-        target: [],
-        value:  []
-    }
-
-    for (const f of sortedFirsts.concat(sortedSeconds)) {
-        if (!sankeyKeys.includes(f["id"])) {
-            sankeyKeys.push(f["id"])
-            sankeyLabels.push(`${f["label"]}: ${f["label"]} (${f["sum"]})`)
+function SankeyLinks({ sortedFirsts, sortedSeconds, limitedDistribution }) {
+    // Create a map of node IDs to their indices
+    const idToIndex = new Map();
+    const uniqueNodes = new Set();
+    
+    // Collect nodes from both sortedFirsts and sortedSeconds
+    const allNodes = [
+        ...sortedFirsts.map(node => ({ id: node.id, label: node.label, sum: node.sum })),
+        ...sortedSeconds.map(node => ({ id: node.id, label: node.label, sum: node.sum }))
+    ];
+    
+    // Build the node map and collect unique nodes
+    let index = 0;
+    for (const node of allNodes) {
+        if (!uniqueNodes.has(node.id)) {
+            uniqueNodes.add(node.id);
+            idToIndex.set(node.id, index++);
         }
     }
-
-    for (const d in limitedDistribution) {
-        let cvs = limitedDistribution[d]["conceptValues"];
-        if (cvs.length == 2) {
-            let id1 = cvs[0]["id"];
-            let id2 = cvs[1]["id"];
-            let targetIndex = sankeyKeys.indexOf(id2);
-            let count = limitedDistribution[d]["count"];
-            if (sankeyKeys.includes(id1)) {
-                let sourceIndex = sankeyKeys.indexOf(id1);
-                sankeyLinks["source"].push(sourceIndex);
-                sankeyLinks["target"].push(targetIndex);
-                sankeyLinks["value"].push(count);
-            }
+    
+    // Build the node labels array
+    const nodeLabels = Array.from(uniqueNodes).map(nodeId => {
+        const node = allNodes.find(n => n.id === nodeId);
+        return `${node.label}: ${node.label} (${node.sum})`;
+    });
+    
+    // Build the links array
+    const source = [];
+    const target = [];
+    const value = [];
+    
+    for (const entry of limitedDistribution) {
+        const [firstNode, secondNode] = entry.conceptValues;
+        const firstId = firstNode.id;
+        const secondId = secondNode.id;
+        
+        // Check if both nodes exist in the map
+        if (idToIndex.has(firstId) && idToIndex.has(secondId)) {
+            const sourceIdx = idToIndex.get(firstId);
+            const targetIdx = idToIndex.get(secondId);
+            const count = entry.count;
+            
+            source.push(sourceIdx);
+            target.push(targetIdx);
+            value.push(count);
         }
     }
- 
-    return {sankeyLabels, sankeyLinks};
- 
+    
+    return {
+        sankeyLabels: nodeLabels,
+        sankeyLinks: {
+            source,
+            target,
+            value
+        }
+    };
 }
 
 //----------------------------------------------------------------------------//
