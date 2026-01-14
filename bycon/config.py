@@ -3,7 +3,7 @@ from pymongo import MongoClient
 import sys
 import socket
 
-pkg_path = path.dirname( path.abspath(__file__) )
+BEACON_API_VERSION  = "v2.2.2-beaconplus"
 
 """
 Runtime global variables that might be modified through providing them
@@ -12,35 +12,45 @@ in the environment:
 DATABASE_NAMES
 BYCON_MONGO_HOST
 BYC_LOCAL_CONF ==> LOC_PATH
-
 """
 
-BEACON_API_VERSION = "v2.2.2-beaconplus"
+#------------------------------------------------------------------------------#
+# Web settings
+#------------------------------------------------------------------------------#
 
-HTTP_HOST = environ.get('HTTP_HOST', "___shell___")
-HOSTNAME = environ.get('HOSTNAME', socket.gethostname())
-REQUEST_SCHEME = environ.get('REQUEST_SCHEME', "___shell___")
-
-BEACON_ROOT = f"{REQUEST_SCHEME}://{HTTP_HOST}"
-if HTTP_HOST == "___shell___":
-    BEACON_ROOT = f"cli://{HOSTNAME}"
-
-PKG_PATH = pkg_path
-CONF_PATH = path.join(pkg_path, "config")
-LIB_PATH = path.join(pkg_path, "lib")
-
-NO_PARAM_VALUES = ["none", "null", "undefined"]
+PKG_PATH            = path.dirname( path.abspath(__file__) )
+CONF_PATH           = path.join(PKG_PATH, "config")
+LIB_PATH            = path.join(PKG_PATH, "lib")
 
 # path of the calling script is used to point to a local config directory
-CALLER_PATH = path.dirname( path.abspath(sys.argv[0]))
-PROJECT_PATH = path.join(CALLER_PATH, pardir)
-
+CALLER_PATH         = path.dirname( path.abspath(sys.argv[0]))
+PROJECT_PATH        = path.join(CALLER_PATH, pardir)
 # local dataset configurations etc.
-LOC_PATH = environ.get('BYC_LOCAL_CONF', path.join(PROJECT_PATH, "local"))
+LOC_PATH            = environ.get('BYC_LOCAL_CONF', path.join(PROJECT_PATH, "local"))
+
+#------------------------------------------------------------------------------#
+# Web settings
+#------------------------------------------------------------------------------#
+
+HOSTNAME            = environ.get('HOSTNAME', socket.gethostname())
+REQUEST_SCHEME      = environ.get('REQUEST_SCHEME', "___shell___")
+REQUEST_URI         = environ.get('REQUEST_URI', False)
+REQUEST_METHOD      = environ.get('REQUEST_METHOD', '')
+HTTP_HOST           = environ.get('HTTP_HOST', "___shell___")
+BEACON_ROOT         = f"{REQUEST_SCHEME}://{HTTP_HOST}"
+if HTTP_HOST == "___shell___":
+    BEACON_ROOT = f"cli://{HOSTNAME}"
 
 REQUEST_PATH_ROOT = "beacon"
 if "services" in PROJECT_PATH:
     REQUEST_PATH_ROOT = "services"
+
+# path elements after the `beacon` or `services` REQUEST_PATH_ROOT
+REQUEST_PATH_PARAMS = [
+    "request_entity_path_id",
+    "path_ids",
+    "response_entity_path_id"
+]
 
 #------------------------------------------------------------------------------#
 # Database settings
@@ -65,77 +75,76 @@ BYC_DBS = {
   "publication_coll": "publications"
 }
 
-MONGO_DISTINCT_STORAGE_LIMIT = 300000
-VARIANTS_RESPONSE_LIMIT = 300000
+MONGO_DISTINCT_STORAGE_LIMIT    = 300000
+VARIANTS_RESPONSE_LIMIT         = 300000
 
 ################################################################################
 # to be modified during execution ##############################################
 ################################################################################
 
-errors = []
-
 BYC = {
-  "DEBUG_MODE": False,
-  "TEST_MODE": False,
-  "ERRORS": errors,
-  "WARNINGS": [],
-  "NOTES": [],
-  "USER": "anonymous",
+    "DEBUG_MODE":       False,
+    "TEST_MODE":        False,
+    "ERRORS":           [],
+    "WARNINGS":         [],
+    "NOTES":            [],
+    "USER":             "anonymous",
+    "BYC_DATASET_IDS":  [],
 
-  "BYC_DATASET_IDS": [],
+    "default_dataset_id": "examplez",
+    "test_domains": [
+        "localhost"
+    ],
 
-  "default_dataset_id": "examplez",
-  "test_domains": ["localhost"],
- 
-  "info_responses": [
-    "beaconInfoResponse" ,
-    "beaconConfigurationResponse",
-    "beaconMapResponse",
-    "beaconEntryTypesResponse"
-  ],
-  "data_responses": [
-    "beaconCollectionsResponse" ,
-    "beaconResultsetsResponse",
-    "beaconAggregationTermsResponse",
-    "beaconFilteringTermsResponse"
-  ],
+    "info_responses": [
+        "beaconInfoResponse" ,
+        "beaconConfigurationResponse",
+        "beaconMapResponse",
+        "beaconEntryTypesResponse"
+    ],
+    "data_responses": [
+        "beaconCollectionsResponse" ,
+        "beaconResultsetsResponse",
+        "beaconAggregationTermsResponse",
+        "beaconFilteringTermsResponse"
+    ],
 
-  # ..._mappings / ..._definitions are generated from YAML files & should stay static
+    # ..._mappings / ..._definitions are generated from YAML files & should stay static
 
-  "argument_definitions": {},
-  "authorizations": {},
-  "dataset_definitions": {},
-  "datatable_mappings": {},
-  "entity_defaults": {},
-  "env_paths": {},
-  "filter_definitions": {},
-  "handover_definitions": {},
-  "interval_definitions": {},
-  "plot_defaults": {},
-  "request_meta": {},
-  "service_config": {},
-  "test_queries": {},
-  "variant_request_definitions": {},
-  "variant_type_definitions": {},
+    "argument_definitions":     {},
+    "authorizations":           {},
+    "dataset_definitions":      {},
+    "datatable_mappings":       {},
+    "entity_defaults":          {},
+    "env_paths":                {},
+    "filter_definitions":       {},
+    "handover_definitions":     {},
+    "interval_definitions":     {},
+    "plot_defaults":            {},
+    "request_meta":             {},
+    "service_config":           {},
+    "test_queries":             {},
+    "variant_request_definitions": {},
+    "variant_type_definitions": {},
 
-  "loc_mod_pars": [
-    "authorizations",
-    "env_paths",
-    "filter_definitions",
-    "datatable_mappings",
-    "test_queries",
-    "plot_defaults"
-  ],
+    "loc_mod_pars": [
+        "authorizations",
+        "env_paths",
+        "filter_definitions",
+        "datatable_mappings",
+        "test_queries",
+        "plot_defaults"
+    ],
 
 
-  # -------------------------------------------------------------------------- #
+    # -------------------------------------------------------------------------- #
 
-  "authorized_granularities": {},
-  "request_entity_id": None,
-  "response_entity_id": None,
-  "response_entity": {},
-  "response_schema": "beaconInfoResponse",
-  "returned_granularity": "boolean"
+    "authorized_granularities": {},
+    "request_entity_id": None,
+    "response_entity_id": None,
+    "response_entity": {},
+    "response_schema": "beaconInfoResponse",
+    "returned_granularity": "boolean"
 }
 
 # collection object for cmd arguments and web parameters (depending on the HTTP_HOST)
@@ -148,16 +157,20 @@ BYC_PARS = {}
 # additionally to the default local `dataset_id` values can be added (as in 
 # "examplez" here)
 AUTHORIZATIONS = {
-  "anonymous": {
-    "default": "boolean",
-    "examplez": "record"
-  },
-  "local": {"default": "record"}
+    "anonymous": {
+        "default": "boolean",
+        "examplez": "record"
+    },
+    "local": {
+        "default": "record"
+    }
 }
 
 #------------------------------------------------------------------------------#
 # not really to be modified...
 #------------------------------------------------------------------------------#
+
+NO_PARAM_VALUES = ["none", "null", "undefined"]
 
 GRANULARITY_LEVELS = {
   "none": 0,

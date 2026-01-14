@@ -19,13 +19,13 @@ from schema_parsing import ByconSchemas, RecordsHierarchy
 
 class BeaconResponseMeta:
     def __init__(self, data_response=None):
-        self.beacon_schema = BYC["response_entity"].get("defaultSchema", "___none___")
-        self.entity_defaults = BYC.get("entity_defaults", {})
-        self.response_meta = ByconSchemas("beaconResponseMeta", "").get_schema_instance()
+        self.beacon_schema      = BYC["response_entity"].get("defaultSchema", "___none___")
+        self.entity_defaults    = BYC.get("entity_defaults", {})
+        self.response_meta      = ByconSchemas("beaconResponseMeta", "").get_schema_instance()
         self.returned_granularity = BYC.get("returned_granularity", "boolean")
-        self.data_response = data_response
-        self.record_queries = None
-        self.filters = ByconFilters().get_filters()
+        self.data_response      = data_response
+        self.record_queries     = None
+        self.filters            = ByconFilters().get_filters()
 
 
     # -------------------------------------------------------------------------#
