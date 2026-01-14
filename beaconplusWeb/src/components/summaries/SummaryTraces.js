@@ -185,7 +185,7 @@ function SankeyLinks({ sortedFirsts, sortedSeconds, limitedDistribution }) {
     // Build the node labels array
     const nodeLabels = Array.from(uniqueNodes).map(nodeId => {
         const node = allNodes.find(n => n.id === nodeId);
-        return `${node.label}: ${node.label} (${node.sum})`;
+        return `${node.label} (${node.sum})`;
     });
     
     // Build the links array
