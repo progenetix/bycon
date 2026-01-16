@@ -62,5 +62,5 @@ $defs:
       concepts:
         type: array
         items:
-          $ref: "beaconAggregationResults.yaml#/$defs/AggregationConcept"
+          $ref: "./beaconAggregationResults.yaml#/$defs/AggregationConcept"
 

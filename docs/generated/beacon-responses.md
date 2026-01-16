@@ -1,3 +1,11 @@
+## beaconAggregationResponse
+
+Definition for a response that provides solely summaries of records in the beacon but not delivers individual records. While summaries might be also part of other response types (e.g. result set specific in `beaconResultsetResponse`) this response type specifically focuses on providing aggregated statistics of a beacon resource similarily to the `beaconBooleanResponse` and `beaconCountResponse`.
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconAggregationResponse>
+
+
+
 ## beaconCollectionsResponse
 
 A type of Beacon response that includes details about the **collections** in a beacon. The types of collections are defined in each beacon's configuration; if using the Beacon v2+ default model usually the types `dataset` and `cohort` are supported.

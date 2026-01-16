@@ -1,4 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+$id: ___BEACON_ROOT___/services/schemas/beaconEntryTypesResponse/v2026-01-16
 type: object
 description: >-
   The `beaconEntryTypesResponse` provides information about the entry types

@@ -5,7 +5,6 @@ from bycon import (
     BeaconDataResponse,
     BeaconErrorResponse,
     BeaconInfoResponse,
-    prdbug,
     print_json_response,
     print_text_response
 )
@@ -22,6 +21,7 @@ by the next one in the order, if existing:
    `/beacon/biosamples/...`)
 2. from a form value, e.g. `?requestEntityPathId=biosamples`
 3. from a command line argument, e.g. `--requestEntityPathId biosamples`
+    - short form argument is `-e biosamples`
 
 Fallback is `/info` - so the 422 shouldn't be a thing...
 """
@@ -47,9 +47,11 @@ def main():
     if r:
         print_json_response(r)
 
-    e_m = "No correct Beacon path provided. Please refer to the documentation at http://docs.progenetix.org"
+    e_m = "No correct Beacon path provided. Please refer to the documentation at http://bycon.progenetix.org"
     BYC["ERRORS"].append(e_m)
     BeaconErrorResponse().respond_if_errors()
+
+################################################################################
 
 if __name__ == "__main__":
     main()

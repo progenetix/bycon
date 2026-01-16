@@ -16,9 +16,9 @@ properties:
     examples:
       - pgxind-kftx25eh
   sex:
-    $ref: ../common/commonDefinitions.yaml#/$defs/Sex
+    $ref: ../bycon-model/common/commonDefinitions.yaml#/$defs/Sex
   ethnicity:
-    $ref: ../common/commonDefinitions.yaml#/$defs/Ethnicity
+    $ref: ../bycon-model/common/commonDefinitions.yaml#/$defs/Ethnicity
   diseases:
     type: array
     items:
@@ -41,13 +41,13 @@ properties:
       - id: 022f39e9-57ee-4b2b-8b3a-8929e3d69a37
         notes: TCGA case_id
   VitalStatus:
-    $ref: ../common/VitalStatus.yaml
+    $ref: ../bycon-model/common/VitalStatus.yaml
   geoLocation:
-    $ref: ../common/GeoLocation.yaml
+    $ref: ../bycon-model/common/GeoLocation.yaml
   ancestries:
     type: array
     items:
-      $ref: ../common/ancestry.yaml
+      $ref: ../bycon-model/common/ancestry.yaml
   updated:
     type: string
     format: date-time

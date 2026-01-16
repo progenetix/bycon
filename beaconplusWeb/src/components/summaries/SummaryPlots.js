@@ -148,7 +148,7 @@ function SankeyPlot({ sankeyLabels, sankeyLinks, outer_w, title}) { //, title
             source: sankeyLinks.source,
             target: sankeyLinks.target,
             value: sankeyLinks.value,
-            hovertemplate: 'Left: %{source.label}<br />Right: %{target.label}<br />Co-occurrence: %{value}<extra></extra>'
+            hovertemplate: 'Left: %{source.label}<br />Right: %{target.label}<br />Intersect: %{value}<extra></extra>'
         }
     };
     sankeyData = [sankeyData];

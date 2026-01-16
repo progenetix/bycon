@@ -4,7 +4,7 @@ from json_ref_dict import RefDict, materialize
 from os import path, scandir, pardir
 from pathlib import Path
 
-from bycon_helpers import dict_replace_values, prjsonnice, prdbug
+from bycon_helpers import dict_replace_values, prjsonnice, prdbug, prdbughead
 from config import *
 
 ################################################################################
@@ -81,7 +81,7 @@ class ByconSchemas:
         #     if (r_p_id := self.entity_defaults[self.schema_name].get("request_entity_path_id")):
         #         self.schema_path_id = r_p_id
 
-        self.__retrieve_schema_file_path()
+        self.__get_schema_file_path()
 
 
     # -------------------------------------------------------------------------#
@@ -100,17 +100,17 @@ class ByconSchemas:
         # some lookup for the `request_entity_path_id` value in the case of "true"
         # entry types where schemas are defined in a directory with the path id
 
-        if self.schema_path is not False:
-            if len(self.root_key) > 1:
-                self.schema_path += f'#/{self.root_key}'
-            root_def = RefDict(self.schema_path)
-            exclude_keys = [ "examples" ] #"format",
-            self.schema_instance = materialize(root_def, exclude_keys=exclude_keys)
-            assert isinstance(self.schema_instance, dict)
-            self.schema_instance = dict_replace_values(self.schema_instance, "___BEACON_ROOT___", BEACON_ROOT)
-            return self.schema_instance
+        if self.schema_path is False:
+            return False
 
-        return False
+        if len(self.root_key) > 1:
+            self.schema_path += f'#/{self.root_key}'
+        root_def = RefDict(self.schema_path)
+        exclude_keys = [ "examples" ] #"format",
+        self.schema_instance = materialize(root_def, exclude_keys=exclude_keys)
+        assert isinstance(self.schema_instance, dict)
+        self.schema_instance = dict_replace_values(self.schema_instance, "___BEACON_ROOT___", BEACON_ROOT)
+        return self.schema_instance
 
 
     # -------------------------------------------------------------------------#
@@ -121,13 +121,6 @@ class ByconSchemas:
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def __retrieve_schema_file_path(self):
-        # self.__get_default_schema_file_path()
-        self.__get_schema_file_path()
-
-
     # -------------------------------------------------------------------------#
 
     # def __get_default_schema_file_path(self):
@@ -145,7 +138,10 @@ class ByconSchemas:
 
         f_n = f'{self.schema_name}.{self.ext}'
         s_p_s = [ f for f in self.schemas_root.rglob("*") if f.is_file() ]
+        # prdbughead(s_p_s)
+        # prdbug(f_n)
         s_p_s = [ f for f in s_p_s if f.name == f_n ]
+
         if len(s_p_s) == 1:
             self.schema_path = f'{s_p_s[0].resolve()}'
 

@@ -1,4 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+$id: ___BEACON_ROOT___/services/schemas/beaconResultsetsResponse/v2026-01-16
 description: >-
   A `beaconResultsetsResponse` returns the results of a query against a beacon
   or beacon aggregator. Beyond the `responseSummary` for overall matches the

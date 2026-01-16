@@ -1,4 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+$id: ___BEACON_ROOT___/services/schemas/beaconInfoResponse/v2026-01-16
 type: object
 description: >-
   The `beaconInfoResponse` provides metadata describing a Beacon instance, such
