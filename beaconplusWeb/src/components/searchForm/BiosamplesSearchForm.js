@@ -1,6 +1,5 @@
 import {
   checkIntegerRange,
-  makeFilters,
   useFiltersByType,
   validateBeaconQuery
 } from "../../hooks/api"
@@ -45,35 +44,6 @@ function urlQueryToFormParam(urlQuery, key, parametersConfig) {
   if (isMulti) {
     return value?.split(",").filter((v) => v?.trim().length ?? -1 > 0)
   } else return value
-}
-
-function useIsFilterlogicWarningVisible(watch) {
-  const filterLogic = watch("filterLogic")
-  const bioontology = watch("bioontology")
-  const referenceid = watch("referenceid")
-  const clinicalClasses = watch("clinicalClasses")
-  const cohorts = watch("cohorts")
-  const allTermsFilters = watch("allTermsFilters")
-  const sex = watch("sex")
-  const materialtype = watch("materialtype")
-  const ageAtDiagnosis = watch("ageAtDiagnosis")
-  const followupTime = watch("followupTime")
-  const followupState = watch("followupState")
-  const freeFilters = watch("freeFilters")
-  const filters = makeFilters({
-    allTermsFilters,
-    bioontology,
-    referenceid,
-    clinicalClasses,
-    cohorts,
-    sex,
-    materialtype,
-    ageAtDiagnosis,
-    followupTime,
-    followupState,
-    freeFilters
-  })
-  return filterLogic === "AND" && filters.length > 1
 }
 
 export function BeaconSearchForm({
@@ -198,7 +168,6 @@ export function BeaconSearchForm({
     control
   }
 
-  const isFilterlogicWarningVisible = useIsFilterlogicWarningVisible(watch)
   const geoCity = watch("geoCity")
   const showGeoDistance = !parameters.geoCity.isHidden && geoCity != null
 
@@ -457,17 +426,6 @@ export function BeaconSearchForm({
               {...parameters.allTermsFilters}
               {...selectProps}
               isLoading={isAllSubsetsDataLoading}
-            />
-            <SelectField
-              className="column py-0 mb-3"
-              {...parameters.filterLogic}
-              {...selectProps}
-              label={
-                <span>
-                  <span>{parameters.filterLogic.label}</span>
-                  <FilterLogicWarning isVisible={isFilterlogicWarningVisible} />
-                </span>
-              }
             />
             <SelectField
               className="column py-0 mb-3"
@@ -829,16 +787,3 @@ function useFilteringTerms(watchForm, ct) {
   })
 }
 
-function FilterLogicWarning({ isVisible }) {
-  return (
-    <span
-      className={cn(
-        "has-background-warning has-text-weight-normal ml-2 px-1",
-        "is-inline-flex animate__animated animate__headShake",
-        { "is-hidden": !isVisible }
-      )}
-    >
-      Multiple terms - use OR ?
-    </span>
-  )
-}

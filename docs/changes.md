@@ -6,6 +6,9 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+
+* removed custom `paginateResults`, `filterLogic` parameters from the API
+
 ### 2026-01-10 (v2.7.1)
 
 * further refactoring of summaries processing

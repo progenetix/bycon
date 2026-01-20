@@ -7,116 +7,6 @@ TODO: Temporary(?) for authentication testing.
 **cmdFlags:** `--userName`    
 **in:** query    
 
-#### `test_mode` 
-**description:**
-Activates the Beacon test setting, i.e. returning some random documents    
-**type:** boolean    
-**cmdFlags:** `-t,--testMode`    
-**default:** `False`    
-**in:** query    
-**beacon_query:** True    
-
-#### `skip` 
-**description:**
-Number of pages to be skipped.    
-**type:** integer    
-**cmdFlags:** `--skip`    
-**default:** `0`    
-**in:** query    
-
-#### `limit` 
-**type:** integer    
-**cmdFlags:** `-l,--limit`    
-**description:**
-limit number of documents; a value of 0 sets to unlimited    
-**default:** `200`    
-**local:** 0    
-**in:** query    
-
-#### `paginate_results` 
-**description:**
-Custom bycon parameter used for paginating results in some bycon services.    
-**type:** boolean    
-**cmdFlags:** `--paginateResults`    
-**default:** `True`    
-
-#### `requested_granularity` 
-**description:**
-The requested granularity of the beacon    
-**type:** string    
-**enum:** `record,count,boolean,aggregated`    
-**pattern:** `^\w+$`    
-**cmdFlags:** `--requestedGranularity`    
-**default:** `record`    
-**in:** query    
-**examples:** `{'emptyValue': {'value': '', 'summary': 'Granularity of the response'}},{'record': {'value': 'record', 'summary': 'Data record'}},{'count': {'value': 'count', 'summary': 'Count of the matched records'}},{'boolean': {'value': 'boolean', 'summary': 'Boolean for match / no match'}}`    
-
-#### `request_entity_path_id` 
-**description:**
-    
-* data entry point, equal to the first REST path element in Beacon     
-* this only is used for command-line tests instead of the REST path
-  value seen by the stack in web server mode    
-**type:** string    
-**cmdFlags:** `-p,--requestEntityPathId`    
-**default:** `info`    
-
-#### `response_entity_path_id` 
-**description:**
-    
-* optional data delivery entry point, for {id} paths     
-* for command line (see above), but also potentially for selecting
-  a special response entity in byconaut services (e.g. `indviduals`
-  in `/sampletable/`)    
-**type:** string    
-**cmdFlags:** `-r,--responseEntityPathId`    
-
-#### `include_resultset_responses` 
-**type:** string    
-**cmdFlags:** `--includeResultsetResponses`    
-**description:**
-    
-* include resultset responses, e.g. HIT, MISS     
-* kind of a holdover from Beacon pre-v1 but HIT & ALL might have
-  some use in networks    
-**default:** `HIT`    
-**in:** query    
-
-#### `dataset_ids` 
-**type:** array    
-**items:**  
-    - `type`: `string`    
-**cmdFlags:** `-d,--datasetIds`    
-**description:**
-dataset ids    
-
-#### `cohort_ids` 
-**type:** array    
-**items:**  
-    - `type`: `string`    
-**cmdFlags:** `--cohortIds`    
-**description:**
-cohort ids    
-
-#### `filters` 
-**type:** array    
-**items:**  
-    - `type`: `string`    
-**cmdFlags:** `--filters`    
-**description:**
-prefixed filter values, comma concatenated; or objects in POST    
-**in:** query    
-**beacon_query:** True    
-**vqs_query:** True    
-**examples:** `{'emptyValue': {'value': '', 'summary': 'A Beacon filter value, e.g. a CURIE for a disease code'}},{'NCITneoplasm': {'value': ['NCIT:C9335'], 'summary': 'A neoplasia disease code (CURIE format)'}},{'pubmed': {'value': ['pubmed:28966033'], 'summary': 'A publiction identifier (CURIE format)'}}`    
-
-#### `filter_precision` 
-**type:** string    
-**cmdFlags:** `--filterPrecision`    
-**description:**
-either `start` or `exact` for matching filter values    
-**default:** `exact`    
-
 #### `aggregation_terms` 
 **type:** array    
 **items:**  
@@ -141,19 +31,134 @@ Experimental for Beacon v2+ aggregation of ageAtDiagnosis by ISO8601 durations
 **description:**
 Experimental for Beacon v2+ aggregation of followupTime by ISO8601 durations    
 
-#### `filter_logic` 
-**type:** string    
-**cmdFlags:** `--filterLogic`    
+#### `request_entity_path_id` 
 **description:**
-Global for either OR or AND (translated to the MongoDB $and etc.). The Beacon protocol only knows AND.    
-**default:** `AND`    
+    
+* data entry point, equal to the first REST path element in Beacon     
+* this only is used for command-line tests instead of the REST path
+  value seen by the stack in web server mode    
+**type:** string    
+**cmdFlags:** `-p,--requestEntityPathId`    
+**default:** `info`    
+
+#### `response_entity_path_id` 
+**description:**
+    
+* optional data delivery entry point, for {id} paths     
+* for command line (see above), but also potentially for selecting
+  a special response entity in byconaut services (e.g. `indviduals`
+  in `/sampletable/`)    
+**type:** string    
+**cmdFlags:** `-r,--responseEntityPathId`    
+
+#### `id` 
+**type:** string    
+**db_key:** id    
+**pattern:** `^\w[\w\:\-\,]+?\w$`    
+**cmdFlags:** `--id`    
+**description:**
+    
+* An id     
+* This parameter only makes sense for specific REST entry types where
+  it is used in place of the path parameter (`.../__request_entity_path_id__/{id}/`)    
+**in:** path    
+**examples:**  
+    - `$ref`: `#/examples/id`    
+
+#### `filter_precision` 
+**type:** string    
+**cmdFlags:** `--filterPrecision`    
+**description:**
+Either `start` or `exact` for matching "filter" values in some services, e.g. `OntologyMaps` or Publications. Not used for standard Beacon functions.    
+**default:** `exact`    
+
+#### `skip` 
+**description:**
+Number of pages to be skipped. In POST `pagination.skip`.    
+**type:** integer    
+**cmdFlags:** `--skip`    
+**default:** `0`    
+**in:** query    
+
+#### `limit` 
+**type:** integer    
+**cmdFlags:** `-l,--limit`    
+**description:**
+Limit to number of documents returned; a value of 0 sets to unlimited. In POST `pagination.limit`.    
+**default:** `200`    
+**local:** 0    
+**in:** query    
+
+#### `test_mode` 
+**description:**
+Activates the Beacon test setting, i.e. returning some random documents    
+**type:** boolean    
+**cmdFlags:** `-t,--testMode`    
+**default:** `False`    
+**in:** query    
+**beacon_query:** True    
+
+#### `requested_granularity` 
+**description:**
+The requested granularity of the beacon    
+**type:** string    
+**enum:** `record,count,boolean,aggregated`    
+**pattern:** `^\w+$`    
+**cmdFlags:** `--requestedGranularity`    
+**default:** `record`    
+**in:** query    
+**examples:**  
+    - `$ref`: `#/examples/requested_granularity`    
+
+#### `include_resultset_responses` 
+**type:** string    
+**cmdFlags:** `--includeResultsetResponses`    
+**description:**
+    
+* include resultset responses, e.g. HIT, MISS     
+* kind of a holdover from Beacon pre-v1 but HIT & ALL might have
+  some use in networks    
+**default:** `HIT`    
+**in:** query    
+
+#### `filters` 
+**type:** array    
+**items:**  
+    - `type`: `string`    
+**cmdFlags:** `--filters`    
+**description:**
+prefixed filter values, comma concatenated; or objects in POST    
+**in:** query    
+**beacon_query:** True    
+**vqs_query:** True    
+**examples:**  
+    - `$ref`: `#/examples/filters`    
 
 #### `include_descendant_terms` 
 **type:** boolean    
 **cmdFlags:** `--includeDescendantTerms`    
 **description:**
-global treatment of descendant terms    
+Global treatment of descendant terms for `filters`    
 **default:** `True`    
+
+#### `dataset_ids` 
+**type:** array    
+**items:**  
+    - `type`: `string`    
+**cmdFlags:** `-d,--datasetIds`    
+**description:**
+dataset ids    
+
+#### `request_profile_id` 
+**type:** string    
+**pattern:** `^\w+$`    
+**db_key:** None    
+**cmdFlags:** `--requestProfileId`    
+**default:** `Bv2GenericVariantRequest`    
+**description:**
+profile ID for the request, to indicate variant query type    
+**beacon_query:** True    
+**in:** query    
 
 #### `vrs_type` 
 **type:** string    
@@ -304,7 +309,8 @@ alternate bases
 variant type, e.g. EFO:0030067 or DUP    
 **beacon_query:** True    
 **in:** query    
-**examples:** `{'emptyValue': {'value': '', 'summary': 'An EFO or SO code in CURIE format, or a VCF-style label'}},{'EFOhllossCNV': {'value': 'EFO:0030067', 'summary': 'high-level copy number loss'}},{'VCFdup': {'value': 'DUP', 'summary': 'copy number duplication'}}`    
+**examples:**  
+    - `$ref`: `#/examples/variant_type`    
 
 #### `start` 
 **type:** array    
@@ -384,7 +390,8 @@ one or more (comma concatenated) gene ids
 **beacon_query:** True    
 **vqs_query:** True    
 **in:** query    
-**examples:** `{'emptyValue': {'value': [''], 'summary': 'A HUGO gene symbol'}},{'TP53': {'value': ['TP53'], 'summary': 'TP53 gene identifier'}},{'CDKN2A': {'value': ['CDKN2A'], 'summary': 'CDKN2A gene identifier'}}`    
+**examples:**  
+    - `$ref`: `#/examples/gene_id`    
 
 #### `aminoacid_change` 
 **type:** string    
@@ -394,7 +401,8 @@ one or more (comma concatenated) gene ids
 **description:**
 Aminoacid alteration in 1 letter format    
 **in:** query    
-**examples:** `{'emptyValue': {'value': '', 'summary': 'Aminoacid alteration in 1 letter format'}},{'V600E': {'value': 'V600E'}},{'M734V': {'value': 'M734V'}},{'G244A': {'value': 'G244A'}}`    
+**examples:**  
+    - `$ref`: `#/examples/aminoacid_change`    
 
 #### `genomic_allele_short_form` 
 **type:** string    
@@ -451,25 +459,6 @@ An accessid for retrieving handovers etc.
 **description:**
 A file id e.g. as generated by the uploader service    
 **examples:** `{'FileID': {'value': '90e19951-1443-4fa8-8e0b-6b5d8c5e45cc'}}`    
-
-#### `id` 
-**type:** string    
-**db_key:** id    
-**pattern:** `^\w[\w\:\-\,]+?\w$`    
-**cmdFlags:** `--id`    
-**description:**
-An id; this parameter only makes sense for specific REST entry types    
-**in:** path    
-**examples:** `{'variant_id': {'value': 'pgxvar-5bab576a727983b2e00b8d32', 'summary': 'An internal variant ID', 'in_paths': ['g_variants']}},{'individual_id': {'value': 'pgxind-kftx25eh', 'summary': 'An internal ID for an individual / subject', 'in_paths': ['individuals']}},{'biosample_id': {'value': 'pgxbs-kftviphc', 'summary': 'An internal biosample ID', 'in_paths': ['biosamples']}},{'analysis_id': {'value': 'pgxcs-kftwaay4', 'summary': 'An internal analysis ID', 'in_paths': ['analyses']}}`    
-
-#### `path_ids` 
-**type:** array    
-**items:**  
-    - `type`: `string`      
-    - `pattern`: `^\w[\w,:-]+\w$`    
-**cmdFlags:** `--pathIds`    
-**description:**
-One or more ids provided in the path for specific REST entry types    
 
 #### `biosample_ids` 
 **type:** array    

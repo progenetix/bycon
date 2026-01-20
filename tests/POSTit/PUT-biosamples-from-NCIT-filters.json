@@ -16,11 +16,8 @@
             }
         },
         "filters": [
-            { "id": "NCIT:C4536", "includeDescendantTerms": false },
-            { "id": "NCIT:C95597", "includeDescendantTerms": false },
-            { "id": "NCIT:C7712", "includeDescendantTerms": false }
+            {"id": "NCIT:C7712", "includeDescendantTerms": false }
         ],
-        "filterLogic": "OR",
         "pagination": {
             "skip": 0,
             "limit": 10

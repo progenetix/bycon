@@ -233,7 +233,6 @@ class ByconQuery():
                 v_p_c.update({v_p_k: self.ChroNames.refseq(v_p)})
                 continue
 
-
             # VQS - TODO (remapping to be transferred ...)
             if "reference_accession" in v_p_k:
                 v_p_c.update({"reference_name": self.ChroNames.refseq(v_p)})
@@ -299,7 +298,7 @@ class ByconQuery():
                     # prdbug(q)
                     queries.append(q)
                     continue
-            if "geneVariantRequest" in variant_request_type:
+            if "GeneIdRequest" in variant_request_type:
                 if (q := self.__create_geneVariantRequest_query(v_pars)):
                     queries = [*queries, *q]
                     continue
@@ -327,7 +326,7 @@ class ByconQuery():
                  if (q := self.__create_variantRangeRequest_query(v_pars)):
                     queries.append(q)
                     continue
-            if "variantAlleleRequest" in variant_request_type:
+            if "BV2alleleRequest" in variant_request_type:
                 if (q := self.__create_variantAlleleRequest_query(v_pars)):
                     queries.append(q)
                     continue
@@ -359,9 +358,11 @@ class ByconQuery():
               which is only removed after a successfull type match.
         """
 
+        prdbug(f"Checking variant request type for {v_pars.get("request_profile_id")}")
+
         variant_request_type = None
 
-        brts = self.variant_request_definitions.get("request_types", {})
+        brts = self.variant_request_definitions.get("request_profiles", {})
         brts_k = brts.keys()
         # prdbug(f'...brts_k: {brts_k}')
         
@@ -370,7 +371,7 @@ class ByconQuery():
         if "mate_name" in  v_pars:
             brts_k = [ "variantFusionRequest" ]
         elif "start" in v_pars and "end" in v_pars:
-            if len(v_pars[ "start" ]) == 1 and len(v_pars[ "end" ]) == 1:
+            if len(v_pars.get("start", [])) == 1 and len(v_pars.get("end", [])) == 1:
                 brts_k = [ "variantRangeRequest" ]
             elif len(v_pars[ "start" ]) == 2 and len(v_pars[ "end" ]) == 2:
                 brts_k = [ "variantBracketRequest" ]
@@ -379,7 +380,7 @@ class ByconQuery():
         elif "genomic_allele_short_form" in v_pars:
             brts_k = [ "genomicAlleleShortFormRequest" ]
         elif "gene_id" in v_pars:
-            brts_k = [ "geneVariantRequest" ]
+            brts_k = [ "GeneIdRequest" ]
         elif "cyto_bands" in  v_pars:
             brts_k = [ "cytoBandRequest" ]
         elif "variant_query_digests" in  v_pars:
@@ -419,14 +420,14 @@ class ByconQuery():
     def __create_geneVariantRequest_query(self, v_pars):
         # query database for gene and use coordinates to create range query
         gene_id = v_pars.get("gene_id", [])
-        prdbug(f'...geneVariantRequest gene_id: {gene_id}')
+        prdbug(f'...GeneIdRequest gene_id: {gene_id}')
         queries = []
         for g in gene_id:
             # TODO: error report/warning
             if not (gene_data := GeneInfo().returnGene(g)):
                 continue
             gene = gene_data[0]
-            prdbug(f'...geneVariantRequest gene_data: {gene}')
+            prdbug(f'...GeneIdRequest gene_data: {gene}')
             # Since this is a pre-processor to the range request
             v_pars.update({
                 "reference_name": f'refseq:{gene.get("accession_version", "___none___")}',
@@ -434,7 +435,7 @@ class ByconQuery():
                 "end": [ gene.get("end", 1) ]
             })
             q_t = self.__create_variantRangeRequest_query(v_pars)
-            prdbug(f'...geneVariantRequest query result: {q_t}')
+            prdbug(f'...GeneIdRequest query result: {q_t}')
             queries.append(q_t)
 
         if len(queries) < 1:
@@ -479,7 +480,7 @@ class ByconQuery():
                     "reference_bases": ref,
                     "alternate_bases": alt
                 } )
-                self.variant_request_type = "variantAlleleRequest"
+                self.variant_request_type = "BV2alleleRequest"
                 q_t = self.__create_variantAlleleRequest_query(v_pars)
                 return False
             else:
@@ -920,8 +921,6 @@ class ByconQuery():
     def __update_queries_for_entity(self, query, entity):
         # TODO: This is now for using generally query lists and aggregate 
         # by multiple queries & intersection of matched ids during execution
-        # => logic right now always AND
-        logic = self.__boolean_to_mongo_logic(BYC_PARS.get("filter_logic"))
         r_c = BYC_DBS.get(f"{entity}_coll", "___none___")
         q_e = self.queries.get("entities")
 
@@ -933,14 +932,6 @@ class ByconQuery():
             q_e[entity]["query"] = [*q_e[entity]["query"], *query]
 
         self.queries.update({"entities": q_e})
-
-
-    # -------------------------------------------------------------------------#
-
-    def __boolean_to_mongo_logic(self, logic: str = "AND") -> str:
-        if "OR" in logic.upper():
-            return '$or'
-        return '$and'
 
 
     # -------------------------------------------------------------------------#

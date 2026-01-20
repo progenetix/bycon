@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 
 import json, yaml
+from json_ref_dict import RefDict, materialize
 from humps import camelize
 from markdown import markdown as md
 from os import path
@@ -49,6 +50,7 @@ class ByconOpenAPI:
         self.entity_defaults = BYC.get("entity_defaults", {})
         self.examples = load_yaml_empty_fallback(path.join(services_conf_path, "api_examples.yaml"))
         self.argument_definitions = BYC.get("argument_definitions", {}).get("$defs", {})
+        self.argument_examples = BYC.get("argument_definitions", {}).get("examples", {})
         self.mode = BYC_PARS.get("mode", "__none__")
         self.this_server = select_this_server()
 
@@ -335,8 +337,13 @@ class ByconOpenAPI:
     # ------------------------------------------------------------------------ #
 
     def __parameter_add_examples(self, p, parameter, definition, scope):
-
         e_s = definition.get("examples", [])
+        if type(e_s) is dict:
+            if "$ref" in (e_s):
+                e_s = self.argument_examples.get(parameter, [])
+
+            prdbug(f"Examples: {parameter}: {e_s}")
+
         e_s += self.__parameter_get_values(parameter)
 
         if len(e_s) < 1:

@@ -107,18 +107,6 @@ parameters:
       end provided as a range for the possible occurrence of the CNV end (e.g. "21967753-22500000").
     label: End
     placeholder: 21967753-24000000
-  filterLogic:
-    infoText: Boolean logic for filter values; the default **AND** in the Beacon stack
-      assumes different logical scopes for used filters (e.g. collisions occurr if
-      multiple cancer diagnoses are used with AND). Please be aware that "Filters"
-      here include the "Cancer Classification", "Biosample Type" and "Filters" fields.
-    isHidden: true
-    label: Filter Logic
-    options:
-    - label: AND
-      value: AND
-    - label: OR
-      value: OR
 
   followupState:
     infoText: Survival state, especially when used with `Follow-up time`.

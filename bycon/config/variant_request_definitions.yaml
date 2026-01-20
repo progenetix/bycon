@@ -5,6 +5,7 @@
 ################################################################################
 
 request_pars:
+  - request_profile_id
   - assembly_id
   - reference_name
   - mate_name
@@ -36,9 +37,38 @@ multi_request_pars:
   - variant_query_digests
 
 # As long as there are no variant query schemas to define valid Beacon
-# variant parameter combinations the `request_types` here provide sets
+# variant parameter combinations the `request_profiles` here provide sets
 # of combinations valid at least for `bycon` Progenetix etc. data.
-request_types:
+request_profiles:
+
+  BV2alleleRequest:
+    description: >-
+      This type corresponds to the original BeaconAlleleRequest, in which at a
+      specified genome position a query looks for a combination of reference and
+      replacement base(s).
+    all_of:
+      # - assembly_id
+      - start
+      - reference_name
+      - alternate_bases
+    optional:
+      - reference_bases
+
+
+  GeneIdRequest:
+    description: >-
+      A variant overlapping with the genomic coordinates of a gene or other named
+      sequence element.
+    all_of:
+      - gene_id
+    optional:
+      - variant_type
+      - reference_bases
+      - alternate_bases
+      - variant_min_length
+      - variant_max_length
+
+
 
   variantQueryDigestsRequest:
     all_of:
@@ -109,19 +139,6 @@ request_types:
       - variant_min_length
       - variant_max_length
 
-  variantAlleleRequest:
-    description: >-
-      This type corresponds to the original BeaconAlleleRequest, in which at a
-      specified genome position a query looks for a combination of reference and
-      replacement base(s).
-    all_of:
-      # - assembly_id
-      - start
-      - reference_name
-      - alternate_bases
-    optional:
-      - reference_bases
-
   variantTypeFilteredRequest:
     description: >-
       This is a special case where it is checked separately if a filter query
@@ -131,19 +148,6 @@ request_types:
       necessarily corresponds to a single sample etc.
     all_of:
       - variant_type
-
-  geneVariantRequest:
-    description: >-
-      A variant overlapping with the genomic coordinates of a gene or other named
-      sequence element.
-    all_of:
-      - gene_id
-    optional:
-      - variant_type
-      - reference_bases
-      - alternate_bases
-      - variant_min_length
-      - variant_max_length
 
   variantFusionRequest:
     description: >-

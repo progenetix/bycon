@@ -405,7 +405,7 @@ class ByconEntities:
         self.response_entity_path_id = None
         self.request_path_id_par = BYC_PARS.get("request_entity_path_id", "___none___")
         self.response_path_id_par = BYC_PARS.get("response_entity_path_id", "___none___")
-        self.path_ids = BYC_PARS.get("path_ids", False)
+        self.path_ids = BYC_PARS.get("path_ids", None)
         self.request_entity_id = None
         self.response_entity_id = None
         self.response_entity = {}

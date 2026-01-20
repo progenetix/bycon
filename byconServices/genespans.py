@@ -16,7 +16,6 @@ from byconServiceLibs import ByconServiceResponse, read_service_prefs
 
 services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )
 
-
 def genespans():
     """
     The `genespans` function provides a JSON response with the coordinates of
@@ -29,7 +28,7 @@ def genespans():
     """
 
     # form id assumes start match (e.g. for autocompletes)
-    if len(gene_ids := BYC.get("path_ids", [])) == 1:
+    if len(gene_ids := BYC_PARS.get("path_ids", [])) == 1:
         # REST path id assumes exact match
         results = GeneInfo().returnGene(gene_ids[0])
     else:

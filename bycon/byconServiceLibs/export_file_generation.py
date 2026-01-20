@@ -197,8 +197,7 @@ class PGXseg:
         if not (var_ids := self.dataset_result.get("variants.id", {}).get("target_values")):
             BYC["ERRORS"].append("No variants found in the dataset results.")
             return
-        if ByconH().truth(BYC_PARS.get("paginate_results", True)):
-            var_ids = ByconH().paginated_list(var_ids, self.skip, self.limit)
+        var_ids = ByconH().paginated_list(var_ids, self.skip, self.limit)
         vs_coll = self.mongo_client[self.ds_id]["variants"]
 
         v_instances = []
@@ -442,8 +441,7 @@ def export_callsets_matrix(datasets_results, ds_id):
     q_vals = cs_r["target_values"]
     r_no = len(q_vals)
     if r_no > limit:
-        if ByconH().truth( BYC_PARS.get("paginate_results", True) ):
-            q_vals = ByconH().paginated_list(q_vals, skip, limit)
+        q_vals = ByconH().paginated_list(q_vals, skip, limit)
         print(f'#meta=>"WARNING: Only {len(q_vals)} analyses will be included due to pagination skip {skip} and limit {limit}."')
 
     bios_ids = set()
@@ -549,8 +547,7 @@ class PGXvcf:
 
     def __add_variants(self):
         v_instances = self.flattened_data
-        if ByconH().truth( BYC_PARS.get("paginate_results", True) ):
-            v_instances = ByconH().paginated_list(v_instances, self.skip, self.limit)
+        v_instances = ByconH().paginated_list(v_instances, self.skip, self.limit)
         v_instances = [ByconVariant().byconVariant(v) for v in v_instances]
         v_instances = list(sorted(v_instances, key=lambda x: (f'{x["location"]["chromosome"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x["location"]['start'])))
 
