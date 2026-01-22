@@ -1,0 +1,6 @@
+db.biosamples.updateMany(
+    [   
+        { $match: {"references.pubmed.id":{$regex:/^\d/}}},
+        { $project: { "references.pubmed.id": { $concat: [ "pubmed:", "$references.pubmed.id"] } } }
+    ]
+)

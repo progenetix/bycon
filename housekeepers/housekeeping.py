@@ -4,7 +4,6 @@ import re, json, yaml, sys
 from datetime import datetime
 from isodate import date_isoformat
 from os import path, environ, pardir, system
-from pymongo import MongoClient
 from progress.bar import Bar
 
 from bycon import *
@@ -36,12 +35,14 @@ def main():
         "geolocs_updates": input("Relabel all biosamples with existing geolocation?\n(y|N): ")
     }
 
-    data_db = MongoClient(host=BYC_DBS["mongodb_host"])[ds_id]
-    services_db = MongoClient(host=BYC_DBS["mongodb_host"])[BYC_DBS["services_db"]]
+    m_h         = BYC_DBS["mongodb_host"]
+    m_d         = BYC_DBS["services_db"]
+    data_db     = ByconMongo().openMongoDatabase(ds_id)
+    services_db = ByconMongo().openMongoDatabase(m_d)
 
-    ana_coll = data_db[BYC_DBS["analysis_coll"]]
-    ind_coll = data_db[BYC_DBS["individual_coll"]]
-    bios_coll = data_db[BYC_DBS["biosample_coll"]]
+    ana_coll    = data_db[ BYC_DBS.get("collections", {}).get("analysis")   ]
+    ind_coll    = data_db[ BYC_DBS.get("collections", {}).get("individual") ]
+    bios_coll   = data_db[ BYC_DBS.get("collections", {}).get("biosample")  ]
 
     #>-------------------- MongoDB index updates -----------------------------<#
 

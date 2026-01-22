@@ -667,9 +667,9 @@ class ByconCollections:
 
             counts = {}
             for e in self.queried_entities:
-                coll_name = BYC_DBS.get(f'{e}_coll', '___none___')
-                d_c = self.mongo_client[coll_id][coll_name]
-                counts.update({e: d_c.count_documents({}) })
+                if (c := BYC_DBS.get("collections", {}).get(e)):
+                    d_c = self.mongo_client[coll_id][c]
+                    counts.update({e: d_c.count_documents({}) })
 
             coll.update({"counts": counts})
 
@@ -724,8 +724,13 @@ class ByconResultSets:
         self.returned_granularity = BYC.get("returned_granularity", "boolean")
         self.limit = BYC_PARS.get("limit")
         self.skip = BYC_PARS.get("skip")
-        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-        self.ho_coll = self.mongo_client[BYC_DBS["housekeeping_db"]][BYC_DBS["handover_coll"]]
+
+        m_h = BYC_DBS["mongodb_host"]
+        self.mongo_client = MongoClient(host=m_h)
+
+        m_d = BYC_DBS["housekeeping_db"]
+        m_c = BYC_DBS.get("collections", {}).get("handover")
+        self.ho_coll = self.mongo_client[m_d][m_c]
 
         self.record_queries = ByconQuery().recordsQuery()
         self.__create_empty_result_sets()
@@ -808,8 +813,9 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __get_handover_access_key(self):
-        coll = BYC_DBS.get(f"{self.response_entity_id}_coll", "___none___")
-        self.handover_key = f'{coll}.id'
+        e = self.response_entity_id
+        c = BYC_DBS.get("collections", {}).get(self.response_entity_id, "___none___")
+        self.handover_key = f'{c}.id'
 
 
     # -------------------------------------------------------------------------#

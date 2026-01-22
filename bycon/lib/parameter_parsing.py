@@ -591,11 +591,13 @@ class ByconDatasets:
         if not (accessid := BYC_PARS.get("accessid")):
             return
 
-        ho_client = MongoClient(host=BYC_DBS["mongodb_host"])
-        h_o = ho_client[BYC_DBS["housekeeping_db"]][BYC_DBS["handover_coll"]].find_one({"id": accessid})
-        if not h_o:
+        m_h = BYC_DBS["mongodb_host"]
+        m_d = BYC_DBS["housekeeping_db"]
+        m_c = BYC_DBS.get("collections", {}).get("handover")
+
+        ho_client = MongoClient(host=m_h)
+        if not (h_o := ho_client[m_d][m_c].find_one({"id": accessid})):
             return
-        ds_id = h_o.get("ds_id", False)
         if (ds_id := str(h_o.get("ds_id"))) not in self.database_names:
             return
         self.dataset_ids = [ds_id]

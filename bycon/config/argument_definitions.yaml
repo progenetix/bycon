@@ -9,6 +9,10 @@ description: >-
 
   * the `examples` ... `emptyValue` entries are used to display information in
     the generated OpenAPI endpoint
+  * `beacon_query: True` indicates inclusion in the OpenAPI form generation
+  * `is_variant_par: True` indicates that the parameter is a standard Beacon v2
+    variant query parameter
+
 
 ################################################################################
 # standard Beacon parameters 
@@ -172,7 +176,6 @@ $defs:
     description: prefixed filter values, comma concatenated; or objects in POST
     in: query
     beacon_query: True
-    vqs_query: true
     examples:
       $ref: '#/examples/filters'
 
@@ -185,7 +188,7 @@ $defs:
     default: true
 
 
-  # ------------------- BeaconQuery ==> requestParameters -------------------- #
+  # ----------- BeaconQuery, non-standard requestParameters ------------------ #
 
   dataset_ids:
     type: array
@@ -220,12 +223,6 @@ $defs:
       - --followupSplits
     description: Experimental for Beacon v2+ aggregation of followupTime by ISO8601 durations
 
-  # ----------------------------------------------------------------------------
-  # variant parameters
-  # ----------------------------------------------------------------------------
-
-  # first some in test mode ----------------------------------------------------
-
   request_profile_id:
     type: string
     pattern: '^\w+$'
@@ -235,7 +232,10 @@ $defs:
     default: Bv2GenericVariantRequest
     description: profile ID for the request, to indicate variant query type
     beacon_query: True
+    is_variant_par: True
     in: query
+
+  # ---------- BeaconQuery, experimental for testing VRS/VQS ----------------- #
 
   vrs_type:
     type: string
@@ -245,7 +245,7 @@ $defs:
       - --vrsType
     description: VRS variant schema type, e.g. `Allele` or `CopyNumberChange`
     beacon_query: False
-    vqs_query: true
+    is_vqs_par: true
     in: query
 
   reference_accession:
@@ -256,7 +256,7 @@ $defs:
       - --referenceAccession
     description: reference accession, i.e. a versioned sequence reference ID
     beacon_query: False
-    vqs_query: true
+    is_vqs_par: true
     in: query
 
   copy_change:
@@ -267,7 +267,7 @@ $defs:
       - --copyChange
     description: variant type, e.g. EFO:0030067 or DUP
     beacon_query: False
-    vqs_query: True
+    is_vqs_par: True
     in: query
 
   sequence_length:
@@ -282,7 +282,7 @@ $defs:
       * length (range) of variant sequence
       * should replace variant_min_length and variant_max_length
     beacon_query: False
-    vqs_query: True
+    is_vqs_par: True
     in: query
 
   breakpoint_range:
@@ -297,7 +297,7 @@ $defs:
       - --breakpointRange
     description: range for breakpoint or lower chromosome position in adjacency
     beacon_query: False
-    vqs_query: True
+    is_vqs_par: True
     in: query
 
   adjacency_accession:
@@ -308,7 +308,7 @@ $defs:
       - --adjacencyAccession
     description: adjacency accession, i.e. a versioned sequence reference ID
     beacon_query: False
-    vqs_query: true
+    is_vqs_par: true
     in: query
 
   adjacency_range:
@@ -323,10 +323,10 @@ $defs:
       - --adjacencyRange
     description: range for higher chromosome position in adjacency
     beacon_query: False
-    vqs_query: True
+    is_vqs_par: True
     in: query
 
-  # ----------------------------------------------------------------------------
+  # -------------- BeaconQuery, standard requestParameters ------------------- #
 
   assembly_id:
     type: string
@@ -335,7 +335,8 @@ $defs:
     cmdFlags:
       - --assemblyId
     description: assembly id; currently not used in bycon's version
-    # default: GRCh38
+    is_variant_par: True
+   # default: GRCh38 # not used since we're using GRCh38 only and versioned parameters
     # in: query
 
   reference_name:
@@ -346,14 +347,10 @@ $defs:
       - --referenceName
     description: chromosome
     beacon_query: True
+    is_variant_par: True
     in: query
     examples:
-      - emptyValue:
-          value: ""
-          summary: A versioned reference ID or a chromsome name / number
-      - chromosome:
-          value: "9"
-          summary: chromsome 9
+      $ref: "#/examples/reference_name"
 
   mate_name:
     type: string
@@ -363,6 +360,7 @@ $defs:
       - --mateName
     description: chromosome
     beacon_query: True
+    is_variant_par: True
     in: query
     examples:
       - emptyValue:
@@ -377,6 +375,7 @@ $defs:
       - --referenceBases
     description: reference bases
     beacon_query: True
+    is_variant_par: True
     in: query
 
   alternate_bases:
@@ -387,6 +386,7 @@ $defs:
       - --alternateBases
     description: alternate bases
     beacon_query: True
+    is_variant_par: True
     in: query
 
   variant_type:
@@ -397,6 +397,7 @@ $defs:
       - --variantType
     description: variant type, e.g. EFO:0030067 or DUP
     beacon_query: True
+    is_variant_par: True
     in: query
     examples:
       $ref: '#/examples/variant_type'
@@ -413,7 +414,8 @@ $defs:
       - --start
     description: genomic start position
     beacon_query: True
-    vqs_query: True
+    is_variant_par: True
+    is_vqs_par: True
     in: query
 
   end:
@@ -428,7 +430,8 @@ $defs:
       - --end
     description: genomic end position
     beacon_query: True
-    vqs_query: True
+    is_variant_par: True
+    is_vqs_par: True
     in: query
 
   mate_start:
@@ -438,6 +441,7 @@ $defs:
     cmdFlags:
       - --mateStart
     description: genomic start position of fusion partner breakpoint region
+    is_variant_par: True
 
   mate_end:
     type: integer
@@ -446,6 +450,7 @@ $defs:
     cmdFlags:
       - --MateEnd
     description: genomic end position of fusion partner breakpoint region
+    is_variant_par: True
 
   variant_min_length:
     type: integer
@@ -456,6 +461,7 @@ $defs:
     description: >-
       The minimal variant length in bases e.g. for CNV queries.
     beacon_query: True
+    is_variant_par: True
     in: query
 
   variant_max_length:
@@ -467,6 +473,7 @@ $defs:
     description: >-
       The maximum variant length in bases e.g. for CNV queries.
     beacon_query: True
+    is_variant_par: True
     in: query
 
   gene_id:
@@ -479,7 +486,8 @@ $defs:
       - --geneId
     description: one or more (comma concatenated) gene ids
     beacon_query: True
-    vqs_query: True
+    is_variant_par: True
+    is_vqs_par: True
     in: query
     examples:
       $ref: '#/examples/gene_id'
@@ -492,6 +500,7 @@ $defs:
       - --aminoacidChange
     description: >-
       Aminoacid alteration in 1 letter format
+    is_variant_par: True
     in: query
     examples:
       $ref: '#/examples/aminoacid_change'
@@ -504,6 +513,7 @@ $defs:
       - --genomicAlleleShortForm
     description: >-
       Genomic HGVSId descriptor
+    is_variant_par: True
     in: query
     examples:
       - gHGVS:
@@ -558,8 +568,7 @@ $defs:
       - --accessid
     description: An accessid for retrieving handovers etc.
     examples:
-      - accessid:
-          value: 'b59857bc-0c4a-4ac8-804b-6596c6566494'
+      $ref: '#/examples/accessid'
 
   file_id:
     type: string
@@ -568,8 +577,16 @@ $defs:
       - --fileId
     description: A file id e.g. as generated by the uploader service
     examples:
-      - FileID:
-          value: '90e19951-1443-4fa8-8e0b-6b5d8c5e45cc'
+      $ref: '#/examples/file_id'
+
+  path_ids:
+    type: array
+    items:
+      type: string
+      pattern: '^\w[\w,:-]+\w$'
+    cmdFlags:
+      - --pathIds
+    description: ids in the path
 
   biosample_ids:
     type: array
@@ -620,13 +637,6 @@ $defs:
     cmdFlags:
       - --debugMode 
     description: debug setting
-    default: false
-
-  show_help:
-    type: boolean
-    cmdFlags:
-      - --showHelp 
-    description: specific help display
     default: false
 
   test_mode_count:
@@ -837,6 +847,10 @@ $defs:
 
 examples:
 
+  accessid:
+    - accessid:
+        value: b59857bc-0c4a-4ac8-804b-6596c6566494
+
   aminoacid_change:
     - emptyValue:
         value: ""
@@ -847,6 +861,10 @@ examples:
         value: M734V
     - G244A:
         value: G244A
+
+  file_id:
+    - FileID:
+        value: 90e19951-1443-4fa8-8e0b-6b5d8c5e45cc
 
   filters:
     - emptyValue:
@@ -896,6 +914,14 @@ examples:
         summary: An internal analysis ID
         in_paths:
           - analyses
+
+  reference_name:
+    - emptyValue:
+        value: ""
+        summary: A versioned reference ID or a chromsome name / number
+    - chromosome:
+        value: "9"
+        summary: chromsome 9
 
   requested_granularity:
     - emptyValue:

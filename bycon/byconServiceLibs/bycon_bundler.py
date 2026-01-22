@@ -272,13 +272,13 @@ class ByconBundler:
             if not res_k in ds_res:
                 continue
 
-            mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-            sample_coll = mongo_client[ds_id][bundle_type]
-            s_r = ds_res[res_k]
-            s_ids = s_r["target_values"]
-            r_no = len(s_ids)
+            mongo_client    = MongoClient(host=BYC_DBS["mongodb_host"])
+            sample_coll     = mongo_client[ds_id][bundle_type]
+            s_r             = ds_res[res_k]
+            s_ids           = s_r["target_values"]
+            r_no            = len(s_ids)
+            s_ids           = ByconH().paginated_list(s_ids, self.skip, self.limit)
             prdbug(f'...... __analyses_bundle_from_result_set limit: {self.limit}')
-            s_ids = ByconH().paginated_list(s_ids, self.skip, self.limit)
             prdbug(f'...... __analyses_bundle_from_result_set after: {len(s_ids)}')
             for s_id in s_ids:
                 s = sample_coll.find_one({"id": s_id })

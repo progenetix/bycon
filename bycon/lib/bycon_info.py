@@ -10,13 +10,16 @@ class ByconInfo():
     def __init__(self, distvars=True):
         self.count_distvars = distvars
         self.database_names = ByconDatasets().get_database_names()
-        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-        self.info_coll = self.mongo_client[ BYC_DBS["housekeeping_db"] ][ BYC_DBS["info_coll"] ]
         self.dataset_ids = list(BYC["dataset_definitions"].keys())
         self.data_colls = ["biosamples", "individuals", "variants", "analyses"]
         self.today = date_isoformat(datetime.now())
         self.status = {"date": self.today}
 
+        m_h = BYC_DBS["mongodb_host"]
+        m_d = BYC_DBS["housekeeping_db"]
+        m_c = BYC_DBS.get("collections", {}).get("info")
+        self.mongo_client = MongoClient(host=m_h)
+        self.info_coll = self.mongo_client[m_d][m_c]
 
     #--------------------------------------------------------------------------#
     #----------------------------- public -------------------------------------#
@@ -27,9 +30,9 @@ class ByconInfo():
         self.info_coll.delete_many({"date": self.today})
         if not BYC["TEST_MODE"]:
             self.info_coll.insert_one(self.status)
-            print(f'\n{self.__hl()}==> updated entry {self.status["date"]} in {BYC_DBS["housekeeping_db"]}.{BYC_DBS["info_coll"]}')
+            print(f'\n{self.__hl()}==> updated entry {self.status["date"]} in info collection')
         else:
-            print(f'\n{self.__hl()}==> no {BYC_DBS["housekeeping_db"]}.{BYC_DBS["info_coll"]} update since in TEST_MODE')
+            print(f'\n{self.__hl()}==> no info collection update since in TEST_MODE')
 
 
     #--------------------------------------------------------------------------#
@@ -49,8 +52,11 @@ class ByconInfo():
     #--------------------------------------------------------------------------#
 
     def __dataset_update_counts(self, ds_id):
-        ds_db = self.mongo_client[ds_id]
-        b_i_ds = {
+        m_d     = ds_id
+        m_c     = BYC_DBS.get("collections", {}).get("collations")
+        ds_db   = self.mongo_client[m_d]
+        collcoll = ds_db[m_c]
+        b_i_ds  = {
             "counts": {},
             "collation_types": {},
             "collations": {},
@@ -61,7 +67,7 @@ class ByconInfo():
             if c not in c_n:
                 continue
 
-            no = ds_db[ c ].estimated_document_count()
+            no = ds_db[c].estimated_document_count()
             b_i_ds["counts"].update( { c: no } )
             if c == "variants" and self.count_distvars:
                 v_d = { }
@@ -72,14 +78,14 @@ class ByconInfo():
                 bar.finish()
                 b_i_ds["counts"].update( { "variants_distinct": len(v_d.keys()) } )
 
-        coll_types = ds_db["collations"].distinct("collation_type", {"code_matches": {"$gt": 0}})
+        coll_types = collcoll.distinct("collation_type", {"code_matches": {"$gt": 0}})
         pipeline = [
             {"$group": {"_id": "$collation_type", "count": {"$sum": 1}}}
         ]
-        for ct in list(ds_db["collations"].aggregate(pipeline)):
+        for ct in list(collcoll.aggregate(pipeline)):
             b_i_ds["collation_types"].update({ct["_id"]: ct["count"]})
         for ctk in b_i_ds["collation_types"].keys():
-            for coll in ds_db["collations"].find(
+            for coll in collcoll.find(
                 {"collation_type": ctk, "code_matches": {"$gt": 0}},
                 {"_id": 0, "id": 1, "entity": 1, "db_key": 1, "label": 1, "collation_type": 1, "code_matches": 1}
             ):

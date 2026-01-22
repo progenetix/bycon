@@ -51,13 +51,17 @@ def publications_inserter():
         else:
             print(f'Download failed: status code {r.status_code}\n{r.text}')
 
-    mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-    pub_coll = mongo_client[BYC_DBS["services_db"]][BYC_DBS["publication_coll"]]
-    bios_coll = mongo_client["progenetix"]["biosamples"]
+    m_h = BYC_DBS["mongodb_host"]
+    m_d = BYC_DBS["services_db"]
+    m_c = BYC_DBS.get("collections", {}).get("publication")
+
+    mongo_client    = MongoClient(host=m_h)
+    pub_coll        = mongo_client[m_d][m_c]
+    bios_coll       = mongo_client["progenetix"]["biosamples"]
     publication_ids = pub_coll.distinct("id")
-    progenetix_ids = bios_coll.distinct("external_references.id")
-    progenetix_ids = [item for item in progenetix_ids if item is not None]
-    progenetix_ids = list(filter(lambda x: x.startswith("pubmed"), progenetix_ids))
+    progenetix_ids  = bios_coll.distinct("references.pubmed.id")
+    progenetix_ids  = [item for item in progenetix_ids if item is not None]
+    progenetix_ids  = list(filter(lambda x: x.startswith("pubmed"), progenetix_ids))
 
     # TODO: Use schema ...
 
@@ -138,13 +142,13 @@ def publications_inserter():
             if BYC["TEST_MODE"] is False:
                 entry = pub_coll.update_one({"id": n_p["id"] }, {"$set": n_p }, upsert=True )
                 up_count += 1
-                print(f'{n_p["id"]}: inserting this into _byconServicesDB.publications')
+                print(f'{n_p["id"]}: inserting this into {m_d}.{m_c}')
             else:
                 jprint(n_p)
                     
     print(f"{up_count} publications were inserted or updated")
 
-    ByconGeoResource().update_geolocations(BYC_DBS["services_db"], BYC_DBS["publication_coll"])
+    ByconGeoResource().update_geolocations(m_d, m_c)
 
 ##############################################################################
 ##############################################################################

@@ -570,6 +570,12 @@ class GeneInfo:
     def __init__(self):
         self.gene_data = []
 
+        m_h = BYC_DBS["mongodb_host"]
+        m_d = BYC_DBS["services_db"]
+        m_c = BYC_DBS.get("collections", {}).get("genes")
+        self.mongo_client = MongoClient(host=m_h)
+        self.genes_coll = self.mongo_client[m_d][m_c]
+
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -592,12 +598,6 @@ class GeneInfo:
     # -------------------------------------------------------------------------#
 
     def __gene_id_data(self, gene_id, single=True):
-        mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-        db_names = list(mongo_client.list_database_names())
-        if BYC_DBS["services_db"] not in db_names:
-            BYC["ERRORS"].append(f"services db `{BYC_DBS["services_db"]}` does not exist")
-            return
-
         q_f_s = ["symbol", "ensembl_gene_ids", "synonyms"]
         terminator = ""
         if single is True:
@@ -608,15 +608,13 @@ class GeneInfo:
             q_list.append({q_f: q_re })
         query = { "$or": q_list }
 
-        g_coll = mongo_client[BYC_DBS["services_db"]][BYC_DBS["genes_coll"]]
-
         if single is True:
-            gene = g_coll.find_one(query, { '_id': False } )
+            gene = self.genes_coll.find_one(query, { '_id': False } )
             if gene:
-                self.gene_data = [ g_coll.find_one(query, { '_id': False } ) ]
+                self.gene_data = [ self.genes_coll.find_one(query, { '_id': False } ) ]
         else:
-            gene_list = list(g_coll.find(query, { '_id': False } ))
+            gene_list = list(self.genes_coll.find(query, { '_id': False } ))
             if len(gene_list) > 0:
-                self.gene_data = list(g_coll.find(query, { '_id': False } ))
+                self.gene_data = list(self.genes_coll.find(query, { '_id': False } ))
 
 

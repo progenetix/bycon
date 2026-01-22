@@ -10,6 +10,59 @@ from config import *
 
 ################################################################################
 
+
+class ByconMongo:
+    def __init__(self):
+        self.host_address = BYC_DBS["mongodb_host"]
+
+    #--------------------------------------------------------------------------#
+    #----------------------------- public -------------------------------------#
+    #--------------------------------------------------------------------------#
+    
+    def openMongoDatabase(self, db_name):
+        self.client = MongoClient(host=self.host_address)
+        if self.__check_db_name(db_name) is False:
+            return False
+        return self.client[db_name]
+
+
+    #--------------------------------------------------------------------------#
+
+    def openMongoColl(self, db_name, coll_name):
+        self.client = MongoClient(host=self.host_address)
+        db_names = list(client.list_database_names())
+        if self.__check_db_name(db_name) is False:
+            return False
+        self.db = self.client[db_name]
+        if self.__check_coll_name(coll_name) is False:
+            return False
+        return self.db[coll_name]
+
+
+    #--------------------------------------------------------------------------#
+    #---------------------------- private -------------------------------------#
+    #--------------------------------------------------------------------------#
+
+    def __check_db_name(self, db_name):
+        if str(db_name) not in list(self.client.list_database_names()):
+            error = f"db `{db_name}` does not exist"
+            BYC["ERRORS"].append(error)
+            return False
+        return db_name
+
+
+    #--------------------------------------------------------------------------#
+    
+    def __check_coll_name(self, coll_name):
+        if str(coll_name) not in self.db.list_collection_names():
+            error = f"collection `{coll_name}` does not exist in `{db_name}`"
+            BYC["ERRORS"].append(error)
+            return False
+        return coll_name
+
+
+################################################################################
+
 class ByconID:
     def __init__(self, sleep=0.01):
         self.errors = []
@@ -138,17 +191,11 @@ def days_from_iso8601duration(iso8601duration=""):
 
 def mongo_result_list(db_name, coll_name, query, fields={}):
     results = []
-
-    mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-    db_names = list(mongo_client.list_database_names())
-    if db_name not in db_names:
-        BYC["ERRORS"].append(f"db `{db_name}` does not exist")
-        return results
     try:
-        results = list(mongo_client[db_name][coll_name].find(query, fields))
+        if (coll := ByconMongo().openMongoColl(ds_id, coll_name)):
+            results = list(coll.find(query, fields))
     except Exception as e:
         BYC["ERRORS"].append(e)
-    mongo_client.close()
 
     return results
 

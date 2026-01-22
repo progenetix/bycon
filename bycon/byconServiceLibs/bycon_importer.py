@@ -258,8 +258,7 @@ class ByconImporter():
     def __prepare_entity(self, entity="___none___"):
         if not (e_d := self.entity_defaults.get(entity)):
             return
-        import_collkey = f"{entity}_coll"
-        self.import_collname = BYC_DBS.get(import_collkey, "___none___")
+        self.import_collname = BYC_DBS.get("collections", {}).get(entity)
         self.import_entity = entity
         self.import_id = f"{entity}_id"
         self.upstream = RecordsHierarchy().upstream(entity)
@@ -337,7 +336,7 @@ class ByconImporter():
 
         dcs = []
         for d in self.downstream:
-            if (c := BYC_DBS.get(f"{d}_coll")):
+            if (c := BYC_DBS.get("collections", {}).get(d)):
                 dcs.append(c)
 
         if tds_id not in self.database_names:
@@ -423,7 +422,7 @@ class ByconImporter():
         fn = self.data_in.fieldnames
         dcs = []
         for d in self.downstream:
-            if (c := BYC_DBS.get(f"{d}_coll")):
+            if (c := BYC_DBS.get("collections", {}).get(d)):
                 dcs.append(c)
 
         del_coll = self.mongo_client[ds_id][icn]
@@ -646,7 +645,7 @@ class ByconImporter():
         for u in self.upstream:
             if not (e_d := self.entity_defaults.get(u)):
                 return
-            if not (u_coll := BYC_DBS.get(f"{u}_coll")):
+            if not (u_coll := BYC_DBS.get("collections", {}).get(u)):
                 return
             # no exception for genomicVariant since never upstream...
             u_id = new_doc.get(f'{u}_id', "___none___")

@@ -71,6 +71,10 @@ export function BeaconSearchForm({
       null
   })
 
+  // const handleReset = () => {
+  //   reset();
+  // };
+
   const {
     register,
     handleSubmit,

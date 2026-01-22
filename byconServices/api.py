@@ -170,7 +170,7 @@ class ByconOpenAPI:
             for a, a_d in self.argument_definitions.items():
                 if self.mode:
                     if "VQS" in self.mode:
-                        if a_d.get("vqs_query"):
+                        if a_d.get("is_vqs_par"):
                             pars.append(a)
                     else:
                         if a_d.get("beacon_query"):

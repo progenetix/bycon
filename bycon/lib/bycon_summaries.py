@@ -59,9 +59,17 @@ class ByconSummaries:
         for a_v in self.summaries:
             if use_dataset_result:
                 self.__generate_query_from_dataset_result(a_v)
-            a_v.update({"distribution": []})    
-            self.__summarize_concepts(a_v)
-            self.__reshape_dataset_summaries()
+            a_v.update({"distribution": []})
+            try:
+                self.__summarize_concepts(a_v)
+            except Exception as e:
+                prdbug(f"Exception at __summarize_concepts: {e}")
+                BYC["ERRORS"].append(e)
+            try:
+                self.__reshape_dataset_summaries()
+            except Exception as e:
+                prdbug(f"Exception at __reshape_dataset_summaries:{e}")
+                BYC["ERRORS"].append(e)
 
 
     # -------------------------------------------------------------------------#
@@ -69,7 +77,7 @@ class ByconSummaries:
     def __generate_query_from_dataset_result(self, a_v):
         # TODO: Default scope to response entity?
         scope = a_v.get("scope", "biosample")
-        coll = BYC_DBS.get(f"{scope}_coll", "___none___")
+        coll = BYC_DBS.get("collections", {}).get(scope, "___none___")
         # TODO: Fallback query for 0 results?
         if not (coll_k := f"{coll}.id") in self.dataset_result.keys():
             return
@@ -101,9 +109,9 @@ class ByconSummaries:
         if len(scopes := list(scopes)) != 1:
             return
 
-        if not (d_c := BYC_DBS.get(f"{scopes[0]}_coll")):
+        if not (m_c := BYC_DBS.get("collections", {}).get(scopes[0])):
             return
-        data_coll = self.data_client[d_c]
+        data_coll = self.data_client[m_c]
 
         _id = {}
         for c in concepts:
@@ -131,15 +139,19 @@ class ByconSummaries:
 
         if a_v.get("sorted") is True:
             k = list(agg_d[0]["_id"].keys())[0]
-            if "order" in agg_d[0]["_id"][k]:
-                agg_d = sorted(agg_d, key=lambda x: x["_id"][k].get("order", 9999))
+            if type(d := agg_d[0]["_id"].get(k)) is dict:
+                if "order" in d.keys():
+                    agg_d = sorted(agg_d, key=lambda x: x["_id"][k].get("order", 9999))
 
         # label lookups only for term-based aggregations
         for a in agg_d:
             if not (i_k := a.get("_id")):
                 continue
             c_v_s = []
-            id_v_s = list(i_k.values())
+            if not i_k.values():
+                id_v_s = ["Undefined"]
+            else:
+                id_v_s = list(i_k.values())
             for v in id_v_s:
                 if type(v) is dict and "id" in v:
                     label = v.get("label", v.get("id"))

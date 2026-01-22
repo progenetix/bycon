@@ -53,10 +53,8 @@ class ByconQuery():
         # TODO: call the variant type definition from inside this class since
         # e.g. multivars ... need this for each instance
         self.variant_request_type = None
-        self.variant_request_definitions = BYC.get("variant_request_definitions", {})
-        self.variant_par_names = self.variant_request_definitions.get("request_pars", [])
-        self.variant_par_names += self.variant_request_definitions.get("VQS_pars", [])
-
+        self.variant_par_names = []
+        self.request_profiles = BYC.get("request_profiles", {}).get("$defs", {})
         self.variant_type_definitions = BYC.get("variant_type_definitions", {})
 
         self.limit = BYC_PARS.get("limit")
@@ -68,6 +66,7 @@ class ByconQuery():
             "entities": {}
         }
 
+        self.__set_variant_par_names()
         self.__queries_for_test_mode()
         self.__update_queries_from_id_values()
         self.__query_from_hoid()
@@ -87,6 +86,14 @@ class ByconQuery():
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __set_variant_par_names(self):
+        for a_k, a_d in self.argument_definitions.items():
+            if a_d.get("is_variant_par") or a_d.get("is_vqs_par"):
+                self.variant_par_names.append(a_k)
+
+
     # -------------------------------------------------------------------------#
 
     def __update_queries_from_id_values(self):
@@ -149,20 +156,21 @@ class ByconQuery():
             return
 
         ret_no = BYC_PARS.get("test_mode_count", 5)
-        if not (r_c := BYC_DBS.get(f"{self.response_entity_id}_coll")):
+        e = self.response_entity_id
+        if not (c := BYC_DBS.get("collections", {}).get(e)):
             return
 
         data_db = MongoClient(host=BYC_DBS["mongodb_host"])[self.ds_id]
-        if r_c not in data_db.list_collection_names():
+        if c not in data_db.list_collection_names():
             # TODO: warning?
             return
 
-        data_coll = data_db[r_c]
+        data_coll = data_db[c]
         rs = list(data_coll.aggregate([{"$sample": {"size": ret_no}}]))
 
         q = [{"id": {"$in": list(s["id"] for s in rs)}}]
 
-        self.queries["entities"].update({self.response_entity_id: {"query": q, "collection": r_c}})
+        self.queries["entities"].update({self.response_entity_id: {"query": q, "collection": c}})
         self.queries.update({"expand": False})
 
 
@@ -175,15 +183,16 @@ class ByconQuery():
             return
         self.variant_multi_pars = BYC_PARS.get("variant_multi_pars", [])
 
-        r_e = "genomicVariant"
-        r_c = BYC_DBS.get(f"{r_e}_coll")
+        e = "genomicVariant"
+        if not (c := BYC_DBS.get("collections", {}).get(e)):
+            return
 
         # new preprocessing which results in a list of variant queries
         self.__preprocess_variant_pars()        
         if not (v_queries := self.__loop_multivars()):
             return
 
-        self.queries["entities"].update({r_e: {"query": v_queries, "collection": r_c}})
+        self.queries["entities"].update({e: {"query": v_queries, "collection": c}})
 
 
     # -------------------------------------------------------------------------#
@@ -362,7 +371,7 @@ class ByconQuery():
 
         variant_request_type = None
 
-        brts = self.variant_request_definitions.get("request_profiles", {})
+        brts = self.request_profiles
         brts_k = brts.keys()
         # prdbug(f'...brts_k: {brts_k}')
         
@@ -739,10 +748,12 @@ class ByconQuery():
         if len(self.filters) < 1:
             return
 
-        if not (ft_collname := BYC_DBS.get("filteringTerm_coll")):
-            BYC["ERRORS"].append("No filtering term collection `filteringTerm_coll` defined!")
+        m_h = BYC_DBS["mongodb_host"]
+        m_d = self.ds_id
+        if not (m_c := BYC_DBS.get("collections", {}).get("filteringTerm")):
+            BYC["ERRORS"].append("No filtering term collection defined!")
             return
-        self.filter_collection = MongoClient(host=BYC_DBS["mongodb_host"])[self.ds_id][ft_collname]
+        self.filter_collection = MongoClient(host=m_h)[m_d][m_c]
 
         entity_filters_lists = self.__assemble_filter_lists()
 
@@ -900,7 +911,11 @@ class ByconQuery():
         if not (accessid := BYC_PARS.get("accessid")):
             return
 
-        ho_coll = MongoClient(host=BYC_DBS["mongodb_host"])[BYC_DBS["housekeeping_db"]][BYC_DBS["handover_coll"]]
+        m_h = BYC_DBS["mongodb_host"]
+        m_d = BYC_DBS["housekeeping_db"]
+        m_c = BYC_DBS.get("collections", {}).get("handover")
+
+        ho_coll = MongoClient(host=m_h)[m_d][m_c]
         if not (h_o := ho_coll.find_one({"id": accessid})):
             return
 
@@ -921,15 +936,17 @@ class ByconQuery():
     def __update_queries_for_entity(self, query, entity):
         # TODO: This is now for using generally query lists and aggregate 
         # by multiple queries & intersection of matched ids during execution
-        r_c = BYC_DBS.get(f"{entity}_coll", "___none___")
+        e = entity
+        if not (c := BYC_DBS.get("collections", {}).get(e)):
+            return
         q_e = self.queries.get("entities")
 
         if type(query) is not list:
             query = [query]
-        if entity not in q_e:
-            q_e.update({entity:{"query": query, "collection": r_c}})
+        if e not in q_e:
+            q_e.update({e:{"query": query, "collection": c}})
         else:
-            q_e[entity]["query"] = [*q_e[entity]["query"], *query]
+            q_e[e]["query"] = [*q_e[e]["query"], *query]
 
         self.queries.update({"entities": q_e})
 

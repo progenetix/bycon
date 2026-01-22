@@ -1,5 +1,4 @@
 from os import environ, path, pardir
-from pymongo import MongoClient
 import sys
 import socket
 
@@ -57,29 +56,32 @@ REQUEST_PATH_PARAMS = [
 #------------------------------------------------------------------------------#
 
 BYC_DBS = {
-  "mongodb_host": environ.get("BYCON_MONGO_HOST", "localhost"),
-  "housekeeping_db": "_byconHousekeepingDB",
-  "services_db": "_byconServicesDB",
-  "info_coll": "beaconinfo",
-  "handover_coll": "querybuffer",
-  "genes_coll": "genes",
-  "geolocs_coll": "geolocs",
-  "genomicVariant_coll": "variants",
-  "biosample_coll": "biosamples",
-  "individual_coll": "individuals",
-  "analysis_coll": "analyses",
-  "run_coll": "analyses",
-  "phenopacket_coll": "individuals",
-  "filteringTerm_coll": "collations",
-  "cohort_coll": "collations",
-  "publication_coll": "publications"
+    "mongodb_host": environ.get("BYCON_MONGO_HOST", "localhost"),
+    "housekeeping_db": "_byconHousekeepingDB",
+    "services_db": "_byconServicesDB",
+    "collections": {
+        "info":             "beaconinfo",
+        "handover":         "querybuffer",
+        "genes":            "genes",
+        "geolocs":          "geolocs",
+        "genomicVariant":   "variants",
+        "biosample":        "biosamples",
+        "individual":       "individuals",
+        "analysis":         "analyses",
+        "run":              "analyses",
+        "phenopacket":      "individuals",
+        "filteringTerm":    "collations",
+        "cohort":           "collations",
+        "collation":        "collations",
+        "publication":      "publications"
+    }
 }
 
 MONGO_DISTINCT_STORAGE_LIMIT    = 300000
 VARIANTS_RESPONSE_LIMIT         = 300000
 
 ################################################################################
-# to be modified during execution ##############################################
+# potentially to be modified during execution ##################################
 ################################################################################
 
 BYC = {
@@ -124,7 +126,7 @@ BYC = {
     "request_meta":             {},
     "service_config":           {},
     "test_queries":             {},
-    "variant_request_definitions": {},
+    "request_profiles":         {},
     "variant_type_definitions": {},
 
     "loc_mod_pars": [

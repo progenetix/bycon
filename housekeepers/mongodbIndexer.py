@@ -29,11 +29,10 @@ def mongodb_indexer():
     data_db = mongo_client[ds_id]
     coll_names = data_db.list_collection_names()
     for r_t, r_d in b_rt_s.items():
-        collname = BYC_DBS.get(f"{r_t}_coll")
-        if collname not in coll_names:
-            print(f"¡¡¡ Collection {collname} does not exist in {ds_id} !!!")
+        if not (c := BYC_DBS.get("collections", {}).get(r_t)) in coll_names:
+            print(f"¡¡¡ Collection {c} does not exist in {ds_id} !!!")
             continue
-        i_coll = data_db[ collname ]
+        i_coll = data_db[c]
         io_params = dt_m["$defs"][ r_t ]["parameters"]
 
         for p_k, p_v in io_params.items():
@@ -45,11 +44,11 @@ def mongodb_indexer():
                     if (i_d_i := i_d.get("indexed")):
                         for i_p in i_d_i:
                             i_k = f'{k}.{i_p}'
-                            print(f'Creating index "{i_k}" in {collname} from {ds_id}')
+                            print(f'Creating index "{i_k}" in {c} from {ds_id}')
                             i_m = i_coll.create_index(i_k)
                             print(i_m)
                     continue
-                print(f'Creating index "{k}" in {collname} from {ds_id}')
+                print(f'Creating index "{k}" in {c} from {ds_id}')
                 m = i_coll.create_index(k)
                 print(m)
 

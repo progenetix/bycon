@@ -1,9 +1,8 @@
 import math, re, sys
 from os import path
-from pymongo import MongoClient
 from progress.bar import Bar
 
-from bycon import BYC, BYC_DBS, BYC_PARS, GeoQuery, RefactoredValues, prdbug, print_html_response
+from bycon import BYC, BYC_DBS, BYC_PARS, ByconMongo, GeoQuery, RefactoredValues, prdbug, print_html_response
 
 services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 sys.path.append( services_lib_path )
@@ -110,10 +109,11 @@ class ByconGeolocs:
 
 class ByconGeoResource:
     def __init__(self):
-        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-        self.geolocs_coll = self.mongo_client[BYC_DBS["services_db"]][BYC_DBS["geolocs_coll"]]
-        self.atlantis_coords = [ -71, 25 ]
-        self.geo_distance = 500000  # 500 km
+        m_d = BYC_DBS["services_db"]
+        m_c = BYC_DBS.get("collections", {}).get("geolocs")
+        self.geolocs_coll       = ByconMongo().openMongoColl(m_d, m_c)
+        self.atlantis_coords    = [ -71, 25 ]
+        self.geo_distance       = 500000  # 500 km
 
 
     # -------------------------------------------------------------------------#
@@ -121,8 +121,8 @@ class ByconGeoResource:
     # -------------------------------------------------------------------------#
 
     def update_geolocations(self, database=None, update_coll=None, query={}):
-        self.update_coll = self.mongo_client[database][update_coll]
- 
+        self.update_coll = ByconMongo().openMongoColl(database, update_coll)
+
         gn = self.update_coll.count_documents({})
         atl_count = 0
         if not BYC["TEST_MODE"]:

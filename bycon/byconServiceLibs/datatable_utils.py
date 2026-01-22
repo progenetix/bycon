@@ -1,12 +1,11 @@
 import csv, re, requests, sys
 from os import path
-from pymongo import MongoClient
 
-# bycon
 from bycon import (
     BYC,
     BYC_PARS,
     BYC_DBS,
+    ByconMongo,
     RefactoredValues,
     get_nested_value,
     prdbug,
@@ -257,14 +256,13 @@ def add_geolocation_to_pgxdoc(pgxdoc, geoprov_id):
     """
     Adds a geolocation to a pgxdoc by its ID.
     """
-    if not geoprov_id:
+    if not "::" in str(geoprov_id):
         return pgxdoc
 
-    if not "::" in geoprov_id:
-        return pgxdoc
-
-    mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-    geo_info = mongo_client[BYC_DBS["services_db"]][BYC_DBS["geolocs_coll"]].find_one({"id": geoprov_id}, {"_id": 0, "id": 0})
+    m_d = BYC_DBS["services_db"]
+    m_c = BYC_DBS.get("collections", {}).get("geolocs")
+    geo_coll = ByconMongo().openMongoColl(m_d, m_c)
+    geo_info = geo_coll.find_one({"id": geoprov_id}, {"_id": 0, "id": 0})
     if geo_info is None:
         return pgxdoc
     pgxdoc.update({"geo_location": geo_info.get("geo_location", {})})
