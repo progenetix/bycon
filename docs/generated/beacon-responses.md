@@ -6,6 +6,14 @@ Definition for a response that provides solely summaries of records in the beaco
 
 
 
+## beaconInformationalErrorResponse
+
+A `beaconErrorResponse` denotes an unsuccessful operation, e.g. due to a missing parameter or an invalid query. The response contains an error object.
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconInformationalErrorResponse>
+
+
+
 ## beaconCollectionsResponse
 
 A type of Beacon response that includes details about the **collections** in a beacon. The types of collections are defined in each beacon's configuration; if using the Beacon v2+ default model usually the types `dataset` and `cohort` are supported.

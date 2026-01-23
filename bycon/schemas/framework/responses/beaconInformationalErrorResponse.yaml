@@ -1,0 +1,15 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: ___BEACON_ROOT___/services/schemas/beaconInformationalErrorResponse/v2026-01-23
+type: object
+description: >-
+  A `beaconInformationalErrorResponse` denotes an unsuccessful operation. The
+  response contains an error object.
+properties:
+  meta:
+    $ref: ./sections/beaconInformationalResponseMeta.yaml
+  error:
+    $ref: ../common/beaconCommonComponents.yaml#/$defs/BeaconError
+required:
+  - meta
+  - error
+additionalProperties: true

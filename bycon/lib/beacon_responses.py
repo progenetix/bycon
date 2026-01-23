@@ -120,12 +120,13 @@ class BeaconResponseMeta:
 
 class BeaconErrorResponse:
     """
-    This response class is used for all the info / map / configuration responses
-    which have the same type of `meta`.
-    The responses are then provided by the dedicated methods
+    
     """
     def __init__(self):
-        self.error_response = ByconSchemas("beaconErrorResponse", "").get_schema_instance()
+        e_r = ByconSchemas("beaconErrorResponse", "").get_schema_instance()
+        i_r = ByconSchemas("beaconInformationalResponseMeta", "").get_schema_instance()
+        self.error_response = e_r
+        self.informational_error_response = ByconSchemas("beaconInformationalResponseMeta", "").get_schema_instance()
         self.meta = BeaconResponseMeta().populatedMeta()
 
 
