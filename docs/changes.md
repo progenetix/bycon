@@ -6,13 +6,14 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
-### 2026-01-21 (v2.7.2)
+### 2026-01-23 (v2.7.2)
 
 * removed custom `paginateResults`, `filterLogic` parameters from the API
 * renamed and refactored `variant_request_definitions` => `request_profiles`
     - which parameters are variant parameters is now indicated in `argument_definitions`
       through `is_variant_par` and/or `is_vqs_par` flags
 * fixed some bug in summaries when only empty values were returned
+* added `beaconInformationalErrorResponse`
 
 ### 2026-01-10 (v2.7.1)
 

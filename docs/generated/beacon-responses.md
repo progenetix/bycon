@@ -8,7 +8,7 @@ Definition for a response that provides solely summaries of records in the beaco
 
 ## beaconInformationalErrorResponse
 
-A `beaconErrorResponse` denotes an unsuccessful operation, e.g. due to a missing parameter or an invalid query. The response contains an error object.
+A `beaconInformationalErrorResponse` denotes an unsuccessful operation. The response contains an error object.
 
 * **{S}** <{{config.reference_server_url}}/services/schemas/beaconInformationalErrorResponse>
 
