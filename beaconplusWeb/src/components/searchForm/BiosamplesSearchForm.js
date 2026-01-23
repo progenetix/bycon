@@ -3,7 +3,7 @@ import {
   useFiltersByType,
   validateBeaconQuery
 } from "../../hooks/api"
-import React, { useMemo, useState } from "react" //useEffect, 
+import React, { useMemo, useState } from "react" //useEffect,
 import { useForm } from "react-hook-form"
 import {
   CytoBandsUtility,
@@ -14,7 +14,7 @@ import PropTypes from "prop-types"
 import { merge, transform } from "lodash"
 import SelectField from "../formShared/SelectField"
 import InputField from "../formShared/InputField"
-import {MarkdownParser} from "../MarkdownParser"
+import { MarkdownParser } from "../MarkdownParser"
 import useDeepCompareEffect from "use-deep-compare-effect"
 import { withUrlQuery } from "../../hooks/url-query"
 import { GeoCitySelector } from "./GeoCitySelector"
@@ -24,7 +24,11 @@ import cn from "classnames"
 
 export const BiosamplesSearchForm = withUrlQuery(
   ({ urlQuery, setUrlQuery, ...props }) => (
-    <BeaconSearchForm {...props} urlQuery={urlQuery} setUrlQuery={setUrlQuery} />
+    <BeaconSearchForm
+      {...props}
+      urlQuery={urlQuery}
+      setUrlQuery={setUrlQuery}
+    />
   )
 )
 export default BiosamplesSearchForm
@@ -47,20 +51,19 @@ function urlQueryToFormParam(urlQuery, key, parametersConfig) {
 }
 
 export function BeaconSearchForm({
-    isQuerying,
-    setSearchQuery,
-    beaconQueryTypes,
-    requestTypeExamples,
-    parametersConfig,
-    urlQuery,
-    setUrlQuery
-  }) {
+  isQuerying,
+  setSearchQuery,
+  beaconQueryTypes,
+  requestTypeExamples,
+  parametersConfig,
+  urlQuery,
+  setUrlQuery
+}) {
   // const autoExecuteSearch = urlQuery.executeSearch === "true"
 
   const [example, setExample] = useState(null)
   let parameters = useMemo(
-    () =>
-      makeParameters(parametersConfig, example),
+    () => makeParameters(parametersConfig, example),
     [example, parametersConfig]
   )
 
@@ -91,59 +94,59 @@ export function BeaconSearchForm({
 
   // reset form when default values changes
   useDeepCompareEffect(() => reset(initialValues), [initialValues])
-  
+
   // all subsets lookup ----------------------------------------------------- //
   var ct = ""
-  const {
-    data: allsubsetsResponse,
-    isLoading: isAllSubsetsDataLoading 
-  } = useFilteringTerms( watch, ct, "withpubmed" )
-  const allsubsetsOptions = allsubsetsResponse?.response?.filteringTerms?.map((value) => ({
-    value: value.id,
-    label: `${value.id}: ${value.label} (${value.count})`
-  }))
+  const { data: allsubsetsResponse, isLoading: isAllSubsetsDataLoading } =
+    useFilteringTerms(watch, ct, "withpubmed")
+  const allsubsetsOptions = allsubsetsResponse?.response?.filteringTerms?.map(
+    (value) => ({
+      value: value.id,
+      label: `${value.id}: ${value.label} (${value.count})`
+    })
+  )
   parameters = merge({}, parameters, {
     allTermsFilters: { options: allsubsetsOptions }
   })
 
   // biosubsets lookup ------------------------------------------------------ //
   ct = "NCITneoplasm,icdom,icdot,UBERON"
-  const {
-    data: biosubsetsResponse,
-    isLoading: isBioSubsetsDataLoading
-  } = useFilteringTerms( watch, ct ) 
-  const biosubsetsOptions = biosubsetsResponse?.response?.filteringTerms?.map((value) => ({
-    value: value.id,
-    label: `${value.id}: ${value.label} (${value.count})`
-  }))
+  const { data: biosubsetsResponse, isLoading: isBioSubsetsDataLoading } =
+    useFilteringTerms(watch, ct)
+  const biosubsetsOptions = biosubsetsResponse?.response?.filteringTerms?.map(
+    (value) => ({
+      value: value.id,
+      label: `${value.id}: ${value.label} (${value.count})`
+    })
+  )
   parameters = merge({}, parameters, {
     bioontology: { options: biosubsetsOptions }
   })
-  
+
   // referenceid lookup ----------------------------------------------------- //
   ct = "pubmed,GEOseries,AEseries,GEOplatform,cellosaurus"
-  const {
-    data: refsubsetsResponse,
-    isLoading: isRefSubsetsDataLoading
-  } = useFilteringTerms( watch, ct )
-  const refsubsetsOptions = refsubsetsResponse?.response?.filteringTerms?.map((value) => ({
-    value: value.id,
-    label: `${value.id}: ${value.label} (${value.count})`
-  }))   
+  const { data: refsubsetsResponse, isLoading: isRefSubsetsDataLoading } =
+    useFilteringTerms(watch, ct)
+  const refsubsetsOptions = refsubsetsResponse?.response?.filteringTerms?.map(
+    (value) => ({
+      value: value.id,
+      label: `${value.id}: ${value.label} (${value.count})`
+    })
+  )
   parameters = merge({}, parameters, {
     referenceid: { options: refsubsetsOptions }
   })
-  
+
   // clinical lookup -------------------------------------------------------- //
   ct = "TNM,NCITgrade,NCITstage,EFOfus"
-  const {
-    data: clinicalResponse,
-    isLoading: isClinicalDataLoading
-  } = useFilteringTerms( watch, ct )
-  const clinicalOptions = clinicalResponse?.response?.filteringTerms?.map((value) => ({
-    value: value.id,
-    label: `${value.id}: ${value.label} (${value.count})`
-  }))
+  const { data: clinicalResponse, isLoading: isClinicalDataLoading } =
+    useFilteringTerms(watch, ct)
+  const clinicalOptions = clinicalResponse?.response?.filteringTerms?.map(
+    (value) => ({
+      value: value.id,
+      label: `${value.id}: ${value.label} (${value.count})`
+    })
+  )
   parameters = merge({}, parameters, {
     clinicalClasses: { options: clinicalOptions }
   })
@@ -186,7 +189,7 @@ export function BeaconSearchForm({
           )}
           beaconQueryTypes={beaconQueryTypes}
         />
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form>
           {errors?.global?.message && (
             <div className="notification is-warning">
               {errors.global.message}
@@ -194,9 +197,7 @@ export function BeaconSearchForm({
           )}
           <SelectField {...parameters.assemblyId} {...selectProps} />
           {!parameters.datasetIds.isHidden && (
-            <SelectField
-              {...parameters.datasetIds} {...selectProps}
-            />
+            <SelectField {...parameters.datasetIds} {...selectProps} />
           )}
           <div className="columns my-0">
             <InputField
@@ -204,21 +205,24 @@ export function BeaconSearchForm({
                 !parameters.geneId.isHidden && "column",
                 "py-0 mb-3"
               )}
-              {...parameters.geneId} {...fieldProps}
+              {...parameters.geneId}
+              {...fieldProps}
             />
             <InputField
               className={cn(
                 !parameters.genomicAlleleShortForm.isHidden && "column",
                 "py-0 mb-3"
               )}
-              {...parameters.genomicAlleleShortForm} {...fieldProps}
+              {...parameters.genomicAlleleShortForm}
+              {...fieldProps}
             />
             <InputField
               className={cn(
                 !parameters.aminoacidChange.isHidden && "column",
                 "py-0 mb-3"
               )}
-              {...parameters.aminoacidChange} {...fieldProps}
+              {...parameters.aminoacidChange}
+              {...fieldProps}
             />
           </div>
           <div className="columns my-0">
@@ -289,7 +293,10 @@ export function BeaconSearchForm({
               }}
             />
             <InputField
-              className={cn(!parameters.mateEnd.isHidden && "column", "py-0 mb-3")}
+              className={cn(
+                !parameters.mateEnd.isHidden && "column",
+                "py-0 mb-3"
+              )}
               {...fieldProps}
               {...parameters.mateEnd}
               rules={{
@@ -380,10 +387,7 @@ export function BeaconSearchForm({
           </div>
           <div className="columns my-0">
             <SelectField
-              className={cn(
-                !parameters.sex.isHidden && "column",
-                "py-0 mb-3"
-              )}
+              className={cn(!parameters.sex.isHidden && "column", "py-0 mb-3")}
               {...parameters.sex}
               {...selectProps}
             />
@@ -474,10 +478,7 @@ export function BeaconSearchForm({
               }}
             />
             <InputField
-              className={cn(
-                !parameters.skip.isHidden && "column",
-                "py-0 mb-3"
-              )}
+              className={cn(!parameters.skip.isHidden && "column", "py-0 mb-3")}
               {...fieldProps}
               {...parameters.skip}
               rules={{
@@ -494,17 +495,27 @@ export function BeaconSearchForm({
             />
           </div>
           <ChromosomePreview watch={watch} />
-          <div className="field mt-5">
-            <div className="control">
-              <button
-                type="submit"
-                className={cn("button", "is-primary is-fullwidth", {
-                  "is-loading": isQuerying
-                })}
-              >
-                Query Database
-              </button>
-            </div>
+          <div className="columns my-0">
+            {/* <div className="control">*/}
+            <button
+              style={{ marginRight: "10px" }}
+              onClick={handleSubmit(onSubmit)}
+              className={cn("button", "is-primary", "column", "py-0", "mb-3", {
+                "is-loading": isQuerying
+              })}
+            >
+              Query Database
+            </button>
+            <button
+              style={{ marginLeft: "10px" }}
+              onClick={cleanParameters()}
+              className={cn("button", "column", "py-0", "mb-3", {
+                "is-loading": isQuerying
+              })}
+            >
+              Clear Form
+            </button>
+            {/* </div>*/}
           </div>
         </form>
       </div>
@@ -528,7 +539,6 @@ export function BeaconSearchForm({
             onGeneSpansClick={onGeneSpansClick}
             geneSpansPanelOpen={geneSpansPanelOpen}
           />
-
         </div>
         <div className="buttons">
           <ExamplesButtons
@@ -541,13 +551,13 @@ export function BeaconSearchForm({
           />
         </div>
         {example?.description && (
-          <ExampleDescription description={example.description} />   
+          <ExampleDescription description={example.description} />
         )}
       </div>
       {example?.img && (
-          <div>
-            <img src={example.img}/>
-          </div>
+        <div>
+          <img src={example.img} />
+        </div>
       )}
     </>
   )
@@ -567,7 +577,9 @@ function QuerytypesTabs({ beaconQueryTypes, onQuerytypeClicked }) {
               "is-active": selectedTab.label === value.label
             })}
             key={id}
-            onClick={() => {onQuerytypeClicked(value), setSelectedTab(value)}}
+            onClick={() => {
+              onQuerytypeClicked(value), setSelectedTab(value)
+            }}
           >
             <a>{value.label}</a>
           </li>
@@ -589,9 +601,7 @@ function ExamplesButtons({ requestTypeExamples, onExampleClicked }) {
   return (
     <div className="column is-full" style={{ padding: "0px" }}>
       <div className="columns">
-        <div className="column is-one-fifth label">
-          Query Examples
-        </div>
+        <div className="column is-one-fifth label">Query Examples</div>
         <div className="column">
           {Object.entries(requestTypeExamples || []).map(([id, value]) => (
             <button
@@ -617,12 +627,12 @@ function FormUtilitiesButtons({
   return (
     <div className="column is-full" style={{ padding: "0px" }}>
       <div className="columns">
-        <div className="column is-one-fifth label">
-          Form Utilities
-        </div>
+        <div className="column is-one-fifth label">Form Utilities</div>
         <div className="column is-full">
           <button
-            className={cn("button is-warning", [geneSpansPanelOpen && "is-link"])}
+            className={cn("button is-warning", [
+              geneSpansPanelOpen && "is-link"
+            ])}
             onClick={onGeneSpansClick}
           >
             <span className="icon">
@@ -631,7 +641,9 @@ function FormUtilitiesButtons({
             <span>Gene Spans</span>
           </button>
           <button
-            className={cn("button is-warning", [cytoBandPanelOpen && "is-link"])}
+            className={cn("button is-warning", [
+              cytoBandPanelOpen && "is-link"
+            ])}
             onClick={onCytoBandClick}
           >
             <span className="icon">
@@ -655,10 +667,7 @@ function ExampleDescription({ example }) {
   ) : null
 }
 
-function makeParameters(
-  parametersConfig,
-  example
-) {
+function makeParameters(parametersConfig, example) {
   // merge base parameters config and request config
   const mergedConfigs = merge(
     {}, // important to not mutate the object
@@ -670,6 +679,22 @@ function makeParameters(
     r[k] = { name: k, ...v }
   })
   return parameters
+}
+
+cleanParameters.propTypes = {
+  setFormValue: PropTypes.func.isRequired
+}
+function cleanParameters(reset, setUrlQuery, setExample) {
+  return () => {
+    // Clear form fields
+    reset()
+
+    // Clear URL query parameters
+    setUrlQuery({}, { replace: true })
+
+    // If you have other state to clear (like example selection)
+    setExample(null)
+  }
 }
 
 function onSubmitHandler({ clearErrors, setError, setSearchQuery }) {
@@ -717,26 +742,26 @@ function validateForm(formValues) {
     errors.push([name, { type: "manual", message: "Parameter is missing" }])
 
   if (
-      !referenceName && 
-      !referenceBases && 
-      !alternateBases && 
-      !start &&
-      !end &&
-      !variantQueryDigests &&
-      !cytoBands &&
-      !variantType &&
-      !geneId &&
-      !aminoacidChange &&
-      !genomicAlleleShortForm &&
-      !bioontology &&
-      !referenceid &&
-      !ageAtDiagnosis && 
-      !followupTime && 
-      !followupState && 
-      !allTermsFilters &&
-      !freeFilters &&
-      !clinicalClasses &&
-      !cohorts
+    !referenceName &&
+    !referenceBases &&
+    !alternateBases &&
+    !start &&
+    !end &&
+    !variantQueryDigests &&
+    !cytoBands &&
+    !variantType &&
+    !geneId &&
+    !aminoacidChange &&
+    !genomicAlleleShortForm &&
+    !bioontology &&
+    !referenceid &&
+    !ageAtDiagnosis &&
+    !followupTime &&
+    !followupState &&
+    !allTermsFilters &&
+    !freeFilters &&
+    !clinicalClasses &&
+    !cohorts
   ) {
     !referenceName && setMissing("referenceName")
     !referenceBases && setMissing("referenceBases")
@@ -777,10 +802,11 @@ const handleExampleClicked = (reset, setExample, setUrlQuery) => (example) => {
   setExample(example)
 }
 
-const handleQuerytypeClicked = (reset, setExample, setUrlQuery) => (example) => {
-  setUrlQuery({}, { replace: true })
-  setExample(example)
-}
+const handleQuerytypeClicked =
+  (reset, setExample, setUrlQuery) => (example) => {
+    setUrlQuery({}, { replace: true })
+    setExample(example)
+  }
 
 // Maps FilteringTerms hook to apiReply usable by DataFetchSelect
 function useFilteringTerms(watchForm, ct) {
@@ -790,4 +816,3 @@ function useFilteringTerms(watchForm, ct) {
     collationTypes: ct
   })
 }
-
