@@ -138,7 +138,7 @@ class ByconParameters:
             if r_i >= p_len:
                 break
             p_v = unquote(p_items[r_i])
-            if p_v.lower() in NO_PARAM_VALUES:
+            if p_v.lower() in PARAM_NONE_VALUES:
                 break
             p_vals[p_k] = p_v
 
@@ -175,7 +175,7 @@ class ByconParameters:
         for p in arg_vars.keys():
             if not (v := arg_vars.get(p)):
                 continue
-            if str(v).lower() in NO_PARAM_VALUES:
+            if str(v).lower() in PARAM_NONE_VALUES:
                 continue
             p_d = humps.decamelize(p)
             if not (a_d := self.arg_defs.get(p_d)):

@@ -263,7 +263,7 @@ chr3:
 
 ### 2025-06-05: (v2.4.7 "Thessaloniki")
 
-* added a global `NO_PARAM_VALUES` which is used to set matching parameters (e.g. "none", "null", "undefined") to empty strings during input processing (circumvents issues with empty parameters in web front-ends)
+* added a global `PARAM_NONE_VALUES` which is used to set matching parameters (e.g. "none", "null", "undefined") to empty strings during input processing (circumvents issues with empty parameters in web front-ends)
 * added clustering, tree generation and labels to the `histocircleplot` plot option
 * started to move request tests to [Bruno](https://docs.usebruno.com/) (in `tests/bycon-tests`)
 * circle plots are now clustered if more than one, with cluster tree and labels

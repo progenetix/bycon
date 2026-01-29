@@ -44,12 +44,21 @@ REQUEST_PATH_ROOT = "beacon"
 if "services" in PROJECT_PATH:
     REQUEST_PATH_ROOT = "services"
 
+# collection object for cmd arguments and web parameters (depending on the HTTP_HOST)
+# all possible parameters rare defined in `argument_definitions.yaml`, partially
+# provifding default values
+BYC_PARS = {}
+
 # path elements after the `beacon` or `services` REQUEST_PATH_ROOT
 REQUEST_PATH_PARAMS = [
     "request_entity_path_id",
     "path_ids",
     "response_entity_path_id"
 ]
+
+# globals for treating "Null" value versions (e.g. from JS frontend to parameter
+# to stack interpretation)
+PARAM_NONE_VALUES = ["none", "null", "undefined"]
 
 #------------------------------------------------------------------------------#
 # Database settings
@@ -142,17 +151,12 @@ BYC = {
     # -------------------------------------------------------------------------- #
 
     "authorized_granularities": {},
-    "request_entity_id": None,
-    "response_entity_id": None,
-    "response_entity": {},
-    "response_schema": "beaconInfoResponse",
-    "returned_granularity": "boolean"
+    "request_entity_id":        None,
+    "response_entity_id":       None,
+    "response_entity":          {},
+    "response_schema":          "beaconInfoResponse",
+    "returned_granularity":     "boolean"
 }
-
-# collection object for cmd arguments and web parameters (depending on the HTTP_HOST)
-# all possible parameters rare defined in `argument_definitions.yaml`, partially
-# provifding default values
-BYC_PARS = {}
 
 # default authorization levels; a local `authorizations.yaml` file can add to 
 # these / override the values
@@ -160,7 +164,7 @@ BYC_PARS = {}
 # "examplez" here)
 AUTHORIZATIONS = {
     "anonymous": {
-        "default": "boolean",
+        "default":  "boolean",
         "examplez": "record"
     },
     "local": {
@@ -168,12 +172,7 @@ AUTHORIZATIONS = {
     }
 }
 
-#------------------------------------------------------------------------------#
-# not really to be modified...
-#------------------------------------------------------------------------------#
-
-NO_PARAM_VALUES = ["none", "null", "undefined"]
-
+# integer granularities for some sorting of levels
 GRANULARITY_LEVELS = {
   "none": 0,
   "boolean": 1,
@@ -181,6 +180,10 @@ GRANULARITY_LEVELS = {
   "aggregated": 3,
   "record": 4
 }
+
+#------------------------------------------------------------------------------#
+# not really to be modified...
+#------------------------------------------------------------------------------#
 
 BYC_UNCAMELED = [
   "gVariants",

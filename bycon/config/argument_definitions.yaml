@@ -146,7 +146,11 @@ $defs:
       The response granularity of the beacon; for "secure" Beacons the default
       should be overridden in local definitions (e.g. as "boolean")
     type: string
-    enum: [record, count, boolean, aggregated]
+    enum:
+      - boolean
+      - count
+      - aggregated
+      - record
     pattern: '^\w+$'
     cmdFlags:
       - --requestedGranularity
