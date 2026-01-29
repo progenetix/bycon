@@ -5,6 +5,7 @@ from bycon import (
     BeaconDataResponse,
     BeaconErrorResponse,
     BeaconInfoResponse,
+    ByconError,
     print_json_response,
     print_text_response
 )
@@ -39,7 +40,7 @@ def main():
     elif b_r_s in BYC.get("data_responses", []):
         r = BeaconDataResponse().dataResponseFromEntry()
     else:
-        BYC["ERRORS"].append(f"Unsupported response schema type {b_r_s}")
+        ByconError().addError(f"Unsupported response schema type {b_r_s}")
 
     # Final error check before printing
     BeaconErrorResponse().respond_if_errors()

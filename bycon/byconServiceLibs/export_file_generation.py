@@ -8,6 +8,7 @@ from bycon import (
     BYC,
     BYC_PARS,
     ByconFilters,
+    ByconError,
     ByconID,
     ByconH,
     ByconVariant,
@@ -162,7 +163,7 @@ class PGXseg:
 
     def __add_meta_lines(self):
         if not (bios_ids := self.dataset_result.get("biosamples.id", {}).get("target_values")):
-            BYC["ERRORS"].append("No biosamples found in the dataset results.")
+            ByconError().addError("No biosamples found in the dataset results.")
             return
         bs_coll = self.mongo_client[self.ds_id]["biosamples"]
         for bs_id in bios_ids:
@@ -195,7 +196,7 @@ class PGXseg:
 
     def __add_variants(self):
         if not (var_ids := self.dataset_result.get("variants.id", {}).get("target_values")):
-            BYC["ERRORS"].append("No variants found in the dataset results.")
+            ByconError().addError("No variants found in the dataset results.")
             return
         var_ids = ByconH().paginated_list(var_ids, self.skip, self.limit)
         vs_coll = self.mongo_client[self.ds_id]["variants"]
@@ -377,7 +378,7 @@ class PGXbed:
 
     def __check_file(self):
         if not path.isdir(self.tmp_path):
-            BYC["ERRORS"].append(f"Temporary directory `{self.tmp_path}` not found.")
+            ByconError().addError(f"Temporary directory `{self.tmp_path}` not found.")
             return False
         self.bed_file = path.join(self.tmp_path, self.filename)
         return True

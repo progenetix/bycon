@@ -3,6 +3,7 @@ from os import path
 
 from bycon import (
     BeaconErrorResponse,
+    ByconError,
     BYC,
     BYC_PARS,
     prdbug,
@@ -45,5 +46,5 @@ def ids():
                         lid = pim+lid
                 print_uri_rewrite_response(f'{link}{lid}')
 
-    BYC.update({"ERRORS": ["No correct id provided. Please refer to the documentation at http://info.progenetix.org/"]})
+    ByconError().addError("No correct id provided. Please refer to the documentation at http://info.progenetix.org/")
     BeaconErrorResponse().respond_if_errors()

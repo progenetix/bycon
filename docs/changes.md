@@ -6,6 +6,13 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2026-01-29 (v2.7.3 "Stephen Fry")
+
+* removed array storage paths from config (not used anymore/ can be defined in custom
+  extensions) - `server_callsets_dir_loc`, `probefile_name`
+* moved error collection from direct manipulation of `BYC["ERRORS"}` into
+  new `bycon_helpers.ByconError` class, e.g. for universal debug w/ caller
+
 ### 2026-01-23 (v2.7.2)
 
 * removed custom `paginateResults`, `filterLogic` parameters from the API

@@ -102,7 +102,7 @@ Activates the Beacon test setting, i.e. returning some random documents
 **description:**
 The requested granularity of the beacon    
 **type:** string    
-**enum:** `record,count,boolean,aggregated`    
+**enum:** `boolean,count,aggregated,record`    
 **pattern:** `^\w+$`    
 **cmdFlags:** `--requestedGranularity`    
 **default:** `record`    

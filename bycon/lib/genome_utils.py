@@ -3,7 +3,7 @@ from os import environ, path, pardir
 from pymongo import MongoClient
 
 # local
-from bycon_helpers import prdbug
+from bycon_helpers import ByconError, prdbug
 from config import *
 
 ################################################################################
@@ -312,7 +312,7 @@ class Cytobands():
 
     def __cytobands_response_object(self):
         if len(self.filtered_bands) < 1:
-            BYC["ERRORS"].append("No matching cytobands!")
+            ByconError().addError("No matching cytobands!")
             return
 
         self.__cytobands_label()
@@ -417,7 +417,7 @@ class Cytobands():
         cytobands = list(filter(lambda d: d["chro"] == chro, self.cytobands.copy()))
 
         if len(cytobands) < 10:
-            BYC["ERRORS"].append(f"No matching cytobands for chromosome {chro}!")
+            ByconError().addError(f"No matching cytobands for chromosome {chro}!")
             return
 
         if cb_start is None and cb_end is None:

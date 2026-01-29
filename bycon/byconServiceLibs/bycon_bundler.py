@@ -10,6 +10,7 @@ from bycon import (
     BYC,
     BYC_PARS,
     BYC_DBS,
+    ByconError,
     ByconVariant,
     CollationQuery,
     GenomeBins,
@@ -210,7 +211,7 @@ class ByconBundler:
 
     def collationsPlotbundles(self):       
         if len(self.datset_ids) < 1:
-            BYC["ERRORS"].append("¡¡¡ No `datasetdIds` parameter !!!")
+            ByconError().addError("¡¡¡ No `datasetdIds` parameter !!!")
             return
         self.__isetBundlesFromCollationParameters()
         self.plotDataBundle.update({ "interval_frequencies_bundles": self.intervalFrequenciesBundles })

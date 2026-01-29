@@ -75,7 +75,7 @@ try:
         try:
             local_file = path.join(LOC_PATH, f'{p}.yaml')
             if not path.exists(local_file):
-                logger.warning(f"Local config {local_file} not found")
+                logger.warning(f"Optional local config {local_file} not found")
                 continue
 
             local_data = load_yaml_empty_fallback(local_file)

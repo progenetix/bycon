@@ -135,6 +135,7 @@ class BeaconErrorResponse:
     def respond_if_errors(self, error_code=422):
         if len(errors := BYC.get("ERRORS", [])) < 1:
             return False
+        errors = [str(x) for x in errors]
         self.error_response.update({
             "error": {"error_code": error_code, "error_message": ", ".join(errors)},
             "meta": self.meta
@@ -355,7 +356,7 @@ class BeaconDataResponse:
 
     def __check_switch_to_error_response(self):
         if not (r_q_e := self.record_queries.get("entities", {})):
-            BYC["ERRORS"].append("no valid query")
+            ByconError().addError("no valid query")
             self.data_response.update({"error": {"error_code": 422, "error_message": ", ".join(BYC["ERRORS"])}})
             self.data_response.pop("response", None)
             self.data_response.pop("response_summary", None)
@@ -780,7 +781,7 @@ class ByconResultSets:
         self.response_entity_id = "individual"
         self.__retrieve_datasets_data()
         if not ds_id in self.datasets_data:
-            BYC["ERRORS"].append("no correct dataset id provided to `dataset_results_biosample_ids`")
+            ByconError().addError("no correct dataset id provided to `dataset_results_biosample_ids`")
             return []
 
         data = self.datasets_data[ds_id]
@@ -798,7 +799,7 @@ class ByconResultSets:
         self.response_entity_id = "analysis"
         self.__retrieve_datasets_data()
         if not ds_id in self.datasets_data:
-            BYC["ERRORS"].append("no correct dataset id provided to `dataset_results_biosample_ids`")
+            ByconError().addError("no correct dataset id provided to `dataset_results_biosample_ids`")
             return []
 
         data = self.datasets_data[ds_id]
@@ -833,7 +834,7 @@ class ByconResultSets:
                 if h_o_size < 15000000:
                     self.ho_coll.update_one( { "id": h_o["id"] }, { '$set': h_o }, upsert=True )
                 else:
-                    BYC["ERRORS"].append('Storage size for {ds_id}.{h_o_k}: {h_o_size / 1000}kb ==>> not saved')
+                    ByconError().addError(f'Storage size for {ds_id}.{h_o_k}: {h_o_size / 1000}kb ==>> not saved')
 
 
     # -------------------------------------------------------------------------#
@@ -889,7 +890,7 @@ class ByconResultSets:
 
     # -------------------------------------------------------------------------#
 
-    def __retrieve_single_dataset_data(self, ds_id):
+    def __retrieve_single_dataset_data(self, ds_id="___none___"):
         if not (ds_results := self.datasets_results.get(ds_id)):
             return
         if not self.handover_key in ds_results.keys():

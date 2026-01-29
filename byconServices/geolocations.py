@@ -22,7 +22,7 @@ def geolocations():
     else:
         query       = GeoQuery().get_geoquery()
         if not query:
-            BYC["ERRORS"].append("No query generated - missing or malformed parameters")
+            ByconError().addError("No query generated - missing or malformed parameters")
         else:
             results = mongo_result_list(m_d, m_c, query, { '_id': False } )
 

@@ -4,7 +4,7 @@ from urllib.parse import urlparse, unquote
 from os import environ
 from pymongo import MongoClient
 
-from bycon_helpers import prdbug, prdbughead, ByconH
+from bycon_helpers import prdbug, prdbughead, ByconError, ByconH
 from config import *
 
 ################################################################################
@@ -614,7 +614,7 @@ class ByconDatasets:
         if len(ds_ids) > 0:
             self.dataset_ids = ds_ids
         else:
-            BYC["ERRORS"].append(f"!!! The requested dataset id(s) {f_ds_ids} do not match any of the available datasets.")
+            ByconError().addError(f"!!! The requested dataset id(s) {f_ds_ids} do not match any of the available datasets.")
             prdbug(f"!!! The dataset id(s) {f_ds_ids} do not match any of the available datasets.")
 
 

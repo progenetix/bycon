@@ -1,4 +1,4 @@
-import base36, humps, json, random, re, time, yaml
+import base36, humps, inspect, json, random, re, time, yaml
 
 from isodate import parse_duration
 from datetime import datetime
@@ -23,18 +23,21 @@ class ByconMongo:
         self.client = MongoClient(host=self.host_address)
         if self.__check_db_name(db_name) is False:
             return False
+        self.db = self.client[db_name]
         return self.client[db_name]
 
 
     #--------------------------------------------------------------------------#
 
-    def openMongoColl(self, db_name, coll_name):
+    def openMongoColl(self, db_name, coll_name="___none___"):
         self.client = MongoClient(host=self.host_address)
-        db_names = list(client.list_database_names())
+        db_names = list(self.client.list_database_names())
         if self.__check_db_name(db_name) is False:
+            ByconError().addError(f"db {db_name} does not exist")
             return False
         self.db = self.client[db_name]
         if self.__check_coll_name(coll_name) is False:
+            ByconError().addError(f"collection {db_name}.{coll_name} does not exist")
             return False
         return self.db[coll_name]
 
@@ -45,8 +48,7 @@ class ByconMongo:
 
     def __check_db_name(self, db_name):
         if str(db_name) not in list(self.client.list_database_names()):
-            error = f"db `{db_name}` does not exist"
-            BYC["ERRORS"].append(error)
+            ByconError().addError(f"db `{db_name}` does not exist")
             return False
         return db_name
 
@@ -54,13 +56,33 @@ class ByconMongo:
     #--------------------------------------------------------------------------#
     
     def __check_coll_name(self, coll_name):
-        if str(coll_name) not in self.db.list_collection_names():
-            error = f"collection `{coll_name}` does not exist in `{db_name}`"
-            BYC["ERRORS"].append(error)
+        if str(coll_name) not in list(self.db.list_collection_names()):
+            ByconError().addError(f"collection `{coll_name}` does not exist in `{self.db}`")
             return False
         return coll_name
 
 
+################################################################################
+################################################################################
+################################################################################
+
+class ByconError:
+    def __init__(self):
+        self.errors = BYC["ERRORS"]
+        self.caller = inspect.stack()[-1].function
+
+    #--------------------------------------------------------------------------#
+    #----------------------------- public -------------------------------------#
+    #--------------------------------------------------------------------------#
+
+    def addError(self, error=None):
+        if error:
+            prdbug(f"{error} - {self.caller}")
+            BYC["ERRORS"].append(error)
+
+
+################################################################################
+################################################################################
 ################################################################################
 
 class ByconID:
@@ -191,12 +213,8 @@ def days_from_iso8601duration(iso8601duration=""):
 
 def mongo_result_list(db_name, coll_name, query, fields={}):
     results = []
-    try:
-        if (coll := ByconMongo().openMongoColl(ds_id, coll_name)):
-            results = list(coll.find(query, fields))
-    except Exception as e:
-        BYC["ERRORS"].append(e)
-
+    if not (coll := ByconMongo().openMongoColl(db_name, coll_name)) is False:
+        results = list(coll.find(query, fields))
     return results
 
 

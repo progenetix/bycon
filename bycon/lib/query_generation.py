@@ -3,7 +3,7 @@ import humps, inspect, pymongo, re, sys
 from os import environ
 from pymongo import MongoClient
 
-from bycon_helpers import days_from_iso8601duration, prdbug, prjsonnice, ByconH
+from bycon_helpers import days_from_iso8601duration, prdbug, prjsonnice, ByconError, ByconH
 from config import *
 from genome_utils import ChroNames, Cytobands, GeneInfo, VariantTypes
 from parameter_parsing import ByconFilters
@@ -751,7 +751,7 @@ class ByconQuery():
         m_h = BYC_DBS["mongodb_host"]
         m_d = self.ds_id
         if not (m_c := BYC_DBS.get("collections", {}).get("filteringTerm")):
-            BYC["ERRORS"].append("No filtering term collection defined!")
+            ByconError().addError("No filtering term collection defined!")
             return
         self.filter_collection = MongoClient(host=m_h)[m_d][m_c]
 
@@ -1161,7 +1161,7 @@ class CollationQuery:
         mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         db_names = list(mongo_client.list_database_names())
         if self.dataset_id not in db_names:
-            BYC["ERRORS"].append(f"db `{self.dataset_id}` does not exist")
+            ByconError().addError(f"db `{self.dataset_id}` does not exist")
             self.query = {"_id": "___undefined___"}
             return
         try:
@@ -1169,7 +1169,7 @@ class CollationQuery:
             ids = list(s["id"] for s in rs)
             self.query = {"id": {"$in": ids}}
         except Exception as e:
-            BYC["ERRORS"].append(e)
+            ByconError().addError(e)
             self.query = {"_id": "___undefined___"}
         mongo_client.close()
 
