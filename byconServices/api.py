@@ -8,7 +8,17 @@ from os import path
 
 from collections import OrderedDict
 
-from bycon import BYC, BYC_PARS, ByconFilteringTerms, ChroNames, load_yaml_empty_fallback, prdbug, prjsonhead, prjsontrue, select_this_server
+from bycon import (
+    BYC,
+    BYC_PARS,
+    ByconFilteringTerms,
+    ChroNames,
+    load_yaml_empty_fallback,
+    prdbug,
+    prjsonhead,
+    prjsontrue,
+    select_this_server
+)
 
 services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )
 

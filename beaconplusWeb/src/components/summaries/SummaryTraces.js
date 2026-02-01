@@ -44,7 +44,7 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
     });
 
     // removal of the "unknown" and "undefined" categories from the first dimension
-    let unfilteredNo = sortedFirsts.length;
+    // let unfilteredNo = sortedFirsts.length;
     if (filterUnknowns == true) {
         sortedFirsts = sortedFirsts.filter(object => {
             return object.id !== "unknown";
@@ -53,8 +53,8 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
             return object.id !== "undefined";
         });
     }
-    let filteredNo = unfilteredNo - sortedFirsts.length;
-    console.log(`Filtered out ${filteredNo} 'unknown'/'undefined' from first dimension.`);
+    // let filteredNo = unfilteredNo - sortedFirsts.length;
+    // console.log(`Filtered out ${filteredNo} 'unknown'/'undefined' from first dimension.`);
 
     if (sortedFirsts.length > colNo) {
         sortedFirsts = sortedFirsts.slice(0, colNo);

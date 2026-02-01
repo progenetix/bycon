@@ -45,7 +45,7 @@ function SummaryPlot({ summary, filterUnknowns }) {
     }, []);
     const outer_w = boundingRect.width
 
-    console.log("==>> Plot for", summary["label"]);
+    // console.log("==>> Plot for", summary["label"]);
     let summaryId = summary["id"];
     let {tracesData, sankeyLabels, sankeyLinks} = SummaryTraces({ summary, filterUnknowns, colNo, includeOthers });
 
@@ -54,7 +54,7 @@ function SummaryPlot({ summary, filterUnknowns }) {
     }
 
     if (dashboardPies.includes(summaryId)) {
-        console.log("Rendering SimplePlotlyPie for", summary["label"]);
+        // console.log("Rendering SimplePlotlyPie for", summary["label"]);
         return (
         <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
             <SimplePlotlyPie
@@ -65,7 +65,7 @@ function SummaryPlot({ summary, filterUnknowns }) {
     }
 
     if (dashboardSankeys.includes(summaryId)) {
-        console.log("Rendering SankeyPlot for", summary["label"]);
+        // console.log("Rendering SankeyPlot for", summary["label"]);
         return (
         <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", width: "100%", marginBottom: "0px" }}>
             <SankeyPlot
@@ -78,7 +78,7 @@ function SummaryPlot({ summary, filterUnknowns }) {
         );
     }
 
-    console.log("Rendering StackedPlotlyBar for", summary["label"]);
+    // console.log("Rendering StackedPlotlyBar for", summary["label"]);
     return (
     <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
         <StackedPlotlyBar

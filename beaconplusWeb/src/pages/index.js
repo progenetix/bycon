@@ -19,6 +19,11 @@ const searchExamples = merge(
   locSearchExamples
 )
 
+searchExamples.forEach(function (v) {
+  console.log(v.label)
+  console.log(v.parameters)
+})
+
 if (!parametersConfig.parameters?.datasetIds?.defaultValue) {
   parametersConfig.parameters.datasetIds.defaultValue = [DATASETDEFAULT]
 }

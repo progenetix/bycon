@@ -1,6 +1,8 @@
 ---
 - label: "CNV (Bracket)"
-  infoText: "Query usein 2 `start` and 2 `end` values to find (structural) variants with some fuzziness for their start and end."
+  infoText: |
+    Query using 2 `start` and 2 `end` values to find (structural) variants with
+    some fuzziness for their start and end.
   description: |
     Typically CNV Queries are performed as **Beacon Bracket Queries**. These allow
     the specification of sequence _ranges_ for both `start` and `end` positions of a
