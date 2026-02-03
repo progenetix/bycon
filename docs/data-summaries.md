@@ -36,7 +36,7 @@ or the intersection of two properties (2-dimensional aggregations, "2D").
         - This is a `resultSets` response for the `/biosamples/` endpoint with
           `requestedGranularity=aggregated` and using the `ageAtDiagnosisBySex`
           aggregation term known from the `/aggregation_terms/` call above
-        - the summaries are reported in `summaryResults.n.summaryResults`
+        - the summaries are reported in `resultSets.n.resultsAggregation`
     * Age/sex distribution for brain cancer samples shown in a [dashboard](https://staging.progenetix.org/queryResultsDashboard/?filters=NCIT:C3268&aggregationTerms=ageAtDiagnosisBySex)
     * [Content dashboard for the Progenetix data](https://staging.progenetix.org/dataDashboard/)
         - This is purely a showcase for 1 and 2 dimensional representations w/o
@@ -291,7 +291,7 @@ An example summary response (here using the GeoJSON tagging for biosamples in
 Progenetix - not a standard Beacon property yet) would look like this:
 
 ```javascript
-summaryResults: [ {
+resultsAggregation: [ {
     id: "sampleCountries",
     label: "Sample Countries",
     scope: "biosample",

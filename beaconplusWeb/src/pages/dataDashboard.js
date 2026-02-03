@@ -6,7 +6,7 @@ import { DATASETDEFAULT, tryFetch, THISSITE } from "./../hooks/api"
 
 // http://beaconplus.org/stats/?datasetIds=progenetix&ageSplits=P0D,P1Y,P2Y,P18Y,P21Y,P40Y
 
-export default function StatsPage({summaryResults, counts}) {
+export default function StatsPage({resultsAggregation, counts}) {
 
   const title = `${DATASETDEFAULT} Data Content Overview`
   const leadText = `This page shows some data statistics for the ${DATASETDEFAULT}
@@ -24,7 +24,7 @@ dataset. Please allow for some loading time.`
   </Panel>
   <Panel heading="Some Content Statistics">
     <SummaryPlots
-      summaryResults={summaryResults}
+      resultsAggregation={resultsAggregation}
       filterUnknowns={true}
     />
   </Panel>
@@ -40,7 +40,7 @@ export const getStaticProps = async () => {
 
   return {
     props: {
-      summaryResults: aggregationReply.response.collections[0].summaryResults,
+      resultsAggregation: aggregationReply.response.collections[0].resultsAggregation,
       counts: aggregationReply.response.collections[0].counts
     }
   }

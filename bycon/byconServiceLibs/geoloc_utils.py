@@ -165,7 +165,24 @@ class ByconGeoResource:
 
         if not BYC["TEST_MODE"]:
             bar.finish()
-                 
+ 
+    # -------------------------------------------------------------------------#
+
+    def geoloc_from_long_lat(self, lon=-71, lat=25):
+        BYC_PARS.update({
+            "geo_latitude": lat,
+            "geo_longitude": lon,
+            "geo_distance": self.geo_distance
+        })
+        geo_q = GeoQuery().get_geoquery()
+        nearest = list(self.geolocs_coll.find(geo_q).limit(1))
+        if len(nearest) < 1:
+            return False
+        if not (n_g_l := nearest[0].get("geo_location")):
+            return False
+
+        return n_g_l
+
 
 ################################################################################
 ################################################################################

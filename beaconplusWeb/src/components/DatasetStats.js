@@ -39,7 +39,7 @@ export default function DatasetStats({dataset_id, ageSplits, followupSplits, agg
         </Panel>
         <Panel heading="Some Content Statistics">
           <SummaryPlots
-            summaryResults={data.response.collections[0].summaryResults}
+            resultsAggregation={data.response.collections[0].resultsAggregation}
             filterUnknowns={filterUnknowns}
           />
         </Panel>

@@ -41,7 +41,7 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
     id,
     resultsHandovers,
     info,
-    summaryResults,
+    resultsAggregation,
     resultsCount
   } = responseSet
 
@@ -241,7 +241,7 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
       <br/>
       <hr/>
       <h2 className="subtitle has-text-dark">Matched {id} Data  Overview</h2>
-      <SummaryPlots summaryResults={summaryResults} filterUnknowns={true} />
+      <SummaryPlots resultsAggregation={resultsAggregation} filterUnknowns={true} />
       <br/>
       <hr/>
       <h2 className="subtitle has-text-dark">{id} Data Downloads</h2>

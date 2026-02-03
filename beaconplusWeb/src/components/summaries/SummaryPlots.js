@@ -14,12 +14,12 @@ const dashboardSankeys = ["selectedDiagnosesBySex"]
 
 //----------------------------------------------------------------------------//
 
-export function SummaryPlots({ summaryResults, filterUnknowns }) {
+export function SummaryPlots({ resultsAggregation, filterUnknowns }) {
 
     return (
         <>
-        {summaryResults ? 
-            summaryResults.map((r) => (
+        {resultsAggregation ? 
+            resultsAggregation.map((r) => (
                 <>
                 {r["concepts"].length > 0 && (
                     <SummaryPlot
