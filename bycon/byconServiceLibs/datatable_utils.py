@@ -16,7 +16,6 @@ from bycon import (
 services_lib_path = path.join(path.dirname(path.abspath(__file__)))
 sys.path.append(services_lib_path)
 from file_utils import ExportFile
-from geoloc_utils import ByconGeoResource
 
 
 ################################################################################
@@ -257,27 +256,18 @@ def add_geolocation_to_pgxdoc(pgxdoc, geoprov_id):
     """
     Adds a geolocation to a pgxdoc by its ID.
     """
-    # if not "::" in str(geoprov_id):
-    #     return pgxdoc
+    if not "::" in str(geoprov_id):
+        return pgxdoc
 
-    # m_d = BYC_DBS["services_db"]
-    # m_c = BYC_DBS.get("collections", {}).get("geolocs")
-    # geo_coll = ByconMongo().openMongoColl(m_d, m_c)
-    # geo_info = geo_coll.find_one({"id": geoprov_id}, {"_id": 0, "id": 0})
-    # if geo_info is None:
-    #     return pgxdoc
-
-    if len(coords := pgxdoc.get("geoprov_long_lat", [])) == 2:
-        GEORSRC = ByconGeoResource()
-        if (geoloc := GEORSRC.geoloc_from_long_lat(coords[0], coords[1])):
-            pgxdoc.update({"geo_location": geoloc})
-    # pgxdoc["geo_location"]["properties"].update({"id": geoprov_id})
-    # mongo_client.close()
-
-    pgxdoc["geo_location"].update({"type": "Feature"})
-    pgxdoc["geo_location"]["geometry"].update({"type": "Point"})
-
-    prjsonnice(pgxdoc["geo_location"])
+    m_d = BYC_DBS["services_db"]
+    m_c = BYC_DBS.get("collections", {}).get("geolocs")
+    geo_coll = ByconMongo().openMongoColl(m_d, m_c)
+    geo_info = geo_coll.find_one({"id": geoprov_id}, {"_id": 0, "id": 0})
+    if geo_info is None:
+        return pgxdoc
+    pgxdoc.update({"geo_location": geo_info.get("geo_location", {})})
+    pgxdoc["geo_location"]["properties"].update({"id": geoprov_id})
+    mongo_client.close()
 
     return pgxdoc
 

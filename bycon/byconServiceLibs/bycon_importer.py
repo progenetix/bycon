@@ -23,7 +23,7 @@ sys.path.append( services_lib_path )
 from bycon_bundler import ByconBundler
 from datatable_utils import import_datatable_dict_line
 from file_utils import write_log
-# from geoloc_utils import ByconGeoResource
+from geoloc_utils import ByconGeoResource
 from service_helpers import assert_single_dataset_or_exit
 
 ################################################################################
@@ -562,11 +562,9 @@ class ByconImporter():
             update_i = {"id": new_doc[iid]}
             update_i = import_datatable_dict_line(update_i, fn, new_doc, ien)
 
-            # if len(coords := update_i.get("geo_location", {}).get("geometry", {}).get("coordinates", [])) == 2:
-            #     if (geoloc := GEORSRC.geoloc_from_long_lat(coords[0], coords[1])):
-            #         update_i.update({"geo_location": geoloc})
-
-            
+            if len(coords := update_i.get("geo_location", {}).get("geometry", {}).get("coordinates", [])) == 2:
+                if (geoloc := GEORSRC.geoloc_from_long_lat(coords[0], coords[1])):
+                    update_i.update({"geo_location": geoloc})
 
             update_i.update({"updated": datetime.now().isoformat()})
 
