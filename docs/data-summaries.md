@@ -61,8 +61,9 @@ or the intersection of two properties (2-dimensional aggregations, "2D").
 Aggregation responses or summary data are called by setting the `requestedGranularity`
 to `aggregated`. Example:
 
-* TCGA cancer samples in Progenetix
-    - <https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers>
+* samples in Progenetix
+    - <https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&datasetIds=progenetix&filters=pgx:cohort-TCGAcancers>
+    - <https://staging.progenetix.org/beacon/biosamples?requestedGranularity=aggregated&datasetIds=progenetix&aggregationTerms=ageAtDiagnosisBySex&filters=NCIT:C3268>
     
 The aggregation types to be returned can be specified by using the additional
 request `aggregationTerms` parameter as well as optional parameters for binning or

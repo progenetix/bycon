@@ -21,6 +21,7 @@ import { GeoCitySelector } from "./GeoCitySelector"
 import ChromosomePreview from "./ChromosomePreview"
 import { FaCogs } from "react-icons/fa"
 import cn from "classnames"
+// import FilteringTermsLookup from "./FilteringTermsLookup"
 
 export const BiosamplesSearchForm = withUrlQuery(
   ({ urlQuery, setUrlQuery, ...props }) => (
@@ -38,7 +39,7 @@ BiosamplesSearchForm.propTypes = {
   setSearchQuery: PropTypes.func.isRequired,
   beaconQueryTypes: PropTypes.object.isRequired,
   requestTypeExamples: PropTypes.object.isRequired,
-  parametersConfig: PropTypes.object.isRequired
+  // parametersConfig: PropTypes.object.isRequired
 }
 
 function urlQueryToFormParam(urlQuery, key, parametersConfig) {
