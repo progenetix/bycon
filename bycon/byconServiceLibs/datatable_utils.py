@@ -260,21 +260,19 @@ def add_geolocation_to_pgxdoc(pgxdoc, geoprov_id):
     if not "::" in str(geoprov_id):
         return pgxdoc
 
-    m_d = BYC_DBS["services_db"]
-    m_c = BYC_DBS.get("collections", {}).get("geolocs")
-    geo_coll = ByconMongo().openMongoColl(m_d, m_c)
-    geo_info = geo_coll.find_one({"id": geoprov_id}, {"_id": 0, "id": 0})
-    if geo_info is None:
-        return pgxdoc
+    # m_d = BYC_DBS["services_db"]
+    # m_c = BYC_DBS.get("collections", {}).get("geolocs")
+    # geo_coll = ByconMongo().openMongoColl(m_d, m_c)
+    # geo_info = geo_coll.find_one({"id": geoprov_id}, {"_id": 0, "id": 0})
+    # if geo_info is None:
+    #     return pgxdoc
 
-    if len(coords := geo_info.get("geo_location", {}).get("geometry", {}).get("coordinates", [])) == 2:
+    if len(coords := pgxdoc.get("geoprov_long_lat", [])) == 2:
         GEORSRC = ByconGeoResource()
         if (geoloc := GEORSRC.geoloc_from_long_lat(coords[0], coords[1])):
-            geo_info.update({"geo_location": geoloc})
-
-    pgxdoc.update({"geo_location": geo_info.get("geo_location", {})})
-    pgxdoc["geo_location"]["properties"].update({"id": geoprov_id})
-    mongo_client.close()
+            pgxdoc.update({"geo_location": geoloc})
+    # pgxdoc["geo_location"]["properties"].update({"id": geoprov_id})
+    # mongo_client.close()
 
     return pgxdoc
 
