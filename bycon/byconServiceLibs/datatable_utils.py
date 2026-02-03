@@ -277,5 +277,7 @@ def add_geolocation_to_pgxdoc(pgxdoc, geoprov_id):
     pgxdoc["geo_location"].update({"type": "Feature"})
     pgxdoc["geo_location"]["geometry"].update({"type": "Point"})
 
+    prjsonnice(pgxdoc["geo_location"])
+
     return pgxdoc
 
