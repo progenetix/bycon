@@ -257,8 +257,8 @@ def add_geolocation_to_pgxdoc(pgxdoc, geoprov_id):
     """
     Adds a geolocation to a pgxdoc by its ID.
     """
-    if not "::" in str(geoprov_id):
-        return pgxdoc
+    # if not "::" in str(geoprov_id):
+    #     return pgxdoc
 
     # m_d = BYC_DBS["services_db"]
     # m_c = BYC_DBS.get("collections", {}).get("geolocs")
@@ -273,6 +273,9 @@ def add_geolocation_to_pgxdoc(pgxdoc, geoprov_id):
             pgxdoc.update({"geo_location": geoloc})
     # pgxdoc["geo_location"]["properties"].update({"id": geoprov_id})
     # mongo_client.close()
+
+    pgxdoc["geo_location"].update({"type": "Feature"})
+    pgxdoc["geo_location"]["geometry"].update({"type": "Point"})
 
     return pgxdoc
 
