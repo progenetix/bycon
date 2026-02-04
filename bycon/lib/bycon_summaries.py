@@ -11,6 +11,27 @@ class ByconSummaries:
     def __init__(self, ds_id=None):
         self.dataset_id = ds_id
         a_d_s = BYC.get("summaries_definitions", {}).get("$defs", {}).values()
+        a_c_s = BYC.get("aggregation_concepts", {}).get("$defs", {})
+
+        # construct the aggregations from concepts and combinations
+        # this might be transitional, e.g. when BYC_PARS["aggregation_terms"]
+        # is replaced (`aggregationConceptIds` arrays or such)
+        for agg_d in a_d_s:
+            concepts = []
+            labels   = []
+            c_id_s = agg_d.get("conceptIds", [])
+            for c_id in c_id_s:
+                if (c := a_c_s.get(c_id)):
+                    concepts.append(c)
+                    if (l := c.get("label")):
+                        labels.append(l)
+            if len(c_id_s) == len(concepts):
+                agg_d.update({
+                    "concepts": concepts,
+                    "label": " by ".join(labels)
+                })
+            else:
+                prdbug(f"ByconSummaries - {agg_d.get("id")} doesn't match all concepts")
 
         self.summaries = []
         # ordered selection of aggregation concepts
@@ -23,10 +44,10 @@ class ByconSummaries:
         else:
             self.summaries = list(a_d_s)
 
-        self.dataset_summaries = [] 
-        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-        self.data_client = self.mongo_client[ds_id]
-        self.term_coll = self.data_client["collations"]
+        self.dataset_summaries  = [] 
+        self.mongo_client       = MongoClient(host=BYC_DBS["mongodb_host"])
+        self.data_client        = self.mongo_client[ds_id]
+        self.term_coll          = self.data_client["collations"]
 
 
     # -------------------------------------------------------------------------#
