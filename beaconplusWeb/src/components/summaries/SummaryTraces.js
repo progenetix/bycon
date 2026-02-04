@@ -16,7 +16,7 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
         const { conceptValues, count } = v;
         conceptValues.forEach(function (cv, index) {
             ! keyedProps[index] ? keyedProps[index] = {} : keyedProps
-            let key = cv.id;
+            let key = cv.id ? cv.id : "undefined";
             let label = cv.label || key;
             if (! (key in keyedProps[index])) {
                 keyedProps[index][key] = {id: key, label: label, sum: count};
@@ -44,7 +44,7 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
     });
 
     // removal of the "unknown" and "undefined" categories from the first dimension
-    // let unfilteredNo = sortedFirsts.length;
+    let unfilteredNo = sortedFirsts.length;
     if (filterUnknowns == true) {
         sortedFirsts = sortedFirsts.filter(object => {
             return object.id !== "unknown";
@@ -53,8 +53,8 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
             return object.id !== "undefined";
         });
     }
-    // let filteredNo = unfilteredNo - sortedFirsts.length;
-    // console.log(`Filtered out ${filteredNo} 'unknown'/'undefined' from first dimension.`);
+    let filteredNo = unfilteredNo - sortedFirsts.length;
+    console.log(`Filtered out ${filteredNo} 'unknown'/'undefined' from first dimension.`);
 
     if (sortedFirsts.length > colNo) {
         sortedFirsts = sortedFirsts.slice(0, colNo);
@@ -65,7 +65,7 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
     let otherDistribution = [];
     distribution.forEach(function (v) {
         let cvs = v["conceptValues"];
-        if (sortedFirstIds.includes(cvs[0]["id"])) {
+        if (sortedFirstIds.includes(String(cvs[0]["id"]))) {
             limitedDistribution.push(v);
         } else {
             otherDistribution.push(v);
@@ -167,6 +167,8 @@ function SankeyLinks({ sortedFirsts, sortedSeconds, limitedDistribution }) {
     const idToIndex = new Map();
     const uniqueNodes = new Set();
     
+    // console.log(entry.conceptValues)
+
     // Collect nodes from both sortedFirsts and sortedSeconds
     const allNodes = [
         ...sortedFirsts.map(node => ({ id: node.id, label: node.label, sum: node.sum })),
@@ -176,16 +178,17 @@ function SankeyLinks({ sortedFirsts, sortedSeconds, limitedDistribution }) {
     // Build the node map and collect unique nodes
     let index = 0;
     for (const node of allNodes) {
-        if (!uniqueNodes.has(node.id)) {
-            uniqueNodes.add(node.id);
-            idToIndex.set(node.id, index++);
+        if (node.id) {
+            if (!uniqueNodes.has(node.id)) {
+                uniqueNodes.add(node.id);
+                idToIndex.set(node.id, index++);
+            }
         }
     }
-    
     // Build the node labels array
     const nodeLabels = Array.from(uniqueNodes).map(nodeId => {
         const node = allNodes.find(n => n.id === nodeId);
-        return `${node.label} (${node.sum})`;
+        return `${node.label}: ${node.label} (${node.sum})`;
     });
     
     // Build the links array
@@ -194,6 +197,7 @@ function SankeyLinks({ sortedFirsts, sortedSeconds, limitedDistribution }) {
     const value = [];
     
     for (const entry of limitedDistribution) {
+
         const [firstNode, secondNode] = entry.conceptValues;
         const firstId = firstNode.id;
         const secondId = secondNode.id;

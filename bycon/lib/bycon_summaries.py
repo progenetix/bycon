@@ -152,17 +152,23 @@ class ByconSummaries:
                 id_v_s = ["Undefined"]
             else:
                 id_v_s = list(i_k.values())
+
+            # adding undefined for second category if missing
+            # TODO: Check if it is really only the 2nd category that might be missing...
+            while len(id_v_s) < len(concepts):
+                id_v_s.append({"id": "undefined", "label": "undefined"})
+            
             for v in id_v_s:
                 if type(v) is dict and "id" in v:
-                    label = v.get("label", v.get("id"))
-                    c_v_s.append({"id": v.get("id"), "label": label})
+                    label = str(v.get("label", v.get("id")))
+                    c_v_s.append({"id": str(v.get("id")), "label": label})
                     continue
-                label = v
+                label = str(v)
                 if (coll := self.term_coll.find_one( {"id": v})):
-                    label = coll.get("label", label)
-                    c_v_s.append({"id": v, "label": label})
+                    label = str(coll.get("label", label))
+                    c_v_s.append({"id": str(v), "label": label})
                     continue
-                c_v_s.append({"id": v, "label": label})
+                c_v_s.append({"id": str(v), "label": label})
 
             a_v["distribution"].append({
                 "concept_values": c_v_s,

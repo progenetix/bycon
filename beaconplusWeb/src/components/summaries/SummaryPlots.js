@@ -10,7 +10,6 @@ const includeOthers = true
 // const includeOthers = false
 const dashboardPies = ["selectedPlatformTechnologies", "sampleCountries"]
 const dashboardSankeys = ["selectedDiagnosesBySex"]
-// const sankeyHeight = 512
 
 //----------------------------------------------------------------------------//
 
@@ -39,22 +38,27 @@ export function SummaryPlots({ resultsAggregation, filterUnknowns }) {
 //----------------------------------------------------------------------------//
 
 function SummaryPlot({ summary, filterUnknowns }) {
+
+    console.log("==>> Plot for", summary["label"]);
+    let summaryId = summary["id"]
+
+    let {tracesData, sankeyLabels, sankeyLinks} = SummaryTraces({ summary, filterUnknowns, colNo, includeOthers });
+
     const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
     const containerRef = useCallback((node) => {
         if (node !== null) { setBoundingRect(node.getBoundingClientRect()); }
     }, []);
+
     const outer_w = boundingRect.width
 
-    // console.log("==>> Plot for", summary["label"]);
-    let summaryId = summary["id"];
-    let {tracesData, sankeyLabels, sankeyLinks} = SummaryTraces({ summary, filterUnknowns, colNo, includeOthers });
+    // console.log("tracesData for", summary["label"], ":", tracesData.length, concepts.length);
 
     if (tracesData.length == 0) {
         return <></>;
     }
 
     if (dashboardPies.includes(summaryId)) {
-        // console.log("Rendering SimplePlotlyPie for", summary["label"]);
+        console.log("Rendering SimplePlotlyPie for", summary["label"]);
         return (
         <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
             <SimplePlotlyPie
@@ -65,9 +69,9 @@ function SummaryPlot({ summary, filterUnknowns }) {
     }
 
     if (dashboardSankeys.includes(summaryId)) {
-        // console.log("Rendering SankeyPlot for", summary["label"]);
+        console.log("Rendering SankeyPlot for", summary["label"]);
         return (
-        <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", width: "100%", marginBottom: "0px" }}>
+        <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
             <SankeyPlot
                 sankeyLabels={sankeyLabels}
                 sankeyLinks={sankeyLinks}
@@ -78,7 +82,7 @@ function SummaryPlot({ summary, filterUnknowns }) {
         );
     }
 
-    // console.log("Rendering StackedPlotlyBar for", summary["label"]);
+    console.log("Rendering StackedPlotlyBar for", summary["label"]);
     return (
     <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
         <StackedPlotlyBar
@@ -134,28 +138,23 @@ function StackedPlotlyBar({ tracesData, outer_w, title}) { //, title
 //----------------------------------------------------------------------------//
 
 function SankeyPlot({ sankeyLabels, sankeyLinks, outer_w, title}) { //, title
+
     let sankeyData = {
         type: "sankey",
         orientation: "h",
-        textfont: {color: "rgb(0,0,0)", size: 12}, // to hide default labels
         node: {
             pad: 15,
             thickness: 30,
             label: sankeyLabels,
-            hovertemplate: '%{label}<extra></extra>'
         },
-        link: {
-            source: sankeyLinks.source,
-            target: sankeyLinks.target,
-            value: sankeyLinks.value,
-            hovertemplate: 'Left: %{source.label}<br />Right: %{target.label}<br />Intersect: %{value}<extra></extra>'
-        }
+        link: sankeyLinks
     };
+
     sankeyData = [sankeyData];
 
     let sankeyLayout = {
-        width: outer_w * 0.8,
-        // height: sankeyHeight,
+        width: outer_w,
+        // height: 400,
         title: {text: title}
     };
 
