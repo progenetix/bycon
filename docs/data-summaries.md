@@ -32,12 +32,12 @@ or the intersection of two properties (2-dimensional aggregations, "2D").
     change along with the schema proposal).
 
     * [`/aggregation_terms/` endpoint response](https://staging.progenetix.org/beacon/aggregation_terms/)
-    * [Example aggregation response for TCGA cancer samples](https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers&aggregationTerms=ageAtDiagnosisBySex)
+    * [Example aggregation response for TCGA cancer samples](https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers&aggregators=ageAtDiagnosisBySex)
         - This is a `resultSets` response for the `/biosamples/` endpoint with
           `requestedGranularity=aggregated` and using the `ageAtDiagnosisBySex`
           aggregation term known from the `/aggregation_terms/` call above
         - the summaries are reported in `resultSets.n.resultsAggregation`
-    * Age/sex distribution for brain cancer samples shown in a [dashboard](https://staging.progenetix.org/queryResultsDashboard/?filters=NCIT:C3268&aggregationTerms=ageAtDiagnosisBySex)
+    * Age/sex distribution for brain cancer samples shown in a [dashboard](https://staging.progenetix.org/queryResultsDashboard/?filters=NCIT:C3268&aggregators=ageAtDiagnosisBySex)
     * [Content dashboard for the Progenetix data](https://staging.progenetix.org/dataDashboard/)
         - This is purely a showcase for 1 and 2 dimensional representations w/o
           any refinements. However, based on the JavaScript version of [plotly](https://plotly.com/)
@@ -63,15 +63,15 @@ to `aggregated`. Example:
 
 * samples in Progenetix
     - <https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&datasetIds=progenetix&filters=pgx:cohort-TCGAcancers>
-    - <https://staging.progenetix.org/beacon/biosamples?requestedGranularity=aggregated&datasetIds=progenetix&aggregationTerms=ageAtDiagnosisBySex&filters=NCIT:C3268>
+    - <https://staging.progenetix.org/beacon/biosamples?requestedGranularity=aggregated&datasetIds=progenetix&aggregators=ageAtDiagnosisBySex&filters=NCIT:C3268>
     
 The aggregation types to be returned can be specified by using the additional
-request `aggregationTerms` parameter as well as optional parameters for binning or
+request `aggregators` parameter as well as optional parameters for binning or
 term selection (==TBD==). Example:
 
 * Age groups labeled by sex for TCGA cancer individuals in Progenetix
-    - <https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers&aggregationTerms=ageAtDiagnosisBySex>
-    - age/sex distribution for brain cancer samples shown in a plot <https://staging.progenetix.org/queryResultsDashboard/?datasetIds=progenetix&filters=NCIT:C3268&aggregationTerms=ageAtDiagnosisBySex>
+    - <https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers&aggregators=ageAtDiagnosisBySex>
+    - age/sex distribution for brain cancer samples shown in a plot <https://staging.progenetix.org/queryResultsDashboard/?datasetIds=progenetix&filters=NCIT:C3268&aggregators=ageAtDiagnosisBySex>
     
 
 ## Components
@@ -83,7 +83,7 @@ Empowering aggregation responses or summary data relies on several components:
 * an informational response for about supported summaries (similar to the `/filtering_terms/` endpoint)
 * request parameters for selecting summary types
     - `aggregationTermIds`, also suitable for `GET` requests
-    - `aggregationTerms` for `POST`ed aggregation schemas
+    - `aggregators` for `POST`ed aggregation schemas
     - additional reuest parameters for modifying responses (e.g. limits, binning...)
 * the response format for the summaries
 * the front end logic - which is not part of this itself but serves for understanding

@@ -13,7 +13,7 @@ const QueryStatsPage = withUrlQuery(({ urlQuery }) => {
   var ageSplits = urlQuery["ageSplits"]
   var followupSplits = urlQuery["followupSplits"]
   var filters = urlQuery["filters"]
-  var aggregationTerms = urlQuery["aggregationTerms"]
+  var aggregators = urlQuery["aggregators"]
 
   const title = `${datasetIds} Data Content Overview`
   const leadText = `This page shows some data statistics for the ${datasetIds}
@@ -23,14 +23,14 @@ dataset. Current modification options are through URL parameters for (with examp
 * ${"`ageSplits=P0D,P1Y,P2Y,P18Y,P21Y,P40Y`"} ... as example for age binning
 * ${"`followupTime=P0D,P1D,P6M,P1Y,P5Y,P10Y`"} ... as example for followup binning
 * ${"`filters=pgx:cohort-TCGAcancers`"} ... as example for a custom filter
-* ${"`aggregationTerms=ageAtDiagnosisBySex`"} ... for limited aggregations
+* ${"`aggregators=ageAtDiagnosisBySex`"} ... for limited aggregations
 
 Example URL would be:
 
 * TCGA samples in Progenetix for age groups, split by sex
-    - ${"`"}${basePath}queryResultsDashboard/?datasetIds=progenetix&filters=pgx:cohort-TCGAcancers&aggregationTerms=ageAtDiagnosisBySex${"`"}
+    - ${"`"}${basePath}queryResultsDashboard/?datasetIds=progenetix&filters=pgx:cohort-TCGAcancers&aggregators=ageAtDiagnosisBySex${"`"}
 * Brain cancers in Progenetix by some aggregation types (see the bimodal age distribution)...
-    - ${"`"}${basePath}queryResultsDashboard/?datasetIds=progenetix&filters=NCIT:C3268&aggregationTerms=ageAtDiagnosisBySex,diseaseBySex,followupTime${"`"}
+    - ${"`"}${basePath}queryResultsDashboard/?datasetIds=progenetix&filters=NCIT:C3268&aggregators=ageAtDiagnosisBySex,diseaseBySex,followupTime${"`"}
 Please allow for some loading time.`
 
   return (
@@ -40,7 +40,7 @@ Please allow for some loading time.`
             ageSplits={ageSplits}
             followupSplits={followupSplits}
             filters={filters}
-            aggregationTerms={aggregationTerms}
+            aggregators={aggregators}
             filterUnknowns={true}
         />
     </Layout>

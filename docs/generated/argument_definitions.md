@@ -7,30 +7,6 @@ TODO: Temporary(?) for authentication testing.
 **cmdFlags:** `--userName`    
 **in:** query    
 
-#### `aggregation_terms` 
-**type:** array    
-**items:**  
-    - `type`: `string`    
-**cmdFlags:** `--aggregationTerms`    
-**description:**
-Experimental for Beacon v2+ for indicating which summaries to provide    
-
-#### `age_splits` 
-**type:** array    
-**items:**  
-    - `type`: `string`    
-**cmdFlags:** `--ageSplits`    
-**description:**
-Experimental for Beacon v2+ aggregation of ageAtDiagnosis by ISO8601 durations    
-
-#### `followup_splits` 
-**type:** array    
-**items:**  
-    - `type`: `string`    
-**cmdFlags:** `--followupSplits`    
-**description:**
-Experimental for Beacon v2+ aggregation of followupTime by ISO8601 durations    
-
 #### `request_entity_path_id` 
 **description:**
     
@@ -147,6 +123,30 @@ Global treatment of descendant terms for `filters`
 **cmdFlags:** `-d,--datasetIds`    
 **description:**
 dataset ids    
+
+#### `aggregators` 
+**type:** array    
+**items:**  
+    - `type`: `string`    
+**cmdFlags:** `--aggregators`    
+**description:**
+Experimental for Beacon v2+ for indicating which aggregations to provide    
+
+#### `age_splits` 
+**type:** array    
+**items:**  
+    - `type`: `string`    
+**cmdFlags:** `--ageSplits`    
+**description:**
+Experimental for Beacon v2+ aggregation of ageAtDiagnosis by ISO8601 durations    
+
+#### `followup_splits` 
+**type:** array    
+**items:**  
+    - `type`: `string`    
+**cmdFlags:** `--followupSplits`    
+**description:**
+Experimental for Beacon v2+ aggregation of followupTime by ISO8601 durations    
 
 #### `request_profile_id` 
 **type:** string    

@@ -116,7 +116,7 @@ BYC = {
     "data_responses": [
         "beaconCollectionsResponse" ,
         "beaconResultsetsResponse",
-        "beaconAggregationTermsResponse",
+        "beaconAggregationConceptsResponse",
         "beaconFilteringTermsResponse"
     ],
 

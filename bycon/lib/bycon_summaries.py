@@ -14,7 +14,7 @@ class ByconSummaries:
         a_c_s = BYC.get("aggregation_concepts", {}).get("$defs", {})
 
         # construct the aggregations from concepts and combinations
-        # this might be transitional, e.g. when BYC_PARS["aggregation_terms"]
+        # this might be transitional, e.g. when BYC_PARS["aggregators"]
         # is replaced (`aggregationConceptIds` arrays or such)
         for agg_d in a_d_s:
             concepts = []
@@ -35,7 +35,7 @@ class ByconSummaries:
 
         self.summaries = []
         # ordered selection of aggregation concepts
-        if len(a_t_s := BYC_PARS.get("aggregation_terms", [])) > 0:
+        if len(a_t_s := BYC_PARS.get("aggregators", [])) > 0:
             for a_d_k in a_t_s:
                 for a_d in a_d_s:
                     if a_d.get("id") in a_t_s:

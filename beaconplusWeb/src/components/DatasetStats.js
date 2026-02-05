@@ -7,7 +7,7 @@ import {
 import { Loader } from "./Loader"
 import Panel from "./Panel"
 
-export default function DatasetStats({dataset_id, ageSplits, followupSplits, aggregationTerms, filterUnknowns}) {
+export default function DatasetStats({dataset_id, ageSplits, followupSplits, aggregators, filterUnknowns}) {
   var summaryURL = `${basePath}beacon/datasets/${dataset_id}?requestedGranularity=aggregated`
   var params = []
 
@@ -17,8 +17,8 @@ export default function DatasetStats({dataset_id, ageSplits, followupSplits, agg
   if (ageSplits) {
     params.push(`ageSplits=${ageSplits}`)
   }
-  if (aggregationTerms) {
-    params.push(`aggregationTerms=${aggregationTerms}`)
+  if (aggregators) {
+    params.push(`aggregators=${aggregators}`)
   }
   if (params.length > 0) {
     summaryURL += `&${params.join("&")}`

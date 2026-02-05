@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-"$id": ___BEACON_ROOT___/services/schemas/beaconAggregationTermsResponse/v2026-01-16
+"$id": ___BEACON_ROOT___/services/schemas/beaconAggregationConceptsResponse/v2026-01-16
 type: object
 description: >-
   The aggregation terms response provides information about available
@@ -8,7 +8,7 @@ properties:
   meta:
     $ref: ./sections/beaconInformationalResponseMeta.yaml
   response:
-    $ref: ./sections/beaconAggregationTermsResults.yaml
+    $ref: ./sections/beaconAggregationConceptsResults.yaml
 required:
   - meta
   - response

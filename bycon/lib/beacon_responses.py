@@ -264,7 +264,7 @@ class BeaconDataResponse:
             return self.collectionsResponse()
         if "beaconFilteringTermsResponse" in self.response_schema:
             return self.filteringTermsResponse()
-        if "beaconAggregationTermsResponse" in self.response_schema:
+        if "beaconAggregationConceptsResponse" in self.response_schema:
             return self.aggregationTermsResponse()
 
 
@@ -339,7 +339,7 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def aggregationTermsResponse(self):
-        if not "beaconAggregationTermsResponse" in self.response_schema:
+        if not "beaconAggregationConceptsResponse" in self.response_schema:
             return
 
         a_d_s = list(BYC.get("summaries_definitions", {}).get("$defs", {}).values())

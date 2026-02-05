@@ -139,6 +139,26 @@ For a list of entities potentially served by `beaconBooleanResponse` depending o
 the selected or granted `responseGranularity` please check `beaconResultsetsResponse`.
 
 
+## beaconAggregationConceptsResponse
+
+The aggregation terms response provides information about available individual aggregation options beacon's response.
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconAggregationConceptsResponse>
+
+### aggregationTerm @ `/aggregation_terms`
+
+Information about the summary terms available in the beacon instance.
+
+
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/aggregationTermsSchema>
+
+* **{T}** <{{config.reference_server_url}}/beacon/aggregation_terms>
+
+
+
+
+
 ## beaconFilteringTermsResponse
 
 The filtering terms response provides information about available individual filters for a beacon's entry types as well as optional information about the ontologies the filters belong to.
@@ -164,26 +184,6 @@ Information about the filtering terms available in the beacon instance.
 A `beaconErrorResponse` denotes an unsuccessful operation, e.g. due to a missing parameter or an invalid query. The response contains an error object.
 
 * **{S}** <{{config.reference_server_url}}/services/schemas/beaconErrorResponse>
-
-
-
-## beaconAggregationTermsResponse
-
-The aggregation terms response provides information about available individual aggregation options beacon's response.
-
-* **{S}** <{{config.reference_server_url}}/services/schemas/beaconAggregationTermsResponse>
-
-### aggregationTerm @ `/aggregation_terms`
-
-Information about the summary terms available in the beacon instance.
-
-
-
-* **{S}** <{{config.reference_server_url}}/services/schemas/aggregationTermsSchema>
-
-* **{T}** <{{config.reference_server_url}}/beacon/aggregation_terms>
-
-
 
 
 
