@@ -110,12 +110,13 @@ class ByconSummaries:
     # -------------------------------------------------------------------------#
 
     def __reshape_dataset_summaries(self):
-        """Post-processing of the aggregation results to remove unneeded keys.
+        """Post-processing of the aggregation results to remove unnecessary keys.
         """
-        for i_a, a_v in enumerate(self.dataset_summaries):
-            for i_c, c_v in enumerate(a_v.get("concepts", [])):
-                c_v.pop("splits", None)
-                c_v.pop("termIds", None)
+        return
+        # for i_a, a_v in enumerate(self.dataset_summaries):
+        #     for i_c, c_v in enumerate(a_v.get("concepts", [])):
+        #         c_v.pop("splits", None)
+        #         c_v.pop("termIds", None)
 
 
     # -------------------------------------------------------------------------#
@@ -150,7 +151,7 @@ class ByconSummaries:
             }
         )
         # sorting either on logical order () detection order
-        if a_v.get("sorted") is True:
+        if concepts[0].get("sorted") is True:
             agg_p.append({ "$sort": { "_id.order": 1 } })
         else:
             agg_p.append({ "$sort": { "count": -1 } })
@@ -158,7 +159,7 @@ class ByconSummaries:
         if len(agg_d := list(data_coll.aggregate(agg_p))) < 1:
             return
 
-        if a_v.get("sorted") is True:
+        if concepts[0].get("sorted") is True:
             k = list(agg_d[0]["_id"].keys())[0]
             if type(d := agg_d[0]["_id"].get(k)) is dict:
                 if "order" in d.keys():
@@ -191,12 +192,18 @@ class ByconSummaries:
                     continue
                 c_v_s.append({"id": str(v), "label": label})
 
-            a_v["distribution"].append({
-                "concept_values": c_v_s,
-                "count": a.get("count", 0)
-            })
+            include = True
+            for c in c_v_s:
+                if str(c.get("id")) == "NO_MATCH":
+                    include = False
+            if include is True:
+                a_v["distribution"].append({
+                    "concept_values": c_v_s,
+                    "count": a.get("count", 0)
+                })
 
-        self.dataset_summaries.append(a_v)
+        if len(a_v.get("distribution", [])) > 0:
+            self.dataset_summaries.append(a_v)
 
 
     # -------------------------------------------------------------------------#
@@ -251,7 +258,7 @@ class ByconSummaries:
                 continue
             branches.append({
                 "case": { "$in": [ f'${concept_id}', child_terms ] },
-                "then": {"id": i_k, "label": label, "order": d_i}
+                "then": { "id": i_k, "label": label, "order": d_i }
             })
 
         # fallback dummy branch - at least one is needed or error
@@ -261,15 +268,12 @@ class ByconSummaries:
                 "then": {"id": "undefined", "label": "undefined", "order": 1}
             })
 
-        _id = {
+        return {
             "$switch": {
                 "branches": branches,
-                "default": {"id": "other", "label": "other", "order": len(terms)}
+                "default": {"id": "NO_MATCH", "label": "other", "order": len(terms)}
             }
         }
-
-        return _id
-
 
     # -------------------------------------------------------------------------#
 

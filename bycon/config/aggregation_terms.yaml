@@ -2,10 +2,15 @@ description: >-
   Each of the `concepts` defines the scope (individual, biosample, analysis),
   property to aggregate on, and optional `termIds` or `splits` for selection
   or binning of the results in the returned `distribution`.
+
+  Note: `sorted` right now only applies to the first dimension if used in 2D.
+  
 $defs:
+
   selectedHistologicalDiagnoses:
     id: selectedHistologicalDiagnoses
     label: Selected Diagnostic Classes (by NCIT)
+    scope: biosample
     property: biosample.histological_diagnosis.id
     termIds:
       - NCIT:C9335    # Malignant neoplasm of breast
@@ -107,7 +112,7 @@ $defs:
 
   sampleAge:
     id: sampleAge
-    label: Age at Diagnosis
+    label: Age at sample collection
     description: >-
       Age at diagnosis (sample collection...)
     scope: biosample
@@ -118,13 +123,14 @@ $defs:
       - P18Y
       - P65Y
       - P120Y
+    sorted: True
 
   individualAge:
     id: individualAge
-    label: Age at Diagnosis
+    label: Individual's age at Diagnosis
     description: >-
-      Age at diagnosis
-    scope: biosample
+      Individual's age at diagnosis
+    scope: individual
     property: individual.index_disease.onset.age
     format: iso8601duration
     splits:
@@ -135,6 +141,7 @@ $defs:
       - P65Y
       - P80Y
       - P120Y
+    sorted: True
 
   individualDisease:
     id: individualDisease
@@ -167,7 +174,6 @@ $defs:
     description: >-
       Follow-up time after diagnosis
     scope: individual
-    sorted: True
     property: individual.index_disease.followup
     format: iso8601duration
     splits:
@@ -179,3 +185,4 @@ $defs:
       - P5Y
       - P10Y
       - P60Y
+    sorted: True

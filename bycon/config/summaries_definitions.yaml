@@ -1,12 +1,8 @@
 description: >-
-  Definitions of aggregations for the Bycon aggregator service.
-  Each aggregation definition contains an `id`, `label`, `description`, and a
-  list of one or more `concepts`, as well as an optional `sorted` property which
-  can indicate to the client that the returned `distribution` of the aggregation
-  result objects response has some pre-sorted order.
-  Each of the `concepts` defines the scope (individual, biosample, analysis),
-  property to aggregate on, and optional `termIds` or `splits` for selection
-  or binning of the results in the returned `distribution`.
+  Definitions of aggregations for the Bycon aggregator service. This is transitional
+  since we're moving to definition by concept and then calling the individual or
+  combined concepts by their ids directly.
+  
 $defs:
   selectedDiagnosesBySex:
     id: selectedDiagnosesBySex
@@ -24,6 +20,15 @@ $defs:
     scope: biosample
     conceptIds:
       - selectedCarcinomaDiagnoses
+
+  selectedCarinomaDiagnosesBySex:
+    id: selectedCarinomaDiagnosesBySex
+    description: >-
+      Count of histological diagnoses in matched biosamples for selected carcinomas by sex
+    scope: biosample
+    conceptIds:
+      - selectedCarcinomaDiagnoses
+      - sampleSex
 
   selectedPlatformTechnologies:
     id: selectedPlatformTechnologies
@@ -60,11 +65,10 @@ $defs:
       - sampleAge
 
   sampleByAgeAtCollection:
-    id: sampleICDO3histologyByAge
+    id: sampleByAgeAtCollection
     description: >-
       Age at diagnosis (sample collection...)
     scope: biosample
-    sorted: True
     conceptIds:
       - sampleAge
 
@@ -104,12 +108,19 @@ $defs:
     conceptIds:
       - sampleCountries
 
+  ageAtDiagnosis:
+    id: ageAtDiagnosis
+    description: >-
+      Age at diagnosis
+    scope: individual
+    conceptIds:
+      - individualAge
+
   ageAtDiagnosisBySex:
     id: ageAtDiagnosisBySex
     description: >-
       Age at diagnosis by sex
     scope: individual
-    sorted: True
     conceptIds:
       - individualAge
       - individualSex
@@ -119,6 +130,5 @@ $defs:
     description: >-
       Follow-up time after diagnosis
     scope: individual
-    sorted: True
     conceptIds:
       - followupTime
