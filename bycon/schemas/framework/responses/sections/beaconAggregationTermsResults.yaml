@@ -1,6 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 description: >-
-  Aggregation terms and concepts supported for this Beacon.
+  Aggregation terms supported for this Beacon.
 type: object
 properties:
   aggregationTerms:

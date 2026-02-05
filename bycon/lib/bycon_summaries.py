@@ -11,7 +11,7 @@ class ByconSummaries:
     def __init__(self, ds_id=None):
         self.dataset_id = ds_id
         a_d_s = BYC.get("summaries_definitions", {}).get("$defs", {}).values()
-        a_c_s = BYC.get("aggregation_concepts", {}).get("$defs", {})
+        a_c_s = BYC.get("aggregation_terms", {}).get("$defs", {})
 
         # construct the aggregations from concepts and combinations
         # this might be transitional, e.g. when BYC_PARS["aggregators"]
