@@ -23,14 +23,14 @@ dataset. Current modification options are through URL parameters for (with examp
 * ${"`ageSplits=P0D,P1Y,P2Y,P18Y,P21Y,P40Y`"} ... as example for age binning
 * ${"`followupTime=P0D,P1D,P6M,P1Y,P5Y,P10Y`"} ... as example for followup binning
 * ${"`filters=pgx:cohort-TCGAcancers`"} ... as example for a custom filter
-* ${"`aggregators=ageAtDiagnosisBySex`"} ... for limited aggregations
+* ${"`aggregators=sampleAge::sampleSex`"} ... for limited aggregations
 
 Example URL would be:
 
 * TCGA samples in Progenetix for age groups, split by sex
     - ${"`"}${basePath}queryResultsDashboard/?datasetIds=progenetix&filters=pgx:cohort-TCGAcancers&aggregators=ageAtDiagnosisBySex${"`"}
 * Brain cancers in Progenetix by some aggregation types (see the bimodal age distribution)...
-    - ${"`"}${basePath}queryResultsDashboard/?datasetIds=progenetix&filters=NCIT:C3268&aggregators=ageAtDiagnosisBySex,diseaseBySex,followupTime${"`"}
+    - ${"`"}${basePath}queryResultsDashboard/?datasetIds=progenetix&filters=NCIT:C3268&aggregators=sampleAge::sampleSex,sampleICDO3histology::sampleSex,followupTime${"`"}
 Please allow for some loading time.`
 
   return (

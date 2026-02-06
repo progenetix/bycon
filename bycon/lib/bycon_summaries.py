@@ -10,39 +10,51 @@ from bycon_helpers import *
 class ByconSummaries:
     def __init__(self, ds_id=None):
         self.dataset_id = ds_id
-        a_d_s = BYC.get("summaries_definitions", {}).get("$defs", {}).values()
+        self.summaries = []
+
+        a_d_s = BYC.get("aggregation_terms", {}).get("defaults", [])
         a_c_s = BYC.get("aggregation_terms", {}).get("$defs", {})
+        a_t_s = BYC_PARS.get("aggregators", [])
 
         # construct the aggregations from concepts and combinations
         # this might be transitional, e.g. when BYC_PARS["aggregators"]
         # is replaced (`aggregationConceptIds` arrays or such)
-        for agg_d in a_d_s:
-            concepts = []
-            labels   = []
-            c_id_s = agg_d.get("conceptIds", [])
-            for c_id in c_id_s:
-                if (c := a_c_s.get(c_id)):
-                    concepts.append(c)
-                    if (l := c.get("label")):
-                        labels.append(l)
-            if len(c_id_s) == len(concepts):
-                agg_d.update({
-                    "concepts": concepts,
-                    "label": " by ".join(labels)
-                })
-            else:
-                prdbug(f"ByconSummaries - {agg_d.get("id")} doesn't match all concepts")
+        if len(a_t_s) < 1:
+            a_t_s = a_d_s
 
-        self.summaries = []
-        # ordered selection of aggregation concepts
-        if len(a_t_s := BYC_PARS.get("aggregators", [])) > 0:
-            for a_d_k in a_t_s:
-                for a_d in a_d_s:
-                    if a_d.get("id") in a_t_s:
-                        self.summaries.append(a_d)
-                        continue
-        else:
-            self.summaries = list(a_d_s)
+        # WiP: construct terms from aggregators
+        if len(a_t_s) > 0:
+            for a in a_t_s:
+                t_a = []
+                if not isinstance(a, list):
+                    for a_id in re.split("::", a):
+                        t_a.append(a_id)
+                else:
+                    for a_o in a:
+                        if (a_id := a_o.get("id")):
+                            t_a.append(a_id)
+
+                if len(t_a) < 1:
+                    continue
+                concepts    = []
+                labels      = []
+                ids         = []
+                for a_id in t_a:
+                    if (c := a_c_s.get(a_id)):
+                        concepts.append(c)
+                        ids.append(a_id)
+                        if (l := c.get("label")):
+                            labels.append(l)
+
+                if len(concepts) == len(t_a):
+                    self.summaries.append(
+                        {
+                            "id": "::".join(ids),
+                            "concepts": concepts,
+                            "label": " by ".join(labels),
+                            "scope": concepts[0].get("scope", "biosample")
+                        }
+                    )
 
         self.dataset_summaries  = [] 
         self.mongo_client       = MongoClient(host=BYC_DBS["mongodb_host"])
@@ -151,8 +163,10 @@ class ByconSummaries:
             }
         )
         # sorting either on logical order () detection order
+        prdbug(f"... concept {concepts[0].get("id")} sorted?: {concepts[0].get("sorted")}")
         if concepts[0].get("sorted") is True:
             agg_p.append({ "$sort": { "_id.order": 1 } })
+            a_v.update({"sorted": True})
         else:
             agg_p.append({ "$sort": { "count": -1 } })
 

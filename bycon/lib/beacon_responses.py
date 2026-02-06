@@ -342,7 +342,6 @@ class BeaconDataResponse:
         if not "beaconAggregationConceptsResponse" in self.response_schema:
             return
 
-        # a_d_s = list(BYC.get("summaries_definitions", {}).get("$defs", {}).values())
         a_d_s = list(BYC.get("aggregation_terms", {}).get("$defs", {}).values())
 
         self.data_response["response"].update({"aggregation_terms": a_d_s})

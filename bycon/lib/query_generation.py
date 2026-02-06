@@ -168,7 +168,8 @@ class ByconQuery():
         data_coll = data_db[c]
         rs = list(data_coll.aggregate([{"$sample": {"size": ret_no}}]))
 
-        q = [{"id": {"$in": list(s["id"] for s in rs)}}]
+        q = [{"id": {"$in": list(s.get("id", "___none___") for s in rs)}}]
+        prdbug(f"... test mode query: {q}")
 
         self.queries["entities"].update({self.response_entity_id: {"query": q, "collection": c}})
         self.queries.update({"expand": False})

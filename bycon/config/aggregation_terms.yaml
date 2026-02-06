@@ -4,7 +4,31 @@ description: >-
   or binning of the results in the returned `distribution`.
 
   Note: `sorted` right now only applies to the first dimension if used in 2D.
-  
+
+defaults:
+  - - id: selectedHistologicalDiagnoses
+    - id: sampleSex
+  - - id: selectedCarcinomaDiagnoses
+  - - id: selectedCarcinomaDiagnoses
+    - id: sampleSex
+  - - id: selectedPlatformTechnologies
+  - - id: allPlatformTechnologies
+  - - id: sampleAge
+  - - id: sampleOriginDetails
+    - id: sampleSex
+  - - id: sampleICDO3histology
+    - id: sampleAge
+  - - id: sampleICDO3histology
+    - id: sampleSex
+  - - id: individualDisease
+    - id: individualSex
+  - - id: biosampleDisease
+    - id: sampleSex
+  - - id: sampleCountries
+  - - id: individualAge
+  - - id: individualAge
+    - id: individualSex
+
 $defs:
 
   selectedHistologicalDiagnoses:

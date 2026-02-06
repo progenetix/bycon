@@ -120,20 +120,22 @@ BYC = {
         "beaconFilteringTermsResponse"
     ],
 
-    # ..._mappings / ..._definitions are generated from YAML files & should stay static
+    # ..._mappings / ..._definitions are generated from YAML files & should stay
+    # static unless not overridden by local defaults
 
+    "aggregation_terms":        {},
     "argument_definitions":     {},
     "authorizations":           {},
     "dataset_definitions":      {},
     "datatable_mappings":       {},
-    "entity_defaults":          {},
+    "beacon_configuration":     {},
     "env_paths":                {},
     "filter_definitions":       {},
     "handover_definitions":     {},
     "interval_definitions":     {},
     "plot_defaults":            {},
-    "request_meta":             {},
-    "service_config":           {},
+    "request_profiles":         {},
+    "service_configuration":    {},
     "test_queries":             {},
     "request_profiles":         {},
     "variant_type_definitions": {},
