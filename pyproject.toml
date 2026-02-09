@@ -29,7 +29,7 @@ authors=[
 ]
 description = "A Python-based environment for the GA4GH Beacon genomics API"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.12"
 keywords = ["genomics", "Beacon", "GA4GH", "Progenetix", "MongoDB"]
 license = "CC0-1.0"
 classifiers = [

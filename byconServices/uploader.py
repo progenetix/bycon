@@ -2,7 +2,7 @@ from mycgi import Form
 from os import path
 from uuid import uuid4
 
-from bycon import BYC, print_json_response, select_this_server, print_uri_rewrite_response
+from bycon import BYC, print_json_response, print_uri_rewrite_response
 
 ################################################################################
 
@@ -20,7 +20,7 @@ def uploader():
     fileitem = form_data['inputfile']
     filename = fileitem.filename
     data = fileitem.value
-    base_url = select_this_server()
+    base_url = BEACON_ROOT
 
     response = {
         "error": {},

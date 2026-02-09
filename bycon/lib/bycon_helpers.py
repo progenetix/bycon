@@ -1,12 +1,18 @@
-import base36, humps, inspect, json, random, re, time, yaml
+import base36
+import humps
+import inspect
+import json
+import random
+import re
+import time
+import yaml
 
 from isodate import parse_duration
 from datetime import datetime
-from os import environ
 from pathlib import Path
 from pymongo import MongoClient
 
-from config import *
+from config import BYC, BYC_DBS, BYC_UNCAMELED, BYC_UPPER, HTTP_HOST
 
 ################################################################################
 
@@ -31,7 +37,6 @@ class ByconMongo:
 
     def openMongoColl(self, db_name, coll_name="___none___"):
         self.client = MongoClient(host=self.host_address)
-        db_names = list(self.client.list_database_names())
         if self.__check_db_name(db_name) is False:
             ByconError().addError(f"db {db_name} does not exist")
             return False
@@ -41,6 +46,14 @@ class ByconMongo:
             return False
         return self.db[coll_name]
 
+
+    #--------------------------------------------------------------------------#
+
+    def resultList(self, db_name, coll_name, query, fields={}):
+        results = []
+        if (coll := self.openMongoColl(db_name, coll_name)) is not False:
+            results = list(coll.find(query, fields))
+        return results
 
     #--------------------------------------------------------------------------#
     #---------------------------- private -------------------------------------#
@@ -152,70 +165,28 @@ class ByconH:
 
 ################################################################################
 
-def select_this_server() -> str:
-    """
-    Cloudflare based encryption may lead to "http" based server addresses in the
-    URI, but then the browser ... will complain if the handover URLs won't use
-    encryption. OTOH for local testing one may need to stick w/ http if no pseudo-
-    https scenario had been implemented. Therefore handover addresses etc. will
-    always use https _unless_ the request comes from a host listed as test instance.
-    """
-    s_uri = str(environ.get('SCRIPT_URI'))
-    X_FORWARDED_PROTO = str(environ.get('HTTP_X_FORWARDED_PROTO'))
-
-    test_sites = BYC.get("test_domains", [])
-
-    # for k in environ.keys():
-    #     prdbug(f'{k} => {str(environ.get(k))}')
-
-    s = f'https://{HTTP_HOST}'
-    if not "https" in s_uri and not "https" in X_FORWARDED_PROTO:
-        s = s.replace("https://", "http://")
-
-    return s
-
-
-################################################################################
-
 def days_from_iso8601duration(iso8601duration=""):
     """A simple function to convert ISO8601 duration strings to days. This is
-    potentially lossy since it does not include time parsing."""
+    potentially lossy since it does not include time zone parsing."""
 
     # TODO: check format
-    # is_isodate_duration = is_isodate_duration.upper()
-    is_isodate_duration = re.match(r'^P\d+?[YMD](\d+?[M])?(\d+?[D])?', iso8601duration)
-    if not is_isodate_duration:
+    if not re.match(r'^P\d+?[YMD](\d+?[M])?(\d+?[D])?(T[\dHMS]+?)?$', str(iso8601duration)):
         return False
 
-    duration = parse_duration(iso8601duration)
+    iso8601duration = iso8601duration.upper()
+
+    d = parse_duration(iso8601duration.upper())
     days = 0
+    # try catches exceptions for zero date ranges like "P0D"
     try:
-        days += int(duration.years) * 365.2425
-    except AttributeError:
-        pass
-    try:
-        days += int(duration.months) * 30.4167
-    except AttributeError:
-        pass
-    try:
-        days += int(duration.days)
-    except AttributeError:
-        pass
-    # try:
-    #     days += int(duration.seconds) / 
-    # except AttributeError:
-    #     pass
+        days += int(d.years) * 365.2425
+        days += int(d.months) * 30.4167
+        days += int(d.days)
+        days += int(d.seconds) / 86400
+    except Exception as e:
+        return 0
 
     return int(days)
-
-
-################################################################################
-
-def mongo_result_list(db_name, coll_name, query, fields={}):
-    results = []
-    if not (coll := ByconMongo().openMongoColl(db_name, coll_name)) is False:
-        results = list(coll.find(query, fields))
-    return results
 
 
 ################################################################################
@@ -260,7 +231,7 @@ def prdbughead(this=""):
 ################################################################################
 
 def prjsonhead():
-    if not "___shell___" in HTTP_HOST:
+    if "___shell___" not in HTTP_HOST:
         print('Content-Type: application/json')
         print('status:200')
         print()
@@ -269,7 +240,7 @@ def prjsonhead():
 ################################################################################
 
 def prtexthead():
-    if not "___shell___" in HTTP_HOST:
+    if "___shell___" not in HTTP_HOST:
         print('Content-Type: text/plain')
         print('status: 302')
         print()
@@ -278,7 +249,7 @@ def prtexthead():
 ################################################################################
 
 def prdlhead(filename="download.txt"):
-    if not "___shell___" in HTTP_HOST:
+    if "___shell___" not in HTTP_HOST:
         print('Content-Type: text/tsv')
         print(f'Content-Disposition: attachment; filename={filename}')
         print('status: 200')

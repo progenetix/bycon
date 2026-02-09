@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from os import environ
 from isodate import date_isoformat
 
-from bycon_helpers import prdbug, clean_empty_fields, select_this_server
+from bycon_helpers import prdbug, clean_empty_fields
 from config import *
 from variant_mapping import ByconVariant
 
@@ -266,7 +266,7 @@ def phenopack_individual(ind, data_db):
                    "icdo_topography"]
 
     pxf_resources = _phenopack_resources()
-    server = select_this_server()
+    server = BEACON_ROOT
 
     bios_s = data_db["biosamples"].find({"individual_id": ind.get("id", "___none___")})
 

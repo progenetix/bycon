@@ -2,7 +2,7 @@ from deepmerge import always_merger
 from os import environ
 
 from beacon_responses import BeaconResponseMeta, print_json_response
-from bycon_helpers import mongo_result_list
+from bycon_helpers import ByconMongo
 from config import AUTHORIZATIONS, BYC, BYC_PARS
 from export_file_generation import *
 from parameter_parsing import prdbug
@@ -115,7 +115,6 @@ class ByconCollations:
         self.filter_collation_types = set()
         self.collations = []
 
-
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
@@ -144,7 +143,7 @@ class ByconCollations:
             prdbug(f'... parsing collations for {ds_id}')
 
             fields = {"_id": 0}
-            f_s = mongo_result_list(ds_id, f_coll, query, fields)
+            f_s = ByconMongo().resultList(ds_id, f_coll, query, fields)
             for f in f_s:
                 if BYC_PARS.get("include_descendant_terms", True) is False:
                     if int(f.get("code_matches", 0)) < 1:

@@ -1,7 +1,7 @@
-from pymongo import MongoClient
+import re
 
-from config import *
-from bycon_helpers import *
+from config import BYC, BYC_DBS, BYC_PARS
+from bycon_helpers import ByconMongo, days_from_iso8601duration, prdbug
 
 ################################################################################
 ################################################################################
@@ -43,8 +43,8 @@ class ByconSummaries:
                     if (c := a_c_s.get(a_id)):
                         concepts.append(c)
                         ids.append(a_id)
-                        if (l := c.get("label")):
-                            labels.append(l)
+                        if (lab := c.get("label")):
+                            labels.append(lab)
 
                 if len(concepts) == len(t_a):
                     self.summaries.append(
@@ -57,9 +57,8 @@ class ByconSummaries:
                     )
 
         self.dataset_summaries  = [] 
-        self.mongo_client       = MongoClient(host=BYC_DBS["mongodb_host"])
-        self.data_client        = self.mongo_client[ds_id]
-        self.term_coll          = self.data_client["collations"]
+        self.data_client        = ByconMongo().openMongoDatabase(ds_id)
+        self.term_coll          = ByconMongo().openMongoColl(ds_id, "collations")
 
 
     # -------------------------------------------------------------------------#
@@ -112,7 +111,7 @@ class ByconSummaries:
         scope = a_v.get("scope", "biosample")
         coll = BYC_DBS.get("collections", {}).get(scope, "___none___")
         # TODO: Fallback query for 0 results?
-        if not (coll_k := f"{coll}.id") in self.dataset_result.keys():
+        if (coll_k := f"{coll}.id") not in self.dataset_result.keys():
             return
         res = self.dataset_result.get(coll_k, {})
         q_v_s = res.get("target_values", [])

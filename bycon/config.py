@@ -35,8 +35,12 @@ HOSTNAME            = environ.get('HOSTNAME', socket.gethostname())
 REQUEST_SCHEME      = environ.get('REQUEST_SCHEME', "___shell___")
 REQUEST_URI         = environ.get('REQUEST_URI', False)
 REQUEST_METHOD      = environ.get('REQUEST_METHOD', '')
+SCRIPT_URI          = environ.get('SCRIPT_URI', '')
 HTTP_HOST           = environ.get('HTTP_HOST', "___shell___")
+X_FORWARDED_PROTO   = str(environ.get('HTTP_X_FORWARDED_PROTO'))
 BEACON_ROOT         = f"{REQUEST_SCHEME}://{HTTP_HOST}"
+if not "https" in BEACON_ROOT and not "https" in X_FORWARDED_PROTO:
+    BEACON_ROOT = BEACON_ROOT.replace("https://", "http://")
 if HTTP_HOST == "___shell___":
     BEACON_ROOT = f"cli://{HOSTNAME}"
 
