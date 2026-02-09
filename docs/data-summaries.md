@@ -134,7 +134,7 @@ Each `concept` involved in an aggregation should be defined with:
       instead of the logical concept (`individual.diseases.diseaseCode`). This might
       be changed if necessary.
 * optional modifiers:
-    - `termIds` for specifying terms to be included in the aggregation
+    - `terms` for specifying terms to be included in the aggregation
     - `splits` for specifying how to split the values (e.g. binning for
       numeric or pseudo-numeric values such as ISO8601 durations for ages)
         * at this time `splits` seem as the best way to specify binning, but this might
@@ -177,7 +177,7 @@ concepts:
       - P120Y
 ```
 
-#### Single property aggregation with `termIds`
+#### Single property aggregation with `terms`
 
 ```
 id: selectedCarinomaDiagnoses
@@ -187,7 +187,7 @@ description: >-
 scope: biosample
 concepts:
   - property: biosample.histological_diagnosis.id
-    termIds:
+    terms:
       - NCIT:C9384 # Kidney Carcinoma
       - NCIT:C3513 # Esophageal Carcinoma
       - NCIT:C35850 # Head and Neck Carcinoma

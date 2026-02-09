@@ -8,7 +8,7 @@ description: |-
   documentation for `AggregationTermInResponse.id` in `beaconAggregationTermsResults`.
 
   TODO: The current implementation does not allow to define aggregations, _i.e._
-  to send aggregation term objects or parts thereof (e.g. `splits`, `termIds`). It
+  to send aggregation term objects or parts thereof (e.g. `splits`, `terms`). It
   only allows to select from the predefined concepts. This behaviour might
   be changed in the future, e.g. allowing dynamic aggregation definitions through
   POSTing aggregation term objects.

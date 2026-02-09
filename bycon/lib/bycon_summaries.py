@@ -128,7 +128,7 @@ class ByconSummaries:
         # for i_a, a_v in enumerate(self.dataset_summaries):
         #     for i_c, c_v in enumerate(a_v.get("concepts", [])):
         #         c_v.pop("splits", None)
-        #         c_v.pop("termIds", None)
+        #         c_v.pop("terms", None)
 
 
     # -------------------------------------------------------------------------#
@@ -258,21 +258,22 @@ class ByconSummaries:
         ```
         """
 
-        if len(terms := concept.get("termIds", [])) < 1:
+        if len(terms := concept.get("terms", [])) < 1:
             return False
 
         scope, concept_id = concept.get("property", "___none___.___none___").split('.', 1)
 
         branches = []
-        for d_i, i_k in enumerate(terms):
-            if not (coll := self.term_coll.find_one( {"id": i_k})):
+        for d_i, t in enumerate(terms):
+            t_id    = t.get("id", "___none___") 
+            t_label = t.get("label", t_id) 
+            if not (coll := self.term_coll.find_one( {"id": t_id} )):
                 continue
-            label = coll.get("label", i_k)
             if len(child_terms := coll.get("child_terms", [])) < 1:
                 continue
             branches.append({
                 "case": { "$in": [ f'${concept_id}', child_terms ] },
-                "then": { "id": i_k, "label": label, "order": d_i }
+                "then": { "id": t_id, "label": t_label, "order": d_i }
             })
 
         # fallback dummy branch - at least one is needed or error
@@ -326,21 +327,25 @@ class ByconSummaries:
 
         f = concept.get('format', "")
 
-        split_labs = splits
-        split_vals = splits
+        split_labs = list(x.get("label", x.get("value", "undefined")) for x in splits)
+        split_vals = list(x.get("value", "undefined") for x in splits)
         branches = []
 
         if "iso8601duration" in f:
             concept_id = f"{concept_id}_days"
-            split_labs = ["unknown"]
+            split_l =  ["unknown"]
             split_vals = [0]
             pre = "P0D"
-            for l in splits:
+            for i, l in enumerate(splits):
+                l = l.get("value")
                 if re.match(r"^P\d", str(l)):
                     if int(d := days_from_iso8601duration(l)) > 0:
-                        split_labs.append(f"[{pre}, {l})")
+                        # split_l.append(f"[{pre}, {l})")
+                        split_l.append(split_labs[i])
                         split_vals.append(d)
                     pre = l
+
+            split_labs = split_l
 
         for d_i, d_l in enumerate(split_labs):
             branches.append({
