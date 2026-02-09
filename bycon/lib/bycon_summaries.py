@@ -326,15 +326,17 @@ class ByconSummaries:
 
         f = concept.get('format', "")
 
-        split_labs = list(x.get("label", x.get("value", "undefined")) for x in splits)
-        split_vals = list(x.get("value", "undefined") for x in splits)
+        split_labs  = list(x.get("label", x.get("value", "undefined")) for x in splits)
+        split_vals  = list(x.get("value", "undefined") for x in splits)
+        split_ids   = list(x.get("value", "undefined") for x in splits)
         branches = []
 
         if "iso8601duration" in f:
-            concept_id = f"{concept_id}_days"
-            split_l =  ["unknown"]
-            split_vals = [0]
-            pre = "P0D"
+            concept_id  = f"{concept_id}_days"
+            split_l     = ["undefined"]
+            split_vals  = [0]
+            pre         = "undefined"
+            split_ids   = [pre]
             for i, l in enumerate(splits):
                 l = l.get("value")
                 if re.match(r"^P\d", str(l)):
@@ -342,6 +344,7 @@ class ByconSummaries:
                         # split_l.append(f"[{pre}, {l})")
                         split_l.append(split_labs[i])
                         split_vals.append(d)
+                        split_ids.append(f"<{re.sub("P", "", l).lower()}")
                     pre = l
 
             split_labs = split_l
@@ -349,7 +352,7 @@ class ByconSummaries:
         for d_i, d_l in enumerate(split_labs):
             branches.append({
                 "case": { "$lt": [ f'${concept_id}', split_vals[d_i] ] },
-                "then": {"id": d_l, "label": d_l, "order": d_i}
+                "then": {"id": split_ids[d_i], "label": d_l, "order": d_i}
             })
 
         _id = {

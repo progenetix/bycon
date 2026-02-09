@@ -19,14 +19,16 @@ from config import BYC, BYC_DBS, BYC_UNCAMELED, BYC_UPPER, HTTP_HOST
 
 class ByconMongo:
     def __init__(self):
-        self.host_address = BYC_DBS["mongodb_host"]
+        self.host_address   = BYC_DBS["mongodb_host"]
+        self.client         = MongoClient(host=self.host_address)
+        self.databases      = list(self.client.list_database_names())
+        self.collections    = []
 
     #--------------------------------------------------------------------------#
     #----------------------------- public -------------------------------------#
     #--------------------------------------------------------------------------#
     
     def openMongoDatabase(self, db_name):
-        self.client = MongoClient(host=self.host_address)
         if self.__check_db_name(db_name) is False:
             return False
         self.db = self.client[db_name]
@@ -36,7 +38,6 @@ class ByconMongo:
     #--------------------------------------------------------------------------#
 
     def openMongoColl(self, db_name, coll_name="___none___"):
-        self.client = MongoClient(host=self.host_address)
         if self.__check_db_name(db_name) is False:
             ByconError().addError(f"db {db_name} does not exist")
             return False
@@ -49,18 +50,36 @@ class ByconMongo:
 
     #--------------------------------------------------------------------------#
 
+    def databaseList(self):
+        return self.databases
+
+
+    #--------------------------------------------------------------------------#
+
+    def collectionList(self, db_name="___none___"):
+        if self.__check_db_name(db_name) is False:
+            ByconError().addError(f"db {db_name} does not exist")
+            return self.collections
+        self.db = self.client[db_name]
+        self.collections = list(self.db.list_collection_names())
+        return self.collections
+
+
+    #--------------------------------------------------------------------------#
+
     def resultList(self, db_name, coll_name, query, fields={}):
         results = []
         if (coll := self.openMongoColl(db_name, coll_name)) is not False:
             results = list(coll.find(query, fields))
         return results
 
+
     #--------------------------------------------------------------------------#
     #---------------------------- private -------------------------------------#
     #--------------------------------------------------------------------------#
 
     def __check_db_name(self, db_name):
-        if str(db_name) not in list(self.client.list_database_names()):
+        if str(db_name) not in self.databases:
             ByconError().addError(f"db `{db_name}` does not exist")
             return False
         return db_name

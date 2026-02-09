@@ -1,9 +1,7 @@
-import humps, inspect, pymongo, re, sys
-# from bson import SON
+import humps, re, sys
 from os import environ
-from pymongo import MongoClient
 
-from bycon_helpers import days_from_iso8601duration, prdbug, prjsonnice, ByconError, ByconH
+from bycon_helpers import ByconMongo, days_from_iso8601duration, prdbug, prjsonnice, ByconError, ByconH
 from config import *
 from genome_utils import ChroNames, Cytobands, GeneInfo, VariantTypes
 from parameter_parsing import ByconFilters
@@ -160,12 +158,11 @@ class ByconQuery():
         if not (c := BYC_DBS.get("collections", {}).get(e)):
             return
 
-        data_db = MongoClient(host=BYC_DBS["mongodb_host"])[self.ds_id]
-        if c not in data_db.list_collection_names():
+        if c not in ByconMongo().collectionList(self.ds_id):
             # TODO: warning?
             return
 
-        data_coll = data_db[c]
+        data_coll = ByconMongo().openMongoColl(self.ds_id, c)
         rs = list(data_coll.aggregate([{"$sample": {"size": ret_no}}]))
 
         q = [{"id": {"$in": list(s.get("id", "___none___") for s in rs)}}]
@@ -754,7 +751,7 @@ class ByconQuery():
         if not (m_c := BYC_DBS.get("collections", {}).get("filteringTerm")):
             ByconError().addError("No filtering term collection defined!")
             return
-        self.filter_collection = MongoClient(host=m_h)[m_d][m_c]
+        self.filter_collection = ByconMongo().openMongoColl(m_d, m_c)
 
         entity_filters_lists = self.__assemble_filter_lists()
 
@@ -916,7 +913,7 @@ class ByconQuery():
         m_d = BYC_DBS["housekeeping_db"]
         m_c = BYC_DBS.get("collections", {}).get("handover")
 
-        ho_coll = MongoClient(host=m_h)[m_d][m_c]
+        ho_coll = ByconMongo().openMongoColl(m_d, m_c)
         if not (h_o := ho_coll.find_one({"id": accessid})):
             return
 
@@ -1159,9 +1156,7 @@ class CollationQuery:
     def __coll_test_mode_query(self):
         if BYC["TEST_MODE"] is not True:
             return
-        mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-        db_names = list(mongo_client.list_database_names())
-        if self.dataset_id not in db_names:
+        if self.dataset_id not in ByconMongo().databaseList():
             ByconError().addError(f"db `{self.dataset_id}` does not exist")
             self.query = {"_id": "___undefined___"}
             return

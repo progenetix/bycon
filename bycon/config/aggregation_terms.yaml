@@ -182,8 +182,6 @@ $defs:
     property: biosample.collection_moment
     format: iso8601duration
     splits:
-      - value: P0D
-        label: not yet born...
       - value: P18Y
         label: < 18 years
       - value: P40Y
@@ -205,8 +203,6 @@ $defs:
     property: individual.index_disease.onset.age
     format: iso8601duration
     splits:
-      - value: P0D
-        label: not yet born...
       - value: P18M
         label: < 18 months
       - value: P18Y
@@ -255,8 +251,6 @@ $defs:
     property: individual.index_disease.followup
     format: iso8601duration
     splits:
-      - value: P0D
-        label: no value...
       - value: P6M
         label: < 6 months
       - value: P1Y
