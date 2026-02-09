@@ -28,6 +28,7 @@ defaults:
   - - id: individualAge
   - - id: individualAge
     - id: individualSex
+  - - id: followupTime
 
 $defs:
 
@@ -207,17 +208,17 @@ $defs:
       - value: P0D
         label: not yet born...
       - value: P18M
-        label: < 18months
+        label: < 18 months
       - value: P18Y
-        label: < 18 years
+        label: 1.5 to < 18 years
       - value: P40Y
-        label: < 40 years
+        label: 18 to < 40 years
       - value: P65Y
-        label: < 65 years
+        label: 40 to < 65 years
       - value: P80Y
-        label: 65-80 years
+        label: 65 to < 80 years
       - value: P120Y
-        label: 80+ years
+        label: 80 years and older
     sorted: True
 
   individualDisease:
@@ -255,11 +256,19 @@ $defs:
     format: iso8601duration
     splits:
       - value: P0D
+        label: no value...
       - value: P6M
+        label: < 6 months
       - value: P1Y
+        label: < 1 year
       - value: P18M
+        label: < 18 months
       - value: P3Y
+        label: < 3 years
       - value: P5Y
+        label: < 5 years
       - value: P10Y
-      - value: P60Y
+        label: < 10 years
+      - value: P100Y
+        label: "> 10 years"
     sorted: True
