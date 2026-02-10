@@ -324,18 +324,17 @@ class ByconSummaries:
 
         scope, concept_id = concept.get("property", "___none___.___none___").split('.', 1)
 
-        f = concept.get('format', "")
-
         split_labs  = list(x.get("label", x.get("value", "undefined")) for x in splits)
         split_vals  = list(x.get("value", "undefined") for x in splits)
-        split_ids   = list(x.get("value", "undefined") for x in splits)
-        branches = []
+        split_ids   = split_vals
 
-        if "iso8601duration" in f:
-            concept_id  = f"{concept_id}_days"
-            split_l     = ["undefined"]
-            split_vals  = [0]
+        branches    = []
+
+        if "iso8601duration" in str(concept.get('format', "")):
             pre         = "undefined"
+            concept_id  = f"{concept_id}_days"
+            split_vals  = [0]
+            split_l     = [pre]
             split_ids   = [pre]
             for i, l in enumerate(splits):
                 l = l.get("value")
@@ -346,7 +345,6 @@ class ByconSummaries:
                         split_vals.append(d)
                         split_ids.append(f"<{re.sub("P", "", l).lower()}")
                     pre = l
-
             split_labs = split_l
 
         for d_i, d_l in enumerate(split_labs):
