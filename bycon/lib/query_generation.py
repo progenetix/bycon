@@ -1,8 +1,14 @@
-import humps, re, sys
-from os import environ
+import re
 
-from bycon_helpers import ByconMongo, days_from_iso8601duration, prdbug, prjsonnice, ByconError, ByconH
-from config import *
+import humps
+from bycon_helpers import (
+    ByconError,
+    ByconH,
+    ByconMongo,
+    days_from_iso8601duration,
+    prdbug
+)
+from config import BYC, BYC_DBS, BYC_PARS
 from genome_utils import ChroNames, Cytobands, GeneInfo, VariantTypes
 from parameter_parsing import ByconFilters
 
@@ -10,7 +16,8 @@ from parameter_parsing import ByconFilters
 ################################################################################
 ################################################################################
 
-class ByconQuery():
+
+class ByconQuery:
     """
     Bycon queries are collected as an object with per data collection query objects,
     ready to be run against the respective entity databases.
@@ -55,14 +62,11 @@ class ByconQuery():
         self.request_profiles = BYC.get("request_profiles", {}).get("$defs", {})
         self.variant_type_definitions = BYC.get("variant_type_definitions", {})
 
-        self.limit = BYC_PARS.get("limit")
-        self.skip = BYC_PARS.get("skip")
-        self.filters = ByconFilters().get_filters()
+        self.limit      = BYC_PARS.get("limit")
+        self.skip       = BYC_PARS.get("skip")
+        self.filters    = ByconFilters().get_filters()
 
-        self.queries = {
-            "expand": True,
-            "entities": {}
-        }
+        self.queries    = {"expand": True, "entities": {}}
 
         self.__set_variant_par_names()
         self.__queries_for_test_mode()
@@ -72,15 +76,13 @@ class ByconQuery():
         self.__query_from_filters()
         self.__query_from_geoquery()
 
-
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
     def recordsQuery(self):
-        prdbug(f'...recordsQuery: {self.queries}')
+        prdbug(f"...recordsQuery: {self.queries}")
         return self.queries
-
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
@@ -90,7 +92,6 @@ class ByconQuery():
         for a_k, a_d in self.argument_definitions.items():
             if a_d.get("is_variant_par") or a_d.get("is_vqs_par"):
                 self.variant_par_names.append(a_k)
-
 
     # -------------------------------------------------------------------------#
 
@@ -117,7 +118,6 @@ class ByconQuery():
                 self.__update_queries_for_entity(q, entity)
                 self.queries.update({"expand": False})
 
-
     # -------------------------------------------------------------------------#
 
     def __id_query_add_variant_query(self, entity, entity_ids):
@@ -125,25 +125,21 @@ class ByconQuery():
         if "variant" in entity.lower():
             return
 
-        v_q_id = f'{entity}_id'
+        v_q_id = f"{entity}_id"
         v_q_id = re.sub("run", "analysis", v_q_id)
 
         if len(entity_ids) == 1:
             q = [{v_q_id: entity_ids[0]}]
         elif len(entity_ids) > 1:
-            q = [{v_q_id: {"$in": entity_ids } }]
+            q = [{v_q_id: {"$in": entity_ids}}]
         else:
             return
 
         BYC.update({"AGGREGATE_VARIANT_RESULTS": False})
 
-        self.queries["entities"].update({
-            "genomicVariant": {
-                "query": q,
-                "collection": "variants"
-            }
-        })
-
+        self.queries["entities"].update(
+            {"genomicVariant": {"query": q, "collection": "variants"}}
+        )
 
     # -------------------------------------------------------------------------#
 
@@ -168,9 +164,10 @@ class ByconQuery():
         q = [{"id": {"$in": list(s.get("id", "___none___") for s in rs)}}]
         prdbug(f"... test mode query: {q}")
 
-        self.queries["entities"].update({self.response_entity_id: {"query": q, "collection": c}})
+        self.queries["entities"].update(
+            {self.response_entity_id: {"query": q, "collection": c}}
+        )
         self.queries.update({"expand": False})
-
 
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
@@ -186,12 +183,11 @@ class ByconQuery():
             return
 
         # new preprocessing which results in a list of variant queries
-        self.__preprocess_variant_pars()        
+        self.__preprocess_variant_pars()
         if not (v_queries := self.__loop_multivars()):
             return
 
         self.queries["entities"].update({e: {"query": v_queries, "collection": c}})
-
 
     # -------------------------------------------------------------------------#
 
@@ -201,9 +197,9 @@ class ByconQuery():
         v_p_s = self.variant_par_names
         # standard pars
         s_q_p_0 = {}
-        if (v_s_s := v_p_s & BYC_PARS.keys()):
+        if v_s_s := v_p_s & BYC_PARS.keys():
             for v_p in v_s_s:
-                s_q_p_0.update({ v_p: BYC_PARS.get(v_p) })
+                s_q_p_0.update({v_p: BYC_PARS.get(v_p)})
         if len(s_q_p_0.keys()) > 0:
             v_m_ps.append(s_q_p_0)
 
@@ -211,30 +207,25 @@ class ByconQuery():
         for v in v_m_ps:
             vp = {}
 
-            if (v_s_s := v_p_s & v.keys()):
+            if v_s_s := v_p_s & v.keys():
                 for v_p in v_s_s:
-                    vp.update({ v_p: v.get(v_p) })
+                    vp.update({v_p: v.get(v_p)})
                 if len(vp.keys()) > 0:
                     vips.append(self.__parse_variant_parameters(vp))
 
         self.variant_multi_pars = vips
 
-
     # -------------------------------------------------------------------------#
 
     def __parse_variant_parameters(self, variant_pars):
-        v_p_s = self.variant_par_names
-        a_defs = self.argument_definitions
-        v_t_defs = self.variant_type_definitions
-
         # value checks
-        v_p_c = { }
+        v_p_c = {}
         pop_list = []
         for p_k, v_p in variant_pars.items():
             v_p_k = humps.decamelize(p_k)
             if "variant_type" in v_p_k:
                 v_s_c = VariantTypes().variantStateChildren(v_p)
-                v_p_c.update({v_p_k: { "$in": v_s_c }})
+                v_p_c.update({v_p_k: {"$in": v_s_c}})
                 continue
             if "reference_name" in v_p_k or "mate_name" in v_p_k:
                 v_p_c.update({v_p_k: self.ChroNames.refseq(v_p)})
@@ -261,30 +252,28 @@ class ByconQuery():
                 v_p_c.update({"mate_start": [v_p[0]], "mate_end": [v_p[1]]})
                 pop_list.append(p_k)
                 continue
-            # VQS 
+            # VQS
             if "copy_change" in v_p_k:
                 v_s_c = VariantTypes().variantStateChildren(v_p)
-                v_p_c.update({"variant_type": { "$in": v_s_c }})
+                v_p_c.update({"variant_type": {"$in": v_s_c}})
                 pop_list.append(p_k)
-                continue               
+                continue
             # VQS
             if "sequence_length" in v_p_k:
                 if len(v_p) == 1:
                     v_p.append(v_p[0] + 1)
-                v_p_c.update({
-                    "variant_min_length": v_p[0],
-                    "variant_max_length": v_p[1]
-                })
+                v_p_c.update(
+                    {"variant_min_length": v_p[0], "variant_max_length": v_p[1]}
+                )
                 pop_list.append(p_k)
                 continue
-            
+
             v_p_c.update({v_p_k: v_p})
 
         for p_l in pop_list:
             variant_pars.pop(p_l, None)
 
         return v_p_c
-
 
     # -------------------------------------------------------------------------#
 
@@ -301,54 +290,53 @@ class ByconQuery():
             # a bit verbose for now...
             if "variantFusionRequest" in variant_request_type:
                 # prdbug(v_pars)
-                if (q := self.__create_variantFusionRequest_query(v_pars)):
+                if q := self.__create_variantFusionRequest_query(v_pars):
                     # prdbug(q)
                     queries.append(q)
                     continue
             if "GeneIdRequest" in variant_request_type:
-                if (q := self.__create_geneVariantRequest_query(v_pars)):
+                if q := self.__create_geneVariantRequest_query(v_pars):
                     queries = [*queries, *q]
                     continue
             if "cytoBandRequest" in variant_request_type:
-                if (q := self.__create_cytoBandRequest_query(v_pars)):
+                if q := self.__create_cytoBandRequest_query(v_pars):
                     queries.append(q)
                     continue
             if "variantQueryDigestsRequest" in variant_request_type:
-                if (q := self.__create_variantQueryDigestsRequest_query(v_pars)):
+                if q := self.__create_variantQueryDigestsRequest_query(v_pars):
                     queries.append(q)
                     continue
             if "aminoacidChangeRequest" in variant_request_type:
-                if (q := self.aminoacidChangeRequest(v_pars)):
+                if q := self.__create_aminoacidChangeRequest_query(v_pars):
                     queries.append(q)
                     continue
             if "genomicAlleleShortFormRequest" in variant_request_type:
-                if (q := self.__create_genomicAlleleShortFormRequest_query(v_pars)):
+                if q := self.__create_genomicAlleleShortFormRequest_query(v_pars):
                     queries.append(q)
                     continue
             if "variantBracketRequest" in variant_request_type:
-                 if (q := self.__create_variantBracketRequest_query(v_pars)):
+                if q := self.__create_variantBracketRequest_query(v_pars):
                     queries.append(q)
                     continue
             if "variantRangeRequest" in variant_request_type:
-                 if (q := self.__create_variantRangeRequest_query(v_pars)):
+                if q := self.__create_variantRangeRequest_query(v_pars):
                     queries.append(q)
                     continue
             if "BV2alleleRequest" in variant_request_type:
-                if (q := self.__create_variantAlleleRequest_query(v_pars)):
+                if q := self.__create_variantAlleleRequest_query(v_pars):
                     queries.append(q)
                     continue
             if "variantTypeFilteredRequest" in variant_request_type:
-                if (q := self.__create_variantTypeRequest_query(v_pars)):
+                if q := self.__create_variantTypeRequest_query(v_pars):
                     queries.append(q)
                     continue
 
         # if len(queries) == 1:
         #     queries = queries[0]
 
-        prdbug(f'__loop_multivars queries: {queries}')
+        prdbug(f"__loop_multivars queries: {queries}")
 
         return queries
-
 
     ################################################################################
 
@@ -365,84 +353,85 @@ class ByconQuery():
               which is only removed after a successfull type match.
         """
 
-        prdbug(f"Checking variant request type for {v_pars.get("request_profile_id")}")
+        prdbug(f"Checking variant request type for {v_pars.get('request_profile_id')}")
 
         variant_request_type = None
 
         brts = self.request_profiles
         brts_k = brts.keys()
         # prdbug(f'...brts_k: {brts_k}')
-        
+
         # Already hard-coding some types here - if conditions are met only
         # the respective types will be evaluated since only this key is used
-        if "mate_name" in  v_pars:
-            brts_k = [ "variantFusionRequest" ]
+        if "mate_name" in v_pars:
+            brts_k = ["variantFusionRequest"]
         elif "start" in v_pars and "end" in v_pars:
             if len(v_pars.get("start", [])) == 1 and len(v_pars.get("end", [])) == 1:
-                brts_k = [ "variantRangeRequest" ]
-            elif len(v_pars[ "start" ]) == 2 and len(v_pars[ "end" ]) == 2:
-                brts_k = [ "variantBracketRequest" ]
+                brts_k = ["variantRangeRequest"]
+            elif len(v_pars["start"]) == 2 and len(v_pars["end"]) == 2:
+                brts_k = ["variantBracketRequest"]
         elif "aminoacid_change" in v_pars:
-            brts_k = [ "aminoacidChangeRequest" ]
+            brts_k = ["aminoacidChangeRequest"]
         elif "genomic_allele_short_form" in v_pars:
-            brts_k = [ "genomicAlleleShortFormRequest" ]
+            brts_k = ["genomicAlleleShortFormRequest"]
         elif "gene_id" in v_pars:
-            brts_k = [ "GeneIdRequest" ]
-        elif "cyto_bands" in  v_pars:
-            brts_k = [ "cytoBandRequest" ]
-        elif "variant_query_digests" in  v_pars:
-            brts_k = [ "variantQueryDigestsRequest" ]
+            brts_k = ["GeneIdRequest"]
+        elif "cyto_bands" in v_pars:
+            brts_k = ["cytoBandRequest"]
+        elif "variant_query_digests" in v_pars:
+            brts_k = ["variantQueryDigestsRequest"]
         elif "variant_type" in v_pars and len(self.filters) > 0:
-            brts_k = [ "variantTypeFilteredRequest" ]
-            
-        vrt_matches = [ ]
+            brts_k = ["variantTypeFilteredRequest"]
+
+        vrt_matches = []
         for vrt in brts_k:
             matched_par_no = 0
             needed_par_no = 0
             if "one_of" in brts[vrt]:
                 needed_par_no = 1
-                for one_of in brts[vrt][ "one_of" ]:
+                for one_of in brts[vrt]["one_of"]:
                     if one_of in v_pars:
                         matched_par_no = 1
                         continue
             if "all_of" in brts[vrt]:
-                needed_par_no += len( brts[vrt][ "all_of" ] )
-                for required in brts[vrt][ "all_of" ]:
+                needed_par_no += len(brts[vrt]["all_of"])
+                for required in brts[vrt]["all_of"]:
                     if required in v_pars:
                         matched_par_no += 1
             if matched_par_no >= needed_par_no:
-                vrt_matches.append( { "type": vrt, "par_no": matched_par_no } )
-            prdbug(f'...{vrt}: {matched_par_no} of {needed_par_no}')
+                vrt_matches.append({"type": vrt, "par_no": matched_par_no})
+            prdbug(f"...{vrt}: {matched_par_no} of {needed_par_no}")
 
         if len(vrt_matches) > 0:
-            vrt_matches = sorted(vrt_matches, key=lambda k: k['par_no'], reverse=True)
+            vrt_matches = sorted(vrt_matches, key=lambda k: k["par_no"], reverse=True)
             variant_request_type = vrt_matches[0]["type"]
 
-        prdbug(f'...variant_request_type: {variant_request_type}')
+        prdbug(f"...variant_request_type: {variant_request_type}")
         return variant_request_type
 
-
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __create_geneVariantRequest_query(self, v_pars):
         # query database for gene and use coordinates to create range query
         gene_id = v_pars.get("gene_id", [])
-        prdbug(f'...GeneIdRequest gene_id: {gene_id}')
+        prdbug(f"...GeneIdRequest gene_id: {gene_id}")
         queries = []
         for g in gene_id:
             # TODO: error report/warning
             if not (gene_data := GeneInfo().returnGene(g)):
                 continue
             gene = gene_data[0]
-            prdbug(f'...GeneIdRequest gene_data: {gene}')
+            prdbug(f"...GeneIdRequest gene_data: {gene}")
             # Since this is a pre-processor to the range request
-            v_pars.update({
-                "reference_name": f'refseq:{gene.get("accession_version", "___none___")}',
-                "start": [ gene.get("start", 0) ],
-                "end": [ gene.get("end", 1) ]
-            })
+            v_pars.update(
+                {
+                    "reference_name": f"refseq:{gene.get('accession_version', '___none___')}",
+                    "start": [gene.get("start", 0)],
+                    "end": [gene.get("end", 1)],
+                }
+            )
             q_t = self.__create_variantRangeRequest_query(v_pars)
-            prdbug(f'...GeneIdRequest query result: {q_t}')
+            prdbug(f"...GeneIdRequest query result: {q_t}")
             queries.append(q_t)
 
         if len(queries) < 1:
@@ -450,7 +439,7 @@ class ByconQuery():
 
         return queries
 
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __create_variantQueryDigestsRequest_query(self, v_pars):
         # query database for gene and use coordinates to create range query
@@ -461,17 +450,17 @@ class ByconQuery():
 
         vd_s = v_pars.get("variant_query_digests", "___none___")
         if not vqd_pat.match(vd_s):
-            prdbug(f'!!! no match {vd_s}')
+            prdbug(f"!!! no match {vd_s}")
             return False
         chro, start, end, change = vqd_pat.match(vd_s).group(1, 2, 3, 4)
-        v_pars.update( {
-            "reference_name": self.ChroNames.refseq(chro),
-            "start": list(map(int, re.split('-', start))) 
-        } )
+        v_pars.update(
+            {
+                "reference_name": self.ChroNames.refseq(chro),
+                "start": list(map(int, re.split("-", start))),
+            }
+        )
         if end:
-            v_pars.update( {
-                "end": list(map(int, re.split('-', end))) 
-            } )
+            v_pars.update({"end": list(map(int, re.split("-", end)))})
         else:
             v_pars.pop("end", None)
 
@@ -483,94 +472,98 @@ class ByconQuery():
         if change:
             if ">" in change:
                 ref, alt = change.split(">")
-                v_pars.update( {
-                    "reference_bases": ref,
-                    "alternate_bases": alt
-                } )
+                v_pars.update({"reference_bases": ref, "alternate_bases": alt})
                 self.variant_request_type = "BV2alleleRequest"
-                q_t = self.__create_variantAlleleRequest_query(v_pars)
-                return False
+                return self.__create_variantAlleleRequest_query(v_pars)
             else:
-                v_pars.update( {
-                    "variant_type": { "$in": VariantTypes().variantStateChildren(change) }
-                } )
+                v_pars.update(
+                    {
+                        "variant_type": {
+                            "$in": VariantTypes().variantStateChildren(change)
+                        }
+                    }
+                )
 
         if len(v_pars.get("start", [])) == 2:
             if len(v_pars.get("end", [])) == 2:
                 self.variant_request_type = "variantBracketRequest"
-                prdbug(f'...variantQueryDigestsRequest for variantBracketRequest: {v_pars}')
+                prdbug(
+                    f"...variantQueryDigestsRequest for variantBracketRequest: {v_pars}"
+                )
                 return self.__create_variantBracketRequest_query(v_pars)
-                prdbug(f'...variantQueryDigestsRequest -> variantBracketRequest: {q}')
         elif len(v_pars.get("start", [])) == 1:
             if len(v_pars.get("end", [])) == 1:
                 self.variant_request_type = "variantRangeRequest"
                 return self.__create_variantRangeRequest_query(v_pars)
         else:
-            prdbug(f'!!! variantQueryDigestsRequest: {v_pars}')
+            prdbug(f"!!! variantQueryDigestsRequest: {v_pars}")
             return False
         # TODO: Allele query...
 
-
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __create_cytoBandRequest_query(self, v_pars):
         # query database for cytoband(s) and use coordinates to create range query
         vp = v_pars
-        c_b_d = self.cytoband_definitions
 
         if not (cb_s := vp.get("cyto_bands")):
             return False
+
         CB = Cytobands()
         cbs, chro, start, end = CB.bands_from_cytostring(cb_s)
-        sequence_id = self.self.ChroNames.refseq(chro)
-        v_pars.update( {
-            "reference_name": sequence_id,
-            "start": [start],
-            "end": [end]
-        } )
+        sequence_id = self.ChroNames.refseq(chro)
+        v_pars.update({"reference_name": sequence_id, "start": [start], "end": [end]})
         self.variant_request_type = "variantRangeRequest"
-        q = self.__create_variantRangeRequest_query(v_pars)
-        return q
 
+        return self.__create_variantRangeRequest_query(v_pars)
 
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
-    def __create_aminoacidChangeRequest_query(self, v_pars):    
+    def __create_aminoacidChangeRequest_query(self, v_pars):
         vp = v_pars
-        if not "aminoacid_change" in vp:
+        if "aminoacid_change" not in vp:
             return
         v_p_defs = self.argument_definitions
-        v_q = { v_p_defs["aminoacid_change"]["db_key"]: vp.get("aminoacid_change", "___none___")}
+        v_q = {
+            v_p_defs["aminoacid_change"]["db_key"]: vp.get(
+                "aminoacid_change", "___none___"
+            )
+        }
 
         return v_q
 
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
-    def __create_genomicAlleleShortFormRequest_query(self, v_pars):    
+    def __create_genomicAlleleShortFormRequest_query(self, v_pars):
         vp = v_pars
-        if not "genomic_allele_short_form" in vp:
+        if "genomic_allele_short_form" not in vp:
             return
 
         v_p_defs = self.argument_definitions
-        v_q = { v_p_defs["genomic_allele_short_form"]["db_key"]: vp.get("genomic_allele_short_form", "___none___")}
+        v_q = {
+            v_p_defs["genomic_allele_short_form"]["db_key"]: vp.get(
+                "genomic_allele_short_form", "___none___"
+            )
+        }
 
         return v_q
 
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
-    def __create_variantTypeRequest_query(self, v_pars):    
+    def __create_variantTypeRequest_query(self, v_pars):
         v_p_defs = self.argument_definitions
         vp = v_pars
-        if not "variant_type" in vp:
+        if "variant_type" not in vp:
             return
-        v_q = self.__create_in_query_for_parameter("variant_type", v_p_defs["variant_type"]["db_key"], vp)
+        v_q = self.__create_in_query_for_parameter(
+            "variant_type", v_p_defs["variant_type"]["db_key"], vp
+        )
 
         return v_q
 
+    # --------------------------------------------------------------------------#
 
-    #--------------------------------------------------------------------------#
-
-    def __create_variantFusionRequest_query(self, v_pars):    
+    def __create_variantFusionRequest_query(self, v_pars):
         vp = v_pars
         v_p_defs = self.argument_definitions
 
@@ -583,76 +576,84 @@ class ByconQuery():
                         "adjoined_sequences.0.sequence_id": vp["reference_name"],
                         "$or": [
                             {
-                                "adjoined_sequences.0.start.0": { "$lt": vp["end"][-1] },
-                                "adjoined_sequences.0.start.1": { "$gte": vp["start"][0] }
+                                "adjoined_sequences.0.start.0": {"$lt": vp["end"][-1]},
+                                "adjoined_sequences.0.start.1": {
+                                    "$gte": vp["start"][0]
+                                },
                             },
                             {
-                                "adjoined_sequences.0.end.0": { "$lt": vp["end"][-1] },
-                                "adjoined_sequences.0.end.1": { "$gte": vp["start"][0] }
-                            }
-
-
-                        ]
+                                "adjoined_sequences.0.end.0": {"$lt": vp["end"][-1]},
+                                "adjoined_sequences.0.end.1": {"$gte": vp["start"][0]},
+                            },
+                        ],
                     },
                     {
                         "adjoined_sequences.1.sequence_id": vp["mate_name"],
                         "$or": [
                             {
-                                "adjoined_sequences.1.start.0": { "$lt": vp["mate_end"] },
-                                "adjoined_sequences.1.start.1": { "$gte": vp["mate_start"] }
+                                "adjoined_sequences.1.start.0": {"$lt": vp["mate_end"]},
+                                "adjoined_sequences.1.start.1": {
+                                    "$gte": vp["mate_start"]
+                                },
                             },
                             {
-                                "adjoined_sequences.1.end.0": { "$lt": vp["mate_end"] },
-                                "adjoined_sequences.1.end.1": { "$gte": vp["mate_start"] }
-                            }
-
-
-                        ]
-                    }
+                                "adjoined_sequences.1.end.0": {"$lt": vp["mate_end"]},
+                                "adjoined_sequences.1.end.1": {
+                                    "$gte": vp["mate_start"]
+                                },
+                            },
+                        ],
+                    },
                 ]
             }
         except Exception as e:
             prdbug(e)
 
-        if (l_q := self.__request_variant_size_limits(v_pars)):
+        if l_q := self.__request_variant_size_limits(v_pars):
             v_q.update(l_q)
 
         p_n = "variant_type"
         if p_n in vp:
-            v_q.update( self.__create_in_query_for_parameter(p_n, v_p_defs[p_n]["db_key"], vp) )
+            v_q.update(
+                self.__create_in_query_for_parameter(p_n, v_p_defs[p_n]["db_key"], vp)
+            )
 
         return v_q
 
+    # --------------------------------------------------------------------------#
 
-    #--------------------------------------------------------------------------#
-
-    def __create_variantRangeRequest_query(self, v_pars):    
+    def __create_variantRangeRequest_query(self, v_pars):
         vp = v_pars
         v_p_defs = self.argument_definitions
 
         v_q = {
-            v_p_defs["reference_name"]["db_key"]: vp.get("reference_name", "___none___"),
-            v_p_defs["start"]["db_key"]: { "$lt": int(vp[ "end" ][-1]) },
-            v_p_defs["end"]["db_key"]: { "$gt": int(vp[ "start" ][0]) }
+            v_p_defs["reference_name"]["db_key"]: vp.get(
+                "reference_name", "___none___"
+            ),
+            v_p_defs["start"]["db_key"]: {"$lt": int(vp["end"][-1])},
+            v_p_defs["end"]["db_key"]: {"$gt": int(vp["start"][0])},
         }
 
-        if (l_q := self.__request_variant_size_limits(v_pars)):
+        if l_q := self.__request_variant_size_limits(v_pars):
             v_q.update(l_q)
 
         p_n = "variant_type"
         if p_n in vp:
-            v_q.update( self.__create_in_query_for_parameter(p_n, v_p_defs[p_n]["db_key"], vp) )
+            v_q.update(
+                self.__create_in_query_for_parameter(p_n, v_p_defs[p_n]["db_key"], vp)
+            )
         if "alternate_bases" in vp:
             # the N wildcard stands for any length alt bases so can be ignored
-            if vp[ "alternate_bases" ] == "N":
-                 v_q.update( { v_p_defs["alternate_bases"]["db_key"]: {'$regex': "." } } )
+            if vp["alternate_bases"] == "N":
+                v_q.update({v_p_defs["alternate_bases"]["db_key"]: {"$regex": "."}})
             else:
-                v_q.update( { v_p_defs["alternate_bases"]["db_key"]: vp[ "alternate_bases" ] } )
+                v_q.update(
+                    {v_p_defs["alternate_bases"]["db_key"]: vp["alternate_bases"]}
+                )
 
         return v_q
 
-
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __request_variant_size_limits(self, v_pars):
         vp = v_pars
@@ -661,20 +662,18 @@ class ByconQuery():
         s_q = {l_k: {}}
 
         p_n = "variant_min_length"
-        if (minl := vp.get(p_n)):
-            { v_p_defs["variant_max_length"]["db_key"]: {}}
-            s_q[l_k].update( { "$gte" : minl } )
+        if minl := vp.get(p_n):
+            s_q[l_k].update({"$gte": minl})
         p_n = "variant_max_length"
-        if (maxl := vp.get(p_n)):
-            s_q[l_k].update( { "$lte" : maxl } )
+        if maxl := vp.get(p_n):
+            s_q[l_k].update({"$lte": maxl})
 
         if s_q[l_k].keys():
             return s_q
 
         return None
-        
-    #--------------------------------------------------------------------------#
 
+    # --------------------------------------------------------------------------#
 
     def __create_variantBracketRequest_query(self, v_pars):
         vp = v_pars
@@ -682,44 +681,48 @@ class ByconQuery():
 
         v_q = {
             v_p_defs["reference_name"]["db_key"]: vp["reference_name"],
-            v_p_defs["start"]["db_key"]: { "$gte": sorted(vp["start"])[0], "$lt": sorted(vp["start"])[-1] },
-            v_p_defs["end"]["db_key"]: { "$gte": sorted(vp["end"])[0], "$lt": sorted(vp["end"])[-1] },
+            v_p_defs["start"]["db_key"]: {
+                "$gte": sorted(vp["start"])[0],
+                "$lt": sorted(vp["start"])[-1],
+            },
+            v_p_defs["end"]["db_key"]: {
+                "$gte": sorted(vp["end"])[0],
+                "$lt": sorted(vp["end"])[-1],
+            },
         }
 
-        if (v_t := self.__create_in_query_for_parameter("variant_type", v_p_defs["variant_type"]["db_key"], vp)):
+        if v_t := self.__create_in_query_for_parameter(
+            "variant_type", v_p_defs["variant_type"]["db_key"], vp
+        ):
             v_q.update(v_t)
 
         return v_q
 
-
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __create_variantAlleleRequest_query(self, v_pars):
-        """
-     
-        """
+        """ """
         vp = v_pars
         v_p_defs = self.argument_definitions
         # TODO: Regexes for ref or alt with wildcard characters
         # TODO: figure out VCF vs. VRS normalization
         v_q = {
             v_p_defs["reference_name"]["db_key"]: vp["reference_name"],
-            v_p_defs["start"]["db_key"]: int(vp["start"][0])
+            v_p_defs["start"]["db_key"]: int(vp["start"][0]),
         }
-        for p in [ "reference_bases", "alternate_bases" ]:
+        for p in ["reference_bases", "alternate_bases"]:
             qv = vp.get(p)
             if not qv:
                 continue
-            if "N" in vp[ p ]:
+            if "N" in vp[p]:
                 qv = qv.replace("N", ".")
-                v_q.update( { v_p_defs[p]["db_key"]: { '$regex': qv } } )
+                v_q.update({v_p_defs[p]["db_key"]: {"$regex": qv}})
             else:
-                v_q.update( { v_p_defs[p]["db_key"]: qv } )
+                v_q.update({v_p_defs[p]["db_key"]: qv})
 
         return v_q
 
-
-    #--------------------------------------------------------------------------#
+    # --------------------------------------------------------------------------#
 
     def __create_in_query_for_parameter(self, par, qpar, q_pars):
 
@@ -729,12 +732,11 @@ class ByconQuery():
             q_pars[par][0]
         except IndexError:
             return {}
-     
-        if len(q_pars[ par ]) > 1:
+
+        if len(q_pars[par]) > 1:
             return {qpar: {"$in": q_pars[par]}}
 
         return {qpar: q_pars[par][0]}
-
 
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
@@ -746,13 +748,11 @@ class ByconQuery():
         if len(self.filters) < 1:
             return
 
-        m_h = BYC_DBS["mongodb_host"]
         m_d = self.ds_id
         if not (m_c := BYC_DBS.get("collections", {}).get("filteringTerm")):
             ByconError().addError("No filtering term collection defined!")
             return
         self.filter_collection = ByconMongo().openMongoColl(m_d, m_c)
-
         entity_filters_lists = self.__assemble_filter_lists()
 
         for f_entity, field_queries in entity_filters_lists.items():
@@ -766,21 +766,23 @@ class ByconQuery():
 
             self.__update_queries_for_entity(f_s_l, f_entity)
 
-
     # -------------------------------------------------------------------------#
 
     def __assemble_filter_lists(self):
         f_lists = {}
 
         for f in self.filters:
-
             f = self.__substitute_filter_id(f)
             f_val, f_neg = self.__get_filter_value_and_negation(f)
-            f_desc = f.get("includeDescendantTerms", BYC_PARS.get("include_descendant_terms"))
+            f_desc = f.get(
+                "includeDescendantTerms", BYC_PARS.get("include_descendant_terms")
+            )
             if (f_info := self.__filter_info_from_collationed_filter(f_val)) is False:
                 f_info = self.__filter_info_from_filter_definitions(f_val)
             if f_info is False:
-                BYC["WARNINGS"].append(f"No filter query could be created for value {f_val}!!!")
+                BYC["WARNINGS"].append(
+                    f"No filter query could be created for value {f_val}!!!"
+                )
                 continue
 
             if f_neg is True:
@@ -799,27 +801,30 @@ class ByconQuery():
             # TODO: The whole negation is a bit non-standard since the logic
             # of "excluded" versus "not found" is complex. To be revised...
             if "alphanumeric" in f_info.get("type", "ontology"):
-                prdbug(f'__query_from_filters ... alphanumeric: {f_info["id"]}')
-                if re.match(r'^(\w+):?([<>=]+?)?(\w[\w.]+?)$', f_info["id"]):
-                    f_class, comp, val = re.match(r'^(\w+):?([<>=]+?)?(\w[\w.]+?)$', f_info["id"]).group(1, 2, 3)
+                prdbug(f"__query_from_filters ... alphanumeric: {f_info['id']}")
+                if re.match(r"^(\w+):?([<>=]+?)?(\w[\w.]+?)$", f_info["id"]):
+                    f_class, comp, val = re.match(
+                        r"^(\w+):?([<>=]+?)?(\w[\w.]+?)$", f_info["id"]
+                    ).group(1, 2, 3)
                     if "iso8601duration" in f_info.get("format", "___none___"):
                         val = days_from_iso8601duration(val)
-                    f_lists[f_entity][f_field].append(self.__mongo_comparator_query(comp, val))
+                    f_lists[f_entity][f_field].append(
+                        self.__mongo_comparator_query(comp, val)
+                    )
                 else:
                     f_lists[f_entity][f_field].append(f_info["id"])
             elif f_desc is True:
                 if f_neg is True:
-                    f_lists[f_entity][f_field].append({'$nin': f_info["child_terms"]})
+                    f_lists[f_entity][f_field].append({"$nin": f_info["child_terms"]})
                 else:
-                    f_lists[f_entity][f_field].append({'$in': f_info["child_terms"]})
+                    f_lists[f_entity][f_field].append({"$in": f_info["child_terms"]})
             else:
                 if f_neg is True:
-                    f_lists[f_entity][f_field].append({'$nin': [f_info["id"]]})
+                    f_lists[f_entity][f_field].append({"$nin": [f_info["id"]]})
                 else:
                     f_lists[f_entity][f_field].append(f_info["id"])
 
         return f_lists
-
 
     # -------------------------------------------------------------------------#
 
@@ -827,23 +832,21 @@ class ByconQuery():
         f.update({"id": f.get("id", "___none___").replace("PMID:", "pubmed:")})
         return f
 
-
     # -------------------------------------------------------------------------#
 
     def __get_filter_value_and_negation(self, f):
         f_val = f.get("id")
         f_neg = f.get("excluded", False)
-        if re.compile(r'^!').match(f_val):
+        if re.compile(r"^!").match(f_val):
             f_neg = True
-            f_val = re.sub(r'^!', '', f_val)
-        f_val = re.sub(r'^!', '', f_val)
+            f_val = re.sub(r"^!", "", f_val)
+        f_val = re.sub(r"^!", "", f_val)
         return f_val, f_neg
-
 
     # -------------------------------------------------------------------------#
 
     def __filter_info_from_collationed_filter(self, f_val):
-        if (f_info := self.filter_collection.find_one(
+        if f_info := self.filter_collection.find_one(
             {"id": f_val},
             {
                 "_id": 0,
@@ -853,26 +856,25 @@ class ByconQuery():
                 "format": 1,
                 "db_key": 1,
                 "entity": 1,
-                "child_terms": 1
-            }
-        )):
+                "child_terms": 1,
+            },
+        ):
             return f_info
 
         return False
-
 
     # -------------------------------------------------------------------------#
 
     def __filter_info_from_filter_definitions(self, f_val):
         f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
 
-        prdbug(f'...__filter_info_from_filter_definitions: {f_val}')
+        prdbug(f"...__filter_info_from_filter_definitions: {f_val}")
 
         for f_d in f_d_s.values():
             if f_d.get("collationed", False) is True:
                 continue
             f_re = re.compile(f_d.get("pattern", "___none___"))
-            prdbug(f"pattern check: {f_d.get("pattern", "___none___")} <> {f_val}")
+            prdbug(f"pattern check: {f_d.get('pattern', '___none___')} <> {f_val}")
             if f_re.match(f_val):
                 f_info = {
                     "id": f_val,
@@ -881,12 +883,11 @@ class ByconQuery():
                     "db_key": f_d["db_key"],
                     "type": f_d.get("type", "ontology"),
                     "format": f_d.get("format", "___none___"),
-                    "child_terms": [f_val]
+                    "child_terms": [f_val],
                 }
                 return f_info
 
         return False
-
 
     # -------------------------------------------------------------------------#
 
@@ -895,7 +896,6 @@ class ByconQuery():
         if not geo_q:
             return
         self.__update_queries_for_entity([geo_q], entity)
-
 
     # -------------------------------------------------------------------------#
 
@@ -909,7 +909,6 @@ class ByconQuery():
         if not (accessid := BYC_PARS.get("accessid")):
             return
 
-        m_h = BYC_DBS["mongodb_host"]
         m_d = BYC_DBS["housekeeping_db"]
         m_c = BYC_DBS.get("collections", {}).get("handover")
 
@@ -918,21 +917,18 @@ class ByconQuery():
             return
 
         t_v = h_o["target_values"]
-        c_n = h_o["collection"]
         t_e = h_o["entity_id"]
-        t_c = h_o["target_count"]
 
         t_v = ByconH().paginated_list(t_v, self.skip, self.limit)
         if len(t_v) < 1:
             return
-        h_o_q = [{"id": {'$in': t_v}}]
+        h_o_q = [{"id": {"$in": t_v}}]
         self.__update_queries_for_entity(h_o_q, t_e)
-
 
     # -------------------------------------------------------------------------#
 
     def __update_queries_for_entity(self, query, entity):
-        # TODO: This is now for using generally query lists and aggregate 
+        # TODO: This is now for using generally query lists and aggregate
         # by multiple queries & intersection of matched ids during execution
         e = entity
         if not (c := BYC_DBS.get("collections", {}).get(e)):
@@ -942,24 +938,17 @@ class ByconQuery():
         if type(query) is not list:
             query = [query]
         if e not in q_e:
-            q_e.update({e:{"query": query, "collection": c}})
+            q_e.update({e: {"query": query, "collection": c}})
         else:
             q_e[e]["query"] = [*q_e[e]["query"], *query]
 
         self.queries.update({"entities": q_e})
 
-
     # -------------------------------------------------------------------------#
 
     def __mongo_comparator_query(self, comparator, value):
-        mongo_comps = {
-            ">": '$gt',
-            ">=": '$gte',
-            "<": '$lt',
-            "<=": '$lte',
-            "=": '$eq'
-        }
-        c = mongo_comps.get(comparator, '$eq')
+        mongo_comps = {">": "$gt", ">=": "$gte", "<": "$lt", "<=": "$lte", "=": "$eq"}
+        c = mongo_comps.get(comparator, "$eq")
         return {c: value}
 
 
@@ -967,21 +956,21 @@ class ByconQuery():
 ################################################################################
 ################################################################################
 
-class GeoQuery():
+
+class GeoQuery:
     """
     This class is used to generate a query for the geolocation data.
     It is an extension of the standard BeaconQuery process.
     """
 
     def __init__(self, geo_root="geo_location"):
-        self.argument_definitions = BYC.get("argument_definitions", {}).get("parameters", {})
-        
+        self.argument_definitions = BYC.get("argument_definitions", {}).get(
+            "parameters", {}
+        )
+
         # this is a remnant of geo objects in different nestings...
         self.geo_root = geo_root
-        self.geo_dot_keys = {
-            "properties": "properties",
-            "geometry": "geometry"
-        }
+        self.geo_dot_keys = {"properties": "properties", "geometry": "geometry"}
         if len(self.geo_root) > 0:
             for k, v in self.geo_dot_keys.items():
                 self.geo_dot_keys[k] = ".".join([self.geo_root, v])
@@ -993,19 +982,15 @@ class GeoQuery():
             "iso3166alpha3": None,
             "geo_latitude": None,
             "geo_longitude": None,
-            "geo_distance": None
+            "geo_distance": None,
         }
 
         self.__get_geo_pars()
 
-        self.query = {
-            "expand": True,
-            "geo_query": {}
-        }
+        self.query = {"expand": True, "geo_query": {}}
 
         self.__geo_city_query()
         self.__geo_geo_longlat_query()
-
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -1014,12 +999,10 @@ class GeoQuery():
     def get_geoquery(self):
         return self.query.get("geo_query", {})
 
-
     # -------------------------------------------------------------------------#
 
     def get_geopars(self):
         return self.geo_pars
-
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
@@ -1042,9 +1025,7 @@ class GeoQuery():
             if not self.geo_pars.get(g_k):
                 self.geo_pars.pop(g_k, None)
 
-        prdbug(f'...__get_geo_pars: {self.geo_pars}')
-
-
+        prdbug(f"...__get_geo_pars: {self.geo_pars}")
 
     # -------------------------------------------------------------------------#
 
@@ -1056,26 +1037,26 @@ class GeoQuery():
             if not self.geo_pars.get(g_k):
                 return
 
-        geoq_l = [ {
-            self.geo_dot_keys["geometry"]: {
-                '$near': {
-                    '$geometry':{
-                        'type': 'Point',
-                        'coordinates': [
-                            self.geo_pars.get("geo_longitude"),
-                            self.geo_pars.get("geo_latitude")
-                        ]
-                    },
-                    '$maxDistance': self.geo_pars.get("geo_distance")
+        geoq_l = [
+            {
+                self.geo_dot_keys["geometry"]: {
+                    "$near": {
+                        "$geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                self.geo_pars.get("geo_longitude"),
+                                self.geo_pars.get("geo_latitude"),
+                            ],
+                        },
+                        "$maxDistance": self.geo_pars.get("geo_distance"),
+                    }
                 }
             }
-        } ]
+        ]
 
-        self.query.update({
-            "geo_query": mongo_and_or_query_from_list(geoq_l),
-            "expand": False
-        })
-
+        self.query.update(
+            {"geo_query": mongo_and_or_query_from_list(geoq_l), "expand": False}
+        )
 
     # -------------------------------------------------------------------------#
 
@@ -1086,7 +1067,11 @@ class GeoQuery():
             return
 
         geoq_l = [
-            {f'{self.geo_dot_keys["properties"]}.city': re.compile(r'^' + str(city_v), re.IGNORECASE)}
+            {
+                f"{self.geo_dot_keys['properties']}.city": re.compile(
+                    r"^" + str(city_v), re.IGNORECASE
+                )
+            }
         ]
 
         for g_k in ["country", "iso3166alpha3", "iso3166alpha2"]:
@@ -1094,18 +1079,22 @@ class GeoQuery():
                 continue
 
             geoq_l.append(
-                {f'{self.geo_dot_keys["properties"]}.{g_k}': re.compile(r'^' + str(g_v) + r'$', re.IGNORECASE)}
+                {
+                    f"{self.geo_dot_keys['properties']}.{g_k}": re.compile(
+                        r"^" + str(g_v) + r"$", re.IGNORECASE
+                    )
+                }
             )
 
-        self.query.update({
-            "geo_query": mongo_and_or_query_from_list(geoq_l),
-            "expand": False
-        })
+        self.query.update(
+            {"geo_query": mongo_and_or_query_from_list(geoq_l), "expand": False}
+        )
 
 
 ################################################################################
 ################################################################################
 ################################################################################
+
 
 class CollationQuery:
     def __init__(self):
@@ -1120,8 +1109,7 @@ class CollationQuery:
         self.__coll_query()
 
         if self.query is False:
-            self.query = {"id":"___undefined___"}
-
+            self.query = {"id": "___undefined___"}
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -1129,7 +1117,6 @@ class CollationQuery:
 
     def getQuery(self):
         return self.query
-
 
     # -------------------------------------------------------------------------#
     # ---------------------------- private ------------------------------------#
@@ -1145,11 +1132,10 @@ class CollationQuery:
         if len(self.collation_types) > 0:
             if "all" in self.collation_types[0]:
                 self.collation_types = []
-            q_list.append({"collation_type": {"$in": self.collation_types }})
+            q_list.append({"collation_type": {"$in": self.collation_types}})
         if len(q_list) < 1:
             return
         self.query = mongo_and_or_query_from_list(q_list)
-
 
     # -------------------------------------------------------------------------#
 
@@ -1161,7 +1147,11 @@ class CollationQuery:
             self.query = {"_id": "___undefined___"}
             return
         try:
-            rs = list(mongo_client[self.dataset_id]["collations"].aggregate([{"$sample": {"size": self.test_mode_count}}]))
+            rs = list(
+                mongo_client[self.dataset_id]["collations"].aggregate(
+                    [{"$sample": {"size": self.test_mode_count}}]
+                )
+            )
             ids = list(s["id"] for s in rs)
             self.query = {"id": {"$in": ids}}
         except Exception as e:
@@ -1174,6 +1164,7 @@ class CollationQuery:
 ################################################################################
 ################################################################################
 
+
 def mongo_and_or_query_from_list(query, logic="AND"):
     if type(query) != list:
         return query
@@ -1185,4 +1176,3 @@ def mongo_and_or_query_from_list(query, logic="AND"):
         return {"$and": query}
     else:
         return {}
-
