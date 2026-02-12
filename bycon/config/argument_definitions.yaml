@@ -751,6 +751,16 @@ $defs:
       - --chroBases
     description: only for the cytoband converter ... e.g. 8:0-120000000
 
+  # add predefined gene list for genome_binning
+  gene_interval_tsv:
+    type: string
+    pattern: '^[\w\/\.\-]+$'
+    default: "cancer_gene_list.tsv"
+    cmdFlags:
+      - --geneIntervalTsv 
+    description: >-
+      path to a TSV file containing gene intervals. The file should at least contains: gene_id, gene_symbol, chrom, start, end.
+
   ################################################################################
   # geographic ...
   ################################################################################
