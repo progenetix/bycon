@@ -47,24 +47,26 @@ class ByconQuery:
             self.ds_id = BYC["BYC_DATASET_IDS"][0]
         else:
             self.ds_id = dataset_id
+
         self.argument_definitions = BYC.get("argument_definitions", {}).get("$defs", {})
         self.cytoband_definitions = BYC.get("cytobands", [])
         self.ChroNames = ChroNames()
 
-        self.requested_entity = BYC.get("request_entity_id", False)
-        self.response_entity = BYC.get("response_entity", {})
+        self.requested_entity   = BYC.get("request_entity_id", False)
+        self.response_entity    = BYC.get("response_entity", {})
         self.response_entity_id = BYC.get("response_entity_id", "")
 
         # TODO: call the variant type definition from inside this class since
         # e.g. multivars ... need this for each instance
-        self.variant_request_type = None
-        self.variant_par_names = []
-        self.request_profiles = BYC.get("request_profiles", {}).get("$defs", {})
-        self.variant_type_definitions = BYC.get("variant_type_definitions", {})
+        self.variant_request_type       = None
+        self.variant_par_names          = []
+        self.request_profiles           = BYC.get("request_profiles", {}).get("$defs", {})
+        self.variant_type_definitions   = BYC.get("variant_type_definitions", {})
 
-        self.limit      = BYC_PARS.get("limit")
-        self.skip       = BYC_PARS.get("skip")
-        self.filters    = ByconFilters().get_filters()
+        self.limit              = BYC_PARS.get("limit")
+        self.skip               = BYC_PARS.get("skip")
+        self.test_mode_count    = BYC_PARS.get("test_mode_count", 5)
+        self.filters            = ByconFilters().get_filters()
 
         self.queries    = {"expand": True, "entities": {}}
 
@@ -149,18 +151,15 @@ class ByconQuery:
         if self.queries.get("expand") is False:
             return
 
-        ret_no = BYC_PARS.get("test_mode_count", 5)
         e = self.response_entity_id
-        if not (c := BYC_DBS.get("collections", {}).get(e)):
+        if (c := BYC_DBS.get("collections", {}).get(e, "___none___")) not in ByconMongo().collectionList(self.ds_id):
             return
 
-        if c not in ByconMongo().collectionList(self.ds_id):
-            # TODO: warning?
-            return
-
-        data_coll = ByconMongo().openMongoColl(self.ds_id, c)
-        rs = list(data_coll.aggregate([{"$sample": {"size": ret_no}}]))
-
+        pipeline = [
+            {"$sample": {"size": self.test_mode_count}},
+            {"$project": {"_id": 0, "id": 1}}
+        ]
+        rs = ByconMongo().resultListFromPipeline(self.ds_id, c, pipeline)
         q = [{"id": {"$in": list(s.get("id", "___none___") for s in rs)}}]
         prdbug(f"... test mode query: {q}")
 
@@ -1147,17 +1146,17 @@ class CollationQuery:
             self.query = {"_id": "___undefined___"}
             return
         try:
-            rs = list(
-                mongo_client[self.dataset_id]["collations"].aggregate(
-                    [{"$sample": {"size": self.test_mode_count}}]
-                )
-            )
+            pipeline = [
+                {"$sample": {"size": self.test_mode_count}},
+                {"$project": {"_id": 0, "id": 1}}
+            ]
+            rs = ByconMongo().resultListFromPipeline(self.dataset_id, "collations", pipeline)
+            prdbug(f"...__coll_test_mode_query result\n\n{rs}")
             ids = list(s["id"] for s in rs)
             self.query = {"id": {"$in": ids}}
         except Exception as e:
             ByconError().addError(e)
             self.query = {"_id": "___undefined___"}
-        mongo_client.close()
 
 
 ################################################################################
@@ -1166,7 +1165,7 @@ class CollationQuery:
 
 
 def mongo_and_or_query_from_list(query, logic="AND"):
-    if type(query) != list:
+    if type(query) is not list:
         return query
     if len(query) == 1:
         return query[0]

@@ -642,7 +642,7 @@ class ByconFilteringTerms:
         if "collation_type" not in fields:
             fields.update({"collation_type": 1})
 
-        f_s = ByconMongo().resultList(
+        f_s = ByconMongo().resultListFromQuery(
             self.ds_id, self.data_collection, self.filtering_terms_query, fields
         )
         t_f_t_s = []

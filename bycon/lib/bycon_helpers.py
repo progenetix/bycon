@@ -67,10 +67,19 @@ class ByconMongo:
 
     #--------------------------------------------------------------------------#
 
-    def resultList(self, db_name, coll_name, query, fields={}):
+    def resultListFromQuery(self, db_name, coll_name, query, fields={}):
         results = []
         if (coll := self.openMongoColl(db_name, coll_name)) is not False:
             results = list(coll.find(query, fields))
+        return results
+
+
+    #--------------------------------------------------------------------------#
+
+    def resultListFromPipeline(self, db_name, coll_name, pipeline=[]):
+        results = []
+        if (coll := self.openMongoColl(db_name, coll_name)) is not False:
+            results = list(coll.aggregate(pipeline))
         return results
 
 

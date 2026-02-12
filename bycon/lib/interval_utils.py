@@ -7,7 +7,6 @@ from os import pardir, path
 
 from bycon_helpers import prdbug
 from config import BYC, BYC_DBS, BYC_PARS, HTTP_HOST
-from genome_utils import Cytobands
 from pymongo import MongoClient
 from genome_utils import Cytobands, GeneIntervals
 from bycon_helpers import prdbug
