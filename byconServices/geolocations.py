@@ -24,7 +24,7 @@ def geolocations():
         if not query:
             ByconError().addError("No query generated - missing or malformed parameters")
         else:
-            results = mongo_result_list(m_d, m_c, query, { '_id': False } )
+            results = ByconMongo().resultList(m_d, m_c, query, { '_id': False } )
 
     BeaconErrorResponse().respond_if_errors()
 
@@ -47,7 +47,7 @@ def geolocations():
             })
             prdbug(results)
             query = GeoQuery().get_geoquery()
-            results = mongo_result_list(m_d, m_c, query, { '_id': False } )
+            results = ByconMongo().resultList(m_d, m_c, query, { '_id': False } )
 
     BeaconErrorResponse().respond_if_errors()
 

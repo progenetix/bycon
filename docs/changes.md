@@ -6,6 +6,16 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2026-02-06 (v2.7.4)
+
+* rewrote the aggregation part to now only have single concepts in `aggregation_terms`
+  and create the one or more dimensional aggregations then bnased on calling their
+  id values as single or combined `aggregators` parameters
+    - `&aggregators=sampleAge::sampleSex,followupTime` for 2D and 1D, using a `::`
+      split parameter for list of >1D id values
+    - similar in POST `{"aggregators": [[{"id":"sampleAge"}, {"id": "sampleSex"}], [{"id":"followupTime"}]}`
+* removed `summaries_definitions.yaml`
+
 ### 2026-01-29 (v2.7.3 "Stephen Fry")
 
 * removed array storage paths from config (not used anymore/ can be defined in custom

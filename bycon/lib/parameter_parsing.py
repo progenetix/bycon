@@ -223,7 +223,7 @@ class ByconParameters:
             # parameters are defined in snake_case
             p_d = humps.decamelize(p)
 
-            if p == "filters":
+            if p in ["filters", "aggregators"]:
                 self.byc_pars.update({p: v})
                 continue
 

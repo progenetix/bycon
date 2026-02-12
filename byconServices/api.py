@@ -16,8 +16,7 @@ from bycon import (
     load_yaml_empty_fallback,
     prdbug,
     prjsonhead,
-    prjsontrue,
-    select_this_server
+    prjsontrue
 )
 
 services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )
@@ -62,7 +61,7 @@ class ByconOpenAPI:
         self.argument_definitions = BYC.get("argument_definitions", {}).get("$defs", {})
         self.argument_examples = BYC.get("argument_definitions", {}).get("examples", {})
         self.mode = BYC_PARS.get("mode", "__none__")
-        self.this_server = select_this_server()
+        self.this_server = BEACON_ROOT
 
         self.beacon_eps = ["info", "dataset", "cohort", "genomicVariant", "analysis", "biosample", "individual", "filteringTerm"]
         self.service_eps = ["collation", "intervalFrequencies", "geolocation", "publication"]

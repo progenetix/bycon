@@ -32,12 +32,12 @@ or the intersection of two properties (2-dimensional aggregations, "2D").
     change along with the schema proposal).
 
     * [`/aggregation_terms/` endpoint response](https://staging.progenetix.org/beacon/aggregation_terms/)
-    * [Example aggregation response for TCGA cancer samples](https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers&aggregators=ageAtDiagnosisBySex)
+    * [Example aggregation response for TCGA cancer samples](https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers&aggregators=sampleAge::sampleSex)
         - This is a `resultSets` response for the `/biosamples/` endpoint with
-          `requestedGranularity=aggregated` and using the `ageAtDiagnosisBySex`
-          aggregation term known from the `/aggregation_terms/` call above
+          `requestedGranularity=aggregated` and using the `sampleAge::sampleSex`
+          aggregation term concatenation of id values from the `/aggregation_terms/` call above
         - the summaries are reported in `resultSets.n.resultsAggregation`
-    * Age/sex distribution for brain cancer samples shown in a [dashboard](https://staging.progenetix.org/queryResultsDashboard/?filters=NCIT:C3268&aggregators=ageAtDiagnosisBySex)
+    * Age/sex distribution for brain cancer samples shown in a [dashboard](https://staging.progenetix.org/queryResultsDashboard/?filters=NCIT:C3268&aggregators=sampleAge::sampleSex)
     * [Content dashboard for the Progenetix data](https://staging.progenetix.org/dataDashboard/)
         - This is purely a showcase for 1 and 2 dimensional representations w/o
           any refinements. However, based on the JavaScript version of [plotly](https://plotly.com/)
@@ -63,15 +63,15 @@ to `aggregated`. Example:
 
 * samples in Progenetix
     - <https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&datasetIds=progenetix&filters=pgx:cohort-TCGAcancers>
-    - <https://staging.progenetix.org/beacon/biosamples?requestedGranularity=aggregated&datasetIds=progenetix&aggregators=ageAtDiagnosisBySex&filters=NCIT:C3268>
+    - <https://staging.progenetix.org/beacon/biosamples?requestedGranularity=aggregated&datasetIds=progenetix&aggregators=sampleAge::sampleSex&filters=NCIT:C3268>
     
 The aggregation types to be returned can be specified by using the additional
 request `aggregators` parameter as well as optional parameters for binning or
 term selection (==TBD==). Example:
 
 * Age groups labeled by sex for TCGA cancer individuals in Progenetix
-    - <https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers&aggregators=ageAtDiagnosisBySex>
-    - age/sex distribution for brain cancer samples shown in a plot <https://staging.progenetix.org/queryResultsDashboard/?datasetIds=progenetix&filters=NCIT:C3268&aggregators=ageAtDiagnosisBySex>
+    - <https://staging.progenetix.org/beacon/biosamples/?requestedGranularity=aggregated&filters=pgx:cohort-TCGAcancers&aggregators=sampleAge::sampleSex>
+    - age/sex distribution for brain cancer samples shown in a plot <https://staging.progenetix.org/queryResultsDashboard/?datasetIds=progenetix&filters=NCIT:C3268&aggregators=sampleAge::sampleSex>
     
 
 ## Components
@@ -82,8 +82,10 @@ Empowering aggregation responses or summary data relies on several components:
 * data aggregation pipelines
 * an informational response for about supported summaries (similar to the `/filtering_terms/` endpoint)
 * request parameters for selecting summary types
-    - `aggregationTermIds`, also suitable for `GET` requests
-    - `aggregators` for `POST`ed aggregation schemas
+    - `aggregators`, also suitable for `GET` requests
+        * by custom, multiple id values for e.g. 2D counts are concatenated by `::`
+            - `sampleAge::sampleSex`
+    - `aggregators` objects (with at least `id` values) for `POST`ed aggregation schemas
     - additional reuest parameters for modifying responses (e.g. limits, binning...)
 * the response format for the summaries
 * the front end logic - which is not part of this itself but serves for understanding
@@ -132,7 +134,7 @@ Each `concept` involved in an aggregation should be defined with:
       instead of the logical concept (`individual.diseases.diseaseCode`). This might
       be changed if necessary.
 * optional modifiers:
-    - `termIds` for specifying terms to be included in the aggregation
+    - `terms` for specifying terms to be included in the aggregation
     - `splits` for specifying how to split the values (e.g. binning for
       numeric or pseudo-numeric values such as ISO8601 durations for ages)
         * at this time `splits` seem as the best way to specify binning, but this might
@@ -175,7 +177,7 @@ concepts:
       - P120Y
 ```
 
-#### Single property aggregation with `termIds`
+#### Single property aggregation with `terms`
 
 ```
 id: selectedCarinomaDiagnoses
@@ -185,7 +187,7 @@ description: >-
 scope: biosample
 concepts:
   - property: biosample.histological_diagnosis.id
-    termIds:
+    terms:
       - NCIT:C9384 # Kidney Carcinoma
       - NCIT:C3513 # Esophageal Carcinoma
       - NCIT:C35850 # Head and Neck Carcinoma

@@ -1,7 +1,7 @@
-from pymongo import MongoClient
+import re
 
-from config import *
-from bycon_helpers import *
+from config import BYC, BYC_DBS, BYC_PARS
+from bycon_helpers import ByconMongo, days_from_iso8601duration, prdbug
 
 ################################################################################
 ################################################################################
@@ -10,44 +10,55 @@ from bycon_helpers import *
 class ByconSummaries:
     def __init__(self, ds_id=None):
         self.dataset_id = ds_id
-        a_d_s = BYC.get("summaries_definitions", {}).get("$defs", {}).values()
+        self.summaries = []
+
+        a_d_s = BYC.get("aggregation_terms", {}).get("defaults", [])
         a_c_s = BYC.get("aggregation_terms", {}).get("$defs", {})
+        a_t_s = BYC_PARS.get("aggregators", [])
 
         # construct the aggregations from concepts and combinations
         # this might be transitional, e.g. when BYC_PARS["aggregators"]
         # is replaced (`aggregationConceptIds` arrays or such)
-        for agg_d in a_d_s:
-            concepts = []
-            labels   = []
-            c_id_s = agg_d.get("conceptIds", [])
-            for c_id in c_id_s:
-                if (c := a_c_s.get(c_id)):
-                    concepts.append(c)
-                    if (l := c.get("label")):
-                        labels.append(l)
-            if len(c_id_s) == len(concepts):
-                agg_d.update({
-                    "concepts": concepts,
-                    "label": " by ".join(labels)
-                })
-            else:
-                prdbug(f"ByconSummaries - {agg_d.get("id")} doesn't match all concepts")
+        if len(a_t_s) < 1:
+            a_t_s = a_d_s
 
-        self.summaries = []
-        # ordered selection of aggregation concepts
-        if len(a_t_s := BYC_PARS.get("aggregators", [])) > 0:
-            for a_d_k in a_t_s:
-                for a_d in a_d_s:
-                    if a_d.get("id") in a_t_s:
-                        self.summaries.append(a_d)
-                        continue
-        else:
-            self.summaries = list(a_d_s)
+        # WiP: construct terms from aggregators
+        if len(a_t_s) > 0:
+            for a in a_t_s:
+                t_a = []
+                if not isinstance(a, list):
+                    for a_id in re.split("::", a):
+                        t_a.append(a_id)
+                else:
+                    for a_o in a:
+                        if (a_id := a_o.get("id")):
+                            t_a.append(a_id)
+
+                if len(t_a) < 1:
+                    continue
+                concepts    = []
+                labels      = []
+                ids         = []
+                for a_id in t_a:
+                    if (c := a_c_s.get(a_id)):
+                        concepts.append(c)
+                        ids.append(a_id)
+                        if (lab := c.get("label")):
+                            labels.append(lab)
+
+                if len(concepts) == len(t_a):
+                    self.summaries.append(
+                        {
+                            "id": "::".join(ids),
+                            "concepts": concepts,
+                            "label": " by ".join(labels),
+                            "scope": concepts[0].get("scope", "biosample")
+                        }
+                    )
 
         self.dataset_summaries  = [] 
-        self.mongo_client       = MongoClient(host=BYC_DBS["mongodb_host"])
-        self.data_client        = self.mongo_client[ds_id]
-        self.term_coll          = self.data_client["collations"]
+        self.data_client        = ByconMongo().openMongoDatabase(ds_id)
+        self.term_coll          = ByconMongo().openMongoColl(ds_id, "collations")
 
 
     # -------------------------------------------------------------------------#
@@ -100,7 +111,7 @@ class ByconSummaries:
         scope = a_v.get("scope", "biosample")
         coll = BYC_DBS.get("collections", {}).get(scope, "___none___")
         # TODO: Fallback query for 0 results?
-        if not (coll_k := f"{coll}.id") in self.dataset_result.keys():
+        if (coll_k := f"{coll}.id") not in self.dataset_result.keys():
             return
         res = self.dataset_result.get(coll_k, {})
         q_v_s = res.get("target_values", [])
@@ -116,7 +127,7 @@ class ByconSummaries:
         # for i_a, a_v in enumerate(self.dataset_summaries):
         #     for i_c, c_v in enumerate(a_v.get("concepts", [])):
         #         c_v.pop("splits", None)
-        #         c_v.pop("termIds", None)
+        #         c_v.pop("terms", None)
 
 
     # -------------------------------------------------------------------------#
@@ -151,8 +162,10 @@ class ByconSummaries:
             }
         )
         # sorting either on logical order () detection order
+        prdbug(f"... concept {concepts[0].get("id")} sorted?: {concepts[0].get("sorted")}")
         if concepts[0].get("sorted") is True:
             agg_p.append({ "$sort": { "_id.order": 1 } })
+            a_v.update({"sorted": True})
         else:
             agg_p.append({ "$sort": { "count": -1 } })
 
@@ -244,21 +257,22 @@ class ByconSummaries:
         ```
         """
 
-        if len(terms := concept.get("termIds", [])) < 1:
+        if len(terms := concept.get("terms", [])) < 1:
             return False
 
         scope, concept_id = concept.get("property", "___none___.___none___").split('.', 1)
 
         branches = []
-        for d_i, i_k in enumerate(terms):
-            if not (coll := self.term_coll.find_one( {"id": i_k})):
+        for d_i, t in enumerate(terms):
+            t_id    = t.get("id", "___none___") 
+            t_label = t.get("label", t_id) 
+            if not (coll := self.term_coll.find_one( {"id": t_id} )):
                 continue
-            label = coll.get("label", i_k)
             if len(child_terms := coll.get("child_terms", [])) < 1:
                 continue
             branches.append({
                 "case": { "$in": [ f'${concept_id}', child_terms ] },
-                "then": { "id": i_k, "label": label, "order": d_i }
+                "then": { "id": t_id, "label": t_label, "order": d_i }
             })
 
         # fallback dummy branch - at least one is needed or error
@@ -310,28 +324,33 @@ class ByconSummaries:
 
         scope, concept_id = concept.get("property", "___none___.___none___").split('.', 1)
 
-        f = concept.get('format', "")
+        split_labs  = list(x.get("label", x.get("value", "undefined")) for x in splits)
+        split_vals  = list(x.get("value", "undefined") for x in splits)
+        split_ids   = split_vals
 
-        split_labs = splits
-        split_vals = splits
-        branches = []
+        branches    = []
 
-        if "iso8601duration" in f:
-            concept_id = f"{concept_id}_days"
-            split_labs = ["unknown"]
-            split_vals = [0]
-            pre = "P0D"
-            for l in splits:
+        if "iso8601duration" in str(concept.get('format', "")):
+            pre         = "undefined"
+            concept_id  = f"{concept_id}_days"
+            split_vals  = [0]
+            split_l     = [pre]
+            split_ids   = [pre]
+            for i, l in enumerate(splits):
+                l = l.get("value")
                 if re.match(r"^P\d", str(l)):
                     if int(d := days_from_iso8601duration(l)) > 0:
-                        split_labs.append(f"[{pre}, {l})")
+                        # split_l.append(f"[{pre}, {l})")
+                        split_l.append(split_labs[i])
                         split_vals.append(d)
+                        split_ids.append(f"<{re.sub("P", "", l).lower()}")
                     pre = l
+            split_labs = split_l
 
         for d_i, d_l in enumerate(split_labs):
             branches.append({
                 "case": { "$lt": [ f'${concept_id}', split_vals[d_i] ] },
-                "then": {"id": d_l, "label": d_l, "order": d_i}
+                "then": {"id": split_ids[d_i], "label": d_l, "order": d_i}
             })
 
         _id = {

@@ -14,11 +14,11 @@ from bycon import (
     ByconVariant,
     BYC_DBS,
     HTTP_HOST,
+    BEACON_ROOT,
     GenomeBins,
     get_nested_value,
     prdbug,
-    RefactoredValues,
-    select_this_server
+    RefactoredValues
 )
 
 services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
@@ -254,7 +254,7 @@ class PGXbed:
         self.ucsc_link = f'http://www.genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg38'
         self.tmp_path = path.join(*BYC["env_paths"]["server_tmp_dir_loc"])
         web_root = BYC["env_paths"].get("server_tmp_dir_web", "/tmp")
-        self.bed_url = f'{select_this_server()}{web_root}'
+        self.bed_url = f'{BEACON_ROOT}{web_root}'
         self.var_cols = ByconPlotPars().plotVariantColors()
         self.var_count = len(self.flattened_data)
         self.starts_ends = []

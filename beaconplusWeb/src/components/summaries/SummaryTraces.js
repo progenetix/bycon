@@ -5,6 +5,9 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
     // TODO: The handling of "other" is currently done downstream but it would be
     // simpler to have a rewrite of the 2D distributions after collating everything
     // above the cut-off - rewriting the first propertyValue to other...
+    // TODO: The `sorted` flag is only evaluated for the aggregation at root level
+    // but should be done per concept (the root level is copied in on the server
+    // based on the first dimension's value...)
     let presorted       = summary["sorted"] ? true : false
     let distribution    = summary["distribution"]
     let dimension       = summary["concepts"] ? summary["concepts"].length : 1
