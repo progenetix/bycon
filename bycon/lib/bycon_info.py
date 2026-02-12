@@ -1,9 +1,10 @@
 from isodate import date_isoformat
+from datetime import datetime
 from pymongo import MongoClient
 from progress.bar import Bar
 
-from bycon_helpers import *
-from config import *
+from bycon_helpers import prjsonnice
+from config import BYC, BYC_DBS
 from parameter_parsing import ByconDatasets
 
 class ByconInfo():
