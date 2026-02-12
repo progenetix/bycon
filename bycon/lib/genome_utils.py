@@ -598,6 +598,12 @@ class GeneInfo:
     # -------------------------------------------------------------------------#
 
     def __gene_id_data(self, gene_id, single=True):
+        mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
+        db_names = list(mongo_client.list_database_names())
+        if BYC_DBS["services_db"] not in db_names:
+            BYC["ERRORS"].append(f"services db `{BYC_DBS['services_db']}` does not exist")
+            return
+
         q_f_s = ["symbol", "ensembl_gene_ids", "synonyms"]
         terminator = ""
         if single is True:
@@ -616,5 +622,46 @@ class GeneInfo:
             gene_list = list(self.genes_coll.find(query, { '_id': False } ))
             if len(gene_list) > 0:
                 self.gene_data = list(self.genes_coll.find(query, { '_id': False } ))
+
+################################################################################
+################################################################################
+################################################################################
+class GeneIntervals:
+    def __init__(self, tsv_path=None):
+        if tsv_path is None:
+            tsv_path = BYC_PARS.get("gene_interval_tsv", "")
+        if not tsv_path:
+            raise ValueError("No TSV path provided for gene intervals (gene_interval_tsc is empty).")
+        if not path.isabs(tsv_path):
+            genome_rsrc_path = ChroNames().genomePath()
+            tsv_path = path.join(genome_rsrc_path, tsv_path)
+
+        self.tsv_path = path.normpath(tsv_path)
+        self.genes = self.__load_genes()
+    
+    def __load_genes(self):
+        required = {"gene_id", "gene_symbol", "chrom", "start", "end"}
+        genes = []
+        with open(self.tsv_path, "r") as f:
+            reader = csv.DictReader(f, delimiter="\t")
+            header = set(reader.fieldnames or [])
+            missing = required - header
+            if missing:
+                raise ValueError(f"GeneInterval TSV {self.tsv_path} is missing required columns:{sorted(missing)}")
+            for row in reader:
+                try: 
+                    start = int(row["start"])
+                    end = int(row["end"])
+                except (TypeError, ValueError):
+                    continue
+                gene = dict(row)
+                gene["start"] = start
+                gene["end"] = end
+                genes.append(gene)
+        return genes
+    
+    def get_all_genes(self):
+        return self.genes
+
 
 

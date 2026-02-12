@@ -161,7 +161,7 @@ class ByconGeoResource:
                 )
             else:
                 pass
-                print(f"Would update sample {bgl.get('properties', {}).get("geoprov_id")} to geo_location {n_g_l.get('properties', {}).get("id")}")
+                print(f"Would update sample {bgl.get('properties', {}).get('geoprov_id')} to geo_location {n_g_l.get('properties', {}).get('id')}")
 
         if not BYC["TEST_MODE"]:
             bar.finish()
@@ -416,7 +416,7 @@ class ByconMap:
             "lng": g['coordinates'][0],
             "alt": alt,
             "count": count,
-            "label": f"'{label.replace("'", "\\'")}'"
+            "label": "'" + label.replace("'", "\\'") + "'"
         }
 
 

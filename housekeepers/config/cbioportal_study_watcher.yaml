@@ -1,0 +1,11 @@
+# cbioportal_study_watcher.yaml
+#
+
+dataset_id: progenetix
+mongo_host: localhost  
+cbio_api: https://www.cbioportal.org/api
+
+state_file: local/state/cbioportal_study_watcher_state.json
+out_tsv: local/reports/cbioportal_new_cna_studies.tsv
+
+stale_days: 30
