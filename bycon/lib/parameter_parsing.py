@@ -4,20 +4,18 @@ from urllib.parse import urlparse, unquote
 from os import environ
 from pymongo import MongoClient
 
-from bycon_helpers import prdbug, prdbughead, ByconH
+from bycon_helpers import prdbug, prdbughead, ByconError, ByconH
 from config import *
 
 ################################################################################
 
 class ByconParameters:
     def __init__(self):
-        self.arg_defs = BYC.get("argument_definitions", {}).get("$defs", {})
-        self.no_value = NO_PARAM_VALUES
-        self.byc_pars = {}
-        self.request_uri = environ.get('REQUEST_URI', False)
-        self.request_type = "__none__"
-        self.request_meta = {}
-        self.request_query = {}
+        self.arg_defs       = BYC.get("argument_definitions", {}).get("$defs", {})
+        self.byc_pars       = {}
+        self.request_type   = "__none__"
+        self.request_meta   = {}
+        self.request_query  = {}
 
         self.__detect_request_environment()
 
@@ -51,9 +49,9 @@ class ByconParameters:
         * `/services/intervalFrequencies/NCIT:C3072/` => "intervalFrequencies" -> "NCIT:C3072"
 
         """
-        if not self.request_uri:
+        if not REQUEST_URI:
             return
-        url_comps = urlparse(self.request_uri)
+        url_comps = urlparse(REQUEST_URI)
         p_items = re.split('/', url_comps.path)
         p_items = [x for x in p_items if len(x) > 1]
         p_items = [x for x in p_items if not "debugMode" in x]
@@ -72,9 +70,10 @@ class ByconParameters:
     # -------------------------------------------------------------------------#
 
     def __detect_request_environment(self):
+        """Setting the request method to supported types: SHELL, POST, GET"""
         if "___shell___" in HTTP_HOST:
             self.request_type = "SHELL"
-        elif "POST" in environ.get('REQUEST_METHOD', ''):
+        elif "POST" in REQUEST_METHOD:
             self.request_type = "POST"
         else:
             self.request_type = "GET"
@@ -115,38 +114,38 @@ class ByconParameters:
         required      required              optional            optional
         """
 
-        if not self.request_uri:
+        if not REQUEST_URI:
             return
 
-        url_comps = urlparse(self.request_uri)
-        url_p = url_comps.path
-        p_items = re.split('/', url_p)
+        url_comps   = urlparse(REQUEST_URI)
+        url_p       = url_comps.path
+        p_items     = re.split('/', url_p)
 
         if not REQUEST_PATH_ROOT in p_items:
             return
 
-        p_items = list(filter(None, p_items))
-        p_len = len(p_items)
-        r_i = p_items.index(REQUEST_PATH_ROOT)
-
-        # prdbughead(p_items)
+        p_vals      = {"request_entity_path_id": "info"}
+        p_items     = list(filter(None, p_items))
+        p_len       = len(p_items)
+        r_i         = p_items.index(REQUEST_PATH_ROOT)
 
         if p_len == r_i + 1:
-            self.byc_pars.update({"request_entity_path_id": "info"})
+            self.byc_pars.update(p_vals)
             return
 
-        for p_k in ["request_entity_path_id", "path_ids", "response_entity_path_id"]:
+        for p_k in REQUEST_PATH_PARAMS:
             r_i += 1
             if r_i >= p_len:
                 break
             p_v = unquote(p_items[r_i])
-            if p_v.lower() in self.no_value:
+            if p_v.lower() in PARAM_NONE_VALUES:
                 break
-            self.byc_pars.update({p_k: p_v})
-            # prdbug(f"{p_k} ==> {p_v}")
+            p_vals[p_k] = p_v
 
-        if (rpidv := self.byc_pars.get("path_ids")):
-            self.byc_pars.update({"path_ids": rpidv.split(",") })
+        if (rpidv := p_vals.get("path_ids")):
+            p_vals["path_ids"] = rpidv.split(",")
+
+        self.byc_pars.update(p_vals)
 
 
     # -------------------------------------------------------------------------#
@@ -176,7 +175,7 @@ class ByconParameters:
         for p in arg_vars.keys():
             if not (v := arg_vars.get(p)):
                 continue
-            if str(v).lower() in self.no_value:
+            if str(v).lower() in PARAM_NONE_VALUES:
                 continue
             p_d = humps.decamelize(p)
             if not (a_d := self.arg_defs.get(p_d)):
@@ -406,7 +405,7 @@ class ByconEntities:
         self.response_entity_path_id = None
         self.request_path_id_par = BYC_PARS.get("request_entity_path_id", "___none___")
         self.response_path_id_par = BYC_PARS.get("response_entity_path_id", "___none___")
-        self.path_ids = BYC_PARS.get("path_ids", False)
+        self.path_ids = BYC_PARS.get("path_ids", None)
         self.request_entity_id = None
         self.response_entity_id = None
         self.response_entity = {}
@@ -592,11 +591,13 @@ class ByconDatasets:
         if not (accessid := BYC_PARS.get("accessid")):
             return
 
-        ho_client = MongoClient(host=BYC_DBS["mongodb_host"])
-        h_o = ho_client[BYC_DBS["housekeeping_db"]][BYC_DBS["handover_coll"]].find_one({"id": accessid})
-        if not h_o:
+        m_h = BYC_DBS["mongodb_host"]
+        m_d = BYC_DBS["housekeeping_db"]
+        m_c = BYC_DBS.get("collections", {}).get("handover")
+
+        ho_client = MongoClient(host=m_h)
+        if not (h_o := ho_client[m_d][m_c].find_one({"id": accessid})):
             return
-        ds_id = h_o.get("ds_id", False)
         if (ds_id := str(h_o.get("ds_id"))) not in self.database_names:
             return
         self.dataset_ids = [ds_id]
@@ -613,7 +614,7 @@ class ByconDatasets:
         if len(ds_ids) > 0:
             self.dataset_ids = ds_ids
         else:
-            BYC["ERRORS"].append(f"!!! The requested dataset id(s) {f_ds_ids} do not match any of the available datasets.")
+            ByconError().addError(f"!!! The requested dataset id(s) {f_ds_ids} do not match any of the available datasets.")
             prdbug(f"!!! The dataset id(s) {f_ds_ids} do not match any of the available datasets.")
 
 

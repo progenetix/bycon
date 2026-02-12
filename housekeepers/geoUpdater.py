@@ -129,9 +129,10 @@ for c in cities:
 
 bar.finish()
 
-mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-geo_coll = mongo_client[BYC_DBS["services_db"]][BYC_DBS["geolocs_coll"]]
-
+m_h 		= BYC_DBS["mongodb_host"]
+m_d 		= BYC_DBS["services_db"]
+m_c 		= BYC_DBS.get("collections", {}).get("geolocs")
+geo_coll 	= MongoClient(host=m_h)[m_d][m_c]
 
 if not BYC["TEST_MODE"]:
 	bar = Bar(f"=> updating cities", max=len(geolocs), suffix='%(percent)d%%'+" of "+str(len(geolocs)) )

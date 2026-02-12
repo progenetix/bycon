@@ -306,7 +306,7 @@ function ResultPanel({ formValues, response, width, datasetIds }) {
 
 // const groupByOptions = [
 //   { value: "", label: "No Grouping" },
-//   { value: "NCIT", label: "NCIT Neoplasm Code" },
+//   { value: "NCITneoplasm", label: "NCIT Neoplasm Code" },
 //   { value: "icdom", label: "ICD-O Morphology Code" },
 //   { value: "icdot", label: "ICD Topography Code" },
 //   { value: "UBERON", label: "UBERON Anatomy Concepts" },

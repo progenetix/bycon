@@ -8,31 +8,31 @@ from config import *
 
 from bycon_helpers import *
 from bycon_info import ByconInfo
-from bycon_summarizer import ByconSummary
+from bycon_summaries import ByconSummaries
 from parameter_parsing import ByconFilters, ByconParameters
 from query_execution import ByconDatasetResults # execute_bycon_queries
 from query_generation import ByconQuery, CollationQuery
-from response_remapping import *
-from schema_parsing import ByconSchemas
+from response_remapping import reshape_resultset_results
+from schema_parsing import ByconSchemas, RecordsHierarchy
 
 ################################################################################
 
 class BeaconResponseMeta:
     def __init__(self, data_response=None):
-        self.beacon_schema = BYC["response_entity"].get("defaultSchema", "___none___")
-        self.entity_defaults = BYC.get("entity_defaults", {})
-        self.response_meta = ByconSchemas("beaconResponseMeta", "").get_schema_instance()
+        self.beacon_schema      = BYC["response_entity"].get("defaultSchema", "___none___")
+        self.entity_defaults    = BYC.get("entity_defaults", {})
+        self.response_meta      = ByconSchemas("beaconResponseMeta", "").get_schema_instance()
         self.returned_granularity = BYC.get("returned_granularity", "boolean")
-        self.data_response = data_response
-        self.record_queries = None
-        self.filters = ByconFilters().get_filters()
+        self.data_response      = data_response
+        self.record_queries     = None
+        self.filters            = ByconFilters().get_filters()
 
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def populatedMeta(self, record_queries=None):
+    def populatedMeta(self):
         if self.data_response:
             self.response_meta = always_merger.merge(self.response_meta, self.data_response.get("meta", {}))
 
@@ -42,7 +42,7 @@ class BeaconResponseMeta:
 
 
     # -------------------------------------------------------------------------#
-    # ----------------------------- private ------------------------------------#
+    # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 
     def __meta_add_parameters(self):
@@ -120,12 +120,13 @@ class BeaconResponseMeta:
 
 class BeaconErrorResponse:
     """
-    This response class is used for all the info / map / configuration responses
-    which have the same type of `meta`.
-    The responses are then provided by the dedicated methods
+    
     """
     def __init__(self):
-        self.error_response = ByconSchemas("beaconErrorResponse", "").get_schema_instance()
+        e_r = ByconSchemas("beaconErrorResponse", "").get_schema_instance()
+        i_r = ByconSchemas("beaconInformationalResponseMeta", "").get_schema_instance()
+        self.error_response = e_r
+        self.informational_error_response = ByconSchemas("beaconInformationalResponseMeta", "").get_schema_instance()
         self.meta = BeaconResponseMeta().populatedMeta()
 
 
@@ -134,6 +135,7 @@ class BeaconErrorResponse:
     def respond_if_errors(self, error_code=422):
         if len(errors := BYC.get("ERRORS", [])) < 1:
             return False
+        errors = [str(x) for x in errors]
         self.error_response.update({
             "error": {"error_code": error_code, "error_message": ", ".join(errors)},
             "meta": self.meta
@@ -182,8 +184,6 @@ class BeaconInfoResponse:
 
     def __populateInfoResponse(self):
         if "configuration" in self.response_entity_id:
-            # c_f = ByconSchemas("beaconConfiguration").get_schema_file_path()
-            # self.info_response_content = load_yaml_empty_fallback(c_f)
             self.info_response_content = BYC.get("beacon_configuration", {})
             betks = []
             for e_t, e_d in self.entity_defaults.items():
@@ -204,12 +204,10 @@ class BeaconInfoResponse:
             self.info_response_content = {"entry_types": e_t_s["entryTypes"] }
             return
         if "info" in self.response_entity_id:
-            info = self.entity_defaults.get("info", {})
-            pgx_info = info.get("content", {})
+            pgx_info = self.entity_defaults.get("info", {}).get("content", {})
             beacon_info = ByconSchemas("beaconInfoResults", "").get_schema_instance()
-            for k in beacon_info.keys():
-                if k in pgx_info:
-                    beacon_info.update({k:pgx_info[k]})
+            for k in beacon_info.keys() & pgx_info.keys():
+                beacon_info.update({k:pgx_info[k]})
             self.info_response_content = beacon_info
             return
 
@@ -266,6 +264,8 @@ class BeaconDataResponse:
             return self.collectionsResponse()
         if "beaconFilteringTermsResponse" in self.response_schema:
             return self.filteringTermsResponse()
+        if "beaconAggregationConceptsResponse" in self.response_schema:
+            return self.aggregationTermsResponse()
 
 
     # -------------------------------------------------------------------------#
@@ -295,9 +295,10 @@ class BeaconDataResponse:
         self.result_sets_end = datetime.now()
         self.result_sets_duration = self.result_sets_end - self.result_sets_start
 
-        self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta(self.record_queries) })
+        self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta() })
 
         dbm = f'... data response duration was {self.result_sets_duration.total_seconds()} seconds'
+        prdbug(dbm)
 
         return self.data_response
 
@@ -314,7 +315,7 @@ class BeaconDataResponse:
         self.record_queries.update({"entities": self.queries})
         self.__collections_response_update_summaries()
         self.__check_switch_to_error_response()
-        self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta(self.record_queries) })
+        self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta() })
         self.data_response.get("meta", {}).get("received_request_summary", {}).pop("include_resultset_responses", None)
         return self.data_response
 
@@ -331,17 +332,23 @@ class BeaconDataResponse:
         self.record_queries.update({"entities": {"filtering_terms": query}})
         self.__response_clean_parameters()
         self.__check_switch_to_error_response()
-        self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta(self.record_queries) })
+        self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta() })
         return self.data_response
 
 
     # -------------------------------------------------------------------------#
 
-    def filteringTermsList(self):
-        if not "beaconFilteringTermsResponse" in self.response_schema:
+    def aggregationTermsResponse(self):
+        if not "beaconAggregationConceptsResponse" in self.response_schema:
             return
-        fts, ress, query = ByconFilteringTerms().populatedFilteringTerms()
-        return fts
+
+        # a_d_s = list(BYC.get("summaries_definitions", {}).get("$defs", {}).values())
+        a_d_s = list(BYC.get("aggregation_terms", {}).get("$defs", {}).values())
+
+        self.data_response["response"].update({"aggregation_terms": a_d_s})
+        self.__response_clean_parameters()
+        self.data_response.update({"meta": BeaconResponseMeta(self.data_response).populatedMeta() })
+        return self.data_response
 
 
     # -------------------------------------------------------------------------#
@@ -349,9 +356,8 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def __check_switch_to_error_response(self):
-        r_q_e = self.record_queries.get("entities", {})
-        if not r_q_e:
-            BYC["ERRORS"].append("no valid query")
+        if not (r_q_e := self.record_queries.get("entities", {})):
+            ByconError().addError("no valid query")
             self.data_response.update({"error": {"error_code": 422, "error_message": ", ".join(BYC["ERRORS"])}})
             self.data_response.pop("response", None)
             self.data_response.pop("response_summary", None)
@@ -406,11 +412,6 @@ class BeaconDataResponse:
                 "cohort_type": "beacon-defined",
                 "cohort_size": c.get("count"),
                 "name": c.get("label", ""),
-                # "inclusion_criteria": {
-                #     "description": c.get("description", "NA"),
-                #     c_k: c.get("id"),
-                #     "dataset_id": c.get("dataset_id")
-                # }
             })
             for k in pop_keys:
                 c.pop(k, None)
@@ -462,9 +463,9 @@ class BeaconDataResponse:
 
         if self.response_entity_id and "dataset" in self.response_entity_id:
             if t_count == 1 and "aggregated" in self.returned_granularity:
-                BA = ByconAggregations(BYC["BYC_DATASET_IDS"][0])        
+                BA = ByconSummaries(BYC["BYC_DATASET_IDS"][0])        
                 self.data_response["response"]["collections"][0].update({
-                    "summary_results": BA.datasetAllAggregation()
+                    "results_aggregation": BA.datasetAllSummaries()
                 })
 
         self.data_response.update({
@@ -473,8 +474,6 @@ class BeaconDataResponse:
                 "exists": t_exists
             }
         })
-
-        return
 
 
 ################################################################################
@@ -619,8 +618,6 @@ class ByconFilteringTerms:
         for k, v in r_o.items():
             self.filter_resources.append(v)
 
-        return
-
 
 ################################################################################
 ################################################################################
@@ -630,10 +627,10 @@ class ByconCollections:
 
     def __init__(self):
         self.response_entity_id = BYC.get("response_entity_id", "dataset")
-        coll_id = f'{self.response_entity_id}_coll'
-        self.data_collection = BYC_DBS.get(coll_id, "collations")
         self.collections = []
         self.collections_queries = {}
+        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
+        self.queried_entities = RecordsHierarchy().entities()
 
 
     # -------------------------------------------------------------------------#
@@ -661,23 +658,24 @@ class ByconCollections:
     # -------------------------------------------------------------------------#
 
     def __datasets_update_latest_stats(self):
-        stat = list(ByconInfo().beaconinfo_get_latest())
-        if len(stat) < 1:
-            ds_stats = {}
-        ds_stats = stat[0].get("datasets", {})
+        # stat = list(ByconInfo().beaconinfo_get_latest())
+        # if len(stat) < 1:
+        #     ds_stats = {}
+        # ds_stats = stat[0].get("datasets", {})
 
         for coll_id, coll in BYC["dataset_definitions"].items():
             prdbug(f'... processing dataset {coll_id} => {BYC.get("BYC_DATASET_IDS", [])}')
             if not coll_id in BYC.get("BYC_DATASET_IDS", []):
                 continue
-            if (ds_vs := ds_stats.get(coll_id)):
-                if "filtering_terms" in BYC["response_entity_id"]:
-                    coll.update({ "filtering_terms": []})
-                    coll_items = ds_vs.get("collations", {})
-                    for c_id, c_v in ds_vs.get("collations", {}).items():
-                        coll["filtering_terms"].append({"id":c_id, "label": c_v.get("label", c_id)})
-            # TODO: update counts
-            # TODO: remove verifier hack
+
+            counts = {}
+            for e in self.queried_entities:
+                if (c := BYC_DBS.get("collections", {}).get(e)):
+                    d_c = self.mongo_client[coll_id][c]
+                    counts.update({e: d_c.count_documents({}) })
+
+            coll.update({"counts": counts})
+
             for t in ["createDateTime", "updateDateTime"]:
                 d = str(coll.get(t, "1967-11-11"))
                 if re.match(r'^\d\d\d\d\-\d\d\-\d\d$', d):
@@ -705,346 +703,12 @@ class ByconCollections:
                     ]
                 }
 
-        mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         for ds_id in BYC["BYC_DATASET_IDS"]:
-            mongo_db = mongo_client[ ds_id ]        
-            mongo_coll = mongo_db[ "collations" ]
+            mongo_coll = self.mongo_client[ds_id]["collations"] 
             for cohort in mongo_coll.find( query, limit=limit ):
                 self.collections.append(cohort)
 
         self.collections_queries.update({"cohorts":query})
-
-
-################################################################################
-################################################################################
-################################################################################
-
-class ByconAggregations:
-    def __init__(self, ds_id=None):
-        self.dataset_id = ds_id
-        self.aggregation_terms = BYC_PARS.get("aggregation_terms", [])
-        self.aggregator_definitions = BYC.get("aggregator_definitions", {}).get("$defs", {})
-        self.dataset_aggregation = [] 
-        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-        self.data_client = self.mongo_client[ds_id]
-        self.term_coll = self.data_client["collations"]
-
-
-    # -------------------------------------------------------------------------#
-    # ----------------------------- public ------------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def datasetResultAggregation(self, dataset_result={}):
-        self.dataset_result = dataset_result
-
-        # CAVE: Always aggregating on biosamples
-        self.__aggregate_dataset_data(use_dataset_result=True)
-
-        return self.dataset_aggregation
-
-
-    # -------------------------------------------------------------------------#
-
-    def datasetAllAggregation(self):
-        self.__aggregate_dataset_data()
-        return self.dataset_aggregation
-
-
-    # -------------------------------------------------------------------------#
-    # ----------------------------- private -----------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def __aggregate_dataset_data(self, query={}, use_dataset_result=False):
-        # temporary aggregation implementation
-        # WiP
-        # TODO: 2-dimensional with buckets; they need another way - e.g. $switch
-        # https://www.mongodb.com/docs/manual/reference/operator/aggregation/switch/
-
-
-        agg_terms = self.aggregator_definitions.keys()
-        if len(self.aggregation_terms) > 0:
-            agg_terms = list(set(agg_terms) & set(self.aggregation_terms))
-
-        # one could aggregate all terms in one pipeline, but this is clearer
-        for a_k in agg_terms:
-            a_v = self.aggregator_definitions.get(a_k)
-            if use_dataset_result:
-                concepts = a_v.get("concepts", [])
-                concept = concepts[0]
-                d = concept.get("scope")
-                coll = BYC_DBS.get(f"{d}_coll", "___none___")
-                if not (coll_k := f"{coll}.id") in self.dataset_result.keys():
-                    continue
-                res = self.dataset_result.get(coll_k, {})
-                q_v_s = res.get("target_values", [])
-                query = {"id": {"$in": q_v_s}}
-                prdbug(f'... aggregating {a_k} for {coll_k} with query {query}')
-
-            a_v.update({"distribution": []})    
-            self.__aggregate_single_concept(a_k, a_v, query)
-            # self.__aggregate_single_concept_buckets(a_k, a_v, query)
-            self.__aggregate_2_concepts(a_k, a_v, query)
-
-
-    # -------------------------------------------------------------------------#
-
-    def __aggregate_single_concept(self, a_k, a_v, query={}):
-        concepts = a_v.get("concepts", [])
-        if len(concepts) != 1:
-            return
-
-        concept = concepts[0]
-        
-        c = concept.get("property")
-        d = concept.get("scope")
-        if not (collection := BYC_DBS.get(f"{d}_coll")):
-            return
-
-        data_coll = self.data_client[collection]
-
-        _id = self.__id_object(a_k, concept)
-
-        agg_p = [ { "$match": query } ]
-        agg_p.append(            
-            { "$group": {
-                    "_id": _id,
-                    "count": { "$sum": 1 }
-                }
-            }        
-        )
-        # sorting either on logical order () detection order
-        if a_v.get("sorted") is True:
-            agg_p.append({ "$sort": { "_id.order": 1 } })
-        else:
-            agg_p.append({ "$sort": { "count": -1 } })
-
-        agg_d = data_coll.aggregate(agg_p)
-
-        # label lookups only for term-based aggregations
-        for a in agg_d:
-            # prjsonnice(a)
-            if not (i_k := a.get("_id")):
-                continue
-            if type(i_k) is dict and "id" in i_k:
-                id_v = i_k.get("id")
-                label = i_k.get("label", id_v)
-            else:
-                id_v = i_k
-                label = id_v
-                if (coll := self.term_coll.find_one( {"id": i_k})):
-                    label = coll.get("label", id_v)
-            a_v["distribution"].append({
-                "concept_values": [
-                    {"id": id_v, "label": label}
-                ],
-                "count": a.get("count", 0)
-            })
-
-        self.dataset_aggregation.append(a_v)
-
-
-    # -------------------------------------------------------------------------#
-
-    def __aggregate_2_concepts(self, a_k, a_v, query={}):
-        concepts = a_v.get("concepts", [])
-        if len(concepts) != 2:
-            return
-        # if len(concepts[0].get("splits", [])) > 0 or len(concepts[1].get("splits", [])) > 0:
-        #     return
-
-        c_one = concepts[0].get("property")
-        d_one = concepts[0].get("scope")
-        c_two = concepts[1].get("property")
-        d_two = concepts[1].get("scope")
-        if d_one != d_two:
-            return
-
-        if not (collection := BYC_DBS.get(f"{d_one}_coll")):
-            return
-        data_coll = self.data_client[collection]
-
-        agg_p = [
-            { "$match": query },
-            { "$group":
-                {
-                    "_id": {
-                        c_one.replace(".", "_"): self.__id_object(a_k, concepts[0]),
-                        c_two.replace(".", "_"): self.__id_object(a_k, concepts[1])
-                    },
-                    "count": { "$sum": 1 }
-                }
-            },
-            { "$sort": { "count": -1 } }
-        ]
-        agg_d = list(data_coll.aggregate(agg_p))
-
-        if len(agg_d) < 1:
-            return
-
-        if a_v.get("sorted") is True:
-            k = list(agg_d[0]["_id"].keys())[0]
-            if "order" in agg_d[0]["_id"][k]:
-                agg_d = sorted(agg_d, key=lambda x: x["_id"][k].get("order", 9999))
-
-        # label lookups only for term-based aggregations
-        for a in agg_d:
-            if not (i_k := a.get("_id")):
-                continue
-            c_v_s = []
-            id_v_s = list(i_k.values())
-            for v in id_v_s:
-                if type(v) is dict and "id" in v:
-                    label = v.get("label", v.get("id"))
-                    c_v_s.append({"id": v.get("id"), "label": label})
-                    continue
-                label = v
-                if (coll := self.term_coll.find_one( {"id": v})):
-                    label = coll.get("label", label)
-                    c_v_s.append({"id": v, "label": label})
-
-            a_v["distribution"].append({
-                "concept_values": c_v_s,
-                "count": a.get("count", 0)
-            })
-
-        self.dataset_aggregation.append(a_v)
-
-
-    # -------------------------------------------------------------------------#
-
-    def __id_object(self, a_k, concept):
-        if (_id := self.__switch_branches_from_terms(a_k, concept)):
-            return _id
-        if (_id := self.__switch_branches_from_splits(a_k, concept)):
-            return _id
-        return f"${concept.get('property')}"
-
-
-    # -------------------------------------------------------------------------#
-
-    def __switch_branches_from_terms(self, a_k, concept):
-        """
-        Switch example for term list from children:
-
-        ```
-        db.biosamples.aggregate([
-            { $group: {
-                "_id": {
-                    "cancerType": {
-                        $switch: {
-                            "branches": [
-                                { "case": { $in: [ "$histological_diagnosis.id", ["NCIT:C3466", "NCIT:C3457", "NCIT:C3163"] ]}, "then": {"id": "...", "label": "Some Lymphoma"} },
-                                { "case": { $in: [ "$histological_diagnosis.id", ["NCIT:C3512", "NCIT:C3493"] ]}, "then": {"id": "...", "label": "Some Lung Cancer"} }
-                            ],
-                            "default": {"id": "other", "label": "other"}
-                        }
-                    }
-                },
-                "count": { $sum: 1 }
-            }}
-        ])
-        ```
-        """
-
-        if len(terms := concept.get("termIds", [])) < 1:
-            return False
-
-        p = concept.get('property')
-
-        branches = []
-        for d_i, i_k in enumerate(terms):
-            if not (coll := self.term_coll.find_one( {"id": i_k})):
-                continue
-            label = coll.get("label", i_k)
-            if len(child_terms := coll.get("child_terms", [])) < 1:
-                continue
-            branches.append({
-                "case": { "$in": [ f'${p}', child_terms ] },
-                "then": {"id": i_k, "label": label, "order": d_i}
-            })
-
-        # fallback dummy branch - at least one is needed or error
-        if len(branches) < 1:
-            branches.append({
-                "case": { "$in": [f'${p}', [ "___undefined___" ]] },
-                "then": {"id": "undefined", "label": "undefined", "order": 1}
-            })
-
-        _id = {
-            "$switch": {
-                "branches": branches,
-                "default": {"id": "other", "label": "other", "order": len(terms)}
-            }
-        }
-
-        return _id
-
-
-    # -------------------------------------------------------------------------#
-
-    def __switch_branches_from_splits(self, a_k, concept):
-        """
-        Numeric splits can be implemented using `$bucket` or `$switch`. We're
-        preferimg switches since they can be combined with other aggregators.
-
-        Switch example for age at diagnosis buckets:
-
-        ```
-        db.biosamples.aggregate([
-            { $group: {
-                "_id": {
-                    "ageAtDiagnosis": {
-                        $switch: {
-                            "branches": [
-                                { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 365 ] }, "then": "<P1Y" },
-                                { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 1825 ] }, "then": "<P5Y" },
-=                               { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 14600 ] }, "then": "<P40Y" }
-                            ],
-                            "default": "undefined"
-                        }
-                    }
-                },
-                "count": { $sum: 1 }
-            }}
-        ])
-        ```
-        """
-        if len(splits := concept.get("splits", [])) < 1:
-            return False
-        p = concept.get('property')
-        f = concept.get('format', "")
-
-        split_labs = splits
-        split_vals = splits
-        branches = []
-
-        if "iso8601duration" in f:
-            p = f"{p}_days"
-            split_labs = ["unknown"]
-            split_vals = [0]
-            pre = "P0D"
-            for l in splits:
-                if re.match(r"^P\d", str(l)):
-                    if int(d := days_from_iso8601duration(l)) > 0:
-                        split_labs.append(f"[{pre}, {l})")
-                        split_vals.append(d)
-                    pre = l
-
-        for d_i, d_l in enumerate(split_labs):
-            branches.append({
-                "case": { "$lt": [ f'${p}', split_vals[d_i] ] },
-                "then": {"id": d_l, "label": d_l, "order": d_i}
-            })
-
-        _id = {
-            "$switch": {
-                "branches": branches,
-                "default": {"id": "other", "label": "other", "order": len(split_labs)}
-            }
-        }
-
-        return _id
-
 
 
 ################################################################################
@@ -1063,7 +727,13 @@ class ByconResultSets:
         self.returned_granularity = BYC.get("returned_granularity", "boolean")
         self.limit = BYC_PARS.get("limit")
         self.skip = BYC_PARS.get("skip")
-        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
+
+        m_h = BYC_DBS["mongodb_host"]
+        self.mongo_client = MongoClient(host=m_h)
+
+        m_d = BYC_DBS["housekeeping_db"]
+        m_c = BYC_DBS.get("collections", {}).get("handover")
+        self.ho_coll = self.mongo_client[m_d][m_c]
 
         self.record_queries = ByconQuery().recordsQuery()
         self.__create_empty_result_sets()
@@ -1112,7 +782,7 @@ class ByconResultSets:
         self.response_entity_id = "individual"
         self.__retrieve_datasets_data()
         if not ds_id in self.datasets_data:
-            BYC["ERRORS"].append("no correct dataset id provided to `dataset_results_biosample_ids`")
+            ByconError().addError("no correct dataset id provided to `dataset_results_biosample_ids`")
             return []
 
         data = self.datasets_data[ds_id]
@@ -1130,7 +800,7 @@ class ByconResultSets:
         self.response_entity_id = "analysis"
         self.__retrieve_datasets_data()
         if not ds_id in self.datasets_data:
-            BYC["ERRORS"].append("no correct dataset id provided to `dataset_results_biosample_ids`")
+            ByconError().addError("no correct dataset id provided to `dataset_results_biosample_ids`")
             return []
 
         data = self.datasets_data[ds_id]
@@ -1146,15 +816,14 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __get_handover_access_key(self):
-        coll = BYC_DBS.get(f"{self.response_entity_id}_coll", "___none___")
-        self.handover_key = f'{coll}.id'
+        e = self.response_entity_id
+        c = BYC_DBS.get("collections", {}).get(self.response_entity_id, "___none___")
+        self.handover_key = f'{c}.id'
 
 
     # -------------------------------------------------------------------------#
 
     def __result_sets_save_handovers(self):
-        ho_client = MongoClient(host=BYC_DBS["mongodb_host"])
-        ho_coll = ho_client[BYC_DBS["housekeeping_db"]][BYC_DBS["handover_coll"]]
         for ds_id, d_s in self.datasets_results.items():
             if not d_s:
                 continue
@@ -1163,12 +832,10 @@ class ByconResultSets:
                 if not "target_values" in h_o:
                     continue
                 h_o_size = sys.getsizeof(h_o["target_values"])        
-                dbm = f'Storage size for {ds_id}.{h_o_k}: {h_o_size / 1000}kb'
-                prdbug(dbm)
-                # TODO: warning/error for exclusion due to size (breaking the MongoDB storage...)
                 if h_o_size < 15000000:
-                    ho_coll.update_one( { "id": h_o["id"] }, { '$set': h_o }, upsert=True )
-        ho_client.close()
+                    self.ho_coll.update_one( { "id": h_o["id"] }, { '$set': h_o }, upsert=True )
+                else:
+                    ByconError().addError(f'Storage size for {ds_id}.{h_o_k}: {h_o_size / 1000}kb ==>> not saved')
 
 
     # -------------------------------------------------------------------------#
@@ -1212,10 +879,10 @@ class ByconResultSets:
         prdbug('... retrieving datasets data')
         ds_d_start = datetime.now()
         for ds_id in self.datasets_results.keys():
-            BA = ByconAggregations(ds_id)
+            BA = ByconSummaries(ds_id)
             self.__retrieve_single_dataset_data(ds_id)
             self.datasets_aggregations.update({
-                ds_id: BA.datasetResultAggregation(self.datasets_results[ds_id])
+                ds_id: BA.datasetResultSummaries(self.datasets_results[ds_id])
             })
         ds_d_duration = datetime.now() - ds_d_start
         dbm = f'... datasets data retrieval needed {ds_d_duration.total_seconds()} seconds'
@@ -1224,7 +891,7 @@ class ByconResultSets:
 
     # -------------------------------------------------------------------------#
 
-    def __retrieve_single_dataset_data(self, ds_id):
+    def __retrieve_single_dataset_data(self, ds_id="___none___"):
         if not (ds_results := self.datasets_results.get(ds_id)):
             return
         if not self.handover_key in ds_results.keys():
@@ -1283,34 +950,11 @@ class ByconResultSets:
                 r_s_res = reshape_resultset_results(ds_id, r_s_res)
                 self.result_sets[i].update({"results": r_s_res})
             if self.returned_granularity == "aggregated":
-                self.result_sets[i].update({"summary_results": self.datasets_aggregations.get(ds_id, [])})
+                self.result_sets[i].update({"results_aggregation": self.datasets_aggregations.get(ds_id, [])})
 
         ds_v_duration = datetime.now() - ds_v_start
         dbm = f'... __populate_result_sets needed {ds_v_duration.total_seconds()} seconds'
         prdbug(dbm)
-        return
-
-
-    # -------------------------------------------------------------------------#
-
-    def __analyses_cnvfrequencies(self, ds_id, ds_res):
-        if not "cnvfrequencies" in self.available_aggregation_ids:
-            return False
-
-        analyses_result = ds_res.get("analyses.id", {})
-        BSUM = ByconSummary()
-        int_f = BSUM.analyses_frequencies_bundle(ds_id, analyses_result)
-        d = int_f.get("interval_frequencies", [])
-        c = int_f.get("sample_count", 0)
-        return {
-            "id": "cnvfrequencies",
-            "entity": "analysis",
-            "distribution": {
-                "items":d,
-            },
-            "description": f'Binned CNV frequencies for {c} matched analyses',
-            "count": c
-        }
 
 
 ################################################################################
@@ -1321,6 +965,7 @@ class ByconHO:
     def __init__(self):
         self.dataset_definitions = BYC.get("dataset_definitions", {})
         self.handover_types = BYC.get("handover_definitions", {}).get("h->o_types", {})
+        self.include_handovers = BYC_PARS.get("include_handovers", False)
         self.response_entity_id = BYC.get("response_entity_id")
 
 
@@ -1330,6 +975,8 @@ class ByconHO:
 
     def get_dataset_handovers(self, ds_id=None, datasets_results={}):
         self.dataset_handover = []
+        if not self.include_handovers:
+            return self.dataset_handover
         self.dataset_id = ds_id
         if not (ds_def := self.dataset_definitions.get(str(ds_id))):
             return self.dataset_handover

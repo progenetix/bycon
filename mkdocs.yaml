@@ -56,6 +56,7 @@ markdown_extensions:
       alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
+  - pymdownx.blocks.caption
   - tables
   - mdx_gh_links:
       user: ga4gh-beacon

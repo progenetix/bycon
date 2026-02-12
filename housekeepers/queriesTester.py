@@ -3,7 +3,7 @@
 from bycon import *
 from pymongo import MongoClient
 
-from bycon import byconServiceLibs
+from bycon import byconServiceLibs, ByconError
 from service_helpers import assert_single_dataset_or_exit
 
 
@@ -89,7 +89,7 @@ class MultiQueryResponses:
             
             if not (ds := ds_results.get(self.ds_id)):
                 r_c = BRS.get_record_queries()
-                BYC["ERRORS"].append(f'ERROR - no {qek} data for {self.ds_id}')
+                ByconError().addError(f'ERROR - no {qek} data for {self.ds_id}')
                 continue
             f_i_ids = ds[ho_id].get("target_values", [])
             self.entity_ids = set(self.entity_ids)

@@ -5,11 +5,23 @@ description: >-
   information such as OpenAPI information (`in`, `examples`...) and scope
   information (e.g. `beacon_query` flag for form inclusion).
 
+  #### Notes
+
+  * the `examples` ... `emptyValue` entries are used to display information in
+    the generated OpenAPI endpoint
+  * `beacon_query: True` indicates inclusion in the OpenAPI form generation
+  * `is_variant_par: True` indicates that the parameter is a standard Beacon v2
+    variant query parameter
+
+
 ################################################################################
 # standard Beacon parameters 
 ################################################################################
 
 $defs:
+
+  # ---------------------procedural, experimental ---------------------------- #
+
   user_name:
     description: >-
       TODO: Temporary(?) for authentication testing.
@@ -19,71 +31,7 @@ $defs:
       - --userName
     in: query
 
-  # procedural
-
-  test_mode:
-    description: >-
-      Activates the Beacon test setting, i.e. returning some random documents
-    type: boolean
-    cmdFlags:
-      - -t
-      - --testMode 
-    default: false
-    in: query
-    beacon_query: True
-
-  skip:
-    description: >-
-      Number of pages to be skipped.
-    type: integer
-    cmdFlags:
-      - --skip 
-    default: 0
-    in: query
-
-  limit:
-    type: integer
-    cmdFlags:
-      - -l
-      - --limit 
-    description: limit number of documents; a value of 0 sets to unlimited
-    default: 200
-    local: 0
-    in: query
-
-  paginate_results:
-    description: >-
-      Custom bycon parameter used for paginating results in some bycon services.
-    type: boolean
-    cmdFlags:
-      - --paginateResults 
-    default: true
-
-  requested_granularity:
-    description: >-
-      The response granularity of the beacon; for "secure" Beacons the default
-      should be overridden in local definitions (e.g. as "boolean")
-    type: string
-    enum: [record, count, boolean, aggregated]
-    pattern: '^\w+$'
-    cmdFlags:
-      - --requestedGranularity
-    description: The requested granularity of the beacon
-    default: record
-    in: query
-    examples:
-      - emptyValue:
-          value: ""
-          summary: Granularity of the response
-      - record:
-          value: record
-          summary: Data record
-      - count:
-          value: count
-          summary: Count of the matched records
-      - boolean:
-          value: boolean
-          summary: Boolean for match / no match
+  # ------------------ procedural, bycon specific ---------------------------- #
 
   request_entity_path_id:
     description: >-
@@ -107,13 +55,82 @@ $defs:
       - -r
       - --responseEntityPathId
 
-  # requested_schema:
-  #   type: string
-  #   cmdFlags:
-  #     - --requestedSchema
-  #   description: >-
-  #     * requested schema for the `result` part of the response
-  #     * not used in bycon
+  id:
+    type: string
+    db_key: id 
+    pattern: '^\w[\w\:\-\,]+?\w$'
+    cmdFlags:
+      - --id
+    description: >-
+      * An id
+      * This parameter only makes sense for specific REST entry types where
+        it is used in place of the path parameter (`.../__request_entity_path_id__/{id}/`)
+    in: "path"
+    examples:
+      $ref: '#/examples/id'
+
+  filter_precision:
+    type: string
+    cmdFlags:
+      - --filterPrecision
+    description: >-
+      Either `start` or `exact` for matching "filter" values in some services,
+      e.g. `OntologyMaps` or Publications. Not used for standard Beacon functions.
+    default: exact
+
+  # ---------------- BeaconQuery, excluding requestParameters ---------------- #
+
+  skip:
+    description: >-
+      Number of pages to be skipped.
+      In POST `pagination.skip`.
+    type: integer
+    cmdFlags:
+      - --skip 
+    default: 0
+    in: query
+
+  limit:
+    type: integer
+    cmdFlags:
+      - -l
+      - --limit 
+    description: >-
+      Limit to number of documents returned; a value of 0 sets to unlimited.
+      In POST `pagination.limit`.
+    default: 200
+    local: 0
+    in: query
+
+  test_mode:
+    description: >-
+      Activates the Beacon test setting, i.e. returning some random documents
+    type: boolean
+    cmdFlags:
+      - -t
+      - --testMode 
+    default: false
+    in: query
+    beacon_query: True
+
+  requested_granularity:
+    description: >-
+      The response granularity of the beacon; for "secure" Beacons the default
+      should be overridden in local definitions (e.g. as "boolean")
+    type: string
+    enum:
+      - boolean
+      - count
+      - aggregated
+      - record
+    pattern: '^\w+$'
+    cmdFlags:
+      - --requestedGranularity
+    description: The requested granularity of the beacon
+    default: record
+    in: query
+    examples:
+      $ref: '#/examples/requested_granularity'
 
   include_resultset_responses:
     type: string
@@ -126,7 +143,28 @@ $defs:
     default: HIT
     in: query
 
-  # query / data selection
+  filters:
+    type: array
+    items:
+      type: string
+    cmdFlags:
+      - --filters
+    description: prefixed filter values, comma concatenated; or objects in POST
+    in: query
+    beacon_query: True
+    examples:
+      $ref: '#/examples/filters'
+
+  include_descendant_terms:
+    type: boolean
+    cmdFlags:
+      - --includeDescendantTerms
+    description: >-
+      Global treatment of descendant terms for `filters`
+    default: true
+
+
+  # ----------- BeaconQuery, non-standard requestParameters ------------------ #
 
   dataset_ids:
     type: array
@@ -137,51 +175,13 @@ $defs:
       - --datasetIds
     description: dataset ids
 
-  cohort_ids:
+  aggregators:
     type: array
     items:
       type: string
     cmdFlags:
-      - --cohortIds
-    description: cohort ids
-
-  filters:
-    type: array
-    items:
-      type: string
-    cmdFlags:
-      - --filters
-    description: prefixed filter values, comma concatenated; or objects in POST
-    in: query
-    beacon_query: True
-    vqs_query: true
-    examples:
-      - emptyValue:
-          value: ""
-          summary: A Beacon filter value, e.g. a CURIE for a disease code
-      - NCIT:
-          value:
-            - NCIT:C9335
-          summary: A neoplasia disease code (CURIE format)
-      - pubmed:
-          value:
-            - pubmed:28966033
-          summary: A publiction identifier (CURIE format)
-
-  filter_precision:
-    type: string
-    cmdFlags:
-      - --filterPrecision
-    description: either `start` or `exact` for matching filter values
-    default: exact
-
-  aggregation_terms:
-    type: array
-    items:
-      type: string
-    cmdFlags:
-      - --aggregationTerms
-    description: Experimental for Beacon v2+ for indicating which summaries to provide
+      - --aggregators
+    description: Experimental for Beacon v2+ for indicating which aggregations to provide
 
   age_splits:
     type: array
@@ -199,27 +199,19 @@ $defs:
       - --followupSplits
     description: Experimental for Beacon v2+ aggregation of followupTime by ISO8601 durations
 
-  filter_logic:
+  request_profile_id:
     type: string
+    pattern: '^\w+$'
+    db_key: Null
     cmdFlags:
-      - --filterLogic
-    description: >-
-      Global for either OR or AND (translated to the MongoDB $and etc.). The Beacon
-      protocol only knows AND.
-    default: AND
+      - --requestProfileId
+    default: Bv2GenericVariantRequest
+    description: profile ID for the request, to indicate variant query type
+    beacon_query: True
+    is_variant_par: True
+    in: query
 
-  include_descendant_terms:
-    type: boolean
-    cmdFlags:
-      - --includeDescendantTerms
-    description: global treatment of descendant terms
-    default: true
-
-  # ----------------------------------------------------------------------------
-  # variant parameters
-  # ----------------------------------------------------------------------------
-
-  # first some in test mode ----------------------------------------------------
+  # ---------- BeaconQuery, experimental for testing VRS/VQS ----------------- #
 
   vrs_type:
     type: string
@@ -229,7 +221,7 @@ $defs:
       - --vrsType
     description: VRS variant schema type, e.g. `Allele` or `CopyNumberChange`
     beacon_query: False
-    vqs_query: true
+    is_vqs_par: true
     in: query
 
   reference_accession:
@@ -240,7 +232,7 @@ $defs:
       - --referenceAccession
     description: reference accession, i.e. a versioned sequence reference ID
     beacon_query: False
-    vqs_query: true
+    is_vqs_par: true
     in: query
 
   copy_change:
@@ -251,7 +243,7 @@ $defs:
       - --copyChange
     description: variant type, e.g. EFO:0030067 or DUP
     beacon_query: False
-    vqs_query: True
+    is_vqs_par: True
     in: query
 
   sequence_length:
@@ -266,7 +258,7 @@ $defs:
       * length (range) of variant sequence
       * should replace variant_min_length and variant_max_length
     beacon_query: False
-    vqs_query: True
+    is_vqs_par: True
     in: query
 
   breakpoint_range:
@@ -281,7 +273,7 @@ $defs:
       - --breakpointRange
     description: range for breakpoint or lower chromosome position in adjacency
     beacon_query: False
-    vqs_query: True
+    is_vqs_par: True
     in: query
 
   adjacency_accession:
@@ -292,7 +284,7 @@ $defs:
       - --adjacencyAccession
     description: adjacency accession, i.e. a versioned sequence reference ID
     beacon_query: False
-    vqs_query: true
+    is_vqs_par: true
     in: query
 
   adjacency_range:
@@ -307,10 +299,10 @@ $defs:
       - --adjacencyRange
     description: range for higher chromosome position in adjacency
     beacon_query: False
-    vqs_query: True
+    is_vqs_par: True
     in: query
 
-  # ----------------------------------------------------------------------------
+  # -------------- BeaconQuery, standard requestParameters ------------------- #
 
   assembly_id:
     type: string
@@ -319,7 +311,8 @@ $defs:
     cmdFlags:
       - --assemblyId
     description: assembly id; currently not used in bycon's version
-    # default: GRCh38
+    is_variant_par: True
+   # default: GRCh38 # not used since we're using GRCh38 only and versioned parameters
     # in: query
 
   reference_name:
@@ -330,14 +323,10 @@ $defs:
       - --referenceName
     description: chromosome
     beacon_query: True
+    is_variant_par: True
     in: query
     examples:
-      - emptyValue:
-          value: ""
-          summary: A versioned reference ID or a chromsome name / number
-      - chromosome:
-          value: "9"
-          summary: chromsome 9
+      $ref: "#/examples/reference_name"
 
   mate_name:
     type: string
@@ -347,6 +336,7 @@ $defs:
       - --mateName
     description: chromosome
     beacon_query: True
+    is_variant_par: True
     in: query
     examples:
       - emptyValue:
@@ -361,6 +351,7 @@ $defs:
       - --referenceBases
     description: reference bases
     beacon_query: True
+    is_variant_par: True
     in: query
 
   alternate_bases:
@@ -371,6 +362,7 @@ $defs:
       - --alternateBases
     description: alternate bases
     beacon_query: True
+    is_variant_par: True
     in: query
 
   variant_type:
@@ -381,17 +373,10 @@ $defs:
       - --variantType
     description: variant type, e.g. EFO:0030067 or DUP
     beacon_query: True
+    is_variant_par: True
     in: query
     examples:
-      - emptyValue:
-          value: ""
-          summary: An EFO or SO code in CURIE format, or a VCF-style label
-      - EFOhllossCNV:
-          value: EFO:0030067
-          summary: high-level copy number loss
-      - VCFdup:
-          value: DUP
-          summary: copy number duplication    
+      $ref: '#/examples/variant_type'
 
   start:
     type: array
@@ -405,7 +390,8 @@ $defs:
       - --start
     description: genomic start position
     beacon_query: True
-    vqs_query: True
+    is_variant_par: True
+    is_vqs_par: True
     in: query
 
   end:
@@ -420,7 +406,8 @@ $defs:
       - --end
     description: genomic end position
     beacon_query: True
-    vqs_query: True
+    is_variant_par: True
+    is_vqs_par: True
     in: query
 
   mate_start:
@@ -430,6 +417,7 @@ $defs:
     cmdFlags:
       - --mateStart
     description: genomic start position of fusion partner breakpoint region
+    is_variant_par: True
 
   mate_end:
     type: integer
@@ -438,6 +426,7 @@ $defs:
     cmdFlags:
       - --MateEnd
     description: genomic end position of fusion partner breakpoint region
+    is_variant_par: True
 
   variant_min_length:
     type: integer
@@ -448,6 +437,7 @@ $defs:
     description: >-
       The minimal variant length in bases e.g. for CNV queries.
     beacon_query: True
+    is_variant_par: True
     in: query
 
   variant_max_length:
@@ -459,6 +449,7 @@ $defs:
     description: >-
       The maximum variant length in bases e.g. for CNV queries.
     beacon_query: True
+    is_variant_par: True
     in: query
 
   gene_id:
@@ -471,21 +462,11 @@ $defs:
       - --geneId
     description: one or more (comma concatenated) gene ids
     beacon_query: True
-    vqs_query: True
+    is_variant_par: True
+    is_vqs_par: True
     in: query
     examples:
-      - emptyValue:
-          value: 
-            - ""
-          summary: A HUGO gene symbol
-      - TP53:
-          value: 
-            - TP53
-          summary: TP53 gene identifier
-      - CDKN2A:
-          value: 
-            - CDKN2A
-          summary: CDKN2A gene identifier   
+      $ref: '#/examples/gene_id'
 
   aminoacid_change:
     type: string
@@ -495,17 +476,10 @@ $defs:
       - --aminoacidChange
     description: >-
       Aminoacid alteration in 1 letter format
+    is_variant_par: True
     in: query
     examples:
-      - emptyValue:
-          value: ""
-          summary: Aminoacid alteration in 1 letter format
-      - V600E:
-          value: V600E
-      - M734V:
-          value: M734V
-      - G244A:
-          value: G244A
+      $ref: '#/examples/aminoacid_change'
 
   genomic_allele_short_form:
     type: string
@@ -515,6 +489,7 @@ $defs:
       - --genomicAlleleShortForm
     description: >-
       Genomic HGVSId descriptor
+    is_variant_par: True
     in: query
     examples:
       - gHGVS:
@@ -558,7 +533,7 @@ $defs:
           value: '11:52900000-134452384:EFO_0030067'
 
 ################################################################################
-# non-standard parameters
+# general non-standard parameters
 ################################################################################
 
   accessid:
@@ -569,8 +544,7 @@ $defs:
       - --accessid
     description: An accessid for retrieving handovers etc.
     examples:
-      - accessid:
-          value: 'b59857bc-0c4a-4ac8-804b-6596c6566494'
+      $ref: '#/examples/accessid'
 
   file_id:
     type: string
@@ -579,38 +553,7 @@ $defs:
       - --fileId
     description: A file id e.g. as generated by the uploader service
     examples:
-      - FileID:
-          value: '90e19951-1443-4fa8-8e0b-6b5d8c5e45cc'
-
-  id:
-    type: string
-    db_key: id 
-    pattern: '^\w[\w\:\-\,]+?\w$'
-    cmdFlags:
-      - --id
-    description: An id; this parameter only makes sense for specific REST entry types
-    in: "path"
-    examples:
-      - variant_id:
-          value: 'pgxvar-5bab576a727983b2e00b8d32'
-          summary: An internal variant ID
-          in_paths:
-            - g_variants
-      - individual_id:
-          value: 'pgxind-kftx25eh'
-          summary: An internal ID for an individual / subject
-          in_paths:
-            - individuals
-      - biosample_id:
-          value: 'pgxbs-kftviphc'
-          summary: An internal biosample ID
-          in_paths:
-            - biosamples
-      - analysis_id:
-          value: 'pgxcs-kftwaay4'
-          summary: An internal analysis ID
-          in_paths:
-            - analyses
+      $ref: '#/examples/file_id'
 
   path_ids:
     type: array
@@ -619,7 +562,7 @@ $defs:
       pattern: '^\w[\w,:-]+\w$'
     cmdFlags:
       - --pathIds
-    description: 'One or more ids provided in the path for specific REST entry types'
+    description: ids in the path
 
   biosample_ids:
     type: array
@@ -670,13 +613,6 @@ $defs:
     cmdFlags:
       - --debugMode 
     description: debug setting
-    default: false
-
-  show_help:
-    type: boolean
-    cmdFlags:
-      - --showHelp 
-    description: specific help display
     default: false
 
   test_mode_count:
@@ -890,3 +826,111 @@ $defs:
       - --plotType
     description: plot type (histoplot, samplesplot, arrayplot - more?)
     default: histoplot
+
+################################################################################
+############### examples (procedurally resolved in api.py) #####################
+################################################################################
+
+examples:
+
+  accessid:
+    - accessid:
+        value: b59857bc-0c4a-4ac8-804b-6596c6566494
+
+  aminoacid_change:
+    - emptyValue:
+        value: ""
+        summary: Aminoacid alteration in 1 letter format
+    - V600E:
+        value: V600E
+    - M734V:
+        value: M734V
+    - G244A:
+        value: G244A
+
+  file_id:
+    - FileID:
+        value: 90e19951-1443-4fa8-8e0b-6b5d8c5e45cc
+
+  filters:
+    - emptyValue:
+        value: ""
+        summary: A Beacon filter value, e.g. a CURIE for a disease code
+    - NCITneoplasm:
+        value:
+          - NCIT:C9335
+        summary: A neoplasia disease code (CURIE format)
+    - pubmed:
+        value:
+          - pubmed:28966033
+        summary: A publiction identifier (CURIE format)
+
+  gene_id:
+    - emptyValue:
+        value: 
+          - ""
+        summary: A HUGO gene symbol
+    - TP53:
+        value: 
+          - TP53
+        summary: TP53 gene identifier
+    - CDKN2A:
+        value: 
+          - CDKN2A
+        summary: CDKN2A gene identifier
+
+  id:
+    - variant_id:
+        value: 'pgxvar-5bab576a727983b2e00b8d32'
+        summary: An internal variant ID
+        in_paths:
+          - g_variants
+    - individual_id:
+        value: 'pgxind-kftx25eh'
+        summary: An internal ID for an individual / subject
+        in_paths:
+          - individuals
+    - biosample_id:
+        value: 'pgxbs-kftviphc'
+        summary: An internal biosample ID
+        in_paths:
+          - biosamples
+    - analysis_id:
+        value: 'pgxcs-kftwaay4'
+        summary: An internal analysis ID
+        in_paths:
+          - analyses
+
+  reference_name:
+    - emptyValue:
+        value: ""
+        summary: A versioned reference ID or a chromsome name / number
+    - chromosome:
+        value: "9"
+        summary: chromsome 9
+
+  requested_granularity:
+    - emptyValue:
+        value: ""
+        summary: Granularity of the response
+    - record:
+        value: record
+        summary: Data record
+    - count:
+        value: count
+        summary: Count of the matched records
+    - boolean:
+        value: boolean
+        summary: Boolean for match / no match
+
+  variant_type:
+    - emptyValue:
+        value: ""
+        summary: An EFO or SO code in CURIE format, or a VCF-style label
+    - EFOhllossCNV:
+        value: EFO:0030067
+        summary: high-level copy number loss
+    - VCFdup:
+        value: DUP
+        summary: copy number duplication  
+

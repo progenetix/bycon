@@ -8,6 +8,7 @@ from bycon import (
     BYC_DBS,
     BYC_PARS,
     BeaconErrorResponse,
+    ByconError,
     ByconFilters,
     GeoQuery,
     prdbug
@@ -48,7 +49,7 @@ def publications():
         else:
             query = { '$and': [ geo_q, query ] }
     if len(query.keys()) < 1:
-        BYC["ERRORS"].append("No query could be constructed from the parameters provided.")
+        ByconError().addError("No query could be constructed from the parameters provided.")
     
     BeaconErrorResponse().respond_if_errors()
 
@@ -181,7 +182,7 @@ def __create_filters_query():
             elif op == "=":
                 op = '$eq'
             else:
-                BYC["ERRORS"].append(f'uncaught filter error: {f_val}')
+                ByconError().addError(f'uncaught filter error: {f_val}')
                 continue
             q_list.append( { dbk: { op: int(no) } } )
         elif "start" in filter_precision or len(pre_code) == 1:

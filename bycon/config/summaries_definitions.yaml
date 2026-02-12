@@ -1,0 +1,134 @@
+description: >-
+  Definitions of aggregations for the Bycon aggregator service. This is transitional
+  since we're moving to definition by concept and then calling the individual or
+  combined concepts by their ids directly.
+  
+$defs:
+  selectedDiagnosesBySex:
+    id: selectedDiagnosesBySex
+    description: >-
+      Count of histological diagnoses in matched biosamples
+    scope: biosample
+    conceptIds:
+      - selectedHistologicalDiagnoses
+      - sampleSex
+
+  selectedCarinomaDiagnoses:
+    id: selectedCarinomaDiagnoses
+    description: >-
+      Count of histological diagnoses in matched biosamples for selected carcinomas
+    scope: biosample
+    conceptIds:
+      - selectedCarcinomaDiagnoses
+
+  selectedCarinomaDiagnosesBySex:
+    id: selectedCarinomaDiagnosesBySex
+    description: >-
+      Count of histological diagnoses in matched biosamples for selected carcinomas by sex
+    scope: biosample
+    conceptIds:
+      - selectedCarcinomaDiagnoses
+      - sampleSex
+
+  selectedPlatformTechnologies:
+    id: selectedPlatformTechnologies
+    description: >-
+      Count of basic platform technologies used in matched analyses
+    scope: analysis
+    conceptIds:
+      - selectedPlatformTechnologies
+
+  allPlatformTechnologies:
+    id: platformTechnologies
+    description: >-
+      Count of basic platform technologies used in matched analyses
+    scope: analysis
+    conceptIds:
+      - allPlatformTechnologies
+
+  sampleOriginDetailsBySex:
+    id: sampleOriginDetails
+    description: >-
+      Count of anatomical sites in matched biosamples
+    scope: biosample
+    conceptIds:
+      - sampleOriginDetails
+      - sampleSex
+
+  sampleICDO3histologyByAge:
+    id: sampleICDO3histologyByAge
+    description: >-
+      ICD-O 3 histologies in matched biosamples by age at diagnosis
+    scope: biosample
+    conceptIds:
+      - sampleICDO3histology
+      - sampleAge
+
+  sampleByAgeAtCollection:
+    id: sampleByAgeAtCollection
+    description: >-
+      Age at diagnosis (sample collection...)
+    scope: biosample
+    conceptIds:
+      - sampleAge
+
+  sampleICDO3histologyBySex:
+    id: sampleICDO3histologyBySex
+    scope: biosample
+    description: 
+      - ICD-O 3 histologies by sex in matched biosamples
+    conceptIds:
+      - sampleICDO3histology
+      - sampleSex
+
+  diseaseBySex:
+    id: diseaseBySex
+    description: 
+      - Cancer type by sex in matched individuals
+    scope: individual
+    conceptIds:
+      - individualDisease
+      - individualSex
+
+  biosampleDiseaseBySex:
+    id: biosampleDiseaseBySex
+    description: 
+      - Cancer type by sex in matched biosamples
+    scope: biosample
+    conceptIds:
+      - biosampleDisease
+      - sampleSex
+
+  sampleCountries:
+    id: sampleCountries
+    label_key: country
+    description: >-
+      Count of countries of origin in matched biosamples
+    scope: biosample
+    conceptIds:
+      - sampleCountries
+
+  ageAtDiagnosis:
+    id: ageAtDiagnosis
+    description: >-
+      Age at diagnosis
+    scope: individual
+    conceptIds:
+      - individualAge
+
+  ageAtDiagnosisBySex:
+    id: ageAtDiagnosisBySex
+    description: >-
+      Age at diagnosis by sex
+    scope: individual
+    conceptIds:
+      - individualAge
+      - individualSex
+
+  followupTime:
+    id: followupTime
+    description: >-
+      Follow-up time after diagnosis
+    scope: individual
+    conceptIds:
+      - followupTime

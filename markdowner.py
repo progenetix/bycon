@@ -32,10 +32,7 @@ def main():
         fn = f.name.split('.')[0]
         if fn in [ "__init__", "services"]:
             continue
-        # print(f'from {fn} import {fn}')
-
         pp_fh.write(f'### `/{fn}`\n\n')
-
         func = getattr(byconServices, fn)
         pp_fh.write(f'{inspect.getdoc(func)}\n\n\n')
 
@@ -125,7 +122,6 @@ the selected or granted `responseGranularity` please check `beaconResultsetsResp
     Here we process the `plot_defaults.yaml` and `argument_definitions.yaml` files
     into Markdown pages.
     """
-
 
     file_pars = {
         "plot_defaults":{

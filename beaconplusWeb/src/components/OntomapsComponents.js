@@ -67,11 +67,11 @@ export function useGetFilteredOptions({
 function mapToOptions(data) {
   if (!data || data.response.results[0].uniqueTerms == null) return []
   const ut = data.response.results[0].uniqueTerms
-  const NCIT = filterTermlistByPrefix("NCIT", ut) ?? []
+  const NCITneoplasm = filterTermlistByPrefix("NCIT", ut) ?? []
   const icdom = filterTermlistByPrefix("pgx:icdom", ut) ?? []
   const icdot = filterTermlistByPrefix("pgx:icdot", ut) ?? []
   const UBERON = filterTermlistByPrefix("UBERON", ut) ?? []
-  return [NCIT, icdom, icdot, UBERON].flat().map((c) => ({
+  return [NCITneoplasm, icdom, icdot, UBERON].flat().map((c) => ({
     label: c.id + ": " + c.label,
     value: c.id
   }))

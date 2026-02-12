@@ -15,7 +15,7 @@ import { svgFetcher } from "../../hooks/fetcher"
 // import BiosamplesStatsDataTable from "./BiosamplesStatsDataTable"
 // import { WithData } from "../Loader"
 import { refseq2chro } from "../Chromosome"
-import { AggregatedPlots } from "../AggregatedPlots"
+import { SummaryPlots } from "../summaries/SummaryPlots"
 
 const HANDOVER_IDS = {
   histoplot: "histoplot",
@@ -41,7 +41,7 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
     id,
     resultsHandovers,
     info,
-    summaryResults,
+    resultsAggregation,
     resultsCount
   } = responseSet
 
@@ -241,7 +241,7 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
       <br/>
       <hr/>
       <h2 className="subtitle has-text-dark">Matched {id} Data  Overview</h2>
-      <AggregatedPlots summaryResults={summaryResults} filterUnknowns={true} />
+      <SummaryPlots resultsAggregation={resultsAggregation} filterUnknowns={true} />
       <br/>
       <hr/>
       <h2 className="subtitle has-text-dark">{id} Data Downloads</h2>

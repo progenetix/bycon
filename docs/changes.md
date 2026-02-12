@@ -6,10 +6,63 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2026-01-29 (v2.7.3 "Stephen Fry")
+
+* removed array storage paths from config (not used anymore/ can be defined in custom
+  extensions) - `server_callsets_dir_loc`, `probefile_name`
+* moved error collection from direct manipulation of `BYC["ERRORS"}` into
+  new `bycon_helpers.ByconError` class, e.g. for universal debug w/ caller
+
+### 2026-01-23 (v2.7.2)
+
+* removed custom `paginateResults`, `filterLogic` parameters from the API
+* renamed and refactored `variant_request_definitions` => `request_profiles`
+    - which parameters are variant parameters is now indicated in `argument_definitions`
+      through `is_variant_par` and/or `is_vqs_par` flags
+* fixed some bug in summaries when only empty values were returned
+* added `beaconInformationalErrorResponse`
+
+### 2026-01-10 (v2.7.1)
+
+* further refactoring of summaries processing
+    - `bycon` - renaming of `aggregator_definitions` to `summaries_definitions` to keep a distinction from Beacon aggregation (_i.e._ involving multiple beacons)
+    - `beaconplusWeb` with several changes in `components/summaries`, generally
+      involving code "reshaping" but no major functional changes
+
+### 2025-12-31 (v2.7.0 "That Was 2025")
+
+* `beaconplusWeb` front end updates
+    - refactored data summaries source in `src/components/summaries/`
+    - improving of documentation in <https://bycon.progenetix.org/data-summaries/>
+
+### 2025-12-22 (v2.7.0+pre1)
+
+* de-nested the `classificationTrees` into single tupe specific files
+  and moved the additional sources for their generation outside of the project
+    - also renamed some files/filter types (e.g. `NCIT` ==> `NCITneoplasm`, `NCITsex` ==> `pgxSex`)
+* in `beaconplusWeb` changes to `AggregationPlots`
+    - moved from `Victory` to `Plotly`; this requires `npm install react-plotly.js plotly.js`
+* new `___BEACON_ROOT___/beacon/aggregation_terms` endpoint to indicate concepts
+  for available data summaries
+
+### 2025-12-12 (v2.6.9)
+
+The recent changes addressed several issues with the aggregation implementation
+
+* now `ByconSummaries` class
+    - dimension agnostic, i.e. supports 1D, 2D, ... nD aggregations through the
+      same methods
+    - TODO: So far cross-entity aggregations are supported through some workarounds;
+      e.g. some information stored in `individual` (sex, age, followup...) is
+      repeated in the biosamples' `individual_info` property to allow biosample
+      aggregations on individual properties. A more generic solution would be
+      desirable, e.g. utilizing MongoDB's `$lookup`.
+* added (expanding ...) [doumentation page](/data-summaries/) about the Beacon Aggregation development
+
 ### 2025-11-28 (v2.6.8 "Aggregator")
 
 * extending aggregation responses to support 2-dimensional aggregations
-    - implemented in `ByconAggregations` class
+    - implemented in `ByconSummaries` class
     - now also supports `plot_type: "stackedBar"` for the dashboard
 
 ### 2025-11-18 (v2.6.7 "DashboardDabbler")
@@ -18,7 +71,7 @@ milestones.
   draft version of a Beacon v2.n aggregation response
     - simple Victory based bar plots defined in `beaconplusWeb/src/components/AggregatedPlots.js`
     - only one-dimensional so far; 2-dimensional for stacked plots coming up
-* ... based on the `ByconAggregations` class to handle aggregation definitions
+* ... based on the `ByconSummaries` class to handle aggregation definitions
       and processing
     - added `aggregation_definitions.yaml` file for defining available aggregations
       and their parameters
@@ -40,7 +93,7 @@ milestones.
     },
     sex: { id: 'NCIT:C16576', label: 'female' }
 ```
-  
+
 
 ### 2025-11-04 (v2.6.6 "GlobeProjector")
 
@@ -217,7 +270,7 @@ chr3:
 
 ### 2025-06-05: (v2.4.7 "Thessaloniki")
 
-* added a global `NO_PARAM_VALUES` which is used to set matching parameters (e.g. "none", "null", "undefined") to empty strings during input processing (circumvents issues with empty parameters in web front-ends)
+* added a global `PARAM_NONE_VALUES` which is used to set matching parameters (e.g. "none", "null", "undefined") to empty strings during input processing (circumvents issues with empty parameters in web front-ends)
 * added clustering, tree generation and labels to the `histocircleplot` plot option
 * started to move request tests to [Bruno](https://docs.usebruno.com/) (in `tests/bycon-tests`)
 * circle plots are now clustered if more than one, with cluster tree and labels
@@ -260,7 +313,7 @@ chr3:
 
 ### 2025-05-15: (v2.4.3 "Bologna")
 
-* expanded `NCITsex` ontology to have hierarchical terms with the current NCIT
+* expanded `pgxSex` ontology to have hierarchical terms with the current NCIT
   terms at the tip of the branches
     - e.g. `pgx:sex` => `pgx:sex-female` => `PATO:0020001` => `NCIT:C16576`
     - allows for query expansion & use of alternate terms (e.g. PATO)

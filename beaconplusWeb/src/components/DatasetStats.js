@@ -1,20 +1,24 @@
 import React from "react"
-import { AggregatedPlots } from "./AggregatedPlots"
+import { SummaryPlots } from "./SummaryPlots"
 import {
   basePath,
   useProgenetixApi,
 } from "./../hooks/api"
 import { Loader } from "./Loader"
+import Panel from "./Panel"
 
-export default function DatasetStats({dataset_id, age_splits, followup_splits, filterUnknowns}) {
+export default function DatasetStats({dataset_id, ageSplits, followupSplits, aggregators, filterUnknowns}) {
   var summaryURL = `${basePath}beacon/datasets/${dataset_id}?requestedGranularity=aggregated`
   var params = []
 
-  if (followup_splits) {
-    params.push(`followupSplits=${followup_splits}`)
+  if (followupSplits) {
+    params.push(`followupSplits=${followupSplits}`)
   }
-  if (age_splits) {
-    params.push(`ageSplits=${age_splits}`)
+  if (ageSplits) {
+    params.push(`ageSplits=${ageSplits}`)
+  }
+  if (aggregators) {
+    params.push(`aggregators=${aggregators}`)
   }
   if (params.length > 0) {
     summaryURL += `&${params.join("&")}`
@@ -24,11 +28,25 @@ export default function DatasetStats({dataset_id, age_splits, followup_splits, f
   return (
     <Loader isLoading={isLoading} background>
       {data && (
-        <AggregatedPlots
-          summaryResults={data.response.collections[0].summaryResults}
-          filterUnknowns={filterUnknowns}
-        />
+        <>
+        <Panel heading="Dataset Summary">
+          <ul>
+            <li>Variants: {data.response.collections[0].counts.genomicVariant}</li>
+            <li>Analyses: {data.response.collections[0].counts.analysis}</li>
+            <li>Biosamples: {data.response.collections[0].counts.biosample}</li>
+            <li>Individuals: {data.response.collections[0].counts.individual}</li>
+          </ul>
+        </Panel>
+        <Panel heading="Some Content Statistics">
+          <SummaryPlots
+            resultsAggregation={data.response.collections[0].resultsAggregation}
+            filterUnknowns={filterUnknowns}
+          />
+        </Panel>
+        </>
       )}
     </Loader>
   )
 }
+
+

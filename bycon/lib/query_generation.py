@@ -3,7 +3,7 @@ import humps, inspect, pymongo, re, sys
 from os import environ
 from pymongo import MongoClient
 
-from bycon_helpers import days_from_iso8601duration, prdbug, prjsonnice, ByconH
+from bycon_helpers import days_from_iso8601duration, prdbug, prjsonnice, ByconError, ByconH
 from config import *
 from genome_utils import ChroNames, Cytobands, GeneInfo, VariantTypes
 from parameter_parsing import ByconFilters
@@ -53,10 +53,8 @@ class ByconQuery():
         # TODO: call the variant type definition from inside this class since
         # e.g. multivars ... need this for each instance
         self.variant_request_type = None
-        self.variant_request_definitions = BYC.get("variant_request_definitions", {})
-        self.variant_par_names = self.variant_request_definitions.get("request_pars", [])
-        self.variant_par_names += self.variant_request_definitions.get("VQS_pars", [])
-
+        self.variant_par_names = []
+        self.request_profiles = BYC.get("request_profiles", {}).get("$defs", {})
         self.variant_type_definitions = BYC.get("variant_type_definitions", {})
 
         self.limit = BYC_PARS.get("limit")
@@ -68,6 +66,7 @@ class ByconQuery():
             "entities": {}
         }
 
+        self.__set_variant_par_names()
         self.__queries_for_test_mode()
         self.__update_queries_from_id_values()
         self.__query_from_hoid()
@@ -87,6 +86,14 @@ class ByconQuery():
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __set_variant_par_names(self):
+        for a_k, a_d in self.argument_definitions.items():
+            if a_d.get("is_variant_par") or a_d.get("is_vqs_par"):
+                self.variant_par_names.append(a_k)
+
+
     # -------------------------------------------------------------------------#
 
     def __update_queries_from_id_values(self):
@@ -149,20 +156,21 @@ class ByconQuery():
             return
 
         ret_no = BYC_PARS.get("test_mode_count", 5)
-        if not (r_c := BYC_DBS.get(f"{self.response_entity_id}_coll")):
+        e = self.response_entity_id
+        if not (c := BYC_DBS.get("collections", {}).get(e)):
             return
 
         data_db = MongoClient(host=BYC_DBS["mongodb_host"])[self.ds_id]
-        if r_c not in data_db.list_collection_names():
+        if c not in data_db.list_collection_names():
             # TODO: warning?
             return
 
-        data_coll = data_db[r_c]
+        data_coll = data_db[c]
         rs = list(data_coll.aggregate([{"$sample": {"size": ret_no}}]))
 
         q = [{"id": {"$in": list(s["id"] for s in rs)}}]
 
-        self.queries["entities"].update({self.response_entity_id: {"query": q, "collection": r_c}})
+        self.queries["entities"].update({self.response_entity_id: {"query": q, "collection": c}})
         self.queries.update({"expand": False})
 
 
@@ -175,15 +183,16 @@ class ByconQuery():
             return
         self.variant_multi_pars = BYC_PARS.get("variant_multi_pars", [])
 
-        r_e = "genomicVariant"
-        r_c = BYC_DBS.get(f"{r_e}_coll")
+        e = "genomicVariant"
+        if not (c := BYC_DBS.get("collections", {}).get(e)):
+            return
 
         # new preprocessing which results in a list of variant queries
         self.__preprocess_variant_pars()        
         if not (v_queries := self.__loop_multivars()):
             return
 
-        self.queries["entities"].update({r_e: {"query": v_queries, "collection": r_c}})
+        self.queries["entities"].update({e: {"query": v_queries, "collection": c}})
 
 
     # -------------------------------------------------------------------------#
@@ -232,7 +241,6 @@ class ByconQuery():
             if "reference_name" in v_p_k or "mate_name" in v_p_k:
                 v_p_c.update({v_p_k: self.ChroNames.refseq(v_p)})
                 continue
-
 
             # VQS - TODO (remapping to be transferred ...)
             if "reference_accession" in v_p_k:
@@ -299,7 +307,7 @@ class ByconQuery():
                     # prdbug(q)
                     queries.append(q)
                     continue
-            if "geneVariantRequest" in variant_request_type:
+            if "GeneIdRequest" in variant_request_type:
                 if (q := self.__create_geneVariantRequest_query(v_pars)):
                     queries = [*queries, *q]
                     continue
@@ -327,7 +335,7 @@ class ByconQuery():
                  if (q := self.__create_variantRangeRequest_query(v_pars)):
                     queries.append(q)
                     continue
-            if "variantAlleleRequest" in variant_request_type:
+            if "BV2alleleRequest" in variant_request_type:
                 if (q := self.__create_variantAlleleRequest_query(v_pars)):
                     queries.append(q)
                     continue
@@ -359,9 +367,11 @@ class ByconQuery():
               which is only removed after a successfull type match.
         """
 
+        prdbug(f"Checking variant request type for {v_pars.get("request_profile_id")}")
+
         variant_request_type = None
 
-        brts = self.variant_request_definitions.get("request_types", {})
+        brts = self.request_profiles
         brts_k = brts.keys()
         # prdbug(f'...brts_k: {brts_k}')
         
@@ -370,7 +380,7 @@ class ByconQuery():
         if "mate_name" in  v_pars:
             brts_k = [ "variantFusionRequest" ]
         elif "start" in v_pars and "end" in v_pars:
-            if len(v_pars[ "start" ]) == 1 and len(v_pars[ "end" ]) == 1:
+            if len(v_pars.get("start", [])) == 1 and len(v_pars.get("end", [])) == 1:
                 brts_k = [ "variantRangeRequest" ]
             elif len(v_pars[ "start" ]) == 2 and len(v_pars[ "end" ]) == 2:
                 brts_k = [ "variantBracketRequest" ]
@@ -379,7 +389,7 @@ class ByconQuery():
         elif "genomic_allele_short_form" in v_pars:
             brts_k = [ "genomicAlleleShortFormRequest" ]
         elif "gene_id" in v_pars:
-            brts_k = [ "geneVariantRequest" ]
+            brts_k = [ "GeneIdRequest" ]
         elif "cyto_bands" in  v_pars:
             brts_k = [ "cytoBandRequest" ]
         elif "variant_query_digests" in  v_pars:
@@ -419,14 +429,14 @@ class ByconQuery():
     def __create_geneVariantRequest_query(self, v_pars):
         # query database for gene and use coordinates to create range query
         gene_id = v_pars.get("gene_id", [])
-        prdbug(f'...geneVariantRequest gene_id: {gene_id}')
+        prdbug(f'...GeneIdRequest gene_id: {gene_id}')
         queries = []
         for g in gene_id:
             # TODO: error report/warning
             if not (gene_data := GeneInfo().returnGene(g)):
                 continue
             gene = gene_data[0]
-            prdbug(f'...geneVariantRequest gene_data: {gene}')
+            prdbug(f'...GeneIdRequest gene_data: {gene}')
             # Since this is a pre-processor to the range request
             v_pars.update({
                 "reference_name": f'refseq:{gene.get("accession_version", "___none___")}',
@@ -434,7 +444,7 @@ class ByconQuery():
                 "end": [ gene.get("end", 1) ]
             })
             q_t = self.__create_variantRangeRequest_query(v_pars)
-            prdbug(f'...geneVariantRequest query result: {q_t}')
+            prdbug(f'...GeneIdRequest query result: {q_t}')
             queries.append(q_t)
 
         if len(queries) < 1:
@@ -479,7 +489,7 @@ class ByconQuery():
                     "reference_bases": ref,
                     "alternate_bases": alt
                 } )
-                self.variant_request_type = "variantAlleleRequest"
+                self.variant_request_type = "BV2alleleRequest"
                 q_t = self.__create_variantAlleleRequest_query(v_pars)
                 return False
             else:
@@ -707,8 +717,6 @@ class ByconQuery():
                 v_q.update( { v_p_defs[p]["db_key"]: { '$regex': qv } } )
             else:
                 v_q.update( { v_p_defs[p]["db_key"]: qv } )
-            
-        # v_q = { "$and": v_q_l }
 
         return v_q
 
@@ -740,34 +748,41 @@ class ByconQuery():
         if len(self.filters) < 1:
             return
 
-        logic = self.__boolean_to_mongo_logic(BYC_PARS.get("filter_logic"))
-
-        data_db = MongoClient(host=BYC_DBS["mongodb_host"])[self.ds_id]
-        if not (ft_collname := BYC_DBS.get("filteringTerm_coll")):
+        m_h = BYC_DBS["mongodb_host"]
+        m_d = self.ds_id
+        if not (m_c := BYC_DBS.get("collections", {}).get("filteringTerm")):
+            ByconError().addError("No filtering term collection defined!")
             return
-        coll_coll = data_db[ft_collname]
-        self.collation_ids = coll_coll.distinct("id", {})
+        self.filter_collection = MongoClient(host=m_h)[m_d][m_c]
 
+        entity_filters_lists = self.__assemble_filter_lists()
+
+        for f_entity, field_queries in entity_filters_lists.items():
+            f_s_l = []
+            for f_field, f_query_vals in field_queries.items():
+                if len(f_query_vals) == 1:
+                    f_s_l.append({f_field: f_query_vals[0]})
+                else:
+                    for f_q_v in f_query_vals:
+                        f_s_l.append({f_field: f_q_v})
+
+            self.__update_queries_for_entity(f_s_l, f_entity)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __assemble_filter_lists(self):
         f_lists = {}
-        f_infos = {}
 
-        for i, f in enumerate(self.filters):
+        for f in self.filters:
+
             f = self.__substitute_filter_id(f)
-            f_val = f.get("id")
-            prdbug(f_val)
-            f_neg = f.get("excluded", False)
-            if re.compile(r'^!').match(f_val):
-                f_neg = True
-                f_val = re.sub(r'^!', '', f_val)
-            f_val = re.sub(r'^!', '', f_val)
+            f_val, f_neg = self.__get_filter_value_and_negation(f)
             f_desc = f.get("includeDescendantTerms", BYC_PARS.get("include_descendant_terms"))
-
-            f_info = self.__query_from_collationed_filter(coll_coll, f_val)
+            if (f_info := self.__filter_info_from_collationed_filter(f_val)) is False:
+                f_info = self.__filter_info_from_filter_definitions(f_val)
             if f_info is False:
-                f_info = self.__query_from_filter_definitions(f_val)
-
-            prdbug(f'... f_info: {f_info}')
-            if f_info is False:
+                BYC["WARNINGS"].append(f"No filter query could be created for value {f_val}!!!")
                 continue
 
             if f_neg is True:
@@ -776,17 +791,15 @@ class ByconQuery():
             f_entity = f_info.get("entity")
             if f_entity not in f_lists.keys():
                 f_lists.update({f_entity: {}})
-            if f_entity not in f_infos.keys():
-                f_infos.update({f_entity: {}})
 
             f_field = f_info.get("db_key", "id")
             if f_field not in f_lists[f_entity].keys():
                 f_lists[f_entity].update({f_field: []})
-            if f_field not in f_infos[f_entity].keys():
-                f_infos[f_entity].update({f_field: f_info})
 
             # TODO: needs a general solution for alphanumerics; so far for the
-            # iso age w/ pre-calculated days field...
+            # iso age and followup_time w/ pre-calculated days field...
+            # TODO: The whole negation is a bit non-standard since the logic
+            # of "excluded" versus "not found" is complex. To be revised...
             if "alphanumeric" in f_info.get("type", "ontology"):
                 prdbug(f'__query_from_filters ... alphanumeric: {f_info["id"]}')
                 if re.match(r'^(\w+):?([<>=]+?)?(\w[\w.]+?)$', f_info["id"]):
@@ -806,20 +819,9 @@ class ByconQuery():
                     f_lists[f_entity][f_field].append({'$nin': [f_info["id"]]})
                 else:
                     f_lists[f_entity][f_field].append(f_info["id"])
-            prdbug(f'... f_neg: {f_neg} ==>> {f_field}: {f_lists[f_entity][f_field]}')
 
-        # now processing the filter lists into the queries
+        return f_lists
 
-        for f_entity in f_lists.keys():
-            f_s_l = []
-            for f_field, f_query_vals in f_lists[f_entity].items():
-                if len(f_query_vals) == 1:
-                    f_s_l.append({f_field: f_query_vals[0]})
-                else:
-                    for f_q_v in f_query_vals:
-                        f_s_l.append({f_field: f_q_v})
-
-            self.__update_queries_for_entity(f_s_l, f_entity)
 
     # -------------------------------------------------------------------------#
 
@@ -830,29 +832,43 @@ class ByconQuery():
 
     # -------------------------------------------------------------------------#
 
-    def __query_from_collationed_filter(self, coll_coll, f_val):
-        f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
-        if f_val not in self.collation_ids:
-            return False
-
-        f_info = coll_coll.find_one({"id": f_val}, {"frequencymap": 0})
-        f_ct = f_info.get("collation_type", "___none__")
-        if not (f_d := f_d_s.get(f_ct)):
-            return False
-
-        # TODO: the whole "get entity" is a bit cumbersome ... should be added
-        # to each collation in the next generation round
-        f_info.update({"entity": f_d.get("entity", "biosample")})
-
-        return f_info
+    def __get_filter_value_and_negation(self, f):
+        f_val = f.get("id")
+        f_neg = f.get("excluded", False)
+        if re.compile(r'^!').match(f_val):
+            f_neg = True
+            f_val = re.sub(r'^!', '', f_val)
+        f_val = re.sub(r'^!', '', f_val)
+        return f_val, f_neg
 
 
     # -------------------------------------------------------------------------#
 
-    def __query_from_filter_definitions(self, f_val):
+    def __filter_info_from_collationed_filter(self, f_val):
+        if (f_info := self.filter_collection.find_one(
+            {"id": f_val},
+            {
+                "_id": 0,
+                "id": 1,
+                "label": 1,
+                "type": 1,
+                "format": 1,
+                "db_key": 1,
+                "entity": 1,
+                "child_terms": 1
+            }
+        )):
+            return f_info
+
+        return False
+
+
+    # -------------------------------------------------------------------------#
+
+    def __filter_info_from_filter_definitions(self, f_val):
         f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
 
-        prdbug(f'...__query_from_filter_definitions: {f_val}')
+        prdbug(f'...__filter_info_from_filter_definitions: {f_val}')
 
         for f_d in f_d_s.values():
             if f_d.get("collationed", False) is True:
@@ -895,7 +911,11 @@ class ByconQuery():
         if not (accessid := BYC_PARS.get("accessid")):
             return
 
-        ho_coll = MongoClient(host=BYC_DBS["mongodb_host"])[BYC_DBS["housekeeping_db"]][BYC_DBS["handover_coll"]]
+        m_h = BYC_DBS["mongodb_host"]
+        m_d = BYC_DBS["housekeeping_db"]
+        m_c = BYC_DBS.get("collections", {}).get("handover")
+
+        ho_coll = MongoClient(host=m_h)[m_d][m_c]
         if not (h_o := ho_coll.find_one({"id": accessid})):
             return
 
@@ -916,27 +936,19 @@ class ByconQuery():
     def __update_queries_for_entity(self, query, entity):
         # TODO: This is now for using generally query lists and aggregate 
         # by multiple queries & intersection of matched ids during execution
-        # => logic right now always AND
-        logic = self.__boolean_to_mongo_logic(BYC_PARS.get("filter_logic"))
-        r_c = BYC_DBS.get(f"{entity}_coll", "___none___")
+        e = entity
+        if not (c := BYC_DBS.get("collections", {}).get(e)):
+            return
         q_e = self.queries.get("entities")
 
         if type(query) is not list:
             query = [query]
-        if entity not in q_e:
-            q_e.update({entity:{"query": query, "collection": r_c}})
+        if e not in q_e:
+            q_e.update({e:{"query": query, "collection": c}})
         else:
-            q_e[entity]["query"] = [*q_e[entity]["query"], *query]
+            q_e[e]["query"] = [*q_e[e]["query"], *query]
 
         self.queries.update({"entities": q_e})
-
-
-    # -------------------------------------------------------------------------#
-
-    def __boolean_to_mongo_logic(self, logic: str = "AND") -> str:
-        if "OR" in logic.upper():
-            return '$or'
-        return '$and'
 
 
     # -------------------------------------------------------------------------#
@@ -1149,7 +1161,7 @@ class CollationQuery:
         mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         db_names = list(mongo_client.list_database_names())
         if self.dataset_id not in db_names:
-            BYC["ERRORS"].append(f"db `{self.dataset_id}` does not exist")
+            ByconError().addError(f"db `{self.dataset_id}` does not exist")
             self.query = {"_id": "___undefined___"}
             return
         try:
@@ -1157,7 +1169,7 @@ class CollationQuery:
             ids = list(s["id"] for s in rs)
             self.query = {"id": {"$in": ids}}
         except Exception as e:
-            BYC["ERRORS"].append(e)
+            ByconError().addError(e)
             self.query = {"_id": "___undefined___"}
         mongo_client.close()
 

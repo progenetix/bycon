@@ -5,6 +5,7 @@ from importlib import import_module, util
 from bycon import (
     BYC,
     BeaconErrorResponse,
+    ByconError,
     prdbug
 )
 
@@ -18,7 +19,7 @@ rewrite in the server configuration for creation of canonical URLs.
 rq_p_id = BYC.get("request_entity_path_id", "ids")
 
 if not(servicemod := util.find_spec(rq_p_id)):
-    BYC["ERRORS"].append(f'No correct service path provided through {servicemod}. Please refer to the documentation at http://bycon.progenetix.org')
+    ByconError().addError(f'No correct service path provided through {servicemod}. Please refer to the documentation at http://bycon.progenetix.org')
     BeaconErrorResponse().respond_if_errors()
 
 # dynamic package/function loading with function names equal to the module
@@ -29,5 +30,5 @@ try:
     serv = getattr(mod, rq_p_id)
     serv()
 except Exception as e:
-    BYC["ERRORS"].append(f"Service error: {e}")
+    ByconError().addError(f"Service error: {e}")
     BeaconErrorResponse().respond_if_errors()

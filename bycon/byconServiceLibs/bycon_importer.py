@@ -23,6 +23,7 @@ sys.path.append( services_lib_path )
 from bycon_bundler import ByconBundler
 from datatable_utils import import_datatable_dict_line
 from file_utils import write_log
+from geoloc_utils import ByconGeoResource
 from service_helpers import assert_single_dataset_or_exit
 
 ################################################################################
@@ -258,8 +259,7 @@ class ByconImporter():
     def __prepare_entity(self, entity="___none___"):
         if not (e_d := self.entity_defaults.get(entity)):
             return
-        import_collkey = f"{entity}_coll"
-        self.import_collname = BYC_DBS.get(import_collkey, "___none___")
+        self.import_collname = BYC_DBS.get("collections", {}).get(entity)
         self.import_entity = entity
         self.import_id = f"{entity}_id"
         self.upstream = RecordsHierarchy().upstream(entity)
@@ -337,7 +337,7 @@ class ByconImporter():
 
         dcs = []
         for d in self.downstream:
-            if (c := BYC_DBS.get(f"{d}_coll")):
+            if (c := BYC_DBS.get("collections", {}).get(d)):
                 dcs.append(c)
 
         if tds_id not in self.database_names:
@@ -423,7 +423,7 @@ class ByconImporter():
         fn = self.data_in.fieldnames
         dcs = []
         for d in self.downstream:
-            if (c := BYC_DBS.get(f"{d}_coll")):
+            if (c := BYC_DBS.get("collections", {}).get(d)):
                 dcs.append(c)
 
         del_coll = self.mongo_client[ds_id][icn]
@@ -555,10 +555,17 @@ class ByconImporter():
 
         #---------------------------- Import Stage ----------------------------# 
 
+        # GEORSRC = ByconGeoResource()
+
         i_no = 0
         for new_doc in checked_docs:
             update_i = {"id": new_doc[iid]}
             update_i = import_datatable_dict_line(update_i, fn, new_doc, ien)
+
+            if len(coords := update_i.get("geo_location", {}).get("geometry", {}).get("coordinates", [])) == 2:
+                if (geoloc := GEORSRC.geoloc_from_long_lat(coords[0], coords[1])):
+                    update_i.update({"geo_location": geoloc})
+
             update_i.update({"updated": datetime.now().isoformat()})
 
             if not BYC["TEST_MODE"]:
@@ -646,7 +653,7 @@ class ByconImporter():
         for u in self.upstream:
             if not (e_d := self.entity_defaults.get(u)):
                 return
-            if not (u_coll := BYC_DBS.get(f"{u}_coll")):
+            if not (u_coll := BYC_DBS.get("collections", {}).get(u)):
                 return
             # no exception for genomicVariant since never upstream...
             u_id = new_doc.get(f'{u}_id', "___none___")

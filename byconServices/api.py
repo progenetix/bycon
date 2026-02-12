@@ -1,13 +1,24 @@
 #!/usr/local/bin/python3
 
 import json, yaml
+from json_ref_dict import RefDict, materialize
 from humps import camelize
 from markdown import markdown as md
 from os import path
 
 from collections import OrderedDict
 
-from bycon import BYC, BYC_PARS, ByconFilteringTerms, ChroNames, load_yaml_empty_fallback, prdbug, prjsonhead, prjsontrue, select_this_server
+from bycon import (
+    BYC,
+    BYC_PARS,
+    ByconFilteringTerms,
+    ChroNames,
+    load_yaml_empty_fallback,
+    prdbug,
+    prjsonhead,
+    prjsontrue,
+    select_this_server
+)
 
 services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )
 
@@ -49,12 +60,13 @@ class ByconOpenAPI:
         self.entity_defaults = BYC.get("entity_defaults", {})
         self.examples = load_yaml_empty_fallback(path.join(services_conf_path, "api_examples.yaml"))
         self.argument_definitions = BYC.get("argument_definitions", {}).get("$defs", {})
+        self.argument_examples = BYC.get("argument_definitions", {}).get("examples", {})
         self.mode = BYC_PARS.get("mode", "__none__")
         self.this_server = select_this_server()
 
         self.beacon_eps = ["info", "dataset", "cohort", "genomicVariant", "analysis", "biosample", "individual", "filteringTerm"]
         self.service_eps = ["collation", "intervalFrequencies", "geolocation", "publication"]
-        self.collation_types = ["NCIT", "pubmed", "NCITsex", "icdom"]
+        self.collation_types = ["NCIT", "pubmed", "pgxSex", "icdom"]
         self.general_pars = ["skip", "limit", "requested_granularity"]
 
         self.include_id_paths = True
@@ -168,7 +180,7 @@ class ByconOpenAPI:
             for a, a_d in self.argument_definitions.items():
                 if self.mode:
                     if "VQS" in self.mode:
-                        if a_d.get("vqs_query"):
+                        if a_d.get("is_vqs_par"):
                             pars.append(a)
                     else:
                         if a_d.get("beacon_query"):
@@ -335,8 +347,13 @@ class ByconOpenAPI:
     # ------------------------------------------------------------------------ #
 
     def __parameter_add_examples(self, p, parameter, definition, scope):
-
         e_s = definition.get("examples", [])
+        if type(e_s) is dict:
+            if "$ref" in (e_s):
+                e_s = self.argument_examples.get(parameter, [])
+
+            prdbug(f"Examples: {parameter}: {e_s}")
+
         e_s += self.__parameter_get_values(parameter)
 
         if len(e_s) < 1:

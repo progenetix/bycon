@@ -1,3 +1,19 @@
+## beaconAggregationResponse
+
+Definition for a response that provides solely summaries of records in the beacon but not delivers individual records. While summaries might be also part of other response types (e.g. result set specific in `beaconResultsetResponse`) this response type specifically focuses on providing aggregated statistics of a beacon resource similarily to the `beaconBooleanResponse` and `beaconCountResponse`.
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconAggregationResponse>
+
+
+
+## beaconInformationalErrorResponse
+
+A `beaconInformationalErrorResponse` denotes an unsuccessful operation. The response contains an error object.
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconInformationalErrorResponse>
+
+
+
 ## beaconCollectionsResponse
 
 A type of Beacon response that includes details about the **collections** in a beacon. The types of collections are defined in each beacon's configuration; if using the Beacon v2+ default model usually the types `dataset` and `cohort` are supported.
@@ -29,6 +45,38 @@ A group of individuals, identified by a common characteristic.
 * **{S}** <{{config.reference_server_url}}/services/schemas/cohort>
 
 * **{T}** <{{config.reference_server_url}}/beacon/cohorts?testMode=true>
+
+
+
+### gene @ `/genespans`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/genespans?testMode=true>
+
+
+
+### geolocation @ `/geolocations`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/geolocations?testMode=true>
+
+
+
+### intervalFrequencies @ `/intervalFrequencies`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/intervalFrequencies?testMode=true>
+
+
+
+### publication @ `/publications`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/publications?testMode=true>
 
 
 
@@ -89,6 +137,26 @@ Additional information - which should not consist of record-level information - 
 
 For a list of entities potentially served by `beaconBooleanResponse` depending on
 the selected or granted `responseGranularity` please check `beaconResultsetsResponse`.
+
+
+## beaconAggregationConceptsResponse
+
+The aggregation terms response provides information about available individual aggregation options beacon's response.
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/beaconAggregationConceptsResponse>
+
+### aggregationTerm @ `/aggregation_terms`
+
+Information about the summary terms available in the beacon instance.
+
+
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/aggregationTermsSchema>
+
+* **{T}** <{{config.reference_server_url}}/beacon/aggregation_terms>
+
+
+
 
 
 ## beaconFilteringTermsResponse
@@ -234,6 +302,14 @@ Information about matching subjects (individuals) from the corresponding dataset
 
 
 
+### cnvstats @ `/cnvstats`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/cnvstats?testMode=true>
+
+
+
 
 
 ## beaconEntryTypesResponse
@@ -266,5 +342,171 @@ Additional information - which should not consist of record-level information - 
 
 For a list of entities potentially served by `beaconBooleanResponse` depending on
 the selected or granted `responseGranularity` please check `beaconResultsetsResponse`.
+
+
+## None
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/None>
+
+### api @ `/api`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/api>
+
+
+
+### byconschemas @ `/byconschemas`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/byconschemas>
+
+
+
+### collationplot @ `/collationplots`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/collationplots>
+
+
+
+### cytobands @ `/cytomapper`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/cytomapper>
+
+
+
+### dbstats @ `/dbstats`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/dbstats>
+
+
+
+### endpoints @ `/endpoints`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/endpoints>
+
+
+
+### ids @ `/ids`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/ids>
+
+
+
+### ontologymaps @ `/ontologymaps`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/ontologymaps>
+
+
+
+### tester @ `/tester`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/tester>
+
+
+
+### uploader @ `/uploader`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/uploader>
+
+
+
+### pgxsegvariants @ `/pgxsegvariants`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/pgxsegvariants>
+
+
+
+### samplemap @ `/samplemap`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/samplemap>
+
+
+
+### sampleglobe @ `/sampleglobe`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/sampleglobe>
+
+
+
+### samplematrix @ `/samplematrix`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/samplematrix>
+
+
+
+### sampletable @ `/sampletable`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/sampletable>
+
+
+
+### sampleplots @ `/sampleplots`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/sampleplots>
+
+
+
+### variantsbedfile @ `/variantsbedfile`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/variantsbedfile>
+
+
+
+### vcfvariants @ `/vcfvariants`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/vcfvariants>
+
+
+
+
+
+## byconServiceResponse
+
+Byconaut service responses provide lists of items and a summary.
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/byconServiceResponse>
+
+### collation @ `/collations`
+
+* **{S}** <{{config.reference_server_url}}/services/schemas/>
+
+* **{T}** <{{config.reference_server_url}}/beacon/collations>
+
+
+
 
 

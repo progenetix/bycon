@@ -1,0 +1,188 @@
+description: >-
+  Each of the `concepts` defines the scope (individual, biosample, analysis),
+  property to aggregate on, and optional `termIds` or `splits` for selection
+  or binning of the results in the returned `distribution`.
+
+  Note: `sorted` right now only applies to the first dimension if used in 2D.
+  
+$defs:
+
+  selectedHistologicalDiagnoses:
+    id: selectedHistologicalDiagnoses
+    label: Selected Diagnostic Classes (by NCIT)
+    scope: biosample
+    property: biosample.histological_diagnosis.id
+    termIds:
+      - NCIT:C9335    # Malignant neoplasm of breast
+      - NCIT:C4863    # Prostate Carcinoma
+      - NCIT:C9384    # Kidney Carcinoma
+      - NCIT:C7431    # Malignant Ovarian Neoplasm
+      - NCIT:C61574   # Malignant Uterine Corpus Neoplasm
+      - NCIT:C9311    # Malignant Cervical Neoplasm
+      - NCIT:C3513    # Esophageal Carcinoma
+      - NCIT:C35850   # Head and Neck Carcinoma
+      - NCIT:C4878    # Lung Carcinoma
+      - NCIT:C207229  # Pancreatic Carcinoma
+      - NCIT:C4911    # Gastric Carcinoma
+      - NCIT:C2955    # Colorectal Carcinoma
+      - NCIT:C7927    # Liver Carcinoma
+      - NCIT:C4822    # Malignant Glioma
+      - NCIT:C3716    # Primitive Neuroectodermal Tumor
+      - NCIT:C3224    # Melanoma
+      - NCIT:C9118    # Sarcoma
+      - NCIT:C4925    # Malignant Germ Cell Tumor
+      - NCIT:C27753   # Acute Myeloid Leukemia, Not Otherwise Specified
+      - NCIT:C3163    # Chronic Lymphocytic Leukemia
+      - NCIT:C3466    # T-Cell Non-Hodgkin Lymphoma
+      - NCIT:C3457    # B-Cell Non-Hodgkin Lymphoma
+
+  selectedCarcinomaDiagnoses:
+    id: selectedCarcinomaDiagnoses
+    label: Selected Diagnostic Classes (carcinomas; by NCIT)
+    description: >-
+      Count of histological diagnoses in matched biosamples for selected carcinomas
+    scope: biosample
+    property: biosample.histological_diagnosis.id
+    termIds:
+      - NCIT:C9384 # Kidney Carcinoma
+      - NCIT:C3513 # Esophageal Carcinoma
+      - NCIT:C35850 # Head and Neck Carcinoma
+      - NCIT:C4878 # Lung Carcinoma
+      - NCIT:C207229 # Pancreatic Carcinoma
+      - NCIT:C4911 # Gastric Carcinoma
+      - NCIT:C2955 # Colorectal Carcinoma
+      - NCIT:C7927 # Liver Carcinoma
+
+  selectedPlatformTechnologies:
+    id: selectedPlatformTechnologies
+    label: Selected Platform Technologies
+    description: >-
+      Count of basic platform technologies used in matched analyses
+    scope: analysis
+    property: analysis.platform_model.id
+    termIds:
+      - EFO:0030075 # cDNA microarray
+      - EFO:0010938 # large-insert clone DNA microarray
+      - EFO:0010939 # oligonucleotide DNA microarray
+      - EFO:0010937 # comparative genomic hybridization (CGH)
+      - NCIT:C16437 # Chromosome Banding
+      - OBI:0002117 # whole genome sequencing assay
+      - OBI:0002118 # whole exome sequencing assay
+      - NCIT:C158253  # Targeted Genome Sequencing
+
+  allPlatformTechnologies:
+    id: allPlatformTechnologies
+    label: All Platforms by ID
+    description: >-
+      Count of basic platform technologies used in matched analyses
+    scope: analysis
+    property: analysis.platform_model.id
+
+  sampleOriginDetails:
+    id: sampleOriginDetails
+    label: Anatomical Origin
+    description: >-
+      Count of anatomical sites in matched biosamples
+    scope: biosample
+    property: biosample.sample_origin_detail.id
+
+  sampleSex:
+    id: sampleSex
+    label: Sex at birth
+    description: >-
+      Sex of the sample's donor
+    scope: biosample
+    property: biosample.individual_info.sex.id
+
+  individualSex:
+    id: individualSex
+    label: Sex at birth
+    description: >-
+      Sex of the individual
+    scope: individual
+    property: individual.sex.id
+
+  sampleICDO3histology:
+    id: sampleICDO3histology
+    label: ICD-O 3 Histology
+    description: >-
+      ICD-O 3 histologies in matched biosamples by age at diagnosis
+    scope: biosample
+    property: biosample.icdo_morphology.id
+
+  sampleAge:
+    id: sampleAge
+    label: Age at sample collection
+    description: >-
+      Age at diagnosis (sample collection...)
+    scope: biosample
+    property: biosample.collection_moment
+    format: iso8601duration
+    splits:
+      - P0D
+      - P18Y
+      - P65Y
+      - P120Y
+    sorted: True
+
+  individualAge:
+    id: individualAge
+    label: Individual's age at Diagnosis
+    description: >-
+      Individual's age at diagnosis
+    scope: individual
+    property: individual.index_disease.onset.age
+    format: iso8601duration
+    splits:
+      - P0D
+      - P18M
+      - P18Y
+      - P40Y
+      - P65Y
+      - P80Y
+      - P120Y
+    sorted: True
+
+  individualDisease:
+    id: individualDisease
+    label: Diseases in Individuals
+    description: 
+      - Disease in matched individuals
+    scope: individual
+    property: individual.index_disease.disease_code.id
+
+  biosampleDisease:
+    id: biosampleDisease
+    label: Diseases in Biosamples
+    description: 
+      - Disease in matched biosamples
+    scope: biosample
+    property: biosample.histological_diagnosis.id
+
+  sampleCountries:
+    id: sampleCountries
+    label: Sample Countries
+    label_key: country
+    description: >-
+      Count of countries of origin in matched biosamples
+    scope: biosample
+    property: biosample.geo_location.properties.ISO3166alpha3
+
+  followupTime:
+    id: followupTime
+    label: Follow-up Time
+    description: >-
+      Follow-up time after diagnosis
+    scope: individual
+    property: individual.index_disease.followup
+    format: iso8601duration
+    splits:
+      - P0D
+      - P6M
+      - P1Y
+      - P18M
+      - P3Y
+      - P5Y
+      - P10Y
+      - P60Y
+    sorted: True

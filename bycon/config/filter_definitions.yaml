@@ -206,7 +206,7 @@ $defs:
       - NCIT:C48786
 
   # Bio-Metadata
-  NCIT:
+  NCITneoplasm:
     id: ncit/neoplasm-core.owl
     type: ontologyTerm
     iri_prefix: http://purl.obolibrary.org/obo/NCIT_
@@ -263,25 +263,7 @@ $defs:
     examples:
       - HP:0012209
 
-# PATOsex:
-#   description: >
-#     Some PATO codes specific for genotypic sex...
-#   id: pato
-#   ft_type: ontologyTerm
-#   iri_prefix: http://purl.obolibrary.org/obo/PATO_
-#   name: "Phenotypic Qualities Ontology"
-#   namespace_prefix: PATO
-#   url: https://github.com/pato-ontology/pato/
-#   db_key: sex.id
-#   scope: individuals
-#   entity: individual
-#   pattern: '^PATO(:002000[012])?$'
-#   collationed: True
-#   examples:
-#     - PATO:0020002
-
-
-  NCITsex:
+  pgxSex:
     description: >-
       Some NCIT codes specific for sex... However, while these are by definition
       not limited to genotypic sex we use them as indicators for XX/XY as we interpret

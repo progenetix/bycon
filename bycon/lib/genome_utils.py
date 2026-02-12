@@ -3,7 +3,7 @@ from os import environ, path, pardir
 from pymongo import MongoClient
 
 # local
-from bycon_helpers import prdbug
+from bycon_helpers import ByconError, prdbug
 from config import *
 
 ################################################################################
@@ -312,7 +312,7 @@ class Cytobands():
 
     def __cytobands_response_object(self):
         if len(self.filtered_bands) < 1:
-            BYC["ERRORS"].append("No matching cytobands!")
+            ByconError().addError("No matching cytobands!")
             return
 
         self.__cytobands_label()
@@ -417,7 +417,7 @@ class Cytobands():
         cytobands = list(filter(lambda d: d["chro"] == chro, self.cytobands.copy()))
 
         if len(cytobands) < 10:
-            BYC["ERRORS"].append(f"No matching cytobands for chromosome {chro}!")
+            ByconError().addError(f"No matching cytobands for chromosome {chro}!")
             return
 
         if cb_start is None and cb_end is None:
@@ -570,6 +570,12 @@ class GeneInfo:
     def __init__(self):
         self.gene_data = []
 
+        m_h = BYC_DBS["mongodb_host"]
+        m_d = BYC_DBS["services_db"]
+        m_c = BYC_DBS.get("collections", {}).get("genes")
+        self.mongo_client = MongoClient(host=m_h)
+        self.genes_coll = self.mongo_client[m_d][m_c]
+
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -608,16 +614,14 @@ class GeneInfo:
             q_list.append({q_f: q_re })
         query = { "$or": q_list }
 
-        g_coll = mongo_client[BYC_DBS["services_db"]][BYC_DBS["genes_coll"]]
-
         if single is True:
-            gene = g_coll.find_one(query, { '_id': False } )
+            gene = self.genes_coll.find_one(query, { '_id': False } )
             if gene:
-                self.gene_data = [ g_coll.find_one(query, { '_id': False } ) ]
+                self.gene_data = [ self.genes_coll.find_one(query, { '_id': False } ) ]
         else:
-            gene_list = list(g_coll.find(query, { '_id': False } ))
+            gene_list = list(self.genes_coll.find(query, { '_id': False } ))
             if len(gene_list) > 0:
-                self.gene_data = list(g_coll.find(query, { '_id': False } ))
+                self.gene_data = list(self.genes_coll.find(query, { '_id': False } ))
 
 ################################################################################
 ################################################################################

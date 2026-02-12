@@ -4,7 +4,6 @@ import re, json, yaml, sys
 from datetime import datetime
 from isodate import date_isoformat
 from os import path, environ, pardir, system
-from pymongo import MongoClient
 from progress.bar import Bar
 
 from bycon import *
@@ -36,12 +35,14 @@ def main():
         "geolocs_updates": input("Relabel all biosamples with existing geolocation?\n(y|N): ")
     }
 
-    data_db = MongoClient(host=BYC_DBS["mongodb_host"])[ds_id]
-    services_db = MongoClient(host=BYC_DBS["mongodb_host"])[BYC_DBS["services_db"]]
+    m_h         = BYC_DBS["mongodb_host"]
+    m_d         = BYC_DBS["services_db"]
+    data_db     = ByconMongo().openMongoDatabase(ds_id)
+    services_db = ByconMongo().openMongoDatabase(m_d)
 
-    ana_coll = data_db[BYC_DBS["analysis_coll"]]
-    ind_coll = data_db[BYC_DBS["individual_coll"]]
-    bios_coll = data_db[BYC_DBS["biosample_coll"]]
+    ana_coll    = data_db[ BYC_DBS.get("collections", {}).get("analysis")   ]
+    ind_coll    = data_db[ BYC_DBS.get("collections", {}).get("individual") ]
+    bios_coll   = data_db[ BYC_DBS.get("collections", {}).get("biosample")  ]
 
     #>-------------------- MongoDB index updates -----------------------------<#
 
@@ -210,7 +211,14 @@ def main():
         if len(ind_info.keys()) < 1:
             continue
         for bios in bios_coll.find({"individual_id":ind["id"], "biosample_status.id":{"$ne":'EFO:0009654'}}):
-            bios_coll.update_one({"_id": bios["_id"]}, {"$set": {"individual_info": ind_info}})
+            update_obj = {"individual_info": ind_info}
+            if "P" in (coll_iso := bios.get("collection_moment", "")):
+                age_days = days_from_iso8601duration(coll_iso)
+                if age_days is not False:
+                    update_obj.update({"collection_moment_days": age_days})
+                    ind_coll.update_one({"_id": ind["_id"]}, {"$set": {"index_disease.onset.age_days": age_days, "index_disease.onset.age": coll_iso}})
+                    print(f'=> updated individual {ind["id"]} with collection moment age {coll_iso}')
+            bios_coll.update_one({"_id": bios["_id"]}, {"$set": update_obj})
     bar.finish()
 
     #>----------------------- / individuals ----------------------------------<#

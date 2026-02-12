@@ -92,7 +92,7 @@ function SubsetSearchForm({
   })
 
   // biosubsets lookup ------------------------------------------------------ //
-  ct = "NCIT,icdom,icdot,UBERON"
+  ct = "NCITneoplasm,icdom,icdot,UBERON"
   const {
     data: biosubsetsResponse,
     isLoading: isBioSubsetsDataLoading

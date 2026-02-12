@@ -1,4 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+$id: ___BEACON_ROOT___/services/schemas/beaconCollectionsResponse/v2026-01-16
 description: >-
   A type of Beacon response that includes details about the **collections** in a
   beacon. The types of collections are defined in each beacon's configuration;

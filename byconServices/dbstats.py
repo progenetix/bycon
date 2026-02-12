@@ -12,8 +12,12 @@ def dbstats():
     * <https://progenetix.org/services/dbstats/>
     * <https://progenetix.org/services/dbstats/examplez>
     """
-    stats_client = MongoClient(host=BYC_DBS["mongodb_host"])
-    stats_coll = stats_client[BYC_DBS["housekeeping_db"]][BYC_DBS["info_coll"]]
+
+    m_h = BYC_DBS["mongodb_host"]
+    m_d = BYC_DBS["housekeeping_db"]
+    m_c = BYC_DBS.get("collections", {}).get("info")
+
+    stats_coll = MongoClient(host=m_h)[m_d][m_c]
     results = []
     stats = stats_coll.find({}, {"_id": 0 }).sort("date", -1).limit(1)
     stat = list(stats)[0]

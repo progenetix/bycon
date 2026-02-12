@@ -11,6 +11,7 @@ from bycon import (
     BYC_PARS,
     HTTP_HOST,
     PROJECT_PATH,
+    ByconError,
     prdbug,
     prjsonnice
 )
@@ -54,7 +55,7 @@ class ExportFile:
         if "___shell___" in HTTP_HOST:
             print(error)
             exit()
-        BYC["ERRORS"].append(error)
+        ByconError().addError(error)
         self.file_path = False
 
 

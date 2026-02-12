@@ -14,7 +14,7 @@ $defs:
       - id: NCIT:C20197
         label: male
       - id: NCIT:C1799
-        label: unknown
+        label: unknown sex
   KaryotypicSex:
     description: >-
       The chromosomal sex of an individual represented from a selection

@@ -13,11 +13,8 @@
             }
         },
         "filters": [
-            { "id": "NCIT:C4536" },
-            { "id": "NCIT:C95597" },
             { "id": "NCIT:C7712" }
         ],
-        "filterLogic": "OR",
         "debugMode": 1
     }
 }

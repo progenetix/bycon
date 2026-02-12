@@ -107,8 +107,6 @@ parameters:
     isHidden: true
   accessid:
     isHidden: true
-  filterLogic:
-    isHidden: true
   includeDescendantTerms:
     isHidden: true
   geoCity:

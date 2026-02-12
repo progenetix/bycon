@@ -45,7 +45,7 @@ steps for a CNV supporting database and create an archive for distribution.
 
 #### Examples
 
-* `.recordsSampler.py -d progenetix --output examplez --filters "pgx:icdom-81703,pgx:icdom-94003" --filterLogic OR  --limit 222`
+* `.recordsSampler.py -d progenetix --output examplez --filters "pgx:icdom-81703" --limit 222`
 * `.recordsSampler.py -d progenetix --output examplez --mode testqueries`
 """
 

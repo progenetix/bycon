@@ -40,7 +40,7 @@ def main():
 ################################################################################
 
 def __process_collation_type(ds_id, coll_type, coll_defs):
-    pre_h_f = path.join( project_path, "rsrc", "classificationTrees", coll_type, "numbered_hierarchies.tsv" )
+    pre_h_f = path.join( project_path, "rsrc", "classificationTrees", f"{coll_type}.tsv" )
     collection = coll_defs["scope"]
     db_key = coll_defs["db_key"]
 

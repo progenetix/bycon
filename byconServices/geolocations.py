@@ -14,15 +14,17 @@ def geolocations():
     * <http://progenetix.org/cgi/bycon/services/geolocations.py?city=New&ISO3166alpha2=UK&plotType=map&markerType=marker>
     """
     # TODO: make the input parsing a class
+    m_d  = BYC_DBS["services_db"]
+    m_c  = BYC_DBS.get("collections", {}).get("geolocs")
     GEOL = ByconGeolocs()
     if "inputfile" in BYC_PARS:
-        results = GEOL.get_locations_from_web()
+        results     = GEOL.get_locations_from_web()
     else:
-        query = GeoQuery().get_geoquery()
+        query       = GeoQuery().get_geoquery()
         if not query:
-            BYC["ERRORS"].append("No query generated - missing or malformed parameters")
+            ByconError().addError("No query generated - missing or malformed parameters")
         else:
-            results = mongo_result_list(BYC_DBS["services_db"], BYC_DBS["geolocs_coll"], query, { '_id': False } )
+            results = mongo_result_list(m_d, m_c, query, { '_id': False } )
 
     BeaconErrorResponse().respond_if_errors()
 
@@ -45,7 +47,7 @@ def geolocations():
             })
             prdbug(results)
             query = GeoQuery().get_geoquery()
-            results = mongo_result_list(BYC_DBS["services_db"], BYC_DBS["geolocs_coll"], query, { '_id': False } )
+            results = mongo_result_list(m_d, m_c, query, { '_id': False } )
 
     BeaconErrorResponse().respond_if_errors()
 

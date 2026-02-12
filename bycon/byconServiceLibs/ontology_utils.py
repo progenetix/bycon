@@ -57,7 +57,7 @@ class OntologyMaps:
 
     def ontology_maps_results(self):
         if len(self.query.keys()) < 1:
-            BYC["ERRORS"].append("No correct filter value provided!")
+            ByconError().addError("No correct filter value provided!")
         else:
             self.__retrieve_ontologymaps()
 

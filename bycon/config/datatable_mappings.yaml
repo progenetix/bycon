@@ -326,6 +326,11 @@ $defs:
         type: string
         db_key: collection_moment
         indexed: True
+      age_days:
+        type: number
+        db_key: collection_moment_days
+        indexed: True
+        computed: True
       # recurrence:
       #   db_key: info.recurrence
       #   type: string

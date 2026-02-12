@@ -20,7 +20,7 @@ const apiAllMapsURL = `${ontologymapsBaseUrl}filters=${prefixes}`
 
 export default function OntologymapsPage() {
   return (
-    <Layout title="Ontologymaps" headline="Services: Ontologymaps (NCIt)">
+    <Layout title="Ontologymaps" headline="Services: Ontologymaps (NCIt neoplasms)">
       <div className="content">
         <img
           src="/img/ncit-logo-320x80.jpg"
@@ -33,7 +33,7 @@ export default function OntologymapsPage() {
           codes developed for the individual samples in the Progenetix
           collection.
         </p>
-        <h4>NCIT and ICD-O 3</h4>
+        <h4>NCIT neoplasm codes and ICD-O 3</h4>
         <p>
           While NCIT treats diseases as{" "}
           <span className="span-blue">histologic</span> and{" "}

@@ -126,6 +126,7 @@ entryTypes:
 
 
   pgxsegvariants:
+    id: pgxsegvariants
     response_entity_path_alias: g_variants
     # TODO: change? a bit non-standard... 
     defaultSchema:
@@ -134,22 +135,27 @@ entryTypes:
     path_id_value_bycon_parameter: biosample_ids
 
   samplemap:
+    id: samplemap
     response_entity_path_alias: biosamples
     path_id_value_bycon_parameter: biosample_ids
 
   sampleglobe:
+    id: sampleglobe
     response_entity_path_alias: biosamples
     path_id_value_bycon_parameter: biosample_ids
 
   samplematrix:
+    id: samplematrix
     response_entity_path_alias: biosamples
     path_id_value_bycon_parameter: biosample_ids
 
   sampletable:
+    id: sampletable
     response_entity_path_alias: biosamples
     path_id_value_bycon_parameter: biosample_ids
 
   sampleplots:
+    id: sampleplots
     response_entity_path_alias: biosamples
     defaultSchema:
       id: SVG
@@ -157,6 +163,7 @@ entryTypes:
     path_id_value_bycon_parameter: biosample_ids
 
   variantsbedfile:
+    id: variantsbedfile
     response_entity_path_alias: g_variants
     defaultSchema:
       id: BED
@@ -164,6 +171,7 @@ entryTypes:
     path_id_value_bycon_parameter: biosample_ids
 
   vcfvariants:
+    id: vcfvariants
     response_entity_path_alias: g_variants
     defaultSchema:
       id: VCF

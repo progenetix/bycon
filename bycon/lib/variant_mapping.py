@@ -47,7 +47,7 @@ class ByconVariant:
         self.header_cols = self.datatable_mappings.get("ordered_pgxseg_columns", [])
         self.variant_mappings = self.datatable_mappings["$defs"].get("genomicVariant", {}).get("parameters", {})
 
-        seqrepo_rest_service_url = 'seqrepo+file:///Users/Shared/seqrepo/2024-12-20'
+        seqrepo_rest_service_url = 'seqrepo+file:///Users/Shared/seqrepo/latest'
         self.seqrepo_dataproxy = create_dataproxy(uri=seqrepo_rest_service_url)
         self.vrs_allele_translator = AlleleTranslator(data_proxy=self.seqrepo_dataproxy)
         self.vrs_cnv_translator = CnvTranslator(data_proxy=self.seqrepo_dataproxy, identify=False)
@@ -199,7 +199,7 @@ class ByconVariant:
             gnomad_ref = f'{pad_base}{gnomad_ref}'
             gnomad_alt = f'{pad_base}{gnomad_alt}'
         gnomad_string = f'chr{gnomad_chr}-{gnomad_pos}-{gnomad_ref}-{gnomad_alt}'
-        prdbug(f'gnomad_string: {gnomad_string}')
+        # prdbug(f'gnomad_string: {gnomad_string}')
 
         # vrs_v = self.vrs_allele_translator.translate_from(pgxseg_l, "pgxseg", require_validation=False)
         vrs_v = self.vrs_allele_translator.translate_from(gnomad_string, "gnomad", require_validation=False)

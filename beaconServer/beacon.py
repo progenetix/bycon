@@ -5,8 +5,9 @@ from bycon import (
     BeaconDataResponse,
     BeaconErrorResponse,
     BeaconInfoResponse,
-    prdbug,
-    print_json_response
+    ByconError,
+    print_json_response,
+    print_text_response
 )
 
 ################################################################################
@@ -21,24 +22,39 @@ by the next one in the order, if existing:
    `/beacon/biosamples/...`)
 2. from a form value, e.g. `?requestEntityPathId=biosamples`
 3. from a command line argument, e.g. `--requestEntityPathId biosamples`
+    - short form argument is `-e biosamples`
 
 Fallback is `/info` - so the 422 shouldn't be a thing...
 """
+def main():
 
-BeaconErrorResponse().respond_if_errors()
+    # Initial error check
+    BeaconErrorResponse().respond_if_errors()
 
-b_r_s = BYC.get("response_schema", "beaconInfoResponse")
+    # Get response schema type
+    b_r_s = BYC.get("response_schema", "beaconInfoResponse")
 
-r = None
-if b_r_s in BYC.get("info_responses", []):
-    r = BeaconInfoResponse().populatedInfoResponse()
-elif b_r_s in BYC.get("data_responses", []):
-    r = BeaconDataResponse().dataResponseFromEntry()
-BeaconErrorResponse().respond_if_errors()
-if r:
-    print_json_response(r)
+    # Determine response type and generate appropriate response
+    if b_r_s in BYC.get("info_responses", []):
+        r = BeaconInfoResponse().populatedInfoResponse()
+    elif b_r_s in BYC.get("data_responses", []):
+        r = BeaconDataResponse().dataResponseFromEntry()
+    else:
+        ByconError().addError(f"Unsupported response schema type {b_r_s}")
 
-e_m = "No correct Beacon path provided. Please refer to the documentation at http://docs.progenetix.org"
-BYC["ERRORS"].append(e_m)
-BeaconErrorResponse().respond_if_errors()
+    # Final error check before printing
+    BeaconErrorResponse().respond_if_errors()
 
+    if r:
+        print_json_response(r)
+
+    e_m = "No correct Beacon path provided. Please refer to the documentation at http://bycon.progenetix.org"
+    BYC["ERRORS"].append(e_m)
+    BeaconErrorResponse().respond_if_errors()
+
+################################################################################
+
+if __name__ == "__main__":
+    main()
+    
+################################################################################

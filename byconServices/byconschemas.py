@@ -1,6 +1,7 @@
 from bycon import (
     BYC,
     BYC_PARS,
+    ByconError,
     prdbug,
     prjsonhead,
     prjsontrue,
@@ -23,5 +24,5 @@ def byconschemas():
             prjsontrue(s)
             exit()
     
-    BYC["ERRORS"].append("No correct schema id provided!")
+    ByconError().addError("No correct schema id provided!")
     BeaconErrorResponse().respond_if_errors()

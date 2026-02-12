@@ -1,5 +1,4 @@
 from uuid import uuid4
-from pymongo import MongoClient
 
 from config import *
 from bycon_helpers import *
@@ -9,13 +8,11 @@ from schema_parsing import RecordsHierarchy
 
 class ByconDatasetResults():
     def __init__(self, ds_id, BQ):
-        self.dataset_results = {}
-        self.dataset_id = ds_id
-        self.entity_defaults = BYC["entity_defaults"]
-        self.res_ent_id = r_e_id = str(BYC.get("response_entity_id", "___none___"))
-        self.data_db = MongoClient(host=BYC_DBS["mongodb_host"])[ds_id]
-
-
+        self.dataset_results    = {}
+        self.dataset_id         = ds_id
+        self.entity_defaults    = BYC["entity_defaults"]
+        self.res_ent_id         = r_e_id = str(BYC.get("response_entity_id", "___none___"))
+        self.data_db            = ByconMongo().openMongoDatabase(ds_id)
 
         # This is bycon and model specific; in the default model there would also
         # be `run` (which has it's data here as part of `analysis`). Also in
@@ -28,7 +25,7 @@ class ByconDatasetResults():
         self.res_obj_defs = {}
         self.queries = {}
         for e in self.queried_entities:
-            c = BYC_DBS.get(f"{e}_coll", "___none___")
+            c = BYC_DBS.get("collections", {}).get(e, "___none___")
             self.res_obj_defs.update({f'{c}.id': {
                 "collection": c,
                 "entity_id": e,
@@ -79,7 +76,7 @@ class ByconDatasetResults():
         c_n_s = self.data_db.list_collection_names()
         q_e_s = BQ.get("entities", {})
         for e, q_o in q_e_s.items():
-            c = BYC_DBS.get(f"{e}_coll", "___none___")
+            c = BYC_DBS.get("collections", {}).get(e, "___none___")
             if (q := q_o.get("query")) and c in c_n_s:
                 self.queries.update({e: q})
                 # self.queries.update({c: q})
@@ -99,12 +96,11 @@ class ByconDatasetResults():
             if not (e in q_e_s):
                 continue
             query = self.queries.get(e)
-            c = BYC_DBS.get(f"{e}_coll", "___none___")
+            c = BYC_DBS.get("collections", {}).get(e, "___none___")
             ent_resp_def = self.res_obj_defs.get(f'{c}.id')
             prdbug(f"... prefetching entity multi id response for {e} with query {query}")
             self.__prefetch_entity_multi_id_response(ent_resp_def, query)
             prdbug(f"... prefetching worked")
-        # prdbug(f"... id responses so far: {self.id_responses}")
 
 
     # -------------------------------------------------------------------------#
@@ -220,7 +216,7 @@ class ByconDatasetResults():
                 BYC["WARNINGS"].append(f"Too many {e} values ({v_no}) for dataset {self.dataset_id}. Only the first {VARIANTS_RESPONSE_LIMIT} will be returned.")
 
             self.id_responses.update({id_p: {"values": v_ids, "count": v_no}})
-            c = BYC_DBS.get(f"{e}_coll", "___none___")
+            c = BYC_DBS.get("collections", {}).get(e, "___none___")
             self.res_obj_defs.update({f'{c}.id': {
                 "collection": c,
                 "entity_id": e,
