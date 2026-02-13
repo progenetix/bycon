@@ -76,6 +76,15 @@ class ByconMongo:
 
     #--------------------------------------------------------------------------#
 
+    def oneFromQuery(self, db_name, coll_name, query={"no_field": "___none___"}):
+        if (coll := self.openMongoColl(db_name, coll_name)) is not False:
+            if (one := coll.find_one(query)):
+                return one
+        return None
+
+
+    #--------------------------------------------------------------------------#
+
     def resultListFromPipeline(self, db_name, coll_name, pipeline=[]):
         results = []
         if (coll := self.openMongoColl(db_name, coll_name)) is not False:
@@ -323,20 +332,14 @@ def isonow():
 
 ################################################################################
 
-def clean_empty_fields(this_object, protected=["external_references"]):
+def clean_empty_properties(this_object, protected=["external_references"]):
     if not isinstance(this_object, dict):
         return this_object
-    for k in list(this_object.keys()):
-        if k in protected:
-            continue
-        if not this_object.get(k):
-            this_object.pop(k, None)
-        elif isinstance(this_object[k], dict):
-            if not this_object.get(k):
-                this_object.pop(k, None)
-        elif isinstance(this_object[k], list):
-            if len(this_object[k]) < 1:
-                this_object.pop(k, None)
+
+    r_k_s = [k for k, v in this_object.items() if v is None or v == {} or v == [] or v == ""]
+    for p in r_k_s:
+        if p not in protected:
+            del this_object[p]
 
     return this_object
 

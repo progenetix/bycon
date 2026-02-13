@@ -1,11 +1,15 @@
-import argparse, humps, json, re, sys
+import argparse
+import humps
+import json
+import re
+import sys
+
 from mycgi import Form
 from urllib.parse import urlparse, unquote
 from os import environ
-from pymongo import MongoClient
 
-from bycon_helpers import prdbug, prdbughead, ByconError, ByconH
-from config import *
+from bycon_helpers import prdbug, prdbughead, ByconError, ByconH, ByconMongo
+from config import BYC, BYC_DBS, BYC_PARS, HTTP_HOST, PARAM_NONE_VALUES, REQUEST_METHOD, REQUEST_PATH_PARAMS, REQUEST_PATH_ROOT, REQUEST_URI
 
 ################################################################################
 
@@ -306,8 +310,10 @@ class ByconParameters:
 
         v = self.form_data.getlist(p)
         for n_v in ["null", "undefined", "None"]:
-            if n_v in v: v.remove(n_v)
-        if len(v) < 1: return l_v
+            if n_v in v:
+                v.remove(n_v)
+        if len(v) < 1:
+            return l_v
 
         if "array" in p_type:
             l_v = ','.join(v)
@@ -334,10 +340,10 @@ class ByconParameters:
 
 class ByconFilters:
     def __init__(self):
-        self.filter_defs = BYC.get("filter_definitions", {}).get("$defs", {})
-        self.filter_patterns = [f.get("pattern") for f in self.filter_defs.values()]
-        self.filter_pars = BYC_PARS.get("filters", [])
-        self.parsed_filters = []
+        self.filter_defs        = BYC.get("filter_definitions", {}).get("$defs", {})
+        self.filter_patterns    = [f.get("pattern") for f in self.filter_defs.values()]
+        self.filter_pars        = BYC_PARS.get("filters", [])
+        self.parsed_filters     = []
         self.__parse_filters()
 
     # -------------------------------------------------------------------------#
@@ -376,7 +382,7 @@ class ByconFilters:
         for f in self.filter_pars:
             if not isinstance(f, dict):
                 f = {"id": f}
-            if not "id" in f:
+            if "id" not in f:
                 continue
             deflagged = re.sub(r'^!', '', f["id"])
             matched = False
@@ -398,17 +404,17 @@ class ByconFilters:
 
 class ByconEntities:
     def __init__(self):
-        self.entity_defaults = BYC.get("entity_defaults", {})
-        self.arg_defs = BYC.get("argument_definitions", {}).get("$defs", {})
-        self.dealiased_path_ids = {}
-        self.request_entity_path_id = None
-        self.response_entity_path_id = None
-        self.request_path_id_par = BYC_PARS.get("request_entity_path_id", "___none___")
-        self.response_path_id_par = BYC_PARS.get("response_entity_path_id", "___none___")
-        self.path_ids = BYC_PARS.get("path_ids", None)
-        self.request_entity_id = None
-        self.response_entity_id = None
-        self.response_entity = {}
+        self.entity_defaults            = BYC.get("entity_defaults", {})
+        self.arg_defs                   = BYC.get("argument_definitions", {}).get("$defs", {})
+        self.dealiased_path_ids         = {}
+        self.request_entity_path_id     = None
+        self.response_entity_path_id    = None
+        self.request_path_id_par        = BYC_PARS.get("request_entity_path_id", "___none___")
+        self.response_path_id_par       = BYC_PARS.get("response_entity_path_id", "___none___")
+        self.path_ids                   = BYC_PARS.get("path_ids", None)
+        self.request_entity_id          = None
+        self.response_entity_id         = None
+        self.response_entity            = {}
 
         self.__map_entity_aliases()
         self.__assign_entities()
@@ -499,10 +505,10 @@ class ByconEntities:
 
 class ByconDatasets:
     def __init__(self):
-        self.dataset_defs = BYC.get("dataset_definitions", {})
-        self.dataset_ids = []
+        self.dataset_defs   = BYC.get("dataset_definitions", {})
+        self.dataset_ids    = []
         self.database_names = []
-        self.allow_default = True
+        self.allow_default  = True
 
         self.__get_database_names()
         self.__ds_ids_from_rest_path_value()
@@ -511,8 +517,6 @@ class ByconDatasets:
         self.__ds_ids_from_form()
         self.__ds_ids_from_all_datasets()
         self.__ds_ids_from_default()
-
-        ds_ids = self.dataset_ids
 
 
     # -------------------------------------------------------------------------#
@@ -541,14 +545,10 @@ class ByconDatasets:
 
     def __get_database_names(self):
         if "DATABASE_NAMES" in environ:
-          self.database_names = environ["DATABASE_NAMES"].split()
+            self.database_names = environ["DATABASE_NAMES"].split()
         else:
-          try:
-            mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-            db_names = list(mongo_client.list_database_names())
+            db_names = ByconMongo().databaseList()
             self.database_names = [x for x in db_names if x not in [BYC_DBS["housekeeping_db"], BYC_DBS["services_db"], "admin", "config", "local"]]
-          except Exception as e:
-            BYC["WARNINGS"].append(f'Could not connect to MongoDB:\n####\n{e}\n####')
 
 
     # -------------------------------------------------------------------------#
@@ -591,12 +591,9 @@ class ByconDatasets:
         if not (accessid := BYC_PARS.get("accessid")):
             return
 
-        m_h = BYC_DBS["mongodb_host"]
         m_d = BYC_DBS["housekeeping_db"]
         m_c = BYC_DBS.get("collections", {}).get("handover")
-
-        ho_client = MongoClient(host=m_h)
-        if not (h_o := ho_client[m_d][m_c].find_one({"id": accessid})):
+        if not (h_o := ByconMongo().oneFromQuery(m_d, m_c, {"id": accessid})):
             return
         if (ds_id := str(h_o.get("ds_id"))) not in self.database_names:
             return
@@ -623,7 +620,7 @@ class ByconDatasets:
     def __ds_ids_from_all_datasets(self):
         if len(self.dataset_ids) > 0:
             return
-        if not "dataset" in BYC.get("response_entity_id", "___none___"):
+        if "dataset" not in BYC.get("response_entity_id", "___none___"):
             return
         self.dataset_ids = list(BYC["dataset_definitions"].keys())
 
@@ -656,7 +653,7 @@ class RefactoredValues():
     # -------------------------------------------------------------------------#
 
     def refVal(self, vs=[]):
-        if type(vs) != list:
+        if type(vs) is not list:
             vs = [vs]
         self.v_list = vs
         self.__refactor_values_from_defined_type()
@@ -667,7 +664,7 @@ class RefactoredValues():
     # -------------------------------------------------------------------------#
 
     def strVal(self, vs=""):
-        if type(vs) != list:
+        if type(vs) is not list:
             vs = [vs]
         self.v_list = vs
         self.__stringify_values_from_defined_type()
@@ -680,7 +677,6 @@ class RefactoredValues():
 
     def __stringify_values_from_defined_type(self):
         defs = self.parameter_definition
-
         values = self.v_list
 
         if len(values) == 0:
@@ -690,7 +686,6 @@ class RefactoredValues():
         if "array" in defs.get("type", "string"):
             # remapping definitions to the current item definitions
             defs = self.parameter_definition.get("items", {"type": "string"})
-        p_t = defs.get("type", "string")
 
         v_l = []
         for v in values:
@@ -742,7 +737,7 @@ class RefactoredValues():
         if "object" in p_type:
             return self.__object_to_string(defs, p_value)
         if "array" in p_type:
-            if type(p_value) != list:
+            if type(p_value) is not list:
                 p_value = [p_value]
             return self.join_by.join(p_value)
         return str(p_value)
@@ -789,7 +784,7 @@ class RefactoredValues():
     # -------------------------------------------------------------------------#
 
     def __object_to_string(self, defs, value):
-        if type(value) != dict:
+        if type(value) is not dict:
             return ""
         o_p = defs.get("parameters", ["id", "label"])
         o_s = defs.get("split_by", "::")

@@ -5,8 +5,7 @@ from config import BYC
 from ga4gh.vrs.dataproxy import SequenceProxy, create_dataproxy
 from genome_utils import ChroNames
 from humps import decamelize
-from parameter_parsing import RefactoredValues, prdbug
-from schema_parsing import ByconSchemas
+from parameter_parsing import RefactoredValues
 from vrs_translator import AdjacencyTranslator, AlleleTranslator, CnvTranslator
 
 ################################################################################
@@ -28,10 +27,9 @@ class ByconVariant:
         Progenetix platform and does not cover some use cases outside of Progenetix
         and Beacon "common use" scenarios (as of Beacon v2 / 2023).
         """
-        self.vcf_variant = {}
-
-        self.ChroNames = ChroNames()
-        self.variant_types = BYC.get("variant_type_definitions", {})
+        self.vcf_variant    = {}
+        self.ChroNames      = ChroNames()
+        self.variant_types  = BYC.get("variant_type_definitions", {})
         self.variant_types_map = {}
         for v_t, v_d in self.variant_types.items():
             if (variant_type := v_d.get("variant_type")) and (
@@ -383,10 +381,11 @@ class ByconVariant:
 
         self.byc_variant.update(v)
 
+
     # -------------------------------------------------------------------------#
 
     def __byc_variant_normalize_chromosome(self):
-        if not "location" in (v := self.byc_variant):
+        if "location" not in (v := self.byc_variant):
             return
 
         refs_ids = self.ChroNames.allRefseqs()
@@ -409,6 +408,7 @@ class ByconVariant:
             )
         self.byc_variant.update(v)
 
+
     # -------------------------------------------------------------------------#
 
     def __byc_variant_normalize_sequences(self):
@@ -425,11 +425,12 @@ class ByconVariant:
 
         self.byc_variant.update(v)
 
+
     # -------------------------------------------------------------------------#
 
     def __byc_variant_normalize_positions(self):
         v = self.byc_variant
-        if not "location" in v:
+        if "location" not in v:
             # HACK for adjacency
             return
         # TODO: rethink length calculation (e.g. indel...)

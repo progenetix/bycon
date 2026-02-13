@@ -356,8 +356,8 @@ class ByconQuery:
 
         variant_request_type = None
 
-        brts = self.request_profiles
-        brts_k = brts.keys()
+        brts    = self.request_profiles
+        brts_k  = brts.keys()
         # prdbug(f'...brts_k: {brts_k}')
 
         # Already hard-coding some types here - if conditions are met only

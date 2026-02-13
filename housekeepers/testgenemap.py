@@ -73,6 +73,7 @@ def main():
         print("No genomic intervals found (check genome_binning / gene_interval_tsv). Exiting.")
         return
 
+    # TODO: No hardcoded paths
     downloads_dir = "/Users/bgadmin/Downloads"
     out_name = BYC_PARS.get("outputfile") or "gene_cnv_test.tsv"
     out_name = path.basename(out_name)  

@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from os import environ
 from isodate import date_isoformat
 
-from bycon_helpers import prdbug, clean_empty_fields
+from bycon_helpers import prdbug, clean_empty_properties
 from config import *
 from variant_mapping import ByconVariant
 
@@ -66,7 +66,7 @@ class VariantsResponse:
             v_i = deepcopy(self.VAR.vrsVariant(d_vs[0]))
             for c_k in self.case_pars + ["variant_internal_id", "info"] + self.var_pars:
                 v_i.pop(c_k, None)
-            v_i = clean_empty_fields(v_i)
+            v_i = clean_empty_properties(v_i)
 
             v = {
                 "variation": v_i,
@@ -288,7 +288,7 @@ def phenopack_individual(ind, data_db):
         })
         for k in bs_pop_keys:
             bios.pop(k, None)
-        clean_empty_fields(bios)
+        clean_empty_properties(bios)
         pxf_bios.append(bios)
 
     for k in ind_pop_keys:
@@ -367,7 +367,7 @@ def remap_all(r_s_res):
         if type(br_r) is not dict:
             continue
         r_s_res[br_i].pop("_id", None)
-        clean_empty_fields(r_s_res[br_i])
+        clean_empty_properties(r_s_res[br_i])
 
     return r_s_res
 
