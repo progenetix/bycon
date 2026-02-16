@@ -67,11 +67,24 @@ class ByconMongo:
 
     #--------------------------------------------------------------------------#
 
+    def resultCursorFromQuery(self, db_name, coll_name, query, fields={}):
+        return coll.find(query, fields)
+
+    #--------------------------------------------------------------------------#
+
     def resultListFromQuery(self, db_name, coll_name, query, fields={}):
         results = []
         if (coll := self.openMongoColl(db_name, coll_name)) is not False:
             results = list(coll.find(query, fields))
         return results
+
+
+    #--------------------------------------------------------------------------#
+
+    def resultCountFromQuery(self, db_name, coll_name, query) -> int:
+        if (coll := self.openMongoColl(db_name, coll_name)) is not False:
+            return coll.count_documents(query)
+        return 0
 
 
     #--------------------------------------------------------------------------#

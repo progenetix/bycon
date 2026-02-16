@@ -122,7 +122,9 @@ for c_id in coll_ids:
 
     prdbug(f'\n... after limit {len(ana_ids)}')
 
-    intervals, cnv_ana_count = GB.intervalAidFrequencyMaps(ds_id, ana_ids)
+    query       = {"id": {"$in": ana_ids}, "operation.id": "EDAM:operation_3961"}
+    ana_cursor  = ByconMongo().resultCursorFromQuery(data_db, cs_coll, query, {"_id": 0})
+    intervals, cnv_ana_count = GB.intervalFrequencyMaps(ana_cursor)
     prdbug(f'... retrieved {cnv_ana_count} CNV analyses')
 
     if cnv_ana_count < 1:

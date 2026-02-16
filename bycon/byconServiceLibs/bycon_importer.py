@@ -340,11 +340,11 @@ class ByconImporter():
             if (c := BYC_DBS.get("collections", {}).get(d)):
                 dcs.append(c)
 
-        if tds_id not in self.database_names:
-            print(f'No *existing* target database was defined using `--output`.')
-            print(f'You can create a database (here `{tds_id}`) by running a command like:\n')
-            print(f'mongosh --eval \'db.placeholder.insertOne({{"id":"dummy"}})\' {tds_id}')
-            exit()
+        # if tds_id not in self.database_names:
+        #     print(f'No *existing* target database was defined using `--output`.')
+        #     print(f'You can create a database (here `{tds_id}`) by running a command like:\n')
+        #     print(f'mongosh --eval \'db.placeholder.insertOne({{"id":"dummy"}})\' {tds_id}')
+        #     exit()
 
         source_coll = self.mongo_client[ds_id][icn]
         target_coll = self.mongo_client[tds_id][icn]
