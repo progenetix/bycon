@@ -37,7 +37,8 @@ class ByconImporter():
         self.entity_defaults = BYC.get("entity_defaults", {})
         self.limit = BYC_PARS.get("limit", 0)
         self.input_file = BYC_PARS.get("inputfile")
-        self.target_db = BYC_PARS.get("output", "___none___")
+        self.target_db = BYC_PARS.get("output",  f'tmpdb_{datetime.now().isoformat()}')
+
         self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
 
         self.delMatchedVars = "n"
@@ -53,7 +54,6 @@ class ByconImporter():
         self.downstream = []
         self.downstream_only = False
         self.dataset_client = self.mongo_client[ self.dataset_id ]
-        self.target_db = "___none___"
         self.allow_duplicates = False
 
         self.__initialize_importer()
@@ -224,7 +224,6 @@ class ByconImporter():
 
         self.__prepare_entity("individual")
         # TODO: Use some default nanme but check for existence and offer deletion
-        self.target_db = BYC_PARS.get("output", f'tmpdb_{datetime.now().isoformat()}')
         self.downstream = RecordsHierarchy().downstream("individual")
 
         if self.target_db in self.database_names:
@@ -389,7 +388,7 @@ class ByconImporter():
             target_coll = self.mongo_client[tds_id][c]
             if not BYC["TEST_MODE"]:
                 target_coll.insert_one({"id": "___init___"})
-                bar = Bar(f'Moving {c} ', max = len(source_ids), suffix='%(percent)d%%'+f' of {str(len(source_ids))} {icn}' )
+                bar = Bar(f'Moving {c} ', max = len(source_ids), suffix='%(percent)d%%'+f' for {str(len(source_ids))} {icn}' )
             mov_nos.update({c: 0})
             for m_id in source_ids:
                 d_c = source_coll.count_documents({iid: m_id})

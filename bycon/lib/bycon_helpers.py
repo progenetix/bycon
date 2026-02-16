@@ -39,11 +39,13 @@ class ByconMongo:
 
     def openMongoColl(self, db_name, coll_name="___none___"):
         if self.__check_db_name(db_name) is False:
-            ByconError().addError(f"db {db_name} does not exist")
+            ByconError().addError(f"`openMongoColl`: db {db_name} does not exist")
+            prdbug(f"`openMongoColl`: Opening database `{db_name}` error ==>> does not exist")
             return False
         self.db = self.client[db_name]
         if self.__check_coll_name(coll_name) is False:
-            ByconError().addError(f"collection {db_name}.{coll_name} does not exist")
+            ByconError().addError(f"`openMongoColl`: collection {db_name}.{coll_name} does not exist")
+            prdbug(f"`openMongoColl`: Opening collection `{db_name}.{db_name}` error ==>> does not exist")
             return False
         return self.db[coll_name]
 
@@ -68,6 +70,7 @@ class ByconMongo:
     #--------------------------------------------------------------------------#
 
     def resultCursorFromQuery(self, db_name, coll_name, query, fields={}):
+        coll = self.openMongoColl(db_name, coll_name)
         return coll.find(query, fields)
 
     #--------------------------------------------------------------------------#
@@ -187,10 +190,6 @@ class ByconH:
             return list(this)
         if len(list(this)) < 1:
             return []
-
-        if BYC.get("PAGINATED_STATUS", False):
-            return this
-        BYC.update({"PAGINATED_STATUS": True})
 
         p_range = [
             skip * limit,

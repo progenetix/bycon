@@ -99,7 +99,7 @@ for coll in list(test_colls):
 ByconImporter(False).move_individuals_and_downstream_from_ds_results(ds_results)
 
 print(f"Finished re-creating the example database '{examples_db}'.")
-print(f"For full functionality you might want to run \n\n`{loc_path}/housekeeping.py -d {examples_db}`\n\nor continue with the following commands.\n")
+print(f"For full functionality you might want to run \n\n`{loc_path}/housekeeping.py -d {examples_db} --limit 0`\n\nor continue with the following commands.\n")
 
 proceed = input(f'Proceed with running the (time consuming) aggregation functions? (y/N): ')
 if not "y" in proceed.lower():
