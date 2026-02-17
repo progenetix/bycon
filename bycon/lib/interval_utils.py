@@ -72,12 +72,12 @@ class GenomeBins:
         self.variant_type_definitions = BYC.get("variant_type_definitions", {})
 
         CB = Cytobands()
-        self.cytobands = CB.get_all_cytobands()
-        self.cytolimits = CB.get_all_cytolimits()
-        self.genome_size = CB.get_genome_size()
+        self.cytobands      = CB.get_all_cytobands()
+        self.cytolimits     = CB.get_all_cytolimits()
+        self.genome_size    = CB.get_genome_size()
 
         self.binning = BYC_PARS.get("genome_binning", "1Mb")
-        self.genomic_intervals = []
+        self.genomic_intervals  = []
         self.cytoband_intervals = []
 
         self.interval_definitions.update({"genome_binning": self.binning})
@@ -157,17 +157,6 @@ class GenomeBins:
         self.__interval_counts_from_analyses()
         return self.interval_frequencies, self.analyses_count
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
-
-    # def intervalAidFrequencyMaps(self, ds_id, analysis_ids=["___none___"]):
-    #     query = {"id": {"$in": analysis_ids}, "operation.id": "EDAM:operation_3961"}
-    #     if len(a_s := ByconMongo().resultCountFromQuery(ds_id, "analyses", query)) < 1:
-    #         return {}, 0
-    #     self.analyses = a_s
-    #     self.__interval_counts_from_analyses()
-    #     return self.interval_frequencies, self.analyses_count
-
 
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#
@@ -198,13 +187,13 @@ class GenomeBins:
     #--------------------------------------------------------------------------#
     
     def __generate_gene_intervals(self):
-        # generate genomic intervals from a gene list 
+        # generate genomic intervals from a gene list
+        # the list will be sorted by genomic start position
         genes   = GeneIntervals().get_all_genes()
         c_l     = self.cytolimits
 
         self.genomic_intervals = []
         i = 1
-
         for chro in c_l.keys():
             chro_genes = [ g for g in genes if g.get("chrom") == chro ]
             chro_genes = sorted(chro_genes, key=lambda g: g.get("start", 0))
@@ -217,25 +206,15 @@ class GenomeBins:
                 gene_symbol     = g.get("gene_symbol", gene_id or "")
                 gene_type       = g.get("gene_type", "")
 
-                cbs = Cytobands().cytobands_label_from_positions(chro, start, end)
-                arm = ""
-                if isinstance(cbs, str):
-                    if "p" in cbs:
-                        arm = "p"
-                    elif "q" in cbs:
-                        arm = "q"
-
+                cbs = str(Cytobands().cytobands_label_from_positions(chro, start, end))
                 base_keys = {"gene_id", "gene_symbol", "gene_type", "chrom", "start", "end"}
                 info = {k: v for k, v in g.items() if k not in base_keys}
-
-                if gene_type:
-                    info.setdefault("gene_type", gene_type)
 
                 self.genomic_intervals.append({
                     "no": i,
                     "id": gene_id or gene_symbol,
                     "reference_name": chro,
-                    "arm": arm,
+                    "arm": "p" if "p" in cbs else "q" if "q" in cbs else "",
                     "cytobands": cbs,
                     "start": start,
                     "end": end,
@@ -246,6 +225,7 @@ class GenomeBins:
                 i += 1
 
         self.interval_count = len(self.genomic_intervals)
+
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
