@@ -1,9 +1,10 @@
-import csv, re, sys
+import csv
+import re
+import sys
 
 from datetime import datetime
 
 from os import environ, path
-from pymongo import MongoClient
 from copy import deepcopy
 
 from bycon import (
@@ -11,6 +12,7 @@ from bycon import (
     BYC_PARS,
     BYC_DBS,
     ByconError,
+    ByconMongo,
     ByconVariant,
     CollationQuery,
     GenomeBins,
@@ -39,43 +41,43 @@ class ByconBundler:
     """
 
     def __init__(self):
-        self.errors = []
-        self.filepath = None
-        self.datset_ids = BYC.get("BYC_DATASET_IDS", [])
-        self.datasets_results = None
-        self.collation_types = BYC_PARS.get("collation_types", [])
-        self.min_number = BYC_PARS.get("min_number", 0)
-        self.header = []
-        self.data = []
-        self.fieldnames = []
-        self.analysisVariantsBundles = []
-        self.intervalFrequenciesBundles = []
-        self.limit = BYC_PARS.get("limit", 0)
-        self.skip = BYC_PARS.get("skip", 0)
+        self.errors                 = []
+        self.filepath               = None
+        self.datset_ids             = BYC.get("BYC_DATASET_IDS", [])
+        self.datasets_results       = None
+        self.collation_types        = BYC_PARS.get("collation_types", [])
+        self.min_number             = BYC_PARS.get("min_number", 0)
+        self.header                 = []
+        self.data                   = []
+        self.fieldnames             = []
+        self.limit                  = BYC_PARS.get("limit", 0)
+        self.skip                   = BYC_PARS.get("skip", 0)
+        self.analysisVarsBundles    = []
+        self.intervalFreqsBundles   = []
 
         self.bundle = {
-            "variants": [],
-            "analyses": [],
-            "biosamples": [],
-            "individuals": [],
+            "variants":     [],
+            "analyses":     [],
+            "biosamples":   [],
+            "individuals":  [],
             "info": {
-                "errors": []
+                "errors":   []
             }
         }
 
         self.keyedBundle = {
-            "variants_by_analysis_id": {},
-            "analyses_by_id": {},
-            "individuals_by_id": {},
-            "biosamples_by_id": {},
+            "variants_by_analysis_id":  {},
+            "analyses_by_id":           {},
+            "individuals_by_id":        {},
+            "biosamples_by_id":         {},
             "info": {
-                "errors": []
+                "errors":               []
             }
         }
 
         self.plotDataBundle = {
             "interval_frequencies_bundles": [],
-            "analyses_variants_bundles": []
+            "analyses_variants_bundles":    []
         }
 
 
@@ -178,8 +180,8 @@ class ByconBundler:
                 "variants": list(filter(lambda v: v.get("analysis_id", "___none___") == cs_id, bb["variants"]))
             })
             c_p_l.append(p_o)          
-        self.analysisVariantsBundles = c_p_l
-        return self.analysisVariantsBundles
+        self.analysisVarsBundles = c_p_l
+        return self.analysisVarsBundles
 
 
     #--------------------------------------------------------------------------#
@@ -188,7 +190,7 @@ class ByconBundler:
         self.datasets_results = datasets_results
         self.__analyses_bundle_from_result_set()
         self.__analyses_add_database_variants()
-        return { "analyses_variants_bundles": self.analysisVariantsBundles }
+        return { "analyses_variants_bundles": self.analysisVarsBundles }
 
 
     #--------------------------------------------------------------------------#
@@ -197,14 +199,14 @@ class ByconBundler:
         self.datasets_results = datasets_results
         self.__analyses_bundle_from_result_set()
         self.__analysisBundleCreateIsets()
-        return {"interval_frequencies_bundles": self.intervalFrequenciesBundles}
+        return {"interval_frequencies_bundles": self.intervalFreqsBundles}
 
 
     #--------------------------------------------------------------------------#
 
     def analyses_frequencies_bundles(self):
         self.__fileAnalysisBundleCreateIsets()
-        return self.intervalFrequenciesBundles
+        return self.intervalFreqsBundles
 
 
     #--------------------------------------------------------------------------#
@@ -214,7 +216,7 @@ class ByconBundler:
             ByconError().addError("¡¡¡ No `datasetdIds` parameter !!!")
             return
         self.__isetBundlesFromCollationParameters()
-        self.plotDataBundle.update({ "interval_frequencies_bundles": self.intervalFrequenciesBundles })
+        self.plotDataBundle.update({ "interval_frequencies_bundles": self.intervalFreqsBundles })
         return self.plotDataBundle
 
 
@@ -273,14 +275,12 @@ class ByconBundler:
             if not res_k in ds_res:
                 continue
 
-            mongo_client    = MongoClient(host=BYC_DBS["mongodb_host"])
-            sample_coll     = mongo_client[ds_id][bundle_type]
+            sample_coll     = ByconMongo().openMongoColl(ds_id, bundle_type)
             s_r             = ds_res[res_k]
             s_ids           = s_r["target_values"]
             r_no            = len(s_ids)
             s_ids           = ByconH().paginated_list(s_ids, self.skip, self.limit)
-            prdbug(f'...... __analyses_bundle_from_result_set limit: {self.limit}')
-            prdbug(f'...... __analyses_bundle_from_result_set after: {len(s_ids)}')
+            prdbug(f'...... __analyses_bundle_from_result_set after limit: {len(s_ids)}')
             for s_id in s_ids:
                 s = sample_coll.find_one({"id": s_id })
 
@@ -297,11 +297,11 @@ class ByconBundler:
                     "label": s.get("label", s.get("biosample_id", "")),
                     "cnv_chro_stats": s.get("cnv_chro_stats"),
                     "cnv_statusmaps": s.get("cnv_statusmaps"),
-                    # "probefile": analysis_guess_probefile_path(s),
                     "variants": []
                 }
 
-                # TODO: add optional probe read in
+                # TODO: add optional probe reading and ...
+                # "probefile": analysis_guess_probefile_path(s),
                 self.bundle[bundle_type].append(p_o)
             prdbug(f'...... __analyses_bundle_from_result_set number: {len(self.bundle[bundle_type])}')
 
@@ -312,32 +312,31 @@ class ByconBundler:
 
     def __analyses_add_database_variants(self):
         bb = self.bundle
-        c_p_l = []
 
+        c_p_l = []
         mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         for p_o in bb.get("analyses", []):
-            ds_id = p_o.get("dataset_id", "___none___")
-            var_coll = mongo_client[ds_id]["variants"]
-            cs_id = p_o.get("analysis_id", "___none___")
-            v_q = {"analysis_id": cs_id}
+            ds_id       = p_o.get("dataset_id", "___none___")
+            var_coll    = mongo_client[ds_id]["variants"]
+            cs_id       = p_o.get("analysis_id", "___none___")
+            v_q         = {"analysis_id": cs_id}
             p_o.update({"variants": list(var_coll.find(v_q))})
             c_p_l.append(p_o)
 
-        self.analysisVariantsBundles = c_p_l
+        self.analysisVarsBundles = c_p_l
         return
 
 
     #--------------------------------------------------------------------------#
 
     def __keyed_bundle_add_variants_from_lines(self):
-        fieldnames = self.fieldnames
-        varlines = self.data
-
-        b_k_b = self.keyedBundle
-        inds_ided = b_k_b.get("individuals_by_id", {})
-        bios_ided = b_k_b.get("biosamples_by_id", {})
-        cs_ided = b_k_b.get("analyses_by_id", {})
-        vars_ided = b_k_b.get("variants_by_analysis_id", {})
+        fieldnames  = self.fieldnames
+        varlines    = self.data
+        b_k_b       = self.keyedBundle
+        inds_ided   = b_k_b.get("individuals_by_id", {})
+        bios_ided   = b_k_b.get("biosamples_by_id", {})
+        cs_ided     = b_k_b.get("analyses_by_id", {})
+        vars_ided   = b_k_b.get("variants_by_analysis_id", {})
 
         GB = GenomeBins()
 
@@ -429,7 +428,7 @@ class ByconBundler:
                 iset["interval_frequencies"].append(intv.copy())
             prdbug(f'... __analysisBundleCreateIsets {ds_id} => sample_count {cnv_ana_count} ...')
             
-            self.intervalFrequenciesBundles.append(iset)
+            self.intervalFreqsBundles.append(iset)
 
 
     #--------------------------------------------------------------------------#
@@ -451,7 +450,7 @@ class ByconBundler:
             iset["interval_frequencies"].append(intv.copy())
         prdbug(f'... __analysisBundleCreateIsets {ds_id} => sample_count {cnv_ana_count} ...')
         
-        self.intervalFrequenciesBundles.append(iset)
+        self.intervalFreqsBundles.append(iset)
 
 
     #--------------------------------------------------------------------------#
@@ -479,7 +478,7 @@ class ByconBundler:
                     "frequencymap_samples": fmap.get("frequencymap_samples", fmap_count),
                     "interval_frequencies": fmap.get("intervals", [])
                 }                    
-                self.intervalFrequenciesBundles.append(r_o)
+                self.intervalFreqsBundles.append(r_o)
         mongo_client.close( )
 
 
