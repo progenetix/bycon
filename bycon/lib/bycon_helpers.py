@@ -18,7 +18,7 @@ from config import BYC, BYC_DBS, BYC_UNCAMELED, BYC_UPPER, HTTP_HOST
 
 
 class ByconMongo:
-    def __init__(self, db_name="___none___"):
+    def __init__(self, db_name=None):
         self.host_address   = BYC_DBS["mongodb_host"]
         self.client         = MongoClient(host=self.host_address)
         self.databases      = list(self.client.list_database_names())
@@ -111,6 +111,9 @@ class ByconMongo:
     #--------------------------------------------------------------------------#
 
     def __check_db_name(self, db_name):
+        # allowing undefined name here
+        if db_name is None:
+            return None
         if str(db_name) not in self.databases:
             ByconError().addError(f"db `{db_name}` does not exist")
             return None
