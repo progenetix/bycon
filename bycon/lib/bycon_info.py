@@ -49,8 +49,7 @@ class ByconInfo():
     #--------------------------------------------------------------------------#
 
     def __dataset_update_counts(self, ds_id):
-        m_d         = ds_id
-        m_c         = BYC_DBS.get("collections", {}).get("collations")
+        m_c         = BYC_DBS.get("collections", {}).get("collation")
         collcoll    = ByconMongo(ds_id).openMongoColl(m_c)
         b_i_ds      = {
             "counts": {},
@@ -58,7 +57,7 @@ class ByconInfo():
             "collations": {},
             "updated": datetime.now().isoformat()
         }
-        ds_db   = ByconMongo(m_d).openMongoDatabase()
+        ds_db   = ByconMongo(ds_id).openMongoDatabase()
         c_n     = ds_db.list_collection_names()
         for c in self.data_colls:
             if c not in c_n:
