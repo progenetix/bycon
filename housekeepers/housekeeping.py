@@ -217,7 +217,7 @@ def main():
                 if age_days is not False:
                     update_obj.update({"collection_moment_days": age_days})
                     ind_coll.update_one({"_id": ind["_id"]}, {"$set": {"index_disease.onset.age_days": age_days, "index_disease.onset.age": coll_iso}})
-                    print(f'=> updated individual {ind["id"]} with collection moment age {coll_iso}')
+                    print(f'\n=> updated individual {ind["id"]} with collection moment age {coll_iso}')
             bios_coll.update_one({"_id": bios["_id"]}, {"$set": update_obj})
     bar.finish()
 

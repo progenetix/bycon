@@ -58,7 +58,7 @@ class ByconMongo:
     #--------------------------------------------------------------------------#
 
     def collectionList(self):
-        if not self.openMongoDatabase():
+        if self.openMongoDatabase() is None:
             return False
         self.collections = list(self.db.list_collection_names())
         return self.collections
@@ -75,7 +75,7 @@ class ByconMongo:
 
     def resultListFromQuery(self, coll_name, query, fields={}):
         results = []
-        if (coll := self.openMongoColl(coll_name)) is not False:
+        if (coll := self.openMongoColl(coll_name)) is not None:
             results = list(coll.find(query, fields))
         return results
 
@@ -83,7 +83,7 @@ class ByconMongo:
     #--------------------------------------------------------------------------#
 
     def resultCountFromQuery(self, coll_name, query) -> int:
-        if (coll := self.openMongoColl(coll_name)) is not False:
+        if (coll := self.openMongoColl(coll_name)) is not None:
             return coll.count_documents(query)
         return 0
 
@@ -91,7 +91,7 @@ class ByconMongo:
     #--------------------------------------------------------------------------#
 
     def oneFromQuery(self, coll_name, query={"no_field": "___none___"}):
-        if (coll := self.openMongoColl(coll_name)) is not False:
+        if (coll := self.openMongoColl(coll_name)) is not None:
             if (one := coll.find_one(query)):
                 return one
         return None
@@ -101,7 +101,7 @@ class ByconMongo:
 
     def resultListFromPipeline(self, coll_name, pipeline=[]):
         results = []
-        if (coll := self.openMongoColl(coll_name)) is not False:
+        if (coll := self.openMongoColl(coll_name)) is not None:
             results = list(coll.aggregate(pipeline))
         return results
 
